@@ -1,90 +1,5 @@
-/* Stadium Zero fragment012_17ED00. */
-/* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_343BA0.c. */
-
-#include "fragments/battle_engine/battle_engine.h"
-#include "gallery.h"
-#include "gfx_buffer.h"
-#include "math.h"
-#include "math_util.h"
-extern u8* sBattleAnimAssetPointers[256];
-extern s16 sBattleAnimResourceList[0x10];
-extern arg1_func_80019420* sBattleAnimResourceTablePointers[40];
-extern s16 D_8219CAC0;
-extern s16 D_8219CAC2;
-extern Mtx D_8219CAC8;
-extern s16 D_8219CB08;
-extern s16 D_8219CB0A;
-extern s16 D_8219CB0C;
-extern s16 D_8219CB0E;
-extern s16 D_8219CB10;
-extern s16 D_8219CB12;
-extern s16 D_8219CB14;
-extern s16 D_8219CB16;
-extern s16 D_8219CB18;
-extern s16 D_8219CB1A;
-extern const char D_821978C8[];
-
-void BattleAnim_StartEffect98Radial20_Init(void);
-s32 BattleAnim_StartEffect98Radial20_Update(void);
-void BattleAnim_StartEffect98Radial20_Draw(void);
-void BattleAnim_StartEffect11Trail50Alt_Init(void);
-s32 BattleAnim_StartEffect11Trail50Alt_Update(void);
-void BattleAnim_StartEffect11Trail50Alt_Draw(void);
-void BattleAnim_StartEffect57Trail50_Init(void);
-s32 BattleAnim_StartEffect57Trail50_Update(void);
-void BattleAnim_StartEffect57Trail50_Draw(void);
-void BattleAnim_StartEffect42Trail40_Init(void);
-s32 BattleAnim_StartEffect42Trail40_Update(void);
-void BattleAnim_StartEffect42Trail40_Draw(void);
-void BattleAnim_StartEffect43Trail40Variant_Init(void);
-s32 BattleAnim_StartEffect43Trail40Variant_Update(void);
-void BattleAnim_StartEffect43Trail40Variant_Draw(void);
-void BattleAnim_StartEffect44Trail40GridAlt_Init(void);
-s32 BattleAnim_StartEffect44Trail40GridAlt_Update(void);
-void BattleAnim_StartEffect44Trail40GridAlt_Draw(void);
-void BattleAnim_StartEffect45FourStreamTrail_Init(void);
-void BattleAnim_StartEffect45FourStreamTrail_Draw(void);
-void BattleAnim_StartEffect62OwnerLinkedFourStream_Init(void);
-s32 BattleAnim_StartEffect62OwnerLinkedFourStream_Update(void);
-void BattleAnim_StartEffect62OwnerLinkedFourStream_Draw(void);
-void BattleAnim_StartEffect67OwnerAnchoredFourStream_Init(void);
-s32 BattleAnim_StartEffect67OwnerAnchoredFourStream_Update(void);
-void BattleAnim_StartEffect67OwnerAnchoredFourStream_Draw(void);
-void BattleAnim_StartEffect78Radial20_Init(void);
-s32 BattleAnim_StartEffect78Radial20_Update(void);
-void BattleAnim_StartEffect78Radial20_Draw(void);
-void BattleAnim_StartEffect26DoubleTextureTrail_Seed(void);
-void BattleAnim_StartEffect26DoubleTextureTrail_Init(void);
-s32 BattleAnim_StartEffect26DoubleTextureTrail_Update(void);
-void BattleAnim_StartEffect26DoubleTextureTrail_Draw(void);
-void BattleAnim_StartEffect47SixSlotTrail_Seed(void);
-void BattleAnim_StartEffect47SixSlotTrail_Init(void);
-s32 BattleAnim_StartEffect47SixSlotTrail_Update(void);
-void BattleAnim_StartEffect47SixSlotTrail_Draw(void);
-void BattleAnim_StartEffect4DoubleTextureTrail_Seed(void);
-void BattleAnim_StartEffect4DoubleTextureTrail_Init(void);
-s32 BattleAnim_StartEffect4DoubleTextureTrail_Update(void);
-void BattleAnim_StartEffect4DoubleTextureTrail_Draw(void);
-void BattleAnim_StartEffect77DoubleTextureTrail_Seed(void);
-void BattleAnim_StartEffect77DoubleTextureTrail_Init(void);
-s32 BattleAnim_StartEffect77DoubleTextureTrail_Update(void);
-void BattleAnim_StartEffect77DoubleTextureTrail_Draw(void);
-void BattleAnim_StartEffect70DoubleTextureTrail_Seed(void);
-void BattleAnim_StartEffect70DoubleTextureTrail_Init(void);
-s32 BattleAnim_StartEffect70DoubleTextureTrail_Update(void);
-void BattleAnim_StartEffect70DoubleTextureTrail_Draw(void);
-void BattleAnim_StartEffect39DoubleTextureTrail_Seed(void);
-void BattleAnim_StartEffect39SixSlotTrail_Seed(void);
-void BattleAnim_StartEffect39CombinedTrail_Init(void);
-s32 BattleAnim_StartEffect39CombinedTrail_Update(void);
-void BattleAnim_StartEffect39CombinedTrail_Draw(void);
-
-void BattleAnim_EffectSecondaryOwnerAnchorPosition(Vec3f* arg0);
-f32 BattleAnim_EffectSecondaryOwnerModelScale(void);
-void BattleAnim_CalcVectorAtToDm(f32* arg0, f32* arg1, f32* arg2, f32* arg3, f32* arg4, f32* arg5);
-void BattleAnim_ResetSharedEffectMatrix(void);
-void BattleAnim_StartEffect98Radial20_EmitVariantD(void);
-void BattleAnim_StartEffect78Radial20_EmitVariantA(void);
+/* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
+#include "battle_engine_343BA0_8.h"
 
 void BattleAnim_StartEffect98Radial20_Init(void) {
     D_8219CB16 = 0;
@@ -250,30 +165,6 @@ void BattleAnim_StartEffect45FourStreamTrail_Init(void) {
     FourStreamTrail_Init();
 }
 
-/*
- * func_8216F3A0
- *
- * Per-frame update of the "four stream trail" part of effect 45: counts
- * frames in D_8219CAC0 (returns -1, which ends the effect, from frame 0x32
- * on).  During the first four frames (counter < 4) it starts one trail at the
- * secondary owner's bone position: the trail leaves in a direction in the
- * Y/Z plane given by an angle of (counter % 3) * pi / 3 + pi/6 (the sine and
- * cosine of that angle, normalised together with a 1.0 X component and
- * then scaled by 20), at X speed +-10 (negative when the start X is
- * negative), with colour 0xC0FFFF, alpha 0x80, a random +-0.3 drift and
- * fixed shape parameters 2.0, 13.0 and 0x28.  From frame 2 on it returns
- * whether the trail has completed (FourStreamTrail_IsComplete), else 0.
- *
- * Same code as BattleAnim_StartEffect45FourStreamTrail_Update in the Stadium
- * 1 decomp.  pi (D_FLT_82197934), pi/6 as a double (D_DBL_82197938) and 0.3
- * (D_DBL_82197940) are read from the retail rodata because this file's own
- * rodata is not placed; the names of the values are inferred from their use
- * and the donor source's M_PI_F, 0.5235987901687622 and 0.3.
- */
-extern f32 D_FLT_82197934;
-extern f64 D_DBL_82197938;
-extern f64 D_DBL_82197940;
-
 s32 func_8216F3A0(void) {
     s32 var_v1;
     Vec3f sp68;
@@ -332,9 +223,6 @@ void BattleAnim_StartEffect62OwnerLinkedFourStream_Init(void) {
     OwnerLinkedFourStream_Init();
 }
 
-extern const f32 D_FLT_82197948;
-extern const f32 D_FLT_8219794C;
-extern const f32 D_FLT_82197950;
 s32 BattleAnim_StartEffect62OwnerLinkedFourStream_Update(void) {
     s32 var_v1;
     f32 sp60;
@@ -371,7 +259,6 @@ void BattleAnim_StartEffect62OwnerLinkedFourStream_Draw(void) {
     }
 }
 
-extern const f32 D_FLT_82197954;
 void BattleAnim_StartEffect67OwnerAnchoredFourStream_Init(void) {
     Vec3f sp5C;
     f32 sp58;
@@ -410,7 +297,6 @@ void BattleAnim_StartEffect67OwnerAnchoredFourStream_Draw(void) {
     gDisplayListHead = OwnerAnchoredFourStream_Draw(gDisplayListHead);
 }
 
-extern const f32 D_FLT_82197958;
 void BattleAnim_StartEffect78Radial20_EmitVariantA(void) {
     f32 sp5C;
     f32 sp58;
@@ -447,8 +333,6 @@ void BattleAnim_StartEffect78Radial20_Draw(void) {
     gDisplayListHead = Radial20_Draw(gDisplayListHead);
 }
 
-extern const f32 D_FLT_8219795C;
-extern const f32 D_FLT_82197960;
 void BattleAnim_StartEffect26DoubleTextureTrail_Seed(void) {
     static unk_D_843C2C00_024 D_84387FC0 = { 2, 1, 0xE, 1, 2, 2, 3, 1 };
     static unk_D_843C2C00_024 D_84387FE0 = { 3, 5, 0, 5, 3, 7, 0, 5 };
@@ -489,11 +373,6 @@ void BattleAnim_StartEffect26DoubleTextureTrail_Draw(void) {
     gDisplayListHead = DoubleTextureTrail_DrawAll(gDisplayListHead);
 }
 
-extern const f32 D_FLT_82197974;
-extern const f32 D_FLT_82197964;
-extern const f32 D_FLT_82197968;
-extern const f32 D_FLT_8219796C;
-extern const f32 D_FLT_82197970;
 void BattleAnim_StartEffect47SixSlotTrail_Seed(void) {
     static unk_D_843C2C00_024 D_84388040 = { 3, 5, 1, 5, 1, 7, 3, 7 };
     static unk_D_843C2C00_024 D_84388060 = { 0x1F, 0x1F, 0x1F, 0, 7, 7, 7, 0 };
@@ -538,8 +417,6 @@ void BattleAnim_StartEffect47SixSlotTrail_Draw(void) {
     gDisplayListHead = BattleAnim_SixSlotTrail_DrawAll(gDisplayListHead);
 }
 
-extern const f32 D_FLT_82197978;
-extern const f32 D_FLT_8219797C;
 void BattleAnim_StartEffect4DoubleTextureTrail_Seed(void) {
     static unk_D_843C2C00_024 D_84388080 = { 3, 5, 1, 5, 6, 7, 2, 3 };
     static unk_D_843C2C00_024 D_843880A0 = { 0x1F, 0x1F, 0x1F, 0, 0, 7, 5, 7 };
@@ -581,8 +458,6 @@ void BattleAnim_StartEffect4DoubleTextureTrail_Draw(void) {
     gDisplayListHead = DoubleTextureTrail_DrawAll(gDisplayListHead);
 }
 
-extern const f32 D_FLT_82197980;
-extern const f32 D_FLT_82197984;
 void BattleAnim_StartEffect77DoubleTextureTrail_Seed(void) {
     static unk_D_843C2C00_024 D_84388100 = { 2, 1, 0xE, 1, 2, 7, 1, 3 };
     static unk_D_843C2C00_024 D_84388120 = { 3, 5, 0, 5, 0, 7, 5, 7 };
@@ -624,7 +499,6 @@ void BattleAnim_StartEffect77DoubleTextureTrail_Draw(void) {
     gDisplayListHead = DoubleTextureTrail_DrawAll(gDisplayListHead);
 }
 
-extern const f32 D_FLT_82197988;
 void BattleAnim_StartEffect70DoubleTextureTrail_Seed(void) {
     static unk_D_843C2C00_024 D_84388180 = { 2, 1, 0xE, 1, 2, 1, 3, 1 };
     static unk_D_843C2C00_024 D_843881A0 = { 3, 5, 0, 5, 0, 7, 5, 7 };
@@ -661,8 +535,6 @@ void BattleAnim_StartEffect70DoubleTextureTrail_Draw(void) {
     gDisplayListHead = DoubleTextureTrail_DrawAll(gDisplayListHead);
 }
 
-extern const f32 D_FLT_8219798C;
-extern const f32 D_FLT_82197990;
 void BattleAnim_StartEffect39DoubleTextureTrail_Seed(void) {
     static unk_D_843C2C00_024 D_843881C0 = {
         0x00000002, 0x00000001, 0x0000000E, 0x00000001, 0x00000007, 0x00000007, 0x00000007, 0x00000003,
@@ -694,61 +566,4 @@ void BattleAnim_StartEffect39DoubleTextureTrail_Seed(void) {
     DoubleTextureTrail_Spawn(spB4, spB0, spAC, spA8, spA4, spA0, 0.0f, 5.0f, D_FLT_82197990, 3.0f, 15.0f, 0x14, 0x97, 0x96, 6, 0x14, 0xE,
                   0xF, -3, 0xA, 0, 0xF, &D_84388200, &D_84388220, 0xFF, 0xFF, 0x64, 0x96, 0xFF, 0xFF, 0x64, 0, 0xC8, 0,
                   0, 0, 0);
-}
-
-#ifdef NON_MATCHING
-// Matches the ROM, but uses data/rodata data that is not placed in this file yet.
-void BattleAnim_StartEffect39SixSlotTrail_Seed(void) {
-    static unk_D_843C2C00_024 D_84388240 = {
-        0x00000002, 0x00000001, 0x0000000E, 0x00000001, 0x00000002, 0x00000001, 0x00000003, 0x00000001,
-    };
-    static unk_D_843C2C00_024 D_84388260 = {
-        0x00000003, 0x00000005, 0x00000000, 0x00000005, 0x00000000, 0x00000007, 0x00000005, 0x00000007,
-    };
-
-    f32 spA4;
-    f32 spA0;
-    f32 sp9C;
-    f32 sp98;
-    f32 sp94;
-    f32 sp90;
-
-    BattleAnim_CalcVectorAtToDm(&spA4, &spA0, &sp9C, &sp98, &sp94, &sp90);
-
-    sp94 += (0.4f * __cosf((RAND(10) * M_PI_F) / 10));
-    sp90 += (0.4f * __cosf((RAND(10) * M_PI_F) / 10));
-
-    sp98 *= 12.0f;
-    sp94 *= 12.0f;
-    sp90 *= 12.0f;
-
-    BattleAnim_SixSlotTrail_Spawn(0, spA4, spA0, sp9C, sp98, sp94, sp90, 0xFF, 0xFF, 0x64, 0x32, 0xC8, 0xFF, 0x32, 0, 0xFF, 0.4f, 2.0f,
-                  5.0f, 0x3C, 0x95, 0x95, 0, 0x14, 0, 0xD, 0, 0x19, 0, 0xD, &D_84388240, &D_84388260);
-}
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82170D28.s")
-#endif
-
-void BattleAnim_StartEffect39CombinedTrail_Init(void) {
-    BattleAnim_ResetSharedEffectMatrix();
-    DoubleTextureTrail_InitPool();
-    BattleAnim_StartEffect39DoubleTextureTrail_Seed();
-    BattleAnim_SixSlotTrail_ResetPool();
-    BattleAnim_StartEffect39SixSlotTrail_Seed();
-}
-
-s32 BattleAnim_StartEffect39CombinedTrail_Update(void) {
-    D_8219CB14++;
-    if ((D_8219CB14 % 10) == 0) {
-        BattleAnim_StartEffect39SixSlotTrail_Seed();
-    }
-    BattleAnim_SixSlotTrail_UpdateAll();
-    return DoubleTextureTrail_UpdateAll();
-}
-
-void BattleAnim_StartEffect39CombinedTrail_Draw(void) {
-    gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-
-    gDisplayListHead = DoubleTextureTrail_DrawAll(gDisplayListHead);
-    gDisplayListHead = BattleAnim_SixSlotTrail_DrawAll(gDisplayListHead);
 }

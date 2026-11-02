@@ -55,10 +55,28 @@
       "size": "0x8"
     }
   },
+  "src/fragments/fragment012_17ED00/battle_engine_3055E0_821243DC.c": {
+    ".rodata": {
+      "address": "0x8219626C",
+      "size": "0x8"
+    }
+  },
   "src/fragments/fragment012_17ED00/battle_engine_309ED0.c": {
+    ".rodata": {
+      "address": "0x82196290",
+      "size": "0x14"
+    }
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_309ED0_82124E80.c": {
     ".rodata": {
       "address": "0x821962A8",
       "size": "0x58"
+    }
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_309ED0_8212A328.c": {
+    ".rodata": {
+      "address": "0x821963AC",
+      "size": "0x64"
     }
   },
   "src/fragments/fragment012_17ED00/battle_engine_313D60.c": {
@@ -88,6 +106,16 @@
   "src/fragments/fragment012_17ED00/battle_engine_31D9F0_2.c": {
     ".rodata": "0x821969C0"
   },
+  "src/fragments/fragment012_17ED00/battle_engine_31D9F0_82117610.c": {
+    ".rodata": {
+      "address": "0x82195980",
+      "size": "0x44"
+    },
+    ".data": "0x8218B0C8"
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_31D9F0_821199E4.c": {
+    ".rodata": "0x82195A04"
+  },
   "src/fragments/fragment012_17ED00/battle_engine_3223B0.c": {
     ".rodata": "0x82196A90"
   },
@@ -104,13 +132,46 @@
     ".rodata": "0x82196030"
   },
   "src/fragments/fragment012_17ED00/battle_engine_32B680_3.c": {
+    ".rodata": {
+      "address": "0x82196CBC",
+      "size": "0x20C"
+    }
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_32B680_3_82154310.c": {
+    ".rodata": {
+      "address": "0x82196ED0",
+      "size": "0x1E4"
+    }
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_32B680_3_82154484.c": {
     ".rodata": "0x82197240"
   },
   "src/fragments/fragment012_17ED00/battle_engine_339CA0.c": {
     ".rodata": "0x82197520"
   },
+  "src/fragments/fragment012_17ED00/battle_engine_339CA0_821640A0.c": {
+    ".rodata": {
+      "address": "0x82197738",
+      "size": "0x118"
+    }
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_339CA0_821659FC.c": {
+    ".rodata": {
+      "address": "0x82197858",
+      "size": "0x14"
+    }
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_339CA0_82165E30.c": {
+    ".rodata": "0x82197870"
+  },
   "src/fragments/fragment012_17ED00/battle_engine_3438B0.c": {
-    ".rodata": "0x82196594"
+    ".rodata": {
+      "address": "0x82196410",
+      "size": "0x138"
+    }
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_3438B0_82130628.c": {
+    ".rodata": "0x8219655C"
   },
   "src/fragments/fragment012_17ED00/battle_engine_343BA0.c": {
     ".rodata": "0x821966E0"
@@ -134,11 +195,22 @@
     },
     ".data": "0x82191A10"
   },
+  "src/fragments/fragment012_17ED00/battle_engine_343BA0_8_82170D28.c": {
+    ".rodata": "0x82197994",
+    ".data": "0x82191C90"
+  },
   "src/fragments/fragment012_17ED00/battle_engine_347330.c": {
     ".rodata": {
-      "address": "0x821979F8",
+      "address": "0x821979B0",
       "size": "0x8"
     }
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_347330_82171788.c": {
+    ".rodata": "0x821979F8",
+    ".data": "0x821928D8"
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_347330_82173418.c": {
+    ".data": "0x821929D0"
   },
   "src/fragments/fragment012_17ED00/battle_engine_34A420.c": {
     ".rodata": "0x82197AB0"
@@ -193,11 +265,18 @@
     ".rodata": "0x82194880"
   },
   "src/fragments/fragment012_17ED00/battle_engine_move_model_transforms.c": {
-    ".data": "0x821891F0",
+    ".data": {
+      "address": "0x821891A8",
+      "size": "0x24"
+    },
     ".rodata": {
-      "address": "0x82194930",
-      "size": "0x2C"
+      "address": "0x82194914",
+      "size": "0xC"
     }
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_move_model_transforms_82109AF4.c": {
+    ".data": "0x821891D8",
+    ".rodata": "0x82194930"
   },
   "src/fragments/fragment012_17ED00/ekans_game.c": {
     ".rodata": {
@@ -207,6 +286,12 @@
   },
   "src/fragments/fragment012_17ED00/fragment1_89010.c": {
     ".rodata": "0x82196670"
+  },
+  "src/fragments/fragment012_17ED00/fragment1_89010_821328DC.c": {
+    ".rodata": {
+      "address": "0x821966A8",
+      "size": "0x38"
+    }
   },
   "src/fragments/fragment012_17ED00/particle_math_269820_2.c": {
     ".rodata": "0x82196970"
