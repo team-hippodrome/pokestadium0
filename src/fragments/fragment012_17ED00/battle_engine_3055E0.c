@@ -209,7 +209,19 @@ void func_82122374(s8 *arg0) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8212239C.s")
+typedef struct BattleCameraModelState {
+    u8 pad00[0x30]; s16 rotationX; s16 rotationY; u8 pad34[4]; f32 distance;
+} BattleCameraModelState;
+extern f32 D_FLT_82189354[][4];
+void func_8212239C(ActivePokemon* pokemon, CameraNode* camera) {
+    BattleCameraModelState* model = (BattleCameraModelState*)&pokemon->modelTransform;
+    UNUSED s32 pad[3];
+    Vec3f_SetComponentsDuplicate(&pokemon->modelTransform.unk_18, M2C_FIELD(pokemon, f32*, 0x5DC), M2C_FIELD(pokemon, f32*, 0x5E0), M2C_FIELD(pokemon, f32*, 0x5E4));
+    pokemon->modelTransform.unk_18.y = M2C_FIELD(pokemon, f32*, 0x5E0) + (pokemon->displayObject.position.y - D_FLT_82189354[pokemon->displayObject.objectType][0]);
+    BattleAnim_Vec3fCopy((Vec3f*)(D_8219A5A0 + 0xA8), &camera->view.targetPosition);
+    BattleAnim_Vec3fCopy((Vec3f*)(D_8219A5A0 + 0xB4), &camera->view.eyePosition);
+    BattleAnim_CalculateDistanceAngles(&pokemon->modelTransform.unk_18, &camera->view.targetPosition, &model->distance, &model->rotationX, &model->rotationY);
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82122458.s")
 

@@ -725,7 +725,23 @@ void func_8210BA4C(s32 arg0, s8 *arg1) {
     M2C_FIELD(arg1, s32 *, 0x614) = (s32) (M2C_FIELD(arg1, s32 *, 0x614) + 1);
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210BA64.s")
+extern f32 D_FLT_8218935C[][4];
+void func_8210BA64(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
+    f32 rotation_x;
+    f32 water_height;
+    f32* model_row;
+
+    animated_pokemon->animationState++;
+    water_height = TerrainGrid_SampleHeightAndSlope(owner->displayObject.position.x, owner->displayObject.position.z, &rotation_x);
+    model_row = D_FLT_8218935C[owner->displayObject.objectType];
+    owner->displayObject.position.y = model_row[-2] + (water_height + 5.0f);
+    owner->displayObject.rotation.x = (s16)rotation_x * 182;
+    if (animated_pokemon->animationState == 200) {
+        owner->displayObject.position.y = model_row[-2];
+        owner->displayObject.rotation.x = 0;
+        func_82109C88((s8*)animated_pokemon);
+    }
+}
 
 void func_8210BB28(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     switch (animated_pokemon->modelTransformTimer) {
