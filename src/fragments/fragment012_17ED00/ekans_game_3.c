@@ -335,11 +335,27 @@ s32 func_82183CE4(s8 *arg0)
   return var_v1;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82183D50; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82183D50.s")
-#endif
+typedef struct BattleSlotZ {
+    /* 0x00 */ TeamRoster* roster;
+    /* 0x04 */ u8 pad04[0x17];
+    /* 0x1B */ u8 unk_1B;
+    /* 0x1C */ u16 hp;
+    /* 0x1E */ u8 pad1E[0xE];
+    /* 0x2C */ u8 types[2];
+    /* 0x2E */ u8 pad2E[8];
+    /* 0x36 */ u8 unk_36;
+    /* 0x37 */ u8 pad37[0x59];
+} BattleSlotZ; // size = 0x90
+extern BattleSlotZ* D_821CF298;
+
+s32 func_82183D50(BattleSlotZ* slots) {
+    s32 count = 0;
+    s32 i;
+    for (i = 0; i < slots->roster->numberOfPokemonBrought; i++) {
+        if (slots[i].hp != 0) count++;
+    }
+    return count;
+}
 
 void func_82183D9C(void) {
 }
@@ -367,39 +383,50 @@ void func_82183DCC(s8* arg0) {
 void GalleryDebugger_SaveControllerPak(void) {
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82183E24; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82183E24.s")
-#endif
+s32 func_82183E24(s32 value) {
+    s32 i;
+    for (i = 0; i < D_821CF298->roster->rosterInfo->numberOfPokemonCanBePicked; i++) {
+        if (D_821CF298[i].hp != 0 && D_821CF298[i].unk_1B == value) {
+            return 1;
+        }
+    }
+    return 0;
+}
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82183E88; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82183E88.s")
-#endif
+s32 func_82183E88(void) {
+    s32 count = 0;
+    s32 i;
+    for (i = 0; i < D_821CF298->roster->rosterInfo->numberOfPokemonCanBePicked; i++) {
+        if (D_821CF298[i].types[0] == 21 || D_821CF298[i].types[1] == 21 ||
+            D_821CF298[i].types[0] == 2 || D_821CF298[i].types[1] == 2) {
+            count++;
+        }
+    }
+    return count;
+}
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82183F04; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82183F04.s")
-#endif
+s32 func_82183F04(void) {
+    s32 count = 0;
+    s32 i;
+    for (i = 0; i < D_821CF298->roster->rosterInfo->numberOfPokemonCanBePicked; i++) {
+        if (D_821CF298[i].types[0] == 4 || D_821CF298[i].types[1] == 4) {
+            count++;
+        }
+    }
+    return count;
+}
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82183F6C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82183F6C.s")
-#endif
+s32 func_82183F6C(void) {
+    s32 count = 0;
+    s32 i;
+    for (i = 0; i < D_821CF298->roster->rosterInfo->numberOfPokemonCanBePicked; i++) {
+        if (D_821CF298[i].types[0] == 1 || D_821CF298[i].types[1] == 1) {
+            count++;
+        }
+    }
+    return count;
+}
 
-typedef struct BattleSlotZ {
-    /* 0x00 */ TeamRoster* roster;
-    /* 0x04 */ u8 pad04[0x17];
-    /* 0x1B */ u8 unk_1B;
-    /* 0x1C */ u8 pad1C[0x1A];
-    /* 0x36 */ u8 unk_36;
-    /* 0x37 */ u8 pad37[0x59];
-} BattleSlotZ; // size = 0x90
-extern BattleSlotZ* D_821CF298;
 
 s32 func_82183FD4(void) {
     s32 i;
@@ -412,23 +439,40 @@ s32 func_82183FD4(void) {
     return 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8218403C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8218403C.s")
-#endif
+s32 func_8218403C(void) {
+    s32 count = 0;
+    s32 i;
+    for (i = 0; i < D_821CF298->roster->rosterInfo->numberOfPokemonCanBePicked; i++) {
+        if (D_821CF298[i].types[0] == 23 || D_821CF298[i].types[1] == 23 ||
+            D_821CF298[i].types[0] == 3 || D_821CF298[i].types[1] == 3) {
+            count++;
+        }
+    }
+    return count;
+}
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_821840B8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821840B8.s")
-#endif
+s32 func_821840B8(void) {
+    s32 count = 0;
+    s32 i;
+    for (i = 0; i < D_821CF298->roster->rosterInfo->numberOfPokemonCanBePicked; i++) {
+        if (D_821CF298[i].types[0] == 5 || D_821CF298[i].types[1] == 5 ||
+            D_821CF298[i].types[0] == 21 || D_821CF298[i].types[1] == 21) {
+            count++;
+        }
+    }
+    return count;
+}
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82184134; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82184134.s")
-#endif
+s32 func_82184134(void) {
+    s32 count = 0;
+    s32 i;
+    for (i = 0; i < D_821CF298->roster->rosterInfo->numberOfPokemonCanBePicked; i++) {
+        if (D_821CF298[i].types[0] == 23 || D_821CF298[i].types[1] == 23) {
+            count++;
+        }
+    }
+    return count;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8218419C; signature not recovered. */
@@ -520,11 +564,15 @@ s32 func_82185044(s32 species, s32 bit) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82185108.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_821851B4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821851B4.s")
-#endif
+s32 func_82185108(u8*, s32);
+s32 func_821851B4(u8* pokemon, s32 move) {
+    s32 i;
+    for (i = 0; i < 4; i++) {
+        if (pokemon[0x2B + i] == 0) break;
+        if (pokemon[0x2B + i] == move && pokemon[0x3E + i] != 0) return move;
+    }
+    return func_82185108(pokemon, move);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_82185220; signature not recovered. */
