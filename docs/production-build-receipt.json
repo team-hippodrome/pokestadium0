@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 4453,
-  "asm_owners": 991,
+  "c_owners": 4456,
+  "asm_owners": 988,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -602,7 +602,7 @@
     "tools/cflags_overrides.json": "a63bd5b3abbfdc0d47270d0a1c1cf174a5b3d383346465b879dfe4d89db42ddf",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "d8dc2515e05c805b0b0b9970f3d21071235c42c611869fe8533023810d5bc4b5",
+    "docs/function-matches.csv": "cbd5a9cb6a1dd69d1f7b638e6a3bd81568a9efe19cff8a6bae37eefc851a9027",
     "linker_scripts/jp/symbol_addrs.txt": "2456a150541197a6396eae026c3eee015906dcdaa257db9bc9a3a4ea9bb6621f"
   },
   "binutils": {
@@ -682,8 +682,8 @@
     "src/fragments/fragment000_80C00/81110210.c": "1d18a3866ec7f8aef4ad9c0cdb1d9c7ad990617d64ee5652f87791640b8fa891",
     "src/fragments/fragment000_80C00/81111C20.c": "a215a819a0c9b15f3171e18232eee12a32de99d7c2bc1576f826ba641361b8ac",
     "src/fragments/fragment000_80C00/81117B20.c": "3843091a770c9a107a189ef652ff919fc1eac6d520dd8100299adf9b1616cefc",
-    "src/fragments/fragment000_80C00/battle_engine_2FA4D0.c": "2a2af10bb1272ccac1debab1c80e08b6822578f4e3eb43069497203770163363",
-    "src/fragments/fragment000_80C00/battle_engine_309ED0.c": "4b2994ebca4daf2346aa13a0c373a8c4ba9f61f20af61a55d4bfa42d761b7a82",
+    "src/fragments/fragment000_80C00/battle_engine_2FA4D0.c": "25de2f31cdbcca2970b057c40812402a7b5658af5f853efa1b1194bcc5e03a8f",
+    "src/fragments/fragment000_80C00/battle_engine_309ED0.c": "7afd4491a65469b31285a00778c8fe4c1edf61d85b2d01e6547dbe38a13bdbf0",
     "src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c": "37986b4b75fc151ff1beaa22e2b79ec43181c9a967686e9ed1165b9de5b54357",
     "src/fragments/fragment000_80C00/gb_tower_emulator_86920.c": "ccaf998841c109263c3231af8c291556d960f7ad5dd4183c6d4cf909fe89bf11",
     "src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c": "87366fb2835f201029e0339bc4f93762b4adb221e9dd71bab9dfbb454902cdfa",
