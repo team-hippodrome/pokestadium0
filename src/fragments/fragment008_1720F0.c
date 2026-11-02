@@ -161,11 +161,34 @@ s32 func_88100B2C(s32 arg0) {
     return sp1C;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88100BA4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment008_1720F0/func_88100BA4.s")
-#endif
+typedef struct Color88100D9C {
+    u8 c[4];
+} Color88100D9C;
+extern Gfx D_80060270[];
+void func_80029028(s32, s32, s32, s32, Color88100D9C);
+
+typedef struct Window88100BA4 {
+    u8 pad00[0x14];
+    s32 flags;
+    Color88100D9C color18;
+    Color88100D9C color1C;
+    s32 state20;
+    s32 state24;
+    s32 state28;
+    s32 value2C;
+} Window88100BA4;
+void func_8002A8C4(void*, s32, s32, s32, s32);
+extern Color88100D9C D_88102DB0[2];
+void func_88100BA4(Window88100BA4* window, s32 x, s32 y, s32 value) {
+    func_8002A8C4(window, x, y, 0x170, 0x68);
+    window->state24 = 0;
+    window->state20 = 0;
+    window->state28 = 0;
+    window->flags = 0x1006;
+    window->color18 = D_88102DB0[0];
+    window->color1C = D_88102DB0[1];
+    window->value2C = value;
+}
 
 s32 func_8002AE6C();
 extern u8 D_800734A8[4];
@@ -190,23 +213,16 @@ void func_88100CA8(s32 arg0) {
     func_8002BC14(D_800603C0);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88100CD0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment008_1720F0/func_88100CD0.s")
-#endif
+void func_88100CD0(s32 x, s32 y, Color88100D9C color) {
+    gSPDisplayList(gDisplayListHead++, D_80060270);
+    func_80029028(x, y, 0x88, 0x64, color);
+}
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88100D30; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment008_1720F0/func_88100D30.s")
-#endif
+void func_88100D30(s32 x, s32 y, Color88100D9C color) {
+    gSPDisplayList(gDisplayListHead++, D_80060270);
+    func_80029028(x + 0x88, y, 0x18C, 0x64, color);
+}
 
-typedef struct Color88100D9C {
-    u8 c[4];
-} Color88100D9C;
-extern Gfx D_80060270[];
-void func_80029028(s32, s32, s32, s32, Color88100D9C);
 void func_88100D9C(s32 arg0, s32 arg1, Color88100D9C arg2) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(arg0, arg1, 0x214, 1, arg2);
@@ -295,11 +311,13 @@ s32 func_88101734(s32 *arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment008_1720F0/func_88101A38.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88101D7C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment008_1720F0/func_88101D7C.s")
-#endif
+void func_88101D7C(s32* values, s32 first, s32 count) {
+    s32 end = first + count;
+
+    for (; first < end; first++) {
+        values[first] = -1;
+    }
+}
 
 void func_88101DB4(s8 *arg0, s32 arg1) {
     M2C_FIELD(arg0, s32 *, 0xBC) = arg1;

@@ -3,11 +3,13 @@
 #include "global.h"
 #include "m2c_macros.h"
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82000020; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment007_166580/func_82000020.s")
-#endif
+void func_82000020(s32* values, s32 first, s32 count) {
+    s32 end = first + count;
+
+    for (; first < end; first++) {
+        values[first] = -1;
+    }
+}
 
 typedef struct Entry82000058 {
     /* 0x00 */ s32 unk_00;
@@ -250,23 +252,22 @@ s32 func_820012B4(s8* arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment007_166580/func_82001BB4.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82001C00; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment007_166580/func_82001C00.s")
-#endif
-
-#ifdef NON_MATCHING
-/* TODO: decompile func_82001C60; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment007_166580/func_82001C60.s")
-#endif
-
 typedef struct Color82001CCC {
     u8 c[4];
 } Color82001CCC;
 extern Gfx D_80060270[];
 void func_80029028(s32, s32, s32, s32, Color82001CCC);
+
+void func_82001C00(s32 x, s32 y, Color82001CCC color) {
+    gSPDisplayList(gDisplayListHead++, D_80060270);
+    func_80029028(x, y, 0x88, 0x64, color);
+}
+
+void func_82001C60(s32 x, s32 y, Color82001CCC color) {
+    gSPDisplayList(gDisplayListHead++, D_80060270);
+    func_80029028(x + 0x88, y, 0x18C, 0x64, color);
+}
+
 void func_82001CCC(s32 arg0, s32 arg1, Color82001CCC arg2) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(arg0, arg1, 0x214, 1, arg2);
