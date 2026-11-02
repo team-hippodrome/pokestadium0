@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 4415,
-  "asm_owners": 1029,
+  "c_owners": 4418,
+  "asm_owners": 1026,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -602,7 +602,7 @@
     "tools/cflags_overrides.json": "a63bd5b3abbfdc0d47270d0a1c1cf174a5b3d383346465b879dfe4d89db42ddf",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "dcd08b9ac82cf2f69397571cb5e941a03c6df9f9d1f3d4fda49e9edd0fd51dd7",
+    "docs/function-matches.csv": "b25c4723512a908422f62b897a0dd8e6c8a439a7bd09085009ad00abdc2b8457",
     "linker_scripts/jp/symbol_addrs.txt": "2456a150541197a6396eae026c3eee015906dcdaa257db9bc9a3a4ea9bb6621f"
   },
   "binutils": {
@@ -798,8 +798,8 @@
     "src/fragments/fragment015_238BD0/89006FC0.c": "9235b7c1a73b5bffaa7c6427e0543a2d80ed859ea97f83730ff0fc6f34956005",
     "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c": "f4d8821fc1a5d81f846dcc510975767849e1c9be497edea90c4ba27777c16824",
     "src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c": "ce49c1b12e7343d7b14da2009bc2af84a841873a2205b3987b7d932292cff1d8",
-    "src/fragments/fragment016_252E10/89100020.c": "713892e8859a5ee23e7ec402a5eadc553b152ee8b7b522a63f6ebf0b8ad25d74",
-    "src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c": "978a404d07dcf1bade6e006d808c5ace2ada7831b47162d5991ff3526b500ba6",
+    "src/fragments/fragment016_252E10/89100020.c": "4a52bb56e8cc324816b69b17d867256b82d692b2b9b974f4628b40ad97306101",
+    "src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c": "a929fe6a9f39ccaee72772c82aba668b5188443c51d98a2daf714716cffd4c48",
     "src/fragments/fragment016_252E10/lab_pc_list_1E46B0.c": "e485759e119f946ca53737ff6a623cd7c09713005d302364a4865c5bb2dfd94a",
     "src/fragments/fragment016_252E10/lab_pc_list_1E46B0_2.c": "ca2ad66f736d581a4970adae550f327d1024cb27841e034e49b7345dcf501bbe",
     "src/fragments/fragment017_261F00.c": "98ae20c7f9bc4209e2f3aeb3cba7ab1363ba2e794069031d009bf5a0ab86e7d1",
