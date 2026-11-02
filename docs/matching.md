@@ -2,7 +2,7 @@
 
 This page records the historical first pass. Current verified totals are in
 [COVERAGE.md](../COVERAGE.md); the latest continuation is recorded in
-[matching-2026-11-02-roster-scans.md](matching-2026-11-02-roster-scans.md).
+[matching-2026-11-02-record-copy.md](matching-2026-11-02-record-copy.md).
 
 This pass put C into the tree for every function that matched without hand
 work, from two sources:

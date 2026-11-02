@@ -2936,7 +2936,7 @@ func_82186394,0x82186394,src/fragments/fragment012_17ED00/ekans_game_3.c,,asm,,a
 func_821864D4,0x821864D4,src/fragments/fragment012_17ED00/ekans_game_3.c,,asm,,asm
 func_8218663C,0x8218663C,src/fragments/fragment012_17ED00/ekans_game_3.c,,asm,,asm
 func_821866F0,0x821866F0,src/fragments/fragment012_17ED00/ekans_game_3.c,,asm,,asm
-func_821867A8,0x821867A8,src/fragments/fragment012_17ED00/ekans_game_3.c,,asm,,asm
+func_821867A8,0x821867A8,src/fragments/fragment012_17ED00/ekans_game_3.c,func_821867A8,hand,,c
 func_82186834,0x82186834,src/fragments/fragment012_17ED00/ekans_game_3.c,func_82186834,m2c,m2c+context,c
 func_821868E8,0x821868E8,src/fragments/fragment012_17ED00/ekans_game_3.c,,asm,,asm
 func_821869C4,0x821869C4,src/fragments/fragment012_17ED00/ekans_game_3.c,func_821869C4,m2c,m2c+permuter,c
