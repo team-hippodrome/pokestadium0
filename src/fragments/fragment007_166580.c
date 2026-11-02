@@ -50,11 +50,22 @@ s32 func_82000058(s32 arg0, s32 arg1, s32 arg2, Entry82000058* entry) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment007_166580/func_82000140.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_820001B8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment007_166580/func_820001B8.s")
-#endif
+Entry82000058* func_820001B8(Entry82000058* entries, s32* outCount) {
+    Entry82000058* selected = NULL;
+    s32 count = 0;
+    s32 i;
+
+    entries += 6;
+    for (i = 0; i < 6; i++) {
+        entries--;
+        if (entries->unk_00 != 0) {
+            selected = entries;
+            count++;
+        }
+    }
+    *outCount = count;
+    return selected;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_82000258; signature not recovered. */

@@ -386,23 +386,53 @@ void func_881025C8(s32* arg0, s32* arg1) {
     arg0[2] = arg1[2];
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88102600; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment008_1720F0/func_88102600.s")
-#endif
+void func_80027410(void*, void*, s32, s32, s32);
+void func_80027804(void*, void*, s32, s32);
+void func_8810024C(s32*);
+void func_88101DF8(void*, s32, s32, s32*, s32);
+void func_88102600(s32 ui) {
+    s32* records = (s32*)(ui + 0x2698);
+    s32* list;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88102688; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment008_1720F0/func_88102688.s")
-#endif
+    func_80027410(records, (void*)(ui + 0x458), 0x220, 0x10, 0);
+    func_8810024C(records);
+    list = (s32*)(ui + 0x26A8);
+    func_80027804(list, (void*)(ui + 0x2658), 0x10, 0);
+    func_881025C8(list, records);
+    func_88101DF8((void*)(ui + 0x88), 0x30, 0x5C, list, 1);
+}
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88102710; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment008_1720F0/func_88102710.s")
-#endif
+void func_80027410(void*, void*, s32, s32, s32);
+void func_80027804(void*, void*, s32, s32);
+void func_8810024C(s32*);
+void func_88101DF8(void*, s32, s32, s32*, s32);
+void func_88102688(s32 ui) {
+    s32* records = (s32*)(ui + 0x2698);
+    s32* list;
+
+    func_80027410(records, (void*)(ui + 0x458), 0x220, 0x10, 0);
+    func_8810024C(records);
+    list = (s32*)(ui + 0x26A8);
+    func_80027804(list, (void*)(ui + 0x2658), 0x10, 0);
+    func_881025C8(list, records);
+    func_88101DF8((void*)(ui + 0x88), 0x30, 0x5C, list, 2);
+}
+
+void func_80027410(void*, void*, s32, s32, s32);
+void func_80027804(void*, void*, s32, s32);
+void func_88100348(s32*);
+void func_88101DF8(void*, s32, s32, s32*, s32);
+void func_88102710(s32 ui) {
+    s32* records = (s32*)(ui + 0x2698);
+    s32* list;
+
+    func_80027410(records, (void*)(ui + 0x458), 0x220, 4, 0);
+    func_88100348(records);
+    list = (s32*)(ui + 0x26A8);
+    func_80027804(list, (void*)(ui + 0x2658), 4, 0);
+    func_881025C8(list, records);
+    func_88101DF8((void*)(ui + 0x88), 0x30, 0x5C, list, 0);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_88102794; signature not recovered. */
