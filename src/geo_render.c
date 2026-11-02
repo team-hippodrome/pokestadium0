@@ -180,11 +180,47 @@ void GeoRender_PushScale(Vec3f* arg0) {
 
 extern s32 D_800ABCF0;
 extern unk_D_800ABCC0 D_800ABCC0[2];
-#ifdef NON_MATCHING
-/* TODO: decompile func_8001148C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8001148C.s")
-#endif
+/*
+ * func_8001148C
+ *
+ * Fills the global record D_800AC690 from the object `arg0` and the data
+ * block arg0->unk_4 (`temp_s1`):
+ *
+ *   - if arg1 != 0, arg0->unk_8 = func_80011774(arg0) first;
+ *   - arg0->unk_12 (halfword at 0x12) = D_80060484;
+ *   - D_800AC690[0] = 1;  D_800AC690[1] = first halfword of the block & 4;
+ *     D_800AC690 word 4 = the block pointer;
+ *     D_800AC690 halfword 2 = (arg0->unk_8) >> 16, clamped to 0 if negative;
+ *   - D_800AC690 words 8, 0xC, 0x10, 0x14 = func_80002C80 of the block's
+ *     words at 0xC, 0x10, 0x14, 0x18.
+ *
+ * What the record is used for is not established; func_80011774 and
+ * func_80002C80 are not described here.
+ */
+s32 func_80002C80(s32);
+s32 func_80011774(TransformAnimRaw* arg0);
+extern u8 D_800AC690;
+
+void func_8001148C(void *arg0, s32 arg1) {
+    s16 *temp_s1;
+
+    temp_s1 = M2C_FIELD(arg0, s16 **, 4);
+    if (arg1 != 0) {
+        M2C_FIELD(arg0, s32 *, 8) = func_80011774((TransformAnimRaw*)arg0);
+    }
+    M2C_FIELD(arg0, u16 *, 0x12) = (u16) D_80060484;
+    M2C_FIELD(&D_800AC690, s8 *, 0) = 1;
+    M2C_FIELD(&D_800AC690, s8 *, 1) = (s8) (*M2C_FIELD(arg0, s16 **, 4) & 4);
+    M2C_FIELD(&D_800AC690, s16 *, 2) = (s16) ((s32) M2C_FIELD(arg0, s32 *, 8) >> 0x10);
+    M2C_FIELD(&D_800AC690, s16 **, 4) = temp_s1;
+    M2C_FIELD(&D_800AC690, s32 *, 8) = func_80002C80(M2C_FIELD(temp_s1, s32 *, 0xC));
+    M2C_FIELD(&D_800AC690, s32 *, 0xC) = func_80002C80(M2C_FIELD(temp_s1, s32 *, 0x10));
+    M2C_FIELD(&D_800AC690, s32 *, 0x10) = func_80002C80(M2C_FIELD(temp_s1, s32 *, 0x14));
+    M2C_FIELD(&D_800AC690, s32 *, 0x14) = func_80002C80(M2C_FIELD(temp_s1, s32 *, 0x18));
+    if (M2C_FIELD(&D_800AC690, s16 *, 2) < 0) {
+        M2C_FIELD(&D_800AC690, s16 *, 2) = 0;
+    }
+}
 
 f32 ModelAnim_EvaluateTranslationChannel(unk_D_800ABCC0* arg0, s32 arg1) {
     f32 ret;
@@ -537,11 +573,23 @@ void func_80012CC0(s8 *arg0, s8 *arg1) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80012DC8.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80012E68; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80012E68.s")
-#endif
+/*
+ * func_80012E68
+ *
+ * If the word at arg0 + 0x0C is non-zero, appends a G_TEXTURE command with
+ * both scales 0xFFFF and the texture off (gSPTexture(..., 0xFFFF, 0xFFFF, 0,
+ * G_TX_RENDERTILE, G_OFF)) to the display list. Then clears the words at
+ * arg0 + 0x0C, + 0x10 and + 0x14. The second argument is not used (retail only
+ * spills it to its stack home).
+ */
+void func_80012E68(s32* arg0, s32 arg1) {
+    if (arg0[3] != 0) {
+        gSPTexture(gDisplayListHead++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF);
+    }
+    arg0[3] = 0;
+    arg0[4] = 0;
+    arg0[5] = 0;
+}
 
 extern s16 D_8006F2A4[];
 extern unk_D_800ABB28* D_800ABCB8;
@@ -597,11 +645,31 @@ extern unk_D_800ABB28* D_800ABCB8;
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80013148.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_800132C8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800132C8.s")
-#endif
+/*
+ * func_800132C8
+ *
+ * Emits display-list commands for one object, `arg1`. `*arg0` caches the
+ * last matrix address handled: when arg1's word at offset 0xC differs from
+ * it, the cache is updated and a gSPMatrix (G_MTX_NOPUSH | G_MTX_LOAD |
+ * G_MTX_MODELVIEW) for that address masked to a physical address is
+ * emitted. Then arg1's word at offset 8 is emitted as a gSPDisplayList
+ * target; if it lies in 0x81000000..0x8FFFFFFF (the fragment address range)
+ * it is first run through Memmap_GetFragmentVaddr. The meaning of the two
+ * fields is inferred from how they are used, not from a declaration.
+ * Matching note: the extra registers m2c shows as arguments to the
+ * Memmap_GetFragmentVaddr call are leftovers, not arguments.
+ */
+void func_800132C8(s32* arg0, void* arg1) {
+    if (*arg0 != M2C_FIELD(arg1, s32*, 0xC)) {
+        *arg0 = M2C_FIELD(arg1, s32*, 0xC);
+        gSPMatrix(gDisplayListHead++, M2C_FIELD(arg1, u32*, 0xC) & 0x1FFFFFFF, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    }
+    if ((M2C_FIELD(arg1, u32*, 8) >= 0x81000000U) && (M2C_FIELD(arg1, u32*, 8) < 0x90000000U)) {
+        gSPDisplayList(gDisplayListHead++, Memmap_GetFragmentVaddr(M2C_FIELD(arg1, void**, 8)));
+    } else {
+        gSPDisplayList(gDisplayListHead++, M2C_FIELD(arg1, u32*, 8));
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_80013398; signature not recovered. */

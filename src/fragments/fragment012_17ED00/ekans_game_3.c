@@ -335,11 +335,37 @@ s32 func_82183CE4(s8 *arg0)
   return var_v1;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82183D50; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82183D50.s")
-#endif
+/*
+ * func_82183D50
+ *
+ * arg0 points to an array of 0x90-byte entries whose count is the byte at
+ * offset 2 of the record that the first word of arg0 points to. Returns the
+ * number of entries whose halfword at offset 0x1C is non-zero.
+ *
+ * What the entries and the count's record are is not established (the first
+ * word of arg0 is read through to find the count, so the first entry's own
+ * first word is that record pointer). Matching note: the loop is a do/while
+ * over a byte pointer with the end address `arg0 + n * 0x90` recomputed in
+ * its condition, as in the ROM.
+ */
+s32 func_82183D50(u8 *arg0) {
+    s32 count;
+    u8 *p;
+    s32 n;
+
+    count = 0;
+    p = arg0;
+    n = M2C_FIELD(*(void **)arg0, u8 *, 2);
+    if (n > 0) {
+        do {
+            if (M2C_FIELD(p, u16 *, 0x1C) != 0) {
+                count++;
+            }
+            p += 0x90;
+        } while (p < arg0 + n * 0x90);
+    }
+    return count;
+}
 
 void func_82183D9C(void) {
 }
@@ -367,39 +393,89 @@ void func_82183DCC(s8* arg0) {
 void GalleryDebugger_SaveControllerPak(void) {
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82183E24; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82183E24.s")
-#endif
-
-#ifdef NON_MATCHING
-/* TODO: decompile func_82183E88; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82183E88.s")
-#endif
-
-#ifdef NON_MATCHING
-/* TODO: decompile func_82183F04; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82183F04.s")
-#endif
-
-#ifdef NON_MATCHING
-/* TODO: decompile func_82183F6C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82183F6C.s")
-#endif
-
 typedef struct BattleSlotZ {
     /* 0x00 */ TeamRoster* roster;
     /* 0x04 */ u8 pad04[0x17];
     /* 0x1B */ u8 unk_1B;
-    /* 0x1C */ u8 pad1C[0x1A];
+    /* 0x1C */ u16 unk_1C;
+    /* 0x1E */ u8 pad1E[0xE];
+    /* 0x2C */ u8 unk_2C;
+    /* 0x2D */ u8 unk_2D;
+    /* 0x2E */ u8 pad2E[8];
     /* 0x36 */ u8 unk_36;
     /* 0x37 */ u8 pad37[0x59];
 } BattleSlotZ; // size = 0x90
 extern BattleSlotZ* D_821CF298;
+
+/**
+ * Returns 1 if any of the first `numberOfPokemonCanBePicked` BattleSlotZ
+ * entries has a non-zero unk_1C and unk_1B equal to arg0, otherwise 0.
+ * (func_82183FD4 below walks the same array.)
+ */
+s32 func_82183E24(s32 arg0) {
+    s32 i;
+
+    for (i = 0; i < D_821CF298->roster->rosterInfo->numberOfPokemonCanBePicked; i++) {
+        if ((D_821CF298[i].unk_1C != 0) && (arg0 == D_821CF298[i].unk_1B)) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+/**
+ * Counts how many of the first `numberOfPokemonCanBePicked` BattleSlotZ entries
+ * (walked like func_82183E24 / func_82183FD4) have unk_2C or unk_2D equal to 0x15
+ * or 2. What the two bytes and the values mean is not established.
+ */
+s32 func_82183E88(void) {
+    s32 count;
+    s32 i;
+
+    count = 0;
+    for (i = 0; i < D_821CF298->roster->rosterInfo->numberOfPokemonCanBePicked; i++) {
+        if ((D_821CF298[i].unk_2C == 0x15) || (D_821CF298[i].unk_2D == 0x15) || (D_821CF298[i].unk_2C == 2) || (D_821CF298[i].unk_2D == 2)) {
+            count++;
+        }
+    }
+    return count;
+}
+
+/**
+ * Counts how many of the first `numberOfPokemonCanBePicked` BattleSlotZ entries
+ * (walked like func_82183E24 / func_82183FD4) have unk_2C or unk_2D equal to 4.
+ * What the two bytes and the value 4 mean is not established.
+ */
+s32 func_82183F04(void) {
+    s32 count;
+    s32 i;
+
+    count = 0;
+    for (i = 0; i < D_821CF298->roster->rosterInfo->numberOfPokemonCanBePicked; i++) {
+        if ((D_821CF298[i].unk_2C == 4) || (D_821CF298[i].unk_2D == 4)) {
+            count++;
+        }
+    }
+    return count;
+}
+
+/**
+ * Counts how many of the first `numberOfPokemonCanBePicked` BattleSlotZ entries
+ * (walked like func_82183E24 / func_82183FD4) have unk_2C or unk_2D equal to 1.
+ * What the two bytes and the value 1 mean is not established.
+ */
+s32 func_82183F6C(void) {
+    s32 count;
+    s32 i;
+
+    count = 0;
+    for (i = 0; i < D_821CF298->roster->rosterInfo->numberOfPokemonCanBePicked; i++) {
+        if ((D_821CF298[i].unk_2C == 1) || (D_821CF298[i].unk_2D == 1)) {
+            count++;
+        }
+    }
+    return count;
+}
 
 s32 func_82183FD4(void) {
     s32 i;
@@ -412,23 +488,59 @@ s32 func_82183FD4(void) {
     return 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8218403C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8218403C.s")
-#endif
+/**
+ * Counts how many of the first `numberOfPokemonCanBePicked` BattleSlotZ entries
+ * (walked like func_82183E24 / func_82183FD4) have unk_2C or unk_2D equal to 0x17
+ * or 3. What the two bytes and the values mean is not established.
+ */
+s32 func_8218403C(void) {
+    s32 count;
+    s32 i;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_821840B8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821840B8.s")
-#endif
+    count = 0;
+    for (i = 0; i < D_821CF298->roster->rosterInfo->numberOfPokemonCanBePicked; i++) {
+        if ((D_821CF298[i].unk_2C == 0x17) || (D_821CF298[i].unk_2D == 0x17) || (D_821CF298[i].unk_2C == 3) || (D_821CF298[i].unk_2D == 3)) {
+            count++;
+        }
+    }
+    return count;
+}
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82184134; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82184134.s")
-#endif
+/**
+ * Counts how many of the first `numberOfPokemonCanBePicked` BattleSlotZ entries
+ * (walked like func_82183E24 / func_82183FD4) have unk_2C or unk_2D equal to 5
+ * or 0x15. What the two bytes and the values mean is not established.
+ */
+s32 func_821840B8(void) {
+    s32 count;
+    s32 i;
+
+    count = 0;
+    for (i = 0; i < D_821CF298->roster->rosterInfo->numberOfPokemonCanBePicked; i++) {
+        if ((D_821CF298[i].unk_2C == 5) || (D_821CF298[i].unk_2D == 5) || (D_821CF298[i].unk_2C == 0x15) || (D_821CF298[i].unk_2D == 0x15)) {
+            count++;
+        }
+    }
+    return count;
+}
+
+/**
+ * Counts how many of the first `numberOfPokemonCanBePicked` BattleSlotZ entries
+ * (walked like func_82183E24 / func_82183FD4) have unk_2C or unk_2D equal to 0x17.
+ * What the two bytes and the value 0x17 mean is not established.
+ */
+s32 func_82184134(void) {
+    s32 count;
+    s32 i;
+
+    count = 0;
+    for (i = 0; i < D_821CF298->roster->rosterInfo->numberOfPokemonCanBePicked; i++) {
+        if ((D_821CF298[i].unk_2C == 0x17) || (D_821CF298[i].unk_2D == 0x17)) {
+            count++;
+        }
+    }
+    return count;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8218419C; signature not recovered. */
@@ -520,11 +632,28 @@ s32 func_82185044(s32 species, s32 bit) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82185108.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_821851B4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821851B4.s")
-#endif
+s32 func_82185108(u8*, s32);
+
+/**
+ * Searches the four slots of arg0 (id bytes at offsets 0x2B..0x2E, flag bytes
+ * at 0x3E..0x41) for id arg1. Returns arg1 as soon as a slot with that id
+ * has a non-zero flag; the search stops at the first empty (zero) id. When
+ * nothing matched it returns func_82185108(arg0, arg1).
+ */
+s32 func_821851B4(u8* arg0, s32 arg1) {
+    s32 i;
+    u8* slot;
+
+    for (i = 0, slot = arg0; i < 4; i++, slot++) {
+        if (slot[0x2B] == 0) {
+            break;
+        }
+        if ((arg1 == slot[0x2B]) && (slot[0x3E] != 0)) {
+            return arg1;
+        }
+    }
+    return func_82185108(arg0, arg1);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_82185220; signature not recovered. */
@@ -668,35 +797,90 @@ s32 func_82185494(void) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8218663C.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_821866F0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821866F0.s")
-#endif
+extern u8 D_821CF280;
+extern u8 D_821CF281;
+extern BattleSlotZ* D_821CF294;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_821867A8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821867A8.s")
-#endif
+extern BattleSlotZ* D_821CF294;
+extern u8 D_821CF280;
+extern u8 D_821CF281;
 
-M2C_UNK func_80058410(s8 *, s8 *, M2C_UNK);
-M2C_UNK func_821867A8(s8 *, s8 *);
-void func_82186834(u8 *arg0, u8 *arg1) {
-    M2C_FIELD(arg0, u8 *, 0xB) = (u8) M2C_FIELD(arg1, u8 *, 0);
-    M2C_FIELD(arg0, u16 *, 0xC) = (u16) M2C_FIELD(arg1, u16 *, 2);
-    M2C_FIELD(arg0, u8 *, 0x14) = (u8) M2C_FIELD(arg1, u8 *, 4);
-    M2C_FIELD(arg0, u8 *, 0x15) = (u8) M2C_FIELD(arg1, u8 *, 5);
-    M2C_FIELD(arg0, u8 *, 0x1C) = (u8) M2C_FIELD(arg1, u8 *, 6);
-    M2C_FIELD(arg0, u8 *, 0x1D) = (u8) M2C_FIELD(arg1, u8 *, 7);
+/**
+ * Returns 0x2710 or 0 depending on arg0 and the BattleSlotZ entries (array D_821CF294)
+ * selected by the indices D_821CF281 and D_821CF280:
+ *   arg0 == 2: if the entry at D_821CF281 has unk_1B equal to 3, 0x71 or 0x7C, returns 0;
+ *              otherwise falls through to the arg0 == 1 check;
+ *   arg0 == 1: if the entry at D_821CF280 has unk_1B equal to 3, 0x71 or 0x7C, returns 0;
+ *              otherwise falls through to return 0x2710;
+ *   arg0 == 0: returns 0x2710;
+ *   any other arg0: returns 0.
+ * What the 0x2710 / 0 results and the unk_1B values mean is not established.
+ */
+s32 func_821866F0(s32 arg0) {
+    switch (arg0) {
+        case 2:
+            if ((D_821CF294[D_821CF281].unk_1B == 3) || (D_821CF294[D_821CF281].unk_1B == 0x71) || (D_821CF294[D_821CF281].unk_1B == 0x7C)) {
+                return 0;
+            }
+        case 1:
+            if ((D_821CF294[D_821CF280].unk_1B == 3) || (D_821CF294[D_821CF280].unk_1B == 0x71) || (D_821CF294[D_821CF280].unk_1B == 0x7C)) {
+                return 0;
+            }
+        case 0:
+            return 0x2710;
+        default:
+            return 0;
+    }
+}
+
+/**
+ * Copies up to four bytes from the string arg0 into arg1. Each of the four
+ * output bytes is the current source byte; the source pointer only advances
+ * while the byte is non-zero, so once the NUL is reached the remaining output
+ * bytes are all zero. (The output is always exactly four bytes.)
+ */
+void func_821867A8(u8* arg0, u8* arg1) {
+    s32 i;
+    u8 c;
+
+    for (i = 0; i < 4; i++) {
+        c = *arg0;
+        if (c == 0) {
+            *arg1 = 0;
+            arg1++;
+        } else {
+            *arg1 = c;
+            arg1++;
+            arg0++;
+        }
+    }
+}
+
+M2C_UNK func_80058410(s8*, s8*, M2C_UNK);
+
+/**
+ * Copies a set of fields from the record arg1 into the record arg0, which has a
+ * different layout (arg1's offsets 0, 2, 4, 5, 6, 7, 0x1E, 0x24 and 0x26..0x2E map to
+ * arg0's 0xB, 0xC, 0x14, 0x15, 0x1C, 0x1D, 0x24, 0x26 and 0x28..0x30). The name field
+ * at arg1 + 9 is expanded into the four bytes at arg0 + 0x1F by func_821867A8, and the
+ * four bytes at arg1 + 0x20 are copied to arg0 + 0x32. Compare func_821869C4, which
+ * copies the already-expanded layout. What the fields mean is not established.
+ */
+void func_82186834(s8* arg0, s8* arg1) {
+    M2C_FIELD(arg0, u8*, 0xB) = M2C_FIELD(arg1, u8*, 0);
+    M2C_FIELD(arg0, u16*, 0xC) = M2C_FIELD(arg1, u16*, 2);
+    M2C_FIELD(arg0, u8*, 0x14) = M2C_FIELD(arg1, u8*, 4);
+    M2C_FIELD(arg0, u8*, 0x15) = M2C_FIELD(arg1, u8*, 5);
+    M2C_FIELD(arg0, u8*, 0x1C) = M2C_FIELD(arg1, u8*, 6);
+    M2C_FIELD(arg0, u8*, 0x1D) = M2C_FIELD(arg1, u8*, 7);
     func_821867A8(arg1 + 9, arg0 + 0x1F);
-    M2C_FIELD(arg0, u16 *, 0x24) = (u16) M2C_FIELD(arg1, u16 *, 0x1E);
-    M2C_FIELD(arg0, u8 *, 0x26) = (u8) M2C_FIELD(arg1, u8 *, 0x24);
-    M2C_FIELD(arg0, u16 *, 0x28) = (u16) M2C_FIELD(arg1, u16 *, 0x26);
-    M2C_FIELD(arg0, u16 *, 0x2A) = (u16) M2C_FIELD(arg1, u16 *, 0x28);
-    M2C_FIELD(arg0, u16 *, 0x2C) = (u16) M2C_FIELD(arg1, u16 *, 0x2A);
-    M2C_FIELD(arg0, u16 *, 0x2E) = (u16) M2C_FIELD(arg1, u16 *, 0x2C);
-    M2C_FIELD(arg0, u16 *, 0x30) = (u16) M2C_FIELD(arg1, u16 *, 0x2E);
+    M2C_FIELD(arg0, u16*, 0x24) = M2C_FIELD(arg1, u16*, 0x1E);
+    M2C_FIELD(arg0, u8*, 0x26) = M2C_FIELD(arg1, u8*, 0x24);
+    M2C_FIELD(arg0, u16*, 0x28) = M2C_FIELD(arg1, u16*, 0x26);
+    M2C_FIELD(arg0, u16*, 0x2A) = M2C_FIELD(arg1, u16*, 0x28);
+    M2C_FIELD(arg0, u16*, 0x2C) = M2C_FIELD(arg1, u16*, 0x2A);
+    M2C_FIELD(arg0, u16*, 0x2E) = M2C_FIELD(arg1, u16*, 0x2C);
+    M2C_FIELD(arg0, u16*, 0x30) = M2C_FIELD(arg1, u16*, 0x2E);
     func_80058410(arg1 + 0x20, arg0 + 0x32, 4);
 }
 
@@ -707,7 +891,6 @@ void func_82186834(u8 *arg0, u8 *arg1) {
 #endif
 
 M2C_UNK func_80058410(s8 *, s8 *, M2C_UNK);     /* extern */
-M2C_UNK func_821867A8(s8 *, s8 *);              /* extern */
 extern s8 *D_821CF2A0;
 void func_821869C4(s8 *arg0, s8 *arg1)
 {
@@ -762,7 +945,7 @@ void func_821869C4(s8 *arg0, s8 *arg1)
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82186F28.s")
 #endif
 
-extern u8* D_821CF294;
+extern BattleSlotZ* D_821CF294;
 s32 func_82186F28(s32, s32);
 
 s32 func_821870D8(s32 arg0, s32 arg1, s32 arg2) {
@@ -825,11 +1008,43 @@ s32 func_821870D8(s32 arg0, s32 arg1, s32 arg2) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82188394.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_821886F0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821886F0.s")
-#endif
+extern u8* D_821CF29C;
+
+/**
+ * Searches for another entry that matches entry arg0 in the per-entry byte tables
+ * addressed through D_821CF29C (the byte at +0x2B + index and the byte at +0x3E + index,
+ * index 0..3). If the +0x3E byte of arg0 has any of the bits 0x3F set, returns arg0.
+ * Otherwise scans indices 0..3 in order: stops and returns arg0 at the first index
+ * whose +0x2B byte is zero; skips index arg0; and returns the first other index whose
+ * +0x2B byte equals that of arg0 and whose +0x3E byte has any of bits 0x3F set.
+ * Returns arg0 when no such index is found. What the tables mean is not established.
+ */
+s32 func_821886F0(s32 arg0) {
+    s32 i;
+    u8* base;
+    u8* cur;
+    u8* me;
+    u8 v;
+
+    base = D_821CF29C;
+    me = base + arg0;
+    i = 0;
+    if (!(me[0x3E] & 0x3F)) {
+        cur = base;
+        do {
+            v = cur[0x2B];
+            if (v == 0) {
+                break;
+            }
+            if ((i != arg0) && (v != 0) && (v == me[0x2B]) && (cur[0x3E] & 0x3F)) {
+                return i;
+            }
+            i++;
+            cur++;
+        } while (i != 4);
+    }
+    return arg0;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_82188770; signature not recovered. */

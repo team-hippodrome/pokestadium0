@@ -198,11 +198,41 @@ void func_891057FC(s8 *arg0, s32 arg1) {
     func_8002DAD8(arg0 + 0x20, M2C_FIELD(arg0, s32 *, 0), M2C_FIELD(arg0, s32 *, 4) + 4, arg1 | 0xFFED, arg0);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8910587C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_8910587C.s")
-#endif
+M2C_UNK func_8003F6AC(M2C_UNK);
+extern s32 D_800603C0;
+
+/**
+ * List-menu input handler (same family as func_8A20093C). arg0 is the menu object (passed as
+ * an integer address here, as elsewhere in this file). Calls func_8002DC04(arg0 + 0x20) and
+ * acts on its result: 0x200 plays sound func_8003F6AC(1) and returns 2. 0 reads the button
+ * halfword at D_800603C0 + 8: if bit 0x8000 is set it plays sound 2, toggles bit 3 of the
+ * halfword table entry arg0->0x24[arg0->0x28] and returns 1; otherwise if bit 0x4000 is set it
+ * plays sound 3 and returns -1. Any other case returns 0. (The button-bit names are not
+ * established, so they are left as raw masks.)
+ */
+s32 func_8910587C(s32 arg0) {
+    s32 ret = 0;
+    s32 res;
+    s32 buttons;
+    u16* entry;
+
+    res = func_8002DC04(arg0 + 0x20);
+    if (res == 0x200) {
+        func_8003F6AC(1);
+        ret = 2;
+    } else if (res == 0) {
+        buttons = ((u16*)D_800603C0)[4];
+        if (buttons & 0x8000) {
+            func_8003F6AC(2);
+            ret = 1;
+            M2C_FIELD(arg0, u16**, 0x24)[M2C_FIELD(arg0, s32*, 0x28)] ^= 8;
+        } else if (buttons & 0x4000) {
+            func_8003F6AC(3);
+            ret = -1;
+        }
+    }
+    return ret;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_89105924; signature not recovered. */
@@ -532,11 +562,49 @@ s32 func_89106F74(s8 *arg0)
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_891081A8.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89108450; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89108450.s")
-#endif
+/* Layouts below are partial and local to this function: only the fields the
+ * function touches are named, and the names say where they are, not what
+ * they mean. */
+typedef struct {
+    s32 pad0[4];
+    s32 word10;
+} FlagScanEntry;
+
+typedef struct {
+    FlagScanEntry** entries; /* 0x00 */
+    s32 unk4;
+    s32 count;               /* 0x08 */
+} FlagScanTable;
+
+typedef struct {
+    u8 pad0[0x4C];
+    FlagScanTable* table;    /* 0x4C */
+    u16* flags;              /* 0x50 */
+} FlagScanOwner;
+
+/*
+ * func_89108450
+ *
+ * Walks the pointer array arg0->table->entries (arg0->table->count items).
+ * For every entry whose word at offset 0x10 has any of its low five bits
+ * (mask 0x1F) set, bit 0 is set in the matching halfword of the array at
+ * arg0->flags (same index). What the entries and the flags are is not
+ * established here. The loop bound re-reads arg0->table->count each pass.
+ * Matching note: the entries pointer is held in a local and indexed;
+ * advancing a pointer through arg0->table->entries directly gives a
+ * different register assignment.
+ */
+void func_89108450(FlagScanOwner* arg0) {
+    s32 i;
+    FlagScanEntry** entries;
+
+    entries = arg0->table->entries;
+    for (i = 0; i < arg0->table->count; i++) {
+        if (entries[i]->word10 & 0x1F) {
+            arg0->flags[i] |= 1;
+        }
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_891084B4; signature not recovered. */

@@ -32,11 +32,29 @@ f32 func_81111F0C(arg0)
     return ret;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81111FE0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81111FE0.s")
-#endif
+typedef struct {
+    /* 0x00 */ char unk00[0x4];
+    /* 0x04 */ u32 phase;
+    /* 0x08 */ s16* table;
+    /* 0x0C */ char unk0C[0x4];
+    /* 0x10 */ f32 step;
+} PhaseTableCursor;
+
+/*
+ * func_81111FE0
+ *
+ * Advances the cursor's phase by its step (truncated to an integer) and
+ * returns the table entry selected by phase bits 10-15 (a 64-entry table of
+ * s16), shifted right by 8 so only the entry's upper byte remains
+ * (sign-extended).
+ */
+s16 func_81111FE0(PhaseTableCursor* arg0) {
+    s32 index;
+
+    arg0->phase += (s32)arg0->step;
+    index = (arg0->phase >> 10) & 0x3F;
+    return (s16)(arg0->table[index] >> 8);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_81112024; signature not recovered. */

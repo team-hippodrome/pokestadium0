@@ -777,11 +777,28 @@ void BattleScene_EnterRow9QueueEffectList6(ActivePokemon* active_pokemon) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82103EF4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82103EF4.s")
-#endif
+/**
+ * Move-animation tick callback (compare func_821032B0, which has an extra branch on
+ * D_82199FCC). Looks up the used move's presentation cue for the opposing side; when the
+ * opponent's animationTimer reaches cue->endFrame + 1 and func_82101F84 reports nothing
+ * blocking, plays move sound/effect func_8003FE58(usedMove, objectType, 5) and replaces the
+ * current tick-slot callback with the sentinel (unregisters itself).
+ */
+void func_82103EF4(ActivePokemon* active_pokemon) {
+    BattleMonRuntime* runtime;
+    MovePresentationCue* cue;
+    s32 other;
+
+    runtime = &active_pokemon->state.runtime;
+    cue = &sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon) == 0]->moveCues[runtime->usedMove - 1];
+    other = BattleScene_GetParticipantSideIndex(active_pokemon) == 0;
+    if (cue->endFrame + 1 == sActivePokemon[other]->animationTimer) {
+        if (func_82101F84((s8*)active_pokemon) == 0) {
+            func_8003FE58(runtime->usedMove, active_pokemon->displayObject.objectType, 5);
+            sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
+        }
+    }
+}
 
 void BattleScene_Row13PlaySequences14And21(ActivePokemon* active_pokemon) {
     BattleMonRuntime* runtime = &active_pokemon->state.runtime;
@@ -797,11 +814,54 @@ void BattleScene_Row13PlaySequences14And21(ActivePokemon* active_pokemon) {
     sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82104038; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82104038.s")
-#endif
+/**
+ * An 0xB-byte record of the table that D_82189180[...] points to; only the
+ * byte at offset 4 is used here.
+ */
+typedef struct Record82104AFC {
+    /* 0x00 */ u8 unk_00[4];
+    /* 0x04 */ u8 unk_04;
+    /* 0x05 */ u8 unk_05[6];
+} Record82104AFC; // size = 0xB
+
+typedef struct Entry82199E14 {
+    /* 0x00 */ s32 unk_00;
+    /* 0x04 */ s32 unk_04;
+} Entry82199E14;
+extern Entry82199E14 D_82199E14[];
+extern s32 D_8218A7B0;
+extern s32 D_82199E48;
+extern u8* D_82189180[];
+extern f32 D_FLT_82189354[];
+void func_82134E18(ActivePokemon*);
+
+/*
+ * func_82104038: per-tick check that is a sibling of func_82104120 and func_82104AFC
+ * (same id table and the same cue-record test, no state-tick change).
+ *
+ * Reads the Pokemon's move/animation id (u16 at +0x1A).  For an id whose D_FLT_82189354
+ * row has a non-zero first float -- except ids 0x16, 0x52 and 0x8E -- it only stores
+ * D_8218A7B0 into the first word of entry D_82199E48 of D_82199E14 and returns.
+ * Otherwise, when byte 4 of the side's cue record (sSideBattleCues[side] + 0x72D,
+ * `side` from BattleScene_GetParticipantSideIndex) plus one equals the animation timer
+ * at +0x620 and func_82101F84 reports nothing pending, it calls func_82134E18 and then
+ * performs the same store.  (What D_82199E14 / D_8218A7B0 are used for is not
+ * established here.)
+ */
+void func_82104038(ActivePokemon* active_pokemon) {
+    u8* cue = ((u8*)sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon)]) + 0x72D;
+    u16 id;
+
+    id = M2C_FIELD(active_pokemon, u16*, 0x1A);
+    if ((((f32(*)[4])D_FLT_82189354)[(int)id][0] != 0.0f) && (id != 0x16) && (id != 0x52) && (id != 0x8E)) {
+        D_82199E14[D_82199E48].unk_00 = D_8218A7B0;
+        return;
+    }
+    if (((cue[4] + 1) == M2C_FIELD(active_pokemon, s32*, 0x620)) && (func_82101F84((s8*)active_pokemon) == 0)) {
+        func_82134E18(active_pokemon);
+        D_82199E14[D_82199E48].unk_00 = D_8218A7B0;
+    }
+}
 
 typedef struct Cue8218A7D8 {
     s32 unk_00;
@@ -949,11 +1009,31 @@ void func_82104AB0(s8* arg0) {
     func_821368B0(M2C_FIELD(arg0, s32*, 0x85C), D_82189190[D_8219A4F0[0xE]]);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82104AFC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82104AFC.s")
-#endif
+extern s16 D_8219A50C;
+s32 func_82107A5C();
+void func_82101B54(ActivePokemon*, s32);
+
+/**
+ * Selects the record (D_82189190[D_8219A50C] - 1) of the table chosen by
+ * func_82107A5C(). When D_8219A50C == 5, and the record's byte 4 plus one equals
+ * the word at offset 0x620 of arg0 and func_82101F84(arg0) returns 0, it calls
+ * func_82101B54(arg0, D_82189190[D_8219A50C]) and stores D_8218A7B0 into the
+ * first word of entry D_82199E48 of D_82199E14. For every other value of
+ * D_8219A50C only the store is done.
+ */
+void func_82104AFC(s8* arg0) {
+    Record82104AFC* rec;
+
+    rec = (Record82104AFC*)D_82189180[func_82107A5C()] + (D_82189190[D_8219A50C] - 1);
+    if (D_8219A50C == 5) {
+        if (((rec->unk_04 + 1) == M2C_FIELD(arg0, s32*, 0x620)) && (func_82101F84(arg0) == 0)) {
+            func_82101B54((ActivePokemon*)arg0, D_82189190[D_8219A50C]);
+            D_82199E14[D_82199E48].unk_00 = D_8218A7B0;
+        }
+    } else {
+        D_82199E14[D_82199E48].unk_00 = D_8218A7B0;
+    }
+}
 
 /**
  * Empty state callback used as the tick-slot sentinel and table filler.
@@ -1006,16 +1086,23 @@ void BattleScene_TickStateCallbacks(void) {
     }
 }
 
-s32 func_82101F84(s8 *arg0);
-s32 func_82101F84(s8 *arg0);
-M2C_UNK func_82134E18(s8 *);                        /* extern */
-extern M2C_UNK D_82199E14;
+/*
+ * func_82104DB0
+ *
+ * If the word at offset 0x620 of the object `arg0` equals D_8219A754 and
+ * func_82101F84(arg0) returns 0: calls func_82134E18(arg0) and stores
+ * D_8218A7B0 into the first word of entry D_82199E48 of the table
+ * D_82199E14, whose entries are 8 bytes each (the index is scaled by 8 in
+ * the ROM; the second word of an entry is not touched here).
+ *
+ * What the table and the compared values mean is not established.
+ */
 extern s32 D_8219A754;
 
 void func_82104DB0(s8 *arg0) {
     if ((D_8219A754 == M2C_FIELD(arg0, s32 *, 0x620)) && (func_82101F84(arg0) == 0)) {
         func_82134E18(arg0);
-        *((M2C_UNK*)((u8*)&D_82199E14 + (sBattleSceneStateTickSlotIndex * 8))) = sBattleSceneStateTickSentinel;
+        D_82199E14[D_82199E48].unk_00 = D_8218A7B0;
     }
 }
 

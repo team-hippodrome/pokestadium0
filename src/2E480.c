@@ -3,6 +3,64 @@
 #include "global.h"
 #include "m2c_macros.h"
 
+/**
+ * Paged grid menu fields used by func_80031004, func_8002D948,
+ * func_8002F32C and the other grid/list menu helpers. Offsets other than the ones
+ * named here are unknown/unused by this function.
+ */
+typedef struct GridMenu80031004 {
+    /* 0x00 */ char unk00[0x8];
+    /* 0x08 */ s32 cursor;
+    /* 0x0C */ s32 cellWidth;
+    /* 0x10 */ s32 cellHeight;
+    /* 0x14 */ char unk14[0x16];
+    /* 0x2A */ u16 flags;
+    /* 0x2C */ s32 scroll;
+    /* 0x30 */ char unk30[0x4];
+    /* 0x34 */ s32 scrollTarget;
+    /* 0x38 */ char unk38[0x10];
+    /* 0x48 */ s32 columns;
+} GridMenu80031004;
+
+typedef struct MenuDef8002E230 {
+    /* 0x00 */ u8* items;
+    /* 0x04 */ s32 count;
+    /* 0x08 */ s32 itemCount;
+    /* 0x0C */ s32 itemSize;
+} MenuDef8002E230;
+typedef void (*MenuDrawFunc8002E230)(s32, s32, u8*, s32, s32, s32);
+typedef struct Menu8002E230 {
+    /* 0x00 */ MenuDef8002E230* def;
+    /* 0x04 */ u16* flags;
+    /* 0x08 */ s32 cursor;
+    /* 0x0C */ s32 colSpacing;
+    /* 0x10 */ s32 rowSpacing;
+    /* 0x14 */ MenuDrawFunc8002E230 draw;
+    /* 0x18 */ char unk18[0x8];
+    /* 0x20 */ s32 options;
+    /* 0x24 */ s32 columns;
+} Menu8002E230;
+
+typedef struct ScrollMenu8002F6C4 {
+    /* 0x00 */ MenuDef8002E230* def;
+    /* 0x04 */ u16* flags;
+    /* 0x08 */ s32 cursor;
+    /* 0x0C */ s32 width;
+    /* 0x10 */ s32 rowSpacing;
+    /* 0x14 */ MenuDrawFunc8002E230 draw;
+    /* 0x18 */ char unk18[0x8];
+    /* 0x20 */ s32 options;
+    /* 0x24 */ s32 rows;
+    /* 0x28 */ s32 unk28;
+    /* 0x2C */ s32 scroll;
+} ScrollMenu8002F6C4;
+void func_8002EDA8(ScrollMenu8002F6C4*);
+void func_8002F030(ScrollMenu8002F6C4*, s32, s32, s32, s32);
+void func_8002F32C(GridMenu80031004*, s32, s32);
+
+extern u8 D_80073520[];
+M2C_UNK func_80029A64(s32, s32, s32, s32, Color_RGBA8);
+
 #ifdef NON_MATCHING
 /* TODO: decompile func_8002D880; signature not recovered. */
 #else
@@ -26,11 +84,18 @@ void func_8002D900(u8* arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002D948; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002D948.s")
-#endif
+/**
+ * Draws the cursor rectangle (via func_80029A64) for a list menu with one cell per row:
+ * x = arg1 + 2, y = cursor * cellHeight + arg2 + 2, size = (cellWidth - 4) x (cellHeight - 4),
+ * colour read from D_80073520. Compare func_8002F32C and func_80031004. The separate `y`
+ * local only fixes the order in which the fields are loaded.
+ */
+void func_8002D948(GridMenu80031004* arg0, s32 arg1, s32 arg2) {
+    s32 y;
+
+    y = arg0->cursor * arg0->cellHeight + arg2 + 2;
+    func_80029A64(arg1 + 2, y, arg0->cellWidth - 4, arg0->cellHeight - 4, *(Color_RGBA8*)D_80073520);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8002D9B8; signature not recovered. */
@@ -62,11 +127,27 @@ void func_8002D900(u8* arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002DDFC.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002DECC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002DECC.s")
-#endif
+void func_8002DF2C(s8*, s32, s32);
+extern s32 D_800603C0;
+M2C_UNK func_8000B2F4(s32);
+
+/**
+ * Initialises a menu object at arg0: stores arg4, arg5, arg6 and arg3 at
+ * offsets 0x24, 0x0C, 0x10 and 0x14, calls func_8002DF2C(arg0, arg1, arg2),
+ * sets offset 0x1C to 0xC00 and offset 0x20 to 0, then stores D_800603C0 at
+ * offset 0x18 and passes it to func_8000B2F4. What the fields mean is not
+ * established.
+ */
+void func_8002DECC(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6) {
+    M2C_FIELD(arg0, s32*, 0x24) = arg4;
+    M2C_FIELD(arg0, s32*, 0xC) = arg5;
+    M2C_FIELD(arg0, s32*, 0x10) = arg6;
+    M2C_FIELD(arg0, s32*, 0x14) = arg3;
+    func_8002DF2C(arg0, arg1, arg2);
+    M2C_FIELD(arg0, s32*, 0x1C) = 0xC00;
+    M2C_FIELD(arg0, s32*, 0x20) = 0;
+    func_8000B2F4(M2C_FIELD(arg0, s32*, 0x18) = D_800603C0);
+}
 
 void func_8002DF54(u8* arg0);
 
@@ -85,11 +166,21 @@ void func_8002DF54(u8* arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002DF9C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002DF9C.s")
-#endif
+/**
+ * Draws the cursor rectangle (via func_80029A64) for a multi-column menu: the cursor cell is
+ * at column cursor % columns, row cursor / columns, so x = column * colSpacing + arg_x + 2 and
+ * y = row * rowSpacing + arg_y + 2; the size is (colSpacing - 4) x (rowSpacing - 4) and the
+ * colour is read from D_80073520. Compare func_80031004. The `px`/`py` locals only fix the
+ * evaluation order of the argument expressions.
+ */
+void func_8002DF9C(Menu8002E230* menu, s32 x, s32 y) {
+    s32 px;
+    s32 py;
+
+    px = (menu->cursor % menu->columns) * menu->colSpacing + x + 2;
+    py = (menu->cursor / menu->columns) * menu->rowSpacing + y + 2;
+    func_80029A64(px, py, menu->colSpacing - 4, menu->rowSpacing - 4, *(Color_RGBA8*)D_80073520);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8002E078; signature not recovered. */
@@ -97,24 +188,6 @@ void func_8002DF54(u8* arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002E078.s")
 #endif
 
-typedef struct MenuDef8002E230 {
-    /* 0x00 */ u8* items;
-    /* 0x04 */ s32 count;
-    /* 0x08 */ s32 itemCount;
-    /* 0x0C */ s32 itemSize;
-} MenuDef8002E230;
-typedef void (*MenuDrawFunc8002E230)(s32, s32, u8*, s32, s32, s32);
-typedef struct Menu8002E230 {
-    /* 0x00 */ MenuDef8002E230* def;
-    /* 0x04 */ u16* flags;
-    /* 0x08 */ s32 cursor;
-    /* 0x0C */ s32 colSpacing;
-    /* 0x10 */ s32 rowSpacing;
-    /* 0x14 */ MenuDrawFunc8002E230 draw;
-    /* 0x18 */ char unk18[0x8];
-    /* 0x20 */ s32 options;
-    /* 0x24 */ s32 columns;
-} Menu8002E230;
 void func_8002DF9C(Menu8002E230*, s32, s32);
 void func_8002E230(Menu8002E230* menu, s32 x, s32 y, s32 mask, s32 arg4) {
     MenuDef8002E230* def = menu->def;
@@ -205,34 +278,73 @@ void func_8002ED70(s8 *arg0)
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002F030.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002F32C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002F32C.s")
-#endif
+/**
+ * Draws the cursor rectangle (via func_80029A64) for a scrolling list menu. Same shape as
+ * func_80031004 but with x = arg1 + 2 (no column calculation) and the rectangle size taken from
+ * cellWidth/cellHeight minus 4: y = scrollTarget + arg2 - scroll + 2, and when flag 0x400 is
+ * set, (cellHeight - 1) is subtracted from it. The colour argument is read from D_80073520.
+ * Matching note: the redundant (s32) cast on arg2 only fixes the operand order of the addu.
+ */
+void func_8002F32C(GridMenu80031004* arg0, s32 arg1, s32 arg2) {
+    s32 sp2C;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002F3C4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002F3C4.s")
-#endif
+    sp2C = (s32)arg2 + arg0->scrollTarget - arg0->scroll + 2;
+    if (arg0->flags & 0x400) {
+        sp2C = sp2C - arg0->cellHeight + 1;
+    }
+    func_80029A64(arg1 + 2, sp2C, arg0->cellWidth - 4, arg0->cellHeight - 4, *(Color_RGBA8*)D_80073520);
+}
 
-typedef struct ScrollMenu8002F6C4 {
-    /* 0x00 */ MenuDef8002E230* def;
-    /* 0x04 */ u16* flags;
-    /* 0x08 */ s32 cursor;
-    /* 0x0C */ s32 width;
-    /* 0x10 */ s32 rowSpacing;
-    /* 0x14 */ MenuDrawFunc8002E230 draw;
-    /* 0x18 */ char unk18[0x8];
-    /* 0x20 */ s32 options;
-    /* 0x24 */ s32 rows;
-    /* 0x28 */ s32 unk28;
-    /* 0x2C */ s32 scroll;
-} ScrollMenu8002F6C4;
-void func_8002EDA8(ScrollMenu8002F6C4*);
-void func_8002F030(ScrollMenu8002F6C4*, s32, s32, s32, s32);
-void func_8002F32C(ScrollMenu8002F6C4*, s32, s32);
+/**
+ * Draws a scrolling list menu whose entries are an array of words (def->items[i], passed to the
+ * draw callback by value as the entry argument) rather than fixed-size records -- compare
+ * func_8002F6C4, which indexes records by def->itemSize. Sets the scissor rectangle to the
+ * menu area (x, y, width x rows * rowSpacing), calls func_8002EDA8, then draws every visible
+ * row i (from scroll / rowSpacing) through menu->draw(x, rowY, entry, i, flags & mask, arg4),
+ * where the flags halfword for row i comes from menu->flags and is OR'd with 0x12 for the
+ * cursor row; rows at or past def->itemCount get entry 0 and flags 0. Afterwards the scissor
+ * is restored to the full 640x480 screen, func_8002F030 draws when option bit 0x100000 is set
+ * and func_8002F32C (cursor box) draws when mask bit 2, option bit 0x10000 and a non-empty
+ * list agree.
+ */
+void func_8002F3C4(ScrollMenu8002F6C4* menu, s32 x, s32 y, s32 mask, s32 arg4) {
+    s32 height = menu->rowSpacing * menu->rows;
+    s32 i;
+    s32 rowY;
+    s32 end;
+    s32 item;
+    s32 f;
+    s32* items = (s32*)menu->def->items;
+
+    gDPPipeSync(gDisplayListHead++);
+    gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, x, y, menu->width + x, y + height);
+    func_8002EDA8(menu);
+    rowY = y - menu->scroll % menu->rowSpacing;
+    i = menu->scroll / menu->rowSpacing;
+    end = (menu->scroll + height - 1) / menu->rowSpacing + 1;
+    for (; i < end; i++) {
+        item = 0;
+        f = 0;
+        if (i < menu->def->itemCount) {
+            item = items[i];
+            f = menu->flags[i];
+            if (i == menu->cursor) {
+                f |= 0x12;
+            }
+        }
+        menu->draw(x, rowY, (u8*)item, i, f & mask, arg4);
+        rowY += menu->rowSpacing;
+    }
+    gDPPipeSync(gDisplayListHead++);
+    gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, 0, 640, 480);
+    if (menu->options & 0x100000) {
+        func_8002F030(menu, x, y - 16, y + menu->rowSpacing * menu->rows, menu->width);
+    }
+    if ((menu->def->itemCount > 0) && (mask & 2) && (menu->options & 0x10000)) {
+        func_8002F32C((GridMenu80031004*)menu, x, y);
+    }
+}
+
 void func_8002F6C4(ScrollMenu8002F6C4* menu, s32 x, s32 y, s32 mask, s32 arg4) {
     MenuDef8002E230* def = menu->def;
     u8* items = def->items;
@@ -401,11 +513,25 @@ void func_80030A1C(s8 *arg0)
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80030D3C.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80031004; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80031004.s")
-#endif
+
+/**
+ * Draws a rectangle (via func_80029A64) for the cursor of a paged grid menu.
+ * The column is cursor % columns, so x = column * cellWidth + arg1. y is
+ * scrollTarget + arg2 - scroll + 2; when flag 0x400 is set, (cellHeight - 1)
+ * is subtracted from it. The rectangle size is the cell size minus 4 in each
+ * direction, and the colour argument is read from D_80073520.
+ */
+void func_80031004(GridMenu80031004* arg0, s32 arg1, s32 arg2) {
+    s32 sp2C;
+    s32 sp28;
+
+    sp2C = arg0->scrollTarget + arg2 - arg0->scroll + 2;
+    sp28 = (arg0->cursor % arg0->columns) * arg0->cellWidth + arg1;
+    if (arg0->flags & 0x400) {
+        sp2C = sp2C - arg0->cellHeight + 1;
+    }
+    func_80029A64(sp28, sp2C, arg0->cellWidth - 4, arg0->cellHeight - 4, *(Color_RGBA8*)D_80073520);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_800310D8; signature not recovered. */

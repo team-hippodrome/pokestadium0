@@ -192,7 +192,7 @@ s32 func_800418CC(u32 arg0) {
     return ((u8*)&D_800FD6B4)[arg0];
 }
 
-extern s8 D_80077538;
+extern u8 D_80077538;
 
 void func_800418F0(s32 arg0) {
     if (arg0 != 0) {
@@ -253,11 +253,45 @@ void func_80041914(s32 arg0, s32 arg1) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80043860.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80043A10; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80043A10.s")
-#endif
+/*
+ * func_80043A10
+ *
+ * Chooses between two settings depending on D_80077540 and D_800FD6B4 and
+ * sets the flag byte D_80077530.
+ *
+ *   - If D_80077540 == 8 and the byte D_800FD6B4 is at least 2:
+ *     func_80043CE8(0x18, 0.0f, 0x80) and D_80077530 = 1; nothing else.
+ *   - In every other case: func_80043CE8(0x1E, 0.0f, 0x80), D_80077530 = 0,
+ *     then func_8003834C(D_800B4188, D_800B41A4, 0x1A, 0x80, 0x80, 0, -1).
+ *
+ * The second argument of func_80043CE8 is a float: with a float parameter
+ * the compiler loads the constant into $a1 with `li`, which is what the ROM
+ * does (an integer 0 would use `move $a1, $zero`).  What func_80043CE8
+ * (still assembly) and func_8003834C do with these values is not
+ * established here.
+ */
+void func_80043CE8(s32, f32, s32);
+extern s8 D_80077530;
+extern u8 D_80077540;
+extern s32 D_800B4188;
+extern s32 D_800B41A4;
+
+void func_80043A10(void) {
+    if (D_80077540 == 8) {
+        if (*(u8*)&D_800FD6B4 >= 2) {
+            func_80043CE8(0x18, 0.0f, 0x80);
+            D_80077530 = 1;
+            return;
+        }
+        func_80043CE8(0x1E, 0.0f, 0x80);
+        D_80077530 = 0;
+        func_8003834C(D_800B4188, D_800B41A4, 0x1A, 0x80, 0x80, 0, -1);
+        return;
+    }
+    func_80043CE8(0x1E, 0.0f, 0x80);
+    D_80077530 = 0;
+    func_8003834C(D_800B4188, D_800B41A4, 0x1A, 0x80, 0x80, 0, -1);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_80043B00; signature not recovered. */
@@ -265,11 +299,57 @@ void func_80041914(s32 arg0, s32 arg1) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80043B00.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80043CE8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80043CE8.s")
-#endif
+/** One pending entry in the 10-slot ring buffer D_800FD6C0. */
+typedef struct QueuedEntry80043CE8 {
+    /* 0x0 */ s32 id;
+    /* 0x4 */ f32 value;
+    /* 0x8 */ u32 level;
+} QueuedEntry80043CE8;
+
+extern u8 D_80077528;
+extern u8 D_8007753C;
+extern u32 D_80077558;
+extern u32 D_8007758C;
+extern QueuedEntry80043CE8 D_800FD6C0[];
+s32 func_8004D300(s32);
+
+/**
+ * Appends (arg0, arg1, arg2 + 0x70) to the 10-entry ring buffer D_800FD6C0,
+ * with the level clamped to 0xFF.
+ *
+ * Does nothing unless D_80077528 == 0, D_80077538 != 0 and D_8007753C == 0,
+ * and also does nothing when D_80077558 (the number of queued entries) is
+ * already 2 or more. D_8007758C is the write index and wraps modulo 10. The
+ * update runs with the interrupt mask raised by func_8004D300 (libultra's
+ * osSetIntMask) and restored afterwards.
+ */
+void func_80043CE8(s32 arg0, f32 arg1, s32 arg2) {
+    s32 prevMask;
+    QueuedEntry80043CE8* entry;
+    u32 level;
+    u32 idx;
+    u32 count;
+
+    if ((D_80077528 == 0) && (D_80077538 != 0) && (D_8007753C == 0)) {
+        prevMask = func_8004D300(1);
+        count = D_80077558;
+        if (count < 2) {
+            idx = D_8007758C;
+            entry = &D_800FD6C0[idx];
+            level = arg2 + 0x70;
+            entry->level = level;
+            entry->id = arg0;
+            entry->value = arg1;
+            if (level >= 0x100) {
+                entry->level = 0xFF;
+            }
+            D_8007758C = idx + 1;
+            D_80077558 = count + 1;
+            D_8007758C %= 10;
+        }
+        func_8004D300(prevMask);
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_80043DD0; signature not recovered. */

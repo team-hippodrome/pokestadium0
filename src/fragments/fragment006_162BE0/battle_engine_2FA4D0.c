@@ -468,11 +468,53 @@ void Save_InitializeBank3(void) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment006_162BE0/func_88401B40.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88401D54; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment006_162BE0/func_88401D54.s")
-#endif
+/*
+ * func_88401D54
+ *
+ * Loops until a choice is made. Each pass calls func_88400108(0),
+ * func_88401290() and func_80006780(), then tests the halfword at offset 8 of
+ * the record D_800603C0 points to:
+ *  - bit 0x8000: choice = 1, calls func_8003F6AC(0x1B);
+ *  - else bit 0x4000: choice = 2, calls func_8003F6AC(3);
+ *  - else bit 0x1: calls func_8003F6AC(2) and func_88401B40() and goes round
+ *    again.
+ * After the loop, if the choice is 1 and D_88403358 is not negative, calls
+ * func_80025BE4(D_88403358). Returns the choice (1 or 2).
+ *
+ * What the bits, the functions called and D_88403358 are is not
+ * established (the bits look like controller buttons but that is a guess
+ * from the masks only). Matching notes: the halfword is read directly at
+ * each test (the compiler shares one load) rather than through a local, and
+ * func_8003F6AC(3) is written before `choice = 2` to match the ROM's
+ * instruction order.
+ */
+M2C_UNK func_88401290();                            /* extern */
+M2C_UNK func_88401B40();                            /* extern */
+M2C_UNK func_80025BE4(s32);                         /* extern */
+s32 func_88401D54(void) {
+    s32 var_s0;
+
+    var_s0 = 0;
+    do {
+        func_88400108(0);
+        func_88401290();
+        func_80006780();
+        if (M2C_FIELD(D_800603C0, u16 *, 8) & 0x8000) {
+            var_s0 = 1;
+            func_8003F6AC(0x1B);
+        } else if (M2C_FIELD(D_800603C0, u16 *, 8) & 0x4000) {
+            func_8003F6AC(3);
+            var_s0 = 2;
+        } else if (M2C_FIELD(D_800603C0, u16 *, 8) & 1) {
+            func_8003F6AC(2);
+            func_88401B40();
+        }
+    } while (var_s0 == 0);
+    if ((var_s0 == 1) && (D_88403358 >= 0)) {
+        func_80025BE4(D_88403358);
+    }
+    return var_s0;
+}
 
 void func_800273E8(s8* arg0, s32 arg1);
 s32 func_80027214(s8*, s32);
@@ -508,35 +550,41 @@ void func_88401E24(void) {
     }
 }
 
-M2C_UNK func_8003F6AC(M2C_UNK);
-void func_80010F9C(void*, s32);
-M2C_UNK func_80006828(M2C_UNK, M2C_UNK *);
-M2C_UNK func_80010F14(M2C_UNK *, M2C_UNK, M2C_UNK *, M2C_UNK); /* extern */
-M2C_UNK func_8001107C(M2C_UNK *, M2C_UNK, M2C_UNK *); /* extern */
-M2C_UNK func_80019924(M2C_UNK *, M2C_UNK, M2C_UNK, s32); /* extern */
-M2C_UNK func_80025100(s8 *, M2C_UNK);               /* extern */
-extern M2C_UNK D_88402D74;
-extern M2C_UNK D_884037B0;
+void func_80025100(s8 *, void *);
+M2C_UNK func_8001107C(M2C_UNK *, M2C_UNK, M2C_UNK *);
+M2C_UNK func_80010F14(M2C_UNK *, M2C_UNK, M2C_UNK *, M2C_UNK);
+M2C_UNK func_80019924(M2C_UNK *, M2C_UNK, M2C_UNK, s32);
+extern M2C_UNK D_88403378;
+extern s32 D_88403358;
+extern s32 D_884037B0[];
+extern s32 D_88402D74[];
 extern M2C_UNK D_8F4014CC;
 extern M2C_UNK D_8F4889B8;
-extern M2C_UNK D_88403378;
-extern M2C_UNK D_88403648;
 
+/**
+ * Scene set-up that ends by running func_80006828(0x14, &func_88400108). Reads a signed
+ * byte index through func_80025100(&sp1F, NULL), then sets up the object at D_88403648
+ * (func_8001107C, func_80010F14 with D_8F4014CC and a 0x10000 argument, func_80010F9C
+ * with 0x2E, and sets bit 0x20 of its byte at +2). If D_88403358 is not negative, also
+ * sets up D_88403378 the same way, using the table entries D_884037B0[sp1F] and
+ * D_88402D74[sp1F]. Finally calls func_8003F6AC(0xB) and func_80006828(0x14,
+ * &func_88400108). What the index and the tables hold is not established.
+ */
 void func_88401F38(void) {
     s8 sp1F;
 
-    func_80025100(&sp1F, 0);
+    func_80025100(&sp1F, NULL);
     func_8001107C(&D_88403648, 1, &D_8F4889B8);
     func_80010F14(&D_88403648, 1, &D_8F4014CC, 0x10000);
     func_80010F9C(&D_88403648, 0x2E);
-    M2C_FIELD(&D_88403648, u8 *, 2) = (u8) (M2C_FIELD(&D_88403648, u8 *, 2) | 0x20);
+    M2C_FIELD(&D_88403648, u8 *, 2) |= 0x20;
     if (D_88403358 >= 0) {
-        func_80019924(&D_88403378, 0, 0, *((M2C_UNK*)((u8*)&D_884037B0 + (sp1F * 4))));
-        func_80010F14(&D_88403378, 1, *((M2C_UNK*)((u8*)&D_88402D74 + (sp1F * 4))), 0x10000);
+        func_80019924(&D_88403378, 0, 0, D_884037B0[sp1F]);
+        func_80010F14(&D_88403378, 1, (M2C_UNK *)D_88402D74[sp1F], 0x10000);
         func_80010F9C(&D_88403378, 0x2E);
     }
     func_8003F6AC(0xB);
-    func_80006828(0x14, (s32 *) func_88400108);
+    func_80006828(0x14, &func_88400108);
 }
 
 M2C_UNK func_80006828(M2C_UNK, M2C_UNK *);          /* extern */
@@ -555,11 +603,46 @@ void func_88402038(void) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88402098; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment006_162BE0/func_88402098.s")
-#endif
+extern s32 D_88403360;
+extern M2C_UNK D_88402E40;
+extern M2C_UNK D_88402E5C;
+
+/*
+ * func_88402098
+ *
+ * Reads the word at offset 0xC of D_88403370 (call it `rec`), calls
+ * func_8000A7FC(0x32) and fills two 0x3C-byte local buffers with
+ * func_800273E8 from D_88402E5C and D_88402E40. Then, while
+ * func_80027214(buf1, rec + 0xA8) returns non-zero, it calls
+ * func_80027214(buf2, rec + 0xB4), increments D_88403360 if it is below
+ * 0x19 (25), and calls func_88400108(0) and func_80006780().
+ *
+ * Same buffer pair and loop shape as func_88401E24 and func_82200618. What
+ * the buffers and helpers are is not established. Matching note: the only
+ * declared scalar is `temp_s0`; declaring a second one for rec + 0xA8
+ * makes the stack frame 8 bytes larger than the ROM's (each declared local
+ * seems to reserve a stack slot even when it lives in a register).
+ */
+void func_88402098(void) {
+    s8 sp7C[0x3C];
+    s8 sp40[0x3C];
+    s32 temp_s0;
+
+    temp_s0 = M2C_FIELD(D_88403370, s32 *, 0xC);
+    func_8000A7FC(0x32);
+    func_800273E8(sp7C, (s32) &D_88402E5C);
+    func_800273E8(sp40, (s32) &D_88402E40);
+    if (func_80027214(sp7C, temp_s0 + 0xA8) != 0) {
+        do {
+            func_80027214(sp40, temp_s0 + 0xB4);
+            if (D_88403360 < 0x19) {
+                D_88403360 += 1;
+            }
+            func_88400108(0);
+            func_80006780();
+        } while (func_80027214(sp7C, temp_s0 + 0xA8) != 0);
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_88402174; signature not recovered. */
@@ -576,12 +659,6 @@ void func_884022A4(void) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment006_162BE0/func_884022AC.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88402334; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment006_162BE0/func_88402334.s")
-#endif
-
 M2C_UNK func_80005B98(M2C_UNK);                     /* extern */
 M2C_UNK func_800067BC(M2C_UNK);                     /* extern */
 M2C_UNK func_80006828(M2C_UNK, M2C_UNK *);          /* extern */
@@ -589,6 +666,45 @@ M2C_UNK func_8000D520(s32, s8 *);                 /* extern */
 M2C_UNK func_80025BE4(s32);                         /* extern */
 M2C_UNK func_8840115C();                            /* extern */
 M2C_UNK func_884022AC();                            /* extern */
+
+M2C_UNK func_88401040();
+extern s8 D_88402D98;
+extern s8 D_88402DB4;
+/**
+ * Sibling of func_8840248C and func_884023F0. Reads the record pointer from
+ * D_88403370 (+0xC), clears D_88403360, then calls func_884000CC(), func_800067BC(1),
+ * func_8000A7B0(0xA) and func_80005B98(0x1E). Calls func_8000D520 twice with
+ * (record + 0xB4, D_88402D98 + 2) and (record + 0xA8, D_88402DB4 + 2), runs
+ * func_80006828(5, &func_88400108) and func_88401040(), then r = func_88401D54();
+ * calls func_884022AC() if r == 1 and func_88401E24() otherwise. Returns r.
+ * The record pointer is read before D_88403360 is cleared, as in func_8840248C.
+ * What the screen is, and what the two +2 offsets select, is not established.
+ */
+s32 func_88402334(void) {
+    s32 sp1C;
+    s32 sp18;
+    s32 temp_v0;
+
+    sp18 = M2C_FIELD(D_88403370, s32 *, 0xC);
+    D_88403360 = 0;
+    func_884000CC();
+    func_800067BC(1);
+    func_8000A7B0(0xA);
+    func_80005B98(0x1E);
+    func_8000D520(sp18 + 0xB4, &D_88402D98 + 2);
+    func_8000D520(sp18 + 0xA8, &D_88402DB4 + 2);
+    func_80006828(5, &func_88400108);
+    func_88401040();
+    temp_v0 = func_88401D54();
+    sp1C = temp_v0;
+    if (temp_v0 == 1) {
+        func_884022AC();
+    } else {
+        func_88401E24();
+    }
+    return sp1C;
+}
+
 extern s8 D_88402DD0;
 extern s8 D_88402DEC;
 extern s32 D_88403358;
@@ -610,11 +726,50 @@ s32 func_884023F0(void) {
     return 1;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8840248C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment006_162BE0/func_8840248C.s")
-#endif
+/*
+ * func_8840248C
+ *
+ * Clears D_88403360; reads the word at offset 0xC of D_88403370 (used as a
+ * pointer); calls func_884000CC(), func_8000A7FC(0x3C) and func_800067BC(1).
+ * Then calls func_8000D520 twice with (record + 0xB4, D_88402E78 + 2) and
+ * (record + 0xA8, D_88402E94 + 2), where `record` is the pointer read above
+ * (the neighbouring function func_884023F0 makes the same two calls with
+ * D_88402DD0 and D_88402DEC). Calls func_88402174() and func_88402038(),
+ * then r = func_88401D54(); calls func_884022AC() if r == 1 and
+ * func_88401E24() otherwise. Returns r.
+ *
+ * What the screen/state it sets up is, and what the two +2 offsets select
+ * (they are byte offsets into the data at D_88402E78 and D_88402E94), is not
+ * established. Matching note: D_88403360 is cleared after the load of
+ * the record pointer; the reverse order does not match.
+ */
+s32 func_88401D54();                                /* extern */
+M2C_UNK func_88402174();                            /* extern */
+extern s8 D_88402E78;
+extern s8 D_88402E94;
+s32 func_8840248C(void) {
+    s32 sp1C;
+    s32 sp18;
+    s32 temp_v0;
+
+    sp18 = M2C_FIELD(D_88403370, s32 *, 0xC);
+    D_88403360 = 0;
+    func_884000CC();
+    func_8000A7FC(0x3C);
+    func_800067BC(1);
+    func_8000D520(sp18 + 0xB4, &D_88402E78 + 2);
+    func_8000D520(sp18 + 0xA8, &D_88402E94 + 2);
+    func_88402174();
+    func_88402038();
+    temp_v0 = func_88401D54();
+    sp1C = temp_v0;
+    if (temp_v0 == 1) {
+        func_884022AC();
+    } else {
+        func_88401E24();
+    }
+    return sp1C;
+}
 
 typedef struct GbPortSummaryZ {
     /* 0x00 */ u8 saveState;

@@ -307,11 +307,40 @@ void func_82121908(ActivePokemon* arg0, Vec3f* arg1) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82121954.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82121C3C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82121C3C.s")
-#endif
+extern f32 D_FLT_82196230;
+extern f32 D_FLT_82196234;
+s32 func_82121954(ActivePokemon*, s32, ActivePokemon*, s16, f32);
+/*
+ * func_82121C3C
+ *
+ * Unless the scene's unk_1C is one of 4, 7, 8, 9, 0xA or 0xB, it calls
+ * func_82121954 once for each of the two active Pokemon (sActivePokemon[0]
+ * and [1]).  Each call gets the Pokemon (twice), arg0, the halfword at offset
+ * 0x34 of that Pokemon's state block, and a float (D_FLT_82196230 for the
+ * first Pokemon, D_FLT_82196234 for the second).  Bit 0 of the byte at offset 1
+ * of the Pokemon is set when the call returns non-zero and cleared when it
+ * returns zero.  What func_82121954 tests and what that bit means is not
+ * established here.
+ * Note: sActivePokemon[0]/[1] are re-read after each call rather than held in
+ * locals, which is what the ROM does.
+ */
+void func_82121C3C(s32 arg0) {
+    ActivePokemonState* first_state = &sActivePokemon[0]->state;
+    ActivePokemonState* second_state = &sActivePokemon[1]->state;
+    s32 mode = sBattleScene.scene->unk_1C;
+    if ((mode != 4) && (mode != 8) && (mode != 7) && (mode != 0xB) && (mode != 9) && (mode != 0xA)) {
+        if (func_82121954(sActivePokemon[0], arg0, sActivePokemon[0], M2C_FIELD(first_state, s16*, 0x34), D_FLT_82196230) != 0) {
+            M2C_FIELD(sActivePokemon[0], u8*, 1) |= 1;
+        } else {
+            M2C_FIELD(sActivePokemon[0], u8*, 1) &= 0xFFFE;
+        }
+        if (func_82121954(sActivePokemon[1], arg0, sActivePokemon[1], M2C_FIELD(second_state, s16*, 0x34), D_FLT_82196234) != 0) {
+            M2C_FIELD(sActivePokemon[1], u8*, 1) |= 1;
+        } else {
+            M2C_FIELD(sActivePokemon[1], u8*, 1) &= 0xFFFE;
+        }
+    }
+}
 
 void BattleScene_SetCameraModeAndStep(s32 camera_mode, s32 camera_step) {
     sBattleScene.scene->unk_1C = camera_mode;
@@ -328,11 +357,43 @@ void BattleScene_SetCameraSubstate(s32 arg0, u16 arg1) {
     sBattleScene.scene->unk_2E = arg1;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82121DAC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82121DAC.s")
-#endif
+void func_82121D5C(s32, s32);
+/*
+ * func_82121DAC
+ *
+ * Only runs when the scene's unk_18 is 2.  It then checks the scene's unk_44
+ * against 1, 2, 5, 6, 9 and 0xA in turn (the field is re-read after every
+ * call, so a call may change it and a later check can then also succeed) and
+ * calls func_82121D5C(value, argument) for each match: with 0x32 for 1, 5 and
+ * 9, and with 0 for 2, 6 and 0xA.  Before the calls for 2, 6 and 0xA it also
+ * copies the scene's unk_2A into unk_2C.  What unk_44 values 1/2, 5/6 and 9/0xA
+ * stand for, and what func_82121D5C does with them, is not established here.
+ */
+void func_82121DAC(void) {
+    if (sBattleScene.scene->unk_18 == 2) {
+        if (sBattleScene.scene->unk_44 == 1) {
+            func_82121D5C(1, 0x32);
+        }
+        if (sBattleScene.scene->unk_44 == 2) {
+            sBattleScene.scene->unk_2C = sBattleScene.scene->unk_2A;
+            func_82121D5C(2, 0);
+        }
+        if (sBattleScene.scene->unk_44 == 5) {
+            func_82121D5C(5, 0x32);
+        }
+        if (sBattleScene.scene->unk_44 == 6) {
+            sBattleScene.scene->unk_2C = sBattleScene.scene->unk_2A;
+            func_82121D5C(6, 0);
+        }
+        if (sBattleScene.scene->unk_44 == 9) {
+            func_82121D5C(9, 0x32);
+        }
+        if (sBattleScene.scene->unk_44 == 0xA) {
+            sBattleScene.scene->unk_2C = sBattleScene.scene->unk_2A;
+            func_82121D5C(0xA, 0);
+        }
+    }
+}
 
 void BattleScene_SetDamageShakeAmplitude(ActivePokemon* arg0) {
     BattleMon* ptr = &arg0->teamRoster->pokemonPicked[arg0->state.rosterIndex];
@@ -406,7 +467,7 @@ s32 BattleScene_IsCameraAngleSettled(s16 arg0, s16 arg1) {
     return 0;
 }
 
-M2C_UNK func_8000EEBC(s32, s32, s32, s16, s32);     /* extern */
+M2C_UNK func_8000EEBC(s32, s32, f32, s16, s32);     /* extern */
 extern s8 *D_8219A5A0;
 
 s32 func_821221C0(s32 arg0, s16 arg1, s16 arg2) {
@@ -428,7 +489,7 @@ s32 func_821221C0(s32 arg0, s16 arg1, s16 arg2) {
         return 1;
     }
 block_7:
-    func_8000EEBC(arg0 + 0xB4, arg0 + 0xA8, M2C_FIELD(D_8219A5A0, s32 *, 0x5C), M2C_FIELD(D_8219A5A0, s16 *, 0x58), (s32) var_v0);
+    func_8000EEBC(arg0 + 0xB4, arg0 + 0xA8, M2C_FIELD(D_8219A5A0, f32 *, 0x5C), M2C_FIELD(D_8219A5A0, s16 *, 0x58), (s32) var_v0);
     return 0;
 }
 
@@ -461,17 +522,60 @@ void func_82122374(s8 *arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8212239C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8212239C.s")
-#endif
+extern f32 D_FLT_82189354[][4];
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82122458; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82122458.s")
-#endif
+/*
+ * func_8212239C
+ *
+ * Prepares a participant's camera anchor point at +0x5D0 and saves the camera.
+ * The anchor starts as the vector at +0x5DC (Vec3f_SetComponentsDuplicate), then
+ * its Y (+0x5D4) is rebuilt as that vector's Y (+0x5E0) plus the display
+ * object's Y position minus the object type's table entry
+ * (D_FLT_82189354[type][0], the resting height func_82107790 uses). The
+ * camera's target and eye are then copied into the scene's saved-target (+0xA8)
+ * and saved-eye (+0xB4) slots, and the distance and angles from the anchor to
+ * the camera target are stored in the model transform at +0x38 / +0x30 / +0x32
+ * (the same fields func_82122A7C reads).
+ *
+ * The `pad` local only reproduces the retail stack frame (12 unused bytes).
+ */
+void func_8212239C(ActivePokemon* arg0, CameraNode* arg1) {
+    UNUSED s32 pad[3];
+    u8* ptr = (u8*)&arg0->modelTransform;
+
+    Vec3f_SetComponentsDuplicate(&M2C_FIELD(arg0, Vec3f*, 0x5D0), M2C_FIELD(arg0, f32*, 0x5DC), M2C_FIELD(arg0, f32*, 0x5E0), M2C_FIELD(arg0, f32*, 0x5E4));
+    M2C_FIELD(arg0, f32*, 0x5D4) = M2C_FIELD(arg0, f32*, 0x5E0) + (arg0->displayObject.position.y - D_FLT_82189354[arg0->displayObject.objectType][0]);
+    BattleAnim_Vec3fCopy(&M2C_FIELD(sBattleScene.scene, Vec3f*, 0xA8), &arg1->view.targetPosition);
+    BattleAnim_Vec3fCopy(&M2C_FIELD(sBattleScene.scene, Vec3f*, 0xB4), &arg1->view.eyePosition);
+    BattleAnim_CalculateDistanceAngles(&M2C_FIELD(arg0, Vec3f*, 0x5D0), &arg1->view.targetPosition, &M2C_FIELD(ptr, f32*, 0x38), &M2C_FIELD(ptr, s16*, 0x30), &M2C_FIELD(ptr, s16*, 0x32));
+}
+
+extern u8 D_8219A4F4;
+void func_82121D78(CameraNode* arg0, f32 arg1, f32 arg2);
+
+/*
+ * func_82122458
+ *
+ * Sets the camera's clip planes (BattleScene_SetCameraClipPlanes, func_82121D78)
+ * for the current battle phase: always 20 / 4000 first; then 20 / 32000 while the
+ * scene's phase value (unk_1C) is 4 or 8; and 60 / 32000 when that value is 9,
+ * D_8219A4F4 is 5 and unk_20 is not 0x1D. What the phase values and D_8219A4F4
+ * stand for has not been established. The meaning of the two floats as near/far
+ * planes comes from the Stadium 1 name of func_82121D78.
+ */
+void func_82122458(CameraNode* arg0) {
+    s32 var_v0;
+
+    func_82121D78(arg0, 20.0f, 4000.0f);
+    var_v0 = sBattleScene.scene->unk_1C;
+    if ((var_v0 == 4) || (var_v0 == 8)) {
+        func_82121D78(arg0, 20.0f, 32000.0f);
+        var_v0 = sBattleScene.scene->unk_1C;
+    }
+    if ((var_v0 == 9) && (D_8219A4F4 == 5) && (sBattleScene.scene->unk_20 != 0x1D)) {
+        func_82121D78(arg0, 60.0f, 32000.0f);
+    }
+}
 
 void BattleScene_ClearCameraOffsetVectors(void) {
     Vec3f_SetComponentsDuplicate(&sBattleScene.scene->unk_94, 0.0f, 0.0f, 0.0f);
@@ -517,11 +621,40 @@ void BattleScene_SetCameraEyeAndStoreAnglesFromAt(CameraNode* arg0, s16 arg1, s1
 void BattleScene_CameraHelperNop(UNUSED CameraNode* arg0) {
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_821227C0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821227C0.s")
-#endif
+/*
+ * func_821227C0
+ *
+ * Called at the end of func_821228B0.  Measures distance and angles between
+ * the scene's saved eye (+0xB4) and saved target (+0xA8) vectors with
+ * BattleAnim_CalculateDistanceAngles.  Only when the last angle output,
+ * divided by 182 (0xB6, about one degree in 16-bit angle units), is exactly
+ * 90 or -90 does it go on: it measures the same pair of vectors on the camera
+ * node, eases the resulting distance towards the scene distance (1.5 times it,
+ * with speed 1.0, when the participant's object type is 0x65; otherwise the
+ * scene distance itself with speed 0.5), and passes the camera node's eye and
+ * target vectors, the eased distance and the two angles to func_8000EEBC.
+ * What func_8000EEBC does with them is not established here.
+ * Note: the "pad" array only reproduces the retail frame size.
+ */
+void func_821227C0(CameraNode* arg0, ActivePokemon* arg1) {
+    UNUSED s32 pad[9];
+    f32 sp38;
+    s16 sp36;
+    s16 sp34;
+    f32 sp30;
+    s16 sp2E;
+    s16 sp2C;
+    BattleAnim_CalculateDistanceAngles(&M2C_FIELD(sBattleScene.scene, Vec3f*, 0xB4), &M2C_FIELD(sBattleScene.scene, Vec3f*, 0xA8), &sp30, &sp2E, &sp2C);
+    if (((sp2C / 182) == 0x5A) || ((sp2C / 182) == -0x5A)) {
+        BattleAnim_CalculateDistanceAngles(&M2C_FIELD(arg0, Vec3f*, 0xB4), &M2C_FIELD(arg0, Vec3f*, 0xA8), &sp38, &sp36, &sp34);
+        if (arg1->displayObject.objectType == 0x65) {
+            BattleAnim_ApproachF(&sp38, sp30 * 1.5f, 1.0f);
+        } else {
+            BattleAnim_ApproachF(&sp38, sp30, 0.5f);
+        }
+        func_8000EEBC((s32)arg0 + 0xB4, (s32)arg0 + 0xA8, sp38, sp36, sp34);
+    }
+}
 
 void func_821227C0(CameraNode*, ActivePokemon*);
 
@@ -566,35 +699,203 @@ void BattleScene_ApproachCameraTarget(CameraNode* arg0, ActivePokemon* arg1) {
     Camera_ComputeEyeFromAngles(&sp38, &arg0->view.targetPosition, sp34 * 0.1f, sp32, sp30);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82122A7C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82122A7C.s")
-#endif
+extern f32 D_FLT_82189350[][4];
+extern f32 D_FLT_82196240;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82122B9C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82122B9C.s")
-#endif
+/*
+ * func_82122A7C
+ *
+ * Moves the camera's target point towards the participant. Works out the
+ * participant's camera anchor (func_82121908) and its distance/angles to the
+ * point stored at +0x5D0, then eases camera->view.targetPosition: if that
+ * distance is at least the object type's table width (D_FLT_82189350[type][0])
+ * the new goal is the anchor offset by the model transform's own distance and
+ * angles (+0x38, +0x30, +0x32 within the transform); otherwise the goal is the
+ * scene's stored vector at +0xA8. The target then moves along the direction to
+ * the goal by D_FLT_82196240 times the remaining distance.
+ */
+void func_82122A7C(CameraNode* arg0, ActivePokemon* arg1) {
+    u8* ptr = (u8*)&arg1->modelTransform;
+    Vec3f sp50;
+    Vec3f sp44;
+    Vec3f sp38;
+    f32 sp34;
+    s16 sp32;
+    s16 sp30;
+    Vec3f* sp28;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82122CCC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82122CCC.s")
-#endif
+    func_82121908(arg1, &sp50);
+    BattleAnim_CalculateDistanceAngles(&sp50, &M2C_FIELD(arg1, Vec3f*, 0x5D0), &sp34, &sp32, &sp30);
+    sp28 = &arg0->view.targetPosition;
+    BattleAnim_Vec3fCopy(&sp38, sp28);
+    if (D_FLT_82189350[arg1->displayObject.objectType][0] <= sp34) {
+        Camera_ComputeEyeFromAngles(&sp50, &sp44, M2C_FIELD(ptr, f32*, 0x38), M2C_FIELD(ptr, s16*, 0x30), M2C_FIELD(ptr, s16*, 0x32));
+        BattleAnim_CalculateDistanceAngles(&sp38, &sp44, &sp34, &sp32, &sp30);
+    } else {
+        BattleAnim_CalculateDistanceAngles(&sp38, &M2C_FIELD(sBattleScene.scene, Vec3f*, 0xA8), &sp34, &sp32, &sp30);
+    }
+    Camera_ComputeEyeFromAngles(&sp38, sp28, sp34 * D_FLT_82196240, sp32, sp30);
+}
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82122DFC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82122DFC.s")
-#endif
+extern f32 D_FLT_82189350[][4];
+extern f32 D_FLT_82196244;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82122FD8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82122FD8.s")
-#endif
+/*
+ * func_82122B9C
+ *
+ * Variant of func_82122A7C that is skipped while the participant's
+ * modelTransformId is 6 or 4 and eases the camera target by
+ * D_FLT_82196244 instead of D_FLT_82196240 (see func_82122A7C for the
+ * step-by-step description). The meaning of transform ids 4 and 6 has not been
+ * established.
+ */
+void func_82122B9C(CameraNode* arg0, ActivePokemon* arg1) {
+    u8* ptr = (u8*)&arg1->modelTransform;
+    Vec3f sp58;
+    Vec3f sp4C;
+    Vec3f sp40;
+    f32 sp3C;
+    s16 sp3A;
+    s16 sp38;
+    Vec3f* sp30;
+
+    if ((arg1->modelTransformId != 6) && (arg1->modelTransformId != 4)) {
+        func_82121908(arg1, &sp58);
+        BattleAnim_CalculateDistanceAngles(&sp58, &M2C_FIELD(arg1, Vec3f*, 0x5D0), &sp3C, &sp3A, &sp38);
+        sp30 = &arg0->view.targetPosition;
+        BattleAnim_Vec3fCopy(&sp40, sp30);
+        if (D_FLT_82189350[arg1->displayObject.objectType][0] <= sp3C) {
+            Camera_ComputeEyeFromAngles(&sp58, &sp4C, M2C_FIELD(ptr, f32*, 0x38), M2C_FIELD(ptr, s16*, 0x30), M2C_FIELD(ptr, s16*, 0x32));
+            BattleAnim_CalculateDistanceAngles(&sp40, &sp4C, &sp3C, &sp3A, &sp38);
+        } else {
+            BattleAnim_CalculateDistanceAngles(&sp40, &M2C_FIELD(sBattleScene.scene, Vec3f*, 0xA8), &sp3C, &sp3A, &sp38);
+        }
+        Camera_ComputeEyeFromAngles(&sp40, sp30, sp3C * D_FLT_82196244, sp3A, sp38);
+    }
+}
+
+extern f32 D_FLT_82189350[][4];
+extern f32 D_FLT_82196248;
+extern f32 D_FLT_8219624C;
+
+/*
+ * func_82122CCC
+ *
+ * Variant of func_82122A7C: the distance threshold is the object type's table
+ * width multiplied by D_FLT_82196248 (rather than the bare width), and the
+ * camera target is eased by D_FLT_8219624C times the remaining distance. See
+ * func_82122A7C for the step-by-step description.
+ */
+void func_82122CCC(CameraNode* arg0, ActivePokemon* arg1) {
+    u8* ptr = (u8*)&arg1->modelTransform;
+    Vec3f sp50;
+    Vec3f sp44;
+    Vec3f sp38;
+    f32 sp34;
+    s16 sp32;
+    s16 sp30;
+    Vec3f* sp28;
+
+    func_82121908(arg1, &sp50);
+    BattleAnim_CalculateDistanceAngles(&sp50, &M2C_FIELD(arg1, Vec3f*, 0x5D0), &sp34, &sp32, &sp30);
+    sp28 = &arg0->view.targetPosition;
+    BattleAnim_Vec3fCopy(&sp38, sp28);
+    if ((D_FLT_82189350[arg1->displayObject.objectType][0] * D_FLT_82196248) <= sp34) {
+        Camera_ComputeEyeFromAngles(&sp50, &sp44, M2C_FIELD(ptr, f32*, 0x38), M2C_FIELD(ptr, s16*, 0x30), M2C_FIELD(ptr, s16*, 0x32));
+        BattleAnim_CalculateDistanceAngles(&sp38, &sp44, &sp34, &sp32, &sp30);
+    } else {
+        BattleAnim_CalculateDistanceAngles(&sp38, &M2C_FIELD(sBattleScene.scene, Vec3f*, 0xA8), &sp34, &sp32, &sp30);
+    }
+    Camera_ComputeEyeFromAngles(&sp38, sp28, sp34 * D_FLT_8219624C, sp32, sp30);
+}
+
+void func_82122CCC(CameraNode* arg0, ActivePokemon* arg1);
+void func_82107DDC(ActivePokemon* active_pokemon, Vec3f* out);
+
+/*
+ * func_82122DFC
+ *
+ * Earlier relative of Stadium 1's BattleScene_FrameCamera (that version also
+ * handles underground and Fire Spin cases, which this one does not). Unless the
+ * participant is an Onix it first runs func_82122CCC. It then saves the camera's
+ * current target and eye, asks func_82107DDC for the participant's anchor and
+ * sets the camera from it using the facing angle and a distance from
+ * BattleScene_ScaleCameraDistance(3.5, 300). The new eye distance and angles are
+ * compared with the saved ones: the distance is approached by 0.05, the Y angle
+ * is stepped by 0x111 and the X angle by 0x5B per call, and the camera is
+ * rebuilt from those values. The target is also moved one hundredth of the way
+ * from its saved position to its new one. Returns 1 once both angles have
+ * reached their goals, otherwise 0.
+ */
+s32 func_82122DFC(CameraNode* arg0, ActivePokemon* arg1) {
+    Vec3f sp5C;
+    Vec3f sp50;
+    Vec3f sp44;
+    f32 sp40;
+    s16 sp3E;
+    s16 sp3C;
+    s16 sp3A;
+    s16 sp38;
+    s16 sp36;
+    s16 sp34;
+
+    if (arg1->displayObject.objectType != ONIX) {
+        func_82122CCC(arg0, arg1);
+    }
+    BattleAnim_Vec3fCopy(&sp50, &arg0->view.targetPosition);
+    BattleAnim_Vec3fCopy(&sp44, &arg0->view.eyePosition);
+    func_82107DDC(arg1, &sp5C);
+    gCameraDistTarget = BattleScene_ScaleCameraDistance(arg1, 3.5f, 300.0f);
+    BattleScene_SetCameraEyeFromPosition(arg0, sp5C, 0, BattleScene_GetParticipantFacingAngle(arg1), gCameraDistTarget, 0.0f);
+    BattleAnim_CalculateDistanceAngles(&arg0->view.targetPosition, &arg0->view.eyePosition, &D_8219A534, &sp34, &sp38);
+    BattleAnim_CalculateDistanceAngles(&sp50, &sp44, &gCameraDistTarget, &sp36, &sp3A);
+    BattleAnim_ApproachF(&gCameraDistTarget, D_8219A534, 0.05f);
+    BattleAnim_StepToS16(&sp3A, sp38, 0x111);
+    BattleAnim_StepToS16(&sp36, sp34, 0x5B);
+    BattleAnim_CalculateDistanceAngles(&sp50, &arg0->view.targetPosition, &sp40, &sp3E, &sp3C);
+    Camera_ComputeEyeFromAngles(&sp50, &arg0->view.targetPosition, sp40 / 100.0f, sp3E, sp3C);
+    BattleScene_SetCameraEyeFromAt(arg0, sp36, sp3A, gCameraDistTarget, 0.0f);
+    if ((sp34 == sp36) && (sp38 == sp3A)) {
+        return 1;
+    }
+    return 0;
+}
+
+extern f32 D_FLT_82189350[][4];
+extern f32 D_FLT_82196250;
+extern f32 D_FLT_82196254;
+
+/*
+ * func_82122FD8
+ *
+ * Variant of func_82122A7C that first copies the scene's vector at +0xB4 into
+ * the camera's eye position. The distance threshold is the object type's table
+ * width scaled by D_FLT_82196250 and the camera target is eased by
+ * D_FLT_82196254 times the remaining distance. See func_82122A7C for the
+ * step-by-step description.
+ */
+void func_82122FD8(CameraNode* arg0, ActivePokemon* arg1) {
+    u8* ptr = (u8*)&arg1->modelTransform;
+    Vec3f sp58;
+    Vec3f sp4C;
+    UNUSED s32 pad[3];
+    Vec3f sp34;
+    f32 sp30;
+    s16 sp2E;
+    s16 sp2C;
+
+    BattleAnim_Vec3fCopy(&arg0->view.eyePosition, &M2C_FIELD(sBattleScene.scene, Vec3f*, 0xB4));
+    func_82121908(arg1, &sp58);
+    BattleAnim_CalculateDistanceAngles(&sp58, &M2C_FIELD(arg1, Vec3f*, 0x5D0), &sp30, &sp2E, &sp2C);
+    BattleAnim_Vec3fCopy(&sp34, &arg0->view.targetPosition);
+    if ((D_FLT_82189350[arg1->displayObject.objectType][0] * D_FLT_82196250) <= sp30) {
+        Camera_ComputeEyeFromAngles(&sp58, &sp4C, M2C_FIELD(ptr, f32*, 0x38), M2C_FIELD(ptr, s16*, 0x30), M2C_FIELD(ptr, s16*, 0x32));
+        BattleAnim_CalculateDistanceAngles(&sp34, &sp4C, &sp30, &sp2E, &sp2C);
+    } else {
+        BattleAnim_CalculateDistanceAngles(&sp34, &M2C_FIELD(sBattleScene.scene, Vec3f*, 0xA8), &sp30, &sp2E, &sp2C);
+    }
+    Camera_ComputeEyeFromAngles(&sp34, &arg0->view.targetPosition, sp30 * D_FLT_82196254, sp2E, sp2C);
+}
 
 // Zero passes an extra, unused 4-byte struct by value; its type is a guess.
 void func_8212311C(CameraNode* arg0, ActivePokemon* arg1, Color_RGBA8 arg2) {

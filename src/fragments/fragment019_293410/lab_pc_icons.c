@@ -142,11 +142,39 @@ void func_8A2008F4(s8 *arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8A20093C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment019_293410/func_8A20093C.s")
-#endif
+extern s8 *D_800603C0;
+M2C_UNK func_8003F6AC(M2C_UNK);
+s32 func_8002DC04(s8*);
+s32 func_8002BC14(s32);
+/**
+ * Menu-list input handler (same pattern as func_8200639C / func_8900408C). Does nothing and
+ * returns 0 while func_8002DC04(arg0 + 0x2C) is non-zero. Otherwise reads the input result
+ * from func_8002BC14(D_800603C0): -1 returns -1; 1 looks at the entry for the cursor index
+ * stored at arg0 + 0x34 in the halfword table pointed to by arg0 + 0x30 -- if bit 0 of that
+ * entry is clear it returns index + 1, if set it plays sound effect func_8003F6AC(8) and
+ * returns 0; any other result returns 0. (What the table bit means -- likely "disabled"
+ * -- is inferred from the sound call only.)
+ */
+s32 func_8A20093C(s8* arg0) {
+    s32 sp1C = 0;
+    s32 dir;
+    s32 idx;
+
+    if (func_8002DC04(arg0 + 0x2C) == 0) {
+        dir = func_8002BC14((s32)D_800603C0);
+        if (dir == -1) {
+            sp1C = -1;
+        } else if (dir == 1) {
+            idx = M2C_FIELD(arg0, s32*, 0x34);
+            if (!(M2C_FIELD(arg0, u16**, 0x30)[idx] & 1)) {
+                sp1C = idx + 1;
+            } else {
+                func_8003F6AC(8);
+            }
+        }
+    }
+    return sp1C;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8A2009CC; signature not recovered. */
@@ -472,11 +500,28 @@ void func_8A202904(s8 *arg0, s32 arg1, s32 arg2) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment019_293410/func_8A20291C.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8A202EF4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment019_293410/func_8A202EF4.s")
-#endif
+extern s32 D_8A21DE08;
+extern M2C_UNK D_8A21DE10;
+extern M2C_UNK D_8A21DA80;
+s32 func_80025BD8();
+M2C_UNK func_80027FF8(M2C_UNK *, s32);
+M2C_UNK func_8A2024D0(M2C_UNK *);
+
+/**
+ * Stores the result of func_80025BD8() in D_8A21DA40 and copies it to D_8A21DE08. If it
+ * is not -1, passes it with &D_8A21DE10 to func_80027FF8. Then calls
+ * func_8A2024D0(&D_8A21DA80). The copy is re-read from D_8A21DE08 for the compare and
+ * call, as the retail register allocation requires. The meaning of the value is not
+ * established.
+ */
+void func_8A202EF4(void) {
+    D_8A21DA40 = func_80025BD8();
+    D_8A21DE08 = D_8A21DA40;
+    if (D_8A21DE08 != -1) {
+        func_80027FF8(&D_8A21DE10, D_8A21DE08);
+    }
+    func_8A2024D0(&D_8A21DA80);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8A202F50; signature not recovered. */

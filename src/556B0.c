@@ -55,8 +55,25 @@ void func_80054AB0(OSPri pri, OSMesgQueue* cmdQ, OSMesg* cmdBuf, s32 cmdMsgCnt) 
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80054C2C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80054C2C.s")
-#endif
+extern OSPiHandle D_80102BC0;
+extern OSPiHandle D_80102C38;
+
+/**
+ * Fills in the two PI device handles used by the PI manager: D_80102BC0 for domain 1
+ * and D_80102C38 for domain 2. Each handle's latency, pulse width, page size and
+ * release duration are read back from the matching PI_BSD_DOMx_*_REG registers (the
+ * current bus timings), and its domain field is set to PI_DOMAIN1 / PI_DOMAIN2.
+ * Called from func_80054AB0 (the PI manager start-up).
+ */
+void func_80054C2C(void) {
+    D_80102BC0.latency = IO_READ(PI_BSD_DOM1_LAT_REG);
+    D_80102BC0.pulse = IO_READ(PI_BSD_DOM1_PWD_REG);
+    D_80102BC0.pageSize = IO_READ(PI_BSD_DOM1_PGS_REG);
+    D_80102BC0.relDuration = IO_READ(PI_BSD_DOM1_RLS_REG);
+    D_80102BC0.domain = PI_DOMAIN1;
+    D_80102C38.latency = IO_READ(PI_BSD_DOM2_LAT_REG);
+    D_80102C38.pulse = IO_READ(PI_BSD_DOM2_PWD_REG);
+    D_80102C38.pageSize = IO_READ(PI_BSD_DOM2_PGS_REG);
+    D_80102C38.relDuration = IO_READ(PI_BSD_DOM2_RLS_REG);
+    D_80102C38.domain = PI_DOMAIN2;
+}

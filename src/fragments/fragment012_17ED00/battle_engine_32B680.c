@@ -159,17 +159,70 @@ void func_8211FB54(CameraNode* arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211FF08.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82120134; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82120134.s")
-#endif
+extern f32 D_FLT_82196040;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_821202AC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821202AC.s")
-#endif
+/**
+ * Intro camera shot (compare func_8212054C and func_821202AC). Clears the camera offset
+ * vectors, calls func_8212187C(1), and takes the active Pokemon selected by scene->unk_2C.
+ * Unless BattleScene_SkipIntroIfFainted handles it, it enters state row 0x10, stores the
+ * Pokemon's default anchor position in scene->unk_D0, derives a camera distance (factor
+ * 3.5f, base 300.0f), aims the camera at the anchor using the Pokemon's facing angle and
+ * a height offset of -func_82107EC8(ap), puts the eye at the same anchor with
+ * -func_82107EC8(ap) * D_FLT_82196040 (a float constant in the unplaced .rodata, so it
+ * is referenced as an extern symbol), calls func_8212239C(ap, camera) and advances
+ * scene->unk_20.
+ * `pad` only reserves the stack slot the retail frame has between `dist` and `angle`.
+ */
+void func_82120134(CameraNode* arg0) {
+    ActivePokemon* ap;
+    f32 dist;
+    UNUSED s32 pad;
+    s16 angle;
+
+    BattleScene_ClearCameraOffsetVectors();
+    func_8212187C(1);
+    ap = sActivePokemon[sBattleScene.scene->unk_2C];
+    if (BattleScene_SkipIntroIfFainted(ap, arg0) == 0) {
+        BattleScene_EnterStateRow(ap, 0x10);
+        BattleAnim_GetOwnerDefaultAnchorPosition(ap, &sBattleScene.scene->unk_D0);
+        dist = BattleScene_ScaleCameraDistance(ap, 3.5f, 300.0f);
+        angle = BattleScene_GetParticipantFacingAngle(ap);
+        BattleScene_SetCameraAtFromAnchor(ap, arg0, sBattleScene.scene->unk_D0, 0, angle, 0.0f, -func_82107EC8(ap));
+        angle = BattleScene_GetParticipantFacingAngle(ap);
+        BattleScene_SetCameraEyeFromPosition(arg0, sBattleScene.scene->unk_D0, 0, angle, dist, -func_82107EC8(ap) * D_FLT_82196040);
+        func_8212239C(ap, arg0);
+        sBattleScene.scene->unk_20 += 1;
+    }
+}
+
+/**
+ * Intro camera shot, a variant of func_82120418 (and func_8212054C). After clearing the
+ * camera offset vectors it takes the active Pokemon selected by scene->unk_2C and, unless
+ * BattleScene_SkipIntroIfFainted handles it, saves the camera's vertical field of view in
+ * scene->unk_60 and widens it to 100.0f; enters state row 0x10; stores the Pokemon's default
+ * anchor position in scene->unk_D0 and the camera distance (factor 4.0f, base 300.0f) in
+ * scene->unk_74; aims the camera at the anchor with its facing angle and puts the eye at
+ * the same anchor, again using the facing angle, with the s16 at scene offset 0x6E set to
+ * -0x1554 (that store is made inside the argument list, as in the retail code); and
+ * finally advances scene->unk_20. The meaning of the s16 at 0x6E is not established
+ * (it lies inside the unk_6C field of the BattleScene header).
+ */
+void func_821202AC(CameraNode* arg0) {
+    ActivePokemon* ap;
+
+    BattleScene_ClearCameraOffsetVectors();
+    ap = sActivePokemon[sBattleScene.scene->unk_2C];
+    if (BattleScene_SkipIntroIfFainted(ap, arg0) == 0) {
+        sBattleScene.scene->unk_60 = arg0->perspective.verticalFieldOfView;
+        arg0->perspective.verticalFieldOfView = 100.0f;
+        BattleScene_EnterStateRow(ap, 0x10);
+        BattleAnim_GetOwnerDefaultAnchorPosition(ap, &sBattleScene.scene->unk_D0);
+        sBattleScene.scene->unk_74 = BattleScene_ScaleCameraDistance(ap, 4.0f, 300.0f);
+        BattleScene_SetCameraAtFromAnchor(ap, arg0, sBattleScene.scene->unk_D0, 0, BattleScene_GetParticipantFacingAngle(ap), 0.0f, 0);
+        BattleScene_SetCameraEyeFromPosition(arg0, sBattleScene.scene->unk_D0, (M2C_FIELD(sBattleScene.scene, s16*, 0x6E) = -0x1554), BattleScene_GetParticipantFacingAngle(ap), sBattleScene.scene->unk_74, 0.0f);
+        sBattleScene.scene->unk_20 += 1;
+    }
+}
 
 void func_82120418(CameraNode* arg0) {
     ActivePokemon* ap;
@@ -236,23 +289,96 @@ void BattleScene_IntroCameraRollStepNoFov(CameraNode* arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82120AC8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82120AC8.s")
-#endif
+extern f32 D_FLT_82189358[][4];
+void func_821206F4(CameraNode*);
+/*
+ * func_82120AC8
+ *
+ * Eases the scene float at +0x8C towards 0.1 (speed 0.02) and then eases the
+ * camera node's float at +0xB8 towards a goal made of two parts: a per-object
+ * table value, D_FLT_82189358[objectType][0] for the active Pokemon at index
+ * sBattleScene.scene->unk_2C (D_FLT_82189358 is the table at 0x82189350 shifted
+ * by 8, i.e. column 2 of D_FLT_82189350, the table func_82135BE4 in
+ * battle_engine_343BA0_4.c reads column 0 of), plus the scene float at +0xC4.  The speed is the scene float at
+ * +0x8C.  When the camera float is still below that goal plus 0.5 it calls
+ * func_821206F4(arg0).  What the floats mean is not established here.
+ * Note: the sums are written with the scene float first, which is what
+ * reproduces the retail FPU register allocation.
+ */
+void func_82120AC8(CameraNode* arg0) {
+    BattleAnim_ApproachF(&M2C_FIELD(sBattleScene.scene, f32*, 0x8C), 0.1f, 0.02f);
+    BattleAnim_ApproachF(&M2C_FIELD(arg0, f32*, 0xB8),
+                         M2C_FIELD(sBattleScene.scene, f32*, 0xC4) + D_FLT_82189358[M2C_FIELD(sActivePokemon[sBattleScene.scene->unk_2C], s16*, 0x1A)][0],
+                         M2C_FIELD(sBattleScene.scene, f32*, 0x8C));
+    if (M2C_FIELD(arg0, f32*, 0xB8) < (M2C_FIELD(sBattleScene.scene, f32*, 0xC4) + D_FLT_82189358[M2C_FIELD(sActivePokemon[sBattleScene.scene->unk_2C], s16*, 0x1A)][0] + 0.5f)) {
+        func_821206F4(arg0);
+    }
+}
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82120BB8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82120BB8.s")
-#endif
+void func_821206F4(CameraNode*);
+void func_82122FD8(CameraNode*, ActivePokemon*);
+s32 func_821217DC(M2C_UNK);
+/*
+ * func_82120BB8
+ *
+ * Same logic as func_821210E4, but the Pokemon is fetched into a local only
+ * after the early-out test.  It reads the state of the active Pokemon at index
+ * sBattleScene.scene->unk_2C.  If its state byte unk_2D is 0x10 or bit 0x4000
+ * is set in its state flags, it calls func_821206F4(arg0).  Otherwise it calls
+ * func_82122FD8(arg0, that Pokemon) and, when func_821217DC(0x3C) returns
+ * non-zero, func_821206F4(arg0).  What the state byte and the flags mean is
+ * not established here.
+ * Note: m2c passed the Pokemon pointer to the first call; the ROM leaves a0
+ * untouched at the func_821206F4 calls, so arg0 is passed there.  Declaring
+ * the Pokemon local after the state pointer, and assigning it only after the
+ * early return, is what reproduces the register allocation (found with the
+ * decomp-permuter).
+ */
+void func_82120BB8(CameraNode* arg0) {
+    ActivePokemon* pokemon;
+    ActivePokemonState* st = &sActivePokemon[sBattleScene.scene->unk_2C]->state;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82120C44; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82120C44.s")
-#endif
+    if ((st->unk_2D == 0x10) || (st->flags & 0x4000)) {
+        func_821206F4(arg0);
+        return;
+    }
+    pokemon = sActivePokemon[sBattleScene.scene->unk_2C];
+    func_82122FD8(arg0, pokemon);
+    if (func_821217DC(0x3C) != 0) {
+        func_821206F4(arg0);
+    }
+}
+
+extern f32 D_FLT_82189358[][4];
+void func_821206F4(CameraNode*);
+/*
+ * func_82120C44
+ *
+ * Variant of func_82120AC8 (see there for the floats involved) with a goal of
+ * D_FLT_82189358[objectType][0] + 1.5 * (scene float +0xC4).  Same early-out as
+ * func_82120BB8/func_821210E4: when the active Pokemon at index
+ * sBattleScene.scene->unk_2C has state byte unk_2D == 0x10 or state flag bit
+ * 0x4000 it just calls func_821206F4(arg0).  Otherwise it eases the scene float
+ * at +0x8C towards 0.1 (speed 0.02), eases the camera node's float at +0xB8
+ * towards the goal with the scene float +0x8C as the speed, and calls
+ * func_821206F4(arg0) once the goal minus 0.5 is below the camera float.
+ * Note: operand order of the first sum matches the ROM's FPU register use.
+ */
+void func_82120C44(CameraNode* arg0) {
+    ActivePokemonState* st = &sActivePokemon[sBattleScene.scene->unk_2C]->state;
+
+    if ((st->unk_2D == 0x10) || (st->flags & 0x4000)) {
+        func_821206F4(arg0);
+        return;
+    }
+    BattleAnim_ApproachF(&M2C_FIELD(sBattleScene.scene, f32*, 0x8C), 0.1f, 0.02f);
+    BattleAnim_ApproachF(&M2C_FIELD(arg0, f32*, 0xB8),
+                         M2C_FIELD(sBattleScene.scene, f32*, 0xC4) * 1.5f + D_FLT_82189358[M2C_FIELD(sActivePokemon[sBattleScene.scene->unk_2C], s16*, 0x1A)][0],
+                         M2C_FIELD(sBattleScene.scene, f32*, 0x8C));
+    if (((D_FLT_82189358[M2C_FIELD(sActivePokemon[sBattleScene.scene->unk_2C], s16*, 0x1A)][0] + M2C_FIELD(sBattleScene.scene, f32*, 0xC4) * 1.5f) - 0.5f) < M2C_FIELD(arg0, f32*, 0xB8)) {
+        func_821206F4(arg0);
+    }
+}
 
 void func_821206F4(CameraNode*);
 s32 func_82135734(CameraNode*, ActivePokemon*);
@@ -271,23 +397,100 @@ void func_82120D94(CameraNode* arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82120E70; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82120E70.s")
-#endif
+void func_82122628(s32, Vec3f, s32, s32, f32, f32);
+/*
+ * func_82120E70
+ *
+ * Same early-out as func_82120BB8: when the active Pokemon at index
+ * sBattleScene.scene->unk_2C has state byte unk_2D == 0x10 or state flag bit
+ * 0x4000 it just calls func_821206F4(arg0).  Otherwise it steps the scene
+ * halfword at +0x6E towards 0x149E (step 0x2D) with BattleAnim_StepToS16,
+ * calls func_82122628 with arg0, the scene's Vec3f at +0xC0, that halfword,
+ * the Pokemon's facing angle (BattleScene_GetParticipantFacingAngle), the scene
+ * float unk_74 and 0.0, and eases the camera node's float at +0x2C towards the
+ * scene float unk_60 (speed 0.08).  When the camera float is below unk_60 + 1.0
+ * it snaps the float to unk_60 and calls func_821206F4(arg0).  What the fields
+ * mean is not established here.
+ */
+void func_82120E70(CameraNode* arg0) {
+    ActivePokemonState* st = &sActivePokemon[sBattleScene.scene->unk_2C]->state;
+    f32 temp_f0;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82120FB0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82120FB0.s")
-#endif
+    if ((st->unk_2D == 0x10) || (st->flags & 0x4000)) {
+        func_821206F4(arg0);
+        return;
+    }
+    BattleAnim_StepToS16(&M2C_FIELD(sBattleScene.scene, s16*, 0x6E), 0x149E, 0x2D);
+    func_82122628((s32)arg0, M2C_FIELD(sBattleScene.scene, Vec3f*, 0xC0), M2C_FIELD(sBattleScene.scene, s16*, 0x6E),
+                  BattleScene_GetParticipantFacingAngle(sActivePokemon[sBattleScene.scene->unk_2C]), sBattleScene.scene->unk_74, 0.0f);
+    BattleAnim_ApproachF(&M2C_FIELD(arg0, f32*, 0x2C), sBattleScene.scene->unk_60, 0.08f);
+    temp_f0 = sBattleScene.scene->unk_60;
+    if (M2C_FIELD(arg0, f32*, 0x2C) < (temp_f0 + 1.0f)) {
+        M2C_FIELD(arg0, f32*, 0x2C) = temp_f0;
+        func_821206F4(arg0);
+    }
+}
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_821210E4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821210E4.s")
-#endif
+extern f32 D_FLT_821960A8;
+f32 func_82121750(ActivePokemon*, f32, f32);
+/*
+ * func_82120FB0
+ *
+ * Sibling of func_82120E70, with the same early-out: when the active Pokemon
+ * at index sBattleScene.scene->unk_2C has state byte unk_2D == 0x10 or state
+ * flag bit 0x4000 it just calls func_821206F4(arg0).  Otherwise it asks
+ * func_82121750(Pokemon, 2.5, 300.0) for a float, eases the scene float unk_74
+ * towards it (speed 0.08), calls func_82122628 with arg0, the scene's Vec3f at
+ * +0xC0, 0, the Pokemon's facing angle, unk_74 and 0.0, and calls
+ * func_821206F4(arg0) while unk_74 is still below that float plus
+ * D_FLT_821960A8.  What the fields and func_82121750 mean is not established
+ * here.
+ */
+void func_82120FB0(CameraNode* arg0) {
+    ActivePokemonState* st = &sActivePokemon[sBattleScene.scene->unk_2C]->state;
+    f32 temp_f0;
+
+    if ((st->unk_2D == 0x10) || (st->flags & 0x4000)) {
+        func_821206F4(arg0);
+        return;
+    }
+    temp_f0 = func_82121750(sActivePokemon[sBattleScene.scene->unk_2C], 2.5f, 300.0f);
+    BattleAnim_ApproachF(&sBattleScene.scene->unk_74, temp_f0, 0.08f);
+    func_82122628((s32)arg0, M2C_FIELD(sBattleScene.scene, Vec3f*, 0xC0), 0,
+                  BattleScene_GetParticipantFacingAngle(sActivePokemon[sBattleScene.scene->unk_2C]), sBattleScene.scene->unk_74, 0.0f);
+    if (sBattleScene.scene->unk_74 < (temp_f0 + D_FLT_821960A8)) {
+        func_821206F4(arg0);
+    }
+}
+
+void func_82122A7C(CameraNode*, ActivePokemon*);
+
+/*
+ * func_821210E4
+ *
+ * Reads the state of the active Pokemon at index sBattleScene.scene->unk_2C,
+ * the same entry func_82120D94 and func_8212116C use. If its state byte
+ * unk_2D is 0x10 or bit 0x4000 is set in its state flags, it calls
+ * func_821206F4(arg0). Otherwise it calls func_82122A7C(arg0, that Pokemon)
+ * and, when func_821217DC(0x3C) returns non-zero, func_821206F4(arg0). What
+ * the state byte and the flags mean is not established here.
+ * Note: m2c passed the Pokemon pointer to the first two calls. The ROM leaves
+ * a0 untouched at the func_821206F4 call, so arg0 is passed there; at the
+ * func_82122A7C call the Pokemon is the second argument (the form that
+ * matches, with the Pokemon re-read exactly as func_82120D94 does).
+ */
+void func_821210E4(CameraNode* arg0) {
+    ActivePokemonState* st = &sActivePokemon[sBattleScene.scene->unk_2C]->state;
+
+    if ((st->unk_2D == 0x10) || (st->flags & 0x4000)) {
+        func_821206F4(arg0);
+        return;
+    }
+    func_82122A7C(arg0, sActivePokemon[sBattleScene.scene->unk_2C]);
+    if (func_821217DC(0x3C) != 0) {
+        func_821206F4(arg0);
+    }
+}
 
 s32 func_82135734(CameraNode*, ActivePokemon*);
 void func_8212188C(void);

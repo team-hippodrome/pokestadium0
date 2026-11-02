@@ -545,11 +545,69 @@ void Battle_ApplyPoisonOrBurnDamage(void) {
     sBattleUser->unk_10 = sBattleUser->unk_0E;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8211176C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211176C.s")
-#endif
+/*
+ * func_8211176C
+ *
+ * Works on two BattleMonRuntime records: sBattleUser (D_8219A3C0, "A" below)
+ * and sBattleTarget (D_8219A3C4, "B" below). Both pointers are re-read on every
+ * access, as in the retail code.
+ *
+ *  1. If bits 0x18 of A->unk_15 are clear, A->unk_10 = A->unk_12, or A->unk_0C
+ *     when unk_12 is 0xFFFF.
+ *  2. amount = (A->unk_28 >> 4) & 0xFFFF, raised to 1 if that is 0.
+ *  3. If A->unk_4E & 1, A->unk_51 is incremented and amount becomes
+ *     (amount * A->unk_51) & 0xFFFF (unsigned multiply).
+ *  4. If A->unk_10 < amount, A->unk_10 = 0 and amount = A->unk_10 (so 0);
+ *     otherwise A->unk_10 -= amount.
+ *  5. B->unk_10 = B->unk_0C, then B->unk_10 += amount, then B->unk_10 is
+ *     replaced by B->unk_28 if B->unk_28 < B->unk_10 (compared as ints).
+ *
+ * What the fields mean (current/maximum values, the unk_4E bit and the unk_51
+ * counter) is not established from this function.
+ *
+ * Matching notes: reusing the single temporary `v` for the intermediate values
+ * matters; with a separate local for each use the compiler picked a2 instead of
+ * a1 for the address register. The two-step `v = ...; amount = v & 0xFFFF`
+ * forms and the (u32) cast on the multiply (which fixes the operand order of
+ * the multu) are matching choices, not meaning.
+ */
+void func_8211176C(void) {
+    s32 amount;
+    s32 v;
+
+    if (!(sBattleUser->unk_15 & 0x18)) {
+        v = sBattleUser->unk_12;
+        if (v != 0xFFFF) {
+            sBattleUser->unk_10 = v;
+        } else {
+            sBattleUser->unk_10 = sBattleUser->unk_0C;
+        }
+    }
+    v = (sBattleUser->unk_28 >> 4) & 0xFFFF;
+    amount = v;
+    if (v == 0) {
+        v = v + 1;
+        amount = v & 0xFFFF;
+    }
+    if (sBattleUser->unk_4E & 1) {
+        sBattleUser->unk_51 += 1;
+        v = (u32)amount * sBattleUser->unk_51;
+        amount = v & 0xFFFF;
+    }
+    v = sBattleUser->unk_10;
+    if (v < amount) {
+        sBattleUser->unk_10 = 0;
+        amount = sBattleUser->unk_10;
+    } else {
+        sBattleUser->unk_10 = v - amount;
+    }
+    sBattleTarget->unk_10 = sBattleTarget->unk_0C;
+    sBattleTarget->unk_10 = sBattleTarget->unk_10 + amount;
+    v = sBattleTarget->unk_28;
+    if (v < sBattleTarget->unk_10) {
+        sBattleTarget->unk_10 = v;
+    }
+}
 
 void func_82111870(void) {
 }

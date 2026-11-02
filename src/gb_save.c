@@ -150,11 +150,19 @@ void Trade_DrawSolidFillRect(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGB8 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800292A8.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_800295E8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800295E8.s")
-#endif
+extern Gfx D_80073450[];
+void func_800292A8(s32, s32, s32, s32, u8*);
+
+/**
+ * Appends a call of display list D_80073450 and a gDPSetCombineMode(
+ * G_CC_DECALRGBA, G_CC_DECALRGBA) to the current display list, then forwards
+ * all five arguments unchanged to func_800292A8.
+ */
+void func_800295E8(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
+    gSPDisplayList(gDisplayListHead++, D_80073450);
+    gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
+    func_800292A8(arg0, arg1, arg2, arg3, arg4);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_80029658; signature not recovered. */
@@ -252,11 +260,57 @@ void func_8002A8C4(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4)
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002A8E0.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002AAC4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002AAC4.s")
-#endif
+/*
+ * func_8002AAC4
+ *
+ * Advances a small step counter held in the object `arg0`: the counter is
+ * the word at offset 0x24 and a second word at offset 0x28 receives a value
+ * that depends on it.  Returns 1 or 0.
+ *
+ *   counter >= 11: word 0x28 = 4, return 1 (counter unchanged);
+ *   counter >= 7:  word 0x28 = 3, counter + 1, return 1;
+ *   counter <  4:  if counter == 0, func_8003F6AC(4, arg0) first (the
+ *                  counter is re-read afterwards); then word 0x28 = 0,
+ *                  counter + 1, return 1;
+ *   counter 4, 5:  word 0x28 = 1, counter + 1, return 0;
+ *   counter == 6:  word 0x28 = 2 (counter unchanged), return 0.
+ *
+ * What the counter measures is not established.
+ */
+M2C_UNK func_8003F6AC(M2C_UNK, void *);
+
+s32 func_8002AAC4(void *arg0) {
+    s32 var_v1;
+    s32 var_v0;
+
+    var_v0 = M2C_FIELD(arg0, s32 *, 0x24);
+    var_v1 = 1;
+    if (var_v0 >= 0xB) {
+        M2C_FIELD(arg0, s32 *, 0x28) = 4;
+        return 1;
+    }
+    if (var_v0 >= 7) {
+        M2C_FIELD(arg0, s32 *, 0x28) = 3;
+        M2C_FIELD(arg0, s32 *, 0x24) = (s32) (var_v0 + 1);
+    } else if (var_v0 < 4) {
+        if (var_v0 == 0) {
+            func_8003F6AC(4, arg0);
+            var_v1 = 1;
+            var_v0 = M2C_FIELD(arg0, s32 *, 0x24);
+        }
+        M2C_FIELD(arg0, s32 *, 0x28) = 0;
+        M2C_FIELD(arg0, s32 *, 0x24) = (s32) (var_v0 + 1);
+    } else {
+        var_v1 = 0;
+        if (var_v0 < 6) {
+            M2C_FIELD(arg0, s32 *, 0x28) = 1;
+            M2C_FIELD(arg0, s32 *, 0x24) = (s32) (var_v0 + 1);
+        } else {
+            M2C_FIELD(arg0, s32 *, 0x28) = 2;
+        }
+    }
+    return var_v1;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8002AB84; signature not recovered. */
@@ -269,11 +323,24 @@ void Particle_SetVelocityXZFromRotationY(Particle* arg0) {
     Particle_Field50_SetXZFromField7C_09BB4(arg0);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002AE94; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002AE94.s")
-#endif
+/**
+ * Initialises a text-box style object at arg0: stores the constants 0x14,
+ * 8, 6, 2 and 0 at offsets 0x24..0x34, runs func_8002A8C4(arg0, arg1, arg2,
+ * arg3, 0x18), then sets offset 0x14 to 1, offset 0x20 to the colour arg4
+ * (a 4-byte struct passed by value, stored with unaligned stores) and offset
+ * 0x38 to the string pointer arg5. What the fields mean is not established.
+ */
+void func_8002AE94(s8* arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 arg4, char* arg5) {
+    M2C_FIELD(arg0, s32*, 0x24) = 0x14;
+    M2C_FIELD(arg0, s32*, 0x28) = 8;
+    M2C_FIELD(arg0, s32*, 0x2C) = 6;
+    M2C_FIELD(arg0, s32*, 0x30) = 2;
+    M2C_FIELD(arg0, s32*, 0x34) = 0;
+    func_8002A8C4(arg0, arg1, arg2, arg3, 0x18);
+    M2C_FIELD(arg0, s32*, 0x14) = 1;
+    M2C_FIELD(arg0, Color_RGBA8*, 0x20) = arg4;
+    M2C_FIELD(arg0, char**, 0x38) = arg5;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8002AF04; signature not recovered. */

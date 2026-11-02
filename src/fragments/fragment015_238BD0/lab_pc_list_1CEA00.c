@@ -403,11 +403,47 @@ void func_89000D34(s8 *arg0, s32 arg1) {
     *temp_v0 |= 1;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89000D50; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_89000D50.s")
-#endif
+/*
+ * func_89000D50: draws one line of text `str` at (x, y) in the Lab PC list style.
+ *
+ * `flags` bit 0x10 first draws a 0xD2 x 0x16 highlight (func_8002A0AC, colour
+ * D_8900A5BC) at (x + 3, y + 3).  The text colour is then picked:
+ *   - flags & 1: D_800734A8[1] with alpha forced to 0x4C;
+ *   - else flags & 0x100: D_8900A5D4[(flags & 2) ? 0 : 1];
+ *   - otherwise: D_800734A8[(flags & 2) ? 0 : 1];
+ * and the string is printed at (x + 8, y + 4) with font set 8 in translucent text
+ * mode.  `index` is unused.  (A shorter sibling of func_89004908, which has two more
+ * colour tables.)
+ */
+typedef struct Rgba89000D50 {
+    /* 0x0 */ u8 r, g, b, a;
+} Rgba89000D50; // size = 0x4
+void func_8002A0AC(s32, s32, s32, s32, Rgba89000D50);
+M2C_UNK func_8001AA9C(u8, u8, u8, u8);
+extern Rgba89000D50 D_8900A5BC;
+extern Rgba89000D50 D_8900A5D4[];
+extern M2C_UNK D_800734A8;
+void func_89000D50(s32 x, s32 y, char* str, UNUSED s32 index, s32 flags) {
+    Rgba89000D50 color;
+    UNUSED s32 pad[4];
+
+    if (flags & 0x10) {
+        func_8002A0AC(x + 3, y + 3, 0xD2, 0x16, D_8900A5BC);
+    }
+    Font_BeginTranslucentTextRendering();
+    if (flags & 1) {
+        color = ((Rgba89000D50*)&D_800734A8)[1];
+        color.a = 0x4C;
+    } else if (flags & 0x100) {
+        color = D_8900A5D4[(flags & 2) ? 0 : 1];
+    } else {
+        color = ((Rgba89000D50*)&D_800734A8)[(flags & 2) ? 0 : 1];
+    }
+    func_8001AA9C(color.r, color.g, color.b, color.a);
+    Font_SetActive(8, 0);
+    Font_Printf(x + 8, y + 4, str);
+    Font_EndTexturedTextRendering();
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_89000E98; signature not recovered. */
@@ -843,11 +879,20 @@ s32 func_8900408C(s8* arg0) {
     return ret;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89004120; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_89004120.s")
-#endif
+extern char D_8900A704[];
+extern char D_8900A710[];
+extern char D_890188F4[];
+void func_89003E2C(s32, s32, s32, s32, s32, char*, s32, char*, s32, char*);
+
+/**
+ * Calls func_89003E2C with its own first argument passed straight through
+ * followed by 0x30, 0x5C, 0x170, 0xCE, D_8900A704, 3, D_8900A710, 3 and
+ * D_890188F4. What func_89003E2C does (it is still assembly) and what the
+ * arguments mean are not established.
+ */
+void func_89004120(s32 arg0) {
+    func_89003E2C(arg0, 0x30, 0x5C, 0x170, 0xCE, D_8900A704, 3, D_8900A710, 3, D_890188F4);
+}
 
 M2C_UNK func_800069CC();                            /* extern */
 M2C_UNK func_80028060(M2C_UNK, M2C_UNK *, M2C_UNK *, s32); /* extern */
@@ -870,17 +915,46 @@ void func_89004184(s32 arg0) {
     func_89003ECC(arg0);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_890041E4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_890041E4.s")
-#endif
+/**
+ * Wrapper around func_8900408C(arg0): -1 calls func_8003F6AC(3) and returns -1;
+ * a positive result calls func_8003F6AC(2) and returns the word at arg0 + 0x34
+ * plus 1; any other result returns 0. (Same pattern as func_820076DC.)
+ */
+s32 func_890041E4(s8* arg0) {
+    s32 result = 0;
+    s32 tmp;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89004244; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_89004244.s")
-#endif
+    tmp = func_8900408C(arg0);
+    if (tmp == -1) {
+        func_8003F6AC(3);
+        result = -1;
+    } else if (tmp > 0) {
+        func_8003F6AC(2);
+        result = M2C_FIELD(arg0, s32*, 0x34) + 1;
+    }
+    return result;
+}
+
+extern M2C_UNK D_89019110;
+extern M2C_UNK D_89028950;
+extern s32 D_890289D4;
+s32 func_80025BD8();
+M2C_UNK func_80027FF8(M2C_UNK *, s32);
+
+/**
+ * Stores the result of func_80025BD8() in D_89019108. If it is not -1, passes it with
+ * &D_89019110 to func_80027FF8. Then calls func_89004120(&D_89028950) and sets
+ * D_890289D4 to 1. (The value is re-read from D_89019108 after the store, which is
+ * what the retail register allocation needs.) What the value means is not established.
+ */
+void func_89004244(void) {
+    D_89019108 = func_80025BD8();
+    if (D_89019108 != -1) {
+        func_80027FF8(&D_89019110, D_89019108);
+    }
+    func_89004120(&D_89028950);
+    D_890289D4 = 1;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8900429C; signature not recovered. */
@@ -893,7 +967,6 @@ M2C_UNK func_8000B220();                            /* extern */
 M2C_UNK func_89003650(M2C_UNK *);                   /* extern */
 M2C_UNK func_8900379C(M2C_UNK *);                   /* extern */
 s32 func_89003A88(M2C_UNK *);                       /* extern */
-s32 func_890041E4(M2C_UNK *);                       /* extern */
 M2C_UNK func_890067B0(M2C_UNK *, M2C_UNK *);        /* extern */
 M2C_UNK func_890069C0(M2C_UNK *);                   /* extern */
 M2C_UNK func_890069E8(M2C_UNK *);                   /* extern */

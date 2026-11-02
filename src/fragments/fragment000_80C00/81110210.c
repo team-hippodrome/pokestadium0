@@ -138,11 +138,39 @@ void func_811110E0(s8 *arg0) {
     M2C_FIELD(arg0, s8 **, 0x3C) = arg0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81111130; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81111130.s")
-#endif
+/* Same 0xCC-byte record array as func_81109678 (gb_tower_emulator_86920.c); only the fields used here are named. */
+typedef struct Rec81111130 {
+    /* 0x00 */ s32 unk_00;
+    /* 0x04 */ u8 pad04[4];
+    /* 0x08 */ struct Rec81111130* unk_08;
+    /* 0x0C */ u8 pad0C[0xCC - 0xC];
+} Rec81111130; // size = 0xCC
+
+s32 func_81112EAC(s8*, Rec81111130*);
+extern Rec81111130* D_81184664;
+extern s8 D_81184938;
+extern s32 D_811858E8;
+
+/*
+ * func_81111130
+ *
+ * Calls func_811110E0(&D_81184938), then for each of the D_811858E8 records of
+ * the array at D_81184664 (0xCC bytes each, indexed directly each time):
+ * stores the record's own address at offset 8, clears the word at offset 0,
+ * and calls func_81112EAC(&D_81184938, record). func_81109678, which walks the
+ * same array, passes the same list argument to the same function. What the
+ * records are is not established from this function.
+ */
+void func_81111130(void) {
+    s32 i;
+
+    func_811110E0(&D_81184938);
+    for (i = 0; i < D_811858E8; i++) {
+        D_81184664[i].unk_08 = &D_81184664[i];
+        D_81184664[i].unk_00 = 0;
+        func_81112EAC(&D_81184938, &D_81184664[i]);
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_811111E0; signature not recovered. */

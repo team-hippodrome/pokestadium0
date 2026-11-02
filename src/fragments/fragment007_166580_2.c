@@ -3,11 +3,52 @@
 #include "global.h"
 #include "m2c_macros.h"
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82008C40; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment007_166580/func_82008C40.s")
-#endif
+typedef struct { u8 b[9]; } Bytes9;
+extern u8 D_8200AC30[];
+extern char D_800AAF50[];
+s32 func_80022C70(s32);
+s32 func_80020AFC(s32, s32, s32, s32);
+u8 func_80020CE4(void*, s32, s32);
+void func_80020C60(s32);
+void func_80022D84(s32, void*);
+void func_80058410(void*, void*, s32);
+void func_8000A460(void*, void*);
+
+/**
+ * Initialises the slot list arg0 together with its extra block arg1 (layouts
+ * not established; see func_82008D7C for the caller). Sets byte 0 of arg0 to 1
+ * and byte 1 to arg2, stores &D_800AAF50[arg2] (entries of 0x24 bytes) at
+ * arg0 + 4 and func_80022C70(arg3) at arg0 + 0x18, and stores arg1 at
+ * arg0 + 0x1FC. Allocates a handle with func_80020AFC(0x20, arg3, 0, 0), uses
+ * it with func_80020CE4(arg0 + 0x1C, 6, handle) to set byte 2 of arg0, then
+ * releases it with func_80020C60. Calls func_80022D84(arg3, arg0 + 8).
+ * Fills the extra block: s16 0 = 0, byte 2 = arg0's byte 2, byte 3 = arg3,
+ * a 9-byte copy of D_8200AC30 at +4, and the calls
+ * func_80058410(arg0 + 0x1C, arg1 + 0x28, 0x1E0) and
+ * func_8000A460(arg1 + 0x14, arg0 + 8).
+ * The pointers are recomputed at each use; keeping them in locals changes the
+ * stack frame.
+ */
+void func_82008C40(void* arg0, void* arg1, s32 arg2, s32 arg3) {
+    s32 sp2C;
+
+    M2C_FIELD(arg0, s8*, 0) = 1;
+    M2C_FIELD(arg0, s8*, 1) = arg2;
+    M2C_FIELD(arg0, char**, 4) = D_800AAF50 + arg2 * 0x24;
+    M2C_FIELD(arg0, s32*, 0x18) = func_80022C70(arg3);
+    M2C_FIELD(arg0, u8*, 2) = 0;
+    M2C_FIELD(arg0, void**, 0x1FC) = arg1;
+    sp2C = func_80020AFC(0x20, arg3, 0, 0);
+    M2C_FIELD(arg0, u8*, 2) = func_80020CE4((u8*)arg0 + 0x1C, 6, sp2C);
+    func_80020C60(sp2C);
+    func_80022D84(arg3, (u8*)arg0 + 8);
+    M2C_FIELD(arg1, s16*, 0) = 0;
+    M2C_FIELD(arg1, u8*, 2) = M2C_FIELD(arg0, u8*, 2);
+    M2C_FIELD(arg1, s8*, 3) = arg3;
+    func_80058410((u8*)arg0 + 0x1C, (u8*)arg1 + 0x28, 0x1E0);
+    *(Bytes9*)((u8*)arg1 + 4) = *(Bytes9*)D_8200AC30;
+    func_8000A460((u8*)arg1 + 0x14, (u8*)arg0 + 8);
+}
 
 void func_82008D54(s8 *arg0) {
     M2C_FIELD(arg0, s8 *, 0) = 0;
@@ -42,8 +83,7 @@ void func_82008D54(s8 *arg0) {
  * The four words at context offsets 4, 0x208, 0x40C and 0x610 (the first
  * word of each list) are cleared as well.
  *
- * What the lists and groups are used for is not established here;
- * func_82008C40 is still assembly.
+ * What the lists and groups are used for is not established here.
  */
 void func_82008C40(void*, void*, s32, s32);
 extern u8 D_800AE8F0[];

@@ -1154,11 +1154,61 @@ void func_8212D820(CameraNode* arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8212DB28; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8212DB28.s")
-#endif
+void func_80042A6C(s32);
+
+/**
+ * Camera state machine (sibling of func_8212C874). Sets scene->unk_50 = 4 and switches on
+ * scene->unk_20:
+ *   0: once func_82105724(D_8219A544, 0x1E) succeeds, runs the shared camera setup
+ *      (func_821255B4, func_8212C78C, func_8211F034, ...), plays sound 0x2E, resets the
+ *      camera frame counter and advances to state 1.
+ *   1: while scene->unk_54 == 1, eases the camera field at +0x2C towards 60.0f; when the frame
+ *      counter reaches 0x32, clears the message cursor and advances to state 2.
+ *   2: same easing, caches func_8210F31C for both active Pokemon in D_8219A560/D_8219A564,
+ *      sets scene->unk_34 = 3 if byte 0x820 of D_8219A540 is 0xFF, resets the frame counter
+ *      and animation step and finishes through func_82125C80.
+ */
+void func_8212DB28(CameraNode* arg0) {
+    sBattleScene.scene->unk_50 = 4;
+    switch (sBattleScene.scene->unk_20) {
+        case 0:
+            if (func_82105724((ActivePokemon*)D_8219A544, 0x1E) != 0) {
+                func_821255B4(arg0);
+                func_80042A6C(0x2E);
+                func_8211F034(D_8219A520 + 0xC8, sBattleScene.scene->unk_2C);
+                func_8212C78C((s32)arg0);
+                func_82110B44((ActivePokemon*)D_8219A544);
+                func_82105E64((ActivePokemon*)D_8219A544);
+                BattleScene_ResetCameraFrameCounter();
+                sBattleScene.scene->unk_20++;
+            }
+            break;
+
+        case 1:
+            if (M2C_FIELD(sBattleScene.scene, s32*, 0x54) == 1) {
+                BattleAnim_ApproachF(&M2C_FIELD(arg0, f32*, 0x2C), 60.0f, 0.03f);
+            }
+            if (BattleScene_AdvanceCameraFrameCounter(0x32) != 0) {
+                Battle_ClearMessageCursor();
+                sBattleScene.scene->unk_20++;
+            }
+            break;
+
+        case 2:
+            if (M2C_FIELD(sBattleScene.scene, s32*, 0x54) == 1) {
+                BattleAnim_ApproachF(&M2C_FIELD(arg0, f32*, 0x2C), 60.0f, 0.03f);
+            }
+            D_8219A560 = func_8210F31C(sActivePokemon[sBattleScene.scene->unk_2C]);
+            D_8219A564 = func_8210F31C(sActivePokemon[!sBattleScene.scene->unk_2C]);
+            if (M2C_FIELD(D_8219A540, u8*, 0x820) == 0xFF) {
+                sBattleScene.scene->unk_34 = 3;
+            }
+            BattleScene_ResetCameraFrameCounter();
+            BattleScene_ResetAnimationStep();
+            func_82125C80(arg0);
+            break;
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8212DD14; signature not recovered. */
@@ -1237,11 +1287,57 @@ void func_8212E0B0(CameraNode* arg0) {
 extern s32 D_84390220;
 extern ActivePokemon* D_84390204;
 extern s32 D_84390224;
-#ifdef NON_MATCHING
-/* TODO: decompile func_8212E634; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8212E634.s")
-#endif
+s32 func_82121798(s32);
+void func_8212188C(void);
+void func_8212189C(void);
+s32 func_82105AB0(ActivePokemon*, s32);
+void func_82124A40(void);
+/*
+ * func_8212E634: two-step camera/animation state for a battle move effect.
+ * Sets the scene's unk_50 to 4, then switches on the scene state counter
+ * (unk_20):
+ *   0: calls func_82124984 for the active Pokemon (D_8219A544) and waits on
+ *      func_82105724(.., 0x1E), a "move cue reached" check that falls back to
+ *      a 0x1E-frame wait when the Pokemon is frozen, asleep, airborne or
+ *      underground.  Once it reports true the effect is set up
+ *      (func_821255B4, func_8211F034, func_8212188C/func_8212189C,
+ *      func_82104C68 with 8, func_82110B44) and the state counter advances.
+ *   1: calls func_8211EE8C when func_82121798(0x28) fires, refreshes
+ *      D_8219A560/D_8219A564 from the two entries of sActivePokemon (the
+ *      indices unk_2C and !unk_2C), and when func_82105AB0(.., 0x1E) -- the
+ *      same kind of cue check -- reports true calls func_82124A40 and
+ *      func_82125C80.
+ * Same shape as func_8212C874 and func_8212E7B0.
+ */
+void func_8212E634(CameraNode* arg0) {
+    sBattleScene.scene->unk_50 = 4;
+    switch (sBattleScene.scene->unk_20) {
+        case 0:
+            func_82124984(D_8219A544, (s32)arg0, 3);
+            if (func_82105724((ActivePokemon*)D_8219A544, 0x1E) != 0) {
+                func_821255B4(arg0);
+                func_8211F034(D_8219A520 + 0xC8, sBattleScene.scene->unk_2C);
+                func_8212188C();
+                func_8212189C();
+                func_82104C68((ActivePokemon*)D_8219A544, 8);
+                func_82110B44((ActivePokemon*)D_8219A544);
+                sBattleScene.scene->unk_20++;
+            }
+            break;
+
+        case 1:
+            if (func_82121798(0x28) != 0) {
+                func_8211EE8C();
+            }
+            D_8219A560 = func_8210F31C(sActivePokemon[sBattleScene.scene->unk_2C]);
+            D_8219A564 = func_8210F31C(sActivePokemon[!sBattleScene.scene->unk_2C]);
+            if (func_82105AB0((ActivePokemon*)D_8219A544, 0x1E) != 0) {
+                func_82124A40();
+                func_82125C80(arg0);
+            }
+            break;
+    }
+}
 
 void func_82104C68(ActivePokemon*, s32);
 void func_82124A40(void);

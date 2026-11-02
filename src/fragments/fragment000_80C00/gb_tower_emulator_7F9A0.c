@@ -104,11 +104,57 @@ s32 GbPak_InitializeCartridgeMapper(unk_D_8122B2C0* arg0) {
   return ret;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_811020A8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_811020A8.s")
-#endif
+/*
+ * func_811020A8
+ *
+ * Operates on a record arg0 that looks like the one GbPak_TransferBankedRam
+ * takes (it holds a handle at 0x50 and is passed to func_81102344 in both),
+ * but that is inferred from those uses only. Sets the byte at 0xA2 to 2 and
+ * saves then clears the byte at 0x98. Calls func_81102344(arg0, word94 >> 13) (the same
+ * bank-select helper GbPak_TransferBankedRam uses with address / 0x2000);
+ * if that returns 0, calls func_8005C670 with the handle at 0x50, the
+ * mode 0 (func_81101FA0 passes 1 here), the address (word94 & 0x1FFF) | 0xA000,
+ * the buffer D_811564A0 and a length of 0x20; if that also returns 0, calls
+ * func_80057910(D_811564A0, entry, 0x20) where entry is the 0x20-byte record
+ * number byte9C of the table at D_811564C0. If the last result is 0 the byte
+ * at 0xA2 is reset to 0. The saved byte at 0x98 is restored and the first
+ * non-zero (or final) result is returned.
+ *
+ * What func_8005C670 mode 0 and func_80057910 do, and what the two tables
+ * hold, is not established. Matching notes: the unused first local `pad`
+ * places `sp28` at sp+0x28, and the table index is scaled as
+ * `(x << 1) << 4` because a single `<< 5` (or `* 0x20`) uses one temporary
+ * register fewer and does not match.
+ */
+s32 func_81102344(u8*, s32);
+s32 func_80057910(M2C_UNK *, void *, M2C_UNK); /* extern */
+extern M2C_UNK D_811564A0;
+extern M2C_UNK D_811564C0;
+s32 func_811020A8(void *arg0) {
+    s32 pad;
+    s32 sp28;
+    s32 var_v0;
+    s32 var_v1;
+
+    M2C_FIELD(arg0, s8 *, 0xA2) = 2;
+    sp28 = (s32) M2C_FIELD(arg0, u8 *, 0x98);
+    M2C_FIELD(arg0, u8 *, 0x98) = 0U;
+    var_v0 = func_81102344(arg0, (u32) M2C_FIELD(arg0, u32 *, 0x94) >> 0xD);
+    var_v1 = var_v0;
+    if (var_v0 == 0) {
+        var_v0 = func_8005C670(M2C_FIELD(arg0, s32 *, 0x50), 0, ((M2C_FIELD(arg0, u32 *, 0x94) & 0x1FFF) | 0xA000) & 0xFFFF, &D_811564A0, 0x20);
+        var_v1 = var_v0;
+        if (var_v0 == 0) {
+            var_v0 = func_80057910(&D_811564A0, (u8 *)&D_811564C0 + ((M2C_FIELD(arg0, u8 *, 0x9C) << 1) << 4), 0x20);
+            var_v1 = var_v0;
+        }
+    }
+    if (var_v0 == 0) {
+        M2C_FIELD(arg0, s8 *, 0xA2) = 0;
+    }
+    M2C_FIELD(arg0, u8 *, 0x98) = (u8) sp28;
+    return var_v1;
+}
 
 s32 func_80051110(s32, s8 *, s8 *);             /* extern */
 
@@ -129,11 +175,52 @@ s32 func_81102168(s8 *arg0) {
     return 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_811021D4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_811021D4.s")
-#endif
+s32 func_81101FE8(s8 *);                            /* extern */
+s32 func_81102F7C(u8, s32, u8);                     /* extern */
+
+/*
+ * func_811021D4
+ *
+ * Returns 0 right away when bit 0 of the byte at arg0 + 0x9B is set.
+ * Otherwise runs func_81102168(arg0), then func_81101FE8(arg0) while the
+ * result is 0, then, if bit 0 of the byte at 0x9B is (now) set and the byte
+ * at 0x98 is non-zero, func_811020A8(arg0), then
+ * func_81102F7C(byte 0x9C, word 0x94, byte 0x98), stopping at the first
+ * non-zero result. If the result is non-zero, clears bit 0 of the byte at
+ * 0x9B. Returns the result.
+ *
+ * Same record as GbPak_TransferBankedRam and func_811020A8 take; what the
+ * flag bit and the other fields mean is not established.
+ *
+ * Matching note: the empty `if` on `arg0` has no meaning of its own. It was
+ * found with decomp-permuter and is the only form tried that makes the
+ * compiler copy arg0 to s0 before the first load, as the ROM does; the
+ * triple test is needed (one or two do not match). The same kind of empty
+ * test already exists in func_88100100.
+ */
+s32 func_811021D4(u8 *arg0) {
+    s32 ret;
+
+    if (((!arg0) && (!arg0)) && (!arg0)) {
+    }
+    ret = 0;
+    if (!(M2C_FIELD(arg0, u8 *, 0x9B) & 1)) {
+        ret = func_81102168(arg0);
+        if (ret == 0) {
+            ret = func_81101FE8(arg0);
+            if ((ret == 0) && (M2C_FIELD(arg0, u8 *, 0x9B) & 1) && (M2C_FIELD(arg0, u8 *, 0x98) != 0)) {
+                ret = func_811020A8(arg0);
+                if (ret == 0) {
+                    ret = func_81102F7C(M2C_FIELD(arg0, u8 *, 0x9C), M2C_FIELD(arg0, s32 *, 0x94), M2C_FIELD(arg0, u8 *, 0x98));
+                }
+            }
+        }
+        if (ret != 0) {
+            M2C_FIELD(arg0, u8 *, 0x9B) &= ~1;
+        }
+    }
+    return ret;
+}
 
 s32 GbPak_SelectRomAddress(unk_D_8122B2C0* arg0, s32 arg1) {
     s32 temp_a2;

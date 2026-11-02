@@ -300,11 +300,54 @@ s32 func_822005A8(s32 arg0) {
     return sp24;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82200618; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment013_232510/func_82200618.s")
-#endif
+M2C_UNK func_80006780();                            /* extern */
+s32 func_80027214(s8 *, s32);                       /* extern */
+
+/*
+ * func_82200618
+ *
+ * Reads the word at offset 0xC of D_82203240 (the `children` pointer of
+ * that GraphNode; call it `rec`), fills two
+ * 0x3C-byte local buffers with func_800273E8: from D_82202CD0 and D_82202CEC
+ * when the byte *D_822036A4 is 0, from D_82202C60 and D_82202C7C otherwise.
+ * Then, while func_80027214(buf1, rec + 0xA8) returns non-zero, it calls
+ * func_80027214(buf2, rec + 0xB4), then func_82200510(0) and
+ * func_80006780(), and stops as soon as func_82200510 returns non-zero.
+ *
+ * Same buffer pair and loop as func_88401E24. What the buffers, the record
+ * and the helpers are is not established.
+ *
+ * Matching notes: `sp3C` is a stack local (as m2c reported it), the
+ * 0x3C-byte arrays are real arrays (a scalar in their place gives a frame
+ * of 72 bytes instead of 184), and the empty `do { } while (0);` has no
+ * meaning of its own: decomp-permuter found it as the only change that
+ * swaps the registers of the two buffer addresses (s3/s4) to the ROM's.
+ */
+void func_82200618(void) {
+    s8 sp7C[0x3C];
+    s8 sp40[0x3C];
+    s32 sp3C;
+    s32 temp_s0_2;
+
+    sp3C = M2C_FIELD(D_82203240, s32 *, 0xC);
+    if (*D_822036A4 == 0) {
+        func_800273E8(sp7C, (s32) &D_82202CD0);
+        func_800273E8(sp40, (s32) &D_82202CEC);
+    } else {
+        func_800273E8(sp7C, (s32) &D_82202C60);
+        func_800273E8(sp40, (s32) &D_82202C7C);
+    }
+    do {
+    } while (0);
+    while (func_80027214(sp7C, sp3C + 0xA8) != 0) {
+        func_80027214(sp40, sp3C + 0xB4);
+        temp_s0_2 = func_82200510(0);
+        func_80006780();
+        if (temp_s0_2 != 0) {
+            break;
+        }
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_82200714; signature not recovered. */

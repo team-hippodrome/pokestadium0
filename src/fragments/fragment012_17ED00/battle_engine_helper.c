@@ -130,17 +130,32 @@ s16 func_82107B54(ActivePokemon* active_pokemon) {
     return M2C_FIELD(hit_cue, u8*, 3);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82107B88; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82107B88.s")
-#endif
+extern f32 D_FLT_82189350[][4];
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82107BC4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82107BC4.s")
-#endif
+/*
+ * func_82107B88
+ *
+ * Returns the participant's scaled model width: the table entry for its object
+ * type (first float of each 0x10-byte entry of D_FLT_82189350, the same table
+ * whose second float func_82107790 reads as a resting height), doubled, divided
+ * by 50, times the display object's Y scale. Zero-side relative of the width
+ * term used by BattleScene_GetParticipantModelWidth in Stadium 1.
+ */
+f32 func_82107B88(ActivePokemon* active_pokemon) {
+    return ((D_FLT_82189350[active_pokemon->displayObject.objectType][0] * 2) / 50.0f) * active_pokemon->displayObject.scale.y;
+}
+
+extern f32 D_FLT_82189350[][4];
+
+/*
+ * func_82107BC4
+ *
+ * Same as func_82107B88 without the final scale factor: the table width for the
+ * participant's object type, doubled and divided by 50.
+ */
+f32 func_82107BC4(ActivePokemon* active_pokemon) {
+    return (D_FLT_82189350[active_pokemon->displayObject.objectType][0] * 2) / 50.0f;
+}
 
 u8 func_82107BF4(s8 *arg0) {
     return M2C_FIELD(arg0, u8 *, 0x820);
@@ -226,11 +241,22 @@ void func_82107EA0(s8 *arg0, s8 *arg1) {
     M2C_FIELD(arg1, f32 *, 8) = (f32) M2C_FIELD(arg0, f32 *, 0x650);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82107EC8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82107EC8.s")
-#endif
+extern f32 D_FLT_82189350[][4];
+
+/*
+ * func_82107EC8
+ *
+ * Returns the table width (first float of the object type's entry in
+ * D_FLT_82189350) unscaled when modelTransformId is 0x10, otherwise the same
+ * width times the display object's Y scale. What transform 0x10 is has not been
+ * established; the value is used literally here.
+ */
+f32 func_82107EC8(ActivePokemon* active_pokemon) {
+    if (active_pokemon->modelTransformId == 0x10) {
+        return D_FLT_82189350[active_pokemon->displayObject.objectType][0];
+    }
+    return D_FLT_82189350[active_pokemon->displayObject.objectType][0] * active_pokemon->displayObject.scale.y;
+}
 
 extern f32 D_FLT_8218934C[][4];
 f32 func_82107F18(ActivePokemon* active_pokemon) {

@@ -105,11 +105,20 @@ void func_8800023C(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4) {
 void func_8800075C(void) {
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88000764; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment014_235D70/func_88000764.s")
-#endif
+extern Gfx D_80073450[];
+void func_800292A8(s32, s32, s32, s32, u8*);
+/**
+ * Appends a call of display list D_80073450, a gDPSetCombineMode(G_CC_MODULATEIA_PRIM,
+ * G_CC_MODULATEIA_PRIM) and a white primitive colour with alpha arg5 to the current display
+ * list, then forwards its first five arguments unchanged to func_800292A8 (compare
+ * func_800295E8, which does the same with a decal combiner and no primitive colour).
+ */
+void func_88000764(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4, s32 arg5) {
+    gSPDisplayList(gDisplayListHead++, D_80073450);
+    gDPSetCombineMode(gDisplayListHead++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+    gDPSetPrimColor(gDisplayListHead++, 0, 0, 255, 255, 255, arg5);
+    func_800292A8(arg0, arg1, arg2, arg3, arg4);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_880007FC; signature not recovered. */
@@ -202,11 +211,26 @@ s32 func_8800125C(s8* arg0) {
     return ret;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_880012FC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment014_235D70/func_880012FC.s")
-#endif
+extern Color_RGBA8 D_88002230;
+void func_8002A8C4(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+
+/**
+ * Initialises the object arg0 (size and layout not established; same
+ * family as func_82008524). Calls func_8002A8C4(arg0, arg1, arg2, 0x224, 0x60),
+ * clears the words at 0x20, 0x24 and 0x28, sets the word at 0x14 to 0x2800,
+ * copies the 4-byte colour D_88002230 to arg0 + 0x18, then stores arg3 at 0x20
+ * (replacing the zero) and arg4 at 0x30.
+ */
+void func_880012FC(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
+    func_8002A8C4(arg0, arg1, arg2, 0x224, 0x60);
+    M2C_FIELD(arg0, s32*, 0x24) = 0;
+    M2C_FIELD(arg0, s32*, 0x20) = 0;
+    M2C_FIELD(arg0, s32*, 0x28) = 0;
+    M2C_FIELD(arg0, s32*, 0x14) = 0x2800;
+    M2C_FIELD(arg0, Color_RGBA8*, 0x18) = D_88002230;
+    M2C_FIELD(arg0, s32*, 0x20) = arg3;
+    M2C_FIELD(arg0, s32*, 0x30) = arg4;
+}
 
 s32 func_8002AE6C();
 extern u8 D_800734A8[4];
@@ -223,13 +247,19 @@ void func_88001368(s8* arg0) {
 
 M2C_UNK func_880002D8(s32, M2C_UNK, M2C_UNK);       /* extern */
 M2C_UNK func_88000C1C(u8 *, s32, s32);            /* extern */
-M2C_UNK func_880012FC(u8 *, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 extern u8 D_800AF985;
-extern M2C_UNK D_88002230;
 extern M2C_UNK D_88002240;
 
-void func_880013EC(u8 *arg0, s32 arg1, s32 arg2) {
+/*
+ * The caller func_8800187C passes a fourth argument, &D_88002B20, which this function
+ * never reads. It is declared so that call compiles; the empty `if (arg3)` only stops
+ * the compiler from spilling the unused argument, which the ROM does not do.
+ */
+void func_880013EC(u8 *arg0, s32 arg1, s32 arg2, s32 *arg3) {
     s32 temp_v0;
+
+    if (arg3) {
+    }
 
     if (D_800AF985 & 1) {
         func_880002D8(arg0 + 0x32C, 0x82, 0x6E);
@@ -284,11 +314,57 @@ void func_8800149C(s8 *arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment014_235D70/func_88001564.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8800187C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment014_235D70/func_8800187C.s")
-#endif
+s32 func_80002D98(M2C_UNK);
+M2C_UNK func_8000B2F4(s32);
+s32 func_80022B4C(s32);
+s32 func_80022F00(s32);
+s32 func_80022EDC(s32);
+s32 func_80025BD8();
+M2C_UNK func_80027FF8(M2C_UNK *, s32);
+extern s32 D_800603C0;
+extern s32 D_80073400;
+extern s32 D_88002B00;
+extern M2C_UNK D_88002B08;
+extern s32 D_88002B20;
+
+/**
+ * Allocates the 0x3B0-byte object stored in D_88002B20 and starts it with
+ * func_880013EC. Steps:
+ *  1. id = func_80025BD8(); D_88002B00 = id; if (D_88002B00 != -1) pass it with
+ *     &D_88002B08 to func_80027FF8.
+ *  2. Picks a mode from id: id == -1 -> 4; else func_80022B4C(id) != 0 -> 3;
+ *     else func_80022F00(id) == 0 -> 2; else func_80022EDC(id) == 0 -> 1; else 0.
+ *  3. D_88002B20 = func_80002D98(0x3B0), then
+ *     func_880013EC(D_88002B20, mode, D_80073400 == 0 ? 4 : D_80073400 - 1, &D_88002B20)
+ *     and finally func_8000B2F4(D_800603C0).
+ * pad1/pad2 are unused locals that reproduce the retail 0x30-byte frame. What the id,
+ * the modes and D_80073400 mean is not established.
+ */
+void func_8800187C(void) {
+    s32 pad1;
+    s32 pad2;
+    s32 sp24;
+    s32 var_s0;
+
+    var_s0 = 0;
+    sp24 = func_80025BD8();
+    D_88002B00 = sp24;
+    if (D_88002B00 != -1) {
+        func_80027FF8(&D_88002B08, D_88002B00);
+    }
+    if (sp24 == -1) {
+        var_s0 = 4;
+    } else if (func_80022B4C(sp24) != 0) {
+        var_s0 = 3;
+    } else if (func_80022F00(sp24) == 0) {
+        var_s0 = 2;
+    } else if (func_80022EDC(sp24) == 0) {
+        var_s0 = 1;
+    }
+    D_88002B20 = func_80002D98(0x3B0);
+    func_880013EC(D_88002B20, var_s0, (D_80073400 == 0) ? 4 : D_80073400 - 1, &D_88002B20);
+    func_8000B2F4(D_800603C0);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8800196C; signature not recovered. */
@@ -411,7 +487,7 @@ M2C_UNK func_8000A7B0(M2C_UNK);                     /* extern */
 M2C_UNK func_8000A7FC(M2C_UNK);                     /* extern */
 M2C_UNK func_8001A194(M2C_UNK, M2C_UNK);            /* extern */
 M2C_UNK func_8001A360();                            /* extern */
-M2C_UNK func_8800187C();                            /* extern */
+void func_8800187C(void);                          /* extern */
 extern M2C_UNK D_002E0BE0;
 extern M2C_UNK D_002E2B90;
 extern M2C_UNK D_00400F70;

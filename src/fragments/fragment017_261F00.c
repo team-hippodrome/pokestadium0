@@ -56,11 +56,45 @@ s32 func_8A00009C(s32 arg0) {
     return 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8A0001F0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment017_261F00/func_8A0001F0.s")
-#endif
+s32 func_8000B30C();
+void func_8003F6AC(s32);
+extern s32 D_8A0005F0;
+
+/*
+ * func_8A0001F0
+ *
+ * Moves a selection index, D_8A0005F0, within 0..5. func_8000B30C() supplies
+ * a value (read here as a button mask; not confirmed): 0x400 calls
+ * func_8003F6AC(1) and increments the index, wrapping 6 to 0; 0x800 calls
+ * func_8003F6AC(1) and decrements it, wrapping -1 to 5; any other value does
+ * nothing.
+ * Matching note: the empty `if (!D_8A0005F0) {}` before the first call has no
+ * effect on behaviour. It was found with decomp-permuter and is the only form
+ * tried that gives the ROM's register for the address of D_8A0005F0 (v1
+ * instead of v0). Same kind of workaround as in func_81200A20.
+ */
+void func_8A0001F0(void) {
+    s32 btn;
+
+    if (!D_8A0005F0) {
+    }
+    btn = func_8000B30C();
+    if (btn != 0x400) {
+        if (btn == 0x800) {
+            func_8003F6AC(1);
+            D_8A0005F0 -= 1;
+            if (D_8A0005F0 < 0) {
+                D_8A0005F0 = 5;
+            }
+        }
+    } else {
+        func_8003F6AC(1);
+        D_8A0005F0 += 1;
+        if (D_8A0005F0 >= 6) {
+            D_8A0005F0 = 0;
+        }
+    }
+}
 
 M2C_UNK func_80025BA0(s32, M2C_UNK *, M2C_UNK *, M2C_UNK, s32); /* extern */
 extern s8 D_00235D70;

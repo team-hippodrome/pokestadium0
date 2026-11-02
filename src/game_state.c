@@ -164,11 +164,63 @@ void func_800258B4(void) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80025910.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80025A64; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80025A64.s")
-#endif
+s8 func_800253BC(M2C_UNK *, s8 *, M2C_UNK *);       /* extern */
+M2C_UNK func_80025910(s8);                          /* extern */
+s32 func_80057910(s8 *, M2C_UNK *, M2C_UNK);        /* extern */
+extern s8 D_800AE8F6;
+extern M2C_UNK D_800AE910;
+
+/*
+ * func_80025A64
+ *
+ * Clears the byte at D_800AE8F0 + 0x1095, then calls
+ * func_800253BC(&D_800AFB10, buf, &D_800AE910) with a 0x162-byte local
+ * buffer. If it returns -1 the function returns 0. Otherwise the result is
+ * stored to the byte D_800AE8F6 and:
+ *  - if buf[0] == 0: calls func_80025910(buf[0]), sets bit 0 of the byte at
+ *    D_800AE8F0 + 0x1095, sets the byte at + 0x1094 to 0xFF, calls
+ *    func_800257F0(-1) and returns 1;
+ *  - otherwise, if D_800733D4 is in 0..3, GbSave_CopyPortSnapshot(D_800733D4,
+ *    &D_800AF9A8) is non-zero and func_80057910(buf, &D_800AF9A8, 0x162)
+ *    returns 0 (func_80057910 is libultra bcmp, so: the 0x162 bytes of buf
+ *    equal the snapshot just copied): calls func_80025910(buf[0]), sets
+ *    bit 0 of + 0x1095, stores D_800733D4 at + 0x1094, calls
+ *    func_800257F0(D_800733D4) and returns 1;
+ *  - in every other case returns 0.
+ *
+ * What the buffer, D_800AE8F0's fields and the two helpers do is not
+ * established. Matching notes: the unused `pad` local sits between the
+ * buffer and `ret` as in the ROM's frame (buffer at sp+0x34, ret at sp+0x2C),
+ * and the bit-0 update is written before the store of 0xFF to match the
+ * ROM's register order.
+ */
+s32 func_80025A64(void) {
+    s8 buf[0x162];
+    UNUSED s32 pad;
+    s32 ret;
+    s8 temp_v0;
+
+    ret = 0;
+    M2C_FIELD(&D_800AE8F0, u8 *, 0x1095) = 0U;
+    temp_v0 = func_800253BC(&D_800AFB10, buf, &D_800AE910);
+    if (temp_v0 != -1) {
+        D_800AE8F6 = temp_v0;
+        if (buf[0] == 0) {
+            func_80025910(buf[0]);
+            M2C_FIELD(&D_800AE8F0, u8 *, 0x1095) = (u8) (M2C_FIELD(&D_800AE8F0, u8 *, 0x1095) | 1);
+            M2C_FIELD(&D_800AE8F0, u8 *, 0x1094) = 0xFF;
+            func_800257F0(-1);
+            ret = 1;
+        } else if ((D_800733D4 >= 0) && (D_800733D4 < 4) && (GbSave_CopyPortSnapshot(D_800733D4, &D_800AF9A8) != 0) && (func_80057910(buf, &D_800AF9A8, 0x162) == 0)) {
+            func_80025910(buf[0]);
+            M2C_FIELD(&D_800AE8F0, u8 *, 0x1095) = (u8) (M2C_FIELD(&D_800AE8F0, u8 *, 0x1095) | 1);
+            M2C_FIELD(&D_800AE8F0, s8 *, 0x1094) = (s8) D_800733D4;
+            func_800257F0((s32) D_800733D4);
+            ret = 1;
+        }
+    }
+    return ret;
+}
 
 s32 Fragment_LoadAndCall(s32 arg0, u8* romStart, u8* romEnd, u32 arg3, u32 arg4) {
     s32 result;
@@ -453,11 +505,33 @@ void Game_ResetStorageDevice(void) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80026B50.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_800270B4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800270B4.s")
-#endif
+s32 func_800023C4(M2C_UNK, M2C_UNK);                /* extern */
+M2C_UNK func_80026B50(s16, s16, s16, s32, s32, s32, s32, s32); /* extern */
+extern s32 D_800733F0;
+
+/*
+ * func_800270B4
+ *
+ * Calls func_800023C4(0xA00, 0) and func_800023C4(0xA70, 0) (they look like
+ * allocations, but that is not established here), then calls func_80026B50
+ * with (arg0, arg1, arg2 as halfwords, first result, second result, arg3,
+ * arg4, arg5). Stores the second result in D_800733F0 (the word that
+ * Display_DisableBlackout clears) and returns it.
+ *
+ * Matching note: the unused leading `pad1` local only makes the stack frame
+ * and slots match the ROM (0x38 bytes, blocks at sp+0x30 and sp+0x2C).
+ */
+s32 func_800270B4(s16 arg0, s16 arg1, s16 arg2, s32 arg3, s16 arg4, s16 arg5) {
+    s32 pad;
+    s32 sp30;
+    s32 sp2C;
+
+    sp30 = func_800023C4(0xA00, 0);
+    sp2C = func_800023C4(0xA70, 0);
+    func_80026B50(arg0, arg1, arg2, sp30, sp2C, arg3, (s32) arg4, (s32) arg5);
+    D_800733F0 = sp2C;
+    return sp2C;
+}
 
 void Display_DisableBlackout(void) {
     D_800733F0 = 0;

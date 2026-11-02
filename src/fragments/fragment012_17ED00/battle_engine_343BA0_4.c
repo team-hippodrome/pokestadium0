@@ -6,6 +6,10 @@
 #include "gfx_buffer.h"
 #include "math.h"
 #include "math_util.h"
+/* Spline camera path state (scene spline block pointer, keyframe buffer) and helper shared by the func_82135xxx camera path functions. */
+extern s8 D_FLT_8219A5B0;
+extern BattleScene* D_8219A5A0;
+void Battle_ComputeSplineWeightsVariantC(f32* arg0, f32 arg1);
 extern u8* sBattleAnimAssetPointers[256];
 extern s16 sBattleAnimResourceList[0x10];
 extern arg1_func_80019420* sBattleAnimResourceTablePointers[40];
@@ -430,11 +434,45 @@ void BattleAnim_SetQueuedEffectList(u8 effect_list_index);
 void func_82135100(void) {
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82135108; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82135108.s")
-#endif
+M2C_UNK func_80003824(M2C_UNK *, s8 *, s8 *, M2C_UNK); /* extern */
+extern s8 D_00434C00;
+extern u32 D_8218A2DC[];
+extern u32 D_8218A544[];
+/*
+ * func_82135108
+ *
+ * Picks one of two model records by the participant's object type
+ * (display object objectType - 1 indexes the two word tables D_8218A544 and
+ * D_8218A2DC; the low 24 bits of each entry are an offset from D_00434C00)
+ * and hands that record, together with the address 0x168 bytes after it, to
+ * func_80003824 with the destination D_FLT_8219A5B0 and a final argument of 0.
+ * The record from D_8218A2DC is used when the scene's unk_1C is 9; otherwise it
+ * is used when BattleAnim_RandomRange(100) is below 0x33, and the record from
+ * D_8218A544 when it is 0x33 or higher.  What func_80003824 does with the two
+ * addresses (0x168 is the size of a DisplayObject) is not established here.
+ * Note: the local pad arrays only reproduce the retail stack layout, and the
+ * order of the two table lookups matches the register allocation.
+ */
+void func_82135108(ActivePokemon* arg0) {
+    s16 temp_a2;
+    UNUSED s32 padC[2];
+    s8* temp_a1;
+    UNUSED s32 padA[1];
+    s8* sp18;
+
+    temp_a2 = arg0->displayObject.objectType - 1;
+    temp_a1 = (s8*)((D_8218A2DC[temp_a2] & 0xFFFFFF) + (u32)&D_00434C00);
+    sp18 = (s8*)((D_8218A544[temp_a2] & 0xFFFFFF) + (u32)&D_00434C00);
+    if (sBattleScene.scene->unk_1C == 9) {
+        func_80003824(&D_FLT_8219A5B0, temp_a1, temp_a1 + 0x168, 0);
+        return;
+    }
+    if (BattleAnim_RandomRange(0x64) >= 0x33) {
+        func_80003824(&D_FLT_8219A5B0, sp18, sp18 + 0x168, 0);
+        return;
+    }
+    func_80003824(&D_FLT_8219A5B0, temp_a1, temp_a1 + 0x168, 0);
+}
 
 void func_821351EC(UNUSED s32 arg0, UNUSED s32 arg1) {
 }
@@ -451,29 +489,173 @@ void func_821351EC(UNUSED s32 arg0, UNUSED s32 arg1) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82135384.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82135458; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82135458.s")
-#endif
+extern f32 D_FLT_82189350[][4];
+extern f32 D_FLT_82196810;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8213558C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8213558C.s")
-#endif
+/*
+ * func_82135458
+ *
+ * Same camera-target easing as func_82122FD8 (see func_82122A7C for the
+ * step-by-step description) with the arguments in the opposite order (the
+ * participant first, the camera second). It first copies the scene's saved eye
+ * (+0xB4) into the camera's eye position, uses the bare object-type table width
+ * (D_FLT_82189350[type][0]) as the distance threshold and eases the camera
+ * target by D_FLT_82196810 times the remaining distance.
+ */
+void func_82135458(ActivePokemon* arg0, CameraNode* arg1) {
+    u8* ptr = (u8*)&arg0->modelTransform;
+    Vec3f sp58;
+    Vec3f sp4C;
+    UNUSED s32 pad[3];
+    Vec3f sp34;
+    f32 sp30;
+    s16 sp2E;
+    s16 sp2C;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82135734; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82135734.s")
-#endif
+    BattleAnim_Vec3fCopy(&arg1->view.eyePosition, &M2C_FIELD(sBattleScene.scene, Vec3f*, 0xB4));
+    func_82121908(arg0, &sp58);
+    BattleAnim_CalculateDistanceAngles(&sp58, &M2C_FIELD(arg0, Vec3f*, 0x5D0), &sp30, &sp2E, &sp2C);
+    BattleAnim_Vec3fCopy(&sp34, &arg1->view.targetPosition);
+    if (D_FLT_82189350[arg0->displayObject.objectType][0] <= sp30) {
+        Camera_ComputeEyeFromAngles(&sp58, &sp4C, M2C_FIELD(ptr, f32*, 0x38), M2C_FIELD(ptr, s16*, 0x30), M2C_FIELD(ptr, s16*, 0x32));
+        BattleAnim_CalculateDistanceAngles(&sp34, &sp4C, &sp30, &sp2E, &sp2C);
+    } else {
+        BattleAnim_CalculateDistanceAngles(&sp34, &M2C_FIELD(sBattleScene.scene, Vec3f*, 0xA8), &sp30, &sp2E, &sp2C);
+    }
+    Camera_ComputeEyeFromAngles(&sp34, &arg1->view.targetPosition, sp30 * D_FLT_82196810, sp2E, sp2C);
+}
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82135894; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82135894.s")
-#endif
+void func_82135384(ActivePokemon*, CameraNode*, Vec3f*, Vec3f*, s32, s32);
+
+/*
+ * func_8213558C
+ *
+ * Evaluates one step of the spline camera path. func_82135384 is called four
+ * times to turn the keyframes arg4[arg5 + 0..3] into points relative to the
+ * participant and camera (stored in a local array of four vectors); arg2 then
+ * receives the weighted sum of those four points using the four weights in
+ * arg3 (the weights come from func_8210C274 / func_8210C330 / func_8210C40C,
+ * the Stadium 1 Battle_ComputeSplineWeights variants). Finally the scene's path
+ * parameter (+0x04, f32) advances by 1 / (s8 at +0x00).
+ *
+ * func_82135CD8 has an identical body (it is the same step with a different
+ * caller).
+ */
+void func_8213558C(ActivePokemon* arg0, CameraNode* arg1, Vec3f* arg2, f32* arg3, Vec3f* arg4, s32 arg5) {
+    Vec3f sp28[4];
+
+    func_82135384(arg0, arg1, arg4, sp28, arg5, 0);
+    func_82135384(arg0, arg1, arg4, sp28, arg5, 1);
+    func_82135384(arg0, arg1, arg4, sp28, arg5, 2);
+    func_82135384(arg0, arg1, arg4, sp28, arg5, 3);
+    arg2->x = (((arg3[0] * sp28[0].x) + (arg3[1] * sp28[1].x)) + (arg3[2] * sp28[2].x)) + (arg3[3] * sp28[3].x);
+    arg2->y = (((arg3[0] * sp28[0].y) + (arg3[1] * sp28[1].y)) + (arg3[2] * sp28[2].y)) + (arg3[3] * sp28[3].y);
+    arg2->z = (((arg3[0] * sp28[0].z) + (arg3[1] * sp28[1].z)) + (arg3[2] * sp28[2].z)) + (arg3[3] * sp28[3].z);
+    M2C_FIELD(sBattleScene.scene, f32*, 4) += 1.0f / (f32)M2C_FIELD(sBattleScene.scene, s8*, 0);
+}
+
+/*
+ * func_82135734
+ *
+ * Advances the spline camera path by one frame. Unless the participant is an
+ * Onix (95) or object type 0x52, it first runs func_82135458 to ease the camera
+ * target. The scene holds the current segment (s8 at +0x01), the parameter t
+ * (f32 at +0x04) and the keyframe count (s8 at +0x08). Returns 1 without doing
+ * anything else once segment + 3 reaches the keyframe count. Otherwise it picks
+ * the weight formula for the segment (VariantB for segment 1, VariantC for
+ * segment 2, VariantA for segment 3 and up), blends the keyframes in
+ * D_FLT_8219A5B0 into the camera's eye position with func_8213558C, raises the
+ * eye Y to at least 15, and moves to the next segment (resetting t) once t has
+ * reached 1. Returns 0.
+ */
+s32 func_82135734(CameraNode* arg0, ActivePokemon* arg1) {
+    f32 sp28[4];
+    s16 temp_v0;
+    s8 var_v1;
+
+    temp_v0 = arg1->displayObject.objectType;
+    if ((temp_v0 != 0x5F) && (temp_v0 != 0x52)) {
+        func_82135458(arg1, arg0);
+    }
+    var_v1 = M2C_FIELD(D_8219A5A0, s8*, 1);
+    if (M2C_FIELD(D_8219A5A0, s8*, 8) < (var_v1 + 3)) {
+        return 1;
+    }
+    if (var_v1 == 1) {
+        Battle_ComputeSplineWeightsVariantB(sp28, M2C_FIELD(D_8219A5A0, f32*, 4));
+        var_v1 = M2C_FIELD(D_8219A5A0, s8*, 1);
+    }
+    if (var_v1 == 2) {
+        Battle_ComputeSplineWeightsVariantC(sp28, M2C_FIELD(D_8219A5A0, f32*, 4));
+        var_v1 = M2C_FIELD(D_8219A5A0, s8*, 1);
+    }
+    if (var_v1 >= 3) {
+        Battle_ComputeSplineWeightsVariantA(sp28, M2C_FIELD(D_8219A5A0, f32*, 4));
+        var_v1 = M2C_FIELD(D_8219A5A0, s8*, 1);
+    }
+    func_8213558C(arg1, arg0, &arg0->view.eyePosition, sp28, (Vec3f*)&D_FLT_8219A5B0, var_v1 - 1);
+    if (arg0->view.eyePosition.y < 15.0f) {
+        arg0->view.eyePosition.y = 15.0f;
+    }
+    if ((f64)M2C_FIELD(D_8219A5A0, f32*, 4) >= 1.0) {
+        M2C_FIELD(D_8219A5A0, s8*, 1) = (s8)(M2C_FIELD(D_8219A5A0, s8*, 1) + 1);
+        M2C_FIELD(sBattleScene.scene, f32*, 4) = 0.0f;
+    }
+    return 0;
+}
+
+/*
+ * func_82135894
+ *
+ * Advances the spline camera path by one frame (the variant used when the
+ * target easing runs after the end-of-path test, paired with func_82135734).
+ * The scene holds the current segment (s8 at +0x01), the parameter t (f32 at
+ * +0x04) and the keyframe count (s8 at +0x08). Returns 1 immediately once
+ * segment + 3 reaches the keyframe count. Otherwise, unless the participant is
+ * an Onix (95) or object type 0x52, it runs func_82135458 to ease the camera
+ * target. It then picks the weight formula for the segment (VariantB for
+ * segment 1, VariantC for segment 2, VariantA for segment 3 and up), blends
+ * the keyframes in D_FLT_8219A5B0 into the camera's eye position with
+ * func_8213558C, raises the eye Y to at least 15, and moves to the next
+ * segment (resetting t) once t has reached 1. Returns 0.
+ */
+s32 func_82135894(CameraNode* arg0, ActivePokemon* arg1) {
+    f32 sp30[4];
+    UNUSED s32 pad[2];
+    s16 temp_a0;
+    s8 var_v1;
+
+    var_v1 = M2C_FIELD(D_8219A5A0, s8*, 1);
+    if ((var_v1 + 3) >= M2C_FIELD(D_8219A5A0, s8*, 8)) {
+        return 1;
+    }
+    temp_a0 = arg1->displayObject.objectType;
+    if ((temp_a0 != 0x5F) && (temp_a0 != 0x52)) {
+        func_82135458(arg1, arg0);
+        var_v1 = M2C_FIELD(D_8219A5A0, s8*, 1);
+    }
+    if (var_v1 == 1) {
+        Battle_ComputeSplineWeightsVariantB(sp30, M2C_FIELD(D_8219A5A0, f32*, 4));
+        var_v1 = M2C_FIELD(D_8219A5A0, s8*, 1);
+    }
+    if (var_v1 == 2) {
+        Battle_ComputeSplineWeightsVariantC(sp30, M2C_FIELD(D_8219A5A0, f32*, 4));
+        var_v1 = M2C_FIELD(D_8219A5A0, s8*, 1);
+    }
+    if (var_v1 >= 3) {
+        Battle_ComputeSplineWeightsVariantA(sp30, M2C_FIELD(D_8219A5A0, f32*, 4));
+        var_v1 = M2C_FIELD(D_8219A5A0, s8*, 1);
+    }
+    func_8213558C(arg1, arg0, &arg0->view.eyePosition, sp30, (Vec3f*)&D_FLT_8219A5B0, var_v1 - 1);
+    if (arg0->view.eyePosition.y < 15.0f) {
+        arg0->view.eyePosition.y = 15.0f;
+    }
+    if ((f64)M2C_FIELD(D_8219A5A0, f32*, 4) >= 1.0) {
+        M2C_FIELD(D_8219A5A0, s8*, 1) = (s8)(M2C_FIELD(D_8219A5A0, s8*, 1) + 1);
+        M2C_FIELD(sBattleScene.scene, f32*, 4) = 0.0f;
+    }
+    return 0;
+}
 
 M2C_UNK func_80003824(M2C_UNK *, s8 *, s8 *, M2C_UNK); /* extern */
 extern s8 D_00434C00;
@@ -492,23 +674,107 @@ void func_82135A04(s32 arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82135A54.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82135BE4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82135BE4.s")
-#endif
+extern f32 D_FLT_82189350[][4];
+extern f32 D_FLT_82196814;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82135CD8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82135CD8.s")
-#endif
+/*
+ * func_82135BE4
+ *
+ * Another variant of the camera-target easing in func_82122A7C (see there).
+ * It measures the participant's anchor against the point at +0x5D0, rebuilds
+ * the goal from the anchor and the model transform's distance and angles
+ * (+0x38 / +0x30 / +0x32 within the transform) and measures the camera target
+ * against that goal. Only when that distance is at least the object type's
+ * table width (D_FLT_82189350[type][0]) does it ease the camera target towards
+ * the goal, by D_FLT_82196814 times the remaining distance.
+ */
+void func_82135BE4(ActivePokemon* arg0, CameraNode* arg1) {
+    u8* ptr = (u8*)&arg0->modelTransform;
+    Vec3f sp58;
+    Vec3f sp4C;
+    UNUSED s32 pad[3];
+    Vec3f sp34;
+    f32 sp30;
+    s16 sp2E;
+    s16 sp2C;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82135E80; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82135E80.s")
-#endif
+    func_82121908(arg0, &sp58);
+    BattleAnim_CalculateDistanceAngles(&sp58, &M2C_FIELD(arg0, Vec3f*, 0x5D0), &sp30, &sp2E, &sp2C);
+    BattleAnim_Vec3fCopy(&sp34, &arg1->view.targetPosition);
+    Camera_ComputeEyeFromAngles(&sp58, &sp4C, M2C_FIELD(ptr, f32*, 0x38), M2C_FIELD(ptr, s16*, 0x30), M2C_FIELD(ptr, s16*, 0x32));
+    BattleAnim_CalculateDistanceAngles(&sp34, &sp4C, &sp30, &sp2E, &sp2C);
+    if (D_FLT_82189350[arg0->displayObject.objectType][0] <= sp30) {
+        Camera_ComputeEyeFromAngles(&sp34, &arg1->view.targetPosition, sp30 * D_FLT_82196814, sp2E, sp2C);
+    }
+}
+
+void func_82135384(ActivePokemon*, CameraNode*, Vec3f*, Vec3f*, s32, s32);
+
+/*
+ * func_82135CD8
+ *
+ * Identical in code to func_8213558C (see there): evaluates one step of the
+ * spline camera path from four keyframes and advances the scene's path
+ * parameter by 1 / (s8 at +0x00). Called by func_82135E80.
+ */
+void func_82135CD8(ActivePokemon* arg0, CameraNode* arg1, Vec3f* arg2, f32* arg3, Vec3f* arg4, s32 arg5) {
+    Vec3f sp28[4];
+
+    func_82135384(arg0, arg1, arg4, sp28, arg5, 0);
+    func_82135384(arg0, arg1, arg4, sp28, arg5, 1);
+    func_82135384(arg0, arg1, arg4, sp28, arg5, 2);
+    func_82135384(arg0, arg1, arg4, sp28, arg5, 3);
+    arg2->x = (((arg3[0] * sp28[0].x) + (arg3[1] * sp28[1].x)) + (arg3[2] * sp28[2].x)) + (arg3[3] * sp28[3].x);
+    arg2->y = (((arg3[0] * sp28[0].y) + (arg3[1] * sp28[1].y)) + (arg3[2] * sp28[2].y)) + (arg3[3] * sp28[3].y);
+    arg2->z = (((arg3[0] * sp28[0].z) + (arg3[1] * sp28[1].z)) + (arg3[2] * sp28[2].z)) + (arg3[3] * sp28[3].z);
+    M2C_FIELD(sBattleScene.scene, f32*, 4) += 1.0f / (f32)M2C_FIELD(sBattleScene.scene, s8*, 0);
+}
+
+/*
+ * func_82135E80
+ *
+ * Advances the spline camera path by one frame using the func_82135BE4 /
+ * func_82135CD8 pair (the counterpart of func_82135734). It always eases the
+ * camera target with func_82135BE4 first. The scene holds the current segment
+ * (s8 at +0x01), the parameter t (f32 at +0x04) and the keyframe count (s8 at
+ * +0x08). Returns 1 without doing anything else once segment + 3 reaches the
+ * keyframe count. Otherwise it picks the weight formula for the segment
+ * (VariantB for segment 1, VariantC for segment 2, VariantA for segment 3 and
+ * up), blends the keyframes in D_FLT_8219A5B0 into the camera's eye position
+ * with func_82135CD8, raises the eye Y to at least 15, and moves to the next
+ * segment (resetting t) once t has reached 1. Returns 0.
+ */
+s32 func_82135E80(CameraNode* arg0, ActivePokemon* arg1) {
+    f32 sp30[4];
+    s8 var_v1;
+
+    func_82135BE4(arg1, arg0);
+    var_v1 = M2C_FIELD(D_8219A5A0, s8*, 1);
+    if (M2C_FIELD(D_8219A5A0, s8*, 8) < (var_v1 + 3)) {
+        return 1;
+    }
+    if (var_v1 == 1) {
+        Battle_ComputeSplineWeightsVariantB(sp30, M2C_FIELD(D_8219A5A0, f32*, 4));
+        var_v1 = M2C_FIELD(D_8219A5A0, s8*, 1);
+    }
+    if (var_v1 == 2) {
+        Battle_ComputeSplineWeightsVariantC(sp30, M2C_FIELD(D_8219A5A0, f32*, 4));
+        var_v1 = M2C_FIELD(D_8219A5A0, s8*, 1);
+    }
+    if (var_v1 >= 3) {
+        Battle_ComputeSplineWeightsVariantA(sp30, M2C_FIELD(D_8219A5A0, f32*, 4));
+        var_v1 = M2C_FIELD(D_8219A5A0, s8*, 1);
+    }
+    func_82135CD8(arg1, arg0, &arg0->view.eyePosition, sp30, (Vec3f*)&D_FLT_8219A5B0, var_v1 - 1);
+    if (arg0->view.eyePosition.y < 15.0f) {
+        arg0->view.eyePosition.y = 15.0f;
+    }
+    if ((f64)M2C_FIELD(D_8219A5A0, f32*, 4) >= 1.0) {
+        M2C_FIELD(D_8219A5A0, s8*, 1) = (s8)(M2C_FIELD(D_8219A5A0, s8*, 1) + 1);
+        M2C_FIELD(sBattleScene.scene, f32*, 4) = 0.0f;
+    }
+    return 0;
+}
 
 M2C_UNK func_82136338();                            /* extern */
 M2C_UNK func_82136E48();                            /* extern */

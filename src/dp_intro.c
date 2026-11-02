@@ -213,11 +213,25 @@ void DisplayWorker_Initialize(void) {
     Dma_WriteChunks(&D_80087B88, 0xB0000B70, 0xB0000C70, 0);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80001948; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80001948.s")
-#endif
+/*
+ * Display_ClearFramebufferLine (func_80001948)
+ *
+ * Writes `color` into 640 consecutive 16-bit entries starting at the image
+ * pointer of the image object stored at D_800870A0.unk_9E0 (the one-line,
+ * 0x280-wide image allocated in the intro setup function just above). The
+ * Stadium 1 version of this function ends with an osWritebackDCache call;
+ * the ROM's code for this address has no such call, so none is written.
+ * Matching note: the count is a signed local decremented in the loop
+ * condition (`width-- > 0`), the form used by the Stadium 1 source.
+ */
+void Display_ClearFramebufferLine(u16 color) {
+    s32 width = 640;
+    u16* buf = (u16*)D_800870A0.unk_9E0->img_p;
+
+    while (width-- > 0) {
+        *(buf)++ = color;
+    }
+}
 
 u16 Display_GetFramebufferClearColor(void) {
     u16* ptr = (u16*)D_800870A0.unk_9E0->img_p;

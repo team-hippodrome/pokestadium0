@@ -105,17 +105,68 @@ void func_80023890(s32 arg0, s32 arg1, s32 arg2) {
     func_80003774(arg1, sp1C, arg2, 1);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_800238D8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800238D8.s")
-#endif
+/*
+ * func_800238D8: flushes one save record whose "dirty" flag is set.
+ *
+ * `arg0` is the address of the record inside the buffer at D_800AE8E0 and
+ * `arg1` its size in bytes (halfword flag at the start of the record).  If
+ * bit 1 of that halfword is set: the bit is cleared, the footer is rewritten
+ * with Save_WriteFooter(record, size, 1) (the valid 'PO' 'KE' form), the
+ * record is copied to record + size via func_80058410(src, dst, size) -- a
+ * second copy directly behind it -- and func_80003774 is called with the
+ * record address, its offset from the start of the buffer, twice the size and
+ * 1.  What func_80003774 does with them (the offset and doubled size suggest
+ * a write of both copies out to the save medium) is not established here.
+ *
+ * Callers such as func_8002404C pass a third argument that this function
+ * ignores, so the prototype is left unspecified at the call sites and the
+ * definition is written in K&R style.  The unused pad[2] only reproduces the
+ * retail stack frame.
+ */
+void func_800238D8(arg0, arg1)
+    s32 arg0;
+    s32 arg1;
+{
+    UNUSED s32 pad[2];
+    s32 offset;
+    s16 flags = *(s16*)arg0;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80023954; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80023954.s")
-#endif
+    if (flags & 2) {
+        offset = arg0 - D_800AE8E0;
+        *(s16*)arg0 = flags & 0xFFFD;
+        Save_WriteFooter((u8*)arg0, arg1, 1);
+        func_80058410(arg0, arg0 + arg1, arg1);
+        func_80003774(arg0, offset, arg1 * 2, 1);
+    }
+}
+
+/*
+ * func_80023954: same as func_800238D8, but for invalidating a dirty record.
+ *
+ * If bit 1 of the record's leading halfword is set, the footer is written with
+ * Save_WriteFooter(record, size, 0) (the 'XX' 'XX' form with the inverted
+ * checksum), the record is copied to record + size via func_80058410 and
+ * func_80003774 is called with the record address, its offset from the start
+ * of the buffer at D_800AE8E0, twice the size and 1.  Unlike func_800238D8
+ * the flag bit is left set.  `arg0` is the record address and `arg1` its size.
+ * A third argument passed by func_80024170 is ignored; the definition is K&R
+ * style for that reason, and the unused pad[2] reproduces the retail stack
+ * frame.
+ */
+void func_80023954(arg0, arg1)
+    s32 arg0;
+    s32 arg1;
+{
+    UNUSED s32 pad[2];
+    s32 offset;
+
+    if (*(s16*)arg0 & 2) {
+        offset = arg0 - D_800AE8E0;
+        Save_WriteFooter((u8*)arg0, arg1, 0);
+        func_80058410(arg0, arg0 + arg1, arg1);
+        func_80003774(arg0, offset, arg1 * 2, 1);
+    }
+}
 
 M2C_UNK func_80058410(s32, s32, s32);               /* extern */
 
@@ -237,7 +288,7 @@ void func_80023DB8(s32 arg0, s32 arg1) {
 void func_80024044(void) {
 }
 
-M2C_UNK func_800238D8(); // Called with two or three arguments.
+void func_800238D8(); // Called with two or three arguments.
 void func_8002404C(s32 arg0, s32 arg1) {
     switch (arg0) {
     case 16:
@@ -263,7 +314,7 @@ void func_8002404C(s32 arg0, s32 arg1) {
     }
 }
 
-M2C_UNK func_80023954(s32, M2C_UNK, s32);           /* extern */
+void func_80023954(); // Called with three arguments; the third is ignored.
 void func_80024170(s32 arg0, s32 arg1) {
     switch (arg0) {
     case 16:

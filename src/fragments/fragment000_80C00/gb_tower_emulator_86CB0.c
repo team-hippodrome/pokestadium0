@@ -429,11 +429,24 @@ s16 func_81112FC4(u8** arg0) {
     return tmp;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81112FFC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81112FFC.s")
-#endif
+/*
+ * func_81112FFC
+ *
+ * Reads a one- or two-byte value from the byte stream whose current position
+ * is stored at *arg0, advancing that position. If the first byte has bit 7
+ * clear it is the result. Otherwise the result is ((first & 0x7F) << 8) |
+ * second byte, and the position advances past both bytes.
+ */
+u16 func_81112FFC(u8** arg0) {
+    u16 v;
+
+    v = *(*arg0)++;
+    if (v & 0x80) {
+        v = (v << 8) & 0x7F00;
+        v = *(*arg0)++ | v;
+    }
+    return v;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8111303C; signature not recovered. */
@@ -494,11 +507,24 @@ void func_81113140(Particle3140* arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81113A44.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81113E54; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81113E54.s")
-#endif
+/**
+ * Splits the byte arg1 into two nibbles and stores each non-zero one in arg0:
+ * the low nibble at offset 5 and the high nibble at offset 6. A zero nibble
+ * leaves the corresponding byte unchanged. (arg1 itself is reused for the
+ * high nibble, which is what the retail register use needs.)
+ */
+void func_81113E54(u8* arg0, u8 arg1) {
+    s32 low;
+
+    low = arg1 & 0xF;
+    if (low != 0) {
+        arg0[5] = low;
+    }
+    arg1 = arg1 >> 4;
+    if (arg1 != 0) {
+        arg0[6] = arg1;
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_81113E84; signature not recovered. */

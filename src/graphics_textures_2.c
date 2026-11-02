@@ -50,11 +50,39 @@ s32 Font_GetSetIndexFromMask(s32 mask) {
     return index;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8001A118; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8001A118.s")
-#endif
+/*
+ * func_8001A118: registers one font set in the font context.
+ *
+ * Takes the next free slot index from func_8001A0A4 and fills the 8-byte
+ * entry at that index in the table at the start of *font_context: three
+ * size bytes (arg1, arg2, arg3 -- their meaning is not established; func_8001A194
+ * passes e.g. 0x20/0x20/0x20 for mask 0x20 and 0xA/0xA/0x10 for mask 0x1) and
+ * the pointer to the font file.  The slot index is then stored at
+ * font_context + 0x38 (FontContext::unk_50, cleared by func_8001A194).
+ *
+ * `mask` is not used by the retail code; the empty `if (mask) {}` is only there
+ * so IDO does not spill the unused argument register.
+ */
+typedef struct FontEntry8001A118 {
+    /* 0x0 */ s8 size_a;
+    /* 0x1 */ s8 size_b;
+    /* 0x2 */ s8 size_c;
+    /* 0x4 */ void* file;
+} FontEntry8001A118; // size = 0x8
+s32 func_8001A0A4(void);
+void func_8001A118(s32 mask, s32 arg1, s32 arg2, s32 arg3, void* file);
+void func_8001A118(s32 mask, s32 arg1, s32 arg2, s32 arg3, void* file) {
+    s32 index;
+
+    if (mask) {}
+    index = func_8001A0A4();
+
+    ((FontEntry8001A118*)font_context)[index].file = file;
+    ((FontEntry8001A118*)font_context)[index].size_a = arg1;
+    ((FontEntry8001A118*)font_context)[index].size_b = arg2;
+    ((FontEntry8001A118*)font_context)[index].size_c = arg3;
+    font_context->unk_50 = index;
+}
 
 /*
  * func_8001A194 (Font_Init in symbol_addrs.txt)
@@ -212,11 +240,29 @@ void Font_DisableTwoCycleTexturing(void) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8001AFB0.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8001B25C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8001B25C.s")
-#endif
+/**
+ * Builds a small display list in freshly allocated display-list memory:
+ * lighting is switched off, textures are enabled with full scale, a two-cycle
+ * combiner (TEXEL0 * ENVIRONMENT) is selected, the environment colour is set
+ * to arg1, the caller's display list
+ * arg0 is called, and lighting is switched back on.
+ *
+ * Note: 0x80 bytes are allocated but only the first 0x40 (eight commands)
+ * are written.
+ */
+void func_8001B25C(Gfx* arg0, Color_RGBA8 arg1) {
+    Gfx* gfx = Gfx_AllocDisplayList(0x80);
+
+    gDPPipeSync(gfx++);
+    gSPClearGeometryMode(gfx++, G_LIGHTING);
+    gSPTexture(gfx++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON);
+    gDPSetCombineLERP(gfx++, TEXEL0, 0, ENVIRONMENT, 0, TEXEL0, 0, ENVIRONMENT, 0, 0, 0, 0, COMBINED, 0, 0, 0,
+                      COMBINED);
+    gDPSetEnvColor(gfx++, arg1.r, arg1.g, arg1.b, arg1.a);
+    gSPDisplayList(gfx++, arg0);
+    gSPSetGeometryMode(gfx++, G_LIGHTING);
+    gSPEndDisplayList(gfx++);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8001B32C; signature not recovered. */

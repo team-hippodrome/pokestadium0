@@ -53,11 +53,66 @@ void GbApu_InitAllocator(unk_func_81206FA0* arg0, s32 arg1, s32 arg2);
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_811095E0.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81109678; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81109678.s")
-#endif
+/* One 0xCC-byte record; only the fields func_81109678 touches are named. */
+typedef struct Rec81109678Flags {
+    /* 0x0 */ u8 bit7 : 1;
+    /* 0x0 */ u8 bit6 : 1;
+    /* 0x0 */ u8 rest : 6;
+} Rec81109678Flags;
+
+typedef struct Rec81109678 {
+    /* 0x00 */ u8 pad00[0x30];
+    /* 0x30 */ u8 unk_30;
+    /* 0x31 */ u8 pad31[2];
+    /* 0x33 */ u8 unk_33;
+    /* 0x34 */ u8 unk_34;
+    /* 0x35 */ u8 pad35[0x44 - 0x35];
+    /* 0x44 */ Rec81109678Flags* unk_44;
+    /* 0x48 */ u8 pad48[0xCC - 0x48];
+} Rec81109678; // size = 0xCC
+
+s32 func_8111073C(Rec81109678*);
+s32 func_811114BC(Rec81109678*);
+s32 func_81112EAC(s8*, Rec81109678*);
+extern Rec81109678* D_81184664;
+extern s8 D_81184938;
+extern s32 D_811858E8;
+
+/*
+ * func_81109678
+ *
+ * Walks the D_811858E8 records of the array at D_81184664 (0xCC bytes each,
+ * the array pointer is re-read on every iteration). For each record whose
+ * byte at 0x33 equals arg0: if the bytes at 0x34 and 0x30 are 0 and non-zero
+ * respectively, it clears bit 7 and then sets bit 6 of the byte that the
+ * pointer at 0x44 points to. In every matching record it then calls
+ * func_8111073C(rec), func_811114BC(rec) and func_81112EAC(&D_81184938, rec).
+ * Records whose byte at 0x33 differs are skipped. What the record and the
+ * flag bits mean is not established from this function.
+ *
+ * Matching notes: the two single-bit writes are declared as bit-fields; the
+ * bit-field form gives the retail `andi 0xFF7F` / `ori 0x40` read-modify-write
+ * sequences and register numbering (a plain `&= 0xFF7F; |= 0x40` on a byte
+ * was one temporary register off). Indexing the array with the loop counter,
+ * instead of a separate byte offset, gives the retail loop setup order.
+ */
+void func_81109678(s32 arg0) {
+    s32 i;
+    Rec81109678* p;
+
+    for (i = 0; i < D_811858E8; i++) {
+        p = &D_81184664[i];
+        if (arg0 == p->unk_33) {
+            if ((p->unk_34 == 0) && (p->unk_30 != 0)) {
+                p->unk_44->bit7 = 0;
+                p->unk_44->bit6 = 1;
+            }
+            func_8111073C(p);
+            func_811114BC(p);
+            func_81112EAC(&D_81184938, p);
+        }
+    }
+}
 
 M2C_UNK func_81112E00(M2C_UNK *);                   /* extern */
 extern s8 D_81184668;
@@ -162,11 +217,24 @@ void func_8110992C(s8 *arg0) {
     M2C_FIELD(arg0, s32 *, 4) = (s32) M2C_FIELD(arg0, s32 *, 0);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110993C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110993C.s")
-#endif
+M2C_UNK func_811098C0(M2C_UNK *, s32, s32);
+extern M2C_UNK D_81184290;
+extern M2C_UNK D_811842B0;
+extern u8 D_81186270[];
+extern s32 D_811526FC;
+extern s32 D_811842A0;
+
+/**
+ * Runs func_811098C0 twice: first on D_811842B0 with the buffer D_81186270 and
+ * length arg0, then on D_81184290 with the remainder of the buffer (starting
+ * at arg0 and D_811526FC - arg0 long). Finally clears D_811842A0. What
+ * func_811098C0 does with its arguments is not established.
+ */
+void func_8110993C(s32 arg0) {
+    func_811098C0(&D_811842B0, (s32)D_81186270, arg0);
+    func_811098C0(&D_81184290, (s32)(D_81186270 + arg0), D_811526FC - arg0);
+    D_811842A0 = 0;
+}
 
 s32 func_81109868(M2C_UNK *, s32);                  /* extern */
 M2C_UNK func_811098C0(M2C_UNK *, s32, s32);         /* extern */
@@ -272,23 +340,57 @@ s32 func_8110A310(s32 arg0, s32 arg1, s32 arg2) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110A474.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110A848; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110A848.s")
-#endif
+/*
+ * func_8110A848
+ *
+ * Sets the eight s16 values at arg0 to zero (the loop is unrolled by four in
+ * the retail code).
+ */
+void func_8110A848(s16* arg0) {
+    s32 i;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110A878; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110A878.s")
-#endif
+    for (i = 0; i < 8; i++) {
+        arg0[i] = 0;
+    }
+}
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110A8CC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110A8CC.s")
-#endif
+extern s16 D_811371D8[];
+
+/*
+ * func_8110A878
+ *
+ * Copies eight s16 values into arg0 from entry arg1 of the table at
+ * D_811371D8 (entries are 8 s16 = 16 bytes long; the loop is unrolled by four
+ * in the retail code).
+ */
+void func_8110A878(s16* arg0, s32 arg1) {
+    s16* src;
+    s32 i;
+
+    src = &D_811371D8[arg1 * 8];
+    for (i = 0; i < 8; i++) {
+        arg0[i] = src[i];
+    }
+}
+
+extern s16 D_811373C8[];
+
+/*
+ * func_8110A8CC
+ *
+ * Copies eight s16 values into arg0 from the table at D_811373C8. The entry is
+ * numbered from 1: entry arg1 starts at D_811373C8 + (arg1 - 1) * 16 bytes
+ * (8 s16 per entry; the loop is unrolled by four in the retail code).
+ */
+void func_8110A8CC(s16* arg0, s32 arg1) {
+    s16* src;
+    s32 i;
+
+    src = &D_811373C8[arg1 * 8 - 8];
+    for (i = 0; i < 8; i++) {
+        arg0[i] = src[i];
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8110A924; signature not recovered. */
@@ -439,11 +541,27 @@ void func_8110B9F8(s32 arg0, s32 arg1) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110BD20.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110BEE4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110BEE4.s")
-#endif
+/* One-byte flags field; only the 2-bit value at bits 2-3 is touched by func_8110BEE4. */
+typedef struct {
+    u8 pad0 : 4;
+    u8 field : 2;
+    u8 pad1 : 2;
+} Flags2Bit;
+
+/*
+ * func_8110BEE4
+ *
+ * If arg1 is non-NULL and the word at arg0 + 0x08 equals the word at
+ * arg1 + 0x04, copies the word at arg0 + 0x0C into arg1 + 0x04 and stores the
+ * low two bits of the signed byte at arg0 + 0x01 into bits 2-3 of the byte at
+ * arg1 + 0x00 (a bit-field write: the retail code masks with 0xFFF3 / 0x0C).
+ */
+void func_8110BEE4(u8* arg0, Flags2Bit* arg1) {
+    if ((arg1 != NULL) && (M2C_FIELD(arg0, s32*, 8) == M2C_FIELD(arg1, s32*, 4))) {
+        M2C_FIELD(arg1, s32*, 4) = M2C_FIELD(arg0, s32*, 0xC);
+        arg1->field = M2C_FIELD(arg0, s8*, 1);
+    }
+}
 
 s32 func_81109868(M2C_UNK *, s32);                  /* extern */
 s8 *func_8110BF28(s32 arg0)
@@ -655,18 +773,28 @@ void func_8110CF24(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110D110.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110D1B8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110D1B8.s")
-#endif
-
 typedef struct Slot8110D214 {
     /* 0x000 */ s32 unk_000;
     /* 0x004 */ char unk004[0x158];
 } Slot8110D214; // size = 0x15C
 extern Slot8110D214 D_81184740[];
 s32 func_8110D278(s32, s32, s32);
+
+/**
+ * Clears the first word of slot arg0 in the D_81184740 array (stride 0x15C) and
+ * returns func_8110D278(arg0, arg1, arg2); returns 0 without touching anything if
+ * D_811859D4 is nonzero. arg1 and arg2 are passed through unchanged. Sibling of
+ * func_8110D214, which stores its arg2 instead of 0 and passes 0 as the last argument.
+ * What the slot and the flag mean is not established.
+ */
+s32 func_8110D1B8(s32 arg0, s32 arg1, s32 arg2) {
+    if (D_811859D4 != 0) {
+        return 0;
+    }
+    D_81184740[arg0].unk_000 = 0;
+    return func_8110D278(arg0, arg1, arg2);
+}
+
 s32 func_8110D214(s32 arg0, s32 arg1, s32 arg2) {
     if (D_811859D4 != 0) {
         return 0;
@@ -732,11 +860,36 @@ s32 func_8110D7EC(s32 arg0, s32 arg1) {
     return 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110D840; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110D840.s")
-#endif
+extern u8* D_8118589C;
+extern u8* D_811858A0;
+extern u8* D_811858A4;
+
+/*
+ * func_8110D840
+ *
+ * Returns the pointer stored in D_8118589C, D_811858A0 or D_811858A4 for
+ * arg0 = 0, 1 or 2, and NULL for any other value (the caller treats the result
+ * as a byte pointer to a table indexed in 16-byte steps). What the three
+ * tables are is not established.
+ * Matching note: the result is built in a local and returned once; separate
+ * `return` statements in each case give a different register choice.
+ */
+u8* func_8110D840(s32 arg0) {
+    u8* ret;
+    ret = NULL;
+    switch (arg0) {
+    case 0:
+        ret = D_8118589C;
+        break;
+    case 1:
+        ret = D_811858A0;
+        break;
+    case 2:
+        ret = D_811858A4;
+        break;
+    }
+    return ret;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8110D884; signature not recovered. */

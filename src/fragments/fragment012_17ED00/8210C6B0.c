@@ -107,20 +107,74 @@ void func_8210CACC(s8* arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8210CBD4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210CBD4.s")
-#endif
+s32 func_8210C8A0();                                /* extern */
+void func_82134D40(s8 *);
+M2C_UNK func_82134D80(s8 *);                        /* extern */
+M2C_UNK func_8211F274();
 
-M2C_UNK func_8210CBD4();                            /* extern */
+/*
+ * func_8210CBD4
+ *
+ * Does nothing unless the word at arg0 + 0x790 is 1 and func_8210C8A0()
+ * returns 0. Then, with `rec` = the pointer at arg0 + 0x858 and `sub` =
+ * arg0 + 0x78C:
+ *  - if the word at arg0 + 0xA04 is non-zero: calls func_8211F274(arg0) when
+ *    any of the bits 0xE03F is set in the halfword at rec + 8;
+ *  - otherwise clears sub[0x20]; if sub[0x10] is 0 it sets it to 1 and
+ *    returns; else if bit 0x20 of rec + 8 is set and bit 0x10 of the halfword
+ *    at rec + 6 is clear, it clears sub[0x10], calls func_82134D80(arg0) and
+ *    returns; else it clears the byte sub[0x1C], and, when bit 0x10 of rec + 6
+ *    is set, calls func_82134D40(arg0) if bit 0x10 of rec + 8 is also set and
+ *    sets the byte sub[0x1C] to 1; finally it calls func_8210CACC(arg0).
+ *
+ * What the fields and the callees mean is not established (rec[6] and rec[8]
+ * look like button/state bit masks but that is a guess from the masks only).
+ * Matching notes: func_82134D40 must be declared `void` (the result is unused;
+ * an `M2C_UNK` return changes register allocation), and the unused `pad` local,
+ * declared after `temp_v1`, moves the spill slot of `temp_v0` to sp+0x18.
+ */
+void func_8210CBD4(s8 *arg0) {
+    void *temp_v0;
+    void *temp_v1;
+    UNUSED s32 pad;
+
+    temp_v1 = M2C_FIELD(arg0, void **, 0x858);
+    if ((M2C_FIELD(arg0, s32 *, 0x790) == 1) && (func_8210C8A0() == 0)) {
+        temp_v0 = arg0 + 0x78C;
+        if (M2C_FIELD(arg0, s32 *, 0xA04) != 0) {
+            if (M2C_FIELD(temp_v1, u16 *, 8) & 0xE03F) {
+                func_8211F274(arg0);
+            }
+        } else {
+            M2C_FIELD(temp_v0, s32 *, 0x20) = 0;
+            if (M2C_FIELD(temp_v0, s32 *, 0x10) == 0) {
+                M2C_FIELD(temp_v0, s32 *, 0x10) = 1;
+                return;
+            }
+            if ((M2C_FIELD(temp_v1, u16 *, 8) & 0x20) && !(M2C_FIELD(temp_v1, u16 *, 6) & 0x10)) {
+                M2C_FIELD(temp_v0, s32 *, 0x10) = 0;
+                func_82134D80(arg0);
+                return;
+            }
+            M2C_FIELD(temp_v0, s8 *, 0x1C) = 0;
+            if (M2C_FIELD(temp_v1, u16 *, 6) & 0x10) {
+                if (M2C_FIELD(temp_v1, u16 *, 8) & 0x10) {
+                    func_82134D40(arg0);
+                }
+                M2C_FIELD(temp_v0, s8 *, 0x1C) = 1;
+            }
+            func_8210CACC(arg0);
+        }
+    }
+}
+
 s32 func_8210CCDC(s8 *arg0, M2C_UNK arg1)
 {
   *((s8 *) (((s8 *) arg0) + 0x7B6)) = 1;
   if (1)
   {
     *((s8 *) (((s8 *) arg0) + 0x7B6)) = 1;
-    func_8210CBD4();
+    func_8210CBD4(arg0);
     *((s8 *) (((s8 *) arg0) + 0x7B6)) = 1;
   }
   return 0;

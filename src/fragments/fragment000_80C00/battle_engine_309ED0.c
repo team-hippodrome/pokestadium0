@@ -84,11 +84,47 @@ s32 func_8110E6B0(s32 arg0, s32 arg1) {
 void func_8110E714(void) {
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110E71C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110E71C.s")
-#endif
+/** Four consecutive words, copied as a unit. */
+typedef struct Words4_8110E71C {
+    s32 w[4];
+} Words4_8110E71C;
+
+/** Entry returned by func_8110E6B0: four words, the first of which starts with a flag byte. */
+typedef struct Entry8110E71C {
+    /* 0x00 */ u8 flags;
+    /* 0x01 */ u8 unk_01[3];
+    /* 0x04 */ s32 unk_04;
+    /* 0x08 */ s32 unk_08;
+    /* 0x0C */ s32 unk_0C;
+} Entry8110E71C;
+
+/** Object that receives a copy of the entry; only the used fields are named. */
+typedef struct Owner8110E71C {
+    /* 0x00 */ u8 unk_00;
+    /* 0x01 */ u8 keyA;
+    /* 0x02 */ u8 keyB;
+    /* 0x03 */ u8 unk_03[9];
+    /* 0x0C */ s32 unk_0C;
+    /* 0x10 */ u8 unk_10[0xC];
+    /* 0x1C */ Words4_8110E71C copy;
+} Owner8110E71C;
+
+/**
+ * Looks up the entry for (keyA, keyB) with func_8110E6B0. If one exists, its
+ * 16 bytes are copied into arg0->copy, the entry's second word is
+ * overwritten with arg0->unk_0C, and bits 2 and 3 of its first byte are
+ * cleared.
+ */
+void func_8110E71C(Owner8110E71C* arg0) {
+    Entry8110E71C* entry;
+
+    entry = (Entry8110E71C*)func_8110E6B0(arg0->keyA, arg0->keyB);
+    if (entry != NULL) {
+        arg0->copy = *(Words4_8110E71C*)entry;
+        entry->unk_04 = arg0->unk_0C;
+        entry->flags &= 0xFFF3;
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8110E784; signature not recovered. */
@@ -152,11 +188,34 @@ void func_8110EE28(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110F310.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110F4D0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110F4D0.s")
-#endif
+typedef struct Item8110F4D0 {
+    /* 0x0 */ s32 unk0;
+    /* 0x4 */ s32 key;
+} Item8110F4D0;
+
+/**
+ * Appends `arg0` to the list `list` unless an entry with the same `key` (offset 0x4)
+ * is already present among the first `count` entries.
+ *
+ * @param arg0  Item to add.
+ * @param count Number of entries currently in `list`.
+ * @param list  Array of item pointers; must have room for `count + 1` entries.
+ * @return The new entry count (count + 1 if added, otherwise unchanged).
+ */
+s32 func_8110F4D0(Item8110F4D0* arg0, s32 count, Item8110F4D0** list) {
+    s32 i;
+
+    for (i = 0; i < count; i++) {
+        if (arg0->key == list[i]->key) {
+            break;
+        }
+    }
+    if (i == count) {
+        list[count] = arg0;
+        count++;
+    }
+    return count;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8110F518; signature not recovered. */
@@ -164,11 +223,42 @@ void func_8110EE28(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110F518.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110F64C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110F64C.s")
-#endif
+/* First word of a record, split into bit ranges (big-endian, most significant
+ * bit first). The field names only say which bits they are; what they mean is
+ * not established. */
+typedef struct {
+    u32 bits31_28 : 4;
+    u32 bits27_26 : 2;
+    u32 bit25 : 1;
+    u32 bit24 : 1;
+    u32 low24 : 24;
+} PackedWordRec;
+
+extern PackedWordRec *D_81184978[];
+extern s32 D_81185578;
+
+/*
+ * func_8110F64C
+ *
+ * Takes a pointer to a pointer to a record whose first word is read as the
+ * bit ranges above. When the low 24 bits, bit 25 and bits 27..26 are all
+ * non-zero, the record pointer is appended to the pointer array D_81184978
+ * and the count D_81185578 is incremented. There is no bounds check on the
+ * count. The caller (func_8110F6A4) is still assembly, so what the array and
+ * the count are used for is not established from this function alone.
+ * Matching note: the bit-field reads are what produce the ROM's shift
+ * sequence; the equivalent masks and shifts on a plain word differ in
+ * temporary register numbering.
+ */
+void func_8110F64C(PackedWordRec **arg0) {
+    PackedWordRec *rec;
+
+    rec = *arg0;
+    if (rec->low24 && rec->bit25 && rec->bits27_26) {
+        D_81184978[D_81185578] = rec;
+        D_81185578 += 1;
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8110F6A4; signature not recovered. */

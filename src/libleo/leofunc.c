@@ -65,11 +65,55 @@ void func_800483E0(s32 arg0, s32 arg1, M2C_UNK *arg2, M2C_UNK arg3) {
     func_8004CFB0(&D_80100E58, 0, 0);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80048530; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80048530.s")
-#endif
+/*
+ * func_80048530 (leoCommand in the Stadium 1 decomp): submits a 64DD command block.
+ *
+ * Takes the block-queue (D_80100E58) lock, marks the block busy (status 8, sense 0)
+ * and then dispatches on the command byte:
+ *   - command 1 (queue clear): clears the command queue via leoClr_queue (with
+ *     LEOclr_que_flag set around it), marks the block GOOD and, if the POST bit
+ *     (0x80) of its control byte is set, posts 0 to the block's reply queue;
+ *   - commands 5 and 6 (read/write): zero the transfer byte count, then queue;
+ *   - any other command: rejected with sense INVALID_COMMAND_OPERATION_CODE and
+ *     status CHECK_CONDITION unless it is one of commands 1..0xE, which are queued;
+ *   - queueing posts the block to LEOcommand_que without blocking; if the queue is
+ *     full the block is marked QUEUE_FULL / CHECK_CONDITION.
+ * Finally the block-queue lock is released.
+ *
+ * Unlike the Stadium 1 version there is no __leoResetCalled check at the start.
+ */
+void func_80048530(void* cmd_blk_addr) {
+    osRecvMesg((OSMesgQueue*)&D_80100E58, NULL, 1);
+    ((LEOCmd*)cmd_blk_addr)->header.status = LEO_STATUS_BUSY;
+    ((LEOCmd*)cmd_blk_addr)->header.sense = LEO_SENSE_NO_ADDITIONAL_SENSE_INFOMATION;
+    switch (((LEOCmd*)cmd_blk_addr)->header.command) {
+        case 1:
+            LEOclr_que_flag = 0xFF;
+            leoClr_queue();
+            LEOclr_que_flag = 0;
+            ((LEOCmd*)cmd_blk_addr)->header.status = LEO_STATUS_GOOD;
+            if (((LEOCmd*)cmd_blk_addr)->header.control & LEO_CONTROL_POST) {
+                osSendMesg(((LEOCmd*)cmd_blk_addr)->header.post, (OSMesg)0, 1);
+            }
+            break;
+        case 5:
+        case 6:
+            ((LEOCmd*)cmd_blk_addr)->data.readwrite.rw_bytes = 0;
+            goto cmd_queing;
+        default:
+            if ((u32)(((LEOCmd*)cmd_blk_addr)->header.command - 1) >= 0xE) {
+                ((LEOCmd*)cmd_blk_addr)->header.sense = LEO_SENSE_INVALID_COMMAND_OPERATION_CODE;
+                ((LEOCmd*)cmd_blk_addr)->header.status = LEO_STATUS_CHECK_CONDITION;
+                break;
+            }
+        cmd_queing:
+            if (osSendMesg(&LEOcommand_que, (OSMesg)cmd_blk_addr, 0) != 0) {
+                ((LEOCmd*)cmd_blk_addr)->header.sense = LEO_SENSE_QUEUE_FULL;
+                ((LEOCmd*)cmd_blk_addr)->header.status = LEO_STATUS_CHECK_CONDITION;
+            }
+    }
+    osSendMesg((OSMesgQueue*)&D_80100E58, (OSMesg)0, 1);
+}
 
 void LeoReset(void) {
     osRecvMesg((OSMesgQueue*)&D_80100E58, NULL, 1);

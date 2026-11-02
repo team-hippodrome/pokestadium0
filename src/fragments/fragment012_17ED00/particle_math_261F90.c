@@ -767,11 +767,25 @@ Vec3f* ParticleMath_ScaleVec3f(Vec3f* arg0, f32 arg1) {
     return arg0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_821385C0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821385C0.s")
-#endif
+void func_821381E4(Vec3f*, Vec3f, Vec3f);
+s32 func_8213C80C(void);
+
+/**
+ * Takes the scene camera (func_8213C80C returns a CameraNode*), asks
+ * func_821381E4 for the direction from its eye to its target position (the
+ * Vec3f arguments are passed by value, in $a1-$a3 and on the stack), and
+ * passes the result's z and x components to MathUtil_Atan2s (the angle itself
+ * is discarded).
+ */
+void func_821385C0(void) {
+    UNUSED s32 pad;
+    Vec3f sp30;
+    CameraNode* camera;
+
+    camera = (CameraNode*)func_8213C80C();
+    func_821381E4(&sp30, camera->view.eyePosition, camera->view.targetPosition);
+    MathUtil_Atan2s(sp30.z, sp30.x);
+}
 
 s16 ParticleMath_AngleXBetweenPoints(Vec3f arg0, Vec3f arg1) {
     return MathUtil_Atan2s(arg1.y - arg0.y, arg1.z - arg0.z);

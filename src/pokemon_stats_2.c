@@ -485,11 +485,31 @@ s32 func_80021B30(s32 arg0) {
     return sp24;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80021C6C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80021C6C.s")
-#endif
+/*
+ * func_80021C6C
+ *
+ * If bit arg0 of D_800AD330 is set: sets bit 0x20 in the first halfword of
+ * Game Boy port arg0's record, then calls GbSave_OpenMainData(arg0). If that
+ * returns non-zero, calls func_80022BC8(arg0) and clears the record's
+ * unk_03 byte; if it returns 0, sets unk_03 to 3.
+ *
+ * What bit 0x20 and the values 0 and 3 of unk_03 mean is not established.
+ * The port index expression is repeated rather than cached in a local:
+ * the compiler then spills the record pointer to sp+0x1C as in the ROM,
+ * whereas a `port` local put the spill at sp+0x18.
+ */
+s32 func_80022BC8(s32 arg0);
+void func_80021C6C(s32 arg0) {
+    if ((1 << arg0) & D_800AD330) {
+        sGbSavePorts[arg0].unk_00 |= 0x20;
+        if (GbSave_OpenMainData(arg0) != 0) {
+            func_80022BC8(arg0);
+            sGbSavePorts[arg0].unk_03 = 0;
+        } else {
+            sGbSavePorts[arg0].unk_03 = 3;
+        }
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_80021CF4; signature not recovered. */

@@ -474,13 +474,40 @@ void BattleAnim_PlayBattleSequenceById(ActivePokemon* active_pokemon, s32 sequen
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82134FD0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82134FD0.s")
-#endif
+M2C_UNK func_80041940();
+void func_80042508(s32);
+s32 func_82107A5C(s8*);
+/*
+ * func_82134FD0
+ *
+ * Takes the active Pokemon's roster entry (teamRoster->pokemonPicked indexed
+ * by state.rosterIndex) and calls func_80041940 with the side index of the
+ * Pokemon (func_82107A5C), the entry's hp and its unk_26.  Unless the display
+ * object's objectType is 0x98, it then calls func_80042508 with the side index,
+ * OR-ed with 0x10 when the entry's status byte has a sleep bit (mask 0x07) or
+ * the freeze bit (0x20) set, or when the scene's unk_48 is 0x1F or 0x1B.
+ * Related to func_82135098, which makes the func_80041940 call alone.
+ * Notes: func_80041940 is declared without a prototype because this function
+ * passes three arguments while func_82135098 passes four; the unused "pad"
+ * local only reproduces the retail stack slot of "mon" (0x18).  What
+ * func_80041940/func_80042508 do is not established here (they look like
+ * audio calls, but that is a guess).
+ */
+void func_82134FD0(ActivePokemon* arg0) {
+    UNUSED s32 pad;
+    BattleMon* mon = &arg0->teamRoster->pokemonPicked[arg0->state.rosterIndex];
 
-M2C_UNK func_80041940(s32, u16, u16, s8 *);       /* extern */
+    func_80041940(func_82107A5C(arg0), mon->hp, mon->unk_26);
+    if (arg0->displayObject.objectType != 0x98) {
+        if ((mon->statusCondition & 7) || (mon->statusCondition & 0x20) ||
+            (sBattleScene.scene->unk_48 == 0x1F) || (sBattleScene.scene->unk_48 == 0x1B)) {
+            func_80042508(func_82107A5C(arg0) | 0x10);
+        } else {
+            func_80042508(func_82107A5C(arg0));
+        }
+    }
+}
+
 s32 func_82107A5C(s8 *);                          /* extern */
 void func_82135098(s8 *arg0)
 {

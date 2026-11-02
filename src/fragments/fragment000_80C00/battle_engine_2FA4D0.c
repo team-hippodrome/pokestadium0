@@ -168,17 +168,56 @@ s32 Audio_CountCategorySounds(s32 arg0) {
     return Audio_CountActiveSoundsByCategory(arg0);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110FF1C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110FF1C.s")
-#endif
+extern u8 D_81184658;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110FF74; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110FF74.s")
-#endif
+/*
+ * func_8110FF1C
+ *
+ * Calls func_8004D1C0 once with the queue pointer in D_81186250, the address
+ * of a local word and a third argument of 0 (see func_8110FF74). Returns 0 if
+ * that call returns -1; otherwise returns 1 when the word it stored equals
+ * D_81184658 and 0 when it does not. The caller-visible meaning of the
+ * comparison is not established here.
+ * Matching note: the unused leading `pad` local moves `sp18` to the ROM's
+ * stack offset (sp+0x18); the two returns are written as separate
+ * `return 0` / `return 1` paths because that is the form that compiles to the
+ * ROM's branch layout.
+ */
+s32 func_8110FF1C(void) {
+    UNUSED s32 pad;
+    u32 sp18;
+
+    if (func_8004D1C0(D_81186250, &sp18, 0) == -1) {
+        return 0;
+    }
+    if (sp18 != D_81184658) {
+        return 0;
+    }
+    return 1;
+}
+
+/*
+ * func_8110FF74
+ *
+ * Calls func_8004D1C0 with the queue pointer in D_81186250, the address of a
+ * local word and a third argument of 0, repeatedly until it returns -1. The
+ * received word is never read, so the loop only discards what the call hands
+ * back. (dp_intro.c declares func_8004D1C0 as taking an OSMesgQueue*, and the
+ * other callers pass 1 as the third argument; what 0 and -1 mean to the
+ * callee is not established here.)
+ * Matching note: the -1 is kept in a local assigned inside the loop body.
+ * With a literal -1 in the condition the compiler hands out the saved
+ * registers in a different order. Declaring `neg` before `sp28` puts `sp28`
+ * at the ROM's stack offset (sp+0x28).
+ */
+void func_8110FF74(void) {
+    s32 neg;
+    u32 sp28;
+
+    do {
+        neg = -1;
+    } while (func_8004D1C0(D_81186250, &sp28, 0) != neg);
+}
 
 extern u8* D_86B0E5E8;
 extern GraphNode* D_86B0E5D0;
@@ -208,11 +247,17 @@ s32 func_8110FFC8(s32 arg0) {
     return func_8110FDF0();
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81110060; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81110060.s")
-#endif
+extern volatile s32 D_811859D4;
+
+/**
+ * Sets the volatile flag D_811859D4 to 1, calls func_8110FFC8(0), then
+ * clears the volatile byte D_81184657.
+ */
+void func_81110060(void) {
+    D_811859D4 = 1;
+    func_8110FFC8(0);
+    D_81184657 = 0;
+}
 
 typedef struct unk_D_81184668 {
     /* 0x000 */ u32 unk_000_31 : 1;

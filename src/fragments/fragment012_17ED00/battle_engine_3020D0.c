@@ -274,11 +274,22 @@ void func_8211F274(s8 *arg0) {
     M2C_FIELD(arg0, s8 *, 0xA0C) = 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8211F288; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211F288.s")
-#endif
+/*
+ * func_8211F288
+ *
+ * Starts a caption for the participant: stores the byte at index 1 of the
+ * session entry selected by state.unk_2D_zero (+0x7B9) + 2 (from the table at
+ * ActivePokemon +0x85C) into the byte D_8219A520 points to, sets
+ * captionState.unk_00 to 1, and formats the string arg1 into
+ * captionState.unk_48 with func_8211EEC0 (Battle_SimpleStringFormat). The
+ * function is variadic: the extra arguments are the format's values, which is
+ * why retail stores $a2/$a3 to their stack homes.
+ */
+void func_8211F288(ActivePokemon* arg0, s8* arg1, ...) {
+    *(u8*)D_8219A520 = (*(u8***)((u8*)arg0 + 0x85C))[arg0->state.unk_2D_zero + 2][1];
+    arg0->captionState.unk_00 = 1;
+    func_8211EEC0(&arg0->captionState.unk_48, arg1);
+}
 
 void func_8211C43C(u8, s32, s32, s8*);
 extern ActivePokemon* sSide1ActivePokemon;

@@ -210,11 +210,51 @@ void func_818000D0(s16 arg0, s16 arg1, s16 arg2, s16 arg3) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment011_17E340/func_8180014C.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81800320; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment011_17E340/func_81800320.s")
-#endif
+M2C_UNK func_80006780();
+M2C_UNK func_8180003C();
+
+/*
+ * func_81800320
+ *
+ * Reads the pointer at offset 0xC of the object that D_818008A0 holds (once,
+ * before the loop; called `target` below) and then runs 30 iterations
+ * (var_s0 goes 0, -350, ... down to -10500 in steps of -0x15E, var_s2 goes
+ * 0, 1500, ... in steps of 0x5DC). Each iteration:
+ *  - calls func_8180003C();
+ *  - stores (f32)(s16)(var_s0 / 30 + 0xDC) at target + 0xB8 and target + 0xAC;
+ *  - stores (f32)(s16)(var_s2 / 30 + 0x4B0) at target + 0xB0;
+ *  - calls func_81800074(0) and func_80006780().
+ * The divisions are signed C divisions by 30 (truncating toward zero). What
+ * the three float fields are is not established from this function.
+ *
+ * Matching notes: the declaration order (var_s0, var_s2, target) and the
+ * initialisation order (var_s0, target, var_s2) decide which saved registers
+ * the three values get. The `(var_s0 ^ 0)` in the loop test is a
+ * matching-only construct (found with decomp-permuter): it only swaps the
+ * operand order of the final `bne` to the retail order; `(var_s0 | 0)` does
+ * the same.
+ */
+void func_81800320(void) {
+    f32 temp_f0;
+    s32 var_s0;
+    s32 var_s2;
+    void* target;
+
+    var_s0 = 0;
+    target = *(void**)((s8*)D_818008A0 + 0xC);
+    var_s2 = 0;
+    do {
+        func_8180003C();
+        temp_f0 = (f32)(s16)((var_s0 / 30) + 0xDC);
+        *(f32*)((s8*)target + 0xB8) = temp_f0;
+        *(f32*)((s8*)target + 0xAC) = temp_f0;
+        *(f32*)((s8*)target + 0xB0) = (f32)(s16)((var_s2 / 30) + 0x4B0);
+        func_81800074(0);
+        func_80006780();
+        var_s0 -= 0x15E;
+        var_s2 += 0x5DC;
+    } while ((var_s0 ^ 0) != -0x2904);
+}
 
 M2C_UNK func_80006780();                            /* extern */
 M2C_UNK func_8180003C();                            /* extern */
@@ -248,7 +288,7 @@ M2C_UNK func_80006998(M2C_UNK);                     /* extern */
 M2C_UNK func_8000A7FC(M2C_UNK);                     /* extern */
 M2C_UNK func_800407B0(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
 M2C_UNK func_8180014C(M2C_UNK, M2C_UNK);            /* extern */
-M2C_UNK func_81800320();                            /* extern */
+void func_81800320(void);
 
 void func_81800514(void) {
     func_800067BC(2);
@@ -283,8 +323,68 @@ void TransferPak_InitScene(void) {
     D_818008D0 = 0x4000;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81800634; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment011_17E340/func_81800634.s")
-#endif
+M2C_UNK func_8000256C(M2C_UNK);
+M2C_UNK func_80002620(M2C_UNK);
+M2C_UNK func_80003EB8(u32, M2C_UNK *, M2C_UNK *, M2C_UNK);
+M2C_UNK func_800040B4(s32, M2C_UNK *, M2C_UNK *);
+M2C_UNK func_80005040(M2C_UNK, M2C_UNK);
+M2C_UNK func_800050AC();
+s32 func_8000645C(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32);
+M2C_UNK func_80006680(s32);
+M2C_UNK func_800066C8();
+M2C_UNK func_8001A194(M2C_UNK, M2C_UNK);
+M2C_UNK func_8001A360();
+M2C_UNK func_81800594();
+extern M2C_UNK D_002E0BE0;
+extern M2C_UNK D_002E2B90;
+extern M2C_UNK D_0042CC80;
+extern M2C_UNK D_00434C00;
+extern M2C_UNK D_01000000;
+extern s32 D_818008A8;
+extern s32 D_818008AC;
+extern M2C_UNK D_8EA00000;
+
+/*
+ * func_81800634
+ *
+ * Stores arg1 into D_818008AC and D_818008A8; D_818008A8 is changed to 3 if
+ * arg1 is 4. Then it calls func_8000256C(0x54435550), func_80005040(0x10000, 0),
+ * func_8000645C(1, 1, 2, 1, 2, 1) (result kept in a local), func_8001A194(0x10, 0),
+ * func_80003EB8 and func_800040B4 with the segment-derived arguments below,
+ * func_81800594(), func_80006680(result of func_8000645C), func_81800514(),
+ * func_800066C8(), func_8001A360(), func_800050AC() and finally
+ * func_80002620(0x54435550). Returns 0. arg0 is not used.
+ *
+ * Matching notes:
+ *  - The test reads D_818008A8 back (`if (D_818008A8 == 4)`) instead of testing
+ *    arg1. The compiler forwards the just-stored value, so the machine code
+ *    compares a1, but the extra read uses up one temporary register number and
+ *    makes the later constants land in t7/t8/t9 as in the retail code.
+ *  - The unused `pad` local reserves the stack slot that sp20 needs to be at
+ *    0x20(sp).
+ * What the calls do is not established from this function.
+ */
+s32 func_81800634(s32 arg0, s32 arg1) {
+    UNUSED s32 pad;
+    s32 sp20;
+
+    D_818008AC = arg1;
+    D_818008A8 = arg1;
+    if (D_818008A8 == 4) {
+        D_818008A8 = 3;
+    }
+    func_8000256C(0x54435550);
+    func_80005040(0x10000, 0);
+    sp20 = func_8000645C(1, 1, 2, 1, 2, 1);
+    func_8001A194(0x10, 0);
+    func_80003EB8((u32)((s32)&D_01000000 & 0x0F000000) >> 0x18, &D_002E0BE0, &D_002E2B90, 0);
+    func_800040B4(((u32)((s32)&D_8EA00000 & 0x0FF00000) >> 0x14) - 0x10, &D_0042CC80, &D_00434C00);
+    func_81800594();
+    func_80006680(sp20);
+    func_81800514();
+    func_800066C8();
+    func_8001A360();
+    func_800050AC();
+    func_80002620(0x54435550);
+    return 0;
+}

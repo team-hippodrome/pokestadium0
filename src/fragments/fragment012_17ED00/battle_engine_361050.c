@@ -243,11 +243,30 @@ void BattleAI_PrepareDamageCalcState(BattleMonRuntime* arg0, BattleMonRuntime* a
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210EDBC.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8210EED8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210EED8.s")
-#endif
+extern u8 D_82199F32;
+extern u8 D_82199F33;
+void func_8210E9C0(u8*, u8*);
+void func_8210EAC4();
+void func_8210EC0C(u8*, u8*, u8);
+void func_8210EDBC(u8*, u8*);
+
+/**
+ * Runs the sequence func_8210EC0C, func_8210EDBC, func_8210EB28,
+ * func_8210EAC4 and func_8210E9C0 for the attacker/defender pair
+ * (arg0, arg1). The flag D_82199F32 is saved into D_82199F33 and cleared
+ * for the first four steps, and restored before the last one. arg2 is only
+ * handed on to func_8210EC0C.
+ */
+void func_8210EED8(u8* arg0, u8* arg1, u8 arg2) {
+    D_82199F33 = D_82199F32;
+    D_82199F32 = 0;
+    func_8210EC0C(arg0, arg1, arg2);
+    func_8210EDBC(arg0, arg1);
+    func_8210EB28(arg0, arg1);
+    func_8210EAC4();
+    D_82199F32 = D_82199F33;
+    func_8210E9C0(arg0, arg1);
+}
 
 /**
  * Returns the index of `lookup_value` in `array`, or -1 if absent.

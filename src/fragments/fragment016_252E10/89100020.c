@@ -7,6 +7,9 @@
 #include "stage_loader.h"
 #include "m2c_macros.h"
 
+extern u8 D_80073520[];
+M2C_UNK func_80029A64(s32, s32, s32, s32, Color_RGBA8);
+
 M2C_UNK func_89109E5C(s32, s32, s32, s32);          /* extern */
 M2C_UNK func_89109FE0(s32);                         /* extern */
 void func_89100020(s32 arg0)
@@ -115,11 +118,23 @@ void func_89100140(Ctx89100140* arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89100688.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89100870; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89100870.s")
-#endif
+/**
+ * Draws a highlight rectangle (via func_80029A64) for the screen object arg0, positioned from
+ * the two words at arg0 + 0x2C / 0x30 (what they mean is not established). The word at
+ * arg0 + 0xB550 selects the shape: 0 draws a 0x26 x 0x14 rectangle at the origin, 1 a
+ * 0x50 x 0x14 rectangle offset 0x26 to the right; other values draw nothing. The colour is
+ * read from D_80073520. (Compare func_8910179C.)
+ */
+void func_89100870(s8* arg0) {
+    switch (M2C_FIELD(arg0, s32*, 0xB550)) {
+        case 0:
+            func_80029A64(M2C_FIELD(arg0, s32*, 0x2C), M2C_FIELD(arg0, s32*, 0x30), 0x26, 0x14, *(Color_RGBA8*)D_80073520);
+            return;
+        case 1:
+            func_80029A64(M2C_FIELD(arg0, s32*, 0x2C) + 0x26, M2C_FIELD(arg0, s32*, 0x30), 0x50, 0x14, *(Color_RGBA8*)D_80073520);
+            return;
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_89100914; signature not recovered. */
@@ -219,11 +234,34 @@ void LabPCList_DrawPlainText(s32 arg0, s32 arg1, s8* arg2, s32 arg3, s32 arg4) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_891012A8.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8910179C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_8910179C.s")
-#endif
+/**
+ * Fields of the scrolling list menu used by func_8910179C (same layout as GridMenu80031004
+ * in src/2E480.c; offsets not listed are unknown/unused here).
+ */
+typedef struct ListMenu8910179C {
+    /* 0x00 */ char unk00[0x10];
+    /* 0x10 */ s32 cellHeight;
+    /* 0x14 */ char unk14[0x16];
+    /* 0x2A */ u16 flags;
+    /* 0x2C */ s32 scroll;
+    /* 0x30 */ char unk30[0x4];
+    /* 0x34 */ s32 scrollTarget;
+} ListMenu8910179C;
+
+/**
+ * Draws a fixed-size (0x50 x 0x14) cursor rectangle via func_80029A64 for a scrolling list
+ * menu: x = arg1 + 0x26, y = scrollTarget + arg2 - scroll, minus (cellHeight - 1) when flag
+ * 0x400 is set; colour read from D_80073520. Compare func_80031004 and func_8002F32C.
+ */
+void func_8910179C(ListMenu8910179C* arg0, s32 arg1, s32 arg2) {
+    s32 y;
+
+    y = arg0->scrollTarget + arg2 - arg0->scroll;
+    if (arg0->flags & 0x400) {
+        y = y - arg0->cellHeight + 1;
+    }
+    func_80029A64(arg1 + 0x26, y, 0x50, 0x14, *(Color_RGBA8*)D_80073520);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_89101818; signature not recovered. */
@@ -445,11 +483,51 @@ s32 func_89103080(s8* arg0) {
     return 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89103144; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89103144.s")
-#endif
+/** One 0x20-byte list item; only the fields tested here are named. */
+typedef struct Item89103144 {
+    /* 0x00 */ char unk00[0x8];
+    /* 0x08 */ s32 unk_08;
+    /* 0x0C */ char unk0C[0x10];
+    /* 0x1C */ s32 unk_1C;
+} Item89103144; // size = 0x20
+
+/** List owning the items. */
+typedef struct List89103144 {
+    /* 0x00 */ char unk00[0x10];
+    /* 0x10 */ Item89103144* items;
+    /* 0x14 */ char unk14[0x4];
+    /* 0x18 */ s32 count;
+    /* 0x1C */ char unk1C[0x4];
+    /* 0x20 */ s32 limit;
+} List89103144;
+
+/** Per-item flag array holder. */
+typedef struct Flags89103144 {
+    /* 0x00 */ char unk00[0x4];
+    /* 0x04 */ u16* flags;
+} Flags89103144;
+
+/**
+ * For every item of arg2 whose unk_08 is zero, whose unk_1C is at
+ * least arg2->limit, or that is the item *arg1, sets bit 0 of the matching
+ * entry in arg0->flags.
+ */
+void func_89103144(Flags89103144* arg0, Item89103144** arg1, List89103144* arg2) {
+    s32 i;
+    Item89103144* item;
+
+    item = arg2->items;
+    i = 0;
+    if (arg2->count > 0) {
+        do {
+            if ((item->unk_08 == 0) || (item->unk_1C >= arg2->limit) || (item == *arg1)) {
+                arg0->flags[i] |= 1;
+            }
+            i++;
+            item++;
+        } while (i < arg2->count);
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_891031B8; signature not recovered. */
@@ -614,11 +692,15 @@ s32 func_891043BC(s8* arg0) {
     return ret;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_891044F0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_891044F0.s")
-#endif
+/**
+ * Clears the first word of arg0 and initialises the sub-objects at offsets 4
+ * and 0xB7E4 with func_891003A4(arg0 + 4, 0x26, 0x48, arg0 + 0xB7E4). What the
+ * object is is not established.
+ */
+void func_891044F0(void* arg0) {
+    M2C_FIELD(arg0, s32*, 0) = 0;
+    func_891003A4((s8*)arg0 + 4, 0x26, 0x48, (s8*)arg0 + 0xB7E4);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8910452C; signature not recovered. */

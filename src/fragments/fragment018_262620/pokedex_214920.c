@@ -214,11 +214,21 @@ void func_8A1009E0(s8 *arg0, s32 arg1, s32 arg2) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment018_262620/func_8A100A24.s")
 #endif
 
-extern s8 D_8A12FCDC;
+extern char D_8A12FCDC[];
+void func_8001A944(s32, s32, const char*, ...);
+void func_8001AA60(s32, s32, s32);
 
+/**
+ * Prints the two decimal digits of arg2 at (arg0, arg1). The tens digit is
+ * printed by func_8001A944(arg0, arg1, D_8A12FCDC, arg2 / 10), with D_8A12FCDC
+ * passed in the format-string position; the units digit is drawn by
+ * func_8001AA60(arg0 + 0x54, arg1, arg2 % 10 + '0').
+ * What D_8A12FCDC contains and the exact roles of the two callees are not
+ * established.
+ */
 void func_8A100BEC(s32 arg0, s32 arg1, s32 arg2) {
-    Font_Printf(arg0, arg1, &D_8A12FCDC, arg2 / 10);
-    Font_DrawCharAt(arg0 + 0x54, arg1, (arg2 % 10) + 0x30);
+    func_8001A944(arg0, arg1, D_8A12FCDC, arg2 / 10);
+    func_8001AA60(arg0 + 0x54, arg1, (arg2 % 10) + 0x30);
 }
 
 #ifdef NON_MATCHING
@@ -233,11 +243,47 @@ void func_8A100BEC(s32 arg0, s32 arg1, s32 arg2) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment018_262620/func_8A100F20.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8A101020; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment018_262620/func_8A101020.s")
-#endif
+s32 func_80029658(s32, s32, s32, void*);
+s32 func_80029864(s32, s32, s32, void*);
+s32 func_8002A3F8(void*, s32, s32);
+s32 func_8002AB84();
+void func_8A100A24(s32, s32, s32, s32);
+void func_8A100C50(s32, s32);
+void func_8A100F20(s32, s32);
+extern u8 D_8007356C;
+extern u8 D_8A11FC18;
+
+/*
+ * func_8A101020
+ *
+ * Per-frame draw helper for the screen in this file, called by
+ * func_8A10164C with D_8A130204, the value returned by func_800196F8, and
+ * that function's second argument. `arg0` is a layout record: words at
+ * offsets 0 and 4 act as an x/y origin that the draw calls below offset
+ * (x + 0xF9, y + 0xD7 and so on), the word at offset 8 is passed to
+ * func_80029658, and the word at offset 0x28 is a mode value. When the mode
+ * is not 2 and func_8002AB84() returns 0, it runs func_80029658,
+ * func_80029864, func_8A100C50 and func_8A100F20 at those offsets. When the
+ * mode is 1 or 2 it also calls func_8002A3F8 on D_8A11FC18 with (0x32, 0x5A)
+ * and then func_8A100A24(0x32, 0x5A, v, arg1), where v is 0xFF if arg2 >= 2
+ * and 0x64 otherwise. What the individual calls draw is not established here;
+ * the field meanings are inferred from the offsets only.
+ */
+void func_8A101020(void* arg0, s32 arg1, s32 arg2) {
+    s32 temp_v0;
+
+    if ((M2C_FIELD(arg0, s32*, 0x28) != 2) && (func_8002AB84() == 0)) {
+        func_80029658(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0xD7, M2C_FIELD(arg0, s32*, 8), &D_8007356C);
+        func_80029864(M2C_FIELD(arg0, s32*, 0) + 0xF9, M2C_FIELD(arg0, s32*, 4), 0xDE, &D_8007356C);
+        func_8A100C50(M2C_FIELD(arg0, s32*, 0) + 0x100, M2C_FIELD(arg0, s32*, 4) + 6);
+        func_8A100F20(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0xDE);
+    }
+    temp_v0 = M2C_FIELD(arg0, s32*, 0x28);
+    if ((temp_v0 == 1) || (temp_v0 == 2)) {
+        func_8002A3F8(&D_8A11FC18, 0x32, 0x5A);
+        func_8A100A24(0x32, 0x5A, (arg2 >= 2) ? 0xFF : 0x64, arg1);
+    }
+}
 
 M2C_UNK func_8002C064(M2C_UNK, M2C_UNK, u8, u8, s32); /* extern */
 extern M2C_UNK D_8A1057D0;
@@ -414,11 +460,26 @@ void Pokedex_LoadIcon(u8* arg0, s32 arg1) {
     main_pool_pop_state('ICON');
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8A101760; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment018_262620/func_8A101760.s")
-#endif
+extern u8 D_8A105818;
+
+/*
+ * func_8A101760
+ *
+ * Pushes the main-pool state with tag 0x50494354 ('PICT'), builds a model
+ * preview with PokeIcon_CreateModelPreview(arg0, 0x100, 0xD2, 0, 0, 0xF4,
+ * 0xD2, &D_8A105818), stores the result in D_8A12FF98, and passes it to
+ * PokeIcon_SetPreviewSpecies together with arg1 and 0x108D. Only called by
+ * func_8A10180C, which passes D_8A12FFA4 and D_8A12FFB8 + 1; the meaning of
+ * arg1 and of D_8A105818 is not established here.
+ * Matching note: the call result is stored straight into D_8A12FF98 and
+ * D_8A12FF98 is read back for the second call, which the compiler folds into
+ * a register move; going through a local gives a different store sequence.
+ */
+void func_8A101760(s32 arg0, s32 arg1) {
+    main_pool_push_state(0x50494354);
+    D_8A12FF98 = (s32)PokeIcon_CreateModelPreview((ModelLoadContext*)arg0, 0x100, 0xD2, 0, 0, 0xF4, 0xD2, &D_8A105818);
+    PokeIcon_SetPreviewSpecies((unk_func_8001B1FC*)D_8A12FF98, arg1, 0x108D);
+}
 
 M2C_UNK func_80002620(M2C_UNK);                     /* extern */
 M2C_UNK func_800199E4(M2C_UNK *);                   /* extern */
@@ -453,7 +514,7 @@ void func_8001B5F0(void);
 M2C_UNK func_80006780();
 s32 func_8003BECC();
 M2C_UNK func_8003F6AC(M2C_UNK);
-M2C_UNK func_8A101760(s32, s32);
+void func_8A101760(s32, s32);
 s32 func_800231C8(s32, s32);
 extern s32 D_8A12FFB8;
 

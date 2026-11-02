@@ -534,11 +534,22 @@ void func_82125C34(s32 arg0) {
     func_82125AC8(arg0);
 }
 
-M2C_UNK func_82125AC8(s32);
-void func_82125C80(s32 arg0) {
+extern s32 D_8219A560;
+extern s32 D_8219A564;
+
+/*
+ * func_82125C80
+ *
+ * Does nothing unless both D_8219A560 and D_8219A564 (stored by
+ * func_82125C34 from func_8210F31C) equal 1. In that case it sets the
+ * scene's unk_50 to 1 and runs BattleScene_UpdateDisplayedHpAndTransition
+ * with the camera node it was given (its first argument is passed straight
+ * through).
+ */
+void func_82125C80(CameraNode* arg0) {
     if ((D_8219A560 == 1) && (D_8219A564 == 1)) {
-        M2C_FIELD(D_8219A5A0, s32 *, 0x50) = 1;
-        func_82125AC8(arg0);
+        sBattleScene.scene->unk_50 = 1;
+        BattleScene_UpdateDisplayedHpAndTransition(arg0);
     }
 }
 
@@ -1038,11 +1049,46 @@ void func_821272C0(s8 *arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82128510.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82128780; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82128780.s")
-#endif
+extern s32 D_8219A568;
+void func_82127354(CameraNode*);
+void func_82127724(CameraNode*);
+void func_82127DFC(CameraNode*);
+void func_8212817C(CameraNode*);
+/*
+ * func_82128780: picks which of four camera/animation variants to play for the
+ * current move and runs it.
+ *
+ * Only when the scene object's field +0x3C (BattleScene::unk_3C, reached
+ * through sBattleScene.scene) is 0 does it draw a new random variant,
+ * BattleAnim_RandomRange(4), into D_8219A568 (values >= 4 are clamped to 0,
+ * which cannot happen for a correct range but is in the retail code);
+ * otherwise the variant chosen earlier is replayed.  It then calls the matching
+ * variant function (func_82127354, func_82127724, func_82127DFC,
+ * func_8212817C) with the camera node.  Same shape as func_8212954C and
+ * func_8212960C, except that there is no default case.
+ */
+void func_82128780(CameraNode* arg0) {
+    if (sBattleScene.scene->unk_3C == 0) {
+        D_8219A568 = BattleAnim_RandomRange(4);
+        if (D_8219A568 >= 4) {
+            D_8219A568 = 0;
+        }
+    }
+    switch (D_8219A568) {
+        case 0:
+            func_82127354(arg0);
+            break;
+        case 1:
+            func_82127724(arg0);
+            break;
+        case 2:
+            func_82127DFC(arg0);
+            break;
+        case 3:
+            func_8212817C(arg0);
+            break;
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_82128848; signature not recovered. */
@@ -1084,11 +1130,46 @@ void func_82128E34(s32 arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82128F2C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82128F2C.s")
-#endif
+extern s32 D_8219A570;
+extern s32 D_8219A574;
+
+/*
+ * func_82128F2C
+ *
+ * Second argument is not used. While the byte at sBattleScene.scene + 0x1B is
+ * not 0xA and the byte at offset 0x389 of the structure D_8219A520 points to
+ * is non-zero, it increments that byte and returns. Otherwise it calls
+ * func_82124A40, copies sMultihitCount into D_8219A570 and D_8219A574, and
+ * calls func_82128E34(arg0) when func_82125CC8() returns 0. What the byte
+ * counts and what the copied value means are not established here.
+ * Matching note (found with decomp-permuter): the scene pointer is copied
+ * into a local before the byte is read through sBattleScene.scene again, and
+ * the 0x389 offset is held in an int local. Both only steer register choice
+ * (the pointer lands in v0, the byte in v1). The D_8219A574 = D_8219A570 =
+ * sMultihitCount chain gives the ROM's store order, and the empty `if (1) {}`
+ * after func_82124A40() (no code is emitted for it) makes the D_8219A570
+ * address land in v0 as in the ROM. These are matching-only workarounds.
+ */
+void func_82128F2C(CameraNode* arg0, s32 arg1) {
+    BattleScene* scene;
+    u8 temp_v1;
+    int off;
+
+    scene = sBattleScene.scene;
+    temp_v1 = M2C_FIELD(sBattleScene.scene, u8*, 0x1B);
+    off = 0x389;
+    if ((temp_v1 != 0xA) && (M2C_FIELD(D_8219A520, s8*, off) != 0)) {
+        M2C_FIELD(scene, u8*, 0x1B) = temp_v1 + 1;
+        return;
+    }
+    func_82124A40();
+    if (1) {
+    }
+    D_8219A574 = D_8219A570 = sMultihitCount;
+    if (func_82125CC8() == 0) {
+        func_82128E34((s32)arg0);
+    }
+}
 
 void func_82124984(ActivePokemon* arg0, CameraNode* arg1, s32 arg2);
 void func_8212239C(ActivePokemon* arg0, CameraNode* arg1);
@@ -1731,17 +1812,78 @@ void func_8212A554(s32 arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8212A5AC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8212A5AC.s")
-#endif
+/*
+ * func_8212A5AC: picks which of three camera/animation variants to play for the
+ * current move and runs it.
+ *
+ * Only when BattleScene::unk_3C (reached through sBattleScene.scene) is 0
+ * does it draw a new variant, BattleAnim_RandomRange(3), into D_8219A568;
+ * a result >= 3 is reset to 0.  Otherwise the variant chosen earlier is
+ * replayed.  It then calls the matching effect
+ * function (func_821247F0, func_82124810, func_82124830, func_82124874) with
+ * the camera node first and the active Pokemon second.  Same shape as
+ * func_8212954C and func_8212EEC0.
+ */
+void func_8212A5AC(ActivePokemon* arg0, CameraNode* arg1) {
+    if (sBattleScene.scene->unk_3C == 0) {
+        D_8219A568 = BattleAnim_RandomRange(3);
+        if (D_8219A568 >= 3) {
+            D_8219A568 = 0;
+        }
+    }
+    switch (D_8219A568) {
+        case 0:
+            func_821247F0(arg1, arg0);
+            break;
+        case 1:
+            func_82124810(arg1, arg0);
+            break;
+        case 2:
+            func_82124830(arg1, arg0);
+            break;
+        default:
+            func_82124874(arg1, arg0);
+            break;
+    }
+}
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8212A67C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8212A67C.s")
-#endif
+/*
+ * func_8212A67C: picks which of four camera/animation variants to play for the
+ * current move and runs it.
+ *
+ * Only when BattleScene::unk_3C (reached through sBattleScene.scene) is 0
+ * does it draw a new variant, BattleAnim_RandomRange(4), into D_8219A568;
+ * a result >= 4 is reset to 0.  Otherwise the variant chosen earlier is
+ * replayed.  It then calls the matching effect
+ * function (func_821247F0, func_82124810, func_82124830, func_82124874) with
+ * the camera node first and the active Pokemon second.  Same shape as
+ * func_8212954C and func_8212EEC0.
+ */
+void func_8212A67C(ActivePokemon* arg0, CameraNode* arg1) {
+    if (sBattleScene.scene->unk_3C == 0) {
+        D_8219A568 = BattleAnim_RandomRange(4);
+        if (D_8219A568 >= 4) {
+            D_8219A568 = 0;
+        }
+    }
+    switch (D_8219A568) {
+        case 0:
+            func_821247F0(arg1, arg0);
+            break;
+        case 1:
+            func_82124810(arg1, arg0);
+            break;
+        case 2:
+            func_82124830(arg1, arg0);
+            break;
+        case 3:
+            func_82124874(arg1, arg0);
+            break;
+        default:
+            func_82124874(arg1, arg0);
+            break;
+    }
+}
 
 void func_8212A5AC(ActivePokemon* arg0, CameraNode* arg1);
 void func_8212A67C(ActivePokemon* arg0, CameraNode* arg1);

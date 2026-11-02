@@ -471,17 +471,172 @@ u8* Audio_SetVoicePanModulation(channel_t* cp, u8* ptr) {
     return ptr;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_800370AC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800370AC.s")
-#endif
+s32 func_8003821C(s32, s32, s32, s32, s32, s32, s32);
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_800371A4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800371A4.s")
-#endif
+/**
+ * Command handler (same shape as func_80036F40): reads a sound id from `ptr`, either one
+ * byte, or, when that byte is >= 0x80, two bytes as ((first & 0x7F) << 8) + second. It
+ * then starts that sound with func_8003821C, passing the channel's offsets 0x140 and
+ * 0x13C, the id, the s16 at 0xAA, the s16 at 0xBC, 0 and the channel's offset-0x60 value
+ * (`priority`), which is incremented across the call and decremented again afterwards.
+ * If func_8003821C returns a non-zero handle, every channel whose offset-0x5C handle
+ * equals it receives this channel's handle (0x5C), 0x88, 0xAA, 0x38 and 0x3C fields.
+ * Returns the advanced command pointer. What the started object is is not established.
+ */
+u8* func_800370AC(s8* cp, u8* ptr) {
+    u32 id = *ptr++;
+    s32 ret;
+    s32 i;
+    s8* p;
+
+    if (id >= 0x80) {
+        id = ((id & 0x7F) << 8) + *ptr++;
+    }
+    ret = func_8003821C(M2C_FIELD(cp, s32*, 0x140), M2C_FIELD(cp, s32*, 0x13C), id, M2C_FIELD(cp, s16*, 0xAA), M2C_FIELD(cp, s16*, 0xBC), 0, M2C_FIELD(cp, s32*, 0x60)++);
+    M2C_FIELD(cp, s32*, 0x60)--;
+    if (ret == 0) {
+        return ptr;
+    }
+    p = D_800B3640;
+    for (i = 0; i < D_800B3638; i++, p += 0x148) {
+        if (ret == M2C_FIELD(p, s32*, 0x5C)) {
+            M2C_FIELD(p, s32*, 0x5C) = M2C_FIELD(cp, s32*, 0x5C);
+            M2C_FIELD(p, s32*, 0x88) = M2C_FIELD(cp, s32*, 0x88);
+            M2C_FIELD(p, s16*, 0xAA) = M2C_FIELD(cp, s16*, 0xAA);
+            M2C_FIELD(p, s32*, 0x38) = M2C_FIELD(cp, s32*, 0x38);
+            M2C_FIELD(p, s32*, 0x3C) = M2C_FIELD(cp, s32*, 0x3C);
+        }
+    }
+    return ptr;
+}
+
+typedef struct PlayerChannelZero_1E {
+    /* 0x00 */ char unk00[0x1E];
+    /* 0x1E */ u8 unk_1E;
+    /* 0x1F */ char unk1F[0x5];
+} PlayerChannelZero_1E; // size = 0x24
+
+/* Block passed as the first argument of func_8003B2E0 (synthesizer set-up).
+ * Field meanings beyond what func_800371A4 writes are not established. */
+typedef struct SynInitCfgZero {
+    /* 0x00 */ s32 f00;
+    /* 0x04 */ s32 f04;
+    /* 0x08 */ s32 f08;
+    /* 0x0C */ s32 f0C;
+    /* 0x10 */ s32 f10;
+    /* 0x14 */ s32 f14;
+    /* 0x18 */ s32 f18;
+    /* 0x1C */ s8 f1C;
+} SynInitCfgZero;
+
+/* Block passed as the second argument of func_8003B2E0; filled from the init
+ * configuration at offsets 0x18, 0x20 and 0x1C. */
+typedef struct SynInitRateZero {
+    /* 0x00 */ s32 f00;
+    /* 0x04 */ s32 f04;
+    /* 0x08 */ s32 f08;
+} SynInitRateZero;
+
+extern s32* D_800B3648;
+extern s8* D_800B3664;
+extern s8* D_800B3668;
+extern s32 D_800B365C;
+extern s32 D_800B3CC8;
+extern s32 D_800B3CCC;
+extern s32 D_800B3CD0;
+void func_800374E0(s32, s32);
+void func_8003A2B8(s8*);
+extern s32 D_80000300;
+extern s32 D_80075C34;
+extern s32 D_800B3644;
+extern s32 D_800B3650;
+extern s32 D_800B3660;
+extern s32 D_800B3CC4;
+extern PlayerChannelZero_1E D_800B3670[45];
+extern ALPlayer D_800B3610;
+extern ALHeap D_800B3628;
+extern void* D_800B363C;
+void func_8003A564(void*, s32, s32);
+s32 func_8003B2E0(SynInitCfgZero*, SynInitRateZero*, s32, s32, s32);
+void func_800468F0(ALPlayer*);
+void* func_8005C0D0(s32, s32, void*, s32, s32);
+void func_800388BC();
+
+/**
+ * Sound-player initialisation (the Stadium Zero counterpart of the retail libmus
+ * initialiser). `arg0` is the caller's configuration block:
+ *   0x00 channel count (D_800B3638)        0x04 ALHeap* used for all allocation
+ *   0x08 pointer stored in D_800B3664 and D_800B3668
+ *   0x0C -> D_800B3644, 0x10 -> D_800B3648 (the song table that func_80037828 indexes)
+ *   0x14, 0x18, 0x1C, 0x20, 0x24, 0x28: values forwarded to func_8003B2E0.
+ * Steps: set D_800B364C to 50 if the word at 0x80000300 is 0 (osTvType == PAL), else 60,
+ * and D_800B3650 to 1000000 / D_800B364C; allocate and zero the 0x1C-byte-per-channel
+ * table D_800B363C and the 0x148-byte-per-channel array D_800B3640; build the two
+ * parameter blocks and call func_8003B2E0; call func_800374E0(7, 0x7FFF); reset the
+ * handle counter D_800B365C to 1 and D_800B3660 to 0x12345678, and clear D_800B3CC4,
+ * D_800B3CC8, D_800B3CCC, D_80075C34 and D_800B3CD0;
+ * register the player at D_800B3610 (handler func_800388BC, clientData = itself) with
+ * func_800468F0; clear offsets 0xDD and 0x30 and call func_8003A2B8 on every channel;
+ * set the byte at offset 0x1E of all 45 entries of D_800B3670 to 5; finally copy the
+ * ALHeap into D_800B3628 and return its used size (cur - base).
+ * The `pad` local only reserves the stack slot the retail frame has there.
+ * What the 0x1C-byte table and several configuration words are is not established.
+ */
+s32 func_800371A4(s8* arg0) {
+    s32 i;
+    s32 off;
+    UNUSED s32* pad;
+    SynInitCfgZero cfg;
+    SynInitRateZero rate;
+
+    D_800B3638 = M2C_FIELD(arg0, s32*, 0);
+    D_800B3644 = M2C_FIELD(arg0, s32*, 0xC);
+    D_800B3648 = M2C_FIELD(arg0, s32**, 0x10);
+    if (D_80000300 == 0) {
+        D_800B364C = 0x32;
+    } else {
+        D_800B364C = 0x3C;
+    }
+    D_800B3650 = 0xF4240 / (s32)D_800B364C;
+    D_800B363C = func_8005C0D0(0, 0, M2C_FIELD(arg0, void**, 4), 1, D_800B3638 * 0x1C);
+    D_800B3640 = func_8005C0D0(0, 0, M2C_FIELD(arg0, void**, 4), 1, D_800B3638 * 0x148);
+    func_8003A564(D_800B363C, 0, D_800B3638 * 0x1C);
+    func_8003A564(D_800B3640, 0, D_800B3638 * 0x148);
+    D_800B3668 = D_800B3664 = M2C_FIELD(arg0, s8**, 8);
+    cfg.f00 = 0x2D;
+    cfg.f04 = D_800B3638;
+    cfg.f08 = M2C_FIELD(arg0, s32*, 0x14);
+    cfg.f10 = 0;
+    cfg.f1C = 2;
+    cfg.f18 = 0;
+    cfg.f14 = M2C_FIELD(arg0, s32*, 4);
+    rate.f00 = M2C_FIELD(arg0, s32*, 0x18);
+    rate.f04 = M2C_FIELD(arg0, s32*, 0x20);
+    rate.f08 = M2C_FIELD(arg0, s32*, 0x1C);
+    func_8003B2E0(&cfg, &rate, M2C_FIELD(arg0, s32*, 0x24), M2C_FIELD(arg0, s32*, 0x28), D_800B364C);
+    func_800374E0(7, 0x7FFF);
+    D_800B365C = 1;
+    D_800B3660 = 0x12345678;
+    D_800B3CC4 = 0;
+    D_800B3CC8 = 0;
+    D_800B3CCC = 0;
+    D_80075C34 = 0;
+    D_800B3CD0 = 0;
+    D_800B3610.next = NULL;
+    D_800B3610.handler = func_800388BC;
+    D_800B3610.clientData = &D_800B3610;
+    func_800468F0(&D_800B3610);
+    for (i = 0, off = 0; i < D_800B3638; i++, off += 0x148) {
+        M2C_FIELD(D_800B3640 + off, s8*, 0xDD) = 0;
+        M2C_FIELD(D_800B3640 + off, s32*, 0x30) = 0;
+        func_8003A2B8(off + D_800B3640);
+    }
+    for (i = 0; i < 45; i++) {
+        D_800B3670[i].unk_1E = 5;
+    }
+    D_800B3628 = *M2C_FIELD(arg0, ALHeap**, 4);
+    return D_800B3628.cur - D_800B3628.base;
+}
 
 extern s16 D_800B3654;
 extern s16 D_800B3656;
@@ -548,35 +703,188 @@ s32 func_80037508(s32* song) {
     return handle;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_800376E8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800376E8.s")
-#endif
+extern s32 D_800B3CCC;
+extern s32* D_800B3648;
+s32 func_8003A638(channel_t*, s32, s32, s32, s32);
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80037828; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80037828.s")
-#endif
+/**
+ * Claims the first free channel and starts it. With the D_800B3CCC flag set to 1 (each
+ * write made with interrupts masked via osSetIntMask(1)), it scans the channel array for
+ * one whose `pdata` is NULL, marks it in use by storing -1 there, and calls
+ * func_8003A638(channel, ...) on it, then clears the flag and returns that call's result.
+ * Returns 0 (and clears the flag) if no channel is free.
+ * Same as func_80037828 with arg1 = arg2 = 0x80 and the last argument always taken from
+ * D_800B3648[song] (D_800B3648 is a pointer to a table of s32).
+ */
+s32 func_800376E8(s32 song) {
+    channel_t* cp;
+    s32 i;
+    s32 found;
+    s32 arg;
+    u32 mask;
+    s32 ret;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8003798C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8003798C.s")
-#endif
+    found = 0;
+    mask = osSetIntMask(1);
+    D_800B3CCC = 1;
+    osSetIntMask(mask);
+    cp = mus_channels;
+    i = 0;
+    arg = D_800B3648[song];
+    for (; i < (s32)max_channels; i++, cp++) {
+        mask = osSetIntMask(1);
+        if (cp->pdata == NULL) {
+            cp->pdata = (u8*)-1;
+            found = 1;
+        }
+        osSetIntMask(mask);
+        if (found != 0) {
+            ret = func_8003A638(cp, song, 0x80, 0x80, arg);
+            mask = osSetIntMask(1);
+            D_800B3CCC = 0;
+            osSetIntMask(mask);
+            return ret;
+        }
+    }
+    mask = osSetIntMask(1);
+    D_800B3CCC = 0;
+    osSetIntMask(mask);
+    return 0;
+}
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80037A48; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80037A48.s")
-#endif
+extern s32 D_800B3CCC;
+extern s32* D_800B3648;
+s32 func_8003A638(channel_t*, s32, s32, s32, s32);
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80037AC4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80037AC4.s")
-#endif
+/**
+ * Claims the first free channel and starts it. With the D_800B3CCC flag set to 1 (each
+ * write made with interrupts masked via osSetIntMask(1)), it scans the channel array for
+ * one whose `pdata` is NULL, marks it in use by storing -1 there, and calls
+ * func_8003A638(channel, ...) on it, then clears the flag and returns that call's result.
+ * Returns 0 (and clears the flag) if no channel is free.
+ * Arguments: song, arg1, arg2, arg3 (unused), arg4. The call is
+ * func_8003A638(channel, song, arg1, arg2, arg4), where arg4 is first replaced by
+ * D_800B3648[song] if song is not 0xFFFF and arg4 is -1. D_800B3648 is read as a
+ * pointer to a table of s32 (the retail code loads it with lw).
+ * What the table and the started object are is not established.
+ */
+s32 func_80037828(s32 song, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
+    channel_t* cp;
+    s32 i;
+    s32 found;
+    u32 mask;
+    s32 ret;
+
+    found = 0;
+    mask = osSetIntMask(1);
+    D_800B3CCC = 1;
+    osSetIntMask(mask);
+    if ((song != 0xFFFF) && (arg4 == -1)) {
+        arg4 = D_800B3648[song];
+    }
+    for (i = 0, cp = mus_channels; i < (s32)max_channels; i++, cp++) {
+        mask = osSetIntMask(1);
+        if (cp->pdata == NULL) {
+            cp->pdata = (u8*)-1;
+            found = 1;
+        }
+        osSetIntMask(mask);
+        if (found != 0) {
+            ret = func_8003A638(cp, song, arg1, arg2, arg4);
+            mask = osSetIntMask(1);
+            D_800B3CCC = 0;
+            osSetIntMask(mask);
+            return ret;
+        }
+    }
+    mask = osSetIntMask(1);
+    D_800B3CCC = 0;
+    osSetIntMask(mask);
+    return 0;
+}
+
+/**
+ * For every channel whose type matches `flags` (MUSFLAG_EFFECTS selects channels whose
+ * u16 at offset 0xB2 is nonzero, MUSFLAG_SONGS those where it is 0), sets `duration`
+ * (offset 0x38) to arg1 and `duration_scale` (offset 0x3C) to arg1, or to 1 when arg1
+ * is 0, with interrupts masked (osSetIntMask(1), then restored). Companion of
+ * func_80037AC4, which does the same for one handle.
+ */
+void func_8003798C(s32 flags, s32 duration) {
+    channel_t* cp;
+    s32 scale;
+    s32 i;
+    u32 mask;
+
+    scale = (duration != 0) ? duration : 1;
+    mask = osSetIntMask(1);
+
+    for (i = 0, cp = mus_channels; i < (s32)max_channels; i++, cp++) {
+        if (((M2C_FIELD(cp, u16 *, 0xB2) != 0) && (flags & MUSFLAG_EFFECTS)) || ((M2C_FIELD(cp, u16 *, 0xB2) == 0) && (flags & MUSFLAG_SONGS))) {
+            cp->duration = duration;
+            cp->duration_scale = scale;
+        }
+    }
+
+    osSetIntMask(mask);
+}
+
+/**
+ * Counts the channels that are in use: `pdata` (offset 0x30) is neither NULL nor -1, and
+ * the channel's type matches `flags` (MUSFLAG_EFFECTS selects channels whose u16 at
+ * offset 0xB2 is nonzero, MUSFLAG_SONGS those where it is 0). Does not mask interrupts.
+ * Written with the offset-0xB2 field read through M2C_FIELD: player.h places the
+ * equivalent `IsFX` at 0xBA, which does not match this build's data.
+ */
+s32 func_80037A48(s32 flags) {
+    channel_t* cp;
+    s32 i;
+    s32 count;
+
+    for (i = 0, cp = mus_channels, count = 0; i < (s32)max_channels; i++, cp++) {
+        if ((cp->pdata != NULL) && (cp->pdata != (u8*)-1)) {
+            if (((M2C_FIELD(cp, u16 *, 0xB2) != 0) && (flags & MUSFLAG_EFFECTS)) || ((M2C_FIELD(cp, u16 *, 0xB2) == 0) && (flags & MUSFLAG_SONGS))) {
+                count++;
+            }
+        }
+    }
+
+    return count;
+}
+
+/**
+ * For every channel whose handle equals `handle`, sets `duration` (offset 0x38) to
+ * arg1 and `duration_scale` (offset 0x3C) to arg1, or to 1 when arg1 is 0, with
+ * interrupts masked (osSetIntMask(1), then restored). Returns the number of channels
+ * changed; returns 0 without doing anything for handle 0. Same shape as func_80037D4C.
+ * The declaration order of the locals is what produces the retail stack layout.
+ */
+s32 func_80037AC4(s32 handle, s32 duration) {
+    channel_t* cp;
+    s32 scale;
+    s32 count;
+    s32 i;
+    u32 mask;
+
+    if (handle == 0) {
+        return 0;
+    }
+
+    scale = (duration != 0) ? duration : 1;
+    mask = osSetIntMask(1);
+
+    for (i = 0, count = 0, cp = mus_channels; i < (s32)max_channels; i++, cp++) {
+        if (handle == cp->handle) {
+            cp->duration = duration;
+            cp->duration_scale = scale;
+            count++;
+        }
+    }
+
+    osSetIntMask(mask);
+
+    return count;
+}
 
 s32 func_80037B7C(s32 handle) {
     channel_t* cp;
@@ -601,17 +909,67 @@ s32 func_80037B7C(s32 handle) {
     return count;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80037C04; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80037C04.s")
-#endif
+/**
+ * Sets the field at channel offset 0xAA (`volume_scale` in player.h) to arg1 on every
+ * channel whose handle equals `handle`, with interrupts masked (osSetIntMask(1), then
+ * restored). Returns the number of channels changed; returns 0 without doing anything
+ * for handle 0. Same shape as func_80037D4C.
+ */
+s32 func_80037C04(s32 handle, s32 arg1) {
+    channel_t* cp;
+    s32 i;
+    s32 count;
+    u32 mask;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80037CA4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80037CA4.s")
-#endif
+    if (handle == 0) {
+        return 0;
+    }
+
+    mask = osSetIntMask(1);
+
+    for (i = 0, count = 0, cp = mus_channels; i < (s32)max_channels; i++, cp++) {
+        if (handle == cp->handle) {
+            cp->volume_scale = arg1;
+            count++;
+        }
+    }
+
+    osSetIntMask(mask);
+
+    return count;
+}
+
+/**
+ * For every channel whose handle equals `handle`, stores arg1 at channel offset 0xBC
+ * (`sweep_amount` / `channel_tempo_save` in player.h) and sets the byte at 0xCC
+ * (`pan_current`) to 0xFF, with interrupts masked (osSetIntMask(1), then restored).
+ * Returns the number of channels changed; returns 0 without doing anything for handle 0.
+ * Same shape as func_80037D4C.
+ */
+s32 func_80037CA4(s32 handle, s32 arg1) {
+    channel_t* cp;
+    s32 i;
+    s32 count;
+    u32 mask;
+
+    if (handle == 0) {
+        return 0;
+    }
+
+    mask = osSetIntMask(1);
+
+    for (i = 0, count = 0, cp = mus_channels; i < (s32)max_channels; i++, cp++) {
+        if (handle == cp->handle) {
+            cp->sweep_amount = arg1;
+            cp->pan_current = 0xFF;
+            count++;
+        }
+    }
+
+    osSetIntMask(mask);
+
+    return count;
+}
 
 s32 func_80037D4C(s32 handle, f32 offset) {
     channel_t* cp;
@@ -637,27 +995,96 @@ s32 func_80037D4C(s32 handle, f32 offset) {
     return count;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80037DF4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80037DF4.s")
-#endif
+/**
+ * Sets the tempo scale for every channel whose handle equals `handle`. The tempo is
+ * clamped to 1..0x100 (values <= 0 become 1, values above 0x100 become 0x100). For each
+ * matching channel it stores the clamped value in `temscale` (offset 0xA4) and sets
+ * `channel_tempo` (offset 0xA8) to (u16 at offset 0xB4 * tempo) >> 7. Returns the
+ * number of channels changed; returns 0 for handle 0. Unlike its neighbours it does
+ * not mask interrupts. The field at 0xB4 is unnamed in player.h.
+ */
+s32 func_80037DF4(s32 handle, s32 tempo) {
+    channel_t* cp;
+    s32 i;
+    s32 count;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80037E84; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80037E84.s")
-#endif
+    if (handle == 0) {
+        return 0;
+    }
+
+    if (tempo <= 0) {
+        tempo = 1;
+    } else if (tempo > 0x100) {
+        tempo = 0x100;
+    }
+
+    for (i = 0, cp = mus_channels, count = 0; i < (s32)max_channels; i++, cp++) {
+        if (handle == cp->handle) {
+            cp->temscale = tempo;
+            count++;
+            cp->channel_tempo = (M2C_FIELD(cp, u16 *, 0xB4) * tempo) >> 7;
+        }
+    }
+
+    return count;
+}
+
+/**
+ * Clamps `value` to 0..0x7F, then for every channel whose handle equals `handle` stores
+ * it in `reverb_intensity` (offset 0xDF) and sets `reverb_mix` (offset 0xE0) to 0xFF,
+ * with interrupts masked (osSetIntMask(1), then restored). Returns the number of
+ * channels changed; returns 0 without doing anything for handle 0.
+ */
+s32 func_80037E84(s32 handle, s32 value) {
+    channel_t* cp;
+    s32 i;
+    s32 count;
+    u32 mask;
+
+    if (handle == 0) {
+        return 0;
+    }
+
+    if (value < 0) {
+        value = 0;
+    } else if (value > 0x7F) {
+        value = 0x7F;
+    }
+
+    mask = osSetIntMask(1);
+
+    for (i = 0, count = 0, cp = mus_channels; i < (s32)max_channels; i++, cp++) {
+        if (handle == cp->handle) {
+            cp->reverb_intensity = value;
+            cp->reverb_mix = 0xFF;
+            count++;
+        }
+    }
+
+    osSetIntMask(mask);
+
+    return count;
+}
 
 void Audio_RelocateSoundBankWrapper(s32 arg0, s32 arg1) {
     Audio_RelocateSoundBank(arg0, arg1);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80037F68; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80037F68.s")
-#endif
+/**
+ * With interrupts masked (func_8004D300 is libultra's osSetIntMask), records
+ * arg0 in D_800B366C if it is non-NULL and bit 0 of its word at offset 0x10 is
+ * set, restores the interrupt mask, then calls func_80037508(arg1).
+ */
+void func_80037F68(void* arg0, s32* arg1) {
+    s32 prevMask;
+
+    prevMask = func_8004D300(1);
+    if ((arg0 != NULL) && (M2C_FIELD(arg0, s32*, 0x10) & 1)) {
+        D_800B366C = (s32)arg0;
+    }
+    func_8004D300(prevMask);
+    func_80037508(arg1);
+}
 
 M2C_UNK func_800376E8(M2C_UNK);                     /* extern */
 extern s8 *D_800B3664;
@@ -702,12 +1129,6 @@ s32 Team_IsOpponentIndexUsed(s32 arg0) {
     return 0;
 }
 
-typedef struct PlayerChannelZero_1E {
-    /* 0x00 */ char unk00[0x1E];
-    /* 0x1E */ u8 unk_1E;
-    /* 0x1F */ char unk1F[0x5];
-} PlayerChannelZero_1E; // size = 0x24
-
 extern u8 D_800B368E;
 extern PlayerChannelZero_1E D_800B3694[44];
 
@@ -725,11 +1146,38 @@ s32 func_800380D0(void) {
     return 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8003815C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8003815C.s")
-#endif
+/**
+ * Initialises channel `cp` as a new sound: calls func_8003A2B8(cp) to reset it, then
+ * stores arg0 at offsets 0x88 and 0x140, arg1 at 0x13C, arg3 + 0x100 at 0xB2 (the
+ * type word that func_80037A48 and func_8003798C test), arg4 at 0xAA, arg5 at 0xBC and
+ * arg6 at 0x60 (`priority`). With interrupts masked (func_8004D300(1) is osSetIntMask),
+ * it assigns the next handle D_800B365C++ to offset 0x5C and loads
+ * ((s32*)arg1[+0xC])[arg3] into offsets 0x8C and 0x30 (`pbase` / `pdata`).
+ * Returns the new handle. What arg0, arg1 and arg3 index is not established.
+ */
+s32 func_8003815C(s32 arg0, s32 arg1, s8* cp, s32 arg3, s32 arg4, s32 arg5, s32 arg6) {
+    s32 mask;
+    s32 table;
+    s32 val;
+
+    func_8003A2B8(cp);
+    M2C_FIELD(cp, s32*, 0x88) = arg0;
+    M2C_FIELD(cp, s16*, 0xB2) = arg3 + 0x100;
+    M2C_FIELD(cp, s16*, 0xAA) = arg4;
+    M2C_FIELD(cp, s16*, 0xBC) = arg5;
+    M2C_FIELD(cp, s32*, 0x60) = arg6;
+    table = M2C_FIELD(arg1, s32*, 0xC);
+    M2C_FIELD(cp, s32*, 0x140) = arg0;
+    M2C_FIELD(cp, s32*, 0x13C) = arg1;
+    mask = func_8004D300(1);
+    M2C_FIELD(cp, s32*, 0x5C) = D_800B365C;
+    D_800B365C++;
+    val = ((s32*)table)[arg3];
+    M2C_FIELD(cp, s32*, 0x8C) = val;
+    M2C_FIELD(cp, s32*, 0x30) = val;
+    func_8004D300(mask);
+    return M2C_FIELD(cp, s32*, 0x5C);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8003821C; signature not recovered. */
@@ -764,17 +1212,76 @@ s32 func_8003834C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s3
     return ret;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_800383DC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800383DC.s")
-#endif
+void func_8003A710(void*);
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_800384D8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800384D8.s")
-#endif
+/**
+ * Starts a sound on the first free channel without masking interrupts (compare
+ * func_8003821C, which does the same with osSetIntMask(1) around each claim). Returns -1
+ * at once if D_800B3CCC or D_800B3CC8 is non-zero. Otherwise, if bit 0 of the word at
+ * arg1+4 is clear it calls func_8003A710(arg1); if arg6 is -1 it is replaced by
+ * ((s32*)arg1[+8])[arg2]. It then scans the D_800B3640 channel array (0x148 bytes each,
+ * D_800B3638 entries) for one whose word at offset 0x30 is 0, marks it in use by storing
+ * -1 there, and returns func_8003815C(arg0, arg1, channel, arg2, arg3, arg4, arg6). If
+ * no channel is free it returns 0. arg5 is not used. What arg0 and arg1 point to is not
+ * established (func_8003815C stores them at channel offsets 0x88/0x140 and 0x13C).
+ */
+s32 func_800383DC(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, UNUSED s32 arg5, s32 arg6) {
+    s32 ret;
+    s32* tbl;
+    s8* p;
+    u32 i;
+
+    ret = 0;
+    if ((D_800B3CCC != 0) || (D_800B3CC8 != 0)) {
+        return -1;
+    }
+    if (!(M2C_FIELD(arg1, s32*, 4) & 1)) {
+        func_8003A710((void*)arg1);
+    }
+    if ((u32)arg6 == 0xFFFFFFFFU) {
+        tbl = (s32*)M2C_FIELD(arg1, s32*, 8);
+        arg6 = *(s32*)(arg2 * 4 + (s32)tbl);
+    }
+    for (i = 0, p = D_800B3640; i < (u32)D_800B3638; i++, p += 0x148) {
+        if (M2C_FIELD(p, s32*, 0x30) == 0) {
+            M2C_FIELD(p, s32*, 0x30) = -1;
+            ret = func_8003815C(arg0, arg1, p, arg2, arg3, arg4, arg6);
+            break;
+        }
+    }
+    return ret;
+}
+
+/*
+ * func_800384D8
+ *
+ * Returns 1 if func_80037A48(3) is non-zero. Otherwise scans the byte at
+ * offset 0x1E of each of the 45 entries of the 0x24-byte table at
+ * D_800B3670 (the same table func_800380D0 scans, which starts one entry
+ * later at D_800B3694 and reads the first entry's byte as D_800B368E) and
+ * returns that byte plus 10 for the first entry whose byte is not 5;
+ * returns 0 if all of them are 5.
+ *
+ * What the table entries are, and what the value 5 and the +10 mean, is not
+ * established. Matching note: the loop is written over 45 entries from
+ * D_800B3670; reading the first byte separately as D_800B368E followed by a
+ * loop over D_800B3694 gives different register allocation.
+ */
+s32 func_80037A48(M2C_UNK);                         /* extern */
+extern PlayerChannelZero_1E D_800B3670[45];
+s32 func_800384D8(void) {
+    s32 i;
+
+    if (func_80037A48(3) != 0) {
+        return 1;
+    }
+    for (i = 0; i < 45; i++) {
+        if (D_800B3670[i].unk_1E != 5) {
+            return D_800B3670[i].unk_1E + 0xA;
+        }
+    }
+    return 0;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_80038588; signature not recovered. */
@@ -820,11 +1327,50 @@ s32 func_800386E4(s32 arg0, s32 arg1) {
     return var_s2;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_800387BC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800387BC.s")
-#endif
+extern s32 D_80075C34;
+extern s8 D_8007754C;
+s32 func_8004D300(s32);
+
+/**
+ * Sets a new value for every channel and for D_80075C34. A zero `arg0` is replaced by 1.
+ * Each part runs with interrupts masked via func_8004D300(1) (osSetIntMask) and the
+ * previous mask restored afterwards: first the byte D_8007754C is cleared; then every
+ * entry of the D_800B3640 channel array (D_800B3638 entries of 0x148 bytes) gets the value
+ * in offsets 0x38 and 0x3C (the compiled code derives the second copy through a
+ * redundant `arg0 != 0 ? arg0 : 1`, kept here so the code matches); finally D_80075C34
+ * is set to the value. Compare func_800386E4, which writes the same two fields only on
+ * the channels whose handle (offset 0x5C) matches. What the fields mean is not
+ * established.
+ * Matching note: the value is kept in `arg0` itself; a separate local makes the frame
+ * 8 bytes larger.
+ */
+void func_800387BC(s32 arg0) {
+    s32 mask;
+    s32 hi;
+    s32 i;
+    s8* p;
+
+    if (arg0 == 0) {
+        arg0 = 1;
+    }
+    if (arg0 != 0) {
+        hi = arg0;
+    } else {
+        hi = 1;
+    }
+    mask = func_8004D300(1);
+    D_8007754C = 0;
+    func_8004D300(mask);
+    mask = func_8004D300(1);
+    for (i = 0, p = D_800B3640; i < D_800B3638; i++, p += 0x148) {
+        M2C_FIELD(p, s32*, 0x38) = arg0;
+        M2C_FIELD(p, s32*, 0x3C) = hi;
+    }
+    func_8004D300(mask);
+    mask = func_8004D300(1);
+    D_80075C34 = arg0;
+    func_8004D300(mask);
+}
 
 s32 func_8004D300(s32);                             /* extern */
 extern s8 D_8007754C;
@@ -1282,8 +1828,34 @@ void Audio_RelocatePointerArray(u8* arg0, u32 arg1, u32 arg2) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8003A638; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8003A638.s")
-#endif
+/**
+ * Initialises channel `cp` as a new sound (a sibling of func_8003815C): calls
+ * func_8003A2B8(cp) to reset it, then stores D_800B3668 at offset 0x88, arg1 at the
+ * s16 at 0xB2 (the type word), arg2 at 0xAA, arg3 at 0xBC and arg4 at 0x60 (`priority`).
+ * It then raises the interrupt mask with func_8004D300, takes the next handle
+ * D_800B365C++ for offset 0x5C, loads ((s32*)D_800B3644)[arg1] into offsets 0x8C and 0x30,
+ * restores the mask and returns the handle. The argument of the first func_8004D300 call is
+ * an uninitialised stack local in the retail code (`lw $a0, 0x20($sp)`, not the constant
+ * 1 that func_8003815C passes); `uninit` reproduces that and must not be given a value.
+ * What the table at D_800B3644 holds is not established.
+ */
+s32 func_8003A638(channel_t* cp, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
+    s32 val;
+    s32 uninit;
+    s32 mask;
+
+    func_8003A2B8((s8*)cp);
+    M2C_FIELD(cp, s32*, 0x88) = (s32)D_800B3668;
+    M2C_FIELD(cp, s16*, 0xB2) = arg1;
+    M2C_FIELD(cp, s16*, 0xAA) = arg2;
+    M2C_FIELD(cp, s16*, 0xBC) = arg3;
+    M2C_FIELD(cp, s32*, 0x60) = arg4;
+    mask = func_8004D300(uninit);
+    M2C_FIELD(cp, s32*, 0x5C) = D_800B365C;
+    D_800B365C++;
+    val = ((s32*)D_800B3644)[arg1];
+    M2C_FIELD(cp, s32*, 0x8C) = val;
+    M2C_FIELD(cp, s32*, 0x30) = val;
+    func_8004D300(mask);
+    return M2C_FIELD(cp, s32*, 0x5C);
+}

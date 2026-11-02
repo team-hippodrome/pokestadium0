@@ -303,11 +303,38 @@ s32 func_890093AC(void* arg0) {
     return sp1C;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89009414; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_89009414.s")
-#endif
+typedef struct {
+    /* 0x0 */ s32 value;
+    /* 0x4 */ s32 flag;
+} SwapEntry;
+
+typedef struct {
+    /* 0x0 */ SwapEntry** entries;
+    /* 0x4 */ char unk04[4];
+    /* 0x8 */ s32 index;
+} SwapList;
+
+/**
+ * Swaps the first word of the entry selected by the list at arg0 + 0x1D8 with
+ * that of the entry selected by the list at arg0 + 0x1DC, then sets the second
+ * word (flag) of both entries to 1. Each list is {Entry** entries, ?, index};
+ * the entry is `(*entries)[index]` with 8-byte entries. The operands of the
+ * pointer addition are written `index + *entries` because that order gives the
+ * retail temp numbering.
+ */
+void func_89009414(void* arg0) {
+    SwapEntry* a;
+    SwapEntry* b;
+    s32 tmp;
+
+    a = M2C_FIELD(arg0, SwapList**, 0x1D8)->index + *M2C_FIELD(arg0, SwapList**, 0x1D8)->entries;
+    b = M2C_FIELD(arg0, SwapList**, 0x1DC)->index + *M2C_FIELD(arg0, SwapList**, 0x1DC)->entries;
+    tmp = b->value;
+    b->value = a->value;
+    a->flag = 1;
+    a->value = tmp;
+    b->flag = 1;
+}
 
 typedef struct Entry89009464 {
     s32 unk_00;

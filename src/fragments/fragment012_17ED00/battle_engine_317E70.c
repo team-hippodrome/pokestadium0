@@ -107,11 +107,56 @@ s32 func_821119F8(void) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82111A78.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82111AC4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82111AC4.s")
-#endif
+extern TypeEffectivenessEntry D_8218AC50[];
+extern u8 D_82199F3F;
+
+/*
+ * func_82111AC4
+ *
+ * Applies a type-chart table to sBattleDamage. moveType is
+ * sBattleUser->moveCache.unk_03. If it equals either of sBattleUser's two
+ * type bytes (roster[6], roster[7]), sBattleDamage is increased by half of
+ * itself and bit 0x80 of D_82199F3F is set. Then every 3-byte entry of the
+ * table at D_8218AC50 (ended by a first byte of 0xFF) whose first byte is
+ * moveType and whose second byte equals either of sBattleTarget's two type
+ * bytes: D_82199F3F = (D_82199F3F & 0x80) + entry multiplier,
+ * sBattleDamage = sBattleDamage * multiplier / 10, and sBattleMoveFailed is
+ * set to 1 if the result is 0.
+ *
+ * The four type bytes are read into locals before the first test, as in the
+ * retail code. func_8210EB28 walks the same table. Stadium 1's equivalent is
+ * Battle_ApplyTypeEffectAndSTAB, which has extra Struggle and effectiveness
+ * counting logic that this version does not.
+ */
+void func_82111AC4(void) {
+    TypeEffectivenessEntry* entry;
+    u8 userType1;
+    u8 userType2;
+    u8 targetType1;
+    u8 targetType2;
+    u8 moveType;
+
+    userType1 = sBattleUser->roster[6];
+    userType2 = sBattleUser->roster[7];
+    targetType1 = sBattleTarget->roster[6];
+    targetType2 = sBattleTarget->roster[7];
+    moveType = sBattleUser->moveCache.unk_03;
+    if ((moveType == userType1) || (moveType == userType2)) {
+        sBattleDamage += sBattleDamage >> 1;
+        D_82199F3F |= 0x80;
+    }
+    entry = D_8218AC50;
+    while (entry->unk_00 != 0xFF) {
+        if ((entry->unk_00 == moveType) && ((entry->unk_01 == targetType1) || (entry->unk_01 == targetType2))) {
+            D_82199F3F = (D_82199F3F & 0x80) + entry->unk_02;
+            sBattleDamage = (sBattleDamage * entry->unk_02) / 10;
+            if (sBattleDamage == 0) {
+                sBattleMoveFailed = 1;
+            }
+        }
+        entry++;
+    }
+}
 
 s32 Battle_Effect_Counter(void) {
     if (sBattleUser->usedMove != 0x44) {

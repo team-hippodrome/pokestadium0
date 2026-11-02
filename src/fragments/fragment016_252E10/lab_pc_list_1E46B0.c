@@ -383,7 +383,18 @@ s32 LabPCList_FilterByExactTypePair(unk_func_8830867C_02C_0CC* arg0, unk_func_88
     return 1;
 }
 
-extern u8 D_80064C4C[];
-s32 func_89109960(u8* arg0, s32 arg1) {
-    return (D_80064C4C[arg0[8] * 0x1C] & 1) != 0;
+/*
+ * func_89109960
+ *
+ * Returns 1 if bit 0 of the first byte of the entry at index `i` of the
+ * 0x1C-byte-stride table at D_80064C4C is set, otherwise 0, where `i` is the
+ * byte at offset 8 of arg0. arg1 is not used.
+ *
+ * What the table and the record arg0 are is not established. Matching note:
+ * the table is indexed through a byte pointer; the untyped word extern would
+ * scale the 0x1C stride by 4 and read a word.
+ */
+extern M2C_UNK D_80064C4C;
+s32 func_89109960(void *arg0, M2C_UNK arg1) {
+    return (*((u8 *)&D_80064C4C + (M2C_FIELD(arg0, u8 *, 8) * 0x1C)) & 1) != 0;
 }
