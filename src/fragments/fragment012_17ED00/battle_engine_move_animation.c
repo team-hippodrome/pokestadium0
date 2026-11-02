@@ -1496,11 +1496,15 @@ void func_82105FCC(ActivePokemon* active_pokemon) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82106144; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82106144.s")
-#endif
+void func_82106144(ActivePokemon* pokemon) {
+    if (pokemon->state.runtime.usedMove == 0x45) {
+        BattleAnim_ResetOwnerFacingAndExitStatusIdle(pokemon);
+    }
+    if (pokemon->state.flags & 8) {
+        pokemon->displayObject.position.y = ((f32(*)[4])D_FLT_82189354)[pokemon->displayObject.objectType][0];
+        func_82105E4C((s8*)pokemon, 0x608);
+    }
+}
 
 void BattleScene_CleanupOpponentSpecialAnimFlag(ActivePokemon* active_pokemon) {
     UNUSED s32 pad[2];
