@@ -285,11 +285,30 @@ void func_82001CCC(s32 arg0, s32 arg1, Color82001CCC arg2) {
     func_80029028(arg0, arg1 + 0x63, 0x214, 1, arg2);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82001D64; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment007_166580/func_82001D64.s")
-#endif
+extern Color82001CCC D_82008F58;
+void func_8001AB6C(void);
+void func_8001A384(s32, s32);
+void func_8001ABBC(void);
+void func_8001AA9C(u8, u8, u8, u8);
+void func_8001A944(s32, s32, const char*, ...);
+M2C_UNK func_8001AAE4(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK); /* extern */
+M2C_UNK func_8001AB2C(M2C_UNK);                     /* extern */
+M2C_UNK func_8001ABE8();                            /* extern */
+M2C_UNK func_8001AC3C();                            /* extern */
+extern char D_82009C08[];
+
+void func_82001D64(s32 arg0, s32 arg1, s32 arg2) {
+    func_82001C60(arg0, arg1, D_82008F58);
+    func_8001AB6C();
+    func_8001AA9C(0xFFU, 0xFFU, 0xFFU, 0xFFU);
+    func_8001A384(0x20, 0);
+    func_8001AB2C(0x2A);
+    func_8001ABE8();
+    func_8001AAE4(0xFF, 0x64, 0xFF, 0xFF);
+    func_8001A944(arg0 + 0xAE, arg1 + 0xE, D_82009C08);
+    func_8001AC3C();
+    func_8001ABBC();
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_82001E20; signature not recovered. */

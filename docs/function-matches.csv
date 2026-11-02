@@ -755,7 +755,7 @@ func_82001BB4,0x82001BB4,src/fragments/fragment007_166580.c,,asm,,asm
 func_82001C00,0x82001C00,src/fragments/fragment007_166580.c,func_82001C00,hand,,c
 func_82001C60,0x82001C60,src/fragments/fragment007_166580.c,func_82001C60,hand,,c
 func_82001CCC,0x82001CCC,src/fragments/fragment007_166580.c,func_82001CCC,hand,,c
-func_82001D64,0x82001D64,src/fragments/fragment007_166580.c,,asm,,asm
+func_82001D64,0x82001D64,src/fragments/fragment007_166580.c,func_82001D64,hand,,c
 func_82001E20,0x82001E20,src/fragments/fragment007_166580.c,,asm,,asm
 func_820020EC,0x820020EC,src/fragments/fragment007_166580.c,,asm,,asm
 func_820023E8,0x820023E8,src/fragments/fragment007_166580.c,,asm,,asm
@@ -859,9 +859,9 @@ func_88100CD0,0x88100CD0,src/fragments/fragment008_1720F0.c,func_88100CD0,hand,,
 func_88100D30,0x88100D30,src/fragments/fragment008_1720F0.c,func_88100D30,hand,,c
 func_88100D9C,0x88100D9C,src/fragments/fragment008_1720F0.c,func_88100D9C,hand,,c
 func_88100E34,0x88100E34,src/fragments/fragment008_1720F0.c,,asm,,asm
-func_8810105C,0x8810105C,src/fragments/fragment008_1720F0.c,,asm,,asm
+func_8810105C,0x8810105C,src/fragments/fragment008_1720F0.c,func_8810105C,hand,,c
 func_8810112C,0x8810112C,src/fragments/fragment008_1720F0.c,,asm,,asm
-func_8810137C,0x8810137C,src/fragments/fragment008_1720F0.c,,asm,,asm
+func_8810137C,0x8810137C,src/fragments/fragment008_1720F0.c,func_8810137C,hand,,c
 func_88101478,0x88101478,src/fragments/fragment008_1720F0.c,,asm,,asm
 func_8810165C,0x8810165C,src/fragments/fragment008_1720F0.c,func_8810165C,m2c,m2c,c
 func_88101670,0x88101670,src/fragments/fragment008_1720F0.c,func_88101670,m2c,m2c,c
@@ -882,10 +882,10 @@ func_881025C8,0x881025C8,src/fragments/fragment008_1720F0.c,func_881025C8,hand,,
 func_88102600,0x88102600,src/fragments/fragment008_1720F0.c,func_88102600,hand,,c
 func_88102688,0x88102688,src/fragments/fragment008_1720F0.c,func_88102688,hand,,c
 func_88102710,0x88102710,src/fragments/fragment008_1720F0.c,func_88102710,hand,,c
-func_88102794,0x88102794,src/fragments/fragment008_1720F0.c,,asm,,asm
+func_88102794,0x88102794,src/fragments/fragment008_1720F0.c,func_88102794,hand,,c
 func_88102834,0x88102834,src/fragments/fragment008_1720F0.c,func_88102834,hand,,c
 func_881028B8,0x881028B8,src/fragments/fragment008_1720F0.c,,asm,,asm
-func_881029E0,0x881029E0,src/fragments/fragment008_1720F0.c,,asm,,asm
+func_881029E0,0x881029E0,src/fragments/fragment008_1720F0.c,func_881029E0,hand,,c
 func_88102A2C,0x88102A2C,src/fragments/fragment008_1720F0.c,,asm,,asm
 func_88102B58,0x88102B58,src/fragments/fragment008_1720F0.c,func_88102B58,m2c,m2c,c
 func_88102B98,0x88102B98,src/fragments/fragment008_1720F0.c,func_88102B98,m2c,m2c,c

@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 4467,
-  "asm_owners": 977,
+  "c_owners": 4472,
+  "asm_owners": 972,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -602,7 +602,7 @@
     "tools/cflags_overrides.json": "a63bd5b3abbfdc0d47270d0a1c1cf174a5b3d383346465b879dfe4d89db42ddf",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "9b161b150959eada7d8877aea24cdccea4bf00ca419e247d9e3e98aaae19a024",
+    "docs/function-matches.csv": "c2273b83aa3f49e758c2125a6a8f50c42500cc9cd421cd151efb6371bc1e3f84",
     "linker_scripts/jp/symbol_addrs.txt": "2456a150541197a6396eae026c3eee015906dcdaa257db9bc9a3a4ea9bb6621f"
   },
   "binutils": {
@@ -695,10 +695,10 @@
     "src/fragments/fragment005_15FCE0/battle_order_select.c": "8a1af3148a122e0710b124deebdc83372db8df67b820c979e36d559924e50673",
     "src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c": "866fdf2f1f6533ddef7230043cb2aa8bd7a852da891d841e41f2ab93c716d43d",
     "src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c": "1b89754c68ec1ed07c791f6a2d08d9136b532d593d6996cd97987258c2c9d8f0",
-    "src/fragments/fragment007_166580.c": "5661a9b19d6eed40b98e5b437f9afffd1aa03846ba446c59cf305eb0ecc47795",
+    "src/fragments/fragment007_166580.c": "b625a89047ecdcffb8f7be15cff50e095b3ddbe4552a2ee9e180f98553e74d00",
     "src/fragments/fragment007_166580_2.c": "006af7fbd6b271c0d34eb5942bfae1181d4d11f47321dbcdd7000a35a1b30707",
     "src/fragments/fragment007_166580_3.c": "dbc06e313d14721e9f7034d3b415ddc5277ba7f01f08eb63b2908134b0f6fef0",
-    "src/fragments/fragment008_1720F0.c": "a175e18ea3c3b29f3670ce64d0293d972e7911b9e64fa8425a1067a1376f56a1",
+    "src/fragments/fragment008_1720F0.c": "9b7af9b055a20720ff65bc547fd61be6c6a35e2b129a5dada0063c96eae56df0",
     "src/fragments/fragment009_175570.c": "f15eaa1907af594a25af5f2c6890667b75e07bd3c706f091377747e8352bd54b",
     "src/fragments/fragment010_17BE70/pikachu_reward.c": "1bef72afcb702aa8b887445fa82335a229292b20a1c18c4ab86ae47c08131781",
     "src/fragments/fragment011_17E340/area_select.c": "2cf3512fb830f85566bb6386b8d8c05f7933b4def5bc6c23ab7f8134f0ceb4a2",
