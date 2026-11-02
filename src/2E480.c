@@ -2,6 +2,7 @@
 
 #include "global.h"
 #include "input.h"
+#include "audio_sfx.h"
 #include "m2c_macros.h"
 
 typedef struct MenuDef8002E230 {
@@ -132,11 +133,31 @@ void func_8002DAD8(Menu8002E230* menu, s32 x, s32 y, s32 mask, s32 arg4) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002DC04; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002DC04.s")
-#endif
+s32 func_8002DC04(Menu8002E230* menu) {
+    s32 input = 0;
+    s32 old = menu->cursor;
+    if (menu->def->itemCount == 0) {
+        return input;
+    }
+    input = Input_GetRepeatedDPad() & 0xFFFF;
+    if (input != 0x400) {
+        if (input == 0x800) {
+            if (menu->cursor == 0) {
+                menu->cursor += menu->def->itemCount;
+            }
+            menu->cursor--;
+        }
+    } else {
+        if (menu->cursor >= menu->def->itemCount - 1) {
+            menu->cursor -= menu->def->itemCount;
+        }
+        menu->cursor++;
+    }
+    if (old != menu->cursor) {
+        Audio_PlaySoundEffectById(1);
+    }
+    return input;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8002DCE0; signature not recovered. */

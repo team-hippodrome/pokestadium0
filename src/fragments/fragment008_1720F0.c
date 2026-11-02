@@ -161,11 +161,34 @@ s32 func_88100B2C(s32 arg0) {
     return sp1C;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88100BA4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment008_1720F0/func_88100BA4.s")
-#endif
+typedef struct Color88100D9C {
+    u8 c[4];
+} Color88100D9C;
+extern Gfx D_80060270[];
+void func_80029028(s32, s32, s32, s32, Color88100D9C);
+
+typedef struct Window88100BA4 {
+    u8 pad00[0x14];
+    s32 flags;
+    Color88100D9C color18;
+    Color88100D9C color1C;
+    s32 state20;
+    s32 state24;
+    s32 state28;
+    s32 value2C;
+} Window88100BA4;
+void func_8002A8C4(void*, s32, s32, s32, s32);
+extern Color88100D9C D_88102DB0[2];
+void func_88100BA4(Window88100BA4* window, s32 x, s32 y, s32 value) {
+    func_8002A8C4(window, x, y, 0x170, 0x68);
+    window->state24 = 0;
+    window->state20 = 0;
+    window->state28 = 0;
+    window->flags = 0x1006;
+    window->color18 = D_88102DB0[0];
+    window->color1C = D_88102DB0[1];
+    window->value2C = value;
+}
 
 s32 func_8002AE6C();
 extern u8 D_800734A8[4];
@@ -190,23 +213,16 @@ void func_88100CA8(s32 arg0) {
     func_8002BC14(D_800603C0);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88100CD0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment008_1720F0/func_88100CD0.s")
-#endif
+void func_88100CD0(s32 x, s32 y, Color88100D9C color) {
+    gSPDisplayList(gDisplayListHead++, D_80060270);
+    func_80029028(x, y, 0x88, 0x64, color);
+}
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88100D30; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment008_1720F0/func_88100D30.s")
-#endif
+void func_88100D30(s32 x, s32 y, Color88100D9C color) {
+    gSPDisplayList(gDisplayListHead++, D_80060270);
+    func_80029028(x + 0x88, y, 0x18C, 0x64, color);
+}
 
-typedef struct Color88100D9C {
-    u8 c[4];
-} Color88100D9C;
-extern Gfx D_80060270[];
-void func_80029028(s32, s32, s32, s32, Color88100D9C);
 void func_88100D9C(s32 arg0, s32 arg1, Color88100D9C arg2) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(arg0, arg1, 0x214, 1, arg2);
@@ -219,11 +235,13 @@ void func_88100D9C(s32 arg0, s32 arg1, Color88100D9C arg2) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment008_1720F0/func_88100E34.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8810105C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment008_1720F0/func_8810105C.s")
-#endif
+extern Color88100D9C D_88102D78[2];
+void func_8810105C(s32 x, s32 y, s32 height) {
+    gSPDisplayList(gDisplayListHead++, D_80060270);
+    func_80029028(x, y, 0x88, height, D_88102D78[1]);
+    gSPDisplayList(gDisplayListHead++, D_80060270);
+    func_80029028(x + 0x88, y, 0x18C, height, D_88102D78[0]);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8810112C; signature not recovered. */
@@ -231,11 +249,18 @@ void func_88100D9C(s32 arg0, s32 arg1, Color88100D9C arg2) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment008_1720F0/func_8810112C.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8810137C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment008_1720F0/func_8810137C.s")
-#endif
+u8* func_80018DEC(s32, s32);
+extern Color88100D9C D_88102D78[];
+extern Gfx D_80073408[];
+extern Gfx D_80073438[];
+extern s32 D_88103074;
+void func_8810137C(s32 x, s32 y) {
+    gSPDisplayList(gDisplayListHead++, D_80060270);
+    func_80029028(x, y, 0x84, 0x32, D_88102D78[0]);
+    gSPDisplayList(gDisplayListHead++, D_80073408);
+    Gfx_DrawTextureRgba16(x + 0x56, y + 6, 0x28, 0x28, func_80018DEC(D_88103074, 0x18), 0x28, 0x200000);
+    gSPDisplayList(gDisplayListHead++, D_80073438);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_88101478; signature not recovered. */
@@ -295,11 +320,13 @@ s32 func_88101734(s32 *arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment008_1720F0/func_88101A38.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88101D7C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment008_1720F0/func_88101D7C.s")
-#endif
+void func_88101D7C(s32* values, s32 first, s32 count) {
+    s32 end = first + count;
+
+    for (; first < end; first++) {
+        values[first] = -1;
+    }
+}
 
 void func_88101DB4(s8 *arg0, s32 arg1) {
     M2C_FIELD(arg0, s32 *, 0xBC) = arg1;
@@ -368,29 +395,72 @@ void func_881025C8(s32* arg0, s32* arg1) {
     arg0[2] = arg1[2];
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88102600; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment008_1720F0/func_88102600.s")
-#endif
+void func_80027410(void*, void*, s32, s32, s32);
+void func_80027804(void*, void*, s32, s32);
+void func_8810024C(s32*);
+void func_88101DF8(void*, s32, s32, s32*, s32);
+void func_88102600(s32 ui) {
+    s32* records = (s32*)(ui + 0x2698);
+    s32* list;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88102688; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment008_1720F0/func_88102688.s")
-#endif
+    func_80027410(records, (void*)(ui + 0x458), 0x220, 0x10, 0);
+    func_8810024C(records);
+    list = (s32*)(ui + 0x26A8);
+    func_80027804(list, (void*)(ui + 0x2658), 0x10, 0);
+    func_881025C8(list, records);
+    func_88101DF8((void*)(ui + 0x88), 0x30, 0x5C, list, 1);
+}
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88102710; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment008_1720F0/func_88102710.s")
-#endif
+void func_80027410(void*, void*, s32, s32, s32);
+void func_80027804(void*, void*, s32, s32);
+void func_8810024C(s32*);
+void func_88101DF8(void*, s32, s32, s32*, s32);
+void func_88102688(s32 ui) {
+    s32* records = (s32*)(ui + 0x2698);
+    s32* list;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88102794; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment008_1720F0/func_88102794.s")
-#endif
+    func_80027410(records, (void*)(ui + 0x458), 0x220, 0x10, 0);
+    func_8810024C(records);
+    list = (s32*)(ui + 0x26A8);
+    func_80027804(list, (void*)(ui + 0x2658), 0x10, 0);
+    func_881025C8(list, records);
+    func_88101DF8((void*)(ui + 0x88), 0x30, 0x5C, list, 2);
+}
+
+void func_80027410(void*, void*, s32, s32, s32);
+void func_80027804(void*, void*, s32, s32);
+void func_88100348(s32*);
+void func_88101DF8(void*, s32, s32, s32*, s32);
+void func_88102710(s32 ui) {
+    s32* records = (s32*)(ui + 0x2698);
+    s32* list;
+
+    func_80027410(records, (void*)(ui + 0x458), 0x220, 4, 0);
+    func_88100348(records);
+    list = (s32*)(ui + 0x26A8);
+    func_80027804(list, (void*)(ui + 0x2658), 4, 0);
+    func_881025C8(list, records);
+    func_88101DF8((void*)(ui + 0x88), 0x30, 0x5C, list, 0);
+}
+
+s32 GbSave_GetActivePort(void);
+void GbSave_BuildPortSummary(void*, s32);
+void func_881004CC(void*, s32, s32, s32, s32, Color88100D9C*, s32, Color88100D9C*, s32, void*);
+extern Color88100D9C D_88102D84[3];
+extern Color88100D9C D_88102D90[3];
+extern u8 D_88103000[];
+extern s32 D_88103078;
+extern u8 D_88103080[];
+void func_88102794(s32* ui) {
+    s32 port;
+    port = GbSave_GetActivePort();
+    D_88103078 = port;
+    if (D_88103078 != -1) {
+        GbSave_BuildPortSummary(D_88103080, D_88103078);
+    }
+    func_881004CC(ui + 1, 0x40, 0x74, 0x1AC, 0xCE, D_88102D84, 3, D_88102D90, 3, D_88103000);
+    *ui = 0;
+}
 
 void func_800069CC(void);
 void func_8002C064(s32, s32, s32, s32, s32);
@@ -417,11 +487,18 @@ M2C_UNK func_88102834(s32 a) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment008_1720F0/func_881028B8.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_881029E0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment008_1720F0/func_881029E0.s")
-#endif
+s32 func_80002D98(s32);
+void func_88102794(s32*);
+void func_80018234(s32, s32, s32, s32);
+extern s32 D_88103074;
+extern s32 D_881030F8;
+void func_881029E0(void) {
+    s32 ui = func_80002D98(0x26B4);
+
+    D_881030F8 = ui;
+    func_88102794((s32*)D_881030F8);
+    func_80018234(D_88103074, 0x18, 0x84, 0xF800);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_88102A2C; signature not recovered. */

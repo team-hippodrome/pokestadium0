@@ -152,11 +152,23 @@ void func_8110EE28(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110F310.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110F4D0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110F4D0.s")
-#endif
+typedef struct GbItem8110F4D0 {
+    u32 flags;
+    s32 key;
+} GbItem8110F4D0;
+s32 func_8110F4D0(GbItem8110F4D0* item, s32 count, GbItem8110F4D0** items) {
+    s32 i;
+
+    for (i = 0; i < count; i++) {
+        if (item->key == items[i]->key) {
+            break;
+        }
+    }
+    if (i == count) {
+        items[count++] = item;
+    }
+    return count;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8110F518; signature not recovered. */
@@ -164,11 +176,22 @@ void func_8110EE28(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110F518.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110F64C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110F64C.s")
-#endif
+typedef struct GbCollected8110F64C {
+    u32 high : 4;
+    u32 kind : 2;
+    u32 enabled : 1;
+    u32 unused : 1;
+    u32 address : 24;
+} GbCollected8110F64C;
+extern GbCollected8110F64C* D_81184978[];
+extern s32 D_81185578;
+void func_8110F64C(GbCollected8110F64C** arg0) {
+    GbCollected8110F64C* item = *arg0;
+
+    if (item->address && item->enabled && item->kind) {
+        D_81184978[D_81185578++] = item;
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8110F6A4; signature not recovered. */

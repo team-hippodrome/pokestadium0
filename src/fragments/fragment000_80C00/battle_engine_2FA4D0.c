@@ -208,11 +208,14 @@ s32 func_8110FFC8(s32 arg0) {
     return func_8110FDF0();
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81110060; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81110060.s")
-#endif
+s32 func_8110FFC8(s32 arg0);
+extern volatile s32 D_811859D4;
+
+void func_81110060(void) {
+    D_811859D4 = 1;
+    func_8110FFC8(0);
+    D_81184657 = 0;
+}
 
 typedef struct unk_D_81184668 {
     /* 0x000 */ u32 unk_000_31 : 1;
