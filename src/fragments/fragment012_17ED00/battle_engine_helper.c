@@ -24,7 +24,10 @@ s32 BattleAnim_GetOwnerSpecies(ActivePokemon* active_pokemon);
 u8 BattleScene_IsParticipantModelVisible(ActivePokemon* active_pokemon);
 void BattleScene_GetParticipantModelPosition(ActivePokemon* pokemon, Vec3f* dest);
 
+/* Species model rows are four floats wide. */
+extern f32 D_FLT_82189350[][4];
 extern f32 D_FLT_82189354[][4];
+extern f32 D_FLT_8218935C[][4];
 
 void BattleScene_PositionParticipantModel(ActivePokemon* active_pokemon) {
     if (BattleScene_GetParticipantSideIndex(active_pokemon) == 0) {
@@ -130,27 +133,23 @@ s16 func_82107B54(ActivePokemon* active_pokemon) {
     return M2C_FIELD(hit_cue, u8*, 3);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82107B88; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82107B88.s")
-#endif
+f32 BattleAnim_GetSpeciesBaseScale(ActivePokemon* pokemon) {
+    return ((D_FLT_82189350[pokemon->displayObject.objectType][0] * 2) / 50.0f) * pokemon->displayObject.scale.y;
+}
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82107BC4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82107BC4.s")
-#endif
+f32 func_82107BC4(ActivePokemon* pokemon) {
+    return (D_FLT_82189350[pokemon->displayObject.objectType][0] * 2) / 50.0f;
+}
 
 u8 func_82107BF4(s8 *arg0) {
     return M2C_FIELD(arg0, u8 *, 0x820);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82107BFC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82107BFC.s")
-#endif
+void func_82107BFC(ActivePokemon* pokemon, Vec3f* out) {
+    out->x = ((D_FLT_8218935C[pokemon->displayObject.objectType - 1][0] * 2) / 50.0f) * pokemon->displayObject.scale.x;
+    out->y = ((D_FLT_8218935C[pokemon->displayObject.objectType - 1][1] * 2) / 50.0f) * pokemon->displayObject.scale.y;
+    out->z = ((D_FLT_8218935C[pokemon->displayObject.objectType - 1][0] * 2) / 50.0f) * pokemon->displayObject.scale.x;
+}
 
 void BattleScene_GetParticipantModelRotation(ActivePokemon* pokemon, Vec3s* dest) {
     dest->x = pokemon->displayObject.rotation.x;
@@ -226,11 +225,12 @@ void func_82107EA0(s8 *arg0, s8 *arg1) {
     M2C_FIELD(arg1, f32 *, 8) = (f32) M2C_FIELD(arg0, f32 *, 0x650);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82107EC8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82107EC8.s")
-#endif
+f32 func_82107EC8(ActivePokemon* pokemon) {
+    if (pokemon->modelTransformId == 0x10) {
+        return D_FLT_82189350[pokemon->displayObject.objectType][0];
+    }
+    return D_FLT_82189350[pokemon->displayObject.objectType][0] * pokemon->displayObject.scale.y;
+}
 
 extern f32 D_FLT_8218934C[][4];
 f32 func_82107F18(ActivePokemon* active_pokemon) {
@@ -285,11 +285,35 @@ void BattleScene_InitializeParticipantOwnerModel(ActivePokemon* active_pokemon) 
     Vec3f_SetComponentsDuplicate(&presentation->displayObject.position, 0.0f, 0.0f, 0.0f);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82108090; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82108090.s")
-#endif
+void BattleScene_InitializeParticipantSecondaryModels(ActivePokemon* pokemon, s32* secondary_models) {
+    ModelNodeView* model_node;
+    s16 object_type;
+    s32 i;
+    PokemonAfterimage* afterimage;
+    model_node = Battle_GetLoadedModelNode(pokemon, 0);
+    object_type = func_82107F58((s8*)pokemon, 0);
+    for (i = 0; i < 3; i++) {
+        afterimage = &pokemon->afterimages[i];
+        ModelRenderer_AttachDisplayObject(&afterimage->displayObject);
+        if (pokemon == sActivePokemon[0]) {
+            M2C_FIELD(secondary_models, u8*, 0xA6) = 2;
+        } else {
+            M2C_FIELD(secondary_models, u8*, 0xA6) = 3;
+        }
+        Model_InitDisplayObject(&afterimage->displayObject, 0, object_type, model_node);
+        ModelAnim_SetFrame(&afterimage->displayObject, 0);
+        ModelAnim_SetAnimation(&afterimage->displayObject, 0);
+        afterimage->displayObject.node.renderFlags &= ~0x40;
+        if (pokemon == sActivePokemon[0]) {
+            BattleScene_PositionParticipantModel(pokemon);
+            afterimage->displayObject.rotation.y = 0x4000;
+        } else {
+            BattleScene_PositionParticipantModel(pokemon);
+            afterimage->displayObject.rotation.y = -0x4000;
+        }
+        afterimage->displayObject.node.flags &= ~1;
+    }
+}
 
 extern f32 D_82199DF0[][4];
 void func_8000D41C(Vec3f*, f32, f32, f32);
@@ -522,11 +546,38 @@ void func_82108A88(s8 *arg0, s32 arg1, s32 arg2) {
     M2C_FIELD(arg0, s32 *, 0x614) = arg2;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82108A94; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82108A94.s")
-#endif
+void Battle_ReturnToIdleAnimIfFinished(ActivePokemon* active_pokemon, ActivePokemon* animated_pokemon) {
+    s32 idx;
+    MovePresentationCue* idle_cue;
+    MovePresentationCue* flying_cue;
+    MovePresentationCue* sleep_idle_cue;
+    ActivePokemonState* pokemon_state = &active_pokemon->state;
+
+    idx = BattleScene_GetParticipantSideIndex(active_pokemon);
+    idle_cue = (MovePresentationCue*)((u8*)sSideBattleCues[idx] + 0x717);
+    idx = BattleScene_GetParticipantSideIndex(active_pokemon);
+    flying_cue = (MovePresentationCue*)((u8*)sSideBattleCues[idx] + 0x790);
+    idx = BattleScene_GetParticipantSideIndex(active_pokemon);
+    sleep_idle_cue = (MovePresentationCue*)((u8*)sSideBattleCues[idx] + 0x785);
+    if (!(pokemon_state->flags & 0x4002)) {
+        if ((BattleAnim_IsSessionBusy(active_pokemon) == 0) && (animated_pokemon->displayObject.transformAnim.animationId != -1) &&
+            (ModelAnim_IsFinished(&animated_pokemon->displayObject) == 1)) {
+            if (pokemon_state->flags & 0x200) {
+                ModelAnim_SetAnimation(&animated_pokemon->displayObject, flying_cue->id);
+            } else if ((pokemon_state->flags & 1) && ((animated_pokemon->displayObject.objectType == 0x39) || (animated_pokemon->displayObject.objectType == 0x67))) {
+                ModelAnim_SetAnimation(&animated_pokemon->displayObject, sleep_idle_cue->id);
+            } else {
+                if (animated_pokemon->displayObject.objectType == DITTO) {
+                    idx = BattleAnim_RandomRange(5);
+                    ModelAnim_SetAnimation(&animated_pokemon->displayObject, idx + 13);
+                } else {
+                    ModelAnim_SetAnimation(&animated_pokemon->displayObject, idle_cue->id);
+                }
+            }
+            ModelAnim_SetFrame(&animated_pokemon->displayObject, 0);
+        }
+    }
+}
 
 void Battle_ResetModelToIdleAnim(ActivePokemon* active_pokemon) {
     s32 idx;

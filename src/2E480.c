@@ -1,13 +1,42 @@
 /* Stadium Zero resident code. */
 
 #include "global.h"
+#include "input.h"
 #include "m2c_macros.h"
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002D880; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002D880.s")
-#endif
+typedef struct MenuDef8002E230 {
+    /* 0x00 */ u8* items;
+    /* 0x04 */ s32 count;
+    /* 0x08 */ s32 itemCount;
+    /* 0x0C */ s32 itemSize;
+} MenuDef8002E230;
+typedef void (*MenuDrawFunc8002E230)(s32, s32, u8*, s32, s32, s32);
+typedef struct Menu8002E230 {
+    /* 0x00 */ MenuDef8002E230* def;
+    /* 0x04 */ u16* flags;
+    /* 0x08 */ s32 cursor;
+    /* 0x0C */ s32 colSpacing;
+    /* 0x10 */ s32 rowSpacing;
+    /* 0x14 */ MenuDrawFunc8002E230 draw;
+    /* 0x18 */ Controller* controller;
+    /* 0x1C */ s32 repeatMask;
+    /* 0x20 */ s32 options;
+    /* 0x24 */ s32 columns;
+} Menu8002E230;
+
+void func_8002D8D8(s8*, s32, s32);
+void func_8002D880(s8* arg0, s32 def, s32 flags, MenuDrawFunc8002E230 draw, s32 width, s32 height) {
+    Menu8002E230* menu = (Menu8002E230*)arg0;
+
+    menu->colSpacing = width;
+    menu->rowSpacing = height;
+    menu->draw = draw;
+    func_8002D8D8(arg0, def, flags);
+    menu->repeatMask = 0xC00;
+    menu->options = 0;
+    menu->controller = gPlayer1Controller;
+    Input_SetRepeatController(menu->controller);
+}
 
 void func_8002D900(u8* arg0);
 
@@ -26,23 +55,82 @@ void func_8002D900(u8* arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002D948; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002D948.s")
-#endif
+void func_80029A64(s32, s32, s32, s32, Color_RGBA8);
+extern Color_RGBA8 D_80073520;
+void func_8002D948(Menu8002E230* menu, s32 x, s32 y) {
+    s32 h = menu->rowSpacing; s32 row = menu->cursor * h + y + 2;
+    func_80029A64(x + 2, row, menu->colSpacing - 4, h - 4, D_80073520);
+}
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002D9B8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002D9B8.s")
-#endif
+void func_8002D9B8(Menu8002E230* menu, s32 x, s32 y, s32 mask, s32 arg4) {
+    u8** items;
+    u8** item;
+    s32 i;
+    s32 flagOffset;
+    s32 rowY;
+    s32 count;
+    s32 loopCount;
+    s32 flags;
+    MenuDef8002E230* def;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002DAD8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002DAD8.s")
-#endif
+    def = menu->def;
+    count = def->itemCount;
+    loopCount = count;
+    rowY = y;
+    i = 0;
+    items = (u8**)def->items;
+    if (count > 0) {
+        flagOffset = 0;
+        item = items;
+        do {
+            flags = *(u16*)((u8*)menu->flags + flagOffset);
+            if (i == menu->cursor) {
+                flags |= 0x12;
+            }
+            menu->draw(x, rowY, *item, i, flags & mask, arg4);
+            i++;
+            flagOffset += 2;
+            item++;
+            rowY += menu->rowSpacing;
+        } while (i != loopCount);
+        count = menu->def->itemCount;
+    }
+    if (count > 0 && (mask & 2) && (menu->options & 0x10000)) {
+        func_8002D948(menu, x, y);
+    }
+}
+
+void func_8002DAD8(Menu8002E230* menu, s32 x, s32 y, s32 mask, s32 arg4) {
+    s32 count;
+    u8* items;
+    s32 i;
+    s32 flagOffset;
+    s32 rowY;
+    s32 flags;
+    MenuDef8002E230* def;
+
+    def = menu->def;
+    count = def->itemCount;
+    rowY = y;
+    i = 0;
+    items = def->items;
+    if (count > 0) {
+        flagOffset = 0;
+        do {
+            flags = *(u16*)((u8*)menu->flags + flagOffset);
+            if (i == menu->cursor) {
+                flags |= 0x12;
+            }
+            menu->draw(x, rowY, items + def->itemSize * i, i, flags & mask, arg4);
+            i++;
+            flagOffset += 2;
+            rowY += menu->rowSpacing;
+        } while (i != count);
+    }
+    if (menu->def->itemCount > 0 && (mask & 2) && (menu->options & 0x10000)) {
+        func_8002D948(menu, x, y);
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8002DC04; signature not recovered. */
@@ -62,11 +150,19 @@ void func_8002D900(u8* arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002DDFC.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002DECC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002DECC.s")
-#endif
+void func_8002DF2C(s8*, s32, s32);
+void func_8002DECC(s8* arg0, s32 def, s32 flags, MenuDrawFunc8002E230 draw, s32 columns, s32 width, s32 height) {
+    Menu8002E230* menu = (Menu8002E230*)arg0;
+    menu->columns = columns;
+    menu->colSpacing = width;
+    menu->rowSpacing = height;
+    menu->draw = draw;
+    func_8002DF2C(arg0, def, flags);
+    menu->repeatMask = 0xC00;
+    menu->options = 0;
+    menu->controller = gPlayer1Controller;
+    Input_SetRepeatController(menu->controller);
+}
 
 void func_8002DF54(u8* arg0);
 
@@ -97,24 +193,6 @@ void func_8002DF54(u8* arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002E078.s")
 #endif
 
-typedef struct MenuDef8002E230 {
-    /* 0x00 */ u8* items;
-    /* 0x04 */ s32 count;
-    /* 0x08 */ s32 itemCount;
-    /* 0x0C */ s32 itemSize;
-} MenuDef8002E230;
-typedef void (*MenuDrawFunc8002E230)(s32, s32, u8*, s32, s32, s32);
-typedef struct Menu8002E230 {
-    /* 0x00 */ MenuDef8002E230* def;
-    /* 0x04 */ u16* flags;
-    /* 0x08 */ s32 cursor;
-    /* 0x0C */ s32 colSpacing;
-    /* 0x10 */ s32 rowSpacing;
-    /* 0x14 */ MenuDrawFunc8002E230 draw;
-    /* 0x18 */ char unk18[0x8];
-    /* 0x20 */ s32 options;
-    /* 0x24 */ s32 columns;
-} Menu8002E230;
 void func_8002DF9C(Menu8002E230*, s32, s32);
 void func_8002E230(Menu8002E230* menu, s32 x, s32 y, s32 mask, s32 arg4) {
     MenuDef8002E230* def = menu->def;

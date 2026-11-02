@@ -451,11 +451,46 @@ void func_821351EC(UNUSED s32 arg0, UNUSED s32 arg1) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82135384.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82135458; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82135458.s")
-#endif
+/* Partial model layout used by the camera interpolation routines. */
+typedef struct BattleCameraModelState {
+    u8 pad00[0x30];
+    s16 rotationX;
+    s16 rotationY;
+    u8 pad34[4];
+    f32 distance;
+} BattleCameraModelState;
+void func_82121908(ActivePokemon*, Vec3f*);             /* extern */
+extern f32 D_FLT_82189350[][4];
+extern f32 D_FLT_82196810;
+
+void func_82135458(u8 *arg0, s32 arg1) {
+    BattleCameraModelState* temp_v0;
+    Vec3f sp58;
+    Vec3f sp4C;
+    UNUSED Vec3f pad;
+    Vec3f sp34;
+    f32 sp30;
+    s16 sp2E;
+    s16 sp2C;
+    Vec3f *sp28;
+    Vec3f *temp_a1;
+
+    BattleAnim_Vec3fCopy(arg1 + 0xA8, &sBattleScene.scene->unk_C4);
+    func_82121908((ActivePokemon*)arg0, &sp58);
+    BattleAnim_CalculateDistanceAngles(&sp58, arg0 + 0x5D0, &sp30, &sp2E, &sp2C);
+    temp_a1 = arg1 + 0xB4;
+    sp28 = temp_a1;
+    BattleAnim_Vec3fCopy(&sp34, temp_a1);
+    temp_v0 = (BattleCameraModelState*)&((ActivePokemon*)arg0)->modelTransform;
+    if (D_FLT_82189350[M2C_FIELD(arg0, s16 *, 0x1A)][0] <= sp30) {
+        Camera_ComputeEyeFromAngles(&sp58, &sp4C, temp_v0->distance, temp_v0->rotationX, (s16) (s32) temp_v0->rotationY);
+        BattleAnim_CalculateDistanceAngles(&sp34, &sp4C, &sp30, &sp2E, &sp2C);
+    } else {
+        BattleAnim_CalculateDistanceAngles(&sp34, &sBattleScene.scene->unk_B8, &sp30, &sp2E, &sp2C);
+    }
+    Camera_ComputeEyeFromAngles(&sp34, sp28, sp30 * D_FLT_82196810, sp2E, (s16) (s32) sp2C);
+}
+
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8213558C; signature not recovered. */
@@ -492,11 +527,34 @@ void func_82135A04(s32 arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82135A54.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82135BE4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82135BE4.s")
-#endif
+void func_82121908(ActivePokemon*, Vec3f*);                     /* extern */
+extern f32 D_FLT_82189350[][4];
+extern f32 D_FLT_82196814;
+
+void func_82135BE4(u8 *arg0, s32 arg1) {
+    BattleCameraModelState* model = (BattleCameraModelState*)&((ActivePokemon*)arg0)->modelTransform;
+    Vec3f sp58;
+    Vec3f sp4C;
+    UNUSED Vec3f pad;
+    Vec3f sp34;
+    f32 sp30;
+    s16 sp2E;
+    s16 sp2C;
+    Vec3f *sp28;
+    Vec3f *temp_a1;
+
+    func_82121908((ActivePokemon*)arg0, &sp58);
+    BattleAnim_CalculateDistanceAngles(&sp58, arg0 + 0x5D0, &sp30, &sp2E, &sp2C);
+    temp_a1 = arg1 + 0xB4;
+    sp28 = temp_a1;
+    BattleAnim_Vec3fCopy(&sp34, temp_a1);
+    Camera_ComputeEyeFromAngles(&sp58, &sp4C, model->distance, model->rotationX, (s16) (s32) model->rotationY);
+    BattleAnim_CalculateDistanceAngles(&sp34, &sp4C, &sp30, &sp2E, &sp2C);
+    if (D_FLT_82189350[M2C_FIELD(arg0, s16 *, 0x1A)][0] <= sp30) {
+        Camera_ComputeEyeFromAngles(&sp34, sp28, sp30 * D_FLT_82196814, sp2E, (s16) (s32) sp2C);
+    }
+}
+
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_82135CD8; signature not recovered. */
