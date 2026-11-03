@@ -557,11 +557,24 @@ void GeoRender_SetCombineMode(Gfx* arg0, arg1_func_81407874_014_000_010* arg1) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800128E0.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8001298C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8001298C.s")
-#endif
+extern s32 D_800604A4[][9];
+s32 func_8001298C(arg0) s8* arg0; {
+    s32 mode = D_800604A4[M2C_FIELD(arg0, u8*, 0x1D)][M2C_FIELD(arg0, u8*, 0x1C)];
+    Gfx* gfx;
+
+    M2C_FIELD(arg0, s32*, 8) = 0xFFFFFF00;
+    gfx = gDisplayListHead++;
+    gfx->words.w0 = 0xF8000000;
+    gfx->words.w1 = M2C_FIELD(arg0, s32*, 8);
+    if ((D_80060480 & 1) && (M2C_FIELD(arg0, u8*, 0x1D) == 1) && (M2C_FIELD(arg0, u8*, 0x1C) == 5)) {
+        mode = 0x107A58;
+    }
+    if (D_80060490->unk_1D != 0) {
+        gSPSetOtherMode(gDisplayListHead++, G_SETOTHERMODE_L, G_MDSFT_RENDERMODE, 29, mode | 0xC8000000);
+    } else {
+        gSPSetOtherMode(gDisplayListHead++, G_SETOTHERMODE_L, G_MDSFT_RENDERMODE, 29, mode | 0x0C080000);
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_80012A80; signature not recovered. */

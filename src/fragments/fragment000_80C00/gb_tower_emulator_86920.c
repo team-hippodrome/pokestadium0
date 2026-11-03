@@ -1013,8 +1013,43 @@ void func_8110DB8C(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3) {
 
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110DBA0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110DBA0.s")
-#endif
+typedef struct IoMesg8110DBA0 {
+    /* 0x00 */ u16 type;
+    /* 0x02 */ u8 pri;
+    /* 0x03 */ u8 status;
+    /* 0x04 */ void* retQueue;
+    /* 0x08 */ void* dramAddr;
+    /* 0x0C */ u32 devAddr;
+    /* 0x10 */ u32 size;
+} IoMesg8110DBA0;
+s32 func_800593D0(void);
+s32 func_80051E60(void);
+void func_80056530(s32, IoMesg8110DBA0*, s32);
+s32 func_8110DBA0(IoMesg8110DBA0* mb, s32 pri, s32 direction, u32 devAddr, void* dramAddr, u32 size, void* mq, s32 kind) {
+    s32 handle;
+
+    if ((u32)D_811859D4 > 16) {
+        return -1;
+    }
+    switch (kind) {
+        case 2:
+            handle = func_800593D0();
+            break;
+        case 3:
+            handle = func_80051E60();
+            break;
+        default:
+            return 0;
+    }
+    if (size & 0xF) {
+        size = (size + 0xF) & ~0xF;
+    }
+    mb->pri = pri;
+    mb->retQueue = mq;
+    mb->dramAddr = dramAddr;
+    mb->devAddr = devAddr;
+    mb->size = size;
+    M2C_FIELD(handle, s32*, 0x14) = 2;
+    func_80056530(handle, mb, direction);
+    return 0;
+}

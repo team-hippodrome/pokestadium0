@@ -560,11 +560,33 @@ u8* func_82184AA8(u8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     return NULL;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82184ADC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82184ADC.s")
-#endif
+typedef struct Move82184ADC { u8 unk00; u8 unk01; u8 power; u8 type; u8 unk04; u8 unk05; } Move82184ADC;
+extern Move82184ADC D_8006B190[];
+extern u8 D_8218AC50[];
+s32 func_82184ADC(s8* arg0, s8* arg1, s32 move) {
+    s32 mult = 100;
+    u8 defType1;
+    u8 defType2;
+    s32 type;
+    u8* chart;
+
+    if (move != 0) {
+        defType1 = M2C_FIELD(arg1, u8*, 0x28);
+        defType2 = M2C_FIELD(arg1, u8*, 0x29);
+        if (D_8006B190[move - 1].power != 0) {
+            type = D_8006B190[move - 1].type;
+            if (type == M2C_FIELD(arg0, u8*, 0x28) || type == M2C_FIELD(arg0, u8*, 0x29)) {
+                mult = 150;
+            }
+            for (chart = D_8218AC50; chart[0] != 0xFF; chart += 3) {
+                if (chart[0] == type && (chart[1] == defType1 || chart[1] == defType2)) {
+                    mult = chart[2] * mult / 10;
+                }
+            }
+        }
+    }
+    return mult;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_82184BC8; signature not recovered. */

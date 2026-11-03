@@ -88,11 +88,42 @@ void func_89100140(Ctx89100140* arg0) {
     func_80027410((s8*)arg0 + 0x420, arg0->unk_3B4, 0x24, 3, 3);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89100294; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89100294.s")
-#endif
+typedef struct Ctx89100294 {
+    /* 0x0000 */ char unk0000[0x8C];
+    /* 0x008C */ s32 unk8C;
+    /* 0x0090 */ char unk0090[0xB15C - 0x90];
+    /* 0xB15C */ s32 mode;
+    /* 0xB160 */ char unkB160[0xB548 - 0xB160];
+    /* 0xB548 */ s32* ranges;
+    /* 0xB54C */ s32 unkB54C;
+    /* 0xB550 */ s32 unkB550;
+    /* 0xB554 */ s32 unkB554;
+} Ctx89100294;
+extern s32 D_800603C0;
+void func_8000B2F4(s32);
+void func_89100294(Ctx89100294* arg0) {
+    s32 count;
+
+    switch (arg0->mode) {
+        case 0:
+            count = arg0->ranges[arg0->mode + 1] - arg0->ranges[arg0->mode] - 1;
+            break;
+        case 1:
+            count = 1;
+            break;
+        case 2:
+            count = arg0->ranges[arg0->mode + 1] - arg0->ranges[arg0->mode];
+            break;
+    }
+    if (arg0->unk8C == 2) {
+        arg0->unkB550 = arg0->unkB550;  /* self-assignment is required to match (retail reloads and stores the field) */
+    } else {
+        arg0->unkB550 = 2;
+    }
+    arg0->unkB554 = count + 2;
+    arg0->unkB54C = D_800603C0;
+    func_8000B2F4(D_800603C0);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_89100380; signature not recovered. */
@@ -171,11 +202,41 @@ void func_89100F1C(s32 arg0, s32 arg1, u8* arg2, s32 arg3) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89100FC4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89100FC4.s")
-#endif
+typedef struct Entry89100FC4 {
+    /* 0x00 */ u8 unk_00;
+    /* 0x01 */ u8 type;
+    /* 0x04 */ const char* name;
+    /* 0x08 */ s32 unk_08;
+} Entry89100FC4; // size = 0xC
+typedef struct Label89100FC4 {
+    Color82000BC4 color;
+    const char* str;
+} Label89100FC4;
+extern Entry89100FC4 D_8006A9D4[];
+extern M2C_UNK D_800734A8;
+extern char D_8910DBAC[];
+s32 func_8002D454(s32, s32);
+void func_89100FC4(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
+    const char* str;
+    Color82000BC4 color;
+    s32 idx;
+
+    idx = func_8002D454(arg2, arg3);
+    if (idx != -1) {
+        if (idx == -2) {
+            color = *(Color82000BC4*)&D_800734A8;
+            str = D_8910DBAC;
+        } else {
+            color = D_80066AD8[D_8006A9D4[idx].type].color;
+            str = D_8006A9D4[idx].name;
+        }
+        func_8001AB6C();
+        func_8001A384(4, -1);
+        func_8001AA9C(color.r, color.g, color.b, color.a);
+        func_8001A944(arg0, arg1, (M2C_UNK*)str);
+        func_8001ABBC();
+    }
+}
 
 M2C_UNK func_8001A384(M2C_UNK, M2C_UNK);            /* extern */
 M2C_UNK func_8001A944(s32, s32, M2C_UNK *);         /* extern */
