@@ -254,11 +254,13 @@ void func_89005958(s32 arg0, s32 arg1, s32 arg2) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_89005F2C.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89005FD8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_89005FD8.s")
-#endif
+void func_89000048(void*);
+
+void func_89005FD8(s8* arg0) {
+    func_89000048(arg0 + 0x294);
+    M2C_FIELD(arg0, s32**, 0x3AC)[M2C_FIELD(arg0, s32*, 0x28C)] = 1;
+    M2C_FIELD(arg0, s32*, 0) = (((M2C_FIELD(arg0, s32*, 0x28C) == 0) ? 1 : 0) == M2C_FIELD(M2C_FIELD(arg0, s8**, 0x294), s32*, 8)) ? 1 : 4;
+}
 
 
 void func_89006054(s8 *arg0) {

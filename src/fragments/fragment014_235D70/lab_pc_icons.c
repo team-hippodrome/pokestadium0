@@ -543,8 +543,20 @@ s32 func_88001D54(s32 arg0) {
     return sp1C;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88001F44; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment014_235D70/func_88001F44.s")
-#endif
+M2C_UNK func_80025BA0(s32, M2C_UNK *, M2C_UNK *, M2C_UNK, s32);
+extern u16 D_800AF986;
+extern M2C_UNK D_82000000;
+extern M2C_UNK D_00166580;
+extern M2C_UNK D_001720F0;
+
+s32 func_88001F44(s32 arg0, s32 arg1) {
+    s32 ret;
+
+    if (D_800AF986 & 0x100) {
+        ret = 0x8040;
+        func_80025BA0(((u32)((s32)&D_82000000 & 0x0FF00000) >> 0x14) - 0x10, &D_00166580, &D_001720F0, 0, 0);
+    } else {
+        ret = func_88001D54(arg0);
+    }
+    return ret;
+}

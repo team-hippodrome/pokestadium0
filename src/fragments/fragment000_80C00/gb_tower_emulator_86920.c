@@ -422,11 +422,17 @@ void func_8110AA50(void) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110AC14; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110AC14.s")
-#endif
+extern s16 D_811858C2;
+
+void func_8110AC14(void) {
+    s32 idx = D_811858FC;
+    s32 i;
+
+    D_811859C4[idx] = D_811858C2;
+    for (i = 0; i < 0x7E0; i++) {
+        D_811859B8[idx][i] = 0;
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8110AC8C; signature not recovered. */
@@ -442,7 +448,7 @@ void func_8110AA50(void) {
 
 typedef struct unk_D_81184450 {
     /* 0x0 */ s32 unk_0;
-    /* 0x4 */ char unk4[0x4];
+    /* 0x4 */ s32 unk_4;
     /* 0x8 */ s16 unk_8;
     /* 0xA */ s16 unk_A;
 } unk_D_81184450; // size = 0xC
