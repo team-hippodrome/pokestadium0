@@ -845,11 +845,45 @@ void Geo_NodeModelRoot(GraphNode* arg0) {
     arg->unk_1A = D_80060484;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80013DC8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80013DC8.s")
-#endif
+typedef struct Root80013DC8 {
+    /* 0x00 */ char unk00[0xC];
+    /* 0x0C */ void* children;
+    /* 0x10 */ char unk10[0x8];
+    /* 0x18 */ s32 unk18[9];
+} Root80013DC8;
+extern s32 D_800AB240;
+extern s32 D_800AB448;
+extern s32 D_800AB44C;
+extern s32 D_800AB450;
+extern s32 D_800AB454;
+extern s32 D_800AB458;
+extern s32 D_800AB45C;
+s32 func_8000255C(void);
+s32 func_80002B10(s32, s32);
+void func_80002420(s32);
+void func_80013398(Root80013DC8*);
+s32 func_8001380C();
+void func_80013DC8(Root80013DC8* arg0) {
+    s32 i;
+
+    if ((D_80060494 == NULL) && (arg0->children != NULL)) {
+        for (i = 0; i < 9; i++) {
+            arg0->unk18[i] = 0;
+        }
+        D_800AB450 = -1;
+        D_800AB44C = 0xFFFFFF00;
+        D_800AB448 = 0;
+        D_800AB454 = 0;
+        D_800AB458 = 0;
+        D_800AB45C = 0;
+        D_800AB240 = func_80002B10(func_8000255C(), 0);
+        D_80060494 = (CameraNode*)arg0;
+        func_8001380C(arg0);
+        func_80013398(arg0);
+        D_80060494 = NULL;
+        func_80002420(D_800AB240);
+    }
+}
 
 void Geo_NodeOrtho(GraphNode* arg0) {
     if ((D_80060494 == NULL) && (arg0->children != NULL)) {

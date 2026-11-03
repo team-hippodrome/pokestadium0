@@ -559,14 +559,41 @@ void func_80031004(GridMenu80031004* arg0, s32 arg1, s32 arg2) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8003152C.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80031AB0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80031AB0.s")
-#endif
+typedef struct GridMenu80031AB0 {
+    /* 0x00 */ char unk00[0x8];
+    /* 0x08 */ s32 cursor;
+    /* 0x0C */ u32 cellWidth;
+    /* 0x10 */ u32 cellHeight;
+    /* 0x14 */ char unk14[0x10];
+    /* 0x24 */ u32 rows;
+    /* 0x28 */ char unk28[4];
+    /* 0x2C */ s32 scroll;
+    /* 0x30 */ s32 scrollTarget;
+    /* 0x34 */ s32 cursorY;
+    /* 0x38 */ char unk38[0x8];
+    /* 0x40 */ s32 unk40;
+    /* 0x44 */ s32 cursorX;
+    /* 0x48 */ s32 columns;
+} GridMenu80031AB0;
+void func_80031AB0(GridMenu80031AB0* arg0, s32 arg1) {
+    s32 v;
+    arg0->unk40 = 0;
+    arg0->cursor = arg1;
+    arg0->cursorY = (arg1 / arg0->columns) * arg0->cellHeight;
+    arg0->cursorX = (arg1 % arg0->columns) * arg0->cellWidth;
+    if (arg0->cursorY < arg0->scroll) {
+        arg0->scroll = arg0->cursorY;
+    } else {
+        v = (arg0->cursorY + arg0->cellHeight) - arg0->rows * arg0->cellHeight;
+        if (arg0->scroll < v) {
+            arg0->scroll = v;
+        }
+    }
+    arg0->scrollTarget = arg0->scroll;
+}
 
 M2C_UNK func_8002DDFC();                            /* extern */
-M2C_UNK func_80031AB0(s8 *, s32);                 /* extern */
+void func_80031AB0();                 /* extern */
 
 void func_80031B88(s8 *arg0) {
     func_8002DDFC();

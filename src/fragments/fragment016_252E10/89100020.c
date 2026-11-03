@@ -370,11 +370,39 @@ s32 func_891028CC(s8 *arg0)
   return 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89102930; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89102930.s")
-#endif
+typedef struct Sub89102930 { char unk00[0x10]; s32 unk10; char unk14[0xC]; } Sub89102930; // 0x20
+typedef struct Item89102930 { char unk00[4]; s32 unk04; char unk08[8]; Sub89102930* subs; char unk14[4]; s32 subCount; char unk1C[8]; } Item89102930; // 0x24
+typedef struct Slot89102930 { s32 unk00; s32 unk04; char unk08[0x14]; } Slot89102930; // 0x1C
+typedef struct Ctx89102930 { char unk0000[0x9E68]; Slot89102930 slots[3]; } Ctx89102930;
+s32 func_89102930(arg0) s8* arg0; {
+    s32 flags = 0;
+    s32 i;
+    s32 j;
+    Item89102930* item = M2C_FIELD(arg0, Item89102930**, 0x420);
+
+    for (i = 0; i < M2C_FIELD(arg0, s32*, 0x428); i++, item++) {
+        Sub89102930* sub = item->subs;
+        for (j = 0; j < item->subCount; j++, sub++) {
+            if (sub->unk10 != 0) {
+                if (item->unk04 == 0x20 || item->unk04 == 0x21) {
+                    flags |= 1;
+                } else {
+                    flags |= 0x10;
+                }
+            }
+        }
+    }
+    for (i = 0; i < 3; i++) {
+        if (((Ctx89102930*)arg0)->slots[i].unk00 != 0 && ((Ctx89102930*)arg0)->slots[i].unk04 != 0) {
+            if (i == 0 || i == 1) {
+                flags |= 2;
+            } else {
+                flags |= 0x20;
+            }
+        }
+    }
+    return flags;
+}
 
 s32 func_8002207C(s32);                             /* extern */
 M2C_UNK func_80022118(s32);                         /* extern */

@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 4658,
-  "asm_owners": 786,
+  "c_owners": 4662,
+  "asm_owners": 782,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -584,7 +584,7 @@
     "tools/cflags_overrides.json": "7052d644eb08429c59981bb4c369c8c937c61ca4c639a1c1ca2c5fc0ce919ebb",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "3ca745430c18c3e3dd61464cc5da6823949a913086e1e63badf5b4935dfd97fb",
+    "docs/function-matches.csv": "232c3519ee40c57b80d531d6ceaebde994d09de824334aab3753aa82b5ef975a",
     "linker_scripts/jp/symbol_addrs.txt": "afca390ab7e15134bd987939224f6ec6b0d8be60cd8dee3c830ae7d9d3a49a19"
   },
   "binutils": {
@@ -595,7 +595,7 @@
   "c_sources_sha256": {
     "src/1060.c": "8dbe2ec29a3709a1fcbdd3e375a0682f936e9a8997a7b8d26f3baf66ec372272",
     "src/26130.c": "c36b6f74d8e06109e59947eaa8955e2dfa27e7c1c21c7777adca93b9e02bb09d",
-    "src/2E480.c": "a76e0cb6979abffa114f89ee4e4f328cdd56440832c926eec817d42e5d59d60c",
+    "src/2E480.c": "67f34caa0fbe9f53f6b03e77737e17ec1667787f4a793e7faef654adea4cb63e",
     "src/33E30.c": "8e546a276792c3266148ec8e834ab1a5aa1ef01e8f2e5974ba46cb96d532ca06",
     "src/33FE0.c": "92773fa7984062880967c0df329407356d190467569e29469275ee7e90a7b269",
     "src/33FE0_2.c": "b2085e874773b9bbc6b33765654809e01faecc3318efd3d367f07ecd2a95081e",
@@ -755,8 +755,8 @@
     "src/fragments/fragment015_238BD0/89006FC0.c": "b5f72718f4b079a8e8eeb0d7761af90658c2e975b7619e274fb0217f571763e0",
     "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c": "8046511b32eb7742311a032d0c576273ae146d2ece383d126f553cfad7f5aaba",
     "src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c": "298e5207d86a7d1942707e8c390a799c51163ed7232d26929beacfeae0ec4d8d",
-    "src/fragments/fragment016_252E10/89100020.c": "f2b424ff53e7dcd472d90673ad312eca996eaa675fe16c7059018a5ad38df34f",
-    "src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c": "43d5d9f81fdd4a955f842b690a7d7459902ba701a72697624a5cf6d45cffddd6",
+    "src/fragments/fragment016_252E10/89100020.c": "ef39091c26c3f527fdabf7ff9f56fdb98374514944fcc967d5e8c35f748e3c42",
+    "src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c": "e643ea2264c2608d93e080dd04b35211bbd7fa13347bc55f3f8220fdabf79852",
     "src/fragments/fragment016_252E10/lab_pc_list_1E46B0.c": "ba8d4b5501f5daea30407668a46cb1021536cf2edb09db847e7544301d76b045",
     "src/fragments/fragment016_252E10/lab_pc_list_1E46B0_2.c": "ca2ad66f736d581a4970adae550f327d1024cb27841e034e49b7345dcf501bbe",
     "src/fragments/fragment017_261F00.c": "010db2d8b146be87183a9f92e3d7a094eb3e9b17ab5eda9b74b443022094159e",
@@ -940,7 +940,7 @@
     "src/gb_tower.c": "176816e083b7e59f7a469e5cb27b7a0b94869007fcb3060a4e31dfeefbfd0124",
     "src/geo_layout.c": "cd22cfc78b438f75ba379097e38e64b8e773c73701f536774d4a9c9fbe313f0d",
     "src/geo_node.c": "4b117247e69f5030a02753148e827dc7179b9c497a8af94b2feb264947aa287a",
-    "src/geo_render.c": "d29f4afad700f620889e94c6d8e6ef1ee7d267a013621029d6273f3a800ef121",
+    "src/geo_render.c": "de7c1b13ed1a293fe71e8fa8cfe43cb6a2d2a85fc008ee3d55ab0b29a1ecbb59",
     "src/gfx_buffer.c": "8763545514d8fbae9e0f5bba8be79ea47a1db08f2e40b1ceccb6c16d0a5e59e5",
     "src/gfx_rect.c": "3a0dff00341a56b8ad23d88450d7e2c07dd2da34ca6a8c870462e97eb8d1a8e8",
     "src/graphics_textures.c": "453f662b84fedb755a66b198930f5ee7489f4a8f592eef45f2f75181815d548b",

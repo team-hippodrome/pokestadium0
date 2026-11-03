@@ -274,11 +274,22 @@ s32 func_8910587C(s32 arg0) {
     return ret;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89105924; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89105924.s")
-#endif
+typedef struct Entry89105924 { char unk00[0xC]; s32 unk0C; char unk10[0xC]; s32 unk1C; } Entry89105924;
+typedef struct List89105924 { char unk00[0x10]; Entry89105924* entries; char unk14[4]; s32 count; } List89105924;
+s32 func_89105924(List89105924* arg0) {
+    Entry89105924* entries = arg0->entries;
+    s32 flags = 0x100;
+    s32 i;
+    for (i = 0; i < arg0->count; i++) {
+        if (entries[i].unk0C != 0) {
+            flags |= 8;
+        }
+        if (entries[i].unk1C > 0) {
+            flags &= ~0x100;
+        }
+    }
+    return flags;
+}
 
 void func_8910597C(s8* arg0, s8* arg1) {
     s32 flag = 0;
