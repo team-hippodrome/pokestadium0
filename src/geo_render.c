@@ -322,11 +322,34 @@ s32 func_80011774(TransformAnimRaw* arg0) {
     return spC.raw;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80011838; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80011838.s")
-#endif
+s16 ModelAnim_AdvanceEventFrame(EventTrackState* arg0);
+
+typedef struct EventTrackRender {
+    /* 0x0 */ s8 active;
+    /* 0x2 */ s16 frame;
+    /* 0x4 */ EventTrackData* data;
+    /* 0x8 */ s32 trackTable;
+    /* 0xC */ s32 frameValues;
+} EventTrackRender;
+
+extern EventTrackRender D_800AC6A8;
+
+void func_80011838(EventTrackState* arg0, s32 arg1) {
+    EventTrackData* data = arg0->data;
+
+    if (arg1 != 0) {
+        arg0->frame = ModelAnim_AdvanceEventFrame(arg0);
+    }
+    arg0->lastRenderFrame = D_80060484;
+    D_800AC6A8.active = 1;
+    D_800AC6A8.frame = arg0->frame;
+    D_800AC6A8.data = data;
+    D_800AC6A8.trackTable = func_80002C80((s32)data->trackTable);
+    D_800AC6A8.frameValues = func_80002C80((s32)data->frameValues);
+    if (D_800AC6A8.frame < 0) {
+        D_800AC6A8.frame = 0;
+    }
+}
 
 s32 ModelAnim_ResolveEventIndex(s32 arg0, unk_func_80017540_arg1* arg1, s32 arg2) {
     unk_func_80017540_arg1* temp_v0 = &arg1[arg2];
@@ -561,17 +584,40 @@ void func_80012CC0(s8 *arg0, s8 *arg1) {
     M2C_FIELD(arg0, s32 *, 8) = (s32) M2C_FIELD(arg1, s32 *, 0x14);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80012D04; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80012D04.s")
-#endif
+typedef union Rgba80012D04 {
+    s32 word;
+    struct {
+        u8 r, g, b, a;
+    } c;
+} Rgba80012D04;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80012DC8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80012DC8.s")
-#endif
+void func_80012D04(s8* arg0, s8* arg1) {
+    Rgba80012D04 color;
+
+    if ((M2C_FIELD(arg0, s32*, 4) != M2C_FIELD(arg1, s32*, 0x10)) || (M2C_FIELD(arg0, u8*, 0x19) != M2C_FIELD(arg1, u8*, 7))) {
+        if (M2C_FIELD(arg0, u8*, 0x1E) == 0) {
+            M2C_FIELD(arg0, u8*, 0x1E) = 1;
+            gDPPipeSync(gDisplayListHead++);
+        }
+        color.word = M2C_FIELD(arg1, s32*, 0x10);
+        gDPSetPrimColor(gDisplayListHead++, 0, M2C_FIELD(arg1, u8*, 7), color.c.r, color.c.g, color.c.b, color.c.a);
+        M2C_FIELD(arg0, s32*, 4) = M2C_FIELD(arg1, s32*, 0x10);
+        M2C_FIELD(arg0, u8*, 0x19) = M2C_FIELD(arg1, u8*, 7);
+    }
+}
+
+extern arg1_func_81407874_014_000_010 D_80060534[];
+
+void func_80012DC8(s8* arg0, s8* arg1) {
+    if (M2C_FIELD(arg0, u8*, 0x18) != M2C_FIELD(arg1, u8*, 6)) {
+        if (M2C_FIELD(arg0, u8*, 0x1E) == 0) {
+            M2C_FIELD(arg0, u8*, 0x1E) = 1;
+            gDPPipeSync(gDisplayListHead++);
+        }
+        GeoRender_SetCombineMode(gDisplayListHead++, &D_80060534[M2C_FIELD(arg1, u8*, 6)]);
+        M2C_FIELD(arg0, u8*, 0x18) = M2C_FIELD(arg1, u8*, 6);
+    }
+}
 
 /*
  * func_80012E68
@@ -764,7 +810,7 @@ void Geo_NodeType3Pass(GraphNode* arg0) {
 }
 
 extern u8 D_800AC690;
-extern u8 D_800AC6A8;
+extern EventTrackRender D_800AC6A8;
 
 void Geo_NodeModelRoot(GraphNode* arg0) {
     unk_D_86002F34_alt1* arg = (unk_D_86002F34_alt1*)arg0;
@@ -784,7 +830,7 @@ void Geo_NodeModelRoot(GraphNode* arg0) {
         gDPSetCycleType(gDisplayListHead++, G_CYC_2CYCLE);
 
         D_800AC690 = 0;
-        D_800AC6A8 = 0;
+        D_800AC6A8.active = 0;
         GeoRender_InitMatrixStack();
         GeoRender_ResetTransformStack();
 
@@ -1089,7 +1135,7 @@ void func_80014C4C(GraphNode* arg0) {
         }
 
         D_800AC690 = 0;
-        D_800AC6A8 = 0;
+        D_800AC6A8.active = 0;
         D_800AB460.unk_10A0 -= 1;
     }
 }

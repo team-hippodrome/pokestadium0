@@ -361,11 +361,36 @@ void func_81112D68(Particle2D68** arg0, u8 arg1, s32 arg2) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81112E00; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81112E00.s")
-#endif
+void func_81112CE8(u8* arg0, s32 arg1);
+s32 func_8110CA2C(s32);
+s32 func_8110CA68(s32);
+void func_8110CAE0(s32, s32);
+void func_8110CB10(s32, s32);
+extern M2C_UNK D_81184380;
+
+typedef struct TradeFlags81112E00 {
+    /* 0x0 */ u8 bit7 : 1;
+    /* 0x0 */ u8 bit6 : 1;
+    /* 0x0 */ u8 rest : 6;
+} TradeFlags81112E00;
+
+void func_81112E00(u8* arg0) {
+    func_81112CE8(arg0, 0xFFFF);
+    func_811111E0((s8*)arg0 + 0x98);
+    ((TradeFlags81112E00*)arg0)->bit6 = 1;
+    ((TradeFlags81112E00*)arg0)->bit7 = 0;
+    if (func_8110CA68(arg0[4]) != 0) {
+        func_8110CB10(arg0[4], 3);
+    }
+    if (func_8110CA2C(arg0[5]) != 0) {
+        func_8110CAE0(arg0[5], 4);
+    }
+    if (arg0[5] == M2C_FIELD(&D_81184380, s16*, 0x3E)) {
+        M2C_FIELD(&D_81184380, s32*, 0x20) = 1;
+    } else if (arg0[5] == M2C_FIELD(&D_81184380, s16*, 0x4A)) {
+        M2C_FIELD(&D_81184380, s32*, 0x20) = 0;
+    }
+}
 
 void func_81112EAC(s8 *arg0, s8 *arg1)
 {

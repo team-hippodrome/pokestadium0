@@ -613,11 +613,19 @@ void func_89107850(s8* arg0, s32* arg1) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89107EC4.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89108108; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89108108.s")
-#endif
+extern u8 D_8910A978[];
+
+void func_89108108(s8* arg0, s8* arg1) {
+    s32 count = 0;
+    s32 i;
+
+    for (i = 0; i < 4; i++) {
+        if (M2C_FIELD(arg0 + i * 0x40, s32*, 0x68) != -1) {
+            arg1[count++] = D_8910A978[M2C_FIELD(arg0 + i * 0x40, s32*, 0x68)] + 1;
+        }
+    }
+    M2C_FIELD(arg1, s32*, 4) = count;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_891081A8; signature not recovered. */

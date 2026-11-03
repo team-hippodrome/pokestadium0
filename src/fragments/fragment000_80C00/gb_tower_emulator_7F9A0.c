@@ -638,11 +638,23 @@ void GbEmu_Delay(OSTime arg0) {
   osRecvMesg(&sp68, NULL, 1);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81104C30; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81104C30.s")
-#endif
+void func_80058410(void*, void*, s32);
+extern u8 D_81122854[];
+
+s32 func_81104C30(u8* arg0) {
+    u8 buf[8];
+    u8* entry = D_81122854;
+    s32 i;
+
+    func_80058410(arg0 + 0x44, buf, 8);
+    for (i = 4; i != 0; i--, entry += 0x18) {
+        buf[3] = entry[0x13];
+        if ((func_80057910(arg0 + 0x34, entry, 0x10) == 0) && (func_80057910(buf, entry + 0x10, 8) == 0)) {
+            break;
+        }
+    }
+    return i;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_81104CD4; signature not recovered. */

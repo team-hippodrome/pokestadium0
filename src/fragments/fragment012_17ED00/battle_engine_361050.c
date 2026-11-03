@@ -291,11 +291,25 @@ s32 BattleScene_FindU16InByteArray(u16 lookup_value, u8* array, s32 array_length
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210EFAC.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8210F24C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210F24C.s")
-#endif
+void func_8210EFAC(s8* arg0, u16 arg1);
+extern u8 D_8218C930[][2];
+
+void func_8210F24C(s8* arg0) {
+    s32 pad;
+    s8* state = arg0 + 0x7C6;
+
+    M2C_FIELD(arg0, s8*, 0x851) = 1;
+    M2C_FIELD(arg0, s8*, 0x852) = 1;
+    M2C_FIELD(arg0, s8*, 0x853) = 1;
+    M2C_FIELD(arg0, s8*, 0x854) = 1;
+    func_8210EFAC(arg0, M2C_FIELD(state, u8*, 0xB) - 1);
+    if (D_8218C930[M2C_FIELD(state, u8*, 0xB) - 1][0] != 0) {
+        func_8210EFAC(arg0, D_8218C930[M2C_FIELD(state, u8*, 0xB) - 1][0] - 1);
+    }
+    if (D_8218C930[M2C_FIELD(state, u8*, 0xB) - 1][1] != 0) {
+        func_8210EFAC(arg0, D_8218C930[M2C_FIELD(state, u8*, 0xB) - 1][1] - 1);
+    }
+}
 
 void func_8210F2F4(s8 *arg0)
 {

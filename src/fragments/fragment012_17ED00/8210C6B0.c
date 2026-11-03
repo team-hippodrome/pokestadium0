@@ -73,14 +73,42 @@ void func_8210C82C(ActivePokemon* arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210C8A0.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8210CA24; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210CA24.s")
-#endif
+M2C_UNK func_8211F274();
+M2C_UNK func_8211F288();
+extern s32 D_8218C6F4;
+extern s32 D_8218C6F8;
+
+typedef struct BattleMoveCheck8210CA24 {
+    /* 0x000 */ char unk000[0x7A0];
+    /* 0x7A0 */ s32 slot;
+    /* 0x7A4 */ char unk7A4[0x7F8 - 0x7A4];
+    /* 0x7F8 */ u8 moveFlags[1];
+} BattleMoveCheck8210CA24;
+
+s32 func_8210CA24(s8* arg0) {
+    u8 flags;
+    s8* state;
+
+    if (!(((BattleMoveCheck8210CA24*)arg0)->moveFlags[((BattleMoveCheck8210CA24*)arg0)->slot] & 0x3F)) {
+        func_8211F274(arg0);
+        func_8211F288(arg0, D_8218C6F4);
+        return 1;
+    }
+    flags = M2C_FIELD(arg0, u8*, 0x818);
+    state = arg0 + 0x78C;
+    if ((flags & 0xF) && ((flags >> 4) == M2C_FIELD(state, s32*, 0x14))) {
+        func_8211F274(arg0);
+        func_8211F288(arg0, D_8218C6F8);
+        return 1;
+    }
+    M2C_FIELD(state, s16*, 0x1E) = 0;
+    M2C_FIELD(state, s32*, 0x10) = 3;
+    M2C_FIELD(state, s8*, 0x1C) = 0;
+    return 0;
+}
 
 void func_82134D60(void);
-void func_8210CA24(s8*);
+s32 func_8210CA24(s8*);
 void func_8210CACC(s8* arg0) {
     s32 buttons;
     s8* ctrl;

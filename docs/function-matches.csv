@@ -47,7 +47,7 @@ func_8003152C,0x8003152C,src/2E480.c,,asm,,asm
 func_80031AB0,0x80031AB0,src/2E480.c,,asm,,asm
 func_80031B88,0x80031B88,src/2E480.c,func_80031B88,m2c,m2c,c
 func_80032FD0,0x80032FD0,src/33E30.c,,asm,,asm
-func_80033078,0x80033078,src/33E30.c,,asm,,asm
+func_80033078,0x80033078,src/33E30.c,func_80033078,hand,,c
 func_80033124,0x80033124,src/33E30.c,Gfx_DrawTriangleMarker,s1,stadium1:src/33E30.c,c
 func_8000A780,0x8000A780,src/33FE0.c,func_8000A780,s1,stadium1:src/33FE0.c,c
 func_8000A788,0x8000A788,src/33FE0.c,func_80035208_empty,s1,stadium1:src/33FE0.c,c
@@ -484,7 +484,7 @@ func_81104AE4,0x81104AE4,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0
 func_81104B18,0x81104B18,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,func_81104B18,m2c,m2c+permuter,c
 func_81104B60,0x81104B60,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,func_81104B60,m2c,m2c,c
 func_81104B88,0x81104B88,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,GbEmu_Delay,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_7F9A0.c,c
-func_81104C30,0x81104C30,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,,asm,,asm
+func_81104C30,0x81104C30,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,func_81104C30,hand,,c
 func_81104CD4,0x81104CD4,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,,asm,,asm
 func_81104D84,0x81104D84,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,func_81104D84,hand,,c
 func_81104DD0,0x81104DD0,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,,asm,,asm
@@ -580,7 +580,7 @@ func_81112B84,0x81112B84,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0
 func_81112BF0,0x81112BF0,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,,asm,,asm
 func_81112CE8,0x81112CE8,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,,asm,,asm
 func_81112D68,0x81112D68,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_81112D68,hand,,c
-func_81112E00,0x81112E00,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,,asm,,asm
+func_81112E00,0x81112E00,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_81112E00,hand,,c
 func_81112EAC,0x81112EAC,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_81112EAC,m2c,m2c+permuter,c
 func_81112EEC,0x81112EEC,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_81112EEC,m2c,m2c,c
 func_81112F2C,0x81112F2C,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_81112F2C,hand,,c
@@ -944,7 +944,7 @@ func_8210C738,0x8210C738,src/fragments/fragment012_17ED00/8210C6B0.c,BattleScene
 func_8210C778,0x8210C778,src/fragments/fragment012_17ED00/8210C6B0.c,,asm,,asm
 func_8210C82C,0x8210C82C,src/fragments/fragment012_17ED00/8210C6B0.c,func_8210C82C,hand,,c
 func_8210C8A0,0x8210C8A0,src/fragments/fragment012_17ED00/8210C6B0.c,,asm,,asm
-func_8210CA24,0x8210CA24,src/fragments/fragment012_17ED00/8210C6B0.c,,asm,,asm
+func_8210CA24,0x8210CA24,src/fragments/fragment012_17ED00/8210C6B0.c,func_8210CA24,hand,,c
 func_8210CACC,0x8210CACC,src/fragments/fragment012_17ED00/8210C6B0.c,func_8210CACC,hand,,c
 func_8210CBD4,0x8210CBD4,src/fragments/fragment012_17ED00/8210C6B0.c,func_8210CBD4,hand,,c
 func_8210CCDC,0x8210CCDC,src/fragments/fragment012_17ED00/8210C6B0.c,func_8210CCDC,m2c,m2c+permuter,c
@@ -2551,7 +2551,7 @@ func_8210EDBC,0x8210EDBC,src/fragments/fragment012_17ED00/battle_engine_361050.c
 func_8210EED8,0x8210EED8,src/fragments/fragment012_17ED00/battle_engine_361050.c,func_8210EED8,hand,,c
 func_8210EF58,0x8210EF58,src/fragments/fragment012_17ED00/battle_engine_361050.c,BattleScene_FindU16InByteArray,s1,stadium1:src/fragments/battle_engine/battle_engine_move_animation.c,c
 func_8210EFAC,0x8210EFAC,src/fragments/fragment012_17ED00/battle_engine_361050.c,,asm,,asm
-func_8210F24C,0x8210F24C,src/fragments/fragment012_17ED00/battle_engine_361050.c,,asm,,asm
+func_8210F24C,0x8210F24C,src/fragments/fragment012_17ED00/battle_engine_361050.c,func_8210F24C,hand,,c
 func_8210F2F4,0x8210F2F4,src/fragments/fragment012_17ED00/battle_engine_361050.c,func_8210F2F4,m2c,m2c+permuter,c
 func_8210F31C,0x8210F31C,src/fragments/fragment012_17ED00/battle_engine_361050.c,,asm,,asm
 func_8210F3E8,0x8210F3E8,src/fragments/fragment012_17ED00/battle_engine_361050.c,BattleScene_IntroInitNop,s1,stadium1:src/fragments/battle_engine/battle_engine_313250.c,c
@@ -3780,7 +3780,7 @@ func_891078E0,0x891078E0,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,,
 func_89107A60,0x89107A60,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,,asm,,asm
 func_89107D7C,0x89107D7C,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,,asm,,asm
 func_89107EC4,0x89107EC4,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,,asm,,asm
-func_89108108,0x89108108,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,,asm,,asm
+func_89108108,0x89108108,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_89108108,hand,,c
 func_891081A8,0x891081A8,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,,asm,,asm
 func_89108450,0x89108450,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_89108450,hand,,c
 func_891084B4,0x891084B4,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,,asm,,asm
@@ -4449,7 +4449,7 @@ func_80011548,0x80011548,src/geo_render.c,ModelAnim_EvaluateTranslationChannel,s
 func_800115FC,0x800115FC,src/geo_render.c,ModelAnim_EvaluateRotationChannel,s1,stadium1:src/model_animation.c,c
 func_80011690,0x80011690,src/geo_render.c,ModelAnim_EvaluateScaleChannel,hand,,c
 func_80011774,0x80011774,src/geo_render.c,func_80011774,hand,,c
-func_80011838,0x80011838,src/geo_render.c,,asm,,asm
+func_80011838,0x80011838,src/geo_render.c,func_80011838,hand,,c
 func_800118DC,0x800118DC,src/geo_render.c,ModelAnim_ResolveEventIndex,s1,stadium1:src/model_animation_events.c,c
 func_80011914,0x80011914,src/geo_render.c,ModelAnim_AdvanceEventFrame,hand,,c
 func_80011978,0x80011978,src/geo_render.c,GeoOverlay_BuildFadeQuad,s1,stadium1:src/geo_render.c,c
@@ -4464,8 +4464,8 @@ func_8001298C,0x8001298C,src/geo_render.c,,asm,,asm
 func_80012A80,0x80012A80,src/geo_render.c,,asm,,asm
 func_80012C00,0x80012C00,src/geo_render.c,,asm,,asm
 func_80012CC0,0x80012CC0,src/geo_render.c,func_80012CC0,m2c,m2c,c
-func_80012D04,0x80012D04,src/geo_render.c,,asm,,asm
-func_80012DC8,0x80012DC8,src/geo_render.c,,asm,,asm
+func_80012D04,0x80012D04,src/geo_render.c,func_80012D04,hand,,c
+func_80012DC8,0x80012DC8,src/geo_render.c,func_80012DC8,hand,,c
 func_80012E68,0x80012E68,src/geo_render.c,func_80012E68,hand,,c
 func_80012EAC,0x80012EAC,src/geo_render.c,GeoRender_BindTexture,hand,,c
 func_80013148,0x80013148,src/geo_render.c,,asm,,asm
