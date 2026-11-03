@@ -489,17 +489,33 @@ void func_881025C8(s32* arg0, s32* arg1) {
     arg0[2] = arg1[2];
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88102600; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment008_1720F0/func_88102600.s")
-#endif
+void func_80027410(s8*, s8*, s32, s32, s32);
+void func_80027804(s8*, s8*, s32, s32);
+void func_8810024C(s8*);
+void func_88101DF8(s8*, s32, s32, s8*, s32);
+void func_881025C8(s32* arg0, s32* arg1);
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88102688; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment008_1720F0/func_88102688.s")
-#endif
+void func_88102600(s32* arg0) {
+    func_80027410((s8*)arg0 + 0x2698, (s8*)arg0 + 0x458, 0x220, 0x10, 0);
+    func_8810024C((s8*)arg0 + 0x2698);
+    func_80027804((s8*)arg0 + 0x26A8, (s8*)arg0 + 0x2658, 0x10, 0);
+    func_881025C8((s32*)((s8*)arg0 + 0x26A8), (s32*)((s8*)arg0 + 0x2698));
+    func_88101DF8((s8*)arg0 + 0x88, 0x30, 0x5C, (s8*)arg0 + 0x26A8, 1);
+}
+
+void func_80027410(s8*, s8*, s32, s32, s32);
+void func_80027804(s8*, s8*, s32, s32);
+void func_8810024C(s8*);
+void func_88101DF8(s8*, s32, s32, s8*, s32);
+void func_881025C8(s32* arg0, s32* arg1);
+
+void func_88102688(s32* arg0) {
+    func_80027410((s8*)arg0 + 0x2698, (s8*)arg0 + 0x458, 0x220, 0x10, 0);
+    func_8810024C((s8*)arg0 + 0x2698);
+    func_80027804((s8*)arg0 + 0x26A8, (s8*)arg0 + 0x2658, 0x10, 0);
+    func_881025C8((s32*)((s8*)arg0 + 0x26A8), (s32*)((s8*)arg0 + 0x2698));
+    func_88101DF8((s8*)arg0 + 0x88, 0x30, 0x5C, (s8*)arg0 + 0x26A8, 2);
+}
 
 void func_80027410(s8*, s8*, s32, s32, s32);
 void func_80027804(s8*, s8*, s32, s32);
@@ -584,8 +600,8 @@ M2C_UNK func_88102834(s32 a) {
 M2C_UNK func_881004CC(void *, M2C_UNK, M2C_UNK, M2C_UNK, s32, M2C_UNK *, s32, M2C_UNK *, s32, M2C_UNK *);
 s32 func_881007AC(void *);
 s32 func_88102184(void *);
-M2C_UNK func_88102600(s32 *);
-M2C_UNK func_88102688(s32 *);
+void func_88102600(s32 *);
+void func_88102688(s32 *);
 void func_88102710(s32 *);
 extern M2C_UNK D_88102D84;
 extern M2C_UNK D_88102D90;

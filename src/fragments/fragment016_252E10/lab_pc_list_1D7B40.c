@@ -212,11 +212,20 @@ void func_89105504(s32 arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89105560.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8910576C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_8910576C.s")
-#endif
+typedef struct Rgba8910576C {
+    u8 r, g, b, a;
+} Rgba8910576C;
+
+void func_89105560(void);
+void func_891053E8(void* arg0);
+
+void func_8910576C(void* arg0, s32 arg1, s32 arg2, void* arg3, s32 arg4, Rgba8910576C arg5) {
+    func_8002A8C4((s8*)arg0, arg1, arg2, 0x9C, M2C_FIELD(arg3, s32*, 8) * 0x1C + 8);
+    M2C_FIELD(arg0, s32*, 0x14) = 0;
+    M2C_FIELD(arg0, Rgba8910576C*, 0x18) = arg5;
+    func_8002D880((s8*)arg0 + 0x20, arg3, arg4, func_89105560, 0x9C, 0x1C);
+    func_891053E8(arg0);
+}
 
 M2C_UNK func_800295E8(s32, s32, s32, s32, M2C_UNK *); /* extern */
 M2C_UNK func_8002A8E0(s8 *);                      /* extern */
@@ -271,11 +280,27 @@ s32 func_8910587C(s32 arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89105924.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8910597C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_8910597C.s")
-#endif
+void func_8910597C(s8* arg0, s8* arg1) {
+    s32 flag = 0;
+    s32 i = 0;
+    s32 count = M2C_FIELD(M2C_FIELD(arg1, s8**, 0x20), s32*, 8);
+    u16* items;
+
+    if (count > 0) {
+        if (!arg0) {} // fake, keeps arg0 live in a saved register
+        items = M2C_FIELD(arg1, u16**, 0x24);
+        do {
+            i++;
+            if (*items & 8) {
+                flag = 8;
+                break;
+            }
+            items++;
+        } while (i < count);
+    }
+    M2C_FIELD(arg0, u16**, 0x74)[M2C_FIELD(arg0, s32*, 0x78)] &= ~8;
+    M2C_FIELD(arg0, u16**, 0x74)[M2C_FIELD(arg0, s32*, 0x78)] |= flag;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_891059FC; signature not recovered. */
@@ -551,11 +576,18 @@ s32 func_89106F74(s8 *arg0)
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89107614.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89107850; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89107850.s")
-#endif
+void func_89107850(s8* arg0, s32* arg1) {
+    s32 count = 0;
+    s32 i;
+
+    for (i = 0; i < 2; i++) {
+        if (M2C_FIELD(arg0 + i * 0x40, s32*, 0x68) != -1) {
+            M2C_FIELD((s8*)arg1 + count, s8*, 4) = func_89107170(M2C_FIELD(arg0 + i * 0x40, s32*, 0x68));
+            count++;
+        }
+    }
+    *arg1 = count;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_891078E0; signature not recovered. */

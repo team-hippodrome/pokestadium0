@@ -240,11 +240,23 @@ void func_811177E8(s32 numSamples, s16* out);
 void func_81117AFC(UNUSED s32 arg0);
 void func_81218104_jp(UNUSED s32 arg0);
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81112650; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81112650.s")
-#endif
+extern u8 D_81138690[];
+u8 func_81112FB0(u8** arg0);
+s16 func_81112FC4(u8** arg0);
+
+u16 func_81112650(u8** stream, u8 kind) {
+    u8 flags = D_81138690[kind];
+    u16 value = 0;
+
+    if (((flags & 0xFF) & 3) == 1) {
+        if (!(flags & 0x80)) {
+            value = func_81112FB0(stream);
+        } else {
+            value = func_81112FC4(stream);
+        }
+    }
+    return value;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_811126B8; signature not recovered. */
@@ -526,17 +538,46 @@ void func_81113E54(u8* arg0, u8 arg1) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81113E84; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81113E84.s")
-#endif
+u8* func_81110CA8(s32, s32);
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81113EF4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81113EF4.s")
-#endif
+s32 func_81113E84(u8* arg0, u8 arg1, u8** arg2, u8* arg3) {
+    u8* p = func_81110CA8(arg0[7], arg1);
+
+    if (p == NULL) {
+        *arg2 = NULL;
+        return 0;
+    }
+    M2C_FIELD(arg3, s32*, 4) = M2C_FIELD(p, s32*, 4);
+    arg3[0] = p[3];
+    *arg2 = p;
+    arg1++;
+    return arg1;
+}
+
+typedef struct AudioStreamFlags {
+    /* 0x0 */ u8 pad0 : 4;
+    /* 0x0 */ u8 active : 1;
+    /* 0x0 */ u8 pad1 : 3;
+} AudioStreamFlags;
+
+void func_81113EF4(u8* arg0, u8 arg1) {
+    s16 ret;
+
+    if (arg1 >= 0x80) {
+        M2C_FIELD(arg0, s16*, 0x22) = arg1;
+        M2C_FIELD(arg0, s32*, 0x48) = 0;
+    } else if (arg1 == 0x7F) {
+        M2C_FIELD(arg0, s16*, 0x22) = 0;
+        M2C_FIELD(arg0, s32*, 0x48) = 1;
+    } else {
+        ret = M2C_FIELD(arg0, s16*, 0x22) = func_81113E84(arg0, arg1, (u8**)(arg0 + 0x48), arg0 + 0x7C);
+        if (ret == 0) {
+            ((AudioStreamFlags*)arg0)->active = 0;
+            return;
+        }
+    }
+    ((AudioStreamFlags*)arg0)->active = 1;
+}
 
 /*
  * func_81113F84

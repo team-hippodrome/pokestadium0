@@ -161,11 +161,13 @@ u8 func_82107BF4(s8 *arg0) {
     return M2C_FIELD(arg0, u8 *, 0x820);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82107BFC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82107BFC.s")
-#endif
+extern f32 D_FLT_8218935C[][4];
+
+void func_82107BFC(s8* arg0, Vec3f* out) {
+    out->x = M2C_FIELD(arg0, f32*, 0x30) * (D_FLT_8218935C[M2C_FIELD(arg0, s16*, 0x1A) - 1][0] * 2 / 50.0f);
+    out->y = M2C_FIELD(arg0, f32*, 0x34) * (D_FLT_8218935C[M2C_FIELD(arg0, s16*, 0x1A) - 1][1] * 2 / 50.0f);
+    out->z = M2C_FIELD(arg0, f32*, 0x30) * (D_FLT_8218935C[M2C_FIELD(arg0, s16*, 0x1A) - 1][0] * 2 / 50.0f);
+}
 
 void BattleScene_GetParticipantModelRotation(ActivePokemon* pokemon, Vec3s* dest) {
     dest->x = pokemon->displayObject.rotation.x;

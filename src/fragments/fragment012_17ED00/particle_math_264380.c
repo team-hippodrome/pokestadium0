@@ -306,11 +306,11 @@ s32 func_82169AE4(s32 arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82169E84.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82169F74; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82169F74.s")
-#endif
+void func_82169F74(void* img, s32 width, s32 height) {
+    gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, width, img);
+    gDPLoadSync(gDisplayListHead++);
+    gDPLoadTile(gDisplayListHead++, G_TX_LOADTILE, 0, 0, (width - 1) << G_TEXTURE_IMAGE_FRAC, (height - 1) << G_TEXTURE_IMAGE_FRAC);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_82169FF8; signature not recovered. */
@@ -318,11 +318,11 @@ s32 func_82169AE4(s32 arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82169FF8.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8216A0E8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8216A0E8.s")
-#endif
+void func_8216A0E8(void* img, s32 width, s32 height) {
+    gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_32b, width, img);
+    gDPLoadSync(gDisplayListHead++);
+    gDPLoadTile(gDisplayListHead++, G_TX_LOADTILE, 0, 0, (width - 1) << G_TEXTURE_IMAGE_FRAC, (height - 1) << G_TEXTURE_IMAGE_FRAC);
+}
 
 void ParticleGfx_LoadTextureBlock32(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
                    s32 shiftt) {

@@ -3634,3 +3634,6 @@ __osPfsGetOneChannelData = 0x80059B74; // type:func
 __osPackEepWriteData = 0x80053C78; // type:func
 __osPackEepReadData = 0x8005CBA4; // type:func
 __additional_scanline = 0x8007938C; // type:data
+__osPfsInodeCacheChannel = 0x80079320; // type:data
+__osPfsInodeCacheBank = 0x80079324; // type:data
+__osPfsInodeCache = 0x80104000; // type:data

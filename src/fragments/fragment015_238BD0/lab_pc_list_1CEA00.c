@@ -616,11 +616,18 @@ void func_890020C0(u8* arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_8900219C.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89002248; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_89002248.s")
-#endif
+void func_80027654(s32* matrix, u8* out, s32 row);
+void func_80027700(s32* matrix, u8* in, s32 row);
+
+void func_89002248(s8* arg0) {
+    u8 row[4];
+    s32* matrix = M2C_FIELD(arg0, s32**, 0x1E4);
+
+    func_80027654(matrix, row, M2C_FIELD(arg0, s32*, 0x1EC));
+    func_80027700(matrix, (u8*)(matrix[3] * M2C_FIELD(arg0, s32*, 0x40C) + matrix[0]), M2C_FIELD(arg0, s32*, 0x1EC));
+    func_80027700(matrix, row, M2C_FIELD(arg0, s32*, 0x40C));
+    M2C_FIELD(arg0, s32**, 0x494)[M2C_FIELD(arg0, s32*, 0x1D4)] = 1;
+}
 
 
 void func_890022D0(s8 *arg0) {

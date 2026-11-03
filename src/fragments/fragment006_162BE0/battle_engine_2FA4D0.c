@@ -653,11 +653,24 @@ void func_88402098(void) {
 void func_884022A4(void) {
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_884022AC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment006_162BE0/func_884022AC.s")
-#endif
+typedef struct GbPortSummaryZ {
+    /* 0x00 */ u8 saveState;
+    /* 0x01 */ u8 game;
+    /* 0x02 */ u16 trainerId;
+    /* 0x04 */ char name[0xE];
+} GbPortSummaryZ; // size = 0x12
+extern GbPortSummaryZ D_88403310[4];
+
+void func_884022AC(void) {
+    func_88401F38();
+    func_88402098();
+    func_80006998(1);
+    func_80006828(2, &func_88400108);
+    func_80041374(0x46, 0x1E);
+    if (D_88403358 < 0 || D_88403310[D_88403358].saveState != 0) {
+        func_80006828(0x14, &func_88400108);
+    }
+}
 
 M2C_UNK func_80005B98(M2C_UNK);                     /* extern */
 M2C_UNK func_800067BC(M2C_UNK);                     /* extern */
@@ -665,7 +678,7 @@ M2C_UNK func_80006828(M2C_UNK, M2C_UNK *);          /* extern */
 M2C_UNK func_8000D520(s32, s8 *);                 /* extern */
 M2C_UNK func_80025BE4(s32);                         /* extern */
 M2C_UNK func_8840115C();                            /* extern */
-M2C_UNK func_884022AC();                            /* extern */
+void func_884022AC(void);                          /* extern */
 
 M2C_UNK func_88401040();
 extern s8 D_88402D98;
@@ -771,13 +784,6 @@ s32 func_8840248C(void) {
     return sp1C;
 }
 
-typedef struct GbPortSummaryZ {
-    /* 0x00 */ u8 saveState;
-    /* 0x01 */ u8 game;
-    /* 0x02 */ u16 trainerId;
-    /* 0x04 */ char name[0xE];
-} GbPortSummaryZ; // size = 0x12
-extern GbPortSummaryZ D_88403310[4];
 typedef struct GbIdentityZ {
     /* 0x00 */ u16 trainerId;
     /* 0x02 */ char name[10];
