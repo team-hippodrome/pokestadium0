@@ -623,11 +623,49 @@ s32 Pokedex_ShowAreaMapScreen(void) {
     return var_s0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8A101B30; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment018_262620/func_8A101B30.s")
-#endif
+typedef struct Col8A101B30 { u8 r, g, b, a; } Col8A101B30;
+extern s32 D_8A105800;
+extern s32 D_8A105804;
+/*
+ * Second name for D_8A105800. The fade-out store in this function family
+ * (also func_8200579C, func_8900429C, func_891049E8, func_8A101B30) does not
+ * share the counter's address with the load before it, which only happens
+ * when the two accesses name different symbols.
+ */
+extern s32 D_8A105800_2;
+extern M2C_UNK D_8A12FD3C;
+M2C_UNK func_80028060(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
+void func_8002C8D8(Col8A101B30*, Col8A101B30, f32);
+s32 func_8A101B30(u8 arg0) {
+    Col8A101B30 sp2C;
+    M2C_UNK *var_a1;
+    s32 n;
+
+    n = D_8A105800;
+    if (n >= 8) {
+        D_8A105804 = 1;
+    }
+    if (D_8A105804 != 0) {
+        n--;
+        D_8A105800_2 = n;
+    }
+    func_800069CC();
+    if (D_8A130230 == -1) {
+        var_a1 = NULL;
+    } else {
+        var_a1 = &D_8A130238;
+    }
+    func_80028060(0, var_a1, &D_8A12FD3C, D_8A130230);
+    n = D_8A105800;
+    func_8002C8D8(&sp2C, *(Col8A101B30*)&D_8A1057D0, n / (f64)8.0f);
+    func_8002C064(0x38, 0x1E0, sp2C.r, sp2C.g, sp2C.b);
+    if (D_8A105804 == 0) {
+        n = D_8A105800;
+        n++;
+        D_8A105800 = n;
+    }
+    return 0;
+}
 
 void Pokedex_RunEntryFlow(void) {
     s32 var_v0 = 1;

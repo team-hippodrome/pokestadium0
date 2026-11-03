@@ -788,7 +788,7 @@ func_82004CE0,0x82004CE0,src/fragments/fragment007_166580.c,,asm,,asm
 func_82004E9C,0x82004E9C,src/fragments/fragment007_166580.c,,asm,,asm
 func_8200569C,0x8200569C,src/fragments/fragment007_166580.c,func_8200569C,hand,,c
 func_8200573C,0x8200573C,src/fragments/fragment007_166580.c,func_8200573C,hand,,c
-func_8200579C,0x8200579C,src/fragments/fragment007_166580.c,,asm,,asm
+func_8200579C,0x8200579C,src/fragments/fragment007_166580.c,func_8200579C,hand,,c
 func_820058BC,0x820058BC,src/fragments/fragment007_166580.c,func_820058BC,m2c,m2c,c
 func_820058FC,0x820058FC,src/fragments/fragment007_166580.c,func_820058FC,m2c,m2c,c
 func_82005958,0x82005958,src/fragments/fragment007_166580.c,func_82005958,m2c,m2c,c
@@ -3628,7 +3628,7 @@ func_89004120,0x89004120,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,f
 func_89004184,0x89004184,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,func_89004184,m2c,m2c,c
 func_890041E4,0x890041E4,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,func_890041E4,hand,,c
 func_89004244,0x89004244,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,func_89004244,hand,,c
-func_8900429C,0x8900429C,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,,asm,,asm
+func_8900429C,0x8900429C,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,func_8900429C,hand,,c
 func_890043BC,0x890043BC,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,func_890043BC,m2c,m2c,c
 func_89004560,0x89004560,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,func_89004560,hand,,c
 func_89004680,0x89004680,src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c,func_89004680,hand,,c
@@ -3725,7 +3725,7 @@ func_8910452C,0x8910452C,src/fragments/fragment016_252E10/89100020.c,,asm,,asm
 func_89104818,0x89104818,src/fragments/fragment016_252E10/89100020.c,func_89104818,m2c,m2c,c
 func_89104854,0x89104854,src/fragments/fragment016_252E10/89100020.c,func_89104854,hand,,c
 func_89104998,0x89104998,src/fragments/fragment016_252E10/89100020.c,func_89104998,hand,,c
-func_891049E8,0x891049E8,src/fragments/fragment016_252E10/89100020.c,,asm,,asm
+func_891049E8,0x891049E8,src/fragments/fragment016_252E10/89100020.c,func_891049E8,hand,,c
 func_89104B08,0x89104B08,src/fragments/fragment016_252E10/89100020.c,func_89104B08,m2c,m2c,c
 func_89104B48,0x89104B48,src/fragments/fragment016_252E10/89100020.c,func_89104B48,hand,,c
 func_89104C70,0x89104C70,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_89104C70,hand,,c
@@ -3869,7 +3869,7 @@ func_8A10193C,0x8A10193C,src/fragments/fragment018_262620/pokedex_214920.c,func_
 func_8A1019AC,0x8A1019AC,src/fragments/fragment018_262620/pokedex_214920.c,func_8A1019AC,m2c,m2c,c
 func_8A101A44,0x8A101A44,src/fragments/fragment018_262620/pokedex_214920.c,Pokedex_ExitAreaMapScreen,s1,stadium1:src/fragments/pokedex/pokedex_214920.c,c
 func_8A101AA8,0x8A101AA8,src/fragments/fragment018_262620/pokedex_214920.c,Pokedex_ShowAreaMapScreen,s1,stadium1:src/fragments/pokedex/pokedex_214920.c,c
-func_8A101B30,0x8A101B30,src/fragments/fragment018_262620/pokedex_214920.c,,asm,,asm
+func_8A101B30,0x8A101B30,src/fragments/fragment018_262620/pokedex_214920.c,func_8A101B30,hand,,c
 func_8A101C50,0x8A101C50,src/fragments/fragment018_262620/pokedex_214920.c,Pokedex_RunEntryFlow,s1,stadium1:src/fragments/pokedex/pokedex_214920.c,c
 func_8A101CE4,0x8A101CE4,src/fragments/fragment018_262620/pokedex_214920.c,Pokedex_GetHighestSeenSpeciesIndex,s1,stadium1:src/fragments/pokedex/pokedex_214920.c,c
 func_8A101D38,0x8A101D38,src/fragments/fragment018_262620/pokedex_214920.c,Pokedex_InitFramebuffers,s1,stadium1:src/fragments/pokedex/pokedex_214920.c,c
@@ -3923,7 +3923,7 @@ func_8A20261C,0x8A20261C,src/fragments/fragment019_293410/lab_pc_icons.c,,asm,,a
 func_8A202904,0x8A202904,src/fragments/fragment019_293410/lab_pc_icons.c,func_8A202904,m2c,m2c,c
 func_8A20291C,0x8A20291C,src/fragments/fragment019_293410/lab_pc_icons.c,,asm,,asm
 func_8A202EF4,0x8A202EF4,src/fragments/fragment019_293410/lab_pc_icons.c,func_8A202EF4,hand,,c
-func_8A202F50,0x8A202F50,src/fragments/fragment019_293410/lab_pc_icons.c,,asm,,asm
+func_8A202F50,0x8A202F50,src/fragments/fragment019_293410/lab_pc_icons.c,func_8A202F50,hand,,c
 func_8A203070,0x8A203070,src/fragments/fragment019_293410/lab_pc_icons.c,func_8A203070,m2c,m2c,c
 func_8A2030C0,0x8A2030C0,src/fragments/fragment019_293410/lab_pc_icons.c,func_8A2030C0,hand,,c
 func_8E000020,0x8E000020,src/fragments/fragment020_2B1360.c,func_8E000020,m2c,m2c,c

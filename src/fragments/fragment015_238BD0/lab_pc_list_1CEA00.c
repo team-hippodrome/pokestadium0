@@ -1013,11 +1013,49 @@ void func_89004244(void) {
     D_890289D4 = 1;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8900429C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_8900429C.s")
-#endif
+typedef struct Col8900429C { u8 r, g, b, a; } Col8900429C;
+extern s32 D_8900A71C;
+extern s32 D_8900A720;
+/*
+ * Second name for D_8900A71C. The fade-out store in this function family
+ * (also func_8200579C, func_8900429C, func_891049E8, func_8A101B30) does not
+ * share the counter's address with the load before it, which only happens
+ * when the two accesses name different symbols.
+ */
+extern s32 D_8900A71C_2;
+extern M2C_UNK D_8901890C;
+M2C_UNK func_80028060(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
+void func_8002C8D8(Col8900429C*, Col8900429C, f32);
+s32 func_8900429C(s32 arg0) {
+    Col8900429C sp2C;
+    M2C_UNK *var_a1;
+    s32 n;
+
+    n = D_8900A71C;
+    if (n >= 8) {
+        D_8900A720 = 1;
+    }
+    if (D_8900A720 != 0) {
+        n--;
+        D_8900A71C_2 = n;
+    }
+    func_800069CC();
+    if (D_89019108 == -1) {
+        var_a1 = NULL;
+    } else {
+        var_a1 = &D_89019110;
+    }
+    func_80028060(0, var_a1, &D_8901890C, D_89019108);
+    n = D_8900A71C;
+    func_8002C8D8(&sp2C, *(Col8900429C*)&D_8900A5B8, n / (f64)8.0f);
+    func_8002C064(0x38, 0x1E0, sp2C.r, sp2C.g, sp2C.b);
+    if (D_8900A720 == 0) {
+        n = D_8900A71C;
+        n++;
+        D_8900A71C = n;
+    }
+    return 0;
+}
 
 M2C_UNK func_8000B1FC();                            /* extern */
 M2C_UNK func_8000B220();                            /* extern */
