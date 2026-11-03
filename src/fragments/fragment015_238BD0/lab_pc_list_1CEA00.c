@@ -690,11 +690,26 @@ void func_89002C10(s8* arg, s32 arg1, s32 arg2, s8* arg3) {
     arg0->unk6C |= 0x10000;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89002D14; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_89002D14.s")
-#endif
+void func_80029658(s32, s32, s32, void*);
+void func_8002A8E0(void*);
+void func_8002DAD8(void*, s32, s32, s32, s32);
+extern u8 D_8007356C[];
+extern u8 D_89018688[];
+void func_89002D14(s8* arg0, s32 arg1) {
+    if (func_8002AE6C() == 0) {
+        func_80029658(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 0x30) - 7, M2C_FIELD(arg0, s32*, 8), D_8007356C);
+        func_8002A8E0(arg0 + 0x2C);
+        func_8002DAD8(arg0 + 0x4C, M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, 0xFFEF, 0);
+        func_8001AB6C();
+        func_8001A384(8, 0);
+        if (!arg0) { // empty test only changes register allocation; needed to match
+        }
+        func_8001AA9C(M2C_FIELD(&D_800734A8, u8 *, 0), M2C_FIELD(&D_800734A8, u8 *, 1), M2C_FIELD(&D_800734A8, u8 *, 2), M2C_FIELD(&D_800734A8, u8 *, 3));
+        func_8001AB2C(0x1C);
+        func_8001A944(M2C_FIELD(arg0, s32*, 0x2C) + 8, M2C_FIELD(arg0, s32*, 0x30) + 8, D_89018688);
+        func_8001ABBC();
+    }
+}
 
 s32 func_8002DC04(void*);
 

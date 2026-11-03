@@ -105,11 +105,25 @@ void func_8002D948(GridMenu80031004* arg0, s32 arg1, s32 arg2) {
     func_80029A64(arg1 + 2, y, arg0->cellWidth - 4, arg0->cellHeight - 4, *(Color_RGBA8*)D_80073520);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002D9B8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002D9B8.s")
-#endif
+void func_8002D9B8(Menu8002E230* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
+    s32 i;
+    s32 y = arg2;
+    s32 count = arg0->def->itemCount;
+    u8** items = (u8**)arg0->def->items;
+    s32 flags;
+
+    for (i = 0; i < count; i++) {
+        flags = arg0->flags[i];
+        if (i == arg0->cursor) {
+            flags |= 0x12;
+        }
+        arg0->draw(arg1, y, items[i], i, flags & arg3, arg4);
+        y += arg0->rowSpacing;
+    }
+    if (arg0->def->itemCount > 0 && (arg3 & 2) && (arg0->options & 0x10000)) {
+        func_8002D948((GridMenu80031004*)arg0, arg1, arg2);
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8002DAD8; signature not recovered. */
@@ -117,11 +131,37 @@ void func_8002D948(GridMenu80031004* arg0, s32 arg1, s32 arg2) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002DAD8.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002DC04; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002DC04.s")
-#endif
+s32 func_8000B30C();
+s32 func_8003F6AC();
+s32 func_8002DC04(Menu8002E230* arg0) {
+    s32 input;
+    s32 old = arg0->cursor;
+
+    if (arg0->def->itemCount == 0) {
+        return 0;
+    }
+    if (arg0) { // no-op test; changes register allocation to match
+    }
+    input = (u16)func_8000B30C();
+    switch (input) {
+        case 0x800:
+            if (arg0->cursor == 0) {
+                arg0->cursor += arg0->def->itemCount;
+            }
+            arg0->cursor--;
+            break;
+        case 0x400:
+            if (arg0->cursor >= arg0->def->itemCount - 1) {
+                arg0->cursor -= arg0->def->itemCount;
+            }
+            arg0->cursor++;
+            break;
+    }
+    if (old != arg0->cursor) {
+        func_8003F6AC(1);
+    }
+    return input;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8002DCE0; signature not recovered. */

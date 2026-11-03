@@ -200,8 +200,30 @@ void PokeIcon_PollBackgroundForObject(unk_func_8001C248* arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80019F70; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80019F70.s")
-#endif
+extern u8 D_8006081F[];
+extern u8 D_8005E7D2[];
+extern u8 D_8005E47F[];
+extern u8 D_8005E37F[];
+s32 func_80019F70(u16 arg0) {
+    s32 c = arg0;
+    s32 ret = 0;
+
+    if (c >= 0x21 && c < 0x7F) {
+        ret = D_8006081F[c];
+    } else if (c >= 0x2122 && c < 0x2178) {
+        ret = D_8005E7D2[c];
+    } else if (c >= 0x2330 && c < 0x233A) {
+        ret = c - 0x2320;
+    } else if (c >= 0x2341 && c < 0x235B) {
+        ret = c - 0x2327;
+    } else if (c >= 0x2361 && c < 0x237B) {
+        ret = c - 0x22CC;
+    } else if (c >= 0x2421 && c < 0x2474) {
+        ret = D_8005E47F[c] + 0xAF;
+    } else if (c >= 0x2521 && c < 0x2574) {
+        ret = D_8005E37F[c] + 0x45;
+    } else if (c == 0x2574) {
+        ret = 0xFF;
+    }
+    return ret;
+}

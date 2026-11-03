@@ -6,9 +6,9 @@ func_8002D880,0x8002D880,src/2E480.c,func_8002D880,hand,,c
 func_8002D8D8,0x8002D8D8,src/2E480.c,func_8002D8D8,m2c,m2c,c
 func_8002D900,0x8002D900,src/2E480.c,func_8002D900,hand,,c
 func_8002D948,0x8002D948,src/2E480.c,func_8002D948,hand,,c
-func_8002D9B8,0x8002D9B8,src/2E480.c,,asm,,asm
+func_8002D9B8,0x8002D9B8,src/2E480.c,func_8002D9B8,hand,,c
 func_8002DAD8,0x8002DAD8,src/2E480.c,,asm,,asm
-func_8002DC04,0x8002DC04,src/2E480.c,,asm,,asm
+func_8002DC04,0x8002DC04,src/2E480.c,func_8002DC04,hand,,c
 func_8002DCE0,0x8002DCE0,src/2E480.c,,asm,,asm
 func_8002DDFC,0x8002DDFC,src/2E480.c,,asm,,asm
 func_8002DECC,0x8002DECC,src/2E480.c,func_8002DECC,hand,,c
@@ -476,7 +476,7 @@ func_81103D30,0x81103D30,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0
 func_81103D60,0x81103D60,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,func_81103D60,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_7F9A0.c,c
 func_8110427C,0x8110427C,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,func_8110427C,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_7F9A0.c,c
 func_8110445C,0x8110445C,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,func_8110445C,hand,,c
-func_81104540,0x81104540,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,,asm,,asm
+func_81104540,0x81104540,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,func_81104540,hand,,c
 func_81104618,0x81104618,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,,asm,,asm
 func_811047A0,0x811047A0,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,,asm,,asm
 func_81104930,0x81104930,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,,asm,,asm
@@ -3608,7 +3608,7 @@ func_890022D0,0x890022D0,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,f
 func_89002318,0x89002318,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,,asm,,asm
 func_89002A80,0x89002A80,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,,asm,,asm
 func_89002C10,0x89002C10,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,func_89002C10,hand,,c
-func_89002D14,0x89002D14,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,,asm,,asm
+func_89002D14,0x89002D14,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,func_89002D14,hand,,c
 func_89002DE4,0x89002DE4,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,func_89002DE4,hand,,c
 func_89002E58,0x89002E58,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,,asm,,asm
 func_890030C8,0x890030C8,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,func_890030C8,hand,,c
@@ -5144,7 +5144,7 @@ func_80019DE0,0x80019DE0,src/model_renderer.c,PokeIcon_PollFrameLoadForObject,s1
 func_80019E30,0x80019E30,src/model_renderer.c,PokeIcon_WaitFrameLoadForObject,s1,stadium1:src/model_renderer.c,c
 func_80019E90,0x80019E90,src/model_renderer.c,PokeIcon_RequestBackgroundForObject,s1,stadium1:src/model_renderer.c,c
 func_80019F20,0x80019F20,src/model_renderer.c,PokeIcon_PollBackgroundForObject,s1,stadium1:src/model_renderer.c,c
-func_80019F70,0x80019F70,src/model_renderer.c,,asm,,asm
+func_80019F70,0x80019F70,src/model_renderer.c,func_80019F70,hand,,c
 func_80032840,0x80032840,src/model_renderer_callbacks.c,,asm,,asm
 func_80032890,0x80032890,src/model_renderer_callbacks.c,func_80032890,hand,,c
 func_800328D4,0x800328D4,src/model_renderer_callbacks.c,ModelRenderer_CacheSlotMatrices,s1,stadium1:src/model_renderer_callbacks.c,c
@@ -5153,7 +5153,7 @@ func_80032980,0x80032980,src/model_renderer_callbacks.c,ModelRenderer_RebuildSlo
 func_80032A24,0x80032A24,src/model_renderer_callbacks.c,ModelRenderer_ClearSlotModels,s1,stadium1:src/model_renderer_callbacks.c,c
 func_80032A6C,0x80032A6C,src/model_renderer_callbacks.c,ModelRenderer_UpdateSlotModel,hand,,c
 func_80032BA8,0x80032BA8,src/model_renderer_callbacks.c,ModelRenderer_UpdateSlotVertices,hand,,c
-func_80032C74,0x80032C74,src/model_renderer_callbacks.c,,asm,,asm
+func_80032C74,0x80032C74,src/model_renderer_callbacks.c,func_80032C74,hand,,c
 func_80032D90,0x80032D90,src/model_renderer_callbacks.c,func_80032D90,hand,,c
 func_80017F40,0x80017F40,src/poke_icon.c,PokeIcon_CaptureGeoNode,s1,stadium1:src/poke_icon.c,c
 func_80017F54,0x80017F54,src/poke_icon.c,func_80017F54,m2c,m2c,c
