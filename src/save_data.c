@@ -273,17 +273,72 @@ void func_80023DB8(s32 arg0, s32 arg1) {
     func_80058410(arg0 + 0x4D, arg1 + 0x2A, 3);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80023E28; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80023E28.s")
-#endif
+typedef struct SaveRecA80023F38 { s16 flags; char pad[0x24E]; } SaveRecA80023F38;
+typedef struct SaveRecB80023F38 { s16 flags; char pad[0xABE]; } SaveRecB80023F38;
+typedef struct SaveRecC80023F38 { s16 flags; char pad[0x1BE]; } SaveRecC80023F38;
+typedef struct Save80023F38 {
+    SaveRecA80023F38 a[16];
+    SaveRecB80023F38 b[4];
+    SaveRecC80023F38 c[4];
+    s16 d; char padD[0x7A40 - 0x5702];
+    s16 e; char padE[0x7A60 - 0x7A42];
+    s16 f;
+} Save80023F38;
+s32 func_80023E28(arg0, arg1, arg2)
+    s32 arg0;
+    s32 arg1;
+    s16 arg2;
+{
+    s32 ret = 0;
+    switch (arg0) {
+    case 16:
+        ret = ((*(Save80023F38**)&D_800AE8E0)->a[arg1].flags & arg2) != 0;
+        break;
+    case 17:
+        ret = ((*(Save80023F38**)&D_800AE8E0)->b[arg1].flags & arg2) != 0;
+        break;
+    case 18:
+        ret = ((*(Save80023F38**)&D_800AE8E0)->c[arg1].flags & arg2) != 0;
+        break;
+    case 19:
+        ret = ((*(Save80023F38**)&D_800AE8E0)->d & arg2) != 0;
+        break;
+    case 20:
+        ret = ((*(Save80023F38**)&D_800AE8E0)->e & arg2) != 0;
+        break;
+    case 21:
+        ret = ((*(Save80023F38**)&D_800AE8E0)->f & arg2) != 0;
+        break;
+    }
+    return ret;
+}
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80023F38; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80023F38.s")
-#endif
+M2C_UNK func_80023F38(arg0, arg1, arg2)
+    s32 arg0;
+    s32 arg1;
+    s16 arg2;
+{
+    switch (arg0) {
+    case 16:
+        (*(Save80023F38**)&D_800AE8E0)->a[arg1].flags |= arg2;
+        break;
+    case 17:
+        (*(Save80023F38**)&D_800AE8E0)->b[arg1].flags |= arg2;
+        break;
+    case 18:
+        (*(Save80023F38**)&D_800AE8E0)->c[arg1].flags |= arg2;
+        break;
+    case 19:
+        (*(Save80023F38**)&D_800AE8E0)->d |= arg2;
+        break;
+    case 20:
+        (*(Save80023F38**)&D_800AE8E0)->e |= arg2;
+        break;
+    case 21:
+        (*(Save80023F38**)&D_800AE8E0)->f |= arg2;
+        break;
+    }
+}
 
 void func_80024044(void) {
 }

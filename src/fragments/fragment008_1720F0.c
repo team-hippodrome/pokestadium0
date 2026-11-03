@@ -193,11 +193,38 @@ s32 func_881007AC(void* arg0) {
     return ret;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88100898; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment008_1720F0/func_88100898.s")
-#endif
+void func_8002A8C4(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+extern s32 D_800603C0;
+typedef struct Win88100898 {
+    s32 x; s32 y; s32 w; s32 h; s32 unk10; s32 unk14; s32 unk18; s32 unk1C;
+    s32 unk20; s32 unk24; s32 unk28;
+    char unk2C[0x2C];
+    s32 unk58; s32 unk5C; s32 unk60; s32 unk64;
+    char unk68[0x3C];
+    s32 unkA4; s32 unkA8; s32 unkAC; s32 unkB0;
+} Win88100898;
+extern Color_RGBA8 D_88102DA4;
+extern char D_88102F14[];
+extern char D_88102F1C[];
+void func_8002AE94(s8*, s32, s32, s32, Color_RGBA8, char*);
+M2C_UNK func_8000B2F4(s32);
+void func_88100898(s8* arg, s32 arg1, s32 arg2, s32 arg3) {
+    Win88100898* arg0 = (Win88100898*)arg;
+    func_8002A8C4(arg, arg1, arg2, 0x174, 0x66);
+    arg0->unk24 = 0;
+    arg0->unk20 = 0;
+    arg0->unk28 = 0;
+    arg0->unk14 = 0x1001;
+    func_8002AE94((s8*)arg0->unk2C, arg0->x + 0x62, arg0->y + 0x42, 0x48, D_88102DA4, D_88102F14);
+    arg0->unk58 = 0xA;
+    arg0->unk60 = 0xC;
+    func_8002AE94((s8*)arg0->unk68, arg0->x + 0xCA, arg0->y + 0x42, 0x48, D_88102DA4, D_88102F1C);
+    arg0->unkAC = 2;
+    arg0->unkA8 = 0;
+    arg0->unkA4 = D_800603C0;
+    func_8000B2F4(D_800603C0);
+    arg0->unkB0 = arg3;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_881009A0; signature not recovered. */
@@ -321,11 +348,19 @@ void func_88100D9C(s32 arg0, s32 arg1, Color88100D9C arg2) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment008_1720F0/func_8810112C.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8810137C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment008_1720F0/func_8810137C.s")
-#endif
+extern s32 D_88103074;
+extern Color88100D9C D_88102D78;
+extern Gfx D_80073408[];
+extern Gfx D_80073438[];
+s32 func_80018DEC(s8*, s32);
+void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
+void func_8810137C(s32 arg0, s32 arg1) {
+    gSPDisplayList(gDisplayListHead++, D_80060270);
+    func_80029028(arg0, arg1, 0x84, 0x32, D_88102D78);
+    gSPDisplayList(gDisplayListHead++, D_80073408);
+    func_8001B884(arg0 + 0x56, arg1 + 6, 0x28, 0x28, (u8*)func_80018DEC((s8*)D_88103074, 0x18), 0x28, 0x200000);
+    gSPDisplayList(gDisplayListHead++, D_80073438);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_88101478; signature not recovered. */

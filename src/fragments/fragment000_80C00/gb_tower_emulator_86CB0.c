@@ -494,11 +494,50 @@ u16 func_81112FFC(u8** arg0) {
     return v;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8111303C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8111303C.s")
-#endif
+typedef struct Particle303C {
+    u32 b80 : 1;
+    u32 b40 : 1;
+    u32 b20 : 1;
+    u32 b10 : 1;
+    u32 rest : 28;
+    char pad04[0x3C];
+    s16 unk40;
+    s16 unk42;
+    char pad44[4];
+    s32 unk48;
+} Particle303C;
+void func_81113140();
+s32 func_811132E4();
+s32 func_81113A44();
+s32 func_81113650();
+void func_811131CC();
+void func_8111303C(Particle303C* arg0) {
+    s32 ret;
+    if (arg0->b80) {
+        if (arg0->unk40 >= 2) {
+            arg0->unk40--;
+            if (!arg0->b20 && arg0->unk42 >= arg0->unk40) {
+                func_81111090((Particle31FlagsA*)arg0);
+                arg0->b20 = 1;
+            }
+        } else {
+            func_81113140(arg0);
+            ret = func_811132E4(arg0);
+            if (ret != -1) {
+                ret = func_81113A44(arg0, ret);
+                if (ret != -1) {
+                    ret = func_81113650(arg0, ret);
+                }
+                if (ret != -1) {
+                    func_811131CC(arg0, ret);
+                }
+                if (arg0->b20 == 1 && (arg0->unk48 != 0 || arg0->b10)) {
+                    func_81111090((Particle31FlagsA*)arg0);
+                }
+            }
+        }
+    }
+}
 
 typedef struct Particle3140 {
     u32 b80 : 1;

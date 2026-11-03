@@ -653,11 +653,42 @@ void func_890022D0(s8 *arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_89002A80.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89002C10; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_89002C10.s")
-#endif
+typedef struct Col89002C10 { u8 r, g, b, a; } Col89002C10;
+typedef struct Win89002C10 {
+    s32 x; s32 y; s32 w; s32 h; s32 unk10; s32 unk14; s32 unk18; s32 unk1C;
+    void* unk20; s32 unk24; s32 unk28;
+    char unk2C[0x14];
+    s32 unk40;
+    Col89002C10 unk44;
+    Col89002C10 unk48;
+    char unk4C[0x20];
+    s32 unk6C;
+    char unk70[0x10];
+    char unk80[1];
+} Win89002C10;
+extern Col89002C10 D_8900A6AC;
+extern Col89002C10 D_8900A6B0;
+extern char D_89018678[];
+void func_89002A80();
+void func_8002A8C4(s8*, s32, s32, s32, s32);
+void func_8002D880(s8*, s32, s32, s32, s32, s32);
+void func_80027410(s8*, s8*, s32, s32, s32);
+void func_89002C10(s8* arg, s32 arg1, s32 arg2, s8* arg3) {
+    Win89002C10* arg0 = (Win89002C10*)arg;
+    s32 pad;
+    func_8002A8C4(arg, arg1, arg2, 0x148, 0x14A);
+    arg0->unk24 = 0;
+    arg0->unk28 = 0;
+    arg0->unk14 = 0x801;
+    arg0->unk20 = D_89018678;
+    func_8002A8C4((s8*)arg0->unk2C, arg0->x + 6, arg0->y + 0x104, arg0->w - 0xC, 0x40);
+    arg0->unk40 = 6;
+    arg0->unk44 = D_8900A6AC;
+    arg0->unk48 = D_8900A6B0;
+    func_80027410((s8*)arg0->unk70, arg3, 0x14, 4, 4);
+    func_8002D880((s8*)arg0->unk4C, (s32)arg0->unk70, (s32)arg0->unk80, (s32)func_89002A80, 0x13C, 0x3E);
+    arg0->unk6C |= 0x10000;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_89002D14; signature not recovered. */
