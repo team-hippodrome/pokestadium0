@@ -671,7 +671,25 @@ void func_891035E4(u8* arg0) {
 }
 
 #ifdef NON_MATCHING
-/* TODO: decompile func_89103620; signature not recovered. */
+// Matches the ROM, but uses rodata data that is not placed in this file yet.
+typedef struct Str7_89103620 { char s[7]; } Str7_89103620;
+typedef struct Str9_89103620 { char s[9]; } Str9_89103620;
+u32 func_800566BC(s8*);
+void func_89103620(s8* arg0, s32 arg1, s32 arg2) {
+    switch (arg1) {
+        case 0:
+            *(Str7_89103620*)arg0 = *(Str7_89103620*)"てもち";
+            break;
+        case 1:
+            *(Str9_89103620*)arg0 = *(Str9_89103620*)"ＧＢ　０";
+            arg0[func_800566BC(arg0) - 1] += arg2 + 1;
+            break;
+        case 2:
+            *(Str9_89103620*)arg0 = *(Str9_89103620*)"６４　０";
+            arg0[func_800566BC(arg0) - 1] += arg2 + 1;
+            break;
+    }
+}
 #else
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89103620.s")
 #endif

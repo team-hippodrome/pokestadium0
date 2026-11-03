@@ -893,11 +893,57 @@ void func_8111539C(s32 arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81115480; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81115480.s")
-#endif
+typedef struct Emu81115480 {
+    u8 b80 : 1;
+    u8 rest : 7;
+    char pad01[0x53];
+    s32 unk54;
+    char pad58[0x2C];
+} Emu81115480; // size = 0x84
+typedef struct Rec81115480 {
+    u8 b80 : 1;
+    u8 b40 : 1;
+    u8 b20 : 1;
+    u8 b10 : 1;
+    u8 b08 : 1;
+    u8 b04 : 1;
+    u8 b02 : 1;
+    u8 b01 : 1;
+    u8 pad01[2];
+    u8 unk03;
+    char pad04[0x30];
+    Item8111539C* items[16];
+    char pad74[0x24];
+    u8 unk98[0xBC];
+    s8 unk154;
+    char pad155[7];
+} Rec81115480; // size = 0x15C
+void func_811110E0(void*);
+void func_81115480(void) {
+    s32 i;
+    s32 j;
+    Rec81115480* rec;
+
+    func_81112F2C();
+    for (i = 0; i < 1; i++) {
+        ((Emu81115480*)D_811847C8)[i].unk54 = 0;
+        ((Emu81115480*)D_811847C8)[i].b80 = 0;
+    }
+    for (i = 0; i < 1; i++) {
+        rec = (Rec81115480*)&D_81184668[i];
+        for (j = 0; j < 16; j++) {
+            rec->items[j] = &D_81184850;
+        }
+        rec->unk154 = -1;
+        rec->unk03 = 0x60;
+        rec->b80 = 0;
+        rec->b20 = 0;
+        rec->b08 = 0;
+        rec->b10 = 0;
+        func_811110E0(rec->unk98);
+        func_811152A4(i);
+    }
+}
 
 void func_811155A0(void) {
     func_812103F0_jp();

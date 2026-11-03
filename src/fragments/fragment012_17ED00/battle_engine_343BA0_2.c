@@ -93,11 +93,39 @@ void func_82133318(void) {
     M2C_FIELD(D_8219A5A0, s32 *, 0x20) = (s32) (M2C_FIELD(D_8219A5A0, s32 *, 0x20) + 1);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8213334C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8213334C.s")
-#endif
+M2C_UNK func_82135E80(CameraNode*, s8*);
+extern s16 D_8219A50C;
+M2C_UNK func_80019B28(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32);
+s32 func_821217DC(M2C_UNK);
+extern u8 D_8219A594;
+extern u8 D_8219A4F4;
+s16 func_8000F1FC(s16, M2C_UNK, M2C_UNK, M2C_UNK);
+void func_800414B0(s32, s32, s32, s32);
+void func_82104C68(s8*, s32);
+void func_8213334C(CameraNode* arg0) {
+    D_8219A594 = func_8000F1FC(D_8219A594, 0xFF, 0x1E, 0x1E);
+    func_80019B28(D_8219A590, 0, 0, 0, 0xFF - D_8219A594);
+    switch (*(u16*)&D_8219A50C) {
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+            if (func_821217DC(0x28) != 0) {
+                M2C_FIELD(D_8219A5A0, s32 *, 0x20) = (s32) (M2C_FIELD(D_8219A5A0, s32 *, 0x20) + 1);
+            }
+            break;
+        case 5:
+            func_82135E80(arg0, D_8219A590);
+            if (D_8219A5A0[1] == 4) {
+                func_800414B0(0, 0x38, 9, 0);
+                D_8219A4F4 = 1;
+                func_82104C68(D_8219A590, 0x14);
+                M2C_FIELD(D_8219A5A0, s32 *, 0x20) = (s32) (M2C_FIELD(D_8219A5A0, s32 *, 0x20) + 1);
+            }
+            break;
+    }
+}
 
 /*
  * func_8213346C
