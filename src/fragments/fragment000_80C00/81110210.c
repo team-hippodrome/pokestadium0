@@ -108,8 +108,9 @@ u8* func_81110C6C(u8* arg0, s32 arg1) {
 
 typedef struct ParticleBank81110CA8 {
     /* 0x0 */ u8 count;
+    /* 0x1 */ u8 count2;
     /* 0x4 */ u8** entries;
-    /* 0x8 */ s32 unk_08;
+    /* 0x8 */ u8** entries2;
 } ParticleBank81110CA8; // size = 0xC
 
 s32 func_8110CA2C(s32 arg0);
@@ -137,11 +138,28 @@ u8* func_81110CA8(s32 arg0, s32 arg1) {
     return ret;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81110D6C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81110D6C.s")
-#endif
+u8* func_81110D6C(s32 arg0, s32 arg1) {
+    ParticleBank81110CA8* bank;
+    u8* ret;
+
+    if (func_8110CA2C(arg0) == 0) {
+        D_811859D0 = arg0 + 0x10000000;
+        return NULL;
+    }
+    bank = (ParticleBank81110CA8*)((u8*)D_811858B0 + arg0 * sizeof(ParticleBank81110CA8));
+    if (arg1 >= bank->count2) {
+        D_811859D0 = (arg0 << 8) + arg1 + 0x04000000;
+        return NULL;
+    }
+    if ((u32)bank->entries2 < 0x80000000) {
+        return NULL;
+    }
+    ret = bank->entries2[arg1];
+    if (ret == NULL) {
+        D_811859D0 = (arg0 << 8) + arg1 + 0x05000000;
+    }
+    return ret;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_81110E3C; signature not recovered. */

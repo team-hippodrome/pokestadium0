@@ -53,11 +53,15 @@ void func_89004708(void) {
 void func_89004710(void) {
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89004718; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_89004718.s")
-#endif
+void func_89004718(s8* arg0, s8* arg1) {
+    s32 i;
+
+    for (i = 0; i < 13; i++) {
+        if (M2C_FIELD(arg1 + i * 0x10, s32*, 8) == 0) {
+            M2C_FIELD(arg0, u16**, 0x30)[i] |= 0x100;
+        }
+    }
+}
 
 void func_890047E4(s8 *arg0, s8 *arg1) {
     u16 *temp_v0;
