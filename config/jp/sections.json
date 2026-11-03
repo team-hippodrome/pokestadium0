@@ -353,9 +353,15 @@
   "src/libultra/io/cartrominit.c": {
     ".bss": "0x80103F80"
   },
+  "src/libultra/io/conteepread.c": {
+    ".bss": "0x80105320"
+  },
   "src/libultra/io/contpfs.c": {
     ".data": "0x80079320",
     ".bss": "0x80104000"
+  },
+  "src/libultra/io/contramread.c": {
+    ".data": "0x80079330"
   },
   "src/libultra/io/controller.c": {
     ".bss": "0x801027D0",

@@ -438,7 +438,35 @@
     "mips": "-mips2",
     "profile": "ultralib"
   },
+  "src/libultra/io/conteepread.c": {
+    "extra": [],
+    "ido": "5.3",
+    "mips": "-mips2",
+    "opt": "-O2",
+    "profile": "ultralib"
+  },
+  "src/libultra/io/conteepwrite.c": {
+    "extra": [],
+    "ido": "5.3",
+    "mips": "-mips2",
+    "opt": "-O2",
+    "profile": "ultralib"
+  },
   "src/libultra/io/contpfs.c": {
+    "extra": [],
+    "ido": "5.3",
+    "mips": "-mips2",
+    "opt": "-O2",
+    "profile": "ultralib"
+  },
+  "src/libultra/io/contramread.c": {
+    "extra": [],
+    "ido": "5.3",
+    "mips": "-mips2",
+    "opt": "-O2",
+    "profile": "ultralib"
+  },
+  "src/libultra/io/contramwrite.c": {
     "extra": [],
     "ido": "5.3",
     "mips": "-mips2",
@@ -456,6 +484,13 @@
     "ido": "5.3",
     "mips": "-mips2",
     "opt": "-O1",
+    "profile": "ultralib"
+  },
+  "src/libultra/io/crc.c": {
+    "extra": [],
+    "ido": "5.3",
+    "mips": "-mips2",
+    "opt": "-O2",
     "profile": "ultralib"
   },
   "src/libultra/io/devmgr.c": {
@@ -545,6 +580,13 @@
     "ido": "5.3",
     "opt": "-O2",
     "mips": "-mips2",
+    "profile": "ultralib"
+  },
+  "src/libultra/io/pfsgetstatus.c": {
+    "extra": [],
+    "ido": "5.3",
+    "mips": "-mips2",
+    "opt": "-O2",
     "profile": "ultralib"
   },
   "src/libultra/io/pfsisplug.c": {
@@ -696,6 +738,13 @@
     "ido": "5.3",
     "mips": "-mips2",
     "opt": "-O1",
+    "profile": "ultralib"
+  },
+  "src/libultra/io/viswapcontext.c": {
+    "extra": [],
+    "ido": "5.3",
+    "mips": "-mips2",
+    "opt": "-O2",
     "profile": "ultralib"
   },
   "src/libultra/libc/ldiv.c": {
