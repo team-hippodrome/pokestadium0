@@ -321,11 +321,20 @@ void Particle31_ResetAllSlots(DisplayObject* arg0) {
     ((Particle31Flags*)arg0)->b40 = 1;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81112BF0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81112BF0.s")
-#endif
+void func_81112BF0(s8* arg0, u16 mask) {
+    s32 i;
+    s8* item;
+
+    for (i = 0; i < 16; i++) {
+        if (mask & 1) {
+            item = M2C_FIELD(arg0, s8**, 0x34 + i * 4);
+            M2C_FIELD(item, u8*, 7) = M2C_FIELD(arg0, u8*, 5);
+            M2C_FIELD(item, u8*, 3) = M2C_FIELD(arg0, u8*, 3);
+            M2C_FIELD(item, u8*, 2) = M2C_FIELD(arg0, u8*, 2);
+        }
+        mask = (s32)mask >> 1;
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_81112CE8; signature not recovered. */
@@ -670,11 +679,66 @@ void func_81115254(s8 *arg0)
   }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_811152A4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_811152A4.s")
-#endif
+typedef struct Chan811152A4 {
+    /* 0x00 */ u8 bit80 : 1;
+    /* 0x00 */ u8 bits : 5;
+    /* 0x00 */ u8 bit02 : 1;
+    /* 0x00 */ u8 bit01 : 1;
+    /* 0x01 */ u8 unk01;
+    /* 0x02 */ u8 unk02;
+    /* 0x03 */ char unk03[5];
+    /* 0x08 */ s16 unk08;
+    /* 0x0A */ s16 unk0A;
+    /* 0x0C */ s16 unk0C;
+    /* 0x0E */ s16 unk0E;
+    /* 0x10 */ s16 unk10;
+    /* 0x12 */ s16 unk12;
+    /* 0x14 */ s16 unk14;
+    /* 0x16 */ char unk16[6];
+    /* 0x1C */ f32 unk1C;
+    /* 0x20 */ f32 unk20;
+    /* 0x24 */ f32 unk24;
+    /* 0x28 */ f32 unk28;
+    /* 0x2C */ f32 unk2C;
+    /* 0x30 */ char unk30[4];
+    /* 0x34 */ void* items[16];
+    /* 0x74 */ char unk74[0x1C];
+    /* 0x90 */ void* unk90;
+    /* 0x94 */ void* unk94;
+    /* 0x98 */ char unk98[0x44];
+    /* 0xDC */ s32 unkDC;
+    /* 0xE0 */ char unkE0[0x7C];
+} Chan811152A4; // size = 0x15C
+extern u8 D_81136978[];
+extern u8 D_81136988[];
+void func_81112894(void*);
+void func_811152A4(s32 arg0) {
+    Chan811152A4* chan = (Chan811152A4*)&D_81184668[arg0];
+    s32 i;
+
+    func_81112E00((u8*)chan);
+    chan->bit02 = 0;
+    chan->unk10 = 0;
+    chan->unk01 = 1;
+    chan->unk12 = 0;
+    chan->unk14 = 0;
+    chan->unk0A = 0;
+    chan->unk08 = 0x1680;
+    chan->unk0C = 0;
+    chan->unk0E = 0;
+    chan->unk02 = 0;
+    chan->unk90 = D_81136978;
+    chan->unk94 = D_81136988;
+    chan->unkDC = 0;
+    chan->unk1C = 1.0f;
+    chan->unk2C = 1.0f;
+    chan->unk20 = 0.0f;
+    chan->unk24 = 0.0f;
+    chan->unk28 = 0.5f;
+    for (i = 0; i < 16; i++) {
+        func_81112894(chan->items[i]);
+    }
+}
 
 typedef struct Item8111539C {
     /* 0x00 */ u32 active : 1;

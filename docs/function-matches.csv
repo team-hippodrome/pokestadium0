@@ -103,7 +103,7 @@ func_8003BF40,0x8003BF40,src/3D140.c,Audio_GetDiskReadyStatus,s1,stadium1:src/3D
 func_8003BF78,0x8003BF78,src/3D140.c,Audio_SetDiskReadyPolling,s1,stadium1:src/3D140.c,c
 func_80031D00,0x80031D00,src/3D140_2.c,Audio_QueueSequenceIdWrapper,s1,stadium1:src/3D140_2.c,c
 func_80044290,0x80044290,src/44E90.c,func_80044290,hand,,c
-func_800443C4,0x800443C4,src/44E90.c,,asm,,asm
+func_800443C4,0x800443C4,src/44E90.c,func_800443C4,hand,,c
 func_80046860,0x80046860,src/47460.c,func_80046860,hand,,c
 func_80047310,0x80047310,src/47F10.c,n_alSynStartVoiceParams,hand,,c
 func_80047490,0x80047490,src/48090.c,func_80047490,hand,,c
@@ -577,7 +577,7 @@ func_811129E0,0x811129E0,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0
 func_81112AF8,0x81112AF8,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_81112AF8,hand,,c
 func_81112B34,0x81112B34,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_81112B34,hand,,c
 func_81112B84,0x81112B84,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,Particle31_ResetAllSlots,hand,,c
-func_81112BF0,0x81112BF0,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,,asm,,asm
+func_81112BF0,0x81112BF0,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_81112BF0,hand,,c
 func_81112CE8,0x81112CE8,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,,asm,,asm
 func_81112D68,0x81112D68,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_81112D68,hand,,c
 func_81112E00,0x81112E00,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_81112E00,hand,,c
@@ -601,7 +601,7 @@ func_81113FA8,0x81113FA8,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0
 func_81114B54,0x81114B54,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,,asm,,asm
 func_811151C8,0x811151C8,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_811151C8,hand,,c
 func_81115254,0x81115254,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_81115254,m2c,m2c+permuter,c
-func_811152A4,0x811152A4,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,,asm,,asm
+func_811152A4,0x811152A4,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_811152A4,hand,,c
 func_8111539C,0x8111539C,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_8111539C,hand,,c
 func_81115480,0x81115480,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,,asm,,asm
 func_811155A0,0x811155A0,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_811155A0,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
