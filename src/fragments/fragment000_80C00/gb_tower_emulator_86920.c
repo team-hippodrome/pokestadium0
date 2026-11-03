@@ -746,11 +746,36 @@ void func_8110CC94(s32 arg0, s32 arg1) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110CD0C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110CD0C.s")
-#endif
+typedef struct Stream8110CD0C {
+    /* 0x00 */ u32 unk00_0 : 4;
+    /* 0x00 */ u32 mode : 2;
+    /* 0x00 */ u32 unk00_6 : 1;
+    /* 0x00 */ u32 enabled : 1;
+    /* 0x00 */ u32 addr : 24;
+    /* 0x04 */ s32 unk04;
+} Stream8110CD0C;
+void func_8110DB8C(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3);
+void func_8110DA68(s32, s32, s32, s32);
+extern u8* D_811858A4;
+s32 func_8110CD0C(Stream8110CD0C* arg0, s32 arg1) {
+    s32 ret;
+
+    if (arg0->enabled == 1) {
+        if (arg0->mode != 0) {
+            ret = func_8110B9A8(arg0->addr, arg1, arg0->unk04, arg0->mode);
+            if (ret == 0) {
+                return -1;
+            }
+            if (arg0->mode == 1) {
+                func_8110DB8C(arg0->unk04, ret, arg0->addr, *(s16*)(D_811858A4 + 2));
+            } else {
+                func_8110DA68(arg0->unk04, ret, arg0->addr, arg0->mode);
+            }
+            arg0->mode = 0;
+            arg0->unk04 = ret;
+        }
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8110CDF0; signature not recovered. */
@@ -870,11 +895,43 @@ void func_8110D3D4(s32 arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110D408.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110D4E0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110D4E0.s")
-#endif
+typedef struct Entry8110D4E0 { u8 unk00[2]; u8 unk02; u8 unk03; char unk04[8]; } Entry8110D4E0;
+extern Entry8110D4E0* D_811858B0;
+s32 func_8110D408(s32, s32*);
+void func_8110EF7C(s32, s32, s32*, s32);
+s32 func_8110D4E0(s32 arg0) {
+    s32 ret;
+    s32 a;
+    s32 b;
+    s32 sp38;
+    s32 sp34;
+    s32 sp30;
+    s32 sp20[4];
+
+    arg0 = func_8110D7B0(1, arg0);
+    a = D_811858B0[arg0].unk02;
+    b = D_811858B0[arg0].unk03;
+    sp20[0] = a;
+    sp20[1] = b;
+    if (a != 0xFF) {
+        sp20[2] = func_8110D408(a, &sp30);
+    } else {
+        sp20[2] = 0;
+    }
+    if (b != 0xFF) {
+        sp20[3] = func_8110D408(b, &sp34);
+    } else {
+        sp20[3] = 0;
+    }
+    ret = func_8110D5BC(1, arg0, &sp38);
+    if (ret == 0) {
+        return 0;
+    }
+    if (sp38 == 1) {
+        func_8110EF7C(arg0, ret, sp20, 0);
+    }
+    return ret;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8110D5BC; signature not recovered. */

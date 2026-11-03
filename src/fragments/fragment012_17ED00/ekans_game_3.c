@@ -884,11 +884,28 @@ void func_82186834(s8* arg0, s8* arg1) {
     func_80058410(arg1 + 0x20, arg0 + 0x32, 4);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_821868E8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821868E8.s")
-#endif
+typedef struct BaseStats821868E8 { u8 species; u8 hp; u8 atk; u8 def; u8 spd; u8 spc; u8 type1; u8 type2; char unk08[0xF]; } BaseStats821868E8;
+extern u8 D_80065D00[];
+s32 func_82183C78(s32, s32);
+s32 func_82183C9C(s32, s32);
+s32 func_82183CC0(s32, s32);
+void func_821868E8(s8* arg0, s32 species, s32 level) {
+    BaseStats821868E8* stats;
+
+    if (species != 0 && species < 0x98) {
+        M2C_FIELD(arg0, u8*, 0xB) = species;
+        stats = &((BaseStats821868E8*)D_80065D00)[species - 1];
+        M2C_FIELD(arg0, s16*, 0xC) = M2C_FIELD(arg0, s16*, 0x28) = func_82183C24(stats->hp, level);
+        M2C_FIELD(arg0, u8*, 0x1C) = stats->type1;
+        M2C_FIELD(arg0, u8*, 0x1D) = stats->type2;
+        M2C_FIELD(arg0, s16*, 0x24) = 0x7777;
+        M2C_FIELD(arg0, u8*, 0x26) = level;
+        M2C_FIELD(arg0, s16*, 0x2A) = func_82183C54(stats->atk, level);
+        M2C_FIELD(arg0, s16*, 0x2C) = func_82183C78(stats->def, level);
+        M2C_FIELD(arg0, s16*, 0x2E) = func_82183C9C(stats->spd, level);
+        M2C_FIELD(arg0, s16*, 0x30) = func_82183CC0(stats->spc, level);
+    }
+}
 
 M2C_UNK func_80058410(s8 *, s8 *, M2C_UNK);     /* extern */
 extern s8 *D_821CF2A0;

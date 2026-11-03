@@ -676,11 +676,40 @@ void func_81115254(s8 *arg0)
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_811152A4.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8111539C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8111539C.s")
-#endif
+typedef struct Item8111539C {
+    /* 0x00 */ u32 active : 1;
+    /* 0x00 */ u32 unk00 : 31;
+    /* 0x04 */ char unk04[0x48];
+    /* 0x4C */ void* owners[2];
+} Item8111539C;
+typedef struct Rec8111539C {
+    /* 0x00 */ char unk00[0x34];
+    /* 0x34 */ Item8111539C* items[16];
+    /* 0x74 */ char unk74[0xE8];
+} Rec8111539C;
+extern u8 D_811842C0[];
+extern Item8111539C D_81184850;
+void* func_811097E8(void*, s32);
+void func_8111539C(s32 arg0) {
+    Rec8111539C* rec = (Rec8111539C*)&D_81184668[arg0];
+    s32 i;
+    s32 j;
+    Item8111539C* item;
+
+    for (i = 0; i < 16; i++) {
+        rec->items[i] = func_811097E8(D_811842C0, 0xD4);
+        if (rec->items[i] == NULL) {
+            rec->items[i] = &D_81184850;
+        } else {
+            item = rec->items[i];
+            item->active = 0;
+            item->owners[0] = rec;
+            for (j = 0; j < 1; j++) {
+                item->owners[j + 1] = NULL;
+            }
+        }
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_81115480; signature not recovered. */
