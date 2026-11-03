@@ -342,11 +342,22 @@ void func_8002AE94(s8* arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 arg4, cha
     M2C_FIELD(arg0, char**, 0x38) = arg5;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002AF04; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002AF04.s")
-#endif
+extern Color_RGBA8 D_80073520;
+void func_8002A0AC(s32, s32, s32, s32, Color_RGBA8);
+void func_80029A64(s32, s32, s32, s32, Color_RGBA8);
+void func_8002AF04(s8* arg0, s32 arg1) {
+    func_8002A32C(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 8), M2C_FIELD(arg0, s32*, 0xC));
+    if ((M2C_FIELD(arg0, s32*, 0x10) & 8) || (arg1 & 0x10)) {
+        func_8002A0AC(M2C_FIELD(arg0, s32*, 0) + 1, M2C_FIELD(arg0, s32*, 4) + 1, M2C_FIELD(arg0, s32*, 8) - 2, M2C_FIELD(arg0, s32*, 0xC) - 2, M2C_FIELD(arg0, Color_RGBA8*, 0x20));
+    } else if (arg1 & 2) {
+        func_80029A64(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 8), M2C_FIELD(arg0, s32*, 0xC), D_80073520);
+    }
+    func_8001AB6C();
+    func_8001A384(M2C_FIELD(arg0, s32*, 0x28), M2C_FIELD(arg0, s32*, 0x34));
+    func_80027F20(M2C_FIELD(arg0, s32*, 0x10) | arg1);
+    func_8001A944(M2C_FIELD(arg0, s32*, 0x2C) + M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 0x30) + M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 0x38));
+    func_8001ABBC();
+}
 
 /*
  * func_8002B018

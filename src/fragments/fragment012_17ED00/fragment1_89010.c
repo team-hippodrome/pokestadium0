@@ -100,11 +100,26 @@ void BattleScene_UpdateIntroSequence(CameraNode* arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_821324D8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821324D8.s")
-#endif
+extern s32 D_82199DE0;
+extern s8 *D_8219A5A0;
+void func_8212188C(void);
+void func_8000D41C(Vec3f*, f32, f32, f32);
+void func_8210BCF0(Vec3f*, Vec3f*, s8*, s8*, s8*);
+M2C_UNK func_800407B0(M2C_UNK, M2C_UNK, M2C_UNK);
+void func_80041914(s32, s32);
+void func_82136918(u8*, s32);
+void func_821324D8(CameraNode* arg0) {
+    func_8212188C();
+    func_8000D41C(&arg0->view.targetPosition, 0.0f, 425.0f, 0.0f);
+    func_8000D41C(&arg0->view.eyePosition, -0.15f, 15.0f, 64.8f);
+    func_8210BCF0(&arg0->view.targetPosition, &arg0->view.eyePosition, D_8219A5A0 + 0x74, D_8219A5A0 + 0x58, D_8219A5A0 + 0x5A);
+    (*(u8**)&D_82199DE0)[1] &= ~1;
+    ((u8**)&D_82199DE0)[1][1] &= ~1;
+    func_800407B0(4, 0, 0);
+    func_80041914(*(u8*)(*(u8**)(((u8**)&D_82199DE0)[0] + 0x860) + 2), *(u8*)(*(u8**)(((u8**)&D_82199DE0)[1] + 0x860) + 2));
+    func_82136918(*(u8**)((*(u8**)&D_82199DE0) + 0x85C), 3);
+    M2C_FIELD(D_8219A5A0, s32 *, 0x20)++;
+}
 
 s32 func_82101FD4(s32);                             /* extern */
 extern s32 D_82199DE0;

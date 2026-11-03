@@ -676,11 +676,36 @@ void func_891035E4(u8* arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89103620.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89103740; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89103740.s")
-#endif
+typedef struct Head89103740 { char unk00[0xC]; s32 unkC; } Head89103740;
+typedef struct Sub89103740 { Head89103740* head; s32 unk04; char unk08[8]; s32 unk10; char unk14[8]; s32 count; } Sub89103740; // 0x20
+typedef struct Item89103740 { char unk00[0x10]; Sub89103740* subs; char unk14[0x10]; } Item89103740; // 0x24
+typedef struct Ref89103740 { Sub89103740* sub; s32 unk04; } Ref89103740;
+typedef struct Msg89103740 { void* unk00; s32 unk04; void* unk08; void* unk0C; } Msg89103740;
+typedef struct Ctx89103740 { char unk0000[0xB558]; s32 unkB558; } Ctx89103740;
+extern char D_8910DD94[];
+extern char D_8910E398[];
+extern char D_8910E3A8[];
+void func_80027868(s8*, s32);
+void func_80027814(s8*, Ref89103740*, s32);
+void func_89103740(Ctx89103740* arg0, Ref89103740* arg1, s32 arg2, s32 arg3, Msg89103740* arg4) {
+    Item89103740* items = M2C_FIELD(arg0, Item89103740**, 0x420);
+    Sub89103740* sub = &items[arg2].subs[arg3];
+    Sub89103740* old = arg1->sub;
+    arg4->unk00 = D_8910DD94;
+    arg4->unk04 = 1;
+    func_89103620(D_8910E398, arg1->sub->head->unkC, arg1->sub->unk04);
+    arg4->unk08 = D_8910E398;
+    func_89103620(D_8910E3A8, arg2, arg3);
+    arg4->unk0C = D_8910E3A8;
+    func_80027868(old->unk14, arg1->unk04);
+    func_891035E4((u8*)old);
+    arg1->sub = sub;
+    arg1->unk04 = sub->count;
+    func_80027814(sub->unk14, arg1, sub->count);
+    old->unk10 = 1;
+    sub->unk10 = 1;
+    arg0->unkB558 = 1;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_89103858; signature not recovered. */

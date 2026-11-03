@@ -328,11 +328,46 @@ s32 func_8110A310(s32 arg0, s32 arg1, s32 arg2) {
     return func_8110A368(arg0, arg1, arg2);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110A368; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110A368.s")
-#endif
+typedef struct Entry8110A368 { s32 val; char pad4[6]; s16 key; } Entry8110A368;
+typedef struct Tbl8110A368 { u32 count; char pad4[0x10]; Entry8110A368 entries[1]; } Tbl8110A368;
+s32 func_8110A368(s32 arg0, s32 arg1, s32 arg2) {
+    Tbl8110A368* sub;
+    Tbl8110A368* tbl;
+    u32 i;
+    switch (arg0) {
+    case 0:
+        tbl = (Tbl8110A368*)&D_81184320;
+        break;
+    case 1:
+        tbl = (Tbl8110A368*)&D_81184380;
+        break;
+    case 2:
+        tbl = (Tbl8110A368*)&D_811843E0;
+        break;
+    }
+    sub = (Tbl8110A368*)((u8*)tbl + 0x20);
+    if (arg1 == 0) {
+        if (arg2 == sub->entries[0].key) {
+            sub->count = 1;
+            return sub->entries[0].val;
+        }
+        if (arg2 == sub->entries[1].key) {
+            sub->count = 0;
+            return sub->entries[1].val;
+        }
+        return 0;
+    }
+    sub = tbl;
+    for (i = 0; i < sub->count; i++) {
+        if (arg2 == tbl->entries[i].key) {
+            return tbl->entries[i].val;
+        }
+    }
+    if (arg1 == 2) {
+        return func_8110A310(arg0, 0, arg2);
+    }
+    return 0;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8110A474; signature not recovered. */
@@ -595,11 +630,38 @@ s8 *func_8110BF28(s32 arg0)
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110BFB0.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110C1C0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110C1C0.s")
-#endif
+typedef struct Timer8110C1C0 { char pad0[0xD]; u8 slot; u8 count; char padF; } Timer8110C1C0;
+extern Timer8110C1C0* D_81185688;
+extern u32 D_8118568C;
+extern u32 D_81185690;
+extern s32 D_81185694;
+extern u8 D_81185698[];
+extern u8 D_81185798[];
+extern u8 D_8118589A;
+extern u8 D_8118589B;
+void func_8110C1C0(void) {
+    u32 i;
+    Timer8110C1C0* t;
+    for (i = 0; i < D_81185690; i++) {
+        t = &D_81185688[i];
+        if (t->count != 0) {
+            if (--t->count == 0) {
+                t->slot = D_8118589A;
+                D_81185698[D_8118589A++] = i;
+            }
+        }
+    }
+    for (i = D_81185690; i < D_8118568C; i++) {
+        t = &D_81185688[i];
+        if (t->count != 0) {
+            if (--t->count == 0) {
+                t->slot = D_8118589B;
+                D_81185798[D_8118589B++] = i;
+            }
+        }
+    }
+    D_81185694 = 0;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8110C2D8; signature not recovered. */

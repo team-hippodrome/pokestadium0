@@ -270,11 +270,90 @@ u16 func_81112650(u8** stream, u8 kind) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81112894.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_811129E0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_811129E0.s")
-#endif
+extern struct GbEmuListZ D_81184928;
+typedef struct Pair811129E0 { u8 a; u8 pad[3]; s32 b; } Pair811129E0;
+typedef struct Part811129E0 {
+    u8 b80 : 1;
+    u8 b40 : 1;
+    u8 b20 : 1;
+    u8 b10 : 1;
+    u8 b08 : 1;
+    u8 b04 : 1;
+    u8 b02 : 1;
+    u8 b01 : 1;
+    u8 unk01;
+    u8 unk02;
+    u8 unk03;
+    u8 unk04;
+    u8 pad05;
+    u8 unk06;
+    u8 pad07;
+    u8 unk08;
+    char pad09[0xF];
+    Pair811129E0 unk18;
+    char pad20[2];
+    s16 unk22;
+    f32 unk24;
+    f32 unk28;
+    f32 unk2C;
+    char pad30[0x10];
+    s16 unk40;
+    s16 unk42;
+    s16 unk44;
+    s32 unk48;
+    s32 unk4C;
+    char pad50[4];
+    void* owner;
+    char pad58[0x18];
+    u8 unk70;
+} Part811129E0;
+typedef struct Owner811129E0 {
+    char pad0[0x50];
+    Part811129E0* slots[11];
+    Pair811129E0 unk7C;
+} Owner811129E0;
+s32 func_81112EEC(s8*);
+void func_81111090();
+s32 func_811129E0(Owner811129E0* arg0, s32 arg1) {
+    Part811129E0* p;
+    s32 pad;
+    if (arg0->slots[arg1] == NULL) {
+        arg0->slots[arg1] = (Part811129E0*)func_81112EEC((s8*)&D_81184928);
+        if (arg0->slots[arg1] == NULL) {
+            arg0->slots[arg1] = NULL;
+            return -1;
+        }
+    } else {
+        func_81111090(arg0->slots[arg1]);
+    }
+    p = arg0->slots[arg1];
+    p->owner = arg0;
+    p->unk18 = arg0->unk7C;
+    p->b80 = 1;
+    p->b20 = 0;
+    p->b10 = 0;
+    p->b40 = 0;
+    p->b02 = 0;
+    p->unk18.a = 0;
+    p->b01 = 0;
+    p->unk01 = 0x40;
+    p->unk08 = 0;
+    p->unk70 = 0;
+    p->unk03 = 0;
+    p->unk04 = 0x80;
+    p->unk06 = 0x40;
+    p->unk22 = 0;
+    p->unk40 = 0;
+    p->unk42 = 0;
+    p->unk44 = 0;
+    p->unk48 = 0;
+    p->unk4C = 0;
+    p->unk02 = 0xFF;
+    p->unk24 = 1.0f;
+    p->unk28 = 1.0f;
+    p->unk2C = 0.0f;
+    return 0;
+}
 
 typedef struct Particle31FlagsA {
     u8 b80 : 1;
@@ -510,7 +589,7 @@ void func_81113140();
 s32 func_811132E4();
 s32 func_81113A44();
 s32 func_81113650();
-void func_811131CC();
+s32 func_811131CC();
 void func_8111303C(Particle303C* arg0) {
     s32 ret;
     if (arg0->b80) {
