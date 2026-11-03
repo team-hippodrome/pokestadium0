@@ -514,11 +514,61 @@ void func_89102A04(s32 arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89102C40.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89102EC8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89102EC8.s")
-#endif
+typedef struct Ctx89102EC8 {
+    /* 0x0000 */ char unk0000[0x78];
+    /* 0x0078 */ s32 unk78;
+    /* 0x007C */ char unk007C[0xC];
+    /* 0x0088 */ s32 unk88;
+    /* 0x008C */ char unk008C[0x9828 - 0x8C];
+    /* 0x9828 */ u8 unk9828;
+    /* 0x9829 */ u8 unk9829;
+    /* 0x982A */ char unk982A[2];
+    /* 0x982C */ s32 unk982C;
+    /* 0x9830 */ char unk9830[0x98D4 - 0x9830];
+    /* 0x98D4 */ s32 unk98D4;
+    /* 0x98D8 */ char unk98D8[0x10];
+    /* 0x98E8 */ s32 unk98E8;
+} Ctx89102EC8;
+s32 func_89106C98(void*);
+M2C_UNK func_89101D94(s8 *);
+s32 func_89102EC8(s8 *arg)
+{
+  Ctx89102EC8 *arg0 = (Ctx89102EC8 *) arg;
+  s32 ret;
+  Ctx89102EC8 *new_var;
+  ret = func_89106C98(arg0->unk9830);
+  if (ret == (-1))
+  {
+    new_var = arg0;
+    new_var->unk88 = 0;
+  }
+  else
+    if (ret == 1)
+  {
+    if (arg0->unk98E8 >= arg0->unk98D4)
+    {
+      arg0->unk982C = 0;
+      arg0->unk9828 = arg0->unk98D4;
+      arg0->unk9829 = arg0->unk98E8;
+      arg0->unk78 = 1;
+    }
+    else
+    {
+      arg0->unk982C = 1;
+      arg0->unk9829 = arg0->unk98D4;
+      arg0->unk9828 = arg0->unk98E8;
+      arg0->unk78 = 2;
+    }
+    func_89101D54((s8 *) arg0, 1);
+    func_89101D94((s8 *) arg0);
+    arg0->unk88 = 0;
+  }
+  else
+  {
+ do { if (ret == 2) { arg0->unk9828 = 1; arg0->unk9829 = 100; arg0->unk982C = 0; func_89101D64((s8 *) arg0, 1); func_89101D94((s8 *) arg0); arg0->unk88 = 0; } } while (0);
+  }
+  return 0;
+}
 
 s32 func_89107614(s8*);
 void func_89107850(s8*, s8*);

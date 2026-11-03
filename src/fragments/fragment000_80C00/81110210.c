@@ -376,11 +376,39 @@ s32 func_81111734(s8 *arg0, s8 *arg1) {
     return ret;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81111784; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81111784.s")
-#endif
+s8 *func_81111784(s8 *arg0, s8 *arg1)
+{
+  s8 *a;
+  s8 *b;
+  s32 prioA;
+  s32 prioB;
+  prioA = (prioB = 0x10);
+  a = func_811114E8(arg0 + 0x20, *((u8 *) (((s8 *) (*((u8 **) (((s8 *) arg1) + 0x54)))) + 5)));
+  if (a != 0)
+  {
+    prioA = *((u8 *) (((s8 *) a) + 0x30));
+  }
+  b = func_811114E8(arg0 + 0x30, *((u8 *) (((s8 *) (*((u8 **) (((s8 *) arg1) + 0x54)))) + 5)));
+  if (b != 0)
+  {
+    prioB = *((u8 *) (((s8 *) b) + 0x30));
+  }
+  if ((a == 0) && (b == 0))
+  {
+    return 0;
+  }
+  if (prioB < (prioA ^ 0))
+  {
+    func_811114BC(b);
+    func_81111688(b, (s32) arg1);
+    func_81112EAC(arg0 + 0x20, (Rec81111130 *) b);
+    *((u8 *) (((s8 *) b) + 0x30)) = *((u8 *) (((s8 *) (*((u8 **) (((s8 *) arg1) + 0x54)))) + 5));
+    return b;
+  }
+  *((s8 **) (((s8 *) a) + 0x48)) = arg1;
+  *((u8 *) (((s8 *) a) + 0x30)) = *((u8 *) (((s8 *) (*((u8 **) (((s8 *) arg1) + 0x54)))) + 5));
+  return a;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8111187C; signature not recovered. */

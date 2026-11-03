@@ -640,11 +640,45 @@ void func_82002778(SlotFlags* arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8200288C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment007_166580/func_8200288C.s")
-#endif
+typedef struct MenuDef8200288C {
+    /* 0x00 */ s32* items;
+    /* 0x04 */ s32 count;
+    /* 0x08 */ s32 itemCount;
+    /* 0x0C */ s32 itemSize;
+} MenuDef8200288C;
+extern s32 D_8200AC58[];
+extern Color82001CCC D_82008F60;
+void func_82001E20(s32, s32, s32, void*);
+void func_8002E230(void*, s32, s32, s32, MenuDef8200288C*);
+void func_8200288C(s8 *arg0, s32 arg1)
+{
+  s32 x;
+  s32 y;
+  s32 pad[2];
+  MenuDef8200288C def;
+  s32 mode;
+ x = (*((s32 *) (((s8 *) arg0) + 0x14))) + 6; y = (*((s32 *) (((s8 *) arg0) + 0x18))) + 6;
+  mode = 0xFFED;
+  func_82001E20(x, y, 2, arg0 + 0xC8);
+  def.items = D_8200AC58;
+  def.count = 0;
+  def.itemCount = 0x18;
+  def.itemSize = (*((s32 *) (((s8 *) arg0) + 0x48))) * 6;
+  switch (arg1)
+  {
+    case 1:
+      mode = 0xFFEF;
+      break;
+
+    case 2:
+      mode = 0xFFFD;
+      break;
+
+  }
+
+  func_8002E230(arg0 + 0x2F8, x + 0x88, y, mode, &def);
+  func_82001CCC(x, y, D_82008F60);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_82002980; signature not recovered. */
