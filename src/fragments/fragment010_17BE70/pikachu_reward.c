@@ -767,7 +767,7 @@ extern u8 D_0042C4A0[];
 extern u8 D_0042CC80[];
 extern u8 D_002E0BE0[];
 extern u8 D_002E2B90[];
-s32 func_81700064(u8);
+s32 func_81700064(s32);
 void func_8001A194(s32, s32);
 
 void func_81701710(void);

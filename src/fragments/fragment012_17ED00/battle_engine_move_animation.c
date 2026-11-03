@@ -996,11 +996,23 @@ void func_821048BC(ActivePokemon* active_pokemon) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_821049E8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821049E8.s")
-#endif
+extern u8 D_82189190[];
+extern s16 D_8219A50C;
+void func_800199F8(ActivePokemon*, u8);
+void func_821054C4(ActivePokemon*, s32);
+
+void func_821049E8(ActivePokemon* arg0) {
+    s32 pad;
+    Record82104AFC* rec =
+        &((Record82104AFC*)D_82189180[BattleScene_GetParticipantSideIndex(arg0)])[D_82189190[D_8219A50C] - 1];
+
+    if (func_82101FD4(arg0) != 0) {
+        M2C_FIELD(arg0, s32*, 0x620) = 0;
+        D_82199E14[D_82199E48].unk_00 = D_8218A7B0;
+        func_800199F8(arg0, rec->unk_00[0]);
+        func_821054C4(arg0, D_82189190[D_8219A50C] - 1);
+    }
+}
 
 extern u8 D_82189190[];
 extern s16 D_8219A4F0[];
@@ -1583,11 +1595,15 @@ void func_82105FCC(ActivePokemon* active_pokemon) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82106144; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82106144.s")
-#endif
+void func_82106144(ActivePokemon* active_pokemon) {
+    if (M2C_FIELD(active_pokemon, u8*, 0x820) == 0x45) {
+        BattleAnim_ResetOwnerFacingAndExitStatusIdle(active_pokemon);
+    }
+    if (M2C_FIELD(active_pokemon, u16*, 0x7C2) & ACTIVE_RETURN_RESET) {
+        M2C_FIELD(active_pokemon, f32*, 0x28) = ((RestHeightRow2*)D_FLT_82189354)[M2C_FIELD(active_pokemon, s16*, 0x1A)].v;
+        func_82105E4C((s8*)active_pokemon, 0x608);
+    }
+}
 
 void BattleScene_CleanupOpponentSpecialAnimFlag(ActivePokemon* active_pokemon) {
     UNUSED s32 pad[2];

@@ -264,11 +264,26 @@ void func_8001B25C(Gfx* arg0, Color_RGBA8 arg1) {
     gSPEndDisplayList(gfx++);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8001B32C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8001B32C.s")
-#endif
+typedef struct Glyph8001B32C {
+    u8 unk0;
+    u8 width;
+    u8 unk2[6];
+} Glyph8001B32C;
+
+typedef struct Font8001B32C {
+    Glyph8001B32C glyphs[7];
+    u8 current;
+    s8 spacing;
+} Font8001B32C;
+
+s32 func_8001B32C(s32 x, s32 scale, const char* str) {
+    s32 width;
+    Font8001B32C* font = (Font8001B32C*)D_800AD200;
+
+    width = (font->glyphs[font->current].width + font->spacing) * scale / 100;
+
+    return x - (((strlen(str) >> 1) * width) >> 1);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8001B3AC; signature not recovered. */

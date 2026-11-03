@@ -90,11 +90,27 @@ void func_8800023C(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment014_235D70/func_880003D4.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88000564; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment014_235D70/func_88000564.s")
-#endif
+s32 func_8002DC04(s8*);
+s32 func_8002BC14(s32);
+extern s32 D_800603C0;
+
+s32 func_88000564(s8* arg0) {
+    s32 ret = 0;
+
+    switch (M2C_FIELD(arg0, s32*, 0x28)) {
+        case 1:
+        case 2:
+            break;
+        default:
+            return 0;
+    }
+    if (func_8002DC04(arg0 + 0x4C) == 0) {
+        if (func_8002BC14(D_800603C0) == 1) {
+            ret = M2C_FIELD(arg0, s32*, 0x54) + 1;
+        }
+    }
+    return ret;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_880005E8; signature not recovered. */
@@ -366,11 +382,15 @@ void func_8800187C(void) {
     func_8000B2F4(D_800603C0);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8800196C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment014_235D70/func_8800196C.s")
-#endif
+Color_RGBA8 func_8800196C(Color_RGBA8 arg0, f32 arg1) {
+    Color_RGBA8 color;
+
+    color.r = (s32)(arg0.r * arg1);
+    color.g = (s32)(arg0.g * arg1);
+    color.b = (s32)(arg0.b * arg1);
+    color.a = arg0.a;
+    return color;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_88001A30; signature not recovered. */
@@ -543,8 +563,20 @@ s32 func_88001D54(s32 arg0) {
     return sp1C;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88001F44; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment014_235D70/func_88001F44.s")
-#endif
+M2C_UNK func_80025BA0(s32, M2C_UNK *, M2C_UNK *, M2C_UNK, s32);
+extern u16 D_800AF986;
+extern M2C_UNK D_82000000;
+extern M2C_UNK D_00166580;
+extern M2C_UNK D_001720F0;
+
+s32 func_88001F44(s32 arg0, s32 arg1) {
+    s32 ret;
+
+    if (D_800AF986 & 0x100) {
+        ret = 0x8040;
+        func_80025BA0(((u32)((s32)&D_82000000 & 0x0FF00000) >> 0x14) - 0x10, &D_00166580, &D_001720F0, 0, 0);
+    } else {
+        ret = func_88001D54(arg0);
+    }
+    return ret;
+}

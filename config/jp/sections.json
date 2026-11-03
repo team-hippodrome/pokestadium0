@@ -26,6 +26,9 @@
   "src/fragments/fragment000_80C00/81110190.c": {
     ".data": "0x81138350"
   },
+  "src/fragments/fragment000_80C00/81110210.c": {
+    ".rodata": "0x811542D8"
+  },
   "src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c": {
     ".rodata": "0x811549E0",
     ".data": "0x81138B74"
@@ -352,6 +355,16 @@
   },
   "src/libultra/io/cartrominit.c": {
     ".bss": "0x80103F80"
+  },
+  "src/libultra/io/conteepread.c": {
+    ".bss": "0x80105320"
+  },
+  "src/libultra/io/contpfs.c": {
+    ".data": "0x80079320",
+    ".bss": "0x80104000"
+  },
+  "src/libultra/io/contramread.c": {
+    ".data": "0x80079330"
   },
   "src/libultra/io/controller.c": {
     ".bss": "0x801027D0",

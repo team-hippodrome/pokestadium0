@@ -133,11 +133,22 @@ void func_8A100318(void* arg0, s32 arg1, s32 arg2) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment018_262620/func_8A100588.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8A100620; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment018_262620/func_8A100620.s")
-#endif
+typedef struct Rgba8A100620 {
+    u8 r, g, b, a;
+} Rgba8A100620;
+
+extern Rgba8A100620 D_8A1057E0;
+extern Rgba8A100620 D_8A1057E4;
+
+void func_8A100620(void* arg0, s32 arg1, s32 arg2) {
+    func_8002A8C4((s8*)arg0, arg1, arg2, 0xF8, 0x68);
+    M2C_FIELD(arg0, s32*, 0x24) = 0;
+    M2C_FIELD(arg0, s32*, 0x20) = 0;
+    M2C_FIELD(arg0, s32*, 0x28) = 0;
+    M2C_FIELD(arg0, s32*, 0x14) = 0x1006;
+    M2C_FIELD(arg0, Rgba8A100620*, 0x18) = D_8A1057E0;
+    M2C_FIELD(arg0, Rgba8A100620*, 0x1C) = D_8A1057E4;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8A10068C; signature not recovered. */

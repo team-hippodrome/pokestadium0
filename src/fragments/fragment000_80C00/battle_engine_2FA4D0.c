@@ -76,11 +76,17 @@ void func_8110FC48(void) {
     func_800567E0(D_81186250, &D_81186234, 1);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110FCF0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110FCF0.s")
-#endif
+extern s32 D_811859D8[][2];
+
+void func_8110FCF0(DisplayObject* arg0, s32* arg1) {
+    s32* entry = D_811859D8[*(u8*)&D_811861DA & 0xFF];
+
+    entry[0] = (s32)arg0;
+    entry[1] = *arg1;
+    if (*(u8*)&D_811861DB == ++(*(u8*)&D_811861DA)) {
+        (*(u8*)&D_811861DA)--;
+    }
+}
 
 /*
  * func_8110FD48

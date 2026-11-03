@@ -15,11 +15,24 @@ Gfx* Gfx_DrawTriangleMarker(Gfx* arg0, Vec3f* arg1, u8 arg2, u8 arg3, u8 arg4, u
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80032FD0.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80033078; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80033078.s")
-#endif
+void rmonPrintf(const char* fmt, ...);
+extern char D_8007DBB0[];
+extern char D_8007DBBC[];
+extern char D_8007DBC0[];
+
+void func_80033078(f32* arg0) {
+    s32 i;
+    s32 j;
+    f32* p = arg0;
+
+    for (i = 0; i < 4; i++) {
+        for (j = 0; j < 4; j++, p++) {
+            rmonPrintf(D_8007DBB0, *p);
+        }
+        rmonPrintf(D_8007DBBC);
+    }
+    rmonPrintf(D_8007DBC0);
+}
 
 Gfx* Gfx_DrawTriangleMarker(Gfx* arg0, Vec3f* arg1, u8 arg2, u8 arg3, u8 arg4, u8 arg5, f32 arg6) {
     f32 sp144;

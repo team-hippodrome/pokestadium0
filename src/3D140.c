@@ -170,11 +170,17 @@ s32 n_alEnvmixerParam(N_PVoice* filter, s32 paramID, void* param) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8003B0F8.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8003B280; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8003B280.s")
-#endif
+s16 func_8003B280(s16 arg0, s32 arg1, s16 arg2, u16 arg3) {
+    s32 delta;
+
+    arg1 >>= 3;
+    if (arg1 == 0) {
+        return arg0;
+    }
+    delta = ((s32)(arg3 * arg1) >> 16) + (arg2 * arg1);
+    arg0 += delta;
+    return arg0;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8003B2E0; signature not recovered. */

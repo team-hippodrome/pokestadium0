@@ -638,11 +638,23 @@ void GbEmu_Delay(OSTime arg0) {
   osRecvMesg(&sp68, NULL, 1);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81104C30; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81104C30.s")
-#endif
+void func_80058410(void*, void*, s32);
+extern u8 D_81122854[];
+
+s32 func_81104C30(u8* arg0) {
+    u8 buf[8];
+    u8* entry = D_81122854;
+    s32 i;
+
+    func_80058410(arg0 + 0x44, buf, 8);
+    for (i = 4; i != 0; i--, entry += 0x18) {
+        buf[3] = entry[0x13];
+        if ((func_80057910(arg0 + 0x34, entry, 0x10) == 0) && (func_80057910(buf, entry + 0x10, 8) == 0)) {
+            break;
+        }
+    }
+    return i;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_81104CD4; signature not recovered. */
@@ -650,11 +662,15 @@ void GbEmu_Delay(OSTime arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81104CD4.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81104D84; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81104D84.s")
-#endif
+extern s32 D_81154C48;
+
+s32 func_81104D84(s32 arg0) {
+    osViBlack(1);
+    GbEmu_Delay(20);
+    osViSetXScale(1.0f);
+    D_81154C48 = arg0;
+    return -1;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_81104DD0; signature not recovered. */
@@ -668,11 +684,26 @@ void GbEmu_Delay(OSTime arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_811056CC.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_811064DC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_811064DC.s")
-#endif
+extern OSMesgQueue D_81156458;
+extern u8 D_811565A0;
+
+s32 func_811064DC(void) {
+    volatile u8* chan = (volatile u8*)&D_811561C8[D_811565A0];
+
+    while (chan[0x99] != 0) {
+    }
+    if (chan[0x9A] != 0) {
+        return -1;
+    }
+    chan[0x99] = 8;
+    osSendMesg(&D_81156458, (OSMesg)(u32)D_811565A0, OS_MESG_BLOCK);
+    while (chan[0x99] != 0) {
+    }
+    if (chan[0x9A] != 0) {
+        return -1;
+    }
+    return 0;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8110659C; signature not recovered. */
@@ -719,11 +750,16 @@ loop_3:
     goto loop_3;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_811067B0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_811067B0.s")
-#endif
+extern u8 D_81156261[];
+extern OSMesgQueue D_81156458;
+extern volatile u8 D_81156475;
+
+void func_811067B0(void) {
+    D_81156261[D_811565A0 * 0xA4] = 4;
+    osSendMesg(&D_81156458, (OSMesg)(u32)D_811565A0, OS_MESG_BLOCK);
+    while (D_81156475 != 0) {
+    }
+}
 
 extern s8 D_81156546;
 
