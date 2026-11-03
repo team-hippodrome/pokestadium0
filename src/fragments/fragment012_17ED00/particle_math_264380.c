@@ -142,11 +142,9 @@ s32 func_82168F54(s32 arg0)
   return var_v1;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82168F7C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82168F7C.s")
-#endif
+void func_82168F7C(void) {
+    gDPSetRenderMode(gDisplayListHead++, 0x0C180000, 0x5978);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_82168FAC; signature not recovered. */

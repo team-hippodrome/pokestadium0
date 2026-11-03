@@ -61,11 +61,19 @@ void func_8002F32C(GridMenu80031004*, s32, s32);
 extern u8 D_80073520[];
 M2C_UNK func_80029A64(s32, s32, s32, s32, Color_RGBA8);
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002D880; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002D880.s")
-#endif
+void func_8002D8D8(s8* arg0, s32 arg1, s32 arg2);
+extern s32 D_800603C0;
+M2C_UNK func_8000B2F4(s32);
+
+void func_8002D880(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
+    M2C_FIELD(arg0, s32*, 0xC) = arg4;
+    M2C_FIELD(arg0, s32*, 0x10) = arg5;
+    M2C_FIELD(arg0, s32*, 0x14) = arg3;
+    func_8002D8D8(arg0, arg1, arg2);
+    M2C_FIELD(arg0, s32*, 0x1C) = 0xC00;
+    M2C_FIELD(arg0, s32*, 0x20) = 0;
+    func_8000B2F4(M2C_FIELD(arg0, s32*, 0x18) = D_800603C0);
+}
 
 void func_8002D900(u8* arg0);
 

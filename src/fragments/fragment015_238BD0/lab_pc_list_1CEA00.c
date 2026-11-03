@@ -487,11 +487,15 @@ void func_89001230(s8* arg0, s32 arg1) {
     func_8002ED18(arg0, arg1, arg0 + 0x44);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89001250; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_89001250.s")
-#endif
+void func_8002EC24(s8*, s32, s8*, s32, void*, s32, s32);
+void func_89001018();
+
+void func_89001250(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
+    M2C_FIELD(arg0, s32*, 0x10C) = arg1;
+    M2C_FIELD(arg0, s32*, 0x110) = arg2;
+    func_8002EC24(arg0, arg3, arg0 + 0x44, 8, func_89001018, 0xEC, 0x1C);
+    M2C_FIELD(arg0, s32*, 0x20) |= 0x10000;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_890012C4; signature not recovered. */

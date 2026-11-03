@@ -755,11 +755,17 @@ void func_8110CF24(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110CFEC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110CFEC.s")
-#endif
+u8* func_8110CFEC(s32 arg0, s32* arg1) {
+    s32 off;
+
+    off = ((u16*)D_811858A8)[func_8110D7B0(0, arg0)];
+    *arg1 = *(off + D_811858A8);
+    off++;
+    if (*arg1 == 0) {
+        return NULL;
+    }
+    return D_811858A8 + off;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8110D054; signature not recovered. */
@@ -809,11 +815,13 @@ s32 func_8110D214(s32 arg0, s32 arg1, s32 arg2) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110D278.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110D3D4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110D3D4.s")
-#endif
+void func_8110D3D4(s32 arg0) {
+    s32 idx;
+    s32 sp18;
+
+    idx = func_8110D7B0(0, arg0);
+    func_8110D5BC(0, idx, &sp18);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8110D408; signature not recovered. */

@@ -488,11 +488,11 @@ void func_80029028(s32, s32, s32, s32, Color82001CCC);
 extern Color82001CCC D_82008F5C;
 extern Color82001CCC D_82008F58;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82001BB4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment007_166580/func_82001BB4.s")
-#endif
+void func_82001810(s32, s32, s32*, s32, s32, s32);
+
+void func_82001BB4(s32 arg0, s32 arg1, s32* arg2, s32 arg3, s32 arg4, s32 arg5) {
+    func_82001810(arg0, arg1, (*arg2 & 1) ? NULL : arg2 + 1, arg3, arg4, arg5);
+}
 
 /*
  * func_82001C00
@@ -677,7 +677,7 @@ extern s32 D_8200ACFC;
 extern s32 D_8200AD00;
 extern s32 D_8200AC58[];
 extern M2C_UNK D_82009C98;
-extern M2C_UNK func_82001810;
+void func_82001810();
 extern M2C_UNK func_820020EC;
 void func_8002A8C4(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 M2C_UNK func_8002EC24(s8*, s32, s8*, M2C_UNK, M2C_UNK*, s32, s32);

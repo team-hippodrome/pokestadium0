@@ -438,6 +438,13 @@
     "mips": "-mips2",
     "profile": "ultralib"
   },
+  "src/libultra/io/contpfs.c": {
+    "extra": [],
+    "ido": "5.3",
+    "mips": "-mips2",
+    "opt": "-O2",
+    "profile": "ultralib"
+  },
   "src/libultra/io/contreaddata.c": {
     "ido": "5.3",
     "opt": "-O2",

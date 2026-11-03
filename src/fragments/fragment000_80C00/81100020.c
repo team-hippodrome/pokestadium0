@@ -14,11 +14,16 @@
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_811000DC.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81100284; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81100284.s")
-#endif
+extern s32 D_8111D0A8[];
+extern s32 D_8111D228[];
+extern s32 D_8111D528[];
+extern s32 D_8111D6A8[];
+extern s32 D_8111D828[];
+
+s32* func_81100284(s32 arg0) {
+    arg0 &= 7;
+    return (arg0 == 1) ? D_8111D528 : (arg0 == 2) ? D_8111D6A8 : (arg0 == 3) ? D_8111D228 : (arg0 == 4) ? D_8111D0A8 : D_8111D828;
+}
 
 s32* func_81100284(s32);
 s32 func_81103C40(s32, s32*, s32, s32, s32);
