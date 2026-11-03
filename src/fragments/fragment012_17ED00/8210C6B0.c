@@ -41,11 +41,31 @@ void BattleScene_SelectActiveController(ActivePokemon* arg0) {
     ptr->controller = &gControllers[arg0->sessionTeams->teamMember[M2C_FIELD(arg0, u8*, 0x7B9)]->controllerPort];
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8210C778; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210C778.s")
-#endif
+s32 func_82107A5C(void);
+void func_8210C738(ActivePokemon* arg0, ActivePokemonState* arg1, Controller* arg2);
+M2C_UNK func_82134D80();
+extern s8 D_82199DE0;
+
+s32 func_8210C778(ActivePokemon* arg0) {
+    ActivePokemonState* state = &arg0->state;
+    ActivePokemonState* other = &((ActivePokemon**)&D_82199DE0)[func_82107A5C() == 0]->state;
+    Controller* controller = state->controller;
+    s32 pad;
+
+    if (state->unk_10 == 3) {
+        if ((M2C_FIELD(controller, u16*, 8) & 0x20) && (other->unk_2D != 0x10)) {
+            if (state->unk_04 == 2) {
+                func_8210C738(arg0, other, controller);
+            }
+            state->unk_10 = 0;
+            func_82134D80();
+            return 0;
+        }
+        state->unk_1E += 0x38E;
+        return 1;
+    }
+    return 0;
+}
 
 void func_8210C82C(ActivePokemon* arg0) {
     BattleMonRuntime* temp_v1 = &arg0->state.runtime;
@@ -358,11 +378,36 @@ void BattleScene_CollectPlayerAction(ActivePokemon* arg0, ActivePokemon* arg1) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8210DA30; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210DA30.s")
-#endif
+s32 func_8210DA30(ActivePokemon* arg0) {
+    u8* mon = (u8*)arg0 + 0x7C6;
+    s32 pp = 0;
+    s32 disabled;
+
+    if (M2C_FIELD(arg0, u8*, 0x818) != 0) {
+        disabled = mon[0x52] >> 4;
+        if (disabled != 0) {
+            pp = mon[0x32] & 0x3F;
+        }
+        if (disabled != 1) {
+            pp |= mon[0x33] & 0x3F;
+        }
+        if (disabled != 2) {
+            pp |= mon[0x34] & 0x3F;
+        }
+        if (disabled != 3) {
+            pp |= mon[0x35] & 0x3F;
+        }
+    } else {
+        pp = mon[0x32] & 0x3F;
+        pp |= mon[0x33] & 0x3F;
+        pp |= mon[0x34] & 0x3F;
+        pp |= mon[0x35] & 0x3F;
+    }
+    if (pp == 0) {
+        return 1;
+    }
+    return 0;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8210DAEC; signature not recovered. */

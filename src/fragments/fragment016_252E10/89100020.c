@@ -529,11 +529,24 @@ void func_89103144(Flags89103144* arg0, Item89103144** arg1, List89103144* arg2)
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_891031B8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_891031B8.s")
-#endif
+void func_891031B8(s8* arg0, s8** arg1, s8* arg2) {
+    s32 i;
+    s32 j;
+    s8* box;
+    s8* entry;
+
+    for (box = M2C_FIELD(arg2, s8**, 0), i = 0; i < M2C_FIELD(arg2, s32*, 8); i++, box += 0x24) {
+        for (entry = M2C_FIELD(box, s8**, 0x10), j = 0; j < M2C_FIELD(box, s32*, 0x18); j++, entry += 0x20) {
+            if ((M2C_FIELD(entry, s32*, 8) != 0) && (M2C_FIELD(entry, s32*, 0x1C) < M2C_FIELD(box, s32*, 0x20)) &&
+                (entry != *arg1)) {
+                break;
+            }
+        }
+        if (j >= M2C_FIELD(box, s32*, 0x18)) {
+            M2C_FIELD(arg0, u16**, 4)[i] |= 1;
+        }
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_89103274; signature not recovered. */

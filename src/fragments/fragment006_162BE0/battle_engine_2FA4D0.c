@@ -802,11 +802,22 @@ void func_88402538(void) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_884025E4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment006_162BE0/func_884025E4.s")
-#endif
+s32 func_80022B40(void);
+s32 func_80025BD8(void);
+
+void func_884025E4(void) {
+    if (func_80022B40() == 0) {
+        D_88403358 = -1;
+        return;
+    }
+    D_88403358 = func_80025BD8();
+    if ((D_88403358 < 0) || (D_88403310[D_88403358].game == 0)) {
+        D_88403358 = 0;
+        while (D_88403310[D_88403358].game == 0) {
+            D_88403358++;
+        }
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_884026A4; signature not recovered. */

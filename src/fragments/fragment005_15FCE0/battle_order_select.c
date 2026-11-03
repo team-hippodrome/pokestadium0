@@ -411,11 +411,25 @@ s32 BattleMenu_IsSlotAlreadySelected(unk_D_848037A0* arg0, s8 arg1) {
     return 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_823018F8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment005_15FCE0/func_823018F8.s")
-#endif
+s32 func_823018F8(unk_D_848037A0* arg0) {
+    s32 sum;
+    s32 i;
+    s32 locked = (arg0->unk_001C->unk_000 & 2) != 0;
+
+    if ((D_82302BD0->ruleCategory == 1) && !locked) {
+        sum = 0;
+        for (i = 0; i < arg0->unk_000B; i++) {
+            sum += arg0->unk_0018[arg0->unk_000C[i]].unk_24;
+        }
+        if ((arg0->unk_000B == 2) && (sum >= 0x6A)) {
+            return 1;
+        }
+        if ((arg0->unk_000B == 3) && (sum >= 0x9C)) {
+            return 1;
+        }
+    }
+    return 0;
+}
 
 s32 func_823019AC(unk_D_848037A0* arg0) {
     s32 var_v1;

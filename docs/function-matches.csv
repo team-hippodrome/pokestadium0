@@ -341,7 +341,7 @@ func_811000DC,0x811000DC,src/fragments/fragment000_80C00/81100020.c,,asm,,asm
 func_81100284,0x81100284,src/fragments/fragment000_80C00/81100020.c,func_81100284,hand,,c
 func_811002F4,0x811002F4,src/fragments/fragment000_80C00/81100020.c,func_811002F4,hand,,c
 func_81100390,0x81100390,src/fragments/fragment000_80C00/81100020.c,,asm,,asm
-func_81100818,0x81100818,src/fragments/fragment000_80C00/81100020.c,,asm,,asm
+func_81100818,0x81100818,src/fragments/fragment000_80C00/81100020.c,func_81100818,hand,,c
 func_811008DC,0x811008DC,src/fragments/fragment000_80C00/81100020.c,,asm,,asm
 func_81100C84,0x81100C84,src/fragments/fragment000_80C00/81100020.c,,asm,,asm
 func_81107390,0x81107390,src/fragments/fragment000_80C00/81107390.c,,asm,,asm
@@ -360,12 +360,12 @@ func_811092F4,0x811092F4,src/fragments/fragment000_80C00/81107390.c,,asm,,asm
 func_8110938C,0x8110938C,src/fragments/fragment000_80C00/81107390.c,,asm,,asm
 func_81110190,0x81110190,src/fragments/fragment000_80C00/81110190.c,osGbSetNextBuffer,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86C30.c,c
 func_81110210,0x81110210,src/fragments/fragment000_80C00/81110210.c,,asm,,asm
-func_811105DC,0x811105DC,src/fragments/fragment000_80C00/81110210.c,,asm,,asm
+func_811105DC,0x811105DC,src/fragments/fragment000_80C00/81110210.c,func_811105DC,hand,,c
 func_81110694,0x81110694,src/fragments/fragment000_80C00/81110210.c,func_81110694,hand,,c
 func_8111073C,0x8111073C,src/fragments/fragment000_80C00/81110210.c,,asm,,asm
 func_81110798,0x81110798,src/fragments/fragment000_80C00/81110210.c,,asm,,asm
 func_81110C6C,0x81110C6C,src/fragments/fragment000_80C00/81110210.c,func_81110C6C,hand,,c
-func_81110CA8,0x81110CA8,src/fragments/fragment000_80C00/81110210.c,,asm,,asm
+func_81110CA8,0x81110CA8,src/fragments/fragment000_80C00/81110210.c,func_81110CA8,hand,,c
 func_81110D6C,0x81110D6C,src/fragments/fragment000_80C00/81110210.c,,asm,,asm
 func_81110E3C,0x81110E3C,src/fragments/fragment000_80C00/81110210.c,,asm,,asm
 func_81111090,0x81111090,src/fragments/fragment000_80C00/81110210.c,func_81111090,hand,,c
@@ -489,7 +489,7 @@ func_81104CD4,0x81104CD4,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0
 func_81104D84,0x81104D84,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,func_81104D84,hand,,c
 func_81104DD0,0x81104DD0,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,,asm,,asm
 func_811056CC,0x811056CC,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,,asm,,asm
-func_811064DC,0x811064DC,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,,asm,,asm
+func_811064DC,0x811064DC,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,func_811064DC,hand,,c
 func_8110659C,0x8110659C,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,,asm,,asm
 func_8110665C,0x8110665C,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,,asm,,asm
 func_81106700,0x81106700,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,func_81106700,m2c,m2c+context+types,c
@@ -547,14 +547,14 @@ func_8110CAE0,0x8110CAE0,src/fragments/fragment000_80C00/gb_tower_emulator_86920
 func_8110CB10,0x8110CB10,src/fragments/fragment000_80C00/gb_tower_emulator_86920.c,func_8110CB10,m2c,m2c,c
 func_8110CB40,0x8110CB40,src/fragments/fragment000_80C00/gb_tower_emulator_86920.c,func_8110CB40,m2c,m2c,c
 func_8110CB70,0x8110CB70,src/fragments/fragment000_80C00/gb_tower_emulator_86920.c,func_8110CB70,m2c,m2c+permuter,c
-func_8110CBD0,0x8110CBD0,src/fragments/fragment000_80C00/gb_tower_emulator_86920.c,,asm,,asm
+func_8110CBD0,0x8110CBD0,src/fragments/fragment000_80C00/gb_tower_emulator_86920.c,func_8110CBD0,hand,,c
 func_8110CC94,0x8110CC94,src/fragments/fragment000_80C00/gb_tower_emulator_86920.c,func_8110CC94,hand,,c
 func_8110CD0C,0x8110CD0C,src/fragments/fragment000_80C00/gb_tower_emulator_86920.c,,asm,,asm
 func_8110CDF0,0x8110CDF0,src/fragments/fragment000_80C00/gb_tower_emulator_86920.c,,asm,,asm
 func_8110CEC0,0x8110CEC0,src/fragments/fragment000_80C00/gb_tower_emulator_86920.c,func_8110CEC0,m2c,m2c,c
 func_8110CF24,0x8110CF24,src/fragments/fragment000_80C00/gb_tower_emulator_86920.c,func_8110CF24,hand,,c
 func_8110CFEC,0x8110CFEC,src/fragments/fragment000_80C00/gb_tower_emulator_86920.c,func_8110CFEC,hand,,c
-func_8110D054,0x8110D054,src/fragments/fragment000_80C00/gb_tower_emulator_86920.c,,asm,,asm
+func_8110D054,0x8110D054,src/fragments/fragment000_80C00/gb_tower_emulator_86920.c,func_8110D054,hand,,c
 func_8110D110,0x8110D110,src/fragments/fragment000_80C00/gb_tower_emulator_86920.c,,asm,,asm
 func_8110D1B8,0x8110D1B8,src/fragments/fragment000_80C00/gb_tower_emulator_86920.c,func_8110D1B8,hand,,c
 func_8110D214,0x8110D214,src/fragments/fragment000_80C00/gb_tower_emulator_86920.c,func_8110D214,hand,,c
@@ -676,7 +676,7 @@ func_82301658,0x82301658,src/fragments/fragment005_15FCE0/battle_order_select.c,
 func_823016FC,0x823016FC,src/fragments/fragment005_15FCE0/battle_order_select.c,,asm,,asm
 func_823017EC,0x823017EC,src/fragments/fragment005_15FCE0/battle_order_select.c,func_823017EC,hand,,c
 func_823018AC,0x823018AC,src/fragments/fragment005_15FCE0/battle_order_select.c,BattleMenu_IsSlotAlreadySelected,s1,stadium1:src/fragments/battle_order_select/battle_order_select.c,c
-func_823018F8,0x823018F8,src/fragments/fragment005_15FCE0/battle_order_select.c,,asm,,asm
+func_823018F8,0x823018F8,src/fragments/fragment005_15FCE0/battle_order_select.c,func_823018F8,hand,,c
 func_823019AC,0x823019AC,src/fragments/fragment005_15FCE0/battle_order_select.c,func_823019AC,hand,,c
 func_82301A2C,0x82301A2C,src/fragments/fragment005_15FCE0/battle_order_select.c,func_82301A2C,hand,,c
 func_82301B2C,0x82301B2C,src/fragments/fragment005_15FCE0/battle_order_select.c,func_82301B2C,m2c,m2c,c
@@ -727,7 +727,7 @@ func_88402334,0x88402334,src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c
 func_884023F0,0x884023F0,src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c,func_884023F0,m2c,m2c,c
 func_8840248C,0x8840248C,src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c,func_8840248C,hand,,c
 func_88402538,0x88402538,src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c,func_88402538,hand,,c
-func_884025E4,0x884025E4,src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c,,asm,,asm
+func_884025E4,0x884025E4,src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c,func_884025E4,hand,,c
 func_884026A4,0x884026A4,src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c,,asm,,asm
 func_884029FC,0x884029FC,src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c,func_884029FC,m2c,m2c,c
 func_88402AF0,0x88402AF0,src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c,ClefairyGame_Main,hand,,c
@@ -941,7 +941,7 @@ func_8210C6B0,0x8210C6B0,src/fragments/fragment012_17ED00/8210C6B0.c,func_8210C6
 func_8210C6F8,0x8210C6F8,src/fragments/fragment012_17ED00/8210C6B0.c,func_8210C6F8,m2c,m2c,c
 func_8210C708,0x8210C708,src/fragments/fragment012_17ED00/8210C6B0.c,func_8210C708,m2c,m2c,c
 func_8210C738,0x8210C738,src/fragments/fragment012_17ED00/8210C6B0.c,BattleScene_SelectActiveController,hand,,c
-func_8210C778,0x8210C778,src/fragments/fragment012_17ED00/8210C6B0.c,,asm,,asm
+func_8210C778,0x8210C778,src/fragments/fragment012_17ED00/8210C6B0.c,func_8210C778,hand,,c
 func_8210C82C,0x8210C82C,src/fragments/fragment012_17ED00/8210C6B0.c,func_8210C82C,hand,,c
 func_8210C8A0,0x8210C8A0,src/fragments/fragment012_17ED00/8210C6B0.c,,asm,,asm
 func_8210CA24,0x8210CA24,src/fragments/fragment012_17ED00/8210C6B0.c,func_8210CA24,hand,,c
@@ -961,7 +961,7 @@ func_8210D4B4,0x8210D4B4,src/fragments/fragment012_17ED00/8210C6B0.c,,asm,,asm
 func_8210D6BC,0x8210D6BC,src/fragments/fragment012_17ED00/8210C6B0.c,,asm,,asm
 func_8210D838,0x8210D838,src/fragments/fragment012_17ED00/8210C6B0.c,BattleScene_HandlePlayerActionInput,hand,,c
 func_8210D90C,0x8210D90C,src/fragments/fragment012_17ED00/8210C6B0.c,BattleScene_CollectPlayerAction,s1,stadium1:src/fragments/battle_engine/battle_engine_2F74E0.c,c
-func_8210DA30,0x8210DA30,src/fragments/fragment012_17ED00/8210C6B0.c,,asm,,asm
+func_8210DA30,0x8210DA30,src/fragments/fragment012_17ED00/8210C6B0.c,func_8210DA30,hand,,c
 func_8210DAEC,0x8210DAEC,src/fragments/fragment012_17ED00/8210C6B0.c,,asm,,asm
 func_8210DC9C,0x8210DC9C,src/fragments/fragment012_17ED00/8210C6B0.c,BattleScene_CompleteCpuForcedAction,s1,stadium1:src/fragments/battle_engine/battle_engine_2F74E0.c,c
 func_8210DCE4,0x8210DCE4,src/fragments/fragment012_17ED00/8210C6B0.c,,asm,,asm
@@ -2711,7 +2711,7 @@ func_821044C8,0x821044C8,src/fragments/fragment012_17ED00/battle_engine_move_ani
 func_82104648,0x82104648,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,,asm,,asm
 func_821047C4,0x821047C4,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,func_821047C4,hand,,c
 func_821048BC,0x821048BC,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,func_821048BC,hand,,c
-func_821049E8,0x821049E8,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,,asm,,asm
+func_821049E8,0x821049E8,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,func_821049E8,hand,,c
 func_82104AB0,0x82104AB0,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,func_82104AB0,hand,,c
 func_82104AFC,0x82104AFC,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,func_82104AFC,hand,,c
 func_82104BE4,0x82104BE4,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,BattleScene_StateCallbackNop,s1,stadium1:src/fragments/battle_engine/battle_engine_move_animation.c,c
@@ -3519,7 +3519,7 @@ func_880013EC,0x880013EC,src/fragments/fragment014_235D70/lab_pc_icons.c,func_88
 func_8800149C,0x8800149C,src/fragments/fragment014_235D70/lab_pc_icons.c,func_8800149C,m2c,m2c,c
 func_88001564,0x88001564,src/fragments/fragment014_235D70/lab_pc_icons.c,,asm,,asm
 func_8800187C,0x8800187C,src/fragments/fragment014_235D70/lab_pc_icons.c,func_8800187C,hand,,c
-func_8800196C,0x8800196C,src/fragments/fragment014_235D70/lab_pc_icons.c,,asm,,asm
+func_8800196C,0x8800196C,src/fragments/fragment014_235D70/lab_pc_icons.c,func_8800196C,hand,,c
 func_88001A30,0x88001A30,src/fragments/fragment014_235D70/lab_pc_icons.c,,asm,,asm
 func_88001AE0,0x88001AE0,src/fragments/fragment014_235D70/lab_pc_icons.c,func_88001AE0,m2c,m2c,c
 func_88001B28,0x88001B28,src/fragments/fragment014_235D70/lab_pc_icons.c,,asm,,asm
@@ -3706,7 +3706,7 @@ func_89102EC8,0x89102EC8,src/fragments/fragment016_252E10/89100020.c,,asm,,asm
 func_89102FBC,0x89102FBC,src/fragments/fragment016_252E10/89100020.c,func_89102FBC,hand,,c
 func_89103080,0x89103080,src/fragments/fragment016_252E10/89100020.c,func_89103080,hand,,c
 func_89103144,0x89103144,src/fragments/fragment016_252E10/89100020.c,func_89103144,hand,,c
-func_891031B8,0x891031B8,src/fragments/fragment016_252E10/89100020.c,,asm,,asm
+func_891031B8,0x891031B8,src/fragments/fragment016_252E10/89100020.c,func_891031B8,hand,,c
 func_89103274,0x89103274,src/fragments/fragment016_252E10/89100020.c,,asm,,asm
 func_89103370,0x89103370,src/fragments/fragment016_252E10/89100020.c,func_89103370,m2c,m2c,c
 func_891033A0,0x891033A0,src/fragments/fragment016_252E10/89100020.c,,asm,,asm

@@ -684,11 +684,26 @@ s32 func_81104D84(s32 arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_811056CC.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_811064DC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_811064DC.s")
-#endif
+extern OSMesgQueue D_81156458;
+extern u8 D_811565A0;
+
+s32 func_811064DC(void) {
+    volatile u8* chan = (volatile u8*)&D_811561C8[D_811565A0];
+
+    while (chan[0x99] != 0) {
+    }
+    if (chan[0x9A] != 0) {
+        return -1;
+    }
+    chan[0x99] = 8;
+    osSendMesg(&D_81156458, (OSMesg)(u32)D_811565A0, OS_MESG_BLOCK);
+    while (chan[0x99] != 0) {
+    }
+    if (chan[0x9A] != 0) {
+        return -1;
+    }
+    return 0;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8110659C; signature not recovered. */

@@ -382,11 +382,15 @@ void func_8800187C(void) {
     func_8000B2F4(D_800603C0);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8800196C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment014_235D70/func_8800196C.s")
-#endif
+Color_RGBA8 func_8800196C(Color_RGBA8 arg0, f32 arg1) {
+    Color_RGBA8 color;
+
+    color.r = (s32)(arg0.r * arg1);
+    color.g = (s32)(arg0.g * arg1);
+    color.b = (s32)(arg0.b * arg1);
+    color.a = arg0.a;
+    return color;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_88001A30; signature not recovered. */
