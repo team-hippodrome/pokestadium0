@@ -112,6 +112,21 @@
   "src/fragments/fragment012_17ED00/battle_engine_339CA0.c": {
     ".rodata": "0x82197520"
   },
+  "src/fragments/fragment012_17ED00/battle_engine_339CA0_821640A0.c": {
+    ".rodata": {
+      "address": "0x82197738",
+      "size": "0x118"
+    }
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_339CA0_821659FC.c": {
+    ".rodata": {
+      "address": "0x82197858",
+      "size": "0x14"
+    }
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_339CA0_82165E30.c": {
+    ".rodata": "0x82197870"
+  },
   "src/fragments/fragment012_17ED00/battle_engine_3438B0.c": {
     ".rodata": {
       "address": "0x82196410",
@@ -143,11 +158,22 @@
     },
     ".data": "0x82191A10"
   },
+  "src/fragments/fragment012_17ED00/battle_engine_343BA0_8_82170D28.c": {
+    ".rodata": "0x82197994",
+    ".data": "0x82191C90"
+  },
   "src/fragments/fragment012_17ED00/battle_engine_347330.c": {
     ".rodata": {
-      "address": "0x821979F8",
+      "address": "0x821979B0",
       "size": "0x8"
     }
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_347330_82171788.c": {
+    ".rodata": "0x821979F8",
+    ".data": "0x821928D8"
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_347330_82173418.c": {
+    ".data": "0x821929D0"
   },
   "src/fragments/fragment012_17ED00/battle_engine_34A420.c": {
     ".rodata": "0x82197AB0"

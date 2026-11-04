@@ -11,11 +11,11 @@ A WIP decompilation of the Japanese-only original Pokémon Stadium (ポケモン
 
 `make rom` builds the complete 16 MiB ROM byte-for-byte from `src/`. Every source file is compiled whole with IDO through asm-processor; its C functions and its `GLOBAL_ASM` owners link at their original addresses in the resident image and all 259 fragments, and the fragments' original storage is rebuilt.
 
-- **4,678 of 5,444 code owners are built from C**, including 210 owners from
+- **4,690 of 5,444 code owners are built from C**, including 210 owners from
   unmodified `lib/ultralib` sources. The per-owner ledger is
   [docs/function-matches.csv](docs/function-matches.csv); current verified counts
   and code bytes are in [COVERAGE.md](COVERAGE.md).
-- 34 more owners have matching C behind `#ifdef NON_MATCHING` while their
+- 22 more owners have matching C behind `#ifdef NON_MATCHING` while their
   remaining data placement is recovered.
 - Registered source files place recovered `.rodata`, `.data`, and runtime `.bss`
   at their established addresses. Other data, microcode and non-code ranges
@@ -54,7 +54,7 @@ Do not commit ROMs or extracted retail assets.
 ## Progress and evidence
 
 - [Coverage](COVERAGE.md): first-pass owner counts and bytes built from C.
-- [Latest matching continuation](docs/matching-2026-11-04-camera-data.md): thirteen held battle-camera C owners integrated beyond PR #38.
+- [Latest matching continuation](docs/matching-2026-11-04-effects-data.md): twelve held effect and terrain C owners integrated beyond PR #39.
 - [First matching pass](docs/matching.md): Stadium 1 ports and m2c output in
   `src/`, listed per owner in [function-matches.csv](docs/function-matches.csv).
 - [Initial 100 m2c functions](docs/m2c-easiest-100.md): eight-byte empty returns.
