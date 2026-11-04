@@ -119,7 +119,7 @@
     ".rodata": "0x821966E0"
   },
   "src/fragments/fragment012_17ED00/battle_engine_343BA0_2.c": {
-    ".rodata": "0x82196738"
+    ".rodata": "0x82196720"
   },
   "src/fragments/fragment012_17ED00/battle_engine_343BA0_3.c": {
     ".rodata": "0x82196760"
@@ -216,6 +216,12 @@
   },
   "src/fragments/fragment012_17ED00/particle_math_26E6D0_3.c": {
     ".rodata": "0x82196990"
+  },
+  "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c": {
+    ".rodata": {
+      "address": "0x8901892C",
+      "size": "0x1C"
+    }
   },
   "src/fragments/fragment016_252E10/89100020.c": {
     ".rodata": {
@@ -440,7 +446,7 @@
     ".rodata": "0x800793A0"
   },
   "src/save_data.c": {
-    ".rodata": "0x8007B748"
+    ".rodata": "0x8007B718"
   },
   "src/scheduler.c": {
     ".rodata": "0x800794E0"
