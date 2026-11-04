@@ -258,11 +258,28 @@ void func_8A100BEC(s32 arg0, s32 arg1, s32 arg2) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment018_262620/func_8A100C50.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8A100F20; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment018_262620/func_8A100F20.s")
-#endif
+typedef struct Rgba8A100F20 { u8 r, g, b, a; } Rgba8A100F20;
+void func_8002A550(s32, s32, s32, s32, Rgba8A100F20, Rgba8A100F20);
+void func_8001A944(s32, s32, const char*, ...);
+s32 func_800231C8(s32, s32);
+extern u8 D_8A1057F8[];
+extern u8 D_8A1057FC[];
+extern char D_8A12FD1C[];
+extern s32 D_8A12FFB8;
+void func_8A100F20(s32 arg0, s32 arg1) {
+    u8 *entry = (u8 *)&D_80064C5C + D_8A12FFB8 * 0x1C;
+
+    func_8002A550(arg0, arg1, 0x21C, 0x78, *(Rgba8A100F20 *)D_8A1057F8, *(Rgba8A100F20 *)D_8A1057FC);
+    func_8001AB6C();
+    func_8001A384(0x10, 0);
+    func_8001AB2C(0x24);
+    if (func_800231C8(D_8A12FFB0, entry[0]) >= 2) {
+        func_8001A944(arg0 + 0x2A, arg1 + 0xC, M2C_FIELD(entry, char **, 0x18));
+    } else {
+        func_8001A944(arg0 + 0x2A, arg1 + 0xC, D_8A12FD1C);
+    }
+    func_8001ABBC();
+}
 
 s32 func_80029658(s32, s32, s32, void*);
 s32 func_80029864(s32, s32, s32, void*);

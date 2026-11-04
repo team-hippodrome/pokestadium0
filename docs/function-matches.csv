@@ -3577,7 +3577,7 @@ func_890003C0,0x890003C0,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,L
 func_89000448,0x89000448,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,LabItem_ReadDeckEntries,s1,stadium1:src/fragments/lab_pc/lab_pc_1B4EA0.c,c
 func_89000494,0x89000494,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,LabItem_WriteDeckBack,hand,,c
 func_8900054C,0x8900054C,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,func_8900054C,m2c,m2c,c
-func_89000588,0x89000588,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,,asm,,asm
+func_89000588,0x89000588,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,func_89000588,hand,,c
 func_89000694,0x89000694,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,,asm,,asm
 func_89000828,0x89000828,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,func_89000828,hand,,c
 func_890008C8,0x890008C8,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,,asm,,asm
@@ -3852,7 +3852,7 @@ func_8A1009E0,0x8A1009E0,src/fragments/fragment018_262620/pokedex_214920.c,func_
 func_8A100A24,0x8A100A24,src/fragments/fragment018_262620/pokedex_214920.c,,asm,,asm
 func_8A100BEC,0x8A100BEC,src/fragments/fragment018_262620/pokedex_214920.c,func_8A100BEC,hand,,c
 func_8A100C50,0x8A100C50,src/fragments/fragment018_262620/pokedex_214920.c,,asm,,asm
-func_8A100F20,0x8A100F20,src/fragments/fragment018_262620/pokedex_214920.c,,asm,,asm
+func_8A100F20,0x8A100F20,src/fragments/fragment018_262620/pokedex_214920.c,func_8A100F20,hand,,c
 func_8A101020,0x8A101020,src/fragments/fragment018_262620/pokedex_214920.c,func_8A101020,hand,,c
 func_8A101118,0x8A101118,src/fragments/fragment018_262620/pokedex_214920.c,func_8A101118,m2c,m2c,c
 func_8A101154,0x8A101154,src/fragments/fragment018_262620/pokedex_214920.c,func_8A101154,hand,,c
