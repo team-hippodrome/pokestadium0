@@ -314,11 +314,35 @@ void func_82006154(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s8* arg5)
     Font_EndTexturedTextRendering();
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_820061F0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment007_166580/func_820061F0.s")
-#endif
+typedef struct List820061F0 {
+    /* 0x00 */ char **items;
+    /* 0x04 */ s8 count;
+    /* 0x08 */ s32 unk8;
+} List820061F0;
+void func_820061F0(s8 *arg0, s32 arg1, s32 arg2, List820061F0 *arg3, s8 *arg4, Color_RGBA8 arg5) {
+    s32 i;
+    s32 w;
+    s32 max = 0;
+    s32 h;
+
+    for (i = 0; i < arg3->count; i++) {
+        w = func_800566BC(arg3->items[i]) >> 1;
+        if (max < w) {
+            max = w;
+        }
+    }
+    func_80027804(arg0 + 0x50, (s32)arg3->items, arg3->count, arg3->count);
+    h = max * 0x18 + 0x18;
+    func_8002D880(arg0 + 0x2C, arg0 + 0x50, arg4, (void (*)(s32, s32, char *, s32, s32, s32 *))func_82006154, h, 0x24);
+    M2C_FIELD(arg0, s32 *, 0x4C) |= 0x10000;
+    func_8002A8C4(arg0, arg1, arg2, h + 0xC, arg3->count * 0x24 + 0x18);
+    M2C_FIELD(arg0, s32 *, 0x24) = 0;
+    M2C_FIELD(arg0, s32 *, 0x20) = 0;
+    M2C_FIELD(arg0, s32 *, 0x28) = 0;
+    M2C_FIELD(arg0, s32 *, 0x14) = 0x800;
+    M2C_FIELD(arg0, s32 *, 0x20) = arg3->unk8;
+    M2C_FIELD(arg0, Color_RGBA8 *, 0x18) = arg5;
+}
 
 s32 func_8002AE6C();                                /* extern */
 void func_8002D9B8(s32, s32, s32, s32, s8 *);  /* extern */

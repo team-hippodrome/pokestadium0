@@ -623,11 +623,18 @@ s32 Ui_AdjustSteppedRangeSelection(unk_func_8002E128_arg0* arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002B940.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002BAB8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002BAB8.s")
-#endif
+extern Gfx D_80073450[];
+extern u8 *D_80073584[];
+void func_8002BAB8(s32 x, s32 y, s32 value, s32 digits) {
+
+    gSPDisplayList(gDisplayListHead++, D_80073450);
+    gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
+    while (digits > 0) {
+        digits--;
+        func_8001BCB4(x + digits * 9, y, 8, 0xC, D_80073584[value % 10], 8, 0);
+        value /= 10;
+    }
+}
 
 s32 Ui_GetSelectionDirection(unk_func_8002EBD8_arg0* arg0) {
     s32 var_v1 = 0;

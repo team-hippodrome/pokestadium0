@@ -800,7 +800,7 @@ func_82005E34,0x82005E34,src/fragments/fragment007_166580_3.c,func_82005E34,hand
 func_82005EE4,0x82005EE4,src/fragments/fragment007_166580_3.c,func_82005EE4,hand,,c
 func_820060AC,0x820060AC,src/fragments/fragment007_166580_3.c,func_820060AC,hand,,c
 func_82006154,0x82006154,src/fragments/fragment007_166580_3.c,func_82006154,hand,,c
-func_820061F0,0x820061F0,src/fragments/fragment007_166580_3.c,,asm,,asm
+func_820061F0,0x820061F0,src/fragments/fragment007_166580_3.c,func_820061F0,hand,,c
 func_82006348,0x82006348,src/fragments/fragment007_166580_3.c,func_82006348,m2c,m2c+permuter,c
 func_8200639C,0x8200639C,src/fragments/fragment007_166580_3.c,func_8200639C,hand,,c
 func_82006410,0x82006410,src/fragments/fragment007_166580_3.c,func_82006410,hand,,c
@@ -4302,7 +4302,7 @@ func_8002B638,0x8002B638,src/gb_save.c,Ui_HandleNumericSelectionInput,s1,stadium
 func_8002B66C,0x8002B66C,src/gb_save.c,Ui_AdjustSteppedRangeSelection,s1,stadium1:src/gb_save.c,c
 func_8002B788,0x8002B788,src/gb_save.c,,asm,,asm
 func_8002B940,0x8002B940,src/gb_save.c,,asm,,asm
-func_8002BAB8,0x8002BAB8,src/gb_save.c,,asm,,asm
+func_8002BAB8,0x8002BAB8,src/gb_save.c,func_8002BAB8,hand,,c
 func_8002BC14,0x8002BC14,src/gb_save.c,Ui_GetSelectionDirection,s1,stadium1:src/gb_save.c,c
 func_8002BC44,0x8002BC44,src/gb_save.c,GbSave_GameToCategoryIndex,s1,stadium1:src/gb_save.c,c
 func_8002BC58,0x8002BC58,src/gb_save.c,,asm,,asm
