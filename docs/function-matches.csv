@@ -2930,11 +2930,11 @@ func_82185684,0x82185684,src/fragments/fragment012_17ED00/ekans_game_3.c,func_82
 func_821857CC,0x821857CC,src/fragments/fragment012_17ED00/ekans_game_3.c,,asm,,asm
 func_821858DC,0x821858DC,src/fragments/fragment012_17ED00/ekans_game_3.c,,asm,,asm
 func_82185A30,0x82185A30,src/fragments/fragment012_17ED00/ekans_game_3.c,,asm,,asm
-func_82185BE0,0x82185BE0,src/fragments/fragment012_17ED00/ekans_game_3.c,,asm,,asm
+func_82185BE0,0x82185BE0,src/fragments/fragment012_17ED00/ekans_game_3.c,func_82185BE0,hand,,c
 func_82185D44,0x82185D44,src/fragments/fragment012_17ED00/ekans_game_3.c,,asm,,asm
 func_82186394,0x82186394,src/fragments/fragment012_17ED00/ekans_game_3.c,func_82186394,hand,,c
-func_821864D4,0x821864D4,src/fragments/fragment012_17ED00/ekans_game_3.c,,asm,,asm
-func_8218663C,0x8218663C,src/fragments/fragment012_17ED00/ekans_game_3.c,,asm,,asm
+func_821864D4,0x821864D4,src/fragments/fragment012_17ED00/ekans_game_3.c,func_821864D4,hand,,c
+func_8218663C,0x8218663C,src/fragments/fragment012_17ED00/ekans_game_3.c,func_8218663C,hand,,c
 func_821866F0,0x821866F0,src/fragments/fragment012_17ED00/ekans_game_3.c,func_821866F0,hand,,c
 func_821867A8,0x821867A8,src/fragments/fragment012_17ED00/ekans_game_3.c,func_821867A8,hand,,c
 func_82186834,0x82186834,src/fragments/fragment012_17ED00/ekans_game_3.c,func_82186834,hand,,c
