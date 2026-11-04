@@ -174,11 +174,35 @@ void func_8213346C(CameraNode* arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82133534; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82133534.s")
-#endif
+typedef struct Arr82133534 { u8 b[7]; } Arr82133534;
+typedef struct Mon82133534 { u8 flags; u8 pad1; s16 move; } Mon82133534;
+extern Arr82133534 D_8218B350;
+s16 func_8000F1FC(s16, M2C_UNK, M2C_UNK, M2C_UNK);
+M2C_UNK func_80019B28(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32);
+void func_82133534(CameraNode *arg0)
+{
+  s32 pad[2];
+  Arr82133534 sp28 = D_8218B350;
+  s32 v;
+  D_8219A594 = func_8000F1FC(D_8219A594, 0, 0x28, 0x28);
+  func_80019B28(D_8219A590, 0, 0, 0, 0xFF - D_8219A594);
+  if (func_821217DC(8) != 0)
+  {
+    D_8219A4F0[0xE]++;
+    v = sp28.b[D_8219A4F0[0xE]];
+    if (v == 0xFF)
+    {
+      *((s32 *) (((s8 *) D_8219A5A0) + 0x20)) = 6;
+ if (1) { }
+    }
+    else
+    {
+      (*((Mon82133534 **) (((s8 *) D_8219A590) + 0x85C)))->move = v;
+      (*((Mon82133534 **) (((s8 *) D_8219A590) + 0x85C)))->flags |= 0x80;
+      (*((s32 *) (((s8 *) D_8219A5A0) + 0x20)))++;
+    }
+  }
+}
 
 M2C_UNK func_80019B28(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32); /* extern */
 M2C_UNK func_821088BC(s8 *);                      /* extern */
