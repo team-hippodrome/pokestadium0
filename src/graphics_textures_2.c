@@ -222,11 +222,13 @@ void Font_DisableTwoCycleTexturing(void) {
     gSPDisplayList(gDisplayListHead++, D_800609D8);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8001AC7C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8001AC7C.s")
-#endif
+extern Gfx D_80060A00[];
+void func_8001AC7C(s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b, s32 a) {
+    gSPDisplayList(gDisplayListHead++, D_80060A00);
+    gDPSetPrimColor(gDisplayListHead++, 0, 0, r, g, b, a);
+    gSPTextureRectangle(gDisplayListHead++, x << 2, y << 2, (x + w) << 2, (y + h) << 2, G_TX_RENDERTILE, 0, 0, 0x1000, 0x0400);
+    gDPSetTexturePersp(gDisplayListHead++, G_TP_PERSP);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8001ADA0; signature not recovered. */

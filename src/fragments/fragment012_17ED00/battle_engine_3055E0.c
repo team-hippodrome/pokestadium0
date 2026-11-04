@@ -223,7 +223,7 @@ void ClefairyGame_HidePatternIcons(void);
 void ClefairyGame_ShowPatternIcons(void);
 void func_821247F0(void);
 s32 func_82124810(CameraNode* arg0, ActivePokemon* arg1);
-void func_82124874(void);
+void func_82124874();
 
 void BattleScene_SetCameraAnglesAndDistance(s16 arg0, s16 arg1, f32 arg2);
 void BattleScene_SetCameraAtFromAnchor(ActivePokemon* arg0, CameraNode* arg1, Vec3f arg2, s16 arg3, s16 arg4, f32 arg5, f32 arg6);
@@ -988,7 +988,31 @@ void BattleScene_ApproachCameraZoom(CameraNode* arg0, ActivePokemon* arg1) {
 }
 
 #ifdef NON_MATCHING
-/* TODO: decompile func_82123684; signature not recovered. */
+// Matches the ROM, but uses rodata data that is not placed in this file yet.
+void func_82123684(CameraNode* arg0, ActivePokemon* arg1) {
+    s32 pad[3];
+    Vec3f sp50;
+    Vec3f sp44;
+    f32 sp40;
+    s16 sp3E;
+    s16 sp3C;
+    s16 sp3A;
+    s16 sp38;
+    s16 sp36;
+    s16 sp34;
+
+    BattleAnim_Vec3fCopy(&sp50, &arg0->view.targetPosition);
+    BattleAnim_Vec3fCopy(&sp44, &arg0->view.eyePosition);
+    func_82124874(arg0, arg1);
+    BattleAnim_CalculateDistanceAngles(&arg0->view.targetPosition, &arg0->view.eyePosition, &D_8219A534, &sp34, &sp38);
+    BattleAnim_CalculateDistanceAngles(&sp50, &sp44, &gCameraDistTarget, &sp36, &sp3A);
+    BattleAnim_ApproachF(&gCameraDistTarget, D_8219A534, 0.5f);
+    BattleAnim_StepToS16(&sp3A, sp38, 0x108);
+    BattleAnim_StepToS16(&sp36, sp34, 0xB6);
+    BattleAnim_CalculateDistanceAngles(&sp50, &arg0->view.targetPosition, &sp40, &sp3E, &sp3C);
+    Camera_ComputeEyeFromAngles(&sp50, &arg0->view.targetPosition, sp40, sp3E, sp3C);
+    BattleScene_SetCameraEyeFromAt(arg0, sp36, sp3A, gCameraDistTarget, 0.0f);
+}
 #else
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82123684.s")
 #endif
@@ -1158,7 +1182,8 @@ void ClefairyGame_ShowPatternIcons(void) {
     ClefairyGame_SpawnPatternIcons();
 }
 
-// Called with (CameraNode*, ActivePokemon*); the arguments pass through untouched.
+// Called with (CameraNode*, ActivePokemon*) by func_82123684 through the unprototyped
+// declaration above; the arguments pass through untouched.
 void func_821247F0(void) {
     Diorama_RenderFrame();
 }
@@ -1179,7 +1204,8 @@ void func_82124830(s8 *arg0, ActivePokemon* arg1)
   }
 }
 
-// Called with (CameraNode*, ActivePokemon*); the arguments pass through untouched.
+// Called with (CameraNode*, ActivePokemon*) by func_82123684 through the unprototyped
+// declaration above; the arguments pass through untouched.
 void func_82124874(void) {
     MiniFx_UpdateParticles();
 }

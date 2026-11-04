@@ -7,7 +7,7 @@ func_8002D8D8,0x8002D8D8,src/2E480.c,func_8002D8D8,m2c,m2c,c
 func_8002D900,0x8002D900,src/2E480.c,func_8002D900,hand,,c
 func_8002D948,0x8002D948,src/2E480.c,func_8002D948,hand,,c
 func_8002D9B8,0x8002D9B8,src/2E480.c,func_8002D9B8,hand,,c
-func_8002DAD8,0x8002DAD8,src/2E480.c,,asm,,asm
+func_8002DAD8,0x8002DAD8,src/2E480.c,func_8002DAD8,hand,,c
 func_8002DC04,0x8002DC04,src/2E480.c,func_8002DC04,hand,,c
 func_8002DCE0,0x8002DCE0,src/2E480.c,,asm,,asm
 func_8002DDFC,0x8002DDFC,src/2E480.c,,asm,,asm
@@ -707,7 +707,7 @@ func_88400C48,0x88400C48,src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c
 func_88400CE8,0x88400CE8,src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c,func_88400CE8,m2c,m2c,c
 func_88400DAC,0x88400DAC,src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c,func_88400DAC,hand,,c
 func_88400F4C,0x88400F4C,src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c,func_88400F4C,m2c,m2c,c
-func_88401040,0x88401040,src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c,,asm,,asm
+func_88401040,0x88401040,src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c,func_88401040,hand,,c
 func_8840115C,0x8840115C,src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c,func_8840115C,hand,,c
 func_88401290,0x88401290,src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c,,asm,,asm
 func_884014B4,0x884014B4,src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c,,asm,,asm
@@ -3858,7 +3858,7 @@ func_8A101118,0x8A101118,src/fragments/fragment018_262620/pokedex_214920.c,func_
 func_8A101154,0x8A101154,src/fragments/fragment018_262620/pokedex_214920.c,func_8A101154,hand,,c
 func_8A1011A4,0x8A1011A4,src/fragments/fragment018_262620/pokedex_214920.c,func_8A1011A4,m2c,m2c,c
 func_8A10122C,0x8A10122C,src/fragments/fragment018_262620/pokedex_214920.c,,asm,,asm
-func_8A1013C0,0x8A1013C0,src/fragments/fragment018_262620/pokedex_214920.c,,asm,,asm
+func_8A1013C0,0x8A1013C0,src/fragments/fragment018_262620/pokedex_214920.c,func_8A1013C0,hand,,c
 func_8A1014EC,0x8A1014EC,src/fragments/fragment018_262620/pokedex_214920.c,func_8A1014EC,hand,,c
 func_8A10164C,0x8A10164C,src/fragments/fragment018_262620/pokedex_214920.c,func_8A10164C,hand,,c
 func_8A1016B8,0x8A1016B8,src/fragments/fragment018_262620/pokedex_214920.c,Pokedex_LoadIcon,s1,stadium1:src/fragments/pokedex/pokedex_214920.c,c
@@ -4547,7 +4547,7 @@ func_8001AB6C,0x8001AB6C,src/graphics_textures_2.c,Font_BeginTranslucentTextRend
 func_8001ABBC,0x8001ABBC,src/graphics_textures_2.c,Font_EndTexturedTextRendering,s1,stadium1:src/graphics_textures.c,c
 func_8001ABE8,0x8001ABE8,src/graphics_textures_2.c,Font_EnableTwoCycleTexturing,hand,,c
 func_8001AC3C,0x8001AC3C,src/graphics_textures_2.c,Font_DisableTwoCycleTexturing,hand,,c
-func_8001AC7C,0x8001AC7C,src/graphics_textures_2.c,,asm,,asm
+func_8001AC7C,0x8001AC7C,src/graphics_textures_2.c,func_8001AC7C,hand,,c
 func_8001ADA0,0x8001ADA0,src/graphics_textures_2.c,,asm,,asm
 func_8001AFB0,0x8001AFB0,src/graphics_textures_2.c,,asm,,asm
 func_8001B25C,0x8001B25C,src/graphics_textures_2.c,func_8001B25C,hand,,c
