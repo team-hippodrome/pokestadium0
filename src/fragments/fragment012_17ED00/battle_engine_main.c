@@ -160,11 +160,18 @@ void Battle_RenderActivePokemonThumbnail(GraphNode* thumbnail_root, DepthBuffer*
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82100650; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82100650.s")
-#endif
+s32 func_80006B50(s32 *, s32 *, s32 *, s32 *);
+void func_82100650(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
+    s32 x0 = arg0;
+    s32 y0 = arg1;
+
+    if (func_80006B50(&arg0, &arg1, &arg2, &arg3) != 0) {
+        x0 = ((arg0 - x0) << 5) + 16;
+        y0 = ((arg1 - y0) << 5) + 16;
+        gSPTextureRectangle(gDisplayListHead++, arg0 << 2, arg1 << 2, (arg2 + 1) << 2, (arg3 + 1) << 2,
+                            G_TX_RENDERTILE, x0, y0, 0x800, 0x800);
+    }
+}
 
 // called every frame: bug boy in GLC
 // Load full-width source rows and draw at half size using the clipped rectangle helper.

@@ -459,11 +459,38 @@ void GbPak_PrepareProbeBlock(u32* arg0, s32 arg1) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_811035B4.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81103728; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81103728.s")
-#endif
+extern volatile u8 D_81156474;
+extern volatile u8 D_81156475;
+extern volatile s8 D_81156476;
+extern volatile s8 D_81156477;
+extern s8 D_81156478;
+extern s8 D_81156479;
+extern s32 D_81156470;
+extern OSMesgQueue D_81156458;
+void func_800515B0(s32, s32);
+void func_8004CFB0(OSMesgQueue *, s32, s32);
+void func_81103728(s32 arg0) {
+    s32 i;
+
+    while (D_81156475 != 0) {
+    }
+    for (i = 0; i < 4; i++) {
+        if ((1 << i) & arg0) {
+            func_800515B0(*(s32 *)((u8 *)&D_811561C8[i] + 0x50), 0);
+        }
+    }
+    while (D_81156475 != 0) {
+    }
+    func_8004CFB0(&D_81156458, 0xFF, 1);
+    while (D_81156474 != 0) {
+    }
+    D_81156470 = 0;
+    D_81156475 = 0;
+    D_81156476 = 0;
+    D_81156477 = 0;
+    D_81156478 = 0;
+    D_81156479 = 0;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_81103850; signature not recovered. */

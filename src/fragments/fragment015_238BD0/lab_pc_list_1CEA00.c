@@ -569,11 +569,42 @@ void func_89001B10(s32 arg0, s32 arg1, s32 arg2) {
     func_8001ABBC();
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89001B88; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_89001B88.s")
-#endif
+typedef struct List89001B88 {
+    /* 0x00 */ u8** data;
+    /* 0x04 */ s32 unk4;
+    /* 0x08 */ s32 index;
+} List89001B88;
+extern s32 D_8900A650[];
+extern char* D_8900A660[];
+extern char* D_8900A66C[];
+extern s8* D_8900A678[];
+s32 func_80031BC0(u8, char *);
+void func_89001B88(s32* arg0) {
+    char sp2C[0x54];
+    List89001B88* list;
+
+    switch (arg0[0]) {
+        case 1:
+            func_890019C8(arg0[0xC] + 0x58, arg0[0xD], D_8900A650[arg0[0x41]], D_8900A678[arg0[0x41]]);
+            break;
+        case 2:
+            func_89001A7C(arg0[0xC] + 0x58, arg0[0xD], D_8900A660[arg0[0x41]]);
+            break;
+        case 3:
+            func_89001A7C(arg0[0xC] + 0x58, arg0[0xD], D_8900A66C[arg0[0x41]]);
+            break;
+        case 4:
+        case 6:
+        case 7:
+            if (arg0[0] == 6) {
+                list = (List89001B88*)(arg0 + 0xBE);
+            } else {
+                list = (List89001B88*)(arg0 + 0x79);
+            }
+            func_89001B10(arg0[0xC] + 0x58, arg0[0xD], func_80031BC0((*list->data)[list->index * 2], sp2C));
+            break;
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_89001CB0; signature not recovered. */
