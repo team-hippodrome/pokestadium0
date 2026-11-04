@@ -849,11 +849,32 @@ s32 func_8110CD0C(Stream8110CD0C* arg0, s32 arg1) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110CDF0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110CDF0.s")
-#endif
+u8* func_81110CA8(s32, s32);
+u8* func_81110D6C(s32, s32);
+s32 func_8110CDF0(s32 arg0, s32 arg1, s32 arg2) {
+    u8 *p;
+
+    if (arg1 < 0x7F) {
+        p = func_81110CA8(arg0, arg1);
+        if (p == NULL) {
+            return -1;
+        }
+        if (p[1] != 0) {
+            func_8110CD0C(M2C_FIELD(p, Stream8110CD0C **, 8), arg0);
+        }
+        func_8110CD0C(M2C_FIELD(p, Stream8110CD0C **, 0x10), arg0);
+        if (p[2] != 0x7F) {
+            func_8110CD0C(M2C_FIELD(p, Stream8110CD0C **, 0x18), arg0);
+        }
+    } else if (arg1 == 0x7F) {
+        p = func_81110D6C(arg0, arg2);
+        if (p == NULL) {
+            return -1;
+        }
+        func_8110CD0C(M2C_FIELD(p, Stream8110CD0C **, 4), arg0);
+        return 0;
+    }
+}
 
 M2C_UNK func_8004CFB0(s32, M2C_UNK, M2C_UNK);       /* extern */
 s32 func_8110D7B0(M2C_UNK, s32);                    /* extern */

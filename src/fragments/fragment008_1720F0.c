@@ -452,11 +452,24 @@ void func_88101DB4(s8 *arg0, s32 arg1) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88101DF8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment008_1720F0/func_88101DF8.s")
-#endif
+extern M2C_UNK D_88102D84;
+extern s32 D_88103098[];
+void func_8810173C(s32, s32, s32, s32, s32, s32);
+M2C_UNK func_8002EC24();
+void func_88101DF8(s8 *arg0, s32 arg1, s32 arg2, s8 *arg3, s32 arg4) {
+    func_8002A8C4(arg0 + 8, arg1, arg2, 0x220, 0x158);
+    M2C_FIELD(arg0, s32 *, 0x2C) = 0;
+    M2C_FIELD(arg0, s32 *, 0x28) = 0;
+    M2C_FIELD(arg0, s32 *, 0x30) = 0;
+    M2C_FIELD(arg0, s32 *, 0x1C) = 0x801;
+    func_88101DB4(arg0, arg4);
+    M2C_FIELD(arg0, s32 *, 0x28) = ((s32 *)&D_88102D84)[M2C_FIELD(arg0, s32 *, 0xBC)];
+    M2C_FIELD(arg0, s8 **, 0xB8) = arg3;
+    func_8002EC24(arg0 + 0x54, arg3, arg0 + 0x98, 3, func_8810173C, 0x214, 0x64);
+    M2C_FIELD(arg0, s32 *, 0x74) |= 0x10000;
+    M2C_FIELD(arg0, s32 *, 0) = 0;
+    func_88101D7C(D_88103098, 0, 0x18);
+}
 
 typedef struct {
     /* 0x00 */ char unk00[0x8];
