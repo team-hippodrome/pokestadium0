@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 4725,
-  "asm_owners": 719,
+  "c_owners": 4727,
+  "asm_owners": 717,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -584,7 +584,7 @@
     "tools/cflags_overrides.json": "7052d644eb08429c59981bb4c369c8c937c61ca4c639a1c1ca2c5fc0ce919ebb",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "be1a41fb35a83fb5610253da4465dc91bbec975991193aba1732886e6730bc3f",
+    "docs/function-matches.csv": "305f16d6d64d9c87f8d50b79976dd7ab1e2dd61f838c6f92df6cac49685cf3be",
     "linker_scripts/jp/symbol_addrs.txt": "afca390ab7e15134bd987939224f6ec6b0d8be60cd8dee3c830ae7d9d3a49a19"
   },
   "binutils": {
@@ -655,7 +655,7 @@
     "src/fragments/fragment000_80C00/81107390.c": "b3a85cbb3f7667126573c33d657ec42a87e3a766a5d47898c799672b31a1568b",
     "src/fragments/fragment000_80C00/81110190.c": "c3654154efda0cd7040fdd8e2b6d4e862660e256550ffc7aa97119b537acf61d",
     "src/fragments/fragment000_80C00/81110210.c": "fc1f8348e53f7c3253f03ecc52864911d4fa6b69ca9bc7ff30da0789a5acfad6",
-    "src/fragments/fragment000_80C00/81111C20.c": "998446c7d21442a2d2fe1aba7edcbe373ed8189e27efc28cc2ea8e5dd1669c93",
+    "src/fragments/fragment000_80C00/81111C20.c": "555a1d6975d960188756eb552108811fe4ddbb66a7f919d51e38b7c0444d75e0",
     "src/fragments/fragment000_80C00/81117B20.c": "3843091a770c9a107a189ef652ff919fc1eac6d520dd8100299adf9b1616cefc",
     "src/fragments/fragment000_80C00/battle_engine_2FA4D0.c": "96169d3cd584ca90783a597ca7644af6387b053272ce7724419ce713a62fa3a2",
     "src/fragments/fragment000_80C00/battle_engine_309ED0.c": "a9bf25ded5c33d5e0b1369a3ad0f3366d8f6f41594f259001f29c9b0dc355d2f",
@@ -741,7 +741,7 @@
     "src/fragments/fragment012_17ED00/battle_engine_thumbnail.c": "d2717cbc20d699d329f5a4f108f3264dc2d89e6c06a1aa40df896680f2a479f7",
     "src/fragments/fragment012_17ED00/ekans_game.c": "4c0d7afe0c3308ce8e32a1466e62fae8934e6fcd26584fb158fa89b07c3902a1",
     "src/fragments/fragment012_17ED00/ekans_game_2.c": "a843a8dcfda50b5c239239d42815db53bc72ffbf18dc042d5f01b364bcc4ffbd",
-    "src/fragments/fragment012_17ED00/ekans_game_3.c": "09b9da7b9878c5dd270f689c649c7db0f9628875f7ee8b8945e633005cd3d258",
+    "src/fragments/fragment012_17ED00/ekans_game_3.c": "2c80c79b06dc8e5d28396edb15877ae5c451becfbe570326805ea918a7c46e91",
     "src/fragments/fragment012_17ED00/fragment1_89010.c": "527731fc641c3aec279d4a479d3c2651f372f3e07517bd391a366b1cd5b00526",
     "src/fragments/fragment012_17ED00/particle_math_261F90.c": "cd49bb456fdc16d331184020b9d04ce3953c903b713477a833bc0083f191c47a",
     "src/fragments/fragment012_17ED00/particle_math_264380.c": "2a2df40645ffec94b5cf08d403b88d53e44d851d2e4e826f65484d77e539b479",

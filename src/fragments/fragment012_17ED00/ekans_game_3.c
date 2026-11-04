@@ -801,11 +801,32 @@ s32 func_82185494(void) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82185D44.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82186394; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82186394.s")
-#endif
+extern u8* D_821CF29C;
+s32 func_82186394(u8 *arg0, u8 *arg1) {
+    s32 i;
+
+    if ((arg1[0x21] != 0) || (func_82185450(D_821CF29C, D_821CF2A0) != 0) || (func_82183CE4(D_821CF2A0) < 0x1E) ||
+        (func_82183CE4((s8*)D_821CF29C) < 0x1E)) {
+        return -1;
+    }
+    for (i = 0; i < 4; i++) {
+        if (arg0[0x2B + i] == 0) {
+            return -1;
+        }
+        if (func_82184BC8((s8*)arg0, arg0[0x2B + i]) != 0) {
+            switch (arg0[0x2B + i]) {
+                case 0x56:
+                    if (func_82184D9C((s8*)arg1, 4) != 0) {
+                        return -1;
+                    }
+                case 0x4E:
+                case 0x89:
+                    return i;
+            }
+        }
+    }
+    return -1;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_821864D4; signature not recovered. */
