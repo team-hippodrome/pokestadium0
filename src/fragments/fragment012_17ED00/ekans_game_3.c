@@ -765,11 +765,38 @@ s32 func_82185494(void) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821855F0.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82185684; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82185684.s")
-#endif
+extern u8 D_82194824[];
+extern u8 D_82194840[];
+s32 func_82185684(u8 *arg0) {
+    s32 i;
+
+    for (i = 0; i < 4; i++) {
+        if (arg0[0x2B + i] == 0) {
+            goto check;
+        }
+        if (func_82184BC8((s8*)arg0, arg0[0x2B + i]) != 0) {
+            switch (arg0[0x2B + i]) {
+                case 0:
+                    goto check;
+                case 0x2F:
+                case 0x4F:
+                case 0x5F:
+                case 0x8E:
+                case 0x93:
+                    return 1;
+            }
+        }
+    }
+    return 0;
+check:
+    if (func_82184AA8(D_82194824, 1, 0x19, arg0[0x74]) != 0) {
+        return 1;
+    }
+    if ((arg0[0x32] >= 0x32) && (func_82184AA8(D_82194840, 1, 8, arg0[0x74]) != 0)) {
+        return 1;
+    }
+    return 0;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_821857CC; signature not recovered. */
@@ -1056,11 +1083,31 @@ s32 func_821870D8(s32 arg0, s32 arg1, s32 arg2) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82188050.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8218824C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8218824C.s")
-#endif
+s32 func_82184DC8(s8 *, s8 *, u8, u8 *);
+s32 func_8218824C(s32 arg0) {
+    s32 i;
+    s32 best = -1;
+    s32 bestIdx = -1;
+    s32 v;
+
+    for (i = 0; i < 4; i++) {
+        if ((D_821CF29C + i)[0x2B] == 0) {
+            break;
+        }
+        if (func_82184BC8((s8*)D_821CF29C, (D_821CF29C + i)[0x2B]) != 0) {
+            v = func_82184DC8((s8*)D_821CF29C + 0xC, D_821CF2A0 + 0xC, (D_821CF29C + i)[0x2B], D_821CF29C);
+            if (best < v) {
+                best = v;
+                bestIdx = i;
+            }
+        }
+    }
+    best = best * 9 / 10;
+    if ((M2C_FIELD(D_821CF2A0, u16 *, 0x18) != 0) && (arg0 < (best * 100) / M2C_FIELD(D_821CF2A0, u16 *, 0x18))) {
+        return bestIdx;
+    }
+    return -1;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_82188394; signature not recovered. */

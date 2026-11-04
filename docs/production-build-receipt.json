@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 4727,
-  "asm_owners": 717,
+  "c_owners": 4729,
+  "asm_owners": 715,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -584,7 +584,7 @@
     "tools/cflags_overrides.json": "7052d644eb08429c59981bb4c369c8c937c61ca4c639a1c1ca2c5fc0ce919ebb",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "305f16d6d64d9c87f8d50b79976dd7ab1e2dd61f838c6f92df6cac49685cf3be",
+    "docs/function-matches.csv": "4b8556261894076564f1a07c51e92a35f6fa35d07e61910077b3b46b9b83a247",
     "linker_scripts/jp/symbol_addrs.txt": "afca390ab7e15134bd987939224f6ec6b0d8be60cd8dee3c830ae7d9d3a49a19"
   },
   "binutils": {
@@ -741,7 +741,7 @@
     "src/fragments/fragment012_17ED00/battle_engine_thumbnail.c": "d2717cbc20d699d329f5a4f108f3264dc2d89e6c06a1aa40df896680f2a479f7",
     "src/fragments/fragment012_17ED00/ekans_game.c": "4c0d7afe0c3308ce8e32a1466e62fae8934e6fcd26584fb158fa89b07c3902a1",
     "src/fragments/fragment012_17ED00/ekans_game_2.c": "a843a8dcfda50b5c239239d42815db53bc72ffbf18dc042d5f01b364bcc4ffbd",
-    "src/fragments/fragment012_17ED00/ekans_game_3.c": "2c80c79b06dc8e5d28396edb15877ae5c451becfbe570326805ea918a7c46e91",
+    "src/fragments/fragment012_17ED00/ekans_game_3.c": "9a670e1c2594410c05bd3949398f5641bb173fbb657ec5622a28e8ce60cbab2d",
     "src/fragments/fragment012_17ED00/fragment1_89010.c": "527731fc641c3aec279d4a479d3c2651f372f3e07517bd391a366b1cd5b00526",
     "src/fragments/fragment012_17ED00/particle_math_261F90.c": "cd49bb456fdc16d331184020b9d04ce3953c903b713477a833bc0083f191c47a",
     "src/fragments/fragment012_17ED00/particle_math_264380.c": "2a2df40645ffec94b5cf08d403b88d53e44d851d2e4e826f65484d77e539b479",
