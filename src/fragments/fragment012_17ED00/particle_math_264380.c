@@ -146,11 +146,9 @@ void func_82168F7C(void) {
     gDPSetRenderMode(gDisplayListHead++, 0x0C180000, 0x5978);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82168FAC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82168FAC.s")
-#endif
+void func_82168FAC(u16* palette) {
+    gDPLoadTLUT_pal256(gDisplayListHead++, palette);
+}
 
 void ParticleGfx_SetPrimColor(u8 r, u8 g, u8 b, u8 a) {
     gDPSetPrimColor(gDisplayListHead++, 0, 0, r, g, b, a);
@@ -276,35 +274,55 @@ s32 func_82169AE4(s32 arg0) {
     return var_v1;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82169B14; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82169B14.s")
-#endif
+void func_82169B14(s32 width, s32 height) {
+    gDPPipeSync(gDisplayListHead++);
+    gDPTileSync(gDisplayListHead++);
+    gDPSetTile(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0,
+                 G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
+    gDPTileSync(gDisplayListHead++);
+    gDPSetTile(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, ((width * 2 + 7) >> 3), 0, G_TX_RENDERTILE, 0,
+                 G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
+    gDPSetTileSize(gDisplayListHead++, G_TX_RENDERTILE, 0, 0, (width - 1) << 2, (height - 1) << 2);
+}
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82169BF0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82169BF0.s")
-#endif
+void func_82169BF0(s32 width, s32 height) {
+    gDPPipeSync(gDisplayListHead++);
+    gDPTileSync(gDisplayListHead++);
+    gDPSetTile(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, ((width * 2 + 7) >> 3), 0, G_TX_LOADTILE, 0,
+                 G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
+    gDPTileSync(gDisplayListHead++);
+    gDPSetTile(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, ((width * 2 + 7) >> 3), 0, G_TX_RENDERTILE, 0,
+                 G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
+    gDPSetTileSize(gDisplayListHead++, G_TX_RENDERTILE, 0, 0, (width - 1) << 2, (height - 1) << 2);
+}
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82169CCC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82169CCC.s")
-#endif
+void func_82169CCC(s32 width, s32 height) {
+    gDPPipeSync(gDisplayListHead++);
+    gDPTileSync(gDisplayListHead++);
+    gDPSetTile(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_32b, 0, 0, G_TX_LOADTILE, 0,
+                 G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
+    gDPTileSync(gDisplayListHead++);
+    gDPSetTile(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_32b, ((width * 2 + 7) >> 3), 0, G_TX_RENDERTILE, 0,
+                 G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
+    gDPSetTileSize(gDisplayListHead++, G_TX_RENDERTILE, 0, 0, (width - 1) << 2, (height - 1) << 2);
+}
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82169DA8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82169DA8.s")
-#endif
+void func_82169DA8(s32 width, s32 height) {
+    gDPPipeSync(gDisplayListHead++);
+    gDPTileSync(gDisplayListHead++);
+    gDPSetTile(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_32b, ((width * 2 + 7) >> 3), 0, G_TX_LOADTILE, 0,
+                 G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
+    gDPTileSync(gDisplayListHead++);
+    gDPSetTile(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_32b, ((width * 2 + 7) >> 3), 0, G_TX_RENDERTILE, 0,
+                 G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
+    gDPSetTileSize(gDisplayListHead++, G_TX_RENDERTILE, 0, 0, (width - 1) << 2, (height - 1) << 2);
+}
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82169E84; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82169E84.s")
-#endif
+void func_82169E84(u8* texture, s32 width, s32 height) {
+    gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, texture);
+    gDPLoadSync(gDisplayListHead++);
+    gDPLoadBlock(gDisplayListHead++, G_TX_LOADTILE, 0, 0, width * height - 1, CALC_DXT(width, G_IM_SIZ_16b_BYTES));
+}
 
 void func_82169F74(void* img, s32 width, s32 height) {
     gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, width, img);
@@ -312,11 +330,11 @@ void func_82169F74(void* img, s32 width, s32 height) {
     gDPLoadTile(gDisplayListHead++, G_TX_LOADTILE, 0, 0, (width - 1) << G_TEXTURE_IMAGE_FRAC, (height - 1) << G_TEXTURE_IMAGE_FRAC);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82169FF8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82169FF8.s")
-#endif
+void func_82169FF8(u8* texture, s32 width, s32 height) {
+    gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_32b, 1, texture);
+    gDPLoadSync(gDisplayListHead++);
+    gDPLoadBlock(gDisplayListHead++, G_TX_LOADTILE, 0, 0, width * height - 1, CALC_DXT(width, G_IM_SIZ_32b_BYTES));
+}
 
 void func_8216A0E8(void* img, s32 width, s32 height) {
     gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_32b, width, img);

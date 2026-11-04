@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 4658,
-  "asm_owners": 786,
+  "c_owners": 4665,
+  "asm_owners": 779,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -584,13 +584,13 @@
     "tools/cflags_overrides.json": "7052d644eb08429c59981bb4c369c8c937c61ca4c639a1c1ca2c5fc0ce919ebb",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "3ca745430c18c3e3dd61464cc5da6823949a913086e1e63badf5b4935dfd97fb",
+    "docs/function-matches.csv": "0e4bbaea6d3641d04c61d84afae8213fec2b5cf2f0e69669ca2120d613650486",
     "linker_scripts/jp/symbol_addrs.txt": "afca390ab7e15134bd987939224f6ec6b0d8be60cd8dee3c830ae7d9d3a49a19"
   },
   "binutils": {
-    "as": "GNU assembler (GNU Binutils for Ubuntu) 2.42",
-    "ld": "GNU ld (GNU Binutils for Ubuntu) 2.42",
-    "objcopy": "GNU objcopy (GNU Binutils for Ubuntu) 2.42"
+    "as": "GNU assembler (GNU Binutils for Debian) 2.44",
+    "ld": "GNU ld (GNU Binutils for Debian) 2.44",
+    "objcopy": "GNU objcopy (GNU Binutils for Debian) 2.44"
   },
   "c_sources_sha256": {
     "src/1060.c": "8dbe2ec29a3709a1fcbdd3e375a0682f936e9a8997a7b8d26f3baf66ec372272",
@@ -744,7 +744,7 @@
     "src/fragments/fragment012_17ED00/ekans_game_3.c": "b34087384a155da3591f052b2807f5d98a931685f65ea1e7f034be0ba330e0a2",
     "src/fragments/fragment012_17ED00/fragment1_89010.c": "0a876121dd0d6a1c2e4de31aedfb31684fbef7d08f14c5caad5fba5a986a24a3",
     "src/fragments/fragment012_17ED00/particle_math_261F90.c": "cd49bb456fdc16d331184020b9d04ce3953c903b713477a833bc0083f191c47a",
-    "src/fragments/fragment012_17ED00/particle_math_264380.c": "2a2df40645ffec94b5cf08d403b88d53e44d851d2e4e826f65484d77e539b479",
+    "src/fragments/fragment012_17ED00/particle_math_264380.c": "c72d31952de337605826b42db2af812fb1441ccd3d85cb28b8ec17fca7c6f00c",
     "src/fragments/fragment012_17ED00/particle_math_269820.c": "b59b6dadfb852fd47c8bef932a3c72d2256ae4e621b8978ddda151bb4060e426",
     "src/fragments/fragment012_17ED00/particle_math_269820_2.c": "5ba56aa11c30d3ec3f8a40664a79989c3124fd1cfe7ee088fbe4d857bfe74f5a",
     "src/fragments/fragment012_17ED00/particle_math_26E6D0.c": "db0eea2fb8a1213b96f9b7fe293faf96dab17fda49f25b90465aca62b04ca039",

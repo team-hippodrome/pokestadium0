@@ -11,7 +11,7 @@ A WIP decompilation of the Japanese-only original Pokémon Stadium (ポケモン
 
 `make rom` builds the complete 16 MiB ROM byte-for-byte from `src/`. Every source file is compiled whole with IDO through asm-processor; its C functions and its `GLOBAL_ASM` owners link at their original addresses in the resident image and all 259 fragments, and the fragments' original storage is rebuilt.
 
-- **4,571 of 5,444 code owners are built from C**, including 197 owners from
+- **4,665 of 5,444 code owners are built from C**, including 210 owners from
   unmodified `lib/ultralib` sources. The per-owner ledger is
   [docs/function-matches.csv](docs/function-matches.csv); current verified counts
   and code bytes are in [COVERAGE.md](COVERAGE.md).
@@ -54,7 +54,7 @@ Do not commit ROMs or extracted retail assets.
 ## Progress and evidence
 
 - [Coverage](COVERAGE.md): first-pass owner counts and bytes built from C.
-- [Latest matching continuation](docs/matching-2026-11-01.md): 87 additional C owners beyond upstream master.
+- [Latest matching continuation](docs/matching-2026-11-04-particle-textures.md): seven particle texture C owners beyond merged PR #36.
 - [First matching pass](docs/matching.md): Stadium 1 ports and m2c output in
   `src/`, listed per owner in [function-matches.csv](docs/function-matches.csv).
 - [Initial 100 m2c functions](docs/m2c-easiest-100.md): eight-byte empty returns.
