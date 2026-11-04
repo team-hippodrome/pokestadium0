@@ -243,11 +243,52 @@ void func_81111130(void) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_811111E0.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81111340; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81111340.s")
-#endif
+extern s8 D_81184948;
+extern s8 D_81184958;
+extern s8 D_81184968;
+void func_811111E0(void);
+s32 func_81112EEC(s8 *);
+void func_81111340(s8* arg0, s32 arg1) {
+    s32 pad[3]; /* places src/dst at sp+0x48/0x44 and the frame at 0x58 as in the ROM */
+    s8* src;
+    s8* dst;
+    s32 n;
+    s32 pass;
+    s32 r;
+
+    func_811111E0();
+    for (pass = 0, n = 0; n < arg1; pass++) {
+        if (pass == 4) {
+            return;
+        }
+        switch (pass) {
+            case 0:
+                src = &D_81184938;
+                dst = arg0;
+                break;
+            case 1:
+                src = &D_81184948;
+                dst = arg0 + 0x10;
+                break;
+            case 2:
+                src = &D_81184958;
+                dst = arg0 + 0x20;
+                break;
+            case 3:
+                src = &D_81184968;
+                dst = arg0 + 0x30;
+                break;
+        }
+        while (n < arg1) {
+            r = func_81112EEC(src);
+            if (r == 0) {
+                break;
+            }
+            func_81112EAC(dst, (Rec81111130*)r);
+            n++;
+        }
+    }
+}
 
 void func_8111147C(M2C_UNK *arg0, M2C_UNK *arg1) {
     if (M2C_FIELD(arg1, M2C_UNK **, 0) == NULL) {
