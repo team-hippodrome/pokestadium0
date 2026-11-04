@@ -69,11 +69,21 @@ DepthBuffer* GfxImage_GetCurrent(void) {
     return D_8005F670;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8000533C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8000533C.s")
-#endif
+void func_8000533C(Gfx** gfx_p, DepthBuffer* arg1) {
+    Gfx* gfx = *gfx_p;
+
+    gDPPipeSync(gfx++);
+
+    if (arg1->depth_p != NULL) {
+        gDPSetDepthSource(gfx++, G_ZS_PIXEL);
+        gDPSetDepthImage(gfx++, (u32)arg1->depth_p->img_p & 0x1FFFFFFF);
+    }
+
+    gDPSetColorImage(gfx++, arg1->fmt, arg1->size, arg1->width, (u32)arg1->img_p & 0x1FFFFFFF);
+    gDPSetScissor(gfx++, G_SC_NON_INTERLACE, 0, 0, arg1->width, arg1->height);
+    D_8005F670 = arg1;
+    *gfx_p = gfx;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8000548C; signature not recovered. */

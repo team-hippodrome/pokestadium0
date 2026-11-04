@@ -264,6 +264,14 @@ u16 func_81112650(u8** stream, u8 kind) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_811126B8.s")
 #endif
 
+typedef struct Item8111539C {
+    /* 0x00 */ u32 active : 1;
+    /* 0x00 */ u32 unk00 : 31;
+    /* 0x04 */ char unk04[0x48];
+    /* 0x4C */ void* owners[2];
+} Item8111539C;
+extern Item8111539C D_81184850;
+
 #ifdef NON_MATCHING
 /* TODO: decompile func_81112894; signature not recovered. */
 #else
@@ -858,12 +866,6 @@ void func_811152A4(s32 arg0) {
     }
 }
 
-typedef struct Item8111539C {
-    /* 0x00 */ u32 active : 1;
-    /* 0x00 */ u32 unk00 : 31;
-    /* 0x04 */ char unk04[0x48];
-    /* 0x4C */ void* owners[2];
-} Item8111539C;
 typedef struct Rec8111539C {
     /* 0x00 */ char unk00[0x34];
     /* 0x34 */ Item8111539C* items[16];

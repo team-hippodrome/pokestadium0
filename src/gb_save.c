@@ -216,11 +216,43 @@ void func_8002A354(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color8002A354 arg4) {
     func_800295E8(arg0, arg1, arg2, arg3, D_8007353C);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002A3F8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002A3F8.s")
-#endif
+typedef struct Img8002A3F8 {
+    /* 0x00 */ s32 stride;
+    /* 0x04 */ s32 height;
+    /* 0x08 */ s32 width;
+    /* 0x0C */ u8 *pixels;
+} Img8002A3F8;
+extern Gfx D_80073408[];
+extern Gfx D_80073438[];
+void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
+void func_8002A3F8(Img8002A3F8 *arg0, s32 x, s32 y) {
+    s32 stride;
+    s32 rows;
+    s32 maxRows;
+    u8 *pixels;
+    s32 n;
+    s32 curY;
+
+    gSPDisplayList(gDisplayListHead++, D_80073408);
+    stride = arg0->stride;
+    maxRows = 0x1000 / (stride * 2);
+    rows = arg0->height;
+    pixels = arg0->pixels;
+    curY = y;
+    while (rows > 0) {
+        if (maxRows < rows) {
+            n = maxRows;
+        } else {
+            n = rows;
+        }
+        func_8001B884(x, curY, arg0->width, n, pixels, stride, 0x200000);
+        stride = arg0->stride;
+        rows -= n;
+        curY += n;
+        pixels += n * stride * 2;
+    }
+    gSPDisplayList(gDisplayListHead++, D_80073438);
+}
 
 extern u8 D_04000008[];
 void func_8002A550(s32 x, s32 y, s32 w, s32 h, Color_RGBA8 prim, Color_RGBA8 env) {
@@ -647,11 +679,18 @@ void func_8002BE24(s32 start, s32 end) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002C064; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002C064.s")
-#endif
+void func_8002C064(s32 start, s32 end, s32 r, s32 g, s32 b) {
+    gDPPipeSync(gDisplayListHead++);
+    gDPSetCycleType(gDisplayListHead++, G_CYC_1CYCLE);
+    gDPSetRenderMode(gDisplayListHead++, 0x0F0A4000, 0);
+    gDPSetTexturePersp(gDisplayListHead++, G_TP_NONE);
+    gDPSetTextureFilter(gDisplayListHead++, G_TF_POINT);
+    gDPSetCombineLERP(gDisplayListHead++, TEXEL0, 0, ENVIRONMENT, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, ENVIRONMENT, 0, 0, 0, 0, TEXEL0);
+    gDPSetEnvColor(gDisplayListHead++, r, g, b, 0xFF);
+    func_8002BE24(start, end);
+    gDPPipeSync(gDisplayListHead++);
+    gDPSetTexturePersp(gDisplayListHead++, G_TP_PERSP);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8002C1B4; signature not recovered. */
