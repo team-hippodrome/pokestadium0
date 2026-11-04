@@ -326,11 +326,37 @@ void BattleScene_InitializeSwitchActions(void) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82125384; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82125384.s")
-#endif
+extern s32 D_82199DE0;
+M2C_UNK func_800419F8();
+void func_82121D8C(s32, s32, s8 *);
+void func_82125384(void) {
+    s8* a;
+    s8* b;
+    s32 st;
+
+    a = M2C_FIELD(&D_82199DE0, s8 **, 0) + 0x78C;
+    b = M2C_FIELD(&D_82199DE0, s8 **, 4) + 0x78C;
+    func_800419F8(1, a, b);
+    M2C_FIELD(a, s32 *, 0x10) = 0;
+    M2C_FIELD(b, s32 *, 0x10) = 0;
+    st = M2C_FIELD(D_8219A5A0, s32 *, 0x1C);
+    if ((st == 4) || (st == 9) || (st == 0xA)) {
+        func_82121D8C(1, 0, b);
+    } else if ((M2C_FIELD(a, u8 *, 0x2E) == 0x10) || (M2C_FIELD(b, u8 *, 0x2E) == 0x10) || (M2C_FIELD(D_8219A5A0, u16 *, 0x2E) == 2)) {
+        func_82121D8C(1, 0, b);
+    } else {
+        func_82121D8C(1, 1, b);
+    }
+    st = M2C_FIELD(D_8219A5A0, s32 *, 0x1C);
+    if (st == 6) {
+        M2C_FIELD(D_8219A5A0, s32 *, 0x44) = 5;
+    } else if (st == 0xA) {
+        M2C_FIELD(D_8219A5A0, s32 *, 0x44) = 9;
+    } else {
+        M2C_FIELD(D_8219A5A0, s32 *, 0x44) = 1;
+    }
+    M2C_FIELD(D_8219A5A0, s32 *, 0x20)++;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_821254B0; signature not recovered. */

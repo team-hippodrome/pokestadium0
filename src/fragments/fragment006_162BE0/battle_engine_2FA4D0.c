@@ -644,11 +644,36 @@ void func_88402098(void) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88402174; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment006_162BE0/func_88402174.s")
-#endif
+extern M2C_UNK D_88403378;
+extern M2C_UNK D_88403648;
+extern s8 D_88402E78;
+extern s8 D_88402E94;
+M2C_UNK func_8003F6AC(M2C_UNK);
+void func_88402174(void) {
+    s8 sp94[0x3C];
+    s8 sp58[0x3C];
+    s32 i = 0;
+    s32 temp_s1;
+    s32 pad;
+
+    temp_s1 = M2C_FIELD(D_88403370, s32 *, 0xC);
+    func_800273E8(sp94, (s32) &D_88402E94);
+    func_800273E8(sp58, (s32) &D_88402E78);
+    if (func_80027214(sp94, temp_s1 + 0xA8) != 0) {
+        do {
+            if (i++ == 0xF) {
+                M2C_FIELD(&D_88403648, u8 *, 2) |= 0x20;
+                if (D_88403358 >= 0) {
+                    M2C_FIELD(&D_88403378, u8 *, 2) |= 0x20;
+                }
+                func_8003F6AC(0x11);
+            }
+            func_80027214(sp58, temp_s1 + 0xB4);
+            func_88400108(0);
+            func_80006780();
+        } while (func_80027214(sp94, temp_s1 + 0xA8) != 0);
+    }
+}
 
 void func_884022A4(void) {
 }
@@ -757,7 +782,7 @@ s32 func_884023F0(void) {
  * the record pointer; the reverse order does not match.
  */
 s32 func_88401D54();                                /* extern */
-M2C_UNK func_88402174();                            /* extern */
+void func_88402174(void);
 extern s8 D_88402E78;
 extern s8 D_88402E94;
 s32 func_8840248C(void) {

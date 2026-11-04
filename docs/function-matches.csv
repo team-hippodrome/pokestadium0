@@ -720,7 +720,7 @@ func_88401E24,0x88401E24,src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c
 func_88401F38,0x88401F38,src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c,func_88401F38,hand,,c
 func_88402038,0x88402038,src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c,func_88402038,m2c,m2c,c
 func_88402098,0x88402098,src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c,func_88402098,hand,,c
-func_88402174,0x88402174,src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c,,asm,,asm
+func_88402174,0x88402174,src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c,func_88402174,hand,,c
 func_884022A4,0x884022A4,src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c,func_884022A4,s1,stadium1:src/fragments/battle_engine/battle_engine_3020D0.c,c
 func_884022AC,0x884022AC,src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c,func_884022AC,hand,,c
 func_88402334,0x88402334,src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c,func_88402334,hand,,c
@@ -1112,7 +1112,7 @@ func_82124EF4,0x82124EF4,src/fragments/fragment012_17ED00/battle_engine_309ED0.c
 func_82124EFC,0x82124EFC,src/fragments/fragment012_17ED00/battle_engine_309ED0.c,func_82124EFC,hand,,c
 func_821250D4,0x821250D4,src/fragments/fragment012_17ED00/battle_engine_309ED0.c,,asm,,asm
 func_82125224,0x82125224,src/fragments/fragment012_17ED00/battle_engine_309ED0.c,BattleScene_InitializeSwitchActions,s1,stadium1:src/fragments/battle_engine/battle_engine_309ED0.c,c
-func_82125384,0x82125384,src/fragments/fragment012_17ED00/battle_engine_309ED0.c,,asm,,asm
+func_82125384,0x82125384,src/fragments/fragment012_17ED00/battle_engine_309ED0.c,func_82125384,hand,,c
 func_821254B0,0x821254B0,src/fragments/fragment012_17ED00/battle_engine_309ED0.c,,asm,,asm
 func_82125570,0x82125570,src/fragments/fragment012_17ED00/battle_engine_309ED0.c,BattleScene_ClearPhaseFlag,s1,stadium1:src/fragments/battle_engine/battle_engine_309ED0.c,c
 func_82125580,0x82125580,src/fragments/fragment012_17ED00/battle_engine_309ED0.c,BattleScene_SetPhaseFlag,s1,stadium1:src/fragments/battle_engine/battle_engine_309ED0.c,c
