@@ -404,11 +404,27 @@ void func_89009710(s8 *arg0, s8 *arg1, s8 *arg2) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89009738; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_89009738.s")
-#endif
+s32 func_8002B204();
+s32 func_89009738(u8 *arg0, s32 arg1) {
+    s32 r;
+    s32 idx;
+    s32 pos;
+
+    for (r = func_8002B204(arg0 + 0x164, arg1); r != 0; r = func_8002B204(arg0 + 0x164, arg1)) {
+        pos = *(s32 *)(arg0 + 0x168);
+        idx = pos - 8;
+        if (pos < 8) {
+            *(u8 **)(arg0 + 0x1D8) = arg0 + 0x170;
+            idx = pos;
+        } else {
+            *(u8 **)(arg0 + 0x1D8) = arg0 + 0x194;
+        }
+        if (!((*(u16 **)(*(u8 **)(arg0 + 0x1D8) + 4))[idx] & 1)) {
+            break;
+        }
+    }
+    return r;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_890097E0; signature not recovered. */

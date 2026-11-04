@@ -146,11 +146,9 @@ void func_82168F7C(void) {
     gDPSetRenderMode(gDisplayListHead++, 0x0C180000, 0x5978);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82168FAC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82168FAC.s")
-#endif
+void func_82168FAC(void *arg0) {
+    gDPLoadTLUT_pal256(gDisplayListHead++, arg0);
+}
 
 void ParticleGfx_SetPrimColor(u8 r, u8 g, u8 b, u8 a) {
     gDPSetPrimColor(gDisplayListHead++, 0, 0, r, g, b, a);

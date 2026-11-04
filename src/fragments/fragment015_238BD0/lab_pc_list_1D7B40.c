@@ -267,11 +267,18 @@ void func_89005EA4(s8* arg0) {
     M2C_FIELD(arg0, s32**, 0x3AC)[M2C_FIELD(arg0, s32*, 0x28C)] = 1;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89005F2C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_89005F2C.s")
-#endif
+
+void func_89005F2C(s8* arg0) {
+    u8 row[0x50];
+    s32* matrix;
+
+    func_80027654(M2C_FIELD(arg0, s32**, 0x31C), row, M2C_FIELD(arg0, s32*, 0x324));
+    matrix = M2C_FIELD(arg0, s32**, 0x294);
+    func_80027700(M2C_FIELD(arg0, s32**, 0x31C), (u8*)(matrix[3] * M2C_FIELD(arg0, s32*, 0x29C) + matrix[0]), M2C_FIELD(arg0, s32*, 0x324));
+    func_80027700(M2C_FIELD(arg0, s32**, 0x294), row, M2C_FIELD(arg0, s32*, 0x29C));
+    M2C_FIELD(arg0, s32**, 0x3AC)[M2C_FIELD(arg0, s32*, 0x290)] = 1;
+    M2C_FIELD(arg0, s32**, 0x3AC)[M2C_FIELD(arg0, s32*, 0x28C)] = M2C_FIELD(arg0, s32**, 0x3AC)[M2C_FIELD(arg0, s32*, 0x290)];
+}
 
 void func_89000048(void*);
 
