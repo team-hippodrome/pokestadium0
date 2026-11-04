@@ -550,11 +550,26 @@ s32 func_8002488C(s32 arg0, s32 arg1, u8* arg2) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80024954.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80024ADC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80024ADC.s")
-#endif
+/* Old-style definition: callers pass their own args through (see below). */
+s32 func_80024ADC(arg0, arg1) s32 arg0; s32 arg1; {
+    s32 ret = 0;
+
+    switch (arg0) {
+        case 16:
+            ret = *(s16 *)((u8 *)&(*(Save80023F38 **)&D_800AE8E0)->a[arg1] + 0x12);
+            break;
+        case 17:
+            ret = *(s16 *)((u8 *)&(*(Save80023F38 **)&D_800AE8E0)->b[arg1] + 0x12);
+            break;
+        case 18:
+            ret = *(s16 *)((u8 *)&(*(Save80023F38 **)&D_800AE8E0)->c[arg1] + 0xA);
+            break;
+        case 19:
+            ret = *(s16 *)((u8 *)&(*(Save80023F38 **)&D_800AE8E0)->d + 2);
+            break;
+    }
+    return ret;
+}
 
 M2C_UNK func_80023F38(s32, s32, M2C_UNK);           /* extern */
 s32 func_80024ADC();                                /* extern */

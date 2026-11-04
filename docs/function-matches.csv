@@ -46,7 +46,7 @@ func_80031464,0x80031464,src/2E480.c,,asm,,asm
 func_8003152C,0x8003152C,src/2E480.c,,asm,,asm
 func_80031AB0,0x80031AB0,src/2E480.c,func_80031AB0,hand,,c
 func_80031B88,0x80031B88,src/2E480.c,func_80031B88,m2c,m2c,c
-func_80032FD0,0x80032FD0,src/33E30.c,,asm,,asm
+func_80032FD0,0x80032FD0,src/33E30.c,func_80032FD0,hand,,c
 func_80033078,0x80033078,src/33E30.c,func_80033078,hand,,c
 func_80033124,0x80033124,src/33E30.c,Gfx_DrawTriangleMarker,s1,stadium1:src/33E30.c,c
 func_8000A780,0x8000A780,src/33FE0.c,func_8000A780,s1,stadium1:src/33FE0.c,c
@@ -3586,7 +3586,7 @@ func_89000BEC,0x89000BEC,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,f
 func_89000CF0,0x89000CF0,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,func_89000CF0,m2c,m2c+permuter,c
 func_89000D34,0x89000D34,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,func_89000D34,m2c,m2c,c
 func_89000D50,0x89000D50,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,func_89000D50,hand,,c
-func_89000E98,0x89000E98,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,,asm,,asm
+func_89000E98,0x89000E98,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,func_89000E98,hand,,c
 func_89000F5C,0x89000F5C,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,func_89000F5C,m2c,m2c,c
 func_89000FA4,0x89000FA4,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,func_89000FA4,hand,,c
 func_89001018,0x89001018,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,,asm,,asm
@@ -3639,7 +3639,7 @@ func_890047E4,0x890047E4,src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c,f
 func_8900480C,0x8900480C,src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c,func_8900480C,hand,,c
 func_890048EC,0x890048EC,src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c,func_890048EC,m2c,m2c,c
 func_89004908,0x89004908,src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c,func_89004908,hand,,c
-func_89004AD4,0x89004AD4,src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c,,asm,,asm
+func_89004AD4,0x89004AD4,src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c,func_89004AD4,hand,,c
 func_89004B98,0x89004B98,src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c,func_89004B98,m2c,m2c,c
 func_89004BE0,0x89004BE0,src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c,func_89004BE0,hand,,c
 func_89004C54,0x89004C54,src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c,,asm,,asm
@@ -3845,7 +3845,7 @@ func_8A100588,0x8A100588,src/fragments/fragment018_262620/pokedex_214920.c,,asm,
 func_8A100620,0x8A100620,src/fragments/fragment018_262620/pokedex_214920.c,func_8A100620,hand,,c
 func_8A10068C,0x8A10068C,src/fragments/fragment018_262620/pokedex_214920.c,,asm,,asm
 func_8A100808,0x8A100808,src/fragments/fragment018_262620/pokedex_214920.c,func_8A100808,hand,,c
-func_8A1008A4,0x8A1008A4,src/fragments/fragment018_262620/pokedex_214920.c,,asm,,asm
+func_8A1008A4,0x8A1008A4,src/fragments/fragment018_262620/pokedex_214920.c,func_8A1008A4,hand,,c
 func_8A100954,0x8A100954,src/fragments/fragment018_262620/pokedex_214920.c,func_8A100954,m2c,m2c,c
 func_8A1009A4,0x8A1009A4,src/fragments/fragment018_262620/pokedex_214920.c,func_8A1009A4,m2c,m2c,c
 func_8A1009E0,0x8A1009E0,src/fragments/fragment018_262620/pokedex_214920.c,func_8A1009E0,m2c,m2c,c
@@ -4272,7 +4272,7 @@ func_80028C80,0x80028C80,src/gb_save.c,func_80028C80,hand,,c
 func_80028E5C,0x80028E5C,src/gb_save.c,func_80028E5C,hand,,c
 func_80029028,0x80029028,src/gb_save.c,Trade_DrawSolidFillRect,hand,,c
 func_800290F0,0x800290F0,src/gb_save.c,,asm,,asm
-func_800291F8,0x800291F8,src/gb_save.c,,asm,,asm
+func_800291F8,0x800291F8,src/gb_save.c,func_800291F8,hand,,c
 func_800292A8,0x800292A8,src/gb_save.c,,asm,,asm
 func_800295E8,0x800295E8,src/gb_save.c,func_800295E8,hand,,c
 func_80029658,0x80029658,src/gb_save.c,,asm,,asm
@@ -4459,10 +4459,10 @@ func_80011E04,0x80011E04,src/geo_render.c,GeoOverlay_BuildRotatingQuad,s1,stadiu
 func_8001222C,0x8001222C,src/geo_render.c,GeoOverlay_DrawRotatingQuad,s1,stadium1:src/geo_render.c,c
 func_80012658,0x80012658,src/geo_render.c,GeoOverlay_Draw,s1,stadium1:src/geo_render.c,c
 func_800127D4,0x800127D4,src/geo_render.c,GeoRender_SetCombineMode,s1,stadium1:src/geo_render.c,c
-func_800128E0,0x800128E0,src/geo_render.c,,asm,,asm
+func_800128E0,0x800128E0,src/geo_render.c,func_800128E0,hand,,c
 func_8001298C,0x8001298C,src/geo_render.c,func_8001298C,hand,,c
 func_80012A80,0x80012A80,src/geo_render.c,,asm,,asm
-func_80012C00,0x80012C00,src/geo_render.c,,asm,,asm
+func_80012C00,0x80012C00,src/geo_render.c,func_80012C00,hand,,c
 func_80012CC0,0x80012CC0,src/geo_render.c,func_80012CC0,m2c,m2c,c
 func_80012D04,0x80012D04,src/geo_render.c,func_80012D04,hand,,c
 func_80012DC8,0x80012DC8,src/geo_render.c,func_80012DC8,hand,,c
@@ -5314,7 +5314,7 @@ func_800246C8,0x800246C8,src/save_data.c,func_800246C8,hand,,c
 func_8002479C,0x8002479C,src/save_data.c,func_8002479C,hand,,c
 func_8002488C,0x8002488C,src/save_data.c,func_8002488C,hand,,c
 func_80024954,0x80024954,src/save_data.c,,asm,,asm
-func_80024ADC,0x80024ADC,src/save_data.c,,asm,,asm
+func_80024ADC,0x80024ADC,src/save_data.c,func_80024ADC,hand,,c
 func_80024B90,0x80024B90,src/save_data.c,func_80024B90,m2c,m2c,c
 func_80024C80,0x80024C80,src/save_data.c,func_80024C80,m2c,m2c,c
 func_80024D88,0x80024D88,src/save_data.c,,asm,,asm

@@ -138,11 +138,11 @@ void Trade_DrawSolidFillRect(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGB8 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800290F0.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_800291F8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800291F8.s")
-#endif
+void func_800291F8(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 color) {
+    gDPPipeSync(gDisplayListHead++);
+    gDPSetPrimColor(gDisplayListHead++, 0, 0, color.r, color.g, color.b, color.a);
+    gDPFillRectangle(gDisplayListHead++, arg0, arg1, arg0 + arg2, arg1 + arg3);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_800292A8; signature not recovered. */

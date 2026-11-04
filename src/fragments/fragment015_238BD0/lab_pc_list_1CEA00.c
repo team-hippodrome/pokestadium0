@@ -445,11 +445,23 @@ void func_89000D50(s32 x, s32 y, char* str, UNUSED s32 index, s32 flags) {
     Font_EndTexturedTextRendering();
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89000E98; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_89000E98.s")
-#endif
+void func_8002A8C4(s8*, s32, s32, s32, s32);
+void func_8002D880(s8*, s32, s32, s32, s32, s32);
+M2C_UNK func_80027804();
+void func_89000E98(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
+    s32 pad[2];
+
+    func_8002A8C4((s8 *)arg0, arg1, arg2, 0xE4, (arg4 * 0x1C) + 0x14);
+    M2C_FIELD(arg0, s32 *, 0x28) = 0;
+    M2C_FIELD(arg0, s32 *, 0x20) = 0;
+    M2C_FIELD(arg0, s32 *, 0x24) = 0;
+    M2C_FIELD(arg0, s32 *, 0x14) = 0;
+    M2C_FIELD(arg0, Rgba89000D50 *, 0x18) = D_8900A5BC;
+    func_80027804((s8 *)arg0 + 0x50, arg3, arg4, arg4);
+    func_8002D880((s8 *)arg0 + 0x2C, (s32)((s8 *)arg0 + 0x50), (s32)((s8 *)arg0 + 0x5C), (s32)func_89000D50, 0xD8, 0x1C);
+    M2C_FIELD(arg0, s32 *, 0x34) = arg5;
+    M2C_FIELD(arg0, s32 *, 0x4C) |= 0x10000;
+}
 
 s32 func_8002AE6C();                                /* extern */
 M2C_UNK func_8002D9B8(s8 *, s32, s32, M2C_UNK, s32); /* extern */

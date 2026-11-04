@@ -551,11 +551,16 @@ void GeoRender_SetCombineMode(Gfx* arg0, arg1_func_81407874_014_000_010* arg1) {
                       GCCc1w1(arg1->unk_09, arg1->unk_0C, arg1->unk_0E, arg1->unk_0B, arg1->unk_0D, arg1->unk_0F));
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_800128E0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800128E0.s")
-#endif
+extern arg1_func_81407874_014_000_010 D_80060534[];
+void func_800128E0(s8 *arg0) {
+    bzero(arg0, 0x20);
+    M2C_FIELD(arg0, u8 *, 0x19) = 0xFF;
+    M2C_FIELD(arg0, u32 *, 4) = 0xFFFFFFFF;
+    gDPPipeSync(gDisplayListHead++);
+    gDPSetCycleType(gDisplayListHead++, G_CYC_2CYCLE);
+    gDPSetPrimColor(gDisplayListHead++, 0, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF);
+    GeoRender_SetCombineMode(gDisplayListHead++, D_80060534);
+}
 
 extern s32 D_800604A4[][9];
 s32 func_8001298C(arg0) s8* arg0; {
@@ -582,11 +587,21 @@ s32 func_8001298C(arg0) s8* arg0; {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80012A80.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80012C00; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80012C00.s")
-#endif
+void func_80012C00(s8 *arg0, s8 *arg1) {
+    Gfx *gfx;
+
+    if (M2C_FIELD(arg0, s32 *, 8) != M2C_FIELD(arg1, s32 *, 0x14)) {
+        if (M2C_FIELD(arg0, u8 *, 0x1E) == 0) {
+            M2C_FIELD(arg0, u8 *, 0x1E) = 1;
+            gDPPipeSync(gDisplayListHead++);
+        }
+        gfx = gDisplayListHead++;
+        gfx->words.w0 = 0xF8000000;
+        gfx->words.w1 = M2C_FIELD(arg1, s32 *, 0x14);
+        gSPSetOtherMode(gDisplayListHead++, G_SETOTHERMODE_L, G_MDSFT_RENDERMODE, 29, D_800604A4[M2C_FIELD(arg0, u8 *, 0x1D)][M2C_FIELD(arg0, u8 *, 0x1C)] | 0xC4000000);
+        M2C_FIELD(arg0, s32 *, 8) = M2C_FIELD(arg1, s32 *, 0x14);
+    }
+}
 
 M2C_UNK func_8001298C();                            /* extern */
 
