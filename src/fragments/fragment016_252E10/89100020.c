@@ -386,11 +386,50 @@ s32 func_89101D80(s8 *arg0, s32 arg1)
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89102344.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_891024A4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_891024A4.s")
-#endif
+typedef struct Rgba891024A4 { u8 r, g, b, a; } Rgba891024A4;
+typedef struct Screen891024A4 {
+    /* 0x0000 */ char unk0[0x2C];
+    /* 0x002C */ s32 x;
+    /* 0x0030 */ s32 y;
+    /* 0x0034 */ s32 w;
+    /* 0x0038 */ s32 h;
+    /* 0x003C */ char unk3C[0x40];
+    /* 0x007C */ s32 mode;
+    /* 0x0080 */ char unk80[0x9654 - 0x80];
+    /* 0x9654 */ s8 menu[0x18];
+    /* 0x966C */ Rgba891024A4 color;
+    /* 0x9670 */ char unk9670[0x10];
+    /* 0x9680 */ s8 box[0x18];
+    /* 0x9698 */ s8 *boxItems;
+    /* 0x969C */ char unk969C[0x2C];
+    /* 0x96C8 */ s32 right;
+    /* 0x96CC */ s32 bottom;
+    /* 0x96D0 */ char unk96D0[0xF8];
+    /* 0x97C8 */ s8 items[1];
+} Screen891024A4;
+void func_8000A460(s8 *, s8 *);
+u32 func_800566BC(s8*);
+void func_89106424(s8 *, void *, s8 *, s32, s32);
+void func_89106570(s8 *);
+void func_8002A8C4(s8 *, s32, s32, s32, s32);
+extern Rgba891024A4 D_8910A7F4;
+extern s8 *D_8910A8A8[];
+extern s8 D_8910A8B0[];
+extern u8 D_8910A8C8[];
+extern s8 D_8910E358[];
+void func_891024A4(Screen891024A4 *arg0) {
+    func_8000A460(D_8910E358, D_8910A8B0);
+    func_8000A460(D_8910E358 + func_800566BC(D_8910E358), D_8910A8A8[(arg0->mode & 0x20) ? 1 : 0]);
+    func_89106424(arg0->menu, D_8910A8C8, arg0->items, 5, 0);
+    func_8002A8C4(arg0->box, arg0->x + 0x26, arg0->y, 0, 0x16);
+    arg0->right = arg0->x + arg0->w;
+    arg0->bottom = arg0->y + arg0->h;
+    func_89106570(arg0->menu);
+    arg0->color = D_8910A7F4;
+    if (arg0->mode == 0) {
+        M2C_FIELD(arg0->boxItems, u16 *, 6) |= 1;
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_891025D8; signature not recovered. */

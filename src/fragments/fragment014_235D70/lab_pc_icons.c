@@ -204,11 +204,32 @@ s32 func_88000E20(s8 *arg0) {
 void func_88000FE0(void) {
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88000FE8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment014_235D70/func_88000FE8.s")
-#endif
+void func_8002AE94(s8* arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 arg4, char* arg5);
+M2C_UNK func_8000B2F4(s32);
+extern u8 D_8800222C[];
+extern char D_880023C0[];
+extern char D_880023C8[];
+void func_88000FE8(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, Color_RGBA8 arg6, s32 arg7) {
+    func_8002A8C4(arg0, arg1, arg2, 0x214, 0x8A);
+    M2C_FIELD(arg0, s32 *, 0x24) = 0;
+    M2C_FIELD(arg0, s32 *, 0x20) = 0;
+    M2C_FIELD(arg0, s32 *, 0x28) = 0;
+    M2C_FIELD(arg0, s32 *, 0x14) = 0x800;
+    M2C_FIELD(arg0, Color_RGBA8 *, 0x18) = arg6;
+    M2C_FIELD(arg0, s32 *, 0x20) = arg3;
+    M2C_FIELD(arg0, s32 *, 0x34) = arg4;
+    M2C_FIELD(arg0, s32 *, 0x38) = arg5;
+    func_8002AE94(arg0 + 0x3C, M2C_FIELD(arg0, s32 *, 0) + 0x165, M2C_FIELD(arg0, s32 *, 4) + 0x66, 0x48, *(Color_RGBA8 *)D_8800222C, D_880023C0);
+    M2C_FIELD(arg0, s32 *, 0x68) = 0xA;
+    M2C_FIELD(arg0, s32 *, 0x70) = 0xC;
+    func_8002AE94(arg0 + 0x78, M2C_FIELD(arg0, s32 *, 0) + 0x1BA, M2C_FIELD(arg0, s32 *, 4) + 0x66, 0x48, *(Color_RGBA8 *)D_8800222C, D_880023C8);
+    M2C_FIELD(arg0, s32 *, 0xBC) = 2;
+    M2C_FIELD(arg0, s32 *, 0xB8) = 0;
+    M2C_FIELD(arg0, s32 *, 0xB4) = D_800603C0;
+    func_8000B2F4(D_800603C0);
+    M2C_FIELD(arg0, Color_RGBA8 *, 0x2C) = arg6;
+    M2C_FIELD(arg0, s32 *, 0xC0) = arg7;
+}
 
 s32 func_8002AE6C();
 extern u8 D_800734A8[4];

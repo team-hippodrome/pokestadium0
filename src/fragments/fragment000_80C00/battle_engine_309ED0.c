@@ -173,6 +173,20 @@ void func_8110EE28(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3) {
 
 }
 
+/* First word of a record, split into bit ranges (big-endian, most significant
+ * bit first). The field names only say which bits they are; what they mean is
+ * not established. */
+typedef struct {
+    u32 bits31_28 : 4;
+    u32 bits27_26 : 2;
+    u32 bit25 : 1;
+    u32 bit24 : 1;
+    u32 low24 : 24;
+} PackedWordRec;
+
+extern PackedWordRec *D_81184978[];
+extern s32 D_81185578;
+
 #ifdef NON_MATCHING
 /* TODO: decompile func_8110EE3C; signature not recovered. */
 #else
@@ -234,19 +248,6 @@ extern Entry811858B0* D_811858B0;
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110F518.s")
 #endif
 
-/* First word of a record, split into bit ranges (big-endian, most significant
- * bit first). The field names only say which bits they are; what they mean is
- * not established. */
-typedef struct {
-    u32 bits31_28 : 4;
-    u32 bits27_26 : 2;
-    u32 bit25 : 1;
-    u32 bit24 : 1;
-    u32 low24 : 24;
-} PackedWordRec;
-
-extern PackedWordRec *D_81184978[];
-extern s32 D_81185578;
 
 /*
  * func_8110F64C
