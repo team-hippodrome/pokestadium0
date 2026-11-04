@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 4729,
-  "asm_owners": 715,
+  "c_owners": 4731,
+  "asm_owners": 713,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -584,7 +584,7 @@
     "tools/cflags_overrides.json": "7052d644eb08429c59981bb4c369c8c937c61ca4c639a1c1ca2c5fc0ce919ebb",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "4b8556261894076564f1a07c51e92a35f6fa35d07e61910077b3b46b9b83a247",
+    "docs/function-matches.csv": "080475002d72d971f0e8f0007afd8c12de3a0713f4d3c60811c31d84413a847c",
     "linker_scripts/jp/symbol_addrs.txt": "afca390ab7e15134bd987939224f6ec6b0d8be60cd8dee3c830ae7d9d3a49a19"
   },
   "binutils": {
@@ -668,7 +668,7 @@
     "src/fragments/fragment004_15F8F0/gb_tower_team_prep.c": "8d223c847fbf199c7b00d7455ad7395c8cc1b779c74349e89f1e764e1dd11402",
     "src/fragments/fragment005_15FCE0/battle_order_select.c": "d723f74a42393877affca28bf6094556a54d1e2caff766dc214435d229c2d09c",
     "src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c": "14cd05e85edf24bbe91784b9fc29c8ced4c13d6b2e817011bd81da634dbff5c7",
-    "src/fragments/fragment007_166580.c": "ffc80d99844ec269a715778fac1243a9e052b7d6e274d6fe8d3c43f91488dbf7",
+    "src/fragments/fragment007_166580.c": "f6a710eff242123f9e903e8ef1b4c6e42f7cb028821dbb73e9a375b5733f8d23",
     "src/fragments/fragment007_166580_2.c": "56b0700668c3b37f0dc634a9de6e453c587f36ebfad129eaab6eaf7bc774fbec",
     "src/fragments/fragment007_166580_3.c": "85f813986d57e6ef8ecc07a80f2c99d87eed19f593798e8178cdc71c5b52452f",
     "src/fragments/fragment008_1720F0.c": "f56709991b1e67e3558d6a2f0f6fb34e19972466fec1fdb8a3f7a60a5605f3e7",
@@ -762,7 +762,7 @@
     "src/fragments/fragment017_261F00.c": "010db2d8b146be87183a9f92e3d7a094eb3e9b17ab5eda9b74b443022094159e",
     "src/fragments/fragment018_262620/pokedex_214920.c": "1b167dae51ca3e58e458bded305156639d6e4904bde16d8e98fcb85f610fc0ee",
     "src/fragments/fragment018_262620/pokedex_2190D0.c": "95f32a019b80bdf17400546f059a4fe7b54980b0adbcb3b3aa63b483453c8717",
-    "src/fragments/fragment019_293410/lab_pc_icons.c": "5bf5ccfe0352b5b293acb70ee1667812e1b6e4c30c60e1836a9de6810b28fe79",
+    "src/fragments/fragment019_293410/lab_pc_icons.c": "cd9b258d36d9a7bebc3b68f979042607933da4fb14016a47549c584d3feb0535",
     "src/fragments/fragment020_2B1360.c": "1d51773e2a436bb50560c5297d6152fb294823d9c01f0e5ec662adab156da927",
     "src/fragments/fragment021_2B13F0.c": "89591b5837dd2c5cb906da8fc3231bc8e0a207a6adf0fd1e7058e89f0fbbe95e",
     "src/fragments/fragment022_2B1480.c": "b411841b7ef4508a6156ef9cadac3883ef0e1b3b9cf8434174930a787b6d07ab",

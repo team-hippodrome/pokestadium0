@@ -442,11 +442,56 @@ void func_82001340(FlagOwner* arg0, Slot54* arg1, s32 arg2) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8200140C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment007_166580/func_8200140C.s")
-#endif
+typedef struct Mon8200140C {
+    /* 0x00 */ s32 flags;
+    /* 0x04 */ u8 species;
+    /* 0x05 */ char unk05[0x28 - 0x5];
+    /* 0x28 */ u8 level;
+    /* 0x29 */ char unk29[0x54 - 0x29];
+} Mon8200140C; // size = 0x54
+typedef struct Team8200140C {
+    /* 0x000 */ char unk000[0x1C];
+    /* 0x01C */ Mon8200140C mons[6];
+    /* 0x214 */
+} Team8200140C; // size = 0x214
+typedef struct TeamList8200140C {
+    /* 0x0 */ Team8200140C* teams;
+    /* 0x4 */ s32 unk4;
+    /* 0x8 */ s32 count;
+} TeamList8200140C;
+typedef struct Species8200140C {
+    /* 0x00 */ char unk00[0xC];
+    /* 0x0C */ u8 flags;
+    /* 0x0D */ char unk0D[0xF];
+} Species8200140C; // size = 0x1C
+extern Species8200140C D_80064C5C[];
+void func_8200140C(TeamList8200140C *arg0, s32 arg1) {
+    s32 i;
+    s32 j;
+    Team8200140C* team = arg0->teams;
+    Mon8200140C* mon;
+
+    for (i = 0; i < arg0->count; i++, team++) {
+        for (mon = team->mons, j = 0; j < 6; j++, mon++) {
+            if (mon->flags & 1) {
+                continue;
+            }
+            if ((mon->species <= 0) || (mon->species >= 0x98)) {
+                mon->flags |= 0x20;
+            } else if (arg1 == 1) {
+                if (!(D_80064C5C[mon->species - 1].flags & 1) || (mon->level < 0x32) || (mon->level >= 0x38)) {
+                    mon->flags |= 2;
+                }
+            } else if (arg1 == 2) {
+                if (!(D_80064C5C[mon->species - 1].flags & 2) || (mon->level <= 0) || (mon->level >= 0x1F)) {
+                    mon->flags |= 4;
+                }
+            } else if (!(D_80064C5C[mon->species - 1].flags & 1)) {
+                mon->flags |= 2;
+            }
+        }
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_82001558; signature not recovered. */

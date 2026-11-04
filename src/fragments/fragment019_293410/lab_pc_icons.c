@@ -476,11 +476,26 @@ void func_8A2023F4(s32* arg0, s32 arg1) {
     func_80022188(D_8A21DA40);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8A2024D0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment019_293410/func_8A2024D0.s")
-#endif
+void func_80027410(s8 *, s8 *, s32, s32, s32);
+void func_80027804(s8 *, s8 *, s32, s32);
+void func_8A2024D0(s8 *arg0) {
+    s32 i;
+
+    M2C_FIELD(arg0, s32 *, 0) = 1;
+    M2C_FIELD(arg0, s8 **, 8) = arg0 + 0x10;
+    M2C_FIELD(arg0, s32 *, 0x384) = 0;
+    for (i = 0; i < 6; i++) {
+        M2C_FIELD(arg0, s8 **, 0x18C + i * 4) = arg0 + 0x1A4 + i * 0x50;
+    }
+    func_80027410(arg0 + 0x170, arg0 + 0x1A4, 0x50, 6, 0);
+    func_8A202390(arg0 + 0x170);
+    func_80027804(arg0 + 0x180, arg0 + 0x18C, 6, M2C_FIELD(arg0, s32 *, 0x178));
+    for (i = 0; i < M2C_FIELD(arg0, s32 *, 0x178); i++) {
+        func_8001833C((unk_func_8001A024*)D_8A21DA50, i, (BattleMon*)(M2C_FIELD(arg0, s32 *, 0x170) + i * 0x50),
+                      GPACK_RGBA5551(D_8A203304.r, D_8A203304.g, D_8A203304.b, 1));
+    }
+    func_8A20034C(arg0 + 0x10, 0x2F, 0x4D, (s32)(arg0 + 0x180));
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8A20261C; signature not recovered. */
@@ -505,7 +520,7 @@ extern M2C_UNK D_8A21DE10;
 extern M2C_UNK D_8A21DA80;
 s32 func_80025BD8();
 M2C_UNK func_80027FF8(M2C_UNK *, s32);
-M2C_UNK func_8A2024D0(M2C_UNK *);
+void func_8A2024D0(s8 *);
 
 /**
  * Stores the result of func_80025BD8() in D_8A21DA40 and copies it to D_8A21DE08. If it
