@@ -332,11 +332,40 @@ void func_88400F4C(void) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment006_162BE0/func_88401040.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8840115C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment006_162BE0/func_8840115C.s")
-#endif
+void func_800273E8(s8* arg0, s32 arg1);
+s32 func_80027214(s8*, s32);
+extern M2C_UNK D_88403648;
+extern s8 D_88402DD0;
+extern s8 D_88402DEC;
+
+M2C_UNK func_8003F6AC(M2C_UNK);
+void func_8840115C(void) {
+    s8 sp8C[0x3C];
+    s8 sp50[0x3C];
+    s32 i = 0;
+    s32 rec;
+    s32 pad;
+
+    rec = M2C_FIELD(D_88403370, s32 *, 0xC);
+    if (D_800AF986 & 0x18) {
+        func_88400F4C();
+    }
+    func_800273E8(sp8C, (s32) &D_88402DEC);
+    func_800273E8(sp50, (s32) &D_88402DD0);
+    if (func_80027214(sp8C, rec + 0xA8) != 0) {
+        do {
+            if (i++ == 0xA) {
+                M2C_FIELD(&D_88403648, s32 *, 0x14) = 1;
+                M2C_FIELD(&D_88403648, u8 *, 2) |= 0x20;
+                func_8003F6AC(0x10);
+            }
+            func_80027214(sp50, rec + 0xB4);
+            func_88400108(0);
+            func_80006780();
+        } while (func_80027214(sp8C, rec + 0xA8) != 0);
+    }
+    func_80006828(0x19, &func_88400108);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_88401290; signature not recovered. */
@@ -702,7 +731,7 @@ M2C_UNK func_800067BC(M2C_UNK);                     /* extern */
 M2C_UNK func_80006828(M2C_UNK, M2C_UNK *);          /* extern */
 M2C_UNK func_8000D520(s32, s8 *);                 /* extern */
 M2C_UNK func_80025BE4(s32);                         /* extern */
-M2C_UNK func_8840115C();                            /* extern */
+void func_8840115C(void);
 void func_884022AC(void);                          /* extern */
 
 M2C_UNK func_88401040();

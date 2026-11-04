@@ -351,17 +351,47 @@ void func_89009464(s32 arg0) {
     b->unk_04 = 1;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_890094A8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_890094A8.s")
-#endif
+typedef struct LabPCBoxList890094A8 {
+    /* 0x0 */ LabPCBoxEntry* entries;
+    /* 0x4 */ s32 unk_04;
+    /* 0x8 */ s32 count;
+} LabPCBoxList890094A8;
+void func_8002DDFC(s8 *);
+void func_890094A8(s8* arg0) {
+    s32 i;
+    LabPCBoxList890094A8* list = M2C_FIELD(arg0, LabPCBoxList890094A8**, 0);
+    s32 n = list->count;
+    LabPCBoxEntry* e = list->entries;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_890095DC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_890095DC.s")
-#endif
+    for (i = 0; i < n; i++, e++) {
+        if (M2C_FIELD(e->box, s32*, 0x960) == 0) {
+            M2C_FIELD(arg0, u16**, 4)[i] |= 1;
+        }
+    }
+    M2C_FIELD(arg0, s32*, 8) = 0;
+    func_8002DDFC(arg0);
+}
+
+typedef struct LabPCBoxList890095DC {
+    /* 0x0 */ LabPCBoxEntry* entries;
+    /* 0x4 */ s32 unk_04;
+    /* 0x8 */ s32 count;
+} LabPCBoxList890095DC;
+
+void func_890095DC(s8* arg0) {
+    s32 i;
+    LabPCBoxList890095DC* list = M2C_FIELD(arg0, LabPCBoxList890095DC**, 0);
+    s32 n = list->count;
+    LabPCBoxEntry* e = list->entries;
+
+    for (i = 0; i < n; i++, e++) {
+        if (M2C_FIELD(e->box, s32*, 0x960) > 0) {
+            M2C_FIELD(arg0, u16**, 4)[i] |= 1;
+        }
+    }
+    M2C_FIELD(arg0, s32*, 8) = 0;
+    func_8002DDFC(arg0);
+}
 
 void func_89009710(s8 *arg0, s8 *arg1, s8 *arg2) {
     if (arg1 != NULL) {
