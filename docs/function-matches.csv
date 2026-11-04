@@ -3012,7 +3012,7 @@ func_82138060,0x82138060,src/fragments/fragment012_17ED00/particle_math_261F90.c
 func_821380B4,0x821380B4,src/fragments/fragment012_17ED00/particle_math_261F90.c,ParticleMath_RotateVec3fXY,s1,stadium1:src/fragments/particle_math/particle_math_261F90.c,c
 func_82138180,0x82138180,src/fragments/fragment012_17ED00/particle_math_261F90.c,ParticleMath_Distance3D,s1,stadium1:src/fragments/particle_math/particle_math_261F90.c,c
 func_821381E4,0x821381E4,src/fragments/fragment012_17ED00/particle_math_261F90.c,ParticleMath_NormalizedDirection,s1,stadium1:src/fragments/particle_math/particle_math_261F90.c,c
-func_82138244,0x82138244,src/fragments/fragment012_17ED00/particle_math_261F90.c,,asm,,asm
+func_82138244,0x82138244,src/fragments/fragment012_17ED00/particle_math_261F90.c,func_82138244,hand,,c
 func_8213831C,0x8213831C,src/fragments/fragment012_17ED00/particle_math_261F90.c,,asm,,asm
 func_821383C8,0x821383C8,src/fragments/fragment012_17ED00/particle_math_261F90.c,ParticleMath_DistanceScaled,s1,stadium1:src/fragments/particle_math/particle_math_261F90.c,c
 func_82138444,0x82138444,src/fragments/fragment012_17ED00/particle_math_261F90.c,ParticleMath_ScaleDirectionToLength,s1,stadium1:src/fragments/particle_math/particle_math_261F90.c,c
@@ -3499,7 +3499,7 @@ func_82202494,0x82202494,src/fragments/fragment013_232510/demo_scenes_161E60.c,f
 func_82202728,0x82202728,src/fragments/fragment013_232510/demo_scenes_161E60.c,func_82202728,hand,,c
 func_88000020,0x88000020,src/fragments/fragment014_235D70/lab_pc_icons.c,,asm,,asm
 func_8800023C,0x8800023C,src/fragments/fragment014_235D70/lab_pc_icons.c,func_8800023C,hand,,c
-func_880002D8,0x880002D8,src/fragments/fragment014_235D70/lab_pc_icons.c,,asm,,asm
+func_880002D8,0x880002D8,src/fragments/fragment014_235D70/lab_pc_icons.c,func_880002D8,hand,,c
 func_880003D4,0x880003D4,src/fragments/fragment014_235D70/lab_pc_icons.c,,asm,,asm
 func_88000564,0x88000564,src/fragments/fragment014_235D70/lab_pc_icons.c,func_88000564,hand,,c
 func_880005E8,0x880005E8,src/fragments/fragment014_235D70/lab_pc_icons.c,,asm,,asm
@@ -3895,7 +3895,7 @@ func_8A1057AC,0x8A1057AC,src/fragments/fragment018_262620/pokedex_2190D0.c,Poked
 func_8A200020,0x8A200020,src/fragments/fragment019_293410/lab_pc_icons.c,func_8A200020,hand,,c
 func_8A20009C,0x8A20009C,src/fragments/fragment019_293410/lab_pc_icons.c,func_8A20009C,hand,,c
 func_8A2001C0,0x8A2001C0,src/fragments/fragment019_293410/lab_pc_icons.c,UI_DrawTextureRgba16,hand,,c
-func_8A200274,0x8A200274,src/fragments/fragment019_293410/lab_pc_icons.c,,asm,,asm
+func_8A200274,0x8A200274,src/fragments/fragment019_293410/lab_pc_icons.c,func_8A200274,hand,,c
 func_8A20034C,0x8A20034C,src/fragments/fragment019_293410/lab_pc_icons.c,func_8A20034C,m2c,m2c,c
 func_8A2003C0,0x8A2003C0,src/fragments/fragment019_293410/lab_pc_icons.c,,asm,,asm
 func_8A200770,0x8A200770,src/fragments/fragment019_293410/lab_pc_icons.c,func_8A200770,hand,,c
