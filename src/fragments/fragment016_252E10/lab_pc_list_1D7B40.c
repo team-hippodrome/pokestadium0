@@ -50,11 +50,36 @@ void func_89104C70(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s32* arg5
     Font_EndTexturedTextRendering();
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89104D14; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89104D14.s")
-#endif
+typedef struct Str89104D14 { s8 c[4]; } Str89104D14;
+extern Str89104D14 D_8910A914;
+void func_80027804(s8 *, s32 *, s32, s32);
+void func_8002A8C4(s8 *, s32, s32, s32, s32);
+void func_8002D880(s8 *, s8 *, s32, void *, s32, s32);
+u32 func_800566BC(s32);
+void func_89104C70();
+void func_89104D14(s8 *arg0, s32 arg1, s32 arg2, s32 *arg3, s32 arg4, s32 arg5) {
+    s32 i;
+    s32 w;
+    s32 max = 0;
+    s32 h;
+
+    for (i = 0; i < arg5; i++) {
+        w = func_800566BC(arg3[i]) >> 1;
+        if (max < w) {
+            max = w;
+        }
+    }
+    func_80027804(arg0 + 0x50, arg3, arg5, arg5);
+    h = max * 0x14 + 0x10;
+    func_8002D880(arg0 + 0x2C, arg0 + 0x50, arg4, func_89104C70, h, 0x1C);
+    M2C_FIELD(arg0, s32 *, 0x4C) |= 0x10000;
+    func_8002A8C4(arg0, arg1, arg2, h + 0xC, 0x84);
+    M2C_FIELD(arg0, s32 *, 0x24) = 0;
+    M2C_FIELD(arg0, s32 *, 0x20) = 0;
+    M2C_FIELD(arg0, s32 *, 0x28) = 0;
+    M2C_FIELD(arg0, s32 *, 0x14) = 0;
+    M2C_FIELD(arg0, Str89104D14 *, 0x18) = D_8910A914;
+}
 
 s32 func_8002AE6C();
 M2C_UNK func_8002D9B8(s32, s32, s32, s32, s8*);

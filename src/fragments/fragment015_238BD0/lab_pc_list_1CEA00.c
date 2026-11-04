@@ -784,11 +784,44 @@ void func_890030C8(s32 arg0, s32 arg1, s8* arg2, s32 arg3) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_890032E4.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8900352C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_8900352C.s")
-#endif
+s32 func_8002B2B0(void *);
+s32 func_890013F8(void *, s32);
+s32 func_8900352C(s32* arg0) {
+    s32 ret = 0;
+
+    switch (arg0[0]) {
+        case 1:
+            if (func_8002B2B0(arg0 + 0x35) == 0) {
+                s32 r = func_8002BC14(D_800603C0);
+                if (r == -1) {
+                        func_8003F6AC(3);
+                        ret = -1;
+                } else if (r == 1) {
+                        switch (arg0[0x36]) {
+                            case 1:
+                                func_8003F6AC(2);
+                                arg0[0] = 2;
+                                break;
+                            case 0:
+                                func_8003F6AC(2);
+                                ret = 1;
+                                break;
+                            case 2:
+                                func_8003F6AC(3);
+                                ret = -1;
+                                break;
+                        }
+                }
+            }
+            break;
+        case 2:
+            if (func_890013F8(arg0 + 0x38, 0) == -1) {
+                arg0[0] = 1;
+            }
+            break;
+    }
+    return ret;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_89003650; signature not recovered. */

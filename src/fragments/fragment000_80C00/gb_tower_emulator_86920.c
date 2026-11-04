@@ -817,7 +817,7 @@ typedef struct Stream8110CD0C {
     /* 0x04 */ s32 unk04;
 } Stream8110CD0C;
 void func_8110DB8C(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3);
-void func_8110DA68(s32, s32, s32, s32);
+void func_8110DA68(s32, s32, u32, s32);
 extern u8* D_811858A4;
 s32 func_8110CD0C(Stream8110CD0C* arg0, s32 arg1) {
     s32 ret;
@@ -1065,11 +1065,32 @@ u8* func_8110D840(s32 arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110D884.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110DA68; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110DA68.s")
-#endif
+extern s8 D_81137C1C[];
+extern s8 D_81137C28[];
+extern u8 D_81185650[];
+extern u8 D_81185670[];
+void func_80056730(s32, u32);
+void func_8004D1C0(void*, s32, s32);
+s32 func_8110DBA0();
+void func_8110DA68(s32 arg0, s32 arg1, u32 arg2, s32 arg3) {
+
+    arg2 = (arg2 + 0xF) & ~0xF;
+    func_80056730(arg1, arg2);
+    while (TRUE) {
+        if (arg2 < 0x400) {
+            break;
+        }
+        func_8110DBA0(D_81185670, 1, 0, arg0, arg1, 0x400, D_81185650, arg3, D_81137C1C);
+        func_8004D1C0(D_81185650, 0, 1);
+        arg2 -= 0x400;
+        arg0 += 0x400;
+        arg1 += 0x400;
+    }
+    if (arg2 != 0) {
+        func_8110DBA0(D_81185670, 1, 0, arg0, arg1, arg2, D_81185650, arg3, D_81137C28);
+        func_8004D1C0(D_81185650, 0, 1);
+    }
+}
 
 void func_8110DB8C(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3) {
 
