@@ -700,11 +700,46 @@ void func_881029E0(void) {
     func_80018234(D_88103074, 0x18, 0x84, 0xF800);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88102A2C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment008_1720F0/func_88102A2C.s")
-#endif
+typedef struct Col88102A2C { u8 r, g, b, a; } Col88102A2C;
+extern s32 D_88102DCC;
+extern s32 D_88102DD0;
+/* Second name for D_88102DCC; see func_8A202F50 in lab_pc_icons.c. */
+extern s32 D_88102DCC_2;
+extern M2C_UNK D_88103018;
+void func_800189C0(s32, s32);
+M2C_UNK func_80028060(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
+void func_8002C8D8(Col88102A2C*, Col88102A2C, f32);
+s32 func_88102A2C(s32 arg0) {
+    Col88102A2C sp2C;
+    M2C_UNK *var_a1;
+    s32 n;
+
+    n = D_88102DCC;
+    if (n >= 8) {
+        D_88102DD0 = 1;
+    }
+    if (D_88102DD0 != 0) {
+        n--;
+        D_88102DCC_2 = n;
+    }
+    func_800189C0(D_88103074, 0);
+    func_800069CC();
+    if (D_88103078 == -1) {
+        var_a1 = NULL;
+    } else {
+        var_a1 = &D_88103080;
+    }
+    func_80028060(0, var_a1, &D_88103018, D_88103078);
+    n = D_88102DCC;
+    func_8002C8D8(&sp2C, *(Col88102A2C*)D_88102D70, n / (f64)8.0f);
+    func_8002C064(0x38, 0x1E0, sp2C.r, sp2C.g, sp2C.b);
+    if (D_88102DD0 == 0) {
+        n = D_88102DCC;
+        n++;
+        D_88102DCC = n;
+    }
+    return 0;
+}
 
 M2C_UNK func_8000B1FC();                            /* extern */
 M2C_UNK func_8000B220();                            /* extern */
