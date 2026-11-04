@@ -3473,7 +3473,7 @@ func_82200278,0x82200278,src/fragments/fragment013_232510/demo_scenes_161E60.c,,
 func_82200510,0x82200510,src/fragments/fragment013_232510/demo_scenes_161E60.c,func_82200510,hand,,c
 func_822005A8,0x822005A8,src/fragments/fragment013_232510/demo_scenes_161E60.c,func_822005A8,hand,,c
 func_82200618,0x82200618,src/fragments/fragment013_232510/demo_scenes_161E60.c,func_82200618,hand,,c
-func_82200714,0x82200714,src/fragments/fragment013_232510/demo_scenes_161E60.c,,asm,,asm
+func_82200714,0x82200714,src/fragments/fragment013_232510/demo_scenes_161E60.c,func_82200714,hand,,c
 func_82200848,0x82200848,src/fragments/fragment013_232510/demo_scenes_161E60.c,func_82200848,s1,stadium1:src/fragments/jigglypuff_doodle/jigglypuff_doodle.c,c
 func_82200850,0x82200850,src/fragments/fragment013_232510/demo_scenes_161E60.c,func_82200850,s1,stadium1:src/fragments/jigglypuff_doodle/jigglypuff_doodle.c,c
 func_82200858,0x82200858,src/fragments/fragment013_232510/demo_scenes_161E60.c,func_82200858,hand,,c
@@ -3511,7 +3511,7 @@ func_88000E20,0x88000E20,src/fragments/fragment014_235D70/lab_pc_icons.c,func_88
 func_88000EAC,0x88000EAC,src/fragments/fragment014_235D70/lab_pc_icons.c,,asm,,asm
 func_88000FE0,0x88000FE0,src/fragments/fragment014_235D70/lab_pc_icons.c,func_88000FE0,s1,stadium1:src/fragments/lab_pc/lab_pc_1B4EA0.c,c
 func_88000FE8,0x88000FE8,src/fragments/fragment014_235D70/lab_pc_icons.c,,asm,,asm
-func_88001128,0x88001128,src/fragments/fragment014_235D70/lab_pc_icons.c,,asm,,asm
+func_88001128,0x88001128,src/fragments/fragment014_235D70/lab_pc_icons.c,func_88001128,hand,,c
 func_8800125C,0x8800125C,src/fragments/fragment014_235D70/lab_pc_icons.c,func_8800125C,hand,,c
 func_880012FC,0x880012FC,src/fragments/fragment014_235D70/lab_pc_icons.c,func_880012FC,hand,,c
 func_88001368,0x88001368,src/fragments/fragment014_235D70/lab_pc_icons.c,func_88001368,hand,,c
@@ -3756,7 +3756,7 @@ func_89105AD4,0x89105AD4,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,,
 func_89105C54,0x89105C54,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,,asm,,asm
 func_89105E70,0x89105E70,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,,asm,,asm
 func_891060BC,0x891060BC,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,,asm,,asm
-func_89106254,0x89106254,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,,asm,,asm
+func_89106254,0x89106254,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_89106254,hand,,c
 func_89106384,0x89106384,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_89106384,hand,,c
 func_89106424,0x89106424,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,,asm,,asm
 func_89106570,0x89106570,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,,asm,,asm

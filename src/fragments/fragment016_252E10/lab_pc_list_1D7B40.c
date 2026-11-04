@@ -375,11 +375,41 @@ void BattleInfoWidget_ApplyEntrySelection(unk_func_8830867C_034* arg0, s32 arg1)
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_891060BC.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89106254; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89106254.s")
-#endif
+s32 func_891060BC(s8 *);
+s32 func_89106254(s8 *arg0) {
+    s32 ret = 0;
+    s32 r;
+
+    if (M2C_FIELD(arg0, s32 *, 0x2C) == 0) {
+        return 0;
+    }
+    switch (M2C_FIELD(arg0, s32 *, 0)) {
+        case 0:
+            ret = func_891060BC(arg0);
+            break;
+        case 1:
+            r = func_8910587C((s32)(arg0 + 0xDC));
+            if (r == -1) {
+                ret = -1;
+            } else if (r == 1) {
+                func_8910597C(arg0, arg0 + 0xDC);
+            } else if (r == 2) {
+                M2C_FIELD(arg0, s32 *, 0) = 0;
+            }
+            break;
+        case 2:
+            r = func_8910587C((s32)(arg0 + 0x120));
+            if (r == -1) {
+                ret = -1;
+            } else if (r == 1) {
+                func_8910597C(arg0, arg0 + 0x120);
+            } else if (r == 2) {
+                M2C_FIELD(arg0, s32 *, 0) = 0;
+            }
+            break;
+    }
+    return ret;
+}
 
 void func_89106384(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s8* arg5) {
     s32 temp_v0 = M2C_FIELD(arg5, s32*, 8) - 0xC;

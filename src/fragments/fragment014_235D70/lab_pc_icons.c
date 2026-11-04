@@ -191,11 +191,30 @@ void func_88000FE0(void) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment014_235D70/func_88000FE8.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88001128; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment014_235D70/func_88001128.s")
-#endif
+s32 func_8002AE6C();
+extern u8 D_800734A8[4];
+extern u8 D_8007356C[];
+void func_80029658(s32, s32, s32, u8 *);
+void func_8002AF04(s8 *, s32);
+void func_880005E8(s32, s32, s32, s32, s32, s32, s32);
+void func_88001128(s8 *arg0) {
+    s32* p;
+
+    if (func_8002AE6C() == 0) {
+        func_80029658(M2C_FIELD(arg0, s32 *, 0), M2C_FIELD(arg0, s32 *, 4) + 0x59, M2C_FIELD(arg0, s32 *, 8), D_8007356C);
+        Font_BeginTranslucentTextRendering();
+        Gfx_SetEnvColor(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
+        Font_SetActive(8, 0);
+        Font_SetLineHeight(0x1C);
+        Font_Printf(M2C_FIELD(arg0, s32 *, 0) + 0x8A, M2C_FIELD(arg0, s32 *, 4) + 0xA, M2C_FIELD(arg0, char **, 0x34));
+        Font_Printf(M2C_FIELD(arg0, s32 *, 0) + 0xBC, M2C_FIELD(arg0, s32 *, 4) + 0x68, M2C_FIELD(arg0, char **, 0x38));
+        Font_EndTexturedTextRendering();
+        func_8002AF04(arg0 + 0x3C, (M2C_FIELD(arg0, s32 *, 0xB8) == 0) ? 2 : 0);
+        func_8002AF04(arg0 + 0x78, (M2C_FIELD(arg0, s32 *, 0xB8) == 1) ? 2 : 0);
+        p = M2C_FIELD(arg0, s32 **, 0xC0);
+        func_880005E8(M2C_FIELD(arg0, s32 *, 0) + 0xA, M2C_FIELD(arg0, s32 *, 4) + 0xA, p[2], p[3], p[4], p[5], 0xFF);
+    }
+}
 
 s32 func_8002B390(s8*);
 s32 func_8002BC14(s32);
@@ -296,7 +315,7 @@ M2C_UNK func_800069CC();                            /* extern */
 M2C_UNK func_8002C064(M2C_UNK, M2C_UNK, u8, u8, s32); /* extern */
 M2C_UNK func_880003D4(s8 *);                      /* extern */
 M2C_UNK func_88000EAC(s8 *, M2C_UNK);             /* extern */
-M2C_UNK func_88001128(s8 *);                      /* extern */
+void func_88001128(s8 *);
 extern M2C_UNK D_88002254;
 
 void func_8800149C(s8 *arg0) {
