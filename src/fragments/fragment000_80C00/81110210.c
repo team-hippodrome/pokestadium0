@@ -416,8 +416,57 @@ s8 *func_81111784(s8 *arg0, s8 *arg1)
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8111187C.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81111AF4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81111AF4.s")
-#endif
+typedef struct Rec81111AF4 {
+    /* 0x00 */ char pad00[0x1C];
+    /* 0x1C */ s32 unk_1C;
+    /* 0x20 */ char pad20[0x10];
+    /* 0x30 */ s8 unk_30;
+    /* 0x31 */ s8 unk_31;
+    /* 0x32 */ char pad32[2];
+    /* 0x34 */ s8 unk_34;
+    /* 0x35 */ char pad35;
+    /* 0x36 */ s16 unk_36;
+    /* 0x38 */ char pad38[8];
+    /* 0x40 */ s32 unk_40;
+    /* 0x44 */ s32 unk_44;
+    /* 0x48 */ s32 unk_48;
+    /* 0x4C */ char pad4C[8];
+    /* 0x54 */ f32 unk_54;
+    /* 0x58 */ char pad58[4];
+    /* 0x5C */ s8 unk_5C;
+    /* 0x5D */ s8 unk_5D;
+    /* 0x5E */ char pad5E[0x84 - 0x5E];
+    /* 0x84 */ f32 unk_84;
+    /* 0x88 */ f32 unk_88;
+    /* 0x8C */ char pad8C[0xA4 - 0x8C];
+    /* 0xA4 */ s8 unk_A4;
+    /* 0xA5 */ char padA5[0xB4 - 0xA5];
+    /* 0xB4 */ Copy18 unk_B4;
+    /* 0xCC */
+} Rec81111AF4; // size = 0xCC
+extern Copy18 D_811369A8;
+extern s8 D_811842C0;
+s32 func_81109868(s8 *, s32);
+void func_81111AF4(void) {
+    s32 i;
+    Rec81111AF4* rec;
+
+    for (i = 0; i < D_811858E8; i++) {
+        rec = (Rec81111AF4*)&D_81184664[i];
+        rec->unk_B4 = D_811369A8;
+        rec->unk_30 = 0;
+        rec->unk_34 = 0;
+        rec->unk_44 = -1;
+        rec->unk_48 = -1;
+        rec->unk_40 = -1;
+        rec->unk_31 = 0;
+        rec->unk_54 = 0.0f;
+        rec->unk_36 = 0;
+        rec->unk_5D = 0;
+        rec->unk_5C = 0;
+        rec->unk_A4 = 0;
+        rec->unk_84 = 0.0f;
+        rec->unk_88 = 0.0f;
+        rec->unk_1C = func_81109868(&D_811842C0, 0x80);
+    }
+}

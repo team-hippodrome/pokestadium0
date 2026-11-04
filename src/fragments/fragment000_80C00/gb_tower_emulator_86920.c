@@ -427,11 +427,21 @@ void func_8110A8CC(s16* arg0, s32 arg1) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110A924; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110A924.s")
-#endif
+void func_8110A924(s16* arg0, s32 arg1, s32 arg2) {
+    s32 i;
+
+    if ((arg1 == 0) && (arg2 == 0)) {
+        func_8110A878(arg0, 0);
+    } else if (arg2 == 0) {
+        func_8110A878(arg0, arg1);
+    } else if (arg1 == 0) {
+        func_8110A8CC(arg0, arg2);
+    } else {
+        for (i = 0; i < 8; i++) {
+            arg0[i] = (D_811371D8[arg2 * 8 + i] + D_811373C8[arg2 * 8 + i]) / 2;
+        }
+    }
+}
 
 typedef struct Voice8110AA50 {
     /* 0x000 */ char unk000[0xC];
