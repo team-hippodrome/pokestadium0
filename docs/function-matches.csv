@@ -3592,7 +3592,7 @@ func_89000FA4,0x89000FA4,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,f
 func_89001018,0x89001018,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,,asm,,asm
 func_89001230,0x89001230,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,func_89001230,hand,,c
 func_89001250,0x89001250,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,func_89001250,hand,,c
-func_890012C4,0x890012C4,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,,asm,,asm
+func_890012C4,0x890012C4,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,func_890012C4,hand,,c
 func_890013F8,0x890013F8,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,,asm,,asm
 func_8900147C,0x8900147C,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,,asm,,asm
 func_890017FC,0x890017FC,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,,asm,,asm
@@ -3645,7 +3645,7 @@ func_89004BE0,0x89004BE0,src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c,f
 func_89004C54,0x89004C54,src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c,,asm,,asm
 func_89004E1C,0x89004E1C,src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c,func_89004E1C,hand,,c
 func_89004E3C,0x89004E3C,src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c,func_89004E3C,hand,,c
-func_89004EB0,0x89004EB0,src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c,,asm,,asm
+func_89004EB0,0x89004EB0,src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c,func_89004EB0,hand,,c
 func_89004FE4,0x89004FE4,src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c,,asm,,asm
 func_89005068,0x89005068,src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c,func_89005068,m2c,m2c,c
 func_89005098,0x89005098,src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c,,asm,,asm
@@ -4317,10 +4317,10 @@ func_8002CAD0,0x8002CAD0,src/gb_save.c,,asm,,asm
 func_8002CC44,0x8002CC44,src/gb_save.c,,asm,,asm
 func_8002CD7C,0x8002CD7C,src/gb_save.c,,asm,,asm
 func_8002CE5C,0x8002CE5C,src/gb_save.c,,asm,,asm
-func_8002CEEC,0x8002CEEC,src/gb_save.c,,asm,,asm
+func_8002CEEC,0x8002CEEC,src/gb_save.c,func_8002CEEC,hand,,c
 func_8002D024,0x8002D024,src/gb_save.c,,asm,,asm
 func_8002D138,0x8002D138,src/gb_save.c,func_8002D138,hand,,c
-func_8002D188,0x8002D188,src/gb_save.c,,asm,,asm
+func_8002D188,0x8002D188,src/gb_save.c,func_8002D188,hand,,c
 func_8002D2BC,0x8002D2BC,src/gb_save.c,,asm,,asm
 func_8002D3D0,0x8002D3D0,src/gb_save.c,func_8002D3D0,hand,,c
 func_8002D430,0x8002D430,src/gb_save.c,func_8002D430,hand,,c

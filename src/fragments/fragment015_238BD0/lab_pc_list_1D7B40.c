@@ -191,11 +191,24 @@ void func_89004E3C(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     M2C_FIELD(arg0, s32*, 0x20) |= 0x10000;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89004EB0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_89004EB0.s")
-#endif
+void func_8002F9D8(void *, s32, s32, s32, s32);
+void func_8002F6C4(void *, s32, s32, s32, s32);
+void func_8002BAB8(s32, s32, s32, s32);
+void func_8001BCB4(s32, s32, s32, s32, void *, s32, s32);
+extern Gfx D_80073450[];
+extern u8 D_04011AB8[];
+void func_89004EB0(s8 *arg0, s32 arg1) {
+    if (arg1 & 0x200) {
+        func_8002F9D8(arg0, M2C_FIELD(arg0, s32 *, 0x80), M2C_FIELD(arg0, s32 *, 0x84) + 0x10, arg1 | 0xFFED, 0);
+    } else {
+        func_8002F6C4(arg0, M2C_FIELD(arg0, s32 *, 0x80), M2C_FIELD(arg0, s32 *, 0x84) + 0x10, arg1 | 0xFFED, 0);
+    }
+    func_8002BAB8(M2C_FIELD(arg0, s32 *, 0x80) + 0x98, M2C_FIELD(arg0, s32 *, 0x84) + 0xBA, M2C_FIELD(M2C_FIELD(arg0, s8 **, 0), s32 *, 8), 2);
+    func_8002BAB8(M2C_FIELD(arg0, s32 *, 0x80) + 0xB3, M2C_FIELD(arg0, s32 *, 0x84) + 0xBA, M2C_FIELD(M2C_FIELD(arg0, s8 **, 0), s32 *, 4), 2);
+    gSPDisplayList(gDisplayListHead++, D_80073450);
+    gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
+    func_8001BCB4(M2C_FIELD(arg0, s32 *, 0x80) + 0xAA, M2C_FIELD(arg0, s32 *, 0x84) + 0xBC, 8, 0xA, D_04011AB8, 8, 0);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_89004FE4; signature not recovered. */

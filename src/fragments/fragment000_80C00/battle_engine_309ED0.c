@@ -220,6 +220,14 @@ s32 func_8110F4D0(Item8110F4D0* arg0, s32 count, Item8110F4D0** list) {
     return count;
 }
 
+typedef struct Entry811858B0 {
+    /* 0x00 */ u8 unk_00[2];
+    /* 0x02 */ u8 unk_02;
+    /* 0x03 */ u8 unk_03;
+    /* 0x04 */ char unk04[8];
+} Entry811858B0; // size = 0xC
+extern Entry811858B0* D_811858B0;
+
 #ifdef NON_MATCHING
 /* TODO: decompile func_8110F518; signature not recovered. */
 #else
@@ -282,13 +290,6 @@ typedef struct Table81184440 {
 } Table81184440;
 extern Table81184440 D_81184440;
 extern s32 D_8118444C;
-typedef struct Entry811858B0 {
-    /* 0x00 */ u8 unk_00[2];
-    /* 0x02 */ u8 unk_02;
-    /* 0x03 */ u8 unk_03;
-    /* 0x04 */ char unk04[8];
-} Entry811858B0; // size = 0xC
-extern Entry811858B0* D_811858B0;
 typedef struct Entry8110D840 {
     /* 0x00 */ char unk00[8];
     /* 0x08 */ s8 unk_08;

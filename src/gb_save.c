@@ -751,11 +751,39 @@ void func_8002CA34(s8 *arg0, s32 arg1, s32 arg2) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002CE5C.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002CEEC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002CEEC.s")
-#endif
+typedef struct Ent8002D188 { s32 w; s32 h; s32 unk8; } Ent8002D188;
+typedef struct Rgba8002D188 { u8 r, g, b, a; } Rgba8002D188;
+extern Ent8002D188 D_800736D0[];
+u32 func_800566BC(s32);
+extern u8 D_800736E8[];
+extern u8 D_800736EC[];
+void func_8002CEEC(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4) {
+    u32 len;
+    s32 w;
+    s32 h;
+    s32 cw;
+    s32 ch;
+
+    if (arg4 == 0) {
+        len = func_800566BC(arg1) >> 1;
+    } else {
+        len = arg4;
+    }
+    M2C_FIELD(arg0, s32 *, 0x30) = arg2;
+    M2C_FIELD(arg0, s32 *, 0x34) = arg3;
+    cw = D_800736D0[arg2].w;
+    ch = D_800736D0[arg2].h;
+    w = ch * 2 + len * cw;
+    h = ch + (u32)(cw + ch) * arg3;
+    func_8002A8C4(arg0, (0x274 - w) / 2, (0x19C - h) / 2 + 0x38, w + 0xC, h + 0xC);
+    M2C_FIELD(arg0, s32 *, 0x24) = 0;
+    M2C_FIELD(arg0, s32 *, 0x20) = 0;
+    M2C_FIELD(arg0, s32 *, 0x28) = 0;
+    M2C_FIELD(arg0, s32 *, 0x14) = 6;
+    M2C_FIELD(arg0, Rgba8002D188 *, 0x18) = *(Rgba8002D188 *)D_800736E8;
+    M2C_FIELD(arg0, Rgba8002D188 *, 0x1C) = *(Rgba8002D188 *)D_800736EC;
+    M2C_FIELD(arg0, s32 *, 0x2C) = arg1;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8002D024; signature not recovered. */
@@ -773,11 +801,35 @@ s32 func_8002D138(UNUSED s32 arg0) {
     return ret;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002D188; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002D188.s")
-#endif
+extern u8 D_800736F8[];
+extern u8 D_800736FC[];
+u32 func_800566BC(s32);
+void func_8002D188(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4) {
+    u32 len;
+    s32 w;
+    s32 h;
+    s32 cw;
+    s32 ch;
+
+    if (arg4 == 0) {
+        len = func_800566BC(arg1) >> 1;
+    } else {
+        len = arg4;
+    }
+    M2C_FIELD(arg0, s32 *, 0x2C) = arg2;
+    M2C_FIELD(arg0, s32 *, 0x30) = arg3;
+    cw = D_800736D0[arg2].w;
+    ch = D_800736D0[arg2].h;
+    w = ch * 2 + len * cw;
+    h = ch + (u32)(cw + ch) * arg3;
+    func_8002A8C4(arg0, (0x274 - w) / 2, (0x19C - h) / 2 + 0x38, w + 0xC, h + 0xC);
+    M2C_FIELD(arg0, s32 *, 0x20) = 0;
+    M2C_FIELD(arg0, s32 *, 0x24) = 0;
+    M2C_FIELD(arg0, s32 *, 0x14) = 6;
+    M2C_FIELD(arg0, Rgba8002D188 *, 0x18) = *(Rgba8002D188 *)D_800736F8;
+    M2C_FIELD(arg0, Rgba8002D188 *, 0x1C) = *(Rgba8002D188 *)D_800736FC;
+    M2C_FIELD(arg0, s32 *, 0x28) = arg1;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8002D2BC; signature not recovered. */
