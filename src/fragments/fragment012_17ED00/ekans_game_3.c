@@ -588,17 +588,42 @@ s32 func_82184ADC(s8* arg0, s8* arg1, s32 move) {
     return mult;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82184BC8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82184BC8.s")
-#endif
+s32 func_82184BC8(s8 *arg0, s32 arg1) {
+    s32 i;
+    u8 *p = (u8 *)arg0;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82184CE0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82184CE0.s")
-#endif
+    if (arg1 != 0) {
+        for (i = 0; i < 4; i++) {
+            if (p[0x2B + i] == 0) {
+                return 0;
+            }
+            if ((arg1 == p[0x2B + i]) && (p[0x3E + i] & 0x3F) && (arg1 != p[0x63])) {
+                return arg1;
+            }
+        }
+    }
+    return 0;
+}
+
+u8 func_82184CE0(u8 *arg0) {
+    s32 i;
+
+    for (i = 0; i < 4; i++) {
+        if (arg0[0x2B + i] == 0) {
+            return 0;
+        }
+        switch (arg0[0x2B + i]) {
+            case 0x69:
+            case 0x87:
+            case 0x9C:
+                if (func_82184BC8((s8*)arg0, arg0[0x2B + i]) != 0) {
+                    return arg0[0x2B + i];
+                }
+                break;
+        }
+    }
+    return 0;
+}
 
 s32 func_82184D9C(s8 *arg0, s32 arg1) {
     if ((arg1 == M2C_FIELD(arg0, u8 *, 0x28)) || (arg1 == M2C_FIELD(arg0, u8 *, 0x29))) {
@@ -649,8 +674,6 @@ s32 func_82185044(species, bit) s32 species; s32 bit; {
     return (1 << (bit & 7)) & bits;
 }
 
-#ifdef NON_MATCHING
-// Matches the ROM, but uses rodata data that is not placed in this file yet.
 extern u8 D_821944CF[];
 extern u32 D_821945C4[];
 s32 func_82185108(u8 *arg0, s32 arg1) {
@@ -674,9 +697,6 @@ s32 func_82185108(u8 *arg0, s32 arg1) {
     }
     return v;
 }
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82185108.s")
-#endif
 
 s32 func_82185108(u8*, s32);
 
@@ -834,11 +854,50 @@ check:
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821858DC.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82185A30; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82185A30.s")
-#endif
+extern u8* D_821CF29C;
+s32 func_8218824C(s32);
+s32 func_82185A30(u8 *arg0) {
+    s32 i;
+    s32 r;
+
+    if (func_82185494() == 0) {
+        return -1;
+    }
+    if (D_821CF29C[0x7C] == 0x5C) {
+        return -1;
+    }
+    r = func_8218824C((func_82183CE4(D_821CF2A0) * 5) / 4);
+    if (r >= 0) {
+        return r;
+    }
+    if ((((u8 *)D_821CF2A0)[0x21] == 0) && (func_82184D9C(D_821CF2A0, 3) == 0)) {
+        for (i = 0; i < 4; i++) {
+            if (arg0[0x2B + i] == 0) {
+                break;
+            }
+            if ((func_82184BC8((s8 *)arg0, arg0[0x2B + i]) != 0) && (arg0[0x2B + i] == 0x5C)) {
+                return i;
+            }
+        }
+    }
+    if (!(((u8 *)D_821CF2A0)[0x21] & 8)) {
+        return -1;
+    }
+    if ((((u8 *)D_821CF2A0)[0x75] & D_821CF29C[0x77]) || (func_82184D9C(D_821CF2A0, 0x16) != 0)) {
+        return -1;
+    }
+    {
+        for (i = 0; i < 4; i++) {
+            if (arg0[0x2B + i] == 0) {
+                break;
+            }
+            if ((func_82184BC8((s8 *)arg0, arg0[0x2B + i]) != 0) && (arg0[0x2B + i] == 0x49)) {
+                return i;
+            }
+        }
+    }
+    return -1;
+}
 
 extern u8 D_8006B18B[];
 s32 func_82185BE0(u8 *arg0, s32 arg1) {
@@ -1134,17 +1193,80 @@ void func_821869C4(s8 *arg0, s8 *arg1)
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82186AF4.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82186CA8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82186CA8.s")
-#endif
+extern u8 D_82194848[];
+void func_82186CA8(u8 *arg0, u8 *arg1) {
+    s32 score;
+    s32 i;
+    s32 acc;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82186F28; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82186F28.s")
-#endif
+    switch (arg0[0x17]) {
+        default:
+            score = 0;
+            break;
+        case 0x84:
+            score = 0;
+            break;
+        case 0x79:
+            score = 0;
+            break;
+    }
+    if (*(u16 *)(arg0 + 0x18) != 0) {
+        score = 0x8000;
+    }
+    if (!(arg0[0x21] & 0x20)) {
+        score += 0x4000;
+    }
+    if (!(arg0[0x5A] & 1) || (arg0[0x7A] < 3)) {
+        score += 0x2000;
+    }
+    if (!(arg0[0x21] & 7)) {
+        score += 0x1000;
+    }
+    if (func_82184CE0(arg0) != 0) {
+        score += 0x200;
+    }
+    if ((func_82184D9C((s8 *)arg0, 0x19) != 0) || (func_82184D9C((s8 *)arg0, 3) != 0)) {
+        score += 0x200;
+    }
+    if (*(u16 *)(arg1 + 0x3A) < *(u16 *)(arg0 + 0x3A)) {
+        score += 0x300;
+    }
+    for (i = 0; i < 4; i++) {
+        if (arg0[0x2B + i] == 0) {
+            break;
+        }
+        if ((func_82184BC8((s8 *)arg0, arg0[0x2B + i]) != 0) && (func_82184AA8(D_82194848, 1, 0x2B, arg0[0x2B + i]) != 0)) {
+            acc = (D_8006B190[arg0[0x2B + i]].unk04 * D_8006B190[arg0[0x2B + i]].unk04) / 650;
+            score += (((func_82184ADC((s8 *)arg0, (s8 *)arg1, arg0[0x2B + i]) * 8) / 100) * acc) / 100;
+        }
+    }
+    *(s32 *)(arg0 + 4) += score;
+}
+
+s32 func_82186F28(s32 arg0, s32 arg1) {
+    s32 i;
+    s32 sum;
+
+    if ((arg0 == 0) || (arg0 >= 3)) {
+        return 1;
+    }
+    if (arg0 == 1) {
+        for (i = 0; i < 6; i++) {
+            if ((i != D_821CF280) && (i != arg1)) {
+                sum = D_821CF294[D_821CF280].unk_36 + D_821CF294[i].unk_36 + D_821CF294[arg1].unk_36;
+                if ((sum >= 0x96) && (sum < 0x9C)) {
+                    return 1;
+                }
+            }
+        }
+        return 0;
+    }
+    sum = D_821CF294[D_821CF280].unk_36 + D_821CF294[(&D_821CF280)[1]].unk_36 + D_821CF294[arg1].unk_36;
+    if ((sum >= 0x96) && (sum < 0x9C)) {
+        return 1;
+    }
+    return 0;
+}
 
 extern BattleSlotZ* D_821CF294;
 s32 func_82186F28(s32, s32);
