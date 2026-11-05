@@ -284,11 +284,25 @@ void func_8002DF9C(Menu8002E230* menu, s32 x, s32 y) {
     func_80029A64(px, py, menu->colSpacing - 4, menu->rowSpacing - 4, *(Color_RGBA8*)D_80073520);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002E078; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002E078.s")
-#endif
+void func_8002E078(Menu8002E230* menu, s32 x, s32 y, s32 mask, s32 arg4) {
+    MenuDef8002E230* def = menu->def;
+    s32 i;
+    u8** items = (u8**)def->items;
+    u8* item;
+    s32 f;
+
+    for (i = 0; i < def->count; i++) {
+        item = (i < def->itemCount) ? items[i] : NULL;
+        f = menu->flags[i];
+        if (i == menu->cursor) {
+            f |= 0x12;
+        }
+        menu->draw((i % menu->columns) * menu->colSpacing + x, (i / menu->columns) * menu->rowSpacing + y, item, i, f & mask, arg4);
+    }
+    if ((menu->def->itemCount > 0) && (mask & 2) && (menu->options & 0x10000)) {
+        func_8002DF9C(menu, x, y);
+    }
+}
 
 void func_8002DF9C(Menu8002E230*, s32, s32);
 void func_8002E230(Menu8002E230* menu, s32 x, s32 y, s32 mask, s32 arg4) {
