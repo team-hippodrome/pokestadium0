@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 4853,
-  "asm_owners": 591,
+  "c_owners": 4856,
+  "asm_owners": 588,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -597,8 +597,8 @@
     "tools/cflags_overrides.json": "7052d644eb08429c59981bb4c369c8c937c61ca4c639a1c1ca2c5fc0ce919ebb",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "623b8fb644fb4245747a6bcae9c1d8a70b8d55ef283af8ad77bb9b968ffbe2f7",
-    "linker_scripts/jp/symbol_addrs.txt": "c541da3eda9cc54f57157779aac1372668f531794cff72448d63b43c89763ccf"
+    "docs/function-matches.csv": "ed9170be806ce4473482990d502a3b1f172673a8b2147f2cd291ef2b7f484a83",
+    "linker_scripts/jp/symbol_addrs.txt": "3b5103d4cfe8c6cf2470a85f3aacf457f87dc2c7f2096a7a216bec5fd85d5385"
   },
   "binutils": {
     "as": "GNU assembler (GNU Binutils for Ubuntu) 2.42",
@@ -966,7 +966,7 @@
     "src/gb_tower.c": "176816e083b7e59f7a469e5cb27b7a0b94869007fcb3060a4e31dfeefbfd0124",
     "src/geo_layout.c": "cd22cfc78b438f75ba379097e38e64b8e773c73701f536774d4a9c9fbe313f0d",
     "src/geo_node.c": "4b117247e69f5030a02753148e827dc7179b9c497a8af94b2feb264947aa287a",
-    "src/geo_render.c": "8a56760d6801535a8867c8c8906e449d9c5b993f418190e0ce5431dc3dd86c33",
+    "src/geo_render.c": "d474f02f1ce61e4ca35518fb8a0d794870aaa4cefcab03341f190069e6f7b621",
     "src/gfx_buffer.c": "8763545514d8fbae9e0f5bba8be79ea47a1db08f2e40b1ceccb6c16d0a5e59e5",
     "src/gfx_rect.c": "aa0d5e4c1ee103a6195cc63d2e2e8f303c99b8a7dcbfe54b922dfd7c5948eee8",
     "src/graphics_textures.c": "453f662b84fedb755a66b198930f5ee7489f4a8f592eef45f2f75181815d548b",
@@ -1162,7 +1162,7 @@
     "src/model_animation_events.c": "bb49d355580173be4f6b6df3d2c88bfb9f63d04392aa58c5b7313024a87b3348",
     "src/model_renderer.c": "da92442a2927d0c75b484bcd0b309cec8cac5865dc3078c50ca4fd45cf102ab4",
     "src/model_renderer_callbacks.c": "be28d5f1a8318ae059ac1ba3c42573b456d13a416a7d2521397d69495bf78b26",
-    "src/poke_icon.c": "1a42cf4def0281e6f4a69095377f71112a00a7d2bec7e77ac9beba8d373bb1d5",
+    "src/poke_icon.c": "7bf39c4aed79b7e2f3b3632b3d1d18ca1ea5938e43930aa946c0d703889cf984",
     "src/poke_icon_2.c": "8edb42f4b2d7f820fae69069e24baf050606f38dd739885bc918345f81a10af7",
     "src/pokemon_lab_support.c": "131b1659d81b154753e4465f0b1ba84990472bcd21dda61b9ac32816ca448146",
     "src/pokemon_stats.c": "7a702100543353296efd2bc8c09856b394ac734d0830e1d2620c01c05041aea4",

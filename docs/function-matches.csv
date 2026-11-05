@@ -4468,7 +4468,7 @@ func_80012D04,0x80012D04,src/geo_render.c,func_80012D04,hand,,c
 func_80012DC8,0x80012DC8,src/geo_render.c,func_80012DC8,hand,,c
 func_80012E68,0x80012E68,src/geo_render.c,func_80012E68,hand,,c
 func_80012EAC,0x80012EAC,src/geo_render.c,GeoRender_BindTexture,hand,,c
-func_80013148,0x80013148,src/geo_render.c,,asm,,asm
+func_80013148,0x80013148,src/geo_render.c,func_80013148,hand,,c
 func_800132C8,0x800132C8,src/geo_render.c,func_800132C8,hand,,c
 func_80013398,0x80013398,src/geo_render.c,,asm,,asm
 func_800135FC,0x800135FC,src/geo_render.c,,asm,,asm
@@ -5159,10 +5159,10 @@ func_80017F40,0x80017F40,src/poke_icon.c,PokeIcon_CaptureGeoNode,s1,stadium1:src
 func_80017F54,0x80017F54,src/poke_icon.c,func_80017F54,m2c,m2c,c
 func_80017FDC,0x80017FDC,src/poke_icon.c,PokeIcon_CreateRenderList,hand,,c
 func_80018168,0x80018168,src/poke_icon.c,func_80018168,m2c,m2c,c
-func_80018234,0x80018234,src/poke_icon.c,,asm,,asm
+func_80018234,0x80018234,src/poke_icon.c,func_80018234,hand,,c
 func_8001833C,0x8001833C,src/poke_icon.c,func_8001833C,hand,,c
 func_800184C0,0x800184C0,src/poke_icon.c,PokeIcon_AdjustImageColors,hand,,c
-func_80018550,0x80018550,src/poke_icon.c,,asm,,asm
+func_80018550,0x80018550,src/poke_icon.c,func_80018550,hand,,c
 func_8001882C,0x8001882C,src/poke_icon.c,PokeIcon_ProcessNextSlot,s1,stadium1:src/poke_icon.c,c
 func_800189C0,0x800189C0,src/poke_icon.c,PokeIcon_ProcessAllSlots,s1,stadium1:src/poke_icon.c,c
 func_80018BA4,0x80018BA4,src/poke_icon.c,PokeIcon_RenderNextSlotBlocking,s1,stadium1:src/poke_icon.c,c

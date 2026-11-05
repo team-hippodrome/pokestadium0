@@ -724,11 +724,21 @@ void GeoRender_BindTexture(unk_D_800ABB28* arg0, unk_D_800ABB10* arg1) {
 }
 
 extern unk_D_800ABB28* D_800ABCB8;
-#ifdef NON_MATCHING
-/* TODO: decompile func_80013148; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80013148.s")
-#endif
+extern u8 D_1001800[];
+
+void func_80013148(s8* arg0, s32 arg1) {
+    if (M2C_FIELD(arg0, u8 *, 0x1A) == 0) {
+        gDPLoadTextureBlock(gDisplayListHead++, D_1001800, G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0,
+                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 5, 5, 1, 1);
+        gSPTexture(gDisplayListHead++, 0x1194, 0x1194, 0, G_TX_RENDERTILE, G_ON);
+
+        gSPSetGeometryMode(gDisplayListHead++, G_TEXTURE_GEN);
+        gSPClearGeometryMode(gDisplayListHead++, G_TEXTURE_GEN_LINEAR);
+        gDPSetCombineMode(gDisplayListHead++, G_CC_MODULATEI, G_CC_MODULATEI2);
+
+        M2C_FIELD(arg0, u8 *, 0x1A) = 1;
+    }
+}
 
 /*
  * func_800132C8
