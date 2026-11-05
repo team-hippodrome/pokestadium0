@@ -3647,3 +3647,6 @@ Audio_UpdateBattleAudioFrame = 0x80043DD0; // learned from func_8003B868
 curAcmdList = 0x80075E2C; // learned from func_8003B868
 lastInfo = 0x80075E30; // learned from func_8003B868
 min_only_one = 0x80075E34; // learned from func_8003B868
+D_10031C0 = 0x010031C0; // learned from func_8001E6C0
+D_1003740 = 0x01003740; // learned from func_8001E6C0
+D_1003880 = 0x01003880; // learned from func_8001E6C0

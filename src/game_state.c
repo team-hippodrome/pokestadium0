@@ -149,7 +149,8 @@ M2C_UNK func_80025640(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
 extern M2C_UNK D_800AE8F0;
 extern M2C_UNK D_800AE8F4;
 extern M2C_UNK D_800AEAF8;
-extern M2C_UNK D_800AF104;
+typedef struct { s16 unk_00; u8 unk_02; u8 unk_03; } Unk800AF104;
+extern Unk800AF104 D_800AF104;
 extern M2C_UNK D_800AF30C;
 extern M2C_UNK D_800AF924;
 extern M2C_UNK D_800AF94C;
@@ -158,7 +159,7 @@ M2C_UNK func_80025758(M2C_UNK arg0, M2C_UNK arg1, M2C_UNK arg2) {
     M2C_FIELD(&D_800AE8F0, s8 *, 0) = arg0;
     M2C_FIELD(&D_800AE8F0, s8 *, 1) = 1;
     M2C_FIELD(&D_800AE8F0, s8 *, 3) = 1;
-    func_80025640(0, &D_800AE8F4, &D_800AF104, arg1);
+    func_80025640(0, &D_800AE8F4, (M2C_UNK *)&D_800AF104, arg1);
     func_80025640(1, &D_800AEAF8, &D_800AF30C, arg2);
     func_8002572C((s8 *)&D_800AF924, (s32)&D_800AE8F4);
     func_8002572C((s8 *)&D_800AF94C, (s32)&D_800AEAF8);
@@ -205,7 +206,7 @@ void func_80025830(void) {
     Save_CommitTypedRecord(0x15, 0);
 }
 
-M2C_UNK func_80058410(M2C_UNK *, M2C_UNK *, M2C_UNK, M2C_UNK *); /* extern */
+M2C_UNK func_80058410();
 extern M2C_UNK D_800AE8F0;
 extern M2C_UNK D_800AF974;
 extern M2C_UNK D_800AFB10;
@@ -226,7 +227,7 @@ void func_800258B4(void) {
 #endif
 
 s8 func_800253BC(M2C_UNK *, s8 *, M2C_UNK *);       /* extern */
-M2C_UNK func_80025910(s8);                          /* extern */
+void func_80025910(s32);                          /* extern */
 s32 func_80057910(s8 *, M2C_UNK *, M2C_UNK);        /* extern */
 extern s8 D_800AE8F6;
 extern M2C_UNK D_800AE910;
