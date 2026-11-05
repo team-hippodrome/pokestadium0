@@ -237,7 +237,7 @@ func_80043A10,0x80043A10,src/audio_commands.c,func_80043A10,hand,,c
 func_80043B00,0x80043B00,src/audio_commands.c,,asm,,asm
 func_80043CE8,0x80043CE8,src/audio_commands.c,func_80043CE8,hand,,c
 func_80043DD0,0x80043DD0,src/audio_commands.c,,asm,,asm
-func_80044158,0x80044158,src/audio_commands.c,,asm,,asm
+func_80044158,0x80044158,src/audio_commands.c,func_80044158,hand,,c
 func_80044268,0x80044268,src/audio_commands.c,Audio_ClearWaveDataLoaded,s1,stadium1:src/audio_data.c,c
 func_80056950,0x80056950,src/libultra/audio/synthesizer.c,,ultralib,libultra:src/audio/synthesizer.c,c
 func_80056958,0x80056958,src/libultra/audio/synthesizer.c,_timeToSamples,ultralib,libultra:src/audio/synthesizer.c,c
