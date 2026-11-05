@@ -146,8 +146,8 @@ void func_82168F7C(void) {
     gDPSetRenderMode(gDisplayListHead++, 0x0C180000, 0x5978);
 }
 
-void func_82168FAC(void *arg0) {
-    gDPLoadTLUT_pal256(gDisplayListHead++, arg0);
+void func_82168FAC(u16* palette) {
+    gDPLoadTLUT_pal256(gDisplayListHead++, palette);
 }
 
 void ParticleGfx_SetPrimColor(u8 r, u8 g, u8 b, u8 a) {
@@ -277,41 +277,49 @@ s32 func_82169AE4(s32 arg0) {
 void func_82169B14(s32 width, s32 height) {
     gDPPipeSync(gDisplayListHead++);
     gDPTileSync(gDisplayListHead++);
-    gDPSetTile(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
+    gDPSetTile(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0,
+                 G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
     gDPTileSync(gDisplayListHead++);
-    gDPSetTile(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, ((width * 2) + 7) >> 3, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
-    gDPSetTileSize(gDisplayListHead++, G_TX_RENDERTILE, 0, 0, (width - 1) << G_TEXTURE_IMAGE_FRAC, (height - 1) << G_TEXTURE_IMAGE_FRAC);
+    gDPSetTile(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, ((width * 2 + 7) >> 3), 0, G_TX_RENDERTILE, 0,
+                 G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
+    gDPSetTileSize(gDisplayListHead++, G_TX_RENDERTILE, 0, 0, (width - 1) << 2, (height - 1) << 2);
 }
 
 void func_82169BF0(s32 width, s32 height) {
     gDPPipeSync(gDisplayListHead++);
     gDPTileSync(gDisplayListHead++);
-    gDPSetTile(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, ((width * 2) + 7) >> 3, 0, G_TX_LOADTILE, 0, G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
+    gDPSetTile(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, ((width * 2 + 7) >> 3), 0, G_TX_LOADTILE, 0,
+                 G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
     gDPTileSync(gDisplayListHead++);
-    gDPSetTile(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, ((width * 2) + 7) >> 3, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
-    gDPSetTileSize(gDisplayListHead++, G_TX_RENDERTILE, 0, 0, (width - 1) << G_TEXTURE_IMAGE_FRAC, (height - 1) << G_TEXTURE_IMAGE_FRAC);
+    gDPSetTile(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, ((width * 2 + 7) >> 3), 0, G_TX_RENDERTILE, 0,
+                 G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
+    gDPSetTileSize(gDisplayListHead++, G_TX_RENDERTILE, 0, 0, (width - 1) << 2, (height - 1) << 2);
 }
 
 void func_82169CCC(s32 width, s32 height) {
     gDPPipeSync(gDisplayListHead++);
     gDPTileSync(gDisplayListHead++);
-    gDPSetTile(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_32b, 0, 0, G_TX_LOADTILE, 0, G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
+    gDPSetTile(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_32b, 0, 0, G_TX_LOADTILE, 0,
+                 G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
     gDPTileSync(gDisplayListHead++);
-    gDPSetTile(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_32b, ((width * 2) + 7) >> 3, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
-    gDPSetTileSize(gDisplayListHead++, G_TX_RENDERTILE, 0, 0, (width - 1) << G_TEXTURE_IMAGE_FRAC, (height - 1) << G_TEXTURE_IMAGE_FRAC);
+    gDPSetTile(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_32b, ((width * 2 + 7) >> 3), 0, G_TX_RENDERTILE, 0,
+                 G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
+    gDPSetTileSize(gDisplayListHead++, G_TX_RENDERTILE, 0, 0, (width - 1) << 2, (height - 1) << 2);
 }
 
 void func_82169DA8(s32 width, s32 height) {
     gDPPipeSync(gDisplayListHead++);
     gDPTileSync(gDisplayListHead++);
-    gDPSetTile(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_32b, ((width * 2) + 7) >> 3, 0, G_TX_LOADTILE, 0, G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
+    gDPSetTile(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_32b, ((width * 2 + 7) >> 3), 0, G_TX_LOADTILE, 0,
+                 G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
     gDPTileSync(gDisplayListHead++);
-    gDPSetTile(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_32b, ((width * 2) + 7) >> 3, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
-    gDPSetTileSize(gDisplayListHead++, G_TX_RENDERTILE, 0, 0, (width - 1) << G_TEXTURE_IMAGE_FRAC, (height - 1) << G_TEXTURE_IMAGE_FRAC);
+    gDPSetTile(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_32b, ((width * 2 + 7) >> 3), 0, G_TX_RENDERTILE, 0,
+                 G_TX_CLAMP, 0, 0, G_TX_CLAMP, 0, 0);
+    gDPSetTileSize(gDisplayListHead++, G_TX_RENDERTILE, 0, 0, (width - 1) << 2, (height - 1) << 2);
 }
 
-void func_82169E84(void *timg, s32 width, s32 height) {
-    gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, timg);
+void func_82169E84(u8* texture, s32 width, s32 height) {
+    gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, texture);
     gDPLoadSync(gDisplayListHead++);
     gDPLoadBlock(gDisplayListHead++, G_TX_LOADTILE, 0, 0, width * height - 1, CALC_DXT(width, G_IM_SIZ_16b_BYTES));
 }
@@ -322,8 +330,8 @@ void func_82169F74(void* img, s32 width, s32 height) {
     gDPLoadTile(gDisplayListHead++, G_TX_LOADTILE, 0, 0, (width - 1) << G_TEXTURE_IMAGE_FRAC, (height - 1) << G_TEXTURE_IMAGE_FRAC);
 }
 
-void func_82169FF8(void *timg, s32 width, s32 height) {
-    gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_32b, 1, timg);
+void func_82169FF8(u8* texture, s32 width, s32 height) {
+    gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_32b, 1, texture);
     gDPLoadSync(gDisplayListHead++);
     gDPLoadBlock(gDisplayListHead++, G_TX_LOADTILE, 0, 0, width * height - 1, CALC_DXT(width, G_IM_SIZ_32b_BYTES));
 }
