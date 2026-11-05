@@ -649,11 +649,34 @@ M2C_UNK func_80027168(arg0)
     return 1;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80027214; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80027214.s")
-#endif
+s32 func_80027214(Obj80027168* arg0, Vec3f* arg1) {
+    f32 t;
+    f32 u;
+    f32 b0;
+    f32 b1;
+    f32 b2;
+    f32 b3;
+
+    if (arg0->unk_3A > 0) {
+        if ((arg0->unk_38 >= arg0->unk_3A) && (func_80027168(arg0) == 0)) {
+            return 0;
+        }
+        arg0->unk_38++;
+        t = (f32)arg0->unk_38 / (f32)arg0->unk_3A;
+        if (arg0->unk_00 & 1) {
+            t = (-2.0f * t * t * t) + (3.0f * t * t);
+        }
+        u = 1.0f - t;
+        b0 = u * u * u;
+        b1 = 3.0f * t * u * u;
+        b2 = 3.0f * t * t * u;
+        b3 = t * t * t;
+        arg1->x = (arg0->unk_2C.x * b3) + ((b0 * arg0->unk_08.x) + (b1 * arg0->unk_14.x) + (b2 * arg0->unk_20.x));
+        arg1->y = (arg0->unk_2C.y * b3) + ((b0 * arg0->unk_08.y) + (b1 * arg0->unk_14.y) + (b2 * arg0->unk_20.y));
+        arg1->z = (arg0->unk_2C.z * b3) + ((b0 * arg0->unk_08.z) + (b1 * arg0->unk_14.z) + (b2 * arg0->unk_20.z));
+    }
+    return 1;
+}
 
 M2C_UNK func_80027168();                            /* extern */
 

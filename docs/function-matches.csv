@@ -4169,7 +4169,7 @@ func_800270B4,0x800270B4,src/game_state.c,func_800270B4,hand,,c
 func_80027134,0x80027134,src/game_state.c,Display_DisableBlackout,s1,stadium1:src/dp_intro.c,c
 func_80027140,0x80027140,src/game_state.c,func_80027140,m2c,m2c+permuter,c
 func_80027168,0x80027168,src/game_state.c,func_80027168,hand,,c
-func_80027214,0x80027214,src/game_state.c,,asm,,asm
+func_80027214,0x80027214,src/game_state.c,func_80027214,hand,,c
 func_800273C4,0x800273C4,src/game_state.c,func_800273C4,m2c,m2c,c
 func_800273E8,0x800273E8,src/game_state.c,func_800273E8,m2c,m2c,c
 func_8003C030,0x8003C030,src/gb_audio.c,GbMusic_UpdateChannels,s1,stadium1:src/gb_audio.c,c
