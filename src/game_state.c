@@ -73,17 +73,65 @@ void Display_ClearFramebufferLine(u16 color);
 void Display_WaitForFrames(s32 arg0);
 void Display_ApplyPendingVideoMode(void);
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80025540; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80025540.s")
-#endif
+typedef struct { u8 b[5]; } Unk5Bytes;
+M2C_UNK func_8001FD8C(void *, s32);                 /* extern */
+M2C_UNK func_800203FC(void *);                      /* extern */
+s32 func_8002057C(s32, s32, s32);                 /* extern */
+extern M2C_UNK D_80065D00;
+extern M2C_UNK D_8007B7B0;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80025640; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80025640.s")
-#endif
+void func_80025540(s8 *arg0, s32 arg1) {
+    u8 *temp_v1;
+
+    M2C_FIELD(arg0, s8 *, 0) = arg1;
+    M2C_FIELD(arg0, s8 *, 4) = 0;
+    M2C_FIELD(arg0, s8 *, 5) = 0;
+    M2C_FIELD(arg0, u8 *, 6) = ((u8 *)&D_80065D00)[arg1 * 0x17 - 0x11];
+    M2C_FIELD(arg0, u8 *, 7) = ((u8 *)&D_80065D00)[arg1 * 0x17 - 0x10];
+    M2C_FIELD(arg0, s8 *, 8) = 0;
+    M2C_FIELD(arg0, s8 *, 9) = 1;
+    M2C_FIELD(arg0, s8 *, 0xA) = 0;
+    M2C_FIELD(arg0, s8 *, 0xB) = 0;
+    M2C_FIELD(arg0, s8 *, 0xC) = 0;
+    M2C_FIELD(arg0, s16 *, 0xE) = 0;
+    M2C_FIELD(arg0, s16 *, 0x14) = 0x6400;
+    M2C_FIELD(arg0, s16 *, 0x16) = 0x6400;
+    M2C_FIELD(arg0, s16 *, 0x18) = 0x6400;
+    M2C_FIELD(arg0, s16 *, 0x1A) = 0x6400;
+    M2C_FIELD(arg0, s16 *, 0x1C) = 0x6400;
+    M2C_FIELD(arg0, u16 *, 0x1E) = 0xFFFF;
+    M2C_FIELD(arg0, s8 *, 0x20) = 0x23;
+    M2C_FIELD(arg0, s8 *, 0x21) = 0;
+    M2C_FIELD(arg0, s8 *, 0x22) = 0;
+    M2C_FIELD(arg0, s8 *, 0x23) = 0;
+    M2C_FIELD(arg0, s32 *, 0x10) = func_8002057C(arg1, 0x32, arg1);
+    func_800203FC(arg0);
+    M2C_FIELD(arg0, u16 *, 2) = M2C_FIELD(arg0, u16 *, 0x26);
+    func_8001FD8C(arg0 + 0x30, arg1);
+    *(Unk5Bytes *)(arg0 + 0x40) = *(Unk5Bytes *)&D_8007B7B0;
+}
+
+typedef struct { s32 w[0x14]; } Unk50Bytes;
+extern u8 D_800AAF50[];
+extern M2C_UNK D_8007B7B8;
+
+M2C_UNK func_80025640(M2C_UNK arg0, M2C_UNK *arg1, M2C_UNK *arg2, s32 arg3) {
+
+    M2C_FIELD(arg1, s8 *, 0) = 1;
+    M2C_FIELD(arg1, s8 *, 1) = arg0;
+    M2C_FIELD(arg1, u8 **, 4) = D_800AAF50 + arg0 * 0x24;
+    M2C_FIELD(arg1, s32 *, 0x18) = 0;
+    M2C_FIELD(arg1, s8 **, 0x1FC) = (s8 *)arg2;
+    M2C_FIELD(arg1, s8 *, 2) = 1;
+    *(Unk5Bytes *)((s8 *)arg1 + 8) = *(Unk5Bytes *)&D_8007B7B8;
+    func_80025540((s8 *)arg1 + 0x1C, arg3);
+    M2C_FIELD(arg2, s16 *, 0) = 0;
+    M2C_FIELD(arg2, s8 *, 2) = 1;
+    M2C_FIELD(arg2, s8 *, 3) = 0;
+    M2C_FIELD(arg2, s8 *, 4) = 0;
+    M2C_FIELD(arg2, s8 *, 0x14) = 0;
+    *(Unk50Bytes *)((s8 *)arg2 + 0x28) = *(Unk50Bytes *)((s8 *)arg1 + 0x1C);
+}
 
 void func_8002572C(s8 *arg0, s32 arg1) {
     M2C_FIELD(arg0, s8 *, 0) = 0;
@@ -97,11 +145,24 @@ void func_8002572C(s8 *arg0, s32 arg1) {
     M2C_FIELD(arg0, s32 *, 0x20) = 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80025758; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80025758.s")
-#endif
+M2C_UNK func_80025640(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
+extern M2C_UNK D_800AE8F0;
+extern M2C_UNK D_800AE8F4;
+extern M2C_UNK D_800AEAF8;
+extern M2C_UNK D_800AF104;
+extern M2C_UNK D_800AF30C;
+extern M2C_UNK D_800AF924;
+extern M2C_UNK D_800AF94C;
+
+M2C_UNK func_80025758(M2C_UNK arg0, M2C_UNK arg1, M2C_UNK arg2) {
+    M2C_FIELD(&D_800AE8F0, s8 *, 0) = arg0;
+    M2C_FIELD(&D_800AE8F0, s8 *, 1) = 1;
+    M2C_FIELD(&D_800AE8F0, s8 *, 3) = 1;
+    func_80025640(0, &D_800AE8F4, &D_800AF104, arg1);
+    func_80025640(1, &D_800AEAF8, &D_800AF30C, arg2);
+    func_8002572C((s8 *)&D_800AF924, (s32)&D_800AE8F4);
+    func_8002572C((s8 *)&D_800AF94C, (s32)&D_800AEAF8);
+}
 
 /*
  * func_800257F0
