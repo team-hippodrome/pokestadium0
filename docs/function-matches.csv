@@ -3013,7 +3013,7 @@ func_821380B4,0x821380B4,src/fragments/fragment012_17ED00/particle_math_261F90.c
 func_82138180,0x82138180,src/fragments/fragment012_17ED00/particle_math_261F90.c,ParticleMath_Distance3D,s1,stadium1:src/fragments/particle_math/particle_math_261F90.c,c
 func_821381E4,0x821381E4,src/fragments/fragment012_17ED00/particle_math_261F90.c,ParticleMath_NormalizedDirection,s1,stadium1:src/fragments/particle_math/particle_math_261F90.c,c
 func_82138244,0x82138244,src/fragments/fragment012_17ED00/particle_math_261F90.c,,asm,,asm
-func_8213831C,0x8213831C,src/fragments/fragment012_17ED00/particle_math_261F90.c,,asm,,asm
+func_8213831C,0x8213831C,src/fragments/fragment012_17ED00/particle_math_261F90.c,func_8213831C,hand,,c
 func_821383C8,0x821383C8,src/fragments/fragment012_17ED00/particle_math_261F90.c,ParticleMath_DistanceScaled,s1,stadium1:src/fragments/particle_math/particle_math_261F90.c,c
 func_82138444,0x82138444,src/fragments/fragment012_17ED00/particle_math_261F90.c,ParticleMath_ScaleDirectionToLength,s1,stadium1:src/fragments/particle_math/particle_math_261F90.c,c
 func_821384FC,0x821384FC,src/fragments/fragment012_17ED00/particle_math_261F90.c,ParticleMath_RandomDirection,s1,stadium1:src/fragments/particle_math/particle_math_261F90.c,c

@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 4721,
-  "asm_owners": 723,
+  "c_owners": 4722,
+  "asm_owners": 722,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -603,7 +603,7 @@
     "tools/cflags_overrides.json": "7052d644eb08429c59981bb4c369c8c937c61ca4c639a1c1ca2c5fc0ce919ebb",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "edb5ec1aecd2392134d70329e9abaaa693c843b35c00a95f452a7b6f521fb559",
+    "docs/function-matches.csv": "183975740aa7cdb71107592f5d4bcf9eb9689c7da892e4d264071d89315a45d0",
     "linker_scripts/jp/symbol_addrs.txt": "afca390ab7e15134bd987939224f6ec6b0d8be60cd8dee3c830ae7d9d3a49a19"
   },
   "binutils": {
@@ -780,7 +780,7 @@
     "src/fragments/fragment012_17ED00/ekans_game_3.c": "b34087384a155da3591f052b2807f5d98a931685f65ea1e7f034be0ba330e0a2",
     "src/fragments/fragment012_17ED00/fragment1_89010.c": "f7c6aebdb008121ea464b9c879dd6ccdaf6c8c7be24aff2f062164015a31eef8",
     "src/fragments/fragment012_17ED00/fragment1_89010_821328DC.c": "901f6b861de798e44a86953d188e36bab018d53c204092429a5ae06c18790655",
-    "src/fragments/fragment012_17ED00/particle_math_261F90.c": "cd49bb456fdc16d331184020b9d04ce3953c903b713477a833bc0083f191c47a",
+    "src/fragments/fragment012_17ED00/particle_math_261F90.c": "a7174dc56143607329b3b5f27ba2bcf8e430c60608f8433845eee670df77d913",
     "src/fragments/fragment012_17ED00/particle_math_264380.c": "c72d31952de337605826b42db2af812fb1441ccd3d85cb28b8ec17fca7c6f00c",
     "src/fragments/fragment012_17ED00/particle_math_269820.c": "b59b6dadfb852fd47c8bef932a3c72d2256ae4e621b8978ddda151bb4060e426",
     "src/fragments/fragment012_17ED00/particle_math_269820_2.c": "5ba56aa11c30d3ec3f8a40664a79989c3124fd1cfe7ee088fbe4d857bfe74f5a",
