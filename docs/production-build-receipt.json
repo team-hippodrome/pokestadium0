@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 4837,
-  "asm_owners": 607,
+  "c_owners": 4841,
+  "asm_owners": 603,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -587,7 +587,7 @@
     "src/vector_math.c"
   ],
   "source_registry_sha256": "be0e08c80add86ebef43160c7c53956898c144243c37c558a5415734fd37151e",
-  "section_registry_sha256": "4a58e50be358fc8d19189a9da45c26170c730b30185568d492602ef480c4f1f9",
+  "section_registry_sha256": "cbda58af40aa0bf7cddb908f29c3692558e337e2053d6b3231a9380fd3d34066",
   "headers_sha256": "d588a5e02004945152bc9239f74957ea7099836fe19bf5cea8b65cbd863df3bf",
   "matching_registry_sha256": "d8bcc14a2a0db281cf30dcb9ddbd94d59e1afe84c70b4c8c017ea27ce60a251c",
   "build_tools_sha256": {
@@ -597,8 +597,8 @@
     "tools/cflags_overrides.json": "7052d644eb08429c59981bb4c369c8c937c61ca4c639a1c1ca2c5fc0ce919ebb",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "99825097734dab4031a2f7b6953927965eb1f7d0ce3bd7ef173ef50207e9cb09",
-    "linker_scripts/jp/symbol_addrs.txt": "afca390ab7e15134bd987939224f6ec6b0d8be60cd8dee3c830ae7d9d3a49a19"
+    "docs/function-matches.csv": "a8bae2d2a5a439298ebb27e1629c29e953ce16694eb49cdc405ea852846ef219",
+    "linker_scripts/jp/symbol_addrs.txt": "47d40464646858b46aa99a636cbfbe8e150588d65166d19539126c0789b48d2e"
   },
   "binutils": {
     "as": "GNU assembler (GNU Binutils for Ubuntu) 2.42",
@@ -615,7 +615,7 @@
     "src/33FE0_3.c": "b9aea3b2b69108f69da2f08bcfbcc20d8241ccec271a2621bb61c750c084b1a9",
     "src/33FE0_4.c": "7e760c67767d985aab690bf84850d8b90894465ba5dac62b394df97fa3b4069b",
     "src/3B2F0.c": "8a29c79018e0345a4669d8599b01fcd9c98079508291109e9fe8adffcc508e5f",
-    "src/3D140.c": "f9e326930fd2b1ee8a09c74d7e4e6dac3ba94a707c9a576bc364aa1ca14445be",
+    "src/3D140.c": "524ecf1eb224bec0fea8e4bdfd03cfdbc52429baeb810ac3383f5844519e2a9a",
     "src/3D140_2.c": "f1f92deae5fc138e5b54b4d3886671cd90a7e36ce3644760ec374f3bcc641b85",
     "src/44E90.c": "d56d0c95291f5fad16cee2682129b3a8236ae3f6b2e37d266f0127b227ad5747",
     "src/47460.c": "1860087c28f6d453dd421afc8e9b178e9191c9a2bfaa418be5dd364c4349d20a",

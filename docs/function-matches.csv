@@ -85,12 +85,12 @@ func_8003A710,0x8003A710,src/3B2F0.c,,asm,,asm
 func_8003A7AC,0x8003A7AC,src/3B2F0.c,,asm,,asm
 func_8003A890,0x8003A890,src/3D140.c,,asm,,asm
 func_8003AE2C,0x8003AE2C,src/3D140.c,n_alEnvmixerParam,hand,,c
-func_8003AECC,0x8003AECC,src/3D140.c,,asm,,asm
-func_8003B0F8,0x8003B0F8,src/3D140.c,,asm,,asm
+func_8003AECC,0x8003AECC,src/3D140.c,func_8003AECC,hand,,c
+func_8003B0F8,0x8003B0F8,src/3D140.c,func_8003B0F8,hand,,c
 func_8003B280,0x8003B280,src/3D140.c,func_8003B280,hand,,c
-func_8003B2E0,0x8003B2E0,src/3D140.c,,asm,,asm
+func_8003B2E0,0x8003B2E0,src/3D140.c,func_8003B2E0,hand,,c
 func_8003B668,0x8003B668,src/3D140.c,__amDMA,s1,stadium1:src/3D140.c,c
-func_8003B868,0x8003B868,src/3D140.c,,asm,,asm
+func_8003B868,0x8003B868,src/3D140.c,func_8003B868,hand,,c
 func_8003BB60,0x8003BB60,src/3D140.c,__amDmaNew,s1,stadium1:src/3D140.c,c
 func_8003BB98,0x8003BB98,src/3D140.c,__clearAudioDMA,s1,stadium1:src/3D140.c,c
 func_8003BC9C,0x8003BC9C,src/3D140.c,func_8003BC9C,m2c,m2c,c
