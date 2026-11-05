@@ -9,8 +9,8 @@ func_8002D948,0x8002D948,src/2E480.c,func_8002D948,hand,,c
 func_8002D9B8,0x8002D9B8,src/2E480.c,func_8002D9B8,hand,,c
 func_8002DAD8,0x8002DAD8,src/2E480.c,func_8002DAD8,hand,,c
 func_8002DC04,0x8002DC04,src/2E480.c,func_8002DC04,hand,,c
-func_8002DCE0,0x8002DCE0,src/2E480.c,,asm,,asm
-func_8002DDFC,0x8002DDFC,src/2E480.c,,asm,,asm
+func_8002DCE0,0x8002DCE0,src/2E480.c,func_8002DCE0,hand,,c
+func_8002DDFC,0x8002DDFC,src/2E480.c,func_8002DDFC,hand,,c
 func_8002DECC,0x8002DECC,src/2E480.c,func_8002DECC,hand,,c
 func_8002DF2C,0x8002DF2C,src/2E480.c,func_8002DF2C,m2c,m2c,c
 func_8002DF54,0x8002DF54,src/2E480.c,func_8002DF54,hand,,c

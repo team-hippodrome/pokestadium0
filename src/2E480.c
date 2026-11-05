@@ -178,17 +178,56 @@ s32 func_8002DC04(Menu8002E230* arg0) {
     return input;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002DCE0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002DCE0.s")
-#endif
+s32 func_8002DCE0(Menu8002E230* arg0) {
+    s32 input;
+    s32 old = arg0->cursor;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002DDFC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002DDFC.s")
-#endif
+    if (arg0->def->itemCount == 0) {
+        return 0;
+    }
+    if (arg0) {}
+    input = (u16)func_8000B30C();
+    switch (input) {
+        case 0x800:
+            do {
+                if (arg0->cursor == 0) {
+                    arg0->cursor += arg0->def->itemCount;
+                }
+                arg0->cursor--;
+            } while (arg0->flags[arg0->cursor] & 1);
+            break;
+        case 0x400:
+            do {
+                if (arg0->cursor == arg0->def->itemCount - 1) {
+                    arg0->cursor -= arg0->def->itemCount;
+                }
+                arg0->cursor++;
+            } while (arg0->flags[arg0->cursor] & 1);
+            break;
+    }
+    if (old != arg0->cursor) {
+        func_8003F6AC(1);
+    }
+    return input;
+}
+
+s32 func_8002DDFC(Menu8002E230* arg0) {
+    s32 i;
+
+    for (i = arg0->cursor; i < arg0->def->itemCount && (arg0->flags[i] & 1); i++) {
+    }
+    if (i < arg0->def->itemCount) {
+        arg0->cursor = i;
+        return i;
+    }
+    for (i = arg0->cursor - 1; i >= 0 && (arg0->flags[i] & 1); i--) {
+    }
+    if (i >= 0) {
+        arg0->cursor = i;
+        return i;
+    }
+    return -1;
+}
 
 void func_8002DF2C(s8*, s32, s32);
 extern s32 D_800603C0;
@@ -647,10 +686,9 @@ void func_80031AB0(GridMenu80031AB0* arg0, s32 arg1) {
     arg0->scrollTarget = arg0->scroll;
 }
 
-M2C_UNK func_8002DDFC();                            /* extern */
 void func_80031AB0();                 /* extern */
 
 void func_80031B88(s8 *arg0) {
-    func_8002DDFC();
+    func_8002DDFC((Menu8002E230*)arg0);
     func_80031AB0(arg0, M2C_FIELD(arg0, s32 *, 8));
 }
