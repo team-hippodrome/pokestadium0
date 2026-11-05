@@ -85,11 +85,13 @@ void func_8000533C(Gfx** gfx_p, DepthBuffer* arg1) {
     *gfx_p = gfx;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8000548C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8000548C.s")
-#endif
+void func_8000548C(Gfx** gfx_p) {
+    Gfx* gfx = *gfx_p;
+
+    gDPPipeSync(gfx++);
+    gDPSetScissor(gfx++, G_SC_NON_INTERLACE, 0, 0, D_8005F670->width, D_8005F670->height);
+    *gfx_p = gfx;
+}
 
 void GfxImage_FillRectangle(Gfx** gfx_p, s32 arg1, s32 arg2, s32 arg3, s32 arg4, u16 fill_color) {
     if (D_8005F670 != NULL) {

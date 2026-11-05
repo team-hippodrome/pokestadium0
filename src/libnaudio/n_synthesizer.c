@@ -209,14 +209,14 @@ void _n_freePVoice(N_PVoice* pvoice) {
     alLink((ALLink*)pvoice, &n_syn->pLameList);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_800449E0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800449E0.s")
-#endif
+s32 func_800449E0(s32 micros) {
+    f32 tmp = ((f32)micros) * n_syn->outputRate / 1000000.0 + 0.5;
 
-s32 func_800449E0();                                /* extern */
+    return (s32)tmp;
+}
 
-s32 func_80044A34(void) {
-    return func_800449E0() & ~0xF;
+s32 func_800449E0(s32 micros);
+
+s32 func_80044A34(s32 micros) {
+    return func_800449E0(micros) & ~0xF;
 }

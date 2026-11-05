@@ -4521,7 +4521,7 @@ func_800052E8,0x800052E8,src/gfx_rect.c,GfxImage_AttachDepthBuffer,s1,stadium1:s
 func_80005324,0x80005324,src/gfx_rect.c,func_80005324,m2c,m2c,c
 func_80005330,0x80005330,src/gfx_rect.c,GfxImage_GetCurrent,s1,stadium1:src/gfx_rect.c,c
 func_8000533C,0x8000533C,src/gfx_rect.c,func_8000533C,hand,,c
-func_8000548C,0x8000548C,src/gfx_rect.c,,asm,,asm
+func_8000548C,0x8000548C,src/gfx_rect.c,func_8000548C,hand,,c
 func_80005540,0x80005540,src/gfx_rect.c,GfxImage_FillRectangle,s1,stadium1:src/gfx_rect.c,c
 func_80005770,0x80005770,src/gfx_rect.c,GfxImage_ClearDepthRectangle,s1,stadium1:src/gfx_rect.c,c
 func_80005928,0x80005928,src/gfx_rect.c,GfxImage_FillCurrent,s1,stadium1:src/gfx_rect.c,c
@@ -4714,7 +4714,7 @@ func_80046270,0x80046270,src/libnaudio/n_drvrNew.c,n_alFxNew,s1,stadium1:src/lib
 func_80046684,0x80046684,src/libnaudio/n_drvrNew.c,alN_PVoiceNew,s1,stadium1:src/libnaudio/n_drvrNew.c,c
 func_80046B20,0x80046B20,src/libnaudio/n_load.c,n_alAdpcmPull,s1,stadium1:src/libnaudio/n_load.c,c
 func_80046F5C,0x80046F5C,src/libnaudio/n_load.c,n_alLoadParam,s1,stadium1:src/libnaudio/n_load.c,c
-func_8004711C,0x8004711C,src/libnaudio/n_load.c,,asm,,asm
+func_8004711C,0x8004711C,src/libnaudio/n_load.c,func_8004711C,hand,,c
 func_80046950,0x80046950,src/libnaudio/n_resample.c,n_alResamplePull,s1,stadium1:src/libnaudio/n_resample.c,c
 func_80046AF8,0x80046AF8,src/libnaudio/n_resample.c,n_alResampleParam,s1,stadium1:src/libnaudio/n_resample.c,c
 func_80047530,0x80047530,src/libnaudio/n_reverb.c,n_alFxPull,s1,stadium1:src/libnaudio/n_reverb.c,c
@@ -4741,7 +4741,7 @@ func_800448F8,0x800448F8,src/libnaudio/n_synthesizer.c,__n_allocParam,s1,stadium
 func_80044928,0x80044928,src/libnaudio/n_synthesizer.c,_n_freeParam,s1,stadium1:src/libnaudio/n_synthesizer.c,c
 func_80044948,0x80044948,src/libnaudio/n_synthesizer.c,_n_collectPVoices,s1,stadium1:src/libnaudio/n_synthesizer.c,c
 func_800449AC,0x800449AC,src/libnaudio/n_synthesizer.c,_n_freePVoice,s1,stadium1:src/libnaudio/n_synthesizer.c,c
-func_800449E0,0x800449E0,src/libnaudio/n_synthesizer.c,,asm,,asm
+func_800449E0,0x800449E0,src/libnaudio/n_synthesizer.c,func_800449E0,hand,,c
 func_80044A34,0x80044A34,src/libnaudio/n_synthesizer.c,func_80044A34,m2c,m2c,c
 func_80036640,0x80036640,src/libnumus/player.c,func_80036640,m2c,m2c,c
 func_80036660,0x80036660,src/libnumus/player.c,Audio_SetVoiceSampleIndex,s1,stadium1:src/libnumus/player.c,c
@@ -5103,7 +5103,7 @@ func_80001FA8,0x80001FA8,src/memmap.c,Memmap_GetLoadedFragmentVaddr,s1,stadium1:
 func_80002840,0x80002840,src/memory.c,mem_pool_try_init,s1,stadium1:src/memory.c,c
 func_80002888,0x80002888,src/memory.c,mem_pool_init,s1,stadium1:src/memory.c,c
 func_800028F8,0x800028F8,src/memory.c,mem_pool_alloc,s1,stadium1:src/memory.c,c
-func_800029D0,0x800029D0,src/memory.c,,asm,,asm
+func_800029D0,0x800029D0,src/memory.c,func_800029D0,hand,,c
 func_80002B10,0x80002B10,src/memory_2.c,MainPool_AllocState,s1,stadium1:src/memory.c,c
 func_80002B60,0x80002B60,src/memory_2.c,MainPool_FinalizeAllocation,s1,stadium1:src/memory.c,c
 func_80002BA4,0x80002BA4,src/memory_2.c,MainPool_InitState,s1,stadium1:src/memory.c,c

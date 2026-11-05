@@ -377,6 +377,9 @@
   "src/libnaudio/n_reverb.c": {
     ".rodata": "0x8007ECC0"
   },
+  "src/libnaudio/n_synthesizer.c": {
+    ".rodata": "0x8007EC50"
+  },
   "src/libnumus/player.c": {
     ".rodata": {
       "address": "0x8007DC58",

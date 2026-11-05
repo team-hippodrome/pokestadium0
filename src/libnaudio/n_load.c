@@ -247,8 +247,23 @@ s32 n_alLoadParam(N_PVoice* filter, s32 paramID, void* param) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8004711C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8004711C.s")
-#endif
+Acmd* func_8004711C(Acmd* ptr, N_PVoice* f, s32 tsam, s32 nbytes, s16 outp, s16 inp, u32 flags) {
+    s32 dramAlign, dramLoc;
+
+    if (nbytes > 0) {
+        dramLoc = (f->dc_dma)(f->dc_memin, nbytes, f->dc_dmaState);
+        dramAlign = dramLoc & 0x7;
+        nbytes += dramAlign;
+        n_aLoadBuffer(ptr++, nbytes + 8 - (nbytes & 0x7), inp, dramLoc - dramAlign);
+    } else {
+        dramAlign = 0;
+    }
+
+    if (flags & A_LOOP) {
+        aSetLoop(ptr++, K0_TO_PHYS(f->dc_lstate));
+    }
+
+    n_aADPCMdec(ptr++, K0_TO_PHYS(f->dc_state), flags, tsam << 1, dramAlign, outp);
+    f->dc_first = 0;
+    return ptr;
+}
