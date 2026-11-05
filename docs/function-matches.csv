@@ -3752,7 +3752,7 @@ func_89105924,0x89105924,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,f
 func_8910597C,0x8910597C,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_8910597C,hand,,c
 func_891059FC,0x891059FC,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,,asm,,asm
 func_89105A98,0x89105A98,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,BattleInfoWidget_ApplyEntrySelection,hand,,c
-func_89105AD4,0x89105AD4,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,,asm,,asm
+func_89105AD4,0x89105AD4,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_89105AD4,hand,,c
 func_89105C54,0x89105C54,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,,asm,,asm
 func_89105E70,0x89105E70,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,,asm,,asm
 func_891060BC,0x891060BC,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,,asm,,asm
@@ -3776,7 +3776,7 @@ func_891071A4,0x891071A4,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,,
 func_891074CC,0x891074CC,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,,asm,,asm
 func_89107614,0x89107614,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,,asm,,asm
 func_89107850,0x89107850,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_89107850,hand,,c
-func_891078E0,0x891078E0,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,,asm,,asm
+func_891078E0,0x891078E0,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_891078E0,hand,,c
 func_89107A60,0x89107A60,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,,asm,,asm
 func_89107D7C,0x89107D7C,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,,asm,,asm
 func_89107EC4,0x89107EC4,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,,asm,,asm
@@ -4461,7 +4461,7 @@ func_80012658,0x80012658,src/geo_render.c,GeoOverlay_Draw,s1,stadium1:src/geo_re
 func_800127D4,0x800127D4,src/geo_render.c,GeoRender_SetCombineMode,s1,stadium1:src/geo_render.c,c
 func_800128E0,0x800128E0,src/geo_render.c,func_800128E0,hand,,c
 func_8001298C,0x8001298C,src/geo_render.c,func_8001298C,hand,,c
-func_80012A80,0x80012A80,src/geo_render.c,,asm,,asm
+func_80012A80,0x80012A80,src/geo_render.c,func_80012A80,hand,,c
 func_80012C00,0x80012C00,src/geo_render.c,func_80012C00,hand,,c
 func_80012CC0,0x80012CC0,src/geo_render.c,func_80012CC0,m2c,m2c,c
 func_80012D04,0x80012D04,src/geo_render.c,func_80012D04,hand,,c

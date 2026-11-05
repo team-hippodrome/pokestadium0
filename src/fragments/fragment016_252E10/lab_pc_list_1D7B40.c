@@ -351,11 +351,38 @@ void BattleInfoWidget_ApplyEntrySelection(unk_func_8830867C_034* arg0, s32 arg1)
     M2C_FIELD(ptr2, s32*, 0xC) = (M2C_FIELD(arg0, u16**, 0x74)[arg1] & 8) != 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89105AD4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89105AD4.s")
-#endif
+void func_8002A3F8(void*, s32, s32);
+void func_80029A64(s32, s32, s32, s32, Color_RGBA8);
+extern u8 D_80073614[];
+extern u8 D_80073624[];
+extern Color_RGBA8 D_80073520;
+extern Color_RGBA8 D_8910A934[];
+extern Color_RGBA8 D_800734A8[];
+void func_89105AD4(s32 arg0, s32 arg1, char** arg2, s32 arg3, s32 arg4) {
+    Color_RGBA8 color;
+    s32 pad[5];
+    s32 sel;
+
+    if (arg4 & 8) {
+        func_8002A3F8(D_80073614, arg0 + 8, arg1 + 4);
+    } else {
+        func_8002A3F8(D_80073624, arg0 + 8, arg1 + 4);
+    }
+    sel = arg4 & 2;
+    if (sel) {
+        func_80029A64(arg0 + 0x2A, arg1 + 2, 0xE8, 0x18, D_80073520);
+    }
+    if (arg4 & 0x100) {
+        color = D_8910A934[sel ? 0 : 1];
+    } else {
+        color = D_800734A8[sel ? 0 : 1];
+    }
+    Font_BeginTranslucentTextRendering();
+    Gfx_SetEnvColor(color.r, color.g, color.b, color.a);
+    Font_SetActive(8, 0);
+    Font_Printf(arg0 + 0x30, arg1 + 4, *arg2);
+    Font_EndTexturedTextRendering();
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_89105C54; signature not recovered. */
@@ -706,11 +733,33 @@ void func_89107850(s8* arg0, s32* arg1) {
     *arg1 = count;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_891078E0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_891078E0.s")
-#endif
+typedef struct Entry891078E0 {
+    /* 0x00 */ u8 unk_00;
+    /* 0x01 */ u8 type;
+    /* 0x04 */ const char* name;
+    /* 0x08 */ s32 unk_08;
+} Entry891078E0;
+extern Entry891078E0 D_8006A9D4[];
+extern u8 D_8910AAC0[];
+extern u8 D_8910AAC8[];
+void func_891078E0(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4) {
+    s32 idx;
+
+    idx = *arg2;
+    gSPDisplayList(gDisplayListHead++, D_80060270);
+    func_80029028(arg0, arg1 + 1, 0xD4, 0x1A, *(Color_RGBA8 *)D_8910AAC0);
+    func_80029028(arg0, arg1, 0xD4, 1, *(Color_RGBA8 *)D_8910AAC8);
+    func_80029028(arg0, arg1 + 0x1B, 0xD4, 1, *(Color_RGBA8 *)D_8910AAC8);
+    if (arg4 & 8) {
+        func_8002A0AC(arg0 + 3, arg1 + 3, 0xCE, 0x16, *(Color_RGBA8 *)D_8910AAC0);
+    }
+    func_8002B940(arg0 + 9, arg1 + 8, arg3 + 1, 3);
+    Font_BeginTranslucentTextRendering();
+    func_80027F20(arg4);
+    Font_SetActive(8, 0);
+    Font_Printf(arg0 + 0x37, arg1 + 4, D_8006A9D4[idx].name);
+    Font_EndTexturedTextRendering();
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_89107A60; signature not recovered. */

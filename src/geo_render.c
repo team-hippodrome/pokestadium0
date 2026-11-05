@@ -581,11 +581,29 @@ s32 func_8001298C(arg0) s8* arg0; {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80012A80; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80012A80.s")
-#endif
+typedef union Rgba80012D04 {
+    s32 word;
+    struct {
+        u8 r, g, b, a;
+    } c;
+} Rgba80012D04;
+
+void func_80012A80(s8* arg0) {
+    Rgba80012D04 color;
+
+    color.word = M2C_FIELD(arg0, s32*, 4);
+    M2C_FIELD(arg0, s32*, 0xC) = 0;
+    M2C_FIELD(arg0, s32*, 0x10) = 0;
+    M2C_FIELD(arg0, s32*, 0) = 0;
+    M2C_FIELD(arg0, u8*, 0x1A) = 0;
+    gDPPipeSync(gDisplayListHead++);
+    gDPSetPrimColor(gDisplayListHead++, 0, M2C_FIELD(arg0, u8*, 0x19), color.c.r, color.c.g, color.c.b, color.c.a);
+    gDPSetTextureLUT(gDisplayListHead++, G_TT_NONE);
+    gSPTexture(gDisplayListHead++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF);
+    GeoRender_SetCombineMode(gDisplayListHead++, &D_80060534[M2C_FIELD(arg0, u8*, 0x18)]);
+    gSPClearGeometryMode(gDisplayListHead++, G_TEXTURE_GEN);
+    gSPLookAt(gDisplayListHead++, M2C_FIELD(D_80060488, u32*, 0xA4) & 0x1FFFFFFF);
+}
 
 void func_80012C00(s8 *arg0, s8 *arg1) {
     Gfx *gfx;
@@ -611,13 +629,6 @@ void func_80012CC0(s8 *arg0, s8 *arg1) {
     }
     M2C_FIELD(arg0, s32 *, 8) = (s32) M2C_FIELD(arg1, s32 *, 0x14);
 }
-
-typedef union Rgba80012D04 {
-    s32 word;
-    struct {
-        u8 r, g, b, a;
-    } c;
-} Rgba80012D04;
 
 void func_80012D04(s8* arg0, s8* arg1) {
     Rgba80012D04 color;
