@@ -3593,7 +3593,7 @@ func_89001018,0x89001018,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,,
 func_89001230,0x89001230,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,func_89001230,hand,,c
 func_89001250,0x89001250,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,func_89001250,hand,,c
 func_890012C4,0x890012C4,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,,asm,,asm
-func_890013F8,0x890013F8,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,,asm,,asm
+func_890013F8,0x890013F8,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,func_890013F8,hand,,c
 func_8900147C,0x8900147C,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,,asm,,asm
 func_890017FC,0x890017FC,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,,asm,,asm
 func_890019C8,0x890019C8,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,func_890019C8,m2c,m2c,c
@@ -3646,7 +3646,7 @@ func_89004C54,0x89004C54,src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c,,
 func_89004E1C,0x89004E1C,src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c,func_89004E1C,hand,,c
 func_89004E3C,0x89004E3C,src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c,func_89004E3C,hand,,c
 func_89004EB0,0x89004EB0,src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c,,asm,,asm
-func_89004FE4,0x89004FE4,src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c,,asm,,asm
+func_89004FE4,0x89004FE4,src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c,func_89004FE4,hand,,c
 func_89005068,0x89005068,src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c,func_89005068,m2c,m2c,c
 func_89005098,0x89005098,src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c,,asm,,asm
 func_890054D4,0x890054D4,src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c,,asm,,asm

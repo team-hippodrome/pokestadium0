@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 4722,
-  "asm_owners": 722,
+  "c_owners": 4724,
+  "asm_owners": 720,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -603,7 +603,7 @@
     "tools/cflags_overrides.json": "7052d644eb08429c59981bb4c369c8c937c61ca4c639a1c1ca2c5fc0ce919ebb",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "183975740aa7cdb71107592f5d4bcf9eb9689c7da892e4d264071d89315a45d0",
+    "docs/function-matches.csv": "3acce21fce40b18a5440bf7eae94a2363c496450b621df91bc86ae7f54f612a9",
     "linker_scripts/jp/symbol_addrs.txt": "afca390ab7e15134bd987939224f6ec6b0d8be60cd8dee3c830ae7d9d3a49a19"
   },
   "binutils": {
@@ -790,8 +790,8 @@
     "src/fragments/fragment013_232510/demo_scenes_161E60.c": "202a107278d89758ec2be4378d3c94b016e00604eb68e83e0532a01592a29c04",
     "src/fragments/fragment014_235D70/lab_pc_icons.c": "a45b51fa0c81975ffe45c7a24bc2068b2bbb1595eb21e39a78273a085dbf772f",
     "src/fragments/fragment015_238BD0/89006FC0.c": "b5f72718f4b079a8e8eeb0d7761af90658c2e975b7619e274fb0217f571763e0",
-    "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c": "8046511b32eb7742311a032d0c576273ae146d2ece383d126f553cfad7f5aaba",
-    "src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c": "298e5207d86a7d1942707e8c390a799c51163ed7232d26929beacfeae0ec4d8d",
+    "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c": "8f54744b3f89785b925e0086e7c9d4fabd2a7379d760d772076749c0a329b6c3",
+    "src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c": "2fc918cc1968b78f32a4c267c13ee80cda2edca39b9f1f0b1725e99a279d7afd",
     "src/fragments/fragment016_252E10/89100020.c": "fb449aa63c7f1db01748a4290bca69a35f1509dc69fd1577e0962c957fe2f4c0",
     "src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c": "37ec6792d16867ecd6c9c4804e5faee009fd7e33165072a8e247580123a2237c",
     "src/fragments/fragment016_252E10/lab_pc_list_1E46B0.c": "ba8d4b5501f5daea30407668a46cb1021536cf2edb09db847e7544301d76b045",
