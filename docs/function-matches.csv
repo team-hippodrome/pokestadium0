@@ -3742,7 +3742,7 @@ func_89105390,0x89105390,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,f
 func_891053B0,0x891053B0,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_891053B0,m2c,m2c,c
 func_891053E0,0x891053E0,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_891053E0,s1,stadium1:src/fragments/lab_pc_list/lab_pc_list_1D7B40.c,c
 func_891053E8,0x891053E8,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,BattleInfoWidget_UpdateEntryFlags,hand,,c
-func_8910548C,0x8910548C,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,,asm,,asm
+func_8910548C,0x8910548C,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_8910548C,hand,,c
 func_89105504,0x89105504,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_89105504,hand,,c
 func_89105560,0x89105560,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,,asm,,asm
 func_8910576C,0x8910576C,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_8910576C,hand,,c
@@ -3750,7 +3750,7 @@ func_891057FC,0x891057FC,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,f
 func_8910587C,0x8910587C,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_8910587C,hand,,c
 func_89105924,0x89105924,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,,asm,,asm
 func_8910597C,0x8910597C,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_8910597C,hand,,c
-func_891059FC,0x891059FC,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,,asm,,asm
+func_891059FC,0x891059FC,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_891059FC,hand,,c
 func_89105A98,0x89105A98,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,BattleInfoWidget_ApplyEntrySelection,hand,,c
 func_89105AD4,0x89105AD4,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,,asm,,asm
 func_89105C54,0x89105C54,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,,asm,,asm
