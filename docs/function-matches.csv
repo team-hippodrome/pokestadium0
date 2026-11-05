@@ -5138,7 +5138,7 @@ func_80019B28,0x80019B28,src/model_renderer.c,Model_SetMaterialColor,s1,stadium1
 func_80019B6C,0x80019B6C,src/model_renderer.c,Model_SetMaterialAlpha,s1,stadium1:src/model_renderer.c,c
 func_80019B78,0x80019B78,src/model_renderer.c,Model_SetMaterialTextureMode,s1,stadium1:src/model_renderer.c,c
 func_80019B84,0x80019B84,src/model_renderer.c,ModelAnim_GetAnimationRecord,s1,stadium1:src/model_renderer.c,c
-func_80019BDC,0x80019BDC,src/model_renderer.c,,asm,,asm
+func_80019BDC,0x80019BDC,src/model_renderer.c,func_80019BDC,hand,,c
 func_80019D08,0x80019D08,src/model_renderer.c,func_80019D08,hand,,c
 func_80019DE0,0x80019DE0,src/model_renderer.c,PokeIcon_PollFrameLoadForObject,s1,stadium1:src/model_renderer.c,c
 func_80019E30,0x80019E30,src/model_renderer.c,PokeIcon_WaitFrameLoadForObject,s1,stadium1:src/model_renderer.c,c

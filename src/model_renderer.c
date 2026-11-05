@@ -118,11 +118,45 @@ ModelAnimationBank* ModelAnim_GetAnimationRecord(DisplayObject* arg0, s32 arg1) 
     return var_v1;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80019BDC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80019BDC.s")
-#endif
+extern unk_D_8006FF00 D_80064C5C[];
+
+arg1_func_80010CA8* func_80019BDC(arg1_func_80010CA8* arg0, BattleMon* arg1) {
+    UNUSED s32 pad;
+    char sp38[0xB];
+    arg1_func_80010CA8 sp34;
+    unk_D_8006FF00* sp30;
+    UNUSED s32 pad2;
+    u8 var_a0;
+    s8* var_v1;
+
+    sp30 = &D_80064C5C[arg1->unk_00.unk_00 - 1];
+    sp34.raw = 0;
+
+    Text_CopySpeciesName(sp38, arg1->unk_00.unk_00);
+
+    if (HAL_Strcmp(arg1->unk_30, sp38) != 0) {
+        var_a0 = ((arg1->unk_0E >> 8) & 0xFF) + (arg1->unk_0E & 0xFF);
+
+        if (1) {}
+
+        var_v1 = arg1->unk_30;
+        while (*var_v1) {
+            var_a0 += *var_v1++ & 0xFF;
+            var_a0 += 0;
+        }
+
+        var_v1 = (s8*)arg1 + 0x40;
+        while (*var_v1) {
+            var_a0 += *var_v1++ & 0xFF;
+            var_a0 += 0;
+        }
+
+        sp34.unk_00 = ((((sp30->unk_12 - sp30->unk_10) << 6) * var_a0) / 255) + (sp30->unk_10 << 6);
+    }
+
+    *arg0 = sp34;
+    return arg0;
+}
 
 typedef struct IconLoader19D08 {
     u8 flags;
