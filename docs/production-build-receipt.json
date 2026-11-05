@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 4850,
-  "asm_owners": 594,
+  "c_owners": 4853,
+  "asm_owners": 591,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -597,7 +597,7 @@
     "tools/cflags_overrides.json": "7052d644eb08429c59981bb4c369c8c937c61ca4c639a1c1ca2c5fc0ce919ebb",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "edf85145e0fe28e8593b1136fdba44ed7e92d147d9315732ff1daa3c114c9a10",
+    "docs/function-matches.csv": "623b8fb644fb4245747a6bcae9c1d8a70b8d55ef283af8ad77bb9b968ffbe2f7",
     "linker_scripts/jp/symbol_addrs.txt": "c541da3eda9cc54f57157779aac1372668f531794cff72448d63b43c89763ccf"
   },
   "binutils": {
@@ -962,7 +962,7 @@
     "src/gb_audio_render.c": "0fff118e77fa82381154a56e875ee741e1fdff04b03ecff9a2bb14771221d51e",
     "src/gb_data.c": "38e026d47ec44d5de127778395cddf3c932ccdda434bef8628ea81336cce3ba3",
     "src/gb_mbc.c": "1ed5ad571c7b2f9ada6c5b47251450d75b7247527837bb602c67a4eddfd69f02",
-    "src/gb_save.c": "252a650a3cc4f43a6f900233fe39e569b4866d73acac114f88778c9b5f3b0163",
+    "src/gb_save.c": "73d5eb0467e8068c1d390abf362fe7987321fe2c98cfa57972c21c7ae88710a8",
     "src/gb_tower.c": "176816e083b7e59f7a469e5cb27b7a0b94869007fcb3060a4e31dfeefbfd0124",
     "src/geo_layout.c": "cd22cfc78b438f75ba379097e38e64b8e773c73701f536774d4a9c9fbe313f0d",
     "src/geo_node.c": "4b117247e69f5030a02753148e827dc7179b9c497a8af94b2feb264947aa287a",
@@ -1170,7 +1170,7 @@
     "src/profiler.c": "fa24688648aa812dba1f00a9dbcd01f01acbfc61ac5f64ab9aeec92f40062a81",
     "src/rom_device.c": "58d99aa66ed7aa418bc3c3db56a545520ec3829b628d50ec3b2a223ec7c6eecd",
     "src/rsp.c": "7a8ee9ac2dd34ba7b559852110d4cb85bc1e135359529a4f1d936eccfbd9ed8a",
-    "src/save_data.c": "8efd3a6caa377499ef905375581244cb413e0dd41ddb3078515f0f9675a48dca",
+    "src/save_data.c": "6099f33811701bb323589a3d80ec2f349298a90f1b3f4a142d04883080f5501d",
     "src/scheduler.c": "0a8c7fc3b4ec4b1b4425558b41560792c6f9dc0d89992b4af00969c2b413f952",
     "src/stage_loader.c": "476c52dcb1f98cf6a34a359960e41a4d065a67b739e16e8632e108f66d20ab12",
     "src/stage_loader_2.c": "13a5ffde9ea37a48b7335f9a8707561b85619202603aa8c062c7747da0186414",

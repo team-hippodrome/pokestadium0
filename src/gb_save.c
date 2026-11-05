@@ -309,7 +309,7 @@ void func_8002A8C4(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4)
  *
  * What the counter measures is not established.
  */
-M2C_UNK func_8003F6AC(M2C_UNK, void *);
+M2C_UNK func_8003F6AC();
 
 s32 func_8002AAC4(void *arg0) {
     s32 var_v1;
@@ -803,11 +803,20 @@ void func_8002CA34(s8 *arg0, s32 arg1, s32 arg2) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002CD7C.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002CE5C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002CE5C.s")
-#endif
+extern u8 D_80073554[];
+void func_8002A8E0(s32* arg0);
+
+s32 func_8002CE5C(s32* arg0) {
+    s32 t = arg0[8]++;
+
+    t %= 8;
+    if ((arg0[9] == 0) && (t >= 4)) {
+        return 1;
+    }
+    func_8002A8E0(arg0);
+    func_800295E8(arg0[0], arg0[1], arg0[2], arg0[3], D_80073554);
+    return 0;
+}
 
 typedef struct Ent8002D188 { s32 w; s32 h; s32 unk8; } Ent8002D188;
 typedef struct Rgba8002D188 { u8 r, g, b, a; } Rgba8002D188;

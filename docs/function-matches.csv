@@ -4316,7 +4316,7 @@ func_8002CA34,0x8002CA34,src/gb_save.c,func_8002CA34,m2c,m2c,c
 func_8002CAD0,0x8002CAD0,src/gb_save.c,,asm,,asm
 func_8002CC44,0x8002CC44,src/gb_save.c,,asm,,asm
 func_8002CD7C,0x8002CD7C,src/gb_save.c,,asm,,asm
-func_8002CE5C,0x8002CE5C,src/gb_save.c,,asm,,asm
+func_8002CE5C,0x8002CE5C,src/gb_save.c,func_8002CE5C,hand,,c
 func_8002CEEC,0x8002CEEC,src/gb_save.c,func_8002CEEC,hand,,c
 func_8002D024,0x8002D024,src/gb_save.c,,asm,,asm
 func_8002D138,0x8002D138,src/gb_save.c,func_8002D138,hand,,c
@@ -5323,11 +5323,11 @@ func_80025100,0x80025100,src/save_data.c,func_80025100,m2c,m2c,c
 func_80025130,0x80025130,src/save_data.c,func_80025130,m2c,m2c,c
 func_80025168,0x80025168,src/save_data.c,func_80025168,m2c,m2c+context,c
 func_800251A8,0x800251A8,src/save_data.c,func_800251A8,m2c,m2c+permuter,c
-func_800251C8,0x800251C8,src/save_data.c,,asm,,asm
+func_800251C8,0x800251C8,src/save_data.c,func_800251C8,hand,,c
 func_80025214,0x80025214,src/save_data.c,func_80025214,m2c,m2c,c
 func_80025224,0x80025224,src/save_data.c,func_80025224,m2c,m2c+context,c
 func_80025260,0x80025260,src/save_data.c,,asm,,asm
-func_800253BC,0x800253BC,src/save_data.c,,asm,,asm
+func_800253BC,0x800253BC,src/save_data.c,func_800253BC,hand,,c
 func_800045E0,0x800045E0,src/scheduler.c,Sched_ResetTaskState,s1,stadium1:src/scheduler.c,c
 func_8000460C,0x8000460C,src/scheduler.c,Sched_WaitForTaskMessage,s1,stadium1:src/scheduler.c,c
 func_80004634,0x80004634,src/scheduler.c,Sched_StartTask,s1,stadium1:src/scheduler.c,c

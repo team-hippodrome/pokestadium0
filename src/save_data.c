@@ -664,11 +664,11 @@ s32 func_800251A8(void)
   return (((*((u8 *) (((s8 *) (*((s8 **) (&D_800AE8E0)))) + 0x7A48))) << 8) | (*((u8 *) (((s8 *) (*((s8 **) (&D_800AE8E0)))) + 0x7A49)))) & 0xFFFF;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_800251C8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800251C8.s")
-#endif
+void func_800251C8(u16 arg0) {
+    M2C_FIELD(D_800AE8E0, u8 *, 0x7A48) = (arg0 >> 8) & 0xFF;
+    M2C_FIELD(D_800AE8E0, u8 *, 0x7A49) = arg0 & 0xFF;
+    func_80023F38(0x14, 0, 2);
+}
 
 u8 func_80025214(void) {
     return M2C_FIELD(D_800AE8E0, u8 *, 0x7A43);
@@ -687,8 +687,37 @@ void func_80025224(s8 arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80025260.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_800253BC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800253BC.s")
-#endif
+typedef struct { s16 h[6]; } Unk12Bytes;
+typedef struct { s16 h[0xB1]; } Unk162Bytes;
+typedef struct { u8 b[0x2D]; } Unk2DBytes;
+typedef struct {
+    /* 0x000 */ s16 flags;
+    /* 0x002 */ Unk12Bytes header;
+    /* 0x00E */ s16 count;
+    /* 0x010 */ Unk2DBytes records[6];
+    /* 0x11E */ Unk162Bytes extra;
+    /* 0x280 */ u8 mask;
+} ContinueBlock7A60;
+typedef struct { u8 unk_00; u8 unk_01; u8 pad[0x4E]; } Mon50;
+
+s16 func_800253BC(Unk12Bytes* arg0, Unk162Bytes* arg1, Mon50* arg2) {
+    s16 count = -1;
+    ContinueBlock7A60* blk;
+    s32 i;
+
+    if (D_800AE8E0 != NULL) {
+        blk = (ContinueBlock7A60*)((s8*)D_800AE8E0 + 0x7A60);
+        if (blk->flags & 1) {
+            *arg0 = blk->header;
+            *arg1 = blk->extra;
+            count = blk->count;
+            for (i = 0; i < count; i++) {
+                func_80023D3C((s32)&arg2[i], (s32)&blk->records[i]);
+                if (blk->mask & (1 << i)) {
+                    arg2[i].unk_01 = 1;
+                }
+            }
+        }
+    }
+    return count;
+}
