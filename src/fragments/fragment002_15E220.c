@@ -3,11 +3,45 @@
 #include "global.h"
 #include "m2c_macros.h"
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81200020; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment002_15E220/func_81200020.s")
-#endif
+s32 func_8000B2E8(void);
+void func_8001AB6C(void);
+void func_8001A384(s32, s32);
+void func_8001AA60(s32, s32, s16);
+void func_8001ABBC(void);
+u32 func_800566BC(const char*);
+extern s16 D_81200D20[];
+extern s32 D_81200DA8;
+
+void func_81200020(void) {
+    s32 unused;
+    s32 len;
+    s32 x;
+    s32 idx;
+    s32 i;
+
+    if (!(func_8000B2E8() & 1)) {
+        len = func_800566BC((const char*)D_81200D20) >> 1;
+        x = 16 - (D_81200DA8 % 16);
+        idx = D_81200DA8 / 16;
+        gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 16, 0, 304, 240);
+        func_8001AB6C();
+        func_8001A384(4, 0);
+        for (i = 0; i < 19; i++) {
+            func_8001AA60(x, 0xC0, D_81200D20[idx]);
+            idx++;
+            if (len - 1 < idx) {
+                idx = 0;
+            }
+            x += 16;
+        }
+        func_8001ABBC();
+        gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, 0, 320, 240);
+        D_81200DA8++;
+        if (D_81200DA8 >= len * 16) {
+            D_81200DA8 = 0;
+        }
+    }
+}
 
 u32 osGetCount(void);
 f32 MathUtil_Random_ZeroOne(void);
@@ -147,7 +181,7 @@ M2C_UNK func_80006998(M2C_UNK);
 s32 func_8000D0DC(s32);
 M2C_UNK func_800387BC(M2C_UNK);
 M2C_UNK func_8003F6AC(M2C_UNK);
-M2C_UNK func_81200020();
+void func_81200020(void);
 M2C_UNK func_8120023C(s32);
 M2C_UNK func_812007B0(M2C_UNK, M2C_UNK);
 extern void *D_800603C0;

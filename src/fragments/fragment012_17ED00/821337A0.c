@@ -32,7 +32,7 @@ void func_821337A0(s8 *arg0)
  * code (a word-sized stack spill and no halfword mask on the argument).
  */
 M2C_UNK func_82121D8C(M2C_UNK, M2C_UNK);            /* extern */
-M2C_UNK func_82133868(s32);                         /* extern */
+void func_82133868();
 extern M2C_UNK D_82199DE0;
 extern void *D_8219A5A0;
 

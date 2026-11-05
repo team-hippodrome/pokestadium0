@@ -640,7 +640,7 @@ func_811177E8,0x811177E8,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0
 func_81117AFC,0x81117AFC,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_81117AFC,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
 func_81117B04,0x81117B04,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_81218104_jp,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
 func_81000020,0x81000020,src/fragments/fragment001_15B1A0.c,,asm,,asm
-func_81200020,0x81200020,src/fragments/fragment002_15E220.c,,asm,,asm
+func_81200020,0x81200020,src/fragments/fragment002_15E220.c,func_81200020,hand,,c
 func_81200190,0x81200190,src/fragments/fragment002_15E220.c,func_81200190,hand,,c
 func_8120023C,0x8120023C,src/fragments/fragment002_15E220.c,,asm,,asm
 func_8120047C,0x8120047C,src/fragments/fragment002_15E220.c,func_8120047C,hand,,c
@@ -3911,7 +3911,7 @@ func_8A201394,0x8A201394,src/fragments/fragment019_293410/lab_pc_icons.c,func_8A
 func_8A201598,0x8A201598,src/fragments/fragment019_293410/lab_pc_icons.c,,asm,,asm
 func_8A2018E0,0x8A2018E0,src/fragments/fragment019_293410/lab_pc_icons.c,,asm,,asm
 func_8A201C08,0x8A201C08,src/fragments/fragment019_293410/lab_pc_icons.c,func_8A201C08,hand,,c
-func_8A201D3C,0x8A201D3C,src/fragments/fragment019_293410/lab_pc_icons.c,,asm,,asm
+func_8A201D3C,0x8A201D3C,src/fragments/fragment019_293410/lab_pc_icons.c,func_8A201D3C,hand,,c
 func_8A201EAC,0x8A201EAC,src/fragments/fragment019_293410/lab_pc_icons.c,func_8A201EAC,m2c,m2c+permuter,c
 func_8A202078,0x8A202078,src/fragments/fragment019_293410/lab_pc_icons.c,func_8A202078,m2c,m2c,c
 func_8A202160,0x8A202160,src/fragments/fragment019_293410/lab_pc_icons.c,func_8A202160,m2c,m2c,c

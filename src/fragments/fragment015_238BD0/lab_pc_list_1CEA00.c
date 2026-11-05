@@ -1194,7 +1194,7 @@ s32 func_8900429C(s32 arg0) {
 
 M2C_UNK func_8000B1FC();                            /* extern */
 M2C_UNK func_8000B220();                            /* extern */
-M2C_UNK func_89003650(M2C_UNK *);                   /* extern */
+void func_89003650(s8*);
 M2C_UNK func_8900379C(M2C_UNK *);                   /* extern */
 s32 func_89003A88(M2C_UNK *);                       /* extern */
 M2C_UNK func_890067B0(M2C_UNK *, M2C_UNK *);        /* extern */
@@ -1232,7 +1232,7 @@ s32 func_890043BC(s32 arg0) {
                 func_890067B0(&D_89019B98, &D_89018918);
                 break;
             case 3:                                 /* switch 2 */
-                func_89003650(&D_89019128);
+                func_89003650((s8*)&D_89019128);
                 break;
             case 4:                                 /* switch 2 */
                 func_8900A014(&D_89021428);

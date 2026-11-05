@@ -319,11 +319,42 @@ void func_8A201C08(s32 arg0, s32 arg1, s32 arg2) {
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8A201D3C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment019_293410/func_8A201D3C.s")
-#endif
+s32 func_80001AA4(void);
+s32 func_80002BA4(void*, s32);
+s32 func_80017304(s32, BinArchive*, s32, void*, s32);
+s32 func_8001FA8C(s32);
+s32 func_8002D3D0(u8*);
+s32 func_8002D454();
+typedef struct Move8A201D3C { u8 unk00; u8 unk01; u8 power; u8 type; u8 unk04; u8 unk05; } Move8A201D3C;
+extern Move8A201D3C D_8006B190[];
+extern BinArchive* D_8A21DA54;
+extern void* D_8A21DA58;
+extern void* D_8A21DA60[4];
+extern s32 D_8A21DA70[];
+
+void func_8A201D3C(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
+    s32 unused;
+    s32 count;
+    s32 i;
+    s32 handle;
+    s32 move;
+
+    func_8002A8C4(arg0, arg1, arg2, 0x228, 0x16A);
+    M2C_FIELD(arg0, s32*, 0x28) = 0;
+    M2C_FIELD(arg0, s32*, 0x20) = 0;
+    M2C_FIELD(arg0, s32*, 0x24) = 0;
+    M2C_FIELD(arg0, s32*, 0x14) = 0x1001;
+    M2C_FIELD(arg0, s32*, 0x34) = 0;
+    M2C_FIELD(arg0, s32*, 0x2C) = arg3;
+    count = func_8002D3D0((u8*)arg3);
+    while (func_80001AA4() == 0) {
+    }
+    for (i = 0; i < count; i++) {
+        handle = func_80002BA4(D_8A21DA60[i], 0x14800);
+        move = func_8002D454(arg3, i);
+        D_8A21DA70[i] = func_80017304(handle, D_8A21DA54, func_8001FA8C((move == -2) ? 0 : D_8006B190[move].type), D_8A21DA58, 0x3000);
+    }
+}
 
 M2C_UNK func_80019008(s32, s32, M2C_UNK);           /* extern */
 M2C_UNK func_80029658(s32, s32, s32, M2C_UNK *);    /* extern */
