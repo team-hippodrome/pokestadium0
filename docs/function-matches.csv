@@ -3502,7 +3502,7 @@ func_8800023C,0x8800023C,src/fragments/fragment014_235D70/lab_pc_icons.c,func_88
 func_880002D8,0x880002D8,src/fragments/fragment014_235D70/lab_pc_icons.c,func_880002D8,hand,,c
 func_880003D4,0x880003D4,src/fragments/fragment014_235D70/lab_pc_icons.c,,asm,,asm
 func_88000564,0x88000564,src/fragments/fragment014_235D70/lab_pc_icons.c,func_88000564,hand,,c
-func_880005E8,0x880005E8,src/fragments/fragment014_235D70/lab_pc_icons.c,,asm,,asm
+func_880005E8,0x880005E8,src/fragments/fragment014_235D70/lab_pc_icons.c,func_880005E8,hand,,c
 func_8800075C,0x8800075C,src/fragments/fragment014_235D70/lab_pc_icons.c,func_8800075C,s1,stadium1:src/fragments/lab_pc_icons/lab_pc_icons.c,c
 func_88000764,0x88000764,src/fragments/fragment014_235D70/lab_pc_icons.c,func_88000764,hand,,c
 func_880007FC,0x880007FC,src/fragments/fragment014_235D70/lab_pc_icons.c,,asm,,asm
@@ -3843,7 +3843,7 @@ func_8A100318,0x8A100318,src/fragments/fragment018_262620/pokedex_214920.c,func_
 func_8A1003D0,0x8A1003D0,src/fragments/fragment018_262620/pokedex_214920.c,,asm,,asm
 func_8A100588,0x8A100588,src/fragments/fragment018_262620/pokedex_214920.c,,asm,,asm
 func_8A100620,0x8A100620,src/fragments/fragment018_262620/pokedex_214920.c,func_8A100620,hand,,c
-func_8A10068C,0x8A10068C,src/fragments/fragment018_262620/pokedex_214920.c,,asm,,asm
+func_8A10068C,0x8A10068C,src/fragments/fragment018_262620/pokedex_214920.c,func_8A10068C,hand,,c
 func_8A100808,0x8A100808,src/fragments/fragment018_262620/pokedex_214920.c,func_8A100808,hand,,c
 func_8A1008A4,0x8A1008A4,src/fragments/fragment018_262620/pokedex_214920.c,func_8A1008A4,hand,,c
 func_8A100954,0x8A100954,src/fragments/fragment018_262620/pokedex_214920.c,func_8A100954,m2c,m2c,c
@@ -4301,7 +4301,7 @@ func_8002B4B4,0x8002B4B4,src/gb_save.c,Ui_AdjustNumericSelection,hand,,c
 func_8002B638,0x8002B638,src/gb_save.c,Ui_HandleNumericSelectionInput,s1,stadium1:src/gb_save.c,c
 func_8002B66C,0x8002B66C,src/gb_save.c,Ui_AdjustSteppedRangeSelection,s1,stadium1:src/gb_save.c,c
 func_8002B788,0x8002B788,src/gb_save.c,,asm,,asm
-func_8002B940,0x8002B940,src/gb_save.c,,asm,,asm
+func_8002B940,0x8002B940,src/gb_save.c,func_8002B940,hand,,c
 func_8002BAB8,0x8002BAB8,src/gb_save.c,func_8002BAB8,hand,,c
 func_8002BC14,0x8002BC14,src/gb_save.c,Ui_GetSelectionDirection,s1,stadium1:src/gb_save.c,c
 func_8002BC44,0x8002BC44,src/gb_save.c,GbSave_GameToCategoryIndex,s1,stadium1:src/gb_save.c,c
