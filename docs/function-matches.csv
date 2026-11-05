@@ -255,7 +255,7 @@ func_8000AEB0,0x8000AEB0,src/controller.c,Cont_AdjustAnalogStick,s1,stadium1:src
 func_8000AFE4,0x8000AFE4,src/controller.c,Cont_InitControllers,hand,,c
 func_8000B170,0x8000B170,src/controller.c,Cont_SetupControllers,hand,,c
 func_8000B1FC,0x8000B1FC,src/controller.c,func_8000B1FC,m2c,m2c,c
-func_8000B220,0x8000B220,src/controller.c,,asm,,asm
+func_8000B220,0x8000B220,src/controller.c,func_8000B220,hand,,c
 func_8000B2E8,0x8000B2E8,src/controller.c,func_8000B2E8,m2c,m2c,c
 func_8000B2F4,0x8000B2F4,src/controller.c,Input_SetRepeatController,s1,stadium1:src/input.c,c
 func_8000B30C,0x8000B30C,src/controller.c,Input_GetRepeatedDPad,s1,stadium1:src/input.c,c

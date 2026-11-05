@@ -125,11 +125,32 @@ void func_8000B1FC(void) {
     func_80051C70(&D_800AAFE0);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8000B220; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8000B220.s")
-#endif
+void GbTower_PollPakConnection(void);
+void func_8000B220(void) {
+    OSMesg msg;
+    s32 i;
+    Controller* controller;
+
+    if (D_800AAFF8 != 0) {
+        osRecvMesg(&gSIEventMesgQueue, &msg, OS_MESG_BLOCK);
+        osContGetReadData(&gControllerPads[0]);
+
+        for (i = 0; i < 4; i++) {
+            controller = &gControllers[i];
+            if (controller->contId != 0) {
+                controller->rawStickX = controller->controllerData->stick_x;
+                controller->rawStickY = controller->controllerData->stick_y;
+                controller->buttonPressed =
+                    controller->controllerData->button & (controller->controllerData->button ^ controller->buttonDown);
+                controller->unk_0A = controller->buttonDown & (controller->controllerData->button ^ controller->buttonDown);
+                controller->buttonDown = controller->controllerData->button;
+
+                Cont_AdjustAnalogStick(controller);
+            }
+        }
+        GbTower_PollPakConnection();
+    }
+}
 
 extern u8 D_800AAFF8;
 
