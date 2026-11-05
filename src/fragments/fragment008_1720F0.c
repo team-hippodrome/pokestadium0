@@ -309,11 +309,13 @@ void func_88100D9C(s32 arg0, s32 arg1, Color88100D9C arg2) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment008_1720F0/func_88100E34.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8810105C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment008_1720F0/func_8810105C.s")
-#endif
+extern Color88100D9C D_88102D78[2];
+void func_8810105C(s32 x, s32 y, s32 height) {
+    gSPDisplayList(gDisplayListHead++, D_80060270);
+    func_80029028(x, y, 0x88, height, D_88102D78[1]);
+    gSPDisplayList(gDisplayListHead++, D_80060270);
+    func_80029028(x + 0x88, y, 0x18C, height, D_88102D78[0]);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8810112C; signature not recovered. */
