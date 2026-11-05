@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 4785,
-  "asm_owners": 659,
+  "c_owners": 4787,
+  "asm_owners": 657,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -584,7 +584,7 @@
     "tools/cflags_overrides.json": "7052d644eb08429c59981bb4c369c8c937c61ca4c639a1c1ca2c5fc0ce919ebb",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "455f7cfcc6d7155883da60e186f0423abaf848f3278c5eabcf2da693258e1f80",
+    "docs/function-matches.csv": "475cf62b3e69ab0c997c6f08cc3ee2455f292d53195b6a818054bb1ca0d1a81c",
     "linker_scripts/jp/symbol_addrs.txt": "afca390ab7e15134bd987939224f6ec6b0d8be60cd8dee3c830ae7d9d3a49a19"
   },
   "binutils": {
@@ -752,11 +752,11 @@
     "src/fragments/fragment012_17ED00/particle_math_26E6D0_3.c": "f0a6213871cd4e3baae1d9b905e8ff098d5e5059c92250264da0269018343318",
     "src/fragments/fragment013_232510/demo_scenes_161E60.c": "e3b8fef74a3bc0faa9ada97609d1a2eb5ac17951be3b1ca75f3b4f10c9011a48",
     "src/fragments/fragment014_235D70/lab_pc_icons.c": "7a8539195087ff597c626f8fa6de553f128e7a03f0932f75a6c8982bf3272055",
-    "src/fragments/fragment015_238BD0/89006FC0.c": "07c6cc6eab95e18eb0c182567bb443e164ef1f6bd9ff338bc95b798c44389f7b",
+    "src/fragments/fragment015_238BD0/89006FC0.c": "e23cc0ecf2aa418dc18fe2442255ac103948643770f65a9ca2ec8eba8ce59b77",
     "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c": "ea4ee6bccbd2b9824fad1841f98b9a7cf4669900270c2eccb3a33ee607baf05e",
     "src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c": "193a82ee3961dcf5163a62debcc8408f7f49b6ee467ec524a883311570d1f6cc",
     "src/fragments/fragment016_252E10/89100020.c": "ec230ad102181a6307ff712cd3ad2197c974a0a9ca16ee34c32b1964476f58fc",
-    "src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c": "2f533b539e24a02be0dcc113e87daa6959353da52e1085f51dd686f1853f648a",
+    "src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c": "7f4f2986ec144fa9f48a7a187251658b896dbafc98fc309a2ec3733f9d00a781",
     "src/fragments/fragment016_252E10/lab_pc_list_1E46B0.c": "ba8d4b5501f5daea30407668a46cb1021536cf2edb09db847e7544301d76b045",
     "src/fragments/fragment016_252E10/lab_pc_list_1E46B0_2.c": "ca2ad66f736d581a4970adae550f327d1024cb27841e034e49b7345dcf501bbe",
     "src/fragments/fragment017_261F00.c": "010db2d8b146be87183a9f92e3d7a094eb3e9b17ab5eda9b74b443022094159e",

@@ -106,11 +106,41 @@ s32 func_8900732C(s8* arg0) {
     return 1;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89007374; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_89007374.s")
-#endif
+void func_8002A8C4(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+void func_8002AE94(s8* arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 arg4, char* arg5);
+M2C_UNK func_8000B2F4(s32);
+extern s32 D_800603C0;
+extern u8 D_8900A870[];
+extern char D_89018E60[];
+extern char D_89018E68[];
+void func_89007374(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, u16 *arg6) {
+    func_8002A8C4(arg0, arg1, arg2, 0x1AE, 0x124);
+    M2C_FIELD(arg0, s32 *, 0x24) = 0;
+    M2C_FIELD(arg0, s32 *, 0x20) = 0;
+    M2C_FIELD(arg0, s32 *, 0x28) = 0;
+    M2C_FIELD(arg0, s32 *, 0x14) = 0x1001;
+    func_8002AE94(arg0 + 0x2C, M2C_FIELD(arg0, s32 *, 0) + 0x10A, M2C_FIELD(arg0, s32 *, 4) + 0x100, 0x48, *(Color_RGBA8 *)D_8900A870, D_89018E60);
+    M2C_FIELD(arg0, s32 *, 0x58) = 0xA;
+    M2C_FIELD(arg0, s32 *, 0x60) = 0xC;
+    func_8002AE94(arg0 + 0x68, M2C_FIELD(arg0, s32 *, 0) + 0x15A, M2C_FIELD(arg0, s32 *, 4) + 0x100, 0x48, *(Color_RGBA8 *)D_8900A870, D_89018E68);
+    M2C_FIELD(arg0, s32 *, 0xAC) = 2;
+    M2C_FIELD(arg0, s32 *, 0xA8) = 0;
+    M2C_FIELD(arg0, s32 *, 0xA4) = D_800603C0;
+    func_8000B2F4(D_800603C0);
+    M2C_FIELD(arg0, s32 *, 0xA4) = arg5;
+    func_8000B2F4(arg5);
+    M2C_FIELD(arg0, s32 *, 0xB4) = arg4;
+    M2C_FIELD(arg0, s32 *, 0xB0) = arg3;
+    M2C_FIELD(arg0, s32 *, 0xB8) = 0;
+    M2C_FIELD(arg0, u16 **, 0xBC) = arg6;
+    if (arg4 != 0) {
+        *M2C_FIELD(arg0, u16 **, 0xBC) &= ~2;
+        *M2C_FIELD(arg0, u16 **, 0xBC) &= ~4;
+    } else {
+        *M2C_FIELD(arg0, u16 **, 0xBC) |= 2;
+        *M2C_FIELD(arg0, u16 **, 0xBC) |= 4;
+    }
+}
 
 typedef struct Color890075E0 {
     u8 r, g, b, a;

@@ -642,11 +642,26 @@ s32 func_89106F74(s8 *arg0)
   return var_v1;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89106FD8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89106FD8.s")
-#endif
+extern Gfx D_80060270[];
+extern u8 D_8910A968[];
+extern u8 D_8910A970[];
+void func_80029028(s32, s32, s32, s32, Color_RGBA8);
+void func_8002B940(s32, s32, s32, s32);
+void func_89106FD8(s32 arg0, s32 arg1, char **arg2, s32 arg3, s32 arg4) {
+    gSPDisplayList(gDisplayListHead++, D_80060270);
+    func_80029028(arg0, arg1 + 1, 0xAE, 0x1A, *(Color_RGBA8 *)D_8910A968);
+    func_80029028(arg0, arg1, 0xAE, 1, *(Color_RGBA8 *)D_8910A970);
+    func_80029028(arg0, arg1 + 0x1B, 0xAE, 1, *(Color_RGBA8 *)D_8910A970);
+    if (arg4 & 8) {
+        func_8002A0AC(arg0 + 3, arg1 + 3, 0xA8, 0x16, *(Color_RGBA8 *)D_8910A968);
+    }
+    func_8002B940(arg0 + 9, arg1 + 8, arg3 + 1, 2);
+    Font_BeginTranslucentTextRendering();
+    func_80027F20(arg4);
+    Font_SetActive(8, 0);
+    Font_Printf(arg0 + 0x42, arg1 + 4, *arg2);
+    Font_EndTexturedTextRendering();
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8910713C; signature not recovered. */
