@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 4880,
-  "asm_owners": 564,
+  "c_owners": 4883,
+  "asm_owners": 561,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -603,7 +603,7 @@
     "tools/cflags_overrides.json": "7052d644eb08429c59981bb4c369c8c937c61ca4c639a1c1ca2c5fc0ce919ebb",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "4b2cad0e2bf46cafda18f131d63e2258a878587ed52a6144bf88dd1dd44c54d1",
+    "docs/function-matches.csv": "acaf2ea0460ba0fdee7fc11282b318ea7490cbed75c0a7f3d5002f4ddfe82010",
     "linker_scripts/jp/symbol_addrs.txt": "3b5103d4cfe8c6cf2470a85f3aacf457f87dc2c7f2096a7a216bec5fd85d5385"
   },
   "binutils": {
@@ -793,11 +793,11 @@
     "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c": "779ad3059c32fe19947c48ed131c4ac975d23578e3394ef605d8ad0090d9666c",
     "src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c": "81155eb1b53b107bb4662317c9e1ed7cb71a958efe8808ce9bf602e2c2d99b77",
     "src/fragments/fragment016_252E10/89100020.c": "dfad1132d8965c7103aecd5bf816037bf63ab852888c070c0b9e097c221a77a1",
-    "src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c": "df6e9df83596e83a261221aded8de4bbdee0b54e6edb5e9621037871b6e34487",
+    "src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c": "c477bafd8897726b5248d49b7dcac0b4ff641ec88f9553efdfa1086648430be7",
     "src/fragments/fragment016_252E10/lab_pc_list_1E46B0.c": "ba8d4b5501f5daea30407668a46cb1021536cf2edb09db847e7544301d76b045",
     "src/fragments/fragment016_252E10/lab_pc_list_1E46B0_2.c": "ca2ad66f736d581a4970adae550f327d1024cb27841e034e49b7345dcf501bbe",
     "src/fragments/fragment017_261F00.c": "010db2d8b146be87183a9f92e3d7a094eb3e9b17ab5eda9b74b443022094159e",
-    "src/fragments/fragment018_262620/pokedex_214920.c": "52e788c480d5b0efe17704f2d758cf3776a866ce94d21cc01c35af220f8300a6",
+    "src/fragments/fragment018_262620/pokedex_214920.c": "8978a1c750088c065745e0ecc3b32d0d7be315ec08c8dab409d9477cfeb60de6",
     "src/fragments/fragment018_262620/pokedex_2190D0.c": "95f32a019b80bdf17400546f059a4fe7b54980b0adbcb3b3aa63b483453c8717",
     "src/fragments/fragment019_293410/lab_pc_icons.c": "75fcf926bb38ed7ce93f7401e96351f2763de22026c614970d768c942f8d483b",
     "src/fragments/fragment019_293410/lab_pc_icons_8A201598.c": "79849644ea082b060d05d6032edaa23dbdbf75aa3098204bcc21426daa6688ae",

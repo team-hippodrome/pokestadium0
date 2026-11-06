@@ -127,11 +127,33 @@ void func_8A100318(void* arg0, s32 arg1, s32 arg2) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment018_262620/func_8A1003D0.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8A100588; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment018_262620/func_8A100588.s")
-#endif
+extern s32 D_800603C0;
+s32 func_8002FD8C(unk_func_8820BE14_02C_038*);
+
+/* Navigate the list, toggle the view mode, or report cancel/confirm input. */
+s32 func_8A100588(u8* state) {
+    s32 result;
+    unk_func_8820BE14_02C_038* menu;
+    s32 value;
+
+    menu = (unk_func_8820BE14_02C_038*)(state + 0x2C);
+    result = func_8002FD8C(menu);
+    if (result == 0) {
+        value = *(u16*)(D_800603C0 + 8);
+        if (value & 1) {
+            Audio_PlaySoundEffectById(2);
+            WidgetTree_SetScrollableGridIndexPreserveScroll(menu, 0);
+            value = *(s32*)(state + 0x1B0);
+            value = value == 0;
+            *(s32*)(state + 0x1B0) = value;
+        } else if (value & 0x4000) {
+            result = -1;
+        } else if (value & 0x8000) {
+            result = 1;
+        }
+    }
+    return result;
+}
 
 typedef struct Rgba8A100620 {
     u8 r, g, b, a;
@@ -221,7 +243,6 @@ void func_8A100954(s8 *arg0, s32 arg1) {
 
 s32 func_8002BC14(s32);                             /* extern */
 s32 func_8002DC04(s32);                             /* extern */
-extern s32 D_800603C0;
 
 s32 func_8A1009A4(s32 arg0) {
     s32 temp_v0;
