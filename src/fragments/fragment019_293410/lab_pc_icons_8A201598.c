@@ -29,7 +29,42 @@ void func_8A201C08(s32 arg0, s32 arg1, s32 arg2) {
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment019_293410/func_8A201D3C.s")
+s32 func_80001AA4(void);
+s32 func_80002BA4(void*, s32);
+s32 func_80017304(s32, BinArchive*, s32, void*, s32);
+s32 func_8001FA8C(s32);
+s32 func_8002D3D0(u8*);
+s32 func_8002D454();
+typedef struct Move8A201D3C { u8 unk00; u8 unk01; u8 power; u8 type; u8 unk04; u8 unk05; } Move8A201D3C;
+extern Move8A201D3C D_8006B190[];
+extern BinArchive* D_8A21DA54;
+extern void* D_8A21DA58;
+extern void* D_8A21DA60[4];
+extern s32 D_8A21DA70[];
+
+void func_8A201D3C(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
+    s32 unused;
+    s32 count;
+    s32 i;
+    s32 handle;
+    s32 move;
+
+    func_8002A8C4(arg0, arg1, arg2, 0x228, 0x16A);
+    M2C_FIELD(arg0, s32*, 0x28) = 0;
+    M2C_FIELD(arg0, s32*, 0x20) = 0;
+    M2C_FIELD(arg0, s32*, 0x24) = 0;
+    M2C_FIELD(arg0, s32*, 0x14) = 0x1001;
+    M2C_FIELD(arg0, s32*, 0x34) = 0;
+    M2C_FIELD(arg0, s32*, 0x2C) = arg3;
+    count = func_8002D3D0((u8*)arg3);
+    while (func_80001AA4() == 0) {
+    }
+    for (i = 0; i < count; i++) {
+        handle = func_80002BA4(D_8A21DA60[i], 0x14800);
+        move = func_8002D454(arg3, i);
+        D_8A21DA70[i] = func_80017304(handle, D_8A21DA54, func_8001FA8C((move == -2) ? 0 : D_8006B190[move].type), D_8A21DA58, 0x3000);
+    }
+}
 
 void func_8A201EAC(s8 *arg0, s32 arg1)
 {
@@ -167,7 +202,26 @@ void func_8A2023F4(s32* arg0, s32 arg1) {
     func_80022188(D_8A21DA40);
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment019_293410/func_8A2024D0.s")
+void func_80027410(s8 *, s8 *, s32, s32, s32);
+void func_80027804(s8 *, s8 *, s32, s32);
+void func_8A2024D0(s8 *arg0) {
+    s32 i;
+
+    M2C_FIELD(arg0, s32 *, 0) = 1;
+    M2C_FIELD(arg0, s8 **, 8) = arg0 + 0x10;
+    M2C_FIELD(arg0, s32 *, 0x384) = 0;
+    for (i = 0; i < 6; i++) {
+        M2C_FIELD(arg0, s8 **, 0x18C + i * 4) = arg0 + 0x1A4 + i * 0x50;
+    }
+    func_80027410(arg0 + 0x170, arg0 + 0x1A4, 0x50, 6, 0);
+    func_8A202390(arg0 + 0x170);
+    func_80027804(arg0 + 0x180, arg0 + 0x18C, 6, M2C_FIELD(arg0, s32 *, 0x178));
+    for (i = 0; i < M2C_FIELD(arg0, s32 *, 0x178); i++) {
+        func_8001833C((unk_func_8001A024*)D_8A21DA50, i, (BattleMon*)(M2C_FIELD(arg0, s32 *, 0x170) + i * 0x50),
+                      GPACK_RGBA5551(D_8A203304.r, D_8A203304.g, D_8A203304.b, 1));
+    }
+    func_8A20034C(arg0 + 0x10, 0x2F, 0x4D, (s32)(arg0 + 0x180));
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment019_293410/func_8A20261C.s")
 
@@ -188,7 +242,49 @@ void func_8A202EF4(void) {
     func_8A2024D0(&D_8A21DA80);
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment019_293410/func_8A202F50.s")
+typedef struct ColF50 { u8 r, g, b, a; } ColF50;
+extern s32 D_8A203428;
+extern s32 D_8A20342C;
+/*
+ * Second name for D_8A203428. The fade-out store in this function family
+ * (also func_8200579C, func_8900429C, func_891049E8, func_8A101B30) does not
+ * share the counter's address with the load before it, which only happens
+ * when the two accesses name different symbols.
+ */
+extern s32 D_8A203428_2;
+extern M2C_UNK D_8A21D9E4;
+M2C_UNK func_80028060(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
+void func_8002C8D8(ColF50*, ColF50, f32);
+s32 func_8A202F50(u8 arg0) {
+    ColF50 sp2C;
+    M2C_UNK *var_a1;
+    s32 n;
+
+    n = D_8A203428;
+    if (n >= 8) {
+        D_8A20342C = 1;
+    }
+    if (D_8A20342C != 0) {
+        n--;
+        D_8A203428_2 = n;
+    }
+    func_800069CC();
+    if (D_8A21DE08 == -1) {
+        var_a1 = NULL;
+    } else {
+        var_a1 = &D_8A21DE10;
+    }
+    func_80028060(0, var_a1, &D_8A21D9E4, D_8A21DE08);
+    n = D_8A203428;
+    func_8002C8D8(&sp2C, *(ColF50*)&D_8A203300, n / (f64)8.0f);
+    func_8002C064(0x38, 0x1E0, sp2C.r, sp2C.g, sp2C.b);
+    if (D_8A20342C == 0) {
+        n = D_8A203428;
+        n++;
+        D_8A203428 = n;
+    }
+    return 0;
+}
 
 void func_8A203070(s32 arg0) {
     func_8000B1FC();

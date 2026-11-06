@@ -62,7 +62,7 @@ void UI_DrawTextureRgba16(s32 arg0, s32 arg1, s32 arg2);
  * arguments are not named.
  */
 M2C_UNK func_8002D880(s8 *, s32, s8 *, M2C_UNK *, s32, s32); /* extern */
-extern M2C_UNK func_8A200274;
+/* func_8A200274 is defined in lab_pc_icons.c. */
 
 void func_8A20034C(s8 *arg0, s32 arg1, s32 arg2, s32 arg3);
 
@@ -121,7 +121,7 @@ extern s8 D_8007356C;
 void func_8A201EAC(s8 *arg0, s32 arg1);
 
 s32 func_80022B40();                                /* extern */
-s32 func_8002D454(s32, s32, s8 *);                /* extern */
+s32 func_8002D454();                /* extern */
 M2C_UNK func_8003F6AC(M2C_UNK);                     /* extern */
 extern s8 *D_800603C0;
 

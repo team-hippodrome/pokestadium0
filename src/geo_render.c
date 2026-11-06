@@ -551,29 +551,75 @@ void GeoRender_SetCombineMode(Gfx* arg0, arg1_func_81407874_014_000_010* arg1) {
                       GCCc1w1(arg1->unk_09, arg1->unk_0C, arg1->unk_0E, arg1->unk_0B, arg1->unk_0D, arg1->unk_0F));
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_800128E0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800128E0.s")
-#endif
+extern arg1_func_81407874_014_000_010 D_80060534[];
+void func_800128E0(s8 *arg0) {
+    bzero(arg0, 0x20);
+    M2C_FIELD(arg0, u8 *, 0x19) = 0xFF;
+    M2C_FIELD(arg0, u32 *, 4) = 0xFFFFFFFF;
+    gDPPipeSync(gDisplayListHead++);
+    gDPSetCycleType(gDisplayListHead++, G_CYC_2CYCLE);
+    gDPSetPrimColor(gDisplayListHead++, 0, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF);
+    GeoRender_SetCombineMode(gDisplayListHead++, D_80060534);
+}
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8001298C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8001298C.s")
-#endif
+extern s32 D_800604A4[][9];
+s32 func_8001298C(arg0) s8* arg0; {
+    s32 mode = D_800604A4[M2C_FIELD(arg0, u8*, 0x1D)][M2C_FIELD(arg0, u8*, 0x1C)];
+    Gfx* gfx;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80012A80; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80012A80.s")
-#endif
+    M2C_FIELD(arg0, s32*, 8) = 0xFFFFFF00;
+    gfx = gDisplayListHead++;
+    gfx->words.w0 = 0xF8000000;
+    gfx->words.w1 = M2C_FIELD(arg0, s32*, 8);
+    if ((D_80060480 & 1) && (M2C_FIELD(arg0, u8*, 0x1D) == 1) && (M2C_FIELD(arg0, u8*, 0x1C) == 5)) {
+        mode = 0x107A58;
+    }
+    if (D_80060490->unk_1D != 0) {
+        gSPSetOtherMode(gDisplayListHead++, G_SETOTHERMODE_L, G_MDSFT_RENDERMODE, 29, mode | 0xC8000000);
+    } else {
+        gSPSetOtherMode(gDisplayListHead++, G_SETOTHERMODE_L, G_MDSFT_RENDERMODE, 29, mode | 0x0C080000);
+    }
+}
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80012C00; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80012C00.s")
-#endif
+typedef union Rgba80012D04 {
+    s32 word;
+    struct {
+        u8 r, g, b, a;
+    } c;
+} Rgba80012D04;
+
+void func_80012A80(s8* arg0) {
+    Rgba80012D04 color;
+
+    color.word = M2C_FIELD(arg0, s32*, 4);
+    M2C_FIELD(arg0, s32*, 0xC) = 0;
+    M2C_FIELD(arg0, s32*, 0x10) = 0;
+    M2C_FIELD(arg0, s32*, 0) = 0;
+    M2C_FIELD(arg0, u8*, 0x1A) = 0;
+    gDPPipeSync(gDisplayListHead++);
+    gDPSetPrimColor(gDisplayListHead++, 0, M2C_FIELD(arg0, u8*, 0x19), color.c.r, color.c.g, color.c.b, color.c.a);
+    gDPSetTextureLUT(gDisplayListHead++, G_TT_NONE);
+    gSPTexture(gDisplayListHead++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF);
+    GeoRender_SetCombineMode(gDisplayListHead++, &D_80060534[M2C_FIELD(arg0, u8*, 0x18)]);
+    gSPClearGeometryMode(gDisplayListHead++, G_TEXTURE_GEN);
+    gSPLookAt(gDisplayListHead++, M2C_FIELD(D_80060488, u32*, 0xA4) & 0x1FFFFFFF);
+}
+
+void func_80012C00(s8 *arg0, s8 *arg1) {
+    Gfx *gfx;
+
+    if (M2C_FIELD(arg0, s32 *, 8) != M2C_FIELD(arg1, s32 *, 0x14)) {
+        if (M2C_FIELD(arg0, u8 *, 0x1E) == 0) {
+            M2C_FIELD(arg0, u8 *, 0x1E) = 1;
+            gDPPipeSync(gDisplayListHead++);
+        }
+        gfx = gDisplayListHead++;
+        gfx->words.w0 = 0xF8000000;
+        gfx->words.w1 = M2C_FIELD(arg1, s32 *, 0x14);
+        gSPSetOtherMode(gDisplayListHead++, G_SETOTHERMODE_L, G_MDSFT_RENDERMODE, 29, D_800604A4[M2C_FIELD(arg0, u8 *, 0x1D)][M2C_FIELD(arg0, u8 *, 0x1C)] | 0xC4000000);
+        M2C_FIELD(arg0, s32 *, 8) = M2C_FIELD(arg1, s32 *, 0x14);
+    }
+}
 
 M2C_UNK func_8001298C();                            /* extern */
 
@@ -583,13 +629,6 @@ void func_80012CC0(s8 *arg0, s8 *arg1) {
     }
     M2C_FIELD(arg0, s32 *, 8) = (s32) M2C_FIELD(arg1, s32 *, 0x14);
 }
-
-typedef union Rgba80012D04 {
-    s32 word;
-    struct {
-        u8 r, g, b, a;
-    } c;
-} Rgba80012D04;
 
 void func_80012D04(s8* arg0, s8* arg1) {
     Rgba80012D04 color;
@@ -685,11 +724,21 @@ void GeoRender_BindTexture(unk_D_800ABB28* arg0, unk_D_800ABB10* arg1) {
 }
 
 extern unk_D_800ABB28* D_800ABCB8;
-#ifdef NON_MATCHING
-/* TODO: decompile func_80013148; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80013148.s")
-#endif
+extern u8 D_1001800[];
+
+void func_80013148(s8* arg0, s32 arg1) {
+    if (M2C_FIELD(arg0, u8 *, 0x1A) == 0) {
+        gDPLoadTextureBlock(gDisplayListHead++, D_1001800, G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0,
+                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 5, 5, 1, 1);
+        gSPTexture(gDisplayListHead++, 0x1194, 0x1194, 0, G_TX_RENDERTILE, G_ON);
+
+        gSPSetGeometryMode(gDisplayListHead++, G_TEXTURE_GEN);
+        gSPClearGeometryMode(gDisplayListHead++, G_TEXTURE_GEN_LINEAR);
+        gDPSetCombineMode(gDisplayListHead++, G_CC_MODULATEI, G_CC_MODULATEI2);
+
+        M2C_FIELD(arg0, u8 *, 0x1A) = 1;
+    }
+}
 
 /*
  * func_800132C8
@@ -845,11 +894,45 @@ void Geo_NodeModelRoot(GraphNode* arg0) {
     arg->unk_1A = D_80060484;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80013DC8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80013DC8.s")
-#endif
+typedef struct Root80013DC8 {
+    /* 0x00 */ char unk00[0xC];
+    /* 0x0C */ void* children;
+    /* 0x10 */ char unk10[0x8];
+    /* 0x18 */ s32 unk18[9];
+} Root80013DC8;
+extern s32 D_800AB240;
+extern s32 D_800AB448;
+extern s32 D_800AB44C;
+extern s32 D_800AB450;
+extern s32 D_800AB454;
+extern s32 D_800AB458;
+extern s32 D_800AB45C;
+s32 func_8000255C(void);
+s32 func_80002B10(s32, s32);
+void func_80002420(s32);
+void func_80013398(Root80013DC8*);
+s32 func_8001380C();
+void func_80013DC8(Root80013DC8* arg0) {
+    s32 i;
+
+    if ((D_80060494 == NULL) && (arg0->children != NULL)) {
+        for (i = 0; i < 9; i++) {
+            arg0->unk18[i] = 0;
+        }
+        D_800AB450 = -1;
+        D_800AB44C = 0xFFFFFF00;
+        D_800AB448 = 0;
+        D_800AB454 = 0;
+        D_800AB458 = 0;
+        D_800AB45C = 0;
+        D_800AB240 = func_80002B10(func_8000255C(), 0);
+        D_80060494 = (CameraNode*)arg0;
+        func_8001380C(arg0);
+        func_80013398(arg0);
+        D_80060494 = NULL;
+        func_80002420(D_800AB240);
+    }
+}
 
 void Geo_NodeOrtho(GraphNode* arg0) {
     if ((D_80060494 == NULL) && (arg0->children != NULL)) {

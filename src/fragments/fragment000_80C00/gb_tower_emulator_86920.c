@@ -328,11 +328,46 @@ s32 func_8110A310(s32 arg0, s32 arg1, s32 arg2) {
     return func_8110A368(arg0, arg1, arg2);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110A368; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110A368.s")
-#endif
+typedef struct Entry8110A368 { s32 val; char pad4[6]; s16 key; } Entry8110A368;
+typedef struct Tbl8110A368 { u32 count; char pad4[0x10]; Entry8110A368 entries[1]; } Tbl8110A368;
+s32 func_8110A368(s32 arg0, s32 arg1, s32 arg2) {
+    Tbl8110A368* sub;
+    Tbl8110A368* tbl;
+    u32 i;
+    switch (arg0) {
+    case 0:
+        tbl = (Tbl8110A368*)&D_81184320;
+        break;
+    case 1:
+        tbl = (Tbl8110A368*)&D_81184380;
+        break;
+    case 2:
+        tbl = (Tbl8110A368*)&D_811843E0;
+        break;
+    }
+    sub = (Tbl8110A368*)((u8*)tbl + 0x20);
+    if (arg1 == 0) {
+        if (arg2 == sub->entries[0].key) {
+            sub->count = 1;
+            return sub->entries[0].val;
+        }
+        if (arg2 == sub->entries[1].key) {
+            sub->count = 0;
+            return sub->entries[1].val;
+        }
+        return 0;
+    }
+    sub = tbl;
+    for (i = 0; i < sub->count; i++) {
+        if (arg2 == tbl->entries[i].key) {
+            return tbl->entries[i].val;
+        }
+    }
+    if (arg1 == 2) {
+        return func_8110A310(arg0, 0, arg2);
+    }
+    return 0;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8110A474; signature not recovered. */
@@ -392,11 +427,21 @@ void func_8110A8CC(s16* arg0, s32 arg1) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110A924; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110A924.s")
-#endif
+void func_8110A924(s16* arg0, s32 arg1, s32 arg2) {
+    s32 i;
+
+    if ((arg1 == 0) && (arg2 == 0)) {
+        func_8110A878(arg0, 0);
+    } else if (arg2 == 0) {
+        func_8110A878(arg0, arg1);
+    } else if (arg1 == 0) {
+        func_8110A8CC(arg0, arg2);
+    } else {
+        for (i = 0; i < 8; i++) {
+            arg0[i] = (D_811371D8[arg2 * 8 + i] + D_811373C8[arg2 * 8 + i]) / 2;
+        }
+    }
+}
 
 typedef struct Voice8110AA50 {
     /* 0x000 */ char unk000[0xC];
@@ -595,11 +640,38 @@ s8 *func_8110BF28(s32 arg0)
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110BFB0.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110C1C0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110C1C0.s")
-#endif
+typedef struct Timer8110C1C0 { char pad0[0xD]; u8 slot; u8 count; char padF; } Timer8110C1C0;
+extern Timer8110C1C0* D_81185688;
+extern u32 D_8118568C;
+extern u32 D_81185690;
+extern s32 D_81185694;
+extern u8 D_81185698[];
+extern u8 D_81185798[];
+extern u8 D_8118589A;
+extern u8 D_8118589B;
+void func_8110C1C0(void) {
+    u32 i;
+    Timer8110C1C0* t;
+    for (i = 0; i < D_81185690; i++) {
+        t = &D_81185688[i];
+        if (t->count != 0) {
+            if (--t->count == 0) {
+                t->slot = D_8118589A;
+                D_81185698[D_8118589A++] = i;
+            }
+        }
+    }
+    for (i = D_81185690; i < D_8118568C; i++) {
+        t = &D_81185688[i];
+        if (t->count != 0) {
+            if (--t->count == 0) {
+                t->slot = D_8118589B;
+                D_81185798[D_8118589B++] = i;
+            }
+        }
+    }
+    D_81185694 = 0;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8110C2D8; signature not recovered. */
@@ -746,17 +818,63 @@ void func_8110CC94(s32 arg0, s32 arg1) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110CD0C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110CD0C.s")
-#endif
+typedef struct Stream8110CD0C {
+    /* 0x00 */ u32 unk00_0 : 4;
+    /* 0x00 */ u32 mode : 2;
+    /* 0x00 */ u32 unk00_6 : 1;
+    /* 0x00 */ u32 enabled : 1;
+    /* 0x00 */ u32 addr : 24;
+    /* 0x04 */ s32 unk04;
+} Stream8110CD0C;
+void func_8110DB8C(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3);
+void func_8110DA68(s32, s32, u32, s32);
+extern u8* D_811858A4;
+s32 func_8110CD0C(Stream8110CD0C* arg0, s32 arg1) {
+    s32 ret;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110CDF0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110CDF0.s")
-#endif
+    if (arg0->enabled == 1) {
+        if (arg0->mode != 0) {
+            ret = func_8110B9A8(arg0->addr, arg1, arg0->unk04, arg0->mode);
+            if (ret == 0) {
+                return -1;
+            }
+            if (arg0->mode == 1) {
+                func_8110DB8C(arg0->unk04, ret, arg0->addr, *(s16*)(D_811858A4 + 2));
+            } else {
+                func_8110DA68(arg0->unk04, ret, arg0->addr, arg0->mode);
+            }
+            arg0->mode = 0;
+            arg0->unk04 = ret;
+        }
+    }
+}
+
+u8* func_81110CA8(s32, s32);
+u8* func_81110D6C(s32, s32);
+s32 func_8110CDF0(s32 arg0, s32 arg1, s32 arg2) {
+    u8 *p;
+
+    if (arg1 < 0x7F) {
+        p = func_81110CA8(arg0, arg1);
+        if (p == NULL) {
+            return -1;
+        }
+        if (p[1] != 0) {
+            func_8110CD0C(M2C_FIELD(p, Stream8110CD0C **, 8), arg0);
+        }
+        func_8110CD0C(M2C_FIELD(p, Stream8110CD0C **, 0x10), arg0);
+        if (p[2] != 0x7F) {
+            func_8110CD0C(M2C_FIELD(p, Stream8110CD0C **, 0x18), arg0);
+        }
+    } else if (arg1 == 0x7F) {
+        p = func_81110D6C(arg0, arg2);
+        if (p == NULL) {
+            return -1;
+        }
+        func_8110CD0C(M2C_FIELD(p, Stream8110CD0C **, 4), arg0);
+        return 0;
+    }
+}
 
 M2C_UNK func_8004CFB0(s32, M2C_UNK, M2C_UNK);       /* extern */
 s32 func_8110D7B0(M2C_UNK, s32);                    /* extern */
@@ -870,11 +988,43 @@ void func_8110D3D4(s32 arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110D408.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110D4E0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110D4E0.s")
-#endif
+typedef struct Entry8110D4E0 { u8 unk00[2]; u8 unk02; u8 unk03; char unk04[8]; } Entry8110D4E0;
+extern Entry8110D4E0* D_811858B0;
+s32 func_8110D408(s32, s32*);
+void func_8110EF7C(s32, s32, s32*, s32);
+s32 func_8110D4E0(s32 arg0) {
+    s32 ret;
+    s32 a;
+    s32 b;
+    s32 sp38;
+    s32 sp34;
+    s32 sp30;
+    s32 sp20[4];
+
+    arg0 = func_8110D7B0(1, arg0);
+    a = D_811858B0[arg0].unk02;
+    b = D_811858B0[arg0].unk03;
+    sp20[0] = a;
+    sp20[1] = b;
+    if (a != 0xFF) {
+        sp20[2] = func_8110D408(a, &sp30);
+    } else {
+        sp20[2] = 0;
+    }
+    if (b != 0xFF) {
+        sp20[3] = func_8110D408(b, &sp34);
+    } else {
+        sp20[3] = 0;
+    }
+    ret = func_8110D5BC(1, arg0, &sp38);
+    if (ret == 0) {
+        return 0;
+    }
+    if (sp38 == 1) {
+        func_8110EF7C(arg0, ret, sp20, 0);
+    }
+    return ret;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8110D5BC; signature not recovered. */
@@ -946,18 +1096,74 @@ u8* func_8110D840(s32 arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110D884.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110DA68; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110DA68.s")
-#endif
+extern s8 D_81137C1C[];
+extern s8 D_81137C28[];
+extern u8 D_81185650[];
+extern u8 D_81185670[];
+void func_80056730(s32, u32);
+void func_8004D1C0(void*, s32, s32);
+s32 func_8110DBA0();
+void func_8110DA68(s32 arg0, s32 arg1, u32 arg2, s32 arg3) {
+
+    arg2 = (arg2 + 0xF) & ~0xF;
+    func_80056730(arg1, arg2);
+    while (TRUE) {
+        if (arg2 < 0x400) {
+            break;
+        }
+        func_8110DBA0(D_81185670, 1, 0, arg0, arg1, 0x400, D_81185650, arg3, D_81137C1C);
+        func_8004D1C0(D_81185650, 0, 1);
+        arg2 -= 0x400;
+        arg0 += 0x400;
+        arg1 += 0x400;
+    }
+    if (arg2 != 0) {
+        func_8110DBA0(D_81185670, 1, 0, arg0, arg1, arg2, D_81185650, arg3, D_81137C28);
+        func_8004D1C0(D_81185650, 0, 1);
+    }
+}
 
 void func_8110DB8C(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3) {
 
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110DBA0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110DBA0.s")
-#endif
+typedef struct IoMesg8110DBA0 {
+    /* 0x00 */ u16 type;
+    /* 0x02 */ u8 pri;
+    /* 0x03 */ u8 status;
+    /* 0x04 */ void* retQueue;
+    /* 0x08 */ void* dramAddr;
+    /* 0x0C */ u32 devAddr;
+    /* 0x10 */ u32 size;
+} IoMesg8110DBA0;
+s32 func_800593D0(void);
+s32 func_80051E60(void);
+void func_80056530(s32, IoMesg8110DBA0*, s32);
+s32 func_8110DBA0(IoMesg8110DBA0* mb, s32 pri, s32 direction, u32 devAddr, void* dramAddr, u32 size, void* mq, s32 kind) {
+    s32 handle;
+
+    if ((u32)D_811859D4 > 16) {
+        return -1;
+    }
+    switch (kind) {
+        case 2:
+            handle = func_800593D0();
+            break;
+        case 3:
+            handle = func_80051E60();
+            break;
+        default:
+            return 0;
+    }
+    if (size & 0xF) {
+        size = (size + 0xF) & ~0xF;
+    }
+    mb->pri = pri;
+    mb->retQueue = mq;
+    mb->dramAddr = dramAddr;
+    mb->devAddr = devAddr;
+    mb->size = size;
+    M2C_FIELD(handle, s32*, 0x14) = 2;
+    func_80056530(handle, mb, direction);
+    return 0;
+}

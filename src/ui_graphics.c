@@ -278,11 +278,22 @@ void Ui_DrawBorderedPanelNoFill(s32 x1, s32 y1, s32 width, s32 height) {
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8001E6C0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8001E6C0.s")
-#endif
+extern Gfx D_80060308[];
+extern u8 D_10031C0[];
+extern u8 D_1003740[];
+extern u8 D_1003880[];
+
+void Ui_DrawTextureMarker(s32 x, s32 y) {
+    if (StageContext_IsHighResolution() != 0) {
+        gSPDisplayList(gDisplayListHead++, D_80060290);
+        Gfx_DrawTextureRgba16(x, y, 0x20, 0x16, D_10031C0, 0x20, 0x200000);
+    } else {
+        gSPDisplayList(gDisplayListHead++, D_80060308);
+        Gfx_DrawTextureRgba16Ia8(x, y, 0xC, 0xA, D_1003740, D_1003880, 0x10, 0x100000);
+    }
+
+    gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
+}
 
 void Ui_Draw20x20Icon(s32 arg0, s32 arg1, s32 arg2) {
     u8* var_t4;

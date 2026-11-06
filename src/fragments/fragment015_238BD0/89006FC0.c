@@ -106,11 +106,41 @@ s32 func_8900732C(s8* arg0) {
     return 1;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89007374; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_89007374.s")
-#endif
+void func_8002A8C4(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+void func_8002AE94(s8* arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 arg4, char* arg5);
+M2C_UNK func_8000B2F4(s32);
+extern s32 D_800603C0;
+extern u8 D_8900A870[];
+extern char D_89018E60[];
+extern char D_89018E68[];
+void func_89007374(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, u16 *arg6) {
+    func_8002A8C4(arg0, arg1, arg2, 0x1AE, 0x124);
+    M2C_FIELD(arg0, s32 *, 0x24) = 0;
+    M2C_FIELD(arg0, s32 *, 0x20) = 0;
+    M2C_FIELD(arg0, s32 *, 0x28) = 0;
+    M2C_FIELD(arg0, s32 *, 0x14) = 0x1001;
+    func_8002AE94(arg0 + 0x2C, M2C_FIELD(arg0, s32 *, 0) + 0x10A, M2C_FIELD(arg0, s32 *, 4) + 0x100, 0x48, *(Color_RGBA8 *)D_8900A870, D_89018E60);
+    M2C_FIELD(arg0, s32 *, 0x58) = 0xA;
+    M2C_FIELD(arg0, s32 *, 0x60) = 0xC;
+    func_8002AE94(arg0 + 0x68, M2C_FIELD(arg0, s32 *, 0) + 0x15A, M2C_FIELD(arg0, s32 *, 4) + 0x100, 0x48, *(Color_RGBA8 *)D_8900A870, D_89018E68);
+    M2C_FIELD(arg0, s32 *, 0xAC) = 2;
+    M2C_FIELD(arg0, s32 *, 0xA8) = 0;
+    M2C_FIELD(arg0, s32 *, 0xA4) = D_800603C0;
+    func_8000B2F4(D_800603C0);
+    M2C_FIELD(arg0, s32 *, 0xA4) = arg5;
+    func_8000B2F4(arg5);
+    M2C_FIELD(arg0, s32 *, 0xB4) = arg4;
+    M2C_FIELD(arg0, s32 *, 0xB0) = arg3;
+    M2C_FIELD(arg0, s32 *, 0xB8) = 0;
+    M2C_FIELD(arg0, u16 **, 0xBC) = arg6;
+    if (arg4 != 0) {
+        *M2C_FIELD(arg0, u16 **, 0xBC) &= ~2;
+        *M2C_FIELD(arg0, u16 **, 0xBC) &= ~4;
+    } else {
+        *M2C_FIELD(arg0, u16 **, 0xBC) |= 2;
+        *M2C_FIELD(arg0, u16 **, 0xBC) |= 4;
+    }
+}
 
 typedef struct Color890075E0 {
     u8 r, g, b, a;
@@ -351,17 +381,47 @@ void func_89009464(s32 arg0) {
     b->unk_04 = 1;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_890094A8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_890094A8.s")
-#endif
+typedef struct LabPCBoxList890094A8 {
+    /* 0x0 */ LabPCBoxEntry* entries;
+    /* 0x4 */ s32 unk_04;
+    /* 0x8 */ s32 count;
+} LabPCBoxList890094A8;
+void func_8002DDFC(s8 *);
+void func_890094A8(s8* arg0) {
+    s32 i;
+    LabPCBoxList890094A8* list = M2C_FIELD(arg0, LabPCBoxList890094A8**, 0);
+    s32 n = list->count;
+    LabPCBoxEntry* e = list->entries;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_890095DC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_890095DC.s")
-#endif
+    for (i = 0; i < n; i++, e++) {
+        if (M2C_FIELD(e->box, s32*, 0x960) == 0) {
+            M2C_FIELD(arg0, u16**, 4)[i] |= 1;
+        }
+    }
+    M2C_FIELD(arg0, s32*, 8) = 0;
+    func_8002DDFC(arg0);
+}
+
+typedef struct LabPCBoxList890095DC {
+    /* 0x0 */ LabPCBoxEntry* entries;
+    /* 0x4 */ s32 unk_04;
+    /* 0x8 */ s32 count;
+} LabPCBoxList890095DC;
+
+void func_890095DC(s8* arg0) {
+    s32 i;
+    LabPCBoxList890095DC* list = M2C_FIELD(arg0, LabPCBoxList890095DC**, 0);
+    s32 n = list->count;
+    LabPCBoxEntry* e = list->entries;
+
+    for (i = 0; i < n; i++, e++) {
+        if (M2C_FIELD(e->box, s32*, 0x960) > 0) {
+            M2C_FIELD(arg0, u16**, 4)[i] |= 1;
+        }
+    }
+    M2C_FIELD(arg0, s32*, 8) = 0;
+    func_8002DDFC(arg0);
+}
 
 void func_89009710(s8 *arg0, s8 *arg1, s8 *arg2) {
     if (arg1 != NULL) {
@@ -374,11 +434,27 @@ void func_89009710(s8 *arg0, s8 *arg1, s8 *arg2) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89009738; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_89009738.s")
-#endif
+s32 func_8002B204();
+s32 func_89009738(u8 *arg0, s32 arg1) {
+    s32 r;
+    s32 idx;
+    s32 pos;
+
+    for (r = func_8002B204(arg0 + 0x164, arg1); r != 0; r = func_8002B204(arg0 + 0x164, arg1)) {
+        pos = *(s32 *)(arg0 + 0x168);
+        idx = pos - 8;
+        if (pos < 8) {
+            *(u8 **)(arg0 + 0x1D8) = arg0 + 0x170;
+            idx = pos;
+        } else {
+            *(u8 **)(arg0 + 0x1D8) = arg0 + 0x194;
+        }
+        if (!((*(u16 **)(*(u8 **)(arg0 + 0x1D8) + 4))[idx] & 1)) {
+            break;
+        }
+    }
+    return r;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_890097E0; signature not recovered. */

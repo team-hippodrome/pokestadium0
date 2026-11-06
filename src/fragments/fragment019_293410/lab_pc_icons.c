@@ -52,7 +52,29 @@ void UI_DrawTextureRgba16(s32 arg0, s32 arg1, s32 arg2) {
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment019_293410/func_8A200274.s")
+extern Color_RGBA8 D_8A203304;
+extern Color_RGBA8 D_8A203348;
+extern Color_RGBA8 D_80073520;
+void func_8002A0AC(s32, s32, s32, s32, Color_RGBA8);
+M2C_UNK func_80029A64(s32, s32, s32, s32, Color_RGBA8);
+void func_8A200274(s32 arg0, s32 arg1, BattleMon *arg2, s32 arg3, s32 arg4, s32 *arg5) {
+    s32 pad[3];
+    s32 kind = *arg5;
+    Color_RGBA8 *color;
+
+    if (arg4 & 0x18) {
+        func_8002A0AC(arg0 + 3, arg1 + 3, 0x20F, 0x2D, D_8A203304);
+    }
+    func_8A20009C(arg0, arg1, arg2, arg4);
+    if (arg4 & 0x12) {
+        if (kind == 2) {
+            color = &D_8A203348;
+        } else {
+            color = &D_80073520;
+        }
+        func_80029A64(arg0 + 2, arg1 + 2, 0x211, 0x2F, *color);
+    }
+}
 
 void func_8A20034C(s8 *arg0, s32 arg1, s32 arg2, s32 arg3) {
     func_8002A8C4(arg0, arg1, arg2, 0x221, 0x168);
@@ -60,7 +82,7 @@ void func_8A20034C(s8 *arg0, s32 arg1, s32 arg2, s32 arg3) {
     M2C_FIELD(arg0, s32 *, 0x20) = 0;
     M2C_FIELD(arg0, s32 *, 0x28) = 0;
     M2C_FIELD(arg0, s32 *, 0x14) = 0x1001;
-    func_8002D880(arg0 + 0x2C, arg3, arg0 + 0x50, &func_8A200274, 0x215, 0x33);
+    func_8002D880(arg0 + 0x2C, arg3, arg0 + 0x50, (M2C_UNK *)func_8A200274, 0x215, 0x33);
 }
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment019_293410/func_8A2003C0.s")

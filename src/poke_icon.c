@@ -113,11 +113,23 @@ void func_80018168(s8 *arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80018234; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80018234.s")
-#endif
+void func_80018234(unk_func_8001A024* arg0, s32 arg1, s32 arg2, u16 arg3) {
+    DepthBuffer* buf;
+    UNUSED s32 pad;
+
+    if (arg1 < arg0->unk_01) {
+        buf = arg0->unk_08[arg1].unk_0C;
+        func_8004FD20((s32)buf->img_p, buf->width * buf->height * 2, buf->width, buf->height);
+        if ((arg2 <= 0) || (arg2 >= 0x98)) {
+            arg2 = 0x98;
+        }
+        arg0->unk_08[arg1].unk_00 = 1;
+        arg0->unk_08[arg1].unk_02 = arg3 & 0xFFFE;
+        arg0->unk_08[arg1].unk_14.raw = arg2;
+        arg0->unk_08[arg1].unk_08 = *(s16*)&gSpeciesDataById[arg2 - 1][0x1A] / 100.0f;
+        arg0->unk_08[arg1].unk_10.raw = 0;
+    }
+}
 
 void func_80019BDC(arg1_func_80010CA8*);
 void func_8001833C(unk_func_8001A024* arg0, s32 arg1, BattleMon* arg2, u16 arg3) {
@@ -165,11 +177,46 @@ void PokeIcon_AdjustImageColors(u8* arg0, arg1_func_80010CA8 arg1) {
     // clang-format on
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80018550; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80018550.s")
-#endif
+extern unk_D_8006FF00 D_80064C5C[];
+void func_80018550(unk_func_8001A024* arg0, s32 arg1) {
+    Vec3s sp38;
+    unk_func_8001A024_008* temp_s1;
+    ModelNodeView* sp30;
+
+    temp_s1 = &arg0->unk_08[arg1];
+    sp30 = arg0->unk_04->loadedModel->modelRoot->unk_00[0];
+
+    ModelRenderer_ClearDisplayObject(arg0->unk_10);
+    ModelAnim_ClearTransformChannel(arg0->unk_10);
+
+    if (temp_s1->unk_00 & 2) {
+        sp38.x = (s16)(D_80064C5C[*temp_s1->unk_14.ptr - 1].unk_14 >> 0x10) >> 5;
+        sp38.y = (s16)(D_80064C5C[*temp_s1->unk_14.ptr - 1].unk_14 >> 5) >> 6;
+        sp38.z = (s16)(D_80064C5C[*temp_s1->unk_14.ptr - 1].unk_14 << 5) >> 5;
+        Model_InitDisplayObject(arg0->unk_10, 0, *temp_s1->unk_14.ptr, sp30);
+        ModelAnim_SetAnimation(arg0->unk_10, 0);
+        ModelAnim_SetFrame(arg0->unk_10, D_80064C5C[*temp_s1->unk_14.ptr - 1].unk_01);
+        Vec3f_FromVec3s(&arg0->unk_10->position, &sp38);
+    } else {
+        sp38.x = (s16)(D_80064C5C[temp_s1->unk_14.raw - 1].unk_14 >> 0x10) >> 5;
+        sp38.y = (s16)(D_80064C5C[temp_s1->unk_14.raw - 1].unk_14 >> 5) >> 6;
+        sp38.z = (s16)(D_80064C5C[temp_s1->unk_14.raw - 1].unk_14 << 5) >> 5;
+        Model_InitDisplayObject(arg0->unk_10, 0, temp_s1->unk_14.unk_02, sp30);
+        ModelAnim_SetAnimation(arg0->unk_10, 0);
+        ModelAnim_SetFrame(arg0->unk_10, D_80064C5C[temp_s1->unk_14.raw - 1].unk_01);
+        Vec3f_FromVec3s(&arg0->unk_10->position, &sp38);
+    }
+    arg0->unk_10->node.renderFlags &= ~0x40;
+    arg0->unk_10->node.renderFlags |= 0x80;
+    Vec3f_SetComponentsDuplicate(&arg0->unk_10->scale, temp_s1->unk_08, temp_s1->unk_08, temp_s1->unk_08);
+    func_8000533C(&gDisplayListHead, arg0->unk_08[arg1].unk_0C);
+    GeoRender_AdvanceFrameCounter();
+    GeoRender_SetMode(3);
+    Geo_RenderRootNode(arg0->unk_0C);
+    GfxImage_FillCurrent(&gDisplayListHead, arg0->unk_08[arg1].unk_02);
+    GeoRender_SetMode(1);
+    Geo_RenderRootNode(arg0->unk_0C);
+}
 
 s32 PokeIcon_ProcessNextSlot(unk_func_8001A024* arg0, s32 arg1) {
     s32 i;

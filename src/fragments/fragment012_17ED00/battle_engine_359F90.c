@@ -400,11 +400,33 @@ s32 func_82110EAC(s8 *arg0)
   return 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82110EE4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82110EE4.s")
-#endif
+extern u8 D_82199F6A;
+void func_82110EE4(void) {
+    if (D_82199F6A & 1) {
+        D_8219A3C8[0].unk_2A += D_8219A3C8[0].unk_2A >> 3;
+        if (D_8219A3C8[0].unk_2A >= 0x3E8) {
+            D_8219A3C8[0].unk_2A = 0x3E7;
+        }
+    }
+    if (D_82199F6A & 2) {
+        D_8219A3C8[0].unk_2C += D_8219A3C8[0].unk_2C >> 3;
+        if (D_8219A3C8[0].unk_2C >= 0x3E8) {
+            D_8219A3C8[0].unk_2C = 0x3E7;
+        }
+    }
+    if (D_82199F6A & 4) {
+        D_8219A3C8[0].speed += D_8219A3C8[0].speed >> 3;
+        if (D_8219A3C8[0].speed >= 0x3E8) {
+            D_8219A3C8[0].speed = 0x3E7;
+        }
+    }
+    if (D_82199F6A & 8) {
+        D_8219A3C8[0].unk_30 += D_8219A3C8[0].unk_30 >> 3;
+        if (D_8219A3C8[0].unk_30 >= 0x3E8) {
+            D_8219A3C8[0].unk_30 = 0x3E7;
+        }
+    }
+}
 
 void func_82110FB0(void) {
 }

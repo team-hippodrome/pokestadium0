@@ -173,6 +173,20 @@ void func_8110EE28(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3) {
 
 }
 
+/* First word of a record, split into bit ranges (big-endian, most significant
+ * bit first). The field names only say which bits they are; what they mean is
+ * not established. */
+typedef struct {
+    u32 bits31_28 : 4;
+    u32 bits27_26 : 2;
+    u32 bit25 : 1;
+    u32 bit24 : 1;
+    u32 low24 : 24;
+} PackedWordRec;
+
+extern PackedWordRec *D_81184978[];
+extern s32 D_81185578;
+
 #ifdef NON_MATCHING
 /* TODO: decompile func_8110EE3C; signature not recovered. */
 #else
@@ -220,25 +234,20 @@ s32 func_8110F4D0(Item8110F4D0* arg0, s32 count, Item8110F4D0** list) {
     return count;
 }
 
+typedef struct Entry811858B0 {
+    /* 0x00 */ u8 unk_00[2];
+    /* 0x02 */ u8 unk_02;
+    /* 0x03 */ u8 unk_03;
+    /* 0x04 */ char unk04[8];
+} Entry811858B0; // size = 0xC
+extern Entry811858B0* D_811858B0;
+
 #ifdef NON_MATCHING
 /* TODO: decompile func_8110F518; signature not recovered. */
 #else
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110F518.s")
 #endif
 
-/* First word of a record, split into bit ranges (big-endian, most significant
- * bit first). The field names only say which bits they are; what they mean is
- * not established. */
-typedef struct {
-    u32 bits31_28 : 4;
-    u32 bits27_26 : 2;
-    u32 bit25 : 1;
-    u32 bit24 : 1;
-    u32 low24 : 24;
-} PackedWordRec;
-
-extern PackedWordRec *D_81184978[];
-extern s32 D_81185578;
 
 /*
  * func_8110F64C
@@ -282,13 +291,6 @@ typedef struct Table81184440 {
 } Table81184440;
 extern Table81184440 D_81184440;
 extern s32 D_8118444C;
-typedef struct Entry811858B0 {
-    /* 0x00 */ u8 unk_00[2];
-    /* 0x02 */ u8 unk_02;
-    /* 0x03 */ u8 unk_03;
-    /* 0x04 */ char unk04[8];
-} Entry811858B0; // size = 0xC
-extern Entry811858B0* D_811858B0;
 typedef struct Entry8110D840 {
     /* 0x00 */ char unk00[8];
     /* 0x08 */ s8 unk_08;

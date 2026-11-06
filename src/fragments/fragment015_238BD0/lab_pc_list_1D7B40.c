@@ -72,11 +72,15 @@ void func_890047E4(s8 *arg0, s8 *arg1) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8900480C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_8900480C.s")
-#endif
+void func_8900480C(s8* arg0, s8* arg1) {
+    s32 i;
+
+    for (i = 0; i < 13; i++) {
+        if (M2C_FIELD(arg1 + i * 0x10, s32*, 8) == M2C_FIELD(arg1 + i * 0x10, s32*, 4)) {
+            M2C_FIELD(arg0, u16**, 0x30)[i] |= 0x400;
+        }
+    }
+}
 
 void func_890048EC(s8 *arg0, s32 arg1) {
     u16 *temp_v0;
@@ -120,11 +124,23 @@ void func_89004908(s32 x, s32 y, char* str, UNUSED s32 index, s32 flags) {
     Font_EndTexturedTextRendering();
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89004AD4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_89004AD4.s")
-#endif
+void func_8002A8C4(s8*, s32, s32, s32, s32);
+void func_8002D880(s8*, s32, s32, s32, s32, s32);
+M2C_UNK func_80027804();
+void func_89004AD4(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
+    s32 pad[2];
+
+    func_8002A8C4((s8 *)arg0, arg1, arg2, 0xBC, (arg4 * 0x1C) + 0x14);
+    M2C_FIELD(arg0, s32 *, 0x28) = 0;
+    M2C_FIELD(arg0, s32 *, 0x20) = 0;
+    M2C_FIELD(arg0, s32 *, 0x24) = 0;
+    M2C_FIELD(arg0, s32 *, 0x14) = 0;
+    M2C_FIELD(arg0, Rgba89004908 *, 0x18) = D_8900A5BC;
+    func_80027804((s8 *)arg0 + 0x50, arg3, arg4, arg4);
+    func_8002D880((s8 *)arg0 + 0x2C, (s32)((s8 *)arg0 + 0x50), (s32)((s8 *)arg0 + 0x5C), (s32)func_89004908, 0xB0, 0x1C);
+    M2C_FIELD(arg0, s32 *, 0x34) = arg5;
+    M2C_FIELD(arg0, s32 *, 0x4C) |= 0x10000;
+}
 
 s32 func_8002AE6C();                                /* extern */
 M2C_UNK func_8002D9B8(s8 *, s32, s32, M2C_UNK, s32); /* extern */
@@ -175,11 +191,24 @@ void func_89004E3C(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     M2C_FIELD(arg0, s32*, 0x20) |= 0x10000;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89004EB0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_89004EB0.s")
-#endif
+void func_8002F9D8(void *, s32, s32, s32, s32);
+void func_8002F6C4(void *, s32, s32, s32, s32);
+void func_8002BAB8(s32, s32, s32, s32);
+void func_8001BCB4(s32, s32, s32, s32, void *, s32, s32);
+extern Gfx D_80073450[];
+extern u8 D_04011AB8[];
+void func_89004EB0(s8 *arg0, s32 arg1) {
+    if (arg1 & 0x200) {
+        func_8002F9D8(arg0, M2C_FIELD(arg0, s32 *, 0x80), M2C_FIELD(arg0, s32 *, 0x84) + 0x10, arg1 | 0xFFED, 0);
+    } else {
+        func_8002F6C4(arg0, M2C_FIELD(arg0, s32 *, 0x80), M2C_FIELD(arg0, s32 *, 0x84) + 0x10, arg1 | 0xFFED, 0);
+    }
+    func_8002BAB8(M2C_FIELD(arg0, s32 *, 0x80) + 0x98, M2C_FIELD(arg0, s32 *, 0x84) + 0xBA, M2C_FIELD(M2C_FIELD(arg0, s8 **, 0), s32 *, 8), 2);
+    func_8002BAB8(M2C_FIELD(arg0, s32 *, 0x80) + 0xB3, M2C_FIELD(arg0, s32 *, 0x84) + 0xBA, M2C_FIELD(M2C_FIELD(arg0, s8 **, 0), s32 *, 4), 2);
+    gSPDisplayList(gDisplayListHead++, D_80073450);
+    gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
+    func_8001BCB4(M2C_FIELD(arg0, s32 *, 0x80) + 0xAA, M2C_FIELD(arg0, s32 *, 0x84) + 0xBC, 8, 0xA, D_04011AB8, 8, 0);
+}
 
 s32 func_8002FD8C(void*);
 s32 func_80030230(void*);
@@ -283,11 +312,18 @@ void func_89005EA4(s8* arg0) {
     M2C_FIELD(arg0, s32**, 0x3AC)[M2C_FIELD(arg0, s32*, 0x28C)] = 1;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89005F2C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_89005F2C.s")
-#endif
+
+void func_89005F2C(s8* arg0) {
+    u8 row[0x50];
+    s32* matrix;
+
+    func_80027654(M2C_FIELD(arg0, s32**, 0x31C), row, M2C_FIELD(arg0, s32*, 0x324));
+    matrix = M2C_FIELD(arg0, s32**, 0x294);
+    func_80027700(M2C_FIELD(arg0, s32**, 0x31C), (u8*)(matrix[3] * M2C_FIELD(arg0, s32*, 0x29C) + matrix[0]), M2C_FIELD(arg0, s32*, 0x324));
+    func_80027700(M2C_FIELD(arg0, s32**, 0x294), row, M2C_FIELD(arg0, s32*, 0x29C));
+    M2C_FIELD(arg0, s32**, 0x3AC)[M2C_FIELD(arg0, s32*, 0x290)] = 1;
+    M2C_FIELD(arg0, s32**, 0x3AC)[M2C_FIELD(arg0, s32*, 0x28C)] = M2C_FIELD(arg0, s32**, 0x3AC)[M2C_FIELD(arg0, s32*, 0x290)];
+}
 
 void func_89000048(void*);
 

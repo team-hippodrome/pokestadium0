@@ -442,11 +442,56 @@ void func_82001340(FlagOwner* arg0, Slot54* arg1, s32 arg2) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8200140C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment007_166580/func_8200140C.s")
-#endif
+typedef struct Mon8200140C {
+    /* 0x00 */ s32 flags;
+    /* 0x04 */ u8 species;
+    /* 0x05 */ char unk05[0x28 - 0x5];
+    /* 0x28 */ u8 level;
+    /* 0x29 */ char unk29[0x54 - 0x29];
+} Mon8200140C; // size = 0x54
+typedef struct Team8200140C {
+    /* 0x000 */ char unk000[0x1C];
+    /* 0x01C */ Mon8200140C mons[6];
+    /* 0x214 */
+} Team8200140C; // size = 0x214
+typedef struct TeamList8200140C {
+    /* 0x0 */ Team8200140C* teams;
+    /* 0x4 */ s32 unk4;
+    /* 0x8 */ s32 count;
+} TeamList8200140C;
+typedef struct Species8200140C {
+    /* 0x00 */ char unk00[0xC];
+    /* 0x0C */ u8 flags;
+    /* 0x0D */ char unk0D[0xF];
+} Species8200140C; // size = 0x1C
+extern Species8200140C D_80064C5C[];
+void func_8200140C(TeamList8200140C *arg0, s32 arg1) {
+    s32 i;
+    s32 j;
+    Team8200140C* team = arg0->teams;
+    Mon8200140C* mon;
+
+    for (i = 0; i < arg0->count; i++, team++) {
+        for (mon = team->mons, j = 0; j < 6; j++, mon++) {
+            if (mon->flags & 1) {
+                continue;
+            }
+            if ((mon->species <= 0) || (mon->species >= 0x98)) {
+                mon->flags |= 0x20;
+            } else if (arg1 == 1) {
+                if (!(D_80064C5C[mon->species - 1].flags & 1) || (mon->level < 0x32) || (mon->level >= 0x38)) {
+                    mon->flags |= 2;
+                }
+            } else if (arg1 == 2) {
+                if (!(D_80064C5C[mon->species - 1].flags & 2) || (mon->level <= 0) || (mon->level >= 0x1F)) {
+                    mon->flags |= 4;
+                }
+            } else if (!(D_80064C5C[mon->species - 1].flags & 1)) {
+                mon->flags |= 2;
+            }
+        }
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_82001558; signature not recovered. */
@@ -640,11 +685,45 @@ void func_82002778(SlotFlags* arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8200288C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment007_166580/func_8200288C.s")
-#endif
+typedef struct MenuDef8200288C {
+    /* 0x00 */ s32* items;
+    /* 0x04 */ s32 count;
+    /* 0x08 */ s32 itemCount;
+    /* 0x0C */ s32 itemSize;
+} MenuDef8200288C;
+extern s32 D_8200AC58[];
+extern Color82001CCC D_82008F60;
+void func_82001E20(s32, s32, s32, void*);
+void func_8002E230(void*, s32, s32, s32, MenuDef8200288C*);
+void func_8200288C(s8 *arg0, s32 arg1)
+{
+  s32 x;
+  s32 y;
+  s32 pad[2];
+  MenuDef8200288C def;
+  s32 mode;
+ x = (*((s32 *) (((s8 *) arg0) + 0x14))) + 6; y = (*((s32 *) (((s8 *) arg0) + 0x18))) + 6;
+  mode = 0xFFED;
+  func_82001E20(x, y, 2, arg0 + 0xC8);
+  def.items = D_8200AC58;
+  def.count = 0;
+  def.itemCount = 0x18;
+  def.itemSize = (*((s32 *) (((s8 *) arg0) + 0x48))) * 6;
+  switch (arg1)
+  {
+    case 1:
+      mode = 0xFFEF;
+      break;
+
+    case 2:
+      mode = 0xFFFD;
+      break;
+
+  }
+
+  func_8002E230(arg0 + 0x2F8, x + 0x88, y, mode, &def);
+  func_82001CCC(x, y, D_82008F60);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_82002980; signature not recovered. */
@@ -1112,11 +1191,52 @@ void func_8200573C(void) {
     func_82004B0C(D_8200AD28);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8200579C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment007_166580/func_8200579C.s")
-#endif
+typedef struct Col8200579C { u8 r, g, b, a; } Col8200579C;
+extern s32 D_820090D4;
+extern s32 D_820090D8;
+/*
+ * Second name for D_820090D4. The fade-out store in this function family
+ * (also func_8200579C, func_8900429C, func_891049E8, func_8A101B30) does not
+ * share the counter's address with the load before it, which only happens
+ * when the two accesses name different symbols.
+ */
+extern s32 D_820090D4_2;
+extern M2C_UNK D_82009E10;
+extern s32 D_82008F50;
+M2C_UNK func_80028060(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
+void func_800069CC(void);
+M2C_UNK func_8002C064(M2C_UNK, M2C_UNK, u8, u8, s32);
+void func_8002C8D8(Col8200579C*, Col8200579C, f32);
+s32 func_8200579C(s32 arg0) {
+    Col8200579C sp2C;
+    M2C_UNK *var_a1;
+    s32 n;
+
+    n = D_820090D4;
+    if (n >= 8) {
+        D_820090D8 = 1;
+    }
+    if (D_820090D8 != 0) {
+        n--;
+        D_820090D4_2 = n;
+    }
+    func_800069CC();
+    if (D_8200AD2C == -1) {
+        var_a1 = NULL;
+    } else {
+        var_a1 = &D_8200AD30;
+    }
+    func_80028060(0, var_a1, &D_82009E10, D_8200AD2C);
+    n = D_820090D4;
+    func_8002C8D8(&sp2C, *(Col8200579C*)&D_82008F50, n / (f64)8.0f);
+    func_8002C064(0x38, 0x1E0, sp2C.r, sp2C.g, sp2C.b);
+    if (D_820090D8 == 0) {
+        n = D_820090D4;
+        n++;
+        D_820090D4 = n;
+    }
+    return 0;
+}
 
 M2C_UNK func_8000B1FC();                            /* extern */
 M2C_UNK func_8000B220();                            /* extern */

@@ -138,11 +138,11 @@ void Trade_DrawSolidFillRect(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGB8 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800290F0.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_800291F8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800291F8.s")
-#endif
+void func_800291F8(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 color) {
+    gDPPipeSync(gDisplayListHead++);
+    gDPSetPrimColor(gDisplayListHead++, 0, 0, color.r, color.g, color.b, color.a);
+    gDPFillRectangle(gDisplayListHead++, arg0, arg1, arg0 + arg2, arg1 + arg3);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_800292A8; signature not recovered. */
@@ -216,11 +216,43 @@ void func_8002A354(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color8002A354 arg4) {
     func_800295E8(arg0, arg1, arg2, arg3, D_8007353C);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002A3F8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002A3F8.s")
-#endif
+typedef struct Img8002A3F8 {
+    /* 0x00 */ s32 stride;
+    /* 0x04 */ s32 height;
+    /* 0x08 */ s32 width;
+    /* 0x0C */ u8 *pixels;
+} Img8002A3F8;
+extern Gfx D_80073408[];
+extern Gfx D_80073438[];
+void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
+void func_8002A3F8(Img8002A3F8 *arg0, s32 x, s32 y) {
+    s32 stride;
+    s32 rows;
+    s32 maxRows;
+    u8 *pixels;
+    s32 n;
+    s32 curY;
+
+    gSPDisplayList(gDisplayListHead++, D_80073408);
+    stride = arg0->stride;
+    maxRows = 0x1000 / (stride * 2);
+    rows = arg0->height;
+    pixels = arg0->pixels;
+    curY = y;
+    while (rows > 0) {
+        if (maxRows < rows) {
+            n = maxRows;
+        } else {
+            n = rows;
+        }
+        func_8001B884(x, curY, arg0->width, n, pixels, stride, 0x200000);
+        stride = arg0->stride;
+        rows -= n;
+        curY += n;
+        pixels += n * stride * 2;
+    }
+    gSPDisplayList(gDisplayListHead++, D_80073438);
+}
 
 extern u8 D_04000008[];
 void func_8002A550(s32 x, s32 y, s32 w, s32 h, Color_RGBA8 prim, Color_RGBA8 env) {
@@ -277,7 +309,7 @@ void func_8002A8C4(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4)
  *
  * What the counter measures is not established.
  */
-M2C_UNK func_8003F6AC(M2C_UNK, void *);
+M2C_UNK func_8003F6AC();
 
 s32 func_8002AAC4(void *arg0) {
     s32 var_v1;
@@ -342,11 +374,22 @@ void func_8002AE94(s8* arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 arg4, cha
     M2C_FIELD(arg0, char**, 0x38) = arg5;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002AF04; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002AF04.s")
-#endif
+extern Color_RGBA8 D_80073520;
+void func_8002A0AC(s32, s32, s32, s32, Color_RGBA8);
+void func_80029A64(s32, s32, s32, s32, Color_RGBA8);
+void func_8002AF04(s8* arg0, s32 arg1) {
+    func_8002A32C(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 8), M2C_FIELD(arg0, s32*, 0xC));
+    if ((M2C_FIELD(arg0, s32*, 0x10) & 8) || (arg1 & 0x10)) {
+        func_8002A0AC(M2C_FIELD(arg0, s32*, 0) + 1, M2C_FIELD(arg0, s32*, 4) + 1, M2C_FIELD(arg0, s32*, 8) - 2, M2C_FIELD(arg0, s32*, 0xC) - 2, M2C_FIELD(arg0, Color_RGBA8*, 0x20));
+    } else if (arg1 & 2) {
+        func_80029A64(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 8), M2C_FIELD(arg0, s32*, 0xC), D_80073520);
+    }
+    func_8001AB6C();
+    func_8001A384(M2C_FIELD(arg0, s32*, 0x28), M2C_FIELD(arg0, s32*, 0x34));
+    func_80027F20(M2C_FIELD(arg0, s32*, 0x10) | arg1);
+    func_8001A944(M2C_FIELD(arg0, s32*, 0x2C) + M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 0x30) + M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 0x38));
+    func_8001ABBC();
+}
 
 /*
  * func_8002B018
@@ -574,17 +617,36 @@ s32 Ui_AdjustSteppedRangeSelection(unk_func_8002E128_arg0* arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002B788.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002B940; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002B940.s")
-#endif
+extern Gfx D_80073450[];
+extern u8 *D_80073584[];
+void func_8002B940(s32 x, s32 y, s32 value, s32 digits) {
+    s32 first;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002BAB8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002BAB8.s")
-#endif
+    gSPDisplayList(gDisplayListHead++, D_80073450);
+    gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
+    first = 1;
+    while (digits > 0) {
+        digits--;
+        if (value > 0 || first) {
+            func_8001BCB4(x + digits * 9, y, 8, 0xC, D_80073584[value % 10], 8, 0);
+        }
+        value /= 10;
+        first = 0;
+    }
+}
+
+extern Gfx D_80073450[];
+extern u8 *D_80073584[];
+void func_8002BAB8(s32 x, s32 y, s32 value, s32 digits) {
+
+    gSPDisplayList(gDisplayListHead++, D_80073450);
+    gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
+    while (digits > 0) {
+        digits--;
+        func_8001BCB4(x + digits * 9, y, 8, 0xC, D_80073584[value % 10], 8, 0);
+        value /= 10;
+    }
+}
 
 s32 Ui_GetSelectionDirection(unk_func_8002EBD8_arg0* arg0) {
     s32 var_v1 = 0;
@@ -636,11 +698,18 @@ void func_8002BE24(s32 start, s32 end) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002C064; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002C064.s")
-#endif
+void func_8002C064(s32 start, s32 end, s32 r, s32 g, s32 b) {
+    gDPPipeSync(gDisplayListHead++);
+    gDPSetCycleType(gDisplayListHead++, G_CYC_1CYCLE);
+    gDPSetRenderMode(gDisplayListHead++, 0x0F0A4000, 0);
+    gDPSetTexturePersp(gDisplayListHead++, G_TP_NONE);
+    gDPSetTextureFilter(gDisplayListHead++, G_TF_POINT);
+    gDPSetCombineLERP(gDisplayListHead++, TEXEL0, 0, ENVIRONMENT, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, ENVIRONMENT, 0, 0, 0, 0, TEXEL0);
+    gDPSetEnvColor(gDisplayListHead++, r, g, b, 0xFF);
+    func_8002BE24(start, end);
+    gDPPipeSync(gDisplayListHead++);
+    gDPSetTexturePersp(gDisplayListHead++, G_TP_PERSP);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8002C1B4; signature not recovered. */
@@ -734,17 +803,54 @@ void func_8002CA34(s8 *arg0, s32 arg1, s32 arg2) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002CD7C.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002CE5C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002CE5C.s")
-#endif
+extern u8 D_80073554[];
+void func_8002A8E0(s32* arg0);
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002CEEC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002CEEC.s")
-#endif
+s32 func_8002CE5C(s32* arg0) {
+    s32 t = arg0[8]++;
+
+    t %= 8;
+    if ((arg0[9] == 0) && (t >= 4)) {
+        return 1;
+    }
+    func_8002A8E0(arg0);
+    func_800295E8(arg0[0], arg0[1], arg0[2], arg0[3], D_80073554);
+    return 0;
+}
+
+typedef struct Ent8002D188 { s32 w; s32 h; s32 unk8; } Ent8002D188;
+typedef struct Rgba8002D188 { u8 r, g, b, a; } Rgba8002D188;
+extern Ent8002D188 D_800736D0[];
+u32 func_800566BC(s32);
+extern u8 D_800736E8[];
+extern u8 D_800736EC[];
+void func_8002CEEC(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4) {
+    u32 len;
+    s32 w;
+    s32 h;
+    s32 cw;
+    s32 ch;
+
+    if (arg4 == 0) {
+        len = func_800566BC(arg1) >> 1;
+    } else {
+        len = arg4;
+    }
+    M2C_FIELD(arg0, s32 *, 0x30) = arg2;
+    M2C_FIELD(arg0, s32 *, 0x34) = arg3;
+    cw = D_800736D0[arg2].w;
+    ch = D_800736D0[arg2].h;
+    w = ch * 2 + len * cw;
+    h = ch + (u32)(cw + ch) * arg3;
+    func_8002A8C4(arg0, (0x274 - w) / 2, (0x19C - h) / 2 + 0x38, w + 0xC, h + 0xC);
+    M2C_FIELD(arg0, s32 *, 0x24) = 0;
+    M2C_FIELD(arg0, s32 *, 0x20) = 0;
+    M2C_FIELD(arg0, s32 *, 0x28) = 0;
+    M2C_FIELD(arg0, s32 *, 0x14) = 6;
+    M2C_FIELD(arg0, Rgba8002D188 *, 0x18) = *(Rgba8002D188 *)D_800736E8;
+    M2C_FIELD(arg0, Rgba8002D188 *, 0x1C) = *(Rgba8002D188 *)D_800736EC;
+    M2C_FIELD(arg0, s32 *, 0x2C) = arg1;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8002D024; signature not recovered. */
@@ -762,11 +868,35 @@ s32 func_8002D138(UNUSED s32 arg0) {
     return ret;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002D188; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002D188.s")
-#endif
+extern u8 D_800736F8[];
+extern u8 D_800736FC[];
+u32 func_800566BC(s32);
+void func_8002D188(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4) {
+    u32 len;
+    s32 w;
+    s32 h;
+    s32 cw;
+    s32 ch;
+
+    if (arg4 == 0) {
+        len = func_800566BC(arg1) >> 1;
+    } else {
+        len = arg4;
+    }
+    M2C_FIELD(arg0, s32 *, 0x2C) = arg2;
+    M2C_FIELD(arg0, s32 *, 0x30) = arg3;
+    cw = D_800736D0[arg2].w;
+    ch = D_800736D0[arg2].h;
+    w = ch * 2 + len * cw;
+    h = ch + (u32)(cw + ch) * arg3;
+    func_8002A8C4(arg0, (0x274 - w) / 2, (0x19C - h) / 2 + 0x38, w + 0xC, h + 0xC);
+    M2C_FIELD(arg0, s32 *, 0x20) = 0;
+    M2C_FIELD(arg0, s32 *, 0x24) = 0;
+    M2C_FIELD(arg0, s32 *, 0x14) = 6;
+    M2C_FIELD(arg0, Rgba8002D188 *, 0x18) = *(Rgba8002D188 *)D_800736F8;
+    M2C_FIELD(arg0, Rgba8002D188 *, 0x1C) = *(Rgba8002D188 *)D_800736FC;
+    M2C_FIELD(arg0, s32 *, 0x28) = arg1;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8002D2BC; signature not recovered. */

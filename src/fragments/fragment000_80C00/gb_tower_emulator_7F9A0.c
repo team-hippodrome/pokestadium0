@@ -459,11 +459,38 @@ void GbPak_PrepareProbeBlock(u32* arg0, s32 arg1) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_811035B4.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81103728; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81103728.s")
-#endif
+extern volatile u8 D_81156474;
+extern volatile u8 D_81156475;
+extern volatile s8 D_81156476;
+extern volatile s8 D_81156477;
+extern s8 D_81156478;
+extern s8 D_81156479;
+extern s32 D_81156470;
+extern OSMesgQueue D_81156458;
+void func_800515B0(s32, s32);
+void func_8004CFB0(OSMesgQueue *, s32, s32);
+void func_81103728(s32 arg0) {
+    s32 i;
+
+    while (D_81156475 != 0) {
+    }
+    for (i = 0; i < 4; i++) {
+        if ((1 << i) & arg0) {
+            func_800515B0(*(s32 *)((u8 *)&D_811561C8[i] + 0x50), 0);
+        }
+    }
+    while (D_81156475 != 0) {
+    }
+    func_8004CFB0(&D_81156458, 0xFF, 1);
+    while (D_81156474 != 0) {
+    }
+    D_81156470 = 0;
+    D_81156475 = 0;
+    D_81156476 = 0;
+    D_81156477 = 0;
+    D_81156478 = 0;
+    D_81156479 = 0;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_81103850; signature not recovered. */
@@ -571,11 +598,34 @@ void func_8110445C(u8* arg0, s32 arg1, s32 arg2) {
     func_81103D60((u16*)(arg0 + arg2 * 2 - 0x10), D_811207F8, arg1, 8, 0x10);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81104540; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81104540.s")
-#endif
+extern u16 D_81120FD8[];
+void func_80052100(void*, s32);
+void func_81104540(u16* arg0, s32 arg1, s32 arg2) {
+    u16* src;
+    u32 row;
+    s32 y;
+    s32 x;
+    u16 pixel;
+
+    if (arg1 != 0) {
+        src = &D_81120FD8[arg2 * 0x84];
+        arg1 = 1;
+    } else {
+        src = &D_81120FD8[arg2 * 0x84 + 0x83];
+        arg1 = -1;
+    }
+    for (y = 0; y < 11; y++) {
+        for (x = 0; x < 12; x++) {
+            pixel = *src;
+            if (pixel & 1) {
+                row = y;
+                arg0[row * 0x140 + x + 0x2D2] = pixel;
+            }
+            src += arg1;
+        }
+    }
+    func_80052100(arg0, 0x1E00);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_81104618; signature not recovered. */

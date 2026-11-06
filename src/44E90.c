@@ -68,8 +68,46 @@ s32 func_80044290(void *arg0, void *arg1) {
     return obj != NULL;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_800443C4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800443C4.s")
-#endif
+typedef struct ALLink800443C4 {
+    struct ALLink800443C4* next;
+    struct ALLink800443C4* prev;
+} ALLink800443C4;
+typedef struct PVoice800443C4 {
+    /* 0x00 */ ALLink800443C4 node;
+    /* 0x08 */ s8* vvoice;
+    /* 0x0C */ char unk0C[0x7C];
+    /* 0x88 */ s32 offset;
+} PVoice800443C4;
+typedef struct Synth800443C4 {
+    /* 0x00 */ char unk00[4];
+    /* 0x04 */ ALLink800443C4 pFreeList;
+    /* 0x0C */ ALLink800443C4 pAllocList;
+    /* 0x14 */ ALLink800443C4 pLameList;
+} Synth800443C4;
+void func_8004D600(ALLink800443C4*);
+void func_8004D630(ALLink800443C4*, ALLink800443C4*);
+s32 func_800443C4(void** pvoice, s16 priority) {
+    ALLink800443C4* dl;
+    PVoice800443C4* pv;
+    s32 stolen = 0;
+
+    if ((dl = ((Synth800443C4*)D_80075E44)->pLameList.next) != NULL) {
+        *pvoice = dl;
+        func_8004D600(dl);
+        func_8004D630(dl, &((Synth800443C4*)D_80075E44)->pAllocList);
+    } else if ((dl = ((Synth800443C4*)D_80075E44)->pFreeList.next) != NULL) {
+        *pvoice = dl;
+        func_8004D600(dl);
+        func_8004D630(dl, &((Synth800443C4*)D_80075E44)->pAllocList);
+    } else {
+        for (dl = ((Synth800443C4*)D_80075E44)->pAllocList.next; dl != NULL; dl = dl->next) {
+            pv = (PVoice800443C4*)dl;
+            if (M2C_FIELD(pv->vvoice, s16*, 0x16) <= priority && pv->offset == 0) {
+                *pvoice = pv;
+                priority = M2C_FIELD(pv->vvoice, s16*, 0x16);
+                stolen = 1;
+            }
+        }
+    }
+    return stolen;
+}

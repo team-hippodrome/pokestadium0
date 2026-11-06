@@ -76,9 +76,100 @@ u16 func_81112650(u8** stream, u8 kind) {
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_811126B8.s")
 
+typedef struct Item8111539C {
+    /* 0x00 */ u32 active : 1;
+    /* 0x00 */ u32 unk00 : 31;
+    /* 0x04 */ char unk04[0x48];
+    /* 0x4C */ void* owners[2];
+} Item8111539C;
+extern Item8111539C D_81184850;
+
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81112894.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_811129E0.s")
+extern struct GbEmuListZ D_81184928;
+typedef struct Pair811129E0 { u8 a; u8 pad[3]; s32 b; } Pair811129E0;
+typedef struct Part811129E0 {
+    u8 b80 : 1;
+    u8 b40 : 1;
+    u8 b20 : 1;
+    u8 b10 : 1;
+    u8 b08 : 1;
+    u8 b04 : 1;
+    u8 b02 : 1;
+    u8 b01 : 1;
+    u8 unk01;
+    u8 unk02;
+    u8 unk03;
+    u8 unk04;
+    u8 pad05;
+    u8 unk06;
+    u8 pad07;
+    u8 unk08;
+    char pad09[0xF];
+    Pair811129E0 unk18;
+    char pad20[2];
+    s16 unk22;
+    f32 unk24;
+    f32 unk28;
+    f32 unk2C;
+    char pad30[0x10];
+    s16 unk40;
+    s16 unk42;
+    s16 unk44;
+    s32 unk48;
+    s32 unk4C;
+    char pad50[4];
+    void* owner;
+    char pad58[0x18];
+    u8 unk70;
+} Part811129E0;
+typedef struct Owner811129E0 {
+    char pad0[0x50];
+    Part811129E0* slots[11];
+    Pair811129E0 unk7C;
+} Owner811129E0;
+s32 func_81112EEC(s8*);
+void func_81111090();
+s32 func_811129E0(Owner811129E0* arg0, s32 arg1) {
+    Part811129E0* p;
+    s32 pad;
+    if (arg0->slots[arg1] == NULL) {
+        arg0->slots[arg1] = (Part811129E0*)func_81112EEC((s8*)&D_81184928);
+        if (arg0->slots[arg1] == NULL) {
+            arg0->slots[arg1] = NULL;
+            return -1;
+        }
+    } else {
+        func_81111090(arg0->slots[arg1]);
+    }
+    p = arg0->slots[arg1];
+    p->owner = arg0;
+    p->unk18 = arg0->unk7C;
+    p->b80 = 1;
+    p->b20 = 0;
+    p->b10 = 0;
+    p->b40 = 0;
+    p->b02 = 0;
+    p->unk18.a = 0;
+    p->b01 = 0;
+    p->unk01 = 0x40;
+    p->unk08 = 0;
+    p->unk70 = 0;
+    p->unk03 = 0;
+    p->unk04 = 0x80;
+    p->unk06 = 0x40;
+    p->unk22 = 0;
+    p->unk40 = 0;
+    p->unk42 = 0;
+    p->unk44 = 0;
+    p->unk48 = 0;
+    p->unk4C = 0;
+    p->unk02 = 0xFF;
+    p->unk24 = 1.0f;
+    p->unk28 = 1.0f;
+    p->unk2C = 0.0f;
+    return 0;
+}
 
 void func_81112AF8(Particle31FlagsA* arg0) {
     if (arg0 != NULL) {
@@ -109,7 +200,20 @@ void Particle31_ResetAllSlots(DisplayObject* arg0) {
     ((Particle31Flags*)arg0)->b40 = 1;
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81112BF0.s")
+void func_81112BF0(s8* arg0, u16 mask) {
+    s32 i;
+    s8* item;
+
+    for (i = 0; i < 16; i++) {
+        if (mask & 1) {
+            item = M2C_FIELD(arg0, s8**, 0x34 + i * 4);
+            M2C_FIELD(item, u8*, 7) = M2C_FIELD(arg0, u8*, 5);
+            M2C_FIELD(item, u8*, 3) = M2C_FIELD(arg0, u8*, 3);
+            M2C_FIELD(item, u8*, 2) = M2C_FIELD(arg0, u8*, 2);
+        }
+        mask = (s32)mask >> 1;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81112CE8.s")
 
@@ -224,7 +328,50 @@ u16 func_81112FFC(u8** arg0) {
     return v;
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8111303C.s")
+typedef struct Particle303C {
+    u32 b80 : 1;
+    u32 b40 : 1;
+    u32 b20 : 1;
+    u32 b10 : 1;
+    u32 rest : 28;
+    char pad04[0x3C];
+    s16 unk40;
+    s16 unk42;
+    char pad44[4];
+    s32 unk48;
+} Particle303C;
+void func_81113140();
+s32 func_811132E4();
+s32 func_81113A44();
+s32 func_81113650();
+s32 func_811131CC();
+void func_8111303C(Particle303C* arg0) {
+    s32 ret;
+    if (arg0->b80) {
+        if (arg0->unk40 >= 2) {
+            arg0->unk40--;
+            if (!arg0->b20 && arg0->unk42 >= arg0->unk40) {
+                func_81111090((Particle31FlagsA*)arg0);
+                arg0->b20 = 1;
+            }
+        } else {
+            func_81113140(arg0);
+            ret = func_811132E4(arg0);
+            if (ret != -1) {
+                ret = func_81113A44(arg0, ret);
+                if (ret != -1) {
+                    ret = func_81113650(arg0, ret);
+                }
+                if (ret != -1) {
+                    func_811131CC(arg0, ret);
+                }
+                if (arg0->b20 == 1 && (arg0->unk48 != 0 || arg0->b10)) {
+                    func_81111090((Particle31FlagsA*)arg0);
+                }
+            }
+        }
+    }
+}
 
 void func_81113140(Particle3140* arg0) {
     if (!arg0->b10) {
@@ -339,11 +486,147 @@ void func_81115254(s8 *arg0)
   }
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_811152A4.s")
+typedef struct Chan811152A4 {
+    /* 0x00 */ u8 bit80 : 1;
+    /* 0x00 */ u8 bits : 5;
+    /* 0x00 */ u8 bit02 : 1;
+    /* 0x00 */ u8 bit01 : 1;
+    /* 0x01 */ u8 unk01;
+    /* 0x02 */ u8 unk02;
+    /* 0x03 */ char unk03[5];
+    /* 0x08 */ s16 unk08;
+    /* 0x0A */ s16 unk0A;
+    /* 0x0C */ s16 unk0C;
+    /* 0x0E */ s16 unk0E;
+    /* 0x10 */ s16 unk10;
+    /* 0x12 */ s16 unk12;
+    /* 0x14 */ s16 unk14;
+    /* 0x16 */ char unk16[6];
+    /* 0x1C */ f32 unk1C;
+    /* 0x20 */ f32 unk20;
+    /* 0x24 */ f32 unk24;
+    /* 0x28 */ f32 unk28;
+    /* 0x2C */ f32 unk2C;
+    /* 0x30 */ char unk30[4];
+    /* 0x34 */ void* items[16];
+    /* 0x74 */ char unk74[0x1C];
+    /* 0x90 */ void* unk90;
+    /* 0x94 */ void* unk94;
+    /* 0x98 */ char unk98[0x44];
+    /* 0xDC */ s32 unkDC;
+    /* 0xE0 */ char unkE0[0x7C];
+} Chan811152A4; // size = 0x15C
+extern u8 D_81136978[];
+extern u8 D_81136988[];
+void func_81112894(void*);
+void func_811152A4(s32 arg0) {
+    Chan811152A4* chan = (Chan811152A4*)&D_81184668[arg0];
+    s32 i;
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8111539C.s")
+    func_81112E00((u8*)chan);
+    chan->bit02 = 0;
+    chan->unk10 = 0;
+    chan->unk01 = 1;
+    chan->unk12 = 0;
+    chan->unk14 = 0;
+    chan->unk0A = 0;
+    chan->unk08 = 0x1680;
+    chan->unk0C = 0;
+    chan->unk0E = 0;
+    chan->unk02 = 0;
+    chan->unk90 = D_81136978;
+    chan->unk94 = D_81136988;
+    chan->unkDC = 0;
+    chan->unk1C = 1.0f;
+    chan->unk2C = 1.0f;
+    chan->unk20 = 0.0f;
+    chan->unk24 = 0.0f;
+    chan->unk28 = 0.5f;
+    for (i = 0; i < 16; i++) {
+        func_81112894(chan->items[i]);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81115480.s")
+typedef struct Rec8111539C {
+    /* 0x00 */ char unk00[0x34];
+    /* 0x34 */ Item8111539C* items[16];
+    /* 0x74 */ char unk74[0xE8];
+} Rec8111539C;
+extern u8 D_811842C0[];
+extern Item8111539C D_81184850;
+void* func_811097E8(void*, s32);
+void func_8111539C(s32 arg0) {
+    Rec8111539C* rec = (Rec8111539C*)&D_81184668[arg0];
+    s32 i;
+    s32 j;
+    Item8111539C* item;
+
+    for (i = 0; i < 16; i++) {
+        rec->items[i] = func_811097E8(D_811842C0, 0xD4);
+        if (rec->items[i] == NULL) {
+            rec->items[i] = &D_81184850;
+        } else {
+            item = rec->items[i];
+            item->active = 0;
+            item->owners[0] = rec;
+            for (j = 0; j < 1; j++) {
+                item->owners[j + 1] = NULL;
+            }
+        }
+    }
+}
+
+typedef struct Emu81115480 {
+    u8 b80 : 1;
+    u8 rest : 7;
+    char pad01[0x53];
+    s32 unk54;
+    char pad58[0x2C];
+} Emu81115480; // size = 0x84
+typedef struct Rec81115480 {
+    u8 b80 : 1;
+    u8 b40 : 1;
+    u8 b20 : 1;
+    u8 b10 : 1;
+    u8 b08 : 1;
+    u8 b04 : 1;
+    u8 b02 : 1;
+    u8 b01 : 1;
+    u8 pad01[2];
+    u8 unk03;
+    char pad04[0x30];
+    Item8111539C* items[16];
+    char pad74[0x24];
+    u8 unk98[0xBC];
+    s8 unk154;
+    char pad155[7];
+} Rec81115480; // size = 0x15C
+void func_811110E0(void*);
+void func_81115480(void) {
+    s32 i;
+    s32 j;
+    Rec81115480* rec;
+
+    func_81112F2C();
+    for (i = 0; i < 1; i++) {
+        ((Emu81115480*)D_811847C8)[i].unk54 = 0;
+        ((Emu81115480*)D_811847C8)[i].b80 = 0;
+    }
+    for (i = 0; i < 1; i++) {
+        rec = (Rec81115480*)&D_81184668[i];
+        for (j = 0; j < 16; j++) {
+            rec->items[j] = &D_81184850;
+        }
+        rec->unk154 = -1;
+        rec->unk03 = 0x60;
+        rec->b80 = 0;
+        rec->b20 = 0;
+        rec->b08 = 0;
+        rec->b10 = 0;
+        func_811110E0(rec->unk98);
+        func_811152A4(i);
+    }
+}
 
 void func_811155A0(void) {
     func_812103F0_jp();

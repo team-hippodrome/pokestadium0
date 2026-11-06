@@ -26,11 +26,38 @@
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110776C.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_811077FC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_811077FC.s")
-#endif
+typedef struct Voice811077FC {
+    /* 0x00 */ u32 active : 1;
+    /* 0x00 */ u32 dirty : 1;
+    /* 0x00 */ u32 unk00 : 30;
+    /* 0x04 */ char unk04[2];
+    /* 0x06 */ u8 unk06;
+    /* 0x07 */ char unk07[0x11];
+} Voice811077FC; // size = 0x18
+typedef struct Rec811077FC {
+    /* 0x00 */ char unk00[0xB4];
+    /* 0xB4 */ Voice811077FC voice;
+} Rec811077FC; // size = 0xCC
+extern Rec811077FC* D_81184664;
+extern Voice811077FC* D_81184288;
+extern s32 D_811858E8;
+void func_811077FC(u32 arg0) {
+    s32 i;
+    Voice811077FC* src;
+    Voice811077FC* dst;
+
+    for (i = 0; i < D_811858E8; i++) {
+        src = &D_81184664[i].voice;
+        dst = &D_81184288[D_811858E8 * arg0 + i];
+        if (src->active) {
+            *dst = *src;
+            src->dirty = 0;
+        } else {
+            dst->active = 0;
+        }
+        src->unk06 = 0;
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_811078D8; signature not recovered. */

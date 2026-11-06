@@ -172,11 +172,34 @@ void func_8A100620(void* arg0, s32 arg1, s32 arg2) {
     M2C_FIELD(arg0, Rgba8A100620*, 0x1C) = D_8A1057E4;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8A10068C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment018_262620/func_8A10068C.s")
-#endif
+s32 func_8002AE6C();
+s32 func_800233AC(s32);
+s32 func_800234EC(s32);
+s32 func_8002362C(s32);
+extern u8 D_800734A8[4];
+extern char D_8A12FC6C[];
+extern char D_8A12FC7C[];
+extern char D_8A12FC8C[];
+extern char D_8A12FC9C[];
+extern char D_8A12FCA0[];
+extern char D_8A12FCA4[];
+void func_8A10068C(void* arg0) {
+    if (func_8002AE6C() == 0) {
+        Font_BeginTranslucentTextRendering();
+        Font_SetActive(8, 0);
+        Gfx_SetEnvColor(0x9C, 0xCC, 0x98, 0xFF);
+        Font_Printf(M2C_FIELD(arg0, s32*, 0) + 0xE, M2C_FIELD(arg0, s32*, 4) + 0xE, D_8A12FC6C);
+        Gfx_SetEnvColor(0x98, 0xCC, 0xCC, 0xFF);
+        Font_Printf(M2C_FIELD(arg0, s32*, 0) + 0xE, M2C_FIELD(arg0, s32*, 4) + 0x2A, D_8A12FC7C);
+        Gfx_SetEnvColor(0xCC, 0x98, 0x98, 0xFF);
+        Font_Printf(M2C_FIELD(arg0, s32*, 0) + 0xE, M2C_FIELD(arg0, s32*, 4) + 0x46, D_8A12FC8C);
+        Gfx_SetEnvColor(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
+        Font_Printf(M2C_FIELD(arg0, s32*, 0) + 0xAE, M2C_FIELD(arg0, s32*, 4) + 0xE, D_8A12FC9C, func_800233AC(D_8A12FFB0));
+        Font_Printf(M2C_FIELD(arg0, s32*, 0) + 0xAE, M2C_FIELD(arg0, s32*, 4) + 0x2A, D_8A12FCA0, func_800234EC(D_8A12FFB0));
+        Font_Printf(M2C_FIELD(arg0, s32*, 0) + 0xAE, M2C_FIELD(arg0, s32*, 4) + 0x46, D_8A12FCA4, func_8002362C(D_8A12FFB0));
+        Font_EndTexturedTextRendering();
+    }
+}
 
 extern Color_RGBA8 D_8A1057D4;
 void func_8002A0AC(s32, s32, s32, s32, Color_RGBA8);
@@ -193,11 +216,21 @@ void func_8A100808(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4) {
     Font_EndTexturedTextRendering();
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8A1008A4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment018_262620/func_8A1008A4.s")
-#endif
+extern M2C_UNK D_8A1057E8;
+M2C_UNK func_80027804();
+void func_8A1008A4(void* arg0, s32 arg1, s32 arg2) {
+    s32 pad;
+
+    func_8002A8C4((s8*)arg0, arg1, arg2, 0xB4, 0xA8);
+    M2C_FIELD(arg0, s32*, 0x24) = 0;
+    M2C_FIELD(arg0, s32*, 0x20) = 0;
+    M2C_FIELD(arg0, s32*, 0x28) = 0;
+    M2C_FIELD(arg0, s32*, 0x14) = 0x1000;
+    M2C_FIELD(arg0, Color_RGBA8*, 0x18) = D_8A1057D4;
+    func_80027804((s8 *)arg0 + 0x58, &D_8A1057E8, 4, 4);
+    func_8002D880((s8 *)arg0 + 0x2C, (s8 *)arg0 + 0x58, (s8 *)arg0 + 0x50, &func_8A100808, 0xA8, 0x24);
+    M2C_FIELD(arg0, s32 *, 0x4C) = (s32) (M2C_FIELD(arg0, s32 *, 0x4C) | 0x10000);
+}
 
 s32 func_8002AE6C();                                /* extern */
 M2C_UNK func_8002D9B8(s8 *, s32, s32, s32, s32);  /* extern */
@@ -269,11 +302,28 @@ void func_8A100BEC(s32 arg0, s32 arg1, s32 arg2) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment018_262620/func_8A100C50.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8A100F20; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment018_262620/func_8A100F20.s")
-#endif
+typedef struct Rgba8A100F20 { u8 r, g, b, a; } Rgba8A100F20;
+void func_8002A550(s32, s32, s32, s32, Rgba8A100F20, Rgba8A100F20);
+void func_8001A944(s32, s32, const char*, ...);
+s32 func_800231C8(s32, s32);
+extern u8 D_8A1057F8[];
+extern u8 D_8A1057FC[];
+extern char D_8A12FD1C[];
+extern s32 D_8A12FFB8;
+void func_8A100F20(s32 arg0, s32 arg1) {
+    u8 *entry = (u8 *)&D_80064C5C + D_8A12FFB8 * 0x1C;
+
+    func_8002A550(arg0, arg1, 0x21C, 0x78, *(Rgba8A100F20 *)D_8A1057F8, *(Rgba8A100F20 *)D_8A1057FC);
+    func_8001AB6C();
+    func_8001A384(0x10, 0);
+    func_8001AB2C(0x24);
+    if (func_800231C8(D_8A12FFB0, entry[0]) >= 2) {
+        func_8001A944(arg0 + 0x2A, arg1 + 0xC, M2C_FIELD(entry, char **, 0x18));
+    } else {
+        func_8001A944(arg0 + 0x2A, arg1 + 0xC, D_8A12FD1C);
+    }
+    func_8001ABBC();
+}
 
 s32 func_80029658(s32, s32, s32, void*);
 s32 func_80029864(s32, s32, s32, void*);
@@ -348,7 +398,7 @@ void func_8A101154(void* arg0) {
 M2C_UNK func_800069CC();                            /* extern */
 M2C_UNK func_80028060(M2C_UNK, M2C_UNK *, M2C_UNK *, s32); /* extern */
 M2C_UNK func_8A1003D0(M2C_UNK *, M2C_UNK);          /* extern */
-M2C_UNK func_8A10068C(M2C_UNK *);                   /* extern */
+void func_8A10068C(void*);
 extern M2C_UNK D_8A12FD2C;
 extern M2C_UNK D_8A12FFC0;
 extern M2C_UNK D_8A130174;
@@ -379,11 +429,47 @@ s32 func_8A1011A4(s32 arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment018_262620/func_8A10122C.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8A1013C0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment018_262620/func_8A1013C0.s")
-#endif
+M2C_UNK func_8003F6AC(M2C_UNK);
+M2C_UNK func_8003BD3C(s32);
+extern s32 D_8A12FFB8;
+extern u8 D_8A130204[];
+s32 func_8A1013C0(s32 arg0, s32 *arg1) {
+    s32 ret = 0;
+
+    if (arg0 == 1) {
+        if (M2C_FIELD(&D_8A12FFC0, u16 **, 0x210)[M2C_FIELD(&D_8A12FFC0, s32 *, 0x214)] & 1) {
+            func_8003F6AC(8);
+        } else {
+            switch (M2C_FIELD(&D_8A12FFC0, s32 *, 0x214)) {
+                case 0:
+                    func_8003BD3C(D_8A12FFB8 + 1);
+                    func_8A1009E0(D_8A130204, 0x2C, 0x54);
+                    ret = 2;
+                    *arg1 = 3;
+                    break;
+                case 1:
+                    ret = 1;
+                    *arg1 = 4;
+                    break;
+                case 2:
+                    func_8003F6AC(2);
+                    ret = 1;
+                    *arg1 = 5;
+                    break;
+                case 3:
+                    func_8003F6AC(3);
+                    ret = 2;
+                    *arg1 = 0;
+                    break;
+            }
+        }
+    } else if (arg0 == -1) {
+        func_8003F6AC(3);
+        ret = 1;
+        *arg1 = 1;
+    }
+    return ret;
+}
 
 /*
  * func_8A1014EC
@@ -644,11 +730,49 @@ s32 Pokedex_ShowAreaMapScreen(void) {
     return var_s0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8A101B30; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment018_262620/func_8A101B30.s")
-#endif
+typedef struct Col8A101B30 { u8 r, g, b, a; } Col8A101B30;
+extern s32 D_8A105800;
+extern s32 D_8A105804;
+/*
+ * Second name for D_8A105800. The fade-out store in this function family
+ * (also func_8200579C, func_8900429C, func_891049E8, func_8A101B30) does not
+ * share the counter's address with the load before it, which only happens
+ * when the two accesses name different symbols.
+ */
+extern s32 D_8A105800_2;
+extern M2C_UNK D_8A12FD3C;
+M2C_UNK func_80028060(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
+void func_8002C8D8(Col8A101B30*, Col8A101B30, f32);
+s32 func_8A101B30(u8 arg0) {
+    Col8A101B30 sp2C;
+    M2C_UNK *var_a1;
+    s32 n;
+
+    n = D_8A105800;
+    if (n >= 8) {
+        D_8A105804 = 1;
+    }
+    if (D_8A105804 != 0) {
+        n--;
+        D_8A105800_2 = n;
+    }
+    func_800069CC();
+    if (D_8A130230 == -1) {
+        var_a1 = NULL;
+    } else {
+        var_a1 = &D_8A130238;
+    }
+    func_80028060(0, var_a1, &D_8A12FD3C, D_8A130230);
+    n = D_8A105800;
+    func_8002C8D8(&sp2C, *(Col8A101B30*)&D_8A1057D0, n / (f64)8.0f);
+    func_8002C064(0x38, 0x1E0, sp2C.r, sp2C.g, sp2C.b);
+    if (D_8A105804 == 0) {
+        n = D_8A105800;
+        n++;
+        D_8A105800 = n;
+    }
+    return 0;
+}
 
 void Pokedex_RunEntryFlow(void) {
     s32 var_v0 = 1;

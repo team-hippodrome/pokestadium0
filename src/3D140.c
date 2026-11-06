@@ -158,17 +158,74 @@ s32 n_alEnvmixerParam(N_PVoice* filter, s32 paramID, void* param) {
     return 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8003AECC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8003AECC.s")
-#endif
+s16 func_8003B0F8(f64 vol, f64 tgt, s32 count, u16* ratel);
+extern s16 D_80075D00[];
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8003B0F8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8003B0F8.s")
-#endif
+Acmd* func_8003AECC(N_PVoice* filter, s16* inp, s16* outp, s32 outCount, Acmd* p) {
+    Acmd* ptr = p;
+    N_PVoice* e = filter;
+    s16* inpp = N_AL_RESAMPLER_OUT;
+
+    if (e->em_motion != AL_PLAYING || !outCount)
+        return ptr;
+
+    ptr = n_alResamplePull(e, inp, p);
+
+    if (e->em_first) {
+        e->em_first = 0;
+
+        e->em_ltgt = (e->em_volume * D_80075D00[e->em_pan]) >> 15;
+        e->em_lratm = func_8003B0F8((f64)e->em_cvolL, (f64)e->em_ltgt, e->em_segEnd, &(e->em_lratl));
+        e->em_rtgt = (e->em_volume * D_80075D00[128 - e->em_pan - 1]) >> 15;
+        e->em_rratm = func_8003B0F8((f64)e->em_cvolR, (f64)e->em_rtgt, e->em_segEnd, &(e->em_rratl));
+
+        // clang-format off
+        // needs to be on same line.
+        n_aSetVolume(ptr++, A_RATE, e->em_ltgt, e->em_lratm, e->em_lratl); n_aSetVolume(ptr++, A_LEFT | A_VOL, e->em_cvolL, e->em_dryamt, e->em_wetamt); n_aSetVolume(ptr++, A_RIGHT | A_VOL, e->em_rtgt, e->em_rratm, e->em_rratl); n_aEnvMixer(ptr++, A_INIT, e->em_cvolR, osVirtualToPhysical(e->em_state));
+        // clang-format on
+    } else {
+        n_aEnvMixer(ptr++, A_CONTINUE, 0, osVirtualToPhysical(e->em_state));
+    }
+
+    *inp += (FIXED_SAMPLE << 1);
+    e->em_delta += FIXED_SAMPLE;
+
+    return ptr;
+}
+
+s16 func_8003B0F8(f64 vol, f64 tgt, s32 count, u16* ratel) {
+    s16 s, tmp;
+    f64 invn, a, f;
+
+    if (count == 0) {
+        if (tgt >= vol) {
+            *ratel = 0xffff;
+            return 0x7fff;
+        } else {
+            *ratel = 0;
+            return 0;
+        }
+    }
+
+    invn = 1.0 / count;
+
+    if (tgt < 1.0)
+        tgt = 1.0;
+    if (vol <= 0.0)
+        vol = 1.0;
+
+    a = (tgt - vol) * invn * 8.0;
+    s = (s16)a;
+    f = a - (f64)s;
+    s -= 1;
+    f += 1.0;
+    tmp = (s16)f;
+    s += tmp;
+    f -= (f64)tmp;
+
+    *ratel = (u16)(0xffff * f);
+    return s;
+}
 
 s16 func_8003B280(s16 arg0, s32 arg1, s16 arg2, u16 arg3) {
     s32 delta;
@@ -182,11 +239,67 @@ s16 func_8003B280(s16 arg0, s32 arg1, s16 arg2, u16 arg3) {
     return arg0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8003B2E0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8003B2E0.s")
-#endif
+extern s32 D_80075E00;
+extern s32 D_800B3F94;
+void func_8003B2E0(ALSynConfig* c, amConfig* amc, u32 num_dma_buffers, s32 arg3, s32 arg4) {
+    u32 i;
+    f32 fsize;
+
+    D_800B3FC0[0] = osCartRomInit();
+    dmaBufferLen = arg3;
+
+    dmaState.initialized = FALSE;
+
+    c->dmaproc = __amDmaNew;
+    c->outputRate = amc->outputRate;
+
+    i = num_dma_buffers;
+    i <<= 1;
+    dmaBuffs = alHeapAlloc(c->heap, 1, num_dma_buffers * sizeof(AMDMABuffer));
+    audDMAIOMesgBuf = alHeapAlloc(c->heap, 1, i * sizeof(OSIoMesg));
+    audDMAMessageBuf = alHeapAlloc(c->heap, 1, i * sizeof(OSMesg));
+
+    fsize = (f32)amc->framesPerField * c->outputRate / arg4;
+    frameSize = (s32)fsize;
+    if (frameSize < fsize) {
+        frameSize++;
+    }
+
+    frameSize = ((frameSize / SAMPLES) + 1) * SAMPLES;
+    minFrameSize = frameSize - SAMPLES;
+    maxFrameSize = frameSize + 0x120;
+
+    alInit(&__am.g, c);
+
+    dmaBuffs[0].node.prev = NULL;
+    dmaBuffs[0].node.next = NULL;
+
+    for (i = 0; i < num_dma_buffers - 1; i++) {
+        alLink(&dmaBuffs[i + 1].node, &dmaBuffs[i].node);
+        dmaBuffs[i].ptr = alHeapAlloc(c->heap, 1, arg3);
+    }
+
+    dmaBuffs[i].ptr = alHeapAlloc(c->heap, 1, arg3);
+
+    for (i = 0; i < 2; i++) {
+        __am.ACMDList[i] = alHeapAlloc(c->heap, 1, amc->maxACMDSize * sizeof(Acmd));
+    }
+
+    maxRSPCmds = amc->maxACMDSize;
+
+    for (i = 0; i < 3; i++) {
+        __am.audioInfo[i] = alHeapAlloc(c->heap, 1, sizeof(AudioInfo));
+        __am.audioInfo[i]->msg.done.type = 0;
+        __am.audioInfo[i]->msg.done.info = __am.audioInfo[i];
+        __am.audioInfo[i]->data = alHeapAlloc(c->heap, 1, maxFrameSize * 4);
+    }
+
+    osCreateMesgQueue(&audDMAMessageQ, audDMAMessageBuf, num_dma_buffers << 1);
+
+    D_800B3F94 = c->outputRate;
+    D_80075E00 = 1;
+    D_800B3CE0 = 0;
+}
 
 s32 __amDMA(s32 addr, s32 len, void* state) {
     void* foundBuffer;
@@ -264,11 +377,91 @@ s32 __amDMA(s32 addr, s32 len, void* state) {
     return osVirtualToPhysical(foundBuffer) + delta;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8003B868; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8003B868.s")
-#endif
+extern u8 D_80075E0C;
+extern u8 D_80077534;
+extern s32 D_800FD68C;
+extern long long int D_8005E120[];
+extern long long int D_8007FCF0[];
+void func_8003BDB0(void);
+OSTask* func_8003B868(OSTask* arg0) {
+    s16* audioPtr;
+    Acmd* cmdp;
+    s32 cmdLen;
+    s32 samplesLeft;
+    OSTask sp38;
+    s32 pad[2];
+    AudioInfo* info;
+
+    info = __am.audioInfo[audFrameCt % 3];
+    audioPtr = osVirtualToPhysical(info->data);
+    samplesLeft = HW_REG(AI_LEN_REG, u32) >> 2;
+
+    if ((D_80075E0C == 0) && (lastInfo != NULL)) {
+        osAiSetNextBuffer(lastInfo->data, lastInfo->frameSamples << 2);
+    }
+
+    if ((samplesLeft >= 0x1C9) && (min_only_one != 0)) {
+        info->frameSamples = minFrameSize;
+        min_only_one = 0;
+    } else {
+        info->frameSamples = frameSize;
+        min_only_one = 1;
+    }
+
+    __clearAudioDMA();
+
+    if (D_80075E20 != 0) {
+        D_800B3CEC = LeoTestUnitReady(&D_800B3CE8);
+    }
+
+    cmdp = alAudioFrame(__am.ACMDList[curAcmdList], &cmdLen, audioPtr, info->frameSamples);
+    sp38.t.data_ptr = __am.ACMDList[curAcmdList];
+    sp38.t.data_size = (cmdp - __am.ACMDList[curAcmdList]) * sizeof(Acmd);
+
+    sp38.t.type = M_AUDTASK;
+    sp38.t.ucode_boot = &rspbootTextStart;
+    sp38.t.ucode_boot_size = (s32)_binary_assets_us_F3DEX2_bin_start - (s32)rspbootTextStart;
+    sp38.t.flags = 0;
+    sp38.t.ucode = D_8005E120;
+    sp38.t.ucode_data = D_8007FCF0;
+    sp38.t.ucode_data_size = SP_UCODE_DATA_SIZE;
+    sp38.t.dram_stack = NULL;
+    sp38.t.dram_stack_size = 0;
+    sp38.t.output_buff = NULL;
+    sp38.t.output_buff_size = 0;
+    sp38.t.yield_data_ptr = NULL;
+    sp38.t.yield_data_size = 0;
+
+    curAcmdList ^= 1;
+    lastInfo = __am.audioInfo[audFrameCt % 3];
+    audFrameCt++;
+
+    if (D_80075E10[0] != 0) {
+        func_8003BDB0();
+    }
+
+    if (D_80075E04[0] != 0) {
+        GbMusic_UpdateChannels();
+        if (lastInfo != NULL) {
+            GbAudio_GenerateSamples(lastInfo->data, 0, ((audFrameCt % 3) == 0) ? 0x216 : 0x215, 0);
+        }
+    }
+
+    D_800FD68C = 0;
+    if (D_80077534 != 0) {
+        D_80077534--;
+    }
+
+    if (D_80075E0C != 0) {
+        sp38.t.data_size = 0;
+    }
+
+    Audio_UpdateBattleAudioFrame();
+
+    *arg0 = sp38;
+
+    return arg0;
+}
 
 ALDMAproc __amDmaNew(AMDMAState** state) {
     if (!dmaState.initialized) {
@@ -400,7 +593,7 @@ s32 Cry_IsPlaying(void) {
 
 s32 func_800384D8();                                /* extern */
 M2C_UNK func_80058100(s32);                         /* extern */
-extern s8 D_80075E0C;
+extern u8 D_80075E0C;
 extern s32 D_80075E30;
 extern s8 D_800B3F78;
 extern s32 D_800B3F94;

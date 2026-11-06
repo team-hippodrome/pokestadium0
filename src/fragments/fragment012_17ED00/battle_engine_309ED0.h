@@ -132,7 +132,7 @@ s32 BattleScene_PrepareResidualStatusPresentation(void);
 
 void BattleScene_UpdateActiveOwnerPointers(void);
 
-M2C_UNK func_800419F8(M2C_UNK);                     /* extern */
+M2C_UNK func_800419F8();                     /* extern */
 M2C_UNK func_82108C0C(s32);                         /* extern */
 M2C_UNK func_821218AC(s32, s32, f32, s32, f32, s32, s32); /* extern */
 M2C_UNK func_82121D78(s32, M2C_UNK, M2C_UNK);       /* extern */

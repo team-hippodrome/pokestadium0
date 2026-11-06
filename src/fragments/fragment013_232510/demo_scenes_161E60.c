@@ -349,11 +349,42 @@ void func_82200618(void) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82200714; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment013_232510/func_82200714.s")
-#endif
+extern s8 D_82202C98;
+extern s8 D_82202CB4;
+extern s8 D_82202D08;
+extern s8 D_82202D24;
+M2C_UNK func_80005B98(M2C_UNK);
+M2C_UNK func_8000A7FC(M2C_UNK);
+void func_82200714(void) {
+    s8 sp8C[0x3C];
+    s8 sp50[0x3C];
+    s32 i = 0;
+    s32 rec;
+    s32 done;
+
+    rec = M2C_FIELD(D_82203240, s32 *, 0xC);
+    if (*D_822036A4 == 0) {
+        func_800273E8(sp8C, (s32) &D_82202D08);
+        func_800273E8(sp50, (s32) &D_82202D24);
+    } else {
+        func_800273E8(sp8C, (s32) &D_82202C98);
+        func_800273E8(sp50, (s32) &D_82202CB4);
+    }
+    do {
+    } while (0);
+    while (func_80027214(sp8C, rec + 0xA8) != 0) {
+        if (i++ == 0x14) {
+            func_80005B98(0x20);
+            func_8000A7FC(0x3C);
+        }
+        func_80027214(sp50, rec + 0xB4);
+        done = func_82200510(0);
+        func_80006780();
+        if (done != 0) {
+            break;
+        }
+    }
+}
 
 void func_82200848(void) {
 }

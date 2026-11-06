@@ -105,35 +105,129 @@ void func_8002D948(GridMenu80031004* arg0, s32 arg1, s32 arg2) {
     func_80029A64(arg1 + 2, y, arg0->cellWidth - 4, arg0->cellHeight - 4, *(Color_RGBA8*)D_80073520);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002D9B8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002D9B8.s")
-#endif
+void func_8002D9B8(Menu8002E230* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
+    s32 i;
+    s32 y = arg2;
+    s32 count = arg0->def->itemCount;
+    u8** items = (u8**)arg0->def->items;
+    s32 flags;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002DAD8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002DAD8.s")
-#endif
+    for (i = 0; i < count; i++) {
+        flags = arg0->flags[i];
+        if (i == arg0->cursor) {
+            flags |= 0x12;
+        }
+        arg0->draw(arg1, y, items[i], i, flags & arg3, arg4);
+        y += arg0->rowSpacing;
+    }
+    if (arg0->def->itemCount > 0 && (arg3 & 2) && (arg0->options & 0x10000)) {
+        func_8002D948((GridMenu80031004*)arg0, arg1, arg2);
+    }
+}
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002DC04; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002DC04.s")
-#endif
+void func_8002DAD8(Menu8002E230* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
+    s32 i;
+    s32 y = arg2;
+    MenuDef8002E230* def = arg0->def;
+    s32 count = def->itemCount;
+    u8* items = def->items;
+    s32 flags;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002DCE0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002DCE0.s")
-#endif
+    for (i = 0; i < count; i++) {
+        flags = arg0->flags[i];
+        if (i == arg0->cursor) {
+            flags |= 0x12;
+        }
+        arg0->draw(arg1, y, items + def->itemSize * i, i, flags & arg3, arg4);
+        y += arg0->rowSpacing;
+    }
+    if (arg0->def->itemCount > 0 && (arg3 & 2) && (arg0->options & 0x10000)) {
+        func_8002D948((GridMenu80031004*)arg0, arg1, arg2);
+    }
+}
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002DDFC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002DDFC.s")
-#endif
+s32 func_8000B30C();
+s32 func_8003F6AC();
+s32 func_8002DC04(Menu8002E230* arg0) {
+    s32 input;
+    s32 old = arg0->cursor;
+
+    if (arg0->def->itemCount == 0) {
+        return 0;
+    }
+    if (arg0) { // no-op test; changes register allocation to match
+    }
+    input = (u16)func_8000B30C();
+    switch (input) {
+        case 0x800:
+            if (arg0->cursor == 0) {
+                arg0->cursor += arg0->def->itemCount;
+            }
+            arg0->cursor--;
+            break;
+        case 0x400:
+            if (arg0->cursor >= arg0->def->itemCount - 1) {
+                arg0->cursor -= arg0->def->itemCount;
+            }
+            arg0->cursor++;
+            break;
+    }
+    if (old != arg0->cursor) {
+        func_8003F6AC(1);
+    }
+    return input;
+}
+
+s32 func_8002DCE0(Menu8002E230* arg0) {
+    s32 input;
+    s32 old = arg0->cursor;
+
+    if (arg0->def->itemCount == 0) {
+        return 0;
+    }
+    if (arg0) {}
+    input = (u16)func_8000B30C();
+    switch (input) {
+        case 0x800:
+            do {
+                if (arg0->cursor == 0) {
+                    arg0->cursor += arg0->def->itemCount;
+                }
+                arg0->cursor--;
+            } while (arg0->flags[arg0->cursor] & 1);
+            break;
+        case 0x400:
+            do {
+                if (arg0->cursor == arg0->def->itemCount - 1) {
+                    arg0->cursor -= arg0->def->itemCount;
+                }
+                arg0->cursor++;
+            } while (arg0->flags[arg0->cursor] & 1);
+            break;
+    }
+    if (old != arg0->cursor) {
+        func_8003F6AC(1);
+    }
+    return input;
+}
+
+s32 func_8002DDFC(Menu8002E230* arg0) {
+    s32 i;
+
+    for (i = arg0->cursor; i < arg0->def->itemCount && (arg0->flags[i] & 1); i++) {
+    }
+    if (i < arg0->def->itemCount) {
+        arg0->cursor = i;
+        return i;
+    }
+    for (i = arg0->cursor - 1; i >= 0 && (arg0->flags[i] & 1); i--) {
+    }
+    if (i >= 0) {
+        arg0->cursor = i;
+        return i;
+    }
+    return -1;
+}
 
 void func_8002DF2C(s8*, s32, s32);
 extern s32 D_800603C0;
@@ -190,11 +284,25 @@ void func_8002DF9C(Menu8002E230* menu, s32 x, s32 y) {
     func_80029A64(px, py, menu->colSpacing - 4, menu->rowSpacing - 4, *(Color_RGBA8*)D_80073520);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002E078; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002E078.s")
-#endif
+void func_8002E078(Menu8002E230* menu, s32 x, s32 y, s32 mask, s32 arg4) {
+    MenuDef8002E230* def = menu->def;
+    s32 i;
+    u8** items = (u8**)def->items;
+    u8* item;
+    s32 f;
+
+    for (i = 0; i < def->count; i++) {
+        item = (i < def->itemCount) ? items[i] : NULL;
+        f = menu->flags[i];
+        if (i == menu->cursor) {
+            f |= 0x12;
+        }
+        menu->draw((i % menu->columns) * menu->colSpacing + x, (i / menu->columns) * menu->rowSpacing + y, item, i, f & mask, arg4);
+    }
+    if ((menu->def->itemCount > 0) && (mask & 2) && (menu->options & 0x10000)) {
+        func_8002DF9C(menu, x, y);
+    }
+}
 
 void func_8002DF9C(Menu8002E230*, s32, s32);
 void func_8002E230(Menu8002E230* menu, s32 x, s32 y, s32 mask, s32 arg4) {
@@ -559,16 +667,42 @@ void func_80031004(GridMenu80031004* arg0, s32 arg1, s32 arg2) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8003152C.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80031AB0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80031AB0.s")
-#endif
+typedef struct GridMenu80031AB0 {
+    /* 0x00 */ char unk00[0x8];
+    /* 0x08 */ s32 cursor;
+    /* 0x0C */ u32 cellWidth;
+    /* 0x10 */ u32 cellHeight;
+    /* 0x14 */ char unk14[0x10];
+    /* 0x24 */ u32 rows;
+    /* 0x28 */ char unk28[4];
+    /* 0x2C */ s32 scroll;
+    /* 0x30 */ s32 scrollTarget;
+    /* 0x34 */ s32 cursorY;
+    /* 0x38 */ char unk38[0x8];
+    /* 0x40 */ s32 unk40;
+    /* 0x44 */ s32 cursorX;
+    /* 0x48 */ s32 columns;
+} GridMenu80031AB0;
+void func_80031AB0(GridMenu80031AB0* arg0, s32 arg1) {
+    s32 v;
+    arg0->unk40 = 0;
+    arg0->cursor = arg1;
+    arg0->cursorY = (arg1 / arg0->columns) * arg0->cellHeight;
+    arg0->cursorX = (arg1 % arg0->columns) * arg0->cellWidth;
+    if (arg0->cursorY < arg0->scroll) {
+        arg0->scroll = arg0->cursorY;
+    } else {
+        v = (arg0->cursorY + arg0->cellHeight) - arg0->rows * arg0->cellHeight;
+        if (arg0->scroll < v) {
+            arg0->scroll = v;
+        }
+    }
+    arg0->scrollTarget = arg0->scroll;
+}
 
-M2C_UNK func_8002DDFC();                            /* extern */
-M2C_UNK func_80031AB0(s8 *, s32);                 /* extern */
+void func_80031AB0();                 /* extern */
 
 void func_80031B88(s8 *arg0) {
-    func_8002DDFC();
+    func_8002DDFC((Menu8002E230*)arg0);
     func_80031AB0(arg0, M2C_FIELD(arg0, s32 *, 8));
 }

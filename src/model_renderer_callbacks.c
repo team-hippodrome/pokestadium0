@@ -137,11 +137,27 @@ void ModelRenderer_UpdateSlotVertices(void) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80032C74; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80032C74.s")
-#endif
+extern Gfx D_800744D8[];
+extern Gfx D_80074540[];
+extern u16 D_80060484;
+Gfx* func_80032C74(Gfx* gfx) {
+    switch (D_8006049C->objectType) {
+        default:
+            gSPDisplayList(gfx++, D_800744D8);
+            gDPSetEnvColor(gfx++, 0xB4 - (D_80060484 % 8) * 10, 0x20, 0x00, 0x00);
+            break;
+        case 0x92:
+            gSPDisplayList(gfx++, D_80074540);
+            gDPSetEnvColor(gfx++, 0xFF, 0x20, 0x00, 0x00);
+            break;
+        case 0x7E:
+            gSPDisplayList(gfx++, D_800744D8);
+            gDPSetEnvColor(gfx++, 0xFF, 0x20, 0x00, 0x00);
+            gDPSetPrimColor(gfx++, 0xFF, 0xFF, 0xFF, 0xFF, 0x05, 0xFF);
+            break;
+    }
+    return gfx;
+}
 
 Gfx* func_80032C74(Gfx*);
 void func_80032A6C(void);

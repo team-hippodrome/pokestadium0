@@ -80,8 +80,43 @@ void* mem_pool_alloc(MemoryPool* node, s32 size) {
     return addr;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_800029D0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800029D0.s")
-#endif
+void func_800029D0(MemoryPool* pool, void* addr) {
+    struct MemoryBlock* block;
+    struct MemoryBlock* freeList;
+
+    osRecvMesg(&pool->queue, NULL, 1);
+    block = (struct MemoryBlock*)((u8*)addr - sizeof(struct MemoryBlock));
+    freeList = pool->freeList.next;
+    if (pool->freeList.next == NULL) {
+        pool->freeList.next = block;
+        block->next = NULL;
+    } else if (block < pool->freeList.next) {
+        if ((u32)pool->freeList.next == ((u32)block + (u32)block->size)) {
+            block->size += ((u32)freeList->size);
+            block->next = freeList->next;
+            pool->freeList.next = block;
+        } else {
+            block->next = pool->freeList.next;
+            pool->freeList.next = block;
+        }
+    } else {
+        while (freeList->next != NULL) {
+            if (freeList < block && block < freeList->next) {
+                break;
+            }
+            freeList = freeList->next;
+        }
+        if (((u32)freeList + (u32)freeList->size) == (u32)block) {
+            freeList->size += block->size;
+            block = freeList;
+        } else {
+            block->next = freeList->next;
+            freeList->next = block;
+        }
+        if (block->next != NULL && (u32)block->next == ((u32)block + (u32)block->size)) {
+            block->size = (u32)block->size + (u32)block->next->size;
+            block->next = block->next->next;
+        }
+    }
+    osSendMesg(&pool->queue, NULL, 0);
+}

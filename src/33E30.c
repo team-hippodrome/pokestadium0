@@ -9,11 +9,24 @@ extern Gfx D_800745F0[];
 
 Gfx* Gfx_DrawTriangleMarker(Gfx* arg0, Vec3f* arg1, u8 arg2, u8 arg3, u8 arg4, u8 arg5, f32 arg6);
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80032FD0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80032FD0.s")
-#endif
+extern char D_8007DBA0[];
+extern char D_8007DBA8[];
+extern char D_8007DBAC[];
+void func_8005666C();
+void func_80032FD0(s32 *arg0) {
+    s32 i;
+    s32 j;
+    s32 *p = arg0;
+
+    for (i = 0; i < 8; i++) {
+        for (j = 0; j < 2; j++) {
+            func_8005666C(D_8007DBA0, *p);
+            p++;
+        }
+        func_8005666C(D_8007DBA8);
+    }
+    func_8005666C(D_8007DBAC);
+}
 
 void rmonPrintf(const char* fmt, ...);
 extern char D_8007DBB0[];

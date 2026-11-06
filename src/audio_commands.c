@@ -357,11 +357,34 @@ void func_80043CE8(s32 arg0, f32 arg1, s32 arg2) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80043DD0.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80044158; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80044158.s")
-#endif
+extern u8* D_800FD690;
+extern File1Header* D_800B4164;
+extern u8* D_800B41F0;
+extern u8* D_800B419C;
+s32 func_80037F68(u8*, u8*);
+void func_80037C04(s32, u32);
+
+s32 func_80044158(u8* arg0) {
+    UNUSED s32 pad[2];
+    u8* sp1C;
+
+    D_800FD690 = arg0;
+    sp1C = D_800FD690 + 0x32C0;
+
+    if (1) {}
+
+    Rom_DmaRead(D_800B4164->offset1, (u32)D_800B41F0, D_800B4164->wave_tables_offset - D_800B4164->offset1);
+    Audio_CopyDataWithCacheSync((s32)D_800B41F0, D_800FD690, 0x32C0);
+    Rom_DmaRead(D_800B4164->wave_tables_offset, (u32)sp1C, D_800B4164->files[0] - D_800B4164->wave_tables_offset);
+    Audio_RelocateSoundBankWrapper((s32)D_800FD690, (s32)sp1C);
+    D_80075C30 |= 0x80000000;
+    Rom_DmaRead(D_800B4164->files[0], (u32)D_800B41F0, D_800B4164->files[1] - D_800B4164->files[0]);
+    Audio_CopyDataWithCacheSync((s32)D_800B41F0, D_800B419C, 0x8CA0);
+    D_800FD608 = func_80037F68(D_800FD690, D_800B419C);
+    func_80037C04(D_800FD608, 0x70);
+
+    return D_800FD608;
+}
 
 void Audio_ClearWaveDataLoaded(void) {
     D_80075C30 &= ~0x80000000;

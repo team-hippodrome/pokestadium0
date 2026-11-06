@@ -160,11 +160,18 @@ void Battle_RenderActivePokemonThumbnail(GraphNode* thumbnail_root, DepthBuffer*
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82100650; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82100650.s")
-#endif
+s32 func_80006B50(s32 *, s32 *, s32 *, s32 *);
+void func_82100650(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
+    s32 x0 = arg0;
+    s32 y0 = arg1;
+
+    if (func_80006B50(&arg0, &arg1, &arg2, &arg3) != 0) {
+        x0 = ((arg0 - x0) << 5) + 16;
+        y0 = ((arg1 - y0) << 5) + 16;
+        gSPTextureRectangle(gDisplayListHead++, arg0 << 2, arg1 << 2, (arg2 + 1) << 2, (arg3 + 1) << 2,
+                            G_TX_RENDERTILE, x0, y0, 0x800, 0x800);
+    }
+}
 
 // called every frame: bug boy in GLC
 // Load full-width source rows and draw at half size using the clipped rectangle helper.
@@ -325,11 +332,38 @@ s32 BattleScene_UpdatePausedFrame(s32 fade_mode) {
     return battle_result;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82100ED4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82100ED4.s")
-#endif
+extern SessionContext* D_82198D10;
+extern s32 D_82198D30;
+extern u8 D_82198D24;
+extern u8* D_800603C0;
+s32 func_800010B8(void);
+s32 func_8003BF40(u8*);
+void func_8000D304(void);
+void func_82100ED4(void) {
+    u8 sp1F;
+    if (D_82198D30 < 0) {
+        D_82198D30++;
+    } else if (D_82198D30 == 0) {
+        if (D_82198D10->mode == 5) {
+            if (*(u16*)(D_800603C0 + 8) != 0) {
+                D_82198D30 = 1;
+            }
+        } else if (D_82198D10->mode == 3) {
+            if (*(u16*)(D_800603C0 + 8) != 0) {
+                D_82198D30 = 1;
+            } else if (func_800010B8() != 0) {
+                if (func_8003BF40(&sp1F) != 8) {
+                    sp1F &= 1;
+                    if ((sp1F ^ D_82198D24) & D_82198D24) {
+                        func_8000D304();
+                        D_82198D30 = 1;
+                    }
+                    D_82198D24 = sp1F;
+                }
+            }
+        }
+    }
+}
 
 extern SessionContext* D_82198D10;
 void func_8000A7FC(s32);

@@ -249,11 +249,39 @@ void func_8211F034(s8* arg0, s32 side) {
     arg0[0] = 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8211F0DC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211F0DC.s")
-#endif
+typedef struct Msg8211F0DC { u8 id; s32 pos; s8 out[0x40]; s8 in[0x40]; } Msg8211F0DC;
+#define MSG ((Msg8211F0DC*)D_8219A520)
+void func_8211C1B8();
+void func_8211F0DC(void)
+{
+  s8 c = MSG->in[MSG->pos];
+  if (c != 0)
+  {
+    if ((c == 0xA) || (c == 0x20))
+    {
+      MSG->out[MSG->pos] = c;
+      MSG->pos++;
+    }
+    c = MSG->in[MSG->pos];
+    if ((c >= 0x21) && (c < 0x40))
+    {
+      MSG->out[MSG->pos] = c;
+      MSG->pos++;
+    }
+    else
+    {
+      MSG->out[MSG->pos] = c;
+      MSG->out[MSG->pos + 1] = MSG->in[MSG->pos + 1];
+      MSG->pos += 2;
+    }
+  }
+  MSG->out[MSG->pos] = 0;
+  if (MSG->in[0] != 0)
+  {
+    func_8211C1B8(MSG->id, 0x29, 0xBB, MSG->out);
+  }
+}
+#undef MSG
 
 void func_8211F0DC(void);
 void Battle_DrawCompactStatusBoxesIfVisible(void) {
