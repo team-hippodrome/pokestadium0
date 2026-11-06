@@ -690,17 +690,13 @@ void func_89106FD8(s32 arg0, s32 arg1, char **arg2, s32 arg3, s32 arg4) {
     Font_EndTexturedTextRendering();
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8910713C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_8910713C.s")
-#endif
+s32 Move_NormalizeDisplayIndex(s32 a) {
+    return a >= 20 ? a - 12 : (a >= 7 ? a - 1 : a);
+}
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89107170; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89107170.s")
-#endif
+s32 func_89107170(s32 a) {
+    return a >= 8 ? a + 12 : (a >= 6 ? a + 1 : a);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_891071A4; signature not recovered. */

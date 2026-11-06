@@ -336,11 +336,13 @@ void func_88100D9C(s32 arg0, s32 arg1, Color88100D9C arg2) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment008_1720F0/func_88100E34.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8810105C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment008_1720F0/func_8810105C.s")
-#endif
+extern Color88100D9C D_88102D78[2];
+void func_8810105C(s32 x, s32 y, s32 height) {
+    gSPDisplayList(gDisplayListHead++, D_80060270);
+    func_80029028(x, y, 0x88, height, D_88102D78[1]);
+    gSPDisplayList(gDisplayListHead++, D_80060270);
+    func_80029028(x + 0x88, y, 0x18C, height, D_88102D78[0]);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8810112C; signature not recovered. */
@@ -349,14 +351,13 @@ void func_88100D9C(s32 arg0, s32 arg1, Color88100D9C arg2) {
 #endif
 
 extern s32 D_88103074;
-extern Color88100D9C D_88102D78;
 extern Gfx D_80073408[];
 extern Gfx D_80073438[];
 s32 func_80018DEC(s8*, s32);
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 void func_8810137C(s32 arg0, s32 arg1) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
-    func_80029028(arg0, arg1, 0x84, 0x32, D_88102D78);
+    func_80029028(arg0, arg1, 0x84, 0x32, D_88102D78[0]);
     gSPDisplayList(gDisplayListHead++, D_80073408);
     func_8001B884(arg0 + 0x56, arg1 + 6, 0x28, 0x28, (u8*)func_80018DEC((s8*)D_88103074, 0x18), 0x28, 0x200000);
     gSPDisplayList(gDisplayListHead++, D_80073438);

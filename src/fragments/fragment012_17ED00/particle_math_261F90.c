@@ -712,6 +712,11 @@ Vec3f* ParticleMath_NormalizedDirection(Vec3f* arg0, Vec3f arg1, Vec3f arg2) {
     return arg0;
 }
 
+s32 func_8213C80C(void);
+
+#ifdef NON_MATCHING
+/* TODO: decompile func_82138244; signature not recovered. */
+#else
 void func_821381E4(Vec3f*, Vec3f, Vec3f);
 s32 func_8213C80C(void);
 void func_82137F10();
@@ -726,12 +731,18 @@ void func_82138244(Vec3f *arg0, s32 arg1, f32 arg2) {
     arg0->y = camera->view.eyePosition.y + arg2 * dir.y;
     arg0->z = camera->view.eyePosition.z + arg2 * dir.z;
 }
-
-#ifdef NON_MATCHING
-/* TODO: decompile func_8213831C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8213831C.s")
 #endif
+
+/* Place a point at the requested distance from the scene camera eye. */
+void func_8213831C(Vec3f* out, f32 distance) {
+    Vec3f direction;
+    CameraNode* camera;
+    camera = (CameraNode*)func_8213C80C();
+    ParticleMath_NormalizedDirection(&direction, camera->view.eyePosition, camera->view.targetPosition);
+    out->x = camera->view.eyePosition.x + distance * direction.x;
+    out->y = camera->view.eyePosition.y + distance * direction.y;
+    out->z = camera->view.eyePosition.z + distance * direction.z;
+}
 
 s32 ParticleMath_DistanceScaled(Vec3f arg0, Vec3f arg1, f32 arg2) {
     return ParticleMath_Distance3D(arg0, arg1) / arg2;
@@ -777,7 +788,6 @@ Vec3f* ParticleMath_ScaleVec3f(Vec3f* arg0, f32 arg1) {
 }
 
 void func_821381E4(Vec3f*, Vec3f, Vec3f);
-s32 func_8213C80C(void);
 
 /**
  * Takes the scene camera (func_8213C80C returns a CameraNode*), asks

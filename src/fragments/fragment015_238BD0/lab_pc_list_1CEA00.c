@@ -546,11 +546,31 @@ void func_890012C4(s8 *arg0, s32 arg1) {
     func_8001BCB4(M2C_FIELD(arg0, s32 *, 0x10C) + 0xC4, M2C_FIELD(arg0, s32 *, 0x110) + 0xF4, 8, 0xA, D_04011AB8, 8, 0);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_890013F8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_890013F8.s")
-#endif
+s32 func_8002FD8C(void*);
+s32 func_80030230(void*);
+
+/* Navigate the selected menu mode, then report cancel or confirm input. */
+s32 func_890013F8(void* menu, u32 flags) {
+    s32 result = 0;
+    s32 moved;
+    s32 action;
+
+    if (flags & 0x200) {
+        moved = func_80030230(menu);
+    } else {
+        moved = func_8002FD8C(menu);
+    }
+    if (moved == 0) {
+        action = func_8002BC14(D_800603C0);
+        if (action == -1) {
+            func_8003F6AC(3);
+            result = -1;
+        } else if (action == 1) {
+            result = 1;
+        }
+    }
+    return result;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8900147C; signature not recovered. */
@@ -879,7 +899,7 @@ void func_8900323C(s32 *arg0) {
 #endif
 
 s32 func_8002B2B0(void *);
-s32 func_890013F8(void *, s32);
+s32 func_890013F8(void *, u32);
 s32 func_8900352C(s32* arg0) {
     s32 ret = 0;
 

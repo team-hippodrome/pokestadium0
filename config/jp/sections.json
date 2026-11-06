@@ -33,7 +33,19 @@
     ".rodata": "0x811549E0",
     ".data": "0x81138B74"
   },
+  "src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_811177E8.c": {
+    ".data": {
+      "address": "0x811526A4",
+      "size": "0xC"
+    }
+  },
   "src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c": {
+    ".data": {
+      "address": "0x88402F8C",
+      "size": "0x8"
+    }
+  },
+  "src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c": {
     ".data": {
       "address": "0x88402FB4",
       "size": "0xC"
@@ -58,10 +70,28 @@
       "size": "0x8"
     }
   },
+  "src/fragments/fragment012_17ED00/battle_engine_3055E0_821243DC.c": {
+    ".rodata": {
+      "address": "0x8219626C",
+      "size": "0x8"
+    }
+  },
   "src/fragments/fragment012_17ED00/battle_engine_309ED0.c": {
+    ".rodata": {
+      "address": "0x82196290",
+      "size": "0x14"
+    }
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_309ED0_82124E80.c": {
     ".rodata": {
       "address": "0x821962A8",
       "size": "0x58"
+    }
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_309ED0_8212A328.c": {
+    ".rodata": {
+      "address": "0x821963AC",
+      "size": "0x64"
     }
   },
   "src/fragments/fragment012_17ED00/battle_engine_313D60.c": {
@@ -312,6 +342,12 @@
     }
   },
   "src/fragments/fragment019_293410/lab_pc_icons.c": {
+    ".rodata": {
+      "address": "0x8A21D998",
+      "size": "0x1C"
+    }
+  },
+  "src/fragments/fragment019_293410/lab_pc_icons_8A201598.c": {
     ".rodata": {
       "address": "0x8A21D9EC",
       "size": "0x18"
