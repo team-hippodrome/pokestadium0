@@ -190,11 +190,28 @@ void BattleInfoWidget_UpdateEntryFlags(unk_func_8830867C_034* arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8910548C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_8910548C.s")
-#endif
+/* Set or clear bit 3 in every laboratory list entry flag. */
+void func_8910548C(u8* widget, s32 enabled) {
+    s32 value = enabled ? 8 : 0;
+    s32 offset;
+    s32 index;
+    s32* list;
+    u16* flags;
+
+    list = *(s32**)(widget + 0x20);
+    index = 0;
+    if (list[2] > 0) {
+        offset = 0;
+        do {
+            index++;
+            flags = (u16*)(*(u8**)(widget + 0x24) + offset);
+            *flags &= ~8;
+            flags = (u16*)(*(u8**)(widget + 0x24) + offset);
+            *flags |= value;
+            offset += 2;
+        } while (index < *(s32*)(*(u8**)(widget + 0x20) + 8));
+    }
+}
 
 void func_89105504(s32 arg0) {
     s32 i;
@@ -302,11 +319,32 @@ void func_8910597C(s8* arg0, s8* arg1) {
     M2C_FIELD(arg0, u16**, 0x74)[M2C_FIELD(arg0, s32*, 0x78)] |= flag;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_891059FC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_891059FC.s")
-#endif
+s32 func_89105924(s32);
+/* Rebuild entry flags from the current laboratory records. */
+void func_891059FC(u8* widget) {
+    s32 offset;
+    s32 entry = (*(s32**)(widget + 0x70))[0];
+    s32 index;
+    s32* list;
+    s32 flags;
+    u16* destination;
+
+    list = *(s32**)(widget + 0x70);
+    offset = 0;
+    index = 0;
+
+    if (list[2] > 0) {
+        do {
+            *(u16*)(*(u8**)(widget + 0x74) + offset) = 0;
+            flags = func_89105924(entry);
+            index++;
+            entry += 0x24;
+            destination = (u16*)(*(u8**)(widget + 0x74) + offset);
+            *destination |= flags;
+            offset += 2;
+        } while (index < *(s32*)(*(u8**)(widget + 0x70) + 8));
+    }
+}
 
 void BattleInfoWidget_ApplyEntrySelection(unk_func_8830867C_034* arg0, s32 arg1) {
     s8* ptr = M2C_FIELD(M2C_FIELD(arg0, s8**, 0x70), s8**, 0) + arg1 * 0x24;
