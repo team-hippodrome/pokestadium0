@@ -94,11 +94,25 @@ void func_89100140(Ctx89100140* arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89100294.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89100380; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89100380.s")
-#endif
+typedef struct LabPCInitialStateFields {
+    u8 pad0000[0x9828];
+    u8 unk_9828;
+    u8 unk_9829;
+    u8 pad982A[2];
+    s32 unk_982C;
+    u8 pad9830[0xE8];
+    s32 unk_9918;
+    u8 pad991C[0x1E8];
+    s32 unk_9B04;
+} LabPCInitialStateFields;
+
+void func_89100380(LabPCInitialStateFields* state) {
+    /* IDO schedules these byte stores together when they share a source line. */
+    state->unk_9828 = 1; state->unk_9829 = 100;
+    state->unk_982C = 0;
+    state->unk_9918 = 0;
+    state->unk_9B04 = 0;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_891003A4; signature not recovered. */
