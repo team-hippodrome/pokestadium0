@@ -740,11 +740,40 @@ void func_891031B8(s8* arg0, s8** arg1, s8* arg2) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89103274; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89103274.s")
-#endif
+typedef struct Screen89103274 {
+    /* 0x0000 */ char unk0[0x2C];
+    /* 0x002C */ s32 x;
+    /* 0x0030 */ s32 y;
+    /* 0x0034 */ s32 w;
+    /* 0x0038 */ s32 h;
+    /* 0x003C */ char unk3C[0x420 - 0x3C];
+    /* 0x0420 */ s8 unk420[0x9654 - 0x420];
+    /* 0x9654 */ s32 menuX;
+    /* 0x9658 */ s32 menuY;
+    /* 0x965C */ char unk965C[0x96D0 - 0x965C];
+    /* 0x96D0 */ s8 menu[0x14];
+    /* 0x96E4 */ s32 menuFlags;
+    /* 0x96E8 */ Rgba891024A4 color;
+    /* 0x96EC */ char unk96EC[0x10];
+    /* 0x96FC */ s8 box[0x14];
+    /* 0x9710 */ s8 list[0x34];
+    /* 0x9744 */ s32 right;
+    /* 0x9748 */ s32 bottom;
+    /* 0x974C */ char unk974C[0x97E8 - 0x974C];
+    /* 0x97E8 */ s8 items[1];
+} Screen89103274;
+extern u8 D_8910A8DC[];
+extern s32 D_8910DD34[];
+void func_89103274(Screen89103274* arg0, s8** arg1) {
+    func_89106424(arg0->menu, D_8910A8DC, arg0->items, 3, (s32)D_8910DD34);
+    func_8002A8C4(arg0->box, arg0->menuX + 0xE, arg0->menuY + 0x38, 0x6C, 0x1C);
+    arg0->menuFlags |= 0x1000000;
+    arg0->right = arg0->x + arg0->w;
+    arg0->bottom = arg0->y + arg0->h;
+    func_89106570(arg0->menu);
+    arg0->color = D_8910A7F4;
+    func_891031B8(arg0->list, arg1, arg0->unk420);
+}
 
 s32 func_89103370(s8 **arg0) {
     s32 var_v1;
