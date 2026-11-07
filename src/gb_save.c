@@ -37,7 +37,15 @@ s32 Ui_AdjustNumericSelection(unk_func_8830867C_044_038_030* arg0, s32 arg1);
 void Particle_Field50_SetXZFromField7C_09BB4(Particle* arg0);
 void Particle_Field7C_SetXZFromField74AngleY_0B278(Particle* arg0);
 
-M2C_UNK func_8001AA9C(u8, u8, u8, u8);              /* extern */
+void func_8001AA9C(u8, u8, u8, u8);
+void func_8001AB6C(void);
+void func_8001A384(s32, s32);
+void func_8001A944(s32, s32, s32);
+void func_8001ABBC(void);
+void func_8001AB2C(s32);
+void func_8001ABE8(void);
+void func_8001AAE4(u8, u8, u8, u8);
+void func_8001AC3C(void);
 extern s8 D_800734A8;
 extern s8 D_800734B0;
 extern s8 D_800734B8;
@@ -886,11 +894,21 @@ void func_8002CEEC(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4) {
     M2C_FIELD(arg0, s32 *, 0x2C) = arg1;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002D024; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002D024.s")
-#endif
+extern Rgba8002D188 D_800736F0[];
+void func_8002D024(s32* arg0) {
+    if (func_8002AE6C(arg0) != 0) {
+        return;
+    }
+    func_8001AB6C();
+    func_8001A384(D_800736D0[arg0[12]].unk8, 0);
+    func_8001AA9C(D_800736F0[0].r, D_800736F0[0].g, D_800736F0[0].b, D_800736F0[0].a);
+    func_8001AB2C(D_800736D0[arg0[12]].w + D_800736D0[arg0[12]].h);
+    func_8001ABE8();
+    func_8001AAE4(D_800736F0[1].r, D_800736F0[1].g, D_800736F0[1].b, D_800736F0[1].a);
+    func_8001A944(arg0[0] + D_800736D0[arg0[12]].h + 6, arg0[1] + D_800736D0[arg0[12]].h + 6, arg0[11]);
+    func_8001AC3C();
+    func_8001ABBC();
+}
 
 s32 func_8002D138(UNUSED s32 arg0) {
     s32 ret = 0;
@@ -932,11 +950,21 @@ void func_8002D188(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4) {
     M2C_FIELD(arg0, s32 *, 0x28) = arg1;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002D2BC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002D2BC.s")
-#endif
+extern Rgba8002D188 D_80073700[];
+void func_8002D2BC(s32* arg0) {
+    if (func_8002CE5C(arg0) != 0) {
+        return;
+    }
+    func_8001AB6C();
+    func_8001A384(D_800736D0[arg0[11]].unk8, 0);
+    func_8001AA9C(D_80073700[0].r, D_80073700[0].g, D_80073700[0].b, D_80073700[0].a);
+    func_8001AB2C(D_800736D0[arg0[11]].w + D_800736D0[arg0[11]].h);
+    func_8001ABE8();
+    func_8001AAE4(D_80073700[1].r, D_80073700[1].g, D_80073700[1].b, D_80073700[1].a);
+    func_8001A944(arg0[0] + D_800736D0[arg0[11]].h + 6, arg0[1] + D_800736D0[arg0[11]].h + 6, arg0[10]);
+    func_8001AC3C();
+    func_8001ABBC();
+}
 
 s32 func_8002D3D0(u8* arg0) {
     s32 i;

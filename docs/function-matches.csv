@@ -4318,10 +4318,10 @@ func_8002CC44,0x8002CC44,src/gb_save.c,,asm,,asm
 func_8002CD7C,0x8002CD7C,src/gb_save.c,func_8002CD7C,hand,,c
 func_8002CE5C,0x8002CE5C,src/gb_save.c,func_8002CE5C,hand,,c
 func_8002CEEC,0x8002CEEC,src/gb_save.c,func_8002CEEC,hand,,c
-func_8002D024,0x8002D024,src/gb_save.c,,asm,,asm
+func_8002D024,0x8002D024,src/gb_save.c,func_8002D024,hand,,c
 func_8002D138,0x8002D138,src/gb_save.c,func_8002D138,hand,,c
 func_8002D188,0x8002D188,src/gb_save.c,func_8002D188,hand,,c
-func_8002D2BC,0x8002D2BC,src/gb_save.c,,asm,,asm
+func_8002D2BC,0x8002D2BC,src/gb_save.c,func_8002D2BC,hand,,c
 func_8002D3D0,0x8002D3D0,src/gb_save.c,func_8002D3D0,hand,,c
 func_8002D430,0x8002D430,src/gb_save.c,func_8002D430,hand,,c
 func_8002D454,0x8002D454,src/gb_save.c,func_8002D454,m2c,m2c,c
