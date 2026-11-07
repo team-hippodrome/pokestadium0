@@ -331,8 +331,11 @@ void func_8210F2F4(s8 *arg0)
 void BattleScene_IntroInitNop(void) {
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8210F3F0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210F3F0.s")
-#endif
+extern u8 D_82199F7C;
+extern f64 D_DBL_82195770;
+extern f64 D_DBL_82195778;
+u32 func_80053A80(void);
+u8 func_8210F3F0(void)
+{
+  return (D_82199F7C += (u8) ((u32) ((((f32) ((s32) ((u16) (func_80053A80() / 5577)))) / D_DBL_82195770) * D_DBL_82195778))) ^ 0;
+}
