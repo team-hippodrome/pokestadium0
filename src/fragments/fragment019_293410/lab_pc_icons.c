@@ -98,7 +98,11 @@ void func_8A200770(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4) {
     Font_EndTexturedTextRendering();
 }
 
+#ifdef NON_MATCHING
+/* TODO: decompile func_8A20080C; signature not recovered. */
+#else
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment019_293410/func_8A20080C.s")
+#endif
 
 void func_8A2008F4(s8 *arg0) {
     if (func_8002AB84() == 0) {
