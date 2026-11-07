@@ -201,7 +201,26 @@ void func_8211B208(TeamRoster* arg0, BattleMon* arg1, s32 arg2, s32 arg3, s32 ar
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211C6C0.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211C9FC.s")
+extern u8 D_8219A4F1;
+u8 func_8000F1FC(u8, s32, s32, s32);
+void func_8211C9FC(void) {
+    u32 len;
+    s8* name;
+    ActivePokemonState* state = &sActivePokemon[sBattleScene.scene->unk_2C]->state;
+    BattleMon* bm = &sActivePokemon[sBattleScene.scene->unk_2C]->sessionTeams->teamMember[0]->pokemonPicked[state->rosterIndex];
+
+    D_8219A4F1 = func_8000F1FC(D_8219A4F1, 0xFF, 5, 5);
+    func_8001AB6C();
+    func_8001ABE8();
+    func_8001AA9C(0xFF, 0xFF, 0xFF, D_8219A4F1);
+    func_8001AAE4(0xFF, 0xFF, 0xF, D_8219A4F1);
+    name = (s8*)bm + 0x30;
+    len = func_800566BC((s32)name) >> 1;
+    func_8001A384(4, 0);
+    func_8001A944(0x9A - len * 6, 0xBE, (s32)name);
+    func_8001AC3C();
+    func_8001ABBC();
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211CB0C.s")
 
