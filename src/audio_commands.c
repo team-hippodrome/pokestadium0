@@ -217,11 +217,36 @@ void func_80041914(s32 arg0, s32 arg1) {
     M2C_FIELD(&D_800FD6B4, s8 *, 1) = temp_v1;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80041940; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80041940.s")
-#endif
+extern s32 D_800FD6A0[];
+extern u8 D_800FD6B0[];
+extern u8 D_800FD6B6[];
+extern s8 D_80077560;
+void func_80041940(u32 arg0, s32 arg1, s32 arg2) {
+    s32* cur;
+    s32* prev;
+    s32* next;
+
+    if (arg0 < 2) {
+        prev = &D_800FD6A0[arg0];
+        cur = &D_800FD698[arg0];
+        next = &D_800FD6A8[arg0];
+        *prev = *cur;
+        *cur = arg1;
+        *next = arg2;
+        if (arg1 == 0) {
+            if (*prev == *next) {
+                D_80077560 = 1;
+            } else {
+                D_80077560 = 0;
+            }
+            if (((u8*)&D_800FD6B4)[arg0] != 0) {
+                ((u8*)&D_800FD6B4)[arg0]--;
+            }
+            D_800FD6B6[arg0]++;
+            D_800FD6B0[arg0] = 1;
+        }
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_800419F8; signature not recovered. */
