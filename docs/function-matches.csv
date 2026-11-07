@@ -24,11 +24,11 @@ func_8002ED18,0x8002ED18,src/2E480.c,func_8002ED18,m2c,m2c,c
 func_8002ED50,0x8002ED50,src/2E480.c,func_8002ED50,m2c,m2c,c
 func_8002ED70,0x8002ED70,src/2E480.c,func_8002ED70,m2c,m2c+permuter,c
 func_8002EDA8,0x8002EDA8,src/2E480.c,,asm,,asm
-func_8002F030,0x8002F030,src/2E480.c,,asm,,asm
+func_8002F030,0x8002F030,src/2E480.c,func_8002F030,hand,,c
 func_8002F32C,0x8002F32C,src/2E480.c,func_8002F32C,hand,,c
 func_8002F3C4,0x8002F3C4,src/2E480.c,func_8002F3C4,hand,,c
 func_8002F6C4,0x8002F6C4,src/2E480.c,func_8002F6C4,hand,,c
-func_8002F9D8,0x8002F9D8,src/2E480.c,,asm,,asm
+func_8002F9D8,0x8002F9D8,src/2E480.c,func_8002F9D8,hand,,c
 func_8002FD8C,0x8002FD8C,src/2E480.c,,asm,,asm
 func_80030230,0x80030230,src/2E480.c,,asm,,asm
 func_800306E0,0x800306E0,src/2E480.c,,asm,,asm
@@ -528,7 +528,7 @@ func_8110AC14,0x8110AC14,src/fragments/fragment000_80C00/gb_tower_emulator_86920
 func_8110AC8C,0x8110AC8C,src/fragments/fragment000_80C00/gb_tower_emulator_86920.c,,asm,,asm
 func_8110AFF0,0x8110AFF0,src/fragments/fragment000_80C00/gb_tower_emulator_86920.c,,asm,,asm
 func_8110B880,0x8110B880,src/fragments/fragment000_80C00/gb_tower_emulator_86920.c,func_8110B880,hand,,c
-func_8110B8D8,0x8110B8D8,src/fragments/fragment000_80C00/gb_tower_emulator_86920.c,,asm,,asm
+func_8110B8D8,0x8110B8D8,src/fragments/fragment000_80C00/gb_tower_emulator_86920.c,func_8110B8D8,hand,,c
 func_8110B958,0x8110B958,src/fragments/fragment000_80C00/gb_tower_emulator_86920.c,func_8110B958,hand,,c
 func_8110B9A8,0x8110B9A8,src/fragments/fragment000_80C00/gb_tower_emulator_86920.c,func_8110B9A8,hand,,c
 func_8110B9F8,0x8110B9F8,src/fragments/fragment000_80C00/gb_tower_emulator_86920.c,func_8110B9F8,m2c,m2c,c
@@ -2261,7 +2261,7 @@ func_82135100,0x82135100,src/fragments/fragment012_17ED00/battle_engine_343BA0_4
 func_82135108,0x82135108,src/fragments/fragment012_17ED00/battle_engine_343BA0_4.c,func_82135108,hand,,c
 func_821351EC,0x821351EC,src/fragments/fragment012_17ED00/battle_engine_343BA0_4.c,func_821351EC,s1,stadium1:src/fragments/battle_engine/battle_engine_32B680.c,c
 func_821351F8,0x821351F8,src/fragments/fragment012_17ED00/battle_engine_343BA0_4.c,,asm,,asm
-func_82135384,0x82135384,src/fragments/fragment012_17ED00/battle_engine_343BA0_4.c,,asm,,asm
+func_82135384,0x82135384,src/fragments/fragment012_17ED00/battle_engine_343BA0_4.c,func_82135384,hand,,c
 func_82135458,0x82135458,src/fragments/fragment012_17ED00/battle_engine_343BA0_4.c,func_82135458,hand,,c
 func_8213558C,0x8213558C,src/fragments/fragment012_17ED00/battle_engine_343BA0_4.c,func_8213558C,hand,,c
 func_82135734,0x82135734,src/fragments/fragment012_17ED00/battle_engine_343BA0_4.c,func_82135734,hand,,c

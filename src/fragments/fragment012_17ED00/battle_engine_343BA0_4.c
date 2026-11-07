@@ -483,11 +483,21 @@ void func_821351EC(UNUSED s32 arg0, UNUSED s32 arg1) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821351F8.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82135384; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82135384.s")
-#endif
+void func_82107D24(ActivePokemon*, f32*);
+void func_8210BCF0(f32*, Vec3f*, f32*, s16*, s16*);
+void func_8000EEBC(void*, Vec3f*, f32, s16, s32);
+extern f32 D_FLT_8219A718;
+void func_82135384(ActivePokemon* arg0, CameraNode* arg1, Vec3f* arg2, Vec3f* arg3, s32 arg4, s32 arg5) {
+    f32 sp2C;
+    s16 pad2A;
+    s16 sp28;
+    s16 sp26;
+    s16* sp26p;
+    func_82107D24(arg0, &D_FLT_8219A718);
+    D_FLT_8219A718 *= M2C_FIELD(arg0, s32*, 0x60C);
+    func_8210BCF0(&D_FLT_8219A718, &arg2[arg4 + arg5], &sp2C, &sp28, &sp26);
+    func_8000EEBC((u8*)arg1 + 0xB4, &arg3[arg5], sp2C, sp28, M2C_FIELD(arg0, u32*, 0x60C) * *(sp26p = &sp26));
+}
 
 extern f32 D_FLT_82189350[][4];
 extern f32 D_FLT_82196810;

@@ -435,11 +435,41 @@ void func_8002ED70(s8 *arg0)
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002EDA8.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002F030; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002F030.s")
-#endif
+extern u8 D_04003A50[];
+extern u8 D_04003AD8[];
+extern u8 D_040044F8[];
+extern u8 D_04003FE8[];
+extern u8 D_04004A08[];
+extern u8 D_04003D60[];
+extern u8 D_04004780[];
+extern u8 D_04004270[];
+extern u8 D_04004C90[];
+extern Gfx D_80073408[];
+extern Gfx D_80073438[];
+void func_8001C22C(s32, s32, s32, s32, u8*, s32, s32);
+void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
+void func_8002F030(ScrollMenu8002F6C4* menu, s32 x, s32 topY, s32 bottomY, s32 width) {
+    s32 height = menu->rowSpacing * menu->rows;
+    s32 arrowX;
+    s32 more;
+
+    arrowX = menu->width / 2 + x - 9;
+    gDPPipeSync(gDisplayListHead++);
+    gDPSetCycleType(gDisplayListHead++, G_CYC_1CYCLE);
+    gDPSetRenderMode(gDisplayListHead++, 0x0F0A4000, 0);
+    gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
+    gDPSetTexturePersp(gDisplayListHead++, G_TP_NONE);
+    gDPSetTextureFilter(gDisplayListHead++, G_TF_POINT);
+    func_8001C22C(x, topY, width, 0x10, D_04003A50, 8, 0);
+    func_8001C22C(x, bottomY, width, 0x10, D_04003A50, 8, 0);
+    gSPDisplayList(gDisplayListHead++, D_80073408);
+    func_8001B884(arrowX, topY, 0x12, 0x10, (menu->scroll > 0) ? D_04003AD8 : D_040044F8, 0x14, 0x200000);
+    func_8001B884(arrowX - 0x1C, topY, 0x14, 0x10, (menu->scroll > 0) ? D_04003FE8 : D_04004A08, 0x14, 0x200000);
+    more = menu->scroll + height < menu->rowSpacing * menu->def->itemCount;
+    func_8001B884(arrowX, bottomY, 0x12, 0x10, more ? D_04003D60 : D_04004780, 0x14, 0x200000);
+    func_8001B884(arrowX + 0x1A, bottomY, 0x14, 0x10, more ? D_04004270 : D_04004C90, 0x14, 0x200000);
+    gSPDisplayList(gDisplayListHead++, D_80073438);
+}
 
 /**
  * Draws the cursor rectangle (via func_80029A64) for a scrolling list menu. Same shape as
@@ -547,11 +577,49 @@ void func_8002F6C4(ScrollMenu8002F6C4* menu, s32 x, s32 y, s32 mask, s32 arg4) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002F9D8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002F9D8.s")
-#endif
+void func_8002F9D8(ScrollMenu8002F6C4* menu, s32 x, s32 y, s32 mask, s32 arg4) {
+    MenuDef8002E230* def = menu->def;
+    u8* items = def->items;
+    s32 pad[2];
+    s32 height = menu->rowSpacing * menu->rows;
+    s32 i;
+    s32 rowY;
+    s32 end;
+    u8* item;
+    s32 f;
+
+    gDPPipeSync(gDisplayListHead++);
+    gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, x, y, menu->width + x, y + height);
+    func_8002EDA8(menu);
+    i = menu->scroll / menu->rowSpacing;
+    rowY = y - menu->scroll % menu->rowSpacing + (menu->cursor - i) * menu->rowSpacing;
+    menu->draw(x, rowY, NULL, i, 0, arg4);
+    rowY = y - menu->scroll % menu->rowSpacing;
+    end = (menu->scroll + height - 1) / menu->rowSpacing;
+    for (; i < end; i++) {
+        item = NULL;
+        f = 0;
+        if (i < menu->def->itemCount) {
+            item = items + def->itemSize * i;
+            f = menu->flags[i];
+            if (i == menu->cursor) {
+                f |= 0x12;
+            }
+        }
+        menu->draw(x, ((i >= menu->cursor) ? menu->rowSpacing : 0) + rowY, item, i, f & mask, arg4);
+        rowY += menu->rowSpacing;
+    }
+    gDPPipeSync(gDisplayListHead++);
+    gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, 0, 640, 480);
+    if (menu->options & 0x100000) {
+        menu->def->itemCount++;
+        func_8002F030(menu, x, y - 16, y + menu->rowSpacing * menu->rows, menu->width);
+        menu->def->itemCount--;
+    }
+    if ((mask & 2) && (menu->options & 0x10000)) {
+        func_8002F32C(menu, x, y);
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8002FD8C; signature not recovered. */
@@ -671,7 +739,35 @@ void func_80030A1C(s8 *arg0)
 #endif
 
 #ifdef NON_MATCHING
-/* TODO: decompile func_80030D3C; signature not recovered. */
+void func_80030D3C(s8* arg0, s32 x, s32 y) {
+    s32 h = M2C_FIELD(arg0, s32*, 0x24) * M2C_FIELD(arg0, s32*, 0x10);
+    s32 w;
+    s32 arrowX;
+    s32 topY;
+    s32 bottomY;
+
+    w = M2C_FIELD(arg0, s32*, 0x48) * M2C_FIELD(arg0, s32*, 0xC);
+    topY = y - 0x10;
+    arrowX = w / 2 + x - 9;
+    gDPPipeSync(gDisplayListHead++);
+    gDPSetCycleType(gDisplayListHead++, G_CYC_1CYCLE);
+    gDPSetRenderMode(gDisplayListHead++, 0x0F0A4000, 0);
+    gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
+    gDPSetTexturePersp(gDisplayListHead++, G_TP_NONE);
+    gDPSetTextureFilter(gDisplayListHead++, G_TF_POINT);
+    func_8001C22C(x, topY, w, 0x10, D_04003A50, 8, 0);
+    bottomY = y + h;
+    func_8001C22C(x, bottomY, w, 0x10, D_04003A50, 8, 0);
+    gSPDisplayList(gDisplayListHead++, D_80073408);
+    func_8001B884(arrowX, topY, 0x12, 0x10, (M2C_FIELD(arg0, s32*, 0x2C) > 0) ? D_04003AD8 : D_040044F8, 0x14, 0x200000);
+    func_8001B884(arrowX, bottomY, 0x12, 0x10,
+                  (M2C_FIELD(arg0, s32*, 0x2C) + h <
+                   ((M2C_FIELD(M2C_FIELD(arg0, s8**, 0), s32*, 8) + M2C_FIELD(arg0, s32*, 0x48) - 1) / M2C_FIELD(arg0, s32*, 0x48)) * M2C_FIELD(arg0, s32*, 0x10))
+                      ? D_04003D60
+                      : D_04004780,
+                  0x14, 0x200000);
+    gSPDisplayList(gDisplayListHead++, D_80073438);
+}
 #else
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80030D3C.s")
 #endif

@@ -517,11 +517,19 @@ s32 func_8110B880(s32 arg0, s32 arg1) {
     return 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110B8D8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110B8D8.s")
-#endif
+s32 func_8110B8D8(s32 x, s32 y, s32 size) {
+    UNUSED s32 pad;
+    s32 index = D_81184440.unk_0C;
+
+    D_81184440.unk_10[index].unk_0 = func_81109868((M2C_UNK*)&D_81184440, size);
+    if (D_81184440.unk_10[index].unk_0 == 0) {
+        return 0;
+    }
+    D_81184440.unk_10[index].unk_8 = x;
+    D_81184440.unk_10[index].unk_A = y;
+    D_81184440.unk_10[index].unk_4 = size;
+    // No return here; the original falls off the end with the allocation still in v0.
+}
 
 s8* func_8110BA8C(s32);
 s32 func_8110B958(s32 arg0, s32 arg1, s32 arg2, s8 arg3) {
