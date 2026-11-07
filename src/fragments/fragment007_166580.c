@@ -1136,11 +1136,74 @@ void func_82004BC0(s8 *arg0)
   func_82002D5C(arg0 + 0x4690, 0x30, 0x5C, (s32) (arg0 + 0x4320), (s32) (arg0 + 0x4340), M2C_FIELD(arg0, s32*, 0x4374));
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82004CE0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment007_166580/func_82004CE0.s")
-#endif
+void func_800069CC(void);
+M2C_UNK func_8002C064(M2C_UNK, M2C_UNK, u8, u8, s32);
+extern u8 D_82008F50[];
+void func_8200752C(s8*);
+void func_82005EE4(s8*, s32);
+void func_82006348(s8*, s32);
+void func_82007D94(s8*, s32);
+void func_82006810(s8*);
+void func_82006DF8(s8*);
+void func_82007AF4(s8*, s32);
+void func_8200339C(s8*);
+void func_8002D2BC(s8*);
+M2C_UNK func_82004CE0(s32 arg0) {
+    s8* base = (s8*)arg0;
+
+    func_800069CC();
+    func_8002C064(0x38, 0x1E0, D_82008F50[0], D_82008F50[1], D_82008F50[2]);
+    switch (*(s32*)base) {
+        case 1:
+            func_8200752C(base + 0x4378);
+            break;
+        case 2:
+        case 3:
+            func_82005EE4(base + 0x43E4, 2);
+            break;
+        case 4:
+            func_82005EE4(base + 0x43E4, 0x10);
+            func_82005EE4(base + 0x4468, 2);
+            break;
+        case 12:
+            func_82006348(base + 0x4E50, 2);
+            break;
+        case 13:
+            func_82006348(base + 0x4E50, 0x10);
+            func_82006348(base + 0x4EAC, 0);
+            break;
+        case 14:
+            func_82007D94(base + 0x4F30, 0);
+            break;
+        case 5:
+            func_82005EE4(base + 0x43E4, 0x10);
+            func_82005EE4(base + 0x4468, 0x10);
+            func_82006810(base + 0x4554);
+            break;
+        case 6:
+            func_82005EE4(base + 0x43E4, 0x10);
+            func_82005EE4(base + 0x4468, 0x10);
+            func_82006DF8(base + 0x45C8);
+            break;
+        case 7:
+        case 8:
+            func_82005EE4(base + 0x43E4, 0x10);
+            func_82005EE4(base + 0x4468, 2);
+            break;
+        case 9:
+            func_82005EE4(base + 0x43E4, 0x10);
+            func_82005EE4(base + 0x4468, 0x10);
+            func_82007AF4(base + 0x44EC, 2);
+            break;
+        case 10:
+            func_8200339C(base + 0x4690);
+            break;
+        case 11:
+            func_8200339C(base + 0x4690);
+            func_8002D2BC(base + 0x4E1C);
+            break;
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_82004E9C; signature not recovered. */
@@ -1224,7 +1287,6 @@ extern s32 D_820090D8;
  */
 extern s32 D_820090D4_2;
 extern M2C_UNK D_82009E10;
-extern s32 D_82008F50;
 M2C_UNK func_80028060(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
 void func_800069CC(void);
 M2C_UNK func_8002C064(M2C_UNK, M2C_UNK, u8, u8, s32);
