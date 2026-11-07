@@ -4271,7 +4271,7 @@ func_80028060,0x80028060,src/gb_save.c,,asm,,asm
 func_80028C80,0x80028C80,src/gb_save.c,func_80028C80,hand,,c
 func_80028E5C,0x80028E5C,src/gb_save.c,func_80028E5C,hand,,c
 func_80029028,0x80029028,src/gb_save.c,Trade_DrawSolidFillRect,hand,,c
-func_800290F0,0x800290F0,src/gb_save.c,,asm,,asm
+func_800290F0,0x800290F0,src/gb_save.c,func_800290F0,hand,,c
 func_800291F8,0x800291F8,src/gb_save.c,func_800291F8,hand,,c
 func_800292A8,0x800292A8,src/gb_save.c,,asm,,asm
 func_800295E8,0x800295E8,src/gb_save.c,func_800295E8,hand,,c
