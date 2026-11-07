@@ -5145,7 +5145,7 @@ func_80019E30,0x80019E30,src/model_renderer.c,PokeIcon_WaitFrameLoadForObject,s1
 func_80019E90,0x80019E90,src/model_renderer.c,PokeIcon_RequestBackgroundForObject,s1,stadium1:src/model_renderer.c,c
 func_80019F20,0x80019F20,src/model_renderer.c,PokeIcon_PollBackgroundForObject,s1,stadium1:src/model_renderer.c,c
 func_80019F70,0x80019F70,src/model_renderer.c,func_80019F70,hand,,c
-func_80032840,0x80032840,src/model_renderer_callbacks.c,,asm,,asm
+func_80032840,0x80032840,src/model_renderer_callbacks.c,func_80032840,hand,,c
 func_80032890,0x80032890,src/model_renderer_callbacks.c,func_80032890,hand,,c
 func_800328D4,0x800328D4,src/model_renderer_callbacks.c,ModelRenderer_CacheSlotMatrices,s1,stadium1:src/model_renderer_callbacks.c,c
 func_80032930,0x80032930,src/model_renderer_callbacks.c,ModelRenderer_ApplySlotScale,s1,stadium1:src/model_renderer_callbacks.c,c
