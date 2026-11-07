@@ -205,7 +205,31 @@ void func_8211B208(TeamRoster* arg0, BattleMon* arg1, s32 arg2, s32 arg3, s32 ar
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211CB0C.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211CBCC.s")
+extern s8 D_8219A4A0[];
+extern s8 D_8219A4C8[];
+s32 func_8211CBCC(s8* str) {
+    s8 i = 0;
+    s8 j = 0;
+
+    do {
+        D_8219A4A0[i] = str[i];
+        i++;
+        D_8219A4A0[i] = 0;
+        if (str[i] == ' ') {
+            goto found;
+        }
+    } while (str[i] != 0);
+    return 0;
+found:
+    i++;
+    do {
+        D_8219A4C8[j] = str[i];
+        i++;
+        j++;
+        D_8219A4C8[j] = 0;
+    } while (str[i] != 0);
+    return 1;
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211CC8C.s")
 
