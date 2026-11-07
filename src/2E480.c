@@ -739,35 +739,7 @@ void func_80030A1C(s8 *arg0)
 #endif
 
 #ifdef NON_MATCHING
-void func_80030D3C(s8* arg0, s32 x, s32 y) {
-    s32 h = M2C_FIELD(arg0, s32*, 0x24) * M2C_FIELD(arg0, s32*, 0x10);
-    s32 w;
-    s32 arrowX;
-    s32 topY;
-    s32 bottomY;
-
-    w = M2C_FIELD(arg0, s32*, 0x48) * M2C_FIELD(arg0, s32*, 0xC);
-    topY = y - 0x10;
-    arrowX = w / 2 + x - 9;
-    gDPPipeSync(gDisplayListHead++);
-    gDPSetCycleType(gDisplayListHead++, G_CYC_1CYCLE);
-    gDPSetRenderMode(gDisplayListHead++, 0x0F0A4000, 0);
-    gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
-    gDPSetTexturePersp(gDisplayListHead++, G_TP_NONE);
-    gDPSetTextureFilter(gDisplayListHead++, G_TF_POINT);
-    func_8001C22C(x, topY, w, 0x10, D_04003A50, 8, 0);
-    bottomY = y + h;
-    func_8001C22C(x, bottomY, w, 0x10, D_04003A50, 8, 0);
-    gSPDisplayList(gDisplayListHead++, D_80073408);
-    func_8001B884(arrowX, topY, 0x12, 0x10, (M2C_FIELD(arg0, s32*, 0x2C) > 0) ? D_04003AD8 : D_040044F8, 0x14, 0x200000);
-    func_8001B884(arrowX, bottomY, 0x12, 0x10,
-                  (M2C_FIELD(arg0, s32*, 0x2C) + h <
-                   ((M2C_FIELD(M2C_FIELD(arg0, s8**, 0), s32*, 8) + M2C_FIELD(arg0, s32*, 0x48) - 1) / M2C_FIELD(arg0, s32*, 0x48)) * M2C_FIELD(arg0, s32*, 0x10))
-                      ? D_04003D60
-                      : D_04004780,
-                  0x14, 0x200000);
-    gSPDisplayList(gDisplayListHead++, D_80073438);
-}
+/* TODO: decompile func_80030D3C; signature not recovered. */
 #else
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80030D3C.s")
 #endif
