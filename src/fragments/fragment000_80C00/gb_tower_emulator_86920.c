@@ -990,11 +990,34 @@ void func_8110D3D4(s32 arg0) {
     func_8110D5BC(0, idx, &sp18);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110D408; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110D408.s")
-#endif
+u8* func_8110D840(s32);
+s32 func_8110D7EC(s32, s32);
+#define ENTRY ((u8*)&((s32(*)[4])table)[arg0])
+s32 func_8110D408(s32 arg0, s32* arg1) {
+    s32 ret;
+    u8* table = func_8110D840(2);
+    s32 state;
+    s32 sp28;
+
+    arg0 = func_8110D7B0(2, arg0);
+    if ((ret = func_8110D7EC(2, arg0)) != 0) {
+        func_8110CB40(arg0, 2);
+        *arg1 = 0;
+        return ret;
+    }
+    state = (s8)ENTRY[0x19];
+    if (state == 4) {
+        *arg1 = (s8)ENTRY[0x18];
+        return *(s32*)(ENTRY + 0x10);
+    }
+    if ((ret = func_8110D5BC(2, arg0, &sp28)) != 0) {
+        *arg1 = 0;
+        return ret;
+    }
+    *arg1 = (s8)ENTRY[0x18];
+    return *(s32*)(ENTRY + 0x10);
+}
+#undef ENTRY
 
 typedef struct Entry8110D4E0 { u8 unk00[2]; u8 unk02; u8 unk03; char unk04[8]; } Entry8110D4E0;
 extern Entry8110D4E0* D_811858B0;
