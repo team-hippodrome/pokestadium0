@@ -98,11 +98,33 @@ void func_8A200770(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4) {
     Font_EndTexturedTextRendering();
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8A20080C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment019_293410/func_8A20080C.s")
-#endif
+extern u8 D_8A203364[];
+s32 func_8002D3D0(u8*);
+void func_80027804(s8*, void*, s32, s32);
+void func_8A20080C(s8 *arg0, s32 arg1, s32 arg2, u8 *arg3)
+{
+  s8 *new_var;
+  s8 *sp2C;
+  func_8002A8C4(arg0, arg1, arg2, 0xB4, 0x84);
+  *((s32 *) (((s8 *) arg0) + 0x24)) = 0;
+  new_var = ((s8 *) arg0) + 0x28;
+  *((s32 *) (((s8 *) arg0) + 0x20)) = 0;
+  *((s32 *) new_var) = 0;
+  *((s32 *) (((s8 *) arg0) + 0x14)) = 0;
+  *((Color_RGBA8 *) (((s8 *) arg0) + 0x18)) = D_8A203304;
+  sp2C = arg0 + 0x50;
+  func_80027804(sp2C, D_8A203364, 3, 3);
+  func_8002D880(arg0 + 0x2C, sp2C, arg0 + 0x5C, (M2C_UNK *) func_8A200770, 0xA8, 0x24);
+  if ((!arg0) && (!arg0))
+  {
+  }
+  *((s32 *) (((s8 *) arg0) + 0x4C)) |= 0x10000;
+  if (((arg3[0] > 0) && (arg3[0] < 0x98)) && (func_8002D3D0(arg3) != 0))
+  {
+    return;
+  }
+  *(*((u16 **) (((s8 *) arg0) + 0x30))) |= 1;
+}
 
 void func_8A2008F4(s8 *arg0) {
     if (func_8002AB84() == 0) {

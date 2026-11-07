@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 4926,
-  "asm_owners": 518,
+  "c_owners": 4927,
+  "asm_owners": 517,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -603,7 +603,7 @@
     "tools/cflags_overrides.json": "7052d644eb08429c59981bb4c369c8c937c61ca4c639a1c1ca2c5fc0ce919ebb",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "3ee4e2ec9f14c15b0bb66e72eaaed6c35347db330d3196af077b2bf7a23aa0c4",
+    "docs/function-matches.csv": "6fe95188372e5e050e2ed427cbbfd5a82acee44e4d383472979b678166e81cd3",
     "linker_scripts/jp/symbol_addrs.txt": "3b5103d4cfe8c6cf2470a85f3aacf457f87dc2c7f2096a7a216bec5fd85d5385"
   },
   "binutils": {
@@ -799,7 +799,7 @@
     "src/fragments/fragment017_261F00.c": "010db2d8b146be87183a9f92e3d7a094eb3e9b17ab5eda9b74b443022094159e",
     "src/fragments/fragment018_262620/pokedex_214920.c": "8978a1c750088c065745e0ecc3b32d0d7be315ec08c8dab409d9477cfeb60de6",
     "src/fragments/fragment018_262620/pokedex_2190D0.c": "95f32a019b80bdf17400546f059a4fe7b54980b0adbcb3b3aa63b483453c8717",
-    "src/fragments/fragment019_293410/lab_pc_icons.c": "f632c906f48f5712c42e2f3a6bea5be0a76caccfba65a25fb766c3176559af12",
+    "src/fragments/fragment019_293410/lab_pc_icons.c": "25a72887214253f2b982c3e11c16a9b1cb657ff113d7a1f75b0118d8ed10862b",
     "src/fragments/fragment019_293410/lab_pc_icons_8A201598.c": "79849644ea082b060d05d6032edaa23dbdbf75aa3098204bcc21426daa6688ae",
     "src/fragments/fragment020_2B1360.c": "1d51773e2a436bb50560c5297d6152fb294823d9c01f0e5ec662adab156da927",
     "src/fragments/fragment021_2B13F0.c": "89591b5837dd2c5cb906da8fc3231bc8e0a207a6adf0fd1e7058e89f0fbbe95e",
