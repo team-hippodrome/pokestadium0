@@ -2506,7 +2506,7 @@ func_82110FC0,0x82110FC0,src/fragments/fragment012_17ED00/battle_engine_359F90.c
 func_82111080,0x82111080,src/fragments/fragment012_17ED00/battle_engine_359F90.c,Battle_ApplyRageContinuation,hand,,c
 func_82111150,0x82111150,src/fragments/fragment012_17ED00/battle_engine_359F90.c,Battle_UpdateBattleLog,hand,,c
 func_821111D0,0x821111D0,src/fragments/fragment012_17ED00/battle_engine_359F90.c,Battle_PlayMoveSound,hand,,c
-func_821112AC,0x821112AC,src/fragments/fragment012_17ED00/battle_engine_359F90.c,,asm,,asm
+func_821112AC,0x821112AC,src/fragments/fragment012_17ED00/battle_engine_359F90.c,func_821112AC,hand,,c
 func_821113E8,0x821113E8,src/fragments/fragment012_17ED00/battle_engine_359F90.c,,asm,,asm
 func_821115F4,0x821115F4,src/fragments/fragment012_17ED00/battle_engine_359F90.c,Battle_IncrementMoveUsage,hand,,c
 func_82111664,0x82111664,src/fragments/fragment012_17ED00/battle_engine_359F90.c,Battle_Effect_Metronome,s1,stadium1:src/fragments/battle_engine/battle_engine_359F90.c,c

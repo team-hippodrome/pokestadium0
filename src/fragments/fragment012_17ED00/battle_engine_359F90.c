@@ -501,11 +501,56 @@ void Battle_PlayMoveSound(void) {
     sBattleCritFlag = 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_821112AC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821112AC.s")
-#endif
+void func_821112AC(void) {
+    s32 n;
+
+    switch (((u8*)D_8219A3C0)[0x45]) {
+        case 0x26:
+            break;
+        case 0x28:
+            D_82199F50 = M2C_FIELD(D_8219A3C4, u16*, 0xC) / 2;
+            if ((u16)D_82199F50 == 0) {
+                D_82199F50 = 1;
+            }
+            break;
+        case 0x29:
+            switch (((u8*)D_8219A3C0)[0x44]) {
+                case 0x45:
+                case 0x65:
+                    n = ((u8*)D_8219A3C0)[0x26];
+                    break;
+                case 0x31:
+                    n = 0x14;
+                    break;
+                case 0x52:
+                    n = 0x28;
+                    break;
+                default:
+                    {
+                        s32 r;
+                        n = ((u8*)D_8219A3C0)[0x26];
+                        n = (n >> 1) + n;
+                        do {
+                            do {
+                                r = func_8210F3F0();
+                            } while (r == 0);
+                        } while (r >= n);
+                        n = r;
+                    }
+                    break;
+            }
+            D_82199F50 = n;
+            break;
+        default:
+            if (((u8*)D_8219A3C0)[0x46] == 0) {
+                return;
+            }
+            break;
+    }
+    if ((u16)D_82199F50 != 0) {
+        func_8211009C();
+    }
+}
 
 extern u8 D_82199F3F;
 #ifdef NON_MATCHING

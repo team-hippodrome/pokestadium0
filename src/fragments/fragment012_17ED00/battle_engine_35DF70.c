@@ -297,6 +297,12 @@ void Battle_Effect_Rage(void) {
     sBattleUser->unk_4D |= 0x40;
 }
 
+typedef struct {
+    /* 0x0 */ s32 unk_00;
+    /* 0x4 */ s32 unk_04;
+    /* 0x8 */ s32 unk_08;
+} unk_D_8006A9CC; // size = 0xC
+extern unk_D_8006A9CC D_8006A9CC[];
 #ifdef NON_MATCHING
 /* TODO: decompile func_8211576C; signature not recovered. */
 #else
@@ -332,12 +338,6 @@ void func_821159D0(void) {
     func_8211EF74(D_8219A520 + 0x88, -0x3C, D_8218C8CC);
 }
 
-typedef struct {
-    /* 0x0 */ s32 unk_00;
-    /* 0x4 */ s32 unk_04;
-    /* 0x8 */ s32 unk_08;
-} unk_D_8006A9CC; // size = 0xC
-extern unk_D_8006A9CC D_8006A9CC[];
 extern s32 D_8218C8D0;
 extern s32 D_8218C8D4;
 void func_82115A14(void) {
