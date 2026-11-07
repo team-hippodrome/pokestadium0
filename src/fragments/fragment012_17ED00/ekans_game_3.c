@@ -803,11 +803,30 @@ s32 func_82185494(void) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821854AC.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_821855F0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821855F0.s")
-#endif
+extern s32 D_821CF288;
+s32 func_821855F0(BattleSlotZ *arg0)
+{
+  s32 i;
+  BattleSlotZ *p;
+  int new_var;
+  if ((arg0 == D_821CF298) && (((u8 *) D_821CF2A0)[0x21] & 7))
+  {
+    new_var = !D_821CF288;
+    if ((new_var && (!D_821CF288)) && (!D_821CF288))
+    {
+    }
+    return 0;
+  }
+  for (i = 0, p = arg0; i < D_821CF288; i++, p++)
+  {
+    if (((p->unk_1C != 0) && (((u8 *) p)[0x25] & 7)) && (((u8 *) p)[0x7F] == 0))
+    {
+      return 0;
+    }
+  }
+
+  return 1;
+}
 
 extern u8 D_82194824[];
 extern u8 D_82194840[];
@@ -848,11 +867,57 @@ check:
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821857CC.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_821858DC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821858DC.s")
-#endif
+extern u8* D_821CF29C;
+s32 func_821858DC(u8 *arg0)
+{
+  s32 i;
+  if ((arg0[0x5A] & 1) || (((*((u16 *) (((s8 *) arg0) + 0x34))) / 2) < (*((u16 *) (((s8 *) arg0) + 0x72)))))
+  {
+    return -1;
+  }
+  switch (arg0[0x7C])
+  {
+    case 0x69:
+
+    case 0x87:
+
+    case 0x9C:
+      return -1;
+
+  }
+
+  if (func_82183CE4((s8 *) D_821CF29C) < 0x28)
+  {
+    for (i = 0; i < 4; i++)
+    {
+      if (arg0[0x2B + i] == 0)
+      {
+        return -1;
+      }
+      if (func_82184BC8((s8 *) arg0, arg0[0x2B + i]) != 0)
+      {
+        switch (arg0[0x2B + i])
+        {
+          case 0x69:
+
+          case 0x87:
+            return i;
+
+          case 0x9C:
+            if ((arg0[0x7E] != 0x9C) && (arg0[0x7D] != 0x9C))
+          {
+            return i;
+            break;
+          }
+
+        }
+
+      }
+    }
+
+  }
+  return -1;
+}
 
 extern u8* D_821CF29C;
 s32 func_8218824C(s32);

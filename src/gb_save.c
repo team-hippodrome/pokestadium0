@@ -797,11 +797,43 @@ void func_8002CA34(s8 *arg0, s32 arg1, s32 arg2) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002CC44.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002CD7C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002CD7C.s")
-#endif
+s32 func_8002BC14(s32);
+s32 func_8002DC04(void *, void *);
+extern s32 D_800603C0;
+
+s32 func_8002CD7C(s8 *arg0) {
+    s32 ret = 0;
+
+    if ((M2C_FIELD(arg0, s32 *, 0x28) != 1) && (M2C_FIELD(arg0, s32 *, 0x28) != 2)) {
+        return 0;
+    }
+    if (func_8002DC04(arg0 + 0x2C, arg0) == 0) {
+        s32 res = func_8002BC14(D_800603C0);
+
+        if (res == -1) {
+            func_8003F6AC(3);
+            ret = -1;
+        } else if (res == 1) {
+            switch (M2C_FIELD(arg0, s32 *, 0x34)) {
+                case 0:
+                    ret = 1;
+                    func_8003F6AC(0x1D);
+                    break;
+                case 1:
+                    ret = 2;
+                    func_8003F6AC(0x21);
+                    break;
+                case 2:
+                    ret = -1;
+                    func_8003F6AC(3);
+                    break;
+            }
+            if (arg0) { // no-op test; changes register allocation to match
+            }
+        }
+    }
+    return ret;
+}
 
 extern u8 D_80073554[];
 void func_8002A8E0(s32* arg0);

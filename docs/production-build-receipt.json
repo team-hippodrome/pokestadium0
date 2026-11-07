@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 4883,
-  "asm_owners": 561,
+  "c_owners": 4887,
+  "asm_owners": 557,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -603,7 +603,7 @@
     "tools/cflags_overrides.json": "7052d644eb08429c59981bb4c369c8c937c61ca4c639a1c1ca2c5fc0ce919ebb",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "acaf2ea0460ba0fdee7fc11282b318ea7490cbed75c0a7f3d5002f4ddfe82010",
+    "docs/function-matches.csv": "1cf8df9fcba6a8f2a60d08ef190123a052cd07101e317cd46fab52e5aed8bd69",
     "linker_scripts/jp/symbol_addrs.txt": "3b5103d4cfe8c6cf2470a85f3aacf457f87dc2c7f2096a7a216bec5fd85d5385"
   },
   "binutils": {
@@ -614,7 +614,7 @@
   "c_sources_sha256": {
     "src/1060.c": "8dbe2ec29a3709a1fcbdd3e375a0682f936e9a8997a7b8d26f3baf66ec372272",
     "src/26130.c": "c36b6f74d8e06109e59947eaa8955e2dfa27e7c1c21c7777adca93b9e02bb09d",
-    "src/2E480.c": "359a941956d8655671c7ccd2d036b2946eae9c775445e96aef81708b063211aa",
+    "src/2E480.c": "cb80a21e48924bd06f5a6d004ea4cbf1a551f0778446190924f528cbb334130a",
     "src/33E30.c": "c9fd2d571f0aa8aa565aa840b893fe023314b322b84c58d834370fbe64f590cf",
     "src/33FE0.c": "92773fa7984062880967c0df329407356d190467569e29469275ee7e90a7b269",
     "src/33FE0_2.c": "b2085e874773b9bbc6b33765654809e01faecc3318efd3d367f07ecd2a95081e",
@@ -777,7 +777,7 @@
     "src/fragments/fragment012_17ED00/battle_engine_thumbnail.c": "d2717cbc20d699d329f5a4f108f3264dc2d89e6c06a1aa40df896680f2a479f7",
     "src/fragments/fragment012_17ED00/ekans_game.c": "4c0d7afe0c3308ce8e32a1466e62fae8934e6fcd26584fb158fa89b07c3902a1",
     "src/fragments/fragment012_17ED00/ekans_game_2.c": "a843a8dcfda50b5c239239d42815db53bc72ffbf18dc042d5f01b364bcc4ffbd",
-    "src/fragments/fragment012_17ED00/ekans_game_3.c": "3c8f8fc32654a9b56a68833af9ae7c061e9608c28a24c1e6510fd5f7af983685",
+    "src/fragments/fragment012_17ED00/ekans_game_3.c": "e504cab4a0c0e22d9e9a0d712ab66aecead9679b4e37398bed836bd69ba8229f",
     "src/fragments/fragment012_17ED00/fragment1_89010.c": "dc29556dad1f10c69177bb21af9c9542c7ef5e5e29ea3a5a53ed7cdb9b74e5ed",
     "src/fragments/fragment012_17ED00/fragment1_89010_821328DC.c": "901f6b861de798e44a86953d188e36bab018d53c204092429a5ae06c18790655",
     "src/fragments/fragment012_17ED00/particle_math_261F90.c": "74022412078088a6e83edf3cd5e19d6220ea32b3705f0faff47b2ad5c4cf440c",
@@ -974,7 +974,7 @@
     "src/gb_audio_render.c": "0fff118e77fa82381154a56e875ee741e1fdff04b03ecff9a2bb14771221d51e",
     "src/gb_data.c": "38e026d47ec44d5de127778395cddf3c932ccdda434bef8628ea81336cce3ba3",
     "src/gb_mbc.c": "1ed5ad571c7b2f9ada6c5b47251450d75b7247527837bb602c67a4eddfd69f02",
-    "src/gb_save.c": "73d5eb0467e8068c1d390abf362fe7987321fe2c98cfa57972c21c7ae88710a8",
+    "src/gb_save.c": "97d118e92c1bafc484b05613d45584c900ab74b3a93a4cbb4f83662b64ba8634",
     "src/gb_tower.c": "176816e083b7e59f7a469e5cb27b7a0b94869007fcb3060a4e31dfeefbfd0124",
     "src/geo_layout.c": "cd22cfc78b438f75ba379097e38e64b8e773c73701f536774d4a9c9fbe313f0d",
     "src/geo_node.c": "4b117247e69f5030a02753148e827dc7179b9c497a8af94b2feb264947aa287a",

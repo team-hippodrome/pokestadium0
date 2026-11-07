@@ -17,7 +17,7 @@ func_8002DF54,0x8002DF54,src/2E480.c,func_8002DF54,hand,,c
 func_8002DF9C,0x8002DF9C,src/2E480.c,func_8002DF9C,hand,,c
 func_8002E078,0x8002E078,src/2E480.c,func_8002E078,hand,,c
 func_8002E230,0x8002E230,src/2E480.c,func_8002E230,hand,,c
-func_8002E3F0,0x8002E3F0,src/2E480.c,,asm,,asm
+func_8002E3F0,0x8002E3F0,src/2E480.c,func_8002E3F0,hand,,c
 func_8002E70C,0x8002E70C,src/2E480.c,,asm,,asm
 func_8002EC24,0x8002EC24,src/2E480.c,,asm,,asm
 func_8002ED18,0x8002ED18,src/2E480.c,func_8002ED18,m2c,m2c,c
@@ -2925,10 +2925,10 @@ func_8218540C,0x8218540C,src/fragments/fragment012_17ED00/ekans_game_3.c,func_82
 func_82185450,0x82185450,src/fragments/fragment012_17ED00/ekans_game_3.c,BattleAI_IsRestrictedRandomMove,hand,,c
 func_82185494,0x82185494,src/fragments/fragment012_17ED00/ekans_game_3.c,func_82185494,m2c,m2c,c
 func_821854AC,0x821854AC,src/fragments/fragment012_17ED00/ekans_game_3.c,,asm,,asm
-func_821855F0,0x821855F0,src/fragments/fragment012_17ED00/ekans_game_3.c,,asm,,asm
+func_821855F0,0x821855F0,src/fragments/fragment012_17ED00/ekans_game_3.c,func_821855F0,hand,,c
 func_82185684,0x82185684,src/fragments/fragment012_17ED00/ekans_game_3.c,func_82185684,hand,,c
 func_821857CC,0x821857CC,src/fragments/fragment012_17ED00/ekans_game_3.c,,asm,,asm
-func_821858DC,0x821858DC,src/fragments/fragment012_17ED00/ekans_game_3.c,,asm,,asm
+func_821858DC,0x821858DC,src/fragments/fragment012_17ED00/ekans_game_3.c,func_821858DC,hand,,c
 func_82185A30,0x82185A30,src/fragments/fragment012_17ED00/ekans_game_3.c,func_82185A30,hand,,c
 func_82185BE0,0x82185BE0,src/fragments/fragment012_17ED00/ekans_game_3.c,func_82185BE0,hand,,c
 func_82185D44,0x82185D44,src/fragments/fragment012_17ED00/ekans_game_3.c,,asm,,asm
@@ -4315,7 +4315,7 @@ func_8002C998,0x8002C998,src/gb_save.c,BattleInfoWidget_DrawLabel,hand,,c
 func_8002CA34,0x8002CA34,src/gb_save.c,func_8002CA34,m2c,m2c,c
 func_8002CAD0,0x8002CAD0,src/gb_save.c,,asm,,asm
 func_8002CC44,0x8002CC44,src/gb_save.c,,asm,,asm
-func_8002CD7C,0x8002CD7C,src/gb_save.c,,asm,,asm
+func_8002CD7C,0x8002CD7C,src/gb_save.c,func_8002CD7C,hand,,c
 func_8002CE5C,0x8002CE5C,src/gb_save.c,func_8002CE5C,hand,,c
 func_8002CEEC,0x8002CEEC,src/gb_save.c,func_8002CEEC,hand,,c
 func_8002D024,0x8002D024,src/gb_save.c,,asm,,asm

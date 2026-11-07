@@ -325,11 +325,58 @@ void func_8002E230(Menu8002E230* menu, s32 x, s32 y, s32 mask, s32 arg4) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002E3F0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002E3F0.s")
-#endif
+s32 func_8002E3F0(Menu8002E230* arg0) {
+    s32 input;
+    s32 old = arg0->cursor;
+
+    if (arg0->def->itemCount == 0) {
+        return 0;
+    }
+    if (arg0 && arg0) { // no-op test; changes register allocation to match
+    }
+    input = (u16)func_8000B30C();
+    switch (input) {
+        case 0x800:
+            arg0->cursor -= arg0->columns;
+            if (arg0->cursor < 0) {
+                arg0->cursor += ((arg0->def->itemCount - 1) / arg0->columns + 1) * arg0->columns;
+                if (arg0->cursor > arg0->def->itemCount - 1) {
+                    arg0->cursor = arg0->def->itemCount - 1;
+                }
+            }
+            break;
+        case 0x400:
+            arg0->cursor += arg0->columns;
+            if ((arg0->def->itemCount - 1) / arg0->columns < arg0->cursor / arg0->columns) {
+                arg0->cursor = arg0->cursor % arg0->columns;
+            } else if (arg0->cursor > arg0->def->itemCount - 1) {
+                arg0->cursor = arg0->def->itemCount - 1;
+            }
+            break;
+        case 0x200:
+            if (arg0->cursor % arg0->columns == 0) {
+                arg0->cursor += arg0->columns;
+            }
+            arg0->cursor--;
+            if (arg0->cursor > arg0->def->itemCount - 1) {
+                arg0->cursor = arg0->def->itemCount - 1;
+            }
+            break;
+        case 0x100:
+            if (arg0->cursor % arg0->columns + 1 == arg0->columns) {
+                arg0->cursor -= arg0->columns;
+            }
+            arg0->cursor++;
+            if (arg0->cursor >= arg0->def->itemCount) {
+                arg0->cursor -= arg0->cursor % arg0->columns;
+            }
+            break;
+    }
+    if (old != arg0->cursor) {
+        func_8003F6AC(1);
+    }
+    return input;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8002E70C; signature not recovered. */
