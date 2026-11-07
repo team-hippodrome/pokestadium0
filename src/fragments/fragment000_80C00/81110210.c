@@ -81,11 +81,29 @@ void func_81110694(Obj0694* arg0) {
     arg0->unk_B4 = D_811369C0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8111073C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8111073C.s")
-#endif
+typedef struct Flags8111073C {
+    /* 0x0 */ u32 b80 : 1;
+    /* 0x0 */ u32 b40 : 1;
+    /* 0x0 */ u32 b20 : 1;
+    /* 0x0 */ u32 rest : 29;
+} Flags8111073C;
+
+#define FLAGS ((Flags8111073C*)(arg0 + 0xB4))
+void func_8111073C(s8* arg0) {
+    if (FLAGS->b40 == 1) {
+        FLAGS->b40 = 0;
+    }
+    M2C_FIELD(arg0, u8*, 0x30) = 0;
+    M2C_FIELD(arg0, u8*, 0x34) = 0;
+    FLAGS->b80 = 0;
+    if (arg0 && arg0 && arg0) {}
+    M2C_FIELD(arg0, s32*, 0x44) = -1;
+    M2C_FIELD(arg0, s32*, 0x40) = -1;
+    FLAGS->b20 = 0;
+    M2C_FIELD(arg0, u8*, 0x5D) = 0;
+    M2C_FIELD(arg0, f32*, 0x70) = 0.0f;
+}
+#undef FLAGS
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_81110798; signature not recovered. */

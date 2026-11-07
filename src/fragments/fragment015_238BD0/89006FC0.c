@@ -303,11 +303,15 @@ s32 func_890082FC(s32 arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_89008AF4.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89008EF0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_89008EF0.s")
-#endif
+extern s32 D_8900A924[];
+extern s32 D_8900A93C[];
+void func_890019C8(s32, s32, s32, s32);
+void func_89008EF0(s8* arg0) {
+    if (M2C_FIELD(arg0, s32*, 0) == 1) {
+        if (0) {}
+        func_890019C8(M2C_FIELD(arg0, s32*, 0x30) + 0x58, M2C_FIELD(arg0, s32*, 0x34), D_8900A924[M2C_FIELD((0, arg0), s32*, 0x15C)], D_8900A93C[M2C_FIELD(arg0, s32*, 0x15C)]);
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_89008F4C; signature not recovered. */

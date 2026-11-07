@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 4904,
-  "asm_owners": 540,
+  "c_owners": 4906,
+  "asm_owners": 538,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -603,7 +603,7 @@
     "tools/cflags_overrides.json": "7052d644eb08429c59981bb4c369c8c937c61ca4c639a1c1ca2c5fc0ce919ebb",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "3d1b0ba037d5acf46688adb9e3417d91f2fac5e71b31b6bde077fba1b336c94b",
+    "docs/function-matches.csv": "0f0696125489e461b78fdde24194893fb6c1c77a817b6d292a55ae472c46e215",
     "linker_scripts/jp/symbol_addrs.txt": "3b5103d4cfe8c6cf2470a85f3aacf457f87dc2c7f2096a7a216bec5fd85d5385"
   },
   "binutils": {
@@ -673,7 +673,7 @@
     "src/fragments/fragment000_80C00/81100020.c": "efe92ce7ee7983a0f7b49b852f9650ce658deba0eb1d3601e9ba4a33ba7dfba6",
     "src/fragments/fragment000_80C00/81107390.c": "71ca1f7bf46e28ecb5c8349d853f1a6a2562932c921947ec06ef8d468a53076b",
     "src/fragments/fragment000_80C00/81110190.c": "c3654154efda0cd7040fdd8e2b6d4e862660e256550ffc7aa97119b537acf61d",
-    "src/fragments/fragment000_80C00/81110210.c": "fc1f8348e53f7c3253f03ecc52864911d4fa6b69ca9bc7ff30da0789a5acfad6",
+    "src/fragments/fragment000_80C00/81110210.c": "14db2b589cfde46f9720bf8addfc17854f5ed4117c4a4b6111e4b448d2037960",
     "src/fragments/fragment000_80C00/81111C20.c": "555a1d6975d960188756eb552108811fe4ddbb66a7f919d51e38b7c0444d75e0",
     "src/fragments/fragment000_80C00/81117B20.c": "3843091a770c9a107a189ef652ff919fc1eac6d520dd8100299adf9b1616cefc",
     "src/fragments/fragment000_80C00/battle_engine_2FA4D0.c": "96169d3cd584ca90783a597ca7644af6387b053272ce7724419ce713a62fa3a2",
@@ -789,7 +789,7 @@
     "src/fragments/fragment012_17ED00/particle_math_26E6D0_3.c": "f0a6213871cd4e3baae1d9b905e8ff098d5e5059c92250264da0269018343318",
     "src/fragments/fragment013_232510/demo_scenes_161E60.c": "e3b8fef74a3bc0faa9ada97609d1a2eb5ac17951be3b1ca75f3b4f10c9011a48",
     "src/fragments/fragment014_235D70/lab_pc_icons.c": "698a8a5680270d16b5a119673d9c43a02f3f196110ad572b935d4534605e329a",
-    "src/fragments/fragment015_238BD0/89006FC0.c": "e23cc0ecf2aa418dc18fe2442255ac103948643770f65a9ca2ec8eba8ce59b77",
+    "src/fragments/fragment015_238BD0/89006FC0.c": "38092e0c4e7083afb1ec0b7fa5d4a9657a4bc45e3eb66e2b4b35578466e21fe2",
     "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c": "526b6d84a2243967f1c9bed4c713b5d929910c1dc3ec86d022fd8350b3554a9c",
     "src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c": "81155eb1b53b107bb4662317c9e1ed7cb71a958efe8808ce9bf602e2c2d99b77",
     "src/fragments/fragment016_252E10/89100020.c": "dfad1132d8965c7103aecd5bf816037bf63ab852888c070c0b9e097c221a77a1",

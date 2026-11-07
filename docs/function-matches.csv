@@ -362,7 +362,7 @@ func_81110190,0x81110190,src/fragments/fragment000_80C00/81110190.c,osGbSetNextB
 func_81110210,0x81110210,src/fragments/fragment000_80C00/81110210.c,,asm,,asm
 func_811105DC,0x811105DC,src/fragments/fragment000_80C00/81110210.c,func_811105DC,hand,,c
 func_81110694,0x81110694,src/fragments/fragment000_80C00/81110210.c,func_81110694,hand,,c
-func_8111073C,0x8111073C,src/fragments/fragment000_80C00/81110210.c,,asm,,asm
+func_8111073C,0x8111073C,src/fragments/fragment000_80C00/81110210.c,func_8111073C,/tmp/w/073cx2.c,,c
 func_81110798,0x81110798,src/fragments/fragment000_80C00/81110210.c,,asm,,asm
 func_81110C6C,0x81110C6C,src/fragments/fragment000_80C00/81110210.c,func_81110C6C,hand,,c
 func_81110CA8,0x81110CA8,src/fragments/fragment000_80C00/81110210.c,func_81110CA8,hand,,c
@@ -3550,7 +3550,7 @@ func_89008370,0x89008370,src/fragments/fragment015_238BD0/89006FC0.c,,asm,,asm
 func_8900865C,0x8900865C,src/fragments/fragment015_238BD0/89006FC0.c,,asm,,asm
 func_890088F8,0x890088F8,src/fragments/fragment015_238BD0/89006FC0.c,,asm,,asm
 func_89008AF4,0x89008AF4,src/fragments/fragment015_238BD0/89006FC0.c,,asm,,asm
-func_89008EF0,0x89008EF0,src/fragments/fragment015_238BD0/89006FC0.c,,asm,,asm
+func_89008EF0,0x89008EF0,src/fragments/fragment015_238BD0/89006FC0.c,func_89008EF0,/tmp/w/8ef0x1.c,,c
 func_89008F4C,0x89008F4C,src/fragments/fragment015_238BD0/89006FC0.c,,asm,,asm
 func_890093AC,0x890093AC,src/fragments/fragment015_238BD0/89006FC0.c,func_890093AC,hand,,c
 func_89009414,0x89009414,src/fragments/fragment015_238BD0/89006FC0.c,func_89009414,hand,,c
