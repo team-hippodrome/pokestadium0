@@ -336,11 +336,27 @@ s32 func_89000828(s8* arg0) {
     return ret;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_890008C8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_890008C8.s")
-#endif
+typedef struct Rgba89000D50 {
+    /* 0x0 */ u8 r, g, b, a;
+} Rgba89000D50; // size = 0x4
+extern Rgba89000D50 D_8900A5BC;
+
+void func_890008C8(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
+    func_8002A8C4(arg0 + 4, arg1, arg2, 0x54, 0x34);
+    M2C_FIELD(arg0, s32*, 0x28) = 0;
+    M2C_FIELD(arg0, s32*, 0x24) = 0;
+    M2C_FIELD(arg0, s32*, 0x2C) = 0;
+    M2C_FIELD(arg0, s32*, 0x18) = 0;
+    M2C_FIELD(arg0, Rgba89000D50*, 0x1C) = D_8900A5BC;
+    M2C_FIELD(arg0, s32*, 0x40) = 2;
+    M2C_FIELD(arg0, s32*, 0x34) = 1;
+    M2C_FIELD(arg0, s32*, 0x38) = 1;
+    M2C_FIELD(arg0, s32*, 0x3C) = arg3;
+    M2C_FIELD(arg0, s32*, 0x44) = 0;
+    func_8000B2F4(D_800603C0);
+    M2C_FIELD(arg0, s32*, 0x30) = arg4;
+    M2C_FIELD(arg0, s32*, 0) = 0;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_89000960; signature not recovered. */
@@ -433,12 +449,8 @@ void func_89000D34(s8 *arg0, s32 arg1) {
  * mode.  `index` is unused.  (A shorter sibling of func_89004908, which has two more
  * colour tables.)
  */
-typedef struct Rgba89000D50 {
-    /* 0x0 */ u8 r, g, b, a;
-} Rgba89000D50; // size = 0x4
 void func_8002A0AC(s32, s32, s32, s32, Rgba89000D50);
 M2C_UNK func_8001AA9C(u8, u8, u8, u8);
-extern Rgba89000D50 D_8900A5BC;
 extern Rgba89000D50 D_8900A5D4[];
 extern M2C_UNK D_800734A8;
 void func_89000D50(s32 x, s32 y, char* str, UNUSED s32 index, s32 flags) {

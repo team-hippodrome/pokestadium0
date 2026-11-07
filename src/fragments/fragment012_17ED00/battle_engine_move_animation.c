@@ -1864,11 +1864,19 @@ void BattleScene_ResetParticipantAuxTransform(UNUSED ActivePokemon* owner, Activ
     active_pokemon->facingDirection = facing_direction;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82106FE0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82106FE0.s")
-#endif
+extern Entry82199E14 D_82199E10[];
+void func_8210E6F4(void);
+void func_82106FE0(BattleSessionTeams* session_teams) {
+    s32 i;
+
+    for (i = 0; i < 7; i++) {
+        D_82199E10[i].unk_04 = D_8218A7B0;
+    }
+    BattleScene_ResetParticipantAuxTransform(sActivePokemon[0], sActivePokemon[0], 1);
+    BattleScene_ResetParticipantAuxTransform(sActivePokemon[1], sActivePokemon[1], -1);
+    BattleScene_InitializePresentation(session_teams);
+    func_8210E6F4();
+}
 
 /**
  * Per-frame idle presentation for both participants.
