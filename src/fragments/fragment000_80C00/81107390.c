@@ -2,6 +2,26 @@
 
 #include "global.h"
 
+typedef struct AudioVoice81107E70 {
+    /* 0x00 */ char unk00[0xE];
+    /* 0x0E */ u16 offset;
+    /* 0x10 */ s16 count;
+    /* 0x12 */ s16 wrapCount;
+} AudioVoice81107E70; // size = 0x14
+
+typedef struct AudioChannel81107E70 {
+    /* 0x000 */ char unk000[0x3];
+    /* 0x003 */ u8 bank;
+    /* 0x004 */ char unk004[0x1C];
+    /* 0x020 */ s32 bufL;
+    /* 0x024 */ s32 bufR;
+    /* 0x028 */ char unk028[0x10];
+    /* 0x038 */ AudioVoice81107E70 voices[2][5];
+    /* 0x100 */ char unk100[0x58];
+} AudioChannel81107E70; // size = 0x158
+
+extern AudioChannel81107E70 D_81184110[];
+
 #ifdef NON_MATCHING
 /* TODO: decompile func_81107390; signature not recovered. */
 #else
@@ -70,21 +90,6 @@ void func_811077FC(u32 arg0) {
 #else
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81107AEC.s")
 #endif
-
-typedef struct AudioVoice81107E70 {
-    /* 0x00 */ char unk00[0xE];
-    /* 0x0E */ u16 offset;
-    /* 0x10 */ s16 count;
-    /* 0x12 */ s16 wrapCount;
-} AudioVoice81107E70; // size = 0x14
-
-typedef struct AudioChannel81107E70 {
-    /* 0x000 */ char unk000[0x3];
-    /* 0x003 */ u8 bank;
-    /* 0x004 */ char unk004[0x34];
-    /* 0x038 */ AudioVoice81107E70 voices[2][5];
-    /* 0x100 */ char unk100[0x58];
-} AudioChannel81107E70; // size = 0x158
 
 void* func_81107634(void* cmd, u16 dmem, u16 offset, s32 count, s32 channel);
 extern AudioChannel81107E70 D_81184110[];

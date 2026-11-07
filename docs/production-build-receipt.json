@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 4892,
-  "asm_owners": 552,
+  "c_owners": 4894,
+  "asm_owners": 550,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -603,7 +603,7 @@
     "tools/cflags_overrides.json": "7052d644eb08429c59981bb4c369c8c937c61ca4c639a1c1ca2c5fc0ce919ebb",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "d655f21c8d4a394e20ae95b5236500d24279ca5166d01ebe32cead978cb8a3bb",
+    "docs/function-matches.csv": "b9daca99b7636a4ee902657e6f216ad1665f389861daa50f1bcbf91f3e7ec920",
     "linker_scripts/jp/symbol_addrs.txt": "3b5103d4cfe8c6cf2470a85f3aacf457f87dc2c7f2096a7a216bec5fd85d5385"
   },
   "binutils": {
@@ -671,7 +671,7 @@
     "src/dma.c": "4a07cb055cd28fb692e5dd3ebf4f09047780d0634463431a66664b3e121bc3e8",
     "src/dp_intro.c": "39e1824379bae87ca6eeaed34c92c997eb93e9cc4a82c8eccdbd00b47fb73b24",
     "src/fragments/fragment000_80C00/81100020.c": "efe92ce7ee7983a0f7b49b852f9650ce658deba0eb1d3601e9ba4a33ba7dfba6",
-    "src/fragments/fragment000_80C00/81107390.c": "b3a85cbb3f7667126573c33d657ec42a87e3a766a5d47898c799672b31a1568b",
+    "src/fragments/fragment000_80C00/81107390.c": "71ca1f7bf46e28ecb5c8349d853f1a6a2562932c921947ec06ef8d468a53076b",
     "src/fragments/fragment000_80C00/81110190.c": "c3654154efda0cd7040fdd8e2b6d4e862660e256550ffc7aa97119b537acf61d",
     "src/fragments/fragment000_80C00/81110210.c": "fc1f8348e53f7c3253f03ecc52864911d4fa6b69ca9bc7ff30da0789a5acfad6",
     "src/fragments/fragment000_80C00/81111C20.c": "555a1d6975d960188756eb552108811fe4ddbb66a7f919d51e38b7c0444d75e0",
@@ -1182,7 +1182,7 @@
     "src/profiler.c": "fa24688648aa812dba1f00a9dbcd01f01acbfc61ac5f64ab9aeec92f40062a81",
     "src/rom_device.c": "58d99aa66ed7aa418bc3c3db56a545520ec3829b628d50ec3b2a223ec7c6eecd",
     "src/rsp.c": "7a8ee9ac2dd34ba7b559852110d4cb85bc1e135359529a4f1d936eccfbd9ed8a",
-    "src/save_data.c": "6099f33811701bb323589a3d80ec2f349298a90f1b3f4a142d04883080f5501d",
+    "src/save_data.c": "7cc449b8c3844fc613d8f49d0bec84b878fad51df24f34bba692390f7b2a4389",
     "src/scheduler.c": "0a8c7fc3b4ec4b1b4425558b41560792c6f9dc0d89992b4af00969c2b413f952",
     "src/stage_loader.c": "476c52dcb1f98cf6a34a359960e41a4d065a67b739e16e8632e108f66d20ab12",
     "src/stage_loader_2.c": "13a5ffde9ea37a48b7335f9a8707561b85619202603aa8c062c7747da0186414",

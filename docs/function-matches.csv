@@ -5303,9 +5303,9 @@ func_80023F38,0x80023F38,src/save_data.c,func_80023F38,hand,,c
 func_80024044,0x80024044,src/save_data.c,func_80024044,s1,stadium1:src/DDC0.c,c
 func_8002404C,0x8002404C,src/save_data.c,func_8002404C,m2c,m2c,c
 func_80024170,0x80024170,src/save_data.c,func_80024170,m2c,m2c,c
-func_80024294,0x80024294,src/save_data.c,,asm,,asm
+func_80024294,0x80024294,src/save_data.c,func_80024294,hand,,c
 func_800243B8,0x800243B8,src/save_data.c,func_800243B8,hand,,c
-func_80024470,0x80024470,src/save_data.c,,asm,,asm
+func_80024470,0x80024470,src/save_data.c,func_80024470,hand,,c
 func_800245E0,0x800245E0,src/save_data.c,Save_ResetAndCommitTypedRecord,s1,stadium1:src/save_data.c,c
 func_80024610,0x80024610,src/save_data.c,func_80024610,s1,stadium1:src/pokemon_stats.c,c
 func_8002465C,0x8002465C,src/save_data.c,func_8002465C,s1,stadium1:src/pokemon_stats.c,c

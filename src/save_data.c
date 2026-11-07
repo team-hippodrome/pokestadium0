@@ -175,7 +175,8 @@ void func_800239C4(s32 arg0, s32 arg1) {
 }
 
 M2C_UNK func_8004FD20();                            /* extern */
-void func_800239F0(s16 *arg0)
+void func_800239F0(arg0)
+    s16* arg0;
 {
   if (1)
   {
@@ -395,11 +396,28 @@ void func_80024170(s32 arg0, s32 arg1) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80024294; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80024294.s")
-#endif
+void func_80024294(s32 arg0, s32 arg1) {
+    switch (arg0) {
+    case 16:
+        func_800239C4((s32)&(*(Save80023F38**)&D_800AE8E0)->a[arg1], 0x128);
+        break;
+    case 17:
+        func_800239C4((s32)&(*(Save80023F38**)&D_800AE8E0)->b[arg1], 0x560);
+        break;
+    case 18:
+        func_800239C4((s32)&(*(Save80023F38**)&D_800AE8E0)->c[arg1], 0xE0);
+        break;
+    case 19:
+        func_800239C4((s32)&(*(Save80023F38**)&D_800AE8E0)->d, 0x11A0);
+        break;
+    case 20:
+        func_800239C4((s32)&(*(Save80023F38**)&D_800AE8E0)->e, 0x10);
+        break;
+    case 21:
+        func_800239C4((s32)&(*(Save80023F38**)&D_800AE8E0)->f, 0x288);
+        break;
+    }
+}
 
 void func_800243B8(void) {
     s32 i;
@@ -416,11 +434,45 @@ void func_800243B8(void) {
     func_800238D8(*(s32*)&D_800AE8E0 + 0x5700, 0x11A0);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80024470; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80024470.s")
-#endif
+void func_80024470(s32 arg0, s32 arg1) {
+    switch (arg0) {
+    case 16: {
+        SaveRecA80023F38* rec = &(*(Save80023F38**)&D_800AE8E0)->a[arg1];
+        func_800239F0(rec, 0x128);
+        ((s8*)rec)[2] = 0x50;
+        ((s8*)rec)[0xA] = 0x50;
+        break;
+    }
+    case 17: {
+        SaveRecB80023F38* rec = &(*(Save80023F38**)&D_800AE8E0)->b[arg1];
+        func_800239F0(rec, 0x560);
+        ((s8*)rec)[2] = 0x50;
+        ((s8*)rec)[0xA] = 0x50;
+        break;
+    }
+    case 18: {
+        SaveRecC80023F38* rec = &(*(Save80023F38**)&D_800AE8E0)->c[arg1];
+        func_800239F0(rec, 0xE0);
+        ((s8*)rec)[2] = 0x50;
+        break;
+    }
+    case 19: {
+        s16* rec = &(*(Save80023F38**)&D_800AE8E0)->d;
+        func_800239F0(rec, 0x11A0);
+        *rec |= 1;
+        break;
+    }
+    case 20: {
+        s16* rec = &(*(Save80023F38**)&D_800AE8E0)->e;
+        func_800239F0(rec, 0x10);
+        *rec |= 1;
+        break;
+    }
+    case 21:
+        func_800239F0(&(*(Save80023F38**)&D_800AE8E0)->f, 0x288);
+        break;
+    }
+}
 
 void Save_ResetAndCommitTypedRecord(s32 arg0, s32 arg1) {
     Save_ClearTypedRecord(arg0, arg1);
