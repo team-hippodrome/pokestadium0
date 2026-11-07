@@ -552,7 +552,7 @@
     ".rodata": "0x800793A0"
   },
   "src/save_data.c": {
-    ".rodata": "0x8007B718"
+    ".rodata": "0x8007B700"
   },
   "src/scheduler.c": {
     ".rodata": "0x800794E0"

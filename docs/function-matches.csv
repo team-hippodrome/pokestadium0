@@ -5292,7 +5292,7 @@ func_800238D8,0x800238D8,src/save_data.c,func_800238D8,hand,,c
 func_80023954,0x80023954,src/save_data.c,func_80023954,hand,,c
 func_800239C4,0x800239C4,src/save_data.c,func_800239C4,m2c,m2c,c
 func_800239F0,0x800239F0,src/save_data.c,func_800239F0,m2c,m2c+permuter,c
-func_80023A20,0x80023A20,src/save_data.c,,asm,,asm
+func_80023A20,0x80023A20,src/save_data.c,func_80023A20,hand,,c
 func_80023C08,0x80023C08,src/save_data.c,func_80023C08,m2c,m2c,c
 func_80023C30,0x80023C30,src/save_data.c,func_80023C30,m2c,m2c+permuter,c
 func_80023D30,0x80023D30,src/save_data.c,Audio_GetFreeVoiceCount,s1,stadium1:src/audio_sound_state.c,c
@@ -5313,12 +5313,12 @@ func_800246A8,0x800246A8,src/save_data.c,Deck_IsSaveEntryPresent,s1,stadium1:src
 func_800246C8,0x800246C8,src/save_data.c,func_800246C8,hand,,c
 func_8002479C,0x8002479C,src/save_data.c,func_8002479C,hand,,c
 func_8002488C,0x8002488C,src/save_data.c,func_8002488C,hand,,c
-func_80024954,0x80024954,src/save_data.c,,asm,,asm
+func_80024954,0x80024954,src/save_data.c,func_80024954,hand,,c
 func_80024ADC,0x80024ADC,src/save_data.c,func_80024ADC,hand,,c
 func_80024B90,0x80024B90,src/save_data.c,func_80024B90,m2c,m2c,c
 func_80024C80,0x80024C80,src/save_data.c,func_80024C80,m2c,m2c,c
-func_80024D88,0x80024D88,src/save_data.c,,asm,,asm
-func_80024F14,0x80024F14,src/save_data.c,,asm,,asm
+func_80024D88,0x80024D88,src/save_data.c,func_80024D88,hand,,c
+func_80024F14,0x80024F14,src/save_data.c,func_80024F14,hand,,c
 func_80025100,0x80025100,src/save_data.c,func_80025100,m2c,m2c,c
 func_80025130,0x80025130,src/save_data.c,func_80025130,m2c,m2c,c
 func_80025168,0x80025168,src/save_data.c,func_80025168,m2c,m2c+context,c
@@ -5326,7 +5326,7 @@ func_800251A8,0x800251A8,src/save_data.c,func_800251A8,m2c,m2c+permuter,c
 func_800251C8,0x800251C8,src/save_data.c,func_800251C8,hand,,c
 func_80025214,0x80025214,src/save_data.c,func_80025214,m2c,m2c,c
 func_80025224,0x80025224,src/save_data.c,func_80025224,m2c,m2c+context,c
-func_80025260,0x80025260,src/save_data.c,,asm,,asm
+func_80025260,0x80025260,src/save_data.c,func_80025260,hand,,c
 func_800253BC,0x800253BC,src/save_data.c,func_800253BC,hand,,c
 func_800045E0,0x800045E0,src/scheduler.c,Sched_ResetTaskState,s1,stadium1:src/scheduler.c,c
 func_8000460C,0x8000460C,src/scheduler.c,Sched_WaitForTaskMessage,s1,stadium1:src/scheduler.c,c

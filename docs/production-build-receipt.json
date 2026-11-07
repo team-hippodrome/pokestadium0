@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 4894,
-  "asm_owners": 550,
+  "c_owners": 4899,
+  "asm_owners": 545,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -593,7 +593,7 @@
     "src/vector_math.c"
   ],
   "source_registry_sha256": "23324db86a9583335916ac8b036f9a0000b23dcde9a41e110bd84697c4447969",
-  "section_registry_sha256": "bbe0c19c55dc2773330f9894ee7106700cf194bf3defdd6e51610c498cdb5455",
+  "section_registry_sha256": "e7eeaba0e517df1300bbbb6d15694de00d5777dfd58652a9edff0f27b6a43ab0",
   "headers_sha256": "8fb7b06750b14eebe3aa39eebf826e4703049469869396b4623fff5eb52cdcd8",
   "matching_registry_sha256": "d8bcc14a2a0db281cf30dcb9ddbd94d59e1afe84c70b4c8c017ea27ce60a251c",
   "build_tools_sha256": {
@@ -603,7 +603,7 @@
     "tools/cflags_overrides.json": "7052d644eb08429c59981bb4c369c8c937c61ca4c639a1c1ca2c5fc0ce919ebb",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "b9daca99b7636a4ee902657e6f216ad1665f389861daa50f1bcbf91f3e7ec920",
+    "docs/function-matches.csv": "921d92b818de17a9863d4353ad40bec362eb213b1fc7440915dccf4ddbcb3765",
     "linker_scripts/jp/symbol_addrs.txt": "3b5103d4cfe8c6cf2470a85f3aacf457f87dc2c7f2096a7a216bec5fd85d5385"
   },
   "binutils": {
@@ -1182,7 +1182,7 @@
     "src/profiler.c": "fa24688648aa812dba1f00a9dbcd01f01acbfc61ac5f64ab9aeec92f40062a81",
     "src/rom_device.c": "58d99aa66ed7aa418bc3c3db56a545520ec3829b628d50ec3b2a223ec7c6eecd",
     "src/rsp.c": "7a8ee9ac2dd34ba7b559852110d4cb85bc1e135359529a4f1d936eccfbd9ed8a",
-    "src/save_data.c": "7cc449b8c3844fc613d8f49d0bec84b878fad51df24f34bba692390f7b2a4389",
+    "src/save_data.c": "219c634bbea10427338fb8ee20b5076cef17363f871f3e3ce1615af5917184ed",
     "src/scheduler.c": "0a8c7fc3b4ec4b1b4425558b41560792c6f9dc0d89992b4af00969c2b413f952",
     "src/stage_loader.c": "476c52dcb1f98cf6a34a359960e41a4d065a67b739e16e8632e108f66d20ab12",
     "src/stage_loader_2.c": "13a5ffde9ea37a48b7335f9a8707561b85619202603aa8c062c7747da0186414",
