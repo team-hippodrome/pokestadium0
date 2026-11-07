@@ -388,7 +388,11 @@ void func_81113140(Particle3140* arg0) {
     arg0->b04 = 1;
 }
 
+#ifdef NON_MATCHING
+/* TODO: decompile func_811131CC; signature not recovered. */
+#else
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_811131CC.s")
+#endif
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_811132E4.s")
 

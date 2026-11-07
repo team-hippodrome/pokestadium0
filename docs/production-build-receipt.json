@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 4930,
-  "asm_owners": 514,
+  "c_owners": 4931,
+  "asm_owners": 513,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -603,7 +603,7 @@
     "tools/cflags_overrides.json": "7052d644eb08429c59981bb4c369c8c937c61ca4c639a1c1ca2c5fc0ce919ebb",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "400157e9cff3914e83d69ba6e5d5dc95a7781d03cc165569775971ceecc3950d",
+    "docs/function-matches.csv": "4ee0a5a419c4e09182f8588d0525f09c4be2b4816c884568fb7c550354d1a9a4",
     "linker_scripts/jp/symbol_addrs.txt": "3b5103d4cfe8c6cf2470a85f3aacf457f87dc2c7f2096a7a216bec5fd85d5385"
   },
   "binutils": {
@@ -680,7 +680,7 @@
     "src/fragments/fragment000_80C00/battle_engine_309ED0.c": "104cbe19677cf38e85e67edf6381cafffd7fa874f7a5219f15d159e4d667bce3",
     "src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c": "3e82731c217407080c8b5d0cbd5b4f66aeb0e8c2cd77287a30d35235ea0606b9",
     "src/fragments/fragment000_80C00/gb_tower_emulator_86920.c": "8eacf5982c614682c8dd9dcbb99d92f6e387678f441b7fa71f81d4c950f1ab21",
-    "src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c": "a72eb2b886d32007e532a6df45ed1e34e0166cf925c11d6cc72f00709e24a974",
+    "src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c": "318086a76636aa22c02772ffe3f9f26b31146866ab82c26ff798244af2c084b4",
     "src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_811177E8.c": "4b75c7a204982ed7a37d2030b1b5e8b5691252c4fecc501cb8b96a2abc3c9db7",
     "src/fragments/fragment001_15B1A0.c": "d1c261a91d2655fce1c365532252dbb923f0e500cf5a8cd8959a1fdedbaa8444",
     "src/fragments/fragment002_15E220.c": "22ca703e0dfefcfde7bcfc1a79ada2cc330ef5b85672a3135c8d49be018e882e",
@@ -692,7 +692,7 @@
     "src/fragments/fragment007_166580.c": "e57384cb5b9bf7a80ffbf1d2d63b2985c77c654052717db0bf11f9c373feed6f",
     "src/fragments/fragment007_166580_2.c": "56b0700668c3b37f0dc634a9de6e453c587f36ebfad129eaab6eaf7bc774fbec",
     "src/fragments/fragment007_166580_3.c": "c58046963b69c4f47fd66924877aa44b7d5bdcd4ec7f58230dd5022bd3fa550c",
-    "src/fragments/fragment008_1720F0.c": "544f64465523803141a9d62c2ccbb0399d4df944df1cf4d9d086902b281e8ee2",
+    "src/fragments/fragment008_1720F0.c": "e8d54c0209dd88002c6b9999369cce59f5b0e016beef3e1e03bdf17168010f5d",
     "src/fragments/fragment009_175570.c": "f15eaa1907af594a25af5f2c6890667b75e07bd3c706f091377747e8352bd54b",
     "src/fragments/fragment010_17BE70/pikachu_reward.c": "3a9f362382ad7a2789d29a624a626699afa1bb9e572a8f2f3b7ec47d32014506",
     "src/fragments/fragment011_17E340/area_select.c": "354abcd268b9f1cd60f8bd6d27ea2ca9ea129994e44d92766ca25752652e4f01",

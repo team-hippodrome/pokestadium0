@@ -139,11 +139,34 @@ void func_88100428(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s32* arg5
     Font_EndTexturedTextRendering();
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_881004CC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment008_1720F0/func_881004CC.s")
-#endif
+void func_8002A8C4(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+s32 func_800226BC(s32, s32, s32);
+void func_80027804(s8*, s8*, s32, s32);
+M2C_UNK func_8002D880(s8 *, s8 *, s8 *, M2C_UNK *, s32, s32);
+extern s32 D_88103078;
+
+void func_881004CC(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, M2C_UNK* arg5, s32 arg6, M2C_UNK* arg7, s32 arg8, M2C_UNK* arg9) {
+    s32 sp2C;
+
+    func_8002A8C4(arg0, arg1, arg2, arg3, arg4);
+    M2C_FIELD(arg0, s32 *, 0x28) = 0;
+    M2C_FIELD(arg0, s32 *, 0x24) = 0;
+    M2C_FIELD(arg0, s32 *, 0x14) = 0x801;
+    M2C_FIELD(arg0, s32 *, 0x20) = (s32)arg9;
+    func_80027804(arg0 + 0x50, (s8*)arg5, arg6, arg6);
+    func_8002D880(arg0 + 0x2C, arg0 + 0x50, arg0 + 0x5C, (M2C_UNK*)func_88100428, arg3 - 0xC, 0x20);
+    M2C_FIELD(arg0, s32 *, 0x4C) = (s32) (M2C_FIELD(arg0, s32 *, 0x4C) | 0x10000);
+    M2C_FIELD(arg0, s32 *, 0x7C) = (s32)arg7;
+    M2C_FIELD(arg0, s32 *, 0x80) = arg8;
+    sp2C = func_88100020();
+    if ((func_800226BC(0x20, D_88103078, 0) == 0) || (sp2C == -1)) {
+        M2C_FIELD(M2C_FIELD(arg0, s8 **, 0x30), u16 *, 0) |= 1;
+    }
+    if (sp2C == 0) {
+        M2C_FIELD(M2C_FIELD(arg0, s8 **, 0x30), u16 *, 2) |= 1;
+        M2C_FIELD(M2C_FIELD(arg0, s8 **, 0x30), u16 *, 4) |= 1;
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_881005E4; signature not recovered. */
@@ -581,7 +604,7 @@ void func_88102710(s32* arg0) {
 
 s32 func_80025BD8();
 M2C_UNK func_80027FF8(M2C_UNK *, s32);
-M2C_UNK func_881004CC(void *, M2C_UNK, M2C_UNK, M2C_UNK, s32, M2C_UNK *, s32, M2C_UNK *, s32, M2C_UNK *);
+void func_881004CC(s8*, s32, s32, s32, s32, M2C_UNK*, s32, M2C_UNK*, s32, M2C_UNK*);
 extern M2C_UNK D_88102D84;
 extern M2C_UNK D_88102D90;
 extern M2C_UNK D_88103000;
@@ -646,7 +669,7 @@ M2C_UNK func_88102834(s32 a) {
  * not match).  What the states and helpers do is not established; the
  * helpers are still assembly.
  */
-M2C_UNK func_881004CC(void *, M2C_UNK, M2C_UNK, M2C_UNK, s32, M2C_UNK *, s32, M2C_UNK *, s32, M2C_UNK *);
+void func_881004CC(s8*, s32, s32, s32, s32, M2C_UNK*, s32, M2C_UNK*, s32, M2C_UNK*);
 s32 func_881007AC(void *);
 s32 func_88102184(void *);
 void func_88102600(s32 *);
