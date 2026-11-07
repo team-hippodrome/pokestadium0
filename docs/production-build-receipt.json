@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 4910,
-  "asm_owners": 534,
+  "c_owners": 4912,
+  "asm_owners": 532,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -603,7 +603,7 @@
     "tools/cflags_overrides.json": "7052d644eb08429c59981bb4c369c8c937c61ca4c639a1c1ca2c5fc0ce919ebb",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "e9e9d99ffd89996824117d344b60d2e27957b59af500b2e3ccf983a4db9768df",
+    "docs/function-matches.csv": "24f942c4ef2d0aa0dfaee24915431aacb53c19a9c3d51710b91e507f3a16da87",
     "linker_scripts/jp/symbol_addrs.txt": "3b5103d4cfe8c6cf2470a85f3aacf457f87dc2c7f2096a7a216bec5fd85d5385"
   },
   "binutils": {
@@ -810,8 +810,8 @@
     "src/fragments/fragment030_326700.c": "06e937e0de6c26b005ff49e353ee98d76b76e8e36ae847a6562d3db4e45c6e4d",
     "src/fragments/fragment031_3553C0/8F200020.c": "1ff404b0ec536364936d6078d3cb1bc92f9a641ff067a135a5292685ad1ea15f",
     "src/fragments/fragment031_3553C0/particle_data_library_257DE0.c": "1d81015184d7381469245214e16725ea4585e1a471443b55a9bfd3ff7018c2c8",
-    "src/fragments/fragment032_35C390.c": "9e3528662e3b445ee2c4bf99e416c542a12d1bc3e3b00ca66df4929c675ae070",
-    "src/fragments/fragment033_35E790.c": "a5620171d9cb8b41568041fae01f45f5f933812bf4b2d9b8a5c4019f8a2be118",
+    "src/fragments/fragment032_35C390.c": "3b699fb288c8958a7cf981c1aeeffcf4493253d19aa859f56434c6bcfa2c5ba0",
+    "src/fragments/fragment033_35E790.c": "494409b6ee78cbba7988df2653ebc88224b4f94b6cfc70242f556ac12b88831e",
     "src/fragments/fragment034_369F50.c": "06d8f5edaacdd136354f3fbaba6bfa6a5893377d174412e2d1a4dbd442bdf01a",
     "src/fragments/fragment038_38A540.c": "daffc2bd818ce0fd04cc886cea58ca1cac91ea3bd7fd64db927a34c05f09e2a1",
     "src/fragments/fragment039_3C5200.c": "a5bcc1168ee0de12af965ec4afb84c4b1f35a9f2729a4a60cad9f68b86d59242",

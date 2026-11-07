@@ -101,11 +101,31 @@ Gfx* func_8F600300(Gfx* gfx, void* segment) {
     return gfx;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8F600360; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment033_35E790/func_8F600360.s")
-#endif
+void func_8F600360(s32 arg0, DemoGeoNode *arg1)
+{
+  s32 pad;
+  DemoGeoTeam *teams;
+  s32 team;
+  s32 slot;
+  if (arg0 == 2)
+  {
+    teams = D_80060490->node.callbackArg;
+    team = (((u32) arg1->node.callbackArg) >> 16) & 0xFFFF;
+    slot = ((u32) arg1->node.callbackArg) & 0xFFFF;
+    if (slot < teams[team].unk_38[0][2])
+    {
+      arg1->unk_18 = Gfx_AllocDisplayList(0x10);
+      func_8F600300(arg1->unk_18, teams[team].unk_08[slot]);
+    }
+    else
+    {
+      arg1->unk_18 = 0;
+      if (arg1)
+      {
+      }
+    }
+  }
+}
 
 Gfx* func_8F600420(Gfx* gfx, void* segment) {
     gSPSegment(gfx++, 0x0F, osVirtualToPhysical(segment));
