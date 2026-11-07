@@ -700,7 +700,19 @@ void func_821272C0(s8 *arg0) {
     M2C_FIELD(arg0, s16 *, 0x7BE) = 0x800;
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821272CC.s")
+void ModelAnim_SetFrame(DisplayObject* display_object, s16 animation_timer);
+void func_821272CC(DisplayObject* arg0, s32 arg1) {
+    s32 frames = M2C_FIELD(M2C_FIELD(arg0, s8**, 0x44), u16*, 0xA);
+
+    if (M2C_FIELD(arg0, u16*, 0x7C2) & 2) {
+        return;
+    }
+    /* Read through a second type so the halfword is loaded again, as in the original. */
+    if ((u16)M2C_FIELD(arg0, s16*, 0x7C2) & 0x4000) {
+        return;
+    }
+    ModelAnim_SetFrame(arg0, (arg1 / frames + 1) * frames - arg1);
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82127354.s")
 

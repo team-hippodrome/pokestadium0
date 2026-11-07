@@ -151,11 +151,24 @@ void func_8110E994(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110E9A8.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110EABC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110EABC.s")
-#endif
+typedef struct Entry8110EABC {
+    /* 0x00 */ s8 active;
+    /* 0x01 */ char unk01[0x53];
+} Entry8110EABC; // size = 0x54
+extern volatile s32 D_811859D4;
+extern Entry8110EABC D_81185580[1];
+void func_8110EB40(Entry8110EABC*, s32);
+void func_8110EABC(s32 arg0) {
+    s32 i;
+
+    if (D_811859D4 != 1U) {
+        for (i = 0; i < 1; i++) {
+            if (D_81185580[i].active == 1) {
+                func_8110EB40(&D_81185580[i], arg0);
+            }
+        }
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8110EB40; signature not recovered. */
