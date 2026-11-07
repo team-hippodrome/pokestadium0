@@ -956,7 +956,39 @@ s32 func_8900352C(s32* arg0) {
 #endif
 
 #ifdef NON_MATCHING
-/* TODO: decompile func_8900379C; signature not recovered. */
+// Matches, but its jump table can only be placed once func_89002318 (whose table precedes it) is C.
+M2C_UNK func_800069CC();
+void func_8900379C(void* arg) {
+    s8* arg0 = arg;
+
+    func_800069CC();
+    func_8900054C();
+    switch (M2C_FIELD(arg0, s32*, 0)) {
+        case 1:
+            func_89001CB0(arg0 + 4);
+            break;
+        case 2:
+            func_89001CB0(arg0 + 4);
+            func_8002CAD0(arg0 + 0x4E8);
+            break;
+        case 3:
+            func_89001CB0(arg0 + 4);
+            func_89000694(arg0 + 0x54C);
+            break;
+        case 4:
+            func_89002D14(arg0 + 0x604, 2);
+            break;
+        case 5:
+            func_89002D14(arg0 + 0x604, 0x10);
+            func_890032E4(arg0 + 0x68C);
+            break;
+        case 6:
+            func_89002D14(arg0 + 0x604, 0x10);
+            func_890032E4(arg0 + 0x68C);
+            func_89000694(arg0 + 0x54C);
+            break;
+    }
+}
 #else
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_8900379C.s")
 #endif
@@ -971,7 +1003,7 @@ void func_8002D7D4(s32);
 void func_800243B8(void);
 void func_800245E0(s32, s32);
 void func_89000494(s32, s32, s32, s8*, s32, void*, s32);
-M2C_UNK func_8900379C(M2C_UNK*);
+void func_8900379C(void*);
 typedef struct Slot89003880 {
     /* 0x00 */ s32 active;
     /* 0x04 */ char unk04[0x10];
@@ -1227,7 +1259,7 @@ s32 func_8900429C(s32 arg0) {
 M2C_UNK func_8000B1FC();                            /* extern */
 M2C_UNK func_8000B220();                            /* extern */
 void func_89003650(s8*);
-M2C_UNK func_8900379C(M2C_UNK *);                   /* extern */
+void func_8900379C(void*);
 s32 func_89003A88(M2C_UNK *);                       /* extern */
 M2C_UNK func_890067B0(M2C_UNK *, M2C_UNK *);        /* extern */
 M2C_UNK func_890069C0(M2C_UNK *);                   /* extern */
