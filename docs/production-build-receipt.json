@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 4921,
-  "asm_owners": 523,
+  "c_owners": 4922,
+  "asm_owners": 522,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -603,7 +603,7 @@
     "tools/cflags_overrides.json": "7052d644eb08429c59981bb4c369c8c937c61ca4c639a1c1ca2c5fc0ce919ebb",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "45f8624e2eb9a39b7ad6268b14cdf08b63f5139bff266389579675d8fc459d6d",
+    "docs/function-matches.csv": "66abc18593c166563cf328826f45e14b191222a23dcbf27439997723e2e0387a",
     "linker_scripts/jp/symbol_addrs.txt": "3b5103d4cfe8c6cf2470a85f3aacf457f87dc2c7f2096a7a216bec5fd85d5385"
   },
   "binutils": {
@@ -678,7 +678,7 @@
     "src/fragments/fragment000_80C00/81117B20.c": "3843091a770c9a107a189ef652ff919fc1eac6d520dd8100299adf9b1616cefc",
     "src/fragments/fragment000_80C00/battle_engine_2FA4D0.c": "96169d3cd584ca90783a597ca7644af6387b053272ce7724419ce713a62fa3a2",
     "src/fragments/fragment000_80C00/battle_engine_309ED0.c": "104cbe19677cf38e85e67edf6381cafffd7fa874f7a5219f15d159e4d667bce3",
-    "src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c": "3a3f65773276970481489bbfdc841208979d3df1a756800a0da59d6df3a1e77a",
+    "src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c": "3e82731c217407080c8b5d0cbd5b4f66aeb0e8c2cd77287a30d35235ea0606b9",
     "src/fragments/fragment000_80C00/gb_tower_emulator_86920.c": "8eacf5982c614682c8dd9dcbb99d92f6e387678f441b7fa71f81d4c950f1ab21",
     "src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c": "a72eb2b886d32007e532a6df45ed1e34e0166cf925c11d6cc72f00709e24a974",
     "src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_811177E8.c": "4b75c7a204982ed7a37d2030b1b5e8b5691252c4fecc501cb8b96a2abc3c9db7",
