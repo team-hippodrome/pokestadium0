@@ -525,7 +525,7 @@ void func_8213A68C(void) {
     }
 }
 
-M2C_UNK func_8213A904(s8 *);                      /* extern */
+void func_8213A904(s8 *);
 M2C_UNK func_8213A9C4(s8 *, s32);                 /* extern */
 s32 func_8213CAFC(s8 *, M2C_UNK);                 /* extern */
 s32 func_8213CB1C(s8 *, M2C_UNK);                 /* extern */
@@ -555,7 +555,7 @@ void func_8213A784(s32 arg0) {
     } while (var_s3 != 0x12C);
 }
 
-M2C_UNK func_8213A904(s8 *);                      /* extern */
+void func_8213A904(s8 *);
 M2C_UNK func_8213A9C4(s8 *, s32);                 /* extern */
 s32 func_8213CAFC(s8 *, M2C_UNK);                 /* extern */
 
@@ -577,11 +577,25 @@ void func_8213A858(s32 arg0) {
     } while (var_s1 != 0x12C);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8213A904; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8213A904.s")
-#endif
+typedef void (*Fn8213A904)(s8*, s32);
+void func_8213A904(s8* arg0) {
+    s8* desc = M2C_FIELD(arg0, s8**, 0xC);
+    s8* sp = M2C_FIELD(desc, s8**, 4);
+
+    if (M2C_FIELD(desc, s16*, 0) == 1) {
+        switch (M2C_FIELD(sp, s16*, 2)) {
+            case 0:
+                gSPDisplayList(gDisplayListHead++, D_82190548);
+                break;
+            case 1:
+                gSPDisplayList(gDisplayListHead++, D_821904C8);
+                break;
+        }
+        if (M2C_FIELD(sp, s16*, 0) != 2) {
+            M2C_FIELD(sp, Fn8213A904*, 4)(arg0, *M2C_FIELD(sp, s32**, 0xC));
+        }
+    }
+}
 
 typedef void (*ParticleDrawFn2)(Particle*, s32);
 typedef void (*ParticleDrawFnCam)(Particle*, CameraNode*);
