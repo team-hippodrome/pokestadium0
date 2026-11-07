@@ -1108,11 +1108,33 @@ void func_82004B0C(s32 arg0) {
     func_82004518(arg0, 1, 0);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82004BC0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment007_166580/func_82004BC0.s")
-#endif
+void func_82000594(void*);
+void func_820003D4(void*);
+void func_80027804(void*, void*, s32, s32);
+void func_82004BC0(s8 *arg0)
+{
+  s32 i;
+  M2C_FIELD(arg0, s32*, 0x4368) = (!((M2C_FIELD(arg0, s32*, 0x4370)) == 0)) || (!((M2C_FIELD(arg0, s32*, 0x4374)) == 0));
+  M2C_FIELD(arg0, s32*, 0x436C) = ((M2C_FIELD(arg0, s32*, 0x4370)) == 0) && ((M2C_FIELD(arg0, s32*, 0x4374)) == 0);
+  func_80027410(arg0 + 0x4310, (s32) (arg0 + 0x10), 0x214, 0x20, 0);
+  func_820003D4(arg0 + 0x4310);
+  if (M2C_FIELD(arg0, s32*, 0x4368))
+  {
+    func_8200053C((void *) (arg0 + 0x4310));
+  }
+  if (M2C_FIELD(arg0, s32*, 0x436C))
+  {
+    func_82000594(arg0 + 0x4310);
+  }
+  func_80027804(arg0 + 0x4320, arg0 + 0x4290, 0x20, 0);
+  func_820008C8((void *) (arg0 + 0x4320), (void *) (arg0 + 0x4310));
+  func_8200140C((void *) (arg0 + 0x4310), M2C_FIELD(arg0, s32*, 0x4374));
+  M2C_FIELD(arg0, s32*, 0x4354) = 0;
+    for (i = 0; i < 5; i++) { M2C_FIELD(arg0, s32*, (0x4340 + (i * 4))) = 0;
+  }
+
+  func_82002D5C(arg0 + 0x4690, 0x30, 0x5C, (s32) (arg0 + 0x4320), (s32) (arg0 + 0x4340), M2C_FIELD(arg0, s32*, 0x4374));
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_82004CE0; signature not recovered. */
