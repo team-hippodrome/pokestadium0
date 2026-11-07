@@ -85,6 +85,16 @@ void func_821325E8(s32 arg0) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82132628.s")
+s32 func_821217DC(s32);
+void func_8000EEBC(Vec3f*, Vec3f*, f32, s32, s32);
+void func_82132628(CameraNode* arg0) {
+    if (func_821217DC(0xF) != 0) {
+        sBattleScene.scene->unk_20++;
+    }
+    M2C_FIELD(sBattleScene.scene, s16*, 0x5A) += 0x2D8;
+    func_8000EEBC(&arg0->view.targetPosition, &arg0->view.eyePosition, M2C_FIELD(sBattleScene.scene, f32*, 0x74), M2C_FIELD(sBattleScene.scene, s16*, 0x58), M2C_FIELD(sBattleScene.scene, s16*, 0x5A));
+    func_8210BCF0(&arg0->view.targetPosition, &arg0->view.eyePosition, D_8219A5A0 + 0x74, D_8219A5A0 + 0x58, D_8219A5A0 + 0x5A);
+    M2C_FIELD(D_8219A5A0, f32*, 0x98) = 0.0f;
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821326E4.s")

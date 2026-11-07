@@ -2960,7 +2960,7 @@ func_821323D8,0x821323D8,src/fragments/fragment012_17ED00/fragment1_89010.c,Batt
 func_821323E0,0x821323E0,src/fragments/fragment012_17ED00/fragment1_89010.c,BattleScene_UpdateIntroSequence,hand,,c
 func_821324D8,0x821324D8,src/fragments/fragment012_17ED00/fragment1_89010.c,func_821324D8,hand,,c
 func_821325E8,0x821325E8,src/fragments/fragment012_17ED00/fragment1_89010.c,func_821325E8,m2c,m2c,c
-func_82132628,0x82132628,src/fragments/fragment012_17ED00/fragment1_89010.c,,asm,,asm
+func_82132628,0x82132628,src/fragments/fragment012_17ED00/fragment1_89010.c,func_82132628,hand,,c
 func_821326E4,0x821326E4,src/fragments/fragment012_17ED00/fragment1_89010.c,,asm,,asm
 func_821328DC,0x821328DC,src/fragments/fragment012_17ED00/fragment1_89010_821328DC.c,func_821328DC,hand,,c
 func_82137340,0x82137340,src/fragments/fragment012_17ED00/particle_math_261F90.c,ParticleMath_BitwiseOr,s1,stadium1:src/fragments/particle_math/particle_math_261F90.c,c
