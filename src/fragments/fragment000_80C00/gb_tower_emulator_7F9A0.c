@@ -706,11 +706,29 @@ s32 func_81104C30(u8* arg0) {
     return i;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81104CD4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81104CD4.s")
-#endif
+s32 func_81104CD4(s8* arg0) {
+    s32 i;
+    s32 sum;
+
+    if ((M2C_FIELD(arg0, u32*, 0x8C) >> 13) == 1) {
+        for (i = 0x598; i < 0x59E; i++) {
+            if (M2C_FIELD(arg0, u8**, 0x54)[i] == 0x50) {
+                goto found;
+            }
+        }
+        return 11;
+    found:
+        sum = 0;
+        for (i = 0x598; i < 0x1594; i++) {
+            sum += M2C_FIELD(arg0, u8**, 0x54)[i];
+        }
+        sum = (sum & 0xFF) ^ 0xFF;
+        if (sum != M2C_FIELD(arg0, u8**, 0x54)[i]) {
+            return 10;
+        }
+    }
+    return 0;
+}
 
 extern s32 D_81154C48;
 
