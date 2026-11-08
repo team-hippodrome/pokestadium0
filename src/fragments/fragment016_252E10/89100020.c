@@ -555,11 +555,77 @@ M2C_UNK func_89101D94(Ctx89101D94* arg0) {
     func_80027D68(arg0->unkB160, D_8910D990[arg0->unk78]);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89101F90; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89101F90.s")
-#endif
+typedef struct Pair8910D910 { void* a; s32 b; } Pair8910D910;
+extern Pair8910D910 D_8910D910[];
+void func_89106424(s8*, void*, s8*, s32, s32);
+void func_89106570(s8*);
+void func_891071A4(s8*, s32, s32, s8*);
+void func_89107A60(s8*, s32, s32, s8*);
+typedef struct Ctx89101F90 {
+    /* 0x0000 */ char unk0000[0x2C];
+    /* 0x002C */ s32 x;
+    /* 0x0030 */ s32 y;
+    /* 0x0034 */ s32 dx;
+    /* 0x0038 */ s32 dy;
+    /* 0x003C */ char unk003C[0x88 - 0x3C];
+    /* 0x0088 */ s32 state;
+    /* 0x008C */ char unk008C[0x9654 - 0x8C];
+    /* 0x9654 */ s8 unk9654[0x966C - 0x9654];
+    /* 0x966C */ Rgba891024A4 color;
+    /* 0x9670 */ char unk9670[0x9680 - 0x9670];
+    /* 0x9680 */ s8 unk9680[0x96C8 - 0x9680];
+    /* 0x96C8 */ s32 posX;
+    /* 0x96CC */ s32 posY;
+    /* 0x96D0 */ char unk96D0[0x97C8 - 0x96D0];
+    /* 0x97C8 */ s8 unk97C8[0x9918 - 0x97C8];
+    /* 0x9918 */ s8 unk9918[0x9920 - 0x9918];
+    /* 0x9920 */ s8 unk9920[0x9B00 - 0x9920];
+    /* 0x9B00 */ s8 unk9B00[0x9B08 - 0x9B00];
+    /* 0x9B08 */ s8 unk9B08[0xB15C - 0x9B08];
+    /* 0xB15C */ s32 mode;
+    /* 0xB160 */ char unkB160[0xB548 - 0xB160];
+    /* 0xB548 */ s32* ranges;
+    /* 0xB54C */ char unkB54C[4];
+    /* 0xB550 */ s32 base;
+} Ctx89101F90;
+
+void func_89101F90(Ctx89101F90* arg0) {
+    s32 sel;
+
+    sel = arg0->ranges[arg0->mode] + arg0->base - 2;
+    switch (sel) {
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+        case 10:
+        case 11:
+        case 12:
+        case 13:
+        case 14:
+        case 15:
+            arg0->state = 3;
+            func_89106424(arg0->unk9654, D_8910D910[sel].a, arg0->unk97C8, D_8910D910[sel].b, 0);
+            func_8002A8C4(arg0->unk9680, func_891005CC(arg0), arg0->y, 0, 0x16);
+            arg0->posX = arg0->x + arg0->dx;
+            arg0->posY = arg0->y + arg0->dy;
+            func_89106570(arg0->unk9654);
+            arg0->color = D_8910A7F4;
+            break;
+        case 4:
+        case 5:
+            func_891071A4(arg0->unk9920, 0x81, 0x94, arg0->unk9918);
+            arg0->state = 5;
+            break;
+        case 6:
+        case 7:
+        case 8:
+        case 9:
+            func_89107A60(arg0->unk9B08, 0x81, 0x94, arg0->unk9B00);
+            arg0->state = 6;
+            break;
+    }
+}
 
 typedef struct Str891020F8 { char s[13]; } Str891020F8;
 typedef struct Big891020F8 {
