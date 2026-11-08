@@ -121,11 +121,38 @@ void func_8A100318(void* arg0, s32 arg1, s32 arg2) {
     M2C_FIELD(arg0, s32 *, 0x4C) = (s32) (M2C_FIELD(arg0, s32 *, 0x4C) | 0x10000);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8A1003D0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment018_262620/func_8A1003D0.s")
-#endif
+s32 func_8002AE6C();
+s32 func_80029658(s32, s32, s32, void*);
+void func_80029028(s32, s32, s32, s32, Color_RGBA8);
+void func_8002F6C4(void*, s32, s32, s32, s32);
+void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
+extern u8 D_8007356C;
+extern u8 D_800734A8[];
+extern Gfx D_80060270[];
+extern Gfx D_80060290[];
+extern Gfx D_80060398[];
+extern u8 D_04005890[];
+extern Color_RGBA8 D_8A1057DC;
+extern char D_8A12FC48[];
+extern char D_8A12FC5C[];
+void func_8A1003D0(s8* arg0, u32 arg1) {
+    char* str;
+
+    if (func_8002AE6C() == 0) {
+        func_80029658(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0x145, M2C_FIELD(arg0, s32*, 8), &D_8007356C);
+        func_8002F6C4(arg0 + 0x2C, M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0x16, arg1 | 0xFFED, (s32)(arg0 + 0x1B0));
+        gSPDisplayList(gDisplayListHead++, D_80060270);
+        func_80029028(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0x14C, M2C_FIELD(arg0, s32*, 8) - 0xC, 0x1C, D_8A1057DC);
+        Font_BeginTranslucentTextRendering();
+        Gfx_SetEnvColor(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
+        Font_SetActive(8, 0);
+        Font_Printf(M2C_FIELD(arg0, s32*, 0) + 0x24, M2C_FIELD(arg0, s32*, 4) + 0x150, M2C_FIELD(arg0, s32*, 0x1B0) ? D_8A12FC48 : D_8A12FC5C);
+        Font_EndTexturedTextRendering();
+        gSPDisplayList(gDisplayListHead++, D_80060290);
+        func_8001B884(M2C_FIELD(arg0, s32*, 0) + 0xD8, M2C_FIELD(arg0, s32*, 4) + 0x150, 0x14, 0x14, D_04005890, 0x14, 0x200000);
+        gSPDisplayList(gDisplayListHead++, D_80060398);
+    }
+}
 
 extern s32 D_800603C0;
 s32 func_8002FD8C(unk_func_8820BE14_02C_038*);
@@ -412,7 +439,7 @@ void func_8A101154(void* arg0) {
 
 M2C_UNK func_800069CC();                            /* extern */
 M2C_UNK func_80028060(M2C_UNK, M2C_UNK *, M2C_UNK *, s32); /* extern */
-M2C_UNK func_8A1003D0(M2C_UNK *, u32);          /* extern */
+void func_8A1003D0(s8*, u32);
 void func_8A10068C(void*);
 extern M2C_UNK D_8A12FD2C;
 extern M2C_UNK D_8A12FFC0;
@@ -439,7 +466,7 @@ s32 func_8A1011A4(s32 arg0) {
 }
 
 M2C_UNK func_8003F6AC(M2C_UNK);
-M2C_UNK func_8A1003D0(M2C_UNK *, u32);
+void func_8A1003D0(s8*, u32);
 void func_8000B1FC(void);
 M2C_UNK func_8000B220();
 M2C_UNK func_8000B2F4(s32);

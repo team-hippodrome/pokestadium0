@@ -3840,7 +3840,7 @@ func_8A100020,0x8A100020,src/fragments/fragment018_262620/pokedex_214920.c,func_
 func_8A1000C0,0x8A1000C0,src/fragments/fragment018_262620/pokedex_214920.c,func_8A1000C0,m2c,m2c,c
 func_8A100104,0x8A100104,src/fragments/fragment018_262620/pokedex_214920.c,,asm,,asm
 func_8A100318,0x8A100318,src/fragments/fragment018_262620/pokedex_214920.c,func_8A100318,m2c,m2c,c
-func_8A1003D0,0x8A1003D0,src/fragments/fragment018_262620/pokedex_214920.c,,asm,,asm
+func_8A1003D0,0x8A1003D0,src/fragments/fragment018_262620/pokedex_214920.c,func_8A1003D0,hand,,c
 func_8A100588,0x8A100588,src/fragments/fragment018_262620/pokedex_214920.c,func_8A100588,hand,,c
 func_8A100620,0x8A100620,src/fragments/fragment018_262620/pokedex_214920.c,func_8A100620,hand,,c
 func_8A10068C,0x8A10068C,src/fragments/fragment018_262620/pokedex_214920.c,func_8A10068C,hand,,c
