@@ -118,11 +118,49 @@ void Battle_Effect_OHKO(void) {
     sBattleCritFlag = 2;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82114D10; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82114D10.s")
-#endif
+extern s32 D_8218C878;
+extern s32 D_8218C87C;
+extern s32 D_8218C880;
+extern s32 D_8218C884;
+extern s32 D_8218C888;
+extern s32 D_8218C88C;
+
+void func_82114D10(void) {
+    sBattleScene.scene->unk_48 = 0xE;
+    sBattleUser->unk_4C |= 0x10;
+
+    if ((sBattleUser->moveCache.unk_01 == 0x2B) || (sBattleUser->moveCache.lastMove == DIG)) {
+        sBattleUser->unk_4C |= 0x40;
+        if (sBattleUser->moveCache.lastMove == DIG) {
+            sBattleScene.scene->unk_48 = 0xD;
+        }
+
+        if (sBattleUser->moveCache.unk_01 == 0x2B) {
+            sBattleScene.scene->unk_48 = 0xC;
+        }
+    }
+
+    switch (sBattleUser->moveCache.lastMove) {
+        case 0xD:
+            func_8211EF74(D_8219A520 + 0xC8, -0x51, D_8218C878, func_82107F88(sActivePokemon[sBattleScene.scene->unk_2C]));
+            break;
+        case 0x4C:
+            func_8211EF74(D_8219A520 + 0xC8, -0x50, D_8218C87C, func_82107F88(sActivePokemon[sBattleScene.scene->unk_2C]));
+            break;
+        case 0x82:
+            func_8211EF74(D_8219A520 + 0xC8, -0x4F, D_8218C880, func_82107F88(sActivePokemon[sBattleScene.scene->unk_2C]));
+            break;
+        case 0x8F:
+            func_8211EF74(D_8219A520 + 0xC8, -0x4E, D_8218C884, func_82107F88(sActivePokemon[sBattleScene.scene->unk_2C]));
+            break;
+        case 0x13:
+            func_8211EF74(D_8219A520 + 0x148, -0x4D, D_8218C888, func_82107F88(sActivePokemon[sBattleScene.scene->unk_2C]));
+            break;
+        case 0x5B:
+            func_8211EF74(D_8219A520 + 0x148, -0x4C, D_8218C88C, func_82107F88(sActivePokemon[sBattleScene.scene->unk_2C]));
+            break;
+    }
+}
 
 extern u8* D_8219A3C0;
 extern u8* D_8219A3C4;

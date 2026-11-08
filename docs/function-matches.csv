@@ -2520,7 +2520,7 @@ func_82114A8C,0x82114A8C,src/fragments/fragment012_17ED00/battle_engine_35DF70.c
 func_82114B44,0x82114B44,src/fragments/fragment012_17ED00/battle_engine_35DF70.c,Battle_Effect_MultiHit,s1,stadium1:src/fragments/battle_engine/battle_engine_35DF70.c,c
 func_82114C20,0x82114C20,src/fragments/fragment012_17ED00/battle_engine_35DF70.c,func_82114C20,hand,,c
 func_82114CAC,0x82114CAC,src/fragments/fragment012_17ED00/battle_engine_35DF70.c,Battle_Effect_OHKO,s1,stadium1:src/fragments/battle_engine/battle_engine_35DF70.c,c
-func_82114D10,0x82114D10,src/fragments/fragment012_17ED00/battle_engine_35DF70.c,,asm,,asm
+func_82114D10,0x82114D10,src/fragments/fragment012_17ED00/battle_engine_35DF70.c,func_82114D10,hand,,c
 func_82114F9C,0x82114F9C,src/fragments/fragment012_17ED00/battle_engine_35DF70.c,func_82114F9C,hand,,c
 func_82115024,0x82115024,src/fragments/fragment012_17ED00/battle_engine_35DF70.c,Battle_Effect_Mist,hand,,c
 func_821150EC,0x821150EC,src/fragments/fragment012_17ED00/battle_engine_35DF70.c,Battle_Effect_FocusEnergy,hand,,c
