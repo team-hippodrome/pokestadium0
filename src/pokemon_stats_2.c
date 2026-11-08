@@ -355,11 +355,37 @@ void GbSave_CheckLocationFlag(s32 arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002178C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002178C.s")
-#endif
+s32 func_8002178C(s32 arg0) {
+    u8 sp2F;
+    s32 sp28 = 0;
+
+    if (sGbSavePorts[arg0].unk_00 & 1) {
+        return 1;
+    }
+
+    sGbSavePorts[arg0].unk_40 = main_pool_alloc_with_func(0x1020, 0, arg0 + 'DAT0', GbSave_ReleasePortBuffers);
+    sGbSavePorts[arg0].unk_00 &= ~0x4000;
+
+    if (sGbSavePorts[arg0].unk_40 != NULL) {
+        sGbSavePorts[arg0].unk_00 |= 1;
+        if (GbTower_ProbePak(arg0, &sp2F, sGbSavePorts[arg0].unk_18) == 0) {
+            Game_ShutdownAndLoadFragment(arg0, 2);
+        }
+
+        sp28 = GbSave_ReadMainData(arg0);
+        if (GbTower_CheckPakRemoved(arg0, sp2F) == 0) {
+            Game_ShutdownAndLoadFragment(arg0, 2);
+        }
+
+        if (sp28 != 0) {
+            GbSave_CheckLocationFlag(arg0);
+        } else {
+            main_pool_try_free(sGbSavePorts[arg0].unk_40);
+        }
+    }
+
+    return sp28;
+}
 
 s32 GbSave_EnsureMainDataLoaded(s32 arg0) {
     s32 sp1C = 0;
