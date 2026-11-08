@@ -573,9 +573,3 @@ void func_8212120C(CameraNode* arg0) {
 #else
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82121260.s")
 #endif
-
-#ifdef NON_MATCHING
-/* TODO: decompile func_82121434; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82121434.s")
-#endif

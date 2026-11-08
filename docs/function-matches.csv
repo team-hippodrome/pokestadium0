@@ -1721,7 +1721,7 @@ func_8212116C,0x8212116C,src/fragments/fragment012_17ED00/battle_engine_32B680.c
 func_821211D4,0x821211D4,src/fragments/fragment012_17ED00/battle_engine_32B680.c,func_821211D4,m2c,m2c,c
 func_8212120C,0x8212120C,src/fragments/fragment012_17ED00/battle_engine_32B680.c,func_8212120C,hand,,c
 func_82121260,0x82121260,src/fragments/fragment012_17ED00/battle_engine_32B680.c,,asm,,asm
-func_82121434,0x82121434,src/fragments/fragment012_17ED00/battle_engine_32B680.c,,asm,,asm
+func_82121434,0x82121434,src/fragments/fragment012_17ED00/battle_engine_32B680_82121434.c,func_82121434,hand,,c
 func_82121604,0x82121604,src/fragments/fragment012_17ED00/battle_engine_32B680_82121604.c,func_82121604,hand,,c
 func_82141760,0x82141760,src/fragments/fragment012_17ED00/battle_engine_32B680_2.c,ParticleEffect_Noop,s1,stadium1:src/fragments/battle_engine/battle_engine_32B680.c,c
 func_8214176C,0x8214176C,src/fragments/fragment012_17ED00/battle_engine_32B680_2.c,BattleAnim_DrawAsset76Ia8FrameWithAsset77I4Overlay,hand,,c
