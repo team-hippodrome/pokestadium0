@@ -4300,7 +4300,7 @@ func_8002B3C4,0x8002B3C4,src/gb_save.c,Ui_AdjustSteppedScrollSelection,s1,stadiu
 func_8002B4B4,0x8002B4B4,src/gb_save.c,Ui_AdjustNumericSelection,hand,,c
 func_8002B638,0x8002B638,src/gb_save.c,Ui_HandleNumericSelectionInput,s1,stadium1:src/gb_save.c,c
 func_8002B66C,0x8002B66C,src/gb_save.c,Ui_AdjustSteppedRangeSelection,s1,stadium1:src/gb_save.c,c
-func_8002B788,0x8002B788,src/gb_save.c,,asm,,asm
+func_8002B788,0x8002B788,src/gb_save.c,func_8002B788,s1,,c
 func_8002B940,0x8002B940,src/gb_save.c,func_8002B940,hand,,c
 func_8002BAB8,0x8002BAB8,src/gb_save.c,func_8002BAB8,hand,,c
 func_8002BC14,0x8002BC14,src/gb_save.c,Ui_GetSelectionDirection,s1,stadium1:src/gb_save.c,c
