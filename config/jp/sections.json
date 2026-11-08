@@ -362,7 +362,13 @@
       "size": "0x1C"
     }
   },
-  "src/fragments/fragment016_252E10/89100020.c": {
+  "src/fragments/fragment016_252E10/89100020_89102AB8.c": {
+    ".rodata": {
+      "address": "0x8910DF44",
+      "size": "0x14"
+    }
+  },
+  "src/fragments/fragment016_252E10/89100020_89102C40.c": {
     ".rodata": {
       "address": "0x8910DFC8",
       "size": "0x38"
