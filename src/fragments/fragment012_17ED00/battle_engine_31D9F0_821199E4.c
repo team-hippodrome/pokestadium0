@@ -275,11 +275,24 @@ void func_8211C9FC(void) {
     func_8001ABBC();
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8211CB0C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211CB0C.s")
-#endif
+extern Gfx D_800602C8[];
+extern Gfx D_80060398[];
+extern u8 D_03003EC0[];
+extern u8 D_03006C40[];
+
+void func_8211CB0C(void) {
+    s32 i;
+    u8* tex;
+
+    gSPDisplayList(gDisplayListHead++, D_800602C8);
+    // Keep on one line: IDO schedules the setup differently otherwise.
+    tex = D_03003EC0; i = 0x17; do {
+        Gfx_DrawTextureRgba32(0x1E, i, 0x68, 1, tex, 0x68, 0);
+        tex += 0x1A0;
+        i++;
+    } while (tex != D_03006C40);
+    gSPDisplayList(gDisplayListHead++, D_80060398);
+}
 
 extern s8 D_8219A4A0[];
 extern s8 D_8219A4C8[];
