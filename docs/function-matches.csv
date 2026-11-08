@@ -1419,7 +1419,7 @@ func_82116EB4,0x82116EB4,src/fragments/fragment012_17ED00/battle_engine_31D9F0.c
 func_82116FF4,0x82116FF4,src/fragments/fragment012_17ED00/battle_engine_31D9F0.c,func_82116FF4,m2c,m2c,c
 func_821170D0,0x821170D0,src/fragments/fragment012_17ED00/battle_engine_31D9F0.c,func_821170D0,hand,,c
 func_8211724C,0x8211724C,src/fragments/fragment012_17ED00/battle_engine_31D9F0.c,BattleHud_DrawSpeciesNameLabelAuto,s1,stadium1:src/fragments/battle_engine/battle_engine_2FA4D0.c,c
-func_821172F0,0x821172F0,src/fragments/fragment012_17ED00/battle_engine_31D9F0.c,,asm,,asm
+func_821172F0,0x821172F0,src/fragments/fragment012_17ED00/battle_engine_31D9F0.c,func_821172F0,hand,,c
 func_821174AC,0x821174AC,src/fragments/fragment012_17ED00/battle_engine_31D9F0.c,BattleHud_DrawBorderTile,s1,stadium1:src/fragments/battle_engine/battle_engine_2FA4D0.c,c
 func_82117608,0x82117608,src/fragments/fragment012_17ED00/battle_engine_31D9F0.c,ParticleEffect_InitNoop,s1,stadium1:src/fragments/battle_engine/battle_engine_31D9F0.c,c
 func_82117610,0x82117610,src/fragments/fragment012_17ED00/battle_engine_31D9F0_82117610.c,func_82117610,hand,,c
