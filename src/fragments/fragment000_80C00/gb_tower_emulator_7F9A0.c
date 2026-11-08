@@ -632,11 +632,38 @@ void func_81104540(u16* arg0, s32 arg1, s32 arg2) {
     func_80052100(arg0, 0x1E00);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81104618; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81104618.s")
-#endif
+extern s32 D_81156550;
+extern u8 D_8111E308;
+extern u8 D_811221C0[];
+extern u8 D_81121B30[];
+extern u8 D_811220D0[];
+extern u8 D_81122010[];
+extern u8 D_81122070[];
+extern u8 D_81121DA0[];
+void func_81103C40(s32, u8*, s32, s32, s32);
+
+void func_81104618(s32 arg0) {
+    s32 sp2C;
+    s32 mode;
+
+    sp2C = ((u8*)D_81156550)[0x101B9];
+    mode = D_8111E308;
+
+    if (mode == 1) {
+        arg0 += 0xA8;
+        func_81103C40(arg0 + 0x16BE, D_811221C0, 0, 0x10, 5);
+        func_81103C40(arg0 + 0x506, D_81121B30, 0, 0x18, 0xD);
+    } else if (mode == 2) {
+        arg0 += 0x94;
+        func_81103C40(arg0 + 0x16BE, D_811220D0, 0, 0x18, 5);
+        func_81103C40(arg0 + 0x55A, (sp2C >= 3) ? D_81122010 : D_81122070, 0, 8, 6);
+        func_81103C40(arg0 + 0x506, D_81121DA0, 0, 0x18, 0xD);
+    }
+    if (D_8111E308 != 0) {
+        func_81103C40(arg0 + 0x53A, D_81122010, 0, 8, 6);
+        func_81103C40(arg0 + 0x54A, (sp2C >= 2) ? D_81122010 : D_81122070, 0, 8, 6);
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_811047A0; signature not recovered. */
