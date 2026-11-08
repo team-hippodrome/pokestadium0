@@ -110,7 +110,7 @@ func_80047490,0x80047490,src/48090.c,func_80047490,hand,,c
 func_800474B8,0x800474B8,src/48090.c,func_800474B8,hand,,c
 func_800474E0,0x800474E0,src/48090.c,func_800474E0,m2c,m2c+permuter,c
 func_80048010,0x80048010,src/48C10.c,,asm,,asm
-func_80048110,0x80048110,src/48D10.c,,asm,,asm
+func_80048110,0x80048110,src/48D10.c,n_alMainBusPull,s1,stadium1:src/libnaudio/n_mainbus.c,c
 func_8004BB60,0x8004BB60,src/4C760.c,func_8004BB60,hand,,c
 func_8004CB00,0x8004CB00,src/4D700.c,LeoCJCreateLeoManager,s1,,c
 func_8004CD40,0x8004CD40,src/4D940.c,LeoTestUnitReady,hand,,c
