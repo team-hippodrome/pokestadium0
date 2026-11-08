@@ -590,7 +590,7 @@ func_81112FFC,0x81112FFC,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0
 func_8111303C,0x8111303C,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_8111303C,hand,,c
 func_81113140,0x81113140,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_81113140,hand,,c
 func_811131CC,0x811131CC,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,,asm,,asm
-func_811132E4,0x811132E4,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,,asm,,asm
+func_811132E4,0x811132E4,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_811132E4,hand,,c
 func_81113650,0x81113650,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,,asm,,asm
 func_81113A44,0x81113A44,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,,asm,,asm
 func_81113E54,0x81113E54,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_81113E54,hand,,c
@@ -615,27 +615,27 @@ func_81115750,0x81115750,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0
 func_8111578C,0x8111578C,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_81215D8C_jp,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
 func_811157DC,0x811157DC,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_81215DDC_jp,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
 func_81115804,0x81115804,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,GbApu_SetNoisePeriodBounds,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
-func_81115818,0x81115818,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,GbApu_FreqToStep,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
-func_811158F4,0x811158F4,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_811158F4,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c,c
-func_81115A20,0x81115A20,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,GbApu_FreqToStep2x,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
-func_81115AF0,0x81115AF0,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_81115AF0,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
-func_81115AF8,0x81115AF8,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_81115AF8,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c,c
-func_81115BD4,0x81115BD4,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,GbApu_UpdateSquare1Channel,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c,c
-func_81115EC0,0x81115EC0,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,GbApu_UpdateSquare2Channel,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c,c
-func_811160BC,0x811160BC,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,GbApu_UpdateWaveChannel,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c,c
-func_81116250,0x81116250,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_81207C5C_Empty,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c,c
-func_81116258,0x81116258,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_81116258,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c,c
-func_811164CC,0x811164CC,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_811164CC,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c,c
-func_81116C88,0x81116C88,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_81116C88,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
-func_81117068,0x81117068,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_81117068,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
-func_811171DC,0x811171DC,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,GbApu_ResetChannels,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
-func_81117288,0x81117288,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,GbApu_Reset,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
-func_811172AC,0x811172AC,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_811172AC,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
-func_811173F4,0x811173F4,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_811173F4,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
-func_811173FC,0x811173FC,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,GbMem_ReadIoRegister,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
-func_811174D8,0x811174D8,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_811174D8,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
-func_811177D0,0x811177D0,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,GbAudio_SetAlternateRendererEnabled,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
-func_811177DC,0x811177DC,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,GbAudio_SetAlternateStreamId,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
+func_81115818,0x81115818,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81115818.c,GbApu_FreqToStep,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
+func_811158F4,0x811158F4,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81115818.c,func_811158F4,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c,c
+func_81115A20,0x81115A20,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81115818.c,GbApu_FreqToStep2x,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
+func_81115AF0,0x81115AF0,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81115818.c,func_81115AF0,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
+func_81115AF8,0x81115AF8,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81115818.c,func_81115AF8,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c,c
+func_81115BD4,0x81115BD4,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81115818.c,GbApu_UpdateSquare1Channel,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c,c
+func_81115EC0,0x81115EC0,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81115818.c,GbApu_UpdateSquare2Channel,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c,c
+func_811160BC,0x811160BC,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81115818.c,GbApu_UpdateWaveChannel,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c,c
+func_81116250,0x81116250,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81115818.c,func_81207C5C_Empty,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c,c
+func_81116258,0x81116258,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81115818.c,func_81116258,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c,c
+func_811164CC,0x811164CC,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81115818.c,func_811164CC,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c,c
+func_81116C88,0x81116C88,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81115818.c,func_81116C88,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
+func_81117068,0x81117068,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81115818.c,func_81117068,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
+func_811171DC,0x811171DC,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81115818.c,GbApu_ResetChannels,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
+func_81117288,0x81117288,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81115818.c,GbApu_Reset,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
+func_811172AC,0x811172AC,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81115818.c,func_811172AC,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
+func_811173F4,0x811173F4,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81115818.c,func_811173F4,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
+func_811173FC,0x811173FC,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81115818.c,GbMem_ReadIoRegister,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
+func_811174D8,0x811174D8,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81115818.c,func_811174D8,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
+func_811177D0,0x811177D0,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81115818.c,GbAudio_SetAlternateRendererEnabled,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
+func_811177DC,0x811177DC,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81115818.c,GbAudio_SetAlternateStreamId,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
 func_811177E8,0x811177E8,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_811177E8.c,func_811177E8,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
 func_81117AFC,0x81117AFC,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_811177E8.c,func_81117AFC,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
 func_81117B04,0x81117B04,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_811177E8.c,func_81218104_jp,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
