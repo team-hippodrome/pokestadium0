@@ -403,11 +403,48 @@ void func_89006054(s8 *arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_8900609C.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_890067B0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_890067B0.s")
-#endif
+s8* func_80017860(s32);
+void func_80017934(void);
+s32 func_80018F2C(s8*, s32, s32, s32, s32, s32, s32, s32);
+void func_80027410(s8*, s8*, s32, s32, s32);
+void func_89000448(s32, s32, s32, s8*);
+void func_89005098(s8*, s32, s32, s8*, s8*);
+extern u8 D_81000000[];
+extern u8 D_0015B1A0[];
+extern u8 D_0015E220[];
+extern s32 D_89019108;
+void func_890067B0(s8* arg0, s32 arg1) {
+    s32 i;
+
+    main_pool_push_state('OTPC');
+    M2C_FIELD(arg0, s8**, 4) = func_80017860(1);
+    M2C_FIELD(arg0, s32*, 8) = func_80018F2C(M2C_FIELD(arg0, s8**, 4), 0x80, 0x78, 0, 0, 0x78, 0x78, 0);
+    func_80017934();
+    Fragment_Load(((((u32)D_81000000) & 0x0FF00000) >> 0x14) - 0x10, D_0015B1A0, D_0015E220);
+    M2C_FIELD(arg0, s32*, 0xC) = arg1;
+    func_80027410(arg0 + 0x778C, arg0 + 0x52C, 0x50, 6, 0);
+    for (i = 0; i < 8; i++) {
+        func_80027410(arg0 + 0x779C + i * 0x10, arg0 + 0x70C + i * 0x960, 0x50, 0x1E, 0);
+    }
+    for (i = 0; i < 4; i++) {
+        func_80027410(arg0 + 0x781C + i * 0x10, arg0 + 0x520C + i * 0x960, 0x50, 0x1E, 0);
+    }
+    func_89000448(0x20, D_89019108, 0, arg0 + 0x778C);
+    for (i = 0; i < 8; i++) {
+        func_89000448(0x21, D_89019108, i, arg0 + 0x779C + i * 0x10);
+    }
+    for (i = 0; i < 4; i++) {
+        func_89000448(0x11, 0, i, arg0 + 0x781C + i * 0x10);
+    }
+    M2C_FIELD(arg0, s32*, 0x785C) = 0;
+    i = 1;
+    do {
+        ((s32*)(arg0 + 0x785C))[i] = 0;
+        i++;
+    } while (i != 13);
+    func_89005098(arg0 + 0x10, 0x26, 0x53, arg0 + 0x778C, arg0 + 0x785C);
+    M2C_FIELD(arg0, s32*, 0) = 1;
+}
 
 M2C_UNK func_80002620(M2C_UNK);                     /* extern */
 

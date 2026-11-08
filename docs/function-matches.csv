@@ -3660,7 +3660,7 @@ func_89005F2C,0x89005F2C,src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c,f
 func_89005FD8,0x89005FD8,src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c,func_89005FD8,hand,,c
 func_89006054,0x89006054,src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c,func_89006054,m2c,m2c,c
 func_8900609C,0x8900609C,src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c,,asm,,asm
-func_890067B0,0x890067B0,src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c,,asm,,asm
+func_890067B0,0x890067B0,src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c,func_890067B0,hand,,c
 func_890069C0,0x890069C0,src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c,func_890069C0,m2c,m2c,c
 func_890069E8,0x890069E8,src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c,func_890069E8,hand,,c
 func_89006AB4,0x89006AB4,src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c,func_89006AB4,m2c,m2c,c

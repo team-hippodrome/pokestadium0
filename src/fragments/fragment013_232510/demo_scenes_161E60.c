@@ -610,7 +610,7 @@ s32 func_80018E24(s32);                             /* extern */
 M2C_UNK func_800407B0(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
 M2C_UNK func_822005A8(M2C_UNK);                     /* extern */
 M2C_UNK func_82201084(s32);                         /* extern */
-M2C_UNK func_82201600(s32);                         /* extern */
+void func_82201600(s32);
 s32 func_822017F0();                                /* extern */
 
 void func_822018EC(void) {
