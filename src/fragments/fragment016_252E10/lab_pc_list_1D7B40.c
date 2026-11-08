@@ -920,11 +920,91 @@ s32 func_89107170(s32 a) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_891074CC.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89107614; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89107614.s")
-#endif
+s32 func_8002FD8C(s8*);
+
+typedef struct Slot89107614 {
+    s32 unk64;
+    s32 unk68;
+    char unk6C[0x38];
+} Slot89107614;
+
+typedef struct Lab89107614 {
+    char unk000[0x64];
+    Slot89107614 slots[3];
+    s8 unk124[4];
+    s32 unk128;
+    char unk12C[4];
+    s8 unk130[4];
+    u16* unk134;
+    s32 unk138;
+    char unk13C[0x38];
+    s32* unk174[26];
+    s32 unk1DC;
+} Lab89107614;
+
+s32 func_89107614(Lab89107614* arg0) {
+    s32 ret = 0;
+    u16 buttons;
+
+    switch (arg0->unk1DC) {
+        case 0:
+            if (func_8002B2B0(arg0->unk124) == 0) {
+                buttons = ((u16*)D_800603C0)[4];
+                if (buttons & 0x4000) {
+                    func_8003F6AC(3);
+                    ret = -1;
+                } else if (buttons & 0x8000) {
+                    switch (arg0->unk128) {
+                        case 0:
+                        case 1:
+                            func_8003F6AC(2);
+                            arg0->unk1DC = 1;
+                            break;
+                        case 2:
+                            func_8003F6AC(2);
+                            ret = 1;
+                            break;
+                        case 3:
+                            if (M2C_FIELD(arg0, s32*, 0xBC) & 1) {
+                                func_8003F6AC(8);
+                            } else {
+                                func_8003F6AC(2);
+                                ret = 2;
+                            }
+                            break;
+                    }
+                }
+            }
+            break;
+        case 1:
+            if (func_8002FD8C(arg0->unk130) == 0) {
+                buttons = ((u16*)D_800603C0)[4];
+                if (buttons & 0x4000) {
+                    func_8003F6AC(3);
+                    arg0->unk1DC = 0;
+                } else if (buttons & 0x8000) {
+                    if (arg0->unk134[arg0->unk138] & 8) {
+                        func_8003F6AC(8);
+                    } else {
+                        s32 prev;
+
+                        func_8003F6AC(2);
+                        prev = arg0->slots[arg0->unk128].unk68;
+                        if (prev != -1) {
+                            arg0->unk134[prev] &= ~8;
+                        }
+                        arg0->unk134[arg0->unk138] |= 8;
+                        arg0->slots[arg0->unk128].unk68 = arg0->unk138;
+                        arg0->slots[arg0->unk128].unk64 = *arg0->unk174[arg0->unk138];
+                        arg0->unk1DC = 0;
+                        arg0->unk128++;
+                    }
+                }
+            }
+            break;
+    }
+    return ret;
+}
 
 void func_89107850(s8* arg0, s32* arg1) {
     s32 count = 0;
