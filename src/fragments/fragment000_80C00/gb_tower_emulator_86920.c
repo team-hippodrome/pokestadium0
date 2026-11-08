@@ -23,14 +23,18 @@ typedef struct unk_D_81234650 {
     /* 0x04 */ s32 unk_04;
 } unk_D_81234650;
 typedef struct unk_D_81234690 {
-    /* 0x00 */ u8  pad0[2];
+    /* 0x00 */ s16 unk_00;
     /* 0x02 */ u16 unk_02;
     /* 0x04 */ s16 unk_04;
     /* 0x06 */ s16 unk_06;
     /* 0x08 */ s16 unk_08;
     /* 0x0A */ s16 unk_0A;
     /* 0x0C */ s16 unk_0C;
-    /* 0x0E */ u8 pad0E[0x2A];
+    /* 0x0E */ u8 pad0E[0x14 - 0x0E];
+    /* 0x14 */ s16 unk_14;
+    /* 0x16 */ u8 pad16[0x1C - 0x16];
+    /* 0x1C */ f32 unk_1C;
+    /* 0x20 */ u8 pad20[0x38 - 0x20];
 } unk_D_81234690;
 extern unk_D_81234690 D_811858B8;
 extern volatile s32 D_811858F0;
@@ -86,7 +90,12 @@ typedef struct Rec81109678 {
     /* 0x34 */ u8 unk_34;
     /* 0x35 */ u8 pad35[0x44 - 0x35];
     /* 0x44 */ Rec81109678Flags* unk_44;
-    /* 0x48 */ u8 pad48[0xB4 - 0x48];
+    /* 0x48 */ u8 pad48[0x5C - 0x48];
+    /* 0x5C */ u8 unk_5C;
+    /* 0x5D */ u8 unk_5D;
+    /* 0x5E */ u8 pad5E[0x6C - 0x5E];
+    /* 0x6C */ f32 unk_6C;
+    /* 0x70 */ u8 pad70[0xB4 - 0x70];
     /* 0xB4 */ u32 enabled : 1;
     /* 0xB4 */ u32 restB4 : 31;
     /* 0xB8 */ u8 padB8[0xCC - 0xB8];
@@ -434,7 +443,31 @@ s32 func_8110A368(s32 arg0, s32 arg1, s32 arg2) {
 }
 
 #ifdef NON_MATCHING
-/* TODO: decompile func_8110A474; signature not recovered. */
+// Matches the ROM, but uses rodata data that is not placed in this file yet.
+/**
+ * Unused in the code seen so far. Fills out[0..15] from two recurrences in p
+ * and q seeded with 262159.0f; as in the Ocarina of Time version
+ * (func_800DDF80) the first loop writes to out instead of tmp, so the second
+ * loop copies partly uninitialised values.
+ */
+void func_8110A474(f32 p, f32 q, u16* out) {
+    s32 i;
+    f32 tmp[16];
+
+    tmp[0] = (f32)(q * 262159.0f);
+    tmp[8] = (f32)(p * 262159.0f);
+    tmp[1] = (f32)((q * p) * 262159.0f);
+    tmp[9] = (f32)(((p * p) + q) * 262159.0f);
+
+    for (i = 2; i < 8; i++) {
+        out[i] = q * tmp[i - 2] + p * tmp[i - 1];
+        out[8 + i] = q * tmp[6 + i] + p * tmp[7 + i];
+    }
+
+    for (i = 0; i < 16; i++) {
+        out[i] = tmp[i];
+    }
+}
 #else
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110A474.s")
 #endif
