@@ -501,7 +501,7 @@ func_81106AA0,0x81106AA0,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0
 func_81106CC8,0x81106CC8,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,,asm,,asm
 func_81107128,0x81107128,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,func_81107128,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_7F9A0.c,c
 func_8110724C,0x8110724C,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,func_8110724C,hand,,c
-func_811095E0,0x811095E0,src/fragments/fragment000_80C00/gb_tower_emulator_86920.c,,asm,,asm
+func_811095E0,0x811095E0,src/fragments/fragment000_80C00/gb_tower_emulator_86920.c,func_811095E0,hand,,c
 func_81109678,0x81109678,src/fragments/fragment000_80C00/gb_tower_emulator_86920.c,func_81109678,hand,,c
 func_81109764,0x81109764,src/fragments/fragment000_80C00/gb_tower_emulator_86920.c,func_81109764,m2c,m2c+permuter,c
 func_811097E8,0x811097E8,src/fragments/fragment000_80C00/gb_tower_emulator_86920.c,GbApu_AllocZeroed,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86920.c,c

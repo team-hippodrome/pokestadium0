@@ -47,11 +47,29 @@ u32 GbApu_AllocZeroed(unk_func_81206FA0* arg0, s32 arg1);
 s32 GbApu_Alloc(unk_func_81206FA0* arg0, s32 arg1);
 void GbApu_InitAllocator(unk_func_81206FA0* arg0, s32 arg1, s32 arg2);
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_811095E0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_811095E0.s")
-#endif
+extern u8 D_81184654[1];
+extern u8 D_81184655[1];
+extern u8 D_81184656[1];
+
+void func_811095E0(void) {
+    s32 i;
+
+    for (i = 0; i < 1; i++) {
+        if (D_81184655[i] != 5) {
+            D_81184655[i] = 0;
+        }
+    }
+    for (i = 0; i < 1; i++) {
+        if (D_81184654[i] != 5) {
+            D_81184654[i] = 0;
+        }
+    }
+    for (i = 0; i < 1; i++) {
+        if (D_81184656[i] != 5) {
+            D_81184656[i] = 0;
+        }
+    }
+}
 
 /* One 0xCC-byte record; only the fields func_81109678 touches are named. */
 typedef struct Rec81109678Flags {
@@ -341,9 +359,9 @@ typedef struct SeqPlayer81109C0C {
     /* 0x005 */ u8 pad5[0x15C - 0x5];
 } SeqPlayer81109C0C; // size = 0x15C
 
-extern s8 D_81184654;
-extern s8 D_81184655;
-extern s8 D_81184656;
+extern u8 D_81184654[1];
+extern u8 D_81184655[1];
+extern u8 D_81184656[1];
 void func_8110CAE0(s32, s32);
 
 #ifdef NON_MATCHING
@@ -983,7 +1001,7 @@ void* func_8110C2D8(u32 devAddr, u32 size, s32 arg2, u8* dmaIndexRef, s32 medium
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110C618.s")
 #endif
 
-extern s8 D_81184655;
+extern u8 D_81184655[1];
 
 s32 func_8110CA2C(s32 arg0) {
     if (arg0 == 0xFF) {
@@ -995,7 +1013,7 @@ s32 func_8110CA2C(s32 arg0) {
     return 0;
 }
 
-extern s8 D_81184656;
+extern u8 D_81184656[1];
 
 s32 func_8110CA68(s32 arg0) {
     if (arg0 == 0xFF) {
@@ -1007,7 +1025,7 @@ s32 func_8110CA68(s32 arg0) {
     return 0;
 }
 
-extern s8 D_81184654;
+extern u8 D_81184654[1];
 
 s32 func_8110CAA4(s32 arg0) {
     if (arg0 == 0xFF) {
@@ -1019,7 +1037,7 @@ s32 func_8110CAA4(s32 arg0) {
     return 0;
 }
 
-extern s8 D_81184655;
+extern u8 D_81184655[1];
 void func_8110CAE0(s32 arg0, s32 arg1) {
     u8 *temp_v0;
 
@@ -1031,7 +1049,7 @@ void func_8110CAE0(s32 arg0, s32 arg1) {
     }
 }
 
-extern s8 D_81184656;
+extern u8 D_81184656[1];
 void func_8110CB10(s32 arg0, s32 arg1) {
     u8 *temp_v0;
 
@@ -1043,7 +1061,7 @@ void func_8110CB10(s32 arg0, s32 arg1) {
     }
 }
 
-extern s8 D_81184654;
+extern u8 D_81184654[1];
 void func_8110CB40(s32 arg0, s32 arg1) {
     u8 *temp_v0;
 
