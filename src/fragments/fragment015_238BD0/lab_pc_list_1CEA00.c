@@ -793,11 +793,29 @@ void func_890022D0(s8 *arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_89002318.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89002A80; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_89002A80.s")
-#endif
+extern Color_RGBA8 D_8900A698;
+extern u8 D_8900A69C[];
+extern char D_89018660[];
+extern char D_8901866C[];
+void func_8002A3F8(void*, s32, s32);
+void func_80027F20(s32);
+void func_89002A80(s32 arg0, s32 arg1, s8* arg2, s32 arg3, s32 arg4) {
+    gSPDisplayList(gDisplayListHead++, D_80060270);
+    func_80029028(arg0, arg1 + 1, 0x13C, 0x3C, *(Color_RGBA8*)&D_8900A5BC);
+    func_80029028(arg0, arg1, 0x13C, 1, D_8900A698);
+    func_80029028(arg0, arg1 + 0x3D, 0x13C, 1, D_8900A698);
+    if (arg4 & 0x10) {
+        func_8002A0AC(arg0 + 3, arg1 + 3, 0x136, 0x38, D_8900A5BC);
+    }
+    func_8002A3F8(D_8900A69C, arg0 + 0xB, arg1 + 0xB);
+    Font_BeginTranslucentTextRendering();
+    func_80027F20(arg4);
+    Font_SetActive(0x10, 0);
+    Font_Printf(arg0 + 0x53, arg1 + 6, D_89018660, arg2 + 8);
+    Font_SetActive(8, 0);
+    Font_Printf(arg0 + 0x58, arg1 + 0x24, D_8901866C, M2C_FIELD(arg2, s32*, 4));
+    Font_EndTexturedTextRendering();
+}
 
 typedef struct Col89002C10 { u8 r, g, b, a; } Col89002C10;
 typedef struct Win89002C10 {

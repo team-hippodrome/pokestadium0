@@ -3606,7 +3606,7 @@ func_8900219C,0x8900219C,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,f
 func_89002248,0x89002248,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,func_89002248,hand,,c
 func_890022D0,0x890022D0,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,func_890022D0,m2c,m2c,c
 func_89002318,0x89002318,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,,asm,,asm
-func_89002A80,0x89002A80,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,,asm,,asm
+func_89002A80,0x89002A80,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,func_89002A80,hand,,c
 func_89002C10,0x89002C10,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,func_89002C10,hand,,c
 func_89002D14,0x89002D14,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,func_89002D14,hand,,c
 func_89002DE4,0x89002DE4,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,func_89002DE4,hand,,c
