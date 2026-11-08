@@ -145,11 +145,70 @@ void func_89100380(LabPCInitialStateFields* state) {
     state->unk_9B04 = 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_891003A4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_891003A4.s")
-#endif
+typedef struct Rgba891024A4 { u8 r, g, b, a; } Rgba891024A4;
+void func_8002A8C4(s8 *, s32, s32, s32, s32);
+void func_80027804(s8*, s8*, s32, s32);
+void func_89109B60(s8*);
+M2C_UNK func_89109C6C(s32, s32);                    /* extern */
+void func_80027D68(s32, s32);
+void func_8002EC24(s8*, s8*, s8*, s32, void*, s32, s32);
+void func_891012A8();
+void func_89105C54(s8*, s32, s32, s8*, Rgba891024A4);
+extern s32 D_8910D990[];
+extern Rgba891024A4 D_8910A7F4;
+extern u8 D_8910A844[];
+extern u8 D_8910A848[];
+extern u8 D_8910A804[];
+extern u8 D_8910A84C[];
+typedef struct Big891003A4 {
+    /* 0x0000 */ char unk0000[0xB15C];
+    /* 0xB15C */ s32 unkB15C;
+    /* 0xB160 */ char unkB160[0x20];
+    /* 0xB180 */ s32 unkB180;
+    /* 0xB184 */ char unkB184[0x3C4];
+    /* 0xB548 */ u8* unkB548;
+    /* 0xB54C */ char unkB54C[0xC];
+    /* 0xB558 */ s32 unkB558;
+    /* 0xB55C */ char unkB55C[0x38];
+    /* 0xB594 */ s32 unkB594;
+} Big891003A4;
+void func_891003A4(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
+    UNUSED s32 pad[1];
+
+    func_89100140((Ctx89100140*)arg0);
+    func_8002A8C4(arg0, arg1, arg2, 0x234, 0x17E);
+    M2C_FIELD(arg0, s32*, 0x24) = 0;
+    M2C_FIELD(arg0, s32*, 0x20) = 0;
+    M2C_FIELD(arg0, s32*, 0x28) = 0;
+    M2C_FIELD(arg0, s32*, 0x14) = 1;
+    func_8002A8C4(arg0 + 0x4C, arg1 + 6, arg2 + 6, 0x228, 0x1E);
+    M2C_FIELD(arg0, s32*, 0x60) = 6;
+    M2C_FIELD(arg0, Rgba891024A4*, 0x64) = *(Rgba891024A4*)D_8910A844;
+    M2C_FIELD(arg0, Rgba891024A4*, 0x68) = *(Rgba891024A4*)D_8910A848;
+    func_8002A8C4(arg0 + 0x2C, arg1 + 6, arg2 + 0x3A, 0x228, 0x12E);
+    M2C_FIELD(arg0, s32*, 0x40) = 1;
+    func_80027804(arg0 + 0x9648, arg0 + 0x87B8, 0x1D2, 0);
+    func_80027804(arg0 + 0x6C, arg0 + 0x8F00, 0x1D2, 0);
+    func_89109B60(arg0 + 0x420);
+    M2C_FIELD(arg0, s32*, 0x7C) = 0;
+    M2C_FIELD(arg0, u8**, 0x84) = D_8910A804;
+    func_89109C6C((s32)(arg0 + 0x9648), (s32)(arg0 + 0x420));
+    M2C_FIELD(arg0, s32*, 0x78) = 0;
+    func_80027D68((s32)(arg0 + 0x9648), D_8910D990[0]);
+    M2C_FIELD(arg0, s32*, 0x8C) = 0;
+    func_89100020((s32)arg0);
+    M2C_FIELD(arg0, s32*, 0x80) = 0;
+    ((Big891003A4*)arg0)->unkB15C = 0;
+    func_8002EC24(arg0 + 0xB160, arg0 + 0x9648, arg0 + 0xB1A4, 0xE, func_891012A8, 0x228, 0x14);
+    ((Big891003A4*)arg0)->unkB180 &= ~0x100000;
+    ((Big891003A4*)arg0)->unkB548 = D_8910A84C;
+    func_89100294((Ctx89100294*)arg0);
+    ((Big891003A4*)arg0)->unkB558 = 0;
+    ((Big891003A4*)arg0)->unkB594 = arg3;
+    func_89100380((LabPCInitialStateFields*)arg0);
+    M2C_FIELD(arg0, s32*, 0x88) = 1;
+    func_89105C54(arg0 + 0x230, 0x78, 0x67, arg0 + 0x420, D_8910A7F4);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_891005CC; signature not recovered. */
@@ -557,7 +616,6 @@ s32 func_89102344(Ctx89102344* arg0) {
     return ret;
 }
 
-typedef struct Rgba891024A4 { u8 r, g, b, a; } Rgba891024A4;
 typedef struct Screen891024A4 {
     /* 0x0000 */ char unk0[0x2C];
     /* 0x002C */ s32 x;
