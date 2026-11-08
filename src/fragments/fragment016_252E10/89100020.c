@@ -197,7 +197,7 @@ typedef struct Entry80066AD8 {
 extern Entry80066AD8 D_80066AD8[];
 s32 func_8002D498(u8*, s32);
 M2C_UNK func_8001A384(M2C_UNK, M2C_UNK);
-M2C_UNK func_8001A944(s32, s32, M2C_UNK *);
+M2C_UNK func_8001A944(s32, s32, M2C_UNK *, ...);
 M2C_UNK func_8001AA9C(u8, u8, u8, u8);
 M2C_UNK func_8001AB6C();
 M2C_UNK func_8001ABBC();
@@ -253,7 +253,7 @@ void func_89100FC4(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
 }
 
 M2C_UNK func_8001A384(M2C_UNK, M2C_UNK);            /* extern */
-M2C_UNK func_8001A944(s32, s32, M2C_UNK *);         /* extern */
+M2C_UNK func_8001A944(s32, s32, M2C_UNK *, ...);         /* extern */
 M2C_UNK func_8001AA60(s32, s32, s32);               /* extern */
 M2C_UNK func_8001AA9C(u8, u8, u8, u8);              /* extern */
 M2C_UNK func_8001AB6C();                            /* extern */
@@ -338,11 +338,32 @@ void func_8910179C(ListMenu8910179C* arg0, s32 arg1, s32 arg2) {
     func_80029A64(arg1 + 0x26, y, 0x50, 0x14, *(Color_RGBA8*)D_80073520);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89101818; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89101818.s")
-#endif
+extern u8 D_04006170[];
+extern u8 D_04006CE0[];
+extern Gfx D_80060290[];
+extern Gfx D_80060398[];
+
+extern u8 D_8910C370[];
+extern u8 D_8910C978[];
+extern char D_8910DBF0[];
+extern char D_8910DC04[];
+void Gfx_DrawTextureRgba16(s32, s32, s32, s32, u8*, s32, s32);
+
+void func_89101818(s8* arg0) {
+    func_8001AB6C();
+    func_8001AA9C(M2C_FIELD(&D_800734A8, u8*, 0), M2C_FIELD(&D_800734A8, u8*, 1), M2C_FIELD(&D_800734A8, u8*, 2), M2C_FIELD(&D_800734A8, u8*, 3));
+    func_8001A384(8, 0);
+    func_8001A944(M2C_FIELD(arg0, s32*, 0x4C) + 0x22, M2C_FIELD(arg0, s32*, 0x50) + 5, (M2C_UNK*)D_8910DBF0);
+    func_8001A944(M2C_FIELD(arg0, s32*, 0x4C) + 0x152, M2C_FIELD(arg0, s32*, 0x50) + 5, (M2C_UNK*)D_8910DC04,
+                  M2C_FIELD(arg0, s32*, 0xB15C) + 1);
+    func_8001ABBC();
+    gSPDisplayList(gDisplayListHead++, D_80060290);
+    Gfx_DrawTextureRgba16(M2C_FIELD(arg0, s32*, 0x4C) + 4, M2C_FIELD(arg0, s32*, 0x50) + 3, 0x1A, 0x18, D_8910C370, 0x20, 0x200000);
+    Gfx_DrawTextureRgba16(M2C_FIELD(arg0, s32*, 0x4C) + 0xDA, M2C_FIELD(arg0, s32*, 0x50) + 3, 0x1A, 0x18, D_8910C978, 0x20, 0x200000);
+    Gfx_DrawTextureRgba16(M2C_FIELD(arg0, s32*, 0x4C) + 0x134, M2C_FIELD(arg0, s32*, 0x50) + 2, 0x1A, 0x1A, D_04006170, 0x1C, 0x200000);
+    Gfx_DrawTextureRgba16(M2C_FIELD(arg0, s32*, 0x4C) + 0x20A, M2C_FIELD(arg0, s32*, 0x50) + 2, 0x1A, 0x1A, D_04006CE0, 0x1C, 0x200000);
+    gSPDisplayList(gDisplayListHead++, D_80060398);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_891019E4; signature not recovered. */
