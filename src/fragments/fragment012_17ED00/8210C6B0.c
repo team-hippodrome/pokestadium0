@@ -350,11 +350,46 @@ void func_8210D020(ActivePokemon* arg0, s8* arg1) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210D4B4.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8210D6BC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210D6BC.s")
-#endif
+extern u8 D_800AAF50[];
+void func_8210CDEC(ActivePokemon*, u8*, u8*, s32);
+void func_82134D60(void);
+
+void func_8210D6BC(ActivePokemon* arg0) {
+    s8* state = (s8*)arg0 + 0x78C;
+    s8* other = (s8*)sActivePokemon[BattleScene_GetParticipantSideIndex(arg0) == 0] + 0x78C;
+    u8* c1;
+    u8* c2;
+    s8* team;
+    s32 buttons;
+
+    if (M2C_FIELD(state, s32*, 0x10) != 0) {
+        return;
+    }
+    if (M2C_FIELD(M2C_FIELD(arg0, s8**, 0x85C), u8*, 1) == 1U) {
+        c1 = c2 = &D_800AAF50[M2C_FIELD(M2C_FIELD(M2C_FIELD(arg0, s8**, 0x85C), s8**, 8), u8*, 1) * 0x24];
+    } else {
+        team = M2C_FIELD(arg0, s8**, 0x85C);
+        c1 = &D_800AAF50[M2C_FIELD(M2C_FIELD(team, s8**, 8), u8*, 1) * 0x24];
+        c2 = &D_800AAF50[M2C_FIELD(M2C_FIELD(team, s8**, 0xC), u8*, 1) * 0x24];
+    }
+    if (M2C_FIELD(M2C_FIELD(state, s8**, 0xCC), u16*, 8) & 0x8000) {
+        M2C_FIELD(state, s32*, 4) = 1;
+    } else {
+        buttons = M2C_FIELD(c2, u16*, 8) | M2C_FIELD(c1, u16*, 8);
+        if (buttons & 0x4000) {
+            M2C_FIELD(state, s32*, 4) = 2;
+            func_8210CDEC(arg0, c1, c2, M2C_FIELD(M2C_FIELD(arg0, s8**, 0x85C), u8*, 1));
+        } else if (buttons & 0x1000) {
+            M2C_FIELD(state, s32*, 4) = 3;
+        } else {
+            M2C_FIELD(state, s32*, 4) = 0;
+        }
+    }
+    buttons = M2C_FIELD(c2, u16*, 8) | M2C_FIELD(c1, u16*, 8);
+    if ((buttons & 0x8000) || (buttons & 0x4000) || ((buttons & 0x1000) && (M2C_FIELD(other, s32*, 0x10) != 4))) {
+        func_82134D60();
+    }
+}
 
 s32 func_8210C778(ActivePokemon*);
 

@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5130,
-  "asm_owners": 314,
+  "c_owners": 5131,
+  "asm_owners": 313,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -613,7 +613,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "cf7785a8e1801bc5861af49bf0e4d0adce0c14dffac32bad472a01a3b828efb9",
+    "docs/function-matches.csv": "8188a8c594a6eae86daca6b489e6b148eba73dfe7507207ed857f3323556953b",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -706,7 +706,7 @@
     "src/fragments/fragment009_175570.c": "f15eaa1907af594a25af5f2c6890667b75e07bd3c706f091377747e8352bd54b",
     "src/fragments/fragment010_17BE70/pikachu_reward.c": "df1b99b4fdc9a7cf71dbc3807adac6e8e82fc06a4b6573249f0607c108fb1be1",
     "src/fragments/fragment011_17E340/area_select.c": "354abcd268b9f1cd60f8bd6d27ea2ca9ea129994e44d92766ca25752652e4f01",
-    "src/fragments/fragment012_17ED00/8210C6B0.c": "f1bc56b8b66325a316c10a7156b52cb888b8880d90a6885eb6e30d1a42e787fe",
+    "src/fragments/fragment012_17ED00/8210C6B0.c": "bd58bcafb108a18d475c12e4e2ac038edc007dc84263a4e4c3c034e36edd6563",
     "src/fragments/fragment012_17ED00/821337A0.c": "e9ed134bb5801a09a7f5a6c53b79673de13df34e2488ff18085f38eac63dd5c6",
     "src/fragments/fragment012_17ED00/82168C20.c": "7baa1bc4ef63e41d3ab7b9f7988d35c415c6d702c336db8b43041962119e5a8b",
     "src/fragments/fragment012_17ED00/battle_engine_2F6930.c": "a1f816f4b909a077f3ae0653f86adb7dea51007eae55b17bfae5f309afa9384e",
