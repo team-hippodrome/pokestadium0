@@ -380,11 +380,40 @@ void BattleMenu_DrawConfirmButtonLabel(unk_D_848037A0* arg0) {
     Font_EndTexturedTextRendering();
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_823016FC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment005_15FCE0/func_823016FC.s")
-#endif
+extern s16 D_82302B40;
+void func_823010E8(s8*);
+void func_82301448(s8*);
+void func_823016FC(unk_D_848037A0* arg0) {
+    if ((D_82302B40 != 0) || (arg0->unk_0006 != 0)) {
+        if ((D_82302B40 != 0) && (arg0->unk_0002 == -1)) {
+            BattleMenu_DrawConfirmButtonLabel(arg0);
+        }
+
+        switch (arg0->unk_0005) {
+            case 0:
+                func_82300BD0((s8*)arg0);
+                break;
+
+            case 1:
+                func_823010E8((s8*)arg0);
+                break;
+
+            case 2:
+                func_823012D0((s8*)arg0);
+                break;
+
+            case 3:
+                func_82301448((s8*)arg0);
+                break;
+        }
+
+        if (arg0->unk_0006 != 0) {
+            arg0->unk_0006--;
+        }
+    } else if (arg0->unk_0005 == 3) {
+        func_82301448((s8*)arg0);
+    }
+}
 
 extern s32 D_84816450;
 extern Controller D_84816428;
