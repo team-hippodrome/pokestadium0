@@ -397,11 +397,62 @@ s32 func_89101D80(s8 *arg0, s32 arg1)
   return temp_t7 & new_var;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89101D94; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89101D94.s")
-#endif
+typedef struct Ctx89101D94 {
+    /* 0x0000 */ char unk0000[0x6C];
+    /* 0x006C */ char unk6C[0xC];
+    /* 0x0078 */ s32 unk78;
+    /* 0x007C */ s32 unk7C;
+    /* 0x0080 */ char unk0080[0x9648 - 0x80];
+    /* 0x9648 */ char unk9648[0x9828 - 0x9648];
+    /* 0x9828 */ char unk9828[0x9918 - 0x9828];
+    /* 0x9918 */ char unk9918[0x9B00 - 0x9918];
+    /* 0x9B00 */ char unk9B00[0x9E58 - 0x9B00];
+    /* 0x9E58 */ char unk9E58[4];
+    /* 0x9E5C */ char unk9E5C[0xB160 - 0x9E5C];
+    /* 0xB160 */ s32 unkB160;
+    /* 0xB164 */ char unkB164[0xB1A4 - 0xB164];
+    /* 0xB1A4 */ char unkB1A4[4];
+} Ctx89101D94;
+extern s32 D_8910D990[];
+void func_8002ED18(s32*, void*, void*);
+void func_80027D94(s32, void*, void*, void*);
+void func_80027D68(s32, s32);
+s32 func_891096F4();
+s32 func_89109720();
+s32 func_891097E4();
+s32 func_89109884();
+s32 func_89109898();
+s32 func_89109960();
+M2C_UNK func_89101D94(Ctx89101D94* arg0) {
+    func_8002ED18(&arg0->unkB160, arg0->unk9648, arg0->unkB1A4);
+    if (arg0->unk7C != 0) {
+        if (arg0->unk7C & 1) {
+            func_80027D94(arg0->unkB160, arg0->unk6C, func_891096F4, arg0->unk9828);
+            func_8002ED18(&arg0->unkB160, arg0->unk6C, arg0->unkB1A4);
+        }
+        if (arg0->unk7C & 2) {
+            func_80027D94(arg0->unkB160, arg0->unk6C, func_89109720, arg0->unk9918);
+            func_8002ED18(&arg0->unkB160, arg0->unk6C, arg0->unkB1A4);
+        }
+        if (arg0->unk7C & 4) {
+            func_80027D94(arg0->unkB160, arg0->unk6C, func_891097E4, arg0->unk9B00);
+            func_8002ED18(&arg0->unkB160, arg0->unk6C, arg0->unkB1A4);
+        }
+        if (arg0->unk7C & 8) {
+            func_80027D94(arg0->unkB160, arg0->unk6C, func_89109884, arg0->unk9E58);
+            func_8002ED18(&arg0->unkB160, arg0->unk6C, arg0->unkB1A4);
+        }
+        if (arg0->unk7C & 0x10) {
+            func_80027D94(arg0->unkB160, arg0->unk6C, func_89109898, arg0->unk9E5C);
+            func_8002ED18(&arg0->unkB160, arg0->unk6C, arg0->unkB1A4);
+        }
+        if (arg0->unk7C & 0x20) {
+            func_80027D94(arg0->unkB160, arg0->unk6C, func_89109960, NULL);
+            func_8002ED18(&arg0->unkB160, arg0->unk6C, arg0->unkB1A4);
+        }
+    }
+    func_80027D68(arg0->unkB160, D_8910D990[arg0->unk78]);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_89101F90; signature not recovered. */
@@ -568,7 +619,7 @@ s32 func_89102700(Ctx89100294* arg0) {
     return done;
 }
 
-M2C_UNK func_89101D94(s8 *);                      /* extern */
+M2C_UNK func_89101D94();
 s32 func_89106254(s32);                             /* extern */
 M2C_UNK func_89109C6C(s32, s32);                    /* extern */
 s32 func_891028CC(s8 *arg0)
@@ -671,7 +722,7 @@ void func_89102A04(s32 arg0) {
 s32 func_891066C0(s8*);
 void func_80027D68(s32, s32);
 void func_89105C54(s8*, s32, s32, s8*, Rgba891024A4);
-M2C_UNK func_89101D94(s8 *);
+M2C_UNK func_89101D94();
 extern s32 D_8910D9D0;
 extern s32 D_8910D9D4;
 
@@ -747,7 +798,7 @@ typedef struct Ctx89102EC8 {
     /* 0x98E8 */ s32 unk98E8;
 } Ctx89102EC8;
 s32 func_89106C98(void*);
-M2C_UNK func_89101D94(s8 *);
+M2C_UNK func_89101D94();
 s32 func_89102EC8(s8 *arg)
 {
   Ctx89102EC8 *arg0 = (Ctx89102EC8 *) arg;
