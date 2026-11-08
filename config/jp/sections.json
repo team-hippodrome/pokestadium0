@@ -447,6 +447,12 @@
   "src/fragments/fragment025_2B16A0/fatal_error_screen.c": {
     ".data": "0x816008EC"
   },
+  "src/fragments/fragment039_3C5200.c": {
+    ".bss": "0x8E825728"
+  },
+  "src/fragments/fragment040_3CE090.c": {
+    ".bss": "0x8E923EB0"
+  },
   "src/gb_audio.c": {
     ".bss": "0x800B3FD0",
     ".rodata": "0x8007DD40",
