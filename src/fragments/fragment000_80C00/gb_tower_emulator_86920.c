@@ -1288,11 +1288,28 @@ void func_8110D054(s32 arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110D110; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110D110.s")
-#endif
+extern s16 D_811843BE;
+extern s16 D_811843CA;
+void func_8110D110(s32 arg0) {
+    Tbl8110A368* tbl2;
+    s32 none;
+    Tbl8110A368* tbl = (Tbl8110A368*)&D_81184380;
+    u32 i;
+
+    none = -1;
+    if (arg0 == ((Tbl8110A368*)((u8*)tbl + 0x20))->entries[0].key) {
+        D_811843BE = none;
+    } else if (arg0 == D_811843CA) {
+        D_811843CA = none;
+    }
+    tbl2 = tbl;
+    for (i = 0; i < tbl2->count; i++) {
+        if (arg0 == tbl2->entries[i].key) {
+            tbl2->entries[i].key = none;
+        }
+    }
+    func_81109678(arg0);
+}
 
 typedef struct Slot8110D214 {
     /* 0x000 */ s32 unk_000;
