@@ -503,11 +503,22 @@ Color_RGBA8 func_8800196C(Color_RGBA8 arg0, f32 arg1) {
     return color;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88001A30; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment014_235D70/func_88001A30.s")
-#endif
+M2C_UNK func_80005B98(M2C_UNK);
+extern s32 D_880022C4;
+s32 func_88001A30(s32 arg0) {
+    Color_RGBA8 sp24;
+
+    if (arg0 == 1) {
+        /* Dead read of the counter; the retail code loads it here. */
+        if (D_880022C4) {}
+        func_80005B98(1);
+    }
+    func_800069CC();
+    sp24 = func_8800196C(*(Color_RGBA8*)&D_88002254, D_880022C4 / 20.0);
+    func_8002C064(0, 0x1E0, sp24.r, sp24.g, sp24.b);
+    D_880022C4++;
+    return 0;
+}
 
 M2C_UNK func_800069CC();                            /* extern */
 M2C_UNK func_8002C064(M2C_UNK, M2C_UNK, u8, u8, s32); /* extern */

@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 4991,
-  "asm_owners": 453,
+  "c_owners": 4992,
+  "asm_owners": 452,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -603,7 +603,7 @@
     "tools/cflags_overrides.json": "7052d644eb08429c59981bb4c369c8c937c61ca4c639a1c1ca2c5fc0ce919ebb",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "a71048e749fa92d6c0092da44e5da5eef997093d3c8b2c68273f3380bba08fb2",
+    "docs/function-matches.csv": "655d718b9aa914e1ca0f07982c954ddd3d0beb3ba6f4632e01c36d4956c6afec",
     "linker_scripts/jp/symbol_addrs.txt": "91a8d27f8e3707e5bcad1c0b12773248d8212c8fe32df8bae724086cddb32db8"
   },
   "binutils": {
@@ -788,7 +788,7 @@
     "src/fragments/fragment012_17ED00/particle_math_26E6D0_2.c": "3f224465f6a774f97bae0bca4529e165237020aa32b6630dadc52304b4b853a6",
     "src/fragments/fragment012_17ED00/particle_math_26E6D0_3.c": "f0a6213871cd4e3baae1d9b905e8ff098d5e5059c92250264da0269018343318",
     "src/fragments/fragment013_232510/demo_scenes_161E60.c": "e3b8fef74a3bc0faa9ada97609d1a2eb5ac17951be3b1ca75f3b4f10c9011a48",
-    "src/fragments/fragment014_235D70/lab_pc_icons.c": "6ece04ac771fa0c405d6e65b0e4a85494340559eb85c90875f2ba2bd157665d8",
+    "src/fragments/fragment014_235D70/lab_pc_icons.c": "34d6d98c8dae5357bb84f0a9a7e1a8226548a54e8d477e710ba3e95cb361d305",
     "src/fragments/fragment015_238BD0/89006FC0.c": "0108ce0935570ca91c6b0f48b6ad0e70d51f2b4023b1cc04be566b712f4f321e",
     "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c": "f8f3a36dfc9fca40a3a59d0644048ba468d8500a6a3e5d2feec02779e8f70731",
     "src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c": "99f677863e70a41f2109034cbbb5a3d6e6972336a903ab8342e41af3c84b19f3",
