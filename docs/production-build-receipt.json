@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5171,
-  "asm_owners": 273,
+  "c_owners": 5172,
+  "asm_owners": 272,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -617,7 +617,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "812eea74460b6f66b8f22af996185f147137c3c53d1524447209467f69767fcb",
+    "docs/function-matches.csv": "771c5050aaf4fd7f4162f5a15362d4de9808037e7652e7d0b9c48f8a7b3c8ec5",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -687,7 +687,7 @@
     "src/fragments/fragment000_80C00/81100020.c": "e3429350616c8ef4f8b115b271a69ad5bfe03c5c13e955f03f5708739612f9dd",
     "src/fragments/fragment000_80C00/81107390.c": "6adce27c7d444cdcd00afcb722537597d49bda2faa4b5b2fd90a0d8bcab52242",
     "src/fragments/fragment000_80C00/81110190.c": "c3654154efda0cd7040fdd8e2b6d4e862660e256550ffc7aa97119b537acf61d",
-    "src/fragments/fragment000_80C00/81110210.c": "5ce957f92f83cfb6fd40b55c9632801907e42c17cc99bd19314d3f11489114b2",
+    "src/fragments/fragment000_80C00/81110210.c": "3d2af51db3b1bc3d3e0f78e19a4338545827869385005f52651a990f5d6d74f3",
     "src/fragments/fragment000_80C00/81111C20.c": "885778daf5aaed442fe34a9e23e9b9a0ef1e83665af97b30161dc7870e0144e4",
     "src/fragments/fragment000_80C00/81117B20.c": "3843091a770c9a107a189ef652ff919fc1eac6d520dd8100299adf9b1616cefc",
     "src/fragments/fragment000_80C00/battle_engine_2FA4D0.c": "3d031ea7cefa1819d9cf5b73e9ad79c811609968f7a668f0953f3ff614542e87",

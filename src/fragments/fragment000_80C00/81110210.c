@@ -3,7 +3,8 @@
 #include "global.h"
 #include "fragments/particle_math/particle_math.h"
 #include "m2c_macros.h"
-void func_81110E3C(Particle*, s32);
+struct LayerE3C;
+void func_81110E3C(struct LayerE3C*, s32);
 
 void func_811105DC(s8* arg0, f32 arg1);
 
@@ -334,18 +335,184 @@ u8* func_81110D6C(s32 arg0, s32 arg1) {
     return ret;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81110E3C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81110E3C.s")
-#endif
+typedef struct StereoE3C {
+    u8 type : 2;
+    u8 strongRight : 1;
+    u8 strongLeft : 1;
+    u8 stereoHeadsetEffects : 1;
+    u8 usesHeadsetPanEffects : 1;
+    u8 pad : 2;
+} StereoE3C;
+
+typedef struct SeqPlayerE3C {
+    /* 0x00 */ u32 enabled : 1;
+    /* 0x00 */ u32 finished : 1;
+    /* 0x00 */ u32 muted : 1;
+    /* 0x00 */ u32 rest : 29;
+} SeqPlayerE3C;
+
+typedef struct ChannelE3C {
+    /* 0x00 */ u8 unk00[3];
+    /* 0x03 */ u8 muteBehavior;
+    /* 0x04 */ u8 reverb;
+    /* 0x05 */ u8 notePriority;
+    /* 0x06 */ u8 someOtherPriority;
+    /* 0x07 */ u8 unk07[5];
+    /* 0x0C */ u8 gain;
+    /* 0x0D */ u8 unk0D[0x4C - 0x0D];
+    /* 0x4C */ SeqPlayerE3C* seqPlayer;
+    /* 0x50 */ u8 unk50[0x7C - 0x50];
+    /* 0x7C */ u8 decayIndex;
+    /* 0x7D */ u8 sustain;
+    /* 0x7E */ u8 unk7E[0xD0 - 0x7E];
+    /* 0xD0 */ s16* filter;
+} ChannelE3C;
+
+typedef struct LayerE3C {
+    /* 0x00 */ u8 flags;
+    /* 0x01 */ StereoE3C stereo;
+    /* 0x02 */ u8 unk02;
+    /* 0x03 */ u8 status;
+    /* 0x04 */ u8 unk04[3];
+    /* 0x07 */ u8 notePan;
+    /* 0x08 */ u8 unk08[0x18 - 0x08];
+    /* 0x18 */ u8 decayIndex;
+    /* 0x19 */ u8 unk19[0x34 - 0x19];
+    /* 0x34 */ f32 noteVelocity;
+    /* 0x38 */ f32 noteFreqScale;
+    /* 0x3C */ u8 unk3C[0x48 - 0x3C];
+    /* 0x48 */ struct NoteE3C* note;
+    /* 0x4C */ u8 unk4C[0x54 - 0x4C];
+    /* 0x54 */ ChannelE3C* channel;
+} LayerE3C;
+
+typedef struct NoteAttributesE3C {
+    /* 0x00 */ u8 reverb;
+    /* 0x01 */ u8 gain;
+    /* 0x02 */ u8 pan;
+    /* 0x03 */ StereoE3C stereo;
+    /* 0x04 */ f32 freqScale;
+    /* 0x08 */ f32 velocity;
+    /* 0x0C */ s16* filter;
+} NoteAttributesE3C;
+
+#define ADSR_ACTION_RELEASE_E3C 0x10
+#define ADSR_ACTION_DECAY_E3C 0x20
+
+typedef struct AdsrE3C {
+    /* 0x00 */ u8 action;
+    /* 0x01 */ u8 state;
+    /* 0x02 */ u8 unk02[6];
+    /* 0x08 */ f32 sustain;
+    /* 0x0C */ u8 unk0C[4];
+    /* 0x10 */ f32 fadeOutVel;
+    /* 0x14 */ f32 current;
+} AdsrE3C;
+
+typedef struct NoteE3C {
+    /* 0x00 */ void* prev;
+    /* 0x04 */ void* next;
+    /* 0x08 */ void* value;
+    /* 0x0C */ s8* pool;
+    /* 0x10 */ u8 unk10[0x30 - 0x10];
+    /* 0x30 */ u8 priority;
+    /* 0x31 */ u8 unk31[3];
+    /* 0x34 */ u8 unk_04;
+    /* 0x35 */ u8 unk35[0x40 - 0x35];
+    /* 0x40 */ LayerE3C* prevParentLayer;
+    /* 0x44 */ LayerE3C* parentLayer;
+    /* 0x48 */ LayerE3C* wantedParentLayer;
+    /* 0x4C */ NoteAttributesE3C attributes;
+    /* 0x5C */ AdsrE3C adsr;
+    /* 0x74 */ u8 unk74[0xB4 - 0x74];
+    /* 0xB4 */ u8 noteSubEuEnabled : 1;
+    /* 0xB4 */ u8 noteSubEuNeedsInit : 1;
+    /* 0xB4 */ u8 noteSubEuFinished : 1;
+    /* 0xB4 */ u8 noteSubEuRest : 5;
+} NoteE3C;
+
+extern f32 D_811858D4;
+extern f32 D_811858D8;
+void func_811114BC(s8*);
+void func_8111147C(M2C_UNK* arg0, M2C_UNK* arg1);
+
+void func_81110E3C(LayerE3C* layer, s32 target) {
+    NoteE3C* note;
+    NoteAttributesE3C* attrs;
+
+    if (layer == (LayerE3C*)-1) {
+        return;
+    }
+
+    layer->status = 0;
+
+    if (layer->note == NULL) {
+        return;
+    }
+
+    note = layer->note;
+    attrs = &note->attributes;
+
+    if (note->wantedParentLayer == layer) {
+        note->wantedParentLayer = (LayerE3C*)-1;
+    }
+
+    if (note->parentLayer != layer) {
+        if (note->parentLayer == (LayerE3C*)-1 && note->wantedParentLayer == (LayerE3C*)-1 &&
+            note->prevParentLayer == layer && target != 6) {
+            note->adsr.fadeOutVel = D_811858D4;
+            note->adsr.action |= ADSR_ACTION_RELEASE_E3C;
+        }
+        return;
+    }
+
+    if (note->adsr.state != 6) {
+        attrs->freqScale = layer->noteFreqScale;
+        attrs->velocity = layer->noteVelocity;
+        attrs->pan = layer->notePan;
+        attrs->stereo = layer->stereo;
+        if (layer->channel != NULL) {
+            attrs->reverb = layer->channel->reverb;
+            attrs->gain = layer->channel->gain;
+            attrs->filter = layer->channel->filter;
+            if (layer->channel->seqPlayer->muted && (layer->channel->muteBehavior & 8)) {
+                note->noteSubEuFinished = 1;
+            }
+            note->priority = layer->channel->someOtherPriority;
+        } else {
+            note->priority = 1;
+        }
+
+        note->prevParentLayer = note->parentLayer;
+        note->parentLayer = (LayerE3C*)-1;
+        if (target == 7) {
+            note->adsr.fadeOutVel = D_811858D4;
+            note->adsr.action |= ADSR_ACTION_RELEASE_E3C;
+            note->unk_04 = 2;
+        } else {
+            note->unk_04 = 1;
+            note->adsr.action |= ADSR_ACTION_DECAY_E3C;
+            if (layer->decayIndex == 0) {
+                note->adsr.fadeOutVel = layer->channel->decayIndex * D_811858D8;
+            } else {
+                note->adsr.fadeOutVel = layer->decayIndex * D_811858D8;
+            }
+            note->adsr.sustain = ((f32)(s32)layer->channel->sustain * note->adsr.current) / 256.0f;
+        }
+    }
+
+    if (target == 6) {
+        func_811114BC((s8*)note);
+        func_8111147C((M2C_UNK*)(note->pool + 0x10), (M2C_UNK*)note);
+    }
+}
 
 void func_81111090(Particle* arg0) {
-    func_81110E3C(arg0, 6);
+    func_81110E3C((struct LayerE3C*)arg0, 6);
 }
 
 void func_811110B0(Particle* arg0) {
-    func_81110E3C(arg0, 7);
+    func_81110E3C((struct LayerE3C*)arg0, 7);
 }
 
 void func_811110D0(s8 *arg0) {
