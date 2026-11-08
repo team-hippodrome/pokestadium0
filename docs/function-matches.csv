@@ -954,7 +954,7 @@ func_8210CD7C,0x8210CD7C,src/fragments/fragment012_17ED00/8210C6B0.c,BattleScene
 func_8210CDEC,0x8210CDEC,src/fragments/fragment012_17ED00/8210C6B0.c,,asm,,asm
 func_8210CEE8,0x8210CEE8,src/fragments/fragment012_17ED00/8210C6B0.c,,asm,,asm
 func_8210CFE4,0x8210CFE4,src/fragments/fragment012_17ED00/8210C6B0.c,func_8210CFE4,m2c,m2c,c
-func_8210D020,0x8210D020,src/fragments/fragment012_17ED00/8210C6B0.c,,asm,,asm
+func_8210D020,0x8210D020,src/fragments/fragment012_17ED00/8210C6B0.c,func_8210D020,hand,,c
 func_8210D1B0,0x8210D1B0,src/fragments/fragment012_17ED00/8210C6B0.c,,asm,,asm
 func_8210D378,0x8210D378,src/fragments/fragment012_17ED00/8210C6B0.c,,asm,,asm
 func_8210D4B4,0x8210D4B4,src/fragments/fragment012_17ED00/8210C6B0.c,,asm,,asm

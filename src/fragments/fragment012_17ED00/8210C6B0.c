@@ -280,11 +280,57 @@ void func_8210CFE4(s32 arg0) {
     func_8211F288(arg0, D_8218C700, func_82107F88(arg0));
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8210D020; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210D020.s")
-#endif
+void func_82134D60(void);
+
+void func_8210D020(ActivePokemon* arg0, s8* arg1) {
+    u8* team = *(u8**)(M2C_FIELD(arg0, u8*, 0x7B9) * 4 + M2C_FIELD(arg0, s8**, 0x85C) + 8);
+    ActivePokemonState* state = &arg0->state;
+
+    if (team[2] == 3) {
+        if (M2C_FIELD(arg1, u16*, 8) & 8) {
+            arg0->state.unk_18 = 0;
+        } else if (M2C_FIELD(arg1, u16*, 8) & 1) {
+            arg0->state.unk_18 = 1;
+        } else if (M2C_FIELD(arg1, u16*, 8) & 4) {
+            arg0->state.unk_18 = 2;
+        } else {
+            return;
+        }
+    } else {
+        if (M2C_FIELD(arg1, u16*, 8) & 8) {
+            arg0->state.unk_18 = 0;
+        }
+        if (M2C_FIELD(arg1, u16*, 8) & 2) {
+            arg0->state.unk_18 = 1;
+        }
+        if (M2C_FIELD(arg1, u16*, 8) & 0x4000) {
+            arg0->state.unk_18 = 2;
+        }
+        if (M2C_FIELD(arg1, u16*, 8) & 1) {
+            arg0->state.unk_18 = 3;
+        }
+        if (M2C_FIELD(arg1, u16*, 8) & 4) {
+            arg0->state.unk_18 = 4;
+        }
+        if (M2C_FIELD(arg1, u16*, 8) & 0x8000) {
+            arg0->state.unk_18 = 5;
+        }
+    }
+    if (M2C_FIELD(arg1, u16*, 8) & 0xC00F) {
+        if ((state->rosterIndex == state->unk_18) && (state->teamMemberIndex == state->unk_2D_zero)) {
+            if (func_8210CD7C(arg0) != 0) {
+                func_8210CFE4((s32)arg0);
+            }
+        } else if (state->unk_18 <= (u32)(team[2] - 1)) {
+            if (func_8210CD7C(arg0) != 0) {
+                func_82134D60();
+                state->unk_1C = 0;
+                state->unk_1E = 0;
+                state->unk_10 = 3;
+            }
+        }
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8210D1B0; signature not recovered. */
