@@ -1132,11 +1132,56 @@ void func_811068A0(u16* arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81106AA0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81106AA0.s")
-#endif
+extern u16 D_81129AB8[];
+extern u16 D_8112A138[];
+extern u16 D_81129238[];
+extern u16 D_811296B8[];
+extern u16 D_81129D38[];
+extern u16 D_8112A538[];
+extern u16 D_81129638[];
+extern u8 D_811565E1;
+
+void func_81106AA0(s32 addr, s32 frame) {
+    s32 i;
+
+    for (i = 0; i < 6; i++) {
+        func_81103C40(addr, (u8*)&D_81129AB8[frame * 0x28], 0, 8, 5);
+        addr += 0x10;
+    }
+    func_81103C40(addr, (u8*)&D_8112A138[frame * 0x40], 0, 8, 8);
+    addr += 0x1406;
+    for (i = 0; i < 5; i++) {
+        func_81103C40(addr, (u8*)&D_81129238[frame * 0x40], 0, 8, 8);
+        addr += 0x1400;
+    }
+    func_81103C40(addr, (u8*)&D_811296B8[frame * 0x40], 0, 8, 8);
+    addr += 0x10;
+    switch (D_811565E1) {
+        case 1:
+            i = 7;
+            break;
+        case 2:
+            i = 0xA;
+            break;
+        case 3:
+            i = 0xB;
+            break;
+        default:
+            i = 6;
+            break;
+    }
+    for (; i > 0; i--) {
+        func_81103C40(addr + 0x780, (u8*)&D_81129AB8[frame * 0x28], 0, 8, 5);
+        addr += 0x10;
+    }
+    func_81103C40(addr, (u8*)&D_81129D38[frame * 0x40], 0, 8, 8);
+    addr -= 0x13FA;
+    func_81103C40(addr, (u8*)&D_8112A538[frame * 0x40], 0, 8, 8);
+    addr -= 0x1400;
+    func_81103C40(addr, (u8*)&D_8112A538[frame * 0x40], 0, 8, 8);
+    addr -= 0x1400;
+    func_81103C40(addr, (u8*)D_81129638, 0, 8, 8);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_81106CC8; signature not recovered. */
