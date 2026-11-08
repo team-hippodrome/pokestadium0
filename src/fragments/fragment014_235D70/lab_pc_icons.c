@@ -213,11 +213,47 @@ void func_88000764(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4, s32 arg5) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment014_235D70/func_880007FC.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88000C1C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment014_235D70/func_88000C1C.s")
-#endif
+void func_80027410(void*, void*, s32, s32, s32);
+void func_8002DECC(void*, void*, void*, void*, s32, s32, s32);
+s32 func_800226BC(s32, s32, s32);
+s32 func_80025BD8();
+void func_880007FC();
+M2C_UNK func_88000C1C(u8* arg0, s32 arg1, s32 arg2) {
+    M2C_FIELD(arg0, s32*, 4) = 0;
+    func_80027410(arg0 + 0x1E0, arg0 + 0x30, 0x30, 9, 9);
+    func_8002DECC(arg0 + 8, arg0 + 0x1E0, arg0 + 0x1F0, func_880007FC, 3, 0, 0);
+    M2C_FIELD(arg0, s32*, 0x10) = arg1;
+    M2C_FIELD(arg0, u16**, 0xC)[1] |= 1;
+    switch (arg2) {
+        case 4:
+            M2C_FIELD(arg0, u16**, 0xC)[0] |= 1;
+            M2C_FIELD(arg0, u16**, 0xC)[2] |= 1;
+            M2C_FIELD(arg0, u16**, 0xC)[3] |= 1;
+            M2C_FIELD(arg0, u16**, 0xC)[5] |= 1;
+            M2C_FIELD(arg0, u16**, 0xC)[6] |= 1;
+            M2C_FIELD(arg0, u16**, 0xC)[8] |= 1;
+            break;
+        case 3:
+            M2C_FIELD(arg0, u16**, 0xC)[0] |= 1;
+            M2C_FIELD(arg0, u16**, 0xC)[2] |= 1;
+            M2C_FIELD(arg0, u16**, 0xC)[3] |= 1;
+            M2C_FIELD(arg0, u16**, 0xC)[5] |= 1;
+            M2C_FIELD(arg0, u16**, 0xC)[8] |= 1;
+            break;
+        case 2:
+            M2C_FIELD(arg0, u16**, 0xC)[0] |= 1;
+            M2C_FIELD(arg0, u16**, 0xC)[2] |= 1;
+            M2C_FIELD(arg0, u16**, 0xC)[3] |= 1;
+            break;
+        case 1:
+            M2C_FIELD(arg0, u16**, 0xC)[0] |= 1;
+            M2C_FIELD(arg0, u16**, 0xC)[2] |= 1;
+            break;
+    }
+    if ((arg2 == 1 || arg2 == 2) && func_800226BC(0x20, func_80025BD8(), 0) == 0) {
+        M2C_FIELD(arg0, u16**, 0xC)[5] |= 1;
+    }
+}
 
 s32 func_88000E20(s8 *arg0) {
     s32 temp_v0;
