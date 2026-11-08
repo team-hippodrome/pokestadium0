@@ -74,7 +74,11 @@ u16 func_81112650(u8** stream, u8 kind) {
     return value;
 }
 
+#ifdef NON_MATCHING
+/* TODO: decompile func_811126B8; signature not recovered. */
+#else
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_811126B8.s")
+#endif
 
 typedef struct Item8111539C {
     /* 0x00 */ u32 active : 1;
@@ -467,7 +471,195 @@ void func_81113140(Particle3140* arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_811131CC.s")
 #endif
 
+typedef struct SeqPlayer811132E4 {
+    /* 0x00 */ u8 unk00[0xE];
+    /* 0x0E */ s16 transposition;
+    /* 0x10 */ u8 unk10[0x18 - 0x10];
+    /* 0x18 */ u8* seqData;
+    /* 0x1C */ u8 unk1C[0x90 - 0x1C];
+    /* 0x90 */ u8* velocityTable;
+    /* 0x94 */ u8* durationTable;
+} SeqPlayer811132E4;
+
+typedef struct Channel811132E4 {
+    /* 0x00 */ u8 unk00[0x24];
+    /* 0x24 */ s16 transposition;
+    /* 0x26 */ u8 unk26[0x4C - 0x26];
+    /* 0x4C */ struct SeqPlayer811132E4* seqPlayer;
+} Channel811132E4;
+
+typedef struct ScriptState811132E4 {
+    /* 0x00 */ u8* pc;
+} ScriptState811132E4;
+
+typedef struct Layer811132E4 {
+    /* 0x00 */ u8 enabled : 1;
+    /* 0x00 */ u8 finished : 1;
+    /* 0x00 */ u8 stopSomething : 1;
+    /* 0x00 */ u8 continuousNotes : 1;
+    /* 0x00 */ u8 bit3 : 1;
+    /* 0x00 */ u8 notePropertiesNeedInit : 1;
+    /* 0x00 */ u8 ignoreDrumPan : 1;
+    /* 0x00 */ u8 bit1 : 1;
+    /* 0x01 */ s8 unk01;
+    /* 0x02 */ u8 instOrWave;
+    /* 0x03 */ u8 unk03;
+    /* 0x04 */ u8 noteDuration;
+    /* 0x05 */ u8 portamentoTargetNote;
+    /* 0x06 */ u8 pan;
+    /* 0x07 */ u8 unk07;
+    /* 0x08 */ u8 portamentoMode;
+    /* 0x09 */ u8 unk09[0x18 - 0x09];
+    /* 0x18 */ u8 releaseRate;
+    /* 0x19 */ u8 unk19[3];
+    /* 0x1C */ u8* envelope;
+    /* 0x20 */ s16 portamentoTime;
+    /* 0x22 */ s16 transposition;
+    /* 0x24 */ u8 unk24[4];
+    /* 0x28 */ f32 freqScale;
+    /* 0x2C */ u8 unk2C[4];
+    /* 0x30 */ f32 velocitySquare;
+    /* 0x34 */ u8 unk34[0x3C - 0x34];
+    /* 0x3C */ s16 shortNoteDefaultDelay;
+    /* 0x3E */ u8 unk3E[0x4C - 0x3E];
+    /* 0x4C */ u8* instrument;
+    /* 0x50 */ u8 unk50[4];
+    /* 0x54 */ Channel811132E4* channel;
+    /* 0x58 */ ScriptState811132E4 scriptState;
+} Layer811132E4;
+
+extern f32 D_81136378[];
+s32 func_811126B8(void*, void*, s32, s32);
+u8 func_81113E84(u8* arg0, u8 arg1, u8** arg2, u8* arg3);
+
+#ifdef NON_MATCHING
+// Matches the ROM, but uses rodata data that is not placed in this file yet.
+s32 func_811132E4(Layer811132E4* layer) {
+    Channel811132E4* channel = layer->channel;
+    ScriptState811132E4* state = &layer->scriptState;
+    SeqPlayer811132E4* seqPlayer = channel->seqPlayer;
+    u8 cmd;
+    u8 cmdArg8;
+    u16 cmdArg16;
+    u16 velocity;
+
+    while (1) {
+        cmd = func_81112FB0(&state->pc);
+        if (cmd <= 0xC0) {
+            return cmd;
+        }
+        if (cmd >= 0xF2) {
+            cmdArg16 = func_81112650(&state->pc, cmd);
+            if (func_811126B8(seqPlayer, state, cmd, cmdArg16) == 0) {
+                continue;
+            }
+            func_81112AF8((Particle31FlagsA*)layer);
+            return -1;
+        }
+
+        switch (cmd) {
+            case 0xC1:
+            case 0xCA:
+                cmdArg8 = *(state->pc++);
+                if (cmd == 0xC1) {
+                    layer->velocitySquare = (f32)(cmdArg8 * cmdArg8) / 16129.0f;
+                } else {
+                    layer->pan = cmdArg8;
+                }
+                break;
+            case 0xC9:
+            case 0xC2:
+                cmdArg8 = *(state->pc++);
+                if (cmd == 0xC9) {
+                    layer->noteDuration = cmdArg8;
+                } else {
+                    layer->transposition = cmdArg8;
+                }
+                break;
+            case 0xC4:
+            case 0xC5:
+                if (cmd == 0xC4) {
+                    layer->continuousNotes = 1;
+                } else {
+                    layer->continuousNotes = 0;
+                }
+                layer->bit1 = 0;
+                func_81111090((Particle31FlagsA*)layer);
+                break;
+            case 0xC3:
+                cmdArg16 = func_81112FFC(&state->pc);
+                layer->shortNoteDefaultDelay = cmdArg16;
+                break;
+            case 0xC6:
+                cmd = func_81112FB0(&state->pc);
+                if (cmd >= 0x7F) {
+                    if (cmd == 0x7F) {
+                        layer->instOrWave = 0;
+                    } else {
+                        layer->instOrWave = cmd;
+                        layer->instrument = NULL;
+                    }
+                    if (cmd == 0xFF) {
+                        layer->releaseRate = 0;
+                    }
+                    break;
+                }
+                if ((layer->instOrWave = func_81113E84((u8*)channel, cmd, &layer->instrument, &layer->releaseRate)) == 0) {
+                    layer->instOrWave = 0xFF;
+                }
+                break;
+            case 0xC7:
+                layer->portamentoMode = func_81112FB0(&state->pc);
+                cmd = func_81112FB0(&state->pc);
+                cmd += channel->transposition;
+                cmd += layer->transposition;
+                cmd += seqPlayer->transposition;
+                if (cmd >= 0x80) {
+                    cmd = 0;
+                }
+                layer->portamentoTargetNote = cmd;
+                if (layer->portamentoMode & 0x80) {
+                    layer->portamentoTime = *(state->pc++);
+                    break;
+                }
+                cmdArg16 = func_81112FFC(&state->pc);
+                layer->portamentoTime = cmdArg16;
+                break;
+            case 0xC8:
+                layer->portamentoMode = 0;
+                break;
+            case 0xCB:
+                cmdArg16 = func_81112FC4(&state->pc);
+                layer->envelope = seqPlayer->seqData + cmdArg16;
+            case 0xCF:
+                layer->releaseRate = func_81112FB0(&state->pc);
+                break;
+            case 0xCC:
+                layer->ignoreDrumPan = 1;
+                break;
+            case 0xCD:
+                layer->unk01 = func_81112FB0(&state->pc);
+                break;
+            case 0xCE:
+                layer->freqScale = D_81136378[(u8)(func_81112FB0(&state->pc) + 0x80)];
+                break;
+            default:
+                switch (cmd & 0xF0) {
+                    case 0xD0:
+                        velocity = seqPlayer->velocityTable[cmd & 0xF];
+                        layer->velocitySquare = (f32)(velocity * velocity) / 16129.0f;
+                        break;
+                    case 0xE0:
+                        layer->noteDuration = seqPlayer->durationTable[cmd & 0xF];
+                        break;
+                }
+                break;
+        }
+    }
+}
+#else
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_811132E4.s")
+#endif
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81113650.s")
 
@@ -492,7 +684,7 @@ void func_81113E54(u8* arg0, u8 arg1) {
     }
 }
 
-s32 func_81113E84(u8* arg0, u8 arg1, u8** arg2, u8* arg3) {
+u8 func_81113E84(u8* arg0, u8 arg1, u8** arg2, u8* arg3) {
     u8* p = func_81110CA8(arg0[7], arg1);
 
     if (p == NULL) {
