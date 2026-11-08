@@ -631,11 +631,19 @@ void func_8002234C(unk_func_88205880_00D0* arg0, s32 arg1, s32 arg2) {
     sp24->unk_001[arg2] = sp24->unk_008[arg2].unk_00.unk_00;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80022424; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80022424.s")
-#endif
+void func_80022424(BattleMon* arg0, s32 arg1, s32 arg2, s32 arg3) {
+    u8* sp2C = (u8*)GbSave_GetBoxEntry(arg1, arg2);
+
+    if (sp2C != NULL) {
+        Pokemon_FromGbRecord(arg0, (GbPokemonRecord*)(sp2C + 0x20 + arg3 * 0x21));
+        Pokemon_RecalcStats(arg0);
+
+        _bcopy(((u8(*)[6])(sp2C + 0x3FE))[arg3], (u8*)arg0 + 0x3D, 3);
+        _bcopy(((u8(*)[6])(sp2C + 0x3FE))[arg3] + 3, (u8*)arg0 + 0x4D, 3);
+        Text_UntranscodeFixedName((char*)arg0 + 0x30, (char*)((u8(*)[6])(sp2C + 0x4B2))[arg3]);
+        Text_UntranscodeFixedName((char*)arg0 + 0x40, (char*)((u8(*)[6])(sp2C + 0x3FE))[arg3]);
+    }
+}
 
 /*
  * func_800224E8
