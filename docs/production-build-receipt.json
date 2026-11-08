@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 4946,
-  "asm_owners": 498,
+  "c_owners": 4947,
+  "asm_owners": 497,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -593,7 +593,7 @@
     "src/vector_math.c"
   ],
   "source_registry_sha256": "23324db86a9583335916ac8b036f9a0000b23dcde9a41e110bd84697c4447969",
-  "section_registry_sha256": "fade3d2b14b60ae9b761bd2eb33b678e3240b8f84f523ce3cd54648653d6164a",
+  "section_registry_sha256": "7f5c544bc8106aa1771a63a90d1a58893a793d6b651d571ae54bcf2a3e5b2122",
   "headers_sha256": "8fb7b06750b14eebe3aa39eebf826e4703049469869396b4623fff5eb52cdcd8",
   "matching_registry_sha256": "d8bcc14a2a0db281cf30dcb9ddbd94d59e1afe84c70b4c8c017ea27ce60a251c",
   "build_tools_sha256": {
@@ -603,7 +603,7 @@
     "tools/cflags_overrides.json": "7052d644eb08429c59981bb4c369c8c937c61ca4c639a1c1ca2c5fc0ce919ebb",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "cc6bf79aaabe73faa7604b4ad2d4fbbae12c3b7e509348e4cd3ff87bd7f8ea05",
+    "docs/function-matches.csv": "d18aff84099a1fe9416a655f21667e886ef5838c261bea6320a717f3bceec176",
     "linker_scripts/jp/symbol_addrs.txt": "3b5103d4cfe8c6cf2470a85f3aacf457f87dc2c7f2096a7a216bec5fd85d5385"
   },
   "binutils": {
@@ -777,7 +777,7 @@
     "src/fragments/fragment012_17ED00/battle_engine_thumbnail.c": "d2717cbc20d699d329f5a4f108f3264dc2d89e6c06a1aa40df896680f2a479f7",
     "src/fragments/fragment012_17ED00/ekans_game.c": "4c0d7afe0c3308ce8e32a1466e62fae8934e6fcd26584fb158fa89b07c3902a1",
     "src/fragments/fragment012_17ED00/ekans_game_2.c": "a843a8dcfda50b5c239239d42815db53bc72ffbf18dc042d5f01b364bcc4ffbd",
-    "src/fragments/fragment012_17ED00/ekans_game_3.c": "e504cab4a0c0e22d9e9a0d712ab66aecead9679b4e37398bed836bd69ba8229f",
+    "src/fragments/fragment012_17ED00/ekans_game_3.c": "0d7844a96f078f006db048203fedcd0725fffc428813585a1663a1ebcb9c981c",
     "src/fragments/fragment012_17ED00/fragment1_89010.c": "210e23fe9b917e573a636ac7a27415a13a3d1f55d6a6b1f6d430de8f19147b63",
     "src/fragments/fragment012_17ED00/fragment1_89010_821328DC.c": "901f6b861de798e44a86953d188e36bab018d53c204092429a5ae06c18790655",
     "src/fragments/fragment012_17ED00/particle_math_261F90.c": "74022412078088a6e83edf3cd5e19d6220ea32b3705f0faff47b2ad5c4cf440c",

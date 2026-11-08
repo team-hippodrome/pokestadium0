@@ -2924,7 +2924,7 @@ func_82185404,0x82185404,src/fragments/fragment012_17ED00/ekans_game_3.c,Jigglyp
 func_8218540C,0x8218540C,src/fragments/fragment012_17ED00/ekans_game_3.c,func_8218540C,m2c,m2c+permuter,c
 func_82185450,0x82185450,src/fragments/fragment012_17ED00/ekans_game_3.c,BattleAI_IsRestrictedRandomMove,hand,,c
 func_82185494,0x82185494,src/fragments/fragment012_17ED00/ekans_game_3.c,func_82185494,m2c,m2c,c
-func_821854AC,0x821854AC,src/fragments/fragment012_17ED00/ekans_game_3.c,,asm,,asm
+func_821854AC,0x821854AC,src/fragments/fragment012_17ED00/ekans_game_3.c,func_821854AC,hand,,c
 func_821855F0,0x821855F0,src/fragments/fragment012_17ED00/ekans_game_3.c,func_821855F0,hand,,c
 func_82185684,0x82185684,src/fragments/fragment012_17ED00/ekans_game_3.c,func_82185684,hand,,c
 func_821857CC,0x821857CC,src/fragments/fragment012_17ED00/ekans_game_3.c,,asm,,asm
