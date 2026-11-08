@@ -2391,7 +2391,7 @@ func_821748CC,0x821748CC,src/fragments/fragment012_17ED00/battle_engine_34A420.c
 func_82174B20,0x82174B20,src/fragments/fragment012_17ED00/battle_engine_34A420.c,Radial20_ResetPool,s1,stadium1:src/fragments/battle_engine/battle_engine_34A420.c,c
 func_82174C30,0x82174C30,src/fragments/fragment012_17ED00/battle_engine_34A420.c,,asm,,asm
 func_82174E64,0x82174E64,src/fragments/fragment012_17ED00/battle_engine_34A420.c,Radial20_VariantB,hand,,c
-func_82175068,0x82175068,src/fragments/fragment012_17ED00/battle_engine_34A420.c,,asm,,asm
+func_82175068,0x82175068,src/fragments/fragment012_17ED00/battle_engine_34A420.c,func_82175068,s1,,asm
 func_82175440,0x82175440,src/fragments/fragment012_17ED00/battle_engine_34A420.c,,asm,,asm
 func_82175828,0x82175828,src/fragments/fragment012_17ED00/battle_engine_34A420.c,Radial20_VariantE,s1,stadium1:src/fragments/battle_engine/battle_engine_34A420.c,c
 func_82175BE0,0x82175BE0,src/fragments/fragment012_17ED00/battle_engine_34A420.c,Radial20_RotateVertexOffset,s1,stadium1:src/fragments/battle_engine/battle_engine_34A420.c,c

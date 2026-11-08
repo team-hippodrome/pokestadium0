@@ -193,7 +193,74 @@ void Radial20_VariantB(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg
 }
 
 #ifdef NON_MATCHING
-/* TODO: decompile func_82175068; signature not recovered. */
+// Matches the ROM, but uses rodata data that is not placed in this file yet.
+extern Radial20 D_821A3490[10];
+void func_82175068(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s16 arg6, u8 arg7, u8 arg8, u8 arg9,
+                   u8 argA, f32 argB, f32 argC, f32 argD, s16 argE) {
+    Radial20* var_v0;
+    Radial20Node* var_s0;
+    s32 i;
+    s32 j;
+    Vec3f spBC;
+    Vec3f spB0;
+    s32 spA4;
+    s32 temp_fp;
+    s32 temp_s2;
+    s32 temp_s3;
+    s32 temp_s4;
+    s32 temp_s7;
+    s32 tmp;
+
+    spBC.x = arg0;
+    spBC.y = arg1;
+    spBC.z = arg2;
+    spB0.x = arg3;
+    spB0.y = arg4;
+    spB0.z = arg5;
+
+    var_v0 = &D_821A3490[0];
+
+    for (i = 0; i < 10; i++, var_v0++) {
+        if (var_v0->unk_000 == 0) {
+            var_s0 = &var_v0->unk_048[0];
+
+            var_v0->unk_000 = 1;
+            var_v0->unk_004 = 0;
+            var_v0->unk_006 = argE;
+            var_v0->unk_008 = arg6;
+            var_v0->unk_00A.r = arg7;
+            var_v0->unk_00A.g = arg8;
+            var_v0->unk_00A.b = arg9;
+            var_v0->unk_014 = argD;
+            var_v0->unk_018 = argB;
+
+            temp_s7 = (guRandom() % 20) + 2;
+            temp_fp = (guRandom() % 10) + 4;
+            spA4 = (guRandom() % 20) + 2;
+            temp_s4 = (guRandom() % 10) + 4;
+
+            for (j = 0, temp_s2 = spA4, temp_s3 = temp_s7; j < 20; j++) {
+                var_s0->unk_00 = j;
+                var_s0->unk_04 = argA;
+                var_s0->unk_08 = argC;
+                var_s0->unk_0C = 0.0f;
+                var_s0->unk_10 = spBC;
+                var_s0->unk_1C = spB0;
+
+                var_s0->unk_1C.y += 2.0 * __sinf(((temp_s3 % temp_fp) * TWO_PI) / temp_fp) *
+                                    __sinf(((temp_s2 % (temp_s4 + 0x14)) * TWO_PI) / (temp_s4 + 0x14));
+                var_s0->unk_1C.z += 0.5 * __sinf(((temp_s2 % temp_s4) * TWO_PI) / temp_s4);
+                tmp = j * 0.5;
+                var_s0->unk_10.x += var_s0->unk_1C.x * ((j * 0.5) - tmp);
+
+                temp_s2++;
+                temp_s3++;
+                var_s0++;
+            }
+            break;
+        }
+    }
+}
 #else
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82175068.s")
 #endif

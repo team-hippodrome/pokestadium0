@@ -603,7 +603,7 @@
     "tools/cflags_overrides.json": "9d38732a8062f9f9d8de32c0e0b6ec71b1a0818cb0b4701f332126abe3441fc0",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "fbba6566e247b6859f00d46165b0d3f6ecb5701cdf1700a2a2affb90e62c0bc2",
+    "docs/function-matches.csv": "9023bdb6eea32604a19f97c371a5ca71bdcca201398b9b7483b449dfc0baf0b3",
     "linker_scripts/jp/symbol_addrs.txt": "8f6ea5aa7efb13c4586ed6b886a50ac2d66e6820a5c7706f1dda9205b38582fb"
   },
   "binutils": {
@@ -750,7 +750,7 @@
     "src/fragments/fragment012_17ED00/battle_engine_347330.c": "00d55dd705275503794ccb8fa4418b5598ef272cae842a00e0a99aa5bbbd45b1",
     "src/fragments/fragment012_17ED00/battle_engine_347330_82171788.c": "5d9b5d786ea806c34dd1cc6da47b7d01ae948dfdcab7e4fbaa851cb159bee7db",
     "src/fragments/fragment012_17ED00/battle_engine_347330_82173418.c": "43b29f4ad76b69d556925f0b04285873c12402d86729a60ebfa79a22e918347c",
-    "src/fragments/fragment012_17ED00/battle_engine_34A420.c": "f0b16a520e7ef36e6290a31d02493ce4987c07614af6cda41801d7cc1031c8c4",
+    "src/fragments/fragment012_17ED00/battle_engine_34A420.c": "5408a63a89932ab76465b72b153c52e437d92c155694d0874eb1958c6aff25a3",
     "src/fragments/fragment012_17ED00/battle_engine_34E1A0.c": "a3afc280aa277cc91f93ea4bb630dd8fabeb4bb69ccec6ecee49b4208a05cf4a",
     "src/fragments/fragment012_17ED00/battle_engine_34F1A0.c": "23629dc761f54c15660569cc0f446ded75fcd2b82c4a90181a620bfc0cf897f2",
     "src/fragments/fragment012_17ED00/battle_engine_3502D0.c": "3d5f1cd4ae8b47dc8a3c1b87daefcf03fe2d1e614e22ea821fdde549f8830c94",
