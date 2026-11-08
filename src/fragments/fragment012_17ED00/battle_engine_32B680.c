@@ -147,11 +147,29 @@ void func_8211FB54(CameraNode* arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8211FCC8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211FCC8.s")
-#endif
+void func_8211FCC8(CameraNode* arg0) {
+    UNUSED s32 pad[2];
+    f32 sp4C;
+    UNUSED CameraNode** pad2 = &arg0;
+    u16 sp46;
+    f32 dist;
+    ActivePokemon* pokemon;
+    func_821224F4(arg0); func_8212187C(0); func_82121D78(arg0, 20.0f, 4000.0f);
+    pokemon = sActivePokemon[sBattleScene.scene->unk_2C];
+    if (func_8211F644(pokemon, arg0) == 0) {
+        func_82104C68(pokemon, 1);
+        BattleAnim_GetOwnerDefaultAnchorPosition(pokemon, &sBattleScene.scene->unk_D0);
+        dist = BattleScene_GetParticipantModelRadiusScaled(pokemon) * 3.5f;
+        sp46 = BattleAnim_RandomRange(3);
+        dist *= BattleAnim_GetSpeciesBaseScale(pokemon) * 0.5 * sp46 + 1.0;
+        if (dist > 500.0f) dist = 500.0f;
+        sp46 = BattleAnim_RandomRange(4);
+        sp4C = func_82107EC8(pokemon) * sp46;
+        BattleScene_SetCameraAtFromAnchor(pokemon, arg0, sBattleScene.scene->unk_D0, 0, 0, 0.0f, 0);
+        BattleScene_SetCameraEyeFromPosition(arg0, sBattleScene.scene->unk_D0, 0, 0x4000 - BattleAnim_RandomRange(0xB4) * 0xB6, dist, sp4C);
+        func_8212239C(pokemon, arg0); sBattleScene.scene->unk_20++;
+    }
+}
 
 void func_8211FF08(CameraNode* arg0) {
     UNUSED s32 pad[2];
