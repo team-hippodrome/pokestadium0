@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 4986,
-  "asm_owners": 458,
+  "c_owners": 4987,
+  "asm_owners": 457,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -603,7 +603,7 @@
     "tools/cflags_overrides.json": "7052d644eb08429c59981bb4c369c8c937c61ca4c639a1c1ca2c5fc0ce919ebb",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "ca15a6d6a28206cc30a36d77570c2b7efb4e1962c5c6d44c2474a54ff78e11a1",
+    "docs/function-matches.csv": "d015e6f561972b88ea8ac3b79fdf912cdeedd2939b2494d6b0e993a7b4cb85b3",
     "linker_scripts/jp/symbol_addrs.txt": "3b5103d4cfe8c6cf2470a85f3aacf457f87dc2c7f2096a7a216bec5fd85d5385"
   },
   "binutils": {
@@ -1178,7 +1178,7 @@
     "src/poke_icon_2.c": "8edb42f4b2d7f820fae69069e24baf050606f38dd739885bc918345f81a10af7",
     "src/pokemon_lab_support.c": "131b1659d81b154753e4465f0b1ba84990472bcd21dda61b9ac32816ca448146",
     "src/pokemon_stats.c": "7a702100543353296efd2bc8c09856b394ac734d0830e1d2620c01c05041aea4",
-    "src/pokemon_stats_2.c": "09295016fc5f1729688cd63ae61ac54b51688167aa376f8e2f12cc747c81fd23",
+    "src/pokemon_stats_2.c": "397c98d4666f85fe807db69ca54acd55ecf58e5882a74c9f485eeb5657eadc61",
     "src/profiler.c": "fa24688648aa812dba1f00a9dbcd01f01acbfc61ac5f64ab9aeec92f40062a81",
     "src/rom_device.c": "58d99aa66ed7aa418bc3c3db56a545520ec3829b628d50ec3b2a223ec7c6eecd",
     "src/rsp.c": "7a8ee9ac2dd34ba7b559852110d4cb85bc1e135359529a4f1d936eccfbd9ed8a",

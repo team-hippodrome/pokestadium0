@@ -5208,7 +5208,7 @@ func_80021C6C,0x80021C6C,src/pokemon_stats_2.c,func_80021C6C,hand,,c
 func_80021CF4,0x80021CF4,src/pokemon_stats_2.c,,asm,,asm
 func_80021E64,0x80021E64,src/pokemon_stats_2.c,,asm,,asm
 func_80021F50,0x80021F50,src/pokemon_stats_2.c,GbSave_WriteBoxBanks,hand,,c
-func_80021FF4,0x80021FF4,src/pokemon_stats_2.c,,asm,,asm
+func_80021FF4,0x80021FF4,src/pokemon_stats_2.c,func_80021FF4,hand,,c
 func_8002207C,0x8002207C,src/pokemon_stats_2.c,GbSave_RebuildAndWriteSave,hand,,c
 func_80022118,0x80022118,src/pokemon_stats_2.c,GbSave_ValidateBeforeWrite,hand,,c
 func_80022188,0x80022188,src/pokemon_stats_2.c,GbSave_RequirePakPresent,s1,stadium1:src/pokemon_stats.c (VERSION_JP),c

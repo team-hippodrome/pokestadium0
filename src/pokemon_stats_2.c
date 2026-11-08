@@ -542,11 +542,19 @@ s32 GbSave_WriteBoxBanks(s32 arg0) {
     return sp28;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80021FF4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80021FF4.s")
-#endif
+s32 func_80021FF4(s32 arg0) {
+    u8 sp2F;
+    s32 sp28 = 0;
+
+    if (sGbSavePorts[arg0].unk_00 & 1) {
+        if (GbTower_ProbePak(arg0, &sp2F, sGbSavePorts[arg0].unk_18) == 0) {
+            Game_ShutdownAndLoadFragment(arg0, 2);
+        }
+        sp28 = func_80021334(arg0);
+        sp28 &= GbTower_CheckPakRemoved(arg0, sp2F);
+    }
+    return sp28;
+}
 
 s32 GbSave_RebuildAndWriteSave(s32 arg0) {
     u8 sp2F;
