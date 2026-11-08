@@ -1015,5 +1015,11 @@
     "ido": "5.3",
     "mips": "-mips2",
     "opt": "-O2"
+  },
+  "src/52D80.c": {
+    "ido": "5.3",
+    "opt": "-O1",
+    "mips": "-mips2",
+    "profile": "ultralib"
   }
 }

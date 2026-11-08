@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5024,
-  "asm_owners": 420,
+  "c_owners": 5025,
+  "asm_owners": 419,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -593,17 +593,17 @@
     "src/vector_math.c"
   ],
   "source_registry_sha256": "23324db86a9583335916ac8b036f9a0000b23dcde9a41e110bd84697c4447969",
-  "section_registry_sha256": "756bbde4d1460ee9aceb60ff9efc9148d4ecd8bccfa30dab179cd730713589b6",
+  "section_registry_sha256": "4f662d6f91e1eac66965c338d06954d3bcfe1fd0cafc4c298a495587f4a91a92",
   "headers_sha256": "ca0d57681ffc274908048a5057db725b4a95593d821a3f88ebd1b9459c4b1fcd",
   "matching_registry_sha256": "d8bcc14a2a0db281cf30dcb9ddbd94d59e1afe84c70b4c8c017ea27ce60a251c",
   "build_tools_sha256": {
     "tools/production.py": "c62476279cd553bc7b7d39d13253922dec0bf62fddc24e76cdd4b490e460c6c9",
     "tools/m2c_easiest.py": "edb0c9af61e5241c9e90f24152effdf636ceaa630812900d2840e2a67c5ff3f3",
     "tools/asm_prelude.inc": "e17e26652f832563c8ff17b0588b67d897a0faa4905442b151e5e67c85bfcff1",
-    "tools/cflags_overrides.json": "6981aa2b1dfa80a9be590f64c586e0496f964b18aeb50707bbe51fc887f0f4ac",
+    "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "0d84fffdfd3b80ffecadf617e1255e801414c02513933857c2fa4be3cf6c7752",
+    "docs/function-matches.csv": "95ccac4237e68a294813beb5b4f49fe137f7097594522965ec9880491854e691",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -637,7 +637,7 @@
     "src/50920.c": "69522e69f89f94df17d14df26f44ab02654a550946cf6778a4a75048ab2b16ff",
     "src/51D10.c": "caabbdbabec39dec618f03d3ac2fec4c04b05cf039b1b85bcc81bebe2bc77b2a",
     "src/52D00.c": "2de7280f33980f0261657a78edbaf7decdf779981016f1ebc6eb799d41c0f911",
-    "src/52D80.c": "f038af5ab6af708148727a1d18c93853b92782c4b9572d704f6d788a9a01cf9c",
+    "src/52D80.c": "deac56e88f76c49f74b9e5a70045afe8a1be5f2f927ce9f435022e178a73d33c",
     "src/53080.c": "97f72b7aaad2fe2286dbbe3cea02fd44711f3ff6f4aa7d58aeafce9cb9f0a18c",
     "src/538C0.c": "0e4767751ccaa00c8577139bda5c95b332930ef7c5002fddc6e62a86a1649128",
     "src/556B0.c": "247574e8fc094a2c7698d2b8454a80346c4755f01e7255eeed689c59b539a0c1",
