@@ -409,11 +409,75 @@ s32 func_8002AAC4(void *arg0) {
     return var_v1;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002AB84; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002AB84.s")
-#endif
+extern u8 D_80073554[];
+void func_8002C1B4(s32, s32, s32, s32);
+void func_8002C5A4(s32, s32, s32, s32);
+
+s32 func_8002AB84(s32* arg0) {
+    UNUSED s32 pad1; // FAKE: unused locals that only pad the stack frame
+    UNUSED s32 pad2; // FAKE
+    UNUSED s32 pad3; // FAKE
+    UNUSED s32 pad4; // FAKE
+    s32 x;
+    s32 y;
+    s32 w;
+    s32 h;
+    s32 ret;
+    s32 maxW;
+    s32 maxH;
+    s32 t;
+
+    maxW = (arg0[2] < 0x10) ? 0x10 : arg0[2];
+    maxH = (arg0[3] < 0x10) ? 0x10 : arg0[3];
+    ret = 1;
+    switch ((u32)arg0[10]) {
+        case 4:
+            return 1;
+        case 3:
+            x = arg0[0];
+            y = arg0[1];
+            t = 0xB - arg0[9];
+            w = ((maxW - 0x10) * t) / 4 + 0x10;
+            h = ((maxH - 0x10) * t) / 4 + 0x10;
+            break;
+        case 0:
+            t = arg0[9] - 1;
+            x = arg0[0];
+            y = arg0[1];
+            w = ((maxW - 0x10) * t) / 4 + 0x10;
+            h = ((maxH - 0x10) * t) / 4 + 0x10;
+            break;
+        case 1:
+        case 2:
+            ret = 0;
+            x = arg0[0];
+            y = arg0[1];
+            h = maxH;
+            w = maxW;
+            break;
+    }
+    if (ret == 0) {
+        if (!(arg0[5] & 1)) {
+            if ((arg0[5] & 2) && (arg0[5] & 4)) {
+                func_8002A550(x, y, w, h, *(Color_RGBA8*)&arg0[6], *(Color_RGBA8*)&arg0[7]);
+            } else if (((u8*)&arg0[6])[3] == 0xFF) {
+                gSPDisplayList(gDisplayListHead++, D_80060270);
+                func_80029028(x, y, w, h, *(Color8002A354*)&arg0[6]);
+            } else {
+                gSPDisplayList(gDisplayListHead++, D_80073480);
+                func_800291F8(x, y, w, h, *(Color_RGBA8*)&arg0[6]);
+            }
+        }
+    }
+    func_800295E8(x, y, w, h, D_80073554);
+    if (arg0[5] & 0x800) {
+        func_8002C1B4(x, y - 0x16, arg0[8], arg0[5]);
+    }
+    if (arg0[5] & 0x1000) {
+        func_8002C5A4(x, y - 0xA, 0x50, arg0[5]);
+    }
+    return ret;
+}
 
 void Particle_SetVelocityXZFromRotationY(Particle* arg0) {
     Particle_Field7C_SetXZFromField74AngleY_0B278(arg0);
