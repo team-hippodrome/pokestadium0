@@ -2698,7 +2698,7 @@ func_82103A54,0x82103A54,src/fragments/fragment012_17ED00/battle_engine_move_ani
 func_82103AF0,0x82103AF0,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,BattleScene_TickRow20CleanupAndEnterState18,s1,stadium1:src/fragments/battle_engine/battle_engine_move_animation.c,c
 func_82103B98,0x82103B98,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,BattleScene_ResetOwnerModelIfLoaded,s1,stadium1:src/fragments/battle_engine/battle_engine_move_animation.c,c
 func_82103BCC,0x82103BCC,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,BattleScene_EnterRow8StartMappedMoveAnim,hand,,c
-func_82103C64,0x82103C64,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,,asm,,asm
+func_82103C64,0x82103C64,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,func_82103C64,s1,,c
 func_82103DA4,0x82103DA4,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,func_82103DA4,hand,,c
 func_82103E70,0x82103E70,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,BattleScene_EnterRow9QueueEffectList6,s1,stadium1:src/fragments/battle_engine/battle_engine_move_animation.c,c
 func_82103EF4,0x82103EF4,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,func_82103EF4,hand,,c

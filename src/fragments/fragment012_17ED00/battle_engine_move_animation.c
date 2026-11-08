@@ -74,7 +74,7 @@ extern char** sBattleControllerDisconnectedMessage;
 
 #include "m2c_macros.h"
 
-void func_8003FE58(u8, s16, s32);
+void func_8003FE58(u8, s32, s32);
 
 void BattleScene_ClearStateTickCallbacks(void);
 void BattleScene_QueueRowEffectList3(ActivePokemon* actor, s32 effect_entry);
@@ -762,11 +762,37 @@ void BattleScene_EnterRow8StartMappedMoveAnim(ActivePokemon* active_pokemon) {
     BattleAnim_SetModelEventTrackFromRow(active_pokemon, charge_move_cue);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82103C64; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82103C64.s")
-#endif
+void func_82103C64(ActivePokemon* active_pokemon) {
+    BattleMonRuntime* runtime;
+    s16 species_ob1;
+    s16 move;
+    UNUSED s32 pad;
+    MovePresentationCue* cue;
+
+    species_ob1 = active_pokemon->displayObject.objectType - 1;
+    runtime = &active_pokemon->state.runtime;
+    move = sChargeMoveCues[runtime->usedMove - 1];
+
+    cue = &sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon)]->moveCues[move];
+    BattleScene_GetParticipantSideIndex(active_pokemon);
+
+    if ((active_pokemon->animationTimer == (cue->animationDuration + 1)) && (BattleAnim_IsAssetLoadBusy(active_pokemon) == 0)) {
+        BattleAnim_PlayChargingMoveEffectScript(active_pokemon, runtime->usedMove);
+
+        if (runtime->usedMove == FLY) {
+            BattleScene_SetParticipantModelTransform(active_pokemon, 3, 0);
+        }
+
+        if ((runtime->usedMove == DIG) && (species_ob1 != DIGLETT_OB1) && (species_ob1 != DUGTRIO_OB1)) {
+            BattleScene_SetParticipantModelTransform(active_pokemon, 5, 0);
+            BattleAnim_QueueEffectList(4, active_pokemon);
+        }
+
+        sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
+
+        func_8003FE58(runtime->usedMove, species_ob1 + 1, 4);
+    }
+}
 
 void func_82103DA4(ActivePokemon* active_pokemon) {
     UNUSED s32 pad[2];
