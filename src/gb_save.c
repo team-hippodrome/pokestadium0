@@ -291,6 +291,7 @@ void func_8002A550(s32 x, s32 y, s32 w, s32 h, Color_RGBA8 prim, Color_RGBA8 env
                         (64 << 10) / w, (64 << 10) / h);
 }
 
+// FAKE: decomp slop. Raw pointer-offset casts and the new_var alias stand in for struct fields.
 void func_8002A8C4(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4)
 {
   s8 *new_var;
@@ -302,11 +303,59 @@ void func_8002A8C4(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4)
   *((s32 *) (((s8 *) arg0) + 0x10)) = 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002A8E0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002A8E0.s")
-#endif
+extern Gfx D_80073480[];
+extern u8 D_800735C4[];
+extern u8 D_800735DC[];
+
+void func_8002A8E0(s32* arg0) {
+    UNUSED s32 pad1; // FAKE: unused locals that only pad the stack frame
+    UNUSED s32 pad2; // FAKE
+    UNUSED s32 pad3; // FAKE
+    UNUSED s32 pad4; // FAKE
+    s32 x;
+    s32 y;
+    s32 w;
+    s32 h;
+    s32 x2;
+    s32 y2;
+    s32 w2;
+    s32 h2;
+    Color_RGBA8* color = (Color_RGBA8*)&arg0[6];
+
+    w = (arg0[2] < 0x10) ? 0x10 : arg0[2];
+    h = (arg0[3] < 0x10) ? 0x10 : arg0[3];
+    x = arg0[0];
+    y = arg0[1];
+    if (!(arg0[5] & 1)) {
+        if (arg0[5] & 0x18) {
+            x2 = x + 2;
+            w2 = w - 4;
+            y2 = y + 2;
+            h2 = h - 4;
+        } else {
+            x2 = x;
+            y2 = y;
+            w2 = w;
+            h2 = h;
+        }
+        if ((arg0[5] & 2) && (arg0[5] & 4)) {
+            func_8002A550(x, y, w, h, *(Color_RGBA8*)&arg0[6], *(Color_RGBA8*)&arg0[7]);
+        } else {
+            if (color->a == 0xFF) {
+                gSPDisplayList(gDisplayListHead++, D_80060270);
+                func_80029028(x2, y2, w2, h2, *(Color8002A354*)color);
+            } else {
+                gSPDisplayList(gDisplayListHead++, D_80073480);
+                func_800291F8(x2, y2, w2, h2, *color);
+            }
+        }
+    }
+    if (arg0[5] & 8) {
+        func_800295E8(x, y, w, h, D_800735DC);
+    } else if (arg0[5] & 0x10) {
+        func_800295E8(x, y, w, h, D_800735C4);
+    }
+}
 
 /*
  * func_8002AAC4
@@ -727,11 +776,24 @@ s32 GbSave_GameToCategoryIndex(s32 arg0) {
     return D_80073644[arg0];
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002BC58; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002BC58.s")
-#endif
+extern Img8002A3F8 D_80073674;
+extern Color_RGBA8 D_80073684[];
+extern u8* D_80073694[];
+extern u8 D_04008F20[];
+void Gfx_DrawTextureIa8(s32 x1, s32 y1, s32 draw_width, s32 height, u8* texture, s32 load_width, s32 texture_spread_x_mode);
+
+void func_8002BC58(s32 x, s32 y, s32 arg2, s32 game) {
+    Img8002A3F8 img = D_80073674;
+    Color_RGBA8* color = &D_80073684[GbSave_GameToCategoryIndex(game)];
+
+    func_8002A3F8(&img, x, y);
+    gSPDisplayList(gDisplayListHead++, D_80073450);
+    gDPSetCombineMode(gDisplayListHead++, G_CC_MODULATEIDECALA_PRIM, G_CC_MODULATEIDECALA_PRIM);
+    gDPSetPrimColor(gDisplayListHead++, 0, 0, color->r, color->g, color->b, color->a);
+    Gfx_DrawTextureIa8(x + 6, y + 0x10, 0x28, 0x22, D_04008F20, 0x28, 0);
+    gDPSetPrimColor(gDisplayListHead++, 0, 0, ((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
+    Gfx_DrawTextureIa8(x + 9, y + 0x17, 0x20, 0x14, D_80073694[arg2], 0x20, 0);
+}
 
 extern u8 D_04009FB0[];
 void func_8002BE24(s32 start, s32 end) {
@@ -917,7 +979,7 @@ s32 func_8002CD7C(s8 *arg0) {
                     func_8003F6AC(3);
                     break;
             }
-            if (arg0) { // no-op test; changes register allocation to match
+            if (arg0) { // FAKE: no-op test; changes register allocation to match
             }
         }
     }

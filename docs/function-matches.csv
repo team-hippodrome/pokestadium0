@@ -4284,7 +4284,7 @@ func_8002A354,0x8002A354,src/gb_save.c,func_8002A354,hand,,c
 func_8002A3F8,0x8002A3F8,src/gb_save.c,func_8002A3F8,hand,,c
 func_8002A550,0x8002A550,src/gb_save.c,func_8002A550,hand,,c
 func_8002A8C4,0x8002A8C4,src/gb_save.c,func_8002A8C4,m2c,m2c+permuter,c
-func_8002A8E0,0x8002A8E0,src/gb_save.c,,asm,,asm
+func_8002A8E0,0x8002A8E0,src/gb_save.c,func_8002A8E0,hand,,c
 func_8002AAC4,0x8002AAC4,src/gb_save.c,func_8002AAC4,hand,,c
 func_8002AB84,0x8002AB84,src/gb_save.c,,asm,,asm
 func_8002AE6C,0x8002AE6C,src/gb_save.c,Particle_SetVelocityXZFromRotationY,s1,stadium1:src/fragments/particle_math/particle_math_269820.c,c
@@ -4305,7 +4305,7 @@ func_8002B940,0x8002B940,src/gb_save.c,func_8002B940,hand,,c
 func_8002BAB8,0x8002BAB8,src/gb_save.c,func_8002BAB8,hand,,c
 func_8002BC14,0x8002BC14,src/gb_save.c,Ui_GetSelectionDirection,s1,stadium1:src/gb_save.c,c
 func_8002BC44,0x8002BC44,src/gb_save.c,GbSave_GameToCategoryIndex,s1,stadium1:src/gb_save.c,c
-func_8002BC58,0x8002BC58,src/gb_save.c,,asm,,asm
+func_8002BC58,0x8002BC58,src/gb_save.c,func_8002BC58,hand,,c
 func_8002BE24,0x8002BE24,src/gb_save.c,func_8002BE24,hand,,c
 func_8002C064,0x8002C064,src/gb_save.c,func_8002C064,hand,,c
 func_8002C1B4,0x8002C1B4,src/gb_save.c,,asm,,asm
