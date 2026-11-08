@@ -621,11 +621,50 @@ s32 func_890013F8(void* menu, u32 flags) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_8900147C.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_890017FC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_890017FC.s")
-#endif
+typedef struct ColorPair890017FC {
+    /* 0x0 */ Color_RGBA8 prim;
+    /* 0x4 */ Color_RGBA8 env;
+} ColorPair890017FC;
+
+extern ColorPair890017FC D_8900A608;
+extern ColorPair890017FC D_8900A610;
+extern u8* D_89017A80[];
+extern u8 D_89017A98[];
+extern s32 D_89019114;
+extern Gfx D_80073408[];
+extern Gfx D_80073438[];
+void Gfx_DrawTextureRgba16(s32, s32, s32, s32, u8*, s32, s32);
+void func_80027F20(s32);
+s32 func_8002BC44(s32);
+
+void func_890017FC(s8* arg0, s32 x, s32 y, s32 flags, s32 icon) {
+    ColorPair890017FC* colors;
+
+    if (flags & 2) {
+        colors = &D_8900A608;
+    } else {
+        colors = &D_8900A610;
+    }
+    func_8002A550(x, y, 0xEC, 0x1E, colors->prim, colors->env);
+    if (icon != -1) {
+        gSPDisplayList(gDisplayListHead++, D_80073408);
+        switch (icon) {
+            case 0:
+            case 1:
+                Gfx_DrawTextureRgba16(x + 5, y + 2, 0x18, 0x1A, D_89017A80[func_8002BC44(D_89019114)], 0x18, 0x200000);
+                break;
+            case 2:
+                Gfx_DrawTextureRgba16(x + 5, y + 2, 0x2E, 0x1A, D_89017A98, 0x30, 0x200000);
+                break;
+        }
+        gSPDisplayList(gDisplayListHead++, D_80073438);
+        func_8001AB6C();
+        func_80027F20(flags);
+        func_8001A384(8, 0);
+        func_8001A944(x + 0x21, y + 4, M2C_FIELD(arg0, s32**, 0x1DC)[icon]);
+        func_8001ABBC();
+    }
+}
 
 M2C_UNK func_8001A384(M2C_UNK, M2C_UNK);            /* extern */
 M2C_UNK func_8001A944(s32, s32, s32);               /* extern */
