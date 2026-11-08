@@ -2260,14 +2260,14 @@ func_821344B4,0x821344B4,src/fragments/fragment012_17ED00/battle_engine_343BA0_3
 func_82135100,0x82135100,src/fragments/fragment012_17ED00/battle_engine_343BA0_4.c,func_82135100,s1,stadium1:src/fragments/battle_engine/battle_engine_343BA0.c,c
 func_82135108,0x82135108,src/fragments/fragment012_17ED00/battle_engine_343BA0_4.c,func_82135108,hand,,c
 func_821351EC,0x821351EC,src/fragments/fragment012_17ED00/battle_engine_343BA0_4.c,func_821351EC,s1,stadium1:src/fragments/battle_engine/battle_engine_32B680.c,c
-func_821351F8,0x821351F8,src/fragments/fragment012_17ED00/battle_engine_343BA0_4.c,,asm,,asm
+func_821351F8,0x821351F8,src/fragments/fragment012_17ED00/battle_engine_343BA0_4.c,func_821351F8,hand,,c
 func_82135384,0x82135384,src/fragments/fragment012_17ED00/battle_engine_343BA0_4.c,func_82135384,hand,,c
 func_82135458,0x82135458,src/fragments/fragment012_17ED00/battle_engine_343BA0_4.c,func_82135458,hand,,c
 func_8213558C,0x8213558C,src/fragments/fragment012_17ED00/battle_engine_343BA0_4.c,func_8213558C,hand,,c
 func_82135734,0x82135734,src/fragments/fragment012_17ED00/battle_engine_343BA0_4.c,func_82135734,hand,,c
 func_82135894,0x82135894,src/fragments/fragment012_17ED00/battle_engine_343BA0_4.c,func_82135894,hand,,c
 func_82135A04,0x82135A04,src/fragments/fragment012_17ED00/battle_engine_343BA0_4.c,func_82135A04,m2c,m2c,c
-func_82135A54,0x82135A54,src/fragments/fragment012_17ED00/battle_engine_343BA0_4.c,,asm,,asm
+func_82135A54,0x82135A54,src/fragments/fragment012_17ED00/battle_engine_343BA0_4.c,func_82135A54,hand,,c
 func_82135BE4,0x82135BE4,src/fragments/fragment012_17ED00/battle_engine_343BA0_4.c,func_82135BE4,hand,,c
 func_82135CD8,0x82135CD8,src/fragments/fragment012_17ED00/battle_engine_343BA0_4.c,func_82135CD8,hand,,c
 func_82135E80,0x82135E80,src/fragments/fragment012_17ED00/battle_engine_343BA0_4.c,func_82135E80,hand,,c
