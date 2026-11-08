@@ -5213,7 +5213,7 @@ func_8002207C,0x8002207C,src/pokemon_stats_2.c,GbSave_RebuildAndWriteSave,hand,,
 func_80022118,0x80022118,src/pokemon_stats_2.c,GbSave_ValidateBeforeWrite,hand,,c
 func_80022188,0x80022188,src/pokemon_stats_2.c,GbSave_RequirePakPresent,s1,stadium1:src/pokemon_stats.c (VERSION_JP),c
 func_800221BC,0x800221BC,src/pokemon_stats_2.c,GbSave_GetBoxEntry,hand,,c
-func_80022284,0x80022284,src/pokemon_stats_2.c,,asm,,asm
+func_80022284,0x80022284,src/pokemon_stats_2.c,func_80022284,hand,,c
 func_8002234C,0x8002234C,src/pokemon_stats_2.c,func_8002234C,hand,,c
 func_80022424,0x80022424,src/pokemon_stats_2.c,func_80022424,hand,,c
 func_800224E8,0x800224E8,src/pokemon_stats_2.c,func_800224E8,hand,,c

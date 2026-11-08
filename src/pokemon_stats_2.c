@@ -603,11 +603,16 @@ GbSaveBoxEntry* GbSave_GetBoxEntry(s32 arg0, s32 arg1) {
     return sp1C;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80022284; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80022284.s")
-#endif
+void func_80022284(BattleMon* arg0, s32 arg1, s32 arg2) {
+    GbSavePartyZero* ptr2 = (GbSavePartyZero*)(sGbSavePorts[arg1].unk_40 + 0x955);
+
+    Pokemon_FromGbRecordExt(arg0, &ptr2->unk_008[arg2]);
+
+    _bcopy(ptr2->unk_110[arg2], (u8*)arg0 + 0x3D, 3);
+    _bcopy(ptr2->unk_110[arg2] + 3, (u8*)arg0 + 0x4D, 3);
+    Text_UntranscodeFixedName((char*)arg0 + 0x30, ptr2->unk_134[arg2]);
+    Text_UntranscodeFixedName((char*)arg0 + 0x40, ptr2->unk_110[arg2]);
+}
 
 /*
  * func_8002234C
