@@ -271,11 +271,128 @@ extern s32 D_81185578;
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110EE3C.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110EF7C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110EF7C.s")
-#endif
+typedef struct RelocInfo8110EF7C {
+    /* 0x00 */ s32 sampleBankId1;
+    /* 0x04 */ s32 sampleBankId2;
+    /* 0x08 */ s32 baseAddr1;
+    /* 0x0C */ s32 baseAddr2;
+    /* 0x10 */ u32 medium1;
+    /* 0x14 */ u32 medium2;
+} RelocInfo8110EF7C;
+
+typedef struct Sample8110EF7C {
+    /* 0x00 */ u32 codec : 4;
+    /* 0x00 */ u32 medium : 2;
+    /* 0x00 */ u32 unk_bit26 : 1;
+    /* 0x00 */ u32 isRelocated : 1;
+    /* 0x00 */ u32 size : 24;
+    /* 0x04 */ s32 sampleAddr;
+} Sample8110EF7C;
+
+typedef struct Preload8110EF7C {
+    /* 0x00 */ u32 endAndMediumKey;
+    /* 0x04 */ Sample8110EF7C* sample;
+    /* 0x08 */ s32 ramAddr;
+    /* 0x0C */ u32 encodedInfo;
+    /* 0x10 */ s32 isFree;
+} Preload8110EF7C; // size = 0x14
+
+extern s32 D_811806D8;
+extern Preload8110EF7C D_81184B78[];
+extern s32 D_8118557C;
+extern OSMesgQueue D_811855F8;
+extern u8* D_811858A4;
+void func_8110D884(s32, s32, RelocInfo8110EF7C*);
+void func_8110DB8C(s32, s32, u32, s16);
+void func_8110DA68(s32, s32, u32, s32);
+void func_8110E9A8(s32, s32, u32, s32, s32, OSMesgQueue*, u32);
+s32 func_8110B9A8(s32, s32, s32, s8);
+
+
+void func_8110EF7C(s32 fontId, s32 fontData, RelocInfo8110EF7C* relocInfo, s32 async) {
+    UNUSED s32 pad[2];
+    s32 sampleRamAddr;
+    Sample8110EF7C* sample;
+    s32 size;
+    s32 nChunks;
+    s32 preloadInProgress;
+    s32 i;
+
+    preloadInProgress = 0;
+    if (D_8118557C != 0) {
+        preloadInProgress = 1;
+    } else {
+        D_811806D8 = 0;
+    }
+
+    D_81185578 = 0;
+    func_8110D884(fontId, fontData, relocInfo);
+
+    size = 0;
+    for (i = 0; i < D_81185578; i++) {
+        size += ALIGN16(((Sample8110EF7C*)D_81184978[i])->size);
+    }
+
+    for (i = 0; i < D_81185578; i++) {
+        if (D_8118557C == 0x78) {
+            break;
+        }
+
+        sample = (Sample8110EF7C*)D_81184978[i];
+        switch (async) {
+            case 0:
+                if (sample->medium == relocInfo->medium1) {
+                    // Assigning size here keeps it live, which the ROM's register allocation needs.
+                    sampleRamAddr = func_8110B9A8(size = sample->size, relocInfo->sampleBankId1, sample->sampleAddr, sample->medium);
+                } else if (sample->medium == relocInfo->medium2) {
+                    sampleRamAddr = func_8110B9A8(sample->size, relocInfo->sampleBankId2, sample->sampleAddr, sample->medium);
+                }
+                break;
+
+            case 1:
+                if (sample->medium == relocInfo->medium1) {
+                    sampleRamAddr = func_8110B958(sample->size, relocInfo->sampleBankId1, sample->sampleAddr, sample->medium);
+                } else if (sample->medium == relocInfo->medium2) {
+                    sampleRamAddr = func_8110B958(sample->size, relocInfo->sampleBankId2, sample->sampleAddr, sample->medium);
+                }
+                break;
+        }
+
+        if (sampleRamAddr == 0) {
+            continue;
+        }
+
+        switch (async) {
+            case 0:
+                if (sample->medium == 1) {
+                    func_8110DB8C(sample->sampleAddr, sampleRamAddr, sample->size, *(s16*)(D_811858A4 + 2));
+                    sample->sampleAddr = sampleRamAddr;
+                    sample->medium = 0;
+                } else {
+                    func_8110DA68(sample->sampleAddr, sampleRamAddr, sample->size, sample->medium);
+                    sample->sampleAddr = sampleRamAddr;
+                    sample->medium = 0;
+                }
+                break;
+
+            case 1:
+                D_81184B78[D_8118557C].sample = sample;
+                D_81184B78[D_8118557C].ramAddr = sampleRamAddr;
+                D_81184B78[D_8118557C].encodedInfo = (D_8118557C << 24) | 0xFFFFFF;
+                D_81184B78[D_8118557C].isFree = 0;
+                D_81184B78[D_8118557C].endAndMediumKey = sample->sampleAddr + sample->size + sample->medium;
+                D_8118557C++;
+                break;
+        }
+    }
+    D_81185578 = 0;
+
+    if ((D_8118557C != 0) && !preloadInProgress) {
+        sample = D_81184B78[D_8118557C - 1].sample;
+        nChunks = (sample->size >> 12) + 1;
+        func_8110E9A8(sample->sampleAddr, D_81184B78[D_8118557C - 1].ramAddr, sample->size, sample->medium, nChunks, &D_811855F8, D_81184B78[D_8118557C - 1].encodedInfo);
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8110F310; signature not recovered. */
@@ -406,7 +523,7 @@ typedef struct Table8110D840 {
 } Table8110D840;
 Table8110D840* func_8110D840(s32);
 s32 func_8110D7B0(s32, s32);
-void func_8110F6A4(s32, s32, s32*);
+void func_8110F6A4(s32, s32, RelocInfo8110EF7C*);
 void func_8110FAF4(void) {
     Table8110D840* base = func_8110D840(2);
     s32 i;

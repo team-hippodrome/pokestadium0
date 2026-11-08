@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5091,
-  "asm_owners": 353,
+  "c_owners": 5092,
+  "asm_owners": 352,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -603,7 +603,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "64c64b830c218daabc2b39fb2ef804f42e7ddb8ad8a3dcd91d04b4b3024e5694",
+    "docs/function-matches.csv": "9838f1d3808970f1f6a22d14aca8f8cf2c1e0db400507311d8da412fca5d935b",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -677,7 +677,7 @@
     "src/fragments/fragment000_80C00/81111C20.c": "82b4429bf8c805af51025d1521621afbdb31b332578c9ed2785b497c40fbeb41",
     "src/fragments/fragment000_80C00/81117B20.c": "3843091a770c9a107a189ef652ff919fc1eac6d520dd8100299adf9b1616cefc",
     "src/fragments/fragment000_80C00/battle_engine_2FA4D0.c": "96169d3cd584ca90783a597ca7644af6387b053272ce7724419ce713a62fa3a2",
-    "src/fragments/fragment000_80C00/battle_engine_309ED0.c": "147dbe8feaee839a022a2783605ac89b04e058c34b0ccfd1098668df37577f0b",
+    "src/fragments/fragment000_80C00/battle_engine_309ED0.c": "a39e89d80a409d2b7229180f3843a8ca69282afa177f185b70e928abcbeeae11",
     "src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c": "fdca2341cd53ddcbc6d0ed8665a3e4ddc4d7e211313e32dbd36f4eaba52b96f5",
     "src/fragments/fragment000_80C00/gb_tower_emulator_86920.c": "d108c90dde6f200ad5b8418f7f91105e120cf01a676e60cbddcf16ac25805cbb",
     "src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c": "318086a76636aa22c02772ffe3f9f26b31146866ab82c26ff798244af2c084b4",
