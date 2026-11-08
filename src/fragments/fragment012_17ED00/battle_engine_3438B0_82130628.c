@@ -427,7 +427,30 @@ void func_821319FC(s32 arg0) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82131A3C.s")
+s32 func_80041374(s32, u32);
+void func_82131A3C(CameraNode* arg0) {
+    sActivePokemon[0]->displayObject.node.flags &= ~1;
+    sActivePokemon[1]->displayObject.node.flags &= ~1;
+    BattleAnim_ApproachF(&M2C_FIELD(sBattleScene.scene, f32*, 0x74), 10000.0f, 0.025f);
+    BattleScene_SetCameraAtFromPosition(arg0, D_8218B630, 0, 0, 0.0f, 0.0f);
+    BattleScene_SetCameraEyeAndStoreAngles(arg0, D_8218B630, 0x3C6E, M2C_FIELD(sBattleScene.scene, s16*, 0x5A) -= 0x16C, M2C_FIELD(sBattleScene.scene, f32*, 0x74), 0.0f);
+    BattleAnim_ApproachF(&M2C_FIELD(sBattleScene.scene, f32*, 0x64), 1.0f, 0.06f);
+    Battle_SetStageScale(M2C_FIELD(sBattleScene.scene, f32*, 0x64));
+    if (M2C_FIELD(sBattleScene.scene, s32*, 0x14) == 0x3C) {
+        func_80041374(4, 0x3C);
+    }
+    if (func_821217DC(0x50) != 0) {
+        func_800407B0(1, 0xFE, 0);
+        Vec3f_SetComponentsDuplicate((Vec3f*)((u8*)arg0 + 0xB4), 0.0f, 75.0f, 0.0f);
+        Vec3f_SetComponentsDuplicate((Vec3f*)((u8*)arg0 + 0xA8), -1.79f, 0.075f, 155.2f);
+        func_82108A88((s8*)sActivePokemon[0], 1, 0);
+        func_821365B0(8, (s8*)sActivePokemon[0], (s8*)sActivePokemon[0], 0xFF, 0xFF);
+        Battle_SetStageScale(1.0f);
+        sBattleScene.scene->unk_20 += 1;
+        M2C_FIELD(sBattleScene.scene, f32*, 0x60) = M2C_FIELD(arg0, f32*, 0x2C);
+        M2C_FIELD(arg0, f32*, 0x2C) = 40.0f;
+    }
+}
 
 void func_82131C64(s32 arg0) {
     M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 0), u8 *, 1) = (u8) (M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 0), u8 *, 1) & 0xFFFE);
