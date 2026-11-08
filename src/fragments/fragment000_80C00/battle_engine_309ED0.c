@@ -237,11 +237,50 @@ extern Entry8110EABC D_81185580[1];
 
 Entry8110EABC* func_8110E9A8(s32, s32, u32, s32, s32, OSMesgQueue*, u32);
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110E9A8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110E9A8.s")
-#endif
+void func_800567E0(OSMesgQueue*, OSMesg*, s32);
+/**
+ * Claims the free async load slot and starts a chunked DMA of size bytes from
+ * devAddr to ramAddr. nChunks == 0 means 0x1000-byte chunks; otherwise the size
+ * is split into nChunks pieces rounded up to 0x100 (at least 0x100). retMsg is
+ * sent to retQueue when the load finishes. Returns NULL when no slot is free.
+ */
+Entry8110EABC* func_8110E9A8(s32 devAddr, s32 ramAddr, u32 size, s32 medium, s32 nChunks, OSMesgQueue* retQueue, u32 retMsg) {
+    Entry8110EABC* load;
+    s32 i;
+
+    for (i = 0; i < ARRAY_COUNT(D_81185580); i++) {
+        if (D_81185580[i].active == 0) {
+            load = &D_81185580[i];
+            break;
+        }
+    }
+
+    if (i == ARRAY_COUNT(D_81185580)) {
+        return NULL;
+    }
+
+    load->active = 1;
+    load->romAddr = devAddr;
+    load->ramAddr = ramAddr;
+    load->curAddr = ramAddr;
+    load->size = size;
+
+    if (nChunks == 0) {
+        load->chunkSize = 0x1000;
+    } else {
+        load->chunkSize = ((s32)size / nChunks + 0xFF) & ~0xFF;
+        if (load->chunkSize < 0x100) {
+            load->chunkSize = 0x100;
+        }
+    }
+
+    load->doneQueue = retQueue;
+    load->state = 3;
+    load->medium = medium;
+    load->info = retMsg;
+    func_800567E0(&load->queue, &load->msg, 1);
+    return load;
+}
 
 extern volatile s32 D_811859D4;
 void func_8110EB40(Entry8110EABC*, s32);
