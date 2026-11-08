@@ -699,11 +699,64 @@ void func_89106424(s8 *arg0, s32 *arg1, s32 arg2, s32 arg3, s32 arg4) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89106570; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89106570.s")
-#endif
+typedef struct Popup89106570 {
+    /* 0x00 */ s32 x;
+    /* 0x04 */ s32 y;
+    /* 0x08 */ s32 width;
+    /* 0x0C */ s32 height;
+    /* 0x10 */ char unk10[0x4];
+    /* 0x14 */ s32 flags;
+    /* 0x18 */ char unk18[0xC];
+    /* 0x24 */ s32 unk24;
+    /* 0x28 */ char unk28[0x4];
+    /* 0x2C */ s32 anchorX;
+    /* 0x30 */ s32 anchorY;
+    /* 0x34 */ s32 anchorW;
+    /* 0x38 */ s32 anchorH;
+    /* 0x3C */ char unk3C[0x38];
+    /* 0x74 */ s32 limitX;
+    /* 0x78 */ s32 limitY;
+} Popup89106570;
+
+/*
+ * func_89106570
+ *
+ * Places a popup next to its anchor rectangle while keeping it inside the
+ * limits at +0x74/+0x78.  With flag 0x01000000 it goes to the right of the
+ * anchor (or to its left when that would overflow) and is pushed up by the
+ * overflow, at least 8; otherwise it goes below the anchor (or above it) and
+ * is pushed left the same way.  Field names describe that geometry only.
+ */
+void func_89106570(Popup89106570* arg0) {
+    s32 over;
+
+    if (arg0->flags & 0x01000000) {
+        if (arg0->limitY >= arg0->anchorY + arg0->height) {
+            arg0->y = arg0->anchorY;
+        } else {
+            over = (arg0->anchorY + arg0->height) - arg0->limitY;
+            arg0->y = arg0->anchorY - ((over > 8) ? over : 8);
+        }
+        if (arg0->limitX >= arg0->anchorX + arg0->anchorW + arg0->width) {
+            arg0->x = arg0->anchorX + arg0->anchorW;
+        } else {
+            arg0->x = arg0->anchorX - arg0->width;
+        }
+    } else {
+        if (arg0->limitX >= arg0->anchorX + arg0->width) {
+            arg0->x = arg0->anchorX;
+        } else {
+            over = (arg0->anchorX + arg0->width) - arg0->limitX;
+            arg0->x = arg0->anchorX - ((over > 8) ? over : 8);
+        }
+        if (arg0->limitY >= arg0->anchorY + arg0->anchorH + arg0->height) {
+            arg0->y = arg0->anchorY + arg0->anchorH;
+        } else {
+            arg0->y = arg0->anchorY - arg0->height;
+        }
+    }
+    arg0->unk24 = 0;
+}
 
 s32 func_8002AE6C();                                /* extern */
 M2C_UNK func_8002D9B8(s32, s32, s32, s32, s8 *);  /* extern */

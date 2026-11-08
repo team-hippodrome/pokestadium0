@@ -3759,7 +3759,7 @@ func_891060BC,0x891060BC,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,f
 func_89106254,0x89106254,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_89106254,hand,,c
 func_89106384,0x89106384,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_89106384,hand,,c
 func_89106424,0x89106424,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_89106424,hand,,c
-func_89106570,0x89106570,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,,asm,,asm
+func_89106570,0x89106570,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_89106570,hand,,c
 func_8910666C,0x8910666C,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_8910666C,m2c,m2c+permuter,c
 func_891066C0,0x891066C0,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_891066C0,m2c,m2c,c
 func_891066E0,0x891066E0,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,,asm,,asm
