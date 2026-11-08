@@ -1880,11 +1880,24 @@ void BattleScene_AllocateParticipants(BattleSessionTeams* battle_teams) {
     sSide2ActivePokemon = sActivePokemon[1];
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82106D90; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82106D90.s")
-#endif
+extern u8 D_800AAF50[];
+void func_82108DC8(ActivePokemon*, s32);
+void func_82108DE0(ActivePokemon*, s32);
+void func_82108DF0(ActivePokemon*, s32);
+void func_82108DE8(ActivePokemon*, u8*);
+void func_82106D90(ActivePokemon* arg0) {
+    u8* sp24 = &D_800AAF50[M2C_FIELD(M2C_FIELD(M2C_FIELD(arg0, s8**, 0x85C), s8**, 8), u8*, 1) * 0x24];
+    ActivePokemonState* state = &arg0->state;
+
+    func_82108DC8(arg0, 0);
+    func_82108DE0(arg0, 0);
+    func_82108DF0(arg0, 0);
+    func_82108DE8(arg0, sp24);
+    M2C_FIELD(arg0, s32*, 0x9D0) = 0;
+    M2C_FIELD(arg0, s32*, 0x9D4) = 0;
+    state->unk_2D_zero = 0;
+    state->ownerTeamMemberIndex = 0;
+}
 
 extern s32 D_84390174;
 extern unk_D_84390178 D_84390178;

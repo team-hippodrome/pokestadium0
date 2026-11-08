@@ -2761,7 +2761,7 @@ func_82106BC4,0x82106BC4,src/fragments/fragment012_17ED00/battle_engine_move_ani
 func_82106C44,0x82106C44,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,BattleScene_AllocateParticipantRecord,hand,,c
 func_82106D18,0x82106D18,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,func_82106D18,m2c,m2c,c
 func_82106D38,0x82106D38,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,BattleScene_AllocateParticipants,s1,stadium1:src/fragments/battle_engine/battle_engine_move_animation.c,c
-func_82106D90,0x82106D90,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,,asm,,asm
+func_82106D90,0x82106D90,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,func_82106D90,hand,,c
 func_82106E1C,0x82106E1C,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,BattleScene_InitializePresentation,hand,,c
 func_82106F78,0x82106F78,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,BattleScene_ResetParticipantAuxTransform,s1,stadium1:src/fragments/battle_engine/battle_engine_move_animation.c,c
 func_82106FE0,0x82106FE0,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,func_82106FE0,hand,,c
