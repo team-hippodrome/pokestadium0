@@ -131,7 +131,11 @@ void func_82125384(void) {
     M2C_FIELD(D_8219A5A0, s32 *, 0x20)++;
 }
 
+#ifdef NON_MATCHING
+/* TODO: decompile func_821254B0; signature not recovered. */
+#else
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821254B0.s")
+#endif
 
 void BattleScene_ClearPhaseFlag(void) {
     sBattleScene.scene->unk_3C = 0;

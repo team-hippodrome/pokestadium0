@@ -745,11 +745,45 @@ void func_82002BF8(s8 *arg0, s32 arg1, s32 arg2) {
     func_82002980();
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82002C3C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment007_166580/func_82002C3C.s")
-#endif
+void func_800306E0(s8*, s32);
+extern u8 D_800AAF50[];
+typedef struct List82002C3C {
+    u8** items;
+    s32 unk4;
+    s32 count;
+} List82002C3C;
+
+void func_82002C3C(s8* arg0) {
+    s32 sel = M2C_FIELD(arg0, s32*, 0x48);
+    s32 mode = M2C_FIELD(arg0, s32*, 0x738);
+    s32 i;
+    s32 count;
+    u8** list;
+    List82002C3C* obj;
+
+    if (mode != 5) {
+        obj = M2C_FIELD(arg0, List82002C3C**, 0x40);
+        count = obj->count;
+        list = obj->items;
+        for (i = 0; i < count && (*list)[0] == 0 && (*list)[1] == 0x20; i++, list++) {
+            if (mode - 1 == (*list)[2]) {
+                sel = i;
+                break;
+            }
+        }
+    }
+    func_800306E0(arg0 + 0x40, sel);
+    mode = M2C_FIELD(arg0, s32*, 0x738);
+    if (mode == 5) {
+        M2C_FIELD(arg0, u8**, 0x744) = D_800AAF50;
+    } else {
+        M2C_FIELD(arg0, u8**, 0x744) = D_800AAF50 + (mode - 1) * 0x24;
+    }
+    M2C_FIELD(arg0, s32*, 0x734) = 0;
+    M2C_FIELD(arg0, u8**, 0x58) = M2C_FIELD(arg0, u8**, 0x744);
+    M2C_FIELD(arg0, u8**, 0x6FC) = M2C_FIELD(arg0, u8**, 0x744);
+    func_82002BF8(arg0, 1, 0);
+}
 
 extern s32 D_8200AC50;
 extern s32 D_8200ACFC;
@@ -763,7 +797,7 @@ M2C_UNK func_8002EC24(s8*, s32, s8*, M2C_UNK, M2C_UNK*, s32, s32);
 M2C_UNK func_80030894(s8*, s8*, s8*, M2C_UNK, s32, M2C_UNK*, s32, s32);
 M2C_UNK func_80027410(s8*, s32, M2C_UNK, M2C_UNK, s32);
 void func_80018168(s8* arg0);
-M2C_UNK func_82002C3C(s8*);
+void func_82002C3C(s8*);
 
 /**
  * Initializes the slot-menu object at arg0 (the layout other functions in this file
