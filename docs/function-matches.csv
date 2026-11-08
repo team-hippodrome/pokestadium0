@@ -4313,7 +4313,7 @@ func_8002C5A4,0x8002C5A4,src/gb_save.c,,asm,,asm
 func_8002C8D8,0x8002C8D8,src/gb_save.c,Color_InterpolateFromGray,s1,stadium1:src/gb_save.c,c
 func_8002C998,0x8002C998,src/gb_save.c,BattleInfoWidget_DrawLabel,hand,,c
 func_8002CA34,0x8002CA34,src/gb_save.c,func_8002CA34,m2c,m2c,c
-func_8002CAD0,0x8002CAD0,src/gb_save.c,,asm,,asm
+func_8002CAD0,0x8002CAD0,src/gb_save.c,func_8002CAD0,hand,,c
 func_8002CC44,0x8002CC44,src/gb_save.c,,asm,,asm
 func_8002CD7C,0x8002CD7C,src/gb_save.c,func_8002CD7C,hand,,c
 func_8002CE5C,0x8002CE5C,src/gb_save.c,func_8002CE5C,hand,,c

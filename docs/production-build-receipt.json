@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 4935,
-  "asm_owners": 509,
+  "c_owners": 4936,
+  "asm_owners": 508,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -603,7 +603,7 @@
     "tools/cflags_overrides.json": "7052d644eb08429c59981bb4c369c8c937c61ca4c639a1c1ca2c5fc0ce919ebb",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "e24ee4b414f5408d1d2fe3c22c3747c603b0dcc237c7d5ac6e6fb7e75fff9a3e",
+    "docs/function-matches.csv": "d193fa00decce87b4952bed27070deebf1eb45dcd7876a3edb1e05d2e4d4368f",
     "linker_scripts/jp/symbol_addrs.txt": "3b5103d4cfe8c6cf2470a85f3aacf457f87dc2c7f2096a7a216bec5fd85d5385"
   },
   "binutils": {
@@ -974,7 +974,7 @@
     "src/gb_audio_render.c": "0fff118e77fa82381154a56e875ee741e1fdff04b03ecff9a2bb14771221d51e",
     "src/gb_data.c": "38e026d47ec44d5de127778395cddf3c932ccdda434bef8628ea81336cce3ba3",
     "src/gb_mbc.c": "1ed5ad571c7b2f9ada6c5b47251450d75b7247527837bb602c67a4eddfd69f02",
-    "src/gb_save.c": "a0d34df3772c2d8e2481f96a0f819a7b67c83872050e0baf0982fd319354f065",
+    "src/gb_save.c": "d3c93fb931921acef0bf8e2a98d6d305596fe043d6988e74b40be5d53561cf2f",
     "src/gb_tower.c": "176816e083b7e59f7a469e5cb27b7a0b94869007fcb3060a4e31dfeefbfd0124",
     "src/geo_layout.c": "cd22cfc78b438f75ba379097e38e64b8e773c73701f536774d4a9c9fbe313f0d",
     "src/geo_node.c": "4b117247e69f5030a02753148e827dc7179b9c497a8af94b2feb264947aa287a",
