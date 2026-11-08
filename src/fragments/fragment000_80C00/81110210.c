@@ -358,11 +358,52 @@ s8 *func_811114E8(s8 *arg0, s32 arg1) {
     return temp_a0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81111568; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81111568.s")
-#endif
+typedef struct Flags81111568 {
+    /* 0x0 */ u32 pad0 : 6;
+    /* 0x0 */ u32 flag : 1;
+    /* 0x0 */ u32 pad0b : 1;
+    /* 0x1 */ u8 mode : 3;
+    /* 0x1 */ u8 pad1 : 2;
+    /* 0x1 */ u8 range : 2;
+    /* 0x1 */ u8 pad1b : 1;
+    /* 0x2 */ char pad2[0xE];
+    /* 0x10 */ s32 unk10;
+} Flags81111568;
+typedef struct Src81111568 {
+    /* 0x0 */ u32 pad : 5;
+    /* 0x0 */ u32 flag : 1;
+    /* 0x0 */ u32 rest : 26;
+} Src81111568;
+typedef struct Bit81111568 { u8 pad : 5; u8 b : 1; u8 rest : 2; } Bit81111568;
+void func_81111568(s8* arg0, s8* arg1) {
+    Flags81111568* flags;
+    s32 v;
+
+    M2C_FIELD(arg0, s32*, 0x40) = -1;
+    M2C_FIELD(arg0, s8**, 0x44) = arg1;
+    M2C_FIELD(arg0, u8*, 0x30) = M2C_FIELD(M2C_FIELD(arg1, u8**, 0x54), u8*, 5);
+    ((Bit81111568*)arg1)->b = 1;
+    M2C_FIELD(arg1, u8*, 3) = 3;
+    M2C_FIELD(arg1, s8**, 0x48) = arg0;
+    M2C_FIELD(M2C_FIELD(arg1, s8**, 0x54), s8**, 0x40) = arg0;
+    M2C_FIELD(M2C_FIELD(arg1, s8**, 0x54), s8**, 0x44) = arg1;
+    M2C_FIELD(arg1, f32*, 0x34) = 0.0f;
+    func_81110694((Obj0694*)arg0);
+    v = M2C_FIELD(arg1, u8*, 2);
+    flags = (Flags81111568*)(arg0 + 0xB4);
+    if (v == 0xFF) {
+        v = M2C_FIELD(M2C_FIELD(arg1, s8**, 0x54), s16*, 0x22);
+    }
+    flags->unk10 = M2C_FIELD(arg1, s32*, 0x50);
+    if (v >= 0x80 && v < 0xC0) {
+        flags->range = 1;
+    } else {
+        flags->range = 0;
+    }
+    M2C_FIELD(arg0, u8*, 0x33) = M2C_FIELD(M2C_FIELD(arg1, u8**, 0x54), u8*, 7);
+    flags->flag = M2C_FIELD(arg1, Src81111568**, 0x54)->flag;
+    flags->mode = M2C_FIELD(M2C_FIELD(arg1, u8**, 0x54), u8*, 8) & 3;
+}
 
 
 void func_81111688(s8 *arg0, s32 arg1) {
@@ -397,14 +438,14 @@ void func_811116BC(s8 *arg0, s8 *arg1)
  * arg1 is not established (it is still assembly).
  */
 s32 func_81112EEC(s8 *);
-M2C_UNK func_81111568(s32, s32);                    /* extern */
+void func_81111568(s8*, s8*);
 
 s32 func_811116E8(s8 *arg0, s32 arg1) {
     s32 ret;
 
     ret = func_81112EEC(arg0);
     if (ret != 0) {
-        func_81111568(ret, arg1);
+        func_81111568((s8*)ret, (s8*)arg1);
         func_8111147C((M2C_UNK *) (arg0 + 0x30), (M2C_UNK *) ret);
     }
     return ret;
