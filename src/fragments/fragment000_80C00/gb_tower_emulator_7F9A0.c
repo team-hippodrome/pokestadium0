@@ -671,11 +671,59 @@ void func_81104618(s32 arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_811047A0.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81104930; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81104930.s")
-#endif
+typedef struct Screen81104930 {
+    /* 0x00 */ u8 unk_00[0x4C];
+    /* 0x4C */ s32 framebuffer;
+    /* 0x50 */ u8 unk_50[4];
+    /* 0x54 */ s32 colorIndex;
+} Screen81104930;
+
+extern Screen81104930 D_81156540;
+extern u16 D_811223E0[];
+extern u8 D_811208F8[];
+extern u8 D_811541FC[5];
+extern u8* D_8115659C;
+extern s32 D_81154C00;
+
+void func_81104930(void) {
+
+    s32 pos;
+    s32 dst;
+    u8* p;
+
+    func_81103D30();
+    switch (D_8111E308) {
+        case 1:
+
+            pos = D_81156540.framebuffer + 0xA4;
+            func_8110445C((u8*)pos, D_811223E0[D_81156540.colorIndex], 0x7C);
+            func_81104618(D_81156540.framebuffer);
+            pos += 0x2DE;
+            break;
+        case 2:
+
+            pos = D_81156540.framebuffer + 0x94;
+            func_8110445C((u8*)pos, D_811223E0[D_81156540.colorIndex], 0x84);
+            func_81104618(D_81156540.framebuffer);
+            pos += 0x2EE;
+            break;
+        case 0:
+        default:
+
+            pos = D_81156540.framebuffer + 0xCE;
+            func_8110445C((u8*)pos, D_811223E0[D_81156540.colorIndex], 0x50);
+            pos += 0x288;
+            break;
+    }
+    func_81103C40(pos + 0x280, D_811208F8, 0, 0xC, 0xC);
+    dst = pos + 0x29C;
+    /* The comma expression is what gives the ROM's register allocation. */
+    for (p = D_811541FC; (0, p) != &D_811541FC[5]; p++) {
+        func_8110427C((u16*)dst, D_8115659C + *p * 0xC0, 0xFFFE, 0xC, 0xC, 0x10);
+        dst += 0x18;
+    }
+    D_81154C00 = D_81156540.framebuffer;
+}
 
 M2C_UNK func_8004FD20(s32, M2C_UNK);                /* extern */
 extern s32 D_81156550;
