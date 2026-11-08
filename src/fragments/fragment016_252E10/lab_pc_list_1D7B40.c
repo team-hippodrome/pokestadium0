@@ -433,11 +433,51 @@ void func_89105AD4(s32 arg0, s32 arg1, char** arg2, s32 arg3, s32 arg4) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89105E70.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_891060BC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_891060BC.s")
-#endif
+s32 func_8002B2B0(s8*);
+void func_89105A98(s8*, s32);
+
+s32 func_891060BC(s8* arg0) {
+    s32 ret = 0;
+    s32 res;
+    s32 buttons;
+
+    res = func_8002B2B0(arg0 + 0xD0);
+    if (res == 0x100) {
+        if (M2C_FIELD(arg0, s32*, 0xD4) == 1) {
+            func_8003F6AC(1);
+            M2C_FIELD(arg0, s32*, 0) = 1;
+        } else if (M2C_FIELD(arg0, s32*, 0xD4) == 2) {
+            func_8003F6AC(1);
+            M2C_FIELD(arg0, s32*, 0) = 2;
+        }
+    } else if (res == 0) {
+        buttons = ((u16*)D_800603C0)[4];
+        if (buttons & 0x8000) {
+            if (M2C_FIELD(arg0, s32*, 0xD4) == 3) {
+                func_8003F6AC(2);
+                func_89105A98(arg0, 0);
+                func_89105504((s32)(arg0 + 0xDC));
+                func_89105504((s32)(arg0 + 0x120));
+                ret = 1;
+            } else {
+                func_8003F6AC(2);
+                M2C_FIELD(arg0, u16**, 0x74)[M2C_FIELD(arg0, s32*, 0x78)] ^= 8;
+                if (M2C_FIELD(arg0, s32*, 0xD4) == 1) {
+                    func_8910548C((u8*)(arg0 + 0xDC), M2C_FIELD(arg0, u16**, 0x74)[M2C_FIELD(arg0, s32*, 0x78)] & 8);
+                } else if (M2C_FIELD(arg0, s32*, 0xD4) == 2) {
+                    func_8910548C((u8*)(arg0 + 0x120), M2C_FIELD(arg0, u16**, 0x74)[M2C_FIELD(arg0, s32*, 0x78)] & 8);
+                }
+            }
+        } else if (buttons & 0x4000) {
+            func_8003F6AC(3);
+            ret = -1;
+        }
+    }
+    if (M2C_FIELD(arg0, s32*, 0xD4) < 4) {
+        M2C_FIELD(arg0, s32*, 0x78) = M2C_FIELD(arg0, s32*, 0xD4);
+    }
+    return ret;
+}
 
 s32 func_891060BC(s8 *);
 s32 func_89106254(s8 *arg0) {
