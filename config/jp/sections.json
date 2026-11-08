@@ -231,7 +231,7 @@
     ".data": "0x821929D0"
   },
   "src/fragments/fragment012_17ED00/battle_engine_34A420.c": {
-    ".rodata": "0x82197AB0"
+    ".rodata": "0x82197AA0"
   },
   "src/fragments/fragment012_17ED00/battle_engine_34E1A0.c": {
     ".rodata": "0x82197BC0"
