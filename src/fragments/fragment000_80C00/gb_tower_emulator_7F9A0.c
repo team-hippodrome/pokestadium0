@@ -421,15 +421,50 @@ s32 GbPak_TransferBankedRam(u8* arg0, s32 arg1) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_811027A8.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81102970; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81102970.s")
-#endif
+extern volatile u8 D_81156475;
+extern volatile u8 D_81156476;
+extern OSMesgQueue D_81156458;
+s32 func_8004CFB0(OSMesgQueue*, s32, s32);
+
+s32 func_81102970(s32 chan, s32 bank) {
+    u8* entry;
+    u8* state;
+
+    while (D_81156475 != 0) {
+    }
+    if ((D_81156476 == 0) || (D_811561C8[chan].request != 0) || (D_811561C8[chan].error != 0)) {
+        return -2;
+    }
+    for (entry = D_811561C8[chan].bankList; *entry != 0xFF; entry += 6) {
+        if (bank == *entry) {
+            goto found;
+        }
+    }
+    return -1;
+
+found:
+    state = &D_811561C8[chan].bankState[bank];
+    if (*state != 0) {
+        *state = 3;
+        D_811561C8[chan].request = 6;
+        D_811561C8[chan].addr = (*entry & 0x7F) << 14;
+        D_811561C8[chan].buf = D_811561C8[chan].addr + D_811561C8[chan].romBuf;
+        D_811561C8[chan].size = 0x2000;
+        D_811561C8[chan].bankEntry = entry;
+        if (!entry && !entry && !entry) {} // FAKE: empty test found by the permuter; only changes instruction scheduling
+        func_8004CFB0(&D_81156458, D_811561C8[chan].channel, 1);
+        while (D_81156475 != 0) {
+        }
+    }
+    if (D_811561C8[chan].error != 0) {
+        return -1;
+    }
+    return 0;
+}
 
 extern volatile u8 D_81156475;
-extern volatile s8 D_81156476;
-extern volatile s8 D_81156477;
+extern volatile u8 D_81156476;
+extern volatile u8 D_81156477;
 extern OSMesgQueue D_81156458;
 s32 func_8004CFB0(OSMesgQueue*, s32, s32);
 
@@ -449,7 +484,7 @@ s32 func_81102AC8(s32 arg0) {
     }
     for (i = 0; i < ch2->ramSize >> 8; i++) {
         if (ch->blockState[i] == 0) {
-            if (*(volatile u8*)&D_81156476 == 0 && *(volatile u8*)&D_81156477 != 0) {
+            if (D_81156476 == 0 && D_81156477 != 0) {
                 ch->blockState[i] = 1;
                 ch->blockDirty[i] = 0;
                 ch->request = 5;
@@ -551,8 +586,8 @@ s32 func_81102F7C(s32 arg0, s32 arg1, s32 arg2) {
 
 extern volatile u8 D_81156474;
 extern volatile u8 D_81156475;
-extern volatile s8 D_81156476;
-extern volatile s8 D_81156477;
+extern volatile u8 D_81156476;
+extern volatile u8 D_81156477;
 extern s8 D_81156478;
 extern s8 D_81156479;
 extern s32 D_81156470;

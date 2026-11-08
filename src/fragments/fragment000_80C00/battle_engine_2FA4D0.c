@@ -51,15 +51,15 @@ void func_8110FC40(void) {
 }
 
 M2C_UNK func_800567E0(M2C_UNK *, M2C_UNK *, M2C_UNK); /* extern */
-extern s8 D_811861DA;
-extern s8 D_811861DB;
+extern u8 D_811861DA;
+extern u8 D_811861DB;
 extern s8 D_811861DC;
 extern M2C_UNK D_811861E0;
 extern M2C_UNK D_811861E8;
 extern M2C_UNK *D_81186200;
 extern M2C_UNK D_81186208;
 extern M2C_UNK D_81186218;
-extern M2C_UNK *D_81186230;
+extern OSMesgQueue* D_81186230;
 extern M2C_UNK D_81186234;
 extern M2C_UNK D_81186238;
 extern M2C_UNK *D_81186250;
@@ -79,12 +79,12 @@ void func_8110FC48(void) {
 extern s32 D_811859D8[][2];
 
 void func_8110FCF0(DisplayObject* arg0, s32* arg1) {
-    s32* entry = D_811859D8[*(u8*)&D_811861DA & 0xFF];
+    s32* entry = D_811859D8[D_811861DA & 0xFF]; // FAKE: no-op mask on a u8
 
     entry[0] = (s32)arg0;
     entry[1] = *arg1;
-    if (*(u8*)&D_811861DB == ++(*(u8*)&D_811861DA)) {
-        (*(u8*)&D_811861DA)--;
+    if (D_811861DB == ++D_811861DA) {
+        D_811861DA--;
     }
 }
 
