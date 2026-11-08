@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 4952,
-  "asm_owners": 492,
+  "c_owners": 4953,
+  "asm_owners": 491,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -603,7 +603,7 @@
     "tools/cflags_overrides.json": "7052d644eb08429c59981bb4c369c8c937c61ca4c639a1c1ca2c5fc0ce919ebb",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "5f88c08810f9e7799d039f1f2fd9b641ff33fe926142065b42dc0b8bf4f9856c",
+    "docs/function-matches.csv": "cb9eb8ff734142406af1880ae07aae8a263af4ba44f294946dbaa825aef999e4",
     "linker_scripts/jp/symbol_addrs.txt": "3b5103d4cfe8c6cf2470a85f3aacf457f87dc2c7f2096a7a216bec5fd85d5385"
   },
   "binutils": {
@@ -793,7 +793,7 @@
     "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c": "eefbff7c0d58ff548ce304c6cdc22178a0a5cd034ab06a98601793b1a66880fb",
     "src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c": "81155eb1b53b107bb4662317c9e1ed7cb71a958efe8808ce9bf602e2c2d99b77",
     "src/fragments/fragment016_252E10/89100020.c": "8d43fc96dccadb17a1bcba83fd9c1eecb83c1a2efdf6fe21d121377dc608a0a6",
-    "src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c": "bb83e02c345cabea1d9f4c5b057ef403579d641d70f27af354c35444964e05b1",
+    "src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c": "ebc06c3f3408ec164197e28c6b9b30a14192707ca1a96853a763933ea764cfbf",
     "src/fragments/fragment016_252E10/lab_pc_list_1E46B0.c": "ba8d4b5501f5daea30407668a46cb1021536cf2edb09db847e7544301d76b045",
     "src/fragments/fragment016_252E10/lab_pc_list_1E46B0_2.c": "ca2ad66f736d581a4970adae550f327d1024cb27841e034e49b7345dcf501bbe",
     "src/fragments/fragment017_261F00.c": "010db2d8b146be87183a9f92e3d7a094eb3e9b17ab5eda9b74b443022094159e",

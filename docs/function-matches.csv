@@ -3733,7 +3733,7 @@ func_89104D14,0x89104D14,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,f
 func_89104E38,0x89104E38,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_89104E38,hand,,c
 func_89104E94,0x89104E94,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_89104E94,m2c,m2c,c
 func_89104EB4,0x89104EB4,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,,asm,,asm
-func_89104FC0,0x89104FC0,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,,asm,,asm
+func_89104FC0,0x89104FC0,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_89104FC0,hand,,c
 func_89105144,0x89105144,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,BattleMoveListWidget_DisableRestrictedMoves,hand,,c
 func_891051A4,0x891051A4,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_891051A4,hand,,c
 func_89105200,0x89105200,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,,asm,,asm

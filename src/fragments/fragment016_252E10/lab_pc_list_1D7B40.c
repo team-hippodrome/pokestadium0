@@ -119,11 +119,33 @@ void func_89104E94(s32 arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89104EB4.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89104FC0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89104FC0.s")
-#endif
+typedef struct Str89104FC0 { s8 c[4]; } Str89104FC0;
+extern Str89104FC0 D_8910A91C;
+s32 func_8002D3D0(u8*);
+s32 func_8002D430(s32, s32);
+void func_80027410(void*, void*, s32, s32, s32);
+void func_89104EB4();
+
+void func_89104FC0(s8* arg0, s32 arg1, s32 arg2, u8* arg3) {
+    s32 n = func_8002D3D0(arg3);
+    s32 i;
+
+    for (i = 0; i < n; i++) {
+        M2C_FIELD(arg0, s32*, 0x60 + i * 4) = func_8002D430((s32)arg3, i);
+    }
+    for (i = n; i < 4; i++) {
+        M2C_FIELD(arg0, s32*, 0x60 + i * 4) = -1;
+    }
+    func_80027410(arg0 + 0x50, arg0 + 0x60, 4, 4, 4);
+    func_8002D880(arg0 + 0x2C, arg0 + 0x50, (s32)(arg0 + 0x70), func_89104EB4, 0x9C, 0x1C);
+    M2C_FIELD(arg0, s32*, 0x4C) |= 0x10000;
+    func_8002A8C4(arg0, arg1, arg2, 0xA8, 0x84);
+    M2C_FIELD(arg0, s32*, 0x24) = 0;
+    M2C_FIELD(arg0, s32*, 0x20) = 0;
+    M2C_FIELD(arg0, s32*, 0x28) = 0;
+    M2C_FIELD(arg0, s32*, 0x14) = 0;
+    M2C_FIELD(arg0, Str89104FC0*, 0x18) = D_8910A91C;
+}
 
 extern s32 D_8910A920[5];
 void BattleMoveListWidget_DisableRestrictedMoves(unk_func_8830867C_04C_078* arg0) {
