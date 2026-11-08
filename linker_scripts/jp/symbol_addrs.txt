@@ -3651,3 +3651,4 @@ D_10031C0 = 0x010031C0; // learned from func_8001E6C0
 D_1003740 = 0x01003740; // learned from func_8001E6C0
 D_1003880 = 0x01003880; // learned from func_8001E6C0
 D_1001800 = 0x01001800; // learned from func_80013148
+Species_FromInternalIndex = 0x80020994; // learned from func_8002302C

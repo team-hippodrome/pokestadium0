@@ -1244,11 +1244,17 @@ s32 GbSave_CopyPortSnapshot(s32 arg0, GbSavePortSnapshot* arg1) {
     return temp_v1;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002302C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002302C.s")
-#endif
+void func_8002302C(char* arg0, s32 arg1, u8* arg2) {
+    s32 temp_v0;
+    s32 h;
+
+    while (arg1-- > 0) {
+        temp_v0 = Species_FromInternalIndex(*arg2++);
+        temp_v0--;
+        h = temp_v0 / 8;
+        arg0[h] |= (1 << (temp_v0 % 8));
+    }
+}
 
 void GbSave_RebuildSeenBitfield(s32 arg0) {
     GbSavePortZero* ptr = &sGbSavePorts[arg0];

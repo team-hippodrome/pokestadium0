@@ -5243,7 +5243,7 @@ func_80022EDC,0x80022EDC,src/pokemon_stats_2.c,GbSave_SavedAtPokemonCenter,s1,st
 func_80022F00,0x80022F00,src/pokemon_stats_2.c,func_80022F00,m2c,m2c,c
 func_80022F48,0x80022F48,src/pokemon_stats_2.c,func_80022F48,m2c,m2c,c
 func_80022F90,0x80022F90,src/pokemon_stats_2.c,GbSave_CopyPortSnapshot,hand,,c
-func_8002302C,0x8002302C,src/pokemon_stats_2.c,,asm,,asm
+func_8002302C,0x8002302C,src/pokemon_stats_2.c,func_8002302C,hand,,c
 func_800230C4,0x800230C4,src/pokemon_stats_2.c,GbSave_RebuildSeenBitfield,hand,,c
 func_800231C8,0x800231C8,src/pokemon_stats_2.c,GbSave_GetSpeciesProgressLevel,hand,,c
 func_80023268,0x80023268,src/pokemon_stats_2.c,func_80023268,hand,,c

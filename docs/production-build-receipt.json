@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 4990,
-  "asm_owners": 454,
+  "c_owners": 4991,
+  "asm_owners": 453,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -603,8 +603,8 @@
     "tools/cflags_overrides.json": "7052d644eb08429c59981bb4c369c8c937c61ca4c639a1c1ca2c5fc0ce919ebb",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "3930127d192bbec96fe1788e637126b34f9aa5e7c71ddcd1ee8f711383d65570",
-    "linker_scripts/jp/symbol_addrs.txt": "3b5103d4cfe8c6cf2470a85f3aacf457f87dc2c7f2096a7a216bec5fd85d5385"
+    "docs/function-matches.csv": "a71048e749fa92d6c0092da44e5da5eef997093d3c8b2c68273f3380bba08fb2",
+    "linker_scripts/jp/symbol_addrs.txt": "91a8d27f8e3707e5bcad1c0b12773248d8212c8fe32df8bae724086cddb32db8"
   },
   "binutils": {
     "as": "GNU assembler (GNU Binutils for Ubuntu) 2.42",
@@ -1178,7 +1178,7 @@
     "src/poke_icon_2.c": "8edb42f4b2d7f820fae69069e24baf050606f38dd739885bc918345f81a10af7",
     "src/pokemon_lab_support.c": "131b1659d81b154753e4465f0b1ba84990472bcd21dda61b9ac32816ca448146",
     "src/pokemon_stats.c": "7a702100543353296efd2bc8c09856b394ac734d0830e1d2620c01c05041aea4",
-    "src/pokemon_stats_2.c": "dde4889b568d8054fba38b6831f5ac6d6585237abdb9e279a4966f1781115289",
+    "src/pokemon_stats_2.c": "880292f63c984bae3dc06d57358cfc43c13428b0571dec0ceda1cddbfad44c15",
     "src/profiler.c": "fa24688648aa812dba1f00a9dbcd01f01acbfc61ac5f64ab9aeec92f40062a81",
     "src/rom_device.c": "58d99aa66ed7aa418bc3c3db56a545520ec3829b628d50ec3b2a223ec7c6eecd",
     "src/rsp.c": "7a8ee9ac2dd34ba7b559852110d4cb85bc1e135359529a4f1d936eccfbd9ed8a",
