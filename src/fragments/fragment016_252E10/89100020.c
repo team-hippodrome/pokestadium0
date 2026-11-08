@@ -559,11 +559,42 @@ M2C_UNK func_89101D94(Ctx89101D94* arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89101F90.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_891020F8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_891020F8.s")
-#endif
+typedef struct Str891020F8 { char s[13]; } Str891020F8;
+typedef struct Big891020F8 {
+    /* 0x0000 */ char unk0000[0x96C8];
+    /* 0x96C8 */ s32 right;
+    /* 0x96CC */ s32 bottom;
+} Big891020F8;
+void func_8000A460(s8*, s8*);
+u32 func_800566BC(s8*);
+void func_89106424(s8*, void*, s8*, s32, s32);
+void func_89106570(s8*);
+void func_8910A21C(s8*, s8*, s8*, s32);
+extern s8* D_8910A890[];
+extern u8 D_8910A898[];
+extern u8 D_8910DC50[];
+extern s8 D_8910E2D0[];
+extern s8 D_8910E312[];
+
+void func_891020F8(s8* arg0) {
+    func_8000A460(D_8910E2D0, *(s8**)D_80064C44[M2C_FIELD(M2C_FIELD(arg0, s8****, 0xB160)[0][M2C_FIELD(arg0, s32*, 0xB168)], u8*, 8)]);
+    func_8000A460(D_8910E2D0 + func_800566BC(D_8910E2D0), D_8910A890[(M2C_FIELD(arg0, s32*, 0x7C) & 8) ? 1 : 0]);
+    *(Str891020F8*)D_8910E312 = *(Str891020F8*)D_8910DC50;
+    func_8000A460(D_8910E2D0 + (func_800566BC(D_8910E312) + 0x42), D_8910A890[(M2C_FIELD(arg0, s32*, 0x7C) & 0x10) ? 1 : 0]);
+    func_89106424(arg0 + 0x9654, D_8910A898, arg0 + 0x97C8, 4, 0);
+    func_8002A8C4(arg0 + 0x9680, M2C_FIELD(arg0, s32*, 0x2C) + 0x26,
+                  M2C_FIELD(arg0, s32*, 0x30) + M2C_FIELD(arg0, s32*, 0xB194) - M2C_FIELD(arg0, s32*, 0xB18C) + 0x16, 0, 0x14);
+    ((Big891020F8*)arg0)->right = M2C_FIELD(arg0, s32*, 0x34) + M2C_FIELD(arg0, s32*, 0x2C);
+    ((Big891020F8*)arg0)->bottom = M2C_FIELD(arg0, s32*, 0x38) + M2C_FIELD(arg0, s32*, 0x30);
+    func_89106570(arg0 + 0x9654);
+    M2C_FIELD(arg0, Rgba891024A4*, 0x966C) = D_8910A7F4;
+    M2C_FIELD(arg0, s32*, 0x88) = 7;
+    func_80027804(arg0 + 0xAFFC, arg0 + 0xAD54, 0xAA, 0);
+    func_8910A21C(arg0 + 0xAFFC, arg0 + 0xA00C, arg0 + 0x9E64, 3);
+    if (M2C_FIELD(arg0, s32*, 0xB004) == 0) {
+        M2C_FIELD(M2C_FIELD(arg0, s8**, 0x9698), u16*, 6) |= 1;
+    }
+}
 
 typedef struct List89102344 {
     /* 0x00 */ u8** items;
@@ -591,7 +622,7 @@ typedef struct Ctx89102344 {
 s32 func_8003F6AC();
 s32 func_8002FD8C(void*);
 void func_800306E0(void*, s32);
-void func_891020F8(Ctx89102344*);
+void func_891020F8(s8*);
 
 s32 func_89102344(Ctx89102344* arg0) {
     s32 ret;
@@ -607,7 +638,7 @@ s32 func_89102344(Ctx89102344* arg0) {
     if ((ret == 0) && (*(u16*)(D_800603C0 + 8) & 0x8000)) {
         if ((arg0->list->count > 0) && (arg0->list->items[arg0->cursor][8] > 0) && (arg0->list->items[arg0->cursor][8] < 0x98)) {
             func_8003F6AC(2);
-            func_891020F8(arg0);
+            func_891020F8((s8*)arg0);
             ret = 1;
         } else {
             func_8003F6AC(8);
