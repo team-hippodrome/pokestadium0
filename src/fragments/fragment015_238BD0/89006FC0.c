@@ -504,11 +504,26 @@ void func_8900A1CC(s8* arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8900A298; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_8900A298.s")
-#endif
+typedef struct Ent8900A298 {
+    s32 unk0;
+    s32 unk4;
+} Ent8900A298;
+
+s32 func_8900A298(s8* arg0) {
+    s32 i;
+
+    for (i = 0; i < 8; i++) {
+        if (((Ent8900A298*)(arg0 + 0x749C))[i].unk0 != 0) {
+            return 1;
+        }
+    }
+    for (i = 0; i < 4; i++) {
+        if (((Ent8900A298*)(arg0 + 0x74DC))[i].unk0 != 0) {
+            return 1;
+        }
+    }
+    return 0;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8900A324; signature not recovered. */

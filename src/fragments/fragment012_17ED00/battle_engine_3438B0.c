@@ -1316,7 +1316,34 @@ void func_8212EEC0(ActivePokemon* arg0, CameraNode* arg1) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8212EF74.s")
+void func_8212EF74(ActivePokemon* arg0, CameraNode* arg1) {
+    s32 temp_v0;
+    s32 var_v1;
+
+    temp_v0 = func_8210C020(4, (s32)arg1); D_8219A568 = temp_v0;
+    var_v1 = temp_v0;
+    if (temp_v0 >= 5) {
+        D_8219A568 = 0;
+        var_v1 = 0;
+    }
+    switch (var_v1) {
+        case 0:
+            func_821247F0(arg1, arg0);
+            return;
+        case 1:
+            func_82124810(arg1, arg0);
+            return;
+        case 2:
+            func_82124830(arg1, arg0);
+            return;
+        case 3:
+            func_82124874(arg1, arg0);
+            return;
+        default:
+            func_82124874(arg1, arg0);
+            return;
+    }
+}
 
 void func_8212F044(CameraNode* arg0) {
     s32 other = sBattleScene.scene->unk_2C == 0;
