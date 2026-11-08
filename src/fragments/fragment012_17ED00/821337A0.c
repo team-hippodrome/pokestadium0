@@ -1,6 +1,6 @@
 /* Stadium Zero fragment012_17ED00. */
 
-#include "global.h"
+#include "fragments/battle_engine/battle_engine.h"
 #include "m2c_macros.h"
 
 void func_821337A0(s8 *arg0)

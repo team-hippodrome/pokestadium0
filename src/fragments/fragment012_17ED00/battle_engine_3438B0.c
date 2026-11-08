@@ -1041,7 +1041,29 @@ void func_8212DB28(CameraNode* arg0) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8212DD14.s")
+void func_8210568C(ActivePokemon*, s32, s32);
+
+void func_8212DD14(ActivePokemon* arg0) {
+    ActivePokemonState* state = &arg0->state;
+    BattleMon* sp28 = &arg0->teamRoster->pokemonPicked[arg0->state.rosterIndex];
+
+    if (arg0->state.flags & 2) {
+        func_82136708(1, arg0);
+        M2C_FIELD(arg0, u8*, 2) |= 0x20;
+        func_82105E4C(arg0, 2);
+    }
+    if (state->flags & 1) {
+        M2C_FIELD(sp28, s8*, 5) = 0;
+        func_8210568C(arg0, 0xB8, 1);
+        func_82136708(3, arg0);
+        func_82105E4C(arg0, 1);
+    }
+    if (state->flags & 0x80) {
+        func_82136708(2, sActivePokemon[sBattleScene.scene->unk_2C]);
+        func_82105E4C(sActivePokemon[sBattleScene.scene->unk_2C], 0x80);
+    }
+    func_82110B44(arg0);
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8212DE30.s")
 
