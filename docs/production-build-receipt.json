@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5027,
-  "asm_owners": 417,
+  "c_owners": 5029,
+  "asm_owners": 415,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -603,7 +603,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "80da2e89aef93cf7027e3f2363057ee8146e2be081d9bf62da7287f7db95e250",
+    "docs/function-matches.csv": "84e594e71a57c5fac2143ea8701c55ed07843e735a6b9f34cb21eacc5128741d",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -669,7 +669,7 @@
     "src/crash_screen.c": "3e5eff6eea466ae744294f7d8fa34e2c1e625cf23842e26d4cc0700ebe5cefaf",
     "src/display_object_textures.c": "214c1ae3a879d33c836053262170ca8023f02ac7b0dfca6921ada25d55ea8f9b",
     "src/dma.c": "4a07cb055cd28fb692e5dd3ebf4f09047780d0634463431a66664b3e121bc3e8",
-    "src/dp_intro.c": "39e1824379bae87ca6eeaed34c92c997eb93e9cc4a82c8eccdbd00b47fb73b24",
+    "src/dp_intro.c": "17a93bbeb314a527545cbbb084f0bd53524e8b97dc3cd942e25fc625d21f1de6",
     "src/fragments/fragment000_80C00/81100020.c": "27e04ddfd035534e1f0859107e68fedb119b59c5004aaee85777f154b35e939f",
     "src/fragments/fragment000_80C00/81107390.c": "60ba1ac38c8d51793813e95165f77ce364562212c36c8301b407f30ccd236ab9",
     "src/fragments/fragment000_80C00/81110190.c": "c3654154efda0cd7040fdd8e2b6d4e862660e256550ffc7aa97119b537acf61d",
@@ -969,7 +969,7 @@
     "src/fragments/fragment256_B83840.c": "2eede8d311f7555c99fbaedb15fee7f45115ff35b9bb524c9f3774bc09566dbf",
     "src/fragments/fragment257_B8BFE0.c": "f213c2caa67dabfb160f9a377f73d231e8549abd79e4cf3bad672f9f85cad6c8",
     "src/fragments/fragment258_B91160.c": "6035eb3014b0ed773dbd779d08c18b0f4a1dd84523d903c534fe613eae21c017",
-    "src/game_state.c": "ce075069bc751f57ca5363ceca300a0b785f68f96d2034bb672698a4c62c3604",
+    "src/game_state.c": "d8892b72ab4cf157c2e80794816e144c6be935b92c28068922599fba41c7c2f0",
     "src/gb_audio.c": "9be4a1d4a944a704c335fe10e931029c1b15d49fe4d7356d3a24f69c243d711c",
     "src/gb_audio_render.c": "0fff118e77fa82381154a56e875ee741e1fdff04b03ecff9a2bb14771221d51e",
     "src/gb_data.c": "38e026d47ec44d5de127778395cddf3c932ccdda434bef8628ea81336cce3ba3",

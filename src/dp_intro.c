@@ -193,13 +193,31 @@ void func_800012AC(s8* arg0);
 void func_80001328(void);
 void func_80001558(void);
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_800016C4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800016C4.s")
-#endif
+void func_800016C4(UNUSED void* arg) {
+    func_800594D0(0x01000F00);
+    func_80001A30(&M2C_FIELD(&D_800870D0, u8*, 0xAA4), 0, 1, 2, 0xFF, 0, 0, 0);
+    func_80001A30(&M2C_FIELD(&D_800870D0, u8*, 0xA94), 0, 1, 2, 0xFF, 0, 0, 0);
+    osCreateMesgQueue(&M2C_FIELD(&D_800870D0, OSMesgQueue*, 0x9FC), &M2C_FIELD(&D_800870D0, OSMesg*, 0x9EC), 4);
+    func_80004EA8(&M2C_FIELD(&D_800870D0, OSMesg*, 0x9EC));
+    func_80001140(&M2C_FIELD(&D_800870D0, u8*, 0xA18));
+    while (TRUE) {
+        OSMesg sp4C;
 
-void func_800016C4(void*);
+        if (D_800A9710.unk_A38 > 0) {
+            func_80001558();
+            continue;
+        }
+        func_800081E0(0);
+        M2C_FIELD(&D_800870D0, u8*, 0xA82) = 1;
+        func_8004D1C0(&M2C_FIELD(&D_800870D0, OSMesgQueue*, 0x9BC), &sp4C, 1);
+        M2C_FIELD(&D_800870D0, u8*, 0xA82) = 0;
+        func_800081E0(1);
+        func_800081E0(2);
+        func_800012AC(sp4C);
+        func_80001328();
+        func_8004CFB0(&M2C_FIELD(&D_800870D0, OSMesgQueue*, 0x9D4), (OSMesg)'DONE', 0);
+    }
+}
 
 void DisplayWorker_Initialize(void) {
     osCreateThread((OSThread*)&D_800870D0, 5, func_800016C4, NULL, &M2C_FIELD(&D_800870D0, s32*, 0x9B0), 0x28);
