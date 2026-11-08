@@ -195,11 +195,98 @@ void func_8111220C(s8 *arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81112278; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81112278.s")
-#endif
+typedef struct Channel81112278 {
+    /* 0x00 */ char pad00[0x10];
+    /* 0x10 */ u16 vibratoRateStart;
+    /* 0x12 */ u16 vibratoExtentStart;
+    /* 0x14 */ u16 vibratoRateTarget;
+    /* 0x16 */ u16 vibratoExtentTarget;
+    /* 0x18 */ u16 vibratoRateChangeDelay;
+    /* 0x1A */ u16 vibratoExtentChangeDelay;
+    /* 0x1C */ u16 vibratoDelay;
+} Channel81112278;
+
+typedef struct Portamento81112278 {
+    /* 0x00 */ s32 words[4];
+} Portamento81112278; // size = 0x10
+
+typedef struct Layer81112278 {
+    /* 0x00 */ char pad00[0x8];
+    /* 0x08 */ Portamento81112278 portamento;
+    /* 0x18 */ char pad18[0x54 - 0x18];
+    /* 0x54 */ Channel81112278* seqChannel;
+} Layer81112278;
+
+typedef struct PlaybackState81112278 {
+    /* 0x00 */ char pad00[0x14];
+    /* 0x14 */ Layer81112278* parentLayer;
+    /* 0x18 */ char pad18[0x50 - 0x18];
+    /* 0x50 */ Portamento81112278 portamento;
+} PlaybackState81112278;
+
+typedef struct Vibrato81112278 {
+    /* 0x00 */ Channel81112278* seqChannel;
+    /* 0x04 */ u32 time;
+    /* 0x08 */ s16* curve;
+    /* 0x0C */ f32 extent;
+    /* 0x10 */ f32 rate;
+    /* 0x14 */ u8 active;
+    /* 0x16 */ u16 rateChangeTimer;
+    /* 0x18 */ u16 extentChangeTimer;
+    /* 0x1A */ u16 delay;
+} Vibrato81112278;
+
+typedef struct Note81112278 {
+    /* 0x00 */ char pad00[0x30];
+    /* 0x30 */ u8 priority;
+    /* 0x31 */ char pad31[0x38 - 0x31];
+    /* 0x38 */ f32 portamentoFreqScale;
+    /* 0x3C */ f32 vibratoFreqScale;
+    /* 0x40 */ char pad40[0x4];
+    /* 0x44 */ Layer81112278* parentLayer;
+    /* 0x48 */ char pad48[0x90 - 0x48];
+    /* 0x90 */ Vibrato81112278 vibratoState;
+} Note81112278;
+
+extern s16* D_81135F68;
+
+/**
+ * Starts a note's vibrato from its channel's vibrato settings (extent and rate
+ * start at their start values when they have a change delay, otherwise at
+ * their targets) and copies the layer's portamento into the note. Same
+ * structure as note_vibrato_init in the Super Mario 64 audio library.
+ */
+void func_81112278(Note81112278* note) {
+    Vibrato81112278* vib;
+    Channel81112278* seqChannel;
+    PlaybackState81112278* seqPlayerState = (PlaybackState81112278*)&note->priority;
+
+    note->vibratoFreqScale = 1.0f;
+    note->portamentoFreqScale = 1.0f;
+    vib = &note->vibratoState;
+
+    vib->active = 1;
+    vib->time = 0;
+
+    vib->curve = D_81135F68;
+    vib->seqChannel = note->parentLayer->seqChannel;
+    seqChannel = vib->seqChannel;
+
+    if ((vib->extentChangeTimer = seqChannel->vibratoExtentChangeDelay) == 0) {
+        vib->extent = (s32)seqChannel->vibratoExtentTarget;
+    } else {
+        vib->extent = (s32)seqChannel->vibratoExtentStart;
+    }
+
+    if ((vib->rateChangeTimer = seqChannel->vibratoRateChangeDelay) == 0) {
+        vib->rate = (s32)seqChannel->vibratoRateTarget;
+    } else {
+        vib->rate = (s32)seqChannel->vibratoRateStart;
+    }
+    vib->delay = seqChannel->vibratoDelay;
+
+    seqPlayerState->portamento = seqPlayerState->parentLayer->portamento;
+}
 
 void func_8111235C(s8 *arg0, s32 arg1, M2C_UNK arg2) {
     M2C_FIELD(arg0, s8 *, 0) = 0;
