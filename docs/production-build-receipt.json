@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 4964,
-  "asm_owners": 480,
+  "c_owners": 4965,
+  "asm_owners": 479,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -603,7 +603,7 @@
     "tools/cflags_overrides.json": "7052d644eb08429c59981bb4c369c8c937c61ca4c639a1c1ca2c5fc0ce919ebb",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "9791c9a0c89a118c84333df21ed20716f3f82e7ddf66ed9202d9514c3d18fcf6",
+    "docs/function-matches.csv": "321343b38717845f677a3d96b06c56585baa81f2efcb2e5c337a4ce802a1e1dc",
     "linker_scripts/jp/symbol_addrs.txt": "3b5103d4cfe8c6cf2470a85f3aacf457f87dc2c7f2096a7a216bec5fd85d5385"
   },
   "binutils": {
@@ -797,7 +797,7 @@
     "src/fragments/fragment016_252E10/lab_pc_list_1E46B0.c": "ba8d4b5501f5daea30407668a46cb1021536cf2edb09db847e7544301d76b045",
     "src/fragments/fragment016_252E10/lab_pc_list_1E46B0_2.c": "17d37709d252c5f05b7d3eadd97fc634eb3f54800c584a0daef62f1a298e5992",
     "src/fragments/fragment017_261F00.c": "010db2d8b146be87183a9f92e3d7a094eb3e9b17ab5eda9b74b443022094159e",
-    "src/fragments/fragment018_262620/pokedex_214920.c": "491d32e418656360bf49beaa37165ee2c6b6273e53860751c8410cea2d4c0ff2",
+    "src/fragments/fragment018_262620/pokedex_214920.c": "79ee6f207cb79508c52e017dbee965a69c96ef223698a6c9c824e9e764c2dc75",
     "src/fragments/fragment018_262620/pokedex_2190D0.c": "95f32a019b80bdf17400546f059a4fe7b54980b0adbcb3b3aa63b483453c8717",
     "src/fragments/fragment019_293410/lab_pc_icons.c": "4bead4359d24affb3ecb407923bf2bdad62c721bb4e347a57d7a3578f61fef37",
     "src/fragments/fragment019_293410/lab_pc_icons_8A201598.c": "79849644ea082b060d05d6032edaa23dbdbf75aa3098204bcc21426daa6688ae",

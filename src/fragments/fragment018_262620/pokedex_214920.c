@@ -412,7 +412,7 @@ void func_8A101154(void* arg0) {
 
 M2C_UNK func_800069CC();                            /* extern */
 M2C_UNK func_80028060(M2C_UNK, M2C_UNK *, M2C_UNK *, s32); /* extern */
-M2C_UNK func_8A1003D0(M2C_UNK *, M2C_UNK);          /* extern */
+M2C_UNK func_8A1003D0(M2C_UNK *, u32);          /* extern */
 void func_8A10068C(void*);
 extern M2C_UNK D_8A12FD2C;
 extern M2C_UNK D_8A12FFC0;
@@ -438,11 +438,55 @@ s32 func_8A1011A4(s32 arg0) {
     return 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8A10122C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment018_262620/func_8A10122C.s")
-#endif
+M2C_UNK func_8003F6AC(M2C_UNK);
+M2C_UNK func_8A1003D0(M2C_UNK *, u32);
+void func_8000B1FC(void);
+M2C_UNK func_8000B220();
+M2C_UNK func_8000B2F4(s32);
+M2C_UNK func_800158C0();
+void func_8001B5F0(void);
+M2C_UNK func_80006780();
+s32 func_8A10122C(void) {
+    s32 temp_s0;
+    s32 var_s4;
+
+    var_s4 = 1;
+    func_8000B2F4(D_800603C0);
+    do {
+        func_8000B1FC();
+        func_8000B220();
+        func_8001B5F0();
+        if ((M2C_FIELD(&D_8A12FFC0, s32 *, 0x28) == 1) || (M2C_FIELD(&D_8A12FFC0, s32 *, 0x28) == 2U)) {
+            temp_s0 = func_8A100588((u8*)&D_8A12FFC0);
+            D_8A12FFB8 = func_8A1000C0((s8*)&D_8A12FFC0);
+            if (temp_s0 == -1) {
+                func_8003F6AC(3);
+                M2C_FIELD(&D_8A12FFC0, s32 *, 0x24) = 7;
+                M2C_FIELD(&D_8A12FFC0, s32 *, 0x1D8) = 7;
+                M2C_FIELD(&D_8A12FFC0, s32 *, 0x204) = 7;
+            } else if (temp_s0 == 1) {
+                if (func_800231C8(D_8A12FFB0, D_8A12FFB8 + 1) == 0) {
+                    func_8003F6AC(8);
+                } else {
+                    func_8003F6AC(2);
+                    var_s4 = 2;
+                    M2C_FIELD(&D_8A12FFC0, s32 *, 0x214) = 0;
+                }
+            }
+        }
+        func_800158C0();
+        func_800069CC();
+        func_8A101118();
+        func_8A1003D0(&D_8A12FFC0, 2);
+        func_8A10068C(&D_8A130174);
+        func_8A100954((s8*)&D_8A1301A0, 0);
+        func_80006780();
+        if (M2C_FIELD(&D_8A12FFC0, s32 *, 0x28) == 4) {
+            var_s4 = 0;
+        }
+    } while (var_s4 == 1);
+    return var_s4;
+}
 
 M2C_UNK func_8003F6AC(M2C_UNK);
 M2C_UNK func_8003BD3C(s32);
