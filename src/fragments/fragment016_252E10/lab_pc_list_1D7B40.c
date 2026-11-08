@@ -120,11 +120,41 @@ typedef struct Entry891078E0 {
     /* 0x08 */ s32 unk_08;
 } Entry891078E0;
 extern Entry891078E0 D_8006A9D4[];
-#ifdef NON_MATCHING
-/* TODO: decompile func_89104EB4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89104EB4.s")
-#endif
+extern Color_RGBA8 D_800734A8[];
+extern char D_8910E000[];
+extern char D_8910E010[];
+
+void func_89104EB4(s32 arg0, s32 arg1, s32* arg2, s32 arg3, s32 arg4, s32* arg5) {
+    UNUSED s32 padA[4];
+    const char* name;
+    s32 temp;
+    s32 alpha;
+
+    temp = *arg2;
+    switch (temp) {
+        case -2:
+            name = D_8910E000;
+            break;
+        case -1:
+            name = D_8910E010;
+            break;
+        default:
+            name = D_8006A9D4[temp].name;
+            break;
+    }
+    Font_BeginTranslucentTextRendering();
+    if (arg4 & 0x100) {
+        Gfx_SetEnvColor(D_800734A8[0].r, D_800734A8[0].g, D_800734A8[0].b, *arg5);
+    } else if (arg4 & 0x200) {
+        alpha = *arg5;
+        Gfx_SetEnvColor(0xFF, 0xC8, 0xC8, alpha);
+    } else {
+        func_80027F20(arg4);
+    }
+    Font_SetActive(8, 0);
+    Font_Printf(arg0 + 8, arg1 + 4, name);
+    Font_EndTexturedTextRendering();
+}
 
 typedef struct Str89104FC0 { s8 c[4]; } Str89104FC0;
 extern Str89104FC0 D_8910A91C;

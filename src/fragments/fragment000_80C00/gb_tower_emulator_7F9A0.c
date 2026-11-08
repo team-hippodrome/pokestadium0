@@ -1144,7 +1144,7 @@ extern u32 D_811565CC;
 extern s32 D_811565C0;
 extern u16* D_811565D4;
 extern u16* D_811565D0;
-void func_81106AA0(s32, u8);
+void func_81106AA0(s32, s32);
 void func_8110724C(void) {
     if ((osGetCount() - D_811565DC) > D_811565D8) {
         D_811565DC = osGetCount();
