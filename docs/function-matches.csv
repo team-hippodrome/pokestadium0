@@ -1113,7 +1113,7 @@ func_82124EFC,0x82124EFC,src/fragments/fragment012_17ED00/battle_engine_309ED0_8
 func_821250D4,0x821250D4,src/fragments/fragment012_17ED00/battle_engine_309ED0_82124E80.c,func_821250D4,hand,,c
 func_82125224,0x82125224,src/fragments/fragment012_17ED00/battle_engine_309ED0_82124E80.c,BattleScene_InitializeSwitchActions,s1,stadium1:src/fragments/battle_engine/battle_engine_309ED0.c,c
 func_82125384,0x82125384,src/fragments/fragment012_17ED00/battle_engine_309ED0_82124E80.c,func_82125384,hand,,c
-func_821254B0,0x821254B0,src/fragments/fragment012_17ED00/battle_engine_309ED0_82124E80.c,,asm,,asm
+func_821254B0,0x821254B0,src/fragments/fragment012_17ED00/battle_engine_309ED0_82124E80.c,func_821254B0,hand,,c
 func_82125570,0x82125570,src/fragments/fragment012_17ED00/battle_engine_309ED0_82124E80.c,BattleScene_ClearPhaseFlag,s1,stadium1:src/fragments/battle_engine/battle_engine_309ED0.c,c
 func_82125580,0x82125580,src/fragments/fragment012_17ED00/battle_engine_309ED0_82124E80.c,BattleScene_SetPhaseFlag,s1,stadium1:src/fragments/battle_engine/battle_engine_309ED0.c,c
 func_82125594,0x82125594,src/fragments/fragment012_17ED00/battle_engine_309ED0_82124E80.c,BattleScene_SetPhase,s1,stadium1:src/fragments/battle_engine/battle_engine_309ED0.c,c

@@ -210,14 +210,9 @@ void func_891003A4(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     func_89105C54(arg0 + 0x230, 0x78, 0x67, arg0 + 0x420, D_8910A7F4);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_891005CC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_891005CC.s")
-#endif
-
 typedef struct Ctx89100688 {
-    /* 0x0000 */ char unk0000[0x30];
+    /* 0x0000 */ char unk0000[0x2C];
+    /* 0x002C */ s32 x;
     /* 0x0030 */ s32 y;
     /* 0x0034 */ char unk0034[0x84 - 0x34];
     /* 0x0084 */ s32* widths;
@@ -228,6 +223,13 @@ typedef struct Ctx89100688 {
     /* 0xB54C */ s32 unkB54C;
     /* 0xB550 */ s32 cursor;
 } Ctx89100688;
+
+#ifdef NON_MATCHING
+/* TODO: decompile func_891005CC; signature not recovered. */
+#else
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_891005CC.s")
+#endif
+
 s32 func_891005CC();
 void func_89100688(Ctx89100688* arg0) {
     s32 end;

@@ -156,11 +156,26 @@ void func_82125384(void) {
     M2C_FIELD(D_8219A5A0, s32 *, 0x20)++;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_821254B0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821254B0.s")
-#endif
+void func_82133868(ActivePokemonState*);
+
+// Stadium 1 counterpart: Battle_ActSecondAttacker (no phase/arg handling here).
+void func_821254B0(void) {
+    ActivePokemonState* temp_a3;
+
+    sBattleScene.scene->unk_2C = !sBattleScene.scene->unk_2C;
+    temp_a3 = &sActivePokemon[sBattleScene.scene->unk_2C]->state;
+
+    if ((temp_a3->unk_2D == 0xF) || (temp_a3->unk_2D == 0x10)) {
+        BeginBattleForEntity(sActivePokemon[sBattleScene.scene->unk_2C]);
+    } else if (sBattleScene.scene->unk_1C == 0xA) {
+        func_82133868(temp_a3);
+    } else {
+        Battle_ResolveMonAction();
+    }
+
+    sBattleScene.scene->unk_34 = 1;
+    sBattleScene.scene->unk_A0.z = 0.0f;
+}
 
 void BattleScene_ClearPhaseFlag(void) {
     sBattleScene.scene->unk_3C = 0;

@@ -215,7 +215,11 @@ void func_81112BF0(s8* arg0, u16 mask) {
     }
 }
 
+#ifdef NON_MATCHING
+/* TODO: decompile func_81112CE8; signature not recovered. */
+#else
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81112CE8.s")
+#endif
 
 void func_81112D68(Particle2D68** arg0, u8 arg1, s32 arg2) {
     Particle2D68* p = arg0[arg1 + 13];
