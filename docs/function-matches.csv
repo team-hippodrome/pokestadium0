@@ -193,7 +193,7 @@ func_800339CC,0x800339CC,src/DDC0_2.c,func_800339CC,s1,stadium1:src/33FE0.c,c
 func_80033BBC,0x80033BBC,src/DDC0_2.c,func_80033BBC,s1,stadium1:src/33FE0.c,c
 func_80033BE4,0x80033BE4,src/DDC0_2.c,func_80033BE4,s1,stadium1:src/33FE0.c,c
 func_800340F4,0x800340F4,src/DDC0_2.c,func_800340F4,s1,stadium1:src/33FE0.c,c
-func_800341E8,0x800341E8,src/DDC0_2.c,,asm,,asm
+func_800341E8,0x800341E8,src/DDC0_2.c,func_800341E8,s1,,c
 func_800346C4,0x800346C4,src/DDC0_2.c,func_800346C4,s1,stadium1:src/33FE0.c,c
 func_800349C8,0x800349C8,src/DDC0_2.c,Model_ApplyVertexTransforms,s1,stadium1:src/33FE0.c,c
 func_80034A74,0x80034A74,src/DDC0_2.c,func_80034A74,s1,stadium1:src/33FE0.c,c
