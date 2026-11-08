@@ -298,7 +298,17 @@ void func_8210A744(s32 arg0, s8 *arg1) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210A7D8.s")
+f32 func_82107EC8(s8*);
+void func_8210A7D8(s32 arg0, s8* arg1) {
+    func_8210A430(arg0, M2C_FIELD(arg1, s16*, 0x602), (s16)(M2C_FIELD(arg1, s32*, 0x60C) << 0xE));
+    func_82109AF4(arg1, M2C_FIELD(arg1, s16*, 0x602));
+    BattleAnim_ApproachF((f32*)(arg0 + 0x28), -(func_82107EC8(arg1) * 2.6), 0.04f);
+    if (*(f32*)(arg0 + 0x28) <= -(func_82107EC8(arg1) * 2.5)) {
+        func_8000D700(arg0 + 0x1E, 0, (s16)(M2C_FIELD(arg1, s32*, 0x60C) << 0xE), 0);
+        func_82109C88(arg1);
+        func_8210942C((s32)arg1);
+    }
+}
 
 void func_8210A8CC(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     switch (animated_pokemon->modelTransformTimer) {

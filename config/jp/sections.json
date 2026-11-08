@@ -294,7 +294,10 @@
   },
   "src/fragments/fragment012_17ED00/battle_engine_move_model_transforms_82109AF4.c": {
     ".data": "0x821891D8",
-    ".rodata": "0x82194930"
+    ".rodata": {
+      "address": "0x82194928",
+      "size": "0xB8"
+    }
   },
   "src/fragments/fragment012_17ED00/ekans_game.c": {
     ".rodata": {

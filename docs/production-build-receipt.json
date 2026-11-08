@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 4981,
-  "asm_owners": 463,
+  "c_owners": 4982,
+  "asm_owners": 462,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -593,8 +593,8 @@
     "src/vector_math.c"
   ],
   "source_registry_sha256": "23324db86a9583335916ac8b036f9a0000b23dcde9a41e110bd84697c4447969",
-  "section_registry_sha256": "81f2c4a1ac6720df4596936a42ba2161782fc0346e29a2ad0a671ab676964eb9",
-  "headers_sha256": "73015dc32ba811c8c4a22dd89209e0481da0f9b2535e8fd82272ea9ce9e851b5",
+  "section_registry_sha256": "bf1625ca6aa9713ff33d313eaf0029aee5e944a9adc57a64a185f945457971c3",
+  "headers_sha256": "ca0d57681ffc274908048a5057db725b4a95593d821a3f88ebd1b9459c4b1fcd",
   "matching_registry_sha256": "d8bcc14a2a0db281cf30dcb9ddbd94d59e1afe84c70b4c8c017ea27ce60a251c",
   "build_tools_sha256": {
     "tools/production.py": "c672f1c73b64b7cf0e64da909081796174b2e57b49852e0862d45d0826c4c8ff",
@@ -603,7 +603,7 @@
     "tools/cflags_overrides.json": "7052d644eb08429c59981bb4c369c8c937c61ca4c639a1c1ca2c5fc0ce919ebb",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "a666736b885a628e857d7883a9f6d7fb847c854a3155a0fd3d540611eb08de38",
+    "docs/function-matches.csv": "8c4ddfabbd801a45145865b022ec3f6dd4a287bf9986d32e3f4692b277d6266f",
     "linker_scripts/jp/symbol_addrs.txt": "3b5103d4cfe8c6cf2470a85f3aacf457f87dc2c7f2096a7a216bec5fd85d5385"
   },
   "binutils": {
@@ -773,7 +773,7 @@
     "src/fragments/fragment012_17ED00/battle_engine_main.c": "1d43eed176f20e019280f749808380e304a560a8fb8f793f55235e0c7ea95924",
     "src/fragments/fragment012_17ED00/battle_engine_move_animation.c": "874602796196f72015adf2ab100a715d43a1838f09f1ff9aacaaf0e1ffbf8154",
     "src/fragments/fragment012_17ED00/battle_engine_move_model_transforms.c": "dd39c36cfbf8771a42e5f54f40470fe9e784cc2f943614b0632ea52d40c021d4",
-    "src/fragments/fragment012_17ED00/battle_engine_move_model_transforms_82109AF4.c": "09646b44434fec5b914f51534e13d1e0126dd276c7a1d0d507b9887a6bd27678",
+    "src/fragments/fragment012_17ED00/battle_engine_move_model_transforms_82109AF4.c": "dd563b4f49f6a88c791b99ae895d8bc90af1f4302192137712ac8486128dab8f",
     "src/fragments/fragment012_17ED00/battle_engine_thumbnail.c": "d2717cbc20d699d329f5a4f108f3264dc2d89e6c06a1aa40df896680f2a479f7",
     "src/fragments/fragment012_17ED00/ekans_game.c": "4c0d7afe0c3308ce8e32a1466e62fae8934e6fcd26584fb158fa89b07c3902a1",
     "src/fragments/fragment012_17ED00/ekans_game_2.c": "a843a8dcfda50b5c239239d42815db53bc72ffbf18dc042d5f01b364bcc4ffbd",
