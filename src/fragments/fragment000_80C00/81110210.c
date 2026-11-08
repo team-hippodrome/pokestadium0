@@ -5,11 +5,149 @@
 #include "m2c_macros.h"
 void func_81110E3C(Particle*, s32);
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81110210; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81110210.s")
-#endif
+void func_811105DC(s8* arg0, f32 arg1);
+
+typedef struct ReverbBits81110210 {
+    /* 0x0 */ u8 bit0 : 1;
+    /* 0x0 */ u8 bit1 : 1;
+    /* 0x0 */ u8 bit2 : 1;
+    /* 0x0 */ u8 usesHeadsetPanEffects : 1;
+    /* 0x0 */ u8 stereoHeadsetEffects : 2;
+    /* 0x0 */ u8 strongRight : 1;
+    /* 0x0 */ u8 strongLeft : 1;
+} ReverbBits81110210;
+
+typedef struct ReverbInfo81110210 {
+    /* 0x00 */ u8 reverbVol;
+    /* 0x01 */ u8 bankId;
+    /* 0x02 */ u8 pan;
+    /* 0x03 */ ReverbBits81110210 reverbBits;
+    /* 0x04 */ f32 freqScale;
+    /* 0x08 */ f32 velocity;
+    /* 0x0C */ s32 unk0C;
+    /* 0x10 */ s32 synthesisVolume;
+} ReverbInfo81110210;
+
+typedef struct NoteSub81110210 {
+    /* 0x00 */ volatile u8 enabled : 1;
+    /* 0x00 */ u8 needsInit : 1;
+    /* 0x00 */ u8 finished : 1;
+    /* 0x00 */ u8 envMixerNeedsInit : 1;
+    /* 0x00 */ u8 stereoStrongRight : 1;
+    /* 0x00 */ u8 stereoStrongLeft : 1;
+    /* 0x00 */ u8 stereoHeadsetEffects : 1;
+    /* 0x00 */ u8 usesHeadsetPanEffects : 1;
+    /* 0x01 */ u8 unk01;
+    /* 0x02 */ u8 bankId;
+    /* 0x03 */ u8 headsetPanRight;
+    /* 0x04 */ u8 headsetPanLeft;
+    /* 0x05 */ u8 reverbVol;
+    /* 0x06 */ u8 unk06[2];
+    /* 0x08 */ u16 targetVolLeft;
+    /* 0x0A */ u16 targetVolRight;
+    /* 0x0C */ u8 unk0C[8];
+    /* 0x14 */ s32 synthesisVolume;
+} NoteSub81110210;
+
+extern s8 D_811858EE;
+extern u16 D_811369D8[];
+extern f32 D_81136AD8[];
+extern f32 D_81136CD8[];
+extern f32 D_81136ED8[];
+
+void func_81110210(s8* note, ReverbInfo81110210* reverbInfo) {
+    NoteSub81110210* sub;
+    f32 volRight;
+    f32 volLeft;
+    s32 smallPanIndex;
+    UNUSED u32 pad;
+    UNUSED u32 pad1;
+    u8 strongRight;
+    u8 strongLeft;
+    f32 velocity;
+    u8 pan;
+    u8 reverbVol;
+    ReverbBits81110210 reverbBits;
+
+    func_811105DC(note, reverbInfo->freqScale);
+    velocity = reverbInfo->velocity;
+    pan = reverbInfo->pan;
+    reverbVol = reverbInfo->reverbVol;
+    reverbBits = reverbInfo->reverbBits;
+    sub = (NoteSub81110210*)(note + 0xB4);
+    pan &= 0x7F;
+
+    if (sub->stereoHeadsetEffects && D_811858EE == 1) {
+        smallPanIndex = pan >> 1;
+        if (smallPanIndex > 0x3F) {
+            smallPanIndex = 0x3F;
+        }
+        sub->headsetPanLeft = D_811369D8[smallPanIndex];
+        sub->headsetPanRight = D_811369D8[0x3F - smallPanIndex];
+        sub->stereoStrongRight = 0;
+        sub->stereoStrongLeft = 0;
+        sub->usesHeadsetPanEffects = 1;
+        volLeft = D_81136AD8[pan];
+        volRight = D_81136AD8[0x7F - pan];
+    } else if (sub->stereoHeadsetEffects && D_811858EE == 0) {
+        strongLeft = strongRight = 0;
+        sub->headsetPanRight = 0;
+        sub->headsetPanLeft = 0;
+        sub->usesHeadsetPanEffects = 0;
+        volLeft = D_81136CD8[pan];
+        volRight = D_81136CD8[0x7F - pan];
+        if (pan < 0x20) {
+            strongLeft = 1;
+        } else if (pan > 0x60) {
+            strongRight = 1;
+        }
+        sub->stereoStrongRight = strongRight;
+        sub->stereoStrongLeft = strongLeft;
+        switch (reverbBits.stereoHeadsetEffects) {
+            case 0:
+                sub->stereoStrongRight = reverbBits.strongRight;
+                sub->stereoStrongLeft = reverbBits.strongLeft;
+                break;
+            case 1:
+                break;
+            case 2:
+                sub->stereoStrongRight = reverbBits.strongRight | strongRight;
+                sub->stereoStrongLeft = reverbBits.strongLeft | strongLeft;
+                break;
+            case 3:
+                sub->stereoStrongRight = reverbBits.strongRight ^ strongRight;
+                sub->stereoStrongLeft = reverbBits.strongLeft ^ strongLeft;
+                break;
+        }
+    } else if (D_811858EE == 3) {
+        volLeft = 0.707f;
+        volRight = 0.707f;
+    } else {
+        volLeft = D_81136ED8[pan];
+        volRight = D_81136ED8[0x7F - pan];
+    }
+
+    if (velocity < 0.0f) {
+        velocity = 0.0f;
+    }
+    if (velocity > 1.0f) {
+        velocity = 1.0f;
+    }
+
+    sub->targetVolLeft = (s32)(velocity * volLeft * 4095.999f);
+    sub->targetVolRight = (s32)(velocity * volRight * 4095.999f);
+    sub->bankId = reverbInfo->bankId;
+    sub->synthesisVolume = reverbInfo->synthesisVolume;
+
+    if (sub->reverbVol != reverbVol) {
+        sub->reverbVol = reverbVol;
+        sub->envMixerNeedsInit = 1;
+    } else if (sub->needsInit) {
+        sub->envMixerNeedsInit = 1;
+    } else {
+        sub->envMixerNeedsInit = 0;
+    }
+}
 
 typedef struct StereoFlags811105DC {
     /* 0x0 */ u8 unk0;
