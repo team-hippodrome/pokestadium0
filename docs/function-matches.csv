@@ -671,7 +671,7 @@ func_82300B6C,0x82300B6C,src/fragments/fragment005_15FCE0/battle_order_select.c,
 func_82300BD0,0x82300BD0,src/fragments/fragment005_15FCE0/battle_order_select.c,,asm,,asm
 func_823010E8,0x823010E8,src/fragments/fragment005_15FCE0/battle_order_select.c,,asm,,asm
 func_823012D0,0x823012D0,src/fragments/fragment005_15FCE0/battle_order_select.c,func_823012D0,hand,,c
-func_82301448,0x82301448,src/fragments/fragment005_15FCE0/battle_order_select.c,,asm,,asm
+func_82301448,0x82301448,src/fragments/fragment005_15FCE0/battle_order_select.c,func_82301448,s1,,c
 func_82301658,0x82301658,src/fragments/fragment005_15FCE0/battle_order_select.c,BattleMenu_DrawConfirmButtonLabel,hand,,c
 func_823016FC,0x823016FC,src/fragments/fragment005_15FCE0/battle_order_select.c,func_823016FC,s1,,c
 func_823017EC,0x823017EC,src/fragments/fragment005_15FCE0/battle_order_select.c,func_823017EC,hand,,c

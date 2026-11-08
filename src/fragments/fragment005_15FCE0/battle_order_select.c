@@ -354,11 +354,62 @@ void func_823012D0(s8* arg0) {
 }
 
 extern char** D_84803790;
-#ifdef NON_MATCHING
-/* TODO: decompile func_82301448; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment005_15FCE0/func_82301448.s")
-#endif
+extern char D_82302AE4[];
+extern char D_82302AFC[];
+void func_82301448(unk_D_848037A0* arg0) {
+    s32 sp3C;
+    s32 sp38;
+    s32 sp34;
+
+    if (arg0->unk_0002 == -1) {
+        // clang-format off
+        if (arg0->unk_0003 == 0) {
+            sp3C = 0xC8; sp38 = 0x81;
+        } else {
+            sp3C = 0x50; sp38 = 0xF0;
+        }
+        // clang-format on
+        arg0->unk_0007 = 0;
+        func_82300BD0((s8*)arg0);
+        BattleMenu_DrawBorderedPanel(sp3C, sp38, 0x15F, 0x53, arg0->unk_0001);
+        Font_BeginTranslucentTextRendering();
+        Font_SetActive(0x20, -4);
+        Font_EnableTwoCycleTexturing();
+        Gfx_SetPrimColor(0x1C, 0x74, 0xFF, 0xFF);
+        Font_Printf(sp3C + 0x14, sp38 + 0x19, D_82302AE4);
+        Font_DisableTwoCycleTexturing();
+        Font_EndTexturedTextRendering();
+    } else {
+        sp3C = arg0->unk_0012;
+        sp38 = arg0->unk_0014;
+
+        if (arg0->unk_0008 < 0x10) {
+            sp34 = arg0->unk_0008 * 0x10;
+        } else if (arg0->unk_0008 < 0x23) {
+            sp34 = 0xFF;
+        } else if (arg0->unk_0008 < 0x32) {
+            sp34 = (-arg0->unk_0008 * 0x10) + 0x320;
+        } else {
+            sp34 = 0;
+        }
+
+        arg0->unk_0008++;
+        if (arg0->unk_0008 >= 0x3D) {
+            arg0->unk_0008 = 0;
+        }
+
+        func_82300BD0((s8*)arg0);
+        func_8001AC7C(sp3C + 5, sp38 + 5, 0x1CD, 0x54, 0, 0, 0, 0x80);
+        Font_BeginTranslucentTextRendering();
+        Font_SetActive(0x20, 0);
+        Font_EnableTwoCycleTexturing();
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, sp34);
+        Gfx_SetPrimColor(0x1C, 0x74, 0xFF, sp34);
+        Font_Printf(sp3C + 0x39, sp38 + 0x25, D_82302AFC);
+        Font_DisableTwoCycleTexturing();
+        Font_EndTexturedTextRendering();
+    }
+}
 
 void BattleMenu_DrawConfirmButtonLabel(unk_D_848037A0* arg0) {
     s16 sp26;
@@ -382,7 +433,7 @@ void BattleMenu_DrawConfirmButtonLabel(unk_D_848037A0* arg0) {
 
 extern s16 D_82302B40;
 void func_823010E8(s8*);
-void func_82301448(s8*);
+void func_82301448(unk_D_848037A0*);
 void func_823016FC(unk_D_848037A0* arg0) {
     if ((D_82302B40 != 0) || (arg0->unk_0006 != 0)) {
         if ((D_82302B40 != 0) && (arg0->unk_0002 == -1)) {
@@ -403,7 +454,7 @@ void func_823016FC(unk_D_848037A0* arg0) {
                 break;
 
             case 3:
-                func_82301448((s8*)arg0);
+                func_82301448(arg0);
                 break;
         }
 
@@ -411,7 +462,7 @@ void func_823016FC(unk_D_848037A0* arg0) {
             arg0->unk_0006--;
         }
     } else if (arg0->unk_0005 == 3) {
-        func_82301448((s8*)arg0);
+        func_82301448(arg0);
     }
 }
 
