@@ -1123,11 +1123,65 @@ void func_820037D0(SlotMenu* arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment007_166580/func_820038B0.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82004020; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment007_166580/func_82004020.s")
-#endif
+typedef struct Str82009D28 { char s[7]; } Str82009D28;
+typedef struct Str82009D40 { char s[11]; } Str82009D40;
+typedef struct Mon82004020 { s32 data[0x14]; } Mon82004020;
+typedef struct Entry82004020 {
+    /* 0x00 */ s32 unk_00;
+    /* 0x04 */ Mon82004020 mon;
+} Entry82004020; // size = 0x54
+typedef struct Src82004020 {
+    /* 0x00 */ u8 unk_00;
+    /* 0x01 */ u8 unk_01;
+    /* 0x02 */ u8 unk_02;
+    /* 0x04 */ s32 unk_04;
+    /* 0x08 */ char name[0x10];
+    /* 0x18 */ s32 count;
+    /* 0x1C */ Entry82004020 entries[1];
+} Src82004020;
+extern u8 D_800AAF74[];
+extern char D_82009D28[];
+extern char D_82009D40[];
+char* func_8000A460(char*, const char*);
+void func_80058410(void*, void*, s32, s32);
+void func_82004020(u8* arg0, u8* arg1, s32 arg2, Src82004020* arg3) {
+    s32 i;
+    s32 n;
+    char* name;
+
+    if (arg2 == 5) {
+        arg0[0] = 2;
+        arg0[1] = 1;
+        M2C_FIELD(arg0, u8**, 4) = D_800AAF74;
+        name = (char*)(arg0 + 8);
+        *(Str82009D28*)name = *(Str82009D28*)D_82009D28;
+        M2C_FIELD(arg0, s32*, 0x18) = 0;
+    } else {
+        arg0[0] = 1;
+        arg0[1] = arg2 - 1;
+        M2C_FIELD(arg0, u8**, 4) = D_800AAF50 + (arg2 - 1) * 0x24;
+        name = (char*)(arg0 + 8);
+        if (arg3->unk_01 == 0x20 && arg2 == arg3->unk_02 + 1) {
+            func_8000A460(name, arg3->name);
+            M2C_FIELD(arg0, s32*, 0x18) = arg3->unk_04;
+        } else {
+            M2C_FIELD(arg0, s32*, 0x18) = 0;
+            func_8000A460(name, ((char**)&D_820090C0)[arg2]);
+        }
+    }
+    for (i = 0, n = 0; i < arg3->count; i++) {
+        if (arg3->entries[i].unk_00 == 0) {
+            ((Mon82004020*)(arg0 + 0x1C))[n++] = arg3->entries[i].mon;
+        }
+    }
+    arg0[2] = n;
+    M2C_FIELD(arg0, u8**, 0x1FC) = arg1;
+    M2C_FIELD(arg1, s16*, 0) = 0;
+    arg1[2] = arg0[2];
+    func_80058410(arg0 + 0x1C, arg1 + 0x28, 0x1E0, n);
+    *(Str82009D40*)(arg1 + 4) = *(Str82009D40*)D_82009D40;
+    func_8000A460((char*)(arg1 + 0x14), name);
+}
 
 void func_82004240(s8 *arg0) {
     M2C_FIELD(arg0, s8 *, 0) = 0;
