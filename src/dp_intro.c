@@ -169,11 +169,36 @@ void DisplayWorker_ProcessFrame(void) {
 
 #undef DW
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80001558; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80001558.s")
-#endif
+void func_80001558(void) {
+    s32 width;
+    s32 i;
+    s32 j;
+    u64* p;
+
+    if (M2C_FIELD(&D_800870D0, s16*, 0xA80) < 15) {
+        if (M2C_FIELD(&D_800870D0, u8*, 0xAA5) == 0) {
+            width = 80;
+        } else {
+            width = 320;
+        }
+        if (M2C_FIELD(&D_800870D0, struct unk_D_80068BB0**, 0xAB0) != NULL) {
+            p = (u64*)M2C_FIELD(&D_800870D0, struct unk_D_80068BB0**, 0xAB0)->img_p;
+            p += width * M2C_FIELD(&D_800870D0, s16*, 0xA80);
+            // clang-format off
+            for (i = 0; i < 16; i++) { for (j = 0; j < width; j++) { *(p++) = 0; } p += width * 14; }
+            // clang-format on
+        } else {
+            func_80052DC0(1, width);
+        }
+        M2C_FIELD(&D_800870D0, s16*, 0xA80)++;
+        func_8005C0A0();
+    }
+    func_80004920((u8*)&D_800870D0 + 0x9EC);
+    while (M2C_FIELD(&D_800870D0, s32*, 0xA04) > 0) {
+        func_8000494C((u8*)&D_800870D0 + 0x9EC);
+    }
+    func_80004920((u8*)&D_800870D0 + 0x9EC);
+}
 
 extern u8 D_80087B74[];
 extern u8 D_80087B64[];
