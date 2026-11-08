@@ -81,7 +81,7 @@ func_80036064,0x80036064,src/33FE0_4.c,func_80036064,s1,stadium1:src/33FE0.c,c
 func_8003642C,0x8003642C,src/33FE0_4.c,Model_WriteVtxBuffer,s1,stadium1:src/33FE0.c,c
 func_80036544,0x80036544,src/33FE0_4.c,Model_Draw,s1,stadium1:src/33FE0.c,c
 func_8003A6F0,0x8003A6F0,src/3B2F0.c,func_8003A6F0,hand,,c
-func_8003A710,0x8003A710,src/3B2F0.c,,asm,,asm
+func_8003A710,0x8003A710,src/3B2F0.c,func_8003A710,hand,,c
 func_8003A7AC,0x8003A7AC,src/3B2F0.c,func_8003A7AC,hand,,c
 func_8003A890,0x8003A890,src/3D140.c,,asm,,asm
 func_8003AE2C,0x8003AE2C,src/3D140.c,n_alEnvmixerParam,hand,,c
