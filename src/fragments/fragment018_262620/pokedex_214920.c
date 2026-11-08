@@ -65,7 +65,7 @@ void func_8A100020(s32 arg0, s32 arg1, s32 arg2) {
     gSPDisplayList(gDisplayListHead++, D_80060398);
 }
 
-s32 func_800209A4(s32, s8 *);                     /* extern */
+s32 func_800209A4();
 
 s32 func_8A1000C0(s8 *arg0) {
     s32 var_v1;
@@ -78,11 +78,56 @@ s32 func_8A1000C0(s8 *arg0) {
     return var_v1;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8A100104; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment018_262620/func_8A100104.s")
-#endif
+typedef struct unk_D_80064C60 {
+    /* 0x00 */ char* unk_00;
+    /* 0x04 */ char unk04[0x18];
+} unk_D_80064C60; // size = 0x1C
+extern unk_D_80064C60 D_80064C60[];
+extern Gfx D_80060270[];
+extern Color_RGBA8 D_8A1057D4;
+extern Color_RGBA8 D_8A1057D8;
+extern char D_8A12FC30[];
+void func_80029028(s32, s32, s32, s32, Color_RGBA8);
+void func_8002A0AC(s32, s32, s32, s32, Color_RGBA8);
+void func_80027F20(s32);
+s32 func_800231C8(s32, s32);
+void func_8001A944(s32, s32, const char*, ...);
+void func_8A100104(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s32* arg5) {
+    s32 sorted;
+    UNUSED s32 pad[2];
+    s32 idx;
+    s32 progress;
+
+    sorted = *arg5;
+    if (sorted != 0) {
+        idx = func_800209A4(arg3 + 1) - 1;
+    } else {
+        idx = arg3;
+    }
+    progress = func_800231C8(D_8A12FFB0, idx + 1);
+    gSPDisplayList(gDisplayListHead++, D_80060270);
+    func_80029028(arg0, arg1, 0x104, 1, D_8A1057D8);
+    func_80029028(arg0, arg1 + 0x23, 0x104, 1, D_8A1057D8);
+    func_80029028(arg0, arg1 + 1, 0x104, 0x22, D_8A1057D4);
+    if (arg4 & 0x10) {
+        func_8002A0AC(arg0 + 3, arg1 + 3, 0xFE, 0x1E, D_8A1057D4);
+    }
+    if (progress == 2) {
+        func_8A100020(arg0 + 0x58, arg1 + 8, 0);
+    }
+    if (progress == 3) {
+        func_8A100020(arg0 + 0x58, arg1 + 8, 1);
+    }
+    func_8001AB6C();
+    func_80027F20(arg4);
+    func_8001A384(8, 0);
+    func_8001A944(arg0 + 0x10, arg1 + 8, D_8A12FC30, idx + 1);
+    if (progress != 0) {
+        func_8001A384(0x10, 0);
+        func_8001A944(arg0 + 0x7C, arg1 + 6, D_80064C60[idx].unk_00);
+    }
+    func_8001ABBC();
+}
 
 /*
  * func_8A100318
@@ -107,7 +152,6 @@ M2C_UNK func_80027410(s8 *, M2C_UNK *, M2C_UNK, M2C_UNK, s32); /* extern */
 M2C_UNK func_8002EC24(s8 *, s8 *, s8 *, M2C_UNK, M2C_UNK *, s32, s32); /* extern */
 extern M2C_UNK D_80064C5C;
 extern M2C_UNK D_8A12FC38;
-extern M2C_UNK func_8A100104;
 
 void func_8A100318(void* arg0, s32 arg1, s32 arg2) {
     func_8002A8C4((s8 *)arg0, arg1, arg2, 0x110, 0x16E);
