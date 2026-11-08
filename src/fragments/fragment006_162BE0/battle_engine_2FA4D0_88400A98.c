@@ -302,7 +302,80 @@ void Save_InitializeBank3(void) {
     func_800418F0(1);
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment006_162BE0/func_88401B40.s")
+s32 func_80025214(void);
+void func_80025224(u8);
+void func_8002404C(s32, s32);
+void func_88401B40(void) {
+    s32 done = 0;
+    s32 sel = 0;
+    u8 flags = func_80025214();
+    u8 diff;
+
+    do {
+        if (M2C_FIELD(D_800603C0, u16*, 8) & 0x800) {
+            sel--;
+            if (sel < 0) {
+                sel = 3;
+            }
+            func_8003F6AC(1);
+        } else if (M2C_FIELD(D_800603C0, u16*, 8) & 0x400) {
+            sel++;
+            if (sel >= 4) {
+                sel = 0;
+            }
+            func_8003F6AC(1);
+        } else if (M2C_FIELD(D_800603C0, u16*, 8) & 0x8000) {
+            switch (sel) {
+                case 0:
+                    func_8003F6AC(2);
+                    flags ^= 1;
+                    break;
+                case 1:
+                    func_8003F6AC(2);
+                    flags ^= 2;
+                    break;
+                case 2:
+                    func_8003F6AC(2);
+                    if (func_88401970(0, sel, flags) != 0 && func_88401970(1, sel, flags) != 0) {
+                        flags = 0;
+                        Save_InitializeBank3();
+                    }
+                    break;
+                case 3:
+                    done = 1;
+                    func_8003F6AC(0x1D);
+                    break;
+            }
+        } else if (M2C_FIELD(D_800603C0, u16*, 8) & 0x4000) {
+            done = 2;
+            func_8003F6AC(3);
+        }
+        func_88400108(0);
+        func_884014B4(sel, flags);
+        func_80006780();
+    } while (done == 0);
+    if (done == 1) {
+        diff = func_80025214() ^ flags;
+        if (diff != 0) {
+            if (diff & 1) {
+                if (flags & 1) {
+                    func_8003BC9C(0);
+                } else {
+                    func_8003BC9C(1);
+                }
+            }
+            if (diff & 2) {
+                if (flags & 2) {
+                    func_800418F0(0);
+                } else {
+                    func_800418F0(1);
+                }
+            }
+            func_80025224(flags);
+            func_8002404C(0x14, 0);
+        }
+    }
+}
 
 s32 func_88401D54(void) {
     s32 var_s0;
