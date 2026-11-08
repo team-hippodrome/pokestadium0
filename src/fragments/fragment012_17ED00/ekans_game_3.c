@@ -899,11 +899,39 @@ check:
     return 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_821857CC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821857CC.s")
-#endif
+s32 func_821857CC(u8* arg0) {
+    s32 i;
+    s32 t;
+
+    for (i = 0; i < 4; i++) {
+        if (arg0[0x2B + i] == 0) {
+            return -1;
+        }
+        if (func_82184BC8((s8*)arg0, arg0[0x2B + i]) != 0) {
+            switch (arg0[0x2B + i]) {
+                case 0x0E:
+                case 0x4A:
+                case 0x60:
+                case 0x61:
+                case 0x68:
+                case 0x6A:
+                case 0x6B:
+                case 0x6E:
+                case 0x6F:
+                case 0x70:
+                case 0x85:
+                case 0x97:
+                case 0x9F:
+                    t = (D_8006B190[arg0[0x2B + i] - 1].unk01 - 10) & 7;
+                    if ((arg0 + 0x68)[t] < 0xD) {
+                        return i;
+                    }
+                    break;
+            }
+        }
+    }
+    return -1;
+}
 
 extern u8* D_821CF29C;
 s32 func_821858DC(u8 *arg0)
