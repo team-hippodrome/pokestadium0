@@ -3945,9 +3945,9 @@ func_8F200020,0x8F200020,src/fragments/fragment031_3553C0/8F200020.c,func_8F2000
 func_8F20010C,0x8F20010C,src/fragments/fragment031_3553C0/8F200020.c,func_8F20010C,m2c,m2c,c
 func_8F200160,0x8F200160,src/fragments/fragment031_3553C0/particle_data_library_257DE0.c,func_8F200160,hand,,c
 func_8F200244,0x8F200244,src/fragments/fragment031_3553C0/particle_data_library_257DE0.c,func_8F200244,m2c,m2c,c
-func_8F200290,0x8F200290,src/fragments/fragment031_3553C0/particle_data_library_257DE0.c,,asm,,asm
+func_8F200290,0x8F200290,src/fragments/fragment031_3553C0/particle_data_library_257DE0.c,func_8F200290,hand,,c
 func_8F2003AC,0x8F2003AC,src/fragments/fragment031_3553C0/particle_data_library_257DE0.c,func_8F2003AC,m2c,m2c,c
-func_8F2003EC,0x8F2003EC,src/fragments/fragment031_3553C0/particle_data_library_257DE0.c,,asm,,asm
+func_8F2003EC,0x8F2003EC,src/fragments/fragment031_3553C0/particle_data_library_257DE0.c,func_8F2003EC,hand,,c
 func_8F200504,0x8F200504,src/fragments/fragment031_3553C0/particle_data_library_257DE0.c,DisplayList_InitRotationMatrixSegment,s1,stadium1:src/fragments/particle_data_library/particle_data_library_257DE0.c,c
 func_8F500020,0x8F500020,src/fragments/fragment032_35C390.c,func_8F500020,m2c,m2c,c
 func_8F500088,0x8F500088,src/fragments/fragment032_35C390.c,func_8F500088,m2c,m2c,c

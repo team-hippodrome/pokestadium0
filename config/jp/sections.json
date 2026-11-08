@@ -447,6 +447,9 @@
   "src/fragments/fragment025_2B16A0/fatal_error_screen.c": {
     ".data": "0x816008EC"
   },
+  "src/fragments/fragment031_3553C0/particle_data_library_257DE0.c": {
+    ".bss": "0x8F212930"
+  },
   "src/fragments/fragment039_3C5200.c": {
     ".bss": "0x8E825728"
   },
