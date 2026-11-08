@@ -350,8 +350,130 @@ void func_8111235C(s8 *arg0, s32 arg1, M2C_UNK arg2) {
     M2C_FIELD(arg0, f32 *, 0x14) = 0.0f;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81112380; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81112380.s")
-#endif
+typedef struct EnvelopePoint81112380 {
+    /* 0x0 */ s16 delay;
+    /* 0x2 */ s16 arg;
+} EnvelopePoint81112380;
+
+typedef struct Adsr81112380 {
+    /* 0x00 */ u8 action;
+    /* 0x01 */ u8 state;
+    /* 0x02 */ s16 envIndex;
+    /* 0x04 */ s16 delay;
+    /* 0x08 */ f32 sustain;
+    /* 0x0C */ f32 velocity;
+    /* 0x10 */ f32 fadeOutVel;
+    /* 0x14 */ f32 current;
+    /* 0x18 */ f32 target;
+    /* 0x1C */ char pad1C[4];
+    /* 0x20 */ EnvelopePoint81112380* envelope;
+} Adsr81112380;
+
+extern f32 D_811858DC;
+
+/**
+ * Steps an ADSR envelope by one update and returns its level clamped to
+ * [0, 1]. Envelope points with a delay of 0, -1, -2 and -3 disable, hang,
+ * jump and restart; other points fade toward their target over their delay.
+ * Same structure as AudioEffects_UpdateAdsr in the Ocarina of Time audio
+ * library.
+ */
+f32 func_81112380(Adsr81112380* adsr) {
+    u8 action = adsr->action;
+    u8 state = adsr->state;
+
+    switch (state) {
+        case 0:
+            return 0.0f;
+
+        case 1:
+            if (action & 0x40) {
+                adsr->state = 5;
+                break;
+            }
+        case 2:
+            adsr->envIndex = 0;
+            adsr->state = 3;
+        retry:
+        case 3:
+            adsr->delay = adsr->envelope[adsr->envIndex].delay;
+            switch (adsr->delay) {
+                case 0:
+                    adsr->state = 0;
+                    break;
+                case -1:
+                    adsr->state = 5;
+                    break;
+                case -2:
+                    adsr->envIndex = adsr->envelope[adsr->envIndex].arg;
+                    goto retry;
+                case -3:
+                    adsr->state = 1;
+                    break;
+                default:
+                    adsr->delay *= D_811858DC;
+                    if (adsr->delay == 0) {
+                        adsr->delay = 1;
+                    }
+                    adsr->target = adsr->envelope[adsr->envIndex].arg / 32767.0f;
+                    adsr->target = adsr->target * adsr->target;
+                    adsr->velocity = (adsr->target - adsr->current) / adsr->delay;
+                    adsr->state = 4;
+                    adsr->envIndex++;
+                    break;
+            }
+            if (adsr->state != 4) {
+                break;
+            }
+        case 4:
+            adsr->current += adsr->velocity;
+            if (--adsr->delay <= 0) {
+                adsr->state = 3;
+            }
+        case 5:
+            break;
+
+        case 6:
+        case 7:
+            adsr->current -= adsr->fadeOutVel;
+            if (adsr->sustain != 0.0f && state == 6) {
+                if (adsr->current < adsr->sustain) {
+                    adsr->current = adsr->sustain;
+                    adsr->delay = 128;
+                    adsr->state = 8;
+                }
+                break;
+            }
+
+            if (adsr->current < 0.00001f) {
+                adsr->current = 0.0f;
+                adsr->state = 0;
+            }
+            break;
+
+        case 8:
+            adsr->delay--;
+            if (adsr->delay == 0) {
+                adsr->state = 7;
+            }
+            break;
+    }
+
+    if (action & 0x20) {
+        adsr->state = 6;
+        adsr->action = action & ~0x20;
+    }
+
+    if (action & 0x10) {
+        adsr->state = 7;
+        adsr->action = action & ~0x10;
+    }
+
+    if (adsr->current < 0.0f) {
+        return 0.0f;
+    }
+    if (adsr->current > 1.0f) {
+        return 1.0f;
+    }
+    return adsr->current;
+}

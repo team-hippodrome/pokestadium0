@@ -38,6 +38,9 @@
   "src/fragments/fragment000_80C00/81110210.c": {
     ".rodata": "0x811542D8"
   },
+  "src/fragments/fragment000_80C00/81111C20.c": {
+    ".rodata": "0x811542F0"
+  },
   "src/fragments/fragment000_80C00/battle_engine_309ED0.c": {
     ".rodata": {
       "address": "0x811542B4",
