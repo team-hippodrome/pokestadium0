@@ -115,7 +115,7 @@ func_8004BB60,0x8004BB60,src/4C760.c,func_8004BB60,hand,,c
 func_8004CB00,0x8004CB00,src/4D700.c,LeoCJCreateLeoManager,s1,,c
 func_8004CD40,0x8004CD40,src/4D940.c,LeoTestUnitReady,hand,,c
 func_8004FD20,0x8004FD20,src/50920.c,,asm,,asm
-func_80051110,0x80051110,src/51D10.c,,asm,,asm
+func_80051110,0x80051110,src/51D10.c,osGbpakCheckConnector,ultralib,libultra:io/gbpakcheckconnector.c,c
 func_80051C70,0x80051C70,src/libultra/io/contreaddata.c,osContStartReadData,ultralib,libultra:io/contreaddata.c,c
 func_80051CF4,0x80051CF4,src/libultra/io/contreaddata.c,osContGetReadData,ultralib,libultra:io/contreaddata.c,c
 func_80051D80,0x80051D80,src/libultra/io/contreaddata.c,,ultralib,libultra:src/io/contreaddata.c,c

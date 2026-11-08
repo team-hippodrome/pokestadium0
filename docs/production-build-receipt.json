@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5021,
-  "asm_owners": 423,
+  "c_owners": 5022,
+  "asm_owners": 422,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -600,10 +600,10 @@
     "tools/production.py": "c62476279cd553bc7b7d39d13253922dec0bf62fddc24e76cdd4b490e460c6c9",
     "tools/m2c_easiest.py": "edb0c9af61e5241c9e90f24152effdf636ceaa630812900d2840e2a67c5ff3f3",
     "tools/asm_prelude.inc": "e17e26652f832563c8ff17b0588b67d897a0faa4905442b151e5e67c85bfcff1",
-    "tools/cflags_overrides.json": "215dd5e5466812373e50d873163b266033612241f9daea73a764339f92b48b9f",
+    "tools/cflags_overrides.json": "4db5f6accdae1a19fde0662c4955e0d62cd18e39d25f6507ece04a540f27218c",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "cf7ab553a4f7e2119f194409fee03fde8087faa3090e7da946e353d93ea34ef6",
+    "docs/function-matches.csv": "bf7bcef5c91aa045e05a09b2524fec8881399fc2384c0a74b39ebb35a24b7e55",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -635,7 +635,7 @@
     "src/4DF00.c": "bdf775b739c4b784106b32a19dee0fab78c245346db019bb4a631c07970775a0",
     "src/4E980.c": "3620672c9d77d5312804c347f87c7d092fab20b1b68a2a8796ae647d146904f7",
     "src/50920.c": "69522e69f89f94df17d14df26f44ab02654a550946cf6778a4a75048ab2b16ff",
-    "src/51D10.c": "34851fc8d6b36fb8225fdfc3b29320a2f8cda7aa4fbcadf667e3d69daecbd75b",
+    "src/51D10.c": "caabbdbabec39dec618f03d3ac2fec4c04b05cf039b1b85bcc81bebe2bc77b2a",
     "src/52D00.c": "2de7280f33980f0261657a78edbaf7decdf779981016f1ebc6eb799d41c0f911",
     "src/52D80.c": "f038af5ab6af708148727a1d18c93853b92782c4b9572d704f6d788a9a01cf9c",
     "src/53080.c": "97f72b7aaad2fe2286dbbe3cea02fd44711f3ff6f4aa7d58aeafce9cb9f0a18c",
