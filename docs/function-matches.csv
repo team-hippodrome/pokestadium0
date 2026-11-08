@@ -681,7 +681,7 @@ func_823019AC,0x823019AC,src/fragments/fragment005_15FCE0/battle_order_select.c,
 func_82301A2C,0x82301A2C,src/fragments/fragment005_15FCE0/battle_order_select.c,func_82301A2C,hand,,c
 func_82301B2C,0x82301B2C,src/fragments/fragment005_15FCE0/battle_order_select.c,func_82301B2C,m2c,m2c,c
 func_82301BBC,0x82301BBC,src/fragments/fragment005_15FCE0/battle_order_select.c,BattleMenu_HandleOrderSelectPanel_PartyInput,hand,,c
-func_82301CCC,0x82301CCC,src/fragments/fragment005_15FCE0/battle_order_select.c,,asm,,asm
+func_82301CCC,0x82301CCC,src/fragments/fragment005_15FCE0/battle_order_select.c,BattleMenu_HandleOrderSelectPanel_ConfirmInput,hand,,c
 func_82301DDC,0x82301DDC,src/fragments/fragment005_15FCE0/battle_order_select.c,BattleMenu_HandleOrderSelectPanel_LevelCapNoticeInput,s1,stadium1:src/fragments/battle_order_select/battle_order_select.c,c
 func_82301E28,0x82301E28,src/fragments/fragment005_15FCE0/battle_order_select.c,BattleMenu_UpdateOrderSelectPanel,hand,,c
 func_82301EF4,0x82301EF4,src/fragments/fragment005_15FCE0/battle_order_select.c,BattleMenu_UpdateOrderSelect,hand,,c

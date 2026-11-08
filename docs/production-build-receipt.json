@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5101,
-  "asm_owners": 343,
+  "c_owners": 5102,
+  "asm_owners": 342,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -603,7 +603,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "f65f70c6b814f2f165cbc409d3adaa428ee42731d38157ce0047af45f623051f",
+    "docs/function-matches.csv": "581576e5c46cb96ea74c5258cdb68cedaf125156c7f51b76d95900bdc65b825b",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -686,7 +686,7 @@
     "src/fragments/fragment002_15E220.c": "7496a5e732094991be4c728bfa03f78b0bc122733e7dab23e2ad0463b40cda83",
     "src/fragments/fragment003_15F390/n64_logo.c": "ea090992fcd978895ff885d3c54db85cf6ae2f352df8c509a401bb94044987aa",
     "src/fragments/fragment004_15F8F0/gb_tower_team_prep.c": "07f82a30827ebf45541cfe97d8455c59d7252c0f4bf46ecf35c86b3812ab2ba3",
-    "src/fragments/fragment005_15FCE0/battle_order_select.c": "448361803ab9f9f89b4f7d8ba530ea8c1c4c863797ae72f4fe9c3336282360be",
+    "src/fragments/fragment005_15FCE0/battle_order_select.c": "a70295c0213b97f1b0ba41701ed3d35953bc6cb93d182514974cb268fe8ff973",
     "src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c": "866fdf2f1f6533ddef7230043cb2aa8bd7a852da891d841e41f2ab93c716d43d",
     "src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c": "9f2001371fb617126d94361238fd895c146c30b05be3d7f4e0a750e91c1e2401",
     "src/fragments/fragment007_166580.c": "b4104eec5af3666a9a731c7b42e57059d20a57816095d23766a54b6ed2206f3c",
@@ -793,7 +793,7 @@
     "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c": "9ef200586e877cb5feb20ec89ccaceace5d3c4466c913be5170dac1d91542fc0",
     "src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c": "d70cdaebea72170e55473b8fdf30de90f9b3ad5699b19851826aa8b9deeafb93",
     "src/fragments/fragment016_252E10/89100020.c": "c8ad089a22182e64178503a1a4b3871bf711f9191ffc02952e1b0679585f6661",
-    "src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c": "39cfd408432976f0df224c94903b6c63331da27316a82bdf5885053790186aea",
+    "src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c": "38b45357140b9eed1b7503a10ac70102c525ccfb6e802a629eb0c841ee4e2428",
     "src/fragments/fragment016_252E10/lab_pc_list_1E46B0.c": "ba8d4b5501f5daea30407668a46cb1021536cf2edb09db847e7544301d76b045",
     "src/fragments/fragment016_252E10/lab_pc_list_1E46B0_2.c": "d2b3316eb953509dc776192668fc1faa2f9e910c9baf9acc90664fc3678ee39f",
     "src/fragments/fragment017_261F00.c": "010db2d8b146be87183a9f92e3d7a094eb3e9b17ab5eda9b74b443022094159e",

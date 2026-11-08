@@ -703,11 +703,45 @@ void BattleMenu_HandleOrderSelectPanel_PartyInput(Controller* arg0, unk_D_848037
 }
 
 extern unk_D_848037A0 D_848037A0[4];
-#ifdef NON_MATCHING
-/* TODO: decompile func_82301CCC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment005_15FCE0/func_82301CCC.s")
-#endif
+void BattleMenu_HandleOrderSelectPanel_ConfirmInput(Controller* arg0, unk_D_848037A0* arg1) {
+    unk_D_848037A0* temp_v0_2;
+
+    if (BTN_IS_PRESSED(arg0, BTN_R)) {
+        arg1->unk_0009 = 1;
+        arg1->unk_0006 = 2;
+    }
+    if (arg0->unk_0A & 0x10) {
+        arg1->unk_0009 = 0;
+        arg1->unk_0006 = 2;
+    }
+
+    if (BTN_IS_PRESSED(arg0, BTN_DLEFT | BTN_DRIGHT)) {
+        arg1->unk_0006 = 2;
+        arg1->unk_000A ^= 1;
+        Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
+    } else if (BTN_IS_PRESSED(arg0, BTN_A)) {
+        if (arg1->unk_000A == 0) {
+            arg1->unk_0006 = 2;
+            arg1->unk_0005 = 3;
+            arg1->unk_0008 = 0;
+            Audio_PlaySoundEffectById(9);
+        } else {
+            arg1->unk_0006 = 2;
+            arg1->unk_0005 = 0;
+            arg1->unk_000B = 0;
+            arg1->unk_0009 = 0;
+            BattleMenu_ResetOrderSlotIcons(arg1->unk_0003);
+            Audio_PlaySoundEffectById(SFX_MENU_BACK);
+            if (arg1->unk_0002 != -1) {
+                temp_v0_2 = &D_82302B48[arg1->unk_0002];
+                temp_v0_2->unk_0005 = 0;
+                temp_v0_2->unk_000B = 0;
+                temp_v0_2->unk_0009 = 0;
+                temp_v0_2->unk_0006 = 2;
+            }
+        }
+    }
+}
 
 void BattleMenu_HandleOrderSelectPanel_LevelCapNoticeInput(Controller* arg0, unk_D_848037A0* arg1) {
     if (BTN_IS_PRESSED(arg0, BTN_A | BTN_B)) {
@@ -722,7 +756,6 @@ void BattleMenu_HandleOrderSelectPanel_LevelCapNoticeInput(Controller* arg0, unk
 
 extern Controller D_84816428;
 extern Controller D_82302BD8;
-void func_82301CCC(Controller* arg0, unk_D_848037A0* arg1);
 s32 BattleMenu_UpdateOrderSelectPanel(s32 arg0, unk_D_848037A0* arg1) {
     Controller* var_a0;
     s32 sp18 = 0;
@@ -740,7 +773,7 @@ s32 BattleMenu_UpdateOrderSelectPanel(s32 arg0, unk_D_848037A0* arg1) {
                 break;
 
             case 1:
-                func_82301CCC(var_a0, arg1);
+                BattleMenu_HandleOrderSelectPanel_ConfirmInput(var_a0, arg1);
                 break;
 
             case 2:

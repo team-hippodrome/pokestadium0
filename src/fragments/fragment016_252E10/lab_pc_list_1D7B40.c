@@ -113,6 +113,13 @@ void func_89104E94(s32 arg0) {
     func_8002DC04(arg0 + 0x2C);
 }
 
+typedef struct Entry891078E0 {
+    /* 0x00 */ u8 unk_00;
+    /* 0x01 */ u8 type;
+    /* 0x04 */ const char* name;
+    /* 0x08 */ s32 unk_08;
+} Entry891078E0;
+extern Entry891078E0 D_8006A9D4[];
 #ifdef NON_MATCHING
 /* TODO: decompile func_89104EB4; signature not recovered. */
 #else
@@ -1019,13 +1026,6 @@ void func_89107850(s8* arg0, s32* arg1) {
     *arg1 = count;
 }
 
-typedef struct Entry891078E0 {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 type;
-    /* 0x04 */ const char* name;
-    /* 0x08 */ s32 unk_08;
-} Entry891078E0;
-extern Entry891078E0 D_8006A9D4[];
 extern u8 D_8910AAC0[];
 extern u8 D_8910AAC8[];
 void func_891078E0(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4) {
