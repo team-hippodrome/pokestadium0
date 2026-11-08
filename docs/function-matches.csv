@@ -3754,7 +3754,7 @@ func_891059FC,0x891059FC,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,f
 func_89105A98,0x89105A98,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,BattleInfoWidget_ApplyEntrySelection,hand,,c
 func_89105AD4,0x89105AD4,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_89105AD4,hand,,c
 func_89105C54,0x89105C54,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,,asm,,asm
-func_89105E70,0x89105E70,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,,asm,,asm
+func_89105E70,0x89105E70,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_89105E70,hand,,c
 func_891060BC,0x891060BC,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_891060BC,hand,,c
 func_89106254,0x89106254,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_89106254,hand,,c
 func_89106384,0x89106384,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_89106384,hand,,c
