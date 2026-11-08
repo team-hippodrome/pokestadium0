@@ -440,7 +440,27 @@ void func_82131C64(s32 arg0) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82131D24.s")
+void func_8212254C(s8*, void*, Vec3f, s32, s32, f32, f32);
+void func_82122628(void*, Vec3f, s32, s32, f32, f32);
+void func_82131D24(void* arg0) {
+    Vec3f sp34;
+
+    sp34.y = 0.0f;
+    sp34.z = 0.0f;
+    sp34.x = -150.0f;
+    M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 0), u8 *, 1) = (u8) (M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 0), u8 *, 1) & 0xFFFE);
+    M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 4), u8 *, 1) = (u8) (M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 4), u8 *, 1) & 0xFFFE);
+    if (M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 4), f32 *, 0x64C) == 0) {
+        if (M2C_FIELD(D_8219A5A0, s32 *, 0x1C) == 4) {
+            M2C_FIELD(arg0, f32 *, 0x2C) = M2C_FIELD(D_8219A5A0, f32 *, 0x60);
+        }
+        func_8212254C(M2C_FIELD(&D_82199DE0, s8 **, 0), arg0, sp34, 0, 0, 0.0f, 0.0f);
+        func_82108A88(M2C_FIELD(&D_82199DE0, s8 **, 0), 2, 0);
+        func_821365B0(0xB, M2C_FIELD(&D_82199DE0, s8 **, 0), M2C_FIELD(&D_82199DE0, s8 **, 0), 0xFF, 0xFF);
+        func_82122628(arg0, sp34, M2C_FIELD(D_8219A5A0, s16 *, 0x58) = 0x71C, 0x4000, M2C_FIELD(D_8219A5A0, f32 *, 0x74) = 250.0f, 0.0f);
+        M2C_FIELD(D_8219A5A0, s32 *, 0x20) = (s32) (M2C_FIELD(D_8219A5A0, s32 *, 0x20) + 1);
+    }
+}
 
 void BattleScene_IntroPanCamera(CameraNode* arg0) {
     Vec3f sp2C;

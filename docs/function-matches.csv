@@ -2220,7 +2220,7 @@ func_82131880,0x82131880,src/fragments/fragment012_17ED00/battle_engine_3438B0_8
 func_821319FC,0x821319FC,src/fragments/fragment012_17ED00/battle_engine_3438B0_82130628.c,func_821319FC,m2c,m2c,c
 func_82131A3C,0x82131A3C,src/fragments/fragment012_17ED00/battle_engine_3438B0_82130628.c,,asm,,asm
 func_82131C64,0x82131C64,src/fragments/fragment012_17ED00/battle_engine_3438B0_82130628.c,func_82131C64,m2c,m2c,c
-func_82131D24,0x82131D24,src/fragments/fragment012_17ED00/battle_engine_3438B0_82130628.c,,asm,,asm
+func_82131D24,0x82131D24,src/fragments/fragment012_17ED00/battle_engine_3438B0_82130628.c,func_82131D24,hand,,c
 func_82131EC4,0x82131EC4,src/fragments/fragment012_17ED00/battle_engine_3438B0_82130628.c,BattleScene_IntroPanCamera,hand,,c
 func_8213201C,0x8213201C,src/fragments/fragment012_17ED00/battle_engine_3438B0_82130628.c,func_8213201C,m2c,m2c,c
 func_82132088,0x82132088,src/fragments/fragment012_17ED00/battle_engine_3438B0_82130628.c,func_82132088,hand,,c

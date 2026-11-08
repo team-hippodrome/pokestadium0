@@ -281,7 +281,11 @@ void func_8211D874(s16 arg0, s16 arg1) {
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211E414.s")
 
+#ifdef NON_MATCHING
+/* TODO: decompile func_8211E5F4; signature not recovered. */
+#else
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211E5F4.s")
+#endif
 
 s32 func_800564D4(char*, const char*, ...);
 extern s8* D_8219A5A0;
