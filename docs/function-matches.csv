@@ -3936,7 +3936,7 @@ func_816001A8,0x816001A8,src/fragments/fragment025_2B16A0/fatal_error_screen.c,F
 func_816002AC,0x816002AC,src/fragments/fragment025_2B16A0/fatal_error_screen.c,FatalError_DrawMessagePanel,hand,,c
 func_81600334,0x81600334,src/fragments/fragment025_2B16A0/fatal_error_screen.c,FatalError_DrawPortDiagram,hand,,c
 func_81600778,0x81600778,src/fragments/fragment025_2B16A0/fatal_error_screen.c,FatalError_DrawFrame,s1,stadium1:src/fragments/fatal_error_screen/fatal_error_screen.c,c
-func_816007C4,0x816007C4,src/fragments/fragment025_2B16A0/fatal_error_screen.c,func_816007C4,hand,,asm
+func_816007C4,0x816007C4,src/fragments/fragment025_2B16A0/fatal_error_screen.c,func_816007C4,hand,,c
 func_8F100020,0x8F100020,src/fragments/fragment030_326700.c,func_8F100020,hand,,c
 func_8F100118,0x8F100118,src/fragments/fragment030_326700.c,func_8F100118,m2c,m2c,c
 func_8F100154,0x8F100154,src/fragments/fragment030_326700.c,func_8F100154,hand,,c

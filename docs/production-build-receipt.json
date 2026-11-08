@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 4994,
-  "asm_owners": 450,
+  "c_owners": 4995,
+  "asm_owners": 449,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -597,13 +597,13 @@
   "headers_sha256": "ca0d57681ffc274908048a5057db725b4a95593d821a3f88ebd1b9459c4b1fcd",
   "matching_registry_sha256": "d8bcc14a2a0db281cf30dcb9ddbd94d59e1afe84c70b4c8c017ea27ce60a251c",
   "build_tools_sha256": {
-    "tools/production.py": "c672f1c73b64b7cf0e64da909081796174b2e57b49852e0862d45d0826c4c8ff",
+    "tools/production.py": "c62476279cd553bc7b7d39d13253922dec0bf62fddc24e76cdd4b490e460c6c9",
     "tools/m2c_easiest.py": "edb0c9af61e5241c9e90f24152effdf636ceaa630812900d2840e2a67c5ff3f3",
     "tools/asm_prelude.inc": "e17e26652f832563c8ff17b0588b67d897a0faa4905442b151e5e67c85bfcff1",
     "tools/cflags_overrides.json": "9d38732a8062f9f9d8de32c0e0b6ec71b1a0818cb0b4701f332126abe3441fc0",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "b4174b56c67cce8a050c3c3b651aab803a71c80e256ce0d500e041c144c188e3",
+    "docs/function-matches.csv": "8e784be12651666c7b073a47a375df3cf1d26818456cbf3d4f0393a87973026d",
     "linker_scripts/jp/symbol_addrs.txt": "8f6ea5aa7efb13c4586ed6b886a50ac2d66e6820a5c7706f1dda9205b38582fb"
   },
   "binutils": {
@@ -806,7 +806,7 @@
     "src/fragments/fragment022_2B1480.c": "b411841b7ef4508a6156ef9cadac3883ef0e1b3b9cf8434174930a787b6d07ab",
     "src/fragments/fragment023_2B1510.c": "eef05196fdf3bd0f4e1e37d3c37ed39b9b473861feb40c82274165f5a30ff1ca",
     "src/fragments/fragment024_2B15A0.c": "3cb817a0cb2476b35007d316f09b2fefc6828a59e6dc15e27b775a676a95a391",
-    "src/fragments/fragment025_2B16A0/fatal_error_screen.c": "cccdd8228ba4f4c11d05fec283949391b6e893c5a9269558ed0b4f4441451b3e",
+    "src/fragments/fragment025_2B16A0/fatal_error_screen.c": "4a0cc30c716cf2d2c6a8c200760b2e4e62ee017cc5a964e8334ff4ab9d6de7b4",
     "src/fragments/fragment030_326700.c": "06e937e0de6c26b005ff49e353ee98d76b76e8e36ae847a6562d3db4e45c6e4d",
     "src/fragments/fragment031_3553C0/8F200020.c": "1ff404b0ec536364936d6078d3cb1bc92f9a641ff067a135a5292685ad1ea15f",
     "src/fragments/fragment031_3553C0/particle_data_library_257DE0.c": "1d81015184d7381469245214e16725ea4585e1a471443b55a9bfd3ff7018c2c8",

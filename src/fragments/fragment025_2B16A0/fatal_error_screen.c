@@ -113,8 +113,6 @@ s32 FatalError_DrawFrame(u8 arg0) {
 }
 
 extern char** D_81100938;
-#ifdef NON_MATCHING
-// Matches the ROM, but uses rodata data that is not placed in this file yet.
 void func_816007C4(s32 arg0, s32 arg1) {
     StageContext* temp_s0;
 
@@ -134,6 +132,3 @@ void func_816007C4(s32 arg0, s32 arg1) {
         BgStage_WaitForCondition(FatalError_DrawFrame, 8, 8);
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment025_2B16A0/func_816007C4.s")
-#endif
