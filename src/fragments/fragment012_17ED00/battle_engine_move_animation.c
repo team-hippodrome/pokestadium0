@@ -191,11 +191,21 @@ void BattleScene_TickStartRowAnimRecord(ActivePokemon* active_pokemon) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82101DB0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82101DB0.s")
-#endif
+extern ModelDimensions D_8218934C[];
+
+void BattleScene_TickQueueRowEffectList3AtAnimEnd(ActivePokemon* active_pokemon) {
+    s32 row_index = active_pokemon->animationState;
+    s32 cue_index = sBattleSceneStateRowTable[row_index].unk_20;
+    MovePresentationCue* cue;
+
+    cue = &sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon)]->moveCues[cue_index];
+    if (D_8218934C[M2C_FIELD(active_pokemon, s16*, 0x1A)].restingHeight != 0.0f) {
+        sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
+    } else if ((active_pokemon->animationTimer == (cue->animationDuration + 1)) && (BattleAnim_IsAssetLoadBusy(active_pokemon) == 0)) {
+        BattleScene_QueueRowEffectList3(active_pokemon, sBattleSceneStateRowTable[row_index].mode);
+        sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
+    }
+}
 
 void func_82101EC0(s8 *arg0) {
     M2C_FIELD(arg0, s32 *, 0x620) = 0;
