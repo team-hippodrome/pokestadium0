@@ -570,8 +570,80 @@ s32 func_89006CDC(s8* arg0) {
     return 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89006D60; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_89006D60.s")
-#endif
+void func_8002CA34(s8* arg0, s32 arg1, s32 arg2);
+void func_8002CC44(s8* arg0);
+s32 func_8002CD7C(s8* arg0);
+void func_800407B0(s32, s32, s32);
+s32 func_8900609C(s8* arg0);
+void func_89007374(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, u16* arg6);
+s32 func_89007CD8(s8* arg0);
+extern u8 D_89018DBC[];
+
+s32 func_89006D60(s8* arg0) {
+    s32 ret = 0;
+    s8* sub;
+    u8* mon;
+    s32 res;
+
+    switch (M2C_FIELD(arg0, s32*, 0)) {
+        case 1:
+            res = func_8900609C(arg0 + 0x10);
+            if (res == -1) {
+                if (func_89006CDC(arg0) != 0) {
+                    M2C_FIELD(arg0, s32*, 0) = 2;
+                    func_8002CA34(arg0 + 0x408, 0xCA, 0xAD);
+                } else {
+                    ret = 1;
+                }
+            } else if (res == 2) {
+                mon = M2C_FIELD(arg0, s32*, 0x2AC) * 0x50 + M2C_FIELD(arg0, u8***, 0x2A4)[0];
+                M2C_FIELD(arg0, s32*, 0) = 3;
+                func_89007374(arg0 + 0x46C, 0x69, 0x7D, (s32)mon, 0,
+                              D_800603C0, M2C_FIELD(arg0, u16**, 8));
+            } else if (res == 3) {
+                mon = M2C_FIELD(arg0, s32*, 0x2AC) * 0x50 + M2C_FIELD(arg0, u8***, 0x2A4)[0];
+                M2C_FIELD(arg0, s32*, 0) = 4;
+                func_89007374(arg0 + 0x46C, 0x69, 0x7D, (s32)mon,
+                              (s32)D_89018DBC, D_800603C0, M2C_FIELD(arg0, u16**, 8));
+                M2C_FIELD(arg0, s32*, 0x514) = 1;
+            }
+            break;
+        case 2:
+            sub = arg0 + 0x408;
+            res = func_8002CD7C(sub);
+            if (res == -1) {
+                M2C_FIELD(arg0, s32*, 0) = 1;
+            } else if (res > 0) {
+                ret = 1;
+                M2C_FIELD(arg0, s32*, 0x38) = 7;
+                switch (res) {
+                    case 2:
+                        break;
+                    case 1:
+                        func_8002CC44(sub);
+                        func_89006B2C((Save89006B2C*)arg0);
+                        break;
+                }
+            }
+            break;
+        case 3:
+            res = func_8002BC14(D_800603C0);
+            if ((res == -1) || (res == 1)) {
+                func_8003F6AC(3);
+                M2C_FIELD(arg0, s32*, 0) = 1;
+            }
+            break;
+        case 4:
+            res = func_89007CD8(arg0 + 0x46C);
+            if (res == -1) {
+                func_8003F6AC(3);
+                M2C_FIELD(arg0, s32*, 0) = 1;
+            } else if (res == 1) {
+                func_800407B0(0x57, 0, 0);
+                func_89005FD8(arg0 + 0x10);
+                M2C_FIELD(arg0, s32*, 0) = 1;
+            }
+            break;
+    }
+    return ret;
+}
