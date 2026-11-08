@@ -567,7 +567,7 @@ extern s32 D_811845F4;
 typedef struct SampleCacheEntry8110BA8C {
     /* 0x00 */ s8 inUse;
     /* 0x01 */ s8 origMedium;
-    /* 0x02 */ u8 sampleBankId;
+    /* 0x02 */ s8 sampleBankId;
     /* 0x04 */ s32 sampleAddr;
     /* 0x08 */ u8* allocatedAddr;
     /* 0x0C */ s32 unk_0C;
@@ -704,18 +704,25 @@ SampleCacheEntry8110BA8C* func_8110BA8C(u32 size) {
     return entry;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110BD20; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110BD20.s")
-#endif
-
 /* One-byte flags field; only the 2-bit value at bits 2-3 is touched by func_8110BEE4. */
 typedef struct {
     u8 pad0 : 4;
     u8 field : 2;
     u8 pad1 : 2;
 } Flags2Bit;
+
+typedef struct Entry8110D4E0 { u8 unk00; u8 unk01; u8 unk02; u8 unk03; char unk04[8]; } Entry8110D4E0;
+extern Entry8110D4E0* D_811858B0;
+extern u8* D_811858A0;
+s32 func_8110CA2C(s32 arg0);
+u8* func_81110CA8(s32, s32);
+u8* func_81110D6C(s32, s32);
+
+#ifdef NON_MATCHING
+/* TODO: decompile func_8110BD20; signature not recovered. */
+#else
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110BD20.s")
+#endif
 
 /*
  * func_8110BEE4
@@ -752,12 +759,6 @@ s8 *func_8110BF28(s32 arg0)
   return temp_v0;
 }
 
-typedef struct Entry8110D4E0 { u8 unk00; u8 unk01; u8 unk02; u8 unk03; char unk04[8]; } Entry8110D4E0;
-extern Entry8110D4E0* D_811858B0;
-extern u8* D_811858A0;
-s32 func_8110CA2C(s32 arg0);
-u8* func_81110CA8(s32, s32);
-u8* func_81110D6C(s32, s32);
 
 void func_8110BFB0(void) {
     UNUSED s32 pad2[1];
@@ -811,7 +812,15 @@ void func_8110BFB0(void) {
     }
 }
 
-typedef struct Timer8110C1C0 { char pad0[0xD]; u8 slot; u8 count; char padF; } Timer8110C1C0;
+typedef struct Timer8110C1C0 {
+    /* 0x00 */ u8* ramAddr;
+    /* 0x04 */ u32 devAddr;
+    /* 0x08 */ u16 sizeUnused;
+    /* 0x0A */ u16 size;
+    /* 0x0C */ u8 unused;
+    /* 0x0D */ u8 slot;
+    /* 0x0E */ u8 count;
+} Timer8110C1C0; // size = 0x10
 extern Timer8110C1C0* D_81185688;
 extern u32 D_8118568C;
 extern u32 D_81185690;
@@ -844,11 +853,83 @@ void func_8110C1C0(void) {
     D_81185694 = 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110C2D8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110C2D8.s")
-#endif
+extern u8 D_81185898;
+extern u8 D_81185899;
+extern u8 D_81185638[];
+extern u32 D_811858F4;
+extern u8 D_81185618[];
+extern s8 D_81137ACC[];
+s32 func_8110DBA0();
+
+void* func_8110C2D8(u32 devAddr, u32 size, s32 arg2, u8* dmaIndexRef, s32 medium) {
+    UNUSED s32 pad1;
+    Timer8110C1C0* dma;
+    s32 hasDma = FALSE;
+    u32 dmaDevAddr;
+    UNUSED u32 pad2;
+    u32 dmaIndex;
+    u32 transfer;
+    s32 bufferPos;
+    u32 i;
+
+    if (arg2 != 0 || *dmaIndexRef >= D_81185690) {
+        for (i = D_81185690; i < D_8118568C; i++) {
+            dma = &D_81185688[i];
+            bufferPos = devAddr - dma->devAddr;
+            if (0 <= bufferPos && (u32)bufferPos <= (dma->size - size)) {
+                if (dma->count == 0 && D_81185899 != D_8118589B) {
+                    if (dma->slot != D_81185899) {
+                        D_81185798[dma->slot] = D_81185798[D_81185899];
+                        D_81185688[D_81185798[D_81185899]].slot = dma->slot;
+                    }
+                    D_81185899++;
+                }
+                dma->count = 32;
+                *dmaIndexRef = (u8)i;
+                return (dma->ramAddr + devAddr) - dma->devAddr;
+            }
+        }
+
+        if (D_81185899 != D_8118589B && arg2 != 0) {
+            dmaIndex = D_81185798[D_81185899];
+            D_81185899++;
+            dma = D_81185688 + dmaIndex;
+            hasDma = TRUE;
+        }
+    } else {
+        dma = D_81185688 + *dmaIndexRef;
+        bufferPos = devAddr - dma->devAddr;
+        if (0 <= bufferPos && (u32)bufferPos <= dma->size - size) {
+            if (dma->count == 0) {
+                if (dma->slot != D_81185898) {
+                    D_81185698[dma->slot] = D_81185698[D_81185898];
+                    D_81185688[D_81185698[D_81185898]].slot = dma->slot;
+                }
+                D_81185898++;
+            }
+            dma->count = 2;
+            return (dma->ramAddr + devAddr) - dma->devAddr;
+        }
+    }
+
+    if (!hasDma) {
+        if (D_81185898 == D_8118589A) {
+            return NULL;
+        }
+        dmaIndex = D_81185698[D_81185898++];
+        dma = D_81185688 + dmaIndex;
+        hasDma = TRUE;
+    }
+
+    transfer = dma->size;
+    dmaDevAddr = devAddr & ~0xF;
+    dma->count = 3;
+    dma->devAddr = dmaDevAddr;
+    dma->sizeUnused = transfer;
+    func_8110DBA0(&D_81185638[D_811858F4++ * 0x18], 0, 0, dmaDevAddr, dma->ramAddr, transfer, D_81185618, medium, D_81137ACC);
+    *dmaIndexRef = dmaIndex;
+    return (devAddr - dmaDevAddr) + dma->ramAddr;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8110C618; signature not recovered. */
