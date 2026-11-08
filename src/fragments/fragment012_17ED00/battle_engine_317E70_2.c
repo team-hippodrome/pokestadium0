@@ -619,15 +619,48 @@ void Particle_DispatchDraw(Particle* arg0, CameraNode* arg1) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8213AA78; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8213AA78.s")
-#endif
+void func_8213AA78(Particle* arg0, ActivePokemon* arg1, BattleAnimEffectSlot* arg2, s16 arg3) {
+    if ((u32)arg0 == -1) {
+        return;
+    }
+
+    if (1) {}
+    if (1) {}
+    if (1) {}
+    if (1) {}
+    if (1) {}
+
+    while (arg0 != NULL) {
+        arg0->unk_10 = arg1;
+        arg0->unk_AC = arg3++;
+        arg0->unk_08 = arg2->unk_00;
+        arg0->unk_0C = arg2->unk_04;
+        arg0->unk_CD = arg2->unk_19;
+        arg0->unk_CE = arg2->unk_1A;
+        arg0->unk_AA = arg2->unk_12;
+        arg0->unk_CF = arg2->unk_1B;
+        arg0->unk_CA = arg2->unk_17;
+        arg0->unk_CC = arg2->unk_16;
+        arg0->unk_CB = arg2->unk_18;
+
+        if (arg1 != NULL) {
+            BattleAnim_InitializeParticleAnchor(arg0);
+            BattleScene_GetParticipantModelRotation(arg0->unk_10, &arg0->unk_94);
+        }
+
+        if ((arg2->unk_16 & 0xFFFFu) == 0x12) {
+            arg0->unk_A6 = arg2->unk_10 * arg3;
+        } else {
+            arg0->unk_A6 = arg2->unk_10;
+        }
+
+        arg0 = arg0->next;
+    }
+}
 
 s32 func_82139C38();                                /* extern */
 s32 func_82139C58(s32);                             /* extern */
-M2C_UNK func_8213AA78(s32, s32, s8 *, s16);       /* extern */
+void func_8213AA78(Particle* arg0, ActivePokemon* arg1, BattleAnimEffectSlot* arg2, s16 arg3);
 
 void func_8213AB88(s8 *arg0) {
     s16 temp_s2;
@@ -640,12 +673,12 @@ void func_8213AB88(s8 *arg0) {
         var_s0 = 0;
         if (temp_s2 > 0) {
             do {
-                func_8213AA78(func_82139C38(), temp_s3, arg0, var_s0);
+                func_8213AA78((Particle*)func_82139C38(), (ActivePokemon*)temp_s3, (BattleAnimEffectSlot*)arg0, var_s0);
                 var_s0 += 1;
             } while (var_s0 < temp_s2);
         }
     } else {
-        func_8213AA78(func_82139C58(temp_s2 & 0xFF), temp_s3, arg0, 0);
+        func_8213AA78((Particle*)func_82139C58(temp_s2 & 0xFF), (ActivePokemon*)temp_s3, (BattleAnimEffectSlot*)arg0, 0);
     }
 }
 
@@ -663,12 +696,12 @@ void func_8213AC3C(s8* arg0) {
         for (i = 0; i < count; i++) {
             temp_v0 = func_82139C38();
             M2C_FIELD(arg0, s16 *, 0x10) = step;
-            func_8213AA78(temp_v0, temp_s4, arg0, i);
+            func_8213AA78((Particle*)temp_v0, (ActivePokemon*)temp_s4, (BattleAnimEffectSlot*)arg0, i);
         }
     } else {
         temp_v0 = func_82139C58(count & 0xFF);
         M2C_FIELD(arg0, s16 *, 0x10) = step;
-        func_8213AA78(temp_v0, temp_s4, arg0, 0);
+        func_8213AA78((Particle*)temp_v0, (ActivePokemon*)temp_s4, (BattleAnimEffectSlot*)arg0, 0);
     }
 }
 

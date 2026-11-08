@@ -1297,7 +1297,7 @@ func_8213A784,0x8213A784,src/fragments/fragment012_17ED00/battle_engine_317E70_2
 func_8213A858,0x8213A858,src/fragments/fragment012_17ED00/battle_engine_317E70_2.c,func_8213A858,m2c,m2c,c
 func_8213A904,0x8213A904,src/fragments/fragment012_17ED00/battle_engine_317E70_2.c,func_8213A904,hand,,c
 func_8213A9C4,0x8213A9C4,src/fragments/fragment012_17ED00/battle_engine_317E70_2.c,Particle_DispatchDraw,hand,,c
-func_8213AA78,0x8213AA78,src/fragments/fragment012_17ED00/battle_engine_317E70_2.c,,asm,,asm
+func_8213AA78,0x8213AA78,src/fragments/fragment012_17ED00/battle_engine_317E70_2.c,func_8213AA78,s1,,c
 func_8213AB88,0x8213AB88,src/fragments/fragment012_17ED00/battle_engine_317E70_2.c,func_8213AB88,m2c,m2c,c
 func_8213AC3C,0x8213AC3C,src/fragments/fragment012_17ED00/battle_engine_317E70_2.c,func_8213AC3C,hand,,c
 func_8213AD38,0x8213AD38,src/fragments/fragment012_17ED00/battle_engine_317E70_2.c,BattleAnim_SpawnSingleParticle,s1,stadium1:src/fragments/battle_engine/battle_engine_317E70.c,c
