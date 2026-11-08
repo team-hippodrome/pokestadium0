@@ -276,11 +276,19 @@ void func_81112BF0(s8* arg0, u16 mask) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81112CE8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81112CE8.s")
-#endif
+void func_81112B84(Item8111539C*);
+
+void func_81112CE8(u8* seqPlayer, s32 channelBits) {
+    Item8111539C* channel;
+    s32 i;
+
+    for (i = 0; i < 16; i++) {
+        channel = M2C_FIELD(seqPlayer, Item8111539C**, 0x34 + i * 4);
+        if (((u32)channel != (u32)&D_81184850) == 1) {
+            func_81112B84(channel);
+        }
+    }
+}
 
 void func_81112D68(Particle2D68** arg0, u8 arg1, s32 arg2) {
     Particle2D68* p = arg0[arg1 + 13];
