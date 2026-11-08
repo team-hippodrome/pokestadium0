@@ -99,11 +99,63 @@ f32 Strip400_GetTailFadeRatio(void) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821742F0.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_821748CC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821748CC.s")
-#endif
+extern Gfx D_82192AB0[];
+Gfx* func_821748CC(Gfx* arg0) {
+    Vtx* vtx;
+    s32 i;
+    Strip400Node* var_a0;
+    Strip400State* ptr = &sTrailState;
+
+    if (ptr->unk_28 < 2) {
+        return arg0;
+    }
+    ptr->unk_2C = Gfx_AllocDisplayList(ptr->unk_28 * 2 * sizeof(Vtx));
+    vtx = ptr->unk_2C;
+    var_a0 = &sTrailPoints[0];
+
+    for (i = 0; i < ptr->unk_28; i++) {
+        vtx->v.ob[0] = var_a0->unk_00;
+        if (var_a0->unk_04 > 0.0) {
+            vtx->v.ob[1] = var_a0->unk_04;
+        } else {
+            vtx->v.ob[1] = 0;
+        }
+        vtx->v.ob[2] = var_a0->unk_08;
+        vtx->v.cn[0] = ptr->unk_30.r;
+        vtx->v.cn[1] = ptr->unk_30.g;
+        vtx->v.cn[2] = ptr->unk_30.b;
+        vtx->v.cn[3] = ptr->unk_2A;
+
+        vtx++;
+        var_a0++;
+
+        vtx->v.ob[0] = var_a0->unk_00;
+        if (var_a0->unk_04 > 0.0) {
+            vtx->v.ob[1] = var_a0->unk_04;
+        } else {
+            vtx->v.ob[1] = 0;
+        }
+        vtx->v.ob[2] = var_a0->unk_08;
+        vtx->v.cn[0] = ptr->unk_33.r;
+        vtx->v.cn[1] = ptr->unk_33.g;
+        vtx->v.cn[2] = ptr->unk_33.b;
+        vtx->v.cn[3] = (u8)ptr->unk_2A / 2;
+
+        vtx++;
+        var_a0++;
+    }
+
+    gSPDisplayList(arg0++, D_82192AB0);
+
+    vtx = ptr->unk_2C;
+    for (i = 0; i < ptr->unk_28 - 1; i++) {
+        gSPVertex(arg0++, vtx, 4, 0);
+        gSP2Triangles(arg0++, 0, 2, 1, 0, 2, 3, 1, 0);
+        vtx += 2;
+    }
+
+    return arg0;
+}
 
 extern Radial20 D_821A3490[10];
 void Radial20_ResetPool(void) {
