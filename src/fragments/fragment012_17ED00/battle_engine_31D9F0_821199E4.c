@@ -260,7 +260,37 @@ void BattleScene_DrawStripWipeIfActive(void) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211D3D8.s")
+extern s32 D_8218B13C[];
+extern u8 D_8219A730;
+extern u8 D_8219A731;
+extern s8 D_8219A732;
+extern u8 D_0300A500[];
+extern u8 D_0300A7A0[];
+extern Gfx D_80060398[];
+void func_8211D3D8(s16 arg0, s16 arg1) {
+    func_8001AC7C(arg0, arg1, 0x64, 0x7D, 0, 0, 0, 0x3C);
+    func_8001AB6C();
+    if (D_8219A730 == 0) {
+        func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF);
+    } else {
+        func_8001AA9C(0xFF, 0xFF, 0xFF, 0x78);
+    }
+    func_8001A384(1, 0);
+    func_8001A944(arg0 + 0x18, arg1 + 4, D_8218B13C[0]);
+    func_8001A944(arg0 + 0x18, arg1 + 0x10, D_8218B13C[1]);
+    func_8001A944(arg0 + 0x18, arg1 + 0x1C, D_8218B13C[2]);
+    func_8001A944(arg0 + 0x18, arg1 + 0x28, D_8218B13C[3]);
+    func_8001A944(arg0 + 0x18, arg1 + 0x34, D_8218B13C[4]);
+    func_8001A944(arg0 + 0x18, arg1 + 0x40, D_8218B13C[5]);
+    func_8001A944(arg0 + 0x18, arg1 + 0x4C, D_8218B13C[6]);
+    func_8001A944(arg0 + 0x18, arg1 + 0x58, D_8218B13C[7]);
+    func_8001AA9C(0xFF, 0xFF, 0, 0xFF);
+    func_8001A944(arg0 + 0x18, arg1 + 0x69, D_8218B13C[D_8219A731]);
+    func_8001ABBC();
+    gSPDisplayList(gDisplayListHead++, D_80060308);
+    Gfx_DrawTextureRgba16Ia8(arg0 + 2, arg1 + D_8219A732 * 0xC + 3, 0x18, 0xE, D_0300A500, D_0300A7A0, 0x18, 0x100000);
+    gSPDisplayList(gDisplayListHead++, D_80060398);
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211D5F4.s")
 
