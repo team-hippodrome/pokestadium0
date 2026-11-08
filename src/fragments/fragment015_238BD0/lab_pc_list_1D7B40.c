@@ -301,11 +301,39 @@ void func_89005958(s32 arg0, s32 arg1, s32 arg2) {
     func_8001ABBC();
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_890059D0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_890059D0.s")
-#endif
+extern s32 D_8900A7EC[];
+extern s32 D_8900A804[];
+extern s32 D_8900A81C[];
+extern s32 D_8900A834[];
+void func_890019C8(s32, s32, s32, s32);
+void func_890056A4(s32, s32, s32);
+
+void func_890059D0(s32* arg0) {
+    s32 idx = arg0[0x170 / 4];
+    s32** list;
+
+    switch (arg0[0]) {
+        case 1:
+            func_890019C8(arg0[0x30 / 4] + 0x58, arg0[0x34 / 4] + 0x1A, D_8900A7EC[idx], D_8900A834[idx]);
+            break;
+        case 2:
+            func_89005958(arg0[0x30 / 4], arg0[0x34 / 4], D_8900A804[idx]);
+            break;
+        case 3:
+            func_89005958(arg0[0x30 / 4], arg0[0x34 / 4], D_8900A81C[idx]);
+            break;
+        case 4:
+        case 6:
+        case 7:
+            if (arg0[0] == 7) {
+                list = (s32**)&arg0[0x31C / 4];
+            } else {
+                list = (s32**)&arg0[0x294 / 4];
+            }
+            func_890056A4(arg0[0x30 / 4], arg0[0x34 / 4], ((s32*)list)[2] * 0x50 + *list[0]);
+            break;
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_89005AE0; signature not recovered. */
