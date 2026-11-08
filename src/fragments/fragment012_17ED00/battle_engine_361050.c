@@ -411,11 +411,27 @@ void func_8210F2F4(s8 *arg0)
  if (1) { }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8210F31C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210F31C.s")
-#endif
+extern ActivePokemon* D_8219A540;
+void func_80043860(s32);
+
+// Integer-step version of Stadium 1's BattleScene_AnimateDisplayedHpToRuntime.
+s32 func_8210F31C(ActivePokemon* arg0) {
+    BattleMonRuntime* rt = &arg0->state.runtime;
+    BattleMon* mon = &arg0->teamRoster->pokemonPicked[arg0->state.rosterIndex];
+
+    if (mon->hp == rt->unk_0C) {
+        return 1;
+    }
+    mon->hp = Math_StepToS32(mon->hp, rt->unk_0C, 1, 1);
+    if (mon->hp == rt->unk_0C) {
+        if (arg0->displayObject.objectType == 0x98) {
+            return 1;
+        }
+        func_80043860(BattleScene_GetParticipantSideIndex(D_8219A540));
+        return 1;
+    }
+    return 0;
+}
 
 void BattleScene_IntroInitNop(void) {
 }
