@@ -5202,7 +5202,7 @@ func_80021720,0x80021720,src/pokemon_stats_2.c,GbSave_CheckLocationFlag,hand,,c
 func_8002178C,0x8002178C,src/pokemon_stats_2.c,func_8002178C,hand,,c
 func_80021894,0x80021894,src/pokemon_stats_2.c,GbSave_EnsureMainDataLoaded,hand,,c
 func_80021910,0x80021910,src/pokemon_stats_2.c,func_80021910,hand,,c
-func_80021A8C,0x80021A8C,src/pokemon_stats_2.c,,asm,,asm
+func_80021A8C,0x80021A8C,src/pokemon_stats_2.c,func_80021A8C,hand,,c
 func_80021B30,0x80021B30,src/pokemon_stats_2.c,func_80021B30,hand,,c
 func_80021C6C,0x80021C6C,src/pokemon_stats_2.c,func_80021C6C,hand,,c
 func_80021CF4,0x80021CF4,src/pokemon_stats_2.c,func_80021CF4,hand,,c

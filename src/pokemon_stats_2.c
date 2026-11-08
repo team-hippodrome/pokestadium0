@@ -449,11 +449,28 @@ s32 func_80021910(s32 arg0) {
     return sp2C;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80021A8C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80021A8C.s")
-#endif
+s32 func_80021A8C(s32 arg0) {
+    UNUSED s32 pad;
+    u8 sp2B;
+    s32 temp_s1;
+
+    if (GbTower_ProbePak(arg0, &sp2B, sGbSavePorts[arg0].unk_18) == 0) {
+        Game_ShutdownAndLoadFragment(arg0, 2);
+    }
+
+    temp_s1 = GbSave_EnsureMainDataLoaded(arg0);
+    temp_s1 &= func_80021910(arg0);
+
+    if (GbTower_CheckPakRemoved(arg0, sp2B) == 0) {
+        Game_ShutdownAndLoadFragment(arg0, 2);
+    }
+
+    if (temp_s1 != 0) {
+        GbSave_RebuildSeenBitfield(arg0);
+    }
+
+    return temp_s1;
+}
 
 extern GbSavePort D_800AC910[4];
 /*
