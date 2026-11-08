@@ -5,6 +5,12 @@
     "mips": "-mips2",
     "opt": "-O2"
   },
+  "src/4D700.c": {
+    "extra": [],
+    "ido": "5.3",
+    "mips": "-mips2",
+    "opt": "-O2"
+  },
   "src/5D5B0.c": {
     "extra": [],
     "ido": "7.1",
