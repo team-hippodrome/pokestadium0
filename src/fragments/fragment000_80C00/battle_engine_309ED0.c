@@ -35,11 +35,133 @@ void func_8110DCA0(Particle* arg0, s32 arg1) {
     func_8110D5BC(arg0, arg1, &sp1C);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110DCC0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110DCC0.s")
-#endif
+typedef struct AudioTableEntry8110DCC0 {
+    /* 0x00 */ s32 romAddr;
+    /* 0x04 */ u32 size;
+    /* 0x08 */ s8 medium;
+    /* 0x09 */ s8 cachePolicy;
+    /* 0x0A */ s16 shortData1;
+    /* 0x0C */ s16 shortData2;
+    /* 0x0E */ s16 shortData3;
+} AudioTableEntry8110DCC0; // size = 0x10
+
+typedef struct AudioTable8110DCC0 {
+    /* 0x00 */ s16 numEntries;
+    /* 0x02 */ s16 unkMediumParam;
+    /* 0x04 */ s32 romAddr;
+    /* 0x08 */ char pad[0x8];
+    /* 0x10 */ AudioTableEntry8110DCC0 entries[1];
+} AudioTable8110DCC0;
+
+extern u8 D_81184654[];
+extern u8 D_81184655[];
+extern u8 D_81184656[];
+s32 func_8110D7EC(s32, s32);
+struct Table8110D840* func_8110D840(s32);
+s32 func_8110B8D8(s32, s32, s32);
+s32 func_81109C0C(s32, s32, s32, s32);
+s32 func_8004CFB0(OSMesgQueue*, OSMesg, s32);
+void func_8110CAE0(s32, s32);
+void func_8110CB10(s32, s32);
+void func_8110CB40(s32, s32);
+struct Entry8110EABC* func_8110E9A8(s32, s32, u32, s32, s32, OSMesgQueue*, u32);
+
+/**
+ * Starts an asynchronous load of entry id of audio table tableType (0 sequences,
+ * 1 sound fonts, 2 sample banks). Returns 0 if a load of it is already in
+ * progress or no memory could be allocated. If the entry is already cached the
+ * cached address is returned and retData is posted to retQueue at once;
+ * otherwise memory is allocated by the entry's cache policy and a chunked DMA
+ * is started. The table's load status is updated either way. Same structure as
+ * AudioLoad_AsyncLoadInner in the Ocarina of Time audio library.
+ */
+s32 func_8110DCC0(s32 tableType, s32 id, s32 nChunks, s32 retData, OSMesgQueue* retQueue) {
+    u32 size;
+    AudioTable8110DCC0* table;
+    s32 ramAddr;
+    s32 medium;
+    s8 cachePolicy;
+    u32 devAddr;
+    s32 loadStatus;
+
+    switch (tableType) {
+        case 0:
+            if (D_81184656[id] == 1) {
+                return 0;
+            }
+            break;
+        case 1:
+            if (D_81184655[id] == 1) {
+                return 0;
+            }
+            break;
+        case 2:
+            if (D_81184654[id] == 1) {
+                return 0;
+            }
+            break;
+    }
+
+    ramAddr = func_8110D7EC(tableType, id);
+    if (ramAddr != 0) {
+        loadStatus = 2;
+        func_8004CFB0(retQueue, (OSMesg)(retData << 0x18), 0);
+    } else {
+        table = (AudioTable8110DCC0*)func_8110D840(tableType);
+        size = table->entries[id].size;
+        size = ALIGN16(size);
+        medium = table->entries[id].medium;
+        cachePolicy = table->entries[id].cachePolicy;
+        devAddr = table->entries[id].romAddr;
+        loadStatus = 2;
+
+        switch (cachePolicy) {
+            case 0:
+                ramAddr = func_8110B8D8(tableType, id, size);
+                if (ramAddr == 0) {
+                    return ramAddr;
+                }
+                loadStatus = 5;
+                break;
+            case 1:
+                ramAddr = func_81109C0C(tableType, size, 1, id);
+                if (ramAddr == 0) {
+                    return ramAddr;
+                }
+                break;
+            case 2:
+                ramAddr = func_81109C0C(tableType, size, 0, id);
+                if (ramAddr == 0) {
+                    return ramAddr;
+                }
+                break;
+            case 3:
+            case 4:
+                ramAddr = func_81109C0C(tableType, size, 2, id);
+                if (ramAddr == 0) {
+                    return ramAddr;
+                }
+                break;
+        }
+
+        func_8110E9A8(devAddr, ramAddr, size, medium, nChunks, retQueue, (retData << 0x18) | (tableType << 0x10) | (id << 8) | loadStatus);
+        loadStatus = 1;
+    }
+
+    switch (tableType) {
+        case 0:
+            func_8110CB10(id, loadStatus);
+            break;
+        case 1:
+            func_8110CAE0(id, loadStatus);
+            break;
+        case 2:
+            func_8110CB40(id, loadStatus);
+            break;
+    }
+
+    return ramAddr;
+}
 
 s32 BattleScene_EndStatusAnimationsAndCommit(ActivePokemon* arg0) {
     BattleAnim_ClearFreezeStatusAnimation(arg0);
@@ -296,6 +418,15 @@ void func_8110EABC(s32 arg0) {
     }
 }
 
+typedef struct RelocInfo8110EF7C {
+    /* 0x00 */ s32 sampleBankId1;
+    /* 0x04 */ s32 sampleBankId2;
+    /* 0x08 */ s32 baseAddr1;
+    /* 0x0C */ s32 baseAddr2;
+    /* 0x10 */ u32 medium1;
+    /* 0x14 */ u32 medium2;
+} RelocInfo8110EF7C;
+
 #ifdef NON_MATCHING
 /* TODO: decompile func_8110EB40; signature not recovered. */
 #else
@@ -335,15 +466,6 @@ extern s32 D_81185578;
 #else
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110EE3C.s")
 #endif
-
-typedef struct RelocInfo8110EF7C {
-    /* 0x00 */ s32 sampleBankId1;
-    /* 0x04 */ s32 sampleBankId2;
-    /* 0x08 */ s32 baseAddr1;
-    /* 0x0C */ s32 baseAddr2;
-    /* 0x10 */ u32 medium1;
-    /* 0x14 */ u32 medium2;
-} RelocInfo8110EF7C;
 
 typedef struct Sample8110EF7C {
     /* 0x00 */ u32 codec : 4;

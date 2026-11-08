@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5150,
-  "asm_owners": 294,
+  "c_owners": 5151,
+  "asm_owners": 293,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -603,7 +603,7 @@
     "src/vector_math.c"
   ],
   "source_registry_sha256": "594aae79cbd7744f028255fbc652ade7fd2e0803a36156c07d38c06d9541a52f",
-  "section_registry_sha256": "5c1c707526ae8dd2b374b9fbd7f609362565bf63bcdd820fa7ed22244f9135bc",
+  "section_registry_sha256": "f9cc7c1df675e24798091035453ed874102059280c14814466446bc8ba4643cd",
   "headers_sha256": "3b55178b5775428da07c262f46e1eff59ad34b2611ca08559987910d9d6368fa",
   "matching_registry_sha256": "d8bcc14a2a0db281cf30dcb9ddbd94d59e1afe84c70b4c8c017ea27ce60a251c",
   "build_tools_sha256": {
@@ -613,7 +613,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "3ab1b9e5b97033ca2a37a370194346bc0a75891bd404c21f08e8b2f037b4d936",
+    "docs/function-matches.csv": "80a8f2a1e0ed1a4db4e5473c94f18811cd5a0da3add743ea3b081896c7e45e48",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -687,7 +687,7 @@
     "src/fragments/fragment000_80C00/81111C20.c": "82b4429bf8c805af51025d1521621afbdb31b332578c9ed2785b497c40fbeb41",
     "src/fragments/fragment000_80C00/81117B20.c": "3843091a770c9a107a189ef652ff919fc1eac6d520dd8100299adf9b1616cefc",
     "src/fragments/fragment000_80C00/battle_engine_2FA4D0.c": "96169d3cd584ca90783a597ca7644af6387b053272ce7724419ce713a62fa3a2",
-    "src/fragments/fragment000_80C00/battle_engine_309ED0.c": "b58eff7db3698a1f63d93095d2b8d8f36ff329a89bac137356607fd9d6be0b39",
+    "src/fragments/fragment000_80C00/battle_engine_309ED0.c": "004a70f9822a66d25130ebb7566b52b942b6c75727ee1547f8509a94959c585e",
     "src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c": "21aaf707c9aa797d1d6a59983b5ec2bd402cdf503f1570fe63d0bf1a0cab8894",
     "src/fragments/fragment000_80C00/gb_tower_emulator_86920.c": "f716ca56531f8d124a3b908c286599ee358b8cece3fe70cd437df4eca0e1a7c1",
     "src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c": "742da8348bae9a11a8f97969c50510e9dd3baea1fd255e4e1219026f2533b648",
