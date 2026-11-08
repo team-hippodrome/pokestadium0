@@ -47,6 +47,14 @@ s32 BattleScene_EndStatusAnimationsAndCommit(ActivePokemon* arg0) {
     Battle_ApplyAnimStateEffects(arg0);
 }
 
+typedef struct Entry811858B0 {
+    /* 0x00 */ u8 unk_00[2];
+    /* 0x02 */ u8 unk_02;
+    /* 0x03 */ u8 unk_03;
+    /* 0x04 */ char unk04[8];
+} Entry811858B0; // size = 0xC
+extern Entry811858B0* D_811858B0;
+
 #ifdef NON_MATCHING
 /* TODO: decompile func_8110DF80; signature not recovered. */
 #else
@@ -429,13 +437,6 @@ s32 func_8110F4D0(Item8110F4D0* arg0, s32 count, Item8110F4D0** list) {
     return count;
 }
 
-typedef struct Entry811858B0 {
-    /* 0x00 */ u8 unk_00[2];
-    /* 0x02 */ u8 unk_02;
-    /* 0x03 */ u8 unk_03;
-    /* 0x04 */ char unk04[8];
-} Entry811858B0; // size = 0xC
-extern Entry811858B0* D_811858B0;
 
 s32 func_8110F518(s32 arg0, Item8110F4D0** arg1) {
     s32 count = 0;

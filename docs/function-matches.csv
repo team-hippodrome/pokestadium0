@@ -532,7 +532,7 @@ func_8110B8D8,0x8110B8D8,src/fragments/fragment000_80C00/gb_tower_emulator_86920
 func_8110B958,0x8110B958,src/fragments/fragment000_80C00/gb_tower_emulator_86920.c,func_8110B958,hand,,c
 func_8110B9A8,0x8110B9A8,src/fragments/fragment000_80C00/gb_tower_emulator_86920.c,func_8110B9A8,hand,,c
 func_8110B9F8,0x8110B9F8,src/fragments/fragment000_80C00/gb_tower_emulator_86920.c,func_8110B9F8,m2c,m2c,c
-func_8110BA8C,0x8110BA8C,src/fragments/fragment000_80C00/gb_tower_emulator_86920.c,,asm,,asm
+func_8110BA8C,0x8110BA8C,src/fragments/fragment000_80C00/gb_tower_emulator_86920.c,func_8110BA8C,hand,,c
 func_8110BD20,0x8110BD20,src/fragments/fragment000_80C00/gb_tower_emulator_86920.c,,asm,,asm
 func_8110BEE4,0x8110BEE4,src/fragments/fragment000_80C00/gb_tower_emulator_86920.c,func_8110BEE4,hand,,c
 func_8110BF28,0x8110BF28,src/fragments/fragment000_80C00/gb_tower_emulator_86920.c,func_8110BF28,m2c,m2c+permuter,c

@@ -531,9 +531,9 @@ s32 func_8110B8D8(s32 x, s32 y, s32 size) {
     // No return here; the original falls off the end with the allocation still in v0.
 }
 
-s8* func_8110BA8C(s32);
+struct SampleCacheEntry8110BA8C* func_8110BA8C(u32);
 s32 func_8110B958(s32 arg0, s32 arg1, s32 arg2, s8 arg3) {
-    s8* p = func_8110BA8C(arg0);
+    s8* p = (s8*)func_8110BA8C(arg0);
 
     if (p != NULL) {
         M2C_FIELD(p, u8*, 2) = arg1;
@@ -564,7 +564,39 @@ extern M2C_UNK D_81184310;
 extern M2C_UNK D_811845D0;
 extern s32 D_811845D8;
 extern s32 D_811845F4;
-extern M2C_UNK D_811845F8;
+typedef struct SampleCacheEntry8110BA8C {
+    /* 0x00 */ s8 inUse;
+    /* 0x01 */ s8 origMedium;
+    /* 0x02 */ u8 sampleBankId;
+    /* 0x04 */ s32 sampleAddr;
+    /* 0x08 */ u8* allocatedAddr;
+    /* 0x0C */ s32 unk_0C;
+    /* 0x10 */ u32 size;
+} SampleCacheEntry8110BA8C; // size = 0x14
+
+typedef struct SampleCache8110BA8C {
+    /* 0x00 */ u8* startRamAddr;
+    /* 0x04 */ u8* curRamAddr;
+    /* 0x08 */ s32 size;
+    /* 0x0C */ s32 numAllocatedEntries;
+    /* 0x10 */ SampleCacheEntry8110BA8C entries[1];
+    /* 0x24 */ s32 numEntries;
+} SampleCache8110BA8C;
+
+typedef struct PreloadSample8110BA8C {
+    /* 0x00 */ u32 unk_bits : 8;
+    /* 0x00 */ u32 size : 24;
+} PreloadSample8110BA8C;
+
+typedef struct Preload8110BA8C {
+    /* 0x00 */ u32 endAndMediumKey;
+    /* 0x04 */ PreloadSample8110BA8C* sample;
+    /* 0x08 */ u8* ramAddr;
+    /* 0x0C */ u32 encodedInfo;
+    /* 0x10 */ s32 isFree;
+} Preload8110BA8C; // size = 0x14
+
+extern SampleCache8110BA8C D_811845F8;
 extern s32 D_81184600;
 extern s32 D_8118461C;
 
@@ -582,17 +614,95 @@ void func_8110B9F8(s32 arg0, s32 arg1) {
     if (temp_v0_2 == 0) {
         D_81184600 = 0;
     } else {
-        func_811098C0(&D_811845F8, temp_v0_2, arg1);
+        func_811098C0((M2C_UNK*)&D_811845F8, temp_v0_2, arg1);
     }
     D_811845F4 = 0;
     D_8118461C = 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110BA8C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110BA8C.s")
-#endif
+extern Preload8110BA8C D_81184B78[];
+extern s32 D_8118557C;
+void func_8110BD20(SampleCacheEntry8110BA8C*);
+
+SampleCacheEntry8110BA8C* func_8110BA8C(u32 size) {
+    u8* allocAfter;
+    u8* allocBefore;
+    void* mem;
+    s32 index;
+    s32 i;
+    SampleCacheEntry8110BA8C* entry;
+    Preload8110BA8C* preload;
+    SampleCache8110BA8C* cache;
+    u8* startRamAddr;
+    u8* endRamAddr;
+
+    cache = &D_811845F8;
+    allocBefore = cache->curRamAddr;
+    mem = (void*)func_81109868((M2C_UNK*)cache, size);
+    if (mem == NULL) {
+        u8* old = cache->curRamAddr;
+
+        cache->curRamAddr = cache->startRamAddr;
+        mem = (void*)func_81109868((M2C_UNK*)cache, size);
+        if (mem == NULL) {
+            cache->curRamAddr = old;
+            return NULL;
+        }
+        allocBefore = cache->startRamAddr;
+    }
+
+    allocAfter = cache->curRamAddr;
+
+    index = -1;
+    for (i = 0; i < D_8118557C; i++) {
+        preload = &D_81184B78[i];
+        if (preload->isFree == 0) {
+            startRamAddr = preload->ramAddr;
+            endRamAddr = preload->ramAddr + preload->sample->size - 1;
+
+            if (endRamAddr < allocBefore && startRamAddr < allocBefore) {
+                continue;
+            }
+            if (endRamAddr >= allocAfter && startRamAddr >= allocAfter) {
+                continue;
+            }
+
+            preload->isFree = 1;
+        }
+    }
+
+    for (i = 0; i < cache->numEntries; i++) {
+        if (!cache->entries[i].inUse) {
+            continue;
+        }
+
+        startRamAddr = cache->entries[i].allocatedAddr;
+        endRamAddr = startRamAddr + cache->entries[i].size - 1;
+
+        if (endRamAddr < allocBefore && startRamAddr < allocBefore) {
+            continue;
+        }
+        if (endRamAddr >= allocAfter && startRamAddr >= allocAfter) {
+            continue;
+        }
+
+        func_8110BD20(&cache->entries[i]);
+        if (index == -1) {
+            index = i;
+        }
+    }
+
+    if (index == -1) {
+        index = cache->numEntries++;
+    }
+
+    entry = &cache->entries[index];
+    entry->inUse = 1;
+    entry->allocatedAddr = mem;
+    entry->size = size;
+
+    return entry;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8110BD20; signature not recovered. */
