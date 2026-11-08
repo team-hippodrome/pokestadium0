@@ -1252,7 +1252,7 @@ func_82136D58,0x82136D58,src/fragments/fragment012_17ED00/battle_engine_315D50_2
 func_82136D94,0x82136D94,src/fragments/fragment012_17ED00/battle_engine_315D50_2.c,BattleAnim_BindModelAnim,s1,stadium1:src/fragments/battle_engine/battle_engine_315D50.c,c
 func_82136DD0,0x82136DD0,src/fragments/fragment012_17ED00/battle_engine_315D50_2.c,BattleAnim_BindModelAnimReversed,s1,stadium1:src/fragments/battle_engine/battle_engine_315D50.c,c
 func_82136E2C,0x82136E2C,src/fragments/fragment012_17ED00/battle_engine_315D50_2.c,BattleAnim_IsModelAnimComplete,s1,stadium1:src/fragments/battle_engine/battle_engine_315D50.c,c
-func_82136E48,0x82136E48,src/fragments/fragment012_17ED00/battle_engine_315D50_2.c,,asm,,asm
+func_82136E48,0x82136E48,src/fragments/fragment012_17ED00/battle_engine_315D50_2.c,func_82136E48,hand,,c
 func_82137000,0x82137000,src/fragments/fragment012_17ED00/battle_engine_315D50_2.c,BattleAnim_UpdateEffectCallbacks,s1,stadium1:src/fragments/battle_engine/battle_engine_315D50.c,c
 func_82137084,0x82137084,src/fragments/fragment012_17ED00/battle_engine_315D50_2.c,BattleAnim_DrawEffectCallbacks,s1,stadium1:src/fragments/battle_engine/battle_engine_315D50.c,c
 func_821370DC,0x821370DC,src/fragments/fragment012_17ED00/battle_engine_315D50_2.c,func_821370DC,m2c,m2c,c
