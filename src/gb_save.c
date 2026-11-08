@@ -411,7 +411,7 @@ s32 func_8002AAC4(void *arg0) {
 
 extern u8 D_80073554[];
 void func_8002C1B4(s32, s32, s32, s32);
-void func_8002C5A4(s32, s32, s32, s32);
+void func_8002C5A4(); // no prototype: callers pass a fourth argument the definition ignores
 
 s32 func_8002AB84(s32* arg0) {
     UNUSED s32 pad1; // FAKE: unused locals that only pad the stack frame
@@ -895,11 +895,17 @@ void func_8002C064(s32 start, s32 end, s32 r, s32 g, s32 b) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002C1B4.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002C5A4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002C5A4.s")
-#endif
+extern u8 D_0400E680[];
+extern u8 D_0400E788[];
+
+void func_8002C5A4(s32 x, s32 y, s32 w) {
+    gSPDisplayList(gDisplayListHead++, D_80073450);
+    gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
+    gDPLoadTextureBlock(gDisplayListHead++, D_0400E680, G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 16, 0, G_TX_CLAMP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    gSPTextureRectangle(gDisplayListHead++, x << 2, y << 2, (x + w) << 2, (y + 16) << 2, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
+    gDPLoadTextureBlock(gDisplayListHead++, D_0400E788, G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 16, 0, G_TX_CLAMP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    gSPTextureRectangle(gDisplayListHead++, (x + w) << 2, y << 2, (x + w + 32) << 2, (y + 16) << 2, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
+}
 
 Color_RGBA8 Color_InterpolateFromGray(Color_RGBA8 arg0, f32 arg1) {
     static Color_RGBA8 D_80075940 = { 0xC8, 0xC8, 0xC8, 0xFF };
