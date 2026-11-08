@@ -399,11 +399,49 @@ void func_88100D9C(s32 arg0, s32 arg1, Color88100D9C arg2) {
     func_80029028(arg0, arg1 + 0x63, 0x214, 1, arg2);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88100E34; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment008_1720F0/func_88100E34.s")
-#endif
+extern Color88100D9C D_88102D7C;
+extern u8 D_88102DB8[];
+extern char D_88102F24[];
+extern char D_88102F2C[];
+extern Gfx D_80073450[];
+extern u8 D_04010918[];
+void func_8001BCB4(s32, s32, s32, s32, void*, s32, s32);
+s32 func_80022BAC(u8);
+void func_8002BC58(s32, s32, u8, s32);
+void func_8002A3F8(u8*, s32, s32);
+void func_8002BAB8(s32, s32, s32, s32);
+void func_88100E34(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
+    UNUSED s32 pad[3];
+
+    gSPDisplayList(gDisplayListHead++, D_80060270);
+    func_80029028(arg0, arg1, 0x88, 0x64, D_88102D7C);
+    if (arg3[0] == 0) {
+        if (arg3[1] == 0x20) {
+            func_8002BC58(arg0 + 5, arg1 + 4, arg3[2], func_80022BAC(arg3[2]));
+        } else if (arg3[1] == 0x10) {
+            func_8002A3F8(D_88102DB8, arg0 + 4, arg1 + 4);
+            Font_BeginTranslucentTextRendering();
+            func_80027F20(arg2);
+            Font_SetActive(8, 0);
+            Font_Printf(arg0 + 0x1B, arg1 + 0x1A, D_88102F24, arg3[3] + 1);
+            Font_EndTexturedTextRendering();
+        }
+    }
+    Font_BeginTranslucentTextRendering();
+    Gfx_SetEnvColor(0xFF, 0xC8, 0xC8, 0xFF);
+    Font_SetActive(4, -1);
+    Font_Printf(arg0 + 4, arg1 + 0x41, D_88102F2C);
+    func_80027F20(arg2);
+    Font_SetActive(4, 0);
+    Font_Printf(arg0 + 0x38, arg1 + 0x41, (char*)(arg3 + 8));
+    Font_EndTexturedTextRendering();
+    if (M2C_FIELD(arg3, s32*, 4) != 0) {
+        gSPDisplayList(gDisplayListHead++, D_80073450);
+        gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
+        func_8001BCB4(arg0 + 0x25, arg1 + 0x56, 0x28, 0xA, D_04010918, 0x28, 0);
+        func_8002BAB8(arg0 + 0x51, arg1 + 0x54, M2C_FIELD(arg3, s32*, 4), 5);
+    }
+}
 
 extern Color88100D9C D_88102D78[2];
 void func_8810105C(s32 x, s32 y, s32 height) {

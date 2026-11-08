@@ -1125,7 +1125,11 @@ void func_821296E4(CameraNode* arg0) {
     }
 }
 
+#ifdef NON_MATCHING
+/* TODO: decompile func_821297BC. */
+#else
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821297BC.s")
+#endif
 
 void func_821299B0(CameraNode* arg0) {
     switch (sBattleScene.scene->unk_3C) {
