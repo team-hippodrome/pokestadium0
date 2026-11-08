@@ -67,11 +67,64 @@ void LabPCList_ConsumeUsedTmItem(unk_func_8830867C_04C_030_02C_000* arg0);
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89109990.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89109B60; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89109B60.s")
-#endif
+typedef struct LabPCDeckNode89109B60 {
+    /* 0x00 */ void* owner;
+    /* 0x04 */ s32 index;
+    /* 0x08 */ u8 entry[1];
+} LabPCDeckNode89109B60;
+typedef struct LabPCDeck89109B60 {
+    /* 0x00 */ char unk00[0x14];
+    /* 0x14 */ LabPCDeckNode89109B60** nodes;
+    /* 0x18 */ char unk18[0x4];
+    /* 0x1C */ s32 count;
+} LabPCDeck89109B60; // size = 0x20
+typedef struct LabPCBox89109B60 {
+    /* 0x00 */ char unk00[0x4];
+    /* 0x04 */ s32 unk_04;
+    /* 0x08 */ s32 unk_08;
+    /* 0x0C */ char unk0C[0x4];
+    /* 0x10 */ LabPCDeck89109B60* decks;
+    /* 0x14 */ char unk14[0x4];
+    /* 0x18 */ s32 deckCount;
+    /* 0x1C */ char unk1C[0x8];
+} LabPCBox89109B60; // size = 0x24
+typedef struct LabPCBoxList89109B60 {
+    /* 0x00 */ LabPCBox89109B60* boxes;
+    /* 0x04 */ char unk04[0x4];
+    /* 0x08 */ s32 count;
+} LabPCBoxList89109B60;
+
+/* Stadium 1's LabPCList_LoadAllBoxes, without its box-count check and NULL deck check. */
+void func_89109B60(LabPCBoxList89109B60* arg0) {
+    s32 i;
+    s32 j;
+    s32 n;
+    DeckHandle* handle;
+    LabPCDeck89109B60* deck;
+    LabPCDeckNode89109B60** node;
+    LabPCBox89109B60* box;
+
+    box = arg0->boxes;
+    for (i = 0; i < arg0->count; i++, box++) {
+        deck = box->decks;
+        for (j = 0; j < box->deckCount; j++, deck++) {
+            node = deck->nodes;
+            handle = Deck_Open(box->unk_04, box->unk_08, j, 0);
+            n = 0;
+            while (TRUE) {
+                if (Deck_ReadEntries(&(*node)->entry, 1, handle) == 0) {
+                    break;
+                }
+                (*node)->owner = deck;
+                (*node)->index = n;
+                node++;
+                n++;
+            }
+            Deck_CloseAndFlush(handle);
+            deck->count = n;
+        }
+    }
+}
 
 typedef struct LabPCListSlotZero {
     /* 0x00 */ char unk00[0xC];
