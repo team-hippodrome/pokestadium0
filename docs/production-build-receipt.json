@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5090,
-  "asm_owners": 354,
+  "c_owners": 5091,
+  "asm_owners": 353,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -603,7 +603,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "bfcc69e7c4499201b4506c65b1b92404e6a937efa053f2df90b04d600475cf28",
+    "docs/function-matches.csv": "64c64b830c218daabc2b39fb2ef804f42e7ddb8ad8a3dcd91d04b4b3024e5694",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -766,7 +766,7 @@
     "src/fragments/fragment012_17ED00/battle_engine_3591E0.c": "e6ffd99190ebdf40156d13c470a609a5d5bb6974cee4bb453dd3ea5a9095c87f",
     "src/fragments/fragment012_17ED00/battle_engine_3597B0.c": "c651ab56ff6ef3b90ee7d22a904b1819b9c78e2bf0ec217673a041d12f0ff972",
     "src/fragments/fragment012_17ED00/battle_engine_359F90.c": "41077906ebcfa25363f6bdb704135e68cad777fa4ba22fa4da64010aff574938",
-    "src/fragments/fragment012_17ED00/battle_engine_35DF70.c": "07119b215ab1fe608ffb4ca703409a0ec51c758aa06021275d5ec276b576e281",
+    "src/fragments/fragment012_17ED00/battle_engine_35DF70.c": "b4b8832b4861c85010fe32723f299f45f7fc77d9166188215c6cc16bae6b3b26",
     "src/fragments/fragment012_17ED00/battle_engine_361050.c": "8db9452862e36819f4a95e384df1b613a39424913cb14c25df60d5d17823cda0",
     "src/fragments/fragment012_17ED00/battle_engine_361050_2.c": "526dec36748e9c2d6963df341be268e5971e832c63d14ed92cbd5d70b160c440",
     "src/fragments/fragment012_17ED00/battle_engine_helper.c": "b749a8fd1bee6c1cec264a0ff35960921292fbe16472a0d531b10e79613e9f82",

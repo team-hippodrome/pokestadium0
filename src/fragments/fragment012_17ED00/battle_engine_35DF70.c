@@ -341,11 +341,36 @@ typedef struct {
     /* 0x8 */ s32 unk_08;
 } unk_D_8006A9CC; // size = 0xC
 extern unk_D_8006A9CC D_8006A9CC[];
-#ifdef NON_MATCHING
-/* TODO: decompile func_8211576C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211576C.s")
-#endif
+extern u8 D_82199F37;
+extern s32 D_8218C8BC;
+extern s32 D_8218C8C0;
+
+void func_8211576C(void) {
+    ActivePokemonState* sp34 = &sActivePokemon[sBattleScene.scene->unk_2C]->state;
+    UNUSED s32 pad;
+    s32 var_t0;
+    u8 temp_v0;
+
+    sBattleScene.scene->unk_48 = 7;
+    HandleMoveEffectFlags();
+
+    if ((sBattleMoveFailed == 0) && !(sBattleTarget->unk_4C & 0x40)) {
+        D_82199F37 = 1;
+        do {
+            var_t0 = BattleAnim_RandomRange(4);
+            if (var_t0 >= 4) {
+                var_t0 = 3;
+            }
+            temp_v0 = sBattleTarget->moves[var_t0];
+        } while (temp_v0 == 0);
+
+        sBattleUser->moves[sp34->unk_0C] = temp_v0;
+        func_8211EF74(D_8219A520 + 0x88, -0x40, D_8218C8BC, func_82107F88(sActivePokemon[sBattleScene.scene->unk_2C]), D_8006A9CC[sBattleTarget->moves[var_t0]].unk_00);
+        return;
+    }
+
+    func_8211EF74(D_8219A520 + 0x88, -0x3F, D_8218C8C0);
+}
 
 extern s32 D_8218C8C4;
 extern s32 D_8218C8C8;
