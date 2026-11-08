@@ -128,11 +128,31 @@ Slot54* func_820001B8(Slot54* arg0, s32* arg1) {
     return found;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82000258; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment007_166580/func_82000258.s")
-#endif
+typedef struct Mon82000258 {
+    /* 0x00 */ char unk00[0x28];
+    /* 0x28 */ u8 level;
+    /* 0x29 */ char unk29[0x2B];
+} Mon82000258; // size = 0x54
+
+s32 func_82000258(Mon82000258* mons) {
+    s32 i;
+    s32 j;
+    s32 k;
+    s32 sum;
+
+    for (i = 0; i < 4; i++) {
+        sum = mons[i].level;
+        for (j = i + 1; j < 5; j++) {
+            sum += mons[j].level;
+            for (k = j + 1; k < 6; k++) {
+                if (mons[k].level + sum < 0x9C) {
+                    return 0;
+                }
+            }
+        }
+    }
+    return 1;
+}
 
 typedef struct {
     /* 0x000 */ u8 type;
@@ -991,7 +1011,7 @@ typedef struct {
 void func_820080B8(s8*, s32, s32, s32);
 void func_820081C8(s8*, s32, s32, s32, s32);
 s32 func_82001558(void*, s32*);
-s32 func_82000258(void*);
+s32 func_82000258(Mon82000258*);
 
 /**
  * Decides the next state of the six-slot menu. Clears `picked`, then, if `mode`

@@ -274,9 +274,14 @@ s32 GbPak_SelectRamBank(unk_D_8122B2C0* arg0, s32 arg1) {
 }
 
 typedef struct GbpakChannel811023DC {
-    /* 0x00 */ char unk00[0x9B];
+    /* 0x00 */ char unk00[0x50];
+    /* 0x50 */ OSPfs* pfs;
+    /* 0x54 */ char unk54[0x47];
     /* 0x9B */ u8 status;
-    /* 0x9C */ char unk9C[0x8];
+    /* 0x9C */ u8 channel;
+    /* 0x9D */ char unk9D[0x4];
+    /* 0xA1 */ u8 unkA1;
+    /* 0xA2 */ char unkA2[0x2];
 } GbpakChannel811023DC; // size = 0xA4
 extern GbpakChannel811023DC D_811561C8[];
 s32 func_811023DC(OSPfs* arg0) {
