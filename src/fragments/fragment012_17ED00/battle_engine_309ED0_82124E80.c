@@ -63,7 +63,32 @@ void func_82124EFC(void) {
     sBattleScene.scene->unk_2C = sp24;
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821250D4.s")
+void func_82188B8C(s32, s32, s32);
+s32 func_821250D4(void) {
+    s8* sp24;
+    s8* sp20;
+    s8* sp1C;
+
+    sp24 = (s8*)sActivePokemon[sBattleScene.scene->unk_2C] + 0x78C;
+    sp20 = (s8*)sActivePokemon[sBattleScene.scene->unk_2C] + 0x78C;
+    sp1C = (s8*)sActivePokemon[!sBattleScene.scene->unk_2C] + 0x78C;
+    func_821079E8(0x1FFE);
+    if ((M2C_FIELD(sp24, u8*, 0x2E) == 0xF) || (M2C_FIELD(sp24, u8*, 0x2E) == 0x10)) {
+        if (*M2C_FIELD(sActivePokemon[sBattleScene.scene->unk_2C], u8**, 0x860) & 2) {
+            func_82188B8C(M2C_FIELD(sp20, s32*, 8), M2C_FIELD(sp1C, s32*, 8), 2);
+        }
+        func_82105E4C(sActivePokemon[sBattleScene.scene->unk_2C], 0x3800);
+        sBattleScene.scene->unk_20 = 0;
+        M2C_FIELD(sBattleScene.scene, s32*, 0x14) = 0;
+        if (M2C_FIELD(sp24, u8*, 0x2E) == 0x10) {
+            M2C_FIELD(sBattleScene.scene, s32*, 0x38) = 0x12;
+        } else {
+            M2C_FIELD(sBattleScene.scene, s32*, 0x38) = 0xB;
+        }
+        return 1;
+    }
+    return 0;
+}
 
 void BattleScene_InitializeSwitchActions(void) {
     s32 sp2C;

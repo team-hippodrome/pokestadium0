@@ -1110,7 +1110,7 @@ func_82124E80,0x82124E80,src/fragments/fragment012_17ED00/battle_engine_309ED0_8
 func_82124EB4,0x82124EB4,src/fragments/fragment012_17ED00/battle_engine_309ED0_82124E80.c,func_82124EB4,m2c,m2c,c
 func_82124EF4,0x82124EF4,src/fragments/fragment012_17ED00/battle_engine_309ED0_82124E80.c,func_82124EF4,s1,stadium1:src/fragments/battle_engine/battle_engine_339CA0.c,c
 func_82124EFC,0x82124EFC,src/fragments/fragment012_17ED00/battle_engine_309ED0_82124E80.c,func_82124EFC,hand,,c
-func_821250D4,0x821250D4,src/fragments/fragment012_17ED00/battle_engine_309ED0_82124E80.c,,asm,,asm
+func_821250D4,0x821250D4,src/fragments/fragment012_17ED00/battle_engine_309ED0_82124E80.c,func_821250D4,hand,,c
 func_82125224,0x82125224,src/fragments/fragment012_17ED00/battle_engine_309ED0_82124E80.c,BattleScene_InitializeSwitchActions,s1,stadium1:src/fragments/battle_engine/battle_engine_309ED0.c,c
 func_82125384,0x82125384,src/fragments/fragment012_17ED00/battle_engine_309ED0_82124E80.c,func_82125384,hand,,c
 func_821254B0,0x821254B0,src/fragments/fragment012_17ED00/battle_engine_309ED0_82124E80.c,,asm,,asm

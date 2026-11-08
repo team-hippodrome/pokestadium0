@@ -1065,7 +1065,11 @@ void func_8212DD14(ActivePokemon* arg0) {
     func_82110B44(arg0);
 }
 
+#ifdef NON_MATCHING
+/* TODO: decompile func_8212DE30; signature not recovered. */
+#else
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8212DE30.s")
+#endif
 
 void func_8212E0B0(CameraNode* arg0) {
     switch (sBattleScene.scene->unk_20) {
