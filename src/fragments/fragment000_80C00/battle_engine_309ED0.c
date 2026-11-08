@@ -249,11 +249,15 @@ void func_8110EABC(s32 arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110EB40.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110ED98; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110ED98.s")
-#endif
+extern u8 D_81137F04[];
+
+void func_8110ED98(s8* arg0, s32 arg1) {
+    arg1 = (arg1 + 0xF) & ~0xF;
+    osInvalDCache((void*)M2C_FIELD(arg0, s32*, 0xC), arg1);
+    osCreateMesgQueue((OSMesgQueue*)(arg0 + 0x20), (OSMesg*)(arg0 + 0x38), 1);
+    func_8110DBA0(arg0 + 0x3C, 0, 0, M2C_FIELD(arg0, s32*, 8), M2C_FIELD(arg0, s32*, 0xC), arg1, (OSMesgQueue*)(arg0 + 0x20), arg0[2], D_81137F04);
+    if (arg1) {}
+}
 
 void func_8110EE28(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3) {
 
