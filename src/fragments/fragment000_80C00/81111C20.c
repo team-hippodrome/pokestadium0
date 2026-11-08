@@ -177,24 +177,6 @@ s16 func_81111FE0(PhaseTableCursor* arg0) {
     return (s16)(arg0->table[index] >> 8);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81112024; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81112024.s")
-#endif
-
-f32 func_81111F0C(); // The caller passes a second argument the callee ignores.
-f32 func_81112024(s8 *, s8 *);                  /* extern */
-
-void func_8111220C(s8 *arg0) {
-    if (M2C_FIELD(arg0, u8 *, 0x80) != 0) {
-        M2C_FIELD(arg0, f32 *, 0x38) = func_81111F0C(arg0 + 0x80, arg0);
-    }
-    if ((M2C_FIELD(arg0, u8 *, 0xA4) != 0) && (M2C_FIELD(arg0, s32 *, 0x44) != -1)) {
-        M2C_FIELD(arg0, f32 *, 0x3C) = func_81112024(arg0 + 0x90, arg0);
-    }
-}
-
 typedef struct Channel81112278 {
     /* 0x00 */ char pad00[0x10];
     /* 0x10 */ u16 vibratoRateStart;
@@ -247,6 +229,77 @@ typedef struct Note81112278 {
     /* 0x48 */ char pad48[0x90 - 0x48];
     /* 0x90 */ Vibrato81112278 vibratoState;
 } Note81112278;
+
+/**
+ * Returns the frequency scale for a note's vibrato and steps it: counts down
+ * the delay, moves the extent and rate toward their channel targets over their
+ * change timers, and scales the curve value at the current phase by the
+ * extent. Same structure as get_vibrato_freq_scale in the Super Mario 64 audio
+ * library.
+ */
+f32 func_81112024(vib)
+    Vibrato81112278* vib;
+{
+    s32 pitchChange;
+    f32 extent;
+    f32 result;
+    Channel81112278* seqChannel = vib->seqChannel;
+
+    if (vib->delay != 0) {
+        vib->delay--;
+        return 1;
+    }
+
+    if (vib->extentChangeTimer) {
+        if (vib->extentChangeTimer == 1) {
+            vib->extent = (s32)seqChannel->vibratoExtentTarget;
+        } else {
+            vib->extent += ((s32)seqChannel->vibratoExtentTarget - vib->extent) / (s32)vib->extentChangeTimer;
+        }
+
+        vib->extentChangeTimer--;
+    } else if (seqChannel->vibratoExtentTarget != (s32)vib->extent) {
+        if ((vib->extentChangeTimer = seqChannel->vibratoExtentChangeDelay) == 0) {
+            vib->extent = (s32)seqChannel->vibratoExtentTarget;
+        }
+    }
+
+    if (vib->rateChangeTimer) {
+        if (vib->rateChangeTimer == 1) {
+            vib->rate = (s32)seqChannel->vibratoRateTarget;
+        } else {
+            vib->rate += ((s32)seqChannel->vibratoRateTarget - vib->rate) / (s32)vib->rateChangeTimer;
+        }
+
+        vib->rateChangeTimer--;
+    } else if (seqChannel->vibratoRateTarget != (s32)vib->rate) {
+        if ((vib->rateChangeTimer = seqChannel->vibratoRateChangeDelay) == 0) {
+            vib->rate = (s32)seqChannel->vibratoRateTarget;
+        }
+    }
+
+    if (vib->extent == 0) {
+        return 1.0f;
+    }
+
+    pitchChange = func_81111FE0((PhaseTableCursor*)vib);
+    extent = (f32)vib->extent / 4096.0f;
+
+    result = 1.0f + extent * (D_FLT_81136178[pitchChange] - 1.0f);
+    return result;
+}
+
+f32 func_81111F0C(); // The caller passes a second argument the callee ignores.
+f32 func_81112024(); // The caller passes a second argument the callee ignores.
+
+void func_8111220C(s8 *arg0) {
+    if (M2C_FIELD(arg0, u8 *, 0x80) != 0) {
+        M2C_FIELD(arg0, f32 *, 0x38) = func_81111F0C(arg0 + 0x80, arg0);
+    }
+    if ((M2C_FIELD(arg0, u8 *, 0xA4) != 0) && (M2C_FIELD(arg0, s32 *, 0x44) != -1)) {
+        M2C_FIELD(arg0, f32 *, 0x3C) = func_81112024(arg0 + 0x90, arg0);
+    }
+}
 
 extern s16* D_81135F68;
 
