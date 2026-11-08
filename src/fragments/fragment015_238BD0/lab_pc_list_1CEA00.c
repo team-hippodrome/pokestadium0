@@ -300,11 +300,42 @@ void func_89000588(s8* arg0, s32 arg1, s32 arg2, char *arg3, s32 arg4) {
     M2C_FIELD(arg0, s32*, 0x30) = arg4;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89000694; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_89000694.s")
-#endif
+s32 func_8002AE6C();                                /* extern */
+M2C_UNK func_8001A384(M2C_UNK, M2C_UNK);            /* extern */
+M2C_UNK func_8001A944(s32, s32, s32);               /* extern */
+M2C_UNK func_8001AA9C(u8, u8, u8, u8);              /* extern */
+M2C_UNK func_8001AB2C(M2C_UNK);                     /* extern */
+M2C_UNK func_8001AB6C();                            /* extern */
+M2C_UNK func_8001ABBC();                            /* extern */
+void func_80029658(s32, s32, s32, void*);
+void func_8002A550(s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
+void func_80029028(s32, s32, s32, s32, Color_RGBA8);
+void func_8002AF04(s8*, s32);
+extern u8 D_8007356C[];
+extern M2C_UNK D_800734A8;
+extern Gfx D_80060270[];
+extern Color_RGBA8 D_8900A5C4;
+extern Color_RGBA8 D_8900A5C8;
+extern Color_RGBA8 D_8900A5CC;
+
+void func_89000694(s8* arg0) {
+    if (func_8002AE6C() == 0) {
+        func_80029658(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0x61, M2C_FIELD(arg0, s32*, 8), D_8007356C);
+        func_8002A550(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) - 0xC, 0x5C, D_8900A5C4, D_8900A5C8);
+        gSPDisplayList(gDisplayListHead++, D_80060270);
+        func_80029028(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0x68, M2C_FIELD(arg0, s32*, 8) - 0xC, 0x24, D_8900A5CC);
+        func_8001AB6C();
+        if (!arg0) { // empty test only changes register allocation; needed to match
+        }
+        func_8001AA9C(M2C_FIELD(&D_800734A8, u8 *, 0), M2C_FIELD(&D_800734A8, u8 *, 1), M2C_FIELD(&D_800734A8, u8 *, 2), M2C_FIELD(&D_800734A8, u8 *, 3));
+        func_8001A384(8, 0);
+        func_8001AB2C(0x1C);
+        func_8001A944(M2C_FIELD(arg0, s32*, 0) + 0xE, M2C_FIELD(arg0, s32*, 4) + 0xA, M2C_FIELD(arg0, s32*, 0x30));
+        func_8001ABBC();
+        func_8002AF04(arg0 + 0x34, (M2C_FIELD(arg0, s32*, 0xB0) == 0) ? 2 : 0);
+        func_8002AF04(arg0 + 0x70, (M2C_FIELD(arg0, s32*, 0xB0) == 1) ? 2 : 0);
+    }
+}
 
 s32 func_8002B390(s8*);
 s32 func_8002BC14(s32);
@@ -851,9 +882,7 @@ s32 func_89002DE4(unk_func_8820E99C_030* arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_89002E58.s")
 #endif
 
-typedef struct Rgba8900A6BC {
-    /* 0x0 */ u8 r, g, b, a;
-} Rgba8900A6BC; // size = 0x4
+typedef Color_RGBA8 Rgba8900A6BC; // size = 0x4
 typedef struct Color8900A6BC {
     /* 0x0 */ Rgba8900A6BC c[2];
 } Color8900A6BC; // size = 0x8

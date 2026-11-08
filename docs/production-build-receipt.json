@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 4941,
-  "asm_owners": 503,
+  "c_owners": 4942,
+  "asm_owners": 502,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -603,7 +603,7 @@
     "tools/cflags_overrides.json": "7052d644eb08429c59981bb4c369c8c937c61ca4c639a1c1ca2c5fc0ce919ebb",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "77543c17ae9bc3c2c3a3b1fbc731a5c524a76bfa83c0f2020e48fe972139d52b",
+    "docs/function-matches.csv": "be5d642d23ef7650f51a2302a3d2fb9d57076ca2f63c6469f87b0656f6c22a23",
     "linker_scripts/jp/symbol_addrs.txt": "3b5103d4cfe8c6cf2470a85f3aacf457f87dc2c7f2096a7a216bec5fd85d5385"
   },
   "binutils": {
@@ -790,7 +790,7 @@
     "src/fragments/fragment013_232510/demo_scenes_161E60.c": "e3b8fef74a3bc0faa9ada97609d1a2eb5ac17951be3b1ca75f3b4f10c9011a48",
     "src/fragments/fragment014_235D70/lab_pc_icons.c": "698a8a5680270d16b5a119673d9c43a02f3f196110ad572b935d4534605e329a",
     "src/fragments/fragment015_238BD0/89006FC0.c": "f0e3dc71bfa1f6a324b315050541b2cf80f179f0166074ab26f768999ca3c409",
-    "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c": "8e68a6f2371915f1411d8cf3666d7d1a64aefcc371223d10c1b89d43a2fbd5f3",
+    "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c": "eefbff7c0d58ff548ce304c6cdc22178a0a5cd034ab06a98601793b1a66880fb",
     "src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c": "81155eb1b53b107bb4662317c9e1ed7cb71a958efe8808ce9bf602e2c2d99b77",
     "src/fragments/fragment016_252E10/89100020.c": "8c756bdce83ff7becf6eab95c5fcef43deaf921e2cd848e565a55342d54ec11f",
     "src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c": "c477bafd8897726b5248d49b7dcac0b4ff641ec88f9553efdfa1086648430be7",
