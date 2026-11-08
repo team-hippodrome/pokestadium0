@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5042,
-  "asm_owners": 402,
+  "c_owners": 5043,
+  "asm_owners": 401,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -603,7 +603,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "278d9c4863f972d977df73b3a51e6939ce8929fa98e9744255730331375f30fa",
+    "docs/function-matches.csv": "9768d86107712096d7a638a95875aeb6180501cd3707a3171fef4e2736b239f0",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -792,7 +792,7 @@
     "src/fragments/fragment015_238BD0/89006FC0.c": "0108ce0935570ca91c6b0f48b6ad0e70d51f2b4023b1cc04be566b712f4f321e",
     "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c": "fb9096c40133542be9d3163fca2763e4a48b6d19c1545287d1cd9e05730b3223",
     "src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c": "7e14cb6cf60d1dd09bdb762845eea0758f60b640ba85df2181d544b43b1597f5",
-    "src/fragments/fragment016_252E10/89100020.c": "7f46069156245b22763dd17d6f4b6f992755f16da41b946dcc9e3d6995b9cea0",
+    "src/fragments/fragment016_252E10/89100020.c": "7e7002b6fd2dc714fa4cb1a0c0e896a197171a435439c080b2da57eac7dad7ab",
     "src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c": "318ce31e241e7aa90d05a82f353c169f951eeef6fec717d817e9f821185f951e",
     "src/fragments/fragment016_252E10/lab_pc_list_1E46B0.c": "ba8d4b5501f5daea30407668a46cb1021536cf2edb09db847e7544301d76b045",
     "src/fragments/fragment016_252E10/lab_pc_list_1E46B0_2.c": "d2b3316eb953509dc776192668fc1faa2f9e910c9baf9acc90664fc3678ee39f",

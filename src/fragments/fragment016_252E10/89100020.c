@@ -517,11 +517,56 @@ void func_891024A4(Screen891024A4 *arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_891025D8.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89102700; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89102700.s")
-#endif
+s32 func_891025D8(void*);
+
+s32 func_89102700(Ctx89100294* arg0) {
+    s32 done = FALSE;
+    s32 result;
+    u16 buttons;
+
+    switch (arg0->unk8C) {
+        case 0:
+            result = func_89102344((Ctx89102344*)arg0);
+            break;
+        case 1:
+        case 2:
+            result = func_891025D8(arg0);
+            break;
+    }
+    if (result == -1) {
+        done = TRUE;
+    } else if (result == 0) {
+        buttons = *(u16*)(D_800603C0 + 8);
+        if (buttons & 0x4000) {
+            func_8003F6AC(3);
+            done = TRUE;
+        } else if (buttons & 2) {
+            func_8003F6AC(2);
+            if (arg0->mode == 0) {
+                arg0->mode += 3;
+            }
+            arg0->mode--;
+            func_89100294(arg0);
+        } else if (buttons & 1) {
+            func_8003F6AC(2);
+            if (arg0->mode >= 2) {
+                arg0->mode -= 3;
+            }
+            arg0->mode++;
+            func_89100294(arg0);
+        } else if (buttons & 0x20) {
+            if (arg0->unk8C != 0) {
+                func_8003F6AC(2);
+                arg0->unk8C = 0;
+            }
+        } else if ((buttons & 0x10) && (arg0->unk8C != 1)) {
+            func_8003F6AC(2);
+            arg0->unk8C = 1;
+            arg0->unkB550 = 2;
+        }
+    }
+    return done;
+}
 
 M2C_UNK func_89101D94(s8 *);                      /* extern */
 s32 func_89106254(s32);                             /* extern */
@@ -1029,7 +1074,7 @@ void func_89104314(u8** arg0, u8** arg1, s32 arg2) {
     *(s32*)(arg0[0] + 0x10) = 1;
 }
 
-s32 func_89102700(s8*);
+s32 func_89102700();
 s32 func_89102AB8(s8*);
 s32 func_89102C40(s8*);
 s32 func_89102EC8(s8*);
