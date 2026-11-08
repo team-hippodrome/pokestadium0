@@ -1075,7 +1075,7 @@ func_8212311C,0x8212311C,src/fragments/fragment012_17ED00/battle_engine_3055E0.c
 func_82123314,0x82123314,src/fragments/fragment012_17ED00/battle_engine_3055E0.c,func_82123314,hand,,c
 func_821233EC,0x821233EC,src/fragments/fragment012_17ED00/battle_engine_3055E0.c,BattleScene_RecenterCameraOnOwner,s1,stadium1:src/fragments/battle_engine/battle_engine_3055E0.c,c
 func_821235E0,0x821235E0,src/fragments/fragment012_17ED00/battle_engine_3055E0.c,BattleScene_ApproachCameraZoom,s1,stadium1:src/fragments/battle_engine/battle_engine_3055E0.c,c
-func_82123684,0x82123684,src/fragments/fragment012_17ED00/battle_engine_3055E0.c,,asm,,asm
+func_82123684,0x82123684,src/fragments/fragment012_17ED00/battle_engine_3055E0.c,func_82123684,hand,,c
 func_821237B0,0x821237B0,src/fragments/fragment012_17ED00/battle_engine_3055E0.c,BattleScene_SetCameraOwnerWideShot,s1,stadium1:src/fragments/battle_engine/battle_engine_3055E0.c,c
 func_82123874,0x82123874,src/fragments/fragment012_17ED00/battle_engine_3055E0.c,BattleScene_SetCameraPresetClose,hand,,c
 func_821239B4,0x821239B4,src/fragments/fragment012_17ED00/battle_engine_3055E0.c,BattleScene_SetCameraFollowPresetNear,hand,,c

@@ -721,7 +721,30 @@ void BattleScene_ApproachCameraZoom(CameraNode* arg0, ActivePokemon* arg1) {
     BattleScene_SetCameraEyeFromAt(arg0, sp26, sp24, D_8219A534, 0.0f);
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82123684.s")
+void func_82123684(CameraNode* arg0, ActivePokemon* arg1) {
+    UNUSED s32 pad[3];
+    Vec3f sp50;
+    Vec3f sp44;
+    f32 sp40;
+    s16 sp3E;
+    s16 sp3C;
+    s16 sp3A;
+    s16 sp38;
+    s16 sp36;
+    s16 sp34;
+
+    BattleAnim_Vec3fCopy(&sp50, &arg0->view.targetPosition);
+    BattleAnim_Vec3fCopy(&sp44, &arg0->view.eyePosition);
+    func_82124874(arg0, arg1);
+    BattleAnim_CalculateDistanceAngles(&arg0->view.targetPosition, &arg0->view.eyePosition, &D_8219A534, &sp34, &sp38);
+    BattleAnim_CalculateDistanceAngles(&sp50, &sp44, &gCameraDistTarget, &sp36, &sp3A);
+    BattleAnim_ApproachF(&gCameraDistTarget, D_8219A534, 0.5f);
+    BattleAnim_StepToS16(&sp3A, sp38, 0x108);
+    BattleAnim_StepToS16(&sp36, sp34, 0xB6);
+    BattleAnim_CalculateDistanceAngles(&sp50, &arg0->view.targetPosition, &sp40, &sp3E, &sp3C);
+    Camera_ComputeEyeFromAngles(&sp50, &arg0->view.targetPosition, sp40, sp3E, sp3C);
+    BattleScene_SetCameraEyeFromAt(arg0, sp36, sp3A, gCameraDistTarget, 0.0f);
+}
 
 void BattleScene_SetCameraOwnerWideShot(CameraNode* arg0, ActivePokemon* arg1) {
     f32 sp3C;
