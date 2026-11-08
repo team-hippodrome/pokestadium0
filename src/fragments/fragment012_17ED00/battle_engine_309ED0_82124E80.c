@@ -1125,11 +1125,52 @@ void func_821296E4(CameraNode* arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_821297BC. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821297BC.s")
-#endif
+extern s32 D_8219A56C;
+void func_821297BC(CameraNode* arg0) {
+    switch (M2C_FIELD(D_8219A5A0, s32*, 0x3C)) {
+        case 0:
+            M2C_FIELD(D_8219A5A0, s32*, 0x50) = 4;
+            func_821255B4((s8*)arg0);
+            func_82124984((ActivePokemon*)D_8219A544, arg0, D_8219A570);
+            func_8212239C((ActivePokemon*)D_8219A544, arg0);
+            func_82125580();
+            break;
+        case 1:
+            M2C_FIELD(D_8219A5A0, s32*, 0x50) = 4;
+            func_821228B0(arg0, (ActivePokemon*)D_8219A544);
+            if (func_821058E8((ActivePokemon*)D_8219A544, 0x32) != 0) {
+                func_821255B4((s8*)arg0);
+                func_8211EE8C();
+                func_82124984((ActivePokemon*)D_8219A544, arg0, D_8219A570 - 1);
+                func_8212239C((ActivePokemon*)D_8219A544, arg0);
+                if (--D_8219A570 < 0 || D_82199F31 != 0) {
+                    func_82125580();
+                    do {
+                        D_8219A570 = D_8219A56C;
+                        M2C_FIELD(D_8219A5A0, s32*, 0x3C)++;
+                    } while (0);
+                } else {
+                    func_82104C68(((ActivePokemon**)&D_82199DE0)[M2C_FIELD(D_8219A5A0, u16*, 0x2C)], 0x13);
+                    func_80040738();
+                    func_8213B31C(1);
+                    M2C_FIELD(D_8219A5A0, s32*, 0x3C) = 1;
+                }
+            }
+            break;
+        case 2:
+            M2C_FIELD(D_8219A5A0, s32*, 0x50) = 4;
+            func_821228B0(arg0, (ActivePokemon*)D_8219A544);
+            if (func_821217DC(0x28) != 0) {
+                M2C_FIELD(D_8219A5A0, s32*, 0x50) = 0;
+                func_8212188C();
+                func_82125570();
+                M2C_FIELD(D_8219A5A0, s32*, 0x48) = 0;
+                func_80040738();
+                M2C_FIELD(D_8219A5A0, s32*, 0x20)++;
+            }
+            break;
+    }
+}
 
 void func_821299B0(CameraNode* arg0) {
     switch (sBattleScene.scene->unk_3C) {
