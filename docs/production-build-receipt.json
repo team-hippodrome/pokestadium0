@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5066,
-  "asm_owners": 378,
+  "c_owners": 5067,
+  "asm_owners": 377,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -603,7 +603,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "df42bf3372c65f6561b0604947ca4368640bc399d375df5d1048372003bace2b",
+    "docs/function-matches.csv": "b3cdfad1e0e27f672bb316c2231f2fa37fd014f420397cb8a27ef214971a2a44",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -789,7 +789,7 @@
     "src/fragments/fragment012_17ED00/particle_math_26E6D0_3.c": "f0a6213871cd4e3baae1d9b905e8ff098d5e5059c92250264da0269018343318",
     "src/fragments/fragment013_232510/demo_scenes_161E60.c": "13091894687e5ae603adf99992963149a5725210d6e063fbe881d84efffa8560",
     "src/fragments/fragment014_235D70/lab_pc_icons.c": "7a87bc6180cb30446ac9efbbf18fe8ac0ff0ef36a183e18eb1b8f4c721de96fd",
-    "src/fragments/fragment015_238BD0/89006FC0.c": "44b45e8583fef2e5ff39a56997ae08a3983835c1b31650b09635e4cfde5402fd",
+    "src/fragments/fragment015_238BD0/89006FC0.c": "1b774a29d4859c9ff45ec11ab15e04f59590aad713102e35f39ffd921a00e63f",
     "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c": "605dd5bd74175b78dae6fc174391886f034daa3f1fd6fc304a7033a1e2c6b3be",
     "src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c": "3cab0b3c6f8cc7527f8dccc169c208cf29835b57678a80523605acd1c3505d2b",
     "src/fragments/fragment016_252E10/89100020.c": "4932b3c5d22cd3e74db4347201a1031d2ced140e1e233c94e0f25ab0f854ff8e",
