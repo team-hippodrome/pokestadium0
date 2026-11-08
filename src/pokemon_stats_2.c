@@ -511,11 +511,53 @@ void func_80021C6C(s32 arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80021CF4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80021CF4.s")
-#endif
+s32 func_8002178C(s32);
+s32 func_80021CF4(void) {
+    s32 i;
+    s32 temp_v0 = GbTower_ScanPaks();
+
+    D_800AD334 = temp_v0 & 0xFF;
+    D_800AD335 = (temp_v0 >> 0x10) & 0xFF;
+    D_800AD330 = 0;
+
+    for (i = 0; i < 4; i++) {
+        GbSavePortZero* var_s0 = &sGbSavePorts[i];
+        u64* temp;
+
+        var_s0->unk_00 = 0x20;
+        var_s0->unk_40 = NULL;
+        var_s0->unk_44 = NULL;
+        var_s0->unk_03 = 1;
+        var_s0->unk_02 = 0;
+
+        temp = (u64*)&var_s0->unk_38;
+        *temp = 0x500000000000;
+
+        if (D_800AD335 & (1 << i)) {
+            var_s0->unk_03 = 2;
+            var_s0->unk_02 = GbCart_IdentifyGame(i);
+            if (var_s0->unk_02) {
+                D_800AD330 |= (1 << i);
+                if (GbPak_DetectRam(i, var_s0->unk_18) == 0) {
+                    Game_ShutdownAndLoadFragment(i, 2);
+                }
+                if (func_8002178C(i) != 0) {
+                    GbSave_RefreshPlayerIdentity(i);
+                    var_s0->unk_03 = 0;
+                } else {
+                    var_s0->unk_03 = 3;
+                }
+            }
+            GbTower_CheckPakRemoved(i, 0);
+        }
+    }
+
+    if (D_800AD334 != 0) {
+        GbTower_SetPollMask(D_800AD330);
+    }
+
+    return D_800AD330;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_80021E64; signature not recovered. */
