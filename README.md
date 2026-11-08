@@ -1,7 +1,7 @@
 # AI Disclosure
 
 This repo is almost entirely vibe-coded. The reasons we think this is acceptable are:
-- The AI assisted repo at [team-hippodrome/pokestadium](https://github.com/team-hippodrome/pokestadium0) serves as a great base line for Stadium 0 as almost all functionality in zero is also in stadium 1
+- The AI assisted repo at [team-hippodrome/pokestadium](https://github.com/team-hippodrome/pokestadium) serves as a great base line for Stadium 0 as almost all functionality in zero is also in stadium 1
 - Stadium 0 is a small game (only 16 mb)
 - The md5 hash of the rom serves as a fail-safe
 
