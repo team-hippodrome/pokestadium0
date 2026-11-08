@@ -82,28 +82,45 @@ void func_81110694(Obj0694* arg0) {
 }
 
 typedef struct Flags8111073C {
-    /* 0x0 */ u32 b80 : 1;
-    /* 0x0 */ u32 b40 : 1;
-    /* 0x0 */ u32 b20 : 1;
+    /* 0x0 */ volatile u32 enabled : 1; // volatile like SM64 NoteSubEu.enabled; stops IDO reusing the flag byte
+    /* 0x0 */ u32 needsInit : 1;
+    /* 0x0 */ u32 finished : 1;
     /* 0x0 */ u32 rest : 29;
 } Flags8111073C;
 
-#define FLAGS ((Flags8111073C*)(arg0 + 0xB4))
-void func_8111073C(s8* arg0) {
-    if (FLAGS->b40 == 1) {
-        FLAGS->b40 = 0;
+typedef struct PlaybackState8111073C {
+    /* 0x00 */ u8 priority;
+    /* 0x01 */ char unk01[3];
+    /* 0x04 */ u8 unk04;
+    /* 0x05 */ char unk05[0xB];
+    /* 0x10 */ void* prevParentLayer;
+    /* 0x14 */ void* parentLayer;
+    /* 0x18 */ char unk18[0x2D - 0x18];
+    /* 0x2D */ u8 adsrState;
+    /* 0x2E */ char unk2E[0x40 - 0x2E];
+    /* 0x40 */ f32 adsrCurrent;
+} PlaybackState8111073C;
+
+typedef struct Note8111073C {
+    /* 0x00 */ char unk00[0x30];
+    /* 0x30 */ PlaybackState8111073C playbackState;
+    /* 0x74 */ char unk74[0xB4 - 0x74];
+    /* 0xB4 */ Flags8111073C noteSubEu;
+} Note8111073C;
+
+void func_8111073C(Note8111073C* note) {
+    if (note->noteSubEu.needsInit == 1) {
+        note->noteSubEu.needsInit = 0;
     }
-    M2C_FIELD(arg0, u8*, 0x30) = 0;
-    M2C_FIELD(arg0, u8*, 0x34) = 0;
-    FLAGS->b80 = 0;
-    if (arg0 && arg0 && arg0) {}
-    M2C_FIELD(arg0, s32*, 0x44) = -1;
-    M2C_FIELD(arg0, s32*, 0x40) = -1;
-    FLAGS->b20 = 0;
-    M2C_FIELD(arg0, u8*, 0x5D) = 0;
-    M2C_FIELD(arg0, f32*, 0x70) = 0.0f;
+    note->playbackState.priority = 0;
+    note->playbackState.unk04 = 0;
+    note->noteSubEu.enabled = 0;
+    note->playbackState.parentLayer = (void*)-1;
+    note->playbackState.prevParentLayer = (void*)-1;
+    note->noteSubEu.finished = 0;
+    note->playbackState.adsrState = 0;
+    note->playbackState.adsrCurrent = 0.0f;
 }
-#undef FLAGS
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_81110798; signature not recovered. */
