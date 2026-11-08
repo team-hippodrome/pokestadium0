@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5114,
-  "asm_owners": 330,
+  "c_owners": 5115,
+  "asm_owners": 329,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -194,6 +194,8 @@
     "src/fragments/fragment014_235D70/lab_pc_icons.c",
     "src/fragments/fragment015_238BD0/89006FC0.c",
     "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c",
+    "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00_8900379C.c",
+    "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00_89003880.c",
     "src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c",
     "src/fragments/fragment016_252E10/89100020.c",
     "src/fragments/fragment016_252E10/89100020_89102AB8.c",
@@ -598,8 +600,8 @@
     "src/util.c",
     "src/vector_math.c"
   ],
-  "source_registry_sha256": "56e8717bc6931b187cba38c9c5a8e2a2f6d19d99fe2d94df5ea236950013ef01",
-  "section_registry_sha256": "e8b193689b6703c73a4e0b20b21d893ffcc3ec44c3efc3bac12bf9be252dd0d5",
+  "source_registry_sha256": "3ca15a5444b1e0aec4fa808aa2efc5fcda0805a195cc96d2f0715c7849fefb5a",
+  "section_registry_sha256": "7fd7373ec3f680545298198793eb6aafdb147858a39f2851396bbeecd0910333",
   "headers_sha256": "f1ad4898605ed0ad0d778c9da2826a84496e85208e3b00b25a60a984daf8ec41",
   "matching_registry_sha256": "d8bcc14a2a0db281cf30dcb9ddbd94d59e1afe84c70b4c8c017ea27ce60a251c",
   "build_tools_sha256": {
@@ -609,7 +611,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "ebba4fa2bca4202fa9aceaa9dc6a79a86cea94b4f0d9740ba46bffc913efcec2",
+    "docs/function-matches.csv": "d0edf2fbde04d0ee3260fa79831cadc752e09ad0b477224d3a024c42d063fba5",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -798,7 +800,9 @@
     "src/fragments/fragment013_232510/demo_scenes_161E60.c": "b2a2f1069c93a8565aef78a5d1046a0d41b1298909513c18dbc8f0d1c7e170f9",
     "src/fragments/fragment014_235D70/lab_pc_icons.c": "7a87bc6180cb30446ac9efbbf18fe8ac0ff0ef36a183e18eb1b8f4c721de96fd",
     "src/fragments/fragment015_238BD0/89006FC0.c": "1b774a29d4859c9ff45ec11ab15e04f59590aad713102e35f39ffd921a00e63f",
-    "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c": "9ef200586e877cb5feb20ec89ccaceace5d3c4466c913be5170dac1d91542fc0",
+    "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c": "e5368f0eff82974c24deab4a0f833ea6f4487ebfdbad8da7adab49f9f86c55bf",
+    "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00_8900379C.c": "f736cf6cf4ef2b1d86742aec70ddbc13863209f2470a551eea40da677ed33fc7",
+    "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00_89003880.c": "c8bf798b3994c99ac46f418c7dd2bb4eeafada32fe66fd36a94bce3b5d339f8c",
     "src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c": "d70cdaebea72170e55473b8fdf30de90f9b3ad5699b19851826aa8b9deeafb93",
     "src/fragments/fragment016_252E10/89100020.c": "0e6cf8bfe3651e93da78e778a8f83a25d88bd02ad7a8c7553d49ae9384294192",
     "src/fragments/fragment016_252E10/89100020_89102AB8.c": "5f6a7afe50345f4953f85c12f66ae077fda973216c77b3ff4c2c825645da196e",
