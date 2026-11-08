@@ -292,7 +292,46 @@ void func_8211D3D8(s16 arg0, s16 arg1) {
     gSPDisplayList(gDisplayListHead++, D_80060398);
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211D5F4.s")
+s32 func_800564D4(char*, const char*, ...);
+extern s32 D_82199DE0;
+extern char D_82195B00[];
+extern char D_82195B0C[];
+extern char D_82195B18[];
+extern char D_82195B24[];
+extern char D_82195B30[];
+extern char D_82195B3C[];
+extern char D_82195B4C[];
+extern char D_82195B50[];
+extern char D_82195B58[];
+extern char D_82195B60[];
+extern char D_82195B64[];
+extern char D_82195B68[];
+void func_8211D5F4(s16 arg0, s16 arg1) {
+    char buf[16];
+
+    func_8001AC7C(arg0, arg1, 0x82, 0x50, 0, 0, 0, 0x3C);
+    func_8001AB6C();
+    func_8001A384(1, 0);
+    func_8001A944(arg0 + 3, arg1 + 4, (s32)D_82195B00);
+    func_8001A944(arg0 + 3, arg1 + 0x10, (s32)D_82195B0C);
+    func_8001A944(arg0 + 3, arg1 + 0x1C, (s32)D_82195B18);
+    func_8001A944(arg0 + 3, arg1 + 0x28, (s32)D_82195B24);
+    func_8001A944(arg0 + 3, arg1 + 0x34, (s32)D_82195B30);
+    func_8001A944(arg0 + 3, arg1 + 0x40, (s32)D_82195B3C);
+    func_8001ABBC();
+    func_800564D4(buf, D_82195B4C, M2C_FIELD(D_82199DE0, f32*, 0x9F0));
+    func_82116480(buf, arg0 + 0x46, arg1 + 6);
+    func_800564D4(buf, D_82195B50, M2C_FIELD(D_82199DE0, f32*, 0x9FC));
+    func_82116480(buf, arg0 + 0x46, arg1 + 0x12);
+    func_800564D4(buf, D_82195B58, M2C_FIELD(D_82199DE0, f32*, 0x9F8));
+    func_82116480(buf, arg0 + 0x46, arg1 + 0x1E);
+    func_800564D4(buf, D_82195B60, M2C_FIELD(D_82199DE0, s16*, 0x9EC));
+    func_82116480(buf, arg0 + 0x46, arg1 + 0x2A);
+    func_800564D4(buf, D_82195B64, M2C_FIELD(D_82199DE0, s16*, 0x9EE));
+    func_82116480(buf, arg0 + 0x46, arg1 + 0x36);
+    func_800564D4(buf, D_82195B68, M2C_FIELD(D_82199DE0, s32*, 0x9E8));
+    func_82116480(buf, arg0 + 0x4B, arg1 + 0x42);
+}
 
 void func_8211D874(s16 arg0, s16 arg1) {
     func_8001AC7C(arg0, arg1, 0x6E, 0x1E, 0, 0, 0, 0x3C);
@@ -309,7 +348,6 @@ void func_8211D874(s16 arg0, s16 arg1) {
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211E164.s")
 
-extern s32 D_82199DE0;
 extern s32 D_8219A74C;
 extern s32 D_8219A754;
 extern char D_82195F70[];
@@ -320,7 +358,6 @@ extern char D_82195FB4[];
 extern char D_82195FB8[];
 extern char D_82195FBC[];
 extern char D_82195FC0[];
-s32 func_800564D4(char*, const char*, ...);
 void func_8211E414(s16 arg0, s16 arg1) {
     char buf[16];
     UNUSED s32 pad;
