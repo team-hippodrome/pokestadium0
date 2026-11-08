@@ -3500,7 +3500,7 @@ func_82202728,0x82202728,src/fragments/fragment013_232510/demo_scenes_161E60.c,f
 func_88000020,0x88000020,src/fragments/fragment014_235D70/lab_pc_icons.c,,asm,,asm
 func_8800023C,0x8800023C,src/fragments/fragment014_235D70/lab_pc_icons.c,func_8800023C,hand,,c
 func_880002D8,0x880002D8,src/fragments/fragment014_235D70/lab_pc_icons.c,func_880002D8,hand,,c
-func_880003D4,0x880003D4,src/fragments/fragment014_235D70/lab_pc_icons.c,,asm,,asm
+func_880003D4,0x880003D4,src/fragments/fragment014_235D70/lab_pc_icons.c,func_880003D4,hand,,c
 func_88000564,0x88000564,src/fragments/fragment014_235D70/lab_pc_icons.c,func_88000564,hand,,c
 func_880005E8,0x880005E8,src/fragments/fragment014_235D70/lab_pc_icons.c,func_880005E8,hand,,c
 func_8800075C,0x8800075C,src/fragments/fragment014_235D70/lab_pc_icons.c,func_8800075C,s1,stadium1:src/fragments/lab_pc_icons/lab_pc_icons.c,c

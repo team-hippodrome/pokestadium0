@@ -103,11 +103,38 @@ M2C_UNK func_880002D8(s32 arg0, s32 arg1, s32 arg2) {
     M2C_FIELD(obj, s32 *, 0x6C) |= 0x10000;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_880003D4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment014_235D70/func_880003D4.s")
-#endif
+s32 func_8002AE6C();
+extern u8 D_800734A8[4];
+extern u8 D_8007356C[];
+extern Gfx D_80060270[];
+extern Color_RGBA8 D_88001FE8;
+extern char D_88002308[];
+extern char D_88002328[];
+void func_80029658(s32, s32, s32, u8 *);
+void func_80029028(s32, s32, s32, s32, Color_RGBA8);
+void func_8002A8E0(void*);
+void func_8002D9B8(s8 *, s32, s32, s32, s32);
+void func_880003D4(s8* arg0) {
+    if (func_8002AE6C() == 0) {
+        func_8002A8E0(arg0 + 0x2C);
+        func_80029658(M2C_FIELD(arg0, s32 *, 0), M2C_FIELD(arg0, s32 *, 4) + 0x8D, M2C_FIELD(arg0, s32 *, 8), D_8007356C);
+        gSPDisplayList(gDisplayListHead++, D_80060270);
+        func_80029028(M2C_FIELD(arg0, s32 *, 0) + 6, M2C_FIELD(arg0, s32 *, 4) + 0x94, M2C_FIELD(arg0, s32 *, 8) - 0xC, 0x78, D_88001FE8);
+        Font_BeginTranslucentTextRendering();
+        Font_SetActive(0x10, 0);
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+        Font_EnableTwoCycleTexturing();
+        Gfx_SetPrimColor(0xFF, 0x96, 0x96, 0xFF);
+        Font_Printf(M2C_FIELD(arg0, s32 *, 0x2C) + 0xC, M2C_FIELD(arg0, s32 *, 0x30) + 0xC, D_88002308);
+        Font_DisableTwoCycleTexturing();
+        Font_SetActive(8, 0);
+        Gfx_SetEnvColor(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
+        Font_SetLineHeight(0x1C);
+        Font_Printf(M2C_FIELD(arg0, s32 *, 0x2C) + 0x34, M2C_FIELD(arg0, s32 *, 0x30) + 0x30, D_88002328);
+        Font_EndTexturedTextRendering();
+        func_8002D9B8(arg0 + 0x4C, M2C_FIELD(arg0, s32 *, 0) + 6, M2C_FIELD(arg0, s32 *, 4) + 0x9A, 0xFFEF, 0);
+    }
+}
 
 s32 func_8002DC04(s8*);
 s32 func_8002BC14(s32);
@@ -378,7 +405,7 @@ void func_880013EC(u8 *arg0, s32 arg1, s32 arg2, s32 *arg3) {
 
 M2C_UNK func_800069CC();                            /* extern */
 M2C_UNK func_8002C064(M2C_UNK, M2C_UNK, u8, u8, s32); /* extern */
-M2C_UNK func_880003D4(s8 *);                      /* extern */
+void func_880003D4(s8 *);
 M2C_UNK func_88000EAC(s8 *, M2C_UNK);             /* extern */
 void func_88001128(s8 *);
 extern M2C_UNK D_88002254;
