@@ -1195,16 +1195,62 @@ void func_82004240(s8 *arg0) {
     M2C_FIELD(arg0, s32 *, 0x20) = 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82004268; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment007_166580/func_82004268.s")
-#endif
+extern s8* D_8200ACF8;
+void func_800257F0(u8);
 
-M2C_UNK func_82004268(s8 *, s8 *, s8 *, s32, s32, s32); /* extern */
+void func_82004268(s32* arg0, s32* arg1, Src82004020** arg2, s32 arg3, s32 arg4, s32 arg5) {
+    Src82004020* src;
+
+    D_8200ACF8[0] = arg3;
+    D_8200ACF8[1] = arg4;
+    if (D_8200ACF8[0] == 2) {
+        D_8200ACF8[2] = arg5;
+    }
+    if ((D_8200ACF8[0] == 1) || (D_8200ACF8[0] == 2)) {
+        if (arg0[0] > 0) {
+            src = arg2[arg0[0] - 1];
+            if (src->unk_01 == 0x20) {
+                M2C_FIELD(D_8200ACF8, u8*, 0x1094) = src->unk_02;
+            } else {
+                M2C_FIELD(D_8200ACF8, s8*, 0x1094) = -1;
+            }
+            func_800257F0(M2C_FIELD(D_8200ACF8, u8*, 0x1094));
+        }
+    }
+    M2C_FIELD(D_8200ACF8, u32*, 0x108C) = -1;
+    M2C_FIELD(D_8200ACF8, u32*, 0x1090) = -1;
+    func_82004240(D_8200ACF8 + 0x1034);
+    func_82004240(D_8200ACF8 + 0x105C);
+    D_8200ACF8[4] = 0;
+    D_8200ACF8[0x208] = 0;
+    D_8200ACF8[0x40C] = 0;
+    D_8200ACF8[0x610] = 0;
+    if (arg0[0] > 0) {
+        func_82004020(D_8200ACF8 + 4, D_8200ACF8 + 0x814, arg0[0], arg2[arg0[0] - 1]);
+        M2C_FIELD(D_8200ACF8, s8**, 0x103C + M2C_FIELD(D_8200ACF8, u8*, 0x1035) * 4) = D_8200ACF8 + 4;
+        M2C_FIELD(D_8200ACF8, u8*, 0x1035)++;
+    }
+    if (arg0[1] > 0) {
+        func_82004020(D_8200ACF8 + 0x208, D_8200ACF8 + 0xA1C, arg0[1], arg2[arg0[1] - 1]);
+        M2C_FIELD(D_8200ACF8, s8**, 0x103C + M2C_FIELD(D_8200ACF8, u8*, 0x1035) * 4) = D_8200ACF8 + 0x208;
+        M2C_FIELD(D_8200ACF8, u8*, 0x1035)++;
+    }
+    if (arg1[0] > 0) {
+        func_82004020(D_8200ACF8 + 0x40C, D_8200ACF8 + 0xC24, arg1[0], arg2[arg1[0] - 1]);
+        M2C_FIELD(D_8200ACF8, s8**, 0x1064 + M2C_FIELD(D_8200ACF8, u8*, 0x105D) * 4) = D_8200ACF8 + 0x40C;
+        M2C_FIELD(D_8200ACF8, u8*, 0x105D)++;
+    }
+    if (arg1[1] > 0) {
+        func_82004020(D_8200ACF8 + 0x610, D_8200ACF8 + 0xE2C, arg1[1], arg2[arg1[1] - 1]);
+        M2C_FIELD(D_8200ACF8, s8**, 0x1064 + M2C_FIELD(D_8200ACF8, u8*, 0x105D) * 4) = D_8200ACF8 + 0x610;
+        M2C_FIELD(D_8200ACF8, u8*, 0x105D)++;
+    }
+}
+
+void func_82004268(s32*, s32*, Src82004020**, s32, s32, s32);
 
 void func_820044D0(s8 *arg0) {
-    func_82004268(arg0 + 0x4358, arg0 + 0x4360, arg0 + 0x4340, M2C_FIELD(arg0, s32 *, 0x4370), M2C_FIELD(arg0, s32 *, 0x4374), M2C_FIELD(arg0, s32 *, 0x501C));
+    func_82004268((s32*)(arg0 + 0x4358), (s32*)(arg0 + 0x4360), (Src82004020**)(arg0 + 0x4340), M2C_FIELD(arg0, s32 *, 0x4370), M2C_FIELD(arg0, s32 *, 0x4374), M2C_FIELD(arg0, s32 *, 0x501C));
 }
 
 #ifdef NON_MATCHING
@@ -1613,7 +1659,7 @@ extern s8 D_00235D70;
 extern s8 D_00238BD0;
 extern s8 D_800AE8F0;
 extern s32 D_82008F84;
-extern M2C_UNK *D_8200ACF8;
+extern s8* D_8200ACF8;
 extern s8 D_88000000;
 s32 func_82005CCC(s32 arg0, M2C_UNK arg1)
 {
