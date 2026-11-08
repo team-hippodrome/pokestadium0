@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 4993,
-  "asm_owners": 451,
+  "c_owners": 4994,
+  "asm_owners": 450,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -600,10 +600,10 @@
     "tools/production.py": "c672f1c73b64b7cf0e64da909081796174b2e57b49852e0862d45d0826c4c8ff",
     "tools/m2c_easiest.py": "edb0c9af61e5241c9e90f24152effdf636ceaa630812900d2840e2a67c5ff3f3",
     "tools/asm_prelude.inc": "e17e26652f832563c8ff17b0588b67d897a0faa4905442b151e5e67c85bfcff1",
-    "tools/cflags_overrides.json": "7052d644eb08429c59981bb4c369c8c937c61ca4c639a1c1ca2c5fc0ce919ebb",
+    "tools/cflags_overrides.json": "9d38732a8062f9f9d8de32c0e0b6ec71b1a0818cb0b4701f332126abe3441fc0",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "6ccb0a61138245ccf00f640b2c72e4f56675e49030bcf8b926d424f820fea05a",
+    "docs/function-matches.csv": "2e64363b37fb79e34598df0e220baf2277962aa8c2b8b613f81182dbce118242",
     "linker_scripts/jp/symbol_addrs.txt": "91a8d27f8e3707e5bcad1c0b12773248d8212c8fe32df8bae724086cddb32db8"
   },
   "binutils": {
@@ -629,7 +629,7 @@
     "src/48090.c": "5f698b365cede25dd7e2cba44b654562f5142044ec9136df9ebdfac5f3ff74cf",
     "src/48C10.c": "c87ab0521ba32463bd4640520d73d16f6412d35a25b9b2756e742369aa01b45a",
     "src/48D10.c": "61cfe4366bff35084d2202df447a1ab391ff85ef65501ef7ad14690c6d385d0e",
-    "src/4C760.c": "fd5290be967e962c0dea66e83fae3c5a779672ca1e31ec83cee169289974f397",
+    "src/4C760.c": "b17915377c6a3131f1ba378621bcc30c02823bae5096d073547caf9432c0f9a7",
     "src/4D700.c": "51f5b4f2548a12f4740fe5b3ea371a3230a99156b53027bd3f8f3d8924370463",
     "src/4D940.c": "fe97e2be40c240968bcc92da5209b1b8d650507383b1b040c283973e5cf47067",
     "src/4DF00.c": "bdf775b739c4b784106b32a19dee0fab78c245346db019bb4a631c07970775a0",
