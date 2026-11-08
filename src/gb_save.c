@@ -414,11 +414,27 @@ void func_8002B018(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s
     M2C_FIELD(arg0, s32 *, 0x24) = arg5;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002B054; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002B054.s")
-#endif
+void func_8002B054(s8* arg0, s32 arg1) {
+    Color_RGBA8 color;
+    Color_RGBA8* src;
+
+    func_8002A32C(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 8), M2C_FIELD(arg0, s32*, 0xC));
+    if ((M2C_FIELD(arg0, s32*, 0x10) & 8) || (arg1 & 0x10)) {
+        func_8002A0AC(M2C_FIELD(arg0, s32*, 0) + 1, M2C_FIELD(arg0, s32*, 4) + 1, M2C_FIELD(arg0, s32*, 8) - 2, M2C_FIELD(arg0, s32*, 0xC) - 2, M2C_FIELD(arg0, Color_RGBA8*, 0x20));
+    } else if (arg1 & 2) {
+        func_80029A64(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 8), M2C_FIELD(arg0, s32*, 0xC), D_80073520);
+    }
+    if (arg1 & 0x12) {
+        src = (Color_RGBA8*)(arg0 + 0x18);
+    } else {
+        src = (Color_RGBA8*)(arg0 + 0x1C);
+    }
+    color = *src;
+    gSPDisplayList(gDisplayListHead++, D_80073450);
+    gDPSetCombineMode(gDisplayListHead++, G_CC_MODULATEIDECALA_PRIM, G_CC_MODULATEIDECALA_PRIM);
+    gDPSetPrimColor(gDisplayListHead++, 0, 0, color.r, color.g, color.b, color.a);
+    Gfx_DrawTextureIa16(M2C_FIELD(arg0, s32*, 0) + 3, M2C_FIELD(arg0, s32*, 4) + 3, M2C_FIELD(arg0, s32*, 8) - 6, M2C_FIELD(arg0, s32*, 0xC) - 6, M2C_FIELD(arg0, u8**, 0x28), M2C_FIELD(arg0, s32*, 0x24), 0);
+}
 
 s32 Ui_AdjustVerticalSelection(unk_func_8002DCB8_arg0* arg0, s32 arg1) {
     s32 ret = 0;

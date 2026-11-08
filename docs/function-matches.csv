@@ -4291,7 +4291,7 @@ func_8002AE6C,0x8002AE6C,src/gb_save.c,Particle_SetVelocityXZFromRotationY,s1,st
 func_8002AE94,0x8002AE94,src/gb_save.c,func_8002AE94,hand,,c
 func_8002AF04,0x8002AF04,src/gb_save.c,func_8002AF04,hand,,c
 func_8002B018,0x8002B018,src/gb_save.c,func_8002B018,m2c,m2c,c
-func_8002B054,0x8002B054,src/gb_save.c,,asm,,asm
+func_8002B054,0x8002B054,src/gb_save.c,func_8002B054,hand,,c
 func_8002B204,0x8002B204,src/gb_save.c,Ui_AdjustVerticalSelection,s1,stadium1:src/gb_save.c,c
 func_8002B2B0,0x8002B2B0,src/gb_save.c,Ui_HandleVerticalSelectionInput,s1,stadium1:src/gb_save.c,c
 func_8002B2E4,0x8002B2E4,src/gb_save.c,Ui_AdjustHorizontalSelection,s1,stadium1:src/gb_save.c,c
