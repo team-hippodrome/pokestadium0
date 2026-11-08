@@ -938,11 +938,38 @@ void func_89108450(FlagScanOwner* arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_891084B4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_891084B4.s")
-#endif
+typedef struct Str891084B4 {
+    /* 0x00 */ u8 c[0x11];
+} Str891084B4; // size = 0x11
+typedef struct Rgba891084B4 {
+    u8 r, g, b, a;
+} Rgba891084B4;
+extern s8 D_89119BD0[];
+extern u8 D_8910E120[];
+extern u8 D_8910AAE0[];
+extern u8 D_8910AAE4[];
+void func_8000A460(s8*, s8*);
+void func_8002EC24(s8*, s32, s32, s32, void*, s32, s32);
+void func_891081A8();
+void func_891084B4(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, u8* arg5) {
+    func_8002A8C4(arg0, arg1, arg2, 0x184, 0x16E);
+    M2C_FIELD(arg0, s32*, 0x24) = 0;
+    M2C_FIELD(arg0, s32*, 0x20) = 0;
+    M2C_FIELD(arg0, s32*, 0x28) = 0;
+    M2C_FIELD(arg0, s32*, 0x14) = 0x801;
+    func_8000A460(D_89119BD0, *(s8**)D_80064C44[arg5[8]]);
+    *(Str891084B4*)(func_800566BC((s32)D_89119BD0) + D_89119BD0) = *(Str891084B4*)D_8910E120;
+    M2C_FIELD(arg0, s8**, 0x20) = D_89119BD0;
+    func_8002A8C4(arg0 + 0x2C, arg1 + 6, arg2 + 0x10C, 0x178, 0x5C);
+    M2C_FIELD(arg0, s32*, 0x40) = 6;
+    M2C_FIELD(arg0, Rgba891084B4*, 0x44) = *(Rgba891084B4*)D_8910AAE0;
+    M2C_FIELD(arg0, Rgba891084B4*, 0x48) = *(Rgba891084B4*)D_8910AAE4;
+    func_8002EC24(arg0 + 0x4C, arg3, arg4, 8, func_891081A8, 0x178, 0x1C);
+    M2C_FIELD(arg0, s32*, 0x6C) |= 0x10000;
+    func_89108450((FlagScanOwner*)arg0);
+    M2C_FIELD(arg0, u8**, 0x1AC) = arg5;
+    M2C_FIELD(arg0, s32*, 0x1B0) = 0;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_89108650; signature not recovered. */
