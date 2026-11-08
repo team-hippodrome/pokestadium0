@@ -122,7 +122,7 @@ func_80051D80,0x80051D80,src/libultra/io/contreaddata.c,,ultralib,libultra:src/i
 func_80052100,0x80052100,src/52D00.c,,asm,,asm
 func_80052180,0x80052180,src/52D80.c,,asm,,asm
 func_80052410,0x80052410,src/libultra/io/pirawread.c,osPiRawReadIo,ultralib,libultra:io/pirawread.c,c
-func_80052480,0x80052480,src/53080.c,,asm,,asm
+func_80052480,0x80052480,src/53080.c,osGbpakInit,ultralib,libultra:io/gbpakinit.c,c
 func_80052C30,0x80052C30,src/libultra/io/sprawdma.c,__osSpRawStartDma,ultralib,libultra:src/io/sprawdma.c,c
 func_80052CC0,0x80052CC0,src/538C0.c,func_80052CC0,m2c,m2c,c
 func_80053A90,0x80053A90,src/libultra/io/conteepprobe.c,osEepromProbe,ultralib,libultra:src/io/conteepprobe.c,c

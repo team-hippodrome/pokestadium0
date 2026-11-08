@@ -997,5 +997,11 @@
     "opt": "-O2",
     "mips": "-mips2",
     "profile": "ultralib"
+  },
+  "src/53080.c": {
+    "ido": "5.3",
+    "opt": "-O2",
+    "mips": "-mips2",
+    "profile": "ultralib"
   }
 }
