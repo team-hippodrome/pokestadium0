@@ -782,11 +782,51 @@ s32 func_8110CA2C(s32 arg0);
 u8* func_81110CA8(s32, s32);
 u8* func_81110D6C(s32, s32);
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110BD20; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110BD20.s")
-#endif
+void func_8110BEE4(u8* arg0, Flags2Bit* arg1);
+
+void func_8110BD20(SampleCacheEntry8110BA8C* entry) {
+    u8* inst;
+    s32 numFonts;
+    s32 fontId;
+    s32 sampleBankId1;
+    s32 sampleBankId2;
+    s32 instId;
+    u8* drum;
+    s32 drumId;
+
+    numFonts = *(s16*)D_811858A0;
+    for (fontId = 0; fontId < numFonts; fontId++) {
+        sampleBankId1 = D_811858B0[fontId].unk02;
+        sampleBankId2 = D_811858B0[fontId].unk03;
+        if (((sampleBankId1 != 0xFF) && (entry->sampleBankId == sampleBankId1)) ||
+            ((sampleBankId2 != 0xFF) && (entry->sampleBankId == sampleBankId2)) || entry->sampleBankId == 0) {
+            if (func_8110A310(1, 2, fontId) != 0) {
+                if (func_8110CA2C(fontId) != 0) {
+                    for (instId = 0; instId < D_811858B0[fontId].unk00; instId++) {
+                        inst = func_81110CA8(fontId, instId);
+                        if (inst != NULL) {
+                            if (inst[1] != 0) {
+                                func_8110BEE4((u8*)entry, M2C_FIELD(inst, Flags2Bit**, 8));
+                            }
+                            if (inst[2] != 0x7F) {
+                                if (1) {
+                                    func_8110BEE4((u8*)entry, M2C_FIELD(inst, Flags2Bit**, 0x18));
+                                }
+                            }
+                            func_8110BEE4((u8*)entry, M2C_FIELD(inst, Flags2Bit**, 0x10));
+                        }
+                    }
+                    for (drumId = 0; drumId < D_811858B0[fontId].unk01; drumId++) {
+                        drum = func_81110D6C(fontId, drumId);
+                        if (drum != NULL) {
+                            func_8110BEE4((u8*)entry, M2C_FIELD(drum, Flags2Bit**, 4));
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 
 /*
  * func_8110BEE4
