@@ -4155,7 +4155,7 @@ func_80025D8C,0x80025D8C,src/game_state.c,func_80025D8C,hand,,c
 func_80025E3C,0x80025E3C,src/game_state.c,func_80025E3C,m2c,m2c,c
 func_80025F3C,0x80025F3C,src/game_state.c,func_80025F3C,m2c,m2c,c
 func_80025FDC,0x80025FDC,src/game_state.c,State_FastN64Logo,hand,,c
-func_800260C4,0x800260C4,src/game_state.c,,asm,,asm
+func_800260C4,0x800260C4,src/game_state.c,func_800260C4,hand,,c
 func_80026368,0x80026368,src/game_state.c,,asm,,asm
 func_8002677C,0x8002677C,src/game_state.c,State_GbTower,hand,,c
 func_80026898,0x80026898,src/game_state.c,func_80026898,m2c,m2c,c

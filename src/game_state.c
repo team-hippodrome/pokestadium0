@@ -462,11 +462,82 @@ void State_FastN64Logo(void) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_800260C4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800260C4.s")
-#endif
+extern M2C_UNK D_88000000;
+extern M2C_UNK D_88400000;
+extern u8 D_00162BE0[];
+extern u8 D_00166580[];
+extern u8 D_00235D70[];
+extern u8 D_00238BD0[];
+extern s16 D_800AF986;
+extern StageContext *D_800AF9A4;
+void func_80021A8C(s32);
+s32 func_80021E64(s32);
+void GbSave_ValidateBeforeWrite(s32);
+void GbSave_RequirePakPresent(s32);
+s32 func_80022B4C(s32);
+s32 GbSave_GetBoxCount(s32);
+void func_80023C30(void);
+void func_80025E3C(s32);
+void func_800260C4(void)
+{
+  s32 pushed = 0;
+  main_pool_push_state('OVLY');
+  func_80023C30();
+  Gfx_InitDisplayListBuffers(0x10000, 0);
+  D_800AF9A4 = StageContext_Allocate(1, 1, 2, 0, 2, 1);
+  StageContext_Activate(D_800AF9A4);
+  if (((*((u16 *) (((s8 *) (&D_800AE8F0)) + 0x1096))) & 1) && (!((*((u16 *) (((s8 *) (&D_800AE8F0)) + 0x1096))) & 2)))
+  {
+    *((u16 *) (((s8 *) (&D_800AE8F0)) + 0x1096)) |= 0x100;
+  }
+  D_800733D8 = 0;
+  if ((D_800AF988 != 0) || ((*((u16 *) (((s8 *) (&D_800AE8F0)) + 0x1096))) & 0x100))
+  {
+    D_800AF988 = 0;
+    GbSave_SetActivePort(D_800733D4);
+    Fragment_QueueCall((((u32) (((s32) (&D_88000000)) & 0x0FF00000)) >> 0x14) - 0x10, D_00235D70, D_00238BD0, 0, (s32) (&D_800AE8F0));
+  }
+  else
+  {
+    Fragment_QueueCall((((u32) (((s32) (&D_88400000)) & 0x0FF00000)) >> 0x14) - 0x10, D_00162BE0, D_00166580, 0, (s32) (&D_800AE8F0));
+  }
+  func_80025A64();
+  while ((D_800733C8 == 0x8040) && (D_800AF990.unk_00 != 0))
+  {
+    if (D_800733D8 != 0)
+    {
+      D_800733D8 = 0;
+      if (func_80022B4C(D_800733D4) == 0)
+      {
+        if (pushed)
+        {
+          main_pool_pop_state('BUDT');
+        }
+        pushed = 1;
+        main_pool_push_state('BUDT');
+        func_80021A8C(D_800733D4);
+        if (GbSave_GetBoxCount(D_800733D4) == 0)
+        {
+          GbSave_ValidateBeforeWrite(D_800733D4);
+          while (func_80021E64(D_800733D4) == 0)
+          {
+            func_80025E3C(D_800733D4);
+          }
+
+          GbSave_RequirePakPresent(D_800733D4);
+        }
+        func_80025A64();
+      }
+    }
+    D_800AF990.unk_00 = 0;
+    D_800733C8 = Fragment_LoadAndCall(D_800AF990.fragment_id, D_800AF990.rom_start, D_800AF990.rom_end, D_800AF990.arg0, D_800AF990.arg1);
+  }
+
+  D_800AF986 = (!((*((u16 *) (((s8 *) (&D_800AE8F0)) + 0x1096))) & 2)) * 0;
+  StageContext_Deactivate();
+  Gfx_FreeDisplayListBuffers();
+  main_pool_pop_state('OVLY');
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_80026368; signature not recovered. */
