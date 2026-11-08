@@ -601,7 +601,60 @@ void func_89102A04(s32 arg0) {
 }
 
 #ifdef NON_MATCHING
-/* TODO: decompile func_89102AB8; signature not recovered. */
+// Matches the ROM, but uses rodata data that is not placed in this file yet.
+s32 func_891066C0(s8*);
+void func_80027D68(s32, s32);
+void func_89105C54(s8*, s32, s32, s8*, Rgba891024A4);
+M2C_UNK func_89101D94(s8 *);
+extern s32 D_8910D9D0;
+extern s32 D_8910D9D4;
+
+s32 func_89102AB8(s8* arg0) {
+    s32 buttons;
+
+    if (func_891066C0(arg0 + 0x9654) != 0) {
+        return 0;
+    }
+    buttons = ((u16*)D_800603C0)[4];
+    if (buttons & 0x4000) {
+        func_8003F6AC(3);
+        M2C_FIELD(arg0, s32*, 0x88) = 0;
+    } else if (buttons & 0x8000) {
+        if (!(M2C_FIELD(arg0, u16**, 0x9698)[M2C_FIELD(arg0, s32*, 0x969C)] & 1)) {
+            func_8003F6AC(2);
+            switch (M2C_FIELD(arg0, s32*, 0x969C)) {
+                case 0:
+                    M2C_FIELD(arg0, s32*, 0x78) = 0x10;
+                    func_80027D68(M2C_FIELD(arg0, s32*, 0xB160), D_8910D9D0);
+                    M2C_FIELD(arg0, s32*, 0x88) = 0;
+                    break;
+                case 1:
+                    M2C_FIELD(arg0, s32*, 0x78) = 0x11;
+                    func_80027D68(M2C_FIELD(arg0, s32*, 0xB160), D_8910D9D4);
+                    M2C_FIELD(arg0, s32*, 0x88) = 0;
+                    break;
+                case 2:
+                    func_89101D80(arg0, 0x20);
+                    func_89101D94(arg0);
+                    M2C_FIELD(arg0, s32*, 0x88) = 0;
+                    break;
+                case 3:
+                    func_89100380((LabPCInitialStateFields*)arg0);
+                    func_89101D78(arg0);
+                    func_89101D94(arg0);
+                    M2C_FIELD(arg0, s32*, 0x88) = 0;
+                    break;
+                case 4:
+                    M2C_FIELD(arg0, s32*, 0x88) = 1;
+                    func_89105C54(arg0 + 0x230, 0x78, 0x67, arg0 + 0x420, D_8910A7F4);
+                    return 0;
+            }
+        } else {
+            func_8003F6AC(8);
+        }
+    }
+    return 0;
+}
 #else
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89102AB8.s")
 #endif

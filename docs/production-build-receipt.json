@@ -603,7 +603,7 @@
     "tools/cflags_overrides.json": "7052d644eb08429c59981bb4c369c8c937c61ca4c639a1c1ca2c5fc0ce919ebb",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "d18aff84099a1fe9416a655f21667e886ef5838c261bea6320a717f3bceec176",
+    "docs/function-matches.csv": "97bff02bf89185d844a99c63fac5e6bb96e0d2a0c3cee888ada921cfe795ce83",
     "linker_scripts/jp/symbol_addrs.txt": "3b5103d4cfe8c6cf2470a85f3aacf457f87dc2c7f2096a7a216bec5fd85d5385"
   },
   "binutils": {
@@ -792,7 +792,7 @@
     "src/fragments/fragment015_238BD0/89006FC0.c": "f0e3dc71bfa1f6a324b315050541b2cf80f179f0166074ab26f768999ca3c409",
     "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c": "eefbff7c0d58ff548ce304c6cdc22178a0a5cd034ab06a98601793b1a66880fb",
     "src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c": "81155eb1b53b107bb4662317c9e1ed7cb71a958efe8808ce9bf602e2c2d99b77",
-    "src/fragments/fragment016_252E10/89100020.c": "8c756bdce83ff7becf6eab95c5fcef43deaf921e2cd848e565a55342d54ec11f",
+    "src/fragments/fragment016_252E10/89100020.c": "8d43fc96dccadb17a1bcba83fd9c1eecb83c1a2efdf6fe21d121377dc608a0a6",
     "src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c": "bb83e02c345cabea1d9f4c5b057ef403579d641d70f27af354c35444964e05b1",
     "src/fragments/fragment016_252E10/lab_pc_list_1E46B0.c": "ba8d4b5501f5daea30407668a46cb1021536cf2edb09db847e7544301d76b045",
     "src/fragments/fragment016_252E10/lab_pc_list_1E46B0_2.c": "ca2ad66f736d581a4970adae550f327d1024cb27841e034e49b7345dcf501bbe",
