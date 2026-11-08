@@ -47,17 +47,35 @@ extern Voice811077FC* D_81184288;
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81107390.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81107634; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81107634.s")
-#endif
+#define SHL_8110(v, s, w) ((u32)(((u32)(v) & ((1 << (w)) - 1)) << (s)))
+#define aLoadBuf_8110(pkt, c, dmem, count, addr)                                                  \
+    {                                                                                              \
+        AudioCmd* _a = (AudioCmd*)(pkt);                                                           \
+        _a->w0 = (SHL_8110(c, 24, 8) | SHL_8110((count) >> 4, 16, 8) | SHL_8110(dmem, 0, 16));     \
+        _a->w1 = (u32)(addr);                                                                      \
+    }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_811076D0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_811076D0.s")
-#endif
+void* func_81107634(AudioCmd* cmd, u16 dmem, u16 offset, s32 count, s32 channel) {
+    aLoadBuf_8110(cmd++, 0x14, dmem, count, D_81184110[channel].bufL + offset * 2 + 0x80000000);
+    aLoadBuf_8110(cmd++, 0x14, dmem + 0x1A0, count, D_81184110[channel].bufR + offset * 2 + 0x80000000);
+    return cmd;
+}
+
+void* func_811076D0(AudioCmd* cmd, u16 dmem, u16 offset, s32 count, s32 channel) {
+    aLoadBuf_8110(cmd++, 0x15, dmem, count, D_81184110[channel].bufL + offset * 2 + 0x80000000);
+    aLoadBuf_8110(cmd++, 0x15, dmem + 0x1A0, count, D_81184110[channel].bufR + offset * 2 + 0x80000000);
+    return cmd;
+}
+
+typedef struct AudioCfg811078D8 {
+    /* 0x00 */ char unk00[0xC];
+    /* 0x0C */ s16 passes;
+    /* 0x0E */ s16 chunk;
+    /* 0x10 */ s16 maxChunk;
+    /* 0x12 */ s16 minChunk;
+} AudioCfg811078D8;
+extern AudioCfg811078D8 D_811858B8;
+extern s32 D_811858E8;
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8110776C; signature not recovered. */
@@ -89,14 +107,6 @@ void func_811077FC(u32 arg0) {
     }
 }
 
-typedef struct AudioCfg811078D8 {
-    /* 0x00 */ char unk00[0xC];
-    /* 0x0C */ s16 passes;
-    /* 0x0E */ s16 chunk;
-    /* 0x10 */ s16 maxChunk;
-    /* 0x12 */ s16 minChunk;
-} AudioCfg811078D8;
-extern AudioCfg811078D8 D_811858B8;
 extern s8 D_8118427B;
 void func_81107390(s32, s32, s32);
 AudioCmd* func_8110814C(s32*, s32, AudioCmd*, s32);
@@ -152,7 +162,7 @@ AudioCmd* func_811078D8(AudioCmd* arg0, s32* arg1, s32* arg2, s32 arg3) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81107AEC.s")
 #endif
 
-void* func_81107634(void* cmd, u16 dmem, u16 offset, s32 count, s32 channel);
+void* func_81107634(AudioCmd* cmd, u16 dmem, u16 offset, s32 count, s32 channel);
 extern AudioChannel81107E70 D_81184110[];
 
 void* func_81107E70(void* cmd, s16 channel, s16 slot) {
@@ -171,7 +181,7 @@ void* func_81107E70(void* cmd, s16 channel, s16 slot) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81107F40.s")
 #endif
 
-void* func_811076D0(void* cmd, u16 dmem, u16 offset, s32 count, s32 channel);
+void* func_811076D0(AudioCmd* cmd, u16 dmem, u16 offset, s32 count, s32 channel);
 
 void* func_8110807C(void* cmd, s16 channel, s16 slot) {
     AudioVoice81107E70* voice = &D_81184110[channel].voices[D_81184110[channel].bank][slot];
