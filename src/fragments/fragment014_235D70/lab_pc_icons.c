@@ -628,8 +628,8 @@ extern M2C_UNK D_01000000;
 extern M2C_UNK D_04000000;
 extern M2C_UNK D_05000000;
 extern s32 D_80073400;
-extern M2C_UNK func_88001A30;
-extern M2C_UNK func_88001B28;
+s32 func_88001A30(s32 arg0);
+s32 func_88001B28(s32 arg0);
 
 s32 func_88001D54(s32 arg0) {
     s32 sp1C;

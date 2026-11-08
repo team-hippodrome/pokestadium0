@@ -2,11 +2,26 @@
 
 #include "global.h"
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81100020; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81100020.s")
-#endif
+void func_811177D0(s32);
+void func_81106820(void);
+void func_80052DC0(s32);
+void func_81104B88(OSTime);
+void func_8005C280(f32);
+void func_80057470(s32);
+void func_80008014(s32, s32, s32);
+void func_8004FD20(s32, s32);
+extern s8* D_81154C30[];
+extern s32 D_81154C3C;
+void func_81100020(void) {
+    func_811177D0(0);
+    func_81106820();
+    func_80052DC0(1);
+    func_81104B88(20);
+    func_8005C280(1.0f);
+    func_80057470(*(s32*)(D_81154C30[D_81154C3C] + 8));
+    func_80008014(*(s32*)(D_81154C30[D_81154C3C] + 8), 0x140, 0x10);
+    func_8004FD20(*(s32*)(D_81154C30[D_81154C3C] + 8), 0x25800);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_811000DC; signature not recovered. */

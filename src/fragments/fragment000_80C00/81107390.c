@@ -26,6 +26,21 @@ typedef struct AudioChannel81107E70 {
 
 extern AudioChannel81107E70 D_81184110[];
 
+typedef struct AudioCmd {
+    /* 0x00 */ u32 w0;
+    /* 0x04 */ u32 w1;
+} AudioCmd; // size = 0x8
+
+typedef struct Voice811077FC {
+    /* 0x00 */ u32 active : 1;
+    /* 0x00 */ u32 dirty : 1;
+    /* 0x00 */ u32 unk00 : 30;
+    /* 0x04 */ char unk04[2];
+    /* 0x06 */ u8 unk06;
+    /* 0x07 */ char unk07[0x11];
+} Voice811077FC; // size = 0x18
+extern Voice811077FC* D_81184288;
+
 #ifdef NON_MATCHING
 /* TODO: decompile func_81107390; signature not recovered. */
 #else
@@ -50,20 +65,11 @@ extern AudioChannel81107E70 D_81184110[];
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110776C.s")
 #endif
 
-typedef struct Voice811077FC {
-    /* 0x00 */ u32 active : 1;
-    /* 0x00 */ u32 dirty : 1;
-    /* 0x00 */ u32 unk00 : 30;
-    /* 0x04 */ char unk04[2];
-    /* 0x06 */ u8 unk06;
-    /* 0x07 */ char unk07[0x11];
-} Voice811077FC; // size = 0x18
 typedef struct Rec811077FC {
     /* 0x00 */ char unk00[0xB4];
     /* 0xB4 */ Voice811077FC voice;
 } Rec811077FC; // size = 0xCC
 extern Rec811077FC* D_81184664;
-extern Voice811077FC* D_81184288;
 extern s32 D_811858E8;
 void func_811077FC(u32 arg0) {
     s32 i;
