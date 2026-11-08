@@ -991,5 +991,11 @@
     "mips": "-mips2",
     "opt": "-O1",
     "profile": "ultralib"
+  },
+  "src/56F50.c": {
+    "ido": "5.3",
+    "opt": "-O2",
+    "mips": "-mips2",
+    "profile": "ultralib"
   }
 }

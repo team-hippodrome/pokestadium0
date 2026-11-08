@@ -4981,7 +4981,7 @@ func_8005C524,0x8005C524,src/libultra/libc/llcvt.c,,ultralib,libultra:src/libc/l
 func_8005C53C,0x8005C53C,src/libultra/libc/llcvt.c,,ultralib,libultra:src/libc/llcvt.c,c
 func_8005C554,0x8005C554,src/libultra/libc/llcvt.c,,ultralib,libultra:src/libc/llcvt.c,c
 func_8005C588,0x8005C588,src/libultra/libc/llcvt.c,,ultralib,libultra:src/libc/llcvt.c,c
-func_80056350,0x80056350,src/56F50.c,,asm,,asm
+func_80056350,0x80056350,src/56F50.c,osGbpakGetStatus,ultralib,libultra:io/gbpakgetstatus.c,c
 func_800564B0,0x800564B0,src/libultra/libc/sprintf.c,,ultralib,,c
 func_800564D4,0x800564D4,src/libultra/libc/sprintf.c,,ultralib,libultra:src/libc/sprintf.c,c
 func_80056690,0x80056690,src/libultra/libc/string.c,,ultralib,libultra:src/libc/string.c,c
