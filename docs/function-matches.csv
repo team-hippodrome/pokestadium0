@@ -3826,7 +3826,7 @@ func_8910A094,0x8910A094,src/fragments/fragment016_252E10/lab_pc_list_1E46B0_2.c
 func_8910A0E4,0x8910A0E4,src/fragments/fragment016_252E10/lab_pc_list_1E46B0_2.c,LabPCList_IsHmItemId,s1,stadium1:src/fragments/lab_pc_list/lab_pc_list_1E46B0.c,c
 func_8910A1A8,0x8910A1A8,src/fragments/fragment016_252E10/lab_pc_list_1E46B0_2.c,LabPCList_IsSpecialTmItemId,s1,stadium1:src/fragments/lab_pc_list/lab_pc_list_1E46B0.c,c
 func_8910A1EC,0x8910A1EC,src/fragments/fragment016_252E10/lab_pc_list_1E46B0_2.c,LabPCList_CompareTmHmEntries,s1,stadium1:src/fragments/lab_pc_list/lab_pc_list_1E46B0.c,c
-func_8910A21C,0x8910A21C,src/fragments/fragment016_252E10/lab_pc_list_1E46B0_2.c,,asm,,asm
+func_8910A21C,0x8910A21C,src/fragments/fragment016_252E10/lab_pc_list_1E46B0_2.c,func_8910A21C,hand,,c
 func_8910A3C0,0x8910A3C0,src/fragments/fragment016_252E10/lab_pc_list_1E46B0_2.c,LabPCList_CanLearnMoveByLevelUp,s1,stadium1:src/fragments/lab_pc_list/lab_pc_list_1D7B40.c,c
 func_8910A4C8,0x8910A4C8,src/fragments/fragment016_252E10/lab_pc_list_1E46B0_2.c,,asm,,asm
 func_8910A764,0x8910A764,src/fragments/fragment016_252E10/lab_pc_list_1E46B0_2.c,LabPCList_ConsumeUsedTmItem,s1,stadium1:src/fragments/lab_pc_list/lab_pc_list_1E46B0.c,c

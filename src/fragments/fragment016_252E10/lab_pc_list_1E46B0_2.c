@@ -194,11 +194,70 @@ s32 LabPCList_CompareTmHmEntries(unk_func_88200FA0_030_038* arg0, unk_func_88200
     return (arg0->unk_08 - arg1->unk_08 != 0) ? arg0->unk_08 - arg1->unk_08 : (s32)arg0[1].unk_00 - (s32)arg1[1].unk_00;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8910A21C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_8910A21C.s")
-#endif
+typedef struct TmEntry8910A21C {
+    /* 0x00 */ u8* unk_00;
+    /* 0x04 */ unk_func_8830867C_02C_154* unk_04;
+    /* 0x08 */ s32 unk_08;
+    /* 0x0C */ s32 unk_0C;
+    /* 0x10 */ s32 unk_10;
+} TmEntry8910A21C; // size = 0x14
+void func_8910A21C(unk_func_88200FA0_030_038* arg0, TmEntry8910A21C* arg1, unk_func_8830867C_02C_154* arg2, s32 arg3) {
+    unk_func_88205880_00D0** var_s6;
+    unk_func_8830867C_02C_154* var_s4;
+    s32 i;
+    TmEntry8910A21C* var_s1;
+    s32 j;
+    s32 sp50;
+    s32 var_s0;
+    s32 var_v0;
+    u8* var_s2;
+
+    var_s6 = arg0->unk_00;
+    var_s4 = arg2;
+    var_s1 = arg1;
+
+    for (i = 0; i < arg3; i++, var_s4++) {
+        if (var_s4->unk_04 != 0) {
+            var_s2 = var_s4->unk_0C;
+
+            for (j = 0; j < var_s4->unk_14; j++, var_s2 += 2) {
+                var_s0 = 0;
+                sp50 = *var_s2;
+                if (LabPCList_IsTmItemId(&sp50) != 0) {
+                    var_s0 = 1;
+                } else if (LabPCList_IsHmItemId(&sp50) != 0) {
+                    var_s0 = 1;
+                } else if (LabPCList_IsSpecialTmItemId(&sp50) != 0) {
+                    var_s0 = 1;
+                }
+
+                if (var_s0 != 0) {
+                    var_s1->unk_00 = var_s2;
+                    var_s1->unk_04 = var_s4;
+                    var_s1->unk_08 = sp50;
+
+                    if (var_s4->unk_00 == 0x23) {
+                        var_s1->unk_0C = 0;
+                    } else {
+                        if (var_s4->unk_00 == 0x22) {
+                            var_v0 = 1;
+                        } else {
+                            var_v0 = 2;
+                        }
+                        var_s1->unk_0C = var_v0;
+                    }
+                    *var_s6 = (unk_func_88205880_00D0*)var_s1;
+
+                    var_s1++;
+                    var_s6++;
+                }
+            }
+        }
+    }
+
+    arg0->unk_08 = var_s1 - arg1;
+    PointerList_Sort(arg0, LabPCList_CompareTmHmEntries);
+}
 
 s32 LabPCList_CanLearnMoveByLevelUp(s32 arg0, s32 arg1) {
     static SpeciesData D_8831757C[] = {

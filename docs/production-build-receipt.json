@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 4958,
-  "asm_owners": 486,
+  "c_owners": 4959,
+  "asm_owners": 485,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -603,7 +603,7 @@
     "tools/cflags_overrides.json": "7052d644eb08429c59981bb4c369c8c937c61ca4c639a1c1ca2c5fc0ce919ebb",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "8d8102a0df70cfd98275170de022d52f4ff13601f37fa3f1f62c1842fca3075b",
+    "docs/function-matches.csv": "929f273542e380e97a5a41f7888583ca2cffef0df77c29fc648e4a2d06d30c9f",
     "linker_scripts/jp/symbol_addrs.txt": "3b5103d4cfe8c6cf2470a85f3aacf457f87dc2c7f2096a7a216bec5fd85d5385"
   },
   "binutils": {
@@ -795,7 +795,7 @@
     "src/fragments/fragment016_252E10/89100020.c": "8d43fc96dccadb17a1bcba83fd9c1eecb83c1a2efdf6fe21d121377dc608a0a6",
     "src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c": "e212df2b633dda9b3219c406341655e9c5db470008cf779f289271b7f753994d",
     "src/fragments/fragment016_252E10/lab_pc_list_1E46B0.c": "ba8d4b5501f5daea30407668a46cb1021536cf2edb09db847e7544301d76b045",
-    "src/fragments/fragment016_252E10/lab_pc_list_1E46B0_2.c": "ca2ad66f736d581a4970adae550f327d1024cb27841e034e49b7345dcf501bbe",
+    "src/fragments/fragment016_252E10/lab_pc_list_1E46B0_2.c": "17d37709d252c5f05b7d3eadd97fc634eb3f54800c584a0daef62f1a298e5992",
     "src/fragments/fragment017_261F00.c": "010db2d8b146be87183a9f92e3d7a094eb3e9b17ab5eda9b74b443022094159e",
     "src/fragments/fragment018_262620/pokedex_214920.c": "8978a1c750088c065745e0ecc3b32d0d7be315ec08c8dab409d9477cfeb60de6",
     "src/fragments/fragment018_262620/pokedex_2190D0.c": "95f32a019b80bdf17400546f059a4fe7b54980b0adbcb3b3aa63b483453c8717",
