@@ -177,11 +177,143 @@ typedef struct Entry811858B0 {
 } Entry811858B0; // size = 0xC
 extern Entry811858B0* D_811858B0;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110DF80; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110DF80.s")
-#endif
+extern volatile s32 D_811859D4;
+extern s32 D_811526FC;
+extern u64 D_81186270[];
+extern u64 D_81184100;
+extern u64 D_81186258;
+extern f32 D_811859B0;
+extern s32 D_811859B4;
+extern s16 D_811859C4[3];
+extern s16* D_811859B8[3];
+extern volatile s32 D_811858F0;
+extern s32 D_811858F8;
+extern s32 D_811858FC;
+extern s8 D_811858EE;
+extern s32 D_8118590C;
+extern u8 D_81185910[];
+extern OSMesgQueue D_81185650;
+extern OSMesg D_81185668[];
+extern OSMesgQueue D_81185618;
+extern OSMesg D_81185630[];
+extern OSMesgQueue D_811855D8;
+extern OSMesg D_811855F0[];
+extern OSMesgQueue D_811855F8;
+extern OSMesg D_81185610[];
+extern s32 D_811858F4;
+extern s32 D_8118568C;
+extern s32 D_81152700;
+extern s32 D_81152704;
+extern u8 D_811842B0[];
+extern struct Table81184440 D_81184440;
+extern volatile s8 D_81184657;
+extern s8 D_81184658;
+extern AudioTable8110DCC0* D_8118589C;
+extern AudioTable8110DCC0* D_811858A0;
+extern u8* D_811858A4;
+extern u8* D_811858A8;
+extern s16 D_811858AC;
+extern AudioTable8110DCC0 D_81152760;
+extern AudioTable8110DCC0 D_81152720;
+extern AudioTable8110DCC0 D_81152740;
+extern u8 D_81152710[];
+extern u8 D_0015AE60[];
+extern u8 D_0015A9B0[];
+extern u8 D_0015AA60[];
+void func_8111016C(void);
+void func_8110993C(s32);
+void* func_81109868(void*, s32);
+void func_811098C0(void*, void*, s32);
+s32 func_8110AC8C(void);
+void func_8110CB70(AudioTable8110DCC0*, u8*, s32);
+
+/**
+ * Initialises the audio system: clears the heap and the audio globals, sets up
+ * the message queues and the three output buffers, points the sequence, font
+ * and sample tables at their ROM copies and fills in each font's sample bank
+ * ids and instrument and drum counts. Same structure as AudioLoad_Init in the
+ * Ocarina of Time audio library.
+ */
+void func_8110DF80(void) {
+    s32 numFonts;
+    void* ramAddr;
+    s32 i;
+    s32 j;
+    u64* ptr;
+    s16* buf;
+    s32 count;
+
+    D_811859D4 = 0;
+
+    for (i = 0; i < D_811526FC / 8; i++) {
+        D_81186270[i] = 0;
+    }
+
+    ptr = &D_81184100;
+    for (count = ((u32)&D_81186258 - (u32)&D_81184100) / 8; count >= 0; count--) {
+        *ptr++ = 0;
+    }
+
+    D_811859B0 = 16.713f;
+    D_811859B4 = 0x3C;
+    func_8111016C();
+
+    for (i = 0; i < 3; i++) {
+        D_811859C4[i] = 0xA0;
+    }
+
+    D_811858F0 = 0;
+    D_811858F8 = 0;
+    D_811858FC = 0;
+    D_811858EE = 0;
+    D_8118590C = 0;
+    *(s32*)(D_81185910 + 0x34) = 0;
+    *(s32*)(D_81185910 + 0x84) = 0;
+
+    osCreateMesgQueue(&D_81185650, D_81185668, 1);
+    osCreateMesgQueue(&D_81185618, D_81185630, 1);
+    osCreateMesgQueue(&D_811855D8, D_811855F0, 1);
+    osCreateMesgQueue(&D_811855F8, D_81185610, 1);
+    D_811858F4 = 0;
+    D_8118568C = 0;
+    func_8110993C(D_81152700);
+
+    for (i = 0; i < 3; i++) {
+        buf = D_811859B8[i] = func_81109868(D_811842B0, 0xFC0);
+        for (j = 0; j < 0x7E0; j++) {
+            *buf++ = 0;
+        }
+    }
+
+    D_81184658 = 0;
+    D_81184657 = 1;
+    func_8110AC8C();
+
+    D_8118589C = &D_81152760;
+    D_811858A0 = &D_81152720;
+    D_811858A4 = (u8*)&D_81152740;
+    D_811858A8 = D_81152710;
+    D_811858AC = D_8118589C->numEntries;
+
+    func_8110CB70(D_8118589C, D_0015AE60, 0);
+    func_8110CB70(D_811858A0, D_0015A9B0, 0);
+    func_8110CB70((AudioTable8110DCC0*)D_811858A4, D_0015AA60, 0);
+
+    numFonts = D_811858A0->numEntries;
+    D_811858B0 = func_81109868(D_811842B0, numFonts * sizeof(Entry811858B0));
+    for (i = 0; i < numFonts; i++) {
+        D_811858B0[i].unk_02 = D_811858A0->entries[i].shortData1 >> 8 & 0xFF;
+        D_811858B0[i].unk_03 = D_811858A0->entries[i].shortData1 & 0xFF;
+        D_811858B0[i].unk_00[0] = D_811858A0->entries[i].shortData2 >> 8 & 0xFF;
+        D_811858B0[i].unk_00[1] = D_811858A0->entries[i].shortData2 & 0xFF;
+    }
+
+    ramAddr = func_81109868(D_811842B0, D_81152704);
+    if (ramAddr == NULL) {
+        D_81152704 = 0;
+    }
+    func_811098C0(&D_81184440, ramAddr, D_81152704);
+}
 
 typedef struct SampleHeader8110E500 {
     /* 0x00 */ u32 codec : 4;
