@@ -208,11 +208,83 @@ void func_82113CD0(void) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82113FC8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82113FC8.s")
-#endif
+extern StatStageMultiplier D_8218ADF4[];
+extern s32 D_8218C7F0;
+extern s32 D_8218C808;
+extern s32 D_8218C820;
+void func_82113FC8(void) {
+    s32 sp24;
+    s32 var_a3;
+    u16* sp1C;
+    u16* sp18;
+
+    sBattleScene.scene->unk_4C = 0xA;
+
+    var_a3 = 1;
+    sp24 = sBattleUser->moveCache.unk_01 - 0xA;
+
+    if (sp24 >= 8) {
+        var_a3 = 2;
+        sp24 -= 0x28;
+    }
+
+    if (sBattleUser->unk_5C[sp24] != 0xD) {
+        sBattleUser->unk_5C[sp24] += var_a3;
+        if (sBattleUser->unk_5C[sp24] >= 0xE) {
+            sBattleUser->unk_5C[var_a3] = 0xD;
+        }
+
+        if (sp24 < 4) {
+            switch (sp24) {
+                case 0:
+                    sp18 = &sBattleUser->unk_38;
+                    sp1C = &sBattleUser->unk_2A;
+                    break;
+
+                case 1:
+                    sp18 = &sBattleUser->unk_3A;
+                    sp1C = &sBattleUser->unk_2C;
+                    break;
+
+                case 2:
+                    sp18 = &sBattleUser->unk_3C;
+                    sp1C = &sBattleUser->speed;
+                    break;
+
+                case 3:
+                    sp18 = &sBattleUser->unk_3E;
+                    sp1C = &sBattleUser->unk_30;
+                    break;
+            }
+
+            if (*sp1C != 0x3E7) {
+                *sp1C = (*sp18 * D_8218ADF4[sBattleUser->unk_5C[sp24] - 1].unk_00) /
+                        D_8218ADF4[sBattleUser->unk_5C[sp24] - 1].unk_01;
+                if (*sp1C >= 0x3E8) {
+                    *sp1C = 0x3E7;
+                }
+            } else {
+                goto block_29;
+            }
+        }
+
+        if (sBattleUser->moveCache.lastMove == MINIMIZE) {
+            sBattleUser->scaleResize = 1;
+        }
+
+        if (var_a3 == 2) {
+            func_8211EF74(D_8219A520 + 0x2C8, (s8)(sp24 + 0x8D), (&D_8218C7F0)[sp24], func_82107F88(sActivePokemon[!sBattleScene.scene->unk_2C]));
+        } else {
+            func_8211EF74(D_8219A520 + 0x2C8, (s8)(sp24 + 0x93), (&D_8218C808)[sp24], func_82107F88(sActivePokemon[!sBattleScene.scene->unk_2C]));
+        }
+
+        ApplyParalysisSpeedCut(sActivePokemon[!sBattleScene.scene->unk_2C]);
+        ApplyBurnAttackCut(sActivePokemon[!sBattleScene.scene->unk_2C]);
+    } else {
+    block_29:
+        func_8211EF74(D_8219A520 + 0x2C8, -0x67, D_8218C820);
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_821142B8; signature not recovered. */
