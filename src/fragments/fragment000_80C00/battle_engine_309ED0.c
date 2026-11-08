@@ -420,11 +420,64 @@ void func_8110EF7C(s32 fontId, s32 fontData, RelocInfo8110EF7C* relocInfo, s32 a
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110F310; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110F310.s")
-#endif
+s32 func_8004D1C0(OSMesgQueue*, u32*, s32);
+/**
+ * Finishes queued sample preloads. When the message for a finished DMA arrives,
+ * the sample is pointed at its RAM copy (if it still matches the request), and
+ * the next pending request on the stack is started. Returns 0 while a DMA is
+ * still in flight or on reset (arg0 != 0), otherwise 1.
+ */
+s32 func_8110F310(s32 arg0) {
+    Sample8110EF7C* sample;
+    u32 preloadIndex;
+    u32 key;
+    u32 nChunks;
+    s32 pad;
+
+    if (D_8118557C > 0) {
+        if (arg0 != 0) {
+            func_8004D1C0(&D_811855F8, &preloadIndex, 0);
+            D_8118557C = 0;
+            return 0;
+        }
+        if (func_8004D1C0(&D_811855F8, &preloadIndex, 0) == -1) {
+            return 0;
+        }
+
+        preloadIndex >>= 24;
+        if (D_81184B78[preloadIndex].isFree == 0) {
+            sample = D_81184B78[preloadIndex].sample;
+            key = sample->sampleAddr + sample->size + sample->medium;
+            if (key == D_81184B78[preloadIndex].endAndMediumKey) {
+                sample->sampleAddr = D_81184B78[preloadIndex].ramAddr;
+                sample->medium = 0;
+            }
+            D_81184B78[preloadIndex].isFree = 1;
+        }
+
+        for (;;) {
+            if (D_8118557C <= 0) {
+                break;
+            }
+            if (D_81184B78[D_8118557C - 1].isFree == 1) {
+                D_8118557C--;
+                continue;
+            }
+
+            sample = D_81184B78[D_8118557C - 1].sample;
+            nChunks = (sample->size >> 12) + 1;
+            key = sample->sampleAddr + sample->size + sample->medium;
+            if (key != D_81184B78[D_8118557C - 1].endAndMediumKey) {
+                D_81184B78[D_8118557C - 1].isFree = 1;
+                D_8118557C--;
+            } else {
+                func_8110E9A8(sample->sampleAddr, D_81184B78[D_8118557C - 1].ramAddr, sample->size, sample->medium, nChunks, &D_811855F8, D_81184B78[D_8118557C - 1].encodedInfo);
+                break;
+            }
+        }
+    }
+    return 1;
+}
 
 typedef struct Item8110F4D0 {
     /* 0x0 */ s32 unk0;
