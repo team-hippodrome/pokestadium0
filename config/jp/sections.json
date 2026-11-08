@@ -186,7 +186,10 @@
     }
   },
   "src/fragments/fragment012_17ED00/battle_engine_32B680_3_82154484.c": {
-    ".rodata": "0x82197240"
+    ".rodata": {
+      "address": "0x821970B4",
+      "size": "0x46C"
+    }
   },
   "src/fragments/fragment012_17ED00/battle_engine_32B680_82121260.c": {
     ".rodata": {

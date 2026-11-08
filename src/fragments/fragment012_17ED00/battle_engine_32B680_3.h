@@ -510,7 +510,7 @@ void BattleAnim_CallbackStartEffects50And82Descriptor48AnimatedScaleFade_InitPar
 M2C_UNK func_8213C930(s8 *);                      /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
 M2C_UNK func_8213CCEC(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
-M2C_UNK func_8213D604(s8 *, M2C_UNK);             /* extern */
+void func_8213D604(s8*, f32);
 M2C_UNK func_8213E528(s8 *);                      /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_821403B0(s8 *, M2C_UNK, M2C_UNK);    /* extern */
@@ -554,7 +554,7 @@ void BattleAnim_CallbackStartEffects50And82OffsetModelsScalePaletteFade(Particle
 
 M2C_UNK func_8213C464();                            /* extern */
 M2C_UNK func_8213C930(s8 *);                      /* extern */
-M2C_UNK func_8213D644(s8 *, M2C_UNK);             /* extern */
+void func_8213D644(s8*, f32);
 M2C_UNK func_821401D4(s8 *, M2C_UNK);             /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_82140548(s8 *, M2C_UNK, M2C_UNK);    /* extern */
