@@ -94,7 +94,49 @@ void func_82130628(CameraNode* arg0) {
 }
 
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82130B10.s")
+void func_82130B10(CameraNode* arg0) {
+    u8* sp1C = (u8*)sActivePokemon[sBattleScene.scene->unk_2C] + 0x7C6;
+    u8* sp18 = (u8*)sActivePokemon[!sBattleScene.scene->unk_2C] + 0x7C6;
+
+    switch (sBattleScene.scene->unk_20) {
+        case 0:
+            func_82135098((ActivePokemon*)D_8219A544);
+            func_82106374((ActivePokemon*)D_8219A544);
+            BattleAnim_CleanupEffects(2);
+            sBattleScene.scene->unk_20 += 1;
+            break;
+
+        case 1:
+            func_82108C0C((ActivePokemon*)D_8219A544);
+            func_80040738();
+            BattleAnim_CleanupEffects(1);
+            func_82124874(arg0, sActivePokemon[sBattleScene.scene->unk_2C]);
+            func_82104C68(sActivePokemon[sBattleScene.scene->unk_2C], 0xD);
+            func_8211F034(D_8219A520 + 0x248, sBattleScene.scene->unk_2C);
+            M2C_FIELD(sp1C, u16*, 0xC) = M2C_FIELD(sp1C, u16*, 0xE);
+            M2C_FIELD(sp18, u16*, 0xC) = M2C_FIELD(sp18, u16*, 0xE);
+            sBattleScene.scene->unk_20 += 1;
+            break;
+
+        case 2:
+            func_82124874(arg0, sActivePokemon[sBattleScene.scene->unk_2C]);
+            D_8219A560 = func_8210F31C(sActivePokemon[sBattleScene.scene->unk_2C]);
+            D_8219A564 = 1;
+
+            if ((D_8219A560 == 1) && (D_8219A564 == 1) && (BattleScene_AdvanceCameraFrameCounterUntil(0x32) != 0)) {
+                BattleScene_ResetCameraFrameCounter();
+                Battle_ClearMessageCursor();
+                if (func_82107CA0(sActivePokemon[sBattleScene.scene->unk_2C]) == 0) {
+                    func_82125570();
+                    BattleScene_SetPhase(arg0, 0x22);
+                    sBattleScene.scene->unk_2C = !sBattleScene.scene->unk_2C;
+                } else {
+                    func_8212562C();
+                }
+            }
+            break;
+    }
+}
 
 void func_82130D48(ActivePokemon* active_pokemon) {
     BattleMon* party_pokemon = &active_pokemon->teamRoster->pokemonPicked[M2C_FIELD(active_pokemon, s32*, 0x9D0)];
