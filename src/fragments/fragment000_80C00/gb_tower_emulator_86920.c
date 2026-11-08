@@ -448,8 +448,6 @@ s32 func_8110A368(s32 arg0, s32 arg1, s32 arg2) {
     return 0;
 }
 
-#ifdef NON_MATCHING
-// Matches the ROM, but uses rodata data that is not placed in this file yet.
 /**
  * Unused in the code seen so far. Fills out[0..15] from two recurrences in p
  * and q seeded with 262159.0f; as in the Ocarina of Time version
@@ -474,9 +472,6 @@ void func_8110A474(f32 p, f32 q, u16* out) {
         out[i] = tmp[i];
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110A474.s")
-#endif
 
 /*
  * func_8110A848
@@ -582,11 +577,82 @@ void func_8110AC14(void) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110AC8C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110AC8C.s")
-#endif
+extern volatile u8 D_81184657;
+extern s32 D_8118465C;
+void func_8110AFF0(void);
+void func_8110BFB0(void);
+
+s32 func_8110AC8C(void) {
+    s32 i;
+    s32 j;
+    s32 sp24;
+
+    if (D_811858B8.unk_00 == 2) {
+        sp24 = 2;
+    } else {
+        sp24 = 1;
+    }
+
+    switch (D_81184657) {
+        case 5:
+            for (i = 0; i < D_811858B8.unk_14; i++) {
+                func_81112E00(&D_81184668 + i * 0x15C);
+            }
+            D_8118465C = 4 / sp24;
+            D_81184657--;
+            break;
+        case 4:
+            if (D_8118465C != 0) {
+                D_8118465C--;
+                func_8110AA50();
+            } else {
+                for (i = 0; i < D_811858E8; i++) {
+                    if (D_81184664[i].enabled && D_81184664[i].unk_5D != 0) {
+                        D_81184664[i].unk_6C = D_811858B8.unk_1C;
+                        D_81184664[i].unk_5C |= 0x10;
+                    }
+                }
+                D_8118465C = 16 / sp24;
+                D_81184657--;
+            }
+            break;
+        case 3:
+            if (D_8118465C != 0) {
+                D_8118465C--;
+                func_8110AA50();
+            } else {
+                D_8118465C = 4 / sp24;
+                D_81184657--;
+            }
+            break;
+        case 2:
+            func_8110AC14();
+            if (!D_8118465C && !D_8118465C && !D_8118465C) {} // FAKE: empty test found by a fake search; only changes register use
+            if (D_8118465C != 0) {
+                D_8118465C--;
+            } else {
+                D_81184657--;
+                func_8110BFB0();
+            }
+            if (!D_811858B8.unk_00) {} // FAKE: empty test found by the permuter; keeps &D_811858B8 in a saved register
+            break;
+        case 1:
+            func_8110AFF0();
+            D_81184657 = 0;
+            for (i = 0; i < 3; i++) {
+                D_811859C4[i] = D_811858B8.unk_08;
+                for (j = 0; j < 0x7E0; j++) {
+                    D_811859B8[i][j] = 0;
+                }
+            }
+            break;
+    }
+
+    if (D_81184657 < 3) {
+        return 0;
+    }
+    return 1;
+}
 
 typedef struct ReverbSettingsAFF0 {
     /* 0x00 */ u8 downsampleRate;
