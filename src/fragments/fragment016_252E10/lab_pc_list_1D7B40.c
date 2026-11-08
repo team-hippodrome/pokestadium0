@@ -1044,11 +1044,43 @@ void func_89108F14(void* arg0, s32 arg1, s32 arg2, s32 arg3) {
     M2C_FIELD(arg0, s32*, 0x2C) = arg3;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89108F94; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89108F94.s")
-#endif
+typedef struct Entry89108F94 {
+    /* 0x00 */ char* title;
+    /* 0x04 */ s32 kind;
+    /* 0x08 */ char* left;
+    /* 0x0C */ char* right;
+} Entry89108F94;
+
+extern u8 D_8910D2F0[];
+extern char D_8910E1AC[];
+extern char D_8910E1B0[];
+
+void func_89108F94(s8* arg0) {
+    Entry89108F94* entry;
+
+    if (func_8002AE6C() == 0) {
+        Font_BeginTranslucentTextRendering();
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+        Font_SetActive(0x10, 0);
+        Font_EnableTwoCycleTexturing();
+        Gfx_SetPrimColor(0xFF, 0xAC, 0xAC, 0xFF);
+        Font_Printf(M2C_FIELD(arg0, s32*, 0) + 0x12, M2C_FIELD(arg0, s32*, 4) + 0x12, M2C_FIELD(arg0, Entry89108F94**, 0x2C)->title);
+        Font_DisableTwoCycleTexturing();
+        Gfx_SetEnvColor(D_800734A8[0].r, D_800734A8[0].g, D_800734A8[0].b, D_800734A8[0].a);
+        entry = M2C_FIELD(arg0, Entry89108F94**, 0x2C);
+        if (entry->kind == 0) {
+            Font_Printf(M2C_FIELD(arg0, s32*, 0) + 0x12, M2C_FIELD(arg0, s32*, 4) + 0x36, D_8910E1AC, entry->left);
+            Font_Printf(M2C_FIELD(arg0, s32*, 0) + 0xA2, M2C_FIELD(arg0, s32*, 4) + 0x36, D_8910E1B0, M2C_FIELD(arg0, Entry89108F94**, 0x2C)->right);
+        } else if (entry->kind == 1) {
+            Font_Printf(M2C_FIELD(arg0, s32*, 0) + 0x12, M2C_FIELD(arg0, s32*, 4) + 0x36, entry->left);
+            Font_Printf(M2C_FIELD(arg0, s32*, 0) + 0xA2, M2C_FIELD(arg0, s32*, 4) + 0x36, M2C_FIELD(arg0, Entry89108F94**, 0x2C)->right);
+        }
+        Font_EndTexturedTextRendering();
+        gSPDisplayList(gDisplayListHead++, D_80073408);
+        func_8001B884(M2C_FIELD(arg0, s32*, 0) + 0x7A, M2C_FIELD(arg0, s32*, 4) + 0x36, 0x20, 0x18, D_8910D2F0, 0x20, 0x200000);
+        gSPDisplayList(gDisplayListHead++, D_80073438);
+    }
+}
 
 M2C_UNK func_8003F6AC(M2C_UNK);                     /* extern */
 
