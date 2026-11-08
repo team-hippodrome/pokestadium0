@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5045,
-  "asm_owners": 399,
+  "c_owners": 5046,
+  "asm_owners": 398,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -603,7 +603,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "c22b7eb6167642822b2bea73a8cfa7dfd7e45043417cd2b5a0c7270df374d2f0",
+    "docs/function-matches.csv": "37187c0968ca98fe1cc78379dda7c35e7706bfed2ecf9599bff6a7c95afad6b6",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -692,7 +692,7 @@
     "src/fragments/fragment007_166580.c": "e8eb94fdd3e0905179df786f512d3e73d5dd85d68a16b27e15dac23fef8c76ad",
     "src/fragments/fragment007_166580_2.c": "56b0700668c3b37f0dc634a9de6e453c587f36ebfad129eaab6eaf7bc774fbec",
     "src/fragments/fragment007_166580_3.c": "5cc76fdb39f7f69837572d09ea6eea6542968ad17af73a9f909604476e5d51bc",
-    "src/fragments/fragment008_1720F0.c": "2156a193bb8d16077b7988d67d07b679741b304e23e66ed770b216c3decf297e",
+    "src/fragments/fragment008_1720F0.c": "c2f8eaf0efd1424f5e87a55ea390540183b8ed60996a83e02fa84b160bc451ad",
     "src/fragments/fragment009_175570.c": "f15eaa1907af594a25af5f2c6890667b75e07bd3c706f091377747e8352bd54b",
     "src/fragments/fragment010_17BE70/pikachu_reward.c": "3a9f362382ad7a2789d29a624a626699afa1bb9e572a8f2f3b7ec47d32014506",
     "src/fragments/fragment011_17E340/area_select.c": "354abcd268b9f1cd60f8bd6d27ea2ca9ea129994e44d92766ca25752652e4f01",
