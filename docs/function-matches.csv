@@ -2547,7 +2547,7 @@ func_8210E9C0,0x8210E9C0,src/fragments/fragment012_17ED00/battle_engine_361050.c
 func_8210EAC4,0x8210EAC4,src/fragments/fragment012_17ED00/battle_engine_361050.c,BattleAI_ClampDamageRatio,s1,stadium1:src/fragments/battle_engine/battle_engine_361050.c,c
 func_8210EB28,0x8210EB28,src/fragments/fragment012_17ED00/battle_engine_361050.c,func_8210EB28,hand,,c
 func_8210EC0C,0x8210EC0C,src/fragments/fragment012_17ED00/battle_engine_361050.c,BattleAI_PrepareDamageCalcState,s1,stadium1:src/fragments/battle_engine/battle_engine_361050.c,c
-func_8210EDBC,0x8210EDBC,src/fragments/fragment012_17ED00/battle_engine_361050.c,,asm,,asm
+func_8210EDBC,0x8210EDBC,src/fragments/fragment012_17ED00/battle_engine_361050.c,func_8210EDBC,s1,,c
 func_8210EED8,0x8210EED8,src/fragments/fragment012_17ED00/battle_engine_361050.c,func_8210EED8,hand,,c
 func_8210EF58,0x8210EF58,src/fragments/fragment012_17ED00/battle_engine_361050.c,BattleScene_FindU16InByteArray,s1,stadium1:src/fragments/battle_engine/battle_engine_move_animation.c,c
 func_8210EFAC,0x8210EFAC,src/fragments/fragment012_17ED00/battle_engine_361050.c,,asm,,asm

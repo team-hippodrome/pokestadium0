@@ -237,11 +237,28 @@ void BattleAI_PrepareDamageCalcState(BattleMonRuntime* arg0, BattleMonRuntime* a
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8210EDBC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210EDBC.s")
-#endif
+void func_8210EDBC(UNUSED u8* arg0, UNUSED u8* arg1) {
+    u8 tmp = D_8219A494.unk_01;
+
+    if (tmp == 7) {
+        D_82199F56 >>= 1;
+        if (D_82199F56 == 0) {
+            D_82199F56 = 1;
+        }
+    }
+
+    if (D_82199F56 == 0) {
+        D_82199F56 = 1;
+    }
+
+    D_82199F50 += (((((D_82199F58 * 2) / 5) + 2) * D_82199F52 * D_82199F54) / D_82199F56) / 50;
+
+    if (D_82199F50 >= 0x3E5) {
+        D_82199F50 = 0x3E4;
+    }
+
+    D_82199F50 += 2;
+}
 
 extern u8 D_82199F32;
 extern u8 D_82199F33;
