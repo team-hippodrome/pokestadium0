@@ -775,7 +775,7 @@ typedef struct {
     u8 pad1 : 2;
 } Flags2Bit;
 
-typedef struct Entry8110D4E0 { u8 unk00; u8 unk01; u8 unk02; u8 unk03; char unk04[8]; } Entry8110D4E0;
+typedef struct Entry8110D4E0 { u8 unk00; u8 unk01; u8 unk02; u8 unk03; u8** instruments; u8** drums; } Entry8110D4E0;
 extern Entry8110D4E0* D_811858B0;
 extern u8* D_811858A0;
 s32 func_8110CA2C(s32 arg0);
@@ -1527,11 +1527,69 @@ u8* func_8110D840(s32 arg0) {
     return ret;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110D884; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110D884.s")
-#endif
+void func_8110EE3C(void* sampleP, u32 fontDataAddr, void* relocInfo);
+
+/**
+ * Relocates a sound font loaded at fontData: the drum and instrument pointer
+ * lists, each drum's and instrument's samples and envelope, and records the
+ * font's drum and instrument lists in D_811858B0. Same structure as
+ * AudioLoad_RelocateFont in the Ocarina of Time audio library.
+ */
+void func_8110D884(s32 fontId, u32 fontData, void* relocInfo) {
+    u32 reloc2;
+    u32 reloc;
+    s32 i;
+    u8* drum;
+    u32* ptrs = (u32*)fontData;
+    s32 numDrums = D_811858B0[fontId].unk01;
+    u8* inst;
+    s32 numInstruments = D_811858B0[fontId].unk00;
+
+    reloc2 = ptrs[0];
+    if ((reloc2 != 0) && (numDrums != 0)) {
+        ptrs[0] = reloc2 + fontData;
+        for (i = 0; i < numDrums; i++) {
+            reloc = ((u32*)ptrs[0])[i];
+            if (reloc != 0) {
+                reloc += fontData;
+                ((u32*)ptrs[0])[i] = reloc;
+                drum = (u8*)reloc;
+                if (drum[2] == 0) {
+                    func_8110EE3C(drum + 4, fontData, relocInfo);
+                    reloc = *(u32*)(drum + 0xC);
+                    drum[2] = 1;
+                    *(u32*)(drum + 0xC) = reloc + fontData;
+                }
+            }
+        }
+    }
+
+    if (numInstruments >= 0x80) {
+        numInstruments = 0x7F;
+    }
+
+    for (i = 1; i <= numInstruments; i++) {
+        if (ptrs[i] != 0) {
+            ptrs[i] += fontData;
+            inst = (u8*)ptrs[i];
+            if (inst[0] == 0) {
+                if (inst[1] != 0) {
+                    func_8110EE3C(inst + 8, fontData, relocInfo);
+                }
+                func_8110EE3C(inst + 0x10, fontData, relocInfo);
+                if (inst[2] != 0x7F) {
+                    func_8110EE3C(inst + 0x18, fontData, relocInfo);
+                }
+                reloc = *(u32*)(inst + 4);
+                inst[0] = 1;
+                *(u32*)(inst + 4) = reloc + fontData;
+            }
+        }
+    }
+
+    D_811858B0[fontId].drums = (u8**)ptrs[0];
+    D_811858B0[fontId].instruments = (u8**)(ptrs + 1);
+}
 
 extern s8 D_81137C1C[];
 extern s8 D_81137C28[];
