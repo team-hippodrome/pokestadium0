@@ -307,18 +307,65 @@ void BattleMenu_DrawBorderedPanel(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 ar
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment005_15FCE0/func_82300BD0.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_823010E8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment005_15FCE0/func_823010E8.s")
-#endif
+extern char D_82302A38[];
+extern char D_82302A4C[];
+extern char D_82302A60[];
+extern char D_82302A74[];
+extern char D_82302A7C[];
+void func_82300BD0(s8*);
+void func_8001AC7C(s32, s32, s32, s32, s32, s32, s32, s32);
+void func_8001E6C0(s32, s32);
+void func_823010E8(s8* arg0) {
+    s32 x;
+    s32 y;
+
+    if (arg0[2] == -1) {
+        if (arg0[3] == 0) {
+            x = 0xC8;
+            y = 0x81;
+        } else {
+            x = 0x50;
+            y = 0xF0;
+        }
+        func_82300BD0(arg0);
+        BattleMenu_DrawBorderedPanel(x, y, 0x15F, 0x53, arg0[1]);
+        if (arg0[0xA] == 0) {
+            func_8001E6C0(x + 0x26, y + 0x30);
+        } else {
+            func_8001E6C0(x + 0x86, y + 0x30);
+        }
+        Font_BeginTranslucentTextRendering();
+        Font_SetActive(0x10, 0);
+        Font_Printf(x + 0x1F, y + 0xB, D_82302A38);
+        Font_Printf(x + 0x4F, y + 0x30, D_82302A4C);
+        Font_EndTexturedTextRendering();
+        arg0[7] = 2;
+    } else {
+        x = M2C_FIELD(arg0, s16*, 0x12);
+        y = M2C_FIELD(arg0, s16*, 0x14);
+        func_82300BD0(arg0);
+        func_8001AC7C(x + 5, y + 5, 0x1CD, 0x54, 0, 0, 0, 0x80);
+        if (arg0[0xA] == 0) {
+            func_8001E6C0(x + 0x5C, y + 0x3C);
+        } else {
+            func_8001E6C0(x + 0xBC, y + 0x3C);
+        }
+        Font_BeginTranslucentTextRendering();
+        Font_SetActive(0x10, 0);
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+        Font_Printf(x + 0x50, y + 0x14, D_82302A60);
+        Font_Printf(x + 0x80, y + 0x3C, D_82302A74);
+        Font_Printf(x + 0xE0, y + 0x3C, D_82302A7C);
+        Font_EndTexturedTextRendering();
+    }
+}
 
 extern char D_82302A8C[];
 extern char D_82302AA0[];
 extern char D_82302AB8[];
 extern char D_82302ACC[];
-void func_82300BD0(s8*);
-void func_8001AC7C(s32, s32, s32, s32, s32, s32, s32, s32);
+
+
 void func_823012D0(s8* arg0) {
     s32 x;
     s32 y;
