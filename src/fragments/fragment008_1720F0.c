@@ -138,11 +138,29 @@ void func_8810024C(s8* arg0) {
     M2C_FIELD(arg0, s32*, 8) = (p - M2C_FIELD(arg0, u8**, 0)) / 0x220;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88100348; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment008_1720F0/func_88100348.s")
-#endif
+s32 func_80021894(s32);
+s32 func_80022C70(s32);
+void func_80022D84(s32, u8*);
+void func_88100348(s8* arg0) {
+    u8* p = M2C_FIELD(arg0, u8**, 0);
+    s32 i;
+
+    for (i = 0; i < 4; i++) {
+        if (func_80021894(i) == 0) {
+            continue;
+        }
+        p[0] = 0;
+        p[1] = 0x20;
+        p[2] = i;
+        p[3] = 0;
+        func_80027410((s8*)p + 0x18, (s8*)p + 0x28, 0x54, 6, 0);
+        func_88100078(p[1], p[2], p[3], (s32*)(p + 0x18));
+        M2C_FIELD(p, s32*, 4) = func_80022C70(p[2]);
+        func_80022D84(p[2], p + 8);
+        p += 0x220;
+    }
+    M2C_FIELD(arg0, s32*, 8) = (p - M2C_FIELD(arg0, u8**, 0)) / 0x220;
+}
 
 extern Color_RGBA8 D_88102D74;
 void func_8002A0AC(s32, s32, s32, s32, Color_RGBA8);
