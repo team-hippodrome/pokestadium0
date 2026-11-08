@@ -218,18 +218,32 @@ void func_8110E994(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3) {
 
 }
 
+typedef struct Entry8110EABC {
+    /* 0x00 */ s8 active;
+    /* 0x01 */ s8 state;
+    /* 0x02 */ s8 medium;
+    /* 0x04 */ s32 ramAddr;
+    /* 0x08 */ s32 romAddr;
+    /* 0x0C */ s32 curAddr;
+    /* 0x10 */ s32 size;
+    /* 0x14 */ u32 chunkSize;
+    /* 0x18 */ u32 info;
+    /* 0x1C */ OSMesgQueue* doneQueue;
+    /* 0x20 */ OSMesgQueue queue;
+    /* 0x38 */ OSMesg msg;
+    /* 0x3C */ char unk3C[0x18];
+} Entry8110EABC; // size = 0x54
+extern Entry8110EABC D_81185580[1];
+
+Entry8110EABC* func_8110E9A8(s32, s32, u32, s32, s32, OSMesgQueue*, u32);
+
 #ifdef NON_MATCHING
 /* TODO: decompile func_8110E9A8; signature not recovered. */
 #else
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110E9A8.s")
 #endif
 
-typedef struct Entry8110EABC {
-    /* 0x00 */ s8 active;
-    /* 0x01 */ char unk01[0x53];
-} Entry8110EABC; // size = 0x54
 extern volatile s32 D_811859D4;
-extern Entry8110EABC D_81185580[1];
 void func_8110EB40(Entry8110EABC*, s32);
 void func_8110EABC(s32 arg0) {
     s32 i;
@@ -317,7 +331,7 @@ extern u8* D_811858A4;
 void func_8110D884(s32, s32, RelocInfo8110EF7C*);
 void func_8110DB8C(s32, s32, u32, s16);
 void func_8110DA68(s32, s32, u32, s32);
-void func_8110E9A8(s32, s32, u32, s32, s32, OSMesgQueue*, u32);
+
 s32 func_8110B9A8(s32, s32, s32, s8);
 
 

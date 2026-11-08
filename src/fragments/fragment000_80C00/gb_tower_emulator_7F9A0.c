@@ -276,7 +276,24 @@ s32 GbPak_SelectRamBank(unk_D_8122B2C0* arg0, s32 arg1) {
 typedef struct GbpakChannel811023DC {
     /* 0x00 */ char unk00[0x50];
     /* 0x50 */ OSPfs* pfs;
-    /* 0x54 */ char unk54[0x47];
+    /* 0x54 */ u8* buf;
+    /* 0x58 */ u8* romBuf;
+    /* 0x5C */ char unk5C[0x4];
+    /* 0x60 */ u8* bankState;
+    /* 0x64 */ char unk64[0x4];
+    /* 0x68 */ u8* bankList;
+    /* 0x6C */ u8* bankEntry;
+    /* 0x70 */ u8* ramBuf;
+    /* 0x74 */ u8* blockState;
+    /* 0x78 */ char unk78[0x4];
+    /* 0x7C */ u8* blockDirty;
+    /* 0x80 */ s32 size;
+    /* 0x84 */ char unk84[0x8];
+    /* 0x8C */ s32 addr;
+    /* 0x90 */ u32 ramSize;
+    /* 0x94 */ char unk94[0x5];
+    /* 0x99 */ u8 request;
+    /* 0x9A */ volatile u8 error;
     /* 0x9B */ u8 status;
     /* 0x9C */ u8 channel;
     /* 0x9D */ char unk9D[0x4];
@@ -406,11 +423,47 @@ s32 GbPak_TransferBankedRam(u8* arg0, s32 arg1) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81102970.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81102AC8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81102AC8.s")
-#endif
+extern volatile u8 D_81156475;
+extern volatile s8 D_81156476;
+extern volatile s8 D_81156477;
+extern OSMesgQueue D_81156458;
+s32 func_8004CFB0(OSMesgQueue*, s32, s32);
+
+s32 func_81102AC8(s32 arg0) {
+    s32 chan = arg0;
+    GbpakChannel811023DC* ch;
+    GbpakChannel811023DC* ch2;
+    u32 i;
+
+    if (D_81156475 != 0) {
+        return 1;
+    }
+    ch = &D_811561C8[chan];
+    ch2 = ch;
+    if (ch->error != 0) {
+        return 4;
+    }
+    for (i = 0; i < ch2->ramSize >> 8; i++) {
+        if (ch->blockState[i] == 0) {
+            if (*(volatile u8*)&D_81156476 == 0 && *(volatile u8*)&D_81156477 != 0) {
+                ch->blockState[i] = 1;
+                ch->blockDirty[i] = 0;
+                ch->request = 5;
+                ch->addr = i << 8;
+                ch->buf = ch->ramBuf + (i << 8);
+                ch->size = 0x100;
+                func_8004CFB0(&D_81156458, chan, 1);
+                return 2;
+            }
+            return 3;
+        }
+    }
+    if (ch2->error == 0 && (ch2->status & 1)) {
+        ch->request = 4;
+        func_8004CFB0(&D_81156458, chan, 1);
+    }
+    return 0;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_81102C20; signature not recovered. */
