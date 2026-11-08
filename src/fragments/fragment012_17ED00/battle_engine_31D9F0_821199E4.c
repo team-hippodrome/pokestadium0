@@ -275,7 +275,11 @@ void func_8211C9FC(void) {
     func_8001ABBC();
 }
 
+#ifdef NON_MATCHING
+/* TODO: decompile func_8211CB0C; signature not recovered. */
+#else
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211CB0C.s")
+#endif
 
 extern s8 D_8219A4A0[];
 extern s8 D_8219A4C8[];

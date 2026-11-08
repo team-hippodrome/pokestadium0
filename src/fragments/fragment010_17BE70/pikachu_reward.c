@@ -95,11 +95,35 @@ s32 PikachuReward_PositionSurfingPikachuModel(s32 arg0, DisplayObject* arg1) {
     return 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81700064; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment010_17BE70/func_81700064.s")
-#endif
+typedef struct Rec81700064 {
+    /* 0x00 */ u8 id;
+    /* 0x01 */ u8 unk01[0x4F];
+} Rec81700064; // size = 0x50
+s32 func_80020AFC(M2C_UNK, s32, M2C_UNK, M2C_UNK);
+s32 func_80020CE4(void*, s32, s32);
+M2C_UNK func_80020C60(s32);
+s32 func_80021894(s32);
+extern s32 D_817025C4;
+extern Rec81700064 D_817025C8[];
+extern s8* D_817027A8;
+
+s32 func_81700064(s32 arg0) {
+    s32 i;
+    s32 handle;
+
+    if ((arg0 != -1) && (func_80021894(arg0) != 0)) {
+        handle = func_80020AFC(0x20, arg0, 0, 0);
+        D_817025C4 = func_80020CE4(D_817025C8, 6, handle);
+        func_80020C60(handle);
+        for (i = 0; i < D_817025C4; i++) {
+            if (D_817025C8[i].id == 0x19) {
+                D_817027A8 = (s8*)&D_817025C8[i];
+                return 1;
+            }
+        }
+    }
+    return 0;
+}
 
 extern s8 *D_817027A8;
 
@@ -694,7 +718,7 @@ M2C_UNK func_80022118(s32);                         /* extern */
 M2C_UNK func_80022188(s32);                         /* extern */
 M2C_UNK func_817012C0(M2C_UNK);                     /* extern */
 extern s32 D_817025C4;
-extern M2C_UNK D_817025C8;
+extern Rec81700064 D_817025C8[];
 
 void func_817014A4(s32 arg0) {
     M2C_UNK var_s0;

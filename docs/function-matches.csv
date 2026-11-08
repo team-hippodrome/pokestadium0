@@ -899,7 +899,7 @@ func_82400270,0x82400270,src/fragments/fragment009_175570.c,func_82400270,hand,,
 func_82400304,0x82400304,src/fragments/fragment009_175570.c,func_82400304,hand,,c
 func_82400374,0x82400374,src/fragments/fragment009_175570.c,func_82400374,m2c,m2c,c
 func_81700020,0x81700020,src/fragments/fragment010_17BE70/pikachu_reward.c,PikachuReward_PositionSurfingPikachuModel,s1,stadium1:src/fragments/pikachu_reward/pikachu_reward.c,c
-func_81700064,0x81700064,src/fragments/fragment010_17BE70/pikachu_reward.c,,asm,,asm
+func_81700064,0x81700064,src/fragments/fragment010_17BE70/pikachu_reward.c,func_81700064,hand,,c
 func_81700130,0x81700130,src/fragments/fragment010_17BE70/pikachu_reward.c,func_81700130,m2c,m2c,c
 func_81700160,0x81700160,src/fragments/fragment010_17BE70/pikachu_reward.c,Controller_PollInputs,s1,stadium1:src/game_state.c,c
 func_81700190,0x81700190,src/fragments/fragment010_17BE70/pikachu_reward.c,PikachuReward_UpdateLeadPikachuAnimation,s1,stadium1:src/fragments/pikachu_reward/pikachu_reward.c,c
