@@ -398,6 +398,10 @@
     ".data": {
       "address": "0x800736A4",
       "size": "0x4"
+    },
+    ".rodata": {
+      "address": "0x8007BA40",
+      "size": "0x8"
     }
   },
   "src/gb_tower.c": {

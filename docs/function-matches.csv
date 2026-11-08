@@ -4278,7 +4278,7 @@ func_800295E8,0x800295E8,src/gb_save.c,func_800295E8,hand,,c
 func_80029658,0x80029658,src/gb_save.c,,asm,,asm
 func_80029864,0x80029864,src/gb_save.c,,asm,,asm
 func_80029A64,0x80029A64,src/gb_save.c,,asm,,asm
-func_8002A0AC,0x8002A0AC,src/gb_save.c,,asm,,asm
+func_8002A0AC,0x8002A0AC,src/gb_save.c,func_8002A0AC,hand,,c
 func_8002A32C,0x8002A32C,src/gb_save.c,func_8002A32C,hand,,c
 func_8002A354,0x8002A354,src/gb_save.c,func_8002A354,hand,,c
 func_8002A3F8,0x8002A3F8,src/gb_save.c,func_8002A3F8,hand,,c

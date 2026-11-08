@@ -192,11 +192,21 @@ void func_800295E8(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80029A64.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002A0AC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002A0AC.s")
-#endif
+typedef struct Color8002A354 {
+    u8 c[4];
+} Color8002A354;
+extern Gfx D_80060270[];
+void func_80029028(s32, s32, s32, s32, Color8002A354);
+void func_8002A0AC(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 color) {
+    Color_RGBA8 light;
+
+    light.r = color.r * 1.4;
+    light.g = color.g * 1.4;
+    light.b = color.b * 1.4;
+    light.a = color.a;
+    gSPDisplayList(gDisplayListHead++, D_80060270);
+    func_80029028(arg0, arg1, arg2, arg3, *(Color8002A354*)&light);
+}
 
 /*
  * func_8002A32C
@@ -213,12 +223,7 @@ void func_8002A32C(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     func_800295E8(arg0, arg1, arg2, arg3, D_80073524);
 }
 
-typedef struct Color8002A354 {
-    u8 c[4];
-} Color8002A354;
-extern Gfx D_80060270[];
 extern u8 D_8007353C[];
-void func_80029028(s32, s32, s32, s32, Color8002A354);
 void func_800295E8(s32, s32, s32, s32, u8*);
 void func_8002A354(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color8002A354 arg4) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
