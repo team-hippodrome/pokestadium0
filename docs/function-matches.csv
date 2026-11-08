@@ -4548,7 +4548,7 @@ func_8001ABBC,0x8001ABBC,src/graphics_textures_2.c,Font_EndTexturedTextRendering
 func_8001ABE8,0x8001ABE8,src/graphics_textures_2.c,Font_EnableTwoCycleTexturing,hand,,c
 func_8001AC3C,0x8001AC3C,src/graphics_textures_2.c,Font_DisableTwoCycleTexturing,hand,,c
 func_8001AC7C,0x8001AC7C,src/graphics_textures_2.c,func_8001AC7C,hand,,c
-func_8001ADA0,0x8001ADA0,src/graphics_textures_2.c,,asm,,asm
+func_8001ADA0,0x8001ADA0,src/graphics_textures_2.c,func_8001ADA0,hand,,c
 func_8001AFB0,0x8001AFB0,src/graphics_textures_2.c,,asm,,asm
 func_8001B25C,0x8001B25C,src/graphics_textures_2.c,func_8001B25C,hand,,c
 func_8001B32C,0x8001B32C,src/graphics_textures_2.c,func_8001B32C,hand,,c

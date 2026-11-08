@@ -230,11 +230,17 @@ void func_8001AC7C(s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b, s32 a) {
     gDPSetTexturePersp(gDisplayListHead++, G_TP_PERSP);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8001ADA0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8001ADA0.s")
-#endif
+Vtx* func_8001ADA0(s16 x, s16 y, s16 width, s16 height, u8* tex) {
+    s16 w = (tex[0] * width) / 100;
+    s16 h = (tex[1] * height) / 100;
+    Vtx* vtx = Gfx_AllocDisplayList(sizeof(Vtx) * 4);
+
+    Gfx_SetVertexAttributes(&vtx[0], x, y, 0, 0, 0, 0, 0, 0x7F, 0xFF);
+    Gfx_SetVertexAttributes(&vtx[1], x, y - h, 0, 0, (tex[1] << 5) - 1, 0, 0, 0x7F, 0xFF);
+    Gfx_SetVertexAttributes(&vtx[2], x + w, y - h, 0, (tex[0] << 5) - 1, (tex[1] << 5) - 1, 0, 0, 0x7F, 0xFF);
+    Gfx_SetVertexAttributes(&vtx[3], x + w, y, 0, (tex[0] << 5) - 1, 0, 0, 0, 0x7F, 0xFF);
+    return vtx;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8001AFB0; signature not recovered. */
