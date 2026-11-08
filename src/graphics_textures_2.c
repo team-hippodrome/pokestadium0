@@ -277,11 +277,32 @@ Vtx* func_8001ADA0(s16 x, s16 y, s16 width, s16 height, u8* tex) {
     return vtx;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8001AFB0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8001AFB0.s")
-#endif
+typedef struct Glyph8001AFB0 {
+    /* 0x0 */ u8 advance;
+    /* 0x1 */ u8 height;
+    /* 0x2 */ u8 width;
+    /* 0x4 */ u8* file;
+} Glyph8001AFB0;
+s32 func_80019F70(u16);
+s32 func_8001AFB0(Gfx** arg0, s16 x, s16 y, s16 arg3, s16 arg4, u16 chr) {
+    Glyph8001AFB0* font = &((Glyph8001AFB0*)font_context)[font_context->unk_50];
+    s32 offset = func_80019F70(chr) * font->width * font->height;
+    Vtx* vtx = func_8001ADA0(x, y, arg3, arg4, (u8*)font);
+    Gfx* dl = Gfx_AllocDisplayList(0xA0);
+    Gfx* gfx = dl;
+
+    gDPLoadTextureBlock(gfx++, font->file + offset, G_IM_FMT_IA, G_IM_SIZ_8b, font->width, font->height, 0,
+                        G_TX_CLAMP, G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    gSPVertex(gfx++, vtx, 4, 0);
+    gSP2Triangles(gfx++, 0, 1, 2, 0, 0, 2, 3, 0);
+    if (*arg0 == NULL) {
+        gSPEndDisplayList(gfx++);
+    } else {
+        gSPBranchList(gfx++, *arg0);
+    }
+    *arg0 = dl;
+    return ((font->advance + font_context->unk_51) * arg3) / 100;
+}
 
 /**
  * Builds a small display list in freshly allocated display-list memory:
@@ -330,7 +351,6 @@ s32 func_8001B32C(s32 x, s32 scale, const char* str) {
     return x - (((strlen(str) >> 1) * width) >> 1);
 }
 
-s32 func_8001AFB0(Gfx** arg0, s16 x, s16 y, s16 arg3, s32 arg4, s32 chr);
 Gfx* func_8001B3AC(s16 x, s16 y, s16 arg2, s16 arg3, Color_RGBA8_u32 color, const char* fmt, ...) {
     u8 buf[0x100];
     UNUSED s32 pad[2];

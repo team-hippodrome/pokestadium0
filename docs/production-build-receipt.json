@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5031,
-  "asm_owners": 413,
+  "c_owners": 5032,
+  "asm_owners": 412,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -603,7 +603,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "82946cb84091a3d1d81dc8838bde53ea108bee6e6d25a2741caf68e60477f0dc",
+    "docs/function-matches.csv": "b654dad44a6949dca2353f523cb77fdc3487b2e8432de6baf0069d89f1024d54",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -982,7 +982,7 @@
     "src/gfx_buffer.c": "8763545514d8fbae9e0f5bba8be79ea47a1db08f2e40b1ceccb6c16d0a5e59e5",
     "src/gfx_rect.c": "aa0d5e4c1ee103a6195cc63d2e2e8f303c99b8a7dcbfe54b922dfd7c5948eee8",
     "src/graphics_textures.c": "453f662b84fedb755a66b198930f5ee7489f4a8f592eef45f2f75181815d548b",
-    "src/graphics_textures_2.c": "722b54e23d2719f7b2faa7cb0548594d49c7af9c3fb49415a4f178e7d0017329",
+    "src/graphics_textures_2.c": "48623da4cee5d10c3710df8efdb7800d37e02b049602972af41f84f1a5f6b5e2",
     "src/hal_libc.c": "d50da750462ef0b7edaeb89aa0991db3940b5e96b258447e64ff837325d362ba",
     "src/input.c": "7f601d1f48a9cc0f741568305bfc7ab90486de0197d64c06ac6f6ddba8bb8bf3",
     "src/jpeg_decoder.c": "e8422a5d5560a45a5dca3f3da8fdddf0e15fe81913805b4ce4f02221539f4e0e",
