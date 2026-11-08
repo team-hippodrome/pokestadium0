@@ -1068,11 +1068,81 @@ void* func_8110C2D8(u32 devAddr, u32 size, s32 arg2, u8* dmaIndexRef, s32 medium
     return (devAddr - dmaDevAddr) + dma->ramAddr;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110C618; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110C618.s")
-#endif
+extern s32 D_811858E0;
+
+/**
+ * Allocates the sample DMA buffers: three per note (times the buffer
+ * multiplier) of 0xA0 bytes for the first list, then one per note for the
+ * second, trying D_811842A0 when D_811842C0 is full. Each list's reuse queue
+ * is filled with the buffer indices and the rest of the queue cleared. Same
+ * structure as AudioLoad_InitSampleDmaBuffers in the Ocarina of Time audio
+ * library.
+ */
+void func_8110C618(s32 numNotes) {
+    s32 i;
+
+    D_811858E0 = 0xA0;
+    D_81185688 = (Timer8110C1C0*)func_81109868(&D_811842C0, 4 * D_811858E8 * sizeof(Timer8110C1C0) * D_811858B8.unk_00);
+    for (i = 0; i < 3 * D_811858E8 * D_811858B8.unk_00; i++) {
+        if ((D_81185688[D_8118568C].ramAddr = (u8*)func_81109868(&D_811842C0, D_811858E0)) == NULL) {
+            if (D_811842A0 == 0) {
+                break;
+            }
+            if ((D_81185688[D_8118568C].ramAddr = (u8*)func_81109868((M2C_UNK*)&D_811842A0, D_811858E0)) == NULL) {
+                break;
+            }
+        }
+        D_81185688[D_8118568C].size = D_811858E0;
+        D_81185688[D_8118568C].devAddr = 0;
+        D_81185688[D_8118568C].sizeUnused = 0;
+        D_81185688[D_8118568C].unused = 0;
+        D_81185688[D_8118568C].count = 0;
+        D_8118568C++;
+    }
+
+    for (i = 0; (u32)i < D_8118568C; i++) {
+        D_81185698[i] = i;
+        D_81185688[i].slot = i;
+    }
+
+    for (i = D_8118568C; i < 0x100; i++) {
+        D_81185698[i] = 0;
+    }
+
+    D_81185898 = 0;
+    D_8118589A = D_8118568C;
+    D_81185690 = D_8118568C;
+    D_811858E0 = 0xA0;
+
+    for (i = 0; i < D_811858E8; i++) {
+        if ((D_81185688[D_8118568C].ramAddr = (u8*)func_81109868(&D_811842C0, D_811858E0)) == NULL) {
+            if (D_811842A0 == 0) {
+                break;
+            }
+            if ((D_81185688[D_8118568C].ramAddr = (u8*)func_81109868((M2C_UNK*)&D_811842A0, D_811858E0)) == NULL) {
+                break;
+            }
+        }
+        D_81185688[D_8118568C].size = D_811858E0;
+        D_81185688[D_8118568C].devAddr = 0;
+        D_81185688[D_8118568C].sizeUnused = 0;
+        D_81185688[D_8118568C].unused = 0;
+        D_81185688[D_8118568C].count = 0;
+        D_8118568C++;
+    }
+
+    for (i = D_81185690; (u32)i < D_8118568C; i++) {
+        D_81185798[i - D_81185690] = i;
+        D_81185688[i].slot = i - D_81185690;
+    }
+
+    for (i = D_8118568C; i < 0x100; i++) {
+        D_81185798[i] = D_81185690;
+    }
+
+    D_81185899 = 0;
+    D_8118589B = D_8118568C - D_81185690;
+}
 
 extern u8 D_81184655[1];
 
