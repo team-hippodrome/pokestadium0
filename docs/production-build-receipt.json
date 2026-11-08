@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5046,
-  "asm_owners": 398,
+  "c_owners": 5047,
+  "asm_owners": 397,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -603,7 +603,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "37187c0968ca98fe1cc78379dda7c35e7706bfed2ecf9599bff6a7c95afad6b6",
+    "docs/function-matches.csv": "663f0411fea282b2dd39d8611379524b011dbd6338539a2e0fb6cd25109b8d8d",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -789,7 +789,7 @@
     "src/fragments/fragment012_17ED00/particle_math_26E6D0_3.c": "f0a6213871cd4e3baae1d9b905e8ff098d5e5059c92250264da0269018343318",
     "src/fragments/fragment013_232510/demo_scenes_161E60.c": "e3b8fef74a3bc0faa9ada97609d1a2eb5ac17951be3b1ca75f3b4f10c9011a48",
     "src/fragments/fragment014_235D70/lab_pc_icons.c": "01a3bbcdaf0b33244a8c857a2e529b221f23bdaac8d7e4e239d9a9e9972947ce",
-    "src/fragments/fragment015_238BD0/89006FC0.c": "0108ce0935570ca91c6b0f48b6ad0e70d51f2b4023b1cc04be566b712f4f321e",
+    "src/fragments/fragment015_238BD0/89006FC0.c": "44b45e8583fef2e5ff39a56997ae08a3983835c1b31650b09635e4cfde5402fd",
     "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c": "fb9096c40133542be9d3163fca2763e4a48b6d19c1545287d1cd9e05730b3223",
     "src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c": "7e14cb6cf60d1dd09bdb762845eea0758f60b640ba85df2181d544b43b1597f5",
     "src/fragments/fragment016_252E10/89100020.c": "7e7002b6fd2dc714fa4cb1a0c0e896a197171a435439c080b2da57eac7dad7ab",

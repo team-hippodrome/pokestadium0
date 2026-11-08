@@ -339,11 +339,56 @@ s32 func_890082FC(s32 arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_8900865C.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_890088F8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_890088F8.s")
-#endif
+typedef struct ColorPair890088F8 {
+    Color_RGBA8 prim;
+    Color_RGBA8 env;
+} ColorPair890088F8;
+extern ColorPair890088F8 D_8900A904;
+extern ColorPair890088F8 D_8900A90C;
+extern s32 D_8900A914[];
+extern u8* D_89017A80[];
+extern u8 D_89017A98[];
+extern char D_89018F28[];
+extern char D_89018F3C[];
+extern s32 D_89019114;
+extern Gfx D_80073408[];
+extern Gfx D_80073438[];
+void func_8002A550(s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
+void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
+s32 func_8002BC44(s32);
+void func_80027F20(s32);
+void func_890088F8(s32 x, s32 y, s32 flags, s32 kind) {
+    ColorPair890088F8* c;
+
+    if (flags & 2) {
+        c = &D_8900A904;
+    } else {
+        c = &D_8900A90C;
+    }
+    func_8002A550(x, y, D_8900A914[kind], 0x2C, c->prim, c->env);
+    gSPDisplayList(gDisplayListHead++, D_80073408);
+    switch (kind) {
+        case 0:
+            func_8001B884(x + 1, y + 9, 0x18, 0x1A, D_89017A80[func_8002BC44(D_89019114)], 0x18, 0x200000);
+            break;
+        case 1:
+            func_8001B884(x + 2, y + 9, 0x28, 0x1A, D_89017A98, 0x30, 0x200000);
+            break;
+    }
+    gSPDisplayList(gDisplayListHead++, D_80073438);
+    Font_BeginTranslucentTextRendering();
+    func_80027F20(flags);
+    Font_SetActive(8, 0);
+    switch (kind) {
+        case 0:
+            Font_Printf(x + 0x19, y + 0xC, D_89018F28);
+            break;
+        case 1:
+            Font_Printf(x + 0x2C, y + 0xC, D_89018F3C);
+            break;
+    }
+    Font_EndTexturedTextRendering();
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_89008AF4; signature not recovered. */
