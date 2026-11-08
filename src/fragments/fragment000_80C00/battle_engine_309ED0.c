@@ -255,11 +255,37 @@ typedef struct Entry811858B0 {
 } Entry811858B0; // size = 0xC
 extern Entry811858B0* D_811858B0;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110F518; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110F518.s")
-#endif
+s32 func_8110F518(s32 arg0, Item8110F4D0** arg1) {
+    s32 count = 0;
+    s32 i;
+    s32 n1 = D_811858B0[arg0].unk_00[1];
+    s32 n0 = D_811858B0[arg0].unk_00[0];
+    s32* p;
+    u8* q;
+
+    for (i = 0; i < n1; i++) {
+        p = func_81110D6C(arg0, i);
+        if (p != 0) {
+            // do-while(0) wrapper only changes register allocation; needed to match
+            do {
+                count = func_8110F4D0((Item8110F4D0*)p[1], count, arg1);
+            } while (0);
+        }
+    }
+    for (i = 0; i < n0; i++) {
+        q = (u8*)func_81110CA8(arg0, i);
+        if (q != 0) {
+            if (q[1] != 0) {
+                count = func_8110F4D0(*(Item8110F4D0**)(q + 8), count, arg1);
+            }
+            if (q[2] != 0x7F) {
+                count = func_8110F4D0(*(Item8110F4D0**)(q + 0x18), count, arg1);
+            }
+            count = func_8110F4D0(*(Item8110F4D0**)(q + 0x10), count, arg1);
+        }
+    }
+    return count;
+}
 
 
 /*
