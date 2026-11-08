@@ -862,11 +862,28 @@ void func_8002CAD0(s32* arg0) {
     func_8001ABBC();
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002CC44; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002CC44.s")
-#endif
+extern Color_RGBA8 D_800736C4;
+extern Color_RGBA8 D_800736C8;
+extern u8 D_8007B940[];
+void func_8002CC44(s32* arg0) {
+    s32 i = 2;
+    u8* str = D_8007B940;
+    BgStage_AdvanceFrame();
+    while (i-- > 0) {
+        BgStage_DrawFrame();
+        func_8002A550(arg0[0] + 6, arg0[1] + 6, arg0[2] - 0xC, 0x40, D_800736C4, D_800736C8);
+        func_8001AB6C();
+        func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF);
+        func_8001A384(0x10, 0);
+        func_8001ABE8();
+        func_8001AAE4(0xFF, 0xB2, 0xB2, 0xFF);
+        func_8001A944(arg0[0] + 0x20, arg0[1] + 0x16, (s32)str);
+        func_8001AC3C();
+        func_8001ABBC();
+        BgStage_AdvanceFrame();
+    }
+    BgStage_DrawFrame();
+}
 
 s32 func_8002BC14(s32);
 s32 func_8002DC04(void *, void *);
