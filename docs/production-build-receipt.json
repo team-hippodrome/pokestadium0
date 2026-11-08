@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5018,
-  "asm_owners": 426,
+  "c_owners": 5019,
+  "asm_owners": 425,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -603,7 +603,7 @@
     "tools/cflags_overrides.json": "d52904dd4970ed73d93e369393a800c2e8f86536c5463c3dc054c7baa1909c2a",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "bcc33248d9d377ba26c85883ea14bff92ad6765d0788a6bc5b34ba0abbeeac79",
+    "docs/function-matches.csv": "098ec6443336f397c4b70f5a49d6500f1b4a0cf3c29c29d11d1ea5db2cec9eb3",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -999,7 +999,7 @@
     "src/libleo/leofunc.c": "acb7c52a4078e00f1ac6424b9441951f81e9cca74177d84bf09c2abcfc8b0d80",
     "src/libleo/leoinquiry.c": "d9398e4f1536d2d26eb8fa1c0df57729618c6de3cd8483cf780fb841491dde1a",
     "src/libleo/leoint.c": "e52f3bc116a1f42c67b8b46f336120378d4e176eaaaa272e7feddc8de108926c",
-    "src/libleo/leointerrupt.c": "a2fff7bcd6f5d17a58629aca933b388525e016ce2135cf05294435a7dd4c0fc3",
+    "src/libleo/leointerrupt.c": "c1776c77dac909bb3b14b146f9cb60b8170c87097c78417683612bbc86328342",
     "src/libleo/leomecha.c": "b6c14c0cf65ec0c5b94502167d6c500cab365e262070b7356d28f8ea3cb83878",
     "src/libleo/leomseq_tbl.c": "78b287724515788000e64f036849874cdbeaa90eab18bfec20336b05aaa2e5fd",
     "src/libleo/leord_capa.c": "461d2210160b1578a694fea8995044fdb17c8f5e221f58b3445ac78f6720d2e8",

@@ -4659,7 +4659,7 @@ func_80048930,0x80048930,src/libleo/leoint.c,read_write_track,s1,stadium1:src/li
 func_80048F2C,0x80048F2C,src/libleo/leoint.c,leoChk_mecha_int,s1,stadium1:src/libleo/leoint.c,c
 func_80048F94,0x80048F94,src/libleo/leoint.c,leosetup_BM,s1,stadium1:src/libleo/leoint.c,c
 func_8004907C,0x8004907C,src/libleo/leoint.c,leochk_err_reg,s1,stadium1:src/libleo/leoint.c,c
-func_8004FDC0,0x8004FDC0,src/libleo/leointerrupt.c,,asm,,asm
+func_8004FDC0,0x8004FDC0,src/libleo/leointerrupt.c,func_8004FDC0,s1,,c
 func_80050340,0x80050340,src/libleo/leointerrupt.c,__osLeoAbnormalResume,s1,stadium1:src/libleo/leointerrupt.c,c
 func_800503F4,0x800503F4,src/libleo/leointerrupt.c,__osLeoResume,s1,stadium1:src/libleo/leointerrupt.c,c
 func_80049DC0,0x80049DC0,src/libleo/leomecha.c,leoAnalize_asic_status,s1,stadium1:src/libleo/leomecha.c,c
