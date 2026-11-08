@@ -181,11 +181,31 @@ void* func_81107E70(void* cmd, s16 channel, s16 slot) {
     return cmd;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81107F40; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81107F40.s")
-#endif
+void* func_811076D0(AudioCmd* cmd, u16 dmem, u16 offset, s32 count, s32 channel);
+
+/* Loads a voice's samples (or points the mixer at them in RAM) as one macro statement, like AUDIO_CMDS_811092F4. */
+#define AUDIO_LOAD_VOICE_81107F40(cmd, tmp, ch, voice, slot, channel)                                  \
+    do {                                                                                              \
+        if ((ch)->mode == 1) {                                                                        \
+            cmd = func_811076D0(cmd, 0xC80, (voice)->offset, (voice)->count, channel);                \
+            if ((voice)->wrapCount != 0) {                                                            \
+                cmd = func_811076D0(cmd, (voice)->count + 0xC80, 0, (voice)->wrapCount, channel);     \
+            }                                                                                         \
+        } else {                                                                                      \
+            tmp = (cmd)++;                                                                            \
+            tmp->w0 = 0x15340C80;                                                                     \
+            tmp->w1 = (ch)->voices[(ch)->bank][slot].addr + 0x80000000;                               \
+        }                                                                                             \
+    } while (0)
+
+void* func_81107F40(AudioCmd* cmd, s16 channel, s16 slot) {
+    AudioVoice81107E70* voice = &D_81184110[channel].voices[D_81184110[channel].bank][slot];
+    AudioCmd* c;
+
+    AUDIO_LOAD_VOICE_81107F40(cmd, c, &D_81184110[channel], voice, slot, channel);
+    D_81184110[channel].active = 0;
+    return cmd;
+}
 
 void* func_811076D0(AudioCmd* cmd, u16 dmem, u16 offset, s32 count, s32 channel);
 
