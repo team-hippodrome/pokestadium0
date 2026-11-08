@@ -818,8 +818,53 @@ void func_88102B98(void) {
     func_80002DC0(D_881030F8);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88102BBC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment008_1720F0/func_88102BBC.s")
-#endif
+M2C_UNK func_8000256C(M2C_UNK);
+M2C_UNK func_80002620(M2C_UNK);
+M2C_UNK func_80003EB8(u32, M2C_UNK *, M2C_UNK *, M2C_UNK);
+M2C_UNK func_800040B4(s32, M2C_UNK *, M2C_UNK *);
+M2C_UNK func_80006724();
+M2C_UNK func_8000675C();
+M2C_UNK func_80006828(M2C_UNK, void*);
+s32 func_80017860(M2C_UNK);
+M2C_UNK func_80017934();
+s32 func_80017FDC(s32, M2C_UNK, M2C_UNK, M2C_UNK);
+M2C_UNK func_8001A194(M2C_UNK, M2C_UNK);
+M2C_UNK func_80025BA0(s32, M2C_UNK *, M2C_UNK *, M2C_UNK, s32);
+extern M2C_UNK D_0015B1A0;
+extern M2C_UNK D_0015E220;
+extern M2C_UNK D_00235D70;
+extern M2C_UNK D_00238BD0;
+extern M2C_UNK D_002E0BE0;
+extern M2C_UNK D_002E2B90;
+extern M2C_UNK D_00400F70;
+extern M2C_UNK D_004076E0;
+extern M2C_UNK D_004199E0;
+extern M2C_UNK D_0042C4A0;
+extern M2C_UNK D_01000000;
+extern M2C_UNK D_04000000;
+extern M2C_UNK D_05000000;
+extern M2C_UNK D_81000000;
+extern M2C_UNK D_88000000;
+extern s32 D_88103070;
+extern s32 D_88103074;
+s32 func_88102BBC(s32 arg0, s32 arg1) {
+    func_8000256C(0x52454753);
+    func_8001A194(0x3C, 0);
+    D_88103070 = func_80017860(1);
+    D_88103074 = func_80017FDC(D_88103070, 0x19, 0x28, 0x28);
+    func_80017934();
+    func_800040B4(((u32)((s32)&D_81000000 & 0x0FF00000) >> 0x14) - 0x10, &D_0015B1A0, &D_0015E220);
+    func_80003EB8((u32)((s32)&D_01000000 & 0x0F000000) >> 0x18, &D_002E0BE0, &D_002E2B90, 0);
+    func_80003EB8((u32)((s32)&D_04000000 & 0x0F000000) >> 0x18, &D_00400F70, &D_004076E0, 0);
+    func_80003EB8((u32)((s32)&D_05000000 & 0x0F000000) >> 0x18, &D_004199E0, &D_0042C4A0, 0);
+    func_881029E0();
+    func_8000675C();
+    func_80006828(8, func_88102A2C);
+    func_80006828(0, func_88102B58);
+    func_80006828(8, func_88102A2C);
+    func_80006724();
+    func_88102B98();
+    func_80002620(0x52454753);
+    func_80025BA0(((u32)((s32)&D_88000000 & 0x0FF00000) >> 0x14) - 0x10, &D_00235D70, &D_00238BD0, 0, 0);
+    return 0x8040;
+}
