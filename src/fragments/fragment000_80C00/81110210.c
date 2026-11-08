@@ -255,16 +255,73 @@ void func_81111130(void) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_811111E0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_811111E0.s")
-#endif
+typedef struct ListItem811111E0 {
+    /* 0x00 */ struct ListItem811111E0* prev;
+    /* 0x04 */ struct ListItem811111E0* next;
+    /* 0x08 */ void* u;
+    /* 0x0C */ void* pool;
+} ListItem811111E0; // size = 0x10
+
+typedef struct NotePool811111E0 {
+    /* 0x00 */ ListItem811111E0 disabled;
+    /* 0x10 */ ListItem811111E0 decaying;
+    /* 0x20 */ ListItem811111E0 releasing;
+    /* 0x30 */ ListItem811111E0 active;
+} NotePool811111E0;
 
 extern s8 D_81184948;
 extern s8 D_81184958;
 extern s8 D_81184968;
-void func_811111E0(void);
+void func_811114BC(s8*);
+
+/**
+ * Moves every note in the four lists of a note pool back to the matching
+ * global free list (D_81184938, D_81184948, D_81184958, D_81184968). Same
+ * structure as note_pool_clear in the Super Mario 64 audio library.
+ */
+void func_811111E0(NotePool811111E0* pool) {
+    s32 i;
+    ListItem811111E0* source;
+    ListItem811111E0* cur;
+    s8* dest;
+
+    for (i = 0; i < 4; i++) {
+        switch (i) {
+            case 0:
+                source = &pool->disabled;
+                dest = &D_81184938;
+                break;
+
+            case 1:
+                source = &pool->decaying;
+                dest = &D_81184948;
+                break;
+
+            case 2:
+                source = &pool->releasing;
+                dest = &D_81184958;
+                break;
+
+            case 3:
+                source = &pool->active;
+                dest = &D_81184968;
+                break;
+        }
+
+        for (;;) {
+            cur = source->next;
+            if (cur == source) {
+                break;
+            }
+            if (cur == NULL) {
+                break;
+            }
+            func_811114BC((s8*)cur);
+            func_81112EAC(dest, (Rec81111130*)cur);
+        }
+    }
+}
+
 s32 func_81112EEC(s8 *);
 void func_81111340(s8* arg0, s32 arg1) {
     s32 pad[3]; /* places src/dst at sp+0x48/0x44 and the frame at 0x58 as in the ROM */
@@ -274,7 +331,7 @@ void func_81111340(s8* arg0, s32 arg1) {
     s32 pass;
     s32 r;
 
-    func_811111E0();
+    func_811111E0((NotePool811111E0*)arg0);
     for (pass = 0, n = 0; n < arg1; pass++) {
         if (pass == 4) {
             return;
