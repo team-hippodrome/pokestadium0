@@ -804,7 +804,7 @@ func_820061F0,0x820061F0,src/fragments/fragment007_166580_3.c,func_820061F0,hand
 func_82006348,0x82006348,src/fragments/fragment007_166580_3.c,func_82006348,m2c,m2c+permuter,c
 func_8200639C,0x8200639C,src/fragments/fragment007_166580_3.c,func_8200639C,hand,,c
 func_82006410,0x82006410,src/fragments/fragment007_166580_3.c,func_82006410,hand,,c
-func_82006508,0x82006508,src/fragments/fragment007_166580_3.c,,asm,,asm
+func_82006508,0x82006508,src/fragments/fragment007_166580_3.c,func_82006508,hand,,c
 func_820066E8,0x820066E8,src/fragments/fragment007_166580_3.c,func_820066E8,hand,,c
 func_82006810,0x82006810,src/fragments/fragment007_166580_3.c,func_82006810,hand,,c
 func_820069B8,0x820069B8,src/fragments/fragment007_166580_3.c,func_820069B8,hand,,c
