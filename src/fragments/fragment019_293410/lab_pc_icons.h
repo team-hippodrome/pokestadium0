@@ -111,7 +111,7 @@ M2C_UNK func_80029658(s32, s32, s32, M2C_UNK *);    /* extern */
 M2C_UNK func_80029864(s32, s32, s32, M2C_UNK *);    /* extern */
 s32 func_8002AB84();                                /* extern */
 void func_8A2009CC(s32, s32, BattleMon*);
-M2C_UNK func_8A200B78(s32, s32, s32);               /* extern */
+void func_8A200B78();
 M2C_UNK func_8A200DE0(s32, s32, s32);               /* extern */
 M2C_UNK func_8A2010C8(s32, s32, s32, s32);          /* extern */
 void func_8A201394();

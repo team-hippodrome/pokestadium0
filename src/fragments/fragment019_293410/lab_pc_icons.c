@@ -192,7 +192,33 @@ void func_8A2009CC(s32 arg0, s32 arg1, BattleMon* arg2) {
     func_8001ABBC();
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment019_293410/func_8A200B78.s")
+extern char D_8A21D8FC[];
+extern char D_8A21D904[];
+extern char D_8A21D908[];
+extern char D_8A21D90C[];
+extern char D_8A21D914[];
+void func_8A200B78(s32 arg0, s32 arg1, BattleMon* arg2) {
+    gSPDisplayList(gDisplayListHead++, D_80060270);
+    func_80029028(arg0, arg1, 0x122, 0x90, D_8A203304);
+    func_8001AB6C();
+    func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF);
+    Font_EnableTwoCycleTexturing();
+    func_8001A384(0x10, 0);
+    Gfx_SetPrimColor(0x5A, 0x6B, 0xFF, 0xFF);
+    func_8001A944(arg0 + 0x25, arg1 + 0x1E, arg2->unk_30);
+    Font_DisableTwoCycleTexturing();
+    func_8001A384(8, 0);
+    func_8001AA9C(((Color_RGBA8*)&D_800734A8)->r, ((Color_RGBA8*)&D_800734A8)->g, ((Color_RGBA8*)&D_800734A8)->b, ((Color_RGBA8*)&D_800734A8)->a);
+    func_8001A944(arg0 + 9, arg1 + 6, D_8A21D8FC, arg2->unk_00.unk_00);
+    func_8001A944(arg0 + 0xC9, arg1 + 0x21, D_8A21D904, arg2->unk_24);
+    func_8001A944(arg0 + 0x45, arg1 + 0x44, D_8A21D908);
+    func_8001A944(arg0 + 0x8D, arg1 + 0x58, D_8A21D90C, arg2->hp, arg2->unk_26);
+    func_8001AA9C(0xFF, 0xC7, 0xC7, 0xFF);
+    func_8001A944(arg0 + 0x23, arg1 + 0x74, D_8A21D914);
+    func_8A200020(arg0 + 0xAF, arg1 + 0x74, arg2);
+    func_8001ABBC();
+    BattleHud_DrawHpBarTexture(arg0 + 0x85, arg1 + 0x48, 0x94, arg2->hp, arg2->unk_26);
+}
 
 void func_8A200D44(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     Color82000BC4 c;

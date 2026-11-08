@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5053,
-  "asm_owners": 391,
+  "c_owners": 5054,
+  "asm_owners": 390,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -594,7 +594,7 @@
   ],
   "source_registry_sha256": "23324db86a9583335916ac8b036f9a0000b23dcde9a41e110bd84697c4447969",
   "section_registry_sha256": "0e06fd167d25c494919c1459ec767a1b2bea9cf2688b55bcde9d209a729e5866",
-  "headers_sha256": "ca0d57681ffc274908048a5057db725b4a95593d821a3f88ebd1b9459c4b1fcd",
+  "headers_sha256": "3785127c908975159746b167fd76eb21379d1836c50994c659df6bdf99dba378",
   "matching_registry_sha256": "d8bcc14a2a0db281cf30dcb9ddbd94d59e1afe84c70b4c8c017ea27ce60a251c",
   "build_tools_sha256": {
     "tools/production.py": "c62476279cd553bc7b7d39d13253922dec0bf62fddc24e76cdd4b490e460c6c9",
@@ -603,7 +603,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "75bd725f44c54f7157e81b5742fef1d69c48eb7b3d8dfd052351455338faa170",
+    "docs/function-matches.csv": "a562a66fe7305b5ed802d40990c8dbc883c6be487483f5068a20a83321c4b78a",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -799,7 +799,7 @@
     "src/fragments/fragment017_261F00.c": "010db2d8b146be87183a9f92e3d7a094eb3e9b17ab5eda9b74b443022094159e",
     "src/fragments/fragment018_262620/pokedex_214920.c": "763046a129ef3040207927bac09331179ed6862cb72f5cebb12761097b59a779",
     "src/fragments/fragment018_262620/pokedex_2190D0.c": "f34118c88ebb560e56f416197fa91203210374d1a9c30356c7ac091779394ec5",
-    "src/fragments/fragment019_293410/lab_pc_icons.c": "4bead4359d24affb3ecb407923bf2bdad62c721bb4e347a57d7a3578f61fef37",
+    "src/fragments/fragment019_293410/lab_pc_icons.c": "622982fc7019fca06c46ecb2a5e522ca83596c400802feed02e99ecc79833d38",
     "src/fragments/fragment019_293410/lab_pc_icons_8A201598.c": "79849644ea082b060d05d6032edaa23dbdbf75aa3098204bcc21426daa6688ae",
     "src/fragments/fragment020_2B1360.c": "1d51773e2a436bb50560c5297d6152fb294823d9c01f0e5ec662adab156da927",
     "src/fragments/fragment021_2B13F0.c": "89591b5837dd2c5cb906da8fc3231bc8e0a207a6adf0fd1e7058e89f0fbbe95e",
