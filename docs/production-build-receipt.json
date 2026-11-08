@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5143,
-  "asm_owners": 301,
+  "c_owners": 5144,
+  "asm_owners": 300,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -613,7 +613,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "c53f1572b675ca58b93c5a6c8150d7db46a8864f1659fa61f270092bd3e777ff",
+    "docs/function-matches.csv": "21039508be52c8e0c41d20fc57f983bc78bc4c17e9f2ed9e6c2193084f353352",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -690,7 +690,7 @@
     "src/fragments/fragment000_80C00/battle_engine_309ED0.c": "0694daa2e1c2f1e46977d3ba2589176b8baf813e2ff133d6da9df428c5e4c2e5",
     "src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c": "21aaf707c9aa797d1d6a59983b5ec2bd402cdf503f1570fe63d0bf1a0cab8894",
     "src/fragments/fragment000_80C00/gb_tower_emulator_86920.c": "1f2082a9a5d56d67223eafe2764df33892dfdd9cb8df9e550ed4097ca23ea7af",
-    "src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c": "6f0026223d99171336a3709a6fd9849c7d109445d662b3e026607c6fea99d49a",
+    "src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c": "742da8348bae9a11a8f97969c50510e9dd3baea1fd255e4e1219026f2533b648",
     "src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_811177E8.c": "4b75c7a204982ed7a37d2030b1b5e8b5691252c4fecc501cb8b96a2abc3c9db7",
     "src/fragments/fragment001_15B1A0.c": "d1c261a91d2655fce1c365532252dbb923f0e500cf5a8cd8959a1fdedbaa8444",
     "src/fragments/fragment002_15E220.c": "7496a5e732094991be4c728bfa03f78b0bc122733e7dab23e2ad0463b40cda83",

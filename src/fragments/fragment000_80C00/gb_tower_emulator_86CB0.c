@@ -84,7 +84,68 @@ typedef struct Item8111539C {
 } Item8111539C;
 extern Item8111539C D_81184850;
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81112894.s")
+void func_811110E0(void*);
+typedef struct Bits81112894 {
+    u8 b80 : 1;
+    u8 b40 : 1;
+    u8 b20 : 1;
+    u8 b10 : 1;
+    u8 b08 : 1;
+    u8 b04 : 1;
+    u8 b02 : 1;
+    u8 b01 : 1;
+} Bits81112894;
+extern u8 D_81136998[];
+void func_81112894(void* obj) {
+    s8* arg0 = obj;
+    s32 i;
+
+    if ((Item8111539C*)arg0 != &D_81184850) {
+        ((Bits81112894*)arg0)->b80 = 0;
+        ((Bits81112894*)arg0)->b40 = 0;
+        ((Bits81112894*)arg0)->b20 = 0;
+        ((Bits81112894*)arg0)->b10 = 0;
+        ((Bits81112894*)arg0)->b08 = 0;
+        ((Bits81112894*)arg0)->b04 = 0;
+        M2C_FIELD(arg0, s16*, 0x24) = 0;
+        ((Bits81112894*)arg0)->b02 = 0;
+        M2C_FIELD(arg0, s8*, 9) = 0;
+        M2C_FIELD(arg0, u8*, 1) = 0xFF;
+        M2C_FIELD(arg0, s8*, 0x78) = 0;
+        M2C_FIELD(arg0, s8*, 0xA) = 0x40;
+        M2C_FIELD(arg0, u8*, 0xB) = 0x80;
+        M2C_FIELD(arg0, s8*, 0xD) = 0;
+        M2C_FIELD(arg0, s8*, 0xE) = 0;
+        M2C_FIELD(arg0, s32*, 0x40) = 0;
+        M2C_FIELD(arg0, s8*, 8) = 0;
+        M2C_FIELD(arg0, s8*, 4) = 0;
+        M2C_FIELD(arg0, s8*, 0xC) = 0;
+        M2C_FIELD(arg0, s8*, 5) = 3;
+        M2C_FIELD(arg0, s8*, 6) = 1;
+        M2C_FIELD(arg0, s16*, 0x1E) = 0;
+        M2C_FIELD(arg0, u8**, 0x80) = D_81136998;
+        M2C_FIELD(arg0, s8*, 0x7C) = 0x20;
+        M2C_FIELD(arg0, s16*, 0x14) = 0x800;
+        M2C_FIELD(arg0, s16*, 0x10) = 0x800;
+        M2C_FIELD(arg0, s8*, 0x7D) = 0;
+        M2C_FIELD(arg0, s16*, 0x16) = 0;
+        M2C_FIELD(arg0, s16*, 0x12) = 0;
+        M2C_FIELD(arg0, s16*, 0x18) = 0;
+        M2C_FIELD(arg0, s16*, 0x1A) = 0;
+        M2C_FIELD(arg0, s16*, 0x1C) = 0;
+        M2C_FIELD(arg0, s32*, 0xD0) = 0;
+        M2C_FIELD(arg0, s16*, 0x20) = 0;
+        M2C_FIELD(arg0, s8*, 0xF) = 0;
+        M2C_FIELD(arg0, f32*, 0x2C) = 1.0f;
+        M2C_FIELD(arg0, f32*, 0x28) = 1.0f;
+        M2C_FIELD(arg0, f32*, 0x38) = 1.0f;
+        for (i = 0; i < 8; i++) {
+            M2C_FIELD(arg0, s8*, 0xC4 + i) = -1;
+        }
+        ((Bits81112894*)arg0)->b01 = 0;
+        func_811110E0(arg0 + 0x84);
+    }
+}
 
 extern struct GbEmuListZ D_81184928;
 typedef struct Pair811129E0 { u8 a; u8 pad[3]; s32 b; } Pair811129E0;
