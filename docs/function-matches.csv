@@ -3890,7 +3890,7 @@ func_8A104934,0x8A104934,src/fragments/fragment018_262620/pokedex_2190D0.c,Poked
 func_8A104A6C,0x8A104A6C,src/fragments/fragment018_262620/pokedex_2190D0.c,Pokedex_GetCountTier,s1,stadium1:src/fragments/pokedex/pokedex_2190D0.c,c
 func_8A104B00,0x8A104B00,src/fragments/fragment018_262620/pokedex_2190D0.c,,asm,,asm
 func_8A1051A4,0x8A1051A4,src/fragments/fragment018_262620/pokedex_2190D0.c,Pokedex_CheckAreaMapExit,s1,stadium1:src/fragments/pokedex/pokedex_2190D0.c,c
-func_8A1053E8,0x8A1053E8,src/fragments/fragment018_262620/pokedex_2190D0.c,,asm,,asm
+func_8A1053E8,0x8A1053E8,src/fragments/fragment018_262620/pokedex_2190D0.c,func_8A1053E8,s1,,c
 func_8A1057AC,0x8A1057AC,src/fragments/fragment018_262620/pokedex_2190D0.c,Pokedex_ExitAreaMapPool,s1,stadium1:src/fragments/pokedex/pokedex_2190D0.c,c
 func_8A200020,0x8A200020,src/fragments/fragment019_293410/lab_pc_icons.c,func_8A200020,hand,,c
 func_8A20009C,0x8A20009C,src/fragments/fragment019_293410/lab_pc_icons.c,func_8A20009C,hand,,c

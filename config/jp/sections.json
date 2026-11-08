@@ -350,6 +350,9 @@
       "size": "0x14"
     }
   },
+  "src/fragments/fragment018_262620/pokedex_2190D0.c": {
+    ".rodata": "0x8A12FE20"
+  },
   "src/fragments/fragment019_293410/lab_pc_icons.c": {
     ".rodata": {
       "address": "0x8A21D998",
