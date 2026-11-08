@@ -41,11 +41,66 @@ void func_8217DC80(void) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8217DDD4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8217DDD4.s")
-#endif
+typedef struct OwnerAnchoredFourStreamZero {
+    /* 0x000 */ s16 unk_000;
+    /* 0x002 */ s16 unk_002;
+    /* 0x004 */ s16 unk_004;
+    /* 0x006 */ s16 unk_006;
+    /* 0x008 */ Color_RGB8 unk_008;
+    /* 0x00C */ f32 unk_00C;
+    /* 0x010 */ f32 unk_010;
+    /* 0x014 */ Vtx* unk_014;
+    /* 0x018 */ Particle* unk_018;
+    /* 0x01C */ OwnerAnchoredFourStreamNode unk_01C[15];
+} OwnerAnchoredFourStreamZero; // size = 0x418
+
+void func_8217DDD4(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9,
+                   f32 argA, f32 argB, f32 argC, s16 argD) {
+    s32 i;
+    s32 j;
+    OwnerAnchoredFourStreamZero* var_v1;
+    OwnerAnchoredFourStreamNode* var_s0;
+    Vec3f sp64;
+    Vec3f sp58;
+
+    sp64.x = arg0;
+    sp64.y = arg1;
+    sp64.z = arg2;
+    sp58.x = arg3;
+    sp58.y = arg4;
+    sp58.z = arg5;
+
+    var_v1 = (OwnerAnchoredFourStreamZero*)&D_821B6F00[0];
+    for (i = 0; i < 4; i++, var_v1++) {
+        if (var_v1->unk_000 == 0) {
+            var_v1->unk_000 = 1;
+            var_v1->unk_002 = 0;
+            var_v1->unk_004 = argD;
+            var_v1->unk_008.r = arg6;
+            var_v1->unk_008.g = arg7;
+            var_v1->unk_008.b = arg8;
+            var_v1->unk_00C = argC;
+            var_v1->unk_010 = argA;
+
+            var_v1->unk_018 = BattleAnim_SpawnSecondaryOwnerParticle(sp64, 2);
+            if (arg3 < 0.0) {
+                var_v1->unk_006 = -1;
+            } else {
+                var_v1->unk_006 = 1;
+            }
+
+            var_s0 = &var_v1->unk_01C[0];
+            for (j = 0; j < 15; j++, var_s0++) {
+                var_s0->unk_00 = (arg9 * (0xE - j)) / 15;
+                var_s0->unk_04 = argB;
+                var_s0->unk_08 = (RAND(120) * 6.2831855f) / 120.0;
+                var_s0->unk_0C = sp64;
+                var_s0->unk_18 = sp58;
+            }
+            break;
+        }
+    }
+}
 
 void OwnerAnchoredFourStream_Update(f32 arg0, Vec3f* arg1, f32 arg2) {
     UNUSED MtxF sp70;
