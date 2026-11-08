@@ -166,7 +166,31 @@ s32 func_8A20093C(s8* arg0) {
     return sp1C;
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment019_293410/func_8A2009CC.s")
+extern char D_8A21D8BC[];
+extern char D_8A21D8C8[];
+extern char D_8A21D8D4[];
+extern char D_8A21D8E0[];
+extern char D_8A21D8EC[];
+extern char D_8A21D8F0[];
+extern char D_8A21D8F4[];
+extern char D_8A21D8F8[];
+void func_8A2009CC(s32 arg0, s32 arg1, BattleMon* arg2) {
+    gSPDisplayList(gDisplayListHead++, D_80060270);
+    func_80029028(arg0, arg1, 0xF4, 0x86, D_8A203304);
+    func_8001AB6C();
+    func_8001A384(0x10, 0);
+    func_8001AA9C(0xFF, 0xC8, 0xC8, 0xFF);
+    func_8001A944(arg0 + 0xE, arg1 + 7, D_8A21D8BC);
+    func_8001A944(arg0 + 0xE, arg1 + 0x27, D_8A21D8C8);
+    func_8001A944(arg0 + 0xE, arg1 + 0x47, D_8A21D8D4);
+    func_8001A944(arg0 + 0xE, arg1 + 0x67, D_8A21D8E0);
+    func_8001AA9C(((Color_RGBA8*)&D_800734A8)->r, ((Color_RGBA8*)&D_800734A8)->g, ((Color_RGBA8*)&D_800734A8)->b, ((Color_RGBA8*)&D_800734A8)->a);
+    func_8001A944(arg0 + 0x9E, arg1 + 7, D_8A21D8EC, arg2->unk_28);
+    func_8001A944(arg0 + 0x9E, arg1 + 0x27, D_8A21D8F0, arg2->unk_2A);
+    func_8001A944(arg0 + 0x9E, arg1 + 0x47, D_8A21D8F4, arg2->unk_2C);
+    func_8001A944(arg0 + 0x9E, arg1 + 0x67, D_8A21D8F8, arg2->unk_2E);
+    func_8001ABBC();
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment019_293410/func_8A200B78.s")
 
