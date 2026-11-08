@@ -656,7 +656,7 @@ func_8150036C,0x8150036C,src/fragments/fragment003_15F390/n64_logo.c,N64Logo_Sca
 func_815003A4,0x815003A4,src/fragments/fragment003_15F390/n64_logo.c,N64Logo_Main,s1,,c
 func_81300020,0x81300020,src/fragments/fragment004_15F8F0/gb_tower_team_prep.c,GbTower_LoadPartyFromDeck,s1,stadium1:src/fragments/gb_tower_team_prep/gb_tower_team_prep.c,c
 func_813000F0,0x813000F0,src/fragments/fragment004_15F8F0/gb_tower_team_prep.c,GbTower_TeamPrepFrameCallback,s1,stadium1:src/fragments/gb_tower_team_prep/gb_tower_team_prep.c (VERSION_JP),c
-func_81300144,0x81300144,src/fragments/fragment004_15F8F0/gb_tower_team_prep.c,,asm,,asm
+func_81300144,0x81300144,src/fragments/fragment004_15F8F0/gb_tower_team_prep.c,GbTower_BuildPartyResult,hand,,c
 func_81300228,0x81300228,src/fragments/fragment004_15F8F0/gb_tower_team_prep.c,GbTower_TeamPrep,hand,,c
 func_82300020,0x82300020,src/fragments/fragment005_15FCE0/battle_order_select.c,BattleMenu_DrawBottomActionButtons,hand,,c
 func_8230016C,0x8230016C,src/fragments/fragment005_15FCE0/battle_order_select.c,func_8230016C,hand,,c
