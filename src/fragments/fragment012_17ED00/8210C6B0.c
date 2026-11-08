@@ -471,11 +471,29 @@ void BattleScene_CompleteCpuForcedAction(ActivePokemon* arg0, UNUSED ActivePokem
     ptr->unk_10 = 3;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8210DCE4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210DCE4.s")
-#endif
+void func_8210DCE4(ActivePokemon* arg0, ActivePokemon* arg1) {
+    ActivePokemonState* sp20 = &arg1->state;
+    ActivePokemonState* sp1C = &arg0->state;
+
+    BattleScene_ApplyForcedActionDelay(arg0);
+    sp1C->unk_2A = 1;
+
+    if ((D_82199EB0 == 30.0f) && (D_82199EB8 < 4)) {
+        BattleAnim_PlaySoundEffect2();
+    }
+
+    if ((D_82199EB8 < 4) && (D_82199EB0 >= 30.0f)) {
+        sp1C->unk_10 = 1;
+        sp1C->unk_04 = 1;
+    }
+
+    if (((D_82199EB0 >= 90.0f) || ((sp20->unk_10 == 3) && (D_82199EB0 >= 10.0f))) && (D_82199EB8 < 4)) {
+        BattleAnim_PlaySoundEffect2();
+        sp1C->unk_04 = 1;
+        sp1C->unk_10 = 3;
+        sp1C->unk_0C = sp1C->unk_14;
+    }
+}
 
 s32 func_8210DA30(ActivePokemon* arg0);
 void BattleScene_ApplyCpuChoice(ActivePokemon* arg0, ActivePokemon* arg1) {

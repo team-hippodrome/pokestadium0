@@ -964,7 +964,7 @@ func_8210D90C,0x8210D90C,src/fragments/fragment012_17ED00/8210C6B0.c,BattleScene
 func_8210DA30,0x8210DA30,src/fragments/fragment012_17ED00/8210C6B0.c,func_8210DA30,hand,,c
 func_8210DAEC,0x8210DAEC,src/fragments/fragment012_17ED00/8210C6B0.c,,asm,,asm
 func_8210DC9C,0x8210DC9C,src/fragments/fragment012_17ED00/8210C6B0.c,BattleScene_CompleteCpuForcedAction,s1,stadium1:src/fragments/battle_engine/battle_engine_2F74E0.c,c
-func_8210DCE4,0x8210DCE4,src/fragments/fragment012_17ED00/8210C6B0.c,,asm,,asm
+func_8210DCE4,0x8210DCE4,src/fragments/fragment012_17ED00/8210C6B0.c,func_8210DCE4,hand,,c
 func_8210DE18,0x8210DE18,src/fragments/fragment012_17ED00/8210C6B0.c,BattleScene_ApplyCpuChoice,hand,,c
 func_8210DF64,0x8210DF64,src/fragments/fragment012_17ED00/8210C6B0.c,BattleScene_ApplyCpuSwitchChoice,hand,,c
 func_8210E0A4,0x8210E0A4,src/fragments/fragment012_17ED00/8210C6B0.c,BattleScene_TriggerCpuChoice,hand,,c
