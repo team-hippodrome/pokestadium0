@@ -642,11 +642,64 @@ s8 *func_8110BF28(s32 arg0)
   return temp_v0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110BFB0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110BFB0.s")
-#endif
+typedef struct Entry8110D4E0 { u8 unk00; u8 unk01; u8 unk02; u8 unk03; char unk04[8]; } Entry8110D4E0;
+extern Entry8110D4E0* D_811858B0;
+extern u8* D_811858A0;
+s32 func_8110CA2C(s32 arg0);
+u8* func_81110CA8(s32, s32);
+u8* func_81110D6C(s32, s32);
+
+void func_8110BFB0(void) {
+    UNUSED s32 pad2[1];
+    s32 j;
+    s32 count;
+    UNUSED s32 pad[5];
+    s32 a;
+    s32 b;
+    s8* slot;
+    s32 k;
+    s32 m;
+    s32 i;
+    u8* p;
+    s32 off;
+
+    count = *(s16*)D_811858A0;
+    for (i = 0; i < count; i++) {
+        a = D_811858B0[i].unk02;
+        b = D_811858B0[i].unk03;
+        if ((a != 0xFF) || (b != 0xFFU)) {
+            off = 0x12;
+            if ((func_8110A310(1, 3, i) != 0) && (func_8110CA2C(i) != 0)) {
+                slot = (s8*)&D_811845D0;
+                for (j = 0; j < D_811845F4; j++, slot += 0x14) {
+                    if ((a != slot[off]) && (b != slot[0x12]) && (slot[0x12] != 0)) {
+                        break;
+                    }
+                    {
+                        for (k = 0; k < D_811858B0[i].unk00; k++) {
+                            p = func_81110CA8(i, k);
+                            if (p != NULL) {
+                                if (p[1] != 0) {
+                                    func_8110BEE4(slot + 0x10, M2C_FIELD(p, Flags2Bit**, 8));
+                                }
+                                if (p[2] != 0x7F) {
+                                    func_8110BEE4(slot + 0x10, M2C_FIELD(p, Flags2Bit**, 0x18));
+                                }
+                                func_8110BEE4(slot + 0x10, M2C_FIELD(p, Flags2Bit**, 0x10));
+                            }
+                        }
+                        for (m = 0; m < D_811858B0[i].unk01; m++) {
+                            p = func_81110D6C(i, m);
+                            if (p != NULL) {
+                                func_8110BEE4(slot + 0x10, M2C_FIELD(p, Flags2Bit**, 4));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 
 typedef struct Timer8110C1C0 { char pad0[0xD]; u8 slot; u8 count; char padF; } Timer8110C1C0;
 extern Timer8110C1C0* D_81185688;
@@ -1019,8 +1072,6 @@ s32 func_8110D408(s32 arg0, s32* arg1) {
 }
 #undef ENTRY
 
-typedef struct Entry8110D4E0 { u8 unk00[2]; u8 unk02; u8 unk03; char unk04[8]; } Entry8110D4E0;
-extern Entry8110D4E0* D_811858B0;
 s32 func_8110D408(s32, s32*);
 void func_8110EF7C(s32, s32, s32*, s32);
 s32 func_8110D4E0(s32 arg0) {

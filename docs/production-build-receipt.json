@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5079,
-  "asm_owners": 365,
+  "c_owners": 5080,
+  "asm_owners": 364,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -603,7 +603,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "6d370b956128a0e925637f922aadfc412c921e40a661281e46079d90eb4033cd",
+    "docs/function-matches.csv": "2e46c5e3319f4ff318187b8c4ded2d4803e510805bab67f4e2e42f524283b96c",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -679,7 +679,7 @@
     "src/fragments/fragment000_80C00/battle_engine_2FA4D0.c": "96169d3cd584ca90783a597ca7644af6387b053272ce7724419ce713a62fa3a2",
     "src/fragments/fragment000_80C00/battle_engine_309ED0.c": "147dbe8feaee839a022a2783605ac89b04e058c34b0ccfd1098668df37577f0b",
     "src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c": "fdca2341cd53ddcbc6d0ed8665a3e4ddc4d7e211313e32dbd36f4eaba52b96f5",
-    "src/fragments/fragment000_80C00/gb_tower_emulator_86920.c": "411f66ac8cfd990f02c26c9e19a26bb0ad391cc374a50f2bd9a8196c62a44331",
+    "src/fragments/fragment000_80C00/gb_tower_emulator_86920.c": "d108c90dde6f200ad5b8418f7f91105e120cf01a676e60cbddcf16ac25805cbb",
     "src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c": "318086a76636aa22c02772ffe3f9f26b31146866ab82c26ff798244af2c084b4",
     "src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_811177E8.c": "4b75c7a204982ed7a37d2030b1b5e8b5691252c4fecc501cb8b96a2abc3c9db7",
     "src/fragments/fragment001_15B1A0.c": "d1c261a91d2655fce1c365532252dbb923f0e500cf5a8cd8959a1fdedbaa8444",
