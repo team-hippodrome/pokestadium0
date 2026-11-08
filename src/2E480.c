@@ -633,11 +633,22 @@ void func_8002F9D8(ScrollMenu8002F6C4* menu, s32 x, s32 y, s32 mask, s32 arg4) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80030230.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_800306E0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800306E0.s")
-#endif
+void func_800306E0(s32* arg0, u32 arg1) {
+    s32 v;
+
+    arg0[16] = 0;
+    arg0[2] = arg1;
+    arg0[13] = arg0[4] * arg1;
+    if (arg0[13] < arg0[11]) {
+        arg0[11] = arg0[13];
+    } else {
+        v = (arg0[13] + arg0[4]) - (arg0[4] * arg0[9]);
+        if (arg0[11] < v) {
+            arg0[11] = v;
+        }
+    }
+    arg0[12] = arg0[11];
+}
 
 void func_80030744(s32* arg0, s32 arg1) {
     s32 temp_a2;
