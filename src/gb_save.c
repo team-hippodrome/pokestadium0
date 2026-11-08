@@ -1264,11 +1264,64 @@ s32 func_8002D498(BattleMon* arg0, s32 arg1) {
     return func_8001FA8C(type);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002D520; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002D520.s")
-#endif
+s32 func_80006780();
+void func_800069CC(void);
+extern u8 D_80073554[];
+extern Color8002A354 D_80073708;
+extern u8 D_8007B950[];
+extern u8 D_8007B960[];
+extern u8 D_8007B97C[];
+extern u8 D_8007B9BC[];
+extern u8 D_8007B9D0[];
+
+void func_8002D520(s32 arg0) {
+    func_800069CC();
+    func_800295E8(0x6E, 0x72, 0x1A4, 0x114, D_80073554);
+    gSPDisplayList(gDisplayListHead++, D_80060270);
+    func_80029028(0x74, 0x78, 0x198, 0x108, D_80073708);
+    if (arg0 == 0) {
+        func_8001AB6C();
+        func_8001A384(0x10, 0);
+        func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF);
+        func_8001ABE8();
+        func_8001AAE4(0xFF, 0xF1, 0x78, 0xFF);
+        func_8001A944(0xEC, 0xA8, (s32)D_8007B950);
+        func_8001AC3C();
+        func_8001ABBC();
+    } else if (arg0 == 2) {
+        func_8001AB6C();
+        func_8001A384(0x10, 0);
+        func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF);
+        func_8001ABE8();
+        func_8001AAE4(0xFF, 0xF1, 0x78, 0xFF);
+        func_8001A944(0xB0, 0xA8, (s32)D_8007B960);
+        func_8001AC3C();
+        func_8001ABBC();
+    } else if (arg0 == 3) {
+        func_8001AB6C();
+        func_8001A384(0x10, 0);
+        func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF);
+        func_8001ABE8();
+        func_8001AAE4(0xFF, 0xF1, 0x78, 0xFF);
+        func_8001A944(0x80, 0x84, (s32)D_8007B97C);
+        func_8001AC3C();
+        func_8001ABBC();
+    }
+    if (arg0 != 0) {
+        func_8001AB6C();
+        func_8001A384(0x10, 0);
+        func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF);
+        func_8001ABE8();
+        func_8001AAE4(0xFF, 0xF1, 0x78, 0xFF);
+        func_8001A944(0x128, 0xF0, (s32)D_8007B9BC);
+        func_8001AC3C();
+        func_8001AA9C(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
+        func_8001AB2C(0x24);
+        func_8001A944(0x80, 0xF0, (s32)D_8007B9D0);
+        func_8001ABBC();
+    }
+    func_80006780();
+}
 
 /*
  * func_8002D7D4
@@ -1299,7 +1352,7 @@ s32 func_8002D498(BattleMon* arg0, s32 arg1) {
 M2C_UNK func_80006780();                            /* extern */
 s32 func_80021B30(s32);                             /* extern */
 s32 func_8002207C(s32);                             /* extern */
-M2C_UNK func_8002D520(M2C_UNK);                     /* extern */
+void func_8002D520(s32);
 
 void func_8002D7D4(s32 arg0) {
     s32 state;

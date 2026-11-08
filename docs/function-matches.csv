@@ -4326,7 +4326,7 @@ func_8002D3D0,0x8002D3D0,src/gb_save.c,func_8002D3D0,hand,,c
 func_8002D430,0x8002D430,src/gb_save.c,func_8002D430,hand,,c
 func_8002D454,0x8002D454,src/gb_save.c,func_8002D454,m2c,m2c,c
 func_8002D498,0x8002D498,src/gb_save.c,func_8002D498,hand,,c
-func_8002D520,0x8002D520,src/gb_save.c,,asm,,asm
+func_8002D520,0x8002D520,src/gb_save.c,func_8002D520,hand,,c
 func_8002D7D4,0x8002D7D4,src/gb_save.c,func_8002D7D4,hand,,c
 func_8000BA20,0x8000BA20,src/gb_tower.c,GbPak_VerifyPattern,s1,stadium1:src/gb_tower.c,c
 func_8000BAC8,0x8000BAC8,src/gb_tower.c,GbPak_DetectRam,s1,stadium1:src/gb_tower.c,c
