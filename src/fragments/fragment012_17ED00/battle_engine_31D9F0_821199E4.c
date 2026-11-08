@@ -346,7 +346,63 @@ void func_8211D874(s16 arg0, s16 arg1) {
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211DDC0.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211E164.s")
+typedef struct Entry8006A9CC {
+    /* 0x0 */ char* name;
+    /* 0x4 */ char unk04[0x8];
+} Entry8006A9CC; // size = 0xC
+extern Entry8006A9CC D_8006A9CC[];
+extern s32 D_8218B228[];
+extern char D_82195EF0[];
+extern char D_82195EFC[];
+extern char D_82195F0C[];
+extern char D_82195F20[];
+extern char D_82195F34[];
+extern char D_82195F38[];
+extern char D_82195F48[];
+extern char D_82195F50[];
+extern char D_82195F5C[];
+extern char D_82195F60[];
+extern char D_82195F64[];
+extern char D_82195F68[];
+extern char D_82195F6C[];
+extern s32 D_8219A740;
+extern s32 D_8219A74C;
+extern s32 D_8219A750;
+void func_8211E164(s16 arg0, s16 arg1) {
+    char buf[16];
+    s32 val;
+    UNUSED s32 pad[1];
+
+    val = M2C_FIELD(D_82199DE0, s32*, 0x620);
+    func_8001AC7C(arg0, arg1, 0xAA, 0x5A, 0, 0, 0, 0x3C);
+    func_8001AB6C();
+    func_8001A384(1, 0);
+    func_8001A944(arg0 + 3, arg1 + 4, (s32)D_82195EF0);
+    func_8001A944(arg0 + 0x69, arg1 + 4, (s32)D_8006A9CC[D_8219A740].name);
+    func_8001A944(arg0 + 3, arg1 + 0x10, (s32)D_82195EFC);
+    func_8001A944(arg0 + 3, arg1 + 0x1C, (s32)D_82195F0C);
+    func_8001A944(arg0 + 3, arg1 + 0x28, (s32)D_82195F20);
+    if (D_8219A750 == 0) {
+        func_8001A944(arg0 + 0x69, arg1 + 0x28, (s32)D_82195F34);
+    }
+    func_8001A944(arg0 + 3, arg1 + 0x34, (s32)D_82195F38);
+    func_8001A944(arg0 + 3, arg1 + 0x40, (s32)D_82195F48);
+    func_8001A944(arg0 + 0x69, arg1 + 0x40, D_8218B228[D_8219A5A4]);
+    func_8001A944(arg0 + 3, arg1 + 0x4C, (s32)D_82195F50);
+    func_8001ABBC();
+    func_800564D4(buf, D_82195F5C, D_8219A740);
+    func_82116480(buf, arg0 + 0x69, arg1 + 0x12);
+    func_800564D4(buf, D_82195F60, val);
+    func_82116480(buf, arg0 + 0x69, arg1 + 0x36);
+    if (D_8219A750 != 0) {
+        func_800564D4(buf, D_82195F64, D_8219A750);
+        func_82116480(buf, arg0 + 0x69, arg1 + 0x2A);
+    }
+    func_800564D4(buf, D_82195F68, D_8219A74C);
+    func_82116480(buf, arg0 + 0x69, arg1 + 0x1E);
+    func_800564D4(buf, D_82195F6C, M2C_FIELD(M2C_FIELD(D_82199DE0, void**, 0x44), u16*, 0xA));
+    func_82116480(buf, arg0 + 0x64, arg1 + 0x4E);
+}
 
 extern s32 D_8219A74C;
 extern s32 D_8219A754;
@@ -360,7 +416,7 @@ extern char D_82195FBC[];
 extern char D_82195FC0[];
 void func_8211E414(s16 arg0, s16 arg1) {
     char buf[16];
-    UNUSED s32 pad;
+    UNUSED s32 pad[1];
     s32 val = M2C_FIELD(D_82199DE0, s32*, 0x620);
 
     func_8001AC7C(arg0, arg1, 0xAA, 0x36, 0, 0, 0, 0x3C);
