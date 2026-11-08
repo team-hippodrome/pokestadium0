@@ -191,8 +191,89 @@ s32 func_8217E34C(void)
   return 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8217E3E0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8217E3E0.s")
-#endif
+extern Gfx D_82193270[];
+Gfx* func_8217E3E0(Gfx* arg0) {
+    s32 i;
+    s32 j;
+    s32 k;
+    OwnerAnchoredFourStreamNode* temp_s0;
+    OwnerAnchoredFourStreamZero* var_s5;
+    Vtx* var_s0;
+    Vec3f sp154;
+    UNUSED s32 pad[15];
+    Mtx* temp_v0;
+    Mtx sp100;
+    Mtx spC0;
+    s16 var_s3;
+
+    var_s5 = (OwnerAnchoredFourStreamZero*)&D_821B6F00[0];
+    for (i = 0; i < 4; i++, var_s5++) {
+        if (var_s5->unk_000 == 1) {
+            temp_s0 = &var_s5->unk_01C[0];
+            if (temp_s0->unk_0C.y > 0.0f) {
+                temp_v0 = Gfx_AllocDisplayList(sizeof(Mtx) * 1);
+                guTranslate(temp_v0, temp_s0->unk_0C.x, temp_s0->unk_0C.y, temp_s0->unk_0C.z);
+                guRotateRPY(&sp100, (temp_s0->unk_08 * -360.0f * var_s5->unk_006) / 6.2831854820251465,
+                            0x5A - (var_s5->unk_006 * 0x5A), 0.0f);
+                guMtxCatL(&sp100, temp_v0, temp_v0);
+                guScale(&spC0, 0.16f, 0.16f, 0.16f);
+                guMtxCatL(&spC0, temp_v0, temp_v0);
+
+                gSPMatrix(arg0++, temp_v0, G_MTX_PUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+                gSPDisplayList(arg0++, D_821941F0);
+                gSPPopMatrix(arg0++, G_MTX_MODELVIEW);
+            }
+
+            var_s5->unk_014 = Gfx_AllocDisplayList(sizeof(Vtx) * 30);
+
+            var_s0 = var_s5->unk_014;
+            for (j = 0; j < 15; j++) {
+                OwnerAnchoredFourStream_Update(temp_s0->unk_08, &sp154, temp_s0->unk_04);
+
+                var_s3 = temp_s0->unk_0C.y + sp154.y;
+                if (var_s3 < 0) {
+                    var_s3 = 0;
+                }
+
+                var_s0->v.ob[0] = temp_s0->unk_0C.x + sp154.x;
+                var_s0->v.ob[1] = var_s3;
+                var_s0->v.ob[2] = temp_s0->unk_0C.z + sp154.z;
+                var_s0->v.cn[0] = var_s5->unk_008.r;
+                var_s0->v.cn[1] = var_s5->unk_008.g;
+                var_s0->v.cn[2] = var_s5->unk_008.b;
+                var_s0->v.cn[3] = temp_s0->unk_00;
+                var_s0++;
+
+                OwnerAnchoredFourStream_Update(temp_s0->unk_08 + 3.1415927f, &sp154, temp_s0->unk_04);
+
+                var_s3 = temp_s0->unk_0C.y + sp154.y;
+                if (var_s3 < 0) {
+                    var_s3 = 0;
+                }
+
+                var_s0->v.ob[0] = temp_s0->unk_0C.x + sp154.x;
+                var_s0->v.ob[1] = var_s3;
+                var_s0->v.ob[2] = temp_s0->unk_0C.z + sp154.z;
+                var_s0->v.cn[0] = var_s5->unk_008.r;
+                var_s0->v.cn[1] = var_s5->unk_008.g;
+                var_s0->v.cn[2] = var_s5->unk_008.b;
+                var_s0->v.cn[3] = temp_s0->unk_00;
+                var_s0++;
+
+                temp_s0++;
+            }
+
+            var_s0 = var_s5->unk_014;
+
+            gSPDisplayList(arg0++, D_82193270);
+
+            for (k = 0; k < 14; k++) {
+                gSPVertex(arg0++, var_s0, 4, 0);
+                gSP2Triangles(arg0++, 0, 2, 1, 0, 2, 3, 1, 0);
+                var_s0 += 2;
+            }
+        }
+    }
+
+    return arg0;
+}
