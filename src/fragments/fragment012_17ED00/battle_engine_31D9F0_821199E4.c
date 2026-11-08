@@ -279,7 +279,41 @@ void func_8211D874(s16 arg0, s16 arg1) {
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211E164.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211E414.s")
+extern s32 D_82199DE0;
+extern s32 D_8219A74C;
+extern s32 D_8219A754;
+extern char D_82195F70[];
+extern char D_82195F84[];
+extern char D_82195F98[];
+extern char D_82195FA8[];
+extern char D_82195FB4[];
+extern char D_82195FB8[];
+extern char D_82195FBC[];
+extern char D_82195FC0[];
+s32 func_800564D4(char*, const char*, ...);
+void func_8211E414(s16 arg0, s16 arg1) {
+    char buf[16];
+    UNUSED s32 pad;
+    s32 val = M2C_FIELD(D_82199DE0, s32*, 0x620);
+
+    func_8001AC7C(arg0, arg1, 0xAA, 0x36, 0, 0, 0, 0x3C);
+    func_8001AB6C();
+    func_8001A384(1, 0);
+    func_8001A944(arg0 + 3, arg1 + 4, (s32)D_82195F70);
+    func_8001A944(arg0 + 3, arg1 + 0x10, (s32)D_82195F84);
+    func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF);
+    func_8001A944(arg0 + 3, arg1 + 0x1C, (s32)D_82195F98);
+    func_8001A944(arg0 + 3, arg1 + 0x28, (s32)D_82195FA8);
+    func_8001ABBC();
+    func_800564D4(buf, D_82195FB4, val);
+    func_82116480(buf, arg0 + 0x64, arg1 + 0x1E);
+    func_800564D4(buf, D_82195FB8, D_8219A74C);
+    func_82116480(buf, arg0 + 0x64, arg1 + 6);
+    func_800564D4(buf, D_82195FBC, D_8219A754);
+    func_82116480(buf, arg0 + 0x64, arg1 + 0x12);
+    func_800564D4(buf, D_82195FC0, M2C_FIELD(M2C_FIELD(D_82199DE0, void**, 0x44), u16*, 0xA));
+    func_82116480(buf, arg0 + 0x64, arg1 + 0x2A);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8211E5F4; signature not recovered. */
@@ -287,7 +321,6 @@ void func_8211D874(s16 arg0, s16 arg1) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211E5F4.s")
 #endif
 
-s32 func_800564D4(char*, const char*, ...);
 extern s8* D_8219A5A0;
 extern char D_82195FF4[];
 extern char D_82195FF8[];
