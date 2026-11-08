@@ -166,7 +166,7 @@ char* String_CopyBytesAndAdvance(char* buffer, const char* data, u32 size) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8001A944.s")
 #endif
 
-M2C_UNK func_8001A3E4(s16, s16, s16);               /* extern */
+s16 func_8001A3E4(s16, s16, s16);
 void func_8001AA60(s32 arg0, s32 arg1, s32 arg2) {
     func_8001A3E4(arg0, arg1, (s16) (arg2 & 0x7F7F));
 }
