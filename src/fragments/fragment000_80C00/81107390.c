@@ -144,11 +144,31 @@ void* func_8110807C(void* cmd, s16 channel, s16 slot) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81108750.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_811092F4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_811092F4.s")
-#endif
+#define SHIFTL_81109(v, s, w) ((u32)(((u32)(v) & ((0x01 << (w)) - 1)) << (s)))
+/* Emits the two-or-one command sequence as a single macro statement, like the libultra audio macros. */
+#define AUDIO_CMDS_811092F4(cmd, arg1, arg2, count, arg4, arg5)                                          \
+    do {                                                                                                 \
+        if ((count) == 0) {                                                                              \
+            AudioCmd* a = (cmd)++;                                                                       \
+            a->w0 = SHIFTL_81109(2, 24, 8) | SHIFTL_81109(0x3C0, 0, 24);                                 \
+            a->w1 = (u32)(arg2);                                                                         \
+        } else {                                                                                         \
+            {                                                                                            \
+                AudioCmd* a = (cmd)++;                                                                   \
+                a->w0 = SHIFTL_81109(8, 24, 8) | SHIFTL_81109(arg4, 0, 16);                              \
+                a->w1 = SHIFTL_81109(0x3C0, 16, 16) | SHIFTL_81109(arg2, 0, 16);                         \
+            }                                                                                            \
+            {                                                                                            \
+                AudioCmd* a = (cmd)++;                                                                   \
+                a->w0 = SHIFTL_81109(5, 24, 8) | SHIFTL_81109(arg5, 16, 8) | SHIFTL_81109(count, 0, 16); \
+                a->w1 = (u32)(*(s32*)((arg1) + 0xC) + 0x80000020);                                       \
+            }                                                                                            \
+        }                                                                                                \
+    } while (0)
+void* func_811092F4(AudioCmd* cmd, s8* arg1, s32 arg2, u16 count, u16 arg4, s32 arg5) {
+    AUDIO_CMDS_811092F4(cmd, arg1, arg2, count, arg4, arg5);
+    return cmd;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8110938C; signature not recovered. */

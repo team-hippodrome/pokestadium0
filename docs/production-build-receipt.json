@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 4992,
-  "asm_owners": 452,
+  "c_owners": 4993,
+  "asm_owners": 451,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -603,7 +603,7 @@
     "tools/cflags_overrides.json": "7052d644eb08429c59981bb4c369c8c937c61ca4c639a1c1ca2c5fc0ce919ebb",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "655d718b9aa914e1ca0f07982c954ddd3d0beb3ba6f4632e01c36d4956c6afec",
+    "docs/function-matches.csv": "6ccb0a61138245ccf00f640b2c72e4f56675e49030bcf8b926d424f820fea05a",
     "linker_scripts/jp/symbol_addrs.txt": "91a8d27f8e3707e5bcad1c0b12773248d8212c8fe32df8bae724086cddb32db8"
   },
   "binutils": {
@@ -671,7 +671,7 @@
     "src/dma.c": "4a07cb055cd28fb692e5dd3ebf4f09047780d0634463431a66664b3e121bc3e8",
     "src/dp_intro.c": "39e1824379bae87ca6eeaed34c92c997eb93e9cc4a82c8eccdbd00b47fb73b24",
     "src/fragments/fragment000_80C00/81100020.c": "27e04ddfd035534e1f0859107e68fedb119b59c5004aaee85777f154b35e939f",
-    "src/fragments/fragment000_80C00/81107390.c": "8d3b76ae5e08cc7e2db0294950da27489ee2fb6507002708eeb2b703dc15703c",
+    "src/fragments/fragment000_80C00/81107390.c": "60ba1ac38c8d51793813e95165f77ce364562212c36c8301b407f30ccd236ab9",
     "src/fragments/fragment000_80C00/81110190.c": "c3654154efda0cd7040fdd8e2b6d4e862660e256550ffc7aa97119b537acf61d",
     "src/fragments/fragment000_80C00/81110210.c": "14db2b589cfde46f9720bf8addfc17854f5ed4117c4a4b6111e4b448d2037960",
     "src/fragments/fragment000_80C00/81111C20.c": "555a1d6975d960188756eb552108811fe4ddbb66a7f919d51e38b7c0444d75e0",
