@@ -1457,7 +1457,7 @@ func_8211D920,0x8211D920,src/fragments/fragment012_17ED00/battle_engine_31D9F0_8
 func_8211DDC0,0x8211DDC0,src/fragments/fragment012_17ED00/battle_engine_31D9F0_821199E4.c,,asm,,asm
 func_8211E164,0x8211E164,src/fragments/fragment012_17ED00/battle_engine_31D9F0_821199E4.c,,asm,,asm
 func_8211E414,0x8211E414,src/fragments/fragment012_17ED00/battle_engine_31D9F0_821199E4.c,func_8211E414,hand,,c
-func_8211E5F4,0x8211E5F4,src/fragments/fragment012_17ED00/battle_engine_31D9F0_821199E4.c,,asm,,asm
+func_8211E5F4,0x8211E5F4,src/fragments/fragment012_17ED00/battle_engine_31D9F0_821199E4.c,func_8211E5F4,hand,,c
 func_8211E794,0x8211E794,src/fragments/fragment012_17ED00/battle_engine_31D9F0_821199E4.c,func_8211E794,hand,,c
 func_82144CA0,0x82144CA0,src/fragments/fragment012_17ED00/battle_engine_31D9F0_2.c,BattleAnim_CallbackStartEffects23And35And84Descriptor4FColorCycleScaleFade_InitParticle,s1,stadium1:src/fragments/battle_engine/battle_engine_31D9F0.c,c
 func_82144D80,0x82144D80,src/fragments/fragment012_17ED00/battle_engine_31D9F0_2.c,BattleAnim_CallbackStartEffects23And35And84Descriptor4FColorCycleScaleFade_AdvancePhase,s1,stadium1:src/fragments/battle_engine/battle_engine_31D9F0.c,c
