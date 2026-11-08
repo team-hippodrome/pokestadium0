@@ -337,7 +337,7 @@ func_80001ACC,0x80001ACC,src/dp_intro.c,Cont_GetControllerBits,s1,stadium1:src/c
 func_80056A90,0x80056A90,src/libultra/audio/synthesizer.c,,ultralib,libultra:src/audio/synthesizer.c,c
 func_80056A98,0x80056A98,src/libultra/audio/synthesizer.c,alAudioFrame,ultralib,libultra:src/audio/synthesizer.c,c
 func_81100020,0x81100020,src/fragments/fragment000_80C00/81100020.c,func_81100020,hand,,c
-func_811000DC,0x811000DC,src/fragments/fragment000_80C00/81100020.c,,asm,,asm
+func_811000DC,0x811000DC,src/fragments/fragment000_80C00/81100020.c,func_811000DC,hand,,c
 func_81100284,0x81100284,src/fragments/fragment000_80C00/81100020.c,func_81100284,hand,,c
 func_811002F4,0x811002F4,src/fragments/fragment000_80C00/81100020.c,func_811002F4,hand,,c
 func_81100390,0x81100390,src/fragments/fragment000_80C00/81100020.c,,asm,,asm
