@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 4976,
-  "asm_owners": 468,
+  "c_owners": 4977,
+  "asm_owners": 467,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -603,7 +603,7 @@
     "tools/cflags_overrides.json": "7052d644eb08429c59981bb4c369c8c937c61ca4c639a1c1ca2c5fc0ce919ebb",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "54d961220a5a3e9586ddd4f974686bc4e13a29a6dd3c93b13e02e356e1e98430",
+    "docs/function-matches.csv": "c61303589067a2098ed95dda4b309ac0b902af4e7c8acd82960519a5d3f5eb6b",
     "linker_scripts/jp/symbol_addrs.txt": "3b5103d4cfe8c6cf2470a85f3aacf457f87dc2c7f2096a7a216bec5fd85d5385"
   },
   "binutils": {
@@ -705,7 +705,7 @@
     "src/fragments/fragment012_17ED00/battle_engine_3055E0.c": "e3b676466796b8427c06510d73cc4de3300dfe303a37208e9216667eabec372a",
     "src/fragments/fragment012_17ED00/battle_engine_3055E0_821243DC.c": "69b344beb5d1cf493a1e1388ffe038802af68f0e4970df2f4222209cb83e594f",
     "src/fragments/fragment012_17ED00/battle_engine_309ED0.c": "5322c1ff6d119d2e805ad61385fd8c7d10ebce5c92fa671da6f64d774dfe12c9",
-    "src/fragments/fragment012_17ED00/battle_engine_309ED0_82124E80.c": "a350438424e1eb99a0ad8cfe0cae0f850a0f4c0b92e0a7bea35ecdc4d6275e7e",
+    "src/fragments/fragment012_17ED00/battle_engine_309ED0_82124E80.c": "c1e04de029a222f7a7afd246cff6aee7ca0d0d322c8883c679e31fb4129d736b",
     "src/fragments/fragment012_17ED00/battle_engine_309ED0_8212A328.c": "7fa7b481f2329a14ee18cbc1269269c70fa354ee050d1bd411c3a616ba16a690",
     "src/fragments/fragment012_17ED00/battle_engine_313D60.c": "9f7fbe407f584a1f0a2f197368dcb5150e69a98037cca54c7fff27d3f34c2ea6",
     "src/fragments/fragment012_17ED00/battle_engine_313D60_2.c": "1e719d5aed954a08eeeb91c1cbe0e5e641bed9246c0598733b9383d02f13ebfd",
