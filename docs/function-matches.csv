@@ -427,7 +427,7 @@ func_8110DCA0,0x8110DCA0,src/fragments/fragment000_80C00/battle_engine_309ED0.c,
 func_8110DCC0,0x8110DCC0,src/fragments/fragment000_80C00/battle_engine_309ED0.c,,asm,,asm
 func_8110DF50,0x8110DF50,src/fragments/fragment000_80C00/battle_engine_309ED0.c,BattleScene_EndStatusAnimationsAndCommit,s1,stadium1:src/fragments/battle_engine/battle_engine_309ED0.c,c
 func_8110DF80,0x8110DF80,src/fragments/fragment000_80C00/battle_engine_309ED0.c,,asm,,asm
-func_8110E500,0x8110E500,src/fragments/fragment000_80C00/battle_engine_309ED0.c,,asm,,asm
+func_8110E500,0x8110E500,src/fragments/fragment000_80C00/battle_engine_309ED0.c,func_8110E500,hand,,c
 func_8110E6B0,0x8110E6B0,src/fragments/fragment000_80C00/battle_engine_309ED0.c,func_8110E6B0,hand,,c
 func_8110E714,0x8110E714,src/fragments/fragment000_80C00/battle_engine_309ED0.c,func_8110E714,s1,stadium1:src/fragments/battle_engine/battle_engine_309ED0.c,c
 func_8110E71C,0x8110E71C,src/fragments/fragment000_80C00/battle_engine_309ED0.c,func_8110E71C,hand,,c

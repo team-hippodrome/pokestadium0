@@ -53,11 +53,76 @@ s32 BattleScene_EndStatusAnimationsAndCommit(ActivePokemon* arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110DF80.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110E500; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110E500.s")
-#endif
+typedef struct SampleHeader8110E500 {
+    /* 0x00 */ u32 codec : 4;
+    /* 0x00 */ u32 medium : 2;
+    /* 0x00 */ u32 unk_00 : 2;
+    /* 0x00 */ u32 size : 24;
+    /* 0x04 */ s32 devAddr;
+    /* 0x08 */ s32 unk_08;
+    /* 0x0C */ s32 unk_0C;
+} SampleHeader8110E500; // size = 0x10
+
+typedef struct SampleLoad8110E500 {
+    /* 0x00 */ s8 medium;
+    /* 0x01 */ u8 arg0;
+    /* 0x02 */ u8 arg1;
+    /* 0x04 */ s32 devAddr;
+    /* 0x08 */ s32 ramAddr;
+    /* 0x0C */ s32 curRamAddr;
+    /* 0x10 */ s32 state;
+    /* 0x14 */ s32 size;
+    /* 0x18 */ s8* status;
+    /* 0x1C */ SampleHeader8110E500 header;
+    /* 0x2C */ u8 unk_2C[0x34];
+} SampleLoad8110E500; // size = 0x60
+
+typedef struct SampleLoads8110E500 {
+    /* 0x00 */ s32 index;
+    /* 0x04 */ SampleLoad8110E500 slots[2];
+} SampleLoads8110E500;
+
+extern SampleLoads8110E500 D_81180610;
+s32 func_8110B958(s32, s32, s32, s8);
+s32 func_8110E6B0(s32 arg0, s32 arg1);
+
+s32 func_8110E500(s32 arg0, u8 arg1, s8* status) {
+    SampleHeader8110E500* header = (SampleHeader8110E500*)func_8110E6B0(arg0, arg1);
+    SampleLoad8110E500* load;
+
+    if (header == NULL) {
+        *status = 0;
+        return -1;
+    }
+    if (header->medium == 0) {
+        *status = 2;
+        return 0;
+    }
+    load = &D_81180610.slots[D_81180610.index];
+    if (load->state == 3) {
+        load->state = 0;
+    }
+    load->header = *header;
+    load->status = status;
+    load->ramAddr = func_8110B958(header->size, arg0, header->devAddr, header->medium);
+    if (load->ramAddr == 0) {
+        if ((header->medium == 1) || (header->codec == 2)) {
+            *status = 0;
+            return -1;
+        }
+        *status = 3;
+        return -1;
+    }
+    load->state = 1;
+    load->size = ALIGN16(header->size);
+    load->curRamAddr = load->ramAddr;
+    load->devAddr = header->devAddr;
+    load->medium = header->medium;
+    load->arg0 = arg0;
+    load->arg1 = arg1;
+    D_81180610.index ^= 1;
+    return 0;
+}
 
 s32* func_81110CA8(s32, s32);
 s32* func_81110D6C(s32, s32);
