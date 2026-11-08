@@ -466,11 +466,41 @@ s32 func_89009738(u8 *arg0, s32 arg1) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_890097E0.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8900A014; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_8900A014.s")
-#endif
+typedef struct Ent8900A014 { s32 unk0; s32 unk4; } Ent8900A014;
+s8* func_80017860(s32);
+s32 func_80017FDC(s8*, s32, s32, s32);
+void func_80017934(void);
+s32 func_80018F2C(s8*, s32, s32, s32, s32, s32, s32, s32);
+void func_80027410(s8*, s8*, s32, s32, s32);
+void func_89008AF4(s8*, s32, s32, s8*);
+extern u8 D_81000000[];
+extern u8 D_0015B1A0[];
+extern u8 D_0015E220[];
+
+void func_8900A014(s8* arg0) {
+    s32 i;
+
+    main_pool_push_state('PBOX');
+    M2C_FIELD(arg0, s8**, 0x7518) = func_80017860(1);
+    M2C_FIELD(arg0, s32*, 0x751C) = func_80018F2C(M2C_FIELD(arg0, s8**, 0x7518), 0x80, 0x78, 0, 0, 0x78, 0x78, 0);
+    M2C_FIELD(arg0, s32*, 0x7520) = func_80017FDC(M2C_FIELD(arg0, s8**, 0x7518), 0x1E, 0x28, 0x28);
+    func_80017934();
+    Fragment_Load(((((u32)D_81000000) & 0x0FF00000) >> 0x14) - 0x10, D_0015B1A0, D_0015E220);
+    func_89007264(arg0 + 0x3E8, 0x21, D_89019108, 8);
+    func_89007264(arg0 + 0x4F08, 0x11, 0, 4);
+    for (i = 0; i < 8; i++) {
+        ((Ent8900A014*)(arg0 + 0x7498))[i].unk0 = (s32)(arg0 + 0x3E8 + i * 0x964);
+        ((Ent8900A014*)(arg0 + 0x7498))[i].unk4 = 0;
+    }
+    for (i = 0; i < 4; i++) {
+        ((Ent8900A014*)(arg0 + 0x74D8))[i].unk0 = (s32)(arg0 + 0x4F08 + i * 0x964);
+        ((Ent8900A014*)(arg0 + 0x74D8))[i].unk4 = 0;
+    }
+    func_80027410(arg0 + 0x74F8, arg0 + 0x7498, 8, 8, 8);
+    func_80027410(arg0 + 0x7508, arg0 + 0x74D8, 8, 4, 4);
+    func_89008AF4(arg0 + 4, 0x26, 0x53, arg0 + 0x74F8);
+    M2C_FIELD(arg0, s32*, 0) = 1;
+}
 
 M2C_UNK func_80002620(M2C_UNK);                     /* extern */
 
