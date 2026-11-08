@@ -593,11 +593,62 @@ typedef struct {
 extern PackedWordRec *D_81184978[];
 extern s32 D_81185578;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110EE3C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110EE3C.s")
-#endif
+typedef struct Sample8110EE3C {
+    /* 0x00 */ u32 codec : 4;
+    /* 0x00 */ u32 medium : 2;
+    /* 0x00 */ u32 unk_bit26 : 1;
+    /* 0x00 */ u32 isRelocated : 1;
+    /* 0x00 */ u32 size : 24;
+    /* 0x04 */ s32 sampleAddr;
+    /* 0x08 */ s32 loop;
+    /* 0x0C */ s32 book;
+} Sample8110EE3C;
+
+/**
+ * Relocates a sound font sample: the sample pointer and its loop and book
+ * pointers are made absolute against the font's RAM address, and the sample
+ * data address against the sample bank chosen by its medium. Samples flagged
+ * for preloading that are not in RAM are added to D_81184978. Same structure as
+ * AudioLoad_RelocateSample in the Ocarina of Time audio library.
+ */
+void func_8110EE3C(Sample8110EE3C** sampleP, s32 fontDataAddr, RelocInfo8110EF7C* relocInfo) {
+    Sample8110EE3C* sample;
+    s32 reloc;
+
+    if ((u32)*sampleP <= 0x80000000) {
+        reloc = (u32)*sampleP + fontDataAddr;
+        *sampleP = (Sample8110EE3C*)reloc;
+        sample = (Sample8110EE3C*)reloc;
+
+        if ((sample->size != 0) && (sample->isRelocated != 1)) {
+            reloc = sample->loop + fontDataAddr;
+            sample->loop = reloc;
+            reloc = sample->book + fontDataAddr;
+            sample->book = reloc;
+
+            switch (sample->medium) {
+                case 0:
+                    reloc = sample->sampleAddr + relocInfo->baseAddr1;
+                    sample->sampleAddr = reloc;
+                    sample->medium = relocInfo->medium1;
+                    break;
+                case 1:
+                    reloc = sample->sampleAddr + relocInfo->baseAddr2;
+                    sample->sampleAddr = reloc;
+                    sample->medium = relocInfo->medium2;
+                    break;
+                case 2:
+                case 3:
+                    break;
+            }
+
+            sample->isRelocated = 1;
+            if (sample->unk_bit26 && (sample->medium != 0)) {
+                D_81184978[D_81185578++] = (PackedWordRec*)sample;
+            }
+        }
+    }
+}
 
 typedef struct Sample8110EF7C {
     /* 0x00 */ u32 codec : 4;

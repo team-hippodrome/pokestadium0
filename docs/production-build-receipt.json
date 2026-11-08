@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5152,
-  "asm_owners": 292,
+  "c_owners": 5153,
+  "asm_owners": 291,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -613,7 +613,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "3bc2dd6668aa8fa893c8203260091a60fdbeec64cbc26275f4f190cdeefe9c53",
+    "docs/function-matches.csv": "ac5f8915fbccca6bdc93b89fa348c7bae9fefdf3d392e64032427f140499cf2c",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -687,7 +687,7 @@
     "src/fragments/fragment000_80C00/81111C20.c": "82b4429bf8c805af51025d1521621afbdb31b332578c9ed2785b497c40fbeb41",
     "src/fragments/fragment000_80C00/81117B20.c": "3843091a770c9a107a189ef652ff919fc1eac6d520dd8100299adf9b1616cefc",
     "src/fragments/fragment000_80C00/battle_engine_2FA4D0.c": "96169d3cd584ca90783a597ca7644af6387b053272ce7724419ce713a62fa3a2",
-    "src/fragments/fragment000_80C00/battle_engine_309ED0.c": "ea618d34f3154ca886526b4306392e5fdf9b9f7a5e276fa338c2b538662ccf04",
+    "src/fragments/fragment000_80C00/battle_engine_309ED0.c": "fdb5a7af9b9a996a9b55cd3b27cdb3141d78ba89dacf4daca7b9c706e5b7df0c",
     "src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c": "21aaf707c9aa797d1d6a59983b5ec2bd402cdf503f1570fe63d0bf1a0cab8894",
     "src/fragments/fragment000_80C00/gb_tower_emulator_86920.c": "f716ca56531f8d124a3b908c286599ee358b8cece3fe70cd437df4eca0e1a7c1",
     "src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c": "742da8348bae9a11a8f97969c50510e9dd3baea1fd255e4e1219026f2533b648",
