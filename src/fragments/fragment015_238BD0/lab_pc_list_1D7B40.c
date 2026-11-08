@@ -171,18 +171,42 @@ s32 func_89004BE0(s32 arg0) {
     return sp1C;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89004C54; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_89004C54.s")
-#endif
+extern Gfx D_80060270[];
+extern Rgba89004908 D_8900A73C;
+extern Rgba89004908 D_8900A744;
+extern char D_890189B0[];
+void func_80029028(s32, s32, s32, s32, Rgba89004908);
+void func_80027F20(s32);
+void func_89004C54(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4) {
+    u8* mon = arg2;
+    gSPDisplayList(gDisplayListHead++, D_80060270);
+    func_80029028(arg0, arg1 + 1, 0xCC, 0x1A, D_8900A73C);
+    func_80029028(arg0, arg1, 0xCC, 1, D_8900A744);
+    func_80029028(arg0, arg1 + 0x1B, 0xCC, 1, D_8900A744);
+    if (arg4 & 0x18) {
+        func_8002A0AC(arg0 + 3, arg1 + 3, 0xC6, 0x16, D_8900A5BC);
+    }
+    if (mon != NULL) {
+        Font_BeginTranslucentTextRendering();
+        Font_SetActive(8, 0);
+        if ((mon[0] > 0) && (mon[0] < 0x98) && (D_80064C44[mon[0]][8] & 1)) {
+            func_8001AA9C(0xFF, 0xC8, 0xA0, 0xFF);
+        } else {
+            func_80027F20(arg4);
+        }
+        Font_Printf(arg0 + 0xA, arg1 + 4, (char*)(mon + 0x30));
+        Font_SetActive(4, 0);
+        Font_Printf(arg0 + 0x83, arg1 + 8, D_890189B0, mon[0x24]);
+        Font_EndTexturedTextRendering();
+    }
+}
 
 void func_89004E1C(s8* arg0, s32 arg1) {
     func_8002ED18(arg0, arg1, arg0 + 0x44);
 }
 
 void func_8002EC24(s8*, s32, s8*, s32, void*, s32, s32);
-void func_89004C54();
+void func_89004C54(s32, s32, u8*, s32, s32);
 
 void func_89004E3C(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     M2C_FIELD(arg0, s32*, 0x80) = arg1;
