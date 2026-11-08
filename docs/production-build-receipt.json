@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5038,
-  "asm_owners": 406,
+  "c_owners": 5039,
+  "asm_owners": 405,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -603,7 +603,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "5f0657015050ceddaf2942fcaa6ea94101a51e507cd5bcb2e9ce914fa9225e42",
+    "docs/function-matches.csv": "0f6820f9499c61adf3588c81801e2987381368addb341b1f086100b4500590c8",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -683,7 +683,7 @@
     "src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c": "318086a76636aa22c02772ffe3f9f26b31146866ab82c26ff798244af2c084b4",
     "src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_811177E8.c": "4b75c7a204982ed7a37d2030b1b5e8b5691252c4fecc501cb8b96a2abc3c9db7",
     "src/fragments/fragment001_15B1A0.c": "d1c261a91d2655fce1c365532252dbb923f0e500cf5a8cd8959a1fdedbaa8444",
-    "src/fragments/fragment002_15E220.c": "22ca703e0dfefcfde7bcfc1a79ada2cc330ef5b85672a3135c8d49be018e882e",
+    "src/fragments/fragment002_15E220.c": "7496a5e732094991be4c728bfa03f78b0bc122733e7dab23e2ad0463b40cda83",
     "src/fragments/fragment003_15F390/n64_logo.c": "ea090992fcd978895ff885d3c54db85cf6ae2f352df8c509a401bb94044987aa",
     "src/fragments/fragment004_15F8F0/gb_tower_team_prep.c": "8d223c847fbf199c7b00d7455ad7395c8cc1b779c74349e89f1e764e1dd11402",
     "src/fragments/fragment005_15FCE0/battle_order_select.c": "2cdc208ad4d77f2b7b5a6e30c9bdc2c46e8d3c8a1a47704688f53589f777a6b4",

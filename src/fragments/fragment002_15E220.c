@@ -102,11 +102,40 @@ void func_8120047C(void) {
     gDPSetTextureConvert(gDisplayListHead++, G_TC_FILT);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_812007B0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment002_15E220/func_812007B0.s")
-#endif
+extern M2C_UNK D_02000000;
+extern u8 D_020002C0[];
+extern u8 D_02000580[];
+extern u8 D_02000840[];
+extern Gfx D_800602C8[];
+extern Gfx D_80060398[];
+extern s32 D_81201020;
+void Gfx_DrawTextureIa16(s32 x1, s32 y1, s32 draw_width, s32 height, u8* texture, s32 load_width, s32 texture_spread_x_mode);
+
+void func_812007B0(s16 x, s16 y) {
+    s32 t = D_81201020 - 0x30;
+    s32 alpha = 0;
+
+    if (t >= 0) {
+        if (t < 0x10) {
+            alpha = t * 0x10;
+        } else if (t < 0x23) {
+            alpha = 0xFF;
+        } else if (t < 0x32) {
+            alpha = -t * 0x10 + 0x320;
+        }
+    }
+    D_81201020++;
+    if (D_81201020 >= 0x6D) {
+        D_81201020 = 0x30;
+    }
+    gSPDisplayList(gDisplayListHead++, D_800602C8);
+    gDPSetEnvColor(gDisplayListHead++, 0xFF, 0xFF, 0xFF, alpha);
+    Gfx_DrawTextureIa16(x, y, 0x58, 4, (u8*)&D_02000000, 0x58, 0);
+    Gfx_DrawTextureIa16(x, y + 4, 0x58, 4, D_020002C0, 0x58, 0);
+    Gfx_DrawTextureIa16(x, y + 8, 0x58, 4, D_02000580, 0x58, 0);
+    Gfx_DrawTextureIa16(x, y + 0xC, 0x58, 4, D_02000840, 0x58, 0);
+    gSPDisplayList(gDisplayListHead++, D_80060398);
+}
 
 extern s32 D_81201018;
 s32 func_81200970(s32 arg0)
@@ -183,7 +212,7 @@ M2C_UNK func_800387BC(M2C_UNK);
 M2C_UNK func_8003F6AC(M2C_UNK);
 void func_81200020(void);
 M2C_UNK func_8120023C(s32);
-M2C_UNK func_812007B0(M2C_UNK, M2C_UNK);
+void func_812007B0(s16, s16);
 extern void *D_800603C0;
 extern s32 D_81201014;
 
