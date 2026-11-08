@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5084,
-  "asm_owners": 360,
+  "c_owners": 5085,
+  "asm_owners": 359,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -603,7 +603,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "02bebcaa26b85a4143a91fb93fae033d9d63b76eb9b8a4634837cb3d701420ca",
+    "docs/function-matches.csv": "9aadc90c53fd49c89ec148aca833732e87ec316217e690e5aac2e8defb320c71",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -790,7 +790,7 @@
     "src/fragments/fragment013_232510/demo_scenes_161E60.c": "b2a2f1069c93a8565aef78a5d1046a0d41b1298909513c18dbc8f0d1c7e170f9",
     "src/fragments/fragment014_235D70/lab_pc_icons.c": "7a87bc6180cb30446ac9efbbf18fe8ac0ff0ef36a183e18eb1b8f4c721de96fd",
     "src/fragments/fragment015_238BD0/89006FC0.c": "1b774a29d4859c9ff45ec11ab15e04f59590aad713102e35f39ffd921a00e63f",
-    "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c": "605dd5bd74175b78dae6fc174391886f034daa3f1fd6fc304a7033a1e2c6b3be",
+    "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c": "a1a4ac6f02dd161166edf260786f8b545b07eb1a6f49022b42b2917035dc9d95",
     "src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c": "d70cdaebea72170e55473b8fdf30de90f9b3ad5699b19851826aa8b9deeafb93",
     "src/fragments/fragment016_252E10/89100020.c": "c8ad089a22182e64178503a1a4b3871bf711f9191ffc02952e1b0679585f6661",
     "src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c": "39cfd408432976f0df224c94903b6c63331da27316a82bdf5885053790186aea",
