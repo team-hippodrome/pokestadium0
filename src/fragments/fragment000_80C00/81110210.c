@@ -469,11 +469,53 @@ s8 *func_81111784(s8 *arg0, s8 *arg1)
   return a;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8111187C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8111187C.s")
-#endif
+s8* func_8111187C(s8* arg0) {
+    s8* voice;
+    s32 flags = M2C_FIELD(arg0, u8**, 0x54)[2];
+
+    if (flags & 1) {
+        voice = M2C_FIELD(arg0, s8**, 0x48);
+        if ((voice != NULL) && (arg0 == M2C_FIELD(voice, s8**, 0x40)) && (M2C_FIELD(voice, s32*, 0x48) == -1)) {
+            func_811116BC(voice, arg0);
+            func_811114BC(voice);
+            func_81112EAC(M2C_FIELD(voice, s8**, 0xC) + 0x20, (Rec81111130*)voice);
+            return voice;
+        }
+    }
+    if (flags & 2) {
+        if (((voice = (s8*)func_811116E8(M2C_FIELD(arg0, s8**, 0x54) + 0x84, (s32)arg0)) != NULL) ||
+            ((voice = (s8*)func_81111734(M2C_FIELD(arg0, s8**, 0x54) + 0x84, arg0)) != NULL) ||
+            ((voice = func_81111784(M2C_FIELD(arg0, s8**, 0x54) + 0x84, arg0)) != NULL)) {
+            return voice;
+        }
+    } else if (flags & 4) {
+        if (((voice = (s8*)func_811116E8(M2C_FIELD(arg0, s8**, 0x54) + 0x84, (s32)arg0)) != NULL) ||
+            ((voice = (s8*)func_811116E8(M2C_FIELD(M2C_FIELD(arg0, s8**, 0x54), s8**, 0x4C) + 0x98, (s32)arg0)) != NULL) ||
+            ((voice = (s8*)func_81111734(M2C_FIELD(arg0, s8**, 0x54) + 0x84, arg0)) != NULL) ||
+            ((voice = (s8*)func_81111734(M2C_FIELD(M2C_FIELD(arg0, s8**, 0x54), s8**, 0x4C) + 0x98, arg0)) != NULL) ||
+            ((voice = func_81111784(M2C_FIELD(arg0, s8**, 0x54) + 0x84, arg0)) != NULL) ||
+            ((voice = func_81111784(M2C_FIELD(M2C_FIELD(arg0, s8**, 0x54), s8**, 0x4C) + 0x98, arg0)) != NULL)) {
+            return voice;
+        }
+    } else if (flags & 8) {
+        if (((voice = (s8*)func_811116E8(&D_81184938, (s32)arg0)) != NULL) ||
+            ((voice = (s8*)func_81111734(&D_81184938, arg0)) != NULL) ||
+            ((voice = func_81111784(&D_81184938, arg0)) != NULL)) {
+            return voice;
+        }
+    } else {
+        if (((voice = (s8*)func_811116E8(M2C_FIELD(arg0, s8**, 0x54) + 0x84, (s32)arg0)) != NULL) ||
+            ((voice = (s8*)func_811116E8(&D_81184938, (s32)arg0)) != NULL) ||
+            ((voice = (s8*)func_81111734(M2C_FIELD(arg0, s8**, 0x54) + 0x84, arg0)) != NULL) ||
+            ((voice = (s8*)func_81111734(&D_81184938, arg0)) != NULL) ||
+            ((voice = func_81111784(M2C_FIELD(arg0, s8**, 0x54) + 0x84, arg0)) != NULL) ||
+            ((voice = func_81111784(&D_81184938, arg0)) != NULL)) {
+            return voice;
+        }
+    }
+    arg0[3] = 0;
+    return NULL;
+}
 
 typedef struct Rec81111AF4 {
     /* 0x00 */ char pad00[0x1C];
