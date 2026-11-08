@@ -322,7 +322,7 @@ func_80001234,0x80001234,src/dp_intro.c,func_80001234,hand,,c
 func_800012AC,0x800012AC,src/dp_intro.c,func_800012AC,m2c,m2c,c
 func_80001328,0x80001328,src/dp_intro.c,DisplayWorker_ProcessFrame,hand,,c
 func_80001558,0x80001558,src/dp_intro.c,,asm,,asm
-func_800016C4,0x800016C4,src/dp_intro.c,func_800016C4,s1,stadium1:src/dp_intro.c,c
+func_800016C4,0x800016C4,src/dp_intro.c,,asm,,asm
 func_80001868,0x80001868,src/dp_intro.c,DisplayWorker_Initialize,hand,,c
 func_80001948,0x80001948,src/dp_intro.c,Display_ClearFramebufferLine,hand,,c
 func_8000197C,0x8000197C,src/dp_intro.c,Display_GetFramebufferClearColor,s1,stadium1:src/dp_intro.c,c
@@ -4163,7 +4163,7 @@ func_800268A8,0x800268A8,src/game_state.c,State_N64ddBootUnused,s1,stadium1:src/
 func_800268DC,0x800268DC,src/game_state.c,func_800268DC,s1,stadium1:src/game_state.c,c
 func_800268E4,0x800268E4,src/game_state.c,Game_ShutdownAndLoadFragment,s1,stadium1:src/game_state.c,c
 func_80026980,0x80026980,src/game_state.c,Game_ResetStorageDevice,s1,stadium1:src/game_state.c,c
-func_800269A0,0x800269A0,src/game_state.c,func_800269A0,hand,,c
+func_800269A0,0x800269A0,src/game_state.c,,asm,,asm
 func_80026B50,0x80026B50,src/game_state.c,,asm,,asm
 func_800270B4,0x800270B4,src/game_state.c,func_800270B4,hand,,c
 func_80027134,0x80027134,src/game_state.c,Display_DisableBlackout,s1,stadium1:src/dp_intro.c,c

@@ -555,48 +555,11 @@ void Game_ResetStorageDevice(void) {
     Storage_ResetDisk();
 }
 
-void func_800260C4(void);
-void func_80026368(void);
-u32 __osSetFpcCsr(u32);
-
-void func_800269A0(s32 arg0) {
-    s32 state;
-
-    __osSetFpcCsr(0x01000F00);
-    Cont_SetupControllers(0);
-    Leo_InitializeBootState();
-    PokeIcon_StartThread();
-    main_pool_push_state('GAME');
-    M2C_FIELD(&D_800AE8F0, s8 *, 0) = 1;
-
-    for (;;) {
-        state = D_800733C8;
-        switch (state) {
-            case 0x8001:
-                func_80025F3C();
-                break;
-            case 0x8010:
-                State_FastN64Logo();
-                break;
-            case 0x8040:
-                func_800260C4();
-                break;
-            case 0x8050:
-                func_80026368();
-                break;
-            case 0x8060:
-                State_GbTower();
-                break;
-            case 0x8080:
-                func_80026898();
-                break;
-            case 0xF000:
-                State_N64ddBootUnused();
-                break;
-        }
-        D_800733CC = state;
-    }
-}
+#ifdef NON_MATCHING
+/* TODO: decompile func_800269A0; signature not recovered. */
+#else
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800269A0.s")
+#endif
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_80026B50; signature not recovered. */
