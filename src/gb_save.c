@@ -889,11 +889,36 @@ void func_8002C064(s32 start, s32 end, s32 r, s32 g, s32 b) {
     gDPSetTexturePersp(gDisplayListHead++, G_TP_PERSP);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002C1B4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002C1B4.s")
-#endif
+extern u8 D_04010E10[];
+extern u8 D_04010FD8[];
+extern Img8002A3F8 D_800735F4;
+u32 func_800566BC(s32);
+
+void func_8002C1B4(s32 x, s32 y, s32 str, s32 flags) {
+    s32 width;
+    s32 textX;
+
+    width = (func_800566BC(str) >> 1) * 0x14;
+    textX = x + 8;
+    if (flags & 0x2000) {
+        textX += 0x28;
+        width += 0x28;
+    }
+    gSPDisplayList(gDisplayListHead++, D_80073450);
+    gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
+    gDPLoadTextureBlock(gDisplayListHead++, D_04010E10, G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 28, 0, G_TX_CLAMP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    gSPTextureRectangle(gDisplayListHead++, x << 2, y << 2, (x + width + 8) << 2, (y + 0x1C) << 2, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
+    gDPLoadTextureBlock(gDisplayListHead++, D_04010FD8, G_IM_FMT_RGBA, G_IM_SIZ_16b, 48, 28, 0, G_TX_CLAMP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    gSPTextureRectangle(gDisplayListHead++, (x + width + 8) << 2, y << 2, (x + width + 0x38) << 2, (y + 0x1C) << 2, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
+    if (flags & 0x2000) {
+        func_8002A3F8(&D_800735F4, x + 8, y + 4);
+    }
+    func_8001AB6C();
+    func_8001A384(8, 0);
+    func_8001AA9C(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
+    func_8001A944(textX, y + 4, str);
+    func_8001ABBC();
+}
 
 extern u8 D_0400E680[];
 extern u8 D_0400E788[];

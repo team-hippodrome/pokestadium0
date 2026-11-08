@@ -4308,7 +4308,7 @@ func_8002BC44,0x8002BC44,src/gb_save.c,GbSave_GameToCategoryIndex,s1,stadium1:sr
 func_8002BC58,0x8002BC58,src/gb_save.c,func_8002BC58,hand,,c
 func_8002BE24,0x8002BE24,src/gb_save.c,func_8002BE24,hand,,c
 func_8002C064,0x8002C064,src/gb_save.c,func_8002C064,hand,,c
-func_8002C1B4,0x8002C1B4,src/gb_save.c,,asm,,asm
+func_8002C1B4,0x8002C1B4,src/gb_save.c,func_8002C1B4,hand,,c
 func_8002C5A4,0x8002C5A4,src/gb_save.c,func_8002C5A4,hand,,c
 func_8002C8D8,0x8002C8D8,src/gb_save.c,Color_InterpolateFromGray,s1,stadium1:src/gb_save.c,c
 func_8002C998,0x8002C998,src/gb_save.c,BattleInfoWidget_DrawLabel,hand,,c

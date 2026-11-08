@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5179,
-  "asm_owners": 265,
+  "c_owners": 5180,
+  "asm_owners": 264,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -617,7 +617,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "4512a02e392749bb800131b498c63e87d0fcb2fb7f746a79d1da1384063da96e",
+    "docs/function-matches.csv": "e03e3ec4b508056fde6650f6beaac00c056be43457623319369b01b3e6fbf257",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -1002,7 +1002,7 @@
     "src/gb_audio_render.c": "7b990519ff2999b71446f5f28fdfbafacd9d2c186ffd73f8fe168f19bc91e619",
     "src/gb_data.c": "38e026d47ec44d5de127778395cddf3c932ccdda434bef8628ea81336cce3ba3",
     "src/gb_mbc.c": "1ed5ad571c7b2f9ada6c5b47251450d75b7247527837bb602c67a4eddfd69f02",
-    "src/gb_save.c": "86db9f5ed938226ae6a5402a1355f3d0eea137b710e510ff5ae987e634606176",
+    "src/gb_save.c": "e6d6f9724e8ca77add79e9cd22358a17e0f917476607e8a6785fce9910c8a28a",
     "src/gb_tower.c": "176816e083b7e59f7a469e5cb27b7a0b94869007fcb3060a4e31dfeefbfd0124",
     "src/geo_layout.c": "cd22cfc78b438f75ba379097e38e64b8e773c73701f536774d4a9c9fbe313f0d",
     "src/geo_node.c": "4b117247e69f5030a02753148e827dc7179b9c497a8af94b2feb264947aa287a",
