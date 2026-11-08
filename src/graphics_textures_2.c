@@ -258,8 +258,9 @@ Vtx* func_8001ADA0(s16 x, s16 y, s16 width, s16 height, u8* tex) {
  * Note: 0x80 bytes are allocated but only the first 0x40 (eight commands)
  * are written.
  */
-void func_8001B25C(Gfx* arg0, Color_RGBA8 arg1) {
-    Gfx* gfx = Gfx_AllocDisplayList(0x80);
+Gfx* func_8001B25C(Gfx* arg0, Color_RGBA8_u32 arg1) {
+    Gfx* dl = Gfx_AllocDisplayList(0x80);
+    Gfx* gfx = dl;
 
     gDPPipeSync(gfx++);
     gSPClearGeometryMode(gfx++, G_LIGHTING);
@@ -270,6 +271,7 @@ void func_8001B25C(Gfx* arg0, Color_RGBA8 arg1) {
     gSPDisplayList(gfx++, arg0);
     gSPSetGeometryMode(gfx++, G_LIGHTING);
     gSPEndDisplayList(gfx++);
+    return dl;
 }
 
 typedef struct Glyph8001B32C {
@@ -293,8 +295,47 @@ s32 func_8001B32C(s32 x, s32 scale, const char* str) {
     return x - (((strlen(str) >> 1) * width) >> 1);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8001B3AC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8001B3AC.s")
-#endif
+s32 func_8001AFB0(Gfx** arg0, s16 x, s16 y, s16 arg3, s32 arg4, s32 chr);
+Gfx* func_8001B3AC(s16 x, s16 y, s16 arg2, s16 arg3, Color_RGBA8_u32 color, const char* fmt, ...) {
+    u8 buf[0x100];
+    UNUSED s32 pad[2];
+    s32 startX;
+    Gfx* dl;
+    s32 len;
+    u8* p;
+    s32 chr;
+    va_list args;
+
+    va_start(args, fmt);
+    startX = x;
+    dl = NULL;
+    len = _Printf(String_CopyBytesAndAdvance, (char*)buf, fmt, args);
+    if (len > 0) {
+        buf[len] = 0;
+        chr = buf[0];
+        p = &buf[1];
+        while (chr != 0) {
+            if (chr == 0xA) {
+                x = startX;
+                y -= ((u8)((FontEntry8001A118*)D_800AD200)[M2C_FIELD(D_800AD200, u8*, 0x38)].size_b * ((arg3 * 0xB) / 10)) / 100;
+            } else if (chr == 9) {
+                x = func_8001B32C(x, arg2, (const char*)p);
+            } else {
+                if (chr >= 0x80) {
+                    if (*p != 0) {
+                        chr = *p | (chr << 8);
+                        p++;
+                    }
+                }
+                x += func_8001AFB0(&dl, x, y, arg2, arg3, chr & 0x7F7F);
+            }
+            chr = *p;
+            p++;
+        }
+    }
+    if (dl != NULL) {
+        dl = func_8001B25C(dl, color);
+    }
+    va_end(args);
+    return dl;
+}
