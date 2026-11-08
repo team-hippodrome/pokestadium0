@@ -273,11 +273,26 @@ void func_8A1009E0(s8 *arg0, s32 arg1, s32 arg2) {
     M2C_FIELD(arg0, s32 *, 0x14) = 0x1001;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8A100A24; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment018_262620/func_8A100A24.s")
-#endif
+void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
+void func_8A100A24(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
+    s32 i;
+
+    gDPPipeSync(gDisplayListHead++);
+    gDPSetCycleType(gDisplayListHead++, G_CYC_1CYCLE);
+    gDPSetCombineLERP(gDisplayListHead++, 0, 0, 0, TEXEL0, TEXEL0, 0, ENVIRONMENT, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, ENVIRONMENT, 0);
+    gDPSetRenderMode(gDisplayListHead++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
+    gDPSetTexturePersp(gDisplayListHead++, G_TP_NONE);
+    gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, arg2);
+    for (i = 0; i < 0xD0; i += 8) {
+        func_8001B884(arg0, arg1, 0xF4, 8, arg3, 0x100, 0);
+        arg1 += 8;
+        arg3 += 0x1000;
+    }
+    func_8001B884(arg0, arg1, 0xF4, 2, arg3, 0x100, 0);
+    gDPPipeSync(gDisplayListHead++);
+    gDPSetTexturePersp(gDisplayListHead++, G_TP_PERSP);
+    gDPSetAlphaCompare(gDisplayListHead++, G_AC_NONE);
+}
 
 extern char D_8A12FCDC[];
 void func_8001A944(s32, s32, const char*, ...);
@@ -329,7 +344,7 @@ s32 func_80029658(s32, s32, s32, void*);
 s32 func_80029864(s32, s32, s32, void*);
 s32 func_8002A3F8(void*, s32, s32);
 s32 func_8002AB84();
-void func_8A100A24(s32, s32, s32, s32);
+void func_8A100A24(s32, s32, s32, u8*);
 void func_8A100C50(s32, s32);
 void func_8A100F20(s32, s32);
 extern u8 D_8007356C;
