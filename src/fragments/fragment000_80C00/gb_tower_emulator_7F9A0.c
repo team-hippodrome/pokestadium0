@@ -665,11 +665,43 @@ void func_81104618(s32 arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_811047A0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_811047A0.s")
-#endif
+extern s32 D_81156590;
+extern u16 D_811223E0[];
+extern s32 D_81154C00;
+extern s32 D_81156594;
+extern u8* D_81156598;
+extern s8 D_811565A2;
+extern u8 D_811541F0[];
+extern u8 D_81120A18[];
+extern u16 D_81120B58[];
+void func_811047A0(s32 arg0) {
+    s32 pos;
+    s32 dst;
+    s32 i;
+    u8* p;
+
+    pos = D_81156590;
+    func_8004FD20(pos, 0x2800);
+    pos += 0xAE;
+    func_8110445C((u8*)pos, D_811223E0[D_81156594], 0x70);
+    i = 0;
+    dst = pos + 0x788;
+    if (arg0 != 0) {
+        arg0 = 6;
+    }
+    p = &D_811541F0[arg0];
+    do {
+        func_8110427C((u16*)dst, D_81156598 + *p * 0xA0, 0xFFFE, 0xC, 0xA, 0x10);
+        i += 0x12;
+        dst += 0x12;
+        p++;
+    } while (i != 0x6C);
+    func_81103C40(pos + 0x7FE, D_81120A18, 0, 0x10, 0xA);
+    func_81103C40(pos + 0x5C2, (u8*)&D_81120B58[D_81156594 * 12 * 12], 0, 0xC, 0xC);
+    func_81104540((u16*)pos, arg0, 0);
+    D_811565A2 = 0;
+    D_81154C00 = D_81156590;
+}
 
 typedef struct Screen81104930 {
     /* 0x00 */ u8 unk_00[0x4C];
