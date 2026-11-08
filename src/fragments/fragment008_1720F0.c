@@ -110,11 +110,33 @@ void func_881001A8(void *arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8810024C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment008_1720F0/func_8810024C.s")
-#endif
+s32 func_80024ADC(s32, s32);
+void func_80027410(s8*, s8*, s32, s32, s32);
+s32 func_800246C8(s32, s32);
+void func_8002479C(s32, s32, u8*);
+void func_8810024C(s8* arg0) {
+    u8* p = M2C_FIELD(arg0, u8**, 0);
+    s32 i;
+
+    for (i = 0; i < 0x10; i++) {
+        if (func_800246A8(0x10, i) == 0) {
+            continue;
+        }
+        if (func_80024ADC(0x10, i) == 0) {
+            continue;
+        }
+        p[0] = 0;
+        p[1] = 0x10;
+        p[2] = 0;
+        p[3] = i;
+        func_80027410((s8*)p + 0x18, (s8*)p + 0x28, 0x54, 6, 0);
+        func_88100078(p[1], p[2], p[3], (s32*)(p + 0x18));
+        M2C_FIELD(p, s32*, 4) = func_800246C8(p[1], p[3]);
+        func_8002479C(p[1], p[3], p + 8);
+        p += 0x220;
+    }
+    M2C_FIELD(arg0, s32*, 8) = (p - M2C_FIELD(arg0, u8**, 0)) / 0x220;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_88100348; signature not recovered. */

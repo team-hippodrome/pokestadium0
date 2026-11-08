@@ -843,7 +843,7 @@ func_88100020,0x88100020,src/fragments/fragment008_1720F0.c,func_88100020,m2c,m2
 func_88100078,0x88100078,src/fragments/fragment008_1720F0.c,func_88100078,hand,,c
 func_88100100,0x88100100,src/fragments/fragment008_1720F0.c,func_88100100,m2c,m2c+permuter,c
 func_881001A8,0x881001A8,src/fragments/fragment008_1720F0.c,func_881001A8,hand,,c
-func_8810024C,0x8810024C,src/fragments/fragment008_1720F0.c,,asm,,asm
+func_8810024C,0x8810024C,src/fragments/fragment008_1720F0.c,func_8810024C,hand,,c
 func_88100348,0x88100348,src/fragments/fragment008_1720F0.c,,asm,,asm
 func_88100428,0x88100428,src/fragments/fragment008_1720F0.c,func_88100428,hand,,c
 func_881004CC,0x881004CC,src/fragments/fragment008_1720F0.c,func_881004CC,hand,,c
