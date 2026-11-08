@@ -34,11 +34,59 @@ void LabPC_WriteBoxEntries(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_890070BC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_890070BC.s")
-#endif
+typedef struct Ent890070BC {
+    u8* box;
+    s32 dirty;
+} Ent890070BC;
+s32 func_8002207C(s32);
+void func_80022118(s32);
+void func_80022188(s32);
+void func_800230C4(s32);
+void func_800243B8(void);
+void func_8002D7D4(s32);
+void func_8900A1CC(s8* arg0);
+
+void func_890070BC(s8* arg0) {
+    s32 any;
+    s32 i;
+    s32 any2;
+
+    any2 = 0;
+    any = 0;
+
+    for (i = 0; i < 8; i++) {
+        if (((Ent890070BC*)(arg0 + 0x7498))[i].dirty != 0) {
+            any = 1;
+            break;
+        }
+    }
+    if (any != 0) {
+        func_80022118(D_89019108);
+    }
+    for (i = 0; i < 8; i++) {
+        if (((Ent890070BC*)(arg0 + 0x7498))[i].dirty != 0) {
+            LabPC_WriteBoxEntries(0x21, D_89019108, i, ((Ent890070BC*)(arg0 + 0x7498))[i].box);
+            func_89006FC0(((Ent890070BC*)(arg0 + 0x7498))[i].box);
+        }
+    }
+    for (i = 0; i < 4; i++) {
+        if (((Ent890070BC*)(arg0 + 0x74D8))[i].dirty != 0) {
+            LabPC_WriteBoxEntries(0x11, 0, i, ((Ent890070BC*)(arg0 + 0x74D8))[i].box);
+            any2 = 1;
+        }
+    }
+    if (any != 0) {
+        func_800230C4(D_89019108);
+        if (func_8002207C(D_89019108) == 0) {
+            func_8002D7D4(D_89019108);
+            func_8900A1CC(arg0);
+        }
+        func_80022188(D_89019108);
+    }
+    if (any2 != 0) {
+        func_800243B8();
+    }
+}
 
 s32 func_8900721C(s32 arg0, s32 arg1, s32 arg2, s8* arg3, s32 arg4) {
     s32 sp1C;

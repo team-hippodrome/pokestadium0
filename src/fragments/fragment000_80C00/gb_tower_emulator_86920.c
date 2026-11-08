@@ -811,7 +811,7 @@ s32 func_8110CBD0(s32 arg0, s32* arg1) {
 extern u16 D_811858AC;
 s32 func_8110D7B0(M2C_UNK, s32);
 s32 func_8110CBD0(s32, s32*);
-void func_8110D3D4(s32);
+s32 func_8110D3D4(s32);
 void func_8110CC94(s32 arg0, s32 arg1) {
     s32 sp18[2];
 
@@ -982,7 +982,7 @@ s32 func_8110D214(s32 arg0, s32 arg1, s32 arg2) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110D278.s")
 #endif
 
-void func_8110D3D4(s32 arg0) {
+s32 func_8110D3D4(s32 arg0) {
     s32 idx;
     s32 sp18;
 

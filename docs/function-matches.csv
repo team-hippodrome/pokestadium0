@@ -3532,7 +3532,7 @@ func_88001D54,0x88001D54,src/fragments/fragment014_235D70/lab_pc_icons.c,func_88
 func_88001F44,0x88001F44,src/fragments/fragment014_235D70/lab_pc_icons.c,func_88001F44,hand,,c
 func_89006FC0,0x89006FC0,src/fragments/fragment015_238BD0/89006FC0.c,func_89006FC0,m2c,m2c,c
 func_89007038,0x89007038,src/fragments/fragment015_238BD0/89006FC0.c,LabPC_WriteBoxEntries,hand,,c
-func_890070BC,0x890070BC,src/fragments/fragment015_238BD0/89006FC0.c,,asm,,asm
+func_890070BC,0x890070BC,src/fragments/fragment015_238BD0/89006FC0.c,func_890070BC,hand,,c
 func_8900721C,0x8900721C,src/fragments/fragment015_238BD0/89006FC0.c,func_8900721C,hand,,c
 func_89007264,0x89007264,src/fragments/fragment015_238BD0/89006FC0.c,func_89007264,m2c,m2c+permuter,c
 func_890072E4,0x890072E4,src/fragments/fragment015_238BD0/89006FC0.c,func_890072E4,hand,,c
