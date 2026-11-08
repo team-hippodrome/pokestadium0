@@ -602,11 +602,28 @@ s32 func_80021CF4(void) {
     return D_800AD330;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80021E64; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80021E64.s")
-#endif
+s32 func_80021E64(s32 arg0) {
+    s32 ret;
+    u8 sp33;
+    GbSavePortZero* port = &sGbSavePorts[arg0];
+
+    GbData_WriteU16BE(port->unk_40 + 0x2C2, GbData_ReadU16BE(port->unk_40 + 0x2C2) | 0x8000);
+    HAL_Memset(port->unk_44, 0xFF, 0x2B40);
+    port->unk_44[0x566 * 0] = 0;
+    port->unk_44[0x15A0 + 0x566 * 0] = 0;
+    port->unk_44[0x566 * 1] = 0;
+    port->unk_44[0x15A0 + 0x566 * 1] = 0;
+    port->unk_44[0x566 * 2] = 0;
+    port->unk_44[0x15A0 + 0x566 * 2] = 0;
+    port->unk_44[0x566 * 3] = 0;
+    port->unk_44[0x15A0 + 0x566 * 3] = 0;
+    if (GbTower_ProbePak(arg0, &sp33, port->unk_18) == 0) {
+        Game_ShutdownAndLoadFragment(arg0, 2);
+    }
+    ret = GbSave_RebuildAndWriteSave(arg0);
+    ret &= GbTower_CheckPakRemoved(arg0, sp33);
+    return ret;
+}
 
 s32 GbSave_WriteBoxBanks(s32 arg0) {
     u8 sp2F;
