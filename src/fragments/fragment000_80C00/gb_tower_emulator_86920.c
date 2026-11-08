@@ -68,7 +68,10 @@ typedef struct Rec81109678 {
     /* 0x34 */ u8 unk_34;
     /* 0x35 */ u8 pad35[0x44 - 0x35];
     /* 0x44 */ Rec81109678Flags* unk_44;
-    /* 0x48 */ u8 pad48[0xCC - 0x48];
+    /* 0x48 */ u8 pad48[0xB4 - 0x48];
+    /* 0xB4 */ u32 enabled : 1;
+    /* 0xB4 */ u32 restB4 : 31;
+    /* 0xB8 */ u8 padB8[0xCC - 0xB8];
 } Rec81109678; // size = 0xCC
 
 s32 func_8111073C(Rec81109678*);
@@ -299,6 +302,49 @@ void func_81109B50(s8 *arg0) {
     func_811098FC(&D_811843A0);
     func_811098FC(&D_81184400);
 }
+
+typedef struct CacheEntry81109C0C {
+    /* 0x00 */ u8* ramAddr;
+    /* 0x04 */ u32 size;
+    /* 0x08 */ s16 tableType;
+    /* 0x0A */ s16 id;
+} CacheEntry81109C0C; // size = 0xC
+
+typedef struct Pool81109C0C {
+    /* 0x00 */ u8* startRamAddr;
+    /* 0x04 */ u8* curRamAddr;
+    /* 0x08 */ s32 size;
+    /* 0x0C */ s32 numEntries;
+} Pool81109C0C; // size = 0x10
+
+typedef struct PersistentCache81109C0C {
+    /* 0x00 */ s32 numEntries;
+    /* 0x04 */ Pool81109C0C pool;
+    /* 0x14 */ CacheEntry81109C0C entries[1];
+} PersistentCache81109C0C; // size = 0x20
+
+typedef struct TemporaryCache81109C0C {
+    /* 0x00 */ s32 nextSide;
+    /* 0x04 */ Pool81109C0C pool;
+    /* 0x14 */ CacheEntry81109C0C entries[2];
+} TemporaryCache81109C0C; // size = 0x2C
+
+typedef struct Cache81109C0C {
+    /* 0x00 */ PersistentCache81109C0C persistent;
+    /* 0x20 */ TemporaryCache81109C0C temporary;
+} Cache81109C0C;
+
+typedef struct SeqPlayer81109C0C {
+    /* 0x000 */ u32 enabled : 1;
+    /* 0x000 */ u32 rest0 : 31;
+    /* 0x004 */ u8 seqId;
+    /* 0x005 */ u8 pad5[0x15C - 0x5];
+} SeqPlayer81109C0C; // size = 0x15C
+
+extern s8 D_81184654;
+extern s8 D_81184655;
+extern s8 D_81184656;
+void func_8110CAE0(s32, s32);
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_81109C0C; signature not recovered. */

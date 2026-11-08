@@ -376,11 +376,62 @@ void func_80043CE8(s32 arg0, f32 arg1, s32 arg2) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80043DD0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80043DD0.s")
-#endif
+extern u8 D_80077548;
+extern u8 D_8007754C;
+extern u32 D_80077588;
+extern s32 D_80077590;
+extern u32 D_80077598;
+extern u8 D_8007759C;
+extern s32 D_800775A0;
+extern u8 D_800B3CC8;
+s32 func_80037B7C(s32);
+s32 func_800383DC(s32, s32, s32, s32, s32, s32, s32);
+
+void func_80043DD0(void) {
+    s32 ret;
+
+    if ((D_80077538 != 0) && (D_8007753C == 0) && (func_80037B7C(D_80077590) == 0) && (D_80077588 != D_8007758C) &&
+        (D_800B3CC8 == 0)) {
+        ret = func_800383DC(D_800B418C, D_800B41A8, D_800FD6C0[D_80077588].id, D_800FD6C0[D_80077588].level, 0x80, 0, -1);
+        if (ret != -1) {
+            D_80077590 = ret;
+            D_80077588++;
+            D_80077588 %= 10;
+            D_80077558--;
+        }
+    }
+
+    if (D_8007754C != 0) {
+        if ((D_80077598 >= 0x3E9) && (D_8007759C == 0) && (D_80077548 > 0)) {
+            func_80043CE8(0x2E, 0.0f, 0x80);
+            D_8007759C = 1;
+        } else if ((D_80077598 >= 0xA29) && (D_8007759C == 0) && (D_80077548 == 0)) {
+            func_80043CE8(0x2E, 0.0f, 0x80);
+            D_8007759C = 1;
+        } else if ((D_80077598 >= 0x641) && (D_8007759C == 1) && (D_80077548 > 0)) {
+            func_80043CE8(0x31, 0.0f, 0x80);
+            if (D_800775A0 == 0) {
+                D_800775A0 = func_800383DC(D_800B4188, D_800B41A4, 0x19, 0x80, 0x80, 0, -1);
+            }
+            D_8007759C = 2;
+        } else if ((D_80077598 >= 0xC81) && (D_8007759C == 1) && (D_80077548 == 0)) {
+            func_80043CE8(0x31, 0.0f, 0x80);
+            if (D_800775A0 == 0) {
+                D_800775A0 = func_800383DC(D_800B4188, D_800B41A4, 0x19, 0x80, 0x80, 0, -1);
+            }
+            D_8007759C = 2;
+        } else if ((D_80077598 >= 0x899) && (D_80077548 > 0)) {
+            func_80043CE8(0x32, 0.0f, 0x80);
+            D_80077598 = 0x3E8;
+            D_8007759C = 1;
+        } else if ((D_80077598 >= 0xED9) && (D_80077548 == 0)) {
+            func_80043CE8(0x32, 0.0f, 0x80);
+            D_80077598 = 0xA28;
+            D_8007759C = 1;
+        }
+        D_80077598++;
+    }
+}
 
 extern u8* D_800FD690;
 extern File1Header* D_800B4164;
