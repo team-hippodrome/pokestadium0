@@ -712,8 +712,216 @@ s32 func_811132E4(Layer811132E4* layer) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81113650; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81113650.s")
-#endif
+typedef struct Sound81113650 {
+    /* 0x00 */ u8* sample;
+    /* 0x04 */ f32 tuning;
+} Sound81113650;
+
+typedef struct Drum81113650 {
+    /* 0x00 */ u8 releaseRate;
+    /* 0x01 */ u8 pan;
+    /* 0x02 */ u8 unk02[2];
+    /* 0x04 */ Sound81113650 sound;
+    /* 0x0C */ u8* envelope;
+} Drum81113650;
+
+typedef struct SeqPlayer81113650 {
+    /* 0x00 */ u8 unk00[8];
+    /* 0x08 */ u16 tempo;
+    /* 0x0A */ u8 unk0A[4];
+    /* 0x0E */ s16 transposition;
+} SeqPlayer81113650;
+
+typedef struct Channel81113650 {
+    /* 0x00 */ u32 enabled : 1;
+    /* 0x00 */ u32 finished : 1;
+    /* 0x00 */ u32 stopScript : 1;
+    /* 0x00 */ u32 stopSomething2 : 1;
+    /* 0x00 */ u32 hasInstrument : 1;
+    /* 0x00 */ u32 rest : 27;
+    /* 0x04 */ u8 unk04[3];
+    /* 0x07 */ u8 bankId;
+    /* 0x08 */ u8 unk08[0x22 - 0x08];
+    /* 0x22 */ s16 instOrWave;
+    /* 0x24 */ s16 transposition;
+    /* 0x26 */ u8 unk26[0x48 - 0x26];
+    /* 0x48 */ u8* instrument;
+    /* 0x4C */ SeqPlayer81113650* seqPlayer;
+} Channel81113650;
+
+typedef struct Portamento81113650 {
+    /* 0x00 */ u8 mode;
+    /* 0x04 */ f32 cur;
+    /* 0x08 */ f32 speed;
+    /* 0x0C */ f32 extent;
+} Portamento81113650;
+
+typedef struct Layer81113650 {
+    /* 0x00 */ u8 enabled : 1;
+    /* 0x00 */ u8 finished : 1;
+    /* 0x00 */ u8 stopSomething : 1;
+    /* 0x00 */ u8 continuousNotes : 1;
+    /* 0x00 */ u8 bit3 : 1;
+    /* 0x00 */ u8 notePropertiesNeedInit : 1;
+    /* 0x00 */ u8 ignoreDrumPan : 1;
+    /* 0x00 */ u8 bit1 : 1;
+    /* 0x01 */ u8 unk01;
+    /* 0x02 */ u8 instOrWave;
+    /* 0x03 */ u8 unk03[2];
+    /* 0x05 */ u8 portamentoTargetNote;
+    /* 0x06 */ u8 pan;
+    /* 0x07 */ u8 unk07;
+    /* 0x08 */ Portamento81113650 portamento;
+    /* 0x18 */ u8 releaseRate;
+    /* 0x19 */ u8 unk19[3];
+    /* 0x1C */ u8* envelope;
+    /* 0x20 */ u16 portamentoTime;
+    /* 0x22 */ s16 transposition;
+    /* 0x24 */ f32 freqScale;
+    /* 0x28 */ f32 bendPitch;
+    /* 0x2C */ u8 unk2C[0x40 - 0x2C];
+    /* 0x40 */ s16 delay;
+    /* 0x42 */ u8 unk42[2];
+    /* 0x44 */ s16 duration;
+    /* 0x46 */ u8 unk46[0x4C - 0x46];
+    /* 0x4C */ u8* instrument;
+    /* 0x50 */ Sound81113650* sound;
+    /* 0x54 */ Channel81113650* channel;
+} Layer81113650;
+
+extern f32 D_81136778[];
+extern s16 D_811858EC;
+typedef struct Reverb81113650 {
+    /* 0x000 */ u8 unk000[0x110];
+    /* 0x110 */ Sound81113650 sound;
+    /* 0x118 */ u8 unk118[0x158 - 0x118];
+} Reverb81113650; // size = 0x158
+
+extern Reverb81113650 D_81184110[];
+u8* func_81110C6C(u8* arg0, s32 arg1);
+u8* func_81110D6C(s32 arg0, s32 arg1);
+
+s32 func_81113650(Layer81113650* layer, s32 cmdSemitone) {
+    s32 sameSound = 1;
+    s32 instOrWave;
+    s32 vel;
+    f32 temp_f14;
+    f32 temp_f2;
+    Portamento81113650* portamento;
+    f32 freqScale;
+    f32 freqScale2;
+    Sound81113650* sound;
+    u8* instrument;
+    Drum81113650* drum;
+    f32 tuning;
+    Channel81113650* channel;
+    SeqPlayer81113650* seqPlayer;
+    u8 semitone = cmdSemitone;
+
+    instOrWave = layer->instOrWave;
+    channel = layer->channel;
+    seqPlayer = channel->seqPlayer;
+
+    if (instOrWave == 0xFF) {
+        if (!channel->hasInstrument) {
+            return -1;
+        }
+        instOrWave = channel->instOrWave;
+    }
+
+    switch (instOrWave) {
+        case 0:
+            semitone += channel->transposition + layer->transposition;
+            drum = (Drum81113650*)func_81110D6C(channel->bankId, semitone);
+            if (drum == NULL) {
+                layer->stopSomething = 1;
+                layer->duration = layer->delay;
+                return -1;
+            }
+            sound = &drum->sound;
+            layer->envelope = drum->envelope;
+            layer->releaseRate = drum->releaseRate;
+            if (!layer->ignoreDrumPan) {
+                layer->pan = drum->pan;
+            }
+            layer->sound = sound;
+            layer->freqScale = sound->tuning;
+            break;
+
+        default:
+            semitone += seqPlayer->transposition + channel->transposition + layer->transposition;
+            if (semitone >= 0x80) {
+                layer->stopSomething = 1;
+                return -1;
+            }
+            if (layer->instOrWave == 0xFF) {
+                instrument = channel->instrument;
+            } else {
+                instrument = layer->instrument;
+            }
+            if (layer->portamento.mode != 0) {
+                vel = (semitone > layer->portamentoTargetNote) ? semitone : layer->portamentoTargetNote;
+                if (instrument != NULL) {
+                    sound = (Sound81113650*)func_81110C6C(instrument, vel);
+                    sameSound = (layer->sound == sound);
+                    layer->sound = sound;
+                    tuning = sound->tuning;
+                } else {
+                    layer->sound = NULL;
+                    tuning = 1.0f;
+                    if (instOrWave >= 0xC0) {
+                        layer->sound = &D_81184110[instOrWave - 0xC0].sound;
+                    }
+                }
+                temp_f2 = D_81136778[(s32)semitone] * tuning; // FAKE: no-op cast; only changes the spill slot
+                temp_f14 = D_81136778[layer->portamentoTargetNote] * tuning;
+                portamento = &layer->portamento;
+                switch (layer->portamento.mode & ~0x80) {
+                    case 1:
+                    case 3:
+                    case 5:
+                        freqScale2 = temp_f2;
+                        freqScale = temp_f14;
+                        break;
+                    case 2:
+                    case 4:
+                        freqScale = temp_f2;
+                        freqScale2 = temp_f14;
+                        break;
+                    default:
+                        freqScale = temp_f2;
+                        freqScale2 = temp_f2;
+                        break;
+                }
+                portamento->extent = (freqScale2 / freqScale) - 1.0f;
+                if (layer->portamento.mode & 0x80) {
+                    portamento->speed = 32512.0f * (f32)(s32)seqPlayer->tempo /
+                                        ((f32)layer->delay * (f32)D_811858EC * (f32)(s32)layer->portamentoTime);
+                } else {
+                    portamento->speed = 127.0f / (f32)(s32)layer->portamentoTime;
+                }
+                portamento->cur = 0.0f;
+                layer->freqScale = freqScale;
+                if ((layer->portamento.mode & ~0x80) == 5) {
+                    layer->portamentoTargetNote = semitone;
+                }
+                break;
+            }
+            if (instrument != NULL) {
+                sound = (Sound81113650*)func_81110C6C(instrument, semitone);
+                sameSound = (sound == layer->sound);
+                layer->sound = sound;
+                layer->freqScale = D_81136778[(s32)semitone] * sound->tuning; // FAKE: no-op cast
+            } else {
+                layer->sound = NULL;
+                layer->freqScale = D_81136778[(s32)semitone]; // FAKE: no-op cast
+                if (instOrWave >= 0xC0) {
+                    layer->sound = &D_81184110[instOrWave - 0xC0].sound;
+                }
+            }
+            break;
+    }
+    layer->duration = layer->delay;
+    layer->freqScale *= layer->bendPitch;
+    return sameSound;
+}

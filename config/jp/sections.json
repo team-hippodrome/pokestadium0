@@ -54,7 +54,10 @@
     }
   },
   "src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c": {
-    ".rodata": "0x81154358"
+    ".rodata": {
+      "address": "0x81154358",
+      "size": "0x54"
+    }
   },
   "src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81113A44.c": {
     ".rodata": "0x811543AC"
