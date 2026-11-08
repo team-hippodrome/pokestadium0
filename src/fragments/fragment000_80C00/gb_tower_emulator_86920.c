@@ -1390,6 +1390,8 @@ s32 func_8110D278(s32 arg0, s32 arg1, s32 arg2) {
     }
 }
 
+s32 func_8110D5BC(s32 tableType, s32 id, s32* didAllocate);
+
 s32 func_8110D3D4(s32 arg0) {
     s32 idx;
     s32 sp18;
@@ -1463,11 +1465,106 @@ s32 func_8110D4E0(s32 arg0) {
     return ret;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110D5BC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110D5BC.s")
-#endif
+typedef struct AudioTableEntry8110D5BC {
+    /* 0x00 */ u32 romAddr;
+    /* 0x04 */ u32 size;
+    /* 0x08 */ s8 medium;
+    /* 0x09 */ s8 cachePolicy;
+    /* 0x0A */ s16 shortData1;
+    /* 0x0C */ s16 shortData2;
+    /* 0x0E */ s16 shortData3;
+} AudioTableEntry8110D5BC; // size = 0x10
+
+typedef struct AudioTable8110D5BC {
+    /* 0x00 */ s16 numEntries;
+    /* 0x02 */ s16 unkMediumParam;
+    /* 0x04 */ u32 romAddr;
+    /* 0x08 */ char pad[0x8];
+    /* 0x10 */ AudioTableEntry8110D5BC entries[1];
+} AudioTable8110D5BC;
+
+s32 func_81109C0C(s32, s32, s32, s32);
+
+/**
+ * Loads entry id of audio table tableType (0 sequences, 1 sound fonts, 2 sample
+ * banks) synchronously and returns its RAM address, or 0 if no memory could be
+ * allocated. *didAllocate says whether new memory was used (0 when the entry
+ * was already cached). The table's load status is updated. Same structure as
+ * AudioLoad_SyncLoad in the Ocarina of Time audio library.
+ */
+s32 func_8110D5BC(s32 tableType, s32 id, s32* didAllocate) {
+    u32 size;
+    AudioTable8110D5BC* table;
+    s32 ramAddr;
+    u32 medium;
+    s32 status;
+    u32 romAddr;
+    s32 cachePolicy;
+    UNUSED s32 pad;
+
+    ramAddr = func_8110D7EC(tableType, id);
+    if (ramAddr != 0) {
+        *didAllocate = 0;
+        status = 2;
+    } else {
+        table = (AudioTable8110D5BC*)func_8110D840(tableType);
+        size = table->entries[id].size;
+        size = ALIGN16(size);
+        medium = table->entries[id].medium;
+        cachePolicy = table->entries[id].cachePolicy;
+        romAddr = table->entries[id].romAddr;
+        switch (cachePolicy) {
+            case 0:
+                ramAddr = func_8110B8D8(tableType, id, size);
+                if (ramAddr == 0) {
+                    return ramAddr;
+                }
+                break;
+            case 1:
+                ramAddr = func_81109C0C(tableType, size, 1, id);
+                if (ramAddr == 0) {
+                    return ramAddr;
+                }
+                break;
+            case 2:
+                ramAddr = func_81109C0C(tableType, size, 0, id);
+                if (ramAddr == 0) {
+                    return ramAddr;
+                }
+                break;
+            case 3:
+            case 4:
+                ramAddr = func_81109C0C(tableType, size, 2, id);
+                if (ramAddr == 0) {
+                    return ramAddr;
+                }
+                break;
+        }
+
+        *didAllocate = 1;
+        if (medium == 1) {
+            func_8110DB8C(romAddr, ramAddr, size, table->unkMediumParam);
+        } else {
+            func_8110DA68(romAddr, ramAddr, size, medium);
+        }
+
+        status = cachePolicy == 0 ? 5 : 2;
+    }
+
+    switch (tableType) {
+        case 0:
+            func_8110CB10(id, status);
+            break;
+        case 1:
+            func_8110CAE0(id, status);
+            break;
+        case 2:
+            func_8110CB40(id, status);
+            break;
+    }
+
+    return ramAddr;
+}
 
 u8* func_8110D840(s32);
 s32 func_8110D7B0(s32 arg0, s32 arg1) {
