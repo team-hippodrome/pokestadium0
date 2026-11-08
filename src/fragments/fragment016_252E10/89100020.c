@@ -394,11 +394,56 @@ s32 func_89101D80(s8 *arg0, s32 arg1)
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_891020F8.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89102344; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89102344.s")
-#endif
+typedef struct List89102344 {
+    /* 0x00 */ u8** items;
+    /* 0x04 */ char unk04[4];
+    /* 0x08 */ s32 count;
+} List89102344;
+
+typedef struct Ctx89102344 {
+    /* 0x0000 */ char unk0000[0x8C];
+    /* 0x008C */ s32 unk8C;
+    /* 0x0090 */ char unk0090[0xB160 - 0x90];
+    /* 0xB160 */ List89102344* list;
+    /* 0xB164 */ char unkB164[4];
+    /* 0xB168 */ s32 cursor;
+    /* 0xB16C */ char unkB16C[4];
+    /* 0xB170 */ s32 unkB170;
+    /* 0xB174 */ char unkB174[0xB18C - 0xB174];
+    /* 0xB18C */ s32 unkB18C;
+    /* 0xB190 */ char unkB190[4];
+    /* 0xB194 */ s32 unkB194;
+    /* 0xB198 */ char unkB198[0xB550 - 0xB198];
+    /* 0xB550 */ s32 unkB550;
+} Ctx89102344;
+
+s32 func_8003F6AC();
+s32 func_8002FD8C(void*);
+void func_800306E0(void*, s32);
+void func_891020F8(Ctx89102344*);
+
+s32 func_89102344(Ctx89102344* arg0) {
+    s32 ret;
+
+    if ((arg0->unkB194 == 0) && (*(u16*)(D_800603C0 + 6) & 0x800)) {
+        func_8003F6AC(1);
+        arg0->unk8C = 2;
+        arg0->unkB550 = 1;
+        func_800306E0(&arg0->list, arg0->unkB18C / arg0->unkB170);
+        return 1;
+    }
+    ret = func_8002FD8C(&arg0->list) != 0;
+    if ((ret == 0) && (*(u16*)(D_800603C0 + 8) & 0x8000)) {
+        if ((arg0->list->count > 0) && (arg0->list->items[arg0->cursor][8] > 0) && (arg0->list->items[arg0->cursor][8] < 0x98)) {
+            func_8003F6AC(2);
+            func_891020F8(arg0);
+            ret = 1;
+        } else {
+            func_8003F6AC(8);
+        }
+    }
+    return ret;
+}
 
 typedef struct Rgba891024A4 { u8 r, g, b, a; } Rgba891024A4;
 typedef struct Screen891024A4 {

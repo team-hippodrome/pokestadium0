@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 4934,
-  "asm_owners": 510,
+  "c_owners": 4935,
+  "asm_owners": 509,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -603,7 +603,7 @@
     "tools/cflags_overrides.json": "7052d644eb08429c59981bb4c369c8c937c61ca4c639a1c1ca2c5fc0ce919ebb",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "6a1d68a905a69759fae09d060e42e59ab3e97a0f5a931a95b7ec6663e95ac799",
+    "docs/function-matches.csv": "e24ee4b414f5408d1d2fe3c22c3747c603b0dcc237c7d5ac6e6fb7e75fff9a3e",
     "linker_scripts/jp/symbol_addrs.txt": "3b5103d4cfe8c6cf2470a85f3aacf457f87dc2c7f2096a7a216bec5fd85d5385"
   },
   "binutils": {
@@ -792,7 +792,7 @@
     "src/fragments/fragment015_238BD0/89006FC0.c": "2673f42a2226b08a2150c374e8074108b5e0bef9034d32c309ad669d060fd722",
     "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c": "8e68a6f2371915f1411d8cf3666d7d1a64aefcc371223d10c1b89d43a2fbd5f3",
     "src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c": "81155eb1b53b107bb4662317c9e1ed7cb71a958efe8808ce9bf602e2c2d99b77",
-    "src/fragments/fragment016_252E10/89100020.c": "2be284286808d1388b7246d8be2fd0acb4a9d86e0db68fa1da9b85fe31f1c5ce",
+    "src/fragments/fragment016_252E10/89100020.c": "8c756bdce83ff7becf6eab95c5fcef43deaf921e2cd848e565a55342d54ec11f",
     "src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c": "c477bafd8897726b5248d49b7dcac0b4ff641ec88f9553efdfa1086648430be7",
     "src/fragments/fragment016_252E10/lab_pc_list_1E46B0.c": "ba8d4b5501f5daea30407668a46cb1021536cf2edb09db847e7544301d76b045",
     "src/fragments/fragment016_252E10/lab_pc_list_1E46B0_2.c": "ca2ad66f736d581a4970adae550f327d1024cb27841e034e49b7345dcf501bbe",
