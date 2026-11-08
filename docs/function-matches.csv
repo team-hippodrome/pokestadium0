@@ -1701,7 +1701,7 @@ func_8211FA34,0x8211FA34,src/fragments/fragment012_17ED00/battle_engine_32B680.c
 func_8211FAC4,0x8211FAC4,src/fragments/fragment012_17ED00/battle_engine_32B680.c,func_8211FAC4,hand,,c
 func_8211FB54,0x8211FB54,src/fragments/fragment012_17ED00/battle_engine_32B680.c,func_8211FB54,hand,,c
 func_8211FCC8,0x8211FCC8,src/fragments/fragment012_17ED00/battle_engine_32B680.c,,asm,,asm
-func_8211FF08,0x8211FF08,src/fragments/fragment012_17ED00/battle_engine_32B680.c,,asm,,asm
+func_8211FF08,0x8211FF08,src/fragments/fragment012_17ED00/battle_engine_32B680.c,func_8211FF08,hand,,c
 func_82120134,0x82120134,src/fragments/fragment012_17ED00/battle_engine_32B680.c,func_82120134,hand,,c
 func_821202AC,0x821202AC,src/fragments/fragment012_17ED00/battle_engine_32B680.c,func_821202AC,hand,,c
 func_82120418,0x82120418,src/fragments/fragment012_17ED00/battle_engine_32B680.c,func_82120418,hand,,c

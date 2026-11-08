@@ -97,4 +97,7 @@ void func_82132628(CameraNode* arg0) {
     M2C_FIELD(D_8219A5A0, f32*, 0x98) = 0.0f;
 }
 
+#ifdef NON_MATCHING
+#else
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821326E4.s")
+#endif
