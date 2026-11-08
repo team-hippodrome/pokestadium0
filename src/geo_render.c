@@ -1314,11 +1314,67 @@ void Geo_NodeAnchor(GraphNode* arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800152AC.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80015330; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80015330.s")
-#endif
+extern Gfx D_01002480[];
+extern Gfx D_01002500[];
+void func_80015330(GraphNode* arg0) {
+    Vec3f sp9C;
+    Vec3f sp90;
+    Vec3f sp84;
+    f32 sp80;
+    MtxF sp40;
+    MtxF* sp3C;
+    unk_D_86002F34_alt12* arg = (unk_D_86002F34_alt12*)arg0;
+    Gfx* temp_s1;
+
+    sp3C = &D_800AB460.unk_0000[D_800AB460.unk_10A0];
+    temp_s1 = Gfx_AllocDisplayList(sizeof(Gfx) * 2);
+
+    if (GeoRender_FindAnchorPosition(D_8006049C, 0x64, NULL) == 0) {
+        GeoRender_RecordAnchorPosition(0x64);
+    }
+
+    Vec3f_SetComponentsDuplicate(&sp9C, sp3C->mf[3][0], sp3C->mf[3][1] + arg->unk_1E, sp3C->mf[3][2]);
+    sp9C.y = 0.0f;
+
+    if (D_8006049C->node.renderFlags & 0x40) {
+        Vec3f_SetComponentsDuplicate(&sp90, 0.0f, 1.0f, 0.0f);
+        MtxF_GetScale(sp3C, &sp84);
+
+        sp80 = 1.0f - ((sp3C->mf[3][1] - sp9C.y) / 1000.0f);
+        if (sp80 < 0.5f) {
+            sp80 = 0.5f;
+        }
+
+        if (sp80 > 1.0f) {
+            sp80 = 1.0f;
+        }
+
+        sp84.x *= (arg->unk_1A / 100.0f) * sp80;
+        sp84.z *= (arg->unk_1C / 100.0f) * sp80;
+        MtxF_SetOrthonormalBasis(&sp40, &sp90, &sp9C, D_8006049C->rotation.y);
+        MtxF_ScaleRows(&D_800AB460.unk_0000[D_800AB460.unk_10A0 + 1], &sp40, &sp84);
+
+        D_800AB460.unk_10A0++;
+        GeoRender_CommitMatrix();
+
+        if (arg->unk_18 == 0) {
+            gSPBranchList(&temp_s1[1], Util_ConvertAddrToVirtAddr(D_01002480));
+        } else {
+            gSPBranchList(&temp_s1[1], Util_ConvertAddrToVirtAddr(D_01002500));
+        }
+        gDPSetEnvColor(&temp_s1[0], 0, 0, 0, (s32)(150.0f * sp80));
+
+        if (D_8006049C->node.renderFlags & 2) {
+            func_800135FC(6, (u32)temp_s1 & 0x1FFFFFFF, 0, 1);
+        } else {
+            func_800135FC(5, (u32)temp_s1 & 0x1FFFFFFF, 0, 1);
+        }
+
+        Geo_ProcessNodeChildren(arg0);
+
+        D_800AB460.unk_10A0--;
+    }
+}
 
 void Geo_RenderRootNode(GraphNode* node) {
     unk_D_86002F34_alt1* arg = (unk_D_86002F34_alt1*)node;
