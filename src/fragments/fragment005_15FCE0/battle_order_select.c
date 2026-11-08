@@ -103,11 +103,43 @@ void func_8230016C(void) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_823003B8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment005_15FCE0/func_823003B8.s")
-#endif
+typedef struct OrderSel823003B8 {
+    /* 0x00 */ s8 unk_00;
+    /* 0x01 */ s8 unk_01;
+    /* 0x02 */ s8 unk_02[6];
+    /* 0x08 */ s8 unk_08[6];
+    /* 0x0E */ u8 unk_0E;
+    /* 0x0F */ s8 unk_0F;
+} OrderSel823003B8; // size = 0x10
+
+void func_823003B8(OrderSel823003B8* arg0, u8* arg1, s32 arg2) {
+    s32 i;
+
+    arg0->unk_00 = 0;
+    arg0->unk_01 = 0;
+    for (i = 0; i < 6; i++) {
+        arg0->unk_02[i] = 0;
+        arg0->unk_08[i] = 1;
+    }
+    if (arg2 != 0) {
+        i = 3;
+        do {
+            arg0->unk_02[i] = -1;
+            i++;
+        } while (i < 6);
+    }
+    if (arg1[1] == 1) {
+        arg0->unk_0E = (*(u8**)(arg1 + 8))[1];
+        arg0->unk_0F = -1;
+        arg0->unk_01 = ((*(u8**)(arg1 + 8))[0] & 2) != 0;
+    } else if ((*(u8**)(arg1 + 8))[1] < (*(u8**)(arg1 + 0xC))[1]) {
+        arg0->unk_0E = (*(u8**)(arg1 + 8))[1];
+        arg0->unk_0F = (*(u8**)(arg1 + 0xC))[1];
+    } else {
+        arg0->unk_0E = (*(u8**)(arg1 + 0xC))[1];
+        arg0->unk_0F = (*(u8**)(arg1 + 8))[1];
+    }
+}
 
 extern u8* D_84803698[];
 extern u8* D_84803690[];

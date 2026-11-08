@@ -660,7 +660,7 @@ func_81300144,0x81300144,src/fragments/fragment004_15F8F0/gb_tower_team_prep.c,,
 func_81300228,0x81300228,src/fragments/fragment004_15F8F0/gb_tower_team_prep.c,GbTower_TeamPrep,hand,,c
 func_82300020,0x82300020,src/fragments/fragment005_15FCE0/battle_order_select.c,BattleMenu_DrawBottomActionButtons,hand,,c
 func_8230016C,0x8230016C,src/fragments/fragment005_15FCE0/battle_order_select.c,func_8230016C,hand,,c
-func_823003B8,0x823003B8,src/fragments/fragment005_15FCE0/battle_order_select.c,,asm,,asm
+func_823003B8,0x823003B8,src/fragments/fragment005_15FCE0/battle_order_select.c,func_823003B8,hand,,c
 func_82300488,0x82300488,src/fragments/fragment005_15FCE0/battle_order_select.c,BattleMenu_DrawSidebarLeadIcon,hand,,c
 func_823005B4,0x823005B4,src/fragments/fragment005_15FCE0/battle_order_select.c,BattleMenu_DrawSidebarRowTypeIcon,hand,,c
 func_823006D8,0x823006D8,src/fragments/fragment005_15FCE0/battle_order_select.c,BattleMenu_DrawTeamOrderSidebarTeam0,hand,,c
