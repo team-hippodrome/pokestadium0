@@ -944,11 +944,36 @@ void BattleScene_TickQueueList3Selector2OrCFromB10(ActivePokemon* active_pokemon
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_821044C8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821044C8.s")
-#endif
+void func_821044C8(ActivePokemon* active_pokemon) {
+    UNUSED s32 pad0;
+    s32 row = 0xA5;
+    UNUSED s32 pad;
+    s32 side = BattleScene_GetParticipantSideIndex(active_pokemon) == 0;
+    MovePresentationCue* cue = &sSideBattleCues[side]->moveCues[0xA8];
+    ActivePokemonState* state = &sActivePokemon[side]->state;
+    ActivePokemon* target = sActivePokemon[side];
+    UNUSED s32 pad2[3];
+
+    if ((state->flags & 1) && ((target->displayObject.objectType == 0x39) || (target->displayObject.objectType == 0x67))) {
+        row = 0xAF;
+    }
+    sActivePokemon[side]->animationTimer = 0;
+    if (!(state->flags & 0x4000) && !(state->flags & 2)) {
+        if ((D_82199FCC == 0) || (sBattleMoveFailed != 0)) {
+            cue = &sSideBattleCues[side]->moveCues[row];
+            if (state->flags & 0x200) {
+                cue = &sSideBattleCues[side]->moveCues[0xB0];
+            }
+        } else if (!(state->flags & 1)) {
+            BattleAnim_SetModelEventTrackFromRow(sActivePokemon[side], 0xA8);
+        }
+        ModelAnim_SetFrame(&sActivePokemon[side]->displayObject, 0);
+        ModelAnim_SetAnimation(&sActivePokemon[side]->displayObject, cue->id);
+        if ((M2C_FIELD(active_pokemon, u8*, 0x80A) == 0x17) || (M2C_FIELD(active_pokemon, u8*, 0x80A) == 0x22) || (M2C_FIELD(active_pokemon, u8*, 0x80A) == 0x45)) {
+            func_82108A88(sActivePokemon[side], 0xF, 0);
+        }
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_82104648; signature not recovered. */
