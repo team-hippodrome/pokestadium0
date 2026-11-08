@@ -1202,7 +1202,60 @@ void func_821299B0(CameraNode* arg0) {
     }
 }
 
+#ifdef NON_MATCHING
+// Matches, but its jump table can only be placed once func_82128CDC (whose table precedes it) and the
+// rodata between them are C.
+extern s32 D_8219A568;
+
+void func_82129AE8(CameraNode* arg0, s32 arg1) {
+    s32 temp = M2C_FIELD(D_8219A5A0, s32*, 0x48);
+
+    if (temp == 0x18) {
+        arg1 = 0xA;
+    } else if (temp == 0x14) {
+        arg1 = 0xB;
+    } else if ((arg1 != 5) && (arg1 != 6) && (arg1 != 7)) {
+        D_8219A568 = arg1;
+    }
+    switch (arg1) {
+        case 0:
+            func_82128FBC(arg0);
+            break;
+        case 1:
+            func_821290CC(arg0);
+            break;
+        case 2:
+            func_821291E4(arg0);
+            break;
+        case 3:
+            func_821292FC(arg0);
+            break;
+        case 4:
+            func_82129414(arg0);
+            break;
+        case 5:
+            func_8212954C(arg0);
+            break;
+        case 6:
+            func_8212960C(arg0);
+            break;
+        case 7:
+            func_821296E4(arg0);
+            break;
+        case 10:
+            func_821297BC(arg0);
+            break;
+        case 11:
+            func_821299B0(arg0);
+            break;
+        default:
+            func_82128FBC(arg0);
+            break;
+    }
+}
+#else
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82129AE8.s")
+#endif
 
 void BattleScene_ActionSetupAnimationVariantB(CameraNode* arg0) {
     M2C_FIELD(sBattleScene.scene, s32*, 0x50) = 2;
