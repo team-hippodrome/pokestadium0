@@ -465,11 +465,67 @@ void func_81113140(Particle3140* arg0) {
     arg0->b04 = 1;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_811131CC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_811131CC.s")
-#endif
+s8* func_8111187C(s8*);
+void func_81112278(void*);
+
+typedef struct Sample811131CC {
+    /* 0x00 */ u32 codec : 4;
+    /* 0x00 */ u32 medium : 2;
+    /* 0x00 */ u32 rest : 26;
+} Sample811131CC;
+
+typedef struct Sound811131CC {
+    /* 0x00 */ Sample811131CC* sample;
+} Sound811131CC;
+
+typedef struct Layer811131CC {
+    /* 0x00 */ u32 enabled : 1;
+    /* 0x00 */ u32 finished : 1;
+    /* 0x00 */ u32 stopSomething : 1;
+    /* 0x00 */ u32 continuousNotes : 1;
+    /* 0x00 */ u32 bit3 : 1;
+    /* 0x00 */ u32 ignoreDrumPan : 1;
+    /* 0x00 */ u32 bit6 : 1;
+    /* 0x00 */ u32 bit1 : 1;
+    /* 0x01 */ u32 pad01 : 16;
+    /* 0x03 */ u8 status;
+    /* 0x04 */ u8 pad04[0x48 - 0x04];
+    /* 0x48 */ struct Note811131CC* note;
+    /* 0x4C */ u8 pad4C[4];
+    /* 0x50 */ Sound811131CC* sound;
+} Layer811131CC;
+
+typedef struct Note811131CC {
+    /* 0x00 */ u8 pad00[0x44];
+    /* 0x44 */ Layer811131CC* parentLayer;
+} Note811131CC;
+
+s32 func_811131CC(Layer811131CC* layer, u32 sameSound) {
+    Note811131CC* note;
+
+    if (!layer->stopSomething && layer->sound != NULL && layer->sound->sample->codec == 2 &&
+        layer->sound->sample->medium != 0) {
+        layer->stopSomething = 1;
+        return -1;
+    }
+
+    if (layer->continuousNotes == 1 && layer->bit1 == 1) {
+        return 0;
+    }
+
+    if (layer->continuousNotes != 1 || layer->note == NULL || !layer->status || sameSound != 1 ||
+        layer != layer->note->parentLayer) {
+        if (sameSound == 0) {
+            func_81111090((Particle31FlagsA*)layer);
+        }
+        layer->note = (Note811131CC*)func_8111187C((s8*)layer);
+    }
+    if (layer->note != NULL && layer->note->parentLayer == layer) {
+        note = layer->note;
+        func_81112278(note);
+    }
+    return 0;
+}
 
 typedef struct SeqPlayer811132E4 {
     /* 0x00 */ u8 unk00[0xE];
