@@ -3744,7 +3744,7 @@ func_891053E0,0x891053E0,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,f
 func_891053E8,0x891053E8,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,BattleInfoWidget_UpdateEntryFlags,hand,,c
 func_8910548C,0x8910548C,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_8910548C,hand,,c
 func_89105504,0x89105504,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_89105504,hand,,c
-func_89105560,0x89105560,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,,asm,,asm
+func_89105560,0x89105560,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_89105560,hand,,c
 func_8910576C,0x8910576C,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_8910576C,hand,,c
 func_891057FC,0x891057FC,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_891057FC,m2c,m2c,c
 func_8910587C,0x8910587C,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_8910587C,hand,,c
