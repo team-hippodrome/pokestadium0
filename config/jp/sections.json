@@ -79,6 +79,12 @@
     ".bss": "0x82199E50",
     ".rodata": "0x82195410"
   },
+  "src/fragments/fragment012_17ED00/battle_engine_3020D0.c": {
+    ".rodata": {
+      "address": "0x82196000",
+      "size": "0x30"
+    }
+  },
   "src/fragments/fragment012_17ED00/battle_engine_3055E0.c": {
     ".rodata": {
       "address": "0x82196238",
@@ -161,17 +167,26 @@
   "src/fragments/fragment012_17ED00/battle_engine_32A640.c": {
     ".rodata": "0x82196BA0"
   },
-  "src/fragments/fragment012_17ED00/battle_engine_3020D0.c": {
-    ".rodata": {
-      "address": "0x82196000",
-      "size": "0x30"
-    }
-  },
   "src/fragments/fragment012_17ED00/battle_engine_32B680.c": {
     ".rodata": {
       "address": "0x82196030",
       "size": "0x7C"
     }
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_32B680_3.c": {
+    ".rodata": {
+      "address": "0x82196CBC",
+      "size": "0x20C"
+    }
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_32B680_3_82154310.c": {
+    ".rodata": {
+      "address": "0x82196ED0",
+      "size": "0x1E4"
+    }
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_32B680_3_82154484.c": {
+    ".rodata": "0x82197240"
   },
   "src/fragments/fragment012_17ED00/battle_engine_32B680_82121260.c": {
     ".rodata": {
@@ -190,21 +205,6 @@
       "address": "0x82196164",
       "size": "0xC8"
     }
-  },
-  "src/fragments/fragment012_17ED00/battle_engine_32B680_3.c": {
-    ".rodata": {
-      "address": "0x82196CBC",
-      "size": "0x20C"
-    }
-  },
-  "src/fragments/fragment012_17ED00/battle_engine_32B680_3_82154310.c": {
-    ".rodata": {
-      "address": "0x82196ED0",
-      "size": "0x1E4"
-    }
-  },
-  "src/fragments/fragment012_17ED00/battle_engine_32B680_3_82154484.c": {
-    ".rodata": "0x82197240"
   },
   "src/fragments/fragment012_17ED00/battle_engine_339CA0.c": {
     ".rodata": "0x82197520"
@@ -368,8 +368,9 @@
   "src/fragments/fragment014_235D70/lab_pc_icons.c": {
     ".rodata": {
       "address": "0x88002AE4",
-      "size": "0x14"
-    }
+      "size": "0x1C"
+    },
+    ".bss": "0x880022C8"
   },
   "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c": {
     ".rodata": {
