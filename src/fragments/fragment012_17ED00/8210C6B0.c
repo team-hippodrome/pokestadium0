@@ -688,11 +688,49 @@ void func_8210E6F4(void) {
     D_8219A4F0[0x10] = 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8210E790; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210E790.s")
-#endif
+void func_8210E118(ActivePokemon*, ActivePokemon*);
+void func_8210D90C(ActivePokemon*, ActivePokemon*);
+void func_82125224(void);
+void func_82124EFC(void);
+extern u16 D_82199F24;
+extern u16 D_82199F50;
+
+void func_8210E790(void) {
+    ActivePokemonState* state0 = &sActivePokemon[0]->state;
+    ActivePokemonState* state1 = &sActivePokemon[1]->state;
+
+    if (*M2C_FIELD(sActivePokemon[0], u8**, 0x860) & 2) {
+        D_82199F24 = D_82199F50;
+        func_8210E118(sActivePokemon[0], sActivePokemon[1]);
+        D_82199F50 = D_82199F24;
+    } else {
+        func_8210D90C(sActivePokemon[0], sActivePokemon[1]);
+    }
+    if (*M2C_FIELD(sActivePokemon[1], u8**, 0x860) & 2) {
+        D_82199F24 = D_82199F50;
+        func_8210E118(sActivePokemon[1], sActivePokemon[0]);
+        D_82199F50 = D_82199F24;
+    } else {
+        func_8210D90C(sActivePokemon[1], sActivePokemon[0]);
+    }
+    if ((state0->unk_10 == 3) && (state1->unk_10 == 3)) {
+        if (state0->unk_04 == 2) {
+            func_8210CD58((s8*)sActivePokemon[0]);
+        } else {
+            func_8210C82C(sActivePokemon[0]);
+        }
+        if (state1->unk_04 == 2) {
+            func_8210CD58((s8*)sActivePokemon[1]);
+        } else {
+            func_8210C82C(sActivePokemon[1]);
+        }
+        if ((state0->unk_04 == 2) || (state1->unk_04 == 2)) {
+            func_82125224();
+            return;
+        }
+        func_82124EFC();
+    }
+}
 
 void func_8210E504(void);
 void func_8210E790(void);
