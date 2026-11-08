@@ -772,11 +772,75 @@ void func_800132C8(s32* arg0, void* arg1) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80013398.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_800135FC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800135FC.s")
-#endif
+typedef struct GeoLayerEntry {
+    /* 0x00 */ struct GeoLayerEntry* next;
+    /* 0x04 */ u8 unk_04;
+    /* 0x05 */ u8 textureMode;
+    /* 0x06 */ u8 unk_06;
+    /* 0x07 */ u8 lodFraction;
+    /* 0x08 */ s32 dl;
+    /* 0x0C */ s32 mtx;
+    /* 0x10 */ s32 unk_10;
+    /* 0x14 */ s32 unk_14;
+    /* 0x18 */ s32 unk_18;
+    /* 0x1C */ s32 unk_1C;
+    /* 0x20 */ s32 unk_20;
+} GeoLayerEntry; // size = 0x24
+extern s32 D_800AB240;
+extern s32 D_800AB448;
+extern s32 D_800AB44C;
+extern s32 D_800AB450;
+extern s32 D_800AB454;
+extern s32 D_800AB458;
+extern s32 D_800AB45C;
+void func_800135FC(s16 layer, s32 arg1, s32 arg2, s32 arg3) {
+    s16 flag;
+    GeoLayerEntry* entry;
+
+    flag = layer & 0x80;
+    layer &= 0xF;
+
+    if (!(D_80060480 & 2) && (D_80060494 != NULL) && ((D_8006049C == NULL) || (D_8006049C->lodFraction != 0))) {
+        entry = MainPool_AllocAligned((struct MainPoolState*)D_800AB240, sizeof(GeoLayerEntry), 4);
+        entry->unk_04 = (arg3 != 0);
+        if (arg2 != 0) {
+            entry->mtx = arg2;
+        } else {
+            entry->mtx = (s32)D_800AB460.unk_1000[D_800AB460.unk_10A0];
+        }
+        entry->dl = arg1;
+        entry->unk_06 = D_800AB448;
+        entry->unk_10 = D_800AB450;
+        entry->unk_14 = D_800AB44C;
+        entry->unk_20 = D_800AB45C;
+        entry->unk_18 = D_800AB454;
+        entry->unk_1C = D_800AB458;
+        entry->lodFraction = 0xFF;
+        entry->textureMode = 0;
+        entry->next = NULL;
+        if (D_8006049C != NULL) {
+            if (D_8006049C->lodFraction < 0xFF) {
+                entry->lodFraction = D_8006049C->lodFraction;
+                if (layer == 1) {
+                    layer = 8;
+                } else if (layer == 4) {
+                    layer = 5;
+                } else if ((layer == 2) || (layer == 3)) {
+                    layer += 4;
+                }
+            }
+            if (((layer > 0) && (layer < 4)) || ((layer == 4) && (flag == 0x80))) {
+                entry->textureMode = D_8006049C->textureMode;
+            }
+        }
+        if (M2C_FIELD(D_80060494, GeoLayerEntry**, 0x18 + layer * 4) == NULL) {
+            M2C_FIELD(D_80060494, GeoLayerEntry**, 0x18 + layer * 4) = entry;
+        } else {
+            M2C_FIELD(D_80060494, GeoLayerEntry**, 0x3C + layer * 4)->next = entry;
+        }
+        M2C_FIELD(D_80060494, GeoLayerEntry**, 0x3C + layer * 4) = entry;
+    }
+}
 
 void Geo_ProcessNodeChildren(GraphNode* arg0) {
     GraphNode* temp_s2 = arg0->children;
@@ -1059,7 +1123,6 @@ void Geo_NodeAmbientLight(GraphNode* arg0) {
 
 extern unk_D_86002F34_alt11* D_800604A0;
 extern Gfx D_01002580[];
-M2C_UNK func_800135FC(u8, s32, M2C_UNK, s32);
 void Geo_NodeShadowContext(GraphNode* arg0) {
     unk_D_86002F34_alt11* arg = (unk_D_86002F34_alt11*)arg0;
     MtxF* temp_v0 = &D_800AB460.unk_0000[D_800AB460.unk_10A0];
@@ -1224,7 +1287,6 @@ void func_80014C4C(GraphNode* arg0) {
 }
 
 M2C_UNK func_80011294(s32);                         /* extern */
-M2C_UNK func_800135FC(u8, s32, M2C_UNK, s32);       /* extern */
 M2C_UNK func_8001380C(s8 *);                      /* extern */
 
 void func_80014E78(s8 *arg0) {
@@ -1239,7 +1301,6 @@ void func_80014E78(s8 *arg0) {
     M2C_FIELD(&D_800AB460, s32 *, 0x10A0) = (s32) (M2C_FIELD(&D_800AB460, s32 *, 0x10A0) - 1);
 }
 
-M2C_UNK func_800135FC(u8, s32, M2C_UNK, s32);
 M2C_UNK func_8001380C();
 void func_8000E41C(MtxF*, MtxF*, MtxF*, Vec3f*);
 M2C_UNK func_8001380C(s8 *);
@@ -1260,7 +1321,6 @@ void func_80014EDC(s8 *arg0) {
     D_800AB460.unk_10A0 -= 1;
 }
 
-M2C_UNK func_800135FC(u8, s32, M2C_UNK, s32);       /* extern */
 M2C_UNK func_8001380C(s8 *);                      /* extern */
 void func_80014F78(s8 *arg0)
 {
