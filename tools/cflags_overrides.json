@@ -1009,5 +1009,11 @@
     "opt": "-O2",
     "mips": "-mips2",
     "profile": "ultralib"
+  },
+  "src/5C980.c": {
+    "extra": [],
+    "ido": "5.3",
+    "mips": "-mips2",
+    "opt": "-O2"
   }
 }

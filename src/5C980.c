@@ -58,8 +58,71 @@ void func_8005BD80(OSPri pri) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8005BF00; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8005BF00.s")
-#endif
+typedef struct S0ViContext {
+    /* 0x00 */ u16 state;
+    /* 0x02 */ u16 retraceCount;
+    /* 0x04 */ void* framep;
+    /* 0x08 */ void* modep;
+    /* 0x0C */ u32 control;
+    /* 0x10 */ OSMesgQueue* msgq;
+    /* 0x14 */ OSMesg msg;
+} S0ViContext;
+extern OSTime __osCurrentTime;
+extern u32 __osBaseCounter;
+extern u32 __osViIntrCount;
+void __osViSwapContext(void);
+void __osTimerInterrupt(void);
+S0ViContext* Audio_GetActiveVoiceCount(void);
+void func_8005BF00(void* arg) {
+    S0ViContext* vc;
+    OSDevMgr* dm;
+    OSIoMesg* mb;
+    static u16 D_80105310;
+    s32 first;
+    u32 count;
+
+    mb = NULL;
+    first = 0;
+    vc = Audio_GetActiveVoiceCount();
+    D_80105310 = vc->retraceCount;
+    if (D_80105310 == 0) {
+        D_80105310 = 1;
+    }
+    dm = (OSDevMgr*)arg;
+
+    while (TRUE) {
+        osRecvMesg(dm->evtQueue, (OSMesg)&mb, OS_MESG_BLOCK);
+        switch (mb->hdr.type) {
+            case OS_MESG_TYPE_VRETRACE:
+                __osViSwapContext();
+                D_80105310--;
+
+                if (D_80105310 == 0) {
+                    vc = Audio_GetActiveVoiceCount();
+                    if (vc->msgq != NULL) {
+                        osSendMesg(vc->msgq, vc->msg, OS_MESG_NOBLOCK);
+                    }
+                    D_80105310 = vc->retraceCount;
+                }
+
+                __osViIntrCount++;
+
+                if (first) {
+                    count = osGetCount();
+                    __osCurrentTime = count;
+                    first = 0;
+                }
+
+                count = __osBaseCounter;
+                __osBaseCounter = osGetCount();
+                count = __osBaseCounter - count;
+                __osCurrentTime = __osCurrentTime + count;
+                break;
+            case OS_MESG_TYPE_COUNTER:
+                __osTimerInterrupt();
+                break;
+            default:
+                break;
+        }
+    }
+}

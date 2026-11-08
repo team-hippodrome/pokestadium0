@@ -161,7 +161,7 @@ func_8005BD10,0x8005BD10,src/libultra/io/sirawwrite.c,__osSiRawWriteIo,ultralib,
 func_8005BD60,0x8005BD60,src/5C960.c,func_8005BD60,m2c,m2c,c
 func_8005BD70,0x8005BD70,src/5C970.c,func_8005BD70,m2c,m2c,c
 func_8005BD80,0x8005BD80,src/5C980.c,func_8005BD80,hand,,c
-func_8005BF00,0x8005BF00,src/5C980.c,,asm,,asm
+func_8005BF00,0x8005BF00,src/5C980.c,func_8005BF00,s1,,c
 func_8005C0A0,0x8005C0A0,src/5CCA0.c,,asm,,asm
 func_8005C670,0x8005C670,src/libultra/io/gbpakreadwrite.c,osGbpakReadWrite,ultralib,libultra:io/gbpakreadwrite.c,c
 func_8005C830,0x8005C830,src/libultra/io/gbpaksetbank.c,__osGbpakSetBank,ultralib,libultra:io/gbpaksetbank.c,c
