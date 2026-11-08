@@ -247,11 +247,38 @@ s32 func_88000E20(s8 *arg0) {
     return var_v1;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88000EAC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment014_235D70/func_88000EAC.s")
-#endif
+extern u8 D_05018868[];
+void func_8002E230(s8*, s32, s32, s32, f32*);
+
+s32 func_88000EAC(s8* arg0, s32 arg1) {
+    f32 alpha;
+    s32 ret = 1;
+    s32 color = 0xFFED;
+    s32 n;
+
+    func_88000E20(arg0);
+    switch (M2C_FIELD(arg0, u32*, 0)) {
+        case 4:
+            return 1;
+        case 3:
+            n = 0x17 - M2C_FIELD(arg0, s32*, 4);
+            alpha = (f32)n / 10.0f;
+            break;
+        case 0:
+            n = M2C_FIELD(arg0, s32*, 4) - 1;
+            alpha = (f32)n / 10.0f;
+            break;
+        case 1:
+        case 2:
+            ret = 0;
+            alpha = 1.0f;
+            color = arg1 | 0xFFED;
+            break;
+    }
+    func_8002E230(arg0 + 8, 0, 0, color, &alpha);
+    func_880005E8(0xE6, 0x56, 0xC8, 0x64, 0xC8, D_05018868, 255.0f * alpha);
+    return ret;
+}
 
 void func_88000FE0(void) {
 }

@@ -332,6 +332,12 @@
   "src/fragments/fragment012_17ED00/particle_math_26E6D0_3.c": {
     ".rodata": "0x82196990"
   },
+  "src/fragments/fragment014_235D70/lab_pc_icons.c": {
+    ".rodata": {
+      "address": "0x88002AE4",
+      "size": "0x14"
+    }
+  },
   "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c": {
     ".rodata": {
       "address": "0x8901892C",
