@@ -513,11 +513,39 @@ void func_8200140C(TeamList8200140C *arg0, s32 arg1) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82001558; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment007_166580/func_82001558.s")
-#endif
+typedef struct Slot82001558 {
+    /* 0x00 */ s32 flags;
+    /* 0x04 */ u8 species;
+    /* 0x05 */ char unk05[0x4F];
+} Slot82001558; // size = 0x54
+
+s32 func_82001558(void* arg0, s32* index) {
+    Slot82001558* slots = arg0;
+    s32 count = 0;
+    s32 i;
+    s32 j;
+    u8 species;
+    Slot82001558* cur;
+
+    for (i = 0, cur = slots; i < 5; i++, cur++) {
+        if (cur->flags & 0x3F) {
+            continue;
+        }
+        species = cur->species;
+        for (j = i + 1; j < 6; j++) {
+            if (!(slots[j].flags & 0x3F) && (species == slots[j].species)) {
+                slots[j].flags |= 0x40;
+                count++;
+            }
+        }
+        if (count > 0) {
+            cur->flags |= 0x40;
+            *index = i;
+            return count + 1;
+        }
+    }
+    return 0;
+}
 
 /**
  * Walks the six Slot54 entries at arg0. For each entry whose flag word has
