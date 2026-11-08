@@ -204,8 +204,7 @@ extern f32 D_FLT_82196040;
  * Pokemon's default anchor position in scene->unk_D0, derives a camera distance (factor
  * 3.5f, base 300.0f), aims the camera at the anchor using the Pokemon's facing angle and
  * a height offset of -func_82107EC8(ap), puts the eye at the same anchor with
- * -func_82107EC8(ap) * D_FLT_82196040 (a float constant in the unplaced .rodata, so it
- * is referenced as an extern symbol), calls func_8212239C(ap, camera) and advances
+ * -func_82107EC8(ap) * 0.2f, calls func_8212239C(ap, camera) and advances
  * scene->unk_20.
  * `pad` only reserves the stack slot the retail frame has between `dist` and `angle`.
  */
@@ -225,7 +224,7 @@ void func_82120134(CameraNode* arg0) {
         angle = BattleScene_GetParticipantFacingAngle(ap);
         BattleScene_SetCameraAtFromAnchor(ap, arg0, sBattleScene.scene->unk_D0, 0, angle, 0.0f, -func_82107EC8(ap));
         angle = BattleScene_GetParticipantFacingAngle(ap);
-        BattleScene_SetCameraEyeFromPosition(arg0, sBattleScene.scene->unk_D0, 0, angle, dist, -func_82107EC8(ap) * D_FLT_82196040);
+        BattleScene_SetCameraEyeFromPosition(arg0, sBattleScene.scene->unk_D0, 0, angle, dist, -func_82107EC8(ap) * 0.2f);
         func_8212239C(ap, arg0);
         sBattleScene.scene->unk_20 += 1;
     }
@@ -304,18 +303,109 @@ s32 func_8212068C(UNUSED s32 arg0, CameraNode* arg1) {
     return 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_821206F4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821206F4.s")
-#endif
+typedef struct IntroShotSequence {
+    s32 shots[12];
+} IntroShotSequence;
+extern IntroShotSequence D_8218B240;
+extern f32 D_FLT_82189350[][4];
+void func_82121434(CameraNode*);
+void func_8212188C(void);
+void func_82121C3C(CameraNode*);
+void func_82108C0C(ActivePokemon*);
+s32 func_8210C020(s32);
+void func_8211F6B8(CameraNode*);
+void func_8211F84C(CameraNode*);
+void func_8211FB54(CameraNode*);
+void func_8211FCC8(CameraNode*);
+void func_8211FF08(CameraNode*);
+void func_82120134(CameraNode*);
+void func_8211FA34(CameraNode*);
+void func_8211FAC4(CameraNode*);
+void func_821202AC(CameraNode*);
+void func_82120418(CameraNode*);
+
+void func_821206F4(CameraNode* arg0) {
+    ActivePokemon* p;
+    ActivePokemonState* st;
+    IntroShotSequence seq = D_8218B240;
+
+    if (sBattleScene.scene->unk_1C == 9) {
+        func_82121434(arg0);
+        return;
+    }
+    if (seq.shots[sBattleScene.scene->unk_0C] == 0xFF) {
+        sBattleScene.scene->unk_0C = 0;
+    }
+    sBattleScene.scene->unk_20 = seq.shots[sBattleScene.scene->unk_0C];
+    sBattleScene.scene->unk_0C++;
+    func_82108C0C(sActivePokemon[0]);
+    func_82108C0C(sActivePokemon[1]);
+    func_8212188C();
+    switch (sBattleScene.scene->unk_20) {
+        case 0:
+            func_8211F6B8(arg0);
+            break;
+        case 2:
+            func_8211F84C(arg0);
+            break;
+        case 4:
+            func_8211FB54(arg0);
+            break;
+        case 6:
+            func_8211FCC8(arg0);
+            break;
+        case 8:
+            func_8211FF08(arg0);
+            break;
+        case 10:
+            func_82120134(arg0);
+            break;
+        case 12:
+            func_8211FA34(arg0);
+            break;
+        case 14:
+            func_8211FAC4(arg0);
+            break;
+        case 16:
+            func_821202AC(arg0);
+            break;
+        case 18:
+            func_821202AC(arg0);
+            break;
+        case 20:
+            func_82120418(arg0);
+            break;
+        case 22:
+            func_8212054C(arg0);
+            break;
+    }
+    if ((sBattleScene.scene->unk_20 == 5) || (sBattleScene.scene->unk_20 == 0xB)) {
+        p = sActivePokemon[sBattleScene.scene->unk_2C];
+        st = &p->state;
+        if (st) {}
+        if ((st->flags & 0x200) || (p->displayObject.objectType == 0x8E)) {
+            if (func_8210C020(0x64) & 1) {
+                sBattleScene.scene->unk_20 = 0x10;
+                func_821202AC(arg0);
+            } else {
+                sBattleScene.scene->unk_20 = 0x12;
+                func_821202AC(arg0);
+            }
+        } else if ((func_8212068C(p, arg0) == 0) &&
+                   (D_FLT_82189350[sActivePokemon[sBattleScene.scene->unk_2C]->displayObject.objectType][0] <= 27.0f)) {
+            sBattleScene.scene->unk_20 = 0x14;
+            func_82120418(arg0);
+        }
+    }
+    func_82121C3C(arg0);
+}
 
 extern const f64 D_DBL_821960A0;
 void BattleScene_IntroCameraRollStep(CameraNode* arg0) {
     if (BattleScene_ApproachCameraRoll(arg0, 0xB6, 0x78DC) != 0) {
         BattleScene_SelectNextIntroCameraShot(arg0);
     } else {
-        arg0->view.eyePosition.z *= D_DBL_821960A0;
+        arg0->view.eyePosition.z *= 0.6;
     }
 }
 
@@ -479,7 +569,7 @@ f32 func_82121750(ActivePokemon*, f32, f32);
  * towards it (speed 0.08), calls func_82122628 with arg0, the scene's Vec3f at
  * +0xC0, 0, the Pokemon's facing angle, unk_74 and 0.0, and calls
  * func_821206F4(arg0) while unk_74 is still below that float plus
- * D_FLT_821960A8.  What the fields and func_82121750 mean is not established
+ * 0.2f.  What the fields and func_82121750 mean is not established
  * here.
  */
 void func_82120FB0(CameraNode* arg0) {
@@ -494,7 +584,7 @@ void func_82120FB0(CameraNode* arg0) {
     BattleAnim_ApproachF(&sBattleScene.scene->unk_74, temp_f0, 0.08f);
     func_82122628((s32)arg0, M2C_FIELD(sBattleScene.scene, Vec3f*, 0xC0), 0,
                   BattleScene_GetParticipantFacingAngle(sActivePokemon[sBattleScene.scene->unk_2C]), sBattleScene.scene->unk_74, 0.0f);
-    if (sBattleScene.scene->unk_74 < (temp_f0 + D_FLT_821960A8)) {
+    if (sBattleScene.scene->unk_74 < (temp_f0 + 0.2f)) {
         func_821206F4(arg0);
     }
 }

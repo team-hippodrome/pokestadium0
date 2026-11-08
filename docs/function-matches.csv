@@ -1707,7 +1707,7 @@ func_821202AC,0x821202AC,src/fragments/fragment012_17ED00/battle_engine_32B680.c
 func_82120418,0x82120418,src/fragments/fragment012_17ED00/battle_engine_32B680.c,func_82120418,hand,,c
 func_8212054C,0x8212054C,src/fragments/fragment012_17ED00/battle_engine_32B680.c,func_8212054C,hand,,c
 func_8212068C,0x8212068C,src/fragments/fragment012_17ED00/battle_engine_32B680.c,func_8212068C,hand,,c
-func_821206F4,0x821206F4,src/fragments/fragment012_17ED00/battle_engine_32B680.c,,asm,,asm
+func_821206F4,0x821206F4,src/fragments/fragment012_17ED00/battle_engine_32B680.c,func_821206F4,hand,,c
 func_82120A34,0x82120A34,src/fragments/fragment012_17ED00/battle_engine_32B680.c,BattleScene_IntroCameraRollStep,hand,,c
 func_82120A90,0x82120A90,src/fragments/fragment012_17ED00/battle_engine_32B680.c,BattleScene_IntroCameraRollStepNoFov,s1,stadium1:src/fragments/battle_engine/battle_engine_304060.c,c
 func_82120AC8,0x82120AC8,src/fragments/fragment012_17ED00/battle_engine_32B680.c,func_82120AC8,hand,,c
