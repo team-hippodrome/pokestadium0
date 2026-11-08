@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5116,
-  "asm_owners": 328,
+  "c_owners": 5117,
+  "asm_owners": 327,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -133,6 +133,7 @@
     "src/fragments/fragment012_17ED00/battle_engine_32B680_3.c",
     "src/fragments/fragment012_17ED00/battle_engine_32B680_3_82154310.c",
     "src/fragments/fragment012_17ED00/battle_engine_32B680_3_82154484.c",
+    "src/fragments/fragment012_17ED00/battle_engine_32B680_82121260.c",
     "src/fragments/fragment012_17ED00/battle_engine_32B680_82121434.c",
     "src/fragments/fragment012_17ED00/battle_engine_32B680_82121604.c",
     "src/fragments/fragment012_17ED00/battle_engine_339CA0.c",
@@ -601,8 +602,8 @@
     "src/util.c",
     "src/vector_math.c"
   ],
-  "source_registry_sha256": "0f25e64aa15e3417a93856efd1acb702d615f1a0159192bba5bc492067b84fd5",
-  "section_registry_sha256": "68524528d2894809e198851215fd6f63888f1944805a8acc25f8ac86eab7663c",
+  "source_registry_sha256": "594aae79cbd7744f028255fbc652ade7fd2e0803a36156c07d38c06d9541a52f",
+  "section_registry_sha256": "1bea69fd87300006e413171921e9e943891884af7ab827938d69c7a55caf593b",
   "headers_sha256": "f1ad4898605ed0ad0d778c9da2826a84496e85208e3b00b25a60a984daf8ec41",
   "matching_registry_sha256": "d8bcc14a2a0db281cf30dcb9ddbd94d59e1afe84c70b4c8c017ea27ce60a251c",
   "build_tools_sha256": {
@@ -612,7 +613,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "8e1aad28c245ba86390409103595c772924e5dc04b2b88862bea0a6d2ef1c59e",
+    "docs/function-matches.csv": "753ba6adc3b9ae7fd70350931ef5ffe96fe438c8c4de1f875f2a85d3f87e9f8b",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -736,11 +737,12 @@
     "src/fragments/fragment012_17ED00/battle_engine_3274D0.c": "4054ef02bb3f550ccbba1b02354ec3a96ee56dd98f26f92e74427aa2100b1138",
     "src/fragments/fragment012_17ED00/battle_engine_328F10.c": "11925466e867423cc203b130ba772b328b9717972160a8a299b397221184b0df",
     "src/fragments/fragment012_17ED00/battle_engine_32A640.c": "5452e8230eaed95b741e3bc0d326af0f60c0fff7df55e5de97f3e47665c9140b",
-    "src/fragments/fragment012_17ED00/battle_engine_32B680.c": "b0c37d03d53a73ee81cee194f3ea50de41a71c2084504d505df4e177a369f7d0",
+    "src/fragments/fragment012_17ED00/battle_engine_32B680.c": "aae03dd58f2ac82fe7d34a770d28dec29a28f12d26670b4539b731f1813fe9e9",
     "src/fragments/fragment012_17ED00/battle_engine_32B680_2.c": "62582624e8d8746eb482344ba3d1911353dd7b220a66eb5b429e1e6c7d66108c",
     "src/fragments/fragment012_17ED00/battle_engine_32B680_3.c": "019717fdacf92e1a73a571f37775d5ce9bbbd7157a7549e0c3880a1a0bce9957",
     "src/fragments/fragment012_17ED00/battle_engine_32B680_3_82154310.c": "2b1daa5b638c0d065ead7ca5d5d6175cc01542e93e37fc0ef10a2fd6da545bf8",
     "src/fragments/fragment012_17ED00/battle_engine_32B680_3_82154484.c": "755d00d436fe77e578a79864074e99861f3b5cd23d9e776a859f54dd74a0aae1",
+    "src/fragments/fragment012_17ED00/battle_engine_32B680_82121260.c": "b2c96ad6efdc4a7824bb8638396ec28c9c082612db2b0904076e5f086176d867",
     "src/fragments/fragment012_17ED00/battle_engine_32B680_82121434.c": "9ffd1edb2528f1480312c6894e08d738988c2a473d64ef3f072910111ac7bede",
     "src/fragments/fragment012_17ED00/battle_engine_32B680_82121604.c": "2054eeabe0baee77e1ec05abe11a8ec332707e2e987998a7ca092b9f3b7a5af6",
     "src/fragments/fragment012_17ED00/battle_engine_339CA0.c": "8a258344a467568cb61508cef5b5bb7ad63c48a2210bf1553ae9ca2ce47bfad7",

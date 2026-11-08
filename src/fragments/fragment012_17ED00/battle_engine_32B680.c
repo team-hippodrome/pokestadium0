@@ -567,9 +567,3 @@ void func_8212120C(CameraNode* arg0) {
         M2C_FIELD(D_8219A5A0, s32 *, 0x40) = 3;
     }
 }
-
-#ifdef NON_MATCHING
-/* TODO: decompile func_82121260; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82121260.s")
-#endif
