@@ -369,8 +369,48 @@ void BattleScene_ResetMessageQueue(void) {
     Battle_ClearMessageCursor();
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8211F46C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211F46C.s")
-#endif
+void func_8211F1E0(ActivePokemon*, ActivePokemonState*, ActivePokemonState*);
+void func_8211CC8C(ActivePokemon*, ActivePokemonState*, ActivePokemonState*);
+void func_8211D3A8(void);
+void func_8211D06C(void);
+void func_8211CB0C(ActivePokemon*, ActivePokemonState*, ActivePokemonState*);
+void func_8211C9FC(ActivePokemon*, ActivePokemonState*, ActivePokemonState*);
+
+void func_8211F46C(void) {
+    ActivePokemonState* s0 = &sActivePokemon[0]->state;
+    ActivePokemonState* s1 = &sActivePokemon[1]->state;
+
+    switch (sBattleScene.scene->unk_1C) {
+        case 11:
+            break;
+        case 1:
+            func_8211E890(sActivePokemon[0], s0);
+            func_8211EB10(sActivePokemon[1], s1);
+            func_8211F2E0(sActivePokemon[0]);
+            func_8211F2E0(sActivePokemon[1]);
+            func_8211D3A8();
+            break;
+        case 2:
+            func_8211F1E0(sActivePokemon[0], s0, s1);
+            func_8211D3A8();
+            break;
+        case 4:
+        case 8:
+            func_8211F0DC();
+            func_8211D3A8();
+            break;
+        case 5:
+        case 6:
+            func_8211CB0C(sActivePokemon[0], s0, s1);
+            func_8211D3A8();
+            break;
+        case 9:
+        case 10:
+            func_8211CC8C(sActivePokemon[0], s0, s1);
+            func_8211D06C();
+            break;
+        case 7:
+            func_8211C9FC(sActivePokemon[0], s0, s1);
+            break;
+    }
+}

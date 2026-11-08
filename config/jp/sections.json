@@ -161,6 +161,12 @@
   "src/fragments/fragment012_17ED00/battle_engine_32A640.c": {
     ".rodata": "0x82196BA0"
   },
+  "src/fragments/fragment012_17ED00/battle_engine_3020D0.c": {
+    ".rodata": {
+      "address": "0x82196000",
+      "size": "0x30"
+    }
+  },
   "src/fragments/fragment012_17ED00/battle_engine_32B680.c": {
     ".rodata": {
       "address": "0x82196030",

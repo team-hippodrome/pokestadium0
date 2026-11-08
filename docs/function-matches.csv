@@ -1028,7 +1028,7 @@ func_8211F3E4,0x8211F3E4,src/fragments/fragment012_17ED00/battle_engine_3020D0.c
 func_8211F3EC,0x8211F3EC,src/fragments/fragment012_17ED00/battle_engine_3020D0.c,func_8211F3EC,s1,stadium1:src/fragments/battle_engine/battle_engine_32A640.c,c
 func_8211F3F4,0x8211F3F4,src/fragments/fragment012_17ED00/battle_engine_3020D0.c,func_8211F3F4,hand,,c
 func_8211F430,0x8211F430,src/fragments/fragment012_17ED00/battle_engine_3020D0.c,BattleScene_ResetMessageQueue,s1,stadium1:src/fragments/battle_engine/battle_engine_3020D0.c,c
-func_8211F46C,0x8211F46C,src/fragments/fragment012_17ED00/battle_engine_3020D0.c,,asm,,asm
+func_8211F46C,0x8211F46C,src/fragments/fragment012_17ED00/battle_engine_3020D0.c,func_8211F46C,hand,,c
 func_82121750,0x82121750,src/fragments/fragment012_17ED00/battle_engine_3055E0.c,BattleScene_ScaleCameraDistance,s1,stadium1:src/fragments/battle_engine/battle_engine_3055E0.c,c
 func_82121798,0x82121798,src/fragments/fragment012_17ED00/battle_engine_3055E0.c,BattleScene_AdvanceCameraSubstepCounter,s1,stadium1:src/fragments/battle_engine/battle_engine_3055E0.c,c
 func_821217DC,0x821217DC,src/fragments/fragment012_17ED00/battle_engine_3055E0.c,BattleScene_AdvanceCameraFrameCounter,s1,stadium1:src/fragments/battle_engine/battle_engine_3055E0.c,c
