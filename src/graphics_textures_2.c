@@ -160,11 +160,46 @@ char* String_CopyBytesAndAdvance(char* buffer, const char* data, u32 size) {
     return (char*)memcpy(buffer, data, size) + size;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8001A944; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8001A944.s")
-#endif
+s16 func_8001A3E4(s16, s16, s16);
+void func_8001A944(s32 x, s32 y, const char* fmt, ...) {
+    u8 buf[0x100];
+    UNUSED s32 pad;
+    s32 startX;
+    s32 len;
+    u8* p;
+    s32 chr;
+    s32 draw;
+    va_list args;
+
+    va_start(args, fmt);
+    startX = x;
+    len = _Printf(String_CopyBytesAndAdvance, (char*)buf, fmt, args);
+    if (len > 0) {
+        buf[len] = 0;
+        chr = buf[0];
+        p = &buf[1];
+        while (chr != 0) {
+            draw = 1;
+            if (!(font_context->line_break_flag & 4) && (chr == 0xA)) {
+                x = startX;
+                draw = 0;
+                y += font_context->line_height;
+            }
+            if (draw) {
+                if (chr >= 0x80) {
+                    if (*p != 0) {
+                        chr = *p | (chr << 8);
+                        p++;
+                    }
+                }
+                x = func_8001A3E4(x, y, chr & 0x7F7F);
+            }
+            chr = *p;
+            p++;
+        }
+    }
+    va_end(args);
+}
 
 s16 func_8001A3E4(s16, s16, s16);
 void func_8001AA60(s32 arg0, s32 arg1, s32 arg2) {

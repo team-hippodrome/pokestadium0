@@ -4536,7 +4536,7 @@ func_8001A360,0x8001A360,src/graphics_textures_2.c,Font_Free,s1,stadium1:src/gra
 func_8001A384,0x8001A384,src/graphics_textures_2.c,Font_SetActive,hand,,c
 func_8001A3E4,0x8001A3E4,src/graphics_textures_2.c,,asm,,asm
 func_8001A920,0x8001A920,src/graphics_textures_2.c,String_CopyBytesAndAdvance,s1,stadium1:src/graphics_textures.c,c
-func_8001A944,0x8001A944,src/graphics_textures_2.c,,asm,,asm
+func_8001A944,0x8001A944,src/graphics_textures_2.c,func_8001A944,hand,,c
 func_8001AA60,0x8001AA60,src/graphics_textures_2.c,func_8001AA60,m2c,m2c,c
 func_8001AA9C,0x8001AA9C,src/graphics_textures_2.c,Gfx_SetEnvColor,s1,stadium1:src/graphics_textures.c,c
 func_8001AAE4,0x8001AAE4,src/graphics_textures_2.c,Gfx_SetPrimColor,s1,stadium1:src/graphics_textures.c,c
