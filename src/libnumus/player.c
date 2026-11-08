@@ -1283,11 +1283,54 @@ s32 func_800384D8(void) {
     return 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80038588; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80038588.s")
-#endif
+/* osSetIntMask, declared with an int mask: the constant 1 is then shared with the int stores below. */
+s32 func_8004D300(s32);
+/*
+ * Stadium 1's Audio_StopAllSoundEffects with the D_800B3CC8 busy flag set
+ * around it (each write under its own interrupt mask) and without the
+ * voice re-queue call.
+ */
+void func_80038588(void) {
+    UNUSED s32 pad[4];
+    s32 mask;
+    u32 i;
+    s8* p;
+    s8* voice;
+
+    mask = func_8004D300(1);
+    D_800B3CC8 = 1;
+    func_8004D300(mask);
+
+    mask = func_8004D300(1);
+    p = D_800B3640;
+    for (i = 0; i < D_800B3638; i++, p += 0x148) {
+        if ((M2C_FIELD(p, u16*, 0xB2) != 0) || (M2C_FIELD(p, s32*, 0x30) == 0)) {
+            continue;
+        }
+
+        M2C_FIELD(p, s32*, 0x30) = func_80036640(p, 0);
+
+        if (M2C_FIELD(p, u8*, 0xDD) == 0) {
+            M2C_FIELD(p, s32*, 0x34) = 0;
+            continue;
+        }
+
+        M2C_FIELD(M2C_FIELD(p, s8**, 0x144), s8*, 0x1E) = 4;
+        M2C_FIELD(M2C_FIELD(p, s8**, 0x144), s32*, 0x20) = D_800B3CC4 + 2;
+        n_alSynSetVol(M2C_FIELD(p, N_ALVoice**, 0x144), 0, D_800B3650 * 2);
+        n_alSynSetPriority(M2C_FIELD(p, N_ALVoice**, 0x144), 0);
+
+        M2C_FIELD(p, s8**, 0x144) = NULL;
+        M2C_FIELD(p, s32*, 0xD8) = 1;
+        M2C_FIELD(p, u8*, 0xDD) = 0;
+        M2C_FIELD(p, s32*, 0x34) = 0;
+    }
+    func_8004D300(mask);
+
+    mask = func_8004D300(1);
+    D_800B3CC8 = 0;
+    func_8004D300(mask);
+}
 
 s32 func_8004D300(s32);                             /* extern */
 extern s32 D_800B3638;

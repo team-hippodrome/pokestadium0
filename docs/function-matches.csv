@@ -4811,7 +4811,7 @@ func_8003821C,0x8003821C,src/libnumus/player.c,,asm,,asm
 func_8003834C,0x8003834C,src/libnumus/player.c,func_8003834C,hand,,c
 func_800383DC,0x800383DC,src/libnumus/player.c,func_800383DC,hand,,c
 func_800384D8,0x800384D8,src/libnumus/player.c,func_800384D8,hand,,c
-func_80038588,0x80038588,src/libnumus/player.c,,asm,,asm
+func_80038588,0x80038588,src/libnumus/player.c,func_80038588,s1,,c
 func_800386E4,0x800386E4,src/libnumus/player.c,func_800386E4,m2c,m2c,c
 func_800387BC,0x800387BC,src/libnumus/player.c,func_800387BC,hand,,c
 func_80038880,0x80038880,src/libnumus/player.c,func_80038880,m2c,m2c,c
