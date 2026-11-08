@@ -698,11 +698,41 @@ void BattleScene_TickRow1PlayOwnerCry(ActivePokemon* active_pokemon) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_821036F4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821036F4.s")
-#endif
+void func_821036F4(ActivePokemon *active_pokemon)
+{
+  s32 species;
+  ActivePokemonState *state = &active_pokemon->state;
+  BattleMon *party_pokemon_ptr = &active_pokemon->teamRoster->pokemonPicked[*((s32 *) (((s8 *) active_pokemon) + 0x9D0))];
+  if (((state->flags & 0x4000) || (state->flags & 0x0002)) || (party_pokemon_ptr->statusCondition & 0x07))
+  {
+    sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
+  }
+  else
+    if (active_pokemon->animationTimer == 1)
+  {
+    if (BattleAnim_IsAssetLoadBusy(active_pokemon) == 0)
+    {
+      species = active_pokemon->displayObject.objectType;
+      if (species >= 152)
+      {
+        func_8003F96C(state->model, 3);
+      }
+      else
+      {
+        func_8003F96C(species ^ 0, 3);
+      }
+      if (state->flags & 0x200)
+      {
+        func_800414B0(BattleScene_GetParticipantSideIndex(active_pokemon), 0, active_pokemon->displayObject.objectType, 0x1B);
+      }
+      else
+      {
+        func_800414B0(BattleScene_GetParticipantSideIndex(active_pokemon), 0, active_pokemon->displayObject.objectType, 0xB);
+      }
+      sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
+    }
+  }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8210384C; signature not recovered. */
