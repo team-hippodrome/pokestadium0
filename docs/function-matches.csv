@@ -2742,7 +2742,7 @@ func_821057D4,0x821057D4,src/fragments/fragment012_17ED00/battle_engine_move_ani
 func_821058E8,0x821058E8,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,func_821058E8,hand,,c
 func_82105AB0,0x82105AB0,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,func_82105AB0,hand,,c
 func_82105C8C,0x82105C8C,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,BattleScene_IsRowAnimWaitComplete,hand,,c
-func_82105D3C,0x82105D3C,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,,asm,,asm
+func_82105D3C,0x82105D3C,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,func_82105D3C,hand,,c
 func_82105E38,0x82105E38,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,func_82105E38,m2c,m2c+permuter,c
 func_82105E4C,0x82105E4C,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,func_82105E4C,m2c,m2c+permuter,c
 func_82105E64,0x82105E64,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,func_82105E64,s1,stadium1:src/fragments/battle_engine/battle_engine_move_animation.c,c

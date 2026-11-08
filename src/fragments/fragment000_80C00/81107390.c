@@ -3,16 +3,20 @@
 #include "global.h"
 
 typedef struct AudioVoice81107E70 {
-    /* 0x00 */ char unk00[0xE];
+    /* 0x00 */ char unk00[0x4];
+    /* 0x04 */ s32 addr;
+    /* 0x08 */ char unk08[0x6];
     /* 0x0E */ u16 offset;
     /* 0x10 */ s16 count;
     /* 0x12 */ s16 wrapCount;
 } AudioVoice81107E70; // size = 0x14
 
 typedef struct AudioChannel81107E70 {
-    /* 0x000 */ char unk000[0x3];
+    /* 0x000 */ u8 active;
+    /* 0x001 */ char unk001[0x2];
     /* 0x003 */ u8 bank;
-    /* 0x004 */ char unk004[0x1C];
+    /* 0x004 */ u8 mode;
+    /* 0x005 */ char unk005[0x1B];
     /* 0x020 */ s32 bufL;
     /* 0x024 */ s32 bufR;
     /* 0x028 */ char unk028[0x10];

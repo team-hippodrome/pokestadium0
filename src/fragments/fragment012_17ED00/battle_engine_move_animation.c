@@ -1506,11 +1506,43 @@ s32 BattleScene_IsRowAnimWaitComplete(ActivePokemon* active_pokemon, s32 frame_l
     return ModelAnim_IsAnimationDone(&active_pokemon->displayObject);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82105D3C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82105D3C.s")
-#endif
+s32 func_8210C020(s32, s8*);
+void func_821365B0(s32, s8*, s8*, s32, s32);
+extern s8* D_8219A5A0;
+
+void func_82105D3C(s8* arg0) {
+    s16 id;
+    u8* cue = D_82189180[func_82107A5C()] + 0x717;
+
+    if (func_82101FC4(arg0) != 0) {
+        return;
+    }
+    id = *(s16*)(arg0 + 0x40);
+    if (id == -1) {
+        return;
+    }
+    if (!(*(u8*)(arg0 + 1) & 1)) {
+        return;
+    }
+    if (!(*(u8*)(arg0 + 2) & 0x20)) {
+        return;
+    }
+    if ((*(s32*)(D_8219A5A0 + 0x1C) != 1) && (*(s32*)(D_8219A5A0 + 0x1C) != 5)) {
+        return;
+    }
+    if (id != cue[0]) {
+        return;
+    }
+    if ((*(s32*)(arg0 + 0x48) >> 16) != cue[4]) {
+        return;
+    }
+    if (cue[5] == 0) {
+        return;
+    }
+    if (func_8210C020(2, arg0) == 1) {
+        func_821365B0(cue[5], arg0, arg0, cue[2], cue[2]);
+    }
+}
 
 void func_82105E38(s8 *arg0, unsigned short arg1)
 {
