@@ -688,6 +688,7 @@ s32 func_81111734(s8 *arg0, s8 *arg1) {
     return ret;
 }
 
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 s8 *func_81111784(s8 *arg0, s8 *arg1)
 {
   s8 *a;

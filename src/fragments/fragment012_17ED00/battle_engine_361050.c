@@ -400,15 +400,16 @@ void func_8210F24C(s8* arg0) {
     }
 }
 
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_8210F2F4(s8 *arg0)
 {
   int new_var2;
   u16 *new_var;
   ;
   new_var = ((s8 *) arg0) + 0x7D2;
-  new_var2 = ((*((s32 *) (((s8 *) arg0) + 0x860))) + ((*((s32 *) (((s8 *) arg0) + 0x794))) * 0x50)) + ((0, 0x1C));
+  new_var2 = ((*((s32 *) (((s8 *) arg0) + 0x860))) + ((*((s32 *) (((s8 *) arg0) + 0x794))) * 0x50)) + ((0, 0x1C));  // FAKE
   *((u16 *) (((s8 *) new_var2) + 2)) = (u16) (*((u16 *) new_var));
- if (1) { }
+ if (1) { }  // karodo
 }
 
 extern ActivePokemon* D_8219A540;

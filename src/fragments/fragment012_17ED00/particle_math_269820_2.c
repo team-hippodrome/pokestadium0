@@ -1102,7 +1102,7 @@ void func_8213ECD0(s8 *arg0)
 void func_8213ECE4(s8 *arg0)
 {
   *((s16 *) (((s8 *) arg0) + 0x92)) = (s16) ((*((s16 *) (((s8 *) arg0) + 0x98))) + (*((s16 *) (((s8 *) arg0) + 0x92))));
- if (0) { }
+ if (0) { }  // karodo
 }
 
 void Particle_Field94_AddXFromField9A_0A4B4(Particle* arg0) {

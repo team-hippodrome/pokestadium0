@@ -485,7 +485,7 @@ void func_8212C530(s32 arg0)
 {
   s32 temp_v0;
   s32 var_v1;
- do { temp_v0 = func_8210C020(4, arg0); D_8219A568 = temp_v0; var_v1 = temp_v0 & 0xFFFFFFFFFFFFFFFF; } while (0);
+ do { temp_v0 = func_8210C020(4, arg0); D_8219A568 = temp_v0; var_v1 = temp_v0 & 0xFFFFFFFFFFFFFFFF; } while (0);  // FAKE
   if (temp_v0 >= 5)
   {
     D_8219A568 = 0;

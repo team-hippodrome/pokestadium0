@@ -698,6 +698,7 @@ void BattleScene_TickRow1PlayOwnerCry(ActivePokemon* active_pokemon) {
     }
 }
 
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_821036F4(ActivePokemon *active_pokemon)
 {
   s32 species;
@@ -1341,7 +1342,7 @@ void func_8210524C(ActivePokemon* active_pokemon) {
 extern s32 D_8219A750;
 void func_82105344(ActivePokemon* active_pokemon) {
     // The do-while (0) wrapper is needed for the match.
-    do {
+    do {  // FAKE
         BattleScene_GetParticipantSideIndex(active_pokemon);
     } while (0);
     if (D_8219A750 == 0) {
@@ -1350,7 +1351,7 @@ void func_82105344(ActivePokemon* active_pokemon) {
     }
     if (D_8219A750 == active_pokemon->animationTimer) {
         if (func_82101F84((s8*)active_pokemon) == 0) {
-            if (active_pokemon) {}
+            if (active_pokemon) {}  // karodo
             func_821365E8(1, active_pokemon);
             sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
         }

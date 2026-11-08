@@ -272,7 +272,7 @@ void GbMusic_DecodeChannelCommands(u32 arg0) {
                 }
                 break;
         }
-    } while (!var_v0 ^ 0);
+    } while (!var_v0 ^ 0);  // FAKE
 }
 
 u8 GbMusic_CmdEndOrReturn(u32 arg0) {

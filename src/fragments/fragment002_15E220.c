@@ -225,7 +225,7 @@ s32 func_81200A20(s32 arg0) {
     sp18 = 0;
     func_8000B1FC();
     func_8000B220();
-    if (!sp1C) {
+    if (!sp1C) {  // karodo
     }
     D_81201018 += 1;
     if (arg0 == 0) {

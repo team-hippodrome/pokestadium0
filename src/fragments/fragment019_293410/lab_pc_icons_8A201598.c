@@ -66,6 +66,7 @@ void func_8A201D3C(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     }
 }
 
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_8A201EAC(s8 *arg0, s32 arg1)
 {
   s32 temp_v0;

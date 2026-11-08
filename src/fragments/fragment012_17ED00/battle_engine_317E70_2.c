@@ -624,11 +624,11 @@ void func_8213AA78(Particle* arg0, ActivePokemon* arg1, BattleAnimEffectSlot* ar
         return;
     }
 
-    if (1) {}
-    if (1) {}
-    if (1) {}
-    if (1) {}
-    if (1) {}
+    if (1) {}  // karodo
+    if (1) {}  // karodo
+    if (1) {}  // karodo
+    if (1) {}  // karodo
+    if (1) {}  // karodo
 
     while (arg0 != NULL) {
         arg0->unk_10 = arg1;

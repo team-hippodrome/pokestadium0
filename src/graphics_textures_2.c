@@ -74,7 +74,7 @@ void func_8001A118(s32 mask, s32 arg1, s32 arg2, s32 arg3, void* file);
 void func_8001A118(s32 mask, s32 arg1, s32 arg2, s32 arg3, void* file) {
     s32 index;
 
-    if (mask) {}
+    if (mask) {}  // karodo
     index = func_8001A0A4();
 
     ((FontEntry8001A118*)font_context)[index].file = file;

@@ -179,6 +179,7 @@ typedef struct Mon82133534 { u8 flags; u8 pad1; s16 move; } Mon82133534;
 extern Arr82133534 D_8218B350;
 s16 func_8000F1FC(s16, M2C_UNK, M2C_UNK, M2C_UNK);
 M2C_UNK func_80019B28(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32);
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_82133534(CameraNode *arg0)
 {
   s32 pad[2];
@@ -193,7 +194,7 @@ void func_82133534(CameraNode *arg0)
     if (v == 0xFF)
     {
       *((s32 *) (((s8 *) D_8219A5A0) + 0x20)) = 6;
- if (1) { }
+ if (1) { }  // karodo
     }
     else
     {

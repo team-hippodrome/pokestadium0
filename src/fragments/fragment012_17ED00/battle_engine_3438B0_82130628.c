@@ -152,7 +152,7 @@ void func_82130DAC(CameraNode* arg0) {
     u8* sp2C = (u8*)sActivePokemon[sBattleScene.scene->unk_2C] + 0x78C;
     ActivePokemon* temp_s0 = sActivePokemon[sBattleScene.scene->unk_2C];
 
-    if (sBattleScene.scene->unk_2C) {}
+    if (sBattleScene.scene->unk_2C) {}  // karodo
 
     M2C_FIELD(sBattleScene.scene, s32*, 0x50) = 4;
     switch (sBattleScene.scene->unk_20) {
@@ -178,7 +178,7 @@ void func_82130DAC(CameraNode* arg0) {
             }
             if (BattleScene_AdvanceCameraFrameCounter(0x69) != 0) {
                 Vec3f_SetComponentsDuplicate((Vec3f*)((u8*)arg0 + 0xB4), M2C_FIELD(temp_s0, s32*, 0x60C) * -150.0f, 0.0, 0.0f);
-                if (sBattleScene.scene && sBattleScene.scene) {}
+                if (sBattleScene.scene && sBattleScene.scene) {}  // FAKE
                 Vec3f_SetComponentsDuplicate((Vec3f*)((u8*)arg0 + 0xA8), M2C_FIELD(temp_s0, s32*, 0x60C) * -50.0f, 5.0f, 0.0f);
                 BattleScene_SetParticipantModelTransform(temp_s0, 2, 0);
                 BattleAnim_QueueEffectList3(0xD, temp_s0, temp_s0, 0xFF, 0xFF);

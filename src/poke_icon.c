@@ -161,7 +161,7 @@ void PokeIcon_AdjustImageColors(u8* arg0, arg1_func_80010CA8 arg1) {
     s32 count = M2C_FIELD(arg0, u16*, 6) * M2C_FIELD(arg0, u16*, 4);
     s32 size = count;
 
-    if (!arg0) {}
+    if (!arg0) {}  // karodo
 
     size *= 2;
 

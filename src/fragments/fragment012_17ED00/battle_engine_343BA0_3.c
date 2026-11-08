@@ -40,9 +40,9 @@ void BattleScene_FinalPresentationFrameActiveOwner(CameraNode* arg0) {
                   0.0f, 0.0f);
     BattleScene_SetCameraEyeFromAt(arg0, 0, BattleScene_GetParticipantFacingAngle(sActivePokemon[D_8219A760]), sp3C, 0.0f);
 
-    if (sActivePokemon[0]) {}
+    if (sActivePokemon[0]) {}  // karodo
     sBattleScene.scene->unk_20 += 1;
-    if (D_8219A760) {}
+    if (D_8219A760) {}  // karodo
 }
 
 void func_8213436C(void) {

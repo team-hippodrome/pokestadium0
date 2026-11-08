@@ -185,7 +185,7 @@ s32 func_8002DCE0(Menu8002E230* arg0) {
     if (arg0->def->itemCount == 0) {
         return 0;
     }
-    if (arg0) {}
+    if (arg0) {}  // karodo
     input = (u16)func_8000B30C();
     switch (input) {
         case 0x800:
@@ -412,6 +412,7 @@ void func_8002ED50(s8 *arg0) {
     }
 }
 
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_8002ED70(s8 *arg0)
 {
   s32 *new_var3;
@@ -731,6 +732,7 @@ void func_800309FC(s8 *arg0) {
     }
 }
 
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_80030A1C(s8 *arg0)
 {
   s32 temp_v0;

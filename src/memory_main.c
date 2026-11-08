@@ -108,7 +108,7 @@ u32 main_pool_free(void* addr, u32 runBlockFunc) {
                 if (func != 0) {
                     block->func((u8*)block + sizeof(MainPoolBlock), block->arg);
                     // TODO: fake here too
-                    if ((!(&sMemPool)) && (!(&sMemPool))) {}
+                    if ((!(&sMemPool)) && (!(&sMemPool))) {}  // FAKE
                 }
             }
             sMemPool.available += ((uintptr_t)sMemPool.listHeadL->next - (uintptr_t)sMemPool.listHeadL);

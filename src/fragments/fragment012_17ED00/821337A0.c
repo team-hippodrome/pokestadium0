@@ -3,6 +3,7 @@
 #include "fragments/battle_engine/battle_engine.h"
 #include "m2c_macros.h"
 
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_821337A0(s8 *arg0)
 {
   int new_var;

@@ -572,7 +572,7 @@ void func_8110ED98(s8* arg0, s32 arg1) {
     osInvalDCache((void*)M2C_FIELD(arg0, s32*, 0xC), arg1);
     osCreateMesgQueue((OSMesgQueue*)(arg0 + 0x20), (OSMesg*)(arg0 + 0x38), 1);
     func_8110DBA0(arg0 + 0x3C, 0, 0, M2C_FIELD(arg0, s32*, 8), M2C_FIELD(arg0, s32*, 0xC), arg1, (OSMesgQueue*)(arg0 + 0x20), arg0[2], D_81137F04);
-    if (arg1) {}
+    if (arg1) {}  // karodo
 }
 
 void func_8110EE28(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3) {
@@ -865,7 +865,7 @@ s32 func_8110F518(s32 arg0, Item8110F4D0** arg1) {
         p = func_81110D6C(arg0, i);
         if (p != 0) {
             // do-while(0) wrapper only changes register allocation; needed to match
-            do {
+            do {  // FAKE
                 count = func_8110F4D0((Item8110F4D0*)p[1], count, arg1);
             } while (0);
         }

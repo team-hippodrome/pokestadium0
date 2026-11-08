@@ -382,7 +382,7 @@ void func_821206F4(CameraNode* arg0) {
     if ((sBattleScene.scene->unk_20 == 5) || (sBattleScene.scene->unk_20 == 0xB)) {
         p = sActivePokemon[sBattleScene.scene->unk_2C];
         st = &p->state;
-        if (st) {}
+        if (st) {}  // karodo
         if ((st->flags & 0x200) || (p->displayObject.objectType == 0x8E)) {
             if (func_8210C020(0x64) & 1) {
                 sBattleScene.scene->unk_20 = 0x10;

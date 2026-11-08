@@ -147,6 +147,7 @@ void func_81109678(s32 arg0) {
 M2C_UNK func_81112E00(M2C_UNK *);                   /* extern */
 extern s8 D_81184668;
 extern s16 D_811858CC;
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_81109764(s32 arg0)
 {
   s32 new_var2;
@@ -1216,6 +1217,7 @@ void func_8110CB40(s32 arg0, s32 arg1) {
     }
 }
 
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_8110CB70(s8 *arg0, s32 arg1, unsigned short arg2)
 {
   s32 var_v0;
@@ -1468,7 +1470,7 @@ s32 func_8110D278(s32 arg0, s32 arg1, s32 arg2) {
     func_81112E00(slot);
     id = 0xFF;
     /* do-while(0) block (likely a macro in the original) is required for the register choice */
-    do {
+    do {  // FAKE
         off = ((u16*)D_811858A8)[arg1];
         count = *(off + D_811858A8);
         off++;

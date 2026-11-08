@@ -1156,6 +1156,7 @@ s32 GbSave_GetBoxCount(s32 arg0) {
 
 s32 func_8001FCC0(M2C_UNK, s32, M2C_UNK);           /* extern */
 extern s8 D_800AD210;
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 s32 func_80022D84(s32 arg0, M2C_UNK arg1)
 {
   s8 *temp_v0;
@@ -1164,7 +1165,7 @@ s32 func_80022D84(s32 arg0, M2C_UNK arg1)
   {
     return 0;
   }
-  return func_8001FCC0(arg1 & 0xFFFFFFFFFFFFFFFF, (*((s32 *) (((s8 *) temp_v0) + 0x40))) + 0x18, arg1);
+  return func_8001FCC0(arg1 & 0xFFFFFFFFFFFFFFFF, (*((s32 *) (((s8 *) temp_v0) + 0x40))) + 0x18, arg1);  // FAKE
 }
 
 s32 func_8001FBE4(s32);                             /* extern */
@@ -1181,6 +1182,7 @@ s32 func_80022DDC(s32 arg0) {
 
 s32 func_8001FCC0(M2C_UNK, s32, M2C_UNK);           /* extern */
 extern s8 D_800AD210;
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 s32 func_80022E30(s32 arg0, M2C_UNK arg1)
 {
   s8 *temp_v0;
@@ -1189,7 +1191,7 @@ s32 func_80022E30(s32 arg0, M2C_UNK arg1)
   {
     return 0;
   }
-  return func_8001FCC0(arg1 ^ 0, (*((s32 *) (((s8 *) temp_v0) + 0x40))) + 0x71, arg1);
+  return func_8001FCC0(arg1 ^ 0, (*((s32 *) (((s8 *) temp_v0) + 0x40))) + 0x71, arg1);  // FAKE
 }
 
 s32 func_8001FBE4(s32);                             /* extern */

@@ -184,6 +184,7 @@ void* func_81107E70(void* cmd, s16 channel, s16 slot) {
 void* func_811076D0(AudioCmd* cmd, u16 dmem, u16 offset, s32 count, s32 channel);
 
 /* Loads a voice's samples (or points the mixer at them in RAM) as one macro statement, like AUDIO_CMDS_811092F4. */
+// FAKE: the do-while (0) wrapper in this macro is only there for register allocation.
 #define AUDIO_LOAD_VOICE_81107F40(cmd, tmp, ch, voice, slot, channel)                                  \
     do {                                                                                              \
         if ((ch)->mode == 1) {                                                                        \
@@ -233,6 +234,7 @@ void* func_8110807C(void* cmd, s16 channel, s16 slot) {
 
 #define SHIFTL_81109(v, s, w) ((u32)(((u32)(v) & ((0x01 << (w)) - 1)) << (s)))
 /* Emits the two-or-one command sequence as a single macro statement, like the libultra audio macros. */
+// FAKE: the do-while (0) wrapper in this macro is only there for register allocation.
 #define AUDIO_CMDS_811092F4(cmd, arg1, arg2, count, arg4, arg5)                                          \
     do {                                                                                                 \
         if ((count) == 0) {                                                                              \

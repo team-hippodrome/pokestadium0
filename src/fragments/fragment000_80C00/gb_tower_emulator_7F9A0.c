@@ -201,7 +201,7 @@ s32 func_81102F7C(s32, s32, s32);                     /* extern */
 s32 func_811021D4(u8 *arg0) {
     s32 ret;
 
-    if (((!arg0) && (!arg0)) && (!arg0)) {
+    if (((!arg0) && (!arg0)) && (!arg0)) {  // FAKE
     }
     ret = 0;
     if (!(M2C_FIELD(arg0, u8 *, 0x9B) & 1)) {
@@ -971,6 +971,7 @@ s32 func_811064DC(void) {
 }
 
 extern u8 D_811565A0;
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 s32 func_8110659C(void)
 {
   GbpakChannel811023DC *ch = &D_811561C8[D_811565A0];

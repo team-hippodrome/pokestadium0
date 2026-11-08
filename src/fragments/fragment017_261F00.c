@@ -76,7 +76,7 @@ extern s32 D_8A0005F0;
 void func_8A0001F0(void) {
     s32 btn;
 
-    if (!D_8A0005F0) {
+    if (!D_8A0005F0) {  // karodo
     }
     btn = func_8000B30C();
     if (btn != 0x400) {

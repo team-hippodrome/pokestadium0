@@ -447,7 +447,7 @@ s32 func_80044158(u8* arg0) {
     D_800FD690 = arg0;
     sp1C = D_800FD690 + 0x32C0;
 
-    if (1) {}
+    if (1) {}  // karodo
 
     Rom_DmaRead(D_800B4164->offset1, (u32)D_800B41F0, D_800B4164->wave_tables_offset - D_800B4164->offset1);
     Audio_CopyDataWithCacheSync((s32)D_800B41F0, D_800FD690, 0x32C0);

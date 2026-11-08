@@ -103,7 +103,7 @@ void func_89104E38(Box89104E38* arg0) {
         func_8002D9B8(label, arg0->x + 6, arg0->y + 0xA, 0xFFEF, (s8*)sp2C);
     }
     /* Empty test kept from the permuter: it keeps arg0 in $s0 as in the ROM. */
-    if (arg0) {
+    if (arg0) {  // karodo
     }
 }
 
@@ -212,7 +212,7 @@ void func_891051A4(Box89104E38* arg0) {
         func_8002DAD8(label, arg0->x + 6, arg0->y + 0xA, 0xFFEF, (s8*)sp2C);
     }
     /* Empty test kept from the permuter: it keeps arg0 in $s0 as in the ROM. */
-    if (arg0) {
+    if (arg0) {  // karodo
     }
 }
 
@@ -222,6 +222,7 @@ void func_891051A4(Box89104E38* arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89105200.s")
 #endif
 
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_89105340(s8 *arg0, s32 arg1, s32 arg2)
 {
   u16 *temp_v0;
@@ -790,6 +791,7 @@ void func_89106570(Popup89106570* arg0) {
 
 s32 func_8002AE6C();                                /* extern */
 M2C_UNK func_8002D9B8(s32, s32, s32, s32, s8 *);  /* extern */
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_8910666C(s8 *arg0, s32 arg1)
 {
   s8 *new_var;
@@ -943,6 +945,7 @@ void func_89106E64(Win89106E64* arg0) {
     gSPDisplayList(gDisplayListHead++, D_80073438);
 }
 
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 s32 func_89106F74(s8 *arg0)
 {
   s32 temp_v0;

@@ -888,7 +888,7 @@ void BattleAnim_RegisterEffectSlot(func_D_84390300 arg0, func_D_84390320 arg1) {
         sBattleAnimEffectCallbackIndex = 0;
     }
 
-    if (gBattleAnimEffectUpdateFuncs[sBattleAnimEffectCallbackIndex]) {}
+    if (gBattleAnimEffectUpdateFuncs[sBattleAnimEffectCallbackIndex]) {}  // karodo
 
     gBattleAnimEffectUpdateFuncs[sBattleAnimEffectCallbackIndex] = arg0;
     gBattleAnimEffectDrawFuncs[sBattleAnimEffectCallbackIndex] = arg1;

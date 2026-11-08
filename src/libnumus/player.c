@@ -1180,6 +1180,7 @@ s32 func_8003815C(s32 arg0, s32 arg1, s8* cp, s32 arg3, s32 arg4, s32 arg5, s32 
 }
 
 void func_8003A710(void *);
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 s32 func_8003821C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6)
 {
   s32 found;

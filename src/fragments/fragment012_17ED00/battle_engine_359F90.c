@@ -390,6 +390,7 @@ void Battle_InitPokemonRuntimeState(ActivePokemon* arg0) {
     func_80041940(BattleScene_GetParticipantSideIndex(arg0), sp34->hp, sp34->unk_26);
 }
 
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 s32 func_82110EAC(s8 *arg0)
 {
   int new_var;

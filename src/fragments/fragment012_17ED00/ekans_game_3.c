@@ -318,6 +318,7 @@ s32 func_82183CC0(s32 arg0, s32 arg1) {
     return func_82183BB0(arg0, 0xFFFF, arg1);
 }
 
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 s32 func_82183CE4(s8 *arg0)
 {
   s32 var_v1;
@@ -820,6 +821,7 @@ void func_821853FC(void) {
 void JigglypuffGame_UpdateEffects(void) {
 }
 
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 s32 func_8218540C(s8 *arg0, s8 *arg1)
 {
   if ((*((u8 *) (((s8 *) arg1) + 0x75))) & (*((u8 *) (((s8 *) arg0) + 0x76))))
@@ -984,6 +986,7 @@ s32 func_821857CC(u8* arg0) {
 }
 
 extern u8* D_821CF29C;
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 s32 func_821858DC(u8 *arg0)
 {
   s32 i;
@@ -1333,6 +1336,7 @@ void func_821868E8(s8* arg0, s32 species, s32 level) {
 
 M2C_UNK func_80058410(s8 *, s8 *, M2C_UNK);     /* extern */
 extern s8 *D_821CF2A0;
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_821869C4(s8 *arg0, s8 *arg1)
 {
   long temp_v1;

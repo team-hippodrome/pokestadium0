@@ -86,6 +86,7 @@ u8 func_82107A30(s8 *arg0) {
     return M2C_FIELD(M2C_FIELD(arg0, s8 **, 0x860), u8 *, 2);
 }
 
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 u8 func_82107A3C(s8 *arg0)
 {
   int new_var;
@@ -284,6 +285,7 @@ s32 func_82107F68(u8* arg0) {
     return D_8006A9CC[arg0[0x80A]].unk_00;
 }
 
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 s32 func_82107F88(s8 *arg0)
 {
   unsigned int new_var;

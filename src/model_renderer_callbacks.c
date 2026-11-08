@@ -39,7 +39,7 @@ void func_80032840(u32 arg0) {
         arg0 &= 1;
         for (i = 0; i < 3; i++) {
             slot = &D_800B0338[arg0][i];
-            if (slot) {
+            if (slot) {  // karodo
             }
         }
         if (slot) { // no-op test; changes register allocation to match

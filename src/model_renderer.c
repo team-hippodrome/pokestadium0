@@ -137,7 +137,7 @@ arg1_func_80010CA8* func_80019BDC(arg1_func_80010CA8* arg0, BattleMon* arg1) {
     if (HAL_Strcmp(arg1->unk_30, sp38) != 0) {
         var_a0 = ((arg1->unk_0E >> 8) & 0xFF) + (arg1->unk_0E & 0xFF);
 
-        if (1) {}
+        if (1) {}  // karodo
 
         var_v1 = arg1->unk_30;
         while (*var_v1) {

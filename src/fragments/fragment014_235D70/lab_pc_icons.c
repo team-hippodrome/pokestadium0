@@ -448,7 +448,7 @@ extern M2C_UNK D_88002240;
 void func_880013EC(u8 *arg0, s32 arg1, s32 arg2, s32 *arg3) {
     s32 temp_v0;
 
-    if (arg3) {
+    if (arg3) {  // karodo
     }
 
     if (D_800AF985 & 1) {
@@ -573,7 +573,7 @@ s32 func_88001A30(s32 arg0) {
 
     if (arg0 == 1) {
         /* Dead read of the counter; the retail code loads it here. */
-        if (D_880022C4) {}
+        if (D_880022C4) {}  // karodo
         func_80005B98(1);
     }
     func_800069CC();

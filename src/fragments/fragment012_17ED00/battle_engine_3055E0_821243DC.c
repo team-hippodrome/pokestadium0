@@ -59,6 +59,7 @@ s32 func_82124810(CameraNode* arg0, ActivePokemon* arg1) {
     return LabPCList_CompareBySpeciesGroup((unk_func_8830867C_02C_0CC*)arg0, (unk_func_8830867C_02C_0CC*)arg1);
 }
 
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_82124830(s8 *arg0, ActivePokemon* arg1)
 {
   if (arg0)

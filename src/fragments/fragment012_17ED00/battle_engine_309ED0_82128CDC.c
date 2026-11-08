@@ -97,7 +97,7 @@ void func_82128F2C(CameraNode* arg0, s32 arg1) {
         return;
     }
     func_82124A40();
-    if (1) {
+    if (1) {  // karodo
     }
     D_8219A574 = D_8219A570 = sMultihitCount;
     if (func_82125CC8() == 0) {
@@ -346,7 +346,7 @@ void func_821297BC(CameraNode* arg0) {
                 func_8212239C((ActivePokemon*)D_8219A544, arg0);
                 if (--D_8219A570 < 0 || D_82199F31 != 0) {
                     func_82125580();
-                    do {
+                    do {  // FAKE
                         D_8219A570 = D_8219A56C;
                         M2C_FIELD(D_8219A5A0, s32*, 0x3C)++;
                     } while (0);

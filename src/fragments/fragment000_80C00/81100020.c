@@ -103,7 +103,7 @@ void func_811002F4(s32 arg0, s32 arg1) {
 
     i = arg1 & 7;
     func_81103C40(arg0 + i * 0x24, &D_8111DFA8, 0, 0x18, 0x12);
-    if (i) {
+    if (i) {  // karodo
     }
     p = arg0 + 0x786;
     for (i = 0; i != 5; i++) {

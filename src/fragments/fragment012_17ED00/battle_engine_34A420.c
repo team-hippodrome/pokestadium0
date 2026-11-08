@@ -661,7 +661,7 @@ s32 Radial20_IsComplete(void) {
             var_s0->unk_004++;
             if (var_s0->unk_006 < var_s0->unk_004) {
                 var_s0->unk_000 = 0;
-                if (var_s0->unk_008 == 9) {}
+                if (var_s0->unk_008 == 9) {}  // karodo
             } else {
                 Radial20_UpdateNode(var_s0);
                 var_s2++;

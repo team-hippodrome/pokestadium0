@@ -46,6 +46,7 @@ void func_88100078(s32 arg0, s32 arg1, s32 arg2, s32* arg3) {
 s32 func_80020B94(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s8 *, s32); /* extern */
 M2C_UNK func_80020C60(s32);                         /* extern */
 s32 func_80020DF0(s32, M2C_UNK, s32);               /* extern */
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_88100100(s8 *arg0, M2C_UNK arg1)
 {
   s32 temp_s3;
@@ -547,9 +548,10 @@ void func_88101670(s8 *arg0, s32 arg1) {
     M2C_FIELD(arg0, s32 *, 0) = (s32) (arg1 * 0xF);
 }
 
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 s32 func_88101690(s8 *arg0)
 {
- if (0) { }
+ if (0) { }  // karodo
   return (*((s32 *) (((s8 *) arg0) + 0))) >= ((*((s32 *) (((s8 *) arg0) + 4))) * (*((s32 *) (((s8 *) arg0) + 8))));
 }
 

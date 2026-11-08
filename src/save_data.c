@@ -279,7 +279,7 @@ s32 func_80023C30(void)
   s32 var_s0_2;
   if ((*((s32 *) (&D_8006BBA0))) == 0)
   {
- do { temp_v0 = func_8000234C(0x8000, 0, 0x42553634, &(*((s8 *) (&func_80023C08)))); *((s32 *) (&D_800AE8E0)) = temp_v0; } while (0);
+ do { temp_v0 = func_8000234C(0x8000, 0, 0x42553634, &(*((s8 *) (&func_80023C08)))); *((s32 *) (&D_800AE8E0)) = temp_v0; } while (0);  // FAKE
     if (temp_v0 != 0)
     {
       *((s32 *) (&D_8006BBA0)) = 1;
@@ -846,6 +846,7 @@ s32 func_80025168(s8 arg0) {
     return 1;
 }
 
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 s32 func_800251A8(void)
 {
   return (((*((u8 *) (((s8 *) (*((s8 **) (&D_800AE8E0)))) + 0x7A48))) << 8) | (*((u8 *) (((s8 *) (*((s8 **) (&D_800AE8E0)))) + 0x7A49)))) & 0xFFFF;

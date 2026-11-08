@@ -254,7 +254,7 @@ void LabItem_WriteDeckBack(s32 arg0, s32 arg1, s32 arg2, unk_func_8820BE14_06C* 
     DeckHandle* sp2C;
 
     if (arg6 != -1) {
-        if (1) {}
+        if (1) {}  // karodo
         sp2C = Deck_OpenAndSetName(arg0, arg1, arg2, arg4, arg5, arg6);
     } else {
         sp2C = Deck_Open(arg0, arg1, arg2, 1);
@@ -495,6 +495,7 @@ s32 func_89000BEC(s8 *arg0) {
     return sp2C;
 }
 
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_89000CF0(s8 *arg0, s8 *arg1)
 {
   s32 var_v0;

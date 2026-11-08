@@ -478,6 +478,7 @@ s32 func_80022B4C(s32);
 s32 GbSave_GetBoxCount(s32);
 void func_80023C30(void);
 void func_80025E3C(s32);
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_800260C4(void)
 {
   s32 pushed = 0;

@@ -12,6 +12,7 @@ M2C_UNK func_80029A64(s32, s32, s32, s32, Color_RGBA8);
 
 M2C_UNK func_89109E5C(s32, s32, s32, s32);          /* extern */
 M2C_UNK func_89109FE0(s32);                         /* extern */
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_89100020(s32 arg0)
 {
   s32 var_s0;
@@ -19,7 +20,7 @@ void func_89100020(s32 arg0)
   s8 *var_s2;
   func_89109E5C(arg0 + 0x9E64, arg0 + 0x9EB8, arg0 + 0x9EE0, arg0 + 0x9F44);
   var_s2 = arg0 + 0x8000;
- do { var_s0 = arg0; var_s1 = 0; do { if ((*((s32 *) (((s8 *) var_s2) + 0x1E68))) != 0) { func_89109FE0(var_s0 + 0x9E64); } var_s1 += 0x1C; var_s0 += 0x1C; var_s2 += 0x1C; } while (var_s1 != 0x54); } while (0);
+ do { var_s0 = arg0; var_s1 = 0; do { if ((*((s32 *) (((s8 *) var_s2) + 0x1E68))) != 0) { func_89109FE0(var_s0 + 0x9E64); } var_s1 += 0x1C; var_s0 += 0x1C; var_s2 += 0x1C; } while (var_s1 != 0x54); } while (0);  // FAKE
 }
 
 M2C_UNK func_8910A03C(s32);                         /* extern */
@@ -488,6 +489,7 @@ void func_89101D78(s8 *arg0) {
     M2C_FIELD(arg0, s32 *, 0x7C) = 0;
 }
 
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 s32 func_89101D80(s8 *arg0, s32 arg1)
 {
   s32 temp_t7;

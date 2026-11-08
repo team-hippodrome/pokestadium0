@@ -1148,11 +1148,12 @@ void Geo_NodeShadowContext(GraphNode* arg0) {
 }
 
 M2C_UNK func_8001380C();                            /* extern */
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_8001473C(s8 *arg0)
 {
   unsigned char temp_f6;
- goto dummy_label_201075; dummy_label_201075: ;
- do { } while (0);
+ goto dummy_label_201075; dummy_label_201075: ;  // FAKE
+ do { } while (0);  // karodo
   ;
   if ((((s16) ((s32) (*((f32 *) (((s8 *) ((&(*((s8 *) (&D_800AB460)))) + ((*((s32 *) (((s8 *) (&(*((s8 *) (&D_800AB460))))) + 0x10A0))) << 6))) + 0x38))))) >= (*((s16 *) (((s8 *) arg0) + 0x18)))) && (((s16) ((s32) (*((f32 *) (((s8 *) ((&(*((s8 *) (&D_800AB460)))) + ((*((s32 *) (((s8 *) (&(*((s8 *) (&D_800AB460))))) + 0x10A0))) << 6))) + 0x38))))) < (*((s16 *) (((s8 *) arg0) + 0x1A)))))
   {
@@ -1322,6 +1323,7 @@ void func_80014EDC(s8 *arg0) {
 }
 
 M2C_UNK func_8001380C(s8 *);                      /* extern */
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_80014F78(s8 *arg0)
 {
   s32 new_var;
@@ -1335,7 +1337,7 @@ void func_80014F78(s8 *arg0)
     }
     func_800135FC(*((u8 *) (((s8 *) arg0) + 3)), new_var, 0, (*((u8 *) (((s8 *) arg0) + 2))) & 4);
   }
-  func_8001380C((0, arg0));
+  func_8001380C((0, arg0));  // FAKE
 }
 
 #ifdef NON_MATCHING

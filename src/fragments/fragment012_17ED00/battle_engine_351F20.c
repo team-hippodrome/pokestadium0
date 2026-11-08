@@ -88,7 +88,7 @@ Gfx* Gfx_DrawThickLine(Gfx* arg0, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg
     sp80 = (a2_x * 1.2f) - (a1_x * 0.2f);
     sp7C = (a2_y * 1.2f) - (a1_y * 0.2f);
     sp78 = (a2_z * 1.2f) - (a1_z * 0.2f);
-    if (arg4) {}
+    if (arg4) {}  // karodo
 
     temp_v1->v.ob[0] = a3_x * 2.0f + a1_x;
     temp_v1->v.ob[1] = a3_y * 2.0f + a1_y;

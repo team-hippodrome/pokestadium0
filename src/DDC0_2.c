@@ -290,7 +290,7 @@ void func_80033BE4(StadiumModel* model, s16 maxDist, f32 radius, f32 ax, f32 ay,
         t->mtx = mtx;
 
         guMtxXFMF(mtx->mf, ax, ay, az, &tax, &tay, &taz);
-        if (ax) {}
+        if (ax) {}  // karodo
         guMtxXFMF(mtx->mf, bx, by, bz, &tbx, &tby, &tbz);
         guMtxXFMF(mtx->mf, cx, cy, cz, &tcx, &tcy, &tcz);
         guMtxXFMF(mtx->mf, dx, dy, dz, &tdx, &tdy, &tdz);

@@ -346,6 +346,7 @@ void func_820061F0(s8 *arg0, s32 arg1, s32 arg2, List820061F0 *arg3, s8 *arg4, C
 
 s32 func_8002AE6C();                                /* extern */
 void func_8002D9B8(s32, s32, s32, s32, s8 *);  /* extern */
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_82006348(s8 *arg0, s32 arg1)
 {
   s8 *new_var;

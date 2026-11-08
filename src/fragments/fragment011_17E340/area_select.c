@@ -169,7 +169,7 @@ void AreaSelect_PollInput(void) {
 }
 
 void BattleScene_CameraPresetNop(UNUSED CameraNode* arg0) {
-    if (arg0) {}
+    if (arg0) {}  // karodo
 }
 
 M2C_UNK func_80005928(M2C_UNK *, M2C_UNK);          /* extern */
@@ -253,7 +253,7 @@ void func_81800320(void) {
         func_80006780();
         var_s0 -= 0x15E;
         var_s2 += 0x5DC;
-    } while ((var_s0 ^ 0) != -0x2904);
+    } while ((var_s0 ^ 0) != -0x2904);  // FAKE
 }
 
 M2C_UNK func_80006780();                            /* extern */

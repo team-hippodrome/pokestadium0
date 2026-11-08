@@ -868,8 +868,8 @@ s32 func_811174D8(void) {
                 status = 2;
             }
             // Discarded reads; they only steer IDO's register allocation.
-            if (status) {}
-            if (bufPtr) {}
+            if (status) {}  // karodo
+            if (bufPtr) {}  // karodo
         }
     }
 

@@ -337,7 +337,7 @@ void func_82200618(void) {
         func_800273E8(sp7C, (s32) &D_82202C60);
         func_800273E8(sp40, (s32) &D_82202C7C);
     }
-    do {
+    do {  // karodo
     } while (0);
     while (func_80027214(sp7C, sp3C + 0xA8) != 0) {
         func_80027214(sp40, sp3C + 0xB4);
@@ -370,7 +370,7 @@ void func_82200714(void) {
         func_800273E8(sp8C, (s32) &D_82202C98);
         func_800273E8(sp50, (s32) &D_82202CB4);
     }
-    do {
+    do {  // karodo
     } while (0);
     while (func_80027214(sp8C, rec + 0xA8) != 0) {
         if (i++ == 0x14) {
@@ -605,7 +605,7 @@ void func_82201600(s32 arg0) {
             for (j = 0; j != 2; j++) {
                 team = ((DemoState*)D_822036A4)->players[i].unk_14[j];
                 // Fake match: an empty check found by the permuter fixes register allocation.
-                if (team == NULL && team == NULL && team == NULL) {
+                if (team == NULL && team == NULL && team == NULL) {  // FAKE
                 }
                 for (k = 0; k < team->numberOfPokemonBrought; k++) {
                     if (arg0 == team->pokemonPicked[k].unk_25) {

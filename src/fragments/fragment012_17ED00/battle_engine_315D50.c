@@ -509,6 +509,7 @@ void func_82134FD0(ActivePokemon* arg0) {
 }
 
 s32 func_82107A5C(s8 *);                          /* extern */
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_82135098(s8 *arg0)
 {
   s8 *sp18;

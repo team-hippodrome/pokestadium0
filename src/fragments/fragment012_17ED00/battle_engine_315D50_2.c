@@ -622,7 +622,7 @@ void BattleAnim_RegisterAllAssetTables(void) {
 
     while (*var_s1 != NULL) {
         var_v0 = *var_s1;
-        if (i) {}
+        if (i) {}  // karodo
         BattleAnim_RegisterAssetTable(var_v0);
         var_s1++;
         i++;
