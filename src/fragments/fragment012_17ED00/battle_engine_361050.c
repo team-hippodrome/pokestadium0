@@ -302,13 +302,85 @@ s32 BattleScene_FindU16InByteArray(u16 lookup_value, u8* array, s32 array_length
     return -1;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8210EFAC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210EFAC.s")
-#endif
+typedef struct S0LearnRuntime {
+    /* 0x00 */ char unk00[0x1F];
+    /* 0x1F */ u8 moves[4];
+    /* 0x23 */ char unk23[0x3];
+    /* 0x26 */ u8 unk_26;
+} S0LearnRuntime;
+typedef struct S0LearnMon {
+    /* 0x000 */ char unk000[0x7C6];
+    /* 0x7C6 */ S0LearnRuntime runtime;
+    /* 0x7ED */ char unk7ED[0x851 - 0x7ED];
+    /* 0x851 */ u8 moveSlotIllegality[4];
+} S0LearnMon;
+typedef struct S0Learnset {
+    /* 0x00 */ u8 unk_00[10];
+    /* 0x0A */ u8 unk_0A[10];
+} S0Learnset; // size = 0x14
+extern S0Learnset D_8218CA60[];
+extern S0Learnset D_8218D62C[];
+extern u8 D_8218AD9C[];
+extern u8* D_8218ADC8[];
+u8 Move_GetIdFromTableIndex(s32);
+void func_8210EFAC(S0LearnMon* pokemon, u16 pokemon_id) {
+    s32 move_index;
+    s32 i;
+    s32 lookup;
+    s32 tm_index;
+    u8 tm_hm_flag;
+    SpeciesData* species_data;
+    S0LearnRuntime* pokemon_runtime;
 
-void func_8210EFAC(s8* arg0, u16 arg1);
+    pokemon_runtime = &pokemon->runtime;
+
+    for (move_index = 0; move_index < 4; move_index++) {
+        if (pokemon_runtime->moves[move_index] != 0) {
+            species_data = &gSpeciesData[pokemon_id];
+
+            for (i = 0; i < ARRAY_COUNT(species_data->startingMoves); i++) {
+                if ((species_data->startingMoves[i] != 0) && (species_data->startingMoves[i] == pokemon_runtime->moves[move_index])) {
+                    pokemon->moveSlotIllegality[move_index] = 0;
+                }
+            }
+
+            for (i = 0; i < 10; i++) {
+                if ((D_8218CA60[pokemon_id].unk_00[i] != 0) && (pokemon_runtime->unk_26 >= D_8218CA60[pokemon_id].unk_00[i]) &&
+                    (D_8218CA60[pokemon_id].unk_0A[i] == pokemon_runtime->moves[move_index])) {
+                    pokemon->moveSlotIllegality[move_index] = 0;
+                }
+            }
+
+            for (i = 0; i < 10; i++) {
+                if ((D_8218D62C[pokemon_id].unk_00[i] != 0) && (pokemon_runtime->unk_26 >= D_8218D62C[pokemon_id].unk_00[i]) &&
+                    (D_8218D62C[pokemon_id].unk_0A[i] == pokemon_runtime->moves[move_index])) {
+                    pokemon->moveSlotIllegality[move_index] = 0;
+                }
+            }
+
+            for (i = 0; i < 64; i++) {
+                lookup = BattleScene_FindU16InByteArray(pokemon_id + 1, D_8218AD9C, 8);
+                if (lookup >= 0) {
+                    tm_index = i / 8;
+                    if (tm_index == D_8218ADC8[lookup][0]) {
+                        tm_hm_flag = species_data->tmHmLearnset[tm_index] | D_8218ADC8[lookup][1];
+                    } else {
+                        tm_hm_flag = species_data->tmHmLearnset[tm_index];
+                    }
+                } else {
+                    tm_hm_flag = species_data->tmHmLearnset[i / 8];
+                }
+
+                if (((tm_hm_flag >> (i % 8)) & 1) && (Move_GetIdFromTableIndex(i) == pokemon_runtime->moves[move_index])) {
+                    pokemon->moveSlotIllegality[move_index] = 0;
+                }
+            }
+        } else {
+            pokemon->moveSlotIllegality[move_index] = 0;
+        }
+    }
+}
+
 extern u8 D_8218C930[][2];
 
 void func_8210F24C(s8* arg0) {

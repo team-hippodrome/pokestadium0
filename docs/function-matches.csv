@@ -2550,7 +2550,7 @@ func_8210EC0C,0x8210EC0C,src/fragments/fragment012_17ED00/battle_engine_361050.c
 func_8210EDBC,0x8210EDBC,src/fragments/fragment012_17ED00/battle_engine_361050.c,func_8210EDBC,s1,,c
 func_8210EED8,0x8210EED8,src/fragments/fragment012_17ED00/battle_engine_361050.c,func_8210EED8,hand,,c
 func_8210EF58,0x8210EF58,src/fragments/fragment012_17ED00/battle_engine_361050.c,BattleScene_FindU16InByteArray,s1,stadium1:src/fragments/battle_engine/battle_engine_move_animation.c,c
-func_8210EFAC,0x8210EFAC,src/fragments/fragment012_17ED00/battle_engine_361050.c,,asm,,asm
+func_8210EFAC,0x8210EFAC,src/fragments/fragment012_17ED00/battle_engine_361050.c,func_8210EFAC,s1,,c
 func_8210F24C,0x8210F24C,src/fragments/fragment012_17ED00/battle_engine_361050.c,func_8210F24C,hand,,c
 func_8210F2F4,0x8210F2F4,src/fragments/fragment012_17ED00/battle_engine_361050.c,func_8210F2F4,m2c,m2c+permuter,c
 func_8210F31C,0x8210F31C,src/fragments/fragment012_17ED00/battle_engine_361050.c,,asm,,asm
