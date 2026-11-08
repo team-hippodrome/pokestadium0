@@ -157,11 +157,51 @@ void func_89100380(LabPCInitialStateFields* state) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_891005CC.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89100688; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89100688.s")
-#endif
+typedef struct Ctx89100688 {
+    /* 0x0000 */ char unk0000[0x30];
+    /* 0x0030 */ s32 y;
+    /* 0x0034 */ char unk0034[0x84 - 0x34];
+    /* 0x0084 */ s32* widths;
+    /* 0x0088 */ char unk0088[0xB15C - 0x88];
+    /* 0xB15C */ s32 mode;
+    /* 0xB160 */ char unkB160[0xB548 - 0xB160];
+    /* 0xB548 */ s32* ranges;
+    /* 0xB54C */ s32 unkB54C;
+    /* 0xB550 */ s32 cursor;
+} Ctx89100688;
+s32 func_891005CC();
+void func_89100688(Ctx89100688* arg0) {
+    s32 end;
+    s32* r;
+    s32 i;
+    s32 w;
+
+    switch (arg0->mode) {
+        case 0:
+            end = arg0->ranges[arg0->mode] + arg0->cursor - 2;
+            i = end;
+            if (i == 4) {
+                w = arg0->widths[i] + arg0->widths[i + 1];
+            } else {
+                w = arg0->widths[i];
+            }
+            func_80029A64(func_891005CC(arg0), arg0->y, w, 0x14, *(Color_RGBA8*)D_80073520);
+            break;
+        case 1:
+            w = 0;
+            r = &arg0->ranges[arg0->mode];
+            i = r[0] + arg0->cursor - 2;
+            end = r[1] - r[0] + i;
+            for (; i < end; i++) {
+                w += arg0->widths[i];
+            }
+            func_80029A64(func_891005CC(arg0), arg0->y, w, 0x14, *(Color_RGBA8*)D_80073520);
+            break;
+        case 2:
+            func_80029A64(func_891005CC(arg0), arg0->y, arg0->widths[arg0->ranges[arg0->mode] + arg0->cursor - 2], 0x14, *(Color_RGBA8*)D_80073520);
+            break;
+    }
+}
 
 /**
  * Draws a highlight rectangle (via func_80029A64) for the screen object arg0, positioned from
