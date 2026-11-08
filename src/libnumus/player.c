@@ -1179,11 +1179,42 @@ s32 func_8003815C(s32 arg0, s32 arg1, s8* cp, s32 arg3, s32 arg4, s32 arg5, s32 
     return M2C_FIELD(cp, s32*, 0x5C);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8003821C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8003821C.s")
-#endif
+void func_8003A710(void *);
+s32 func_8003821C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6)
+{
+  s32 found;
+  int four; /* the offset has to go through a temporary to match */
+  s32 *tbl;
+  s8 *p;
+  u32 i;
+  u32 mask;
+  found = 0;
+  if (!((*((s32 *) (((s8 *) arg1) - (-(four = 4))))) & 1))
+  {
+    func_8003A710((void *) arg1);
+  }
+  if (((u32) arg6) == 0xFFFFFFFFU)
+  {
+    tbl = (s32 *) (*((s32 *) (((s8 *) arg1) + 8)));
+    arg6 = *((s32 *) ((arg2 * 4) + ((s32) tbl)));
+  }
+  for (i = 0, p = D_800B3640; i < ((u32) D_800B3638); i++, p += 0x148)
+  {
+    mask = osSetIntMask(1);
+    if ((*((s32 *) (((s8 *) p) + 0x30))) == 0)
+    {
+      *((s32 *) (((s8 *) p) + 0x30)) = -1;
+      found = 1;
+    }
+    osSetIntMask(mask);
+    if (found != 0)
+    {
+      return func_8003815C(arg0, arg1, p, arg2, arg3, arg4, arg6);
+    }
+  }
+
+  return 0;
+}
 
 /*
  * func_8003834C

@@ -4807,7 +4807,7 @@ func_80038014,0x80038014,src/libnumus/player.c,func_80038014,m2c,m2c,c
 func_8003807C,0x8003807C,src/libnumus/player.c,Team_IsOpponentIndexUsed,hand,,c
 func_800380D0,0x800380D0,src/libnumus/player.c,func_800380D0,hand,,c
 func_8003815C,0x8003815C,src/libnumus/player.c,func_8003815C,hand,,c
-func_8003821C,0x8003821C,src/libnumus/player.c,,asm,,asm
+func_8003821C,0x8003821C,src/libnumus/player.c,func_8003821C,hand,,c
 func_8003834C,0x8003834C,src/libnumus/player.c,func_8003834C,hand,,c
 func_800383DC,0x800383DC,src/libnumus/player.c,func_800383DC,hand,,c
 func_800384D8,0x800384D8,src/libnumus/player.c,func_800384D8,hand,,c
