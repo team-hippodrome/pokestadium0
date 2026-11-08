@@ -598,23 +598,23 @@ func_81113E84,0x81113E84,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0
 func_81113EF4,0x81113EF4,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_81113EF4,hand,,c
 func_81113F84,0x81113F84,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_81113F84,hand,,c
 func_81113FA8,0x81113FA8,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,,asm,,asm
-func_81114B54,0x81114B54,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,,asm,,asm
-func_811151C8,0x811151C8,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_811151C8,hand,,c
-func_81115254,0x81115254,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_81115254,m2c,m2c+permuter,c
-func_811152A4,0x811152A4,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_811152A4,hand,,c
-func_8111539C,0x8111539C,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_8111539C,hand,,c
-func_81115480,0x81115480,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_81115480,hand,,c
-func_811155A0,0x811155A0,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_811155A0,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
-func_811155C0,0x811155C0,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,GbApu_SetActiveFlag,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
-func_811155EC,0x811155EC,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,GbApu_ClearActiveFlag,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
-func_81115614,0x81115614,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_81215C14_jp,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
-func_8111569C,0x8111569C,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_81215C9C_jp,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
-func_81115704,0x81115704,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_81115704,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
-func_8111570C,0x8111570C,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_81215D0C_jp,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
-func_81115750,0x81115750,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_81215D50_jp,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
-func_8111578C,0x8111578C,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_81215D8C_jp,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
-func_811157DC,0x811157DC,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_81215DDC_jp,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
-func_81115804,0x81115804,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,GbApu_SetNoisePeriodBounds,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
+func_81114B54,0x81114B54,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81114B54.c,func_81114B54,hand,,c
+func_811151C8,0x811151C8,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81114B54.c,func_811151C8,hand,,c
+func_81115254,0x81115254,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81114B54.c,func_81115254,m2c,m2c+permuter,c
+func_811152A4,0x811152A4,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81114B54.c,func_811152A4,hand,,c
+func_8111539C,0x8111539C,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81114B54.c,func_8111539C,hand,,c
+func_81115480,0x81115480,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81114B54.c,func_81115480,hand,,c
+func_811155A0,0x811155A0,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81114B54.c,func_811155A0,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
+func_811155C0,0x811155C0,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81114B54.c,GbApu_SetActiveFlag,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
+func_811155EC,0x811155EC,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81114B54.c,GbApu_ClearActiveFlag,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
+func_81115614,0x81115614,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81114B54.c,func_81215C14_jp,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
+func_8111569C,0x8111569C,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81114B54.c,func_81215C9C_jp,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
+func_81115704,0x81115704,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81114B54.c,func_81115704,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
+func_8111570C,0x8111570C,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81114B54.c,func_81215D0C_jp,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
+func_81115750,0x81115750,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81114B54.c,func_81215D50_jp,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
+func_8111578C,0x8111578C,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81114B54.c,func_81215D8C_jp,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
+func_811157DC,0x811157DC,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81114B54.c,func_81215DDC_jp,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
+func_81115804,0x81115804,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81114B54.c,GbApu_SetNoisePeriodBounds,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
 func_81115818,0x81115818,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81115818.c,GbApu_FreqToStep,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
 func_811158F4,0x811158F4,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81115818.c,func_811158F4,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c,c
 func_81115A20,0x81115A20,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81115818.c,GbApu_FreqToStep2x,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
