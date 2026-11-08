@@ -462,7 +462,7 @@ func_81102970,0x81102970,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0
 func_81102AC8,0x81102AC8,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,func_81102AC8,hand,,c
 func_81102C20,0x81102C20,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,,asm,,asm
 func_81102EB0,0x81102EB0,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,GbPak_PrepareProbeBlock,hand,,c
-func_81102F7C,0x81102F7C,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,,asm,,asm
+func_81102F7C,0x81102F7C,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,func_81102F7C,hand,,c
 func_811030F0,0x811030F0,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,,asm,,asm
 func_811035B4,0x811035B4,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,,asm,,asm
 func_81103728,0x81103728,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,func_81103728,hand,,c

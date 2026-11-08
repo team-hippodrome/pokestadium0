@@ -176,7 +176,7 @@ s32 func_81102168(s8 *arg0) {
 }
 
 s32 func_81101FE8(s8 *);                            /* extern */
-s32 func_81102F7C(u8, s32, u8);                     /* extern */
+s32 func_81102F7C(s32, s32, s32);                     /* extern */
 
 /*
  * func_811021D4
@@ -274,31 +274,35 @@ s32 GbPak_SelectRamBank(unk_D_8122B2C0* arg0, s32 arg1) {
 }
 
 typedef struct GbpakChannel811023DC {
-    /* 0x00 */ char unk00[0x50];
+    /* 0x00 */ char unk00[0x4E];
+    /* 0x4E */ u8 checksum[2];
     /* 0x50 */ OSPfs* pfs;
     /* 0x54 */ u8* buf;
     /* 0x58 */ u8* romBuf;
-    /* 0x5C */ char unk5C[0x4];
+    /* 0x5C */ u8* sramBuf;
     /* 0x60 */ u8* bankState;
-    /* 0x64 */ char unk64[0x4];
+    /* 0x64 */ u8* sramState;
     /* 0x68 */ u8* bankList;
     /* 0x6C */ u8* bankEntry;
     /* 0x70 */ u8* ramBuf;
     /* 0x74 */ u8* blockState;
-    /* 0x78 */ char unk78[0x4];
+    /* 0x78 */ u8* verifyBuf;
     /* 0x7C */ u8* blockDirty;
     /* 0x80 */ s32 size;
-    /* 0x84 */ char unk84[0x8];
+    /* 0x84 */ s32 sum;
+    /* 0x88 */ char unk88[0x4];
     /* 0x8C */ s32 addr;
     /* 0x90 */ u32 ramSize;
-    /* 0x94 */ char unk94[0x5];
+    /* 0x94 */ s32 sramAddr;
+    /* 0x98 */ u8 unk98;
     /* 0x99 */ u8 request;
     /* 0x9A */ volatile u8 error;
     /* 0x9B */ u8 status;
     /* 0x9C */ u8 channel;
     /* 0x9D */ char unk9D[0x4];
     /* 0xA1 */ u8 unkA1;
-    /* 0xA2 */ char unkA2[0x2];
+    /* 0xA2 */ u8 unkA2;
+    /* 0xA3 */ char unkA3[0x1];
 } GbpakChannel811023DC; // size = 0xA4
 extern GbpakChannel811023DC D_811561C8[];
 s32 func_811023DC(OSPfs* arg0) {
@@ -499,11 +503,39 @@ void GbPak_PrepareProbeBlock(u32* arg0, s32 arg1) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81102F7C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81102F7C.s")
-#endif
+void func_81102EB0(u8*, s32);
+
+s32 func_81102F7C(s32 arg0, s32 arg1, s32 arg2) {
+    GbpakChannel811023DC* ch = &D_811561C8[arg0];
+    s32 ret;
+    s32 n;
+    u8* entry;
+    u16 addr;
+
+    ch->unk98 = 0;
+    if (arg2 == 0) {
+        return 0;
+    }
+    ch->unkA2 = 3;
+    ret = func_81102344((u8*)ch, arg1 / 0x2000);
+    n = 3;
+    if (ret == 0) {
+        entry = (u8*)&D_811564C0 + ((arg0 << 1) << 4);
+        addr = (arg1 & 0x1FFF) | 0xA000;
+        do {
+            func_81102EB0(entry, n);
+            ret = func_8005C670((s32)ch->pfs, 1, addr, (M2C_UNK*)entry, 0x20);
+            if (ret == 0 && (ret = func_8005C670((s32)ch->pfs, 0, addr, &D_811564A0, 0x20)) == 0 &&
+                (ret = func_80057910(&D_811564A0, entry, 0x20)) == 0 && --n == 0) {
+                ch->unk98 = arg2;
+                ch->sramAddr = arg1;
+                ch->unkA2 = 0;
+                break;
+            }
+        } while (ret == 0);
+    }
+    return ret;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_811030F0; signature not recovered. */
