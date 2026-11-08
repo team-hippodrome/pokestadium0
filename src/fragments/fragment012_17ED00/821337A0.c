@@ -63,11 +63,25 @@ void func_821337B4(void) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82133868.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_821339CC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821339CC.s")
-#endif
+void func_82101AD0(void);
+void func_82136708(s32, ActivePokemon*);
+M2C_UNK func_8213B31C(M2C_UNK);
+
+void func_821339CC(ActivePokemon* arg0) {
+    s32 pad;
+    s8* sp20 = (s8*)arg0->teamRoster + 0x1C;
+    BattleMonRuntime* rt = &arg0->state.runtime;
+
+    func_82101AD0();
+    if (rt->unk_15 & 7) {
+        func_82136708(3, arg0);
+    }
+    M2C_FIELD(sp20, s8*, 5) = 0;
+    M2C_FIELD(arg0, s16*, 0x7C2) = 0;
+    rt->unk_15 = 0;
+    func_8213B31C(1);
+    func_8213B31C(2);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_82133A44; signature not recovered. */
