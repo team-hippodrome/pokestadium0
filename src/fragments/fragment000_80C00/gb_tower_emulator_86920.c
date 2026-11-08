@@ -1341,11 +1341,54 @@ s32 func_8110D214(s32 arg0, s32 arg1, s32 arg2) {
     return func_8110D278(arg0, arg1, 0);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110D278; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110D278.s")
-#endif
+typedef struct Flags8110D278 {
+    u8 b80 : 1;
+    u8 b40 : 1;
+    u8 rest : 6;
+} Flags8110D278;
+s32 func_8110D3D4(s32);
+void func_811152A4(s32);
+void func_81115254(s8*);
+s32 func_8110D278(s32 arg0, s32 arg1, s32 arg2) {
+    s8* slot;
+    u8 id;
+    s32 count;
+    s32 off;
+    s32 r;
+    s32 i;
+
+    if (arg1 >= D_811858AC) {
+        return 0;
+    }
+    slot = &D_81184668 + arg0 * 0x15C;
+    arg1 = func_8110D7B0(0, arg1);
+    func_81112E00(slot);
+    id = 0xFF;
+    /* do-while(0) block (likely a macro in the original) is required for the register choice */
+    do {
+        off = ((u16*)D_811858A8)[arg1];
+        count = *(off + D_811858A8);
+        off++;
+    } while (0);
+    while (count > 0) {
+        id = D_811858A8[off++];
+        func_8110D4E0(id);
+        count--;
+    }
+    r = func_8110D3D4(arg1);
+    func_811152A4(arg0);
+    M2C_FIELD(slot, s8*, 4) = arg1;
+    M2C_FIELD(slot, u8*, 5) = id;
+    ((Flags8110D278*)slot)->b80 = 1;
+    M2C_FIELD(slot, s32*, 0x18) = r;
+    M2C_FIELD(slot, s32*, 0x74) = r;
+    M2C_FIELD(slot, s8*, 0x8C) = 0;
+    M2C_FIELD(slot, s16*, 0x10) = 0;
+    ((Flags8110D278*)slot)->b40 = 0;
+    func_81115254(slot);
+    for (i = 0; i < 16; i++) {
+    }
+}
 
 s32 func_8110D3D4(s32 arg0) {
     s32 idx;
