@@ -671,13 +671,32 @@ void func_8210E36C(void)
   *((u8 *) (((s8 *) (*((s8 **) (((s8 *) (&D_82199DE0)) + 4)))) + 0x865)) = (u8) ((*((u8 *) (((s8 *) (*((s8 **) (((s8 *) (&D_82199DE0)) + 4)))) + 0x865))) & 0xFFFE);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8210E3C0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210E3C0.s")
-#endif
+typedef struct DemoInput8210E3C0 {
+    /* 0x0 */ u16 frames;
+    /* 0x2 */ u16 pressed;
+    /* 0x4 */ u16 down;
+} DemoInput8210E3C0;
+extern DemoInput8210E3C0 D_8218ABB8[];
+extern Controller D_82199EC8[];
+extern s32 D_82199F10[];
+extern s32 D_82199F18[];
+void func_8210E3C0() {
+    s32 i = func_82107A5C();
+    Controller* c = &D_82199EC8[i];
 
-void func_8210E3C0(ActivePokemon*, ActivePokemon*);
+    c->buttonPressed = 0;
+    if (D_82199F18[i] == 0) {
+        if ((D_82199F18[i] = D_8218ABB8[D_82199F10[i]].frames) != 0) {
+            c->buttonPressed = D_8218ABB8[D_82199F10[i]].pressed;
+            c->buttonDown = D_8218ABB8[D_82199F10[i]++].down;
+        }
+    }
+    if (D_82199F18[i] > 0) {
+        D_82199F18[i]--;
+    }
+}
+
+void func_8210E3C0();
 void func_8210E484(ActivePokemon* arg0, ActivePokemon* arg1) {
     BattleMonRuntime* temp_v0 = &arg0->state.runtime;
     BattleMonRuntime* temp_v1 = &arg1->state.runtime;
