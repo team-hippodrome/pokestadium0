@@ -89,11 +89,62 @@ void func_811077FC(u32 arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_811078D8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_811078D8.s")
-#endif
+typedef struct AudioCfg811078D8 {
+    /* 0x00 */ char unk00[0xC];
+    /* 0x0C */ s16 passes;
+    /* 0x0E */ s16 chunk;
+    /* 0x10 */ s16 maxChunk;
+    /* 0x12 */ s16 minChunk;
+} AudioCfg811078D8;
+extern AudioCfg811078D8 D_811858B8;
+extern s8 D_8118427B;
+void func_81107390(s32, s32, s32);
+AudioCmd* func_8110814C(s32*, s32, AudioCmd*, s32);
+void func_811151C8(s32 arg0);
+AudioCmd* func_811078D8(AudioCmd* arg0, s32* arg1, s32* arg2, s32 arg3) {
+    AudioCmd* cmd = arg0;
+    s32 i;
+    s32 j;
+    s32 chunk;
+    s32 q;
+    s32* buf;
+
+    for (i = D_811858B8.passes; i > 0; i--) {
+        func_811151C8(i - 1);
+        func_811077FC(D_811858B8.passes - i);
+    }
+    buf = arg2;
+    for (i = D_811858B8.passes; i > 0; i--) {
+        if (i == 1) {
+            chunk = arg3;
+        } else {
+            q = arg3 / i;
+            if (q >= D_811858B8.maxChunk) {
+                chunk = D_811858B8.maxChunk;
+            } else if (D_811858B8.minChunk >= q) {
+                chunk = D_811858B8.minChunk;
+            } else {
+                chunk = D_811858B8.chunk;
+            }
+        }
+        for (j = 0; j < D_8118427B; j++) {
+            if (D_81184110[j].unk001[0] != 0) {
+                func_81107390(chunk, D_811858B8.passes - i, j);
+            }
+        }
+        cmd = func_8110814C(buf, chunk, cmd, D_811858B8.passes - i);
+        arg3 -= chunk;
+        buf += chunk;
+    }
+    for (j = 0; j < D_8118427B; j++) {
+        if (D_81184110[j].unk001[1] != 0) {
+            D_81184110[j].unk001[1]--;
+        }
+        D_81184110[j].bank ^= 1;
+    }
+    *arg1 = cmd - arg0;
+    return cmd;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_81107AEC; signature not recovered. */
