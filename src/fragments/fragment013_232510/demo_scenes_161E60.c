@@ -592,11 +592,41 @@ void func_82201444(unk_D_82203170* arg0, s32 arg1) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82201600; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment013_232510/func_82201600.s")
-#endif
+void func_82201600(s32 arg0) {
+    s32 idx;
+    UNUSED s32 pad[2];
+    TeamRoster* team;
+    s32 k;
+    s32 j;
+    s32 i;
+
+    for (i = 0; i != 2; i++) {
+        if (((DemoState*)D_822036A4)->players[i].unk_0D == 2) {
+            for (j = 0; j != 2; j++) {
+                team = ((DemoState*)D_822036A4)->players[i].unk_14[j];
+                // Fake match: an empty check found by the permuter fixes register allocation.
+                if (team == NULL && team == NULL && team == NULL) {
+                }
+                for (k = 0; k < team->numberOfPokemonBrought; k++) {
+                    if (arg0 == team->pokemonPicked[k].unk_25) {
+                        idx = i * 6 + j * 3 + k;
+                        func_82201348(*(DepthBuffer**)(M2C_FIELD(D_82203264, s8**, 8) + idx * 0x14 + 0xC));
+                        func_800407B0(0x3D, 2, idx + 1);
+                    }
+                }
+            }
+        } else {
+            team = ((DemoState*)D_822036A4)->players[i].unk_14[0];
+            for (k = 0; k < team->numberOfPokemonBrought; k++) {
+                if (arg0 == (team->pokemonPicked + k)->unk_25) {
+                    idx = i * 6 + k;
+                    func_82201348(*(DepthBuffer**)(M2C_FIELD(D_82203264, s8**, 8) + idx * 0x14 + 0xC));
+                    func_800407B0(0x3D, 2, idx + 1);
+                }
+            }
+        }
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_822017F0; signature not recovered. */
