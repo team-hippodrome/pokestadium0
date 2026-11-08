@@ -721,11 +721,61 @@ s32 func_821851B4(u8* arg0, s32 arg1) {
     return func_82185108(arg0, arg1);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82185220; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82185220.s")
-#endif
+s32 func_821851B4(u8 *arg0, s32 arg1);
+s32 func_82184DC8(s8 *, s8 *, u8);
+extern u8 D_82194578[];
+s32 func_82185220(u8 *arg0, u8 *arg1, s32 arg2)
+{
+  s32 best = 0;
+  s32 i;
+  s32 d;
+  unsigned long move;
+  if (!((*(*(*((u8 ***) arg0)))) & 2))
+  {
+    goto check;
+  }
+  slots:
+  for (i = 0; i < 4; i++)
+  {
+    if (arg0[0x2B + i] == 0)
+    {
+      break;
+    }
+    if (func_82184BC8((s8 *) arg0, arg0[0x2B + i]) != 0)
+    {
+      d = func_82184DC8(((s8 *) arg0) + 0xC, ((s8 *) arg1) + 0xC, arg0[0x2B + i]);
+      if (best < d)
+      {
+        best = d;
+      }
+    }
+  }
+
+
+  goto end;
+  check:
+  if (arg0[0x2E] != 0)
+  {
+    goto slots;
+  }
+
+  for (i = 0; i < 0x4E; i++)
+  {
+    move = D_82194578[i];
+    if (((move != 0) && (((move != 0x78) && (move != 0x99)) || (arg2 > 0))) && (func_821851B4(arg0, move) != 0))
+    {
+      d = func_82184DC8(((s8 *) arg0) + 0xC, ((s8 *) arg1) + 0xC, move);
+      if (best < d)
+      {
+        best = d;
+      }
+    }
+  }
+
+  end:
+  return best;
+
+}
 
 void func_82185378(s8 *arg0, s8 *arg1)
 {

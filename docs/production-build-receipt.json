@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5131,
-  "asm_owners": 313,
+  "c_owners": 5132,
+  "asm_owners": 312,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -613,7 +613,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "8188a8c594a6eae86daca6b489e6b148eba73dfe7507207ed857f3323556953b",
+    "docs/function-matches.csv": "83aae4969bb321afb389124bf765e9159de06a4fb0a5ddf5bacffb3462a8c357",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -791,7 +791,7 @@
     "src/fragments/fragment012_17ED00/battle_engine_thumbnail.c": "d2717cbc20d699d329f5a4f108f3264dc2d89e6c06a1aa40df896680f2a479f7",
     "src/fragments/fragment012_17ED00/ekans_game.c": "4c0d7afe0c3308ce8e32a1466e62fae8934e6fcd26584fb158fa89b07c3902a1",
     "src/fragments/fragment012_17ED00/ekans_game_2.c": "a843a8dcfda50b5c239239d42815db53bc72ffbf18dc042d5f01b364bcc4ffbd",
-    "src/fragments/fragment012_17ED00/ekans_game_3.c": "dbfc0f04cb1591306e1c99aacc782a007bb0a61cd162372dc4937e85d2909446",
+    "src/fragments/fragment012_17ED00/ekans_game_3.c": "af723b56da1ab008097e1c8626ce257fdd0ed67dad3529de7070ce3ed2ef9aaa",
     "src/fragments/fragment012_17ED00/fragment1_89010.c": "b75aacfc0c83f334699d5333f40fa195f155c845c1d68d6535f1a9194c51fbfd",
     "src/fragments/fragment012_17ED00/fragment1_89010_821328DC.c": "901f6b861de798e44a86953d188e36bab018d53c204092429a5ae06c18790655",
     "src/fragments/fragment012_17ED00/particle_math_261F90.c": "74022412078088a6e83edf3cd5e19d6220ea32b3705f0faff47b2ad5c4cf440c",
