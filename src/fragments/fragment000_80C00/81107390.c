@@ -77,11 +77,17 @@ typedef struct AudioCfg811078D8 {
 extern AudioCfg811078D8 D_811858B8;
 extern s32 D_811858E8;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110776C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110776C.s")
-#endif
+void func_8110776C(s32 updateIndex, s32 voiceIndex) {
+    s32 i;
+
+    for (i = updateIndex + 1; i < D_811858B8.passes; i++) {
+        if (!(&(D_81184288 + D_811858E8 * i)[voiceIndex])->dirty) {
+            (&(D_81184288 + D_811858E8 * i)[voiceIndex])->active = 0;
+        } else {
+            break;
+        }
+    }
+}
 
 typedef struct Rec811077FC {
     /* 0x00 */ char unk00[0xB4];
