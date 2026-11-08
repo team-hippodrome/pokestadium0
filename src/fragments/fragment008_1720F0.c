@@ -249,11 +249,36 @@ void func_88100898(s8* arg, s32 arg1, s32 arg2, s32 arg3) {
     arg0->unkB0 = arg3;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_881009A0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment008_1720F0/func_881009A0.s")
-#endif
+typedef struct Color88100D9C {
+    u8 c[4];
+} Color88100D9C;
+extern Gfx D_80060270[];
+void func_80029028(s32, s32, s32, s32, Color88100D9C);
+
+s32 func_8002AE6C();
+extern u8 D_800734A8[4];
+extern u8 D_8007356C[];
+extern Color88100D9C D_88102DA8;
+extern Color88100D9C D_88102DAC;
+void func_80029658(s32, s32, s32, void*);
+void func_8002A550(s32, s32, s32, s32, Color88100D9C, Color88100D9C);
+void func_8002AF04(s8*, s32);
+
+void func_881009A0(s8* arg0) {
+    if (func_8002AE6C() == 0) {
+        func_80029658(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0x35, M2C_FIELD(arg0, s32*, 8), D_8007356C);
+        func_8002A550(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) - 0xC, 0x30, D_88102DA8, D_88102DAC);
+        gSPDisplayList(gDisplayListHead++, D_80060270);
+        func_80029028(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0x3C, M2C_FIELD(arg0, s32*, 8) - 0xC, 0x24, *(Color88100D9C*)&D_88102D74);
+        Font_BeginTranslucentTextRendering();
+        Gfx_SetEnvColor(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
+        Font_SetActive(0x10, 0);
+        Font_Printf(M2C_FIELD(arg0, s32*, 0) + 0x12, M2C_FIELD(arg0, s32*, 4) + 0x12, M2C_FIELD(arg0, char**, 0xB0));
+        Font_EndTexturedTextRendering();
+        func_8002AF04(arg0 + 0x2C, (M2C_FIELD(arg0, s32*, 0xA8) == 0) ? 2 : 0);
+        func_8002AF04(arg0 + 0x68, (M2C_FIELD(arg0, s32*, 0xA8) == 1) ? 2 : 0);
+    }
+}
 
 s32 func_8002B390(void*);
 M2C_UNK func_8002BC14(s32);
@@ -319,11 +344,6 @@ void func_88100CA8(s32 arg0) {
     func_8002BC14(D_800603C0);
 }
 
-typedef struct Color88100D9C {
-    u8 c[4];
-} Color88100D9C;
-extern Gfx D_80060270[];
-void func_80029028(s32, s32, s32, s32, Color88100D9C);
 
 /**
  * Appends a call of display list D_80060270 to the current display list and
