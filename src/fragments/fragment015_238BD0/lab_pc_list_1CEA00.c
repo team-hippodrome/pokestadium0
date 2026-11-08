@@ -1154,11 +1154,29 @@ void func_89003E2C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, char *arg5,
     M2C_FIELD(((s8 *)arg0), s32 *, 0x80) = arg8;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89003ECC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_89003ECC.s")
-#endif
+extern Color_RGBA8 D_8900A6FC;
+extern Color_RGBA8 D_8900A700;
+void func_89003ECC(s8* arg0) {
+    UNUSED s32 pad;
+    s32 sp38;
+    s32 h;
+
+    if (func_8002AE6C() == 0) {
+        h = (M2C_FIELD(M2C_FIELD(arg0, s8**, 0x2C), s32*, 8) << 5) + 8;
+        func_80029658(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + h + 5, M2C_FIELD(arg0, s32*, 8), D_8007356C);
+        gSPDisplayList(gDisplayListHead++, D_80060270);
+        func_80029028(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) - 0xC, h, *(Color_RGBA8*)&D_8900A5BC);
+        func_8002A550(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + h + 0xC, M2C_FIELD(arg0, s32*, 8) - 0xC, M2C_FIELD(arg0, s32*, 0x80) * 0x1C, D_8900A6FC, D_8900A700);
+        sp38 = M2C_FIELD(arg0, s32*, 8) - 0xC;
+        func_8002D9B8(arg0 + 0x2C, M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0xA, 0xFFEF, (s32)&sp38);
+        Font_BeginTranslucentTextRendering();
+        func_8001AA9C(M2C_FIELD(&D_800734A8, u8 *, 0), M2C_FIELD(&D_800734A8, u8 *, 1), M2C_FIELD(&D_800734A8, u8 *, 2), M2C_FIELD(&D_800734A8, u8 *, 3));
+        Font_SetActive(8, 0);
+        func_8001AB2C(0x1C);
+        Font_Printf(M2C_FIELD(arg0, s32*, 0) + 0xE, M2C_FIELD(arg0, s32*, 4) + h + 0x10, (*(char***)(arg0 + 0x7C))[M2C_FIELD(arg0, s32*, 0x34)]);
+        Font_EndTexturedTextRendering();
+    }
+}
 
 s32 func_8900408C(s8* arg0) {
     s32 ret = 0;
@@ -1199,7 +1217,7 @@ void func_89004120(s32 arg0) {
 
 M2C_UNK func_800069CC();                            /* extern */
 M2C_UNK func_80028060(M2C_UNK, M2C_UNK *, M2C_UNK *, s32); /* extern */
-M2C_UNK func_89003ECC(s32);                         /* extern */
+void func_89003ECC(s8*);
 extern M2C_UNK D_89018900;
 extern s32 D_89019108;
 extern M2C_UNK D_89019110;
