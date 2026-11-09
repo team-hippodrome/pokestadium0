@@ -215,8 +215,54 @@ s32 func_821886F0(s32 arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82188770.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82188B8C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82188B8C.s")
-#endif
+extern s32 D_821CF2A4;
+extern u8* D_821CF2A8;
+extern u8* D_821CF2AC;
+extern u8 D_8006B18F[];
+
+void func_82188B8C(s32 arg0, s32 arg1, s32 arg2) {
+    s32 i;
+    s32 pp;
+    s32 bonus;
+    s32 move;
+
+    if (D_821CF2A4 == 0xFEDC) {
+        return;
+    }
+    move = D_821CF2AC[0x5A];
+    if (move != 0) {
+        for (i = 0; i < 4; i++) {
+            if (((u8*)D_821CF2A0)[0x2B + i] == 0) {
+                ((u8*)D_821CF2A0)[0x2B + i] = move;
+                pp = D_8006B18F[D_821CF2AC[0x5A] * 6];
+                bonus = (pp / 5 >= 8) ? 7 : pp / 5;
+                pp += bonus * 3;
+                ((u8*)D_821CF2A0)[0x3E + i] = pp - 1;
+                break;
+            }
+            if ((move == ((u8*)D_821CF2A0)[0x2B + i]) && ((pp = ((u8*)D_821CF2A0)[0x3E + i]) != 0)) {
+                ((u8*)D_821CF2A0)[0x3E + i] = pp - 1;
+                break;
+            }
+        }
+    }
+    if ((arg2 < 2) && (D_821CF2A4 < 4) && ((D_821CF29C + D_821CF2A4)[0x2B] == 0x49)) {
+        D_821CF29C[0x77] |= ((u8*)D_821CF2A0)[0x75];
+    }
+    if (arg2 < 2) {
+        D_821CF29C[0x7E] = D_821CF29C[0x7D];
+        D_821CF29C[0x7D] = D_821CF29C[0x7C];
+        D_821CF29C[0x7C] = D_821CF29C[0x66];
+    }
+    if (!(D_821CF2AC[0x4E] & 8)) {
+        if (arg2 == 0) {
+            if (((D_821CF2A8[0x5A] != 0x62) || (D_821CF2AC[0x5A] == 0x62)) && ((D_821CF2A8[0x5A] == 0x44) || (D_821CF2AC[0x5A] != 0x44))) {
+                D_821CF29C[0x76] |= ((u8*)D_821CF2A0)[0x75];
+            }
+        } else if (arg2 == 1) {
+            if (((D_821CF2AC[0x5A] != 0x62) || (D_821CF2A8[0x5A] == 0x62)) && ((D_821CF2AC[0x5A] == 0x44) || (D_821CF2A8[0x5A] != 0x44))) {
+                D_821CF29C[0x76] &= ~((u8*)D_821CF2A0)[0x75];
+            }
+        }
+    }
+}
