@@ -399,6 +399,12 @@
       "size": "0x2DC"
     }
   },
+  "src/fragments/fragment012_17ED00/ekans_game_3_82188050.c": {
+    ".rodata": {
+      "address": "0x82198784",
+      "size": "0x28C"
+    }
+  },
   "src/fragments/fragment012_17ED00/fragment1_89010.c": {
     ".rodata": "0x82196670"
   },
