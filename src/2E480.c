@@ -745,11 +745,55 @@ void func_80030A1C(s8 *arg0)
   }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80030A54; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80030A54.s")
-#endif
+void func_80030A54(GridMenu80031004* menu) {
+    s32 t1;
+    s32 t3;
+    s32 t2;
+    s32 speed;
+
+    if (menu->flags & 0x800) {
+        if (!(M2C_FIELD(menu, u16*, 0x28) & 0x800)) {
+            speed = M2C_FIELD(menu, s32*, 0x38);
+            t1 = (menu->cursor / menu->columns) * menu->cellHeight;
+
+            menu->scrollTarget = menu->scrollTarget - (((menu->scrollTarget - t1) < speed) ? (menu->scrollTarget - t1) : speed);
+            func_800309FC((s8*)menu);
+            if (t1 == menu->scrollTarget) {
+                menu->flags &= ~0x800;
+            }
+        }
+    } else if (menu->flags & 0x400) {
+        if (!(M2C_FIELD(menu, u16*, 0x28) & 0x400)) {
+            t2 = ((menu->cursor / menu->columns) + 1) * menu->cellHeight - 1;
+            speed = M2C_FIELD(menu, s32*, 0x38);
+            menu->scrollTarget += (((t2 - menu->scrollTarget) < speed) ? (t2 - menu->scrollTarget) : speed);
+            func_80030A1C((s8*)menu);
+            if (t2 == menu->scrollTarget) {
+                menu->flags &= ~0x400;
+                menu->scrollTarget = menu->scrollTarget - menu->cellHeight + 1;
+            }
+        }
+    } else if (menu->flags & 0x200) {
+        if (!(M2C_FIELD(menu, u16*, 0x28) & 0x200)) {
+            t3 = (menu->cursor % menu->columns) * menu->cellWidth;
+
+            M2C_FIELD(menu, s32*, 0x44) = M2C_FIELD(menu, s32*, 0x44) - (((M2C_FIELD(menu, s32*, 0x44) - t3) < M2C_FIELD(menu, s32*, 0x4C)) ? (M2C_FIELD(menu, s32*, 0x44) - t3) : M2C_FIELD(menu, s32*, 0x4C));
+            if (t3 == M2C_FIELD(menu, s32*, 0x44)) {
+                menu->flags &= ~0x200;
+            }
+        }
+    } else if (menu->flags & 0x100) {
+        if (!(M2C_FIELD(menu, u16*, 0x28) & 0x100)) {
+            t3 = ((menu->cursor % menu->columns) + 1) * menu->cellWidth - 1;
+            M2C_FIELD(menu, s32*, 0x44) = (((t3 - M2C_FIELD(menu, s32*, 0x44)) < M2C_FIELD(menu, s32*, 0x4C)) ? (t3 - M2C_FIELD(menu, s32*, 0x44)) : M2C_FIELD(menu, s32*, 0x4C)) + M2C_FIELD(menu, s32*, 0x44);
+            if (t3 == M2C_FIELD(menu, s32*, 0x44)) {
+                menu->flags &= ~0x100;
+                M2C_FIELD(menu, s32*, 0x44) = M2C_FIELD(menu, s32*, 0x44) - menu->cellWidth + 1;
+            }
+        }
+    }
+    M2C_FIELD(menu, u16*, 0x28) = 0;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_80030D3C; signature not recovered. */
