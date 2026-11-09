@@ -850,11 +850,70 @@ void func_80031004(GridMenu80031004* arg0, s32 arg1, s32 arg2) {
     func_80029A64(sp28, sp2C, arg0->cellWidth - 4, arg0->cellHeight - 4, *(Color_RGBA8*)D_80073520);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_800310D8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800310D8.s")
-#endif
+typedef struct GridMenu800310D8 {
+    /* 0x00 */ MenuDef8002E230* def;
+    /* 0x04 */ u16* flags;
+    /* 0x08 */ s32 cursor;
+    /* 0x0C */ s32 cellWidth;
+    /* 0x10 */ s32 cellHeight;
+    /* 0x14 */ MenuDrawFunc8002E230 draw;
+    /* 0x18 */ char unk18[0x8];
+    /* 0x20 */ s32 options;
+    /* 0x24 */ s32 rows;
+    /* 0x28 */ char unk28[0x4];
+    /* 0x2C */ s32 scroll;
+    /* 0x30 */ char unk30[0x18];
+    /* 0x48 */ s32 columns;
+} GridMenu800310D8;
+void func_80030D3C(GridMenu800310D8*, s32, s32);
+
+/**
+ * Grid version of func_8002F6C4: sets the scissor to the menu area (columns * cellWidth by
+ * rows * cellHeight at x, y), calls func_80030A54, then draws every visible cell i through
+ * menu->draw(column x, row y, item, i, flags & mask, arg4). The cell's flags come from
+ * menu->flags and get 0x12 for the cursor cell; cells past def->itemCount get no item and
+ * flags 0. Afterwards the scissor is reset to the full screen, func_80030D3C draws when option
+ * bit 0x100000 is set and func_80031004 (cursor box) draws when the list is non-empty, mask
+ * bit 2 is set and option bit 0x10000 is set.
+ */
+void func_800310D8(GridMenu800310D8* menu, s32 x, s32 y, s32 mask, s32 arg4) {
+    s32 width = menu->cellWidth * menu->columns;
+    MenuDef8002E230* def = menu->def;
+    u8* items = def->items;
+    s32 height = menu->cellHeight * menu->rows;
+    s32 i;
+    s32 end;
+    s32 baseY;
+    u8* item;
+    s32 f;
+
+    gDPPipeSync(gDisplayListHead++);
+    gDPSetScissorFrac(gDisplayListHead++, G_SC_NON_INTERLACE, x * 4.0f, y * 4.0f, (x + width) * 4.0f, (y + height) * 4.0f);
+    func_80030A54((GridMenu80031004*)menu);
+    baseY = y - menu->scroll;
+    i = (menu->scroll / menu->cellHeight) * menu->columns;
+    end = ((menu->scroll + height - 1) / menu->cellHeight + 1) * menu->columns;
+    for (; i < end; i++) {
+        item = NULL;
+        f = 0;
+        if (i < menu->def->itemCount) {
+            item = items + def->itemSize * i;
+            f = menu->flags[i];
+            if (i == menu->cursor) {
+                f |= 0x12;
+            }
+        }
+        menu->draw((i % menu->columns) * menu->cellWidth + x, (i / menu->columns) * menu->cellHeight + baseY, item, i, f & mask, arg4);
+    }
+    gDPPipeSync(gDisplayListHead++);
+    gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, 0, 640, 480);
+    if (menu->options & 0x100000) {
+        func_80030D3C(menu, x, y);
+    }
+    if ((menu->def->itemCount > 0) && (mask & 2) && (menu->options & 0x10000)) {
+        func_80031004((GridMenu80031004*)menu, x, y);
+    }
+}
 
 s32 func_80031464(GridMenu80031004* menu) {
     s32 pageCount = (M2C_FIELD(menu, MenuDef8002E230**, 0x0)->itemCount + menu->columns - 1) / menu->columns;

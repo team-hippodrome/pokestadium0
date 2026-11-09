@@ -41,7 +41,7 @@ func_80030A1C,0x80030A1C,src/2E480.c,func_80030A1C,m2c,m2c+permuter,c
 func_80030A54,0x80030A54,src/2E480.c,func_80030A54,hand,,c
 func_80030D3C,0x80030D3C,src/2E480.c,,asm,,asm
 func_80031004,0x80031004,src/2E480.c,func_80031004,hand,,c
-func_800310D8,0x800310D8,src/2E480.c,,asm,,asm
+func_800310D8,0x800310D8,src/2E480.c,func_800310D8,hand,,c
 func_80031464,0x80031464,src/2E480.c,func_80031464,hand,,c
 func_8003152C,0x8003152C,src/2E480.c,,asm,,asm
 func_80031AB0,0x80031AB0,src/2E480.c,func_80031AB0,hand,,c
