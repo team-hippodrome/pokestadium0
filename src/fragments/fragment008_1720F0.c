@@ -666,11 +666,61 @@ void func_88101EC8(IndexedDrawer* arg0) {
     func_8810173C(arg0->unk_08 + 6, arg0->unk_0C + 6, *entry, index, 0, 0);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88101F1C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment008_1720F0/func_88101F1C.s")
-#endif
+void func_800189C0(s32, s32);
+void func_800069CC(void);
+void func_8002F3C4(s8*, s32, s32, s32, s32);
+void func_88101A38(s32, s32, s8*, s32, s32);
+void func_88100C24(s8*);
+void func_88101F1C(s8* arg0) {
+    func_800189C0(D_88103074, 0);
+    func_800069CC();
+    if (func_8002AE6C(arg0 + 8) == 0) {
+        switch (M2C_FIELD(arg0, u32*, 4)) {
+            case 0:
+            case 1:
+            case 2:
+                func_8002F3C4(arg0 + 0x54, M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) + 0x16, 0xFFFF, 0);
+                break;
+            case 3:
+                func_88101EC8((IndexedDrawer*)arg0);
+                func_8810105C(M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) + 0x6A, 0x84);
+                func_88101A38(M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) + 0xEE, arg0 + 0xC0,
+                              M2C_FIELD(arg0, s32*, 0x5C), 0);
+                func_881009A0(arg0 + 0x310);
+                break;
+            case 4:
+                func_88101EC8((IndexedDrawer*)arg0);
+                func_8810105C(M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) + 0x6A, 0x84);
+                func_88101A38(M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) + 0xEE, arg0 + 0xC0,
+                              M2C_FIELD(arg0, s32*, 0x5C), func_88101734((s32*)(arg0 + 0x3C4)) + 0x10);
+                break;
+            case 5:
+                func_88101EC8((IndexedDrawer*)arg0);
+                func_8810105C(M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) + 0x6A, 0x84);
+                func_88101A38(M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) + 0xEE, arg0 + 0xC0,
+                              M2C_FIELD(arg0, s32*, 0x5C), 1);
+                func_88100C24(arg0 + 0x2E0);
+                break;
+            case 6:
+                func_88101A38(M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) + 6, arg0 + 0xC0,
+                              M2C_FIELD(arg0, s32*, 0x5C), 1);
+                func_8810105C(M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) + 0x6A, 0xE8);
+                func_881009A0(arg0 + 0x310);
+                break;
+            case 7:
+                func_88101A38(M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) + 6, arg0 + 0xC0,
+                              M2C_FIELD(arg0, s32*, 0x5C), func_88101734((s32*)(arg0 + 0x3C4)) + 2);
+                func_8810105C(M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) + 0x6A, 0xE8);
+                break;
+            case 8:
+                func_88101A38(M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) + 6, arg0 + 0xC0,
+                              M2C_FIELD(arg0, s32*, 0x5C), 0);
+                func_8810105C(M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) + 0x6A, 0xE8);
+                func_88100C24(arg0 + 0x2E0);
+                break;
+        }
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_88102184; signature not recovered. */
@@ -778,7 +828,7 @@ void func_800069CC(void);
 void func_8002C064(s32, s32, s32, s32, s32);
 extern u8 D_88102D70[];
 void func_881005E4(s8*, s32);
-void func_88101F1C(s32*);
+void func_88101F1C(s8*);
 M2C_UNK func_88102834(s32 a) {
     s32* arg0 = (s32*)a;
     func_800069CC();
@@ -788,7 +838,7 @@ M2C_UNK func_88102834(s32 a) {
             func_881005E4(arg0 + 1, 2);
             break;
         case 1:
-            func_88101F1C(arg0 + 0x22);
+            func_88101F1C((s8*)(arg0 + 0x22));
             break;
     }
 }

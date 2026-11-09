@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5201,
-  "asm_owners": 243,
+  "c_owners": 5202,
+  "asm_owners": 242,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -607,7 +607,7 @@
     "src/vector_math.c"
   ],
   "source_registry_sha256": "2fe4001716a1d3f017647fc7eba487393167f3f9434fb5cfc5911e8df2b48486",
-  "section_registry_sha256": "6685cf00b04f942a225f8316fe939e742c3b4b7ce2ff8d8bd852913d07bc2cc7",
+  "section_registry_sha256": "c52ac62d6631981fee4489947a5dc7bd52046f38cec3d92f6ff8f4a9e31eb739",
   "headers_sha256": "f837395b1ec12c24d32d18bcb0a7e60e82866346b12b7f8145dfd3414f73711b",
   "matching_registry_sha256": "d8bcc14a2a0db281cf30dcb9ddbd94d59e1afe84c70b4c8c017ea27ce60a251c",
   "build_tools_sha256": {
@@ -617,7 +617,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "17afd3420d5d3b2c9cbb8aede6403044c6c5165ac08b089bdcb606cb747bb029",
+    "docs/function-matches.csv": "910198e2a868693e6d07212dbfc75010d87e5d889a0f68c49b00d5698c4b40ac",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -710,7 +710,7 @@
     "src/fragments/fragment007_166580.c": "b6fe8163e5b40a5560573d60403040c2a3af152ccce9d4c31c8e56ecb9644629",
     "src/fragments/fragment007_166580_2.c": "56b0700668c3b37f0dc634a9de6e453c587f36ebfad129eaab6eaf7bc774fbec",
     "src/fragments/fragment007_166580_3.c": "959a52145033722e71f44cc0715f9af9dc8aac65f434bb0cbda1aa0cdfe1489e",
-    "src/fragments/fragment008_1720F0.c": "fa7761863d9d9cf44ecb6572c2be46998195359bf703d67f20ad423b18235edc",
+    "src/fragments/fragment008_1720F0.c": "828d4fd5ebb28c432411dffc954111d7f680102e463c803b9b566eede1ea4401",
     "src/fragments/fragment009_175570.c": "f15eaa1907af594a25af5f2c6890667b75e07bd3c706f091377747e8352bd54b",
     "src/fragments/fragment010_17BE70/pikachu_reward.c": "df1b99b4fdc9a7cf71dbc3807adac6e8e82fc06a4b6573249f0607c108fb1be1",
     "src/fragments/fragment011_17E340/area_select.c": "815b8b9cffc5830619c0df8e2f24e7f44d5c80db553e2f911564ab7c8a37eea1",

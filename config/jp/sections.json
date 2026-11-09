@@ -718,5 +718,11 @@
   },
   "src/vector_math.c": {
     ".rodata": "0x8007DB58"
+  },
+  "src/fragments/fragment008_1720F0.c": {
+    ".rodata": {
+      "address": "0x88103024",
+      "size": "0x24"
+    }
   }
 }
