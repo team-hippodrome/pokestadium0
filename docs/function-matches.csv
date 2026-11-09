@@ -3497,7 +3497,7 @@ func_82202228,0x82202228,src/fragments/fragment013_232510/demo_scenes_161E60.c,f
 func_822023D4,0x822023D4,src/fragments/fragment013_232510/demo_scenes_161E60.c,func_822023D4,hand,,c
 func_82202494,0x82202494,src/fragments/fragment013_232510/demo_scenes_161E60.c,func_82202494,hand,,c
 func_82202728,0x82202728,src/fragments/fragment013_232510/demo_scenes_161E60.c,func_82202728,hand,,c
-func_88000020,0x88000020,src/fragments/fragment014_235D70/lab_pc_icons.c,,asm,,asm
+func_88000020,0x88000020,src/fragments/fragment014_235D70/lab_pc_icons_88000020.c,func_88000020,hand,,c
 func_8800023C,0x8800023C,src/fragments/fragment014_235D70/lab_pc_icons.c,func_8800023C,hand,,c
 func_880002D8,0x880002D8,src/fragments/fragment014_235D70/lab_pc_icons.c,func_880002D8,hand,,c
 func_880003D4,0x880003D4,src/fragments/fragment014_235D70/lab_pc_icons.c,func_880003D4,hand,,c

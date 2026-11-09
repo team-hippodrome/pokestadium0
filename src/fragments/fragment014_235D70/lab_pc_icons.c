@@ -57,12 +57,6 @@ typedef struct unk_D_88218070 {
 void func_8800075C(void);
 void func_88000FE0(void);
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88000020; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment014_235D70/func_88000020.s")
-#endif
-
 extern Color_RGBA8 D_88001FD0;
 void func_8002A0AC(s32, s32, s32, s32, Color_RGBA8);
 void func_80027F20(s32);
