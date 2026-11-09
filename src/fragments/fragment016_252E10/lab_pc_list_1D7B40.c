@@ -1239,11 +1239,86 @@ void func_89107D7C(Ctx89107D7C* arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89107EC4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89107EC4.s")
-#endif
+extern u8 D_8910A978[];
+typedef struct Lab89107EC4 {
+    /* 0x000 */ char unk000[0x64];
+    /* 0x064 */ Slot89107614 slots[4];
+    /* 0x164 */ char unk164[0x40];
+    /* 0x1A4 */ s8 unk1A4[4];
+    /* 0x1A8 */ u32 cursor;
+    /* 0x1AC */ char unk1AC[4];
+    /* 0x1B0 */ s8 unk1B0[4];
+    /* 0x1B4 */ u16* flags;
+    /* 0x1B8 */ s32 sel;
+    /* 0x1BC */ char unk1BC[0x190];
+    /* 0x34C */ s32 mode;
+} Lab89107EC4;
+
+s32 func_89107EC4(Lab89107EC4* arg0) {
+    s32 ret = 0;
+    u16 buttons;
+
+    switch (arg0->mode) {
+        case 0:
+            if (func_8002B2B0(arg0->unk1A4) == 0) {
+                buttons = ((u16*)D_800603C0)[4];
+                if (buttons & 0x4000) {
+                    func_8003F6AC(3);
+                    ret = -1;
+                } else if (buttons & 0x8000) {
+                    switch (arg0->cursor) {
+                        case 0:
+                        case 1:
+                        case 2:
+                        case 3:
+                            func_8003F6AC(2);
+                            arg0->mode = 1;
+                            break;
+                        case 4:
+                            func_8003F6AC(2);
+                            ret = 1;
+                            break;
+                        case 5:
+                            if (M2C_FIELD(arg0, s32*, 0x13C) & 1) {
+                                func_8003F6AC(8);
+                            } else {
+                                func_8003F6AC(2);
+                                ret = 2;
+                            }
+                            break;
+                    }
+                }
+            }
+            break;
+        case 1:
+            if (func_8002FD8C(arg0->unk1B0) == 0) {
+                buttons = ((u16*)D_800603C0)[4];
+                if (buttons & 0x4000) {
+                    func_8003F6AC(3);
+                    arg0->mode = 0;
+                } else if (buttons & 0x8000) {
+                    if (arg0->flags[arg0->sel] & 8) {
+                        func_8003F6AC(8);
+                    } else {
+                        s32 prev;
+
+                        func_8003F6AC(2);
+                        prev = arg0->slots[arg0->cursor].unk68;
+                        if (prev != -1) {
+                            arg0->flags[prev] &= ~8;
+                        }
+                        arg0->flags[arg0->sel] |= 8;
+                        arg0->slots[arg0->cursor].unk68 = arg0->sel;
+                        arg0->slots[arg0->cursor].unk64 = (s32)D_8006A9D4[D_8910A978[arg0->sel]].name;
+                        arg0->mode = 0;
+                        arg0->cursor++;
+                    }
+                }
+            }
+            break;
+    }
+    return ret;
+}
 
 extern u8 D_8910A978[];
 

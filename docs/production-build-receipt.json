@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5191,
-  "asm_owners": 253,
+  "c_owners": 5192,
+  "asm_owners": 252,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -607,7 +607,7 @@
     "src/vector_math.c"
   ],
   "source_registry_sha256": "2fe4001716a1d3f017647fc7eba487393167f3f9434fb5cfc5911e8df2b48486",
-  "section_registry_sha256": "4f3e8ad9752f69444cb68e65a2d245654b589da638c994dc37735d5c64da22cc",
+  "section_registry_sha256": "08d4f9beb60a7f47f079ed8a7a3614f3494729e0e64910e46978ef4ffda6a0c4",
   "headers_sha256": "f837395b1ec12c24d32d18bcb0a7e60e82866346b12b7f8145dfd3414f73711b",
   "matching_registry_sha256": "d8bcc14a2a0db281cf30dcb9ddbd94d59e1afe84c70b4c8c017ea27ce60a251c",
   "build_tools_sha256": {
@@ -617,7 +617,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "f144ff66b077a9f9cacc1ba9e95b10f79140774521c0904b4967bf5ff728e503",
+    "docs/function-matches.csv": "6fe784c844800d24ea42bc614501b75c3df8dbe6e4f059fbe3787f8570bc2fcf",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -821,7 +821,7 @@
     "src/fragments/fragment016_252E10/89100020_89102C40.c": "56cb157207bf3b8fb6d24fe01f236426e4086ce70d13958f06be7b1e3c57a395",
     "src/fragments/fragment016_252E10/89100020_89103620.c": "129c0d3c383e0c9f537d62e122daafcf103739f8333c536b0339887e64822c35",
     "src/fragments/fragment016_252E10/89100020_89103740.c": "f91e3d1fddba0446ffe8abeefec701e2fa4c9fa68fb1a3832f832d62c36933f5",
-    "src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c": "18eb5b3ae8cfc623206205753ac53835ea9547e5af7156142e06abf4e9a3f5f8",
+    "src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c": "8792a2cf7fa097421a5206e0dcd7148217123005bec7038d5f4057b32e75333d",
     "src/fragments/fragment016_252E10/lab_pc_list_1E46B0.c": "ba8d4b5501f5daea30407668a46cb1021536cf2edb09db847e7544301d76b045",
     "src/fragments/fragment016_252E10/lab_pc_list_1E46B0_2.c": "d2b3316eb953509dc776192668fc1faa2f9e910c9baf9acc90664fc3678ee39f",
     "src/fragments/fragment017_261F00.c": "e60f251df9e22e458be0ee04551e3b8b47f5f8d7eaf6625c85ca69b0342af573",

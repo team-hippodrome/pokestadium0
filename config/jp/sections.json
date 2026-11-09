@@ -447,6 +447,12 @@
       "size": "0x38"
     }
   },
+  "src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c": {
+    ".rodata": {
+      "address": "0x8910E1B4",
+      "size": "0x18"
+    }
+  },
   "src/fragments/fragment016_252E10/lab_pc_list_1E46B0_2.c": {
     ".data": "0x8910D9E0"
   },
