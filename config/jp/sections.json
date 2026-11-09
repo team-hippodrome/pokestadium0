@@ -103,7 +103,11 @@
     }
   },
   "src/fragments/fragment011_17E340/area_select.c": {
-    ".data": "0x818007CC"
+    ".data": "0x818007CC",
+    ".rodata": {
+      "address": "0x8180088C",
+      "size": "0x14"
+    }
   },
   "src/fragments/fragment012_17ED00/battle_engine_2F6930.c": {
     ".bss": "0x82199E50",

@@ -930,7 +930,7 @@ func_8180003C,0x8180003C,src/fragments/fragment011_17E340/area_select.c,AreaSele
 func_8180006C,0x8180006C,src/fragments/fragment011_17E340/area_select.c,BattleScene_CameraPresetNop,s1,stadium1:src/fragments/battle_engine/battle_engine_3055E0.c,c
 func_81800074,0x81800074,src/fragments/fragment011_17E340/area_select.c,func_81800074,m2c,m2c,c
 func_818000D0,0x818000D0,src/fragments/fragment011_17E340/area_select.c,func_818000D0,hand,,c
-func_8180014C,0x8180014C,src/fragments/fragment011_17E340/area_select.c,,asm,,asm
+func_8180014C,0x8180014C,src/fragments/fragment011_17E340/area_select.c,func_8180014C,hand,,c
 func_81800320,0x81800320,src/fragments/fragment011_17E340/area_select.c,func_81800320,hand,,c
 func_8180042C,0x8180042C,src/fragments/fragment011_17E340/area_select.c,func_8180042C,m2c,m2c,c
 func_8180050C,0x8180050C,src/fragments/fragment011_17E340/area_select.c,func_8180050C,s1,stadium1:src/fragments/battle_engine/battle_engine_main.c,c

@@ -277,8 +277,8 @@ void func_89105340(s8 *arg0, s32 arg1, s32 arg2)
 
 M2C_UNK func_8002DC04(s32);                         /* extern */
 
-void func_89105390(s32 arg0) {
-    func_8002DC04(arg0 + 0x2C);
+s32 func_89105390(s32 arg0) {
+    return func_8002DC04(arg0 + 0x2C);
 }
 
 s32 func_891053B0(s8 *arg0) {
@@ -843,8 +843,8 @@ void func_8910666C(s8 *arg0, s32 arg1)
 
 M2C_UNK func_8002DC04(s32);                         /* extern */
 
-void func_891066C0(s32 arg0) {
-    func_8002DC04(arg0 + 0x40);
+s32 func_891066C0(s32 arg0) {
+    return func_8002DC04(arg0 + 0x40);
 }
 
 #ifdef NON_MATCHING

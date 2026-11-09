@@ -204,11 +204,58 @@ void func_818000D0(s16 arg0, s16 arg1, s16 arg2, s16 arg3) {
     Ui_DrawGradientPanel(arg0, arg1, arg2, arg3, &sp24, &sp20);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8180014C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment011_17E340/func_8180014C.s")
-#endif
+M2C_UNK func_80006780();
+void func_8001AAE4(s32, s32, s32, s32);
+void func_8001ABE8(void);
+void func_8001AC3C(void);
+s32 func_81800074(s32 arg0);
+extern s32 D_818008AC;
+extern char D_8180080C[];
+extern char D_81800824[];
+extern char D_8180083C[];
+extern char D_81800854[];
+extern char D_8180086C[];
+extern char D_8180087C[];
+extern char D_81800888[];
+
+void func_8180014C(s32 frames, s32 blink) {
+    s32 i;
+
+    for (i = 0; i < frames; i++) {
+        AreaSelect_PollInput();
+        func_81800074(0);
+        func_818000D0(0xAB, 0x172, 0x12A, 0x48);
+        Font_BeginTranslucentTextRendering();
+        func_8001ABE8();
+        Font_SetActive(0x10, -1);
+        func_8001AAE4(0xFF, 0xFF, 0x32, 0xFF);
+        switch ((u32)D_818008AC) {
+            case 0:
+                Font_Printf(0xC1, 0x17A, D_8180080C);
+                break;
+            case 1:
+                Font_Printf(0xCD, 0x17A, D_81800824);
+                break;
+            case 2:
+                Font_Printf(0xCD, 0x17A, D_8180083C);
+                break;
+            case 3:
+                Font_Printf(0xCD, 0x17A, D_81800854);
+                break;
+            case 4:
+                Font_Printf(0xFB, 0x17A, D_8180086C);
+                break;
+        }
+        func_8001AC3C();
+        if ((blink == 0) || ((i >= 10) && (i < 20)) || ((i >= 25) && (i < 35)) || (i >= 40)) {
+            func_8001AA9C(0xFF, 0xFF, 0x96, 0xFF);
+            Font_Printf(0x105, 0x19A, D_8180087C);
+            Font_Printf(0x16B, 0x19A, D_81800888);
+        }
+        Font_EndTexturedTextRendering();
+        func_80006780();
+    }
+}
 
 M2C_UNK func_80006780();
 M2C_UNK func_8180003C();
@@ -287,7 +334,7 @@ M2C_UNK func_800067BC(M2C_UNK);                     /* extern */
 M2C_UNK func_80006998(M2C_UNK);                     /* extern */
 M2C_UNK func_8000A7FC(M2C_UNK);                     /* extern */
 M2C_UNK func_800407B0(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
-M2C_UNK func_8180014C(M2C_UNK, M2C_UNK);            /* extern */
+void func_8180014C(s32 frames, s32 blink);
 void func_81800320(void);
 
 void func_81800514(void) {
