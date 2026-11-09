@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5295,
-  "asm_owners": 149,
+  "c_owners": 5296,
+  "asm_owners": 148,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -621,7 +621,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "e7f6c169bd09c56a4521029d11c8f1af44aef84beb8b681d01d8c5d3a4be40e5",
+    "docs/function-matches.csv": "a1c0c48d92380ed76f7ff52712c6f5ee498639a9ad1233c4b397a7ebee9336be",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -1102,7 +1102,7 @@
     "src/libultra/gu/rotaterpy.c": "ffadd2c9e6e1da24c82d37d4b9cb58daffd0a1682bd8aea78ed8f93c59ab7e83",
     "src/libultra/gu/scale.c": "f8a4b8c2745bfca64df3eeb39e2a55c44ca947bf5b4115b60891ced06ad7326c",
     "src/libultra/gu/sinf.c": "ecd352c985cff917b1575f7187991f53876ba43ed802c4aed0938d1d8221bbc1",
-    "src/libultra/gu/sqrtf.c": "08fe102e2fa1d3c68cb333a2155a4c8c7857167096c2db76a6c2de712ca590bf",
+    "src/libultra/gu/sqrtf.c": "b5ffe9f773757b01648beb7f435f9d6709f4721ccc12ec948c31bc949df8ffdd",
     "src/libultra/gu/translate.c": "e1dc02900792e73241fd19ec26b372d94eb2ed4a31492ed0462a166ac0e30adb",
     "src/libultra/io/aisetfreq.c": "fe41afeb69a104f1135717b70e02cb4c91a5ed8b2422f8f133f773d9ed84c64a",
     "src/libultra/io/aisetnextbuf.c": "d6051e21b6a2ffecc5412655735686133d6d3293984cf003ce4e82abbbf96051",

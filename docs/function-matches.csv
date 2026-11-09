@@ -4912,7 +4912,7 @@ func_8004D300,0x8004D300,src/4DF00.c,,asm,,asm
 func_8004D3A0,0x8004D3A0,src/libultra/gu/scale.c,,ultralib,libultra:src/gu/scale.c,c
 func_8004D3F4,0x8004D3F4,src/libultra/gu/scale.c,,ultralib,libultra:src/gu/scale.c,c
 func_8004D440,0x8004D440,src/libultra/gu/sinf.c,,ultralib,libultra:src/gu/sinf.c,c
-func_80055340,0x80055340,src/libultra/gu/sqrtf.c,,asm,libultra:src/gu/sqrtf.c,asm
+func_80055340,0x80055340,src/libultra/gu/sqrtf.c,sqrtf,ultralib,libultra:src/gu/sqrtf.c,c
 func_80057180,0x80057180,src/libultra/gu/translate.c,,ultralib,libultra:src/gu/translate.c,c
 func_800571C8,0x800571C8,src/libultra/gu/translate.c,,ultralib,libultra:src/gu/translate.c,c
 func_800593D0,0x800593D0,src/libultra/io/cartrominit.c,,ultralib,libultra:src/io/cartrominit.c,c
