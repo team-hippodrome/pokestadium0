@@ -601,12 +601,6 @@ void func_82001708(Slot54* arg0, s32 arg1) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82001810; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment007_166580/func_82001810.s")
-#endif
-
 typedef struct Color82001CCC {
     u8 c[4];
 } Color82001CCC;
@@ -614,6 +608,74 @@ extern Gfx D_80060270[];
 void func_80029028(s32, s32, s32, s32, Color82001CCC);
 extern Color82001CCC D_82008F5C;
 extern Color82001CCC D_82008F58;
+
+typedef struct IconCache82001810 {
+    /* 0x00 */ s32* slots;
+    /* 0x04 */ s32 base;
+    /* 0x08 */ s32 count;
+    /* 0x0C */ s32 start;
+} IconCache82001810; // size = 0x10
+extern s32 D_8200AC50;
+extern Gfx D_80073450[];
+extern Gfx D_80073408[];
+extern Gfx D_80073438[];
+extern u8 D_04011A60[];
+extern u8 D_05000AA0[];
+extern u8 D_05000478[];
+void func_8001AB6C(void);
+void func_8001ABBC(void);
+void func_8001A384(s32, s32);
+void func_80027F20(s32);
+void func_8002A0AC(s32, s32, s32, s32, Color82001CCC);
+void func_8001BCB4(s32, s32, s32, s32, void*, s32, s32);
+void func_8002B788(s32, s32, u8);
+void func_8001833C(s32, s32, s32*, u16);
+u8* func_80018DEC(s32, s32);
+void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
+void func_82001810(s32 x, s32 y, s32* entry, s32 frame, s32 flags, s32 arg5) {
+    IconCache82001810* cache = (IconCache82001810*)arg5;
+    s32 pad[2]; // FAKE
+    s32 key;
+    s32 idx;
+    s32 pad2; // FAKE
+
+    gSPDisplayList(gDisplayListHead++, D_80060270);
+    func_80029028(x, y, 0x84, 0x32, D_82008F58);
+    if (flags & 0x10) {
+        func_8002A0AC(x + 3, y + 3, 0x7E, 0x2C, D_82008F58);
+    }
+    if (entry != NULL) {
+        func_8001AB6C();
+        func_80027F20(flags);
+        func_8001A384(4, 0);
+        func_8001A944(x + 4, y + 4, (char*)entry + 0x30);
+        func_8001ABBC();
+        gSPDisplayList(gDisplayListHead++, D_80073450);
+        gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
+        func_8001BCB4(x + 0x2C, y + 0x19, 8, 0xA, D_04011A60, 8, 0);
+        func_8002B788(x + 0x38, y + 0x17, ((u8*)entry)[0x24]);
+        key = cache->start + frame;
+        idx = cache->base + key % cache->count;
+        if (key != cache->slots[idx]) {
+            cache->slots[idx] = key;
+            func_8001833C(D_8200AC50, idx, entry, ((D_82008F58.c[1] << 3) & 0x7C0) | ((D_82008F58.c[2] >> 2) & 0x3E) | ((D_82008F58.c[0] << 8) & 0xF800) | 1);
+        }
+        gSPDisplayList(gDisplayListHead++, D_80073408);
+        func_8001B884(x + 0x56, y + 6, 0x28, 0x28, func_80018DEC(D_8200AC50, idx), 0x28, 0x200000);
+        gSPDisplayList(gDisplayListHead++, D_80073438);
+        if (flags & 0x800) {
+            gSPDisplayList(gDisplayListHead++, D_80073408);
+            func_8001B884(x + 4, y + 0x14, 0x1C, 0x1C, D_05000AA0, 0x1C, 0x200000);
+            gSPDisplayList(gDisplayListHead++, D_80073438);
+        }
+        if (flags & 0x200) {
+            gSPDisplayList(gDisplayListHead++, D_80073408);
+            func_8001B884(x + 4, y + 0x14, 0x1C, 0x1C, D_05000478, 0x1C, 0x200000);
+            gSPDisplayList(gDisplayListHead++, D_80073438);
+        }
+    }
+}
+
 
 void func_82001810(s32, s32, s32*, s32, s32, s32);
 

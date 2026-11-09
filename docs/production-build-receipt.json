@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5299,
-  "asm_owners": 145,
+  "c_owners": 5300,
+  "asm_owners": 144,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -621,7 +621,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "cca688f8482e322f1380d4892ea22b3f0ff2ee4af59b89940cdbb934cc5c6fd5",
+    "docs/function-matches.csv": "1dd0351521a2bb5e1d1da25b5a819da25b2f0fabfeb14506446e8c59e0bfd565",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -711,7 +711,7 @@
     "src/fragments/fragment005_15FCE0/battle_order_select.c": "d960c5bc70d2842974f98e89efcf1ed3b37409faf6de02de2f91f10750049fa4",
     "src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c": "1b0b73a24f24b373acc90ba80977d9a3e2f5484bb0060f071382b43bff8edadc",
     "src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c": "dbf30826095bc18e17c094f8f915eb140392a1f497809aaa77e252763d7b4ffc",
-    "src/fragments/fragment007_166580.c": "f817c170e628d9101cd2c0941213a6e14061e8dd24175823bb727cdfd97d3431",
+    "src/fragments/fragment007_166580.c": "1a1fba4ad12577f368e8129dcd76c5a2b6e56efe3ffeff60ef63b3f43f19c2c4",
     "src/fragments/fragment007_166580_2.c": "56b0700668c3b37f0dc634a9de6e453c587f36ebfad129eaab6eaf7bc774fbec",
     "src/fragments/fragment007_166580_3.c": "091fc4e48c5bf3438b33d139e741226d026cf636c2eb3be84c0076ffc1bf1dcb",
     "src/fragments/fragment007_166580_4.c": "7709d05b13c01c9ec4e0395ec1671a74e8f5be5bfdb902a9c3c861429f5fe841",
