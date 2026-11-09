@@ -219,7 +219,7 @@ func_8003FE58,0x8003FE58,src/audio_commands.c,,asm,,asm
 func_80040718,0x80040718,src/audio_commands.c,Audio_CreateFrameTaskWrapper,s1,stadium1:src/audio_commands.c,c
 func_80040738,0x80040738,src/audio_commands.c,func_80040738,m2c,m2c,c
 func_800407B0,0x800407B0,src/audio_commands.c,,asm,,asm
-func_80041374,0x80041374,src/audio_commands.c,,asm,,asm
+func_80041374,0x80041374,src/audio_commands.c,func_80041374,hand,,c
 func_800414B0,0x800414B0,src/audio_commands.c,,asm,,asm
 func_80041834,0x80041834,src/audio_commands.c,func_80041834,m2c,m2c,c
 func_8004187C,0x8004187C,src/audio_commands.c,func_8004187C,hand,,c

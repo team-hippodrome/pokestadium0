@@ -221,11 +221,55 @@ void func_80040738(void) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800407B0.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80041374; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80041374.s")
-#endif
+extern s32 D_800FD654;
+extern s32 D_800B3CE4;
+extern s32 D_800FD66C;
+extern s32 D_800FD658[];
+extern s32 D_800FD738;
+extern s32 D_800FD680;
+s32 func_80041374(s32 arg0, s32 arg1) {
+    s32 idx;
+
+    switch (arg0) {
+        case 0:
+            if (arg1 == 0) {
+                arg1 = 1;
+            }
+            func_80037AC4(D_800FD654, arg1);
+            D_800FD654 = 0;
+            break;
+        case 4:
+            if (arg1 == 0) {
+                arg1 = 1;
+            }
+            func_80037AC4(D_800B3CE4, arg1);
+            D_800B3CE4 = 0;
+            break;
+        case 3:
+            func_80037AC4(D_800FD66C, 0x3C);
+            D_800FD66C = 0;
+            break;
+        case 5:
+            idx = arg1 - 1;
+            func_80037AC4(D_800FD658[idx ^ 0], 0xA); // FAKE: keeps idx unfolded in v0
+            D_800FD658[idx] = 0;
+            break;
+        case 0x3D:
+            func_80037AC4(D_800FD738, 0x78);
+            D_800FD738 = 0;
+            break;
+        case 0x46:
+            if (arg1 == 0) {
+                arg1 = 1;
+            }
+            func_80037AC4(D_800FD680, arg1);
+            D_800FD680 = 0;
+            break;
+        default:
+            return 0;
+    }
+    return 1;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_800414B0; signature not recovered. */
