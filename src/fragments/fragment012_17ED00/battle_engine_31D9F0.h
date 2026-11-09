@@ -41,7 +41,7 @@ M2C_UNK func_8001AA9C(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK); /* extern */
 M2C_UNK func_8001AB6C();                            /* extern */
 M2C_UNK func_8001ABBC();                            /* extern */
 u32 func_800566BC(s32);                             /* extern */
-M2C_UNK func_82116CF4(s16, s16, M2C_UNK, M2C_UNK, s8 *, s8 *); /* extern */
+M2C_UNK func_82116CF4(s32, s32, M2C_UNK, M2C_UNK, s8 *, s8 *); /* extern */
 extern s8 D_8218B008;
 extern s8 D_8218B014;
 void func_82116FF4(s16 arg0, s16 arg1, s32 arg2, s32 arg3, s32 arg4);
