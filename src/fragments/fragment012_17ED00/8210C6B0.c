@@ -388,11 +388,47 @@ void func_8210D020(ActivePokemon* arg0, s8* arg1) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8210D1B0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210D1B0.s")
-#endif
+/*
+ * Stadium 0 counterpart of Stadium 1's BattleScene_HandlePlayerPartySelection,
+ * with the two controller pointers kept in locals instead of globals.
+ */
+void func_8210D1B0(ActivePokemon* arg0) {
+    ActivePokemonState* sp18 = &arg0->state;
+    s32 idx;
+    Controller* c1;
+    Controller* c2;
+
+    if (arg0->sessionTeams->tagTeamSize == 1) {
+        c1 = &gControllers[arg0->sessionTeams->teamMember[0]->controllerPort];
+        c2 = &gControllers[arg0->sessionTeams->teamMember[0]->controllerPort];
+    } else {
+        c1 = &gControllers[arg0->sessionTeams->teamMember[sp18->unk_2D_zero]->controllerPort];
+        idx = sp18->unk_2D_zero == 0;
+        c2 = &gControllers[arg0->sessionTeams->teamMember[idx]->controllerPort];
+    }
+
+    if (M2C_FIELD(arg0, s32*, 0xA04) != 0) {
+        if (sp18->controller->buttonPressed & 0xE03F) {
+            func_8211F274(arg0);
+        }
+    } else if (sp18->unk_10 == 0) {
+        sp18->unk_10 = 2;
+    } else if ((c1->buttonPressed & 0x20) && (sp18->unk_2D != 0x10) &&
+               !(c1->buttonDown & 0x10) && !(c2->buttonDown & 0x10)) {
+        BattleScene_SelectActiveController(arg0);
+        BattleAnim_PlaySoundEffect3();
+        sp18->unk_10 = 0;
+    } else {
+        sp18->unk_1C = 0;
+        if ((c1->buttonDown & 0x10) || (c2->buttonDown & 0x10)) {
+            if ((c1->buttonPressed & 0x10) || (c2->buttonPressed & 0x10)) {
+                BattleAnim_PlaySoundEffect1();
+            }
+            sp18->unk_1C = 1;
+        }
+        func_8210D020(arg0, (s8*)sp18->controller);
+    }
+}
 
 extern u8 D_800AAF50[];
 void func_8210D1B0(ActivePokemon* active_pokemon);
