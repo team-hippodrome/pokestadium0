@@ -1292,11 +1292,37 @@ void func_82104E14(ActivePokemon* active_pokemon) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82104EAC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82104EAC.s")
-#endif
+extern s16 D_8218920E[];
+extern s32 D_8219A75C;
+void func_82104EAC(ActivePokemon* active_pokemon) {
+    BattleMonRuntime* runtime;
+    s32 padA; // FAKE
+    s32 cue_index;
+    MovePresentationCue* row_cue;
+    MovePresentationCue* cue;
+
+    cue_index = D_8218920E[active_pokemon->state.runtime.usedMove];
+    row_cue = &sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon)]->moveCues[cue_index];
+    runtime = &active_pokemon->state.runtime;
+    cue = &sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon)]->moveCues[runtime->usedMove - 1];
+
+    if (func_82101FD4(active_pokemon) != 0) {
+        BattleAnim_SetFlagForRockThrowingMoves(active_pokemon);
+        active_pokemon->animationTimer = 0;
+        if (D_8219A75C == 1) {
+            sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
+            if (row_cue->flags1 != 0xFF) {
+                BattleScene_SetParticipantModelTransform(active_pokemon, row_cue->flags1, 0);
+            }
+            ModelAnim_SetAnimation(&active_pokemon->displayObject, row_cue->id);
+            BattleAnim_SetModelEventTrackFromRow(active_pokemon, cue_index);
+        } else {
+            sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
+            ModelAnim_SetAnimation(&active_pokemon->displayObject, cue->id);
+            BattleAnim_SetModelEventTrackFromRow(active_pokemon, runtime->usedMove - 1);
+        }
+    }
+}
 
 s32 func_82101FD4(ActivePokemon*);
 void func_82101F00(ActivePokemon*);

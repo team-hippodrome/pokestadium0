@@ -2721,7 +2721,7 @@ func_82104C68,0x82104C68,src/fragments/fragment012_17ED00/battle_engine_move_ani
 func_82104D10,0x82104D10,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,BattleScene_TickStateCallbacks,s1,stadium1:src/fragments/battle_engine/battle_engine_move_animation.c,c
 func_82104DB0,0x82104DB0,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,func_82104DB0,hand,,c
 func_82104E14,0x82104E14,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,func_82104E14,hand,,c
-func_82104EAC,0x82104EAC,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,,asm,,asm
+func_82104EAC,0x82104EAC,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,func_82104EAC,hand,,c
 func_8210502C,0x8210502C,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,BattleScene_StartHitCueAnimation,hand,,c
 func_821050D0,0x821050D0,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,func_821050D0,hand,,c
 func_82105140,0x82105140,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,func_82105140,hand,,c
