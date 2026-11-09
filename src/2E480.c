@@ -384,11 +384,25 @@ s32 func_8002E3F0(Menu8002E230* arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002E70C.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002EC24; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002EC24.s")
-#endif
+void func_8002ED18(s8* arg0, s32 arg1, s32 arg2);
+extern s32 D_800603C0;
+void func_8002EC24(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6) {
+
+    M2C_FIELD(arg0, s32*, 0x24) = arg3;
+    M2C_FIELD(arg0, s32*, 0x0C) = arg5;
+    M2C_FIELD(arg0, s32*, 0x10) = arg6;
+    M2C_FIELD(arg0, s32*, 0x14) = arg4;
+    func_8002ED18(arg0, arg1, arg2);
+    M2C_FIELD(arg0, s32*, 0x1C) = 0xC00;
+    M2C_FIELD(arg0, s32*, 0x20) = 0x100000;
+    M2C_FIELD(arg0, s32*, 0x18) = D_800603C0;
+    M2C_FIELD(arg0, u16*, 0x28) = M2C_FIELD(arg0, u16*, 0x2A) = 0;
+    M2C_FIELD(arg0, s32*, 0x2C) = 0;
+    M2C_FIELD(arg0, s32*, 0x34) = 0;
+    M2C_FIELD(arg0, s32*, 0x38) = (M2C_FIELD(arg0, s32*, 0x10) * 4) / 10;
+    M2C_FIELD(arg0, s32*, 0x3C) = (M2C_FIELD(arg0, s32*, 0x24) * M2C_FIELD(arg0, s32*, 0x10) * 2) / 10;
+    M2C_FIELD(arg0, s32*, 0x40) = 8;
+}
 
 void func_8002D900(u8* arg0);
 
