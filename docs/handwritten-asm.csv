@@ -1,0 +1,29 @@
+owner,reason
+func_800093C0,marked handwritten by the disassembler (cop0/TLB/cache instructions)
+func_800093E0,marked handwritten by the disassembler (cop0/TLB/cache instructions)
+func_80048010,marked handwritten by the disassembler (cop0/TLB/cache instructions)
+func_8004CFA0,marked handwritten by the disassembler; ultralib src/os/setcause.s
+func_8004D300,marked handwritten by the disassembler (cop0/TLB/cache instructions)
+func_8004DD80,marked handwritten by the disassembler (cop0/TLB/cache instructions)
+func_8004E3AC,marked handwritten by the disassembler (cop0/TLB/cache instructions)
+func_8004E4AC,exception handler code (ultralib src/os/exceptasm.s)
+func_8004E4F4,exception handler code (ultralib src/os/exceptasm.s)
+func_8004E504,marked handwritten by the disassembler (cop0/TLB/cache instructions)
+func_8004FD20,bzero (ultralib src/libc/bzero.s; uses swl)
+func_80051E50,marked handwritten by the disassembler; ultralib src/os/setcount.s
+func_80052050,marked handwritten by the disassembler; ultralib src/os/setsr.s
+func_80052100,marked handwritten by the disassembler (cop0/TLB/cache instructions)
+func_80052470,marked handwritten by the disassembler; ultralib src/os/getsr.s
+func_800539C0,marked handwritten by the disassembler; ultralib src/os/probetlb.s
+func_80053A80,marked handwritten by the disassembler; ultralib src/os/getcount.s
+func_80056730,marked handwritten by the disassembler (cop0/TLB/cache instructions)
+func_80056810,marked handwritten by the disassembler (cop0/TLB/cache instructions)
+func_80057910,bcmp (ultralib src/libc/bcmp.s)
+func_80058350,marked handwritten by the disassembler; ultralib src/os/setcompare.s
+func_80058410,marked handwritten by the disassembler; ultralib src/libc/bcopy.s
+func_80058940,marked handwritten by the disassembler; ultralib src/os/interrupt.s
+func_80058960,marked handwritten by the disassembler; ultralib src/os/interrupt.s
+func_800594D0,__osSetFpcCsr (ultralib src/os/setfpccsr.s)
+func_800596E0,marked handwritten by the disassembler; ultralib src/os/maptlbrdb.s
+func_8005C0A0,marked handwritten by the disassembler (cop0/TLB/cache instructions)
+func_81000020,fragment entry table of j stubs
