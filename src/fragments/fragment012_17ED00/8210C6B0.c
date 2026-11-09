@@ -258,11 +258,40 @@ s32 BattleScene_ValidateSelectedPartyMember(ActivePokemon* arg0) {
     return 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8210CDEC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210CDEC.s")
-#endif
+void func_82108DE8(ActivePokemon*, u8*);
+void func_8210CDEC(ActivePokemon* arg0, u8* arg1, u8* arg2, s32 arg3) {
+    ActivePokemonState* state = &arg0->state;
+    u16 mask;
+    s32 m; // FAKE
+
+    m = 0x4000;
+    if (arg0->sessionTeams->teamMember[0]->numberOfPokemonBrought == 3) {
+        mask = m;
+    } else {
+        mask = 0x4000;
+    }
+    if (arg3 == 1) {
+        if (*(u16*)(arg1 + 8) & mask) {
+            state->ownerTeamMemberIndex = state->unk_2D_zero;
+            state->unk_2D_zero = 0;
+            func_82108DE8(arg0, arg1);
+        } else if (*(u16*)(arg2 + 8) & mask) {
+            state->ownerTeamMemberIndex = state->unk_2D_zero;
+            state->unk_2D_zero = 0;
+            func_82108DE8(arg0, arg2);
+        }
+    } else {
+        if (*(u16*)(arg1 + 8) & mask) {
+            state->ownerTeamMemberIndex = state->unk_2D_zero;
+            state->unk_2D_zero = 0;
+            func_82108DE8(arg0, arg1);
+        } else if (*(u16*)(arg2 + 8) & mask) {
+            state->ownerTeamMemberIndex = state->unk_2D_zero;
+            state->unk_2D_zero = 1;
+            func_82108DE8(arg0, arg2);
+        }
+    }
+}
 
 void func_82108DE8(ActivePokemon*, u8*);
 void func_8210CEE8(ActivePokemon* arg0, u8* arg1, u8* arg2, s32 arg3) {
