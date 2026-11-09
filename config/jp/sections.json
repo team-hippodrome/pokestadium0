@@ -99,7 +99,7 @@
   "src/fragments/fragment007_166580_4.c": {
     ".rodata": {
       "address": "0x82009E20",
-      "size": "0x30"
+      "size": "0x60"
     }
   },
   "src/fragments/fragment007_166580_5.c": {
