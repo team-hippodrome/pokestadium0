@@ -2692,7 +2692,7 @@ func_821033DC,0x821033DC,src/fragments/fragment012_17ED00/battle_engine_move_ani
 func_8210343C,0x8210343C,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,func_8210343C,hand,,c
 func_82103600,0x82103600,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,BattleScene_TickRow1PlayOwnerCry,hand,,c
 func_821036F4,0x821036F4,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,func_821036F4,hand,,c
-func_8210384C,0x8210384C,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,,asm,,asm
+func_8210384C,0x8210384C,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,func_8210384C,hand,,c
 func_82103998,0x82103998,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,func_82103998,hand,,c
 func_82103A54,0x82103A54,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,BattleScene_TickQueueRowEffectList3OnFirstFrame,s1,stadium1:src/fragments/battle_engine/battle_engine_move_animation.c,c
 func_82103AF0,0x82103AF0,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,BattleScene_TickRow20CleanupAndEnterState18,s1,stadium1:src/fragments/battle_engine/battle_engine_move_animation.c,c
