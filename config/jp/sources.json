@@ -49,6 +49,7 @@
   "src/audio_cache.c",
   "src/audio_channel.c",
   "src/audio_commands.c",
+  "src/audio_commands_2.c",
   "src/audio_sfx_wrapper.c",
   "src/audio_sound_state.c",
   "src/battle_hud.c",
