@@ -294,11 +294,56 @@ void func_8210211C(s8 *arg0) {
     M2C_FIELD(M2C_FIELD(arg0, s8 **, 0x85C), s16 *, 2) = (s16) M2C_FIELD(arg0, s16 *, 0x84C);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8210213C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210213C.s")
-#endif
+void func_80003824(void*, s8*, s8*, s32);
+s32 func_82107A5C();
+extern s8 D_00434C00;
+extern u32 D_80073B30[];
+extern u8* D_82189180[];
+extern s8* D_82189188[];
+extern u8 D_0004EDA8[][0x20];
+extern u8 D_00050228[][0x10];
+extern f32 D_82199DF0[][4];
+/*
+ * func_8210213C
+ *
+ * Copies the participant's per-species records out of ROM with
+ * func_80003824 (dest, rom start, rom end, 0). The ROM offsets are masked to
+ * 24 bits and added to the D_00434C00 base. Side 1 also reloads its 0x20-byte
+ * record from the entry named by the record's halfword at 0x10, and keeps
+ * that halfword across the copy.
+ */
+void func_8210213C(ActivePokemon* arg0) {
+    s16 saved;
+    UNUSED s32 pad[3]; // FAKE
+    u32 base;
+    s32 side;
+    s16 type;
+    s8* src;
+
+    side = func_82107A5C(arg0);
+    type = arg0->displayObject.objectType - 1;
+    base = (u32)&D_00434C00;
+    // FAKE: the redundant (u32) casts on base below set the addu operand order.
+    src = (s8*)((D_80073B30[type] & 0xFFFFFF) + (u32)base);
+    func_80003824(D_82189180[side], src, src + 0x814, 0);
+    if (side == 1) {
+        s8** p = &D_82189188[side];
+
+        src = (s8*)((u32)base + ((u32)D_0004EDA8[type] & 0xFFFFFF));
+        func_80003824(*p, src, src + 0x20, 0);
+        if (M2C_FIELD(*p, s16*, 0x10) != 0xFF) {
+            saved = M2C_FIELD(*p, s16*, 0x10);
+            src = (s8*)(((u32)D_0004EDA8[M2C_FIELD(*p, s16*, 0x10) - 2] & 0xFFFFFF) + (u32)base);
+            func_80003824(*p, src, src + 0x20, 0);
+            M2C_FIELD(*p, s16*, 0x10) = saved;
+        }
+    } else {
+        src = (s8*)((u32)base + ((u32)D_0004EDA8[type] & 0xFFFFFF));
+        func_80003824(D_82189188[side], src, src + 0x20, 0);
+    }
+    src = (s8*)((u32)base + ((u32)D_00050228[type] & 0xFFFFFF));
+    func_80003824(D_82199DF0[side], src, src + 0x10, 0);
+}
 
 void BattleScene_TickRow10CleanupAndEnterState18(ActivePokemon* active_pokemon) {
     if (active_pokemon->animationTimer == 20) {
