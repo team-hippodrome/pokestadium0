@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5185,
-  "asm_owners": 259,
+  "c_owners": 5186,
+  "asm_owners": 258,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -617,7 +617,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "66085b5b25987dcdf0eba2797b726cd9193125acb1c9e738f9286db59efbf441",
+    "docs/function-matches.csv": "b8a624be8c85be487e63854d871b48db9837ecfa7c4fad86658bca448c647423",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -809,7 +809,7 @@
     "src/fragments/fragment012_17ED00/particle_math_26E6D0.c": "db0eea2fb8a1213b96f9b7fe293faf96dab17fda49f25b90465aca62b04ca039",
     "src/fragments/fragment012_17ED00/particle_math_26E6D0_2.c": "3f224465f6a774f97bae0bca4529e165237020aa32b6630dadc52304b4b853a6",
     "src/fragments/fragment012_17ED00/particle_math_26E6D0_3.c": "f0a6213871cd4e3baae1d9b905e8ff098d5e5059c92250264da0269018343318",
-    "src/fragments/fragment013_232510/demo_scenes_161E60.c": "8614043eba9b01d8b5582d997bd7018e8391a3e92178be1d1344a6ba5c7ed71a",
+    "src/fragments/fragment013_232510/demo_scenes_161E60.c": "770fd8f9b19f1e1285c4d78512db73887183dfb0d37ae51ab98c7fb76abc3048",
     "src/fragments/fragment014_235D70/lab_pc_icons.c": "30a150a826c2c3d8d17cd9fc7ca3ea8fb4ae19c5e7ea603bfd0ae7e35c3799f9",
     "src/fragments/fragment015_238BD0/89006FC0.c": "ec9f18c1d0cf47ddbc3dd696f403cbbaea1b6cc8d5b95e0c9f4a2d96a59a3e78",
     "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c": "dbfe055a16243f231ef97489f32ebdc970992775970e3e4648f5805647b795ec",

@@ -628,11 +628,35 @@ void func_82201600(s32 arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_822017F0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment013_232510/func_822017F0.s")
-#endif
+s32 func_822017F0(void) {
+    unk_D_82203170* p;
+    BattleMon* mon;
+    s32 i;
+    s32 j;
+    s32 k;
+
+    for (i = 0; i < 2; i++) {
+        p = &D_82203170[i];
+        if (p->unk_00 == 2) {
+            for (j = 0; j < 2; j++) {
+                mon = p->unk_38[j]->pokemonPicked;
+                for (k = 0; k < p->unk_38[j]->numberOfPokemonBrought; k++, mon++) {
+                    if (mon->hp < mon->unk_26) {
+                        return 1;
+                    }
+                }
+            }
+        } else {
+            mon = p->unk_38[0]->pokemonPicked;
+            for (k = 0; k < p->unk_38[0]->numberOfPokemonBrought; k++, mon++) {
+                if (mon->hp < mon->unk_26) {
+                    return 1;
+                }
+            }
+        }
+    }
+    return 0;
+}
 
 M2C_UNK func_80006780();                            /* extern */
 M2C_UNK func_80006828(M2C_UNK, M2C_UNK (*)(M2C_UNK)); /* extern */
