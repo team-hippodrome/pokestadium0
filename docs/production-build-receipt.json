@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5215,
-  "asm_owners": 229,
+  "c_owners": 5216,
+  "asm_owners": 228,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -97,6 +97,8 @@
     "src/fragments/fragment007_166580.c",
     "src/fragments/fragment007_166580_2.c",
     "src/fragments/fragment007_166580_3.c",
+    "src/fragments/fragment007_166580_4.c",
+    "src/fragments/fragment007_166580_5.c",
     "src/fragments/fragment008_1720F0.c",
     "src/fragments/fragment009_175570.c",
     "src/fragments/fragment010_17BE70/pikachu_reward.c",
@@ -607,8 +609,8 @@
     "src/util.c",
     "src/vector_math.c"
   ],
-  "source_registry_sha256": "88c3c816632297ce38ce119cf11105c898e97c1265d5089fe2f33af8c06700b4",
-  "section_registry_sha256": "c17ea0fa5febefacd4ee02d1d052543587d46429a2aaa86c0a877740f707793f",
+  "source_registry_sha256": "322645e96eb9dedf4085c09a330dc3f9453c2d9e8cc7ff8af41e7db5fed5b9b5",
+  "section_registry_sha256": "5d80a69b6440396ec3de2260a2fe2b3fa9dac3e1a0f580c6950158997b51951f",
   "headers_sha256": "f837395b1ec12c24d32d18bcb0a7e60e82866346b12b7f8145dfd3414f73711b",
   "matching_registry_sha256": "d8bcc14a2a0db281cf30dcb9ddbd94d59e1afe84c70b4c8c017ea27ce60a251c",
   "build_tools_sha256": {
@@ -618,7 +620,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "e61d135cbaff8af19c7a851f767718d1935124656c471cb0eec17d32fd087141",
+    "docs/function-matches.csv": "14a42ea27832d68178541cc359846ceb2f08181e09b264e7d4b1a242250dcd2f",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -708,9 +710,11 @@
     "src/fragments/fragment005_15FCE0/battle_order_select.c": "a70295c0213b97f1b0ba41701ed3d35953bc6cb93d182514974cb268fe8ff973",
     "src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c": "1b0b73a24f24b373acc90ba80977d9a3e2f5484bb0060f071382b43bff8edadc",
     "src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c": "dbf30826095bc18e17c094f8f915eb140392a1f497809aaa77e252763d7b4ffc",
-    "src/fragments/fragment007_166580.c": "b6fe8163e5b40a5560573d60403040c2a3af152ccce9d4c31c8e56ecb9644629",
+    "src/fragments/fragment007_166580.c": "e85efbd3dfde13aefaa3442994afce52bb0c95c1a943d34dc8aaa6d5ad64ad18",
     "src/fragments/fragment007_166580_2.c": "56b0700668c3b37f0dc634a9de6e453c587f36ebfad129eaab6eaf7bc774fbec",
     "src/fragments/fragment007_166580_3.c": "959a52145033722e71f44cc0715f9af9dc8aac65f434bb0cbda1aa0cdfe1489e",
+    "src/fragments/fragment007_166580_4.c": "c37dde66cee01e776ad21c14c1239d17c44e141f299095925e313afd227f36b1",
+    "src/fragments/fragment007_166580_5.c": "88e3473bbf9884c722417da521b218e2f7afd6d203ef05c796b34d71d2027122",
     "src/fragments/fragment008_1720F0.c": "4368ab3745b1845094b3c759ebb4fdc71b5ec0c7ed125d5120f1414cb7106d81",
     "src/fragments/fragment009_175570.c": "f15eaa1907af594a25af5f2c6890667b75e07bd3c706f091377747e8352bd54b",
     "src/fragments/fragment010_17BE70/pikachu_reward.c": "df1b99b4fdc9a7cf71dbc3807adac6e8e82fc06a4b6573249f0607c108fb1be1",

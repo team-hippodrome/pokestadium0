@@ -96,7 +96,13 @@
       "size": "0xC"
     }
   },
-  "src/fragments/fragment007_166580.c": {
+  "src/fragments/fragment007_166580_4.c": {
+    ".rodata": {
+      "address": "0x82009E20",
+      "size": "0x30"
+    }
+  },
+  "src/fragments/fragment007_166580_5.c": {
     ".rodata": {
       "address": "0x82009EE8",
       "size": "0x38"
