@@ -461,6 +461,12 @@
     },
     ".bss": "0x880022C8"
   },
+  "src/fragments/fragment015_238BD0/89006FC0.c": {
+    ".rodata": {
+      "address": "0x890190B0",
+      "size": "0x34"
+    }
+  },
   "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c": {
     ".rodata": {
       "address": "0x8901892C",
