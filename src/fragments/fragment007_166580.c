@@ -645,11 +645,77 @@ void func_82001D64(s32 arg0, s32 arg1, s32 arg2) {
     func_8001ABBC();
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82001E20; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment007_166580/func_82001E20.s")
-#endif
+typedef struct Img82001E20 {
+    /* 0x00 */ s32 stride;
+    /* 0x04 */ s32 height;
+    /* 0x08 */ s32 width;
+    /* 0x0C */ u8* pixels;
+} Img82001E20;
+typedef struct Slot82001E20 {
+    /* 0x00 */ u8 flags;
+    /* 0x01 */ u8 kind;
+    /* 0x02 */ u8 species;
+    /* 0x03 */ u8 index;
+    /* 0x04 */ s32 value;
+    /* 0x08 */ char name[1];
+} Slot82001E20;
+extern Img82001E20 D_82008F64;
+extern u8* D_8200AD08[];
+extern char D_82009C2C[];
+extern char D_82009C34[];
+extern char D_82009C48[];
+extern u8 D_04010918[];
+extern Gfx D_80073450[];
+u8 func_80022BAC(s32);
+void func_80027F20(s32);
+void func_8002A3F8(Img82001E20*, s32, s32);
+void func_8002BAB8(s32, s32, s32, s32);
+void func_8002BC58(s32, s32, s32, s32);
+void func_8001BCB4(s32, s32, s32, s32, void*, s32, s32);
+void func_82001E20(s32 arg0, s32 arg1, s32 arg2, Slot82001E20* arg3) {
+    s32 pad[3]; // FAKE
+    Img82001E20 img;
+
+    func_82001C00(arg0, arg1, D_82008F5C);
+    if (arg3->flags == 0) {
+        if (arg3->kind == 0x20) {
+            func_8002BC58(arg0 + 5, arg1 + 4, arg3->species, func_80022BAC(arg3->species));
+        } else if (arg3->kind == 0x10) {
+            func_8002A3F8(&D_82008F64, arg0 + 4, arg1 + 4);
+            func_8001AB6C();
+            func_80027F20(arg2);
+            func_8001A384(8, 0);
+            func_8001A944(arg0 + 0x1B, arg1 + 0x1A, D_82009C2C, arg3->index + 1);
+            func_8001ABBC();
+        }
+    } else if (arg3->flags & 4) {
+        img.width = img.height = img.stride = 0x40;
+        img.pixels = D_8200AD08[arg3->index];
+        func_8002A3F8(&img, arg0 + 0x16, arg1 + 2);
+    }
+    if (arg3->flags & 2) {
+        func_8001AB6C();
+        func_80027F20(arg2);
+        func_8001A384(4, 0);
+        func_8001A944(arg0 + 4, arg1 + 0x41, D_82009C34);
+        func_8001ABBC();
+        return;
+    }
+    func_8001AB6C();
+    func_8001AA9C(0xFF, 0xC8, 0xC8, 0xFF);
+    func_8001A384(4, -1);
+    func_8001A944(arg0 + 4, arg1 + 0x41, D_82009C48);
+    func_80027F20(arg2);
+    func_8001A384(4, 0);
+    func_8001A944(arg0 + 0x38, arg1 + 0x41, arg3->name);
+    func_8001ABBC();
+    if (arg3->value != 0) {
+        gSPDisplayList(gDisplayListHead++, D_80073450);
+        gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
+        func_8001BCB4(arg0 + 0x25, arg1 + 0x56, 0x28, 0xA, D_04010918, 0x28, 0);
+        func_8002BAB8(arg0 + 0x51, arg1 + 0x54, arg3->value, 5);
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_820020EC; signature not recovered. */
@@ -741,7 +807,6 @@ typedef struct MenuDef8200288C {
 } MenuDef8200288C;
 extern s32 D_8200AC58[];
 extern Color82001CCC D_82008F60;
-void func_82001E20(s32, s32, s32, void*);
 void func_8002E230(void*, s32, s32, s32, MenuDef8200288C*);
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_8200288C(s8 *arg0, s32 arg1)
