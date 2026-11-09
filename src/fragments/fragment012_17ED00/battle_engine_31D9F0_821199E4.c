@@ -293,7 +293,41 @@ void func_8211C43C(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
     BattleHud_DrawTranslucentShadowRect(arg1 - 2, arg2 - 1, 0xCD, 0x28, 0);
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211C6C0.s")
+extern u8 D_0300A500[];
+extern u8 D_0300A7A0[];
+extern char D_82195A68[];
+extern char D_82195A7C[];
+extern char D_82195A84[];
+void func_8211C6C0(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3) {
+    s32 pad[2]; // FAKE
+    s32 n;
+
+    Battle_DrawGradientRectWrapper(arg1 + 1, arg2 + 1, 0xC8, 0x24, (Color_RGB8*)(&D_8218B008 + arg3 * 3), (Color_RGB8*)(&D_8218B014 + arg3 * 3));
+    func_8001AB6C();
+    func_8001A384(2, 0);
+    func_8001A944(arg1 + 0x28, arg2 + 5, D_82195A68);
+    func_8001A944(arg1 + 0x32, arg2 + 0x14, D_82195A7C);
+    func_8001A944(arg1 + 0x7A, arg2 + 0x14, D_82195A84);
+    func_8001ABBC();
+    gSPDisplayList(gDisplayListHead++, D_80060308);
+    Gfx_DrawTextureRgba16Ia8(arg1 + arg0->state.unk_2F * 0x49 + 0x1B, arg2 + 0x14, 0x18, 0xE, D_0300A500, D_0300A7A0, 0x18, 0x100000);
+    gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
+    gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
+    BattleHud_DrawBorderTile(arg1, arg2, 8, 8, D_030096C0);
+    BattleHud_DrawBorderTile(arg1, arg2 + 0x1E, 8, 8, D_03009640);
+    BattleHud_DrawBorderTile(arg1 + 0xC2, arg2, 8, 8, D_03009840);
+    BattleHud_DrawBorderTile(arg1 + 0xC2, arg2 + 0x1E, 8, 8, D_030097C0);
+    for (n = 8; n < 0xC8; n += 8) {
+        BattleHud_DrawBorderTile(arg1 + n, arg2, 8, 8, D_03009940);
+        BattleHud_DrawBorderTile(arg1 + n, arg2 + 0x1E, 8, 8, D_030098C0);
+    }
+    for (n = 8; n < 0x20; n += 8) {
+        BattleHud_DrawBorderTile(arg1, arg2 + n, 8, 8, D_030095C0);
+        BattleHud_DrawBorderTile(arg1 + 0xC2, arg2 + n, 8, 8, D_03009740);
+    }
+    gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
+    BattleHud_DrawTranslucentShadowRect(arg1 - 2, arg2 - 1, 0xCD, 0x28, 0);
+}
 
 extern u8 D_8219A4F1;
 u8 func_8000F1FC(u8, s32, s32, s32);
