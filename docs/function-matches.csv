@@ -1388,7 +1388,7 @@ func_82113B74,0x82113B74,src/fragments/fragment012_17ED00/battle_engine_31C660.c
 func_82113C94,0x82113C94,src/fragments/fragment012_17ED00/battle_engine_31C660.c,Battle_Effect_Explosion,s1,stadium1:src/fragments/battle_engine/battle_engine_35DF70.c,c
 func_82113CD0,0x82113CD0,src/fragments/fragment012_17ED00/battle_engine_31C660.c,func_82113CD0,hand,,c
 func_82113FC8,0x82113FC8,src/fragments/fragment012_17ED00/battle_engine_31C660.c,func_82113FC8,s1,,c
-func_821142B8,0x821142B8,src/fragments/fragment012_17ED00/battle_engine_31C660.c,,asm,,asm
+func_821142B8,0x821142B8,src/fragments/fragment012_17ED00/battle_engine_31C660.c,func_821142B8,hand,,c
 func_8211459C,0x8211459C,src/fragments/fragment012_17ED00/battle_engine_31C660.c,Battle_Effect_LowerStat,hand,,c
 func_82144130,0x82144130,src/fragments/fragment012_17ED00/battle_engine_31C660_2.c,BattleAnim_SetupOwnerModelTintPaletteFade,s1,stadium1:src/fragments/battle_engine/battle_engine_31C660.c,c
 func_82144170,0x82144170,src/fragments/fragment012_17ED00/battle_engine_31C660_2.c,func_82144170,m2c,m2c,c
