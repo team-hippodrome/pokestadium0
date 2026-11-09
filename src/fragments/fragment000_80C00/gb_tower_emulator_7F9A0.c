@@ -127,7 +127,7 @@ s32 GbPak_InitializeCartridgeMapper(unk_D_8122B2C0* arg0) {
  * register fewer and does not match.
  */
 s32 func_81102344(u8*, s32);
-s32 func_80057910(M2C_UNK *, void *, M2C_UNK); /* extern */
+s32 func_80057910(M2C_UNK *, void *, u32); /* extern */
 extern M2C_UNK D_811564A0;
 extern M2C_UNK D_811564C0;
 s32 func_811020A8(void *arg0) {
@@ -504,11 +504,73 @@ s32 func_81102AC8(s32 arg0) {
     return 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81102C20; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81102C20.s")
-#endif
+s32 func_81102C20(s32 arg0) {
+    GbpakChannel811023DC* ch2;
+    GbpakChannel811023DC* ch;
+    s32 retries;
+    s32 r;
+    u32 i;
+    s32 off;
+
+    ch = &D_811561C8[arg0];
+    ch2 = ch;
+    retries = 20;
+    for (;;) {
+        r = func_81102AC8(arg0);
+        if (r >= 3) {
+        fail:
+            for (i = 0; i < ch->ramSize >> 8; i++) {
+                ch->blockState[i] = ch->blockDirty[i];
+            }
+            return -1;
+        }
+        if (r == 0) {
+            break;
+        }
+    }
+    while (D_81156475 != 0) {
+    }
+    if (ch->error != 0) {
+        goto fail;
+    }
+restart:
+    for (i = 0; i < ch2->ramSize >> 8; i++) {
+        off = i << 8;
+        if (ch->blockDirty[i] == 0) {
+            ch->request = 2;
+            ch->addr = i << 8;
+            ch->size = 0x100;
+            ch->buf = ch->verifyBuf;
+            func_8004CFB0(&D_81156458, arg0, 1);
+            while (D_81156475 != 0) {
+            }
+            if (ch->error != 0) {
+                goto fail;
+            }
+            if (func_80057910(ch->verifyBuf, ch->ramBuf + (i << 8), 0x100) != 0) {
+                if (retries == 0) {
+                    goto fail;
+                }
+                if ((func_81102168((s8*)ch) != 0) || ((ch->unk98 != 0) && (func_811020A8(ch) != 0))) {
+                    goto fail;
+                }
+                retries--;
+                ch->request = 3;
+                ch->addr = off;
+                ch->buf = ch->ramBuf + off;
+                ch->size = 0x100;
+                func_8004CFB0(&D_81156458, arg0, 1);
+                while (D_81156475 != 0) {
+                }
+                if (ch->error) {
+                    goto fail;
+                }
+                goto restart;
+            }
+        }
+    }
+    return 0;
+}
 
 void func_80058260(u32*);
 u32 func_80053A80(void);
