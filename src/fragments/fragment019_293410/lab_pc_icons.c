@@ -234,7 +234,60 @@ void func_8A200D44(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment019_293410/func_8A200DE0.s")
+extern Color_RGBA8 D_8A203370;
+extern Color_RGBA8 D_8A203374;
+extern char D_8A21D920[];
+extern char D_8A21D92C[];
+extern char D_8A21D938[];
+extern char D_8A21D940[];
+extern char D_8A21D950[];
+extern char D_8A21D95C[];
+extern char D_8A21D964[];
+extern char D_8A21D968[];
+extern char D_8A21D96C[];
+extern char D_8A21D974[];
+extern char D_8A21D978[];
+extern char D_8A21D97C[];
+void func_8002A550(s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
+s32 func_8A20219C(s32, s32);
+void func_8A200DE0(s32 arg0, s32 arg1, s32 arg2) {
+    s32 nextLevel;
+    s32 toNext;
+
+    if (((BattleMon*)arg2)->unk_24 == 100) {
+        nextLevel = 100;
+    } else {
+        nextLevel = ((BattleMon*)arg2)->unk_24 + 1;
+    }
+    toNext = func_8A20219C(((BattleMon*)arg2)->unk_00.unk_00, nextLevel) - ((BattleMon*)arg2)->unk_10;
+    func_8002A550(arg0, arg1, 0x122, 0xC8, D_8A203370, D_8A203374);
+    func_8001AB6C();
+    func_8001A384(8, 0);
+    func_8001AA9C(0xFF, 0xDA, 0xC7, 0xFF);
+    func_8001A944(arg0 + 0x37, arg1 + 0xC, D_8A21D920);
+    if (func_8002D498(arg2, 1) != -1) {
+        func_8001A944(arg0 + 0x37, arg1 + 0x28, D_8A21D92C);
+    }
+    func_8001AA9C(0xFF, 0xFF, 0xC7, 0xFF);
+    func_8001A944(arg0 + 0xF, arg1 + 0x4C, D_8A21D938);
+    func_8001AA9C(0xED, 0xFF, 0xC7, 0xFF);
+    func_8001A944(arg0 + 0xF, arg1 + 0x68, D_8A21D940);
+    func_8001AA9C(0xDA, 0xFF, 0xC7, 0xFF);
+    func_8001A944(arg0 + 0xF, arg1 + 0x8C, D_8A21D950);
+    func_8001AA9C(0xC7, 0xFF, 0xDA, 0xFF);
+    func_8001A944(arg0 + 0xF, arg1 + 0xA8, D_8A21D95C);
+    func_8001A944(arg0 + 0xA5, arg1 + 0xA8, D_8A21D964);
+    func_8001A944(arg0 + 0xC3, arg1 + 0xA8, D_8A21D968);
+    func_8001AA9C(((Color_RGBA8*)&D_800734A8)->r, ((Color_RGBA8*)&D_800734A8)->g, ((Color_RGBA8*)&D_800734A8)->b, ((Color_RGBA8*)&D_800734A8)->a);
+    func_8001A944(arg0 + 0xAF, arg1 + 0x4C, D_8A21D96C, ((BattleMon*)arg2)->unk_0E);
+    func_8001A944(arg0 + 0xAF, arg1 + 0x68, (char*)arg2 + 0x40);
+    func_8001A944(arg0 + 0x87, arg1 + 0x8C, D_8A21D974, ((BattleMon*)arg2)->unk_10);
+    func_8001A944(arg0 + 0x40, arg1 + 0xA8, D_8A21D978, toNext);
+    func_8001A944(arg0 + 0xD7, arg1 + 0xA8, D_8A21D97C, nextLevel);
+    func_8001ABBC();
+    func_8A200D44(arg0 + 0xAF, arg1 + 0xC, 8, arg2, 0);
+    func_8A200D44(arg0 + 0xAF, arg1 + 0x28, 8, arg2, 1);
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment019_293410/func_8A2010C8.s")
 
