@@ -1110,11 +1110,30 @@ void func_821044C8(ActivePokemon* active_pokemon) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82104648; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82104648.s")
-#endif
+void func_82104648(ActivePokemon* active_pokemon) {
+    s32 side = BattleScene_GetParticipantSideIndex(active_pokemon);
+    MovePresentationCue* cue;
+    BattleMonRuntime* runtime = &active_pokemon->state.runtime;
+    BattleMonRuntime* target_runtime;
+    ActivePokemon** target;
+
+    cue = &sSideBattleCues[side == 0]->moveCues[active_pokemon->state.runtime.usedMove - 1];
+    target_runtime = &sActivePokemon[side == 0]->state.runtime;
+    if (sActivePokemon[side == 0]->animationTimer == (cue->endFrame + 1)) {
+        if (func_82101F84((s8*)active_pokemon) == 0) {
+            BattleAnim_CleanupEffects(1);
+            if ((M2C_FIELD(target_runtime, u8*, 0x4C) & 0x80) && (sBattleMoveFailed == 0) && (sConfused == 1)) {
+                BattleAnim_PlayBattleSequenceById(sActivePokemon[side == 0], 0x12);
+            }
+            target = &sActivePokemon[side == 0];
+            BattleAnim_PlayMoveEffectEnd(*target, runtime->usedMove);
+            if ((sBattleMoveFailed == 0) || (sConfused == 1)) {
+                func_8003FE58(runtime->usedMove, (*target)->displayObject.objectType, 1);
+            }
+            sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
+        }
+    }
+}
 
 void func_82134EBC(ActivePokemon*, s32);
 void func_821047C4(ActivePokemon* active_pokemon) {

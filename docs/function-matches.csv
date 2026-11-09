@@ -2708,7 +2708,7 @@ func_82104120,0x82104120,src/fragments/fragment012_17ED00/battle_engine_move_ani
 func_82104208,0x82104208,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,func_82104208,hand,,c
 func_821043C0,0x821043C0,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,BattleScene_TickQueueList3Selector2OrCFromB10,hand,,c
 func_821044C8,0x821044C8,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,func_821044C8,hand,,c
-func_82104648,0x82104648,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,,asm,,asm
+func_82104648,0x82104648,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,func_82104648,hand,,c
 func_821047C4,0x821047C4,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,func_821047C4,hand,,c
 func_821048BC,0x821048BC,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,func_821048BC,hand,,c
 func_821049E8,0x821049E8,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,func_821049E8,hand,,c
