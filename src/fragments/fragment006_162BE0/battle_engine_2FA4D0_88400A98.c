@@ -195,7 +195,49 @@ void func_8840115C(void) {
     func_80006828(0x19, &func_88400108);
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment006_162BE0/func_88401290.s")
+extern Color_RGB8 D_88402F94;
+extern Color_RGB8 D_88402F98;
+extern char* D_88402D80;
+extern char* D_88402D84;
+extern char D_88403228[];
+extern u8 D_8F4B2B30[];
+extern Gfx D_80060398[];
+s32 func_8840079C(s32);
+void func_88400458(s32, s32, s32);
+
+void func_88401290(void) {
+    Color_RGB8 top = D_88402F94;
+    Color_RGB8 bottom = D_88402F98;
+
+    if (D_88403358 >= 0) {
+        D_88403358 = func_8840079C(D_88403358);
+        Ui_DrawGradientPanel(0x1E, 0x1E, 0x104, 0x18, &top, &bottom);
+        Font_BeginTranslucentTextRendering();
+        Font_SetActive(2, -1);
+        Font_SetLineHeight(0x10);
+        Font_Printf(0x23, 0x24, D_88402D80);
+        Font_EndTexturedTextRendering();
+        func_88400458(0, 0x1E, 0x38);
+        func_88400458(1, 0xA2, 0x38);
+        func_88400458(2, 0x1E, 0x80);
+        func_88400458(3, 0xA2, 0x80);
+    } else {
+        Ui_DrawGradientPanel(0x1E, 0x1E, 0x104, 0x4A, &top, &bottom);
+        Font_BeginTranslucentTextRendering();
+        Font_SetActive(2, -1);
+        Font_SetLineHeight(0x10);
+        Font_Printf(0x32, 0x23, D_88402D84);
+        Font_EndTexturedTextRendering();
+    }
+    Ui_DrawGradientPanel(0xBE, 0xCA, 0x64, 0x18, &top, &bottom);
+    gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
+    Gfx_DrawTextureRgba32(0xC8, 0xCF, 0x10, 0xE, (u8*)Util_ConvertAddrToVirtAddr((uintptr_t)D_8F4B2B30), 0x10, 0);
+    gSPDisplayList(gDisplayListHead++, D_80060398);
+    Font_BeginTranslucentTextRendering();
+    Font_SetActive(2, -1);
+    Font_Printf(0xDC, 0xD0, D_88403228);
+    Font_EndTexturedTextRendering();
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment006_162BE0/func_884014B4.s")
 
