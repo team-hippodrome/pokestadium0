@@ -289,7 +289,89 @@ void func_8A200DE0(s32 arg0, s32 arg1, s32 arg2) {
     func_8A200D44(arg0 + 0xAF, arg1 + 0x28, 8, arg2, 1);
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment019_293410/func_8A2010C8.s")
+typedef struct Entry8006A9D4 {
+    /* 0x00 */ u8 unk_00;
+    /* 0x01 */ u8 type;
+    /* 0x04 */ const char* name;
+    /* 0x08 */ s32 unk_08;
+} Entry8006A9D4; // size = 0xC
+extern Entry8006A9D4 D_8006A9D4[];
+typedef struct Entry8A203384 {
+    /* 0x00 */ s32 boxX;
+    /* 0x04 */ s32 boxY;
+    /* 0x08 */ s32 nameX;
+    /* 0x0C */ s32 nameY;
+    /* 0x10 */ s32 center;
+    /* 0x14 */ s32 ppX;
+    /* 0x18 */ s32 ppY;
+    /* 0x1C */ s32 iconX;
+    /* 0x20 */ s32 iconY;
+    /* 0x24 */ s32 icon;
+} Entry8A203384; // size = 0x28
+extern Entry8A203384 D_8A203384[];
+extern Color_RGBA8 D_8A203378;
+extern Color_RGBA8 D_8A20337C;
+extern char D_8A21D980[];
+extern char D_8A21D990[];
+void func_8002A3F8(s32, s32, s32);
+
+s32 func_8002D430(u8*, s32);
+u32 func_800566BC(const char*);
+void func_8A2010C8(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
+    s32 pad; // FAKE
+    s32 count;
+    s32 pad2; // FAKE
+    Color82000BC4 c;
+    const char* str;
+    s32 hl;
+    s32 move;
+    s32 x;
+    s32 i;
+    s32 step;
+    s32 cur;
+    s32 max;
+
+    func_8002A550(arg0, arg1, 0x21C, 0x86, D_8A203378, D_8A20337C);
+    count = func_8002D3D0((u8*)arg2);
+    for (i = 0; i < count; i++) {
+        hl = 0;
+        if (arg3 == i) {
+            func_80029A64(D_8A203384[i].boxX + arg0, D_8A203384[i].boxY + arg1, 0xD0, 0x30, D_80073520);
+            hl = 2;
+        }
+        func_8002A3F8(D_8A203384[i].icon, D_8A203384[i].iconX + arg0, D_8A203384[i].iconY + arg1);
+        move = func_8002D430((u8*)arg2, i);
+        func_8001AB6C();
+        if (move == -2) {
+            str = D_8A21D980;
+            func_8001AA9C(((Color_RGBA8*)&D_800734A8)->r, ((Color_RGBA8*)&D_800734A8)->g, ((Color_RGBA8*)&D_800734A8)->b, ((Color_RGBA8*)&D_800734A8)->a);
+        } else {
+            c = D_80066AD8[D_8006A9D4[move].type].color;
+            func_8001AA9C(c.r, c.g, c.b, c.a);
+            str = D_8006A9D4[move].name;
+        }
+        func_8001A384(8, 0);
+        x = D_8A203384[i].nameX + arg0;
+        if (D_8A203384[i].center) {
+            x = x - (func_800566BC(str) >> 1) * 0x14 + 0x8C;
+        }
+        func_8001A944(x, D_8A203384[i].nameY + arg1, str);
+        func_8001ABBC();
+        if (move != -2) {
+            cur = ((u8*)arg2)[i + 0x20];
+            step = gMoveData[move].unk_05 / 5;
+            if (step >= 7) {
+                step = 7;
+            }
+            max = gMoveData[move].unk_05 + step * (cur >> 6);
+            func_8001AB6C();
+            func_8001A384(4, 0);
+            func_80027F20(hl);
+            func_8001A944(D_8A203384[i].ppX + arg0, D_8A203384[i].ppY + arg1, D_8A21D990, cur & 0x3F, max);
+            func_8001ABBC();
+        }
+    }
+}
 
 
 void func_8A201394(s32 arg0, s32 arg1, BattleMon* arg2) {
