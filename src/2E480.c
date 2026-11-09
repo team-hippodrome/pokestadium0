@@ -827,11 +827,14 @@ void func_80031004(GridMenu80031004* arg0, s32 arg1, s32 arg2) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800310D8.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80031464; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80031464.s")
-#endif
+s32 func_80031464(GridMenu80031004* menu) {
+    s32 pageCount = (M2C_FIELD(menu, MenuDef8002E230**, 0x0)->itemCount + menu->columns - 1) / menu->columns;
+    s32 page = menu->scrollTarget / menu->cellHeight;
+    s32 nextPage = page + 1;
+    s32 remainder = M2C_FIELD(menu, MenuDef8002E230**, 0x0)->itemCount % menu->columns;
+
+    return ((pageCount == nextPage) && (remainder != 0)) ? remainder : menu->columns;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8003152C; signature not recovered. */
