@@ -492,11 +492,93 @@ void func_8800149C(s8 *arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88001564; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment014_235D70/func_88001564.s")
-#endif
+extern s32 D_88002258[];
+extern s32 D_8800227C[];
+extern s32 D_880022A0[];
+extern Color_RGBA8 D_88001FEC[];
+extern u8 D_88002034[][0x18];
+s32 func_8002E70C(s8*);
+void func_800245E0(s32, s32);
+s32 func_88000020(s32);
+s32 func_88001564(s8* arg0) {
+    s32 ret = 0;
+    s32 idx;
+    s32 dir;
+
+    switch (M2C_FIELD(arg0, s32*, 0)) {
+        case 1:
+            if (M2C_FIELD(arg0, s32*, 4) == 4 && M2C_FIELD(arg0, s32*, 0x2C) == 4) {
+                ret = M2C_FIELD(arg0, s32*, 8);
+            } else if (M2C_FIELD(arg0, s32*, 4) == 2 && M2C_FIELD(arg0, s32*, 0x354) == 4) {
+                M2C_FIELD(arg0, s32*, 0) = M2C_FIELD(arg0, s32*, 4);
+                M2C_FIELD(arg0, s32*, 4) = 0;
+            } else {
+                switch (func_88000564(arg0 + 0x32C)) {
+                    case 1:
+                        func_8003F6AC(0x1E);
+                        gSessionContext.sessionFlags |= 2;
+                        M2C_FIELD(arg0, s32*, 8) = 0x8050;
+                        M2C_FIELD(arg0, s32*, 0x350) = 7;
+                        M2C_FIELD(arg0, s32*, 4) = 4;
+                        M2C_FIELD(arg0, s32*, 0x30) = 0xD;
+                        break;
+                    case 2:
+                        func_8003F6AC(3);
+                        gSessionContext.sessionFlags &= ~1;
+                        M2C_FIELD(arg0, s32*, 0x350) = 7;
+                        M2C_FIELD(arg0, s32*, 4) = 2;
+                        break;
+                    case 3:
+                        func_8003F6AC(0x1F);
+                        func_800245E0(0x15, 0);
+                        gSessionContext.sessionFlags &= ~1;
+                        M2C_FIELD(arg0, s32*, 0x350) = 7;
+                        M2C_FIELD(arg0, s32*, 4) = 2;
+                        break;
+                }
+            }
+            break;
+        case 2:
+            if (func_8002E70C(arg0 + 0x34) == 0) {
+                dir = func_8002BC14(D_800603C0);
+                if (dir == -1) {
+                    func_8003F6AC(8);
+                } else if (dir == 1) {
+                    func_8003F6AC(2);
+                    M2C_FIELD(arg0, s32*, 0) = 3;
+                    idx = M2C_FIELD(arg0, s32*, 0x3C);
+                    func_88000FE8(arg0 + 0x234, 0x36, 0x57, D_88002258[idx], D_8800227C[idx], D_880022A0[idx], D_88001FEC[idx], (s32)D_88002034[idx]);
+                }
+            }
+            break;
+        case 3:
+            if (M2C_FIELD(arg0, s32*, 4) == 4 && M2C_FIELD(arg0, s32*, 0x2C) == 4) {
+                ret = M2C_FIELD(arg0, s32*, 8);
+            } else if (M2C_FIELD(arg0, s32*, 4) == 2 && M2C_FIELD(arg0, s32*, 0x25C) == 4) {
+                M2C_FIELD(arg0, s32*, 0) = M2C_FIELD(arg0, s32*, 4);
+                M2C_FIELD(arg0, s32*, 4) = 0;
+            } else {
+                dir = func_8800125C(arg0 + 0x234);
+                if (dir == -1) {
+                    func_8003F6AC(3);
+                    M2C_FIELD(arg0, s32*, 0x258) = 7;
+                    M2C_FIELD(arg0, s32*, 4) = 2;
+                } else if (dir == 1) {
+                    if (M2C_FIELD(arg0, s32*, 0x3C) == 7) {
+                        func_8003F6AC(2);
+                    } else {
+                        func_8003F6AC(0x1C);
+                    }
+                    M2C_FIELD(arg0, s32*, 8) = func_88000020(M2C_FIELD(arg0, s32*, 0x3C));
+                    M2C_FIELD(arg0, s32*, 0x258) = 7;
+                    M2C_FIELD(arg0, s32*, 4) = 4;
+                    M2C_FIELD(arg0, s32*, 0x30) = 0xD;
+                }
+            }
+            break;
+    }
+    return ret;
+}
 
 s32 func_80002D98(M2C_UNK);
 M2C_UNK func_8000B2F4(s32);
@@ -657,7 +739,7 @@ s32 func_88001C08(s32 arg0) {
 M2C_UNK func_8000B1FC();                            /* extern */
 M2C_UNK func_8000B220();                            /* extern */
 M2C_UNK func_8001B5F0();                            /* extern */
-s32 func_88001564(s32);                             /* extern */
+s32 func_88001564(s8*);
 extern s32 D_88002B20;
 
 s32 func_88001CA4(s32 arg0) {

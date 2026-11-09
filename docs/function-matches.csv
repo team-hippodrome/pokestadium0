@@ -3517,7 +3517,7 @@ func_880012FC,0x880012FC,src/fragments/fragment014_235D70/lab_pc_icons.c,func_88
 func_88001368,0x88001368,src/fragments/fragment014_235D70/lab_pc_icons.c,func_88001368,hand,,c
 func_880013EC,0x880013EC,src/fragments/fragment014_235D70/lab_pc_icons.c,func_880013EC,m2c,m2c+context+types,c
 func_8800149C,0x8800149C,src/fragments/fragment014_235D70/lab_pc_icons.c,func_8800149C,m2c,m2c,c
-func_88001564,0x88001564,src/fragments/fragment014_235D70/lab_pc_icons.c,,asm,,asm
+func_88001564,0x88001564,src/fragments/fragment014_235D70/lab_pc_icons.c,func_88001564,hand,,c
 func_8800187C,0x8800187C,src/fragments/fragment014_235D70/lab_pc_icons.c,func_8800187C,hand,,c
 func_8800196C,0x8800196C,src/fragments/fragment014_235D70/lab_pc_icons.c,func_8800196C,hand,,c
 func_88001A30,0x88001A30,src/fragments/fragment014_235D70/lab_pc_icons.c,func_88001A30,hand,,c
