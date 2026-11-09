@@ -232,7 +232,7 @@ func_800419F8,0x800419F8,src/audio_commands.c,,asm,,asm
 func_80042508,0x80042508,src/audio_commands.c,,asm,,asm
 func_80042A6C,0x80042A6C,src/audio_commands.c,,asm,,asm
 func_80042FF8,0x80042FF8,src/audio_commands.c,,asm,,asm
-func_80043860,0x80043860,src/audio_commands.c,,asm,,asm
+func_80043860,0x80043860,src/audio_commands.c,func_80043860,hand,,c
 func_80043A10,0x80043A10,src/audio_commands.c,func_80043A10,hand,,c
 func_80043B00,0x80043B00,src/audio_commands.c,,asm,,asm
 func_80043CE8,0x80043CE8,src/audio_commands.c,func_80043CE8,hand,,c

@@ -272,11 +272,59 @@ void func_80041940(u32 arg0, s32 arg1, s32 arg2) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80042FF8.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80043860; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80043860.s")
-#endif
+extern u8 D_80077548;
+void func_80043CE8(s32, f32, s32);
+extern s32 D_800B4188;
+extern s32 D_800B41A4;
+extern u8 D_80077554;
+extern u8 D_80077570;
+extern u8 D_8007755C;
+extern u8 D_80077564;
+void func_80043860(u32 arg0) {
+    u32 hp;
+    s32 lost;
+    u32* prev;
+
+    if (arg0 < 2) {
+        hp = D_800FD698[arg0];
+        if (hp != 0) {
+            prev = (u32*)&D_800FD6A0[arg0];
+            if (arg0 == D_80077554) {
+                if ((hp < 30) && (D_80077570 != 0)) {
+                    func_80043CE8(0x6A, 0.0f, 0x80);
+                    D_80077570 = 0;
+                }
+            } else {
+                lost = *prev - hp;
+                *prev = hp;
+                if (lost > 0) {
+                    if ((hp < 10) && (hp != 0)) {
+                        func_80043CE8(0x22, 0.0f, 0x80);
+                        func_8003834C(D_800B4188, D_800B41A4, 0x1A, 0x80, 0x80, 0, -1);
+                        return;
+                    }
+                    if (D_8007755C == 0) {
+                        if (lost < 15) {
+                            if (((u8)osGetCount() & 0x11) || (D_80077548 < 2)) {
+                                func_80043CE8(0x3F, 0.0f, 0x80);
+                                D_80077564 = 1;
+                            }
+                        } else if (lost < 60) {
+                            if (((u8)osGetCount() & 1) || (D_80077548 < 2)) {
+                                func_80043CE8(0x3D, 0.0f, 0x80);
+                                D_80077564 = 1;
+                            }
+                        } else {
+                            func_80043CE8(0x3E, 0.0f, 0x80);
+                        }
+                    } else {
+                        D_8007755C = 0;
+                    }
+                }
+            }
+        }
+    }
+}
 
 /*
  * func_80043A10
