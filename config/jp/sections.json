@@ -26,6 +26,12 @@
       "size": "0x24"
     }
   },
+  "src/audio_commands.c": {
+    ".rodata": {
+      "address": "0x8007DEBC",
+      "size": "0xB4"
+    }
+  },
   "src/crash_screen.c": {
     ".rodata": {
       "address": "0x80079704",

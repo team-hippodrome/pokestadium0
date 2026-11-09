@@ -82,11 +82,99 @@ s32 func_8003F654(s32 arg0) {
     return ret;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8003F6AC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8003F6AC.s")
-#endif
+s32 func_800376E8(s32);
+s32 func_8003834C(s32, s32, s32, s32, s32, s32, s32);
+extern u8 D_80077524;
+extern s32 D_800B4188;
+extern s32 D_800B41A4;
+extern u8* D_800FD690;
+void func_80037C04(s32, u32);
+extern s32 D_800B41A0;
+extern s32 D_800FD610[];
+extern u8 D_800FD620;
+extern s32 D_800FD628[];
+extern u8 D_800FD68C;
+
+s32 func_8003F6AC(s32 arg0) {
+    s32 ret;
+    s32 pad[2]; // FAKE
+    u32 i;
+    volatile s32 id; // FAKE: keeps the copy in its stack slot
+    s32* p;
+
+    if (arg0 == 0xF) {
+        if (!(D_80075C30 & 0x80000000)) {
+            return 0;
+        }
+        ret = func_8003834C((s32)D_800FD690, D_800B41A0, 0xF, 0x80, 0x80, 0, -1);
+        func_80037AC4(D_800FD608, 0x28);
+        return ret;
+    }
+    if (arg0 == 0x17) {
+        return func_8003834C(D_800B4188, D_800B41A0, 0x17, 0x80, 0x80, 0, -1);
+    }
+    i = 0;
+    if (D_800FD68C != 0) {
+        p = D_800FD628;
+    loop:
+        i++;
+        if (arg0 == *p) {
+            return 0;
+        }
+        p++;
+        if (i < D_800FD68C) {
+            goto loop;
+        }
+    }
+    D_800FD628[D_800FD68C] = arg0;
+    D_800FD68C++;
+    id = arg0;
+    switch (arg0) {
+        case 36:
+            func_8003834C(D_800B4188, D_800B41A4, 0x1A, 0x80, 0x80, 0, -1);
+            break;
+        case 18:
+        case 19:
+        case 20:
+        case 21:
+        case 22:
+            func_8003834C(D_800B4188, D_800B41A4, 0x1A, 0x80, 0x80, 0, -1);
+            break;
+        case 1: case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10:
+        case 11: case 12: case 13: case 14: case 16: case 17: case 24: case 25: case 26:
+        case 27: case 28: case 29: case 30: case 31: case 32: case 33: case 34: case 35: case 37:
+            break;
+        case 15:
+        case 23:
+        default:
+            return 0;
+    }
+    if (arg0 == 0xA) {
+        D_80077524 = 1;
+    }
+    switch (id) {
+        case 1:
+        case 2:
+        case 3:
+        case 5:
+        case 6:
+        case 8:
+            if (D_800FD610[D_800FD620] != 0) {
+                func_80037AC4(D_800FD610[D_800FD620], 1);
+            }
+            ret = func_800376E8(arg0);
+            D_800FD610[D_800FD620++] = ret;
+            D_800FD620 %= 4;
+            break;
+        default:
+            ret = func_800376E8(arg0);
+            break;
+    }
+    if (id == 0xA) {
+        func_80037C04(ret, 0xE0);
+    }
+    return ret;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8003F96C; signature not recovered. */
