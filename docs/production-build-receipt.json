@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5267,
-  "asm_owners": 177,
+  "c_owners": 5268,
+  "asm_owners": 176,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -611,7 +611,7 @@
     "src/vector_math.c"
   ],
   "source_registry_sha256": "e6279b8fe24d310b6b89f5f532a4c196e0e37d33710a71ff9edc6cf5e0b9ad9b",
-  "section_registry_sha256": "084369e74b15c57b433e68686555c2918493da49f1a4ee0ad31ec9ec436c82cc",
+  "section_registry_sha256": "134b1ee7fea6b504ddb8f199f75f780a5ccd44b58bae6bbfe899327e76c23108",
   "headers_sha256": "0a20c6e036535a982cdddbf6a10b15dce42ac31a1c462180a4b7800590b7686c",
   "matching_registry_sha256": "d8bcc14a2a0db281cf30dcb9ddbd94d59e1afe84c70b4c8c017ea27ce60a251c",
   "build_tools_sha256": {
@@ -621,7 +621,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "4c41d831510aa94973c35c32ab92432f5743194950f58cd2a3d5343a1793cbdc",
+    "docs/function-matches.csv": "8a081d37f824bb21adce91f0aa679b4639eaa27c6f8fa11583a7bb6e793aa558",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -807,7 +807,7 @@
     "src/fragments/fragment012_17ED00/ekans_game_2.c": "a843a8dcfda50b5c239239d42815db53bc72ffbf18dc042d5f01b364bcc4ffbd",
     "src/fragments/fragment012_17ED00/ekans_game_3.c": "f1f72fb025d66400d1c6586ed30f753e7f12bedb9cda4e92894bbcf8bd7dceb9",
     "src/fragments/fragment012_17ED00/ekans_game_3_82188050.c": "630344da294928954b1d343032c6e292504db7a8eb287343f3ee21905254a2e6",
-    "src/fragments/fragment012_17ED00/fragment1_89010.c": "f2baa7a01787fd61e6cbd8bd5aa1cec3cdaad754759997cbc18de242f76a0f82",
+    "src/fragments/fragment012_17ED00/fragment1_89010.c": "efe5b474d6adf059a1ac1d518ff5e0e6b520a4d48917f62e85a09ef18bde891e",
     "src/fragments/fragment012_17ED00/fragment1_89010_821328DC.c": "901f6b861de798e44a86953d188e36bab018d53c204092429a5ae06c18790655",
     "src/fragments/fragment012_17ED00/particle_math_261F90.c": "74022412078088a6e83edf3cd5e19d6220ea32b3705f0faff47b2ad5c4cf440c",
     "src/fragments/fragment012_17ED00/particle_math_264380.c": "c72d31952de337605826b42db2af812fb1441ccd3d85cb28b8ec17fca7c6f00c",

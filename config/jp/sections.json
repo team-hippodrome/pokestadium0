@@ -419,7 +419,10 @@
     }
   },
   "src/fragments/fragment012_17ED00/fragment1_89010.c": {
-    ".rodata": "0x82196670"
+    ".rodata": {
+      "address": "0x82196670",
+      "size": "0x38"
+    }
   },
   "src/fragments/fragment012_17ED00/fragment1_89010_821328DC.c": {
     ".rodata": {
