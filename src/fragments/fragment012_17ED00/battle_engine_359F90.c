@@ -586,11 +586,45 @@ void func_821112AC(void) {
 }
 
 extern u8 D_82199F3F;
-#ifdef NON_MATCHING
-/* TODO: decompile func_821113E8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821113E8.s")
-#endif
+extern s32 D_8218C768;
+extern s32 D_8218C76C;
+extern s32 D_8218C770;
+extern s32 D_8218C774;
+/* Stadium 0 counterpart of Stadium 1's Battle_QueueMoveFailureAndApplyRecoil. */
+void func_821113E8(void) {
+    BattleMonRuntime* sp1C;
+
+    if (D_82199F3F & 0x7F) {
+        if (sBattleCritFlag == 0xFF) {
+            func_8211EF74(D_8219A520 + 0x88, 0x19, D_8218C768, func_82107F88(sActivePokemon[!sBattleScene.scene->unk_2C]));
+        } else {
+            func_8211EF74(D_8219A520 + 0x88, 0x1A, D_8218C76C, func_82107F88(sActivePokemon[sBattleScene.scene->unk_2C]));
+        }
+    } else {
+        func_8211EF74(D_8219A520 + 0x88, 0x1B, D_8218C770, func_82107F88(sActivePokemon[!sBattleScene.scene->unk_2C]));
+    }
+
+    sBattleCritFlag = 0;
+
+    if (sBattleUser->moveCache.unk_01 == 0x2D) {
+        sBattleScene.scene->unk_48 = 0x10;
+        sBattleDamage >>= 3;
+        if (sBattleDamage == 0) {
+            sBattleDamage++;
+        }
+
+        func_8211EF74(D_8219A520 + 0x208, 0x1C, D_8218C774, func_82107F88(sActivePokemon[sBattleScene.scene->unk_2C]));
+
+        sp1C = sBattleUser;
+        sBattleUser = sBattleTarget;
+        sBattleTarget = sp1C;
+        sBattleScene.scene->unk_2C = !sBattleScene.scene->unk_2C;
+        func_8211009C();
+        sBattleScene.scene->unk_2C = !sBattleScene.scene->unk_2C;
+        sBattleTarget = sBattleUser;
+        sBattleUser = sp1C;
+    }
+}
 
 void Battle_IncrementMoveUsage(void) {
     ActivePokemonState* state;
