@@ -265,11 +265,40 @@ void func_8220013C(void) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82200278; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment013_232510/func_82200278.s")
-#endif
+uintptr_t Memmap_GetFragmentVaddr(void* addr);
+void GfxImage_FillCurrent(Gfx** gfx_p, u16 fill_color);
+extern u8 D_8F908980[];
+extern u8 D_8FA08900[];
+extern u8 D_8FB08900[];
+extern Gfx D_80060398[];
+void func_82200278(void) {
+    uintptr_t img;
+
+    if (D_822036A8 > 0) {
+        switch (D_822036A8) {
+            case 1:
+                img = Memmap_GetFragmentVaddr(D_8F908980);
+                break;
+            case 2:
+                img = Memmap_GetFragmentVaddr(D_8FA08900);
+                break;
+            case 3:
+                img = Memmap_GetFragmentVaddr(D_8FB08900);
+                break;
+        }
+        gDPSetCycleType(gDisplayListHead++, G_CYC_1CYCLE);
+        gDPSetTexturePersp(gDisplayListHead++, G_TP_NONE);
+        gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGB, G_CC_DECALRGB);
+        gSPClearGeometryMode(gDisplayListHead++, G_ZBUFFER | G_LIGHTING);
+        gDPLoadTextureBlock(gDisplayListHead++, img, G_IM_FMT_RGBA, G_IM_SIZ_32b, 4, 64, 0, G_TX_NOMIRROR | G_TX_CLAMP,
+                            G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gSPTextureRectangle(gDisplayListHead++, 0, 0, 0x500, 0x200, G_TX_RENDERTILE, 0, 0, 0, 0x200);
+        gSPTextureRectangle(gDisplayListHead++, 0, 0x200, 0x500, 0x3C0, G_TX_RENDERTILE, 0, 0x7E0, 0, 0);
+        gSPDisplayList(gDisplayListHead++, D_80060398);
+        return;
+    }
+    GfxImage_FillCurrent(&gDisplayListHead, 1);
+}
 
 extern u8* D_86B10828;
 extern GraphNode* D_86B106B4;
