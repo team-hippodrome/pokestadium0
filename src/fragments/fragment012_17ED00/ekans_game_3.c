@@ -1476,11 +1476,80 @@ s32 func_821870D8(s32 arg0, s32 arg1, s32 arg2) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82187134.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82187414; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82187414.s")
-#endif
+s8 func_82187134(s32, s32, s32, s32);
+extern u8 D_821CF2B8[];
+s32 func_82187414(s32 arg0)
+{
+  s32 best;
+  s32 i;
+  f32 max;
+  f32 scores[6];
+  s32 r;
+  s32 j;
+
+  D_821CF288 = arg0;
+  for (i = 0; i < D_821CF288; i++)
+  {
+    r = func_82187134(0, 0, 1, i);
+    if (r < 0)
+    {
+      return -1;
+    }
+    D_821CF280[i] = r;
+  }
+
+  for (i = 0; i < D_821CF288; i++)
+  {
+    scores[i] = 0.0f;
+    for (j = 0; j < 6; j++)
+    {
+      if (D_821CF298[j].unk_1C != 0)
+      {
+        r = func_82185220(D_821CF298[j].pad04, D_821CF294[D_821CF280[i]].pad04, 0);
+        if (r == 0)
+        {
+          scores[i] += 2.0f;
+        }
+        else
+        {
+          scores[i] += ((f32) func_82185220(D_821CF294[D_821CF280[i]].pad04, D_821CF298[j].pad04, 0)) / ((f32) r);
+        }
+      }
+    }
+  }
+
+  max = 0.0f;
+  best = 0;
+  for (i = 0; i < D_821CF288; i++)
+  {
+    if (max < scores[i])
+    {
+      best = i;
+      max = scores[i];
+    }
+  }
+
+  if ((best != 0) && (func_82183AF0() < 0x32))
+  {
+    i = D_821CF280[best]; // FAKE: i reused as swap temp
+    D_821CF280[best] = D_821CF280[0];
+    D_821CF280[0] = i;
+  }
+
+  for (i = 0; i < D_821CF288; i++)
+  {
+    func_80058410((s8 *) D_821CF294[D_821CF280[i]].pad04, (s8 *) &D_821CF2B8[i * 0x90], 0x90);
+  }
+
+  for (i = 0; i < D_821CF288; i++)
+  {
+    func_80058410((s8 *) &D_821CF2B8[i * 0x90], (s8 *) D_821CF294[i].pad04, 0x90);
+    ((u8 *) &D_821CF294[i])[0x79] = 1 << i;
+  }
+
+  ((u8 *) D_821CF294)[0x36C] = (1 << D_821CF288) - 1;
+  return 0;
+}
 
 extern BattleSlotZ D_821CF618[6];
 extern BattleSlotZ D_821CF998[6];
