@@ -216,11 +216,44 @@ void func_891051A4(Box89104E38* arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89105200; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89105200.s")
-#endif
+typedef struct Box89105200 {
+    /* 0x00 */ s32 x;
+    /* 0x04 */ s32 y;
+    /* 0x08 */ s32 w;
+    /* 0x0C */ char padC[0x20];
+    /* 0x2C */ s8 label[0x34];
+    /* 0x60 */ s32 unk60[6];
+    /* 0x78 */ s32 timer;
+    /* 0x7C */ s32 unk7C;
+    /* 0x80 */ s32 unk80;
+} Box89105200;
+
+M2C_UNK func_8003F6AC(M2C_UNK);
+
+s32 func_89105200(Box89105200* arg0) {
+    s32 color;
+    s32 params[4]; // only params[0] (alpha) is set here, as in func_891051A4
+
+    if (func_8002AE6C() != 0) {
+        return 0;
+    }
+    if (arg0->timer > 0) {
+        arg0->timer--;
+    }
+    if (arg0->timer >= 30) {
+        color = 0xFDED;
+        params[0] = (arg0->timer * 0xFF - 30 * 0xFF) / 30;
+    } else {
+        if (arg0->timer == 29) {
+            arg0->unk60[arg0->unk7C] = arg0->unk80;
+            func_8003F6AC(0x22);
+        }
+        color = 0xFEED;
+        params[0] = ((30 - arg0->timer) * 0xFF) / 30;
+    }
+    func_8002DAD8(arg0->label, arg0->x + 6, arg0->y + 0xA, color, (s8*)params);
+    return arg0->timer == 0;
+}
 
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_89105340(s8 *arg0, s32 arg1, s32 arg2)
