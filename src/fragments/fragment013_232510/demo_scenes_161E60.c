@@ -817,11 +817,70 @@ void func_82201A3C(void) {
     func_80006828(0x96, &func_822005A8);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82201AC4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment013_232510/func_82201AC4.s")
-#endif
+extern Color_RGB8 D_8220308C;
+extern Color_RGB8 D_82203090;
+extern char D_822030CC[];
+extern char D_822030EC[];
+extern char D_822030F8[];
+extern char D_82203108[];
+extern char D_82203128[];
+extern char D_8220314C[];
+extern u8 D_8F625F00[];
+extern Gfx D_80060290[];
+void func_80025830(void);
+
+s32 func_82201AC4(void) {
+    Color_RGB8 top = D_8220308C;
+    Color_RGB8 bottom = D_82203090;
+    s32 sel = 0;
+    s32 x;
+    u8* tex;
+    s32 pad; // FAKE
+
+    D_822033D0.node.renderFlags &= ~0x20;
+    D_82203538.node.renderFlags &= ~0x20;
+    do {
+        func_822005A8(0);
+        if (gPlayer1Controller->buttonPressed & (BTN_DLEFT | BTN_DRIGHT)) {
+            Audio_PlaySoundEffectById(1);
+            sel ^= 1;
+        }
+        Ui_DrawGradientPanel(0x1E, 0xAA, 0x104, 0x32, &top, &bottom);
+        Font_BeginTranslucentTextRendering();
+        Font_SetActive(2, 0);
+        Font_Printf(0x4B, 0xB2, D_822030CC);
+        Gfx_SetEnvColor(0xFF, 0xFF, (sel == 0) ? 0 : 0xFF, 0xFF);
+        Font_Printf(0x55, 0xC6, D_822030EC);
+        Gfx_SetEnvColor(0xFF, 0xFF, (sel == 1) ? 0 : 0xFF, 0xFF);
+        Font_Printf(0xAA, 0xC6, D_822030F8);
+        Font_EndTexturedTextRendering();
+        gSPDisplayList(gDisplayListHead++, D_80060290);
+        tex = D_8F625F00; // FAKE: temp stops the address being hoisted
+        x = ((sel == 0) ? 0x21 : 0x76) + 0x1E;
+        Gfx_DrawTextureRgba16(x, 0xC5, 0x18, 0xE, (u8*)Util_ConvertAddrToVirtAddr((uintptr_t)tex), 0x18, 0x200000);
+        gSPDisplayList(gDisplayListHead++, D_80060398);
+        func_80006780();
+    } while (!(gPlayer1Controller->buttonPressed & BTN_A));
+    if (sel == 1) {
+        Audio_PlaySoundEffectById(0x1D);
+        func_80025830();
+        do {
+            func_822005A8(0);
+            Ui_DrawGradientPanel(0x1E, 0xAA, 0x104, 0x32, &top, &bottom);
+            Font_BeginTranslucentTextRendering();
+            Font_SetActive(2, 0);
+            Font_Printf(0x34, 0xAF, D_82203108);
+            Font_Printf(0x34, 0xBD, D_82203128);
+            Font_Printf(0x34, 0xCB, D_8220314C);
+            Font_EndTexturedTextRendering();
+            func_80006780();
+        } while (gPlayer1Controller->buttonPressed == 0);
+        func_800407B0(0x56, 0, 0);
+    }
+    D_822033D0.node.renderFlags |= 0x20;
+    D_82203538.node.renderFlags |= 0x20;
+    return sel;
+}
 
 void func_82200F08(void);
 s32 func_82201AC4(void);
