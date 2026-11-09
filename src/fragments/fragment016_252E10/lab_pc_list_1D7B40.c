@@ -853,11 +853,52 @@ void func_891066C0(s32 arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_891066E0.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89106864; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89106864.s")
-#endif
+extern Gfx D_80073408[];
+extern Gfx D_80073438[];
+extern u8 D_04002130[];
+extern u8 D_04002238[];
+extern u8 D_04002340[];
+extern u8 D_04002448[];
+void func_80029A64(s32, s32, s32, s32, Color_RGBA8);
+extern Color_RGBA8 D_80073520;
+M2C_UNK func_8001AA60(s32, s32, s32);
+
+void func_89106864(s8* arg0, s32 x, s32 y, s32 flags) {
+    s32 hl = flags & 2;
+    s32 bx;
+    s32 v;
+
+    if (hl & 2) {
+        bx = x - M2C_FIELD(arg0, s32*, 0x10) * 0x16 + 0x2C;
+        gSPDisplayList(gDisplayListHead++, D_80073408);
+        if (((u16*)D_800603C0)[3] & 0x800) {
+            v = (s32)D_04002340;
+        } else {
+            v = (s32)D_04002130;
+        }
+        func_8001B884(bx + 3, y - 0xA, 0xE, 8, (u8*)v, 0x10, 0x200000);
+        if (((u16*)D_800603C0)[3] & 0x400) {
+            v = (s32)D_04002448;
+        } else {
+            v = (s32)D_04002238;
+        }
+        func_8001B884(bx + 3, y + 0x16, 0xE, 8, (u8*)v, 0x10, 0x200000);
+        gSPDisplayList(gDisplayListHead++, D_80073438);
+        func_80029A64(bx - 3, y - 3, 0x1A, 0x1A, D_80073520);
+    }
+    func_8001AB6C();
+    func_8001A384(8, 2);
+    v = (M2C_FIELD(arg0, s32*, 0x10) == 2) ? hl : 0;
+    func_80027F20(v);
+    func_8001AA60(x, y, M2C_FIELD(arg0, s32*, 0) / 100 + '0');
+    v = (M2C_FIELD(arg0, s32*, 0x10) == 1) ? hl : 0;
+    func_80027F20(v);
+    func_8001AA60(x + 0x16, y, M2C_FIELD(arg0, s32*, 0) / 10 % 10 + '0');
+    v = (M2C_FIELD(arg0, s32*, 0x10) == 0) ? hl : 0;
+    func_80027F20(v);
+    func_8001AA60(x + 0x2C, y, M2C_FIELD(arg0, s32*, 0) % 10 + '0');
+    func_8001ABBC();
+}
 
 void func_8002AF04(s8 *, s32);
 void func_89106864(s8 *, s32, s32, s32);
