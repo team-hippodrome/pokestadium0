@@ -166,17 +166,85 @@ void func_89103740(Ctx89103740* arg0, Ref89103740* arg1, s32 arg2, s32 arg3, Msg
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89103858.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89103C54; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89103C54.s")
-#endif
+typedef struct List89103C54 {
+    /* 0x00 */ Ref89103740** items;
+} List89103C54;
+typedef struct Ctx89103C54 {
+    /* 0x0000 */ char unk0000[0x88];
+    /* 0x0088 */ s32 unk88;
+    /* 0x008C */ char unk008C[0x420 - 0x8C];
+    /* 0x0420 */ s8 unk0420[0x9648 - 0x420];
+    /* 0x9648 */ s8 unk9648[0x974C - 0x9648];
+    /* 0x974C */ s8 unk974C[0x9790 - 0x974C];
+    /* 0x9790 */ u16* flags;
+    /* 0x9794 */ s32 index;
+    /* 0x9798 */ char unk9798[0xB160 - 0x9798];
+    /* 0xB160 */ List89103C54* list;
+    /* 0xB164 */ char unkB164[4];
+    /* 0xB168 */ s32 cursor;
+    /* 0xB16C */ char unkB16C[4];
+    /* 0xB170 */ s32 unkB170;
+    /* 0xB174 */ char unkB174[0xB18C - 0xB174];
+    /* 0xB18C */ s32 unkB18C;
+    /* 0xB190 */ char unkB190[0xB594 - 0xB190];
+    /* 0xB594 */ Msg89103740* msg;
+} Ctx89103C54;
+void func_800307D4(List89103C54**, s32, s32);
+void func_89109C6C(s8*, s8*);
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89103DAC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89103DAC.s")
-#endif
+s32 func_89103C54(Ctx89103C54* arg0) {
+    s32 ret = 0;
+    s32 cursor;
+    s32 top;
+
+    func_891066C0(arg0->unk974C);
+    if (*(u16*)(D_800603C0 + 8) & 0x4000) {
+        func_8003F6AC(3);
+        arg0->unk88 = 8;
+    } else if (*(u16*)(D_800603C0 + 8) & 0x8000) {
+        if (!(arg0->flags[arg0->index] & 1)) {
+            cursor = arg0->cursor;
+            top = arg0->cursor - arg0->unkB18C / arg0->unkB170;
+            func_8003F6AC(0x18);
+            func_89103740((Ctx89103740*)arg0, arg0->list->items[arg0->cursor], 1, arg0->index, arg0->msg);
+            func_89109C6C(arg0->unk9648, arg0->unk0420);
+            func_89101D94(arg0);
+            func_800307D4(&arg0->list, cursor, top);
+            arg0->unk88 = 0;
+            ret = 3;
+        } else {
+            func_8003F6AC(8);
+        }
+    }
+    return ret;
+}
+
+s32 func_89103DAC(Ctx89103C54* arg0) {
+    s32 ret = 0;
+    s32 cursor;
+    s32 top;
+
+    func_891066C0(arg0->unk974C);
+    if (*(u16*)(D_800603C0 + 8) & 0x4000) {
+        func_8003F6AC(3);
+        arg0->unk88 = 8;
+    } else if (*(u16*)(D_800603C0 + 8) & 0x8000) {
+        if (!(arg0->flags[arg0->index] & 1)) {
+            cursor = arg0->cursor;
+            top = arg0->cursor - arg0->unkB18C / arg0->unkB170;
+            func_8003F6AC(0x18);
+            func_89103740((Ctx89103740*)arg0, arg0->list->items[arg0->cursor], 2, arg0->index, arg0->msg);
+            func_89109C6C(arg0->unk9648, arg0->unk0420);
+            func_89101D94(arg0);
+            func_800307D4(&arg0->list, cursor, top);
+            arg0->unk88 = 0;
+            ret = 3;
+        } else {
+            func_8003F6AC(8);
+        }
+    }
+    return ret;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_89103F04; signature not recovered. */
@@ -219,8 +287,8 @@ s32 func_89102C40(s8*);
 s32 func_89102EC8(s8*);
 s32 func_891033A0(s8*);
 s32 func_89103858(s8*);
-s32 func_89103C54(s8*);
-s32 func_89103DAC(s8*);
+s32 func_89103C54();
+s32 func_89103DAC();
 s32 func_8002D138(void*);
 s32 func_891043BC(s8* arg0) {
     s32 ret = 0;

@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5186,
-  "asm_owners": 258,
+  "c_owners": 5188,
+  "asm_owners": 256,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -617,7 +617,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "b8a624be8c85be487e63854d871b48db9837ecfa7c4fad86658bca448c647423",
+    "docs/function-matches.csv": "35fcf3a8f26ba0233ad696116d85fb8b6c6f3c4c3cf6011d8e857f9eac180d45",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -820,7 +820,7 @@
     "src/fragments/fragment016_252E10/89100020_89102AB8.c": "5f6a7afe50345f4953f85c12f66ae077fda973216c77b3ff4c2c825645da196e",
     "src/fragments/fragment016_252E10/89100020_89102C40.c": "56cb157207bf3b8fb6d24fe01f236426e4086ce70d13958f06be7b1e3c57a395",
     "src/fragments/fragment016_252E10/89100020_89103620.c": "129c0d3c383e0c9f537d62e122daafcf103739f8333c536b0339887e64822c35",
-    "src/fragments/fragment016_252E10/89100020_89103740.c": "5d8e61e798a8832b595152d51d24c77b21658593d606849b355442cae6c5c3ff",
+    "src/fragments/fragment016_252E10/89100020_89103740.c": "f91e3d1fddba0446ffe8abeefec701e2fa4c9fa68fb1a3832f832d62c36933f5",
     "src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c": "18eb5b3ae8cfc623206205753ac53835ea9547e5af7156142e06abf4e9a3f5f8",
     "src/fragments/fragment016_252E10/lab_pc_list_1E46B0.c": "ba8d4b5501f5daea30407668a46cb1021536cf2edb09db847e7544301d76b045",
     "src/fragments/fragment016_252E10/lab_pc_list_1E46B0_2.c": "d2b3316eb953509dc776192668fc1faa2f9e910c9baf9acc90664fc3678ee39f",
