@@ -210,7 +210,7 @@ func_80047260,0x80047260,src/audio_channel.c,Audio_SetMonoOutput,s1,stadium1:src
 func_80047280,0x80047280,src/audio_channel.c,Audio_IsSoundPlayingWrapper,s1,stadium1:src/audio_sound_state.c,c
 func_8003E180,0x8003E180,src/audio_commands.c,Audio_RelocateOffsets,s1,stadium1:src/audio_commands.c,c
 func_8003E1F8,0x8003E1F8,src/audio_commands.c,,asm,,asm
-func_8003EECC,0x8003EECC,src/audio_commands.c,,asm,,asm
+func_8003EECC,0x8003EECC,src/audio_commands.c,func_8003EECC,hand,,c
 func_8003F654,0x8003F654,src/audio_commands.c,func_8003F654,hand,,c
 func_8003F6AC,0x8003F6AC,src/audio_commands.c,func_8003F6AC,hand,,c
 func_8003F96C,0x8003F96C,src/audio_commands.c,func_8003F96C,hand,,c
