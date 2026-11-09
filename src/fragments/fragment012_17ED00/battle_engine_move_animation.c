@@ -315,11 +315,33 @@ void BattleScene_TickRow10CleanupAndEnterState18(ActivePokemon* active_pokemon) 
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82102398; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82102398.s")
-#endif
+void func_800414B0(u8, s32, s32, s32);
+void func_82102398(ActivePokemon* active_pokemon) {
+    BattleMonRuntime* runtime;
+    ActivePokemonState* state;
+    s32 id;
+    s16 species;
+    MovePresentationCue* cue;
+
+    species = active_pokemon->displayObject.objectType - 1;
+    runtime = &active_pokemon->state.runtime;
+    state = &active_pokemon->state;
+    cue = &sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon)]->moveCues[runtime->usedMove - 1];
+    if (!(state->flags & 2)) {
+        active_pokemon->animationTimer = 0;
+        id = species + 1;
+        func_800414B0(BattleScene_GetParticipantSideIndex(active_pokemon), runtime->usedMove, id ^ 0, 0); // FAKE
+        if ((state->flags & 0x4000) && (id == 0x33)) {
+            Battle_ClearRuntimeFlags(active_pokemon, 8);
+            active_pokemon->displayObject.node.renderFlags |= 0x20;
+            Battle_ClearRuntimeFlags(active_pokemon, 0x4000);
+        }
+        BattleAnim_SetFlagForRockThrowingMoves(active_pokemon);
+        ModelAnim_SetFrame(&active_pokemon->displayObject, 0);
+        ModelAnim_SetAnimation(&active_pokemon->displayObject, cue->id);
+        BattleAnim_SetModelEventTrackFromRow(active_pokemon, runtime->usedMove - 1);
+    }
+}
 
 void func_82122104(ActivePokemon*);
 void func_821024C8(ActivePokemon* active_pokemon) {

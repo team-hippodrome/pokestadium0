@@ -2675,7 +2675,7 @@ func_821020FC,0x821020FC,src/fragments/fragment012_17ED00/battle_engine_move_ani
 func_8210211C,0x8210211C,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,func_8210211C,m2c,m2c,c
 func_8210213C,0x8210213C,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,,asm,,asm
 func_821022F0,0x821022F0,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,BattleScene_TickRow10CleanupAndEnterState18,s1,stadium1:src/fragments/battle_engine/battle_engine_move_animation.c,c
-func_82102398,0x82102398,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,,asm,,asm
+func_82102398,0x82102398,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,func_82102398,hand,,c
 func_821024C8,0x821024C8,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,func_821024C8,hand,,c
 func_8210278C,0x8210278C,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,func_8210278C,hand,,c
 func_821028EC,0x821028EC,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,Battle_HandleStatBoostingMoveAnimation,hand,,c
