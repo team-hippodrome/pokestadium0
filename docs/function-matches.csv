@@ -870,7 +870,7 @@ func_881016B0,0x881016B0,src/fragments/fragment008_1720F0.c,func_881016B0,m2c,m2
 func_881016BC,0x881016BC,src/fragments/fragment008_1720F0.c,func_881016BC,hand,,c
 func_88101704,0x88101704,src/fragments/fragment008_1720F0.c,Audio_QueueSoundAvoidingRecent,hand,,c
 func_88101734,0x88101734,src/fragments/fragment008_1720F0.c,func_88101734,m2c,m2c,c
-func_8810173C,0x8810173C,src/fragments/fragment008_1720F0.c,,asm,,asm
+func_8810173C,0x8810173C,src/fragments/fragment008_1720F0.c,func_8810173C,hand,,c
 func_88101A38,0x88101A38,src/fragments/fragment008_1720F0.c,,asm,,asm
 func_88101D7C,0x88101D7C,src/fragments/fragment008_1720F0.c,func_88101D7C,hand,,c
 func_88101DB4,0x88101DB4,src/fragments/fragment008_1720F0.c,func_88101DB4,m2c,m2c,c

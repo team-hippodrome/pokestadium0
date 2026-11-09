@@ -577,11 +577,51 @@ s32 func_88101734(s32 *arg0) {
     return *arg0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8810173C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment008_1720F0/func_8810173C.s")
-#endif
+typedef struct IconCache8810173C {
+    /* 0x00 */ s32* slots;
+    /* 0x04 */ s32 base;
+    /* 0x08 */ s32 count;
+    /* 0x0C */ s32 start;
+} IconCache8810173C; // size = 0x10
+extern Color88100D9C D_88102D80;
+extern s32 D_88103098[];
+void func_8810112C(s32, s32, u8*, s32, s32, IconCache8810173C*);
+void func_8810173C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
+    u8* box = (u8*)arg2;
+    s32 pad[2]; // FAKE
+    IconCache8810173C cache;
+    s32 pad2; // FAKE
+    s32 i;
+    u8* entry;
+    s32 color;
+
+    if (box != NULL) {
+        func_88100E34(arg0, arg1, arg4, box);
+        cache.slots = D_88103098;
+        cache.base = 0;
+        cache.count = 0x18;
+        cache.start = arg3 * 6;
+        entry = M2C_FIELD(box, u8**, 0x18);
+        for (i = 0; i < M2C_FIELD(box, s32*, 0x20); i++, entry += 0x54) {
+            color = 0;
+            if (arg4 & 2) {
+                color = 0x10000;
+            }
+            func_8810112C(arg0 + 0x88 + (i % 3) * 0x84, (i / 3) * 0x32 + arg1, entry + 4, arg3 * 6 + i, color, &cache);
+        }
+        for (; i < 6; i++) {
+            color = 0;
+            if (arg4 & 2) {
+                color = 0x10000;
+            }
+            func_8810112C(arg0 + 0x88 + (i % 3) * 0x84, (i / 3) * 0x32 + arg1, NULL, arg3 * 6 + i, color, &cache);
+        }
+    } else {
+        func_88100CD0(arg0, arg1, D_88102D7C);
+        func_88100D30(arg0, arg1, D_88102D78[0]);
+    }
+    func_88100D9C(arg0, arg1, D_88102D80);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_88101A38; signature not recovered. */
