@@ -325,7 +325,7 @@ void func_89000694(s8* arg0) {
         gSPDisplayList(gDisplayListHead++, D_80060270);
         func_80029028(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0x68, M2C_FIELD(arg0, s32*, 8) - 0xC, 0x24, D_8900A5CC);
         func_8001AB6C();
-        if (!arg0) { // empty test only changes register allocation; needed to match
+        if (!arg0) { // FAKE: empty test only changes register allocation; needed to match
         }
         func_8001AA9C(M2C_FIELD(&D_800734A8, u8 *, 0), M2C_FIELD(&D_800734A8, u8 *, 1), M2C_FIELD(&D_800734A8, u8 *, 2), M2C_FIELD(&D_800734A8, u8 *, 3));
         func_8001A384(8, 0);
@@ -995,7 +995,7 @@ void func_89002D14(s8* arg0, s32 arg1) {
         func_8002DAD8(arg0 + 0x4C, M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, 0xFFEF, 0);
         func_8001AB6C();
         func_8001A384(8, 0);
-        if (!arg0) { // empty test only changes register allocation; needed to match
+        if (!arg0) { // FAKE: empty test only changes register allocation; needed to match
         }
         func_8001AA9C(M2C_FIELD(&D_800734A8, u8 *, 0), M2C_FIELD(&D_800734A8, u8 *, 1), M2C_FIELD(&D_800734A8, u8 *, 2), M2C_FIELD(&D_800734A8, u8 *, 3));
         func_8001AB2C(0x1C);

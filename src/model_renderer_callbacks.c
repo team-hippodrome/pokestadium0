@@ -42,7 +42,7 @@ void func_80032840(u32 arg0) {
             if (slot) {  // karodo
             }
         }
-        if (slot) { // no-op test; changes register allocation to match
+        if (slot) { // FAKE: no-op test; changes register allocation to match
         }
     }
 }

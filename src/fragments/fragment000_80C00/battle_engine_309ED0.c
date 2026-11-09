@@ -864,7 +864,7 @@ s32 func_8110F518(s32 arg0, Item8110F4D0** arg1) {
     for (i = 0; i < n1; i++) {
         p = func_81110D6C(arg0, i);
         if (p != 0) {
-            // do-while(0) wrapper only changes register allocation; needed to match
+            // FAKE: do-while(0) wrapper only changes register allocation; needed to match
             do {  // FAKE
                 count = func_8110F4D0((Item8110F4D0*)p[1], count, arg1);
             } while (0);

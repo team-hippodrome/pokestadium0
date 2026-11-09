@@ -155,7 +155,7 @@ s32 func_8002DC04(Menu8002E230* arg0) {
     if (arg0->def->itemCount == 0) {
         return 0;
     }
-    if (arg0) { // no-op test; changes register allocation to match
+    if (arg0) { // FAKE: no-op test; changes register allocation to match
     }
     input = (u16)func_8000B30C();
     switch (input) {
@@ -332,7 +332,7 @@ s32 func_8002E3F0(Menu8002E230* arg0) {
     if (arg0->def->itemCount == 0) {
         return 0;
     }
-    if (arg0 && arg0) { // no-op test; changes register allocation to match
+    if (arg0 && arg0) { // FAKE: no-op test; changes register allocation to match
     }
     input = (u16)func_8000B30C();
     switch (input) {

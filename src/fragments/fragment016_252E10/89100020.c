@@ -117,7 +117,7 @@ void func_89100294(Ctx89100294* arg0) {
             break;
     }
     if (arg0->unk8C == 2) {
-        arg0->unkB550 = arg0->unkB550;  /* self-assignment is required to match (retail reloads and stores the field) */
+        arg0->unkB550 = arg0->unkB550; // FAKE: self-assignment is required to match (retail reloads and stores the field)
     } else {
         arg0->unkB550 = 2;
     }
