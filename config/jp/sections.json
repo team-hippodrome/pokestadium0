@@ -3,7 +3,7 @@
     ".rodata": "0x8007DC00"
   },
   "src/3D140.c": {
-    ".rodata": "0x8007DD18"
+    ".rodata": "0x8007DCD0"
   },
   "src/52D80.c": {
     ".data": {

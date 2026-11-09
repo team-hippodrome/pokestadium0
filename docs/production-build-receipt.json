@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5304,
-  "asm_owners": 140,
+  "c_owners": 5305,
+  "asm_owners": 139,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -612,7 +612,7 @@
     "src/vector_math.c"
   ],
   "source_registry_sha256": "1a3e0bf2003b9e8713ea23130362d0d5268efbcc00c72c42a9bb5036abe80690",
-  "section_registry_sha256": "dc448cdf23098f9e79d6b572d340671cb00a6b19e31be115464c7e639c8c5088",
+  "section_registry_sha256": "fb78f9b0662747602eae7ed6fa5898f24bda17311894a3c40debe6c7520b58fc",
   "headers_sha256": "7b7aef3b35f2c0b0551c5fe240ffd089fd238acdb66308ef11194cbe91b5e26b",
   "matching_registry_sha256": "d8bcc14a2a0db281cf30dcb9ddbd94d59e1afe84c70b4c8c017ea27ce60a251c",
   "build_tools_sha256": {
@@ -622,7 +622,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "dd2faa24f126f820ce50991805bb3345d5f2b8028c10e73f7d2c97ab693aabd8",
+    "docs/function-matches.csv": "fc48c6e936100bf42dad7cbc8bd1c444f23f429b013ab4f017987f0445cce388",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -640,7 +640,7 @@
     "src/33FE0_3.c": "b9aea3b2b69108f69da2f08bcfbcc20d8241ccec271a2621bb61c750c084b1a9",
     "src/33FE0_4.c": "7e760c67767d985aab690bf84850d8b90894465ba5dac62b394df97fa3b4069b",
     "src/3B2F0.c": "174066e9807f230afda58b8bf14e571a3f602ccb79399534ce775d08c230ab0d",
-    "src/3D140.c": "524ecf1eb224bec0fea8e4bdfd03cfdbc52429baeb810ac3383f5844519e2a9a",
+    "src/3D140.c": "18d2492a2ceaf3927dd03d677209fd496ce79023deb84fe1d1f870bb09ee8b0d",
     "src/3D140_2.c": "f1f92deae5fc138e5b54b4d3886671cd90a7e36ce3644760ec374f3bcc641b85",
     "src/44E90.c": "d56d0c95291f5fad16cee2682129b3a8236ae3f6b2e37d266f0127b227ad5747",
     "src/47460.c": "1860087c28f6d453dd421afc8e9b178e9191c9a2bfaa418be5dd364c4349d20a",
