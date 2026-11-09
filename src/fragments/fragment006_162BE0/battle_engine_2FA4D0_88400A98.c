@@ -239,7 +239,11 @@ void func_88401290(void) {
     Font_EndTexturedTextRendering();
 }
 
+#ifdef NON_MATCHING
+/* TODO: decompile func_884014B4; signature not recovered. */
+#else
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment006_162BE0/func_884014B4.s")
+#endif
 
 void func_8840173C(s32 arg0, s32 arg1) {
     Color_RGB8 sp4C = { 0x00, 0x00, 0x32 };
