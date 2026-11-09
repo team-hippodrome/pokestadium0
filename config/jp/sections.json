@@ -451,6 +451,12 @@
       "size": "0x18"
     }
   },
+  "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00_89003880.c": {
+    ".rodata": {
+      "address": "0x89018990",
+      "size": "0x18"
+    }
+  },
   "src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c": {
     ".rodata": {
       "address": "0x89018DD0",
