@@ -394,11 +394,44 @@ void func_8210D020(ActivePokemon* arg0, s8* arg1) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210D1B0.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8210D378; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210D378.s")
-#endif
+extern u8 D_800AAF50[];
+void func_8210D1B0(ActivePokemon* active_pokemon);
+void func_8210CEE8(ActivePokemon*, u8*, u8*, s32);
+s32 func_8210D378(ActivePokemon* arg0, ActivePokemon* arg1) {
+    u8* c1;
+    u8* c2;
+    s8* team;
+    ActivePokemonState* state = &arg0->state;
+    ActivePokemonState* other = &arg1->state;
+
+    if (M2C_FIELD(M2C_FIELD(arg0, s8**, 0x85C), u8*, 1) == 1) {
+        c1 = c2 = &D_800AAF50[M2C_FIELD(M2C_FIELD(M2C_FIELD(arg0, s8**, 0x85C), s8**, 8), u8*, 1) * 0x24];
+    } else {
+        team = M2C_FIELD(arg0, s8**, 0x85C);
+        c1 = &D_800AAF50[M2C_FIELD(M2C_FIELD(team, s8**, 8), u8*, 1) * 0x24];
+        c2 = &D_800AAF50[M2C_FIELD(M2C_FIELD(team, s8**, 0xC), u8*, 1) * 0x24];
+    }
+    if ((state->unk_2D == 0x10) && (other->unk_2D == 0x10)) {
+        if (state->unk_10 == 3) {
+            func_8210C708((s8*)arg0);
+            return 1;
+        }
+        state->unk_04 = 2;
+        state->unk_10 = 2;
+        func_8210D1B0(arg0);
+        return 1;
+    }
+    if (state->unk_2D == 0x10) {
+        state->unk_04 = 2;
+        state->unk_10 = 2;
+        other->unk_10 = 3;
+        other->unk_04 = 1;
+        func_8210CEE8(arg0, c1, c2, M2C_FIELD(M2C_FIELD(arg0, s8**, 0x85C), u8*, 1));
+        func_8210D1B0(arg0);
+        return 1;
+    }
+    return 0;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8210D4B4; signature not recovered. */
