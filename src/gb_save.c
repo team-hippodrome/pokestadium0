@@ -175,17 +175,61 @@ void func_800295E8(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
     func_800292A8(arg0, arg1, arg2, arg3, arg4);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80029658; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80029658.s")
-#endif
+typedef void (*GbTexLoadFunc)(s32, s32, u8*, s32);
+extern GbTexLoadFunc D_80073500[];
+extern Gfx D_80073450[];
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80029864; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80029864.s")
-#endif
+/**
+ * Draws a horizontal frame edge of width w (at least 16) at (x, y): an 8x8 texture
+ * stretched over all but the last 8 pixels, then an 8x8 end cap. The two textures come
+ * from arg3 + 0x10 and arg3 + 0x14, and are loaded through D_80073500[arg3 + 4].
+ */
+void func_80029658(s32 x, s32 y, s32 w, u8* arg3) {
+    GbTexLoadFunc load;
+    s32 pad[2]; // FAKE
+    s32 x2;
+    s32 y8;
+
+    if (w < 0x10) {
+        w = 0x10;
+    }
+    x2 = x + w;
+    y8 = (y + 8) << 2;
+    load = D_80073500[M2C_FIELD(arg3, s32*, 4)];
+    gSPDisplayList(gDisplayListHead++, D_80073450);
+    gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
+    load(8, 8, M2C_FIELD(arg3, u8**, 0x10), M2C_FIELD(arg3, s32*, 0));
+    gSPTextureRectangle(gDisplayListHead++, x << 2, y << 2, (x2 - 8) << 2, y8, G_TX_RENDERTILE, 0, 0, 0x400, 0x400);
+    load(8, 8, M2C_FIELD(arg3, u8**, 0x14), M2C_FIELD(arg3, s32*, 0));
+    gSPTextureRectangle(gDisplayListHead++, (x2 - 8) << 2, y << 2, x2 << 2, y8, G_TX_RENDERTILE, 0, 0, 0x400, 0x400);
+}
+
+extern GbTexLoadFunc D_80073510[];
+
+/**
+ * Vertical counterpart of func_80029658: draws a frame edge of height h (at least 16)
+ * at (x, y) from the textures at arg3 + 8 and arg3 + 0xC, loaded through
+ * D_80073510[arg3 + 4].
+ */
+void func_80029864(s32 x, s32 y, s32 h, u8* arg3) {
+    GbTexLoadFunc load;
+    s32 pad[2]; // FAKE
+    s32 y2;
+    s32 x8;
+
+    if (h < 0x10) {
+        h = 0x10;
+    }
+    y2 = y + h;
+    x8 = (x + 8) << 2;
+    load = D_80073510[M2C_FIELD(arg3, s32*, 4)];
+    gSPDisplayList(gDisplayListHead++, D_80073450);
+    gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
+    load(8, 8, M2C_FIELD(arg3, u8**, 8), M2C_FIELD(arg3, s32*, 0));
+    gSPTextureRectangle(gDisplayListHead++, x << 2, y << 2, x8, (y2 - 8) << 2, G_TX_RENDERTILE, 0, 0, 0x400, 0x400);
+    load(8, 8, M2C_FIELD(arg3, u8**, 0xC), M2C_FIELD(arg3, s32*, 0));
+    gSPTextureRectangle(gDisplayListHead++, x << 2, (y2 - 8) << 2, x8, y2 << 2, G_TX_RENDERTILE, 0, 0, 0x400, 0x400);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_80029A64; signature not recovered. */
