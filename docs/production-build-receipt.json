@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5233,
-  "asm_owners": 211,
+  "c_owners": 5234,
+  "asm_owners": 210,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -611,8 +611,8 @@
     "src/vector_math.c"
   ],
   "source_registry_sha256": "e6279b8fe24d310b6b89f5f532a4c196e0e37d33710a71ff9edc6cf5e0b9ad9b",
-  "section_registry_sha256": "e400da3016f44b52af0cd10ad940b9ea3de3f8c58a53c9b6e7f896b4ab4ce28a",
-  "headers_sha256": "f1637191ada7caa1b038db689dee87cdc5982ce7c63bc32c2c5eb98d32af931e",
+  "section_registry_sha256": "651308fea40b0b9f26e3d8369e7a663053ee45e32d91c83a836941fe51b4b3ed",
+  "headers_sha256": "1d0f4df25362d6e60250bcdf9b966a251ffbb05e8d9a9692c389560dd28a7095",
   "matching_registry_sha256": "d8bcc14a2a0db281cf30dcb9ddbd94d59e1afe84c70b4c8c017ea27ce60a251c",
   "build_tools_sha256": {
     "tools/production.py": "c62476279cd553bc7b7d39d13253922dec0bf62fddc24e76cdd4b490e460c6c9",
@@ -621,7 +621,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "7d6abca8b7736abee26a6e647035947eece28d09d0814416628946c4ad6cae73",
+    "docs/function-matches.csv": "3a9f91c665b7af60f52501c04f3706ddaa5adaae98508667a1ec1a5433217512",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -836,7 +836,7 @@
     "src/fragments/fragment018_262620/pokedex_214920.c": "2fa9a32d63e0a25f4c2042bfc31276f524d7ac0f6d167dc3abc86cffa73b4ac7",
     "src/fragments/fragment018_262620/pokedex_2190D0.c": "f34118c88ebb560e56f416197fa91203210374d1a9c30356c7ac091779394ec5",
     "src/fragments/fragment019_293410/lab_pc_icons.c": "fd4ab6f2531cd1d26d00e2361a4e25bd7cd70e9e3a1b084acb92ffbd94cc837f",
-    "src/fragments/fragment019_293410/lab_pc_icons_8A201598.c": "c9b6af115ba3bce998c0f1737aacd8827be1b5ace6f8f4aa40ef03c5acce0fd5",
+    "src/fragments/fragment019_293410/lab_pc_icons_8A201598.c": "42751b520f3cf2989c8f54a61a6c095862029bb3ea8b5469b5f8aa89c9b1697c",
     "src/fragments/fragment020_2B1360.c": "1d51773e2a436bb50560c5297d6152fb294823d9c01f0e5ec662adab156da927",
     "src/fragments/fragment021_2B13F0.c": "89591b5837dd2c5cb906da8fc3231bc8e0a207a6adf0fd1e7058e89f0fbbe95e",
     "src/fragments/fragment022_2B1480.c": "b411841b7ef4508a6156ef9cadac3883ef0e1b3b9cf8434174930a787b6d07ab",

@@ -3919,7 +3919,7 @@ func_8A20219C,0x8A20219C,src/fragments/fragment019_293410/lab_pc_icons_8A201598.
 func_8A202390,0x8A202390,src/fragments/fragment019_293410/lab_pc_icons_8A201598.c,func_8A202390,m2c,m2c,c
 func_8A2023F4,0x8A2023F4,src/fragments/fragment019_293410/lab_pc_icons_8A201598.c,func_8A2023F4,hand,,c
 func_8A2024D0,0x8A2024D0,src/fragments/fragment019_293410/lab_pc_icons_8A201598.c,func_8A2024D0,hand,,c
-func_8A20261C,0x8A20261C,src/fragments/fragment019_293410/lab_pc_icons_8A201598.c,,asm,,asm
+func_8A20261C,0x8A20261C,src/fragments/fragment019_293410/lab_pc_icons_8A201598.c,func_8A20261C,hand,,c
 func_8A202904,0x8A202904,src/fragments/fragment019_293410/lab_pc_icons_8A201598.c,func_8A202904,m2c,m2c,c
 func_8A20291C,0x8A20291C,src/fragments/fragment019_293410/lab_pc_icons_8A201598.c,,asm,,asm
 func_8A202EF4,0x8A202EF4,src/fragments/fragment019_293410/lab_pc_icons_8A201598.c,func_8A202EF4,hand,,c

@@ -524,7 +524,7 @@
   "src/fragments/fragment019_293410/lab_pc_icons_8A201598.c": {
     ".rodata": {
       "address": "0x8A21D9EC",
-      "size": "0x18"
+      "size": "0x30"
     }
   },
   "src/fragments/fragment025_2B16A0/fatal_error_screen.c": {

@@ -224,7 +224,86 @@ void func_8A2024D0(s8 *arg0) {
     func_8A20034C(arg0 + 0x10, 0x2F, 0x4D, (s32)(arg0 + 0x180));
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment019_293410/func_8A20261C.s")
+typedef struct Ctx8A20261C {
+    /* 0x000 */ s32 state;
+    /* 0x004 */ s32 mode;
+    /* 0x008 */ char unk008[0x8];
+    /* 0x010 */ s8 list[0x24];
+    /* 0x034 */ s32 unk034;
+    /* 0x038 */ s32 unk038;
+    /* 0x03C */ char unk03C[0x34];
+    /* 0x070 */ s8 unk070[0x64];
+    /* 0x0D4 */ s8 unk0D4[0x38];
+    /* 0x10C */ s8 unk10C[0x4];
+} Ctx8A20261C;
+s32 func_8002AAC4(s8*);
+void func_8002CAD0(s8*);
+void func_8A2003C0(s8*, s32);
+#define CTX ((Ctx8A20261C*)arg0)
+void func_8A20261C(void* arg0) {
+    func_800069CC();
+    switch (CTX->state) {
+        case 1:
+            if (func_8002AAC4(CTX->list) != 0) {
+                func_8A202160();
+            }
+            func_8A2003C0(CTX->list, 0);
+            break;
+        case 2:
+            if ((CTX->mode == 4) || (CTX->mode == 7)) {
+                func_8A202160();
+                func_8002AAC4(CTX->list);
+                func_8002AAC4(CTX->unk070);
+                func_8A2003C0(CTX->list, 1);
+            } else if (func_8002AAC4(CTX->unk070) != 0) {
+                CTX->unk034 = (CTX->unk038 <= 0) ? CTX->unk034 : 4;
+                func_8002AAC4(CTX->list);
+                func_8A2003C0(CTX->list, 1);
+                CTX->unk034 = (CTX->unk038 <= 0) ? CTX->unk034 : 4;
+            } else {
+                func_8002AAC4(CTX->list);
+                func_8A2003C0(CTX->list, 1);
+            }
+            func_8A2008F4(CTX->unk070);
+            break;
+        case 3:
+            if (func_8002AAC4(CTX->list) != 0) {
+                func_8A202160();
+            }
+            func_8A2003C0(CTX->list, 2);
+            break;
+        case 4:
+            if (func_8002AAC4(CTX->unk0D4) != 0) {
+                func_8A202160();
+            }
+            func_8A201EAC(CTX->unk0D4, 0);
+            break;
+        case 5:
+            if (func_8002AAC4(CTX->unk0D4) != 0) {
+                func_8A202160();
+            }
+            func_8A201EAC(CTX->unk0D4, 1);
+            break;
+        case 6:
+            if (CTX->mode == 7) {
+                func_8A202160();
+                func_8002AAC4(CTX->list);
+                func_8002AAC4(CTX->unk10C);
+                func_8A2003C0(CTX->list, 0);
+            } else if (func_8002AAC4(CTX->unk10C) != 0) {
+                CTX->unk034 = (CTX->unk038 <= 0) ? CTX->unk034 : 4;
+                func_8002AAC4(CTX->list);
+                func_8A2003C0(CTX->list, 0);
+                CTX->unk034 = (CTX->unk038 <= 0) ? CTX->unk034 : 4;
+            } else {
+                func_8002AAC4(CTX->list);
+                func_8A2003C0(CTX->list, 0);
+            }
+            func_8002CAD0(CTX->unk10C);
+            break;
+    }
+}
+#undef CTX
 
 void func_8A202904(s8 *arg0, s32 arg1, s32 arg2) {
     M2C_FIELD(M2C_FIELD(arg0, s8 **, 8), s32 *, 0x24) = 7;

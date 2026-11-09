@@ -144,7 +144,7 @@ void func_80020DF0(s32, s32, s32);
 s32 func_8002207C(s32);
 void func_8002D7D4(s32);
 void func_80022188(s32);
-M2C_UNK func_8A20261C(M2C_UNK *);
+void func_8A20261C(void*);
 
 void func_8A2023F4(s32* arg0, s32 arg1);
 
@@ -154,7 +154,7 @@ M2C_UNK func_8000B1FC();                            /* extern */
 M2C_UNK func_8000B220();                            /* extern */
 M2C_UNK func_800158C0();                            /* extern */
 M2C_UNK func_8001B5F0();                            /* extern */
-M2C_UNK func_8A20261C(M2C_UNK *);                   /* extern */
+void func_8A20261C(void*);
 M2C_UNK func_8A20291C(M2C_UNK *);                   /* extern */
 extern M2C_UNK D_8A21DA80;
 
