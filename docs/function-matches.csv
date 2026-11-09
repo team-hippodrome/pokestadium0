@@ -2208,7 +2208,7 @@ func_8212F6E4,0x8212F6E4,src/fragments/fragment012_17ED00/battle_engine_3438B0.c
 func_8212F894,0x8212F894,src/fragments/fragment012_17ED00/battle_engine_3438B0.c,func_8212F894,hand,,c
 func_8212F9FC,0x8212F9FC,src/fragments/fragment012_17ED00/battle_engine_3438B0.c,func_8212F9FC,hand,,c
 func_8212FC98,0x8212FC98,src/fragments/fragment012_17ED00/battle_engine_3438B0.c,func_8212FC98,hand,,c
-func_821301EC,0x821301EC,src/fragments/fragment012_17ED00/battle_engine_3438B0.c,,asm,,asm
+func_821301EC,0x821301EC,src/fragments/fragment012_17ED00/battle_engine_3438B0.c,func_821301EC,hand,,c
 func_82130494,0x82130494,src/fragments/fragment012_17ED00/battle_engine_3438B0.c,BattleScene_Phase10,hand,,c
 func_82130628,0x82130628,src/fragments/fragment012_17ED00/battle_engine_3438B0_82130628.c,func_82130628,hand,,c
 func_82130B10,0x82130B10,src/fragments/fragment012_17ED00/battle_engine_3438B0_82130628.c,func_82130B10,s1,,c
