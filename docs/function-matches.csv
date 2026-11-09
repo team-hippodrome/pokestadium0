@@ -1428,7 +1428,7 @@ func_82117908,0x82117908,src/fragments/fragment012_17ED00/battle_engine_31D9F0_8
 func_82117DD0,0x82117DD0,src/fragments/fragment012_17ED00/battle_engine_31D9F0_82117610.c,BattleHud_DrawMonStatusBoxPlayer,hand,,c
 func_82118738,0x82118738,src/fragments/fragment012_17ED00/battle_engine_31D9F0_82117610.c,BattleHud_DrawMonStatusBoxOpponent,hand,,c
 func_82118FD8,0x82118FD8,src/fragments/fragment012_17ED00/battle_engine_31D9F0_82117610.c,,asm,,asm
-func_82119364,0x82119364,src/fragments/fragment012_17ED00/battle_engine_31D9F0_82117610.c,,asm,,asm
+func_82119364,0x82119364,src/fragments/fragment012_17ED00/battle_engine_31D9F0_82117610.c,func_82119364,hand,,c
 func_821196A4,0x821196A4,src/fragments/fragment012_17ED00/battle_engine_31D9F0_82117610.c,func_821196A4,hand,,c
 func_82119994,0x82119994,src/fragments/fragment012_17ED00/battle_engine_31D9F0_82117610.c,func_82119994,m2c,m2c,c
 func_821199E4,0x821199E4,src/fragments/fragment012_17ED00/battle_engine_31D9F0_821199E4.c,BattleHud_DrawMovePpTextLTR,hand,,c
