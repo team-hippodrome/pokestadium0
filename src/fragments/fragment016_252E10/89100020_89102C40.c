@@ -115,11 +115,98 @@ M2C_UNK func_89101D94();
 extern s32 D_8910D9D0;
 extern s32 D_8910D9D4;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89102C40; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89102C40.s")
-#endif
+void func_891066E0(s8*, s32, s32, Rgba891024A4, s32, s32, s32);
+s32 func_89101D44(s8*, s32);
+
+s32 func_89102C40(s8* arg0) {
+    UNUSED s32 pad;
+    u32 sel;
+    s32 a;
+    s32 b;
+
+    sel = M2C_FIELD(arg0, s32*, 0xB550) + M2C_FIELD(arg0, s32**, 0xB548)[M2C_FIELD(arg0, s32*, 0xB15C)] - 2;
+    func_891066C0(arg0 + 0x9654);
+    if (((u16*)D_800603C0)[4] & 0x4000) {
+        func_8003F6AC(3);
+        M2C_FIELD(arg0, s32*, 0x88) = 0;
+    } else if (((u16*)D_800603C0)[4] & 0x8000) {
+        func_8003F6AC(2);
+        switch (M2C_FIELD(arg0, s32*, 0x969C)) {
+            case 0:
+                switch (sel) {
+                    case 0:
+                        M2C_FIELD(arg0, s32*, 0x78) = 0xF;
+                        break;
+                    case 1:
+                        M2C_FIELD(arg0, s32*, 0x78) = 0xD;
+                        break;
+                    case 2:
+                        M2C_FIELD(arg0, s32*, 0x78) = 0xE;
+                        break;
+                    case 3:
+                        M2C_FIELD(arg0, s32*, 0x78) = 0;
+                        break;
+                    case 10:
+                        M2C_FIELD(arg0, s32*, 0x78) = 2;
+                        break;
+                    case 11:
+                        M2C_FIELD(arg0, s32*, 0x78) = 4;
+                        break;
+                    case 12:
+                        M2C_FIELD(arg0, s32*, 0x78) = 6;
+                        break;
+                    case 13:
+                        M2C_FIELD(arg0, s32*, 0x78) = 8;
+                        break;
+                    case 14:
+                        M2C_FIELD(arg0, s32*, 0x78) = 0xA;
+                        break;
+                    case 15:
+                        M2C_FIELD(arg0, s32*, 0x78) = 0xC;
+                        break;
+                }
+                func_80027D68(M2C_FIELD(arg0, s32*, 0xB160), D_8910D990[M2C_FIELD(arg0, s32*, 0x78)]);
+                M2C_FIELD(arg0, s32*, 0x88) = 0;
+                break;
+            case 1:
+                switch (sel) {
+                    case 10:
+                        M2C_FIELD(arg0, s32*, 0x78) = 1;
+                        break;
+                    case 11:
+                        M2C_FIELD(arg0, s32*, 0x78) = 3;
+                        break;
+                    case 12:
+                        M2C_FIELD(arg0, s32*, 0x78) = 5;
+                        break;
+                    case 13:
+                        M2C_FIELD(arg0, s32*, 0x78) = 7;
+                        break;
+                    case 14:
+                        M2C_FIELD(arg0, s32*, 0x78) = 9;
+                        break;
+                    case 15:
+                        M2C_FIELD(arg0, s32*, 0x78) = 0xB;
+                        break;
+                }
+                func_80027D68(M2C_FIELD(arg0, s32*, 0xB160), D_8910D990[M2C_FIELD(arg0, s32*, 0x78)]);
+                M2C_FIELD(arg0, s32*, 0x88) = 0;
+                break;
+            case 2:
+                if (M2C_FIELD(arg0, s32*, 0x982C) != 0) {
+                    a = M2C_FIELD(arg0, u8*, 0x9829);
+                    b = M2C_FIELD(arg0, u8*, 0x9828);
+                } else {
+                    a = M2C_FIELD(arg0, u8*, 0x9828);
+                    b = M2C_FIELD(arg0, u8*, 0x9829);
+                }
+                M2C_FIELD(arg0, s32*, 0x88) = 4;
+                func_891066E0(arg0 + 0x9830, 0x110, 0xF5, D_8910A7F4, a, b, func_89101D44(arg0, 1));
+                break;
+        }
+    }
+    return 0;
+}
 
 typedef struct Ctx89102EC8 {
     /* 0x0000 */ char unk0000[0x78];
