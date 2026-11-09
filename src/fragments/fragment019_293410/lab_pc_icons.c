@@ -85,7 +85,69 @@ void func_8A20034C(s8 *arg0, s32 arg1, s32 arg2, s32 arg3) {
     func_8002D880(arg0 + 0x2C, arg3, arg0 + 0x50, (M2C_UNK *)func_8A200274, 0x215, 0x33);
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment019_293410/func_8A2003C0.s")
+extern s8 D_8007356C;
+extern Color_RGBA8 D_8A20334C;
+extern Color_RGBA8 D_8A203350;
+extern Color_RGBA8 D_8A203354;
+extern char* D_8A203358;
+extern char* D_8A20335C;
+void func_8002A550(s32 x, s32 y, s32 w, s32 h, Color_RGBA8 prim, Color_RGBA8 env);
+void func_800189C0(s8*, s32);
+void func_800069CC(void);
+void func_8A2003C0(s8* arg0, s32 arg1) {
+    s32 flags = 0xFFED;
+    s32 i;
+    s32 x;
+    s32 y;
+
+    if ((M2C_FIELD(arg0, s32*, 0x28) != 2) && (func_8002AB84() == 0)) {
+        func_80029658(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0x137, M2C_FIELD(arg0, s32*, 8), &D_8007356C);
+        func_8002A550(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0x13E, M2C_FIELD(arg0, s32*, 8) - 0xC, 0x24, D_8A203350, D_8A203354);
+        func_8001AB6C();
+        func_8001A384(0x10, 0);
+        func_8001A944(M2C_FIELD(arg0, s32*, 0) + 0x36, M2C_FIELD(arg0, s32*, 4) + 0x144, (arg1 == 2) ? D_8A20335C : D_8A203358);
+        func_8001ABBC();
+
+        x = M2C_FIELD(arg0, s32*, 0) + 6;
+        y = M2C_FIELD(arg0, s32*, 4) + 6;
+        for (i = 0; i < 6; i++) {
+            gSPDisplayList(gDisplayListHead++, D_80060270);
+            func_80029028(x, y + 1, M2C_FIELD(arg0, s32*, 0x38), M2C_FIELD(arg0, s32*, 0x3C), D_8A203304);
+            func_80029028(x, y, M2C_FIELD(arg0, s32*, 0x38), 1, D_8A20334C);
+            func_80029028(x, (y + M2C_FIELD(arg0, s32*, 0x3C)) - 1, M2C_FIELD(arg0, s32*, 0x38), 1, D_8A20334C);
+            y += M2C_FIELD(arg0, s32*, 0x3C);
+        }
+
+        switch (arg1) {
+            case 0:
+            case 2:
+                flags = 0xFFEF;
+                break;
+            case 1:
+                flags = 0xFFFD;
+                break;
+        }
+        func_8002D9B8(arg0 + 0x2C, M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, flags, (s32)&arg1);
+    }
+
+    if ((M2C_FIELD(arg0, s32*, 0x28) == 1) || (M2C_FIELD(arg0, s32*, 0x28) == 2)) {
+        func_800189C0(D_8A21DA50, 0);
+        func_800069CC();
+        x = M2C_FIELD(arg0, s32*, 0) + 6;
+        y = M2C_FIELD(arg0, s32*, 4) + 6;
+        for (i = 0; i < M2C_FIELD(M2C_FIELD(arg0, s8**, 0x2C), s32*, 8); i++) {
+            if (((arg1 == 1) && (i == M2C_FIELD(arg0, s32*, 0x34))) ||
+                ((arg1 == 2) && (M2C_FIELD(arg0, u16**, 0x30)[i] & 8))) {
+                func_8002A0AC(x + 0x14, y + 5, 0x28, 0x28, D_8A203304);
+            } else {
+                gSPDisplayList(gDisplayListHead++, D_80060270);
+                func_80029028(x + 0x14, y + 5, 0x28, 0x28, D_8A203304);
+            }
+            UI_DrawTextureRgba16(x + 0x14, y + 5, i);
+            y += M2C_FIELD(arg0, s32*, 0x3C);
+        }
+    }
+}
 
 void func_8A200770(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4) {
     if (arg4 & 0x10) {
