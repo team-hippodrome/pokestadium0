@@ -3540,7 +3540,7 @@ func_8900732C,0x8900732C,src/fragments/fragment015_238BD0/89006FC0.c,func_890073
 func_89007374,0x89007374,src/fragments/fragment015_238BD0/89006FC0.c,func_89007374,hand,,c
 func_890074E0,0x890074E0,src/fragments/fragment015_238BD0/89006FC0.c,func_890074E0,hand,,c
 func_890075E0,0x890075E0,src/fragments/fragment015_238BD0/89006FC0.c,func_890075E0,hand,,c
-func_89007678,0x89007678,src/fragments/fragment015_238BD0/89006FC0.c,,asm,,asm
+func_89007678,0x89007678,src/fragments/fragment015_238BD0/89006FC0.c,func_89007678,hand,,c
 func_89007CD8,0x89007CD8,src/fragments/fragment015_238BD0/89006FC0.c,func_89007CD8,hand,,c
 func_89007D54,0x89007D54,src/fragments/fragment015_238BD0/89006FC0.c,func_89007D54,hand,,c
 func_8900806C,0x8900806C,src/fragments/fragment015_238BD0/89006FC0.c,func_8900806C,hand,,c

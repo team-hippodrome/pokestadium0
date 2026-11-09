@@ -252,11 +252,159 @@ void func_890075E0(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89007678; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_89007678.s")
-#endif
+typedef struct Rgba8900806C { u8 r, g, b, a; } Rgba8900806C;
+typedef struct Mon89007678 {
+    /* 0x00 */ char unk00[0x24];
+    /* 0x24 */ u8 level;
+    /* 0x25 */ char unk25[1];
+    /* 0x26 */ u16 maxHp;
+    /* 0x28 */ u16 attack;
+    /* 0x2A */ u16 defense;
+    /* 0x2C */ u16 speed;
+    /* 0x2E */ u16 special;
+    /* 0x30 */ char nickname[1];
+} Mon89007678;
+typedef struct Screen89007678 {
+    /* 0x00 */ s32 x;
+    /* 0x04 */ s32 y;
+    /* 0x08 */ s32 w;
+    /* 0x0C */ char unk0C[0x20];
+    /* 0x2C */ char button1[0x3C];
+    /* 0x68 */ char button2[0x40];
+    /* 0xA8 */ s32 selection;
+    /* 0xAC */ char unkAC[4];
+    /* 0xB0 */ Mon89007678* mon;
+    /* 0xB4 */ char* title;
+    /* 0xB8 */ s32 animLoaded;
+    /* 0xBC */ s32 anim;
+} Screen89007678;
+typedef struct Slot89007678 {
+    /* 0x00 */ s32 x;
+    /* 0x04 */ s32 y;
+    /* 0x08 */ s32 centered;
+    /* 0x0C */ s32 iconX;
+    /* 0x10 */ s32 icon;
+} Slot89007678; // size = 0x14
+extern Slot89007678 D_8900A884[];
+extern u8 D_8007356C[];
+extern Gfx D_80060270[];
+extern Gfx D_80060290[];
+extern Gfx D_80060398[];
+extern Color_RGBA8 D_8900A874;
+extern Color_RGBA8 D_8900A878;
+extern Rgba8900806C D_8900A5BC;
+extern Color_RGBA8 D_8900A87C;
+extern Color_RGBA8 D_8900A880;
+extern char D_89018E80[];
+extern char D_89018E84[];
+extern char D_89018E88[];
+extern char D_89018E8C[];
+extern char D_89018E90[];
+extern char D_89018E9C[];
+extern char D_89018EA8[];
+extern char D_89018EB4[];
+extern char D_89018EC0[];
+extern char D_89018ECC[];
+extern char D_89018ED8[];
+extern char D_89018EDC[];
+extern char D_89018EE0[];
+extern char D_89018EE4[];
+void func_800069CC();
+void func_80019008(s32, Mon89007678*, s32);
+u8* func_800196F8(s32);
+void func_8001AAE4(u8, u8, u8, u8);
+void func_8001ABE8(void);
+void func_8001AC3C(void);
+void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
+void func_80029028(s32, s32, s32, s32, Color_RGBA8);
+void func_80029658(s32, s32, s32, u8*);
+void func_8002A550(s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
+s32 func_8002AE6C();
+void func_8002AF04(char*, s32);
+s32 func_8002D3D0(Mon89007678*);
+s32 func_8002D430(Mon89007678*, s32);
+void func_89007678(Screen89007678* arg0) {
+    s32 y = arg0->y + 6;
+    s32 x = arg0->x + 6;
+    s32 count = func_8002D3D0(arg0->mon);
+    s32 i;
+    s32 n;
+    s32 row;
+    u8* tex;
+
+    if (func_8002AE6C(arg0) == 0) {
+        func_80029658(arg0->x, arg0->y + 0xF3, arg0->w, D_8007356C);
+        gSPDisplayList(gDisplayListHead++, D_80060270);
+        func_80029028(x, y, arg0->w - 0xC, 0x20, D_8900A874);
+        func_80029028(x + 0x78, y + 0x20, arg0->w - 0x84, 0x78, D_8900A878);
+        func_80029028(x, y + 0xF4, arg0->w - 0xC, 0x24, *(Color_RGBA8*)&D_8900A5BC);
+        func_8002A550(x, y + 0x98, arg0->w - 0xC, 0x56, D_8900A87C, D_8900A880);
+        func_8001AB6C();
+        func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF);
+        func_8001A384(8, 0);
+        func_8001ABE8();
+        func_8001AAE4(0x7F, 0xA8, 0xFF, 0xFF);
+        func_8001A944(x + 0xA, y + 5, arg0->mon->nickname);
+        func_8001AC3C();
+        func_8001A384(4, -1);
+        func_8001AA9C(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
+        func_8001A944(x + 0x84, y + 9, D_89018E80);
+        func_8001A944(x + 0x112, y + 9, D_89018E84);
+        func_8001A384(8, 0);
+        func_8001A944(x + 0xB2, y + 5, D_89018E88, arg0->mon->level);
+        func_8001A944(x + 0x140, y + 5, D_89018E8C, arg0->mon->maxHp);
+        func_8001A944(x + 0x88, y + 0x28, D_89018E90);
+        if (func_8002D498((s32)arg0->mon, 1) != -1) {
+            func_8001A944(x + 0x88, y + 0x64, D_89018E9C);
+        }
+        func_8001A944(x + 0x102, y + 0x28, D_89018EA8);
+        func_8001A944(x + 0x102, y + 0x44, D_89018EB4);
+        func_8001A944(x + 0x102, y + 0x60, D_89018EC0);
+        func_8001A944(x + 0x102, y + 0x7C, D_89018ECC);
+        func_8001A944(x + 0x15C, y + 0x28, D_89018ED8, arg0->mon->attack);
+        func_8001A944(x + 0x15C, y + 0x44, D_89018EDC, arg0->mon->defense);
+        func_8001A944(x + 0x15C, y + 0x60, D_89018EE0, arg0->mon->speed);
+        func_8001A944(x + 0x15C, y + 0x7C, D_89018EE4, arg0->mon->special);
+        for (i = 0; i < count; i++) {
+            func_890074E0(D_8900A884[i].x + x, D_8900A884[i].y + y, func_8002D430(arg0->mon, i), D_8900A884[i].centered);
+        }
+        func_8001ABBC();
+        func_890075E0(x + 0x9C, y + 0x40, (s32)arg0->mon, 0);
+        func_890075E0(x + 0x9C, y + 0x7C, (s32)arg0->mon, 1);
+        gSPDisplayList(gDisplayListHead++, D_80060290);
+        for (i = 0; i < count; i++) {
+            func_8001B884(D_8900A884[i].iconX + x, D_8900A884[i].y + y, 0x14, 0x14, (u8*)D_8900A884[i].icon, 0x14, 0x200000);
+        }
+        gSPDisplayList(gDisplayListHead++, D_80060398);
+        if (arg0->title != NULL) {
+            func_8001AB6C();
+            func_8001AA9C(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
+            func_8001A384(8, 0);
+            func_8001A944(arg0->x + 0xE, arg0->y + 0x102, arg0->title);
+            func_8001ABBC();
+            func_8002AF04(arg0->button1, (arg0->selection == 0) ? 2 : 0);
+            func_8002AF04(arg0->button2, (arg0->selection == 1) ? 2 : 0);
+        }
+        if (arg0->animLoaded == 0) {
+            arg0->animLoaded = 1;
+            func_80019008(arg0->anim, arg0->mon, 0x416D);
+        }
+        tex = func_800196F8(arg0->anim);
+        func_800069CC();
+        gSPDisplayList(gDisplayListHead++, D_80060290);
+        gDPSetAlphaCompare(gDisplayListHead++, G_AC_NONE);
+        for (row = 0; row < 0x78; row += n) {
+            if (0x78 - row < 0x10) {
+                n = 0x78 - row;
+            } else {
+                n = 0x10;
+            }
+            func_8001B884(x, y + row + 0x20, 0x78, n, tex, 0x80, 0x200000);
+            tex += n << 8;
+        }
+        gSPDisplayList(gDisplayListHead++, D_80060398);
+    }
+}
 
 s32 Ui_HandleHorizontalSelectionInput(void* arg0);
 s32 Ui_GetSelectionDirection(void* arg0);
@@ -280,7 +428,6 @@ s32 func_89007CD8(u8* arg0) {
     return sp1C;
 }
 
-typedef struct Rgba8900806C { u8 r, g, b, a; } Rgba8900806C;
 extern Rgba8900806C D_8900A5BC;
 extern Color_RGBA8 D_8900A8D4;
 extern Color_RGBA8 D_8900A8D8;
@@ -361,7 +508,7 @@ void func_8900806C(s8* arg0, s32 arg1, s32 arg2, u8* arg3, s32 arg4, s32 arg5, s
     M2C_FIELD(arg0, s32*, 0x90) = arg4;
 }
 
-M2C_UNK func_800069CC();                            /* extern */
+void func_800069CC();                            /* extern */
 M2C_UNK func_800189C0(s32, M2C_UNK);                /* extern */
 s32 func_8002AE6C();                                /* extern */
 M2C_UNK func_8002E230(s8 *, s32, s32, s32, s32);  /* extern */
@@ -799,7 +946,7 @@ void func_8002C064(s32, s32, s32, s32, s32);
 extern u8 D_8900A5B8[];
 void func_89008F4C(s8*);
 void func_8002CAD0(s8*);
-void func_89007678(s8*);
+void func_89007678(Screen89007678*);
 void func_8900A1CC(s8* arg0) {
     func_800069CC();
     func_8002C064(0x38, 0x1E0, D_8900A5B8[0], D_8900A5B8[1], D_8900A5B8[2]);
@@ -816,7 +963,7 @@ void func_8900A1CC(s8* arg0) {
             break;
         case 3:
             func_89008284(arg0 + 0x284, 0x10);
-            func_89007678(arg0 + 0x328);
+            func_89007678((Screen89007678*)(arg0 + 0x328));
             break;
     }
 }
