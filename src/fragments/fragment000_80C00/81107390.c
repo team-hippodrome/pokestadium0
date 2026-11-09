@@ -226,11 +226,65 @@ AudioCmd* func_811078D8(AudioCmd* arg0, s32* arg1, s32* arg2, s32 arg3) {
     return cmd;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81107AEC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81107AEC.s")
-#endif
+typedef struct Reverb81107AEC {
+    /* 0x000 */ u8 resampleFlags;
+    /* 0x001 */ u8 unk01;
+    /* 0x002 */ u8 framesLeftToIgnore;
+    /* 0x003 */ u8 curFrame;
+    /* 0x004 */ u8 downsampleRate;
+    /* 0x005 */ char unk05[0x5];
+    /* 0x00A */ u16 reverbGain;
+    /* 0x00C */ u16 wetGain;
+    /* 0x00E */ u16 resampleRate;
+    /* 0x010 */ u16 leakRtl;
+    /* 0x012 */ u16 leakLtr;
+    /* 0x014 */ char unk14[0x14];
+    /* 0x028 */ s32 resampleStateLeft;
+    /* 0x02C */ s32 resampleStateRight;
+    /* 0x030 */ char unk30[0x8];
+    /* 0x038 */ ReverbItem81107390 items[2][5];
+    /* 0x100 */ char unk100[0x58];
+} Reverb81107AEC; // size = 0x158
+#define ACMD_81107AEC(pkt, a, b)            \
+    {                                       \
+        AudioCmd* _a = (AudioCmd*)(pkt);    \
+        _a->w0 = (a);                       \
+        _a->w1 = (b);                       \
+    }
+void* func_81107AEC(AudioCmd* cmd, s32 bufLen, s16 reverbIndex, s16 updateIndex) {
+    ReverbItem81107390* item;
+    s16 startPad;
+    s16 paddedLengthA;
+
+    item = &((Reverb81107AEC*)&D_81184110[reverbIndex])->items[((Reverb81107AEC*)&D_81184110[reverbIndex])->curFrame][updateIndex];
+    if (((Reverb81107AEC*)&D_81184110[reverbIndex])->downsampleRate == 1) {
+        cmd = func_81107634(cmd, 0xC80, item->startPos, item->lengthA, reverbIndex);
+        if (item->lengthB != 0) {
+            cmd = func_81107634(cmd, item->lengthA + 0xC80, 0, item->lengthB, reverbIndex);
+        }
+        ACMD_81107AEC(cmd++, SHL_8110(0xC, 24, 8) | SHL_8110(0x34, 16, 8) | SHL_8110(((Reverb81107AEC*)&D_81184110[reverbIndex])->reverbGain, 0, 16), 0x0C800940);
+        ACMD_81107AEC(cmd++, SHL_8110(0xC, 24, 8) | SHL_8110(0x34, 16, 8) | SHL_8110(((Reverb81107AEC*)&D_81184110[reverbIndex])->wetGain + 0x8000, 0, 16), 0x0C800C80);
+    } else {
+        startPad = (item->startPos & 7) * 2;
+        paddedLengthA = (startPad + item->lengthA + 0xF) & ~0xF;
+        cmd = func_81107634(cmd, 0x3E0, item->startPos - startPad / 2, 0x1A0, reverbIndex);
+        if (item->lengthB != 0) {
+            cmd = func_81107634(cmd, paddedLengthA + 0x3E0, 0, 0x1A0 - paddedLengthA, reverbIndex);
+        }
+        ACMD_81107AEC(cmd++, SHL_8110(8, 24, 8) | SHL_8110(startPad + 0x3E0, 0, 16), SHL_8110(0xC80, 16, 16) | SHL_8110(bufLen * 2, 0, 16));
+        ACMD_81107AEC(cmd++, SHL_8110(5, 24, 8) | SHL_8110(((Reverb81107AEC*)&D_81184110[reverbIndex])->resampleRate, 0, 16) | SHL_8110(((Reverb81107AEC*)&D_81184110[reverbIndex])->resampleFlags, 16, 8), ((Reverb81107AEC*)&D_81184110[reverbIndex])->resampleStateLeft + 0x80000000);
+        ACMD_81107AEC(cmd++, SHL_8110(8, 24, 8) | SHL_8110(startPad + 0x580, 0, 16), SHL_8110(0xE20, 16, 16) | SHL_8110(bufLen * 2, 0, 16));
+        ACMD_81107AEC(cmd++, SHL_8110(5, 24, 8) | SHL_8110(((Reverb81107AEC*)&D_81184110[reverbIndex])->resampleRate, 0, 16) | SHL_8110(((Reverb81107AEC*)&D_81184110[reverbIndex])->resampleFlags, 16, 8), ((Reverb81107AEC*)&D_81184110[reverbIndex])->resampleStateRight + 0x80000000);
+        ACMD_81107AEC(cmd++, SHL_8110(0xC, 24, 8) | SHL_8110(0x34, 16, 8) | SHL_8110(((Reverb81107AEC*)&D_81184110[reverbIndex])->reverbGain, 0, 16), 0x0C800940);
+        ACMD_81107AEC(cmd++, SHL_8110(0xC, 24, 8) | SHL_8110(0x34, 16, 8) | SHL_8110(((Reverb81107AEC*)&D_81184110[reverbIndex])->wetGain + 0x8000, 0, 16), 0x0C800C80);
+    }
+    if ((((Reverb81107AEC*)&D_81184110[reverbIndex])->leakRtl != 0) || (((Reverb81107AEC*)&D_81184110[reverbIndex])->leakLtr != 0)) {
+        ACMD_81107AEC(cmd++, SHL_8110(0xA, 24, 8) | SHL_8110(0xC80, 0, 16), SHL_8110(0x3E0, 16, 16) | SHL_8110(0x1A0, 0, 16));
+        ACMD_81107AEC(cmd++, SHL_8110(0xC, 24, 8) | SHL_8110(0x1A, 16, 8) | SHL_8110(((Reverb81107AEC*)&D_81184110[reverbIndex])->leakRtl, 0, 16), 0x0E200C80);
+        ACMD_81107AEC(cmd++, SHL_8110(0xC, 24, 8) | SHL_8110(0x1A, 16, 8) | SHL_8110(((Reverb81107AEC*)&D_81184110[reverbIndex])->leakLtr, 0, 16), 0x03E00E20);
+    }
+    return cmd;
+}
 
 void* func_81107634(AudioCmd* cmd, u16 dmem, u16 offset, s32 count, s32 channel);
 extern AudioChannel81107E70 D_81184110[];
