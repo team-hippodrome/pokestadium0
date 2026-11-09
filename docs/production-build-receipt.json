@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5312,
-  "asm_owners": 132,
+  "c_owners": 5313,
+  "asm_owners": 131,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -190,6 +190,7 @@
     "src/fragments/fragment012_17ED00/ekans_game.c",
     "src/fragments/fragment012_17ED00/ekans_game_2.c",
     "src/fragments/fragment012_17ED00/ekans_game_3.c",
+    "src/fragments/fragment012_17ED00/ekans_game_3_82184DC8.c",
     "src/fragments/fragment012_17ED00/ekans_game_3_82188050.c",
     "src/fragments/fragment012_17ED00/fragment1_89010.c",
     "src/fragments/fragment012_17ED00/fragment1_89010_821328DC.c",
@@ -613,8 +614,8 @@
     "src/util.c",
     "src/vector_math.c"
   ],
-  "source_registry_sha256": "6875ae21c583502366dca49b47edc98c7c0151eff624d279aa896606eda4932b",
-  "section_registry_sha256": "8c377717af1bfbd3083234c6e50fbe9b9782affeee44629e58c29b7efa6e7da9",
+  "source_registry_sha256": "f5b601664c806797b7394e3b1ea1514c4c52343db8537329562eebea8e0410c6",
+  "section_registry_sha256": "3818ebb3b1b8ef8c38326c5ab07144e5637f9cfb65716e9aae4c5e9d038abc65",
   "headers_sha256": "fb7dae0efbb7eb52eead185ef67436ecc548efb6c3a6401bc01184d895c89578",
   "matching_registry_sha256": "d8bcc14a2a0db281cf30dcb9ddbd94d59e1afe84c70b4c8c017ea27ce60a251c",
   "build_tools_sha256": {
@@ -624,7 +625,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "7ab7c524c04a2f1584adfbf4872c70049c60a1425ea289a9b2a53231869cdf2c",
+    "docs/function-matches.csv": "ca5a1c053225ca0c0ed4b348c680ae5e186eb9e5da3c7978e8e065de35954706",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -809,7 +810,8 @@
     "src/fragments/fragment012_17ED00/battle_engine_thumbnail.c": "d2717cbc20d699d329f5a4f108f3264dc2d89e6c06a1aa40df896680f2a479f7",
     "src/fragments/fragment012_17ED00/ekans_game.c": "4c0d7afe0c3308ce8e32a1466e62fae8934e6fcd26584fb158fa89b07c3902a1",
     "src/fragments/fragment012_17ED00/ekans_game_2.c": "a843a8dcfda50b5c239239d42815db53bc72ffbf18dc042d5f01b364bcc4ffbd",
-    "src/fragments/fragment012_17ED00/ekans_game_3.c": "6a7f9c15ecb684e6f02fdaedcbe57cb64727661588edf33a09e5fd2d4d740c23",
+    "src/fragments/fragment012_17ED00/ekans_game_3.c": "78de5ebc22c9ca76e6749e46cf0168f8014aa1cbe7bc4b2410e38775268a8a8c",
+    "src/fragments/fragment012_17ED00/ekans_game_3_82184DC8.c": "f7317cd453466adc21c0cf1b6052c5e0993f846f333404ab97a99660a2aae046",
     "src/fragments/fragment012_17ED00/ekans_game_3_82188050.c": "efab2f3333b7e2bf9c32e6054223421c34d844727d421d6d57072414378412a3",
     "src/fragments/fragment012_17ED00/fragment1_89010.c": "efe5b474d6adf059a1ac1d518ff5e0e6b520a4d48917f62e85a09ef18bde891e",
     "src/fragments/fragment012_17ED00/fragment1_89010_821328DC.c": "901f6b861de798e44a86953d188e36bab018d53c204092429a5ae06c18790655",
