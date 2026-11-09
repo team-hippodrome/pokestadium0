@@ -3,16 +3,16 @@
 # pokestadium0 decompilation coverage
 
 <!-- AUTO_COVERAGE:START -->
-- Code owners (first-pass function inventory, excluding handwritten assembly): **5,415** covering **1,289,456** text bytes
-- Built from C in the full-ROM build: **5,301 / 5,415 (97.9%)**, **1,125,524** bytes (87.3%)
+- Code owners (first-pass function inventory, excluding handwritten assembly): **5,413** covering **1,270,568** text bytes
+- Built from C in the full-ROM build: **5,301 / 5,413 (97.9%)**, **1,125,524** bytes (88.6%)
   - ported from the Stadium 1 decomp: **2,400**
   - m2c output: **937**
   - matched by hand: **1,743**
   - unmodified ultralib 2.0I sources (`lib/ultralib`): **215**
 - Matching C held behind `NON_MATCHING` until its file's data is placed: **0**
 - Identified libultra functions still built from assembly: **0**, **0** bytes
-- Remaining assembly owners: **114**
-- Handwritten assembly, counted separately and not in the totals above ([list](docs/handwritten-asm.csv)): **29** owners, **14,180** bytes (0 built from C)
+- Remaining assembly owners: **112**
+- Handwritten assembly, counted separately and not in the totals above ([list](docs/handwritten-asm.csv)): **31** owners, **33,068** bytes (0 built from C)
 - Complete ROM comparison: **PASS**, SHA-256 `ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b`
 <!-- AUTO_COVERAGE:END -->
 

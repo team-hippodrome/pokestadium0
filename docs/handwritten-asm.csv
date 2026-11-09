@@ -28,3 +28,5 @@ func_800594D0,__osSetFpcCsr (ultralib src/os/setfpccsr.s)
 func_800596E0,marked handwritten by the disassembler; ultralib src/os/maptlbrdb.s
 func_8005C0A0,marked handwritten by the disassembler (cop0/TLB/cache instructions)
 func_81000020,fragment entry table of j stubs
+func_81117B20,GB emulator init: uses $gp/$fp as general registers and stores a code label inside func_81118018 as data
+func_81118018,GB emulator CPU interpreter: uses $gp/$fp as general registers and has jump targets taken as data
