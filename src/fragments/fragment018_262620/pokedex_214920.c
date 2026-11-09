@@ -382,11 +382,54 @@ void func_8A100BEC(s32 arg0, s32 arg1, s32 arg2) {
     func_8001AA60(arg0 + 0x54, arg1, (arg2 % 10) + 0x30);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8A100C50; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment018_262620/func_8A100C50.s")
-#endif
+extern char D_8A12FCE4[];
+extern char D_8A12FCF0[];
+extern char D_8A12FCF8[];
+extern char D_8A12FD00[];
+extern char D_8A12FD04[];
+extern char D_8A12FD0C[];
+extern char D_8A12FD10[];
+extern char D_8A12FD14[];
+extern char D_8A12FD18[];
+extern u8 D_800735C4[];
+extern s32 D_8A12FFB8;
+s32 func_800231C8(s32, s32);
+void func_800295E8(s32, s32, s32, s32, u8*);
+
+void func_8A100C50(s32 arg0, s32 arg1) {
+    u8* entry = (u8*)&D_80064C5C + D_8A12FFB8 * 0x1C;
+
+    gSPDisplayList(gDisplayListHead++, D_80060270);
+    func_80029028(arg0, arg1, 0x122, 0xD2, D_8A1057D4);
+    func_800295E8(arg0 + 8, arg1 + 8, 0x112, 0x5A, D_800735C4);
+    Font_BeginTranslucentTextRendering();
+    Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+    Font_EnableTwoCycleTexturing();
+    Font_SetActive(0x20, 0);
+    Gfx_SetPrimColor(0x96, 0x96, 0xFF, 0xFF);
+    Font_Printf(arg0 + 0x70, arg1 + 0x38, M2C_FIELD(entry, char**, 4));
+    Font_SetActive(0x10, 0);
+    Gfx_SetPrimColor(0x96, 0xFF, 0x96, 0xFF);
+    Font_Printf(arg0 + 8, arg1 + 0x6A, D_8A12FCE4, M2C_FIELD(entry, s32*, 8));
+    Gfx_SetPrimColor(0xFF, 0xFF, 0x96, 0xFF);
+    Font_Printf(arg0 + 0xD, arg1 + 0x8E, D_8A12FCF0);
+    Gfx_SetPrimColor(0xFF, 0x96, 0x96, 0xFF);
+    Font_Printf(arg0 + 0xD, arg1 + 0xB2, D_8A12FCF8);
+    Font_DisableTwoCycleTexturing();
+    Gfx_SetEnvColor(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
+    Font_Printf(arg0 + 0x12, arg1 + 0x12, D_8A12FD00);
+    Font_Printf(arg0 + 0x4E, arg1 + 0x12, D_8A12FD04, entry[0]);
+    if (func_800231C8(D_8A12FFB0, entry[0]) >= 2) {
+        func_8A100BEC(arg0 + 0x79, arg1 + 0x8E, entry[0xD]);
+        func_8A100BEC(arg0 + 0x79, arg1 + 0xB2, M2C_FIELD(entry, s16*, 0xE));
+    } else {
+        Font_Printf(arg0 + 0x79, arg1 + 0x8E, D_8A12FD0C);
+        Font_Printf(arg0 + 0x79, arg1 + 0xB2, D_8A12FD10);
+    }
+    Font_Printf(arg0 + 0xE1, arg1 + 0x8E, D_8A12FD14);
+    Font_Printf(arg0 + 0xE1, arg1 + 0xB2, D_8A12FD18);
+    Font_EndTexturedTextRendering();
+}
 
 typedef struct Rgba8A100F20 { u8 r, g, b, a; } Rgba8A100F20;
 void func_8002A550(s32, s32, s32, s32, Rgba8A100F20, Rgba8A100F20);
