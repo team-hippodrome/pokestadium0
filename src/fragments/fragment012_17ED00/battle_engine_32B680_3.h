@@ -312,7 +312,6 @@ extern M2C_UNK func_82153C50;
 
 void func_82153FD8(void);
 
-extern const f32 D_FLT_82196CB8;
 extern const f32 D_FLT_82196EC8;
 extern const f32 D_FLT_82196ECC;
 void func_82154050(Particle* arg0);
