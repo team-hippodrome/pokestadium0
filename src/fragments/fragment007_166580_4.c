@@ -34,7 +34,7 @@ typedef struct {
 } SlotFlags;
 
 M2C_UNK func_8002E3F0();
-void func_82004518(s32, s32, s32);
+void func_82004518(s8*, s32, s32);
 extern s32 D_8200AC58[];
 void func_8001AB6C(void);
 void func_8001A384(s32, s32);
@@ -428,8 +428,8 @@ void func_8200339C(s8* arg0) {
     }
 }
 
-void func_82003688(s32 arg0) {
-    func_8002E3F0(arg0 + 0x2F8);
+s32 func_82003688(s32 arg0) {
+    return func_8002E3F0(arg0 + 0x2F8);
 }
 
 typedef struct { s32 w[20]; } Words80;
@@ -671,69 +671,4 @@ void func_82004268(s32*, s32*, Src82004020**, s32, s32, s32);
 
 void func_820044D0(s8 *arg0) {
     func_82004268((s32*)(arg0 + 0x4358), (s32*)(arg0 + 0x4360), (Src82004020**)(arg0 + 0x4340), M2C_FIELD(arg0, s32 *, 0x4370), M2C_FIELD(arg0, s32 *, 0x4374), M2C_FIELD(arg0, s32 *, 0x501C));
-}
-
-#ifdef NON_MATCHING
-/* TODO: decompile func_82004518; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment007_166580/func_82004518.s")
-#endif
-
-u8 func_80022B4C(s32);
-u8 func_8000B2E8(void);
-
-/*
- * func_82004B0C
- *
- * Recomputes two masks in the object at arg0 and then calls
- * func_82004518(arg0, 1, 0). Word +0x5018 gets bit i set for each i in 0..3
- * where func_80022B4C(i) returns 0. Word +0x5010 is set to func_8000B2E8()
- * and word +0x5014 to the number of bits among bits 0..3 of that value that
- * are set.
- */
-void func_82004B0C(s32 arg0) {
-    s32 i;
-
-    M2C_FIELD(arg0, s32*, 0x5018) = 0;
-    for (i = 0; i < 4; i++) {
-        if (func_80022B4C(i) == 0) {
-            M2C_FIELD(arg0, s32*, 0x5018) |= 1 << i;
-        }
-    }
-    M2C_FIELD(arg0, s32*, 0x5010) = func_8000B2E8();
-    M2C_FIELD(arg0, s32*, 0x5014) = 0;
-    for (i = 0; i < 4; i++) {
-        if ((M2C_FIELD(arg0, s32*, 0x5010) >> i) & 1) {
-            M2C_FIELD(arg0, s32*, 0x5014) += 1;
-        }
-    }
-    func_82004518(arg0, 1, 0);
-}
-
-void func_82000594(void*);
-void func_820003D4(void*);
-void func_80027804(void*, void*, s32, s32);
-void func_82004BC0(s8 *arg0)
-{
-  s32 i;
-  M2C_FIELD(arg0, s32*, 0x4368) = (!((M2C_FIELD(arg0, s32*, 0x4370)) == 0)) || (!((M2C_FIELD(arg0, s32*, 0x4374)) == 0));
-  M2C_FIELD(arg0, s32*, 0x436C) = ((M2C_FIELD(arg0, s32*, 0x4370)) == 0) && ((M2C_FIELD(arg0, s32*, 0x4374)) == 0);
-  func_80027410(arg0 + 0x4310, (s32) (arg0 + 0x10), 0x214, 0x20, 0);
-  func_820003D4(arg0 + 0x4310);
-  if (M2C_FIELD(arg0, s32*, 0x4368))
-  {
-    func_8200053C((void *) (arg0 + 0x4310));
-  }
-  if (M2C_FIELD(arg0, s32*, 0x436C))
-  {
-    func_82000594(arg0 + 0x4310);
-  }
-  func_80027804(arg0 + 0x4320, arg0 + 0x4290, 0x20, 0);
-  func_820008C8((void *) (arg0 + 0x4320), (void *) (arg0 + 0x4310));
-  func_8200140C((void *) (arg0 + 0x4310), M2C_FIELD(arg0, s32*, 0x4374));
-  M2C_FIELD(arg0, s32*, 0x4354) = 0;
-    for (i = 0; i < 5; i++) { M2C_FIELD(arg0, s32*, (0x4340 + (i * 4))) = 0;
-  }
-
-  func_82002D5C(arg0 + 0x4690, 0x30, 0x5C, (s32) (arg0 + 0x4320), (s32) (arg0 + 0x4340), M2C_FIELD(arg0, s32*, 0x4374));
 }
