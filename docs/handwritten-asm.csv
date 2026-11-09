@@ -1,5 +1,6 @@
 owner,reason
 func_800093C0,marked handwritten by the disassembler (cop0/TLB/cache instructions)
+func_800093D0,"break 0 instruction (debugger trap), no C equivalent"
 func_800093E0,marked handwritten by the disassembler (cop0/TLB/cache instructions)
 func_80048010,marked handwritten by the disassembler (cop0/TLB/cache instructions)
 func_8004CFA0,marked handwritten by the disassembler; ultralib src/os/setcause.s

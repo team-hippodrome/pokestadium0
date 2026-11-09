@@ -206,11 +206,45 @@ void func_8200053C(RecordList* arg0) {
     arg0->count = rec - arg0->records;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82000594; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment007_166580/func_82000594.s")
-#endif
+typedef struct Src82000594Entry { s32 data[0x14]; } Src82000594Entry;
+typedef struct Src82000594 {
+    /* 0x00 */ u16 unk_00;
+    /* 0x02 */ u16 unk_02;
+    /* 0x04 */ char unk04[0x8];
+    /* 0x0C */ s32 name;
+    /* 0x10 */ Src82000594Entry entries[6];
+} Src82000594; // size = 0x1F0
+typedef struct Slot82000594 { s32 flag; Src82000594Entry data; } Slot82000594;
+typedef struct Rec82000594 {
+    u8 type; u8 unk_01; u8 unk_02; s8 index; s32 unk_04; char name[0x10]; s32 slotCount;
+    Slot82000594 slots[6];
+} Rec82000594;
+typedef struct List82000594 { Rec82000594* records; s32 unk04; s32 count; } List82000594;
+extern Src82000594* D_8200AD04;
+void func_8000A460(char*, void*);
+void* func_80001B10(s32);
+void func_82000594(List82000594* arg0) {
+    s32 i;
+    s32 j;
+    Rec82000594* rec;
+
+    rec = &arg0->records[arg0->count];
+    for (i = 0; i < 8; i++) {
+        rec->type = 4;
+        rec->unk_01 = 0;
+        rec->unk_02 = 0;
+        rec->index = i;
+        rec->unk_04 = D_8200AD04[i].unk_02;
+        func_8000A460(rec->name, func_80001B10(D_8200AD04[i].name));
+        rec->slotCount = 6;
+        for (j = 0; j < 6; j++) {
+            rec->slots[j].flag = 0;
+            rec->slots[j].data = D_8200AD04[i].entries[j];
+        }
+        rec++;
+    }
+    arg0->count = rec - arg0->records;
+}
 
 /*
  * func_820008C8
