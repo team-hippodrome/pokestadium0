@@ -378,11 +378,100 @@ s32 func_8002E3F0(Menu8002E230* arg0) {
     return input;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002E70C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002E70C.s")
-#endif
+s32 func_8002E70C(Menu8002E230* menu) {
+    s32 button;
+    s32 prev = menu->cursor;
+    s32 found = 0;
+    s32 rowStart;
+    s32 i;
+    s32 end;
+
+    if (menu->def->itemCount == 0) {
+        return 0;
+    }
+    button = (u16)func_8000B30C();
+    switch (button) {
+        case 0x800:
+            do {
+                menu->cursor -= menu->columns;
+                if (menu->cursor < 0) {
+                    menu->cursor += ((menu->def->itemCount - 1) / menu->columns + 1) * menu->columns;
+                }
+                rowStart = menu->cursor - menu->cursor % menu->columns;
+                for (i = menu->cursor; i >= rowStart; i--) {
+                    if (i <= menu->def->itemCount - 1 && !(menu->flags[i] & 1)) {
+                        menu->cursor = i;
+                        found = 1;
+                        break;
+                    }
+                }
+                if (!found) {
+                    end = menu->columns + rowStart - 1;
+                    if (end >= menu->def->itemCount - 1) {
+                        end = menu->def->itemCount - 1;
+                    }
+                    for (i = menu->cursor + 1; i <= end; i++) {
+                        if (!(menu->flags[i] & 1)) {
+                            menu->cursor = i;
+                            found = 1;
+                            break;
+                        }
+                    }
+                }
+            } while (!found);
+            break;
+        case 0x400:
+            do {
+                menu->cursor += menu->columns;
+                if ((menu->def->itemCount - 1) / menu->columns < menu->cursor / menu->columns) {
+                    menu->cursor %= menu->columns;
+                }
+                rowStart = menu->cursor - menu->cursor % menu->columns;
+                for (i = menu->cursor; i >= rowStart; i--) {
+                    if (i <= menu->def->itemCount - 1 && !(menu->flags[i] & 1)) {
+                        menu->cursor = i;
+                        found = 1;
+                        break;
+                    }
+                }
+                if (!found) {
+                    end = menu->columns + rowStart - 1;
+                    if (end >= menu->def->itemCount - 1) {
+                        end = menu->def->itemCount - 1;
+                    }
+                    for (i = menu->cursor + 1; i <= end; i++) {
+                        if (!(menu->flags[i] & 1)) {
+                            menu->cursor = i;
+                            found = 1;
+                            break;
+                        }
+                    }
+                }
+            } while (!found);
+            break;
+        case 0x200:
+            do {
+                if (menu->cursor % menu->columns == 0) {
+                    menu->cursor += menu->columns;
+                }
+                menu->cursor--;
+            } while (menu->cursor >= menu->def->itemCount || (menu->flags[menu->cursor] & 1));
+            break;
+        case 0x100:
+            do {
+                if (menu->cursor % menu->columns + 1 == menu->columns) {
+                    menu->cursor -= menu->columns;
+                }
+                menu->cursor++;
+            } while (menu->cursor >= menu->def->itemCount || (menu->flags[menu->cursor] & 1));
+            break;
+    }
+    if (prev != menu->cursor) {
+        func_8003F6AC(1);
+        if (button) {} // karodo
+    }
+    return button;
+}
 
 void func_8002ED18(s8* arg0, s32 arg1, s32 arg2);
 extern s32 D_800603C0;

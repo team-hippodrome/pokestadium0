@@ -18,7 +18,7 @@ func_8002DF9C,0x8002DF9C,src/2E480.c,func_8002DF9C,hand,,c
 func_8002E078,0x8002E078,src/2E480.c,func_8002E078,hand,,c
 func_8002E230,0x8002E230,src/2E480.c,func_8002E230,hand,,c
 func_8002E3F0,0x8002E3F0,src/2E480.c,func_8002E3F0,hand,,c
-func_8002E70C,0x8002E70C,src/2E480.c,,asm,,asm
+func_8002E70C,0x8002E70C,src/2E480.c,func_8002E70C,hand,,c
 func_8002EC24,0x8002EC24,src/2E480.c,func_8002EC24,hand,,c
 func_8002ED18,0x8002ED18,src/2E480.c,func_8002ED18,m2c,m2c,c
 func_8002ED50,0x8002ED50,src/2E480.c,func_8002ED50,m2c,m2c,c
