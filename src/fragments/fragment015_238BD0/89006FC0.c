@@ -280,19 +280,57 @@ s32 func_89007CD8(u8* arg0) {
     return sp1C;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89007D54; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_89007D54.s")
-#endif
+typedef struct Rgba8900806C { u8 r, g, b, a; } Rgba8900806C;
+extern Rgba8900806C D_8900A5BC;
+extern Color_RGBA8 D_8900A8D4;
+extern Color_RGBA8 D_8900A8D8;
+extern Gfx D_80060270[];
+extern Gfx D_80073408[];
+extern Gfx D_80073438[];
+extern Gfx D_80073450[];
+extern u8 D_04011A60[];
+void func_80029028(s32, s32, s32, s32, Color_RGBA8);
+void func_8002A0AC(s32, s32, s32, s32, Color_RGBA8);
+void func_8001BCB4(s32, s32, s32, s32, u8*, s32, s32);
+void func_8002B788(s32, s32, u8);
+void func_80027F20(s32);
+void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
+u8* func_80018DEC(s32, s32);
+void func_89007D54(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4, s32 arg5) {
+    s32 pad[4]; // FAKE
+
+    gSPDisplayList(gDisplayListHead++, D_80060270);
+    func_80029028(arg0 + 1, arg1 + 1, 0x58, 0x2E, *(Color_RGBA8*)&D_8900A5BC);
+    func_80029028(arg0 + 1, arg1 + 0x2F, 0x58, 0x12, D_8900A8D4);
+    func_80029028(arg0, arg1, 0x5A, 1, D_8900A8D8);
+    func_80029028(arg0, arg1 + 0x41, 0x5A, 1, D_8900A8D8);
+    func_80029028(arg0, arg1 + 1, 1, 0x40, D_8900A8D8);
+    func_80029028(arg0 + 0x59, arg1 + 1, 1, 0x40, D_8900A8D8);
+    if (arg2 != NULL) {
+        if (arg4 & 0x10) {
+            func_8002A0AC(arg0 + 3, arg1 + 3, 0x54, 0x2C, *(Color_RGBA8*)&D_8900A5BC);
+            func_8002A0AC(arg0 + 3, arg1 + 0x2F, 0x54, 0x10, D_8900A8D4);
+        }
+        gSPDisplayList(gDisplayListHead++, D_80073450);
+        gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
+        func_8001BCB4(arg0 + 4, arg1 + 0x24, 8, 0xA, D_04011A60, 8, 0);
+        func_8002B788(arg0 + 0xE, arg1 + 0x22, arg2[0x24]);
+        func_8001AB6C();
+        func_80027F20(arg4);
+        func_8001A384(4, 0);
+        func_8001A944(arg0 + 5, arg1 + 0x30, arg2 + 0x30);
+        func_8001ABBC();
+        gSPDisplayList(gDisplayListHead++, D_80073408);
+        func_8001B884(arg0 + 0x2C, arg1 + 4, 0x28, 0x28, func_80018DEC(arg5, arg3), 0x28, 0x200000);
+        gSPDisplayList(gDisplayListHead++, D_80073438);
+    }
+}
 
 typedef struct Str8900806C { char s[13]; } Str8900806C;
-typedef struct Rgba8900806C { u8 r, g, b, a; } Rgba8900806C;
 char* func_8000A460(char*, const char*);
 void func_80018168(s32);
 void func_80027410(s8*, s8*, s32, s32, s32);
 void func_8002DECC(s8*, s8*, s8*, void*, s32, s32, s32);
-extern Rgba8900806C D_8900A5BC;
 extern char D_89018EE8[];
 extern char D_89018EF0[];
 extern char D_89018EF8[];
