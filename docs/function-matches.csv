@@ -642,7 +642,7 @@ func_81117B04,0x81117B04,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0
 func_81000020,0x81000020,src/fragments/fragment001_15B1A0.c,,asm,,asm
 func_81200020,0x81200020,src/fragments/fragment002_15E220.c,func_81200020,hand,,c
 func_81200190,0x81200190,src/fragments/fragment002_15E220.c,func_81200190,hand,,c
-func_8120023C,0x8120023C,src/fragments/fragment002_15E220.c,,asm,,asm
+func_8120023C,0x8120023C,src/fragments/fragment002_15E220.c,func_8120023C,hand,,c
 func_8120047C,0x8120047C,src/fragments/fragment002_15E220.c,func_8120047C,hand,,c
 func_812007B0,0x812007B0,src/fragments/fragment002_15E220.c,func_812007B0,hand,,c
 func_81200970,0x81200970,src/fragments/fragment002_15E220.c,func_81200970,m2c,m2c+permuter,c

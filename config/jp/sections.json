@@ -78,6 +78,12 @@
       "size": "0xC"
     }
   },
+  "src/fragments/fragment002_15E220.c": {
+    ".rodata": {
+      "address": "0x81200FF4",
+      "size": "0x14"
+    }
+  },
   "src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c": {
     ".data": {
       "address": "0x88402F8C",
