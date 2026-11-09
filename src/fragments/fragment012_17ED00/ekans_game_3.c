@@ -396,7 +396,9 @@ void GalleryDebugger_SaveControllerPak(void) {
 
 typedef struct BattleSlotZ {
     /* 0x00 */ TeamRoster* roster;
-    /* 0x04 */ u8 pad04[0x17];
+    /* 0x04 */ u8 pad04[4];
+    /* 0x08 */ s32 unk_08;
+    /* 0x0C */ u8 pad0C[0xF];
     /* 0x1B */ u8 unk_1B;
     /* 0x1C */ u16 unk_1C;
     /* 0x1E */ u8 pad1E[0xE];
@@ -1470,13 +1472,72 @@ s32 func_821870D8(s32 arg0, s32 arg1, s32 arg2) {
     return 1;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82187134; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82187134.s")
-#endif
+void func_8218419C(u8 *, s32);
+s32 func_82187134(u8 *arg0, s32 arg1, s32 arg2, s32 arg3)
+{
+  s32 i;
+  s32 j;
+  s32 best;
+  s32 bestScore;
 
-s8 func_82187134(s32, s32, s32, s32);
+  for (i = 0; i < 6; i++)
+  {
+    D_821CF294[i].unk_08 = -1;
+    if ((D_821CF294[i].unk_1C != 0) && (((arg1 == 0) && (!(((u8 *) D_821CF294)[0x36C] & (1 << i)))) || ((arg1 != 0) && (((u8 *) D_821CF294)[0x36C] & (1 << i)))))
+    {
+      if (arg0 == NULL)
+      {
+        for (j = 0; j < 6; j++)
+        {
+          if ((D_821CF298[j].unk_1C != 0) && (D_821CF298[j].unk_1B != 0) && (D_821CF298[j].unk_36 != 0))
+          {
+            func_82186CA8(D_821CF294[i].pad04, D_821CF298[j].pad04);
+          }
+        }
+      }
+      else
+      {
+        func_82186CA8(D_821CF294[i].pad04, arg0);
+      }
+      if ((arg2 != 0) && (func_82183AF0() < 0x28))
+      {
+        func_82183DCC((s8 *) D_821CF294[i].pad04);
+      }
+      if (((u8 *) D_821CF294)[0x368] >= 2)
+      {
+        D_821CF294[i].unk_08 += func_82183AF0() * 1000;
+      }
+      else if (((u8 *) D_821CF294)[0x368] == 1)
+      {
+        func_82183DCC((s8 *) D_821CF294[i].pad04);
+      }
+      func_8218419C(D_821CF294[i].pad04, arg3);
+    }
+  }
+
+  bestScore = -1;
+  best = -1;
+  for (i = 0; i < 6; i++)
+  {
+    if ((D_821CF294[i].unk_1C != 0) && (((arg1 == 0) && (!(((u8 *) D_821CF294)[0x36C] & (1 << i)))) || ((arg1 != 0) && (((u8 *) D_821CF294)[0x36C] & (1 << i)))) && (func_821870D8(arg1, arg3, i) != 0))
+    {
+      if (bestScore < D_821CF294[i].unk_08)
+      {
+        bestScore = D_821CF294[i].unk_08;
+        best = i;
+      }
+    }
+  }
+
+  if (best < 0)
+  {
+    return -1;
+  }
+  ((u8 *) D_821CF294)[0x36C] |= 1 << best;
+  return best;
+}
+
+s32 func_82187134(u8 *, s32, s32, s32);
 extern u8 D_821CF2B8[];
 s32 func_82187414(s32 arg0)
 {
