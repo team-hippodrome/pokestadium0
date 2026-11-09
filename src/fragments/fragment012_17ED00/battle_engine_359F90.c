@@ -57,7 +57,7 @@ extern u8 sHighCritMoves[];
 
 s32 func_82107F88(ActivePokemon*);
 
-s32 func_8211EF74(s32, s32, s32, ...);
+void func_8211EF74(s32, s32, s32, ...);
 extern s32 D_8219A520;
 
 void ComputeAllPokemonStats(BattleMon* arg0);
@@ -166,11 +166,43 @@ s32 Battle_CalcDamage(void) {
     return 1;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8211009C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211009C.s")
-#endif
+extern s32 D_8218C7B0;
+extern s32 D_8218C7B4;
+void func_82105E38(ActivePokemon*, s32);
+void func_8211009C(void) {
+    BattleMonRuntime* target = sBattleTarget;
+
+    if (target->unk_4D & 0x10) {
+        if (sBattleScene.scene->unk_48 == 0x14) {
+            func_8211EF74(D_8219A520 + 0x208, 0x2B, D_8218C7B0, func_82107F88(sActivePokemon[sBattleScene.scene->unk_2C]));
+            if (sBattleTarget->unk_59 < sBattleDamage) {
+                sBattleTarget->unk_4D &= 0xFFEF;
+                func_8211EF74(D_8219A520 + 0x208, 0x2C, D_8218C7B4, func_82107F88(sActivePokemon[sBattleScene.scene->unk_2C]));
+                sBattleUser->moveCache.unk_01 = 0;
+                func_82105E38(sActivePokemon[sBattleScene.scene->unk_2C], 0x1000);
+            } else {
+                sBattleTarget->unk_59 -= sBattleDamage;
+            }
+        } else {
+            func_8211EF74(D_8219A520 + 0x208, 0x2B, D_8218C7B0, func_82107F88(sActivePokemon[!sBattleScene.scene->unk_2C]));
+            if (sBattleTarget->unk_59 < sBattleDamage) {
+                sBattleTarget->unk_4D &= 0xFFEF;
+                func_8211EF74(D_8219A520 + 0x208, 0x2C, D_8218C7B4, func_82107F88(sActivePokemon[!sBattleScene.scene->unk_2C]));
+                sBattleUser->moveCache.unk_01 = 0;
+                func_82105E38(sActivePokemon[!sBattleScene.scene->unk_2C], 0x1000);
+            } else {
+                sBattleTarget->unk_59 -= sBattleDamage;
+            }
+        }
+    } else {
+        if (sBattleDamage < target->unk_0C) {
+            target->unk_0C -= sBattleDamage;
+        } else {
+            sBattleDamage = target->unk_0C;
+            target->unk_0C = 0;
+        }
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_821102F0; signature not recovered. */
