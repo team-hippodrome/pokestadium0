@@ -364,11 +364,48 @@ s32 func_890082FC(s32 arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_89008370.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8900865C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_8900865C.s")
-#endif
+extern Gfx D_80060270[];
+void func_80029028(s32, s32, s32, s32, Color_RGBA8);
+void func_8002A0AC(s32, s32, s32, s32, Color_RGBA8);
+void func_8002A3F8(void*, s32, s32);
+extern Color_RGBA8 D_8900A8F8;
+extern Color_RGBA8 D_8900A900;
+extern Color_RGBA8 D_8900A8DC[];
+extern char D_89018F14[];
+extern char D_89018F20[];
+extern u8 D_80073634[];
+
+void func_8900865C(s32 arg0, s32 arg1, u8** arg2, s32 arg3, s32 arg4) {
+    Color_RGBA8 color;
+    s32 pad[11]; // FAKE
+
+    gSPDisplayList(gDisplayListHead++, D_80060270);
+    func_80029028(arg0, arg1 + 1, 0x104, 0x36, D_8900A8F8);
+    func_80029028(arg0, arg1, 0x104, 1, D_8900A900);
+    func_80029028(arg0, arg1 + 0x37, 0x104, 1, D_8900A900);
+    if (arg4 & 0x18) {
+        func_8002A0AC(arg0 + 3, arg1 + 3, 0xFE, 0x32, *(Color_RGBA8*)&D_8900A5BC);
+    }
+    func_8001AB6C();
+    func_8001A384(0x10, 0);
+    if (M2C_FIELD(*arg2, s32*, 0x960) == 0) {
+        color = D_8900A8DC[(arg4 & 2) ? 0 : 1];
+    } else {
+        color = ((Color_RGBA8*)&D_800734A8)[(arg4 & 2) ? 0 : 1];
+    }
+    if (arg4 & 1) {
+        color.a = 0x4C;
+    }
+    func_8001AA9C(color.r, color.g, color.b, color.a);
+    func_8001A944(arg0 + 8, arg1 + 0x10, D_89018F14, arg3 + 1);
+    func_8001A384(4, -1);
+    func_8001AA9C(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
+    func_8001A944(arg0 + 0xB0, arg1 + 0x14, D_89018F20, M2C_FIELD(*arg2, s32*, 0x960), 0x1E);
+    func_8001ABBC();
+    if (M2C_FIELD(*arg2, s32*, 0x960) > 0) {
+        func_8002A3F8(D_80073634, arg0 + 0x8C, arg1 + 0x10);
+    }
+}
 
 typedef struct ColorPair890088F8 {
     Color_RGBA8 prim;
