@@ -3815,7 +3815,7 @@ func_891097E4,0x891097E4,src/fragments/fragment016_252E10/lab_pc_list_1E46B0.c,L
 func_89109884,0x89109884,src/fragments/fragment016_252E10/lab_pc_list_1E46B0.c,LabPCList_FilterBySpeciesId,s1,stadium1:src/fragments/lab_pc_list/lab_pc_list_1E46B0.c,c
 func_89109898,0x89109898,src/fragments/fragment016_252E10/lab_pc_list_1E46B0.c,LabPCList_FilterByExactTypePair,s1,stadium1:src/fragments/lab_pc_list/lab_pc_list_1E46B0.c,c
 func_89109960,0x89109960,src/fragments/fragment016_252E10/lab_pc_list_1E46B0.c,func_89109960,hand,,c
-func_89109990,0x89109990,src/fragments/fragment016_252E10/lab_pc_list_1E46B0_2.c,,asm,,asm
+func_89109990,0x89109990,src/fragments/fragment016_252E10/lab_pc_list_1E46B0_2.c,func_89109990,hand,,c
 func_89109B60,0x89109B60,src/fragments/fragment016_252E10/lab_pc_list_1E46B0_2.c,func_89109B60,s1,,c
 func_89109C6C,0x89109C6C,src/fragments/fragment016_252E10/lab_pc_list_1E46B0_2.c,LabPCList_FlattenEntries,hand,,c
 func_89109D14,0x89109D14,src/fragments/fragment016_252E10/lab_pc_list_1E46B0_2.c,func_89109D14,hand,,c

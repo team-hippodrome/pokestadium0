@@ -62,11 +62,57 @@ s32 LabPCList_CompareTmHmEntries(unk_func_88200FA0_030_038* arg0, unk_func_88200
 s32 LabPCList_CanLearnMoveByLevelUp(s32 arg0, s32 arg1);
 void LabPCList_ConsumeUsedTmItem(unk_func_8830867C_04C_030_02C_000* arg0);
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89109990; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89109990.s")
-#endif
+typedef struct unk_func_89109990_010 {
+    /* 0x00 */ void* unk_00;
+    /* 0x04 */ s32 unk_04;
+    /* 0x08 */ s32 unk_08;
+    /* 0x0C */ s32 unk_0C;
+    /* 0x10 */ s32 unk_10;
+    /* 0x14 */ char unk_14[0xC];
+} unk_func_89109990_010; // size = 0x20
+
+typedef struct unk_func_89109990 {
+    /* 0x00 */ char unk00[0x4];
+    /* 0x04 */ s32 unk_04;
+    /* 0x08 */ char unk08[0x8];
+    /* 0x10 */ unk_func_89109990_010* unk_10;
+    /* 0x14 */ s32 unk_14;
+    /* 0x18 */ s32 unk_18;
+} unk_func_89109990;
+
+void func_80027804(void*, u8**, s32, s32);
+void func_89109990(unk_func_89109990* arg0, u8** arg1, u8* arg2, s32 arg3) {
+    UNUSED s32 pad[2];
+    unk_func_89109990_010* var_s1 = arg0->unk_10;
+    s32 var_t0 = 0;
+    s32 i;
+    s32 j;
+
+    switch (arg0->unk_04) {
+        case 0x11:
+        case 0x13:
+            break;
+        case 0x20:
+            var_t0 = 1;
+            break;
+        case 0x21:
+            break;
+    }
+
+    arg0->unk_18 = arg0->unk_14;
+    for (i = 0; i < arg0->unk_18; i++) {
+        var_s1[i].unk_00 = arg0;
+        var_s1[i].unk_04 = i;
+        var_s1[i].unk_08 = 1;
+        var_s1[i].unk_0C = var_t0;
+        var_s1[i].unk_10 = 0;
+        // The loop has to stay on one line: IDO orders the unrolled stores by source line.
+        for (j = 0; j < arg3; j++) { arg1[j] = &arg2[j * 0x58]; }
+        func_80027804(var_s1[i].unk_14, arg1, arg3, 0);
+        arg1 += arg3;
+        arg2 += arg3 * 0x58;
+    }
+}
 
 typedef struct LabPCDeckNode89109B60 {
     /* 0x00 */ void* owner;
