@@ -38,6 +38,7 @@ typedef struct unk_func_883164C0 {
 #include "memmap.h"
 #include "memory.h"
 #include "pokemon_stats.h"
+#include "m2c_macros.h"
 extern u8 D_8910D7D0[];
 typedef struct unk_func_88309614 {
     /* 0x00 */ char unk00[0x8];
@@ -386,11 +387,89 @@ s32 LabPCList_CanLearnMoveByLevelUp(s32 arg0, s32 arg1) {
     return ((var_v1->tmHmLearnset[arg1 / 8] >> (arg1 % 8)) & 1) != 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8910A4C8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_8910A4C8.s")
-#endif
+s32 func_80020974(s32);
+s32 func_8002D3D0(u8*);
+s32 func_8002D430(s32, s32);
+
+void func_8910A4C8(s8* arg0, u8* arg1) {
+    s32 i;
+    s32 j;
+    s32 n;
+    s32 n2;
+    s32 k;
+    s32 move;
+    s8** base;
+    s8* e;
+    u8* p;
+
+    base = M2C_FIELD(arg0, s8***, 0);
+    for (i = 0; i < M2C_FIELD(arg0, s32*, 8); i++) {
+        M2C_FIELD(base[i], s32*, 0x10) = 0;
+        e = base[i];
+        if (M2C_FIELD(e, s32*, 8) >= 100) {
+            if (**(u8**)e >= 0xC9) {
+                move = **(u8**)e - 0xC9;
+            } else {
+                move = **(u8**)e - 0x92;
+            }
+            n = func_8002D3D0(arg1);
+            for (j = 0; j < n; j++) {
+                if (func_80020974(move) == arg1[j + 9]) {
+                    break;
+                }
+            }
+            if (j < n) {
+                M2C_FIELD(base[i], s32*, 0x10) |= 8;
+            }
+            if (LabPCList_CanLearnMoveByLevelUp(arg1[0], move) == 0) {
+                M2C_FIELD(base[i], s32*, 0x10) |= 0x10;
+            }
+        } else if (M2C_FIELD(e, s32*, 8) >= 50) {
+            n2 = func_8002D3D0(arg1);
+            for (j = 0; j < n2; j++) {
+                if ((func_8002D430((s32)arg1, j) != -2) && ((arg1 + j)[0x20] < 0xC0)) {
+                    break;
+                }
+            }
+            if (j >= n2) {
+                M2C_FIELD(base[i], s32*, 0x10) |= 4;
+            }
+        } else {
+            switch (**(u8**)e) {
+                case 35:
+                    if (M2C_FIELD(arg1, u16*, 0x14) >= 0x6400) {
+                        M2C_FIELD(e, s32*, 0x10) |= 1;
+                    }
+                    break;
+                case 36:
+                    if (M2C_FIELD(arg1, u16*, 0x16) >= 0x6400) {
+                        M2C_FIELD(e, s32*, 0x10) |= 1;
+                    }
+                    break;
+                case 37:
+                    if (M2C_FIELD(arg1, u16*, 0x18) >= 0x6400) {
+                        M2C_FIELD(e, s32*, 0x10) |= 1;
+                    }
+                    break;
+                case 38:
+                    if (M2C_FIELD(arg1, u16*, 0x1A) >= 0x6400) {
+                        M2C_FIELD(e, s32*, 0x10) |= 1;
+                    }
+                    break;
+                case 39:
+                    if (M2C_FIELD(arg1, u16*, 0x1C) >= 0x6400) {
+                        M2C_FIELD(e, s32*, 0x10) |= 1;
+                    }
+                    break;
+                case 40:
+                    if (arg1[0x24] >= 100) {
+                        M2C_FIELD(e, s32*, 0x10) |= 2;
+                    }
+                    break;
+            }
+        }
+    }
+}
 
 void LabPCList_ConsumeUsedTmItem(unk_func_8830867C_04C_030_02C_000* arg0) {
     if ((LabItem_IsQuantitylessItemForOperation(arg0->unk_00[0]->unk_00) != 0) || (arg0->unk_00[0]->unk_01 < 2)) {

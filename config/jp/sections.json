@@ -494,7 +494,11 @@
     }
   },
   "src/fragments/fragment016_252E10/lab_pc_list_1E46B0_2.c": {
-    ".data": "0x8910D9E0"
+    ".data": "0x8910D9E0",
+    ".rodata": {
+      "address": "0x8910E2B0",
+      "size": "0x18"
+    }
   },
   "src/fragments/fragment017_261F00.c": {
     ".rodata": {

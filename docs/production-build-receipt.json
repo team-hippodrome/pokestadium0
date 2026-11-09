@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5221,
-  "asm_owners": 223,
+  "c_owners": 5222,
+  "asm_owners": 222,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -611,7 +611,7 @@
     "src/vector_math.c"
   ],
   "source_registry_sha256": "e6279b8fe24d310b6b89f5f532a4c196e0e37d33710a71ff9edc6cf5e0b9ad9b",
-  "section_registry_sha256": "90161f209ca2ce347a6a1d0e014285c237185f12b36bdb29899ec17e4fd8f5b8",
+  "section_registry_sha256": "79e7e4a5744a7e1a69d9b2aad3d67c47d2685aa53433863d28cfe9a584552779",
   "headers_sha256": "f837395b1ec12c24d32d18bcb0a7e60e82866346b12b7f8145dfd3414f73711b",
   "matching_registry_sha256": "d8bcc14a2a0db281cf30dcb9ddbd94d59e1afe84c70b4c8c017ea27ce60a251c",
   "build_tools_sha256": {
@@ -621,7 +621,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "424c88516b3209d4aac10301d4734976118d927b30fd012e2769689961e1177a",
+    "docs/function-matches.csv": "07c38da80ddc1b1c7e50b48c4b6e55d0e28ddfe3326f8d4d48a3d7665b57652f",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -831,7 +831,7 @@
     "src/fragments/fragment016_252E10/89100020_89103740.c": "f91e3d1fddba0446ffe8abeefec701e2fa4c9fa68fb1a3832f832d62c36933f5",
     "src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c": "b0ba78b17fd861e9d3976c5ab9e112cda0e01049de788bd14b2475eeede0b31c",
     "src/fragments/fragment016_252E10/lab_pc_list_1E46B0.c": "ba8d4b5501f5daea30407668a46cb1021536cf2edb09db847e7544301d76b045",
-    "src/fragments/fragment016_252E10/lab_pc_list_1E46B0_2.c": "d2b3316eb953509dc776192668fc1faa2f9e910c9baf9acc90664fc3678ee39f",
+    "src/fragments/fragment016_252E10/lab_pc_list_1E46B0_2.c": "2e380eea022d78b9d9f97e7956f3bfbc5a273fe30e16922e3b5d8cb932eebead",
     "src/fragments/fragment017_261F00.c": "e60f251df9e22e458be0ee04551e3b8b47f5f8d7eaf6625c85ca69b0342af573",
     "src/fragments/fragment018_262620/pokedex_214920.c": "a6ed5404617b742b1815aaea9f7adc698ac1ef0e3c91c5b103dde3fe7949c52b",
     "src/fragments/fragment018_262620/pokedex_2190D0.c": "f34118c88ebb560e56f416197fa91203210374d1a9c30356c7ac091779394ec5",

@@ -3828,7 +3828,7 @@ func_8910A1A8,0x8910A1A8,src/fragments/fragment016_252E10/lab_pc_list_1E46B0_2.c
 func_8910A1EC,0x8910A1EC,src/fragments/fragment016_252E10/lab_pc_list_1E46B0_2.c,LabPCList_CompareTmHmEntries,s1,stadium1:src/fragments/lab_pc_list/lab_pc_list_1E46B0.c,c
 func_8910A21C,0x8910A21C,src/fragments/fragment016_252E10/lab_pc_list_1E46B0_2.c,func_8910A21C,hand,,c
 func_8910A3C0,0x8910A3C0,src/fragments/fragment016_252E10/lab_pc_list_1E46B0_2.c,LabPCList_CanLearnMoveByLevelUp,s1,stadium1:src/fragments/lab_pc_list/lab_pc_list_1D7B40.c,c
-func_8910A4C8,0x8910A4C8,src/fragments/fragment016_252E10/lab_pc_list_1E46B0_2.c,,asm,,asm
+func_8910A4C8,0x8910A4C8,src/fragments/fragment016_252E10/lab_pc_list_1E46B0_2.c,func_8910A4C8,hand,,c
 func_8910A764,0x8910A764,src/fragments/fragment016_252E10/lab_pc_list_1E46B0_2.c,LabPCList_ConsumeUsedTmItem,s1,stadium1:src/fragments/lab_pc_list/lab_pc_list_1E46B0.c,c
 func_8A000020,0x8A000020,src/fragments/fragment017_261F00.c,func_8A000020,m2c,m2c,c
 func_8A00009C,0x8A00009C,src/fragments/fragment017_261F00.c,func_8A00009C,m2c,m2c,c
