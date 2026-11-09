@@ -225,13 +225,17 @@ typedef struct Ctx89100688 {
     /* 0xB550 */ s32 cursor;
 } Ctx89100688;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_891005CC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_891005CC.s")
-#endif
+s32 func_891005CC(Ctx89100688* arg0) {
+    s32 i;
+    s32 x = 0;
+    s32 end;
 
-s32 func_891005CC();
+    for (i = arg0->ranges[arg0->mode], end = arg0->ranges[arg0->mode] + arg0->cursor - 2; i < end; i++) {
+        x += arg0->widths[i];
+    }
+    return arg0->x + x + 0x78;
+}
+
 void func_89100688(Ctx89100688* arg0) {
     s32 end;
     s32* r;
