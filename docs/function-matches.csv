@@ -34,7 +34,7 @@ func_80030230,0x80030230,src/2E480.c,,asm,,asm
 func_800306E0,0x800306E0,src/2E480.c,func_800306E0,hand,,c
 func_80030744,0x80030744,src/2E480.c,func_80030744,hand,,c
 func_800307D4,0x800307D4,src/2E480.c,WidgetTree_SetPagedGridSelectionWithOffset,hand,,c
-func_80030894,0x80030894,src/2E480.c,,asm,,asm
+func_80030894,0x80030894,src/2E480.c,func_80030894,hand,,c
 func_800309D4,0x800309D4,src/2E480.c,func_800309D4,m2c,m2c,c
 func_800309FC,0x800309FC,src/2E480.c,func_800309FC,m2c,m2c,c
 func_80030A1C,0x80030A1C,src/2E480.c,func_80030A1C,m2c,m2c+permuter,c
