@@ -93,7 +93,49 @@ s32 BattleHud_DrawMovePpTextRTL(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82119CAC.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211AAC4.s")
+extern u8 D_0300A500[];
+extern u8 D_0300A7A0[];
+extern char D_82195A44[];
+extern char D_82195A58[];
+extern char D_82195A60[];
+void func_8211AAC4(s16 arg0, s16 arg1, s16 arg2, s32 arg3) {
+    s32 pad; // FAKE
+    s32 idx;
+    s32 n;
+
+    if (Trainer_GetSlots()[arg2].unk_000 & 2) {
+        idx = 4;
+    } else {
+        idx = arg2;
+    }
+    func_82116CF4(arg0 + 1, arg1 + 1, 0xC6, 0x28, idx * 3 + &D_8218B008, idx * 3 + &D_8218B014);
+    func_8001AB6C();
+    func_8001A384(2, 0);
+    func_8001A944(arg0 + 0x2E, arg1 + 6, D_82195A44);
+    func_8001A944(arg0 + 0x38, arg1 + 0x18, D_82195A58);
+    func_8001A944(arg0 + 0x81, arg1 + 0x18, D_82195A60);
+    func_8001ABBC();
+    gSPDisplayList(gDisplayListHead++, D_80060308);
+    Gfx_DrawTextureRgba16Ia8(arg0 + 0x21, arg1 + 0x17, 0x18, 0xE, D_0300A500, D_0300A7A0, 0x18, 0x100000);
+    gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
+    gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
+    BattleHud_DrawBorderTile(arg0, arg1, 8, 8, D_030096C0);
+    BattleHud_DrawBorderTile(arg0, arg1 + 6, 8, 8, D_030095C0);
+    for (n = 8; n < 0x28; n += 8) {
+        BattleHud_DrawBorderTile(arg0, arg1 + n, 8, 8, D_030095C0);
+        BattleHud_DrawBorderTile(arg0 + 0xBE, arg1 + n, 8, 8, D_03009740);
+    }
+    BattleHud_DrawBorderTile(arg0, arg1 + 0x22, 8, 8, D_03009640);
+    BattleHud_DrawBorderTile(arg0 + 0xBE, arg1, 8, 8, D_03009840);
+    BattleHud_DrawBorderTile(arg0 + 0xBE, arg1 + 6, 8, 8, D_03009740);
+    BattleHud_DrawBorderTile(arg0 + 0xBE, arg1 + 0x22, 8, 8, D_030097C0);
+    for (n = 8; n < 0xC0; n += 8) {
+        BattleHud_DrawBorderTile(arg0 + n, arg1, 8, 8, D_03009940);
+        BattleHud_DrawBorderTile(arg0 + n, arg1 + 0x22, 8, 8, D_030098C0);
+    }
+    gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
+    BattleHud_DrawTranslucentShadowRect(arg0 - 3, arg1 - 2, 0xCC, 0x2D, 0);
+}
 
 void BattleHud_DrawPlainText(s16 arg0, s16 arg1, char* arg2) {
     Font_BeginTranslucentTextRendering();
