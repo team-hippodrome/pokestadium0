@@ -407,8 +407,8 @@ void Gallery_AlbumDrawStatusText(s8* arg0) {
 M2C_UNK func_8002BC14(s32);                         /* extern */
 extern s32 D_800603C0;
 
-void func_88100CA8(s32 arg0) {
-    func_8002BC14(D_800603C0);
+s32 func_88100CA8(s32 arg0) {
+    return func_8002BC14(D_800603C0);
 }
 
 
@@ -566,11 +566,11 @@ s32 func_881016BC(s8* arg0) {
     return func_88101690(arg0);
 }
 
-void Audio_QueueSoundAvoidingRecent(s32* arg0) {
+s32 Audio_QueueSoundAvoidingRecent(s32* arg0) {
     if (*arg0 > 0) {
         *arg0 -= 1;
     }
-    func_881016B0(arg0);
+    return func_881016B0(arg0);
 }
 
 s32 func_88101734(s32 *arg0) {
@@ -722,11 +722,123 @@ void func_88101F1C(s8* arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88102184; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment008_1720F0/func_88102184.s")
-#endif
+typedef struct Rec88102184 {
+    s32 w[0x220 / 4];
+} Rec88102184;
+extern char D_88102F34[];
+extern char D_88102F54[];
+extern char D_88102F6C[];
+extern char D_88102FC8[];
+s32 func_8002FD8C(s8*);
+void func_8003FE58(s32, s32, s32);
+void func_80027868(s32, s32);
+
+s32 func_88102184(s8* arg0) {
+    s32 ret = 0;
+    s32 res;
+    Rec88102184* src;
+
+    switch (M2C_FIELD(arg0, u32*, 4)) {
+        case 0:
+            if (func_8002FD8C(arg0 + 0x54) == 0) {
+                res = func_8002BC14(D_800603C0);
+                if (res == -1) {
+                    func_8003F6AC(3);
+                    ret = -1;
+                } else if (res == 1) {
+                    func_8003F6AC(2);
+                    M2C_FIELD(arg0, u32*, 4) = 3;
+                    func_88100898(arg0 + 0x310, M2C_FIELD(arg0, s32*, 8) + 0x56, M2C_FIELD(arg0, s32*, 0xC) + 0x79, (s32)D_88102F34);
+                    *(Rec88102184*)(arg0 + 0xC0) = *(*M2C_FIELD(arg0, Rec88102184****, 0x54))[M2C_FIELD(arg0, s32*, 0x5C)];
+                    M2C_FIELD(arg0, s8*, 0xC1) = 0x10;
+                    M2C_FIELD(arg0, s8*, 0xC3) = func_88100020();
+                }
+            }
+            break;
+        case 1:
+            if ((func_8002FD8C(arg0 + 0x54) == 0) && (func_8002BC14(D_800603C0) == -1)) {
+                func_8003F6AC(3);
+                ret = -1;
+            }
+            break;
+        case 2:
+            if (func_8002FD8C(arg0 + 0x54) == 0) {
+                res = func_8002BC14(D_800603C0);
+                if (res == -1) {
+                    func_8003F6AC(3);
+                    ret = -1;
+                    func_881001A8(M2C_FIELD(arg0, void**, 0xB8));
+                } else if (res == 1) {
+                    func_8003F6AC(2);
+                    *(Rec88102184*)(arg0 + 0xC0) = *(*M2C_FIELD(arg0, Rec88102184****, 0x54))[M2C_FIELD(arg0, s32*, 0x5C)];
+                    func_88100898(arg0 + 0x310, M2C_FIELD(arg0, s32*, 8) + 0x56, M2C_FIELD(arg0, s32*, 0xC) + 0x79, (s32)D_88102F54);
+                    M2C_FIELD(arg0, s32*, 0x3B8) = 1;
+                    M2C_FIELD(arg0, u32*, 4) = 6;
+                }
+            }
+            break;
+        case 3:
+            res = func_88100B2C((s32)(arg0 + 0x310));
+            if (res == -1) {
+                func_8003F6AC(3);
+                M2C_FIELD(arg0, u32*, 4) = 0;
+            } else if (res == 1) {
+                func_8003F6AC(2);
+                func_88100100((*M2C_FIELD(arg0, s8****, 0x54))[M2C_FIELD(arg0, s32*, 0x5C)], func_88100020());
+                func_8810165C(arg0 + 0x3C4, M2C_FIELD(arg0, s32*, 0xE0));
+                M2C_FIELD(arg0, u32*, 4) = 4;
+            }
+            break;
+        case 4:
+            if (M2C_FIELD(arg0, s32*, 0x3C4) % 15 == 0) {
+                func_8003FE58(0x90, 1, 0);
+            }
+            if (func_881016BC(arg0 + 0x3C4) != 0) {
+                func_8003F6AC(0x1E);
+                func_88100BA4(arg0 + 0x2E0, M2C_FIELD(arg0, s32*, 8) + 0x58, M2C_FIELD(arg0, s32*, 0xC) + 0x78, (s32)D_88102F6C);
+                M2C_FIELD(arg0, u32*, 4) = 5;
+            }
+            break;
+        case 5:
+            res = func_88100CA8((s32)(arg0 + 0x2E0));
+            if ((res == -1) || (res == 1)) {
+                func_8003F6AC(2);
+                ret = -1;
+            }
+            break;
+        case 6:
+            res = func_88100B2C((s32)(arg0 + 0x310));
+            if (res == -1) {
+                func_8003F6AC(3);
+                M2C_FIELD(arg0, u32*, 4) = 2;
+            } else if (res == 1) {
+                func_8003F6AC(2);
+                func_88101670(arg0 + 0x3C4, M2C_FIELD(arg0, s32*, 0xE0));
+                M2C_FIELD(arg0, u32*, 4) = 7;
+            }
+            break;
+        case 7:
+            if (M2C_FIELD(arg0, s32*, 0x3C4) % 15 == 0) {
+                func_8003FE58(0x90, 1, 0);
+            }
+            if (Audio_QueueSoundAvoidingRecent((s32*)(arg0 + 0x3C4)) != 0) {
+                func_8003F6AC(0x1F);
+                func_80027868(M2C_FIELD(arg0, s32*, 0xB8), M2C_FIELD(arg0, s32*, 0x5C));
+                func_881001A8(M2C_FIELD(arg0, void**, 0xB8));
+                func_88100BA4(arg0 + 0x2E0, M2C_FIELD(arg0, s32*, 8) + 0x58, M2C_FIELD(arg0, s32*, 0xC) + 0x78, (s32)D_88102FC8);
+                M2C_FIELD(arg0, u32*, 4) = 8;
+            }
+            break;
+        case 8:
+            res = func_88100CA8((s32)(arg0 + 0x2E0));
+            if ((res == -1) || (res == 1)) {
+                func_8003F6AC(2);
+                ret = -1;
+            }
+            break;
+    }
+    return ret;
+}
 
 /*
  * func_881025C8
@@ -866,7 +978,7 @@ M2C_UNK func_88102834(s32 a) {
  */
 void func_881004CC(s8*, s32, s32, s32, s32, M2C_UNK*, s32, M2C_UNK*, s32, M2C_UNK*);
 s32 func_881007AC(void *);
-s32 func_88102184(void *);
+s32 func_88102184(s8*);
 void func_88102600(s32 *);
 void func_88102688(s32 *);
 void func_88102710(s32 *);

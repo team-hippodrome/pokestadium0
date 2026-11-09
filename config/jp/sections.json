@@ -722,7 +722,7 @@
   "src/fragments/fragment008_1720F0.c": {
     ".rodata": {
       "address": "0x88103024",
-      "size": "0x24"
+      "size": "0x48"
     }
   }
 }
