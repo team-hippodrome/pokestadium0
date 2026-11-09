@@ -468,11 +468,105 @@ void func_891044F0(void* arg0) {
     func_891003A4((s8*)arg0 + 4, 0x26, 0x48, (s8*)arg0 + 0xB7E4);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8910452C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_8910452C.s")
-#endif
+void func_8002CA34(s8*, s32, s32);
+void func_8002CC44(s8*);
+s32 func_8002CD7C(s8*);
+void func_89102A04(s8*);
+void func_891084B4(s8*, s32, s32, s8*, s8*, s32);
+s32 func_891089BC(s8*);
+void func_89108F14(s8*, s32, s32, s8*);
+s32 func_89109174(s8*);
+void func_8910A4C8(s8*, s32);
+/*
+ * Per-frame update for a four-state object at arg0 (state word at offset 0).
+ * Returns 1 when the caller should leave this screen. The sub-objects at
+ * 4, 0xB59C, 0xB600 and 0xB7B4 are driven by the func_891043BC,
+ * func_8002CD7C, func_891089BC and func_89109174 updates.
+ */
+s32 func_8910452C(s8* arg0) {
+    s32 ret = 0;
+    s32 r;
+    s8* sub;
+
+    switch (M2C_FIELD(arg0, s32*, 0)) {
+        case 0:
+            sub = arg0 + 4;
+            r = func_891043BC(sub);
+            if (r == 1) {
+                if (M2C_FIELD(arg0, s32*, 0xB55C) != 0) {
+                    func_8002CA34(arg0 + 0xB59C, 0xCA, 0xAD);
+                    M2C_FIELD(arg0, s32*, 0) = 1;
+                } else {
+                    ret = 1;
+                }
+            } else if (r == 2) {
+                func_8910A4C8(arg0 + 0xB000, (*M2C_FIELD(arg0, s32***, 0xB164))[M2C_FIELD(arg0, s32*, 0xB16C)] + 8);
+                func_891084B4(arg0 + 0xB600, M2C_FIELD(sub, s32*, 0) + 0xAB, M2C_FIELD(sub, s32*, 4) + 0xD, sub + 0xAFFC,
+                              sub + 0xB008, (*M2C_FIELD(sub, s32***, 0xB160))[M2C_FIELD(sub, s32*, 0xB168)]);
+                M2C_FIELD(arg0, s32*, 0) = 2;
+            } else if (r == 3) {
+                func_89108F14(arg0 + 0xB7B4, 0xB6, 0xEA, arg0 + 0xB7E4);
+                M2C_FIELD(arg0, s32*, 0) = 3;
+            }
+            break;
+        case 1:
+            sub = arg0 + 0xB59C;
+            r = func_8002CD7C(sub);
+            if (r == -1) {
+                M2C_FIELD(arg0, s32*, 0) = 0;
+            } else if (r > 0) {
+                switch (r) {
+                    case 1:
+                        func_8002CC44(sub);
+                        func_89102A04(arg0 + 4);
+                        ret = 1;
+                        break;
+                    case 2:
+                        ret = 1;
+                        break;
+                }
+            }
+            break;
+        case 2:
+            r = func_891089BC(arg0 + 0xB600);
+            if (r == -1) {
+                M2C_FIELD(arg0, s32*, 0) = 0;
+            } else {
+                s32 off = 0xB55C; // FAKE: stops IDO reusing arg0 + 0x8000 for the store below.
+
+                if (r > 0) {
+                    s32 a1 = (*M2C_FIELD(arg0, s32***, 0xB64C))[M2C_FIELD(arg0, s32*, 0xB654)];
+                    s32 a0 = (*M2C_FIELD(arg0, s32***, 0xB164))[M2C_FIELD(arg0, s32*, 0xB16C)];
+
+                    switch (r) {
+                        case 1:
+                            func_89103F04((u8**)a0, (u8**)a1, (Msg89103F04*)(arg0 + 0xB7E4));
+                            break;
+                        case 2:
+                            func_891041D8((u8**)a0, a1, M2C_FIELD(arg0, s32*, 0xB744), (Msg891041D8*)(arg0 + 0xB7E4));
+                            break;
+                        case 3:
+                            func_89104314((u8**)a0, (u8**)a1, M2C_FIELD(arg0, s32*, 0xB744));
+                            break;
+                    }
+                    M2C_FIELD(arg0, s32*, off) = 1;
+                    if (r == 3) {
+                        M2C_FIELD(arg0, s32*, 0) = 0;
+                    } else {
+                        func_89108F14(arg0 + 0xB7B4, 0xB6, 0xEA, arg0 + 0xB7E4);
+                        M2C_FIELD(arg0, s32*, 0) = 3;
+                    }
+                }
+            }
+            break;
+        case 3:
+            if (func_89109174(arg0 + 0xB7B4) == 1) {
+                M2C_FIELD(arg0, s32*, 0) = 0;
+            }
+            break;
+    }
+    return ret;
+}
 
 M2C_UNK func_8002C064(M2C_UNK, M2C_UNK, u8, u8, s32); /* extern */
 extern M2C_UNK D_8910A7F0;
@@ -581,7 +675,7 @@ s32 func_891049E8(s32 arg0) {
 
 M2C_UNK func_8000B1FC();                            /* extern */
 M2C_UNK func_8000B220();                            /* extern */
-M2C_UNK func_8910452C(M2C_UNK *);                   /* extern */
+s32 func_8910452C(s8*);
 M2C_UNK func_89104854(M2C_UNK *);                   /* extern */
 extern M2C_UNK D_8910E3D0;
 
