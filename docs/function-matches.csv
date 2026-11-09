@@ -1448,7 +1448,7 @@ func_8211C9FC,0x8211C9FC,src/fragments/fragment012_17ED00/battle_engine_31D9F0_8
 func_8211CB0C,0x8211CB0C,src/fragments/fragment012_17ED00/battle_engine_31D9F0_821199E4.c,func_8211CB0C,hand,,c
 func_8211CBCC,0x8211CBCC,src/fragments/fragment012_17ED00/battle_engine_31D9F0_821199E4.c,func_8211CBCC,hand,,c
 func_8211CC8C,0x8211CC8C,src/fragments/fragment012_17ED00/battle_engine_31D9F0_821199E4.c,,asm,,asm
-func_8211D06C,0x8211D06C,src/fragments/fragment012_17ED00/battle_engine_31D9F0_821199E4.c,,asm,,asm
+func_8211D06C,0x8211D06C,src/fragments/fragment012_17ED00/battle_engine_31D9F0_821199E4.c,func_8211D06C,hand,,c
 func_8211D3A8,0x8211D3A8,src/fragments/fragment012_17ED00/battle_engine_31D9F0_821199E4.c,BattleScene_DrawStripWipeIfActive,s1,stadium1:src/fragments/battle_engine/battle_engine_2FA4D0.c,c
 func_8211D3D8,0x8211D3D8,src/fragments/fragment012_17ED00/battle_engine_31D9F0_821199E4.c,func_8211D3D8,hand,,c
 func_8211D5F4,0x8211D5F4,src/fragments/fragment012_17ED00/battle_engine_31D9F0_821199E4.c,func_8211D5F4,hand,,c

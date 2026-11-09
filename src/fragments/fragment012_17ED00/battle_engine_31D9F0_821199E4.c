@@ -397,7 +397,46 @@ found:
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211CC8C.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211D06C.s")
+extern u8 D_8219A4F0[];
+extern u8 D_03003540[];
+extern u8 D_03001DA0[];
+void func_8211D06C(void) {
+    s32 i;
+    u8* tex;
+
+    if (D_8219A4F0[0] & 0x80) {
+        D_8219A4F0[1] = func_8000F1FC(D_8219A4F0[1], 0xFF, 5, 5);
+    } else {
+        D_8219A4F0[1] = func_8000F1FC(D_8219A4F0[1], 0, 5, 5);
+    }
+    if (D_8219A4F0[0] & 0x40) {
+        gDPPipeSync(gDisplayListHead++);
+        gDPSetCycleType(gDisplayListHead++, G_CYC_1CYCLE);
+        gDPSetCombineLERP(gDisplayListHead++, 0, 0, 0, TEXEL0, TEXEL0, 0, ENVIRONMENT, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, ENVIRONMENT, 0);
+        gDPSetRenderMode(gDisplayListHead++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
+        gDPSetTexturePersp(gDisplayListHead++, G_TP_NONE);
+        gDPSetEnvColor(gDisplayListHead++, 0xFF, 0xFF, 0xFF, D_8219A4F0[1]);
+        for (i = 0, tex = D_03003540; i != 0x10; i++, tex += 0x98) {
+            func_8001BCB4(0x54, i + 0x70, 0x98, 1, tex, 0x98, 0);
+        }
+        gDPPipeSync(gDisplayListHead++);
+        gDPSetTexturePersp(gDisplayListHead++, G_TP_PERSP);
+        gDPSetAlphaCompare(gDisplayListHead++, G_AC_NONE);
+    } else {
+        gDPPipeSync(gDisplayListHead++);
+        gDPSetCycleType(gDisplayListHead++, G_CYC_1CYCLE);
+        gDPSetCombineLERP(gDisplayListHead++, 0, 0, 0, TEXEL0, TEXEL0, 0, ENVIRONMENT, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, ENVIRONMENT, 0);
+        gDPSetRenderMode(gDisplayListHead++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
+        gDPSetTexturePersp(gDisplayListHead++, G_TP_NONE);
+        gDPSetEnvColor(gDisplayListHead++, 0xFF, 0xFF, 0xFF, D_8219A4F0[1]);
+        for (i = 0, tex = D_03001DA0; i != 0x2A; i++, tex += 0x90) {
+            func_8001BCB4(0x58, i + 0x63, 0x90, 1, tex, 0x90, 0);
+        }
+        gDPPipeSync(gDisplayListHead++);
+        gDPSetTexturePersp(gDisplayListHead++, G_TP_PERSP);
+        gDPSetAlphaCompare(gDisplayListHead++, G_AC_NONE);
+    }
+}
 
 void BattleScene_DrawStripWipeIfActive(void) {
     if (BattleScene_GetStripWipeState() != 0) {
