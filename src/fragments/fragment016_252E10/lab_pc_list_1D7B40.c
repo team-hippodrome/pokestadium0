@@ -1075,11 +1075,90 @@ s32 func_89107170(s32 a) {
     return a >= 8 ? a + 12 : (a >= 6 ? a + 1 : a);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_891071A4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_891071A4.s")
-#endif
+typedef struct Lab891071A4 {
+    /* 0x000 */ s32 x;
+    /* 0x004 */ s32 y;
+    /* 0x008 */ char unk008[0xC];
+    /* 0x014 */ s32 unk14;
+    /* 0x018 */ Rgba8910576C color;
+    /* 0x01C */ char unk01C[4];
+    /* 0x020 */ char* unk20;
+    /* 0x024 */ s32 unk24;
+    /* 0x028 */ s32 unk28;
+    /* 0x02C */ s8 buttons[2][0x40];
+    /* 0x0AC */ s8 unkAC[0x10];
+    /* 0x0BC */ s32 unkBC;
+    /* 0x0C0 */ char unkC0[0x28];
+    /* 0x0E8 */ s8 unkE8[0x3C];
+    /* 0x124 */ s32 unk124;
+    /* 0x128 */ s32 cursor;
+    /* 0x12C */ s32 unk12C;
+    /* 0x130 */ s8 list[4];
+    /* 0x134 */ u16* flags;
+    /* 0x138 */ char unk138[0x18];
+    /* 0x150 */ s32 unk150;
+    /* 0x154 */ char unk154[0x20];
+    /* 0x174 */ s8* names[15];
+    /* 0x1B0 */ s8 unk1B0[0x20];
+    /* 0x1D0 */ s8 unk1D0[0xC];
+    /* 0x1DC */ s32 mode;
+} Lab891071A4;
+typedef struct Entry891071A4 {
+    const char* str;
+    u8 color[4];
+} Entry891071A4;
+
+void func_8002EC24(s8*, s32, s32, s32, void*, s32, s32);
+void func_8002AE94(s8* arg0, s32 arg1, s32 arg2, s32 arg3, Rgba8910576C arg4, char* arg5);
+void func_8000B2F4(s32);
+extern Entry891071A4 D_80066AD8[];
+extern Rgba8910576C D_8910A974;
+extern char D_8910E09C[];
+extern char D_8910E0B0[];
+extern char D_8910E0B8[];
+extern char D_8910E0C4[];
+
+void func_891071A4(Lab891071A4* arg0, s32 x, s32 y, s32* arg3) {
+    s32 i;
+
+    func_8002A8C4((s8*)arg0, x, y, 0x156, 0x120);
+    arg0->unk24 = 0;
+    arg0->unk20 = NULL;
+    arg0->unk28 = 0;
+    arg0->unk14 = 0x800;
+    arg0->color = D_8910A974;
+    arg0->unk20 = D_8910E09C;
+    func_80027804(arg0->unk1D0, (s32*)arg0->names, 0xF, 0xF);
+    for (i = 0; i < 0xF; i++) {
+        arg0->names[i] = (s8*)&D_80066AD8[i + ((i < 6) ? 0 : 1)];
+    }
+    func_8002EC24(arg0->list, (s32)arg0->unk1D0, (s32)arg0->unk1B0, 8, func_89106FD8, 0xAE, 0x1C);
+    arg0->unk150 |= 0x10000;
+    for (i = 0; i < *arg3; i++) {
+        M2C_FIELD(arg0, s32*, 0x68 + i * 0x40) = Move_NormalizeDisplayIndex(((u8*)arg3)[4 + i]);
+    }
+    for (; i < 2; i++) {
+        M2C_FIELD(arg0, s32*, 0x68 + i * 0x40) = -1;
+    }
+    for (i = 0; i < 2; i++) {
+        if (M2C_FIELD(arg0, s32*, 0x68 + i * 0x40) == -1) {
+            func_8002AE94(arg0->buttons[i], arg0->x + 0x20, arg0->y + i * 0x1C + 0x22, 0x5C, D_8910A974, D_8910E0B0);
+        } else {
+            func_8002AE94(arg0->buttons[i], arg0->x + 0x20, arg0->y + i * 0x1C + 0x22, 0x5C, D_8910A974, *(char**)arg0->names[M2C_FIELD(arg0, s32*, 0x68 + i * 0x40)]);
+            arg0->flags[M2C_FIELD(arg0, s32*, 0x68 + i * 0x40)] |= 8;
+        }
+    }
+    func_8002AE94(arg0->unkE8, arg0->x + 0x20, arg0->y + 0xCA, 0x5C, D_8910A974, D_8910E0B8);
+    func_8002AE94(arg0->unkAC, arg0->x + 0x20, arg0->y + 0xE6, 0x5C, D_8910A974, D_8910E0C4);
+    if (*arg3 == 0) {
+        arg0->unkBC |= 1;
+    }
+    arg0->cursor = 0;
+    arg0->unk12C = 4;
+    arg0->unk124 = D_800603C0;
+    func_8000B2F4(D_800603C0);
+    arg0->mode = 0;
+}
 
 typedef struct Ctx891074CC {
     /* 0x000 */ s32 x;
