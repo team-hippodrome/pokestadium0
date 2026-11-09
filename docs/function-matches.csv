@@ -668,7 +668,7 @@ func_823008DC,0x823008DC,src/fragments/fragment005_15FCE0/battle_order_select.c,
 func_82300AE0,0x82300AE0,src/fragments/fragment005_15FCE0/battle_order_select.c,BattleMenu_AppendOrderSlotIcon,s1,stadium1:src/fragments/battle_order_select/battle_order_select.c,c
 func_82300B30,0x82300B30,src/fragments/fragment005_15FCE0/battle_order_select.c,BattleMenu_ResetOrderSlotIcons,s1,stadium1:src/fragments/battle_order_select/battle_order_select.c,c
 func_82300B6C,0x82300B6C,src/fragments/fragment005_15FCE0/battle_order_select.c,BattleMenu_DrawBorderedPanel,s1,stadium1:src/fragments/battle_order_select/battle_order_select.c,c
-func_82300BD0,0x82300BD0,src/fragments/fragment005_15FCE0/battle_order_select.c,,asm,,asm
+func_82300BD0,0x82300BD0,src/fragments/fragment005_15FCE0/battle_order_select.c,func_82300BD0,hand,,c
 func_823010E8,0x823010E8,src/fragments/fragment005_15FCE0/battle_order_select.c,func_823010E8,hand,,c
 func_823012D0,0x823012D0,src/fragments/fragment005_15FCE0/battle_order_select.c,func_823012D0,hand,,c
 func_82301448,0x82301448,src/fragments/fragment005_15FCE0/battle_order_select.c,func_82301448,s1,,c

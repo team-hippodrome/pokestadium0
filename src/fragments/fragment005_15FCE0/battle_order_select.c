@@ -301,11 +301,76 @@ void BattleMenu_DrawBorderedPanel(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 ar
     Ui_DrawBorderedPanelStyleB(arg0, arg1, arg2, arg3, D_82302800[arg4]);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82300BD0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment005_15FCE0/func_82300BD0.s")
-#endif
+extern u8 D_03000000[];
+extern u8 D_030005B0[];
+extern u8 D_03001110[];
+extern u8 D_03001C70[];
+extern u8 D_03000B60[];
+extern u8 D_030016C0[];
+void func_8001A944(s32 x, s32 y, const char* fmt, ...);
+void func_8001D148(s32 x, s32 y, s32 width, s32 height, s32 r, s32 g, s32 b);
+s32 func_80018DEC(s8* arg0, s32 arg1);
+extern char D_82302A34[];
+extern s32 D_82302BCC;
+void func_82300BD0(s8* arg0) {
+    s32 i;
+    s16 x;
+    s16 y;
+    s32 tx;
+    s32 ty;
+    s32 sel;
+
+    x = M2C_FIELD(arg0, s16*, 0x12);
+    y = M2C_FIELD(arg0, s16*, 0x14);
+
+    BattleMenu_DrawBorderedPanel(x, y, 0x1D7, 0x5E, arg0[1]);
+
+    gSPDisplayList(gDisplayListHead++, D_80060290);
+
+    func_8001B884(x + 7, y + 0xB, 0x1A, 0x1A, D_030005B0, 0x1C, 0x200000);
+    func_8001B884(x + 0xA1, y + 0xB, 0x1A, 0x1A, D_03001110, 0x1C, 0x200000);
+    func_8001B884(x + 0x13B, y + 0xB, 0x1A, 0x1A, D_03001C70, 0x1C, 0x200000);
+    func_8001B884(x + 7, y + 0x35, 0x1A, 0x1A, D_03000000, 0x1C, 0x200000);
+    func_8001B884(x + 0xA1, y + 0x35, 0x1A, 0x1A, D_03000B60, 0x1C, 0x200000);
+    func_8001B884(x + 0x13B, y + 0x35, 0x1A, 0x1A, D_030016C0, 0x1C, 0x200000);
+
+    func_8001B884(x + 0x23, y + 6, 0x28, 0x28, (u8*)func_80018DEC((s8*)D_82302BCC, arg0[0]), 0x28, 0x200000);
+    func_8001B884(x + 0xBD, y + 6, 0x28, 0x28, (u8*)func_80018DEC((s8*)D_82302BCC, arg0[0] + 4), 0x28, 0x200000);
+    func_8001B884(x + 0x157, y + 6, 0x28, 0x28, (u8*)func_80018DEC((s8*)D_82302BCC, arg0[0] + 8), 0x28, 0x200000);
+    func_8001B884(x + 0x23, y + 0x30, 0x28, 0x28, (u8*)func_80018DEC((s8*)D_82302BCC, arg0[0] + 0xC), 0x28, 0x200000);
+    func_8001B884(x + 0xBD, y + 0x30, 0x28, 0x28, (u8*)func_80018DEC((s8*)D_82302BCC, arg0[0] + 0x10), 0x28, 0x200000);
+    func_8001B884(x + 0x157, y + 0x30, 0x28, 0x28, (u8*)func_80018DEC((s8*)D_82302BCC, arg0[0] + 0x14), 0x28, 0x200000);
+
+    gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
+
+    Font_BeginTranslucentTextRendering();
+    Font_SetActive(4, 0);
+
+    for (i = 0; i < arg0[0x16]; i++) {
+        sel = BattleMenu_IsSlotAlreadySelected((unk_D_848037A0*)arg0, i);
+        if ((arg0[9] != 0) && (sel != 0)) {
+            Gfx_SetEnvColor(0xFF, 0xFF, 0, 0xFF);
+        }
+        tx = x + ((i % 3) * 0x9A) + 0x4C;
+        ty = y + ((i / 3) * 0x2A) + 8;
+        func_8001A944(tx, ty, (char*)(M2C_FIELD(arg0, s32*, 0x18) + i * 0x50 + 0x30));
+        if ((arg0[9] != 0) && (sel != 0)) {
+            Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+        }
+        func_8001A944(tx, ty + 0x14, D_82302A34, *(u8*)(M2C_FIELD(arg0, s32*, 0x18) + i * 0x50 + 0x24));
+    }
+
+    Font_EndTexturedTextRendering();
+
+    if (arg0[7] > 0) {
+        if (arg0[3] == 0) {
+            func_8001D148(0xC8, 0x81, 0x15F, 0x53, 0xAB, 0x49, 0x66);
+        } else {
+            func_8001D148(0x50, 0xF0, 0x15F, 0x53, 0xAB, 0x49, 0x66);
+        }
+        arg0[7] -= 1;
+    }
+}
 
 extern char D_82302A38[];
 extern char D_82302A4C[];
@@ -1006,6 +1071,11 @@ extern u8 D_81000000[];
 extern u8 D_01000000[];
 extern u8 D_02000000[];
 extern u8 D_03000000[];
+extern u8 D_030005B0[];
+extern u8 D_03001110[];
+extern u8 D_03001C70[];
+extern u8 D_03000B60[];
+extern u8 D_030016C0[];
 extern u8 D_0015B1A0[];
 extern u8 D_0015E220[];
 extern u8 D_002E0BE0[];

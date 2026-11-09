@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5289,
-  "asm_owners": 155,
+  "c_owners": 5290,
+  "asm_owners": 154,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -621,7 +621,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "78f4b27f28a6e1568931c7b47edc9d2015f820800329d7e595e73ec5a9b715a5",
+    "docs/function-matches.csv": "ff144211bd7db9464df62001b27346ebc35333f46c92fabe6336c44ab030b413",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -708,7 +708,7 @@
     "src/fragments/fragment002_15E220.c": "ba42dd45415c5e7b2729a1421382765b670c6662e49b784c471e1a26fa8609dd",
     "src/fragments/fragment003_15F390/n64_logo.c": "ea090992fcd978895ff885d3c54db85cf6ae2f352df8c509a401bb94044987aa",
     "src/fragments/fragment004_15F8F0/gb_tower_team_prep.c": "07f82a30827ebf45541cfe97d8455c59d7252c0f4bf46ecf35c86b3812ab2ba3",
-    "src/fragments/fragment005_15FCE0/battle_order_select.c": "a70295c0213b97f1b0ba41701ed3d35953bc6cb93d182514974cb268fe8ff973",
+    "src/fragments/fragment005_15FCE0/battle_order_select.c": "d960c5bc70d2842974f98e89efcf1ed3b37409faf6de02de2f91f10750049fa4",
     "src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c": "1b0b73a24f24b373acc90ba80977d9a3e2f5484bb0060f071382b43bff8edadc",
     "src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c": "dbf30826095bc18e17c094f8f915eb140392a1f497809aaa77e252763d7b4ffc",
     "src/fragments/fragment007_166580.c": "9368776d061b8d2d8dcc17aca99bc50e8fa5e60baa4552dabd8c2fe2cae87ffb",
