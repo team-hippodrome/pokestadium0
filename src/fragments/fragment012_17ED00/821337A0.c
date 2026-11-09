@@ -58,11 +58,54 @@ void func_821337B4(void) {
     M2C_FIELD(D_8219A5A0, u16 *, 0x2C) = saved;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82133868; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82133868.s")
-#endif
+void func_8211ED90(void);
+extern s8 D_82199F31;
+extern s32 D_82199F78;
+extern s8 D_82199FCC;
+extern s8 D_82199FCD;
+void func_82133868(void) {
+    s8* self;
+    s8* other;
+    u16 idx;
+    u8 move;
+
+    idx = M2C_FIELD(D_8219A5A0, u16*, 0x2C);
+    self = ((s8**)&D_82199DE0)[idx];
+    other = ((s8**)&D_82199DE0)[idx == 0] + 0x7C6;
+    D_82199F31 = 0;
+    D_82199F78 = 0x14;
+    M2C_FIELD(self, s16*, 0x7D2) = 900;
+    M2C_FIELD(other, s16*, 0xC) = 900;
+    self += 0x7C6;
+    func_821337A0(((s8**)&D_82199DE0)[(idx == 0) * 0]); // FAKE: keeps idx == 0 live
+    func_821337A0(((s8**)&D_82199DE0)[1]);
+    D_82199FCC = 1;
+    D_82199FCD = 1;
+    M2C_FIELD(D_8219A5A0, s8*, 0x1A) = 0;
+    M2C_FIELD(D_8219A5A0, s32*, 0x48) = 0;
+    M2C_FIELD(self, u16*, 0x12) = 0xFFFF;
+    M2C_FIELD(other, u16*, 0x12) = 0xFFFF;
+    func_8211ED90();
+    move = M2C_FIELD(self, u8*, 0x5A);
+    switch (move) {
+        case 0x51:
+            M2C_FIELD(D_8219A5A0, s8*, 0x1A) = 3;
+            break;
+        case 0x6A:
+        case 0x6B:
+        case 0x96:
+            M2C_FIELD(D_8219A5A0, s32*, 0x48) = 7;
+            break;
+        case 0x2F:
+            M2C_FIELD(D_8219A5A0, s32*, 0x48) = 0x16;
+            M2C_FIELD(other, s8*, 0x15) = 3;
+            break;
+        case 0x9C:
+            M2C_FIELD(D_8219A5A0, s32*, 0x48) = 0x15;
+            M2C_FIELD(self, s8*, 0x15) = 3;
+            break;
+    }
+}
 
 void func_82101AD0(void);
 void func_82136708(s32, ActivePokemon*);
