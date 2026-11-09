@@ -4527,7 +4527,7 @@ func_80005770,0x80005770,src/gfx_rect.c,GfxImage_ClearDepthRectangle,s1,stadium1
 func_80005928,0x80005928,src/gfx_rect.c,GfxImage_FillCurrent,s1,stadium1:src/gfx_rect.c,c
 func_8000A560,0x8000A560,src/graphics_textures.c,Gfx_SetVertexAttributes,s1,stadium1:src/graphics_textures.c,c
 func_8000A5C8,0x8000A5C8,src/graphics_textures.c,Gfx_SetViewportDimensions,s1,stadium1:src/graphics_textures.c,c
-func_8000A610,0x8000A610,src/graphics_textures.c,,asm,,asm
+func_8000A610,0x8000A610,src/graphics_textures.c,func_8000A610,hand,,c
 func_8001A090,0x8001A090,src/graphics_textures_2.c,Font_ResetContext,s1,stadium1:src/graphics_textures.c,c
 func_8001A0A4,0x8001A0A4,src/graphics_textures_2.c,Font_GetSetIndexFromMask,s1,stadium1:src/graphics_textures.c,c
 func_8001A118,0x8001A118,src/graphics_textures_2.c,func_8001A118,hand,,c
