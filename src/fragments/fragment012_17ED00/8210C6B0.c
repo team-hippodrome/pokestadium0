@@ -954,11 +954,73 @@ void func_8210E484(ActivePokemon* arg0, ActivePokemon* arg1) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8210E504; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210E504.s")
-#endif
+extern s32 D_82199F20;
+extern u8 D_82199DFC[];
+extern u8 D_82199E0C[];
+extern s32 D_82199F10[2];
+extern s32 D_82199F18[2];
+void func_82124EFC(void);
+extern Controller D_82199EC8[];
+/*
+ * Stadium 0 counterpart of Stadium 1's BattleScene_TickAttractModeInput
+ * (debug/attract-mode buttons on controller D_82199EC8).
+ */
+void func_8210E504(void) {
+    ActivePokemonState* sp24 = &sActivePokemon[0]->state;
+    ActivePokemonState* sp20 = &sActivePokemon[1]->state;
+    BattleMonRuntime* sp1C = &sActivePokemon[0]->state.runtime;
+    BattleMonRuntime* sp18 = &sActivePokemon[1]->state.runtime;
+    Controller* cont = &D_82199EC8[0];
+    s32 move;
+    s32 three = 3; // FAKE
+
+    func_8210E484(sActivePokemon[0], sActivePokemon[1]);
+    func_8210E484(sActivePokemon[1], sActivePokemon[0]);
+
+    if (cont->buttonPressed & 0x20) {
+        func_8210E318();
+        BattleThumbnail_TriggerOwnerModelAnimation(sActivePokemon[0]);
+        BattleThumbnail_TriggerOwnerModelAnimation(sActivePokemon[1]);
+    }
+
+    if (cont->buttonPressed & 0x10) {
+        func_8210E36C();
+    }
+
+    if (cont->buttonPressed & 0x1000) {
+        sp24->unk_04 = 0;
+        sp20->unk_04 = 0;
+        do {
+            move = BattleAnim_RandomRange(4);
+        } while ((move == D_82199F20) || (move >= 4));
+        D_82199F20 = move;
+
+        if (sp24->unk_2A == 0) {
+            sp1C->usedMove = D_82199DFC[D_82199F20];
+        }
+        sp24->unk_10 = three;
+
+        if (sp20->unk_2A == 0) {
+            sp18->usedMove = D_82199E0C[D_82199F20];
+        }
+        sp20->unk_10 = three;
+
+        if ((sp24->unk_10 == three) && (sp20->unk_10 == three)) {
+            func_82124EFC();
+        }
+    }
+
+    if (cont->buttonPressed & 0x2000) {
+        D_82199F10[0] = 0;
+        D_82199F18[0] = 0;
+        D_82199F10[1] = 0;
+        D_82199F18[1] = 0;
+    }
+
+    if (cont->buttonPressed & 0x8000) {
+        sBattleScene.scene->unk_40 = three;
+    }
+}
 
 /*
  * func_8210E6D0
