@@ -870,7 +870,74 @@ void func_821272CC(DisplayObject* arg0, s32 arg1) {
     ModelAnim_SetFrame(arg0, (arg1 / frames + 1) * frames - arg1);
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82127354.s")
+f32 func_82121750(ActivePokemon*, f32, f32);
+s16 func_82107CC4(ActivePokemon*);
+void func_82134FD0(ActivePokemon*);
+void func_82102010(ActivePokemon*);
+s32 func_82101FD4(ActivePokemon*);
+void func_82127354(CameraNode* arg0) {
+    s32 i;
+    f32 sp58;
+    f32 step;
+    s8* scene = (s8*)sBattleScene.scene;
+
+    switch (M2C_FIELD(scene, s32*, 0x3C)) {
+        case 0:
+            if (func_82124A50((ActivePokemon*)D_8219A544) == 0) {
+                func_82124EB4();
+                func_82108C0C(D_8219A544);
+                func_82108C0C(D_8219A540);
+                func_8213B31C(2);
+                M2C_FIELD(sBattleScene.scene, s8*, 0x1B) = 0;
+                func_821272C0((s8*)D_8219A544);
+                func_821255EC((s8*)arg0);
+                BattleAnim_GetOwnerDefaultAnchorPosition((ActivePokemon*)D_8219A544, &sBattleScene.scene->unk_D0);
+                func_82134FD0((ActivePokemon*)D_8219A544);
+                step = func_82121750((ActivePokemon*)D_8219A544, 3.5f, 300.0f);
+                BattleScene_SetCameraAtFromAnchor((ActivePokemon*)D_8219A544, arg0, sBattleScene.scene->unk_D0, 0, 0, M2C_FIELD(sBattleScene.scene, f32*, 0x74) = 150.0f, 0.0); // FAKE: store inside the call
+                M2C_FIELD(sBattleScene.scene, f32*, 0xC0) = M2C_FIELD(arg0, f32*, 0xB4);
+                M2C_FIELD(sBattleScene.scene, f32*, 0xC8) = M2C_FIELD(arg0, f32*, 0xBC);
+                BattleScene_SetCameraEyeFromPosition(arg0, sBattleScene.scene->unk_D0, 0, M2C_FIELD(D_8219A544, s16*, 0x20), M2C_FIELD(sBattleScene.scene, f32*, 0x5C) = step, 0.0); // FAKE: store inside the call
+                func_82102010((ActivePokemon*)D_8219A544);
+                func_82125580();
+                func_821224F4();
+                func_8211F034(D_8219A520 + 0x188, sBattleScene.scene->unk_2C);
+                i = 0;
+                step = 0.3f;
+                sp58 = M2C_FIELD(sBattleScene.scene, f32*, 0x74);
+                for (;;) {
+                    M2C_FIELD(sBattleScene.scene, f32*, 0x8C) = func_8000F23C(M2C_FIELD(sBattleScene.scene, f32*, 0x98), 0.7f, step, step);
+                    func_8210C1A8(&sp58, 0.0f, M2C_FIELD(sBattleScene.scene, f32*, 0x8C));
+                    if (sp58 <= 0.05f) {
+                        break;
+                    }
+                    i++;
+                }
+                func_821272CC((DisplayObject*)D_8219A544, i += 5); // FAKE: i += 5
+                func_821224F4();
+            }
+            break;
+        case 1:
+            M2C_FIELD(scene, s32*, 0x50) = 4;
+            BattleAnim_GetOwnerDefaultAnchorPosition((ActivePokemon*)D_8219A544, &sBattleScene.scene->unk_D0);
+            if (func_82101FD4((ActivePokemon*)D_8219A544) != 0) {
+                func_82121750((ActivePokemon*)D_8219A544, 3.5f, 300.0f);
+                step = 0.3f;
+                M2C_FIELD(sBattleScene.scene, f32*, 0x8C) = func_8000F23C(M2C_FIELD(sBattleScene.scene, f32*, 0x98), 0.7f, step, step);
+                func_8210C1A8(&M2C_FIELD(sBattleScene.scene, f32*, 0x74), 0.0f, M2C_FIELD(sBattleScene.scene, f32*, 0x8C));
+                BattleScene_SetCameraAtFromAnchor((ActivePokemon*)D_8219A544, arg0, sBattleScene.scene->unk_D0, 0, 0, M2C_FIELD(sBattleScene.scene, f32*, 0x74), 0.0);
+                M2C_FIELD(sBattleScene.scene, f32*, 0xC0) = M2C_FIELD(arg0, f32*, 0xB4);
+                M2C_FIELD(sBattleScene.scene, f32*, 0xC8) = M2C_FIELD(arg0, f32*, 0xBC);
+                BattleScene_SetCameraEyeFromPosition(arg0, sBattleScene.scene->unk_D0, 0, M2C_FIELD(D_8219A544, s16*, 0x20), M2C_FIELD(sBattleScene.scene, f32*, 0x5C), 0.0);
+                if (M2C_FIELD(sBattleScene.scene, f32*, 0x74) <= 0.05f) {
+                    func_8211F034(D_8219A520 + 0x388, M2C_FIELD(sBattleScene.scene, u16*, 0x2C));
+                    M2C_FIELD(sBattleScene.scene, s32*, 0x20)++;
+                    func_82125570();
+                }
+            }
+            break;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82127724.s")
 
