@@ -1184,8 +1184,46 @@ s32 func_8900352C(s32* arg0) {
     return ret;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89003650; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_89003650.s")
-#endif
+typedef struct Entry89003650 { s32 unk00; char unk04[0x10]; } Entry89003650;
+typedef struct Ctx89003650 {
+    /* 0x000 */ s32 unk000;
+    /* 0x004 */ s8 unk004[0x880];
+    /* 0x884 */ s8 unk884[0x2A];
+    /* 0x8AE */ s8 unk8AE[0x66];
+    /* 0x914 */ s8 unk914[0xCC];
+    /* 0x9E0 */ s8 list0[0x10];
+    /* 0x9F0 */ s8 list1[0x10];
+    /* 0xA00 */ s8 list2[0x10];
+    /* 0xA10 */ s32 sel[3];
+    /* 0xA1C */ s32 idx;
+    /* 0xA20 */ Entry89003650 entries[1];
+} Ctx89003650;
+s32 func_890002D4(Entry89003650*, s32, s32*);
+void func_890003C0(Entry89003650*);
+void func_89000448(s32, s32, s32, s8*);
+void func_8900147C(s8*, s32, s32, s8*, s32*, s32*);
+extern s32 D_89019108;
+extern s32 D_89019118;
+extern s32 D_8901911C;
+
+void func_89003650(Ctx89003650* arg0) {
+    s32 i;
+
+    func_80027410(arg0->list0, arg0->unk884, 2, 0x14, 0);
+    func_80027410(arg0->list1, arg0->unk8AE, 2, 0x32, 0);
+    func_80027410(arg0->list2, arg0->unk914, 2, 0x64, 0);
+    func_89000448(0x23, D_89019108, 0, arg0->list0);
+    func_89000448(0x22, D_89019108, 0, arg0->list1);
+    func_890003C0(arg0->entries);
+    arg0->idx = func_890002D4(arg0->entries, D_89019118, &D_8901911C);
+    if ((arg0->idx != -1) && (arg0->entries[arg0->idx].unk00 != 0)) {
+        func_89000448(0x12, 0, arg0->idx, arg0->list2);
+    }
+    i = 0;
+    do {
+        arg0->sel[i] = 0;
+        i++;
+    } while (i != 3);
+    func_8900147C(arg0->unk004, 0x26, 0x51, arg0->list0, arg0->sel, &arg0->idx);
+    arg0->unk000 = 1;
+}

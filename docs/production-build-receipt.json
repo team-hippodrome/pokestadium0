@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5188,
-  "asm_owners": 256,
+  "c_owners": 5189,
+  "asm_owners": 255,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -617,7 +617,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "35fcf3a8f26ba0233ad696116d85fb8b6c6f3c4c3cf6011d8e857f9eac180d45",
+    "docs/function-matches.csv": "b0353729a5dc30488e45be11d5d85275a3fd7edffd6251c915201f06b7cdbadf",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -812,7 +812,7 @@
     "src/fragments/fragment013_232510/demo_scenes_161E60.c": "770fd8f9b19f1e1285c4d78512db73887183dfb0d37ae51ab98c7fb76abc3048",
     "src/fragments/fragment014_235D70/lab_pc_icons.c": "30a150a826c2c3d8d17cd9fc7ca3ea8fb4ae19c5e7ea603bfd0ae7e35c3799f9",
     "src/fragments/fragment015_238BD0/89006FC0.c": "ec9f18c1d0cf47ddbc3dd696f403cbbaea1b6cc8d5b95e0c9f4a2d96a59a3e78",
-    "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c": "dbfe055a16243f231ef97489f32ebdc970992775970e3e4648f5805647b795ec",
+    "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c": "a15a45e2c96dedd48d8f0553b39b222e0972eb76c03f3d3560594e3cedf7d019",
     "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00_8900379C.c": "f736cf6cf4ef2b1d86742aec70ddbc13863209f2470a551eea40da677ed33fc7",
     "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00_89003880.c": "c8bf798b3994c99ac46f418c7dd2bb4eeafada32fe66fd36a94bce3b5d339f8c",
     "src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c": "d70cdaebea72170e55473b8fdf30de90f9b3ad5699b19851826aa8b9deeafb93",
