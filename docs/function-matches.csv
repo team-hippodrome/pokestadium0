@@ -957,7 +957,7 @@ func_8210CFE4,0x8210CFE4,src/fragments/fragment012_17ED00/8210C6B0.c,func_8210CF
 func_8210D020,0x8210D020,src/fragments/fragment012_17ED00/8210C6B0.c,func_8210D020,hand,,c
 func_8210D1B0,0x8210D1B0,src/fragments/fragment012_17ED00/8210C6B0.c,func_8210D1B0,hand,,c
 func_8210D378,0x8210D378,src/fragments/fragment012_17ED00/8210C6B0.c,func_8210D378,hand,,c
-func_8210D4B4,0x8210D4B4,src/fragments/fragment012_17ED00/8210C6B0.c,,asm,,asm
+func_8210D4B4,0x8210D4B4,src/fragments/fragment012_17ED00/8210C6B0.c,func_8210D4B4,hand,,c
 func_8210D6BC,0x8210D6BC,src/fragments/fragment012_17ED00/8210C6B0.c,func_8210D6BC,hand,,c
 func_8210D838,0x8210D838,src/fragments/fragment012_17ED00/8210C6B0.c,BattleScene_HandlePlayerActionInput,hand,,c
 func_8210D90C,0x8210D90C,src/fragments/fragment012_17ED00/8210C6B0.c,BattleScene_CollectPlayerAction,s1,stadium1:src/fragments/battle_engine/battle_engine_2F74E0.c,c

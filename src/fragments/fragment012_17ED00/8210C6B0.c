@@ -469,11 +469,55 @@ s32 func_8210D378(ActivePokemon* arg0, ActivePokemon* arg1) {
     return 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8210D4B4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210D4B4.s")
-#endif
+/*
+ * Stadium 0 counterpart of Stadium 1's BattleScene_ForfeitPrompt, with the two
+ * controller pointers kept in locals instead of globals.
+ */
+void func_8210D4B4(ActivePokemon* arg0) {
+    ActivePokemonState* sp18 = &arg0->state;
+    ActivePokemonState* temp_a0 = &sActivePokemon[BattleScene_GetParticipantSideIndex(arg0) == 0]->state;
+    Controller* c1;
+    Controller* c2;
+
+    if (arg0->sessionTeams->tagTeamSize == 1) {
+        c1 = &gControllers[arg0->sessionTeams->teamMember[0]->controllerPort];
+        c2 = &gControllers[arg0->sessionTeams->teamMember[0]->controllerPort];
+    } else {
+        c1 = &gControllers[arg0->sessionTeams->teamMember[0]->controllerPort];
+        c2 = &gControllers[arg0->sessionTeams->teamMember[1]->controllerPort];
+    }
+
+    if (temp_a0->unk_10 == 4) {
+        sp18->unk_10 = 0;
+        sp18->unk_04 = 0;
+        return;
+    }
+
+    if (sp18->unk_10 != 4) {
+        sp18->unk_2F = 0;
+    }
+
+    sp18->unk_10 = 4;
+
+    if ((c1->buttonPressed & 0x200) || (c2->buttonPressed & 0x200)) {
+        sp18->unk_2F = 0;
+        Audio_PlaySoundEffectById(1);
+    }
+
+    if ((c1->buttonPressed & 0x100) || (c2->buttonPressed & 0x100)) {
+        sp18->unk_2F = 1;
+        Audio_PlaySoundEffectById(1);
+    }
+
+    if ((sp18->unk_2F == 1) && ((c1->buttonPressed & 0x8000) || (c2->buttonPressed & 0x8000))) {
+        Audio_PlaySoundEffectById(2);
+        sBattleScene.scene->unk_40 = (BattleScene_GetParticipantSideIndex(arg0) == 0) + 1;
+    } else if ((sp18->unk_2F == 0) && ((c1->buttonPressed & 0x8000) || (c2->buttonPressed & 0x8000))) {
+        sp18->unk_10 = 0;
+        sp18->unk_04 = 0;
+        Audio_PlaySoundEffectById(3);
+    }
+}
 
 extern u8 D_800AAF50[];
 void func_8210CDEC(ActivePokemon*, u8*, u8*, s32);
