@@ -406,7 +406,7 @@ func_8110FD48,0x8110FD48,src/fragments/fragment000_80C00/battle_engine_2FA4D0.c,
 func_8110FD6C,0x8110FD6C,src/fragments/fragment000_80C00/battle_engine_2FA4D0.c,func_8110FD6C,hand,,c
 func_8110FD90,0x8110FD90,src/fragments/fragment000_80C00/battle_engine_2FA4D0.c,func_8110FD90,hand,,c
 func_8110FDC0,0x8110FDC0,src/fragments/fragment000_80C00/battle_engine_2FA4D0.c,func_8110FDC0,hand,,c
-func_8110FDF0,0x8110FDF0,src/fragments/fragment000_80C00/battle_engine_2FA4D0.c,,asm,,asm
+func_8110FDF0,0x8110FDF0,src/fragments/fragment000_80C00/battle_engine_2FA4D0.c,func_8110FDF0,hand,,c
 func_8110FE74,0x8110FE74,src/fragments/fragment000_80C00/battle_engine_2FA4D0.c,func_8110FE74,m2c,m2c,c
 func_8110FE90,0x8110FE90,src/fragments/fragment000_80C00/battle_engine_2FA4D0.c,func_8110FE90,s1,stadium1:src/fragments/battle_engine/battle_engine_2FA4D0.c,c
 func_8110FE98,0x8110FE98,src/fragments/fragment000_80C00/battle_engine_2FA4D0.c,func_8110FE98,m2c,m2c,c
