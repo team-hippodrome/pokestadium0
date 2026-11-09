@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5250,
-  "asm_owners": 194,
+  "c_owners": 5251,
+  "asm_owners": 193,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -621,7 +621,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "7f14845c3176acf2c30a412986f71023acb2a0b71270294b0ec6db0afbc0ef1b",
+    "docs/function-matches.csv": "ab4baf6b470bfd3d9816c141907a069f25ec3b813f53335ae5a2b406d0f98387",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -820,7 +820,7 @@
     "src/fragments/fragment014_235D70/lab_pc_icons.c": "04ac035dd9496a1c1beb3894ca272015367dd153afb9aacf748920007fea7003",
     "src/fragments/fragment014_235D70/lab_pc_icons_88000020.c": "a970e15916bded7744d68ca2cc4075e931ceb5a94ba8b86ba3b9aef85acb83f5",
     "src/fragments/fragment015_238BD0/89006FC0.c": "bd2fa3f793d530b22fe79b8b33c3fab04ea31001081e76bd934bf30673b67337",
-    "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c": "a15a45e2c96dedd48d8f0553b39b222e0972eb76c03f3d3560594e3cedf7d019",
+    "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c": "149c2ff9fdcd4b79897b42396f28f4be1114438b374a544daeff7f23cb532f2c",
     "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00_8900379C.c": "f736cf6cf4ef2b1d86742aec70ddbc13863209f2470a551eea40da677ed33fc7",
     "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00_89003880.c": "cb513a4fdef034050665d9647bc0e661197f16ca2dd583f9555b4ab3dc0378e1",
     "src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c": "46968581b6a11998a89a976e0cf2cc4be17a866a7cccddb8a9f4bf5e51fd3907",

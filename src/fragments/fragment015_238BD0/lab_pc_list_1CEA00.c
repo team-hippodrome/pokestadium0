@@ -705,11 +705,64 @@ s32 func_890013F8(void* menu, u32 flags) {
     return result;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8900147C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_8900147C.s")
-#endif
+void func_8002B018(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
+void func_80027410(s8*, s8*, s32, s32, s32);
+s32 func_800564D4(char*, const char*, ...);
+extern Rgba89000D50 D_8900A600;
+extern Rgba89000D50 D_8900A604;
+extern u8 D_8900A580[];
+extern u8 D_8900BFC0[];
+extern u8 D_8900DAD0[];
+extern u8 D_8900E858[];
+extern u8 D_8900F5E0[];
+extern char D_890184BC[];
+extern char D_890190F0[];
+extern char D_890184CC[];
+extern s32 D_8901911C;
+extern u8 D_8900A5F4[];
+void func_8900147C(s8* arg0, s32 x, s32 y, s8* arg3, s32* arg4, s32* arg5) {
+    func_8002A8C4(arg0 + 4, x, y, 0x234, 0x174);
+    M2C_FIELD(arg0, s32*, 0x28) = 0;
+    M2C_FIELD(arg0, s32*, 0x2C) = 0;
+    M2C_FIELD(arg0, s32*, 0x18) = 0x801;
+    M2C_FIELD(arg0, char**, 0x24) = D_890184BC;
+    func_8002A8C4(arg0 + 0x30, M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) + 0x136, M2C_FIELD(arg0, s32*, 0xC) - 0xC, 0x38);
+    M2C_FIELD(arg0, s32*, 0x44) = 6;
+    M2C_FIELD(arg0, Rgba89000D50*, 0x48) = D_8900A600;
+    M2C_FIELD(arg0, Rgba89000D50*, 0x4C) = D_8900A604;
+    func_8002B018(arg0 + 0x50, x + 0xFF, y + 0x3A, 0x36, 0x2A, 0x30, (s32)D_8900BFC0);
+    M2C_FIELD(arg0, Rgba89000D50*, 0x68) = ((Rgba89000D50*)D_8900A580)[0];
+    M2C_FIELD(arg0, Rgba89000D50*, 0x6C) = ((Rgba89000D50*)D_8900A580)[1];
+    M2C_FIELD(arg0, Rgba89000D50*, 0x70) = D_8900A5BC;
+    func_8002B018(arg0 + 0x7C, x + 0xFF, y + 0x74, 0x36, 0x2A, 0x30, (s32)D_8900DAD0);
+    M2C_FIELD(arg0, Rgba89000D50*, 0x94) = ((Rgba89000D50*)D_8900A580)[2];
+    M2C_FIELD(arg0, Rgba89000D50*, 0x98) = ((Rgba89000D50*)D_8900A580)[3];
+    M2C_FIELD(arg0, Rgba89000D50*, 0x9C) = D_8900A5BC;
+    func_8002B018(arg0 + 0xA8, x + 0xFF, y + 0xAE, 0x36, 0x2A, 0x30, (s32)D_8900E858);
+    M2C_FIELD(arg0, Rgba89000D50*, 0xC0) = ((Rgba89000D50*)D_8900A580)[4];
+    M2C_FIELD(arg0, Rgba89000D50*, 0xC4) = ((Rgba89000D50*)D_8900A580)[5];
+    M2C_FIELD(arg0, Rgba89000D50*, 0xC8) = D_8900A5BC;
+    func_8002B018(arg0 + 0xD4, x + 0xFF, y + 0xE8, 0x36, 0x2A, 0x30, (s32)D_8900F5E0);
+    M2C_FIELD(arg0, Rgba89000D50*, 0xEC) = ((Rgba89000D50*)D_8900A580)[6];
+    M2C_FIELD(arg0, Rgba89000D50*, 0xF0) = ((Rgba89000D50*)D_8900A580)[7];
+    M2C_FIELD(arg0, Rgba89000D50*, 0xF4) = D_8900A5BC;
+    M2C_FIELD(arg0, s32*, 0x1D8) = 1;
+    M2C_FIELD(arg0, s32*, 0x1D4) = 0;
+    func_800564D4(D_890190F0, D_890184CC, &D_8901911C);
+    M2C_FIELD(arg0, u8**, 0x1DC) = D_8900A5F4;
+    M2C_FIELD(arg0, s32*, 0x1E0) = 3;
+    M2C_FIELD(arg0, s32*, 0x108) = 4;
+    M2C_FIELD(arg0, s32*, 0x104) = 0;
+    M2C_FIELD(arg0, s32*, 0x100) = D_800603C0;
+    func_8000B2F4(D_800603C0);
+    M2C_FIELD(arg0, s32*, 0) = 1;
+    M2C_FIELD(arg0, s8**, 0x490) = arg3;
+    M2C_FIELD(arg0, s32**, 0x494) = arg4;
+    M2C_FIELD(arg0, s32**, 0x498) = arg5;
+    func_89001250(arg0 + 0x1E4, M2C_FIELD(arg0, s32*, 4) + 0xC, M2C_FIELD(arg0, s32*, 8) + 0x2A, (s32)(arg3 + M2C_FIELD(arg0, s32*, 0x1D4) * 0x10));
+    func_89001250(arg0 + 0x2F8, M2C_FIELD(arg0, s32*, 4) + 0x13C, M2C_FIELD(arg0, s32*, 8) + 0x2A, (s32)(arg3 + M2C_FIELD(arg0, s32*, 0x1D8) * 0x10));
+    func_80027410(arg0 + 0x49C, M2C_FIELD(M2C_FIELD(arg0, s8**, 0x490), s8**, 0), 2, M2C_FIELD(M2C_FIELD(arg0, s8**, 0x490), s32*, 4), 0);
+}
 
 typedef struct ColorPair890017FC {
     /* 0x0 */ Color_RGBA8 prim;
