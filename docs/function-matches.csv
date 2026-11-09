@@ -213,7 +213,7 @@ func_8003E1F8,0x8003E1F8,src/audio_commands.c,,asm,,asm
 func_8003EECC,0x8003EECC,src/audio_commands.c,,asm,,asm
 func_8003F654,0x8003F654,src/audio_commands.c,func_8003F654,hand,,c
 func_8003F6AC,0x8003F6AC,src/audio_commands.c,func_8003F6AC,hand,,c
-func_8003F96C,0x8003F96C,src/audio_commands.c,,asm,,asm
+func_8003F96C,0x8003F96C,src/audio_commands.c,func_8003F96C,hand,,c
 func_8003FE34,0x8003FE34,src/audio_commands.c,func_8003FE34,hand,,c
 func_8003FE58,0x8003FE58,src/audio_commands.c,,asm,,asm
 func_80040718,0x80040718,src/audio_commands.c,Audio_CreateFrameTaskWrapper,s1,stadium1:src/audio_commands.c,c

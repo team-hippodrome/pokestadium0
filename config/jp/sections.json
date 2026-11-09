@@ -29,7 +29,7 @@
   "src/audio_commands.c": {
     ".rodata": {
       "address": "0x8007DEBC",
-      "size": "0xB4"
+      "size": "0xCC"
     }
   },
   "src/crash_screen.c": {

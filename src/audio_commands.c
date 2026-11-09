@@ -176,11 +176,93 @@ s32 func_8003F6AC(s32 arg0) {
     return ret;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8003F96C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8003F96C.s")
-#endif
+typedef struct Bank8003F96C {
+    /* 0x00 */ u32 count;
+    /* 0x04 */ u32 unk04;
+    /* 0x08 */ u32 unk08;
+    /* 0x0C */ u32 files[1];
+} Bank8003F96C;
+extern u8 D_80077528;
+extern u8 D_80077520;
+extern s32 D_800FD5F8[];
+extern u8* D_800B41B0[];
+extern u8* D_800B41F0;
+extern Bank8003F96C* D_800B4174;
+extern File1Header* D_800B4160;
+extern s32 D_800B4190;
+extern s32 D_800B4188;
+extern s32 D_800B41A4;
+extern s32 D_800775A8;
+s32 func_80037B7C(s32);
+s32 func_80037AC4(s32, s32);
+s32 func_8003834C(s32, s32, s32, s32, s32, s32, s32);
+void func_8003A710(u8*);
+void func_80037D4C(s32, f32);
+void func_80037E84(s32, s32);
+void func_80037DF4(s32, s32);
+
+s32 func_8003F96C(u32 arg0, u32 arg1) {
+    u8 pad[0x28C]; // FAKE
+    s32 sp30;
+    u32 start;
+    u32 size;
+
+    if (D_80077528 != 0) {
+        return 0;
+    }
+    if (arg0 >= 0x98) {
+        return 0;
+    }
+    D_80077520++;
+    D_80077520 %= 3;
+    if (func_80037B7C(D_800FD5F8[D_80077520]) != 0) {
+        D_80077520 += 2;
+        D_80077520 %= 3;
+        return 0;
+    }
+    arg0--;
+    if (arg0 < D_800B4174->count - 1) {
+        start = D_800B4174->files[arg0];
+        size = D_800B4174->files[arg0 + 1] - start;
+    } else {
+        start = D_800B4174->files[arg0];
+        size = D_800B4160->files[3] - start;
+    }
+    Rom_DmaRead(start, (u32)D_800B41F0, size);
+    Audio_CopyDataWithCacheSync((s32)D_800B41F0, D_800B41B0[D_80077520], 0x140);
+    func_8003A710(D_800B41B0[D_80077520]);
+    switch (arg1) {
+        case 0:
+            D_800FD5F8[D_80077520] = func_8003834C(D_800B4190, (s32)D_800B41B0[D_80077520], 1, 0xA0, 0x80, 0, -1);
+            break;
+        case 5:
+            D_800FD5F8[D_80077520] = func_8003834C(D_800B4190, (s32)D_800B41B0[D_80077520], 3, 0x80, 0x80, 0, -1);
+            break;
+        case 1:
+            D_800FD5F8[D_80077520] = func_8003834C(D_800B4190, (s32)D_800B41B0[D_80077520], 4, 0x78, 0x50, 0, -1);
+            sp30 = func_8003834C(D_800B4190, (s32)D_800B41B0[D_80077520], 4, 0x78, 0xB0, 0, -1);
+            func_80037D4C(D_800FD5F8[D_80077520], 5.0f);
+            func_80037E84(D_800FD5F8[D_80077520], 0x3C);
+            func_80037D4C(sp30, 6.0f);
+            func_80037E84(sp30, 0x3C);
+            break;
+        case 2:
+            D_800FD5F8[D_80077520] = func_8003834C(D_800B4190, (s32)D_800B41B0[D_80077520], 2, 0x70, 0x80, 0, -1);
+            func_80037D4C(D_800FD5F8[D_80077520], -1.0f);
+            func_80037DF4(D_800FD5F8[D_80077520], 0x70);
+            break;
+        case 3:
+            D_800FD5F8[D_80077520] = func_8003834C(D_800B4190, (s32)D_800B41B0[D_80077520], 2, 0xA0, 0x80, 0, -1);
+            func_80037AC4(D_800775A8, 0x50);
+            D_800775A8 = func_8003834C(D_800B4188, D_800B41A4, 0xF, 0x80, 0x80, 0, -1);
+            break;
+        case 4:
+            D_800FD5F8[D_80077520] = func_8003834C(D_800B4190, (s32)D_800B41B0[D_80077520], 1, 0xA0, 0x80, 0, -1);
+        default:
+            return 0;
+    }
+    return D_800FD5F8[D_80077520];
+}
 
 void func_8003FE58(s32, s32, s32);
 
