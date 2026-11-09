@@ -252,11 +252,250 @@ void func_80042A6C(s32 arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80042FF8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80042FF8.s")
-#endif
+u32 func_80053A80(void);
+void func_80042FF8(s32 arg0) {
+    switch (arg0) {
+    case 0x0:
+        func_80043CE8(0x3C, 0.0f, 0x80);
+        break;
+    case 0x1:
+        func_80043CE8(0x3C, 0.0f, 0x80);
+        break;
+    case 0x2:
+        func_80043CE8(0x24, 0.0f, 0x80);
+        if ((u8)func_80053A80() & 1) {
+            func_80043CE8(0x2F, 0.0f, 0x80);
+            D_80077568 = 1;
+        }
+        func_8003834C(D_800B4188, D_800B41A4, 0x1A, 0x80, 0x80, 0, -1);
+        break;
+    case 0x3:
+        func_80043CE8(0x3C, 0.0f, 0x80);
+        break;
+    case 0x4:
+        if (D_80077564 == 0) {
+            func_80043CE8(0x5C, 0.0f, 0x80);
+        }
+        break;
+    case 0x5:
+        if (D_80077564 == 0) {
+            func_80043CE8(0x5C, 0.0f, 0x80);
+        }
+        break;
+    case 0x6:
+        func_80043CE8(0x3C, 0.0f, 0x80);
+        break;
+    case 0x9:
+        func_80043CE8(0x27, 0.0f, 0x80);
+        func_8003834C(D_800B4188, D_800B41A4, 0x1A, 0x80, 0x80, 0, -1);
+        break;
+    case 0xA:
+        if (D_80077564 == 0) {
+            func_80043CE8(0x5C, 0.0f, 0x80);
+        }
+        break;
+    case 0xB:
+        func_80043CE8(0x25, 0.0f, 0x80);
+        if ((u8)func_80053A80() & 1) {
+            func_80043CE8(0x2F, 0.0f, 0x80);
+            D_80077568 = 1;
+        }
+        func_8003834C(D_800B4188, D_800B41A4, 0x1A, 0x80, 0x80, 0, -1);
+        break;
+    case 0xC:
+        if (D_80077564 == 0) {
+            func_80043CE8(0x5C, 0.0f, 0x80);
+        }
+        break;
+    case 0xD:
+        if (D_80077574 == 0) {
+            func_80043CE8(0x5F, 0.0f, 0x80);
+        } else {
+            D_80077574 = 0;
+        }
+        break;
+    case 0xE:
+        func_80043CE8(0x60, 0.0f, 0x80);
+        break;
+    case 0xF:
+        func_80043CE8(0x61, 0.0f, 0x80);
+        break;
+    case 0x10:
+        func_80043CE8(0x62, 0.0f, 0x80);
+        break;
+    case 0x11:
+        func_80043CE8(0x63, 0.0f, 0x80);
+        break;
+    case 0x12:
+        func_80043CE8(0x64, 0.0f, 0x80);
+        break;
+    case 0x13:
+        if (D_80077574 == 0) {
+            func_80043CE8(0x5F, 0.0f, 0x80);
+        } else {
+            D_80077574 = 0;
+        }
+        break;
+    case 0x14:
+        func_80043CE8(0x60, 0.0f, 0x80);
+        break;
+    case 0x15:
+        func_80043CE8(0x61, 0.0f, 0x80);
+        break;
+    case 0x16:
+        func_80043CE8(0x62, 0.0f, 0x80);
+        break;
+    case 0x17:
+        func_80043CE8(0x63, 0.0f, 0x80);
+        break;
+    case 0x18:
+        func_80043CE8(0x64, 0.0f, 0x80);
+        break;
+    case 0x19:
+        func_80043CE8(0x4C, 0.0f, 0x80);
+        break;
+    case 0x1A:
+    case 0x1B:
+    case 0x1C:
+    case 0x1D:
+    case 0x1E:
+    case 0x1F:
+    case 0x20:
+    case 0x21:
+    case 0x22:
+    case 0x23:
+    case 0x24:
+    case 0x25:
+        if (D_80077564 == 0) {
+            func_80043CE8(0x5C, 0.0f, 0x80);
+        }
+        break;
+    case 0x26:
+        func_80043CE8(0x4C, 0.0f, 0x80);
+        break;
+    case 0x27:
+        func_80043CE8(0x3C, 0.0f, 0x80);
+        break;
+    case 0x28:
+        func_80043CE8(0x3C, 0.0f, 0x80);
+        break;
+    case 0x29:
+        func_80043CE8(0x4C, 0.0f, 0x80);
+        break;
+    case 0x2D:
+        func_80043CE8(0x3C, 0.0f, 0x80);
+        break;
+    case 0x2E:
+        func_80043CE8(0x4C, 0.0f, 0x80);
+        break;
+    case 0x35:
+        func_80043CE8(0x3C, 0.0f, 0x80);
+        break;
+    case 0x36:
+        func_80043CE8(0x65, 0.0f, 0x80);
+        break;
+    case 0x37:
+        func_80043CE8(0x3C, 0.0f, 0x80);
+        break;
+    case 0x38:
+        func_80043CE8(0x48, 0.0f, 0x80);
+        break;
+    case 0x3A:
+        if (D_80077564 == 0) {
+            func_80043CE8(0x5C, 0.0f, 0x80);
+        }
+        break;
+    case 0x3B:
+        if (D_80077564 == 0) {
+            func_80043CE8(0x5C, 0.0f, 0x80);
+        }
+        break;
+    case 0x3C:
+        func_80043CE8(0x3C, 0.0f, 0x80);
+        break;
+    case 0x3D:
+        if (D_80077564 == 0) {
+            func_80043CE8(0x5C, 0.0f, 0x80);
+        }
+        break;
+    case 0x3E:
+        func_80043CE8(0x4C, 0.0f, 0x80);
+        break;
+    case 0x3F:
+        func_80043CE8(0x4C, 0.0f, 0x80);
+        break;
+    case 0x40:
+        func_80043CE8(0x6B, 0.0f, 0x80);
+        break;
+    case 0x41:
+        func_80043CE8(0x3C, 0.0f, 0x80);
+        break;
+    case 0x42:
+        if (D_80077564 == 0) {
+            func_80043CE8(0x47, 0.0f, 0x80);
+        }
+        break;
+    case 0x43:
+        func_80043CE8(0x3B, 0.0f, 0x80);
+        break;
+    case 0x44:
+        func_80043CE8(0x4C, 0.0f, 0x80);
+        break;
+    case 0x45:
+        if (D_80077564 == 0) {
+            func_80043CE8(0x5C, 0.0f, 0x80);
+        }
+        break;
+    case 0x46:
+        func_80043CE8(0x3C, 0.0f, 0x80);
+        break;
+    case 0x48:
+        func_80043CE8(0x6B, 0.0f, 0x80);
+        break;
+    case 0x49:
+        func_80043CE8(0x3C, 0.0f, 0x80);
+        break;
+    case 0x4A:
+        func_80043CE8(0x2B, 0.0f, 0x80);
+        func_8003834C(D_800B4188, D_800B41A4, 0x1A, 0x80, 0x80, 0, -1);
+        break;
+    case 0x4D:
+        func_80043CE8(0x2A, 0.0f, 0x80);
+        func_8003834C(D_800B4188, D_800B41A4, 0x1A, 0x80, 0x80, 0, -1);
+        break;
+    case 0x4E:
+        func_80043CE8(0x3C, 0.0f, 0x80);
+        break;
+    case 0x4F:
+        func_80043CE8(0x28, 0.0f, 0x80);
+        func_8003834C(D_800B4188, D_800B41A4, 0x1A, 0x80, 0x80, 0, -1);
+        break;
+    case 0x50:
+        func_80043CE8(0x3C, 0.0f, 0x80);
+        break;
+    case 0x51:
+        func_80043CE8(0x65, 0.0f, 0x80);
+        break;
+    case 0x52:
+        func_80043CE8(0x3C, 0.0f, 0x80);
+        break;
+    case 0x53:
+        func_80043CE8(0x66, 0.0f, 0x80);
+        break;
+    case 0x54:
+        func_80043CE8(0x3C, 0.0f, 0x80);
+        break;
+    case 0x55:
+    case 0x56:
+        func_80043CE8(0x3C, 0.0f, 0x80);
+        break;
+    case 0x57:
+        func_80043CE8(0x29, 0.0f, 0x80);
+        func_8003834C(D_800B4188, D_800B41A4, 0x1A, 0x80, 0x80, 0, -1);
+        break;
+    }
+}
+
 
 extern u8 D_80077548;
 void func_80043CE8(s32, f32, s32);
