@@ -322,7 +322,7 @@ func_80001234,0x80001234,src/dp_intro.c,func_80001234,hand,,c
 func_800012AC,0x800012AC,src/dp_intro.c,func_800012AC,m2c,m2c,c
 func_80001328,0x80001328,src/dp_intro.c,DisplayWorker_ProcessFrame,hand,,c
 func_80001558,0x80001558,src/dp_intro.c,func_80001558,hand,,c
-func_800016C4,0x800016C4,src/dp_intro.c,,asm,,asm
+func_800016C4,0x800016C4,src/dp_intro.c,func_800016C4,hand,,c
 func_80001868,0x80001868,src/dp_intro.c,DisplayWorker_Initialize,hand,,c
 func_80001948,0x80001948,src/dp_intro.c,Display_ClearFramebufferLine,hand,,c
 func_8000197C,0x8000197C,src/dp_intro.c,Display_GetFramebufferClearColor,s1,stadium1:src/dp_intro.c,c

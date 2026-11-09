@@ -218,11 +218,31 @@ void func_800012AC(s8* arg0);
 void func_80001328(void);
 void func_80001558(void);
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_800016C4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800016C4.s")
-#endif
+void func_800016C4(UNUSED void* arg0) {
+    OSMesg msg;
+
+    func_800594D0(0x01000F00);
+    func_80001A30(D_80087B74, 0, 1, 2, 0xFF, 0, 0, 0);
+    func_80001A30(D_80087B64, 0, 1, 2, 0xFF, 0, 0, 0);
+    func_800567E0(&D_80087ACC, &D_80087ABC, 4);
+    func_80004EA8(&D_80087ABC);
+    func_80001140(D_80087AE8);
+    while (1) {
+        if (M2C_FIELD(&D_800A9710, s16*, 0xA38) > 0) {
+            func_80001558();
+            continue;
+        }
+        func_800081E0(0);
+        M2C_FIELD(&D_800870D0, u8*, 0xA82) = 1;
+        func_8004D1C0(&D_80087A8C, &msg, 1);
+        M2C_FIELD(&D_800870D0, u8*, 0xA82) = 0;
+        func_800081E0(1);
+        func_800081E0(2);
+        func_800012AC(msg);
+        func_80001328();
+        func_8004CFB0(&D_80087AA4, (OSMesg)0x444F4E45, 0);
+    }
+}
 
 void func_800016C4(void*);
 
