@@ -3762,7 +3762,7 @@ func_89106424,0x89106424,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,f
 func_89106570,0x89106570,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_89106570,hand,,c
 func_8910666C,0x8910666C,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_8910666C,m2c,m2c+permuter,c
 func_891066C0,0x891066C0,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_891066C0,m2c,m2c,c
-func_891066E0,0x891066E0,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,,asm,,asm
+func_891066E0,0x891066E0,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_891066E0,hand,,c
 func_89106864,0x89106864,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_89106864,hand,,c
 func_89106B54,0x89106B54,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_89106B54,hand,,c
 func_89106C98,0x89106C98,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_89106C98,m2c,m2c,c

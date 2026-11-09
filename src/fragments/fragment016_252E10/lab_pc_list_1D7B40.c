@@ -847,11 +847,40 @@ s32 func_891066C0(s32 arg0) {
     return func_8002DC04(arg0 + 0x40);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_891066E0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_891066E0.s")
-#endif
+extern char D_8910E064[];
+extern Rgba8910576C D_8910A94C;
+extern char D_8910E07C[];
+extern char D_8910E088[];
+void func_891066E0(s8* arg0, s32 arg1, s32 arg2, Rgba8910576C arg3, s32 arg4, s32 arg5, s32 arg6) {
+    func_8002A8C4(arg0, arg1, arg2, 0x13C, 0x50);
+    M2C_FIELD(arg0, s32*, 0x24) = 0;
+    M2C_FIELD(arg0, s32*, 0x28) = 0;
+    M2C_FIELD(arg0, s32*, 0x14) = 0x800;
+    M2C_FIELD(arg0, char**, 0x20) = D_8910E064;
+    M2C_FIELD(arg0, Rgba8910576C*, 0x18) = arg3;
+    M2C_FIELD(arg0, s32*, 0xB0) = 3;
+    M2C_FIELD(arg0, s32*, 0xA4) = arg4;
+    M2C_FIELD(arg0, s32*, 0xA8) = 1; M2C_FIELD(arg0, s32*, 0xAC) = 0x64; // FAKE: same line
+    M2C_FIELD(arg0, s32*, 0xB4) = 0;
+    M2C_FIELD(arg0, s32*, 0xC4) = 3;
+    M2C_FIELD(arg0, s32*, 0xB8) = arg5;
+    M2C_FIELD(arg0, s32*, 0xC8) = 0;
+    M2C_FIELD(arg0, s32*, 0xC0) = 0x64;
+    M2C_FIELD(arg0, s32*, 0xBC) = 1;
+    func_8002AE94(arg0 + 0x68, M2C_FIELD(arg0, s32*, 0) + 0xD2, M2C_FIELD(arg0, s32*, 4) + 0xE, 0x5C, D_8910A94C, D_8910E07C);
+    func_8002AE94(arg0 + 0x2C, M2C_FIELD(arg0, s32*, 0) + 0xD2, M2C_FIELD(arg0, s32*, 4) + 0x2A, 0x5C, D_8910A94C, D_8910E088);
+    if (arg6 == 0) {
+        M2C_FIELD(arg0, s32*, 0x3C) |= 1;
+    }
+    M2C_FIELD(arg0, s32*, 0xD0) = 0;
+    M2C_FIELD(arg0, s32*, 0xD4) = 2;
+    M2C_FIELD(arg0, s32*, 0xCC) = D_800603C0;
+    func_8000B2F4(D_800603C0);
+    M2C_FIELD(arg0, s32*, 0xDC) = 2; M2C_FIELD(arg0, s32*, 0xE0) = 7; // FAKE: same line
+    M2C_FIELD(arg0, s32*, 0xD8) = D_800603C0;
+    func_8000B2F4(D_800603C0);
+    M2C_FIELD(arg0, s32*, 0xE4) = 0;
+}
 
 extern Gfx D_80073408[];
 extern Gfx D_80073438[];
