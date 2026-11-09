@@ -483,8 +483,8 @@
   },
   "src/fragments/fragment016_252E10/89100020_89103740.c": {
     ".rodata": {
-      "address": "0x8910DFC8",
-      "size": "0x38"
+      "address": "0x8910DFB0",
+      "size": "0x50"
     }
   },
   "src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c": {

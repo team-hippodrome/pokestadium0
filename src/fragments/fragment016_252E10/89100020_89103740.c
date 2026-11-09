@@ -246,11 +246,92 @@ s32 func_89103DAC(Ctx89103C54* arg0) {
     return ret;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89103F04; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89103F04.s")
-#endif
+typedef struct Msg89103F04 {
+    /* 0x00 */ void* text;
+    /* 0x04 */ s32 unk04;
+    /* 0x08 */ s32 oldValue;
+    /* 0x0C */ s32 newValue;
+} Msg89103F04;
+extern char D_8910DDFC[];
+extern char D_8910DE04[];
+extern char D_8910DE10[];
+extern char D_8910DE1C[];
+extern char D_8910DE28[];
+extern char D_8910DE34[];
+u16 func_80020234(s32, u8, s32, u8, s32);
+s32 func_8002057C(u8, u16);
+void func_800203FC(BattleMon*);
+void func_8910A764();
+void func_89103F04(u8** arg0, u8** arg1, Msg89103F04* arg2) {
+    BattleMon* mon;
+    u16 oldMaxHp;
+
+    arg2->unk04 = 0;
+    mon = (BattleMon*)((u8*)arg0 + 8);
+    switch (**arg1) {
+        case 0x23:
+            arg2->text = D_8910DDFC;
+            arg2->oldValue = mon->unk_26;
+            mon->unk_14 += 0xA00;
+            if (mon->unk_14 > 0x6400) {
+                mon->unk_14 = 0x6400;
+            }
+            mon->unk_26 = func_80020234(1, mon->unk_00.unk_00, mon->unk_14, mon->unk_24, mon->unk_1E);
+            arg2->newValue = mon->unk_26;
+            break;
+        case 0x24:
+            arg2->text = D_8910DE04;
+            arg2->oldValue = mon->unk_28;
+            mon->unk_16 += 0xA00;
+            if (mon->unk_16 > 0x6400) {
+                mon->unk_16 = 0x6400;
+            }
+            mon->unk_28 = func_80020234(2, mon->unk_00.unk_00, mon->unk_16, mon->unk_24, mon->unk_1E);
+            arg2->newValue = mon->unk_28;
+            break;
+        case 0x25:
+            arg2->text = D_8910DE10;
+            arg2->oldValue = mon->unk_2A;
+            mon->unk_18 += 0xA00;
+            if (mon->unk_18 > 0x6400) {
+                mon->unk_18 = 0x6400;
+            }
+            mon->unk_2A = func_80020234(3, mon->unk_00.unk_00, mon->unk_18, mon->unk_24, mon->unk_1E);
+            arg2->newValue = mon->unk_2A;
+            break;
+        case 0x26:
+            arg2->text = D_8910DE1C;
+            arg2->oldValue = mon->unk_2C;
+            mon->unk_1A += 0xA00;
+            if (mon->unk_1A > 0x6400) {
+                mon->unk_1A = 0x6400;
+            }
+            mon->unk_2C = func_80020234(4, mon->unk_00.unk_00, mon->unk_1A, mon->unk_24, mon->unk_1E);
+            arg2->newValue = mon->unk_2C;
+            break;
+        case 0x27:
+            arg2->text = D_8910DE28;
+            arg2->oldValue = mon->unk_2E;
+            mon->unk_1C += 0xA00;
+            if (mon->unk_1C > 0x6400) {
+                mon->unk_1C = 0x6400;
+            }
+            mon->unk_2E = func_80020234(5, mon->unk_00.unk_00, mon->unk_1C, mon->unk_24, mon->unk_1E);
+            arg2->newValue = mon->unk_2E;
+            break;
+        case 0x28:
+            arg2->text = D_8910DE34;
+            arg2->oldValue = mon->unk_24;
+            oldMaxHp = mon->unk_26;
+            mon->unk_10 = func_8002057C(mon->unk_00.unk_00, mon->unk_24 + 1);
+            func_800203FC(mon);
+            mon->hp += mon->unk_26 - oldMaxHp;
+            arg2->newValue = mon->unk_24;
+            break;
+    }
+    func_8910A764(arg1);
+    *(s32*)(arg0[0] + 0x10) = 1;
+}
 
 typedef struct Entry891041D8 {
     /* 0x0 */ char* name;
