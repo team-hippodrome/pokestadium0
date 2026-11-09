@@ -538,11 +538,60 @@ void func_82115DE0(void) {
     func_8211EF74(D_8219A520 + 0x88, -0x32, D_8218C8F4);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82115FCC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82115FCC.s")
-#endif
+extern s32 D_8218C8F8;
+extern s32 D_8218C8FC;
+/* Transform: the user copies the target's species, moves, stats and stat stages. */
+void func_82115FCC(void) {
+    s32 i;
+    ActivePokemonState* user;
+    ActivePokemonState* target;
+
+    user = &sActivePokemon[sBattleScene.scene->unk_2C]->state;
+    target = &sActivePokemon[!sBattleScene.scene->unk_2C]->state;
+
+    if (!(sBattleUser->unk_4C & 0x40)) {
+        if (sBattleUser && sBattleUser) {} // FAKE
+        sBattleScene.scene->unk_48 = 0xF;
+        func_8211EF74(D_8219A520 + 0x148, -0x31, D_8218C8F8, func_82107F88(sActivePokemon[sBattleScene.scene->unk_2C]), func_82107F88(sActivePokemon[!sBattleScene.scene->unk_2C]));
+        sBattleUser->unk_4E |= 8;
+
+        if (sBattleTarget->unk_4E & 8) {
+            user->unk_BE = target->unk_BE;
+        } else {
+            user->unk_BE = sBattleTarget->id;
+        }
+
+        sBattleUser->roster[6] = sBattleTarget->roster[6];
+        sBattleUser->roster[7] = sBattleTarget->roster[7];
+        sBattleUser->moves[0] = sBattleTarget->moves[0];
+        sBattleUser->moves[1] = sBattleTarget->moves[1];
+        sBattleUser->moves[2] = sBattleTarget->moves[2];
+        sBattleUser->moves[3] = sBattleTarget->moves[3];
+        sBattleUser->unk_24 = sBattleTarget->unk_24;
+        sBattleUser->unk_2A = sBattleTarget->unk_2A;
+        sBattleUser->unk_2C = sBattleTarget->unk_2C;
+        sBattleUser->speed = sBattleTarget->speed;
+        sBattleUser->unk_30 = sBattleTarget->unk_30;
+
+        for (i = 0; i < 4; i++) {
+            if (sBattleTarget->moves[i] == 0) {
+                break;
+            }
+            sBattleUser->unk_32[i] = 5;
+        }
+
+        sBattleUser->unk_38 = sBattleTarget->unk_38;
+        sBattleUser->unk_3A = sBattleTarget->unk_3A;
+        sBattleUser->unk_3C = sBattleTarget->unk_3C;
+        sBattleUser->unk_3E = sBattleTarget->unk_3E;
+
+        for (i = 0; i < 8; i++) {
+            sBattleUser->unk_5C[i] = sBattleTarget->unk_5C[i];
+        }
+    } else {
+        func_8211EF74(D_8219A520 + 0x88, -0x30, D_8218C8FC);
+    }
+}
 
 extern s32 D_8218C900;
 extern s32 D_8218C904;
