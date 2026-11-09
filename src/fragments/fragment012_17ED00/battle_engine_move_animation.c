@@ -642,7 +642,7 @@ void func_821033DC(ActivePokemon* active_pokemon) {
     func_82134EBC(active_pokemon, 0x1E);
 }
 
-void func_800414B0(u8, s32, s16, s32);
+void func_800414B0(u8, s32, s32, s32);
 void func_8210343C(ActivePokemon* active_pokemon) {
     s32 row_index = active_pokemon->animationState;
     s32 cue_index = sBattleSceneStateRowTable[row_index].unk_20;

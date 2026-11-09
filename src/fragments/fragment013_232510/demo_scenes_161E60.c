@@ -434,11 +434,76 @@ void func_82200858(unk_D_82203170* arg0, s32 arg1) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8220091C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment013_232510/func_8220091C.s")
-#endif
+extern u8 D_8EC145CC[];
+extern u8 D_8ED0FACC[];
+extern u8 D_8EE0FDE0[];
+extern u8 D_8F5054AC[];
+extern u8 D_8F5054C8[];
+void func_8220091C(void) {
+    s32 track;
+    s32 pad; // FAKE
+    DisplayObject* obj = (DisplayObject*)((GraphNode*)D_82203244->children)->children;
+    s32 pad2; // FAKE
+
+    switch (((DemoState*)D_822036A4)->unk_0001) {
+        case 0:
+            if (!D_82203244->children) { // FAKE: karodo, empty if needed for regalloc
+            }
+            track = 6;
+            break;
+        case 1:
+            track = 1;
+            break;
+        case 2:
+            switch (((DemoState*)D_822036A4)->unk_0002) {
+                case 0:
+                    track = 2;
+                    break;
+                case 1:
+                    track = 3;
+                    break;
+                case 2:
+                    track = 4;
+                    break;
+                case 3:
+                    track = 5;
+                    break;
+            }
+            break;
+    }
+    if (((DemoState*)D_822036A4)->unk_0000 == 0) {
+        func_800407B0(0x3C, 0, track);
+    } else {
+        func_800407B0(0x3C, ((DemoState*)D_822036A4)->unk_0003, track);
+    }
+    obj->rootId = ((DemoState*)D_822036A4)->unk_0003;
+    if (((DemoState*)D_822036A4)->unk_0000 != 0) {
+        if (((DemoState*)D_822036A4)->unk_0003 == 7) {
+            Model_InitDisplayObject(&D_82203268, ((DemoState*)D_822036A4)->unk_0003, 0, (ModelNodeView*)D_82203248);
+            ModelAnim_BindTransformCurve(&D_82203268, 1, D_8ED0FACC, 0x10000);
+            BgStage_RunUntilCondition(0x6E, (s32(*)(u8))func_822005A8);
+            ModelRenderer_ClearDisplayObject(&D_82203268);
+        } else if (((DemoState*)D_822036A4)->unk_0003 == 8) {
+            Model_InitDisplayObject(&D_82203268, ((DemoState*)D_822036A4)->unk_0003, 0, (ModelNodeView*)D_82203248);
+            ModelAnim_BindTransformCurve(&D_82203268, 1, D_8EE0FDE0, 0x10000);
+            BgStage_RunUntilCondition(0x6E, (s32(*)(u8))func_822005A8);
+            ModelRenderer_ClearDisplayObject(&D_82203268);
+        } else {
+            Model_InitDisplayObject(&D_82203268, ((DemoState*)D_822036A4)->unk_0003, 0, (ModelNodeView*)D_82203248);
+            ModelAnim_BindTransformCurve(&D_82203268, 1, D_8EC145CC, 0x10000);
+            BgStage_RunUntilCondition(0x64, (s32(*)(u8))func_822005A8);
+            ModelRenderer_ClearDisplayObject(&D_82203268);
+        }
+    }
+    Model_InitDisplayObject(&D_82203268, ((DemoState*)D_822036A4)->unk_0003, 0, (ModelNodeView*)D_8220324C);
+    if ((D_82203170[0].unk_00 == 2) || (D_82203170[1].unk_00 == 2)) {
+        ModelAnim_BindTransformCurve(&D_82203268, 1, D_8F5054C8, 0x10000);
+        BgStage_RunUntilCondition(0x64, (s32(*)(u8))func_822005A8);
+    } else {
+        ModelAnim_BindTransformCurve(&D_82203268, 1, D_8F5054AC, 0x10000);
+        BgStage_RunUntilCondition(0xA0, (s32(*)(u8))func_822005A8);
+    }
+}
 
 extern u8 D_82400000[];
 extern u8 D_00175570[];
@@ -692,7 +757,7 @@ M2C_UNK func_80006828(M2C_UNK, M2C_UNK (*)(M2C_UNK)); /* extern */
 s32 func_80018E24(s32);                             /* extern */
 M2C_UNK func_800407B0(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
 M2C_UNK func_822005A8(M2C_UNK);                     /* extern */
-M2C_UNK func_82201084(s32);                         /* extern */
+void func_82201084(s32);
 void func_82201600(s32);
 s32 func_822017F0();                                /* extern */
 
@@ -791,7 +856,7 @@ s32 func_82201DF8(void) {
 extern u8 D_8F625614[];
 extern u8 D_8F61F87C[];
 void func_82201444(unk_D_82203170* arg0, s32 arg1);
-M2C_UNK func_82201084(s32);
+void func_82201084(s32);
 void func_82200714(void);
 void func_80041374(s32 arg0, s32 arg1);
 

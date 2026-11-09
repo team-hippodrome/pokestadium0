@@ -3477,7 +3477,7 @@ func_82200714,0x82200714,src/fragments/fragment013_232510/demo_scenes_161E60.c,f
 func_82200848,0x82200848,src/fragments/fragment013_232510/demo_scenes_161E60.c,func_82200848,s1,stadium1:src/fragments/jigglypuff_doodle/jigglypuff_doodle.c,c
 func_82200850,0x82200850,src/fragments/fragment013_232510/demo_scenes_161E60.c,func_82200850,s1,stadium1:src/fragments/jigglypuff_doodle/jigglypuff_doodle.c,c
 func_82200858,0x82200858,src/fragments/fragment013_232510/demo_scenes_161E60.c,func_82200858,hand,,c
-func_8220091C,0x8220091C,src/fragments/fragment013_232510/demo_scenes_161E60.c,,asm,,asm
+func_8220091C,0x8220091C,src/fragments/fragment013_232510/demo_scenes_161E60.c,func_8220091C,hand,,c
 func_82200C04,0x82200C04,src/fragments/fragment013_232510/demo_scenes_161E60.c,func_82200C04,hand,,c
 func_82200DA4,0x82200DA4,src/fragments/fragment013_232510/demo_scenes_161E60.c,func_82200DA4,m2c,m2c,c
 func_82200E2C,0x82200E2C,src/fragments/fragment013_232510/demo_scenes_161E60.c,func_82200E2C,hand,,c
