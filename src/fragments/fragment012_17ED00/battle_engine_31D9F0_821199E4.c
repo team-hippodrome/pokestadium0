@@ -193,7 +193,48 @@ void func_8211B208(TeamRoster* arg0, BattleMon* arg1, s32 arg2, s32 arg3, s32 ar
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211B900.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211BEA8.s")
+extern s8 D_8218B020;
+void func_8211BEA8(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3) {
+    BattleMon* mon;
+    u32 status;
+    u8* color;
+    s32 n;
+    ActivePokemonState* state;
+    u16 val;
+
+    state = &arg0->state;
+    mon = &arg0->sessionTeams->teamMember[M2C_FIELD(arg0, s32*, 0x9D4)]->pokemonPicked[M2C_FIELD(arg0, s32*, 0x9D0)];
+    if (mon->hp == 0) {
+        status = 1;
+    } else {
+        status = func_8001FA30(mon->statusCondition);
+    }
+    if (state->unk_30 < 0xFF00) {
+        state->unk_30 -= 0x30;
+    }
+    val = state->unk_30;
+    if ((val >> 8) & 1) {
+        color = (u8*)(&D_8218B008 + arg3 * 3);
+    } else {
+        color = (u8*)(&D_8218B020 + arg3 * 3);
+    }
+    func_821172F0(arg0, mon, &D_80066AA0[status], arg1 + 1, arg2 + 1, 0x46, 0x28, color[0], color[1], color[2], 0xB2);
+    gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
+    BattleHud_DrawBorderTile(arg1, arg2, 8, 8, D_030096C0);
+    BattleHud_DrawBorderTile(arg1, arg2 + 0x22, 8, 8, D_03009640);
+    BattleHud_DrawBorderTile(arg1 + 0x40, arg2, 8, 8, D_03009840);
+    BattleHud_DrawBorderTile(arg1 + 0x40, arg2 + 0x22, 8, 8, D_030097C0);
+    for (n = 8; n < 0x40; n += 8) {
+        BattleHud_DrawBorderTile(arg1 + n, arg2, 8, 8, D_03009940);
+        BattleHud_DrawBorderTile(arg1 + n, arg2 + 0x22, 8, 8, D_030098C0);
+    }
+    for (n = 8; n < 0x28; n += 8) {
+        BattleHud_DrawBorderTile(arg1, arg2 + n, 8, 8, D_030095C0);
+        BattleHud_DrawBorderTile(arg1 + 0x40, arg2 + n, 8, 8, D_03009740);
+    }
+    gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
+    BattleHud_DrawTranslucentShadowRect(arg1 - 2, arg2 - 2, 0x4C, 0x2D, 0);
+}
 
 M2C_UNK func_8001AB2C(M2C_UNK);
 void Battle_DrawGradientRectWrapper(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGB8* arg4, Color_RGB8* arg5);
