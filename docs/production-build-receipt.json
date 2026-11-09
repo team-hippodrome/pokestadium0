@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5270,
-  "asm_owners": 174,
+  "c_owners": 5271,
+  "asm_owners": 173,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -621,7 +621,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "f0617b4def5d954d12e099774021ea2282220a194712fd2a8da40687a36ca41d",
+    "docs/function-matches.csv": "7d7a9352b0bebc3e5430c6544fb7896933f13499cfb0d225aead52bc739c45af",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -805,7 +805,7 @@
     "src/fragments/fragment012_17ED00/battle_engine_thumbnail.c": "d2717cbc20d699d329f5a4f108f3264dc2d89e6c06a1aa40df896680f2a479f7",
     "src/fragments/fragment012_17ED00/ekans_game.c": "4c0d7afe0c3308ce8e32a1466e62fae8934e6fcd26584fb158fa89b07c3902a1",
     "src/fragments/fragment012_17ED00/ekans_game_2.c": "a843a8dcfda50b5c239239d42815db53bc72ffbf18dc042d5f01b364bcc4ffbd",
-    "src/fragments/fragment012_17ED00/ekans_game_3.c": "f1f72fb025d66400d1c6586ed30f753e7f12bedb9cda4e92894bbcf8bd7dceb9",
+    "src/fragments/fragment012_17ED00/ekans_game_3.c": "37709282255f6684612e6fcbf4c485a811713478cebd57248a9f3218774a894c",
     "src/fragments/fragment012_17ED00/ekans_game_3_82188050.c": "630344da294928954b1d343032c6e292504db7a8eb287343f3ee21905254a2e6",
     "src/fragments/fragment012_17ED00/fragment1_89010.c": "efe5b474d6adf059a1ac1d518ff5e0e6b520a4d48917f62e85a09ef18bde891e",
     "src/fragments/fragment012_17ED00/fragment1_89010_821328DC.c": "901f6b861de798e44a86953d188e36bab018d53c204092429a5ae06c18790655",
