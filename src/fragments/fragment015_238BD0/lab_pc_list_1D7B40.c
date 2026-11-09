@@ -328,11 +328,66 @@ void func_890054D4(s32 arg0, s32 x, s32 y, s32 flags, u32 idx) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_890056A4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_890056A4.s")
-#endif
+typedef struct Slot890056A4 {
+    s32 x;
+    s32 y;
+    s32 type;
+    s32 iconX;
+    void* tex;
+} Slot890056A4;
+s32 func_8002D3D0(u8*);
+s32 func_8002D430(s32, s32);
+void func_890074E0(s32, s32, s32, s32);
+extern Slot890056A4 D_8900A79C[];
+extern char D_89018AC4[];
+extern char D_89018AD0[];
+extern char D_89018ADC[];
+extern char D_89018AE8[];
+extern char D_89018AF4[];
+extern char D_89018B00[];
+extern char D_89018B08[];
+extern char D_89018B0C[];
+extern char D_89018B10[];
+extern char D_89018B14[];
+extern Gfx D_80060290[];
+extern Gfx D_80060398[];
+
+void func_890056A4(s32 x, s32 y, u8* mon) {
+    s32 count;
+    s32 i;
+    char* name;
+
+    count = func_8002D3D0(mon);
+    Font_BeginTranslucentTextRendering();
+    func_8001AA9C(0xFF, 0xC8, 0xC8, 0xFF);
+    Font_SetActive(4, 0);
+    Font_Printf(x + 6, y + 0x56, D_89018AC4);
+    Font_Printf(x + 0x91, y + 0x56, D_89018AD0);
+    Font_Printf(x + 0x11C, y + 0x56, D_89018ADC);
+    Font_Printf(x + 0x1A7, y + 0x56, D_89018AE8);
+    func_8001AA9C(M2C_FIELD(&D_800734A8, u8*, 0), M2C_FIELD(&D_800734A8, u8*, 1), M2C_FIELD(&D_800734A8, u8*, 2), M2C_FIELD(&D_800734A8, u8*, 3));
+    Font_SetActive(8, 0);
+    if ((mon[0] <= 0) || (mon[0] >= 0x98)) {
+        name = D_89018AF4;
+    } else {
+        name = *(char**)D_80064C44[mon[0]];
+    }
+    Font_Printf(x + 8, y + 8, name);
+    Font_Printf(x + 8, y + 0x24, D_89018B00, *(u16*)(mon + 0x26));
+    Font_Printf(x + 0x46, y + 0x54, D_89018B08, *(u16*)(mon + 0x28));
+    Font_Printf(x + 0xD1, y + 0x54, D_89018B0C, *(u16*)(mon + 0x2A));
+    Font_Printf(x + 0x15C, y + 0x54, D_89018B10, *(u16*)(mon + 0x2C));
+    Font_Printf(x + 0x1E7, y + 0x54, D_89018B14, *(u16*)(mon + 0x2E));
+    for (i = 0; i < count; i++) {
+        func_890074E0(D_8900A79C[i].x + x, D_8900A79C[i].y + y, func_8002D430((s32)mon, i), D_8900A79C[i].type);
+    }
+    Font_EndTexturedTextRendering();
+    gSPDisplayList(gDisplayListHead++, D_80060290);
+    for (i = 0; i < count; i++) {
+        func_8001B884(D_8900A79C[i].iconX + x, D_8900A79C[i].y + y, 0x14, 0x14, D_8900A79C[i].tex, 0x14, 0x200000);
+    }
+    gSPDisplayList(gDisplayListHead++, D_80060398);
+}
 
 M2C_UNK func_8001A384(M2C_UNK, M2C_UNK);            /* extern */
 M2C_UNK func_8001A944(s32, s32, s32);               /* extern */
@@ -356,7 +411,7 @@ extern s32 D_8900A804[];
 extern s32 D_8900A81C[];
 extern s32 D_8900A834[];
 void func_890019C8(s32, s32, s32, s32);
-void func_890056A4(s32, s32, s32);
+void func_890056A4();
 
 void func_890059D0(s32* arg0) {
     s32 idx = arg0[0x170 / 4];
