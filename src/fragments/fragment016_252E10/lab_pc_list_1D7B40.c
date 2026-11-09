@@ -30,6 +30,10 @@ typedef struct unk_func_88313894 {
 
 #include "m2c_macros.h"
 
+void func_8001A384(s32, s32);
+void func_8001A944(s32 x, s32 y, const char* fmt, ...);
+void func_8001AB6C(void);
+void func_8001ABBC(void);
 void func_891053E0(void);
 void func_89108F0C(void);
 
@@ -1555,11 +1559,51 @@ void func_89108108(s8* arg0, s8* arg1) {
     M2C_FIELD(arg1, s32*, 4) = count;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_891081A8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_891081A8.s")
-#endif
+extern Color_RGBA8 D_8910AAD0;
+extern Color_RGBA8 D_8910AAD4;
+extern Color_RGBA8 D_8910AAD8;
+extern char D_8910E100[];
+extern char D_8910E104[];
+extern char D_8910E110[];
+extern char D_8910E118[];
+extern Gfx D_80060270[];
+void func_80029028(s32, s32, s32, s32, Color_RGBA8);
+char* func_8001FDC8(u8, char*);
+s32 func_80031CC8(u8);
+void func_891081A8(s32 x, s32 y, u8** item, UNUSED s32 index, s32 flags) {
+    char buf[0x38];
+
+    gSPDisplayList(gDisplayListHead++, D_80060270);
+    func_80029028(x, y + 1, 0x10C, 0x1A, D_8910AAD0);
+    func_80029028(x + 0x10C, y + 1, 0x6C, 0x1A, D_8910AAD4);
+    func_80029028(x, y, 0x178, 1, D_8910AAD8);
+    func_80029028(x, y + 0x1B, 0x178, 1, D_8910AAD8);
+    if (item != NULL) {
+        if (flags & 0x10) {
+            func_8002A0AC(x + 3, y + 3, 0x109, 0x16, D_8910AAD0);
+            func_8002A0AC(x + 0x10C, y + 3, 0x69, 0x16, D_8910AAD4);
+        }
+        func_8001AB6C();
+        func_80027F20(flags);
+        func_8001A384(8, 0);
+        func_8001A944(x + 8, y + 4, func_8001FDC8(item[0][0], buf));
+        if (item[1][0] == 0x12) {
+            func_8001A384(8, 0);
+            func_8001A944(x + 0x120, y + 4, D_8910E100);
+        } else if (item[1][0] == 0x22) {
+            func_8001A384(8, 0);
+            func_8001A944(x + 0x120, y + 4, D_8910E104);
+        } else {
+            func_8001A384(8, 0);
+            func_8001A944(x + 0x120, y + 4, D_8910E110);
+        }
+        if (func_80031CC8(item[0][0]) == 0) {
+            func_8001A384(8, 0);
+            func_8001A944(x + 0xBC, y + 4, D_8910E118, item[0][1]);
+        }
+        func_8001ABBC();
+    }
+}
 
 /* Layouts below are partial and local to this function: only the fields the
  * function touches are named, and the names say where they are, not what
