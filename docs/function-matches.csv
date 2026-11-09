@@ -571,7 +571,7 @@ func_8110DA68,0x8110DA68,src/fragments/fragment000_80C00/gb_tower_emulator_86920
 func_8110DB8C,0x8110DB8C,src/fragments/fragment000_80C00/gb_tower_emulator_86920_8110B880.c,func_8110DB8C,m2c,m2c,c
 func_8110DBA0,0x8110DBA0,src/fragments/fragment000_80C00/gb_tower_emulator_86920_8110B880.c,func_8110DBA0,hand,,c
 func_81112650,0x81112650,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_81112650,hand,,c
-func_811126B8,0x811126B8,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,,asm,,asm
+func_811126B8,0x811126B8,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_811126B8,hand,,c
 func_81112894,0x81112894,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_81112894,hand,,c
 func_811129E0,0x811129E0,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_811129E0,hand,,c
 func_81112AF8,0x81112AF8,src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c,func_81112AF8,hand,,c

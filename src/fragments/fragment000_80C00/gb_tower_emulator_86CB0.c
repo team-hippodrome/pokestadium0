@@ -74,11 +74,86 @@ u16 func_81112650(u8** stream, u8 kind) {
     return value;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_811126B8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_811126B8.s")
-#endif
+typedef struct SeqScriptState811126B8 {
+    /* 0x00 */ u8* pc;
+    /* 0x04 */ u8* stack[4];
+    /* 0x14 */ u8 remLoopIters[4];
+    /* 0x18 */ u8 depth;
+    /* 0x19 */ s8 value;
+} SeqScriptState811126B8;
+
+typedef struct SeqPlayer811126B8 {
+    /* 0x00 */ u8 unk00[0x18];
+    /* 0x18 */ u8* seqData;
+} SeqPlayer811126B8;
+
+u16 func_81112FFC(u8** arg0);
+
+s32 func_811126B8(SeqPlayer811126B8* seqPlayer, SeqScriptState811126B8* state, s32 cmd, s32 cmdArg) {
+    u8 depth;
+
+    switch (cmd) {
+        case 0xFF:
+            if (state->depth == 0) {
+                return -1;
+            }
+            state->pc = state->stack[--state->depth];
+            break;
+        case 0xFD:
+            return func_81112FFC(&state->pc);
+        case 0xFE:
+            return 1;
+        case 0xFC:
+            depth = state->depth;
+            state->stack[depth] = state->pc;
+            state->depth++;
+            state->pc = seqPlayer->seqData + (u16)cmdArg;
+            break;
+        case 0xF8:
+            depth = state->depth;
+            state->remLoopIters[depth] = cmdArg;
+            state->stack[state->depth++] = state->pc;
+            break;
+        case 0xF7:
+            state->remLoopIters[state->depth - 1]--;
+            if (state->remLoopIters[state->depth - 1] != 0) {
+                state->pc = state->stack[state->depth - 1];
+            } else {
+                state->depth--;
+            }
+            break;
+        case 0xF6:
+            state->depth--;
+            break;
+        case 0xF5:
+        case 0xF9:
+        case 0xFA:
+        case 0xFB:
+            if (cmd == 0xFA && state->value != 0) {
+                break;
+            }
+            if (cmd == 0xF9 && state->value >= 0) {
+                break;
+            }
+            if (cmd == 0xF5 && state->value < 0) {
+                break;
+            }
+            state->pc = seqPlayer->seqData + (u16)cmdArg;
+            break;
+        case 0xF2:
+        case 0xF3:
+        case 0xF4:
+            if (cmd == 0xF3 && state->value != 0) {
+                break;
+            }
+            if (cmd == 0xF2 && state->value >= 0) {
+                break;
+            }
+            state->pc += (s8)(cmdArg & 0xFF);
+            break;
+    }
+    return 0;
+}
 
 typedef struct Item8111539C {
     /* 0x00 */ u32 active : 1;
@@ -585,7 +660,6 @@ typedef struct Layer811132E4 {
 } Layer811132E4;
 
 extern f32 D_81136378[];
-s32 func_811126B8(void*, void*, s32, s32);
 u8 func_81113E84(u8* arg0, u8 arg1, u8** arg2, u8* arg3);
 
 s32 func_811132E4(Layer811132E4* layer) {
