@@ -1238,11 +1238,83 @@ void func_891078E0(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4) {
     Font_EndTexturedTextRendering();
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89107A60; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89107A60.s")
-#endif
+typedef struct Lab89107A60 {
+    /* 0x000 */ s32 x;
+    /* 0x004 */ s32 y;
+    /* 0x008 */ char unk008[0xC];
+    /* 0x014 */ s32 unk14;
+    /* 0x018 */ Rgba8910576C color;
+    /* 0x01C */ char unk01C[4];
+    /* 0x020 */ char* unk20;
+    /* 0x024 */ s32 unk24;
+    /* 0x028 */ s32 unk28;
+    /* 0x02C */ s8 buttons[4][0x40];
+    /* 0x12C */ s8 unk12C[0x10];
+    /* 0x13C */ s32 unk13C;
+    /* 0x140 */ char unk140[0x28];
+    /* 0x168 */ s8 unk168[0x3C];
+    /* 0x1A4 */ s32 unk1A4;
+    /* 0x1A8 */ s32 cursor;
+    /* 0x1AC */ s32 unk1AC;
+    /* 0x1B0 */ s8 list[4];
+    /* 0x1B4 */ u16* flags;
+    /* 0x1B8 */ char unk1B8[0x18];
+    /* 0x1D0 */ s32 unk1D0;
+    /* 0x1D4 */ char unk1D4[0x20];
+    /* 0x1F4 */ s8 unk1F4[0x148];
+    /* 0x33C */ s8 unk33C[0x10];
+    /* 0x34C */ s32 mode;
+} Lab89107A60;
+
+void func_8002EC24(s8*, s32, s32, s32, void*, s32, s32);
+void func_8002AE94(s8* arg0, s32 arg1, s32 arg2, s32 arg3, Rgba8910576C arg4, char* arg5);
+void func_8000B2F4(s32);
+extern u8 D_8910A978[];
+extern u8 D_8910AA1C[];
+extern Rgba8910576C D_8910AACC;
+extern char D_8910E0D0[];
+extern char D_8910E0E0[];
+extern char D_8910E0E8[];
+extern char D_8910E0F4[];
+
+void func_89107A60(Lab89107A60* arg0, s32 x, s32 y, u8* arg3) {
+    s32 i;
+
+    func_8002A8C4((s8*)arg0, x, y, 0x194, 0x120);
+    arg0->unk24 = 0;
+    arg0->unk20 = NULL;
+    arg0->unk28 = 0;
+    arg0->unk14 = 0x800;
+    arg0->color = D_8910AACC;
+    arg0->unk20 = D_8910E0D0;
+    func_80027410(arg0->unk33C, D_8910A978, 1, 0xA4, 0xA4);
+    func_8002EC24(arg0->list, (s32)arg0->unk33C, (s32)arg0->unk1F4, 8, func_891078E0, 0xD4, 0x1C);
+    arg0->unk1D0 |= 0x10000;
+    for (i = 0; i < M2C_FIELD(arg3, s32*, 4); i++) {
+        M2C_FIELD(arg0, s32*, 0x68 + i * 0x40) = D_8910AA1C[arg3[i] - 1];
+    }
+    for (; i < 4; i++) {
+        M2C_FIELD(arg0, s32*, 0x68 + i * 0x40) = -1;
+    }
+    for (i = 0; i < 4; i++) {
+        if (M2C_FIELD(arg0, s32*, 0x68 + i * 0x40) == -1) {
+            func_8002AE94(arg0->buttons[i], arg0->x + 0xE, arg0->y + i * 0x1C + 0x22, 0x98, D_8910AACC, D_8910E0E0);
+        } else {
+            func_8002AE94(arg0->buttons[i], arg0->x + 0xE, arg0->y + i * 0x1C + 0x22, 0x98, D_8910AACC, (char*)D_8006A9D4[D_8910A978[M2C_FIELD(arg0, s32*, 0x68 + i * 0x40)]].name);
+            arg0->flags[M2C_FIELD(arg0, s32*, 0x68 + i * 0x40)] |= 8;
+        }
+    }
+    func_8002AE94(arg0->unk168, arg0->x + 0x4A, arg0->y + 0xCA, 0x5C, D_8910AACC, D_8910E0E8);
+    func_8002AE94(arg0->unk12C, arg0->x + 0x4A, arg0->y + 0xE6, 0x5C, D_8910AACC, D_8910E0F4);
+    if (M2C_FIELD(arg3, s32*, 4) == 0) {
+        arg0->unk13C |= 1;
+    }
+    arg0->cursor = 0;
+    arg0->unk1AC = 6;
+    arg0->unk1A4 = D_800603C0;
+    func_8000B2F4(D_800603C0);
+    arg0->mode = 0;
+}
 
 typedef struct Ctx89107D7C {
     /* 0x000 */ s32 x;
