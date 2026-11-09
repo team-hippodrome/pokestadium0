@@ -204,11 +204,82 @@ void func_8211009C(void) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_821102F0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821102F0.s")
-#endif
+extern u8 D_8218ABF0[];
+extern u8 D_8218ABF4[];
+extern u8 D_8218ABFC[];
+extern u8 D_8218AC04[];
+extern s32 D_8218C754;
+extern s32 D_8218C758;
+extern s32 D_8218C75C;
+extern s32 D_8218C760;
+extern s32 D_8218C764;
+s32 func_8210FA2C(s32, u8*, s32);
+s32 func_82107F68(ActivePokemon*);
+
+void func_821102F0(void) {
+    BattleMonRuntime* runtime = &sActivePokemon[sBattleScene.scene->unk_2C]->state.runtime;
+    s32 type;
+
+    runtime->unk_58 = sBattleUser->moveCache.lastMove;
+    if (func_8210FA2C(runtime->moveCache.lastMove, D_8218ABF0, 2) != 0) {
+        type = 0;
+    } else if (func_8210FA2C(runtime->moveCache.lastMove, D_8218ABF4, 5) != 0) {
+        type = 1;
+    } else if (func_8210FA2C(runtime->moveCache.lastMove, D_8218ABFC, 5) != 0) {
+        type = 2;
+    } else if (func_8210FA2C(runtime->moveCache.lastMove, D_8218AC04, 0x2E) != 0) {
+        type = 3;
+    } else {
+        type = 4;
+    }
+    if (sBattleUser->moveCache.lastMove == 0x76 || sBattleUser->moveCache.lastMove == 0x77) {
+        switch (type) {
+            case 0:
+                func_8211EF74(D_8219A520 + 0x388, 0x14, D_8218C754, func_82107F88(sActivePokemon[sBattleScene.scene->unk_2C]),
+                              func_82107F68(sActivePokemon[sBattleScene.scene->unk_2C]));
+                break;
+            case 1:
+                func_8211EF74(D_8219A520 + 0x388, 0x15, D_8218C758, func_82107F88(sActivePokemon[sBattleScene.scene->unk_2C]),
+                              func_82107F68(sActivePokemon[sBattleScene.scene->unk_2C]));
+                break;
+            case 2:
+                func_8211EF74(D_8219A520 + 0x388, 0x16, D_8218C75C, func_82107F88(sActivePokemon[sBattleScene.scene->unk_2C]),
+                              func_82107F68(sActivePokemon[sBattleScene.scene->unk_2C]));
+                break;
+            case 3:
+                func_8211EF74(D_8219A520 + 0x388, 0x17, D_8218C760, func_82107F88(sActivePokemon[sBattleScene.scene->unk_2C]),
+                              func_82107F68(sActivePokemon[sBattleScene.scene->unk_2C]));
+                break;
+            case 4:
+                func_8211EF74(D_8219A520 + 0x388, 0x18, D_8218C764, func_82107F88(sActivePokemon[sBattleScene.scene->unk_2C]),
+                              func_82107F68(sActivePokemon[sBattleScene.scene->unk_2C]));
+                break;
+        }
+    } else {
+        switch (type) {
+            case 0:
+                func_8211EF74(D_8219A520 + 0xC8, 0x14, D_8218C754, func_82107F88(sActivePokemon[sBattleScene.scene->unk_2C]),
+                              func_82107F68(sActivePokemon[sBattleScene.scene->unk_2C]));
+                break;
+            case 1:
+                func_8211EF74(D_8219A520 + 0xC8, 0x15, D_8218C758, func_82107F88(sActivePokemon[sBattleScene.scene->unk_2C]),
+                              func_82107F68(sActivePokemon[sBattleScene.scene->unk_2C]));
+                break;
+            case 2:
+                func_8211EF74(D_8219A520 + 0xC8, 0x16, D_8218C75C, func_82107F88(sActivePokemon[sBattleScene.scene->unk_2C]),
+                              func_82107F68(sActivePokemon[sBattleScene.scene->unk_2C]));
+                break;
+            case 3:
+                func_8211EF74(D_8219A520 + 0xC8, 0x17, D_8218C760, func_82107F88(sActivePokemon[sBattleScene.scene->unk_2C]),
+                              func_82107F68(sActivePokemon[sBattleScene.scene->unk_2C]));
+                break;
+            case 4:
+                func_8211EF74(D_8219A520 + 0xC8, 0x18, D_8218C764, func_82107F88(sActivePokemon[sBattleScene.scene->unk_2C]),
+                              func_82107F68(sActivePokemon[sBattleScene.scene->unk_2C]));
+                break;
+        }
+    }
+}
 
 void Battle_DecrementPP(s32 arg0) {
     BattleMonRuntime* temp_v0;

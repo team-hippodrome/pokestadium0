@@ -380,6 +380,12 @@
   "src/fragments/fragment012_17ED00/battle_engine_3591E0.c": {
     ".rodata": "0x82197DE0"
   },
+  "src/fragments/fragment012_17ED00/battle_engine_359F90.c": {
+    ".rodata": {
+      "address": "0x821957BC",
+      "size": "0x28"
+    }
+  },
   "src/fragments/fragment012_17ED00/battle_engine_move_animation.c": {
     ".rodata": "0x82194880"
   },
