@@ -615,7 +615,11 @@ void func_8212684C(UNUSED CameraNode* arg0) {
 void func_82126A1C(UNUSED CameraNode* arg0) {
 }
 
+#ifdef NON_MATCHING
+/* TODO: decompile func_82126A24; signature not recovered. */
+#else
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82126A24.s")
+#endif
 
 void BattleScene_PhaseSendOutAfterFaint(CameraNode* arg0) {
     switch (sBattleScene.scene->unk_20) {

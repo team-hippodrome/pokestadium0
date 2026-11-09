@@ -1197,11 +1197,76 @@ void Geo_NodeTranslate(GraphNode* arg0) {
     D_800AB460.unk_10A0--;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_800148AC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800148AC.s")
-#endif
+extern s32 D_800AB248[];
+void func_8000ED9C(MtxF* dest, Vec3f* local_position, Vec3s* rotate, Vec3f* scale, MtxF* basis, MtxF* transform);
+/* Geo_NodeAnimatedPart from Stadium 1, with the joint evaluation inlined. D_800AC690 is declared as u8 in this file, so it is cast to the anim record type. */
+void func_800148AC(GraphNode* arg0) {
+    Vec3s sp98;
+    Vec3f sp8C;
+    Vec3f sp80;
+    MtxF sp40;
+    unk_D_86002F34_alt6* arg = (unk_D_86002F34_alt6*)arg0;
+    s32 idx;
+    s32 sp34;
+
+    idx = arg->unk_32 * 3;
+    sp34 = 0;
+    sp98 = arg->unk_1E;
+    sp80 = arg->unk_24;
+
+    Vec3f_FromVec3s(&sp8C, &arg->unk_18);
+    if ((((unk_D_800ABCC0*)&D_800AC690)->unk_00 == 1) && (idx >= 0) &&
+        (idx + 2 < ((unk_D_800ABCC0*)&D_800AC690)->unk_04->channelCount)) {
+        sp8C.x = ModelAnim_EvaluateScaleChannel((unk_D_800ABCC0*)&D_800AC690, idx + 0);
+        sp8C.y = ModelAnim_EvaluateScaleChannel((unk_D_800ABCC0*)&D_800AC690, idx + 1);
+        sp8C.z = ModelAnim_EvaluateScaleChannel((unk_D_800ABCC0*)&D_800AC690, idx + 2);
+
+        sp98.x = ModelAnim_EvaluateRotationChannel((unk_D_800ABCC0*)&D_800AC690, idx + 0);
+        sp98.y = ModelAnim_EvaluateRotationChannel((unk_D_800ABCC0*)&D_800AC690, idx + 1);
+        sp98.z = ModelAnim_EvaluateRotationChannel((unk_D_800ABCC0*)&D_800AC690, idx + 2);
+
+        sp80.x = ModelAnim_EvaluateTranslationChannel((unk_D_800ABCC0*)&D_800AC690, idx + 0);
+        sp80.y = ModelAnim_EvaluateTranslationChannel((unk_D_800ABCC0*)&D_800AC690, idx + 1);
+        sp80.z = ModelAnim_EvaluateTranslationChannel((unk_D_800ABCC0*)&D_800AC690, idx + 2);
+    }
+
+    if (arg->unk_31 & 2) {
+        func_8000ED9C(&sp40, &sp8C, &sp98, &sp80, &D_80060488->view.floatMatrix,
+                      &D_800AB460.unk_0000[D_800AB460.unk_10A0]);
+        D_800AB460.unk_10A0++;
+        GeoRender_SetMatrix(&sp40);
+    } else if (arg->unk_31 & 1) {
+        MtxF_SetRotationScaleTranslation(&sp40, &sp8C, &sp98, &sp80);
+        GeoRender_PushMultipliedMatrix(&sp40);
+    } else {
+        MtxF_SetRotationAndScaledTranslation(&sp40, &sp8C, &sp98, &D_800AC508.unk_000[D_800AC508.unk_180]);
+
+        D_800AB460.unk_10A0++;
+
+        GeoRender_PushScale(&sp80);
+        if (D_800AB460.unk_1080[D_800AB460.unk_10A0 - 1] == 1) {
+            MtxF_Multiply(&D_800AB460.unk_0000[D_800AB460.unk_10A0 + 32], &sp40,
+                          &D_800AB460.unk_0000[D_800AB460.unk_10A0 + 31]);
+        } else {
+            MtxF_Multiply(&D_800AB460.unk_0000[D_800AB460.unk_10A0 + 32], &sp40,
+                          &D_800AB460.unk_0000[D_800AB460.unk_10A0 - 1]);
+        }
+        MtxF_ScaleRows(&D_800AB460.unk_0000[D_800AB460.unk_10A0], &D_800AB460.unk_0000[D_800AB460.unk_10A0 + 32],
+                       &D_800AC508.unk_000[D_800AC508.unk_180]);
+        GeoRender_CommitMatrix();
+        D_800AB460.unk_1080[D_800AB460.unk_10A0] = 1;
+        sp34 = 1;
+    }
+
+    D_800AB248[arg->unk_30] = (s32)D_800AB460.unk_1000[D_800AB460.unk_10A0];
+    Geo_ProcessNodeChildren(arg0);
+    D_800AB248[arg->unk_30] = 0;
+    D_800AB460.unk_10A0--;
+
+    if (sp34 != 0) {
+        D_800AC508.unk_180--;
+    }
+}
 
 /*
  * func_80014BF0

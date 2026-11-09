@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5203,
-  "asm_owners": 241,
+  "c_owners": 5204,
+  "asm_owners": 240,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -617,7 +617,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "4c64cf942ee933a9cb324028ab95edf181af98d560d38d2ab621243492642197",
+    "docs/function-matches.csv": "76d8a045401faa0f6a50e2f9642517986329074ea30c8f9efa1c5f7c6b55113d",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -723,7 +723,7 @@
     "src/fragments/fragment012_17ED00/battle_engine_3055E0.c": "e3b676466796b8427c06510d73cc4de3300dfe303a37208e9216667eabec372a",
     "src/fragments/fragment012_17ED00/battle_engine_3055E0_821243DC.c": "03dd893a2854c44316d775cdd5db4f0e38a6dd84379567b2919b82679f46d8be",
     "src/fragments/fragment012_17ED00/battle_engine_309ED0.c": "5322c1ff6d119d2e805ad61385fd8c7d10ebce5c92fa671da6f64d774dfe12c9",
-    "src/fragments/fragment012_17ED00/battle_engine_309ED0_82124E80.c": "a88f98c8dc0cdbc92e659369218c71cce32e085fce02d411dfef4af5fe200863",
+    "src/fragments/fragment012_17ED00/battle_engine_309ED0_82124E80.c": "94e41c99b036672fd095a54b7a6da4789d67d2bb8d01477aad6e89465e17fe03",
     "src/fragments/fragment012_17ED00/battle_engine_309ED0_82128CDC.c": "80713ba404c0672edbdb8a981c33a3cce2236552bd146de4b7fb4ad7203eb6ac",
     "src/fragments/fragment012_17ED00/battle_engine_309ED0_8212A328.c": "7fa7b481f2329a14ee18cbc1269269c70fa354ee050d1bd411c3a616ba16a690",
     "src/fragments/fragment012_17ED00/battle_engine_313D60.c": "9f7fbe407f584a1f0a2f197368dcb5150e69a98037cca54c7fff27d3f34c2ea6",
@@ -1006,7 +1006,7 @@
     "src/gb_tower.c": "176816e083b7e59f7a469e5cb27b7a0b94869007fcb3060a4e31dfeefbfd0124",
     "src/geo_layout.c": "cd22cfc78b438f75ba379097e38e64b8e773c73701f536774d4a9c9fbe313f0d",
     "src/geo_node.c": "4b117247e69f5030a02753148e827dc7179b9c497a8af94b2feb264947aa287a",
-    "src/geo_render.c": "f98af7f46018926184a9c264dd96c927744146de55868c755b850cb2fb03a580",
+    "src/geo_render.c": "668714f1785713c36ef329f4f7b60e7e521ab0d50a559aa5682dd988a3f62fe5",
     "src/gfx_buffer.c": "8763545514d8fbae9e0f5bba8be79ea47a1db08f2e40b1ceccb6c16d0a5e59e5",
     "src/gfx_rect.c": "aa0d5e4c1ee103a6195cc63d2e2e8f303c99b8a7dcbfe54b922dfd7c5948eee8",
     "src/graphics_textures.c": "1691764c6592b2392747dcba4e39f0b5b11c3d26acd6f4a4cdadf0ce705d7b54",
