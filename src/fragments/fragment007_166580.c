@@ -406,11 +406,158 @@ void func_82000BC4(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82000C5C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment007_166580/func_82000C5C.s")
-#endif
+typedef struct Color82001CCC {
+    u8 c[4];
+} Color82001CCC;
+typedef struct Mon82000C5C {
+    /* 0x00 */ char unk00[0x24];
+    /* 0x24 */ u8 level;
+    /* 0x25 */ char unk25[1];
+    /* 0x26 */ u16 maxHp;
+    /* 0x28 */ u16 attack;
+    /* 0x2A */ u16 defense;
+    /* 0x2C */ u16 speed;
+    /* 0x2E */ u16 special;
+    /* 0x30 */ char nickname[1];
+} Mon82000C5C;
+typedef struct Screen82000C5C {
+    /* 0x00 */ s32 x;
+    /* 0x04 */ s32 y;
+    /* 0x08 */ s32 w;
+    /* 0x0C */ char unk0C[0x20];
+    /* 0x2C */ char button1[0x3C];
+    /* 0x68 */ char button2[0x40];
+    /* 0xA8 */ s32 selection;
+    /* 0xAC */ char unkAC[4];
+    /* 0xB0 */ Mon82000C5C* mon;
+    /* 0xB4 */ char* title;
+} Screen82000C5C;
+typedef struct Slot82000C5C {
+    /* 0x00 */ s32 x;
+    /* 0x04 */ s32 y;
+    /* 0x08 */ s32 centered;
+    /* 0x0C */ s32 iconX;
+    /* 0x10 */ s32 icon;
+} Slot82000C5C; // size = 0x14
+extern Slot82000C5C D_82009040[];
+extern u8 D_8007356C[];
+extern Gfx D_80060270[];
+extern Gfx D_80060290[];
+extern Gfx D_80060398[];
+extern Color82001CCC D_82009030;
+extern Color82001CCC D_82009034;
+extern Color82001CCC D_82008F54;
+extern Color_RGBA8 D_82009038;
+extern Color_RGBA8 D_8200903C;
+extern char D_82009BA0[];
+extern char D_82009BA4[];
+extern char D_82009BA8[];
+extern char D_82009BAC[];
+extern char D_82009BB0[];
+extern char D_82009BBC[];
+extern char D_82009BC8[];
+extern char D_82009BD4[];
+extern char D_82009BE0[];
+extern char D_82009BEC[];
+extern char D_82009BF8[];
+extern char D_82009BFC[];
+extern char D_82009C00[];
+extern char D_82009C04[];
+extern s32 D_8200AC48;
+void func_800069CC(void);
+void func_80019008(s32, Mon82000C5C*, s32);
+u8* func_800196F8(s32);
+void func_8001AAE4(u8, u8, u8, u8);
+void func_8001ABE8(void);
+void func_8001AC3C(void);
+void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
+void func_80029028(s32, s32, s32, s32, Color82001CCC);
+void func_80029658(s32, s32, s32, u8*);
+void func_8002A550(s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
+s32 func_8002AE6C(Screen82000C5C*);
+void func_8002AF04(char*, s32);
+s32 func_8002D3D0(Mon82000C5C*);
+s32 func_8002D430(Mon82000C5C*, s32);
+void func_82000C5C(Screen82000C5C* arg0) {
+    s32 y = arg0->y + 6;
+    s32 x = arg0->x + 6;
+    s32 count = func_8002D3D0(arg0->mon);
+    s32 i;
+    s32 n;
+    s32 row;
+    u8* tex;
+
+    if (func_8002AE6C(arg0) == 0) {
+        func_80029658(arg0->x, arg0->y + 0xF3, arg0->w, D_8007356C);
+        gSPDisplayList(gDisplayListHead++, D_80060270);
+        func_80029028(x, y, arg0->w - 0xC, 0x20, D_82009030);
+        func_80029028(x + 0x78, y + 0x20, arg0->w - 0x84, 0x78, D_82009034);
+        func_80029028(x, y + 0xF4, arg0->w - 0xC, 0x24, D_82008F54);
+        func_8002A550(x, y + 0x98, arg0->w - 0xC, 0x56, D_82009038, D_8200903C);
+        func_8001AB6C();
+        func_8001AA9C(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
+        func_8001A384(8, 0);
+        func_8001A944(arg0->x + 0xE, arg0->y + 0x102, arg0->title);
+        func_8001ABBC();
+        func_8001AB6C();
+        func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF);
+        func_8001A384(8, 0);
+        func_8001ABE8();
+        func_8001AAE4(0x7F, 0xA8, 0xFF, 0xFF);
+        func_8001A944(x + 0xA, y + 5, arg0->mon->nickname);
+        func_8001AC3C();
+        func_8001A384(4, -1);
+        func_8001AA9C(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
+        func_8001A944(x + 0x84, y + 9, D_82009BA0);
+        func_8001A944(x + 0x112, y + 9, D_82009BA4);
+        func_8001A384(8, 0);
+        func_8001A944(x + 0xB2, y + 5, D_82009BA8, arg0->mon->level);
+        func_8001A944(x + 0x140, y + 5, D_82009BAC, arg0->mon->maxHp);
+        func_8001A944(x + 0x88, y + 0x28, D_82009BB0);
+        if (func_8002D498((s32)arg0->mon, 1) != -1) {
+            func_8001A944(x + 0x88, y + 0x64, D_82009BBC);
+        }
+        func_8001A944(x + 0x102, y + 0x28, D_82009BC8);
+        func_8001A944(x + 0x102, y + 0x44, D_82009BD4);
+        func_8001A944(x + 0x102, y + 0x60, D_82009BE0);
+        func_8001A944(x + 0x102, y + 0x7C, D_82009BEC);
+        func_8001A944(x + 0x15C, y + 0x28, D_82009BF8, arg0->mon->attack);
+        func_8001A944(x + 0x15C, y + 0x44, D_82009BFC, arg0->mon->defense);
+        func_8001A944(x + 0x15C, y + 0x60, D_82009C00, arg0->mon->speed);
+        func_8001A944(x + 0x15C, y + 0x7C, D_82009C04, arg0->mon->special);
+        for (i = 0; i < count; i++) {
+            func_82000AC4(D_82009040[i].x + x, D_82009040[i].y + y, func_8002D430(arg0->mon, i), D_82009040[i].centered);
+        }
+        func_8001ABBC();
+        func_82000BC4(x + 0x9C, y + 0x40, (s32)arg0->mon, 0);
+        func_82000BC4(x + 0x9C, y + 0x7C, (s32)arg0->mon, 1);
+        gSPDisplayList(gDisplayListHead++, D_80060290);
+        for (i = 0; i < count; i++) {
+            func_8001B884(D_82009040[i].iconX + x, D_82009040[i].y + y, 0x14, 0x14, (u8*)D_82009040[i].icon, 0x14, 0x200000);
+        }
+        gSPDisplayList(gDisplayListHead++, D_80060398);
+        func_8002AF04(arg0->button1, (arg0->selection == 0) ? 2 : 0);
+        func_8002AF04(arg0->button2, (arg0->selection == 1) ? 2 : 0);
+        if (D_8200AC4C == 0) {
+            D_8200AC4C = 1;
+            func_80019008(D_8200AC48, arg0->mon, 0x416D);
+        }
+        tex = func_800196F8(D_8200AC48);
+        func_800069CC();
+        gSPDisplayList(gDisplayListHead++, D_80060290);
+        gDPSetAlphaCompare(gDisplayListHead++, G_AC_NONE);
+        for (row = 0; row < 0x78; row += n) {
+            if (0x78 - row < 0x10) {
+                n = 0x78 - row;
+            } else {
+                n = 0x10;
+            }
+            func_8001B884(x, y + row + 0x20, 0x78, n, tex, 0x80, 0x200000);
+            tex += n << 8;
+        }
+        gSPDisplayList(gDisplayListHead++, D_80060398);
+    }
+}
 
 s32 func_8002B390(s32);
 s32 func_8002BC14(s32);
@@ -601,9 +748,6 @@ void func_82001708(Slot54* arg0, s32 arg1) {
     }
 }
 
-typedef struct Color82001CCC {
-    u8 c[4];
-} Color82001CCC;
 extern Gfx D_80060270[];
 void func_80029028(s32, s32, s32, s32, Color82001CCC);
 extern Color82001CCC D_82008F5C;
