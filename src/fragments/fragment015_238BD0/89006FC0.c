@@ -358,12 +358,6 @@ s32 func_890082FC(s32 arg0) {
     return sp1C;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89008370; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_89008370.s")
-#endif
-
 extern Gfx D_80060270[];
 void func_80029028(s32, s32, s32, s32, Color_RGBA8);
 void func_8002A0AC(s32, s32, s32, s32, Color_RGBA8);
@@ -371,6 +365,49 @@ void func_8002A3F8(void*, s32, s32);
 extern Color_RGBA8 D_8900A8F8;
 extern Color_RGBA8 D_8900A900;
 extern Color_RGBA8 D_8900A8DC[];
+
+extern Color_RGBA8 D_8900A8E8;
+extern Color_RGBA8 D_8900A8F0;
+extern char D_89018F08[];
+extern u8 D_80073614[];
+extern u8 D_04011AB8[];
+extern Gfx D_80073450[];
+void func_8002B940(s32, s32, s32, s32);
+void func_8001BCB4(s32, s32, s32, s32, u8*, s32, s32);
+void func_89008370(s32 arg0, s32 arg1, u8** arg2, s32 arg3, s32 arg4) {
+    Color_RGBA8 color;
+    s32 pad[2]; // FAKE
+
+    gSPDisplayList(gDisplayListHead++, D_80060270);
+    func_80029028(arg0, arg1 + 1, 0xCE, 0x1A, D_8900A8E8);
+    func_80029028(arg0, arg1, 0xCE, 1, D_8900A8F0);
+    func_80029028(arg0, arg1 + 0x1B, 0xCE, 1, D_8900A8F0);
+    if (arg4 & 0x18) {
+        func_8002A0AC(arg0 + 3, arg1 + 3, 0xC8, 0x16, *(Color_RGBA8*)&D_8900A5BC);
+    }
+    func_8001AB6C();
+    func_8001A384(8, 0);
+    if (M2C_FIELD(*arg2, s32*, 0x960) == 0) {
+        color = D_8900A8DC[(arg4 & 2) ? 0 : 1];
+    } else {
+        color = ((Color_RGBA8*)&D_800734A8)[(arg4 & 2) ? 0 : 1];
+    }
+    if (arg4 & 1) {
+        color.a = 0x4C;
+    }
+    func_8001AA9C(color.r, color.g, color.b, color.a);
+    func_8001A944(arg0 + 8, arg1 + 4, D_89018F08, arg3 + 1);
+    func_8001ABBC();
+    if (M2C_FIELD(*arg2, s32*, 0x960) > 0) {
+        func_8002A3F8(D_80073614, arg0 + 0x78, arg1 + 4);
+    }
+    func_8002B940(arg0 + 0x98, arg1 + 8, M2C_FIELD(*arg2, s32*, 0x960), 2);
+    func_8002B940(arg0 + 0xB3, arg1 + 8, 0x1E, 2);
+    gSPDisplayList(gDisplayListHead++, D_80073450);
+    gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
+    func_8001BCB4(arg0 + 0xAA, arg1 + 0xA, 8, 0xA, D_04011AB8, 8, 0);
+}
+
 extern char D_89018F14[];
 extern char D_89018F20[];
 extern u8 D_80073634[];
