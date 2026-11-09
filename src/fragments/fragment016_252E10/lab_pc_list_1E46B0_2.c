@@ -173,11 +173,44 @@ void LabPCList_FlattenEntries(unk_func_88200FA0_030_038* arg0, unk_func_8830867C
     arg0->unk_08 = var_v0 - (s32*)arg0->unk_00;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89109D14; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89109D14.s")
-#endif
+typedef struct LabPCDeck89109D14 {
+    /* 0x00 */ char unk00[0x10];
+    /* 0x10 */ s32 dirty;
+    /* 0x14 */ LabPCDeckNode89109B60** nodes;
+    /* 0x18 */ char unk18[0x4];
+    /* 0x1C */ s32 count;
+} LabPCDeck89109D14; // size = 0x20
+void func_80023268(s32 arg0, s32 arg1, s32 arg2);
+
+/* Stadium 1's LabPCList_SaveAllBoxes, with every deck flushed the same way. */
+void func_89109D14(LabPCBoxList89109B60* arg0) {
+    s32 i;
+    s32 j;
+    s32 x;
+    DeckHandle* handle;
+    LabPCDeck89109D14* deck;
+    LabPCDeckNode89109B60** node;
+    LabPCBox89109B60* box;
+
+    box = arg0->boxes;
+    for (i = 0; i < arg0->count; i++, box++) {
+        deck = (LabPCDeck89109D14*)box->decks;
+        for (j = 0; j < box->deckCount; j++, deck++) {
+            if (deck->dirty != 0) {
+                node = deck->nodes;
+                handle = Deck_Open(box->unk_04, box->unk_08, j, 1);
+                for (x = 0; x < deck->count; x++, node++) {
+                    Deck_WriteEntries((*node)->entry, 1, handle);
+                    if ((box->unk_04 == 0x20) || (box->unk_04 == 0x21)) {
+                        func_80023268(box->unk_08, (*node)->entry[0], 3);
+                    }
+                }
+                Deck_CloseAndFlush(handle);
+            }
+            if (1) {} // karodo: also in Stadium 1's version
+        }
+    }
+}
 
 s32 func_80025BD8(void);
 void func_80027410(void*, void*, s32, s32, s32);
