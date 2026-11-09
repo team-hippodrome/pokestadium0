@@ -1203,11 +1203,41 @@ void func_891078E0(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89107A60.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89107D7C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89107D7C.s")
-#endif
+typedef struct Ctx89107D7C {
+    /* 0x000 */ s32 x;
+    /* 0x004 */ s32 y;
+    /* 0x008 */ char unk008[0x24];
+    /* 0x02C */ s8 buttons[4][0x40];
+    /* 0x12C */ s8 unk12C[0x3C];
+    /* 0x168 */ s8 unk168[0x40];
+    /* 0x1A8 */ s32 cursor;
+    /* 0x1AC */ char unk1AC[4];
+    /* 0x1B0 */ s8 text[0x19C];
+    /* 0x34C */ s32 mode;
+} Ctx89107D7C;
+void func_8002F6C4(s8*, s32, s32, s32, s32);
+
+void func_89107D7C(Ctx89107D7C* arg0) {
+    s32 i;
+    s32 hl;
+    s32 mask;
+
+    if (func_8002AE6C() == 0) {
+        hl = (arg0->mode == 0) ? 2 : 0x10;
+        for (i = 0; i < 4; i++) {
+            func_8002AF04(arg0->buttons[i], (i == arg0->cursor) ? hl : 0);
+        }
+        hl = (arg0->mode == 0) ? 2 : 0;
+        func_8002AF04(arg0->unk168, (arg0->cursor == 4) ? hl : 0);
+        func_8002AF04(arg0->unk12C, (arg0->cursor == 5) ? hl : 0);
+        func_800295E8(arg0->x + 0xAE, arg0->y + 0xE, 0xD8, 0x104, D_800735C4);
+        mask = 0xFFED;
+        if (arg0->mode == 1) {
+            mask = 0xFFEF;
+        }
+        func_8002F6C4(arg0->text, arg0->x + 0xB0, arg0->y + 0x20, mask, 0);
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_89107EC4; signature not recovered. */
