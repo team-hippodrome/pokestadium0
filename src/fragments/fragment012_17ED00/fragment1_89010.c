@@ -98,6 +98,7 @@ void func_82132628(CameraNode* arg0) {
 }
 
 #ifdef NON_MATCHING
+/* TODO: decompile func_821326E4; signature not recovered. */
 #else
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821326E4.s")
 #endif

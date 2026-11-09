@@ -96,6 +96,12 @@
       "size": "0x38"
     }
   },
+  "src/fragments/fragment007_166580_3.c": {
+    ".rodata": {
+      "address": "0x8200A228",
+      "size": "0x18"
+    }
+  },
   "src/fragments/fragment010_17BE70/pikachu_reward.c": {
     ".data": {
       "address": "0x81701BF4",

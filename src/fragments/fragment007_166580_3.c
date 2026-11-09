@@ -716,11 +716,67 @@ void func_82006C74(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
     M2C_FIELD(arg0, s32 *, 0) = 1;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82006DF8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment007_166580/func_82006DF8.s")
-#endif
+
+void func_82006DF8(s8* arg0) {
+    s32 maskB = 0xFED, maskA = 0xFED;
+    s32 pad[1]; // FAKE: stack padding
+    s32 markA = 0;
+    s32 markB = 0;
+
+    if (func_8002AE6C(arg0 + 4) == 0) {
+        func_80029658(M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 8) + 0x92, M2C_FIELD(arg0, s32*, 0xC), &D_8007356C);
+        gSPDisplayList(gDisplayListHead++, D_80060270);
+        func_80029028(M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) + 0x99, M2C_FIELD(arg0, s32*, 0xC) - 0xC, 0xC4, *(Color82001CCC*)&D_82009100);
+        func_8002A3F8(D_8200910C, M2C_FIELD(arg0, s32*, 4) + 0xA9, M2C_FIELD(arg0, s32*, 8) + 0xF9);
+        if (M2C_FIELD(arg0, s32*, 0) != 0) {
+            if (M2C_FIELD(arg0, s32*, 0) == 1) {
+                maskB = 0xFEF;
+            }
+        } else {
+            maskB = 0xFFD;
+            maskA = 0xFEF;
+        }
+        func_8002D9B8((s32)(arg0 + 0x48), M2C_FIELD(arg0, s32*, 4) + 0x22, M2C_FIELD(arg0, s32*, 8) + 0xD1, maskB, NULL);
+        func_8002D9B8((s32)(arg0 + 0x6C), M2C_FIELD(arg0, s32*, 4) + 0xFC, M2C_FIELD(arg0, s32*, 8) + 0x99, maskA, NULL);
+        switch (M2C_FIELD(arg0, s32*, 0x50)) {
+            case 0:
+                markA = 1;
+                break;
+            case 1:
+                markA = 3;
+                break;
+            case 2:
+                markA = 5;
+                break;
+            case 3:
+                markA = 9;
+                break;
+        }
+        if (M2C_FIELD(arg0, s32*, 0) == 0) {
+            switch (M2C_FIELD(arg0, u32*, 0x74)) {
+                case 0:
+                    markB = 2;
+                    break;
+                case 1:
+                    markB = 4;
+                    break;
+                case 2:
+                    markB = 8;
+                    break;
+                case 3:
+                    markB = 6;
+                    break;
+                case 4:
+                    markB = 0xA;
+                    break;
+                case 5:
+                    markB = 0xC;
+                    break;
+            }
+        }
+        func_82006508(M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xBC), M2C_FIELD(arg0, s32*, 0xC4), markA, markB);
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_82007030; signature not recovered. */
