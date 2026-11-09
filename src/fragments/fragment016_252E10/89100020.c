@@ -761,13 +761,53 @@ void func_891024A4(Screen891024A4 *arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_891025D8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_891025D8.s")
-#endif
+typedef struct Ctx891025D8 {
+    /* 0x0000 */ char unk0000[0x88];
+    /* 0x0088 */ s32 unk88;
+    /* 0x008C */ s32 unk8C;
+    /* 0x0090 */ char unk0090[0xB188 - 0x90];
+    /* 0xB188 */ s16 unkB188;
+    /* 0xB18A */ char unkB18A[0xB1A0 - 0xB18A];
+    /* 0xB1A0 */ s32 unkB1A0;
+    /* 0xB1A4 */ char unkB1A4[0xB54C - 0xB1A4];
+    /* 0xB54C */ s32 unkB54C;
+    /* 0xB550 */ s32 unkB550;
+} Ctx891025D8;
+s32 func_8002B390(s32*);
 
-s32 func_891025D8(void*);
+s32 func_891025D8(Ctx891025D8* arg0) {
+    s32 ret = 0;
+    s32 button;
+
+    button = func_8002B390(&arg0->unkB54C);
+    if (button != 0) {
+        if ((button == 0x400) && (arg0->unkB550 == 1)) {
+            func_8003F6AC(1);
+            arg0->unk8C = 0;
+            arg0->unkB1A0 = 8; arg0->unkB188 = 0x400; // FAKE: both stores must share one source line (IDO schedules by line)
+            ret = 1;
+        } else {
+            arg0->unk8C = (arg0->unkB550 < 2) ? 2 : 1;
+            ret = 1;
+        }
+    } else if (*(u16*)(D_800603C0 + 8) & 0x8000) {
+        if (arg0->unkB550 == 0) {
+            func_8003F6AC(3);
+            ret = -1;
+        } else if (arg0->unkB550 == 1) {
+            func_8003F6AC(2);
+            func_891024A4((Screen891024A4*)arg0);
+            ret = 1;
+            arg0->unk88 = 2;
+        } else {
+            func_8003F6AC(2);
+            func_89101F90((Ctx89101F90*)arg0);
+            ret = 1;
+        }
+    }
+    return ret;
+}
+
 
 s32 func_89102700(Ctx89100294* arg0) {
     s32 done = FALSE;
@@ -780,7 +820,7 @@ s32 func_89102700(Ctx89100294* arg0) {
             break;
         case 1:
         case 2:
-            result = func_891025D8(arg0);
+            result = func_891025D8((Ctx891025D8*)arg0);
             break;
     }
     if (result == -1) {
