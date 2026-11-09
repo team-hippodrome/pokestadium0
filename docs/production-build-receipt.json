@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5196,
-  "asm_owners": 248,
+  "c_owners": 5197,
+  "asm_owners": 247,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -617,7 +617,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "9cd498542e74451bb894e957a37d50aeaa9bfd789c9b402fc40d0a1c64e167dc",
+    "docs/function-matches.csv": "c0514392d587d8b636768511bae3aec42c96ad40d7f28fa727f9d426284fcb14",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -815,7 +815,7 @@
     "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c": "a15a45e2c96dedd48d8f0553b39b222e0972eb76c03f3d3560594e3cedf7d019",
     "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00_8900379C.c": "f736cf6cf4ef2b1d86742aec70ddbc13863209f2470a551eea40da677ed33fc7",
     "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00_89003880.c": "c8bf798b3994c99ac46f418c7dd2bb4eeafada32fe66fd36a94bce3b5d339f8c",
-    "src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c": "a424e1dd8b1145b0e461a96250385e4604d22e776d6aa47cb6cf063e6f6253d2",
+    "src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c": "4fd951d0fd74e6db2c1239d18816b66cae276de6126a9559759ddb5e98abbcf5",
     "src/fragments/fragment016_252E10/89100020.c": "3fd4ab54fe40f3306ffc8112b55d06e60f79cbcf0b7aed899214c6acec33a2ca",
     "src/fragments/fragment016_252E10/89100020_89102AB8.c": "5f6a7afe50345f4953f85c12f66ae077fda973216c77b3ff4c2c825645da196e",
     "src/fragments/fragment016_252E10/89100020_89102C40.c": "56cb157207bf3b8fb6d24fe01f236426e4086ce70d13958f06be7b1e3c57a395",
