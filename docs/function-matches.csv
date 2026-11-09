@@ -822,7 +822,7 @@ func_820078BC,0x820078BC,src/fragments/fragment007_166580_3.c,func_820078BC,hand
 func_82007AF4,0x82007AF4,src/fragments/fragment007_166580_3.c,func_82007AF4,m2c,m2c,c
 func_82007B44,0x82007B44,src/fragments/fragment007_166580_3.c,func_82007B44,hand,,c
 func_82007C30,0x82007C30,src/fragments/fragment007_166580_3.c,func_82007C30,hand,,c
-func_82007D94,0x82007D94,src/fragments/fragment007_166580_3.c,,asm,,asm
+func_82007D94,0x82007D94,src/fragments/fragment007_166580_3.c,func_82007D94,hand,,c
 func_82008044,0x82008044,src/fragments/fragment007_166580_3.c,func_82008044,hand,,c
 func_820080B8,0x820080B8,src/fragments/fragment007_166580_3.c,func_820080B8,hand,,c
 func_8200813C,0x8200813C,src/fragments/fragment007_166580_3.c,func_8200813C,hand,,c

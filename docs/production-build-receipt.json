@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5218,
-  "asm_owners": 226,
+  "c_owners": 5219,
+  "asm_owners": 225,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -621,7 +621,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "332016c0d6d01aa44f628df05d7f1facbef217e9d1926b2d6da2e2660f886383",
+    "docs/function-matches.csv": "025b2eb811de018f9d85a825f981e5bd0d4e14f55f8eb04255f20d4070ff1fc5",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -713,7 +713,7 @@
     "src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c": "dbf30826095bc18e17c094f8f915eb140392a1f497809aaa77e252763d7b4ffc",
     "src/fragments/fragment007_166580.c": "e85efbd3dfde13aefaa3442994afce52bb0c95c1a943d34dc8aaa6d5ad64ad18",
     "src/fragments/fragment007_166580_2.c": "56b0700668c3b37f0dc634a9de6e453c587f36ebfad129eaab6eaf7bc774fbec",
-    "src/fragments/fragment007_166580_3.c": "959a52145033722e71f44cc0715f9af9dc8aac65f434bb0cbda1aa0cdfe1489e",
+    "src/fragments/fragment007_166580_3.c": "091fc4e48c5bf3438b33d139e741226d026cf636c2eb3be84c0076ffc1bf1dcb",
     "src/fragments/fragment007_166580_4.c": "c37dde66cee01e776ad21c14c1239d17c44e141f299095925e313afd227f36b1",
     "src/fragments/fragment007_166580_5.c": "88e3473bbf9884c722417da521b218e2f7afd6d203ef05c796b34d71d2027122",
     "src/fragments/fragment008_1720F0.c": "4368ab3745b1845094b3c759ebb4fdc71b5ec0c7ed125d5120f1414cb7106d81",
