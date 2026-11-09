@@ -579,11 +579,48 @@ s32 func_8210DA30(ActivePokemon* arg0) {
     return 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8210DAEC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210DAEC.s")
-#endif
+s32 func_82188770(s32, s32, s32, s32, s8*);
+s32 func_8210DAEC(ActivePokemon* arg0, ActivePokemon* arg1) {
+    ActivePokemonState* state = &arg0->state;
+    ActivePokemonState* other = &arg1->state;
+    s32 pad[2]; // FAKE
+
+    if ((state->unk_2D == 0x10) && (other->unk_2D == 0x10)) {
+        if (state->unk_10 == 3) {
+            func_8210C708((s8*)arg0);
+            return 1;
+        }
+        state->unk_04 = 2;
+        state->unk_10 = 2;
+        if (D_FLT_82199EB0 == 60.0f) {
+            func_82134D60();
+            D_82199EB8 = func_82188770((s32)&arg0->state.runtime, (s32)&arg1->state.runtime, state->rosterIndex, other->rosterIndex, M2C_FIELD(arg1, s8**, 0x860));
+            state->unk_1C = 0;
+            state->unk_18 = D_82199EB8 - 4;
+            state->unk_1E = 0;
+            state->unk_10 = 3;
+            state->unk_04 = 2;
+        }
+        return 1;
+    }
+    if (state->unk_2D == 0x10) {
+        state->unk_04 = 2;
+        state->unk_10 = 2;
+        other->unk_10 = 3;
+        other->unk_04 = 1;
+        if (D_FLT_82199EB0 == 60.0f) {
+            func_82134D60();
+            D_82199EB8 = func_82188770((s32)&arg0->state.runtime, (s32)&arg1->state.runtime, state->rosterIndex, other->rosterIndex, M2C_FIELD(arg1, s8**, 0x860));
+            state->unk_1C = 0;
+            state->unk_18 = D_82199EB8 - 4;
+            state->unk_1E = 0;
+            state->unk_10 = 3;
+            state->unk_04 = 2;
+        }
+        return 1;
+    }
+    return 0;
+}
 
 void BattleScene_CompleteCpuForcedAction(ActivePokemon* arg0, UNUSED ActivePokemon* arg1) {
     ActivePokemonState* ptr = &arg0->state;
