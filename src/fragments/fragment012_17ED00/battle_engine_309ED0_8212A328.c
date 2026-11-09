@@ -68,6 +68,7 @@ void func_8212A4CC(s32 arg0, s32 *arg1, s32 *arg2) {
     }
 }
 
+s32 func_8210C020(s32);
 void func_8212A554(s32 arg0) {
     s32 temp_v0;
 

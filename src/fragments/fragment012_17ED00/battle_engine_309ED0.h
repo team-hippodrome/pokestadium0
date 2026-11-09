@@ -317,7 +317,6 @@ M2C_UNK func_82125AC8(s32);                         /* extern */
 
 void func_8212A4CC(s32 arg0, s32 *arg1, s32 *arg2);
 
-s32 func_8210C020(M2C_UNK);                         /* extern */
 
 void func_8212A554(s32 arg0);
 
