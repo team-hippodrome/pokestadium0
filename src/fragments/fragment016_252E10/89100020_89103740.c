@@ -252,11 +252,48 @@ s32 func_89103DAC(Ctx89103C54* arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89103F04.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_891041D8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_891041D8.s")
-#endif
+typedef struct Entry891041D8 {
+    /* 0x0 */ char* name;
+    /* 0x4 */ char unk04[0x8];
+} Entry891041D8; // size = 0xC
+typedef struct Msg891041D8 {
+    /* 0x00 */ s8* text;
+    /* 0x04 */ s32 unk04;
+    /* 0x08 */ s32 oldPp;
+    /* 0x0C */ s32 newPp;
+} Msg891041D8;
+extern Entry891041D8 D_8006A9CC[];
+typedef struct Str891041D8 {
+    char c[7];
+} Str891041D8;
+extern char D_8910DE3C[];
+extern s8 D_8910E3B8[];
+void func_8910A764(s32, u8*, s32, Msg891041D8*);
+
+void func_891041D8(u8** arg0, s32 arg1, s32 arg2, Msg891041D8* arg3) {
+    u8* ptr;
+    s32 basePp;
+    s32 step;
+    s8* end;
+
+    func_8000A460(D_8910E3B8, D_8006A9CC[*(u8*)((u32)arg0 + arg2 + 0x11)].name); // FAKE: integer cast keeps arg0 + arg2 from being reused
+    ptr = (u8*)arg0 + arg2 + 8;
+    end = D_8910E3B8 + func_800566BC(D_8910E3B8);
+    *(Str891041D8*)end = *(Str891041D8*)D_8910DE3C;
+    if (1) {} // karodo
+    arg3->text = D_8910E3B8;
+    arg3->unk04 = 0;
+    basePp = gMoveData[ptr[9] - 1].unk_05;
+    step = basePp / 5;
+    if (step >= 7) {
+        step = 7;
+    }
+    arg3->oldPp = (ptr[0x20] >> 6) * step + basePp;
+    arg3->newPp = arg3->oldPp + step;
+    ptr[0x20] += step + 0x40;
+    func_8910A764(arg1, ptr, basePp, arg3);
+    *(s32*)(arg0[0] + 0x10) = 1;
+}
 
 u8 Move_GetIdFromTableIndex(s32 arg0);
 void LabPCList_ConsumeUsedTmItem(u8** arg0);
