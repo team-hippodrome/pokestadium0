@@ -47,7 +47,48 @@ s32 func_88400108(s32 arg0) {
     return 0;
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment006_162BE0/func_88400168.s")
+extern u8* D_88402F6C[4];
+extern u8 D_04007298[];
+extern u8 D_04008298[];
+extern u8 D_04008F20[];
+extern Gfx gUiEnvTintTextureDL[];
+extern Gfx gUiRestoreTextureDL[];
+void Gfx_DrawTextureIa8(s32 x1, s32 y1, s32 draw_width, s32 height, u8* texture, s32 load_width, s32 texture_spread_x_mode);
+
+void func_88400168(s32 x, s32 y, s32 port, s32 game) {
+    u8* icons[4] = D_88402F6C;
+
+    gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
+    if (game == 0) {
+        gDPSetEnvColor(gDisplayListHead++, 0xFF, 0xFF, 0xFF, 0x64);
+    }
+    Gfx_DrawTextureRgba16(x, y, 0x32, 0x20, D_04007298, 0x40, 0);
+    Gfx_DrawTextureRgba16(x, y + 0x20, 0x32, 0x19, D_04008298, 0x40, 0);
+    gDPSetCombineMode(gDisplayListHead++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+    if (game != 0) {
+        switch (game) {
+            case 1:
+                gDPSetPrimColor(gDisplayListHead++, 0, 0, 0xFF, 0x00, 0x00, 0xFF);
+                break;
+            case 2:
+                gDPSetPrimColor(gDisplayListHead++, 0, 0, 0x00, 0x96, 0x00, 0xFF);
+                break;
+            case 3:
+                gDPSetPrimColor(gDisplayListHead++, 0, 0, 0x00, 0x32, 0xFF, 0xFF);
+                break;
+            case 7:
+                gDPSetPrimColor(gDisplayListHead++, 0, 0, 0xFF, 0xFF, 0x00, 0xFF);
+                break;
+        }
+        Gfx_DrawTextureIa8(x + 6, y + 0x10, 0x26, 0x22, D_04008F20, 0x28, 0);
+        gDPSetPrimColor(gDisplayListHead++, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF);
+        Gfx_DrawTextureIa8(x + 9, y + 0x17, 0x20, 0x14, icons[port], 0x20, 0);
+    } else {
+        gDPSetPrimColor(gDisplayListHead++, 0, 0, 0x80, 0x80, 0x80, 0x64);
+        Gfx_DrawTextureIa8(x + 9, y + 0x17, 0x20, 0x14, icons[port], 0x20, 0);
+    }
+    gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
+}
 
 extern Color_RGB8 D_88402F7C;
 extern Color_RGB8 D_88402F80;

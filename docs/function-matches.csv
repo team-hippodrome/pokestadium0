@@ -697,7 +697,7 @@ func_88400064,0x88400064,src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c
 func_884000CC,0x884000CC,src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c,func_884000CC,m2c,m2c,c
 func_88400100,0x88400100,src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c,func_88400100,s1,stadium1:src/fragments/battle_engine/battle_engine_2FA4D0.c,c
 func_88400108,0x88400108,src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c,func_88400108,m2c,m2c,c
-func_88400168,0x88400168,src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c,,asm,,asm
+func_88400168,0x88400168,src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c,func_88400168,hand,,c
 func_88400458,0x88400458,src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c,func_88400458,hand,,c
 func_8840079C,0x8840079C,src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c,,asm,,asm
 func_88400A1C,0x88400A1C,src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c,Trade_DrawSaveSeqMessageBackdrop,s1,stadium1:src/fragments/trade_machine/trade_machine_291D60.c,c
