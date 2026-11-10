@@ -1435,11 +1435,35 @@ void Geo_NodeAnchor(GraphNode* arg0) {
     Geo_ProcessNodeChildren(arg0);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_800152AC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800152AC.s")
-#endif
+typedef struct GeoTextNode {
+    /* 0x00 */ GraphNode node;
+    /* 0x18 */ s16 font;
+    /* 0x1A */ s16 fontArg;
+    /* 0x1C */ s16 x;
+    /* 0x1E */ s16 y;
+    /* 0x20 */ s16 w;
+    /* 0x22 */ s16 h;
+    /* 0x24 */ const char* text;
+    /* 0x28 */ Color_RGBA8_u32 arg;
+} GeoTextNode;
+Gfx* func_8001B3AC(s16 x, s16 y, s16 arg2, s16 arg3, Color_RGBA8_u32 color, const char* fmt, ...);
+/**
+ * Geo callback for a text node: prints the node's formatted string with its
+ * font and colour and queues the resulting display list on the node's layer.
+ */
+void func_800152AC(GraphNode* arg0) {
+    GeoTextNode* arg = (GeoTextNode*)arg0;
+    Gfx* dl;
+
+    if (arg->text != NULL) {
+        Font_SetActive(arg->font, arg->fontArg);
+        dl = func_8001B3AC(arg->x, arg->y, arg->w, arg->h, arg->arg, arg->text);
+        if (dl != NULL) {
+            func_800135FC(arg->node.renderLayer, (s32)dl, 0, arg->node.renderFlags & 4);
+        }
+    }
+    Geo_ProcessNodeChildren(arg0);
+}
 
 extern Gfx D_01002480[];
 extern Gfx D_01002500[];

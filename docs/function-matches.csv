@@ -4501,7 +4501,7 @@ func_80014F78,0x80014F78,src/geo_render.c,func_80014F78,m2c,m2c+permuter,c
 func_80014FC4,0x80014FC4,src/geo_render.c,,asm,,asm
 func_80015214,0x80015214,src/geo_render.c,GeoRender_RecordAnchorPosition,s1,stadium1:src/geo_render.c,c
 func_80015280,0x80015280,src/geo_render.c,Geo_NodeAnchor,s1,stadium1:src/geo_render.c,c
-func_800152AC,0x800152AC,src/geo_render.c,,asm,,asm
+func_800152AC,0x800152AC,src/geo_render.c,func_800152AC,hand,,c
 func_80015330,0x80015330,src/geo_render.c,func_80015330,s1,,c
 func_8001560C,0x8001560C,src/geo_render.c,Geo_RenderRootNode,s1,stadium1:src/geo_render.c,c
 func_80015798,0x80015798,src/geo_render.c,Geo_ProcessCallbacks,s1,stadium1:src/geo_render.c,c
