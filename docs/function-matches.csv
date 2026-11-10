@@ -4534,7 +4534,7 @@ func_8001A118,0x8001A118,src/graphics_textures_2.c,func_8001A118,hand,,c
 func_8001A194,0x8001A194,src/graphics_textures_2.c,func_8001A194,hand,,c
 func_8001A360,0x8001A360,src/graphics_textures_2.c,Font_Free,s1,stadium1:src/graphics_textures.c,c
 func_8001A384,0x8001A384,src/graphics_textures_2.c,Font_SetActive,hand,,c
-func_8001A3E4,0x8001A3E4,src/graphics_textures_2.c,,asm,,asm
+func_8001A3E4,0x8001A3E4,src/graphics_textures_2.c,func_8001A3E4,hand,,c
 func_8001A920,0x8001A920,src/graphics_textures_2.c,String_CopyBytesAndAdvance,s1,stadium1:src/graphics_textures.c,c
 func_8001A944,0x8001A944,src/graphics_textures_2.c,func_8001A944,hand,,c
 func_8001AA60,0x8001AA60,src/graphics_textures_2.c,func_8001AA60,m2c,m2c,c
@@ -4820,7 +4820,7 @@ func_80039010,0x80039010,src/libnumus/player.c,,asm,,asm
 func_80039328,0x80039328,src/libnumus/player.c,Audio_ComputeVoiceVolume,hand,,c
 func_800393F8,0x800393F8,src/libnumus/player.c,Audio_AdvanceVoicePitch,s1,stadium1:src/libnumus/player.c,c
 func_80039530,0x80039530,src/libnumus/player.c,Audio_UpdateVoicePlaybackEnd,hand,,c
-func_800395D0,0x800395D0,src/libnumus/player.c,,asm,,asm
+func_800395D0,0x800395D0,src/libnumus/player.c,func_800395D0,hand,,c
 func_80039A44,0x80039A44,src/libnumus/player.c,func_80039A44,hand,,c
 func_80039A60,0x80039A60,src/libnumus/player.c,Audio_AdvancePanModulation,hand,,c
 func_80039B2C,0x80039B2C,src/libnumus/player.c,Audio_AdvancePeriodicPitchModulation,hand,,c

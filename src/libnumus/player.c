@@ -1546,11 +1546,67 @@ void Audio_UpdateVoicePlaybackEnd(channel_t* arg0) {
     M2C_FIELD(arg0, u8*, 0xD1) = 1;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_800395D0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800395D0.s")
-#endif
+void func_8003A800(void*, s32);
+void func_800395D0(channel_t* arg0) {
+    u32 temp_ft4;
+    u32 temp_a0;
+    UNUSED s32 pad; // FAKE
+
+    if (M2C_FIELD(arg0, u8**, 0x144) != NULL) {
+        if (((M2C_FIELD(arg0, u64*, 0x0) >= M2C_FIELD(arg0, u64*, 0x28)) && (M2C_FIELD(arg0, u8**, 0x144)[0x1E] < 4)) ||
+            (M2C_FIELD(arg0, s32*, 0x34) == 0)) {
+            M2C_FIELD(arg0, u8**, 0x144)[0x1E] = 4;
+            temp_ft4 = (f32)M2C_FIELD(M2C_FIELD(arg0, u8**, 0x144), u16*, 0x1C) /
+                       ((f32)M2C_FIELD(arg0, u16*, 0xA8) * 0.00390625);
+            if (temp_ft4 == 0) {
+                temp_ft4++;
+            }
+            M2C_FIELD(M2C_FIELD(arg0, u8**, 0x144), s32*, 0x20) = (u32)D_800B3CC4 + temp_ft4 + 2;
+            n_alSynSetVol((N_ALVoice*)M2C_FIELD(arg0, u8**, 0x144), 0, (u32)D_800B3650 * temp_ft4);
+            func_8003A800(M2C_FIELD(arg0, u8**, 0x144), 0);
+            M2C_FIELD(arg0, u8**, 0x144) = NULL;
+            M2C_FIELD(arg0, u32*, 0xD8) = 1;
+            M2C_FIELD(arg0, u8*, 0xDD) = 0;
+            M2C_FIELD(arg0, s32*, 0x34) = 0;
+        } else {
+            switch (M2C_FIELD(arg0, u8**, 0x144)[0x1E]) {
+                case 0:
+                case 1:
+                    temp_a0 = (u32)(M2C_FIELD(arg0, u64*, 0x0) - M2C_FIELD(arg0, u64*, 0x20)) >> 8;
+                    if (temp_a0 >= M2C_FIELD(arg0, u8*, 0xD4)) {
+                        M2C_FIELD(arg0, u8**, 0x144)[0x1E]++;
+                        M2C_FIELD(arg0, u8*, 0xD2) = M2C_FIELD(arg0, u8*, 0xCF);
+                    }
+                    break;
+
+                case 2:
+                    M2C_FIELD(arg0, u32*, 0xD8) = 1;
+                    temp_a0 = ((u32)(M2C_FIELD(arg0, u64*, 0x0) - M2C_FIELD(arg0, u64*, 0x20)) >> 8) - M2C_FIELD(arg0, u8*, 0xD4);
+                    if (temp_a0 < M2C_FIELD(arg0, u8*, 0xD5)) {
+                        M2C_FIELD(arg0, u8*, 0xD2) = (u32)(M2C_FIELD(arg0, f32*, 0x70) * temp_a0) + M2C_FIELD(arg0, u8*, 0xCF);
+                    } else {
+                        M2C_FIELD(arg0, u8**, 0x144)[0x1E]++;
+                        M2C_FIELD(arg0, u8*, 0xD2) = M2C_FIELD(arg0, u8*, 0xD0);
+                    }
+                    break;
+
+                case 3:
+                    break;
+            }
+        }
+    } else {
+        u32 attack = M2C_FIELD(arg0, u8*, 0xD4);
+        M2C_FIELD(arg0, u32*, 0xD8) = (f32)attack / ((f32)M2C_FIELD(arg0, u16*, 0xA8) * 0.00390625) *
+                                      (f32)D_800B3650;
+        M2C_FIELD(arg0, u8*, 0xD2) = M2C_FIELD(arg0, u8*, 0xCF);
+        temp_a0 = (u32)(M2C_FIELD(arg0, u64*, 0x0) - M2C_FIELD(arg0, u64*, 0x20)) >> 8;
+        if (temp_a0 < attack) {
+            M2C_FIELD(arg0, u8*, 0xD1) = 1;
+        } else {
+            M2C_FIELD(arg0, u8*, 0xD1) = 2;
+        }
+    }
+}
 
 void func_80039A44(channel_t* cp) {
     M2C_FIELD(cp, u32*, 0xA0) = M2C_FIELD(cp, u64*, 0x20);

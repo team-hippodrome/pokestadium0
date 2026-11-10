@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5337,
-  "asm_owners": 107,
+  "c_owners": 5339,
+  "asm_owners": 105,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -627,7 +627,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "d603b82d7fff5c27b70945bd7f247b41f4cf3feb6c5f73c15326f49d3c42cb15",
+    "docs/function-matches.csv": "94b6278b6c8b2a151595521274d9f3c9a2c3f93f30d319390ec392dfe5953d6b",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -1030,7 +1030,7 @@
     "src/gfx_buffer.c": "8763545514d8fbae9e0f5bba8be79ea47a1db08f2e40b1ceccb6c16d0a5e59e5",
     "src/gfx_rect.c": "aa0d5e4c1ee103a6195cc63d2e2e8f303c99b8a7dcbfe54b922dfd7c5948eee8",
     "src/graphics_textures.c": "1691764c6592b2392747dcba4e39f0b5b11c3d26acd6f4a4cdadf0ce705d7b54",
-    "src/graphics_textures_2.c": "cee07ff76cdd8fb3c8e96834cba7dc5ee18d0079b7760113422e431be66bca93",
+    "src/graphics_textures_2.c": "63080b1c09315a5085ce171d653bbe7728fb6229b35bc5716498830b5ef08da4",
     "src/hal_libc.c": "d50da750462ef0b7edaeb89aa0991db3940b5e96b258447e64ff837325d362ba",
     "src/input.c": "7f601d1f48a9cc0f741568305bfc7ab90486de0197d64c06ac6f6ddba8bb8bf3",
     "src/jpeg_decoder.c": "e8422a5d5560a45a5dca3f3da8fdddf0e15fe81913805b4ce4f02221539f4e0e",
@@ -1084,7 +1084,7 @@
     "src/libnaudio/n_synsetvol.c": "0f602b1c13bf4ac345519452768cbdc7f3c2571c1b3537627c436fd0fae1ea05",
     "src/libnaudio/n_synstopvoice.c": "5ff471cf90eb7868a0e5fd9929a9a43375bf232f273fca3faa864f5f9f86b432",
     "src/libnaudio/n_synthesizer.c": "fe08f80aa7a3bcc7363b51d040e90dcd2020e9572ce620437f0338bc87a9519a",
-    "src/libnumus/player.c": "5040de0c14b4707ee1b8e701d73f46e60b4c9745035a64650cd677ce1d758dc5",
+    "src/libnumus/player.c": "111f83c0e909dc860140eb0a461ed2cc6e25217e3614da620534a7b40bf7f8e9",
     "src/libultra/audio/auxbus.c": "af53c8dc7c5493dbfaba49a5ef1cc178229208438c4f7a4841f4723a18f53867",
     "src/libultra/audio/copy.c": "45a07d253f29377f938e0e6995dbdda906df1d162a2b26fd115dfa4170e3b649",
     "src/libultra/audio/drvrnew.c": "c264a4121c2aee8e587c171aba32ef051f2a1b5f7ecf8aa3b05937a79c17bed2",
