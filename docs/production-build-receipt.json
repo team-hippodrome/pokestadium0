@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5327,
-  "asm_owners": 117,
+  "c_owners": 5328,
+  "asm_owners": 116,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -627,7 +627,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "216d27df169bb996703a5b9313d3d2d6573d5447f5b8f6535318ab164fb7fa05",
+    "docs/function-matches.csv": "ba2b82d217ea6bf3f55c9e6e1058d140ff8034f5b2e1dca82f33d017984ad3fa",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -704,7 +704,7 @@
     "src/fragments/fragment000_80C00/81111C20.c": "885778daf5aaed442fe34a9e23e9b9a0ef1e83665af97b30161dc7870e0144e4",
     "src/fragments/fragment000_80C00/81117B20.c": "3843091a770c9a107a189ef652ff919fc1eac6d520dd8100299adf9b1616cefc",
     "src/fragments/fragment000_80C00/battle_engine_2FA4D0.c": "02a9da163fe3814bf2eef674b8141105d905c01b33cfedd65d4c6caca76e6fa0",
-    "src/fragments/fragment000_80C00/battle_engine_309ED0.c": "7db2ecea82fef4cc9be28dac6435b96abf1d4cd782076aff8913962b370b2960",
+    "src/fragments/fragment000_80C00/battle_engine_309ED0.c": "5b2d72efaf7fb2a32cd416987331b6f8810789818513926fd91fcea64f39cff2",
     "src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c": "2925e27dd6a36d0e01478d1ff18d2eb47365f73c2ce654dd225be6dd50411d2b",
     "src/fragments/fragment000_80C00/gb_tower_emulator_86920.c": "8dd47aae23bac726edbe4de58ca331dfa53a27f979247748193b3ee9f1660a37",
     "src/fragments/fragment000_80C00/gb_tower_emulator_86920_8110B880.c": "7b7abe0669aa854c7f153161d4269c86bcf1c0165c5e4f87d90ba4e79a807076",

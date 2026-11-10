@@ -326,7 +326,7 @@ typedef struct SampleHeader8110E500 {
 } SampleHeader8110E500; // size = 0x10
 
 typedef struct SampleLoad8110E500 {
-    /* 0x00 */ s8 medium;
+    /* 0x00 */ u8 medium;
     /* 0x01 */ u8 arg0;
     /* 0x02 */ u8 arg1;
     /* 0x04 */ s32 devAddr;
@@ -453,11 +453,58 @@ void func_8110E71C(Owner8110E71C* arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110E784; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110E784.s")
-#endif
+s32 func_8004D1C0(OSMesgQueue*, u32*, s32);
+void func_8110E910(s8* arg0, s32 arg1);
+void func_8110E994(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3);
+
+/**
+ * Zero's version of OoT's AudioLoad_ProcessSlowLoads: steps the two slow sample
+ * loads, copying at most 0x1000 bytes per call and finishing a load once nothing
+ * is left.
+ */
+void func_8110E784(s32 resetStatus) {
+    u8* table = D_811858A4;
+    SampleLoad8110E500* load;
+    s32 i;
+
+    for (i = 0; i < 2; i++) {
+        load = &D_81180610.slots[i];
+        switch (D_81180610.slots[i].state) {
+            case 2:
+                func_8004D1C0((OSMesgQueue*)load->unk_2C, NULL, 1);
+                if (resetStatus != 0) {
+                    load->state = 3;
+                    break;
+                }
+            case 1:
+                load->state = 2;
+                if (load->size == 0) {
+                    func_8110E71C((Owner8110E71C*)load);
+                    load->state = 3;
+                    *load->status = 1;
+                } else if (load->size < 0x1000) {
+                    if (load->medium == 1) {
+                        u32 size = load->size;
+
+                        func_8110E994(load->devAddr, load->ramAddr, size, *(s16*)(table + 2));
+                    } else {
+                        func_8110E910((s8*)load, load->size);
+                    }
+                    load->size = 0;
+                } else {
+                    if (load->medium == 1) {
+                        func_8110E994(load->devAddr, load->ramAddr, 0x1000, *(s16*)(table + 2));
+                    } else {
+                        func_8110E910((s8*)load, 0x1000);
+                    }
+                    load->size -= 0x1000;
+                    load->ramAddr += 0x1000;
+                    load->devAddr += 0x1000;
+                }
+                break;
+        }
+    }
+}
 
 extern u8 D_81137E3C[];
 void func_8110DBA0(s8*, s32, s32, s32, s32, s32, OSMesgQueue*, s32, u8*);
