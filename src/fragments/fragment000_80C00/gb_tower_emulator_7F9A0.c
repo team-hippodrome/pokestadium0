@@ -1213,11 +1213,17 @@ s32 func_8110659C(void)
   return 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110665C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110665C.s")
-#endif
+s32 func_8110665C(void) {
+    u8 idx = D_811565A0;
+    volatile GbpakChannel811023DC* ch = &D_811561C8[idx];
+
+    ch->status = 0;
+    ch->request = 8;
+    func_8004CFB0(&D_81156458, idx, 1);
+    while (D_81156475 != 0) {
+    }
+    return D_811561C8[D_811565A0].status & 0x80;
+}
 
 extern M2C_UNK D_8115623C;
 extern u8 D_811565A1;
