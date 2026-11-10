@@ -239,11 +239,45 @@ void func_88401290(void) {
     Font_EndTexturedTextRendering();
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_884014B4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment006_162BE0/func_884014B4.s")
-#endif
+extern char D_88403234[];
+extern char D_88403240[];
+extern char D_8840324C[];
+extern char D_88403254[];
+extern char D_8840325C[];
+extern char D_88403268[];
+extern char D_8840327C[];
+extern char D_88403290[];
+extern char D_884032A0[];
+extern u8 D_8F4B2EB0[];
+void func_884014B4(s32 arg0, u8 arg1) {
+    Color_RGB8 sp44 = {0x00, 0x00, 0x32};
+    Color_RGB8 sp40 = {0x00, 0x00, 0xC8};
+    static char *D_88402FA4[] = {D_88403234, D_88403240};
+    static char *D_88402FAC[] = {D_8840324C, D_88403254};
+    s32 row;
+
+    row = arg0;
+    Ui_DrawGradientPanel(0x32, 0x3C, 0xDC, 0x7D, &sp44, &sp40);
+    gSPDisplayList(gDisplayListHead++, D_80060290);
+    Gfx_DrawTextureRgba16(0x3A, (row * 20) + 0x63, 0x18, 0xE, (u8 *) Util_ConvertAddrToVirtAddr((uintptr_t) D_8F4B2EB0), 0x18, 0x200000);
+    gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
+    Font_BeginTranslucentTextRendering();
+    Font_EnableTwoCycleTexturing();
+    Font_SetActive(8, -2);
+    Gfx_SetPrimColor(100, 255, 150, 255);
+    Font_Printf(0x6E, 0x44, D_8840325C);
+    Font_DisableTwoCycleTexturing();
+    Font_SetActive(4, -2);
+    Gfx_SetEnvColor(255, 255, ((row * 20) + 0x63 == 0x63) ? 0 : 255, 255);
+    Font_Printf(0x52, 0x62, D_88403268, D_88402FA4[(arg1 & 1) != 0]);
+    Gfx_SetEnvColor(255, 255, ((row * 20) + 0x63 == 0x77) ? 0 : 255, 255);
+    Font_Printf(0x52, 0x76, D_8840327C, D_88402FAC[(arg1 & 2) != 0]);
+    Gfx_SetEnvColor(255, 255, ((row * 20) + 0x63 == 0x8B) ? 0 : 255, 255);
+    Font_Printf(0x52, 0x8A, D_88403290);
+    Gfx_SetEnvColor(255, 255, ((row * 20) + 0x63 == 0x9F) ? 0 : 255, 255);
+    Font_Printf(0x52, 0x9E, D_884032A0);
+    Font_EndTexturedTextRendering();
+}
 
 void func_8840173C(s32 arg0, s32 arg1) {
     Color_RGB8 sp4C = { 0x00, 0x00, 0x32 };
