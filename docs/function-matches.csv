@@ -2386,7 +2386,7 @@ func_82173398,0x82173398,src/fragments/fragment012_17ED00/battle_engine_347330_8
 func_82173418,0x82173418,src/fragments/fragment012_17ED00/battle_engine_347330_82173418.c,TerrainGrid_Draw,s1,stadium1:src/fragments/battle_engine/battle_engine_347330.c,c
 func_82174130,0x82174130,src/fragments/fragment012_17ED00/battle_engine_34A420.c,Radial20_Init,s1,stadium1:src/fragments/battle_engine/battle_engine_34A420.c,c
 func_82174270,0x82174270,src/fragments/fragment012_17ED00/battle_engine_34A420.c,Strip400_GetTailFadeRatio,s1,stadium1:src/fragments/battle_engine/battle_engine_34A420.c,c
-func_821742F0,0x821742F0,src/fragments/fragment012_17ED00/battle_engine_34A420.c,,asm,,asm
+func_821742F0,0x821742F0,src/fragments/fragment012_17ED00/battle_engine_34A420.c,func_821742F0,hand,,c
 func_821748CC,0x821748CC,src/fragments/fragment012_17ED00/battle_engine_34A420.c,func_821748CC,s1,,c
 func_82174B20,0x82174B20,src/fragments/fragment012_17ED00/battle_engine_34A420.c,Radial20_ResetPool,s1,stadium1:src/fragments/battle_engine/battle_engine_34A420.c,c
 func_82174C30,0x82174C30,src/fragments/fragment012_17ED00/battle_engine_34A420.c,func_82174C30,s1,,c

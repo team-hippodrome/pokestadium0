@@ -31,8 +31,8 @@ typedef struct Strip400Node {
     /* 0x08 */ f32 unk_08;
     /* 0x0C */ f32 unk_0C;
 } Strip400Node;
-extern Strip400State sTrailState;
-extern Strip400Node sTrailPoints[400];
+Strip400State sTrailState;
+Strip400Node sTrailPoints[400];
 extern s32 pad_D_84398F48[2];
 extern s32 pad_D_84389178[2];
 
@@ -93,11 +93,105 @@ f32 Strip400_GetTailFadeRatio(void) {
     return tmp;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_821742F0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821742F0.s")
-#endif
+s32 func_821742F0(void) {
+    s32 i;
+    f32 spB8;
+    f32 temp_fs0_2;
+    f32 temp_fs4;
+    f32 temp_fs5;
+    f32 temp_ft0;
+    f32 var_fs1;
+    Strip400Node* var_s0;
+    Strip400State* ptr = &sTrailState;
+    f32 sp98;
+    f32 sp94;
+    f32 sp90;
+    f32 tmp2;
+    s32 tmp00;
+    Vec3f sp7C;
+
+    ptr->unk_00++;
+    if (ptr->unk_06 < ptr->unk_00) {
+        return -1;
+    }
+
+    if ((ptr->unk_06 - 0x28) < ptr->unk_00) {
+        ptr->unk_00 = ptr->unk_06 - 0x34;
+        ptr->unk_02++;
+        if (ptr->unk_02 >= 0x15) {
+            return -1;
+        }
+    } else if (ptr->unk_00 < 0x1E) {
+        ptr->unk_2A += 10;
+        if (ptr->unk_2A > 0xC8) {
+            ptr->unk_2A = 0xC8;
+        }
+    }
+
+    BattleAnim_GetCurrentOwnerBonePosition(&sp7C);
+    sp98 = sp7C.x;
+    sp94 = sp7C.y;
+    sp90 = sp7C.z;
+
+    ptr->unk_28 += 6;
+    if (ptr->unk_28 > 0xC8) {
+        ptr->unk_28 = 0xC8;
+    }
+
+    if (((ptr->unk_06 - 0x34) < ptr->unk_00) && (ptr->unk_00 < (ptr->unk_06 - 0x28))) {
+        ptr->unk_24 -= 0.1;
+        if (ptr->unk_24 < 0.25) {
+            ptr->unk_24 = 0.25f;
+        }
+    }
+
+    var_s0 = &sTrailPoints[0];
+
+    for (i = 0; i < ptr->unk_28; i++) {
+        tmp00 = ptr->unk_00;
+
+        if ((ptr->unk_06 - 0x28) < tmp00) {
+            var_s0->unk_0C -= 6.0;
+            if (var_s0->unk_0C < ptr->unk_18) {
+                var_s0->unk_0C = ptr->unk_18;
+            }
+            var_fs1 = __sinf((((ptr->unk_00 + i) % 200) * 251.327419281005859) / 200.0) * 0.1;
+        } else if ((ptr->unk_06 - 0x2D) < tmp00) {
+            var_fs1 = __sinf((((ptr->unk_00 + i) % 200) * 251.327419281005859) / 200.0) + 2.0;
+            var_s0->unk_0C += var_fs1;
+        } else if ((ptr->unk_06 - 0x34) < tmp00) {
+            var_s0->unk_0C -= 8.0;
+            if (var_s0->unk_0C < ptr->unk_18) {
+                var_s0->unk_0C = ptr->unk_18;
+            }
+            var_fs1 = __sinf((((ptr->unk_00 + i) % 200) * 251.327419281005859) / 200.0) * 0.1;
+        } else {
+            var_fs1 = __sinf((((ptr->unk_00 + i) % 200) * 188.495564460754395) / 200.0);
+            var_s0->unk_0C += var_fs1;
+        }
+
+        tmp2 = var_s0->unk_0C;
+
+        temp_fs4 = (((tmp00 + i) % 200) * 69.1150403022766113) / 200.0;
+        temp_fs5 = (((tmp00 + i) % 200) * 12.566370964050293) / 200.0;
+
+        spB8 = (__sinf(temp_fs4) * tmp2) + sp98;
+        temp_fs0_2 = (__sinf(temp_fs5) * (0.7 * tmp2)) + sp94;
+        temp_ft0 = __cosf(temp_fs4) * tmp2 + sp90;
+
+        var_s0->unk_08 = temp_ft0;
+        var_s0->unk_04 = temp_fs0_2 + var_fs1;
+        var_s0->unk_00 = spB8;
+        var_s0++;
+
+        var_s0->unk_00 = spB8;
+        var_s0->unk_04 = (2.0 * __sinf(temp_fs5 * 3.0)) + temp_fs0_2 + var_fs1;
+        var_s0->unk_08 = temp_ft0;
+        var_s0++;
+    }
+
+    return 0;
+}
 
 extern Gfx D_82192AB0[];
 Gfx* func_821748CC(Gfx* arg0) {
