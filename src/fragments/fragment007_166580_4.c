@@ -537,11 +537,294 @@ void func_820037D0(SlotMenu* arg0) {
     D_8200AC58[(arg0->unk_48 * 6 + arg0->cur) % 24] = -1;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_820038B0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment007_166580/func_820038B0.s")
-#endif
+typedef struct Blk820038B0 {
+    s32 w[0x85];
+} Blk820038B0;
+extern u8 D_82009D04[];
+void func_82001BB4();
+
+s32 func_820038B0(s8 *arg0)
+{
+  s32 ret = 0;
+  s32 next;
+  u8 *rec;
+  if ((*((s32 *) (((s8 *) arg0) + 8))) != 0)
+  {
+    next = *((s32 *) (((s8 *) (*((s8 **) (((s8 *) arg0) + 0xC)))) + 0x28));
+    if (next == 4)
+    {
+      if ((arg0 && arg0) && arg0) // FAKE: keeps arg0 in a0 for the state read above
+      {
+      }
+      *((s32 *) (((s8 *) arg0) + 4)) = *((s32 *) (((s8 *) arg0) + 8));
+      if ((*((s32 *) (((s8 *) arg0) + 8))) == 0xD)
+      {
+        ret = 1;
+      }
+      else
+      {
+        func_82002980(arg0);
+        *((s32 *) (((s8 *) arg0) + 8)) = 0;
+      }
+      return ret;
+    }
+    if ((next != 1) && (next != 2))
+    {
+      return 0;
+    }
+  }
+  switch (*((s32 *) (((s8 *) arg0) + 4)))
+  {
+    case 1:
+      if (func_8002FD8C(arg0 + 0x40) == 0)
+    {
+      next = func_8002BC14(*((s32 *) (((s8 *) arg0) + 0x744)));
+      if (next == (-1))
+      {
+        func_8003F6AC(3);
+        ret = -1;
+      }
+      else
+        if (next == 1)
+      {
+        s32 sp40;
+        rec = (*(*((u8 ****) (((s8 *) arg0) + 0xC4))))[*((s32 *) (((s8 *) arg0) + 0x48))];
+        if (((*((s32 *) (((s8 *) arg0) + 0x740))) == 0) && ((func_820001B8(rec + 0x1C, &sp40), sp40 == 6)))
+        {
+          func_8003F6AC(8);
+          func_8002CEEC(arg0 + 0x74C, D_82009D04, 1, 2, 9);
+          func_82002BF8(arg0, 0xC, 0);
+        }
+        else
+        {
+          func_8003F6AC(2);
+          *((s32 *) (((s8 *) arg0) + 0x784)) = 0;
+          if (rec[0] & 2)
+          {
+            func_82000900(arg0 + 0xC8, *((s32 *) (((s8 *) arg0) + 0x738)));
+            *((s32 *) (((s8 *) arg0) + 0x784)) |= 1;
+          }
+          else
+          {
+            *((Blk820038B0 *) (arg0 + 0xC8)) = *((Blk820038B0 *) rec);
+          }
+          func_80027410(arg0 + 0x2DC, (s32) (arg0 + 0xE4), 0x54, 6, 6);
+          func_8002DECC(arg0 + 0x2F8, arg0 + 0x2DC, arg0 + 0x2EC, func_82001BB4, 3, 0x84, 0x32);
+          *((s32 *) (((s8 *) arg0) + 0x6EC)) = 0;
+          *((s32 *) (((s8 *) arg0) + 0x318)) |= 0x10000;
+          func_820023E8(arg0 + 0x2F8);
+          func_82002BF8(arg0, func_820036A8(arg0), 0);
+          *((s32 *) (((s8 *) arg0) + 0x310)) = *((s32 *) (((s8 *) arg0) + 0x744));
+          func_8000B2F4(*((s32 *) (((s8 *) arg0) + 0x744)));
+        }
+      }
+    }
+      break;
+
+    case 2:
+      if (func_82003688(arg0) == 0)
+    {
+      next = func_8002BC14(*((s32 *) (((s8 *) arg0) + 0x744)));
+      if (next == (-1))
+      {
+        func_8003F6AC(3);
+        func_82002BF8(arg0, 1, 1);
+      }
+      else
+        if (next == 1)
+      {
+        if (((Slot54 *) (arg0 + 0xE4))[*((s32 *) (((s8 *) arg0) + 0x300))].flag & 0x40)
+        {
+          func_8003F6AC(2);
+          func_82002BF8(arg0, 3, 0);
+        }
+        else
+        {
+          func_8003F6AC(8);
+        }
+      }
+    }
+      break;
+
+    case 3:
+      next = func_820012B4(arg0 + 0x5CC);
+      if (next == (-1))
+    {
+      func_82002BF8(arg0, 2, 3);
+    }
+    else
+      if (next == 1)
+    {
+      func_8003F6AC(2);
+      func_82002778(arg0 + 0x2F8);
+      func_82001708(arg0 + 0xE4, *((s32 *) (((s8 *) arg0) + 0x300)));
+      func_82002528(arg0 + 0x2F8);
+      func_82002BF8(arg0, func_820036A8(arg0), 1);
+    }
+      break;
+
+    case 4:
+      next = func_82008488(arg0 + 0x370);
+      if (next == (-1))
+    {
+      func_82002BF8(arg0, 1, 1);
+    }
+    else
+      if (next == 1)
+    {
+      func_8003F6AC(2);
+      func_82002BF8(arg0, 8, 1);
+    }
+      break;
+
+    case 5:
+      next = func_820087D4(arg0 + 0x428);
+      if (next == (-1))
+    {
+      func_82002BF8(arg0, 1, 1);
+    }
+    else
+      if (next == 1)
+    {
+      if (arg0)
+      {
+      }
+      *((s32 *) (((s8 *) arg0) + 0x784)) |= 2;
+      func_82002BF8(arg0, 6, 1);
+    }
+      break;
+
+    case 6:
+      if (func_82003688(arg0) == 0)
+    {
+      next = func_8002BC14(*((s32 *) (((s8 *) arg0) + 0x744)));
+      if (next == (-1))
+      {
+        func_8003F6AC(3);
+        if ((*((s32 *) (((s8 *) arg0) + 0x784))) & 2)
+        {
+          func_82002BF8(arg0, 1, 0);
+        }
+        else
+        {
+          func_82002BF8(arg0, 0xA, 0);
+        }
+      }
+      else
+        if (next == 1)
+      {
+        func_8003F6AC(2);
+        if (((Slot54 *) (arg0 + 0xE4))[*((s32 *) (((s8 *) arg0) + 0x300))].flag & 1)
+        {
+          func_82002BF8(arg0, 8, 0);
+        }
+        else
+        {
+          func_82002BF8(arg0, 7, 0);
+        }
+      }
+    }
+      break;
+
+    case 8:
+      if (func_8003152C(arg0 + 0x6E4) == 0)
+    {
+      next = func_8002BC14(*((s32 *) (((s8 *) arg0) + 0x744)));
+      if (next == (-1))
+      {
+        func_8003F6AC(3);
+        if ((*((s32 *) (((s8 *) arg0) + 0x748))) != 0)
+        {
+          func_82002BF8(arg0, 1, 0);
+        }
+        else
+        {
+          func_82002BF8(arg0, 6, 0);
+        }
+      }
+      else
+        if (next == 1)
+      {
+        if (!((*((u16 **) (((s8 *) arg0) + 0x6E8)))[*((s32 *) (((s8 *) arg0) + 0x6EC))] & 1))
+        {
+          func_8003F6AC(2);
+          func_82002BF8(arg0, 9, 0);
+        }
+        else
+        {
+          func_8003F6AC(8);
+        }
+      }
+    }
+      break;
+
+    case 7:
+      next = func_820012B4(arg0 + 0x5CC);
+      if (next == (-1))
+    {
+      func_82002BF8(arg0, 6, 3);
+    }
+    else
+      if (next == 1)
+    {
+      func_8003F6AC(2);
+      func_82002BF8(arg0, 8, 1);
+    }
+      break;
+
+    case 9:
+      next = func_820012B4(arg0 + 0x5CC);
+      if (next == (-1))
+    {
+      func_82002BF8(arg0, 8, 3);
+    }
+    else
+      if (next == 1)
+    {
+      func_8003F6AC(0x22);
+      func_820037D0(arg0);
+      func_82002BF8(arg0, func_820036A8(arg0), 1);
+    }
+      break;
+
+    case 10:
+      next = func_82008B94(arg0 + 0x4DC);
+      if (next == (-1))
+    {
+      func_82002BF8(arg0, 1, 1);
+    }
+    else
+      if (next == 2)
+    {
+      func_8003F6AC(2);
+      *((s32 *) (((s8 *) arg0) + 0x300)) = 0;
+      *((s32 *) (((s8 *) arg0) + 0x6EC)) = 0;
+      func_82002BF8(arg0, 6, 1);
+    }
+    else
+      if (next == 1)
+    {
+      func_8003F6AC(0x20);
+      func_82002BF8(arg0, 0xB, 1);
+    }
+      break;
+
+    case 11:
+      ret = 1;
+      break;
+
+    case 12:
+      if ((*((u16 *) (((s8 *) (*((u16 **) (((s8 *) arg0) + 0x744)))) + 8))) & 0xC000)
+    {
+      func_8003F6AC(2);
+      func_82002BF8(arg0, 1, 1);
+    }
+      break;
+
+  }
+
+  return ret;
+}
 
 typedef struct Str82009D28 { char s[7]; } Str82009D28;
 typedef struct Str82009D40 { char s[11]; } Str82009D40;

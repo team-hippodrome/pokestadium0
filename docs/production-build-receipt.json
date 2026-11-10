@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5348,
-  "asm_owners": 96,
+  "c_owners": 5349,
+  "asm_owners": 95,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -617,7 +617,7 @@
     "src/vector_math.c"
   ],
   "source_registry_sha256": "42f373d4e7291a19b0ac00de0f699654828e4b8b3fc2db17bb268c6d0b441c67",
-  "section_registry_sha256": "26af7f0512ed451d96b568f42c00fab47713b27e21e0f7567311cd11141a518a",
+  "section_registry_sha256": "a5ee8f588133b37286dc62ca1ae95e2412981e2b247b0ef2a8bd477f2d83f13c",
   "headers_sha256": "0e45461d1ac0423bb33079c8ed1c2655e65a5aa153ba5545841944030c898720",
   "matching_registry_sha256": "d8bcc14a2a0db281cf30dcb9ddbd94d59e1afe84c70b4c8c017ea27ce60a251c",
   "build_tools_sha256": {
@@ -627,7 +627,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "2f89fc9812cca7a81cf2376cb0e236327ee3c691a086769bf1a7253b6a484df2",
+    "docs/function-matches.csv": "9944109ba08dc4ec8fe9bca77841aaa1ec4428cfa51647fddf45b3e63e9c5812",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -723,7 +723,7 @@
     "src/fragments/fragment007_166580.c": "dd66492c3cccb2f832deb3288427804461e99d3788a9503cba2128eae4cc3e03",
     "src/fragments/fragment007_166580_2.c": "56b0700668c3b37f0dc634a9de6e453c587f36ebfad129eaab6eaf7bc774fbec",
     "src/fragments/fragment007_166580_3.c": "091fc4e48c5bf3438b33d139e741226d026cf636c2eb3be84c0076ffc1bf1dcb",
-    "src/fragments/fragment007_166580_4.c": "bc035b29b8b1f0e31c25f16ead8b4277da64a534f38f9264413eea2782d28ca8",
+    "src/fragments/fragment007_166580_4.c": "39d5ff35ec0ae440a99a052bafbd253d11385172877ceaab3b12ad8071c1e5bf",
     "src/fragments/fragment007_166580_5.c": "9c8cf743dc70b5cffcac6378a3394928680d2691c6995340e1e39d69fe42dddc",
     "src/fragments/fragment008_1720F0.c": "b890dfac9b1856adc4afa988832994035642ded9e422f64678ad33bb2695c7a2",
     "src/fragments/fragment009_175570.c": "f15eaa1907af594a25af5f2c6890667b75e07bd3c706f091377747e8352bd54b",
