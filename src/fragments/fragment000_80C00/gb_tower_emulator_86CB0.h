@@ -332,7 +332,8 @@ void func_81113140(Particle3140* arg0);
 void func_81113F84(u8* arg0, u8 arg1);
 
 M2C_UNK func_81111DC8(s8 *);
-M2C_UNK func_81114B54(s8 *);
+struct SeqPlayer81114B54;
+void func_81114B54(struct SeqPlayer81114B54*);
 typedef struct Entry811151C8 {
     u32 b80 : 1;
     char pad[0x15C - 4];
@@ -343,7 +344,6 @@ void func_81110798(void);
 void func_811151C8(s32 arg0);
 
 M2C_UNK func_81111DC8(s8 *);                      /* extern */
-M2C_UNK func_81114B54(s8 *);                      /* extern */
 void func_81115254(s8 *arg0);
 
 // Scales channel arg0's unk_01C by arg2 percent: at once when arg1 == 0, otherwise as a ramp

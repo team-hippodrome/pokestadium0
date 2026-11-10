@@ -55,6 +55,9 @@ def load_symbols():
     return symbols
 
 
+TAIL_WORDS = 16
+
+
 def load_owner_words(rom):
     """(image_index, link address) -> owner words, from the inventory and ROM.
 
@@ -63,7 +66,7 @@ def load_owner_words(rom):
     import hashlib
     import pickle
     text = (ROOT / "docs/pragma-inventory.json").read_bytes()
-    key = hashlib.sha256(text + hashlib.sha256(rom).digest()).hexdigest()
+    key = hashlib.sha256(text + hashlib.sha256(rom).digest() + b"tail-v1").hexdigest()
     cache = ROOT / "build/check_functions_owners.pickle"
     if cache.exists():
         stored_key, owners = pickle.loads(cache.read_bytes())
@@ -80,17 +83,29 @@ def read_owner_words(rom):
     mapping = json.loads((ROOT / "docs/mappings/resident-fragments.json").read_text())
     images = {}
     owners = {}
+    starts = {}
+    for row in inventory["owners"]:
+        starts.setdefault(row["image_index"], []).append(int(row["start"], 0))
+    for index in starts:
+        starts[index].sort()
     for row in inventory["owners"]:
         index = row["image_index"]
         start, stop = int(row["start"], 0), int(row["end"], 0)
         if index is None:
-            raw = rom[start:stop]
+            blob = rom
         else:
             if index not in images:
                 images[index] = load_image(rom, mapping["fragments"][index])
-            raw = images[index][start:stop]
+            blob = images[index]
+        raw = blob[start:stop]
         words = list(struct.unpack(">%dI" % (len(raw) // 4), raw))
-        owners[(index, int(row["link_start"], 0))] = (row["name"], words)
+        # The unowned words that follow the owner, up to the next owner. The
+        # owner ranges stop at the last reachable instruction, so a function
+        # that ends in an endless loop leaves its dead epilogue here.
+        later = [s for s in starts[index] if s >= stop]
+        gap = blob[stop:min(later[0] if later else len(blob), stop + TAIL_WORDS * 4)]
+        tail = list(struct.unpack(">%dI" % (len(gap) // 4), gap[:len(gap) // 4 * 4]))
+        owners[(index, int(row["link_start"], 0))] = (row["name"], words, tail)
     return owners
 
 
@@ -122,15 +137,27 @@ def sext16(value):
     return value - 0x10000 if value & 0x8000 else value
 
 
-def compare(text, functions, relocations, name, vram, expected, symbols, learned=None):
+def compare(text, functions, relocations, name, vram, expected, symbols, learned=None, tail=()):
     """Return None on a match, else a short reason.
 
     With learned (a dict), a name with no known address is bound to the
     address the ROM implies and recorded there instead of failing.
+
+    A function may run past its owner only into tail, the unowned ROM words
+    after it, and only with words equal to those (a dead epilogue after an
+    endless loop, with no relocations).
     """
     offset, size = functions[name]
     count = size // 4
-    if count > len(expected) or any(expected[count:]):
+    if count > len(expected):
+        extra = struct.unpack(">%dI" % (count - len(expected)),
+                              text[offset + 4 * len(expected):offset + size])
+        if (list(extra) != list(tail[:len(extra)])
+                or any(offset + 4 * i in relocations for i in range(len(expected), count))):
+            return "size %d words, owner has %d" % (count, len(expected))
+        count = len(expected)
+        size = 4 * count
+    if any(expected[count:]):
         return "size %d words, owner has %d" % (count, len(expected))
     words = struct.unpack(">%dI" % count, text[offset:offset + size])
     by_offset = {value[0]: key for key, value in functions.items()}
@@ -236,7 +263,8 @@ def check_file(job):
         if owner is None:
             failures.append((name, "no assembly owner at this address"))
             continue
-        reason = compare(text, functions, relocations, name, address, owner[1], symbols, learned)
+        reason = compare(text, functions, relocations, name, address, owner[1], symbols, learned,
+                         owner[2])
         checked += 1
         if reason:
             failures.append((name, reason))

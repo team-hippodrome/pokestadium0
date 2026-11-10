@@ -75,11 +75,71 @@ void func_82121908(ActivePokemon* arg0, Vec3f* arg1) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82121954.s")
+void func_8210BCF0(Vec3f*, Vec3f*, f32*, s16*, s16*);
+f32 func_8210BF24(Vec3f a, Vec3f b);
+f32 func_82107F18(ActivePokemon* active_pokemon);
+extern s8* D_8219A5A0;
+/*
+ * Stadium 0 counterpart of Stadium 1's BattleScene_IsOwnerInViewWedgeAlt.
+ * Returns 1 when a2 lies inside the wedge in front of the camera eye
+ * (half-angle arg3, length arg4). In camera modes 2 and 6 the result is
+ * cleared again when the eye is within 1.5x arg0's func_82107F18 radius of
+ * arg0's anchor point.
+ */
+u16 func_82121954(ActivePokemon* arg0, CameraNode* arg1, ActivePokemon* a2, s16 arg3, f32 arg4) {
+    UNUSED s32 pad[6];
+    f32 sp94;
+    f32 sp90;
+    f32 sp8C;
+    f32 sp88;
+    f32 sp84;
+    UNUSED s32 pad2;
+    f32 sp7C;
+    f32 sp78;
+    ActivePokemon* arg2;
+    f32 sp70;
+    s16 sp6E;
+    s16 sp6C;
+    Vec3f sp60;
+    s32 sp5C;
+    f32 radius;
+
+    sp5C = 0;
+    func_8210BCF0(&arg1->view.targetPosition, &arg1->view.eyePosition, &sp70, &sp6E, &sp6C);
+    sp60.z = (COSS((sp6C - 0x8000)) * 30.0f) + arg1->view.eyePosition.z;
+    sp60.x = (SINS((sp6C - 0x8000)) * 30.0f) + arg1->view.eyePosition.x;
+    sp7C = (COSS(((sp6C - arg3) + 0x8000)) * arg4) + sp60.z;
+    sp88 = (SINS(((sp6C - arg3) + 0x8000)) * arg4) + sp60.x;
+    sp78 = (COSS((sp6C + arg3 + 0x8000)) * arg4) + sp60.z;
+    sp84 = (SINS((sp6C + arg3 + 0x8000)) * arg4) + sp60.x;
+
+    arg2 = a2;
+
+    sp94 = ((sp7C - arg2->displayObject.position.z) * (sp84 - arg2->displayObject.position.x)) -
+           ((sp78 - arg2->displayObject.position.z) * (sp88 - arg2->displayObject.position.x));
+    sp90 = ((sp78 - arg2->displayObject.position.z) * (sp60.x - arg2->displayObject.position.x)) -
+           ((sp60.z - arg2->displayObject.position.z) * (sp84 - arg2->displayObject.position.x));
+    sp8C = ((sp60.z - arg2->displayObject.position.z) * (sp88 - arg2->displayObject.position.x)) -
+           ((sp7C - arg2->displayObject.position.z) * (sp60.x - arg2->displayObject.position.x));
+
+    if (((sp94 >= 0.0f) && (sp90 >= 0.0f) && (sp8C >= 0.0f)) || ((sp94 <= 0.0f) && (sp90 <= 0.0f) && (sp8C <= 0.0f))) {
+        sp5C = 1;
+    }
+
+    if ((M2C_FIELD(D_8219A5A0, s32*, 0x1C) == 2) || (M2C_FIELD(D_8219A5A0, s32*, 0x1C) == 6)) {
+        func_82121908(arg0, &sp60);
+        sp60.y = a2->displayObject.position.y;
+        radius = func_82107F18(arg0);
+        if (func_8210BF24(arg1->view.eyePosition, sp60) <= (radius * 1.5f)) {
+            sp5C = 0;
+        }
+    }
+    return sp5C;
+}
 
 extern f32 D_FLT_82196230;
 extern f32 D_FLT_82196234;
-s32 func_82121954(ActivePokemon*, s32, ActivePokemon*, s16, f32);
+u16 func_82121954(ActivePokemon*, CameraNode*, ActivePokemon*, s16, f32);
 /*
  * func_82121C3C
  *
@@ -99,12 +159,12 @@ void func_82121C3C(s32 arg0) {
     ActivePokemonState* second_state = &sActivePokemon[1]->state;
     s32 mode = sBattleScene.scene->unk_1C;
     if ((mode != 4) && (mode != 8) && (mode != 7) && (mode != 0xB) && (mode != 9) && (mode != 0xA)) {
-        if (func_82121954(sActivePokemon[0], arg0, sActivePokemon[0], M2C_FIELD(first_state, s16*, 0x34), D_FLT_82196230) != 0) {
+        if (func_82121954(sActivePokemon[0], (CameraNode*)arg0, sActivePokemon[0], M2C_FIELD(first_state, s16*, 0x34), D_FLT_82196230) != 0) {
             M2C_FIELD(sActivePokemon[0], u8*, 1) |= 1;
         } else {
             M2C_FIELD(sActivePokemon[0], u8*, 1) &= 0xFFFE;
         }
-        if (func_82121954(sActivePokemon[1], arg0, sActivePokemon[1], M2C_FIELD(second_state, s16*, 0x34), D_FLT_82196234) != 0) {
+        if (func_82121954(sActivePokemon[1], (CameraNode*)arg0, sActivePokemon[1], M2C_FIELD(second_state, s16*, 0x34), D_FLT_82196234) != 0) {
             M2C_FIELD(sActivePokemon[1], u8*, 1) |= 1;
         } else {
             M2C_FIELD(sActivePokemon[1], u8*, 1) &= 0xFFFE;
@@ -721,7 +781,30 @@ void BattleScene_ApproachCameraZoom(CameraNode* arg0, ActivePokemon* arg1) {
     BattleScene_SetCameraEyeFromAt(arg0, sp26, sp24, D_8219A534, 0.0f);
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82123684.s")
+void func_82123684(CameraNode* arg0, ActivePokemon* arg1) {
+    UNUSED s32 pad[3];
+    Vec3f sp50;
+    Vec3f sp44;
+    f32 sp40;
+    s16 sp3E;
+    s16 sp3C;
+    s16 sp3A;
+    s16 sp38;
+    s16 sp36;
+    s16 sp34;
+
+    BattleAnim_Vec3fCopy(&sp50, &arg0->view.targetPosition);
+    BattleAnim_Vec3fCopy(&sp44, &arg0->view.eyePosition);
+    func_82124874(arg0, arg1);
+    BattleAnim_CalculateDistanceAngles(&arg0->view.targetPosition, &arg0->view.eyePosition, &D_8219A534, &sp34, &sp38);
+    BattleAnim_CalculateDistanceAngles(&sp50, &sp44, &gCameraDistTarget, &sp36, &sp3A);
+    BattleAnim_ApproachF(&gCameraDistTarget, D_8219A534, 0.5f);
+    BattleAnim_StepToS16(&sp3A, sp38, 0x108);
+    BattleAnim_StepToS16(&sp36, sp34, 0xB6);
+    BattleAnim_CalculateDistanceAngles(&sp50, &arg0->view.targetPosition, &sp40, &sp3E, &sp3C);
+    Camera_ComputeEyeFromAngles(&sp50, &arg0->view.targetPosition, sp40, sp3E, sp3C);
+    BattleScene_SetCameraEyeFromAt(arg0, sp36, sp3A, gCameraDistTarget, 0.0f);
+}
 
 void BattleScene_SetCameraOwnerWideShot(CameraNode* arg0, ActivePokemon* arg1) {
     f32 sp3C;

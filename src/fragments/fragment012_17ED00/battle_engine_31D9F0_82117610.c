@@ -306,11 +306,106 @@ void BattleHud_DrawMonStatusBoxOpponent(ActivePokemon* arg0, s16 arg1, s16 arg2,
     BattleHud_DrawPartyBallRow(arg0, arg1 + 0x41, arg2 - 7);
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82118FD8.s")
+extern u8 D_0300A2C0[];
+extern u8 D_0300A440[];
+extern char D_821959C4[];
+extern char D_821959D0[];
+extern char D_821959DC[];
+void func_82118FD8(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
+    s32 i;
+    s32 pad; // FAKE
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82119364.s")
+    func_82116CF4(arg1 + 1, arg2 + 1, 0xC6, 0x10, arg3 * 3 + &D_8218B008, arg3 * 3 + &D_8218B014);
+    gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
+    BattleHud_DrawBorderTile(arg1 - 1, arg2 - 1, 8, 8, D_030096C0);
+    BattleHud_DrawBorderTile(arg1 - 1, arg2 + 4, 8, 8, D_030095C0);
+    BattleHud_DrawBorderTile(arg1 - 1, arg2 + 0xB, 8, 8, D_03009640);
+    BattleHud_DrawBorderTile(arg1 + 0xC1, arg2 - 1, 8, 8, D_03009840);
+    BattleHud_DrawBorderTile(arg1 + 0xC1, arg2 + 4, 8, 8, D_03009740);
+    BattleHud_DrawBorderTile(arg1 + 0xC1, arg2 + 0xB, 8, 8, D_030097C0);
+    for (i = 7; i != 0xC4; i += 7) {
+        BattleHud_DrawBorderTile(arg1 + i, arg2 - 1, 8, 8, D_03009940);
+        BattleHud_DrawBorderTile(arg1 + i, arg2 + 0xB, 8, 8, D_030098C0);
+    }
+    gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
+    gSPDisplayList(gDisplayListHead++, D_80060308);
+    Gfx_DrawTextureRgba16Ia8(arg1 + 7, arg2 + 3, 0x10, 0xC, D_03009E40, D_03009FC0, 0x10, 0x100000);
+    Gfx_DrawTextureRgba16Ia8(arg1 + 0x46, arg2 + 3, 0x10, 0xC, D_0300A080, D_0300A200, 0x10, 0x100000);
+    Gfx_DrawTextureRgba16Ia8(arg1 + 0x86, arg2 + 3, 0x10, 0xC, D_0300A2C0, D_0300A440, 0x10, 0x100000);
+    gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
+    func_8001AB6C();
+    func_8001A384(1, 0);
+    func_8001A944(arg1 + 0x16, arg2 + 4, D_821959C4);
+    func_8001A944(arg1 + 0x56, arg2 + 4, D_821959D0);
+    func_8001A944(arg1 + 0x96, arg2 + 4, D_821959DC);
+    func_8001ABBC();
+    BattleHud_DrawTranslucentShadowRect(arg1 - 2, arg2 - 2, 0xCC, 0x16, 0);
+}
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821196A4.s")
+extern u8 D_03009C00[];
+extern u8 D_03009D80[];
+extern u8 D_030099C0[];
+extern u8 D_03009B40[];
+extern char D_821959E4[];
+extern char D_821959EC[];
+void func_82119364(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
+    s32 i;
+    s32 pad; // FAKE
+
+    func_82116CF4(arg1 + 1, arg2 + 1, 0x7D, 0x10, arg3 * 3 + &D_8218B008, arg3 * 3 + &D_8218B014);
+    gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
+    BattleHud_DrawBorderTile(arg1 - 1, arg2 - 1, 8, 8, D_030096C0);
+    BattleHud_DrawBorderTile(arg1 - 1, arg2 + 4, 8, 8, D_030095C0);
+    BattleHud_DrawBorderTile(arg1 - 1, arg2 + 0xB, 8, 8, D_03009640);
+    BattleHud_DrawBorderTile(arg1 + 0x77, arg2 - 1, 8, 8, D_03009840);
+    BattleHud_DrawBorderTile(arg1 + 0x77, arg2 + 4, 8, 8, D_03009740);
+    BattleHud_DrawBorderTile(arg1 + 0x77, arg2 + 0xB, 8, 8, D_030097C0);
+    for (i = 7; i != 0x77; i += 7) {
+        BattleHud_DrawBorderTile(arg1 + i, arg2 - 1, 8, 8, D_03009940);
+        BattleHud_DrawBorderTile(arg1 + i, arg2 + 0xB, 8, 8, D_030098C0);
+    }
+    gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
+    gSPDisplayList(gDisplayListHead++, D_80060308);
+    Gfx_DrawTextureRgba16Ia8(arg1 + 7, arg2 + 3, 0x10, 0xC, D_030099C0, D_03009B40, 0x10, 0x100000);
+    Gfx_DrawTextureRgba16Ia8(arg1 + 0x40, arg2 + 3, 0x10, 0xC, D_03009C00, D_03009D80, 0x10, 0x100000);
+    gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
+    func_8001AB6C();
+    func_8001A384(1, 0);
+    func_8001A944(arg1 + 0x18, arg2 + 4, D_821959E4);
+    func_8001A944(arg1 + 0x51, arg2 + 4, D_821959EC);
+    func_8001ABBC();
+    BattleHud_DrawTranslucentShadowRect(arg1 - 2, arg2 - 2, 0x83, 0x16, 0);
+}
+
+extern u8 D_03009C00[];
+extern u8 D_03009D80[];
+extern char D_821959F8[];
+void func_821196A4(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
+    s32 i;
+    s32 pad; // FAKE
+
+    func_82116CF4(arg1 + 1, arg2 + 1, 0x47, 0x10, arg3 * 3 + &D_8218B008, arg3 * 3 + &D_8218B014);
+    gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
+    BattleHud_DrawBorderTile(arg1 - 1, arg2 - 1, 8, 8, D_030096C0);
+    BattleHud_DrawBorderTile(arg1 - 1, arg2 + 4, 8, 8, D_030095C0);
+    BattleHud_DrawBorderTile(arg1 - 1, arg2 + 0xB, 8, 8, D_03009640);
+    BattleHud_DrawBorderTile(arg1 + 0x3F, arg2 - 1, 8, 8, D_03009840);
+    BattleHud_DrawBorderTile(arg1 + 0x3F, arg2 + 4, 8, 8, D_03009740);
+    BattleHud_DrawBorderTile(arg1 + 0x3F, arg2 + 0xB, 8, 8, D_030097C0);
+    for (i = 7; i != 0x3F; i += 7) {
+        BattleHud_DrawBorderTile(arg1 + i, arg2 - 1, 8, 8, D_03009940);
+        BattleHud_DrawBorderTile(arg1 + i, arg2 + 0xB, 8, 8, D_030098C0);
+    }
+    gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
+    gSPDisplayList(gDisplayListHead++, D_80060308);
+    Gfx_DrawTextureRgba16Ia8(arg1 + 7, arg2 + 3, 0x10, 0xC, D_03009C00, D_03009D80, 0x10, 0x100000);
+    gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
+    func_8001AB6C();
+    func_8001A384(1, 0);
+    func_8001A944(arg1 + 0x18, arg2 + 4, D_821959F8);
+    func_8001ABBC();
+    BattleHud_DrawTranslucentShadowRect(arg1 - 2, arg2 - 2, 0x4A, 0x16, 0);
+}
 
 void func_82119994(s32 arg0, s32 arg1, s32 arg2) {
     func_8001A944(arg0 - ((func_800566BC(arg2) >> 1) * 0xA), arg1, arg2);

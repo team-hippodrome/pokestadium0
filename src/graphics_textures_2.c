@@ -74,7 +74,7 @@ void func_8001A118(s32 mask, s32 arg1, s32 arg2, s32 arg3, void* file);
 void func_8001A118(s32 mask, s32 arg1, s32 arg2, s32 arg3, void* file) {
     s32 index;
 
-    if (mask) {}
+    if (mask) {}  // karodo
     index = func_8001A0A4();
 
     ((FontEntry8001A118*)font_context)[index].file = file;
@@ -160,13 +160,48 @@ char* String_CopyBytesAndAdvance(char* buffer, const char* data, u32 size) {
     return (char*)memcpy(buffer, data, size) + size;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8001A944; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8001A944.s")
-#endif
+s16 func_8001A3E4(s16, s16, s16);
+void func_8001A944(s32 x, s32 y, const char* fmt, ...) {
+    u8 buf[0x100];
+    UNUSED s32 pad;
+    s32 startX;
+    s32 len;
+    u8* p;
+    s32 chr;
+    s32 draw;
+    va_list args;
 
-M2C_UNK func_8001A3E4(s16, s16, s16);               /* extern */
+    va_start(args, fmt);
+    startX = x;
+    len = _Printf(String_CopyBytesAndAdvance, (char*)buf, fmt, args);
+    if (len > 0) {
+        buf[len] = 0;
+        chr = buf[0];
+        p = &buf[1];
+        while (chr != 0) {
+            draw = 1;
+            if (!(font_context->line_break_flag & 4) && (chr == 0xA)) {
+                x = startX;
+                draw = 0;
+                y += font_context->line_height;
+            }
+            if (draw) {
+                if (chr >= 0x80) {
+                    if (*p != 0) {
+                        chr = *p | (chr << 8);
+                        p++;
+                    }
+                }
+                x = func_8001A3E4(x, y, chr & 0x7F7F);
+            }
+            chr = *p;
+            p++;
+        }
+    }
+    va_end(args);
+}
+
+s16 func_8001A3E4(s16, s16, s16);
 void func_8001AA60(s32 arg0, s32 arg1, s32 arg2) {
     func_8001A3E4(arg0, arg1, (s16) (arg2 & 0x7F7F));
 }
@@ -230,17 +265,44 @@ void func_8001AC7C(s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b, s32 a) {
     gDPSetTexturePersp(gDisplayListHead++, G_TP_PERSP);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8001ADA0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8001ADA0.s")
-#endif
+Vtx* func_8001ADA0(s16 x, s16 y, s16 width, s16 height, u8* tex) {
+    s16 w = (tex[0] * width) / 100;
+    s16 h = (tex[1] * height) / 100;
+    Vtx* vtx = Gfx_AllocDisplayList(sizeof(Vtx) * 4);
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8001AFB0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8001AFB0.s")
-#endif
+    Gfx_SetVertexAttributes(&vtx[0], x, y, 0, 0, 0, 0, 0, 0x7F, 0xFF);
+    Gfx_SetVertexAttributes(&vtx[1], x, y - h, 0, 0, (tex[1] << 5) - 1, 0, 0, 0x7F, 0xFF);
+    Gfx_SetVertexAttributes(&vtx[2], x + w, y - h, 0, (tex[0] << 5) - 1, (tex[1] << 5) - 1, 0, 0, 0x7F, 0xFF);
+    Gfx_SetVertexAttributes(&vtx[3], x + w, y, 0, (tex[0] << 5) - 1, 0, 0, 0, 0x7F, 0xFF);
+    return vtx;
+}
+
+typedef struct Glyph8001AFB0 {
+    /* 0x0 */ u8 advance;
+    /* 0x1 */ u8 height;
+    /* 0x2 */ u8 width;
+    /* 0x4 */ u8* file;
+} Glyph8001AFB0;
+s32 func_80019F70(u16);
+s32 func_8001AFB0(Gfx** arg0, s16 x, s16 y, s16 arg3, s16 arg4, u16 chr) {
+    Glyph8001AFB0* font = &((Glyph8001AFB0*)font_context)[font_context->unk_50];
+    s32 offset = func_80019F70(chr) * font->width * font->height;
+    Vtx* vtx = func_8001ADA0(x, y, arg3, arg4, (u8*)font);
+    Gfx* dl = Gfx_AllocDisplayList(0xA0);
+    Gfx* gfx = dl;
+
+    gDPLoadTextureBlock(gfx++, font->file + offset, G_IM_FMT_IA, G_IM_SIZ_8b, font->width, font->height, 0,
+                        G_TX_CLAMP, G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    gSPVertex(gfx++, vtx, 4, 0);
+    gSP2Triangles(gfx++, 0, 1, 2, 0, 0, 2, 3, 0);
+    if (*arg0 == NULL) {
+        gSPEndDisplayList(gfx++);
+    } else {
+        gSPBranchList(gfx++, *arg0);
+    }
+    *arg0 = dl;
+    return ((font->advance + font_context->unk_51) * arg3) / 100;
+}
 
 /**
  * Builds a small display list in freshly allocated display-list memory:
@@ -252,8 +314,9 @@ void func_8001AC7C(s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b, s32 a) {
  * Note: 0x80 bytes are allocated but only the first 0x40 (eight commands)
  * are written.
  */
-void func_8001B25C(Gfx* arg0, Color_RGBA8 arg1) {
-    Gfx* gfx = Gfx_AllocDisplayList(0x80);
+Gfx* func_8001B25C(Gfx* arg0, Color_RGBA8_u32 arg1) {
+    Gfx* dl = Gfx_AllocDisplayList(0x80);
+    Gfx* gfx = dl;
 
     gDPPipeSync(gfx++);
     gSPClearGeometryMode(gfx++, G_LIGHTING);
@@ -264,6 +327,7 @@ void func_8001B25C(Gfx* arg0, Color_RGBA8 arg1) {
     gSPDisplayList(gfx++, arg0);
     gSPSetGeometryMode(gfx++, G_LIGHTING);
     gSPEndDisplayList(gfx++);
+    return dl;
 }
 
 typedef struct Glyph8001B32C {
@@ -287,8 +351,46 @@ s32 func_8001B32C(s32 x, s32 scale, const char* str) {
     return x - (((strlen(str) >> 1) * width) >> 1);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8001B3AC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8001B3AC.s")
-#endif
+Gfx* func_8001B3AC(s16 x, s16 y, s16 arg2, s16 arg3, Color_RGBA8_u32 color, const char* fmt, ...) {
+    u8 buf[0x100];
+    UNUSED s32 pad[2];
+    s32 startX;
+    Gfx* dl;
+    s32 len;
+    u8* p;
+    s32 chr;
+    va_list args;
+
+    va_start(args, fmt);
+    startX = x;
+    dl = NULL;
+    len = _Printf(String_CopyBytesAndAdvance, (char*)buf, fmt, args);
+    if (len > 0) {
+        buf[len] = 0;
+        chr = buf[0];
+        p = &buf[1];
+        while (chr != 0) {
+            if (chr == 0xA) {
+                x = startX;
+                y -= ((u8)((FontEntry8001A118*)D_800AD200)[M2C_FIELD(D_800AD200, u8*, 0x38)].size_b * ((arg3 * 0xB) / 10)) / 100;
+            } else if (chr == 9) {
+                x = func_8001B32C(x, arg2, (const char*)p);
+            } else {
+                if (chr >= 0x80) {
+                    if (*p != 0) {
+                        chr = *p | (chr << 8);
+                        p++;
+                    }
+                }
+                x += func_8001AFB0(&dl, x, y, arg2, arg3, chr & 0x7F7F);
+            }
+            chr = *p;
+            p++;
+        }
+    }
+    if (dl != NULL) {
+        dl = func_8001B25C(dl, color);
+    }
+    va_end(args);
+    return dl;
+}

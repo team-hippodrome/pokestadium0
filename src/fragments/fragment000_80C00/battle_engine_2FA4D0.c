@@ -51,15 +51,15 @@ void func_8110FC40(void) {
 }
 
 M2C_UNK func_800567E0(M2C_UNK *, M2C_UNK *, M2C_UNK); /* extern */
-extern s8 D_811861DA;
-extern s8 D_811861DB;
+extern u8 D_811861DA;
+extern u8 D_811861DB;
 extern s8 D_811861DC;
 extern M2C_UNK D_811861E0;
 extern M2C_UNK D_811861E8;
 extern M2C_UNK *D_81186200;
 extern M2C_UNK D_81186208;
 extern M2C_UNK D_81186218;
-extern M2C_UNK *D_81186230;
+extern OSMesgQueue* D_81186230;
 extern M2C_UNK D_81186234;
 extern M2C_UNK D_81186238;
 extern M2C_UNK *D_81186250;
@@ -79,12 +79,12 @@ void func_8110FC48(void) {
 extern s32 D_811859D8[][2];
 
 void func_8110FCF0(DisplayObject* arg0, s32* arg1) {
-    s32* entry = D_811859D8[*(u8*)&D_811861DA & 0xFF];
+    s32* entry = D_811859D8[D_811861DA & 0xFF]; // FAKE: no-op mask on a u8
 
     entry[0] = (s32)arg0;
     entry[1] = *arg1;
-    if (*(u8*)&D_811861DB == ++(*(u8*)&D_811861DA)) {
-        (*(u8*)&D_811861DA)--;
+    if (D_811861DB == ++D_811861DA) {
+        D_811861DA--;
     }
 }
 
@@ -142,11 +142,23 @@ void func_8110FDC0(DisplayObject* arg0, s16 arg1) {
     func_8110FCF0(arg0, &sp1C);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110FDF0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110FDF0.s")
-#endif
+extern s32 D_811381D8;
+s32 func_8004CFB0(OSMesgQueue*, s32, s32);
+
+// No return statement: retail leaves the send result in v0 and func_8110FFC8 returns it.
+s32 func_8110FDF0(void) {
+    s32 head;
+    s32 tail;
+    s32 count = ((head = D_811861DA) - (tail = D_811861DB) + 0x100) & 0xFF;
+
+    if (D_811381D8 < count) {
+        D_811381D8 = count;
+    }
+    head = ((u8)tail << 8) | (u8)head; // FAKE: reuses head for the message
+    if (func_8004CFB0(D_81186230, head, 0) != -1) {
+        D_811861DB = D_811861DA;
+    }
+}
 
 void func_8110FE74(void) {
     (*(u8 *)&D_811861DB) = (*(u8 *)&D_811861DA);

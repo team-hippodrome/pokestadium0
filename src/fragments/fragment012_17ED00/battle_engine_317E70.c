@@ -244,11 +244,42 @@ s32 func_82111DC4(void) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821125C0.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_821129E4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821129E4.s")
-#endif
+s32 func_82107A5C(ActivePokemon*);
+s32 func_82107F88(ActivePokemon*);
+void func_8210F730(ActivePokemon*);
+extern s32 D_8218C710;
+void func_821129E4(ActivePokemon* arg0) {
+    UNUSED s32 pad;
+    s32 sp1C = func_82107A5C(arg0);
+    ActivePokemonState* temp_a10;
+    BattleMonRuntime* temp_a11;
+    BattleMonRuntime* temp_a01;
+
+    temp_a10 = &sActivePokemon[sp1C]->state;
+    temp_a11 = &sActivePokemon[sp1C]->state.runtime;
+    temp_a01 = &sActivePokemon[!sp1C]->state.runtime;
+
+    temp_a01->unk_54 = 0;
+    temp_a01->unk_58 = 0;
+    temp_a01->unk_4C &= ~4;
+
+    temp_a11->unk_4A = 0;
+    temp_a11->unk_4B = 0;
+    temp_a11->unk_4C = 0;
+    temp_a11->unk_4D &= 0x80;
+    temp_a11->unk_4E = 0;
+    temp_a11->unk_52 = 0;
+    temp_a11->unk_57 = 0;
+    temp_a11->scaleResize = 0;
+    temp_a11->unk_58 = 0;
+
+    if (temp_a10->unk_2D != 0xF) {
+        temp_a10->unk_2D = 0x11;
+    }
+
+    func_8210F730(arg0);
+    func_8211EF74((s32)&((u8(*)[0x40])(D_8219A520 + 0x448))[sp1C], 3, D_8218C710, func_82107F88(sActivePokemon[sp1C]));
+}
 
 void Battle_CheckAllBroughtFainted_HP(ActivePokemon* arg0) {
     ActivePokemonState* ptr1 = &arg0->state;

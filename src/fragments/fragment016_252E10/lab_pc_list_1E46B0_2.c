@@ -38,6 +38,7 @@ typedef struct unk_func_883164C0 {
 #include "memmap.h"
 #include "memory.h"
 #include "pokemon_stats.h"
+#include "m2c_macros.h"
 extern u8 D_8910D7D0[];
 typedef struct unk_func_88309614 {
     /* 0x00 */ char unk00[0x8];
@@ -61,17 +62,116 @@ s32 LabPCList_CompareTmHmEntries(unk_func_88200FA0_030_038* arg0, unk_func_88200
 s32 LabPCList_CanLearnMoveByLevelUp(s32 arg0, s32 arg1);
 void LabPCList_ConsumeUsedTmItem(unk_func_8830867C_04C_030_02C_000* arg0);
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89109990; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89109990.s")
-#endif
+typedef struct unk_func_89109990_010 {
+    /* 0x00 */ void* unk_00;
+    /* 0x04 */ s32 unk_04;
+    /* 0x08 */ s32 unk_08;
+    /* 0x0C */ s32 unk_0C;
+    /* 0x10 */ s32 unk_10;
+    /* 0x14 */ char unk_14[0xC];
+} unk_func_89109990_010; // size = 0x20
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89109B60; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89109B60.s")
-#endif
+typedef struct unk_func_89109990 {
+    /* 0x00 */ char unk00[0x4];
+    /* 0x04 */ s32 unk_04;
+    /* 0x08 */ char unk08[0x8];
+    /* 0x10 */ unk_func_89109990_010* unk_10;
+    /* 0x14 */ s32 unk_14;
+    /* 0x18 */ s32 unk_18;
+} unk_func_89109990;
+
+void func_80027804(void*, u8**, s32, s32);
+void func_89109990(unk_func_89109990* arg0, u8** arg1, u8* arg2, s32 arg3) {
+    UNUSED s32 pad[2];
+    unk_func_89109990_010* var_s1 = arg0->unk_10;
+    s32 var_t0 = 0;
+    s32 i;
+    s32 j;
+
+    switch (arg0->unk_04) {
+        case 0x11:
+        case 0x13:
+            break;
+        case 0x20:
+            var_t0 = 1;
+            break;
+        case 0x21:
+            break;
+    }
+
+    arg0->unk_18 = arg0->unk_14;
+    for (i = 0; i < arg0->unk_18; i++) {
+        var_s1[i].unk_00 = arg0;
+        var_s1[i].unk_04 = i;
+        var_s1[i].unk_08 = 1;
+        var_s1[i].unk_0C = var_t0;
+        var_s1[i].unk_10 = 0;
+        // The loop has to stay on one line: IDO orders the unrolled stores by source line.
+        for (j = 0; j < arg3; j++) { arg1[j] = &arg2[j * 0x58]; }
+        func_80027804(var_s1[i].unk_14, arg1, arg3, 0);
+        arg1 += arg3;
+        arg2 += arg3 * 0x58;
+    }
+}
+
+typedef struct LabPCDeckNode89109B60 {
+    /* 0x00 */ void* owner;
+    /* 0x04 */ s32 index;
+    /* 0x08 */ u8 entry[1];
+} LabPCDeckNode89109B60;
+typedef struct LabPCDeck89109B60 {
+    /* 0x00 */ char unk00[0x14];
+    /* 0x14 */ LabPCDeckNode89109B60** nodes;
+    /* 0x18 */ char unk18[0x4];
+    /* 0x1C */ s32 count;
+} LabPCDeck89109B60; // size = 0x20
+typedef struct LabPCBox89109B60 {
+    /* 0x00 */ char unk00[0x4];
+    /* 0x04 */ s32 unk_04;
+    /* 0x08 */ s32 unk_08;
+    /* 0x0C */ char unk0C[0x4];
+    /* 0x10 */ LabPCDeck89109B60* decks;
+    /* 0x14 */ char unk14[0x4];
+    /* 0x18 */ s32 deckCount;
+    /* 0x1C */ char unk1C[0x8];
+} LabPCBox89109B60; // size = 0x24
+typedef struct LabPCBoxList89109B60 {
+    /* 0x00 */ LabPCBox89109B60* boxes;
+    /* 0x04 */ char unk04[0x4];
+    /* 0x08 */ s32 count;
+} LabPCBoxList89109B60;
+
+/* Stadium 1's LabPCList_LoadAllBoxes, without its box-count check and NULL deck check. */
+void func_89109B60(LabPCBoxList89109B60* arg0) {
+    s32 i;
+    s32 j;
+    s32 n;
+    DeckHandle* handle;
+    LabPCDeck89109B60* deck;
+    LabPCDeckNode89109B60** node;
+    LabPCBox89109B60* box;
+
+    box = arg0->boxes;
+    for (i = 0; i < arg0->count; i++, box++) {
+        deck = box->decks;
+        for (j = 0; j < box->deckCount; j++, deck++) {
+            node = deck->nodes;
+            handle = Deck_Open(box->unk_04, box->unk_08, j, 0);
+            n = 0;
+            while (TRUE) {
+                if (Deck_ReadEntries(&(*node)->entry, 1, handle) == 0) {
+                    break;
+                }
+                (*node)->owner = deck;
+                (*node)->index = n;
+                node++;
+                n++;
+            }
+            Deck_CloseAndFlush(handle);
+            deck->count = n;
+        }
+    }
+}
 
 typedef struct LabPCListSlotZero {
     /* 0x00 */ char unk00[0xC];
@@ -119,17 +219,96 @@ void LabPCList_FlattenEntries(unk_func_88200FA0_030_038* arg0, unk_func_8830867C
     arg0->unk_08 = var_v0 - (s32*)arg0->unk_00;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89109D14; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89109D14.s")
-#endif
+typedef struct LabPCDeck89109D14 {
+    /* 0x00 */ char unk00[0x10];
+    /* 0x10 */ s32 dirty;
+    /* 0x14 */ LabPCDeckNode89109B60** nodes;
+    /* 0x18 */ char unk18[0x4];
+    /* 0x1C */ s32 count;
+} LabPCDeck89109D14; // size = 0x20
+void func_80023268(s32 arg0, s32 arg1, s32 arg2);
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89109E5C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89109E5C.s")
-#endif
+/* Stadium 1's LabPCList_SaveAllBoxes, with every deck flushed the same way. */
+void func_89109D14(LabPCBoxList89109B60* arg0) {
+    s32 i;
+    s32 j;
+    s32 x;
+    DeckHandle* handle;
+    LabPCDeck89109D14* deck;
+    LabPCDeckNode89109B60** node;
+    LabPCBox89109B60* box;
+
+    box = arg0->boxes;
+    for (i = 0; i < arg0->count; i++, box++) {
+        deck = (LabPCDeck89109D14*)box->decks;
+        for (j = 0; j < box->deckCount; j++, deck++) {
+            if (deck->dirty != 0) {
+                node = deck->nodes;
+                handle = Deck_Open(box->unk_04, box->unk_08, j, 1);
+                for (x = 0; x < deck->count; x++, node++) {
+                    Deck_WriteEntries((*node)->entry, 1, handle);
+                    if ((box->unk_04 == 0x20) || (box->unk_04 == 0x21)) {
+                        func_80023268(box->unk_08, (*node)->entry[0], 3);
+                    }
+                }
+                Deck_CloseAndFlush(handle);
+            }
+            if (1) {} // karodo: also in Stadium 1's version
+        }
+    }
+}
+
+s32 func_80025BD8(void);
+void func_80027410(void*, void*, s32, s32, s32);
+void func_80027FF8(void*, s32);
+s32 func_800246A8(s32, s32);
+s32 func_800246C8(s32, s32);
+s32 func_8002479C(s32, s32, u8*);
+s32 func_80024ADC(s32, s32);
+s32 func_8000A4E8(char*, char*);
+void func_89109E5C(unk_func_8830867C_02C_154* arg0, void* arg1, void* arg2, void* arg3) {
+    UNUSED s32 pad;
+    s32 temp_s1;
+    char sp54[4];
+    unk_func_8002D860 sp48;
+    char sp38[16];
+    s32 i;
+
+    arg0->unk_00 = 0x23;
+    arg0->unk_01 = func_80025BD8();
+    arg0->unk_02 = 0;
+    arg0->unk_04 = 1;
+    func_80027410(&arg0[0].unk_0C, arg1, 2, 0x14, 0);
+
+    arg0[1].unk_00 = 0x22;
+    arg0[1].unk_01 = arg0->unk_01;
+    arg0[1].unk_02 = 0;
+    arg0[1].unk_04 = 1;
+    func_80027410(&arg0[1].unk_0C, arg2, 2, 0x32, 0);
+
+    arg0[2].unk_00 = 0x12;
+    arg0[2].unk_01 = 0;
+    func_80027410(&arg0[2].unk_0C, arg3, 2, 0x64, 0);
+
+    func_80027FF8(&sp48, arg0->unk_01);
+
+    for (i = 0; i < 4; i++) {
+        if ((func_800246A8(0x12, i) != 0) && (func_80024ADC(0x12, i) > 0)) {
+            temp_s1 = func_800246C8(0x12, i);
+            func_8002479C(0x12, i, sp38);
+            if ((sp48.unk_08 == temp_s1) && (func_8000A4E8(sp54, sp38) == 0)) {
+                break;
+            }
+        }
+    }
+
+    if (i < 4) {
+        arg0[2].unk_02 = i;
+        arg0[2].unk_04 = 1;
+    } else {
+        arg0[2].unk_04 = 0;
+    }
+}
 
 void LabPCList_ReadDeckCategory(unk_func_8830867C_02C_154* arg0) {
     DeckHandle* sp24;
@@ -194,11 +373,70 @@ s32 LabPCList_CompareTmHmEntries(unk_func_88200FA0_030_038* arg0, unk_func_88200
     return (arg0->unk_08 - arg1->unk_08 != 0) ? arg0->unk_08 - arg1->unk_08 : (s32)arg0[1].unk_00 - (s32)arg1[1].unk_00;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8910A21C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_8910A21C.s")
-#endif
+typedef struct TmEntry8910A21C {
+    /* 0x00 */ u8* unk_00;
+    /* 0x04 */ unk_func_8830867C_02C_154* unk_04;
+    /* 0x08 */ s32 unk_08;
+    /* 0x0C */ s32 unk_0C;
+    /* 0x10 */ s32 unk_10;
+} TmEntry8910A21C; // size = 0x14
+void func_8910A21C(unk_func_88200FA0_030_038* arg0, TmEntry8910A21C* arg1, unk_func_8830867C_02C_154* arg2, s32 arg3) {
+    unk_func_88205880_00D0** var_s6;
+    unk_func_8830867C_02C_154* var_s4;
+    s32 i;
+    TmEntry8910A21C* var_s1;
+    s32 j;
+    s32 sp50;
+    s32 var_s0;
+    s32 var_v0;
+    u8* var_s2;
+
+    var_s6 = arg0->unk_00;
+    var_s4 = arg2;
+    var_s1 = arg1;
+
+    for (i = 0; i < arg3; i++, var_s4++) {
+        if (var_s4->unk_04 != 0) {
+            var_s2 = var_s4->unk_0C;
+
+            for (j = 0; j < var_s4->unk_14; j++, var_s2 += 2) {
+                var_s0 = 0;
+                sp50 = *var_s2;
+                if (LabPCList_IsTmItemId(&sp50) != 0) {
+                    var_s0 = 1;
+                } else if (LabPCList_IsHmItemId(&sp50) != 0) {
+                    var_s0 = 1;
+                } else if (LabPCList_IsSpecialTmItemId(&sp50) != 0) {
+                    var_s0 = 1;
+                }
+
+                if (var_s0 != 0) {
+                    var_s1->unk_00 = var_s2;
+                    var_s1->unk_04 = var_s4;
+                    var_s1->unk_08 = sp50;
+
+                    if (var_s4->unk_00 == 0x23) {
+                        var_s1->unk_0C = 0;
+                    } else {
+                        if (var_s4->unk_00 == 0x22) {
+                            var_v0 = 1;
+                        } else {
+                            var_v0 = 2;
+                        }
+                        var_s1->unk_0C = var_v0;
+                    }
+                    *var_s6 = (unk_func_88205880_00D0*)var_s1;
+
+                    var_s1++;
+                    var_s6++;
+                }
+            }
+        }
+    }
+
+    arg0->unk_08 = var_s1 - arg1;
+    PointerList_Sort(arg0, LabPCList_CompareTmHmEntries);
+}
 
 s32 LabPCList_CanLearnMoveByLevelUp(s32 arg0, s32 arg1) {
     static SpeciesData D_8831757C[] = {
@@ -228,11 +466,89 @@ s32 LabPCList_CanLearnMoveByLevelUp(s32 arg0, s32 arg1) {
     return ((var_v1->tmHmLearnset[arg1 / 8] >> (arg1 % 8)) & 1) != 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8910A4C8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_8910A4C8.s")
-#endif
+s32 func_80020974(s32);
+s32 func_8002D3D0(u8*);
+s32 func_8002D430(s32, s32);
+
+void func_8910A4C8(s8* arg0, u8* arg1) {
+    s32 i;
+    s32 j;
+    s32 n;
+    s32 n2;
+    s32 k;
+    s32 move;
+    s8** base;
+    s8* e;
+    u8* p;
+
+    base = M2C_FIELD(arg0, s8***, 0);
+    for (i = 0; i < M2C_FIELD(arg0, s32*, 8); i++) {
+        M2C_FIELD(base[i], s32*, 0x10) = 0;
+        e = base[i];
+        if (M2C_FIELD(e, s32*, 8) >= 100) {
+            if (**(u8**)e >= 0xC9) {
+                move = **(u8**)e - 0xC9;
+            } else {
+                move = **(u8**)e - 0x92;
+            }
+            n = func_8002D3D0(arg1);
+            for (j = 0; j < n; j++) {
+                if (func_80020974(move) == arg1[j + 9]) {
+                    break;
+                }
+            }
+            if (j < n) {
+                M2C_FIELD(base[i], s32*, 0x10) |= 8;
+            }
+            if (LabPCList_CanLearnMoveByLevelUp(arg1[0], move) == 0) {
+                M2C_FIELD(base[i], s32*, 0x10) |= 0x10;
+            }
+        } else if (M2C_FIELD(e, s32*, 8) >= 50) {
+            n2 = func_8002D3D0(arg1);
+            for (j = 0; j < n2; j++) {
+                if ((func_8002D430((s32)arg1, j) != -2) && ((arg1 + j)[0x20] < 0xC0)) {
+                    break;
+                }
+            }
+            if (j >= n2) {
+                M2C_FIELD(base[i], s32*, 0x10) |= 4;
+            }
+        } else {
+            switch (**(u8**)e) {
+                case 35:
+                    if (M2C_FIELD(arg1, u16*, 0x14) >= 0x6400) {
+                        M2C_FIELD(e, s32*, 0x10) |= 1;
+                    }
+                    break;
+                case 36:
+                    if (M2C_FIELD(arg1, u16*, 0x16) >= 0x6400) {
+                        M2C_FIELD(e, s32*, 0x10) |= 1;
+                    }
+                    break;
+                case 37:
+                    if (M2C_FIELD(arg1, u16*, 0x18) >= 0x6400) {
+                        M2C_FIELD(e, s32*, 0x10) |= 1;
+                    }
+                    break;
+                case 38:
+                    if (M2C_FIELD(arg1, u16*, 0x1A) >= 0x6400) {
+                        M2C_FIELD(e, s32*, 0x10) |= 1;
+                    }
+                    break;
+                case 39:
+                    if (M2C_FIELD(arg1, u16*, 0x1C) >= 0x6400) {
+                        M2C_FIELD(e, s32*, 0x10) |= 1;
+                    }
+                    break;
+                case 40:
+                    if (arg1[0x24] >= 100) {
+                        M2C_FIELD(e, s32*, 0x10) |= 2;
+                    }
+                    break;
+            }
+        }
+    }
+}
 
 void LabPCList_ConsumeUsedTmItem(unk_func_8830867C_04C_030_02C_000* arg0) {
     if ((LabItem_IsQuantitylessItemForOperation(arg0->unk_00[0]->unk_00) != 0) || (arg0->unk_00[0]->unk_01 < 2)) {

@@ -1179,11 +1179,43 @@ s32 func_8003815C(s32 arg0, s32 arg1, s8* cp, s32 arg3, s32 arg4, s32 arg5, s32 
     return M2C_FIELD(cp, s32*, 0x5C);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8003821C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8003821C.s")
-#endif
+void func_8003A710(void *);
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
+s32 func_8003821C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6)
+{
+  s32 found;
+  int four; // FAKE: the offset has to go through a temporary to match
+  s32 *tbl;
+  s8 *p;
+  u32 i;
+  u32 mask;
+  found = 0;
+  if (!((*((s32 *) (((s8 *) arg1) - (-(four = 4))))) & 1))
+  {
+    func_8003A710((void *) arg1);
+  }
+  if (((u32) arg6) == 0xFFFFFFFFU)
+  {
+    tbl = (s32 *) (*((s32 *) (((s8 *) arg1) + 8)));
+    arg6 = *((s32 *) ((arg2 * 4) + ((s32) tbl)));
+  }
+  for (i = 0, p = D_800B3640; i < ((u32) D_800B3638); i++, p += 0x148)
+  {
+    mask = osSetIntMask(1);
+    if ((*((s32 *) (((s8 *) p) + 0x30))) == 0)
+    {
+      *((s32 *) (((s8 *) p) + 0x30)) = -1;
+      found = 1;
+    }
+    osSetIntMask(mask);
+    if (found != 0)
+    {
+      return func_8003815C(arg0, arg1, p, arg2, arg3, arg4, arg6);
+    }
+  }
+
+  return 0;
+}
 
 /*
  * func_8003834C
@@ -1283,11 +1315,54 @@ s32 func_800384D8(void) {
     return 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80038588; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80038588.s")
-#endif
+/* osSetIntMask, declared with an int mask: the constant 1 is then shared with the int stores below. */
+s32 func_8004D300(s32);
+/*
+ * Stadium 1's Audio_StopAllSoundEffects with the D_800B3CC8 busy flag set
+ * around it (each write under its own interrupt mask) and without the
+ * voice re-queue call.
+ */
+void func_80038588(void) {
+    UNUSED s32 pad[4];
+    s32 mask;
+    u32 i;
+    s8* p;
+    s8* voice;
+
+    mask = func_8004D300(1);
+    D_800B3CC8 = 1;
+    func_8004D300(mask);
+
+    mask = func_8004D300(1);
+    p = D_800B3640;
+    for (i = 0; i < D_800B3638; i++, p += 0x148) {
+        if ((M2C_FIELD(p, u16*, 0xB2) != 0) || (M2C_FIELD(p, s32*, 0x30) == 0)) {
+            continue;
+        }
+
+        M2C_FIELD(p, s32*, 0x30) = func_80036640(p, 0);
+
+        if (M2C_FIELD(p, u8*, 0xDD) == 0) {
+            M2C_FIELD(p, s32*, 0x34) = 0;
+            continue;
+        }
+
+        M2C_FIELD(M2C_FIELD(p, s8**, 0x144), s8*, 0x1E) = 4;
+        M2C_FIELD(M2C_FIELD(p, s8**, 0x144), s32*, 0x20) = D_800B3CC4 + 2;
+        n_alSynSetVol(M2C_FIELD(p, N_ALVoice**, 0x144), 0, D_800B3650 * 2);
+        n_alSynSetPriority(M2C_FIELD(p, N_ALVoice**, 0x144), 0);
+
+        M2C_FIELD(p, s8**, 0x144) = NULL;
+        M2C_FIELD(p, s32*, 0xD8) = 1;
+        M2C_FIELD(p, u8*, 0xDD) = 0;
+        M2C_FIELD(p, s32*, 0x34) = 0;
+    }
+    func_8004D300(mask);
+
+    mask = func_8004D300(1);
+    D_800B3CC8 = 0;
+    func_8004D300(mask);
+}
 
 s32 func_8004D300(s32);                             /* extern */
 extern s32 D_800B3638;

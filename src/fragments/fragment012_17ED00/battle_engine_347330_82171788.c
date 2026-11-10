@@ -536,7 +536,7 @@ s32 TerrainGrid_UpdateWaves(void) {
         if (((sWaterHeightMap.unk_0000 - 0x3C) % 90) < 0x46) {
             ptr = &sWaterHeightMap.grid[0][2];
             for (j = 0; j < 13; j++) {
-                if (0) {}
+                if (0) {}  // karodo
                 if (ptr->unk_04 > 0.0) {
                     ptr->unk_04 -= 40.0;
                     if (ptr->unk_04 < 0.0) {
@@ -571,7 +571,7 @@ s32 TerrainGrid_UpdateWaves(void) {
                 var_fv0 += sWaterHeightMap.grid[i - 1][j].unk_04 - tmp;
             }
 
-            if ((!ptr) && (!ptr)) {}
+            if ((!ptr) && (!ptr)) {}  // FAKE
 
             if (j > 0) {
                 var_fv0 += sWaterHeightMap.grid[i][j - 1].unk_04 - tmp;
@@ -583,7 +583,7 @@ s32 TerrainGrid_UpdateWaves(void) {
 
             temp_v0++;
             temp_v0++;
-            if (temp_v0) {}
+            if (temp_v0) {}  // karodo
 
             ptr->unk_0C = (var_fv0 * sWaterHeightMap.unk_0004) + tmp;
             ptr++;

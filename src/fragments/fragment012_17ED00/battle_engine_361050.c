@@ -237,11 +237,28 @@ void BattleAI_PrepareDamageCalcState(BattleMonRuntime* arg0, BattleMonRuntime* a
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8210EDBC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210EDBC.s")
-#endif
+void func_8210EDBC(UNUSED u8* arg0, UNUSED u8* arg1) {
+    u8 tmp = D_8219A494.unk_01;
+
+    if (tmp == 7) {
+        D_82199F56 >>= 1;
+        if (D_82199F56 == 0) {
+            D_82199F56 = 1;
+        }
+    }
+
+    if (D_82199F56 == 0) {
+        D_82199F56 = 1;
+    }
+
+    D_82199F50 += (((((D_82199F58 * 2) / 5) + 2) * D_82199F52 * D_82199F54) / D_82199F56) / 50;
+
+    if (D_82199F50 >= 0x3E5) {
+        D_82199F50 = 0x3E4;
+    }
+
+    D_82199F50 += 2;
+}
 
 extern u8 D_82199F32;
 extern u8 D_82199F33;
@@ -285,13 +302,85 @@ s32 BattleScene_FindU16InByteArray(u16 lookup_value, u8* array, s32 array_length
     return -1;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8210EFAC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210EFAC.s")
-#endif
+typedef struct S0LearnRuntime {
+    /* 0x00 */ char unk00[0x1F];
+    /* 0x1F */ u8 moves[4];
+    /* 0x23 */ char unk23[0x3];
+    /* 0x26 */ u8 unk_26;
+} S0LearnRuntime;
+typedef struct S0LearnMon {
+    /* 0x000 */ char unk000[0x7C6];
+    /* 0x7C6 */ S0LearnRuntime runtime;
+    /* 0x7ED */ char unk7ED[0x851 - 0x7ED];
+    /* 0x851 */ u8 moveSlotIllegality[4];
+} S0LearnMon;
+typedef struct S0Learnset {
+    /* 0x00 */ u8 unk_00[10];
+    /* 0x0A */ u8 unk_0A[10];
+} S0Learnset; // size = 0x14
+extern S0Learnset D_8218CA60[];
+extern S0Learnset D_8218D62C[];
+extern u8 D_8218AD9C[];
+extern u8* D_8218ADC8[];
+u8 Move_GetIdFromTableIndex(s32);
+void func_8210EFAC(S0LearnMon* pokemon, u16 pokemon_id) {
+    s32 move_index;
+    s32 i;
+    s32 lookup;
+    s32 tm_index;
+    u8 tm_hm_flag;
+    SpeciesData* species_data;
+    S0LearnRuntime* pokemon_runtime;
 
-void func_8210EFAC(s8* arg0, u16 arg1);
+    pokemon_runtime = &pokemon->runtime;
+
+    for (move_index = 0; move_index < 4; move_index++) {
+        if (pokemon_runtime->moves[move_index] != 0) {
+            species_data = &gSpeciesData[pokemon_id];
+
+            for (i = 0; i < ARRAY_COUNT(species_data->startingMoves); i++) {
+                if ((species_data->startingMoves[i] != 0) && (species_data->startingMoves[i] == pokemon_runtime->moves[move_index])) {
+                    pokemon->moveSlotIllegality[move_index] = 0;
+                }
+            }
+
+            for (i = 0; i < 10; i++) {
+                if ((D_8218CA60[pokemon_id].unk_00[i] != 0) && (pokemon_runtime->unk_26 >= D_8218CA60[pokemon_id].unk_00[i]) &&
+                    (D_8218CA60[pokemon_id].unk_0A[i] == pokemon_runtime->moves[move_index])) {
+                    pokemon->moveSlotIllegality[move_index] = 0;
+                }
+            }
+
+            for (i = 0; i < 10; i++) {
+                if ((D_8218D62C[pokemon_id].unk_00[i] != 0) && (pokemon_runtime->unk_26 >= D_8218D62C[pokemon_id].unk_00[i]) &&
+                    (D_8218D62C[pokemon_id].unk_0A[i] == pokemon_runtime->moves[move_index])) {
+                    pokemon->moveSlotIllegality[move_index] = 0;
+                }
+            }
+
+            for (i = 0; i < 64; i++) {
+                lookup = BattleScene_FindU16InByteArray(pokemon_id + 1, D_8218AD9C, 8);
+                if (lookup >= 0) {
+                    tm_index = i / 8;
+                    if (tm_index == D_8218ADC8[lookup][0]) {
+                        tm_hm_flag = species_data->tmHmLearnset[tm_index] | D_8218ADC8[lookup][1];
+                    } else {
+                        tm_hm_flag = species_data->tmHmLearnset[tm_index];
+                    }
+                } else {
+                    tm_hm_flag = species_data->tmHmLearnset[i / 8];
+                }
+
+                if (((tm_hm_flag >> (i % 8)) & 1) && (Move_GetIdFromTableIndex(i) == pokemon_runtime->moves[move_index])) {
+                    pokemon->moveSlotIllegality[move_index] = 0;
+                }
+            }
+        } else {
+            pokemon->moveSlotIllegality[move_index] = 0;
+        }
+    }
+}
+
 extern u8 D_8218C930[][2];
 
 void func_8210F24C(s8* arg0) {
@@ -311,28 +400,48 @@ void func_8210F24C(s8* arg0) {
     }
 }
 
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_8210F2F4(s8 *arg0)
 {
   int new_var2;
   u16 *new_var;
   ;
   new_var = ((s8 *) arg0) + 0x7D2;
-  new_var2 = ((*((s32 *) (((s8 *) arg0) + 0x860))) + ((*((s32 *) (((s8 *) arg0) + 0x794))) * 0x50)) + ((0, 0x1C));
+  new_var2 = ((*((s32 *) (((s8 *) arg0) + 0x860))) + ((*((s32 *) (((s8 *) arg0) + 0x794))) * 0x50)) + ((0, 0x1C));  // FAKE
   *((u16 *) (((s8 *) new_var2) + 2)) = (u16) (*((u16 *) new_var));
- if (1) { }
+ if (1) { }  // karodo
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8210F31C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210F31C.s")
-#endif
+extern ActivePokemon* D_8219A540;
+void func_80043860(s32);
+
+// Integer-step version of Stadium 1's BattleScene_AnimateDisplayedHpToRuntime.
+s32 func_8210F31C(ActivePokemon* arg0) {
+    BattleMonRuntime* rt = &arg0->state.runtime;
+    BattleMon* mon = &arg0->teamRoster->pokemonPicked[arg0->state.rosterIndex];
+
+    if (mon->hp == rt->unk_0C) {
+        return 1;
+    }
+    mon->hp = Math_StepToS32(mon->hp, rt->unk_0C, 1, 1);
+    if (mon->hp == rt->unk_0C) {
+        if (arg0->displayObject.objectType == 0x98) {
+            return 1;
+        }
+        func_80043860(BattleScene_GetParticipantSideIndex(D_8219A540));
+        return 1;
+    }
+    return 0;
+}
 
 void BattleScene_IntroInitNop(void) {
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8210F3F0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210F3F0.s")
-#endif
+extern u8 D_82199F7C;
+extern f64 D_DBL_82195770;
+extern f64 D_DBL_82195778;
+u32 func_80053A80(void);
+u8 func_8210F3F0(void)
+{
+  return (D_82199F7C += (u8) ((u32) ((((f32) ((s32) ((u16) (func_80053A80() / 5577)))) / D_DBL_82195770) * D_DBL_82195778))) ^ 0;
+}

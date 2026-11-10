@@ -265,11 +265,40 @@ void func_8220013C(void) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82200278; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment013_232510/func_82200278.s")
-#endif
+uintptr_t Memmap_GetFragmentVaddr(void* addr);
+void GfxImage_FillCurrent(Gfx** gfx_p, u16 fill_color);
+extern u8 D_8F908980[];
+extern u8 D_8FA08900[];
+extern u8 D_8FB08900[];
+extern Gfx D_80060398[];
+void func_82200278(void) {
+    uintptr_t img;
+
+    if (D_822036A8 > 0) {
+        switch (D_822036A8) {
+            case 1:
+                img = Memmap_GetFragmentVaddr(D_8F908980);
+                break;
+            case 2:
+                img = Memmap_GetFragmentVaddr(D_8FA08900);
+                break;
+            case 3:
+                img = Memmap_GetFragmentVaddr(D_8FB08900);
+                break;
+        }
+        gDPSetCycleType(gDisplayListHead++, G_CYC_1CYCLE);
+        gDPSetTexturePersp(gDisplayListHead++, G_TP_NONE);
+        gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGB, G_CC_DECALRGB);
+        gSPClearGeometryMode(gDisplayListHead++, G_ZBUFFER | G_LIGHTING);
+        gDPLoadTextureBlock(gDisplayListHead++, img, G_IM_FMT_RGBA, G_IM_SIZ_32b, 4, 64, 0, G_TX_NOMIRROR | G_TX_CLAMP,
+                            G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gSPTextureRectangle(gDisplayListHead++, 0, 0, 0x500, 0x200, G_TX_RENDERTILE, 0, 0, 0, 0x200);
+        gSPTextureRectangle(gDisplayListHead++, 0, 0x200, 0x500, 0x3C0, G_TX_RENDERTILE, 0, 0x7E0, 0, 0);
+        gSPDisplayList(gDisplayListHead++, D_80060398);
+        return;
+    }
+    GfxImage_FillCurrent(&gDisplayListHead, 1);
+}
 
 extern u8* D_86B10828;
 extern GraphNode* D_86B106B4;
@@ -337,7 +366,7 @@ void func_82200618(void) {
         func_800273E8(sp7C, (s32) &D_82202C60);
         func_800273E8(sp40, (s32) &D_82202C7C);
     }
-    do {
+    do {  // karodo
     } while (0);
     while (func_80027214(sp7C, sp3C + 0xA8) != 0) {
         func_80027214(sp40, sp3C + 0xB4);
@@ -370,7 +399,7 @@ void func_82200714(void) {
         func_800273E8(sp8C, (s32) &D_82202C98);
         func_800273E8(sp50, (s32) &D_82202CB4);
     }
-    do {
+    do {  // karodo
     } while (0);
     while (func_80027214(sp8C, rec + 0xA8) != 0) {
         if (i++ == 0x14) {
@@ -405,11 +434,76 @@ void func_82200858(unk_D_82203170* arg0, s32 arg1) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8220091C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment013_232510/func_8220091C.s")
-#endif
+extern u8 D_8EC145CC[];
+extern u8 D_8ED0FACC[];
+extern u8 D_8EE0FDE0[];
+extern u8 D_8F5054AC[];
+extern u8 D_8F5054C8[];
+void func_8220091C(void) {
+    s32 track;
+    s32 pad; // FAKE
+    DisplayObject* obj = (DisplayObject*)((GraphNode*)D_82203244->children)->children;
+    s32 pad2; // FAKE
+
+    switch (((DemoState*)D_822036A4)->unk_0001) {
+        case 0:
+            if (!D_82203244->children) { // FAKE: karodo, empty if needed for regalloc
+            }
+            track = 6;
+            break;
+        case 1:
+            track = 1;
+            break;
+        case 2:
+            switch (((DemoState*)D_822036A4)->unk_0002) {
+                case 0:
+                    track = 2;
+                    break;
+                case 1:
+                    track = 3;
+                    break;
+                case 2:
+                    track = 4;
+                    break;
+                case 3:
+                    track = 5;
+                    break;
+            }
+            break;
+    }
+    if (((DemoState*)D_822036A4)->unk_0000 == 0) {
+        func_800407B0(0x3C, 0, track);
+    } else {
+        func_800407B0(0x3C, ((DemoState*)D_822036A4)->unk_0003, track);
+    }
+    obj->rootId = ((DemoState*)D_822036A4)->unk_0003;
+    if (((DemoState*)D_822036A4)->unk_0000 != 0) {
+        if (((DemoState*)D_822036A4)->unk_0003 == 7) {
+            Model_InitDisplayObject(&D_82203268, ((DemoState*)D_822036A4)->unk_0003, 0, (ModelNodeView*)D_82203248);
+            ModelAnim_BindTransformCurve(&D_82203268, 1, D_8ED0FACC, 0x10000);
+            BgStage_RunUntilCondition(0x6E, (s32(*)(u8))func_822005A8);
+            ModelRenderer_ClearDisplayObject(&D_82203268);
+        } else if (((DemoState*)D_822036A4)->unk_0003 == 8) {
+            Model_InitDisplayObject(&D_82203268, ((DemoState*)D_822036A4)->unk_0003, 0, (ModelNodeView*)D_82203248);
+            ModelAnim_BindTransformCurve(&D_82203268, 1, D_8EE0FDE0, 0x10000);
+            BgStage_RunUntilCondition(0x6E, (s32(*)(u8))func_822005A8);
+            ModelRenderer_ClearDisplayObject(&D_82203268);
+        } else {
+            Model_InitDisplayObject(&D_82203268, ((DemoState*)D_822036A4)->unk_0003, 0, (ModelNodeView*)D_82203248);
+            ModelAnim_BindTransformCurve(&D_82203268, 1, D_8EC145CC, 0x10000);
+            BgStage_RunUntilCondition(0x64, (s32(*)(u8))func_822005A8);
+            ModelRenderer_ClearDisplayObject(&D_82203268);
+        }
+    }
+    Model_InitDisplayObject(&D_82203268, ((DemoState*)D_822036A4)->unk_0003, 0, (ModelNodeView*)D_8220324C);
+    if ((D_82203170[0].unk_00 == 2) || (D_82203170[1].unk_00 == 2)) {
+        ModelAnim_BindTransformCurve(&D_82203268, 1, D_8F5054C8, 0x10000);
+        BgStage_RunUntilCondition(0x64, (s32(*)(u8))func_822005A8);
+    } else {
+        ModelAnim_BindTransformCurve(&D_82203268, 1, D_8F5054AC, 0x10000);
+        BgStage_RunUntilCondition(0xA0, (s32(*)(u8))func_822005A8);
+    }
+}
 
 extern u8 D_82400000[];
 extern u8 D_00175570[];
@@ -592,25 +686,79 @@ void func_82201444(unk_D_82203170* arg0, s32 arg1) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82201600; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment013_232510/func_82201600.s")
-#endif
+void func_82201600(s32 arg0) {
+    s32 idx;
+    UNUSED s32 pad[2];
+    TeamRoster* team;
+    s32 k;
+    s32 j;
+    s32 i;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_822017F0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment013_232510/func_822017F0.s")
-#endif
+    for (i = 0; i != 2; i++) {
+        if (((DemoState*)D_822036A4)->players[i].unk_0D == 2) {
+            for (j = 0; j != 2; j++) {
+                team = ((DemoState*)D_822036A4)->players[i].unk_14[j];
+                // Fake match: an empty check found by the permuter fixes register allocation.
+                if (team == NULL && team == NULL && team == NULL) {  // FAKE
+                }
+                for (k = 0; k < team->numberOfPokemonBrought; k++) {
+                    if (arg0 == team->pokemonPicked[k].unk_25) {
+                        idx = i * 6 + j * 3 + k;
+                        func_82201348(*(DepthBuffer**)(M2C_FIELD(D_82203264, s8**, 8) + idx * 0x14 + 0xC));
+                        func_800407B0(0x3D, 2, idx + 1);
+                    }
+                }
+            }
+        } else {
+            team = ((DemoState*)D_822036A4)->players[i].unk_14[0];
+            for (k = 0; k < team->numberOfPokemonBrought; k++) {
+                if (arg0 == (team->pokemonPicked + k)->unk_25) {
+                    idx = i * 6 + k;
+                    func_82201348(*(DepthBuffer**)(M2C_FIELD(D_82203264, s8**, 8) + idx * 0x14 + 0xC));
+                    func_800407B0(0x3D, 2, idx + 1);
+                }
+            }
+        }
+    }
+}
+
+s32 func_822017F0(void) {
+    unk_D_82203170* p;
+    BattleMon* mon;
+    s32 i;
+    s32 j;
+    s32 k;
+
+    for (i = 0; i < 2; i++) {
+        p = &D_82203170[i];
+        if (p->unk_00 == 2) {
+            for (j = 0; j < 2; j++) {
+                mon = p->unk_38[j]->pokemonPicked;
+                for (k = 0; k < p->unk_38[j]->numberOfPokemonBrought; k++, mon++) {
+                    if (mon->hp < mon->unk_26) {
+                        return 1;
+                    }
+                }
+            }
+        } else {
+            mon = p->unk_38[0]->pokemonPicked;
+            for (k = 0; k < p->unk_38[0]->numberOfPokemonBrought; k++, mon++) {
+                if (mon->hp < mon->unk_26) {
+                    return 1;
+                }
+            }
+        }
+    }
+    return 0;
+}
 
 M2C_UNK func_80006780();                            /* extern */
 M2C_UNK func_80006828(M2C_UNK, M2C_UNK (*)(M2C_UNK)); /* extern */
 s32 func_80018E24(s32);                             /* extern */
 M2C_UNK func_800407B0(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
 M2C_UNK func_822005A8(M2C_UNK);                     /* extern */
-M2C_UNK func_82201084(s32);                         /* extern */
-M2C_UNK func_82201600(s32);                         /* extern */
+void func_82201084(s32);
+void func_82201600(s32);
 s32 func_822017F0();                                /* extern */
 
 void func_822018EC(void) {
@@ -669,11 +817,70 @@ void func_82201A3C(void) {
     func_80006828(0x96, &func_822005A8);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82201AC4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment013_232510/func_82201AC4.s")
-#endif
+extern Color_RGB8 D_8220308C;
+extern Color_RGB8 D_82203090;
+extern char D_822030CC[];
+extern char D_822030EC[];
+extern char D_822030F8[];
+extern char D_82203108[];
+extern char D_82203128[];
+extern char D_8220314C[];
+extern u8 D_8F625F00[];
+extern Gfx D_80060290[];
+void func_80025830(void);
+
+s32 func_82201AC4(void) {
+    Color_RGB8 top = D_8220308C;
+    Color_RGB8 bottom = D_82203090;
+    s32 sel = 0;
+    s32 x;
+    u8* tex;
+    s32 pad; // FAKE
+
+    D_822033D0.node.renderFlags &= ~0x20;
+    D_82203538.node.renderFlags &= ~0x20;
+    do {
+        func_822005A8(0);
+        if (gPlayer1Controller->buttonPressed & (BTN_DLEFT | BTN_DRIGHT)) {
+            Audio_PlaySoundEffectById(1);
+            sel ^= 1;
+        }
+        Ui_DrawGradientPanel(0x1E, 0xAA, 0x104, 0x32, &top, &bottom);
+        Font_BeginTranslucentTextRendering();
+        Font_SetActive(2, 0);
+        Font_Printf(0x4B, 0xB2, D_822030CC);
+        Gfx_SetEnvColor(0xFF, 0xFF, (sel == 0) ? 0 : 0xFF, 0xFF);
+        Font_Printf(0x55, 0xC6, D_822030EC);
+        Gfx_SetEnvColor(0xFF, 0xFF, (sel == 1) ? 0 : 0xFF, 0xFF);
+        Font_Printf(0xAA, 0xC6, D_822030F8);
+        Font_EndTexturedTextRendering();
+        gSPDisplayList(gDisplayListHead++, D_80060290);
+        tex = D_8F625F00; // FAKE: temp stops the address being hoisted
+        x = ((sel == 0) ? 0x21 : 0x76) + 0x1E;
+        Gfx_DrawTextureRgba16(x, 0xC5, 0x18, 0xE, (u8*)Util_ConvertAddrToVirtAddr((uintptr_t)tex), 0x18, 0x200000);
+        gSPDisplayList(gDisplayListHead++, D_80060398);
+        func_80006780();
+    } while (!(gPlayer1Controller->buttonPressed & BTN_A));
+    if (sel == 1) {
+        Audio_PlaySoundEffectById(0x1D);
+        func_80025830();
+        do {
+            func_822005A8(0);
+            Ui_DrawGradientPanel(0x1E, 0xAA, 0x104, 0x32, &top, &bottom);
+            Font_BeginTranslucentTextRendering();
+            Font_SetActive(2, 0);
+            Font_Printf(0x34, 0xAF, D_82203108);
+            Font_Printf(0x34, 0xBD, D_82203128);
+            Font_Printf(0x34, 0xCB, D_8220314C);
+            Font_EndTexturedTextRendering();
+            func_80006780();
+        } while (gPlayer1Controller->buttonPressed == 0);
+        func_800407B0(0x56, 0, 0);
+    }
+    D_822033D0.node.renderFlags |= 0x20;
+    D_82203538.node.renderFlags |= 0x20;
+    return sel;
+}
 
 void func_82200F08(void);
 s32 func_82201AC4(void);
@@ -708,7 +915,7 @@ s32 func_82201DF8(void) {
 extern u8 D_8F625614[];
 extern u8 D_8F61F87C[];
 void func_82201444(unk_D_82203170* arg0, s32 arg1);
-M2C_UNK func_82201084(s32);
+void func_82201084(s32);
 void func_82200714(void);
 void func_80041374(s32 arg0, s32 arg1);
 

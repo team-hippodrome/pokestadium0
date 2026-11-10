@@ -43,11 +43,27 @@ s32 GbTower_TeamPrepFrameCallback(u8 arg0) {
 }
 
 s32 func_80023C30(void);
-#ifdef NON_MATCHING
-/* TODO: decompile func_81300144; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment004_15F8F0/func_81300144.s")
-#endif
+s32 func_80025100(s8*, s32*);
+
+void GbTower_BuildPartyResult(UnkInputStruct8000D738* arg0) {
+    s32 i;
+    s8 tier;
+    s32 field;
+    u16(*var_s1)[0x640] = arg0->unk_04[0];
+
+    func_80025100(&tier, &field);
+    arg0->unk_02 = tier;
+    arg0->unk_00 = field;
+    arg0->unk_03 = D_81300370;
+
+    for (i = 0; i < D_81300370; i++, var_s1++) {
+        _bcopy(PokeIcon_GetImage(D_81300384, i), var_s1, sizeof(var_s1[0]));
+    }
+
+    if (D_81300370 < 6) {
+        bzero(var_s1, 0x4B00 + (-D_81300370 * 0xC80));
+    }
+}
 
 extern ModelLoadContext* D_81300380;
 s32 GbTower_TeamPrep(s32 arg0, UnkInputStruct8000D738* arg1) {

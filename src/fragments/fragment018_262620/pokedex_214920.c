@@ -65,7 +65,7 @@ void func_8A100020(s32 arg0, s32 arg1, s32 arg2) {
     gSPDisplayList(gDisplayListHead++, D_80060398);
 }
 
-s32 func_800209A4(s32, s8 *);                     /* extern */
+s32 func_800209A4();
 
 s32 func_8A1000C0(s8 *arg0) {
     s32 var_v1;
@@ -78,11 +78,56 @@ s32 func_8A1000C0(s8 *arg0) {
     return var_v1;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8A100104; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment018_262620/func_8A100104.s")
-#endif
+typedef struct unk_D_80064C60 {
+    /* 0x00 */ char* unk_00;
+    /* 0x04 */ char unk04[0x18];
+} unk_D_80064C60; // size = 0x1C
+extern unk_D_80064C60 D_80064C60[];
+extern Gfx D_80060270[];
+extern Color_RGBA8 D_8A1057D4;
+extern Color_RGBA8 D_8A1057D8;
+extern char D_8A12FC30[];
+void func_80029028(s32, s32, s32, s32, Color_RGBA8);
+void func_8002A0AC(s32, s32, s32, s32, Color_RGBA8);
+void func_80027F20(s32);
+s32 func_800231C8(s32, s32);
+void func_8001A944(s32, s32, const char*, ...);
+void func_8A100104(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s32* arg5) {
+    s32 sorted;
+    UNUSED s32 pad[2];
+    s32 idx;
+    s32 progress;
+
+    sorted = *arg5;
+    if (sorted != 0) {
+        idx = func_800209A4(arg3 + 1) - 1;
+    } else {
+        idx = arg3;
+    }
+    progress = func_800231C8(D_8A12FFB0, idx + 1);
+    gSPDisplayList(gDisplayListHead++, D_80060270);
+    func_80029028(arg0, arg1, 0x104, 1, D_8A1057D8);
+    func_80029028(arg0, arg1 + 0x23, 0x104, 1, D_8A1057D8);
+    func_80029028(arg0, arg1 + 1, 0x104, 0x22, D_8A1057D4);
+    if (arg4 & 0x10) {
+        func_8002A0AC(arg0 + 3, arg1 + 3, 0xFE, 0x1E, D_8A1057D4);
+    }
+    if (progress == 2) {
+        func_8A100020(arg0 + 0x58, arg1 + 8, 0);
+    }
+    if (progress == 3) {
+        func_8A100020(arg0 + 0x58, arg1 + 8, 1);
+    }
+    func_8001AB6C();
+    func_80027F20(arg4);
+    func_8001A384(8, 0);
+    func_8001A944(arg0 + 0x10, arg1 + 8, D_8A12FC30, idx + 1);
+    if (progress != 0) {
+        func_8001A384(0x10, 0);
+        func_8001A944(arg0 + 0x7C, arg1 + 6, D_80064C60[idx].unk_00);
+    }
+    func_8001ABBC();
+}
 
 /*
  * func_8A100318
@@ -107,7 +152,6 @@ M2C_UNK func_80027410(s8 *, M2C_UNK *, M2C_UNK, M2C_UNK, s32); /* extern */
 M2C_UNK func_8002EC24(s8 *, s8 *, s8 *, M2C_UNK, M2C_UNK *, s32, s32); /* extern */
 extern M2C_UNK D_80064C5C;
 extern M2C_UNK D_8A12FC38;
-extern M2C_UNK func_8A100104;
 
 void func_8A100318(void* arg0, s32 arg1, s32 arg2) {
     func_8002A8C4((s8 *)arg0, arg1, arg2, 0x110, 0x16E);
@@ -121,11 +165,38 @@ void func_8A100318(void* arg0, s32 arg1, s32 arg2) {
     M2C_FIELD(arg0, s32 *, 0x4C) = (s32) (M2C_FIELD(arg0, s32 *, 0x4C) | 0x10000);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8A1003D0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment018_262620/func_8A1003D0.s")
-#endif
+s32 func_8002AE6C();
+s32 func_80029658(s32, s32, s32, void*);
+void func_80029028(s32, s32, s32, s32, Color_RGBA8);
+void func_8002F6C4(void*, s32, s32, s32, s32);
+void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
+extern u8 D_8007356C;
+extern u8 D_800734A8[];
+extern Gfx D_80060270[];
+extern Gfx D_80060290[];
+extern Gfx D_80060398[];
+extern u8 D_04005890[];
+extern Color_RGBA8 D_8A1057DC;
+extern char D_8A12FC48[];
+extern char D_8A12FC5C[];
+void func_8A1003D0(s8* arg0, u32 arg1) {
+    char* str;
+
+    if (func_8002AE6C() == 0) {
+        func_80029658(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0x145, M2C_FIELD(arg0, s32*, 8), &D_8007356C);
+        func_8002F6C4(arg0 + 0x2C, M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0x16, arg1 | 0xFFED, (s32)(arg0 + 0x1B0));
+        gSPDisplayList(gDisplayListHead++, D_80060270);
+        func_80029028(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0x14C, M2C_FIELD(arg0, s32*, 8) - 0xC, 0x1C, D_8A1057DC);
+        Font_BeginTranslucentTextRendering();
+        Gfx_SetEnvColor(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
+        Font_SetActive(8, 0);
+        Font_Printf(M2C_FIELD(arg0, s32*, 0) + 0x24, M2C_FIELD(arg0, s32*, 4) + 0x150, M2C_FIELD(arg0, s32*, 0x1B0) ? D_8A12FC48 : D_8A12FC5C);
+        Font_EndTexturedTextRendering();
+        gSPDisplayList(gDisplayListHead++, D_80060290);
+        func_8001B884(M2C_FIELD(arg0, s32*, 0) + 0xD8, M2C_FIELD(arg0, s32*, 4) + 0x150, 0x14, 0x14, D_04005890, 0x14, 0x200000);
+        gSPDisplayList(gDisplayListHead++, D_80060398);
+    }
+}
 
 extern s32 D_800603C0;
 s32 func_8002FD8C(unk_func_8820BE14_02C_038*);
@@ -273,11 +344,26 @@ void func_8A1009E0(s8 *arg0, s32 arg1, s32 arg2) {
     M2C_FIELD(arg0, s32 *, 0x14) = 0x1001;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8A100A24; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment018_262620/func_8A100A24.s")
-#endif
+void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
+void func_8A100A24(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
+    s32 i;
+
+    gDPPipeSync(gDisplayListHead++);
+    gDPSetCycleType(gDisplayListHead++, G_CYC_1CYCLE);
+    gDPSetCombineLERP(gDisplayListHead++, 0, 0, 0, TEXEL0, TEXEL0, 0, ENVIRONMENT, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, ENVIRONMENT, 0);
+    gDPSetRenderMode(gDisplayListHead++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
+    gDPSetTexturePersp(gDisplayListHead++, G_TP_NONE);
+    gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, arg2);
+    for (i = 0; i < 0xD0; i += 8) {
+        func_8001B884(arg0, arg1, 0xF4, 8, arg3, 0x100, 0);
+        arg1 += 8;
+        arg3 += 0x1000;
+    }
+    func_8001B884(arg0, arg1, 0xF4, 2, arg3, 0x100, 0);
+    gDPPipeSync(gDisplayListHead++);
+    gDPSetTexturePersp(gDisplayListHead++, G_TP_PERSP);
+    gDPSetAlphaCompare(gDisplayListHead++, G_AC_NONE);
+}
 
 extern char D_8A12FCDC[];
 void func_8001A944(s32, s32, const char*, ...);
@@ -296,11 +382,54 @@ void func_8A100BEC(s32 arg0, s32 arg1, s32 arg2) {
     func_8001AA60(arg0 + 0x54, arg1, (arg2 % 10) + 0x30);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8A100C50; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment018_262620/func_8A100C50.s")
-#endif
+extern char D_8A12FCE4[];
+extern char D_8A12FCF0[];
+extern char D_8A12FCF8[];
+extern char D_8A12FD00[];
+extern char D_8A12FD04[];
+extern char D_8A12FD0C[];
+extern char D_8A12FD10[];
+extern char D_8A12FD14[];
+extern char D_8A12FD18[];
+extern u8 D_800735C4[];
+extern s32 D_8A12FFB8;
+s32 func_800231C8(s32, s32);
+void func_800295E8(s32, s32, s32, s32, u8*);
+
+void func_8A100C50(s32 arg0, s32 arg1) {
+    u8* entry = (u8*)&D_80064C5C + D_8A12FFB8 * 0x1C;
+
+    gSPDisplayList(gDisplayListHead++, D_80060270);
+    func_80029028(arg0, arg1, 0x122, 0xD2, D_8A1057D4);
+    func_800295E8(arg0 + 8, arg1 + 8, 0x112, 0x5A, D_800735C4);
+    Font_BeginTranslucentTextRendering();
+    Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+    Font_EnableTwoCycleTexturing();
+    Font_SetActive(0x20, 0);
+    Gfx_SetPrimColor(0x96, 0x96, 0xFF, 0xFF);
+    Font_Printf(arg0 + 0x70, arg1 + 0x38, M2C_FIELD(entry, char**, 4));
+    Font_SetActive(0x10, 0);
+    Gfx_SetPrimColor(0x96, 0xFF, 0x96, 0xFF);
+    Font_Printf(arg0 + 8, arg1 + 0x6A, D_8A12FCE4, M2C_FIELD(entry, s32*, 8));
+    Gfx_SetPrimColor(0xFF, 0xFF, 0x96, 0xFF);
+    Font_Printf(arg0 + 0xD, arg1 + 0x8E, D_8A12FCF0);
+    Gfx_SetPrimColor(0xFF, 0x96, 0x96, 0xFF);
+    Font_Printf(arg0 + 0xD, arg1 + 0xB2, D_8A12FCF8);
+    Font_DisableTwoCycleTexturing();
+    Gfx_SetEnvColor(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
+    Font_Printf(arg0 + 0x12, arg1 + 0x12, D_8A12FD00);
+    Font_Printf(arg0 + 0x4E, arg1 + 0x12, D_8A12FD04, entry[0]);
+    if (func_800231C8(D_8A12FFB0, entry[0]) >= 2) {
+        func_8A100BEC(arg0 + 0x79, arg1 + 0x8E, entry[0xD]);
+        func_8A100BEC(arg0 + 0x79, arg1 + 0xB2, M2C_FIELD(entry, s16*, 0xE));
+    } else {
+        Font_Printf(arg0 + 0x79, arg1 + 0x8E, D_8A12FD0C);
+        Font_Printf(arg0 + 0x79, arg1 + 0xB2, D_8A12FD10);
+    }
+    Font_Printf(arg0 + 0xE1, arg1 + 0x8E, D_8A12FD14);
+    Font_Printf(arg0 + 0xE1, arg1 + 0xB2, D_8A12FD18);
+    Font_EndTexturedTextRendering();
+}
 
 typedef struct Rgba8A100F20 { u8 r, g, b, a; } Rgba8A100F20;
 void func_8002A550(s32, s32, s32, s32, Rgba8A100F20, Rgba8A100F20);
@@ -329,7 +458,7 @@ s32 func_80029658(s32, s32, s32, void*);
 s32 func_80029864(s32, s32, s32, void*);
 s32 func_8002A3F8(void*, s32, s32);
 s32 func_8002AB84();
-void func_8A100A24(s32, s32, s32, s32);
+void func_8A100A24(s32, s32, s32, u8*);
 void func_8A100C50(s32, s32);
 void func_8A100F20(s32, s32);
 extern u8 D_8007356C;
@@ -397,7 +526,7 @@ void func_8A101154(void* arg0) {
 
 M2C_UNK func_800069CC();                            /* extern */
 M2C_UNK func_80028060(M2C_UNK, M2C_UNK *, M2C_UNK *, s32); /* extern */
-M2C_UNK func_8A1003D0(M2C_UNK *, M2C_UNK);          /* extern */
+void func_8A1003D0(s8*, u32);
 void func_8A10068C(void*);
 extern M2C_UNK D_8A12FD2C;
 extern M2C_UNK D_8A12FFC0;
@@ -423,11 +552,55 @@ s32 func_8A1011A4(s32 arg0) {
     return 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8A10122C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment018_262620/func_8A10122C.s")
-#endif
+M2C_UNK func_8003F6AC(M2C_UNK);
+void func_8A1003D0(s8*, u32);
+void func_8000B1FC(void);
+M2C_UNK func_8000B220();
+M2C_UNK func_8000B2F4(s32);
+M2C_UNK func_800158C0();
+void func_8001B5F0(void);
+M2C_UNK func_80006780();
+s32 func_8A10122C(void) {
+    s32 temp_s0;
+    s32 var_s4;
+
+    var_s4 = 1;
+    func_8000B2F4(D_800603C0);
+    do {
+        func_8000B1FC();
+        func_8000B220();
+        func_8001B5F0();
+        if ((M2C_FIELD(&D_8A12FFC0, s32 *, 0x28) == 1) || (M2C_FIELD(&D_8A12FFC0, s32 *, 0x28) == 2U)) {
+            temp_s0 = func_8A100588((u8*)&D_8A12FFC0);
+            D_8A12FFB8 = func_8A1000C0((s8*)&D_8A12FFC0);
+            if (temp_s0 == -1) {
+                func_8003F6AC(3);
+                M2C_FIELD(&D_8A12FFC0, s32 *, 0x24) = 7;
+                M2C_FIELD(&D_8A12FFC0, s32 *, 0x1D8) = 7;
+                M2C_FIELD(&D_8A12FFC0, s32 *, 0x204) = 7;
+            } else if (temp_s0 == 1) {
+                if (func_800231C8(D_8A12FFB0, D_8A12FFB8 + 1) == 0) {
+                    func_8003F6AC(8);
+                } else {
+                    func_8003F6AC(2);
+                    var_s4 = 2;
+                    M2C_FIELD(&D_8A12FFC0, s32 *, 0x214) = 0;
+                }
+            }
+        }
+        func_800158C0();
+        func_800069CC();
+        func_8A101118();
+        func_8A1003D0(&D_8A12FFC0, 2);
+        func_8A10068C(&D_8A130174);
+        func_8A100954((s8*)&D_8A1301A0, 0);
+        func_80006780();
+        if (M2C_FIELD(&D_8A12FFC0, s32 *, 0x28) == 4) {
+            var_s4 = 0;
+        }
+    } while (var_s4 == 1);
+    return var_s4;
+}
 
 M2C_UNK func_8003F6AC(M2C_UNK);
 M2C_UNK func_8003BD3C(s32);

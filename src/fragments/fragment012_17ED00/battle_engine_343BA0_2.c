@@ -79,17 +79,68 @@ void func_82132F88(CameraNode* arg0) {
     sBattleScene.scene->unk_20++;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82133028; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82133028.s")
-#endif
+s32 func_8003F6AC(s32);
+void func_800199F8(s8*, s32);
+void func_80010F9C(s8*, s32);
+s32 func_82107A5C(s8*);
+void func_82135A54(CameraNode*, s8*);
+extern PokemonBattleCues* D_82189180[];
+extern s16 D_8219A50C;
+extern u8 D_8219A4F4;
+extern u8 D_8219A594;
+void func_82133028(CameraNode* arg0) {
+    u8 sp40[6] = { 0x01, 0x13, 0x1B, 0x17, 0x24, 0x38 };
+    u8 sp38[6] = { 0x00, 0x0C, 0x0E, 0x0F, 0x46, 0x1B };
+    MovePresentationCue* cue = D_82189180[func_82107A5C(D_8219A590)]->moveCues + sp40[D_8219A50C] - 1;
 
-M2C_UNK func_82133028();                            /* extern */
+    switch (D_8219A50C) {
+        case 0:
+            func_8003F6AC(0x12);
+            func_82132E28((s32)D_8219A590, (s32)arg0, 3);
+            func_800199F8(D_8219A590, cue->id);
+            func_80010F9C(D_8219A590, sp38[D_8219A50C]);
+            break;
+        case 1:
+            func_8003F6AC(0x13);
+            ((ActivePokemon*)D_8219A590)->displayObject.position.y += 500.0;
+            func_82132EB4((s32)arg0, (s32)D_8219A590, 350.0f, 0.0f, -0x1C71, 0x38E3);
+            func_800199F8(D_8219A590, cue->id);
+            func_80010F9C(D_8219A590, sp38[D_8219A50C]);
+            break;
+        case 2:
+            func_8003F6AC(0x14);
+            ((ActivePokemon*)D_8219A590)->displayObject.rotation.y = -0x4000;
+            func_82132EB4((s32)arg0, (s32)D_8219A590, 300.0f, -75.0f, 0x71C, -0x2AAA);
+            func_800199F8(D_8219A590, cue->id);
+            func_80010F9C(D_8219A590, sp38[D_8219A50C]);
+            break;
+        case 3:
+            func_8003F6AC(0x15);
+            func_82132EB4((s32)arg0, (s32)D_8219A590, 200.0f, 0.0f, 0x71C, 0x2AAA);
+            func_800199F8(D_8219A590, cue->id);
+            func_80010F9C(D_8219A590, sp38[D_8219A50C]);
+            break;
+        case 4:
+            func_8003F6AC(0x16);
+            ((ActivePokemon*)D_8219A590)->displayObject.rotation.y = -0x4000;
+            func_82132EB4((s32)arg0, (s32)D_8219A590, 600.0f, -200.0f, 0, -0x238E);
+            func_800199F8(D_8219A590, cue->id);
+            func_80010F9C(D_8219A590, sp38[D_8219A50C]);
+            break;
+        case 5:
+            func_8003F6AC(0x17);
+            func_80010F9C(D_8219A590, sp38[D_8219A50C]);
+            D_8219A4F4 = 0xA;
+            func_82135A54(arg0, D_8219A590);
+            break;
+    }
+    D_8219A594 = 0;
+}
+
 extern s8 *D_8219A5A0;
 
-void func_82133318(void) {
-    func_82133028();
+void func_82133318(CameraNode* arg0) {
+    func_82133028(arg0);
     M2C_FIELD(D_8219A5A0, s32 *, 0x20) = (s32) (M2C_FIELD(D_8219A5A0, s32 *, 0x20) + 1);
 }
 
@@ -179,6 +230,7 @@ typedef struct Mon82133534 { u8 flags; u8 pad1; s16 move; } Mon82133534;
 extern Arr82133534 D_8218B350;
 s16 func_8000F1FC(s16, M2C_UNK, M2C_UNK, M2C_UNK);
 M2C_UNK func_80019B28(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32);
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_82133534(CameraNode *arg0)
 {
   s32 pad[2];
@@ -193,7 +245,7 @@ void func_82133534(CameraNode *arg0)
     if (v == 0xFF)
     {
       *((s32 *) (((s8 *) D_8219A5A0) + 0x20)) = 6;
- if (1) { }
+ if (1) { }  // karodo
     }
     else
     {
@@ -206,7 +258,6 @@ void func_82133534(CameraNode *arg0)
 
 M2C_UNK func_80019B28(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32); /* extern */
 M2C_UNK func_821088BC(s8 *);                      /* extern */
-M2C_UNK func_82133028(s32);                         /* extern */
 M2C_UNK func_8213B31C(M2C_UNK);                     /* extern */
 extern s8 *D_8219A590;
 extern u8 D_8219A594;
@@ -255,7 +306,7 @@ void func_821336EC(CameraNode* arg0) {
             break;
 
         case 1:
-            func_82133318();
+            func_82133318(arg0);
             break;
 
         case 2:

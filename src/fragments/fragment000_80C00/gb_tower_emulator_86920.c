@@ -23,14 +23,23 @@ typedef struct unk_D_81234650 {
     /* 0x04 */ s32 unk_04;
 } unk_D_81234650;
 typedef struct unk_D_81234690 {
-    /* 0x00 */ u8  pad0[2];
+    /* 0x00 */ s16 unk_00;
     /* 0x02 */ u16 unk_02;
     /* 0x04 */ s16 unk_04;
     /* 0x06 */ s16 unk_06;
     /* 0x08 */ s16 unk_08;
     /* 0x0A */ s16 unk_0A;
     /* 0x0C */ s16 unk_0C;
-    /* 0x0E */ u8 pad0E[0x2A];
+    /* 0x0E */ s16 unk_0E;
+    /* 0x10 */ s16 unk_10;
+    /* 0x12 */ s16 unk_12;
+    /* 0x14 */ s16 unk_14;
+    /* 0x16 */ u8 pad16[0x18 - 0x16];
+    /* 0x18 */ f32 unk_18;
+    /* 0x1C */ f32 unk_1C;
+    /* 0x20 */ f32 unk_20;
+    /* 0x24 */ f32 unk_24;
+    /* 0x28 */ u8 pad28[0x38 - 0x28];
 } unk_D_81234690;
 extern unk_D_81234690 D_811858B8;
 extern volatile s32 D_811858F0;
@@ -47,11 +56,29 @@ u32 GbApu_AllocZeroed(unk_func_81206FA0* arg0, s32 arg1);
 s32 GbApu_Alloc(unk_func_81206FA0* arg0, s32 arg1);
 void GbApu_InitAllocator(unk_func_81206FA0* arg0, s32 arg1, s32 arg2);
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_811095E0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_811095E0.s")
-#endif
+extern u8 D_81184654[1];
+extern u8 D_81184655[1];
+extern u8 D_81184656[1];
+
+void func_811095E0(void) {
+    s32 i;
+
+    for (i = 0; i < 1; i++) {
+        if (D_81184655[i] != 5) {
+            D_81184655[i] = 0;
+        }
+    }
+    for (i = 0; i < 1; i++) {
+        if (D_81184654[i] != 5) {
+            D_81184654[i] = 0;
+        }
+    }
+    for (i = 0; i < 1; i++) {
+        if (D_81184656[i] != 5) {
+            D_81184656[i] = 0;
+        }
+    }
+}
 
 /* One 0xCC-byte record; only the fields func_81109678 touches are named. */
 typedef struct Rec81109678Flags {
@@ -68,7 +95,15 @@ typedef struct Rec81109678 {
     /* 0x34 */ u8 unk_34;
     /* 0x35 */ u8 pad35[0x44 - 0x35];
     /* 0x44 */ Rec81109678Flags* unk_44;
-    /* 0x48 */ u8 pad48[0xCC - 0x48];
+    /* 0x48 */ u8 pad48[0x5C - 0x48];
+    /* 0x5C */ u8 unk_5C;
+    /* 0x5D */ u8 unk_5D;
+    /* 0x5E */ u8 pad5E[0x6C - 0x5E];
+    /* 0x6C */ f32 unk_6C;
+    /* 0x70 */ u8 pad70[0xB4 - 0x70];
+    /* 0xB4 */ u32 enabled : 1;
+    /* 0xB4 */ u32 restB4 : 31;
+    /* 0xB8 */ u8 padB8[0xCC - 0xB8];
 } Rec81109678; // size = 0xCC
 
 s32 func_8111073C(Rec81109678*);
@@ -117,6 +152,7 @@ void func_81109678(s32 arg0) {
 M2C_UNK func_81112E00(M2C_UNK *);                   /* extern */
 extern s8 D_81184668;
 extern s16 D_811858CC;
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_81109764(s32 arg0)
 {
   s32 new_var2;
@@ -300,6 +336,49 @@ void func_81109B50(s8 *arg0) {
     func_811098FC(&D_81184400);
 }
 
+typedef struct CacheEntry81109C0C {
+    /* 0x00 */ u8* ramAddr;
+    /* 0x04 */ u32 size;
+    /* 0x08 */ s16 tableType;
+    /* 0x0A */ s16 id;
+} CacheEntry81109C0C; // size = 0xC
+
+typedef struct Pool81109C0C {
+    /* 0x00 */ u8* startRamAddr;
+    /* 0x04 */ u8* curRamAddr;
+    /* 0x08 */ s32 size;
+    /* 0x0C */ s32 numEntries;
+} Pool81109C0C; // size = 0x10
+
+typedef struct PersistentCache81109C0C {
+    /* 0x00 */ s32 numEntries;
+    /* 0x04 */ Pool81109C0C pool;
+    /* 0x14 */ CacheEntry81109C0C entries[1];
+} PersistentCache81109C0C; // size = 0x20
+
+typedef struct TemporaryCache81109C0C {
+    /* 0x00 */ s32 nextSide;
+    /* 0x04 */ Pool81109C0C pool;
+    /* 0x14 */ CacheEntry81109C0C entries[2];
+} TemporaryCache81109C0C; // size = 0x2C
+
+typedef struct Cache81109C0C {
+    /* 0x00 */ PersistentCache81109C0C persistent;
+    /* 0x20 */ TemporaryCache81109C0C temporary;
+} Cache81109C0C;
+
+typedef struct SeqPlayer81109C0C {
+    /* 0x000 */ u32 enabled : 1;
+    /* 0x000 */ u32 rest0 : 31;
+    /* 0x004 */ u8 seqId;
+    /* 0x005 */ u8 pad5[0x15C - 0x5];
+} SeqPlayer81109C0C; // size = 0x15C
+
+extern u8 D_81184654[1];
+extern u8 D_81184655[1];
+extern u8 D_81184656[1];
+void func_8110CAE0(s32, s32);
+
 #ifdef NON_MATCHING
 /* TODO: decompile func_81109C0C; signature not recovered. */
 #else
@@ -369,11 +448,30 @@ s32 func_8110A368(s32 arg0, s32 arg1, s32 arg2) {
     return 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110A474; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110A474.s")
-#endif
+/**
+ * Unused in the code seen so far. Fills out[0..15] from two recurrences in p
+ * and q seeded with 262159.0f; as in the Ocarina of Time version
+ * (func_800DDF80) the first loop writes to out instead of tmp, so the second
+ * loop copies partly uninitialised values.
+ */
+void func_8110A474(f32 p, f32 q, u16* out) {
+    s32 i;
+    f32 tmp[16];
+
+    tmp[0] = (f32)(q * 262159.0f);
+    tmp[8] = (f32)(p * 262159.0f);
+    tmp[1] = (f32)((q * p) * 262159.0f);
+    tmp[9] = (f32)(((p * p) + q) * 262159.0f);
+
+    for (i = 2; i < 8; i++) {
+        out[i] = q * tmp[i - 2] + p * tmp[i - 1];
+        out[8 + i] = q * tmp[6 + i] + p * tmp[7 + i];
+    }
+
+    for (i = 0; i < 16; i++) {
+        out[i] = tmp[i];
+    }
+}
 
 /*
  * func_8110A848
@@ -479,691 +577,377 @@ void func_8110AC14(void) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110AC8C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110AC8C.s")
-#endif
+extern volatile u8 D_81184657;
+extern s32 D_8118465C;
+void func_8110AFF0(void);
+void func_8110BFB0(void);
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110AFF0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110AFF0.s")
-#endif
-
-typedef struct unk_D_81184450 {
-    /* 0x0 */ s32 unk_0;
-    /* 0x4 */ s32 unk_4;
-    /* 0x8 */ s16 unk_8;
-    /* 0xA */ s16 unk_A;
-} unk_D_81184450; // size = 0xC
-
-typedef struct unk_D_81184440 {
-    /* 0x00 */ char unk00[0xC];
-    /* 0x0C */ s32 unk_0C;
-    /* 0x10 */ unk_D_81184450 unk_10[1];
-} unk_D_81184440;
-
-extern unk_D_81184440 D_81184440;
-s32 func_8110B880(s32 arg0, s32 arg1) {
+s32 func_8110AC8C(void) {
     s32 i;
+    s32 j;
+    s32 sp24;
 
-    for (i = 0; i < D_81184440.unk_0C; i++) {
-        if (arg0 == D_81184440.unk_10[i].unk_8 && arg1 == D_81184440.unk_10[i].unk_A) {
-            return D_81184440.unk_10[i].unk_0;
-        }
-    }
-
-    return 0;
-}
-
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110B8D8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110B8D8.s")
-#endif
-
-s8* func_8110BA8C(s32);
-s32 func_8110B958(s32 arg0, s32 arg1, s32 arg2, s8 arg3) {
-    s8* p = func_8110BA8C(arg0);
-
-    if (p != NULL) {
-        M2C_FIELD(p, u8*, 2) = arg1;
-        M2C_FIELD(p, s32*, 0xC) = arg2;
-        M2C_FIELD(p, s8*, 1) = arg3;
-        return M2C_FIELD(p, s32*, 8);
-    }
-    return 0;
-}
-
-s8* func_8110BF28(s32 arg0);
-s32 func_8110B9A8(s32 arg0, s32 arg1, s32 arg2, s8 arg3) {
-    s8* p = func_8110BF28(arg0);
-
-    if (p != NULL) {
-        M2C_FIELD(p, u8*, 2) = arg1;
-        M2C_FIELD(p, s32*, 0xC) = arg2;
-        M2C_FIELD(p, s8*, 1) = arg3;
-        return M2C_FIELD(p, s32*, 8);
-    }
-    return 0;
-}
-
-s32 func_81109868(M2C_UNK *, s32);                  /* extern */
-M2C_UNK func_811098C0(M2C_UNK *, s32, s32);         /* extern */
-extern M2C_UNK D_81184300;
-extern M2C_UNK D_81184310;
-extern M2C_UNK D_811845D0;
-extern s32 D_811845D8;
-extern s32 D_811845F4;
-extern M2C_UNK D_811845F8;
-extern s32 D_81184600;
-extern s32 D_8118461C;
-
-void func_8110B9F8(s32 arg0, s32 arg1) {
-    s32 temp_v0;
-    s32 temp_v0_2;
-
-    temp_v0 = func_81109868(&D_81184300, arg0);
-    if (temp_v0 == 0) {
-        D_811845D8 = 0;
+    if (D_811858B8.unk_00 == 2) {
+        sp24 = 2;
     } else {
-        func_811098C0(&D_811845D0, temp_v0, arg0);
+        sp24 = 1;
     }
-    temp_v0_2 = func_81109868(&D_81184310, arg1);
-    if (temp_v0_2 == 0) {
-        D_81184600 = 0;
-    } else {
-        func_811098C0(&D_811845F8, temp_v0_2, arg1);
-    }
-    D_811845F4 = 0;
-    D_8118461C = 0;
-}
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110BA8C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110BA8C.s")
-#endif
-
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110BD20; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110BD20.s")
-#endif
-
-/* One-byte flags field; only the 2-bit value at bits 2-3 is touched by func_8110BEE4. */
-typedef struct {
-    u8 pad0 : 4;
-    u8 field : 2;
-    u8 pad1 : 2;
-} Flags2Bit;
-
-/*
- * func_8110BEE4
- *
- * If arg1 is non-NULL and the word at arg0 + 0x08 equals the word at
- * arg1 + 0x04, copies the word at arg0 + 0x0C into arg1 + 0x04 and stores the
- * low two bits of the signed byte at arg0 + 0x01 into bits 2-3 of the byte at
- * arg1 + 0x00 (a bit-field write: the retail code masks with 0xFFF3 / 0x0C).
- */
-void func_8110BEE4(u8* arg0, Flags2Bit* arg1) {
-    if ((arg1 != NULL) && (M2C_FIELD(arg0, s32*, 8) == M2C_FIELD(arg1, s32*, 4))) {
-        M2C_FIELD(arg1, s32*, 4) = M2C_FIELD(arg0, s32*, 0xC);
-        arg1->field = M2C_FIELD(arg0, s8*, 1);
-    }
-}
-
-s32 func_81109868(M2C_UNK *, s32);                  /* extern */
-s8 *func_8110BF28(s32 arg0)
-{
-  s32 temp_v0_2;
-  s8 *temp_v0;
-  s32 *new_var;
-  new_var = (s32 *) (&D_811845F4);
-  temp_v0_2 = func_81109868(&(*((s8 *) (&D_811845D0))), arg0);
-  if (temp_v0_2 == 0)
-  {
-    return 0;
-  }
-  temp_v0 = (((*new_var) * 0x14) + 0x10) + (&(*((s8 *) (&D_811845D0))));
-  *((s8 *) (((s8 *) temp_v0) + 0)) = 1;
-  *((s32 *) (((s8 *) temp_v0) + 8)) = temp_v0_2;
-  *((s32 *) (((s8 *) temp_v0) + 0x10)) = arg0;
-  *new_var += 1;
-  return temp_v0;
-}
-
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110BFB0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110BFB0.s")
-#endif
-
-typedef struct Timer8110C1C0 { char pad0[0xD]; u8 slot; u8 count; char padF; } Timer8110C1C0;
-extern Timer8110C1C0* D_81185688;
-extern u32 D_8118568C;
-extern u32 D_81185690;
-extern s32 D_81185694;
-extern u8 D_81185698[];
-extern u8 D_81185798[];
-extern u8 D_8118589A;
-extern u8 D_8118589B;
-void func_8110C1C0(void) {
-    u32 i;
-    Timer8110C1C0* t;
-    for (i = 0; i < D_81185690; i++) {
-        t = &D_81185688[i];
-        if (t->count != 0) {
-            if (--t->count == 0) {
-                t->slot = D_8118589A;
-                D_81185698[D_8118589A++] = i;
+    switch (D_81184657) {
+        case 5:
+            for (i = 0; i < D_811858B8.unk_14; i++) {
+                func_81112E00(&D_81184668 + i * 0x15C);
             }
-        }
-    }
-    for (i = D_81185690; i < D_8118568C; i++) {
-        t = &D_81185688[i];
-        if (t->count != 0) {
-            if (--t->count == 0) {
-                t->slot = D_8118589B;
-                D_81185798[D_8118589B++] = i;
-            }
-        }
-    }
-    D_81185694 = 0;
-}
-
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110C2D8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110C2D8.s")
-#endif
-
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110C618; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110C618.s")
-#endif
-
-extern s8 D_81184655;
-
-s32 func_8110CA2C(s32 arg0) {
-    if (arg0 == 0xFF) {
-        return 1;
-    }
-    if (((u8*)&D_81184655)[arg0] >= 2) {
-        return 1;
-    }
-    return 0;
-}
-
-extern s8 D_81184656;
-
-s32 func_8110CA68(s32 arg0) {
-    if (arg0 == 0xFF) {
-        return 1;
-    }
-    if (((u8*)&D_81184656)[arg0] >= 2) {
-        return 1;
-    }
-    return 0;
-}
-
-extern s8 D_81184654;
-
-s32 func_8110CAA4(s32 arg0) {
-    if (arg0 == 0xFF) {
-        return 1;
-    }
-    if (((u8*)&D_81184654)[arg0] >= 2) {
-        return 1;
-    }
-    return 0;
-}
-
-extern s8 D_81184655;
-void func_8110CAE0(s32 arg0, s32 arg1) {
-    u8 *temp_v0;
-
-    if (arg0 != 0xFF) {
-        temp_v0 = arg0 + &D_81184655;
-        if (*temp_v0 != 5) {
-            *temp_v0 = arg1;
-        }
-    }
-}
-
-extern s8 D_81184656;
-void func_8110CB10(s32 arg0, s32 arg1) {
-    u8 *temp_v0;
-
-    if (arg0 != 0xFF) {
-        temp_v0 = arg0 + &D_81184656;
-        if (*temp_v0 != 5) {
-            *temp_v0 = arg1;
-        }
-    }
-}
-
-extern s8 D_81184654;
-void func_8110CB40(s32 arg0, s32 arg1) {
-    u8 *temp_v0;
-
-    if (arg0 != 0xFF) {
-        temp_v0 = arg0 + &D_81184654;
-        if (*temp_v0 != 5) {
-            *temp_v0 = arg1;
-        }
-    }
-}
-
-void func_8110CB70(s8 *arg0, s32 arg1, unsigned short arg2)
-{
-  s32 var_v0;
-  s8 *var_a2;
-  *((s16 *) (((s8 *) arg0) + 2)) = arg2;
-  *((s32 *) (((s8 *) arg0) + 4)) = arg1;
-  var_v0 = 0;
-  if ((*((s16 *) (((s8 *) arg0) + 0))) > 0)
-  {
- var_a2 = arg0; do { var_v0 += 1; if (((*((s32 *) (((s8 *) var_a2) + 0x14))) != 0) && ((*((s8 *) (((s8 *) var_a2) + 0x18))) == 2)) {
-        *((s32 *) (((s8 *) var_a2) + 0x10)) = (s32) ((*((s32 *) (((s8 *) var_a2) + 0x10))) + arg1);
-      }
-      var_a2 += 0x10;
- } while (var_v0 < (*((s16 *) (((s8 *) arg0) + 0)))); }
-}
-
-extern u8* D_811858A8;
-extern u16 D_811858AC;
-s32 func_8110D7B0(M2C_UNK, s32);
-s32 func_8110D4E0(s32);
-
-s32 func_8110CBD0(s32 arg0, s32* arg1) {
-    s32 off;
-    s32 count;
-    u8 id;
-    s32 ret;
-
-    if (arg0 >= D_811858AC) {
-        return 0;
-    }
-    off = ((u16*)D_811858A8)[func_8110D7B0(0, arg0)];
-    id = 0xFF;
-    count = *(off + D_811858A8);
-    off++;
-    while (count > 0) {
-        id = D_811858A8[off++];
-        ret = func_8110D4E0(id);
-        count--;
-    }
-    *arg1 = id;
-    return ret;
-}
-
-extern u16 D_811858AC;
-s32 func_8110D7B0(M2C_UNK, s32);
-s32 func_8110CBD0(s32, s32*);
-void func_8110D3D4(s32);
-void func_8110CC94(s32 arg0, s32 arg1) {
-    s32 sp18[2];
-
-    if (arg0 < D_811858AC) {
-        arg0 = func_8110D7B0(0, arg0);
-        if (arg1 & 2) {
-            func_8110CBD0(arg0, sp18);
-        }
-        if (arg1 & 1) {
-            func_8110D3D4(arg0);
-        }
-    }
-}
-
-typedef struct Stream8110CD0C {
-    /* 0x00 */ u32 unk00_0 : 4;
-    /* 0x00 */ u32 mode : 2;
-    /* 0x00 */ u32 unk00_6 : 1;
-    /* 0x00 */ u32 enabled : 1;
-    /* 0x00 */ u32 addr : 24;
-    /* 0x04 */ s32 unk04;
-} Stream8110CD0C;
-void func_8110DB8C(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3);
-void func_8110DA68(s32, s32, u32, s32);
-extern u8* D_811858A4;
-s32 func_8110CD0C(Stream8110CD0C* arg0, s32 arg1) {
-    s32 ret;
-
-    if (arg0->enabled == 1) {
-        if (arg0->mode != 0) {
-            ret = func_8110B9A8(arg0->addr, arg1, arg0->unk04, arg0->mode);
-            if (ret == 0) {
-                return -1;
-            }
-            if (arg0->mode == 1) {
-                func_8110DB8C(arg0->unk04, ret, arg0->addr, *(s16*)(D_811858A4 + 2));
-            } else {
-                func_8110DA68(arg0->unk04, ret, arg0->addr, arg0->mode);
-            }
-            arg0->mode = 0;
-            arg0->unk04 = ret;
-        }
-    }
-}
-
-u8* func_81110CA8(s32, s32);
-u8* func_81110D6C(s32, s32);
-s32 func_8110CDF0(s32 arg0, s32 arg1, s32 arg2) {
-    u8 *p;
-
-    if (arg1 < 0x7F) {
-        p = func_81110CA8(arg0, arg1);
-        if (p == NULL) {
-            return -1;
-        }
-        if (p[1] != 0) {
-            func_8110CD0C(M2C_FIELD(p, Stream8110CD0C **, 8), arg0);
-        }
-        func_8110CD0C(M2C_FIELD(p, Stream8110CD0C **, 0x10), arg0);
-        if (p[2] != 0x7F) {
-            func_8110CD0C(M2C_FIELD(p, Stream8110CD0C **, 0x18), arg0);
-        }
-    } else if (arg1 == 0x7F) {
-        p = func_81110D6C(arg0, arg2);
-        if (p == NULL) {
-            return -1;
-        }
-        func_8110CD0C(M2C_FIELD(p, Stream8110CD0C **, 4), arg0);
-        return 0;
-    }
-}
-
-M2C_UNK func_8004CFB0(s32, M2C_UNK, M2C_UNK);       /* extern */
-s32 func_8110D7B0(M2C_UNK, s32);                    /* extern */
-s32 func_8110DCC0(M2C_UNK, s32, s32, s32, s32);     /* extern */
-
-void func_8110CEC0(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
-    if (func_8110DCC0(2, func_8110D7B0(2, arg0), arg1, arg2, arg3) == 0) {
-        func_8004CFB0(arg3, 0, 0);
-    }
-}
-
-extern u8* D_811858A8;
-void func_8110CF24(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
-    s32 off;
-    s32 count;
-
-    off = ((u16*)D_811858A8)[func_8110D7B0(0, arg0)];
-    count = *(off + D_811858A8);
-    off++;
-    while (count > 0) {
-        func_8110DCC0(1, func_8110D7B0(1, D_811858A8[off++]), arg1, arg2, arg3);
-        count--;
-    }
-}
-
-u8* func_8110CFEC(s32 arg0, s32* arg1) {
-    s32 off;
-
-    off = ((u16*)D_811858A8)[func_8110D7B0(0, arg0)];
-    *arg1 = *(off + D_811858A8);
-    off++;
-    if (*arg1 == 0) {
-        return NULL;
-    }
-    return D_811858A8 + off;
-}
-
-void func_8110D110(s32 arg0);
-
-void func_8110D054(s32 arg0) {
-    s32 off;
-    s32 count;
-    s32 id;
-
-    off = ((u16*)D_811858A8)[func_8110D7B0(0, arg0)];
-    count = *(off + D_811858A8);
-    off++;
-    while (count > 0) {
-        count--;
-        id = func_8110D7B0(1, D_811858A8[off++]);
-        if (func_8110B880(1, id) == 0) {
-            func_8110D110(id);
-            func_8110CAE0(id, 0);
-        }
-    }
-}
-
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110D110; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110D110.s")
-#endif
-
-typedef struct Slot8110D214 {
-    /* 0x000 */ s32 unk_000;
-    /* 0x004 */ char unk004[0x158];
-} Slot8110D214; // size = 0x15C
-extern Slot8110D214 D_81184740[];
-s32 func_8110D278(s32, s32, s32);
-
-/**
- * Clears the first word of slot arg0 in the D_81184740 array (stride 0x15C) and
- * returns func_8110D278(arg0, arg1, arg2); returns 0 without touching anything if
- * D_811859D4 is nonzero. arg1 and arg2 are passed through unchanged. Sibling of
- * func_8110D214, which stores its arg2 instead of 0 and passes 0 as the last argument.
- * What the slot and the flag mean is not established.
- */
-s32 func_8110D1B8(s32 arg0, s32 arg1, s32 arg2) {
-    if (D_811859D4 != 0) {
-        return 0;
-    }
-    D_81184740[arg0].unk_000 = 0;
-    return func_8110D278(arg0, arg1, arg2);
-}
-
-s32 func_8110D214(s32 arg0, s32 arg1, s32 arg2) {
-    if (D_811859D4 != 0) {
-        return 0;
-    }
-    D_81184740[arg0].unk_000 = arg2;
-    return func_8110D278(arg0, arg1, 0);
-}
-
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110D278; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110D278.s")
-#endif
-
-void func_8110D3D4(s32 arg0) {
-    s32 idx;
-    s32 sp18;
-
-    idx = func_8110D7B0(0, arg0);
-    func_8110D5BC(0, idx, &sp18);
-}
-
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110D408; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110D408.s")
-#endif
-
-typedef struct Entry8110D4E0 { u8 unk00[2]; u8 unk02; u8 unk03; char unk04[8]; } Entry8110D4E0;
-extern Entry8110D4E0* D_811858B0;
-s32 func_8110D408(s32, s32*);
-void func_8110EF7C(s32, s32, s32*, s32);
-s32 func_8110D4E0(s32 arg0) {
-    s32 ret;
-    s32 a;
-    s32 b;
-    s32 sp38;
-    s32 sp34;
-    s32 sp30;
-    s32 sp20[4];
-
-    arg0 = func_8110D7B0(1, arg0);
-    a = D_811858B0[arg0].unk02;
-    b = D_811858B0[arg0].unk03;
-    sp20[0] = a;
-    sp20[1] = b;
-    if (a != 0xFF) {
-        sp20[2] = func_8110D408(a, &sp30);
-    } else {
-        sp20[2] = 0;
-    }
-    if (b != 0xFF) {
-        sp20[3] = func_8110D408(b, &sp34);
-    } else {
-        sp20[3] = 0;
-    }
-    ret = func_8110D5BC(1, arg0, &sp38);
-    if (ret == 0) {
-        return 0;
-    }
-    if (sp38 == 1) {
-        func_8110EF7C(arg0, ret, sp20, 0);
-    }
-    return ret;
-}
-
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110D5BC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110D5BC.s")
-#endif
-
-u8* func_8110D840(s32);
-s32 func_8110D7B0(s32 arg0, s32 arg1) {
-    s32* entry = (s32*)(func_8110D840(arg0) + arg1 * 16);
-
-    if (entry[5] == 0) {
-        arg1 = entry[4];
-    }
-    return arg1;
-}
-
-s32 func_8110A310(s32, M2C_UNK, s32);               /* extern */
-
-s32 func_8110D7EC(s32 arg0, s32 arg1) {
-    s32 temp_v0;
-    s32 temp_v0_2;
-
-    temp_v0_2 = func_8110B880(arg0, arg1);
-    if (temp_v0_2 != 0) {
-        return temp_v0_2;
-    }
-    temp_v0 = func_8110A310(arg0, 2, arg1);
-    if (temp_v0 != 0) {
-        return temp_v0;
-    }
-    return 0;
-}
-
-extern u8* D_8118589C;
-extern u8* D_811858A0;
-extern u8* D_811858A4;
-
-/*
- * func_8110D840
- *
- * Returns the pointer stored in D_8118589C, D_811858A0 or D_811858A4 for
- * arg0 = 0, 1 or 2, and NULL for any other value (the caller treats the result
- * as a byte pointer to a table indexed in 16-byte steps). What the three
- * tables are is not established.
- * Matching note: the result is built in a local and returned once; separate
- * `return` statements in each case give a different register choice.
- */
-u8* func_8110D840(s32 arg0) {
-    u8* ret;
-    ret = NULL;
-    switch (arg0) {
-    case 0:
-        ret = D_8118589C;
-        break;
-    case 1:
-        ret = D_811858A0;
-        break;
-    case 2:
-        ret = D_811858A4;
-        break;
-    }
-    return ret;
-}
-
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110D884; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110D884.s")
-#endif
-
-extern s8 D_81137C1C[];
-extern s8 D_81137C28[];
-extern u8 D_81185650[];
-extern u8 D_81185670[];
-void func_80056730(s32, u32);
-void func_8004D1C0(void*, s32, s32);
-s32 func_8110DBA0();
-void func_8110DA68(s32 arg0, s32 arg1, u32 arg2, s32 arg3) {
-
-    arg2 = (arg2 + 0xF) & ~0xF;
-    func_80056730(arg1, arg2);
-    while (TRUE) {
-        if (arg2 < 0x400) {
+            D_8118465C = 4 / sp24;
+            D_81184657--;
             break;
-        }
-        func_8110DBA0(D_81185670, 1, 0, arg0, arg1, 0x400, D_81185650, arg3, D_81137C1C);
-        func_8004D1C0(D_81185650, 0, 1);
-        arg2 -= 0x400;
-        arg0 += 0x400;
-        arg1 += 0x400;
-    }
-    if (arg2 != 0) {
-        func_8110DBA0(D_81185670, 1, 0, arg0, arg1, arg2, D_81185650, arg3, D_81137C28);
-        func_8004D1C0(D_81185650, 0, 1);
-    }
-}
-
-void func_8110DB8C(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3) {
-
-}
-
-typedef struct IoMesg8110DBA0 {
-    /* 0x00 */ u16 type;
-    /* 0x02 */ u8 pri;
-    /* 0x03 */ u8 status;
-    /* 0x04 */ void* retQueue;
-    /* 0x08 */ void* dramAddr;
-    /* 0x0C */ u32 devAddr;
-    /* 0x10 */ u32 size;
-} IoMesg8110DBA0;
-s32 func_800593D0(void);
-s32 func_80051E60(void);
-void func_80056530(s32, IoMesg8110DBA0*, s32);
-s32 func_8110DBA0(IoMesg8110DBA0* mb, s32 pri, s32 direction, u32 devAddr, void* dramAddr, u32 size, void* mq, s32 kind) {
-    s32 handle;
-
-    if ((u32)D_811859D4 > 16) {
-        return -1;
-    }
-    switch (kind) {
-        case 2:
-            handle = func_800593D0();
+        case 4:
+            if (D_8118465C != 0) {
+                D_8118465C--;
+                func_8110AA50();
+            } else {
+                for (i = 0; i < D_811858E8; i++) {
+                    if (D_81184664[i].enabled && D_81184664[i].unk_5D != 0) {
+                        D_81184664[i].unk_6C = D_811858B8.unk_1C;
+                        D_81184664[i].unk_5C |= 0x10;
+                    }
+                }
+                D_8118465C = 16 / sp24;
+                D_81184657--;
+            }
             break;
         case 3:
-            handle = func_80051E60();
+            if (D_8118465C != 0) {
+                D_8118465C--;
+                func_8110AA50();
+            } else {
+                D_8118465C = 4 / sp24;
+                D_81184657--;
+            }
             break;
-        default:
-            return 0;
+        case 2:
+            func_8110AC14();
+            if (!D_8118465C && !D_8118465C && !D_8118465C) {} // FAKE: empty test found by a fake search; only changes register use
+            if (D_8118465C != 0) {
+                D_8118465C--;
+            } else {
+                D_81184657--;
+                func_8110BFB0();
+            }
+            if (!D_811858B8.unk_00) {} // FAKE: empty test found by the permuter; keeps &D_811858B8 in a saved register
+            break;
+        case 1:
+            func_8110AFF0();
+            D_81184657 = 0;
+            for (i = 0; i < 3; i++) {
+                D_811859C4[i] = D_811858B8.unk_08;
+                for (j = 0; j < 0x7E0; j++) {
+                    D_811859B8[i][j] = 0;
+                }
+            }
+            break;
     }
-    if (size & 0xF) {
-        size = (size + 0xF) & ~0xF;
+
+    if (D_81184657 < 3) {
+        return 0;
     }
-    mb->pri = pri;
-    mb->retQueue = mq;
-    mb->dramAddr = dramAddr;
-    mb->devAddr = devAddr;
-    mb->size = size;
-    M2C_FIELD(handle, s32*, 0x14) = 2;
-    func_80056530(handle, mb, direction);
-    return 0;
+    return 1;
+}
+
+typedef struct ReverbSettingsAFF0 {
+    /* 0x00 */ u8 downsampleRate;
+    /* 0x01 */ u8 windowSize;
+    /* 0x02 */ u16 decayRatio;
+    /* 0x04 */ u16 unk_4;
+    /* 0x06 */ u16 unk_6;
+    /* 0x08 */ u16 unk_8;
+    /* 0x0A */ s8 unk_A;
+    /* 0x0C */ u16 unk_C;
+    /* 0x0E */ s16 lowPassFilterCutoffLeft;
+    /* 0x10 */ s16 lowPassFilterCutoffRight;
+} ReverbSettingsAFF0; // size = 0x12
+
+typedef struct AudioSpecAFF0 {
+    /* 0x00 */ u32 frequency;
+    /* 0x04 */ u8 unk_04;
+    /* 0x05 */ u8 numNotes;
+    /* 0x06 */ u8 numSequencePlayers;
+    /* 0x07 */ u8 numReverbs;
+    /* 0x08 */ ReverbSettingsAFF0* reverbSettings;
+    /* 0x0C */ u16 unk_0C;
+    /* 0x10 */ s32 persistentSeqMem;
+    /* 0x14 */ s32 persistentFontMem;
+    /* 0x18 */ s32 persistentSampleMem;
+    /* 0x1C */ s32 temporarySeqMem;
+    /* 0x20 */ s32 temporaryFontMem;
+    /* 0x24 */ s32 temporarySampleMem;
+    /* 0x28 */ s32 persistentSampleCacheSize;
+    /* 0x2C */ s32 temporarySampleCacheSize;
+} AudioSpecAFF0; // size = 0x30
+
+typedef struct SampleAFF0 {
+    /* 0x00 */ u32 codec : 4;
+    /* 0x00 */ u32 medium : 2;
+    /* 0x00 */ u32 unk_bit26 : 1;
+    /* 0x00 */ u32 unk_bit25 : 1;
+    /* 0x01 */ u32 size : 24;
+    /* 0x04 */ s16* sampleAddr;
+    /* 0x08 */ struct LoopAFF0* loop;
+    /* 0x0C */ void* book;
+} SampleAFF0; // size = 0x10
+
+typedef struct LoopAFF0 {
+    /* 0x00 */ u32 start;
+    /* 0x04 */ u32 end;
+    /* 0x08 */ u32 count;
+} LoopAFF0;
+
+typedef struct ReverbItemAFF0 {
+    /* 0x00 */ s16 numSamplesAfterDownsampling;
+    /* 0x02 */ s16 chunkLen;
+    /* 0x04 */ s16* toDownsampleLeft;
+    /* 0x08 */ s16* toDownsampleRight;
+    /* 0x0C */ u8 unk0C[8];
+} ReverbItemAFF0; // size = 0x14
+
+typedef struct SynthesisReverbAFF0 {
+    /* 0x000 */ u8 resampleFlags;
+    /* 0x001 */ u8 useReverb;
+    /* 0x002 */ u8 framesToIgnore;
+    /* 0x003 */ u8 curFrame;
+    /* 0x004 */ u8 downsampleRate;
+    /* 0x005 */ s8 unk_05;
+    /* 0x006 */ u16 windowSize;
+    /* 0x008 */ u16 unk_08;
+    /* 0x00A */ u16 unk_0A;
+    /* 0x00C */ u16 decayRatio;
+    /* 0x00E */ s16 unk_0E;
+    /* 0x010 */ u16 unk_10;
+    /* 0x012 */ u16 unk_12;
+    /* 0x014 */ s32 nextRingBufPos;
+    /* 0x018 */ s32 unk_18;
+    /* 0x01C */ s32 bufSizePerChan;
+    /* 0x020 */ s16* leftRingBuf;
+    /* 0x024 */ s16* rightRingBuf;
+    /* 0x028 */ void* unk_28;
+    /* 0x02C */ void* unk_2C;
+    /* 0x030 */ void* unk_30;
+    /* 0x034 */ void* unk_34;
+    /* 0x038 */ ReverbItemAFF0 items[2][5];
+    /* 0x100 */ s16* filterLeft;
+    /* 0x104 */ s16* filterRight;
+    /* 0x108 */ s16* filterLeftState;
+    /* 0x10C */ s16* filterRightState;
+    /* 0x110 */ SampleAFF0* soundSample;
+    /* 0x114 */ f32 soundTuning;
+    /* 0x118 */ SampleAFF0 sample;
+    /* 0x128 */ LoopAFF0 loop;
+    /* 0x134 */ u8 unk134[0x158 - 0x134];
+} SynthesisReverbAFF0; // size = 0x158
+
+typedef struct SessionSplitAFF0 {
+    /* 0x00 */ s32 miscPoolSize;
+    /* 0x04 */ s32 unk_04;
+    /* 0x08 */ s32 unk_08;
+    /* 0x0C */ s32 cachePoolSize;
+} SessionSplitAFF0;
+
+typedef struct SplitAFF0 {
+    /* 0x00 */ s32 a;
+    /* 0x04 */ s32 b;
+    /* 0x08 */ s32 c;
+} SplitAFF0;
+
+extern AudioSpecAFF0 D_811526C4[];
+extern s16 D_811526F8;
+extern u16 D_81184278;
+extern s16 D_8118427C;
+extern void* D_81184288;
+extern s32 D_81184298;
+extern SessionSplitAFF0 D_81184620;
+extern SplitAFF0 D_81184630;
+extern SplitAFF0 D_81184638;
+extern SplitAFF0 D_81184648;
+extern u8 D_81184658;
+extern s32 D_811858E4;
+extern s16 D_811858EC;
+extern void* D_81185900[2];
+extern s32 D_811859B4;
+extern f32 D_811859B0;
+extern u32 D_8118568C;
+extern s32 D_8118557C;
+// func_8110B9F8 is defined as void in the next file, but this file calls it as
+// if it returned a value (as with an implicit declaration); the call only
+// matches that way.
+s32 func_8110B9F8(s32, s32);
+void func_8110C618(s32);
+void func_811152A4(s32);
+s32 func_80058100(s32);
+void func_8005C0A0(void);
+void func_8110FAF4(void);
+void func_81111130(void);
+void func_81111AF4(void);
+void func_8111539C(s32);
+void func_81115480(void);
+
+typedef struct PoolAFF0 {
+    /* 0x00 */ u8* start;
+    /* 0x04 */ u8* cur;
+    /* 0x08 */ s32 size;
+    /* 0x0C */ s32 count;
+} PoolAFF0;
+
+#define EXTERNAL_POOL_AFF0 (*(PoolAFF0*)&D_811842A0)
+#define REVERBS_AFF0 ((SynthesisReverbAFF0*)D_81184110)
+
+void func_8110AFF0(void) {
+    UNUSED s32 pad[5]; // FAKE: stack pad of unknown origin; only reserves frame space
+    s32 persistentMem;
+    s32 temporaryMem;
+    s32 totalMem;
+    s32 wantMisc;
+    s32 j;
+    s32 i;
+    ReverbSettingsAFF0* settings;
+    SynthesisReverbAFF0* reverb;
+    AudioSpecAFF0* spec = &D_811526C4[D_81184658];
+
+    D_8118568C = 0;
+    D_811858B8.unk_02 = spec->frequency;
+    D_811858B8.unk_04 = func_80058100(D_811858B8.unk_02);
+    D_811858B8.unk_06 = ((D_811858B8.unk_02 / D_811859B4) + 0xF) & 0xFFF0;
+    D_811858B8.unk_0A = D_811858B8.unk_06 - 0x10;
+    D_811858B8.unk_08 = D_811858B8.unk_06 + 0x10;
+    D_811858B8.unk_0C = ((D_811858B8.unk_06 + 0x10) / 0xD0) + 1;
+    D_811858B8.unk_0E = (D_811858B8.unk_06 / D_811858B8.unk_0C) & ~7;
+    D_811858B8.unk_10 = D_811858B8.unk_0E + 8;
+    D_811858B8.unk_12 = D_811858B8.unk_0E - 8;
+    D_811858B8.unk_18 = 32000.0f / (s32)D_811858B8.unk_02;
+    D_811858B8.unk_20 = (1.0f / 256.0f) / D_811858B8.unk_0C;
+    D_811858B8.unk_24 = D_811858B8.unk_0C / 4.0f;
+    D_811858B8.unk_1C = 1.0f / D_811858B8.unk_0C;
+    D_811858E8 = spec->numNotes;
+    D_811858B8.unk_14 = spec->numSequencePlayers;
+    if (D_811858B8.unk_14 >= 2) {
+        D_811858B8.unk_14 = 1;
+    }
+    D_81184278 = spec->unk_0C;
+    D_811858EC = (u32)(D_811858B8.unk_0C * 2880000.0f / D_811526F8 / D_811859B0);
+    D_811858B8.unk_00 = spec->unk_04;
+    D_811858B8.unk_06 *= D_811858B8.unk_00;
+    D_811858B8.unk_08 *= D_811858B8.unk_00;
+    D_811858B8.unk_0A *= D_811858B8.unk_00;
+    D_811858B8.unk_0C *= D_811858B8.unk_00;
+    if (D_811858B8.unk_00 >= 2) {
+        D_811858B8.unk_08 -= 0x10;
+    }
+    D_811858E4 = D_811858E8 * 0x14 * D_811858B8.unk_0C + spec->numReverbs * 0x20 + 0x1E0;
+    persistentMem = spec->persistentSeqMem + spec->persistentFontMem + spec->persistentSampleMem + spec->persistentSampleCacheSize + 0x10;
+    temporaryMem = spec->temporarySeqMem + spec->temporaryFontMem + spec->temporarySampleMem + spec->temporarySampleCacheSize + 0x10;
+    totalMem = persistentMem + temporaryMem;
+    wantMisc = D_81184298 - totalMem - 0x100;
+    D_81184620.miscPoolSize = wantMisc;
+    D_81184620.cachePoolSize = totalMem;
+    func_8110999C((s8*)&D_81184620);
+    D_81184630.a = persistentMem;
+    D_81184630.b = temporaryMem;
+    func_81109A18((s8*)&D_81184630);
+    D_81184638.a = spec->persistentSeqMem;
+    D_81184638.b = spec->persistentFontMem;
+    D_81184638.c = spec->persistentSampleMem;
+    func_81109A94((s8*)&D_81184638);
+    D_81184648.a = spec->temporarySeqMem;
+    D_81184648.b = spec->temporaryFontMem;
+    D_81184648.c = spec->temporarySampleMem;
+    func_81109B50((s8*)&D_81184648);
+    func_8110B9F8(spec->persistentSampleCacheSize, spec->temporarySampleCacheSize);
+    if (EXTERNAL_POOL_AFF0.start != NULL) {
+        EXTERNAL_POOL_AFF0.cur = EXTERNAL_POOL_AFF0.start;
+    }
+    func_811095E0();
+    D_81184664 = (Rec81109678*)GbApu_AllocZeroed((unk_func_81206FA0*)&D_811842C0, D_811858E8 * 0xCC);
+    func_81111AF4();
+    func_81111130();
+    D_81184288 = (void*)GbApu_AllocZeroed((unk_func_81206FA0*)&D_811842C0, D_811858B8.unk_0C * D_811858E8 * 0x18);
+    for (i = 0; i != 2; i++) {
+        D_81185900[i] = (void*)GbApu_AllocZeroed((unk_func_81206FA0*)&D_811842C0, D_811858E4 * 8);
+    }
+    for (i = 0; i < 1; i++) {
+        reverb = &REVERBS_AFF0[i];
+        reverb->useReverb = 0;
+    }
+    D_8118427B = spec->numReverbs;
+    for (i = 0; i < D_8118427B; i++) {
+        reverb = &REVERBS_AFF0[i];
+        settings = &spec->reverbSettings[i];
+
+        reverb->downsampleRate = settings->downsampleRate;
+        reverb->windowSize = settings->windowSize * 64;
+        reverb->windowSize /= reverb->downsampleRate;
+        reverb->decayRatio = settings->decayRatio;
+        reverb->unk_0A = settings->unk_4;
+        reverb->unk_10 = settings->unk_6;
+        reverb->unk_12 = settings->unk_8;
+        reverb->unk_05 = settings->unk_A;
+        reverb->unk_08 = settings->unk_C;
+        reverb->useReverb = 8;
+        reverb->leftRingBuf = (s16*)GbApu_AllocZeroed((unk_func_81206FA0*)&D_811842C0, reverb->windowSize * 2);
+        reverb->rightRingBuf = (s16*)GbApu_AllocZeroed((unk_func_81206FA0*)&D_811842C0, reverb->windowSize * 2);
+        reverb->nextRingBufPos = 0;
+        reverb->unk_18 = 0;
+        reverb->curFrame = 0;
+        reverb->bufSizePerChan = reverb->windowSize;
+        reverb->framesToIgnore = 2;
+        reverb->resampleFlags = 1;
+        reverb->soundSample = &reverb->sample;
+        reverb->sample.loop = &reverb->loop;
+        reverb->soundTuning = 1.0f;
+        reverb->sample.codec = 3;
+        reverb->sample.medium = 0;
+        reverb->sample.size = reverb->windowSize * 2;
+        reverb->sample.sampleAddr = reverb->leftRingBuf;
+        reverb->loop.start = 0;
+        reverb->loop.count = 1;
+        reverb->loop.end = reverb->windowSize;
+        if (reverb->downsampleRate != 1) {
+            reverb->unk_0E = 0x8000 / reverb->downsampleRate;
+            reverb->unk_28 = (void*)GbApu_AllocZeroed((unk_func_81206FA0*)&D_811842C0, 0x20);
+            reverb->unk_2C = (void*)GbApu_AllocZeroed((unk_func_81206FA0*)&D_811842C0, 0x20);
+            reverb->unk_30 = (void*)GbApu_AllocZeroed((unk_func_81206FA0*)&D_811842C0, 0x20);
+            reverb->unk_34 = (void*)GbApu_AllocZeroed((unk_func_81206FA0*)&D_811842C0, 0x20);
+            for (j = 0; j < D_811858B8.unk_0C; j++) {
+                s16* mem = (s16*)GbApu_AllocZeroed((unk_func_81206FA0*)&D_811842C0, 0x340);
+
+                reverb->items[0][j].toDownsampleLeft = mem;
+                reverb->items[0][j].toDownsampleRight = mem + 0xD0;
+                mem = (s16*)GbApu_AllocZeroed((unk_func_81206FA0*)&D_811842C0, 0x340);
+                reverb->items[1][j].toDownsampleLeft = mem;
+                reverb->items[1][j].toDownsampleRight = mem + 0xD0;
+            }
+        }
+        if (settings->lowPassFilterCutoffLeft != 0) {
+            reverb->filterLeftState = (s16*)GbApu_Alloc((unk_func_81206FA0*)&D_811842C0, 0x20);
+            reverb->filterLeft = (s16*)GbApu_Alloc((unk_func_81206FA0*)&D_811842C0, 0x10);
+            func_8110A878(reverb->filterLeft, settings->lowPassFilterCutoffLeft);
+        } else {
+            reverb->filterLeft = NULL;
+        }
+        if (settings->lowPassFilterCutoffRight != 0) {
+            reverb->filterRightState = (s16*)GbApu_Alloc((unk_func_81206FA0*)&D_811842C0, 0x20);
+            reverb->filterRight = (s16*)GbApu_Alloc((unk_func_81206FA0*)&D_811842C0, 0x10);
+            func_8110A878(reverb->filterRight, settings->lowPassFilterCutoffRight);
+        } else {
+            reverb->filterRight = NULL;
+        }
+    }
+    func_81115480();
+    for (j = 0; j < D_811858B8.unk_14; j++) {
+        func_8111539C(j);
+        func_811152A4(j);
+    }
+    func_8110C618(D_811858E8);
+    D_8118557C = 0;
+    D_8118427C = 0x1000;
+    func_8110FAF4();
+    func_8005C0A0();
 }

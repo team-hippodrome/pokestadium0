@@ -94,7 +94,49 @@ void func_82130628(CameraNode* arg0) {
 }
 
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82130B10.s")
+void func_82130B10(CameraNode* arg0) {
+    u8* sp1C = (u8*)sActivePokemon[sBattleScene.scene->unk_2C] + 0x7C6;
+    u8* sp18 = (u8*)sActivePokemon[!sBattleScene.scene->unk_2C] + 0x7C6;
+
+    switch (sBattleScene.scene->unk_20) {
+        case 0:
+            func_82135098((ActivePokemon*)D_8219A544);
+            func_82106374((ActivePokemon*)D_8219A544);
+            BattleAnim_CleanupEffects(2);
+            sBattleScene.scene->unk_20 += 1;
+            break;
+
+        case 1:
+            func_82108C0C((ActivePokemon*)D_8219A544);
+            func_80040738();
+            BattleAnim_CleanupEffects(1);
+            func_82124874(arg0, sActivePokemon[sBattleScene.scene->unk_2C]);
+            func_82104C68(sActivePokemon[sBattleScene.scene->unk_2C], 0xD);
+            func_8211F034(D_8219A520 + 0x248, sBattleScene.scene->unk_2C);
+            M2C_FIELD(sp1C, u16*, 0xC) = M2C_FIELD(sp1C, u16*, 0xE);
+            M2C_FIELD(sp18, u16*, 0xC) = M2C_FIELD(sp18, u16*, 0xE);
+            sBattleScene.scene->unk_20 += 1;
+            break;
+
+        case 2:
+            func_82124874(arg0, sActivePokemon[sBattleScene.scene->unk_2C]);
+            D_8219A560 = func_8210F31C(sActivePokemon[sBattleScene.scene->unk_2C]);
+            D_8219A564 = 1;
+
+            if ((D_8219A560 == 1) && (D_8219A564 == 1) && (BattleScene_AdvanceCameraFrameCounterUntil(0x32) != 0)) {
+                BattleScene_ResetCameraFrameCounter();
+                Battle_ClearMessageCursor();
+                if (func_82107CA0(sActivePokemon[sBattleScene.scene->unk_2C]) == 0) {
+                    func_82125570();
+                    BattleScene_SetPhase(arg0, 0x22);
+                    sBattleScene.scene->unk_2C = !sBattleScene.scene->unk_2C;
+                } else {
+                    func_8212562C();
+                }
+            }
+            break;
+    }
+}
 
 void func_82130D48(ActivePokemon* active_pokemon) {
     BattleMon* party_pokemon = &active_pokemon->teamRoster->pokemonPicked[M2C_FIELD(active_pokemon, s32*, 0x9D0)];
@@ -110,7 +152,7 @@ void func_82130DAC(CameraNode* arg0) {
     u8* sp2C = (u8*)sActivePokemon[sBattleScene.scene->unk_2C] + 0x78C;
     ActivePokemon* temp_s0 = sActivePokemon[sBattleScene.scene->unk_2C];
 
-    if (sBattleScene.scene->unk_2C) {}
+    if (sBattleScene.scene->unk_2C) {}  // karodo
 
     M2C_FIELD(sBattleScene.scene, s32*, 0x50) = 4;
     switch (sBattleScene.scene->unk_20) {
@@ -136,7 +178,7 @@ void func_82130DAC(CameraNode* arg0) {
             }
             if (BattleScene_AdvanceCameraFrameCounter(0x69) != 0) {
                 Vec3f_SetComponentsDuplicate((Vec3f*)((u8*)arg0 + 0xB4), M2C_FIELD(temp_s0, s32*, 0x60C) * -150.0f, 0.0, 0.0f);
-                if (sBattleScene.scene && sBattleScene.scene) {}
+                if (sBattleScene.scene && sBattleScene.scene) {}  // FAKE
                 Vec3f_SetComponentsDuplicate((Vec3f*)((u8*)arg0 + 0xA8), M2C_FIELD(temp_s0, s32*, 0x60C) * -50.0f, 5.0f, 0.0f);
                 BattleScene_SetParticipantModelTransform(temp_s0, 2, 0);
                 BattleAnim_QueueEffectList3(0xD, temp_s0, temp_s0, 0xFF, 0xFF);
@@ -427,7 +469,30 @@ void func_821319FC(s32 arg0) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82131A3C.s")
+s32 func_80041374(s32, u32);
+void func_82131A3C(CameraNode* arg0) {
+    sActivePokemon[0]->displayObject.node.flags &= ~1;
+    sActivePokemon[1]->displayObject.node.flags &= ~1;
+    BattleAnim_ApproachF(&M2C_FIELD(sBattleScene.scene, f32*, 0x74), 10000.0f, 0.025f);
+    BattleScene_SetCameraAtFromPosition(arg0, D_8218B630, 0, 0, 0.0f, 0.0f);
+    BattleScene_SetCameraEyeAndStoreAngles(arg0, D_8218B630, 0x3C6E, M2C_FIELD(sBattleScene.scene, s16*, 0x5A) -= 0x16C, M2C_FIELD(sBattleScene.scene, f32*, 0x74), 0.0f);
+    BattleAnim_ApproachF(&M2C_FIELD(sBattleScene.scene, f32*, 0x64), 1.0f, 0.06f);
+    Battle_SetStageScale(M2C_FIELD(sBattleScene.scene, f32*, 0x64));
+    if (M2C_FIELD(sBattleScene.scene, s32*, 0x14) == 0x3C) {
+        func_80041374(4, 0x3C);
+    }
+    if (func_821217DC(0x50) != 0) {
+        func_800407B0(1, 0xFE, 0);
+        Vec3f_SetComponentsDuplicate((Vec3f*)((u8*)arg0 + 0xB4), 0.0f, 75.0f, 0.0f);
+        Vec3f_SetComponentsDuplicate((Vec3f*)((u8*)arg0 + 0xA8), -1.79f, 0.075f, 155.2f);
+        func_82108A88((s8*)sActivePokemon[0], 1, 0);
+        func_821365B0(8, (s8*)sActivePokemon[0], (s8*)sActivePokemon[0], 0xFF, 0xFF);
+        Battle_SetStageScale(1.0f);
+        sBattleScene.scene->unk_20 += 1;
+        M2C_FIELD(sBattleScene.scene, f32*, 0x60) = M2C_FIELD(arg0, f32*, 0x2C);
+        M2C_FIELD(arg0, f32*, 0x2C) = 40.0f;
+    }
+}
 
 void func_82131C64(s32 arg0) {
     M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 0), u8 *, 1) = (u8) (M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 0), u8 *, 1) & 0xFFFE);
@@ -440,7 +505,27 @@ void func_82131C64(s32 arg0) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82131D24.s")
+void func_8212254C(s8*, void*, Vec3f, s32, s32, f32, f32);
+void func_82122628(void*, Vec3f, s32, s32, f32, f32);
+void func_82131D24(void* arg0) {
+    Vec3f sp34;
+
+    sp34.y = 0.0f;
+    sp34.z = 0.0f;
+    sp34.x = -150.0f;
+    M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 0), u8 *, 1) = (u8) (M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 0), u8 *, 1) & 0xFFFE);
+    M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 4), u8 *, 1) = (u8) (M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 4), u8 *, 1) & 0xFFFE);
+    if (M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 4), f32 *, 0x64C) == 0) {
+        if (M2C_FIELD(D_8219A5A0, s32 *, 0x1C) == 4) {
+            M2C_FIELD(arg0, f32 *, 0x2C) = M2C_FIELD(D_8219A5A0, f32 *, 0x60);
+        }
+        func_8212254C(M2C_FIELD(&D_82199DE0, s8 **, 0), arg0, sp34, 0, 0, 0.0f, 0.0f);
+        func_82108A88(M2C_FIELD(&D_82199DE0, s8 **, 0), 2, 0);
+        func_821365B0(0xB, M2C_FIELD(&D_82199DE0, s8 **, 0), M2C_FIELD(&D_82199DE0, s8 **, 0), 0xFF, 0xFF);
+        func_82122628(arg0, sp34, M2C_FIELD(D_8219A5A0, s16 *, 0x58) = 0x71C, 0x4000, M2C_FIELD(D_8219A5A0, f32 *, 0x74) = 250.0f, 0.0f);
+        M2C_FIELD(D_8219A5A0, s32 *, 0x20) = (s32) (M2C_FIELD(D_8219A5A0, s32 *, 0x20) + 1);
+    }
+}
 
 void BattleScene_IntroPanCamera(CameraNode* arg0) {
     Vec3f sp2C;

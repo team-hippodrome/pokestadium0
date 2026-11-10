@@ -174,8 +174,21 @@ void func_800239C4(s32 arg0, s32 arg1) {
     func_80058410(arg0 + arg1, arg0, arg1);
 }
 
+typedef struct SaveRecA80023F38 { s16 flags; char pad[0x24E]; } SaveRecA80023F38;
+typedef struct SaveRecB80023F38 { s16 flags; char pad[0xABE]; } SaveRecB80023F38;
+typedef struct SaveRecC80023F38 { s16 flags; char pad[0x1BE]; } SaveRecC80023F38;
+typedef struct Save80023F38 {
+    SaveRecA80023F38 a[16];
+    SaveRecB80023F38 b[4];
+    SaveRecC80023F38 c[4];
+    s16 d; char padD[0x7A40 - 0x5702];
+    s16 e; char padE[0x7A60 - 0x7A42];
+    s16 f;
+} Save80023F38;
+
 M2C_UNK func_8004FD20();                            /* extern */
-void func_800239F0(s16 *arg0)
+void func_800239F0(arg0)
+    s16* arg0;
 {
   if (1)
   {
@@ -184,11 +197,65 @@ void func_800239F0(s16 *arg0)
   }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80023A20; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80023A20.s")
-#endif
+s32 func_800237AC(s32, s32);
+void func_800245E0(s32, s32);
+void func_80023A20(s32 arg0, s32 arg1) {
+    UNUSED s32 pad;
+    s32 size;
+    s32 primary;
+    s32 backup;
+    s32 status;
+    s32 base;
+
+    switch (arg0) {
+        case 16:
+            base = (s32)(*(SaveRecA80023F38**)&D_800AE8E0 + arg1);
+            primary = base;
+            backup = base + 0x128;
+            size = 0x128;
+            break;
+        case 17:
+            base = (s32)(*(SaveRecB80023F38**)&D_800AE8E0 + arg1);
+            primary = base + 0x2500;
+            backup = base + 0x2A60;
+            size = 0x560;
+            break;
+        case 18:
+            base = (s32)(*(SaveRecC80023F38**)&D_800AE8E0 + arg1);
+            primary = base + 0x5000;
+            backup = base + 0x50E0;
+            size = 0xE0;
+            break;
+        case 19:
+            primary = D_800AE8E0 + 0x5700;
+            backup = D_800AE8E0 + 0x68A0;
+            size = 0x11A0;
+            break;
+        case 20:
+            primary = D_800AE8E0 + 0x7A40;
+            backup = D_800AE8E0 + 0x7A50;
+            size = 0x10;
+            break;
+        case 21:
+            primary = D_800AE8E0 + 0x7A60;
+            backup = D_800AE8E0 + 0x7CE8;
+            size = 0x288;
+            break;
+    }
+    status = func_800237AC(primary, size);
+    status = (func_800237AC(backup, size) << 1) | status;
+    switch (status) {
+        case 0:
+            func_800245E0(arg0, arg1);
+            break;
+        case 1:
+            func_80023890(primary, backup, size);
+            break;
+        case 2:
+            func_80023890(backup, primary, size);
+            break;
+    }
+}
 
 extern s32 D_8006BBA0;
 extern s32 D_800AE8E0;
@@ -202,7 +269,7 @@ void func_80023C08(s32 arg0, s32 arg1) {
 
 s32 func_8000234C(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK *); /* extern */
 M2C_UNK func_80003774(s32, M2C_UNK, M2C_UNK, M2C_UNK); /* extern */
-M2C_UNK func_80023A20(M2C_UNK, s32);                /* extern */
+void func_80023A20(s32, s32);
 M2C_UNK func_8004FD20(s32, M2C_UNK);                /* extern */
 s32 func_80023C30(void)
 {
@@ -212,7 +279,7 @@ s32 func_80023C30(void)
   s32 var_s0_2;
   if ((*((s32 *) (&D_8006BBA0))) == 0)
   {
- do { temp_v0 = func_8000234C(0x8000, 0, 0x42553634, &(*((s8 *) (&func_80023C08)))); *((s32 *) (&D_800AE8E0)) = temp_v0; } while (0);
+ do { temp_v0 = func_8000234C(0x8000, 0, 0x42553634, &(*((s8 *) (&func_80023C08)))); *((s32 *) (&D_800AE8E0)) = temp_v0; } while (0);  // FAKE
     if (temp_v0 != 0)
     {
       *((s32 *) (&D_8006BBA0)) = 1;
@@ -273,17 +340,6 @@ void func_80023DB8(s32 arg0, s32 arg1) {
     func_80058410(arg0 + 0x4D, arg1 + 0x2A, 3);
 }
 
-typedef struct SaveRecA80023F38 { s16 flags; char pad[0x24E]; } SaveRecA80023F38;
-typedef struct SaveRecB80023F38 { s16 flags; char pad[0xABE]; } SaveRecB80023F38;
-typedef struct SaveRecC80023F38 { s16 flags; char pad[0x1BE]; } SaveRecC80023F38;
-typedef struct Save80023F38 {
-    SaveRecA80023F38 a[16];
-    SaveRecB80023F38 b[4];
-    SaveRecC80023F38 c[4];
-    s16 d; char padD[0x7A40 - 0x5702];
-    s16 e; char padE[0x7A60 - 0x7A42];
-    s16 f;
-} Save80023F38;
 s32 func_80023E28(arg0, arg1, arg2)
     s32 arg0;
     s32 arg1;
@@ -395,11 +451,28 @@ void func_80024170(s32 arg0, s32 arg1) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80024294; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80024294.s")
-#endif
+void func_80024294(s32 arg0, s32 arg1) {
+    switch (arg0) {
+    case 16:
+        func_800239C4((s32)&(*(Save80023F38**)&D_800AE8E0)->a[arg1], 0x128);
+        break;
+    case 17:
+        func_800239C4((s32)&(*(Save80023F38**)&D_800AE8E0)->b[arg1], 0x560);
+        break;
+    case 18:
+        func_800239C4((s32)&(*(Save80023F38**)&D_800AE8E0)->c[arg1], 0xE0);
+        break;
+    case 19:
+        func_800239C4((s32)&(*(Save80023F38**)&D_800AE8E0)->d, 0x11A0);
+        break;
+    case 20:
+        func_800239C4((s32)&(*(Save80023F38**)&D_800AE8E0)->e, 0x10);
+        break;
+    case 21:
+        func_800239C4((s32)&(*(Save80023F38**)&D_800AE8E0)->f, 0x288);
+        break;
+    }
+}
 
 void func_800243B8(void) {
     s32 i;
@@ -416,11 +489,45 @@ void func_800243B8(void) {
     func_800238D8(*(s32*)&D_800AE8E0 + 0x5700, 0x11A0);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80024470; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80024470.s")
-#endif
+void func_80024470(s32 arg0, s32 arg1) {
+    switch (arg0) {
+    case 16: {
+        SaveRecA80023F38* rec = &(*(Save80023F38**)&D_800AE8E0)->a[arg1];
+        func_800239F0(rec, 0x128);
+        ((s8*)rec)[2] = 0x50;
+        ((s8*)rec)[0xA] = 0x50;
+        break;
+    }
+    case 17: {
+        SaveRecB80023F38* rec = &(*(Save80023F38**)&D_800AE8E0)->b[arg1];
+        func_800239F0(rec, 0x560);
+        ((s8*)rec)[2] = 0x50;
+        ((s8*)rec)[0xA] = 0x50;
+        break;
+    }
+    case 18: {
+        SaveRecC80023F38* rec = &(*(Save80023F38**)&D_800AE8E0)->c[arg1];
+        func_800239F0(rec, 0xE0);
+        ((s8*)rec)[2] = 0x50;
+        break;
+    }
+    case 19: {
+        s16* rec = &(*(Save80023F38**)&D_800AE8E0)->d;
+        func_800239F0(rec, 0x11A0);
+        *rec |= 1;
+        break;
+    }
+    case 20: {
+        s16* rec = &(*(Save80023F38**)&D_800AE8E0)->e;
+        func_800239F0(rec, 0x10);
+        *rec |= 1;
+        break;
+    }
+    case 21:
+        func_800239F0(&(*(Save80023F38**)&D_800AE8E0)->f, 0x288);
+        break;
+    }
+}
 
 void Save_ResetAndCommitTypedRecord(s32 arg0, s32 arg1) {
     Save_ClearTypedRecord(arg0, arg1);
@@ -544,11 +651,49 @@ s32 func_8002488C(s32 arg0, s32 arg1, u8* arg2) {
     return ret;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80024954; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80024954.s")
-#endif
+void func_80024954(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4) {
+    switch (arg0) {
+        case 16: {
+            s8* rec = (s8*)&(*(Save80023F38**)&D_800AE8E0)->a[arg1];
+            if ((s32)arg4 >= 0) {
+                *(u16*)(rec + 8) = arg4;
+            }
+            if (arg3 != 0) {
+                func_8001FBE4(rec + 2, arg3);
+            }
+            if (arg2 != 0) {
+                func_8001FBE4(rec + 0xA, arg2);
+            }
+            func_80023F38(arg0, arg1, 3);
+            break;
+        }
+        case 17: {
+            s8* rec = (s8*)&(*(Save80023F38**)&D_800AE8E0)->b[arg1];
+            if ((s32)arg4 >= 0) {
+                *(u16*)(rec + 8) = arg4;
+            }
+            if (arg3 != 0) {
+                func_8001FBE4(rec + 2, arg3);
+            }
+            if (arg2 != 0) {
+                func_8001FBE4(rec + 0xA, arg2);
+            }
+            func_80023F38(arg0, arg1, 3);
+            break;
+        }
+        case 18: {
+            s8* rec = (s8*)&(*(Save80023F38**)&D_800AE8E0)->c[arg1];
+            if ((s32)arg4 >= 0) {
+                *(u16*)(rec + 8) = arg4;
+            }
+            if (arg3 != 0) {
+                func_8001FBE4(rec + 2, arg3);
+            }
+            func_80023F38(arg0, arg1, 3);
+            break;
+        }
+    }
+}
 
 /* Old-style definition: callers pass their own args through (see below). */
 s32 func_80024ADC(arg0, arg1) s32 arg0; s32 arg1; {
@@ -621,17 +766,59 @@ void func_80024C80(s32 arg0, s32 arg1) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80024D88; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80024D88.s")
-#endif
+typedef struct { u8 a; u8 b; } Pair80024D88;
+s32 func_80024D88(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
+    s32 ret = 0;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80024F14; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80024F14.s")
-#endif
+    if (arg2 < func_80024ADC()) {
+        switch (arg0) {
+            case 16:
+                func_80023D3C((s32)arg3, (s32)((u8*)&(*(Save80023F38**)&D_800AE8E0)->a[arg1] + arg2 * 0x2D + 0x14));
+                break;
+            case 17:
+                func_80023D3C((s32)arg3, (s32)((u8*)&(*(Save80023F38**)&D_800AE8E0)->b[arg1] + arg2 * 0x2D + 0x14));
+                break;
+            case 19:
+                func_80023D3C((s32)arg3, (s32)((u8*)&(*(Save80023F38**)&D_800AE8E0)->d + arg2 * 0x2D + 4));
+                break;
+            case 18:
+                *(Pair80024D88*)arg3 = ((Pair80024D88*)((u8*)&(*(Save80023F38**)&D_800AE8E0)->c[arg1] + 0xC))[arg2];
+                break;
+        }
+        ret = 1;
+    }
+    return ret;
+}
+
+s32 func_80024F14(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
+    s32 ret = 0;
+    s32 max = func_80024610(arg0);
+    s32 count = func_80024ADC(arg0, arg1);
+
+    if ((arg2 < count) || ((arg2 == count) && (arg2 < max))) {
+        switch (arg0) {
+            case 16:
+                func_80023DB8((s32)arg3, (s32)((u8*)&(*(Save80023F38**)&D_800AE8E0)->a[arg1] + arg2 * 0x2D + 0x14));
+                break;
+            case 17:
+                func_80023DB8((s32)arg3, (s32)((u8*)&(*(Save80023F38**)&D_800AE8E0)->b[arg1] + arg2 * 0x2D + 0x14));
+                break;
+            case 19:
+                func_80023DB8((s32)arg3, (s32)((u8*)&(*(Save80023F38**)&D_800AE8E0)->d + arg2 * 0x2D + 4));
+                break;
+            case 18:
+                ((Pair80024D88*)((u8*)&(*(Save80023F38**)&D_800AE8E0)->c[arg1] + 0xC))[arg2] = *(Pair80024D88*)arg3;
+                break;
+        }
+        if (arg2 == count) {
+            func_80024C80(arg0, arg1);
+        } else {
+            func_80023F38(arg0, arg1, 2);
+        }
+        ret = 1;
+    }
+    return ret;
+}
 
 s32 func_80025100(s8 *arg0, s32 *arg1) {
     if (arg0 != NULL) {
@@ -659,6 +846,7 @@ s32 func_80025168(s8 arg0) {
     return 1;
 }
 
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 s32 func_800251A8(void)
 {
   return (((*((u8 *) (((s8 *) (*((s8 **) (&D_800AE8E0)))) + 0x7A48))) << 8) | (*((u8 *) (((s8 *) (*((s8 **) (&D_800AE8E0)))) + 0x7A49)))) & 0xFFFF;
@@ -681,11 +869,36 @@ void func_80025224(s8 arg0) {
     func_80023F38(0x14, 0, 2);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80025260; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80025260.s")
-#endif
+typedef struct { u8 b[0xC]; } SaveName80025260;
+typedef struct { s16 h[0xB1]; } SaveBlob80025260;
+typedef struct { u8 unk0; u8 unk1; u8 pad[0x4E]; } SaveMon80025260;
+typedef struct SaveF80025260 {
+    /* 0x000 */ s16 flags;
+    /* 0x002 */ SaveName80025260 name;
+    /* 0x00E */ s16 count;
+    /* 0x010 */ u8 records[6][0x2D];
+    /* 0x11E */ SaveBlob80025260 blob;
+    /* 0x280 */ u8 mask;
+} SaveF80025260;
+void func_80025260(SaveName80025260* arg0, SaveBlob80025260* arg1, SaveMon80025260* arg2, s32 arg3) {
+    SaveF80025260* f;
+    s32 i;
+
+    if (D_800AE8E0 != 0) {
+        f = (SaveF80025260*)(D_800AE8E0 + 0x7A60);
+        f->flags |= 3;
+        f->name = *arg0;
+        f->blob = *arg1;
+        f->count = arg3;
+        f->mask = 0;
+        for (i = 0; i < arg3; i++) {
+            func_80023DB8((s32)&arg2[i], (s32)f->records[i]);
+            if (arg2[i].unk1 == 1) {
+                f->mask |= 1 << i;
+            }
+        }
+    }
+}
 
 typedef struct { s16 h[6]; } Unk12Bytes;
 typedef struct { s16 h[0xB1]; } Unk162Bytes;

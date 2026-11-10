@@ -3,13 +3,152 @@
 #include "global.h"
 #include "fragments/particle_math/particle_math.h"
 #include "m2c_macros.h"
-void func_81110E3C(Particle*, s32);
+struct LayerE3C;
+void func_81110E3C(struct LayerE3C*, s32);
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81110210; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81110210.s")
-#endif
+void func_811105DC(s8* arg0, f32 arg1);
+
+typedef struct ReverbBits81110210 {
+    /* 0x0 */ u8 bit0 : 1;
+    /* 0x0 */ u8 bit1 : 1;
+    /* 0x0 */ u8 bit2 : 1;
+    /* 0x0 */ u8 usesHeadsetPanEffects : 1;
+    /* 0x0 */ u8 stereoHeadsetEffects : 2;
+    /* 0x0 */ u8 strongRight : 1;
+    /* 0x0 */ u8 strongLeft : 1;
+} ReverbBits81110210;
+
+typedef struct ReverbInfo81110210 {
+    /* 0x00 */ u8 reverbVol;
+    /* 0x01 */ u8 bankId;
+    /* 0x02 */ u8 pan;
+    /* 0x03 */ ReverbBits81110210 reverbBits;
+    /* 0x04 */ f32 freqScale;
+    /* 0x08 */ f32 velocity;
+    /* 0x0C */ s32 unk0C;
+    /* 0x10 */ s32 synthesisVolume;
+} ReverbInfo81110210;
+
+typedef struct NoteSub81110210 {
+    /* 0x00 */ volatile u8 enabled : 1;
+    /* 0x00 */ u8 needsInit : 1;
+    /* 0x00 */ u8 finished : 1;
+    /* 0x00 */ u8 envMixerNeedsInit : 1;
+    /* 0x00 */ u8 stereoStrongRight : 1;
+    /* 0x00 */ u8 stereoStrongLeft : 1;
+    /* 0x00 */ u8 stereoHeadsetEffects : 1;
+    /* 0x00 */ u8 usesHeadsetPanEffects : 1;
+    /* 0x01 */ u8 unk01;
+    /* 0x02 */ u8 bankId;
+    /* 0x03 */ u8 headsetPanRight;
+    /* 0x04 */ u8 headsetPanLeft;
+    /* 0x05 */ u8 reverbVol;
+    /* 0x06 */ u8 unk06[2];
+    /* 0x08 */ u16 targetVolLeft;
+    /* 0x0A */ u16 targetVolRight;
+    /* 0x0C */ u8 unk0C[8];
+    /* 0x14 */ s32 synthesisVolume;
+} NoteSub81110210;
+
+extern s8 D_811858EE;
+extern u16 D_811369D8[];
+extern f32 D_81136AD8[];
+extern f32 D_81136CD8[];
+extern f32 D_81136ED8[];
+
+void func_81110210(s8* note, ReverbInfo81110210* reverbInfo) {
+    NoteSub81110210* sub;
+    f32 volRight;
+    f32 volLeft;
+    s32 smallPanIndex;
+    UNUSED u32 pad;
+    UNUSED u32 pad1;
+    u8 strongRight;
+    u8 strongLeft;
+    f32 velocity;
+    u8 pan;
+    u8 reverbVol;
+    ReverbBits81110210 reverbBits;
+
+    func_811105DC(note, reverbInfo->freqScale);
+    velocity = reverbInfo->velocity;
+    pan = reverbInfo->pan;
+    reverbVol = reverbInfo->reverbVol;
+    reverbBits = reverbInfo->reverbBits;
+    sub = (NoteSub81110210*)(note + 0xB4);
+    pan &= 0x7F;
+
+    if (sub->stereoHeadsetEffects && D_811858EE == 1) {
+        smallPanIndex = pan >> 1;
+        if (smallPanIndex > 0x3F) {
+            smallPanIndex = 0x3F;
+        }
+        sub->headsetPanLeft = D_811369D8[smallPanIndex];
+        sub->headsetPanRight = D_811369D8[0x3F - smallPanIndex];
+        sub->stereoStrongRight = 0;
+        sub->stereoStrongLeft = 0;
+        sub->usesHeadsetPanEffects = 1;
+        volLeft = D_81136AD8[pan];
+        volRight = D_81136AD8[0x7F - pan];
+    } else if (sub->stereoHeadsetEffects && D_811858EE == 0) {
+        strongLeft = strongRight = 0;
+        sub->headsetPanRight = 0;
+        sub->headsetPanLeft = 0;
+        sub->usesHeadsetPanEffects = 0;
+        volLeft = D_81136CD8[pan];
+        volRight = D_81136CD8[0x7F - pan];
+        if (pan < 0x20) {
+            strongLeft = 1;
+        } else if (pan > 0x60) {
+            strongRight = 1;
+        }
+        sub->stereoStrongRight = strongRight;
+        sub->stereoStrongLeft = strongLeft;
+        switch (reverbBits.stereoHeadsetEffects) {
+            case 0:
+                sub->stereoStrongRight = reverbBits.strongRight;
+                sub->stereoStrongLeft = reverbBits.strongLeft;
+                break;
+            case 1:
+                break;
+            case 2:
+                sub->stereoStrongRight = reverbBits.strongRight | strongRight;
+                sub->stereoStrongLeft = reverbBits.strongLeft | strongLeft;
+                break;
+            case 3:
+                sub->stereoStrongRight = reverbBits.strongRight ^ strongRight;
+                sub->stereoStrongLeft = reverbBits.strongLeft ^ strongLeft;
+                break;
+        }
+    } else if (D_811858EE == 3) {
+        volLeft = 0.707f;
+        volRight = 0.707f;
+    } else {
+        volLeft = D_81136ED8[pan];
+        volRight = D_81136ED8[0x7F - pan];
+    }
+
+    if (velocity < 0.0f) {
+        velocity = 0.0f;
+    }
+    if (velocity > 1.0f) {
+        velocity = 1.0f;
+    }
+
+    sub->targetVolLeft = (s32)(velocity * volLeft * 4095.999f);
+    sub->targetVolRight = (s32)(velocity * volRight * 4095.999f);
+    sub->bankId = reverbInfo->bankId;
+    sub->synthesisVolume = reverbInfo->synthesisVolume;
+
+    if (sub->reverbVol != reverbVol) {
+        sub->reverbVol = reverbVol;
+        sub->envMixerNeedsInit = 1;
+    } else if (sub->needsInit) {
+        sub->envMixerNeedsInit = 1;
+    } else {
+        sub->envMixerNeedsInit = 0;
+    }
+}
 
 typedef struct StereoFlags811105DC {
     /* 0x0 */ u8 unk0;
@@ -81,11 +220,46 @@ void func_81110694(Obj0694* arg0) {
     arg0->unk_B4 = D_811369C0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8111073C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8111073C.s")
-#endif
+typedef struct Flags8111073C {
+    /* 0x0 */ volatile u32 enabled : 1; // volatile like SM64 NoteSubEu.enabled; stops IDO reusing the flag byte
+    /* 0x0 */ u32 needsInit : 1;
+    /* 0x0 */ u32 finished : 1;
+    /* 0x0 */ u32 rest : 29;
+} Flags8111073C;
+
+typedef struct PlaybackState8111073C {
+    /* 0x00 */ u8 priority;
+    /* 0x01 */ char unk01[3];
+    /* 0x04 */ u8 unk04;
+    /* 0x05 */ char unk05[0xB];
+    /* 0x10 */ void* prevParentLayer;
+    /* 0x14 */ void* parentLayer;
+    /* 0x18 */ char unk18[0x2D - 0x18];
+    /* 0x2D */ u8 adsrState;
+    /* 0x2E */ char unk2E[0x40 - 0x2E];
+    /* 0x40 */ f32 adsrCurrent;
+} PlaybackState8111073C;
+
+typedef struct Note8111073C {
+    /* 0x00 */ char unk00[0x30];
+    /* 0x30 */ PlaybackState8111073C playbackState;
+    /* 0x74 */ char unk74[0xB4 - 0x74];
+    /* 0xB4 */ Flags8111073C noteSubEu;
+} Note8111073C;
+
+void func_8111073C(Note8111073C* note) {
+    if (note->noteSubEu.needsInit == 1) {
+        note->noteSubEu.needsInit = 0;
+    }
+    note->playbackState.priority = 0;
+    note->playbackState.unk04 = 0;
+    note->noteSubEu.enabled = 0;
+    note->playbackState.parentLayer = (void*)-1;
+    note->playbackState.prevParentLayer = (void*)-1;
+    note->noteSubEu.finished = 0;
+    note->playbackState.adsrState = 0;
+    note->playbackState.adsrCurrent = 0.0f;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_81110798; signature not recovered. */
@@ -161,18 +335,184 @@ u8* func_81110D6C(s32 arg0, s32 arg1) {
     return ret;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81110E3C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81110E3C.s")
-#endif
+typedef struct StereoE3C {
+    u8 type : 2;
+    u8 strongRight : 1;
+    u8 strongLeft : 1;
+    u8 stereoHeadsetEffects : 1;
+    u8 usesHeadsetPanEffects : 1;
+    u8 pad : 2;
+} StereoE3C;
+
+typedef struct SeqPlayerE3C {
+    /* 0x00 */ u32 enabled : 1;
+    /* 0x00 */ u32 finished : 1;
+    /* 0x00 */ u32 muted : 1;
+    /* 0x00 */ u32 rest : 29;
+} SeqPlayerE3C;
+
+typedef struct ChannelE3C {
+    /* 0x00 */ u8 unk00[3];
+    /* 0x03 */ u8 muteBehavior;
+    /* 0x04 */ u8 reverb;
+    /* 0x05 */ u8 notePriority;
+    /* 0x06 */ u8 someOtherPriority;
+    /* 0x07 */ u8 unk07[5];
+    /* 0x0C */ u8 gain;
+    /* 0x0D */ u8 unk0D[0x4C - 0x0D];
+    /* 0x4C */ SeqPlayerE3C* seqPlayer;
+    /* 0x50 */ u8 unk50[0x7C - 0x50];
+    /* 0x7C */ u8 decayIndex;
+    /* 0x7D */ u8 sustain;
+    /* 0x7E */ u8 unk7E[0xD0 - 0x7E];
+    /* 0xD0 */ s16* filter;
+} ChannelE3C;
+
+typedef struct LayerE3C {
+    /* 0x00 */ u8 flags;
+    /* 0x01 */ StereoE3C stereo;
+    /* 0x02 */ u8 unk02;
+    /* 0x03 */ u8 status;
+    /* 0x04 */ u8 unk04[3];
+    /* 0x07 */ u8 notePan;
+    /* 0x08 */ u8 unk08[0x18 - 0x08];
+    /* 0x18 */ u8 decayIndex;
+    /* 0x19 */ u8 unk19[0x34 - 0x19];
+    /* 0x34 */ f32 noteVelocity;
+    /* 0x38 */ f32 noteFreqScale;
+    /* 0x3C */ u8 unk3C[0x48 - 0x3C];
+    /* 0x48 */ struct NoteE3C* note;
+    /* 0x4C */ u8 unk4C[0x54 - 0x4C];
+    /* 0x54 */ ChannelE3C* channel;
+} LayerE3C;
+
+typedef struct NoteAttributesE3C {
+    /* 0x00 */ u8 reverb;
+    /* 0x01 */ u8 gain;
+    /* 0x02 */ u8 pan;
+    /* 0x03 */ StereoE3C stereo;
+    /* 0x04 */ f32 freqScale;
+    /* 0x08 */ f32 velocity;
+    /* 0x0C */ s16* filter;
+} NoteAttributesE3C;
+
+#define ADSR_ACTION_RELEASE_E3C 0x10
+#define ADSR_ACTION_DECAY_E3C 0x20
+
+typedef struct AdsrE3C {
+    /* 0x00 */ u8 action;
+    /* 0x01 */ u8 state;
+    /* 0x02 */ u8 unk02[6];
+    /* 0x08 */ f32 sustain;
+    /* 0x0C */ u8 unk0C[4];
+    /* 0x10 */ f32 fadeOutVel;
+    /* 0x14 */ f32 current;
+} AdsrE3C;
+
+typedef struct NoteE3C {
+    /* 0x00 */ void* prev;
+    /* 0x04 */ void* next;
+    /* 0x08 */ void* value;
+    /* 0x0C */ s8* pool;
+    /* 0x10 */ u8 unk10[0x30 - 0x10];
+    /* 0x30 */ u8 priority;
+    /* 0x31 */ u8 unk31[3];
+    /* 0x34 */ u8 unk_04;
+    /* 0x35 */ u8 unk35[0x40 - 0x35];
+    /* 0x40 */ LayerE3C* prevParentLayer;
+    /* 0x44 */ LayerE3C* parentLayer;
+    /* 0x48 */ LayerE3C* wantedParentLayer;
+    /* 0x4C */ NoteAttributesE3C attributes;
+    /* 0x5C */ AdsrE3C adsr;
+    /* 0x74 */ u8 unk74[0xB4 - 0x74];
+    /* 0xB4 */ u8 noteSubEuEnabled : 1;
+    /* 0xB4 */ u8 noteSubEuNeedsInit : 1;
+    /* 0xB4 */ u8 noteSubEuFinished : 1;
+    /* 0xB4 */ u8 noteSubEuRest : 5;
+} NoteE3C;
+
+extern f32 D_811858D4;
+extern f32 D_811858D8;
+void func_811114BC(s8*);
+void func_8111147C(M2C_UNK* arg0, M2C_UNK* arg1);
+
+void func_81110E3C(LayerE3C* layer, s32 target) {
+    NoteE3C* note;
+    NoteAttributesE3C* attrs;
+
+    if (layer == (LayerE3C*)-1) {
+        return;
+    }
+
+    layer->status = 0;
+
+    if (layer->note == NULL) {
+        return;
+    }
+
+    note = layer->note;
+    attrs = &note->attributes;
+
+    if (note->wantedParentLayer == layer) {
+        note->wantedParentLayer = (LayerE3C*)-1;
+    }
+
+    if (note->parentLayer != layer) {
+        if (note->parentLayer == (LayerE3C*)-1 && note->wantedParentLayer == (LayerE3C*)-1 &&
+            note->prevParentLayer == layer && target != 6) {
+            note->adsr.fadeOutVel = D_811858D4;
+            note->adsr.action |= ADSR_ACTION_RELEASE_E3C;
+        }
+        return;
+    }
+
+    if (note->adsr.state != 6) {
+        attrs->freqScale = layer->noteFreqScale;
+        attrs->velocity = layer->noteVelocity;
+        attrs->pan = layer->notePan;
+        attrs->stereo = layer->stereo;
+        if (layer->channel != NULL) {
+            attrs->reverb = layer->channel->reverb;
+            attrs->gain = layer->channel->gain;
+            attrs->filter = layer->channel->filter;
+            if (layer->channel->seqPlayer->muted && (layer->channel->muteBehavior & 8)) {
+                note->noteSubEuFinished = 1;
+            }
+            note->priority = layer->channel->someOtherPriority;
+        } else {
+            note->priority = 1;
+        }
+
+        note->prevParentLayer = note->parentLayer;
+        note->parentLayer = (LayerE3C*)-1;
+        if (target == 7) {
+            note->adsr.fadeOutVel = D_811858D4;
+            note->adsr.action |= ADSR_ACTION_RELEASE_E3C;
+            note->unk_04 = 2;
+        } else {
+            note->unk_04 = 1;
+            note->adsr.action |= ADSR_ACTION_DECAY_E3C;
+            if (layer->decayIndex == 0) {
+                note->adsr.fadeOutVel = layer->channel->decayIndex * D_811858D8;
+            } else {
+                note->adsr.fadeOutVel = layer->decayIndex * D_811858D8;
+            }
+            note->adsr.sustain = ((f32)(s32)layer->channel->sustain * note->adsr.current) / 256.0f;
+        }
+    }
+
+    if (target == 6) {
+        func_811114BC((s8*)note);
+        func_8111147C((M2C_UNK*)(note->pool + 0x10), (M2C_UNK*)note);
+    }
+}
 
 void func_81111090(Particle* arg0) {
-    func_81110E3C(arg0, 6);
+    func_81110E3C((struct LayerE3C*)arg0, 6);
 }
 
 void func_811110B0(Particle* arg0) {
-    func_81110E3C(arg0, 7);
+    func_81110E3C((struct LayerE3C*)arg0, 7);
 }
 
 void func_811110D0(s8 *arg0) {
@@ -237,16 +577,73 @@ void func_81111130(void) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_811111E0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_811111E0.s")
-#endif
+typedef struct ListItem811111E0 {
+    /* 0x00 */ struct ListItem811111E0* prev;
+    /* 0x04 */ struct ListItem811111E0* next;
+    /* 0x08 */ void* u;
+    /* 0x0C */ void* pool;
+} ListItem811111E0; // size = 0x10
+
+typedef struct NotePool811111E0 {
+    /* 0x00 */ ListItem811111E0 disabled;
+    /* 0x10 */ ListItem811111E0 decaying;
+    /* 0x20 */ ListItem811111E0 releasing;
+    /* 0x30 */ ListItem811111E0 active;
+} NotePool811111E0;
 
 extern s8 D_81184948;
 extern s8 D_81184958;
 extern s8 D_81184968;
-void func_811111E0(void);
+void func_811114BC(s8*);
+
+/**
+ * Moves every note in the four lists of a note pool back to the matching
+ * global free list (D_81184938, D_81184948, D_81184958, D_81184968). Same
+ * structure as note_pool_clear in the Super Mario 64 audio library.
+ */
+void func_811111E0(NotePool811111E0* pool) {
+    s32 i;
+    ListItem811111E0* source;
+    ListItem811111E0* cur;
+    s8* dest;
+
+    for (i = 0; i < 4; i++) {
+        switch (i) {
+            case 0:
+                source = &pool->disabled;
+                dest = &D_81184938;
+                break;
+
+            case 1:
+                source = &pool->decaying;
+                dest = &D_81184948;
+                break;
+
+            case 2:
+                source = &pool->releasing;
+                dest = &D_81184958;
+                break;
+
+            case 3:
+                source = &pool->active;
+                dest = &D_81184968;
+                break;
+        }
+
+        for (;;) {
+            cur = source->next;
+            if (cur == source) {
+                break;
+            }
+            if (cur == NULL) {
+                break;
+            }
+            func_811114BC((s8*)cur);
+            func_81112EAC(dest, (Rec81111130*)cur);
+        }
+    }
+}
+
 s32 func_81112EEC(s8 *);
 void func_81111340(s8* arg0, s32 arg1) {
     s32 pad[3]; /* places src/dst at sp+0x48/0x44 and the frame at 0x58 as in the ROM */
@@ -256,7 +653,7 @@ void func_81111340(s8* arg0, s32 arg1) {
     s32 pass;
     s32 r;
 
-    func_811111E0();
+    func_811111E0((NotePool811111E0*)arg0);
     for (pass = 0, n = 0; n < arg1; pass++) {
         if (pass == 4) {
             return;
@@ -340,11 +737,52 @@ s8 *func_811114E8(s8 *arg0, s32 arg1) {
     return temp_a0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81111568; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81111568.s")
-#endif
+typedef struct Flags81111568 {
+    /* 0x0 */ u32 pad0 : 6;
+    /* 0x0 */ u32 flag : 1;
+    /* 0x0 */ u32 pad0b : 1;
+    /* 0x1 */ u8 mode : 3;
+    /* 0x1 */ u8 pad1 : 2;
+    /* 0x1 */ u8 range : 2;
+    /* 0x1 */ u8 pad1b : 1;
+    /* 0x2 */ char pad2[0xE];
+    /* 0x10 */ s32 unk10;
+} Flags81111568;
+typedef struct Src81111568 {
+    /* 0x0 */ u32 pad : 5;
+    /* 0x0 */ u32 flag : 1;
+    /* 0x0 */ u32 rest : 26;
+} Src81111568;
+typedef struct Bit81111568 { u8 pad : 5; u8 b : 1; u8 rest : 2; } Bit81111568;
+void func_81111568(s8* arg0, s8* arg1) {
+    Flags81111568* flags;
+    s32 v;
+
+    M2C_FIELD(arg0, s32*, 0x40) = -1;
+    M2C_FIELD(arg0, s8**, 0x44) = arg1;
+    M2C_FIELD(arg0, u8*, 0x30) = M2C_FIELD(M2C_FIELD(arg1, u8**, 0x54), u8*, 5);
+    ((Bit81111568*)arg1)->b = 1;
+    M2C_FIELD(arg1, u8*, 3) = 3;
+    M2C_FIELD(arg1, s8**, 0x48) = arg0;
+    M2C_FIELD(M2C_FIELD(arg1, s8**, 0x54), s8**, 0x40) = arg0;
+    M2C_FIELD(M2C_FIELD(arg1, s8**, 0x54), s8**, 0x44) = arg1;
+    M2C_FIELD(arg1, f32*, 0x34) = 0.0f;
+    func_81110694((Obj0694*)arg0);
+    v = M2C_FIELD(arg1, u8*, 2);
+    flags = (Flags81111568*)(arg0 + 0xB4);
+    if (v == 0xFF) {
+        v = M2C_FIELD(M2C_FIELD(arg1, s8**, 0x54), s16*, 0x22);
+    }
+    flags->unk10 = M2C_FIELD(arg1, s32*, 0x50);
+    if (v >= 0x80 && v < 0xC0) {
+        flags->range = 1;
+    } else {
+        flags->range = 0;
+    }
+    M2C_FIELD(arg0, u8*, 0x33) = M2C_FIELD(M2C_FIELD(arg1, u8**, 0x54), u8*, 7);
+    flags->flag = M2C_FIELD(arg1, Src81111568**, 0x54)->flag;
+    flags->mode = M2C_FIELD(M2C_FIELD(arg1, u8**, 0x54), u8*, 8) & 3;
+}
 
 
 void func_81111688(s8 *arg0, s32 arg1) {
@@ -379,14 +817,14 @@ void func_811116BC(s8 *arg0, s8 *arg1)
  * arg1 is not established (it is still assembly).
  */
 s32 func_81112EEC(s8 *);
-M2C_UNK func_81111568(s32, s32);                    /* extern */
+void func_81111568(s8*, s8*);
 
 s32 func_811116E8(s8 *arg0, s32 arg1) {
     s32 ret;
 
     ret = func_81112EEC(arg0);
     if (ret != 0) {
-        func_81111568(ret, arg1);
+        func_81111568((s8*)ret, (s8*)arg1);
         func_8111147C((M2C_UNK *) (arg0 + 0x30), (M2C_UNK *) ret);
     }
     return ret;
@@ -417,6 +855,7 @@ s32 func_81111734(s8 *arg0, s8 *arg1) {
     return ret;
 }
 
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 s8 *func_81111784(s8 *arg0, s8 *arg1)
 {
   s8 *a;
@@ -451,11 +890,53 @@ s8 *func_81111784(s8 *arg0, s8 *arg1)
   return a;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8111187C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8111187C.s")
-#endif
+s8* func_8111187C(s8* arg0) {
+    s8* voice;
+    s32 flags = M2C_FIELD(arg0, u8**, 0x54)[2];
+
+    if (flags & 1) {
+        voice = M2C_FIELD(arg0, s8**, 0x48);
+        if ((voice != NULL) && (arg0 == M2C_FIELD(voice, s8**, 0x40)) && (M2C_FIELD(voice, s32*, 0x48) == -1)) {
+            func_811116BC(voice, arg0);
+            func_811114BC(voice);
+            func_81112EAC(M2C_FIELD(voice, s8**, 0xC) + 0x20, (Rec81111130*)voice);
+            return voice;
+        }
+    }
+    if (flags & 2) {
+        if (((voice = (s8*)func_811116E8(M2C_FIELD(arg0, s8**, 0x54) + 0x84, (s32)arg0)) != NULL) ||
+            ((voice = (s8*)func_81111734(M2C_FIELD(arg0, s8**, 0x54) + 0x84, arg0)) != NULL) ||
+            ((voice = func_81111784(M2C_FIELD(arg0, s8**, 0x54) + 0x84, arg0)) != NULL)) {
+            return voice;
+        }
+    } else if (flags & 4) {
+        if (((voice = (s8*)func_811116E8(M2C_FIELD(arg0, s8**, 0x54) + 0x84, (s32)arg0)) != NULL) ||
+            ((voice = (s8*)func_811116E8(M2C_FIELD(M2C_FIELD(arg0, s8**, 0x54), s8**, 0x4C) + 0x98, (s32)arg0)) != NULL) ||
+            ((voice = (s8*)func_81111734(M2C_FIELD(arg0, s8**, 0x54) + 0x84, arg0)) != NULL) ||
+            ((voice = (s8*)func_81111734(M2C_FIELD(M2C_FIELD(arg0, s8**, 0x54), s8**, 0x4C) + 0x98, arg0)) != NULL) ||
+            ((voice = func_81111784(M2C_FIELD(arg0, s8**, 0x54) + 0x84, arg0)) != NULL) ||
+            ((voice = func_81111784(M2C_FIELD(M2C_FIELD(arg0, s8**, 0x54), s8**, 0x4C) + 0x98, arg0)) != NULL)) {
+            return voice;
+        }
+    } else if (flags & 8) {
+        if (((voice = (s8*)func_811116E8(&D_81184938, (s32)arg0)) != NULL) ||
+            ((voice = (s8*)func_81111734(&D_81184938, arg0)) != NULL) ||
+            ((voice = func_81111784(&D_81184938, arg0)) != NULL)) {
+            return voice;
+        }
+    } else {
+        if (((voice = (s8*)func_811116E8(M2C_FIELD(arg0, s8**, 0x54) + 0x84, (s32)arg0)) != NULL) ||
+            ((voice = (s8*)func_811116E8(&D_81184938, (s32)arg0)) != NULL) ||
+            ((voice = (s8*)func_81111734(M2C_FIELD(arg0, s8**, 0x54) + 0x84, arg0)) != NULL) ||
+            ((voice = (s8*)func_81111734(&D_81184938, arg0)) != NULL) ||
+            ((voice = func_81111784(M2C_FIELD(arg0, s8**, 0x54) + 0x84, arg0)) != NULL) ||
+            ((voice = func_81111784(&D_81184938, arg0)) != NULL)) {
+            return voice;
+        }
+    }
+    arg0[3] = 0;
+    return NULL;
+}
 
 typedef struct Rec81111AF4 {
     /* 0x00 */ char pad00[0x1C];

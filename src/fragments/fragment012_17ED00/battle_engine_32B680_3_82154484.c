@@ -66,7 +66,66 @@ void BattleAnim_StartEffect12DelayedModelAnim(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffects12And129DelayedModelAnimWait, &gDefaultParticleDescriptor, 0x1E, 3, 6, 0, 0, 0);
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82154704.s")
+s32 func_82107CF0(s32);
+void func_8213D720(s8*, f32);
+void func_8213D790(s8*, f32);
+void func_82154704(s8* arg0) {
+    f32 var_f20 = 0.0f;
+
+    switch (func_82107CF0(M2C_FIELD(arg0, s32*, 0x10))) {
+        case 0xF:
+            var_f20 = -10.0f;
+            break;
+        case 0x16:
+            var_f20 = -10.0f;
+            break;
+        case 0x33:
+            var_f20 = 10.0f;
+            break;
+        case 0x3B:
+            var_f20 = 15.0f;
+            func_8213D644(arg0, 5.0f);
+            break;
+        case 0x4C:
+            var_f20 = -10.0f;
+            break;
+        case 0x5B:
+            var_f20 = -8.0f;
+            break;
+        case 0x5E:
+            var_f20 = -5.0f;
+            func_8213D644(arg0, 5.0f);
+            break;
+        case 0x5F:
+            func_8213D790(arg0, 15.0f);
+            break;
+        case 0x73:
+            func_8213D790(arg0, 5.0f);
+            var_f20 = -5.0f;
+            break;
+        case 0x79:
+            var_f20 = -8.0f;
+            break;
+        case 0x7F:
+            var_f20 = 15.0f;
+            break;
+        case 0x80:
+            var_f20 = -10.0f;
+            break;
+        case 0x84:
+            var_f20 = 10.0f;
+            break;
+        case 0x8E:
+            var_f20 = -25.0f;
+            func_8213D644(arg0, 20.0f);
+            break;
+        case 0x95:
+            func_8213D720(arg0, 5.0f);
+            func_8213D644(arg0, 5.0f);
+            break;
+    }
+    func_8213D604(arg0, var_f20);
+}
 
 void func_821548B8(void) {
     s32 temp_v0;
@@ -1353,7 +1412,7 @@ void func_82158450(s8 *arg0) {
         func_8213CCEC(arg0, 0, 7, 1, 2, 0);
         func_82140228(arg0, 0x40200000, 0x3E800000);
         func_8213E528(arg0);
-        func_8213D604(arg0, 0x3F000000);
+        func_8213D604(arg0, 0.5f);
         if (func_82140690(arg0) != 0) {
             func_82140518(arg0, 0x20, 0x10);
             func_821403B0(arg0, 0, 0x14);
@@ -1536,7 +1595,7 @@ void func_82158BA4(s8 *arg0) {
         func_821408C8(arg0, 0x64);
         func_82143478(arg0, 0x17);
         func_82140594(arg0, 5);
-        func_8213D644(arg0, 0x41F00000);
+        func_8213D644(arg0, 30.0f);
         return;
     case 2:
         func_82140228(arg0, 0x40A00000, 0x3E99999A);

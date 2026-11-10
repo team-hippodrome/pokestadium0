@@ -35,13 +35,13 @@ void BattleHud_DrawLevelNumber(s32 arg0, s32 arg1, s32 arg2);
 
 void BattleHud_DrawHpFractionText(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 
-M2C_UNK func_8001A384(M2C_UNK, M2C_UNK);            /* extern */
+void func_8001A384(M2C_UNK, M2C_UNK);            /* extern */
 M2C_UNK func_8001A944(s32, s32, s32);               /* extern */
 M2C_UNK func_8001AA9C(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK); /* extern */
 M2C_UNK func_8001AB6C();                            /* extern */
-M2C_UNK func_8001ABBC();                            /* extern */
+void func_8001ABBC(void);
 u32 func_800566BC(s32);                             /* extern */
-M2C_UNK func_82116CF4(s16, s16, M2C_UNK, M2C_UNK, s8 *, s8 *); /* extern */
+M2C_UNK func_82116CF4(s32, s32, M2C_UNK, M2C_UNK, s8 *, s8 *); /* extern */
 extern s8 D_8218B008;
 extern s8 D_8218B014;
 void func_82116FF4(s16 arg0, s16 arg1, s32 arg2, s32 arg3, s32 arg4);
@@ -118,7 +118,7 @@ void func_8211AEA4(TeamRoster* arg0, BattleMon* arg1, s32 arg2, s32 arg3, s32 ar
  *
  * The roles of the func_8001A... helpers are not established here.
  */
-M2C_UNK func_8001AC7C(s16, s16, M2C_UNK, M2C_UNK, s32, s32, s32, s32);
+M2C_UNK func_8001AC7C(s32, s32, s32, s32, s32, s32, s32, s32);
 extern M2C_UNK D_82195BE4;
 extern s32 D_8218B15C[];
 extern s32 D_8219A5A4;

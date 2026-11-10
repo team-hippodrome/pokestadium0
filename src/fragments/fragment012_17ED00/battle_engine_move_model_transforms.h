@@ -130,7 +130,7 @@ s32 func_8210A430(s32, s16, s16);                   /* extern */
 
 void func_8210A744(s32 arg0, s8 *arg1);
 
-void func_8210A7D8(UNUSED ActivePokemon* owner, UNUSED ActivePokemon* animated_pokemon);
+void func_8210A7D8(s32 arg0, s8* arg1);
 void func_8210A8CC(ActivePokemon* owner, ActivePokemon* animated_pokemon);
 
 M2C_UNK func_8000D700(s32, M2C_UNK, s16, M2C_UNK);  /* extern */

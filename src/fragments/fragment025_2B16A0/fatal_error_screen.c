@@ -113,8 +113,22 @@ s32 FatalError_DrawFrame(u8 arg0) {
 }
 
 extern char** D_81100938;
-#ifdef NON_MATCHING
-/* TODO: decompile func_816007C4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment025_2B16A0/func_816007C4.s")
-#endif
+void func_816007C4(s32 arg0, s32 arg1) {
+    StageContext* temp_s0;
+
+    D_81600A70 = arg0;
+    D_81600A74 = arg1;
+
+    main_pool_push_state('FATL');
+
+    Gfx_InitDisplayListBuffers(0x10000, 0);
+    temp_s0 = StageContext_Allocate(0, 1, 2, 0, 2, 1);
+    Font_Init(6, 0);
+    ASSET_LOAD(D_1000000, common_menu1_ui, 0);
+    ASSET_LOAD(D_2000000, transfer_pak_error_ui, 0);
+    StageContext_Activate(temp_s0);
+
+    while (TRUE) {
+        BgStage_WaitForCondition(FatalError_DrawFrame, 8, 8);
+    }
+}

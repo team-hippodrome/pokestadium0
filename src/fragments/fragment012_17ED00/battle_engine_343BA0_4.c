@@ -477,17 +477,58 @@ void func_82135108(ActivePokemon* arg0) {
 void func_821351EC(UNUSED s32 arg0, UNUSED s32 arg1) {
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_821351F8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821351F8.s")
-#endif
+void func_82107D24(ActivePokemon*, f32*);
+void func_8210BCF0(f32*, Vec3f*, f32*, s16*, s16*);
+void func_8000EEBC(void*, Vec3f*, f32, s16, s32);
+void func_8212254C(s32, s32, Vec3f, s32, s32, f32, f32);
+extern f32 D_FLT_8219A718;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82135384; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82135384.s")
-#endif
+void func_821351F8(CameraNode* arg0, ActivePokemon* arg1) {
+    s32 count;
+    Vec3f* p;
+    s16* sp3Cp;
+    f32 sp40;
+    s16 sp3E;
+    s16 sp3C;
+
+    M2C_FIELD(D_8219A5A0, s8*, 0) = 0x19;
+    M2C_FIELD(D_8219A5A0, s8*, 1) = 1;
+    M2C_FIELD(D_8219A5A0, f32*, 4) = 0.0f;
+    M2C_FIELD(D_8219A5A0, s8*, 8) = 0;
+    count = 0;
+    func_82135108(arg1);
+    p = (Vec3f*)&D_FLT_8219A5B0;
+loop:
+    if (p->x != 1000.0f) {
+        count++;
+        p++;
+        p[-1].y = M2C_FIELD(arg1, f32*, 0x28) + p[-1].y;
+        goto loop;
+    }
+    M2C_FIELD(D_8219A5A0, s8*, 8) = count;
+    func_82107D24(arg1, &D_FLT_8219A718);
+    func_8212254C((s32)arg1, (s32)arg0, *(Vec3f*)&D_FLT_8219A718, 0, 0, 0.0f, (f32)0.0);
+    D_FLT_8219A718 *= M2C_FIELD(arg1, s32*, 0x60C);
+    func_8210BCF0(&D_FLT_8219A718, (Vec3f*)&D_FLT_8219A5B0, &sp40, &sp3E, &sp3C);
+    func_8000EEBC((u8*)arg0 + 0xB4, (Vec3f*)((u8*)arg0 + 0xA8), sp40, sp3E, M2C_FIELD(arg1, u32*, 0x60C) * *(sp3Cp = &sp3C));
+    func_8212239C(arg1, arg0);
+}
+
+void func_82107D24(ActivePokemon*, f32*);
+void func_8210BCF0(f32*, Vec3f*, f32*, s16*, s16*);
+void func_8000EEBC(void*, Vec3f*, f32, s16, s32);
+extern f32 D_FLT_8219A718;
+void func_82135384(ActivePokemon* arg0, CameraNode* arg1, Vec3f* arg2, Vec3f* arg3, s32 arg4, s32 arg5) {
+    f32 sp2C;
+    s16 pad2A;
+    s16 sp28;
+    s16 sp26;
+    s16* sp26p;
+    func_82107D24(arg0, &D_FLT_8219A718);
+    D_FLT_8219A718 *= M2C_FIELD(arg0, s32*, 0x60C);
+    func_8210BCF0(&D_FLT_8219A718, &arg2[arg4 + arg5], &sp2C, &sp28, &sp26);
+    func_8000EEBC((u8*)arg1 + 0xB4, &arg3[arg5], sp2C, sp28, M2C_FIELD(arg0, u32*, 0x60C) * *(sp26p = &sp26));
+}
 
 extern f32 D_FLT_82189350[][4];
 extern f32 D_FLT_82196810;
@@ -668,11 +709,43 @@ void func_82135A04(s32 arg0) {
     func_80003824(&D_FLT_8219A5B0, temp_a1, temp_a1 + 0x168, 0);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82135A54; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82135A54.s")
-#endif
+extern u8 D_8219A4F4;
+void func_82107D24(ActivePokemon*, f32*);
+void func_8210BCF0(f32*, Vec3f*, f32*, s16*, s16*);
+void func_8000EEBC(void*, Vec3f*, f32, s16, s32);
+void func_8212254C(s32, s32, Vec3f, s32, s32, f32, f32);
+extern f32 D_FLT_8219A718;
+
+void func_82135A54(CameraNode* arg0, ActivePokemon* arg1) {
+    s32 count;
+    Vec3f* p;
+    s16* sp3Cp;
+    f32 sp40;
+    s16 sp3E;
+    s16 sp3C;
+
+    M2C_FIELD(D_8219A5A0, u8*, 0) = D_8219A4F4;
+    M2C_FIELD(D_8219A5A0, s8*, 1) = 1;
+    M2C_FIELD(D_8219A5A0, f32*, 4) = 0.0f;
+    M2C_FIELD(D_8219A5A0, s8*, 8) = 0;
+    count = 0;
+    func_82135A04((s32)arg1);
+    p = (Vec3f*)&D_FLT_8219A5B0;
+loop:
+    if (p->x != 1000.0f) {
+        count++;
+        p++;
+        p[-1].y = M2C_FIELD(arg1, f32*, 0x28) + p[-1].y;
+        goto loop;
+    }
+    M2C_FIELD(D_8219A5A0, s8*, 8) = count;
+    func_82107D24(arg1, &D_FLT_8219A718);
+    func_8212254C((s32)arg1, (s32)arg0, *(Vec3f*)&D_FLT_8219A718, 0, 0, 0.0f, (f32)0.0);
+    D_FLT_8219A718 *= M2C_FIELD(arg1, s32*, 0x60C);
+    func_8210BCF0(&D_FLT_8219A718, (Vec3f*)&D_FLT_8219A5B0, &sp40, &sp3E, &sp3C);
+    func_8000EEBC((u8*)arg0 + 0xB4, (Vec3f*)((u8*)arg0 + 0xA8), sp40, sp3E, M2C_FIELD(arg1, u32*, 0x60C) * *(sp3Cp = &sp3C));
+    func_8212239C(arg1, arg0);
+}
 
 extern f32 D_FLT_82189350[][4];
 extern f32 D_FLT_82196814;
@@ -815,7 +888,7 @@ void BattleAnim_RegisterEffectSlot(func_D_84390300 arg0, func_D_84390320 arg1) {
         sBattleAnimEffectCallbackIndex = 0;
     }
 
-    if (gBattleAnimEffectUpdateFuncs[sBattleAnimEffectCallbackIndex]) {}
+    if (gBattleAnimEffectUpdateFuncs[sBattleAnimEffectCallbackIndex]) {}  // karodo
 
     gBattleAnimEffectUpdateFuncs[sBattleAnimEffectCallbackIndex] = arg0;
     gBattleAnimEffectDrawFuncs[sBattleAnimEffectCallbackIndex] = arg1;

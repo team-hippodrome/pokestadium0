@@ -195,9 +195,55 @@ void func_8840115C(void) {
     func_80006828(0x19, &func_88400108);
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment006_162BE0/func_88401290.s")
+extern Color_RGB8 D_88402F94;
+extern Color_RGB8 D_88402F98;
+extern char* D_88402D80;
+extern char* D_88402D84;
+extern char D_88403228[];
+extern u8 D_8F4B2B30[];
+extern Gfx D_80060398[];
+s32 func_8840079C(s32);
+void func_88400458(s32, s32, s32);
 
+void func_88401290(void) {
+    Color_RGB8 top = D_88402F94;
+    Color_RGB8 bottom = D_88402F98;
+
+    if (D_88403358 >= 0) {
+        D_88403358 = func_8840079C(D_88403358);
+        Ui_DrawGradientPanel(0x1E, 0x1E, 0x104, 0x18, &top, &bottom);
+        Font_BeginTranslucentTextRendering();
+        Font_SetActive(2, -1);
+        Font_SetLineHeight(0x10);
+        Font_Printf(0x23, 0x24, D_88402D80);
+        Font_EndTexturedTextRendering();
+        func_88400458(0, 0x1E, 0x38);
+        func_88400458(1, 0xA2, 0x38);
+        func_88400458(2, 0x1E, 0x80);
+        func_88400458(3, 0xA2, 0x80);
+    } else {
+        Ui_DrawGradientPanel(0x1E, 0x1E, 0x104, 0x4A, &top, &bottom);
+        Font_BeginTranslucentTextRendering();
+        Font_SetActive(2, -1);
+        Font_SetLineHeight(0x10);
+        Font_Printf(0x32, 0x23, D_88402D84);
+        Font_EndTexturedTextRendering();
+    }
+    Ui_DrawGradientPanel(0xBE, 0xCA, 0x64, 0x18, &top, &bottom);
+    gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
+    Gfx_DrawTextureRgba32(0xC8, 0xCF, 0x10, 0xE, (u8*)Util_ConvertAddrToVirtAddr((uintptr_t)D_8F4B2B30), 0x10, 0);
+    gSPDisplayList(gDisplayListHead++, D_80060398);
+    Font_BeginTranslucentTextRendering();
+    Font_SetActive(2, -1);
+    Font_Printf(0xDC, 0xD0, D_88403228);
+    Font_EndTexturedTextRendering();
+}
+
+#ifdef NON_MATCHING
+/* TODO: decompile func_884014B4; signature not recovered. */
+#else
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment006_162BE0/func_884014B4.s")
+#endif
 
 void func_8840173C(s32 arg0, s32 arg1) {
     Color_RGB8 sp4C = { 0x00, 0x00, 0x32 };
@@ -302,7 +348,80 @@ void Save_InitializeBank3(void) {
     func_800418F0(1);
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment006_162BE0/func_88401B40.s")
+s32 func_80025214(void);
+void func_80025224(u8);
+void func_8002404C(s32, s32);
+void func_88401B40(void) {
+    s32 done = 0;
+    s32 sel = 0;
+    u8 flags = func_80025214();
+    u8 diff;
+
+    do {
+        if (M2C_FIELD(D_800603C0, u16*, 8) & 0x800) {
+            sel--;
+            if (sel < 0) {
+                sel = 3;
+            }
+            func_8003F6AC(1);
+        } else if (M2C_FIELD(D_800603C0, u16*, 8) & 0x400) {
+            sel++;
+            if (sel >= 4) {
+                sel = 0;
+            }
+            func_8003F6AC(1);
+        } else if (M2C_FIELD(D_800603C0, u16*, 8) & 0x8000) {
+            switch (sel) {
+                case 0:
+                    func_8003F6AC(2);
+                    flags ^= 1;
+                    break;
+                case 1:
+                    func_8003F6AC(2);
+                    flags ^= 2;
+                    break;
+                case 2:
+                    func_8003F6AC(2);
+                    if (func_88401970(0, sel, flags) != 0 && func_88401970(1, sel, flags) != 0) {
+                        flags = 0;
+                        Save_InitializeBank3();
+                    }
+                    break;
+                case 3:
+                    done = 1;
+                    func_8003F6AC(0x1D);
+                    break;
+            }
+        } else if (M2C_FIELD(D_800603C0, u16*, 8) & 0x4000) {
+            done = 2;
+            func_8003F6AC(3);
+        }
+        func_88400108(0);
+        func_884014B4(sel, flags);
+        func_80006780();
+    } while (done == 0);
+    if (done == 1) {
+        diff = func_80025214() ^ flags;
+        if (diff != 0) {
+            if (diff & 1) {
+                if (flags & 1) {
+                    func_8003BC9C(0);
+                } else {
+                    func_8003BC9C(1);
+                }
+            }
+            if (diff & 2) {
+                if (flags & 2) {
+                    func_800418F0(0);
+                } else {
+                    func_800418F0(1);
+                }
+            }
+            func_80025224(flags);
+            func_8002404C(0x14, 0);
+        }
+    }
+}
 
 s32 func_88401D54(void) {
     s32 var_s0;

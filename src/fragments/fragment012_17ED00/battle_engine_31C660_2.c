@@ -224,6 +224,7 @@ s32 func_8213C484();                                /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
 M2C_UNK func_8214050C(s8 *, u8);                  /* extern */
 M2C_UNK func_82143408(s8 *, s32);                 /* extern */
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_821448D4(s8 *arg0)
 {
   func_82143408(arg0, func_8213C484() & 0xFFFF);

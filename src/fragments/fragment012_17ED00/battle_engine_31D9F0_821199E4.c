@@ -93,7 +93,49 @@ s32 BattleHud_DrawMovePpTextRTL(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82119CAC.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211AAC4.s")
+extern u8 D_0300A500[];
+extern u8 D_0300A7A0[];
+extern char D_82195A44[];
+extern char D_82195A58[];
+extern char D_82195A60[];
+void func_8211AAC4(s16 arg0, s16 arg1, s16 arg2, s32 arg3) {
+    s32 pad; // FAKE
+    s32 idx;
+    s32 n;
+
+    if (Trainer_GetSlots()[arg2].unk_000 & 2) {
+        idx = 4;
+    } else {
+        idx = arg2;
+    }
+    func_82116CF4(arg0 + 1, arg1 + 1, 0xC6, 0x28, idx * 3 + &D_8218B008, idx * 3 + &D_8218B014);
+    func_8001AB6C();
+    func_8001A384(2, 0);
+    func_8001A944(arg0 + 0x2E, arg1 + 6, D_82195A44);
+    func_8001A944(arg0 + 0x38, arg1 + 0x18, D_82195A58);
+    func_8001A944(arg0 + 0x81, arg1 + 0x18, D_82195A60);
+    func_8001ABBC();
+    gSPDisplayList(gDisplayListHead++, D_80060308);
+    Gfx_DrawTextureRgba16Ia8(arg0 + 0x21, arg1 + 0x17, 0x18, 0xE, D_0300A500, D_0300A7A0, 0x18, 0x100000);
+    gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
+    gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
+    BattleHud_DrawBorderTile(arg0, arg1, 8, 8, D_030096C0);
+    BattleHud_DrawBorderTile(arg0, arg1 + 6, 8, 8, D_030095C0);
+    for (n = 8; n < 0x28; n += 8) {
+        BattleHud_DrawBorderTile(arg0, arg1 + n, 8, 8, D_030095C0);
+        BattleHud_DrawBorderTile(arg0 + 0xBE, arg1 + n, 8, 8, D_03009740);
+    }
+    BattleHud_DrawBorderTile(arg0, arg1 + 0x22, 8, 8, D_03009640);
+    BattleHud_DrawBorderTile(arg0 + 0xBE, arg1, 8, 8, D_03009840);
+    BattleHud_DrawBorderTile(arg0 + 0xBE, arg1 + 6, 8, 8, D_03009740);
+    BattleHud_DrawBorderTile(arg0 + 0xBE, arg1 + 0x22, 8, 8, D_030097C0);
+    for (n = 8; n < 0xC0; n += 8) {
+        BattleHud_DrawBorderTile(arg0 + n, arg1, 8, 8, D_03009940);
+        BattleHud_DrawBorderTile(arg0 + n, arg1 + 0x22, 8, 8, D_030098C0);
+    }
+    gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
+    BattleHud_DrawTranslucentShadowRect(arg0 - 3, arg1 - 2, 0xCC, 0x2D, 0);
+}
 
 void BattleHud_DrawPlainText(s16 arg0, s16 arg1, char* arg2) {
     Font_BeginTranslucentTextRendering();
@@ -193,23 +235,250 @@ void func_8211B208(TeamRoster* arg0, BattleMon* arg1, s32 arg2, s32 arg3, s32 ar
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211B900.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211BEA8.s")
+extern s8 D_8218B020;
+void func_8211BEA8(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3) {
+    BattleMon* mon;
+    u32 status;
+    u8* color;
+    s32 n;
+    ActivePokemonState* state;
+    u16 val;
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211C1B8.s")
+    state = &arg0->state;
+    mon = &arg0->sessionTeams->teamMember[M2C_FIELD(arg0, s32*, 0x9D4)]->pokemonPicked[M2C_FIELD(arg0, s32*, 0x9D0)];
+    if (mon->hp == 0) {
+        status = 1;
+    } else {
+        status = func_8001FA30(mon->statusCondition);
+    }
+    if (state->unk_30 < 0xFF00) {
+        state->unk_30 -= 0x30;
+    }
+    val = state->unk_30;
+    if ((val >> 8) & 1) {
+        color = (u8*)(&D_8218B008 + arg3 * 3);
+    } else {
+        color = (u8*)(&D_8218B020 + arg3 * 3);
+    }
+    func_821172F0(arg0, mon, &D_80066AA0[status], arg1 + 1, arg2 + 1, 0x46, 0x28, color[0], color[1], color[2], 0xB2);
+    gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
+    BattleHud_DrawBorderTile(arg1, arg2, 8, 8, D_030096C0);
+    BattleHud_DrawBorderTile(arg1, arg2 + 0x22, 8, 8, D_03009640);
+    BattleHud_DrawBorderTile(arg1 + 0x40, arg2, 8, 8, D_03009840);
+    BattleHud_DrawBorderTile(arg1 + 0x40, arg2 + 0x22, 8, 8, D_030097C0);
+    for (n = 8; n < 0x40; n += 8) {
+        BattleHud_DrawBorderTile(arg1 + n, arg2, 8, 8, D_03009940);
+        BattleHud_DrawBorderTile(arg1 + n, arg2 + 0x22, 8, 8, D_030098C0);
+    }
+    for (n = 8; n < 0x28; n += 8) {
+        BattleHud_DrawBorderTile(arg1, arg2 + n, 8, 8, D_030095C0);
+        BattleHud_DrawBorderTile(arg1 + 0x40, arg2 + n, 8, 8, D_03009740);
+    }
+    gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
+    BattleHud_DrawTranslucentShadowRect(arg1 - 2, arg2 - 2, 0x4C, 0x2D, 0);
+}
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211C43C.s")
+M2C_UNK func_8001AB2C(M2C_UNK);
+void Battle_DrawGradientRectWrapper(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGB8* arg4, Color_RGB8* arg5);
+void BattleHud_DrawTranslucentShadowRect(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211C6C0.s")
+void func_8211C1B8(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
+    s32 i;
+    s32 n;
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211C9FC.s")
+    Battle_DrawGradientRectWrapper(arg1 + 1, arg2 + 1, 0xEE, 0x24, (Color_RGB8*)(&D_8218B008 + arg0 * 3), (Color_RGB8*)(&D_8218B014 + arg0 * 3));
+    func_8001AB6C();
+    func_8001A384(2, 0);
+    func_8001AB2C(0x10);
+    func_8001A944(arg1 + 0xA, arg2 + 5, arg3);
+    func_8001ABBC();
+    gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
+    BattleHud_DrawBorderTile(arg1, arg2, 8, 8, D_030096C0);
+    BattleHud_DrawBorderTile(arg1, arg2 + 0x1E, 8, 8, D_03009640);
+    BattleHud_DrawBorderTile(arg1 + 0xE8, arg2, 8, 8, D_03009840);
+    BattleHud_DrawBorderTile(arg1 + 0xE8, arg2 + 0x1E, 8, 8, D_030097C0);
+    for (n = 8; n < 0xE8; n += 8) {
+        BattleHud_DrawBorderTile(arg1 + n, arg2, 8, 8, D_03009940);
+        BattleHud_DrawBorderTile(arg1 + n, arg2 + 0x1E, 8, 8, D_030098C0);
+    }
+    for (n = 8; n < 0x20; n += 8) {
+        BattleHud_DrawBorderTile(arg1, arg2 + n, 8, 8, D_030095C0);
+        BattleHud_DrawBorderTile(arg1 + 0xE8, arg2 + n, 8, 8, D_03009740);
+    }
+    gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
+    BattleHud_DrawTranslucentShadowRect(arg1 - 2, arg2 - 1, 0xF4, 0x29, 0);
+}
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211CB0C.s")
+void func_8211C43C(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
+    s32 n;
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211CBCC.s")
+    Battle_DrawGradientRectWrapper(arg1 + 1, arg2 + 1, 0xC8, 0x24, (Color_RGB8*)(&D_8218B008 + arg0 * 3), (Color_RGB8*)(&D_8218B014 + arg0 * 3));
+    func_8001AB6C();
+    func_8001A384(2, 0);
+    func_8001AB2C(0x10);
+    func_8001A944(arg1 + 0xA, arg2 + 5, arg3);
+    func_8001ABBC();
+    gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
+    BattleHud_DrawBorderTile(arg1, arg2, 8, 8, D_030096C0);
+    BattleHud_DrawBorderTile(arg1, arg2 + 0x1E, 8, 8, D_03009640);
+    BattleHud_DrawBorderTile(arg1 + 0xC2, arg2, 8, 8, D_03009840);
+    BattleHud_DrawBorderTile(arg1 + 0xC2, arg2 + 0x1E, 8, 8, D_030097C0);
+    for (n = 8; n < 0xC8; n += 8) {
+        BattleHud_DrawBorderTile(arg1 + n, arg2, 8, 8, D_03009940);
+        BattleHud_DrawBorderTile(arg1 + n, arg2 + 0x1E, 8, 8, D_030098C0);
+    }
+    for (n = 8; n < 0x20; n += 8) {
+        BattleHud_DrawBorderTile(arg1, arg2 + n, 8, 8, D_030095C0);
+        BattleHud_DrawBorderTile(arg1 + 0xC2, arg2 + n, 8, 8, D_03009740);
+    }
+    gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
+    BattleHud_DrawTranslucentShadowRect(arg1 - 2, arg2 - 1, 0xCD, 0x28, 0);
+}
+
+extern u8 D_0300A500[];
+extern u8 D_0300A7A0[];
+extern char D_82195A68[];
+extern char D_82195A7C[];
+extern char D_82195A84[];
+void func_8211C6C0(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3) {
+    s32 pad[2]; // FAKE
+    s32 n;
+
+    Battle_DrawGradientRectWrapper(arg1 + 1, arg2 + 1, 0xC8, 0x24, (Color_RGB8*)(&D_8218B008 + arg3 * 3), (Color_RGB8*)(&D_8218B014 + arg3 * 3));
+    func_8001AB6C();
+    func_8001A384(2, 0);
+    func_8001A944(arg1 + 0x28, arg2 + 5, D_82195A68);
+    func_8001A944(arg1 + 0x32, arg2 + 0x14, D_82195A7C);
+    func_8001A944(arg1 + 0x7A, arg2 + 0x14, D_82195A84);
+    func_8001ABBC();
+    gSPDisplayList(gDisplayListHead++, D_80060308);
+    Gfx_DrawTextureRgba16Ia8(arg1 + arg0->state.unk_2F * 0x49 + 0x1B, arg2 + 0x14, 0x18, 0xE, D_0300A500, D_0300A7A0, 0x18, 0x100000);
+    gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
+    gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
+    BattleHud_DrawBorderTile(arg1, arg2, 8, 8, D_030096C0);
+    BattleHud_DrawBorderTile(arg1, arg2 + 0x1E, 8, 8, D_03009640);
+    BattleHud_DrawBorderTile(arg1 + 0xC2, arg2, 8, 8, D_03009840);
+    BattleHud_DrawBorderTile(arg1 + 0xC2, arg2 + 0x1E, 8, 8, D_030097C0);
+    for (n = 8; n < 0xC8; n += 8) {
+        BattleHud_DrawBorderTile(arg1 + n, arg2, 8, 8, D_03009940);
+        BattleHud_DrawBorderTile(arg1 + n, arg2 + 0x1E, 8, 8, D_030098C0);
+    }
+    for (n = 8; n < 0x20; n += 8) {
+        BattleHud_DrawBorderTile(arg1, arg2 + n, 8, 8, D_030095C0);
+        BattleHud_DrawBorderTile(arg1 + 0xC2, arg2 + n, 8, 8, D_03009740);
+    }
+    gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
+    BattleHud_DrawTranslucentShadowRect(arg1 - 2, arg2 - 1, 0xCD, 0x28, 0);
+}
+
+extern u8 D_8219A4F1;
+u8 func_8000F1FC(u8, s32, s32, s32);
+void func_8211C9FC(void) {
+    u32 len;
+    s8* name;
+    ActivePokemonState* state = &sActivePokemon[sBattleScene.scene->unk_2C]->state;
+    BattleMon* bm = &sActivePokemon[sBattleScene.scene->unk_2C]->sessionTeams->teamMember[0]->pokemonPicked[state->rosterIndex];
+
+    D_8219A4F1 = func_8000F1FC(D_8219A4F1, 0xFF, 5, 5);
+    func_8001AB6C();
+    func_8001ABE8();
+    func_8001AA9C(0xFF, 0xFF, 0xFF, D_8219A4F1);
+    func_8001AAE4(0xFF, 0xFF, 0xF, D_8219A4F1);
+    name = (s8*)bm + 0x30;
+    len = func_800566BC((s32)name) >> 1;
+    func_8001A384(4, 0);
+    func_8001A944(0x9A - len * 6, 0xBE, (s32)name);
+    func_8001AC3C();
+    func_8001ABBC();
+}
+
+extern Gfx D_800602C8[];
+extern Gfx D_80060398[];
+extern u8 D_03003EC0[];
+extern u8 D_03006C40[];
+
+void func_8211CB0C(void) {
+    s32 i;
+    u8* tex;
+
+    gSPDisplayList(gDisplayListHead++, D_800602C8);
+    // Keep on one line: IDO schedules the setup differently otherwise.
+    tex = D_03003EC0; i = 0x17; do {
+        Gfx_DrawTextureRgba32(0x1E, i, 0x68, 1, tex, 0x68, 0);
+        tex += 0x1A0;
+        i++;
+    } while (tex != D_03006C40);
+    gSPDisplayList(gDisplayListHead++, D_80060398);
+}
+
+extern s8 D_8219A4A0[];
+extern s8 D_8219A4C8[];
+s32 func_8211CBCC(s8* str) {
+    s8 i = 0;
+    s8 j = 0;
+
+    do {
+        D_8219A4A0[i] = str[i];
+        i++;
+        D_8219A4A0[i] = 0;
+        if (str[i] == ' ') {
+            goto found;
+        }
+    } while (str[i] != 0);
+    return 0;
+found:
+    i++;
+    do {
+        D_8219A4C8[j] = str[i];
+        i++;
+        j++;
+        D_8219A4C8[j] = 0;
+    } while (str[i] != 0);
+    return 1;
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211CC8C.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211D06C.s")
+extern u8 D_8219A4F0[];
+extern u8 D_03003540[];
+extern u8 D_03001DA0[];
+void func_8211D06C(void) {
+    s32 i;
+    u8* tex;
+
+    if (D_8219A4F0[0] & 0x80) {
+        D_8219A4F0[1] = func_8000F1FC(D_8219A4F0[1], 0xFF, 5, 5);
+    } else {
+        D_8219A4F0[1] = func_8000F1FC(D_8219A4F0[1], 0, 5, 5);
+    }
+    if (D_8219A4F0[0] & 0x40) {
+        gDPPipeSync(gDisplayListHead++);
+        gDPSetCycleType(gDisplayListHead++, G_CYC_1CYCLE);
+        gDPSetCombineLERP(gDisplayListHead++, 0, 0, 0, TEXEL0, TEXEL0, 0, ENVIRONMENT, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, ENVIRONMENT, 0);
+        gDPSetRenderMode(gDisplayListHead++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
+        gDPSetTexturePersp(gDisplayListHead++, G_TP_NONE);
+        gDPSetEnvColor(gDisplayListHead++, 0xFF, 0xFF, 0xFF, D_8219A4F0[1]);
+        for (i = 0, tex = D_03003540; i != 0x10; i++, tex += 0x98) {
+            func_8001BCB4(0x54, i + 0x70, 0x98, 1, tex, 0x98, 0);
+        }
+        gDPPipeSync(gDisplayListHead++);
+        gDPSetTexturePersp(gDisplayListHead++, G_TP_PERSP);
+        gDPSetAlphaCompare(gDisplayListHead++, G_AC_NONE);
+    } else {
+        gDPPipeSync(gDisplayListHead++);
+        gDPSetCycleType(gDisplayListHead++, G_CYC_1CYCLE);
+        gDPSetCombineLERP(gDisplayListHead++, 0, 0, 0, TEXEL0, TEXEL0, 0, ENVIRONMENT, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, ENVIRONMENT, 0);
+        gDPSetRenderMode(gDisplayListHead++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
+        gDPSetTexturePersp(gDisplayListHead++, G_TP_NONE);
+        gDPSetEnvColor(gDisplayListHead++, 0xFF, 0xFF, 0xFF, D_8219A4F0[1]);
+        for (i = 0, tex = D_03001DA0; i != 0x2A; i++, tex += 0x90) {
+            func_8001BCB4(0x58, i + 0x63, 0x90, 1, tex, 0x90, 0);
+        }
+        gDPPipeSync(gDisplayListHead++);
+        gDPSetTexturePersp(gDisplayListHead++, G_TP_PERSP);
+        gDPSetAlphaCompare(gDisplayListHead++, G_AC_NONE);
+    }
+}
 
 void BattleScene_DrawStripWipeIfActive(void) {
     if (BattleScene_GetStripWipeState() != 0) {
@@ -217,9 +486,78 @@ void BattleScene_DrawStripWipeIfActive(void) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211D3D8.s")
+extern s32 D_8218B13C[];
+extern u8 D_8219A730;
+extern u8 D_8219A731;
+extern s8 D_8219A732;
+extern u8 D_0300A500[];
+extern u8 D_0300A7A0[];
+extern Gfx D_80060398[];
+void func_8211D3D8(s16 arg0, s16 arg1) {
+    func_8001AC7C(arg0, arg1, 0x64, 0x7D, 0, 0, 0, 0x3C);
+    func_8001AB6C();
+    if (D_8219A730 == 0) {
+        func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF);
+    } else {
+        func_8001AA9C(0xFF, 0xFF, 0xFF, 0x78);
+    }
+    func_8001A384(1, 0);
+    func_8001A944(arg0 + 0x18, arg1 + 4, D_8218B13C[0]);
+    func_8001A944(arg0 + 0x18, arg1 + 0x10, D_8218B13C[1]);
+    func_8001A944(arg0 + 0x18, arg1 + 0x1C, D_8218B13C[2]);
+    func_8001A944(arg0 + 0x18, arg1 + 0x28, D_8218B13C[3]);
+    func_8001A944(arg0 + 0x18, arg1 + 0x34, D_8218B13C[4]);
+    func_8001A944(arg0 + 0x18, arg1 + 0x40, D_8218B13C[5]);
+    func_8001A944(arg0 + 0x18, arg1 + 0x4C, D_8218B13C[6]);
+    func_8001A944(arg0 + 0x18, arg1 + 0x58, D_8218B13C[7]);
+    func_8001AA9C(0xFF, 0xFF, 0, 0xFF);
+    func_8001A944(arg0 + 0x18, arg1 + 0x69, D_8218B13C[D_8219A731]);
+    func_8001ABBC();
+    gSPDisplayList(gDisplayListHead++, D_80060308);
+    Gfx_DrawTextureRgba16Ia8(arg0 + 2, arg1 + D_8219A732 * 0xC + 3, 0x18, 0xE, D_0300A500, D_0300A7A0, 0x18, 0x100000);
+    gSPDisplayList(gDisplayListHead++, D_80060398);
+}
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211D5F4.s")
+s32 func_800564D4(char*, const char*, ...);
+extern s32 D_82199DE0;
+extern char D_82195B00[];
+extern char D_82195B0C[];
+extern char D_82195B18[];
+extern char D_82195B24[];
+extern char D_82195B30[];
+extern char D_82195B3C[];
+extern char D_82195B4C[];
+extern char D_82195B50[];
+extern char D_82195B58[];
+extern char D_82195B60[];
+extern char D_82195B64[];
+extern char D_82195B68[];
+void func_8211D5F4(s16 arg0, s16 arg1) {
+    char buf[16];
+
+    func_8001AC7C(arg0, arg1, 0x82, 0x50, 0, 0, 0, 0x3C);
+    func_8001AB6C();
+    func_8001A384(1, 0);
+    func_8001A944(arg0 + 3, arg1 + 4, (s32)D_82195B00);
+    func_8001A944(arg0 + 3, arg1 + 0x10, (s32)D_82195B0C);
+    func_8001A944(arg0 + 3, arg1 + 0x1C, (s32)D_82195B18);
+    func_8001A944(arg0 + 3, arg1 + 0x28, (s32)D_82195B24);
+    func_8001A944(arg0 + 3, arg1 + 0x34, (s32)D_82195B30);
+    func_8001A944(arg0 + 3, arg1 + 0x40, (s32)D_82195B3C);
+    func_8001ABBC();
+    func_800564D4(buf, D_82195B4C, M2C_FIELD(D_82199DE0, f32*, 0x9F0));
+    func_82116480(buf, arg0 + 0x46, arg1 + 6);
+    func_800564D4(buf, D_82195B50, M2C_FIELD(D_82199DE0, f32*, 0x9FC));
+    func_82116480(buf, arg0 + 0x46, arg1 + 0x12);
+    func_800564D4(buf, D_82195B58, M2C_FIELD(D_82199DE0, f32*, 0x9F8));
+    func_82116480(buf, arg0 + 0x46, arg1 + 0x1E);
+    func_800564D4(buf, D_82195B60, M2C_FIELD(D_82199DE0, s16*, 0x9EC));
+    func_82116480(buf, arg0 + 0x46, arg1 + 0x2A);
+    func_800564D4(buf, D_82195B64, M2C_FIELD(D_82199DE0, s16*, 0x9EE));
+    func_82116480(buf, arg0 + 0x46, arg1 + 0x36);
+    func_800564D4(buf, D_82195B68, M2C_FIELD(D_82199DE0, s32*, 0x9E8));
+    func_82116480(buf, arg0 + 0x4B, arg1 + 0x42);
+}
 
 void func_8211D874(s16 arg0, s16 arg1) {
     func_8001AC7C(arg0, arg1, 0x6E, 0x1E, 0, 0, 0, 0x3C);
@@ -232,12 +570,202 @@ void func_8211D874(s16 arg0, s16 arg1) {
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211D920.s")
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211DDC0.s")
+typedef struct Entry8006A9CC {
+    /* 0x0 */ char* name;
+    /* 0x4 */ char unk04[0x8];
+} Entry8006A9CC; // size = 0xC
+extern Entry8006A9CC D_8006A9CC[];
+extern s32 D_8219A740;
+extern s32 D_8219A74C;
+extern s32 D_8219A750;
+extern s32 D_8218B218[];
+extern s32 D_8218B204[];
+extern char D_82195E04[];
+extern char D_82195E10[];
+extern char D_82195E20[];
+extern char D_82195E28[];
+extern char D_82195E3C[];
+extern char D_82195E50[];
+extern char D_82195E54[];
+extern char D_82195E6C[];
+extern char D_82195E7C[];
+extern char D_82195E84[];
+extern char D_82195E90[];
+extern char D_82195E94[];
+extern char D_82195E98[];
+extern char D_82195E9C[];
+extern char D_82195EA0[];
+extern char D_82195EA4[];
+extern s32 D_8219A75C;
+extern s32 D_8219A768;
+void func_8211DDC0(s16 arg0, s16 arg1) {
+    char buf[16];
+    s32 val;
+    UNUSED s32 pad[1];
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211E164.s")
+    val = M2C_FIELD(D_82199DE0, s32*, 0x620);
+    func_8001AC7C(arg0, arg1, 0xAA, 0x70, 0, 0, 0, 0x3C);
+    func_8001AB6C();
+    func_8001A384(1, 0);
+    func_8001A944(arg0 + 3, arg1 + 4, (s32)D_82195E04);
+    func_8001A944(arg0 + 0x64, arg1 + 4, (s32)D_8006A9CC[D_8219A740].name);
+    func_8001A944(arg0 + 3, arg1 + 0x10, (s32)D_82195E10);
+    func_8001A944(arg0 + 3, arg1 + 0x1C, (s32)D_82195E20);
+    if (D_8219A75C == 3) {
+        func_8001AA9C(0xFF, 0xFF, 0xFF, 0x3C);
+        func_8001A944(arg0 + 0x64, arg1 + 0x1C, D_8218B218[D_8219A75C]);
+        func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF);
+    } else {
+        func_8001A944(arg0 + 0x64, arg1 + 0x1C, D_8218B218[D_8219A75C]);
+    }
+    func_8001A944(arg0 + 3, arg1 + 0x28, (s32)D_82195E28);
+    func_8001A944(arg0 + 3, arg1 + 0x34, (s32)D_82195E3C);
+    if (D_8219A750 == 0) {
+        func_8001A944(arg0 + 0x69, arg1 + 0x34, (s32)D_82195E50);
+    }
+    func_8001A944(arg0 + 3, arg1 + 0x40, (s32)D_82195E54);
+    func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF);
+    func_8001A944(arg0 + 3, arg1 + 0x4C, (s32)D_82195E6C);
+    func_8001A944(arg0 + 3, arg1 + 0x58, (s32)D_82195E7C);
+    func_8001A944(arg0 + 0x64, arg1 + 0x58, D_8218B204[D_8219A5A4]);
+    func_8001A944(arg0 + 3, arg1 + 0x64, (s32)D_82195E84);
+    func_8001ABBC();
+    func_800564D4(buf, D_82195E90, D_8219A740);
+    func_82116480(buf, arg0 + 0x64, arg1 + 0x12);
+    func_800564D4(buf, D_82195E94, val);
+    func_82116480(buf, arg0 + 0x64, arg1 + 0x4E);
+    func_800564D4(buf, D_82195E98, D_8219A74C);
+    func_82116480(buf, arg0 + 0x6E, arg1 + 0x2A);
+    if (D_8219A750 != 0) {
+        func_800564D4(buf, D_82195E9C, D_8219A750);
+        func_82116480(buf, arg0 + 0x6E, arg1 + 0x36);
+    }
+    func_800564D4(buf, D_82195EA0, D_8219A768);
+    func_82116480(buf, arg0 + 0x6E, arg1 + 0x42);
+    func_800564D4(buf, D_82195EA4, M2C_FIELD(M2C_FIELD(D_82199DE0, void**, 0x44), u16*, 0xA));
+    func_82116480(buf, arg0 + 0x64, arg1 + 0x66);
+}
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211E414.s")
+extern s32 D_8218B228[];
+extern char D_82195EF0[];
+extern char D_82195EFC[];
+extern char D_82195F0C[];
+extern char D_82195F20[];
+extern char D_82195F34[];
+extern char D_82195F38[];
+extern char D_82195F48[];
+extern char D_82195F50[];
+extern char D_82195F5C[];
+extern char D_82195F60[];
+extern char D_82195F64[];
+extern char D_82195F68[];
+extern char D_82195F6C[];
+void func_8211E164(s16 arg0, s16 arg1) {
+    char buf[16];
+    s32 val;
+    UNUSED s32 pad[1];
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211E5F4.s")
+    val = M2C_FIELD(D_82199DE0, s32*, 0x620);
+    func_8001AC7C(arg0, arg1, 0xAA, 0x5A, 0, 0, 0, 0x3C);
+    func_8001AB6C();
+    func_8001A384(1, 0);
+    func_8001A944(arg0 + 3, arg1 + 4, (s32)D_82195EF0);
+    func_8001A944(arg0 + 0x69, arg1 + 4, (s32)D_8006A9CC[D_8219A740].name);
+    func_8001A944(arg0 + 3, arg1 + 0x10, (s32)D_82195EFC);
+    func_8001A944(arg0 + 3, arg1 + 0x1C, (s32)D_82195F0C);
+    func_8001A944(arg0 + 3, arg1 + 0x28, (s32)D_82195F20);
+    if (D_8219A750 == 0) {
+        func_8001A944(arg0 + 0x69, arg1 + 0x28, (s32)D_82195F34);
+    }
+    func_8001A944(arg0 + 3, arg1 + 0x34, (s32)D_82195F38);
+    func_8001A944(arg0 + 3, arg1 + 0x40, (s32)D_82195F48);
+    func_8001A944(arg0 + 0x69, arg1 + 0x40, D_8218B228[D_8219A5A4]);
+    func_8001A944(arg0 + 3, arg1 + 0x4C, (s32)D_82195F50);
+    func_8001ABBC();
+    func_800564D4(buf, D_82195F5C, D_8219A740);
+    func_82116480(buf, arg0 + 0x69, arg1 + 0x12);
+    func_800564D4(buf, D_82195F60, val);
+    func_82116480(buf, arg0 + 0x69, arg1 + 0x36);
+    if (D_8219A750 != 0) {
+        func_800564D4(buf, D_82195F64, D_8219A750);
+        func_82116480(buf, arg0 + 0x69, arg1 + 0x2A);
+    }
+    func_800564D4(buf, D_82195F68, D_8219A74C);
+    func_82116480(buf, arg0 + 0x69, arg1 + 0x1E);
+    func_800564D4(buf, D_82195F6C, M2C_FIELD(M2C_FIELD(D_82199DE0, void**, 0x44), u16*, 0xA));
+    func_82116480(buf, arg0 + 0x64, arg1 + 0x4E);
+}
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211E794.s")
+extern s32 D_8219A74C;
+extern s32 D_8219A754;
+extern char D_82195F70[];
+extern char D_82195F84[];
+extern char D_82195F98[];
+extern char D_82195FA8[];
+extern char D_82195FB4[];
+extern char D_82195FB8[];
+extern char D_82195FBC[];
+extern char D_82195FC0[];
+void func_8211E414(s16 arg0, s16 arg1) {
+    char buf[16];
+    UNUSED s32 pad[1];
+    s32 val = M2C_FIELD(D_82199DE0, s32*, 0x620);
+
+    func_8001AC7C(arg0, arg1, 0xAA, 0x36, 0, 0, 0, 0x3C);
+    func_8001AB6C();
+    func_8001A384(1, 0);
+    func_8001A944(arg0 + 3, arg1 + 4, (s32)D_82195F70);
+    func_8001A944(arg0 + 3, arg1 + 0x10, (s32)D_82195F84);
+    func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF);
+    func_8001A944(arg0 + 3, arg1 + 0x1C, (s32)D_82195F98);
+    func_8001A944(arg0 + 3, arg1 + 0x28, (s32)D_82195FA8);
+    func_8001ABBC();
+    func_800564D4(buf, D_82195FB4, val);
+    func_82116480(buf, arg0 + 0x64, arg1 + 0x1E);
+    func_800564D4(buf, D_82195FB8, D_8219A74C);
+    func_82116480(buf, arg0 + 0x64, arg1 + 6);
+    func_800564D4(buf, D_82195FBC, D_8219A754);
+    func_82116480(buf, arg0 + 0x64, arg1 + 0x12);
+    func_800564D4(buf, D_82195FC0, M2C_FIELD(M2C_FIELD(D_82199DE0, void**, 0x44), u16*, 0xA));
+    func_82116480(buf, arg0 + 0x64, arg1 + 0x2A);
+}
+
+extern char D_82195FC4[];
+extern char D_82195FD0[];
+extern char D_82195FD8[];
+extern char D_82195FE4[];
+extern char D_82195FF0[];
+extern s32 D_8219A760;
+void func_8211E5F4(s16 arg0, s16 arg1) {
+    char buf[16];
+    u8* mon = (u8*)(((s32*)&D_82199DE0)[D_8219A760] + 0x7C6);
+
+    func_8001AC7C(arg0, arg1, 0x78, 0x3C, 0, 0, 0, 0x3C);
+    func_8001AB6C();
+    func_8001A384(1, 0);
+    func_8001A944(arg0 + 3, arg1 + 4, (s32)D_82195FC4);
+    if (mon[0xB] >= 0x98) {
+        func_8001A944(arg0 + 0x3C, arg1 + 4, (s32)D_82195FD0);
+    } else {
+        func_8001A944(arg0 + 0x3C, arg1 + 4, *(s32*)D_80064C44[mon[0xB]]);
+    }
+    func_8001A944(arg0 + 3, arg1 + 0x10, (s32)D_82195FD8);
+    func_8001A944(arg0 + 3, arg1 + 0x1C, (s32)D_82195FE4);
+    func_8001A944(arg0 + 0x3C, arg1 + 0x1C, M2C_FIELD(((s32*)&D_82199DE0)[D_8219A760], s32*, 0x860) + 8);
+    func_8001ABBC();
+    func_800564D4(buf, D_82195FF0, mon[0xB]);
+    func_82116480(buf, arg0 + 0x3C, arg1 + 0x12);
+}
+
+extern s8* D_8219A5A0;
+extern char D_82195FF4[];
+extern char D_82195FF8[];
+void func_8211E794(s16 arg0, s16 arg1) {
+    char buf[16];
+
+    func_8001AC7C(arg0, arg1, 0x50, 0x1E, 0, 0, 0, 0x3C);
+    func_800564D4(buf, D_82195FF4, M2C_FIELD(M2C_FIELD(D_8219A5A0, s8**, 0xCC), f32*, 0x34));
+    func_82116480(buf, arg0 + 3, arg1 + 2);
+    func_800564D4(buf, D_82195FF8, M2C_FIELD(M2C_FIELD(D_8219A5A0, s8**, 0xCC), f32*, 0x38));
+    func_82116480(buf, arg0 + 3, arg1 + 0x10);
+}

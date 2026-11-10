@@ -257,10 +257,10 @@ void func_80044D60(u32 arg0) {
         }
 
         if (D_8010015C != 0) {
-            if (1) {}
-            if (1) {}
-            if (1) {}
-            if (1) {}
+            if (1) {}  // karodo
+            if (1) {}  // karodo
+            if (1) {}  // karodo
+            if (1) {}  // karodo
             tmp = (f32)D_800FDED8[((D_80100158 - D_80100160) + 0x1140) % 4416];
 
             var_a0 += (s16)(((tmp - var_a0) * D_8010015C) >> 8);
@@ -715,7 +715,7 @@ s16 func_80045B9C(void) {
     }
 
     ent = (unk_D_800FC6CC*)((u32*)D_800B41E4 + (D_800FD7B8.unk_04 << 1));
-    if (1) {}
+    if (1) {}  // karodo
     sample = ((s16*)D_800B41E8)[D_800FD7B8.unk_08];
     D_800FD7B8.unk_10 += 1.0f;
     if (D_800FD7B8.unk_0C <= D_800FD7B8.unk_10) {

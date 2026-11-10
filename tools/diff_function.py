@@ -52,7 +52,7 @@ def main():
     offset, size = functions[args.name]
     got = struct.unpack('>%dI' % (size // 4), text[offset:offset + size])
     want = owner[1]
-    reason = cf.compare(text, functions, relocations, args.name, address, want, symbols, {})
+    reason = cf.compare(text, functions, relocations, args.name, address, want, symbols, {}, owner[2])
     print('%s: %d words, owner %s has %d; %s' % (args.name, len(got), owner[0], len(want),
                                                   'MATCH' if reason is None else reason))
     for i in range(max(len(got), len(want))):

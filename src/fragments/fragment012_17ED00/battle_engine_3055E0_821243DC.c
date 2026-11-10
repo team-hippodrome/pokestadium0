@@ -23,7 +23,7 @@ void func_82124544(CameraNode* arg0, ActivePokemon* arg1, f32 arg2, f32 arg3, f3
 }
 
 void func_82124664(s32 arg0, s32 arg1, s16 arg2) {
-    f32 temp = D_FLT_82196274;
+    f32 temp = 0.35f;
 
     M2C_FIELD(sBattleScene.scene, f32*, 0x8C) = func_8000F23C(M2C_FIELD(sBattleScene.scene, f32*, 0x98), 2.5f, temp, temp);
     func_8210C1A8(&sBattleScene.scene->unk_74, sBattleScene.scene->unk_5C, M2C_FIELD(sBattleScene.scene, f32*, 0x8C));
@@ -59,6 +59,7 @@ s32 func_82124810(CameraNode* arg0, ActivePokemon* arg1) {
     return LabPCList_CompareBySpeciesGroup((unk_func_8830867C_02C_0CC*)arg0, (unk_func_8830867C_02C_0CC*)arg1);
 }
 
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_82124830(s8 *arg0, ActivePokemon* arg1)
 {
   if (arg0)
@@ -82,4 +83,30 @@ void func_82124894(CameraNode* arg0, ActivePokemon* arg1) {
     BattleScene_SetCameraEyeFromPosition(arg0, sBattleScene.scene->unk_D0, 0, BattleScene_GetParticipantFacingAngle(arg1), gCameraDistTarget, 0.0f);
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82124984.s")
+void func_82124750();
+void func_82124770();
+void func_82124790();
+void func_821247B0();
+void func_821247D0();
+void func_82124984(void* arg0, void* arg1, s32 arg2) {
+    switch (arg2) {
+        case 0:
+            func_82124750(arg1, arg0);
+            break;
+        case 1:
+            func_82124770(arg1, arg0);
+            break;
+        case 2:
+            func_82124790(arg1, arg0);
+            break;
+        case 3:
+            func_821247B0(arg1, arg0);
+            break;
+        case 4:
+            func_821247D0(arg1, arg0);
+            break;
+        default:
+            func_82124750(arg1, arg0);
+            break;
+    }
+}

@@ -41,8 +41,26 @@ void Gfx_SetViewportDimensions(Vp* viewport, s16 width, s16 height) {
     viewport->vp.vscale[3] = 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8000A610; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8000A610.s")
-#endif
+s32 func_80006B50(s32*, s32*, s32*, s32*);
+
+void func_8000A610(s32 x1, s32 y1, s32 x2, s32 y2, s32 stepX, s32 stepY, s32 mode) {
+    s32 s = x1;
+    s32 t = y1;
+
+    if (func_80006B50(&x1, &y1, &x2, &y2) != 0) {
+        if (mode != 0x200000) {
+            x2 += 1; y2 += 1; // FAKE: both increments must share one source line (IDO schedules by line)
+        }
+        if (stepX != 0) {
+            s = x1 - s;
+        } else {
+            s = 0;
+        }
+        if (stepY != 0) {
+            t = y1 - t;
+        } else {
+            t = 0;
+        }
+        gSPTextureRectangle(gDisplayListHead++, x1 << 2, y1 << 2, x2 << 2, y2 << 2, G_TX_RENDERTILE, s << 5, t << 5, stepX, stepY);
+    }
+}

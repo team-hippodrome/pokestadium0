@@ -1037,7 +1037,7 @@ void BattleAnim_SetupSharedScalePulseFallSetup(Particle* arg0) {
             Particle_SetScaleSpeed(arg0, 0.1f);
             Particle_SetScaleTarget(arg0, 0.03f);
             Particle_AddPositionFromRotationTemplate1(arg0, ParticleMath_RandomRangeOffset(0xC, 5));
-            Particle_FieldA6_SetS16_0BCA8(arg0, sp2E * 1);
+            Particle_FieldA6_SetS16_0BCA8(arg0, sp2E * 1);  // FAKE
             break;
 
         case 3:

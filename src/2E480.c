@@ -155,7 +155,7 @@ s32 func_8002DC04(Menu8002E230* arg0) {
     if (arg0->def->itemCount == 0) {
         return 0;
     }
-    if (arg0) { // no-op test; changes register allocation to match
+    if (arg0) { // FAKE: no-op test; changes register allocation to match
     }
     input = (u16)func_8000B30C();
     switch (input) {
@@ -185,7 +185,7 @@ s32 func_8002DCE0(Menu8002E230* arg0) {
     if (arg0->def->itemCount == 0) {
         return 0;
     }
-    if (arg0) {}
+    if (arg0) {}  // karodo
     input = (u16)func_8000B30C();
     switch (input) {
         case 0x800:
@@ -325,23 +325,172 @@ void func_8002E230(Menu8002E230* menu, s32 x, s32 y, s32 mask, s32 arg4) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002E3F0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002E3F0.s")
-#endif
+s32 func_8002E3F0(Menu8002E230* arg0) {
+    s32 input;
+    s32 old = arg0->cursor;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002E70C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002E70C.s")
-#endif
+    if (arg0->def->itemCount == 0) {
+        return 0;
+    }
+    if (arg0 && arg0) { // FAKE: no-op test; changes register allocation to match
+    }
+    input = (u16)func_8000B30C();
+    switch (input) {
+        case 0x800:
+            arg0->cursor -= arg0->columns;
+            if (arg0->cursor < 0) {
+                arg0->cursor += ((arg0->def->itemCount - 1) / arg0->columns + 1) * arg0->columns;
+                if (arg0->cursor > arg0->def->itemCount - 1) {
+                    arg0->cursor = arg0->def->itemCount - 1;
+                }
+            }
+            break;
+        case 0x400:
+            arg0->cursor += arg0->columns;
+            if ((arg0->def->itemCount - 1) / arg0->columns < arg0->cursor / arg0->columns) {
+                arg0->cursor = arg0->cursor % arg0->columns;
+            } else if (arg0->cursor > arg0->def->itemCount - 1) {
+                arg0->cursor = arg0->def->itemCount - 1;
+            }
+            break;
+        case 0x200:
+            if (arg0->cursor % arg0->columns == 0) {
+                arg0->cursor += arg0->columns;
+            }
+            arg0->cursor--;
+            if (arg0->cursor > arg0->def->itemCount - 1) {
+                arg0->cursor = arg0->def->itemCount - 1;
+            }
+            break;
+        case 0x100:
+            if (arg0->cursor % arg0->columns + 1 == arg0->columns) {
+                arg0->cursor -= arg0->columns;
+            }
+            arg0->cursor++;
+            if (arg0->cursor >= arg0->def->itemCount) {
+                arg0->cursor -= arg0->cursor % arg0->columns;
+            }
+            break;
+    }
+    if (old != arg0->cursor) {
+        func_8003F6AC(1);
+    }
+    return input;
+}
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002EC24; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002EC24.s")
-#endif
+s32 func_8002E70C(Menu8002E230* menu) {
+    s32 button;
+    s32 prev = menu->cursor;
+    s32 found = 0;
+    s32 rowStart;
+    s32 i;
+    s32 end;
+
+    if (menu->def->itemCount == 0) {
+        return 0;
+    }
+    button = (u16)func_8000B30C();
+    switch (button) {
+        case 0x800:
+            do {
+                menu->cursor -= menu->columns;
+                if (menu->cursor < 0) {
+                    menu->cursor += ((menu->def->itemCount - 1) / menu->columns + 1) * menu->columns;
+                }
+                rowStart = menu->cursor - menu->cursor % menu->columns;
+                for (i = menu->cursor; i >= rowStart; i--) {
+                    if (i <= menu->def->itemCount - 1 && !(menu->flags[i] & 1)) {
+                        menu->cursor = i;
+                        found = 1;
+                        break;
+                    }
+                }
+                if (!found) {
+                    end = menu->columns + rowStart - 1;
+                    if (end >= menu->def->itemCount - 1) {
+                        end = menu->def->itemCount - 1;
+                    }
+                    for (i = menu->cursor + 1; i <= end; i++) {
+                        if (!(menu->flags[i] & 1)) {
+                            menu->cursor = i;
+                            found = 1;
+                            break;
+                        }
+                    }
+                }
+            } while (!found);
+            break;
+        case 0x400:
+            do {
+                menu->cursor += menu->columns;
+                if ((menu->def->itemCount - 1) / menu->columns < menu->cursor / menu->columns) {
+                    menu->cursor %= menu->columns;
+                }
+                rowStart = menu->cursor - menu->cursor % menu->columns;
+                for (i = menu->cursor; i >= rowStart; i--) {
+                    if (i <= menu->def->itemCount - 1 && !(menu->flags[i] & 1)) {
+                        menu->cursor = i;
+                        found = 1;
+                        break;
+                    }
+                }
+                if (!found) {
+                    end = menu->columns + rowStart - 1;
+                    if (end >= menu->def->itemCount - 1) {
+                        end = menu->def->itemCount - 1;
+                    }
+                    for (i = menu->cursor + 1; i <= end; i++) {
+                        if (!(menu->flags[i] & 1)) {
+                            menu->cursor = i;
+                            found = 1;
+                            break;
+                        }
+                    }
+                }
+            } while (!found);
+            break;
+        case 0x200:
+            do {
+                if (menu->cursor % menu->columns == 0) {
+                    menu->cursor += menu->columns;
+                }
+                menu->cursor--;
+            } while (menu->cursor >= menu->def->itemCount || (menu->flags[menu->cursor] & 1));
+            break;
+        case 0x100:
+            do {
+                if (menu->cursor % menu->columns + 1 == menu->columns) {
+                    menu->cursor -= menu->columns;
+                }
+                menu->cursor++;
+            } while (menu->cursor >= menu->def->itemCount || (menu->flags[menu->cursor] & 1));
+            break;
+    }
+    if (prev != menu->cursor) {
+        func_8003F6AC(1);
+        if (button) {} // karodo
+    }
+    return button;
+}
+
+void func_8002ED18(s8* arg0, s32 arg1, s32 arg2);
+extern s32 D_800603C0;
+void func_8002EC24(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6) {
+    M2C_FIELD(arg0, s32*, 0x24) = arg3;
+    M2C_FIELD(arg0, s32*, 0x0C) = arg5;
+    M2C_FIELD(arg0, s32*, 0x10) = arg6;
+    M2C_FIELD(arg0, s32*, 0x14) = arg4;
+    func_8002ED18(arg0, arg1, arg2);
+    M2C_FIELD(arg0, s32*, 0x1C) = 0xC00;
+    M2C_FIELD(arg0, s32*, 0x20) = 0x100000;
+    M2C_FIELD(arg0, s32*, 0x18) = D_800603C0;
+    M2C_FIELD(arg0, u16*, 0x28) = M2C_FIELD(arg0, u16*, 0x2A) = 0;
+    M2C_FIELD(arg0, s32*, 0x2C) = 0;
+    M2C_FIELD(arg0, s32*, 0x34) = 0;
+    M2C_FIELD(arg0, s32*, 0x38) = (M2C_FIELD(arg0, s32*, 0x10) * 4) / 10;
+    M2C_FIELD(arg0, s32*, 0x3C) = (M2C_FIELD(arg0, s32*, 0x24) * M2C_FIELD(arg0, s32*, 0x10) * 2) / 10;
+    M2C_FIELD(arg0, s32*, 0x40) = 8;
+}
 
 void func_8002D900(u8* arg0);
 
@@ -365,6 +514,7 @@ void func_8002ED50(s8 *arg0) {
     }
 }
 
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_8002ED70(s8 *arg0)
 {
   s32 *new_var3;
@@ -388,11 +538,41 @@ void func_8002ED70(s8 *arg0)
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002EDA8.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002F030; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002F030.s")
-#endif
+extern u8 D_04003A50[];
+extern u8 D_04003AD8[];
+extern u8 D_040044F8[];
+extern u8 D_04003FE8[];
+extern u8 D_04004A08[];
+extern u8 D_04003D60[];
+extern u8 D_04004780[];
+extern u8 D_04004270[];
+extern u8 D_04004C90[];
+extern Gfx D_80073408[];
+extern Gfx D_80073438[];
+void func_8001C22C(s32, s32, s32, s32, u8*, s32, s32);
+void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
+void func_8002F030(ScrollMenu8002F6C4* menu, s32 x, s32 topY, s32 bottomY, s32 width) {
+    s32 height = menu->rowSpacing * menu->rows;
+    s32 arrowX;
+    s32 more;
+
+    arrowX = menu->width / 2 + x - 9;
+    gDPPipeSync(gDisplayListHead++);
+    gDPSetCycleType(gDisplayListHead++, G_CYC_1CYCLE);
+    gDPSetRenderMode(gDisplayListHead++, 0x0F0A4000, 0);
+    gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
+    gDPSetTexturePersp(gDisplayListHead++, G_TP_NONE);
+    gDPSetTextureFilter(gDisplayListHead++, G_TF_POINT);
+    func_8001C22C(x, topY, width, 0x10, D_04003A50, 8, 0);
+    func_8001C22C(x, bottomY, width, 0x10, D_04003A50, 8, 0);
+    gSPDisplayList(gDisplayListHead++, D_80073408);
+    func_8001B884(arrowX, topY, 0x12, 0x10, (menu->scroll > 0) ? D_04003AD8 : D_040044F8, 0x14, 0x200000);
+    func_8001B884(arrowX - 0x1C, topY, 0x14, 0x10, (menu->scroll > 0) ? D_04003FE8 : D_04004A08, 0x14, 0x200000);
+    more = menu->scroll + height < menu->rowSpacing * menu->def->itemCount;
+    func_8001B884(arrowX, bottomY, 0x12, 0x10, more ? D_04003D60 : D_04004780, 0x14, 0x200000);
+    func_8001B884(arrowX + 0x1A, bottomY, 0x14, 0x10, more ? D_04004270 : D_04004C90, 0x14, 0x200000);
+    gSPDisplayList(gDisplayListHead++, D_80073438);
+}
 
 /**
  * Draws the cursor rectangle (via func_80029A64) for a scrolling list menu. Same shape as
@@ -500,11 +680,49 @@ void func_8002F6C4(ScrollMenu8002F6C4* menu, s32 x, s32 y, s32 mask, s32 arg4) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002F9D8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002F9D8.s")
-#endif
+void func_8002F9D8(ScrollMenu8002F6C4* menu, s32 x, s32 y, s32 mask, s32 arg4) {
+    MenuDef8002E230* def = menu->def;
+    u8* items = def->items;
+    s32 pad[2];
+    s32 height = menu->rowSpacing * menu->rows;
+    s32 i;
+    s32 rowY;
+    s32 end;
+    u8* item;
+    s32 f;
+
+    gDPPipeSync(gDisplayListHead++);
+    gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, x, y, menu->width + x, y + height);
+    func_8002EDA8(menu);
+    i = menu->scroll / menu->rowSpacing;
+    rowY = y - menu->scroll % menu->rowSpacing + (menu->cursor - i) * menu->rowSpacing;
+    menu->draw(x, rowY, NULL, i, 0, arg4);
+    rowY = y - menu->scroll % menu->rowSpacing;
+    end = (menu->scroll + height - 1) / menu->rowSpacing;
+    for (; i < end; i++) {
+        item = NULL;
+        f = 0;
+        if (i < menu->def->itemCount) {
+            item = items + def->itemSize * i;
+            f = menu->flags[i];
+            if (i == menu->cursor) {
+                f |= 0x12;
+            }
+        }
+        menu->draw(x, ((i >= menu->cursor) ? menu->rowSpacing : 0) + rowY, item, i, f & mask, arg4);
+        rowY += menu->rowSpacing;
+    }
+    gDPPipeSync(gDisplayListHead++);
+    gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, 0, 640, 480);
+    if (menu->options & 0x100000) {
+        menu->def->itemCount++;
+        func_8002F030(menu, x, y - 16, y + menu->rowSpacing * menu->rows, menu->width);
+        menu->def->itemCount--;
+    }
+    if ((mask & 2) && (menu->options & 0x10000)) {
+        func_8002F32C(menu, x, y);
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8002FD8C; signature not recovered. */
@@ -518,11 +736,22 @@ void func_8002F6C4(ScrollMenu8002F6C4* menu, s32 x, s32 y, s32 mask, s32 arg4) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80030230.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_800306E0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800306E0.s")
-#endif
+void func_800306E0(s32* arg0, u32 arg1) {
+    s32 v;
+
+    arg0[16] = 0;
+    arg0[2] = arg1;
+    arg0[13] = arg0[4] * arg1;
+    if (arg0[13] < arg0[11]) {
+        arg0[11] = arg0[13];
+    } else {
+        v = (arg0[13] + arg0[4]) - (arg0[4] * arg0[9]);
+        if (arg0[11] < v) {
+            arg0[11] = v;
+        }
+    }
+    arg0[12] = arg0[11];
+}
 
 void func_80030744(s32* arg0, s32 arg1) {
     s32 temp_a2;
@@ -581,11 +810,27 @@ void WidgetTree_SetPagedGridSelectionWithOffset(s8* arg0, s32 arg1, s32 arg2) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80030894; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80030894.s")
-#endif
+void func_800309D4(s8* arg0, s32 arg1, s32 arg2);
+extern s32 D_800603C0;
+void func_80030894(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7) {
+    M2C_FIELD(arg0, s32*, 0x24) = arg4;
+    M2C_FIELD(arg0, s32*, 0xC) = arg6;
+    M2C_FIELD(arg0, s32*, 0x10) = arg7;
+    M2C_FIELD(arg0, s32*, 0x14) = arg5;
+    func_800309D4(arg0, arg1, arg2);
+    M2C_FIELD(arg0, s32*, 0x1C) = 0xC00;
+    M2C_FIELD(arg0, s32*, 0x20) = 0x100000;
+    M2C_FIELD(arg0, s32*, 0x18) = D_800603C0;
+    M2C_FIELD(arg0, s16*, 0x28) = M2C_FIELD(arg0, u16*, 0x2A) = 0;
+    M2C_FIELD(arg0, s32*, 0x2C) = 0;
+    M2C_FIELD(arg0, s32*, 0x34) = 0;
+    M2C_FIELD(arg0, s32*, 0x38) = M2C_FIELD(arg0, s32*, 0x10) * 4 / 10;
+    M2C_FIELD(arg0, s32*, 0x3C) = M2C_FIELD(arg0, s32*, 0x24) * M2C_FIELD(arg0, s32*, 0x10) * 2 / 10;
+    M2C_FIELD(arg0, s32*, 0x40) = 8;
+    M2C_FIELD(arg0, s32*, 0x44) = 0;
+    M2C_FIELD(arg0, s32*, 0x48) = arg3;
+    M2C_FIELD(arg0, s32*, 0x4C) = M2C_FIELD(arg0, s32*, 0xC) * 4 / 10;
+}
 
 void func_8002D900(u8* arg0);
 
@@ -605,6 +850,7 @@ void func_800309FC(s8 *arg0) {
     }
 }
 
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_80030A1C(s8 *arg0)
 {
   s32 temp_v0;
@@ -617,11 +863,55 @@ void func_80030A1C(s8 *arg0)
   }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80030A54; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80030A54.s")
-#endif
+void func_80030A54(GridMenu80031004* menu) {
+    s32 t1;
+    s32 t3;
+    s32 t2;
+    s32 speed;
+
+    if (menu->flags & 0x800) {
+        if (!(M2C_FIELD(menu, u16*, 0x28) & 0x800)) {
+            speed = M2C_FIELD(menu, s32*, 0x38);
+            t1 = (menu->cursor / menu->columns) * menu->cellHeight;
+
+            menu->scrollTarget = menu->scrollTarget - (((menu->scrollTarget - t1) < speed) ? (menu->scrollTarget - t1) : speed);
+            func_800309FC((s8*)menu);
+            if (t1 == menu->scrollTarget) {
+                menu->flags &= ~0x800;
+            }
+        }
+    } else if (menu->flags & 0x400) {
+        if (!(M2C_FIELD(menu, u16*, 0x28) & 0x400)) {
+            t2 = ((menu->cursor / menu->columns) + 1) * menu->cellHeight - 1;
+            speed = M2C_FIELD(menu, s32*, 0x38);
+            menu->scrollTarget += (((t2 - menu->scrollTarget) < speed) ? (t2 - menu->scrollTarget) : speed);
+            func_80030A1C((s8*)menu);
+            if (t2 == menu->scrollTarget) {
+                menu->flags &= ~0x400;
+                menu->scrollTarget = menu->scrollTarget - menu->cellHeight + 1;
+            }
+        }
+    } else if (menu->flags & 0x200) {
+        if (!(M2C_FIELD(menu, u16*, 0x28) & 0x200)) {
+            t3 = (menu->cursor % menu->columns) * menu->cellWidth;
+
+            M2C_FIELD(menu, s32*, 0x44) = M2C_FIELD(menu, s32*, 0x44) - (((M2C_FIELD(menu, s32*, 0x44) - t3) < M2C_FIELD(menu, s32*, 0x4C)) ? (M2C_FIELD(menu, s32*, 0x44) - t3) : M2C_FIELD(menu, s32*, 0x4C));
+            if (t3 == M2C_FIELD(menu, s32*, 0x44)) {
+                menu->flags &= ~0x200;
+            }
+        }
+    } else if (menu->flags & 0x100) {
+        if (!(M2C_FIELD(menu, u16*, 0x28) & 0x100)) {
+            t3 = ((menu->cursor % menu->columns) + 1) * menu->cellWidth - 1;
+            M2C_FIELD(menu, s32*, 0x44) = (((t3 - M2C_FIELD(menu, s32*, 0x44)) < M2C_FIELD(menu, s32*, 0x4C)) ? (t3 - M2C_FIELD(menu, s32*, 0x44)) : M2C_FIELD(menu, s32*, 0x4C)) + M2C_FIELD(menu, s32*, 0x44);
+            if (t3 == M2C_FIELD(menu, s32*, 0x44)) {
+                menu->flags &= ~0x100;
+                M2C_FIELD(menu, s32*, 0x44) = M2C_FIELD(menu, s32*, 0x44) - menu->cellWidth + 1;
+            }
+        }
+    }
+    M2C_FIELD(menu, u16*, 0x28) = 0;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_80030D3C; signature not recovered. */
@@ -649,17 +939,79 @@ void func_80031004(GridMenu80031004* arg0, s32 arg1, s32 arg2) {
     func_80029A64(sp28, sp2C, arg0->cellWidth - 4, arg0->cellHeight - 4, *(Color_RGBA8*)D_80073520);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_800310D8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800310D8.s")
-#endif
+typedef struct GridMenu800310D8 {
+    /* 0x00 */ MenuDef8002E230* def;
+    /* 0x04 */ u16* flags;
+    /* 0x08 */ s32 cursor;
+    /* 0x0C */ s32 cellWidth;
+    /* 0x10 */ s32 cellHeight;
+    /* 0x14 */ MenuDrawFunc8002E230 draw;
+    /* 0x18 */ char unk18[0x8];
+    /* 0x20 */ s32 options;
+    /* 0x24 */ s32 rows;
+    /* 0x28 */ char unk28[0x4];
+    /* 0x2C */ s32 scroll;
+    /* 0x30 */ char unk30[0x18];
+    /* 0x48 */ s32 columns;
+} GridMenu800310D8;
+void func_80030D3C(GridMenu800310D8*, s32, s32);
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80031464; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80031464.s")
-#endif
+/**
+ * Grid version of func_8002F6C4: sets the scissor to the menu area (columns * cellWidth by
+ * rows * cellHeight at x, y), calls func_80030A54, then draws every visible cell i through
+ * menu->draw(column x, row y, item, i, flags & mask, arg4). The cell's flags come from
+ * menu->flags and get 0x12 for the cursor cell; cells past def->itemCount get no item and
+ * flags 0. Afterwards the scissor is reset to the full screen, func_80030D3C draws when option
+ * bit 0x100000 is set and func_80031004 (cursor box) draws when the list is non-empty, mask
+ * bit 2 is set and option bit 0x10000 is set.
+ */
+void func_800310D8(GridMenu800310D8* menu, s32 x, s32 y, s32 mask, s32 arg4) {
+    s32 width = menu->cellWidth * menu->columns;
+    MenuDef8002E230* def = menu->def;
+    u8* items = def->items;
+    s32 height = menu->cellHeight * menu->rows;
+    s32 i;
+    s32 end;
+    s32 baseY;
+    u8* item;
+    s32 f;
+
+    gDPPipeSync(gDisplayListHead++);
+    gDPSetScissorFrac(gDisplayListHead++, G_SC_NON_INTERLACE, x * 4.0f, y * 4.0f, (x + width) * 4.0f, (y + height) * 4.0f);
+    func_80030A54((GridMenu80031004*)menu);
+    baseY = y - menu->scroll;
+    i = (menu->scroll / menu->cellHeight) * menu->columns;
+    end = ((menu->scroll + height - 1) / menu->cellHeight + 1) * menu->columns;
+    for (; i < end; i++) {
+        item = NULL;
+        f = 0;
+        if (i < menu->def->itemCount) {
+            item = items + def->itemSize * i;
+            f = menu->flags[i];
+            if (i == menu->cursor) {
+                f |= 0x12;
+            }
+        }
+        menu->draw((i % menu->columns) * menu->cellWidth + x, (i / menu->columns) * menu->cellHeight + baseY, item, i, f & mask, arg4);
+    }
+    gDPPipeSync(gDisplayListHead++);
+    gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, 0, 640, 480);
+    if (menu->options & 0x100000) {
+        func_80030D3C(menu, x, y);
+    }
+    if ((menu->def->itemCount > 0) && (mask & 2) && (menu->options & 0x10000)) {
+        func_80031004((GridMenu80031004*)menu, x, y);
+    }
+}
+
+s32 func_80031464(GridMenu80031004* menu) {
+    s32 pageCount = (M2C_FIELD(menu, MenuDef8002E230**, 0x0)->itemCount + menu->columns - 1) / menu->columns;
+    s32 page = menu->scrollTarget / menu->cellHeight;
+    s32 nextPage = page + 1;
+    s32 remainder = M2C_FIELD(menu, MenuDef8002E230**, 0x0)->itemCount % menu->columns;
+
+    return ((pageCount == nextPage) && (remainder != 0)) ? remainder : menu->columns;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8003152C; signature not recovered. */

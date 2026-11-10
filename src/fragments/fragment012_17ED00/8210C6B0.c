@@ -258,17 +258,73 @@ s32 BattleScene_ValidateSelectedPartyMember(ActivePokemon* arg0) {
     return 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8210CDEC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210CDEC.s")
-#endif
+void func_82108DE8(ActivePokemon*, u8*);
+void func_8210CDEC(ActivePokemon* arg0, u8* arg1, u8* arg2, s32 arg3) {
+    ActivePokemonState* state = &arg0->state;
+    u16 mask;
+    s32 m; // FAKE
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8210CEE8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210CEE8.s")
-#endif
+    m = 0x4000;
+    if (arg0->sessionTeams->teamMember[0]->numberOfPokemonBrought == 3) {
+        mask = m;
+    } else {
+        mask = 0x4000;
+    }
+    if (arg3 == 1) {
+        if (*(u16*)(arg1 + 8) & mask) {
+            state->ownerTeamMemberIndex = state->unk_2D_zero;
+            state->unk_2D_zero = 0;
+            func_82108DE8(arg0, arg1);
+        } else if (*(u16*)(arg2 + 8) & mask) {
+            state->ownerTeamMemberIndex = state->unk_2D_zero;
+            state->unk_2D_zero = 0;
+            func_82108DE8(arg0, arg2);
+        }
+    } else {
+        if (*(u16*)(arg1 + 8) & mask) {
+            state->ownerTeamMemberIndex = state->unk_2D_zero;
+            state->unk_2D_zero = 0;
+            func_82108DE8(arg0, arg1);
+        } else if (*(u16*)(arg2 + 8) & mask) {
+            state->ownerTeamMemberIndex = state->unk_2D_zero;
+            state->unk_2D_zero = 1;
+            func_82108DE8(arg0, arg2);
+        }
+    }
+}
+
+void func_82108DE8(ActivePokemon*, u8*);
+void func_8210CEE8(ActivePokemon* arg0, u8* arg1, u8* arg2, s32 arg3) {
+    ActivePokemonState* state = &arg0->state;
+    u16 mask;
+
+    if (arg0->sessionTeams->teamMember[0]->numberOfPokemonBrought == 3) {
+        mask = 0xD;
+    } else {
+        mask = 0xC00F;
+    }
+    if (arg3 == 1) {
+        if (*(u16*)(arg1 + 8) & mask) {
+            state->ownerTeamMemberIndex = state->unk_2D_zero;
+            state->unk_2D_zero = 0;
+            func_82108DE8(arg0, arg1);
+        } else if (*(u16*)(arg2 + 8) & mask) {
+            state->ownerTeamMemberIndex = state->unk_2D_zero;
+            state->unk_2D_zero = 0;
+            func_82108DE8(arg0, arg2);
+        }
+    } else {
+        if (*(u16*)(arg1 + 8) & mask) {
+            state->ownerTeamMemberIndex = state->unk_2D_zero;
+            state->unk_2D_zero = 0;
+            func_82108DE8(arg0, arg1);
+        } else if (*(u16*)(arg2 + 8) & mask) {
+            state->ownerTeamMemberIndex = state->unk_2D_zero;
+            state->unk_2D_zero = 1;
+            func_82108DE8(arg0, arg2);
+        }
+    }
+}
 
 s32 func_82107F88(s32);                             /* extern */
 M2C_UNK func_8211F274();                            /* extern */
@@ -280,35 +336,229 @@ void func_8210CFE4(s32 arg0) {
     func_8211F288(arg0, D_8218C700, func_82107F88(arg0));
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8210D020; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210D020.s")
-#endif
+void func_82134D60(void);
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8210D1B0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210D1B0.s")
-#endif
+void func_8210D020(ActivePokemon* arg0, s8* arg1) {
+    u8* team = *(u8**)(M2C_FIELD(arg0, u8*, 0x7B9) * 4 + M2C_FIELD(arg0, s8**, 0x85C) + 8);
+    ActivePokemonState* state = &arg0->state;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8210D378; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210D378.s")
-#endif
+    if (team[2] == 3) {
+        if (M2C_FIELD(arg1, u16*, 8) & 8) {
+            arg0->state.unk_18 = 0;
+        } else if (M2C_FIELD(arg1, u16*, 8) & 1) {
+            arg0->state.unk_18 = 1;
+        } else if (M2C_FIELD(arg1, u16*, 8) & 4) {
+            arg0->state.unk_18 = 2;
+        } else {
+            return;
+        }
+    } else {
+        if (M2C_FIELD(arg1, u16*, 8) & 8) {
+            arg0->state.unk_18 = 0;
+        }
+        if (M2C_FIELD(arg1, u16*, 8) & 2) {
+            arg0->state.unk_18 = 1;
+        }
+        if (M2C_FIELD(arg1, u16*, 8) & 0x4000) {
+            arg0->state.unk_18 = 2;
+        }
+        if (M2C_FIELD(arg1, u16*, 8) & 1) {
+            arg0->state.unk_18 = 3;
+        }
+        if (M2C_FIELD(arg1, u16*, 8) & 4) {
+            arg0->state.unk_18 = 4;
+        }
+        if (M2C_FIELD(arg1, u16*, 8) & 0x8000) {
+            arg0->state.unk_18 = 5;
+        }
+    }
+    if (M2C_FIELD(arg1, u16*, 8) & 0xC00F) {
+        if ((state->rosterIndex == state->unk_18) && (state->teamMemberIndex == state->unk_2D_zero)) {
+            if (func_8210CD7C(arg0) != 0) {
+                func_8210CFE4((s32)arg0);
+            }
+        } else if (state->unk_18 <= (u32)(team[2] - 1)) {
+            if (func_8210CD7C(arg0) != 0) {
+                func_82134D60();
+                state->unk_1C = 0;
+                state->unk_1E = 0;
+                state->unk_10 = 3;
+            }
+        }
+    }
+}
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8210D4B4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210D4B4.s")
-#endif
+/*
+ * Stadium 0 counterpart of Stadium 1's BattleScene_HandlePlayerPartySelection,
+ * with the two controller pointers kept in locals instead of globals.
+ */
+void func_8210D1B0(ActivePokemon* arg0) {
+    ActivePokemonState* sp18 = &arg0->state;
+    s32 idx;
+    Controller* c1;
+    Controller* c2;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8210D6BC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210D6BC.s")
-#endif
+    if (arg0->sessionTeams->tagTeamSize == 1) {
+        c1 = &gControllers[arg0->sessionTeams->teamMember[0]->controllerPort];
+        c2 = &gControllers[arg0->sessionTeams->teamMember[0]->controllerPort];
+    } else {
+        c1 = &gControllers[arg0->sessionTeams->teamMember[sp18->unk_2D_zero]->controllerPort];
+        idx = sp18->unk_2D_zero == 0;
+        c2 = &gControllers[arg0->sessionTeams->teamMember[idx]->controllerPort];
+    }
+
+    if (M2C_FIELD(arg0, s32*, 0xA04) != 0) {
+        if (sp18->controller->buttonPressed & 0xE03F) {
+            func_8211F274(arg0);
+        }
+    } else if (sp18->unk_10 == 0) {
+        sp18->unk_10 = 2;
+    } else if ((c1->buttonPressed & 0x20) && (sp18->unk_2D != 0x10) &&
+               !(c1->buttonDown & 0x10) && !(c2->buttonDown & 0x10)) {
+        BattleScene_SelectActiveController(arg0);
+        BattleAnim_PlaySoundEffect3();
+        sp18->unk_10 = 0;
+    } else {
+        sp18->unk_1C = 0;
+        if ((c1->buttonDown & 0x10) || (c2->buttonDown & 0x10)) {
+            if ((c1->buttonPressed & 0x10) || (c2->buttonPressed & 0x10)) {
+                BattleAnim_PlaySoundEffect1();
+            }
+            sp18->unk_1C = 1;
+        }
+        func_8210D020(arg0, (s8*)sp18->controller);
+    }
+}
+
+extern u8 D_800AAF50[];
+void func_8210D1B0(ActivePokemon* active_pokemon);
+void func_8210CEE8(ActivePokemon*, u8*, u8*, s32);
+s32 func_8210D378(ActivePokemon* arg0, ActivePokemon* arg1) {
+    u8* c1;
+    u8* c2;
+    s8* team;
+    ActivePokemonState* state = &arg0->state;
+    ActivePokemonState* other = &arg1->state;
+
+    if (M2C_FIELD(M2C_FIELD(arg0, s8**, 0x85C), u8*, 1) == 1) {
+        c1 = c2 = &D_800AAF50[M2C_FIELD(M2C_FIELD(M2C_FIELD(arg0, s8**, 0x85C), s8**, 8), u8*, 1) * 0x24];
+    } else {
+        team = M2C_FIELD(arg0, s8**, 0x85C);
+        c1 = &D_800AAF50[M2C_FIELD(M2C_FIELD(team, s8**, 8), u8*, 1) * 0x24];
+        c2 = &D_800AAF50[M2C_FIELD(M2C_FIELD(team, s8**, 0xC), u8*, 1) * 0x24];
+    }
+    if ((state->unk_2D == 0x10) && (other->unk_2D == 0x10)) {
+        if (state->unk_10 == 3) {
+            func_8210C708((s8*)arg0);
+            return 1;
+        }
+        state->unk_04 = 2;
+        state->unk_10 = 2;
+        func_8210D1B0(arg0);
+        return 1;
+    }
+    if (state->unk_2D == 0x10) {
+        state->unk_04 = 2;
+        state->unk_10 = 2;
+        other->unk_10 = 3;
+        other->unk_04 = 1;
+        func_8210CEE8(arg0, c1, c2, M2C_FIELD(M2C_FIELD(arg0, s8**, 0x85C), u8*, 1));
+        func_8210D1B0(arg0);
+        return 1;
+    }
+    return 0;
+}
+
+/*
+ * Stadium 0 counterpart of Stadium 1's BattleScene_ForfeitPrompt, with the two
+ * controller pointers kept in locals instead of globals.
+ */
+void func_8210D4B4(ActivePokemon* arg0) {
+    ActivePokemonState* sp18 = &arg0->state;
+    ActivePokemonState* temp_a0 = &sActivePokemon[BattleScene_GetParticipantSideIndex(arg0) == 0]->state;
+    Controller* c1;
+    Controller* c2;
+
+    if (arg0->sessionTeams->tagTeamSize == 1) {
+        c1 = &gControllers[arg0->sessionTeams->teamMember[0]->controllerPort];
+        c2 = &gControllers[arg0->sessionTeams->teamMember[0]->controllerPort];
+    } else {
+        c1 = &gControllers[arg0->sessionTeams->teamMember[0]->controllerPort];
+        c2 = &gControllers[arg0->sessionTeams->teamMember[1]->controllerPort];
+    }
+
+    if (temp_a0->unk_10 == 4) {
+        sp18->unk_10 = 0;
+        sp18->unk_04 = 0;
+        return;
+    }
+
+    if (sp18->unk_10 != 4) {
+        sp18->unk_2F = 0;
+    }
+
+    sp18->unk_10 = 4;
+
+    if ((c1->buttonPressed & 0x200) || (c2->buttonPressed & 0x200)) {
+        sp18->unk_2F = 0;
+        Audio_PlaySoundEffectById(1);
+    }
+
+    if ((c1->buttonPressed & 0x100) || (c2->buttonPressed & 0x100)) {
+        sp18->unk_2F = 1;
+        Audio_PlaySoundEffectById(1);
+    }
+
+    if ((sp18->unk_2F == 1) && ((c1->buttonPressed & 0x8000) || (c2->buttonPressed & 0x8000))) {
+        Audio_PlaySoundEffectById(2);
+        sBattleScene.scene->unk_40 = (BattleScene_GetParticipantSideIndex(arg0) == 0) + 1;
+    } else if ((sp18->unk_2F == 0) && ((c1->buttonPressed & 0x8000) || (c2->buttonPressed & 0x8000))) {
+        sp18->unk_10 = 0;
+        sp18->unk_04 = 0;
+        Audio_PlaySoundEffectById(3);
+    }
+}
+
+extern u8 D_800AAF50[];
+void func_8210CDEC(ActivePokemon*, u8*, u8*, s32);
+void func_82134D60(void);
+
+void func_8210D6BC(ActivePokemon* arg0) {
+    s8* state = (s8*)arg0 + 0x78C;
+    s8* other = (s8*)sActivePokemon[BattleScene_GetParticipantSideIndex(arg0) == 0] + 0x78C;
+    u8* c1;
+    u8* c2;
+    s8* team;
+    s32 buttons;
+
+    if (M2C_FIELD(state, s32*, 0x10) != 0) {
+        return;
+    }
+    if (M2C_FIELD(M2C_FIELD(arg0, s8**, 0x85C), u8*, 1) == 1U) {
+        c1 = c2 = &D_800AAF50[M2C_FIELD(M2C_FIELD(M2C_FIELD(arg0, s8**, 0x85C), s8**, 8), u8*, 1) * 0x24];
+    } else {
+        team = M2C_FIELD(arg0, s8**, 0x85C);
+        c1 = &D_800AAF50[M2C_FIELD(M2C_FIELD(team, s8**, 8), u8*, 1) * 0x24];
+        c2 = &D_800AAF50[M2C_FIELD(M2C_FIELD(team, s8**, 0xC), u8*, 1) * 0x24];
+    }
+    if (M2C_FIELD(M2C_FIELD(state, s8**, 0xCC), u16*, 8) & 0x8000) {
+        M2C_FIELD(state, s32*, 4) = 1;
+    } else {
+        buttons = M2C_FIELD(c2, u16*, 8) | M2C_FIELD(c1, u16*, 8);
+        if (buttons & 0x4000) {
+            M2C_FIELD(state, s32*, 4) = 2;
+            func_8210CDEC(arg0, c1, c2, M2C_FIELD(M2C_FIELD(arg0, s8**, 0x85C), u8*, 1));
+        } else if (buttons & 0x1000) {
+            M2C_FIELD(state, s32*, 4) = 3;
+        } else {
+            M2C_FIELD(state, s32*, 4) = 0;
+        }
+    }
+    buttons = M2C_FIELD(c2, u16*, 8) | M2C_FIELD(c1, u16*, 8);
+    if ((buttons & 0x8000) || (buttons & 0x4000) || ((buttons & 0x1000) && (M2C_FIELD(other, s32*, 0x10) != 4))) {
+        func_82134D60();
+    }
+}
 
 s32 func_8210C778(ActivePokemon*);
 
@@ -409,11 +659,48 @@ s32 func_8210DA30(ActivePokemon* arg0) {
     return 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8210DAEC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210DAEC.s")
-#endif
+s32 func_82188770(s32, s32, s32, s32, s8*);
+s32 func_8210DAEC(ActivePokemon* arg0, ActivePokemon* arg1) {
+    ActivePokemonState* state = &arg0->state;
+    ActivePokemonState* other = &arg1->state;
+    s32 pad[2]; // FAKE
+
+    if ((state->unk_2D == 0x10) && (other->unk_2D == 0x10)) {
+        if (state->unk_10 == 3) {
+            func_8210C708((s8*)arg0);
+            return 1;
+        }
+        state->unk_04 = 2;
+        state->unk_10 = 2;
+        if (D_FLT_82199EB0 == 60.0f) {
+            func_82134D60();
+            D_82199EB8 = func_82188770((s32)&arg0->state.runtime, (s32)&arg1->state.runtime, state->rosterIndex, other->rosterIndex, M2C_FIELD(arg1, s8**, 0x860));
+            state->unk_1C = 0;
+            state->unk_18 = D_82199EB8 - 4;
+            state->unk_1E = 0;
+            state->unk_10 = 3;
+            state->unk_04 = 2;
+        }
+        return 1;
+    }
+    if (state->unk_2D == 0x10) {
+        state->unk_04 = 2;
+        state->unk_10 = 2;
+        other->unk_10 = 3;
+        other->unk_04 = 1;
+        if (D_FLT_82199EB0 == 60.0f) {
+            func_82134D60();
+            D_82199EB8 = func_82188770((s32)&arg0->state.runtime, (s32)&arg1->state.runtime, state->rosterIndex, other->rosterIndex, M2C_FIELD(arg1, s8**, 0x860));
+            state->unk_1C = 0;
+            state->unk_18 = D_82199EB8 - 4;
+            state->unk_1E = 0;
+            state->unk_10 = 3;
+            state->unk_04 = 2;
+        }
+        return 1;
+    }
+    return 0;
+}
 
 void BattleScene_CompleteCpuForcedAction(ActivePokemon* arg0, UNUSED ActivePokemon* arg1) {
     ActivePokemonState* ptr = &arg0->state;
@@ -425,11 +712,29 @@ void BattleScene_CompleteCpuForcedAction(ActivePokemon* arg0, UNUSED ActivePokem
     ptr->unk_10 = 3;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8210DCE4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210DCE4.s")
-#endif
+void func_8210DCE4(ActivePokemon* arg0, ActivePokemon* arg1) {
+    ActivePokemonState* sp20 = &arg1->state;
+    ActivePokemonState* sp1C = &arg0->state;
+
+    BattleScene_ApplyForcedActionDelay(arg0);
+    sp1C->unk_2A = 1;
+
+    if ((D_82199EB0 == 30.0f) && (D_82199EB8 < 4)) {
+        BattleAnim_PlaySoundEffect2();
+    }
+
+    if ((D_82199EB8 < 4) && (D_82199EB0 >= 30.0f)) {
+        sp1C->unk_10 = 1;
+        sp1C->unk_04 = 1;
+    }
+
+    if (((D_82199EB0 >= 90.0f) || ((sp20->unk_10 == 3) && (D_82199EB0 >= 10.0f))) && (D_82199EB8 < 4)) {
+        BattleAnim_PlaySoundEffect2();
+        sp1C->unk_04 = 1;
+        sp1C->unk_10 = 3;
+        sp1C->unk_0C = sp1C->unk_14;
+    }
+}
 
 s32 func_8210DA30(ActivePokemon* arg0);
 void BattleScene_ApplyCpuChoice(ActivePokemon* arg0, ActivePokemon* arg1) {
@@ -607,13 +912,32 @@ void func_8210E36C(void)
   *((u8 *) (((s8 *) (*((s8 **) (((s8 *) (&D_82199DE0)) + 4)))) + 0x865)) = (u8) ((*((u8 *) (((s8 *) (*((s8 **) (((s8 *) (&D_82199DE0)) + 4)))) + 0x865))) & 0xFFFE);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8210E3C0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210E3C0.s")
-#endif
+typedef struct DemoInput8210E3C0 {
+    /* 0x0 */ u16 frames;
+    /* 0x2 */ u16 pressed;
+    /* 0x4 */ u16 down;
+} DemoInput8210E3C0;
+extern DemoInput8210E3C0 D_8218ABB8[];
+extern Controller D_82199EC8[];
+extern s32 D_82199F10[];
+extern s32 D_82199F18[];
+void func_8210E3C0() {
+    s32 i = func_82107A5C();
+    Controller* c = &D_82199EC8[i];
 
-void func_8210E3C0(ActivePokemon*, ActivePokemon*);
+    c->buttonPressed = 0;
+    if (D_82199F18[i] == 0) {
+        if ((D_82199F18[i] = D_8218ABB8[D_82199F10[i]].frames) != 0) {
+            c->buttonPressed = D_8218ABB8[D_82199F10[i]].pressed;
+            c->buttonDown = D_8218ABB8[D_82199F10[i]++].down;
+        }
+    }
+    if (D_82199F18[i] > 0) {
+        D_82199F18[i]--;
+    }
+}
+
+void func_8210E3C0();
 void func_8210E484(ActivePokemon* arg0, ActivePokemon* arg1) {
     BattleMonRuntime* temp_v0 = &arg0->state.runtime;
     BattleMonRuntime* temp_v1 = &arg1->state.runtime;
@@ -630,11 +954,73 @@ void func_8210E484(ActivePokemon* arg0, ActivePokemon* arg1) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8210E504; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210E504.s")
-#endif
+extern s32 D_82199F20;
+extern u8 D_82199DFC[];
+extern u8 D_82199E0C[];
+extern s32 D_82199F10[2];
+extern s32 D_82199F18[2];
+void func_82124EFC(void);
+extern Controller D_82199EC8[];
+/*
+ * Stadium 0 counterpart of Stadium 1's BattleScene_TickAttractModeInput
+ * (debug/attract-mode buttons on controller D_82199EC8).
+ */
+void func_8210E504(void) {
+    ActivePokemonState* sp24 = &sActivePokemon[0]->state;
+    ActivePokemonState* sp20 = &sActivePokemon[1]->state;
+    BattleMonRuntime* sp1C = &sActivePokemon[0]->state.runtime;
+    BattleMonRuntime* sp18 = &sActivePokemon[1]->state.runtime;
+    Controller* cont = &D_82199EC8[0];
+    s32 move;
+    s32 three = 3; // FAKE
+
+    func_8210E484(sActivePokemon[0], sActivePokemon[1]);
+    func_8210E484(sActivePokemon[1], sActivePokemon[0]);
+
+    if (cont->buttonPressed & 0x20) {
+        func_8210E318();
+        BattleThumbnail_TriggerOwnerModelAnimation(sActivePokemon[0]);
+        BattleThumbnail_TriggerOwnerModelAnimation(sActivePokemon[1]);
+    }
+
+    if (cont->buttonPressed & 0x10) {
+        func_8210E36C();
+    }
+
+    if (cont->buttonPressed & 0x1000) {
+        sp24->unk_04 = 0;
+        sp20->unk_04 = 0;
+        do {
+            move = BattleAnim_RandomRange(4);
+        } while ((move == D_82199F20) || (move >= 4));
+        D_82199F20 = move;
+
+        if (sp24->unk_2A == 0) {
+            sp1C->usedMove = D_82199DFC[D_82199F20];
+        }
+        sp24->unk_10 = three;
+
+        if (sp20->unk_2A == 0) {
+            sp18->usedMove = D_82199E0C[D_82199F20];
+        }
+        sp20->unk_10 = three;
+
+        if ((sp24->unk_10 == three) && (sp20->unk_10 == three)) {
+            func_82124EFC();
+        }
+    }
+
+    if (cont->buttonPressed & 0x2000) {
+        D_82199F10[0] = 0;
+        D_82199F18[0] = 0;
+        D_82199F10[1] = 0;
+        D_82199F18[1] = 0;
+    }
+
+    if (cont->buttonPressed & 0x8000) {
+        sBattleScene.scene->unk_40 = three;
+    }
+}
 
 /*
  * func_8210E6D0
@@ -688,11 +1074,49 @@ void func_8210E6F4(void) {
     D_8219A4F0[0x10] = 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8210E790; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210E790.s")
-#endif
+void func_8210E118(ActivePokemon*, ActivePokemon*);
+void func_8210D90C(ActivePokemon*, ActivePokemon*);
+void func_82125224(void);
+void func_82124EFC(void);
+extern u16 D_82199F24;
+extern u16 D_82199F50;
+
+void func_8210E790(void) {
+    ActivePokemonState* state0 = &sActivePokemon[0]->state;
+    ActivePokemonState* state1 = &sActivePokemon[1]->state;
+
+    if (*M2C_FIELD(sActivePokemon[0], u8**, 0x860) & 2) {
+        D_82199F24 = D_82199F50;
+        func_8210E118(sActivePokemon[0], sActivePokemon[1]);
+        D_82199F50 = D_82199F24;
+    } else {
+        func_8210D90C(sActivePokemon[0], sActivePokemon[1]);
+    }
+    if (*M2C_FIELD(sActivePokemon[1], u8**, 0x860) & 2) {
+        D_82199F24 = D_82199F50;
+        func_8210E118(sActivePokemon[1], sActivePokemon[0]);
+        D_82199F50 = D_82199F24;
+    } else {
+        func_8210D90C(sActivePokemon[1], sActivePokemon[0]);
+    }
+    if ((state0->unk_10 == 3) && (state1->unk_10 == 3)) {
+        if (state0->unk_04 == 2) {
+            func_8210CD58((s8*)sActivePokemon[0]);
+        } else {
+            func_8210C82C(sActivePokemon[0]);
+        }
+        if (state1->unk_04 == 2) {
+            func_8210CD58((s8*)sActivePokemon[1]);
+        } else {
+            func_8210C82C(sActivePokemon[1]);
+        }
+        if ((state0->unk_04 == 2) || (state1->unk_04 == 2)) {
+            func_82125224();
+            return;
+        }
+        func_82124EFC();
+    }
+}
 
 void func_8210E504(void);
 void func_8210E790(void);

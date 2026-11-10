@@ -103,11 +103,43 @@ void func_8230016C(void) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_823003B8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment005_15FCE0/func_823003B8.s")
-#endif
+typedef struct OrderSel823003B8 {
+    /* 0x00 */ s8 unk_00;
+    /* 0x01 */ s8 unk_01;
+    /* 0x02 */ s8 unk_02[6];
+    /* 0x08 */ s8 unk_08[6];
+    /* 0x0E */ u8 unk_0E;
+    /* 0x0F */ s8 unk_0F;
+} OrderSel823003B8; // size = 0x10
+
+void func_823003B8(OrderSel823003B8* arg0, u8* arg1, s32 arg2) {
+    s32 i;
+
+    arg0->unk_00 = 0;
+    arg0->unk_01 = 0;
+    for (i = 0; i < 6; i++) {
+        arg0->unk_02[i] = 0;
+        arg0->unk_08[i] = 1;
+    }
+    if (arg2 != 0) {
+        i = 3;
+        do {
+            arg0->unk_02[i] = -1;
+            i++;
+        } while (i < 6);
+    }
+    if (arg1[1] == 1) {
+        arg0->unk_0E = (*(u8**)(arg1 + 8))[1];
+        arg0->unk_0F = -1;
+        arg0->unk_01 = ((*(u8**)(arg1 + 8))[0] & 2) != 0;
+    } else if ((*(u8**)(arg1 + 8))[1] < (*(u8**)(arg1 + 0xC))[1]) {
+        arg0->unk_0E = (*(u8**)(arg1 + 8))[1];
+        arg0->unk_0F = (*(u8**)(arg1 + 0xC))[1];
+    } else {
+        arg0->unk_0E = (*(u8**)(arg1 + 0xC))[1];
+        arg0->unk_0F = (*(u8**)(arg1 + 8))[1];
+    }
+}
 
 extern u8* D_84803698[];
 extern u8* D_84803690[];
@@ -269,24 +301,136 @@ void BattleMenu_DrawBorderedPanel(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 ar
     Ui_DrawBorderedPanelStyleB(arg0, arg1, arg2, arg3, D_82302800[arg4]);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82300BD0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment005_15FCE0/func_82300BD0.s")
-#endif
+extern u8 D_03000000[];
+extern u8 D_030005B0[];
+extern u8 D_03001110[];
+extern u8 D_03001C70[];
+extern u8 D_03000B60[];
+extern u8 D_030016C0[];
+void func_8001A944(s32 x, s32 y, const char* fmt, ...);
+void func_8001D148(s32 x, s32 y, s32 width, s32 height, s32 r, s32 g, s32 b);
+s32 func_80018DEC(s8* arg0, s32 arg1);
+extern char D_82302A34[];
+extern s32 D_82302BCC;
+void func_82300BD0(s8* arg0) {
+    s32 i;
+    s16 x;
+    s16 y;
+    s32 tx;
+    s32 ty;
+    s32 sel;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_823010E8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment005_15FCE0/func_823010E8.s")
-#endif
+    x = M2C_FIELD(arg0, s16*, 0x12);
+    y = M2C_FIELD(arg0, s16*, 0x14);
+
+    BattleMenu_DrawBorderedPanel(x, y, 0x1D7, 0x5E, arg0[1]);
+
+    gSPDisplayList(gDisplayListHead++, D_80060290);
+
+    func_8001B884(x + 7, y + 0xB, 0x1A, 0x1A, D_030005B0, 0x1C, 0x200000);
+    func_8001B884(x + 0xA1, y + 0xB, 0x1A, 0x1A, D_03001110, 0x1C, 0x200000);
+    func_8001B884(x + 0x13B, y + 0xB, 0x1A, 0x1A, D_03001C70, 0x1C, 0x200000);
+    func_8001B884(x + 7, y + 0x35, 0x1A, 0x1A, D_03000000, 0x1C, 0x200000);
+    func_8001B884(x + 0xA1, y + 0x35, 0x1A, 0x1A, D_03000B60, 0x1C, 0x200000);
+    func_8001B884(x + 0x13B, y + 0x35, 0x1A, 0x1A, D_030016C0, 0x1C, 0x200000);
+
+    func_8001B884(x + 0x23, y + 6, 0x28, 0x28, (u8*)func_80018DEC((s8*)D_82302BCC, arg0[0]), 0x28, 0x200000);
+    func_8001B884(x + 0xBD, y + 6, 0x28, 0x28, (u8*)func_80018DEC((s8*)D_82302BCC, arg0[0] + 4), 0x28, 0x200000);
+    func_8001B884(x + 0x157, y + 6, 0x28, 0x28, (u8*)func_80018DEC((s8*)D_82302BCC, arg0[0] + 8), 0x28, 0x200000);
+    func_8001B884(x + 0x23, y + 0x30, 0x28, 0x28, (u8*)func_80018DEC((s8*)D_82302BCC, arg0[0] + 0xC), 0x28, 0x200000);
+    func_8001B884(x + 0xBD, y + 0x30, 0x28, 0x28, (u8*)func_80018DEC((s8*)D_82302BCC, arg0[0] + 0x10), 0x28, 0x200000);
+    func_8001B884(x + 0x157, y + 0x30, 0x28, 0x28, (u8*)func_80018DEC((s8*)D_82302BCC, arg0[0] + 0x14), 0x28, 0x200000);
+
+    gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
+
+    Font_BeginTranslucentTextRendering();
+    Font_SetActive(4, 0);
+
+    for (i = 0; i < arg0[0x16]; i++) {
+        sel = BattleMenu_IsSlotAlreadySelected((unk_D_848037A0*)arg0, i);
+        if ((arg0[9] != 0) && (sel != 0)) {
+            Gfx_SetEnvColor(0xFF, 0xFF, 0, 0xFF);
+        }
+        tx = x + ((i % 3) * 0x9A) + 0x4C;
+        ty = y + ((i / 3) * 0x2A) + 8;
+        func_8001A944(tx, ty, (char*)(M2C_FIELD(arg0, s32*, 0x18) + i * 0x50 + 0x30));
+        if ((arg0[9] != 0) && (sel != 0)) {
+            Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+        }
+        func_8001A944(tx, ty + 0x14, D_82302A34, *(u8*)(M2C_FIELD(arg0, s32*, 0x18) + i * 0x50 + 0x24));
+    }
+
+    Font_EndTexturedTextRendering();
+
+    if (arg0[7] > 0) {
+        if (arg0[3] == 0) {
+            func_8001D148(0xC8, 0x81, 0x15F, 0x53, 0xAB, 0x49, 0x66);
+        } else {
+            func_8001D148(0x50, 0xF0, 0x15F, 0x53, 0xAB, 0x49, 0x66);
+        }
+        arg0[7] -= 1;
+    }
+}
+
+extern char D_82302A38[];
+extern char D_82302A4C[];
+extern char D_82302A60[];
+extern char D_82302A74[];
+extern char D_82302A7C[];
+void func_82300BD0(s8*);
+void func_8001AC7C(s32, s32, s32, s32, s32, s32, s32, s32);
+void func_8001E6C0(s32, s32);
+void func_823010E8(s8* arg0) {
+    s32 x;
+    s32 y;
+
+    if (arg0[2] == -1) {
+        if (arg0[3] == 0) {
+            x = 0xC8;
+            y = 0x81;
+        } else {
+            x = 0x50;
+            y = 0xF0;
+        }
+        func_82300BD0(arg0);
+        BattleMenu_DrawBorderedPanel(x, y, 0x15F, 0x53, arg0[1]);
+        if (arg0[0xA] == 0) {
+            func_8001E6C0(x + 0x26, y + 0x30);
+        } else {
+            func_8001E6C0(x + 0x86, y + 0x30);
+        }
+        Font_BeginTranslucentTextRendering();
+        Font_SetActive(0x10, 0);
+        Font_Printf(x + 0x1F, y + 0xB, D_82302A38);
+        Font_Printf(x + 0x4F, y + 0x30, D_82302A4C);
+        Font_EndTexturedTextRendering();
+        arg0[7] = 2;
+    } else {
+        x = M2C_FIELD(arg0, s16*, 0x12);
+        y = M2C_FIELD(arg0, s16*, 0x14);
+        func_82300BD0(arg0);
+        func_8001AC7C(x + 5, y + 5, 0x1CD, 0x54, 0, 0, 0, 0x80);
+        if (arg0[0xA] == 0) {
+            func_8001E6C0(x + 0x5C, y + 0x3C);
+        } else {
+            func_8001E6C0(x + 0xBC, y + 0x3C);
+        }
+        Font_BeginTranslucentTextRendering();
+        Font_SetActive(0x10, 0);
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+        Font_Printf(x + 0x50, y + 0x14, D_82302A60);
+        Font_Printf(x + 0x80, y + 0x3C, D_82302A74);
+        Font_Printf(x + 0xE0, y + 0x3C, D_82302A7C);
+        Font_EndTexturedTextRendering();
+    }
+}
 
 extern char D_82302A8C[];
 extern char D_82302AA0[];
 extern char D_82302AB8[];
 extern char D_82302ACC[];
-void func_82300BD0(s8*);
-void func_8001AC7C(s32, s32, s32, s32, s32, s32, s32, s32);
+
+
 void func_823012D0(s8* arg0) {
     s32 x;
     s32 y;
@@ -322,11 +466,62 @@ void func_823012D0(s8* arg0) {
 }
 
 extern char** D_84803790;
-#ifdef NON_MATCHING
-/* TODO: decompile func_82301448; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment005_15FCE0/func_82301448.s")
-#endif
+extern char D_82302AE4[];
+extern char D_82302AFC[];
+void func_82301448(unk_D_848037A0* arg0) {
+    s32 sp3C;
+    s32 sp38;
+    s32 sp34;
+
+    if (arg0->unk_0002 == -1) {
+        // clang-format off
+        if (arg0->unk_0003 == 0) {
+            sp3C = 0xC8; sp38 = 0x81;
+        } else {
+            sp3C = 0x50; sp38 = 0xF0;
+        }
+        // clang-format on
+        arg0->unk_0007 = 0;
+        func_82300BD0((s8*)arg0);
+        BattleMenu_DrawBorderedPanel(sp3C, sp38, 0x15F, 0x53, arg0->unk_0001);
+        Font_BeginTranslucentTextRendering();
+        Font_SetActive(0x20, -4);
+        Font_EnableTwoCycleTexturing();
+        Gfx_SetPrimColor(0x1C, 0x74, 0xFF, 0xFF);
+        Font_Printf(sp3C + 0x14, sp38 + 0x19, D_82302AE4);
+        Font_DisableTwoCycleTexturing();
+        Font_EndTexturedTextRendering();
+    } else {
+        sp3C = arg0->unk_0012;
+        sp38 = arg0->unk_0014;
+
+        if (arg0->unk_0008 < 0x10) {
+            sp34 = arg0->unk_0008 * 0x10;
+        } else if (arg0->unk_0008 < 0x23) {
+            sp34 = 0xFF;
+        } else if (arg0->unk_0008 < 0x32) {
+            sp34 = (-arg0->unk_0008 * 0x10) + 0x320;
+        } else {
+            sp34 = 0;
+        }
+
+        arg0->unk_0008++;
+        if (arg0->unk_0008 >= 0x3D) {
+            arg0->unk_0008 = 0;
+        }
+
+        func_82300BD0((s8*)arg0);
+        func_8001AC7C(sp3C + 5, sp38 + 5, 0x1CD, 0x54, 0, 0, 0, 0x80);
+        Font_BeginTranslucentTextRendering();
+        Font_SetActive(0x20, 0);
+        Font_EnableTwoCycleTexturing();
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, sp34);
+        Gfx_SetPrimColor(0x1C, 0x74, 0xFF, sp34);
+        Font_Printf(sp3C + 0x39, sp38 + 0x25, D_82302AFC);
+        Font_DisableTwoCycleTexturing();
+        Font_EndTexturedTextRendering();
+    }
+}
 
 void BattleMenu_DrawConfirmButtonLabel(unk_D_848037A0* arg0) {
     s16 sp26;
@@ -348,11 +543,40 @@ void BattleMenu_DrawConfirmButtonLabel(unk_D_848037A0* arg0) {
     Font_EndTexturedTextRendering();
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_823016FC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment005_15FCE0/func_823016FC.s")
-#endif
+extern s16 D_82302B40;
+void func_823010E8(s8*);
+void func_82301448(unk_D_848037A0*);
+void func_823016FC(unk_D_848037A0* arg0) {
+    if ((D_82302B40 != 0) || (arg0->unk_0006 != 0)) {
+        if ((D_82302B40 != 0) && (arg0->unk_0002 == -1)) {
+            BattleMenu_DrawConfirmButtonLabel(arg0);
+        }
+
+        switch (arg0->unk_0005) {
+            case 0:
+                func_82300BD0((s8*)arg0);
+                break;
+
+            case 1:
+                func_823010E8((s8*)arg0);
+                break;
+
+            case 2:
+                func_823012D0((s8*)arg0);
+                break;
+
+            case 3:
+                func_82301448(arg0);
+                break;
+        }
+
+        if (arg0->unk_0006 != 0) {
+            arg0->unk_0006--;
+        }
+    } else if (arg0->unk_0005 == 3) {
+        func_82301448(arg0);
+    }
+}
 
 extern s32 D_84816450;
 extern Controller D_84816428;
@@ -544,11 +768,45 @@ void BattleMenu_HandleOrderSelectPanel_PartyInput(Controller* arg0, unk_D_848037
 }
 
 extern unk_D_848037A0 D_848037A0[4];
-#ifdef NON_MATCHING
-/* TODO: decompile func_82301CCC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment005_15FCE0/func_82301CCC.s")
-#endif
+void BattleMenu_HandleOrderSelectPanel_ConfirmInput(Controller* arg0, unk_D_848037A0* arg1) {
+    unk_D_848037A0* temp_v0_2;
+
+    if (BTN_IS_PRESSED(arg0, BTN_R)) {
+        arg1->unk_0009 = 1;
+        arg1->unk_0006 = 2;
+    }
+    if (arg0->unk_0A & 0x10) {
+        arg1->unk_0009 = 0;
+        arg1->unk_0006 = 2;
+    }
+
+    if (BTN_IS_PRESSED(arg0, BTN_DLEFT | BTN_DRIGHT)) {
+        arg1->unk_0006 = 2;
+        arg1->unk_000A ^= 1;
+        Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
+    } else if (BTN_IS_PRESSED(arg0, BTN_A)) {
+        if (arg1->unk_000A == 0) {
+            arg1->unk_0006 = 2;
+            arg1->unk_0005 = 3;
+            arg1->unk_0008 = 0;
+            Audio_PlaySoundEffectById(9);
+        } else {
+            arg1->unk_0006 = 2;
+            arg1->unk_0005 = 0;
+            arg1->unk_000B = 0;
+            arg1->unk_0009 = 0;
+            BattleMenu_ResetOrderSlotIcons(arg1->unk_0003);
+            Audio_PlaySoundEffectById(SFX_MENU_BACK);
+            if (arg1->unk_0002 != -1) {
+                temp_v0_2 = &D_82302B48[arg1->unk_0002];
+                temp_v0_2->unk_0005 = 0;
+                temp_v0_2->unk_000B = 0;
+                temp_v0_2->unk_0009 = 0;
+                temp_v0_2->unk_0006 = 2;
+            }
+        }
+    }
+}
 
 void BattleMenu_HandleOrderSelectPanel_LevelCapNoticeInput(Controller* arg0, unk_D_848037A0* arg1) {
     if (BTN_IS_PRESSED(arg0, BTN_A | BTN_B)) {
@@ -563,7 +821,6 @@ void BattleMenu_HandleOrderSelectPanel_LevelCapNoticeInput(Controller* arg0, unk
 
 extern Controller D_84816428;
 extern Controller D_82302BD8;
-void func_82301CCC(Controller* arg0, unk_D_848037A0* arg1);
 s32 BattleMenu_UpdateOrderSelectPanel(s32 arg0, unk_D_848037A0* arg1) {
     Controller* var_a0;
     s32 sp18 = 0;
@@ -581,7 +838,7 @@ s32 BattleMenu_UpdateOrderSelectPanel(s32 arg0, unk_D_848037A0* arg1) {
                 break;
 
             case 1:
-                func_82301CCC(var_a0, arg1);
+                BattleMenu_HandleOrderSelectPanel_ConfirmInput(var_a0, arg1);
                 break;
 
             case 2:
@@ -814,6 +1071,11 @@ extern u8 D_81000000[];
 extern u8 D_01000000[];
 extern u8 D_02000000[];
 extern u8 D_03000000[];
+extern u8 D_030005B0[];
+extern u8 D_03001110[];
+extern u8 D_03001C70[];
+extern u8 D_03000B60[];
+extern u8 D_030016C0[];
 extern u8 D_0015B1A0[];
 extern u8 D_0015E220[];
 extern u8 D_002E0BE0[];

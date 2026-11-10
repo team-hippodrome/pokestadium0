@@ -65,11 +65,67 @@ void func_81200190(void) {
     func_80025758(3, D_81200DAC[temp_s0], D_81200DAC[sp38]);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8120023C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment002_15E220/func_8120023C.s")
-#endif
+extern char D_81200DE0[];
+extern char D_81200DEC[];
+extern char D_81200E18[];
+extern char D_81200E24[];
+extern char D_81200E50[];
+extern char D_81200E70[];
+extern char D_81200E9C[];
+extern char D_81200EA8[];
+extern char D_81200ED8[];
+extern char D_81200EF0[];
+extern char D_81200F10[];
+extern char D_81200F1C[];
+extern char D_81200F38[];
+extern char D_81200F58[];
+extern char D_81200F80[];
+extern char D_81200F94[];
+extern char D_81200FB8[];
+extern char D_81200FDC[];
+void func_8001AC7C(s32, s32, s32, s32, s32, s32, s32, s32);
+
+void func_8120023C(s32 arg0) {
+    s32 kind = (arg0 >> 8) & 0xFF;
+    s32 pad[1]; // FAKE: stack padding
+
+    if (kind != 0) {
+        func_8001AC7C(0x1E, 0x5F, 0x104, 0x5F, 0, 0, 0, 0x96);
+        Font_BeginTranslucentTextRendering();
+        Font_SetActive(2, -2);
+        switch (kind) {
+            case 1:
+                Font_Printf(0x32, 0x64, D_81200DE0, arg0 & 0xFF);
+                Font_Printf(0x3C, 0x87, D_81200DEC);
+                break;
+            case 2:
+                Font_Printf(0x32, 0x64, D_81200E18, arg0 & 0xFF);
+                Font_Printf(0x3C, 0x7D, D_81200E24);
+                Font_Printf(0x6E, 0x8C, D_81200E50);
+                Font_Printf(0x41, 0xA5, D_81200E70);
+                break;
+            case 3:
+                Font_Printf(0x32, 0x64, D_81200E9C, arg0 & 0xFF);
+                Font_Printf(0x2D, 0x7D, D_81200EA8);
+                Font_Printf(0x69, 0x96, D_81200ED8);
+                Font_Printf(0x5A, 0xA5, D_81200EF0);
+                break;
+            case 4:
+                Font_Printf(0x32, 0x64, D_81200F10, arg0 & 0xFF);
+                Font_Printf(0x5F, 0x73, D_81200F1C);
+                Font_Printf(0x50, 0x82, D_81200F38);
+                Font_Printf(0x41, 0x9B, D_81200F58);
+                Font_Printf(0x7D, 0xAA, D_81200F80);
+                break;
+            case 5:
+                Font_Printf(0x46, 0x73, D_81200F94);
+                Font_Printf(0x50, 0x82, D_81200FB8);
+                Font_Printf(0x69, 0xA5, D_81200FDC);
+                break;
+        }
+        Font_EndTexturedTextRendering();
+    }
+}
 
 extern s32 D_81201010;
 void func_8120047C(void) {
@@ -102,11 +158,40 @@ void func_8120047C(void) {
     gDPSetTextureConvert(gDisplayListHead++, G_TC_FILT);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_812007B0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment002_15E220/func_812007B0.s")
-#endif
+extern M2C_UNK D_02000000;
+extern u8 D_020002C0[];
+extern u8 D_02000580[];
+extern u8 D_02000840[];
+extern Gfx D_800602C8[];
+extern Gfx D_80060398[];
+extern s32 D_81201020;
+void Gfx_DrawTextureIa16(s32 x1, s32 y1, s32 draw_width, s32 height, u8* texture, s32 load_width, s32 texture_spread_x_mode);
+
+void func_812007B0(s16 x, s16 y) {
+    s32 t = D_81201020 - 0x30;
+    s32 alpha = 0;
+
+    if (t >= 0) {
+        if (t < 0x10) {
+            alpha = t * 0x10;
+        } else if (t < 0x23) {
+            alpha = 0xFF;
+        } else if (t < 0x32) {
+            alpha = -t * 0x10 + 0x320;
+        }
+    }
+    D_81201020++;
+    if (D_81201020 >= 0x6D) {
+        D_81201020 = 0x30;
+    }
+    gSPDisplayList(gDisplayListHead++, D_800602C8);
+    gDPSetEnvColor(gDisplayListHead++, 0xFF, 0xFF, 0xFF, alpha);
+    Gfx_DrawTextureIa16(x, y, 0x58, 4, (u8*)&D_02000000, 0x58, 0);
+    Gfx_DrawTextureIa16(x, y + 4, 0x58, 4, D_020002C0, 0x58, 0);
+    Gfx_DrawTextureIa16(x, y + 8, 0x58, 4, D_02000580, 0x58, 0);
+    Gfx_DrawTextureIa16(x, y + 0xC, 0x58, 4, D_02000840, 0x58, 0);
+    gSPDisplayList(gDisplayListHead++, D_80060398);
+}
 
 extern s32 D_81201018;
 s32 func_81200970(s32 arg0)
@@ -182,8 +267,8 @@ s32 func_8000D0DC(s32);
 M2C_UNK func_800387BC(M2C_UNK);
 M2C_UNK func_8003F6AC(M2C_UNK);
 void func_81200020(void);
-M2C_UNK func_8120023C(s32);
-M2C_UNK func_812007B0(M2C_UNK, M2C_UNK);
+void func_8120023C(s32);
+void func_812007B0(s16, s16);
 extern void *D_800603C0;
 extern s32 D_81201014;
 
@@ -196,7 +281,7 @@ s32 func_81200A20(s32 arg0) {
     sp18 = 0;
     func_8000B1FC();
     func_8000B220();
-    if (!sp1C) {
+    if (!sp1C) {  // karodo
     }
     D_81201018 += 1;
     if (arg0 == 0) {

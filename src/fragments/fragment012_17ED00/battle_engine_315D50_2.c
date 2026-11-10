@@ -622,7 +622,7 @@ void BattleAnim_RegisterAllAssetTables(void) {
 
     while (*var_s1 != NULL) {
         var_v0 = *var_s1;
-        if (i) {}
+        if (i) {}  // karodo
         BattleAnim_RegisterAssetTable(var_v0);
         var_s1++;
         i++;
@@ -758,11 +758,64 @@ s32 BattleAnim_IsModelAnimComplete(DisplayObject* arg0) {
     return ret;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82136E48; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82136E48.s")
-#endif
+extern s32 D_8219A77C;
+extern s32 D_8219A780;
+extern s32 D_8219A784;
+extern s32 D_8219A788;
+extern s32 D_8219A78C;
+extern s32 D_8219A790;
+extern s32 D_8219A794;
+extern s32 D_8219A798;
+extern s32 D_8219A79C;
+extern s32 D_8219A7A0;
+extern s32 D_8219A7A4;
+extern s32 D_8219A7A8;
+extern s32 D_8219A7AC;
+extern s32 D_8219A7B0;
+extern s32 D_8219A7B4;
+extern s32 D_8219A7B8;
+extern s32 D_8219A7BC;
+extern s32 D_8219A7C0;
+extern s32 D_8219A7C4;
+extern s32 D_8219A7C8;
+
+void func_82136E48(void) {
+    D_8219A780++;
+    D_8219A77C--;
+    if (D_8219A77C <= 0) {
+        D_8219A77C = 0;
+    }
+    D_8219A784 = D_8219A780 & 0x3F;
+    D_8219A788 = D_8219A780 & 0x1F;
+    D_8219A78C = D_8219A780 & 0xF;
+    D_8219A790 = D_8219A780 & 7;
+    D_8219A794 = D_8219A780 & 3;
+    D_8219A798 = D_8219A780 & 1;
+    if (D_8219A784 == 0) {
+        D_8219A79C++;
+        D_8219A7B4 ^= 1;
+    }
+    if (D_8219A788 == 0) {
+        D_8219A7A0++;
+        D_8219A7B8 ^= 1;
+    }
+    if (D_8219A78C == 0) {
+        D_8219A7A4++;
+        D_8219A7BC ^= 1;
+    }
+    if (D_8219A790 == 0) {
+        D_8219A7A8++;
+        D_8219A7C0 ^= 1;
+    }
+    if (D_8219A794 == 0) {
+        D_8219A7AC++;
+        D_8219A7C4 ^= 1;
+    }
+    if (D_8219A798 == 0) {
+        D_8219A7B0++;
+        D_8219A7C8 ^= 1;
+    }
+}
 
 void BattleAnim_UpdateEffectCallbacks(UNUSED CameraNode* arg0) {
     s32 i;

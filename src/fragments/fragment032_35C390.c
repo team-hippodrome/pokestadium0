@@ -77,11 +77,31 @@ Gfx* func_8F500238(Gfx* gfx, void* segment) {
     return gfx;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8F500298; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment032_35C390/func_8F500298.s")
-#endif
+void func_8F500298(s32 arg0, DemoGeoNode *arg1)
+{
+  s32 pad;
+  DemoGeoTeam *teams;
+  s32 team;
+  s32 slot;
+  if (arg0 == 2)
+  {
+    teams = D_80060490->node.callbackArg;
+    team = (((u32) arg1->node.callbackArg) >> 16) & 0xFFFF;
+    slot = ((u32) arg1->node.callbackArg) & 0xFFFF;
+    if (slot < teams[team].unk_40[0][2])
+    {
+      arg1->unk_18 = Gfx_AllocDisplayList(0x10);
+      func_8F500238(arg1->unk_18, teams[team].unk_08[slot]);
+    }
+    else
+    {
+      arg1->unk_18 = 0;
+      if (arg1)
+      {
+      }
+    }
+  }
+}
 
 void func_8F500358(s32 arg0, DemoGeoNode* arg1) {
     DemoGeoTeam* teams;

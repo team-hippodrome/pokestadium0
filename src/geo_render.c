@@ -772,11 +772,75 @@ void func_800132C8(s32* arg0, void* arg1) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80013398.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_800135FC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800135FC.s")
-#endif
+typedef struct GeoLayerEntry {
+    /* 0x00 */ struct GeoLayerEntry* next;
+    /* 0x04 */ u8 unk_04;
+    /* 0x05 */ u8 textureMode;
+    /* 0x06 */ u8 unk_06;
+    /* 0x07 */ u8 lodFraction;
+    /* 0x08 */ s32 dl;
+    /* 0x0C */ s32 mtx;
+    /* 0x10 */ s32 unk_10;
+    /* 0x14 */ s32 unk_14;
+    /* 0x18 */ s32 unk_18;
+    /* 0x1C */ s32 unk_1C;
+    /* 0x20 */ s32 unk_20;
+} GeoLayerEntry; // size = 0x24
+extern s32 D_800AB240;
+extern s32 D_800AB448;
+extern s32 D_800AB44C;
+extern s32 D_800AB450;
+extern s32 D_800AB454;
+extern s32 D_800AB458;
+extern s32 D_800AB45C;
+void func_800135FC(s16 layer, s32 arg1, s32 arg2, s32 arg3) {
+    s16 flag;
+    GeoLayerEntry* entry;
+
+    flag = layer & 0x80;
+    layer &= 0xF;
+
+    if (!(D_80060480 & 2) && (D_80060494 != NULL) && ((D_8006049C == NULL) || (D_8006049C->lodFraction != 0))) {
+        entry = MainPool_AllocAligned((struct MainPoolState*)D_800AB240, sizeof(GeoLayerEntry), 4);
+        entry->unk_04 = (arg3 != 0);
+        if (arg2 != 0) {
+            entry->mtx = arg2;
+        } else {
+            entry->mtx = (s32)D_800AB460.unk_1000[D_800AB460.unk_10A0];
+        }
+        entry->dl = arg1;
+        entry->unk_06 = D_800AB448;
+        entry->unk_10 = D_800AB450;
+        entry->unk_14 = D_800AB44C;
+        entry->unk_20 = D_800AB45C;
+        entry->unk_18 = D_800AB454;
+        entry->unk_1C = D_800AB458;
+        entry->lodFraction = 0xFF;
+        entry->textureMode = 0;
+        entry->next = NULL;
+        if (D_8006049C != NULL) {
+            if (D_8006049C->lodFraction < 0xFF) {
+                entry->lodFraction = D_8006049C->lodFraction;
+                if (layer == 1) {
+                    layer = 8;
+                } else if (layer == 4) {
+                    layer = 5;
+                } else if ((layer == 2) || (layer == 3)) {
+                    layer += 4;
+                }
+            }
+            if (((layer > 0) && (layer < 4)) || ((layer == 4) && (flag == 0x80))) {
+                entry->textureMode = D_8006049C->textureMode;
+            }
+        }
+        if (M2C_FIELD(D_80060494, GeoLayerEntry**, 0x18 + layer * 4) == NULL) {
+            M2C_FIELD(D_80060494, GeoLayerEntry**, 0x18 + layer * 4) = entry;
+        } else {
+            M2C_FIELD(D_80060494, GeoLayerEntry**, 0x3C + layer * 4)->next = entry;
+        }
+        M2C_FIELD(D_80060494, GeoLayerEntry**, 0x3C + layer * 4) = entry;
+    }
+}
 
 void Geo_ProcessNodeChildren(GraphNode* arg0) {
     GraphNode* temp_s2 = arg0->children;
@@ -1059,7 +1123,6 @@ void Geo_NodeAmbientLight(GraphNode* arg0) {
 
 extern unk_D_86002F34_alt11* D_800604A0;
 extern Gfx D_01002580[];
-M2C_UNK func_800135FC(u8, s32, M2C_UNK, s32);
 void Geo_NodeShadowContext(GraphNode* arg0) {
     unk_D_86002F34_alt11* arg = (unk_D_86002F34_alt11*)arg0;
     MtxF* temp_v0 = &D_800AB460.unk_0000[D_800AB460.unk_10A0];
@@ -1085,11 +1148,12 @@ void Geo_NodeShadowContext(GraphNode* arg0) {
 }
 
 M2C_UNK func_8001380C();                            /* extern */
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_8001473C(s8 *arg0)
 {
   unsigned char temp_f6;
- goto dummy_label_201075; dummy_label_201075: ;
- do { } while (0);
+ goto dummy_label_201075; dummy_label_201075: ;  // FAKE
+ do { } while (0);  // karodo
   ;
   if ((((s16) ((s32) (*((f32 *) (((s8 *) ((&(*((s8 *) (&D_800AB460)))) + ((*((s32 *) (((s8 *) (&(*((s8 *) (&D_800AB460))))) + 0x10A0))) << 6))) + 0x38))))) >= (*((s16 *) (((s8 *) arg0) + 0x18)))) && (((s16) ((s32) (*((f32 *) (((s8 *) ((&(*((s8 *) (&D_800AB460)))) + ((*((s32 *) (((s8 *) (&(*((s8 *) (&D_800AB460))))) + 0x10A0))) << 6))) + 0x38))))) < (*((s16 *) (((s8 *) arg0) + 0x1A)))))
   {
@@ -1133,11 +1197,76 @@ void Geo_NodeTranslate(GraphNode* arg0) {
     D_800AB460.unk_10A0--;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_800148AC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800148AC.s")
-#endif
+extern s32 D_800AB248[];
+void func_8000ED9C(MtxF* dest, Vec3f* local_position, Vec3s* rotate, Vec3f* scale, MtxF* basis, MtxF* transform);
+/* Geo_NodeAnimatedPart from Stadium 1, with the joint evaluation inlined. D_800AC690 is declared as u8 in this file, so it is cast to the anim record type. */
+void func_800148AC(GraphNode* arg0) {
+    Vec3s sp98;
+    Vec3f sp8C;
+    Vec3f sp80;
+    MtxF sp40;
+    unk_D_86002F34_alt6* arg = (unk_D_86002F34_alt6*)arg0;
+    s32 idx;
+    s32 sp34;
+
+    idx = arg->unk_32 * 3;
+    sp34 = 0;
+    sp98 = arg->unk_1E;
+    sp80 = arg->unk_24;
+
+    Vec3f_FromVec3s(&sp8C, &arg->unk_18);
+    if ((((unk_D_800ABCC0*)&D_800AC690)->unk_00 == 1) && (idx >= 0) &&
+        (idx + 2 < ((unk_D_800ABCC0*)&D_800AC690)->unk_04->channelCount)) {
+        sp8C.x = ModelAnim_EvaluateScaleChannel((unk_D_800ABCC0*)&D_800AC690, idx + 0);
+        sp8C.y = ModelAnim_EvaluateScaleChannel((unk_D_800ABCC0*)&D_800AC690, idx + 1);
+        sp8C.z = ModelAnim_EvaluateScaleChannel((unk_D_800ABCC0*)&D_800AC690, idx + 2);
+
+        sp98.x = ModelAnim_EvaluateRotationChannel((unk_D_800ABCC0*)&D_800AC690, idx + 0);
+        sp98.y = ModelAnim_EvaluateRotationChannel((unk_D_800ABCC0*)&D_800AC690, idx + 1);
+        sp98.z = ModelAnim_EvaluateRotationChannel((unk_D_800ABCC0*)&D_800AC690, idx + 2);
+
+        sp80.x = ModelAnim_EvaluateTranslationChannel((unk_D_800ABCC0*)&D_800AC690, idx + 0);
+        sp80.y = ModelAnim_EvaluateTranslationChannel((unk_D_800ABCC0*)&D_800AC690, idx + 1);
+        sp80.z = ModelAnim_EvaluateTranslationChannel((unk_D_800ABCC0*)&D_800AC690, idx + 2);
+    }
+
+    if (arg->unk_31 & 2) {
+        func_8000ED9C(&sp40, &sp8C, &sp98, &sp80, &D_80060488->view.floatMatrix,
+                      &D_800AB460.unk_0000[D_800AB460.unk_10A0]);
+        D_800AB460.unk_10A0++;
+        GeoRender_SetMatrix(&sp40);
+    } else if (arg->unk_31 & 1) {
+        MtxF_SetRotationScaleTranslation(&sp40, &sp8C, &sp98, &sp80);
+        GeoRender_PushMultipliedMatrix(&sp40);
+    } else {
+        MtxF_SetRotationAndScaledTranslation(&sp40, &sp8C, &sp98, &D_800AC508.unk_000[D_800AC508.unk_180]);
+
+        D_800AB460.unk_10A0++;
+
+        GeoRender_PushScale(&sp80);
+        if (D_800AB460.unk_1080[D_800AB460.unk_10A0 - 1] == 1) {
+            MtxF_Multiply(&D_800AB460.unk_0000[D_800AB460.unk_10A0 + 32], &sp40,
+                          &D_800AB460.unk_0000[D_800AB460.unk_10A0 + 31]);
+        } else {
+            MtxF_Multiply(&D_800AB460.unk_0000[D_800AB460.unk_10A0 + 32], &sp40,
+                          &D_800AB460.unk_0000[D_800AB460.unk_10A0 - 1]);
+        }
+        MtxF_ScaleRows(&D_800AB460.unk_0000[D_800AB460.unk_10A0], &D_800AB460.unk_0000[D_800AB460.unk_10A0 + 32],
+                       &D_800AC508.unk_000[D_800AC508.unk_180]);
+        GeoRender_CommitMatrix();
+        D_800AB460.unk_1080[D_800AB460.unk_10A0] = 1;
+        sp34 = 1;
+    }
+
+    D_800AB248[arg->unk_30] = (s32)D_800AB460.unk_1000[D_800AB460.unk_10A0];
+    Geo_ProcessNodeChildren(arg0);
+    D_800AB248[arg->unk_30] = 0;
+    D_800AB460.unk_10A0--;
+
+    if (sp34 != 0) {
+        D_800AC508.unk_180--;
+    }
+}
 
 /*
  * func_80014BF0
@@ -1224,7 +1353,6 @@ void func_80014C4C(GraphNode* arg0) {
 }
 
 M2C_UNK func_80011294(s32);                         /* extern */
-M2C_UNK func_800135FC(u8, s32, M2C_UNK, s32);       /* extern */
 M2C_UNK func_8001380C(s8 *);                      /* extern */
 
 void func_80014E78(s8 *arg0) {
@@ -1239,7 +1367,6 @@ void func_80014E78(s8 *arg0) {
     M2C_FIELD(&D_800AB460, s32 *, 0x10A0) = (s32) (M2C_FIELD(&D_800AB460, s32 *, 0x10A0) - 1);
 }
 
-M2C_UNK func_800135FC(u8, s32, M2C_UNK, s32);
 M2C_UNK func_8001380C();
 void func_8000E41C(MtxF*, MtxF*, MtxF*, Vec3f*);
 M2C_UNK func_8001380C(s8 *);
@@ -1260,8 +1387,8 @@ void func_80014EDC(s8 *arg0) {
     D_800AB460.unk_10A0 -= 1;
 }
 
-M2C_UNK func_800135FC(u8, s32, M2C_UNK, s32);       /* extern */
 M2C_UNK func_8001380C(s8 *);                      /* extern */
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_80014F78(s8 *arg0)
 {
   s32 new_var;
@@ -1275,7 +1402,7 @@ void func_80014F78(s8 *arg0)
     }
     func_800135FC(*((u8 *) (((s8 *) arg0) + 3)), new_var, 0, (*((u8 *) (((s8 *) arg0) + 2))) & 4);
   }
-  func_8001380C((0, arg0));
+  func_8001380C((0, arg0));  // FAKE
 }
 
 #ifdef NON_MATCHING
@@ -1314,11 +1441,67 @@ void Geo_NodeAnchor(GraphNode* arg0) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800152AC.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80015330; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80015330.s")
-#endif
+extern Gfx D_01002480[];
+extern Gfx D_01002500[];
+void func_80015330(GraphNode* arg0) {
+    Vec3f sp9C;
+    Vec3f sp90;
+    Vec3f sp84;
+    f32 sp80;
+    MtxF sp40;
+    MtxF* sp3C;
+    unk_D_86002F34_alt12* arg = (unk_D_86002F34_alt12*)arg0;
+    Gfx* temp_s1;
+
+    sp3C = &D_800AB460.unk_0000[D_800AB460.unk_10A0];
+    temp_s1 = Gfx_AllocDisplayList(sizeof(Gfx) * 2);
+
+    if (GeoRender_FindAnchorPosition(D_8006049C, 0x64, NULL) == 0) {
+        GeoRender_RecordAnchorPosition(0x64);
+    }
+
+    Vec3f_SetComponentsDuplicate(&sp9C, sp3C->mf[3][0], sp3C->mf[3][1] + arg->unk_1E, sp3C->mf[3][2]);
+    sp9C.y = 0.0f;
+
+    if (D_8006049C->node.renderFlags & 0x40) {
+        Vec3f_SetComponentsDuplicate(&sp90, 0.0f, 1.0f, 0.0f);
+        MtxF_GetScale(sp3C, &sp84);
+
+        sp80 = 1.0f - ((sp3C->mf[3][1] - sp9C.y) / 1000.0f);
+        if (sp80 < 0.5f) {
+            sp80 = 0.5f;
+        }
+
+        if (sp80 > 1.0f) {
+            sp80 = 1.0f;
+        }
+
+        sp84.x *= (arg->unk_1A / 100.0f) * sp80;
+        sp84.z *= (arg->unk_1C / 100.0f) * sp80;
+        MtxF_SetOrthonormalBasis(&sp40, &sp90, &sp9C, D_8006049C->rotation.y);
+        MtxF_ScaleRows(&D_800AB460.unk_0000[D_800AB460.unk_10A0 + 1], &sp40, &sp84);
+
+        D_800AB460.unk_10A0++;
+        GeoRender_CommitMatrix();
+
+        if (arg->unk_18 == 0) {
+            gSPBranchList(&temp_s1[1], Util_ConvertAddrToVirtAddr(D_01002480));
+        } else {
+            gSPBranchList(&temp_s1[1], Util_ConvertAddrToVirtAddr(D_01002500));
+        }
+        gDPSetEnvColor(&temp_s1[0], 0, 0, 0, (s32)(150.0f * sp80));
+
+        if (D_8006049C->node.renderFlags & 2) {
+            func_800135FC(6, (u32)temp_s1 & 0x1FFFFFFF, 0, 1);
+        } else {
+            func_800135FC(5, (u32)temp_s1 & 0x1FFFFFFF, 0, 1);
+        }
+
+        Geo_ProcessNodeChildren(arg0);
+
+        D_800AB460.unk_10A0--;
+    }
+}
 
 void Geo_RenderRootNode(GraphNode* node) {
     unk_D_86002F34_alt1* arg = (unk_D_86002F34_alt1*)node;

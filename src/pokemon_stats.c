@@ -61,7 +61,7 @@ s32 Deck_ReadEntries(u8* arg0, s32 arg1, DeckHandle* arg2) {
     var_s3 = arg1 - 1;
     tmp = arg1 > 0;
 
-    if (tmp) {}
+    if (tmp) {}  // karodo
 
     if (tmp != 0) {
         for (; arg2->unk_0A < arg2->unk_08;) {
@@ -104,7 +104,7 @@ s32 Deck_WriteEntries(u8* arg0, s32 arg1, DeckHandle* arg2) {
     var_s4 = arg1 - 1;
     tmp = arg1 > 0;
 
-    if (tmp) {}
+    if (tmp) {}  // karodo
 
     if (tmp) {
         for (; arg2->unk_0A < arg2->unk_06;) {

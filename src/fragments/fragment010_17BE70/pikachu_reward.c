@@ -95,11 +95,35 @@ s32 PikachuReward_PositionSurfingPikachuModel(s32 arg0, DisplayObject* arg1) {
     return 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81700064; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment010_17BE70/func_81700064.s")
-#endif
+typedef struct Rec81700064 {
+    /* 0x00 */ u8 id;
+    /* 0x01 */ u8 unk01[0x4F];
+} Rec81700064; // size = 0x50
+s32 func_80020AFC(M2C_UNK, s32, M2C_UNK, M2C_UNK);
+s32 func_80020CE4(void*, s32, s32);
+M2C_UNK func_80020C60(s32);
+s32 func_80021894(s32);
+extern s32 D_817025C4;
+extern Rec81700064 D_817025C8[];
+extern s8* D_817027A8;
+
+s32 func_81700064(s32 arg0) {
+    s32 i;
+    s32 handle;
+
+    if ((arg0 != -1) && (func_80021894(arg0) != 0)) {
+        handle = func_80020AFC(0x20, arg0, 0, 0);
+        D_817025C4 = func_80020CE4(D_817025C8, 6, handle);
+        func_80020C60(handle);
+        for (i = 0; i < D_817025C4; i++) {
+            if (D_817025C8[i].id == 0x19) {
+                D_817027A8 = (s8*)&D_817025C8[i];
+                return 1;
+            }
+        }
+    }
+    return 0;
+}
 
 extern s8 *D_817027A8;
 
@@ -568,11 +592,70 @@ loop_3:
     goto loop_3;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_817010E8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment010_17BE70/func_817010E8.s")
-#endif
+typedef struct SpeciesNameEntry817010E8 {
+    /* 0x00 */ char* name;
+    /* 0x04 */ char unk04[8];
+} SpeciesNameEntry817010E8; // size = 0xC
+
+extern SpeciesNameEntry817010E8 D_8006A9CC[];
+extern s32 D_81701B20;
+extern s32 D_81701B24;
+extern s32 D_81701B28;
+extern s32 D_81701B2C;
+extern s32 D_81701B30;
+extern s32 D_81701B34;
+extern s32 D_81701B38;
+extern char* D_81701B3C;
+extern s32 D_81701B40;
+s32 func_81700A80(s32);
+void func_8003FE58(s32, s32, s32);
+s32 func_800564D4(char*, const char*, ...);
+
+s32 func_817010E8(void) {
+    char (*text)[0x78];
+    s32 result;
+    s32 choice;
+    char buf[0x78];
+
+    result = func_81700130();
+    if (result == 4) {
+        /* Reading buf through this pointer is what gives the ROM's register allocation. */
+        text = &buf;
+    while (TRUE) {
+        func_8170070C(D_81701B20);
+        func_81700630(D_81701B20, 1);
+        func_8170070C(D_81701B24);
+        func_81700630(D_81701B24, 1);
+        func_8170070C(D_81701B28);
+        if (func_817008B4(D_81701B28) != 0) {
+            func_8170070C(D_81701B30);
+            choice = func_81700A80(D_81701B30);
+            if (choice >= 0) {
+                func_81700588(D_81701B34, 0x1E);
+                func_800199F8(&D_FLT_81702020, 0xA);
+                D_81701B04 = 0;
+                func_8003FE58(0x85, 0x19, 0);
+                func_81700630(D_81701B38, 1);
+                func_800564D4(buf, D_81701B3C, D_8006A9CC[M2C_FIELD(D_817027A8 + choice, u8*, 9)].name);
+                func_8000A7FC(0x3C);
+                func_8170070C((s32)*text);
+                func_81700630((s32)buf, 1);
+                func_8170070C(D_81701B40);
+                func_81700630(D_81701B40, 1);
+                D_81701B04 = -1;
+                return choice;
+            }
+        }
+        func_8170070C(D_81701B2C);
+        if (func_817008B4(D_81701B2C) != 0) {
+            func_81700D7C();
+            return -1;
+        }
+    }
+    }
+    func_8000A7FC(0x3C);
+    return result;
+}
 
 extern char* D_81701B44;
 extern char D_81701F0C[];
@@ -635,7 +718,7 @@ M2C_UNK func_80022118(s32);                         /* extern */
 M2C_UNK func_80022188(s32);                         /* extern */
 M2C_UNK func_817012C0(M2C_UNK);                     /* extern */
 extern s32 D_817025C4;
-extern M2C_UNK D_817025C8;
+extern Rec81700064 D_817025C8[];
 
 void func_817014A4(s32 arg0) {
     M2C_UNK var_s0;

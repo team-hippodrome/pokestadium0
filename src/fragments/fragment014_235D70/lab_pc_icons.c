@@ -57,12 +57,6 @@ typedef struct unk_D_88218070 {
 void func_8800075C(void);
 void func_88000FE0(void);
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88000020; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment014_235D70/func_88000020.s")
-#endif
-
 extern Color_RGBA8 D_88001FD0;
 void func_8002A0AC(s32, s32, s32, s32, Color_RGBA8);
 void func_80027F20(s32);
@@ -103,11 +97,38 @@ M2C_UNK func_880002D8(s32 arg0, s32 arg1, s32 arg2) {
     M2C_FIELD(obj, s32 *, 0x6C) |= 0x10000;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_880003D4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment014_235D70/func_880003D4.s")
-#endif
+s32 func_8002AE6C();
+extern u8 D_800734A8[4];
+extern u8 D_8007356C[];
+extern Gfx D_80060270[];
+extern Color_RGBA8 D_88001FE8;
+extern char D_88002308[];
+extern char D_88002328[];
+void func_80029658(s32, s32, s32, u8 *);
+void func_80029028(s32, s32, s32, s32, Color_RGBA8);
+void func_8002A8E0(void*);
+void func_8002D9B8(s8 *, s32, s32, s32, s32);
+void func_880003D4(s8* arg0) {
+    if (func_8002AE6C() == 0) {
+        func_8002A8E0(arg0 + 0x2C);
+        func_80029658(M2C_FIELD(arg0, s32 *, 0), M2C_FIELD(arg0, s32 *, 4) + 0x8D, M2C_FIELD(arg0, s32 *, 8), D_8007356C);
+        gSPDisplayList(gDisplayListHead++, D_80060270);
+        func_80029028(M2C_FIELD(arg0, s32 *, 0) + 6, M2C_FIELD(arg0, s32 *, 4) + 0x94, M2C_FIELD(arg0, s32 *, 8) - 0xC, 0x78, D_88001FE8);
+        Font_BeginTranslucentTextRendering();
+        Font_SetActive(0x10, 0);
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+        Font_EnableTwoCycleTexturing();
+        Gfx_SetPrimColor(0xFF, 0x96, 0x96, 0xFF);
+        Font_Printf(M2C_FIELD(arg0, s32 *, 0x2C) + 0xC, M2C_FIELD(arg0, s32 *, 0x30) + 0xC, D_88002308);
+        Font_DisableTwoCycleTexturing();
+        Font_SetActive(8, 0);
+        Gfx_SetEnvColor(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
+        Font_SetLineHeight(0x1C);
+        Font_Printf(M2C_FIELD(arg0, s32 *, 0x2C) + 0x34, M2C_FIELD(arg0, s32 *, 0x30) + 0x30, D_88002328);
+        Font_EndTexturedTextRendering();
+        func_8002D9B8(arg0 + 0x4C, M2C_FIELD(arg0, s32 *, 0) + 6, M2C_FIELD(arg0, s32 *, 4) + 0x9A, 0xFFEF, 0);
+    }
+}
 
 s32 func_8002DC04(s8*);
 s32 func_8002BC14(s32);
@@ -186,11 +207,47 @@ void func_88000764(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4, s32 arg5) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment014_235D70/func_880007FC.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88000C1C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment014_235D70/func_88000C1C.s")
-#endif
+void func_80027410(void*, void*, s32, s32, s32);
+void func_8002DECC(void*, void*, void*, void*, s32, s32, s32);
+s32 func_800226BC(s32, s32, s32);
+s32 func_80025BD8();
+void func_880007FC();
+M2C_UNK func_88000C1C(u8* arg0, s32 arg1, s32 arg2) {
+    M2C_FIELD(arg0, s32*, 4) = 0;
+    func_80027410(arg0 + 0x1E0, arg0 + 0x30, 0x30, 9, 9);
+    func_8002DECC(arg0 + 8, arg0 + 0x1E0, arg0 + 0x1F0, func_880007FC, 3, 0, 0);
+    M2C_FIELD(arg0, s32*, 0x10) = arg1;
+    M2C_FIELD(arg0, u16**, 0xC)[1] |= 1;
+    switch (arg2) {
+        case 4:
+            M2C_FIELD(arg0, u16**, 0xC)[0] |= 1;
+            M2C_FIELD(arg0, u16**, 0xC)[2] |= 1;
+            M2C_FIELD(arg0, u16**, 0xC)[3] |= 1;
+            M2C_FIELD(arg0, u16**, 0xC)[5] |= 1;
+            M2C_FIELD(arg0, u16**, 0xC)[6] |= 1;
+            M2C_FIELD(arg0, u16**, 0xC)[8] |= 1;
+            break;
+        case 3:
+            M2C_FIELD(arg0, u16**, 0xC)[0] |= 1;
+            M2C_FIELD(arg0, u16**, 0xC)[2] |= 1;
+            M2C_FIELD(arg0, u16**, 0xC)[3] |= 1;
+            M2C_FIELD(arg0, u16**, 0xC)[5] |= 1;
+            M2C_FIELD(arg0, u16**, 0xC)[8] |= 1;
+            break;
+        case 2:
+            M2C_FIELD(arg0, u16**, 0xC)[0] |= 1;
+            M2C_FIELD(arg0, u16**, 0xC)[2] |= 1;
+            M2C_FIELD(arg0, u16**, 0xC)[3] |= 1;
+            break;
+        case 1:
+            M2C_FIELD(arg0, u16**, 0xC)[0] |= 1;
+            M2C_FIELD(arg0, u16**, 0xC)[2] |= 1;
+            break;
+    }
+    if ((arg2 == 1 || arg2 == 2) && func_800226BC(0x20, func_80025BD8(), 0) == 0) {
+        M2C_FIELD(arg0, u16**, 0xC)[5] |= 1;
+    }
+}
 
 s32 func_88000E20(s8 *arg0) {
     s32 temp_v0;
@@ -220,11 +277,38 @@ s32 func_88000E20(s8 *arg0) {
     return var_v1;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88000EAC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment014_235D70/func_88000EAC.s")
-#endif
+extern u8 D_05018868[];
+void func_8002E230(s8*, s32, s32, s32, f32*);
+
+s32 func_88000EAC(s8* arg0, s32 arg1) {
+    f32 alpha;
+    s32 ret = 1;
+    s32 color = 0xFFED;
+    s32 n;
+
+    func_88000E20(arg0);
+    switch (M2C_FIELD(arg0, u32*, 0)) {
+        case 4:
+            return 1;
+        case 3:
+            n = 0x17 - M2C_FIELD(arg0, s32*, 4);
+            alpha = (f32)n / 10.0f;
+            break;
+        case 0:
+            n = M2C_FIELD(arg0, s32*, 4) - 1;
+            alpha = (f32)n / 10.0f;
+            break;
+        case 1:
+        case 2:
+            ret = 0;
+            alpha = 1.0f;
+            color = arg1 | 0xFFED;
+            break;
+    }
+    func_8002E230(arg0 + 8, 0, 0, color, &alpha);
+    func_880005E8(0xE6, 0x56, 0xC8, 0x64, 0xC8, D_05018868, 255.0f * alpha);
+    return ret;
+}
 
 void func_88000FE0(void) {
 }
@@ -358,7 +442,7 @@ extern M2C_UNK D_88002240;
 void func_880013EC(u8 *arg0, s32 arg1, s32 arg2, s32 *arg3) {
     s32 temp_v0;
 
-    if (arg3) {
+    if (arg3) {  // karodo
     }
 
     if (D_800AF985 & 1) {
@@ -378,7 +462,7 @@ void func_880013EC(u8 *arg0, s32 arg1, s32 arg2, s32 *arg3) {
 
 M2C_UNK func_800069CC();                            /* extern */
 M2C_UNK func_8002C064(M2C_UNK, M2C_UNK, u8, u8, s32); /* extern */
-M2C_UNK func_880003D4(s8 *);                      /* extern */
+void func_880003D4(s8 *);
 M2C_UNK func_88000EAC(s8 *, M2C_UNK);             /* extern */
 void func_88001128(s8 *);
 extern M2C_UNK D_88002254;
@@ -408,11 +492,93 @@ void func_8800149C(s8 *arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88001564; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment014_235D70/func_88001564.s")
-#endif
+extern s32 D_88002258[];
+extern s32 D_8800227C[];
+extern s32 D_880022A0[];
+extern Color_RGBA8 D_88001FEC[];
+extern u8 D_88002034[][0x18];
+s32 func_8002E70C(s8*);
+void func_800245E0(s32, s32);
+s32 func_88000020(s32);
+s32 func_88001564(s8* arg0) {
+    s32 ret = 0;
+    s32 idx;
+    s32 dir;
+
+    switch (M2C_FIELD(arg0, s32*, 0)) {
+        case 1:
+            if (M2C_FIELD(arg0, s32*, 4) == 4 && M2C_FIELD(arg0, s32*, 0x2C) == 4) {
+                ret = M2C_FIELD(arg0, s32*, 8);
+            } else if (M2C_FIELD(arg0, s32*, 4) == 2 && M2C_FIELD(arg0, s32*, 0x354) == 4) {
+                M2C_FIELD(arg0, s32*, 0) = M2C_FIELD(arg0, s32*, 4);
+                M2C_FIELD(arg0, s32*, 4) = 0;
+            } else {
+                switch (func_88000564(arg0 + 0x32C)) {
+                    case 1:
+                        func_8003F6AC(0x1E);
+                        gSessionContext.sessionFlags |= 2;
+                        M2C_FIELD(arg0, s32*, 8) = 0x8050;
+                        M2C_FIELD(arg0, s32*, 0x350) = 7;
+                        M2C_FIELD(arg0, s32*, 4) = 4;
+                        M2C_FIELD(arg0, s32*, 0x30) = 0xD;
+                        break;
+                    case 2:
+                        func_8003F6AC(3);
+                        gSessionContext.sessionFlags &= ~1;
+                        M2C_FIELD(arg0, s32*, 0x350) = 7;
+                        M2C_FIELD(arg0, s32*, 4) = 2;
+                        break;
+                    case 3:
+                        func_8003F6AC(0x1F);
+                        func_800245E0(0x15, 0);
+                        gSessionContext.sessionFlags &= ~1;
+                        M2C_FIELD(arg0, s32*, 0x350) = 7;
+                        M2C_FIELD(arg0, s32*, 4) = 2;
+                        break;
+                }
+            }
+            break;
+        case 2:
+            if (func_8002E70C(arg0 + 0x34) == 0) {
+                dir = func_8002BC14(D_800603C0);
+                if (dir == -1) {
+                    func_8003F6AC(8);
+                } else if (dir == 1) {
+                    func_8003F6AC(2);
+                    M2C_FIELD(arg0, s32*, 0) = 3;
+                    idx = M2C_FIELD(arg0, s32*, 0x3C);
+                    func_88000FE8(arg0 + 0x234, 0x36, 0x57, D_88002258[idx], D_8800227C[idx], D_880022A0[idx], D_88001FEC[idx], (s32)D_88002034[idx]);
+                }
+            }
+            break;
+        case 3:
+            if (M2C_FIELD(arg0, s32*, 4) == 4 && M2C_FIELD(arg0, s32*, 0x2C) == 4) {
+                ret = M2C_FIELD(arg0, s32*, 8);
+            } else if (M2C_FIELD(arg0, s32*, 4) == 2 && M2C_FIELD(arg0, s32*, 0x25C) == 4) {
+                M2C_FIELD(arg0, s32*, 0) = M2C_FIELD(arg0, s32*, 4);
+                M2C_FIELD(arg0, s32*, 4) = 0;
+            } else {
+                dir = func_8800125C(arg0 + 0x234);
+                if (dir == -1) {
+                    func_8003F6AC(3);
+                    M2C_FIELD(arg0, s32*, 0x258) = 7;
+                    M2C_FIELD(arg0, s32*, 4) = 2;
+                } else if (dir == 1) {
+                    if (M2C_FIELD(arg0, s32*, 0x3C) == 7) {
+                        func_8003F6AC(2);
+                    } else {
+                        func_8003F6AC(0x1C);
+                    }
+                    M2C_FIELD(arg0, s32*, 8) = func_88000020(M2C_FIELD(arg0, s32*, 0x3C));
+                    M2C_FIELD(arg0, s32*, 0x258) = 7;
+                    M2C_FIELD(arg0, s32*, 4) = 4;
+                    M2C_FIELD(arg0, s32*, 0x30) = 0xD;
+                }
+            }
+            break;
+    }
+    return ret;
+}
 
 s32 func_80002D98(M2C_UNK);
 M2C_UNK func_8000B2F4(s32);
@@ -476,11 +642,22 @@ Color_RGBA8 func_8800196C(Color_RGBA8 arg0, f32 arg1) {
     return color;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88001A30; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment014_235D70/func_88001A30.s")
-#endif
+M2C_UNK func_80005B98(M2C_UNK);
+extern s32 D_880022C4;
+s32 func_88001A30(s32 arg0) {
+    Color_RGBA8 sp24;
+
+    if (arg0 == 1) {
+        /* Dead read of the counter; the retail code loads it here. */
+        if (D_880022C4) {}  // karodo
+        func_80005B98(1);
+    }
+    func_800069CC();
+    sp24 = func_8800196C(*(Color_RGBA8*)&D_88002254, D_880022C4 / 20.0);
+    func_8002C064(0, 0x1E0, sp24.r, sp24.g, sp24.b);
+    D_880022C4++;
+    return 0;
+}
 
 M2C_UNK func_800069CC();                            /* extern */
 M2C_UNK func_8002C064(M2C_UNK, M2C_UNK, u8, u8, s32); /* extern */
@@ -492,11 +669,25 @@ s32 func_88001AE0(s32 arg0) {
     return 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_88001B28; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment014_235D70/func_88001B28.s")
-#endif
+M2C_UNK func_80028060(M2C_UNK, M2C_UNK *, M2C_UNK *, s32); /* extern */
+extern M2C_UNK D_88002A8C;
+
+s32 func_88001B28(UNUSED s32 arg0) {
+    static s32 D_880022C8;
+    s32 sp1C;
+    M2C_UNK *var_a1;
+
+    sp1C = ((D_880022C8 * 0x38) / 6) - 0x38;
+    func_800069CC();
+    if (D_88002B00 == -1) {
+        var_a1 = NULL;
+    } else {
+        var_a1 = &D_88002B08;
+    }
+    func_80028060(sp1C, var_a1, &D_88002A8C, D_88002B00);
+    D_880022C8++;
+    return 0;
+}
 
 M2C_UNK func_800069CC();                            /* extern */
 M2C_UNK func_80028060(M2C_UNK, M2C_UNK *, M2C_UNK *, s32); /* extern */
@@ -548,7 +739,7 @@ s32 func_88001C08(s32 arg0) {
 M2C_UNK func_8000B1FC();                            /* extern */
 M2C_UNK func_8000B220();                            /* extern */
 M2C_UNK func_8001B5F0();                            /* extern */
-s32 func_88001564(s32);                             /* extern */
+s32 func_88001564(s8*);
 extern s32 D_88002B20;
 
 s32 func_88001CA4(s32 arg0) {
@@ -601,8 +792,8 @@ extern M2C_UNK D_01000000;
 extern M2C_UNK D_04000000;
 extern M2C_UNK D_05000000;
 extern s32 D_80073400;
-extern M2C_UNK func_88001A30;
-extern M2C_UNK func_88001B28;
+s32 func_88001A30(s32 arg0);
+s32 func_88001B28(s32 arg0);
 
 s32 func_88001D54(s32 arg0) {
     s32 sp1C;

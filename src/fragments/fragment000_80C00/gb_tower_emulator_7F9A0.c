@@ -127,7 +127,7 @@ s32 GbPak_InitializeCartridgeMapper(unk_D_8122B2C0* arg0) {
  * register fewer and does not match.
  */
 s32 func_81102344(u8*, s32);
-s32 func_80057910(M2C_UNK *, void *, M2C_UNK); /* extern */
+s32 func_80057910(M2C_UNK *, void *, u32); /* extern */
 extern M2C_UNK D_811564A0;
 extern M2C_UNK D_811564C0;
 s32 func_811020A8(void *arg0) {
@@ -176,7 +176,7 @@ s32 func_81102168(s8 *arg0) {
 }
 
 s32 func_81101FE8(s8 *);                            /* extern */
-s32 func_81102F7C(u8, s32, u8);                     /* extern */
+s32 func_81102F7C(s32, s32, s32);                     /* extern */
 
 /*
  * func_811021D4
@@ -201,7 +201,7 @@ s32 func_81102F7C(u8, s32, u8);                     /* extern */
 s32 func_811021D4(u8 *arg0) {
     s32 ret;
 
-    if (((!arg0) && (!arg0)) && (!arg0)) {
+    if (((!arg0) && (!arg0)) && (!arg0)) {  // FAKE
     }
     ret = 0;
     if (!(M2C_FIELD(arg0, u8 *, 0x9B) & 1)) {
@@ -274,9 +274,35 @@ s32 GbPak_SelectRamBank(unk_D_8122B2C0* arg0, s32 arg1) {
 }
 
 typedef struct GbpakChannel811023DC {
-    /* 0x00 */ char unk00[0x9B];
+    /* 0x00 */ char unk00[0x4E];
+    /* 0x4E */ u8 checksum[2];
+    /* 0x50 */ OSPfs* pfs;
+    /* 0x54 */ u8* buf;
+    /* 0x58 */ u8* romBuf;
+    /* 0x5C */ u8* sramBuf;
+    /* 0x60 */ u8* bankState;
+    /* 0x64 */ u8* sramState;
+    /* 0x68 */ u8* bankList;
+    /* 0x6C */ u8* bankEntry;
+    /* 0x70 */ u8* ramBuf;
+    /* 0x74 */ u8* blockState;
+    /* 0x78 */ u8* verifyBuf;
+    /* 0x7C */ u8* blockDirty;
+    /* 0x80 */ s32 size;
+    /* 0x84 */ s32 sum;
+    /* 0x88 */ char unk88[0x4];
+    /* 0x8C */ s32 addr;
+    /* 0x90 */ u32 ramSize;
+    /* 0x94 */ s32 sramAddr;
+    /* 0x98 */ u8 unk98;
+    /* 0x99 */ u8 request;
+    /* 0x9A */ volatile u8 error;
     /* 0x9B */ u8 status;
-    /* 0x9C */ char unk9C[0x8];
+    /* 0x9C */ u8 channel;
+    /* 0x9D */ char unk9D[0x4];
+    /* 0xA1 */ u8 unkA1;
+    /* 0xA2 */ u8 unkA2;
+    /* 0xA3 */ char unkA3[0x1];
 } GbpakChannel811023DC; // size = 0xA4
 extern GbpakChannel811023DC D_811561C8[];
 s32 func_811023DC(OSPfs* arg0) {
@@ -395,23 +421,156 @@ s32 GbPak_TransferBankedRam(u8* arg0, s32 arg1) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_811027A8.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81102970; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81102970.s")
-#endif
+extern volatile u8 D_81156475;
+extern volatile u8 D_81156476;
+extern OSMesgQueue D_81156458;
+s32 func_8004CFB0(OSMesgQueue*, s32, s32);
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81102AC8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81102AC8.s")
-#endif
+s32 func_81102970(s32 chan, s32 bank) {
+    u8* entry;
+    u8* state;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81102C20; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81102C20.s")
-#endif
+    while (D_81156475 != 0) {
+    }
+    if ((D_81156476 == 0) || (D_811561C8[chan].request != 0) || (D_811561C8[chan].error != 0)) {
+        return -2;
+    }
+    for (entry = D_811561C8[chan].bankList; *entry != 0xFF; entry += 6) {
+        if (bank == *entry) {
+            goto found;
+        }
+    }
+    return -1;
+
+found:
+    state = &D_811561C8[chan].bankState[bank];
+    if (*state != 0) {
+        *state = 3;
+        D_811561C8[chan].request = 6;
+        D_811561C8[chan].addr = (*entry & 0x7F) << 14;
+        D_811561C8[chan].buf = D_811561C8[chan].addr + D_811561C8[chan].romBuf;
+        D_811561C8[chan].size = 0x2000;
+        D_811561C8[chan].bankEntry = entry;
+        if (!entry && !entry && !entry) {} // FAKE: empty test found by the permuter; only changes instruction scheduling
+        func_8004CFB0(&D_81156458, D_811561C8[chan].channel, 1);
+        while (D_81156475 != 0) {
+        }
+    }
+    if (D_811561C8[chan].error != 0) {
+        return -1;
+    }
+    return 0;
+}
+
+extern volatile u8 D_81156475;
+extern volatile u8 D_81156476;
+extern volatile u8 D_81156477;
+extern OSMesgQueue D_81156458;
+s32 func_8004CFB0(OSMesgQueue*, s32, s32);
+
+s32 func_81102AC8(s32 arg0) {
+    s32 chan = arg0;
+    GbpakChannel811023DC* ch;
+    GbpakChannel811023DC* ch2;
+    u32 i;
+
+    if (D_81156475 != 0) {
+        return 1;
+    }
+    ch = &D_811561C8[chan];
+    ch2 = ch;
+    if (ch->error != 0) {
+        return 4;
+    }
+    for (i = 0; i < ch2->ramSize >> 8; i++) {
+        if (ch->blockState[i] == 0) {
+            if (D_81156476 == 0 && D_81156477 != 0) {
+                ch->blockState[i] = 1;
+                ch->blockDirty[i] = 0;
+                ch->request = 5;
+                ch->addr = i << 8;
+                ch->buf = ch->ramBuf + (i << 8);
+                ch->size = 0x100;
+                func_8004CFB0(&D_81156458, chan, 1);
+                return 2;
+            }
+            return 3;
+        }
+    }
+    if (ch2->error == 0 && (ch2->status & 1)) {
+        ch->request = 4;
+        func_8004CFB0(&D_81156458, chan, 1);
+    }
+    return 0;
+}
+
+s32 func_81102C20(s32 arg0) {
+    GbpakChannel811023DC* ch2;
+    GbpakChannel811023DC* ch;
+    s32 retries;
+    s32 r;
+    u32 i;
+    s32 off;
+
+    ch = &D_811561C8[arg0];
+    ch2 = ch;
+    retries = 20;
+    for (;;) {
+        r = func_81102AC8(arg0);
+        if (r >= 3) {
+        fail:
+            for (i = 0; i < ch->ramSize >> 8; i++) {
+                ch->blockState[i] = ch->blockDirty[i];
+            }
+            return -1;
+        }
+        if (r == 0) {
+            break;
+        }
+    }
+    while (D_81156475 != 0) {
+    }
+    if (ch->error != 0) {
+        goto fail;
+    }
+restart:
+    for (i = 0; i < ch2->ramSize >> 8; i++) {
+        off = i << 8;
+        if (ch->blockDirty[i] == 0) {
+            ch->request = 2;
+            ch->addr = i << 8;
+            ch->size = 0x100;
+            ch->buf = ch->verifyBuf;
+            func_8004CFB0(&D_81156458, arg0, 1);
+            while (D_81156475 != 0) {
+            }
+            if (ch->error != 0) {
+                goto fail;
+            }
+            if (func_80057910(ch->verifyBuf, ch->ramBuf + (i << 8), 0x100) != 0) {
+                if (retries == 0) {
+                    goto fail;
+                }
+                if ((func_81102168((s8*)ch) != 0) || ((ch->unk98 != 0) && (func_811020A8(ch) != 0))) {
+                    goto fail;
+                }
+                retries--;
+                ch->request = 3;
+                ch->addr = off;
+                ch->buf = ch->ramBuf + off;
+                ch->size = 0x100;
+                func_8004CFB0(&D_81156458, arg0, 1);
+                while (D_81156475 != 0) {
+                }
+                if (ch->error) {
+                    goto fail;
+                }
+                goto restart;
+            }
+        }
+    }
+    return 0;
+}
 
 void func_80058260(u32*);
 u32 func_80053A80(void);
@@ -441,11 +600,39 @@ void GbPak_PrepareProbeBlock(u32* arg0, s32 arg1) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81102F7C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81102F7C.s")
-#endif
+void func_81102EB0(u8*, s32);
+
+s32 func_81102F7C(s32 arg0, s32 arg1, s32 arg2) {
+    GbpakChannel811023DC* ch = &D_811561C8[arg0];
+    s32 ret;
+    s32 n;
+    u8* entry;
+    u16 addr;
+
+    ch->unk98 = 0;
+    if (arg2 == 0) {
+        return 0;
+    }
+    ch->unkA2 = 3;
+    ret = func_81102344((u8*)ch, arg1 / 0x2000);
+    n = 3;
+    if (ret == 0) {
+        entry = (u8*)&D_811564C0 + ((arg0 << 1) << 4);
+        addr = (arg1 & 0x1FFF) | 0xA000;
+        do {
+            func_81102EB0(entry, n);
+            ret = func_8005C670((s32)ch->pfs, 1, addr, (M2C_UNK*)entry, 0x20);
+            if (ret == 0 && (ret = func_8005C670((s32)ch->pfs, 0, addr, &D_811564A0, 0x20)) == 0 &&
+                (ret = func_80057910(&D_811564A0, entry, 0x20)) == 0 && --n == 0) {
+                ch->unk98 = arg2;
+                ch->sramAddr = arg1;
+                ch->unkA2 = 0;
+                break;
+            }
+        } while (ret == 0);
+    }
+    return ret;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_811030F0; signature not recovered. */
@@ -461,14 +648,14 @@ void GbPak_PrepareProbeBlock(u32* arg0, s32 arg1) {
 
 extern volatile u8 D_81156474;
 extern volatile u8 D_81156475;
-extern volatile s8 D_81156476;
-extern volatile s8 D_81156477;
+extern volatile u8 D_81156476;
+extern volatile u8 D_81156477;
 extern s8 D_81156478;
 extern s8 D_81156479;
 extern s32 D_81156470;
 extern OSMesgQueue D_81156458;
 void func_800515B0(s32, s32);
-void func_8004CFB0(OSMesgQueue *, s32, s32);
+s32 func_8004CFB0(OSMesgQueue *, s32, s32);
 void func_81103728(s32 arg0) {
     s32 i;
 
@@ -627,23 +814,130 @@ void func_81104540(u16* arg0, s32 arg1, s32 arg2) {
     func_80052100(arg0, 0x1E00);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81104618; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81104618.s")
-#endif
+extern s32 D_81156550;
+extern u8 D_8111E308;
+extern u8 D_811221C0[];
+extern u8 D_81121B30[];
+extern u8 D_811220D0[];
+extern u8 D_81122010[];
+extern u8 D_81122070[];
+extern u8 D_81121DA0[];
+void func_81103C40(s32, u8*, s32, s32, s32);
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_811047A0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_811047A0.s")
-#endif
+void func_81104618(s32 arg0) {
+    s32 sp2C;
+    s32 mode;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81104930; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81104930.s")
-#endif
+    sp2C = ((u8*)D_81156550)[0x101B9];
+    mode = D_8111E308;
+
+    if (mode == 1) {
+        arg0 += 0xA8;
+        func_81103C40(arg0 + 0x16BE, D_811221C0, 0, 0x10, 5);
+        func_81103C40(arg0 + 0x506, D_81121B30, 0, 0x18, 0xD);
+    } else if (mode == 2) {
+        arg0 += 0x94;
+        func_81103C40(arg0 + 0x16BE, D_811220D0, 0, 0x18, 5);
+        func_81103C40(arg0 + 0x55A, (sp2C >= 3) ? D_81122010 : D_81122070, 0, 8, 6);
+        func_81103C40(arg0 + 0x506, D_81121DA0, 0, 0x18, 0xD);
+    }
+    if (D_8111E308 != 0) {
+        func_81103C40(arg0 + 0x53A, D_81122010, 0, 8, 6);
+        func_81103C40(arg0 + 0x54A, (sp2C >= 2) ? D_81122010 : D_81122070, 0, 8, 6);
+    }
+}
+
+extern s32 D_81156590;
+extern u16 D_811223E0[];
+extern s32 D_81154C00;
+extern s32 D_81156594;
+extern u8* D_81156598;
+extern s8 D_811565A2;
+extern u8 D_811541F0[];
+extern u8 D_81120A18[];
+extern u16 D_81120B58[];
+void func_811047A0(s32 arg0) {
+    s32 pos;
+    s32 dst;
+    s32 i;
+    u8* p;
+
+    pos = D_81156590;
+    func_8004FD20(pos, 0x2800);
+    pos += 0xAE;
+    func_8110445C((u8*)pos, D_811223E0[D_81156594], 0x70);
+    i = 0;
+    dst = pos + 0x788;
+    if (arg0 != 0) {
+        arg0 = 6;
+    }
+    p = &D_811541F0[arg0];
+    do {
+        func_8110427C((u16*)dst, D_81156598 + *p * 0xA0, 0xFFFE, 0xC, 0xA, 0x10);
+        i += 0x12;
+        dst += 0x12;
+        p++;
+    } while (i != 0x6C);
+    func_81103C40(pos + 0x7FE, D_81120A18, 0, 0x10, 0xA);
+    func_81103C40(pos + 0x5C2, (u8*)&D_81120B58[D_81156594 * 12 * 12], 0, 0xC, 0xC);
+    func_81104540((u16*)pos, arg0, 0);
+    D_811565A2 = 0;
+    D_81154C00 = D_81156590;
+}
+
+typedef struct Screen81104930 {
+    /* 0x00 */ u8 unk_00[0x4C];
+    /* 0x4C */ s32 framebuffer;
+    /* 0x50 */ u8 unk_50[4];
+    /* 0x54 */ s32 colorIndex;
+} Screen81104930;
+
+extern Screen81104930 D_81156540;
+extern u16 D_811223E0[];
+extern u8 D_811208F8[];
+extern u8 D_811541FC[5];
+extern u8* D_8115659C;
+extern s32 D_81154C00;
+
+void func_81104930(void) {
+
+    s32 pos;
+    s32 dst;
+    u8* p;
+
+    func_81103D30();
+    switch (D_8111E308) {
+        case 1:
+
+            pos = D_81156540.framebuffer + 0xA4;
+            func_8110445C((u8*)pos, D_811223E0[D_81156540.colorIndex], 0x7C);
+            func_81104618(D_81156540.framebuffer);
+            pos += 0x2DE;
+            break;
+        case 2:
+
+            pos = D_81156540.framebuffer + 0x94;
+            func_8110445C((u8*)pos, D_811223E0[D_81156540.colorIndex], 0x84);
+            func_81104618(D_81156540.framebuffer);
+            pos += 0x2EE;
+            break;
+        case 0:
+        default:
+
+            pos = D_81156540.framebuffer + 0xCE;
+            func_8110445C((u8*)pos, D_811223E0[D_81156540.colorIndex], 0x50);
+            pos += 0x288;
+            break;
+    }
+    func_81103C40(pos + 0x280, D_811208F8, 0, 0xC, 0xC);
+    dst = pos + 0x29C;
+    /* The comma expression is what gives the ROM's register allocation. */
+    for (p = D_811541FC; (0, p) != &D_811541FC[5]; p++) {
+        func_8110427C((u16*)dst, D_8115659C + *p * 0xC0, 0xFFFE, 0xC, 0xC, 0x10);
+        dst += 0x18;
+    }
+    D_81154C00 = D_81156540.framebuffer;
+}
 
 M2C_UNK func_8004FD20(s32, M2C_UNK);                /* extern */
 extern s32 D_81156550;
@@ -671,7 +965,7 @@ s32 func_81104B18(s32 arg0, M2C_UNK arg1)
   return new_var;
 }
 
-M2C_UNK func_81102970(u8, s32);                     /* extern */
+s32 func_81102970(s32, s32);                     /* extern */
 extern u8 D_811565A0;
 
 void func_81104B60(s32 arg0) {
@@ -706,11 +1000,29 @@ s32 func_81104C30(u8* arg0) {
     return i;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81104CD4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81104CD4.s")
-#endif
+s32 func_81104CD4(s8* arg0) {
+    s32 i;
+    s32 sum;
+
+    if ((M2C_FIELD(arg0, u32*, 0x8C) >> 13) == 1) {
+        for (i = 0x598; i < 0x59E; i++) {
+            if (M2C_FIELD(arg0, u8**, 0x54)[i] == 0x50) {
+                goto found;
+            }
+        }
+        return 11;
+    found:
+        sum = 0;
+        for (i = 0x598; i < 0x1594; i++) {
+            sum += M2C_FIELD(arg0, u8**, 0x54)[i];
+        }
+        sum = (sum & 0xFF) ^ 0xFF;
+        if (sum != M2C_FIELD(arg0, u8**, 0x54)[i]) {
+            return 10;
+        }
+    }
+    return 0;
+}
 
 extern s32 D_81154C48;
 
@@ -755,11 +1067,28 @@ s32 func_811064DC(void) {
     return 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110659C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110659C.s")
-#endif
+extern u8 D_811565A0;
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
+s32 func_8110659C(void)
+{
+  GbpakChannel811023DC *ch = &D_811561C8[D_811565A0];
+  ch->unk00[0x99] = 0x80;
+  ch->unk00[0x9A] = 0;
+  func_8004CFB0(&D_81156458, D_811565A0, 1);
+  while (D_81156475 != 0)
+  {
+  }
+
+  if (((u8) (*((s8 *) (((s8 *) ch) + 0x9A)))) != 0)
+  {
+    return *((u8 *) (((s8 *) ch) + 0x9A));
+  }
+  if (ch->unk00[0x98] != 0)
+  {
+    return func_811020A8(ch);
+  }
+  return 0;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_8110665C; signature not recovered. */
@@ -865,11 +1194,56 @@ void func_811068A0(u16* arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81106AA0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81106AA0.s")
-#endif
+extern u16 D_81129AB8[];
+extern u16 D_8112A138[];
+extern u16 D_81129238[];
+extern u16 D_811296B8[];
+extern u16 D_81129D38[];
+extern u16 D_8112A538[];
+extern u16 D_81129638[];
+extern u8 D_811565E1;
+
+void func_81106AA0(s32 addr, s32 frame) {
+    s32 i;
+
+    for (i = 0; i < 6; i++) {
+        func_81103C40(addr, (u8*)&D_81129AB8[frame * 0x28], 0, 8, 5);
+        addr += 0x10;
+    }
+    func_81103C40(addr, (u8*)&D_8112A138[frame * 0x40], 0, 8, 8);
+    addr += 0x1406;
+    for (i = 0; i < 5; i++) {
+        func_81103C40(addr, (u8*)&D_81129238[frame * 0x40], 0, 8, 8);
+        addr += 0x1400;
+    }
+    func_81103C40(addr, (u8*)&D_811296B8[frame * 0x40], 0, 8, 8);
+    addr += 0x10;
+    switch (D_811565E1) {
+        case 1:
+            i = 7;
+            break;
+        case 2:
+            i = 0xA;
+            break;
+        case 3:
+            i = 0xB;
+            break;
+        default:
+            i = 6;
+            break;
+    }
+    for (; i > 0; i--) {
+        func_81103C40(addr + 0x780, (u8*)&D_81129AB8[frame * 0x28], 0, 8, 5);
+        addr += 0x10;
+    }
+    func_81103C40(addr, (u8*)&D_81129D38[frame * 0x40], 0, 8, 8);
+    addr -= 0x13FA;
+    func_81103C40(addr, (u8*)&D_8112A538[frame * 0x40], 0, 8, 8);
+    addr -= 0x1400;
+    func_81103C40(addr, (u8*)&D_8112A538[frame * 0x40], 0, 8, 8);
+    addr -= 0x1400;
+    func_81103C40(addr, (u8*)D_81129638, 0, 8, 8);
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_81106CC8; signature not recovered. */
@@ -913,7 +1287,7 @@ extern u32 D_811565CC;
 extern s32 D_811565C0;
 extern u16* D_811565D4;
 extern u16* D_811565D0;
-void func_81106AA0(s32, u8);
+void func_81106AA0(s32, s32);
 void func_8110724C(void) {
     if ((osGetCount() - D_811565DC) > D_811565D8) {
         D_811565DC = osGetCount();

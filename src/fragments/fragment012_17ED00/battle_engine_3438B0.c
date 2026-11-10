@@ -485,7 +485,7 @@ void func_8212C530(s32 arg0)
 {
   s32 temp_v0;
   s32 var_v1;
- do { temp_v0 = func_8210C020(4, arg0); D_8219A568 = temp_v0; var_v1 = temp_v0 & 0xFFFFFFFFFFFFFFFF; } while (0);
+ do { temp_v0 = func_8210C020(4, arg0); D_8219A568 = temp_v0; var_v1 = temp_v0 & 0xFFFFFFFFFFFFFFFF; } while (0);  // FAKE
   if (temp_v0 >= 5)
   {
     D_8219A568 = 0;
@@ -1041,9 +1041,35 @@ void func_8212DB28(CameraNode* arg0) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8212DD14.s")
+void func_8210568C(ActivePokemon*, s32, s32);
 
+void func_8212DD14(ActivePokemon* arg0) {
+    ActivePokemonState* state = &arg0->state;
+    BattleMon* sp28 = &arg0->teamRoster->pokemonPicked[arg0->state.rosterIndex];
+
+    if (arg0->state.flags & 2) {
+        func_82136708(1, arg0);
+        M2C_FIELD(arg0, u8*, 2) |= 0x20;
+        func_82105E4C(arg0, 2);
+    }
+    if (state->flags & 1) {
+        M2C_FIELD(sp28, s8*, 5) = 0;
+        func_8210568C(arg0, 0xB8, 1);
+        func_82136708(3, arg0);
+        func_82105E4C(arg0, 1);
+    }
+    if (state->flags & 0x80) {
+        func_82136708(2, sActivePokemon[sBattleScene.scene->unk_2C]);
+        func_82105E4C(sActivePokemon[sBattleScene.scene->unk_2C], 0x80);
+    }
+    func_82110B44(arg0);
+}
+
+#ifdef NON_MATCHING
+/* TODO: decompile func_8212DE30; signature not recovered. */
+#else
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8212DE30.s")
+#endif
 
 void func_8212E0B0(CameraNode* arg0) {
     switch (sBattleScene.scene->unk_20) {
@@ -1092,7 +1118,60 @@ void func_8212E0B0(CameraNode* arg0) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8212E350.s")
+void func_82123314(CameraNode*, ActivePokemon*);
+f32 func_82107EC8(ActivePokemon*);
+void func_8212E350(CameraNode* arg0) {
+    switch (sBattleScene.scene->unk_20) {
+        case 0:
+            if (func_82105724((ActivePokemon*)D_8219A544, 0x1E) != 0) {
+                func_821255B4(arg0);
+                func_8211F034(D_8219A520 + 0xC8, sBattleScene.scene->unk_2C);
+                BattleScene_ResetCameraFrameCounter();
+                BattleScene_ClearPhaseFlag();
+                func_8212239C((ActivePokemon*)D_8219A544, arg0);
+                Battle_ClearMessageCursor();
+                func_82104C68((ActivePokemon*)D_8219A544, 8);
+                sBattleScene.scene->unk_20++;
+            }
+            break;
+
+        case 1:
+            if (((ActivePokemon*)D_8219A544)->modelTransformTimer == 2) {
+                func_82123314(arg0, (ActivePokemon*)D_8219A544);
+            }
+
+            if ((((ActivePokemon*)D_8219A544)->displayObject.objectType != 0x32) && (((ActivePokemon*)D_8219A544)->displayObject.objectType != 0x33)) {
+                if ((BattleAnim_IsAssetLoadBusy((ActivePokemon*)D_8219A544) == 0) && (((ActivePokemon*)D_8219A544)->displayObject.position.y <= (-func_82107EC8((ActivePokemon*)D_8219A544) * 2.5))) {
+                    func_8211F034(D_8219A520 + 0x148, sBattleScene.scene->unk_2C);
+                    func_82105E38((ActivePokemon*)D_8219A544, 0x4000);
+                    ((ActivePokemon*)D_8219A544)->displayObject.node.renderFlags &= 0xFFDF;
+                    sBattleScene.scene->unk_20++;
+                }
+            } else if (func_82105724((ActivePokemon*)D_8219A544, 0x1E) != 0) {
+                func_8211F034(D_8219A520 + 0x148, sBattleScene.scene->unk_2C);
+                func_82105E38((ActivePokemon*)D_8219A544, 0x4000);
+                ((ActivePokemon*)D_8219A544)->displayObject.node.renderFlags &= 0xFFDF;
+                sBattleScene.scene->unk_20++;
+            }
+            break;
+
+        case 2:
+            func_82123314(arg0, (ActivePokemon*)D_8219A544);
+            if (BattleScene_AdvanceCameraFrameCounter(0x23) != 0) {
+                Battle_ClearMessageCursor();
+                sBattleScene.scene->unk_20++;
+            }
+            break;
+
+        case 3:
+            func_82123314(arg0, (ActivePokemon*)D_8219A544);
+            D_8219A560 = func_8210F31C(sActivePokemon[sBattleScene.scene->unk_2C]);
+            D_8219A564 = func_8210F31C(sActivePokemon[!sBattleScene.scene->unk_2C]);
+            func_82124A40();
+            func_82125C80(arg0);
+            break;
+    }
+}
 
 extern s32 D_84390220;
 extern ActivePokemon* D_84390204;
@@ -1316,7 +1395,34 @@ void func_8212EEC0(ActivePokemon* arg0, CameraNode* arg1) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8212EF74.s")
+void func_8212EF74(ActivePokemon* arg0, CameraNode* arg1) {
+    s32 temp_v0;
+    s32 var_v1;
+
+    temp_v0 = func_8210C020(4, (s32)arg1); D_8219A568 = temp_v0;
+    var_v1 = temp_v0;
+    if (temp_v0 >= 5) {
+        D_8219A568 = 0;
+        var_v1 = 0;
+    }
+    switch (var_v1) {
+        case 0:
+            func_821247F0(arg1, arg0);
+            return;
+        case 1:
+            func_82124810(arg1, arg0);
+            return;
+        case 2:
+            func_82124830(arg1, arg0);
+            return;
+        case 3:
+            func_82124874(arg1, arg0);
+            return;
+        default:
+            func_82124874(arg1, arg0);
+            return;
+    }
+}
 
 void func_8212F044(CameraNode* arg0) {
     s32 other = sBattleScene.scene->unk_2C == 0;
@@ -1707,7 +1813,68 @@ void func_8212FC98(CameraNode* arg0) {
 }
 
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821301EC.s")
+void func_82106374(ActivePokemon*);
+s32 func_82124A50(ActivePokemon*);
+void func_82108C0C(ActivePokemon*);
+void func_821366B0(s32, ActivePokemon*);
+void func_821237B0(CameraNode*, ActivePokemon*);
+void func_82123684(CameraNode*, ActivePokemon*);
+void func_82134EBC(ActivePokemon*, s32);
+s32 func_82124BF8(ActivePokemon*);
+void func_821301EC(CameraNode* arg0) {
+    BattleMonRuntime* self = &sActivePokemon[sBattleScene.scene->unk_2C]->state.runtime;
+    BattleMonRuntime* other = &sActivePokemon[!sBattleScene.scene->unk_2C]->state.runtime;
+
+    sBattleScene.scene->unk_50 = 4;
+    switch (sBattleScene.scene->unk_20) {
+        case 0:
+            func_82135098((ActivePokemon*)D_8219A544);
+            func_82106374((ActivePokemon*)D_8219A544);
+            BattleAnim_CleanupEffects(2);
+            sBattleScene.scene->unk_20++;
+            break;
+
+        case 1:
+            if (func_82124A50(sActivePokemon[sBattleScene.scene->unk_2C]) == 0) {
+                func_82108C0C((ActivePokemon*)D_8219A544);
+                func_80040738();
+                BattleAnim_CleanupEffects(1);
+                func_821366B0(9, (ActivePokemon*)D_8219A544);
+                BattleScene_ResetCameraFrameCounter();
+                func_821237B0(arg0, sActivePokemon[sBattleScene.scene->unk_2C]);
+                func_8211F034(D_8219A520 + 0x408, sBattleScene.scene->unk_2C);
+                self->unk_0C = self->unk_12;
+                other->unk_0C = other->unk_12;
+                sBattleScene.scene->unk_20++;
+            }
+            break;
+
+        case 2:
+            func_82123684(arg0, sActivePokemon[sBattleScene.scene->unk_2C]);
+            if (BattleScene_AdvanceCameraFrameCounter(0xF) != 0) {
+                func_82134EBC((ActivePokemon*)D_8219A544, 0x1F);
+                func_82121EB0((ActivePokemon*)D_8219A544);
+                sBattleScene.scene->unk_20++;
+            }
+            break;
+
+        case 3:
+            if (func_82124BF8(D_8219A540) == 0) {
+                sBattleScene.scene->unk_20++;
+            }
+            break;
+
+        case 4:
+            BattleScene_ResetAnimationStep();
+            D_8219A560 = func_8210F31C(sActivePokemon[sBattleScene.scene->unk_2C]);
+            D_8219A564 = func_8210F31C(sActivePokemon[!sBattleScene.scene->unk_2C]);
+            func_82123684(arg0, sActivePokemon[sBattleScene.scene->unk_2C]);
+            if ((D_8219A560 == 1) && (D_8219A564 == 1) && (func_82121820(0x3C) != 0)) {
+                func_82125AC8(arg0);
+            }
+            break;
+    }
+}
 
 void BattleScene_Phase10(CameraNode* arg0) {
     switch (sBattleScene.scene->unk_20) {

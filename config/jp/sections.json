@@ -3,7 +3,16 @@
     ".rodata": "0x8007DC00"
   },
   "src/3D140.c": {
-    ".rodata": "0x8007DD18"
+    ".rodata": "0x8007DCD0"
+  },
+  "src/52D80.c": {
+    ".data": {
+      "address": "0x80077F20",
+      "size": "0x14"
+    }
+  },
+  "src/5C980.c": {
+    ".bss": "0x80105310"
   },
   "src/DDC0_2.c": {
     ".rodata": {
@@ -17,6 +26,18 @@
       "size": "0x24"
     }
   },
+  "src/audio_commands.c": {
+    ".rodata": {
+      "address": "0x8007DDA0",
+      "size": "0x1E8"
+    }
+  },
+  "src/audio_commands_2.c": {
+    ".rodata": {
+      "address": "0x8007EA3C",
+      "size": "0x210"
+    }
+  },
   "src/crash_screen.c": {
     ".rodata": {
       "address": "0x80079704",
@@ -27,9 +48,39 @@
     ".data": "0x81138350"
   },
   "src/fragments/fragment000_80C00/81110210.c": {
-    ".rodata": "0x811542D8"
+    ".rodata": "0x811542D0"
+  },
+  "src/fragments/fragment000_80C00/81111C20.c": {
+    ".rodata": "0x811542F0"
+  },
+  "src/fragments/fragment000_80C00/battle_engine_309ED0.c": {
+    ".rodata": {
+      "address": "0x811542B4",
+      "size": "0x1C"
+    }
+  },
+  "src/fragments/fragment000_80C00/gb_tower_emulator_86920.c": {
+    ".rodata": "0x81154280"
+  },
+  "src/fragments/fragment000_80C00/gb_tower_emulator_86920_8110B880.c": {
+    ".rodata": {
+      "address": "0x811542A0",
+      "size": "0x14"
+    }
   },
   "src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c": {
+    ".rodata": {
+      "address": "0x81154320",
+      "size": "0x8C"
+    }
+  },
+  "src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81113A44.c": {
+    ".rodata": "0x811543AC"
+  },
+  "src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81114B54.c": {
+    ".rodata": "0x8115467C"
+  },
+  "src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81115818.c": {
     ".rodata": "0x811549E0",
     ".data": "0x81138B74"
   },
@@ -37,6 +88,12 @@
     ".data": {
       "address": "0x811526A4",
       "size": "0xC"
+    }
+  },
+  "src/fragments/fragment002_15E220.c": {
+    ".rodata": {
+      "address": "0x81200FF4",
+      "size": "0x14"
     }
   },
   "src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c": {
@@ -51,6 +108,24 @@
       "size": "0xC"
     }
   },
+  "src/fragments/fragment007_166580_4.c": {
+    ".rodata": {
+      "address": "0x82009E20",
+      "size": "0x60"
+    }
+  },
+  "src/fragments/fragment007_166580_5.c": {
+    ".rodata": {
+      "address": "0x82009EB0",
+      "size": "0x70"
+    }
+  },
+  "src/fragments/fragment007_166580_3.c": {
+    ".rodata": {
+      "address": "0x8200A228",
+      "size": "0x18"
+    }
+  },
   "src/fragments/fragment010_17BE70/pikachu_reward.c": {
     ".data": {
       "address": "0x81701BF4",
@@ -58,11 +133,21 @@
     }
   },
   "src/fragments/fragment011_17E340/area_select.c": {
-    ".data": "0x818007CC"
+    ".data": "0x818007CC",
+    ".rodata": {
+      "address": "0x8180088C",
+      "size": "0x14"
+    }
   },
   "src/fragments/fragment012_17ED00/battle_engine_2F6930.c": {
     ".bss": "0x82199E50",
     ".rodata": "0x82195410"
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_3020D0.c": {
+    ".rodata": {
+      "address": "0x82196000",
+      "size": "0x30"
+    }
   },
   "src/fragments/fragment012_17ED00/battle_engine_3055E0.c": {
     ".rodata": {
@@ -71,10 +156,7 @@
     }
   },
   "src/fragments/fragment012_17ED00/battle_engine_3055E0_821243DC.c": {
-    ".rodata": {
-      "address": "0x8219626C",
-      "size": "0x8"
-    }
+    ".rodata": "0x8219626C"
   },
   "src/fragments/fragment012_17ED00/battle_engine_309ED0.c": {
     ".rodata": {
@@ -85,7 +167,13 @@
   "src/fragments/fragment012_17ED00/battle_engine_309ED0_82124E80.c": {
     ".rodata": {
       "address": "0x821962A8",
-      "size": "0x58"
+      "size": "0xAC"
+    }
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_309ED0_82128CDC.c": {
+    ".rodata": {
+      "address": "0x82196354",
+      "size": "0x4C"
     }
   },
   "src/fragments/fragment012_17ED00/battle_engine_309ED0_8212A328.c": {
@@ -144,12 +232,15 @@
     ".rodata": "0x82196BA0"
   },
   "src/fragments/fragment012_17ED00/battle_engine_32B680.c": {
-    ".rodata": "0x82196030"
+    ".rodata": {
+      "address": "0x82196030",
+      "size": "0x7C"
+    }
   },
   "src/fragments/fragment012_17ED00/battle_engine_32B680_3.c": {
     ".rodata": {
-      "address": "0x82196CBC",
-      "size": "0x20C"
+      "address": "0x82196C00",
+      "size": "0x2C8"
     }
   },
   "src/fragments/fragment012_17ED00/battle_engine_32B680_3_82154310.c": {
@@ -159,7 +250,28 @@
     }
   },
   "src/fragments/fragment012_17ED00/battle_engine_32B680_3_82154484.c": {
-    ".rodata": "0x82197240"
+    ".rodata": {
+      "address": "0x821970B4",
+      "size": "0x46C"
+    }
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_32B680_82121260.c": {
+    ".rodata": {
+      "address": "0x821960AC",
+      "size": "0x5C"
+    }
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_32B680_82121434.c": {
+    ".rodata": {
+      "address": "0x82196108",
+      "size": "0x5C"
+    }
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_32B680_82121604.c": {
+    ".rodata": {
+      "address": "0x82196164",
+      "size": "0xC8"
+    }
   },
   "src/fragments/fragment012_17ED00/battle_engine_339CA0.c": {
     ".rodata": "0x82197520"
@@ -182,7 +294,7 @@
   "src/fragments/fragment012_17ED00/battle_engine_3438B0.c": {
     ".rodata": {
       "address": "0x82196410",
-      "size": "0x138"
+      "size": "0x14C"
     }
   },
   "src/fragments/fragment012_17ED00/battle_engine_3438B0_82130628.c": {
@@ -192,7 +304,8 @@
     ".rodata": "0x821966E0"
   },
   "src/fragments/fragment012_17ED00/battle_engine_343BA0_2.c": {
-    ".rodata": "0x82196720"
+    ".rodata": "0x82196700",
+    ".data": "0x8218B340"
   },
   "src/fragments/fragment012_17ED00/battle_engine_343BA0_3.c": {
     ".rodata": "0x82196760"
@@ -228,7 +341,7 @@
     ".data": "0x821929D0"
   },
   "src/fragments/fragment012_17ED00/battle_engine_34A420.c": {
-    ".rodata": "0x82197AB0"
+    ".rodata": "0x82197AA0"
   },
   "src/fragments/fragment012_17ED00/battle_engine_34E1A0.c": {
     ".rodata": "0x82197BC0"
@@ -252,10 +365,7 @@
     ".rodata": "0x82197CD0"
   },
   "src/fragments/fragment012_17ED00/battle_engine_3540B0.c": {
-    ".rodata": {
-      "address": "0x82197D28",
-      "size": "0x18"
-    }
+    ".rodata": "0x82197D20"
   },
   "src/fragments/fragment012_17ED00/battle_engine_354CD0.c": {
     ".rodata": "0x82197D50"
@@ -276,6 +386,12 @@
   "src/fragments/fragment012_17ED00/battle_engine_3591E0.c": {
     ".rodata": "0x82197DE0"
   },
+  "src/fragments/fragment012_17ED00/battle_engine_359F90.c": {
+    ".rodata": {
+      "address": "0x821957BC",
+      "size": "0x28"
+    }
+  },
   "src/fragments/fragment012_17ED00/battle_engine_move_animation.c": {
     ".rodata": "0x82194880"
   },
@@ -291,7 +407,10 @@
   },
   "src/fragments/fragment012_17ED00/battle_engine_move_model_transforms_82109AF4.c": {
     ".data": "0x821891D8",
-    ".rodata": "0x82194930"
+    ".rodata": {
+      "address": "0x82194928",
+      "size": "0xB8"
+    }
   },
   "src/fragments/fragment012_17ED00/ekans_game.c": {
     ".rodata": {
@@ -299,8 +418,29 @@
       "size": "0x74"
     }
   },
+  "src/fragments/fragment012_17ED00/ekans_game_3.c": {
+    ".rodata": {
+      "address": "0x82197DF0",
+      "size": "0x178"
+    }
+  },
+  "src/fragments/fragment012_17ED00/ekans_game_3_82184DC8.c": {
+    ".rodata": {
+      "address": "0x821981EC",
+      "size": "0x2DC"
+    }
+  },
+  "src/fragments/fragment012_17ED00/ekans_game_3_82188050.c": {
+    ".rodata": {
+      "address": "0x82198784",
+      "size": "0x28C"
+    }
+  },
   "src/fragments/fragment012_17ED00/fragment1_89010.c": {
-    ".rodata": "0x82196670"
+    ".rodata": {
+      "address": "0x82196670",
+      "size": "0x38"
+    }
   },
   "src/fragments/fragment012_17ED00/fragment1_89010_821328DC.c": {
     ".rodata": {
@@ -314,20 +454,97 @@
   "src/fragments/fragment012_17ED00/particle_math_26E6D0_3.c": {
     ".rodata": "0x82196990"
   },
+  "src/fragments/fragment014_235D70/lab_pc_icons_88000020.c": {
+    ".rodata": {
+      "address": "0x88002ABC",
+      "size": "0x24"
+    }
+  },
+  "src/fragments/fragment014_235D70/lab_pc_icons.c": {
+    ".rodata": {
+      "address": "0x88002AE4",
+      "size": "0x1C"
+    },
+    ".bss": "0x880022C8"
+  },
+  "src/fragments/fragment015_238BD0/89006FC0.c": {
+    ".rodata": {
+      "address": "0x890190B0",
+      "size": "0x34"
+    }
+  },
   "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c": {
     ".rodata": {
       "address": "0x8901892C",
       "size": "0x1C"
     }
   },
-  "src/fragments/fragment016_252E10/89100020.c": {
+  "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00_8900379C.c": {
     ".rodata": {
-      "address": "0x8910DFC8",
-      "size": "0x38"
+      "address": "0x89018978",
+      "size": "0x18"
+    }
+  },
+  "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00_89003880.c": {
+    ".rodata": {
+      "address": "0x89018990",
+      "size": "0x18"
+    }
+  },
+  "src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c": {
+    ".rodata": {
+      "address": "0x89018DD0",
+      "size": "0x50"
+    }
+  },
+  "src/fragments/fragment016_252E10/89100020_89100914.c": {
+    ".rodata": {
+      "address": "0x8910DE50",
+      "size": "0x40"
+    }
+  },
+  "src/fragments/fragment016_252E10/89100020_891012A8.c": {
+    ".rodata": {
+      "address": "0x8910DF04",
+      "size": "0x40"
+    }
+  },
+  "src/fragments/fragment016_252E10/89100020_89102AB8.c": {
+    ".rodata": {
+      "address": "0x8910DF44",
+      "size": "0x14"
+    }
+  },
+  "src/fragments/fragment016_252E10/89100020_89102C40.c": {
+    ".rodata": {
+      "address": "0x8910DF58",
+      "size": "0x58"
+    }
+  },
+  "src/fragments/fragment016_252E10/89100020_89103620.c": {
+    ".rodata": {
+      "address": "0x8910DD74",
+      "size": "0x20"
+    }
+  },
+  "src/fragments/fragment016_252E10/89100020_89103740.c": {
+    ".rodata": {
+      "address": "0x8910DFB0",
+      "size": "0x50"
+    }
+  },
+  "src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c": {
+    ".rodata": {
+      "address": "0x8910E1B4",
+      "size": "0x18"
     }
   },
   "src/fragments/fragment016_252E10/lab_pc_list_1E46B0_2.c": {
-    ".data": "0x8910D9E0"
+    ".data": "0x8910D9E0",
+    ".rodata": {
+      "address": "0x8910E2B0",
+      "size": "0x18"
+    }
   },
   "src/fragments/fragment017_261F00.c": {
     ".rodata": {
@@ -341,6 +558,9 @@
       "size": "0x14"
     }
   },
+  "src/fragments/fragment018_262620/pokedex_2190D0.c": {
+    ".rodata": "0x8A12FE20"
+  },
   "src/fragments/fragment019_293410/lab_pc_icons.c": {
     ".rodata": {
       "address": "0x8A21D998",
@@ -350,11 +570,20 @@
   "src/fragments/fragment019_293410/lab_pc_icons_8A201598.c": {
     ".rodata": {
       "address": "0x8A21D9EC",
-      "size": "0x18"
+      "size": "0x4C"
     }
   },
   "src/fragments/fragment025_2B16A0/fatal_error_screen.c": {
     ".data": "0x816008EC"
+  },
+  "src/fragments/fragment031_3553C0/particle_data_library_257DE0.c": {
+    ".bss": "0x8F212930"
+  },
+  "src/fragments/fragment039_3C5200.c": {
+    ".bss": "0x8E825728"
+  },
+  "src/fragments/fragment040_3CE090.c": {
+    ".bss": "0x8E923EB0"
   },
   "src/gb_audio.c": {
     ".bss": "0x800B3FD0",
@@ -374,6 +603,7 @@
     }
   },
   "src/gb_save.c": {
+    ".rodata": "0x8007BA40",
     ".data": {
       "address": "0x800736A4",
       "size": "0x4"
@@ -552,7 +782,7 @@
     ".rodata": "0x800793A0"
   },
   "src/save_data.c": {
-    ".rodata": "0x8007B718"
+    ".rodata": "0x8007B700"
   },
   "src/scheduler.c": {
     ".rodata": "0x800794E0"
@@ -562,5 +792,11 @@
   },
   "src/vector_math.c": {
     ".rodata": "0x8007DB58"
+  },
+  "src/fragments/fragment008_1720F0.c": {
+    ".rodata": {
+      "address": "0x88103024",
+      "size": "0x48"
+    }
   }
 }

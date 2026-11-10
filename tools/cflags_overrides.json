@@ -1,4 +1,16 @@
 {
+  "src/4C760.c": {
+    "extra": [],
+    "ido": "5.3",
+    "mips": "-mips2",
+    "opt": "-O2"
+  },
+  "src/4D700.c": {
+    "extra": [],
+    "ido": "5.3",
+    "mips": "-mips2",
+    "opt": "-O2"
+  },
   "src/5D5B0.c": {
     "extra": [],
     "ido": "7.1",
@@ -978,6 +990,36 @@
     "ido": "5.3",
     "mips": "-mips2",
     "opt": "-O1",
+    "profile": "ultralib"
+  },
+  "src/56F50.c": {
+    "ido": "5.3",
+    "opt": "-O2",
+    "mips": "-mips2",
+    "profile": "ultralib"
+  },
+  "src/53080.c": {
+    "ido": "5.3",
+    "opt": "-O2",
+    "mips": "-mips2",
+    "profile": "ultralib"
+  },
+  "src/51D10.c": {
+    "ido": "5.3",
+    "opt": "-O2",
+    "mips": "-mips2",
+    "profile": "ultralib"
+  },
+  "src/5C980.c": {
+    "extra": [],
+    "ido": "5.3",
+    "mips": "-mips2",
+    "opt": "-O2"
+  },
+  "src/52D80.c": {
+    "ido": "5.3",
+    "opt": "-O1",
+    "mips": "-mips2",
     "profile": "ultralib"
   }
 }

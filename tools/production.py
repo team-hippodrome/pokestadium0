@@ -284,18 +284,27 @@ def trim_text(obj, name, size):
     raise ValueError('no C text section')
 
 
-def trim_file_text(obj, size):
+def trim_file_text(obj, size, after=b''):
     """Trim IDO's trailing .text alignment of a source file to its owner span.
 
     The last owner of a file can carry more trailing padding than the object
     emits; that remainder comes from the erased (zero) owner bytes and is
     checked by the image comparison like everything else.
+
+    after holds the image bytes that follow the span. Owner ranges stop at the
+    last reachable instruction, so a file whose last function ends in an
+    endless loop carries that function's dead epilogue past the span; those
+    bytes may be trimmed too when they equal the image bytes, which the gap
+    after the span then supplies.
     """
-    return trim_section(obj, '.text', size)
+    return trim_section(obj, '.text', size, after)
 
 
-def trim_section(obj, name, size):
-    """Shorten a section to at most size bytes; only zero bytes may be removed."""
+def trim_section(obj, name, size, after=b''):
+    """Shorten a section to at most size bytes.
+
+    Only zero bytes, or bytes equal to after (the image bytes past size), may be removed.
+    """
     data = bytearray(obj.read_bytes())
     header = struct.unpack_from('>16sHHIIIIIHHHHHH', data)
     positions = [header[6] + i * header[11] for i in range(header[12])]
@@ -304,7 +313,8 @@ def trim_section(obj, name, size):
     strings = data[table[4]:table[4] + table[5]]
     for position, section in zip(positions, sections):
         if strings[section[0]:].split(b'\0', 1)[0] == name.encode():
-            if section[1] != 8 and any(data[section[4] + size:section[4] + section[5]]):
+            extra = bytes(data[section[4] + size:section[4] + section[5]])
+            if section[1] != 8 and any(extra) and extra != bytes(after[:len(extra)]):
                 raise ValueError(f'{obj.name}: {name} is 0x{section[5]:X} bytes, owners span 0x{size:X}')
             size = min(size, section[5])
             struct.pack_into('>I', data, position + 20, size)
@@ -384,6 +394,13 @@ def build_group(group, selected, cc, prefix, compare, files=None, compilers=None
     current = None
     files = files or {}
     placements = placements or {}
+
+    def image_bytes(offset, count=64):
+        # Extracted image bytes from offset, for trim_file_text.
+        image = ROOT / 'assets/production' / (name + '.bin')
+        with open(image, 'rb') as h:
+            h.seek(offset)
+            return h.read(count)
     objects_by_file = {}
     occupied = []
     nobits = []
@@ -444,7 +461,7 @@ def build_group(group, selected, cc, prefix, compare, files=None, compilers=None
             current = files[row['name']][0]
             span_begin, span_end = spans[current]
             obj = objects_by_file[current]
-            size = trim_file_text(obj, span_end - span_begin)
+            size = trim_file_text(obj, span_end - span_begin, image_bytes(span_end))
             c_objects.append(obj)
             sections.append((begin, size, obj.name, '.text'))
             gap(begin + size, span_end)

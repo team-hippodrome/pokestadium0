@@ -66,6 +66,7 @@ void func_8A201D3C(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     }
 }
 
+// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_8A201EAC(s8 *arg0, s32 arg1)
 {
   s32 temp_v0;
@@ -223,7 +224,86 @@ void func_8A2024D0(s8 *arg0) {
     func_8A20034C(arg0 + 0x10, 0x2F, 0x4D, (s32)(arg0 + 0x180));
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment019_293410/func_8A20261C.s")
+typedef struct Ctx8A20261C {
+    /* 0x000 */ s32 state;
+    /* 0x004 */ s32 mode;
+    /* 0x008 */ char unk008[0x8];
+    /* 0x010 */ s8 list[0x24];
+    /* 0x034 */ s32 unk034;
+    /* 0x038 */ s32 unk038;
+    /* 0x03C */ char unk03C[0x34];
+    /* 0x070 */ s8 unk070[0x64];
+    /* 0x0D4 */ s8 unk0D4[0x38];
+    /* 0x10C */ s8 unk10C[0x4];
+} Ctx8A20261C;
+s32 func_8002AAC4(s8*);
+void func_8002CAD0(s8*);
+void func_8A2003C0(s8*, s32);
+#define CTX ((Ctx8A20261C*)arg0)
+void func_8A20261C(void* arg0) {
+    func_800069CC();
+    switch (CTX->state) {
+        case 1:
+            if (func_8002AAC4(CTX->list) != 0) {
+                func_8A202160();
+            }
+            func_8A2003C0(CTX->list, 0);
+            break;
+        case 2:
+            if ((CTX->mode == 4) || (CTX->mode == 7)) {
+                func_8A202160();
+                func_8002AAC4(CTX->list);
+                func_8002AAC4(CTX->unk070);
+                func_8A2003C0(CTX->list, 1);
+            } else if (func_8002AAC4(CTX->unk070) != 0) {
+                CTX->unk034 = (CTX->unk038 <= 0) ? CTX->unk034 : 4;
+                func_8002AAC4(CTX->list);
+                func_8A2003C0(CTX->list, 1);
+                CTX->unk034 = (CTX->unk038 <= 0) ? CTX->unk034 : 4;
+            } else {
+                func_8002AAC4(CTX->list);
+                func_8A2003C0(CTX->list, 1);
+            }
+            func_8A2008F4(CTX->unk070);
+            break;
+        case 3:
+            if (func_8002AAC4(CTX->list) != 0) {
+                func_8A202160();
+            }
+            func_8A2003C0(CTX->list, 2);
+            break;
+        case 4:
+            if (func_8002AAC4(CTX->unk0D4) != 0) {
+                func_8A202160();
+            }
+            func_8A201EAC(CTX->unk0D4, 0);
+            break;
+        case 5:
+            if (func_8002AAC4(CTX->unk0D4) != 0) {
+                func_8A202160();
+            }
+            func_8A201EAC(CTX->unk0D4, 1);
+            break;
+        case 6:
+            if (CTX->mode == 7) {
+                func_8A202160();
+                func_8002AAC4(CTX->list);
+                func_8002AAC4(CTX->unk10C);
+                func_8A2003C0(CTX->list, 0);
+            } else if (func_8002AAC4(CTX->unk10C) != 0) {
+                CTX->unk034 = (CTX->unk038 <= 0) ? CTX->unk034 : 4;
+                func_8002AAC4(CTX->list);
+                func_8A2003C0(CTX->list, 0);
+                CTX->unk034 = (CTX->unk038 <= 0) ? CTX->unk034 : 4;
+            } else {
+                func_8002AAC4(CTX->list);
+                func_8A2003C0(CTX->list, 0);
+            }
+            func_8002CAD0(CTX->unk10C);
+            break;
+    }
+}
+#undef CTX
 
 void func_8A202904(s8 *arg0, s32 arg1, s32 arg2) {
     M2C_FIELD(M2C_FIELD(arg0, s8 **, 8), s32 *, 0x24) = 7;
@@ -231,7 +311,169 @@ void func_8A202904(s8 *arg0, s32 arg1, s32 arg2) {
     M2C_FIELD(arg0, s32 *, 0xC) = arg2;
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment019_293410/func_8A20291C.s")
+typedef struct Ctx8A20291C { char pad[0x18C]; s32 ptrs[6]; } Ctx8A20291C;
+s32 func_8002DC04(s8*);
+s32 func_8002BC14(s32);
+void func_8002CA34(s8*, s32, s32);
+void func_8002D900(s8*);
+s32 func_8002CD7C(s8*);
+void func_8002CC44(s8*);
+s32 func_8A20093C(s8*);
+void func_8A20080C(s8* arg0, s32 arg1, s32 arg2, u8* arg3);
+s32 func_8A202078(s8* arg0);
+void func_8A2023F4(s32* arg0, s32 arg1);
+M2C_UNK func_8A20291C(M2C_UNK* ctx) {
+    s32 ret = 0;
+    s8* arg0 = (s8*)ctx;
+    s32 res;
+
+    if (M2C_FIELD(M2C_FIELD(arg0, s8**, 8), s32*, 0x28) == 4) {
+        M2C_FIELD(arg0, s32*, 0) = M2C_FIELD(arg0, s32*, 4);
+        if (M2C_FIELD(arg0, s32*, 0) == 7) {
+            ret = 1;
+        } else {
+            M2C_FIELD(arg0, s32*, 4) = 0;
+            M2C_FIELD(arg0, s8**, 8) = M2C_FIELD(arg0, s8**, 0xC);
+        }
+        return ret;
+    }
+    if ((M2C_FIELD(M2C_FIELD(arg0, s8**, 8), s32*, 0x28) != 1) && (M2C_FIELD(M2C_FIELD(arg0, s8**, 8), s32*, 0x28) != 2)) {
+        return 0;
+    }
+
+    switch (M2C_FIELD(arg0, s32*, 0)) {
+        case 1:
+            if (func_8002DC04(arg0 + 0x3C) != 0) {
+                M2C_FIELD(arg0, s32*, 0x34) = (M2C_FIELD(arg0, s32*, 0x38) <= 0) ? M2C_FIELD(arg0, s32*, 0x34) : 4;
+            } else {
+                res = func_8002BC14((s32)D_800603C0);
+                if (res == -1) {
+                    func_8003F6AC(3);
+                    if (M2C_FIELD(arg0, s32*, 0x384) != 0) {
+                        func_8002CA34(arg0 + 0x10C, 0xCA, 0xAD);
+                        M2C_FIELD(arg0, s32*, 0) = 6;
+                        M2C_FIELD(arg0, s8**, 8) = arg0 + 0x10C;
+                    } else {
+                        func_8A202904(arg0, 7, 0);
+                    }
+                } else if (res == 1) {
+                    func_8003F6AC(2);
+                    func_8A20080C(arg0 + 0x70, 0x194, 0x123, (u8*)((Ctx8A20291C*)arg0)->ptrs[M2C_FIELD(arg0, s32*, 0x44)]);
+                    M2C_FIELD(arg0, s32*, 0) = 2;
+                    M2C_FIELD(arg0, s8**, 8) = arg0 + 0x70;
+                }
+            }
+            break;
+        case 2:
+            res = func_8A20093C(arg0 + 0x70);
+            if (res == -1) {
+                func_8003F6AC(3);
+                func_8A202904(arg0, 1, (s32)(arg0 + 0x10));
+            } else if (res > 0) {
+                switch (res) {
+                    case 1:
+                        func_8003F6AC(2);
+                        func_8A202904(arg0, 4, (s32)(arg0 + 0xD4));
+                        M2C_FIELD(arg0, s32*, 0x104) = 0;
+                        M2C_FIELD(arg0, s32*, 0x34) = 7;
+                        func_8A201D3C(arg0 + 0xD4, 0x2C, 0x54, ((Ctx8A20291C*)arg0)->ptrs[M2C_FIELD(arg0, s32*, 0x44)]);
+                        break;
+                    case 2:
+                        func_8003F6AC(2);
+                        func_8A202904(arg0, 3, (s32)(arg0 + 0x10));
+                        M2C_FIELD(arg0, u16**, 0x40)[M2C_FIELD(arg0, s32*, 0x44)] |= 8;
+                        M2C_FIELD(arg0, s32*, 0x6C) = M2C_FIELD(arg0, s32*, 0x44);
+                        break;
+                    case 3:
+                        func_8003F6AC(3);
+                        if (M2C_FIELD(arg0, s32*, 0x384) != 0) {
+                            func_8002CA34(arg0 + 0x10C, 0xD4, 0xAD);
+                            func_8A202904(arg0, 6, (s32)(arg0 + 0x10C));
+                        } else {
+                            func_8A202904(arg0, 7, 0);
+                            M2C_FIELD(arg0, s32*, 0x34) = 7;
+                        }
+                        break;
+                }
+            }
+            break;
+        case 3:
+            if (func_8002DC04(arg0 + 0x3C) != 0) {
+                M2C_FIELD(arg0, s32*, 0x34) = (M2C_FIELD(arg0, s32*, 0x38) <= 0) ? M2C_FIELD(arg0, s32*, 0x34) : 4;
+            } else {
+                res = func_8002BC14((s32)D_800603C0);
+                if (res == -1) {
+                    func_8003F6AC(3);
+                    M2C_FIELD(arg0, s32*, 0) = 1;
+                    M2C_FIELD(arg0, s8**, 8) = arg0 + 0x10;
+                    M2C_FIELD(arg0, s32*, 0x34) = (M2C_FIELD(arg0, s32*, 0x38) <= 0) ? M2C_FIELD(arg0, s32*, 0x34) : 4;
+                    func_8002D900(arg0 + 0x3C);
+                } else if (res == 1) {
+                    func_8003F6AC(0x18);
+                    res = ((Ctx8A20291C*)arg0)->ptrs[M2C_FIELD(arg0, s32*, 0x6C)];
+                    ((Ctx8A20291C*)arg0)->ptrs[M2C_FIELD(arg0, s32*, 0x6C)] = ((Ctx8A20291C*)arg0)->ptrs[M2C_FIELD(arg0, s32*, 0x44)];
+                    ((Ctx8A20291C*)arg0)->ptrs[M2C_FIELD(arg0, s32*, 0x44)] = res;
+                    func_8001833C((unk_func_8001A024*)D_8A21DA50, M2C_FIELD(arg0, s32*, 0x6C), (BattleMon*)((Ctx8A20291C*)arg0)->ptrs[M2C_FIELD(arg0, s32*, 0x6C)], 0);
+                    func_8001833C((unk_func_8001A024*)D_8A21DA50, M2C_FIELD(arg0, s32*, 0x44), (BattleMon*)((Ctx8A20291C*)arg0)->ptrs[M2C_FIELD(arg0, s32*, 0x44)], 0);
+                    M2C_FIELD(arg0, s32*, 0x384) = 1;
+                    M2C_FIELD(arg0, s32*, 0) = 1;
+                    M2C_FIELD(arg0, s8**, 8) = arg0 + 0x10;
+                    M2C_FIELD(arg0, s32*, 0x34) = (M2C_FIELD(arg0, s32*, 0x38) <= 0) ? M2C_FIELD(arg0, s32*, 0x34) : 4;
+                    func_8002D900(arg0 + 0x3C);
+                }
+            }
+            break;
+        case 4:
+            res = func_8002BC14((s32)D_800603C0);
+            if (res == -1) {
+                func_8003F6AC(3);
+                func_8A202904(arg0, 1, (s32)(arg0 + 0x10));
+                M2C_FIELD(arg0, s32*, 0x34) = 0;
+            } else if (res == 1) {
+                func_8003F6AC(2);
+                M2C_FIELD(arg0, s32*, 0) = 5;
+                M2C_FIELD(arg0, s32*, 0xF8) = (M2C_FIELD(arg0, s32*, 0xFC) <= 0) ? M2C_FIELD(arg0, s32*, 0xF8) : 4;
+            }
+            break;
+        case 5:
+            if (func_8A202078(arg0 + 0xD4) == 0) {
+                res = func_8002BC14((s32)D_800603C0);
+                if (res == -1) {
+                    func_8003F6AC(3);
+                    M2C_FIELD(arg0, s32*, 0) = 4;
+                    M2C_FIELD(arg0, s32*, 0xF8) = (M2C_FIELD(arg0, s32*, 0xFC) <= 0) ? M2C_FIELD(arg0, s32*, 0xF8) : 4;
+                } else if (res == 1) {
+                    func_8003F6AC(2);
+                    func_8A202904(arg0, 1, (s32)(arg0 + 0x10));
+                    M2C_FIELD(arg0, s32*, 0x34) = 0;
+                }
+            }
+            break;
+        case 6:
+            res = func_8002CD7C(arg0 + 0x10C);
+            if (res == -1) {
+                func_8A202904(arg0, 1, (s32)(arg0 + 0x10));
+            } else if (res > 0) {
+                switch (res) {
+                    case 1:
+                        func_8002CC44(arg0 + 0x10C);
+                        func_8A2023F4((s32*)(arg0 + 0x180), (s32)arg0);
+                        func_8A202904(arg0, 7, 0);
+                        M2C_FIELD(arg0, s32*, 0x34) = 7;
+                        break;
+                    case 2:
+                        func_8A202904(arg0, 7, 0);
+                        M2C_FIELD(arg0, s32*, 0x34) = 7;
+                        break;
+                }
+            }
+            break;
+        case 7:
+            ret = 1;
+            break;
+    }
+    return ret;
+}
 
 void func_8A202EF4(void) {
     D_8A21DA40 = func_80025BD8();

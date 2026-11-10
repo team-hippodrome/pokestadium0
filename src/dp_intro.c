@@ -169,11 +169,36 @@ void DisplayWorker_ProcessFrame(void) {
 
 #undef DW
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80001558; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80001558.s")
-#endif
+void func_80001558(void) {
+    s32 width;
+    s32 i;
+    s32 j;
+    u64* p;
+
+    if (M2C_FIELD(&D_800870D0, s16*, 0xA80) < 15) {
+        if (M2C_FIELD(&D_800870D0, u8*, 0xAA5) == 0) {
+            width = 80;
+        } else {
+            width = 320;
+        }
+        if (M2C_FIELD(&D_800870D0, struct unk_D_80068BB0**, 0xAB0) != NULL) {
+            p = (u64*)M2C_FIELD(&D_800870D0, struct unk_D_80068BB0**, 0xAB0)->img_p;
+            p += width * M2C_FIELD(&D_800870D0, s16*, 0xA80);
+            // clang-format off
+            for (i = 0; i < 16; i++) { for (j = 0; j < width; j++) { *(p++) = 0; } p += width * 14; }
+            // clang-format on
+        } else {
+            func_80052DC0(1, width);
+        }
+        M2C_FIELD(&D_800870D0, s16*, 0xA80)++;
+        func_8005C0A0();
+    }
+    func_80004920((u8*)&D_800870D0 + 0x9EC);
+    while (M2C_FIELD(&D_800870D0, s32*, 0xA04) > 0) {
+        func_8000494C((u8*)&D_800870D0 + 0x9EC);
+    }
+    func_80004920((u8*)&D_800870D0 + 0x9EC);
+}
 
 extern u8 D_80087B74[];
 extern u8 D_80087B64[];
@@ -193,11 +218,31 @@ void func_800012AC(s8* arg0);
 void func_80001328(void);
 void func_80001558(void);
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_800016C4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800016C4.s")
-#endif
+void func_800016C4(UNUSED void* arg0) {
+    OSMesg msg;
+
+    func_800594D0(0x01000F00);
+    func_80001A30(D_80087B74, 0, 1, 2, 0xFF, 0, 0, 0);
+    func_80001A30(D_80087B64, 0, 1, 2, 0xFF, 0, 0, 0);
+    func_800567E0(&D_80087ACC, &D_80087ABC, 4);
+    func_80004EA8(&D_80087ABC);
+    func_80001140(D_80087AE8);
+    while (1) {
+        if (M2C_FIELD(&D_800A9710, s16*, 0xA38) > 0) {
+            func_80001558();
+            continue;
+        }
+        func_800081E0(0);
+        M2C_FIELD(&D_800870D0, u8*, 0xA82) = 1;
+        func_8004D1C0(&D_80087A8C, &msg, 1);
+        M2C_FIELD(&D_800870D0, u8*, 0xA82) = 0;
+        func_800081E0(1);
+        func_800081E0(2);
+        func_800012AC(msg);
+        func_80001328();
+        func_8004CFB0(&D_80087AA4, (OSMesg)0x444F4E45, 0);
+    }
+}
 
 void func_800016C4(void*);
 

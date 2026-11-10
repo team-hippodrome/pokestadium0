@@ -121,11 +121,166 @@ s32 Cry_IsPlaying(void);
 s32 Audio_GetDiskReadyStatus(u8* arg0);
 void Audio_SetDiskReadyPolling(s32 arg0);
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8003A890; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8003A890.s")
-#endif
+extern s16 D_80075D00[];
+Acmd* func_8003AECC(N_PVoice* filter, s16* inp, s16* outp, s32 outCount, Acmd* p);
+s16 func_8003B280(s16 arg0, s32 arg1, s16 arg2, u16 arg3);
+
+Acmd* func_8003A890(N_PVoice* filter, s32 sampleOffset, Acmd* p) {
+    Acmd* ptr = p;
+    N_PVoice* e = (N_PVoice*)filter;
+    s16 inp;
+    s32 lastOffset;
+    s32 thisOffset = sampleOffset;
+    s32 samples;
+    s16 loutp = 0;
+    s32 fVol;
+    ALParam* thisParam;
+    s32 outCount = FIXED_SAMPLE;
+
+    inp = N_AL_RESAMPLER_OUT;
+
+    while (e->em_ctrlList != 0) {
+        lastOffset = thisOffset;
+        thisOffset = SAMPLE184(e->em_ctrlList->delta);
+        samples = thisOffset - lastOffset;
+
+        if (samples > outCount) {
+            break;
+        }
+
+        switch (e->em_ctrlList->type) {
+            case (AL_FILTER_START_VOICE_ALT): {
+                ALStartParamAlt* param = (ALStartParamAlt*)e->em_ctrlList;
+                ALFilter* f = (ALFilter*)e;
+                s32 tmp;
+
+                if (param->unity) {
+                    e->rs_upitch = 1;
+                }
+
+                n_alLoadParam(e, AL_FILTER_SET_WAVETABLE, param->wave);
+                e->em_motion = AL_PLAYING;
+                e->em_first = 1;
+                e->em_delta = 0;
+                e->em_segEnd = SAMPLE184(param->samples);
+
+                tmp = ((s32)param->volume * (s32)param->volume) >> 15;
+
+                e->em_volume = (s16)tmp;
+                e->em_pan = param->pan;
+                e->em_dryamt = D_80075D00[param->fxMix];
+                e->em_wetamt = D_80075D00[128 - param->fxMix - 1];
+
+                if (param->samples) {
+                    e->em_cvolL = 1;
+                    e->em_cvolR = 1;
+                } else {
+                    e->em_cvolL = (e->em_volume * D_80075D00[e->em_pan]) >> 15;
+                    e->em_cvolR = (e->em_volume * D_80075D00[128 - e->em_pan - 1]) >> 15;
+                }
+                e->rs_ratio = param->pitch;
+            } break;
+
+            case (AL_FILTER_SET_FXAMT):
+            case (AL_FILTER_SET_PAN):
+            case (AL_FILTER_SET_VOLUME):
+                ptr = func_8003AECC(e, &inp, &loutp, samples, ptr);
+
+                if (e->em_delta >= e->em_segEnd || samples == 0) {
+                    e->em_ltgt = (e->em_volume * D_80075D00[e->em_pan]) >> 15;
+                    e->em_rtgt = (e->em_volume * D_80075D00[128 - e->em_pan - 1]) >> 15;
+                    e->em_delta = e->em_segEnd;
+                    e->em_cvolL = e->em_ltgt;
+                    e->em_cvolR = e->em_rtgt;
+                } else {
+                    e->em_cvolL = func_8003B280(e->em_cvolL, e->em_delta, e->em_lratm, e->em_lratl);
+                    e->em_cvolR = func_8003B280(e->em_cvolR, e->em_delta, e->em_rratm, e->em_rratl);
+                }
+
+                if (e->em_cvolL == 0) {
+                    e->em_cvolL = 1;
+                }
+                if (e->em_cvolR == 0) {
+                    e->em_cvolR = 1;
+                }
+
+                if (e->em_ctrlList->type == AL_FILTER_SET_PAN) {
+                    e->em_pan = (s16)e->em_ctrlList->data.i;
+                }
+
+                if (e->em_ctrlList->type == AL_FILTER_SET_VOLUME) {
+                    e->em_delta = 0;
+                    fVol = (e->em_ctrlList->data.i);
+                    fVol = (fVol * fVol) >> 15;
+                    e->em_volume = (s16)fVol;
+                    e->em_segEnd = SAMPLE184(e->em_ctrlList->moredata.i);
+                }
+
+                if (e->em_ctrlList->type == AL_FILTER_SET_FXAMT) {
+                    e->em_dryamt = D_80075D00[e->em_ctrlList->data.i];
+                    e->em_wetamt = D_80075D00[128 - e->em_ctrlList->data.i - 1];
+                }
+
+                e->em_first = 1;
+                break;
+
+            case (AL_FILTER_START_VOICE): {
+                ALStartParam* p = (ALStartParam*)e->em_ctrlList;
+
+                if (p->unity) {
+                    e->rs_upitch = 1;
+                }
+
+                n_alLoadParam(e, AL_FILTER_SET_WAVETABLE, p->wave);
+                e->em_motion = AL_PLAYING;
+            } break;
+            case (AL_FILTER_STOP_VOICE): {
+                ptr = func_8003AECC(e, &inp, &loutp, samples, ptr);
+                n_alEnvmixerParam(e, AL_FILTER_RESET, 0);
+            } break;
+
+            case (AL_FILTER_FREE_VOICE): {
+                N_ALFreeParam* param = (N_ALFreeParam*)e->em_ctrlList;
+                param->pvoice->offset = 0;
+                _n_freePVoice((N_PVoice*)param->pvoice);
+            } break;
+            case (AL_FILTER_SET_PITCH):
+                ptr = func_8003AECC(e, &inp, &loutp, samples, ptr);
+                e->rs_ratio = e->em_ctrlList->data.f;
+                break;
+            case (AL_FILTER_SET_UNITY_PITCH):
+                ptr = func_8003AECC(e, &inp, &loutp, samples, ptr);
+                e->rs_upitch = 1;
+                break;
+            case (AL_FILTER_SET_WAVETABLE):
+                ptr = func_8003AECC(e, &inp, &loutp, samples, ptr);
+                n_alLoadParam(e, AL_FILTER_SET_WAVETABLE, (void*)e->em_ctrlList->data.i);
+                break;
+            default:
+                ptr = func_8003AECC(e, &inp, &loutp, samples, ptr);
+                n_alEnvmixerParam(e, e->em_ctrlList->type, (void*)e->em_ctrlList->data.i);
+                break;
+        }
+        loutp += (samples << 1);
+        outCount -= samples;
+
+        thisParam = e->em_ctrlList;
+        e->em_ctrlList = e->em_ctrlList->next;
+        if (e->em_ctrlList == 0) {
+            e->em_ctrlTail = 0;
+        }
+
+        _n_freeParam(thisParam);
+    }
+
+    ptr = func_8003AECC(e, &inp, &loutp, outCount, ptr);
+
+    if (e->em_delta > e->em_segEnd) {
+        e->em_delta = e->em_segEnd;
+    }
+
+    return ptr;
+}
 
 s32 n_alEnvmixerParam(N_PVoice* filter, s32 paramID, void* param) {
     N_PVoice* e = filter;

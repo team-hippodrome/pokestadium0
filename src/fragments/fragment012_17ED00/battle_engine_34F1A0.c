@@ -261,11 +261,48 @@ s32 Trail40Variant_AdvanceTimer(void) {
     return 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_821798E4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821798E4.s")
-#endif
+s32 func_8000515C(s32);
+s8* func_8213C80C(void);
+void func_80031F14(f32*, f32*, f32*);
+void func_800320A8(s32, f32, f32, f32, f32, f32, f32);
+extern s32 D_821A8B80;
+void func_821798E4(void) {
+    s8* temp_v0;
+    f32 tmp1;
+    f32 tmp2;
+    f32 tmp3;
+    f32 tmp4;
+    f32 tmp5;
+    f32 tmp6;
+    f32 sp68;
+    f32 sp64;
+    f32 sp60;
+    f32 sp5C;
+
+    D_821A8B80 = func_8000515C(0x40);
+    temp_v0 = func_8213C80C();
+
+    tmp4 = *(f32*)(temp_v0 + 0xB4);
+    tmp5 = *(f32*)(temp_v0 + 0xB8);
+    tmp6 = *(f32*)(temp_v0 + 0xBC);
+
+    tmp1 = *(f32*)(temp_v0 + 0xA8);
+    tmp2 = *(f32*)(temp_v0 + 0xAC);
+    tmp3 = *(f32*)(temp_v0 + 0xB0);
+
+    sp5C = *(f32*)(temp_v0 + 0x2C);
+    sp68 = tmp4 - tmp1;
+    sp64 = tmp5 - tmp2;
+    sp60 = tmp6 - tmp3;
+
+    func_80031F14(&sp68, &sp64, &sp60);
+
+    tmp1 = (140.0f * sp68) / (sp5C / 30.0f) + tmp1;
+    tmp2 = (140.0f * sp64) / (sp5C / 30.0f) + tmp2;
+    tmp3 = (140.0f * sp60) / (sp5C / 30.0f) + tmp3;
+
+    func_800320A8(D_821A8B80, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6);
+}
 
 Gfx* Trail40Variant_BuildGfx(Gfx* arg0) {
     s32 i;

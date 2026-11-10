@@ -26,7 +26,7 @@ void BattleAnim_UpdateTransform(ActivePokemon* owner, ActivePokemon* animated_po
 
     temp_attacker_y2 = animated_pokemon->y;
     if (height <= temp_attacker_y2) {
-        if (&animated_pokemon->modelTransform.rotation) {}
+        if (&animated_pokemon->modelTransform.rotation) {}  // FAKE
         temp_attacker_y2 = 0.0f;
     }
 
@@ -64,7 +64,7 @@ void BattleAnim_UpdateSwayPhysicsToTarget(UNUSED ActivePokemon* owner, ActivePok
 
     temp_object_y = animated_object->y;
     if (target <= temp_object_y) {
-        if (&animated_object->modelTransform.rotation) {}
+        if (&animated_object->modelTransform.rotation) {}  // FAKE
         temp_object_y = 0.0f;
     }
 

@@ -709,11 +709,114 @@ s32 Pokedex_CheckAreaMapExit(void) {
     return 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8A1053E8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment018_262620/func_8A1053E8.s")
-#endif
+typedef struct unk_D_80064C60 {
+    /* 0x00 */ char* unk_00;
+    /* 0x04 */ char unk04[0x18];
+} unk_D_80064C60; // size = 0x1C
+extern unk_D_80064C60 D_80064C60[];
+extern s16 D_8A130432;
+extern s16 D_8A130446;
+extern s16 D_8A1302E0;
+extern char D_8A1302E8[];
+extern void* D_8A1302D0;
+extern s16 D_8A12FB20[];
+extern unk_D_88826CF0_004* D_8A120708[];
+extern unk_D_88826CF0_004* D_8A1212DC[];
+extern unk_D_88826CF0_004* D_8A121EB0[];
+extern unk_D_88826CF0_004* D_8A122AAC[];
+extern u8 D_8A12FB98[];
+extern u8 D_8F100000[];
+extern u8 D_00326700[];
+extern u8 D_003553C0[];
+extern u8 D_003FEBD0[];
+extern u8 D_003FFD60[];
+void func_8A1053E8(s32 arg0, MainPoolState* arg1, UNUSED s32 arg2, PERSSZP* arg3, s32 arg4) {
+    s32 i;
+    CameraNode* ptr;
+    MemoryBlock* sp44;
+    unk_D_88826CF0_004* var_v1_2;
+
+    sp44 = MainPool_InitState(arg1, 0x70800);
+    D_8A1302D4 = 0;
+    D_8A130308 = 0;
+    D_8A1302DA = 0;
+    D_8A130432 = 0;
+    D_8A130446 = 0;
+
+    for (i = 0; i < 36; i++) {
+        D_8A130458[i].unk_00 = 0;
+        D_8A130458[i].unk_02 = 0;
+    }
+
+    D_8A1302E0 = arg0 - 1;
+    sprintf(D_8A1302E8, "%s", D_80064C60[D_8A1302E0].unk_00);
+    main_pool_push_state('MAPV');
+
+    D_8A130448 = main_pool_alloc(0x3200, 0);
+    Pokedex_LoadIcon(D_8A130448, arg0);
+
+    Fragment_LoadAndRelocateFromRomRange(sp44, (((u32)&D_8F100000 & 0x0FF00000) >> 0x14) - 0x10, (s32)D_00326700,
+                  (s32)D_003553C0, arg3, arg4);
+
+    D_8A1302D0 = BinArchive_GetFile(BinArchive_Open(D_003FEBD0, D_003FFD60, 1, 1), 0);
+    GeoNode_CreateDisplayList(NULL, &D_8A130250, 5, NULL);
+    D_8A1302DC = 1;
+
+    for (i = 0; i < 59; i++) {
+        if (D_8A12FB20[i] >= 0) {
+            unk_D_88826CF0* temp_s0 = &D_8A130458[D_8A12FAD8[D_8A12FB20[i]] - 1];
+
+            D_8A1302DE = GbSave_GameToCategoryIndex(GbSave_GetPortGame(GbSave_GetActivePort()));
+
+            switch (D_8A1302DE) {
+                case 0:
+                    var_v1_2 = D_8A120708[i];
+                    break;
+
+                case 1:
+                    var_v1_2 = D_8A1212DC[i];
+                    break;
+
+                case 2:
+                    var_v1_2 = D_8A121EB0[i];
+                    break;
+
+                case 3:
+                    var_v1_2 = D_8A122AAC[i];
+                    break;
+
+                default:
+                    var_v1_2 = D_8A122AAC[i];
+                    break;
+            }
+
+            while (true) {
+                if (var_v1_2->unk_00 < 0) {
+                    break;
+                }
+
+                if (D_8A1302E0 == var_v1_2->unk_00 - 1) {
+                    temp_s0->unk_00 = 1;
+                    temp_s0->unk_04[temp_s0->unk_02] = var_v1_2;
+                    temp_s0->unk_18[temp_s0->unk_02] = i;
+                    D_8A1302DC = 0;
+                    temp_s0->unk_02++;
+                }
+                var_v1_2++;
+            }
+        }
+    }
+
+    D_8A1302D6 = Pokedex_FindNextMapArea(0);
+    D_8A1302D8 = D_8A1302D6;
+    GeoNode_CreateDisplayList(NULL, &D_8A1302B0, 5, NULL);
+    GeoNode_CreateDisplayList(NULL, &D_8A130290, 5, NULL);
+    GeoNode_CreateDisplayList(NULL, &D_8A130270, 4, NULL);
+    D_8A1302CC = process_geo_layout(sp44, D_8A12FB98);
+    ptr = (CameraNode*)D_8A1302CC->children;
+    ptr->view.targetPosition = D_8A12F838;
+    ptr->view.eyePosition = D_8A12F844;
+}
 
 void Pokedex_ExitAreaMapPool(void) {
     main_pool_pop_state('MAPV');
