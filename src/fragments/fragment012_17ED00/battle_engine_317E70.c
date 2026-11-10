@@ -101,11 +101,27 @@ s32 func_821119F8(void) {
     return 1;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82111A78; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82111A78.s")
-#endif
+// FAKE: decomp slop. Raw offset casts stand in for battle mon fields.
+void func_82111A78(void)
+{
+  if (((*((u8 *) (((s8 *) D_8219A3C0) + 0x44))) == 0x78) || ((*((u8 *) (((s8 *) D_8219A3C0) + 0x44))) == 0x99))
+  {
+    if ((*((u8 *) (((s8 *) D_8219A3C4) + 0x4C))) & 0x40)
+    {
+      return;
+    }
+    if (*((u8 *) (((s8 *) D_8219A3C4) + 0x1C)) == 8)
+    {
+      return;
+    }
+    if ((s32) D_8219A3C4 == 8) // FAKE: second use of constant 8 pools it into v1
+    {
+    }
+    if ((!D_8219A3C4) && (!D_8219A3C4)) // FAKE
+    {
+    }
+  }
+}
 
 extern TypeEffectivenessEntry D_8218AC50[];
 extern u8 D_82199F3F;

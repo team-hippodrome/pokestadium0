@@ -1260,7 +1260,7 @@ func_82137160,0x82137160,src/fragments/fragment012_17ED00/battle_engine_315D50_3
 func_82137188,0x82137188,src/fragments/fragment012_17ED00/battle_engine_315D50_3.c,BattleAnim_Reset,hand,,c
 func_821119F0,0x821119F0,src/fragments/fragment012_17ED00/battle_engine_317E70.c,BattleAnim_EffectEndNop,s1,stadium1:src/fragments/battle_engine/battle_engine_317E70.c,c
 func_821119F8,0x821119F8,src/fragments/fragment012_17ED00/battle_engine_317E70.c,func_821119F8,m2c,m2c,c
-func_82111A78,0x82111A78,src/fragments/fragment012_17ED00/battle_engine_317E70.c,,asm,,asm
+func_82111A78,0x82111A78,src/fragments/fragment012_17ED00/battle_engine_317E70.c,func_82111A78,hand,,c
 func_82111AC4,0x82111AC4,src/fragments/fragment012_17ED00/battle_engine_317E70.c,func_82111AC4,hand,,c
 func_82111C00,0x82111C00,src/fragments/fragment012_17ED00/battle_engine_317E70.c,Battle_Effect_Counter,hand,,c
 func_82111CD4,0x82111CD4,src/fragments/fragment012_17ED00/battle_engine_317E70.c,func_82111CD4,hand,,c
