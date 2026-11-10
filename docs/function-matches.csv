@@ -4470,7 +4470,7 @@ func_80012E68,0x80012E68,src/geo_render.c,func_80012E68,hand,,c
 func_80012EAC,0x80012EAC,src/geo_render.c,GeoRender_BindTexture,hand,,c
 func_80013148,0x80013148,src/geo_render.c,func_80013148,hand,,c
 func_800132C8,0x800132C8,src/geo_render.c,func_800132C8,hand,,c
-func_80013398,0x80013398,src/geo_render.c,,asm,,asm
+func_80013398,0x80013398,src/geo_render.c,func_80013398,hand,,c
 func_800135FC,0x800135FC,src/geo_render.c,func_800135FC,hand,,c
 func_8001380C,0x8001380C,src/geo_render.c,Geo_ProcessNodeChildren,s1,stadium1:src/geo_render.c,c
 func_800138B4,0x800138B4,src/geo_render.c,Geo_NodeReference,s1,stadium1:src/geo_render.c,c

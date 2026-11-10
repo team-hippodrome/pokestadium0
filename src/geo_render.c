@@ -766,11 +766,90 @@ void func_800132C8(s32* arg0, void* arg1) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80013398; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80013398.s")
-#endif
+
+typedef struct GeoRenderCtx80013398 {
+    /* 0x00 */ s32 unk_00[6];
+    /* 0x18 */ u8 unk_18;
+    /* 0x19 */ u8 unk_19;
+    /* 0x1A */ u8 unk_1A;
+    /* 0x1B */ u8 unk_1B;
+    /* 0x1C */ u8 layer;
+    /* 0x1D */ u8 flags;
+    /* 0x1E */ u8 unk_1E;
+    /* 0x1F */ u8 unk_1F;
+} GeoRenderCtx80013398; // size = 0x20
+
+struct Root80013DC8;
+void func_80013398(struct Root80013DC8 *arg0)
+{
+  s8 *entry;
+  GeoRenderCtx80013398 ctx;
+  func_800128E0((s8 *) (&ctx));
+  ctx.flags = (*((u8 *) (((s8 *) arg0) + 2))) & 3;
+  if (ctx.flags & 1)
+  {
+    gSPSetGeometryMode(gDisplayListHead++, G_ZBUFFER);
+  }
+  else
+  {
+    gSPClearGeometryMode(gDisplayListHead++, G_ZBUFFER);
+  }
+  for (ctx.layer = 0; ctx.layer < 9; ctx.layer++)
+  {
+    entry = ((s8 **) (((s8 *) arg0) + 0x18))[ctx.layer];
+    if (entry != 0)
+    {
+      gDPPipeSync(gDisplayListHead++);
+      func_8001298C((s8 *) (&ctx));
+      for (; entry != 0; entry = *((s8 **) entry))
+      {
+        if ((*((s32 *) (((s8 *) entry) + 0x14))) & 0xFF)
+        {
+          func_80012C00((s8 *) (&ctx), entry);
+        }
+        else
+        {
+          func_80012CC0((s8 *) (&ctx), entry);
+        }
+        if ((*((u8 *) (((s8 *) entry) + 5))) != 0)
+        {
+          func_80013148((s8 *) (&ctx), (s32) entry);
+        }
+        else
+        {
+          if (ctx.unk_1A == 1)
+          {
+            func_80012A80((s8 *) (&ctx));
+          }
+          if ((*((s32 *) (((s8 *) entry) + 0x18))) != 0)
+          {
+            GeoRender_BindTexture((unk_D_800ABB28 *) (&ctx), (unk_D_800ABB10 *) entry);
+          }
+          else
+          {
+            func_80012E68((s32 *) (&ctx), (s32) entry);
+          }
+          func_80012D04((s8 *) (&ctx), entry);
+          func_80012DC8((s8 *) (&ctx), entry);
+        }
+        func_800132C8((s32 *) (&ctx), entry);
+        if ((*((u8 *) (((s8 *) entry) + 4))) != 0)
+        {
+          func_80012A80((s8 *) (&ctx));
+        }
+      }
+
+    }
+  }
+
+  if (ctx.flags & 1)
+  {
+    gSPClearGeometryMode(gDisplayListHead++, G_ZBUFFER);
+  }
+  gDPPipeSync(gDisplayListHead++);
+  gDPSetTextureLUT(gDisplayListHead++, G_TT_NONE);
+  gSPTexture(gDisplayListHead++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF);
+}
 
 typedef struct GeoLayerEntry {
     /* 0x00 */ struct GeoLayerEntry* next;
