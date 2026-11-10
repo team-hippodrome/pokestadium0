@@ -180,11 +180,49 @@ typedef struct {
     /* 0x1C */ Slot54 slots[6];
 } SlotList;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_820003D4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment007_166580/func_820003D4.s")
-#endif
+s32 func_80021894(s32);
+s32 func_80022C70(s32);
+s32 func_80022D84(s32, void*);
+s32 func_800246A8(s32, s32);
+s32 func_800246C8(s32, s32);
+s32 func_8002479C(s32, s32, void*);
+
+void func_820003D4(RecordList* arg0) {
+    SlotList* rec = (SlotList*)arg0->records;
+    s32 i;
+
+    for (i = 0; i < 4; i++) {
+        if (func_80021894(i) == 0) {
+            continue;
+        }
+        rec->unk_00 = 0;
+        rec->unk_01 = 0x20;
+        rec->unk_02 = i;
+        rec->unk_03 = 0;
+        func_82000140(rec->slots, func_82000058(rec->unk_01, rec->unk_02, rec->unk_03, (Entry82000058*)rec->slots));
+        rec->slotCount = 6;
+        rec->unk_04 = func_80022C70(rec->unk_02);
+        func_80022D84(rec->unk_02, rec->unk08);
+        rec++;
+    }
+
+    for (i = 0; i < 0x10; i++) {
+        if (func_800246A8(0x10, i) == 0) {
+            continue;
+        }
+        rec->unk_00 = 0;
+        rec->unk_01 = 0x10;
+        rec->unk_02 = 0;
+        rec->unk_03 = i;
+        func_82000140(rec->slots, func_82000058(rec->unk_01, rec->unk_02, rec->unk_03, (Entry82000058*)rec->slots));
+        rec->slotCount = 6;
+        rec->unk_04 = func_800246C8(rec->unk_01, rec->unk_03);
+        func_8002479C(rec->unk_01, rec->unk_03, rec->unk08);
+        rec++;
+    }
+
+    arg0->count = rec - (SlotList*)arg0->records;
+}
 
 /*
  * func_8200053C
