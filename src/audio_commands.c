@@ -51,11 +51,276 @@ void Audio_RelocateOffsets(u32* arg0, u32 arg1, s32 arg2) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8003E1F8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8003E1F8.s")
-#endif
+typedef struct SoundFileTable {
+    /* 0x00 */ u32 num_files;
+    /* 0x04 */ u32 offset1;
+    /* 0x08 */ u32 wave_tables_offset;
+    /* 0x0C */ u32 files[1];
+} SoundFileTable; // size >= 0x10
+extern SoundFileTable* D_800B4178;
+extern u8* D_800B41C0[];
+
+typedef struct AudioInitConfig {
+    /* 0x00 */ s32 channels;
+    /* 0x04 */ void* heap;
+    /* 0x08 */ void* bank;
+    /* 0x0C */ s32 unk_0C;
+    /* 0x10 */ s32 unk_10;
+    /* 0x14 */ s32 unk_14;
+    /* 0x18 */ s32 outputRate;
+    /* 0x1C */ s32 unk_1C;
+    /* 0x20 */ s32 unk_20;
+    /* 0x24 */ s32 unk_24;
+    /* 0x28 */ s32 unk_28;
+    /* 0x2C */ s32 unk_2C;
+} AudioInitConfig; // size = 0x30
+
+typedef struct AudioSeqEntry {
+    /* 0x0 */ u32 offset;
+    /* 0x4 */ u32 len;
+} AudioSeqEntry; // size = 0x8
+
+extern s32 D_80075C30;
+extern u8 D_00B98000[];
+extern u8 D_800B41F8[];
+extern u8 D_800B4208[];
+extern File1Header* D_800B4160;
+extern File1Header* D_800B4164;
+extern u32* D_800B4168;
+extern u32* D_800B416C;
+extern u32* D_800B4170;
+extern struct Bank8003F96C* D_800B4174;
+extern u32* D_800B417C;
+extern s32 D_800B4180;
+extern s32 D_800B4184;
+extern s32 D_800B4188;
+extern s32 D_800B418C;
+extern s32 D_800B4190;
+extern s32 D_800B4194;
+extern s32 D_800B4198;
+extern s32 D_800B419C;
+extern s32 D_800B41A0;
+extern s32 D_800B41A4;
+extern s32 D_800B41A8;
+extern u8* D_800B41B0[];
+extern void* D_800B41D0[5];
+extern u8* D_800B41F0;
+extern s32 D_800FD5E8;
+extern u8 D_800FD5EC;
+extern s32 D_800FD5F0[2];
+extern s32 D_800FD5F8[];
+extern u8 D_800FD604;
+extern u8 D_800FD605;
+extern s32 D_800FD608;
+extern s32 D_800FD610[];
+extern u8 D_800FD620;
+s32 D_800FD628[8];
+s32 D_800FD648;
+s32 D_800FD64C;
+s32 D_800FD650;
+s32 D_800FD654;
+s32 D_800FD658[4];
+extern s32 D_800FD668;
+extern s32 D_800FD66C;
+extern s32 D_800FD670[4];
+extern s32 D_800FD680;
+extern u32 D_800FD684;
+extern u8 D_800FD68C;
+extern s32 D_800B3CE4;
+extern u8 D_80077520;
+extern u8 D_80077524;
+extern u8 D_80077528;
+extern u8 D_80077534;
+extern u8 D_80077538;
+extern u8 D_8007753C;
+s32 func_80058100(s32);
+void func_80056610(void*, void*, s32);
+void* func_8005C0D0(s32, s32, void*, s32, s32);
+void func_80046040(s32);
+void func_8004609C(u32, u8*, s32);
+void func_80047FB0(u8*, s32, s32);
+void func_80037F48(s32, s32);
+void func_8003A710(u8*);
+s32 func_800371A4(s8*);
+void func_80046170(s32, s32);
+
+s32 func_8003E1F8(void) {
+    u32 i;
+    u32* hdr;
+    s32 num;
+    s32 pad; // FAKE: unused stack word
+    s32 rate;
+    s32 ret;
+    AudioInitConfig config;
+
+    rate = func_80058100(32000);
+    D_80075C30 = 0;
+    func_80056610(D_800B41F8, D_800B4208, 300000);
+    D_800B41F0 = func_8005C0D0(0, 0, D_800B41F8, 1, 0x55F0);
+    func_80046040(0);
+
+    D_800B4160 = func_8005C0D0(0, 0, D_800B41F8, 10, 4);
+    func_8004609C((u32)D_00B98000, (u8*)D_800B4160, 0x28);
+    Audio_RelocateOffsets((u32*)D_800B4160 + 1, (u32)D_00B98000, 9);
+
+    hdr = D_800B4170 = func_8005C0D0(0, 0, D_800B41F8, 4, 4);
+    func_8004609C(D_800B4160->wave_tables_offset, (u8*)hdr, 0xC);
+    num = hdr[2];
+    D_800B4164 = func_8005C0D0(0, 0, D_800B41F8, 4, num + 3);
+    func_8004609C(D_800B4160->wave_tables_offset, (u8*)D_800B4164, num * 4 + 0xC);
+    Audio_RelocateOffsets(&D_800B4164->offset1, D_800B4160->wave_tables_offset, 2);
+    Audio_RelocateOffsets(D_800B4164->files, D_800B4160->wave_tables_offset, num);
+    func_8004609C(D_800B4164->offset1, D_800B41F0, D_800B4164->wave_tables_offset - D_800B4164->offset1);
+    D_800B4180 = (s32)func_8005C0D0(0, 0, D_800B41F8, 1, 0x32C0);
+    func_80047FB0(D_800B41F0, D_800B4180, 0x32C0);
+    func_80037F48(D_800B4180, D_800B4164->wave_tables_offset);
+
+    D_800B4168 = func_8005C0D0(0, 0, D_800B41F8, 4, 3);
+    func_8004609C(D_800B4160->num_files, (u8*)D_800B4168, 0xC);
+    Audio_RelocateOffsets(D_800B4168, D_800B4160->num_files, 3);
+    func_8004609C(D_800B4168[0], D_800B41F0, D_800B4168[1] - D_800B4168[0]);
+    D_800B41A0 = (s32)func_8005C0D0(0, 0, D_800B41F8, 1, 0xAC0);
+    func_80047FB0(D_800B41F0, D_800B41A0, 0xAC0);
+    func_8003A710((u8*)D_800B41A0);
+    func_8004609C(D_800B4168[1], D_800B41F0, D_800B4168[2] - D_800B4168[1]);
+    D_800B4184 = (s32)func_8005C0D0(0, 0, D_800B41F8, 1, 0xD60);
+    func_80047FB0(D_800B41F0, D_800B4184, 0xD60);
+    func_80037F48(D_800B4184, D_800B4168[2]);
+
+    D_800B416C = func_8005C0D0(0, 0, D_800B41F8, 4, 3);
+    func_8004609C(D_800B4160->files[0], (u8*)D_800B416C, 0xC);
+    Audio_RelocateOffsets(D_800B416C, D_800B4160->files[0], 3);
+    func_8004609C(D_800B416C[0], D_800B41F0, D_800B416C[1] - D_800B416C[0]);
+    D_800B41A4 = (s32)func_8005C0D0(0, 0, D_800B41F8, 1, 0xC80);
+    func_80047FB0(D_800B41F0, D_800B41A4, 0xC80);
+    func_8003A710((u8*)D_800B41A4);
+    func_8004609C(D_800B416C[1], D_800B41F0, D_800B416C[2] - D_800B416C[1]);
+    D_800B4188 = (s32)func_8005C0D0(0, 0, D_800B41F8, 1, 0x2060);
+    func_80047FB0(D_800B41F0, D_800B4188, 0x2060);
+    func_80037F48(D_800B4188, D_800B416C[2]);
+
+    func_8004609C(D_800B4160->files[2], (u8*)hdr, 0xC);
+    num = hdr[0];
+    D_800B4174 = func_8005C0D0(0, 0, D_800B41F8, 4, num + 3);
+    func_8004609C(D_800B4160->files[2], (u8*)D_800B4174, num * 4 + 0xC);
+    Audio_RelocateOffsets((u32*)D_800B4174 + 1, D_800B4160->files[2], num + 2);
+    func_8004609C(((u32*)D_800B4174)[1], D_800B41F0, ((u32*)D_800B4174)[2] - ((u32*)D_800B4174)[1]);
+    D_800B4190 = (s32)func_8005C0D0(0, 0, D_800B41F8, 1, 0x1E20);
+    func_80047FB0(D_800B41F0, D_800B4190, 0x1E20);
+    func_80037F48(D_800B4190, ((u32*)D_800B4174)[2]);
+
+    func_8004609C(D_800B4160->files[3], (u8*)hdr, 0xC);
+    num = hdr[0];
+    D_800B4178 = (SoundFileTable*) func_8005C0D0(0, 0, D_800B41F8, 4, num + 3);
+    func_8004609C(D_800B4160->files[3], (u8*)D_800B4178, num * 4 + 0xC);
+    Audio_RelocateOffsets(&D_800B4178->offset1, D_800B4160->files[3], num + 2);
+    func_8004609C(D_800B4178->offset1, D_800B41F0, D_800B4178->wave_tables_offset - D_800B4178->offset1);
+    D_800B4194 = (s32)func_8005C0D0(0, 0, D_800B41F8, 1, 0x2EE0);
+    func_80047FB0(D_800B41F0, D_800B4194, 0x2EE0);
+    func_80037F48(D_800B4194, D_800B4178->wave_tables_offset);
+
+    func_8004609C(D_800B4160->files[4], (u8*)hdr, 0xC);
+    num = hdr[0];
+    D_800B417C = func_8005C0D0(0, 0, D_800B41F8, 4, num + 3);
+    func_8004609C(D_800B4160->files[4], (u8*)D_800B417C, num * 4 + 0xC);
+    Audio_RelocateOffsets(D_800B417C + 1, D_800B4160->files[4], num + 2);
+    func_8004609C(D_800B417C[1], D_800B41F0, D_800B417C[2] - D_800B417C[1]);
+    D_800B4198 = (s32)func_8005C0D0(0, 0, D_800B41F8, 1, 0x7D0);
+    func_80047FB0(D_800B41F0, D_800B4198, 0x7D0);
+    func_80037F48(D_800B4198, D_800B417C[2]);
+
+    func_8004609C(D_800B4160->files[1], (u8*)D_800B4170, 0xC);
+    Audio_RelocateOffsets(D_800B4170, D_800B4160->files[1], 3);
+    func_8004609C(D_800B4170[0], D_800B41F0, D_800B4170[1] - D_800B4170[0]);
+    D_800B41A8 = (s32)func_8005C0D0(0, 0, D_800B41F8, 1, 0xC80);
+    func_80047FB0(D_800B41F0, D_800B41A8, 0xC80);
+    func_8003A710((u8*)D_800B41A8);
+    func_8004609C(D_800B4170[1], D_800B41F0, D_800B4170[2] - D_800B4170[1]);
+    D_800B418C = (s32)func_8005C0D0(0, 0, D_800B41F8, 1, 0x5EE0);
+    func_80047FB0(D_800B41F0, D_800B418C, 0x5EE0);
+    func_80037F48(D_800B418C, D_800B4170[2]);
+
+    D_800B41EC = func_8005C0D0(0, 0, D_800B41F8, 2, 0xB80);
+    D_800FD688 = func_8005C0D0(0, 0, D_800B41F8, 1, 0x1388);
+    func_8004609C(D_800B4160->files[5], (u8*)D_800FD688, D_800B4160->files[6] - D_800B4160->files[5]);
+    D_800B41E4 = func_8005C0D0(0, 0, D_800B41F8, 1, 0x100);
+    func_8004609C(D_800B4160->files[6], (u8*)D_800B41E4, 0x100);
+    for (i = 0; i < 0x20; i++) {
+        D_800B41E4[i].unk_00 += D_800B4160->files[6];
+    }
+
+    D_800B41E8 = func_8005C0D0(0, 0, D_800B41F8, 1, 0x2328);
+    D_800B419C = (s32)func_8005C0D0(0, 0, D_800B41F8, 1, 0x8CA0);
+    D_800B41B0[0] = func_8005C0D0(0, 0, D_800B41F8, 1, 0x140);
+    D_800B41B0[1] = func_8005C0D0(0, 0, D_800B41F8, 1, 0x140);
+    D_800B41B0[2] = func_8005C0D0(0, 0, D_800B41F8, 1, 0x140);
+    D_800B41C0[0] = func_8005C0D0(0, 0, D_800B41F8, 1, 0x320);
+    D_800B41C0[1] = func_8005C0D0(0, 0, D_800B41F8, 1, 0x320);
+    D_800B41C0[2] = func_8005C0D0(0, 0, D_800B41F8, 1, 0x320);
+    D_800B41D0[0] = func_8005C0D0(0, 0, D_800B41F8, 1, 0x200);
+    D_800B41D0[1] = func_8005C0D0(0, 0, D_800B41F8, 1, 0x200);
+    D_800B41D0[2] = func_8005C0D0(0, 0, D_800B41F8, 1, 0x200);
+    D_800B41D0[3] = func_8005C0D0(0, 0, D_800B41F8, 1, 0x200);
+    D_800B41D0[4] = func_8005C0D0(0, 0, D_800B41F8, 1, 0x200);
+
+    D_800FD5E8 = 2;
+    D_800FD5EC = 0;
+    D_800FD5F0[0] = 200;
+    D_800FD5F0[1] = 200;
+    D_800FD608 = 0;
+    D_800FD610[0] = 0;
+    D_800FD610[1] = 0;
+    D_800FD610[2] = 0;
+    D_800FD610[3] = 0;
+    D_800FD620 = 0;
+    for (i = 0; i < 8; i++) {
+        D_800FD628[i] = 0xFFFF;
+    }
+    D_800FD68C = 0;
+    D_800FD5F8[0] = 0;
+    D_800FD5F8[1] = 0;
+    D_800FD5F8[2] = 0;
+    D_80077520 = 0;
+    D_800FD64C = 0;
+    D_800FD650 = 0;
+    D_800FD654 = 0;
+    for (i = 0; i < 4; i++) {
+        D_800FD658[i] = 0;
+    }
+    D_800FD668 = 0;
+    D_800FD66C = 0;
+    D_800B3CE4 = 0;
+    D_800FD648 = 0;
+    D_800FD680 = 0;
+    D_800FD604 = 0;
+    D_80077534 = 0;
+    D_800FD670[0] = 0;
+    D_800FD670[1] = 0;
+    D_800FD670[2] = 0;
+    D_800FD670[3] = 0;
+    D_800FD605 = 0;
+    D_800FD684 = 0;
+    D_80077524 = 0;
+    D_80077528 = 0;
+    D_80077538 = 1;
+    D_8007753C = 1;
+
+    config.channels = 0x18;
+    config.heap = D_800B41F8;
+    config.bank = (void*)D_800B4184;
+    config.unk_0C = ((s32*)D_800B41A0)[3];
+    config.unk_10 = ((s32*)D_800B41A0)[2];
+    config.outputRate = rate;
+    config.unk_14 = 0x100;
+    config.unk_1C = 0x400;
+    config.unk_20 = 1;
+    config.unk_24 = 0x30;
+    config.unk_28 = 0x500;
+    ret = func_800371A4((s8*)&config);
+    func_80046170(2, 2);
+    func_80046170(1, 3);
+    return ret;
+}
 
 void func_80038588(void);
 s32 func_80037F68(s32, s32);
@@ -558,18 +823,10 @@ void func_8003FE34(s32 arg0, s32 arg1) {
     func_8003FE58(arg0, 1, arg1);
 }
 
-typedef struct SoundFileTable {
-    /* 0x00 */ u32 num_files;
-    /* 0x04 */ u32 offset1;
-    /* 0x08 */ u32 wave_tables_offset;
-    /* 0x0C */ u32 files[1];
-} SoundFileTable; // size >= 0x10
 extern u8 D_80077062[];
 extern u8 D_8007755C;
 extern u8 D_8007757C;
-extern SoundFileTable* D_800B4178;
 extern s32 D_800B4194;
-extern u8* D_800B41C0[];
 extern u8 D_800FD604;
 extern s32 D_800FD648;
 extern s32 D_800FD64C;

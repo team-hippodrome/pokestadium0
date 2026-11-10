@@ -27,6 +27,7 @@
     }
   },
   "src/audio_commands.c": {
+    ".bss": "0x800FD628",
     ".rodata": {
       "address": "0x8007DDA0",
       "size": "0xADC"
