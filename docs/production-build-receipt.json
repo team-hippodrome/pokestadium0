@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5350,
-  "asm_owners": 94,
+  "c_owners": 5351,
+  "asm_owners": 93,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -618,7 +618,7 @@
   ],
   "source_registry_sha256": "42f373d4e7291a19b0ac00de0f699654828e4b8b3fc2db17bb268c6d0b441c67",
   "section_registry_sha256": "a5ee8f588133b37286dc62ca1ae95e2412981e2b247b0ef2a8bd477f2d83f13c",
-  "headers_sha256": "0e45461d1ac0423bb33079c8ed1c2655e65a5aa153ba5545841944030c898720",
+  "headers_sha256": "7025f3f9a5e695b741343328966d05f07f55cf41ba7037b4ae42104e3ec03dda",
   "matching_registry_sha256": "d8bcc14a2a0db281cf30dcb9ddbd94d59e1afe84c70b4c8c017ea27ce60a251c",
   "build_tools_sha256": {
     "tools/production.py": "c62476279cd553bc7b7d39d13253922dec0bf62fddc24e76cdd4b490e460c6c9",
@@ -627,7 +627,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "cc3b8d5a5f45de04dd58e49e2fc91fc74e030ab03256115d3286c81cd0d5de61",
+    "docs/function-matches.csv": "c7046f2293b3cbe784878ef19709d1cbab347620376713e159bab1567fba3b74",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -848,7 +848,7 @@
     "src/fragments/fragment018_262620/pokedex_214920.c": "2fa9a32d63e0a25f4c2042bfc31276f524d7ac0f6d167dc3abc86cffa73b4ac7",
     "src/fragments/fragment018_262620/pokedex_2190D0.c": "f34118c88ebb560e56f416197fa91203210374d1a9c30356c7ac091779394ec5",
     "src/fragments/fragment019_293410/lab_pc_icons.c": "d0831af4c6830af2cbc771ba5903929234c97411b6de09fe7361a10b6faa9d08",
-    "src/fragments/fragment019_293410/lab_pc_icons_8A201598.c": "5b2dc57c500f8f9c1ae85a853fd368562ac548081c854ab56b1ecd11abd072ed",
+    "src/fragments/fragment019_293410/lab_pc_icons_8A201598.c": "ecfad5597c99a31950ee4074647704f7f3a166d3aae8f354af370cd75efe93b8",
     "src/fragments/fragment020_2B1360.c": "1d51773e2a436bb50560c5297d6152fb294823d9c01f0e5ec662adab156da927",
     "src/fragments/fragment021_2B13F0.c": "89591b5837dd2c5cb906da8fc3231bc8e0a207a6adf0fd1e7058e89f0fbbe95e",
     "src/fragments/fragment022_2B1480.c": "b411841b7ef4508a6156ef9cadac3883ef0e1b3b9cf8434174930a787b6d07ab",

@@ -3909,7 +3909,7 @@ func_8A200DE0,0x8A200DE0,src/fragments/fragment019_293410/lab_pc_icons.c,func_8A
 func_8A2010C8,0x8A2010C8,src/fragments/fragment019_293410/lab_pc_icons.c,func_8A2010C8,hand,,c
 func_8A201394,0x8A201394,src/fragments/fragment019_293410/lab_pc_icons.c,func_8A201394,hand,,c
 func_8A201598,0x8A201598,src/fragments/fragment019_293410/lab_pc_icons_8A201598.c,,asm,,asm
-func_8A2018E0,0x8A2018E0,src/fragments/fragment019_293410/lab_pc_icons_8A201598.c,,asm,,asm
+func_8A2018E0,0x8A2018E0,src/fragments/fragment019_293410/lab_pc_icons_8A201598.c,func_8A2018E0,hand,,c
 func_8A201C08,0x8A201C08,src/fragments/fragment019_293410/lab_pc_icons_8A201598.c,func_8A201C08,hand,,c
 func_8A201D3C,0x8A201D3C,src/fragments/fragment019_293410/lab_pc_icons_8A201598.c,func_8A201D3C,hand,,c
 func_8A201EAC,0x8A201EAC,src/fragments/fragment019_293410/lab_pc_icons_8A201598.c,func_8A201EAC,m2c,m2c+permuter,c

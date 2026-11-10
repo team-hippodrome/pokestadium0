@@ -115,7 +115,7 @@ void func_8A200B78();
 void func_8A200DE0(s32, s32, s32);
 void func_8A2010C8(s32, s32, s32, s32);
 void func_8A201394();
-void func_8A2018E0(s32, s32, s32, s32);
+s32 func_8A2018E0(s32, s32, s32, s32);
 void func_8A201C08(s32, s32, s32);
 extern s8 D_8007356C;
 void func_8A201EAC(s8 *arg0, s32 arg1);
