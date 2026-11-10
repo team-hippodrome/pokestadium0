@@ -1807,14 +1807,14 @@ void func_82105D3C(s8* arg0) {
     }
 }
 
-void func_82105E38(s8 *arg0, unsigned short arg1)
+s32 func_82105E38(s8 *arg0, unsigned short arg1)
 {
   s8 *new_var;
   new_var = (s8 *) arg0;
   *((u16 *) (new_var + 0x7C2)) = (u16) ((*((u16 *) (new_var + 0x7C2))) | arg1);
 }
 
-void func_82105E4C(s8 *arg0, unsigned short arg1)
+s32 func_82105E4C(s8 *arg0, unsigned short arg1)
 {
   *((u16 *) (((s8 *) arg0) + 0x7C2)) = (u16) ((*((u16 *) (((s8 *) arg0) + 0x7C2))) & (~arg1));
 }
@@ -2013,11 +2013,146 @@ void BattleScene_CleanupParticipantEffectMode(ActivePokemon* active_pokemon) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_821065B4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821065B4.s")
-#endif
+extern ActivePokemon* D_8219A540;
+extern ActivePokemon* D_8219A544;
+extern ActivePokemon* sSide2ActivePokemon;
+extern u8 D_8219A4F4;
+void func_82136708(s32, ActivePokemon*);
+u8 func_8000F1FC(u8, s32, s32, s32);
+void func_80019B28(ActivePokemon*, s32, s32, s32, s32);
+s32 func_80011120(ActivePokemon*);
+void func_800110E8(ActivePokemon*, s32);
+void func_80019A90(ActivePokemon*, s32);
+
+void func_821065B4(ActivePokemon *arg0)
+{
+  s32 pad; // FAKE: unused stack word
+  BattleMon *mon = &arg0->teamRoster->pokemonPicked[arg0->thumbnail.tagTeam];
+  ActivePokemonState *state;
+  state = &arg0->state;
+  if (mon->hp != 0)
+  {
+    if (mon->statusCondition & 0x20)
+    {
+      arg0->displayObject.node.renderFlags &= ~0x20;
+    }
+    if ((!(state->flags & 2)) && (mon->statusCondition & 0x20))
+    {
+      func_821366B0(1, arg0);
+      arg0->displayObject.node.renderFlags &= ~0x20;
+      func_82105E38((s8 *) arg0, 2);
+      func_82134EBC(arg0, 0x13);
+    }
+    if ((state->flags & 2) && (!(mon->statusCondition & 0x20)))
+    {
+      func_82136708(1, arg0);
+      arg0->displayObject.node.renderFlags |= 0x20;
+      func_82105E4C((s8 *) arg0, 2);
+    }
+  }
+  if ((state->flags & 2) && (mon->hp == 0))
+  {
+    func_82136708(1, arg0);
+    arg0->displayObject.node.renderFlags |= 0x20;
+    func_82105E4C((s8 *) arg0, 2);
+  }
+  if (((((mon->statusCondition & 7) != 0) && (sBattleScene.scene->unk_38 == 0xB)) && (sBattleScene.scene->unk_20 > 0)) && (sBattleScene.scene->unk_20 < 7))
+  {
+    if ((sBattleScene.scene->unk_20 == 1) && (func_82107A5C(arg0) == sBattleScene.scene->unk_2C))
+    {
+      func_82136708(3, arg0);
+      func_82105E4C((s8 *) arg0, 1);
+    }
+  }
+  else
+  {
+    if (((mon->statusCondition & 7) != 0) && (!(state->flags & 1)))
+    {
+      func_8210568C(arg0, 0xAF, 2);
+      func_821366B0(3, arg0);
+      func_82134EBC(arg0, 0x32);
+      func_82105E38((s8 *) arg0, 1);
+    }
+    if (((mon->statusCondition & 7) == 0) && (state->flags & 1))
+    {
+      func_8210568C(arg0, 0xB8, 1);
+      func_82136708(3, arg0);
+      func_82105E4C((s8 *) arg0, 1);
+    }
+  }
+  if (state->flags & 0x100)
+  {
+    arg0->displayObject.node.renderFlags &= ~0x20;
+  }
+  if ((state->unk_2D == 0x10) || (state->unk_2D == 0x13))
+  {
+    arg0->displayObject.node.flags &= ~1;
+    func_82105E4C((s8 *) arg0, 0x100);
+  }
+  state->alpha = func_8000F1FC(state->alpha, 0, 0x1E, 0x1E);
+  if (state->alpha != 0)
+  {
+    func_80019B28(arg0, 0xFF, 0xFF, 0xFF, state->alpha);
+  }
+  switch (state->unk_36)
+  {
+    case 0:
+      if (BattleAnim_RandomRange(0x32) == 2)
+    {
+      func_821054C4(arg0, 0xA5);
+    }
+      break;
+
+    case 1:
+      if (func_80011120(arg0) == 1)
+    {
+      func_800110E8(arg0, 0);
+      func_80019A90(arg0, -1);
+      state->unk_36 = 0;
+    }
+      break;
+
+    case 2:
+      break;
+
+  }
+
+  if (sBattleScene.scene->unk_50 == 2)
+  {
+    D_8219A544->displayObject.node.flags &= ~1;
+  }
+  if (sBattleScene.scene->unk_50 == 4)
+  {
+    D_8219A540->displayObject.node.flags &= ~1;
+  }
+  if (sBattleScene.scene->unk_50 == 1)
+  {
+    D_8219A544->displayObject.node.flags |= 1;
+  }
+  if (sBattleScene.scene->unk_50 == 3)
+  {
+    arg0->displayObject.node.flags |= 1;
+  }
+  if (state->flags & 0x4000)
+  {
+    if ((arg0->displayObject.objectType != 0x32) && (arg0->displayObject.objectType != 0x33))
+    {
+      arg0->displayObject.lodFraction = 0;
+    }
+  }
+  if ((arg0 == sSide2ActivePokemon) && (sBattleScene.scene->unk_1C == 7))
+  {
+    arg0->displayObject.node.flags &= ~1;
+  }
+  if ((arg0 == sSide2ActivePokemon) && (sBattleScene.scene->unk_1C == 0xB))
+  {
+    arg0->displayObject.node.flags &= ~1;
+  }
+  if (((arg0 == sSide2ActivePokemon) && ((sBattleScene.scene->unk_1C == 9) || (sBattleScene.scene->unk_1C == 0xA))) && (D_8219A4F4 == 5))
+  {
+    arg0->displayObject.node.flags &= ~1;
+  }
+}
 
 void func_82106AC0(ActivePokemon* arg0) {
     u8* p = (u8*)(*(s32*)((u8*)arg0 + 0x9D0) * 0x50 + *(s32*)((u8*)arg0 + 0x860)) + 0x1C;

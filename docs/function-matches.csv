@@ -2754,7 +2754,7 @@ func_82106220,0x82106220,src/fragments/fragment012_17ED00/battle_engine_move_ani
 func_8210626C,0x8210626C,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,BattleScene_CleanupOpponentAnimationFlags,hand,,c
 func_82106354,0x82106354,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,func_82106354,m2c,m2c,c
 func_82106374,0x82106374,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,BattleScene_CleanupParticipantEffectMode,hand,,c
-func_821065B4,0x821065B4,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,,asm,,asm
+func_821065B4,0x821065B4,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,func_821065B4,hand,,c
 func_82106AC0,0x82106AC0,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,func_82106AC0,hand,,c
 func_82106B48,0x82106B48,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,BattleAnim_ResetFreezeStatusAndRestoreAnimation,hand,,c
 func_82106BC4,0x82106BC4,src/fragments/fragment012_17ED00/battle_engine_move_animation.c,BattleAnim_TriggerStatusAfflictionCry,hand,,c
