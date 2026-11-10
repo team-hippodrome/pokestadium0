@@ -728,7 +728,7 @@ func_884023F0,0x884023F0,src/fragments/fragment006_162BE0/battle_engine_2FA4D0_8
 func_8840248C,0x8840248C,src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c,func_8840248C,hand,,c
 func_88402538,0x88402538,src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c,func_88402538,hand,,c
 func_884025E4,0x884025E4,src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c,func_884025E4,hand,,c
-func_884026A4,0x884026A4,src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c,,asm,,asm
+func_884026A4,0x884026A4,src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c,func_884026A4,hand,,c
 func_884029FC,0x884029FC,src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c,func_884029FC,m2c,m2c,c
 func_88402AF0,0x88402AF0,src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c,ClefairyGame_Main,hand,,c
 func_82000020,0x82000020,src/fragments/fragment007_166580.c,func_82000020,hand,,c

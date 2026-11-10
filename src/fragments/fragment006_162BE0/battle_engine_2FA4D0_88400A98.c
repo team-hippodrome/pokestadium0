@@ -656,7 +656,67 @@ void func_884025E4(void) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment006_162BE0/func_884026A4.s")
+extern u8 D_88402EB0[];
+extern u8 D_8F4A4240[];
+extern u8 D_8F4B2AF0[];
+extern u8 D_8F4959C8[];
+extern u8 D_8F4886F8[];
+extern u8 D_8E825FE8[];
+extern M2C_UNK D_8E802B64;
+extern u8 D_8E924770[];
+extern M2C_UNK D_8E902B64;
+extern M2C_UNK D_8F4014B0;
+extern Vec3f D_88403504;
+extern Vec3f D_88403510;
+extern s32 D_884037B4;
+extern s32 D_884037B8;
+extern s32 D_8840365C;
+void func_884026A4(s32 arg0) {
+    s8 sp27;
+    MemoryBlock* sp20;
+
+    sp20 = MainPool_AllocState(main_pool_get_available(), 0);
+    ModelRenderer_InitDisplayRoots();
+    ModelRenderer_AttachDisplayObject((DisplayObject*)&D_88403648);
+    ModelRenderer_AttachDisplayObject((DisplayObject*)&D_88403378);
+    ModelRenderer_AttachDisplayObject((DisplayObject*)&D_884034E0);
+    D_88403370 = (s32)process_geo_layout(sp20, D_88402EB0);
+    D_884037B0 = (s32)process_geo_layout(sp20, D_8F4A4240);
+    D_884037B4 = (s32)process_geo_layout(sp20, D_8F4B2AF0);
+    D_884037B8 = (s32)process_geo_layout(sp20, D_8F4959C8);
+    func_80019924(&D_88403648, 0, 0, (s32)process_geo_layout(sp20, D_8F4886F8));
+    if (D_800AF986 & 8) {
+        func_80019924(&D_884034E0, 1, 0, (s32)process_geo_layout(sp20, D_8E825FE8));
+        func_80010F14(&D_884034E0, 1, &D_8E802B64, 0x10000);
+        M2C_FIELD(&D_884034E0, u8 *, 1) &= ~1;
+        Vec3f_SetComponentsDuplicate(&D_88403504, 0.0f, 275.0f, 750.0f);
+        Vec3f_SetComponentsDuplicate(&D_88403510, 3.0f, 3.0f, 3.0f);
+    } else if (D_800AF986 & 0x10) {
+        func_80019924(&D_884034E0, 0, 0, (s32)process_geo_layout(sp20, D_8E924770));
+        func_80010F14(&D_884034E0, 1, &D_8E902B64, 0x10000);
+        M2C_FIELD(&D_884034E0, u8 *, 1) &= ~1;
+        Vec3f_SetComponentsDuplicate(&D_88403504, 0.0f, 275.0f, 750.0f);
+        Vec3f_SetComponentsDuplicate(&D_88403510, 3.0f, 3.0f, 3.0f);
+    }
+    MainPool_FinalizeAllocation(sp20);
+    if (arg0 == 0) {
+        func_80010F14(&D_88403648, 1, &D_8F4014B0, 0x10000);
+        M2C_FIELD(&D_88403648, s32 *, 0x14) = 0;
+        M2C_FIELD(&D_88403648, u8 *, 2) &= ~0x20;
+        return;
+    }
+    func_80010F14(&D_88403648, 1, &D_8F4014CC, 0xFFFF0000);
+    func_80010F9C(&D_88403648, 0x4A);
+    M2C_FIELD(&D_88403648, u8 *, 2) &= ~0x20;
+    if (D_88403358 >= 0) {
+        func_80025100(&sp27, 0);
+        func_80019924(&D_88403378, 0, 0, *((M2C_UNK*)((u8*)&D_884037B0 + (sp27 * 4))));
+        func_80010F14(&D_88403378, 1, *((M2C_UNK**)((u8*)&D_88402D74 + (sp27 * 4))), 0xFFFF0000);
+        func_80010F9C(&D_88403378, 0x4A);
+        M2C_FIELD(&D_88403378, u8 *, 2) &= ~0x20;
+    }
+    D_8840365C = 1;
+}
 
 void func_884029FC(void) {
     s32 sp2C;
