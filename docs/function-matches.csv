@@ -984,7 +984,7 @@ func_82133868,0x82133868,src/fragments/fragment012_17ED00/821337A0.c,func_821338
 func_821339CC,0x821339CC,src/fragments/fragment012_17ED00/821337A0.c,func_821339CC,hand,,c
 func_82133A44,0x82133A44,src/fragments/fragment012_17ED00/821337A0.c,func_82133A44,hand,,c
 func_82133AD8,0x82133AD8,src/fragments/fragment012_17ED00/821337A0.c,func_82133AD8,hand,,c
-func_82133B6C,0x82133B6C,src/fragments/fragment012_17ED00/821337A0.c,,asm,,asm
+func_82133B6C,0x82133B6C,src/fragments/fragment012_17ED00/821337A0.c,func_82133B6C,hand,,c
 func_82168C20,0x82168C20,src/fragments/fragment012_17ED00/82168C20.c,func_82168C20,hand,,c
 func_82168CC4,0x82168CC4,src/fragments/fragment012_17ED00/82168C20.c,func_82168CC4,hand,,c
 func_82168E18,0x82168E18,src/fragments/fragment012_17ED00/82168C20.c,func_82168E18,hand,,c

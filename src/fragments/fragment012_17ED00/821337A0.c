@@ -134,9 +134,22 @@ typedef struct Cue82133A44 {
 } Cue82133A44; // size = 0x6
 
 typedef struct Scene82133A44 {
-    /* 0x00 */ u8 unk00[4];
+    /* 0x00 */ u8 flags;
+    /* 0x01 */ s8 unk01;
+    /* 0x02 */ s8 unk02;
+    /* 0x03 */ u8 unk03;
     /* 0x04 */ u8 index;
-    /* 0x05 */ u8 unk05[0x1E - 0x05];
+    /* 0x05 */ char unk05[1];
+    /* 0x06 */ s16 width;
+    /* 0x08 */ s16 height;
+    /* 0x0A */ char unk0A[2];
+    /* 0x0C */ f32 dist;
+    /* 0x10 */ f32 curDist;
+    /* 0x14 */ s16 angle;
+    /* 0x16 */ s16 unk16;
+    /* 0x18 */ s16 unk18;
+    /* 0x1A */ s16 timer;
+    /* 0x1C */ s16 unk1C;
     /* 0x1E */ s16 unk_1E;
     /* 0x20 */ s16 unk_20;
 } Scene82133A44;
@@ -179,8 +192,161 @@ void func_82133AD8(void) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82133B6C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82133B6C.s")
-#endif
+typedef struct Step82133B6C {
+    /* 0x00 */ s16 x;
+    /* 0x02 */ s16 y;
+    /* 0x04 */ s16 unk04;
+    /* 0x06 */ s16 unk06;
+    /* 0x08 */ u8 move0;
+    /* 0x09 */ u8 move1;
+    /* 0x0A */ u8 unk0A;
+    /* 0x0B */ u8 unk0B;
+    /* 0x0C */ char unk0C[2];
+} Step82133B6C; // size = 0xE
+extern Step82133B6C D_8218B5D0[];
+extern s8* D_82199DE4;
+void func_80005B98(s32);
+void func_80006998(s32);
+f32 func_8000F23C(f32, f32, f32, f32);
+void func_80010B3C(void*, s16, s16, s16, s16);
+void func_821088BC(s8*);
+void func_8210BE1C(f32*, f32, s16);
+s16 func_8210BEE0(f32, f32, f32, f32);
+f32 func_8210BFA4(f32, f32, f32, f32);
+void func_82121D5C(s32, s32);
+/*
+ * Per-frame update for the scripted battle demo: advances the cue timers for
+ * both sides (func_82133A44 / func_82133AD8) and reacts to the cue flags in
+ * D_82199ED0[side][0].
+ */
+void func_82133B6C(void) {
+    s8* rt0 = ((s8**)&D_82199DE0)[0] + 0x78C;
+    s8* rt1 = ((s8**)&D_82199DE0)[1] + 0x78C;
+    s8* other0 = ((s8**)&D_82199DE0)[0] + 0x7C6;
+    s8* other1 = ((s8**)&D_82199DE0)[1] + 0x7C6;
+    UNUSED s32 pad; // FAKE
+    s8** mons; // FAKE
+    s32 side = 1; // FAKE: constant side index kept in a variable
+    f32 vec[3];
+
+    M2C_FIELD(D_8219A5A0, s32*, 0x50) = 0;
+    mons = (s8**)&D_82199DE0;
+    if (M2C_FIELD(D_8219A5A0, s32*, 0x20) != 0x1D) {
+        D_8219A4F0.unk_1E++;
+        D_8219A4F0.unk_20++;
+        D_8219A4F0.timer++;
+        func_82133A44();
+        func_82133AD8();
+        if (D_82199ED0[side][0] & 0x8000) {
+            D_8219A4F0.unk03++;
+            D_8219A4F0.unk1C++;
+            D_8219A4F0.flags |= 8;
+            D_8219A4F0.unk02 = 0;
+        }
+        if (D_82199ED0[side][0] & 0x4000) {
+            D_8219A4F0.flags &= ~8;
+        }
+        if (D_8219A4F0.index == 5) {
+            D_8219A4F0.unk16 = D_8218B5D0[D_8219A4F0.index].unk04;
+            D_8219A4F0.unk18 = D_8218B5D0[D_8219A4F0.index].unk06;
+            M2C_FIELD(((s8**)&D_82199DE0)[0], u8*, 1) |= 1;
+            if (D_82199ED0[0][0] & 0x8000) {
+                D_8219A4F0.unk01 = 0;
+                D_8219A4F0.flags |= 0xA0;
+            }
+            if (D_82199ED0[0][0] & 0x4000) {
+                D_8219A4F0.unk01 = 0;
+                D_8219A4F0.flags |= 0xC0;
+            }
+            if (D_82199ED0[0][0] & 0x20) {
+                D_8219A4F0.flags &= ~0x80;
+            }
+        } else {
+            if (D_82199ED0[0][0] & 0x1000) {
+                M2C_FIELD(rt0, s32*, 4) = 0;
+                M2C_FIELD(rt1, s32*, 4) = 0;
+                if (M2C_FIELD(rt0, u8*, 0x2A) == 0) {
+                    M2C_FIELD(other0, u8*, 0x5A) = D_8218B5D0[D_8219A4F0.index].move0;
+                }
+                M2C_FIELD(rt0, s32*, 0x10) = 3;
+                if (M2C_FIELD(rt1, u8*, 0x2A) == 0) {
+                    M2C_FIELD(other1, u8*, 0x5A) = D_8218B5D0[D_8219A4F0.index].move1;
+                }
+                M2C_FIELD(rt1, s32*, 0x10) = 3;
+                if ((M2C_FIELD(rt0, s32*, 0x10) == 3) && (M2C_FIELD(rt1, s32*, 0x10) == 3)) {
+                    func_821337B4();
+                }
+            }
+            if (D_82199ED0[0][0] & 0x4000) {
+                func_80006998(0);
+                func_80005B98(0x14);
+                D_8219A4F0.timer = 0;
+                D_8219A4F0.flags &= ~8;
+                D_8219A4F0.flags |= 0x10;
+            }
+            if ((D_8219A4F0.timer == 0x19) && (D_8219A4F0.flags & 0x10)) {
+                if (D_8219A4F0.index == 4) {
+                    M2C_FIELD(M2C_FIELD(((s8**)&D_82199DE0)[0], u8**, 0x85C), s16*, 2) = 0x96;
+                } else {
+                    M2C_FIELD(M2C_FIELD(mons[0], u8**, 0x85C), s16*, 2) = D_8218B5D0[D_8219A4F0.index + 1].unk0A;
+                }
+                *M2C_FIELD(((s8**)&D_82199DE0)[0], u8**, 0x85C) |= 0x80;
+                D_8219A4F0.flags |= 2;
+                D_8219A4F0.flags &= ~0x10;
+                M2C_FIELD(M2C_FIELD(D_8219A5A0, void**, 0xCC), f32*, 0x2C) = 30.0f;
+            }
+            if (D_8219A4F0.flags & 2) {
+                if (*M2C_FIELD(((s8**)&D_82199DE0)[0], u8**, 0x85C) & 0x10) {
+                    *M2C_FIELD(((s8**)&D_82199DE0)[0], u8**, 0x85C) &= ~0x90;
+                    func_821088BC(((s8**)&D_82199DE0)[0]);
+                    if (D_8219A4F0.index == 4) {
+                        M2C_FIELD(M2C_FIELD(((s8**)&D_82199DE0)[0], u8**, 0x85C), s16*, 2) = 0x96;
+                    }
+                    M2C_FIELD(M2C_FIELD(((s8**)&D_82199DE0)[1], u8**, 0x85C), s16*, 2) = D_8218B5D0[D_8219A4F0.index + 1].unk0B;
+                    *M2C_FIELD(((s8**)&D_82199DE0)[1], u8**, 0x85C) |= 0x80;
+                    D_8219A4F0.flags |= 4;
+                    D_8219A4F0.flags &= ~2;
+                }
+            }
+            if (D_8219A4F0.flags & 4) {
+                if (*M2C_FIELD(((s8**)&D_82199DE0)[1], u8**, 0x85C) & 0x10) {
+                    *M2C_FIELD(((s8**)&D_82199DE0)[1], u8**, 0x85C) &= ~0x90;
+                    func_821088BC(((s8**)&D_82199DE0)[1]);
+                    D_8219A4F0.flags &= ~4;
+                    func_80005B98(0x18);
+                    D_82199F10[0] = 0;
+                    D_82199F18[0] = 0;
+                    D_8219A4F0.flags = D_82199F18[1] = D_82199F10[1] = 0;
+                    D_8219A4F0.index++;
+                    D_8219A4F0.timer = 0;
+                    func_80010B3C(M2C_FIELD(D_8219A5A0, void**, 0xCC), 0, 0, 0x140, 0xF0);
+                    M2C_FIELD(D_8219A5A0, s32*, 0xC) = 0;
+                    func_82121D5C(9, 0x32);
+                    M2C_FIELD(D_8219A5A0, s32*, 0xC) = 0;
+                    func_821339CC(((ActivePokemon**)&D_82199DE0)[0]);
+                    func_821339CC((ActivePokemon*)D_82199DE4);
+                }
+            }
+            if (D_82199ED0[0][0] & 0x8000) {
+                D_8219A4F0.unk16 = D_8218B5D0[D_8219A4F0.index].unk04;
+                D_8219A4F0.unk18 = D_8218B5D0[D_8219A4F0.index].unk06;
+                D_8219A4F0.width = 0x140;
+                D_8219A4F0.height = 0xF0;
+                D_8219A4F0.flags |= 1;
+                D_8219A4F0.dist = func_8210BFA4(0.0f, 0.0f, D_8218B5D0[D_8219A4F0.index].x, D_8218B5D0[D_8219A4F0.index].y);
+                D_8219A4F0.angle = func_8210BEE0(0.0f, 0.0f, D_8218B5D0[D_8219A4F0.index].x, D_8218B5D0[D_8219A4F0.index].y);
+                D_8219A4F0.curDist = 0.0f;
+            }
+            if (D_8219A4F0.flags & 1) {
+                D_8219A4F0.width = func_8000F23C(D_8219A4F0.width, 160.0f, 8.0f, 8.0f);
+                D_8219A4F0.height = func_8000F23C(D_8219A4F0.height, 120.0f, 6.0f, 6.0f);
+                D_8219A4F0.curDist = func_8000F23C(D_8219A4F0.curDist, D_8219A4F0.dist, D_8219A4F0.dist / 20.0f, D_8219A4F0.dist / 20.0f);
+                func_8210BE1C(vec, D_8219A4F0.curDist, D_8219A4F0.angle);
+                func_80010B3C(M2C_FIELD(D_8219A5A0, void**, 0xCC), vec[0], vec[2], D_8219A4F0.width, D_8219A4F0.height);
+                if (D_8219A4F0.width == 0xA0) {
+                    D_8219A4F0.flags &= ~1;
+                }
+            }
+        }
+    }
+}
