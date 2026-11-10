@@ -1298,8 +1298,103 @@ s32 func_8900A298(s8* arg0) {
     return 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8900A324; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_8900A324.s")
-#endif
+s32 func_890097E0(s8*);
+void func_8002CA34(s8*, s32, s32);
+void func_8002CC44(s8*);
+s32 func_8002CD7C(s8*);
+s32 func_8900A298(s8* arg0);
+void func_890070BC(s8* arg0);
+void func_8900806C(s8* arg0, s32 arg1, s32 arg2, u8* arg3, s32 arg4, s32 arg5, s32 arg6);
+void func_89007374(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, u16 *arg6);
+typedef struct Item8900A324 {
+    u8 unk0;
+    char unk1[0x4F];
+} Item8900A324;
+typedef struct Ent8900A324 {
+    Item8900A324* ptr;
+    s32 unk4;
+} Ent8900A324;
+typedef struct List8900A324 {
+    Ent8900A324** tbl;
+    s32 unk4;
+    s32 idx;
+} List8900A324;
+typedef struct Obj8900A324 {
+    /* 0x0000 */ s32 state;
+    /* 0x0004 */ char unk4[0x168];
+    /* 0x016C */ s32 unk16C;
+    /* 0x0170 */ char unk170[0x6C];
+    /* 0x01DC */ List8900A324* list;
+    /* 0x01E0 */ char unk1E0[0xD8];
+    /* 0x02B8 */ s32 sel;
+    /* 0x02BC */ char unk2BC[0x7260];
+    /* 0x751C */ u16* unk751C;
+    /* 0x7520 */ s32 unk7520;
+} Obj8900A324;
+#define OBJ ((Obj8900A324*)arg0)
+s32 func_8900A324(s8* arg0) {
+    s32 ret = 0;
+    s32 r;
+    Ent8900A324* ent;
+    Ent8900A324* ent2;
+    Item8900A324* entry;
+
+    switch (OBJ->state) {
+        case 1:
+            r = func_890097E0(arg0 + 4);
+            if (r == -1) {
+                if (func_8900A298(arg0) != 0) {
+                    OBJ->state = 4;
+                    func_8002CA34(arg0 + 0x220, 0xCA, 0xAD);
+                } else {
+                    ret = 1;
+                }
+            } else if (r == 2) {
+                ent = OBJ->list->idx + *OBJ->list->tbl;
+                OBJ->state = 2;
+                func_8900806C(arg0 + 0x284, 0x2C, 0x5F, (u8*)ent->ptr, OBJ->unk7520,
+                              (OBJ->unk16C < 8) ? 0 : 1, OBJ->list->idx);
+            }
+            break;
+        case 4:
+            r = func_8002CD7C(arg0 + 0x220);
+            if (r == -1) {
+                OBJ->state = 1;
+            } else if (r > 0) {
+                ret = 1;
+                switch (r) {
+                    case 1:
+                        func_8002CC44(arg0 + 0x220);
+                        func_890070BC(arg0);
+                        break;
+                    case 2:
+                        break;
+                }
+            }
+            break;
+        case 2:
+            r = func_890082FC((s32)(arg0 + 0x284));
+            if (r == -1) {
+                OBJ->state = 1;
+            } else if (r > 0) {
+                ent2 = OBJ->list->idx + *OBJ->list->tbl;
+                entry = &ent2->ptr[OBJ->sel];
+                if ((entry->unk0 <= 0) || (entry->unk0 >= 0x98)) {
+                    func_8003F6AC(8);
+                } else {
+                    func_8003F6AC(2);
+                    OBJ->state = 3;
+                    func_89007374(arg0 + 0x328, 0x69, 0x7D, (s32)entry, 0, D_800603C0, OBJ->unk751C);
+                }
+            }
+            break;
+        case 3:
+            r = func_8002BC14(D_800603C0);
+            if ((r == -1) || (r == 1)) {
+                func_8003F6AC(3);
+                OBJ->state = 2;
+            }
+            break;
+    }
+    return ret;
+}
