@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5359,
-  "asm_owners": 85,
+  "c_owners": 5360,
+  "asm_owners": 84,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -627,7 +627,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "89712f9fc88adfd84600e5e279b1a0158d142345993b6ae3257b946ab5c25cfe",
+    "docs/function-matches.csv": "c240c6f77c891e9be836661ccaa9e60e8c37ebb4ee30428ead9528a6ea2b97e2",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -807,7 +807,7 @@
     "src/fragments/fragment012_17ED00/battle_engine_361050.c": "d22714fc91ab5364b17a55c731b613b0b818ba6b5386a4bf8b05f72e243a564b",
     "src/fragments/fragment012_17ED00/battle_engine_361050_2.c": "526dec36748e9c2d6963df341be268e5971e832c63d14ed92cbd5d70b160c440",
     "src/fragments/fragment012_17ED00/battle_engine_helper.c": "f99d42905ad4e84eaf89a243d56346703e18a6212445d235c8615d621ba9c968",
-    "src/fragments/fragment012_17ED00/battle_engine_main.c": "19e546badc005323b01bb0a88837a0af528749f9b4cc01f669f8c35c2ab667ce",
+    "src/fragments/fragment012_17ED00/battle_engine_main.c": "330212bc59db63fba14ca135085be63a2bc26fc8ff1cc34a96e307362ff11dd7",
     "src/fragments/fragment012_17ED00/battle_engine_move_animation.c": "06f1799ceba292093babe0141dd7ab8e45791f4596b4c9a8473dbf4db9459b1a",
     "src/fragments/fragment012_17ED00/battle_engine_move_model_transforms.c": "675340fada41a516f1bf077feec220785b9f8d6d6d9f18ec787901b45ab6336d",
     "src/fragments/fragment012_17ED00/battle_engine_move_model_transforms_82109AF4.c": "dd563b4f49f6a88c791b99ae895d8bc90af1f4302192137712ac8486128dab8f",

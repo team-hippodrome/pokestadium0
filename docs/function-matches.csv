@@ -2633,7 +2633,7 @@ func_82100058,0x82100058,src/fragments/fragment012_17ED00/battle_engine_main.c,B
 func_821000C0,0x821000C0,src/fragments/fragment012_17ED00/battle_engine_main.c,Battle_StageMaterialTintCallback,s1,stadium1:src/fragments/battle_engine/battle_engine_main.c,c
 func_82100118,0x82100118,src/fragments/fragment012_17ED00/battle_engine_main.c,func_82100118,hand,,c
 func_8210013C,0x8210013C,src/fragments/fragment012_17ED00/battle_engine_main.c,Battle_SetStageScale,s1,stadium1:src/fragments/battle_engine/battle_engine_main.c,c
-func_82100148,0x82100148,src/fragments/fragment012_17ED00/battle_engine_main.c,,asm,,asm
+func_82100148,0x82100148,src/fragments/fragment012_17ED00/battle_engine_main.c,func_82100148,hand,,c
 func_82100590,0x82100590,src/fragments/fragment012_17ED00/battle_engine_main.c,Battle_RenderActivePokemonThumbnail,s1,stadium1:src/fragments/battle_engine/battle_engine_main.c,c
 func_82100650,0x82100650,src/fragments/fragment012_17ED00/battle_engine_main.c,func_82100650,hand,,c
 func_82100778,0x82100778,src/fragments/fragment012_17ED00/battle_engine_main.c,Battle_DrawTexturedRectSegment,s1,stadium1:src/fragments/battle_engine/battle_engine_main.c,c

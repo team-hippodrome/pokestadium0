@@ -127,11 +127,54 @@ void Battle_SetStageScale(f32 scale) {
     sStageScale = scale;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82100148; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82100148.s")
-#endif
+extern s32 D_82198D1C;
+extern u8 D_8F908980[];
+extern u8 D_8FA08900[];
+extern u8 D_8FB08900[];
+extern Gfx D_80060398[];
+
+void func_82100148(void) {
+    void* tex;
+    s16 left;
+    s16 right;
+    s16 top;
+    s16 middle;
+    s16 bottom;
+    s16 texture_step_y;
+
+    if ((D_82198D1C > 0) && (sStageScale == 1.0f)) {
+        left = sStageCamera.viewport.x;
+        right = sStageCamera.viewport.width + left;
+        top = sStageCamera.viewport.y;
+        middle = (sStageCamera.viewport.height / 2) + top;
+        bottom = sStageCamera.viewport.height + top;
+        texture_step_y = 0x10000 / (sStageCamera.viewport.height / 2);
+
+        switch (D_82198D1C) {
+            case 1: tex = Memmap_GetFragmentVaddr(D_8F908980); break;
+            case 2: tex = Memmap_GetFragmentVaddr(D_8FA08900); break;
+            case 3: tex = Memmap_GetFragmentVaddr(D_8FB08900); break;
+        }
+
+        if ((sStageCamera.viewport.width < 0x140) || (sStageCamera.viewport.height < 0xF0)) {
+            GfxImage_FillCurrent(&gDisplayListHead, 1);
+        } else {
+            GfxImage_ClearDepthRectangle(&gDisplayListHead, 0, 0, 0x140, 0xF0);
+        }
+
+        gDPSetCycleType(gDisplayListHead++, G_CYC_1CYCLE);
+        gDPSetTexturePersp(gDisplayListHead++, G_TP_NONE);
+        gDPSetCombineMode(gDisplayListHead++, G_CC_MODULATEI_PRIM, G_CC_MODULATEI_PRIM);
+        gDPSetPrimColor(gDisplayListHead++, 0, 0, sTintColor.r, sTintColor.g, sTintColor.b, 255);
+        gSPClearGeometryMode(gDisplayListHead++, G_ZBUFFER | G_LIGHTING);
+        gDPLoadTextureBlock(gDisplayListHead++, tex, G_IM_FMT_RGBA, G_IM_SIZ_32b, 4, 64, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gSPTextureRectangle(gDisplayListHead++, left << 2, top << 2, right << 2, middle << 2, G_TX_RENDERTILE, 0, 0, 0, texture_step_y);
+        gSPTextureRectangle(gDisplayListHead++, left << 2, middle << 2, right << 2, bottom << 2, G_TX_RENDERTILE, 0, 0x07E0, 0, 0);
+        gSPDisplayList(gDisplayListHead++, D_80060398);
+        return;
+    }
+    GfxImage_FillCurrent(&gDisplayListHead, 1);
+}
 
 /*
     Makes and Freezes the thumbnail of active pokemon
