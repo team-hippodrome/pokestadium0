@@ -640,11 +640,194 @@ s32 Pokedex_GetCountTier(s32 arg0) {
     return ret;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8A104B00; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment018_262620/func_8A104B00.s")
-#endif
+typedef struct Label8A104B00 {
+    /* 0x00 */ char text[0x2E];
+    /* 0x2E */ s16 width;
+} Label8A104B00; // size = 0x30
+typedef struct Area8A104B00 {
+    /* 0x00 */ char name[0xA];
+    /* 0x0A */ s16 group;
+} Area8A104B00; // size = 0xC
+extern Label8A104B00 D_8A130310[];
+extern s16 D_8A130438[];
+extern Area8A104B00 D_8A12F574[];
+extern char D_8A12F214[][0x12];
+extern char D_8A12F190[];
+extern char D_8A12F19C[];
+extern char D_8A12F1B0[];
+extern char D_8A12F1C8[];
+extern char D_8A12F1FC[];
+extern char D_8A12F204[];
+extern char D_8A12F208[];
+extern char D_8A12FD60[];
+extern char D_8A12FD68[];
+extern char D_8A12FD6C[];
+extern char D_8A12FD70[];
+extern char D_8A12FD74[];
+extern char D_8A12FD8C[];
+extern char D_8A12FDA0[];
+extern char D_8A12FDBC[];
+extern char D_8A12FDD4[];
+extern char D_8A12FDE4[];
+extern char D_8A12FDF0[];
+extern char D_8A12FE04[];
+extern char D_8A12FE14[];
+extern char D_8A12FE18[];
+extern char D_8A12FE1C[];
+extern s16 D_8A130432;
+extern char D_8A1302E8[];
+extern s16 D_8A130446;
+void func_800069CC(void);
+s32 func_8A104B00(s32 arg0)
+{
+  char *name = D_8A12F2A4[D_8A1302D6];
+  unk_D_88826CF0_004 *temp_s2;
+  s32 temp_s0;
+  char *str;
+  s32 i;
+  s32 tier;
+  s32 var_a1;
+  s32 j;
+  s32 temp_s1;
+  s32 temp_s4;
+  s32 x;
+  s32 idx;
+  s32 sel;
+  s32 pad[1]; // FAKE: unused stack word
+  Pokedex_UpdateAreaMapFrame();
+  GeoRender_AdvanceFrameCounter();
+  func_800069CC();
+  Geo_RenderRootNode(D_8A1302CC);
+  Font_BeginTranslucentTextRendering();
+  Font_SetActive(1, 0);
+  Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+  Font_Printf(0x23, 0x17, D_8A12FD60, D_8A1302E8, D_8A12F190);
+  D_8A130430 = 0;
+  if (D_8A1302DC == 1)
+  {
+    sprintf(D_8A130310[0].text, D_8A12FD68, D_8A12F1C8);
+    D_8A130430 = ((strlen(D_8A130310[0].text) * 5) + 0x1E) & 0xFFF8;
+    Font_Printf(0xAF - (D_8A130430 / 2), 0x7D, D_8A12FD6C, D_8A130310[0].text);
+  }
+  else
+  {
+    if (D_8A1302D4 == 0)
+    {
+      temp_s0 = D_8A12FAD8[D_8A1302D6];
+      temp_s0--;
+      Font_Printf(0xCB, 0xD5, D_8A12FD70, D_8A12F19C);
+      if (D_8A1302DA == 1)
+      {
+        unk_D_88826CF0 *ptr = &D_8A130458[temp_s0];
+        if ((ptr->unk_00 == 1) && (D_8A130308 == 0))
+        {
+          s16 tmp = ptr->unk_02;
+          if (tmp > 0)
+          {
+            for (i = 0; i < tmp; i++)
+            {
+              temp_s2 = ptr->unk_04[i];
+              temp_s1 = temp_s2->unk_02;
+              temp_s4 = temp_s2->unk_04;
+              tier = Pokedex_GetCountTier(temp_s2->unk_06);
+              str = D_8A12F574[ptr->unk_18[i]].name;
+              if (D_8A130446 == 1)
+              {
+                if (temp_s1 == temp_s4)
+                {
+                  if (tmp >= 2)
+                  {
+                    sprintf(D_8A130310[i].text, D_8A12FD74, str, D_8A12F1FC, temp_s1, D_8A12F208, temp_s2->unk_06);
+                  }
+                  else
+                  {
+                    sprintf(D_8A130310[i].text, D_8A12FD8C, str, D_8A12F1FC, temp_s1, D_8A12F208, temp_s2->unk_06);
+                  }
+                }
+                else
+                  if (tmp >= 2)
+                {
+                  sprintf(D_8A130310[i].text, D_8A12FDA0, str, D_8A12F1FC, temp_s1, D_8A12F204, temp_s4, D_8A12F208, temp_s2->unk_06);
+                }
+                else
+                {
+                  sprintf(D_8A130310[i].text, D_8A12FDBC, str, D_8A12F1FC, temp_s1, D_8A12F204, temp_s4, D_8A12F208, temp_s2->unk_06);
+                }
+              }
+              else
+                if (temp_s1 == temp_s4)
+              {
+                if (tmp >= 2)
+                {
+                  sprintf(D_8A130310[i].text, D_8A12FDD4, str, D_8A12F1FC, temp_s1, D_8A12F214[tier]);
+                }
+                else
+                {
+                  sprintf(D_8A130310[i].text, D_8A12FDE4, str, D_8A12F1FC, temp_s1, D_8A12F214[tier]);
+                }
+              }
+              else
+                if (tmp >= 2)
+              {
+                sprintf(D_8A130310[i].text, D_8A12FDF0, str, D_8A12F1FC, temp_s1, D_8A12F204, temp_s4, D_8A12F214[tier]);
+              }
+              else
+              {
+                sprintf(D_8A130310[i].text, D_8A12FE04, str, D_8A12F1FC, temp_s1, D_8A12F204, temp_s4, D_8A12F214[tier]);
+              }
+              D_8A130430 = ((strlen(D_8A130310[i].text) * 5) + 0x32) & 0xFFF8;
+              D_8A130310[i].width = D_8A130430;
+            }
+
+            var_a1 = 0;
+            for (x = 0; x < 7; x++)
+            {
+              for (j = 0; j < tmp; j++)
+              {
+                idx = D_8A12F574[ptr->unk_18[j]].group;
+                if (idx == x)
+                {
+                  D_8A130438[var_a1] = j;
+                  var_a1 += 1;
+                  if (var_a1 >= tmp)
+                  {
+                    x = 7;
+                    break;
+                  }
+                }
+              }
+
+            }
+
+            if (D_8A130450 != 0)
+            {
+              for (i = 0; i < tmp; i++)
+              {
+                sel = D_8A130438[i];
+                if (D_8A130310[sel].width > 0)
+                {
+                  Font_Printf(0xA0 - (D_8A130430 / 2), ((i * 0xA) - (tmp * 0xA)) + 0xC3, D_8A12FE14, D_8A130310[sel].text);
+                }
+              }
+
+            }
+          }
+        }
+      }
+    }
+    else
+    {
+      Font_Printf(0x65, 0xB8, D_8A12FE18, D_8A12F1B0);
+    }
+    if ((D_8A130308 == 0) || (D_8A1302D6 == D_8A1302D8))
+    {
+      Font_Printf(0x54 - (strlen(name) * 2), 0xD5, D_8A12FE1C, name);
+    }
+  }
+  D_8A130432 = D_8A130430;
+  Font_EndTexturedTextRendering();
+  return 0;
+}
 
 s32 Pokedex_CheckAreaMapExit(void) {
     if ((gPlayer1Controller->buttonPressed & 0x4000) && (D_8A1302DA == 0)) {

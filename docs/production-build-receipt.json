@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5357,
-  "asm_owners": 87,
+  "c_owners": 5358,
+  "asm_owners": 86,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -627,7 +627,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "f95ca328bf29314a051fb7ae527cf21e8e8c13be69a9e0bf8a6b74ed072d769a",
+    "docs/function-matches.csv": "229d949bff4b882d760ef3dac81cb9b3c427e7a43f813ba6c5dc3aabd9c59ade",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -846,7 +846,7 @@
     "src/fragments/fragment016_252E10/lab_pc_list_1E46B0_2.c": "da17907c0bcfdfeb35127c50454d63daf278ce9aea9253c7fcb91a53dd3db5d5",
     "src/fragments/fragment017_261F00.c": "e60f251df9e22e458be0ee04551e3b8b47f5f8d7eaf6625c85ca69b0342af573",
     "src/fragments/fragment018_262620/pokedex_214920.c": "2fa9a32d63e0a25f4c2042bfc31276f524d7ac0f6d167dc3abc86cffa73b4ac7",
-    "src/fragments/fragment018_262620/pokedex_2190D0.c": "f34118c88ebb560e56f416197fa91203210374d1a9c30356c7ac091779394ec5",
+    "src/fragments/fragment018_262620/pokedex_2190D0.c": "ccdde0015aa3a9a590462fb1814435218a8a2923a33f1eb995d9deb4adf5dbd5",
     "src/fragments/fragment019_293410/lab_pc_icons.c": "d0831af4c6830af2cbc771ba5903929234c97411b6de09fe7361a10b6faa9d08",
     "src/fragments/fragment019_293410/lab_pc_icons_8A201598.c": "ecfad5597c99a31950ee4074647704f7f3a166d3aae8f354af370cd75efe93b8",
     "src/fragments/fragment020_2B1360.c": "1d51773e2a436bb50560c5297d6152fb294823d9c01f0e5ec662adab156da927",
