@@ -161,11 +161,47 @@ void func_88400458(s32 port, s32 x, s32 y) {
     Font_EndTexturedTextRendering();
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8840079C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment006_162BE0/func_8840079C.s")
-#endif
+// Moves the cursor around a 2x2 grid of slots on D-pad presses, skipping
+// to the diagonal slot when the adjacent one is empty.
+s32 func_8840079C(s32 cursor) {
+    if ((M2C_FIELD(D_800603C0, u16*, 8) & 0x800) && (cursor >= 2)) {
+        if (D_88403310[cursor ^ 2].game != 0) {
+            func_8003F6AC(0x25);
+            cursor ^= 2;
+        } else if (D_88403310[cursor ^ 3].game != 0) {
+            func_8003F6AC(0x25);
+            cursor ^= 3;
+        }
+    }
+    if ((M2C_FIELD(D_800603C0, u16*, 8) & 0x400) && (cursor < 2)) {
+        if (D_88403310[cursor ^ 2].game != 0) {
+            func_8003F6AC(0x25);
+            cursor ^= 2;
+        } else if (D_88403310[cursor ^ 3].game != 0) {
+            func_8003F6AC(0x25);
+            cursor ^= 3;
+        }
+    }
+    if ((M2C_FIELD(D_800603C0, u16*, 8) & 0x200) && ((cursor % 2) == 1)) {
+        if (D_88403310[cursor ^ 1].game != 0) {
+            func_8003F6AC(0x25);
+            cursor ^= 1;
+        } else if (D_88403310[cursor ^ 3].game != 0) {
+            func_8003F6AC(0x25);
+            cursor ^= 3;
+        }
+    }
+    if ((M2C_FIELD(D_800603C0, u16*, 8) & 0x100) && ((cursor % 2) == 0)) {
+        if (D_88403310[cursor ^ 1].game != 0) {
+            func_8003F6AC(0x25);
+            cursor ^= 1;
+        } else if (D_88403310[cursor ^ 3].game != 0) {
+            func_8003F6AC(0x25);
+            cursor ^= 3;
+        }
+    }
+    return cursor;
+}
 
 
 void Trade_DrawSaveSeqMessageBackdrop(s16 arg0, s16 arg1, s16 arg2, s16 arg3) {
