@@ -492,11 +492,49 @@ void func_8810105C(s32 x, s32 y, s32 height) {
     func_80029028(x + 0x88, y, 0x18C, height, D_88102D78[0]);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8810112C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment008_1720F0/func_8810112C.s")
-#endif
+typedef struct IconCache8810173C {
+    /* 0x00 */ s32* slots;
+    /* 0x04 */ s32 base;
+    /* 0x08 */ s32 count;
+    /* 0x0C */ s32 start;
+} IconCache8810173C; // size = 0x10
+
+extern s32 D_88103074;
+extern Gfx D_80073408[];
+extern Gfx D_80073438[];
+extern u8 D_04011A60[];
+s32 func_80018DEC(s8*, s32);
+void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
+void func_8002B940(s32, s32, s32, s32);
+void func_8001833C(void*, s32, void*, u16);
+void func_8810112C(s32 x, s32 y, u8* entry, s32 id, s32 color, IconCache8810173C* cache) {
+    UNUSED s32 pad[4]; // FAKE
+    s32 slot;
+    s32* p;
+
+    gSPDisplayList(gDisplayListHead++, D_80060270);
+    func_80029028(x, y, 0x84, 0x32, D_88102D78[0]);
+    if (entry != NULL) {
+        Font_BeginTranslucentTextRendering();
+        func_80027F20(color);
+        Font_SetActive(4, 0);
+        Font_Printf(x + 4, y + 4, entry + 0x30);
+        Font_EndTexturedTextRendering();
+        gSPDisplayList(gDisplayListHead++, D_80073450);
+        func_8001BCB4(x + 0x2C, y + 0x19, 8, 0xA, D_04011A60, 8, 0);
+        func_8002B940(x + 0x38, y + 0x17, entry[0x24], 3);
+        slot = cache->base + id % cache->count;
+        p = &cache->slots[slot];
+        if (id != *p) {
+            *p = id;
+            func_8001833C(D_88103074, slot, entry, ((D_88102D78[0].c[1] << 3) & 0x7C0) | ((D_88102D78[0].c[2] >> 2) & 0x3E) | ((D_88102D78[0].c[0] << 8) & 0xF800) | 1);
+        }
+        if (cache) {} // FAKE: keeps cache live through the block above so the colour table address takes t1
+        gSPDisplayList(gDisplayListHead++, D_80073408);
+        func_8001B884(x + 0x56, y + 6, 0x28, 0x28, (u8*)func_80018DEC((s8*)D_88103074, slot), 0x28, 0x200000);
+        gSPDisplayList(gDisplayListHead++, D_80073438);
+    }
+}
 
 extern s32 D_88103074;
 extern Gfx D_80073408[];
@@ -577,12 +615,6 @@ s32 func_88101734(s32 *arg0) {
     return *arg0;
 }
 
-typedef struct IconCache8810173C {
-    /* 0x00 */ s32* slots;
-    /* 0x04 */ s32 base;
-    /* 0x08 */ s32 count;
-    /* 0x0C */ s32 start;
-} IconCache8810173C; // size = 0x10
 extern Color88100D9C D_88102D80;
 extern s32 D_88103098[];
 void func_8810112C(s32, s32, u8*, s32, s32, IconCache8810173C*);
