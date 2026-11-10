@@ -747,11 +747,76 @@ void func_89008EF0(s8* arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89008F4C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_89008F4C.s")
-#endif
+void func_8002A8E0(s8*);
+void func_80029658(s32, s32, s32, u8*);
+void func_800295E8(s32, s32, s32, s32, u8*);
+void func_8002B054(s8*, s32);
+void func_8002DAD8(s8*, s32, s32, s32, s32);
+void func_8002D024(s8*);
+extern u8 D_8007356C[];
+extern u8 D_800735C4[];
+void func_89008F4C(s8* arg0) {
+    s32 sel = 0x10;
+    s32 flags[2];
+    s32 pad[2]; // FAKE
+    s32 a;
+    s32 b;
+
+    if (func_8002AE6C(arg0 + 4) != 0) {
+        return;
+    }
+    func_8002A8E0(arg0 + 0x30);
+    gSPDisplayList(gDisplayListHead++, D_80060270);
+    func_80029028(M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) - 0xC, 0xA, *(Color_RGBA8*)&D_8900A5BC);
+    func_80029028(M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) + 0x11C, M2C_FIELD(arg0, s32*, 0xC) - 0xC, 0xA, *(Color_RGBA8*)&D_8900A5BC);
+    func_80029028(M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) + 0x10, 0xA, 0x10C, *(Color_RGBA8*)&D_8900A5BC);
+    func_80029028(M2C_FIELD(arg0, s32*, 0xC) + M2C_FIELD(arg0, s32*, 4) - 0x10, M2C_FIELD(arg0, s32*, 8) + 0x10, 0xA, 0x10C, *(Color_RGBA8*)&D_8900A5BC);
+    func_80029028(M2C_FIELD(arg0, s32*, 4) + 0xDE, M2C_FIELD(arg0, s32*, 8) + 0x10, 0x42, 0x10C, *(Color_RGBA8*)&D_8900A5BC);
+    func_80029658(M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 8) + 0x125, M2C_FIELD(arg0, s32*, 0xC), D_8007356C);
+    func_800295E8(M2C_FIELD(arg0, s32*, 4) + 0xE, M2C_FIELD(arg0, s32*, 8) + 0xE, 0xD2, 0x110, D_800735C4);
+    func_800295E8(M2C_FIELD(arg0, s32*, 4) + 0x11E, M2C_FIELD(arg0, s32*, 8) + 0xE, 0x108, 0x110, D_800735C4);
+    flags[1] = flags[0] = 0xFFED;
+    switch (M2C_FIELD(arg0, s32*, 0)) {
+        case 1:
+            sel = 2;
+            break;
+        case 2:
+            flags[(M2C_FIELD(arg0, s32*, 0x15C) == 1) ? 1 : 0] |= 2;
+            break;
+        case 3:
+        case 4:
+            if (M2C_FIELD(arg0, s32*, 0x15C) == 1) {
+                a = 1;
+                b = 0;
+            } else {
+                a = 0;
+                b = 1;
+            }
+            flags[a] |= 0x10;
+            flags[b] |= 2;
+            break;
+        case 5:
+            flags[0] = 0xFFEF;
+            break;
+        case 6:
+            flags[(M2C_FIELD(arg0, s32*, 0x168) < 8) ? 0 : 1] |= 2;
+            break;
+    }
+    func_8002B054(arg0 + 0x50, (M2C_FIELD(arg0, s32*, 0x15C) == 5) ? sel : 0);
+    func_8002B054(arg0 + 0xA8, (M2C_FIELD(arg0, s32*, 0x15C) == 0) ? sel : 0);
+    func_8002B054(arg0 + 0x7C, (M2C_FIELD(arg0, s32*, 0x15C) == 1) ? sel : 0);
+    func_8002B054(arg0 + 0xD4, (M2C_FIELD(arg0, s32*, 0x15C) == 2) ? sel : 0);
+    func_8002B054(arg0 + 0x100, (M2C_FIELD(arg0, s32*, 0x15C) == 3) ? sel : 0);
+    func_8002B054(arg0 + 0x12C, (M2C_FIELD(arg0, s32*, 0x15C) == 4) ? sel : 0);
+    func_890088F8(M2C_FIELD(arg0, s32*, 4) + 0x10, M2C_FIELD(arg0, s32*, 8) + 0x10, 2, 0);
+    func_890088F8(M2C_FIELD(arg0, s32*, 4) + 0x120, M2C_FIELD(arg0, s32*, 8) + 0x10, 2, 1);
+    func_8002DAD8(arg0 + 0x170, M2C_FIELD(arg0, s32*, 4) + 0x10, M2C_FIELD(arg0, s32*, 8) + 0x3C, flags[0], 0);
+    func_8002DAD8(arg0 + 0x194, M2C_FIELD(arg0, s32*, 4) + 0x120, M2C_FIELD(arg0, s32*, 8) + 0x3C, flags[1], 0);
+    func_89008EF0(arg0);
+    if (M2C_FIELD(arg0, s32*, 0) == 7) {
+        func_8002D024(arg0 + 0x1E0);
+    }
+}
 
 s32 func_8002DCE0(void* arg0);
 
