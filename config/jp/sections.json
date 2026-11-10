@@ -67,6 +67,7 @@
     }
   },
   "src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c": {
+    ".bss": "0x811561C8",
     ".rodata": {
       "address": "0x81154224",
       "size": "0x30"

@@ -304,7 +304,7 @@ typedef struct GbpakChannel811023DC {
     /* 0xA2 */ u8 unkA2;
     /* 0xA3 */ char unkA3[0x1];
 } GbpakChannel811023DC; // size = 0xA4
-extern GbpakChannel811023DC D_811561C8[];
+GbpakChannel811023DC D_811561C8[4];
 s32 func_811023DC(OSPfs* arg0) {
     s32 ret = osGbpakGetStatus(arg0, &D_811561C8[arg0->channel].status);
 
@@ -640,11 +640,44 @@ s32 func_81102F7C(s32 arg0, s32 arg1, s32 arg2) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_811030F0.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_811035B4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_811035B4.s")
-#endif
+extern volatile u8 D_81156474;
+extern volatile u8 D_81156475;
+extern volatile u8 D_81156476;
+extern volatile u8 D_81156477;
+extern s8 D_81156478;
+extern s8 D_81156479;
+extern s32 D_81156470;
+extern OSMesgQueue D_81156458;
+extern OSPfs D_81156018[4];
+extern OSMesg D_811561B8[4];
+extern OSThread D_81154C68;
+extern u8 D_81155E18[];
+void func_800567E0(OSMesgQueue*, OSMesg*, s32);
+void func_80051B20(OSThread*, s32, void (*)(), s32, u8*, s32);
+void func_8005C130(OSThread*);
+M2C_UNK func_8004FD20(s32, M2C_UNK);
+void func_811030F0();
+void func_811035B4(s32 arg0, s32 arg1, s32 arg2) {
+    s32 i;
+
+    D_81156470 = arg2;
+    D_81156474 = 1;
+    D_81156475 = 0;
+    D_81156476 = 0;
+    D_81156477 = 0;
+    D_81156478 = 0;
+    D_81156479 = 0;
+    func_8004FD20((s32) D_811561C8, 0x290);
+    func_8004FD20((s32) &D_81156480, 0x20);
+    for (i = 0; i < 4; i++) {
+        D_811561C8[i].channel = i;
+        D_811561C8[i].unkA1 = 0x18;
+        D_811561C8[i].pfs = &D_81156018[i];
+    }
+    func_800567E0(&D_81156458, D_811561B8, 4);
+    func_80051B20(&D_81154C68, arg0, func_811030F0, 0, D_81155E18, arg1);
+    func_8005C130(&D_81154C68);
+}
 
 extern volatile u8 D_81156474;
 extern volatile u8 D_81156475;
