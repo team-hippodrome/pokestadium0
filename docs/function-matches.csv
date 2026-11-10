@@ -943,7 +943,7 @@ func_8210C708,0x8210C708,src/fragments/fragment012_17ED00/8210C6B0.c,func_8210C7
 func_8210C738,0x8210C738,src/fragments/fragment012_17ED00/8210C6B0.c,BattleScene_SelectActiveController,hand,,c
 func_8210C778,0x8210C778,src/fragments/fragment012_17ED00/8210C6B0.c,func_8210C778,hand,,c
 func_8210C82C,0x8210C82C,src/fragments/fragment012_17ED00/8210C6B0.c,func_8210C82C,hand,,c
-func_8210C8A0,0x8210C8A0,src/fragments/fragment012_17ED00/8210C6B0.c,,asm,,asm
+func_8210C8A0,0x8210C8A0,src/fragments/fragment012_17ED00/8210C6B0.c,func_8210C8A0,hand,,c
 func_8210CA24,0x8210CA24,src/fragments/fragment012_17ED00/8210C6B0.c,func_8210CA24,hand,,c
 func_8210CACC,0x8210CACC,src/fragments/fragment012_17ED00/8210C6B0.c,func_8210CACC,hand,,c
 func_8210CBD4,0x8210CBD4,src/fragments/fragment012_17ED00/8210C6B0.c,func_8210CBD4,hand,,c

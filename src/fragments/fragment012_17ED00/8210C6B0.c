@@ -87,13 +87,70 @@ void func_8210C82C(ActivePokemon* arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8210C8A0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8210C8A0.s")
-#endif
+void func_8211F274();
+s32 func_82107F88(s32);
+M2C_UNK func_8211F288();
+extern s32 D_8218C6F0;
+s32 func_8210C8A0(arg0) ActivePokemon *arg0;
+{
+  s32 i;
+  s32 temp_a1;
+  s32 var_v1;
+  ActivePokemonState *temp_v0;
+  BattleMonRuntime *temp_a0;
+  Controller *cont;
+  temp_a0 = &arg0->state.runtime;
+  cont = arg0->state.controller;
+  var_v1 = 0;
+  if (temp_a0->unk_52 != 0)
+  {
+    temp_a1 = temp_a0->unk_52 >> 4;
+    for (i = 0; i < 4; i++)
+    {
+      if (temp_a1 != i)
+      {
+        var_v1 |= temp_a0->unk_32[i] & 0x3F;
+      }
+    }
 
-M2C_UNK func_8211F274();
+  }
+  else
+  {
+ do { for (i = 0; i < 4; i++) { var_v1 |= temp_a0->unk_32[i] & 0x3F; } } while (0);
+  }
+  if (var_v1 == 0)
+  {
+    temp_v0 = &arg0->state;
+    if ((*((s32 *) (((s8 *) arg0) + 0xA04))) == 0)
+    {
+      if (temp_v0->unk_10 == 0)
+      {
+        temp_v0->unk_10 = 1;
+      }
+      func_8211F274(arg0);
+      func_8211F288(arg0, D_8218C6F0, func_82107F88((s32) arg0));
+    }
+    else
+      if (cont->buttonPressed & 0x20)
+    {
+      func_8211F274(arg0);
+      arg0->state.unk_10 = 0;
+      BattleAnim_PlaySoundEffect3();
+    }
+    else
+      if (cont->buttonPressed & 0x8000)
+    {
+      func_8211F274(arg0);
+      temp_v0->unk_1E = 0;
+      temp_v0->unk_10 = 3;
+      temp_v0->unk_14 = 4;
+    }
+    return 1;
+  }
+  return 0;
+}
+
+void func_8211F274();
 M2C_UNK func_8211F288();
 extern s32 D_8218C6F4;
 extern s32 D_8218C6F8;
@@ -158,7 +215,7 @@ void func_8210CACC(s8* arg0) {
 s32 func_8210C8A0();                                /* extern */
 void func_82134D40(s8 *);
 M2C_UNK func_82134D80(s8 *);                        /* extern */
-M2C_UNK func_8211F274();
+void func_8211F274();
 
 /*
  * func_8210CBD4
@@ -244,7 +301,7 @@ void func_8210CD58(s8 *arg0) {
     }
 }
 
-M2C_UNK func_8211F274();
+void func_8211F274();
 M2C_UNK func_8211F288();
 extern s32 D_8218C6FC;
 
@@ -327,7 +384,7 @@ void func_8210CEE8(ActivePokemon* arg0, u8* arg1, u8* arg2, s32 arg3) {
 }
 
 s32 func_82107F88(s32);                             /* extern */
-M2C_UNK func_8211F274();                            /* extern */
+void func_8211F274();                            /* extern */
 M2C_UNK func_8211F288(s32, s32, s32);               /* extern */
 extern s32 D_8218C700;
 
