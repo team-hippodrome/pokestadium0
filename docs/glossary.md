@@ -30,6 +30,7 @@ Pocket Monsters Stadium (ポケモンスタジアム, 1998) only ships Japanese 
 - [Trainer classes](#trainer-classes)
 - [Places](#places)
 - [Stadium modes and features](#stadium-modes-and-features)
+- [Nintendo Cup '97 finalists](#nintendo-cup-97-finalists-locked-romanizations)
 
 ## Pokémon
 
@@ -736,6 +737,7 @@ be filled in from the in-game text as annotation reaches each mode. Entries mark
 | レンタルポケモン ⚠ | Rentaru pokemon | Rental Pokémon | |
 | ポケモンずかん | Pokemon zukan | Pokédex | `pokedex` fragment |
 | ミニゲーム | Mini geemu | Mini-game | |
+| L50～55でのトーナメント ⚠ | — | Lv. 50–55 Tournament | Nintendo Cup '97 finalists as opponents; see below. Name is from the manual via outside research and not checked here |
 | トーナメント | Toonamento | Tournament | |
 | けっしょう / じゅんけっしょう | Kesshou / jun-kesshou | Final / Semifinal | |
 | ゆうしょう | Yuushou | Win the tournament / championship | |
@@ -750,3 +752,48 @@ be filled in from the in-game text as annotation reaches each mode. Entries mark
 | — | — | Clefairy Says | `clefairy_game` (international name) |
 | — | — | Rock Harden (Metapod) | `metapod_game` (international name) |
 | — | — | GB save viewer / GB Pak data | "GB save port" in function notes |
+
+
+## Nintendo Cup '97 finalists (locked romanizations)
+
+The Lv. 50–55 Tournament uses the teams of the real finalists of the 1st Pokémon League National Tournament
+(第1回ポケモンリーグ全国大会, November 1997, later called Nintendo Cup '97). The opponents come from the table
+`D_82400400` in `src/fragments/fragment009_175570.c`. `func_82400118` picks indices 0–14, so there are 15
+teams. Each `DemoTeamTemplate` has three strings: `unk_04` is the region, `unk_08` is the player's real name
+and `unk_0C` is the trainer (OT) name.
+
+**The game's kana is the authority for every reading.** The ROM stores these names only in hiragana (family
+name, newline, given name), not in kanji. The kanji come from outside tournament records. They are here
+only so a reader can match them up. Several are ambiguous: 美蘭 would normally be read *Miran*, but this
+player's name is *Mika*. Never romanize these names from the kanji.
+
+Use the romanizations below verbatim in comments and identifiers. They are Hepburn without macrons, with
+long vowels doubled to match the rest of this glossary, and family name first.
+
+Provenance: the kana readings come from a read of the ROM string table that Julius provided, with outside
+kanji from fan archives (公式戦ヒストリア, 97リーグの猛者達) and one Nintendo results page. They have **not** been
+re-read from the ROM in this repo, because the string table is not yet in `src/`. The table layout and the
+0–14 pick in fragment009 do match the decomp. Re-check each row when the strings are extracted.
+
+| Region (`unk_04`) | Real name in game (`unk_08`) | Locked romanization | Kanji (reference only) | Trainer name (`unk_0C`) | Trainer romanization | Why it's locked |
+|---|---|---|---|---|---|---|
+| ほっかいどう (Hokkaido) | かとう かずひと | Katou Kazuhito | 加藤 和人 | マサハル | Masaharu | 和人 is also read Kazuto. The trainer name is unrelated to the real name |
+| Tohoku A | ゆうき ようじろう | Yuuki Youjirou | 結城 洋次郎 | ようじろう | Youjirou | Low risk |
+| Tohoku B | たかはし じゅん | Takahashi Jun | 高橋 潤 | じゅん | Jun | Low risk |
+| Hokuriku (champion) | とおる (given name only) | **Tooru** | 宮沢 徹 (Miyazawa, from outside sources only) | おれさま | Oresama | 徹 is also read Tetsu or Akira. His entry alone has no family name and `unk_00` = 0 rather than 2. Reportedly index 3 |
+| Kanto A2 | ふじた みか | Fujita Mika | 藤田 美蘭 | クレア | Kurea | **High risk**: 美蘭 is normally Miran |
+| Chubu A | やまだ たかひさ | Yamada Takahisa | 山田 高久 | ブルー | Buruu ("Blue") | Moderate: 高久 is also read Takaku |
+| Chubu B | きたがわ やすのり | Kitagawa Yasunori | 北川 恭教 | テンサイ | Tensai ("genius") | **High risk**: 恭教 has many readings (Takayuki, Yoshinori, ...) |
+| Kansai (runner-up) | にしむら しゅん | Nishimura Shun | 西村 峻 / 西村 俊 (sources differ) | にっしん | Nisshin | 峻 is also read Takashi |
+| Shikoku | よしい ひろき | Yoshii Hiroki | 吉井 博紀 | ヒロ | Hiro | 博紀 is also read Hironori |
+| Kyushu A | よしとみ たいせい | Yoshitomi Taisei | 吉冨 大成 / 吉富 大成 (sources differ) | タイセイ | Taisei | 大成 is also read Kazunari. The family name is unvoiced: Yoshitomi, not Yoshidomi |
+| ⚠ ? | ⚠ not provided | ⚠ **unlocked** | 林 泰宏 / 林 康宏 | ⚠ | ⚠ | Kana reading still needed |
+| ⚠ ? | ⚠ not provided | ⚠ **unlocked** | 岩政 健次 / 岩政 健治 | ⚠ | ⚠ | Kana reading still needed |
+| ⚠ ? | ⚠ not provided | ⚠ **unlocked** | 渕脇 明裕 / 渕脇 昭裕 | ⚠ | ⚠ | Kana reading still needed |
+| ⚠ ? | ⚠ unknown | ⚠ **unlocked** | ⚠ | ⚠ | ⚠ | Not in the research provided |
+| ⚠ ? | ⚠ unknown | ⚠ **unlocked** | ⚠ | ⚠ | ⚠ | Not in the research provided |
+
+Rows are in the string-table order given in the research. That order is not necessarily the `D_82400400`
+index order. Region names other than ほっかいどう are given in English because the research did not quote
+their kana. Trainer names are names the players chose and have no official English form. Romanize them and
+don't translate them; the glosses in quotes are only there to explain the name.
