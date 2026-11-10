@@ -297,11 +297,91 @@ s32 func_821886F0(s32 arg0) {
     return arg0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82188770; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82188770.s")
-#endif
+extern f64 D_DBL_82198A10;
+extern s32 D_821CF2A4;
+extern u8 *D_821CF2A8;
+extern u8 *D_821CF2AC;
+typedef struct Slot90 { u8 *roster; u8 data[0x8C]; } Slot90;
+extern Slot90 D_821CF618[6];
+extern Slot90 D_821CF998[6];
+extern Slot90 *D_821CF298;
+extern s32 D_821CF288;
+void func_80058410(u8 *, u8 *, s32);
+void func_821869C4(s8 *, u8 *);
+void func_82185378(u8 *, u8 *);
+s32 func_821879A4(void);
+s32 func_82187DB4(void);
+/**
+ * AI action choice: sets up the current/opponent slot pointers,
+ * updates per-turn bookkeeping, then picks an action (a move index 0-3, or
+ * 4 + party slot to switch) and stores it in D_821CF2A4.
+ */
+s32 func_82188770(u8* arg0, u8* arg1, s32 arg2, s32 arg3) {
+    s32 move;
+    s32 r;
+    s32 one; // FAKE
+
+    D_821CF294 = D_821CF618;
+    D_821CF298 = D_821CF998;
+    D_821CF29C = ((Slot90*)D_821CF294)[arg2].data;
+    D_821CF2A0 = (s8*)D_821CF298[arg3].data;
+    D_821CF2A8 = arg0;
+    D_821CF2AC = arg1;
+    func_80058410(arg0, D_821CF29C + 0xC, 0x64);
+    if (M2C_FIELD(D_821CF29C, u16*, 0x18) != M2C_FIELD(D_821CF29C, u16*, 0x70)) {
+        if (D_821CF29C[0x67] != 0) {
+            M2C_FIELD(D_821CF29C, s16*, 0x72) = (M2C_FIELD(D_821CF29C, u16*, 0x70) - M2C_FIELD(D_821CF29C, u16*, 0x18)) / 2;
+        } else {
+            M2C_FIELD(D_821CF29C, s16*, 0x72) = M2C_FIELD(D_821CF29C, u16*, 0x70) - M2C_FIELD(D_821CF29C, u16*, 0x18);
+        }
+        M2C_FIELD(D_821CF29C, u16*, 0x70) = M2C_FIELD(D_821CF29C, u16*, 0x18);
+    }
+    func_821869C4(D_821CF2A0 + 0xC, arg1);
+    if (D_821CF29C[0x5A] & 1) {
+        D_821CF29C[0x7A]++;
+    } else {
+        D_821CF29C[0x7A] = 0;
+    }
+    if (M2C_FIELD(D_821CF294, f32*, 0x364) >= 0.5) {
+        M2C_FIELD(D_821CF294, f32*, 0x364) -= D_DBL_82198A10;
+    }
+    if (arg3 != ((u8*)D_821CF294)[0x369]) {
+        move = ((u8*)D_821CF294)[0x369];
+        if (move < D_821CF288) {
+            func_82185378(D_821CF298[((u8*)D_821CF294)[0x369]].data + 0xC, D_821CF298->roster + move * 0x50 + 0x1C);
+        }
+        ((u8*)D_821CF294)[0x369] = arg3;
+        ((u8*)D_821CF294)[0x36A] = 0;
+    } else {
+        ((u8*)D_821CF294)[0x36A]++;
+    }
+    for (move = 0; move < D_821CF288; move++) {
+        ((u8*)D_821CF294)[move * 0x90 + 0x7F] = arg0[move + 0x16];
+        D_821CF298[move].data[0x7B] = arg1[move + 0x16];
+    }
+
+    move = func_821879A4();
+    if ((move >= 0) && (D_821CF29C[0x75] != ((one = 1) << move))) { // FAKE: one
+        r = -1;
+        if ((M2C_FIELD(D_821CF29C, u16*, 0x18) != 0) && (func_82183CE4((s8*)D_821CF29C) < 0x23) &&
+            (func_82183D50(D_821CF294) >= 2) && (func_8218663C((s8*)D_821CF29C, D_821CF2A0) >= 0)) {
+            r = func_8218663C((s8*)D_821CF29C, D_821CF2A0);
+        }
+        if (r < 0) {
+            func_82185378(D_821CF29C + 0xC, *(u8**)D_821CF294 + move * 0x50 + 0x1C);
+            r = move + 4;
+        }
+    } else if ((((u8*)D_821CF294)[0x368] == 3) && (func_82183CE4(D_821CF2A0) >= 0x1F)) {
+        r = func_82187DB4();
+    } else {
+        r = func_82188394();
+    }
+    if ((r >= 0) && (r < 4) && (r < 4)) { // FAKE: repeated r < 4
+        r = func_821886F0(r);
+    }
+    D_821CF2A4 = r;
+    return r;
+}
 
 extern s32 D_821CF2A4;
 extern u8* D_821CF2A8;

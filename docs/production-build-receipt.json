@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5328,
-  "asm_owners": 116,
+  "c_owners": 5329,
+  "asm_owners": 115,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -627,7 +627,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "ba2b82d217ea6bf3f55c9e6e1058d140ff8034f5b2e1dca82f33d017984ad3fa",
+    "docs/function-matches.csv": "92b18a801cef2a14224b4c42a5289a92210c9ba59ab1b9d3eb2c6e976b2bc4cb",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -816,7 +816,7 @@
     "src/fragments/fragment012_17ED00/ekans_game_2.c": "a843a8dcfda50b5c239239d42815db53bc72ffbf18dc042d5f01b364bcc4ffbd",
     "src/fragments/fragment012_17ED00/ekans_game_3.c": "78de5ebc22c9ca76e6749e46cf0168f8014aa1cbe7bc4b2410e38775268a8a8c",
     "src/fragments/fragment012_17ED00/ekans_game_3_82184DC8.c": "f7317cd453466adc21c0cf1b6052c5e0993f846f333404ab97a99660a2aae046",
-    "src/fragments/fragment012_17ED00/ekans_game_3_82188050.c": "efab2f3333b7e2bf9c32e6054223421c34d844727d421d6d57072414378412a3",
+    "src/fragments/fragment012_17ED00/ekans_game_3_82188050.c": "1aaedb6b3fcd26816330f97c941b6ec6f13b93b7c8f31c58598a2d472990bc84",
     "src/fragments/fragment012_17ED00/fragment1_89010.c": "efe5b474d6adf059a1ac1d518ff5e0e6b520a4d48917f62e85a09ef18bde891e",
     "src/fragments/fragment012_17ED00/fragment1_89010_821328DC.c": "901f6b861de798e44a86953d188e36bab018d53c204092429a5ae06c18790655",
     "src/fragments/fragment012_17ED00/particle_math_261F90.c": "74022412078088a6e83edf3cd5e19d6220ea32b3705f0faff47b2ad5c4cf440c",
