@@ -532,11 +532,89 @@ void func_8002ED70(s8 *arg0)
   }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002EDA8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002EDA8.s")
-#endif
+// FAKE: permuter output. Raw offset casts stand in for menu fields 0x28-0x3C.
+void func_8002EDA8(ScrollMenu8002F6C4 *menu)
+{
+  s32 t1;
+  s32 t3;
+  s32 t2;
+  s32 *new_var; // FAKE
+  s32 speed;
+  s32 cur;
+  if ((*((u16 *) (((s8 *) menu) + 0x2A))) & 0x800)
+  {
+    if (!((*((u16 *) (((s8 *) menu) + 0x28))) & 0x800))
+    {
+      speed = *((s32 *) (((s8 *) menu) + 0x38));
+      t1 = menu->cursor * menu->rowSpacing;
+      cur = *((s32 *) (((s8 *) menu) + 0x34));
+      *((s32 *) (((s8 *) menu) + 0x34)) = cur - (((cur - t1) < speed) ? (cur - t1) : (speed));
+      if (1) {} // karodo
+      if (1) {} // karodo
+      if (1) {} // karodo
+      func_8002ED50((s8 *) menu);
+      if (t1 == (*((s32 *) (((s8 *) menu) + 0x34))))
+      {
+        *((u16 *) (((s8 *) menu) + 0x2A)) &= ~0x800;
+      }
+    }
+  }
+  else
+    if ((*((u16 *) (((s8 *) menu) + 0x2A))) & 0x400)
+  {
+    if (!((*((u16 *) (((s8 *) menu) + 0x28))) & 0x400))
+    {
+      t2 = ((menu->cursor + 1) * menu->rowSpacing) - 1;
+      speed = *((s32 *) (((s8 *) menu) + 0x38));
+      *((s32 *) (((s8 *) menu) + 0x34)) += ((t2 - (*((s32 *) (((s8 *) menu) + 0x34)))) < speed) ? (t2 - (*((s32 *) (((s8 *) menu) + 0x34)))) : (speed);
+      func_8002ED70((s8 *) menu);
+      if (t2 == (*((s32 *) (((s8 *) menu) + 0x34))))
+      {
+        *((u16 *) (((s8 *) menu) + 0x2A)) &= ~0x400;
+        new_var = (s32 *) (((s8 *) menu) + 0x34);
+        *new_var = ((*((s32 *) (((s8 *) menu) + 0x34))) - menu->rowSpacing) + 1;
+      }
+    }
+  }
+  else
+  {
+    if ((*((u16 *) (((s8 *) menu) + 0x2A))) & 0x200)
+    {
+      if (!((*((u16 *) (((s8 *) menu) + 0x28))) & 0x200))
+      {
+        t1 = menu->scroll;
+        t3 = *((s32 *) (((s8 *) menu) + 0x30));
+        t1 = ((t1 - t3) < (*((s32 *) (((s8 *) menu) + 0x3C)))) ? (t1 - t3) : (*((s32 *) (((s8 *) menu) + 0x3C)));
+        menu->scroll -= t1;
+        if (1) {} // karodo
+        *((s32 *) (((s8 *) menu) + 0x34)) -= t1;
+        menu->cursor = (*((s32 *) (((s8 *) menu) + 0x34))) / menu->rowSpacing;
+        if ((t3 & 0xFFFFFFFFu) == menu->scroll) // FAKE: no-op mask fixes bnel operand order
+        {
+          *((u16 *) (((s8 *) menu) + 0x2A)) &= ~0x200;
+        }
+      }
+    }
+    else
+      if ((*((u16 *) (((s8 *) menu) + 0x2A))) & 0x100)
+    {
+      if (!((*((u16 *) (((s8 *) menu) + 0x28))) & 0x100))
+      {
+        t3 = *((s32 *) (((s8 *) menu) + 0x30));
+        t1 = ((t3 - menu->scroll) < (*((s32 *) (((s8 *) menu) + 0x3C)))) ? (t3 - menu->scroll) : (*((s32 *) (((s8 *) menu) + 0x3C)));
+        menu->scroll += t1;
+        if (1) {} // karodo
+        *((s32 *) (((s8 *) menu) + 0x34)) += t1;
+        menu->cursor = (*((s32 *) (((s8 *) menu) + 0x34))) / menu->rowSpacing;
+        if ((t3 & 0xFFFFFFFFu) == menu->scroll) // FAKE: no-op mask fixes bnel operand order
+        {
+          *((u16 *) (((s8 *) menu) + 0x2A)) &= ~0x100;
+        }
+      }
+    }
+  }
+  *((u16 *) (((s8 *) menu) + 0x28)) = 0;
+}
 
 extern u8 D_04003A50[];
 extern u8 D_04003AD8[];

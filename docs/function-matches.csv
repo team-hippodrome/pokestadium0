@@ -23,7 +23,7 @@ func_8002EC24,0x8002EC24,src/2E480.c,func_8002EC24,hand,,c
 func_8002ED18,0x8002ED18,src/2E480.c,func_8002ED18,m2c,m2c,c
 func_8002ED50,0x8002ED50,src/2E480.c,func_8002ED50,m2c,m2c,c
 func_8002ED70,0x8002ED70,src/2E480.c,func_8002ED70,m2c,m2c+permuter,c
-func_8002EDA8,0x8002EDA8,src/2E480.c,,asm,,asm
+func_8002EDA8,0x8002EDA8,src/2E480.c,func_8002EDA8,hand,,c
 func_8002F030,0x8002F030,src/2E480.c,func_8002F030,hand,,c
 func_8002F32C,0x8002F32C,src/2E480.c,func_8002F32C,hand,,c
 func_8002F3C4,0x8002F3C4,src/2E480.c,func_8002F3C4,hand,,c
@@ -1274,7 +1274,7 @@ func_82112D5C,0x82112D5C,src/fragments/fragment012_17ED00/battle_engine_317E70.c
 func_82112E9C,0x82112E9C,src/fragments/fragment012_17ED00/battle_engine_317E70.c,func_82112E9C,hand,,c
 func_82112FDC,0x82112FDC,src/fragments/fragment012_17ED00/battle_engine_317E70.c,Battle_CheckSideDefeatAfterResidualStatus,hand,,c
 func_82113124,0x82113124,src/fragments/fragment012_17ED00/battle_engine_317E70.c,Battle_CheckFaintAfterMove,s1,stadium1:src/fragments/battle_engine/battle_engine_359F90.c,c
-func_821132C8,0x821132C8,src/fragments/fragment012_17ED00/battle_engine_317E70.c,,asm,,asm
+func_821132C8,0x821132C8,src/fragments/fragment012_17ED00/battle_engine_317E70.c,func_821132C8,hand,,c
 func_82113524,0x82113524,src/fragments/fragment012_17ED00/battle_engine_317E70.c,BeginBattleForEntity,s1,stadium1:src/fragments/battle_engine/battle_engine_359F90.c,c
 func_821398A0,0x821398A0,src/fragments/fragment012_17ED00/battle_engine_317E70_2.c,func_821398A0,m2c,m2c,c
 func_8213990C,0x8213990C,src/fragments/fragment012_17ED00/battle_engine_317E70_2.c,func_8213990C,hand,,c

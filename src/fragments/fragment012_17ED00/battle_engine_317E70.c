@@ -633,11 +633,75 @@ s32 Battle_CheckFaintAfterMove(void) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_821132C8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821132C8.s")
-#endif
+void func_82110B44(ActivePokemon*);
+void func_8210F2F4(ActivePokemon*);
+void func_821125C0(void);
+void func_821132C8(void)
+{
+  BattleMonRuntime *sp1C = &sActivePokemon[sBattleScene.scene->unk_2C]->state.runtime;
+  BattleMonRuntime *sp18 = &sActivePokemon[!sBattleScene.scene->unk_2C]->state.runtime;
+  ActivePokemonState *ptr1 = &sActivePokemon[0]->state;
+  ActivePokemonState *ptr2 = &sActivePokemon[1]->state;
+  ptr1->unk_2A = 0;
+  ptr2->unk_2A = 0;
+  sConfused = 1;
+  sStatCanBeChangedFurther = 1;
+  sBattleScene.scene->unk_1A = 0;
+  sBattleScene.scene->unk_4C = 0;
+  sBattleScene.scene->unk_48 = 0;
+  sp1C->unk_12 = 0xFFFF;
+  sp18->unk_12 = 0xFFFF;
+  Battle_ClearAllMessageQueues();
+  func_82110B44(sActivePokemon[0]);
+  func_82110B44(sActivePokemon[1]);
+  sBattleUser = sp1C;
+  sBattleTarget = sp18;
+  if ((sBattleScene.scene->unk_1C == 6) || (sBattleScene.scene->unk_1C == 5))
+  {
+    sBattleUser->unk_0C = 0x384;
+    sBattleTarget->unk_0C = 0x384;
+    func_8210F2F4(sActivePokemon[0]);
+    func_8210F2F4(sActivePokemon[1]);
+    func_821125C0();
+    sBattleUser->unk_0C = 0x384;
+    sBattleTarget->unk_0C = 0x384;
+    sBattleUser->unk_0E = 0x384;
+    sBattleTarget->unk_0E = 0x384;
+    sBattleUser->unk_10 = 0x384;
+    sBattleTarget->unk_10 = 0x384;
+    func_8210F2F4(sActivePokemon[0]);
+    func_8210F2F4(sActivePokemon[1]);
+    Battle_ApplyResidualEffects();
+    if (sp1C->unk_4F == 0)
+    {
+      sp1C->unk_4C &= ~0x20;
+    }
+    if (!sp18->unk_4F)
+    {
+      sp18->unk_4C &= ~0x20;
+    }
+    ((BattleMonRuntime *) D_8219A3C0)->unk_0C = 0x384; // FAKE: alias of sBattleUser via s8* symbol
+    ((BattleMonRuntime *) D_8219A3C4)->unk_0C = 0x384; // FAKE: alias of sBattleTarget
+    ((BattleMonRuntime *) D_8219A3C0)->unk_0E = 0x384; // FAKE
+    ((BattleMonRuntime *) D_8219A3C4)->unk_0E = 0x384; // FAKE
+    ((BattleMonRuntime *) D_8219A3C0)->unk_10 = 0x384; // FAKE
+    ((BattleMonRuntime *) D_8219A3C4)->unk_10 = 0x384; // FAKE
+    func_8210F2F4(sActivePokemon[0]);
+    func_8210F2F4(sActivePokemon[1]);
+    return;
+  }
+  func_821125C0();
+  Battle_ApplyResidualEffects();
+  if (sp1C->unk_4F == 0)
+  {
+    sp1C->unk_4C &= ~0x20;
+  }
+  if (sp18->unk_4F == 0)
+  {
+    sp18->unk_4C &= ~0x20;
+  }
+  Battle_CheckFaintAfterMove();
+}
 
 void BeginBattleForEntity(ActivePokemon* arg0) {
     ActivePokemonState* sp24;
