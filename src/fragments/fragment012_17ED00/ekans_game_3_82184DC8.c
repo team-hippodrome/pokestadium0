@@ -963,11 +963,109 @@ void func_821869C4(s8 *arg0, s8 *arg1)
   }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82186AF4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82186AF4.s")
-#endif
+void func_8004FD20(void*, s32);
+typedef struct PartyMon82186AF4 {
+    /* 0x00 */ u8 species;
+    /* 0x01 */ u8 unk01;
+    /* 0x02 */ u16 hp;
+    /* 0x04 */ u8 unk04[5];
+    /* 0x09 */ u8 moves[4];
+    /* 0x0D */ u8 unk0D[0x17];
+    /* 0x24 */ u8 level;
+    /* 0x25 */ u8 unk25;
+    /* 0x26 */ u16 maxHp;
+    /* 0x28 */ u8 unk28[0x28];
+} PartyMon82186AF4; // size = 0x50
+
+typedef struct Party82186AF4 {
+    /* 0x000 */ u8 flags;
+    /* 0x001 */ u8 unk001[0x1B];
+    /* 0x01C */ PartyMon82186AF4 mons[6];
+    /* 0x1FC */ u8* info;
+} Party82186AF4;
+
+typedef struct Slot82186AF4 {
+    /* 0x00 */ void* owner;
+    /* 0x04 */ u8 unk04[8];
+    /* 0x0C */ u8 mon[0x0C];
+    /* 0x18 */ u16 hp;
+    /* 0x1A */ u8 unk1A[0x56];
+    /* 0x70 */ u16 hp2;
+    /* 0x72 */ u8 unk72[2];
+    /* 0x74 */ u8 species;
+    /* 0x75 */ u8 mask;
+    /* 0x76 */ u8 unk76[2];
+    /* 0x78 */ u8 moveCount;
+    /* 0x79 */ u8 unk79;
+    /* 0x7A */ u8 unk7A[0x16];
+} Slot82186AF4; // size = 0x90
+
+typedef struct Side82186AF4 {
+    /* 0x000 */ Party82186AF4* party;
+    /* 0x004 */ Slot82186AF4 slots[6];
+    /* 0x364 */ f32 unk364;
+    /* 0x368 */ s8 unk368;
+    /* 0x369 */ u8 unk369;
+    /* 0x36A */ u8 unk36A;
+    /* 0x36B */ u8 unk36B;
+} Side82186AF4;
+
+void func_82186AF4(Side82186AF4 *arg0, Party82186AF4 *arg1, s32 arg2)
+{
+  s32 i;
+  s32 j;
+  u8 species;
+  u8 level;
+  arg0->party = arg1;
+  arg0->unk368 = arg2;
+  arg0->unk369 = 0xFF;
+  arg0->unk36B = 0xFF;
+  arg0->unk364 = 0.5f;
+  if (arg2 >= 2)
+  {
+    arg0->unk364 = 10.0f;
+  }
+  for (i = 0; i < 6; i++)
+  {
+    func_8004FD20(&arg0->slots[i], sizeof(Slot82186AF4));
+    arg0->slots[i].mask = 1 << i;
+    arg0->slots[i].owner = arg0;
+    arg0->slots[i].species = arg1->mons[i].species;
+    if (i < arg1->info[2])
+    {
+      species = arg1->mons[i].species;
+      if (((species != 0) && (arg1->mons[i].hp != 0)) && (arg1->mons[i].maxHp != 0))
+      {
+        level = arg1->mons[i].level;
+        if (level != 0)
+        {
+          j = 0; // FAKE: permuter; early init of the move counter
+          level = arg1->mons[i].level; // FAKE: permuter; redundant reload of level
+          if (arg1->flags & 2)
+          {
+            func_82186834((s8 *) arg0->slots[i].mon, (s8 *) (&arg1->mons[i]));
+            arg0->slots[i].hp2 = arg0->slots[i].hp;
+          }
+          else
+          {
+            func_821868E8((s8 *) arg0->slots[i].mon, arg1->mons[i].species, level);
+          }
+          for (j = 0; j < 4; j++)
+          {
+            if ((arg1->mons[i].moves[j] == 0) || (arg1->mons[i].moves[j] == 0x66))
+            {
+              break;
+            }
+          }
+
+        }
+      }
+    }
+    arg0->slots[i].moveCount = j;
+    arg0->slots[i].unk79 = 0x10;
+  }
+
+}
 
 extern u8 D_82194848[];
 void func_82186CA8(u8 *arg0, u8 *arg1) {
@@ -1203,7 +1301,7 @@ extern BattleSlotZ D_821CF618[6];
 extern BattleSlotZ D_821CF998[6];
 extern s32 D_821CF2A4;
 void func_8004FD20(void*, s32);
-void func_82186AF4(BattleSlotZ*, u8*, s32);
+void func_82186AF4(); /* real types are declared with the definition below */
 s32 func_82187414(s32);
 
 s32 func_82187738(u8* arg0, u8* arg1, s32 arg2, s8* arg3, s32 arg4) {
