@@ -224,11 +224,92 @@ typedef struct Move82184ADC { u8 unk00; u8 unk01; u8 power; u8 type; u8 unk04; u
 extern Move82184ADC D_8006B190[];
 extern u8 D_8218AC50[];
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82184DC8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82184DC8.s")
-#endif
+/* The definition has no return statement, so the value left in v0 by its last
+ * call comes back. Reading it as u16 here is what makes IDO keep a saved copy. */
+u16 func_8210EED8(s8*, s8*, u8);
+s32 func_82184DC8(s8* arg0, s8* arg1, u8 move) {
+    s32 score;
+    s32 power;
+
+    power = func_8210EED8(arg0, arg1, move);
+    score = power;
+    switch (move) {
+        case 0x8A:
+            if (M2C_FIELD(arg1, u8*, 0x15) & 7) {
+                break;
+            }
+        case 0x49:
+        case 0x4F:
+        case 0x56:
+        case 0x5F:
+        case 0x64:
+        case 0x68:
+        case 0x69:
+        case 0x6B:
+        case 0x6D:
+        case 0x73:
+        case 0x78:
+        case 0x87:
+        case 0x8E:
+        case 0x99:
+        case 0x9C:
+            return 0;
+    }
+    if ((power >= 6) && (M2C_FIELD(arg1, u8*, 0x61) >= 8)) {
+        if (func_82183AF0() >= (-M2C_FIELD(arg1, u8*, 0x61) * 10) + 0x8C) {
+            return 1;
+        }
+    }
+    switch (move) {
+        case 0x3:
+        case 0x4:
+        case 0x14:
+        case 0x18:
+        case 0x1F:
+        case 0x23:
+        case 0x29:
+        case 0x2A:
+        case 0x53:
+        case 0x80:
+        case 0x83:
+        case 0x8C:
+        case 0x9A:
+        case 0x9B:
+            score += score;
+            break;
+        case 0x2:
+        case 0x4B:
+        case 0x98:
+        case 0xA3:
+            score += (score / 2) + (score / 4);
+            break;
+        case 0xD:
+        case 0x4C:
+        case 0x82:
+        case 0x8F:
+            if ((M2C_FIELD(arg0, u16*, 0x2E) < M2C_FIELD(arg1, u16*, 0x2E)) ||
+                (func_82184AA8((u8*)arg1 + 0x1F, 1, 4, 0x13) != 0) ||
+                (func_82184AA8((u8*)arg1 + 0x1F, 1, 4, 0x5B) != 0)) {
+                score = 0xA;
+            }
+            break;
+        case 0xA2:
+            score = M2C_FIELD(arg1, u16*, 0xC) / 2;
+            break;
+        case 0x5A:
+            if ((M2C_FIELD(arg1, u8*, 0x1C) == 2) || (M2C_FIELD(arg1, u8*, 0x1D) == 2)) {
+                score = 0;
+            }
+            break;
+        case 0xC:
+        case 0x20:
+            if ((M2C_FIELD(arg1, u8*, 0x1C) == 8) || (M2C_FIELD(arg1, u8*, 0x1D) == 8)) {
+                score = 0;
+            }
+            break;
+    }
+    return score;
+}
 
 extern u8 D_80065CF8[];
 

@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5352,
-  "asm_owners": 92,
+  "c_owners": 5353,
+  "asm_owners": 91,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -617,7 +617,7 @@
     "src/vector_math.c"
   ],
   "source_registry_sha256": "42f373d4e7291a19b0ac00de0f699654828e4b8b3fc2db17bb268c6d0b441c67",
-  "section_registry_sha256": "f095d2cdf596415b81b08a6918a8fe173245fc17384b810b9f643534a902e091",
+  "section_registry_sha256": "94b318eafc3e2a446c10cae74620bad6c9ecc67221c1b04cdcdb90d4dd16db5b",
   "headers_sha256": "7025f3f9a5e695b741343328966d05f07f55cf41ba7037b4ae42104e3ec03dda",
   "matching_registry_sha256": "d8bcc14a2a0db281cf30dcb9ddbd94d59e1afe84c70b4c8c017ea27ce60a251c",
   "build_tools_sha256": {
@@ -627,7 +627,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "ec4fd102dd647b651f57b6b8039c322d9295e4132c2fe16f080541c747c04226",
+    "docs/function-matches.csv": "a770249ed2ce9b551009248480fcbb4842b97bf1c02aa8e96d6d5d703ed7bd26",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -815,7 +815,7 @@
     "src/fragments/fragment012_17ED00/ekans_game.c": "4c0d7afe0c3308ce8e32a1466e62fae8934e6fcd26584fb158fa89b07c3902a1",
     "src/fragments/fragment012_17ED00/ekans_game_2.c": "a843a8dcfda50b5c239239d42815db53bc72ffbf18dc042d5f01b364bcc4ffbd",
     "src/fragments/fragment012_17ED00/ekans_game_3.c": "78de5ebc22c9ca76e6749e46cf0168f8014aa1cbe7bc4b2410e38775268a8a8c",
-    "src/fragments/fragment012_17ED00/ekans_game_3_82184DC8.c": "793f5625fa4eb8494ab6087eda979437e3b4ab309ef5147369488cbccc2ef2ae",
+    "src/fragments/fragment012_17ED00/ekans_game_3_82184DC8.c": "ae6d56528cd4013708797c6c24bd1f947a62929f4c74a28f14f32f0a53669dc0",
     "src/fragments/fragment012_17ED00/ekans_game_3_82188050.c": "1aaedb6b3fcd26816330f97c941b6ec6f13b93b7c8f31c58598a2d472990bc84",
     "src/fragments/fragment012_17ED00/fragment1_89010.c": "efe5b474d6adf059a1ac1d518ff5e0e6b520a4d48917f62e85a09ef18bde891e",
     "src/fragments/fragment012_17ED00/fragment1_89010_821328DC.c": "901f6b861de798e44a86953d188e36bab018d53c204092429a5ae06c18790655",
