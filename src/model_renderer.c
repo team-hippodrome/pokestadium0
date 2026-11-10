@@ -46,11 +46,36 @@ void ModelRenderer_AttachSecondaryDisplayObject(DisplayObject* arg0) {
     arg0->node.flags &= ~1;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80019924; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80019924.s")
-#endif
+// FAKE: battle_hud.c defines func_800325B0 with one parameter, but this call
+// passes object_type as a second argument (a1) in the ROM.
+void func_800325B0(u32 arg0, u32 arg1);
+
+void func_80019924(DisplayObject* display_object, s16 root_id, s16 object_type, ModelNodeView* child) {
+    DisplayObject* obj; // FAKE
+
+    GraphNode_AppendChild(&display_object->node, child);
+    MtxF_Identity(&display_object->matrix);
+    display_object->rootId = root_id;
+    display_object->objectType = object_type;
+    display_object->lodFraction = 0xFF;
+    display_object->textureMode = 0;
+    display_object->node.flags |= 0x1;
+    display_object->node.renderFlags &= ~0x4;
+    obj = display_object;
+    obj->node.renderFlags |= 0x20;
+    obj->node.renderFlags |= 0x40;
+    obj->node.renderFlags &= ~0x2;
+    display_object->fogColor.rgba = 0xFFFFFF00;
+    display_object->textureTint.rgba = 0xFFFFFF00;
+    display_object->transformAnim.animationId = -1;
+    display_object->transformAnim.data = 0;
+    display_object->eventTrack.trackId = -1;
+    display_object->eventTrack.data = 0;
+    display_object->node.renderFlags &= ~0x8;
+    if (object_type > 0) {
+        func_800325B0(obj->effectSlot, object_type);
+    }
+}
 
 void ModelRenderer_ClearDisplayObject(DisplayObject* arg0) {
     arg0->node.children = NULL;

@@ -5130,7 +5130,7 @@ func_8001113C,0x8001113C,src/model_animation_events.c,ModelAnim_IsEventTrackDone
 func_80019810,0x80019810,src/model_renderer.c,ModelRenderer_InitDisplayRoots,s1,stadium1:src/model_renderer.c,c
 func_80019848,0x80019848,src/model_renderer.c,ModelRenderer_AttachDisplayObject,s1,stadium1:src/model_renderer.c,c
 func_800198B8,0x800198B8,src/model_renderer.c,ModelRenderer_AttachSecondaryDisplayObject,s1,stadium1:src/model_renderer.c,c
-func_80019924,0x80019924,src/model_renderer.c,,asm,,asm
+func_80019924,0x80019924,src/model_renderer.c,func_80019924,hand,,c
 func_800199E4,0x800199E4,src/model_renderer.c,ModelRenderer_ClearDisplayObject,s1,stadium1:src/model_renderer.c,c
 func_800199F8,0x800199F8,src/model_renderer.c,ModelAnim_SetAnimation,s1,stadium1:src/model_renderer.c,c
 func_80019A90,0x80019A90,src/model_renderer.c,ModelAnim_SetEventTrack,s1,stadium1:src/model_renderer.c,c
