@@ -127,17 +127,57 @@ void func_821339CC(ActivePokemon* arg0) {
     func_8213B31C(2);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82133A44; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82133A44.s")
-#endif
+typedef struct Cue82133A44 {
+    /* 0x0 */ u16 duration;
+    /* 0x2 */ u16 value;
+    /* 0x4 */ u16 unk4;
+} Cue82133A44; // size = 0x6
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82133AD8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82133AD8.s")
-#endif
+typedef struct Scene82133A44 {
+    /* 0x00 */ u8 unk00[4];
+    /* 0x04 */ u8 index;
+    /* 0x05 */ u8 unk05[0x1E - 0x05];
+    /* 0x1E */ s16 unk_1E;
+    /* 0x20 */ s16 unk_20;
+} Scene82133A44;
+
+extern Scene82133A44 D_8219A4F0;
+extern Cue82133A44* D_8218B42C[][99];
+extern s32 D_82199F18[2];
+extern s32 D_82199F10[2];
+extern u16 D_82199ED0[][0x12];
+
+void func_82133A44(void) {
+    s32 i = 0; // FAKE: constant side index kept in a variable
+
+    D_82199ED0[i][0] = 0;
+    if (D_82199F18[i] == 0) {
+        if ((D_82199F18[i] = D_8218B42C[i][D_8219A4F0.index][D_82199F10[i]].duration) != 0) {
+            D_82199ED0[i][0] = D_8218B42C[i][D_8219A4F0.index][D_82199F10[i]].value;
+            D_82199F10[i]++;
+            D_8219A4F0.unk_1E = 0;
+        }
+    }
+    if (D_82199F18[i] > 0) {
+        D_82199F18[i]--;
+    }
+}
+
+void func_82133AD8(void) {
+    s32 i = 1; // FAKE: constant side index kept in a variable
+
+    D_82199ED0[i][0] = 0;
+    if (D_82199F18[i] == 0) {
+        if ((D_82199F18[i] = D_8218B42C[i][D_8219A4F0.index][D_82199F10[i]].duration) != 0) {
+            D_82199ED0[i][0] = D_8218B42C[i][D_8219A4F0.index][D_82199F10[i]].value;
+            D_82199F10[i]++;
+            D_8219A4F0.unk_20 = 0;
+        }
+    }
+    if (D_82199F18[i] > 0) {
+        D_82199F18[i]--;
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_82133B6C; signature not recovered. */
