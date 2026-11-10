@@ -119,11 +119,97 @@ void GbSave_BuildPortSummary(unk_func_8002D860* arg0, s32 arg1) {
     arg0->unk_04 = GbSave_GetPortGame(arg1);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80028060; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80028060.s")
-#endif
+typedef struct GbSaveSummary {
+    /* 0x00 */ s32 state;
+    /* 0x04 */ s32 game;
+    /* 0x08 */ s32 trainerId;
+    /* 0x0C */ char name[1];
+} GbSaveSummary;
+
+extern Gfx D_80060270[];
+extern Gfx D_80073408[];
+extern Gfx D_80073438[];
+extern Gfx D_80073450[];
+extern Color_RGBA8 D_800734C8[];
+extern Color_RGBA8 D_800734D8;
+extern Color_RGBA8 D_800734DC;
+extern u8* D_800734E0[];
+extern char D_8007B8E0[];
+extern u8 D_0400DFB8[];
+extern u8 D_0400EB90[];
+extern u8 D_0400FB80[];
+extern u8 D_04010918[];
+void func_800290F0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 arg4);
+s32 GbSave_GameToCategoryIndex(s32 arg0);
+void func_8001AA60(s32, s32, s32);
+void func_8002BAB8(s32 x, s32 y, s32 value, s32 digits);
+u32 func_800566BC(s32);
+
+void func_80028060(s32 y, GbSaveSummary* summary, char* label, s32 arg3) {
+    if (summary != NULL) {
+        gSPDisplayList(gDisplayListHead++, D_80060270);
+        func_800290F0(0, y, 0x188, 0x36, D_800734C8[GbSave_GameToCategoryIndex(summary->game)]);
+    } else {
+        gSPDisplayList(gDisplayListHead++, D_80060270);
+        func_800290F0(0, y, 0x188, 0x36, D_800734D8);
+    }
+
+    gDPPipeSync(gDisplayListHead++);
+    gDPSetCycleType(gDisplayListHead++, G_CYC_1CYCLE);
+    gDPSetTexturePersp(gDisplayListHead++, G_TP_NONE);
+    gDPSetTextureFilter(gDisplayListHead++, G_TF_POINT);
+    gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
+    gDPSetRenderMode(gDisplayListHead++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
+    gDPLoadTextureBlock(gDisplayListHead++, D_0400DFB8, G_IM_FMT_IA, G_IM_SIZ_8b, 32, 54, 0, G_TX_NOMIRROR | G_TX_WRAP,
+                        G_TX_NOMIRROR | G_TX_WRAP, 5, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    gSPScisTextureRectangle(gDisplayListHead++, 391 << 2, y << 2, 640 << 2, (y + 54) << 2, G_TX_RENDERTILE, 0, 0, 1 << 10,
+                            1 << 10);
+
+    gDPPipeSync(gDisplayListHead++);
+    gDPSetRenderMode(gDisplayListHead++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
+    gDPLoadTextureBlock(gDisplayListHead++, D_0400EB90, G_IM_FMT_IA, G_IM_SIZ_8b, 80, 51, 0, G_TX_NOMIRROR | G_TX_WRAP,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    gSPScisTextureRectangle(gDisplayListHead++, 315 << 2, y << 2, 391 << 2, (y + 51) << 2, G_TX_RENDERTILE, 0, 0, 1 << 10,
+                            1 << 10);
+    gDPLoadTextureBlock(gDisplayListHead++, D_0400FB80, G_IM_FMT_IA, G_IM_SIZ_8b, 80, 3, 0, G_TX_NOMIRROR | G_TX_WRAP,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    gSPScisTextureRectangle(gDisplayListHead++, 315 << 2, (y + 51) << 2, 391 << 2, (y + 54) << 2, G_TX_RENDERTILE, 0, 0,
+                            1 << 10, 1 << 10);
+    gSPDisplayList(gDisplayListHead++, D_80060270);
+    func_800290F0(0, y + 54, 0x280, 2, D_800734DC);
+
+    if (summary != NULL) {
+        func_8001AB6C();
+        func_8001A384(8, 0);
+        func_8001AA9C(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
+        func_8001AA60(0x4A, (y + 32), arg3 + 0x31);
+        func_8001AA60(0x5E, (y + 32), 0x50);
+        func_8001A944(0x86, (y + 32), (s32)((summary->state == 0) ? summary->name : D_8007B8E0));
+        func_8001ABBC();
+
+        gSPDisplayList(gDisplayListHead++, D_80073450);
+        gDPLoadTextureBlock(gDisplayListHead++, D_04010918, G_IM_FMT_IA, G_IM_SIZ_8b, 40, 10, 0, G_TX_NOMIRROR | G_TX_WRAP,
+                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gSPScisTextureRectangle(gDisplayListHead++, 255 << 2, (y + 41) << 2, 295 << 2, (y + 51) << 2, G_TX_RENDERTILE, 0,
+                                0, 1 << 10, 1 << 10);
+        if (summary->state == 0) {
+            func_8002BAB8(0x12A, y + 39, summary->trainerId, 5);
+        }
+        gSPDisplayList(gDisplayListHead++, D_80073408);
+        gDPLoadTextureBlock(gDisplayListHead++, D_800734E0[GbSave_GameToCategoryIndex(summary->game)], G_IM_FMT_RGBA,
+                            G_IM_SIZ_16b, 20, 20, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK,
+                            G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gSPScisTextureRectangle(gDisplayListHead++, 54 << 2, (y + 32) << 2, 73 << 2, (y + 51) << 2, G_TX_RENDERTILE, 0, 0,
+                                4 << 10, 1 << 10);
+        gSPDisplayList(gDisplayListHead++, D_80073438);
+    }
+
+    func_8001AB6C();
+    func_8001A384(8, 0);
+    func_8001AA9C(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
+    func_8001A944(0x254 - ((func_800566BC((s32)label) * 20) >> 1), (y + 32), (s32)label);
+    func_8001ABBC();
+}
 
 void func_80028C80(s32 width, s32 height, void* texture, s32 fmt) {
     gDPLoadTextureBlock(gDisplayListHead++, texture, fmt, G_IM_SIZ_8b, width, height, 0, G_TX_CLAMP, G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
@@ -141,7 +227,7 @@ void Trade_DrawSolidFillRect(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGB8 
     gDPFillRectangle(gDisplayListHead++, arg0, arg1, (arg0 + arg2) - 1, (arg1 + arg3) - 1);
 }
 
-void func_800290F0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGB8 arg4) {
+void func_800290F0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 arg4) {
     s32 color = RGBA5551(arg4.r, arg4.g, arg4.b, 1);
 
     gDPPipeSync(gDisplayListHead++);
