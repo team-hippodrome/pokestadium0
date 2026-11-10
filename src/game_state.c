@@ -37,7 +37,19 @@ extern s16 D_800733D8;
 extern unk_D_800AE520 D_800AF990;
 extern s32 pad_D_800AE534[2];
 extern SessionContext gSessionContext;
-u8 D_800AE8F0[0x1098];
+typedef struct SessionBlock {
+    /* 0x0000 */ s8 unk_0000;
+    /* 0x0001 */ s8 unk_0001;
+    /* 0x0002 */ s8 unk_0002;
+    /* 0x0003 */ s8 unk_0003;
+    /* 0x0004 */ u8 unk_0004[0x1038];
+    /* 0x103C */ TeamRoster* unk_103C;
+    /* 0x1040 */ u8 unk_1040[0x54];
+    /* 0x1094 */ u8 unk_1094;
+    /* 0x1095 */ u8 unk_1095;
+    /* 0x1096 */ u16 unk_1096;
+} SessionBlock; // size = 0x1098
+SessionBlock D_800AE8F0;
 
 #include "global.h"
 #include <PR/os_internal_reg.h>
@@ -457,7 +469,7 @@ void func_80025E3C(s32 arg0) {
 }
 
 M2C_UNK func_80025758(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
-M2C_UNK func_80025B60(s32, M2C_UNK *, M2C_UNK *, M2C_UNK, M2C_UNK *); /* extern */
+M2C_UNK func_80025B60(s32, M2C_UNK *, M2C_UNK *, M2C_UNK, s32); /* extern */
 extern M2C_UNK D_0015F390;
 extern M2C_UNK D_0015F8F0;
 extern M2C_UNK D_0017ED00;
@@ -467,9 +479,9 @@ extern M2C_UNK D_81500000;
 extern M2C_UNK D_82100000;
 
 void func_80025F3C(void) {
-    func_80025B60(((u32) ((s32) &D_81500000 & 0x0FF00000) >> 0x14) - 0x10, &D_0015F390, &D_0015F8F0, 0, NULL);
+    func_80025B60(((u32) ((s32) &D_81500000 & 0x0FF00000) >> 0x14) - 0x10, &D_0015F390, &D_0015F8F0, 0, 0);
     func_80025758(5, 3, 3);
-    func_80025B60(((u32) ((s32) &D_82100000 & 0x0FF00000) >> 0x14) - 0x10, &D_0017ED00, &D_00232510, 0, &D_800AE8F0);
+    func_80025B60(((u32) ((s32) &D_82100000 & 0x0FF00000) >> 0x14) - 0x10, &D_0017ED00, &D_00232510, 0, (s32) &D_800AE8F0);
     D_800733C8 = 0x8010;
 }
 
@@ -478,12 +490,12 @@ extern M2C_UNK D_0015E220;
 extern s32 D_800AF988;
 
 void State_FastN64Logo(void) {
-    D_800733C8 = func_80025B60(((u32) ((s32) &D_81200000 & 0x0FF00000) >> 0x14) - 0x10, &D_0015E220, &D_0015F390, 0, NULL);
+    D_800733C8 = func_80025B60(((u32) ((s32) &D_81200000 & 0x0FF00000) >> 0x14) - 0x10, &D_0015E220, &D_0015F390, 0, 0);
     M2C_FIELD(&D_800AE8F0, u8*, 2) = 0;
     M2C_FIELD(&D_800AE8F0, s16*, 0x1096) = 0;
     switch (D_800733C8) {
         case 0x8010:
-            func_80025B60(((u32) ((s32) &D_82100000 & 0x0FF00000) >> 0x14) - 0x10, &D_0017ED00, &D_00232510, 0, &D_800AE8F0);
+            func_80025B60(((u32) ((s32) &D_82100000 & 0x0FF00000) >> 0x14) - 0x10, &D_0017ED00, &D_00232510, 0, (s32) &D_800AE8F0);
             break;
         case 0x8020:
             D_800733D4 = -1;
@@ -575,11 +587,89 @@ void func_800260C4(void)
   main_pool_pop_state('OVLY');
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80026368; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80026368.s")
-#endif
+extern M2C_UNK D_00232510_2;
+extern M2C_UNK D_0017ED00_2;
+extern M2C_UNK D_0017BE70;
+extern M2C_UNK D_0017E340;
+extern M2C_UNK D_81700000;
+extern M2C_UNK D_81800000;
+extern M2C_UNK D_82200000;
+extern M2C_UNK D_82300000;
+extern M2C_UNK D_0015FCE0;
+void func_80001948(s32);
+void _bcopy(void* src, void* dst, s32);
+
+void func_80026368(void)
+{
+  s32 prev;
+  TeamRoster *roster;
+  ExtendedRosterInfo *info;
+  func_80001948(0xFFFF);
+  if (D_800AE8F0.unk_1095 & 2)
+  {
+    func_800258B4();
+  }
+  else
+  {
+    D_800AE8F0.unk_0003 = 1;
+  }
+  if (D_800AE8F0.unk_0000 == 0)
+  {
+    D_800AE8F0.unk_0003 = 1;
+    func_80025B60((((u32) (((s32) (&D_82200000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_00232510, &D_00235D70, 0, (s32) &D_800AE8F0);
+    func_80025B60((((u32) (((s32) (&D_82300000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0015FCE0, &D_00162BE0, 0, (s32) &D_800AE8F0);
+    func_80025B60((((u32) (((s32) (&D_82100000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0017ED00, &D_00232510_2, 0, (s32) &D_800AE8F0);
+    func_80025B60((((u32) (((s32) (&D_82200000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_00232510, &D_00235D70, 1, (s32) &D_800AE8F0);
+  }
+  else
+  {
+    prev = D_800AE8F0.unk_0000;
+    func_80025B60((((u32) (((s32) (&D_82200000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_00232510, &D_00235D70, 0, (s32) &D_800AE8F0);
+    while (!(D_800AE8F0.unk_1096 & 1))
+    {
+      func_80025B60((((u32) (((s32) (&D_82300000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0015FCE0, &D_00162BE0, 0, (s32) &D_800AE8F0);
+      func_80025B60((((u32) (((s32) (&D_82100000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0017ED00, &D_00232510_2, 0, (s32) &D_800AE8F0);
+      func_80025B60((((u32) (((s32) (&D_82200000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_00232510, &D_00235D70, 2, (s32) &D_800AE8F0);
+    }
+
+    if (D_800AE8F0.unk_1096 & 0x40)
+    {
+      D_800733C8 = 0x8010;
+      return;
+    }
+    else
+    {
+      if (D_800AE8F0.unk_1096 & 2)
+      {
+        roster = D_800AE8F0.unk_103C;
+        D_800AE8F0.unk_0000 = 4;
+        info = roster->rosterInfo;
+        roster->numberOfPokemonBrought = info->numberOfPokemonCanBePicked;
+        _bcopy(info->unk_028, roster->pokemonPicked, 0x1E0);
+        func_80025B60((((u32) (((s32) (&D_82100000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0017ED00, &D_00232510_2, 0, (s32) &D_800AE8F0);
+        if (prev == 1)
+        {
+          func_80025B60((((u32) (((s32) (&D_81800000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0017E340, &D_0017ED00_2, 0, 4);
+        }
+        else
+        {
+          func_80025B60((((u32) (((s32) (&D_81800000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0017E340, &D_0017ED00_2, 0, (s32) D_800AE8F0.unk_0002);
+        }
+      }
+      if (D_800AE8F0.unk_1096 & 4)
+      {
+        func_80025758(6, 0xA, 0xD);
+        D_800AE8F0.unk_0003 = 8;
+        func_80025B60((((u32) (((s32) (&D_82100000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0017ED00, &D_00232510_2, 0, (s32) &D_800AE8F0);
+      }
+      if (D_800AE8F0.unk_1096 & 0x20)
+      {
+        func_80025B60((((u32) (((s32) (&D_81700000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0017BE70, &D_0017E340, 0, (s32) &D_800AE8F0);
+      }
+      }
+  }
+  D_800733C8 = 0x8040;
+}
 
 extern M2C_UNK D_81300000;
 extern M2C_UNK D_0015FCE0;
@@ -607,7 +697,7 @@ void State_GbTower(void) {
 
     sp24.unk_04 = main_pool_alloc(sizeof(*sp24.unk_04), 0);
 
-    func_80025B60(((u32) ((s32) &D_81300000 & 0x0FF00000) >> 0x14) - 0x10, &D_0015F8F0, &D_0015FCE0, D_800733D4, (M2C_UNK*)&sp24);
+    func_80025B60(((u32) ((s32) &D_81300000 & 0x0FF00000) >> 0x14) - 0x10, &D_0015F8F0, &D_0015FCE0, D_800733D4, (s32) &sp24);
     func_8000AC78(&sp24);
 
     sp2C = func_8000ADE8();
