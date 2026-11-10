@@ -770,30 +770,32 @@ player's name is *Mika*. Never romanize these names from the kanji.
 Use the romanizations below verbatim in comments and identifiers. They are Hepburn without macrons, with
 long vowels doubled to match the rest of this glossary, and family name first.
 
-Provenance: the kana readings come from a read of the ROM string table that Julius provided, with outside
+Provenance: the index order and kana readings come from a read of the ROM string table that Julius provided, with outside
 kanji from fan archives (公式戦ヒストリア, 97リーグの猛者達) and one Nintendo results page. They have **not** been
 re-read from the ROM in this repo, because the string table is not yet in `src/`. The table layout and the
-0–14 pick in fragment009 do match the decomp. Re-check each row when the strings are extracted.
+0–14 pick in fragment009 do match the decomp, and so do the index order and kana given in that research.
+Re-check each row when the strings are extracted. The kanji of the three names with variant spellings would
+need a 1997–98 print source to settle, but that does not change any romanization.
 
-| Region (`unk_04`) | Real name in game (`unk_08`) | Locked romanization | Kanji (reference only) | Trainer name (`unk_0C`) | Trainer romanization | Why it's locked |
-|---|---|---|---|---|---|---|
-| ほっかいどう (Hokkaido) | かとう かずひと | Katou Kazuhito | 加藤 和人 | マサハル | Masaharu | 和人 is also read Kazuto. The trainer name is unrelated to the real name |
-| Tohoku A | ゆうき ようじろう | Yuuki Youjirou | 結城 洋次郎 | ようじろう | Youjirou | Low risk |
-| Tohoku B | たかはし じゅん | Takahashi Jun | 高橋 潤 | じゅん | Jun | Low risk |
-| Hokuriku (champion) | とおる (given name only) | **Tooru** | 宮沢 徹 (Miyazawa, from outside sources only) | おれさま | Oresama | 徹 is also read Tetsu or Akira. His entry alone has no family name and `unk_00` = 0 rather than 2. Reportedly index 3 |
-| Kanto A2 | ふじた みか | Fujita Mika | 藤田 美蘭 | クレア | Kurea | **High risk**: 美蘭 is normally Miran |
-| Chubu A | やまだ たかひさ | Yamada Takahisa | 山田 高久 | ブルー | Buruu ("Blue") | Moderate: 高久 is also read Takaku |
-| Chubu B | きたがわ やすのり | Kitagawa Yasunori | 北川 恭教 | テンサイ | Tensai ("genius") | **High risk**: 恭教 has many readings (Takayuki, Yoshinori, ...) |
-| Kansai (runner-up) | にしむら しゅん | Nishimura Shun | 西村 峻 / 西村 俊 (sources differ) | にっしん | Nisshin | 峻 is also read Takashi |
-| Shikoku | よしい ひろき | Yoshii Hiroki | 吉井 博紀 | ヒロ | Hiro | 博紀 is also read Hironori |
-| Kyushu A | よしとみ たいせい | Yoshitomi Taisei | 吉冨 大成 / 吉富 大成 (sources differ) | タイセイ | Taisei | 大成 is also read Kazunari. The family name is unvoiced: Yoshitomi, not Yoshidomi |
-| ⚠ ? | ⚠ not provided | ⚠ **unlocked** | 林 泰宏 / 林 康宏 | ⚠ | ⚠ | Kana reading still needed |
-| ⚠ ? | ⚠ not provided | ⚠ **unlocked** | 岩政 健次 / 岩政 健治 | ⚠ | ⚠ | Kana reading still needed |
-| ⚠ ? | ⚠ not provided | ⚠ **unlocked** | 渕脇 明裕 / 渕脇 昭裕 | ⚠ | ⚠ | Kana reading still needed |
-| ⚠ ? | ⚠ unknown | ⚠ **unlocked** | ⚠ | ⚠ | ⚠ | Not in the research provided |
-| ⚠ ? | ⚠ unknown | ⚠ **unlocked** | ⚠ | ⚠ | ⚠ | Not in the research provided |
+| Index | Region (`unk_04`) | Real name in game (`unk_08`) | Locked romanization | Kanji (reference only) | Trainer name (`unk_0C`) | Trainer romanization | Risk / why locked |
+|---:|---|---|---|---|---|---|---|
+| 0 | ほっかいどう (Hokkaido) | かとう かずひと | Katou Kazuhito | 加藤 和人 | マサハル | Masaharu | Medium: 和人 is also read Kazuto, and the trainer name doesn't match the real name |
+| 1 | とうほくＡ (Tohoku A) | ゆうき ようじろう | Yuuki Youjirou | 結城 洋次郎 | ようじろう | Youjirou | Low |
+| 2 | とうほくＢ (Tohoku B) | たかはし じゅん | Takahashi Jun | 高橋 潤 | じゅん | Jun | Low |
+| 3 | ほくりく (Hokuriku) | とおる (given name only) | Tooru | 宮沢 徹 (champion; family name Miyazawa from outside sources only) | おれさま | Oresama | Medium: 徹 is also read Tetsu or Akira. His entry alone has no family name and `unk_00` = 0 rather than 2 |
+| 4 | かんとうＡ１ (Kanto A1) | すずき ゆうすけ | Suzuki Yuusuke | 鈴木 雄輔 | ユウスケ | Yuusuke | Low |
+| 5 | かんとうＡ２ (Kanto A2) | ふじた みか | Fujita Mika | 藤田 美蘭 | クレア | Kurea | **Extreme**: 美蘭 is normally Miran |
+| 6 | かんとうＢ (Kanto B) | はやし やすひろ | Hayashi Yasuhiro | 林 泰宏 / 林 康宏 (3rd place; sources differ) | ヤスヒロ | Yasuhiro | Low; the kanji vary but the reading doesn't |
+| 7 | ちゅうぶＡ (Chubu A) | やまだ たかひさ | Yamada Takahisa | 山田 高久 | ブルー | Buruu ("Blue") | Low–medium: 高久 is also read Takaku |
+| 8 | ちゅうぶＢ (Chubu B) | きたがわ やすのり | Kitagawa Yasunori | 北川 恭教 | テンサイ | Tensai ("genius") | **Very high**: 恭教 has many readings (Takayuki, Yoshinori, ...) |
+| 9 | かんさい (Kansai) | にしむら しゅん | Nishimura Shun | 西村 峻 / 西村 俊 (runner-up; sources differ) | にっしん | Nisshin | Low–medium: 峻 is also read Takashi |
+| 10 | ちゅうごくＡ (Chugoku A) | いまい だいすけ | Imai Daisuke | 今井 大介 | ダイスケ | Daisuke | Low |
+| 11 | ちゅうごくＢ (Chugoku B) | いわまさ けんじ | Iwamasa Kenji | 岩政 健次 / 岩政 健治 (sources differ) | サトシ | Satoshi | Low; the kanji vary, and the trainer name doesn't match the real name |
+| 12 | しこく (Shikoku) | よしい ひろき | Yoshii Hiroki | 吉井 博紀 | ヒロ | Hiro | Medium: 博紀 is also read Hironori |
+| 13 | きゅうしゅうＡ (Kyushu A) | よしとみ たいせい | Yoshitomi Taisei | 吉冨 大成 / 吉富 大成 (4th place; sources differ) | タイセイ | Taisei | Medium: 大成 is also read Kazunari. The family name is unvoiced: Yoshitomi, not Yoshidomi |
+| 14 | きゅうしゅうＢ (Kyushu B) | ふちわき あきひろ | Fuchiwaki Akihiro | 渕脇 明裕 / 渕脇 昭裕 (sources differ) | アキヒロ | Akihiro | Low; the kanji vary but the reading doesn't |
 
-Rows are in the string-table order given in the research. That order is not necessarily the `D_82400400`
-index order. Region names other than ほっかいどう are given in English because the research did not quote
-their kana. Trainer names are names the players chose and have no official English form. Romanize them and
-don't translate them; the glosses in quotes are only there to explain the name.
+In the game, `unk_08` puts a newline between the family name and the given name; the table shows it as a space.
+Region names are kana in the game. In annotations, use the English form in parentheses. Trainer names are names
+the players chose and have no official English form. Romanize them and don't translate them; the glosses in
+quotes are only there to explain the name.
