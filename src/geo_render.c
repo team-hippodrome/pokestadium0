@@ -1405,11 +1405,64 @@ void func_80014F78(s8 *arg0)
   func_8001380C((0, arg0));  // FAKE
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80014FC4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80014FC4.s")
-#endif
+typedef struct GeoMaterialNode {
+    /* 0x00 */ GraphNode node;
+    /* 0x18 */ s32 unk_18;
+    /* 0x1C */ s16 unk_1C;
+    /* 0x1E */ s16 unk_1E;
+    /* 0x20 */ s16 eventIndex;
+    /* 0x22 */ u8 unk_22;
+    /* 0x24 */ u32 color;
+} GeoMaterialNode;
+#define GEO_TINT (*(Color_RGBA8_u32*)&D_800AB450)
+void func_80014FC4(GeoMaterialNode *arg0)
+{
+  u8 texIndex;
+
+  D_800AB448 = arg0->unk_22;
+  if (arg0->unk_22 == 1)
+  {
+    (*((Color_RGBA8_u32 *) (&D_800AB450))).rgba = -1;
+  }
+  else
+  {
+    (*((Color_RGBA8_u32 *) (&D_800AB450))).rgba = arg0->color;
+  }
+  D_800AB45C = arg0->unk_18;
+  if (arg0->unk_1C >= 0)
+  {
+    D_800AB454 = (s32) (&D_800604A0->unk_18[arg0->unk_1C]);
+  }
+  else
+  {
+    D_800AB454 = 0;
+  }
+  if (arg0->unk_1E >= 0)
+  {
+    D_800AB458 = (s32) (&D_800604A0->unk_1C[arg0->unk_1E]);
+  }
+  else
+  {
+    D_800AB458 = 0;
+  }
+  if (D_8006049C != 0)
+  {
+    (*((Color_RGBA8_u32 *) (&D_800AB450))).r = ((*((Color_RGBA8_u32 *) (&D_800AB450))).r * D_8006049C->textureTint.r) / 255;
+    (*((Color_RGBA8_u32 *) (&D_800AB450))).g = ((*((Color_RGBA8_u32 *) (&D_800AB450))).g * D_8006049C->textureTint.g) / 255;
+    (*((Color_RGBA8_u32 *) (&D_800AB450))).b = ((*((Color_RGBA8_u32 *) (&D_800AB450))).b * D_8006049C->textureTint.b) / 255;
+  }
+  switch ((*((u8 *) (&D_800AC6A8.active)))) // FAKE: reads the s8 `active` field as u8
+  {
+    case 1:
+    if ((arg0->eventIndex >= 0) && (arg0->eventIndex < D_800AC6A8.data->trackCount))
+    {
+      texIndex = ((u8 *) D_800AC6A8.frameValues)[ModelAnim_ResolveEventIndex(D_800AC6A8.frame, (unk_func_80017540_arg1 *) D_800AC6A8.trackTable, arg0->eventIndex)];
+      D_800AB454 = (s32) (&D_800604A0->unk_18[texIndex]);
+    }
+    break;
+  }
+  func_8001380C((s8 *) arg0);
+}
 
 void GeoRender_RecordAnchorPosition(s32 arg0) {
     MtxF* temp_a1;

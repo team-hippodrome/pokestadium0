@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5356,
-  "asm_owners": 88,
+  "c_owners": 5357,
+  "asm_owners": 87,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -627,7 +627,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "ef756a55c9f3f359a733e08b26abbd2c0b5ebbdc88eae831310ee3062a885325",
+    "docs/function-matches.csv": "f95ca328bf29314a051fb7ae527cf21e8e8c13be69a9e0bf8a6b74ed072d769a",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -1026,7 +1026,7 @@
     "src/gb_tower.c": "176816e083b7e59f7a469e5cb27b7a0b94869007fcb3060a4e31dfeefbfd0124",
     "src/geo_layout.c": "cd22cfc78b438f75ba379097e38e64b8e773c73701f536774d4a9c9fbe313f0d",
     "src/geo_node.c": "4b117247e69f5030a02753148e827dc7179b9c497a8af94b2feb264947aa287a",
-    "src/geo_render.c": "c554fd05c4a330ce029e6989e3ecc6358a33e30badac6d7e3cce2df6f892982f",
+    "src/geo_render.c": "b8c524d684603e33aa67588f912a90d5bbc23beb3862e40edab26b964c025e85",
     "src/gfx_buffer.c": "8763545514d8fbae9e0f5bba8be79ea47a1db08f2e40b1ceccb6c16d0a5e59e5",
     "src/gfx_rect.c": "aa0d5e4c1ee103a6195cc63d2e2e8f303c99b8a7dcbfe54b922dfd7c5948eee8",
     "src/graphics_textures.c": "1691764c6592b2392747dcba4e39f0b5b11c3d26acd6f4a4cdadf0ce705d7b54",
