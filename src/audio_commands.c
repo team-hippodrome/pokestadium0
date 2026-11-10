@@ -552,17 +552,323 @@ s32 func_8003F96C(u32 arg0, u32 arg1) {
     return D_800FD5F8[D_80077520];
 }
 
-s32 func_8003FE58(s32, s32, s32);
+s32 func_8003FE58(u32, u32, u32);
 
 void func_8003FE34(s32 arg0, s32 arg1) {
     func_8003FE58(arg0, 1, arg1);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8003FE58; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8003FE58.s")
-#endif
+typedef struct SoundFileTable {
+    /* 0x00 */ u32 num_files;
+    /* 0x04 */ u32 offset1;
+    /* 0x08 */ u32 wave_tables_offset;
+    /* 0x0C */ u32 files[1];
+} SoundFileTable; // size >= 0x10
+extern u8 D_80077062[];
+extern u8 D_8007755C;
+extern u8 D_8007757C;
+extern SoundFileTable* D_800B4178;
+extern s32 D_800B4194;
+extern u8* D_800B41C0[];
+extern u8 D_800FD604;
+extern s32 D_800FD648;
+extern s32 D_800FD64C;
+extern s32 D_800FD650;
+extern s32 D_800FD670[4];
+void func_800386E4(s32, s32);
+s32 func_800407B0(s32, s32, s32);
+s32 func_8003FE58(u32 move_id, u32 species, u32 sound_kind) {
+    s32 var;
+    u32 size;
+    s32 ret;
+    s32 i;
+
+    if (D_80077528 != 0) {
+        return 0;
+    }
+
+    if (move_id >= 0xA7) {
+        return 0;
+    }
+
+    switch (species) {
+        case 9:
+            switch (move_id) {
+                case 0x6E:
+                    goto skip;
+
+                case 0x82:
+                    if (sound_kind == 4) {
+                        goto skip;
+                    }
+                    break;
+            }
+            break;
+
+        case 0x19:
+            if (move_id == 0x39) {
+                goto skip;
+            }
+            break;
+
+        case 0x4C:
+            switch (move_id) {
+                case 0x39:
+                case 0x54:
+                case 0x69:
+                case 0x79:
+                case 0x82:
+                case 0x96:
+                    goto skip;
+            }
+            break;
+
+        case 0x71:
+            if ((move_id == 0x27) || (move_id == 0x64) || (move_id == 0x70) || (move_id == 0x71) || (move_id == 0x73)) {
+                goto skip;
+            }
+            break;
+
+        case 0x44:
+        case 0x5B:
+        case 0x5F:
+        case 0x67:
+        case 0x80:
+        case 0x90:
+        case 0x92:
+            goto skip;
+    }
+
+    for (i = 0; i < 4; i++) {
+        if (func_80037B7C(D_800FD670[i]) != 0) {
+            func_800386E4(D_800FD670[i], 0xF);
+            D_800FD670[i] = 0;
+        }
+    }
+
+skip:
+    if (func_80037B7C(D_800FD648) != 0) {
+        func_80037AC4(D_800FD648, 2);
+        D_800FD648 = 0;
+    }
+
+    if (move_id == 0xA6) {
+        var = sound_kind;
+        sound_kind = 0xFF;
+    }
+
+    switch (sound_kind) {
+        case 4:
+            if (func_80037B7C(D_800FD650) != 0) {
+                func_80037AC4(D_800FD650, 0x14);
+                D_800FD650 = 0;
+            }
+            switch (move_id) {
+                case 0x5B:
+                    func_80043CE8(0x4B, 0.0f, 0x80);
+                    var = 4;
+                    break;
+
+                case 0x13:
+                    func_80043CE8(0x4A, 0.0f, 0x80);
+                    var = 4;
+                    break;
+
+                case 0xD:
+                case 0x4C:
+                case 0x82:
+                case 0x8F:
+                    func_80043CE8(0x52, 0.0f, 0x80);
+                    var = 4;
+                    break;
+
+                default:
+                    return 0;
+            }
+            break;
+
+        case 0:
+            if (func_80037B7C(D_800FD650) != 0) {
+                func_80037AC4(D_800FD650, 0x14);
+                D_800FD650 = 0;
+            }
+            if ((move_id == 0x2F) && (D_80077528 != 0)) {
+                return 0;
+            }
+            switch (move_id) {
+                case 0x35:
+                case 0x52:
+                case 0x53:
+                    if (D_80077062[species * 8] == 1) {
+                        var = 0;
+                    } else {
+                        var = 4;
+                    }
+                    break;
+
+                case 0x78:
+                case 0x99:
+                    func_80043CE8(0x23, 0.0f, 0x80);
+                    var = 0;
+                    D_8007757C = 1;
+                    break;
+
+                default:
+                    var = 0;
+            }
+            break;
+
+        case 1:
+            if ((move_id == 6) && (D_8007755C == 0)) {
+                func_80043CE8(0x53, 0.0f, 0x80);
+            }
+            switch (move_id) {
+                case 0x2B: case 0x30: case 0x3B: case 0x3D: case 0x3E: case 0x3F: case 0x6D: case 0x86:
+                case 0x89:
+                    if (func_80037B7C(D_800FD650) != 0) {
+                        func_80037AC4(D_800FD650, 0x3C);
+                        D_800FD650 = 0;
+                    }
+                    break;
+
+                case 0x14: case 0x23: case 0x32: case 0x35: case 0x47: case 0x48: case 0x4B: case 0x50:
+                case 0x51: case 0x52: case 0x66: case 0x7E: case 0x84: case 0x8A: case 0x8D: case 0xA0:
+                    if (func_80037B7C(D_800FD650) != 0) {
+                        func_80037AC4(D_800FD64C, 0x14);
+                        D_800FD650 = 0;
+                    }
+                    break;
+
+                default:
+                    if (func_80037B7C(D_800FD650) != 0) {
+                        func_80037AC4(D_800FD650, 2);
+                        D_800FD650 = 0;
+                    }
+                    break;
+
+                case 0xB: case 0xC: case 0xD: case 0x10: case 0x12: case 0x2F: case 0x39: case 0x4D:
+                case 0x4E: case 0x4F: case 0x54: case 0x55: case 0x56: case 0x57: case 0x5F: case 0x65:
+                case 0x67: case 0x6C: case 0x72: case 0x78: case 0x7B: case 0x7F: case 0x80: case 0x81:
+                case 0x8B: case 0x8E: case 0x93: case 0x94: case 0x95: case 0x99:
+                    break;
+            }
+            var = 1;
+            break;
+
+        case 2:
+            if (func_80037B7C(D_800FD650) != 0) {
+                func_80037AC4(D_800FD650, 0x14);
+                D_800FD650 = 0;
+            }
+            switch (move_id) {
+                case 0xE: case 0x36: case 0x4A: case 0x60: case 0x61: case 0x66: case 0x68: case 0x69:
+                case 0x6A: case 0x6B: case 0x6E: case 0x6F: case 0x70: case 0x71: case 0x72: case 0x73:
+                case 0x74: case 0x85: case 0x87: case 0x90: case 0x97: case 0x9C: case 0x9F: case 0xA4:
+                    return 0;
+
+                case 0x1: case 0x2: case 0x3: case 0x4: case 0x6: case 0xA: case 0xB: case 0xC:
+                case 0xF: case 0x15: case 0x16: case 0x17: case 0x20: case 0x2C: case 0x44: case 0x7D:
+                case 0x80: case 0x9A: case 0x9E: case 0xA2: case 0xA3:
+                    var = 2;
+                    break;
+
+                case 0x35: case 0x52: case 0x53:
+                    if (D_80077062[species * 8] == 1) {
+                        var = 0;
+                    } else {
+                        var = 4;
+                    }
+                    break;
+
+                default:
+                    var = 0;
+                    break;
+            }
+            break;
+
+        case 3:
+            if (func_80037B7C(D_800FD650) != 0) {
+                func_80037AC4(D_800FD650, 0x14);
+                D_800FD650 = 0;
+            }
+            var = 0;
+            break;
+
+        case 5:
+            switch (move_id) {
+                case 0xD: case 0x10: case 0x12: case 0x2F: case 0x39: case 0x4D: case 0x4E: case 0x4F:
+                case 0x54: case 0x55: case 0x56: case 0x57: case 0x5F: case 0x67: case 0x6C: case 0x6D:
+                case 0x72: case 0x78: case 0x7B: case 0x80: case 0x81: case 0x8B: case 0x8E: case 0x93:
+                case 0x94: case 0x99:
+                    return 0;
+
+                case 0x30:
+                    if (func_80037B7C(D_800FD650) != 0) {
+                        func_80037AC4(D_800FD650, 0x28);
+                        D_800FD650 = 0;
+                    }
+                    return 0;
+
+                default:
+                    if (func_80037B7C(D_800FD650) != 0) {
+                        func_80037AC4(D_800FD650, 0x3C);
+                        D_800FD650 = 0;
+                    }
+                    return 0;
+            }
+            break;
+
+        case 0xFF:
+            break;
+
+        default:
+            return 0;
+    }
+
+    move_id--;
+    D_800FD604++;
+    D_800FD604 %= 3;
+
+    if (move_id < D_800B4178->num_files - 1) {
+        size = D_800B4178->files[move_id + 1] - D_800B4178->files[move_id];
+    } else {
+        size = D_800B4160->files[4] - D_800B4178->files[move_id];
+    }
+
+    func_8004609C(D_800B4178->files[move_id], D_800B41F0, size);
+    func_80047FB0(D_800B41F0, (s32)D_800B41C0[D_800FD604], 0x320);
+    func_8003A710(D_800B41C0[D_800FD604]);
+
+    if (sound_kind == 0xFF) {
+        ret = func_8003834C(D_800B4194, (s32)D_800B41C0[D_800FD604], var + 1, 0x80, 0x80, 0, -1);
+    } else {
+        D_800FD64C = func_8003834C(D_800B4194, (s32)D_800B41C0[D_800FD604], var + 1, 0x80, 0x80, 0, -1);
+        ret = D_800FD64C;
+    }
+
+    if ((sound_kind == 0) || (sound_kind == 2) || (sound_kind == 3) || (sound_kind == 4)) {
+        D_800FD650 = D_800FD64C;
+    }
+
+    if ((sound_kind == 0) || (sound_kind == 2)) {
+        switch (move_id + 1) {
+            case 0x85:
+                func_8003834C(D_800B4188, D_800B41A4, 0xE, 0x80, 0x80, 0, -1);
+                break;
+
+            case 0x9C:
+                func_800407B0(0x32, species, 0);
+                break;
+
+            case 0x2D:
+            case 0x2E:
+                func_8003F96C(species, 0);
+                break;
+        }
+    }
+
+    return ret;
+}
 
 void Audio_CreateFrameTaskWrapper(void* arg0) {
     Audio_CreateFrameTask(arg0);

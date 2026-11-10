@@ -29,7 +29,7 @@
   "src/audio_commands.c": {
     ".rodata": {
       "address": "0x8007DDA0",
-      "size": "0x1E8"
+      "size": "0xADC"
     }
   },
   "src/audio_commands_800407B0.c": {

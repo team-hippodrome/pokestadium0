@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5317,
-  "asm_owners": 127,
+  "c_owners": 5318,
+  "asm_owners": 126,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -617,7 +617,7 @@
     "src/vector_math.c"
   ],
   "source_registry_sha256": "42f373d4e7291a19b0ac00de0f699654828e4b8b3fc2db17bb268c6d0b441c67",
-  "section_registry_sha256": "5385b8e975d5c18f40fc040f869704729d6dd1b0480871e8787f00d637d2ebb7",
+  "section_registry_sha256": "859af9d8eaac0b2bcbb4de3a7ce56cb505f02a3ed6839c529b02a791827be134",
   "headers_sha256": "fb7dae0efbb7eb52eead185ef67436ecc548efb6c3a6401bc01184d895c89578",
   "matching_registry_sha256": "d8bcc14a2a0db281cf30dcb9ddbd94d59e1afe84c70b4c8c017ea27ce60a251c",
   "build_tools_sha256": {
@@ -627,7 +627,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "56b5be25a1e0d89ae13b672f601a6aefdd8557cff1f050bacf4f20a9cc76f331",
+    "docs/function-matches.csv": "7ded2014b0112989abe89a5cc57ae98b928196ec6af570437d48a034062bcd76",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -685,7 +685,7 @@
     "src/DDC0_3.c": "1836ab19a28929c203f2090d818bb6579f33a96eab3d30bcdf814c97f3d393ee",
     "src/audio_cache.c": "a38ad4f1b35eebb514e346e999023a08b82cc101c80f79bc270908e4f1a5deb1",
     "src/audio_channel.c": "049c2adcf17a81497387499f50d55602c63ddeb90f4215c049eaee1a19b896f1",
-    "src/audio_commands.c": "40c57f80e2cae751b8e0b8287985a2ab4b9536fc6b4c29ed296b04467a0201be",
+    "src/audio_commands.c": "4b4af39f60a26b380d6aeff45f537dd450b2d1c839044f31f23f97fe769149dc",
     "src/audio_commands_2.c": "b949d824ef4151d7f55af3ba6de07b7788635d67300aa73cf0147997c2730049",
     "src/audio_commands_800407B0.c": "11f8b92e0c274f98a1e52b4ef77ed53b2e6f915763b249cc6dc159c66003472a",
     "src/audio_commands_800414B0.c": "4f03ab991cef0aa282538c1b8304653fde586d9bc8701e56b0716588ff19dc66",
