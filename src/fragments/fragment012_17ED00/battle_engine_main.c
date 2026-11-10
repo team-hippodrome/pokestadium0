@@ -539,7 +539,7 @@ void func_821076FC(s32, CameraNode*, CameraNode*);
 void func_82134CC0(s32, CameraNode*);
 void func_821370DC(s32, CameraNode*);
 
-void func_82101324(s32* arg0) {
+s32 func_82101324(s32* arg0) { // FAKE: s32 return (value unused) fixes caller regalloc
     UNUSED s32 pad; // FAKE
     MemoryBlock* block;
     unk_D_86002F30* model;
@@ -622,8 +622,104 @@ void func_82101324(s32* arg0) {
 void func_8210186C(void) {
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82101874; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82101874.s")
-#endif
+extern s32 D_82198D1C;
+extern u8 D_82198D24;
+void Audio_PlayMusicIfChanged(s32);
+s32 Storage_GetDiskStatus(void);
+void Audio_SetDiskReadyPolling(s32);
+void Audio_WaitForIdle(s32);
+s32 func_82101324(s32* arg0); // FAKE: see definition
+s32 func_82101874(s32 arg0, SessionContext *arg1)
+{
+  StageContext *stage_context;
+  SessionContext *new_var2; // FAKE
+  SessionContext *ctx;
+  int new_var; // FAKE
+  ctx = (D_82198D10 = arg1);
+  sBattleSides = (BattleSessionTeams *) (((u8 *) arg1) + 0x1034);
+  sCompletionGate = -2;
+  new_var2 = ctx; // FAKE
+  if (ctx->mode == 0)
+  {
+    D_82198D1C = 0;
+  }
+  else
+    if (ctx->roundOrDemoId < 7)
+  {
+    D_82198D1C = 1;
+  }
+  else
+    if (new_var2->roundOrDemoId == 7)
+  {
+    D_82198D1C = 2;
+  }
+  else
+    if (ctx->roundOrDemoId == 8)
+  {
+    D_82198D1C = 3;
+  }
+  main_pool_push_state('BATL');
+  Gfx_InitDisplayListBuffers(0x20000, 0);
+  stage_context = StageContext_Allocate(0, 1, 3, 1, 2, 1);
+  func_82101324((s32*)stage_context);
+  switch (D_82198D10->mode)
+  {
+    case 3:
+      Audio_PlayMusicIfChanged(1);
+      if (Storage_GetDiskStatus() != 0)
+    {
+      D_82198D24 = 0;
+      Audio_SetDiskReadyPolling(1);
+    }
+      break;
+
+    case 4:
+      Audio_PlayMusicIfChanged(8);
+      break;
+
+    case 6:
+      Audio_PlayMusicIfChanged(0xB);
+      break;
+
+    default:
+      Audio_PlayMusicIfChanged(0x32);
+      break;
+
+  }
+
+  StageContext_Activate(stage_context);
+  new_var = 1; // FAKE
+  StageLoader_RunFrames(new_var);
+  BgStage_WaitForCondition(Battle_FrameCallback, 0x20, 0x10);
+  StageLoader_RunFrames(2);
+  switch (D_82198D10->mode)
+  {
+    case 3:
+      if (Storage_GetDiskStatus() != 0)
+    {
+      Audio_SetDiskReadyPolling(2);
+    }
+      Audio_WaitForIdle(1);
+      break;
+
+    case 4:
+      StageLoader_RunFrames(0x1E);
+      break;
+
+    case 5:
+      StageLoader_RunFrames(0xF);
+      Audio_WaitForIdle(1);
+      break;
+
+    case 6:
+      StageLoader_RunFrames(0x1E);
+      Audio_WaitForIdle(1);
+      break;
+
+  }
+
+  StageContext_Deactivate();
+  Gfx_FreeDisplayListBuffers();
+  main_pool_pop_state('BATL');
+  return 0;
+}
