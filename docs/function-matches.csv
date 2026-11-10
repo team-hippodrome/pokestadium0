@@ -4143,7 +4143,7 @@ func_80025758,0x80025758,src/game_state.c,func_80025758,hand,,c
 func_800257F0,0x800257F0,src/game_state.c,func_800257F0,hand,,c
 func_80025830,0x80025830,src/game_state.c,func_80025830,hand,,c
 func_800258B4,0x800258B4,src/game_state.c,func_800258B4,m2c,m2c,c
-func_80025910,0x80025910,src/game_state.c,,asm,,asm
+func_80025910,0x80025910,src/game_state.c,func_80025910,hand,,c
 func_80025A64,0x80025A64,src/game_state.c,func_80025A64,hand,,c
 func_80025B60,0x80025B60,src/game_state.c,Fragment_LoadAndCall,s1,stadium1:src/game_state.c,c
 func_80025BA0,0x80025BA0,src/game_state.c,Fragment_QueueCall,s1,stadium1:src/game_state.c,c

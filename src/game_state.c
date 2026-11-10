@@ -37,6 +37,7 @@ extern s16 D_800733D8;
 extern unk_D_800AE520 D_800AF990;
 extern s32 pad_D_800AE534[2];
 extern SessionContext gSessionContext;
+u8 D_800AE8F0[0x1098];
 
 #include "global.h"
 #include <PR/os_internal_reg.h>
@@ -146,7 +147,6 @@ void func_8002572C(s8 *arg0, s32 arg1) {
 }
 
 M2C_UNK func_80025640(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
-extern M2C_UNK D_800AE8F0;
 extern M2C_UNK D_800AE8F4;
 extern M2C_UNK D_800AEAF8;
 typedef struct { s16 unk_00; u8 unk_02; u8 unk_03; } Unk800AF104;
@@ -207,7 +207,6 @@ void func_80025830(void) {
 }
 
 M2C_UNK func_80058410();
-extern M2C_UNK D_800AE8F0;
 extern M2C_UNK D_800AF974;
 extern M2C_UNK D_800AFB10;
 extern M2C_UNK D_800AFB14;
@@ -220,11 +219,48 @@ void func_800258B4(void) {
     func_80058410(&D_800AFB14, &D_800AF974, 8, &D_800AFB10);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80025910; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80025910.s")
-#endif
+typedef struct { u8 b[3]; } Unk3Bytes;
+typedef struct { u8 b[11]; } Unk11Bytes;
+M2C_UNK func_8000A460(M2C_UNK *, M2C_UNK *);
+s32 func_80022C70(s16);
+M2C_UNK func_80022D84(s16, M2C_UNK *);
+extern s32 D_800603C0;
+extern s16 D_800733D4;
+extern M2C_UNK D_8007B7C0;
+extern M2C_UNK D_8007B7C4;
+
+extern s32 D_800AE90C;
+extern M2C_UNK D_800AE910;
+extern M2C_UNK D_800AF108;
+extern M2C_UNK D_800AF118;
+extern M2C_UNK D_800AF12C;
+extern s8 D_800AE8F6;
+
+void func_80025910(s32 arg0)
+{
+  s8 *st = (s8 *) (&D_800AE8F0);
+  *((s8 *) (st + 4)) = 1;
+  *((s8 *) (st + 5)) = 0;
+  *((s32 *) (st + 8)) = D_800603C0;
+  *((s8 **) (st + 0x200)) = st + 0x814;
+  if ((arg0 != 0) && (D_800733D4 == 0))
+  {
+    (*((s32 *) (st + 0x1C))) = func_80022C70(D_800733D4);
+    func_80022D84(D_800733D4, (st + 0xC));
+  }
+  else
+  {
+    (*((s32 *) (st + 0x1C))) = 0;
+    *((Unk3Bytes *) ((st + 0xC))) = *((Unk3Bytes *) (&D_8007B7C0));
+  }
+  *((s16 *) (st + 0x814)) = 0;
+  *((u8 *) (st + 0x816)) = *((u8 *) ((st + 6)));
+  *((u8 *) (st + 0x817)) = 0;
+  func_80058410((st + 0x20), (st + 0x83C), 0x1E0);
+  *((Unk11Bytes *) ((st + 0x818))) = *((Unk11Bytes *) (&D_8007B7C4));
+  func_8000A460((st + 0x828), (st + 0xC));
+  func_8002572C((s8 *) ((st + 0x1034)), (s32) ((st + 4)));
+}
 
 s8 func_800253BC(M2C_UNK *, s8 *, M2C_UNK *);       /* extern */
 void func_80025910(s32);                          /* extern */
@@ -427,7 +463,6 @@ extern M2C_UNK D_0015F8F0;
 extern M2C_UNK D_0017ED00;
 extern M2C_UNK D_00232510;
 extern s32 D_800733C8;
-extern M2C_UNK D_800AE8F0;
 extern M2C_UNK D_81500000;
 extern M2C_UNK D_82100000;
 

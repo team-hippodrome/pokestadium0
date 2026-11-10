@@ -597,6 +597,9 @@
   "src/fragments/fragment040_3CE090.c": {
     ".bss": "0x8E923EB0"
   },
+  "src/game_state.c": {
+    ".bss": "0x800AE8F0"
+  },
   "src/gb_audio.c": {
     ".bss": "0x800B3FD0",
     ".rodata": "0x8007DD40",
