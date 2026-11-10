@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5368,
-  "asm_owners": 76,
+  "c_owners": 5369,
+  "asm_owners": 75,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -627,7 +627,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "7db6aba61d932e5b7b38666b54977c54d851d703c3215834146ac3de0f80946c",
+    "docs/function-matches.csv": "88a8e0ae40b7e1ccda07ebe5789bfe51d18a6020258e9067c7a905f4a50e89a1",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -706,7 +706,7 @@
     "src/fragments/fragment000_80C00/battle_engine_2FA4D0.c": "02a9da163fe3814bf2eef674b8141105d905c01b33cfedd65d4c6caca76e6fa0",
     "src/fragments/fragment000_80C00/battle_engine_309ED0.c": "f9f7ada8145251aef2fb6e1479ec6f8fb35007e1f1e8ca3bf9502de095f79a97",
     "src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c": "2d0d7832426204dee264bcb18ea4c18b0664000b66a1227aabb73c31a4da671a",
-    "src/fragments/fragment000_80C00/gb_tower_emulator_86920.c": "8dd47aae23bac726edbe4de58ca331dfa53a27f979247748193b3ee9f1660a37",
+    "src/fragments/fragment000_80C00/gb_tower_emulator_86920.c": "780058393fb22ebadab6419f6db90b24203f56535cc55587ff6b7e6241d1ed30",
     "src/fragments/fragment000_80C00/gb_tower_emulator_86920_8110B880.c": "7b7abe0669aa854c7f153161d4269c86bcf1c0165c5e4f87d90ba4e79a807076",
     "src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c": "2287b222feed7f5294d9025692f090b426bd0600c7511061459c2e6a88a3be84",
     "src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81113A44.c": "0dc19a37046df082aac8ff836b0796e892d86557ee8ff5fc136c0ccd88882551",
