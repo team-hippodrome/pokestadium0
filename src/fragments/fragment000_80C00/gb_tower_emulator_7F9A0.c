@@ -679,11 +679,134 @@ void func_81103728(s32 arg0) {
     D_81156479 = 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81103850; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81103850.s")
-#endif
+extern u8* D_81156598;
+extern u8* D_8115659C;
+extern u16 D_81122260[];
+extern u16 D_81122280[];
+extern u16 D_811222A0[];
+extern u16 D_811222C0[];
+extern u16 D_811222E0[];
+extern u16 D_81122300[];
+extern u16 D_81122320[];
+extern u16 D_81122340[];
+extern u16 D_81122360[];
+extern u16 D_81122380[];
+extern u16 D_811223A0[];
+extern u16 D_811223C0[];
+/**
+ * Draws a list of glyph-strip commands into a 320-pixel-wide RGBA16 framebuffer.
+ * Each command is a 6-byte header followed by its glyph indices: flags (0 ends
+ * the list; bit 0 = x bit 8, 0x20 = also draw colour-0 pixels, 0x40 = glyphs
+ * overlap by one pixel), x, y, glyph size (0xA or 0xC), palette index and
+ * glyph count.
+ */
+void func_81103850(u16* fb, u8* cmd) {
+    u8* ptr;
+    u8* data;
+    u8* src;
+    u16* dst;
+    u16* pal;
+    u8 flags;
+    u8 y;
+    s32 width;
+    s32 x;
+    s32 dir;
+    s32 trans;
+    s32 tileSize;
+    s32 row;
+    s32 col;
+    s32 n;
+
+    flags = *cmd;
+    ptr = cmd;
+    while (flags) {
+        trans = flags;
+        x = ptr[1] + ((flags & 1) << 8);
+        y = ptr[2];
+        if (flags & 0x40) {
+            dir = -1;
+        } else {
+            dir = 0;
+        }
+        dst = fb + ((y * 0x140) + x);
+        trans &= 0x20;
+        switch (ptr[3]) {
+            case 0xC:
+                width = 0xC;
+                tileSize = 0xC;
+                data = D_8115659C;
+                break;
+            case 0xA:
+            default:
+                data = D_81156598;
+                width = 0xA;
+                tileSize = 0xA;
+                break;
+        }
+
+        switch (ptr[4]) {
+            case 1:
+                pal = D_81122280;
+                break;
+            case 2:
+                pal = D_811222A0;
+                break;
+            case 3:
+                pal = D_811222C0;
+                break;
+            case 4:
+                pal = D_811222E0;
+                break;
+            case 5:
+                pal = D_81122300;
+                break;
+            case 6:
+                pal = D_81122320;
+                break;
+            case 7:
+                pal = D_81122340;
+                break;
+            case 8:
+                pal = D_81122360;
+                break;
+            case 9:
+                pal = D_81122380;
+                break;
+            case 10:
+                pal = D_811223A0;
+                break;
+            case 11:
+                pal = D_811223C0;
+                break;
+            case 0: // FAKE
+            default:
+                pal = D_81122260;
+                break;
+        }
+
+        n = ptr[5];
+        while (n != 0) {
+            n--;
+            src = data + ((ptr[6] * tileSize) * 0x10);
+            for (row = 0; row != tileSize; row++) {
+                for (col = 0; col != width; col++) {
+                    if (trans || (pal[*src & 0xF] != 0)) {
+                        *dst = pal[*src & 0xF];
+                    }
+                    dst++;
+                    src++;
+                }
+                dst = (dst - width) + 0x140;
+                src = (src - width) + 0x10;
+            }
+            ptr++;
+            dst -= ((tileSize * 0x140) - width) - dir;
+        }
+
+        flags = ptr[6];
+        ptr += 6;
+    }
+}
 
 s32 GbEmu_PixelOpDitherA(s32 arg0, s32 arg1) {
   return (arg1 & 1) ? arg1 : arg0;
