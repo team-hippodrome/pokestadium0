@@ -1091,11 +1091,118 @@ s32 func_80031464(GridMenu80031004* menu) {
     return ((pageCount == nextPage) && (remainder != 0)) ? remainder : menu->columns;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8003152C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8003152C.s")
-#endif
+typedef struct GridMenu8003152C {
+    /* 0x00 */ MenuDef8002E230* def;
+    /* 0x04 */ char unk04[0x4];
+    /* 0x08 */ s32 cursor;
+    /* 0x0C */ s32 cellWidth;
+    /* 0x10 */ s32 cellHeight;
+    /* 0x14 */ char unk14[0x4];
+    /* 0x18 */ u16* input;
+    /* 0x1C */ char unk1C[0xC];
+    /* 0x28 */ u16 buttons;
+    /* 0x2A */ u16 flags;
+    /* 0x2C */ s32 scroll;
+    /* 0x30 */ char unk30[0x4];
+    /* 0x34 */ s32 scrollTarget;
+    /* 0x38 */ s32 scrollSpeed;
+    /* 0x3C */ char unk3C[0x4];
+    /* 0x40 */ s32 repeatTimer;
+    /* 0x44 */ s32 scrollX;
+    /* 0x48 */ s32 columns;
+    /* 0x4C */ s32 scrollSpeedX;
+} GridMenu8003152C;
+
+u16 func_8003152C(GridMenu8003152C *menu)
+{
+  long new_var; // FAKE
+  s32 prev = menu->cursor;
+  s32 lim;
+  s32 w;
+  if (menu->def->itemCount == 0)
+  {
+    return 0;
+  }
+  if (menu->input[4] & 0x800)
+  { menu->repeatTimer = 8; menu->buttons = 0x800; }
+  else
+    if (menu->input[4] & 0x400)
+  { menu->repeatTimer = 8; menu->buttons = 0x400; }
+  else
+    if (menu->input[4] & 0x200)
+  { menu->repeatTimer = 8; menu->buttons = 0x200; }
+  else
+    if (menu->input[4] & 0x100)
+  { menu->repeatTimer = 8; menu->buttons = 0x100; }
+  else
+    if (menu->repeatTimer > 0)
+  {
+    menu->repeatTimer--;
+  }
+  else
+  {
+ do { menu->buttons = menu->input[3]; } while (0); // FAKE
+  }
+  if ((menu->buttons & 0x800) && (!(menu->flags & (~0x800))))
+  {
+    menu->flags |= 0x800;
+    menu->scrollTarget -= (menu->scrollTarget < menu->scrollSpeed) ? (menu->scrollTarget) : (menu->scrollSpeed);
+    func_800309FC((s8 *) menu);
+    menu->cursor = ((menu->scrollTarget / menu->cellHeight) * menu->columns) + (menu->scrollX / menu->cellWidth);
+  }
+  else
+    if ((menu->buttons & 0x400) && (!(menu->flags & (~0x400))))
+  {
+    if (menu->flags == 0)
+    {
+      menu->scrollTarget = (menu->scrollTarget + menu->cellHeight) - 1;
+    }
+    menu->flags |= 0x400;
+    new_var = (((menu->def->itemCount + menu->columns) - 1) / menu->columns) * menu->cellHeight;
+    menu->scrollTarget += (((new_var - menu->scrollTarget) - 1) < menu->scrollSpeed) ? ((new_var - menu->scrollTarget) - 1) : (menu->scrollSpeed);
+    func_80030A1C((s8 *) menu);
+    lim = (func_80031464((GridMenu80031004 *) menu) - 1) * menu->cellWidth;
+    if (lim < menu->scrollX)
+    {
+      menu->scrollX = lim;
+    }
+    menu->cursor = ((menu->scrollTarget / menu->cellHeight) * menu->columns) + (menu->scrollX / menu->cellWidth);
+  }
+  else
+    if ((menu->buttons & 0x200) && (!(menu->flags & (~0x200))))
+  {
+    menu->flags |= 0x200;
+    if (menu->scrollX < menu->scrollSpeedX)
+    {
+      menu->scrollX += menu->cellWidth * func_80031464((GridMenu80031004 *) menu);
+    }
+    menu->scrollX -= menu->scrollSpeedX;
+    menu->cursor = ((menu->scrollTarget / menu->cellHeight) * menu->columns) + (menu->scrollX / menu->cellWidth);
+  }
+  else
+    if ((menu->buttons & 0x100) && (!(menu->flags & (~0x100))))
+  {
+    if (menu->flags == 0)
+    {
+      menu->scrollX = (menu->scrollX + menu->cellWidth) - 1;
+    }
+    menu->flags |= 0x100;
+    lim = func_80031464((GridMenu80031004 *) menu);
+    w = menu->cellWidth;
+    lim = w * lim; if (w) {} // FAKE: found by the traced-allocator lever sweep; keeps w live so the sum takes a2
+    if ((menu->scrollX + menu->scrollSpeedX) >= lim)
+    {
+      menu->scrollX -= lim;
+    }
+    menu->scrollX += menu->scrollSpeedX;
+    menu->cursor = ((menu->scrollTarget / menu->cellHeight) * menu->columns) + (menu->scrollX / w);
+  }
+  if (prev != menu->cursor)
+  {
+    func_8003F6AC(1);
+  }
+  return menu->flags;
+}
 
 typedef struct GridMenu80031AB0 {
     /* 0x00 */ char unk00[0x8];
