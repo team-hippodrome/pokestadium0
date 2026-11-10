@@ -894,11 +894,57 @@ void func_89001B88(s32* arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89001CB0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment015_238BD0/func_89001CB0.s")
-#endif
+void func_800295E8(s32, s32, s32, s32, u8*);
+extern u8 D_800735C4[];
+void func_8002B054(s8*, s32);
+void func_8002A8E0(void*);
+void func_890017FC(s8* arg0, s32 x, s32 y, s32 flags, s32 icon);
+void func_890012C4(s8* arg0, s32 arg1);
+void func_89001CB0(s8 *arg0)
+{
+  s32 v;
+  s32 flags;
+  if (func_8002AE6C(arg0 + 4) == 0)
+  {
+    func_8002A8E0(arg0 + 0x30);
+    gSPDisplayList(gDisplayListHead++, D_80060270);
+    func_80029028((*((s32 *) (((s8 *) arg0) + 4))) + 6, (*((s32 *) (((s8 *) arg0) + 8))) + 6, (*((s32 *) (((s8 *) arg0) + 0xC))) - 0xC, 6, *((Color_RGBA8 *) (&D_8900A5BC)));
+    func_80029028((*((s32 *) (((s8 *) arg0) + 4))) + 6, (*((s32 *) (((s8 *) arg0) + 8))) + 0x12A, (*((s32 *) (((s8 *) arg0) + 0xC))) - 0xC, 6, *((Color_RGBA8 *) (&D_8900A5BC)));
+    func_80029028((*((s32 *) (((s8 *) arg0) + 4))) + 6, (*((s32 *) (((s8 *) arg0) + 8))) + 0xC, 6, 0x11E, *((Color_RGBA8 *) (&D_8900A5BC)));
+    func_80029028(((*((s32 *) (((s8 *) arg0) + 0xC))) + (*((s32 *) (((s8 *) arg0) + 4)))) - 0xC, (*((s32 *) (((s8 *) arg0) + 8))) + 0xC, 6, 0x11E, *((Color_RGBA8 *) (&D_8900A5BC)));
+    func_80029028((*((s32 *) (((s8 *) arg0) + 4))) + 0xF8, (*((s32 *) (((s8 *) arg0) + 8))) + 0xC, 0x44, 0x11E, *((Color_RGBA8 *) (&D_8900A5BC)));
+    func_80029658(*((s32 *) (((s8 *) arg0) + 4)), (*((s32 *) (((s8 *) arg0) + 8))) + 0x12F, *((s32 *) (((s8 *) arg0) + 0xC)), D_8007356C);
+    func_800295E8((*((s32 *) (((s8 *) arg0) + 4))) + 0xA, (*((s32 *) (((s8 *) arg0) + 8))) + 0xA, 0xF0, 0x122, D_800735C4);
+    func_800295E8((*((s32 *) (((s8 *) arg0) + 4))) + 0x13A, (*((s32 *) (((s8 *) arg0) + 8))) + 0xA, 0xF0, 0x122, D_800735C4);
+    v = ((*((s32 *) (((s8 *) arg0) + 0))) == 1) ? (2) : (0x10);
+    func_8002B054(arg0 + 0x50, ((*((s32 *) (((s8 *) arg0) + 0x104))) == 3) ? (v) : (0));
+    func_8002B054(arg0 + 0x7C, ((*((s32 *) (((s8 *) arg0) + 0x104))) == 0) ? (v) : (0));
+    func_8002B054(arg0 + 0xA8, ((*((s32 *) (((s8 *) arg0) + 0x104))) == 1) ? (v) : (0));
+ func_8002B054(arg0 + 0xD4, ((*((s32 *) (((s8 *) arg0) + 0x104))) == 2) ? (v) : (0)); func_890017FC(arg0, (*((s32 *) (((s8 *) arg0) + 4))) + 0xC, (*((s32 *) (((s8 *) arg0) + 8))) + 0xC, 0, *((s32 *) (((s8 *) arg0) + 0x1D4)));
+    func_890017FC(arg0, (*((s32 *) (((s8 *) arg0) + 4))) + 0x13C, (*((s32 *) (((s8 *) arg0) + 8))) + 0xC, 0, *((s32 *) (((s8 *) arg0) + 0x1D8)));
+    func_890012C4(arg0 + 0x1E4, (((*((s32 *) (((s8 *) arg0) + 0))) == 4) || ((*((s32 *) (((s8 *) arg0) + 0))) == 7)) ? (2) : ((((*((s32 *) (((s8 *) arg0) + 0))) == 5) || ((*((s32 *) (((s8 *) arg0) + 0))) == 6)) ? (0x10) : (0)));
+    flags = ((((*((s32 *) (((s8 *) arg0) + 0))) == 5) || ((*((s32 *) (((s8 *) arg0) + 0))) == 6)) ? 2 : 0);
+    flags |= (((*((s32 *) (((s8 *) arg0) + 0))) == 5) ? 0x200 : 0);
+    func_890012C4(arg0 + 0x2F8, flags);
+    if (((*((s32 *) (((s8 *) arg0) + 0))) == 2) || ((*((s32 *) (((s8 *) arg0) + 0))) == 9))
+    {
+      func_89000F5C(arg0 + 0x10C);
+    }
+    if (((*((s32 *) (((s8 *) arg0) + 0))) == 3) || ((*((s32 *) (((s8 *) arg0) + 0))) == 0xA))
+    {
+      func_89000F5C(arg0 + 0x170);
+    }
+    func_89001B88((s32 *) arg0);
+    if (((((*((s32 *) (((s8 *) arg0) + 0))) == 9) || ((*((s32 *) (((s8 *) arg0) + 0))) == 0xA)) || ((*((s32 *) (((s8 *) arg0) + 0))) == 0xB)) || ((*((s32 *) (((s8 *) arg0) + 0))) == 0xC))
+    {
+      func_8002D024(arg0 + 0x4AC);
+    }
+    if ((*((s32 *) (((s8 *) arg0) + 0))) == 8)
+    {
+      func_89000960(arg0 + 0x410);
+    }
+  }
+}
 
 typedef struct LabItemGridZ {
     /* 0x00 */ u8* data;
