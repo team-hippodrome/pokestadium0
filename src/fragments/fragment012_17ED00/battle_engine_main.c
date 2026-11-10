@@ -484,11 +484,140 @@ void BattleScene_InitializeParticipantPresentation(BattleSessionTeams* side, unk
     Trainer_RequestPokeIcon(side);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82101324; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82101324.s")
-#endif
+typedef struct Unit82101324 {
+    /* 0x00 */ char unk00[0x10];
+    /* 0x10 */ ModelLoadContext* framebuffers;
+    /* 0x14 */ char unk14[0x14];
+} Unit82101324; // size = 0x28
+
+extern Unit82101324* D_82198D14;
+extern s32 D_82198D1C;
+extern s32 D_82198D20;
+extern s32 D_82198D18;
+extern DepthBuffer* D_82198CFC;
+extern DepthBuffer* D_82198D00;
+extern DepthBuffer* D_82198D04;
+extern u8* D_82198D08;
+extern u8* D_82198D0C;
+extern GraphNode* D_82198CF0;
+extern GraphNode* D_82198CF4;
+extern GraphNode* D_82198CF8;
+extern CameraNode D_82198A20;
+extern CameraNode D_82198B10;
+extern CameraNode D_82198C00;
+extern u8 D_82188DD0[];
+extern u8 D_82188E90[];
+extern u8 D_82188F50[];
+extern u8 D_82189010[];
+extern u8 D_821890D0[];
+extern u8 D_82189120[];
+extern u8 D_81000000[];
+extern u8 D_8F300000[];
+extern u8 D_8F900000[];
+extern u8 D_8FA00000[];
+extern u8 D_8FB00000[];
+extern u8 D_01000000[];
+extern u8 D_03000000[];
+extern u8 D_0015B1A0[];
+extern u8 D_0015E220[];
+extern u8 D_002E0BE0[];
+extern u8 D_002E2B90[];
+extern u8 D_003F53F0[];
+extern u8 D_003FC1A0[];
+extern u8 D_00320820[];
+extern u8 D_00326700[];
+extern u8 D_003139C0[];
+extern u8 D_00317EF0[];
+extern u8 D_0031C300[];
+s32 func_8001A194(s32, s32);
+s32 func_800040B4(s32, u8*, u8*);
+void func_82101178(void);
+void func_821012D8(Unit82101324*, unk_D_86002F30*);
+void func_82100B84(void);
+void func_821070E0(s32, Unit82101324*);
+void func_821076FC(s32, CameraNode*, CameraNode*);
+void func_82134CC0(s32, CameraNode*);
+void func_821370DC(s32, CameraNode*);
+
+void func_82101324(s32* arg0) {
+    UNUSED s32 pad; // FAKE
+    MemoryBlock* block;
+    unk_D_86002F30* model;
+
+    func_82100118(0xFF, 0xFF, 0xFF);
+    Battle_SetStageScale(1.0f);
+    if (D_82198D10->mode == 4) {
+        func_8001A194(4, 0);
+    } else {
+        func_8001A194(3, 0);
+    }
+    D_82198D14[0].framebuffers = PokeIcon_AllocFramebuffers(3);
+    D_82198D14[1].framebuffers = PokeIcon_AllocFramebuffers(3);
+    PokeIcon_OpenModelArchives();
+    D_82198CFC = main_pool_alloc(0x10, 0);
+    GfxImage_Initialize(D_82198CFC, 0, 2, 0x4C, 0x4C, ((s32**)((s32**)arg0)[6])[3][2]);
+    D_82198D00 = GfxImage_Allocate(0, 2, 0x4C, 0x4C, 0);
+    D_82198D04 = GfxImage_Allocate(0, 2, 0x4C, 0x4C, 0);
+    GfxImage_AttachDepthBuffer(D_82198D00, D_82198CFC);
+    GfxImage_AttachDepthBuffer(D_82198D04, D_82198CFC);
+    D_82198D08 = D_82198D00->img_p;
+    D_82198D0C = D_82198D04->img_p;
+    func_800040B4(((u32)((s32)D_81000000 & 0x0FF00000) >> 0x14) - 0x10, D_0015B1A0, D_0015E220);
+    Asset_LoadToSegment((u32)((s32)D_01000000 & 0x0F000000) >> 0x18, D_002E0BE0, D_002E2B90, 0);
+    Asset_LoadToSegment((u32)((s32)D_03000000 & 0x0F000000) >> 0x18, D_003F53F0, D_003FC1A0, 0);
+    switch (D_82198D1C) {
+        case 0:
+            func_800040B4(((u32)((s32)D_8F300000 & 0x0FF00000) >> 0x14) - 0x10, D_00320820, D_00326700);
+            break;
+        case 1:
+            func_800040B4(((u32)((s32)D_8F900000 & 0x0FF00000) >> 0x14) - 0x10, D_003139C0, D_00317EF0);
+            break;
+        case 2:
+            func_800040B4(((u32)((s32)D_8FA00000 & 0x0FF00000) >> 0x14) - 0x10, D_00317EF0, D_0031C300);
+            break;
+        case 3:
+            func_800040B4(((u32)((s32)D_8FB00000 & 0x0FF00000) >> 0x14) - 0x10, D_0031C300, D_00320820);
+            break;
+    }
+    model = Model_LoadByArchiveIndex(0x99);
+    func_82101178();
+    func_821012D8(&D_82198D14[0], model);
+    func_821012D8(&D_82198D14[1], model);
+    func_82100B84();
+    GeoNode_CreateCamera(NULL, &D_82198A20, 0, 0, 0x140, 0xF0);
+    GeoNode_CreateCamera(NULL, &D_82198B10, 0x1E, 0x50, 0x4C, 0x4C);
+    GeoNode_CreateCamera(NULL, &D_82198C00, 0xE2, 0x50, 0x4C, 0x4C);
+    GeoCamera_SetPerspective(&D_82198A20, 30.0f, 192.0f, 24576.0f);
+    ModelRenderer_InitDisplayRoots();
+    func_821070E0(0, D_82198D14);
+    func_821076FC(0, &D_82198B10, &D_82198C00);
+    func_82134CC0(0, &D_82198A20);
+    func_821370DC(0, &D_82198A20);
+    block = MainPool_AllocState(main_pool_get_available(), 0);
+    switch (D_82198D1C) {
+        case 0:
+            D_82198CF0 = process_geo_layout(block, D_82188DD0);
+            break;
+        case 1:
+            D_82198CF0 = process_geo_layout(block, D_82188E90);
+            break;
+        case 2:
+            D_82198CF0 = process_geo_layout(block, D_82188F50);
+            break;
+        case 3:
+            D_82198CF0 = process_geo_layout(block, D_82189010);
+            break;
+    }
+    D_82198CF4 = process_geo_layout(block, D_821890D0);
+    D_82198CF8 = process_geo_layout(block, D_82189120);
+    MainPool_FinalizeAllocation(block);
+    func_821070E0(3, D_82198D14);
+    func_821076FC(3, &D_82198B10, &D_82198C00);
+    func_82134CC0(3, &D_82198A20);
+    func_821370DC(3, &D_82198A20);
+    D_82198D20 = 1;
+    D_82198D18 = 0;
+}
 
 void func_8210186C(void) {
 }
