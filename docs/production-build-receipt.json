@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5340,
-  "asm_owners": 104,
+  "c_owners": 5342,
+  "asm_owners": 102,
   "linked_images": 260,
   "compiler_sha256": "76d796c9591c9f5504949f85b29c32a6039a663791afe2f36f34ca18425b64d0",
   "source_compilers_sha256": {
@@ -627,7 +627,7 @@
     "tools/cflags_overrides.json": "d46f7e2baf90d218b844aaec245e0c388e075cad0e0482e11822ac52d48ef580",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "07a0091d2eee38820f297d180bc593d3c962220a50e43be40bcf9e551bd4f1ad",
+    "docs/function-matches.csv": "834b369d97128b42b584d5d79a7fda50aa111d4018cc5a61a653cdc9005d914b",
     "linker_scripts/jp/symbol_addrs.txt": "b5d90bf777108fef958bac49ca0818d12236ed49aa4ae67a96698584a1e530fe"
   },
   "binutils": {
@@ -705,7 +705,7 @@
     "src/fragments/fragment000_80C00/81117B20.c": "3843091a770c9a107a189ef652ff919fc1eac6d520dd8100299adf9b1616cefc",
     "src/fragments/fragment000_80C00/battle_engine_2FA4D0.c": "02a9da163fe3814bf2eef674b8141105d905c01b33cfedd65d4c6caca76e6fa0",
     "src/fragments/fragment000_80C00/battle_engine_309ED0.c": "f9f7ada8145251aef2fb6e1479ec6f8fb35007e1f1e8ca3bf9502de095f79a97",
-    "src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c": "2925e27dd6a36d0e01478d1ff18d2eb47365f73c2ce654dd225be6dd50411d2b",
+    "src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c": "abfe3e4d644cc4005921eab2f12d9324883448a65c6be2bdd266a7038a932381",
     "src/fragments/fragment000_80C00/gb_tower_emulator_86920.c": "8dd47aae23bac726edbe4de58ca331dfa53a27f979247748193b3ee9f1660a37",
     "src/fragments/fragment000_80C00/gb_tower_emulator_86920_8110B880.c": "7b7abe0669aa854c7f153161d4269c86bcf1c0165c5e4f87d90ba4e79a807076",
     "src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c": "2287b222feed7f5294d9025692f090b426bd0600c7511061459c2e6a88a3be84",
@@ -720,7 +720,7 @@
     "src/fragments/fragment005_15FCE0/battle_order_select.c": "d960c5bc70d2842974f98e89efcf1ed3b37409faf6de02de2f91f10750049fa4",
     "src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c": "89683e298232295893ce69300a117947eb173a7741c6ab824dbd72b638ba972f",
     "src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c": "451ddcb6718e6286c03fdf99ea43b73d2815cb93e3a0469f4064b6463f0d2d91",
-    "src/fragments/fragment007_166580.c": "5a1d065e26dd61e2bcf0d8ffd4f66c1d115e2a99cb46846a5382d8f668a4ea3a",
+    "src/fragments/fragment007_166580.c": "dd66492c3cccb2f832deb3288427804461e99d3788a9503cba2128eae4cc3e03",
     "src/fragments/fragment007_166580_2.c": "56b0700668c3b37f0dc634a9de6e453c587f36ebfad129eaab6eaf7bc774fbec",
     "src/fragments/fragment007_166580_3.c": "091fc4e48c5bf3438b33d139e741226d026cf636c2eb3be84c0076ffc1bf1dcb",
     "src/fragments/fragment007_166580_4.c": "bc035b29b8b1f0e31c25f16ead8b4277da64a534f38f9264413eea2782d28ca8",

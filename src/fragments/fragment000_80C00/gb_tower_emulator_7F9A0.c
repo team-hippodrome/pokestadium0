@@ -1368,11 +1368,118 @@ void func_81106AA0(s32 addr, s32 frame) {
     func_81103C40(addr, (u8*)D_81129638, 0, 8, 8);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81106CC8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81106CC8.s")
-#endif
+extern s32 D_811565C0;
+extern s32 D_811565C4;
+extern u32 D_811565C8;
+extern u32 D_811565CC;
+extern u16* D_811565D0;
+extern u16* D_811565D4;
+extern u32 D_811565D8;
+extern u8 D_811565E0;
+extern u8 D_811565E1;
+extern u16 D_811228C0[];
+extern u16 D_81124CC0[];
+extern u16 D_81124D40[];
+extern u16 D_81124DC0[];
+extern u16 D_811270E8[];
+extern u16 D_81127390[];
+extern u16 D_81127638[];
+extern u16 D_811278E0[];
+extern u16 D_81127B88[];
+extern u8 D_8112A938[];
+void func_81103850(u16*, u8*);
+void func_811068A0(u16* arg0);
+u32 func_80053A80(void);
+M2C_UNK func_8005C0A0();
+void func_81106CC8(u16* dst, u8 (*arg1)[0xC80], s32 arg2, s32 arg3) {
+    s32 y;
+    s32 x;
+    u16* row;
+    s32 j;
+    s32 step;
+    s32 i;
+
+    D_811565C0 = (s32)dst;
+    step = 0x5000;
+    for (y = 0; y < 0x14000; y += step) {
+        row = dst + y;
+        for (j = 0; j != 320u; j += 64) {
+            GbEmu_BlitWithPixelOp(row, D_811228C0, 0xFFFF, 64, (y == 0xF000) ? 48 : 64);
+            row += 64;
+        }
+    }
+
+    D_811565D0 = (u16*)func_81104B18(0x2580, 0);
+    _bcopy(dst + 0x10540, D_811565D0, 0x2580);
+    D_811565D4 = (u16*)func_81104B18(0x2580, 0);
+    bzero(D_811565D4, 0x2580);
+    func_81103850(D_811565D4, D_8112A938);
+
+    for (i = 0; i < 6; i++) {
+        func_811068A0(dst + 0xB916 + i * 46);
+        osInvalDCache(arg1[i], sizeof(arg1[i]));
+        GbEmu_BlitWithPixelOp(dst + 0xBCD9 + i * 46, (u16*)arg1[i], 0, 40, 40);
+    }
+
+    for (j = 0; j < 6; j++) {
+        for (i = 0; i < 320; i++) {
+            dst[(j + 27) * 320 + i] = 0x25A;
+            dst[(j + 121) * 320 + i] = 0x25A;
+        }
+    }
+
+    for (i = 0; i < 320; i += 8) {
+        GbEmu_BlitWithPixelOp(dst + 33 * 320 + i, D_81124CC0, 0xFFFF, 8, 8);
+        GbEmu_BlitWithPixelOp(dst + 113 * 320 + i, D_81124D40, 0xFFFF, 8, 8);
+    }
+
+    for (j = 0; j < 72; j++) {
+        for (i = 0; i < 320; i++) {
+            dst[(j + 41) * 320 + i] = 0x2BA4;
+        }
+    }
+
+    switch (arg2) {
+        case 1:
+            D_811565C4 = (s32)((u8*)dst + 2);
+            break;
+        case 2:
+            D_811565C4 = (s32)((u8*)dst + 4);
+            break;
+        case 3:
+            D_811565C4 = (s32)((u8*)dst + 6);
+            break;
+        default:
+            D_811565C4 = (s32)dst;
+            break;
+    }
+
+    GbEmu_BlitWithPixelOp(dst + 0x4E38, D_81127B88, 0, 0x56, 0x21);
+    GbEmu_BlitWithPixelOp((u16*)(D_811565C4 + 0x61E0), D_81124DC0, 0, 0x3C, 0x4B);
+
+    switch (arg3) {
+        case 0:
+            GbEmu_BlitWithPixelOp((u16*)(D_811565C4 + 0x7608), D_811270E8, 0, 0x13, 0x11);
+            break;
+        case 1:
+            GbEmu_BlitWithPixelOp((u16*)(D_811565C4 + 0x7608), D_81127390, 0, 0x13, 0x11);
+            break;
+        case 2:
+            GbEmu_BlitWithPixelOp((u16*)(D_811565C4 + 0x7608), D_81127638, 0, 0x13, 0x11);
+            break;
+        case 3:
+            GbEmu_BlitWithPixelOp((u16*)(D_811565C4 + 0x7608), D_811278E0, 0, 0x13, 0x11);
+            break;
+    }
+
+    D_811565E1 = arg2;
+    func_81106AA0(D_811565C4 + 0x87BA, 0);
+    func_8005C0A0();
+    D_811565E0 = 0;
+    D_811565D8 = 0x800000;
+    D_811565C8 = func_80053A80();
+    D_811565CC = 0;
+}
 
 void func_81107128(u16* arg0, u16* arg1, s16* arg2, s32 arg3, s32 arg4) {
     s32 i;

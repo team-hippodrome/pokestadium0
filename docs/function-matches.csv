@@ -498,7 +498,7 @@ func_81106820,0x81106820,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0
 func_81106830,0x81106830,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,VictoryPalace_ResetPillarGlow,hand,,c
 func_811068A0,0x811068A0,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,func_811068A0,hand,,c
 func_81106AA0,0x81106AA0,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,func_81106AA0,hand,,c
-func_81106CC8,0x81106CC8,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,,asm,,asm
+func_81106CC8,0x81106CC8,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,func_81106CC8,hand,,c
 func_81107128,0x81107128,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,func_81107128,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_7F9A0.c,c
 func_8110724C,0x8110724C,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,func_8110724C,hand,,c
 func_811095E0,0x811095E0,src/fragments/fragment000_80C00/gb_tower_emulator_86920.c,func_811095E0,hand,,c
@@ -757,7 +757,7 @@ func_82001C60,0x82001C60,src/fragments/fragment007_166580.c,func_82001C60,hand,,
 func_82001CCC,0x82001CCC,src/fragments/fragment007_166580.c,func_82001CCC,hand,,c
 func_82001D64,0x82001D64,src/fragments/fragment007_166580.c,func_82001D64,hand,,c
 func_82001E20,0x82001E20,src/fragments/fragment007_166580.c,func_82001E20,hand,,c
-func_820020EC,0x820020EC,src/fragments/fragment007_166580.c,,asm,,asm
+func_820020EC,0x820020EC,src/fragments/fragment007_166580.c,func_820020EC,hand,,c
 func_820023E8,0x820023E8,src/fragments/fragment007_166580.c,func_820023E8,hand,,c
 func_82002528,0x82002528,src/fragments/fragment007_166580.c,func_82002528,hand,,c
 func_82002668,0x82002668,src/fragments/fragment007_166580.c,func_82002668,hand,,c

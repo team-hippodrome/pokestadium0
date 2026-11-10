@@ -957,11 +957,90 @@ void func_82001E20(s32 arg0, s32 arg1, s32 arg2, Slot82001E20* arg3) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_820020EC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment007_166580/func_820020EC.s")
-#endif
+typedef struct MenuDef820020EC {
+    /* 0x00 */ s32* items;
+    /* 0x04 */ s32 count;
+    /* 0x08 */ s32 itemCount;
+    /* 0x0C */ s32 itemSize;
+} MenuDef820020EC;
+extern s32 D_8200AC58[];
+extern Color82001CCC D_82008F60;
+extern u8* D_82008F74[];
+extern Gfx D_80073408[];
+extern Gfx D_80073438[];
+void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
+void func_820020EC(s32 arg0, s32 arg1, SlotList *arg2, s32 arg3, s32 arg4, SlotList **arg5)
+{
+  SlotList **new_var;
+  s32 hl;
+  s32 *name;
+  s32 i;
+  s32 pad[1]; // FAKE
+  MenuDef820020EC def;
+  SlotList *list = arg2; // FAKE: alias kept in s6 for loop bound
+  if (arg2 != 0)
+  {
+    func_82001E20(arg0, arg1, arg4, (Slot82001E20 *) arg2);
+    new_var = arg5;
+    if (arg2->unk_00 & 2)
+    {
+      func_82001D64(arg0, arg1, arg4);
+    }
+    else
+    {
+      def.items = D_8200AC58;
+      def.count = 0;
+      def.itemCount = 0x18;
+      def.itemSize = arg3 * 6;
+      i = 0;
+      if (arg2->slotCount > 0)
+      {
+        do
+        {
+          hl = 0;
+          name = 0;
+          if (!(list->slots[i].flag & 1))
+          {
+            name = ((s32 *) (&arg2->slots[i])) + 1;
+            if (list->slots[i].flag & 0x26)
+            {
+              hl = 0x200;
+            }
+          }
+          func_82001810((arg0 + 0x88) + ((i % 3) * 0x84), ((i / 3) * 0x32) + arg1, name, i, hl, (s32) (&def));
+          i++;
+        } while (i < list->slotCount);
+      }
+
+    }
+    for (i = 0; i != 4; i++)
+    {
+      if (arg2 == new_var[i])
+      {
+        {
+          Gfx *_g = (Gfx *) (gDisplayListHead++);
+          _g->words.w1 = (unsigned int) D_80073408;
+          _g->words.w0 = (((unsigned int) ((((unsigned int) 0xde) & ((0x01 << 8) - 1)) << 24)) | ((unsigned int) ((((unsigned int) 0x00) & ((0x01 << 8) - 1)) << 16))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 16) - 1)) << 0));
+        }
+        ;
+        func_8001B884(arg0 + 0x60, (arg1 + 5) + (i * 0xE), 0x28, 0xE, D_82008F74[i], 0x28, 0x200000);
+        {
+          Gfx *_g = (Gfx *) (gDisplayListHead++);
+          _g->words.w1 = (unsigned int) D_80073438;
+          _g->words.w0 = (((unsigned int) ((((unsigned int) 0xde) & ((0x01 << 8) - 1)) << 24)) | ((unsigned int) ((((unsigned int) 0x00) & ((0x01 << 8) - 1)) << 16))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 16) - 1)) << 0));
+        }
+        ;
+      }
+    }
+
+  }
+  else
+  {
+    func_82001C00(arg0, arg1, D_82008F5C);
+    func_82001C60(arg0, arg1, D_82008F58);
+  }
+  func_82001CCC(arg0, arg1, D_82008F60);
+}
 
 typedef struct {
     /* 0x00 */ Slot54** slots;
