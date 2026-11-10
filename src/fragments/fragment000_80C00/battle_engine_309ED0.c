@@ -940,8 +940,8 @@ s32 func_8110F518(s32 arg0, Item8110F4D0** arg1) {
  * bit ranges above. When the low 24 bits, bit 25 and bits 27..26 are all
  * non-zero, the record pointer is appended to the pointer array D_81184978
  * and the count D_81185578 is incremented. There is no bounds check on the
- * count. The caller (func_8110F6A4) is still assembly, so what the array and
- * the count are used for is not established from this function alone.
+ * count. This is Zero's version of OoT's AudioLoad_AddUsedSample: the caller
+ * func_8110F6A4 collects a font's used samples here and then preloads them.
  * Matching note: the bit-field reads are what produce the ROM's shift
  * sequence; the equivalent masks and shifts on a plain word differ in
  * temporary register numbering.
@@ -956,11 +956,122 @@ void func_8110F64C(PackedWordRec **arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110F6A4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110F6A4.s")
-#endif
+/**
+ * Zero's version of OoT's AudioLoad_PreloadSamplesForFont: gathers the samples
+ * used by a font's instruments and drums, then copies them into the sample
+ * cache (async == 0) or queues them on the preload stack (async == 1).
+ */
+void func_8110F6A4(s32 fontId, s32 async, RelocInfo8110EF7C* relocInfo) {
+    s32 numDrums;
+    s32 numInstruments;
+    s32 pad[2]; // FAKE
+    u8* instrument;
+    u8* drum;
+    s32 sampleRamAddr;
+    Sample8110EF7C* sample;
+    s32 size;
+    s32 nChunks;
+    s32 preloadInProgress;
+    s32 i;
+
+    preloadInProgress = 0;
+    if (D_8118557C != 0) {
+        preloadInProgress = 1;
+    }
+    D_81185578 = 0;
+    numInstruments = D_811858B0[fontId].unk_00[0];
+    numDrums = D_811858B0[fontId].unk_00[1];
+
+    for (i = 0; i < numInstruments; i++) {
+        instrument = (u8*)func_81110CA8(fontId, i);
+        if (instrument != NULL) {
+            if (instrument[1] != 0) {
+                func_8110F64C((PackedWordRec**)(instrument + 8));
+                if (!relocInfo->medium2) {} // FAKE
+            }
+            if (instrument[2] != 0x7F) {
+                func_8110F64C((PackedWordRec**)(instrument + 0x18));
+            }
+            func_8110F64C((PackedWordRec**)(instrument + 0x10));
+        }
+    }
+
+    for (i = 0; i < numDrums; i++) {
+        drum = (u8*)func_81110D6C(fontId, i);
+        if (drum != NULL) {
+            func_8110F64C((PackedWordRec**)(drum + 4));
+        }
+    }
+
+    if (D_81185578 == 0) {
+        return;
+    }
+
+    size = 0;
+    for (i = 0; i < D_81185578; i++) {
+        size += ALIGN16(((Sample8110EF7C*)D_81184978[i])->size);
+    }
+    if (size) {} // karodo
+
+    for (i = 0; i < D_81185578; i++) {
+        if (D_8118557C == 0x78) {
+            break;
+        }
+
+        sample = (Sample8110EF7C*)D_81184978[i];
+        switch (async) {
+            case 0:
+                if (sample->medium == relocInfo->medium1) {
+                    sampleRamAddr = func_8110B9A8(sample->size, relocInfo->sampleBankId1, sample->sampleAddr, sample->medium);
+                } else if (sample->medium == relocInfo->medium2) {
+                    sampleRamAddr = func_8110B9A8(sample->size, relocInfo->sampleBankId2, sample->sampleAddr, sample->medium);
+                }
+                break;
+
+            case 1:
+                if (sample->medium == relocInfo->medium1) {
+                    sampleRamAddr = func_8110B958(sample->size, relocInfo->sampleBankId1, sample->sampleAddr, sample->medium);
+                } else if (sample->medium == relocInfo->medium2) {
+                    sampleRamAddr = func_8110B958(sample->size, relocInfo->sampleBankId2, sample->sampleAddr, sample->medium);
+                }
+                break;
+        }
+
+        if (sampleRamAddr == 0) {
+            continue;
+        }
+
+        switch (async) {
+            case 0:
+                if (sample->medium == 1) {
+                    func_8110DB8C(sample->sampleAddr, sampleRamAddr, sample->size, *(s16*)(D_811858A4 + 2));
+                    sample->sampleAddr = sampleRamAddr;
+                    sample->medium = 0;
+                } else {
+                    func_8110DA68(sample->sampleAddr, sampleRamAddr, sample->size, sample->medium);
+                    sample->sampleAddr = sampleRamAddr;
+                    sample->medium = 0;
+                }
+                break;
+
+            case 1:
+                D_81184B78[D_8118557C].sample = sample;
+                D_81184B78[D_8118557C].ramAddr = sampleRamAddr;
+                D_81184B78[D_8118557C].encodedInfo = (D_8118557C << 24) | 0xFFFFFF;
+                D_81184B78[D_8118557C].isFree = 0;
+                D_81184B78[D_8118557C].endAndMediumKey = sample->sampleAddr + sample->size + sample->medium;
+                D_8118557C++;
+                break;
+        }
+    }
+    D_81185578 = 0;
+
+    if ((D_8118557C != 0) && !preloadInProgress) {
+        sample = D_81184B78[D_8118557C - 1].sample;
+        nChunks = (sample->size >> 12) + 1;
+        func_8110E9A8(sample->sampleAddr, D_81184B78[D_8118557C - 1].ramAddr, sample->size, sample->medium, nChunks, &D_811855F8, D_81184B78[D_8118557C - 1].encodedInfo);
+    }
+}
 
 typedef struct Entry81184450 {
     /* 0x0 */ s32 unk_0;
