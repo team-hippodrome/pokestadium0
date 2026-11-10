@@ -2397,7 +2397,7 @@ func_82175828,0x82175828,src/fragments/fragment012_17ED00/battle_engine_34A420.c
 func_82175BE0,0x82175BE0,src/fragments/fragment012_17ED00/battle_engine_34A420.c,Radial20_RotateVertexOffset,s1,stadium1:src/fragments/battle_engine/battle_engine_34A420.c,c
 func_82175C74,0x82175C74,src/fragments/fragment012_17ED00/battle_engine_34A420.c,func_82175C74,hand,,c
 func_821764E0,0x821764E0,src/fragments/fragment012_17ED00/battle_engine_34A420.c,Radial20_IsComplete,hand,,c
-func_821765B4,0x821765B4,src/fragments/fragment012_17ED00/battle_engine_34A420.c,,asm,,asm
+func_821765B4,0x821765B4,src/fragments/fragment012_17ED00/battle_engine_34A420.c,func_821765B4,hand,,c
 func_82177DA0,0x82177DA0,src/fragments/fragment012_17ED00/battle_engine_34E1A0.c,Trail40_Init,s1,stadium1:src/fragments/battle_engine/battle_engine_34E1A0.c,c
 func_82177F1C,0x82177F1C,src/fragments/fragment012_17ED00/battle_engine_34E1A0.c,Trail40_Start,s1,stadium1:src/fragments/battle_engine/battle_engine_34E1A0.c,c
 func_821784B0,0x821784B0,src/fragments/fragment012_17ED00/battle_engine_34E1A0.c,Trail40Node_FillVertex,s1,stadium1:src/fragments/battle_engine/battle_engine_34E1A0.c,c

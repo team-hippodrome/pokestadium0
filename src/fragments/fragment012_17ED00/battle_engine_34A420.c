@@ -676,8 +676,375 @@ s32 Radial20_IsComplete(void) {
     return -1;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_821765B4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821765B4.s")
-#endif
+extern Gfx D_82192B00[];
+extern u8 D_82192B50[];
+extern u8 D_82192B54[];
+extern u8 D_82192B58[];
+extern f32 D_82192B5C[];
+Gfx* func_821765B4(Gfx* arg0) {
+    s32 i;
+    s32 x;
+    s32 j;
+    s32 y;
+    Radial20* sp1B4;
+    Radial20Node* var_s2;
+    Vtx* vtx;
+    Vec3f sp1A0;
+
+    sp1B4 = D_821A3490;
+
+    for (i = 0; i < 10; i++) {
+        if (sp1B4->unk_000 == 1) {
+            var_s2 = &sp1B4->unk_048[0];
+
+            switch (sp1B4->unk_008) {
+                case 0:
+                case 3:
+                case 8:
+                    sp1B4->unk_01C = Gfx_AllocDisplayList(sizeof(Vtx) * 40);
+                    vtx = sp1B4->unk_01C;
+
+                    for (j = 0; j < 20; j++, vtx++) {
+                        Radial20_RotateVertexOffset(var_s2->unk_0C, &var_s2->unk_1C, &sp1A0, var_s2->unk_08, 1.0f, 0.0f, 0.0f);
+
+                        vtx->v.ob[0] = var_s2->unk_10.x + sp1A0.x;
+                        vtx->v.ob[1] = var_s2->unk_10.y + sp1A0.y;
+                        vtx->v.ob[2] = var_s2->unk_10.z + sp1A0.z;
+                        vtx->v.cn[0] = sp1B4->unk_00A.r;
+                        vtx->v.cn[1] = sp1B4->unk_00A.g;
+                        vtx->v.cn[2] = sp1B4->unk_00A.b;
+                        vtx->v.cn[3] = var_s2->unk_04;
+                        vtx++;
+
+                        if (var_s2->unk_00 <= 0.0) {
+                            Radial20_RotateVertexOffset(var_s2->unk_0C + M_PI_F, &var_s2->unk_1C, &sp1A0, var_s2->unk_08, 1.0f, 0.0f,
+                                                        0.0f);
+                        }
+
+                        vtx->v.ob[0] = var_s2->unk_10.x + sp1A0.x;
+                        vtx->v.ob[1] = var_s2->unk_10.y + sp1A0.y;
+                        vtx->v.ob[2] = var_s2->unk_10.z + sp1A0.z;
+                        vtx->v.cn[0] = sp1B4->unk_00A.r;
+                        vtx->v.cn[1] = sp1B4->unk_00A.g;
+                        vtx->v.cn[2] = sp1B4->unk_00A.b;
+                        vtx->v.cn[3] = var_s2->unk_04;
+                        var_s2++;
+                    }
+                    break;
+
+                case 1:
+                    vtx = Gfx_AllocDisplayList(sizeof(Vtx) * 60);
+                    sp1B4->unk_01C = vtx;
+
+                    for (j = 0; j < 20; j++, vtx++) {
+                        Radial20_RotateVertexOffset(var_s2->unk_0C, &var_s2->unk_1C, &sp1A0, var_s2->unk_08, 1.0f, 0.0f, 0.0f);
+
+                        vtx->v.ob[0] = var_s2->unk_10.x + sp1A0.x;
+                        vtx->v.ob[1] = var_s2->unk_10.y + sp1A0.y;
+                        vtx->v.ob[2] = var_s2->unk_10.z + sp1A0.z;
+                        vtx->v.cn[0] = 0xFF;
+                        vtx->v.cn[1] = 0x40;
+                        vtx->v.cn[2] = 0x40;
+                        vtx->v.cn[3] = var_s2->unk_04;
+                        vtx++;
+
+                        if (var_s2->unk_00 <= 0.0) {
+                            Radial20_RotateVertexOffset(var_s2->unk_0C + TWO_THIRDS_PI, &var_s2->unk_1C, &sp1A0, var_s2->unk_08,
+                                                        1.0f, 0.0f, 0.0f);
+                        }
+
+                        vtx->v.ob[0] = var_s2->unk_10.x + sp1A0.x;
+                        vtx->v.ob[1] = var_s2->unk_10.y + sp1A0.y;
+                        vtx->v.ob[2] = var_s2->unk_10.z + sp1A0.z;
+                        vtx->v.cn[0] = 0;
+                        vtx->v.cn[1] = 0xA0;
+                        vtx->v.cn[2] = 0xFF;
+                        vtx->v.cn[3] = var_s2->unk_04;
+                        vtx++;
+
+                        if (var_s2->unk_00 <= 0.0) {
+                            Radial20_RotateVertexOffset(var_s2->unk_0C + TWO_THIRDS_PI * 2, &var_s2->unk_1C, &sp1A0,
+                                                        var_s2->unk_08, 1.0f, 0.0f, 0.0f);
+                        }
+
+                        vtx->v.ob[0] = var_s2->unk_10.x + sp1A0.x;
+                        vtx->v.ob[1] = var_s2->unk_10.y + sp1A0.y;
+                        vtx->v.ob[2] = var_s2->unk_10.z + sp1A0.z;
+                        vtx->v.cn[0] = 0xFF;
+                        vtx->v.cn[1] = 0xFF;
+                        vtx->v.cn[2] = 0;
+                        vtx->v.cn[3] = var_s2->unk_04;
+                        var_s2++;
+                    }
+                    break;
+
+                case 5:
+                    vtx = Gfx_AllocDisplayList(sizeof(Vtx) * 60);
+                    sp1B4->unk_01C = vtx;
+
+                    for (j = 0; j < 20; j++, vtx++) {
+                        Radial20_RotateVertexOffset(var_s2->unk_0C, &var_s2->unk_1C, &sp1A0, var_s2->unk_08, 1.0f, 0.0f, 0.0f);
+
+                        vtx->v.ob[0] = var_s2->unk_10.x + sp1A0.x;
+                        vtx->v.ob[1] = var_s2->unk_10.y + sp1A0.y;
+                        vtx->v.ob[2] = var_s2->unk_10.z + sp1A0.z;
+                        vtx->v.cn[0] = sp1B4->unk_00A.r;
+                        vtx->v.cn[1] = sp1B4->unk_00A.g;
+                        vtx->v.cn[2] = sp1B4->unk_00A.b;
+                        vtx->v.cn[3] = var_s2->unk_04;
+                        vtx++;
+
+                        if (var_s2->unk_00 <= 0.0) {
+                            Radial20_RotateVertexOffset(var_s2->unk_0C + TWO_THIRDS_PI, &var_s2->unk_1C, &sp1A0, var_s2->unk_08,
+                                                        1.0f, 0.0f, 0.0f);
+                        }
+
+                        vtx->v.ob[0] = var_s2->unk_10.x + sp1A0.x;
+                        vtx->v.ob[1] = var_s2->unk_10.y + sp1A0.y;
+                        vtx->v.ob[2] = var_s2->unk_10.z + sp1A0.z;
+                        vtx->v.cn[0] = sp1B4->unk_00A.r;
+                        vtx->v.cn[1] = sp1B4->unk_00A.g;
+                        vtx->v.cn[2] = sp1B4->unk_00A.b;
+                        vtx->v.cn[3] = var_s2->unk_04;
+                        vtx++;
+
+                        if (var_s2->unk_00 <= 0.0) {
+                            Radial20_RotateVertexOffset(var_s2->unk_0C + TWO_THIRDS_PI * 2, &var_s2->unk_1C, &sp1A0,
+                                                        var_s2->unk_08, 1.0f, 0.0f, 0.0f);
+                        }
+
+                        vtx->v.ob[0] = var_s2->unk_10.x + sp1A0.x;
+                        vtx->v.ob[1] = var_s2->unk_10.y + sp1A0.y;
+                        vtx->v.ob[2] = var_s2->unk_10.z + sp1A0.z;
+                        vtx->v.cn[0] = sp1B4->unk_00A.r;
+                        vtx->v.cn[1] = sp1B4->unk_00A.g;
+                        vtx->v.cn[2] = sp1B4->unk_00A.b;
+                        vtx->v.cn[3] = var_s2->unk_04;
+                        var_s2++;
+                    }
+                    break;
+
+                case 6:
+                case 7:
+                    vtx = Gfx_AllocDisplayList(sizeof(Vtx) * 20 * 6);
+                    sp1B4->unk_01C = vtx;
+
+                    for (j = 0; j < 20; j++, var_s2++) {
+                        for (x = 0; x < 6; x++) {
+                            Radial20_RotateVertexOffset(var_s2->unk_0C + ((2.0 * x * M_PI_F) / 6.0), &var_s2->unk_1C, &sp1A0,
+                                                        var_s2->unk_08, 1.0f, 0.0f, 0.0f);
+
+                            vtx->v.ob[0] = var_s2->unk_10.x + sp1A0.x;
+                            vtx->v.ob[1] = var_s2->unk_10.y + sp1A0.y;
+                            vtx->v.ob[2] = var_s2->unk_10.z + sp1A0.z;
+                            vtx->v.cn[0] = sp1B4->unk_00A.r;
+                            vtx->v.cn[1] = sp1B4->unk_00A.g;
+                            vtx->v.cn[2] = sp1B4->unk_00A.b;
+                            vtx->v.cn[3] = 0x64;
+                            vtx++;
+                        }
+                    }
+                    break;
+
+                case 9:
+                    vtx = Gfx_AllocDisplayList(sizeof(Vtx) * 20 * 3 * 3);
+                    sp1B4->unk_01C = vtx;
+
+                    for (j = 0; j < 20; j++, var_s2++) {
+                        for (x = 0; x < 3; x++) {
+                            for (y = 0; y < 3; y++) {
+                                f32 x1, y1, z1;
+
+                                Radial20_RotateVertexOffset(var_s2->unk_0C + ((TWO_PI_F * y) / 12.0f) + ((TWO_PI_F * x) / 3.0f),
+                                                            &var_s2->unk_1C, &sp1A0, D_82192B5C[y] * var_s2->unk_08, 1.0f, 0.0f,
+                                                            0.0f);
+
+                                x1 = var_s2->unk_10.x + sp1A0.x;
+                                y1 = var_s2->unk_10.y + sp1A0.y;
+                                z1 = var_s2->unk_10.z + sp1A0.z;
+
+                                vtx->v.ob[0] = x1;
+                                vtx->v.ob[1] = y1;
+                                vtx->v.ob[2] = z1;
+
+                                if ((y == 0) && ((guRandom() % 100) == 0)) {
+                                    AuxiliaryEffect_Spawn(sp1B4->unk_002, x1, y1, z1, 0xA, 0.75f);
+                                }
+
+                                vtx->v.cn[0] = ((D_82192B50[x] * (0xFF - var_s2->unk_04)) + (var_s2->unk_04 * 0xFF)) / 255;
+                                vtx->v.cn[1] = ((D_82192B54[x] * (0xFF - var_s2->unk_04)) + (var_s2->unk_04 * 0xFF)) / 255;
+                                vtx->v.cn[2] = ((D_82192B58[x] * (0xFF - var_s2->unk_04)) + (var_s2->unk_04 * 0xFF)) / 255;
+                                vtx->v.cn[3] = var_s2->unk_04;
+                                vtx++;
+                            }
+                        }
+                    }
+                    break;
+
+                case 2:
+                case 4:
+                    vtx = Gfx_AllocDisplayList(sizeof(Vtx) * 20 * 15);
+                    sp1B4->unk_01C = vtx;
+
+                    for (j = 0; j < 20; j++, var_s2++) {
+                        for (x = 0; x < 15; x++) {
+                            if (var_s2->unk_00 <= 0.0) {
+                                Radial20_RotateVertexOffset(var_s2->unk_0C + ((2.0 * x * M_PI_F) / 15.0), &var_s2->unk_1C,
+                                                            &sp1A0, var_s2->unk_08, 1.0f, 0.0f, 0.0f);
+                            }
+
+                            vtx->v.ob[0] = var_s2->unk_10.x + sp1A0.x;
+                            vtx->v.ob[1] = var_s2->unk_10.y + sp1A0.y;
+                            vtx->v.ob[2] = var_s2->unk_10.z + sp1A0.z;
+                            vtx->v.cn[0] = sp1B4->unk_00A.r;
+                            vtx->v.cn[1] = sp1B4->unk_00A.g;
+                            vtx->v.cn[2] = sp1B4->unk_00A.b;
+                            vtx->v.cn[3] = var_s2->unk_04;
+                            vtx++;
+                        }
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+
+            vtx = sp1B4->unk_01C;
+            for (x = 0; x < 19; x++) {
+                switch (sp1B4->unk_008) {
+                    case 0:
+                    case 3:
+                    case 8:
+                        gSPDisplayList(arg0++, D_82192B00);
+                        gSPVertex(arg0++, vtx, 4, 0);
+                        gSP2Triangles(arg0++, 0, 2, 1, 0, 2, 3, 1, 0);
+                        vtx += 2;
+                        break;
+
+                    default:
+                        gSPDisplayList(arg0++, D_82192B00);
+                        gSPClearGeometryMode(arg0++, G_CULL_BOTH);
+                        gSPSetGeometryMode(arg0++, G_CULL_FRONT);
+                        gSPVertex(arg0++, vtx, 6, 0);
+                        gSP2Triangles(arg0++, 0, 3, 1, 0, 3, 4, 1, 0);
+                        gSP2Triangles(arg0++, 1, 4, 2, 0, 4, 5, 2, 0);
+                        gSP2Triangles(arg0++, 2, 5, 0, 0, 5, 3, 0, 0);
+                        vtx += 3;
+                        break;
+
+                    case 6:
+                    case 7:
+                        gSPDisplayList(arg0++, D_82192B00);
+                        gSPClearGeometryMode(arg0++, G_CULL_BOTH);
+                        gSPSetGeometryMode(arg0++, G_CULL_FRONT);
+                        gSPVertex(arg0++, vtx, 12, 0);
+
+                        for (j = 0; j < 5; j++) {
+                            gSP2Triangles(arg0++, j + 0, j + 6, j + 1, 0, j + 1, j + 6, j + 7, 0);
+                        }
+
+                        gSP2Triangles(arg0++, 5, 11, 0, 0, 0, 11, 6, 0);
+                        vtx += 6;
+                        break;
+
+                    case 2:
+                    case 4:
+                        gSPDisplayList(arg0++, D_82192B00);
+                        gSPVertex(arg0++, vtx, 30, 0);
+
+                        for (j = 0; j < 14; j++) {
+                            gSP2Triangles(arg0++, j + 0, j + 15, j + 1, 0, j + 15, j + 16, j + 1, 0);
+                        }
+
+                        gSP2Triangles(arg0++, 14, 29, 0, 0, 29, 15, 0, 0);
+                        vtx += 15;
+                        break;
+
+                    case 9:
+                        gSPDisplayList(arg0++, D_82192B00);
+                        gSPClearGeometryMode(arg0++, G_CULL_BOTH);
+                        gSPSetGeometryMode(arg0++, G_CULL_FRONT);
+                        gSPVertex(arg0++, vtx, 18, 0);
+
+                        for (j = 0; j < 3; j++) {
+                            u8 idx = j * 3;
+                            gSP2Triangles(arg0++, idx + 0, idx + 9, idx + 1, 0, idx + 1, idx + 9, idx + 10, 0);
+                            gSP2Triangles(arg0++, idx + 1, idx + 10, idx + 2, 0, idx + 2, idx + 10, idx + 11, 0);
+                            gSP2Triangles(arg0++, idx + 2, idx + 11, idx + 0, 0, idx + 0, idx + 11, idx + 9, 0);
+                        }
+
+                        vtx += 9;
+                        break;
+                }
+            }
+
+            vtx = sp1B4->unk_01C;
+            for (x = 0; x < 19; x++) {
+                switch (sp1B4->unk_008) {
+                    case 0:
+                    case 2:
+                    case 3:
+                    case 4:
+                        break;
+
+                    default:
+                        gSPDisplayList(arg0++, D_82192B00);
+                        gSPClearGeometryMode(arg0++, G_CULL_BOTH);
+                        gSPSetGeometryMode(arg0++, G_CULL_BACK);
+                        gSPVertex(arg0++, vtx, 6, 0);
+                        gSP2Triangles(arg0++, 0, 3, 1, 0, 3, 4, 1, 0);
+                        gSP2Triangles(arg0++, 1, 4, 2, 0, 4, 5, 2, 0);
+                        gSP2Triangles(arg0++, 2, 5, 0, 0, 5, 3, 0, 0);
+                        vtx += 3;
+                        break;
+
+                    case 6:
+                    case 7:
+                        gSPDisplayList(arg0++, D_82192B00);
+                        gSPClearGeometryMode(arg0++, G_CULL_BOTH);
+                        gSPSetGeometryMode(arg0++, G_CULL_BACK);
+                        gSPVertex(arg0++, vtx, 12, 0);
+
+                        for (j = 0; j < 5; j++) {
+                            gSP2Triangles(arg0++, j + 0, j + 6, j + 1, 0, j + 1, j + 6, j + 7, 0);
+                        }
+
+                        gSP2Triangles(arg0++, 5, 11, 0, 0, 0, 11, 6, 0);
+                        vtx += 6;
+                        break;
+
+                    case 9:
+                        gSPDisplayList(arg0++, D_82192B00);
+                        gSPClearGeometryMode(arg0++, G_CULL_BOTH);
+                        gSPSetGeometryMode(arg0++, G_CULL_BACK);
+                        gSPVertex(arg0++, vtx, 18, 0);
+
+                        for (j = 0; j < 3; j++) {
+                            u8 idx = j * 3;
+                            gSP2Triangles(arg0++, idx + 0, idx + 9, idx + 1, 0, idx + 1, idx + 9, idx + 10, 0);
+                            gSP2Triangles(arg0++, idx + 1, idx + 10, idx + 2, 0, idx + 2, idx + 10, idx + 11, 0);
+                            gSP2Triangles(arg0++, idx + 2, idx + 11, idx + 0, 0, idx + 0, idx + 11, idx + 9, 0);
+                        }
+
+                        vtx += 9;
+                        break;
+                }
+            }
+
+            vtx = sp1B4->unk_01C;
+            switch (sp1B4->unk_008) {
+                case 9:
+                    gSPDisplayList(arg0++, D_82192B00);
+                    gSPClearGeometryMode(arg0++, G_CULL_BOTH);
+                    gSPVertex(arg0++, vtx, 9, 0);
+                    gSP2Triangles(arg0++, 2, 1, 0, 0, 5, 4, 3, 0);
+                    gSP1Triangle(arg0++, 8, 7, 6, 0);
+                    break;
+            }
+            arg0 = AuxiliaryEffect_Draw(sp1B4->unk_002, arg0);
+        }
+        sp1B4++;
+    }
+
+    return arg0;
+}
