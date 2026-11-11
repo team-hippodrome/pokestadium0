@@ -4816,7 +4816,7 @@ func_800386E4,0x800386E4,src/libnumus/player.c,func_800386E4,m2c,m2c,c
 func_800387BC,0x800387BC,src/libnumus/player.c,func_800387BC,hand,,c
 func_80038880,0x80038880,src/libnumus/player.c,func_80038880,m2c,m2c,c
 func_800388BC,0x800388BC,src/libnumus/player.c,,asm,,asm
-func_80039010,0x80039010,src/libnumus/player.c,,asm,,asm
+func_80039010,0x80039010,src/libnumus/player.c,func_80039010,hand,,c
 func_80039328,0x80039328,src/libnumus/player.c,Audio_ComputeVoiceVolume,hand,,c
 func_800393F8,0x800393F8,src/libnumus/player.c,Audio_AdvanceVoicePitch,s1,stadium1:src/libnumus/player.c,c
 func_80039530,0x80039530,src/libnumus/player.c,Audio_UpdateVoicePlaybackEnd,hand,,c

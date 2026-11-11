@@ -1466,11 +1466,103 @@ void func_80038880(void) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800388BC.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80039010; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80039010.s")
-#endif
+extern command_func_t D_80075C38[];
+void Audio_UpdateVoicePlaybackEnd(channel_t* arg0);
+void func_80039A44(channel_t* cp);
+void func_800395D0(channel_t* cp);
+void func_80039010(channel_t* arg0) {
+
+    u8* var_s0;
+    u8 temp_a0;
+    u32 tmp;
+    u8 tmp1;
+    u32 sample;
+    u16 wave;
+    song_t* bank;
+
+    var_s0 = M2C_FIELD(arg0, u8**, 0x30);
+    while (var_s0 != NULL && (tmp1 = *var_s0) >= 0x80) {
+        var_s0 = D_80075C38[tmp1 & 0x7F](arg0, var_s0 + 1);
+    }
+    M2C_FIELD(arg0, u8**, 0x30) = var_s0;
+
+    if (M2C_FIELD(arg0, u8**, 0x30) != NULL) {
+        M2C_FIELD(arg0, f32*, 0x64) = M2C_FIELD(arg0, f32*, 0x68);
+        tmp = *M2C_FIELD(arg0, u8**, 0x30)++;
+
+        if (M2C_FIELD(arg0, u8*, 0xE5) != 0) {
+            M2C_FIELD(arg0, u8*, 0xC9) = *M2C_FIELD(arg0, u8**, 0x30)++;
+        } else {
+            M2C_FIELD(arg0, u8*, 0xC9) = M2C_FIELD(arg0, u8*, 0xE6);
+        }
+
+        if (M2C_FIELD(arg0, u16*, 0xB8) != 0) {
+            if (M2C_FIELD(arg0, u8*, 0xC5) == 0) {
+                M2C_FIELD(arg0, u16*, 0xA6) = M2C_FIELD(arg0, u16*, 0xB8);
+            } else {
+                M2C_FIELD(arg0, u8*, 0xC5) = 0;
+                temp_a0 = *M2C_FIELD(arg0, u8**, 0x30)++;
+                if (temp_a0 < 0x80) {
+                    M2C_FIELD(arg0, u16*, 0xA6) = temp_a0 ^ 0; // FAKE
+                } else {
+                    M2C_FIELD(arg0, u16*, 0xA6) = *M2C_FIELD(arg0, u8**, 0x30)++ + ((temp_a0 & 0x7F) << 8);
+                }
+            }
+        } else {
+            temp_a0 = *M2C_FIELD(arg0, u8**, 0x30)++;
+            if (temp_a0 < 0x80) {
+                M2C_FIELD(arg0, u16*, 0xA6) = temp_a0 ^ 0; // FAKE
+            } else {
+                M2C_FIELD(arg0, u16*, 0xA6) = *M2C_FIELD(arg0, u8**, 0x30)++ + ((temp_a0 & 0x7F) << 8);
+            }
+        }
+
+        M2C_FIELD(arg0, u64*, 0x20) = M2C_FIELD(arg0, u64*, 0x18);
+        M2C_FIELD(arg0, u64*, 0x18) = (M2C_FIELD(arg0, u16*, 0xA6) << 8) + M2C_FIELD(arg0, u64*, 0x18);
+
+        M2C_FIELD(arg0, u16*, 0xB6) = 0;
+        M2C_FIELD(arg0, s8*, 0xE4) = 0;
+        M2C_FIELD(arg0, u8*, 0xE3) = M2C_FIELD(arg0, u8*, 0xE2);
+
+        if (tmp != 0x60) {
+            bank = M2C_FIELD(arg0, song_t**, 0x88);
+            if (M2C_FIELD(arg0, u8**, 0x90) != NULL) {
+                M2C_FIELD(arg0, u16*, 0xBA) = M2C_FIELD(arg0, u8**, 0x90)[tmp * 4];
+                M2C_FIELD(arg0, u8*, 0xCB) = M2C_FIELD(arg0, u8**, 0x90)[tmp * 4 + 2] / 2;
+                func_800366C8(arg0, (u8*)&M2C_FIELD(arg0, song_t**, 0x84)->env_table[M2C_FIELD(arg0, u8**, 0x90)[tmp * 4 + 1]]);
+                tmp = M2C_FIELD(arg0, u8**, 0x90)[tmp * 4 + 3];
+            }
+            Audio_UpdateVoicePlaybackEnd(arg0);
+
+            if (M2C_FIELD(arg0, u8*, 0xE7) != 0) {
+                func_80039A44(arg0);
+            }
+
+            if (M2C_FIELD(arg0, u8*, 0xDD) != 0) {
+                M2C_FIELD(arg0, s32*, 0x34) = 0;
+                func_800395D0(arg0);
+            }
+
+            wave = M2C_FIELD(arg0, u16*, 0xBA);
+            sample = bank->samples[wave];
+            M2C_FIELD(arg0, s32*, 0x34) = sample;
+            M2C_FIELD(arg0, f32*, 0x4C) = bank->detune[wave] + tmp;
+        } else {
+            M2C_FIELD(arg0, s32*, 0x34) = 0;
+            if (M2C_FIELD(arg0, u8*, 0xDD) != 0) {
+                M2C_FIELD(arg0, s64*, 0x28) = M2C_FIELD(arg0, s64*, 0x0);
+                func_800395D0(arg0);
+            }
+            M2C_FIELD(arg0, u8*, 0xDD) = 0;
+        }
+    } else {
+        M2C_FIELD(arg0, s32*, 0x34) = 0;
+        if (M2C_FIELD(arg0, u8*, 0xDD) != 0) {
+            M2C_FIELD(arg0, s64*, 0x28) = M2C_FIELD(arg0, s64*, 0x0);
+            func_800395D0(arg0);
+        }
+    }
+}
 
 s32 Audio_ComputeVoiceVolume(channel_t* cp) {
     u32 volume = cp->volume * cp->env_current_vol * cp->velocity * cp->volume_scale;
