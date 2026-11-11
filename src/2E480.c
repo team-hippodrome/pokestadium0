@@ -818,11 +818,121 @@ void func_8002F9D8(ScrollMenu8002F6C4* menu, s32 x, s32 y, s32 mask, s32 arg4) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002FD8C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002FD8C.s")
-#endif
+typedef struct ScrollList8002FD8C {
+    /* 0x00 */ MenuDef8002E230* def;
+    /* 0x04 */ u16* itemFlags;
+    /* 0x08 */ s32 cursor;
+    /* 0x0C */ s32 width;
+    /* 0x10 */ s32 rowSpacing;
+    /* 0x14 */ char unk14[0x4];
+    /* 0x18 */ u16* input;
+    /* 0x1C */ char unk1C[0x8];
+    /* 0x24 */ s32 rows;
+    /* 0x28 */ u16 buttons;
+    /* 0x2A */ u16 flags;
+    /* 0x2C */ s32 scroll;
+    /* 0x30 */ s32 top;
+    /* 0x34 */ s32 scrollTarget;
+    /* 0x38 */ s32 scrollSpeed;
+    /* 0x3C */ s32 pageSpeed;
+    /* 0x40 */ s32 repeatTimer;
+} ScrollList8002FD8C;
+
+u16 func_8002FD8C(ScrollList8002FD8C* menu) {
+    s32 prevTop;
+    s32 prev;
+    s32 room;
+    s32 total;
+    s32 page;
+    s32 step;
+    s32 delta;
+    s32 end;
+
+    prev = menu->cursor;
+    prevTop = menu->top;
+    if (menu->def->itemCount == 0) {
+        return 0;
+    }
+    // Each pair of stores stays on one line: the assembler orders them differently when they are on separate lines.
+    if (menu->input[4] & 0x800) {
+        menu->repeatTimer = 8; menu->buttons = 0x800;
+    } else if (menu->input[4] & 0x400) {
+        menu->repeatTimer = 8; menu->buttons = 0x400;
+    } else if (menu->input[4] & 0x200) {
+        menu->repeatTimer = 8; menu->buttons = 0x200;
+    } else if (menu->input[4] & 0x100) {
+        menu->repeatTimer = 8; menu->buttons = 0x100;
+    } else if (menu->repeatTimer > 0) {
+        menu->repeatTimer--;
+    } else {
+        menu->buttons = menu->input[3];
+    }
+
+    if ((menu->buttons & 0x800) && !(menu->flags & ~0x800)) {
+        menu->flags |= 0x800;
+        menu->scrollTarget -= (menu->scrollTarget < menu->scrollSpeed) ? menu->scrollTarget : menu->scrollSpeed;
+        func_8002ED50((s8*)menu);
+        menu->cursor = menu->scrollTarget / menu->rowSpacing;
+        if (prev != menu->cursor) {
+            func_8003F6AC(1);
+        }
+    } else if ((menu->buttons & 0x400) && !(menu->flags & ~0x400)) {
+        if (menu->flags == 0) {
+            menu->scrollTarget = menu->scrollTarget + menu->rowSpacing - 1;
+        }
+        menu->flags |= 0x400;
+        end = menu->rowSpacing * menu->def->itemCount;
+        menu->scrollTarget += ((end - menu->scrollTarget - 1) < menu->scrollSpeed) ? (end - menu->scrollTarget - 1) : menu->scrollSpeed;
+        func_8002ED70((s8*)menu);
+        menu->cursor = menu->scrollTarget / menu->rowSpacing;
+        if (prev != menu->cursor) {
+            func_8003F6AC(1);
+        }
+    } else if ((menu->buttons & 0x200) && !(menu->flags & ~0x200)) {
+        page = menu->rowSpacing * menu->rows;
+        if (menu->flags == 0) {
+            menu->top = menu->scroll;
+        }
+        menu->flags |= 0x200;
+        if (menu->scroll < menu->pageSpeed) {
+            delta = menu->scroll;
+        } else {
+            delta = menu->pageSpeed;
+        }
+        menu->scroll -= delta;
+        menu->scrollTarget -= delta;
+        menu->cursor = menu->scrollTarget / menu->rowSpacing;
+        if (menu->scroll < menu->top) {
+            menu->top -= (page < menu->top) ? page : menu->top;
+        }
+        if (prevTop != menu->top) {
+            func_8003F6AC(1);
+        }
+    } else if ((menu->buttons & 0x100) && !(menu->flags & ~0x100)) {
+        total = menu->rowSpacing * menu->def->itemCount;
+        page = menu->rowSpacing * menu->rows;
+        if (menu->flags == 0) {
+            menu->top = menu->scroll;
+        }
+        menu->flags |= 0x100;
+        room = total - menu->scroll - page;
+        if (room <= 0) {
+            room = 0;
+        }
+        step = (room < menu->pageSpeed) ? room : menu->pageSpeed;
+        menu->scroll += step;
+        menu->scrollTarget += step;
+        menu->cursor = menu->scrollTarget / menu->rowSpacing;
+        if (menu->top < menu->scroll) {
+            room = total - page - menu->top;
+            menu->top += (page < room) ? page : room;
+        }
+        if (prevTop != menu->top) {
+            func_8003F6AC(1);
+        }
+    }
+    return menu->flags;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_80030230; signature not recovered. */
