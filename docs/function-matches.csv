@@ -4968,11 +4968,11 @@ func_8004DC28,0x8004DC28,src/libultra/libc/ll.c,,ultralib,libultra:src/libc/ll.c
 func_8004DC58,0x8004DC58,src/libultra/libc/ll.c,,ultralib,libultra:src/libc/ll.c,c
 func_8004DCB8,0x8004DCB8,src/libultra/libc/ll.c,,ultralib,libultra:src/libc/ll.c,c
 func_8004DD54,0x8004DD54,src/libultra/libc/ll.c,,ultralib,libultra:src/libc/ll.c,c
-func_8004DD80,0x8004DD80,src/4E980.c,,asm,,asm
-func_8004E3AC,0x8004E3AC,src/4E980.c,,asm,,asm
-func_8004E4AC,0x8004E4AC,src/4E980.c,,asm,libultra:src/os/exceptasm.c,asm
-func_8004E4F4,0x8004E4F4,src/4E980.c,,asm,libultra:src/os/exceptasm.c,asm
-func_8004E504,0x8004E504,src/4E980.c,,asm,,asm
+func_8004DD80,0x8004DD80,src/4E980.c,__osExceptionPreamble,ultralib-asm,libultra:src/os/exceptasm.s,asm
+func_8004E3AC,0x8004E3AC,src/4E980.c,__osEnqueueAndYield,ultralib-asm,libultra:src/os/exceptasm.s,asm
+func_8004E4AC,0x8004E4AC,src/4E980.c,__osEnqueueThread,ultralib-asm,libultra:src/os/exceptasm.s,asm
+func_8004E4F4,0x8004E4F4,src/4E980.c,__osPopThread,ultralib-asm,libultra:src/os/exceptasm.s,asm
+func_8004E504,0x8004E504,src/4E980.c,__osDispatchThread,ultralib-asm,libultra:src/os/exceptasm.s,asm
 func_8005C3B0,0x8005C3B0,src/libultra/libc/llcvt.c,,ultralib,libultra:src/libc/llcvt.c,c
 func_8005C3CC,0x8005C3CC,src/libultra/libc/llcvt.c,,ultralib,libultra:src/libc/llcvt.c,c
 func_8005C3E8,0x8005C3E8,src/libultra/libc/llcvt.c,,ultralib,libultra:src/libc/llcvt.c,c

@@ -5,8 +5,8 @@ opaque assets, and retained storage metadata. Every file listed in
 `config/jp/sources.json` is compiled whole through
 asm-processor, so its C functions and its `GLOBAL_ASM` owners come out of one
 object. Include-only original SDK assembly wrappers use the native IDO assembler
-instead. Of the complete 5,444-owner inventory, 5,315 owners are C, 20 use
-original SDK assembly, and 109 still use extracted listings. Current verified counts are in [COVERAGE.md](../COVERAGE.md). The build links the resident image and all 259
+instead. Of the complete 5,444-owner inventory, 5,315 owners are C, 25 use
+original SDK assembly, and 104 still use extracted listings. Current verified counts are in [COVERAGE.md](../COVERAGE.md). The build links the resident image and all 259
 fragment images independently, preserving the fragments that share link
 addresses. The verified output is 16,777,216 bytes:
 
@@ -55,10 +55,12 @@ all 5,444 owners from assembly as an independent baseline.
   or `-signed` (`hal_libc.c`) per file.
 * Include-only wrappers for unmodified `lib/ultralib/src/*.s` files use the
   `ultralib-asm` profile. IDO 5.3 assembles them with the SDK's assembly flags,
-  including `BUILD_VERSION=6`, `-O1 -mips2` (libc uses `-O2`). The build validates
+  including `BUILD_VERSION=6`, `-O1 -mips2` (libc uses `-O2`;
+  exception/thread assembly uses `-O1 -mips3 -32`). The build validates
   that the wrapper contains only its declared SDK include. Original SDK assembly
   counts separately from C and extracted assembly. The receipt hashes each SDK
-  source and the native `cc`, `acpp`, `as0`, and `as1` tools.
+  source and the native `cc`, `acpp`, `as0`, and `as1` tools; the header digest
+  also covers local headers under `lib/ultralib/src`.
   Native IDO symbol tables are reordered into ELF local/global order, with
   relocation symbol indices remapped; instructions, data, offsets, and addends
   remain unchanged. Only undefined symbols referenced by allocated-section

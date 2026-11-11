@@ -7,12 +7,13 @@
   "c_owners": 5315,
   "asm_owners": 129,
   "linked_images": 260,
-  "sdk_asm_owners": 20,
+  "sdk_asm_owners": 25,
   "original_assembly_sources_sha256": {
     "lib/ultralib/src/debug/assertbreak.s": "a3c09e1c37a78efc12387ef21093efaaae5f028870133a1eaeeb8e56813935ec",
     "lib/ultralib/src/libc/bcmp.s": "c2bfddf0feb53295ba7b0256ac7c0c58da45d1faf721127754960427e7b6be9e",
     "lib/ultralib/src/libc/bcopy.s": "b6593339bf0a91741b68688822cc7c0b4ad342f27a03af9f663dfb033e15d157",
     "lib/ultralib/src/libc/bzero.s": "e7ffeaaed30d1d760167cfefaf438f1233e9bd662cb706b0ac2fb67c4360ddc4",
+    "lib/ultralib/src/os/exceptasm.s": "fb9d2df151de18886ef3de9898e33f24102127523059c856040acd18d33ec717",
     "lib/ultralib/src/os/getcount.s": "bd1694bfb904ba5deb50eb1cf60c74315669b99bc89e3a6b2ff1f30a03f7198e",
     "lib/ultralib/src/os/getsr.s": "0729f4e48a0aea2067cddde89aa756bbbc524e8c62b4009621350f99784875a8",
     "lib/ultralib/src/os/interrupt.s": "52534d86cd74ee2cd7cb714f937e617a51618dd8eb6aa00c0f2d34f57fb380a5",
@@ -647,18 +648,18 @@
     "src/vector_math.c"
   ],
   "source_registry_sha256": "75ecdbb298b63eeb001289d9846990fd9bc0d479e023d5b4bbeb6515f7b9345e",
-  "section_registry_sha256": "3084d61b2a07755ec509e423c7cc37866052383722fce3846b97b43ffbef3ee1",
-  "headers_sha256": "fb7dae0efbb7eb52eead185ef67436ecc548efb6c3a6401bc01184d895c89578",
+  "section_registry_sha256": "d2f296b1132ba55d95331beb6a1f26a8a7f5eb1e4f7c7227c61a3a45cd7ffa8b",
+  "headers_sha256": "9cadd03e2510c47491a2c952f53ddba863d1225005f6fcd179f265ec3ef815e2",
   "matching_registry_sha256": "d8bcc14a2a0db281cf30dcb9ddbd94d59e1afe84c70b4c8c017ea27ce60a251c",
   "build_tools_sha256": {
-    "tools/production.py": "48eb7b0f9bc54333cc23e92681e5e77402f947073a4d5fedcb2456d3f9cbe13c",
+    "tools/production.py": "d54b3a93744283224ff8c95ecd414a145fc13cbcd0bc8296baf4f2ce89e460d1",
     "tools/m2c_easiest.py": "edb0c9af61e5241c9e90f24152effdf636ceaa630812900d2840e2a67c5ff3f3",
     "tools/asm_prelude.inc": "e17e26652f832563c8ff17b0588b67d897a0faa4905442b151e5e67c85bfcff1",
-    "tools/cflags_overrides.json": "105df55810b69600318959b53856c86606e9d70cca96bbf26ff3f925c26ce61a",
+    "tools/cflags_overrides.json": "e3db3b29e01736a27242afda3777cee3db0d330f000cd8eb6230ba10fc8479d1",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "5c4205e39434c9ee24f8a5b95bda4e32b17d3fd3a48c292b10760433544ca373",
-    "linker_scripts/jp/symbol_addrs.txt": "7c63291f2161cf9b45b430c74bc2cd76273db579ccd19dae5da1ad7fd0e64811"
+    "docs/function-matches.csv": "279311719b09878ced261684650b74ff3aad317a42508c2980b129232ad0412c",
+    "linker_scripts/jp/symbol_addrs.txt": "7793ea86643996d488126092ac46aefb79ebd778f2a120c5392784f7bd54e234"
   },
   "binutils": {
     "as": "GNU assembler (GNU Binutils for Debian) 2.44",
@@ -687,7 +688,7 @@
     "src/4D700.c": "0b056106663b443fec538d62792df74ddf5c0d513129d96a5009ad6e3c07eb24",
     "src/4D940.c": "fe97e2be40c240968bcc92da5209b1b8d650507383b1b040c283973e5cf47067",
     "src/4DF00.c": "566b1978ab7b51cbcf39ffc5c37cc5a9370c91f0228b26397ad6feb37ba6d723",
-    "src/4E980.c": "3620672c9d77d5312804c347f87c7d092fab20b1b68a2a8796ae647d146904f7",
+    "src/4E980.c": "8512600c8236cdbba34452686ebb9896f0fb033ce7aa1f3260c8af327b3b671d",
     "src/50920.c": "15e42e74f21cf1dc38cbcb754e8642dd7ee09672355bb0c7ceda35d617b5545c",
     "src/51D10.c": "caabbdbabec39dec618f03d3ac2fec4c04b05cf039b1b85bcc81bebe2bc77b2a",
     "src/52D00.c": "5db4db8be9c46dbd1ec681b401d38993031ef5788cb9030d26ec4a2ed2912ba9",
