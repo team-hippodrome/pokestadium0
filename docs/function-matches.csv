@@ -229,7 +229,7 @@ func_800418F0,0x800418F0,src/audio_commands_800414B0.c,func_800418F0,m2c,m2c,c
 func_80041914,0x80041914,src/audio_commands_800414B0.c,func_80041914,m2c,m2c,c
 func_80041940,0x80041940,src/audio_commands_800414B0.c,func_80041940,hand,,c
 func_800419F8,0x800419F8,src/audio_commands_800414B0.c,func_800419F8,hand,,c
-func_80042508,0x80042508,src/audio_commands_2.c,,asm,,asm
+func_80042508,0x80042508,src/audio_commands_2.c,func_80042508,hand,,c
 func_80042A6C,0x80042A6C,src/audio_commands_2.c,func_80042A6C,hand,,c
 func_80042FF8,0x80042FF8,src/audio_commands_2.c,func_80042FF8,hand,,c
 func_80043860,0x80043860,src/audio_commands_2.c,func_80043860,hand,,c
