@@ -108,11 +108,9 @@ extern char D_82195A38[];
 typedef struct MovePpInit {
     s32 pp[4];
 } MovePpInit;
-// The { 0, 0, 0, 0 } initializer for move_pp sits at the end of the neighbouring split's .data.
-extern MovePpInit D_8218B0D4; // FAKE: data-ownership workaround for the fixed-layout split
 void func_82119CAC(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3) {
     s32 i;
-    MovePpInit move_pp = D_8218B0D4;
+    MovePpInit move_pp = { 0, 0, 0, 0 };
     u8 max_pp[4];
     BattleMon* party;
     BattleMonRuntime* runtime;

@@ -234,13 +234,16 @@
       "address": "0x82195980",
       "size": "0x44"
     },
-    ".data": "0x8218B0C8"
+    ".data": {
+      "address": "0x8218B0C8",
+      "size": "0xC"
+    }
   },
   "src/fragments/fragment012_17ED00/battle_engine_31D9F0_821199E4.c": {
     ".rodata": "0x82195A04",
     ".data": {
-      "address": "0x8218B0E4",
-      "size": "0x120"
+      "address": "0x8218B0D4",
+      "size": "0x130"
     }
   },
   "src/fragments/fragment012_17ED00/battle_engine_3223B0.c": {
