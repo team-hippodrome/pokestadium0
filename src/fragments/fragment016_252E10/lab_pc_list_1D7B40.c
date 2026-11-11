@@ -1746,11 +1746,196 @@ void func_89108650(s8* arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_891089BC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_891089BC.s")
-#endif
+extern u8 D_8910AAE8[];
+extern Rgba891084B4 D_8910AAEC;
+s32 func_8002FD8C(s8 *);
+void func_89105144(s8 *);
+s32 func_80020974(s32);
+s32 func_891089BC(s8 *arg0)
+{
+  s32 ret = 0;
+  s8 *self = arg0;
+  u8 **entry;
+  s32 n;
+  s32 species;
+  unsigned int i;
+  switch (*((u32 *) (((s8 *) self) + 0x1B0)))
+  {
+    case 0:
+      if (func_8002FD8C(self + 0x4C) == 0)
+    {
+      if (((u16 *) D_800603C0)[4] & 0x4000)
+      {
+        func_8003F6AC(3);
+        ret = -1;
+      }
+      else
+        if (((u16 *) D_800603C0)[4] & 0x8000)
+      {
+        if (!((*((u16 **) (((s8 *) self) + 0x50)))[*((s32 *) (((s8 *) self) + 0x54))] & 1))
+        {
+          func_8003F6AC(2);
+          func_89106424(self + 0x94, (s32 *) D_8910AAE8, (s32) (self + 0x90), 1, 0);
+          func_8002A8C4(self + 0xC0, (*((s32 *) (((s8 *) self) + 0))) + 6, (((*((s32 *) (((s8 *) self) + 4))) + (*((s32 *) (((s8 *) self) + 0x80)))) - (*((s32 *) (((s8 *) self) + 0x78)))) + 0x16, (*((s32 *) (((s8 *) self) + 8))) - 0xC, 0x1C);
+          *((s32 *) (((s8 *) self) + 0x108)) = ((*((s32 *) (((s8 *) self) + 8))) + (*((s32 *) (((s8 *) self) + 0)))) - 6;
+          *((s32 *) (((s8 *) self) + 0x10C)) = (*((s32 *) (((s8 *) self) + 4))) + 0xF6;
+          func_89106570((Popup89106570 *) (self + 0x94));
+          *((Rgba891084B4 *) (((s8 *) self) + 0xAC)) = D_8910AAEC;
+          *((u32 *) (((s8 *) self) + 0x1B0)) = 1;
+        }
+        else
+        {
+          func_8003F6AC(8);
+        }
+      }
+    }
+      break;
+
+    case 1:
+      if (func_891066C0((s32) (self + 0x94)) == 0)
+    {
+      if (((u16 *) D_800603C0)[4] & 0x4000)
+      {
+        func_8003F6AC(3);
+        *((u32 *) (((s8 *) self) + 0x1B0)) = 0;
+      }
+      else
+        if (((u16 *) D_800603C0)[4] & 0x8000)
+      {
+        if ((*((s32 *) (((s8 *) self) + 0xDC))) == 0)
+        {
+          entry = (*(*((u8 *****) (((s8 *) self) + 0x4C))))[*((s32 *) (((s8 *) self) + 0x54))];
+          if ((*((s32 *) (((s8 *) entry) + 8))) >= 100)
+          {
+            n = func_8002D3D0((*((u8 **) (((s8 *) self) + 0x1AC))) + 8);
+            func_8003F6AC(2);
+            if (n < 4)
+            {
+              *((u32 *) (((s8 *) self) + 0x1B0)) = 4;
+              if ((*entry[0]) >= 201)
+              {
+                species = (*entry[0]) - 201;
+              }
+              else
+              {
+                species = (*entry[0]) - 146;
+              }
+              func_89104FC0(self + 0x110, (*((s32 *) (((s8 *) self) + 0))) + 0xD5, (*((s32 *) (((s8 *) self) + 4))) + 0x81, (*((u8 **) (((s8 *) self) + 0x1AC))) + 8);
+              *((s32 *) (((s8 *) self) + 0x144)) = n;
+              func_89105340(self + 0x110, *((s32 *) (((s8 *) self) + 0x144)), func_80020974(species));
+            }
+            else
+            {
+              func_89104FC0(self + 0x110, (*((s32 *) (((s8 *) self) + 0))) + 0xD5, (*((s32 *) (((s8 *) self) + 4))) + 0x81, (*((u8 **) (((s8 *) self) + 0x1AC))) + 8);
+              func_89105144(self + 0x110);
+              *((u32 *) (((s8 *) self) + 0x1B0)) = 3;
+            }
+          }
+          else
+            if ((*((s32 *) (((s8 *) entry) + 8))) >= 50)
+          {
+            func_8003F6AC(2);
+            func_89104FC0(self + 0x110, (*((s32 *) (((s8 *) self) + 0))) + 0xD5, (*((s32 *) (((s8 *) self) + 4))) + 0x81, (*((u8 **) (((s8 *) self) + 0x1AC))) + 8);
+            for (i = 0; i < 4; i++)
+            {
+              if ((((*((s32 *) (((s8 *) self) + (0x170 + (i * 4))))) == (-1)) || ((*((s32 *) (((s8 *) self) + (0x170 + (i * 4))))) == (-2))) || ((*((u8 **) (((s8 *) self) + 0x1AC)))[0x28 + i] >= 0xC0))
+              {
+                (*((u16 **) (((s8 *) self) + 0x140)))[i] |= 1;
+              }
+            }
+
+            *((u32 *) (((s8 *) self) + 0x1B0)) = 2;
+          }
+          else
+          {
+            func_8003F6AC(0x22);
+            *((u32 *) (((s8 *) self) + 0x1B0)) = 0;
+            ret = 1;
+          }
+        }
+        else
+        {
+          func_8003F6AC(3);
+          *((u32 *) (((s8 *) self) + 0x1B0)) = 0;
+        }
+      }
+    }
+      break;
+
+    case 2:
+      if (func_89105390((s32) (self + 0x110)) == 0)
+    {
+      if (((u16 *) D_800603C0)[4] & 0x4000)
+      {
+        func_8003F6AC(3);
+        *((u32 *) (((s8 *) self) + 0x1B0)) = 0;
+      }
+      else
+        if (((u16 *) D_800603C0)[4] & 0x8000)
+      {
+        if (!((*((u16 **) (((s8 *) self) + 0x140)))[*((s32 *) (((s8 *) self) + 0x144))] & 1))
+        {
+          func_8003F6AC(0x22);
+          *((u32 *) (((s8 *) self) + 0x1B0)) = 0;
+          ret = 2;
+        }
+        else
+        {
+          func_8003F6AC(8);
+        }
+      }
+    }
+      break;
+
+    case 3:
+      if (func_89105390((s32) (self + 0x110)) == 0)
+    {
+      if (((u16 *) D_800603C0)[4] & 0x4000)
+      {
+        func_8003F6AC(3);
+        *((u32 *) (((s8 *) self) + 0x1B0)) = 0;
+      }
+      else
+        if (((u16 *) D_800603C0)[4] & 0x8000)
+      {
+        if (!((*((u16 **) (((s8 *) self) + 0x140)))[*((s32 *) (((s8 *) self) + 0x144))] & 1))
+        {
+          u8 **entry2;
+          s32 sp38;
+          entry2 = (*(*((u8 *****) (((s8 *) self) + 0x4C))))[*((s32 *) (((s8 *) self) + 0x54))];
+          if ((*entry2[0]) >= 201)
+          {
+            sp38 = (*entry2[0]) - 201;
+          }
+          else
+          {
+            sp38 = (*entry2[0]) - 146;
+          }
+          func_8003F6AC(2);
+          func_89105340(self + 0x110, *((s32 *) (((s8 *) self) + 0x144)), func_80020974(sp38));
+          *((u32 *) (((s8 *) self) + 0x1B0)) = 4;
+        }
+        else
+        {
+          func_8003F6AC(8);
+        }
+      }
+    }
+      break;
+
+    case 4:
+      if (((*((s32 *) (((s8 *) self) + 0x188))) == 0) && (((u16 *) D_800603C0)[4] & 0xC000))
+    {
+      func_8003F6AC(3);
+      *((u32 *) (((s8 *) self) + 0x1B0)) = 0;
+      ret = 3;
+    }
+      break;
+
+  }
+
+  return ret;
+}
 
 void func_89108F0C(void) {
 }
