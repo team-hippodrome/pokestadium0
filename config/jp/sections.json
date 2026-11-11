@@ -217,6 +217,12 @@
       "size": "0x18"
     }
   },
+  "src/fragments/fragment012_17ED00/battle_engine_317E70.c": {
+    ".rodata": {
+      "address": "0x821957E4",
+      "size": "0x14"
+    }
+  },
   "src/fragments/fragment012_17ED00/battle_engine_317E70_2.c": {
     ".rodata": "0x82196860"
   },

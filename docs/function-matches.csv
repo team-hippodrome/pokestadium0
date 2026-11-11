@@ -1266,7 +1266,7 @@ func_82111C00,0x82111C00,src/fragments/fragment012_17ED00/battle_engine_317E70.c
 func_82111CD4,0x82111CD4,src/fragments/fragment012_17ED00/battle_engine_317E70.c,func_82111CD4,hand,,c
 func_82111DC4,0x82111DC4,src/fragments/fragment012_17ED00/battle_engine_317E70.c,func_82111DC4,s1,stadium1:src/fragments/particle_math/particle_math_26F9B0.c,c
 func_82111DCC,0x82111DCC,src/fragments/fragment012_17ED00/battle_engine_317E70.c,func_82111DCC,hand,,c
-func_821125C0,0x821125C0,src/fragments/fragment012_17ED00/battle_engine_317E70.c,,asm,,asm
+func_821125C0,0x821125C0,src/fragments/fragment012_17ED00/battle_engine_317E70.c,func_821125C0,hand,,c
 func_821129E4,0x821129E4,src/fragments/fragment012_17ED00/battle_engine_317E70.c,func_821129E4,hand,,c
 func_82112ADC,0x82112ADC,src/fragments/fragment012_17ED00/battle_engine_317E70.c,Battle_CheckAllBroughtFainted_HP,s1,stadium1:src/fragments/battle_engine/battle_engine_359F90.c,c
 func_82112C1C,0x82112C1C,src/fragments/fragment012_17ED00/battle_engine_317E70.c,func_82112C1C,hand,,c
