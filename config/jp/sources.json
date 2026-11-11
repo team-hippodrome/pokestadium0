@@ -69,6 +69,7 @@
   "src/fragments/fragment000_80C00/battle_engine_2FA4D0.c",
   "src/fragments/fragment000_80C00/battle_engine_309ED0.c",
   "src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c",
+  "src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0_81102C20.c",
   "src/fragments/fragment000_80C00/gb_tower_emulator_86920.c",
   "src/fragments/fragment000_80C00/gb_tower_emulator_86920_8110B880.c",
   "src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c",
