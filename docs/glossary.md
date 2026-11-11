@@ -8,7 +8,13 @@ Pocket Monsters Stadium (ポケモンスタジアム, 1998) only ships Japanese 
 
 - **English** is the current official English name (modern capitalization, e.g. `Thunder Shock`). Where the Gen 1 English games (Red/Blue/Yellow) spelled it differently, that spelling is in the *RBY spelling* column. Prefer the original name in identifiers and comments: `THUNDERSHOCK`, `POKE_BALL`, `ALAKAZAM`.
 - **Romanization** is plain Hepburn without macrons (long vowels doubled, `ー` repeats the vowel), generated mechanically from the kana. It is a search aid, not an official name. For Pokémon, the *Trademark romaji* column also gives Nintendo's registered romanization (e.g. Foodin, Barrierd).
-- Kana is as written in Gen 1–era Japanese text. Game text uses fullwidth digits (`わざマシン０１`).
+- Kana is as written in Gen 1–era Japanese text. Where Stadium Zero spells something differently, the table
+  gives Zero's spelling (オツキミやま, ななしのどうくつ, クリティカッター, シージー). Game text uses fullwidth digits.
+- **Zero ✓** marks a Japanese string that appears in Stadium Zero's own text in exactly that form. This was
+  checked by a ROM text audit of PR #53 on 2026-11-11 (Pokémon names, categories, moves, move types, items,
+  TM/HM moves, map labels, tournament opponents and labels). Rows without the mark are general Gen 1
+  reference vocabulary. They are still correct series terms, but Zero's text was not found to contain them.
+  The audit checks only the Japanese. English spellings, trademark romaji and kanji are outside its scope.
 - Sources: the Pokémon, move, item and type tables are generated from the [PokeAPI](https://github.com/PokeAPI/pokeapi) CSV data (Japanese kana, English names, Gen 1 item indices). The people, places, game-term and Stadium sections are hand-written; entries marked ⚠ are unverified and should be checked against the in-game text.
 
 ## Contents
@@ -28,7 +34,7 @@ Pocket Monsters Stadium (ポケモンスタジアム, 1998) only ships Japanese 
 
 ## Pokémon
 
-Dex numbers are National Pokédex order. Gen 1 cartridges store
+Dex numbers are National Pokédex order. All 151 names and 150 of 151 categories match Zero's species table; Porygon's category in Zero is シージー ("CG"), shown as シージーポケモン. Its English category stays Virtual Pokémon. Gen 1 cartridges store
 species by an internal index that is *not* dex order; map through dex number.
 
 | # | Japanese | Romanization | Trademark romaji | English | Category (JP) | Category (EN) |
@@ -169,7 +175,7 @@ species by an internal index that is *not* dex order; map through dex number.
 | 134 | シャワーズ | Shawaazu | Showers | Vaporeon | あわはきポケモン | Bubble Jet Pokémon |
 | 135 | サンダース | Sandaasu | Thunders | Jolteon | かみなりポケモン | Lightning Pokémon |
 | 136 | ブースター | Buusutaa | Booster | Flareon | ほのおポケモン | Flame Pokémon |
-| 137 | ポリゴン | Porigon | Porygon | Porygon | バーチャルポケモン | Virtual Pokémon |
+| 137 | ポリゴン | Porigon | Porygon | Porygon | シージーポケモン (Zero; later games バーチャルポケモン) | Virtual Pokémon |
 | 138 | オムナイト | Omunaito | Omnite | Omanyte | うずまきポケモン | Spiral Pokémon |
 | 139 | オムスター | Omusutaa | Omstar | Omastar | うずまきポケモン | Spiral Pokémon |
 | 140 | カブト | Kabuto | Kabuto | Kabuto | こうらポケモン | Shellfish Pokémon |
@@ -187,7 +193,7 @@ species by an internal index that is *not* dex order; map through dex number.
 
 ## Types
 
-Gen 1 has 15 types. Steel, Dark and Fairy do not exist yet. Note エスパー (Esper) → **Psychic**.
+Gen 1 has 15 types, and all 15 Japanese names appear in Zero's text. Steel, Dark and Fairy do not exist yet. Note エスパー (Esper) → **Psychic**.
 
 | Japanese | Romanization | English |
 |---|---|---|
@@ -211,7 +217,7 @@ Gen 1 has 15 types. Steel, Dark and Fairy do not exist yet. Note エスパー (E
 
 All 165 Gen 1 moves, in internal move-ID order (Gen 1 internal move IDs; ID 0 is "no move").
 
-Types are the Gen 1 types, which Stadium uses.
+Types are the Gen 1 types, which Stadium uses. All 165 Japanese names and type assignments match Zero's move tables (Zero ✓).
 
 | ID | Japanese | Romanization | English | RBY spelling | Type |
 |---:|---|---|---|---|---|
@@ -384,7 +390,7 @@ Types are the Gen 1 types, which Stadium uses.
 ## Items
 
 In Gen 1 internal item-index order (decimal and hex). Gaps are unused or glitch slots. TMs/HMs are listed separately below.
-Items marked *key* are key items.
+All listed Japanese names match Zero's item table (Zero ✓).
 
 | Index | Hex | Japanese | Romanization | English | RBY spelling |
 |---:|---|---|---|---|---|
@@ -394,7 +400,7 @@ Items marked *key* are key items.
 | 4 | 0x04 | モンスターボール | Monsutaabooru | Poké Ball |  |
 | 5 | 0x05 | タウンマップ | Taunmappu | Town Map |  |
 | 6 | 0x06 | じてんしゃ | Jitensha | Bicycle |  |
-| 7 | 0x07 | ?????（なみのり用 未使用） |  | Surfboard (unused slot) |  |
+| 7 | 0x07 | ？？？？？ |  | (unused; Surfboard slot) |  |
 | 8 | 0x08 | サファリボール | Safaribooru | Safari Ball |  |
 | 9 | 0x09 | ポケモンずかん | Pokemon zukan | Pokédex |  |
 | 10 | 0x0A | つきのいし | Tsukinoishi | Moon Stone |  |
@@ -443,7 +449,7 @@ Items marked *key* are key items.
 | 55 | 0x37 | エフェクトガード | Efekutogaado | Guard Spec. |  |
 | 56 | 0x38 | シルバースプレー | Shirubaasupuree | Super Repel |  |
 | 57 | 0x39 | ゴールドスプレー | Goorudosupuree | Max Repel |  |
-| 58 | 0x3A | クリティカット | Kuritikatto | Dire Hit |  |
+| 58 | 0x3A | クリティカッター | Kuritikattaa | Dire Hit |  |
 | 60 | 0x3C | おいしいみず | Oishiimizu | Fresh Water |  |
 | 61 | 0x3D | サイコソーダ | Saikosooda | Soda Pop |  |
 | 62 | 0x3E | ミックスオレ | Mikkusuore | Lemonade |  |
@@ -471,12 +477,14 @@ Items marked *key* are key items.
 
 Gen 1 renames worth knowing: タウリン is Protein (not Taurine), ブロムヘキシン is Iron, インドメタシン is Carbos,
 リゾチウム is Calcium, マックスアップ is HP Up, プラスパワー is X Attack, ディフェンダー is X Defense,
-スピーダー is X Speed, スペシャルアップ is X Special, ヨクアタール is X Accuracy, クリティカット is Dire Hit,
+スピーダー is X Speed, スペシャルアップ is X Special, ヨクアタール is X Accuracy, クリティカッター is Dire Hit (クリティカット in later games),
 エフェクトガード is Guard Spec., がくしゅうそうち is Exp. All (Exp. Share from Gen 2 on), ダウジングマシン is Itemfinder.
 
 ## TMs and HMs
 
-Gen 1 TM contents (Red/Green/Blue/Yellow). Item index = 0xC4 + HM number − 1 for HMs, 0xC9 + TM number − 1 for TMs.
+Gen 1 TM contents (Red/Green/Blue/Yellow); all 55 TM/HM move assignments match Zero's table. Zero does not store
+55 separate names. It formats them from the templates `わざマシン%02d` and `ひでんマシン%02d` (`Text_GetTmHmName`
+in `src/gb_data.c`), so searching the text for `わざマシン０１` finds nothing. Item index = 0xC4 + HM number − 1 for HMs, 0xC9 + TM number − 1 for TMs.
 
 | Machine | Japanese item | Index | Move (JP) | Move (EN) |
 |---|---|---|---|---|
@@ -640,6 +648,9 @@ Gen 1 TM contents (Red/Green/Blue/Yellow). Item index = 0xC4 + HM number − 1 f
 
 ## Trainer classes
 
+Series reference list for Gen 1 classes. Zero's Lv. 1–30 Tournament opponents use only the eight classes in the
+second table below. The other classes here, including オヤジ and マニア, were not found in Zero's text.
+
 | Japanese | Romanization | English |
 |---|---|---|
 | むしとりしょうねん | Mushitori shounen | Bug Catcher |
@@ -654,7 +665,7 @@ Gen 1 TM contents (Red/Green/Blue/Yellow). Item index = 0xC4 + HM number − 1 f
 | エリートトレーナー | Eriito toreenaa | Cooltrainer |
 | ジェントルマン | Jentoruman | Gentleman |
 | スキンヘッズ | Sukinheddzu | Cue Ball |
-| どろぼう | Dorobou | Burglar |
+| どろぼう (Zero full form: かじばどろぼう) | Dorobou (Kajiba dorobou) | Burglar |
 | ロッカー | Rokkaa | Rocker |
 | ジャグラー | Jaguraa | Juggler |
 | もうじゅうつかい | Moujuu tsukai | Tamer |
@@ -671,7 +682,26 @@ Gen 1 TM contents (Red/Green/Blue/Yellow). Item index = 0xC4 + HM number − 1 f
 | マニア | Mania | PokéManiac |
 | ロケットだんいん | Roketto-dan'in | Rocket (Grunt) |
 
+### Trainer classes in Zero's Lv. 1–30 Tournament
+
+These are the opponent records at `D_82400400` indices 15–22, repeated across the four cup sets. Each record has
+a full class field and a short handle. `\n` is a line break in the game's text; leave it out when searching.
+
+| Index | Full field (Zero ✓) | Short handle (Zero ✓) | English |
+|---:|---|---|---|
+| 15 | むしとり\nしょうねん | むしとり | Bug Catcher |
+| 16 | かじばどろぼう | どろぼう | Burglar |
+| 17 | とりつかい | とりつかい | Bird Keeper |
+| 18 | ガールスカウト | ガール | Jr. Trainer♀ |
+| 19 | りかけいの\nおとこ | りかけい | Super Nerd |
+| 20 | たんぱんこぞう | たんぱん | Youngster |
+| 21 | ボーイスカウト | ボーイ | Jr. Trainer♂ |
+| 22 | ミニスカート | ミニスカ | Lass |
+
 ## Places
+
+Zero ✓ marks the labels in the Pokédex habitat map (`D_8A12F2A4`, 36 rows, declared in
+`src/fragments/fragment018_262620/pokedex_2190D0.c`). The other places are series reference.
 
 | Japanese | Romanization | English | Notes |
 |---|---|---|---|
@@ -687,26 +717,28 @@ Gen 1 TM contents (Red/Green/Blue/Yellow). Item index = 0xC4 + HM number − 1 f
 | セキチクシティ | Sekichiku shiti | Fuchsia City | |
 | グレンタウン | Guren taun | Cinnabar Island | グレンじま in later games |
 | セキエイこうげん | Sekiei kougen | Indigo Plateau | |
-| ○ばんどうろ | ...-ban douro | Route ○ | e.g. 1ばんどうろ → Route 1 |
-| トキワのもり | Tokiwa no mori | Viridian Forest | |
-| おつきみやま | Otsukimi yama | Mt. Moon | |
-| イワヤマトンネル | Iwayama tonneru | Rock Tunnel | |
-| ディグダのあな | Diguda no ana | Diglett's Cave | |
+| ○ばんどうろ | ...-ban douro | Route ○ | Zero ✓, e.g. １ばんどうろ → Route 1 (fullwidth digits) |
+| ○ばんすいどう | ...-ban suidou | Route ○ (sea route) | Zero ✓ for Routes 19–21: １９ばんすいどう → Route 19 |
+| トキワのもり | Tokiwa no mori | Viridian Forest | Zero ✓ |
+| オツキミやま | Otsukimi yama | Mt. Moon | Zero ✓ spelling; おつきみやま in other games |
+| イワヤマトンネル | Iwayama tonneru | Rock Tunnel | Zero ✓ |
+| ディグダのあな | Diguda no ana | Diglett's Cave | Zero ✓ |
 | ちかつうろ | Chika tsuuro | Underground Path | |
 | サイクリングロード | Saikuringu roodo | Cycling Road | |
-| ポケモンタワー | Pokemon tawaa | Pokémon Tower | |
+| ポケモンタワー | Pokemon tawaa | Pokémon Tower | Zero ✓ |
 | シルフカンパニー | Shirufu kanpanii | Silph Co. | |
 | ゲームコーナー | Geemu koonaa | Game Corner | |
 | ロケットだんの アジト | Roketto-dan no ajito | Rocket Hideout | |
 | タマムシデパート | Tamamushi depaato | Celadon Dept. Store | |
-| サファリゾーン | Safari zoon | Safari Zone | |
-| ふたごじま | Futago jima | Seafoam Islands | |
-| ポケモンやしき | Pokemon yashiki | Pokémon Mansion | |
-| むじんはつでんしょ | Mujin hatsudensho | Power Plant | |
-| チャンピオンロード | Chanpion roodo | Victory Road | |
-| ハナダのどうくつ ⚠ | Hanada no doukutsu | Cerulean Cave | RBY: Unknown Dungeon |
+| サファリゾーン | Safari zoon | Safari Zone | Zero ✓ |
+| ふたごじま | Futago jima | Seafoam Islands | Zero ✓ |
+| ポケモンやしき | Pokemon yashiki | Pokémon Mansion | Zero ✓ |
+| むじんはつでんしょ | Mujin hatsudensho | Power Plant | Zero ✓ |
+| チャンピオンロード | Chanpion roodo | Victory Road | Zero ✓ |
+| ななしのどうくつ | Nanashi no doukutsu | Cerulean Cave | Zero ✓ (habitat map row 35). Literal: "Nameless Cave"; historical English alias: Unknown Dungeon |
+| ハナダのどうくつ | Hanada no doukutsu | Cerulean Cave | Later-game name; not Zero's label |
 | サントアンヌごう | Santo Annu gou | S.S. Anne | |
-| みさきのこや ⚠ | Misaki no koya | Sea Cottage | Bill's house |
+| みさきのこや | Misaki no koya | Sea Cottage | Bill's house; not found in Zero's text |
 | かくとうどうじょう | Kakutou doujou | Fighting Dojo | |
 | ニビかがくはくぶつかん | Nibi kagaku hakubutsukan | Pewter Museum of Science | |
 | ポケモンだいすきクラブ | Pokemon daisuki kurabu | Pokémon Fan Club | |
@@ -721,6 +753,9 @@ Gen 1 TM contents (Red/Green/Blue/Yellow). Item index = 0xC4 + HM number − 1 f
 This section covers Stadium itself and is the least certain part of this file. The English names follow
 the names already used in this repo and in the Stadium 1 (international) decomp; the Japanese column should
 be filled in from the in-game text as annotation reaches each mode. Entries marked ⚠ are unverified.
+The English for Zero ✓ rows is a project rendering, not recovered English text. "Nintendo Cup '97/'98" are
+descriptive names; Zero's own labels are the level ranges. Keep the spacing and character width of the
+Japanese only where an exact match matters.
 
 | Japanese | Romanization | English | Code / notes |
 |---|---|---|---|
@@ -731,7 +766,14 @@ be filled in from the in-game text as annotation reaches each mode. Entries mark
 | レンタルポケモン | Rentaru pokemon | Rental Pokémon | |
 | ポケモンずかん | Pokemon zukan | Pokédex | `pokedex` fragment |
 | ミニゲーム | Mini geemu | Mini-game | |
-| L50～55でのトーナメント ⚠ | — | Lv. 50–55 Tournament | Nintendo Cup '97 finalists as opponents; see below. Name is from the manual via outside research and not checked here |
+| L　１〜３０での　トーナメント | L 1–30 de no toonamento | Lv. 1–30 Tournament | Zero ✓. Follows the 2nd national tournament's rules (Nintendo Cup '98); 33 usable species. Fullwidth-Ｌ variant also stored |
+| L５０〜５５での　トーナメント | L 50–55 de no toonamento | Lv. 50–55 Tournament | Zero ✓. Follows the 1st national tournament's rules (Nintendo Cup '97) and uses its finalists; 40 usable species. See below |
+| L　１〜３０　バトル | L 1–30 batoru | Lv. 1–30 Battle | Zero ✓. Free-battle rule label |
+| L５０〜５５　バトル | L 50–55 batoru | Lv. 50–55 Battle | Zero ✓. Free-battle rule label |
+| モンスターボールカップ | Monsutaa booru kappu | Poké Ball Cup | Zero ✓ |
+| スーパーボールカップ | Suupaa booru kappu | Great Ball Cup | Zero ✓ |
+| ハイパーボールカップ | Haipaa booru kappu | Ultra Ball Cup | Zero ✓ |
+| マスターボールカップ | Masutaa booru kappu | Master Ball Cup | Zero ✓ |
 | トーナメント | Toonamento | Tournament | |
 | けっしょう / じゅんけっしょう | Kesshou / jun-kesshou | Final / Semifinal | |
 | ゆうしょう | Yuushou | Win the tournament / championship | |
@@ -760,11 +802,11 @@ player's name is *Mika*. Never romanize these names from the kanji.
 Use the romanizations below verbatim in comments and identifiers. They are Hepburn without macrons, with
 long vowels doubled to match the rest of this glossary, and family name first.
 
-Provenance: the index order and kana readings come from a read of the ROM string table that Julius provided, with outside
-kanji from fan archives (公式戦ヒストリア, 97リーグの猛者達) and one Nintendo results page. They have **not** been
-re-read from the ROM in this repo, because the string table is not yet in `src/`. The table layout and the
-0–14 pick in fragment009 do match the decomp, and so do the index order and kana given in that research.
-Re-check each row when the strings are extracted. The kanji of the three names with variant spellings would
+Provenance: the index order, regions, kana readings and handles match two independent reads of the ROM
+string table (Julius's original research and the 2026-11-11 ROM text audit). The champion's name field
+really is just とおる; the ROM does not give "Miyazawa". The kanji come from fan archives (公式戦ヒストリア,
+97リーグの猛者達) and one Nintendo results page. The ROM does not confirm them. The strings are not yet in
+`src/`; re-check each row against them once they are extracted. The kanji of the three names with variant spellings would
 need a 1997–98 print source to settle, but that does not change any romanization.
 
 | Index | Region (`unk_04`) | Real name in game (`unk_08`) | Locked romanization | Kanji (reference only) | Trainer name (`unk_0C`) | Trainer romanization | Risk / why locked |
@@ -787,6 +829,8 @@ need a 1997–98 print source to settle, but that does not change any romanizati
 
 In the game, `unk_08` puts a newline between the family name and the given name; the table shows it as a space.
 Region names are kana in the game. In annotations, use the English form in parentheses. Trainer names are names
-the players chose and have no official English form. A katakana loanword is written as the English word it
-spells (クレア → Clair, ブルー → Blue). Any other name is romanized, not translated (テンサイ → Tensai); the
-glosses in quotes are only there to explain the name.
+the players chose and have no official English form, and only their kana is verified. By project convention,
+a katakana loanword is written in its English spelling (クレア → Clair, ブルー → Blue). That spelling is a
+choice: クレア could equally be Claire or Clare. Any other name is romanized, not translated
+(テンサイ → Tensai). A playable English localization (e.g. サトシ → Ash) is a separate decision. The glosses in
+quotes are only there to explain the name.
