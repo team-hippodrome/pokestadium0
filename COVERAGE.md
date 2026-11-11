@@ -4,18 +4,18 @@
 
 <!-- AUTO_COVERAGE:START -->
 - Code owners (first-pass function inventory, excluding handwritten assembly): **5,413** covering **1,270,568** text bytes
-- Built from C in the full-ROM build: **5,396 / 5,413 (99.7%)**, **1,241,896** bytes (97.7%)
+- Built from C in the full-ROM build: **5,397 / 5,413 (99.7%)**, **1,242,936** bytes (97.8%)
   - ported from the Stadium 1 decomp: **2,400**
   - m2c output: **937**
-  - matched by hand: **1,838**
+  - matched by hand: **1,839**
   - unmodified ultralib 2.0I sources (`lib/ultralib`): **215**
 - Built from original SDK assembly: **25**, **4,672** bytes
-- Covered by C or original SDK source across the complete inventory (including handwritten owners): **5,421 / 5,444 (99.6%)**, **1,246,568** bytes (95.6%)
+- Covered by C or original SDK source across the complete inventory (including handwritten owners): **5,422 / 5,444 (99.6%)**, **1,247,608** bytes (95.7%)
 - Matching C held behind `NON_MATCHING` until its file's data is placed: **0**
 - Identified libultra functions still using extracted assembly (including handwritten owners): **0**, **0** bytes
-- Remaining ordinary assembly owners: **17** (17 still extracted)
+- Remaining ordinary assembly owners: **16** (16 still extracted)
 - Handwritten assembly, counted separately from the ordinary totals above ([list](docs/handwritten-asm.csv)): **31** owners, **33,068** bytes (0 built from C; 25 from original SDK assembly)
-- Remaining extracted assembly across the complete inventory: **23**
+- Remaining extracted assembly across the complete inventory: **22**
 - Complete ROM comparison: **PASS**, SHA-256 `ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b`
 <!-- AUTO_COVERAGE:END -->
 

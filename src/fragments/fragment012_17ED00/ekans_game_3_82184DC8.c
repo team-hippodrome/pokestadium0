@@ -1672,9 +1672,81 @@ s32 func_82187738(u8* arg0, u8* arg1, s32 arg2, s8* arg3, s32 arg4) {
     return ret;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_821879A4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821879A4.s")
-#endif
+s32 func_821879A4(void) {
+    s32 flag;
+    s32 r;
+    f32 fa[6];
+    f32 f20;
+    s32 k;
+    s32 best;
+    s32 i;
+
+    flag = 0;
+    k = 0;
+    best = -1;
+    if (M2C_FIELD(D_821CF29C, u16*, 0x18) == 0 || (D_821CF29C[0x21] & 0x20) || (D_821CF29C[0x5A] & 1)) {
+        flag = 1;
+    } else if ((D_821CF29C[0x21] & 7) && D_821CF29C[0x6D] < 10) {
+        flag = 1;
+    }
+    if (M2C_FIELD(D_821CF29C, u16*, 0x18) == 0) {
+        ((u8*)D_821CF294)[0x36C] &= ~D_821CF29C[0x75];
+    }
+    for (i = 0; i < D_821CF288; i++) {
+        if ((r = func_82185220((u8*)D_821CF2A0, D_821CF294[i].pad04, 0)) == 0) {
+            fa[i] = 255.0f;
+        } else {
+            fa[i] = (f32)func_82185220(D_821CF294[i].pad04, (u8*)D_821CF2A0, 0) / (f32)r;
+        }
+        // FAKE: the dead store to r is needed for the operand order
+        if (D_821CF29C[0x75] == (r = 1 << i)) {
+            f20 = fa[i];
+        }
+        D_821CF294[i].unk_0C = fa[i];
+    }
+    do {
+        for (i = 0; i < D_821CF288; i++) {
+            if (D_821CF294[i].unk_1C == 0) {
+                continue;
+            }
+            switch (k) {
+            case 0:
+                if (fa[i] - f20 < *(f32*)((u8*)D_821CF294 + 0x364)) break;
+                if (func_82183CE4((s8*)D_821CF294[i].pad04) < 0x28) break;
+            case 1:
+            case 2:
+                if (fa[i] < f20) break;
+            case 3:
+                if (D_821CF294[i].unk_25 & 7) break;
+            case 4:
+                if (D_821CF294[i].unk_5E & 1) break;
+            case 5:
+                if (flag && func_8218663C(D_821CF294[i].pad04, (u8*)D_821CF2A0) < 0) break;
+            case 6:
+                if (flag && func_8218540C((s8*)D_821CF294[i].pad04, D_821CF2A0) == 0) break;
+            case 7:
+                if (func_82183CE4((s8*)D_821CF294[i].pad04) < 0x37) break;
+            case 8:
+                if (D_821CF294[i].unk_25 & 0x20) break;
+            default:
+            case 9:
+                *(f32*)((u8*)D_821CF294 + 0x364) = 10.0f;
+                best = i;
+                f20 = fa[i] - *(f32*)((u8*)D_821CF294 + 0x364);
+            }
+        }
+        k++;
+        if (flag && k == 2) {
+            f20 = -1.0f;
+        }
+    } while (flag && best < 0);
+    if (!flag) {
+        if (func_82183AF0() < 0x46) {
+            if (func_821855F0(D_821CF294) != 0 && func_82185684(D_821CF2A0) != 0) {
+                return -1;
+            }
+        }
+    }
+    return best;
+}
 

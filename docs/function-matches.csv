@@ -2947,7 +2947,7 @@ func_821870D8,0x821870D8,src/fragments/fragment012_17ED00/ekans_game_3_82184DC8.
 func_82187134,0x82187134,src/fragments/fragment012_17ED00/ekans_game_3_82184DC8.c,func_82187134,hand,,c
 func_82187414,0x82187414,src/fragments/fragment012_17ED00/ekans_game_3_82184DC8.c,func_82187414,hand,,c
 func_82187738,0x82187738,src/fragments/fragment012_17ED00/ekans_game_3_82184DC8.c,func_82187738,hand,,c
-func_821879A4,0x821879A4,src/fragments/fragment012_17ED00/ekans_game_3_82184DC8.c,,asm,,asm
+func_821879A4,0x821879A4,src/fragments/fragment012_17ED00/ekans_game_3_82184DC8.c,func_821879A4,hand,,c
 func_82187DB4,0x82187DB4,src/fragments/fragment012_17ED00/ekans_game_3_82187DB4.c,func_82187DB4,hand,,c
 func_82188050,0x82188050,src/fragments/fragment012_17ED00/ekans_game_3_82188050.c,func_82188050,hand,,c
 func_8218824C,0x8218824C,src/fragments/fragment012_17ED00/ekans_game_3_82188050.c,func_8218824C,hand,,c
