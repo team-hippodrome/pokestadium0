@@ -1109,5 +1109,69 @@
     "mips": "-mips2",
     "opt": "-O1",
     "profile": "ultralib-asm"
+  },
+  "src/libultra/debug/assertbreak.c": {
+    "assembly_source": "lib/ultralib/src/debug/assertbreak.s",
+    "extra": [],
+    "ido": "5.3",
+    "mips": "-mips2",
+    "opt": "-O1",
+    "profile": "ultralib-asm"
+  },
+  "src/50920.c": {
+    "assembly_source": "lib/ultralib/src/libc/bzero.s",
+    "extra": [],
+    "ido": "5.3",
+    "mips": "-mips2",
+    "opt": "-O2",
+    "profile": "ultralib-asm"
+  },
+  "src/57330.c": {
+    "assembly_source": "lib/ultralib/src/os/invaldcache.s",
+    "extra": [],
+    "ido": "5.3",
+    "mips": "-mips2",
+    "opt": "-O1",
+    "profile": "ultralib-asm"
+  },
+  "src/57410.c": {
+    "assembly_source": "lib/ultralib/src/os/invalicache.s",
+    "extra": [],
+    "ido": "5.3",
+    "mips": "-mips2",
+    "opt": "-O1",
+    "profile": "ultralib-asm"
+  },
+  "src/libultra/os/setfpccsr_asm.c": {
+    "assembly_source": "lib/ultralib/src/os/setfpccsr.s",
+    "extra": [],
+    "ido": "5.3",
+    "mips": "-mips2",
+    "opt": "-O1",
+    "profile": "ultralib-asm"
+  },
+  "src/4DF00.c": {
+    "assembly_source": "lib/ultralib/src/os/setintmask.s",
+    "extra": [],
+    "ido": "5.3",
+    "mips": "-mips2",
+    "opt": "-O1",
+    "profile": "ultralib-asm"
+  },
+  "src/52D00.c": {
+    "assembly_source": "lib/ultralib/src/os/writebackdcache.s",
+    "extra": [],
+    "ido": "5.3",
+    "mips": "-mips2",
+    "opt": "-O1",
+    "profile": "ultralib-asm"
+  },
+  "src/5CCA0.c": {
+    "assembly_source": "lib/ultralib/src/os/writebackdcacheall.s",
+    "extra": [],
+    "ido": "5.3",
+    "mips": "-mips2",
+    "opt": "-O1",
+    "profile": "ultralib-asm"
   }
 }
