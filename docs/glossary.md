@@ -728,7 +728,7 @@ be filled in from the in-game text as annotation reaches each mode. Entries mark
 | 64GBパック | Rokujuuyon jii bii pakku | Transfer Pak | reads Red/Green/Blue cartridges |
 | コントローラパック | Kontoroora pakku | Controller Pak | |
 | ゲームボーイ | Geemu booi | Game Boy | |
-| レンタルポケモン ⚠ | Rentaru pokemon | Rental Pokémon | |
+| レンタルポケモン | Rentaru pokemon | Rental Pokémon | |
 | ポケモンずかん | Pokemon zukan | Pokédex | `pokedex` fragment |
 | ミニゲーム | Mini geemu | Mini-game | |
 | L50～55でのトーナメント ⚠ | — | Lv. 50–55 Tournament | Nintendo Cup '97 finalists as opponents; see below. Name is from the manual via outside research and not checked here |
@@ -741,10 +741,6 @@ be filled in from the in-game text as annotation reaches each mode. Entries mark
 | — | — | Cup select | `cup_select` |
 | — | — | Battle order select | `battle_order_select` |
 | — | — | Lab (PC boxes, items) | `lab_pc_*`, `lab_item` |
-| — | — | Gallery (photo mode) | `gallery_*` |
-| — | — | Ekans's Hoop Hurl | `ekans_game` (international name) |
-| — | — | Clefairy Says | `clefairy_game` (international name) |
-| — | — | Rock Harden (Metapod) | `metapod_game` (international name) |
 | — | — | GB save viewer / GB Pak data | "GB save port" in function notes |
 
 
@@ -778,9 +774,9 @@ need a 1997–98 print source to settle, but that does not change any romanizati
 | 2 | とうほくＢ (Tohoku B) | たかはし じゅん | Takahashi Jun | 高橋 潤 | じゅん | Jun | Low |
 | 3 | ほくりく (Hokuriku) | とおる (given name only) | Tooru | 宮沢 徹 (champion; family name Miyazawa from outside sources only) | おれさま | Oresama | Medium: 徹 is also read Tetsu or Akira. His entry alone has no family name and `unk_00` = 0 rather than 2 |
 | 4 | かんとうＡ１ (Kanto A1) | すずき ゆうすけ | Suzuki Yuusuke | 鈴木 雄輔 | ユウスケ | Yuusuke | Low |
-| 5 | かんとうＡ２ (Kanto A2) | ふじた みか | Fujita Mika | 藤田 美蘭 | クレア | Kurea | **Extreme**: 美蘭 is normally Miran |
+| 5 | かんとうＡ２ (Kanto A2) | ふじた みか | Fujita Mika | 藤田 美蘭 | クレア | Clair | **Extreme**: 美蘭 is normally Miran |
 | 6 | かんとうＢ (Kanto B) | はやし やすひろ | Hayashi Yasuhiro | 林 泰宏 / 林 康宏 (3rd place; sources differ) | ヤスヒロ | Yasuhiro | Low; the kanji vary but the reading doesn't |
-| 7 | ちゅうぶＡ (Chubu A) | やまだ たかひさ | Yamada Takahisa | 山田 高久 | ブルー | Buruu ("Blue") | Low–medium: 高久 is also read Takaku |
+| 7 | ちゅうぶＡ (Chubu A) | やまだ たかひさ | Yamada Takahisa | 山田 高久 | ブルー | Blue | Low–medium: 高久 is also read Takaku |
 | 8 | ちゅうぶＢ (Chubu B) | きたがわ やすのり | Kitagawa Yasunori | 北川 恭教 | テンサイ | Tensai ("genius") | **Very high**: 恭教 has many readings (Takayuki, Yoshinori, ...) |
 | 9 | かんさい (Kansai) | にしむら しゅん | Nishimura Shun | 西村 峻 / 西村 俊 (runner-up; sources differ) | にっしん | Nisshin | Low–medium: 峻 is also read Takashi |
 | 10 | ちゅうごくＡ (Chugoku A) | いまい だいすけ | Imai Daisuke | 今井 大介 | ダイスケ | Daisuke | Low |
