@@ -280,8 +280,8 @@ typedef struct GbpakChannel811023DC {
     /* 0x54 */ u8* buf;
     /* 0x58 */ u8* romBuf;
     /* 0x5C */ u8* sramBuf;
-    /* 0x60 */ u8* bankState;
-    /* 0x64 */ u8* sramState;
+    /* 0x60 */ volatile u8* bankState;
+    /* 0x64 */ volatile u8* sramState;
     /* 0x68 */ u8* bankList;
     /* 0x6C */ u8* bankEntry;
     /* 0x70 */ u8* ramBuf;
@@ -415,11 +415,65 @@ s32 GbPak_TransferBankedRam(u8* arg0, s32 arg1) {
     return var_v1;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_811027A8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_811027A8.s")
-#endif
+/* One 6-byte entry of the bank list; the list ends with a 0xFF bank byte. */
+typedef struct GbpakBankEntry {
+    /* 0x0 */ u8 bank; // bit 7 set: SRAM bank, clear: ROM bank
+    /* 0x1 */ u8 unk1[5];
+} GbpakBankEntry; // size = 0x6
+extern volatile u8 D_81156476;
+extern OSMesgQueue D_81156458;
+s32 func_8004CFB0(OSMesgQueue*, s32, s32);
+void func_811027A8(GbpakChannel811023DC* ch) {
+    GbpakBankEntry* entry;
+
+    if ((D_81156476 != 0) && (ch->request == 0)) {
+        if (ch->error) {
+            return;
+        }
+        entry = (GbpakBankEntry*)ch->bankList;
+        if (D_81156476 == 2) {
+            D_81156476 = 0;
+            return;
+        }
+        for (; entry->bank != 0xFF; entry++) {
+            if (entry->bank & 0x80) {
+                volatile u8* state = &ch->sramState[entry->bank & 0x7F];
+                if (*state) {
+                    *state = 2;
+                    ch->addr = (entry->bank & 0x7F) << 13;
+                    ch->buf = ch->sramBuf + ch->addr;
+                    ch->size = 0x2000;
+                    ch->request = 7;
+                    ch->unkA1 = 1;
+                    goto found;
+                }
+            } else {
+                volatile u8* state = &ch->bankState[entry->bank & 0x7F];
+                if (*state) {
+                    *state = 2;
+                    ch->request = 6;
+                    ch->addr = (entry->bank & 0x7F) << 14;
+                    ch->buf = ch->romBuf + ch->addr;
+                    ch->size = 0x2000;
+                    ch->unkA1 = 1;
+                    goto found;
+                }
+            }
+        }
+
+        if (((*((u16 *) ch->checksum)) ^ ((ch->sum - ch->checksum[0]) - ch->checksum[1])) & 0xFFFF) {
+            ch->error = 2;
+            return;
+        }
+        ch->request = 4;
+        func_8004CFB0(&D_81156458, ch->channel, 1);
+        D_81156476 = 2;
+        return;
+    found:
+        ch->bankEntry = (u8*)entry;
+        func_8004CFB0(&D_81156458, ch->channel, 1);
+    }
+}
 
 extern volatile u8 D_81156475;
 extern volatile u8 D_81156476;
