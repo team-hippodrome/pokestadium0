@@ -39,6 +39,12 @@
       "size": "0x190"
     }
   },
+  "src/audio_commands_800414B0.c": {
+    ".rodata": {
+      "address": "0x8007EA0C",
+      "size": "0x30"
+    }
+  },
   "src/audio_commands_2.c": {
     ".rodata": {
       "address": "0x8007EA3C",

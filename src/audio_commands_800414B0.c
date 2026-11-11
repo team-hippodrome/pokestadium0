@@ -13,11 +13,112 @@
 #include "audio_fade.h"
 #include "m2c_macros.h"
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_800414B0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800414B0.s")
-#endif
+extern u8 D_80077528;
+extern u8 D_80077534;
+extern s32 D_80077064[][2];
+extern s32 D_800FD670[];
+extern s32 D_800FD680;
+extern u8 D_800FD605;
+extern s32* D_800B417C;
+extern s32* D_800B4160;
+extern u8* D_800B41F0;
+extern s32 D_800B41D0[];
+extern s32 D_800B4198;
+s32 func_80037B7C(s32);
+s32 func_80037AC4(s32, s32);
+void func_8004609C(u32, u8*, s32);
+void func_80047FB0(u8*, s32, s32);
+void func_8003A710(s32);
+s32 func_8003834C(s32, s32, s32, s32, s32, s32, s32);
+
+// FAKE: callers pass four arguments. `hi` has to be a u8 that owns no stack slot
+// (a u8 local matches every instruction but shifts two spill slots by 4), and a
+// fifth parameter is the only form found that does that.
+s32 func_800414B0(u8 arg0, u32 arg1, u32 arg2, u32 arg3, u8 hi) {
+    u32 addr;
+    s32 size;
+    s32 flags;
+    u8* entry;
+
+    if (D_80077528 != 0) {
+        return 0;
+    }
+    if (D_80077534 != 0) {
+        return 0;
+    }
+    if (arg1 >= 0xA6U) {
+        return 0;
+    }
+    if (arg2 == 0x84 || arg2 == 0x5E) {
+        return 0;
+    }
+    D_80077534 = 0x14;
+    if (arg2 >= 0x98U) {
+        return 0;
+    }
+    hi = (arg3 & 0xFF00) >> 8;
+    arg3 &= 0xFF;
+    if ((arg3 == 0xA || arg3 == 0xB) && (hi == 0x10 || hi == 0x20)) {
+        return 0;
+    }
+    if (arg0 >= 2) {
+        return 0;
+    }
+    if (D_80077064[arg2][0] == 0) {
+        return 0;
+    } else {
+        entry = (u8*)D_80077064[arg2][0];
+    }
+    if (func_80037B7C(D_800FD670[arg0])) {
+        func_80037AC4(D_800FD670[arg0], 0xA);
+        D_800FD670[arg0] = 0;
+    }
+    if (arg3 == 1 || arg3 == 5) {
+        for (flags = 0; flags < 4; flags++) {
+            func_80037AC4(D_800FD670[flags], 0xA);
+            D_800FD670[flags] = 0;
+        }
+    }
+    switch (arg3) {
+    case 11:
+        if (func_80037B7C(D_800FD670[arg0 ^ 1])) {
+            func_80037AC4(D_800FD670[arg0 ^ 1], 0xA);
+            D_800FD670[arg0 ^ 1] = 0;
+        }
+        flags = (entry[0] & 0xF0) >> 4;
+        break;
+    case 0:
+    case 2:
+    case 3:
+        flags = (entry[arg1] & 0xF0) >> 4;
+        break;
+    case 4:
+        flags = (entry[arg1] & 0xE) >> 1;
+        break;
+    case 1:
+        flags = entry[arg1] & 1;
+        break;
+    default:
+        return 0;
+    }
+    if (flags == 0) {
+        return 0;
+    }
+    D_800FD605++;
+    D_800FD605 %= 5;
+    arg2--;
+    if (arg2 < (u32)(D_800B417C[0] - 1)) {
+        addr = D_800B417C[arg2 + 3];
+        size = D_800B417C[arg2 + 4] - addr;
+    } else {
+        addr = D_800B417C[arg2 + 3];
+        size = D_800B4160[8] - addr;
+    }
+    func_8004609C(addr, D_800B41F0, size);
+    func_80047FB0(D_800B41F0, D_800B41D0[D_800FD605], 0x200);
+    func_8003A710(D_800B41D0[D_800FD605]);
+    return (D_800FD670[arg0] = func_8003834C(D_800B4198, D_800B41D0[D_800FD605], flags, 0x80, 0x80, 0, -1));
+}
 
 M2C_UNK func_8003834C(s32, s32, s32, M2C_UNK, s32, s32, s32); /* extern */
 extern s32 D_800B418C;
