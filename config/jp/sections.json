@@ -240,7 +240,7 @@
     ".rodata": "0x82195A04",
     ".data": {
       "address": "0x8218B0E4",
-      "size": "0x20"
+      "size": "0x120"
     }
   },
   "src/fragments/fragment012_17ED00/battle_engine_3223B0.c": {
