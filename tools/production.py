@@ -630,7 +630,7 @@ def build_group(group, selected, cc, prefix, compare, files=None, compilers=None
 def headers_digest():
     """One digest over every header and included C fragment the src/ build can read."""
     digest = hashlib.sha256()
-    for directory in ('include', 'src', 'lib/ultralib/include'):
+    for directory in ('include', 'src', 'lib/ultralib/include', 'lib/ultralib/src'):
         for path in sorted((ROOT / directory).rglob('*')):
             if path.is_file() and (path.suffix == '.h' or path.name.endswith('.inc.c')):
                 digest.update(str(path.relative_to(ROOT)).encode() + b'\0' + path.read_bytes())

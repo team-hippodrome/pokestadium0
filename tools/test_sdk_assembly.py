@@ -1,14 +1,15 @@
 """Original SDK provenance and native assembler alias accounting."""
 from pathlib import Path
 import shutil
+import struct
 import subprocess
 import tempfile
 import unittest
 from unittest.mock import patch
 
 from production import (ROOT, ULTRALIB_ASM_FLAGS, sdk_assembly_source,
-                        link_symbols, normalize_sdk_symbols)
-from check_functions import native_function_symbols
+                        link_symbols, normalize_sdk_symbols, headers_digest)
+from check_functions import native_function_symbols, native_owner_span, compare
 
 
 class SDKAssemblyTests(unittest.TestCase):
@@ -44,6 +45,38 @@ class SDKAssemblyTests(unittest.TestCase):
     def test_unsized_entry_without_a_body_remains_subject_to_comparison(self):
         functions = {'unknown': (0, 0), 'body': (4, 12)}
         self.assertEqual(native_function_symbols(functions), functions)
+
+    def test_local_sdk_assembly_headers_are_part_of_the_receipt_digest(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            header = root / 'lib/ultralib/src/os/exceptasm.h'
+            header.parent.mkdir(parents=True)
+            header.write_text('#define MQ_FULLQUEUE 4\n')
+            with patch('production.ROOT', root):
+                original = headers_digest()
+                header.write_text('#define MQ_FULLQUEUE 8\n')
+                self.assertNotEqual(headers_digest(), original)
+
+    def test_internal_sdk_entry_compares_its_complete_instruction_interval(self):
+        owners = {(None, 0x80000100): ('outer', [0x03E00008, 0, 13, 0x03E00008], ())}
+        region = native_owner_span(None, 0x80000108, 8, owners)
+        self.assertEqual(region[0], 'outer')
+        functions = {'internal': (0, 8)}
+        original = struct.pack('>2I', 13, 0x03E00008)
+        self.assertIsNone(compare(original, functions, {}, 'internal', 0x80000108,
+                                  region[1], {}))
+        changed = struct.pack('>2I', 0, 0x03E00008)
+        self.assertEqual(compare(changed, functions, {}, 'internal', 0x80000108,
+                                 region[1], {}), 'word 0')
+
+    def test_sdk_entries_cannot_escape_their_owner_or_use_an_unknown_extent(self):
+        owners = {(None, 0x80000100): ('first', [1, 2], ()),
+                  (None, 0x80000108): ('second', [3, 4], ())}
+        for address, size in ((0x80000104, 8), (0x80000100, 0),
+                              (0x80000100, 3), (0x80000101, 4), (0x80000200, 4)):
+            with self.subTest(address=address, size=size):
+                self.assertIsNone(native_owner_span(None, address, size, owners))
+        self.assertIsNone(native_owner_span(0, 0x80000100, 8, owners))
 
     def test_only_referenced_undefined_symbols_need_addresses(self):
         assembler = shutil.which('mips-linux-gnu-as')

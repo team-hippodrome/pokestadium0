@@ -1173,5 +1173,15 @@
     "mips": "-mips2",
     "opt": "-O1",
     "profile": "ultralib-asm"
+  },
+  "src/4E980.c": {
+    "assembly_source": "lib/ultralib/src/os/exceptasm.s",
+    "extra": [
+      "-32"
+    ],
+    "ido": "5.3",
+    "mips": "-mips3",
+    "opt": "-O1",
+    "profile": "ultralib-asm"
   }
 }
