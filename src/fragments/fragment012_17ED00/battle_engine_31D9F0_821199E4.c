@@ -597,7 +597,102 @@ found:
 
 u8 D_8218B124[] = { 0xFF, 0xFF, 0xFF, 0x00, 0x6E, 0xFF, 0xFF, 0xFF, 0xFF, 0x64, 0xFF, 0x00, 0x00, 0xFF, 0x00, 0x00, 0x64, 0x00, 0x00, 0x64, 0xFF, 0x00, 0x00, 0xFF };
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211CC8C.s")
+typedef struct TextLine8211CC8C {
+    /* 0x00 */ s8* str;
+    /* 0x04 */ u8 color;
+    /* 0x05 */ char unk05[3];
+} TextLine8211CC8C; // size = 0x8
+typedef struct Rgb8211CC8C {
+    u8 r, g, b;
+} Rgb8211CC8C;
+extern TextLine8211CC8C D_82189D8C[];
+extern u8 D_8219A4F0[];
+extern char D_82195A8C[];
+extern char D_82195A94[];
+extern char D_82195A9C[];
+s32 func_8000A4E8(s8*, char*);
+
+void func_8211CC8C(void) {
+    UNUSED s32 pad[4]; // FAKE
+    s16 x = *(s16*)&D_8219A4F0[0x16]; // FAKE: the text box is read as raw bytes; a struct pointer gets folded
+    s16 y = *(s16*)&D_8219A4F0[0x18]; // FAKE
+    s32 n = 0;
+    s32 i = 0;
+    Rgb8211CC8C* c;
+    s32 ty;
+    s32 len;
+
+    if (D_8219A4F0[3] == 0xFF) {
+        return;
+    }
+    if (D_8219A4F0[0] & 8) {
+        D_8219A4F0[2] = func_8000F1FC(D_8219A4F0[2], 0xFF, 0xA, 0xA);
+    } else {
+        D_8219A4F0[2] = func_8000F1FC(D_8219A4F0[2], 0, 0xA, 0xA);
+    }
+    for (;;) {
+        if (D_8219A4F0[3] == 0) {
+            break;
+        }
+        if (func_8000A4E8(D_82189D8C[i].str, D_82195A8C) == 0) {
+            n++;
+            i++;
+            if (n == D_8219A4F0[3]) {
+                break;
+            }
+        }
+        i++;
+    }
+    n = 0;
+    for (;;) {
+        if (func_8000A4E8(D_82189D8C[i + n].str, D_82195A94) == 0) {
+            break;
+        }
+        n++;
+    }
+    if (y == 0xB4) {
+        if (n >= 7) {
+            y = y - n * 0xB - (n / 2) * 0xF + 0x43;
+        } else {
+            y = y - (n / 2) * 0xF - 0xA;
+        }
+    } else if (n >= 7) {
+        y = y + n * 0xB - (n / 2) * 0xF - 0x43;
+    } else {
+        y = y - (n / 2) * 0xF + 0xA;
+    }
+    n = 0;
+    for (;;) {
+        if (func_8000A4E8(D_82189D8C[i].str, D_82195A9C) == 0) {
+            break;
+        }
+        ty = y + n * 0xF;
+        func_8001AB6C();
+        func_8001ABE8();
+        // FAKE: base first, then += index, so D_8218B124 is allocated before the 3 multiplier
+        c = (Rgb8211CC8C*)D_8218B124;
+        c += D_82189D8C[i].color << 1;
+        func_8001AA9C(c->r, c->g, c->b, D_8219A4F0[2]);
+        c = (Rgb8211CC8C*)D_8218B124;
+        c += (D_82189D8C[i].color << 1) + 1;
+        func_8001AAE4(c->r, c->g, c->b, D_8219A4F0[2]);
+        if ((func_8211CBCC(D_82189D8C[i].str) == 0) || (D_82189D8C[i].color == 1)) {
+            len = func_800566BC(D_82189D8C[i].str) >> 1;
+            func_8001A384(2, -1);
+            func_8001A944(x - len * 6 - 6, ty, D_82189D8C[i].str);
+        } else {
+            len = func_800566BC(D_8219A4A0) >> 1;
+            func_8001A384(2, -1);
+            func_8001A944(x - len * 0xC - 0xC, ty, D_8219A4A0);
+            func_8001A384(2, -1);
+            func_8001A944(x - 6, ty, D_8219A4C8);
+        }
+        func_8001AC3C();
+        func_8001ABBC();
+        i++;
+        n++;
+    }
+}
 
 extern u8 D_8219A4F0[];
 extern u8 D_03003540[];
