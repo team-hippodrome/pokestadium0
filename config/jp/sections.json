@@ -57,6 +57,10 @@
       "size": "0x1AC"
     }
   },
+  "src/fragments/fragment000_80C00/81100020.c": {
+    ".bss": "0x81154C50",
+    ".rodata": "0x81154180"
+  },
   "src/fragments/fragment000_80C00/81110190.c": {
     ".data": "0x81138350"
   },
