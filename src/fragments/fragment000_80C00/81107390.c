@@ -785,8 +785,73 @@ void* func_811092F4(AudioCmd* cmd, s8* arg1, s32 arg2, u16 count, u16 arg4, s32 
     return cmd;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110938C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110938C.s")
-#endif
+typedef struct Src8110938C {
+    /* 0x00 */ u32 unk00_0 : 4;
+    /* 0x00 */ u32 flagA : 1;
+    /* 0x00 */ u32 flagB : 1;
+    /* 0x00 */ u32 unk00_6 : 26;
+    /* 0x04 */ char unk04[1];
+    /* 0x05 */ u8 vol;
+    /* 0x06 */ char unk06[2];
+    /* 0x08 */ u16 left;
+    /* 0x0A */ u16 right;
+} Src8110938C;
+
+typedef struct State8110938C {
+    /* 0x00 */ char unk00[4];
+    /* 0x04 */ u8 vol;
+    /* 0x05 */ char unk05[0xB];
+    /* 0x10 */ u16 left;
+    /* 0x12 */ u16 right;
+} State8110938C;
+
+AudioCmd* func_8110938C(AudioCmd* cmd, ZNoteSubEu* noteSubEu, ZNoteSynthesisState* synthesisState, s32 aiBufLen, u16 inBuf, s32 headsetPanSettings, s32 flags) {
+    s32 reverbVol;
+    u16 curVolLeft;
+    u16 targetVolLeft;
+    UNUSED s16 pad2;
+    u16 curVolRight;
+    s16 rampLeft;
+    s16 rampRight;
+    s16 sourceReverbVol;
+    u16 targetVolRight;
+    s16 rampReverb;
+
+    curVolLeft = ((State8110938C*)synthesisState)->left;
+    curVolRight = ((State8110938C*)synthesisState)->right;
+    targetVolLeft = ((Src8110938C*)noteSubEu)->left;
+    targetVolRight = ((Src8110938C*)noteSubEu)->right;
+    targetVolLeft <<= 4;
+    targetVolRight <<= 4;
+
+    if (targetVolLeft != curVolLeft) {
+        rampLeft = (targetVolLeft - curVolLeft) / (aiBufLen >> 3);
+    } else {
+        rampLeft = 0;
+    }
+    if (targetVolRight != curVolRight) {
+        rampRight = (targetVolRight - curVolRight) / (aiBufLen >> 3);
+    } else {
+        rampRight = 0;
+    }
+
+    sourceReverbVol = ((State8110938C*)synthesisState)->vol;
+    // FAKE: dead assignment, reverbVol is overwritten before any use
+    reverbVol = ((Src8110938C*)noteSubEu)->vol;
+    if (((Src8110938C*)noteSubEu)->vol != sourceReverbVol) {
+        reverbVol = ((((Src8110938C*)noteSubEu)->vol & 0x7F) - (sourceReverbVol & 0x7F)) << 9;
+        rampReverb = reverbVol / (aiBufLen >> 3);
+        ((State8110938C*)synthesisState)->vol = ((Src8110938C*)noteSubEu)->vol;
+    } else {
+        rampReverb = 0;
+    }
+
+    ((State8110938C*)synthesisState)->left = curVolLeft + (rampLeft * (aiBufLen >> 3));
+    ((State8110938C*)synthesisState)->right = curVolRight + (rampRight * (aiBufLen >> 3));
+
+    // each command is kept on one line (as a macro would expand), the line numbers affect codegen
+    { AudioCmd* _a = cmd++; _a->w0 = (((u32) ((((u32) 0x12) & ((0x01 << 8) - 1)) << 24)) | ((u32) ((((u32) ((sourceReverbVol & 0x7F) * 2)) & ((0x01 << 8) - 1)) << 16))) | ((u32) ((((u32) rampReverb) & ((0x01 << 16) - 1)) << 0)); _a->w1 = ((u32) ((((u32) rampLeft) & ((0x01 << 16) - 1)) << 16)) | ((u32) ((((u32) rampRight) & ((0x01 << 16) - 1)) << 0)); }
+    { AudioCmd* _a = cmd++; _a->w0 = (u32) ((((u32) 0x16) & ((0x01 << 8) - 1)) << 24); _a->w1 = ((u32) ((((u32) curVolLeft) & ((0x01 << 16) - 1)) << 16)) | ((u32) ((((u32) curVolRight) & ((0x01 << 16) - 1)) << 0)); }
+    { AudioCmd* _a = cmd++; _a->w0 = ((((((u32) ((((u32) 0x13) & ((0x01 << 8) - 1)) << 24)) | ((u32) ((((u32) (inBuf >> 4)) & ((0x01 << 8) - 1)) << 16))) | ((u32) ((((u32) aiBufLen) & ((0x01 << 8) - 1)) << 8))) | ((u32) ((((u32) ((sourceReverbVol & 0x80) >> 7)) & ((0x01 << 1) - 1)) << 2))) | ((u32) ((((u32) ((Src8110938C*)noteSubEu)->flagA) & ((0x01 << 1) - 1)) << 1))) | ((u32) ((((u32) ((Src8110938C*)noteSubEu)->flagB) & ((0x01 << 1) - 1)) << 0)); _a->w1 = 0x94AEC8E2; }
+    return cmd;
+}
