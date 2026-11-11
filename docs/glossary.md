@@ -787,5 +787,6 @@ need a 1997–98 print source to settle, but that does not change any romanizati
 
 In the game, `unk_08` puts a newline between the family name and the given name; the table shows it as a space.
 Region names are kana in the game. In annotations, use the English form in parentheses. Trainer names are names
-the players chose and have no official English form. Romanize them and don't translate them; the glosses in
-quotes are only there to explain the name.
+the players chose and have no official English form. A katakana loanword is written as the English word it
+spells (クレア → Clair, ブルー → Blue). Any other name is romanized, not translated (テンサイ → Tensai); the
+glosses in quotes are only there to explain the name.
