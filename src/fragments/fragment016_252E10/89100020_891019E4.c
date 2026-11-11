@@ -142,11 +142,107 @@ void func_8002BAB8(s32, s32, s32, s32);
 void func_80027F20(s32);
 void func_89101238(s32, s32, s8*, s32, s32);
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_891019E4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_891019E4.s")
-#endif
+s32 func_8002AB84(void);
+void func_8002C5A4(s32, s32, s32);
+void func_8002A8E0(s8*);
+void func_80029658(s32, s32, s32, u8*);
+void func_8002F030(s8*, s32, s32, s32, s32);
+void func_8002F3C4(s8*, s32, s32, s32, s8*);
+void func_89100914(s8*, s32, s32, s32);
+void func_89105E70(s8*, s32);
+void func_8910666C(s8*, s32);
+void func_89106B54(s8*);
+void func_891074CC(s8*);
+void func_89107D7C(s8*);
+void func_8002D024(s8*);
+extern u8 D_8007356C[];
+extern Gfx D_80060270[];
+extern Color_RGBA8 D_8910A88C;
+void func_8910179C(s8*, s32, s32);
+void func_89101818(s8*);
+void func_89100688(s8*);
+void func_89100870(s8*);
+void func_891019E4(s8* arg0) {
+    s32 sel;
+    s32 y;
+    s32 flags[2]; // FAKE (only [0] is used; has to live on the stack)
+
+    if (func_8002AB84() != 0) {
+        return;
+    }
+    func_8002C5A4(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) - 0xA, 0x1F4);
+    func_8002A8E0(arg0 + 0x4C);
+    func_80029658(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0x23, M2C_FIELD(arg0, s32*, 8), D_8007356C);
+    func_89101818(arg0);
+    func_8002F030(arg0 + 0xB160, M2C_FIELD(arg0, s32*, 0x2C), M2C_FIELD(arg0, s32*, 0x30) - 0x10,
+                  M2C_FIELD(arg0, s32*, 0x38) + M2C_FIELD(arg0, s32*, 0x30), M2C_FIELD(arg0, s32*, 0x34));
+    y = M2C_FIELD(arg0, s32*, 0x30) + 0x16;
+    if (M2C_FIELD(arg0, s32*, 0x8C) == 0) {
+        flags[0] = ((M2C_FIELD(arg0, u32*, 0x88) != 0) ? 0x10 : 0) | 2;
+    } else {
+        flags[0] = 0;
+    }
+    func_8002F3C4(arg0 + 0xB160, M2C_FIELD(arg0, s32*, 0x2C), y, flags[0] | 0xFFED, arg0);
+    sel = (M2C_FIELD(arg0, s32*, 0x8C) == 1) ? (((M2C_FIELD(arg0, u32*, 0x88) != 0) ? 0x10 : 0) | 2) : 0;
+    func_89100914(arg0, M2C_FIELD(arg0, s32*, 0x2C), M2C_FIELD(arg0, s32*, 0x30), sel);
+    gSPDisplayList(gDisplayListHead++, D_80060270);
+    func_80029028(M2C_FIELD(arg0, s32*, 0x2C), M2C_FIELD(arg0, s32*, 0x30) + 0x14, M2C_FIELD(arg0, s32*, 0x34), 2, D_8910A88C);
+    func_80029028(M2C_FIELD(arg0, s32*, 0x2C) + 0x76, M2C_FIELD(arg0, s32*, 0x30), 2, M2C_FIELD(arg0, s32*, 0x38), D_8910A88C);
+    if (M2C_FIELD(arg0, u32*, 0x88) == 0) {
+        switch (M2C_FIELD(arg0, s32*, 0x8C)) {
+            case 0:
+                func_8910179C(arg0 + 0xB160, M2C_FIELD(arg0, s32*, 0x2C), y);
+                break;
+            case 1:
+                func_89100688(arg0);
+                break;
+            case 2:
+                func_89100870(arg0);
+                break;
+        }
+    }
+    switch (M2C_FIELD(arg0, u32*, 0x88)) {
+        case 0:
+            break;
+        case 1:
+            func_89105E70(arg0 + 0x230, 2);
+            break;
+        case 2:
+        case 3:
+            func_8910666C(arg0 + 0x9654, 2);
+            break;
+        case 4:
+            func_89106B54(arg0 + 0x9830);
+            break;
+        case 5:
+            func_891074CC(arg0 + 0x9920);
+            break;
+        case 6:
+            func_89107D7C(arg0 + 0x9B08);
+            break;
+        case 7:
+            func_8910666C(arg0 + 0x9654, 2);
+            break;
+        case 8:
+            func_8910666C(arg0 + 0x9654, 0x10);
+            func_8910666C(arg0 + 0x96D0, 2);
+            break;
+        case 9:
+            func_8910666C(arg0 + 0x9654, 0x10);
+            func_8910666C(arg0 + 0x96D0, 0x10);
+            func_8910666C(arg0 + 0x974C, 2);
+            break;
+        case 10:
+            func_8910666C(arg0 + 0x9654, 0x10);
+            func_8910666C(arg0 + 0x96D0, 0x10);
+            func_8910666C(arg0 + 0x974C, 2);
+            break;
+        case 11:
+        case 12:
+            func_8002D024(arg0 + 0xB55C);
+            break;
+    }
+}
 
 s32 func_89101D44(s8 *arg0, s32 arg1) {
     return (M2C_FIELD(arg0, s32 *, 0x7C) & arg1) != 0;
@@ -600,7 +696,7 @@ M2C_UNK func_80022188(s32);                         /* extern */
 M2C_UNK func_800230C4(s32);                         /* extern */
 M2C_UNK func_800243B8();                            /* extern */
 M2C_UNK func_8002D7D4(s32);                         /* extern */
-M2C_UNK func_891019E4(s32);                         /* extern */
+void func_891019E4(s8*);
 s32 func_89102930();                                /* extern */
 M2C_UNK func_89109D14(s32);                         /* extern */
 extern s32 D_8910E37C;
@@ -622,7 +718,7 @@ void func_89102A04(s32 arg0) {
         }
         if (func_8002207C(D_8910E37C) == 0) {
             func_8002D7D4(D_8910E37C);
-            func_891019E4(arg0);
+            func_891019E4((s8*)arg0);
         }
         func_80022188(D_8910E37C);
     }
