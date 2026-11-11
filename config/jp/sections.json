@@ -509,7 +509,7 @@
   "src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c": {
     ".rodata": {
       "address": "0x89018DD0",
-      "size": "0x50"
+      "size": "0x84"
     }
   },
   "src/fragments/fragment016_252E10/89100020_89100914.c": {
