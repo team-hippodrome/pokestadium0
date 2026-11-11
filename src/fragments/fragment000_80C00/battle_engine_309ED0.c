@@ -526,9 +526,9 @@ typedef struct Entry8110EABC {
     /* 0x04 */ s32 ramAddr;
     /* 0x08 */ s32 romAddr;
     /* 0x0C */ s32 curAddr;
-    /* 0x10 */ s32 size;
+    /* 0x10 */ u32 size;
     /* 0x14 */ u32 chunkSize;
-    /* 0x18 */ u32 info;
+    /* 0x18 */ OSMesg info;
     /* 0x1C */ OSMesgQueue* doneQueue;
     /* 0x20 */ OSMesgQueue queue;
     /* 0x38 */ OSMesg msg;
@@ -578,7 +578,7 @@ Entry8110EABC* func_8110E9A8(s32 devAddr, s32 ramAddr, u32 size, s32 medium, s32
     load->doneQueue = retQueue;
     load->state = 3;
     load->medium = medium;
-    load->info = retMsg;
+    load->info = (OSMesg)retMsg;
     func_800567E0(&load->queue, &load->msg, 1);
     return load;
 }
@@ -606,15 +606,81 @@ typedef struct RelocInfo8110EF7C {
     /* 0x14 */ u32 medium2;
 } RelocInfo8110EF7C;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110EB40; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110EB40.s")
-#endif
+s32 func_8004D1C0(OSMesgQueue*, u32*, s32);
+s32 func_8110D408(s32, u32*);
+void func_8110ED98(s8* arg0, u32 arg1);
+void func_8110EE28(s32 arg0, M2C_UNK arg1, u32 arg2, M2C_UNK arg3);
+void func_8110EF7C(s32 size, s32 fontData, RelocInfo8110EF7C* relocInfo, s32 async);
+
+void func_8110EB40(Entry8110EABC* load, s32 resetStatus) {
+    u8* table = D_811858A4;
+    u32 info;
+    s32 fontId;
+    UNUSED s32 pad[2]; // FAKE
+    u32 sampleBankId1;
+    u32 sampleBankId2;
+    RelocInfo8110EF7C relocInfo;
+
+    if (load->state >= 2) {
+        load->state--;
+        return;
+    }
+    if (load->state == 1) {
+        load->state = 0;
+    } else if (resetStatus != 0) {
+        func_8004D1C0(&load->queue, 0, 1);
+        load->active = 0;
+        return;
+    } else if (func_8004D1C0(&load->queue, 0, 0) == -1) {
+        return;
+    }
+    if (load->size == 0) {
+        info = (u32)load->info;
+        switch ((u8)(info >> 16)) {
+            case 0:
+                func_8110CB10((u8)(info >> 8), (u8)info);
+                break;
+            case 2:
+                func_8110CB40((u8)(info >> 8), (u8)info);
+                break;
+            case 1:
+                fontId = (u8)(info >> 8);
+                func_8110CAE0(fontId, (u8)info);
+                sampleBankId1 = D_811858B0[fontId].unk_02;
+                sampleBankId2 = D_811858B0[fontId].unk_03;
+                relocInfo.sampleBankId1 = sampleBankId1;
+                relocInfo.sampleBankId2 = sampleBankId2;
+                relocInfo.baseAddr1 = (sampleBankId1 != 0xFF) ? func_8110D408(sampleBankId1, &relocInfo.medium1) : 0;
+                relocInfo.baseAddr2 = (sampleBankId2 != 0xFF) ? func_8110D408(sampleBankId2, &relocInfo.medium2) : 0;
+                func_8110EF7C(fontId, load->ramAddr, &relocInfo, 1);
+                break;
+        }
+        load->active = 0;
+        func_8004CFB0(load->doneQueue, load->info, 0);
+        return;
+    }
+    if (load->size < load->chunkSize) {
+        if (load->medium == 1) {
+            func_8110EE28(load->romAddr, load->curAddr, load->size, *((s16*)(table + 2)));
+        } else {
+            func_8110ED98((s8*)load, load->size);
+        }
+        load->size = 0;
+        return;
+    }
+    if (load->medium == 1) {
+        func_8110EE28(load->romAddr, load->curAddr, load->chunkSize, *((s16*)(table + 2)));
+    } else {
+        func_8110ED98((s8*)load, load->chunkSize);
+    }
+    load->size -= load->chunkSize;
+    load->romAddr += load->chunkSize;
+    load->curAddr += load->chunkSize;
+}
 
 extern u8 D_81137F04[];
 
-void func_8110ED98(s8* arg0, s32 arg1) {
+void func_8110ED98(s8* arg0, u32 arg1) {
     arg1 = (arg1 + 0xF) & ~0xF;
     osInvalDCache((void*)M2C_FIELD(arg0, s32*, 0xC), arg1);
     osCreateMesgQueue((OSMesgQueue*)(arg0 + 0x20), (OSMesg*)(arg0 + 0x38), 1);
@@ -622,7 +688,7 @@ void func_8110ED98(s8* arg0, s32 arg1) {
     if (arg1) {}  // karodo
 }
 
-void func_8110EE28(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3) {
+void func_8110EE28(s32 arg0, M2C_UNK arg1, u32 arg2, M2C_UNK arg3) {
 
 }
 

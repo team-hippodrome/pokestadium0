@@ -436,7 +436,7 @@ func_8110E910,0x8110E910,src/fragments/fragment000_80C00/battle_engine_309ED0.c,
 func_8110E994,0x8110E994,src/fragments/fragment000_80C00/battle_engine_309ED0.c,func_8110E994,m2c,m2c,c
 func_8110E9A8,0x8110E9A8,src/fragments/fragment000_80C00/battle_engine_309ED0.c,func_8110E9A8,hand,,c
 func_8110EABC,0x8110EABC,src/fragments/fragment000_80C00/battle_engine_309ED0.c,func_8110EABC,hand,,c
-func_8110EB40,0x8110EB40,src/fragments/fragment000_80C00/battle_engine_309ED0.c,,asm,,asm
+func_8110EB40,0x8110EB40,src/fragments/fragment000_80C00/battle_engine_309ED0.c,func_8110EB40,hand,,c
 func_8110ED98,0x8110ED98,src/fragments/fragment000_80C00/battle_engine_309ED0.c,func_8110ED98,hand,,c
 func_8110EE28,0x8110EE28,src/fragments/fragment000_80C00/battle_engine_309ED0.c,func_8110EE28,m2c,m2c,c
 func_8110EE3C,0x8110EE3C,src/fragments/fragment000_80C00/battle_engine_309ED0.c,func_8110EE3C,hand,,c

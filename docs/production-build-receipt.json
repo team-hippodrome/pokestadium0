@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5392,
-  "asm_owners": 52,
+  "c_owners": 5393,
+  "asm_owners": 51,
   "linked_images": 260,
   "sdk_asm_owners": 25,
   "original_assembly_sources_sha256": {
@@ -662,7 +662,7 @@
     "tools/cflags_overrides.json": "e3db3b29e01736a27242afda3777cee3db0d330f000cd8eb6230ba10fc8479d1",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "dd0a3f08299ef30304f45f5c9f35fe8d8744523c6e72e2405c306fe03ed2cbad",
+    "docs/function-matches.csv": "203e3d0a12c08abba0ebba861aee618094c1d3706d96b328da03dd77a6ab6514",
     "linker_scripts/jp/symbol_addrs.txt": "7793ea86643996d488126092ac46aefb79ebd778f2a120c5392784f7bd54e234"
   },
   "binutils": {
@@ -739,7 +739,7 @@
     "src/fragments/fragment000_80C00/81111C20.c": "885778daf5aaed442fe34a9e23e9b9a0ef1e83665af97b30161dc7870e0144e4",
     "src/fragments/fragment000_80C00/81117B20.c": "3843091a770c9a107a189ef652ff919fc1eac6d520dd8100299adf9b1616cefc",
     "src/fragments/fragment000_80C00/battle_engine_2FA4D0.c": "02a9da163fe3814bf2eef674b8141105d905c01b33cfedd65d4c6caca76e6fa0",
-    "src/fragments/fragment000_80C00/battle_engine_309ED0.c": "f9f7ada8145251aef2fb6e1479ec6f8fb35007e1f1e8ca3bf9502de095f79a97",
+    "src/fragments/fragment000_80C00/battle_engine_309ED0.c": "82eccbf60abee519ad18da586c990293d0741c512de9c2efd7845b7c0feea4f0",
     "src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c": "04a60a0145771319960e0b5f7b63c033f4a0ed0da419fcf1edc2f266c9d62471",
     "src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0_81102C20.c": "3736ccbf91d9dfd0669a7fc53da74b72ba87fa0ce9f8042024c7283d42849fcb",
     "src/fragments/fragment000_80C00/gb_tower_emulator_86920.c": "780058393fb22ebadab6419f6db90b24203f56535cc55587ff6b7e6241d1ed30",
