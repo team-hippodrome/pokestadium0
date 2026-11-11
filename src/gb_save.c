@@ -241,11 +241,41 @@ void func_800291F8(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 color) {
     gDPFillRectangle(gDisplayListHead++, arg0, arg1, arg0 + arg2, arg1 + arg3);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_800292A8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800292A8.s")
-#endif
+typedef void (*GbTexLoadFunc4)(s32, s32, u8*, s32);
+extern GbTexLoadFunc4 D_800734F0[];
+/**
+ * Draws a hollow frame from four 8x8 edge textures (top, right, bottom, left).
+ * w and h are clamped to at least 16.
+ *
+ * The two `8U` subtractions are deliberate: the target computes (x2 - 8) and (y2 - 8)
+ * afresh in the following rectangle instead of reusing them, which IDO only does when
+ * the two occurrences differ in signedness.
+ */
+void func_800292A8(s32 x, s32 y, s32 w, s32 h, u8* arg4) {
+    GbTexLoadFunc4 load;
+    s32 x2;
+    s32 y2;
+    s32 y8;
+
+    if (w < 0x10) {
+        w = 0x10;
+    }
+    if (h < 0x10) {
+        h = 0x10;
+    }
+    x2 = x + w;
+    y2 = y + h;
+    y8 = (y + 8) << 2;
+    load = D_800734F0[M2C_FIELD(arg4, s32*, 4)];
+    load(8, 8, M2C_FIELD(arg4, u8**, 8), M2C_FIELD(arg4, s32*, 0));
+    gSPTextureRectangle(gDisplayListHead++, x << 2, y << 2, (x2 - 8U) << 2, y8, G_TX_RENDERTILE, 0, 0, 0x400, 0x400);
+    load(8, 8, M2C_FIELD(arg4, u8**, 0x14), M2C_FIELD(arg4, s32*, 0));
+    gSPTextureRectangle(gDisplayListHead++, (x2 - 8) << 2, y << 2, x2 << 2, (y2 - 8U) << 2, G_TX_RENDERTILE, 0, 0, 0x400, 0x400);
+    load(8, 8, M2C_FIELD(arg4, u8**, 0x10), M2C_FIELD(arg4, s32*, 0));
+    gSPTextureRectangle(gDisplayListHead++, (x + 8) << 2, (y2 - 8) << 2, x2 << 2, y2 << 2, G_TX_RENDERTILE, (w * -0x20) + 0x200, 0, 0x400, 0x400);
+    load(8, 8, M2C_FIELD(arg4, u8**, 0xC), M2C_FIELD(arg4, s32*, 0));
+    gSPTextureRectangle(gDisplayListHead++, x << 2, y8, (x + 8) << 2, y2 << 2, G_TX_RENDERTILE, 0, (h * -0x20) + 0x200, 0x400, 0x400);
+}
 
 extern Gfx D_80073450[];
 void func_800292A8(s32, s32, s32, s32, u8*);
