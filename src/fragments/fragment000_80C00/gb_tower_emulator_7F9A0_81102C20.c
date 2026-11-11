@@ -152,7 +152,11 @@ s32 GbPak_SelectRomAddress(unk_D_8122B2C0* arg0, s32 arg1);
 s32 GbPak_SelectRamBank(unk_D_8122B2C0* arg0, s32 arg1);
 
 typedef struct GbpakChannel811023DC {
-    /* 0x00 */ char unk00[0x4E];
+    /* 0x00 */ char unk00[0x48];
+    /* 0x48 */ u8 cartType;
+    /* 0x49 */ char unk49[0x3];
+    /* 0x4C */ u8 unk4C;
+    /* 0x4D */ char unk4D[0x1];
     /* 0x4E */ u8 checksum[2];
     /* 0x50 */ OSPfs* pfs;
     /* 0x54 */ u8* buf;
@@ -177,7 +181,8 @@ typedef struct GbpakChannel811023DC {
     /* 0x9A */ volatile u8 error;
     /* 0x9B */ u8 status;
     /* 0x9C */ u8 channel;
-    /* 0x9D */ char unk9D[0x4];
+    /* 0x9D */ char unk9D[0x3];
+    /* 0xA0 */ u8 unkA0;
     /* 0xA1 */ u8 unkA1;
     /* 0xA2 */ u8 unkA2;
     /* 0xA3 */ char unkA3[0x1];
@@ -515,7 +520,7 @@ extern u8 D_81155E18[];
 void func_800567E0(OSMesgQueue*, OSMesg*, s32);
 void func_80051B20(OSThread*, s32, void (*)(), s32, u8*, s32);
 void func_8005C130(OSThread*);
-M2C_UNK func_8004FD20(s32, M2C_UNK);
+void func_8004FD20(s32, s32);
 void func_811030F0();
 void func_811035B4(s32 arg0, s32 arg1, s32 arg2) {
     s32 i;
@@ -739,7 +744,7 @@ void GbEmu_BlitWithPixelOp(u16* dst, u16* src, s32 mode, s32 width, s32 height) 
   }
 }
 
-M2C_UNK func_8004FD20(s32, M2C_UNK);                /* extern */
+void func_8004FD20(s32, s32);                /* extern */
 M2C_UNK func_8005C0A0();                            /* extern */
 extern s32 D_8115658C;
 
@@ -902,9 +907,24 @@ void func_811047A0(s32 arg0) {
 }
 
 typedef struct Screen81104930 {
-    /* 0x00 */ u8 unk_00[0x4C];
+    /* 0x00 */ u8 unk_00[6];
+    /* 0x06 */ s8 unk_06;
+    /* 0x07 */ s8 unk_07;
+    /* 0x08 */ u8 unk_08[4];
+    /* 0x0C */ s16 unk_0C;
+    /* 0x0E */ u8 unk_0E[2];
+    /* 0x10 */ u8* unk_10;
+    /* 0x14 */ u8 unk_14[8];
+    /* 0x1C */ u8* unk_1C;
+    /* 0x20 */ u8* unk_20;
+    /* 0x24 */ u8 unk_24[0x14];
+    /* 0x38 */ s32 unk_38;
+    /* 0x3C */ u32 unk_3C;
+    /* 0x40 */ u32 unk_40;
+    /* 0x44 */ u8* unk_44;
+    /* 0x48 */ u8* unk_48;
     /* 0x4C */ s32 framebuffer;
-    /* 0x50 */ u8 unk_50[4];
+    /* 0x50 */ u8* unk_50;
     /* 0x54 */ s32 colorIndex;
 } Screen81104930;
 
@@ -955,7 +975,7 @@ void func_81104930(void) {
     D_81154C00 = D_81156540.framebuffer;
 }
 
-M2C_UNK func_8004FD20(s32, M2C_UNK);                /* extern */
+void func_8004FD20(s32, s32);                /* extern */
 extern s32 D_81156550;
 
 void func_81104AE4(void) {
@@ -1050,11 +1070,202 @@ s32 func_81104D84(s32 arg0) {
     return -1;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81104DD0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81104DD0.s")
-#endif
+void func_8110724C(void);
+void func_800093E0(void*, void*);
+s32 func_80025BD8(void);
+void func_80052DC0(s32);
+void func_8005C280(f32);
+void func_81100020(void);
+void func_811027A8(GbpakChannel811023DC*);
+void func_81106CC8(u16*, u8 (*)[0xC80], s32, s32);
+void func_81117B20(Screen81104930*);
+extern u8 D_8111E570[];
+extern u8 D_811565A1;
+extern s16 D_800AA148;
+extern u8 D_811565A3;
+extern u8 D_811565A4;
+extern u8 D_811565A5;
+extern u8* D_811565A8;
+extern s32 D_811565B4;
+extern u8 D_8112AF3C[];
+extern u8 D_81130024[];
+extern u8 D_811645F0[];
+extern u8 D_811725F0[];
+extern u8 D_811223F4[];
+extern u8 D_811224D4[];
+extern u8 D_811225B4[];
+extern u8 D_81122694[];
+extern u8 D_81122774[];
+extern f32 D_FLT_81154254;
+
+s32 func_81104DD0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
+    GbpakChannel811023DC* cur;
+    GbpakChannel811023DC* slot;
+    u8* buf;
+    s32 i;
+    u32 j;
+    u8* p;
+    s32 pad[2]; // FAKE
+
+    D_811565B4 = 0;
+    D_811565AC = arg1;
+    D_811565B0 = arg1 + arg2;
+    D_811565A0 = arg3;
+    D_81156598 = M2C_FIELD(arg4, u8**, 0x21CC);
+    D_8115659C = M2C_FIELD(arg4, u8**, 0x21D0);
+    D_81156540.unk_10 = (u8*)func_81104B18(0x27F80, 0);
+    D_81156540.unk_1C = (u8*)func_81104B18(0x100000, 0);
+    D_81156540.unk_40 = 0x8000;
+    D_81156540.unk_20 = (u8*)func_81104B18(D_81156540.unk_40, 0);
+    D_81156540.unk_44 = (u8*)func_81104B18(0xF000, 0);
+    D_81156540.unk_48 = (u8*)func_81104B18(0xF000, 0);
+    D_81154C00 = D_81156540.framebuffer = func_81104B18(0x2800, 0);
+    D_81156540.unk_50 = (u8*)func_81104B18(0x2800, 0);
+    D_811565A8 = (u8*)func_81104B18(0x102, 0);
+    D_811565A3 = 0;
+    D_81156477 = 1;
+    D_811565A1 = 0;
+    D_811565A5 = 0x20;
+    D_811565A4 = 0;
+    func_8004FD20((s32)D_81156540.unk_10, 0xFF80);
+    for (i = 0, p = D_81156540.unk_10 + 0x16B20; i < 0x40; i++) {
+        *p++ = 1;
+    }
+    for (i = 0, p = D_81156540.unk_10 + 0x16B60; i < 0x20; i++) {
+        *p++ = 1;
+    }
+    func_81103D30();
+    i = func_80025BD8();
+    D_811561C8[i].request = 0x80;
+    func_8004CFB0(&D_81156458, i, 1);
+    while (D_81156475 != 0) {
+    }
+
+    buf = (u8*)func_81104B18(0x200, 0);
+    for (i = 0; i < 4; i++) {
+        slot = &D_811561C8[i];
+        slot->bankState = D_81156540.unk_10 + 0x16B20;
+        slot->sramState = D_81156540.unk_10 + 0x16B60;
+        slot->ramBuf = D_81156540.unk_20;
+        slot->blockState = D_81156540.unk_10 + 0x16B80;
+        slot->verifyBuf = buf;
+        slot->blockDirty = buf + 0x100;
+        slot->ramSize = D_81156540.unk_40;
+        for (j = 0; j < (D_81156540.unk_40 >> 8); j++) {
+            slot->blockDirty[j] = 0xFF;
+            slot->blockState[j] = 0xFF;
+        }
+        slot->unkA0 = func_81104C30((u8*)slot);
+        slot->romBuf = D_81156540.unk_1C;
+        slot->sramBuf = D_81156540.unk_20;
+    }
+    cur = &D_811561C8[D_811565A0];
+    if (cur->error != 0) {
+        func_81104D84(1);
+        return (cur->unkA2 != 0) ? 2 : 1;
+    }
+    if (cur->unkA0 == 0) {
+        return func_81104D84(1);
+    }
+    D_81156540.colorIndex = cur->unkA0 - 1;
+    while (D_81156475 != 0) {
+    }
+    if (func_81102F7C(D_811565A0, 0, 0xFF) != 0) {
+        func_81104D84(1);
+        return (cur->unkA2 != 0) ? 2 : 1;
+    }
+    D_81156540.unk_38 = 0xE;
+    if (cur->cartType == 4) {
+        D_81156540.unk_3C = 0x80000;
+    } else {
+        D_81156540.unk_3C = 0x100000;
+    }
+    D_81156540.unk_07 = 0;
+    D_81156540.unk_06 = 1;
+    func_81117B20(&D_81156540);
+    func_81103D30();
+
+    /* FAKE: the unsigned `1U` compares stop the constant 1 from sharing a register with unk_06 = 1. */
+    cur->bankList = (cur->unkA0 == 4)   ? NULL
+                    : (cur->unkA0 == 3) ? ((cur->unk4C == 0) ? D_81122774 : NULL)
+                    : (cur->unkA0 == 2) ? ((cur->unk4C == 1U) ? D_81122694 : (cur->unk4C == 0) ? D_811225B4 : NULL)
+                                        : ((cur->unk4C == 1U) ? D_811224D4 : (cur->unk4C == 0) ? D_811223F4 : NULL);
+    cur->sum = 0;
+
+    if (cur->bankList == NULL) {
+        func_81106CC8((u16*)arg0, M2C_FIELD(arg4, u8 (**)[0xC80], 0x2204), func_80025BD8(), D_81156540.colorIndex);
+        func_81104930();
+        func_8005C0A0();
+        func_80052DC0(0);
+        for (i = 0; i < 4; i++) {
+            cur->request = 2;
+            cur->addr = i * 0x2000;
+            cur->buf = i * 0x2000 + D_81156540.unk_20;
+            cur->size = 0x2000;
+            func_8004CFB0(&D_81156458, D_811565A0, 1);
+            while (D_81156475 != 0) {
+                func_8110724C();
+            }
+            if (cur->error) goto fail; /* one line: gives the ROM's beqz/b pair */
+            if (D_800AA148 != 0) {
+                func_81104D84(0);
+            }
+        }
+        for (i = 0; i < (D_81156540.unk_3C >> 13); i++) {
+            cur->request = 1;
+            if (1) {} // karodo
+            if (1) {} // karodo
+            if (1) {} // karodo
+            cur->addr = i * 0x2000;
+            cur->buf = i * 0x2000 + D_81156540.unk_1C;
+            cur->size = 0x2000;
+            func_8004CFB0(&D_81156458, D_811565A0, 1);
+            while (D_81156475 != 0) {
+                func_8110724C();
+            }
+            if (cur->error) goto fail; /* one line: gives the ROM's beqz/b pair */
+            if (D_800AA148 != 0) {
+                func_81104D84(0);
+            }
+        }
+        for (i = 0; i < (D_81156540.unk_3C >> 14); i++) {
+            cur->bankState[i] = 0;
+        }
+        for (i = 0; i < (D_81156540.unk_40 >> 13); i++) {
+            cur->sramState[i] = 0;
+        }
+        func_800093E0(D_8112AF3C, D_811645F0);
+        func_800093E0(D_81130024, D_811725F0);
+    } else {
+        func_811047A0(0);
+        func_8005C0A0();
+        D_81156476 = 1;
+        func_81102970(D_811565A0, 0);
+        while (*cur->bankState != 0) {
+            func_811027A8(cur);
+            if (cur->error != 0) {
+            fail:
+                func_81104D84(1);
+                return (cur->unkA2 != 0) ? 2 : 1;
+            }
+            if (D_800AA148 != 0) {
+                func_81104D84(0);
+            }
+        }
+        D_811565A4 = 1;
+        for (i = 0; i < 0x102; i++) {
+            D_811565A8[i] = D_81156540.unk_1C[i];
+            D_81156540.unk_1C[i] = D_8111E570[i];
+        }
+        D_81156540.unk_0C = 0;
+        D_81156540.unk_10[0xFF42] = 0x64;
+    }
+    D_81156540.unk_06 = 0;
+    func_81100020();
+    func_8005C280(D_FLT_81154254);
+    func_80052DC0(0);
+    return 0;
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_811056CC; signature not recovered. */
