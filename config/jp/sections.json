@@ -137,7 +137,7 @@
   "src/fragments/fragment007_166580_3.c": {
     ".rodata": {
       "address": "0x8200A228",
-      "size": "0x18"
+      "size": "0x34"
     }
   },
   "src/fragments/fragment010_17BE70/pikachu_reward.c": {
