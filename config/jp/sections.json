@@ -477,8 +477,8 @@
   },
   "src/fragments/fragment014_235D70/lab_pc_icons.c": {
     ".rodata": {
-      "address": "0x88002AE4",
-      "size": "0x1C"
+      "address": "0x88002AE0",
+      "size": "0x20"
     },
     ".bss": "0x880022C8"
   },
