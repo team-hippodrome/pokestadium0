@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Compile C functions and compare each one with the retail ROM bytes.
+"""Compile C and original SDK assembly functions and compare them with the ROM.
 
 Each source file is compiled with IDO and -DNON_MATCHING, which leaves only
-the C function definitions (GLOBAL_ASM owners drop out). Every function in
+the C function definitions (GLOBAL_ASM owners drop out). Original SDK assembly
+wrappers instead use ultralib's native IDO assembler recipe. Every function in
 the object is matched to its pragma-inventory owner by address and compared
 word for word. Relocated fields are checked by solving for symbol addresses:
 
@@ -33,7 +34,8 @@ from elftools.elf.elffile import ELFFile
 
 from map_fragment_sections import load_image
 from map_rom import EXPECTED_SHA256
-from production import ULTRALIB_FLAGS
+from production import (ULTRALIB_FLAGS, ULTRALIB_ASM_FLAGS, sdk_assembly_source,
+                        normalize_sdk_symbols)
 
 ROOT = Path(__file__).resolve().parents[1]
 ADDR_NAME = re.compile(r"^(?:func|D|D_FLT|D_DBL|jtbl|B|sub|RO|L)_([0-9A-Fa-f]{8})(?:_\d+)?$")
@@ -228,10 +230,15 @@ def compile_source(path, cc_dir, overrides):
     flags = overrides.get(path, {})
     cc = Path(cc_dir) / ("ido" + flags.get("ido", "7.1")) / "cc"
     with tempfile.TemporaryDirectory() as tmp:
-        source = Path(tmp) / Path(path).name
+        native = flags.get("profile") == "ultralib-asm"
+        if native:
+            sdk_assembly_source(path, flags)
+        source = Path(tmp) / (Path(path).stem + '.s' if native else Path(path).name)
         source.write_bytes((ROOT / path).read_text(encoding="utf-8").encode("euc-jp", "replace"))
         obj = Path(tmp) / "out.o"
-        if flags.get("profile") == "ultralib":
+        if native:
+            base = ULTRALIB_ASM_FLAGS
+        elif flags.get("profile") == "ultralib":
             # An unmodified lib/ultralib source, included by path from the repository root.
             base = [*ULTRALIB_FLAGS, "-EB", "-DNON_MATCHING"]
         else:
@@ -243,7 +250,35 @@ def compile_source(path, cc_dir, overrides):
                                 cwd=ROOT)
         if result.returncode != 0 or not obj.exists():
             return None, result.stdout + result.stderr
+        if native:
+            normalize_sdk_symbols(obj)
         return obj.read_bytes(), ""
+
+
+def native_function_symbols(functions):
+    """Ignore zero-size SDK entry aliases only when a sized entry shares the offset."""
+    sized = {offset for offset, size in functions.values() if size}
+    return {name: value for name, value in functions.items()
+            if value[1] or value[0] not in sized}
+
+
+def native_owner_span(segment, address, size, owners):
+    """Find the exact SDK function interval within a conservative inventory owner.
+
+    Exception assembly has several real function entries in one inventory owner.
+    Every entry still compares against its own complete ROM instruction interval;
+    crossing an owner boundary or an unknown/empty extent is rejected.
+    """
+    if address is None or size <= 0 or size % 4:
+        return None
+    for (owner_segment, start), (name, words, tail) in owners.items():
+        if owner_segment != segment or not start <= address < start + 4 * len(words):
+            continue
+        offset = address - start
+        if offset % 4 or offset + size > 4 * len(words):
+            return None
+        return name, words[offset // 4:(offset + size) // 4], ()
+    return None
 
 
 def check_file(job):
@@ -252,6 +287,9 @@ def check_file(job):
     if data is None:
         return path, [("<compile>", error.strip()[-500:])], 0
     text, functions, relocations = parse_object(data)
+    native = overrides.get(path, {}).get("profile") == "ultralib-asm"
+    if native:
+        functions = native_function_symbols(functions)
     segment = segment_of(path)
     failures = []
     checked = 0
@@ -259,7 +297,8 @@ def check_file(job):
     for name in functions:
         match = ADDR_NAME.match(name)
         address = symbols.get(name, int(match.group(1), 16) if match else None)
-        owner = owners.get((segment, address))
+        owner = (native_owner_span(segment, address, functions[name][1], owners)
+                 if native else owners.get((segment, address)))
         if owner is None:
             failures.append((name, "no assembly owner at this address"))
             continue
@@ -292,9 +331,11 @@ def main():
     owners = load_owner_words(rom)
     symbols = load_symbols()
     overrides = json.loads((ROOT / "tools/cflags_overrides.json").read_text())
-    sources = args.sources or sorted(
+    sources = args.sources or sorted(set(
         str(p.relative_to(ROOT)) for p in (ROOT / "src").rglob("*.c")
-        if has_c_functions(p))
+        if has_c_functions(p)) | {
+            path for path, flags in overrides.items()
+            if flags.get('profile') == 'ultralib-asm'})
     jobs = [(s, args.cc_dir, overrides, symbols, owners, args.learn) for s in sources]
     total = 0
     bad = 0

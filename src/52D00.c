@@ -1,9 +1,2 @@
-/* Stadium Zero resident code. */
-
-#include "global.h"
-
-#ifdef NON_MATCHING
-/* TODO: decompile func_80052100; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80052100.s")
-#endif
+/* Original ultralib assembly (2.0I); built with the native IDO assembler. */
+#include "lib/ultralib/src/os/writebackdcache.s"

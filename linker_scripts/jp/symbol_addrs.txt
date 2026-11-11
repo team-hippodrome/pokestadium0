@@ -3658,3 +3658,17 @@ BattleAnim_QueueEffectList = 0x821366B0; // learned from func_82103C64
 __leoVersion = 0x80101780; // learned from func_8004CB00
 leoInitialize = 0x800483E0; // learned from func_8004CB00
 osResetType = 0x8000030C; // learned from func_8004CB00
+
+// Original SDK assembly entries and interrupt-mask table.
+__assertBreak = 0x800093D0; // type:func
+_bzero = 0x8004FD20; // type:func
+__osRcpImTable = 0x8007F490;
+
+// Original SDK exception entries and relocation-established state addresses.
+__osException = 0x8004DD90; // type:func
+__osExceptionPreamble = 0x8004DD80; // type:func
+__osShutdown = 0x80077F2C;
+__osThreadSave = 0x801029D0;
+handle_CpU = 0x8004E378; // type:func
+leoDiskStack = 0x801017D0;
+send_mesg = 0x8004E2C4; // type:func

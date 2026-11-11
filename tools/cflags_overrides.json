@@ -1021,5 +1021,167 @@
     "opt": "-O1",
     "mips": "-mips2",
     "profile": "ultralib"
+  },
+  "src/libultra/libc/bcmp.c": {
+    "assembly_source": "lib/ultralib/src/libc/bcmp.s",
+    "extra": [],
+    "ido": "5.3",
+    "mips": "-mips2",
+    "opt": "-O2",
+    "profile": "ultralib-asm"
+  },
+  "src/libultra/libc/bcopy.c": {
+    "assembly_source": "lib/ultralib/src/libc/bcopy.s",
+    "extra": [],
+    "ido": "5.3",
+    "mips": "-mips2",
+    "opt": "-O2",
+    "profile": "ultralib-asm"
+  },
+  "src/libultra/os/getcount.c": {
+    "assembly_source": "lib/ultralib/src/os/getcount.s",
+    "extra": [],
+    "ido": "5.3",
+    "mips": "-mips2",
+    "opt": "-O1",
+    "profile": "ultralib-asm"
+  },
+  "src/libultra/os/getsr.c": {
+    "assembly_source": "lib/ultralib/src/os/getsr.s",
+    "extra": [],
+    "ido": "5.3",
+    "mips": "-mips2",
+    "opt": "-O1",
+    "profile": "ultralib-asm"
+  },
+  "src/libultra/os/interrupt.c": {
+    "assembly_source": "lib/ultralib/src/os/interrupt.s",
+    "extra": [],
+    "ido": "5.3",
+    "mips": "-mips2",
+    "opt": "-O1",
+    "profile": "ultralib-asm"
+  },
+  "src/libultra/os/maptlbrdb.c": {
+    "assembly_source": "lib/ultralib/src/os/maptlbrdb.s",
+    "extra": [],
+    "ido": "5.3",
+    "mips": "-mips2",
+    "opt": "-O1",
+    "profile": "ultralib-asm"
+  },
+  "src/libultra/os/probetlb.c": {
+    "assembly_source": "lib/ultralib/src/os/probetlb.s",
+    "extra": [],
+    "ido": "5.3",
+    "mips": "-mips2",
+    "opt": "-O1",
+    "profile": "ultralib-asm"
+  },
+  "src/libultra/os/setcause.c": {
+    "assembly_source": "lib/ultralib/src/os/setcause.s",
+    "extra": [],
+    "ido": "5.3",
+    "mips": "-mips2",
+    "opt": "-O1",
+    "profile": "ultralib-asm"
+  },
+  "src/libultra/os/setcompare.c": {
+    "assembly_source": "lib/ultralib/src/os/setcompare.s",
+    "extra": [],
+    "ido": "5.3",
+    "mips": "-mips2",
+    "opt": "-O1",
+    "profile": "ultralib-asm"
+  },
+  "src/libultra/os/setcount.c": {
+    "assembly_source": "lib/ultralib/src/os/setcount.s",
+    "extra": [],
+    "ido": "5.3",
+    "mips": "-mips2",
+    "opt": "-O1",
+    "profile": "ultralib-asm"
+  },
+  "src/libultra/os/setsr.c": {
+    "assembly_source": "lib/ultralib/src/os/setsr.s",
+    "extra": [],
+    "ido": "5.3",
+    "mips": "-mips2",
+    "opt": "-O1",
+    "profile": "ultralib-asm"
+  },
+  "src/libultra/debug/assertbreak.c": {
+    "assembly_source": "lib/ultralib/src/debug/assertbreak.s",
+    "extra": [],
+    "ido": "5.3",
+    "mips": "-mips2",
+    "opt": "-O1",
+    "profile": "ultralib-asm"
+  },
+  "src/50920.c": {
+    "assembly_source": "lib/ultralib/src/libc/bzero.s",
+    "extra": [],
+    "ido": "5.3",
+    "mips": "-mips2",
+    "opt": "-O2",
+    "profile": "ultralib-asm"
+  },
+  "src/57330.c": {
+    "assembly_source": "lib/ultralib/src/os/invaldcache.s",
+    "extra": [],
+    "ido": "5.3",
+    "mips": "-mips2",
+    "opt": "-O1",
+    "profile": "ultralib-asm"
+  },
+  "src/57410.c": {
+    "assembly_source": "lib/ultralib/src/os/invalicache.s",
+    "extra": [],
+    "ido": "5.3",
+    "mips": "-mips2",
+    "opt": "-O1",
+    "profile": "ultralib-asm"
+  },
+  "src/libultra/os/setfpccsr_asm.c": {
+    "assembly_source": "lib/ultralib/src/os/setfpccsr.s",
+    "extra": [],
+    "ido": "5.3",
+    "mips": "-mips2",
+    "opt": "-O1",
+    "profile": "ultralib-asm"
+  },
+  "src/4DF00.c": {
+    "assembly_source": "lib/ultralib/src/os/setintmask.s",
+    "extra": [],
+    "ido": "5.3",
+    "mips": "-mips2",
+    "opt": "-O1",
+    "profile": "ultralib-asm"
+  },
+  "src/52D00.c": {
+    "assembly_source": "lib/ultralib/src/os/writebackdcache.s",
+    "extra": [],
+    "ido": "5.3",
+    "mips": "-mips2",
+    "opt": "-O1",
+    "profile": "ultralib-asm"
+  },
+  "src/5CCA0.c": {
+    "assembly_source": "lib/ultralib/src/os/writebackdcacheall.s",
+    "extra": [],
+    "ido": "5.3",
+    "mips": "-mips2",
+    "opt": "-O1",
+    "profile": "ultralib-asm"
+  },
+  "src/4E980.c": {
+    "assembly_source": "lib/ultralib/src/os/exceptasm.s",
+    "extra": [
+      "-32"
+    ],
+    "ido": "5.3",
+    "mips": "-mips3",
+    "opt": "-O1",
+    "profile": "ultralib-asm"
   }
 }

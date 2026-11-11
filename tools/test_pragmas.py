@@ -30,7 +30,7 @@ class InventoryTests(unittest.TestCase):
         cls.inventory = json.loads((ROOT / "docs/pragma-inventory.json").read_text())
 
     def test_every_owner_has_one_source(self):
-        """Each owner is built from one GLOBAL_ASM pragma or one verified C function."""
+        """Each owner has one C, original SDK assembly, or GLOBAL_ASM source."""
         import csv
         pragmas = []
         for path in sorted((ROOT / "src").rglob("*.c")):
@@ -46,11 +46,23 @@ class InventoryTests(unittest.TestCase):
             rows = list(csv.DictReader(handle))
         c_owners = {row["owner"] for row in rows if row["build"] == "c"}
         asm_owners = {by_assembly[path] for path in pragmas}
+        sdk_rows = [row for row in rows if row['status'] == 'ultralib-asm']
+        sdk_owners = {row['owner'] for row in sdk_rows}
+        from production import sdk_assembly_source
+        overrides = json.loads((ROOT / 'tools/cflags_overrides.json').read_text())
+        for row in sdk_rows:
+            self.assertEqual(row['build'], 'asm')
+            flags = overrides[row['source']]
+            self.assertEqual(flags['profile'], 'ultralib-asm')
+            original = sdk_assembly_source(row['source'], flags)
+            self.assertEqual(row['origin'], 'libultra:' + original[len('lib/ultralib/'):])
+            self.assertIn(row['c_name'], (ROOT / original).read_text())
         self.assertFalse(c_owners & asm_owners)
+        self.assertFalse(sdk_owners & (c_owners | asm_owners))
         # Matching C that still needs its file's data stays behind NON_MATCHING.
         held = {row["owner"] for row in rows if row["status"] in ("s1", "m2c", "hand") and row["build"] != "c"}
         self.assertLessEqual(held, asm_owners)
-        self.assertEqual(c_owners | asm_owners,
+        self.assertEqual(c_owners | asm_owners | sdk_owners,
                          {row["name"] for row in self.inventory["owners"]})
         for row in rows:
             if row["status"] in ("s1", "m2c", "hand"):

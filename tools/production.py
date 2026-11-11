@@ -39,6 +39,11 @@ ULTRALIB_FLAGS = ['-c', '-Wab,-r4300_mul', '-G', '0', '-nostdinc', '-Xcpluscomm'
                   '-DBUILD_VERSION_STRING="2.0I"', '-non_shared', '-DNDEBUG', '-D_FINALROM',
                   '-I.', '-Ilib/ultralib/include', '-Ilib/ultralib/include/ido',
                   '-Ilib/ultralib/include/PR']
+ULTRALIB_ASM_FLAGS = ['-c', '-Wab,-r4300_mul', '-G', '0', '-nostdinc',
+                      '-woff', '516,649,838,712', '-D_MIPS_SZLONG=32',
+                      '-DF3DEX_GBI', '-DBUILD_VERSION=6', '-non_shared',
+                      '-DNDEBUG', '-D_FINALROM', '-I.',
+                      '-Ilib/ultralib/include', '-Ilib/ultralib/include/PR']
 PRAGMA = re.compile(r'(#pragma\s+GLOBAL_ASM\(\s*")([^"]+)("\s*\))')
 LISTING = re.compile(r'/\*\s+[0-9A-F]+\s+([0-9A-F]+)\s+([0-9A-F]{8})\s*\*/\s*(.*)')
 MACROS = '''.set noreorder
@@ -324,14 +329,76 @@ def trim_section(obj, name, size, after=b''):
     raise ValueError(f'no {name} section in {obj.name}')
 
 
+def sdk_assembly_source(path, flags):
+    """Validate an include-only wrapper for an original ultralib assembly file."""
+    source = flags.get('assembly_source', '')
+    if (not source.startswith('lib/ultralib/src/') or Path(source).suffix != '.s'
+            or '..' in Path(source).parts or not (ROOT / source).is_file()):
+        raise ValueError('invalid original SDK assembly source: ' + source)
+    wrapper = re.sub(r'/\*.*?\*/|//[^\n]*', '',
+                     (ROOT / path).read_text(), flags=re.S).strip()
+    if wrapper != '#include "' + source + '"':
+        raise ValueError('SDK assembly wrapper must include only ' + source)
+    return source
+
+
+def normalize_sdk_symbols(obj):
+    """Put IDO assembler ELF symbols in standard local/global order.
+
+    Only symbol-table metadata and relocation symbol indices change. The
+    original assembled instructions, data, offsets, and addends are retained.
+    """
+    data = bytearray(obj.read_bytes())
+    if data[:6] != b'\x7fELF\x01\x02':
+        raise ValueError('expected big-endian ELF32 SDK object')
+    header = struct.unpack_from('>16sHHIIIIIHHHHHH', data)
+    positions = [header[6] + i * header[11] for i in range(header[12])]
+    sections = [struct.unpack_from('>IIIIIIIIII', data, p) for p in positions]
+    for index, table in enumerate(sections):
+        if table[1] != 2:  # SHT_SYMTAB
+            continue
+        if table[9] != 16 or table[5] % 16:
+            raise ValueError('invalid SDK symbol-table entry size')
+        entries = [bytes(data[p:p + 16])
+                   for p in range(table[4], table[4] + table[5], 16)]
+        locals_ = [i for i, entry in enumerate(entries) if entry[12] >> 4 == 0]
+        globals_ = [i for i, entry in enumerate(entries) if entry[12] >> 4 != 0]
+        order = locals_ + globals_
+        remap = {old: new for new, old in enumerate(order)}
+        data[table[4]:table[4] + table[5]] = b''.join(entries[i] for i in order)
+        struct.pack_into('>I', data, positions[index] + 28, len(locals_))
+        for position, section in zip(positions, sections):
+            if section[6] != index:
+                continue
+            if section[1] in (4, 9):  # SHT_RELA / SHT_REL
+                step = 12 if section[1] == 4 else 8
+                for offset in range(section[4], section[4] + section[5], step):
+                    info = struct.unpack_from('>I', data, offset + 4)[0]
+                    struct.pack_into('>I', data, offset + 4,
+                                     (remap[info >> 8] << 8) | (info & 255))
+            elif section[1] == 17:  # SHT_GROUP signature symbol
+                struct.pack_into('>I', data, position + 28, remap[section[7]])
+    obj.write_bytes(data)
+
+
 def compile_source_file(path, directory, compilers, prefix):
-    """Compile a whole src/ file through asm-processor.
+    """Compile a whole registered file with its C or original SDK assembly recipe.
 
     GLOBAL_ASM owners use the same normalized listings as assembly owners.
     """
     overrides = json.loads((ROOT / 'tools/cflags_overrides.json').read_text())
     flags = overrides.get(path, {})
     stem = path[len('src/'):-2].replace('/', '__')
+    obj = directory / (stem + '.o')
+    if flags.get('profile') == 'ultralib-asm':
+        sdk_assembly_source(path, flags)
+        unit = directory / (stem + '.s')
+        unit.write_text((ROOT / path).read_text())
+        run([compilers[flags.get('ido', '5.3')], *ULTRALIB_ASM_FLAGS,
+             flags.get('opt', '-O1'), flags.get('mips', '-mips2'),
+             *flags.get('extra', []), '-o', obj, unit])
+        normalize_sdk_symbols(obj)
+        return obj
     canon = BUILD / 'canonical'
 
     def canonical(match):
@@ -343,7 +410,6 @@ def compile_source_file(path, directory, compilers, prefix):
 
     unit = directory / (stem + '.c')
     unit.write_text(PRAGMA.sub(canonical, (ROOT / path).read_text(encoding='utf-8')), encoding='utf-8')
-    obj = directory / (stem + '.o')
     if flags.get('profile') == 'ultralib':
         # No GLOBAL_ASM (and -O3, which asm-processor does not take): plain IDO.
         run([compilers[flags.get('ido', '7.1')], *ULTRALIB_FLAGS, flags.get('opt', '-O2'),
@@ -367,6 +433,37 @@ def object_sections(obj):
     table = sections[header[13]]
     strings = data[table[4]:table[4] + table[5]]
     return {strings[s[0]:].split(b'\0', 1)[0].decode(): (s[5], s[1]) for s in sections}
+
+
+def link_symbols(objects):
+    """Resolve actual allocated-section references, not unused symbol-table entries.
+
+    IDO's native assembler retains undefined numeric-label names with no
+    relocations. They require no linker address and do not represent code.
+    """
+    from elftools.elf.elffile import ELFFile
+    from elftools.elf.relocation import RelocationSection
+    defined, referenced = set(), set()
+    for obj in objects:
+        with obj.open('rb') as handle:
+            elf = ELFFile(handle)
+            table = elf.get_section_by_name('.symtab')
+            if table is not None:
+                defined.update(symbol.name for symbol in table.iter_symbols()
+                               if symbol['st_shndx'] != 'SHN_UNDEF'
+                               and symbol['st_info']['bind'] in ('STB_GLOBAL', 'STB_WEAK'))
+            for section in elf.iter_sections():
+                if not isinstance(section, RelocationSection):
+                    continue
+                target = elf.get_section(section['sh_info'])
+                if not target['sh_flags'] & 2:  # SHF_ALLOC; other sections are discarded.
+                    continue
+                symbols = elf.get_section(section['sh_link'])
+                for relocation in section.iter_relocations():
+                    symbol = symbols.get_symbol(relocation['r_info_sym'])
+                    if symbol['st_shndx'] == 'SHN_UNDEF':
+                        referenced.add(symbol.name)
+    return defined, referenced - defined
 
 
 def bss_output_section(output, address, obj, section, base, image_size):
@@ -492,14 +589,7 @@ def build_group(group, selected, cc, prefix, compare, files=None, compilers=None
     assembly_obj = directory / 'assembly.o'
     run([prefix + 'as', '-march=vr4300', '-32', '-G0', source, '-o', assembly_obj])
     objects = [assembly_obj, *c_objects]
-    undefined, defined = set(), set()
-    for line in run([prefix + 'nm', *objects]).decode().splitlines():
-        parts = line.split()
-        if len(parts) == 2 and parts[0] == 'U':
-            undefined.add(parts[1])
-        elif len(parts) == 3:
-            defined.add(parts[2])
-    undefined -= defined
+    defined, undefined = link_symbols(objects)
     linker = ['PHDRS { prefix PT_LOAD FLAGS(4); body PT_LOAD FLAGS(7); }', 'SECTIONS {']
     for index, (begin, size, obj, section) in enumerate(sections):
         output = f'.part_{index}'
@@ -540,7 +630,7 @@ def build_group(group, selected, cc, prefix, compare, files=None, compilers=None
 def headers_digest():
     """One digest over every header and included C fragment the src/ build can read."""
     digest = hashlib.sha256()
-    for directory in ('include', 'src', 'lib/ultralib/include'):
+    for directory in ('include', 'src', 'lib/ultralib/include', 'lib/ultralib/src'):
         for path in sorted((ROOT / directory).rglob('*')):
             if path.is_file() and (path.suffix == '.h' or path.name.endswith('.inc.c')):
                 digest.update(str(path.relative_to(ROOT)).encode() + b'\0' + path.read_bytes())
@@ -612,10 +702,24 @@ def build(cc, prefix, compare, jobs, asm_only, compilers):
         raise ValueError('full ROM differs')
     target = ROOT / 'build/pokestadium0-jp.z64'
     target.write_bytes(output)
+    overrides = json.loads((ROOT / 'tools/cflags_overrides.json').read_text())
+    native = {path: sdk_assembly_source(path, overrides[path])
+              for path, _ in files.values()
+              if overrides.get(path, {}).get('profile') == 'ultralib-asm'}
+    if any(is_c for path, is_c in files.values() if path in native):
+        raise ValueError('original SDK assembly cannot be counted as C')
+    native_versions = {overrides[path].get('ido', '5.3') for path in native}
     receipt = dict(status='PASS' if exact and compare else 'BUILT',
                    input_sha256=manifest['input_sha256'], output_sha256=sha(output),
                    full_rom_identical=exact, compare=compare, c_owners=counts['c'],
                    asm_owners=counts['asm'], linked_images=len(manifest['groups']),
+                   sdk_asm_owners=sum(path in native for path, _ in files.values()),
+                   original_assembly_sources_sha256={source: sha((ROOT / source).read_bytes())
+                                                     for source in sorted(set(native.values()))},
+                   sdk_assembler_tools_sha256={version: {
+                       name: sha((Path(compilers[version]).parent / name).read_bytes())
+                       for name in ('cc', 'acpp', 'as0', 'as1')}
+                       for version in sorted(native_versions)},
                    compiler_sha256=sha(Path(cc).read_bytes()) if counts['c'] else None,
                    source_compilers_sha256={version: sha(Path(path).read_bytes())
                                             for version, path in compilers.items()} if files else None,
