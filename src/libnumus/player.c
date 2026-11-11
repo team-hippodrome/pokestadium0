@@ -551,7 +551,7 @@ extern s32 D_80075C34;
 extern s32 D_800B3644;
 extern s32 D_800B3650;
 extern s32 D_800B3660;
-extern s32 D_800B3CC4;
+extern u32 D_800B3CC4;
 extern PlayerChannelZero_1E D_800B3670[45];
 extern ALPlayer D_800B3610;
 extern ALHeap D_800B3628;
@@ -560,7 +560,7 @@ void func_8003A564(void*, s32, s32);
 s32 func_8003B2E0(SynInitCfgZero*, SynInitRateZero*, s32, s32, s32);
 void func_800468F0(ALPlayer*);
 void* func_8005C0D0(s32, s32, void*, s32, s32);
-void func_800388BC();
+s32 func_800388BC(void*);
 
 /**
  * Sound-player initialisation (the Stadium Zero counterpart of the retail libmus
@@ -1460,11 +1460,195 @@ void func_80038880(void) {
     func_8004D300(temp_v0);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_800388BC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800388BC.s")
-#endif
+void func_800395D0(channel_t* cp);
+void func_80039010(channel_t*);
+s32 func_80039328(s8*);
+f32 func_800393F8(s8*, f32);
+
+void func_80039A60(s8*);
+f32 func_80039B2C(s8*);
+f32 func_80039B7C(s8*);
+void func_80039C10(s8*);
+void func_80039D08(s8*);
+extern s32 D_80075E00;
+void func_80046860(N_ALVoice* v, u8 fxmix); /* n_alSynSetFXMix */
+
+#define CH_FRAME(ch) M2C_FIELD(ch, u64*, 0x00)
+#define CH_VOICE(ch) M2C_FIELD(ch, PlayerChannelZero_1E**, 0x144)
+
+s32 func_800388BC(void* node) {
+    u32 i;
+    u32 j;
+    s8* ch;
+    UNUSED s32 pad; // FAKE
+    f32 detune;
+    f32 pitch;
+    s32 vol;
+    u32 pan;
+    u32 fxmix;
+    ALVoiceConfig config;
+    u32 pdata;
+
+    for (i = 0, ch = D_800B3640; i < D_800B3638; i++, ch += 0x148) {
+        pdata = M2C_FIELD(ch, u32*, 0x30);
+        if ((pdata == 0) || (pdata == 0xFFFFFFFF)) {
+            continue;
+        }
+        CH_FRAME(ch) = M2C_FIELD(ch, u16*, 0xA8) + CH_FRAME(ch);
+        if ((M2C_FIELD(ch, u16*, 0xA6) != 0x7FFF) && (D_800B3CC8 == 0)) {
+            while ((CH_FRAME(ch) > M2C_FIELD(ch, u64*, 0x18)) && (M2C_FIELD(ch, s32*, 0x30) != 0)) {
+                func_80039010((channel_t*)ch);
+            }
+        }
+        if (D_800B3CC8 == 0) {
+            if (M2C_FIELD(ch, s32*, 0x58) != 0) {
+                if (CH_FRAME(ch) > M2C_FIELD(ch, u64*, 0x08)) {
+                    func_80039C10(ch);
+                }
+            }
+            if (M2C_FIELD(ch, s32*, 0x54) != 0) {
+                if (CH_FRAME(ch) > M2C_FIELD(ch, u64*, 0x10)) {
+                    func_80039D08(ch);
+                }
+            }
+        }
+        if (M2C_FIELD(ch, s32*, 0x38) != -1) {
+            M2C_FIELD(ch, s32*, 0x38)--;
+            if (M2C_FIELD(ch, s32*, 0x38) == -1) {
+                M2C_FIELD(ch, s32*, 0x30) = func_80036640(ch, 0);
+                if (M2C_FIELD(ch, u8*, 0xDD) != 0) {
+                    M2C_FIELD(ch, u8*, 0xDD) = 0;
+                    n_alSynStopVoice((N_ALVoice*)CH_VOICE(ch));
+                    n_alSynFreeVoice((N_ALVoice*)CH_VOICE(ch));
+                    CH_VOICE(ch)->unk_1E = 5;
+                    CH_VOICE(ch) = NULL;
+                    M2C_FIELD(ch, s16*, 0xB2) = 0;
+                }
+                M2C_FIELD(ch, s32*, 0x34) = 0;
+            }
+        }
+        if (M2C_FIELD(ch, s32*, 0x34) == 0) {
+            continue;
+        }
+        func_800395D0((channel_t*)ch);
+        if (M2C_FIELD(ch, s32*, 0x34) == 0) {
+            continue;
+        }
+        if (M2C_FIELD(ch, u8*, 0xE7) != 0) {
+            if (CH_FRAME(ch) > M2C_FIELD(ch, u32*, 0xA0)) {
+                func_80039A60(ch);
+            }
+        }
+        detune = M2C_FIELD(ch, f32*, 0x50);
+        if (M2C_FIELD(ch, u8*, 0xE8) != 0) {
+            detune += func_80039B7C(ch);
+        }
+        if (M2C_FIELD(ch, u8*, 0xE1) != 0) {
+            detune += func_80039B2C(ch);
+        }
+        pitch = func_800393F8(ch, detune);
+        if (M2C_FIELD(ch, s32*, 0xD8) != 0) {
+            vol = func_80039328(ch);
+        }
+        if (D_80075E00 == 0) {
+            pan = 0x40;
+        } else {
+            pan = ((M2C_FIELD(ch, s16*, 0xBC) * M2C_FIELD(ch, u8*, 0xCB)) >> 7) & 0x7F;
+        }
+        fxmix = M2C_FIELD(ch, u8*, 0xDF);
+        fxmix += ((0x80 - fxmix) * M2C_FIELD(ch, u8*, 0xDE)) / 128;
+        M2C_FIELD(ch, s16*, 0xB6) = (u32)(CH_FRAME(ch) - M2C_FIELD(ch, u64*, 0x20)) / 256;
+        if (M2C_FIELD(ch, u8*, 0xDD) != 0) {
+            if (pitch != 0.0f) {
+                n_alSynSetPitch((N_ALVoice*)CH_VOICE(ch), pitch);
+            }
+            if ((M2C_FIELD(ch, s32*, 0xD8) != 0) && (vol != M2C_FIELD(ch, u16*, 0xAC))) {
+                M2C_FIELD(ch, u16*, 0xAC) = vol;
+                n_alSynSetVol((N_ALVoice*)CH_VOICE(ch), vol, D_800B3650);
+            }
+            if (pan != M2C_FIELD(ch, u8*, 0xCC)) {
+                M2C_FIELD(ch, u8*, 0xCC) = pan;
+                n_alSynSetPan((N_ALVoice*)CH_VOICE(ch), pan);
+            }
+            if (M2C_FIELD(ch, u8*, 0xE0) != M2C_FIELD(ch, u8*, 0xDE)) {
+                M2C_FIELD(ch, u8*, 0xE0) = fxmix;
+                func_80046860((N_ALVoice*)CH_VOICE(ch), fxmix); /* n_alSynSetFXMix */
+            }
+        } else {
+            for (j = 0; j < 45; j++) {
+                if (D_800B3670[j].unk_1E == 5) {
+                    CH_VOICE(ch) = &D_800B3670[j];
+                    goto found;
+                }
+            }
+            for (j = 0; j < 45; j++) {
+                if (D_800B3670[j].unk_1E == 4) {
+                    CH_VOICE(ch) = &D_800B3670[j];
+                    goto found;
+                }
+            }
+            M2C_FIELD(ch, s32*, 0x34) = 0;
+            continue;
+        found:
+            CH_VOICE(ch)->unk_1E = M2C_FIELD(ch, u8*, 0xD1);
+            M2C_FIELD(CH_VOICE(ch), s16*, 0x1C) = M2C_FIELD(ch, u8*, 0xDC);
+            config.priority = 0x3C;
+            config.unityPitch = 0;
+            config.fxBus = 0;
+            n_alSynAllocVoice((N_ALVoice*)CH_VOICE(ch), &config);
+            M2C_FIELD(ch, u16*, 0xAC) = vol;
+            M2C_FIELD(ch, u8*, 0xCC) = pan;
+            M2C_FIELD(ch, u8*, 0xE0) = fxmix;
+            if (pitch == 0.0f) {
+                pitch = Audio_ExpApproximation(M2C_FIELD(ch, f32*, 0x48) * (5.0 / 60.0));
+                if (pitch > 2.0) {
+                    pitch = 2.0f;
+                }
+            }
+            n_alSynStartVoiceParams((N_ALVoice*)CH_VOICE(ch), M2C_FIELD(ch, ALWaveTable**, 0x34), pitch, vol, pan,
+                                    fxmix, M2C_FIELD(ch, s32*, 0xD8));
+            M2C_FIELD(ch, s32*, 0xD8) = 0;
+            M2C_FIELD(ch, u8*, 0xDD) = 1;
+            CH_VOICE(ch)->unk_1E = 1;
+        }
+    }
+
+    if (vol) {} // FAKE
+    for (i = 0; i < 45; i++) {
+        if (D_800B3670[i].unk_1E == 4) {
+            if (M2C_FIELD(&D_800B3670[i], u32*, 0x20) < D_800B3CC4) {
+                n_alSynStopVoice((N_ALVoice*)&D_800B3670[i]);
+                n_alSynFreeVoice((N_ALVoice*)&D_800B3670[i]);
+                D_800B3670[i].unk_1E = 5;
+            } else if ((D_80075C34 != 0) && (D_80075C34 < (M2C_FIELD(&D_800B3670[i], u32*, 0x20) - D_800B3CC4))) {
+                n_alSynSetVol((N_ALVoice*)&D_800B3670[i], 0, D_800B3650 * D_80075C34);
+                M2C_FIELD(&D_800B3670[i], u32*, 0x20) = D_800B3CC4 + 1 + D_80075C34;
+            }
+        }
+    }
+
+    D_800B3CC4++;
+    if (D_80075C34 != 0) {
+        D_80075C34--;
+    }
+    if (D_800B3CD0 != 0) {
+        for (i = 0; i < 45; i++) {
+            n_alSynStopVoice((N_ALVoice*)&D_800B3670[i]);
+            n_alSynFreeVoice((N_ALVoice*)&D_800B3670[i]);
+            D_800B3670[i].unk_1E = 5;
+        }
+        for (i = 0, ch = D_800B3640; i < D_800B3638; i++, ch += 0x148) {
+            M2C_FIELD(ch, u8*, 0xDD) = 0;
+            M2C_FIELD(ch, s32*, 0x30) = 0;
+            func_8003A2B8(ch);
+        }
+        D_800B3CC8 = 0;
+        D_800B3CCC = 0;
+        D_80075C34 = 0;
+        D_800B3CD0 = 0;
+    }
+    return D_800B3650;
+}
 
 extern command_func_t D_80075C38[];
 void Audio_UpdateVoicePlaybackEnd(channel_t* arg0);

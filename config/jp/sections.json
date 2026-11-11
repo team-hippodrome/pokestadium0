@@ -688,8 +688,8 @@
   },
   "src/libnumus/player.c": {
     ".rodata": {
-      "address": "0x8007DC58",
-      "size": "0x78"
+      "address": "0x8007DC50",
+      "size": "0x80"
     }
   },
   "src/libultra/audio/drvrnew.c": {
