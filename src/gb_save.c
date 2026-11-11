@@ -347,11 +347,45 @@ void func_80029864(s32 x, s32 y, s32 h, u8* arg3) {
     gSPTextureRectangle(gDisplayListHead++, x << 2, (y2 - 8) << 2, x8, y2 << 2, G_TX_RENDERTILE, 0, 0, 0x400, 0x400);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80029A64; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80029A64.s")
-#endif
+extern u8 D_04009E98[];
+extern u8 D_04009EE0[];
+extern u8 D_04009F28[];
+extern u8 D_04009F70[];
+/**
+ * Draws a hollow frame in a flat colour from the four 8x8 edge textures at
+ * D_04009E98 (top), D_04009F70 (right), D_04009F28 (bottom) and D_04009EE0 (left).
+ * w and h are clamped to at least 16.
+ *
+ * y8 is taken before the clamps and x2/y2 after them: that keeps the first basic
+ * block at the size the target has. The right and bottom edges are written out as
+ * x + w and y + h where the target evaluates them again.
+ */
+void func_80029A64(s32 x, s32 y, s32 w, s32 h, Color_RGBA8 color) {
+    s32 x2;
+    s32 y2;
+    s32 y8;
+
+    y8 = (y + 8) << 2;
+    if (w < 0x10) {
+        w = 0x10;
+    }
+    if (h < 0x10) {
+        h = 0x10;
+    }
+    x2 = x + w;
+    y2 = y + h;
+    gSPDisplayList(gDisplayListHead++, D_80073450);
+    gDPSetCombineLERP(gDisplayListHead++, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, TEXEL0);
+    gDPSetPrimColor(gDisplayListHead++, 0, 0, color.r, color.g, color.b, color.a);
+    gDPLoadTextureBlock(gDisplayListHead++, D_04009E98, G_IM_FMT_IA, G_IM_SIZ_8b, 8, 8, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    gSPTextureRectangle(gDisplayListHead++, x << 2, y << 2, (x + w - 8) << 2, y8, G_TX_RENDERTILE, 0, 0, 0x400, 0x400);
+    gDPLoadTextureBlock(gDisplayListHead++, D_04009F70, G_IM_FMT_IA, G_IM_SIZ_8b, 8, 8, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    gSPTextureRectangle(gDisplayListHead++, (x2 - 8U) << 2, y << 2, x2 << 2, (y + h - 8) << 2, G_TX_RENDERTILE, 0, 0, 0x400, 0x400); // FAKE: 8U keeps x2 - 8 apart from the one above
+    gDPLoadTextureBlock(gDisplayListHead++, D_04009F28, G_IM_FMT_IA, G_IM_SIZ_8b, 8, 8, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    gSPTextureRectangle(gDisplayListHead++, (x + 8) << 2, (y + h - 8U) << 2, x2 << 2, y2 << 2, G_TX_RENDERTILE, (w * -0x20) + 0x200, 0, 0x400, 0x400); // FAKE: 8U, as above
+    gDPLoadTextureBlock(gDisplayListHead++, D_04009EE0, G_IM_FMT_IA, G_IM_SIZ_8b, 8, 8, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    gSPTextureRectangle(gDisplayListHead++, x << 2, y8, (x + 8) << 2, y2 << 2, G_TX_RENDERTILE, 0, (h * -0x20) + 0x200, 0x400, 0x400);
+}
 
 typedef struct Color8002A354 {
     u8 c[4];
