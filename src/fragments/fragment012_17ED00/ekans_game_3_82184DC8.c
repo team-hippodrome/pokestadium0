@@ -207,15 +207,20 @@ typedef struct BattleSlotZ {
     /* 0x00 */ TeamRoster* roster;
     /* 0x04 */ u8 pad04[4];
     /* 0x08 */ s32 unk_08;
-    /* 0x0C */ u8 pad0C[0xF];
+    /* 0x0C */ f32 unk_0C;
+    /* 0x10 */ u8 pad10[0xB];
     /* 0x1B */ u8 unk_1B;
     /* 0x1C */ u16 unk_1C;
-    /* 0x1E */ u8 pad1E[0xE];
+    /* 0x1E */ u8 pad1E[7];
+    /* 0x25 */ u8 unk_25;
+    /* 0x26 */ u8 pad26[6];
     /* 0x2C */ u8 unk_2C;
     /* 0x2D */ u8 unk_2D;
     /* 0x2E */ u8 pad2E[8];
     /* 0x36 */ u8 unk_36;
-    /* 0x37 */ u8 pad37[0x48];
+    /* 0x37 */ u8 pad37[0x27];
+    /* 0x5E */ u8 unk_5E;
+    /* 0x5F */ u8 pad5F[0x20];
     /* 0x7F */ u8 unk_7F;
     /* 0x80 */ u8 pad80[0x10];
 } BattleSlotZ; // size = 0x90
@@ -875,10 +880,10 @@ s32 func_821864D4(u8 *arg0, u8 *arg1) {
     return -1;
 }
 
-s32 func_8218663C(u8 *arg0) {
+s32 func_8218663C(u8 *arg0, u8 *arg1) {
     s32 i;
 
-    if (func_82185450() != 0) {
+    if (func_82185450(arg0, arg1) != 0) {
         return -1;
     }
     for (i = 0; i < 4; i++) {
