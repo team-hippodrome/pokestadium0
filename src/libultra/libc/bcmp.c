@@ -1,10 +1,2 @@
-/* Stadium Zero resident code. */
-/* Identical to ultralib src/libc/bcmp.c (2.0I, IDO 5.3); link libultra here once the build exists. */
-
-#include "global.h"
-
-#ifdef NON_MATCHING
-/* TODO: decompile func_80057910; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80057910.s")
-#endif
+/* Original ultralib 2.0I assembly, built with the ultralib-asm profile. */
+#include "lib/ultralib/src/libc/bcmp.s"
