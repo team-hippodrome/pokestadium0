@@ -4164,7 +4164,7 @@ func_800268DC,0x800268DC,src/game_state.c,func_800268DC,s1,stadium1:src/game_sta
 func_800268E4,0x800268E4,src/game_state.c,Game_ShutdownAndLoadFragment,s1,stadium1:src/game_state.c,c
 func_80026980,0x80026980,src/game_state.c,Game_ResetStorageDevice,s1,stadium1:src/game_state.c,c
 func_800269A0,0x800269A0,src/game_state.c,func_800269A0,hand,,c
-func_80026B50,0x80026B50,src/game_state.c,,asm,,asm
+func_80026B50,0x80026B50,src/game_state.c,func_80026B50,hand,,c
 func_800270B4,0x800270B4,src/game_state.c,func_800270B4,hand,,c
 func_80027134,0x80027134,src/game_state.c,Display_DisableBlackout,s1,stadium1:src/dp_intro.c,c
 func_80027140,0x80027140,src/game_state.c,func_80027140,m2c,m2c+permuter,c
