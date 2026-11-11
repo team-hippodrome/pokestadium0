@@ -296,7 +296,102 @@ void func_8211B484(TeamRoster* arg0, s16 arg1, s16 arg2, s32 arg3) {
     BattleHud_DrawTranslucentShadowRect(arg1 - 2, arg2 - 2, 0x69, 0x6A, 0);
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211B900.s")
+typedef struct Colors8211B900 {
+    s8* p[4];
+} Colors8211B900;
+extern Colors8211B900 D_8218B104;
+extern Colors8211B900 D_8218B114;
+extern u8* D_8218AFF8[];
+extern Gfx D_800602C8[];
+extern Gfx D_80060398[];
+
+void func_8211B900(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3) {
+    UNUSED s32 pad[3]; // FAKE
+    Colors8211B900 a = D_8218B104;
+    Colors8211B900 b = D_8218B114;
+    TeamRoster* roster = arg0->sessionTeams->teamMember[M2C_FIELD(arg0, s32*, 0x9D4)];
+    BattleMon* m0 = &arg0->teamRoster->pokemonPicked[0];
+    BattleMon* m1 = &arg0->teamRoster->pokemonPicked[1];
+    BattleMon* m2 = &arg0->teamRoster->pokemonPicked[2];
+    BattleMon* m3 = &arg0->teamRoster->pokemonPicked[3];
+    BattleMon* m4 = &arg0->teamRoster->pokemonPicked[4];
+    BattleMon* m5 = &arg0->teamRoster->pokemonPicked[5];
+    UNUSED s32 pad2[5]; // FAKE
+    s32 icon; // status icon index, computed but never used here
+    s32 n;
+
+    if (m0->hp == 0) {
+        icon = 1;
+    } else {
+        icon = func_8001FA30(m0->statusCondition);
+    }
+    if (m1->hp == 0) {
+        icon = 1;
+    } else {
+        icon = func_8001FA30(m1->statusCondition);
+    }
+    if (m2->hp == 0) {
+        icon = 1;
+    } else {
+        icon = func_8001FA30(m2->statusCondition);
+    }
+    if (m3->hp == 0) {
+        icon = 1;
+    } else {
+        icon = func_8001FA30(m3->statusCondition);
+    }
+    if (m4->hp == 0) {
+        icon = 1;
+    } else {
+        icon = func_8001FA30(m4->statusCondition);
+    }
+    if (m5->hp == 0) {
+        icon = 1;
+    } else {
+        icon = func_8001FA30(m5->statusCondition);
+    }
+    func_82116CF4(arg1 + 1, arg2 + 1, 0xC8, 0xF, a.p[arg3], b.p[arg3]);
+    func_82116CF4(arg1 + 1, arg2 + 0x10, 0xC8, 0x1D, a.p[arg3] + 3, b.p[arg3] + 3);
+    func_82116CF4(arg1 + 1, arg2 + 0x2D, 0xC8, 0x1D, a.p[arg3] + 6, b.p[arg3] + 6);
+    func_82116CF4(arg1 + 1, arg2 + 0x4A, 0xC8, 0x1D, a.p[arg3] + 9, b.p[arg3] + 9);
+    BattleHud_DrawPlainText(arg1 + 0x2C, arg2 + 3, roster->unk_008);
+    gSPDisplayList(gDisplayListHead++, D_800602C8);
+    Gfx_DrawTextureRgba16(arg1 + 1, arg2, 0x18, 0x10, D_8218AFF8[arg3], 0x18, 0);
+    gSPDisplayList(gDisplayListHead++, D_80060398);
+    if (roster->numberOfPokemonBrought > 0) {
+        func_8211AEA4(roster, m0, arg1 + 1, arg2 + 0x10, 0);
+    }
+    if (roster->numberOfPokemonBrought >= 2) {
+        func_8211AEA4(roster, m1, arg1 + 1, arg2 + 0x2D, 1);
+    }
+    if (roster->numberOfPokemonBrought >= 3) {
+        func_8211AEA4(roster, m2, arg1 + 1, arg2 + 0x4A, 2);
+    }
+    if (roster->numberOfPokemonBrought >= 4) {
+        func_8211AEA4(roster, m3, arg1 + 0x66, arg2 + 0x10, 3);
+    }
+    if (roster->numberOfPokemonBrought >= 5) {
+        func_8211AEA4(roster, m4, arg1 + 0x66, arg2 + 0x2D, 4);
+    }
+    if (roster->numberOfPokemonBrought >= 6) {
+        func_8211AEA4(roster, m5, arg1 + 0x66, arg2 + 0x4A, 5);
+    }
+    gSPDisplayList(gDisplayListHead++, D_800602C8);
+    BattleHud_DrawBorderTile(arg1, arg2 - 1, 8, 8, D_030096C0);
+    for (n = 1; n < 14; n++) {
+        BattleHud_DrawBorderTile(arg1, arg2 + n * 7, 8, 8, D_030095C0);
+        BattleHud_DrawBorderTile(arg1 + 0xC2, arg2 + n * 7, 8, 8, D_03009740);
+    }
+    BattleHud_DrawBorderTile(arg1, arg2 + 0x60, 8, 8, D_03009640);
+    BattleHud_DrawBorderTile(arg1 + 0xC2, arg2 - 1, 8, 8, D_03009840);
+    BattleHud_DrawBorderTile(arg1 + 0xC2, arg2 + 0x60, 8, 8, D_030097C0);
+    for (n = 1; n < 28; n++) {
+        BattleHud_DrawBorderTile(arg1 + n * 7, arg2 - 1, 8, 8, D_03009940);
+        BattleHud_DrawBorderTile(arg1 + n * 7, arg2 + 0x60, 8, 8, D_030098C0);
+    }
+    gSPDisplayList(gDisplayListHead++, D_80060398);
+    BattleHud_DrawTranslucentShadowRect(arg1 - 2, arg2 - 2, 0xCE, 0x6A, 0);
+}
 
 extern s8 D_8218B020;
 void func_8211BEA8(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3) {
