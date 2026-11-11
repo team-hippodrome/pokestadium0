@@ -752,11 +752,52 @@ void Game_ResetStorageDevice(void) {
     Storage_ResetDisk();
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_800269A0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800269A0.s")
-#endif
+u32 func_800594D0(u32);
+void func_8000B170(s32);
+void func_8000D20C(void);
+void func_800177DC(void);
+void func_80025FDC(void);
+void func_80026368(void);
+void func_8002677C(void);
+void func_800268A8(void);
+
+void func_800269A0(s32 arg0) {
+    s32 state;
+
+    func_800594D0(0x01000F00);
+    func_8000B170(0);
+    func_8000D20C();
+    func_800177DC();
+    func_8000256C(0x47414D45);
+    M2C_FIELD(&D_800AE8F0, s8*, 0) = 1;
+    while (1) {
+        state = D_800733C8;
+        switch (state) {
+            case 0x8001:
+                func_80025F3C();
+                break;
+            case 0x8010:
+                func_80025FDC();
+                break;
+            case 0x8040:
+                func_800260C4();
+                break;
+            case 0x8050:
+                func_80026368();
+                break;
+            case 0x8060:
+                func_8002677C();
+                break;
+            case 0x8080:
+                func_80026898();
+                break;
+            case 0xF000:
+                func_800268A8();
+                break;
+        }
+        D_800733CC = state;
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_80026B50; signature not recovered. */
