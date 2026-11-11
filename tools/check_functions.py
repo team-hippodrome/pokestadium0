@@ -262,13 +262,33 @@ def native_function_symbols(functions):
             if value[1] or value[0] not in sized}
 
 
+def native_owner_span(segment, address, size, owners):
+    """Find the exact SDK function interval within a conservative inventory owner.
+
+    Exception assembly has several real function entries in one inventory owner.
+    Every entry still compares against its own complete ROM instruction interval;
+    crossing an owner boundary or an unknown/empty extent is rejected.
+    """
+    if address is None or size <= 0 or size % 4:
+        return None
+    for (owner_segment, start), (name, words, tail) in owners.items():
+        if owner_segment != segment or not start <= address < start + 4 * len(words):
+            continue
+        offset = address - start
+        if offset % 4 or offset + size > 4 * len(words):
+            return None
+        return name, words[offset // 4:(offset + size) // 4], ()
+    return None
+
+
 def check_file(job):
     path, cc_dir, overrides, symbols, owners, learn = job
     data, error = compile_source(path, cc_dir, overrides)
     if data is None:
         return path, [("<compile>", error.strip()[-500:])], 0
     text, functions, relocations = parse_object(data)
-    if overrides.get(path, {}).get("profile") == "ultralib-asm":
+    native = overrides.get(path, {}).get("profile") == "ultralib-asm"
+    if native:
         functions = native_function_symbols(functions)
     segment = segment_of(path)
     failures = []
@@ -277,7 +297,8 @@ def check_file(job):
     for name in functions:
         match = ADDR_NAME.match(name)
         address = symbols.get(name, int(match.group(1), 16) if match else None)
-        owner = owners.get((segment, address))
+        owner = (native_owner_span(segment, address, functions[name][1], owners)
+                 if native else owners.get((segment, address)))
         if owner is None:
             failures.append((name, "no assembly owner at this address"))
             continue
