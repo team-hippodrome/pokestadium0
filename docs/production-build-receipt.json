@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5401,
-  "asm_owners": 43,
+  "c_owners": 5403,
+  "asm_owners": 41,
   "linked_images": 260,
   "sdk_asm_owners": 25,
   "original_assembly_sources_sha256": {
@@ -663,7 +663,7 @@
     "tools/cflags_overrides.json": "e3db3b29e01736a27242afda3777cee3db0d330f000cd8eb6230ba10fc8479d1",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "a8243b265cda90fdd4185bba95930661ce8f1150ab76f1fd73cf93cb33d408f8",
+    "docs/function-matches.csv": "acddaa67e69a06001bda5344c274095239236850a714cce6695b1634cc749f68",
     "linker_scripts/jp/symbol_addrs.txt": "7793ea86643996d488126092ac46aefb79ebd778f2a120c5392784f7bd54e234"
   },
   "binutils": {
@@ -722,7 +722,7 @@
     "src/audio_cache.c": "a38ad4f1b35eebb514e346e999023a08b82cc101c80f79bc270908e4f1a5deb1",
     "src/audio_channel.c": "049c2adcf17a81497387499f50d55602c63ddeb90f4215c049eaee1a19b896f1",
     "src/audio_commands.c": "4a83f80e01838e28d0d423ec4a40c1cb9c9d0551d0fd0e22f93a44dfbefd2e37",
-    "src/audio_commands_2.c": "f2467aac9eda61dffc73695cb82ee4261f4e0e22cbebcecc65ae7d060456dbd4",
+    "src/audio_commands_2.c": "aefa13718506b4efb19558637ce5b60bb8ecb44662456c8b02c0a05d07c9c85d",
     "src/audio_commands_800407B0.c": "11f8b92e0c274f98a1e52b4ef77ed53b2e6f915763b249cc6dc159c66003472a",
     "src/audio_commands_800414B0.c": "47b6355d885ae8b652a008c6955d2a87f5e1750b474a5f7cde22199d705f60fe",
     "src/audio_sfx_wrapper.c": "3b4e995ac788d523833742092c74d59b4cd338d8b8c6fee25bb8e80aea20aa8d",
@@ -1056,7 +1056,7 @@
     "src/fragments/fragment256_B83840.c": "2eede8d311f7555c99fbaedb15fee7f45115ff35b9bb524c9f3774bc09566dbf",
     "src/fragments/fragment257_B8BFE0.c": "f213c2caa67dabfb160f9a377f73d231e8549abd79e4cf3bad672f9f85cad6c8",
     "src/fragments/fragment258_B91160.c": "6035eb3014b0ed773dbd779d08c18b0f4a1dd84523d903c534fe613eae21c017",
-    "src/game_state.c": "ecb841e3bdbf0299c932e6b715f6a5019ac7237bdaebe00008e54a6eb69702a6",
+    "src/game_state.c": "7216d3c3e33fb2bedf36ec9832ffe40cde65415135adbbb3d9b7432acd630c52",
     "src/gb_audio.c": "cee7e9a1543908dfb5e951e135afec11e8df066a6128bfe7d3c351e4c509d347",
     "src/gb_audio_render.c": "7b990519ff2999b71446f5f28fdfbafacd9d2c186ffd73f8fe168f19bc91e619",
     "src/gb_data.c": "38e026d47ec44d5de127778395cddf3c932ccdda434bef8628ea81336cce3ba3",
