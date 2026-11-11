@@ -34,7 +34,6 @@ extern s32 D_800AB244;
 extern u8 pad_D_800AA6E8[0x1E0];
 extern unk_D_800AA8C8 D_800AB460;
 extern unk_D_800AB970 D_800AC508;
-#pragma SWAP_FUNCTION_WORDS(func_80011D14, 0xD0, 0xAFB80024, 0x00063403)
 
 #include "model_animation.h"
 #include "util.h"
@@ -434,11 +433,20 @@ void GeoOverlay_DrawFadeQuad(CameraOverlay* arg0, CameraOrthographic* arg1) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80011D14; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80011D14.s")
-#endif
+void func_8000A560();
+
+void func_80011D14(Vtx* arg0, CameraOverlay* arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5, s16 arg6, s16 arg7) {
+    u16 angle = arg1->unk_18;
+    s32 idx = angle >> 4;
+    s16 x;
+    s16 y;
+
+    x = (s16)(arg2 + (s16)(arg4 * gCosineTable[idx] - arg5 * gSineTable[idx]));
+    y = (s16)(arg3 + (s16)(arg4 * gSineTable[idx] + arg5 * gCosineTable[idx]));
+
+    func_8000A560(arg0, x, y, -1, arg6 << 5, arg7 << 5,
+                  arg1->color.r, arg1->color.g, arg1->color.b, 0xFF);
+}
 
 Vtx* GeoOverlay_BuildRotatingQuad(CameraOverlay* arg0) {
     Vtx* temp_v0 = Gfx_AllocDisplayList(sizeof(Vtx) * 8);

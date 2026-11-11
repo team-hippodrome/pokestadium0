@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5388,
-  "asm_owners": 56,
+  "c_owners": 5389,
+  "asm_owners": 55,
   "linked_images": 260,
   "sdk_asm_owners": 25,
   "original_assembly_sources_sha256": {
@@ -662,7 +662,7 @@
     "tools/cflags_overrides.json": "e3db3b29e01736a27242afda3777cee3db0d330f000cd8eb6230ba10fc8479d1",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "da16cd3ee269590248a180f167ba3272a43f18cb9c1ce4823ced81b2ec7c85c0",
+    "docs/function-matches.csv": "a7c5c4437fc38af58de1580e2bfbe3d08385dc2b1d62ad9f9e840314e8718e29",
     "linker_scripts/jp/symbol_addrs.txt": "7793ea86643996d488126092ac46aefb79ebd778f2a120c5392784f7bd54e234"
   },
   "binutils": {
@@ -1063,7 +1063,7 @@
     "src/gb_tower.c": "176816e083b7e59f7a469e5cb27b7a0b94869007fcb3060a4e31dfeefbfd0124",
     "src/geo_layout.c": "cd22cfc78b438f75ba379097e38e64b8e773c73701f536774d4a9c9fbe313f0d",
     "src/geo_node.c": "4b117247e69f5030a02753148e827dc7179b9c497a8af94b2feb264947aa287a",
-    "src/geo_render.c": "2f1bbbdd3e34052da6650fa77ae9e5057a23df99d12c5af15e4039ac1b9af381",
+    "src/geo_render.c": "361ad79b816f0ed5aeef8c0a92375f0f2f3e700c1ee373c16f77f369afd65a61",
     "src/gfx_buffer.c": "8763545514d8fbae9e0f5bba8be79ea47a1db08f2e40b1ceccb6c16d0a5e59e5",
     "src/gfx_rect.c": "aa0d5e4c1ee103a6195cc63d2e2e8f303c99b8a7dcbfe54b922dfd7c5948eee8",
     "src/graphics_textures.c": "1691764c6592b2392747dcba4e39f0b5b11c3d26acd6f4a4cdadf0ce705d7b54",

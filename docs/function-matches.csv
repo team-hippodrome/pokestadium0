@@ -4454,7 +4454,7 @@ func_800118DC,0x800118DC,src/geo_render.c,ModelAnim_ResolveEventIndex,s1,stadium
 func_80011914,0x80011914,src/geo_render.c,ModelAnim_AdvanceEventFrame,hand,,c
 func_80011978,0x80011978,src/geo_render.c,GeoOverlay_BuildFadeQuad,s1,stadium1:src/geo_render.c,c
 func_80011C0C,0x80011C0C,src/geo_render.c,GeoOverlay_DrawFadeQuad,s1,stadium1:src/geo_render.c,c
-func_80011D14,0x80011D14,src/geo_render.c,,asm,,asm
+func_80011D14,0x80011D14,src/geo_render.c,func_80011D14,hand,,c
 func_80011E04,0x80011E04,src/geo_render.c,GeoOverlay_BuildRotatingQuad,s1,stadium1:src/geo_render.c,c
 func_8001222C,0x8001222C,src/geo_render.c,GeoOverlay_DrawRotatingQuad,s1,stadium1:src/geo_render.c,c
 func_80012658,0x80012658,src/geo_render.c,GeoOverlay_Draw,s1,stadium1:src/geo_render.c,c
