@@ -6,16 +6,10 @@ Pocket Monsters Stadium (ポケモンスタジアム, 1998) only ships Japanese 
 
 ## Conventions
 
-- **English** is the current official English name (modern capitalization, e.g. `Thunder Shock`). Where the
-  Gen 1 English games (Red/Blue/Yellow) spelled it differently, that spelling is in the *RBY spelling* column.
-  Prefer the modern name in identifiers and comments: `MOVE_THUNDER_SHOCK`, `ITEM_POKE_BALL`, `SPECIES_ALAKAZAM`.
-- **Romanization** is plain Hepburn without macrons (long vowels doubled, `ー` repeats the vowel), generated
-  mechanically from the kana. It is a search aid, not an official name. For Pokémon, the *Trademark romaji*
-  column also gives Nintendo's registered romanization (e.g. Foodin, Barrierd).
+- **English** is the current official English name (modern capitalization, e.g. `Thunder Shock`). Where the Gen 1 English games (Red/Blue/Yellow) spelled it differently, that spelling is in the *RBY spelling* column. Prefer the original name in identifiers and comments: `THUNDERSHOCK`, `POKE_BALL`, `ALAKAZAM`.
+- **Romanization** is plain Hepburn without macrons (long vowels doubled, `ー` repeats the vowel), generated mechanically from the kana. It is a search aid, not an official name. For Pokémon, the *Trademark romaji* column also gives Nintendo's registered romanization (e.g. Foodin, Barrierd).
 - Kana is as written in Gen 1–era Japanese text. Game text uses fullwidth digits (`わざマシン０１`).
-- Sources: the Pokémon, move, item and type tables are generated from the [PokeAPI](https://github.com/PokeAPI/pokeapi)
-  CSV data (Japanese kana, English names, Gen 1 item indices). The people, places, game-term and Stadium
-  sections are hand-written; entries marked ⚠ are unverified and should be checked against the in-game text.
+- Sources: the Pokémon, move, item and type tables are generated from the [PokeAPI](https://github.com/PokeAPI/pokeapi) CSV data (Japanese kana, English names, Gen 1 item indices). The people, places, game-term and Stadium sections are hand-written; entries marked ⚠ are unverified and should be checked against the in-game text.
 
 ## Contents
 
@@ -673,8 +667,8 @@ Gen 1 TM contents (Red/Green/Blue/Yellow). Item index = 0xC4 + HM number − 1 f
 | ギャンブラー | Gyanburaa | Gambler |
 | けんきゅういん | Kenkyuuin | Scientist |
 | ふなのり | Funanori | Sailor |
-| エンジニア ⚠ | Enjinia | Engineer |
-| マニア ⚠ | Mania | PokéManiac |
+| オヤジ | Oyaji | Mr. Fix |
+| マニア | Mania | PokéManiac |
 | ロケットだんいん | Roketto-dan'in | Rocket (Grunt) |
 
 ## Places
