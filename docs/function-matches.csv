@@ -30,7 +30,7 @@ func_8002F3C4,0x8002F3C4,src/2E480.c,func_8002F3C4,hand,,c
 func_8002F6C4,0x8002F6C4,src/2E480.c,func_8002F6C4,hand,,c
 func_8002F9D8,0x8002F9D8,src/2E480.c,func_8002F9D8,hand,,c
 func_8002FD8C,0x8002FD8C,src/2E480.c,func_8002FD8C,hand,,c
-func_80030230,0x80030230,src/2E480.c,,asm,,asm
+func_80030230,0x80030230,src/2E480.c,func_80030230,hand,,c
 func_800306E0,0x800306E0,src/2E480.c,func_800306E0,hand,,c
 func_80030744,0x80030744,src/2E480.c,func_80030744,hand,,c
 func_800307D4,0x800307D4,src/2E480.c,WidgetTree_SetPagedGridSelectionWithOffset,hand,,c
