@@ -520,6 +520,12 @@
   },
   "src/fragments/fragment016_252E10/89100020_891012A8.c": {
     ".rodata": {
+      "address": "0x8910DE90",
+      "size": "0x40"
+    }
+  },
+  "src/fragments/fragment016_252E10/89100020_891019E4.c": {
+    ".rodata": {
       "address": "0x8910DF04",
       "size": "0x40"
     }
