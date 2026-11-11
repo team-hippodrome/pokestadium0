@@ -231,7 +231,70 @@ void func_8211B208(TeamRoster* arg0, BattleMon* arg1, s32 arg2, s32 arg3, s32 ar
     }
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211B484.s")
+extern u8 D_8218B02C[];
+extern u8 D_8218B044[];
+extern u8 D_8218B05C[];
+extern u8 D_8218B074[];
+extern u8 D_8218B038[];
+extern u8 D_8218B050[];
+extern u8 D_8218B068[];
+extern u8 D_8218B080[];
+extern u8* D_8218AFF8[];
+void func_8211B484(TeamRoster* arg0, s16 arg1, s16 arg2, s32 arg3) {
+    UNUSED s32 pad; // FAKE
+    s8* sp88[] = {D_8218B02C, D_8218B044, D_8218B05C, D_8218B074};
+    s8* sp78[] = {D_8218B038, D_8218B050, D_8218B068, D_8218B080};
+    UNUSED s32 pad2[4]; // FAKE
+    BattleMon* mon0 = &arg0->pokemonPicked[0];
+    BattleMon* mon1 = &arg0->pokemonPicked[1];
+    BattleMon* mon2 = &arg0->pokemonPicked[2];
+    s32 i;
+    s32 icon; // status icon index, computed but never used here
+
+    if (mon0->hp == 0) {
+        icon = 1;
+    } else {
+        icon = func_8001FA30(mon0->statusCondition);
+    }
+    if (mon1->hp == 0) {
+        icon = 1;
+    } else {
+        icon = func_8001FA30(mon1->statusCondition);
+    }
+    if (mon2->hp == 0) {
+        icon = 1;
+    } else {
+        icon = func_8001FA30(mon2->statusCondition);
+    }
+    func_82116CF4(arg1 + 1, arg2 + 1, 0x63, 0xF, sp88[arg3], sp78[arg3]);
+    func_82116CF4(arg1 + 1, arg2 + 0x10, 0x63, 0x1D, sp88[arg3] + 3, sp78[arg3] + 3);
+    func_82116CF4(arg1 + 1, arg2 + 0x2D, 0x63, 0x1D, sp88[arg3] + 6, sp78[arg3] + 6);
+    func_82116CF4(arg1 + 1, arg2 + 0x4A, 0x63, 0x1D, sp88[arg3] + 9, sp78[arg3] + 9);
+    BattleHud_DrawPlainText(arg1 + 0x2C, arg2 + 3, arg0->unk_008);
+    func_8211B208(arg0, mon0, arg1 + 1, arg2 + 0x10, 0);
+    func_8211B208(arg0, mon1, arg1 + 1, arg2 + 0x2D, 1);
+    func_8211B208(arg0, mon2, arg1 + 1, arg2 + 0x4A, 2);
+    gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
+    func_8001B884(arg1 + 1, arg2, 0x18, 0x10, D_8218AFF8[arg3], 0x18, 0);
+    gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
+    gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
+    BattleHud_DrawBorderTile(arg1, arg2 - 1, 8, 8, D_030096C0);
+    for (i = 7; i < 0x62; i += 7) {
+        BattleHud_DrawBorderTile(arg1, arg2 + i, 8, 8, D_030095C0);
+        BattleHud_DrawBorderTile(arg1 + 0x5D, arg2 + i, 8, 8, D_03009740);
+    }
+
+    BattleHud_DrawBorderTile(arg1, arg2 + 0x60, 8, 8, D_03009640);
+    BattleHud_DrawBorderTile(arg1 + 0x5D, arg2 - 1, 8, 8, D_03009840);
+    BattleHud_DrawBorderTile(arg1 + 0x5D, arg2 + 0x60, 8, 8, D_030097C0);
+    for (i = 7; i < 0x62; i += 7) {
+        BattleHud_DrawBorderTile(arg1 + i, arg2 - 1, 8, 8, D_03009940);
+        BattleHud_DrawBorderTile(arg1 + i, arg2 + 0x60, 8, 8, D_030098C0);
+    }
+
+    gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
+    BattleHud_DrawTranslucentShadowRect(arg1 - 2, arg2 - 2, 0x69, 0x6A, 0);
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211B900.s")
 

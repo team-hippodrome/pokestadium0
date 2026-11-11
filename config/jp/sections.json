@@ -231,7 +231,11 @@
     ".data": "0x8218B0C8"
   },
   "src/fragments/fragment012_17ED00/battle_engine_31D9F0_821199E4.c": {
-    ".rodata": "0x82195A04"
+    ".rodata": "0x82195A04",
+    ".data": {
+      "address": "0x8218B0E4",
+      "size": "0x20"
+    }
   },
   "src/fragments/fragment012_17ED00/battle_engine_3223B0.c": {
     ".rodata": "0x82196A90"
