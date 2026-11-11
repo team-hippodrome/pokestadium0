@@ -3658,3 +3658,8 @@ BattleAnim_QueueEffectList = 0x821366B0; // learned from func_82103C64
 __leoVersion = 0x80101780; // learned from func_8004CB00
 leoInitialize = 0x800483E0; // learned from func_8004CB00
 osResetType = 0x8000030C; // learned from func_8004CB00
+
+// Original SDK assembly entries and interrupt-mask table.
+__assertBreak = 0x800093D0; // type:func
+_bzero = 0x8004FD20; // type:func
+__osRcpImTable = 0x8007F490;
