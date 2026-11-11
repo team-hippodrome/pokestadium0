@@ -1432,8 +1432,3 @@ s32 func_82187738(u8* arg0, u8* arg1, s32 arg2, s8* arg3, s32 arg4) {
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821879A4.s")
 #endif
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82187DB4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82187DB4.s")
-#endif
