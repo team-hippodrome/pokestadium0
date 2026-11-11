@@ -54,6 +54,22 @@ typedef struct ScrollMenu8002F6C4 {
     /* 0x28 */ s32 unk28;
     /* 0x2C */ s32 scroll;
 } ScrollMenu8002F6C4;
+
+typedef struct GridMenu800310D8 {
+    /* 0x00 */ MenuDef8002E230* def;
+    /* 0x04 */ u16* flags;
+    /* 0x08 */ s32 cursor;
+    /* 0x0C */ s32 cellWidth;
+    /* 0x10 */ s32 cellHeight;
+    /* 0x14 */ MenuDrawFunc8002E230 draw;
+    /* 0x18 */ char unk18[0x8];
+    /* 0x20 */ s32 options;
+    /* 0x24 */ s32 rows;
+    /* 0x28 */ char unk28[0x4];
+    /* 0x2C */ s32 scroll;
+    /* 0x30 */ char unk30[0x18];
+    /* 0x48 */ s32 columns;
+} GridMenu800310D8;
 void func_8002EDA8(ScrollMenu8002F6C4*);
 void func_8002F030(ScrollMenu8002F6C4*, s32, s32, s32, s32);
 void func_8002F32C(GridMenu80031004*, s32, s32);
@@ -991,11 +1007,33 @@ void func_80030A54(GridMenu80031004* menu) {
     M2C_FIELD(menu, u16*, 0x28) = 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80030D3C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80030D3C.s")
-#endif
+void func_80030D3C(GridMenu800310D8* menu, s32 x, s32 y) {
+    s32 height = menu->cellHeight * menu->rows;
+    s32 arrowX;
+    s32 topY;
+    s32 bottomY;
+    s32 more;
+    s32 width = menu->cellWidth * menu->columns;
+    u8* tex;
+
+    arrowX = (menu->cellWidth * menu->columns) / 2 + x - 9;
+    topY = y - 0x10;
+    bottomY = y + height;
+    gDPPipeSync(gDisplayListHead++);
+    gDPSetCycleType(gDisplayListHead++, G_CYC_1CYCLE);
+    gDPSetRenderMode(gDisplayListHead++, 0x0F0A4000, 0);
+    gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
+    gDPSetTexturePersp(gDisplayListHead++, G_TP_NONE);
+    gDPSetTextureFilter(gDisplayListHead++, G_TF_POINT);
+    func_8001C22C(x, topY, width, 0x10, D_04003A50, 8, 0);
+    func_8001C22C(x, bottomY, width, 0x10, D_04003A50, 8, 0);
+    gSPDisplayList(gDisplayListHead++, D_80073408);
+    tex = (menu->scroll > 0) ? D_04003AD8 : D_040044F8;
+    func_8001B884(arrowX, topY, 0x12, 0x10, tex, 0x14, 0x200000);
+    more = menu->scroll + height < ((menu->def->itemCount + menu->columns - 1) / menu->columns) * menu->cellHeight;
+    func_8001B884(arrowX, bottomY, 0x12, 0x10, more ? D_04003D60 : D_04004780, 0x14, 0x200000);
+    gSPDisplayList(gDisplayListHead++, D_80073438);
+}
 
 
 /**
@@ -1017,21 +1055,6 @@ void func_80031004(GridMenu80031004* arg0, s32 arg1, s32 arg2) {
     func_80029A64(sp28, sp2C, arg0->cellWidth - 4, arg0->cellHeight - 4, *(Color_RGBA8*)D_80073520);
 }
 
-typedef struct GridMenu800310D8 {
-    /* 0x00 */ MenuDef8002E230* def;
-    /* 0x04 */ u16* flags;
-    /* 0x08 */ s32 cursor;
-    /* 0x0C */ s32 cellWidth;
-    /* 0x10 */ s32 cellHeight;
-    /* 0x14 */ MenuDrawFunc8002E230 draw;
-    /* 0x18 */ char unk18[0x8];
-    /* 0x20 */ s32 options;
-    /* 0x24 */ s32 rows;
-    /* 0x28 */ char unk28[0x4];
-    /* 0x2C */ s32 scroll;
-    /* 0x30 */ char unk30[0x18];
-    /* 0x48 */ s32 columns;
-} GridMenu800310D8;
 void func_80030D3C(GridMenu800310D8*, s32, s32);
 
 /**
