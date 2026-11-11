@@ -36,11 +36,11 @@ void BattleHud_DrawLevelNumber(s32 arg0, s32 arg1, s32 arg2);
 void BattleHud_DrawHpFractionText(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 
 void func_8001A384(M2C_UNK, M2C_UNK);            /* extern */
-M2C_UNK func_8001A944(s32, s32, s32);               /* extern */
+M2C_UNK func_8001A944(s32, s32, s8*);              /* extern */
 M2C_UNK func_8001AA9C(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK); /* extern */
 M2C_UNK func_8001AB6C();                            /* extern */
 void func_8001ABBC(void);
-u32 func_800566BC(s32);                             /* extern */
+u32 func_800566BC(s8*);                            /* extern */
 M2C_UNK func_82116CF4(s32, s32, M2C_UNK, M2C_UNK, s8 *, s8 *); /* extern */
 extern s8 D_8218B008;
 extern s8 D_8218B014;
@@ -79,8 +79,8 @@ void BattleHud_DrawMonStatusBoxPlayer(ActivePokemon* arg0, s16 arg1, s16 arg2, u
 
 void BattleHud_DrawMonStatusBoxOpponent(ActivePokemon* arg0, s16 arg1, s16 arg2, u16 arg3, s32 arg4);
 
-M2C_UNK func_8001A944(s32, s32, s32);               /* extern */
-u32 func_800566BC(s32);                             /* extern */
+M2C_UNK func_8001A944(s32, s32, s8*);              /* extern */
+u32 func_800566BC(s8*);                            /* extern */
 
 void func_82119994(s32 arg0, s32 arg1, s32 arg2);
 
