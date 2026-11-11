@@ -54,6 +54,22 @@ typedef struct ScrollMenu8002F6C4 {
     /* 0x28 */ s32 unk28;
     /* 0x2C */ s32 scroll;
 } ScrollMenu8002F6C4;
+
+typedef struct GridMenu800310D8 {
+    /* 0x00 */ MenuDef8002E230* def;
+    /* 0x04 */ u16* flags;
+    /* 0x08 */ s32 cursor;
+    /* 0x0C */ s32 cellWidth;
+    /* 0x10 */ s32 cellHeight;
+    /* 0x14 */ MenuDrawFunc8002E230 draw;
+    /* 0x18 */ char unk18[0x8];
+    /* 0x20 */ s32 options;
+    /* 0x24 */ s32 rows;
+    /* 0x28 */ char unk28[0x4];
+    /* 0x2C */ s32 scroll;
+    /* 0x30 */ char unk30[0x18];
+    /* 0x48 */ s32 columns;
+} GridMenu800310D8;
 void func_8002EDA8(ScrollMenu8002F6C4*);
 void func_8002F030(ScrollMenu8002F6C4*, s32, s32, s32, s32);
 void func_8002F32C(GridMenu80031004*, s32, s32);
@@ -532,11 +548,89 @@ void func_8002ED70(s8 *arg0)
   }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002EDA8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002EDA8.s")
-#endif
+// FAKE: permuter output. Raw offset casts stand in for menu fields 0x28-0x3C.
+void func_8002EDA8(ScrollMenu8002F6C4 *menu)
+{
+  s32 t1;
+  s32 t3;
+  s32 t2;
+  s32 *new_var; // FAKE
+  s32 speed;
+  s32 cur;
+  if ((*((u16 *) (((s8 *) menu) + 0x2A))) & 0x800)
+  {
+    if (!((*((u16 *) (((s8 *) menu) + 0x28))) & 0x800))
+    {
+      speed = *((s32 *) (((s8 *) menu) + 0x38));
+      t1 = menu->cursor * menu->rowSpacing;
+      cur = *((s32 *) (((s8 *) menu) + 0x34));
+      *((s32 *) (((s8 *) menu) + 0x34)) = cur - (((cur - t1) < speed) ? (cur - t1) : (speed));
+      if (1) {} // karodo
+      if (1) {} // karodo
+      if (1) {} // karodo
+      func_8002ED50((s8 *) menu);
+      if (t1 == (*((s32 *) (((s8 *) menu) + 0x34))))
+      {
+        *((u16 *) (((s8 *) menu) + 0x2A)) &= ~0x800;
+      }
+    }
+  }
+  else
+    if ((*((u16 *) (((s8 *) menu) + 0x2A))) & 0x400)
+  {
+    if (!((*((u16 *) (((s8 *) menu) + 0x28))) & 0x400))
+    {
+      t2 = ((menu->cursor + 1) * menu->rowSpacing) - 1;
+      speed = *((s32 *) (((s8 *) menu) + 0x38));
+      *((s32 *) (((s8 *) menu) + 0x34)) += ((t2 - (*((s32 *) (((s8 *) menu) + 0x34)))) < speed) ? (t2 - (*((s32 *) (((s8 *) menu) + 0x34)))) : (speed);
+      func_8002ED70((s8 *) menu);
+      if (t2 == (*((s32 *) (((s8 *) menu) + 0x34))))
+      {
+        *((u16 *) (((s8 *) menu) + 0x2A)) &= ~0x400;
+        new_var = (s32 *) (((s8 *) menu) + 0x34);
+        *new_var = ((*((s32 *) (((s8 *) menu) + 0x34))) - menu->rowSpacing) + 1;
+      }
+    }
+  }
+  else
+  {
+    if ((*((u16 *) (((s8 *) menu) + 0x2A))) & 0x200)
+    {
+      if (!((*((u16 *) (((s8 *) menu) + 0x28))) & 0x200))
+      {
+        t1 = menu->scroll;
+        t3 = *((s32 *) (((s8 *) menu) + 0x30));
+        t1 = ((t1 - t3) < (*((s32 *) (((s8 *) menu) + 0x3C)))) ? (t1 - t3) : (*((s32 *) (((s8 *) menu) + 0x3C)));
+        menu->scroll -= t1;
+        if (1) {} // karodo
+        *((s32 *) (((s8 *) menu) + 0x34)) -= t1;
+        menu->cursor = (*((s32 *) (((s8 *) menu) + 0x34))) / menu->rowSpacing;
+        if ((t3 & 0xFFFFFFFFu) == menu->scroll) // FAKE: no-op mask fixes bnel operand order
+        {
+          *((u16 *) (((s8 *) menu) + 0x2A)) &= ~0x200;
+        }
+      }
+    }
+    else
+      if ((*((u16 *) (((s8 *) menu) + 0x2A))) & 0x100)
+    {
+      if (!((*((u16 *) (((s8 *) menu) + 0x28))) & 0x100))
+      {
+        t3 = *((s32 *) (((s8 *) menu) + 0x30));
+        t1 = ((t3 - menu->scroll) < (*((s32 *) (((s8 *) menu) + 0x3C)))) ? (t3 - menu->scroll) : (*((s32 *) (((s8 *) menu) + 0x3C)));
+        menu->scroll += t1;
+        if (1) {} // karodo
+        *((s32 *) (((s8 *) menu) + 0x34)) += t1;
+        menu->cursor = (*((s32 *) (((s8 *) menu) + 0x34))) / menu->rowSpacing;
+        if ((t3 & 0xFFFFFFFFu) == menu->scroll) // FAKE: no-op mask fixes bnel operand order
+        {
+          *((u16 *) (((s8 *) menu) + 0x2A)) &= ~0x100;
+        }
+      }
+    }
+  }
+  *((u16 *) (((s8 *) menu) + 0x28)) = 0;
+}
 
 extern u8 D_04003A50[];
 extern u8 D_04003AD8[];
@@ -724,17 +818,217 @@ void func_8002F9D8(ScrollMenu8002F6C4* menu, s32 x, s32 y, s32 mask, s32 arg4) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8002FD8C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8002FD8C.s")
-#endif
+typedef struct ScrollList8002FD8C {
+    /* 0x00 */ MenuDef8002E230* def;
+    /* 0x04 */ u16* itemFlags;
+    /* 0x08 */ s32 cursor;
+    /* 0x0C */ s32 width;
+    /* 0x10 */ s32 rowSpacing;
+    /* 0x14 */ char unk14[0x4];
+    /* 0x18 */ u16* input;
+    /* 0x1C */ char unk1C[0x8];
+    /* 0x24 */ s32 rows;
+    /* 0x28 */ u16 buttons;
+    /* 0x2A */ u16 flags;
+    /* 0x2C */ s32 scroll;
+    /* 0x30 */ s32 top;
+    /* 0x34 */ s32 scrollTarget;
+    /* 0x38 */ s32 scrollSpeed;
+    /* 0x3C */ s32 pageSpeed;
+    /* 0x40 */ s32 repeatTimer;
+} ScrollList8002FD8C;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80030230; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80030230.s")
-#endif
+u16 func_8002FD8C(ScrollList8002FD8C* menu) {
+    s32 prevTop;
+    s32 prev;
+    s32 room;
+    s32 total;
+    s32 page;
+    s32 step;
+    s32 delta;
+    s32 end;
+
+    prev = menu->cursor;
+    prevTop = menu->top;
+    if (menu->def->itemCount == 0) {
+        return 0;
+    }
+    // Each pair of stores stays on one line: the assembler orders them differently when they are on separate lines.
+    if (menu->input[4] & 0x800) {
+        menu->repeatTimer = 8; menu->buttons = 0x800;
+    } else if (menu->input[4] & 0x400) {
+        menu->repeatTimer = 8; menu->buttons = 0x400;
+    } else if (menu->input[4] & 0x200) {
+        menu->repeatTimer = 8; menu->buttons = 0x200;
+    } else if (menu->input[4] & 0x100) {
+        menu->repeatTimer = 8; menu->buttons = 0x100;
+    } else if (menu->repeatTimer > 0) {
+        menu->repeatTimer--;
+    } else {
+        menu->buttons = menu->input[3];
+    }
+
+    if ((menu->buttons & 0x800) && !(menu->flags & ~0x800)) {
+        menu->flags |= 0x800;
+        menu->scrollTarget -= (menu->scrollTarget < menu->scrollSpeed) ? menu->scrollTarget : menu->scrollSpeed;
+        func_8002ED50((s8*)menu);
+        menu->cursor = menu->scrollTarget / menu->rowSpacing;
+        if (prev != menu->cursor) {
+            func_8003F6AC(1);
+        }
+    } else if ((menu->buttons & 0x400) && !(menu->flags & ~0x400)) {
+        if (menu->flags == 0) {
+            menu->scrollTarget = menu->scrollTarget + menu->rowSpacing - 1;
+        }
+        menu->flags |= 0x400;
+        end = menu->rowSpacing * menu->def->itemCount;
+        menu->scrollTarget += ((end - menu->scrollTarget - 1) < menu->scrollSpeed) ? (end - menu->scrollTarget - 1) : menu->scrollSpeed;
+        func_8002ED70((s8*)menu);
+        menu->cursor = menu->scrollTarget / menu->rowSpacing;
+        if (prev != menu->cursor) {
+            func_8003F6AC(1);
+        }
+    } else if ((menu->buttons & 0x200) && !(menu->flags & ~0x200)) {
+        page = menu->rowSpacing * menu->rows;
+        if (menu->flags == 0) {
+            menu->top = menu->scroll;
+        }
+        menu->flags |= 0x200;
+        if (menu->scroll < menu->pageSpeed) {
+            delta = menu->scroll;
+        } else {
+            delta = menu->pageSpeed;
+        }
+        menu->scroll -= delta;
+        menu->scrollTarget -= delta;
+        menu->cursor = menu->scrollTarget / menu->rowSpacing;
+        if (menu->scroll < menu->top) {
+            menu->top -= (page < menu->top) ? page : menu->top;
+        }
+        if (prevTop != menu->top) {
+            func_8003F6AC(1);
+        }
+    } else if ((menu->buttons & 0x100) && !(menu->flags & ~0x100)) {
+        total = menu->rowSpacing * menu->def->itemCount;
+        page = menu->rowSpacing * menu->rows;
+        if (menu->flags == 0) {
+            menu->top = menu->scroll;
+        }
+        menu->flags |= 0x100;
+        room = total - menu->scroll - page;
+        if (room <= 0) {
+            room = 0;
+        }
+        step = (room < menu->pageSpeed) ? room : menu->pageSpeed;
+        menu->scroll += step;
+        menu->scrollTarget += step;
+        menu->cursor = menu->scrollTarget / menu->rowSpacing;
+        if (menu->top < menu->scroll) {
+            room = total - page - menu->top;
+            menu->top += (page < room) ? page : room;
+        }
+        if (prevTop != menu->top) {
+            func_8003F6AC(1);
+        }
+    }
+    return menu->flags;
+}
+
+u16 func_80030230(ScrollList8002FD8C* menu) {
+    s32 prevTop;
+    s32 prev;
+    s32 room;
+    s32 total;
+    s32 page;
+    s32 step;
+    s32 delta;
+    s32 end;
+
+    prev = menu->cursor;
+    prevTop = menu->top;
+    if (menu->def->itemCount == 0) {
+        return 0;
+    }
+    // Each pair of stores stays on one line: the assembler orders them differently when they are on separate lines.
+    if (menu->input[4] & 0x800) {
+        menu->repeatTimer = 8; menu->buttons = 0x800;
+    } else if (menu->input[4] & 0x400) {
+        menu->repeatTimer = 8; menu->buttons = 0x400;
+    } else if (menu->input[4] & 0x200) {
+        menu->repeatTimer = 8; menu->buttons = 0x200;
+    } else if (menu->input[4] & 0x100) {
+        menu->repeatTimer = 8; menu->buttons = 0x100;
+    } else if (menu->repeatTimer > 0) {
+        menu->repeatTimer--;
+    } else {
+        menu->buttons = menu->input[3];
+    }
+
+    if ((menu->buttons & 0x800) && !(menu->flags & ~0x800)) {
+        menu->flags |= 0x800;
+        menu->scrollTarget -= (menu->scrollTarget < menu->scrollSpeed) ? menu->scrollTarget : menu->scrollSpeed;
+        func_8002ED50((s8*)menu);
+        menu->cursor = menu->scrollTarget / menu->rowSpacing;
+        if (prev != menu->cursor) {
+            func_8003F6AC(1);
+        }
+    } else if ((menu->buttons & 0x400) && !(menu->flags & ~0x400)) {
+        if (menu->flags == 0) {
+            menu->scrollTarget = menu->scrollTarget + menu->rowSpacing - 1;
+        }
+        menu->flags |= 0x400;
+        end = menu->rowSpacing * (menu->def->itemCount + 1);
+        menu->scrollTarget += ((end - menu->scrollTarget - 1) < menu->scrollSpeed) ? (end - menu->scrollTarget - 1) : menu->scrollSpeed;
+        func_8002ED70((s8*)menu);
+        menu->cursor = menu->scrollTarget / menu->rowSpacing;
+        if (prev != menu->cursor) {
+            func_8003F6AC(1);
+        }
+    } else if ((menu->buttons & 0x200) && !(menu->flags & ~0x200)) {
+        page = menu->rowSpacing * menu->rows;
+        if (menu->flags == 0) {
+            menu->top = menu->scroll;
+        }
+        menu->flags |= 0x200;
+        if (menu->scroll < menu->pageSpeed) {
+            delta = menu->scroll;
+        } else {
+            delta = menu->pageSpeed;
+        }
+        menu->scroll -= delta;
+        menu->scrollTarget -= delta;
+        menu->cursor = menu->scrollTarget / menu->rowSpacing;
+        if (menu->scroll < menu->top) {
+            menu->top -= (page < menu->top) ? page : menu->top;
+        }
+        if (prevTop != menu->top) {
+            func_8003F6AC(1);
+        }
+    } else if ((menu->buttons & 0x100) && !(menu->flags & ~0x100)) {
+        total = menu->rowSpacing * menu->def->itemCount;
+        page = menu->rowSpacing * menu->rows;
+        if (menu->flags == 0) {
+            menu->top = menu->scroll;
+        }
+        menu->flags |= 0x100;
+        room = total - menu->scroll - page;
+        if (room <= 0) {
+            room = 0;
+        }
+        step = (room < menu->pageSpeed) ? room : menu->pageSpeed;
+        menu->scroll += step;
+        menu->scrollTarget += step;
+        menu->cursor = menu->scrollTarget / menu->rowSpacing;
+        if (menu->top < menu->scroll) {
+            room = total - page - menu->top;
+            menu->top += (page < room) ? page : room;
+        }
+        if (prevTop != menu->top) {
+            func_8003F6AC(1);
+        }
+    }
+    return menu->flags;
+}
 
 void func_800306E0(s32* arg0, u32 arg1) {
     s32 v;
@@ -913,11 +1207,33 @@ void func_80030A54(GridMenu80031004* menu) {
     M2C_FIELD(menu, u16*, 0x28) = 0;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80030D3C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80030D3C.s")
-#endif
+void func_80030D3C(GridMenu800310D8* menu, s32 x, s32 y) {
+    s32 height = menu->cellHeight * menu->rows;
+    s32 arrowX;
+    s32 topY;
+    s32 bottomY;
+    s32 more;
+    s32 width = menu->cellWidth * menu->columns;
+    u8* tex;
+
+    arrowX = (menu->cellWidth * menu->columns) / 2 + x - 9;
+    topY = y - 0x10;
+    bottomY = y + height;
+    gDPPipeSync(gDisplayListHead++);
+    gDPSetCycleType(gDisplayListHead++, G_CYC_1CYCLE);
+    gDPSetRenderMode(gDisplayListHead++, 0x0F0A4000, 0);
+    gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
+    gDPSetTexturePersp(gDisplayListHead++, G_TP_NONE);
+    gDPSetTextureFilter(gDisplayListHead++, G_TF_POINT);
+    func_8001C22C(x, topY, width, 0x10, D_04003A50, 8, 0);
+    func_8001C22C(x, bottomY, width, 0x10, D_04003A50, 8, 0);
+    gSPDisplayList(gDisplayListHead++, D_80073408);
+    tex = (menu->scroll > 0) ? D_04003AD8 : D_040044F8;
+    func_8001B884(arrowX, topY, 0x12, 0x10, tex, 0x14, 0x200000);
+    more = menu->scroll + height < ((menu->def->itemCount + menu->columns - 1) / menu->columns) * menu->cellHeight;
+    func_8001B884(arrowX, bottomY, 0x12, 0x10, more ? D_04003D60 : D_04004780, 0x14, 0x200000);
+    gSPDisplayList(gDisplayListHead++, D_80073438);
+}
 
 
 /**
@@ -939,21 +1255,6 @@ void func_80031004(GridMenu80031004* arg0, s32 arg1, s32 arg2) {
     func_80029A64(sp28, sp2C, arg0->cellWidth - 4, arg0->cellHeight - 4, *(Color_RGBA8*)D_80073520);
 }
 
-typedef struct GridMenu800310D8 {
-    /* 0x00 */ MenuDef8002E230* def;
-    /* 0x04 */ u16* flags;
-    /* 0x08 */ s32 cursor;
-    /* 0x0C */ s32 cellWidth;
-    /* 0x10 */ s32 cellHeight;
-    /* 0x14 */ MenuDrawFunc8002E230 draw;
-    /* 0x18 */ char unk18[0x8];
-    /* 0x20 */ s32 options;
-    /* 0x24 */ s32 rows;
-    /* 0x28 */ char unk28[0x4];
-    /* 0x2C */ s32 scroll;
-    /* 0x30 */ char unk30[0x18];
-    /* 0x48 */ s32 columns;
-} GridMenu800310D8;
 void func_80030D3C(GridMenu800310D8*, s32, s32);
 
 /**
@@ -1013,11 +1314,118 @@ s32 func_80031464(GridMenu80031004* menu) {
     return ((pageCount == nextPage) && (remainder != 0)) ? remainder : menu->columns;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8003152C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8003152C.s")
-#endif
+typedef struct GridMenu8003152C {
+    /* 0x00 */ MenuDef8002E230* def;
+    /* 0x04 */ char unk04[0x4];
+    /* 0x08 */ s32 cursor;
+    /* 0x0C */ s32 cellWidth;
+    /* 0x10 */ s32 cellHeight;
+    /* 0x14 */ char unk14[0x4];
+    /* 0x18 */ u16* input;
+    /* 0x1C */ char unk1C[0xC];
+    /* 0x28 */ u16 buttons;
+    /* 0x2A */ u16 flags;
+    /* 0x2C */ s32 scroll;
+    /* 0x30 */ char unk30[0x4];
+    /* 0x34 */ s32 scrollTarget;
+    /* 0x38 */ s32 scrollSpeed;
+    /* 0x3C */ char unk3C[0x4];
+    /* 0x40 */ s32 repeatTimer;
+    /* 0x44 */ s32 scrollX;
+    /* 0x48 */ s32 columns;
+    /* 0x4C */ s32 scrollSpeedX;
+} GridMenu8003152C;
+
+u16 func_8003152C(GridMenu8003152C *menu)
+{
+  long new_var; // FAKE
+  s32 prev = menu->cursor;
+  s32 lim;
+  s32 w;
+  if (menu->def->itemCount == 0)
+  {
+    return 0;
+  }
+  if (menu->input[4] & 0x800)
+  { menu->repeatTimer = 8; menu->buttons = 0x800; }
+  else
+    if (menu->input[4] & 0x400)
+  { menu->repeatTimer = 8; menu->buttons = 0x400; }
+  else
+    if (menu->input[4] & 0x200)
+  { menu->repeatTimer = 8; menu->buttons = 0x200; }
+  else
+    if (menu->input[4] & 0x100)
+  { menu->repeatTimer = 8; menu->buttons = 0x100; }
+  else
+    if (menu->repeatTimer > 0)
+  {
+    menu->repeatTimer--;
+  }
+  else
+  {
+ do { menu->buttons = menu->input[3]; } while (0); // FAKE
+  }
+  if ((menu->buttons & 0x800) && (!(menu->flags & (~0x800))))
+  {
+    menu->flags |= 0x800;
+    menu->scrollTarget -= (menu->scrollTarget < menu->scrollSpeed) ? (menu->scrollTarget) : (menu->scrollSpeed);
+    func_800309FC((s8 *) menu);
+    menu->cursor = ((menu->scrollTarget / menu->cellHeight) * menu->columns) + (menu->scrollX / menu->cellWidth);
+  }
+  else
+    if ((menu->buttons & 0x400) && (!(menu->flags & (~0x400))))
+  {
+    if (menu->flags == 0)
+    {
+      menu->scrollTarget = (menu->scrollTarget + menu->cellHeight) - 1;
+    }
+    menu->flags |= 0x400;
+    new_var = (((menu->def->itemCount + menu->columns) - 1) / menu->columns) * menu->cellHeight;
+    menu->scrollTarget += (((new_var - menu->scrollTarget) - 1) < menu->scrollSpeed) ? ((new_var - menu->scrollTarget) - 1) : (menu->scrollSpeed);
+    func_80030A1C((s8 *) menu);
+    lim = (func_80031464((GridMenu80031004 *) menu) - 1) * menu->cellWidth;
+    if (lim < menu->scrollX)
+    {
+      menu->scrollX = lim;
+    }
+    menu->cursor = ((menu->scrollTarget / menu->cellHeight) * menu->columns) + (menu->scrollX / menu->cellWidth);
+  }
+  else
+    if ((menu->buttons & 0x200) && (!(menu->flags & (~0x200))))
+  {
+    menu->flags |= 0x200;
+    if (menu->scrollX < menu->scrollSpeedX)
+    {
+      menu->scrollX += menu->cellWidth * func_80031464((GridMenu80031004 *) menu);
+    }
+    menu->scrollX -= menu->scrollSpeedX;
+    menu->cursor = ((menu->scrollTarget / menu->cellHeight) * menu->columns) + (menu->scrollX / menu->cellWidth);
+  }
+  else
+    if ((menu->buttons & 0x100) && (!(menu->flags & (~0x100))))
+  {
+    if (menu->flags == 0)
+    {
+      menu->scrollX = (menu->scrollX + menu->cellWidth) - 1;
+    }
+    menu->flags |= 0x100;
+    lim = func_80031464((GridMenu80031004 *) menu);
+    w = menu->cellWidth;
+    lim = w * lim; if (w) {} // FAKE: found by the traced-allocator lever sweep; keeps w live so the sum takes a2
+    if ((menu->scrollX + menu->scrollSpeedX) >= lim)
+    {
+      menu->scrollX -= lim;
+    }
+    menu->scrollX += menu->scrollSpeedX;
+    menu->cursor = ((menu->scrollTarget / menu->cellHeight) * menu->columns) + (menu->scrollX / w);
+  }
+  if (prev != menu->cursor)
+  {
+    func_8003F6AC(1);
+  }
+  return menu->flags;
+}
 
 typedef struct GridMenu80031AB0 {
     /* 0x00 */ char unk00[0x8];

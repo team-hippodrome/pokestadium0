@@ -34,7 +34,6 @@ extern s32 D_800AB244;
 extern u8 pad_D_800AA6E8[0x1E0];
 extern unk_D_800AA8C8 D_800AB460;
 extern unk_D_800AB970 D_800AC508;
-#pragma SWAP_FUNCTION_WORDS(func_80011D14, 0xD0, 0xAFB80024, 0x00063403)
 
 #include "model_animation.h"
 #include "util.h"
@@ -434,11 +433,20 @@ void GeoOverlay_DrawFadeQuad(CameraOverlay* arg0, CameraOrthographic* arg1) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80011D14; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80011D14.s")
-#endif
+void func_8000A560();
+
+void func_80011D14(Vtx* arg0, CameraOverlay* arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5, s16 arg6, s16 arg7) {
+    u16 angle = arg1->unk_18;
+    s32 idx = angle >> 4;
+    s16 x;
+    s16 y;
+
+    x = (s16)(arg2 + (s16)(arg4 * gCosineTable[idx] - arg5 * gSineTable[idx]));
+    y = (s16)(arg3 + (s16)(arg4 * gSineTable[idx] + arg5 * gCosineTable[idx]));
+
+    func_8000A560(arg0, x, y, -1, arg6 << 5, arg7 << 5,
+                  arg1->color.r, arg1->color.g, arg1->color.b, 0xFF);
+}
 
 Vtx* GeoOverlay_BuildRotatingQuad(CameraOverlay* arg0) {
     Vtx* temp_v0 = Gfx_AllocDisplayList(sizeof(Vtx) * 8);
@@ -766,11 +774,90 @@ void func_800132C8(s32* arg0, void* arg1) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80013398; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80013398.s")
-#endif
+
+typedef struct GeoRenderCtx80013398 {
+    /* 0x00 */ s32 unk_00[6];
+    /* 0x18 */ u8 unk_18;
+    /* 0x19 */ u8 unk_19;
+    /* 0x1A */ u8 unk_1A;
+    /* 0x1B */ u8 unk_1B;
+    /* 0x1C */ u8 layer;
+    /* 0x1D */ u8 flags;
+    /* 0x1E */ u8 unk_1E;
+    /* 0x1F */ u8 unk_1F;
+} GeoRenderCtx80013398; // size = 0x20
+
+struct Root80013DC8;
+void func_80013398(struct Root80013DC8 *arg0)
+{
+  s8 *entry;
+  GeoRenderCtx80013398 ctx;
+  func_800128E0((s8 *) (&ctx));
+  ctx.flags = (*((u8 *) (((s8 *) arg0) + 2))) & 3;
+  if (ctx.flags & 1)
+  {
+    gSPSetGeometryMode(gDisplayListHead++, G_ZBUFFER);
+  }
+  else
+  {
+    gSPClearGeometryMode(gDisplayListHead++, G_ZBUFFER);
+  }
+  for (ctx.layer = 0; ctx.layer < 9; ctx.layer++)
+  {
+    entry = ((s8 **) (((s8 *) arg0) + 0x18))[ctx.layer];
+    if (entry != 0)
+    {
+      gDPPipeSync(gDisplayListHead++);
+      func_8001298C((s8 *) (&ctx));
+      for (; entry != 0; entry = *((s8 **) entry))
+      {
+        if ((*((s32 *) (((s8 *) entry) + 0x14))) & 0xFF)
+        {
+          func_80012C00((s8 *) (&ctx), entry);
+        }
+        else
+        {
+          func_80012CC0((s8 *) (&ctx), entry);
+        }
+        if ((*((u8 *) (((s8 *) entry) + 5))) != 0)
+        {
+          func_80013148((s8 *) (&ctx), (s32) entry);
+        }
+        else
+        {
+          if (ctx.unk_1A == 1)
+          {
+            func_80012A80((s8 *) (&ctx));
+          }
+          if ((*((s32 *) (((s8 *) entry) + 0x18))) != 0)
+          {
+            GeoRender_BindTexture((unk_D_800ABB28 *) (&ctx), (unk_D_800ABB10 *) entry);
+          }
+          else
+          {
+            func_80012E68((s32 *) (&ctx), (s32) entry);
+          }
+          func_80012D04((s8 *) (&ctx), entry);
+          func_80012DC8((s8 *) (&ctx), entry);
+        }
+        func_800132C8((s32 *) (&ctx), entry);
+        if ((*((u8 *) (((s8 *) entry) + 4))) != 0)
+        {
+          func_80012A80((s8 *) (&ctx));
+        }
+      }
+
+    }
+  }
+
+  if (ctx.flags & 1)
+  {
+    gSPClearGeometryMode(gDisplayListHead++, G_ZBUFFER);
+  }
+  gDPPipeSync(gDisplayListHead++);
+  gDPSetTextureLUT(gDisplayListHead++, G_TT_NONE);
+  gSPTexture(gDisplayListHead++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF);
+}
 
 typedef struct GeoLayerEntry {
     /* 0x00 */ struct GeoLayerEntry* next;
@@ -1405,11 +1492,64 @@ void func_80014F78(s8 *arg0)
   func_8001380C((0, arg0));  // FAKE
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80014FC4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80014FC4.s")
-#endif
+typedef struct GeoMaterialNode {
+    /* 0x00 */ GraphNode node;
+    /* 0x18 */ s32 unk_18;
+    /* 0x1C */ s16 unk_1C;
+    /* 0x1E */ s16 unk_1E;
+    /* 0x20 */ s16 eventIndex;
+    /* 0x22 */ u8 unk_22;
+    /* 0x24 */ u32 color;
+} GeoMaterialNode;
+#define GEO_TINT (*(Color_RGBA8_u32*)&D_800AB450)
+void func_80014FC4(GeoMaterialNode *arg0)
+{
+  u8 texIndex;
+
+  D_800AB448 = arg0->unk_22;
+  if (arg0->unk_22 == 1)
+  {
+    (*((Color_RGBA8_u32 *) (&D_800AB450))).rgba = -1;
+  }
+  else
+  {
+    (*((Color_RGBA8_u32 *) (&D_800AB450))).rgba = arg0->color;
+  }
+  D_800AB45C = arg0->unk_18;
+  if (arg0->unk_1C >= 0)
+  {
+    D_800AB454 = (s32) (&D_800604A0->unk_18[arg0->unk_1C]);
+  }
+  else
+  {
+    D_800AB454 = 0;
+  }
+  if (arg0->unk_1E >= 0)
+  {
+    D_800AB458 = (s32) (&D_800604A0->unk_1C[arg0->unk_1E]);
+  }
+  else
+  {
+    D_800AB458 = 0;
+  }
+  if (D_8006049C != 0)
+  {
+    (*((Color_RGBA8_u32 *) (&D_800AB450))).r = ((*((Color_RGBA8_u32 *) (&D_800AB450))).r * D_8006049C->textureTint.r) / 255;
+    (*((Color_RGBA8_u32 *) (&D_800AB450))).g = ((*((Color_RGBA8_u32 *) (&D_800AB450))).g * D_8006049C->textureTint.g) / 255;
+    (*((Color_RGBA8_u32 *) (&D_800AB450))).b = ((*((Color_RGBA8_u32 *) (&D_800AB450))).b * D_8006049C->textureTint.b) / 255;
+  }
+  switch ((*((u8 *) (&D_800AC6A8.active)))) // FAKE: reads the s8 `active` field as u8
+  {
+    case 1:
+    if ((arg0->eventIndex >= 0) && (arg0->eventIndex < D_800AC6A8.data->trackCount))
+    {
+      texIndex = ((u8 *) D_800AC6A8.frameValues)[ModelAnim_ResolveEventIndex(D_800AC6A8.frame, (unk_func_80017540_arg1 *) D_800AC6A8.trackTable, arg0->eventIndex)];
+      D_800AB454 = (s32) (&D_800604A0->unk_18[texIndex]);
+    }
+    break;
+  }
+  func_8001380C((s8 *) arg0);
+}
 
 void GeoRender_RecordAnchorPosition(s32 arg0) {
     MtxF* temp_a1;
@@ -1435,11 +1575,35 @@ void Geo_NodeAnchor(GraphNode* arg0) {
     Geo_ProcessNodeChildren(arg0);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_800152AC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800152AC.s")
-#endif
+typedef struct GeoTextNode {
+    /* 0x00 */ GraphNode node;
+    /* 0x18 */ s16 font;
+    /* 0x1A */ s16 fontArg;
+    /* 0x1C */ s16 x;
+    /* 0x1E */ s16 y;
+    /* 0x20 */ s16 w;
+    /* 0x22 */ s16 h;
+    /* 0x24 */ const char* text;
+    /* 0x28 */ Color_RGBA8_u32 arg;
+} GeoTextNode;
+Gfx* func_8001B3AC(s16 x, s16 y, s16 arg2, s16 arg3, Color_RGBA8_u32 color, const char* fmt, ...);
+/**
+ * Geo callback for a text node: prints the node's formatted string with its
+ * font and colour and queues the resulting display list on the node's layer.
+ */
+void func_800152AC(GraphNode* arg0) {
+    GeoTextNode* arg = (GeoTextNode*)arg0;
+    Gfx* dl;
+
+    if (arg->text != NULL) {
+        Font_SetActive(arg->font, arg->fontArg);
+        dl = func_8001B3AC(arg->x, arg->y, arg->w, arg->h, arg->arg, arg->text);
+        if (dl != NULL) {
+            func_800135FC(arg->node.renderLayer, (s32)dl, 0, arg->node.renderFlags & 4);
+        }
+    }
+    Geo_ProcessNodeChildren(arg0);
+}
 
 extern Gfx D_01002480[];
 extern Gfx D_01002500[];

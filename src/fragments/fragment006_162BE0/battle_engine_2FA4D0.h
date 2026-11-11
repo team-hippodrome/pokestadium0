@@ -166,7 +166,7 @@ M2C_UNK func_8003F6AC(M2C_UNK);
 M2C_UNK func_80006828(M2C_UNK, M2C_UNK *);
 M2C_UNK func_80010F14(M2C_UNK *, M2C_UNK, M2C_UNK *, M2C_UNK); /* extern */
 M2C_UNK func_8001107C(M2C_UNK *, M2C_UNK, M2C_UNK *); /* extern */
-M2C_UNK func_80019924(M2C_UNK *, M2C_UNK, M2C_UNK, s32); /* extern */
+void func_80019924(M2C_UNK *, M2C_UNK, M2C_UNK, s32); /* extern */
 M2C_UNK func_80025100(s8 *, M2C_UNK);               /* extern */
 extern M2C_UNK D_88402D74;
 extern M2C_UNK D_884037B0;

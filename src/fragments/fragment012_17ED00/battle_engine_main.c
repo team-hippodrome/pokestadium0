@@ -127,11 +127,54 @@ void Battle_SetStageScale(f32 scale) {
     sStageScale = scale;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82100148; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82100148.s")
-#endif
+extern s32 D_82198D1C;
+extern u8 D_8F908980[];
+extern u8 D_8FA08900[];
+extern u8 D_8FB08900[];
+extern Gfx D_80060398[];
+
+void func_82100148(void) {
+    void* tex;
+    s16 left;
+    s16 right;
+    s16 top;
+    s16 middle;
+    s16 bottom;
+    s16 texture_step_y;
+
+    if ((D_82198D1C > 0) && (sStageScale == 1.0f)) {
+        left = sStageCamera.viewport.x;
+        right = sStageCamera.viewport.width + left;
+        top = sStageCamera.viewport.y;
+        middle = (sStageCamera.viewport.height / 2) + top;
+        bottom = sStageCamera.viewport.height + top;
+        texture_step_y = 0x10000 / (sStageCamera.viewport.height / 2);
+
+        switch (D_82198D1C) {
+            case 1: tex = Memmap_GetFragmentVaddr(D_8F908980); break;
+            case 2: tex = Memmap_GetFragmentVaddr(D_8FA08900); break;
+            case 3: tex = Memmap_GetFragmentVaddr(D_8FB08900); break;
+        }
+
+        if ((sStageCamera.viewport.width < 0x140) || (sStageCamera.viewport.height < 0xF0)) {
+            GfxImage_FillCurrent(&gDisplayListHead, 1);
+        } else {
+            GfxImage_ClearDepthRectangle(&gDisplayListHead, 0, 0, 0x140, 0xF0);
+        }
+
+        gDPSetCycleType(gDisplayListHead++, G_CYC_1CYCLE);
+        gDPSetTexturePersp(gDisplayListHead++, G_TP_NONE);
+        gDPSetCombineMode(gDisplayListHead++, G_CC_MODULATEI_PRIM, G_CC_MODULATEI_PRIM);
+        gDPSetPrimColor(gDisplayListHead++, 0, 0, sTintColor.r, sTintColor.g, sTintColor.b, 255);
+        gSPClearGeometryMode(gDisplayListHead++, G_ZBUFFER | G_LIGHTING);
+        gDPLoadTextureBlock(gDisplayListHead++, tex, G_IM_FMT_RGBA, G_IM_SIZ_32b, 4, 64, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gSPTextureRectangle(gDisplayListHead++, left << 2, top << 2, right << 2, middle << 2, G_TX_RENDERTILE, 0, 0, 0, texture_step_y);
+        gSPTextureRectangle(gDisplayListHead++, left << 2, middle << 2, right << 2, bottom << 2, G_TX_RENDERTILE, 0, 0x07E0, 0, 0);
+        gSPDisplayList(gDisplayListHead++, D_80060398);
+        return;
+    }
+    GfxImage_FillCurrent(&gDisplayListHead, 1);
+}
 
 /*
     Makes and Freezes the thumbnail of active pokemon
@@ -484,17 +527,242 @@ void BattleScene_InitializeParticipantPresentation(BattleSessionTeams* side, unk
     Trainer_RequestPokeIcon(side);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82101324; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82101324.s")
-#endif
+typedef struct Unit82101324 {
+    /* 0x00 */ char unk00[0x10];
+    /* 0x10 */ ModelLoadContext* framebuffers;
+    /* 0x14 */ char unk14[0x14];
+} Unit82101324; // size = 0x28
+
+extern Unit82101324* D_82198D14;
+extern s32 D_82198D1C;
+extern s32 D_82198D20;
+extern s32 D_82198D18;
+extern DepthBuffer* D_82198CFC;
+extern DepthBuffer* D_82198D00;
+extern DepthBuffer* D_82198D04;
+extern u8* D_82198D08;
+extern u8* D_82198D0C;
+extern GraphNode* D_82198CF0;
+extern GraphNode* D_82198CF4;
+extern GraphNode* D_82198CF8;
+extern CameraNode D_82198A20;
+extern CameraNode D_82198B10;
+extern CameraNode D_82198C00;
+extern u8 D_82188DD0[];
+extern u8 D_82188E90[];
+extern u8 D_82188F50[];
+extern u8 D_82189010[];
+extern u8 D_821890D0[];
+extern u8 D_82189120[];
+extern u8 D_81000000[];
+extern u8 D_8F300000[];
+extern u8 D_8F900000[];
+extern u8 D_8FA00000[];
+extern u8 D_8FB00000[];
+extern u8 D_01000000[];
+extern u8 D_03000000[];
+extern u8 D_0015B1A0[];
+extern u8 D_0015E220[];
+extern u8 D_002E0BE0[];
+extern u8 D_002E2B90[];
+extern u8 D_003F53F0[];
+extern u8 D_003FC1A0[];
+extern u8 D_00320820[];
+extern u8 D_00326700[];
+extern u8 D_003139C0[];
+extern u8 D_00317EF0[];
+extern u8 D_0031C300[];
+s32 func_8001A194(s32, s32);
+s32 func_800040B4(s32, u8*, u8*);
+void func_82101178(void);
+void func_821012D8(Unit82101324*, unk_D_86002F30*);
+void func_82100B84(void);
+void func_821070E0(s32, Unit82101324*);
+void func_821076FC(s32, CameraNode*, CameraNode*);
+void func_82134CC0(s32, CameraNode*);
+void func_821370DC(s32, CameraNode*);
+
+s32 func_82101324(s32* arg0) { // FAKE: s32 return (value unused) fixes caller regalloc
+    UNUSED s32 pad; // FAKE
+    MemoryBlock* block;
+    unk_D_86002F30* model;
+
+    func_82100118(0xFF, 0xFF, 0xFF);
+    Battle_SetStageScale(1.0f);
+    if (D_82198D10->mode == 4) {
+        func_8001A194(4, 0);
+    } else {
+        func_8001A194(3, 0);
+    }
+    D_82198D14[0].framebuffers = PokeIcon_AllocFramebuffers(3);
+    D_82198D14[1].framebuffers = PokeIcon_AllocFramebuffers(3);
+    PokeIcon_OpenModelArchives();
+    D_82198CFC = main_pool_alloc(0x10, 0);
+    GfxImage_Initialize(D_82198CFC, 0, 2, 0x4C, 0x4C, ((s32**)((s32**)arg0)[6])[3][2]);
+    D_82198D00 = GfxImage_Allocate(0, 2, 0x4C, 0x4C, 0);
+    D_82198D04 = GfxImage_Allocate(0, 2, 0x4C, 0x4C, 0);
+    GfxImage_AttachDepthBuffer(D_82198D00, D_82198CFC);
+    GfxImage_AttachDepthBuffer(D_82198D04, D_82198CFC);
+    D_82198D08 = D_82198D00->img_p;
+    D_82198D0C = D_82198D04->img_p;
+    func_800040B4(((u32)((s32)D_81000000 & 0x0FF00000) >> 0x14) - 0x10, D_0015B1A0, D_0015E220);
+    Asset_LoadToSegment((u32)((s32)D_01000000 & 0x0F000000) >> 0x18, D_002E0BE0, D_002E2B90, 0);
+    Asset_LoadToSegment((u32)((s32)D_03000000 & 0x0F000000) >> 0x18, D_003F53F0, D_003FC1A0, 0);
+    switch (D_82198D1C) {
+        case 0:
+            func_800040B4(((u32)((s32)D_8F300000 & 0x0FF00000) >> 0x14) - 0x10, D_00320820, D_00326700);
+            break;
+        case 1:
+            func_800040B4(((u32)((s32)D_8F900000 & 0x0FF00000) >> 0x14) - 0x10, D_003139C0, D_00317EF0);
+            break;
+        case 2:
+            func_800040B4(((u32)((s32)D_8FA00000 & 0x0FF00000) >> 0x14) - 0x10, D_00317EF0, D_0031C300);
+            break;
+        case 3:
+            func_800040B4(((u32)((s32)D_8FB00000 & 0x0FF00000) >> 0x14) - 0x10, D_0031C300, D_00320820);
+            break;
+    }
+    model = Model_LoadByArchiveIndex(0x99);
+    func_82101178();
+    func_821012D8(&D_82198D14[0], model);
+    func_821012D8(&D_82198D14[1], model);
+    func_82100B84();
+    GeoNode_CreateCamera(NULL, &D_82198A20, 0, 0, 0x140, 0xF0);
+    GeoNode_CreateCamera(NULL, &D_82198B10, 0x1E, 0x50, 0x4C, 0x4C);
+    GeoNode_CreateCamera(NULL, &D_82198C00, 0xE2, 0x50, 0x4C, 0x4C);
+    GeoCamera_SetPerspective(&D_82198A20, 30.0f, 192.0f, 24576.0f);
+    ModelRenderer_InitDisplayRoots();
+    func_821070E0(0, D_82198D14);
+    func_821076FC(0, &D_82198B10, &D_82198C00);
+    func_82134CC0(0, &D_82198A20);
+    func_821370DC(0, &D_82198A20);
+    block = MainPool_AllocState(main_pool_get_available(), 0);
+    switch (D_82198D1C) {
+        case 0:
+            D_82198CF0 = process_geo_layout(block, D_82188DD0);
+            break;
+        case 1:
+            D_82198CF0 = process_geo_layout(block, D_82188E90);
+            break;
+        case 2:
+            D_82198CF0 = process_geo_layout(block, D_82188F50);
+            break;
+        case 3:
+            D_82198CF0 = process_geo_layout(block, D_82189010);
+            break;
+    }
+    D_82198CF4 = process_geo_layout(block, D_821890D0);
+    D_82198CF8 = process_geo_layout(block, D_82189120);
+    MainPool_FinalizeAllocation(block);
+    func_821070E0(3, D_82198D14);
+    func_821076FC(3, &D_82198B10, &D_82198C00);
+    func_82134CC0(3, &D_82198A20);
+    func_821370DC(3, &D_82198A20);
+    D_82198D20 = 1;
+    D_82198D18 = 0;
+}
 
 void func_8210186C(void) {
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82101874; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82101874.s")
-#endif
+extern s32 D_82198D1C;
+extern u8 D_82198D24;
+void Audio_PlayMusicIfChanged(s32);
+s32 Storage_GetDiskStatus(void);
+void Audio_SetDiskReadyPolling(s32);
+void Audio_WaitForIdle(s32);
+s32 func_82101324(s32* arg0); // FAKE: see definition
+s32 func_82101874(s32 arg0, SessionContext *arg1)
+{
+  StageContext *stage_context;
+  SessionContext *new_var2; // FAKE
+  SessionContext *ctx;
+  int new_var; // FAKE
+  ctx = (D_82198D10 = arg1);
+  sBattleSides = (BattleSessionTeams *) (((u8 *) arg1) + 0x1034);
+  sCompletionGate = -2;
+  new_var2 = ctx; // FAKE
+  if (ctx->mode == 0)
+  {
+    D_82198D1C = 0;
+  }
+  else
+    if (ctx->roundOrDemoId < 7)
+  {
+    D_82198D1C = 1;
+  }
+  else
+    if (new_var2->roundOrDemoId == 7)
+  {
+    D_82198D1C = 2;
+  }
+  else
+    if (ctx->roundOrDemoId == 8)
+  {
+    D_82198D1C = 3;
+  }
+  main_pool_push_state('BATL');
+  Gfx_InitDisplayListBuffers(0x20000, 0);
+  stage_context = StageContext_Allocate(0, 1, 3, 1, 2, 1);
+  func_82101324((s32*)stage_context);
+  switch (D_82198D10->mode)
+  {
+    case 3:
+      Audio_PlayMusicIfChanged(1);
+      if (Storage_GetDiskStatus() != 0)
+    {
+      D_82198D24 = 0;
+      Audio_SetDiskReadyPolling(1);
+    }
+      break;
+
+    case 4:
+      Audio_PlayMusicIfChanged(8);
+      break;
+
+    case 6:
+      Audio_PlayMusicIfChanged(0xB);
+      break;
+
+    default:
+      Audio_PlayMusicIfChanged(0x32);
+      break;
+
+  }
+
+  StageContext_Activate(stage_context);
+  new_var = 1; // FAKE
+  StageLoader_RunFrames(new_var);
+  BgStage_WaitForCondition(Battle_FrameCallback, 0x20, 0x10);
+  StageLoader_RunFrames(2);
+  switch (D_82198D10->mode)
+  {
+    case 3:
+      if (Storage_GetDiskStatus() != 0)
+    {
+      Audio_SetDiskReadyPolling(2);
+    }
+      Audio_WaitForIdle(1);
+      break;
+
+    case 4:
+      StageLoader_RunFrames(0x1E);
+      break;
+
+    case 5:
+      StageLoader_RunFrames(0xF);
+      Audio_WaitForIdle(1);
+      break;
+
+    case 6:
+      StageLoader_RunFrames(0x1E);
+      Audio_WaitForIdle(1);
+      break;
+
+  }
+
+  StageContext_Deactivate();
+  Gfx_FreeDisplayListBuffers();
+  main_pool_pop_state('BATL');
+  return 0;
+}

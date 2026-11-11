@@ -261,11 +261,271 @@ void func_8111073C(Note8111073C* note) {
     note->playbackState.adsrCurrent = 0.0f;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81110798; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81110798.s")
-#endif
+typedef struct SeqPlayer81110798 {
+    /* 0x00 */ u32 enabled : 1;
+    /* 0x00 */ u32 finished : 1;
+    /* 0x00 */ u32 muted : 1;
+    /* 0x00 */ u32 rest : 29;
+} SeqPlayer81110798;
+
+typedef struct Channel81110798 {
+    /* 0x00 */ u8 unk00[3];
+    /* 0x03 */ u8 muteBehavior;
+    /* 0x04 */ u8 reverb;
+    /* 0x05 */ u8 unk05[4];
+    /* 0x09 */ u8 bookOffset;
+    /* 0x0A */ u8 unk0A[2];
+    /* 0x0C */ u8 gain;
+    /* 0x0D */ u8 unk0D[0x4C - 0x0D];
+    /* 0x4C */ SeqPlayer81110798* seqPlayer;
+    /* 0x50 */ u8 unk50[0xD0 - 0x50];
+    /* 0xD0 */ s32 filter;
+} Channel81110798;
+
+typedef struct Layer81110798 {
+    /* 0x00 */ u8 enabled : 1;
+    /* 0x00 */ u8 rest : 6;
+    /* 0x00 */ u8 bit1 : 1;
+    /* 0x01 */ ReverbBits81110210 stereo;
+    /* 0x02 */ u8 unk02[5];
+    /* 0x07 */ u8 notePan;
+    /* 0x08 */ u8 unk08[0x34 - 0x08];
+    /* 0x34 */ f32 noteVelocity;
+    /* 0x38 */ f32 noteFreqScale;
+    /* 0x3C */ u8 unk3C[0x48 - 0x3C];
+    /* 0x48 */ struct Note81110798* note;
+    /* 0x4C */ u8 unk4C[0x54 - 0x4C];
+    /* 0x54 */ Channel81110798* channel;
+} Layer81110798;
+
+typedef struct NoteSubEu81110798 {
+    /* 0x00 */ volatile u32 enabled : 1;
+    /* 0x00 */ u32 needsInit : 1;
+    /* 0x00 */ u32 finished : 1;
+    /* 0x00 */ u32 unk : 8;
+    /* 0x01 */ u32 bookOffset : 2;
+    /* 0x01 */ u32 rest : 19;
+} NoteSubEu81110798;
+
+typedef struct NoteAttributes81110798 {
+    /* 0x00 */ u8 reverbVol;
+    /* 0x01 */ u8 bankId;
+    /* 0x02 */ u8 pan;
+    /* 0x03 */ ReverbBits81110210 reverbBits;
+    /* 0x04 */ f32 freqScale;
+    /* 0x08 */ f32 velocity;
+    /* 0x0C */ s32 unk0C;
+} NoteAttributes81110798;
+
+typedef struct Adsr81110798 {
+    /* 0x00 */ u8 action;
+    /* 0x01 */ u8 state;
+    /* 0x02 */ u8 unk02[0xE];
+    /* 0x10 */ f32 fadeOutVel;
+    /* 0x14 */ f32 current;
+} Adsr81110798;
+
+typedef struct PlaybackState81110798 {
+    /* 0x00 */ u8 priority;
+    /* 0x01 */ u8 unk01[3];
+    /* 0x04 */ u8 unk_04;
+    /* 0x05 */ u8 unk05[3];
+    /* 0x08 */ f32 portamentoFreqScale;
+    /* 0x0C */ f32 vibratoFreqScale;
+    /* 0x10 */ Layer81110798* prevParentLayer;
+    /* 0x14 */ Layer81110798* parentLayer;
+    /* 0x18 */ Layer81110798* wantedParentLayer;
+    /* 0x1C */ NoteAttributes81110798 attributes;
+    /* 0x2C */ Adsr81110798 adsr;
+} PlaybackState81110798;
+
+typedef struct Note81110798 {
+    /* 0x00 */ u8 unk00[0xC];
+    /* 0x0C */ s8* pool;
+    /* 0x10 */ u8 unk10[0x30 - 0x10];
+    /* 0x30 */ PlaybackState81110798 playbackState;
+    /* 0x74 */ u8 unk74[0xB4 - 0x74];
+    /* 0xB4 */ NoteSubEu81110798 noteSubEu;
+    /* 0xB8 */ u8 unkB8[0xCC - 0xB8];
+} Note81110798; // size = 0xCC
+
+struct Rec81111130;
+extern struct Rec81111130* D_81184664;
+extern s32 D_811858E8;
+extern f32 D_811858D0;
+extern f32 D_811858D4;
+void func_811110B0(Particle* arg0);
+void func_811114BC(s8*);
+void func_8111147C(M2C_UNK* arg0, M2C_UNK* arg1);
+s32 func_81112EAC(s8*, struct Rec81111130*);
+void func_81111568(s8* arg0, s8* arg1);
+void func_81112B84(Channel81110798*);
+void func_81112278(Note81110798*);
+f32 func_81112380(u8*);
+void func_8111220C(Note81110798*);
+
+void func_81110798(void)
+{
+  Note81110798 *note;
+  PlaybackState81110798 *playbackState;
+  NoteSubEu81110798 *noteSubEu;
+  NoteAttributes81110798 *attrs;
+  s32 pad[2]; // FAKE
+  ReverbInfo81110210 subAttrs;
+  u8 bookOffset;
+  f32 scale;
+  s32 i;
+  for (i = 0; i < D_811858E8; i++)
+  {
+    note = (Note81110798 *) (i * 0xCC + (u32) D_81184664); // FAKE: integer-cast address form
+    playbackState = &note->playbackState;
+    if (playbackState->parentLayer != ((Layer81110798 *) (-1)))
+    {
+      if (((u32) playbackState->parentLayer) < 0x7FFFFFFF)
+      {
+        continue;
+      }
+      if ((note != playbackState->parentLayer->note) && (playbackState->unk_04 == 0))
+      {
+        playbackState->adsr.action |= 0x10;
+        playbackState->adsr.fadeOutVel = D_811858D4;
+        playbackState->priority = 1;
+        playbackState->unk_04 = 2;
+        goto d;
+      }
+      else
+        if (((!playbackState->parentLayer->enabled) && (playbackState->unk_04 == 0)) && ((playbackState->priority >= 1) ^ 0))
+      {
+      }
+      else
+        if (playbackState->parentLayer->channel->seqPlayer == 0)
+      {
+        func_81112B84(playbackState->parentLayer->channel);
+        playbackState->priority = 1;
+        playbackState->unk_04 = 1;
+        continue;
+      }
+      else
+        if (playbackState->parentLayer->channel->seqPlayer->muted && (playbackState->parentLayer->channel->muteBehavior & 0x40))
+      {
+      }
+      else
+      {
+        goto d;
+      }
+      func_811110B0((Particle *) playbackState->parentLayer);
+      func_811114BC((s8 *) note);
+      func_8111147C((M2C_UNK *) (note->pool + 0x10), (M2C_UNK *) note);
+      playbackState->priority = 1;
+      playbackState->unk_04 = 2;
+    }
+    else
+      if ((playbackState->unk_04 == 0) && (playbackState->priority >= 1))
+    {
+      continue;
+    }
+    d:
+    if (playbackState->priority != 0)
+    {
+      if (1)
+      {
+        noteSubEu = &note->noteSubEu;
+      }
+      if ((playbackState->unk_04 >= 1) || noteSubEu->finished)
+      {
+        if ((playbackState->adsr.state == 0) || noteSubEu->finished)
+        {
+          if (playbackState->wantedParentLayer != ((Layer81110798 *) (-1)))
+          {
+            func_8111073C((Note8111073C *) note);
+            if (playbackState->wantedParentLayer->channel != 0)
+            {
+              func_81111568((s8 *) note, (s8 *) playbackState->wantedParentLayer);
+              func_81112278(note);
+              func_811114BC((s8 *) note);
+              func_81112EAC(note->pool + 0x30, (struct Rec81111130 *) note);
+              playbackState->wantedParentLayer = (Layer81110798 *) (-1);
+              goto process;
+            }
+            func_8111073C((Note8111073C *) note);
+            func_811114BC((s8 *) note);
+            func_81112EAC(note->pool, (struct Rec81111130 *) note);
+            playbackState->wantedParentLayer = (Layer81110798 *) (-1);
+          }
+          else
+          {
+            if (playbackState->parentLayer != ((Layer81110798 *) (-1)))
+            {
+              playbackState->parentLayer->bit1 = 1;
+            }
+            func_8111073C((Note8111073C *) note);
+            func_811114BC((s8 *) note);
+            func_81112EAC(note->pool, (struct Rec81111130 *) note);
+          }
+        }
+        else
+        {
+          goto process;
+        }
+      }
+      else
+        if (playbackState->adsr.state == 0)
+      {
+        if (playbackState->parentLayer != ((Layer81110798 *) (-1)))
+        {
+          playbackState->parentLayer->bit1 = 1;
+        }
+        func_8111073C((Note8111073C *) note);
+        func_811114BC((s8 *) note);
+        func_81112EAC(note->pool, (struct Rec81111130 *) note);
+      }
+      else
+      {
+        process:
+        attrs = &playbackState->attributes;
+
+        scale = func_81112380((u8 *) (&playbackState->adsr));
+        func_8111220C(note);
+        if ((playbackState->unk_04 == 1) || (playbackState->unk_04 == 2))
+        {
+          subAttrs.freqScale = attrs->freqScale;
+          subAttrs.velocity = attrs->velocity;
+          subAttrs.pan = attrs->pan;
+          subAttrs.reverbVol = attrs->reverbVol;
+          subAttrs.reverbBits = attrs->reverbBits;
+          subAttrs.bankId = attrs->bankId;
+          subAttrs.synthesisVolume = attrs->unk0C;
+          bookOffset = noteSubEu->bookOffset;
+        }
+        else
+        {
+          Channel81110798 *channel = playbackState->parentLayer->channel;
+          Layer81110798 *layer = playbackState->parentLayer;
+          subAttrs.freqScale = layer->noteFreqScale;
+          subAttrs.velocity = layer->noteVelocity;
+          subAttrs.pan = layer->notePan;
+          subAttrs.reverbBits = layer->stereo;
+          subAttrs.reverbVol = channel->reverb;
+          subAttrs.bankId = channel->gain;
+          subAttrs.synthesisVolume = channel->filter;
+          bookOffset = channel->bookOffset & 7;
+          if (channel->seqPlayer->muted && (channel->muteBehavior & 8))
+          {
+            subAttrs.freqScale = 0.0f;
+            subAttrs.velocity = 0.0f;
+          }
+        }
+        subAttrs.freqScale *= playbackState->vibratoFreqScale * playbackState->portamentoFreqScale;
+        subAttrs.freqScale *= D_811858D0;
+        subAttrs.velocity *= scale;
+        func_81110210((s8 *) note, &subAttrs);
+        noteSubEu->bookOffset = bookOffset;
+      }
+    }
+
+  }
+
+}
 
 u8* func_81110C6C(u8* arg0, s32 arg1) {
     u8* ret;

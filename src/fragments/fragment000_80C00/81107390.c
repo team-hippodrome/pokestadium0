@@ -338,17 +338,542 @@ void* func_8110807C(void* cmd, s16 channel, s16 slot) {
     return cmd;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110814C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110814C.s")
-#endif
+#define ZSHIFTL_814C(v, s, w) ((u32)(((u32)(v) & ((0x01 << (w)) - 1)) << (s)))
+typedef struct Sub8110814C {
+    /* 0x00 */ u32 enabled : 1;
+    /* 0x00 */ u32 unk00_1 : 7;
+    /* 0x01 */ u8 reverbIndex : 3;
+    /* 0x01 */ u8 unk01_3 : 5;
+    /* 0x02 */ char unk02[0x16];
+} Sub8110814C; // size = 0x18
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81108750; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81108750.s")
-#endif
+typedef struct Note8110814C {
+    /* 0x00 */ char unk00[0x10];
+    /* 0x10 */ char synthesisState[0xBC];
+} Note8110814C; // size = 0xCC
+
+typedef struct Reverb8110814C {
+    /* 0x000 */ u8 resampleFlags;
+    /* 0x001 */ u8 useReverb;
+    /* 0x002 */ char unk002[0x3];
+    /* 0x005 */ s8 unk_05;
+    /* 0x006 */ char unk006[0x2];
+    /* 0x008 */ u16 unk_08;
+    /* 0x00A */ char unk00A[0xF6];
+    /* 0x100 */ s16* filterLeft;
+    /* 0x104 */ s16* filterRight;
+    /* 0x108 */ s16* filterLeftState;
+    /* 0x10C */ s16* filterRightState;
+    /* 0x110 */ char unk110[0x48];
+} Reverb8110814C; // size = 0x158
+
+extern s8 D_8118427A;
+void* func_81107AEC(AudioCmd* cmd, s32 bufLen, s16 reverbIndex, s16 updateIndex);
+void* func_81107E70(void* cmd, s16 channel, s16 slot);
+void* func_81107F40(AudioCmd* cmd, s16 channel, s16 slot);
+void* func_8110807C(void* cmd, s16 channel, s16 slot);
+struct ZNoteSubEu;
+struct ZNoteSynthesisState;
+AudioCmd* func_81108750(s32 noteIndex, struct ZNoteSubEu* noteSubEu, struct ZNoteSynthesisState* synthesisState, s16* aiBuf, s32 bufLen, AudioCmd* cmd, s32 updateIndex);
+
+AudioCmd* func_8110814C(s32* aiBuf, s32 aiBufLen, AudioCmd* cmd, s32 updateIndex) {
+    u8 sp94[0x3C];
+    Sub8110814C* noteSubEu;
+    UNUSED Sub8110814C* noteSubEu2; // FAKE: unused, keeps the frame size
+    s16 count;
+    s16 reverbIndex;
+    s32 i;
+
+    count = 0;
+    if (D_8118427B == 0) {
+        for (i = 0; i < D_811858E8; i++) {
+            if (((Sub8110814C*)D_81184288)[D_811858E8 * updateIndex + i].enabled) {
+                sp94[count++] = i;
+            }
+        }
+    } else {
+        for (reverbIndex = 0; reverbIndex < D_8118427B; reverbIndex++) {
+            for (i = 0; i < D_811858E8; i++) {
+                noteSubEu = (D_811858E8 * updateIndex + i) + (Sub8110814C*)D_81184288;
+                if (count && count && count) {} // FAKE: block boundary that stops as1 propagating the noteSubEu copy
+                if (cmd && cmd && cmd) {} // FAKE: same barrier, also balances register priority
+                if (noteSubEu->enabled && noteSubEu->reverbIndex == reverbIndex) {
+                    sp94[count++] = i;
+                }
+            }
+        }
+        for (i = 0; i < D_811858E8; i++) {
+            noteSubEu = (D_811858E8 * updateIndex + i) + (Sub8110814C*)D_81184288;
+            if (count && count && count) {} // FAKE: block boundary that stops as1 propagating the noteSubEu copy
+            if (noteSubEu->enabled && noteSubEu->reverbIndex >= D_8118427B) {
+                sp94[count++] = i;
+            }
+        }
+    }
+
+    { AudioCmd* _a = cmd++; _a->w0 = ZSHIFTL_814C(2, 24, 8) | ZSHIFTL_814C(0x940, 0, 24); _a->w1 = 0x340; }
+
+    i = 0;
+    for (reverbIndex = 0; reverbIndex < D_8118427B; reverbIndex++) {
+        D_8118427A = ((Reverb8110814C*)&D_81184110[reverbIndex])->useReverb;
+        if (D_8118427A) {
+            cmd = func_81107AEC(cmd, aiBufLen, reverbIndex, updateIndex);
+            if (reverbIndex) {} // FAKE: register priority
+        }
+        while (i < count) {
+            if (((Sub8110814C*)D_81184288)[sp94[i] + updateIndex * D_811858E8].reverbIndex == reverbIndex) {
+                cmd = func_81108750(sp94[i], (struct ZNoteSubEu*)&((Sub8110814C*)D_81184288)[sp94[i] + updateIndex * D_811858E8],
+                                    (struct ZNoteSynthesisState*)&((Note8110814C*)D_81184664)[sp94[i]].synthesisState, (s16*)aiBuf, aiBufLen, cmd, updateIndex);
+            } else {
+                break;
+            }
+            i++;
+        }
+        if (((Reverb8110814C*)&D_81184110[reverbIndex])->useReverb) {
+            if (((Reverb8110814C*)&D_81184110[reverbIndex])->filterLeft != NULL) {
+                { AudioCmd* _a = cmd++; _a->w0 = ZSHIFTL_814C(0x1B, 24, 8) | ZSHIFTL_814C(2, 16, 8) | ZSHIFTL_814C(aiBufLen * 2, 0, 16); _a->w1 = (u32)((Reverb8110814C*)&D_81184110[reverbIndex])->filterLeft; }
+                { AudioCmd* _a = cmd++; _a->w0 = ZSHIFTL_814C(0x1B, 24, 8) | ZSHIFTL_814C(((Reverb8110814C*)&D_81184110[reverbIndex])->resampleFlags, 16, 8) | ZSHIFTL_814C(0xC80, 0, 16); _a->w1 = (u32)((Reverb8110814C*)&D_81184110[reverbIndex])->filterLeftState; }
+            }
+            if (((Reverb8110814C*)&D_81184110[reverbIndex])->filterRight != NULL) {
+                { AudioCmd* _a = cmd++; _a->w0 = ZSHIFTL_814C(0x1B, 24, 8) | ZSHIFTL_814C(2, 16, 8) | ZSHIFTL_814C(aiBufLen * 2, 0, 16); _a->w1 = (u32)((Reverb8110814C*)&D_81184110[reverbIndex])->filterRight; }
+                { AudioCmd* _a = cmd++; _a->w0 = ZSHIFTL_814C(0x1B, 24, 8) | ZSHIFTL_814C(((Reverb8110814C*)&D_81184110[reverbIndex])->resampleFlags, 16, 8) | ZSHIFTL_814C(0xE20, 0, 16); _a->w1 = (u32)((Reverb8110814C*)&D_81184110[reverbIndex])->filterRightState; }
+            }
+            cmd = func_81107F40(cmd, reverbIndex, updateIndex);
+            if (((Reverb8110814C*)&D_81184110[reverbIndex])->unk_05 != -1) {
+                if (((Reverb81107390*)&D_81184110[((Reverb8110814C*)&D_81184110[reverbIndex])->unk_05])->downsampleRate == 1) {
+                    cmd = func_81107E70(cmd, ((Reverb8110814C*)&D_81184110[reverbIndex])->unk_05, updateIndex);
+                    cmd->w0 = ZSHIFTL_814C(0xC, 24, 8) | ZSHIFTL_814C(0x34, 16, 8) | ZSHIFTL_814C(((Reverb8110814C*)&D_81184110[reverbIndex])->unk_08, 0, 16); cmd->w1 = ZSHIFTL_814C(0xC80, 16, 16) | ZSHIFTL_814C(0x3E0, 0, 16); cmd++;
+                    cmd = func_8110807C(cmd, ((Reverb8110814C*)&D_81184110[reverbIndex])->unk_05, updateIndex);
+                }
+            }
+        }
+    }
+
+    while (i < count) {
+        cmd = func_81108750(sp94[i], (struct ZNoteSubEu*)&((Sub8110814C*)D_81184288)[sp94[i] + updateIndex * D_811858E8],
+                            (struct ZNoteSynthesisState*)&((Note8110814C*)D_81184664)[sp94[i]].synthesisState, (s16*)aiBuf, aiBufLen, cmd, updateIndex);
+        i++;
+    }
+
+    updateIndex = aiBufLen * 2;
+    { AudioCmd* _a = cmd++; _a->w0 = ZSHIFTL_814C(0xD, 24, 8) | ZSHIFTL_814C(updateIndex >> 4, 16, 8) | ZSHIFTL_814C(0x3C0, 0, 16); _a->w1 = ZSHIFTL_814C(0x940, 16, 16) | ZSHIFTL_814C(0xAE0, 0, 16); }
+    { AudioCmd* _a = cmd++; _a->w0 = ZSHIFTL_814C(0x15, 24, 8) | ZSHIFTL_814C((updateIndex * 2) >> 4, 16, 8) | ZSHIFTL_814C(0x3C0, 0, 16); _a->w1 = (u32)aiBuf + 0x80000000; }
+    return cmd;
+}
+
+typedef struct ZAdpcmLoop {
+    /* 0x00 */ u32 start;
+    /* 0x04 */ u32 end;
+    /* 0x08 */ u32 count;
+    /* 0x0C */ u32 pad;
+    /* 0x10 */ s16 state[16];
+} ZAdpcmLoop;
+
+typedef struct ZAdpcmBook {
+    /* 0x00 */ s32 order;
+    /* 0x04 */ s32 npredictors;
+    /* 0x08 */ s16 book[1];
+} ZAdpcmBook;
+
+typedef struct ZAudioBankSample {
+    /* 0x00 */ u32 codec : 4;
+    /* 0x00 */ u32 medium : 2;
+    /* 0x00 */ u32 bit1 : 1;
+    /* 0x00 */ u32 isPatched : 1;
+    /* 0x00 */ u32 size : 24;
+    /* 0x04 */ u8* sampleAddr;
+    /* 0x08 */ ZAdpcmLoop* loop;
+    /* 0x0C */ ZAdpcmBook* book;
+} ZAudioBankSample;
+
+typedef struct ZAudioBankSound {
+    /* 0x00 */ ZAudioBankSample* sample;
+} ZAudioBankSound;
+
+typedef struct ZNoteSubEu {
+    /* 0x00 */ u8 enabled : 1;
+    /* 0x00 */ u8 needsInit : 1;
+    /* 0x00 */ u8 finished : 1;
+    /* 0x00 */ u8 envMixerNeedsInit : 1;
+    /* 0x00 */ u8 stereoStrongRight : 1;
+    /* 0x00 */ u8 stereoStrongLeft : 1;
+    /* 0x00 */ u8 stereoHeadsetEffects : 1;
+    /* 0x00 */ u8 usesHeadsetPanEffects : 1;
+    /* 0x01 */ u8 reverbIndex : 3;
+    /* 0x01 */ u8 bookOffset : 2;
+    /* 0x01 */ u8 unk01 : 2;
+    /* 0x01 */ u8 hasTwoAdpcmParts : 1;
+    /* 0x02 */ u8 synthesisVolume;
+    /* 0x03 */ u8 headsetPanRight;
+    /* 0x04 */ u8 headsetPanLeft;
+    /* 0x05 */ u8 reverbVol;
+    /* 0x06 */ u16 targetVolLeft;
+    /* 0x08 */ u16 targetVolRight;
+    /* 0x0A */ u16 unk0A;
+    /* 0x0C */ u16 resamplingRateFixedPoint;
+    /* 0x10 */ ZAudioBankSound* audioBankSound;
+    /* 0x14 */ s16* filter;
+} ZNoteSubEu;
+
+typedef struct ZSynthesisBuffers {
+    /* 0x00 */ s16 adpcmdecState[0x10];
+    /* 0x20 */ s16 finalResampleState[0x10];
+    /* 0x40 */ s16 mixEnvelopeState[0x10];
+    /* 0x60 */ s16 filterBuffer[0x10];
+} ZSynthesisBuffers;
+
+typedef struct ZNoteSynthesisState {
+    /* 0x00 */ u8 restart;
+    /* 0x01 */ u8 sampleDmaIndex;
+    /* 0x02 */ u8 prevHeadsetPanRight;
+    /* 0x03 */ u8 prevHeadsetPanLeft;
+    /* 0x04 */ u8 reverbVol;
+    /* 0x05 */ u8 unk5;
+    /* 0x06 */ u16 samplePosFrac;
+    /* 0x08 */ s32 samplePosInt;
+    /* 0x0C */ ZSynthesisBuffers* synthesisBuffers;
+    /* 0x10 */ s16 curVolLeft;
+    /* 0x12 */ s16 curVolRight;
+} ZNoteSynthesisState;
+
+typedef struct ZNote {
+    /* 0x00 */ char unk00[0xB4];
+    /* 0xB4 */ ZNoteSubEu noteSubEu;
+} ZNote; // size = 0xCC
+
+void* func_811092F4(AudioCmd*, s8*, s32, u16, u16, s32);
+extern s16 D_81136A58[];
+u8* func_8110C2D8(u8*, s32, s32, u8*, u32);
+AudioCmd* func_8110938C(AudioCmd*, ZNoteSubEu*, ZNoteSynthesisState*, s32, u16, s32, s32);
+
+#define ZALIGN(val, amnt) (((val) + (1 << amnt) - 1) & ~((1 << amnt) - 1))
+#define ZSHIFTL(v, s, w) ((u32)(((u32)(v) & ((0x01 << (w)) - 1)) << (s)))
+#define ZV2P(addr) ((u8*)(addr) - 0x80000000U)
+#define ZCMD(pkt, a, b)            \
+    {                              \
+        AudioCmd* _a = (AudioCmd*)(pkt);      \
+        _a->w0 = (a);              \
+        _a->w1 = (u32)(b);         \
+    }
+#define zLoadBuffer(pkt, s, d, c) ZCMD(pkt, ZSHIFTL(0x14, 24, 8) | ZSHIFTL((c) >> 4, 16, 8) | ZSHIFTL(d, 0, 16), s)
+#define zSetBuffer(pkt, f, i, o, c) ZCMD(pkt, ZSHIFTL(8, 24, 8) | ZSHIFTL(f, 16, 8) | ZSHIFTL(i, 0, 16), ZSHIFTL(o, 16, 16) | ZSHIFTL(c, 0, 16))
+#define zADPCMdec(pkt, f, s) ZCMD(pkt, ZSHIFTL(1, 24, 8) | ZSHIFTL(f, 16, 8), s)
+#define zS8Dec(pkt, f, s) ZCMD(pkt, ZSHIFTL(0x17, 24, 8) | ZSHIFTL(f, 16, 8), s)
+#define zDMEMMove(pkt, i, o, c) ZCMD(pkt, ZSHIFTL(0x0A, 24, 8) | ZSHIFTL(i, 0, 24), ZSHIFTL(o, 16, 16) | ZSHIFTL(c, 0, 16))
+#define zClearBuffer(pkt, d, c) ZCMD(pkt, ZSHIFTL(2, 24, 8) | ZSHIFTL(d, 0, 24), c)
+#define zSetLoop(pkt, a) ZCMD(pkt, ZSHIFTL(0x0F, 24, 8), a)
+#define zLoadADPCM(pkt, c, d) ZCMD(pkt, ZSHIFTL(0x0B, 24, 8) | ZSHIFTL(c, 0, 24), d)
+#define zDownsampleHalf(pkt, c, i, o) ZCMD(pkt, ZSHIFTL(0x11, 24, 8) | ZSHIFTL(c, 0, 16), ZSHIFTL(i, 16, 16) | ZSHIFTL(o, 0, 16))
+#define zUnknown25(pkt, op, f, c, o, i) ZCMD(pkt, ZSHIFTL(op, 24, 8) | ZSHIFTL(f, 16, 8) | ZSHIFTL(c, 0, 16), ZSHIFTL(o, 16, 16) | ZSHIFTL(i, 0, 16))
+#define zHiLoGain(pkt, g, buflen, i) ZCMD(pkt, ZSHIFTL(0x18, 24, 8) | ZSHIFTL(g, 16, 8) | ZSHIFTL(buflen, 0, 16), ZSHIFTL(i, 16, 16))
+#define zFilter(pkt, f, countOrBuf, addr) ZCMD(pkt, ZSHIFTL(0x1B, 24, 8) | ZSHIFTL(f, 16, 8) | ZSHIFTL(countOrBuf, 0, 16), addr)
+
+AudioCmd* func_81108750(s32 noteIndex, ZNoteSubEu* noteSubEu, ZNoteSynthesisState* synthesisState, s16* aiBuf,
+                        s32 bufLen, AudioCmd* cmd, s32 updateIndex) {
+    UNUSED s32 pad0[3]; // FAKE
+    ZAudioBankSample* audioBookSample;
+    ZAdpcmLoop* loopInfo;
+    s16* curLoadedBook;
+    UNUSED u8 padEU[0x04]; // FAKE
+    UNUSED u8 pad8[0x04]; // FAKE
+    s32 noteFinished;
+    s32 restart;
+    s32 flags;
+    u16 resamplingRateFixedPoint;
+    s32 nSamplesToLoad;
+    UNUSED u8 pad7[0x0c]; // FAKE
+    s32 sp130;
+    UNUSED s32 tempBufLen; // FAKE
+    UNUSED u32 pad9; // FAKE
+    s32 t0;
+    u8* sampleAddr;
+    s32 s6;
+    s32 samplesLenAdjusted;
+    s32 nAdpcmSamplesProcessed;
+    s32 endPos;
+    s32 nSamplesToProcess;
+    UNUSED s32 samplesLenInt; // FAKE
+    s32 s2;
+    s32 leftRight;
+    s32 s5;
+    u32 samplesLenFixedPoint;
+    s32 s3;
+    s32 nSamplesInThisIteration;
+    u32 a3;
+    u8* v0_2;
+    s32 unk_s6;
+    s32 s5Aligned;
+    s32 sp88;
+    s32 sp84;
+    u32 temp;
+    s32 nParts;
+    s32 curPart;
+    s32 aligned;
+    UNUSED u32 padSH1; // FAKE
+    s32 resampledTempLen;
+    u16 noteSamplesDmemAddrBeforeResampling;
+    UNUSED u32 padSH2; // FAKE
+    s16 addr;
+    u8 synthesisVolume;
+    u32 nEntries;
+    ZNote* note;
+    u16 sp56;
+
+    curLoadedBook = NULL;
+    note = (ZNote*)&D_81184664[noteIndex];
+    if (noteSubEu->audioBankSound != NULL) {
+        flags = 0;
+        if (noteSubEu->needsInit == TRUE) {
+            flags = 1;
+            synthesisState->restart = 0;
+            synthesisState->samplePosInt = 0;
+            synthesisState->samplePosFrac = 0;
+            synthesisState->curVolLeft = 0;
+            synthesisState->curVolRight = 0;
+            synthesisState->prevHeadsetPanRight = 0;
+            synthesisState->prevHeadsetPanLeft = 0;
+            synthesisState->reverbVol = noteSubEu->reverbVol;
+            synthesisState->unk5 = 0;
+            note->noteSubEu.finished = 0;
+        }
+
+        resamplingRateFixedPoint = noteSubEu->resamplingRateFixedPoint;
+        nParts = noteSubEu->hasTwoAdpcmParts + 1;
+        samplesLenFixedPoint = (resamplingRateFixedPoint * bufLen * 2) + synthesisState->samplePosFrac;
+        nSamplesToLoad = (samplesLenFixedPoint >> 0x10);
+        synthesisState->samplePosFrac = samplesLenFixedPoint & 0xFFFF;
+
+        if ((synthesisState->unk5 == 1) && (nParts == 2)) {
+        } else if ((synthesisState->unk5 == 2) && (nParts == 1)) {
+        } else {
+            sp56 = 0;
+        }
+
+        synthesisState->unk5 = nParts;
+
+        audioBookSample = noteSubEu->audioBankSound->sample;
+        loopInfo = audioBookSample->loop;
+        endPos = loopInfo->end;
+        sampleAddr = audioBookSample->sampleAddr;
+        resampledTempLen = 0;
+        for (curPart = 0; curPart < nParts; curPart++) {
+            nAdpcmSamplesProcessed = 0;
+            s5 = 0;
+
+            if (nParts == 1) {
+                samplesLenAdjusted = nSamplesToLoad;
+            } else if (nSamplesToLoad & 1) {
+                samplesLenAdjusted = (nSamplesToLoad & ~1) + (curPart * 2);
+            } else {
+                samplesLenAdjusted = nSamplesToLoad;
+            }
+
+            if (audioBookSample->codec == 0) {
+                if (curLoadedBook != audioBookSample->book->book) {
+                    switch (noteSubEu->bookOffset) {
+                        case 1:
+                            curLoadedBook = D_81136A58 + 1;
+                            break;
+                        case 2:
+                        case 3:
+                        default:
+                            curLoadedBook = audioBookSample->book->book;
+                            break;
+                    }
+                    nEntries = 16 * audioBookSample->book->order * audioBookSample->book->npredictors;
+                    zLoadADPCM(cmd++, nEntries, ZV2P(curLoadedBook));
+                }
+            }
+
+            while (nAdpcmSamplesProcessed != samplesLenAdjusted) {
+                s32 samplesRemaining;
+                s32 s0;
+
+                noteFinished = FALSE;
+                restart = FALSE;
+                s5Aligned = 0;
+                s2 = synthesisState->samplePosInt & 0xf;
+                samplesRemaining = endPos - synthesisState->samplePosInt;
+                nSamplesToProcess = samplesLenAdjusted - nAdpcmSamplesProcessed;
+
+                if (s2 == 0 && synthesisState->restart == FALSE) {
+                    s2 = 16;
+                }
+                s6 = 16 - s2;
+                if (nSamplesToProcess < samplesRemaining) {
+                    t0 = (nSamplesToProcess - s6 + 0xf) / 16;
+                    s0 = t0 * 16;
+                    s3 = s6 + s0 - nSamplesToProcess;
+                } else {
+                    s0 = samplesRemaining - s6;
+                    s3 = 0;
+                    if (s0 <= 0) {
+                        s0 = 0;
+                        s6 = samplesRemaining;
+                    }
+                    t0 = (s0 + 0xf) / 16;
+                    if (loopInfo->count != 0) {
+                        restart = 1;
+                    } else {
+                        noteFinished = 1;
+                    }
+                }
+                switch (audioBookSample->codec) {
+                    case 0:
+                        unk_s6 = 9;
+                        sp88 = 0x10;
+                        sp84 = 0;
+                        break;
+                    case 1:
+                        unk_s6 = 0x10;
+                        sp88 = 0x10;
+                        sp84 = 0;
+                        break;
+                    case 2:
+                        goto skip;
+                }
+                if (t0 != 0) {
+                    temp = (synthesisState->samplePosInt + sp88 - s2) / 16;
+                    if (audioBookSample->medium == 0) {
+                        v0_2 = sp84 + (temp * unk_s6) + sampleAddr;
+                    } else {
+                        v0_2 = func_8110C2D8(sp84 + (temp * unk_s6) + sampleAddr, ZALIGN(t0 * unk_s6 + 16, 4), flags,
+                                             &synthesisState->sampleDmaIndex, audioBookSample->medium);
+                    }
+
+                    a3 = ((u32)v0_2 & 0xf);
+                    aligned = ZALIGN(t0 * unk_s6 + 16, 4);
+                    addr = 0x940 - aligned;
+                    zLoadBuffer(cmd++, ZV2P(v0_2 - a3), addr, ZALIGN(t0 * unk_s6 + 16, 4));
+                } else {
+                    s0 = 0;
+                    a3 = 0;
+                }
+                if (synthesisState->restart != FALSE) {
+                    zSetLoop(cmd++, ZV2P(audioBookSample->loop->state));
+                    flags = 2;
+                    synthesisState->restart = FALSE;
+                }
+                nSamplesInThisIteration = s0 + s6 - s3;
+                if (nAdpcmSamplesProcessed == 0) {
+                    sp130 = s2 * 2;
+                } else {
+                    s5Aligned = ZALIGN(s5 + 16, 4);
+                }
+                switch (audioBookSample->codec) {
+                    case 0:
+                        aligned = ZALIGN(t0 * unk_s6 + 16, 4);
+                        addr = 0x940 - aligned;
+                        zSetBuffer(cmd++, 0, addr + a3, 0x580 + s5Aligned, s0 * 2);
+                        zADPCMdec(cmd++, flags, ZV2P(synthesisState->synthesisBuffers->adpcmdecState));
+                        break;
+                    case 1:
+                        aligned = ZALIGN(t0 * unk_s6 + 16, 4);
+                        addr = 0x940 - aligned;
+                        zSetBuffer(cmd++, 0, addr + a3, 0x580 + s5Aligned, s0 * 2);
+                        zS8Dec(cmd++, flags, ZV2P(synthesisState->synthesisBuffers->adpcmdecState));
+                        break;
+                }
+                if (nAdpcmSamplesProcessed != 0) {
+                    zDMEMMove(cmd++, 0x580 + s5Aligned + (s2 * 2), 0x580 + s5, nSamplesInThisIteration * 2);
+                }
+                nAdpcmSamplesProcessed += nSamplesInThisIteration;
+                switch (flags) {
+                    case 1:
+                        sp130 = 0x20;
+                        s5 = (s0 + 0x10) * 2;
+                        break;
+                    case 2:
+                        s5 = (nSamplesInThisIteration) * 2 + s5;
+                        break;
+                    default:
+                        if (s5 != 0) {
+                            s5 = (nSamplesInThisIteration) * 2 + s5;
+                        } else {
+                            s5 = (s2 + (nSamplesInThisIteration)) * 2;
+                        }
+                        break;
+                }
+                flags = 0;
+            skip:
+                if (noteFinished) {
+                    zClearBuffer(cmd++, 0x580 + s5, (samplesLenAdjusted - nAdpcmSamplesProcessed) * 2);
+                    noteSubEu->finished = 1;
+                    note->noteSubEu.finished = 1;
+                    func_8110776C(updateIndex, noteIndex);
+                    break;
+                }
+                if (restart != 0) {
+                    synthesisState->restart = TRUE;
+                    synthesisState->samplePosInt = loopInfo->start;
+                } else {
+                    synthesisState->samplePosInt += nSamplesToProcess;
+                }
+            }
+
+            switch (nParts) {
+                case 1:
+                    noteSamplesDmemAddrBeforeResampling = 0x580 + sp130;
+                    break;
+                case 2:
+                    switch (curPart) {
+                        case 0:
+                            zDownsampleHalf(cmd++, ZALIGN(samplesLenAdjusted / 2, 3), 0x580 + sp130, 0x3E0);
+                            resampledTempLen = samplesLenAdjusted;
+                            noteSamplesDmemAddrBeforeResampling = 0x3E0;
+                            if (noteSubEu->finished != FALSE) {
+                                zClearBuffer(cmd++, noteSamplesDmemAddrBeforeResampling + resampledTempLen, samplesLenAdjusted + 0x10);
+                            }
+                            break;
+                        case 1:
+                            zDownsampleHalf(cmd++, ZALIGN(samplesLenAdjusted / 2, 3), 0x580 + sp130, resampledTempLen + 0x3E0);
+                            break;
+                    }
+            }
+            if (noteSubEu->finished != FALSE) {
+                break;
+            }
+        }
+
+        flags = 0;
+        if (noteSubEu->needsInit == TRUE) {
+            flags = 1;
+            noteSubEu->needsInit = FALSE;
+        }
+        cmd = func_811092F4(cmd, (s8*)synthesisState, bufLen * 2, resamplingRateFixedPoint,
+                            noteSamplesDmemAddrBeforeResampling, sp56 | flags);
+
+        if (noteSubEu->bookOffset == 3) {
+            zUnknown25(cmd++, 0x19, 0, bufLen * 2, 0x3C0, 0x3C0);
+        }
+        if (noteSubEu->bookOffset == 2) {
+            zUnknown25(cmd++, 0x03, 0, bufLen * 2, 0x3C0, 0x3C0);
+        }
+
+        synthesisVolume = noteSubEu->synthesisVolume;
+        if (synthesisVolume != 0) {
+            if (synthesisVolume < 0x10) {
+                synthesisVolume = 0x10;
+            }
+            zHiLoGain(cmd++, synthesisVolume, (bufLen + 0x10) * 2, 0x3C0);
+        }
+
+        if (noteSubEu->filter) {
+            zFilter(cmd++, 2, bufLen * 2, noteSubEu->filter);
+            zFilter(cmd++, flags, 0x3C0, synthesisState->synthesisBuffers->filterBuffer);
+        }
+
+        if (noteSubEu->headsetPanRight != 0 || synthesisState->prevHeadsetPanRight != 0) {
+            leftRight = 1;
+        } else if (noteSubEu->headsetPanLeft != 0 || synthesisState->prevHeadsetPanLeft != 0) {
+            leftRight = 2;
+        } else {
+            leftRight = 0;
+        }
+        cmd = func_8110938C(cmd, noteSubEu, synthesisState, bufLen, 0x3C0, leftRight, flags);
+    }
+    return cmd;
+}
 
 #define SHIFTL_81109(v, s, w) ((u32)(((u32)(v) & ((0x01 << (w)) - 1)) << (s)))
 /* Emits the two-or-one command sequence as a single macro statement, like the libultra audio macros. */
@@ -377,8 +902,73 @@ void* func_811092F4(AudioCmd* cmd, s8* arg1, s32 arg2, u16 count, u16 arg4, s32 
     return cmd;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110938C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110938C.s")
-#endif
+typedef struct Src8110938C {
+    /* 0x00 */ u32 unk00_0 : 4;
+    /* 0x00 */ u32 flagA : 1;
+    /* 0x00 */ u32 flagB : 1;
+    /* 0x00 */ u32 unk00_6 : 26;
+    /* 0x04 */ char unk04[1];
+    /* 0x05 */ u8 vol;
+    /* 0x06 */ char unk06[2];
+    /* 0x08 */ u16 left;
+    /* 0x0A */ u16 right;
+} Src8110938C;
+
+typedef struct State8110938C {
+    /* 0x00 */ char unk00[4];
+    /* 0x04 */ u8 vol;
+    /* 0x05 */ char unk05[0xB];
+    /* 0x10 */ u16 left;
+    /* 0x12 */ u16 right;
+} State8110938C;
+
+AudioCmd* func_8110938C(AudioCmd* cmd, ZNoteSubEu* noteSubEu, ZNoteSynthesisState* synthesisState, s32 aiBufLen, u16 inBuf, s32 headsetPanSettings, s32 flags) {
+    s32 reverbVol;
+    u16 curVolLeft;
+    u16 targetVolLeft;
+    UNUSED s16 pad2;
+    u16 curVolRight;
+    s16 rampLeft;
+    s16 rampRight;
+    s16 sourceReverbVol;
+    u16 targetVolRight;
+    s16 rampReverb;
+
+    curVolLeft = ((State8110938C*)synthesisState)->left;
+    curVolRight = ((State8110938C*)synthesisState)->right;
+    targetVolLeft = ((Src8110938C*)noteSubEu)->left;
+    targetVolRight = ((Src8110938C*)noteSubEu)->right;
+    targetVolLeft <<= 4;
+    targetVolRight <<= 4;
+
+    if (targetVolLeft != curVolLeft) {
+        rampLeft = (targetVolLeft - curVolLeft) / (aiBufLen >> 3);
+    } else {
+        rampLeft = 0;
+    }
+    if (targetVolRight != curVolRight) {
+        rampRight = (targetVolRight - curVolRight) / (aiBufLen >> 3);
+    } else {
+        rampRight = 0;
+    }
+
+    sourceReverbVol = ((State8110938C*)synthesisState)->vol;
+    // FAKE: dead assignment, reverbVol is overwritten before any use
+    reverbVol = ((Src8110938C*)noteSubEu)->vol;
+    if (((Src8110938C*)noteSubEu)->vol != sourceReverbVol) {
+        reverbVol = ((((Src8110938C*)noteSubEu)->vol & 0x7F) - (sourceReverbVol & 0x7F)) << 9;
+        rampReverb = reverbVol / (aiBufLen >> 3);
+        ((State8110938C*)synthesisState)->vol = ((Src8110938C*)noteSubEu)->vol;
+    } else {
+        rampReverb = 0;
+    }
+
+    ((State8110938C*)synthesisState)->left = curVolLeft + (rampLeft * (aiBufLen >> 3));
+    ((State8110938C*)synthesisState)->right = curVolRight + (rampRight * (aiBufLen >> 3));
+
+    // each command is kept on one line (as a macro would expand), the line numbers affect codegen
+    { AudioCmd* _a = cmd++; _a->w0 = (((u32) ((((u32) 0x12) & ((0x01 << 8) - 1)) << 24)) | ((u32) ((((u32) ((sourceReverbVol & 0x7F) * 2)) & ((0x01 << 8) - 1)) << 16))) | ((u32) ((((u32) rampReverb) & ((0x01 << 16) - 1)) << 0)); _a->w1 = ((u32) ((((u32) rampLeft) & ((0x01 << 16) - 1)) << 16)) | ((u32) ((((u32) rampRight) & ((0x01 << 16) - 1)) << 0)); }
+    { AudioCmd* _a = cmd++; _a->w0 = (u32) ((((u32) 0x16) & ((0x01 << 8) - 1)) << 24); _a->w1 = ((u32) ((((u32) curVolLeft) & ((0x01 << 16) - 1)) << 16)) | ((u32) ((((u32) curVolRight) & ((0x01 << 16) - 1)) << 0)); }
+    { AudioCmd* _a = cmd++; _a->w0 = ((((((u32) ((((u32) 0x13) & ((0x01 << 8) - 1)) << 24)) | ((u32) ((((u32) (inBuf >> 4)) & ((0x01 << 8) - 1)) << 16))) | ((u32) ((((u32) aiBufLen) & ((0x01 << 8) - 1)) << 8))) | ((u32) ((((u32) ((sourceReverbVol & 0x80) >> 7)) & ((0x01 << 1) - 1)) << 2))) | ((u32) ((((u32) ((Src8110938C*)noteSubEu)->flagA) & ((0x01 << 1) - 1)) << 1))) | ((u32) ((((u32) ((Src8110938C*)noteSubEu)->flagB) & ((0x01 << 1) - 1)) << 0)); _a->w1 = 0x94AEC8E2; }
+    return cmd;
+}

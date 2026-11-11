@@ -37,6 +37,19 @@ extern s16 D_800733D8;
 extern unk_D_800AE520 D_800AF990;
 extern s32 pad_D_800AE534[2];
 extern SessionContext gSessionContext;
+typedef struct SessionBlock {
+    /* 0x0000 */ s8 unk_0000;
+    /* 0x0001 */ s8 unk_0001;
+    /* 0x0002 */ s8 unk_0002;
+    /* 0x0003 */ s8 unk_0003;
+    /* 0x0004 */ u8 unk_0004[0x1038];
+    /* 0x103C */ TeamRoster* unk_103C;
+    /* 0x1040 */ u8 unk_1040[0x54];
+    /* 0x1094 */ u8 unk_1094;
+    /* 0x1095 */ u8 unk_1095;
+    /* 0x1096 */ u16 unk_1096;
+} SessionBlock; // size = 0x1098
+SessionBlock D_800AE8F0;
 
 #include "global.h"
 #include <PR/os_internal_reg.h>
@@ -146,7 +159,6 @@ void func_8002572C(s8 *arg0, s32 arg1) {
 }
 
 M2C_UNK func_80025640(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
-extern M2C_UNK D_800AE8F0;
 extern M2C_UNK D_800AE8F4;
 extern M2C_UNK D_800AEAF8;
 typedef struct { s16 unk_00; u8 unk_02; u8 unk_03; } Unk800AF104;
@@ -207,7 +219,6 @@ void func_80025830(void) {
 }
 
 M2C_UNK func_80058410();
-extern M2C_UNK D_800AE8F0;
 extern M2C_UNK D_800AF974;
 extern M2C_UNK D_800AFB10;
 extern M2C_UNK D_800AFB14;
@@ -220,11 +231,48 @@ void func_800258B4(void) {
     func_80058410(&D_800AFB14, &D_800AF974, 8, &D_800AFB10);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80025910; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80025910.s")
-#endif
+typedef struct { u8 b[3]; } Unk3Bytes;
+typedef struct { u8 b[11]; } Unk11Bytes;
+M2C_UNK func_8000A460(M2C_UNK *, M2C_UNK *);
+s32 func_80022C70(s16);
+M2C_UNK func_80022D84(s16, M2C_UNK *);
+extern s32 D_800603C0;
+extern s16 D_800733D4;
+extern M2C_UNK D_8007B7C0;
+extern M2C_UNK D_8007B7C4;
+
+extern s32 D_800AE90C;
+extern M2C_UNK D_800AE910;
+extern M2C_UNK D_800AF108;
+extern M2C_UNK D_800AF118;
+extern M2C_UNK D_800AF12C;
+extern s8 D_800AE8F6;
+
+void func_80025910(s32 arg0)
+{
+  s8 *st = (s8 *) (&D_800AE8F0);
+  *((s8 *) (st + 4)) = 1;
+  *((s8 *) (st + 5)) = 0;
+  *((s32 *) (st + 8)) = D_800603C0;
+  *((s8 **) (st + 0x200)) = st + 0x814;
+  if ((arg0 != 0) && (D_800733D4 == 0))
+  {
+    (*((s32 *) (st + 0x1C))) = func_80022C70(D_800733D4);
+    func_80022D84(D_800733D4, (st + 0xC));
+  }
+  else
+  {
+    (*((s32 *) (st + 0x1C))) = 0;
+    *((Unk3Bytes *) ((st + 0xC))) = *((Unk3Bytes *) (&D_8007B7C0));
+  }
+  *((s16 *) (st + 0x814)) = 0;
+  *((u8 *) (st + 0x816)) = *((u8 *) ((st + 6)));
+  *((u8 *) (st + 0x817)) = 0;
+  func_80058410((st + 0x20), (st + 0x83C), 0x1E0);
+  *((Unk11Bytes *) ((st + 0x818))) = *((Unk11Bytes *) (&D_8007B7C4));
+  func_8000A460((st + 0x828), (st + 0xC));
+  func_8002572C((s8 *) ((st + 0x1034)), (s32) ((st + 4)));
+}
 
 s8 func_800253BC(M2C_UNK *, s8 *, M2C_UNK *);       /* extern */
 void func_80025910(s32);                          /* extern */
@@ -421,20 +469,19 @@ void func_80025E3C(s32 arg0) {
 }
 
 M2C_UNK func_80025758(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
-M2C_UNK func_80025B60(s32, M2C_UNK *, M2C_UNK *, M2C_UNK, M2C_UNK *); /* extern */
+M2C_UNK func_80025B60(s32, M2C_UNK *, M2C_UNK *, M2C_UNK, s32); /* extern */
 extern M2C_UNK D_0015F390;
 extern M2C_UNK D_0015F8F0;
 extern M2C_UNK D_0017ED00;
 extern M2C_UNK D_00232510;
 extern s32 D_800733C8;
-extern M2C_UNK D_800AE8F0;
 extern M2C_UNK D_81500000;
 extern M2C_UNK D_82100000;
 
 void func_80025F3C(void) {
-    func_80025B60(((u32) ((s32) &D_81500000 & 0x0FF00000) >> 0x14) - 0x10, &D_0015F390, &D_0015F8F0, 0, NULL);
+    func_80025B60(((u32) ((s32) &D_81500000 & 0x0FF00000) >> 0x14) - 0x10, &D_0015F390, &D_0015F8F0, 0, 0);
     func_80025758(5, 3, 3);
-    func_80025B60(((u32) ((s32) &D_82100000 & 0x0FF00000) >> 0x14) - 0x10, &D_0017ED00, &D_00232510, 0, &D_800AE8F0);
+    func_80025B60(((u32) ((s32) &D_82100000 & 0x0FF00000) >> 0x14) - 0x10, &D_0017ED00, &D_00232510, 0, (s32) &D_800AE8F0);
     D_800733C8 = 0x8010;
 }
 
@@ -443,12 +490,12 @@ extern M2C_UNK D_0015E220;
 extern s32 D_800AF988;
 
 void State_FastN64Logo(void) {
-    D_800733C8 = func_80025B60(((u32) ((s32) &D_81200000 & 0x0FF00000) >> 0x14) - 0x10, &D_0015E220, &D_0015F390, 0, NULL);
+    D_800733C8 = func_80025B60(((u32) ((s32) &D_81200000 & 0x0FF00000) >> 0x14) - 0x10, &D_0015E220, &D_0015F390, 0, 0);
     M2C_FIELD(&D_800AE8F0, u8*, 2) = 0;
     M2C_FIELD(&D_800AE8F0, s16*, 0x1096) = 0;
     switch (D_800733C8) {
         case 0x8010:
-            func_80025B60(((u32) ((s32) &D_82100000 & 0x0FF00000) >> 0x14) - 0x10, &D_0017ED00, &D_00232510, 0, &D_800AE8F0);
+            func_80025B60(((u32) ((s32) &D_82100000 & 0x0FF00000) >> 0x14) - 0x10, &D_0017ED00, &D_00232510, 0, (s32) &D_800AE8F0);
             break;
         case 0x8020:
             D_800733D4 = -1;
@@ -540,11 +587,89 @@ void func_800260C4(void)
   main_pool_pop_state('OVLY');
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80026368; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80026368.s")
-#endif
+extern M2C_UNK D_00232510_2;
+extern M2C_UNK D_0017ED00_2;
+extern M2C_UNK D_0017BE70;
+extern M2C_UNK D_0017E340;
+extern M2C_UNK D_81700000;
+extern M2C_UNK D_81800000;
+extern M2C_UNK D_82200000;
+extern M2C_UNK D_82300000;
+extern M2C_UNK D_0015FCE0;
+void func_80001948(s32);
+void _bcopy(void* src, void* dst, s32);
+
+void func_80026368(void)
+{
+  s32 prev;
+  TeamRoster *roster;
+  ExtendedRosterInfo *info;
+  func_80001948(0xFFFF);
+  if (D_800AE8F0.unk_1095 & 2)
+  {
+    func_800258B4();
+  }
+  else
+  {
+    D_800AE8F0.unk_0003 = 1;
+  }
+  if (D_800AE8F0.unk_0000 == 0)
+  {
+    D_800AE8F0.unk_0003 = 1;
+    func_80025B60((((u32) (((s32) (&D_82200000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_00232510, &D_00235D70, 0, (s32) &D_800AE8F0);
+    func_80025B60((((u32) (((s32) (&D_82300000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0015FCE0, &D_00162BE0, 0, (s32) &D_800AE8F0);
+    func_80025B60((((u32) (((s32) (&D_82100000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0017ED00, &D_00232510_2, 0, (s32) &D_800AE8F0);
+    func_80025B60((((u32) (((s32) (&D_82200000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_00232510, &D_00235D70, 1, (s32) &D_800AE8F0);
+  }
+  else
+  {
+    prev = D_800AE8F0.unk_0000;
+    func_80025B60((((u32) (((s32) (&D_82200000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_00232510, &D_00235D70, 0, (s32) &D_800AE8F0);
+    while (!(D_800AE8F0.unk_1096 & 1))
+    {
+      func_80025B60((((u32) (((s32) (&D_82300000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0015FCE0, &D_00162BE0, 0, (s32) &D_800AE8F0);
+      func_80025B60((((u32) (((s32) (&D_82100000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0017ED00, &D_00232510_2, 0, (s32) &D_800AE8F0);
+      func_80025B60((((u32) (((s32) (&D_82200000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_00232510, &D_00235D70, 2, (s32) &D_800AE8F0);
+    }
+
+    if (D_800AE8F0.unk_1096 & 0x40)
+    {
+      D_800733C8 = 0x8010;
+      return;
+    }
+    else
+    {
+      if (D_800AE8F0.unk_1096 & 2)
+      {
+        roster = D_800AE8F0.unk_103C;
+        D_800AE8F0.unk_0000 = 4;
+        info = roster->rosterInfo;
+        roster->numberOfPokemonBrought = info->numberOfPokemonCanBePicked;
+        _bcopy(info->unk_028, roster->pokemonPicked, 0x1E0);
+        func_80025B60((((u32) (((s32) (&D_82100000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0017ED00, &D_00232510_2, 0, (s32) &D_800AE8F0);
+        if (prev == 1)
+        {
+          func_80025B60((((u32) (((s32) (&D_81800000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0017E340, &D_0017ED00_2, 0, 4);
+        }
+        else
+        {
+          func_80025B60((((u32) (((s32) (&D_81800000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0017E340, &D_0017ED00_2, 0, (s32) D_800AE8F0.unk_0002);
+        }
+      }
+      if (D_800AE8F0.unk_1096 & 4)
+      {
+        func_80025758(6, 0xA, 0xD);
+        D_800AE8F0.unk_0003 = 8;
+        func_80025B60((((u32) (((s32) (&D_82100000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0017ED00, &D_00232510_2, 0, (s32) &D_800AE8F0);
+      }
+      if (D_800AE8F0.unk_1096 & 0x20)
+      {
+        func_80025B60((((u32) (((s32) (&D_81700000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0017BE70, &D_0017E340, 0, (s32) &D_800AE8F0);
+      }
+      }
+  }
+  D_800733C8 = 0x8040;
+}
 
 extern M2C_UNK D_81300000;
 extern M2C_UNK D_0015FCE0;
@@ -572,7 +697,7 @@ void State_GbTower(void) {
 
     sp24.unk_04 = main_pool_alloc(sizeof(*sp24.unk_04), 0);
 
-    func_80025B60(((u32) ((s32) &D_81300000 & 0x0FF00000) >> 0x14) - 0x10, &D_0015F8F0, &D_0015FCE0, D_800733D4, (M2C_UNK*)&sp24);
+    func_80025B60(((u32) ((s32) &D_81300000 & 0x0FF00000) >> 0x14) - 0x10, &D_0015F8F0, &D_0015FCE0, D_800733D4, (s32) &sp24);
     func_8000AC78(&sp24);
 
     sp2C = func_8000ADE8();
@@ -627,11 +752,52 @@ void Game_ResetStorageDevice(void) {
     Storage_ResetDisk();
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_800269A0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800269A0.s")
-#endif
+u32 func_800594D0(u32);
+void func_8000B170(s32);
+void func_8000D20C(void);
+void func_800177DC(void);
+void func_80025FDC(void);
+void func_80026368(void);
+void func_8002677C(void);
+void func_800268A8(void);
+
+void func_800269A0(s32 arg0) {
+    s32 state;
+
+    func_800594D0(0x01000F00);
+    func_8000B170(0);
+    func_8000D20C();
+    func_800177DC();
+    func_8000256C(0x47414D45);
+    M2C_FIELD(&D_800AE8F0, s8*, 0) = 1;
+    while (1) {
+        state = D_800733C8;
+        switch (state) {
+            case 0x8001:
+                func_80025F3C();
+                break;
+            case 0x8010:
+                func_80025FDC();
+                break;
+            case 0x8040:
+                func_800260C4();
+                break;
+            case 0x8050:
+                func_80026368();
+                break;
+            case 0x8060:
+                func_8002677C();
+                break;
+            case 0x8080:
+                func_80026898();
+                break;
+            case 0xF000:
+                func_800268A8();
+                break;
+        }
+        D_800733CC = state;
+    }
+}
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_80026B50; signature not recovered. */

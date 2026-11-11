@@ -27,9 +27,22 @@
     }
   },
   "src/audio_commands.c": {
+    ".bss": "0x800FD628",
     ".rodata": {
       "address": "0x8007DDA0",
-      "size": "0x1E8"
+      "size": "0xADC"
+    }
+  },
+  "src/audio_commands_800407B0.c": {
+    ".rodata": {
+      "address": "0x8007E87C",
+      "size": "0x190"
+    }
+  },
+  "src/audio_commands_800414B0.c": {
+    ".rodata": {
+      "address": "0x8007EA0C",
+      "size": "0x30"
     }
   },
   "src/audio_commands_2.c": {
@@ -57,6 +70,13 @@
     ".rodata": {
       "address": "0x811542B4",
       "size": "0x1C"
+    }
+  },
+  "src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0_81102C20.c": {
+    ".bss": "0x811561C8",
+    ".rodata": {
+      "address": "0x81154204",
+      "size": "0x50"
     }
   },
   "src/fragments/fragment000_80C00/gb_tower_emulator_86920.c": {
@@ -104,26 +124,26 @@
   },
   "src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c": {
     ".data": {
-      "address": "0x88402FB4",
-      "size": "0xC"
+      "address": "0x88402F9C",
+      "size": "0x24"
     }
   },
   "src/fragments/fragment007_166580_4.c": {
     ".rodata": {
       "address": "0x82009E20",
-      "size": "0x60"
+      "size": "0x90"
     }
   },
   "src/fragments/fragment007_166580_5.c": {
     ".rodata": {
       "address": "0x82009EB0",
-      "size": "0x70"
+      "size": "0xA8"
     }
   },
   "src/fragments/fragment007_166580_3.c": {
     ".rodata": {
       "address": "0x8200A228",
-      "size": "0x18"
+      "size": "0x34"
     }
   },
   "src/fragments/fragment010_17BE70/pikachu_reward.c": {
@@ -217,7 +237,11 @@
     ".data": "0x8218B0C8"
   },
   "src/fragments/fragment012_17ED00/battle_engine_31D9F0_821199E4.c": {
-    ".rodata": "0x82195A04"
+    ".rodata": "0x82195A04",
+    ".data": {
+      "address": "0x8218B0E4",
+      "size": "0x120"
+    }
   },
   "src/fragments/fragment012_17ED00/battle_engine_3223B0.c": {
     ".rodata": "0x82196A90"
@@ -341,7 +365,8 @@
     ".data": "0x821929D0"
   },
   "src/fragments/fragment012_17ED00/battle_engine_34A420.c": {
-    ".rodata": "0x82197AA0"
+    ".bss": "0x821A1B50",
+    ".rodata": "0x82197A50"
   },
   "src/fragments/fragment012_17ED00/battle_engine_34E1A0.c": {
     ".rodata": "0x82197BC0"
@@ -426,8 +451,14 @@
   },
   "src/fragments/fragment012_17ED00/ekans_game_3_82184DC8.c": {
     ".rodata": {
-      "address": "0x821981EC",
-      "size": "0x2DC"
+      "address": "0x82197F68",
+      "size": "0x6E4"
+    }
+  },
+  "src/fragments/fragment012_17ED00/ekans_game_3_82187DB4.c": {
+    ".rodata": {
+      "address": "0x8219864C",
+      "size": "0x138"
     }
   },
   "src/fragments/fragment012_17ED00/ekans_game_3_82188050.c": {
@@ -462,21 +493,21 @@
   },
   "src/fragments/fragment014_235D70/lab_pc_icons.c": {
     ".rodata": {
-      "address": "0x88002AE4",
-      "size": "0x1C"
+      "address": "0x88002AE0",
+      "size": "0x20"
     },
     ".bss": "0x880022C8"
   },
   "src/fragments/fragment015_238BD0/89006FC0.c": {
     ".rodata": {
-      "address": "0x890190B0",
-      "size": "0x34"
+      "address": "0x89019098",
+      "size": "0x4C"
     }
   },
   "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c": {
     ".rodata": {
       "address": "0x8901892C",
-      "size": "0x1C"
+      "size": "0x4C"
     }
   },
   "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00_8900379C.c": {
@@ -494,7 +525,7 @@
   "src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c": {
     ".rodata": {
       "address": "0x89018DD0",
-      "size": "0x50"
+      "size": "0x84"
     }
   },
   "src/fragments/fragment016_252E10/89100020_89100914.c": {
@@ -505,8 +536,14 @@
   },
   "src/fragments/fragment016_252E10/89100020_891012A8.c": {
     ".rodata": {
-      "address": "0x8910DF04",
+      "address": "0x8910DE90",
       "size": "0x40"
+    }
+  },
+  "src/fragments/fragment016_252E10/89100020_891019E4.c": {
+    ".rodata": {
+      "address": "0x8910DED0",
+      "size": "0x74"
     }
   },
   "src/fragments/fragment016_252E10/89100020_89102AB8.c": {
@@ -536,7 +573,7 @@
   "src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c": {
     ".rodata": {
       "address": "0x8910E1B4",
-      "size": "0x18"
+      "size": "0x2C"
     }
   },
   "src/fragments/fragment016_252E10/lab_pc_list_1E46B0_2.c": {
@@ -584,6 +621,9 @@
   },
   "src/fragments/fragment040_3CE090.c": {
     ".bss": "0x8E923EB0"
+  },
+  "src/game_state.c": {
+    ".bss": "0x800AE8F0"
   },
   "src/gb_audio.c": {
     ".bss": "0x800B3FD0",

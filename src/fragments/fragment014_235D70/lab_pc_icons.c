@@ -201,11 +201,75 @@ void func_88000764(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4, s32 arg5) {
     func_800292A8(arg0, arg1, arg2, arg3, arg4);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_880007FC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment014_235D70/func_880007FC.s")
-#endif
+extern u8 D_88002034[][0x18];
+typedef struct unk_88002034 { s32 x; s32 y; s32 w; s32 h; s32 stride; u8* pixels; } unk_88002034;
+typedef struct unk_8800210C { s32 x; s32 y; s32 w; s32 h; } unk_8800210C;
+extern Color_RGBA8 D_88002010[];
+extern unk_8800210C D_8800210C[];
+extern unk_8800210C D_8800219C[];
+extern Gfx D_80073480[];
+extern Color_RGBA8 D_80073520;
+extern u8 D_80073554[];
+void func_800291F8(s32, s32, s32, s32, Color_RGBA8);
+void func_80029A64(s32, s32, s32, s32, Color_RGBA8);
+void func_8001AB6C(void);
+void func_8001AA9C(u8, u8, u8, u8);
+void func_8001A384(s32, s32);
+void func_8001A944(s32, s32, s32);
+void func_8001ABBC(void);
+
+// D_88002034 is declared as raw bytes in this file; each 0x18 byte row is one unk_88002034.
+#define ICON(i) (((unk_88002034*)D_88002034)[i])
+
+void func_880007FC(s32 a0, s32 a1, s32 a2, s32 mode, s32 flags, f32* scale) {
+    Color_RGBA8 frameColor;
+    Color_RGBA8 textColor;
+    f32 fade;
+    f32 value;
+    s32 alpha;
+
+    value = *scale;
+    // the fade is capped at 0.3 when bit 0 is set
+    if ((flags & 1) && (value > 0.3f)) {
+        fade = 0.3f;
+    } else {
+        fade = value;
+    }
+    if (mode == 1) {
+        return;
+    }
+    alpha = (s32)(fade * 255.0f);
+    func_880005E8(D_8800210C[mode].x + ICON(mode).x, D_8800210C[mode].y + ICON(mode).y, ICON(mode).w, ICON(mode).h,
+                  ICON(mode).stride, ICON(mode).pixels, alpha);
+    frameColor = D_88002010[mode];
+    frameColor.a = alpha;
+    if (D_8800219C[mode].h) {
+        gSPDisplayList(gDisplayListHead++, D_80073480);
+        func_800291F8(D_8800210C[mode].x + 6, D_8800210C[mode].y + 6, D_8800210C[mode].w - 12, 4, frameColor);
+        func_800291F8(D_8800210C[mode].x + 6, D_8800210C[mode].y + 6, 4, D_8800219C[mode].y - 10, frameColor);
+        func_800291F8(D_8800210C[mode].x + D_8800210C[mode].w - 10, D_8800210C[mode].y + 6, 4, D_8800219C[mode].y - 10, frameColor);
+        func_800291F8(D_8800210C[mode].x + 6, D_8800210C[mode].y + D_8800219C[mode].y - 4, D_8800210C[mode].w - 12, 0x20, frameColor);
+    } else {
+        gSPDisplayList(gDisplayListHead++, D_80073480);
+        func_800291F8(D_8800210C[mode].x + 6, D_8800210C[mode].y + 6, D_8800210C[mode].w - 12, 8, frameColor);
+        func_800291F8(D_8800210C[mode].x + 6, D_8800210C[mode].y + D_8800210C[mode].h - 14, D_8800210C[mode].w - 12, 8, frameColor);
+        func_800291F8(D_8800210C[mode].x + 6, D_8800210C[mode].y + 14, 9, D_8800210C[mode].h - 28, frameColor);
+        func_800291F8(D_8800210C[mode].x + D_8800210C[mode].w - 15, D_8800210C[mode].y + 14, 9, D_8800210C[mode].h - 28, frameColor);
+    }
+    func_88000764(D_8800210C[mode].x, D_8800210C[mode].y, D_8800210C[mode].w, D_8800210C[mode].h, D_80073554, alpha);
+    if (D_8800219C[mode].h) {
+        textColor = *(Color_RGBA8*)D_800734A8;
+        textColor.a = alpha;
+        func_8001AB6C();
+        func_8001AA9C(textColor.r, textColor.g, textColor.b, textColor.a);
+        func_8001A384(0x10, D_8800219C[mode].w);
+        func_8001A944(D_8800210C[mode].x + D_8800219C[mode].x, D_8800210C[mode].y + D_8800219C[mode].y, D_8800219C[mode].h);
+        func_8001ABBC();
+    }
+    if (flags & 2) {
+        func_80029A64(D_8800210C[mode].x - 4, D_8800210C[mode].y - 4, D_8800210C[mode].w + 8, D_8800210C[mode].h + 8, D_80073520);
+    }
+}
 
 void func_80027410(void*, void*, s32, s32, s32);
 void func_8002DECC(void*, void*, void*, void*, s32, s32, s32);

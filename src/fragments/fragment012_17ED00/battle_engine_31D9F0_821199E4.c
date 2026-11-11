@@ -231,9 +231,167 @@ void func_8211B208(TeamRoster* arg0, BattleMon* arg1, s32 arg2, s32 arg3, s32 ar
     }
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211B484.s")
+extern u8 D_8218B02C[];
+extern u8 D_8218B044[];
+extern u8 D_8218B05C[];
+extern u8 D_8218B074[];
+extern u8 D_8218B038[];
+extern u8 D_8218B050[];
+extern u8 D_8218B068[];
+extern u8 D_8218B080[];
+extern u8* D_8218AFF8[];
+void func_8211B484(TeamRoster* arg0, s16 arg1, s16 arg2, s32 arg3) {
+    UNUSED s32 pad; // FAKE
+    s8* sp88[] = {D_8218B02C, D_8218B044, D_8218B05C, D_8218B074};
+    s8* sp78[] = {D_8218B038, D_8218B050, D_8218B068, D_8218B080};
+    UNUSED s32 pad2[4]; // FAKE
+    BattleMon* mon0 = &arg0->pokemonPicked[0];
+    BattleMon* mon1 = &arg0->pokemonPicked[1];
+    BattleMon* mon2 = &arg0->pokemonPicked[2];
+    s32 i;
+    s32 icon; // status icon index, computed but never used here
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211B900.s")
+    if (mon0->hp == 0) {
+        icon = 1;
+    } else {
+        icon = func_8001FA30(mon0->statusCondition);
+    }
+    if (mon1->hp == 0) {
+        icon = 1;
+    } else {
+        icon = func_8001FA30(mon1->statusCondition);
+    }
+    if (mon2->hp == 0) {
+        icon = 1;
+    } else {
+        icon = func_8001FA30(mon2->statusCondition);
+    }
+    func_82116CF4(arg1 + 1, arg2 + 1, 0x63, 0xF, sp88[arg3], sp78[arg3]);
+    func_82116CF4(arg1 + 1, arg2 + 0x10, 0x63, 0x1D, sp88[arg3] + 3, sp78[arg3] + 3);
+    func_82116CF4(arg1 + 1, arg2 + 0x2D, 0x63, 0x1D, sp88[arg3] + 6, sp78[arg3] + 6);
+    func_82116CF4(arg1 + 1, arg2 + 0x4A, 0x63, 0x1D, sp88[arg3] + 9, sp78[arg3] + 9);
+    BattleHud_DrawPlainText(arg1 + 0x2C, arg2 + 3, arg0->unk_008);
+    func_8211B208(arg0, mon0, arg1 + 1, arg2 + 0x10, 0);
+    func_8211B208(arg0, mon1, arg1 + 1, arg2 + 0x2D, 1);
+    func_8211B208(arg0, mon2, arg1 + 1, arg2 + 0x4A, 2);
+    gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
+    func_8001B884(arg1 + 1, arg2, 0x18, 0x10, D_8218AFF8[arg3], 0x18, 0);
+    gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
+    gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
+    BattleHud_DrawBorderTile(arg1, arg2 - 1, 8, 8, D_030096C0);
+    for (i = 7; i < 0x62; i += 7) {
+        BattleHud_DrawBorderTile(arg1, arg2 + i, 8, 8, D_030095C0);
+        BattleHud_DrawBorderTile(arg1 + 0x5D, arg2 + i, 8, 8, D_03009740);
+    }
+
+    BattleHud_DrawBorderTile(arg1, arg2 + 0x60, 8, 8, D_03009640);
+    BattleHud_DrawBorderTile(arg1 + 0x5D, arg2 - 1, 8, 8, D_03009840);
+    BattleHud_DrawBorderTile(arg1 + 0x5D, arg2 + 0x60, 8, 8, D_030097C0);
+    for (i = 7; i < 0x62; i += 7) {
+        BattleHud_DrawBorderTile(arg1 + i, arg2 - 1, 8, 8, D_03009940);
+        BattleHud_DrawBorderTile(arg1 + i, arg2 + 0x60, 8, 8, D_030098C0);
+    }
+
+    gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
+    BattleHud_DrawTranslucentShadowRect(arg1 - 2, arg2 - 2, 0x69, 0x6A, 0);
+}
+
+typedef struct Colors8211B900 {
+    s8* p[4];
+} Colors8211B900;
+Colors8211B900 D_8218B104 = { { (s8*)D_8218B02C, (s8*)D_8218B044, (s8*)D_8218B05C, (s8*)D_8218B074 } };
+Colors8211B900 D_8218B114 = { { (s8*)D_8218B038, (s8*)D_8218B050, (s8*)D_8218B068, (s8*)D_8218B080 } };
+extern u8* D_8218AFF8[];
+extern Gfx D_800602C8[];
+extern Gfx D_80060398[];
+
+void func_8211B900(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3) {
+    UNUSED s32 pad[3]; // FAKE
+    Colors8211B900 a = D_8218B104;
+    Colors8211B900 b = D_8218B114;
+    TeamRoster* roster = arg0->sessionTeams->teamMember[M2C_FIELD(arg0, s32*, 0x9D4)];
+    BattleMon* m0 = &arg0->teamRoster->pokemonPicked[0];
+    BattleMon* m1 = &arg0->teamRoster->pokemonPicked[1];
+    BattleMon* m2 = &arg0->teamRoster->pokemonPicked[2];
+    BattleMon* m3 = &arg0->teamRoster->pokemonPicked[3];
+    BattleMon* m4 = &arg0->teamRoster->pokemonPicked[4];
+    BattleMon* m5 = &arg0->teamRoster->pokemonPicked[5];
+    UNUSED s32 pad2[5]; // FAKE
+    s32 icon; // status icon index, computed but never used here
+    s32 n;
+
+    if (m0->hp == 0) {
+        icon = 1;
+    } else {
+        icon = func_8001FA30(m0->statusCondition);
+    }
+    if (m1->hp == 0) {
+        icon = 1;
+    } else {
+        icon = func_8001FA30(m1->statusCondition);
+    }
+    if (m2->hp == 0) {
+        icon = 1;
+    } else {
+        icon = func_8001FA30(m2->statusCondition);
+    }
+    if (m3->hp == 0) {
+        icon = 1;
+    } else {
+        icon = func_8001FA30(m3->statusCondition);
+    }
+    if (m4->hp == 0) {
+        icon = 1;
+    } else {
+        icon = func_8001FA30(m4->statusCondition);
+    }
+    if (m5->hp == 0) {
+        icon = 1;
+    } else {
+        icon = func_8001FA30(m5->statusCondition);
+    }
+    func_82116CF4(arg1 + 1, arg2 + 1, 0xC8, 0xF, a.p[arg3], b.p[arg3]);
+    func_82116CF4(arg1 + 1, arg2 + 0x10, 0xC8, 0x1D, a.p[arg3] + 3, b.p[arg3] + 3);
+    func_82116CF4(arg1 + 1, arg2 + 0x2D, 0xC8, 0x1D, a.p[arg3] + 6, b.p[arg3] + 6);
+    func_82116CF4(arg1 + 1, arg2 + 0x4A, 0xC8, 0x1D, a.p[arg3] + 9, b.p[arg3] + 9);
+    BattleHud_DrawPlainText(arg1 + 0x2C, arg2 + 3, roster->unk_008);
+    gSPDisplayList(gDisplayListHead++, D_800602C8);
+    Gfx_DrawTextureRgba16(arg1 + 1, arg2, 0x18, 0x10, D_8218AFF8[arg3], 0x18, 0);
+    gSPDisplayList(gDisplayListHead++, D_80060398);
+    if (roster->numberOfPokemonBrought > 0) {
+        func_8211AEA4(roster, m0, arg1 + 1, arg2 + 0x10, 0);
+    }
+    if (roster->numberOfPokemonBrought >= 2) {
+        func_8211AEA4(roster, m1, arg1 + 1, arg2 + 0x2D, 1);
+    }
+    if (roster->numberOfPokemonBrought >= 3) {
+        func_8211AEA4(roster, m2, arg1 + 1, arg2 + 0x4A, 2);
+    }
+    if (roster->numberOfPokemonBrought >= 4) {
+        func_8211AEA4(roster, m3, arg1 + 0x66, arg2 + 0x10, 3);
+    }
+    if (roster->numberOfPokemonBrought >= 5) {
+        func_8211AEA4(roster, m4, arg1 + 0x66, arg2 + 0x2D, 4);
+    }
+    if (roster->numberOfPokemonBrought >= 6) {
+        func_8211AEA4(roster, m5, arg1 + 0x66, arg2 + 0x4A, 5);
+    }
+    gSPDisplayList(gDisplayListHead++, D_800602C8);
+    BattleHud_DrawBorderTile(arg1, arg2 - 1, 8, 8, D_030096C0);
+    for (n = 1; n < 14; n++) {
+        BattleHud_DrawBorderTile(arg1, arg2 + n * 7, 8, 8, D_030095C0);
+        BattleHud_DrawBorderTile(arg1 + 0xC2, arg2 + n * 7, 8, 8, D_03009740);
+    }
+    BattleHud_DrawBorderTile(arg1, arg2 + 0x60, 8, 8, D_03009640);
+    BattleHud_DrawBorderTile(arg1 + 0xC2, arg2 - 1, 8, 8, D_03009840);
+    BattleHud_DrawBorderTile(arg1 + 0xC2, arg2 + 0x60, 8, 8, D_030097C0);
+    for (n = 1; n < 28; n++) {
+        BattleHud_DrawBorderTile(arg1 + n * 7, arg2 - 1, 8, 8, D_03009940);
+        BattleHud_DrawBorderTile(arg1 + n * 7, arg2 + 0x60, 8, 8, D_030098C0);
+    }
+    gSPDisplayList(gDisplayListHead++, D_80060398);
+    BattleHud_DrawTranslucentShadowRect(arg1 - 2, arg2 - 2, 0xCE, 0x6A, 0);
+}
 
 extern s8 D_8218B020;
 void func_8211BEA8(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3) {
@@ -437,6 +595,8 @@ found:
     return 1;
 }
 
+u8 D_8218B124[] = { 0xFF, 0xFF, 0xFF, 0x00, 0x6E, 0xFF, 0xFF, 0xFF, 0xFF, 0x64, 0xFF, 0x00, 0x00, 0xFF, 0x00, 0x00, 0x64, 0x00, 0x00, 0x64, 0xFF, 0x00, 0x00, 0xFF };
+
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211CC8C.s")
 
 extern u8 D_8219A4F0[];
@@ -486,7 +646,15 @@ void BattleScene_DrawStripWipeIfActive(void) {
     }
 }
 
-extern s32 D_8218B13C[];
+extern char D_82195AA4[];
+extern char D_82195AB0[];
+extern char D_82195AC0[];
+extern char D_82195AC8[];
+extern char D_82195AD4[];
+extern char D_82195AE0[];
+extern char D_82195AEC[];
+extern char D_82195AF4[];
+s32 D_8218B13C[] = { (s32)D_82195AA4, (s32)D_82195AB0, (s32)D_82195AC0, (s32)D_82195AC8, (s32)D_82195AD4, (s32)D_82195AE0, (s32)D_82195AEC, (s32)D_82195AF4 };
 extern u8 D_8219A730;
 extern u8 D_8219A731;
 extern s8 D_8219A732;
@@ -559,6 +727,17 @@ void func_8211D5F4(s16 arg0, s16 arg1) {
     func_82116480(buf, arg0 + 0x4B, arg1 + 0x42);
 }
 
+extern char D_82195B6C[];
+extern char D_82195B74[];
+extern char D_82195B80[];
+extern char D_82195B8C[];
+extern char D_82195B98[];
+extern char D_82195BA4[];
+extern char D_82195BB4[];
+extern char D_82195BC4[];
+extern char D_82195BD4[];
+s32 D_8218B15C[] = { (s32)D_82195B6C, (s32)D_82195B74, (s32)D_82195B80, (s32)D_82195B8C, (s32)D_82195B98, (s32)D_82195BA4, (s32)D_82195BB4, (s32)D_82195BC4, (s32)D_82195BD4 };
+
 void func_8211D874(s16 arg0, s16 arg1) {
     func_8001AC7C(arg0, arg1, 0x6E, 0x1E, 0, 0, 0, 0x3C);
     func_8001AB6C();
@@ -568,13 +747,86 @@ void func_8211D874(s16 arg0, s16 arg1) {
     func_8001ABBC();
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211D920.s")
-
 typedef struct Entry8006A9CC {
     /* 0x0 */ char* name;
     /* 0x4 */ char unk04[0x8];
 } Entry8006A9CC; // size = 0xC
 extern Entry8006A9CC D_8006A9CC[];
+
+extern s32 D_8219A764;
+extern s32 D_8219A760;
+extern s32 D_8219A740;
+extern s32 D_8219A744;
+extern u8 D_8219A748;
+extern u8 D_8219A749;
+extern u8 D_8219A74A;
+extern u8 D_8219A74B;
+extern char D_82195D40[];
+extern char D_82195D48[];
+extern char D_82195D50[];
+extern char D_82195D5C[];
+extern char D_82195D68[];
+extern char D_82195D70[];
+extern char D_82195D7C[];
+extern char D_82195D88[];
+extern char D_82195D90[];
+extern char D_82195D9C[];
+extern char D_82195DA8[];
+extern char D_82195DAC[];
+extern char D_82195BEC[], D_82195BF8[], D_82195C04[], D_82195C10[];
+extern char D_82195C1C[], D_82195C24[], D_82195C30[], D_82195C38[], D_82195C40[], D_82195C4C[];
+extern char D_82195C58[], D_82195C60[], D_82195C68[], D_82195C70[], D_82195C78[], D_82195C84[], D_82195C90[], D_82195C9C[];
+extern char D_82195CA8[], D_82195CB0[], D_82195CB8[], D_82195CC0[], D_82195CC8[], D_82195CD8[], D_82195CE4[], D_82195CF0[];
+extern char D_82195CFC[], D_82195D04[], D_82195D0C[], D_82195D14[], D_82195D1C[], D_82195D28[], D_82195D34[];
+
+void func_8211D920(s16 arg0, s16 arg1) {
+    char buf[16];
+    char* labels[] = { D_82195BEC, D_82195BF8, D_82195C04, D_82195C10 };
+    char* names0[] = { D_82195C1C, D_82195C24, D_82195C30, D_82195C38, D_82195C40, D_82195C4C };
+    char* names1[] = { D_82195C58, D_82195C60, D_82195C68, D_82195C70, D_82195C78, D_82195C84, D_82195C90, D_82195C9C };
+    char* names2[] = { D_82195CA8, D_82195CB0, D_82195CB8, D_82195CC0, D_82195CC8, D_82195CD8, D_82195CE4, D_82195CF0 };
+    char* names3[] = { D_82195CFC, D_82195D04, D_82195D0C, D_82195D14, D_82195D1C, D_82195D28, D_82195D34 };
+
+    func_8001AC7C(arg0, arg1, 0x78, 0x82, 0, 0, 0, 0x3C);
+    func_8001AB6C();
+    func_8001A384(1, 0);
+    func_8001A944(arg0 + 3, arg1 + 2, (s32)D_82195D40);
+    if (D_8219A764 == 0) {
+        func_8001A944(arg0 + 0x3C, arg1 + 2, (s32)D_82195D48);
+    } else {
+        func_8001A944(arg0 + 0x3C, arg1 + 2, (s32)D_82195D50);
+    }
+    func_8001A944(arg0 + 0x3C, arg1 + 0x10, *(s32*)((&D_82199DE0)[D_8219A760] + 0x860) + 8);
+    func_8001A944(arg0 + 3, arg1 + 0x10, (s32)D_82195D5C);
+    func_8001A944(arg0 + 3, arg1 + 0x1C, (s32)D_82195D68);
+    if (D_8219A740 == 0xA6) {
+        func_8001A944(arg0 + 0x23, arg1 + 0x1C, (s32)D_82195D70);
+    } else {
+        func_8001A944(arg0 + 0x23, arg1 + 0x1C, (s32)D_8006A9CC[D_8219A740].name);
+    }
+    func_8001A944(arg0 + 3, arg1 + 0x28, (s32)D_82195D7C);
+    func_8001A944(arg0 + 3, arg1 + 0x34, (s32)D_82195D88);
+    if (D_8219A744 == 0xA6) {
+        func_8001A944(arg0 + 0x23, arg1 + 0x34, (s32)D_82195D90);
+    } else {
+        func_8001A944(arg0 + 0x23, arg1 + 0x34, (s32)D_8006A9CC[D_8219A744].name);
+    }
+    func_8001A944(arg0 + 3, arg1 + 0x40, (s32)D_82195D9C);
+    func_8001A944(arg0 + 3, arg1 + 0x4C, (s32)labels[0]);
+    func_8001A944(arg0 + 0x3C, arg1 + 0x4C, (s32)names0[D_8219A748]);
+    func_8001A944(arg0 + 3, arg1 + 0x58, (s32)labels[1]);
+    func_8001A944(arg0 + 0x3C, arg1 + 0x58, (s32)names1[D_8219A749]);
+    func_8001A944(arg0 + 3, arg1 + 0x64, (s32)labels[2]);
+    func_8001A944(arg0 + 0x3C, arg1 + 0x64, (s32)names2[D_8219A74A]);
+    func_8001A944(arg0 + 3, arg1 + 0x70, (s32)labels[3]);
+    func_8001A944(arg0 + 0x3C, arg1 + 0x70, (s32)names3[D_8219A74B]);
+    func_8001ABBC();
+    func_800564D4(buf, D_82195DA8, D_8219A740);
+    func_82116480(buf, arg0 + 0x3C, arg1 + 0x28);
+    func_800564D4(buf, D_82195DAC, D_8219A744);
+    func_82116480(buf, arg0 + 0x3C, arg1 + 0x40);
+}
+
 extern s32 D_8219A740;
 extern s32 D_8219A74C;
 extern s32 D_8219A750;

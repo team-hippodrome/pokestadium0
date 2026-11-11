@@ -4,9 +4,121 @@
 extern s32 D_8A21DE08;
 extern M2C_UNK D_8A21DE10;
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment019_293410/func_8A201598.s")
+s32 func_80001AA4(void);
+s32 func_80002BA4(void*, s32);
+s32 func_80017304(s32, BinArchive*, s32, void*, s32);
+s32 func_8001FA8C(s32);
+s32 func_8002D3D0(u8*);
+s32 func_8002D454();
+typedef struct Move8A201D3C { u8 unk00; u8 unk01; u8 power; u8 type; u8 unk04; u8 unk05; } Move8A201D3C;
+extern Move8A201D3C D_8006B190[];
+extern BinArchive* D_8A21DA54;
+extern void* D_8A21DA58;
+extern void* D_8A21DA60[4];
+extern s32 D_8A21DA70[];
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment019_293410/func_8A2018E0.s")
+/**
+ * Draws a 282x130 YUV image at (x, y) as 16x16 tiles (the last column and row are cut
+ * to 10 and 2 pixels).
+ */
+void func_8A201598(s32 x, s32 y, u8* image) {
+    s32 j;
+    s32 i;
+    s32 w;
+    s32 h;
+    s32 left;
+    s32 top;
+    s32 right;
+    s32 bottom;
+
+    gDPPipeSync(gDisplayListHead++);
+    gDPSetCycleType(gDisplayListHead++, G_CYC_1CYCLE);
+    gDPSetRenderMode(gDisplayListHead++, 0x0F0A4000, 0);
+    gDPSetTexturePersp(gDisplayListHead++, G_TP_NONE);
+    gDPSetCombine(gDisplayListHead++, 0x17FE2F, 0x77FCF87C);
+    gDPSetTextureConvert(gDisplayListHead++, G_TC_CONV);
+    gDPSetConvert(gDisplayListHead++, G_CV_K0, G_CV_K1, G_CV_K2, G_CV_K3, G_CV_K4, G_CV_K5);
+    gDPPipeSync(gDisplayListHead++);
+
+    for (i = 0; i < 0x90; i += 0x10) {
+        h = 0x82 - i;
+        if (h > 0x10) {
+            h = 0x10;
+        }
+        for (j = 0; j < 0x120; j += 0x10) {
+            w = 0x11A - j;
+            if (w > 0x10) {
+                w = 0x10;
+            }
+            left = (x + j) << 2;
+            top = (y + i) << 2;
+            right = (x + j + w) << 2;
+            bottom = (y + i + h) << 2;
+            gDPLoadTextureBlockYuv(gDisplayListHead++, image, G_IM_FMT_YUV, G_IM_SIZ_16b, 16, 16, 0,
+                                G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK,
+                                G_TX_NOLOD, G_TX_NOLOD);
+            gSPTextureRectangle(gDisplayListHead++, left, top, right, bottom, G_TX_RENDERTILE, 0, 0, 0x0400, 0x0400);
+            image += 0x200;
+        }
+    }
+
+    gDPSetTextureConvert(gDisplayListHead++, G_TC_FILT);
+}
+
+void func_8A201598(s32, s32, u8*);
+s32 func_8001FA8C(s32);
+extern Color_RGBA8 D_8A203424;
+extern char D_8A21D9B4[];
+extern char D_8A21D9BC[];
+extern char D_8A21D9C8[];
+extern char D_8A21D9D4[];
+extern char D_8A21D9D8[];
+extern char D_8A21D9DC[];
+typedef struct Entry8006A9DC { char* str; s32 unk4; s32 unk8; } Entry8006A9DC;
+extern Entry8006A9DC D_8006A9DC[];
+/* Declared s32 with no return statement: only then does IDO stop reading the
+ * move id from v0 after the -2 check. */
+s32 func_8A2018E0(s32 arg0, s32 arg1, s32 arg2, s32 arg3)
+{
+    s32 move;
+    func_8A201598(arg0 + 4, arg1 + 2, (u8*)D_8A21DA70[arg3]);
+    gSPDisplayList(gDisplayListHead++, D_80060270);
+    func_80029028(arg0, arg1, 0x122, 2, D_8A203424);
+    func_80029028(arg0, arg1 + 2, 4, 0x82, D_8A203424);
+    func_80029028(arg0 + 0x11E, arg1 + 2, 4, 0x82, D_8A203424);
+    move = func_8002D454(arg2, arg3);
+    if (move != (-2)) {
+        s32 typeId;
+        Entry80066AD8 *type;
+        s32 pp;
+        typeId = func_8001FA8C(D_8006B190[move].type);
+        type = &D_80066AD8[typeId];
+        pp = ((((D_8006B190[move].unk04 * 100) / 255) + 2) / 5) * 5;
+        func_8001AB6C();
+        func_8001A384(4, 0);
+        func_8001AA9C(0xFF, 0xC8, 0xC8, 0xFF);
+        func_8001A944(arg0 + 9, arg1 + 4, D_8A21D9B4);
+        func_8001A944(arg0 + 0x99, arg1 + 4, D_8A21D9BC);
+        func_8001A944(arg0 + 9, arg1 + 0x17, D_8A21D9C8);
+        func_8001AA9C(type->color.r, type->color.g, type->color.b, type->color.a);
+        func_8001A944(arg0 + 0x49, arg1 + 4, type->str);
+        func_8001AA9C(*((u8 *) (((s8 *) (&D_800734A8)) + 0)), *((u8 *) (((s8 *) (&D_800734A8)) + 1)), *((u8 *) (((s8 *) (&D_800734A8)) + 2)), *((u8 *) (((s8 *) (&D_800734A8)) + 3)));
+        Font_SetLineHeight(0x14);
+        if (D_8006B190[move].power >= 2)
+        {
+            func_8001A944(arg0 + 0xE9, arg1 + 4, D_8A21D9D4, D_8006B190[move].power);
+        }
+        else
+        {
+            func_8001A944(arg0 + 0xE9, arg1 + 4, D_8A21D9D8, D_8006B190[move].power);
+        }
+        func_8001A944(arg0 + 0x69, arg1 + 0x17, D_8A21D9DC, pp);
+        func_8001A384(4, -1);
+        Font_SetLineHeight(0x18);
+        func_8001A944(arg0 + 9, arg1 + 0x3A, D_8006A9DC[move].str);
+        func_8001ABBC();
+    }
+}
 
 void func_8A201C08(s32 arg0, s32 arg1, s32 arg2) {
     u8* tex;
@@ -29,18 +141,6 @@ void func_8A201C08(s32 arg0, s32 arg1, s32 arg2) {
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
-s32 func_80001AA4(void);
-s32 func_80002BA4(void*, s32);
-s32 func_80017304(s32, BinArchive*, s32, void*, s32);
-s32 func_8001FA8C(s32);
-s32 func_8002D3D0(u8*);
-s32 func_8002D454();
-typedef struct Move8A201D3C { u8 unk00; u8 unk01; u8 power; u8 type; u8 unk04; u8 unk05; } Move8A201D3C;
-extern Move8A201D3C D_8006B190[];
-extern BinArchive* D_8A21DA54;
-extern void* D_8A21DA58;
-extern void* D_8A21DA60[4];
-extern s32 D_8A21DA70[];
 
 void func_8A201D3C(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 unused;

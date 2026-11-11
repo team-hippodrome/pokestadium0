@@ -326,7 +326,7 @@ typedef struct SampleHeader8110E500 {
 } SampleHeader8110E500; // size = 0x10
 
 typedef struct SampleLoad8110E500 {
-    /* 0x00 */ s8 medium;
+    /* 0x00 */ u8 medium;
     /* 0x01 */ u8 arg0;
     /* 0x02 */ u8 arg1;
     /* 0x04 */ s32 devAddr;
@@ -453,11 +453,58 @@ void func_8110E71C(Owner8110E71C* arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110E784; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110E784.s")
-#endif
+s32 func_8004D1C0(OSMesgQueue*, u32*, s32);
+void func_8110E910(s8* arg0, s32 arg1);
+void func_8110E994(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3);
+
+/**
+ * Zero's version of OoT's AudioLoad_ProcessSlowLoads: steps the two slow sample
+ * loads, copying at most 0x1000 bytes per call and finishing a load once nothing
+ * is left.
+ */
+void func_8110E784(s32 resetStatus) {
+    u8* table = D_811858A4;
+    SampleLoad8110E500* load;
+    s32 i;
+
+    for (i = 0; i < 2; i++) {
+        load = &D_81180610.slots[i];
+        switch (D_81180610.slots[i].state) {
+            case 2:
+                func_8004D1C0((OSMesgQueue*)load->unk_2C, NULL, 1);
+                if (resetStatus != 0) {
+                    load->state = 3;
+                    break;
+                }
+            case 1:
+                load->state = 2;
+                if (load->size == 0) {
+                    func_8110E71C((Owner8110E71C*)load);
+                    load->state = 3;
+                    *load->status = 1;
+                } else if (load->size < 0x1000) {
+                    if (load->medium == 1) {
+                        u32 size = load->size;
+
+                        func_8110E994(load->devAddr, load->ramAddr, size, *(s16*)(table + 2));
+                    } else {
+                        func_8110E910((s8*)load, load->size);
+                    }
+                    load->size = 0;
+                } else {
+                    if (load->medium == 1) {
+                        func_8110E994(load->devAddr, load->ramAddr, 0x1000, *(s16*)(table + 2));
+                    } else {
+                        func_8110E910((s8*)load, 0x1000);
+                    }
+                    load->size -= 0x1000;
+                    load->ramAddr += 0x1000;
+                    load->devAddr += 0x1000;
+                }
+                break;
+        }
+    }
+}
 
 extern u8 D_81137E3C[];
 void func_8110DBA0(s8*, s32, s32, s32, s32, s32, OSMesgQueue*, s32, u8*);
@@ -479,9 +526,9 @@ typedef struct Entry8110EABC {
     /* 0x04 */ s32 ramAddr;
     /* 0x08 */ s32 romAddr;
     /* 0x0C */ s32 curAddr;
-    /* 0x10 */ s32 size;
+    /* 0x10 */ u32 size;
     /* 0x14 */ u32 chunkSize;
-    /* 0x18 */ u32 info;
+    /* 0x18 */ OSMesg info;
     /* 0x1C */ OSMesgQueue* doneQueue;
     /* 0x20 */ OSMesgQueue queue;
     /* 0x38 */ OSMesg msg;
@@ -531,7 +578,7 @@ Entry8110EABC* func_8110E9A8(s32 devAddr, s32 ramAddr, u32 size, s32 medium, s32
     load->doneQueue = retQueue;
     load->state = 3;
     load->medium = medium;
-    load->info = retMsg;
+    load->info = (OSMesg)retMsg;
     func_800567E0(&load->queue, &load->msg, 1);
     return load;
 }
@@ -559,15 +606,81 @@ typedef struct RelocInfo8110EF7C {
     /* 0x14 */ u32 medium2;
 } RelocInfo8110EF7C;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110EB40; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110EB40.s")
-#endif
+s32 func_8004D1C0(OSMesgQueue*, u32*, s32);
+s32 func_8110D408(s32, u32*);
+void func_8110ED98(s8* arg0, u32 arg1);
+void func_8110EE28(s32 arg0, M2C_UNK arg1, u32 arg2, M2C_UNK arg3);
+void func_8110EF7C(s32 size, s32 fontData, RelocInfo8110EF7C* relocInfo, s32 async);
+
+void func_8110EB40(Entry8110EABC* load, s32 resetStatus) {
+    u8* table = D_811858A4;
+    u32 info;
+    s32 fontId;
+    UNUSED s32 pad[2]; // FAKE
+    u32 sampleBankId1;
+    u32 sampleBankId2;
+    RelocInfo8110EF7C relocInfo;
+
+    if (load->state >= 2) {
+        load->state--;
+        return;
+    }
+    if (load->state == 1) {
+        load->state = 0;
+    } else if (resetStatus != 0) {
+        func_8004D1C0(&load->queue, 0, 1);
+        load->active = 0;
+        return;
+    } else if (func_8004D1C0(&load->queue, 0, 0) == -1) {
+        return;
+    }
+    if (load->size == 0) {
+        info = (u32)load->info;
+        switch ((u8)(info >> 16)) {
+            case 0:
+                func_8110CB10((u8)(info >> 8), (u8)info);
+                break;
+            case 2:
+                func_8110CB40((u8)(info >> 8), (u8)info);
+                break;
+            case 1:
+                fontId = (u8)(info >> 8);
+                func_8110CAE0(fontId, (u8)info);
+                sampleBankId1 = D_811858B0[fontId].unk_02;
+                sampleBankId2 = D_811858B0[fontId].unk_03;
+                relocInfo.sampleBankId1 = sampleBankId1;
+                relocInfo.sampleBankId2 = sampleBankId2;
+                relocInfo.baseAddr1 = (sampleBankId1 != 0xFF) ? func_8110D408(sampleBankId1, &relocInfo.medium1) : 0;
+                relocInfo.baseAddr2 = (sampleBankId2 != 0xFF) ? func_8110D408(sampleBankId2, &relocInfo.medium2) : 0;
+                func_8110EF7C(fontId, load->ramAddr, &relocInfo, 1);
+                break;
+        }
+        load->active = 0;
+        func_8004CFB0(load->doneQueue, load->info, 0);
+        return;
+    }
+    if (load->size < load->chunkSize) {
+        if (load->medium == 1) {
+            func_8110EE28(load->romAddr, load->curAddr, load->size, *((s16*)(table + 2)));
+        } else {
+            func_8110ED98((s8*)load, load->size);
+        }
+        load->size = 0;
+        return;
+    }
+    if (load->medium == 1) {
+        func_8110EE28(load->romAddr, load->curAddr, load->chunkSize, *((s16*)(table + 2)));
+    } else {
+        func_8110ED98((s8*)load, load->chunkSize);
+    }
+    load->size -= load->chunkSize;
+    load->romAddr += load->chunkSize;
+    load->curAddr += load->chunkSize;
+}
 
 extern u8 D_81137F04[];
 
-void func_8110ED98(s8* arg0, s32 arg1) {
+void func_8110ED98(s8* arg0, u32 arg1) {
     arg1 = (arg1 + 0xF) & ~0xF;
     osInvalDCache((void*)M2C_FIELD(arg0, s32*, 0xC), arg1);
     osCreateMesgQueue((OSMesgQueue*)(arg0 + 0x20), (OSMesg*)(arg0 + 0x38), 1);
@@ -575,7 +688,7 @@ void func_8110ED98(s8* arg0, s32 arg1) {
     if (arg1) {}  // karodo
 }
 
-void func_8110EE28(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3) {
+void func_8110EE28(s32 arg0, M2C_UNK arg1, u32 arg2, M2C_UNK arg3) {
 
 }
 
@@ -893,8 +1006,8 @@ s32 func_8110F518(s32 arg0, Item8110F4D0** arg1) {
  * bit ranges above. When the low 24 bits, bit 25 and bits 27..26 are all
  * non-zero, the record pointer is appended to the pointer array D_81184978
  * and the count D_81185578 is incremented. There is no bounds check on the
- * count. The caller (func_8110F6A4) is still assembly, so what the array and
- * the count are used for is not established from this function alone.
+ * count. This is Zero's version of OoT's AudioLoad_AddUsedSample: the caller
+ * func_8110F6A4 collects a font's used samples here and then preloads them.
  * Matching note: the bit-field reads are what produce the ROM's shift
  * sequence; the equivalent masks and shifts on a plain word differ in
  * temporary register numbering.
@@ -909,11 +1022,122 @@ void func_8110F64C(PackedWordRec **arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8110F6A4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_8110F6A4.s")
-#endif
+/**
+ * Zero's version of OoT's AudioLoad_PreloadSamplesForFont: gathers the samples
+ * used by a font's instruments and drums, then copies them into the sample
+ * cache (async == 0) or queues them on the preload stack (async == 1).
+ */
+void func_8110F6A4(s32 fontId, s32 async, RelocInfo8110EF7C* relocInfo) {
+    s32 numDrums;
+    s32 numInstruments;
+    s32 pad[2]; // FAKE
+    u8* instrument;
+    u8* drum;
+    s32 sampleRamAddr;
+    Sample8110EF7C* sample;
+    s32 size;
+    s32 nChunks;
+    s32 preloadInProgress;
+    s32 i;
+
+    preloadInProgress = 0;
+    if (D_8118557C != 0) {
+        preloadInProgress = 1;
+    }
+    D_81185578 = 0;
+    numInstruments = D_811858B0[fontId].unk_00[0];
+    numDrums = D_811858B0[fontId].unk_00[1];
+
+    for (i = 0; i < numInstruments; i++) {
+        instrument = (u8*)func_81110CA8(fontId, i);
+        if (instrument != NULL) {
+            if (instrument[1] != 0) {
+                func_8110F64C((PackedWordRec**)(instrument + 8));
+                if (!relocInfo->medium2) {} // FAKE
+            }
+            if (instrument[2] != 0x7F) {
+                func_8110F64C((PackedWordRec**)(instrument + 0x18));
+            }
+            func_8110F64C((PackedWordRec**)(instrument + 0x10));
+        }
+    }
+
+    for (i = 0; i < numDrums; i++) {
+        drum = (u8*)func_81110D6C(fontId, i);
+        if (drum != NULL) {
+            func_8110F64C((PackedWordRec**)(drum + 4));
+        }
+    }
+
+    if (D_81185578 == 0) {
+        return;
+    }
+
+    size = 0;
+    for (i = 0; i < D_81185578; i++) {
+        size += ALIGN16(((Sample8110EF7C*)D_81184978[i])->size);
+    }
+    if (size) {} // karodo
+
+    for (i = 0; i < D_81185578; i++) {
+        if (D_8118557C == 0x78) {
+            break;
+        }
+
+        sample = (Sample8110EF7C*)D_81184978[i];
+        switch (async) {
+            case 0:
+                if (sample->medium == relocInfo->medium1) {
+                    sampleRamAddr = func_8110B9A8(sample->size, relocInfo->sampleBankId1, sample->sampleAddr, sample->medium);
+                } else if (sample->medium == relocInfo->medium2) {
+                    sampleRamAddr = func_8110B9A8(sample->size, relocInfo->sampleBankId2, sample->sampleAddr, sample->medium);
+                }
+                break;
+
+            case 1:
+                if (sample->medium == relocInfo->medium1) {
+                    sampleRamAddr = func_8110B958(sample->size, relocInfo->sampleBankId1, sample->sampleAddr, sample->medium);
+                } else if (sample->medium == relocInfo->medium2) {
+                    sampleRamAddr = func_8110B958(sample->size, relocInfo->sampleBankId2, sample->sampleAddr, sample->medium);
+                }
+                break;
+        }
+
+        if (sampleRamAddr == 0) {
+            continue;
+        }
+
+        switch (async) {
+            case 0:
+                if (sample->medium == 1) {
+                    func_8110DB8C(sample->sampleAddr, sampleRamAddr, sample->size, *(s16*)(D_811858A4 + 2));
+                    sample->sampleAddr = sampleRamAddr;
+                    sample->medium = 0;
+                } else {
+                    func_8110DA68(sample->sampleAddr, sampleRamAddr, sample->size, sample->medium);
+                    sample->sampleAddr = sampleRamAddr;
+                    sample->medium = 0;
+                }
+                break;
+
+            case 1:
+                D_81184B78[D_8118557C].sample = sample;
+                D_81184B78[D_8118557C].ramAddr = sampleRamAddr;
+                D_81184B78[D_8118557C].encodedInfo = (D_8118557C << 24) | 0xFFFFFF;
+                D_81184B78[D_8118557C].isFree = 0;
+                D_81184B78[D_8118557C].endAndMediumKey = sample->sampleAddr + sample->size + sample->medium;
+                D_8118557C++;
+                break;
+        }
+    }
+    D_81185578 = 0;
+
+    if ((D_8118557C != 0) && !preloadInProgress) {
+        sample = D_81184B78[D_8118557C - 1].sample;
+        nChunks = (sample->size >> 12) + 1;
+        func_8110E9A8(sample->sampleAddr, D_81184B78[D_8118557C - 1].ramAddr, sample->size, sample->medium, nChunks, &D_811855F8, D_81184B78[D_8118557C - 1].encodedInfo);
+    }
+}
 
 typedef struct Entry81184450 {
     /* 0x0 */ s32 unk_0;

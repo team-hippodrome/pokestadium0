@@ -207,15 +207,20 @@ typedef struct BattleSlotZ {
     /* 0x00 */ TeamRoster* roster;
     /* 0x04 */ u8 pad04[4];
     /* 0x08 */ s32 unk_08;
-    /* 0x0C */ u8 pad0C[0xF];
+    /* 0x0C */ f32 unk_0C;
+    /* 0x10 */ u8 pad10[0xB];
     /* 0x1B */ u8 unk_1B;
     /* 0x1C */ u16 unk_1C;
-    /* 0x1E */ u8 pad1E[0xE];
+    /* 0x1E */ u8 pad1E[7];
+    /* 0x25 */ u8 unk_25;
+    /* 0x26 */ u8 pad26[6];
     /* 0x2C */ u8 unk_2C;
     /* 0x2D */ u8 unk_2D;
     /* 0x2E */ u8 pad2E[8];
     /* 0x36 */ u8 unk_36;
-    /* 0x37 */ u8 pad37[0x48];
+    /* 0x37 */ u8 pad37[0x27];
+    /* 0x5E */ u8 unk_5E;
+    /* 0x5F */ u8 pad5F[0x20];
     /* 0x7F */ u8 unk_7F;
     /* 0x80 */ u8 pad80[0x10];
 } BattleSlotZ; // size = 0x90
@@ -224,11 +229,92 @@ typedef struct Move82184ADC { u8 unk00; u8 unk01; u8 power; u8 type; u8 unk04; u
 extern Move82184ADC D_8006B190[];
 extern u8 D_8218AC50[];
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82184DC8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82184DC8.s")
-#endif
+/* The definition has no return statement, so the value left in v0 by its last
+ * call comes back. Reading it as u16 here is what makes IDO keep a saved copy. */
+u16 func_8210EED8(s8*, s8*, u8);
+s32 func_82184DC8(s8* arg0, s8* arg1, u8 move) {
+    s32 score;
+    s32 power;
+
+    power = func_8210EED8(arg0, arg1, move);
+    score = power;
+    switch (move) {
+        case 0x8A:
+            if (M2C_FIELD(arg1, u8*, 0x15) & 7) {
+                break;
+            }
+        case 0x49:
+        case 0x4F:
+        case 0x56:
+        case 0x5F:
+        case 0x64:
+        case 0x68:
+        case 0x69:
+        case 0x6B:
+        case 0x6D:
+        case 0x73:
+        case 0x78:
+        case 0x87:
+        case 0x8E:
+        case 0x99:
+        case 0x9C:
+            return 0;
+    }
+    if ((power >= 6) && (M2C_FIELD(arg1, u8*, 0x61) >= 8)) {
+        if (func_82183AF0() >= (-M2C_FIELD(arg1, u8*, 0x61) * 10) + 0x8C) {
+            return 1;
+        }
+    }
+    switch (move) {
+        case 0x3:
+        case 0x4:
+        case 0x14:
+        case 0x18:
+        case 0x1F:
+        case 0x23:
+        case 0x29:
+        case 0x2A:
+        case 0x53:
+        case 0x80:
+        case 0x83:
+        case 0x8C:
+        case 0x9A:
+        case 0x9B:
+            score += score;
+            break;
+        case 0x2:
+        case 0x4B:
+        case 0x98:
+        case 0xA3:
+            score += (score / 2) + (score / 4);
+            break;
+        case 0xD:
+        case 0x4C:
+        case 0x82:
+        case 0x8F:
+            if ((M2C_FIELD(arg0, u16*, 0x2E) < M2C_FIELD(arg1, u16*, 0x2E)) ||
+                (func_82184AA8((u8*)arg1 + 0x1F, 1, 4, 0x13) != 0) ||
+                (func_82184AA8((u8*)arg1 + 0x1F, 1, 4, 0x5B) != 0)) {
+                score = 0xA;
+            }
+            break;
+        case 0xA2:
+            score = M2C_FIELD(arg1, u16*, 0xC) / 2;
+            break;
+        case 0x5A:
+            if ((M2C_FIELD(arg1, u8*, 0x1C) == 2) || (M2C_FIELD(arg1, u8*, 0x1D) == 2)) {
+                score = 0;
+            }
+            break;
+        case 0xC:
+        case 0x20:
+            if ((M2C_FIELD(arg1, u8*, 0x1C) == 8) || (M2C_FIELD(arg1, u8*, 0x1D) == 8)) {
+                score = 0;
+            }
+            break;
+    }
+    return score;
+}
 
 extern u8 D_80065CF8[];
 
@@ -723,11 +809,252 @@ end:
     return -1;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82185D44; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82185D44.s")
-#endif
+s32 func_82185D44(s32 move) {
+    s32 v1;
+    s32 i;
+
+    if (D_8006B190[move - 1].power != 0) {
+        if (func_82184ADC((s8 *)D_821CF29C, D_821CF2A0, move) == 0) {
+            fail:
+            return 0;
+        }
+    }
+    switch (D_8006B190[move - 1].unk01) {
+        case 28:
+            goto fail;
+        case 66:
+            if (func_82185494() == 0) {
+                goto fail;
+            }
+            if (func_82184D9C(D_821CF2A0, 3) != 0) {
+                goto fail;
+            }
+            if (((u8 *)D_821CF2A0)[0x21] != 0) {
+                goto fail;
+            }
+            if (func_82185450((s8 *)D_821CF29C, D_821CF2A0) == 0) {
+                break;
+            }
+            return 0;
+        case 3:
+            if (func_82185494() == 0) {
+                goto fail;
+            }
+            if (func_82185450((s8 *)D_821CF29C, D_821CF2A0) != 0) {
+                goto fail;
+            }
+            /* fallthrough */
+        case 7:
+        case 24:
+        case 82:
+            if (func_82185450((s8 *)D_821CF29C, D_821CF2A0) == 0) {
+                break;
+            }
+            return 0;
+        case 4:
+        case 5:
+        case 6:
+        case 34:
+        case 35:
+        case 36:
+            if (func_82185494() == 0) {
+                goto fail;
+            }
+            if (((u8 *)D_821CF2A0)[0x21] != 0) {
+                goto fail;
+            }
+            if (func_82184D9C(D_821CF2A0, D_8006B190[move - 1].type) == 0) {
+                break;
+            }
+            return 0;
+        case 8:
+            if ((((u8 *)D_821CF2A0)[0x21] & 7) == 0) {
+                goto fail;
+            }
+            if (func_82185494() == 0) {
+                goto fail;
+            }
+            if (func_82185450((s8 *)D_821CF29C, D_821CF2A0) == 0) {
+                break;
+            }
+            return 0;
+        case 10: case 11: case 12: case 13: case 14: case 15:
+        case 50: case 51: case 52: case 53: case 54: case 55:
+            v1 = D_8006B190[move - 1].unk01 - 10;
+            v1 &= 7;
+            if (((u8 *)D_821CF2A0)[v1 + 0x68] != 0xD) {
+                break;
+            }
+            return 0;
+        case 18: case 19: case 20: case 21: case 22: case 23:
+        case 58: case 59: case 60: case 61: case 62: case 63:
+            if (func_82185494() == 0) {
+                goto fail;
+            }
+            if (((u8 *)D_821CF2A0)[0x59] & 2) {
+                goto fail;
+            }
+            v1 = D_8006B190[move - 1].unk01;
+            if (v1 >= 0x44) {
+                v1 -= 0x44;
+            } else {
+                if (func_82185450((s8 *)D_821CF29C, D_821CF2A0) != 0) {
+                    goto fail;
+                }
+                v1 -= 0x12;
+                if (v1 >= 8) {
+                    v1 -= 0x28;
+                }
+            }
+            v1 &= 7;
+            if (((u8 *)D_821CF2A0)[v1 + 0x68] != 1) {
+                break;
+            }
+            return 0;
+        case 25:
+            for (i = 0; i < 8; i++) {
+                if (((u8 *)D_821CF29C)[i + 0x68] != 7) {
+                    goto done;
+                }
+                if (((u8 *)D_821CF2A0)[i + 0x68] != 7) {
+                    goto done;
+                }
+            }
+            if (((u8 *)D_821CF29C)[0x21] != 0) break;
+            if (((u8 *)D_821CF2A0)[0x21] != 0) break;
+            if (((u8 *)D_821CF29C)[0x63] != 0) break;
+            if (((u8 *)D_821CF2A0)[0x63] != 0) break;
+            if (((u8 *)D_821CF29C)[0x58] != 0) break;
+            if (((u8 *)D_821CF29C)[0x59] != 0) break;
+            if (((u8 *)D_821CF29C)[0x5A] != 0) break;
+            if (((u8 *)D_821CF2A0)[0x58] != 0) break;
+            if (((u8 *)D_821CF2A0)[0x59] != 0) break;
+            if (((u8 *)D_821CF2A0)[0x5A] != 0) break;
+            if (((u8 *)D_821CF29C)[0x62] != 0) break;
+            if (((u8 *)D_821CF2A0)[0x62] != 0) break;
+            goto fail;
+        case 29: case 30: case 44: case 77:
+            if (!(((u8 *)D_821CF2A0)[0x58] & 4)) {
+                break;
+            }
+            return 0;
+        case 31: case 37:
+            if (func_82185494() != 0) {
+                break;
+            }
+            return 0;
+        case 32:
+            if (((u8 *)D_821CF2A0)[0x21] != 0) {
+                goto fail;
+            }
+            if (func_82185450((s8 *)D_821CF29C, D_821CF2A0) != 0) {
+                goto fail;
+            }
+            if (func_821855F0(D_821CF298) != 0) {
+                break;
+            }
+            return 0;
+        case 38:
+            if (func_8218540C((s8 *)D_821CF29C, D_821CF2A0) != 0) {
+                break;
+            }
+            return 0;
+        case 42:
+            if (!(((u8 *)D_821CF29C)[0x58] & 0x20)) {
+                break;
+            }
+            return 0;
+        case 46:
+            if (!(((u8 *)D_821CF29C)[0x59] & 2)) {
+                break;
+            }
+            return 0;
+        case 47:
+            if (!(((u8 *)D_821CF29C)[0x59] & 4)) {
+                break;
+            }
+            return 0;
+        case 49:
+            if (func_82185494() == 0) {
+                goto fail;
+            }
+            if (((u8 *)D_821CF2A0)[0x58] & 0x80) {
+                goto fail;
+            }
+            if (func_82185450((s8 *)D_821CF29C, D_821CF2A0) == 0) {
+                break;
+            }
+            return 0;
+        case 56:
+            if (((u16 *)D_821CF29C)[0x34 / 2] != ((u16 *)D_821CF29C)[0x18 / 2]) {
+                break;
+            }
+            return 0;
+        case 57:
+            if (func_82185450((s8 *)D_821CF29C, D_821CF2A0) != 0) {
+                goto fail;
+            }
+            if (func_82185494() != 0) {
+                break;
+            }
+            return 0;
+        case 64:
+            if (!(((u8 *)D_821CF29C)[0x5A] & 2)) {
+                break;
+            }
+            return 0;
+        case 65:
+            if (!(((u8 *)D_821CF29C)[0x5A] & 4)) {
+                break;
+            }
+            return 0;
+        case 67:
+            if (((u8 *)D_821CF2A0)[0x21] != 0) {
+                goto fail;
+            }
+            if (D_8006B190[move - 1].type == 0x17) {
+                if (func_82184D9C(D_821CF2A0, 4) != 0) {
+                    goto fail;
+                }
+            }
+            if (func_82185450((s8 *)D_821CF29C, D_821CF2A0) == 0) {
+                break;
+            }
+            return 0;
+        case 79:
+            if (func_82185494() == 0) {
+                goto fail;
+            }
+            if (((u16 *)D_821CF29C)[0x18 / 2] >= (((u16 *)D_821CF29C)[0x34 / 2] >> 2)) {
+                break;
+            }
+            return 0;
+        case 84:
+            if (func_82185450((s8 *)D_821CF29C, D_821CF2A0) != 0) {
+                goto fail;
+            }
+            if (func_82184D9C(D_821CF2A0, 0x16) != 0) {
+                goto fail;
+            }
+            if (!(((u8 *)D_821CF2A0)[0x59] & 0x80)) {
+                break;
+            }
+            return 0;
+        case 86:
+            if (func_82185450((s8 *)D_821CF29C, D_821CF2A0) != 0) {
+                goto fail;
+            }
+            if (((u8 *)D_821CF2A0)[0x5E] != 0) {
+                goto fail;
+            }
+            break;
+        case 0:
+        default:
+            break;
+    }
+done:
+    return move;
+}
 
 extern u8* D_821CF29C;
 s32 func_82186394(u8 *arg0, u8 *arg1) {
@@ -794,10 +1121,10 @@ s32 func_821864D4(u8 *arg0, u8 *arg1) {
     return -1;
 }
 
-s32 func_8218663C(u8 *arg0) {
+s32 func_8218663C(u8 *arg0, u8 *arg1) {
     s32 i;
 
-    if (func_82185450() != 0) {
+    if (func_82185450(arg0, arg1) != 0) {
         return -1;
     }
     for (i = 0; i < 4; i++) {
@@ -963,11 +1290,109 @@ void func_821869C4(s8 *arg0, s8 *arg1)
   }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82186AF4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82186AF4.s")
-#endif
+void func_8004FD20(void*, s32);
+typedef struct PartyMon82186AF4 {
+    /* 0x00 */ u8 species;
+    /* 0x01 */ u8 unk01;
+    /* 0x02 */ u16 hp;
+    /* 0x04 */ u8 unk04[5];
+    /* 0x09 */ u8 moves[4];
+    /* 0x0D */ u8 unk0D[0x17];
+    /* 0x24 */ u8 level;
+    /* 0x25 */ u8 unk25;
+    /* 0x26 */ u16 maxHp;
+    /* 0x28 */ u8 unk28[0x28];
+} PartyMon82186AF4; // size = 0x50
+
+typedef struct Party82186AF4 {
+    /* 0x000 */ u8 flags;
+    /* 0x001 */ u8 unk001[0x1B];
+    /* 0x01C */ PartyMon82186AF4 mons[6];
+    /* 0x1FC */ u8* info;
+} Party82186AF4;
+
+typedef struct Slot82186AF4 {
+    /* 0x00 */ void* owner;
+    /* 0x04 */ u8 unk04[8];
+    /* 0x0C */ u8 mon[0x0C];
+    /* 0x18 */ u16 hp;
+    /* 0x1A */ u8 unk1A[0x56];
+    /* 0x70 */ u16 hp2;
+    /* 0x72 */ u8 unk72[2];
+    /* 0x74 */ u8 species;
+    /* 0x75 */ u8 mask;
+    /* 0x76 */ u8 unk76[2];
+    /* 0x78 */ u8 moveCount;
+    /* 0x79 */ u8 unk79;
+    /* 0x7A */ u8 unk7A[0x16];
+} Slot82186AF4; // size = 0x90
+
+typedef struct Side82186AF4 {
+    /* 0x000 */ Party82186AF4* party;
+    /* 0x004 */ Slot82186AF4 slots[6];
+    /* 0x364 */ f32 unk364;
+    /* 0x368 */ s8 unk368;
+    /* 0x369 */ u8 unk369;
+    /* 0x36A */ u8 unk36A;
+    /* 0x36B */ u8 unk36B;
+} Side82186AF4;
+
+void func_82186AF4(Side82186AF4 *arg0, Party82186AF4 *arg1, s32 arg2)
+{
+  s32 i;
+  s32 j;
+  u8 species;
+  u8 level;
+  arg0->party = arg1;
+  arg0->unk368 = arg2;
+  arg0->unk369 = 0xFF;
+  arg0->unk36B = 0xFF;
+  arg0->unk364 = 0.5f;
+  if (arg2 >= 2)
+  {
+    arg0->unk364 = 10.0f;
+  }
+  for (i = 0; i < 6; i++)
+  {
+    func_8004FD20(&arg0->slots[i], sizeof(Slot82186AF4));
+    arg0->slots[i].mask = 1 << i;
+    arg0->slots[i].owner = arg0;
+    arg0->slots[i].species = arg1->mons[i].species;
+    if (i < arg1->info[2])
+    {
+      species = arg1->mons[i].species;
+      if (((species != 0) && (arg1->mons[i].hp != 0)) && (arg1->mons[i].maxHp != 0))
+      {
+        level = arg1->mons[i].level;
+        if (level != 0)
+        {
+          j = 0; // FAKE: permuter; early init of the move counter
+          level = arg1->mons[i].level; // FAKE: permuter; redundant reload of level
+          if (arg1->flags & 2)
+          {
+            func_82186834((s8 *) arg0->slots[i].mon, (s8 *) (&arg1->mons[i]));
+            arg0->slots[i].hp2 = arg0->slots[i].hp;
+          }
+          else
+          {
+            func_821868E8((s8 *) arg0->slots[i].mon, arg1->mons[i].species, level);
+          }
+          for (j = 0; j < 4; j++)
+          {
+            if ((arg1->mons[i].moves[j] == 0) || (arg1->mons[i].moves[j] == 0x66))
+            {
+              break;
+            }
+          }
+
+        }
+      }
+    }
+    arg0->slots[i].moveCount = j;
+    arg0->slots[i].unk79 = 0x10;
+  }
+
+}
 
 extern u8 D_82194848[];
 void func_82186CA8(u8 *arg0, u8 *arg1) {
@@ -1203,7 +1628,7 @@ extern BattleSlotZ D_821CF618[6];
 extern BattleSlotZ D_821CF998[6];
 extern s32 D_821CF2A4;
 void func_8004FD20(void*, s32);
-void func_82186AF4(BattleSlotZ*, u8*, s32);
+void func_82186AF4(); /* real types are declared with the definition below */
 s32 func_82187414(s32);
 
 s32 func_82187738(u8* arg0, u8* arg1, s32 arg2, s8* arg3, s32 arg4) {
@@ -1247,14 +1672,81 @@ s32 func_82187738(u8* arg0, u8* arg1, s32 arg2, s8* arg3, s32 arg4) {
     return ret;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_821879A4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821879A4.s")
-#endif
+s32 func_821879A4(void) {
+    s32 flag;
+    s32 r;
+    f32 fa[6];
+    f32 f20;
+    s32 k;
+    s32 best;
+    s32 i;
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82187DB4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82187DB4.s")
-#endif
+    flag = 0;
+    k = 0;
+    best = -1;
+    if (M2C_FIELD(D_821CF29C, u16*, 0x18) == 0 || (D_821CF29C[0x21] & 0x20) || (D_821CF29C[0x5A] & 1)) {
+        flag = 1;
+    } else if ((D_821CF29C[0x21] & 7) && D_821CF29C[0x6D] < 10) {
+        flag = 1;
+    }
+    if (M2C_FIELD(D_821CF29C, u16*, 0x18) == 0) {
+        ((u8*)D_821CF294)[0x36C] &= ~D_821CF29C[0x75];
+    }
+    for (i = 0; i < D_821CF288; i++) {
+        if ((r = func_82185220((u8*)D_821CF2A0, D_821CF294[i].pad04, 0)) == 0) {
+            fa[i] = 255.0f;
+        } else {
+            fa[i] = (f32)func_82185220(D_821CF294[i].pad04, (u8*)D_821CF2A0, 0) / (f32)r;
+        }
+        // FAKE: the dead store to r is needed for the operand order
+        if (D_821CF29C[0x75] == (r = 1 << i)) {
+            f20 = fa[i];
+        }
+        D_821CF294[i].unk_0C = fa[i];
+    }
+    do {
+        for (i = 0; i < D_821CF288; i++) {
+            if (D_821CF294[i].unk_1C == 0) {
+                continue;
+            }
+            switch (k) {
+            case 0:
+                if (fa[i] - f20 < *(f32*)((u8*)D_821CF294 + 0x364)) break;
+                if (func_82183CE4((s8*)D_821CF294[i].pad04) < 0x28) break;
+            case 1:
+            case 2:
+                if (fa[i] < f20) break;
+            case 3:
+                if (D_821CF294[i].unk_25 & 7) break;
+            case 4:
+                if (D_821CF294[i].unk_5E & 1) break;
+            case 5:
+                if (flag && func_8218663C(D_821CF294[i].pad04, (u8*)D_821CF2A0) < 0) break;
+            case 6:
+                if (flag && func_8218540C((s8*)D_821CF294[i].pad04, D_821CF2A0) == 0) break;
+            case 7:
+                if (func_82183CE4((s8*)D_821CF294[i].pad04) < 0x37) break;
+            case 8:
+                if (D_821CF294[i].unk_25 & 0x20) break;
+            default:
+            case 9:
+                *(f32*)((u8*)D_821CF294 + 0x364) = 10.0f;
+                best = i;
+                f20 = fa[i] - *(f32*)((u8*)D_821CF294 + 0x364);
+            }
+        }
+        k++;
+        if (flag && k == 2) {
+            f20 = -1.0f;
+        }
+    } while (flag && best < 0);
+    if (!flag) {
+        if (func_82183AF0() < 0x46) {
+            if (func_821855F0(D_821CF294) != 0 && func_82185684(D_821CF2A0) != 0) {
+                return -1;
+            }
+        }
+    }
+    return best;
+}
+

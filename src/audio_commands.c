@@ -51,11 +51,276 @@ void Audio_RelocateOffsets(u32* arg0, u32 arg1, s32 arg2) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8003E1F8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8003E1F8.s")
-#endif
+typedef struct SoundFileTable {
+    /* 0x00 */ u32 num_files;
+    /* 0x04 */ u32 offset1;
+    /* 0x08 */ u32 wave_tables_offset;
+    /* 0x0C */ u32 files[1];
+} SoundFileTable; // size >= 0x10
+extern SoundFileTable* D_800B4178;
+extern u8* D_800B41C0[];
+
+typedef struct AudioInitConfig {
+    /* 0x00 */ s32 channels;
+    /* 0x04 */ void* heap;
+    /* 0x08 */ void* bank;
+    /* 0x0C */ s32 unk_0C;
+    /* 0x10 */ s32 unk_10;
+    /* 0x14 */ s32 unk_14;
+    /* 0x18 */ s32 outputRate;
+    /* 0x1C */ s32 unk_1C;
+    /* 0x20 */ s32 unk_20;
+    /* 0x24 */ s32 unk_24;
+    /* 0x28 */ s32 unk_28;
+    /* 0x2C */ s32 unk_2C;
+} AudioInitConfig; // size = 0x30
+
+typedef struct AudioSeqEntry {
+    /* 0x0 */ u32 offset;
+    /* 0x4 */ u32 len;
+} AudioSeqEntry; // size = 0x8
+
+extern s32 D_80075C30;
+extern u8 D_00B98000[];
+extern u8 D_800B41F8[];
+extern u8 D_800B4208[];
+extern File1Header* D_800B4160;
+extern File1Header* D_800B4164;
+extern u32* D_800B4168;
+extern u32* D_800B416C;
+extern u32* D_800B4170;
+extern struct Bank8003F96C* D_800B4174;
+extern u32* D_800B417C;
+extern s32 D_800B4180;
+extern s32 D_800B4184;
+extern s32 D_800B4188;
+extern s32 D_800B418C;
+extern s32 D_800B4190;
+extern s32 D_800B4194;
+extern s32 D_800B4198;
+extern s32 D_800B419C;
+extern s32 D_800B41A0;
+extern s32 D_800B41A4;
+extern s32 D_800B41A8;
+extern u8* D_800B41B0[];
+extern void* D_800B41D0[5];
+extern u8* D_800B41F0;
+extern s32 D_800FD5E8;
+extern u8 D_800FD5EC;
+extern s32 D_800FD5F0[2];
+extern s32 D_800FD5F8[];
+extern u8 D_800FD604;
+extern u8 D_800FD605;
+extern s32 D_800FD608;
+extern s32 D_800FD610[];
+extern u8 D_800FD620;
+s32 D_800FD628[8];
+s32 D_800FD648;
+s32 D_800FD64C;
+s32 D_800FD650;
+s32 D_800FD654;
+s32 D_800FD658[4];
+extern s32 D_800FD668;
+extern s32 D_800FD66C;
+extern s32 D_800FD670[4];
+extern s32 D_800FD680;
+extern u32 D_800FD684;
+extern u8 D_800FD68C;
+extern s32 D_800B3CE4;
+extern u8 D_80077520;
+extern u8 D_80077524;
+extern u8 D_80077528;
+extern u8 D_80077534;
+extern u8 D_80077538;
+extern u8 D_8007753C;
+s32 func_80058100(s32);
+void func_80056610(void*, void*, s32);
+void* func_8005C0D0(s32, s32, void*, s32, s32);
+void func_80046040(s32);
+void func_8004609C(u32, u8*, s32);
+void func_80047FB0(u8*, s32, s32);
+void func_80037F48(s32, s32);
+void func_8003A710(u8*);
+s32 func_800371A4(s8*);
+void func_80046170(s32, s32);
+
+s32 func_8003E1F8(void) {
+    u32 i;
+    u32* hdr;
+    s32 num;
+    s32 pad; // FAKE: unused stack word
+    s32 rate;
+    s32 ret;
+    AudioInitConfig config;
+
+    rate = func_80058100(32000);
+    D_80075C30 = 0;
+    func_80056610(D_800B41F8, D_800B4208, 300000);
+    D_800B41F0 = func_8005C0D0(0, 0, D_800B41F8, 1, 0x55F0);
+    func_80046040(0);
+
+    D_800B4160 = func_8005C0D0(0, 0, D_800B41F8, 10, 4);
+    func_8004609C((u32)D_00B98000, (u8*)D_800B4160, 0x28);
+    Audio_RelocateOffsets((u32*)D_800B4160 + 1, (u32)D_00B98000, 9);
+
+    hdr = D_800B4170 = func_8005C0D0(0, 0, D_800B41F8, 4, 4);
+    func_8004609C(D_800B4160->wave_tables_offset, (u8*)hdr, 0xC);
+    num = hdr[2];
+    D_800B4164 = func_8005C0D0(0, 0, D_800B41F8, 4, num + 3);
+    func_8004609C(D_800B4160->wave_tables_offset, (u8*)D_800B4164, num * 4 + 0xC);
+    Audio_RelocateOffsets(&D_800B4164->offset1, D_800B4160->wave_tables_offset, 2);
+    Audio_RelocateOffsets(D_800B4164->files, D_800B4160->wave_tables_offset, num);
+    func_8004609C(D_800B4164->offset1, D_800B41F0, D_800B4164->wave_tables_offset - D_800B4164->offset1);
+    D_800B4180 = (s32)func_8005C0D0(0, 0, D_800B41F8, 1, 0x32C0);
+    func_80047FB0(D_800B41F0, D_800B4180, 0x32C0);
+    func_80037F48(D_800B4180, D_800B4164->wave_tables_offset);
+
+    D_800B4168 = func_8005C0D0(0, 0, D_800B41F8, 4, 3);
+    func_8004609C(D_800B4160->num_files, (u8*)D_800B4168, 0xC);
+    Audio_RelocateOffsets(D_800B4168, D_800B4160->num_files, 3);
+    func_8004609C(D_800B4168[0], D_800B41F0, D_800B4168[1] - D_800B4168[0]);
+    D_800B41A0 = (s32)func_8005C0D0(0, 0, D_800B41F8, 1, 0xAC0);
+    func_80047FB0(D_800B41F0, D_800B41A0, 0xAC0);
+    func_8003A710((u8*)D_800B41A0);
+    func_8004609C(D_800B4168[1], D_800B41F0, D_800B4168[2] - D_800B4168[1]);
+    D_800B4184 = (s32)func_8005C0D0(0, 0, D_800B41F8, 1, 0xD60);
+    func_80047FB0(D_800B41F0, D_800B4184, 0xD60);
+    func_80037F48(D_800B4184, D_800B4168[2]);
+
+    D_800B416C = func_8005C0D0(0, 0, D_800B41F8, 4, 3);
+    func_8004609C(D_800B4160->files[0], (u8*)D_800B416C, 0xC);
+    Audio_RelocateOffsets(D_800B416C, D_800B4160->files[0], 3);
+    func_8004609C(D_800B416C[0], D_800B41F0, D_800B416C[1] - D_800B416C[0]);
+    D_800B41A4 = (s32)func_8005C0D0(0, 0, D_800B41F8, 1, 0xC80);
+    func_80047FB0(D_800B41F0, D_800B41A4, 0xC80);
+    func_8003A710((u8*)D_800B41A4);
+    func_8004609C(D_800B416C[1], D_800B41F0, D_800B416C[2] - D_800B416C[1]);
+    D_800B4188 = (s32)func_8005C0D0(0, 0, D_800B41F8, 1, 0x2060);
+    func_80047FB0(D_800B41F0, D_800B4188, 0x2060);
+    func_80037F48(D_800B4188, D_800B416C[2]);
+
+    func_8004609C(D_800B4160->files[2], (u8*)hdr, 0xC);
+    num = hdr[0];
+    D_800B4174 = func_8005C0D0(0, 0, D_800B41F8, 4, num + 3);
+    func_8004609C(D_800B4160->files[2], (u8*)D_800B4174, num * 4 + 0xC);
+    Audio_RelocateOffsets((u32*)D_800B4174 + 1, D_800B4160->files[2], num + 2);
+    func_8004609C(((u32*)D_800B4174)[1], D_800B41F0, ((u32*)D_800B4174)[2] - ((u32*)D_800B4174)[1]);
+    D_800B4190 = (s32)func_8005C0D0(0, 0, D_800B41F8, 1, 0x1E20);
+    func_80047FB0(D_800B41F0, D_800B4190, 0x1E20);
+    func_80037F48(D_800B4190, ((u32*)D_800B4174)[2]);
+
+    func_8004609C(D_800B4160->files[3], (u8*)hdr, 0xC);
+    num = hdr[0];
+    D_800B4178 = (SoundFileTable*) func_8005C0D0(0, 0, D_800B41F8, 4, num + 3);
+    func_8004609C(D_800B4160->files[3], (u8*)D_800B4178, num * 4 + 0xC);
+    Audio_RelocateOffsets(&D_800B4178->offset1, D_800B4160->files[3], num + 2);
+    func_8004609C(D_800B4178->offset1, D_800B41F0, D_800B4178->wave_tables_offset - D_800B4178->offset1);
+    D_800B4194 = (s32)func_8005C0D0(0, 0, D_800B41F8, 1, 0x2EE0);
+    func_80047FB0(D_800B41F0, D_800B4194, 0x2EE0);
+    func_80037F48(D_800B4194, D_800B4178->wave_tables_offset);
+
+    func_8004609C(D_800B4160->files[4], (u8*)hdr, 0xC);
+    num = hdr[0];
+    D_800B417C = func_8005C0D0(0, 0, D_800B41F8, 4, num + 3);
+    func_8004609C(D_800B4160->files[4], (u8*)D_800B417C, num * 4 + 0xC);
+    Audio_RelocateOffsets(D_800B417C + 1, D_800B4160->files[4], num + 2);
+    func_8004609C(D_800B417C[1], D_800B41F0, D_800B417C[2] - D_800B417C[1]);
+    D_800B4198 = (s32)func_8005C0D0(0, 0, D_800B41F8, 1, 0x7D0);
+    func_80047FB0(D_800B41F0, D_800B4198, 0x7D0);
+    func_80037F48(D_800B4198, D_800B417C[2]);
+
+    func_8004609C(D_800B4160->files[1], (u8*)D_800B4170, 0xC);
+    Audio_RelocateOffsets(D_800B4170, D_800B4160->files[1], 3);
+    func_8004609C(D_800B4170[0], D_800B41F0, D_800B4170[1] - D_800B4170[0]);
+    D_800B41A8 = (s32)func_8005C0D0(0, 0, D_800B41F8, 1, 0xC80);
+    func_80047FB0(D_800B41F0, D_800B41A8, 0xC80);
+    func_8003A710((u8*)D_800B41A8);
+    func_8004609C(D_800B4170[1], D_800B41F0, D_800B4170[2] - D_800B4170[1]);
+    D_800B418C = (s32)func_8005C0D0(0, 0, D_800B41F8, 1, 0x5EE0);
+    func_80047FB0(D_800B41F0, D_800B418C, 0x5EE0);
+    func_80037F48(D_800B418C, D_800B4170[2]);
+
+    D_800B41EC = func_8005C0D0(0, 0, D_800B41F8, 2, 0xB80);
+    D_800FD688 = func_8005C0D0(0, 0, D_800B41F8, 1, 0x1388);
+    func_8004609C(D_800B4160->files[5], (u8*)D_800FD688, D_800B4160->files[6] - D_800B4160->files[5]);
+    D_800B41E4 = func_8005C0D0(0, 0, D_800B41F8, 1, 0x100);
+    func_8004609C(D_800B4160->files[6], (u8*)D_800B41E4, 0x100);
+    for (i = 0; i < 0x20; i++) {
+        D_800B41E4[i].unk_00 += D_800B4160->files[6];
+    }
+
+    D_800B41E8 = func_8005C0D0(0, 0, D_800B41F8, 1, 0x2328);
+    D_800B419C = (s32)func_8005C0D0(0, 0, D_800B41F8, 1, 0x8CA0);
+    D_800B41B0[0] = func_8005C0D0(0, 0, D_800B41F8, 1, 0x140);
+    D_800B41B0[1] = func_8005C0D0(0, 0, D_800B41F8, 1, 0x140);
+    D_800B41B0[2] = func_8005C0D0(0, 0, D_800B41F8, 1, 0x140);
+    D_800B41C0[0] = func_8005C0D0(0, 0, D_800B41F8, 1, 0x320);
+    D_800B41C0[1] = func_8005C0D0(0, 0, D_800B41F8, 1, 0x320);
+    D_800B41C0[2] = func_8005C0D0(0, 0, D_800B41F8, 1, 0x320);
+    D_800B41D0[0] = func_8005C0D0(0, 0, D_800B41F8, 1, 0x200);
+    D_800B41D0[1] = func_8005C0D0(0, 0, D_800B41F8, 1, 0x200);
+    D_800B41D0[2] = func_8005C0D0(0, 0, D_800B41F8, 1, 0x200);
+    D_800B41D0[3] = func_8005C0D0(0, 0, D_800B41F8, 1, 0x200);
+    D_800B41D0[4] = func_8005C0D0(0, 0, D_800B41F8, 1, 0x200);
+
+    D_800FD5E8 = 2;
+    D_800FD5EC = 0;
+    D_800FD5F0[0] = 200;
+    D_800FD5F0[1] = 200;
+    D_800FD608 = 0;
+    D_800FD610[0] = 0;
+    D_800FD610[1] = 0;
+    D_800FD610[2] = 0;
+    D_800FD610[3] = 0;
+    D_800FD620 = 0;
+    for (i = 0; i < 8; i++) {
+        D_800FD628[i] = 0xFFFF;
+    }
+    D_800FD68C = 0;
+    D_800FD5F8[0] = 0;
+    D_800FD5F8[1] = 0;
+    D_800FD5F8[2] = 0;
+    D_80077520 = 0;
+    D_800FD64C = 0;
+    D_800FD650 = 0;
+    D_800FD654 = 0;
+    for (i = 0; i < 4; i++) {
+        D_800FD658[i] = 0;
+    }
+    D_800FD668 = 0;
+    D_800FD66C = 0;
+    D_800B3CE4 = 0;
+    D_800FD648 = 0;
+    D_800FD680 = 0;
+    D_800FD604 = 0;
+    D_80077534 = 0;
+    D_800FD670[0] = 0;
+    D_800FD670[1] = 0;
+    D_800FD670[2] = 0;
+    D_800FD670[3] = 0;
+    D_800FD605 = 0;
+    D_800FD684 = 0;
+    D_80077524 = 0;
+    D_80077528 = 0;
+    D_80077538 = 1;
+    D_8007753C = 1;
+
+    config.channels = 0x18;
+    config.heap = D_800B41F8;
+    config.bank = (void*)D_800B4184;
+    config.unk_0C = ((s32*)D_800B41A0)[3];
+    config.unk_10 = ((s32*)D_800B41A0)[2];
+    config.outputRate = rate;
+    config.unk_14 = 0x100;
+    config.unk_1C = 0x400;
+    config.unk_20 = 1;
+    config.unk_24 = 0x30;
+    config.unk_28 = 0x500;
+    ret = func_800371A4((s8*)&config);
+    func_80046170(2, 2);
+    func_80046170(1, 3);
+    return ret;
+}
 
 void func_80038588(void);
 s32 func_80037F68(s32, s32);
@@ -552,17 +817,315 @@ s32 func_8003F96C(u32 arg0, u32 arg1) {
     return D_800FD5F8[D_80077520];
 }
 
-void func_8003FE58(s32, s32, s32);
+s32 func_8003FE58(u32, u32, u32);
 
 void func_8003FE34(s32 arg0, s32 arg1) {
     func_8003FE58(arg0, 1, arg1);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8003FE58; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8003FE58.s")
-#endif
+extern u8 D_80077062[];
+extern u8 D_8007755C;
+extern u8 D_8007757C;
+extern s32 D_800B4194;
+extern u8 D_800FD604;
+extern s32 D_800FD648;
+extern s32 D_800FD64C;
+extern s32 D_800FD650;
+extern s32 D_800FD670[4];
+void func_800386E4(s32, s32);
+s32 func_800407B0(s32, s32, s32);
+s32 func_8003FE58(u32 move_id, u32 species, u32 sound_kind) {
+    s32 var;
+    u32 size;
+    s32 ret;
+    s32 i;
+
+    if (D_80077528 != 0) {
+        return 0;
+    }
+
+    if (move_id >= 0xA7) {
+        return 0;
+    }
+
+    switch (species) {
+        case 9:
+            switch (move_id) {
+                case 0x6E:
+                    goto skip;
+
+                case 0x82:
+                    if (sound_kind == 4) {
+                        goto skip;
+                    }
+                    break;
+            }
+            break;
+
+        case 0x19:
+            if (move_id == 0x39) {
+                goto skip;
+            }
+            break;
+
+        case 0x4C:
+            switch (move_id) {
+                case 0x39:
+                case 0x54:
+                case 0x69:
+                case 0x79:
+                case 0x82:
+                case 0x96:
+                    goto skip;
+            }
+            break;
+
+        case 0x71:
+            if ((move_id == 0x27) || (move_id == 0x64) || (move_id == 0x70) || (move_id == 0x71) || (move_id == 0x73)) {
+                goto skip;
+            }
+            break;
+
+        case 0x44:
+        case 0x5B:
+        case 0x5F:
+        case 0x67:
+        case 0x80:
+        case 0x90:
+        case 0x92:
+            goto skip;
+    }
+
+    for (i = 0; i < 4; i++) {
+        if (func_80037B7C(D_800FD670[i]) != 0) {
+            func_800386E4(D_800FD670[i], 0xF);
+            D_800FD670[i] = 0;
+        }
+    }
+
+skip:
+    if (func_80037B7C(D_800FD648) != 0) {
+        func_80037AC4(D_800FD648, 2);
+        D_800FD648 = 0;
+    }
+
+    if (move_id == 0xA6) {
+        var = sound_kind;
+        sound_kind = 0xFF;
+    }
+
+    switch (sound_kind) {
+        case 4:
+            if (func_80037B7C(D_800FD650) != 0) {
+                func_80037AC4(D_800FD650, 0x14);
+                D_800FD650 = 0;
+            }
+            switch (move_id) {
+                case 0x5B:
+                    func_80043CE8(0x4B, 0.0f, 0x80);
+                    var = 4;
+                    break;
+
+                case 0x13:
+                    func_80043CE8(0x4A, 0.0f, 0x80);
+                    var = 4;
+                    break;
+
+                case 0xD:
+                case 0x4C:
+                case 0x82:
+                case 0x8F:
+                    func_80043CE8(0x52, 0.0f, 0x80);
+                    var = 4;
+                    break;
+
+                default:
+                    return 0;
+            }
+            break;
+
+        case 0:
+            if (func_80037B7C(D_800FD650) != 0) {
+                func_80037AC4(D_800FD650, 0x14);
+                D_800FD650 = 0;
+            }
+            if ((move_id == 0x2F) && (D_80077528 != 0)) {
+                return 0;
+            }
+            switch (move_id) {
+                case 0x35:
+                case 0x52:
+                case 0x53:
+                    if (D_80077062[species * 8] == 1) {
+                        var = 0;
+                    } else {
+                        var = 4;
+                    }
+                    break;
+
+                case 0x78:
+                case 0x99:
+                    func_80043CE8(0x23, 0.0f, 0x80);
+                    var = 0;
+                    D_8007757C = 1;
+                    break;
+
+                default:
+                    var = 0;
+            }
+            break;
+
+        case 1:
+            if ((move_id == 6) && (D_8007755C == 0)) {
+                func_80043CE8(0x53, 0.0f, 0x80);
+            }
+            switch (move_id) {
+                case 0x2B: case 0x30: case 0x3B: case 0x3D: case 0x3E: case 0x3F: case 0x6D: case 0x86:
+                case 0x89:
+                    if (func_80037B7C(D_800FD650) != 0) {
+                        func_80037AC4(D_800FD650, 0x3C);
+                        D_800FD650 = 0;
+                    }
+                    break;
+
+                case 0x14: case 0x23: case 0x32: case 0x35: case 0x47: case 0x48: case 0x4B: case 0x50:
+                case 0x51: case 0x52: case 0x66: case 0x7E: case 0x84: case 0x8A: case 0x8D: case 0xA0:
+                    if (func_80037B7C(D_800FD650) != 0) {
+                        func_80037AC4(D_800FD64C, 0x14);
+                        D_800FD650 = 0;
+                    }
+                    break;
+
+                default:
+                    if (func_80037B7C(D_800FD650) != 0) {
+                        func_80037AC4(D_800FD650, 2);
+                        D_800FD650 = 0;
+                    }
+                    break;
+
+                case 0xB: case 0xC: case 0xD: case 0x10: case 0x12: case 0x2F: case 0x39: case 0x4D:
+                case 0x4E: case 0x4F: case 0x54: case 0x55: case 0x56: case 0x57: case 0x5F: case 0x65:
+                case 0x67: case 0x6C: case 0x72: case 0x78: case 0x7B: case 0x7F: case 0x80: case 0x81:
+                case 0x8B: case 0x8E: case 0x93: case 0x94: case 0x95: case 0x99:
+                    break;
+            }
+            var = 1;
+            break;
+
+        case 2:
+            if (func_80037B7C(D_800FD650) != 0) {
+                func_80037AC4(D_800FD650, 0x14);
+                D_800FD650 = 0;
+            }
+            switch (move_id) {
+                case 0xE: case 0x36: case 0x4A: case 0x60: case 0x61: case 0x66: case 0x68: case 0x69:
+                case 0x6A: case 0x6B: case 0x6E: case 0x6F: case 0x70: case 0x71: case 0x72: case 0x73:
+                case 0x74: case 0x85: case 0x87: case 0x90: case 0x97: case 0x9C: case 0x9F: case 0xA4:
+                    return 0;
+
+                case 0x1: case 0x2: case 0x3: case 0x4: case 0x6: case 0xA: case 0xB: case 0xC:
+                case 0xF: case 0x15: case 0x16: case 0x17: case 0x20: case 0x2C: case 0x44: case 0x7D:
+                case 0x80: case 0x9A: case 0x9E: case 0xA2: case 0xA3:
+                    var = 2;
+                    break;
+
+                case 0x35: case 0x52: case 0x53:
+                    if (D_80077062[species * 8] == 1) {
+                        var = 0;
+                    } else {
+                        var = 4;
+                    }
+                    break;
+
+                default:
+                    var = 0;
+                    break;
+            }
+            break;
+
+        case 3:
+            if (func_80037B7C(D_800FD650) != 0) {
+                func_80037AC4(D_800FD650, 0x14);
+                D_800FD650 = 0;
+            }
+            var = 0;
+            break;
+
+        case 5:
+            switch (move_id) {
+                case 0xD: case 0x10: case 0x12: case 0x2F: case 0x39: case 0x4D: case 0x4E: case 0x4F:
+                case 0x54: case 0x55: case 0x56: case 0x57: case 0x5F: case 0x67: case 0x6C: case 0x6D:
+                case 0x72: case 0x78: case 0x7B: case 0x80: case 0x81: case 0x8B: case 0x8E: case 0x93:
+                case 0x94: case 0x99:
+                    return 0;
+
+                case 0x30:
+                    if (func_80037B7C(D_800FD650) != 0) {
+                        func_80037AC4(D_800FD650, 0x28);
+                        D_800FD650 = 0;
+                    }
+                    return 0;
+
+                default:
+                    if (func_80037B7C(D_800FD650) != 0) {
+                        func_80037AC4(D_800FD650, 0x3C);
+                        D_800FD650 = 0;
+                    }
+                    return 0;
+            }
+            break;
+
+        case 0xFF:
+            break;
+
+        default:
+            return 0;
+    }
+
+    move_id--;
+    D_800FD604++;
+    D_800FD604 %= 3;
+
+    if (move_id < D_800B4178->num_files - 1) {
+        size = D_800B4178->files[move_id + 1] - D_800B4178->files[move_id];
+    } else {
+        size = D_800B4160->files[4] - D_800B4178->files[move_id];
+    }
+
+    func_8004609C(D_800B4178->files[move_id], D_800B41F0, size);
+    func_80047FB0(D_800B41F0, (s32)D_800B41C0[D_800FD604], 0x320);
+    func_8003A710(D_800B41C0[D_800FD604]);
+
+    if (sound_kind == 0xFF) {
+        ret = func_8003834C(D_800B4194, (s32)D_800B41C0[D_800FD604], var + 1, 0x80, 0x80, 0, -1);
+    } else {
+        D_800FD64C = func_8003834C(D_800B4194, (s32)D_800B41C0[D_800FD604], var + 1, 0x80, 0x80, 0, -1);
+        ret = D_800FD64C;
+    }
+
+    if ((sound_kind == 0) || (sound_kind == 2) || (sound_kind == 3) || (sound_kind == 4)) {
+        D_800FD650 = D_800FD64C;
+    }
+
+    if ((sound_kind == 0) || (sound_kind == 2)) {
+        switch (move_id + 1) {
+            case 0x85:
+                func_8003834C(D_800B4188, D_800B41A4, 0xE, 0x80, 0x80, 0, -1);
+                break;
+
+            case 0x9C:
+                func_800407B0(0x32, species, 0);
+                break;
+
+            case 0x2D:
+            case 0x2E:
+                func_8003F96C(species, 0);
+                break;
+        }
+    }
+
+    return ret;
+}
 
 void Audio_CreateFrameTaskWrapper(void* arg0) {
     Audio_CreateFrameTask(arg0);
@@ -584,174 +1147,3 @@ void func_80040738(void) {
     D_800FD64C = 0;
     D_800FD650 = 0;
 }
-
-#ifdef NON_MATCHING
-/* TODO: decompile func_800407B0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800407B0.s")
-#endif
-
-extern s32 D_800FD654;
-extern s32 D_800B3CE4;
-extern s32 D_800FD66C;
-extern s32 D_800FD658[];
-extern s32 D_800FD738;
-extern s32 D_800FD680;
-s32 func_80041374(s32 arg0, s32 arg1) {
-    s32 idx;
-
-    switch (arg0) {
-        case 0:
-            if (arg1 == 0) {
-                arg1 = 1;
-            }
-            func_80037AC4(D_800FD654, arg1);
-            D_800FD654 = 0;
-            break;
-        case 4:
-            if (arg1 == 0) {
-                arg1 = 1;
-            }
-            func_80037AC4(D_800B3CE4, arg1);
-            D_800B3CE4 = 0;
-            break;
-        case 3:
-            func_80037AC4(D_800FD66C, 0x3C);
-            D_800FD66C = 0;
-            break;
-        case 5:
-            idx = arg1 - 1;
-            func_80037AC4(D_800FD658[idx ^ 0], 0xA); // FAKE: keeps idx unfolded in v0
-            D_800FD658[idx] = 0;
-            break;
-        case 0x3D:
-            func_80037AC4(D_800FD738, 0x78);
-            D_800FD738 = 0;
-            break;
-        case 0x46:
-            if (arg1 == 0) {
-                arg1 = 1;
-            }
-            func_80037AC4(D_800FD680, arg1);
-            D_800FD680 = 0;
-            break;
-        default:
-            return 0;
-    }
-    return 1;
-}
-
-#ifdef NON_MATCHING
-/* TODO: decompile func_800414B0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800414B0.s")
-#endif
-
-M2C_UNK func_8003834C(s32, s32, s32, M2C_UNK, s32, s32, s32); /* extern */
-extern s32 D_800B418C;
-extern s32 D_800B41A8;
-
-void func_80041834(s32 arg0) {
-    func_8003834C(D_800B418C, D_800B41A8, arg0, 0x80, 0x80, 0, -1);
-}
-
-/*
- * func_8004187C
- *
- * Bounds-checked lookup into the array of two words at D_800FD698.
- * Returns the entry for index 0 or 1, and -1 for any other index
- * (the index is treated as unsigned, so negative values also give -1).
- * What the table entries mean is not known.
- */
-extern s32 D_800FD698[];
-s32 func_8004187C(u32 arg0) {
-    if (arg0 >= 2U) {
-        return -1;
-    }
-    return D_800FD698[arg0];
-}
-
-/*
- * func_800418A4
- *
- * Same shape as func_8004187C but reading the array of two words at
- * D_800FD6A8: index 0 or 1 returns the entry, anything else returns -1.
- */
-extern s32 D_800FD6A8[];
-s32 func_800418A4(u32 arg0) {
-    if (arg0 >= 2U) {
-        return -1;
-    }
-    return D_800FD6A8[arg0];
-}
-
-extern M2C_UNK D_800FD6B4;
-
-s32 func_800418CC(u32 arg0) {
-    if (arg0 >= 2) {
-        return -1;
-    }
-    return ((u8*)&D_800FD6B4)[arg0];
-}
-
-extern u8 D_80077538;
-
-void func_800418F0(s32 arg0) {
-    if (arg0 != 0) {
-        D_80077538 = 1;
-        return;
-    }
-    D_80077538 = 0;
-}
-
-extern M2C_UNK D_800FD6B2;
-extern M2C_UNK D_800FD6B4;
-
-void func_80041914(s32 arg0, s32 arg1) {
-    s8 temp_v0;
-    s8 temp_v1;
-
-    temp_v0 = arg0 * 2;
-    temp_v1 = arg1 * 2;
-    M2C_FIELD(&D_800FD6B2, s8 *, 0) = temp_v0;
-    M2C_FIELD(&D_800FD6B4, s8 *, 0) = temp_v0;
-    M2C_FIELD(&D_800FD6B2, s8 *, 1) = temp_v1;
-    M2C_FIELD(&D_800FD6B4, s8 *, 1) = temp_v1;
-}
-
-extern s32 D_800FD6A0[];
-extern u8 D_800FD6B0[];
-extern u8 D_800FD6B6[];
-extern u8 D_80077560;
-void func_80041940(u32 arg0, s32 arg1, s32 arg2) {
-    s32* cur;
-    s32* prev;
-    s32* next;
-
-    if (arg0 < 2) {
-        prev = &D_800FD6A0[arg0];
-        cur = &D_800FD698[arg0];
-        next = &D_800FD6A8[arg0];
-        *prev = *cur;
-        *cur = arg1;
-        *next = arg2;
-        if (arg1 == 0) {
-            if (*prev == *next) {
-                D_80077560 = 1;
-            } else {
-                D_80077560 = 0;
-            }
-            if (((u8*)&D_800FD6B4)[arg0] != 0) {
-                ((u8*)&D_800FD6B4)[arg0]--;
-            }
-            D_800FD6B6[arg0]++;
-            D_800FD6B0[arg0] = 1;
-        }
-    }
-}
-
-#ifdef NON_MATCHING
-/* TODO: decompile func_800419F8; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_800419F8.s")
-#endif

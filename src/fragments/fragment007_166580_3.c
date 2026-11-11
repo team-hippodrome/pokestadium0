@@ -778,11 +778,108 @@ void func_82006DF8(s8* arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82007030; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment007_166580/func_82007030.s")
-#endif
+void func_8002D900(u8*, void*);
+// The seven result cases were one macro in the original: IDO only schedules
+// these three stores the way the ROM does when they share a source line.
+#define SET_PAIR_82007030(owner, first, second, count) \
+    M2C_FIELD(owner, u32*, 0xB0) = (first); M2C_FIELD(owner, u32*, 0xB4) = (second); M2C_FIELD(owner, u32*, 0xB8) += (count)
+
+s32 func_82007030(void* arg0) {
+    s32 result = 0;
+    u32 res;
+
+    if ((M2C_FIELD(arg0, u32*, 0x2C) != 1) && (M2C_FIELD(arg0, u32*, 0x2C) != 2)) {
+        return 0;
+    }
+    switch (M2C_FIELD(arg0, u32*, 0)) {
+        case 1:
+            if (func_8002DCE0((u8*)arg0 + 0x48, arg0) == 0) {
+                res = func_8002BC14(D_800603C0);
+                if (res == -1) {
+                    func_8003F6AC(3);
+                    result = -1;
+                } else if (res == 1) {
+                    func_8003F6AC(2);
+                    M2C_FIELD(arg0, u32*, 0) = 0;
+                    switch (M2C_FIELD(arg0, u32*, 0x50)) {
+                        case 0:
+                            M2C_FIELD(arg0, u32*, 0xA8) = 1;
+                            M2C_FIELD(arg0, u32*, 0xAC) = 0;
+                            M2C_FIELD(arg0, u32*, 0xB8) = 1;
+                            break;
+                        case 1:
+                            M2C_FIELD(arg0, u32*, 0xA8) = 1;
+                            M2C_FIELD(arg0, u32*, 0xAC) = 2;
+                            M2C_FIELD(arg0, u32*, 0xB8) = 2;
+                            M2C_FIELD(M2C_FIELD(arg0, void**, 0x70), u16*, 0) |= 1;
+                            M2C_FIELD(M2C_FIELD(arg0, void**, 0x70), u16*, 6) |= 1;
+                            M2C_FIELD(M2C_FIELD(arg0, void**, 0x70), u16*, 8) |= 1;
+                            M2C_FIELD(M2C_FIELD(arg0, void**, 0x70), u16*, 0xC) |= 1;
+                            break;
+                        case 2:
+                            M2C_FIELD(arg0, u32*, 0xA8) = 1;
+                            M2C_FIELD(arg0, u32*, 0xAC) = 3;
+                            M2C_FIELD(arg0, u32*, 0xB8) = 2;
+                            M2C_FIELD(M2C_FIELD(arg0, void**, 0x70), u16*, 2) |= 1;
+                            M2C_FIELD(M2C_FIELD(arg0, void**, 0x70), u16*, 6) |= 1;
+                            M2C_FIELD(M2C_FIELD(arg0, void**, 0x70), u16*, 0xA) |= 1;
+                            M2C_FIELD(M2C_FIELD(arg0, void**, 0x70), u16*, 0xC) |= 1;
+                            break;
+                        case 3:
+                            M2C_FIELD(arg0, u32*, 0xA8) = 1;
+                            M2C_FIELD(arg0, u32*, 0xAC) = 4;
+                            M2C_FIELD(arg0, u32*, 0xB8) = 2;
+                            M2C_FIELD(M2C_FIELD(arg0, void**, 0x70), u16*, 4) |= 1;
+                            M2C_FIELD(M2C_FIELD(arg0, void**, 0x70), u16*, 8) |= 1;
+                            M2C_FIELD(M2C_FIELD(arg0, void**, 0x70), u16*, 0xA) |= 1;
+                            M2C_FIELD(M2C_FIELD(arg0, void**, 0x70), u16*, 0xC) |= 1;
+                            break;
+                    }
+                    M2C_FIELD(arg0, u32*, 0x74) = 0;
+                    func_8002DDFC((s8*)arg0 + 0x6C, (s32)arg0);
+                }
+            }
+            break;
+        case 0:
+        if (func_8002DCE0((u8*)arg0 + 0x6C, arg0) == 0) {
+            res = func_8002BC14(D_800603C0);
+            if (res == -1) {
+                func_8003F6AC(3);
+                M2C_FIELD(arg0, u32*, 0) = 1;
+                func_8002D900((u8*)arg0 + 0x6C, arg0);
+                func_82006BB8((HalfBankOwner*)arg0);
+            } else if (res == 1) {
+                func_8003F6AC(2);
+                switch (M2C_FIELD(arg0, u32*, 0x74)) {
+                    case 0:
+                        SET_PAIR_82007030(arg0, 2, 0, 1);
+                        break;
+                    case 1:
+                        SET_PAIR_82007030(arg0, 3, 0, 1);
+                        break;
+                    case 2:
+                        SET_PAIR_82007030(arg0, 4, 0, 1);
+                        break;
+                    case 3:
+                        SET_PAIR_82007030(arg0, 2, 3, 2);
+                        break;
+                    case 4:
+                        SET_PAIR_82007030(arg0, 2, 4, 2);
+                        break;
+                    case 5:
+                        SET_PAIR_82007030(arg0, 3, 4, 2);
+                        break;
+                    case 6:
+                        SET_PAIR_82007030(arg0, 5, 0, 1);
+                        break;
+                }
+                result = 1;
+            }
+        }
+            break;
+    }
+    return result;
+}
 
 typedef struct Box82007398 {
     s32 unk_00;

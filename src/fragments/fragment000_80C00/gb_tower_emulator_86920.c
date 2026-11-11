@@ -351,13 +351,13 @@ typedef struct Pool81109C0C {
 } Pool81109C0C; // size = 0x10
 
 typedef struct PersistentCache81109C0C {
-    /* 0x00 */ s32 numEntries;
+    /* 0x00 */ u32 numEntries;
     /* 0x04 */ Pool81109C0C pool;
     /* 0x14 */ CacheEntry81109C0C entries[1];
 } PersistentCache81109C0C; // size = 0x20
 
 typedef struct TemporaryCache81109C0C {
-    /* 0x00 */ s32 nextSide;
+    /* 0x00 */ u32 nextSide;
     /* 0x04 */ Pool81109C0C pool;
     /* 0x14 */ CacheEntry81109C0C entries[2];
 } TemporaryCache81109C0C; // size = 0x2C
@@ -379,11 +379,233 @@ extern u8 D_81184655[1];
 extern u8 D_81184656[1];
 void func_8110CAE0(s32, s32);
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81109C0C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81109C0C.s")
-#endif
+void* func_81109C0C(s32 tableType, s32 size, s32 cache, s32 id) {
+    Cache81109C0C* loadedCache;
+    TemporaryCache81109C0C* tCache;
+    Pool81109C0C* tempPool;
+    void* persistentAddr;
+    void* tempAddr;
+    u8 loadStatusEntry0;
+    u8 loadStatusEntry1;
+    s32 i;
+    u8* loadStatus;
+
+    switch (tableType) {
+        case 0:
+            loadedCache = (Cache81109C0C*)&D_81184320;
+            loadStatus = D_81184656;
+            break;
+        case 1:
+            loadedCache = (Cache81109C0C*)&D_81184380;
+            loadStatus = D_81184655;
+            break;
+        case 2:
+            loadedCache = (Cache81109C0C*)&D_811843E0;
+            loadStatus = D_81184654;
+            break;
+    }
+
+    if (cache == 0) {
+        tCache = &loadedCache->temporary;
+        tempPool = &tCache->pool;
+
+        if (tCache->entries[0].id == -1) {
+            loadStatusEntry0 = 0;
+        } else {
+            loadStatusEntry0 = loadStatus[tCache->entries[0].id];
+        }
+
+        if (tCache->entries[1].id == -1) {
+            loadStatusEntry1 = 0;
+        } else {
+            loadStatusEntry1 = loadStatus[tCache->entries[1].id];
+        }
+
+        if (tableType == 1) {
+            if (loadStatusEntry0 == 4) {
+                for (i = 0; i < D_811858E8; i++) {
+                    if (D_81184664[i].unk_33 == tCache->entries[0].id && D_81184664[i].enabled) {
+                        break;
+                    }
+                }
+
+                if (i == D_811858E8) {
+                    func_8110CAE0(tCache->entries[0].id, 3);
+                    loadStatusEntry0 = 3;
+                }
+            }
+
+            if (loadStatusEntry1 == 4) {
+                for (i = 0; i < D_811858E8; i++) {
+                    if (D_81184664[i].unk_33 == tCache->entries[1].id && D_81184664[i].enabled) {
+                        break;
+                    }
+                }
+
+                if (i == D_811858E8) {
+                    func_8110CAE0(tCache->entries[1].id, 3);
+                    loadStatusEntry1 = 3;
+                }
+            }
+        }
+
+        if (loadStatusEntry0 == 0) {
+            tCache->nextSide = 0;
+        } else if (loadStatusEntry1 == 0) {
+            tCache->nextSide = 1;
+        } else if (loadStatusEntry0 == 3 && loadStatusEntry1 == 3) {
+            // Use the opposite side from last time.
+        } else if (loadStatusEntry0 == 3) {
+            tCache->nextSide = 0;
+        } else if (loadStatusEntry1 == 3) {
+            tCache->nextSide = 1;
+        } else {
+            if (tableType == 0) {
+                if (loadStatusEntry0 == 2) {
+                    for (i = 0; i < D_811858CC; i++) {
+                        if (((SeqPlayer81109C0C*)&D_81184668)[i].enabled && ((SeqPlayer81109C0C*)&D_81184668)[i].seqId == tCache->entries[0].id) {
+                            break;
+                        }
+                    }
+                    if (i == D_811858CC) {
+                        tCache->nextSide = 0;
+                        goto done;
+                    }
+                }
+                if (loadStatusEntry1 == 2) {
+                    for (i = 0; i < D_811858CC; i++) {
+                        if (((SeqPlayer81109C0C*)&D_81184668)[i].enabled && ((SeqPlayer81109C0C*)&D_81184668)[i].seqId == tCache->entries[1].id) {
+                            break;
+                        }
+                    }
+                    if (i == D_811858CC) {
+                        tCache->nextSide = 1;
+                        goto done;
+                    }
+                }
+            } else if (tableType == 1) {
+                if (loadStatusEntry0 == 2) {
+                    for (i = 0; i < D_811858E8; i++) {
+                        if (D_81184664[i].unk_33 == tCache->entries[0].id && D_81184664[i].enabled) {
+                            break;
+                        }
+                    }
+                    if (i == D_811858E8) {
+                        tCache->nextSide = 0;
+                        goto done;
+                    }
+                }
+                if (loadStatusEntry1 == 2) {
+                    for (i = 0; i < D_811858E8; i++) {
+                        if (D_81184664[i].unk_33 == tCache->entries[1].id && D_81184664[i].enabled) {
+                            break;
+                        }
+                    }
+                    if (i == D_811858E8) {
+                        tCache->nextSide = 1;
+                        goto done;
+                    }
+                }
+            }
+
+            if (tCache->nextSide == 0) {
+                if (loadStatusEntry0 == 1) {
+                    if (loadStatusEntry1 == 1) {
+                        goto fail;
+                    }
+                    tCache->nextSide = 1;
+                }
+            } else {
+                if (loadStatusEntry1 == 1) {
+                    if (loadStatusEntry0 == 1) {
+                        goto fail;
+                    }
+                    tCache->nextSide = 0;
+                }
+            }
+
+            if (0) {
+            fail:
+                return NULL;
+            }
+        }
+
+    done:
+        if (tCache->entries[tCache->nextSide].id != -1) {
+            loadStatus[tCache->entries[tCache->nextSide].id] = 0;
+            if (tableType == 1) {
+                func_81109678(tCache->entries[tCache->nextSide].id);
+            }
+        }
+
+        switch (tCache->nextSide) {
+            case 0:
+                tCache->entries[0].ramAddr = tempPool->startRamAddr;
+                tCache->entries[0].id = id;
+                tCache->entries[0].size = size;
+                tempPool->curRamAddr = tempPool->startRamAddr + size;
+
+                if (tCache->entries[1].id != -1 && tCache->entries[1].ramAddr < tempPool->curRamAddr) {
+                    loadStatus[tCache->entries[1].id] = 0;
+                    switch (tableType) {
+                        case 0:
+                            func_81109764(tCache->entries[1].id);
+                            break;
+                        case 1:
+                            func_81109678(tCache->entries[1].id);
+                            break;
+                    }
+                    tCache->entries[1].id = -1;
+                    tCache->entries[1].ramAddr = tempPool->startRamAddr + tempPool->size;
+                }
+                tempAddr = tCache->entries[0].ramAddr;
+                break;
+
+            case 1:
+                tCache->entries[1].ramAddr = (u8*)((u32)(tempPool->startRamAddr + tempPool->size - size) & ~0xF);
+                tCache->entries[1].id = id;
+                tCache->entries[1].size = size;
+                if (tCache->entries[0].id != -1 && tCache->entries[1].ramAddr < tempPool->curRamAddr) {
+                    loadStatus[tCache->entries[0].id] = 0;
+                    switch (tableType) {
+                        case 0:
+                            func_81109764(tCache->entries[0].id);
+                            break;
+                        case 1:
+                            func_81109678(tCache->entries[0].id);
+                            break;
+                    }
+                    tCache->entries[0].id = -1;
+                    tempPool->curRamAddr = tempPool->startRamAddr;
+                }
+                tempAddr = tCache->entries[1].ramAddr;
+                break;
+
+            default:
+                return NULL;
+        }
+
+        tCache->nextSide ^= 1;
+        return tempAddr;
+    }
+
+    persistentAddr = (void*)func_81109868((M2C_UNK*)&loadedCache->persistent.pool, size);
+    loadedCache->persistent.entries[loadedCache->persistent.numEntries].ramAddr = persistentAddr;
+
+    if (persistentAddr == NULL) {
+        switch (cache) {
+            case 2:
+                return func_81109C0C(tableType, size, 0, id);
+            case 0:
+            case 1:
+                return NULL;
+        }
+    }
+
+    loadedCache->persistent.entries[loadedCache->persistent.numEntries].id = id;
+    loadedCache->persistent.entries[loadedCache->persistent.numEntries].size = size;
+    return loadedCache->persistent.entries[loadedCache->persistent.numEntries++].ramAddr;
+}
 
 /*
  * func_8110A310

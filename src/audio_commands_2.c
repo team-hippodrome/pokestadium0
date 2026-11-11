@@ -92,10 +92,9 @@ extern s32 D_800B418C;
 extern s32 D_800B41A8;
 extern s32 D_800FD698[];
 extern s32 D_800FD6A8[];
-extern M2C_UNK D_800FD6B4;
+extern u8 D_800FD6B4[2];
 extern u8 D_80077538;
-extern M2C_UNK D_800FD6B2;
-extern M2C_UNK D_800FD6B4;
+extern u8 D_800FD6B2[2];
 extern s32 D_800FD6A0[];
 extern u8 D_800FD6B0[];
 extern u8 D_800FD6B6[];
@@ -212,7 +211,7 @@ void func_80042A6C(s32 arg0) {
         case 38:
         case 39:
         case 40:
-            if (((u8*)&D_800FD6B4)[0] >= 2 && ((u8*)&D_800FD6B4)[1] >= 2) {
+            if (D_800FD6B4[0] >= 2 && D_800FD6B4[1] >= 2) {
                 func_80043CE8(0x1F, 0.0f, 0x80);
             }
             break;
@@ -224,7 +223,7 @@ void func_80042A6C(s32 arg0) {
             D_8007755C = 1;
             break;
         case 42:
-            if (((u8*)&D_800FD6B4)[0] >= 2 && ((u8*)&D_800FD6B4)[1] >= 2) {
+            if (D_800FD6B4[0] >= 2 && D_800FD6B4[1] >= 2) {
                 func_80043CE8(0x1C, 0.0f, 0x80);
                 func_80037AC4(D_800FD6BC, 0x3C);
                 D_800FD6BC = 0;
@@ -576,7 +575,7 @@ extern s32 D_800B41A4;
 
 void func_80043A10(void) {
     if (D_80077540 == 8) {
-        if (*(u8*)&D_800FD6B4 >= 2) {
+        if (D_800FD6B4[0] >= 2) {
             func_80043CE8(0x18, 0.0f, 0x80);
             D_80077530 = 1;
             return;
@@ -591,11 +590,69 @@ void func_80043A10(void) {
     func_8003834C(D_800B4188, D_800B41A4, 0x1A, 0x80, 0x80, 0, -1);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80043B00; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80043B00.s")
-#endif
+extern s32 D_80077590;
+extern u8 D_80077550;
+extern u32 D_8007758C;
+extern u32 D_80077588;
+extern u32 D_80077558;
+extern u8 D_8007754C;
+extern u32 D_80077598;
+extern u8 D_8007759C;
+extern s32 D_800775A4;
+extern s32 D_800775A0;
+extern u8 D_80077578;
+extern u8 D_80077584;
+extern u8 D_8007753C;
+void func_80043B00(s32 arg0, u32 arg1) {
+    func_800419F8(0);
+    D_80077590 = 0;
+    D_800FD738 = 0;
+    D_80077540 = arg0;
+    D_80077548 = 0;
+    D_80077550 = 0;
+    D_8007758C = 0;
+    D_80077588 = 0;
+    D_80077558 = 0;
+    D_800FD6B0[0] = 0;
+    D_800FD6B0[1] = 0;
+    D_800FD698[0] = D_800FD6A0[0] = 100;
+    D_800FD698[1] = D_800FD6A0[1] = 100;
+    D_800FD6A8[0] = 100;
+    D_800FD6A8[1] = 100;
+    if (D_80077540 > 0) {
+        D_800FD6B4[0] = 6;
+        D_800FD6B4[1] = 6;
+    } else if ((arg1 != 0) && (arg1 < 6)) {
+        D_800FD6B4[0] = D_800FD6B2[0] = 6;
+        D_800FD6B4[1] = D_800FD6B2[1] = 6;
+    } else {
+        D_800FD6B4[0] = D_800FD6B2[0] = 12;
+        D_800FD6B4[1] = D_800FD6B2[1] = 12;
+    }
+    D_800FD6B6[0] = 0;
+    D_800FD6B6[1] = 0;
+    D_8007754C = 0;
+    D_80077598 = 0;
+    D_8007759C = 0;
+    D_800775A4 = 0;
+    D_800775A0 = 0;
+    D_800FD6B8 = 0;
+    D_800FD6BC = 0;
+    D_80077564 = 0;
+    D_80077568 = 0;
+    D_8007756C = 0;
+    D_80077570 = 0;
+    D_80077574 = 0;
+    D_80077578 = 0;
+    D_80077580 = 0;
+    D_80077584 = 1;
+    D_8007755C = 0;
+    D_80077560 = 0;
+    D_8007757C = 0;
+    D_80077554 = 0;
+    D_8007753C = 0;
+    D_80077530 = 0;
+}
 
 /** One pending entry in the 10-slot ring buffer D_800FD6C0. */
 typedef struct QueuedEntry80043CE8 {

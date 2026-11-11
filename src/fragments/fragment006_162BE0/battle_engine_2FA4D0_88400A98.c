@@ -239,11 +239,45 @@ void func_88401290(void) {
     Font_EndTexturedTextRendering();
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_884014B4; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment006_162BE0/func_884014B4.s")
-#endif
+extern char D_88403234[];
+extern char D_88403240[];
+extern char D_8840324C[];
+extern char D_88403254[];
+extern char D_8840325C[];
+extern char D_88403268[];
+extern char D_8840327C[];
+extern char D_88403290[];
+extern char D_884032A0[];
+extern u8 D_8F4B2EB0[];
+void func_884014B4(s32 arg0, u8 arg1) {
+    Color_RGB8 sp44 = {0x00, 0x00, 0x32};
+    Color_RGB8 sp40 = {0x00, 0x00, 0xC8};
+    static char *D_88402FA4[] = {D_88403234, D_88403240};
+    static char *D_88402FAC[] = {D_8840324C, D_88403254};
+    s32 row;
+
+    row = arg0;
+    Ui_DrawGradientPanel(0x32, 0x3C, 0xDC, 0x7D, &sp44, &sp40);
+    gSPDisplayList(gDisplayListHead++, D_80060290);
+    Gfx_DrawTextureRgba16(0x3A, (row * 20) + 0x63, 0x18, 0xE, (u8 *) Util_ConvertAddrToVirtAddr((uintptr_t) D_8F4B2EB0), 0x18, 0x200000);
+    gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
+    Font_BeginTranslucentTextRendering();
+    Font_EnableTwoCycleTexturing();
+    Font_SetActive(8, -2);
+    Gfx_SetPrimColor(100, 255, 150, 255);
+    Font_Printf(0x6E, 0x44, D_8840325C);
+    Font_DisableTwoCycleTexturing();
+    Font_SetActive(4, -2);
+    Gfx_SetEnvColor(255, 255, ((row * 20) + 0x63 == 0x63) ? 0 : 255, 255);
+    Font_Printf(0x52, 0x62, D_88403268, D_88402FA4[(arg1 & 1) != 0]);
+    Gfx_SetEnvColor(255, 255, ((row * 20) + 0x63 == 0x77) ? 0 : 255, 255);
+    Font_Printf(0x52, 0x76, D_8840327C, D_88402FAC[(arg1 & 2) != 0]);
+    Gfx_SetEnvColor(255, 255, ((row * 20) + 0x63 == 0x8B) ? 0 : 255, 255);
+    Font_Printf(0x52, 0x8A, D_88403290);
+    Gfx_SetEnvColor(255, 255, ((row * 20) + 0x63 == 0x9F) ? 0 : 255, 255);
+    Font_Printf(0x52, 0x9E, D_884032A0);
+    Font_EndTexturedTextRendering();
+}
 
 void func_8840173C(s32 arg0, s32 arg1) {
     Color_RGB8 sp4C = { 0x00, 0x00, 0x32 };
@@ -656,7 +690,67 @@ void func_884025E4(void) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment006_162BE0/func_884026A4.s")
+extern u8 D_88402EB0[];
+extern u8 D_8F4A4240[];
+extern u8 D_8F4B2AF0[];
+extern u8 D_8F4959C8[];
+extern u8 D_8F4886F8[];
+extern u8 D_8E825FE8[];
+extern M2C_UNK D_8E802B64;
+extern u8 D_8E924770[];
+extern M2C_UNK D_8E902B64;
+extern M2C_UNK D_8F4014B0;
+extern Vec3f D_88403504;
+extern Vec3f D_88403510;
+extern s32 D_884037B4;
+extern s32 D_884037B8;
+extern s32 D_8840365C;
+void func_884026A4(s32 arg0) {
+    s8 sp27;
+    MemoryBlock* sp20;
+
+    sp20 = MainPool_AllocState(main_pool_get_available(), 0);
+    ModelRenderer_InitDisplayRoots();
+    ModelRenderer_AttachDisplayObject((DisplayObject*)&D_88403648);
+    ModelRenderer_AttachDisplayObject((DisplayObject*)&D_88403378);
+    ModelRenderer_AttachDisplayObject((DisplayObject*)&D_884034E0);
+    D_88403370 = (s32)process_geo_layout(sp20, D_88402EB0);
+    D_884037B0 = (s32)process_geo_layout(sp20, D_8F4A4240);
+    D_884037B4 = (s32)process_geo_layout(sp20, D_8F4B2AF0);
+    D_884037B8 = (s32)process_geo_layout(sp20, D_8F4959C8);
+    func_80019924(&D_88403648, 0, 0, (s32)process_geo_layout(sp20, D_8F4886F8));
+    if (D_800AF986 & 8) {
+        func_80019924(&D_884034E0, 1, 0, (s32)process_geo_layout(sp20, D_8E825FE8));
+        func_80010F14(&D_884034E0, 1, &D_8E802B64, 0x10000);
+        M2C_FIELD(&D_884034E0, u8 *, 1) &= ~1;
+        Vec3f_SetComponentsDuplicate(&D_88403504, 0.0f, 275.0f, 750.0f);
+        Vec3f_SetComponentsDuplicate(&D_88403510, 3.0f, 3.0f, 3.0f);
+    } else if (D_800AF986 & 0x10) {
+        func_80019924(&D_884034E0, 0, 0, (s32)process_geo_layout(sp20, D_8E924770));
+        func_80010F14(&D_884034E0, 1, &D_8E902B64, 0x10000);
+        M2C_FIELD(&D_884034E0, u8 *, 1) &= ~1;
+        Vec3f_SetComponentsDuplicate(&D_88403504, 0.0f, 275.0f, 750.0f);
+        Vec3f_SetComponentsDuplicate(&D_88403510, 3.0f, 3.0f, 3.0f);
+    }
+    MainPool_FinalizeAllocation(sp20);
+    if (arg0 == 0) {
+        func_80010F14(&D_88403648, 1, &D_8F4014B0, 0x10000);
+        M2C_FIELD(&D_88403648, s32 *, 0x14) = 0;
+        M2C_FIELD(&D_88403648, u8 *, 2) &= ~0x20;
+        return;
+    }
+    func_80010F14(&D_88403648, 1, &D_8F4014CC, 0xFFFF0000);
+    func_80010F9C(&D_88403648, 0x4A);
+    M2C_FIELD(&D_88403648, u8 *, 2) &= ~0x20;
+    if (D_88403358 >= 0) {
+        func_80025100(&sp27, 0);
+        func_80019924(&D_88403378, 0, 0, *((M2C_UNK*)((u8*)&D_884037B0 + (sp27 * 4))));
+        func_80010F14(&D_88403378, 1, *((M2C_UNK**)((u8*)&D_88402D74 + (sp27 * 4))), 0xFFFF0000);
+        func_80010F9C(&D_88403378, 0x4A);
+        M2C_FIELD(&D_88403378, u8 *, 2) &= ~0x20;
+    }
+    D_8840365C = 1;
+}
 
 void func_884029FC(void) {
     s32 sp2C;
