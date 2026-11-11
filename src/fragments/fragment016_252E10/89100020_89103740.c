@@ -160,15 +160,119 @@ void func_89103740(Ctx89103740* arg0, Ref89103740* arg1, s32 arg2, s32 arg3, Msg
     arg0->unkB558 = 1;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_89103858; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment016_252E10/func_89103858.s")
-#endif
-
 typedef struct List89103C54 {
     /* 0x00 */ Ref89103740** items;
 } List89103C54;
+void func_800307D4(List89103C54**, s32, s32);
+void func_89109C6C(s8*, s8*);
+
+typedef struct Ctx89103858 {
+    /* 0x0000 */ char unk0000[0x2C];
+    /* 0x002C */ s32 unk2C;
+    /* 0x0030 */ s32 unk30;
+    /* 0x0034 */ s32 unk34;
+    /* 0x0038 */ s32 unk38;
+    /* 0x003C */ char unk003C[0x88 - 0x3C];
+    /* 0x0088 */ s32 unk88;
+    /* 0x008C */ char unk008C[0x420 - 0x8C];
+    /* 0x0420 */ s32 unk420;
+    /* 0x0424 */ char unk0424[0x9648 - 0x424];
+    /* 0x9648 */ s8 unk9648[0x96D0 - 0x9648];
+    /* 0x96D0 */ s32 x;
+    /* 0x96D4 */ s32 y;
+    /* 0x96D8 */ char unk96D8[0x9714 - 0x96D8];
+    /* 0x9714 */ u16* flags;
+    /* 0x9718 */ s32 index;
+    /* 0x971C */ char unk971C[0x974C - 0x971C];
+    /* 0x974C */ s8 unk974C[0x14];
+    /* 0x9760 */ s32 unk9760;
+    /* 0x9764 */ Rgba891024A4 unk9764;
+    /* 0x9768 */ char unk9768[0x9778 - 0x9768];
+    /* 0x9778 */ s8 unk9778[0x14];
+    /* 0x978C */ s8 unk978C[0x34];
+    /* 0x97C0 */ s32 unk97C0;
+    /* 0x97C4 */ s32 unk97C4;
+    /* 0x97C8 */ char unk97C8[0x9808 - 0x97C8];
+    /* 0x9808 */ s8 unk9808[0xB160 - 0x9808];
+    /* 0xB160 */ List89103C54* list;
+    /* 0xB164 */ char unkB164[4];
+    /* 0xB168 */ s32 cursor;
+    /* 0xB16C */ char unkB16C[4];
+    /* 0xB170 */ s32 unkB170;
+    /* 0xB174 */ char unkB174[0xB18C - 0xB174];
+    /* 0xB18C */ s32 unkB18C;
+    /* 0xB190 */ char unkB190[0xB594 - 0xB190];
+    /* 0xB594 */ Msg89103740* msg;
+} Ctx89103858;
+
+extern u8 D_8910A8E8[];
+void func_89103144(s8*, Ref89103740*, s32);
+s32 func_89103858(Ctx89103858* arg0) {
+    s32 ret = 0;
+    s32 cursor;
+    s32 top;
+
+    func_891066C0((s8*)&arg0->x);
+    if (*(u16*)(D_800603C0 + 8) & 0x4000) {
+        func_8003F6AC(3);
+        arg0->unk88 = 7;
+    } else if (*(u16*)(D_800603C0 + 8) & 0x8000) {
+        if (!(arg0->flags[arg0->index] & 1)) {
+            switch (arg0->index) {
+                case 0:
+                    func_8003F6AC(0x18);
+                    cursor = arg0->cursor;
+                    top = arg0->cursor - arg0->unkB18C / arg0->unkB170;
+                    func_89103740((Ctx89103740*)arg0, arg0->list->items[arg0->cursor], 0, 0, arg0->msg);
+                    func_89109C6C(arg0->unk9648, (s8*)&arg0->unk420);
+                    func_89101D94(arg0);
+                    func_800307D4(&arg0->list, cursor, top);
+                    arg0->unk88 = 0;
+                    ret = 3;
+                    break;
+                case 3:
+                    func_8003F6AC(0x18);
+                    cursor = arg0->cursor;
+                    top = arg0->cursor - arg0->unkB18C / arg0->unkB170;
+                    func_89103740((Ctx89103740*)arg0, arg0->list->items[arg0->cursor], 3, 0, arg0->msg);
+                    func_89109C6C(arg0->unk9648, (s8*)&arg0->unk420);
+                    func_89101D94(arg0);
+                    func_800307D4(&arg0->list, cursor, top);
+                    arg0->unk88 = 0;
+                    ret = 3;
+                    break;
+                case 1:
+                    func_8003F6AC(2);
+                    func_89106424(arg0->unk974C, D_8910A8E8, arg0->unk9808, 8, 0);
+                    func_8002A8C4(arg0->unk9778, arg0->x + 0xE, arg0->y + 0x1C, 0xE4, 0x1C);
+                    arg0->unk9760 |= 0x01000000;
+                    arg0->unk97C0 = arg0->unk2C + arg0->unk34;
+                    arg0->unk97C4 = arg0->unk30 + arg0->unk38;
+                    func_89106570(arg0->unk974C);
+                    arg0->unk9764 = D_8910A7F4;
+                    func_89103144(arg0->unk978C, arg0->list->items[arg0->cursor], arg0->unk420 + 0x24);
+                    arg0->unk88 = 9;
+                    break;
+                case 2:
+                    func_8003F6AC(2);
+                    func_89106424(arg0->unk974C, D_8910A8E8, arg0->unk9808, 4, 0);
+                    func_8002A8C4(arg0->unk9778, arg0->x + 0xE, arg0->y + 0x38, 0xE4, 0x1C);
+                    arg0->unk9760 |= 0x01000000;
+                    arg0->unk97C0 = arg0->unk2C + arg0->unk34;
+                    arg0->unk97C4 = arg0->unk30 + arg0->unk38;
+                    func_89106570(arg0->unk974C);
+                    arg0->unk9764 = D_8910A7F4;
+                    func_89103144(arg0->unk978C, arg0->list->items[arg0->cursor], arg0->unk420 + 0x48);
+                    arg0->unk88 = 0xA;
+                    break;
+            }
+        } else {
+            func_8003F6AC(8);
+        }
+    }
+    return ret;
+}
+
 typedef struct Ctx89103C54 {
     /* 0x0000 */ char unk0000[0x88];
     /* 0x0088 */ s32 unk88;
@@ -189,8 +293,6 @@ typedef struct Ctx89103C54 {
     /* 0xB190 */ char unkB190[0xB594 - 0xB190];
     /* 0xB594 */ Msg89103740* msg;
 } Ctx89103C54;
-void func_800307D4(List89103C54**, s32, s32);
-void func_89109C6C(s8*, s8*);
 
 s32 func_89103C54(Ctx89103C54* arg0) {
     s32 ret = 0;
@@ -404,7 +506,6 @@ s32 func_89102AB8(s8*);
 s32 func_89102C40(s8*);
 s32 func_89102EC8(s8*);
 s32 func_891033A0(s8*);
-s32 func_89103858(s8*);
 s32 func_89103C54();
 s32 func_89103DAC();
 s32 func_8002D138(void*);
@@ -440,7 +541,7 @@ s32 func_891043BC(s8* arg0) {
             ret = func_891033A0(arg0);
             break;
         case 8:
-            ret = func_89103858(arg0);
+            ret = func_89103858((Ctx89103858*)arg0);
             break;
         case 9:
             ret = func_89103C54(arg0);
