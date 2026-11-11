@@ -25,6 +25,7 @@
 #include "memory.h"
 #include "rsp.h"
 #include "stage_loader.h"
+#include "graphics_textures.h"
 #include "lib/ultralib/include/PR/os_internal_reg.h"
 extern u16 D_8006BBB0[16][256];
 extern s32 pad_D_80075660;
@@ -799,14 +800,66 @@ void func_800269A0(s32 arg0) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_80026B50; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_80026B50.s")
-#endif
+/*
+ * func_80026B50
+ *
+ * Builds a display list that draws a 320x240 RGBA16 image `tex` as a grid of
+ * 10 columns by 4 rows of 32x60 texel tiles, centred on (x, y) and scaled to
+ * width x height. For each column it loads 32 vertices into the RSP, then for
+ * each row it loads that tile into TMEM, writes the tile's four corner
+ * vertices into `vtx` (shade 0x00007F, alpha 0xFF) and draws it as two
+ * triangles. Returns the display list pointer after gSPEndDisplayList.
+ *
+ * `vtx` needs room for 10 * 4 * 4 vertices (0xA00 bytes, as func_800270B4
+ * allocates).
+ *
+ * Matching notes: y0/y1 and then ult must be assigned at the top of the row
+ * loop, in that order, before the tile load; the texture coordinates of the
+ * right/bottom edges are written out inline. That fixes the order uopt numbers
+ * its expression temps in, and so the stack temp slots and s-registers.
+ */
+Gfx* func_80026B50(s16 x, s16 y, s16 z, Vtx* vtx, Gfx* gfx, void* tex, s16 width, s16 height) {
+    s32 i;
+    s32 j;
+    s32 uls;
+    s32 ult;
+    s32 x0;
+    s32 x1;
+    s32 y0;
+    s32 y1;
+    s16 s0;
+    s16 t0;
+
+    gDPPipeSync(gfx++);
+    gDPSetCombineMode(gfx++, G_CC_DECALRGB, G_CC_PASS2);
+    gSPTexture(gfx++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON);
+
+    for (i = 0; i < 10; i++) {
+        if (tex && tex && tex) {} // FAKE
+        gSPVertex(gfx++, vtx, 32, 0);
+        x0 = x + i * width / 10 - width / 2;
+        x1 = x + (i + 1) * width / 10 - width / 2;
+        uls = i * 32;
+        s0 = uls << 5;
+        for (j = 0; j < 4; j++) {
+            y0 = y + height / 2 - j * height / 4;
+            y1 = y + height / 2 - (j + 1) * height / 4;
+            ult = j * 60;
+            gDPLoadTextureTile(gfx++, tex, G_IM_FMT_RGBA, G_IM_SIZ_16b, 320, 0, uls, ult, uls + 31, ult + 59, 0,
+                               G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, 5, 6, G_TX_NOLOD, G_TX_NOLOD);
+            t0 = ult << 5;
+            Gfx_SetVertexAttributes(vtx++, x0, y0, z, s0, t0, 0, 0, 0x7F, 0xFF);
+            Gfx_SetVertexAttributes(vtx++, x0, y1, z, s0, (ult + 59) << 5, 0, 0, 0x7F, 0xFF);
+            Gfx_SetVertexAttributes(vtx++, x1, y1, z, (uls + 31) << 5, (ult + 59) << 5, 0, 0, 0x7F, 0xFF);
+            Gfx_SetVertexAttributes(vtx++, x1, y0, z, (uls + 31) << 5, t0, 0, 0, 0x7F, 0xFF);
+            gSP2Triangles(gfx++, j * 4, j * 4 + 1, j * 4 + 2, 0, j * 4, j * 4 + 2, j * 4 + 3, 0);
+        }
+    }
+    gSPEndDisplayList(gfx++);
+    return gfx;
+}
 
 s32 func_800023C4(M2C_UNK, M2C_UNK);                /* extern */
-M2C_UNK func_80026B50(s16, s16, s16, s32, s32, s32, s32, s32); /* extern */
 extern s32 D_800733F0;
 
 /*
@@ -814,9 +867,10 @@ extern s32 D_800733F0;
  *
  * Calls func_800023C4(0xA00, 0) and func_800023C4(0xA70, 0) (they look like
  * allocations, but that is not established here), then calls func_80026B50
- * with (arg0, arg1, arg2 as halfwords, first result, second result, arg3,
- * arg4, arg5). Stores the second result in D_800733F0 (the word that
- * Display_DisableBlackout clears) and returns it.
+ * to build the tiled image display list for texture arg3, with the first
+ * result as its vertex buffer and the second as the display list. Stores the
+ * second result in D_800733F0 (the word that Display_DisableBlackout clears)
+ * and returns it.
  *
  * Matching note: the unused leading `pad1` local only makes the stack frame
  * and slots match the ROM (0x38 bytes, blocks at sp+0x30 and sp+0x2C).
@@ -828,7 +882,7 @@ s32 func_800270B4(s16 arg0, s16 arg1, s16 arg2, s32 arg3, s16 arg4, s16 arg5) {
 
     sp30 = func_800023C4(0xA00, 0);
     sp2C = func_800023C4(0xA70, 0);
-    func_80026B50(arg0, arg1, arg2, sp30, sp2C, arg3, (s32) arg4, (s32) arg5);
+    func_80026B50(arg0, arg1, arg2, (Vtx*)sp30, (Gfx*)sp2C, (void*)arg3, arg4, arg5);
     D_800733F0 = sp2C;
     return sp2C;
 }
