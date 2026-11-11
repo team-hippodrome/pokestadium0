@@ -5,8 +5,8 @@ opaque assets, and retained storage metadata. Every file listed in
 `config/jp/sources.json` is compiled whole through
 asm-processor, so its C functions and its `GLOBAL_ASM` owners come out of one
 object. Include-only original SDK assembly wrappers use the native IDO assembler
-instead. Of the complete 5,444-owner inventory, 5,315 owners are C, 12 use
-original SDK assembly, and 117 still use extracted listings. Current verified counts are in [COVERAGE.md](../COVERAGE.md). The build links the resident image and all 259
+instead. Of the complete 5,444-owner inventory, 5,315 owners are C, 20 use
+original SDK assembly, and 109 still use extracted listings. Current verified counts are in [COVERAGE.md](../COVERAGE.md). The build links the resident image and all 259
 fragment images independently, preserving the fragments that share link
 addresses. The verified output is 16,777,216 bytes:
 
