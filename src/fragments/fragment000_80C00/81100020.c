@@ -112,11 +112,116 @@ void func_811002F4(s32 arg0, s32 arg1) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81100390; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81100390.s")
-#endif
+extern u8 D_8111E308;
+extern u8 D_8111E314[2];
+extern s32 D_8111D3A8;
+extern s32 D_8111CDA8;
+extern s32 D_8111C6A8;
+extern s32 D_8111C728;
+extern s32 D_8111C7A8;
+extern s32 D_8111C828;
+extern s32 D_8111C8A8;
+extern s32 D_8111C928;
+extern s32 D_8111CA28;
+extern s32 D_8111C9A8;
+extern s32 D_8111DBE8;
+extern s32 D_8111DE28;
+extern s32 D_8111D9A8;
+extern u8 D_8111E40C[];
+extern u8 D_8111E454[];
+extern u8 D_8111E47C[];
+extern u8 D_8111E4A0[];
+extern u8 D_8111E4AC[];
+/*
+ * GB Tower option screen. Draws the panel frame tiles into the framebuffer
+ * (three loops), then the two cursors and the selected options.
+ * Register allocation depends on reusing the same few locals: one IDO live
+ * range per local, so i, j, q and r each carry several roles on purpose.
+ */
+void func_81100390(s32 arg0, s32 arg1, s32 arg2) {
+    s32 fb;
+    s32 q;
+    s32 r;
+    s32 i;
+    s32 j;
+
+    arg0 += 0x787C;
+    fb = arg0;
+    if (D_8111E308 == 0) {
+        fb = arg0 - 0x4B00;
+    } else {
+        func_81103C40(arg0 + 0xF22, &D_8111D3A8, 0, 0x10, 0xC);
+        func_81103850((s8*)arg0, D_8111E40C);
+        if (D_8111E308 == 1) {
+            func_81103850((s8*)arg0, D_8111E454);
+        } else {
+            func_81103850((s8*)arg0, D_8111E47C);
+        }
+    }
+    func_81103850((s8*)fb, D_8111E4A0);
+    func_81103850((s8*)fb, D_8111E4AC);
+    func_81103C40(fb + 0x138AE, &D_8111CDA8, 0, 0x10, 0xC);
+    fb += 0xBB80;
+    func_81103C40(fb, &D_8111C6A8, 0, 8, 8);
+    for (i = 0; i < 0x12; i++) {
+        r = fb; // FAKE
+        if (i == 1) {
+            i = 8;
+        }
+        j = i * 0x10 + r + 0x10;
+        r = 0; // FAKE
+        func_81103C40(j, &D_8111C728, 0, 8, 8);
+        j += 0x10;
+    }
+    func_81103C40(j, &D_8111C7A8, 0, 8, 8);
+    for (j = 0, q = fb + 0x1400, r = fb + 0x1530; j < 0x7800; j += 0x1400, q += 0x1400, r += 0x1400) {
+        func_81103C40(q, &D_8111C828, 0, 8, 8);
+        func_81103C40(r, &D_8111C8A8, 0, 8, 8);
+    }
+    func_81103C40(q, &D_8111C928, 0, 8, 8);
+    func_81103C40(r, &D_8111CA28, 0, 8, 8);
+    for (j = 0, q = fb + 0x8C10; j != 0x120; j += 0x10, q += 0x10) {
+        if (j && j && j) {} // FAKE
+        func_81103C40(q, &D_8111C9A8, 0, 8, 8);
+    }
+    fb -= 0xBB80;
+    q = 0x2D;
+    r = 0x2B;
+    if (arg1 & 8) {
+        if (arg2 != 0) {
+            r = arg2 * 6 + 0x2B;
+            j = 1;
+            if (arg2 == -6) {
+                func_811002F4(fb + 0xFF76, arg1);
+            }
+        } else {
+            func_81103C40(fb + 0x10BA8, &D_8111C568, 0, 0x10, 0xA);
+            j = 3;
+        }
+    } else if (arg2 != 0) {
+        q = arg2 * 6 + 0x2D;
+        j = 2;
+        if (arg2 == -6) {
+            func_811002F4(fb + 0xCAF6, arg1);
+        }
+    } else {
+        func_81103C40(fb + 0xD728, &D_8111C568, 0, 0x10, 0xA);
+        j = 3;
+    }
+    i = fb + q * 2;
+    q = 0; // FAKE
+    func_81103C40(i + 0xD200, &D_8111DBE8, 0, 0x18, 0xC);
+    func_81103C40(i + 0xD236, &D_8111DE28, 0, 0x10, 0xC);
+    i = fb + r * 2;
+    func_81103C40(i + 0x10680, &D_8111D9A8, 0, 0x18, 0xC);
+    func_81103C40(i + 0x106BA, &D_8111DE28, 0, 0x10, 0xC);
+    if (j & 1) {
+        func_81103C40(fb + 0xD2C4, func_81100284(D_8111E314[0]), 0, 0x10, 0xC);
+    }
+    if (j & 2) {
+        func_81103C40(fb + 0x10744, func_81100284(D_8111E314[1]), 0, 0x10, 0xC);
+    }
+}
 
 void func_811000DC(s8* arg0, u8 arg1);
 void func_81103850(s8* arg0, u8* arg1);

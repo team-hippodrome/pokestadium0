@@ -340,7 +340,7 @@ func_81100020,0x81100020,src/fragments/fragment000_80C00/81100020.c,func_8110002
 func_811000DC,0x811000DC,src/fragments/fragment000_80C00/81100020.c,func_811000DC,hand,,c
 func_81100284,0x81100284,src/fragments/fragment000_80C00/81100020.c,func_81100284,hand,,c
 func_811002F4,0x811002F4,src/fragments/fragment000_80C00/81100020.c,func_811002F4,hand,,c
-func_81100390,0x81100390,src/fragments/fragment000_80C00/81100020.c,,asm,,asm
+func_81100390,0x81100390,src/fragments/fragment000_80C00/81100020.c,func_81100390,hand,,c
 func_81100818,0x81100818,src/fragments/fragment000_80C00/81100020.c,func_81100818,hand,,c
 func_811008DC,0x811008DC,src/fragments/fragment000_80C00/81100020.c,func_811008DC,hand,,c
 func_81100C84,0x81100C84,src/fragments/fragment000_80C00/81100020.c,,asm,,asm
