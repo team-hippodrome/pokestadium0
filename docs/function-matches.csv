@@ -5417,7 +5417,7 @@ func_8001DBB0,0x8001DBB0,src/ui_graphics.c,BattleHud_DrawGradientRect,s1,stadium
 func_8001DF58,0x8001DF58,src/ui_graphics.c,Ui_DrawBorderedPanel,s1,stadium1:src/ui_graphics.c,c
 func_8001E034,0x8001E034,src/ui_graphics.c,Ui_DrawGradientPanel,s1,stadium1:src/ui_graphics.c,c
 func_8001E170,0x8001E170,src/ui_graphics.c,Ui_DrawBorderedPanelStyleB,s1,stadium1:src/ui_graphics.c,c
-func_8001E24C,0x8001E24C,src/ui_graphics.c,,asm,,asm
+func_8001E24C,0x8001E24C,src/ui_graphics.c,func_8001E24C,hand,,c
 func_8001E618,0x8001E618,src/ui_graphics.c,Ui_DrawBorderedPanelNoFill,s1,stadium1:src/ui_graphics.c,c
 func_8001E6C0,0x8001E6C0,src/ui_graphics.c,Ui_DrawTextureMarker,hand,,c
 func_8001E7CC,0x8001E7CC,src/ui_graphics.c,Ui_Draw20x20Icon,s1,stadium1:src/ui_graphics.c,c

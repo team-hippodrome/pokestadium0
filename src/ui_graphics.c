@@ -260,11 +260,58 @@ void Ui_DrawBorderedPanelStyleB(s32 x1, s32 y1, s32 width, s32 height, u16 color
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8001E24C; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/1060/func_8001E24C.s")
-#endif
+extern Gfx D_800602C8[];
+extern Gfx D_80060398[];
+/**
+ * Draws a 282x130 YUV image at (x + 6, y + 6) as 16x16 tiles (the last column and row
+ * are cut to 10 and 2 pixels), then draws border style A around it.
+ */
+void func_8001E24C(s32 x, s32 y, u8* image) {
+    s32 j;
+    s32 i;
+    s32 w;
+    s32 h;
+    s32 left;
+    s32 top;
+    s32 right;
+    s32 bottom;
+
+    gDPPipeSync(gDisplayListHead++);
+    gDPSetCycleType(gDisplayListHead++, G_CYC_1CYCLE);
+    gDPSetRenderMode(gDisplayListHead++, 0x0F0A4000, 0);
+    gDPSetTexturePersp(gDisplayListHead++, G_TP_NONE);
+    gDPSetCombine(gDisplayListHead++, 0x17FE2F, 0x77FCF87C);
+    gDPSetTextureConvert(gDisplayListHead++, G_TC_CONV);
+    gDPSetConvert(gDisplayListHead++, G_CV_K0, G_CV_K1, G_CV_K2, G_CV_K3, G_CV_K4, G_CV_K5);
+    gDPPipeSync(gDisplayListHead++);
+
+    for (i = 0; i < 0x90; i += 0x10) {
+            h = 0x82 - i;
+            if (h > 0x10) {
+                h = 0x10;
+            }
+        for (j = 0; j < 0x120; j += 0x10) {
+            w = 0x11A - j;
+            if (w > 0x10) {
+                w = 0x10;
+            }
+            left = (x + j + 6) << 2;
+            top = (y + i + 6) << 2;
+            right = (x + j + w + 6) << 2;
+            bottom = (y + i + h + 6) << 2;
+            gDPLoadTextureBlockYuv(gDisplayListHead++, image, G_IM_FMT_YUV, G_IM_SIZ_16b, 16, 16, 0,
+                                G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK,
+                                G_TX_NOLOD, G_TX_NOLOD);
+            gSPTextureRectangle(gDisplayListHead++, left, top, right, bottom, G_TX_RENDERTILE, 0, 0, 0x0400, 0x0400);
+            image += 0x200;
+        }
+    }
+
+    gDPSetTextureConvert(gDisplayListHead++, G_TC_FILT);
+    gSPDisplayList(gDisplayListHead++, D_800602C8);
+    Ui_DrawBorderStyleA(x, y, 0x126, 0x8E);
+    gSPDisplayList(gDisplayListHead++, D_80060398);
+}
 
 void Ui_DrawBorderedPanelNoFill(s32 x1, s32 y1, s32 width, s32 height) {
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
