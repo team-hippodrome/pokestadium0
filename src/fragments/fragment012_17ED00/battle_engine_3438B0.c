@@ -1043,7 +1043,10 @@ void func_8212DB28(CameraNode* arg0) {
 
 void func_8210568C(ActivePokemon*, s32, s32);
 
-void func_8212DD14(ActivePokemon* arg0) {
+// Returns int with no return statement (most likely an old-style definition with
+// no return type). func_8212DE30 only matches when this call is seen as
+// returning a value: it keeps $v0 away from the scene pointer there.
+s32 func_8212DD14(ActivePokemon* arg0) {
     ActivePokemonState* state = &arg0->state;
     BattleMon* sp28 = &arg0->teamRoster->pokemonPicked[arg0->state.rosterIndex];
 
@@ -1065,11 +1068,64 @@ void func_8212DD14(ActivePokemon* arg0) {
     func_82110B44(arg0);
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_8212DE30; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8212DE30.s")
-#endif
+void func_82104C68(ActivePokemon*, s32);
+s32 func_82105724(ActivePokemon*, s32);
+void func_82105E64(ActivePokemon*);
+void func_8212DE30(CameraNode* arg0) {
+    switch (sBattleScene.scene->unk_20) {
+        case 0:
+            if (func_82105724((ActivePokemon*)D_8219A544, 5) != 0) {
+                func_8212C78C((s32)arg0);
+                func_821255B4(arg0);
+                func_8211F034(D_8219A520 + 0xC8, sBattleScene.scene->unk_2C);
+                func_82104C68((ActivePokemon*)D_8219A544, 3);
+                func_82110B44((ActivePokemon*)D_8219A544);
+                func_82105E64((ActivePokemon*)D_8219A544);
+                BattleScene_ResetCameraFrameCounter();
+                BattleScene_ResetCameraSubstepCounter();
+                sBattleScene.scene->unk_20++;
+            }
+            break;
+
+        case 1:
+            if (M2C_FIELD(sBattleScene.scene, s32*, 0x54) == 1) {
+                BattleAnim_ApproachF(&M2C_FIELD(arg0, f32*, 0x2C), 60.0f, 0.03f);
+            }
+            if (BattleScene_AdvanceCameraFrameCounter(0x23) != 0) {
+                BattleScene_ResetCameraFrameCounter();
+                func_8211F034(D_8219A520 + 0x88, sBattleScene.scene->unk_2C);
+                sBattleScene.scene->unk_20++;
+            }
+            break;
+
+        case 2:
+            if (M2C_FIELD(sBattleScene.scene, s32*, 0x54) == 1) {
+                BattleAnim_ApproachF(&M2C_FIELD(arg0, f32*, 0x2C), 60.0f, 0.03f);
+            }
+            if (sBattleScene.scene->unk_14 == 0x37) {
+                Battle_ClearMessageCursor();
+            }
+            if (func_821058E8((ActivePokemon*)D_8219A544, 0x3C) != 0) {
+                func_8212DD14(D_8219A540);
+                sBattleScene.scene->unk_20++;
+            }
+            break;
+
+        case 3:
+            if (M2C_FIELD(sBattleScene.scene, s32*, 0x54) == 1) {
+                BattleAnim_ApproachF(&M2C_FIELD(arg0, f32*, 0x2C), 60.0f, 0.03f);
+            }
+            D_8219A560 = func_8210F31C(sActivePokemon[sBattleScene.scene->unk_2C]);
+            D_8219A564 = func_8210F31C(sActivePokemon[!sBattleScene.scene->unk_2C]);
+            if (M2C_FIELD(D_8219A540, u8*, 0x820) == 0xFF) {
+                sBattleScene.scene->unk_34 = 3;
+            }
+            BattleScene_ResetCameraFrameCounter();
+            BattleScene_ResetAnimationStep();
+            func_82125C80(arg0);
+            break;
+    }
+}
 
 void func_8212E0B0(CameraNode* arg0) {
     switch (sBattleScene.scene->unk_20) {
