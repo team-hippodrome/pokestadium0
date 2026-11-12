@@ -462,7 +462,9 @@ void Battle_RandomizeDamage(void);
 /**
  * Resolves the current action: move selection, hit and damage checks, then
  * effect dispatch. Name from Stadium 1's ProcessBattleTurn.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): resolved 1P's Poison Sting at commit: the move cache load,
+ * Battle_CheckCriticalHit, Battle_CalcDamage, Battle_ApplyTypeEffectAndSTAB and the effect
+ * dispatch all ran inside it.
  */
 void ProcessBattleTurn(void) {
     s8 sp2C[12];
@@ -860,7 +862,9 @@ void func_8210F2F4(ActivePokemon*);
 void ProcessBattleTurn(void);
 /**
  * Initialize one action's shared state, resolve its turn and residuals, then check defeat.
- * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ * Seen in play (2026-11-12): at commit of a Poison Sting turn it called ProcessBattleTurn,
+ * Battle_ApplyResidualEffects and Battle_CheckFaintAfterMove in that order (return addresses
+ * 0x80128868, 0x80128870, 0x801288A8 in its body).
  */
 void Battle_ResolveMonAction(void)
 {
