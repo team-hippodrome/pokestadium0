@@ -72,7 +72,7 @@ void func_82136918(u8*, s32);
 /**
  * Battle opening, step 0 (BattleScene_RunOpeningSendOut): puts the camera high above the field
  * (target y 425), hides both Pokemon and starts the opening music (audio command 4).
- * @unverified Name from the code; not yet checked on screen.
+ * Seen in play (COM battle opening): the screen opens on the stadium lights overhead.
  */
 void BattleScene_OpeningStepInitCamera(CameraNode* arg0) {
     func_8212188C();
@@ -122,7 +122,8 @@ M2C_UNK func_821365B0(M2C_UNK, s8*, s8*, M2C_UNK, s32);
 /**
  * Battle opening, step 3: eases the camera down to field level over 110 frames, then starts side
  * 0's Poke Ball throw (model transform 1, effect list 8).
- * @unverified Name from the code; not yet checked on screen.
+ * Seen in play: the camera comes down off the lights over about 220 frames, and side 0's Poke
+ * Ball trail follows at once.
  */
 void BattleScene_OpeningStepLowerCameraAndThrowSide0(CameraNode* arg0) {
     s32 sp3C;

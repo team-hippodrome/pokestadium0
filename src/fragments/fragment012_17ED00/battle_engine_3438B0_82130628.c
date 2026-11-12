@@ -520,7 +520,7 @@ void func_82131A3C(CameraNode* arg0) {
 /**
  * Battle opening, step 4: once side 0's throw has finished, starts side 1's Poke Ball throw
  * (model transform 1, effect list 10).
- * @unverified Name from the code; not yet checked on screen.
+ * Seen in play: a Poke Ball with a sparkle trail rises from the trainer box.
  */
 void BattleScene_OpeningStepThrowSide1(s32 arg0) {
     M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 0), u8 *, 1) = (u8) (M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 0), u8 *, 1) & 0xFFFE);
@@ -538,7 +538,7 @@ void func_82122628(void*, Vec3f, s32, s32, f32, f32);
 /**
  * Battle opening, step 5: once side 1's throw has finished, frames side 0 and starts its Poke
  * Ball landing (model transform 2, effect list 11).
- * @unverified Name from the code; not yet checked on screen.
+ * Seen in play: the camera then shows the field with the landing ball's shadow.
  */
 void BattleScene_OpeningStepLandSide0Ball(void* arg0) {
     Vec3f sp34;
@@ -581,7 +581,7 @@ void BattleScene_IntroPanCamera(CameraNode* arg0) {
 
 /**
  * Battle opening, step 7: waits for side 0's Poke Ball animation to end.
- * @unverified Name from the code; not yet checked on screen.
+ * Seen in play: ends with the white flash of side 0's ball opening.
  */
 void BattleScene_OpeningStepWaitSide0Ball(s32 arg0) {
     M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 0), u8 *, 1) = (u8) (M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 0), u8 *, 1) & 0xFFFE);
@@ -614,7 +614,7 @@ void BattleScene_SendOutSide0(CameraNode* arg0) {
 /**
  * Battle opening, step 9: holds the camera on side 0's Pokemon after BattleScene_SendOutSide0
  * until its send-out row finishes.
- * @unverified Name from the code; not yet checked on screen.
+ * Seen in play: holds on the flash with 「ゆけっ！イワイワ」 (1P's lead).
  */
 void BattleScene_OpeningStepWaitSide0SendOut(CameraNode* arg0) {
     M2C_FIELD(sActivePokemon[1], u8*, 1) &= ~1;
@@ -650,7 +650,8 @@ void BattleScene_SendOutSide1(CameraNode* arg0) {
 /**
  * Battle opening, step 11: holds the camera on side 1's Pokemon after BattleScene_SendOutSide1,
  * then ends the opening.
- * @unverified Name from the code; not yet checked on screen.
+ * Seen in play: holds on the flash with 「ゆけっ！ニドのすけ」 (the COM's lead), then the command menu
+ * opens.
  */
 void BattleScene_OpeningStepWaitSide1SendOut(CameraNode* arg0) {
     M2C_FIELD(sActivePokemon[0], u8*, 1) &= ~1;
