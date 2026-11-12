@@ -1,8 +1,12 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
 #include "fragment1_89010.h"
 
-void func_821328DC(CameraNode* arg0) {
-    switch (sBattleScene.scene->unk_20) {
+/**
+ * Battle opening phase: steps through the intro camera shots and both send-outs.
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleScene_RunOpeningSendOut(CameraNode* arg0) {
+    switch (sBattleScene.scene->phaseStep) {
         case 0:
             func_821324D8(arg0);
 
@@ -35,7 +39,7 @@ void func_821328DC(CameraNode* arg0) {
             break;
 
         case 8:
-            func_82132088(arg0);
+            BattleScene_SendOutSide0(arg0);
             break;
 
         case 9:
@@ -43,7 +47,7 @@ void func_821328DC(CameraNode* arg0) {
             break;
 
         case 10:
-            func_82132238(arg0);
+            BattleScene_SendOutSide1(arg0);
             break;
 
         case 11:

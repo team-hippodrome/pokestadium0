@@ -223,7 +223,10 @@ s32 func_89109580(unk_func_8830867C_02C_0CC* arg0, unk_func_8830867C_02C_0CC* ar
     return func_891091C0(arg0, arg1);
 }
 
-s32 func_891095A0(unk_func_88316128* arg0, unk_func_88316128* arg1) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+s32 LabPCList_CompareByOtName(unk_func_88316128* arg0, unk_func_88316128* arg1) {
     s32 var_v0;
     s32 ret;
 
@@ -288,7 +291,7 @@ int LabPCList_FilterByLevelRange(unk_func_8830867C_02C_0CC* a0, u8* arg1) {
 }
 
 s32 LabPCList_FilterByAnyType(unk_func_8830867C_02C_0CC* arg0, unk_func_8830867C_02C_C54_01C* a1) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s32 i;
     s32 j;
     s32 var_v1;
@@ -347,7 +350,7 @@ s32 LabPCList_FilterBySpeciesId(unk_func_8830867C_02C_0CC* arg0, s32* arg1) {
 }
 
 s32 LabPCList_FilterByExactTypePair(unk_func_8830867C_02C_0CC* arg0, unk_func_8830867C_02C_C54_014* a1) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s32 i;
     s32 j;
     s32 var_v1;

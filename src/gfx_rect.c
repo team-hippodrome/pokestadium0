@@ -61,7 +61,10 @@ void GfxImage_AttachDepthBuffer(DepthBuffer* img, DepthBuffer* depth) {
     }
 }
 
-void func_80005324(void) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void GfxImage_ResetCurrent(void) {
     D_8005F670 = 0;
 }
 
@@ -69,7 +72,10 @@ DepthBuffer* GfxImage_GetCurrent(void) {
     return D_8005F670;
 }
 
-void func_8000533C(Gfx** gfx_p, DepthBuffer* arg1) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void GfxImage_SetRenderTarget(Gfx** gfx_p, DepthBuffer* arg1) {
     Gfx* gfx = *gfx_p;
 
     gDPPipeSync(gfx++);
@@ -85,7 +91,10 @@ void func_8000533C(Gfx** gfx_p, DepthBuffer* arg1) {
     *gfx_p = gfx;
 }
 
-void func_8000548C(Gfx** gfx_p) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Gfx_ApplyScissorRect(Gfx** gfx_p) {
     Gfx* gfx = *gfx_p;
 
     gDPPipeSync(gfx++);

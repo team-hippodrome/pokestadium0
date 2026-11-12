@@ -188,7 +188,7 @@ s8 GbCart_IdentifyGame(s32 arg0) {
 }
 
 s32 GbSave_CheckMainDataUnchanged(s32 arg0) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s32 sp18 = 0;
 
     if ((GbPak_MbcRead(arg0, &D_800AD338, 0x2580, 0x1020) == 0) &&
@@ -249,8 +249,8 @@ loop_1:
     goto loop_1;
 }
 
-/*
- * func_80021410
+/**
+ * GbSave_InvalidateMainDataChecksum
  *
  * Recomputes the checksum of the main save data of Game Boy port arg0 and
  * writes it back to the cartridge.  The checksum over bytes 0x18.. is stored
@@ -261,8 +261,9 @@ loop_1:
  *
  * Same structure as GbSave_InvalidateMainDataChecksum in the Stadium 1
  * decomp (its VERSION_JP branch uses the same 0x1000/0x1014/0x3580 values).
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
-s32 func_80021410(s32 arg0) {
+s32 GbSave_InvalidateMainDataChecksum(s32 arg0) {
     u8* temp_s3 = sGbSavePorts[arg0].unk_40;
     s32 i;
 
@@ -281,14 +282,14 @@ s32 func_80021410(s32 arg0) {
 
 extern GbSavePort D_800AC910[4];
 s32 GbSave_ReadBoxBank(s32 arg0, s32 arg1) {
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     u8* sp1C = sGbSavePorts[arg0].unk_44 + arg1 * 0x15A0;
 
     return GbPak_MbcRead(arg0, sp1C, (arg1 == 0) ? 0x4000 : 0x6000, 0x15A0) == 0;
 }
 
-/*
- * func_80021570
+/**
+ * GbSave_WriteBoxBank
  *
  * Writes box bank arg1 (0 or 1) of Game Boy port arg0 from the in-memory
  * box data to the cartridge and verifies it by reading it back into
@@ -298,8 +299,9 @@ s32 GbSave_ReadBoxBank(s32 arg0, s32 arg1) {
  *
  * Same structure as GbSave_WriteBoxBank in the Stadium 1 decomp (its
  * VERSION_JP branch also uses 0x15A0).
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
-s32 func_80021570(s32 arg0, s32 arg1) {
+s32 GbSave_WriteBoxBank(s32 arg0, s32 arg1) {
     s32 var_v0;
     u8* temp_s2 = sGbSavePorts[arg0].unk_44 + arg1 * 0x15A0;
     s32 i;
@@ -322,7 +324,7 @@ s32 func_80021570(s32 arg0, s32 arg1) {
 }
 
 extern s8 D_800AD210;
-void func_80021678(s32 arg0, u32 arg1) {
+void GbSave_ReleasePortBuffers(s32 arg0, u32 arg1) {
     s8 *temp_v0;
     s8 *temp_v0_2;
 
@@ -355,7 +357,10 @@ void GbSave_CheckLocationFlag(s32 arg0) {
     }
 }
 
-s32 func_8002178C(s32 arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+s32 GbSave_OpenMainData(s32 arg0) {
     u8 sp2F;
     s32 sp28 = 0;
 
@@ -373,7 +378,7 @@ s32 func_8002178C(s32 arg0) {
         }
 
         sp28 = GbSave_ReadMainData(arg0);
-        if (GbTower_CheckPakRemoved(arg0, sp2F) == 0) {
+        if (GbTower_IsPakInserted(arg0, sp2F) == 0) {
             Game_ShutdownAndLoadFragment(arg0, 2);
         }
 
@@ -400,7 +405,10 @@ s32 GbSave_EnsureMainDataLoaded(s32 arg0) {
     return sp1C;
 }
 
-s32 func_80021910(s32 arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+s32 GbSave_OpenBoxData(s32 arg0) {
     u8 sp37;
     s32 i;
     s32 sp2C;
@@ -428,7 +436,7 @@ s32 func_80021910(s32 arg0) {
                 sp2C = GbSave_ReadBoxBank(arg0, 1);
             }
 
-            if (GbTower_CheckPakRemoved(arg0, sp37) == 0) {
+            if (GbTower_IsPakInserted(arg0, sp37) == 0) {
                 Game_ShutdownAndLoadFragment(arg0, 2);
             }
 
@@ -449,8 +457,8 @@ s32 func_80021910(s32 arg0) {
     return sp2C;
 }
 
-s32 func_80021A8C(s32 arg0) {
-    UNUSED s32 pad;
+s32 GbSave_LoadPort(s32 arg0) {
+    UNUSED s32 pad; // FAKE: stack padding
     u8 sp2B;
     s32 temp_s1;
 
@@ -459,9 +467,9 @@ s32 func_80021A8C(s32 arg0) {
     }
 
     temp_s1 = GbSave_EnsureMainDataLoaded(arg0);
-    temp_s1 &= func_80021910(arg0);
+    temp_s1 &= GbSave_OpenBoxData(arg0);
 
-    if (GbTower_CheckPakRemoved(arg0, sp2B) == 0) {
+    if (GbTower_IsPakInserted(arg0, sp2B) == 0) {
         Game_ShutdownAndLoadFragment(arg0, 2);
     }
 
@@ -474,12 +482,12 @@ s32 func_80021A8C(s32 arg0) {
 
 extern GbSavePort D_800AC910[4];
 /*
- * func_80021B30
+ * GbSave_PollCartRemoval
  *
  * Per-port state machine that waits for a Game Boy cartridge to be pulled
  * out and put back, then checks it is the same one.  D_8006BB9C[arg0] is
  * the state:
- *   0  start the removal check (GbTower_CheckPakRemoved), fall into 1
+ *   0  start the removal check (GbTower_IsPakInserted), fall into 1
  *   1  wait until the cartridge is off (GbPak_IsCartOff)
  *   2  wait until it is back on (GbPak_IsCartOn); returns 1 meanwhile
  *   3  re-initialise the pak (GbTower_ReinitPak); if that worked, return 3,
@@ -491,12 +499,12 @@ extern GbSavePort D_800AC910[4];
  *
  * Same structure as GbSave_PollCartRemoval in the Stadium 1 decomp.
  */
-s32 func_80021B30(s32 arg0) {
+s32 GbSave_PollCartRemoval(s32 arg0) {
     s32 sp24 = 0;
 
     switch (D_8006BB9C[arg0]) {
         case 0:
-            GbTower_CheckPakRemoved(arg0, 0);
+            GbTower_IsPakInserted(arg0, 0);
             D_8006BB9C[arg0] += 1;
             // fallthrough
 
@@ -529,11 +537,11 @@ s32 func_80021B30(s32 arg0) {
 }
 
 /*
- * func_80021C6C
+ * GbSave_ForceReloadPort
  *
  * If bit arg0 of D_800AD330 is set: sets bit 0x20 in the first halfword of
  * Game Boy port arg0's record, then calls GbSave_OpenMainData(arg0). If that
- * returns non-zero, calls func_80022BC8(arg0) and clears the record's
+ * returns non-zero, calls GbSave_RefreshPlayerIdentity(arg0) and clears the record's
  * unk_03 byte; if it returns 0, sets unk_03 to 3.
  *
  * What bit 0x20 and the values 0 and 3 of unk_03 mean is not established.
@@ -541,12 +549,15 @@ s32 func_80021B30(s32 arg0) {
  * the compiler then spills the record pointer to sp+0x1C as in the ROM,
  * whereas a `port` local put the spill at sp+0x18.
  */
-s32 func_80022BC8(s32 arg0);
-void func_80021C6C(s32 arg0) {
+s32 GbSave_RefreshPlayerIdentity(s32 arg0);
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void GbSave_ForceReloadPort(s32 arg0) {
     if ((1 << arg0) & D_800AD330) {
         sGbSavePorts[arg0].unk_00 |= 0x20;
         if (GbSave_OpenMainData(arg0) != 0) {
-            func_80022BC8(arg0);
+            GbSave_RefreshPlayerIdentity(arg0);
             sGbSavePorts[arg0].unk_03 = 0;
         } else {
             sGbSavePorts[arg0].unk_03 = 3;
@@ -554,8 +565,11 @@ void func_80021C6C(s32 arg0) {
     }
 }
 
-s32 func_8002178C(s32);
-s32 func_80021CF4(void) {
+s32 GbSave_OpenMainData(s32);
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+s32 GbSave_ScanAllPorts(void) {
     s32 i;
     s32 temp_v0 = GbTower_ScanPaks();
 
@@ -584,14 +598,14 @@ s32 func_80021CF4(void) {
                 if (GbPak_DetectRam(i, var_s0->unk_18) == 0) {
                     Game_ShutdownAndLoadFragment(i, 2);
                 }
-                if (func_8002178C(i) != 0) {
+                if (GbSave_OpenMainData(i) != 0) {
                     GbSave_RefreshPlayerIdentity(i);
                     var_s0->unk_03 = 0;
                 } else {
                     var_s0->unk_03 = 3;
                 }
             }
-            GbTower_CheckPakRemoved(i, 0);
+            GbTower_IsPakInserted(i, 0);
         }
     }
 
@@ -621,7 +635,7 @@ s32 func_80021E64(s32 arg0) {
         Game_ShutdownAndLoadFragment(arg0, 2);
     }
     ret = GbSave_RebuildAndWriteSave(arg0);
-    ret &= GbTower_CheckPakRemoved(arg0, sp33);
+    ret &= GbTower_IsPakInserted(arg0, sp33);
     return ret;
 }
 
@@ -639,12 +653,12 @@ s32 GbSave_WriteBoxBanks(s32 arg0) {
         if (sp28 != 0) {
             sp28 = GbSave_WriteBoxBank(arg0, 1);
         }
-        sp28 &= GbTower_CheckPakRemoved(arg0, sp2F);
+        sp28 &= GbTower_IsPakInserted(arg0, sp2F);
     }
     return sp28;
 }
 
-s32 func_80021FF4(s32 arg0) {
+s32 GbSave_CommitMainData(s32 arg0) {
     u8 sp2F;
     s32 sp28 = 0;
 
@@ -653,7 +667,7 @@ s32 func_80021FF4(s32 arg0) {
             Game_ShutdownAndLoadFragment(arg0, 2);
         }
         sp28 = func_80021334(arg0);
-        sp28 &= GbTower_CheckPakRemoved(arg0, sp2F);
+        sp28 &= GbTower_IsPakInserted(arg0, sp2F);
     }
     return sp28;
 }
@@ -675,7 +689,7 @@ s32 GbSave_RebuildAndWriteSave(s32 arg0) {
         }
     }
 
-    sp28 &= GbTower_CheckPakRemoved(arg0, sp2F);
+    sp28 &= GbTower_IsPakInserted(arg0, sp2F);
     return sp28;
 }
 
@@ -692,7 +706,7 @@ void GbSave_ValidateBeforeWrite(s32 arg0) {
 }
 
 void GbSave_RequirePakPresent(s32 arg0) {
-    if (GbTower_CheckPakRemoved(arg0, 0) == 0) {
+    if (GbTower_IsPakInserted(arg0, 0) == 0) {
         Game_ShutdownAndLoadFragment(arg0, 2);
     }
 }
@@ -713,7 +727,11 @@ GbSaveBoxEntry* GbSave_GetBoxEntry(s32 arg0, s32 arg1) {
     return sp1C;
 }
 
-void func_80022284(BattleMon* arg0, s32 arg1, s32 arg2) {
+/**
+ * The raw 6-byte Game Boy trainer name is kept in the 3-byte tails at 0x3D and 0x4D.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ */
+void GbSave_LoadMainPokemon(BattleMon* arg0, s32 arg1, s32 arg2) {
     GbSavePartyZero* ptr2 = (GbSavePartyZero*)(sGbSavePorts[arg1].unk_40 + 0x955);
 
     Pokemon_FromGbRecordExt(arg0, &ptr2->unk_008[arg2]);
@@ -724,8 +742,8 @@ void func_80022284(BattleMon* arg0, s32 arg1, s32 arg2) {
     Text_UntranscodeFixedName((char*)arg0 + 0x40, ptr2->unk_110[arg2]);
 }
 
-/*
- * func_8002234C
+/**
+ * GbSave_SaveMainPokemon
  *
  * Stores battle Pokemon slot arg2 of arg0 into slot arg2 of the party block
  * (offset 0x955 of the main save data) of Game Boy port arg1: the record
@@ -735,18 +753,22 @@ void func_80022284(BattleMon* arg0, s32 arg1, s32 arg2) {
  * species list.
  *
  * Same structure as GbSave_SaveMainPokemon in the Stadium 1 decomp.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
-void func_8002234C(unk_func_88205880_00D0* arg0, s32 arg1, s32 arg2) {
+void GbSave_SaveMainPokemon(unk_func_88205880_00D0* arg0, s32 arg1, s32 arg2) {
     GbSavePartyZero* sp24 = (GbSavePartyZero*)(sGbSavePorts[arg1].unk_40 + 0x955);
 
     Pokemon_ToGbRecordExt(arg0, &sp24->unk_008[arg2]);
-    Text_TranscodeName(sp24->unk_134[arg2], (char*)arg0->unk_000[0].unk_30);
+    Text_TranscodeName(sp24->unk_134[arg2], (char*)arg0->unk_000[0].nickname);
     _bcopy((u8*)&arg0->unk_000[0] + 0x3D, sp24->unk_110[arg2], 3);
     _bcopy((u8*)&arg0->unk_000[0] + 0x4D, sp24->unk_110[arg2] + 3, 3);
     sp24->unk_001[arg2] = sp24->unk_008[arg2].unk_00.unk_00;
 }
 
-void func_80022424(BattleMon* arg0, s32 arg1, s32 arg2, s32 arg3) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void GbSave_LoadBoxPokemon(BattleMon* arg0, s32 arg1, s32 arg2, s32 arg3) {
     u8* sp2C = (u8*)GbSave_GetBoxEntry(arg1, arg2);
 
     if (sp2C != NULL) {
@@ -761,7 +783,7 @@ void func_80022424(BattleMon* arg0, s32 arg1, s32 arg2, s32 arg3) {
 }
 
 /*
- * func_800224E8
+ * GbSave_SaveBoxPokemon
  *
  * Stores battle Pokemon arg0 into slot arg3 of box arg2 of Game Boy port
  * arg1, if that box exists (GbSave_GetBoxEntry returns non-NULL): the
@@ -773,13 +795,13 @@ void func_80022424(BattleMon* arg0, s32 arg1, s32 arg2, s32 arg3) {
  *
  * Same structure as GbSave_SaveBoxPokemon in the Stadium 1 decomp.
  */
-void func_800224E8(BattleMon* arg0, s32 arg1, s32 arg2, s32 arg3) {
+void GbSave_SaveBoxPokemon(BattleMon* arg0, s32 arg1, s32 arg2, s32 arg3) {
     GbSaveBoxZero* sp2C = (GbSaveBoxZero*)GbSave_GetBoxEntry(arg1, arg2);
 
     if (sp2C != NULL) {
-        arg0->unk_04 = arg0->unk_24;
+        arg0->unk_04 = arg0->level;
         Pokemon_ToGbRecord(arg0, &sp2C->unk_020[arg3]);
-        Text_TranscodeName(sp2C->unk_4B2[arg3], (char*)arg0->unk_30);
+        Text_TranscodeName(sp2C->unk_4B2[arg3], (char*)arg0->nickname);
         _bcopy((u8*)arg0 + 0x3D, sp2C->unk_3FE[arg3], 3);
         _bcopy((u8*)arg0 + 0x4D, sp2C->unk_3FE[arg3] + 3, 3);
         sp2C->unk_001[arg3] = sp2C->unk_020[arg3].unk_00;
@@ -873,8 +895,8 @@ s32 Deck_GetCount(s32 arg0, s32 arg1, s32 arg2) {
     return var_v1;
 }
 
-/*
- * func_8002274C
+/**
+ * Deck_DeleteEntry
  *
  * Truncates the deck arg0 (32 = party, 33 = box, 34 and 35 = the two
  * BattleMonSpecies lists of the main save data) of Game Boy port arg1 to
@@ -886,8 +908,9 @@ s32 Deck_GetCount(s32 arg0, s32 arg1, s32 arg2) {
  *
  * Same structure as Deck_DeleteEntry in the Stadium 1 decomp, using its
  * VERSION_JP offsets.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
-void func_8002274C(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
+void Deck_DeleteEntry(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     GbSaveMainZero* sp1C = (GbSaveMainZero*)sGbSavePorts[arg1].unk_40;
 
     if (arg3 < Deck_GetCount(arg0, arg1, arg2)) {
@@ -903,30 +926,31 @@ void func_8002274C(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
 
             case 34:
                 sp1C->unk_25C = arg3;
-                sp1C->unk_25D[arg3].unk_00 = 0xFF;
+                sp1C->unk_25D[arg3].id = 0xFF;
                 break;
 
             case 35:
                 sp1C->unk_044 = arg3;
-                sp1C->unk_045[arg3].unk_00 = 0xFF;
+                sp1C->unk_045[arg3].id = 0xFF;
                 break;
         }
     }
 }
 
-/*
- * func_80022828
+/**
+ * Deck_AppendEntry
  *
  * Appends one entry to deck arg0 of Game Boy port arg1 (box arg2 for box
  * decks), if the deck is below its capacity (Deck_GetCapacity): the count
  * becomes count + 1 and the list is re-terminated with 0xFF at the new
  * count.  The entry's contents are written separately (see Deck_WriteEntry).
- * Deck numbers are as in func_8002274C.
+ * Deck numbers are as in Deck_DeleteEntry.
  *
  * Same structure as Deck_AppendEntry in the Stadium 1 decomp, using its
  * VERSION_JP offsets.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
-void func_80022828(s32 arg0, s32 arg1, s32 arg2) {
+void Deck_AppendEntry(s32 arg0, s32 arg1, s32 arg2) {
     GbSaveMainZero* sp1C = (GbSaveMainZero*)sGbSavePorts[arg1].unk_40;
     s32 sp18 = Deck_GetCount(arg0, arg1, arg2);
 
@@ -945,19 +969,19 @@ void func_80022828(s32 arg0, s32 arg1, s32 arg2) {
 
             case 34:
                 sp1C->unk_25C = sp18;
-                sp1C->unk_25D[sp18].unk_00 = 0xFF;
+                sp1C->unk_25D[sp18].id = 0xFF;
                 break;
 
             case 35:
                 sp1C->unk_044 = sp18;
-                sp1C->unk_045[sp18].unk_00 = 0xFF;
+                sp1C->unk_045[sp18].id = 0xFF;
                 break;
         }
     }
 }
 
-/*
- * func_8002290C
+/**
+ * Deck_ReadEntry
  *
  * Reads entry arg3 of deck arg0 (port arg1, box arg2 for box decks) into
  * the BattleMon arg4.  Decks 32 and 33 load a full Pokemon
@@ -968,8 +992,9 @@ void func_80022828(s32 arg0, s32 arg1, s32 arg2) {
  *
  * Same structure as Deck_ReadEntry in the Stadium 1 decomp, using its
  * VERSION_JP offsets.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
-s32 func_8002290C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, BattleMon* arg4) {
+s32 Deck_ReadEntry(s32 arg0, s32 arg1, s32 arg2, s32 arg3, BattleMon* arg4) {
     s32 sp1C = 0;
 
     if (arg3 < Deck_GetCount(arg0, arg1, arg2)) {
@@ -985,11 +1010,11 @@ s32 func_8002290C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, BattleMon* arg4) {
                 break;
 
             case 35:
-                arg4->unk_00 = temp_v0->unk_045[arg3];
+                arg4->species = temp_v0->unk_045[arg3];
                 break;
 
             case 34:
-                arg4->unk_00 = temp_v0->unk_25D[arg3];
+                arg4->species = temp_v0->unk_25D[arg3];
                 break;
         }
         sp1C = 1;
@@ -997,8 +1022,8 @@ s32 func_8002290C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, BattleMon* arg4) {
     return sp1C;
 }
 
-/*
- * func_80022A00
+/**
+ * Deck_WriteEntry
  *
  * Writes the Pokemon in arg4 to entry arg3 of deck arg0 (port arg1, box
  * arg2 for box decks).  Allowed when arg3 is an existing entry, or the
@@ -1007,12 +1032,13 @@ s32 func_8002290C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, BattleMon* arg4) {
  * full Pokemon (GbSave_SaveMainPokemon / GbSave_SaveBoxPokemon); decks 34
  * and 35 store the 2-byte BattleMonSpecies at the start of arg4's first
  * Pokemon.  When writing at the end, the deck is then extended with
- * func_80022828.
+ * Deck_AppendEntry.
  *
  * Same structure as Deck_WriteEntry in the Stadium 1 decomp, using its
  * VERSION_JP offsets.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
-s32 func_80022A00(s32 arg0, s32 arg1, s32 arg2, s32 arg3, unk_func_88205880_00D0* arg4) {
+s32 Deck_WriteEntry(s32 arg0, s32 arg1, s32 arg2, s32 arg3, unk_func_88205880_00D0* arg4) {
     s32 sp2C = 0;
     s32 sp28 = Deck_GetCapacity(arg0);
     s32 sp24 = Deck_GetCount(arg0, arg1, arg2);
@@ -1030,11 +1056,11 @@ s32 func_80022A00(s32 arg0, s32 arg1, s32 arg2, s32 arg3, unk_func_88205880_00D0
                 break;
 
             case 35:
-                ptr->unk_045[arg3] = arg4->unk_000[0].unk_00;
+                ptr->unk_045[arg3] = arg4->unk_000[0].species;
                 break;
 
             case 34:
-                ptr->unk_25D[arg3] = arg4->unk_000[0].unk_00;
+                ptr->unk_25D[arg3] = arg4->unk_000[0].species;
                 break;
         }
 
@@ -1052,7 +1078,7 @@ s32 GbSave_GetPresentPortMask(void) {
 }
 
 extern s8 D_800AD213;
-u8 func_80022B4C(s32 arg0) {
+u8 GbSave_GetSaveState(s32 arg0) {
     return *(&D_800AD213 + (arg0 * 0x48));
 }
 
@@ -1071,12 +1097,12 @@ s32 GbSave_GetPortAvailability(s32 arg0) {
 }
 
 extern s8 D_800AD212;
-u8 func_80022BAC(s32 arg0) {
+u8 GbSave_GetPortGame(s32 arg0) {
     return *(&D_800AD212 + (arg0 * 0x48));
 }
 
 /*
- * func_80022BC8
+ * GbSave_RefreshPlayerIdentity
  *
  * Refreshes the cached player identity of Game Boy port arg0 from that
  * port's loaded save image.  Returns 0 if the port's "present" bit
@@ -1096,7 +1122,10 @@ u8 func_80022BAC(s32 arg0) {
  */
 s32 func_8001FAB0(u8*);
 
-s32 func_80022BC8(s32 arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+s32 GbSave_RefreshPlayerIdentity(s32 arg0) {
     if (!(sGbSavePorts[arg0].unk_00 & 1)) {
         return 0;
     }
@@ -1106,16 +1135,16 @@ s32 func_80022BC8(s32 arg0) {
 }
 
 /*
- * func_80022C40
+ * GbSave_CopyPlayerIdentity
  *
  * Copies the 8-byte cached player identity of Game Boy port arg0 (the
  * halfword at port offset 0x38 followed by the 6-byte name at 0x3A, the
- * pair that func_80022BC8 refreshes) to arg1.  Zero's equivalent of
+ * pair that GbSave_RefreshPlayerIdentity refreshes) to arg1.  Zero's equivalent of
  * GbSave_CopyPlayerIdentity in the Stadium 1 decomp, which copies a
  * 0x10-byte record with the same 64-bit load/store; Zero's record is
  * only 8 bytes and its port stride is 0x48.
  */
-void func_80022C40(s32 arg0, void* arg1) {
+void GbSave_CopyPlayerIdentity(s32 arg0, void* arg1) {
     u64* ptr = (u64*)&sGbSavePorts[arg0].unk_38;
     u64* ptr2 = arg1;
 
@@ -1123,7 +1152,7 @@ void func_80022C40(s32 arg0, void* arg1) {
 }
 
 extern s8 D_800AD210;
-s32 func_80022C70(s32 arg0) {
+s32 GbSave_GetTrainerId(s32 arg0) {
     s8 *temp_v0;
 
     temp_v0 = (arg0 * 0x48) + &D_800AD210;
@@ -1263,7 +1292,10 @@ s32 GbSave_CopyPortSnapshot(s32 arg0, GbSavePortSnapshot* arg1) {
     return temp_v1;
 }
 
-void func_8002302C(char* arg0, s32 arg1, u8* arg2) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void GbSave_MarkSeenBits(char* arg0, s32 arg1, u8* arg2) {
     s32 temp_v0;
     s32 h;
 
@@ -1350,19 +1382,20 @@ void func_80023268(s32 arg0, s32 arg1, s32 arg2) {
     }
 }
 
-/*
- * func_800233AC
+/**
+ * GbSave_CountSpeciesProgressField036
  *
  * Counts the set bits among the first 0x97 (151) bits of the bit array at
  * offset 0x31 of the main save data of Game Boy port arg0 (bit i is bit
  * i % 8 of byte i / 8).  Which Pokedex flag set that array is (seen or
- * owned) is not established here; see func_800234EC for the other array,
+ * owned) is not established here; see GbSave_CountSpeciesProgressField023 for the other array,
  * at offset 0x1E.
  *
  * Same structure as GbSave_CountSpeciesProgressField036 in the Stadium 1
  * decomp (its VERSION_JP offset is also 0x31).
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
-s32 func_800233AC(s32 arg0) {
+s32 GbSave_CountSpeciesProgressField036(s32 arg0) {
     s32 i;
     s32 temp_v1 = 0;
 
@@ -1373,17 +1406,18 @@ s32 func_800233AC(s32 arg0) {
     return temp_v1;
 }
 
-/*
- * func_800234EC
+/**
+ * GbSave_CountSpeciesProgressField023
  *
- * Same as func_800233AC but over the bit array at offset 0x1E of the main
+ * Same as GbSave_CountSpeciesProgressField036 but over the bit array at offset 0x1E of the main
  * save data: counts the set bits among the first 0x97 (151) bits, where
  * bit i is bit i % 8 of byte i / 8.
  *
  * Same structure as GbSave_CountSpeciesProgressField023 in the Stadium 1
  * decomp (its VERSION_JP offset is also 0x1E).
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
-s32 func_800234EC(s32 arg0) {
+s32 GbSave_CountSpeciesProgressField023(s32 arg0) {
     s32 i;
     s32 temp_v1 = 0;
 
@@ -1394,7 +1428,10 @@ s32 func_800234EC(s32 arg0) {
     return temp_v1;
 }
 
-s32 func_8002362C(s32 arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+s32 GbSave_CountSpeciesProgressField06(s32 arg0) {
     s32 i;
     s32 temp_v1 = 0;
 

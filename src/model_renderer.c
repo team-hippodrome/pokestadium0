@@ -50,7 +50,7 @@ void ModelRenderer_AttachSecondaryDisplayObject(DisplayObject* arg0) {
 // passes object_type as a second argument (a1) in the ROM.
 void func_800325B0(u32 arg0, u32 arg1);
 
-void func_80019924(DisplayObject* display_object, s16 root_id, s16 object_type, ModelNodeView* child) {
+void Model_InitDisplayObject(DisplayObject* display_object, s16 root_id, s16 object_type, ModelNodeView* child) {
     DisplayObject* obj; // FAKE
 
     GraphNode_AppendChild(&display_object->node, child);
@@ -145,26 +145,30 @@ ModelAnimationBank* ModelAnim_GetAnimationRecord(DisplayObject* arg0, s32 arg1) 
 
 extern unk_D_8006FF00 D_80064C5C[];
 
-arg1_func_80010CA8* func_80019BDC(arg1_func_80010CA8* arg0, BattleMon* arg1) {
-    UNUSED s32 pad;
+/**
+ * Derive the material color variant from a non-default nickname, OT id, and OT name.
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+arg1_func_80010CA8* Model_ComputeNicknameColorVariant(arg1_func_80010CA8* arg0, BattleMon* arg1) {
+    UNUSED s32 pad; // FAKE: stack padding
     char sp38[0xB];
     arg1_func_80010CA8 sp34;
     unk_D_8006FF00* sp30;
-    UNUSED s32 pad2;
+    UNUSED s32 pad2; // FAKE: stack padding
     u8 var_a0;
     s8* var_v1;
 
-    sp30 = &D_80064C5C[arg1->unk_00.unk_00 - 1];
+    sp30 = &D_80064C5C[arg1->species.id - 1];
     sp34.raw = 0;
 
-    Text_CopySpeciesName(sp38, arg1->unk_00.unk_00);
+    Text_CopySpeciesName(sp38, arg1->species.id);
 
-    if (HAL_Strcmp(arg1->unk_30, sp38) != 0) {
+    if (HAL_Strcmp(arg1->nickname, sp38) != 0) {
         var_a0 = ((arg1->unk_0E >> 8) & 0xFF) + (arg1->unk_0E & 0xFF);
 
         if (1) {}  // karodo
 
-        var_v1 = arg1->unk_30;
+        var_v1 = arg1->nickname;
         while (*var_v1) {
             var_a0 += *var_v1++ & 0xFF;
             var_a0 += 0;

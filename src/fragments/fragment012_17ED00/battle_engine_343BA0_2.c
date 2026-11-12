@@ -32,7 +32,7 @@ void func_821336E4(UNUSED s32 arg0);
 void func_82132E20(void) {
 }
 
-void func_821247F0(s32, s32);
+void BattleScene_CameraShotTargetHighThunk(s32, s32);
 void func_82124810(s32, s32);
 void func_82124830(s32, s32);
 void func_82124874(s32, s32);
@@ -40,7 +40,7 @@ void func_82124874(s32, s32);
 void func_82132E28(s32 arg0, s32 arg1, s32 arg2) {
     switch (arg2) {
         case 0:
-            func_821247F0(arg1, arg0);
+            BattleScene_CameraShotTargetHighThunk(arg1, arg0);
             break;
         case 1:
             func_82124810(arg1, arg0);
@@ -54,29 +54,29 @@ void func_82132E28(s32 arg0, s32 arg1, s32 arg2) {
     }
 }
 
-void func_82107D24(s32, Vec3f*);
+void BattleScene_GetParticipantAimPoint(s32, Vec3f*);
 void func_8212254C(s32, s32, Vec3f, s32, s32, f32, f32);
 void func_82122628(s32, Vec3f, s32, s32, f32, f32);
 void func_82132EB4(s32 arg0, s32 arg1, f32 arg2, f32 arg3, s16 arg4, s16 arg5) {
-    func_82107D24(arg1, &sBattleScene.scene->unk_D0);
+    BattleScene_GetParticipantAimPoint(arg1, &sBattleScene.scene->unk_D0);
     func_8212254C(arg1, arg0, sBattleScene.scene->unk_D0, 0, 0x4000, arg3, 0.0f);
     func_82122628(arg0, sBattleScene.scene->unk_D0, arg4, arg5, arg2, 0.0f);
 }
 
 extern s16 D_8219A4F0[];
 extern s8* D_8219A590;
-void func_82124984(s8* arg0, CameraNode* arg1, s32 arg2);
+void BattleCamera_PlayShot(s8* arg0, CameraNode* arg1, s32 arg2);
 
 void func_82132F88(CameraNode* arg0) {
     D_8219A4F0[0xE] = 0;
     D_8219A4F0[0xD] = 0;
     BattleScene_SetCameraClipPlanes(arg0, 20.0f, 4000.0f);
     BattleScene_ResetCameraFrameCounter();
-    sBattleScene.scene->unk_2C = 0;
-    D_8219A590 = (s8*)sActivePokemon[sBattleScene.scene->unk_2C];
-    func_82124984(D_8219A590, arg0, 3);
+    sBattleScene.scene->actingSide = 0;
+    D_8219A590 = (s8*)sActivePokemon[sBattleScene.scene->actingSide];
+    BattleCamera_PlayShot(D_8219A590, arg0, 3);
     Battle_SetStageScale(0.0f);
-    sBattleScene.scene->unk_20++;
+    sBattleScene.scene->phaseStep++;
 }
 
 s32 func_8003F6AC(s32);
@@ -186,10 +186,10 @@ void func_8213334C(CameraNode* arg0) {
  * 0xFF, then:
  *   - if D_8219A50C == 5: calls func_82135E80(arg0, D_8219A590); if the
  *     upper halfword of the word at offset 0x48 of the object
- *     D_8219A590 points to is 0x26, calls func_8003FE58(0x38, 9, 0); and if
+ *     D_8219A590 points to is 0x26, calls Audio_PlayMoveSound(0x38, 9, 0); and if
  *     func_821217DC(0x37) returns non-zero, sets the word at offset 0x40
  *     of the object D_8219A5A0 points to to 3, calls func_80006998(0xFFFF),
- *     func_80005C4C(4) and func_80040738(), and sets the word at offset
+ *     func_80005C4C(4) and Audio_FadeAndClearStoredSounds(), and sets the word at offset
  *     0x20 of that object to 6;
  *   - otherwise adds 1 to that word at offset 0x20.
  *
@@ -199,8 +199,8 @@ void func_8213334C(CameraNode* arg0) {
  */
 M2C_UNK func_80005C4C(M2C_UNK);
 M2C_UNK func_80006998(M2C_UNK);
-M2C_UNK func_8003FE58(M2C_UNK, M2C_UNK, M2C_UNK);
-M2C_UNK func_80040738();
+M2C_UNK Audio_PlayMoveSound(M2C_UNK, M2C_UNK, M2C_UNK);
+M2C_UNK Audio_FadeAndClearStoredSounds();
 s32 func_821217DC(M2C_UNK);
 M2C_UNK func_82135E80(CameraNode*, s8*);
 extern s16 D_8219A50C;
@@ -211,13 +211,13 @@ void func_8213346C(CameraNode* arg0) {
     if (D_8219A50C == 5) {
         func_82135E80(arg0, D_8219A590);
         if (((s32) M2C_FIELD(D_8219A590, s32 *, 0x48) >> 0x10) == 0x26) {
-            func_8003FE58(0x38, 9, 0);
+            Audio_PlayMoveSound(0x38, 9, 0);
         }
         if (func_821217DC(0x37) != 0) {
             M2C_FIELD(D_8219A5A0, s32 *, 0x40) = 3;
             func_80006998(0xFFFF);
             func_80005C4C(4);
-            func_80040738();
+            Audio_FadeAndClearStoredSounds();
             M2C_FIELD(D_8219A5A0, s32 *, 0x20) = 6;
         }
     } else {
@@ -233,7 +233,7 @@ M2C_UNK func_80019B28(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32);
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_82133534(CameraNode *arg0)
 {
-  s32 pad[2];
+  s32 pad[2]; // FAKE: stack padding
   Arr82133534 sp28 = D_8218B350;
   s32 v;
   D_8219A594 = func_8000F1FC(D_8219A594, 0, 0x28, 0x28);
@@ -257,7 +257,7 @@ void func_82133534(CameraNode *arg0)
 }
 
 M2C_UNK func_80019B28(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32); /* extern */
-M2C_UNK func_821088BC(s8 *);                      /* extern */
+void Battle_LoadOwnerModelForSwitchIn(ActivePokemon* active_pokemon);                      /* extern */
 M2C_UNK func_8213B31C(M2C_UNK);                     /* extern */
 extern s8 *D_8219A590;
 extern u8 D_8219A594;
@@ -270,7 +270,7 @@ void func_82133640(s32 arg0) {
         func_8213B31C(2);
         temp_v0 = M2C_FIELD(D_8219A590, u8 **, 0x85C);
         *temp_v0 &= 0xFF6F;
-        func_821088BC(D_8219A590);
+        Battle_LoadOwnerModelForSwitchIn(D_8219A590);
         func_82133028(arg0);
         func_80019B28(D_8219A590, 0, 0, 0, 0xFF);
         D_8219A594 = 0;
@@ -300,7 +300,7 @@ void func_8213346C(CameraNode* arg0);
 void func_82133534(CameraNode* arg0);
 
 void func_821336EC(CameraNode* arg0) {
-    switch (sBattleScene.scene->unk_20) {
+    switch (sBattleScene.scene->phaseStep) {
         case 0:
             func_82132F88(arg0);
             break;

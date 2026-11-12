@@ -82,7 +82,7 @@ typedef struct unk_func_89109990 {
 
 void func_80027804(void*, u8**, s32, s32);
 void func_89109990(unk_func_89109990* arg0, u8** arg1, u8* arg2, s32 arg3) {
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     unk_func_89109990_010* var_s1 = arg0->unk_10;
     s32 var_t0 = 0;
     s32 i;
@@ -262,12 +262,12 @@ s32 func_80025BD8(void);
 void func_80027410(void*, void*, s32, s32, s32);
 void func_80027FF8(void*, s32);
 s32 func_800246A8(s32, s32);
-s32 func_800246C8(s32, s32);
-s32 func_8002479C(s32, s32, u8*);
+s32 Deck_GetSaveEntryTrainerId(s32, s32);
+s32 Deck_GetSaveEntryName(s32 arg0, s32 arg1, u8* arg2);
 s32 func_80024ADC(s32, s32);
 s32 func_8000A4E8(char*, char*);
 void func_89109E5C(unk_func_8830867C_02C_154* arg0, void* arg1, void* arg2, void* arg3) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s32 temp_s1;
     char sp54[4];
     unk_func_8002D860 sp48;
@@ -294,8 +294,8 @@ void func_89109E5C(unk_func_8830867C_02C_154* arg0, void* arg1, void* arg2, void
 
     for (i = 0; i < 4; i++) {
         if ((func_800246A8(0x12, i) != 0) && (func_80024ADC(0x12, i) > 0)) {
-            temp_s1 = func_800246C8(0x12, i);
-            func_8002479C(0x12, i, sp38);
+            temp_s1 = Deck_GetSaveEntryTrainerId(0x12, i);
+            Deck_GetSaveEntryName(0x12, i, sp38);
             if ((sp48.unk_08 == temp_s1) && (func_8000A4E8(sp54, sp38) == 0)) {
                 break;
             }
@@ -467,8 +467,8 @@ s32 LabPCList_CanLearnMoveByLevelUp(s32 arg0, s32 arg1) {
 }
 
 s32 func_80020974(s32);
-s32 func_8002D3D0(u8*);
-s32 func_8002D430(s32, s32);
+s32 BattleMon_CountMoves(u8* arg0);
+s32 BattleMon_GetMoveIndex(s32, s32);
 
 void func_8910A4C8(s8* arg0, u8* arg1) {
     s32 i;
@@ -491,7 +491,7 @@ void func_8910A4C8(s8* arg0, u8* arg1) {
             } else {
                 move = **(u8**)e - 0x92;
             }
-            n = func_8002D3D0(arg1);
+            n = BattleMon_CountMoves(arg1);
             for (j = 0; j < n; j++) {
                 if (func_80020974(move) == arg1[j + 9]) {
                     break;
@@ -504,9 +504,9 @@ void func_8910A4C8(s8* arg0, u8* arg1) {
                 M2C_FIELD(base[i], s32*, 0x10) |= 0x10;
             }
         } else if (M2C_FIELD(e, s32*, 8) >= 50) {
-            n2 = func_8002D3D0(arg1);
+            n2 = BattleMon_CountMoves(arg1);
             for (j = 0; j < n2; j++) {
-                if ((func_8002D430((s32)arg1, j) != -2) && ((arg1 + j)[0x20] < 0xC0)) {
+                if ((BattleMon_GetMoveIndex((s32)arg1, j) != -2) && ((arg1 + j)[0x20] < 0xC0)) {
                     break;
                 }
             }

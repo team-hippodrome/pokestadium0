@@ -381,7 +381,7 @@ u8 GbMusic_CmdSetEnvelope(u32 arg0) {
 }
 
 u8 GbMusic_CmdPitchSlide(u32 arg0) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     u8 temp_v0;
 
     D_800B4028[arg0].unk_0C = GbMusic_ReadStreamByte(arg0);
@@ -674,8 +674,8 @@ s32 GbMusic_WriteChannelFrequency(u32 arg0, u16 arg1) {
     }
 
     {
-        u32 new_var2 = arg1 & 0xFF;
-        u32 new_var = (((arg1 >> 8) & 0xFF) | 0x80) & 0xC7;
+        u32 new_var2 = arg1 & 0xFF; // FAKE: permuter temp
+        u32 new_var = (((arg1 >> 8) & 0xFF) | 0x80) & 0xC7; // FAKE: permuter temp
 
         sp2E[2] = new_var2;
         sp2E[3] = new_var;
@@ -779,7 +779,7 @@ u8 GbMusic_ReadStreamByte(u32 arg0) {
 }
 
 u16 GbMusic_GetChannelRegister(u32 arg0, s32 arg1) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     u16 D_800785BC[] = {
         0xFF10, 0XFF15, 0xFF1A, 0XFF1F, 0xFF10, 0XFF15, 0xFF1A, 0XFF1F,
     };
@@ -799,8 +799,8 @@ u16 GbMusic_GetNoteFrequency(u8 arg0, u8 arg1) {
     return ret;
 }
 
-/*
- * func_8003D8D8
+/**
+ * GbMusic_StartMusic
  *
  * Resets the Game Boy sound-chip emulation state and starts music sequence
  * arg0: clears the per-channel arrays for the four channels (and the two
@@ -819,8 +819,9 @@ u16 GbMusic_GetNoteFrequency(u8 arg0, u8 arg1) {
  * it then repeats the `lui` for every store instead of sharing it; why is
  * not investigated).  That is why the arrays below are static and why
  * config/jp/sections.json places this file's .bss at 0x800B3FD0.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
-void func_8003D8D8(u8 arg0) {
+void GbMusic_StartMusic(u8 arg0) {
     s32 i;
 
     D_800B3FF8 = 0;

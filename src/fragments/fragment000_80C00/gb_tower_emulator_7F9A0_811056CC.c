@@ -1,4 +1,4 @@
-/* Fixed-layout split at func_811056CC so its jump table lands at 0x81154258. */
+/* Fixed-layout split at GbEmu_UpdateFrame so its jump table lands at 0x81154258. */
 /* Stadium Zero fragment000_80C00. */
 /* C ported from the Stadium 1 decomp: src/fragments/gb_tower_emulator/gb_tower_emulator_7F9A0.c. */
 
@@ -15,7 +15,7 @@
 #include "m2c_macros.h"
 
 void GbEmu_BlitWithPixelOp(u16* dst, u16* src, s32 mode, s32 width, s32 height);
-void func_81107128(u16* arg0, u16* arg1, s16* arg2, s32 arg3, s32 arg4);
+void GbEmu_BlendScrollingLayer(u16* arg0, u16* arg1, s16* arg2, s32 arg3, s32 arg4);
 
 s32 func_811020A8(void *arg0);
 
@@ -74,7 +74,7 @@ void func_80058410(void*, void*, s32);
 extern s32 D_81154C48;
 
 void func_81103D30(void);
-void func_81104540(u16* arg0, s32 arg1, s32 arg2);
+void GbEmu_DrawAccessIcon(u16* arg0, s32 arg1, s32 arg2);
 void func_81104618(s32 arg0);
 void func_811047A0(s32 arg0);
 void func_81104930(void);
@@ -152,8 +152,8 @@ extern u8 D_8111F470[];
 extern u8 D_8111E678[];
 void func_800093E0(void*, void*);
 void func_811027A8(GbpakChannel811023DC*);
-void func_8000B1FC(void);
-void func_8000B220(void);
+void Cont_StartReadInputs(void);
+void Cont_ReadInputs(void);
 u8 func_81118018(void*, s32);
 void func_80056730(void*, s32, void*);
 void func_811177D0(s32);
@@ -166,8 +166,9 @@ void func_811177D0(s32);
  * cycles the graphics set copied in for the screen frame. Returns 1 when only
  * C-Up is held, a negative value on a Transfer Pak error, -100 when the core
  * stopped, otherwise 0.
+ * @unverified Name guessed from the code; comment kept.
  */
-s32 func_811056CC(void) {
+s32 GbEmu_UpdateFrame(void) {
     s32 i;
     s32 err;
     s32 status;
@@ -207,7 +208,7 @@ s32 func_811056CC(void) {
             if (++D_811565A3 >= 11) {
                 D_811565A3 = 0;
             }
-            func_81104540((u16*)(GB_RUN->unk_50 + 0xB0), 0, D_811565A3);
+            GbEmu_DrawAccessIcon((u16*)(GB_RUN->unk_50 + 0xB0), 0, D_811565A3);
             GB_RUN->buttons = 0;
         } else {
             func_81103D30();
@@ -221,8 +222,8 @@ s32 func_811056CC(void) {
         timer = &D_811565B8;
         err = func_81102AC8(D_811565A0);
         if (err == 0) {
-            func_8000B1FC();
-            func_8000B220();
+            Cont_StartReadInputs();
+            Cont_ReadInputs();
             if ((++*timer & 3) == 0) {
                 D_811561C8[D_811565A0].request = 8;
                 func_8004CFB0(&D_81156458, D_811565A0, 1);
@@ -275,7 +276,7 @@ s32 func_811056CC(void) {
             if (++*(u8*)&D_811565A2 >= 11) { // FAKE
                 *(u8*)&D_811565A2 = 0; // FAKE
             }
-            func_81104540((u16*)(GB_RUN->unk_50 + 0xB0), 1, *(u8*)&D_811565A2); // FAKE
+            GbEmu_DrawAccessIcon((u16*)(GB_RUN->unk_50 + 0xB0), 1, *(u8*)&D_811565A2); // FAKE
         }
         GB_RUN->buttons = 0;
     }
@@ -586,11 +587,17 @@ extern s16 D_8260854C;
 extern s16 D_8260854E;
 extern s16 D_800AA148;
 extern s32 D_81156550;
-void func_811174D8(void);
+void GbAudio_UpdateFrame(void);
 void osViBlack(u8);
-void VictoryPalace_ResetPillarGlow(UNUSED s32 arg0) {
+/**
+ * Per-frame tail of the GB Tower emulator: unless emulation is paused (D_81156546) or
+ * the screen is being blanked (D_800AA148), runs the GB audio frame and mirrors the
+ * emulated NR52 (0xFF26) register into GB memory; while D_800AA148 is set it blanks video.
+ * @unverified Name guessed from the code.
+ */
+void GbEmu_UpdateAudioOrBlankVideo(UNUSED s32 arg0) {
     if ((*(u8*)&D_81156546 == 0) && (D_800AA148 == 0)) {
-        func_811174D8();
+        GbAudio_UpdateFrame();
         ((u8*)D_81156550)[0xFF26] = GbMem_ReadIoRegister(0xFF26);
     }
     if (D_800AA148 != 0) {
@@ -606,7 +613,12 @@ extern u16 D_81124AC0[];
 extern u16 D_81124B40[];
 extern u16 D_81124BC0[];
 extern u16 D_81124C40[];
-void func_811068A0(u16* arg0) {
+/**
+ * Draws a 46x46 framed panel (8x8 edge and corner tiles from sUiGraphics) with a
+ * solid interior, used behind each party icon on the loading screen.
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void GbEmu_DrawFramedPanel(u16* arg0) {
     s32 i;
     s32 j;
 
@@ -698,8 +710,8 @@ extern u16 D_81127638[];
 extern u16 D_811278E0[];
 extern u16 D_81127B88[];
 extern u8 D_8112A938[];
-void func_81103850(u16*, u8*);
-void func_811068A0(u16* arg0);
+void GbEmu_DrawTextCommands(u16*, u8*);
+void GbEmu_DrawFramedPanel(u16* arg0);
 u32 func_80053A80(void);
 M2C_UNK func_8005C0A0();
 void func_81106CC8(u16* dst, u8 (*arg1)[0xC80], s32 arg2, s32 arg3) {
@@ -724,10 +736,10 @@ void func_81106CC8(u16* dst, u8 (*arg1)[0xC80], s32 arg2, s32 arg3) {
     _bcopy(dst + 0x10540, D_811565D0, 0x2580);
     D_811565D4 = (u16*)func_81104B18(0x2580, 0);
     bzero(D_811565D4, 0x2580);
-    func_81103850(D_811565D4, D_8112A938);
+    GbEmu_DrawTextCommands(D_811565D4, D_8112A938);
 
     for (i = 0; i < 6; i++) {
-        func_811068A0(dst + 0xB916 + i * 46);
+        GbEmu_DrawFramedPanel(dst + 0xB916 + i * 46);
         osInvalDCache(arg1[i], sizeof(arg1[i]));
         GbEmu_BlitWithPixelOp(dst + 0xBCD9 + i * 46, (u16*)arg1[i], 0, 40, 40);
     }
@@ -792,7 +804,11 @@ void func_81106CC8(u16* dst, u8 (*arg1)[0xC80], s32 arg2, s32 arg3) {
     D_811565CC = 0;
 }
 
-void func_81107128(u16* arg0, u16* arg1, s16* arg2, s32 arg3, s32 arg4) {
+/**
+ * Adds a scrolling image layer to the destination with per-channel saturation.
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void GbEmu_BlendScrollingLayer(u16* arg0, u16* arg1, s16* arg2, s32 arg3, s32 arg4) {
     s32 i;
     s32 j;
     s32 var_v1;
@@ -844,7 +860,7 @@ void func_8110724C(void) {
         if (D_811565CC >= 0x140) {
             D_811565CC = 0;
         }
-        func_81107128(D_811565D4, D_811565D0, (s16*)(D_811565C0 + 0x20A80), 0xF, D_811565CC);
+        GbEmu_BlendScrollingLayer(D_811565D4, D_811565D0, (s16*)(D_811565C0 + 0x20A80), 0xF, D_811565CC);
         func_8005C0A0();
     }
 }

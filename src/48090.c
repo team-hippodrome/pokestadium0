@@ -33,12 +33,18 @@ void func_800474B8(s32 arg0, s32 arg1) {
     func_8003798C(arg0, arg1);
 }
 
-M2C_UNK func_800387BC(s32);                         /* extern */
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+M2C_UNK Audio_FadeCategoriesAndStreams(s32);                         /* extern */
 extern s8 D_8007753C;
 extern s8 D_8007754C;
 extern s32 D_80077588;
 extern s32 D_8007758C;
-void func_800474E0(s32 arg0)
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Audio_FadeCategoriesAndStreamsWithDuration(s32 arg0)
 {
   s32 var_a0;
   if (1)
@@ -53,5 +59,5 @@ void func_800474E0(s32 arg0)
       var_a0 = 1;
     }
   }
-  func_800387BC(var_a0);
+  Audio_FadeCategoriesAndStreams(var_a0);
 }

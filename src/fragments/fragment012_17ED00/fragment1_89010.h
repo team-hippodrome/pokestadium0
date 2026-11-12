@@ -41,9 +41,9 @@ void func_82131C64(CameraNode* arg0);
 void func_82131D24(CameraNode* arg0);
 void func_82131EC4(CameraNode* arg0);
 void func_8213201C(CameraNode* arg0);
-void func_82132088(CameraNode* arg0);
+void BattleScene_SendOutSide0(CameraNode* arg0);
 void func_821321A4(CameraNode* arg0);
-void func_82132238(CameraNode* arg0);
+void BattleScene_SendOutSide1(CameraNode* arg0);
 void func_8213233C(CameraNode* arg0);
 
 void BattleScene_UpdateIntroSequence(CameraNode* arg0);
@@ -58,6 +58,6 @@ void func_821324D8(CameraNode* arg0);
 void func_82132628(CameraNode* arg0);
 void func_821326E4(CameraNode* arg0);
 
-void func_821328DC(CameraNode* arg0);
+void BattleScene_RunOpeningSendOut(CameraNode* arg0);
 
 #endif

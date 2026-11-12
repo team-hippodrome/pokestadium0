@@ -82,16 +82,25 @@ void BattleScene_SetParticipantModelScale(ActivePokemon* active_pokemon, f32 sca
     active_pokemon->displayObject.scale.z = scale;
 }
 
-u8 func_82107A30(s8 *arg0) {
+/**
+ * Returns how many Pokemon the active Pokemon's trainer brought (teamRoster+0x2).
+ * @unverified Name and comment guessed from the code.
+ */
+u8 ActivePokemon_GetBroughtCount(s8 *arg0) {
     return M2C_FIELD(M2C_FIELD(arg0, s8 **, 0x860), u8 *, 2);
 }
 
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-u8 func_82107A3C(s8 *arg0)
+/**
+ * Returns the brought count of the other team member's roster in the session
+ * (teamMember[teamMemberIndex == 0]).
+ * @unverified Name and comment guessed from the code.
+ */
+u8 ActivePokemon_GetPartnerBroughtCount(s8 *arg0)
 {
-  int new_var;
+  int new_var; // FAKE: permuter temp
   new_var = (*((u8 *) (((s8 *) arg0) + 0x7B7))) == 0;
-  return *((u8 *) (((s8 *) (*((s8 **) (((s8 *) ((*((s32 *) (((s8 *) arg0) + 0x85C))) + (new_var * 4))) + 8)))) + 2));
+  return *((u8 *) (((s8 *) (*((s8 **) (((s8 *) ((*((s32 *) (((s8 *) arg0) + 0x85C))) + (new_var * 4))) + 8)))) + 2)); // FAKE: decomp slop, raw pointer casts stand in for struct fields
 }
 
 s32 BattleScene_GetParticipantSideIndex(ActivePokemon* active_pokemon) {
@@ -102,8 +111,8 @@ s32 BattleScene_GetParticipantSideIndex(ActivePokemon* active_pokemon) {
 }
 
 u8 BattleScene_GetMoveCueDefaultAnchor(ActivePokemon* active_pokemon) {
-    UNUSED s32 pad;
-    UNUSED s16 pad2;
+    UNUSED s32 pad; // FAKE: stack padding
+    UNUSED s16 pad2; // FAKE: stack padding
     s16 move_index = active_pokemon->state.runtime.usedMove - 1;
     MovePresentationCue* move_cue = &sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon)]->moveCues[move_index];
 
@@ -111,8 +120,8 @@ u8 BattleScene_GetMoveCueDefaultAnchor(ActivePokemon* active_pokemon) {
 }
 
 u8 BattleScene_GetMoveCueAlternateAnchor(ActivePokemon* active_pokemon) {
-    UNUSED s32 pad;
-    UNUSED s16 pad2;
+    UNUSED s32 pad; // FAKE: stack padding
+    UNUSED s16 pad2; // FAKE: stack padding
     s16 move_index = active_pokemon->state.runtime.usedMove - 1;
     MovePresentationCue* move_cue = &sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon)]->moveCues[move_index];
 
@@ -128,33 +137,32 @@ s16 BattleScene_GetHitCueDefaultAnchor(ActivePokemon* active_pokemon) {
 s16 func_82107B54(ActivePokemon* active_pokemon) {
     MovePresentationCue* hit_cue = &sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon)]->hitCue;
 
-    return M2C_FIELD(hit_cue, u8*, 3);
+    return hit_cue->alternateAnchor;
 }
 
 extern f32 D_FLT_82189350[][4];
 
-/*
- * func_82107B88
+/**
+ * BattleAnim_GetSpeciesBaseScale
  *
  * Returns the participant's scaled model width: the table entry for its object
  * type (first float of each 0x10-byte entry of D_FLT_82189350, the same table
  * whose second float func_82107790 reads as a resting height), doubled, divided
  * by 50, times the display object's Y scale. Zero-side relative of the width
  * term used by BattleScene_GetParticipantModelWidth in Stadium 1.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
-f32 func_82107B88(ActivePokemon* active_pokemon) {
+f32 BattleAnim_GetSpeciesBaseScale(ActivePokemon* active_pokemon) {
     return ((D_FLT_82189350[active_pokemon->displayObject.objectType][0] * 2) / 50.0f) * active_pokemon->displayObject.scale.y;
 }
 
 extern f32 D_FLT_82189350[][4];
 
-/*
- * func_82107BC4
- *
- * Same as func_82107B88 without the final scale factor: the table width for the
- * participant's object type, doubled and divided by 50.
+/**
+ * Returns the model's first size entry from D_FLT_82189350, doubled and divided by 50.
+ * @unverified Name and comment guessed from the code.
  */
-f32 func_82107BC4(ActivePokemon* active_pokemon) {
+f32 ActivePokemon_GetSizeRatio(ActivePokemon* active_pokemon) {
     return (D_FLT_82189350[active_pokemon->displayObject.objectType][0] * 2) / 50.0f;
 }
 
@@ -164,7 +172,10 @@ u8 func_82107BF4(s8 *arg0) {
 
 extern f32 D_FLT_8218935C[][4];
 
-void func_82107BFC(s8* arg0, Vec3f* out) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Trade_UpdateBoxSlotBob(s8* arg0, Vec3f* out) {
     out->x = M2C_FIELD(arg0, f32*, 0x30) * (D_FLT_8218935C[M2C_FIELD(arg0, s16*, 0x1A) - 1][0] * 2 / 50.0f);
     out->y = M2C_FIELD(arg0, f32*, 0x34) * (D_FLT_8218935C[M2C_FIELD(arg0, s16*, 0x1A) - 1][1] * 2 / 50.0f);
     out->z = M2C_FIELD(arg0, f32*, 0x30) * (D_FLT_8218935C[M2C_FIELD(arg0, s16*, 0x1A) - 1][0] * 2 / 50.0f);
@@ -182,7 +193,7 @@ u16 Battle_GetActiveMonHp(ActivePokemon* active_pokemon) {
     return party_pokemon->hp;
 }
 
-s16 func_82107CC4(s8 *arg0) {
+s16 BattleScene_GetParticipantFacingAngle(s8 *arg0) {
     return (s16) (M2C_FIELD(arg0, s32 *, 0x60C) << 0xE);
 }
 
@@ -205,40 +216,53 @@ void BattleScene_GetParticipantModelPosition(ActivePokemon* pokemon, Vec3f* dest
     dest->z = pokemon->displayObject.position.z;
 }
 
-f32 func_82107EC8(ActivePokemon*);
-void func_82107D24(ActivePokemon *arg0, u8 *arg1) {
+f32 BattleScene_GetParticipantHeight(ActivePokemon*);
+/**
+ * World point where effects aim at the participant: its position, raised by its
+ * height for grounded species, never below its height.
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleScene_GetParticipantAimPoint(ActivePokemon *arg0, u8 *arg1) {
     if (*D_FLT_82189354[arg0->displayObject.objectType] != 0.0f) {
         M2C_FIELD(arg1, f32 *, 0) = (f32) arg0->displayObject.position.x;
         M2C_FIELD(arg1, f32 *, 4) = (f32) arg0->displayObject.position.y;
         M2C_FIELD(arg1, f32 *, 8) = (f32) arg0->displayObject.position.z;
     } else {
         M2C_FIELD(arg1, f32 *, 0) = (f32) arg0->displayObject.position.x;
-        M2C_FIELD(arg1, f32 *, 4) = (f32) (func_82107EC8(arg0) + arg0->displayObject.position.y);
+        M2C_FIELD(arg1, f32 *, 4) = (f32) (BattleScene_GetParticipantHeight(arg0) + arg0->displayObject.position.y);
         M2C_FIELD(arg1, f32 *, 8) = (f32) arg0->displayObject.position.z;
     }
     if (M2C_FIELD(arg1, f32 *, 4) < 0.0f) {
-        M2C_FIELD(arg1, f32 *, 4) = func_82107EC8(arg0);
+        M2C_FIELD(arg1, f32 *, 4) = BattleScene_GetParticipantHeight(arg0);
     }
 }
 
 f32 func_8210791C(ActivePokemon*);
-f32 func_82107EC8(ActivePokemon*);
-void func_82107DDC(ActivePokemon* active_pokemon, Vec3f* out) {
+f32 BattleScene_GetParticipantHeight(ActivePokemon*);
+/**
+ * Like BattleScene_GetParticipantAimPoint, but in screen x (func_8210791C) with z 0.
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleScene_GetParticipantScreenAimPoint(ActivePokemon* active_pokemon, Vec3f* out) {
     if (D_FLT_82189354[active_pokemon->displayObject.objectType][0] != 0.0f) {
         out->x = func_8210791C(active_pokemon);
         out->y = active_pokemon->displayObject.position.y;
         out->z = 0.0f;
     } else {
         out->x = func_8210791C(active_pokemon);
-        out->y = func_82107EC8(active_pokemon) + active_pokemon->displayObject.position.y;
+        out->y = BattleScene_GetParticipantHeight(active_pokemon) + active_pokemon->displayObject.position.y;
         out->z = 0.0f;
     }
     if (out->y < 0.0f) {
-        out->y = func_82107EC8(active_pokemon);
+        out->y = BattleScene_GetParticipantHeight(active_pokemon);
     }
 }
 
-void func_82107EA0(s8 *arg0, s8 *arg1) {
+/**
+ * Writes the Poke Ball's position, raised by 2.5 units, to `arg1`.
+ * @unverified Name and comment guessed from the code.
+ */
+void ActivePokemon_GetPokeBallAimPoint(s8 *arg0, s8 *arg1) {
     M2C_FIELD(arg1, f32 *, 0) = (f32) M2C_FIELD(arg0, f32 *, 0x648);
     M2C_FIELD(arg1, f32 *, 4) = (f32) (M2C_FIELD(arg0, f32 *, 0x64C) + 2.5f);
     M2C_FIELD(arg1, f32 *, 8) = (f32) M2C_FIELD(arg0, f32 *, 0x650);
@@ -246,15 +270,16 @@ void func_82107EA0(s8 *arg0, s8 *arg1) {
 
 extern f32 D_FLT_82189350[][4];
 
-/*
- * func_82107EC8
+/**
+ * BattleScene_GetParticipantHeight
  *
  * Returns the table width (first float of the object type's entry in
  * D_FLT_82189350) unscaled when modelTransformId is 0x10, otherwise the same
  * width times the display object's Y scale. What transform 0x10 is has not been
  * established; the value is used literally here.
+ * @unverified Name guessed from the code; comment kept.
  */
-f32 func_82107EC8(ActivePokemon* active_pokemon) {
+f32 BattleScene_GetParticipantHeight(ActivePokemon* active_pokemon) {
     if (active_pokemon->modelTransformId == 0x10) {
         return D_FLT_82189350[active_pokemon->displayObject.objectType][0];
     }
@@ -262,7 +287,10 @@ f32 func_82107EC8(ActivePokemon* active_pokemon) {
 }
 
 extern f32 D_FLT_8218934C[][4];
-f32 func_82107F18(ActivePokemon* active_pokemon) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+f32 BattleScene_GetParticipantModelRadiusScaled(ActivePokemon* active_pokemon) {
     return D_FLT_8218934C[active_pokemon->displayObject.objectType][0] * active_pokemon->displayObject.scale.y;
 }
 
@@ -270,7 +298,11 @@ ModelNodeView* Battle_GetLoadedModelNode(ActivePokemon* active_pokemon, s32 node
     return active_pokemon->sessionTeams->loadedModel->unk_00[2]->unk_00[node_index];
 }
 
-s16 func_82107F58(s8 *arg0, M2C_UNK arg1) {
+/**
+ * Returns the session's display model id (sessionTeams+0x2).
+ * @unverified Name and comment guessed from the code.
+ */
+s16 ActivePokemon_GetDisplayModel(s8 *arg0, M2C_UNK arg1) {
     return M2C_FIELD(M2C_FIELD(arg0, s8 **, 0x85C), s16 *, 2);
 }
 
@@ -286,12 +318,20 @@ s32 func_82107F68(u8* arg0) {
 }
 
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-s32 func_82107F88(s8 *arg0)
+/**
+ * Returns the nickname (+0x30 in BattleMon) of this Pokemon in the roster of the teammate named by state.replacementState.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 ActivePokemon_GetNickname(s8 *arg0)
 {
-  unsigned int new_var;
-  return ((*((s32 *) (((s8 *) ((*((s32 *) (((s8 *) arg0) + 0x85C))) + ((*((u8 *) (((s8 *) arg0) + 0x7B9))) * 4))) + 8))) + ((*((s32 *) (((s8 *) arg0) + 0x794))) * 0x50)) + (new_var = 0x4C);
+  unsigned int new_var; // FAKE: permuter temp
+  return ((*((s32 *) (((s8 *) ((*((s32 *) (((s8 *) arg0) + 0x85C))) + ((*((u8 *) (((s8 *) arg0) + 0x7B9))) * 4))) + 8))) + ((*((s32 *) (((s8 *) arg0) + 0x794))) * 0x50)) + (new_var = 0x4C); // FAKE: decomp slop, raw pointer casts stand in for struct fields
 }
 
+/**
+ * Creates the participant's owner (trainer) model.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleScene_InitializeParticipantOwnerModel(ActivePokemon* active_pokemon) {
     ThumbnailState* presentation = &active_pokemon->thumbnail;
     ModelNodeView* model_view;
@@ -315,13 +355,18 @@ void BattleScene_InitializeParticipantOwnerModel(ActivePokemon* active_pokemon) 
     Vec3f_SetComponentsDuplicate(&presentation->displayObject.position, 0.0f, 0.0f, 0.0f);
 }
 
+/**
+ * Creates the participant's two hidden secondary models.
+ * ^?????? this annotation seems like a hallucination
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleScene_InitializeParticipantSecondaryModels(ActivePokemon* pokemon, s32* secondary_models) {
     ModelNodeView* model_node;
     s16 object_type;
     s32 i;
     PokemonAfterimage* afterimage;
     model_node = Battle_GetLoadedModelNode(pokemon, 0);
-    object_type = func_82107F58((s8*)pokemon, 0);
+    object_type = ActivePokemon_GetDisplayModel((s8*)pokemon, 0);
     for (i = 0; i < 3; i++) {
         afterimage = &pokemon->afterimages[i];
         ModelRenderer_AttachDisplayObject(&afterimage->displayObject);
@@ -348,9 +393,14 @@ void BattleScene_InitializeParticipantSecondaryModels(ActivePokemon* pokemon, s3
 extern f32 D_82199DF0[][4];
 void func_8000D41C(Vec3f*, f32, f32, f32);
 void func_8210213C(ActivePokemon*);
-void func_821081D0(ActivePokemon* active_pokemon) {
+/**
+ * Creates and positions the participant's Pokemon model and loads its
+ * presentation data.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ */
+void BattleScene_InitializeParticipantModel(ActivePokemon* active_pokemon) {
     s32 side;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     ModelNodeView* model_view;
     s16 model_id;
 
@@ -384,9 +434,13 @@ void func_821081D0(ActivePokemon* active_pokemon) {
         BattleScene_PositionParticipantModel(active_pokemon);
         active_pokemon->displayObject.rotation.y = -0x4000;
     }
-    func_8000D41C(&M2C_FIELD(active_pokemon, Vec3f*, 0x5DC), M2C_FIELD(active_pokemon, s32*, 0x60C) * D_82199DF0[side][0], D_82199DF0[side][1], D_82199DF0[side][2]);
+    func_8000D41C(&M2C_FIELD(active_pokemon, Vec3f*, 0x5DC), active_pokemon->facingDirection * D_82199DF0[side][0], D_82199DF0[side][1], D_82199DF0[side][2]);
 }
 
+/**
+ * Creates the participant's hidden auxiliary model (model 154).
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleScene_InitializeParticipantAuxiliaryModel(ActivePokemon* active_pokemon) {
     DisplayObject* auxiliary_model = &active_pokemon->pokeBall;
     ModelNodeView* model_view = active_pokemon->sessionTeams->unk_18;
@@ -409,10 +463,10 @@ void BattleScene_InitializeParticipantAuxiliaryModel(ActivePokemon* active_pokem
 }
 
 void BattleScene_ReinitParticipantBodyModel(ActivePokemon* owner, ActivePokemon* pokemon, s16 object_type) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     ModelNodeView* model_node = Battle_GetLoadedModelNode(owner, 0);
     s32 side = BattleScene_GetParticipantSideIndex(owner);
-    UNUSED s32 pad2;
+    UNUSED s32 pad2; // FAKE: stack padding
 
     ModelRenderer_ClearDisplayObject(&pokemon->displayObject);
 
@@ -443,7 +497,7 @@ void BattleScene_ReinitParticipantBodyModel(ActivePokemon* owner, ActivePokemon*
             pokemon->displayObject.rotation.y = -0x4000;
         }
     }
-    func_8000D41C(&M2C_FIELD(owner, Vec3f*, 0x5DC), M2C_FIELD(owner, s32*, 0x60C) * D_82199DF0[side][0], D_82199DF0[side][1], D_82199DF0[side][2]);
+    func_8000D41C(&M2C_FIELD(owner, Vec3f*, 0x5DC), owner->facingDirection * D_82199DF0[side][0], D_82199DF0[side][1], D_82199DF0[side][2]);
 }
 
 void BattleScene_ReinitParticipantThumbnailModel(ActivePokemon* pokemon, ThumbnailState* thumbnail, s16 object_type) {
@@ -516,7 +570,7 @@ void Battle_ResetEventTrack(ActivePokemon* active_pokemon) {
 
 void Battle_LoadOwnerModelForSpecies(ActivePokemon* active_pokemon) {
     ActivePokemonState* state = &active_pokemon->state;
-    UNUSED s32 pad[3];
+    UNUSED s32 pad[3]; // FAKE: stack padding
     s16 object_type;
 
     Battle_GetLoadedModelNode(active_pokemon, 0);
@@ -529,9 +583,9 @@ void Battle_LoadOwnerModelForSpecies(ActivePokemon* active_pokemon) {
     Vec3f_SetComponentsDuplicate(&active_pokemon->displayObject.scale, 1.0f, 1.0f, 1.0f);
 }
 
-void func_821088BC(ActivePokemon* active_pokemon) {
+void Battle_LoadOwnerModelForSwitchIn(ActivePokemon* active_pokemon) {
     ActivePokemonState* state = &active_pokemon->state;
-    UNUSED s32 pad[3];
+    UNUSED s32 pad[3]; // FAKE: stack padding
     s16 object_type;
 
     Battle_GetLoadedModelNode(active_pokemon, 0);
@@ -540,7 +594,7 @@ void func_821088BC(ActivePokemon* active_pokemon) {
     BattleScene_ReinitParticipantThumbnailModel(active_pokemon, &active_pokemon->thumbnail, object_type);
     func_82108648(active_pokemon, object_type);
     Battle_ResetEventTrack(active_pokemon);
-    M2C_FIELD(state, u8*, 0x2E) = 0;
+    state->unk_2D = 0;
     state->flags &= 0x3800;
     Vec3f_SetComponentsDuplicate(&active_pokemon->displayObject.scale, 1.0f, 1.0f, 1.0f);
 }
@@ -560,7 +614,7 @@ void Battle_ReloadSubstituteDoll(ActivePokemon* active_pokemon) {
 }
 
 void Battle_ReloadDisplayModel(ActivePokemon* active_pokemon) {
-    UNUSED s32 pad[3];
+    UNUSED s32 pad[3]; // FAKE: stack padding
     ActivePokemonState* state = &active_pokemon->state;
     s16 object_type = Battle_GetDisplayModelId(active_pokemon, 0);
 
@@ -571,7 +625,11 @@ void Battle_ReloadDisplayModel(ActivePokemon* active_pokemon) {
     Battle_ResetEventTrack(active_pokemon);
 }
 
-void func_82108A88(s8 *arg0, s32 arg1, s32 arg2) {
+/**
+ * Sets the model transform id and its timer.
+ * @unverified Name and comment guessed from the code.
+ */
+void ActivePokemon_SetModelTransform(s8 *arg0, s32 arg1, s32 arg2) {
     M2C_FIELD(arg0, s32 *, 0x610) = arg1;
     M2C_FIELD(arg0, s32 *, 0x614) = arg2;
 }
@@ -648,19 +706,35 @@ void Battle_SetModelToHitAnim(ActivePokemon* active_pokemon) {
     }
 }
 
-void func_82108DC8(s8 *arg0, s32 arg1) {
+/**
+ * Points teamRoster at sessionTeams->teamMember[index].
+ * @unverified Name and comment guessed from the code.
+ */
+void ActivePokemon_SelectTeamRoster(s8 *arg0, s32 arg1) {
     M2C_FIELD(arg0, s32 *, 0x860) = (s32) M2C_FIELD((M2C_FIELD(arg0, s32 *, 0x85C) + (arg1 * 4)), s32 *, 8);
 }
 
-void func_82108DE0(void *arg0, s32 arg1) {
+/**
+ * Sets state.teamMemberIndex.
+ * @unverified Name and comment guessed from the code.
+ */
+void ActivePokemon_SetTeamMemberIndex(void *arg0, s32 arg1) {
     M2C_FIELD(arg0, s8 *, 0x7B7) = arg1;
 }
 
-void func_82108DE8(s8 *arg0, s32 arg1) {
+/**
+ * Sets state.controller, the controller that drives this Pokemon's menu.
+ * @unverified Name and comment guessed from the code.
+ */
+void ActivePokemon_SetController(s8 *arg0, s32 arg1) {
     M2C_FIELD(arg0, s32 *, 0x858) = arg1;
 }
 
-void func_82108DF0(void *arg0, s32 arg1) {
+/**
+ * Sets state.replacementState.
+ * @unverified Name and comment guessed from the code.
+ */
+void ActivePokemon_SetReplacementState(void *arg0, s32 arg1) {
     M2C_FIELD(arg0, s8 *, 0x7B9) = arg1;
 }
 
@@ -669,8 +743,8 @@ void BattleScene_RebindParticipantTeamMember(ActivePokemon* pokemon, s32 team_me
 
     BattleScene_BindParticipantTeamRoster(pokemon, team_member_index);
     BattleScene_SetParticipantTeamMember(pokemon, team_member_index);
-    M2C_FIELD(pokemon, s32*, 0x9D0) = M2C_FIELD(state, s32*, 0x8);
-    M2C_FIELD(pokemon, s32*, 0x9D4) = M2C_FIELD(state, u8*, 0x2B);
+    M2C_FIELD(pokemon, s32*, 0x9D0) = state->rosterIndex;
+    M2C_FIELD(pokemon, s32*, 0x9D4) = state->teamMemberIndex;
 }
 
 s32 Battle_FreezeClauseInEffect(ActivePokemon* active_pokemon) {

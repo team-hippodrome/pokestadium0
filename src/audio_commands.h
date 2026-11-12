@@ -94,7 +94,7 @@ extern u32* gAudioRegions;
 
 
 
-s32 Audio_PlayCommand(u32 command, s32 parameter, UNUSED s32 unused);
+s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2);
 s32 Audio_FadeCommand(s32 arg0, u32 arg1);
 void func_80056950(void);
 void Audio_CreateFrameTaskWrapper(void* arg0);

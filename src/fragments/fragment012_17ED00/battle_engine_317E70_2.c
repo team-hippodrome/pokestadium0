@@ -41,7 +41,7 @@ BattleAnimEffectSlot* BattleAnim_CreateEffectSlotForCurrentOwner(s32 arg0, func_
 BattleAnimEffectSlot* BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(s32 arg0, s32 arg1, s8 arg2, func_unk_D_8140E724 arg3, ParticleDescriptor* arg4, s16 arg5,
                               s16 arg6, u8 arg7, u8 arg8, u8 arg9, u8 argA);
 BattleAnimEffectSlot* BattleAnim_SpawnGlobalTintColorFadeDetach(s32 arg0, s16 arg1, u8 arg2);
-BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaFadeInHoldOut(s32 arg0, s16 arg1, s16 arg2, u8 arg3, u8 arg4);
+BattleAnimEffectSlot* BattleAnim_SpawnWhiteHueChange(s32 arg0, s16 arg1, s16 arg2, u8 arg3, u8 arg4);
 BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaHoldFadeOutFullAlpha(s32 arg0, s16 arg1, s16 arg2, u8 arg3);
 BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaHoldFadeOut(s32 arg0, s16 arg1, s16 arg2, u8 arg3, u8 arg4);
 BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaHoldFadeOutRepeating(s32 arg0, s32 arg1, s8 arg2, s16 arg3, s16 arg4, u8 arg5, u8 arg6);
@@ -56,14 +56,14 @@ BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25PaletteFadeIn(s32 arg0, s16 ar
 BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintRampDetach(s32 arg0, u8 arg1, s16 arg2, s16 arg3, s16 arg4);
 BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintPulseDetach(s32 arg0, s16 arg1, u8 arg2, s16 arg3, s16 arg4, s16 arg5);
 BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintHoldFadeDetach(s32 arg0, s16 arg1, u8 arg2, s16 arg3, s16 arg4);
-BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintPaletteApproachInactive(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4);
+BattleAnimEffectSlot* BattleAnim_SpawnBeamBoomWaterfallHueChange(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4);
 BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintPaletteApproachInactiveAlt(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4);
-BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintPaletteCycle(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5);
+BattleAnimEffectSlot* BattleAnim_SpawnIceBeamBlizzardHitHueChange(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5);
 BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintPaletteCycleVariant(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5);
-BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintPaletteFade(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5);
+BattleAnimEffectSlot* BattleAnim_SpawnDrainFlameHueChange(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5);
 BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintRandomPaletteCycle(s32 arg0, s16 arg1, u8 arg2);
-BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintPaletteRotateFadeDetach(s32 arg0, s16 arg1, s16 arg2, u8 arg3);
-BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelAlphaFade(s32 arg0, s16 arg1, s16 arg2, s16 arg3);
+BattleAnimEffectSlot* BattleAnim_SpawnRainbowHueChange(s32 arg0, s16 arg1, s16 arg2, u8 arg3);
+BattleAnimEffectSlot* BattleAnim_SpawnInvisibility(s32 arg0, s16 arg1, s16 arg2, s16 arg3);
 BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelAlphaFadeFullPreset(s32 arg0);
 BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelAlphaFadeZeroStartPreset(s32 arg0);
 BattleAnimEffectSlot* BattleAnim_SpawnCategory17MarkerSlot(s32 arg0, u8 arg1);
@@ -75,15 +75,15 @@ void BattleAnim_CloneParticleState(Particle* arg0, Particle* arg1, ParticleUpdat
 Particle* BattleAnim_CreateProceduralParticle(s16 arg0, s16 arg1, s32 arg2, f32 arg3);
 void BattleAnim_DestroyParticle(Particle* arg0);
 void BattleAnim_InitializeParticleFromEffect(Particle* arg0, ActivePokemon* arg1, BattleAnimEffectSlot* arg2, s16 arg3);
-void BattleAnim_SpawnStandardParticles(BattleAnimEffectSlot* arg0);
-void BattleAnim_SpawnBatchedParticles(BattleAnimEffectSlot* arg0);
+void BattleAnim_SpawnStandardParticles(s8 *arg0);
+void BattleAnim_SpawnBatchedParticles(s8* arg0);
 void BattleAnim_CleanupEffectsRetainingCategories47(void);
 void BattleAnim_CleanupEffectsRetainingCategory4(void);
 void BattleAnim_ClearEffectCallbacks(void);
 void BattleAnim_SetEffectStateFlag(s32 arg0);
 Particle* Particle_Alloc(void);
 s32 Particle_CountActive(void);
-s32 Particle_IsInactive(Particle* arg0);
+s32 Particle_IsInactive(s8 *arg0);
 s32 Particle_HasFlags(Particle* arg0, s32 arg1);
 void Particle_UpdateWorldTransform(Particle* arg0);
 void Particle_UpdateFrameCounters(void);
@@ -95,7 +95,10 @@ extern s32 D_8219CA54;
 extern s32 D_8219CA58;
 extern s32 D_8219CA5C;
 
-void func_821398A0(void) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void BattleAnim_InitParticleSystem(void) {
     D_8219CA54 = func_800023C4(0x20D0, 0);
     D_8219CA50 = func_800023C4(0xF3C0, 0);
     func_8004FD20(D_8219CA54, 0x20D0);
@@ -104,7 +107,11 @@ void func_821398A0(void) {
     D_8219CA58 = 0;
 }
 
-void func_8213990C(Particle* arg0) {
+/**
+ * Initialize lifecycle, motion parameters, rotation, timers, and white colors without clearing the entire allocation.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ */
+void Particle_ResetDefaults(Particle* arg0) {
     Particle_InitLifecycle(arg0);
     Particle_SetPosition(arg0, 0.0f, 0.0f, 0.0f);
     Particle_SetOrigin(arg0, 0.0f, 0.0f, 0.0f);
@@ -127,16 +134,20 @@ void func_8213990C(Particle* arg0) {
     Particle_SetEnvColor(arg0, 0xFF, 0xFF, 0xFF);
     Particle_SetPrimAlpha(arg0, 0xFF);
 
-    arg0->unk_1C = 1.0f;
+    arg0->scale = 1.0f;
 }
 
+/**
+ * Search the 300-slot pool from the rolling index, initialize a free slot, or return (Particle*)-1.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 Particle* Particle_Alloc(void) {
     s32 i;
     s32 var_v0 = gParticlePoolIndex;
     Particle* var_a0 = &gParticlePool[var_v0];
 
     for (i = 0; i < 0x12C; i++) {
-        if (var_a0->unk_D0 == 0) {
+        if (var_a0->allocated == 0) {
             break;
         }
 
@@ -152,7 +163,7 @@ Particle* Particle_Alloc(void) {
     if (i >= 0x12C) {
         var_a0 = (Particle*)-1;
     } else {
-        var_a0->unk_D0 = 1;
+        var_a0->allocated = 1;
 
         Particle_ResetDefaults(var_a0);
 
@@ -199,7 +210,7 @@ BattleAnimEffectSlot* BattleAnim_AllocEffectSlot(void) {
     return var_v1;
 }
 
-void func_82139BE8(s8 *arg0) {
+void Particle_Free(s8 *arg0) {
     s8 **temp_v0;
     s8 *temp_v0_2;
 
@@ -223,10 +234,18 @@ void BattleAnim_FreeEffectSlot(BattleAnimEffectSlot* arg0) {
     arg0->unk_0C = arg0->unk_0E;
 }
 
+/**
+ * Allocate one particle using the shared pool allocator.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 Particle* Particle_New(void) {
     return Particle_Alloc();
 }
 
+/**
+ * Allocate a linked chain, returning its first particle even if a later allocation fails.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 Particle* Particle_AllocChain(u8 arg0) {
     s32 i;
     Particle* sp28;
@@ -255,12 +274,12 @@ Particle* Particle_AllocChain(u8 arg0) {
 
 void BattleAnim_InitializeParticleChain(Particle* arg0, Vec3f arg1, Vec3s arg2, s32 arg3, s32 arg4) {
     while (arg0 != NULL) {
-        ParticleMath_CopyVec3f(&arg0->unk_68, &arg1);
-        ParticleMath_CopyVec3s(&arg0->unk_94, &arg2);
-        arg0->unk_08 = arg3;
-        arg0->unk_0C = arg4;
-        arg0->unk_10 = 0;
-        arg0->unk_14 = 0;
+        ParticleMath_CopyVec3f(&arg0->origin, &arg1);
+        ParticleMath_CopyVec3s(&arg0->rotation, &arg2);
+        arg0->updateCallback = arg3;
+        arg0->descriptor = arg4;
+        arg0->pokemon = 0;
+        arg0->displayObject = 0;
         arg0->unk_CD = 0xFF;
 
         arg0 = arg0->next;
@@ -269,25 +288,25 @@ void BattleAnim_InitializeParticleChain(Particle* arg0, Vec3f arg1, Vec3s arg2, 
 
 void BattleAnim_CloneParticleState(Particle* arg0, Particle* arg1, ParticleUpdateCallback arg2, ParticleDescriptor* arg3,
                    s32 arg4) {
-    arg0->unk_08 = arg2;
-    arg0->unk_0C = arg3;
-    arg0->unk_10 = arg1->unk_10;
+    arg0->updateCallback = arg2;
+    arg0->descriptor = arg3;
+    arg0->pokemon = arg1->pokemon;
     arg0->unk_CF = arg1->unk_CF;
     arg0->unk_CA = arg1->unk_CA;
     arg0->unk_CC = 0x1C;
     arg0->unk_CD = 0xFF;
     arg0->unk_CE = arg1->unk_CE;
     arg0->unk_CB = arg1->unk_CB;
-    arg0->unk_74 = arg1->unk_74;
+    arg0->stepMagnitude = arg1->stepMagnitude;
 
     Particle_FieldAC_SetS16_0BED8(arg0, arg4);
 
-    ParticleMath_CopyVec3f(&arg0->unk_38, &arg1->unk_38);
-    ParticleMath_CopyVec3f(&arg0->unk_50, &arg1->unk_50);
-    ParticleMath_CopyVec3f(&arg0->unk_68, &arg1->unk_68);
-    ParticleMath_CopyVec3f(&arg0->unk_7C, &arg1->unk_7C);
-    ParticleMath_CopyVec3s(&arg0->unk_94, &arg1->unk_94);
-    ParticleMath_CopyVec3s(&arg0->unk_9A, &arg1->unk_9A);
+    ParticleMath_CopyVec3f(&arg0->positionOffset, &arg1->positionOffset);
+    ParticleMath_CopyVec3f(&arg0->motionOffset, &arg1->motionOffset);
+    ParticleMath_CopyVec3f(&arg0->origin, &arg1->origin);
+    ParticleMath_CopyVec3f(&arg0->motionStep, &arg1->motionStep);
+    ParticleMath_CopyVec3s(&arg0->rotation, &arg1->rotation);
+    ParticleMath_CopyVec3s(&arg0->rotationStep, &arg1->rotationStep);
 
     if (arg1->unk_CA == 4) {
         arg0->unk_CA = 0;
@@ -327,105 +346,105 @@ Particle* BattleAnim_CreateProceduralParticle(s16 arg0, s16 arg1, s32 arg2, f32 
     Particle* temp_v0 = Particle_New();
 
     if ((u32)temp_v0 != -1) {
-        Vec3f_SetComponentsDuplicate(&temp_v0->unk_38, arg0, arg1, 0.0f);
+        Vec3f_SetComponentsDuplicate(&temp_v0->positionOffset, arg0, arg1, 0.0f);
         Particle_UpdateWorldTransform(temp_v0);
-        Vec3s_SetComponents(&temp_v0->unk_94, arg2, arg2, arg2);
-        temp_v0->unk_1C = arg3;
+        Vec3s_SetComponents(&temp_v0->rotation, arg2, arg2, arg2);
+        temp_v0->scale = arg3;
         Particle_SetFlags(temp_v0, 0x108);
     }
     return temp_v0;
 }
 
 void func_80015908(ActivePokemon*, s32, Vec3f*);
-void func_82107BFC(ActivePokemon* arg0, Vec3f* arg1);
+void Trade_UpdateBoxSlotBob(ActivePokemon* arg0, Vec3f* arg1);
 void BattleAnim_InitializeParticleAnchor(Particle* arg0) {
     Vec3f sp3C;
     Vec3f sp30;
     Vec3s sp28;
 
-    switch (M2C_FIELD(arg0, u8*, 0xC8)) {
+    switch (arg0->unk_CC) {
         case 0:
-            BattleScene_GetParticipantModelPosition(arg0->unk_10, &M2C_FIELD(arg0, Vec3f*, 0x64));
+            BattleScene_GetParticipantModelPosition(arg0->pokemon, &arg0->origin);
             break;
 
         case 1:
-            BattleAnim_GetOwnerDefaultAnchorPosition(arg0->unk_10, &M2C_FIELD(arg0, Vec3f*, 0x64));
+            BattleAnim_GetOwnerDefaultAnchorPosition(arg0->pokemon, &arg0->origin);
             break;
 
         case 27:
-            BattleAnim_GetOwnerDefaultAnchorPosition(arg0->unk_10, &M2C_FIELD(arg0, Vec3f*, 0x64));
-            M2C_FIELD(arg0, Vec3f*, 0x64).y = 0.0f;
+            BattleAnim_GetOwnerDefaultAnchorPosition(arg0->pokemon, &arg0->origin);
+            arg0->origin.y = 0.0f;
             break;
 
         case 9:
-            BattleAnim_GetOwnerBonePosition(arg0->unk_10, 0x64, &M2C_FIELD(arg0, Vec3f*, 0x64));
+            BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
             break;
 
         case 10:
-            BattleAnim_GetOwnerBonePosition(arg0->unk_10, 0x64, &M2C_FIELD(arg0, Vec3f*, 0x64));
-            M2C_FIELD(arg0, Vec3f*, 0x64).y = 0.0f;
+            BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
+            arg0->origin.y = 0.0f;
             break;
 
         case 11:
-            BattleAnim_GetOwnerBonePosition(arg0->unk_10, 0x64, &M2C_FIELD(arg0, Vec3f*, 0x64));
-            BattleScene_GetParticipantModelRotation(arg0->unk_10, &sp28);
-            func_82107BFC(arg0->unk_10, &sp30);
+            BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
+            BattleScene_GetParticipantModelRotation(arg0->pokemon, &sp28);
+            Trade_UpdateBoxSlotBob(arg0->pokemon, &sp30);
             ParticleMath_MakeXZVectorFromAngle(&sp3C, sp30.x * 25.0f, sp28.y);
-            ParticleMath_AddVec3f(&M2C_FIELD(arg0, Vec3f*, 0x64), &sp3C);
+            ParticleMath_AddVec3f(&arg0->origin, &sp3C);
             break;
 
         case 12:
-            BattleAnim_GetOwnerBonePosition(arg0->unk_10, 0x64, &M2C_FIELD(arg0, Vec3f*, 0x64));
-            BattleScene_GetParticipantModelRotation(arg0->unk_10, &sp28);
-            func_82107BFC(arg0->unk_10, &sp30);
+            BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
+            BattleScene_GetParticipantModelRotation(arg0->pokemon, &sp28);
+            Trade_UpdateBoxSlotBob(arg0->pokemon, &sp30);
             ParticleMath_MakeXZVectorFromAngle(&sp3C, sp30.x * 25.0f, sp28.y + 0x8000);
-            ParticleMath_AddVec3f(&M2C_FIELD(arg0, Vec3f*, 0x64), &sp3C);
+            ParticleMath_AddVec3f(&arg0->origin, &sp3C);
             break;
 
         case 13:
-            BattleAnim_GetOwnerBonePosition(arg0->unk_10, 0x64, &M2C_FIELD(arg0, Vec3f*, 0x64));
-            func_82107BFC(arg0->unk_10, &sp30);
-            M2C_FIELD(arg0, Vec3f*, 0x64).y += sp30.y * 25.0f;
+            BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
+            Trade_UpdateBoxSlotBob(arg0->pokemon, &sp30);
+            arg0->origin.y += sp30.y * 25.0f;
             break;
 
         case 14:
-            BattleAnim_GetOwnerBonePosition(arg0->unk_10, 0x64, &M2C_FIELD(arg0, Vec3f*, 0x64));
-            func_82107BFC(arg0->unk_10, &sp30);
-            M2C_FIELD(arg0, Vec3f*, 0x64).y -= sp30.y * 25.0f;
-            if (M2C_FIELD(arg0, Vec3f*, 0x64).y <= 0.0f) {
-                M2C_FIELD(arg0, Vec3f*, 0x64).y = 0.0f;
+            BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
+            Trade_UpdateBoxSlotBob(arg0->pokemon, &sp30);
+            arg0->origin.y -= sp30.y * 25.0f;
+            if (arg0->origin.y <= 0.0f) {
+                arg0->origin.y = 0.0f;
             }
             break;
 
         case 15:
-            BattleAnim_GetOwnerBonePosition(arg0->unk_10, 0x64, &M2C_FIELD(arg0, Vec3f*, 0x64));
-            BattleScene_GetParticipantModelRotation(arg0->unk_10, &sp28);
-            func_82107BFC(arg0->unk_10, &sp30);
+            BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
+            BattleScene_GetParticipantModelRotation(arg0->pokemon, &sp28);
+            Trade_UpdateBoxSlotBob(arg0->pokemon, &sp30);
             ParticleMath_MakeXZVectorFromAngle(&sp3C, sp30.x * 25.0f, sp28.y);
-            ParticleMath_AddVec3f(&M2C_FIELD(arg0, Vec3f*, 0x64), &sp3C);
-            M2C_FIELD(arg0, Vec3f*, 0x64).y = 0.0f;
+            ParticleMath_AddVec3f(&arg0->origin, &sp3C);
+            arg0->origin.y = 0.0f;
             break;
 
         case 17:
-            BattleAnim_GetOwnerBonePosition(arg0->unk_10, M2C_FIELD(arg0, u8*, 0xC9), &M2C_FIELD(arg0, Vec3f*, 0x64));
-            func_80015908(arg0->unk_10, M2C_FIELD(arg0, u8*, 0xC9), &M2C_FIELD(arg0, Vec3f*, 0x64));
+            BattleAnim_GetOwnerBonePosition(arg0->pokemon, arg0->unk_CD, &arg0->origin);
+            func_80015908(arg0->pokemon, arg0->unk_CD, &arg0->origin);
             break;
 
         case 19:
-            func_80015908(arg0->unk_10, M2C_FIELD(arg0, u8*, 0xC9), &M2C_FIELD(arg0, Vec3f*, 0x64));
-            BattleScene_GetParticipantModelRotation(arg0->unk_10, &sp28);
-            func_82107BFC(arg0->unk_10, &sp30);
+            func_80015908(arg0->pokemon, arg0->unk_CD, &arg0->origin);
+            BattleScene_GetParticipantModelRotation(arg0->pokemon, &sp28);
+            Trade_UpdateBoxSlotBob(arg0->pokemon, &sp30);
             ParticleMath_MakeXZVectorFromAngle(&sp3C, sp30.x * 25.0f, sp28.y);
-            ParticleMath_AddVec3f(&M2C_FIELD(arg0, Vec3f*, 0x64), &sp3C);
+            ParticleMath_AddVec3f(&arg0->origin, &sp3C);
             break;
 
         case 30:
-            BattleScene_GetParticipantPokeBallPosition(arg0->unk_10, &M2C_FIELD(arg0, Vec3f*, 0x64));
+            BattleScene_GetParticipantPokeBallPosition(arg0->pokemon, &arg0->origin);
             break;
     }
 }
 
-void func_82107BFC(ActivePokemon* arg0, Vec3f* arg1);
+void Trade_UpdateBoxSlotBob(ActivePokemon* arg0, Vec3f* arg1);
 void BattleAnim_UpdateParticleAnchor(Particle* arg0) {
     Vec3f sp3C;
     Vec3f sp30;
@@ -433,64 +452,64 @@ void BattleAnim_UpdateParticleAnchor(Particle* arg0) {
 
     switch (arg0->unk_CC) {
         case 2:
-            BattleAnim_GetOwnerBonePosition(arg0->unk_10, 0x64, &arg0->unk_68);
+            BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
             break;
 
         case 3:
-            BattleAnim_GetOwnerBonePosition(arg0->unk_10, 0x64, &arg0->unk_68);
-            arg0->unk_68.y = 0.0f;
+            BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
+            arg0->origin.y = 0.0f;
             break;
 
         case 4:
-            BattleAnim_GetOwnerBonePosition(arg0->unk_10, 0x64, &arg0->unk_68);
-            BattleScene_GetParticipantModelRotation(arg0->unk_10, &sp28);
-            func_82107BFC(arg0->unk_10, &sp30);
+            BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
+            BattleScene_GetParticipantModelRotation(arg0->pokemon, &sp28);
+            Trade_UpdateBoxSlotBob(arg0->pokemon, &sp30);
             ParticleMath_MakeXZVectorFromAngle(&sp3C, sp30.x * 25.0f, sp28.y);
-            ParticleMath_AddVec3f(&arg0->unk_68, &sp3C);
+            ParticleMath_AddVec3f(&arg0->origin, &sp3C);
             break;
 
         case 5:
-            BattleAnim_GetOwnerBonePosition(arg0->unk_10, 0x64, &arg0->unk_68);
-            BattleScene_GetParticipantModelRotation(arg0->unk_10, &sp28);
-            func_82107BFC(arg0->unk_10, &sp30);
+            BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
+            BattleScene_GetParticipantModelRotation(arg0->pokemon, &sp28);
+            Trade_UpdateBoxSlotBob(arg0->pokemon, &sp30);
             ParticleMath_MakeXZVectorFromAngle(&sp3C, sp30.x * 25.0f, sp28.y + 0x8000);
-            ParticleMath_AddVec3f(&arg0->unk_68, &sp3C);
+            ParticleMath_AddVec3f(&arg0->origin, &sp3C);
             break;
 
         case 6:
-            BattleAnim_GetOwnerBonePosition(arg0->unk_10, 0x64, &arg0->unk_68);
-            func_82107BFC(arg0->unk_10, &sp30);
-            arg0->unk_68.y += sp30.y * 25.0f;
+            BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
+            Trade_UpdateBoxSlotBob(arg0->pokemon, &sp30);
+            arg0->origin.y += sp30.y * 25.0f;
             break;
 
         case 7:
-            BattleAnim_GetOwnerBonePosition(arg0->unk_10, 0x64, &arg0->unk_68);
-            func_82107BFC(arg0->unk_10, &sp30);
-            arg0->unk_68.y -= sp30.y * 25.0f;
-            if (arg0->unk_68.y <= 0.0f) {
-                arg0->unk_68.y = 0.0f;
+            BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
+            Trade_UpdateBoxSlotBob(arg0->pokemon, &sp30);
+            arg0->origin.y -= sp30.y * 25.0f;
+            if (arg0->origin.y <= 0.0f) {
+                arg0->origin.y = 0.0f;
             }
             break;
 
         case 8:
-            BattleAnim_GetOwnerBonePosition(arg0->unk_10, 0x64, &arg0->unk_68);
-            BattleScene_GetParticipantModelRotation(arg0->unk_10, &sp28);
-            func_82107BFC(arg0->unk_10, &sp30);
+            BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
+            BattleScene_GetParticipantModelRotation(arg0->pokemon, &sp28);
+            Trade_UpdateBoxSlotBob(arg0->pokemon, &sp30);
             ParticleMath_MakeXZVectorFromAngle(&sp3C, sp30.x * 25.0f, sp28.y);
-            ParticleMath_AddVec3f(&arg0->unk_68, &sp3C);
-            arg0->unk_68.y = 0.0f;
+            ParticleMath_AddVec3f(&arg0->origin, &sp3C);
+            arg0->origin.y = 0.0f;
             break;
 
         case 16:
-            BattleAnim_GetOwnerBonePosition(arg0->unk_10, arg0->unk_CD, &arg0->unk_68);
+            BattleAnim_GetOwnerBonePosition(arg0->pokemon, arg0->unk_CD, &arg0->origin);
             break;
 
         case 18:
-            BattleAnim_GetOwnerBonePosition(arg0->unk_10, arg0->unk_CD, &arg0->unk_68);
+            BattleAnim_GetOwnerBonePosition(arg0->pokemon, arg0->unk_CD, &arg0->origin);
             break;
 
         case 29:
-            BattleScene_GetParticipantPokeBallPosition(arg0->unk_10, &arg0->unk_68);
+            BattleScene_GetParticipantPokeBallPosition(arg0->pokemon, &arg0->origin);
             break;
     }
 }
@@ -508,18 +527,18 @@ void func_8213A68C(void) {
     Particle* var_s0 = gParticlePool;
 
     for (i = 0; i < 300; i++, var_s0++) {
-        if (var_s0->unk_D0 != 0) {
+        if (var_s0->allocated != 0) {
             BattleAnim_UpdateParticleAnchor(var_s0);
-            if ((var_s0->unk_10 == NULL) || (Particle_HasFlags(var_s0, 0x108) != 0)) {
-                gParticleRenderContext.unk_00.x = 1.0f;
-                gParticleRenderContext.unk_00.y = 1.0f;
-                gParticleRenderContext.unk_00.z = 1.0f;
+            if ((var_s0->pokemon == NULL) || (Particle_HasFlags(var_s0, 0x108) != 0)) {
+                gParticleRenderContext.scale.x = 1.0f;
+                gParticleRenderContext.scale.y = 1.0f;
+                gParticleRenderContext.scale.z = 1.0f;
             } else if (Particle_LacksFlags(var_s0, 0x800) != 0) {
-                gParticleRenderContext.unk_00.x = BattleAnim_GetSpeciesBaseScale(var_s0->unk_10);
-                gParticleRenderContext.unk_00.y = BattleAnim_GetSpeciesBaseScale(var_s0->unk_10);
-                gParticleRenderContext.unk_00.z = BattleAnim_GetSpeciesBaseScale(var_s0->unk_10);
+                gParticleRenderContext.scale.x = BattleAnim_GetSpeciesBaseScale(var_s0->pokemon);
+                gParticleRenderContext.scale.y = BattleAnim_GetSpeciesBaseScale(var_s0->pokemon);
+                gParticleRenderContext.scale.z = BattleAnim_GetSpeciesBaseScale(var_s0->pokemon);
             }
-            var_s0->unk_08(var_s0);
+            var_s0->updateCallback(var_s0);
             BattleAnim_UpdateOrDestroyParticle(var_s0);
         }
     }
@@ -599,8 +618,12 @@ void func_8213A904(s8* arg0) {
 
 typedef void (*ParticleDrawFn2)(Particle*, s32);
 typedef void (*ParticleDrawFnCam)(Particle*, CameraNode*);
+/**
+ * For kind 1, optionally run per-particle setup then draw; kind 3 calls the direct render callback.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_DispatchDraw(Particle* arg0, CameraNode* arg1) {
-    s8* desc = (s8*)arg0->unk_0C;
+    s8* desc = (s8*)arg0->descriptor;
     s8* sp18 = M2C_FIELD(desc, s8**, 4);
 
     switch (M2C_FIELD(desc, s16*, 0)) {
@@ -619,7 +642,10 @@ void Particle_DispatchDraw(Particle* arg0, CameraNode* arg1) {
     }
 }
 
-void func_8213AA78(Particle* arg0, ActivePokemon* arg1, BattleAnimEffectSlot* arg2, s16 arg3) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void BattleAnim_InitializeParticleFromEffect(Particle* arg0, ActivePokemon* arg1, BattleAnimEffectSlot* arg2, s16 arg3) {
     if ((u32)arg0 == -1) {
         return;
     }
@@ -631,10 +657,10 @@ void func_8213AA78(Particle* arg0, ActivePokemon* arg1, BattleAnimEffectSlot* ar
     if (1) {}  // karodo
 
     while (arg0 != NULL) {
-        arg0->unk_10 = arg1;
+        arg0->pokemon = arg1;
         arg0->unk_AC = arg3++;
-        arg0->unk_08 = arg2->unk_00;
-        arg0->unk_0C = arg2->unk_04;
+        arg0->updateCallback = arg2->unk_00;
+        arg0->descriptor = arg2->unk_04;
         arg0->unk_CD = arg2->unk_19;
         arg0->unk_CE = arg2->unk_1A;
         arg0->unk_AA = arg2->unk_12;
@@ -645,7 +671,7 @@ void func_8213AA78(Particle* arg0, ActivePokemon* arg1, BattleAnimEffectSlot* ar
 
         if (arg1 != NULL) {
             BattleAnim_InitializeParticleAnchor(arg0);
-            BattleScene_GetParticipantModelRotation(arg0->unk_10, &arg0->unk_94);
+            BattleScene_GetParticipantModelRotation(arg0->pokemon, &arg0->rotation);
         }
 
         if ((arg2->unk_16 & 0xFFFFu) == 0x12) {
@@ -660,9 +686,9 @@ void func_8213AA78(Particle* arg0, ActivePokemon* arg1, BattleAnimEffectSlot* ar
 
 s32 func_82139C38();                                /* extern */
 s32 func_82139C58(s32);                             /* extern */
-void func_8213AA78(Particle* arg0, ActivePokemon* arg1, BattleAnimEffectSlot* arg2, s16 arg3);
+void BattleAnim_InitializeParticleFromEffect(Particle* arg0, ActivePokemon* arg1, BattleAnimEffectSlot* arg2, s16 arg3);
 
-void func_8213AB88(s8 *arg0) {
+void BattleAnim_SpawnStandardParticles(s8 *arg0) {
     s16 temp_s2;
     s16 var_s0;
     s32 temp_s3;
@@ -673,16 +699,16 @@ void func_8213AB88(s8 *arg0) {
         var_s0 = 0;
         if (temp_s2 > 0) {
             do {
-                func_8213AA78((Particle*)func_82139C38(), (ActivePokemon*)temp_s3, (BattleAnimEffectSlot*)arg0, var_s0);
+                BattleAnim_InitializeParticleFromEffect((Particle*)func_82139C38(), (ActivePokemon*)temp_s3, (BattleAnimEffectSlot*)arg0, var_s0);
                 var_s0 += 1;
             } while (var_s0 < temp_s2);
         }
     } else {
-        func_8213AA78((Particle*)func_82139C58(temp_s2 & 0xFF), (ActivePokemon*)temp_s3, (BattleAnimEffectSlot*)arg0, 0);
+        BattleAnim_InitializeParticleFromEffect((Particle*)func_82139C58(temp_s2 & 0xFF), (ActivePokemon*)temp_s3, (BattleAnimEffectSlot*)arg0, 0);
     }
 }
 
-void func_8213AC3C(s8* arg0) {
+void BattleAnim_SpawnBatchedParticles(s8* arg0) {
     s16 step;
     s16 count;
     s16 i;
@@ -696,17 +722,17 @@ void func_8213AC3C(s8* arg0) {
         for (i = 0; i < count; i++) {
             temp_v0 = func_82139C38();
             M2C_FIELD(arg0, s16 *, 0x10) = step;
-            func_8213AA78((Particle*)temp_v0, (ActivePokemon*)temp_s4, (BattleAnimEffectSlot*)arg0, i);
+            BattleAnim_InitializeParticleFromEffect((Particle*)temp_v0, (ActivePokemon*)temp_s4, (BattleAnimEffectSlot*)arg0, i);
         }
     } else {
         temp_v0 = func_82139C58(count & 0xFF);
         M2C_FIELD(arg0, s16 *, 0x10) = step;
-        func_8213AA78((Particle*)temp_v0, (ActivePokemon*)temp_s4, (BattleAnimEffectSlot*)arg0, 0);
+        BattleAnim_InitializeParticleFromEffect((Particle*)temp_v0, (ActivePokemon*)temp_s4, (BattleAnimEffectSlot*)arg0, 0);
     }
 }
 
 void BattleAnim_SpawnSingleParticle(BattleAnimEffectSlot* arg0) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     ActivePokemon* sp18 = arg0->unk_08;
 
     BattleAnim_InitializeParticleFromEffect(Particle_New(), sp18, arg0, 0);
@@ -772,13 +798,17 @@ void BattleAnim_TickEffectSlots(void) {
     }
 }
 
+/**
+ * Count allocated pool slots, regardless of their lifecycle or rendering flags.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 Particle_CountActive(void) {
     s32 i;
     s32 var_v1 = 0;
     Particle* ptr = gParticlePool;
 
     for (i = 0; i < 0x12C; i++, ptr++) {
-        if (ptr->unk_D0 != 0) {
+        if (ptr->allocated != 0) {
             var_v1++;
         }
     }
@@ -786,16 +816,20 @@ s32 Particle_CountActive(void) {
     return var_v1;
 }
 
+/**
+ * Return the allocated-slot count through the shared counter.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 Particle_CountActiveAlias(void) {
     return Particle_CountActive();
 }
 
 void BattleAnim_ReleaseParticleModel(Particle* arg0) {
-    if (arg0->unk_14 != NULL) {
+    if (arg0->displayObject != NULL) {
         if (Particle_HasFlags(arg0, 0x400) != 0) {
-            BattleAnim_FreeParticleDisplayContext(arg0->unk_14);
+            BattleAnim_FreeParticleDisplayContext(arg0->displayObject);
         } else {
-            BattleAnim_FreeOwnerDisplayContext(arg0->unk_14);
+            BattleAnim_FreeOwnerDisplayContext(arg0->displayObject);
         }
     }
 }
@@ -816,7 +850,7 @@ void BattleAnim_CleanupEffectsRetainingCategories47(void) {
     }
 
     for (i = 0; i < 300; i++, var_s2++) {
-        if (var_s2->unk_D0 != 0) {
+        if (var_s2->allocated != 0) {
             if ((var_s2->unk_CA != 4) && (var_s2->unk_CA != 7)) {
                 BattleAnim_DestroyParticle(var_s2);
             }
@@ -836,7 +870,7 @@ void BattleAnim_CleanupEffectsRetainingCategory4(void) {
     }
 
     for (i = 0; i < 300; i++, var_s2++) {
-        if ((var_s2->unk_D0 != 0) && (var_s2->unk_CA != 4)) {
+        if ((var_s2->allocated != 0) && (var_s2->unk_CA != 4)) {
             BattleAnim_DestroyParticle(var_s2);
         }
     }
@@ -874,7 +908,11 @@ s32 BattleAnim_IsEffectSpawningEnabled(void) {
 
 extern s32 D_8219A830;
 
-void func_8213B2E0(void) {
+/**
+ * Advance the particle clock and derive its remainder, quotient, and quotient-parity counters.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ */
+void Particle_UpdateFrameCounters(void) {
     D_8219A830 = 1;
 }
 
@@ -882,6 +920,10 @@ void BattleAnim_EnableEffectSpawning(void) {
     D_8219A830 = 0;
 }
 
+/**
+ * Advance the particle clock through the shared frame-counter updater.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_UpdateFrameCountersAlias(void) {
     Particle_UpdateFrameCounters();
 }
@@ -910,7 +952,7 @@ void BattleAnim_StopParticlesForOwnerCategory(u8 arg0, ActivePokemon* arg1) {
     Particle* var_s0 = gParticlePool;
 
     for (i = 0; i < 300; i++, var_s0++) {
-        if ((var_s0->unk_D0 != 0) && (var_s0->unk_CA == 4) && (var_s0->unk_CB == arg0) && (arg1 == var_s0->unk_10)) {
+        if ((var_s0->allocated != 0) && (var_s0->unk_CA == 4) && (var_s0->unk_CB == arg0) && (arg1 == var_s0->pokemon)) {
             Particle_AdvanceLifecycle(var_s0);
         }
     }
@@ -969,32 +1011,35 @@ BattleAnimEffectSlot* BattleAnim_SpawnGlobalTintColorFadeDetach(s32 arg0, s16 ar
     return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_CallbackGlobalTintColorFadeDetach, &gDefaultParticleDescriptor, NULL, 0, arg1, 0x16, 0, arg2, 0);
 }
 
-BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaFadeInHoldOut(s32 arg0, s16 arg1, s16 arg2, u8 arg3, u8 arg4) {
-    return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_CallbackDescriptor25AlphaFadeInHoldOut, &gBattleAnimParticleDescriptors[37], NULL, arg1, arg2, 0x16, arg4, arg3, 0);
+/**
+ * @unverified Name from Stadium 1.
+ */
+BattleAnimEffectSlot* BattleAnim_SpawnWhiteHueChange(s32 arg0, s16 arg1, s16 arg2, u8 arg3, u8 arg4) {
+    return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_RunWhiteHueChange, &gBattleAnimParticleDescriptors[37], NULL, arg1, arg2, 0x16, arg4, arg3, 0);
 }
 
 BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaHoldFadeOutFullAlpha(s32 arg0, s16 arg1, s16 arg2, u8 arg3) {
-    return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_CallbackDescriptor25AlphaHoldFadeOut, &gBattleAnimParticleDescriptors[37], NULL, arg1, arg2, 0x16, 0xFF, arg3, 0);
+    return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_RunFullScreenHueChange, &gBattleAnimParticleDescriptors[37], NULL, arg1, arg2, 0x16, 0xFF, arg3, 0);
 }
 
 BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaHoldFadeOut(s32 arg0, s16 arg1, s16 arg2, u8 arg3, u8 arg4) {
-    return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_CallbackDescriptor25AlphaHoldFadeOut, &gBattleAnimParticleDescriptors[37], NULL, arg1, arg2, 0x16, arg4, arg3, 0);
+    return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_RunFullScreenHueChange, &gBattleAnimParticleDescriptors[37], NULL, arg1, arg2, 0x16, arg4, arg3, 0);
 }
 
 BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaHoldFadeOutRepeating(s32 arg0, s32 arg1, s8 arg2, s16 arg3, s16 arg4, u8 arg5, u8 arg6) {
-    return BattleAnim_CreateEffectSlot(arg0, arg1, arg2, BattleAnim_CallbackDescriptor25AlphaHoldFadeOut, &gBattleAnimParticleDescriptors[37], NULL, arg3, arg4, 0x16, arg6, arg5, 0);
+    return BattleAnim_CreateEffectSlot(arg0, arg1, arg2, BattleAnim_RunFullScreenHueChange, &gBattleAnimParticleDescriptors[37], NULL, arg3, arg4, 0x16, arg6, arg5, 0);
 }
 
 BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaFadeInHoldFullAlpha(s32 arg0, s16 arg1, s16 arg2, u8 arg3) {
-    return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_CallbackDescriptor25AlphaFadeInHold, &gBattleAnimParticleDescriptors[37], NULL, arg1, arg2, 0x16, 0xFF, arg3, 0);
+    return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_RunPokemonAndFullScreenHueChange, &gBattleAnimParticleDescriptors[37], NULL, arg1, arg2, 0x16, 0xFF, arg3, 0);
 }
 
 BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaFadeInHold(s32 arg0, s16 arg1, s16 arg2, u8 arg3, u8 arg4) {
-    return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_CallbackDescriptor25AlphaFadeInHold, &gBattleAnimParticleDescriptors[37], NULL, arg1, arg2, 0x16, arg4, arg3, 0);
+    return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_RunPokemonAndFullScreenHueChange, &gBattleAnimParticleDescriptors[37], NULL, arg1, arg2, 0x16, arg4, arg3, 0);
 }
 
 BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaFadeInHoldRepeating(s32 arg0, s32 arg1, s8 arg2, s16 arg3, s16 arg4, u8 arg5, u8 arg6) {
-    return BattleAnim_CreateEffectSlot(arg0, arg1, arg2, BattleAnim_CallbackDescriptor25AlphaFadeInHold, &gBattleAnimParticleDescriptors[37], NULL, arg3, arg4, 0x16, arg6, arg5, 0);
+    return BattleAnim_CreateEffectSlot(arg0, arg1, arg2, BattleAnim_RunPokemonAndFullScreenHueChange, &gBattleAnimParticleDescriptors[37], NULL, arg3, arg4, 0x16, arg6, arg5, 0);
 }
 
 BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaHoldDetachFullAlpha(s32 arg0, s16 arg1, u8 arg2) {
@@ -1022,14 +1067,17 @@ BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintRampDetach(s32 arg0, u8 arg1
 }
 
 BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintPulseDetach(s32 arg0, s16 arg1, u8 arg2, s16 arg3, s16 arg4, s16 arg5) {
-    return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_CallbackOwnerModelTintPulseDetach, &gDefaultParticleDescriptor, gBattleAnimCurrentOwner, arg1, arg5, 0x1A, arg4, arg2, arg3);
+    return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_RunUserHueChange, &gDefaultParticleDescriptor, gBattleAnimCurrentOwner, arg1, arg5, 0x1A, arg4, arg2, arg3);
 }
 
 BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintHoldFadeDetach(s32 arg0, s16 arg1, u8 arg2, s16 arg3, s16 arg4) {
     return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_CallbackOwnerModelTintHoldFadeDetach, &gDefaultParticleDescriptor, gBattleAnimCurrentOwner, arg1, arg4, 0x1A, 0, arg2, arg3);
 }
 
-BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintPaletteApproachInactive(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+BattleAnimEffectSlot* BattleAnim_SpawnBeamBoomWaterfallHueChange(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4) {
     return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_CallbackOwnerModelTintPaletteApproachInactive, &gDefaultParticleDescriptor, gBattleAnimCurrentOwner, arg4, arg3, 0x1A, arg2, arg1, 0);
 }
 
@@ -1037,15 +1085,21 @@ BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintPaletteApproachInactiveAlt(s
     return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_CallbackOwnerModelTintPaletteApproachInactive, &gDefaultParticleDescriptor, gBattleAnimCurrentOwner, arg4, arg3, 0x1A, arg2, arg1, 0);
 }
 
-BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintPaletteCycle(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5) {
-    return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_CallbackOwnerModelTintPaletteCycle, &gDefaultParticleDescriptor, gBattleAnimCurrentOwner, arg4, arg3, 0x1A, arg2, arg1, arg5);
+/**
+ * @unverified Name from Stadium 1.
+ */
+BattleAnimEffectSlot* BattleAnim_SpawnIceBeamBlizzardHitHueChange(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5) {
+    return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_RunIceBeamBlizzardHitHueChange, &gDefaultParticleDescriptor, gBattleAnimCurrentOwner, arg4, arg3, 0x1A, arg2, arg1, arg5);
 }
 
 BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintPaletteCycleVariant(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5) {
-    return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_CallbackOwnerModelTintPaletteCycle, &gDefaultParticleDescriptor, gBattleAnimCurrentOwner, arg4, arg3, 0x1A, arg2, arg1, arg5);
+    return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_RunIceBeamBlizzardHitHueChange, &gDefaultParticleDescriptor, gBattleAnimCurrentOwner, arg4, arg3, 0x1A, arg2, arg1, arg5);
 }
 
-BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintPaletteFade(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+BattleAnimEffectSlot* BattleAnim_SpawnDrainFlameHueChange(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5) {
     return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_CallbackOwnerModelTintPaletteFade, &gDefaultParticleDescriptor, gBattleAnimCurrentOwner, arg4, arg3, 0x1A, arg2, arg1, arg5);
 }
 
@@ -1053,11 +1107,17 @@ BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintRandomPaletteCycle(s32 arg0,
     return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_CallbackOwnerModelTintRandomPaletteCycle, &gDefaultParticleDescriptor, gBattleAnimCurrentOwner, 0, arg1, 0x1A, arg2, 0, 0);
 }
 
-BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintPaletteRotateFadeDetach(s32 arg0, s16 arg1, s16 arg2, u8 arg3) {
-    return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_CallbackOwnerModelTintPaletteRotateFadeDetach, &gDefaultParticleDescriptor, gBattleAnimCurrentOwner, arg1, arg2, 0x1A, arg3, 0, 0);
+/**
+ * @unverified Name from Stadium 1.
+ */
+BattleAnimEffectSlot* BattleAnim_SpawnRainbowHueChange(s32 arg0, s16 arg1, s16 arg2, u8 arg3) {
+    return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_RunRainbowHueChange, &gDefaultParticleDescriptor, gBattleAnimCurrentOwner, arg1, arg2, 0x1A, arg3, 0, 0);
 }
 
-BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelAlphaFade(s32 arg0, s16 arg1, s16 arg2, s16 arg3) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+BattleAnimEffectSlot* BattleAnim_SpawnInvisibility(s32 arg0, s16 arg1, s16 arg2, s16 arg3) {
     return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_CallbackOwnerModelAlphaFade, &gDefaultParticleDescriptor, gBattleAnimCurrentOwner, arg1, arg3, 0x1A, arg2, 0, 0);
 }
 

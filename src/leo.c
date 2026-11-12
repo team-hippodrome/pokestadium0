@@ -38,7 +38,10 @@ extern M2C_UNK D_80060404;
 extern M2C_UNK D_80084D11;
 extern M2C_UNK D_80084D28;
 
-s32 func_8000C7B0(void) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+s32 Leo_ValidateBootDiskId(void) {
     if ((u32) D_80000318 < 0x800000U) {
         return 2;
     }
@@ -54,7 +57,7 @@ s32 func_8000C7B0(void) {
     if ((s32) M2C_FIELD(&D_80084D10, u8 *, 0) >= 0x5B) {
         return 1;
     }
-    if (M2C_FIELD(&D_80084D10, u8 *, 5) != 1) {
+    if (D_80084D10.diskNumber != 1) {
         return 1;
     }
     func_80058410(&D_80084D10, &D_800001A0, 0x20);
@@ -229,7 +232,7 @@ s32 Leo_HandleResetCompletion(void) {
 
 s32 Leo_HandleBootBlockCompletion(unk_D_800AA680* arg0) {
     s32 sp24;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
 
     if (osRecvMesg(&D_800AB218, &sp24, 0) != -1) {
         switch (sp24) {
@@ -336,7 +339,7 @@ s32 Leo_HandlePayloadCompletion(void) {
 }
 
 s32 Leo_PollDiskReady(void) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     u8 sp23;
     s32 temp_v0 = LeoTestUnitReady(&sp23);
 

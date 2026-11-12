@@ -1,10 +1,14 @@
+#include "pokemon.h"
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
 #include "battle_engine_339CA0.h"
 
-void BattleAnim_CallbackStartEffect81Descriptor3DRisingAnimFade(Particle* arg0) {
-    switch (arg0->unk_B2) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_RunAcidArmorUseEffect2(Particle* arg0) {
+    switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_CallbackStartEffect81Descriptor3DRisingAnimFade_InitParticle(arg0);
+            BattleAnim_SetupAcidArmorUseEffect2(arg0);
             break;
 
         case 2:
@@ -20,7 +24,7 @@ void BattleAnim_CallbackStartEffect81Descriptor3DRisingAnimFade(Particle* arg0) 
             break;
 
         case 4:
-            func_8213CCEC(arg0, 0, 7, 1, 2, 0);
+            Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 2, 0);
             Particle_PrimAlpha_Approach_0BC2C(arg0, 0x40, 4);
             Particle_AddVelocityYFromFieldOffset74(arg0);
             break;
@@ -32,7 +36,10 @@ void BattleAnim_CallbackStartEffect81Descriptor3DRisingAnimFade(Particle* arg0) 
 }
 
 
-void func_82164198(Particle* arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void BattleAnim_InitSharedVerticalFadeParticle(Particle* arg0) {
     Vec3s sp30;  /* scratch rotation vector used by the later cases */
     /* values the effect descriptor stored on the particle */
     s16 sp2E = Particle_FieldAC_GetS16_0C038(arg0);
@@ -196,7 +203,7 @@ void func_82164AD0(s8 *arg0) {
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_82164198(arg0);
+        BattleAnim_InitSharedVerticalFadeParticle(arg0);
         return;
     case 2:
         if (func_821406B4(arg0) != 0) {
@@ -205,12 +212,12 @@ void func_82164AD0(s8 *arg0) {
         }
         return;
     case 3:
-        func_8213CCEC(arg0, 0, 7, 1, (s32) M2C_FIELD(arg0, s16 *, 0xAC), 0);
-        func_82140518(arg0, 0x40, M2C_FIELD(arg0, u8 *, 0xAB));
+        Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, (s32) M2C_FIELD(arg0, s16 *, 0xAC), 0);
+        Particle_ApproachPrimAlpha(arg0, 0x40, M2C_FIELD(arg0, u8 *, 0xAB));
         func_8213E77C(arg0);
         return;
     case 4:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
 }
@@ -220,32 +227,32 @@ void BattleAnim_ApplySpeciesKeyedSpawnOffset(Particle* arg0) {
     f32 sp1C = 50.0f;
     f32 sp18 = 30.0f;
 
-    switch (BattleAnim_GetOwnerSpecies(arg0->unk_10)) {
-        case 3:
+    switch (BattleAnim_GetOwnerSpecies(arg0->pokemon)) {
+        case VENUSAUR:
             sp1C = 40.0f;
             break;
 
-        case 0x5F:
+        case ONIX:
             sp1C = 25.0f;
             break;
 
-        case 0x67:
+        case EXEGGUTOR:
             sp1C = 35.0f;
             break;
 
-        case 0x71:
+        case CHANSEY:
             sp18 = 35.0f;
             break;
 
-        case 0x73:
+        case KANGASKHAN:
             sp1C = 40.0f;
             break;
 
-        case 0x82:
+        case GYARADOS:
             sp1C = 20.0f;
             break;
 
-        case 0x83:
+        case LAPRAS:
             sp1C = 30.0f;
             break;
     }
@@ -256,32 +263,37 @@ void BattleAnim_ApplySpeciesKeyedSpawnOffset(Particle* arg0) {
 }
 
 
-void func_82164CA4(s8 *arg0) {
+/**
+ * Moves: Surf (hit)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_RunSplashOfWater(s8 *arg0) {
     s16 temp_v0;
     s16 temp_v0_2;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
     switch (temp_v0) {                              /* switch 1; irregular */
     case 1:                                         /* switch 1 */
-        func_82164198(arg0);
+        BattleAnim_InitSharedVerticalFadeParticle(arg0);
         func_82164B9C(arg0);
         break;
     case 2:                                         /* switch 1 */
         if (func_821406B4(arg0) != 0) {
             func_8213CB3C(arg0);
             func_8213D238(arg0);
-            func_82140594(arg0, 0x14);
+            Particle_SetUnkA6(arg0, 0x14);
         }
         break;
     case 3:                                         /* switch 1 */
-        func_8213CC10(arg0, 0, 7, 1, 2, 0);
-        func_82140518(arg0, 0x40, 2);
+        Particle_AnimateFramesForwardLooped(arg0, 0, 7, 1, 2, 0);
+        Particle_ApproachPrimAlpha(arg0, 0x40, 2);
         func_8213E7F4(arg0);
         func_8213E71C(arg0, 0x41200000);
         func_821406B4(arg0);
         break;
     case 4:                                         /* switch 1 */
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
     temp_v0_2 = M2C_FIELD(arg0, s16 *, 0xB4);
@@ -289,8 +301,8 @@ void func_82164CA4(s8 *arg0) {
     case 1:                                         /* switch 2 */
         func_8213F6DC(arg0, 0x3F800000, 0x3DCCCCCD);
         if (func_8213D294(arg0, 4) != 0) {
-            func_8213D284(arg0);
-            func_8213F640(arg0, 0x3E4CCCCD);
+            Particle_IncrementPhase(arg0);
+            Particle_SetMagnitudeStepScaled(arg0, 0x3E4CCCCD);
             return;
         }
         return;
@@ -300,13 +312,18 @@ void func_82164CA4(s8 *arg0) {
     }
 }
 
-void func_82164E18(s8 *arg0) {
+/**
+ * Moves: Dig (hit)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_RunDigHitDust(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_82164198(arg0);
+        BattleAnim_InitSharedVerticalFadeParticle(arg0);
         break;
     case 2:
         if (func_821406B4(arg0) != 0) {
@@ -314,26 +331,31 @@ void func_82164E18(s8 *arg0) {
         }
         break;
     case 3:
-        func_8213CCEC(arg0, 0, 7, 1, (s32) M2C_FIELD(arg0, s16 *, 0xAC), 0);
-        func_82140518(arg0, 0x40, M2C_FIELD(arg0, u8 *, 0xAB));
+        Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, (s32) M2C_FIELD(arg0, s16 *, 0xAC), 0);
+        Particle_ApproachPrimAlpha(arg0, 0x40, M2C_FIELD(arg0, u8 *, 0xAB));
         break;
     case 4:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
-    if (func_8213C9B0(arg0) != 0) {
+    if (Particle_IsRunning(arg0) != 0) {
         func_8213F940(arg0, 0xC0000000, 0x3E99999A);
-        func_8213E3F8(arg0);
+        Particle_ApplyMotionStep(arg0);
     }
 }
 
-void func_82164F04(s8 *arg0) {
+/**
+ * Moves: Dig (hit)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_RunDigHitRocks(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_82164198(arg0);
+        BattleAnim_InitSharedVerticalFadeParticle(arg0);
         break;
     case 2:
         if (func_821406B4(arg0) != 0) {
@@ -342,18 +364,21 @@ void func_82164F04(s8 *arg0) {
         break;
     case 3:
         if (M2C_FIELD(arg0, f32 *, 0x2C) < 0.0f) {
-            func_8213C930(arg0);
+            Particle_MarkInactive(arg0);
         }
         break;
     }
-    if (func_8213C9B0(arg0) != 0) {
+    if (Particle_IsRunning(arg0) != 0) {
         func_8213F940(arg0, 0xC1200000, 0x3F4CCCCD);
-        func_8213E3F8(arg0);
+        Particle_ApplyMotionStep(arg0);
     }
 }
 
-void BattleAnim_CallbackStartEffect101Descriptor3DMetadataBurstChild_InitParticle(Particle* arg0) {
-    UNUSED s32 pad;
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_SetupBarrageUseEffect2(Particle* arg0) {
+    UNUSED s32 pad; // FAKE: stack padding
 
     Particle_FieldAC_GetS16_0C038(arg0);
     Particle_FieldCD_GetU8_0C048(arg0);
@@ -365,14 +390,17 @@ void BattleAnim_CallbackStartEffect101Descriptor3DMetadataBurstChild_InitParticl
     Particle_AdvanceLifecycle(arg0);
 }
 
-void BattleAnim_CallbackStartEffect101Descriptor3DMetadataBurstChild(Particle* arg0) {
-    switch (arg0->unk_B2) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_RunBarrageUseEffect2(Particle* arg0) {
+    switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_CallbackStartEffect101Descriptor3DMetadataBurstChild_InitParticle(arg0);
+            BattleAnim_SetupBarrageUseEffect2(arg0);
             break;
 
         case 2:
-            func_8213CCEC(arg0, 0, 7, 1, 2, 0);
+            Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 2, 0);
             Particle_PrimAlpha_Approach_0BC2C(arg0, 0x80, 8);
             Particle_AddVelocityFromRotationTemplate1(arg0);
             break;
@@ -411,19 +439,19 @@ void func_82165224(s8 *arg0) {
         func_82165100(arg0);
         break;
     case 2:
-        func_8213CCEC(arg0, 1, 7, 1, 2, 0);
+        Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 1, 7, 1, 2, 0);
         if (func_82140690(arg0) != 0) {
-            func_82140518(arg0, 0x64, 0x10);
+            Particle_ApproachPrimAlpha(arg0, 0x64, 0x10);
         }
         break;
     case 3:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
-    if (func_8213C9B0(arg0) != 0) {
+    if (Particle_IsRunning(arg0) != 0) {
         func_821402B8(arg0);
         func_8213F940(arg0, 0xBFC00000, 0x3DCCCCCD);
-        func_8213E3F8(arg0);
+        Particle_ApplyMotionStep(arg0);
     }
 }
 
@@ -451,7 +479,7 @@ void BattleAnim_CallbackDescriptor50BurstEmitter_InitParticle(Particle* arg0) {
 }
 
 void BattleAnim_CallbackDescriptor50BurstEmitter(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_CallbackDescriptor50BurstEmitter_InitParticle(arg0);
             break;
@@ -476,26 +504,29 @@ void func_8216547C(s8 *arg0) {
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_82164198(arg0);
+        BattleAnim_InitSharedVerticalFadeParticle(arg0);
         break;
     case 2:
-        func_8213CCEC(arg0, 1, 7, 1, 2, 0);
+        Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 1, 7, 1, 2, 0);
         if (func_82140690(arg0) != 0) {
-            func_82140518(arg0, 0x64, 0x10);
+            Particle_ApproachPrimAlpha(arg0, 0x64, 0x10);
         }
         break;
     case 3:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
-    if (func_8213C9B0(arg0) != 0) {
+    if (Particle_IsRunning(arg0) != 0) {
         func_821402B8(arg0);
         func_8213F940(arg0, 0xBFC00000, 0x3E4CCCCD);
-        func_8213E3F8(arg0);
+        Particle_ApplyMotionStep(arg0);
     }
 }
 
-void BattleAnim_CallbackSharedDescriptor3CExpandingFadeIn_InitParticle(Particle* arg0) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_SetupSolarBeamUseEffect(Particle* arg0) {
     s16 sp26 = Particle_FieldCF_GetS16_0C058(arg0);
 
     Particle_Field1C_SetScaled_0B938(arg0, 0.2f);
@@ -505,10 +536,13 @@ void BattleAnim_CallbackSharedDescriptor3CExpandingFadeIn_InitParticle(Particle*
     Particle_AdvanceLifecycle(arg0);
 }
 
-void BattleAnim_CallbackSharedDescriptor3CExpandingFadeIn(Particle* arg0) {
-    switch (arg0->unk_B2) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_RunSolarBeamUseEffect(Particle* arg0) {
+    switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_CallbackSharedDescriptor3CExpandingFadeIn_InitParticle(arg0);
+            BattleAnim_SetupSolarBeamUseEffect(arg0);
             break;
 
         case 2:
@@ -522,7 +556,10 @@ void BattleAnim_CallbackSharedDescriptor3CExpandingFadeIn(Particle* arg0) {
     }
 }
 
-void BattleAnim_CallbackStartEffects29And60And104And110Descriptor44BurstChild_InitParticle(Particle* arg0) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_SetupQiChargeChild(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
     s16 sp24 = Particle_FieldCF_GetS16_0C058(arg0);
 
@@ -538,10 +575,15 @@ void BattleAnim_CallbackStartEffects29And60And104And110Descriptor44BurstChild_In
     Particle_AdvanceLifecycle(arg0);
 }
 
-void BattleAnim_CallbackStartEffects29And60And104And110Descriptor44BurstChild(Particle* arg0) {
-    switch (arg0->unk_B2) {
+/**
+ * Moves: Conversion (use), Mimic (use), Recover (use), Sky Attack (use), Solar Beam (use)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_RunQiChargeChild(Particle* arg0) {
+    switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_CallbackStartEffects29And60And104And110Descriptor44BurstChild_InitParticle(arg0);
+            BattleAnim_SetupQiChargeChild(arg0);
             break;
 
         case 2:
@@ -563,7 +605,7 @@ void BattleAnim_CallbackStartEffects29And60And104And110Descriptor44BurstChild(Pa
     }
 
     if (Particle_IsRenderingEnabled(arg0) != 0) {
-        Particle_Field74_ApproachUsingField78_0AE00(arg0, 0.0f);
+        Particle_StepMagnitude_ApproachUsingMagnitudeStep(arg0, 0.0f);
         Particle_Field94_AddYFromField9A_0A4C8(arg0);
         func_8213E4B0(arg0);
         func_8213E334(arg0, 0.0f);
@@ -572,22 +614,28 @@ void BattleAnim_CallbackStartEffects29And60And104And110Descriptor44BurstChild(Pa
     }
 }
 
-void BattleAnim_CallbackStartEffects29And60And104And110DefaultDescriptorBurstEmitter_InitParticle(Particle* arg0) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_SetupQiCharge(Particle* arg0) {
     Particle_FieldAC_GetS16_0C038(arg0);
     Particle_Field94_SetY_0A2B8(arg0, ParticleMath_RandomRange(0x10000));
     func_8213E11C(arg0, ParticleMath_RandomSignedOffsetBySign(0x28, 0x28));
-    BattleAnim_EmitParticleBurst(arg0, BattleAnim_CallbackStartEffects29And60And104And110Descriptor44BurstChild, &D_8218E580[0x44], 5);
+    BattleAnim_EmitParticleBurst(arg0, BattleAnim_RunQiChargeChild, &D_8218E580[0x44], 5);
     Particle_AdvanceLifecycle(arg0);
 }
 
-void func_821658DC(Particle* arg0) {
-    switch (arg0->unk_B2) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void BattleAnim_CallbackStartEffects29And60And104And110DefaultDescriptorBurstEmitter(Particle* arg0) {
+    switch (arg0->lifecycle) {
         case 1:
             func_82165854(arg0);
             break;
 
         case 2:
-            func_8213C938(arg0);
+            Particle_DisableAndDetach(arg0);
             break;
     }
 }
@@ -597,7 +645,7 @@ void BattleAnim_CallbackDescriptor26BurstChild_InitParticle(Particle* arg0) {
 
     Particle_SetPrimColor(arg0, 0xDC, 0xFF, 0xFF);
     ParticleGfx_RecolorEnv(arg0, 0x33);
-    arg0->unk_1C = (sp26 * D_FLT_82197854) + 0.5f;
+    arg0->scale = (sp26 * D_FLT_82197854) + 0.5f;
     Particle_Field74_SetScaled_0AD8C(arg0, 2.0f);
     Particle_SetPrimAlpha(arg0, (0xFF - (sp26 << 5)) & 0xFF);
     Particle_FieldA6_SetS16_0BCA8(arg0, sp26 + 1);

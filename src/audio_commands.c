@@ -1,3 +1,5 @@
+#include "pokemon.h"
+#include "moves.h"
 /* Stadium Zero resident code. */
 /* C ported from the Stadium 1 decomp: src/audio_commands.c, src/audio_data.c. */
 
@@ -11,13 +13,7 @@
 #include "audio_cache.h"
 #include "cry.h"
 #include "audio_fade.h"
-typedef struct unk_D_80077970 {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ u8 unk_02;
-    /* 0x03 */ u8 unk_03;
-    /* 0x04 */ u8 unk_04;
-} unk_D_80077970;
+#include "audio_commands_types.h"
 extern u8 pad_D_800FC694[4];
 extern unk_D_800FC6CC* D_800B41E4;
 extern u8* D_800B41E8;
@@ -136,13 +132,13 @@ extern u8 D_8007753C;
 s32 func_80058100(s32);
 void func_80056610(void*, void*, s32);
 void* func_8005C0D0(s32, s32, void*, s32, s32);
-void func_80046040(s32);
+void Rom_InitDevice(s32);
 void func_8004609C(u32, u8*, s32);
 void func_80047FB0(u8*, s32, s32);
 void func_80037F48(s32, s32);
 void func_8003A710(u8*);
 s32 func_800371A4(s8*);
-void func_80046170(s32, s32);
+void Audio_SetChannelVolume(s32 arg0, u32 arg1);
 
 s32 func_8003E1F8(void) {
     u32 i;
@@ -157,7 +153,7 @@ s32 func_8003E1F8(void) {
     D_80075C30 = 0;
     func_80056610(D_800B41F8, D_800B4208, 300000);
     D_800B41F0 = func_8005C0D0(0, 0, D_800B41F8, 1, 0x55F0);
-    func_80046040(0);
+    Rom_InitDevice(0);
 
     D_800B4160 = func_8005C0D0(0, 0, D_800B41F8, 10, 4);
     func_8004609C((u32)D_00B98000, (u8*)D_800B4160, 0x28);
@@ -317,12 +313,12 @@ s32 func_8003E1F8(void) {
     config.unk_24 = 0x30;
     config.unk_28 = 0x500;
     ret = func_800371A4((s8*)&config);
-    func_80046170(2, 2);
-    func_80046170(1, 3);
+    Audio_SetChannelVolume(2, 2);
+    Audio_SetChannelVolume(1, 3);
     return ret;
 }
 
-void func_80038588(void);
+void Audio_StopAllSoundEffects(void);
 s32 func_80037F68(s32, s32);
 void func_80043CE8(s32, f32, s32);
 void func_8004609C(u32, u8*, s32);
@@ -344,11 +340,14 @@ extern s32 D_800B419C;
 extern u8* D_800B41F0;
 extern s32 D_800FD608;
 extern u32 D_800FD684;
-s32 func_80037B7C(s32);
+s32 Audio_QueueSetMonoOutputCommand(s32 handle);
 void func_80037C04(s32, u32);
 void func_800419F8(u32);
 
-s32 func_8003EECC(u32 track_id) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+s32 Audio_StartMusicTrack(u32 track_id) {
     u32 file_index[1]; // FAKE
     s32 pad; // FAKE
     s32 volume_scale[1]; // FAKE
@@ -358,8 +357,8 @@ s32 func_8003EECC(u32 track_id) {
     if (track_id == 0x1E) {
         return 0;
     }
-    if (func_80037B7C(D_800FD608) != 0) {
-        func_80038588();
+    if (Audio_QueueSetMonoOutputCommand(D_800FD608) != 0) {
+        Audio_StopAllSoundEffects();
         D_800FD608 = 0;
     }
     if (D_8007754C != 0) {
@@ -621,7 +620,10 @@ extern u8 D_8007752C;
 s32 func_80037AC4(s32, s32);
 void func_800419F8(u32);
 
-s32 func_8003F654(s32 arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+s32 Audio_FadeOutAll(s32 arg0) {
     s32 ret;
 
     if (arg0 == 0) {
@@ -746,7 +748,7 @@ extern s32 D_800B4190;
 extern s32 D_800B4188;
 extern s32 D_800B41A4;
 extern s32 D_800775A8;
-s32 func_80037B7C(s32);
+s32 Audio_QueueSetMonoOutputCommand(s32 handle);
 s32 func_80037AC4(s32, s32);
 s32 func_8003834C(s32, s32, s32, s32, s32, s32, s32);
 void func_8003A710(u8*);
@@ -754,7 +756,11 @@ void func_80037D4C(s32, f32);
 void func_80037E84(s32, s32);
 void func_80037DF4(s32, s32);
 
-s32 func_8003F96C(u32 arg0, u32 arg1) {
+/**
+ * Loads and plays the cry of `arg0` (1-based national dex, below 152) into one of three rotating buffers.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 Audio_PlayCry(u32 arg0, u32 arg1) {
     u8 pad[0x28C]; // FAKE
     s32 sp30;
     u32 start;
@@ -768,7 +774,7 @@ s32 func_8003F96C(u32 arg0, u32 arg1) {
     }
     D_80077520++;
     D_80077520 %= 3;
-    if (func_80037B7C(D_800FD5F8[D_80077520]) != 0) {
+    if (Audio_QueueSetMonoOutputCommand(D_800FD5F8[D_80077520]) != 0) {
         D_80077520 += 2;
         D_80077520 %= 3;
         return 0;
@@ -817,10 +823,10 @@ s32 func_8003F96C(u32 arg0, u32 arg1) {
     return D_800FD5F8[D_80077520];
 }
 
-s32 func_8003FE58(u32, u32, u32);
+s32 Audio_PlayMoveSound(u32, u32, u32);
 
 void func_8003FE34(s32 arg0, s32 arg1) {
-    func_8003FE58(arg0, 1, arg1);
+    Audio_PlayMoveSound(arg0, 1, arg1);
 }
 
 extern u8 D_80077062[];
@@ -833,8 +839,12 @@ extern s32 D_800FD64C;
 extern s32 D_800FD650;
 extern s32 D_800FD670[4];
 void func_800386E4(s32, s32);
-s32 func_800407B0(s32, s32, s32);
-s32 func_8003FE58(u32 move_id, u32 species, u32 sound_kind) {
+s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2);
+/**
+ * Loads and plays the sound of `move_id` (1-based, below 167) for `species`; some species/move pairs are skipped. Some moves add a cry or a second sound.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 Audio_PlayMoveSound(u32 move_id, u32 species, u32 sound_kind) {
     s32 var;
     u32 size;
     s32 ret;
@@ -849,12 +859,12 @@ s32 func_8003FE58(u32 move_id, u32 species, u32 sound_kind) {
     }
 
     switch (species) {
-        case 9:
+        case BLASTOISE:
             switch (move_id) {
-                case 0x6E:
+                case WITHDRAW:
                     goto skip;
 
-                case 0x82:
+                case SKULL_BASH:
                     if (sound_kind == 4) {
                         goto skip;
                     }
@@ -862,49 +872,49 @@ s32 func_8003FE58(u32 move_id, u32 species, u32 sound_kind) {
             }
             break;
 
-        case 0x19:
+        case PIKACHU:
             if (move_id == 0x39) {
                 goto skip;
             }
             break;
 
-        case 0x4C:
+        case GOLEM:
             switch (move_id) {
-                case 0x39:
-                case 0x54:
-                case 0x69:
-                case 0x79:
-                case 0x82:
-                case 0x96:
+                case SURF:
+                case THUNDERSHOCK:
+                case RECOVER:
+                case EGG_BOMB:
+                case SKULL_BASH:
+                case SPLASH:
                     goto skip;
             }
             break;
 
-        case 0x71:
+        case CHANSEY:
             if ((move_id == 0x27) || (move_id == 0x64) || (move_id == 0x70) || (move_id == 0x71) || (move_id == 0x73)) {
                 goto skip;
             }
             break;
 
-        case 0x44:
-        case 0x5B:
-        case 0x5F:
-        case 0x67:
-        case 0x80:
-        case 0x90:
-        case 0x92:
+        case MACHAMP:
+        case CLOYSTER:
+        case ONIX:
+        case EXEGGUTOR:
+        case TAUROS:
+        case ARTICUNO:
+        case MOLTRES:
             goto skip;
     }
 
     for (i = 0; i < 4; i++) {
-        if (func_80037B7C(D_800FD670[i]) != 0) {
+        if (Audio_QueueSetMonoOutputCommand(D_800FD670[i]) != 0) {
             func_800386E4(D_800FD670[i], 0xF);
             D_800FD670[i] = 0;
         }
     }
 
 skip:
-    if (func_80037B7C(D_800FD648) != 0) {
+    if (Audio_QueueSetMonoOutputCommand(D_800FD648) != 0) {
         func_80037AC4(D_800FD648, 2);
         D_800FD648 = 0;
     }
@@ -916,25 +926,25 @@ skip:
 
     switch (sound_kind) {
         case 4:
-            if (func_80037B7C(D_800FD650) != 0) {
+            if (Audio_QueueSetMonoOutputCommand(D_800FD650) != 0) {
                 func_80037AC4(D_800FD650, 0x14);
                 D_800FD650 = 0;
             }
             switch (move_id) {
-                case 0x5B:
+                case DIG:
                     func_80043CE8(0x4B, 0.0f, 0x80);
                     var = 4;
                     break;
 
-                case 0x13:
+                case FLY:
                     func_80043CE8(0x4A, 0.0f, 0x80);
                     var = 4;
                     break;
 
-                case 0xD:
-                case 0x4C:
-                case 0x82:
-                case 0x8F:
+                case RAZOR_WIND:
+                case SOLARBEAM:
+                case SKULL_BASH:
+                case SKY_ATTACK:
                     func_80043CE8(0x52, 0.0f, 0x80);
                     var = 4;
                     break;
@@ -945,7 +955,7 @@ skip:
             break;
 
         case 0:
-            if (func_80037B7C(D_800FD650) != 0) {
+            if (Audio_QueueSetMonoOutputCommand(D_800FD650) != 0) {
                 func_80037AC4(D_800FD650, 0x14);
                 D_800FD650 = 0;
             }
@@ -953,9 +963,9 @@ skip:
                 return 0;
             }
             switch (move_id) {
-                case 0x35:
-                case 0x52:
-                case 0x53:
+                case FLAMETHROWER:
+                case DRAGON_RAGE:
+                case FIRE_SPIN:
                     if (D_80077062[species * 8] == 1) {
                         var = 0;
                     } else {
@@ -963,8 +973,8 @@ skip:
                     }
                     break;
 
-                case 0x78:
-                case 0x99:
+                case SELFDESTRUCT:
+                case EXPLOSION:
                     func_80043CE8(0x23, 0.0f, 0x80);
                     var = 0;
                     D_8007757C = 1;
@@ -980,56 +990,56 @@ skip:
                 func_80043CE8(0x53, 0.0f, 0x80);
             }
             switch (move_id) {
-                case 0x2B: case 0x30: case 0x3B: case 0x3D: case 0x3E: case 0x3F: case 0x6D: case 0x86:
-                case 0x89:
-                    if (func_80037B7C(D_800FD650) != 0) {
+                case LEER: case SUPERSONIC: case BLIZZARD: case BUBBLEBEAM: case AURORA_BEAM: case HYPER_BEAM: case CONFUSE_RAY: case KINESIS:
+                case GLARE:
+                    if (Audio_QueueSetMonoOutputCommand(D_800FD650) != 0) {
                         func_80037AC4(D_800FD650, 0x3C);
                         D_800FD650 = 0;
                     }
                     break;
 
-                case 0x14: case 0x23: case 0x32: case 0x35: case 0x47: case 0x48: case 0x4B: case 0x50:
-                case 0x51: case 0x52: case 0x66: case 0x7E: case 0x84: case 0x8A: case 0x8D: case 0xA0:
-                    if (func_80037B7C(D_800FD650) != 0) {
+                case BIND: case WRAP: case DISABLE: case FLAMETHROWER: case ABSORB: case MEGA_DRAIN: case RAZOR_LEAF: case PETAL_DANCE:
+                case STRING_SHOT: case DRAGON_RAGE: case MIMIC: case FIRE_BLAST: case CONSTRICT: case DREAM_EATER: case LEECH_LIFE: case CONVERSION:
+                    if (Audio_QueueSetMonoOutputCommand(D_800FD650) != 0) {
                         func_80037AC4(D_800FD64C, 0x14);
                         D_800FD650 = 0;
                     }
                     break;
 
                 default:
-                    if (func_80037B7C(D_800FD650) != 0) {
+                    if (Audio_QueueSetMonoOutputCommand(D_800FD650) != 0) {
                         func_80037AC4(D_800FD650, 2);
                         D_800FD650 = 0;
                     }
                     break;
 
-                case 0xB: case 0xC: case 0xD: case 0x10: case 0x12: case 0x2F: case 0x39: case 0x4D:
-                case 0x4E: case 0x4F: case 0x54: case 0x55: case 0x56: case 0x57: case 0x5F: case 0x65:
-                case 0x67: case 0x6C: case 0x72: case 0x78: case 0x7B: case 0x7F: case 0x80: case 0x81:
-                case 0x8B: case 0x8E: case 0x93: case 0x94: case 0x95: case 0x99:
+                case VICEGRIP: case GUILLOTINE: case RAZOR_WIND: case GUST: case WHIRLWIND: case SING: case SURF: case POISONPOWDER:
+                case STUN_SPORE: case SLEEP_POWDER: case THUNDERSHOCK: case THUNDERBOLT: case THUNDER_WAVE: case THUNDER: case HYPNOSIS: case NIGHT_SHADE:
+                case SCREECH: case SMOKESCREEN: case HAZE: case SELFDESTRUCT: case SMOG: case WATERFALL: case 0x80: /* Clamp; the CLAMP name is taken by the macro */ case SWIFT:
+                case POISON_GAS: case LOVELY_KISS: case SPORE: case FLASH: case PSYWAVE: case EXPLOSION:
                     break;
             }
             var = 1;
             break;
 
         case 2:
-            if (func_80037B7C(D_800FD650) != 0) {
+            if (Audio_QueueSetMonoOutputCommand(D_800FD650) != 0) {
                 func_80037AC4(D_800FD650, 0x14);
                 D_800FD650 = 0;
             }
             switch (move_id) {
-                case 0xE: case 0x36: case 0x4A: case 0x60: case 0x61: case 0x66: case 0x68: case 0x69:
-                case 0x6A: case 0x6B: case 0x6E: case 0x6F: case 0x70: case 0x71: case 0x72: case 0x73:
-                case 0x74: case 0x85: case 0x87: case 0x90: case 0x97: case 0x9C: case 0x9F: case 0xA4:
+                case SWORDS_DANCE: case MIST: case GROWTH: case MEDITATE: case AGILITY: case MIMIC: case DOUBLE_TEAM: case RECOVER:
+                case HARDEN: case MINIMIZE: case WITHDRAW: case DEFENSE_CURL: case BARRIER: case LIGHT_SCREEN: case HAZE: case REFLECT:
+                case FOCUS_ENERGY: case AMNESIA: case SOFTBOILED: case TRANSFORM: case ACID_ARMOR: case REST: case SHARPEN: case SUBSTITUTE:
                     return 0;
 
-                case 0x1: case 0x2: case 0x3: case 0x4: case 0x6: case 0xA: case 0xB: case 0xC:
-                case 0xF: case 0x15: case 0x16: case 0x17: case 0x20: case 0x2C: case 0x44: case 0x7D:
-                case 0x80: case 0x9A: case 0x9E: case 0xA2: case 0xA3:
+                case POUND: case KARATE_CHOP: case DOUBLESLAP: case COMET_PUNCH: case PAY_DAY: case SCRATCH: case VICEGRIP: case GUILLOTINE:
+                case CUT: case SLAM: case VINE_WHIP: case STOMP: case HORN_DRILL: case BITE: case COUNTER: case BONE_CLUB:
+                case 0x80: /* Clamp; the CLAMP name is taken by the macro */ case FURY_SWIPES: case HYPER_FANG: case SUPER_FANG: case SLASH:
                     var = 2;
                     break;
 
-                case 0x35: case 0x52: case 0x53:
+                case FLAMETHROWER: case DRAGON_RAGE: case FIRE_SPIN:
                     if (D_80077062[species * 8] == 1) {
                         var = 0;
                     } else {
@@ -1044,7 +1054,7 @@ skip:
             break;
 
         case 3:
-            if (func_80037B7C(D_800FD650) != 0) {
+            if (Audio_QueueSetMonoOutputCommand(D_800FD650) != 0) {
                 func_80037AC4(D_800FD650, 0x14);
                 D_800FD650 = 0;
             }
@@ -1053,21 +1063,21 @@ skip:
 
         case 5:
             switch (move_id) {
-                case 0xD: case 0x10: case 0x12: case 0x2F: case 0x39: case 0x4D: case 0x4E: case 0x4F:
-                case 0x54: case 0x55: case 0x56: case 0x57: case 0x5F: case 0x67: case 0x6C: case 0x6D:
-                case 0x72: case 0x78: case 0x7B: case 0x80: case 0x81: case 0x8B: case 0x8E: case 0x93:
-                case 0x94: case 0x99:
+                case RAZOR_WIND: case GUST: case WHIRLWIND: case SING: case SURF: case POISONPOWDER: case STUN_SPORE: case SLEEP_POWDER:
+                case THUNDERSHOCK: case THUNDERBOLT: case THUNDER_WAVE: case THUNDER: case HYPNOSIS: case SCREECH: case SMOKESCREEN: case CONFUSE_RAY:
+                case HAZE: case SELFDESTRUCT: case SMOG: case 0x80: /* Clamp; the CLAMP name is taken by the macro */ case SWIFT: case POISON_GAS: case LOVELY_KISS: case SPORE:
+                case FLASH: case EXPLOSION:
                     return 0;
 
-                case 0x30:
-                    if (func_80037B7C(D_800FD650) != 0) {
+                case SUPERSONIC:
+                    if (Audio_QueueSetMonoOutputCommand(D_800FD650) != 0) {
                         func_80037AC4(D_800FD650, 0x28);
                         D_800FD650 = 0;
                     }
                     return 0;
 
                 default:
-                    if (func_80037B7C(D_800FD650) != 0) {
+                    if (Audio_QueueSetMonoOutputCommand(D_800FD650) != 0) {
                         func_80037AC4(D_800FD650, 0x3C);
                         D_800FD650 = 0;
                     }
@@ -1114,12 +1124,12 @@ skip:
                 break;
 
             case 0x9C:
-                func_800407B0(0x32, species, 0);
+                Audio_PlayCommand(0x32, species, 0);
                 break;
 
             case 0x2D:
             case 0x2E:
-                func_8003F96C(species, 0);
+                Audio_PlayCry(species, 0);
                 break;
         }
     }
@@ -1136,7 +1146,7 @@ extern u8 D_80077524;
 extern s32 D_800FD64C;
 extern s32 D_800FD650;
 
-void func_80040738(void) {
+void Audio_FadeAndClearStoredSounds(void) {
     if (D_80077524 != 0) {
         func_80037AC4(D_800FD64C, 0x32);
         func_80037AC4(D_800FD650, 0x32);

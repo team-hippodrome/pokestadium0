@@ -60,7 +60,7 @@ loop_1:
 }
 
 /*
- * func_8000AC78
+ * GbTower_Start
  *
  * Starts the Game Boy Tower emulator (the counterpart of GbTower_Stop below;
  * the donor decomp calls this function GbTower_Start and the symbol table
@@ -98,7 +98,12 @@ M2C_UNK func_800567E0(s32, s32, M2C_UNK);
 M2C_UNK func_80051B20(s32, s32, void (*)(s32), s32, s32, s32);
 u8 func_8000C610(u8);
 
-void func_8000AC78(UnkInputStruct8000D738* arg0) {
+/**
+ * Starts a GB Tower session: allocates both thread blocks, loads the emulator
+ * fragment and fonts, copies the session parameters and starts the emulator thread.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ */
+void GbTower_Start(UnkInputStruct8000D738* arg0) {
     void* temp_v0;
 
     main_pool_push_state('GBEM');
@@ -128,16 +133,21 @@ s32 func_8000ADE8(void) {
 
 extern u8 D_800AAF48;
 void func_80052DC0(s32);
-void func_80001A78(void);
+void Display_ApplyPendingVideoMode(void);
 void func_80004EF0(s32);
 void func_8004D9B0(s32);
 void func_80002620(s32);
 
+/**
+ * Ends the session: copies the session parameters back (button bindings), restores
+ * the pak poll mask and destroys both threads.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void GbTower_Stop(UnkInputStruct8000D738* arg0) {
     *arg0 = M2C_FIELD(D_800AAF40, UnkInputStruct8000D738*, 0x2200);
     func_8000C610(D_800AAF48);
     func_80052DC0(1);
-    func_80001A78();
+    Display_ApplyPendingVideoMode();
     func_80004EF0(D_800AAF40 + 0x21D4);
     func_80004EF0(D_800AAF44 + 0x21B0);
     func_8004D9B0(D_800AAF40);

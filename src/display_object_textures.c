@@ -108,7 +108,7 @@ Fragment* Asset_AllocAndCopyFragment(MainPoolState* arg0, PERSSZP* arg1, s32 arg
 }
 
 Fragment* Fragment_LoadFromRomRange(MainPoolState* arg0, s32 start, s32 end, PERSSZP* arg3, s32 arg4) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     u32 size = ALIGN16(end - start);
     Fragment* var_v1 = NULL;
 
@@ -172,7 +172,7 @@ Fragment* BinArchive_LoadFileFromLbaRange(MainPoolState* arg0, BinArchive* arg1,
 }
 
 Fragment* BinArchive_LoadFileToPool(MainPoolState* arg0, BinArchive* arg1, s32 arg2, u32 arg3, s32 arg4) {
-    s32 pad[4];
+    s32 pad[4]; // FAKE: stack padding
     Fragment* var_s0 = NULL;
     BinArchiveFile* sp2C = (u8*)arg1 + sizeof(BinArchive) + (arg2 * sizeof(BinArchiveFile));
 
@@ -235,7 +235,7 @@ void Fragment_ProcessGeoLayoutList(MemoryBlock* arg0, arg1_func_80019420* arg1) 
 }
 
 void PokeIcon_LoadModelArchive(unk_func_80019600* arg0) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     MemoryBlock* sp28;
     Fragment* sp24;
 
@@ -313,7 +313,7 @@ void PokeIcon_StartThread(void) {
 s8 *func_800023C4(M2C_UNK, M2C_UNK);              /* extern */
 M2C_UNK func_800567E0(s8 *, s8 *, M2C_UNK);     /* extern */
 
-s8 *func_80017860(s32 arg0) {
+s8 *PokeIcon_AllocFramebuffers(s32 arg0) {
     s8 *temp_v0;
 
     temp_v0 = func_800023C4(0x64, 1);
@@ -344,7 +344,10 @@ extern s32 D_800AD1A4;
 extern s32 D_800AD1A8;
 extern s32 D_800AD1AC;
 
-void func_80017934(void) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void PokeIcon_OpenModelArchives(void) {
     D_800AD1A4 = func_80004154(0x500000, 0, 1, 1);
     D_800AD1A8 = func_80004154(0x4A8000, 0, 1, 1);
     D_800AD1AC = func_800023C4(0x28000, 1);
@@ -452,7 +455,10 @@ s32 PokeIcon_PollFrameLoad(ModelLoadContext* arg0) {
     return sp18;
 }
 
-s32 func_80017CB0(ModelLoadContext* arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+s32 PokeIcon_PollBackgroundLoad(ModelLoadContext* arg0) {
     sp18_func_800198E4* sp1C;
     s32 sp18 = 0;
 
@@ -476,7 +482,7 @@ void func_80017D00(s32 arg0) {
 M2C_UNK func_80017BA0(s32, s32);                    /* extern */
 M2C_UNK func_8004D1C0(s32, s32 *, M2C_UNK);         /* extern */
 
-void func_80017D38(s32 arg0) {
+void PokeIcon_WaitBackgroundLoad(s32 arg0) {
     s32 sp1C;
 
     func_8004D1C0(arg0 + 0x44, &sp1C, 1);
@@ -506,7 +512,7 @@ unk_D_86002F30* Model_LoadForPokemon(BattleMon* arg0) {
     unk_D_86002F30* sp24 = NULL;
     MemoryBlock* sp20;
 
-    sp2C = BinArchive_GetFile(D_800AC7A0.unk_A04.unk_00, arg0->unk_00.unk_00 - 1);
+    sp2C = BinArchive_GetFile(D_800AC7A0.unk_A04.unk_00, arg0->species.id - 1);
     if (sp2C != NULL) {
         sp20 = MainPool_AllocState(main_pool_get_available(), 0);
         Model_ComputeSizeVariant(&sp28, arg0);

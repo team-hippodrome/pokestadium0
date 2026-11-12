@@ -1,7 +1,12 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
 #include "battle_engine_347330.h"
 
-void RibbonMesh_Init(void) {
+/**
+ * Moves: Haze (use), Mist (use)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1.
+ */
+void MistHaze_Init(void) {
     RibbonMesh* ptr = &D_8219CB20[0];
     s32 i;
 
@@ -11,7 +16,10 @@ void RibbonMesh_Init(void) {
     }
 }
 
-void RibbonMesh_Configure(RibbonMesh* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8,
+/**
+ * @unverified Name from Stadium 1.
+ */
+void MistHaze_Configure(RibbonMesh* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8,
                    s32 arg9) {
     arg0->unk_028 = arg1;
     arg0->unk_02C = arg2;
@@ -25,7 +33,12 @@ void RibbonMesh_Configure(RibbonMesh* arg0, s32 arg1, s32 arg2, s32 arg3, s32 ar
 }
 
 
-void RibbonMesh_Spawn(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, s32 arg5) {
+/**
+ * Moves: Haze (use), Mist (use)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1.
+ */
+void MistHaze_Spawn(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, s32 arg5) {
     RibbonMesh* ptr;
     RibbonMeshVertexState* ptr1;
     RibbonMeshVertexState* ptr2;
@@ -68,7 +81,7 @@ void RibbonMesh_Spawn(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, s32 arg5
             ptr->unk_008 = (arg4 * 0.0) + arg1;
             ptr->unk_01A = 0x3C;
             ptr->unk_020 = 1.5f;
-            RibbonMesh_Configure(&D_8219CB20[var_v1], 0xFF, 0xFF, 0xC8, 0x20, 0x20, 0xFF, 0x80, 0x80, 0xFF);
+            MistHaze_Configure(&D_8219CB20[var_v1], 0xFF, 0xFF, 0xC8, 0x20, 0x20, 0xFF, 0x80, 0x80, 0xFF);
             ptr->unk_01E = AuxiliaryEffect_Alloc();
             break;
 
@@ -77,7 +90,7 @@ void RibbonMesh_Spawn(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, s32 arg5
             ptr->unk_01A = 0x78;
             ptr->unk_008 = (arg4 * 100.0) + arg1;
             ptr->unk_020 = 1.5f;
-            RibbonMesh_Configure(&D_8219CB20[var_v1], 0xFF, 0xFF, 0xC8, 0xFF, 0x20, 0x20, 0x80, 0x80, 0);
+            MistHaze_Configure(&D_8219CB20[var_v1], 0xFF, 0xFF, 0xC8, 0xFF, 0x20, 0x20, 0x80, 0x80, 0);
             break;
 
         default:

@@ -85,66 +85,66 @@ void Memmap_ClearSegmentMemmap(u32 id) {
  * Initialize the 16 segments with the segment memmap virtual addresses for the
  * display list head.
  */
-void Memmap_SetSegments(Gfx** gfxDl) {
+void Memmap_SetSegments(Gfx** gfx_dl) {
     u32 i;
-    Gfx* gfx = *gfxDl;
+    Gfx* gfx = *gfx_dl;
 
     for (i = 0; i < 16; i++) {
         gSPSegment(gfx++, i, osVirtualToPhysical((void*)gSegments[i].vaddr));
     }
-    *gfxDl = gfx;
+    *gfx_dl = gfx;
 }
 
 /*
  * Perform fragment relocation on a given Fragment.
  */
 void Memmap_RelocateFragment(u32 id, struct Fragment* fragment) {
-    u32 isLoNeg;
-    u32* luiRefs[32];
-    u32 luiVals[32];
-    u32* luiInstRef;
-    u32* relocDataP;
-    u32 relocSize;
-    struct RelocTable* relocInfo;
+    u32 is_lo_neg;
+    u32* lui_refs[32];
+    u32 lui_vals[32];
+    u32* lui_inst_ref;
+    u32* reloc_data_p;
+    u32 reloc_size;
+    struct RelocTable* reloc_info;
     UNUSED u32 relocOffset;
     u32 reloc;
     u32 temp_v0_5;
     u32 i;
-    u32* regValP;
-    UNUSED s32 pad;
+    u32* reg_val_p;
+    UNUSED s32 pad; // FAKE: stack padding
 
     relocOffset = fragment->relocOffset;
-    relocSize = fragment->sizeInRam - fragment->relocOffset;
-    relocInfo = (struct RelocTable*)((uintptr_t)fragment->relocOffset + (uintptr_t)fragment);
+    reloc_size = fragment->sizeInRam - fragment->relocOffset;
+    reloc_info = (struct RelocTable*)((uintptr_t)fragment->relocOffset + (uintptr_t)fragment);
 
     osInvalICache(fragment, fragment->sizeInRam);
     osInvalDCache(fragment, fragment->sizeInRam);
     Memmap_SetFragmentMap(id, (uintptr_t)fragment, fragment->sizeInRam);
 
-    for (i = 0; i < relocInfo->nRelocations; i++) {
-        reloc = relocInfo->relocations[i];
-        relocDataP = (u32*)((reloc & 0xFFFFFF) + (uintptr_t)fragment);
+    for (i = 0; i < reloc_info->nRelocations; i++) {
+        reloc = reloc_info->relocations[i];
+        reloc_data_p = (u32*)((reloc & 0xFFFFFF) + (uintptr_t)fragment);
 
         switch ((reloc & 0x7F000000) >> 24) {
             case R_MIPS_32:
                 // Handles 32-bit address relocation, used for things such as jump tables and pointers in data.
                 // Just relocate the full address.
-                *relocDataP = Memmap_GetFragmentVaddr(*relocDataP);
+                *reloc_data_p = Memmap_GetFragmentVaddr(*reloc_data_p);
                 break;
             case R_MIPS_26:
                 // Handles 26-bit address relocation, used for jumps and jals.
                 // Extract the address from the target field of the J-type MIPS instruction.
                 // Relocate the address and update the instruction.
-                *relocDataP =
-                    (((u32)(Memmap_GetFragmentVaddr(((*relocDataP * 4) & 0x0FFFFFFC) + 0x80000000) & 0x0FFFFFFF) >> 2) |
-                     (*relocDataP & 0xFC000000));
+                *reloc_data_p =
+                    (((u32)(Memmap_GetFragmentVaddr(((*reloc_data_p * 4) & 0x0FFFFFFC) + 0x80000000) & 0x0FFFFFFF) >> 2) |
+                     (*reloc_data_p & 0xFC000000));
                 break;
             case R_MIPS_HI16:
                 // Handles relocation for a hi/lo pair, part 1.
                 // Store the reference to the LUI instruction (hi) using the `rt` register of the instruction.
                 // This will be updated later in the `R_MIPS_LO16` section.
-                luiRefs[(*relocDataP >> 0x10) & 0x1F] = relocDataP;
-                luiVals[(*relocDataP >> 0x10) & 0x1F] = *relocDataP;
+                lui_refs[(*reloc_data_p >> 0x10) & 0x1F] = reloc_data_p;
+                lui_vals[(*reloc_data_p >> 0x10) & 0x1F] = *reloc_data_p;
                 break;
             case R_MIPS_LO16:
                 // Handles relocation for a hi/lo pair, part 2.
@@ -152,18 +152,18 @@ void Memmap_RelocateFragment(u32 id, struct Fragment* fragment) {
                 // The full address is calculated, relocated, and then used to update both the LUI and lo instructions.
                 // If the lo part is negative, add 1 to the LUI value.
                 // Note: The lo instruction is assumed to have a signed immediate.
-                luiInstRef = luiRefs[(*relocDataP >> 0x15) & 0x1F];
-                regValP = &luiVals[(*relocDataP >> 0x15) & 0x1F];
+                lui_inst_ref = lui_refs[(*reloc_data_p >> 0x15) & 0x1F];
+                reg_val_p = &lui_vals[(*reloc_data_p >> 0x15) & 0x1F];
 
-                temp_v0_5 = Memmap_GetFragmentVaddr((*regValP << 0x10) + (s16)*relocDataP);
-                isLoNeg = (temp_v0_5 & 0x8000) ? 1 : 0;
-                *luiInstRef = (u32)((*luiInstRef & 0xFFFF0000) | ((temp_v0_5 >> 16) + isLoNeg));
-                *relocDataP = (u32)((*relocDataP & 0xFFFF0000) | (temp_v0_5 & 0xFFFF));
+                temp_v0_5 = Memmap_GetFragmentVaddr((*reg_val_p << 0x10) + (s16)*reloc_data_p);
+                is_lo_neg = (temp_v0_5 & 0x8000) ? 1 : 0;
+                *lui_inst_ref = (u32)((*lui_inst_ref & 0xFFFF0000) | ((temp_v0_5 >> 16) + is_lo_neg));
+                *reloc_data_p = (u32)((*reloc_data_p & 0xFFFF0000) | (temp_v0_5 & 0xFFFF));
                 break;
         }
     }
-    if (relocSize != 0) {
-        bzero((void*)((uintptr_t)fragment->relocOffset + (uintptr_t)fragment), relocSize);
+    if (reloc_size != 0) {
+        bzero((void*)((uintptr_t)fragment->relocOffset + (uintptr_t)fragment), reloc_size);
     }
     osWritebackDCache(fragment, fragment->sizeInRam);
 }

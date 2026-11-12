@@ -1,7 +1,10 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
 #include "battle_engine_347330.h"
 
-Gfx* TerrainGrid_Draw(Gfx* arg0) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+Gfx* SurfTerrainGrid_Draw(Gfx* arg0) {
     static Gfx D_84388F80[] = {
         gsDPPipeSync(),
         gsDPSetCycleType(G_CYC_2CYCLE),
@@ -90,7 +93,7 @@ Gfx* TerrainGrid_Draw(Gfx* arg0) {
 
     gDPSetPrimColor(arg0++, 0, 0xB4, 255, 255, 255, var_t0);
     gDPSetEnvColor(arg0++, 0, 0x64, 0xC8, var_a2);
-    gDPSetBlendColor(arg0++, 255, 255, 255, 255);
+    gDPSetBlendColor(arg0++, 255, 255, 255, 255); // #FFFFFFFF
 
     gDPLoadTextureTile_4b(arg0++, sBattleAnimAssetPointers[0xB8], G_IM_FMT_I, 32, 0, 0, 0, 31, 31, 0, G_TX_NOMIRROR | G_TX_WRAP,
                           G_TX_NOMIRROR | G_TX_WRAP, 5, 5, 1, 1);
@@ -116,12 +119,12 @@ Gfx* TerrainGrid_Draw(Gfx* arg0) {
     sp12C = (D_821A1B28.unk_00 - D_821A1B28.unk_0C) + D_821A1B28.unk_18;
     sp130 = (D_821A1B28.unk_04 - D_821A1B28.unk_10) + D_821A1B28.unk_1C;
     sp134 = (D_821A1B28.unk_08 - D_821A1B28.unk_14) + D_821A1B28.unk_20;
-    sp11C = TerrainGrid_SampleHeightAndSlope(sp12C, sp134, &sp110);
+    sp11C = SurfTerrainGrid_SampleHeightAndSlope(sp12C, sp134, &sp110);
 
     sp120 = D_821A1B28.unk_00 + D_821A1B28.unk_0C + D_821A1B28.unk_18;
     sp124 = D_821A1B28.unk_04 + D_821A1B28.unk_10 + D_821A1B28.unk_1C;
     sp128 = D_821A1B28.unk_08 + D_821A1B28.unk_14 + D_821A1B28.unk_20;
-    temp_fv0 = TerrainGrid_SampleHeightAndSlope(sp120, sp128, &sp110);
+    temp_fv0 = SurfTerrainGrid_SampleHeightAndSlope(sp120, sp128, &sp110);
 
     if ((sp130 < sp11C) || (sp124 < temp_fv0)) {
         temp_v0 = Gfx_AllocDisplayList(sizeof(Vtx) * 4);

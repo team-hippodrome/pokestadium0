@@ -98,7 +98,7 @@ void FourStreamTrail_Update(f32 arg0, Vec3f* arg1, f32 arg2, f32 arg3) {
     MtxF spB0;
     MtxF sp70;
     MtxF sp30;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
 
     guScaleF(sp30.mf, arg3, arg3, arg3);
     guRotateF(sp70.mf, (arg0 * 360.0) / 6.2831854820251465, 1.0f, 0.0f, 0.0f);
@@ -199,7 +199,7 @@ Gfx* FourStreamTrail_Draw(Gfx* arg0) {
     Mtx spF0;
     Mtx spB0;
     s16 var_s3;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
 
     gDPPipeSync(arg0++);
     gDPLoadTextureBlock_4b(arg0++, sBattleAnimAssetPointers[0x49], G_IM_FMT_I, 32, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,

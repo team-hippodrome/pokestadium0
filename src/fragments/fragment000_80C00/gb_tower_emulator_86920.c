@@ -2,26 +2,7 @@
 /* C ported from the Stadium 1 decomp: src/fragments/gb_tower_emulator/gb_tower_emulator_86920.c. */
 
 #include "global.h"
-typedef struct unk_func_81206FA0 {
-  /* 0x00 */ s32 unk_00;
-  /* 0x04 */ s32 unk_04;
-  /* 0x08 */ s32 unk_08;
-  /* 0x0C */ s32 unk_0C;
-} unk_func_81206FA0;
-typedef struct unk_D_812346E0 {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-} unk_D_812346E0;
-typedef struct unk_D_81231450 {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s32 unk_04;
-} unk_D_81231450;
-typedef struct unk_D_81234650 {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s32 unk_04;
-} unk_D_81234650;
+#include "fragments/fragment000_80C00/gb_tower_emulator_86920_types.h"
 typedef struct unk_D_81234690 {
     /* 0x00 */ s16 unk_00;
     /* 0x02 */ u16 unk_02;
@@ -60,7 +41,11 @@ extern u8 D_81184654[1];
 extern u8 D_81184655[1];
 extern u8 D_81184656[1];
 
-void func_811095E0(void) {
+/**
+ * Marks the fonts that are not permanently loaded (status 5) as unloaded. Zelda 64 audio driver (heap.c), same position and shape.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioHeap_ResetLoadStatus(void) {
     s32 i;
 
     for (i = 0; i < 1; i++) {
@@ -80,48 +65,25 @@ void func_811095E0(void) {
     }
 }
 
-/* One 0xCC-byte record; only the fields func_81109678 touches are named. */
-typedef struct Rec81109678Flags {
-    /* 0x0 */ u8 bit7 : 1;
-    /* 0x0 */ u8 bit6 : 1;
-    /* 0x0 */ u8 rest : 6;
-} Rec81109678Flags;
+/* One 0xCC-byte record; only the fields AudioHeap_DiscardFont touches are named. */
 
-typedef struct Rec81109678 {
-    /* 0x00 */ u8 pad00[0x30];
-    /* 0x30 */ u8 unk_30;
-    /* 0x31 */ u8 pad31[2];
-    /* 0x33 */ u8 unk_33;
-    /* 0x34 */ u8 unk_34;
-    /* 0x35 */ u8 pad35[0x44 - 0x35];
-    /* 0x44 */ Rec81109678Flags* unk_44;
-    /* 0x48 */ u8 pad48[0x5C - 0x48];
-    /* 0x5C */ u8 unk_5C;
-    /* 0x5D */ u8 unk_5D;
-    /* 0x5E */ u8 pad5E[0x6C - 0x5E];
-    /* 0x6C */ f32 unk_6C;
-    /* 0x70 */ u8 pad70[0xB4 - 0x70];
-    /* 0xB4 */ u32 enabled : 1;
-    /* 0xB4 */ u32 restB4 : 31;
-    /* 0xB8 */ u8 padB8[0xCC - 0xB8];
-} Rec81109678; // size = 0xCC
 
-s32 func_8111073C(Rec81109678*);
-s32 func_811114BC(Rec81109678*);
-s32 func_81112EAC(s8*, Rec81109678*);
+s32 AudioPlayback_NoteDisable(Rec81109678*);
+s32 AudioPlayback_AudioListRemove(Rec81109678*);
+s32 AudioSeq_AudioListPushBack(s8*, Rec81109678*);
 extern Rec81109678* D_81184664;
 extern s8 D_81184938;
 extern s32 D_811858E8;
 
-/*
- * func_81109678
+/**
+ * AudioHeap_DiscardFont
  *
  * Walks the D_811858E8 records of the array at D_81184664 (0xCC bytes each,
  * the array pointer is re-read on every iteration). For each record whose
  * byte at 0x33 equals arg0: if the bytes at 0x34 and 0x30 are 0 and non-zero
  * respectively, it clears bit 7 and then sets bit 6 of the byte that the
  * pointer at 0x44 points to. In every matching record it then calls
- * func_8111073C(rec), func_811114BC(rec) and func_81112EAC(&D_81184938, rec).
+ * AudioPlayback_NoteDisable(rec), AudioPlayback_AudioListRemove(rec) and AudioSeq_AudioListPushBack(&D_81184938, rec).
  * Records whose byte at 0x33 differs are skipped. What the record and the
  * flag bits mean is not established from this function.
  *
@@ -130,8 +92,9 @@ extern s32 D_811858E8;
  * sequences and register numbering (a plain `&= 0xFF7F; |= 0x40` on a byte
  * was one temporary register off). Indexing the array with the loop counter,
  * instead of a separate byte offset, gives the retail loop setup order.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_81109678(s32 arg0) {
+void AudioHeap_DiscardFont(s32 arg0) {
     s32 i;
     Rec81109678* p;
 
@@ -142,33 +105,37 @@ void func_81109678(s32 arg0) {
                 p->unk_44->bit7 = 0;
                 p->unk_44->bit6 = 1;
             }
-            func_8111073C(p);
-            func_811114BC(p);
-            func_81112EAC(&D_81184938, p);
+            AudioPlayback_NoteDisable(p);
+            AudioPlayback_AudioListRemove(p);
+            AudioSeq_AudioListPushBack(&D_81184938, p);
         }
     }
 }
 
-M2C_UNK func_81112E00(M2C_UNK *);                   /* extern */
+M2C_UNK AudioSeq_SequencePlayerDisable(M2C_UNK *);                   /* extern */
 extern s8 D_81184668;
 extern s16 D_811858CC;
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-void func_81109764(s32 arg0)
+/**
+ * Stops every sequence player that plays sequence `arg0`. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioHeap_DiscardSequence(s32 arg0)
 {
-  s32 new_var2;
-  s8 *new_var;
+  s32 new_var2; // FAKE: permuter temp
+  s8 *new_var; // FAKE: permuter temp
   s32 var_s1;
   var_s1 = 0;
   if (D_811858CC > 0)
   {
     new_var = &D_81184668;
-    new_var = new_var;
+    new_var = new_var; // FAKE: self-assignment
     new_var2 = arg0;
     do
     {
-      if (((((u32) (*((u32 *) (((s8 *) new_var) + 0)))) >> 0x1F) != 0) && (new_var2 == (*((u8 *) (((s8 *) new_var) + 4)))))
+      if (((((u32) (*((u32 *) (((s8 *) new_var) + 0)))) >> 0x1F) != 0) && (new_var2 == (*((u8 *) (((s8 *) new_var) + 4))))) // FAKE: decomp slop, raw pointer casts stand in for struct fields
       {
-        func_81112E00(new_var);
+        AudioSeq_SequencePlayerDisable(new_var);
       }
       var_s1 += 1;
       new_var += 0x15C;
@@ -177,6 +144,10 @@ void func_81109764(s32 arg0)
   }
 }
 
+/**
+ * Like alHeapDBAlloc: carves a 16-byte aligned block and zeroes it. Returns 0 when the arena is full.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 u32 GbApu_AllocZeroed(unk_func_81206FA0* arg0, s32 arg1) {
   s32 temp_v0;
   u32 temp_a2;
@@ -196,6 +167,10 @@ u32 GbApu_AllocZeroed(unk_func_81206FA0* arg0, s32 arg1) {
   return temp_a2;
 }
 
+/**
+ * GbApu_AllocZeroed without the clear.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 GbApu_Alloc(unk_func_81206FA0* arg0, s32 arg1) {
   s32 temp_a2;
   u32 temp_v0;
@@ -211,6 +186,10 @@ s32 GbApu_Alloc(unk_func_81206FA0* arg0, s32 arg1) {
   return temp_a2;
 }
 
+/**
+ * Like alHeapInit.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void GbApu_InitAllocator(unk_func_81206FA0* arg0, s32 arg1, s32 arg2) {
   arg0->unk_00 = ALIGN16(arg1);
   arg0->unk_04 = ALIGN16(arg1);
@@ -218,14 +197,18 @@ void GbApu_InitAllocator(unk_func_81206FA0* arg0, s32 arg1, s32 arg2) {
   arg0->unk_0C = 0;
 }
 
-void func_811098E8(s8 *arg0) {
+/**
+ * Empties a persistent cache and rewinds its pool. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioHeap_PersistentCacheClear(s8 *arg0) {
     M2C_FIELD(arg0, s32 *, 0x10) = 0;
     M2C_FIELD(arg0, s32 *, 0) = 0;
     M2C_FIELD(arg0, s32 *, 8) = (s32) M2C_FIELD(arg0, s32 *, 4);
 }
 
-/*
- * func_811098FC
+/**
+ * AudioHeap_TemporaryCacheClear
  *
  * Resets a small record: the words at +0x00 and +0x10 are cleared, the words
  * at +0x08 and +0x14 are set to the value at +0x04, the word at +0x20 is set
@@ -237,8 +220,9 @@ void func_811098E8(s8 *arg0) {
  * The sum is written with the fields in this order, and read from memory
  * rather than through a local, because IDO orders the two operands of the
  * addu differently otherwise.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_811098FC(s32* arg0) {
+void AudioHeap_TemporaryCacheClear(s32* arg0) {
     arg0[4] = 0;
     arg0[0] = 0;
     arg0[8] = arg0[3] + arg0[1];
@@ -248,7 +232,11 @@ void func_811098FC(s32* arg0) {
     arg0[5] = arg0[1];
 }
 
-void func_8110992C(s8 *arg0) {
+/**
+ * Rewinds an allocation pool to its start. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioHeap_ResetPool(s8 *arg0) {
     M2C_FIELD(arg0, s32 *, 0xC) = 0;
     M2C_FIELD(arg0, s32 *, 4) = (s32) M2C_FIELD(arg0, s32 *, 0);
 }
@@ -265,8 +253,9 @@ extern s32 D_811842A0;
  * length arg0, then on D_81184290 with the remainder of the buffer (starting
  * at arg0 and D_811526FC - arg0 long). Finally clears D_811842A0. What
  * func_811098C0 does with its arguments is not established.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_8110993C(s32 arg0) {
+void AudioHeap_InitMainPools(s32 arg0) {
     func_811098C0(&D_811842B0, (s32)D_81186270, arg0);
     func_811098C0(&D_81184290, (s32)(D_81186270 + arg0), D_811526FC - arg0);
     D_811842A0 = 0;
@@ -278,7 +267,11 @@ extern M2C_UNK D_81184290;
 extern M2C_UNK D_811842C0;
 extern M2C_UNK D_811842F0;
 
-void func_8110999C(s8 *arg0) {
+/**
+ * Splits the session pool into the misc and cache pools. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioHeap_InitSessionPools(s8 *arg0) {
     M2C_FIELD(&D_81184290, s32 *, 4) = (s32) M2C_FIELD(&D_81184290, s32 *, 0);
     func_811098C0(&D_811842C0, func_81109868(&D_81184290, M2C_FIELD(arg0, s32 *, 0)), M2C_FIELD(arg0, s32 *, 0));
     func_811098C0(&D_811842F0, func_81109868(&D_81184290, M2C_FIELD(arg0, s32 *, 0xC)), M2C_FIELD(arg0, s32 *, 0xC));
@@ -290,7 +283,11 @@ extern M2C_UNK D_811842F0;
 extern M2C_UNK D_81184300;
 extern M2C_UNK D_81184310;
 
-void func_81109A18(s8 *arg0) {
+/**
+ * Splits the cache pool into the persistent and temporary pools. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioHeap_InitCachePools(s8 *arg0) {
     M2C_FIELD(&D_811842F0, s32 *, 4) = (s32) M2C_FIELD(&D_811842F0, s32 *, 0);
     func_811098C0(&D_81184300, func_81109868(&D_811842F0, M2C_FIELD(arg0, s32 *, 0)), M2C_FIELD(arg0, s32 *, 0));
     func_811098C0(&D_81184310, func_81109868(&D_811842F0, M2C_FIELD(arg0, s32 *, 4)), M2C_FIELD(arg0, s32 *, 4));
@@ -306,14 +303,18 @@ extern M2C_UNK D_81184384;
 extern M2C_UNK D_811843E0;
 extern M2C_UNK D_811843E4;
 
-void func_81109A94(s8 *arg0) {
+/**
+ * Splits the persistent pool between the sequence, font and sample caches. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioHeap_InitPersistentCache(s8 *arg0) {
     M2C_FIELD(&D_81184300, s32 *, 4) = (s32) M2C_FIELD(&D_81184300, s32 *, 0);
     func_811098C0(&D_81184324, func_81109868(&D_81184300, M2C_FIELD(arg0, s32 *, 0)), M2C_FIELD(arg0, s32 *, 0));
     func_811098C0(&D_81184384, func_81109868(&D_81184300, M2C_FIELD(arg0, s32 *, 4)), M2C_FIELD(arg0, s32 *, 4));
     func_811098C0(&D_811843E4, func_81109868(&D_81184300, M2C_FIELD(arg0, s32 *, 8)), M2C_FIELD(arg0, s32 *, 8));
-    func_811098E8(&D_81184320);
-    func_811098E8(&D_81184380);
-    func_811098E8(&D_811843E0);
+    AudioHeap_PersistentCacheClear(&D_81184320);
+    AudioHeap_PersistentCacheClear(&D_81184380);
+    AudioHeap_PersistentCacheClear(&D_811843E0);
 }
 
 s32 func_81109868(M2C_UNK *, s32);                  /* extern */
@@ -326,29 +327,21 @@ extern M2C_UNK D_811843A4;
 extern M2C_UNK D_81184400;
 extern M2C_UNK D_81184404;
 
-void func_81109B50(s8 *arg0) {
+/**
+ * Splits the temporary pool between the sequence, font and sample caches. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioHeap_InitTemporaryCache(s8 *arg0) {
     M2C_FIELD(&D_81184310, s32 *, 4) = (s32) M2C_FIELD(&D_81184310, s32 *, 0);
     func_811098C0(&D_81184344, func_81109868(&D_81184310, M2C_FIELD(arg0, s32 *, 0)), M2C_FIELD(arg0, s32 *, 0));
     func_811098C0(&D_811843A4, func_81109868(&D_81184310, M2C_FIELD(arg0, s32 *, 4)), M2C_FIELD(arg0, s32 *, 4));
     func_811098C0(&D_81184404, func_81109868(&D_81184310, M2C_FIELD(arg0, s32 *, 8)), M2C_FIELD(arg0, s32 *, 8));
-    func_811098FC(&D_81184340);
-    func_811098FC(&D_811843A0);
-    func_811098FC(&D_81184400);
+    AudioHeap_TemporaryCacheClear(&D_81184340);
+    AudioHeap_TemporaryCacheClear(&D_811843A0);
+    AudioHeap_TemporaryCacheClear(&D_81184400);
 }
 
-typedef struct CacheEntry81109C0C {
-    /* 0x00 */ u8* ramAddr;
-    /* 0x04 */ u32 size;
-    /* 0x08 */ s16 tableType;
-    /* 0x0A */ s16 id;
-} CacheEntry81109C0C; // size = 0xC
 
-typedef struct Pool81109C0C {
-    /* 0x00 */ u8* startRamAddr;
-    /* 0x04 */ u8* curRamAddr;
-    /* 0x08 */ s32 size;
-    /* 0x0C */ s32 numEntries;
-} Pool81109C0C; // size = 0x10
 
 typedef struct PersistentCache81109C0C {
     /* 0x00 */ u32 numEntries;
@@ -367,160 +360,158 @@ typedef struct Cache81109C0C {
     /* 0x20 */ TemporaryCache81109C0C temporary;
 } Cache81109C0C;
 
-typedef struct SeqPlayer81109C0C {
-    /* 0x000 */ u32 enabled : 1;
-    /* 0x000 */ u32 rest0 : 31;
-    /* 0x004 */ u8 seqId;
-    /* 0x005 */ u8 pad5[0x15C - 0x5];
-} SeqPlayer81109C0C; // size = 0x15C
 
 extern u8 D_81184654[1];
 extern u8 D_81184655[1];
 extern u8 D_81184656[1];
-void func_8110CAE0(s32, s32);
+void AudioLoad_SetFontLoadStatus(s32, s32);
 
-void* func_81109C0C(s32 tableType, s32 size, s32 cache, s32 id) {
-    Cache81109C0C* loadedCache;
-    TemporaryCache81109C0C* tCache;
-    Pool81109C0C* tempPool;
-    void* persistentAddr;
-    void* tempAddr;
-    u8 loadStatusEntry0;
-    u8 loadStatusEntry1;
+/**
+ * Allocates `size` bytes for entry `id` of a table's persistent or temporary cache, evicting the older temporary entry when needed. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+void* AudioHeap_AllocCached(s32 table_type, s32 size, s32 cache, s32 id) {
+    Cache81109C0C* loaded_cache;
+    TemporaryCache81109C0C* t_cache;
+    Pool81109C0C* temp_pool;
+    void* persistent_addr;
+    void* temp_addr;
+    u8 load_status_entry0;
+    u8 load_status_entry1;
     s32 i;
-    u8* loadStatus;
+    u8* load_status;
 
-    switch (tableType) {
+    switch (table_type) {
         case 0:
-            loadedCache = (Cache81109C0C*)&D_81184320;
-            loadStatus = D_81184656;
+            loaded_cache = (Cache81109C0C*)&D_81184320;
+            load_status = D_81184656;
             break;
         case 1:
-            loadedCache = (Cache81109C0C*)&D_81184380;
-            loadStatus = D_81184655;
+            loaded_cache = (Cache81109C0C*)&D_81184380;
+            load_status = D_81184655;
             break;
         case 2:
-            loadedCache = (Cache81109C0C*)&D_811843E0;
-            loadStatus = D_81184654;
+            loaded_cache = (Cache81109C0C*)&D_811843E0;
+            load_status = D_81184654;
             break;
     }
 
     if (cache == 0) {
-        tCache = &loadedCache->temporary;
-        tempPool = &tCache->pool;
+        t_cache = &loaded_cache->temporary;
+        temp_pool = &t_cache->pool;
 
-        if (tCache->entries[0].id == -1) {
-            loadStatusEntry0 = 0;
+        if (t_cache->entries[0].id == -1) {
+            load_status_entry0 = 0;
         } else {
-            loadStatusEntry0 = loadStatus[tCache->entries[0].id];
+            load_status_entry0 = load_status[t_cache->entries[0].id];
         }
 
-        if (tCache->entries[1].id == -1) {
-            loadStatusEntry1 = 0;
+        if (t_cache->entries[1].id == -1) {
+            load_status_entry1 = 0;
         } else {
-            loadStatusEntry1 = loadStatus[tCache->entries[1].id];
+            load_status_entry1 = load_status[t_cache->entries[1].id];
         }
 
-        if (tableType == 1) {
-            if (loadStatusEntry0 == 4) {
+        if (table_type == 1) {
+            if (load_status_entry0 == 4) {
                 for (i = 0; i < D_811858E8; i++) {
-                    if (D_81184664[i].unk_33 == tCache->entries[0].id && D_81184664[i].enabled) {
+                    if (D_81184664[i].unk_33 == t_cache->entries[0].id && D_81184664[i].enabled) {
                         break;
                     }
                 }
 
                 if (i == D_811858E8) {
-                    func_8110CAE0(tCache->entries[0].id, 3);
-                    loadStatusEntry0 = 3;
+                    AudioLoad_SetFontLoadStatus(t_cache->entries[0].id, 3);
+                    load_status_entry0 = 3;
                 }
             }
 
-            if (loadStatusEntry1 == 4) {
+            if (load_status_entry1 == 4) {
                 for (i = 0; i < D_811858E8; i++) {
-                    if (D_81184664[i].unk_33 == tCache->entries[1].id && D_81184664[i].enabled) {
+                    if (D_81184664[i].unk_33 == t_cache->entries[1].id && D_81184664[i].enabled) {
                         break;
                     }
                 }
 
                 if (i == D_811858E8) {
-                    func_8110CAE0(tCache->entries[1].id, 3);
-                    loadStatusEntry1 = 3;
+                    AudioLoad_SetFontLoadStatus(t_cache->entries[1].id, 3);
+                    load_status_entry1 = 3;
                 }
             }
         }
 
-        if (loadStatusEntry0 == 0) {
-            tCache->nextSide = 0;
-        } else if (loadStatusEntry1 == 0) {
-            tCache->nextSide = 1;
-        } else if (loadStatusEntry0 == 3 && loadStatusEntry1 == 3) {
+        if (load_status_entry0 == 0) {
+            t_cache->nextSide = 0;
+        } else if (load_status_entry1 == 0) {
+            t_cache->nextSide = 1;
+        } else if (load_status_entry0 == 3 && load_status_entry1 == 3) {
             // Use the opposite side from last time.
-        } else if (loadStatusEntry0 == 3) {
-            tCache->nextSide = 0;
-        } else if (loadStatusEntry1 == 3) {
-            tCache->nextSide = 1;
+        } else if (load_status_entry0 == 3) {
+            t_cache->nextSide = 0;
+        } else if (load_status_entry1 == 3) {
+            t_cache->nextSide = 1;
         } else {
-            if (tableType == 0) {
-                if (loadStatusEntry0 == 2) {
+            if (table_type == 0) {
+                if (load_status_entry0 == 2) {
                     for (i = 0; i < D_811858CC; i++) {
-                        if (((SeqPlayer81109C0C*)&D_81184668)[i].enabled && ((SeqPlayer81109C0C*)&D_81184668)[i].seqId == tCache->entries[0].id) {
+                        if (((SeqPlayer81109C0C*)&D_81184668)[i].enabled && ((SeqPlayer81109C0C*)&D_81184668)[i].seqId == t_cache->entries[0].id) {
                             break;
                         }
                     }
                     if (i == D_811858CC) {
-                        tCache->nextSide = 0;
+                        t_cache->nextSide = 0;
                         goto done;
                     }
                 }
-                if (loadStatusEntry1 == 2) {
+                if (load_status_entry1 == 2) {
                     for (i = 0; i < D_811858CC; i++) {
-                        if (((SeqPlayer81109C0C*)&D_81184668)[i].enabled && ((SeqPlayer81109C0C*)&D_81184668)[i].seqId == tCache->entries[1].id) {
+                        if (((SeqPlayer81109C0C*)&D_81184668)[i].enabled && ((SeqPlayer81109C0C*)&D_81184668)[i].seqId == t_cache->entries[1].id) {
                             break;
                         }
                     }
                     if (i == D_811858CC) {
-                        tCache->nextSide = 1;
+                        t_cache->nextSide = 1;
                         goto done;
                     }
                 }
-            } else if (tableType == 1) {
-                if (loadStatusEntry0 == 2) {
+            } else if (table_type == 1) {
+                if (load_status_entry0 == 2) {
                     for (i = 0; i < D_811858E8; i++) {
-                        if (D_81184664[i].unk_33 == tCache->entries[0].id && D_81184664[i].enabled) {
+                        if (D_81184664[i].unk_33 == t_cache->entries[0].id && D_81184664[i].enabled) {
                             break;
                         }
                     }
                     if (i == D_811858E8) {
-                        tCache->nextSide = 0;
+                        t_cache->nextSide = 0;
                         goto done;
                     }
                 }
-                if (loadStatusEntry1 == 2) {
+                if (load_status_entry1 == 2) {
                     for (i = 0; i < D_811858E8; i++) {
-                        if (D_81184664[i].unk_33 == tCache->entries[1].id && D_81184664[i].enabled) {
+                        if (D_81184664[i].unk_33 == t_cache->entries[1].id && D_81184664[i].enabled) {
                             break;
                         }
                     }
                     if (i == D_811858E8) {
-                        tCache->nextSide = 1;
+                        t_cache->nextSide = 1;
                         goto done;
                     }
                 }
             }
 
-            if (tCache->nextSide == 0) {
-                if (loadStatusEntry0 == 1) {
-                    if (loadStatusEntry1 == 1) {
+            if (t_cache->nextSide == 0) {
+                if (load_status_entry0 == 1) {
+                    if (load_status_entry1 == 1) {
                         goto fail;
                     }
-                    tCache->nextSide = 1;
+                    t_cache->nextSide = 1;
                 }
             } else {
-                if (loadStatusEntry1 == 1) {
-                    if (loadStatusEntry0 == 1) {
+                if (load_status_entry1 == 1) {
+                    if (load_status_entry0 == 1) {
                         goto fail;
                     }
-                    tCache->nextSide = 0;
+                    t_cache->nextSide = 0;
                 }
             }
 
@@ -531,94 +522,98 @@ void* func_81109C0C(s32 tableType, s32 size, s32 cache, s32 id) {
         }
 
     done:
-        if (tCache->entries[tCache->nextSide].id != -1) {
-            loadStatus[tCache->entries[tCache->nextSide].id] = 0;
-            if (tableType == 1) {
-                func_81109678(tCache->entries[tCache->nextSide].id);
+        if (t_cache->entries[t_cache->nextSide].id != -1) {
+            load_status[t_cache->entries[t_cache->nextSide].id] = 0;
+            if (table_type == 1) {
+                AudioHeap_DiscardFont(t_cache->entries[t_cache->nextSide].id);
             }
         }
 
-        switch (tCache->nextSide) {
+        switch (t_cache->nextSide) {
             case 0:
-                tCache->entries[0].ramAddr = tempPool->startRamAddr;
-                tCache->entries[0].id = id;
-                tCache->entries[0].size = size;
-                tempPool->curRamAddr = tempPool->startRamAddr + size;
+                t_cache->entries[0].ramAddr = temp_pool->startRamAddr;
+                t_cache->entries[0].id = id;
+                t_cache->entries[0].size = size;
+                temp_pool->curRamAddr = temp_pool->startRamAddr + size;
 
-                if (tCache->entries[1].id != -1 && tCache->entries[1].ramAddr < tempPool->curRamAddr) {
-                    loadStatus[tCache->entries[1].id] = 0;
-                    switch (tableType) {
+                if (t_cache->entries[1].id != -1 && t_cache->entries[1].ramAddr < temp_pool->curRamAddr) {
+                    load_status[t_cache->entries[1].id] = 0;
+                    switch (table_type) {
                         case 0:
-                            func_81109764(tCache->entries[1].id);
+                            AudioHeap_DiscardSequence(t_cache->entries[1].id);
                             break;
                         case 1:
-                            func_81109678(tCache->entries[1].id);
+                            AudioHeap_DiscardFont(t_cache->entries[1].id);
                             break;
                     }
-                    tCache->entries[1].id = -1;
-                    tCache->entries[1].ramAddr = tempPool->startRamAddr + tempPool->size;
+                    t_cache->entries[1].id = -1;
+                    t_cache->entries[1].ramAddr = temp_pool->startRamAddr + temp_pool->size;
                 }
-                tempAddr = tCache->entries[0].ramAddr;
+                temp_addr = t_cache->entries[0].ramAddr;
                 break;
 
             case 1:
-                tCache->entries[1].ramAddr = (u8*)((u32)(tempPool->startRamAddr + tempPool->size - size) & ~0xF);
-                tCache->entries[1].id = id;
-                tCache->entries[1].size = size;
-                if (tCache->entries[0].id != -1 && tCache->entries[1].ramAddr < tempPool->curRamAddr) {
-                    loadStatus[tCache->entries[0].id] = 0;
-                    switch (tableType) {
+                t_cache->entries[1].ramAddr = (u8*)((u32)(temp_pool->startRamAddr + temp_pool->size - size) & ~0xF);
+                t_cache->entries[1].id = id;
+                t_cache->entries[1].size = size;
+                if (t_cache->entries[0].id != -1 && t_cache->entries[1].ramAddr < temp_pool->curRamAddr) {
+                    load_status[t_cache->entries[0].id] = 0;
+                    switch (table_type) {
                         case 0:
-                            func_81109764(tCache->entries[0].id);
+                            AudioHeap_DiscardSequence(t_cache->entries[0].id);
                             break;
                         case 1:
-                            func_81109678(tCache->entries[0].id);
+                            AudioHeap_DiscardFont(t_cache->entries[0].id);
                             break;
                     }
-                    tCache->entries[0].id = -1;
-                    tempPool->curRamAddr = tempPool->startRamAddr;
+                    t_cache->entries[0].id = -1;
+                    temp_pool->curRamAddr = temp_pool->startRamAddr;
                 }
-                tempAddr = tCache->entries[1].ramAddr;
+                temp_addr = t_cache->entries[1].ramAddr;
                 break;
 
             default:
                 return NULL;
         }
 
-        tCache->nextSide ^= 1;
-        return tempAddr;
+        t_cache->nextSide ^= 1;
+        return temp_addr;
     }
 
-    persistentAddr = (void*)func_81109868((M2C_UNK*)&loadedCache->persistent.pool, size);
-    loadedCache->persistent.entries[loadedCache->persistent.numEntries].ramAddr = persistentAddr;
+    persistent_addr = (void*)func_81109868((M2C_UNK*)&loaded_cache->persistent.pool, size);
+    loaded_cache->persistent.entries[loaded_cache->persistent.numEntries].ramAddr = persistent_addr;
 
-    if (persistentAddr == NULL) {
+    if (persistent_addr == NULL) {
         switch (cache) {
             case 2:
-                return func_81109C0C(tableType, size, 0, id);
+                return AudioHeap_AllocCached(table_type, size, 0, id);
             case 0:
             case 1:
                 return NULL;
         }
     }
 
-    loadedCache->persistent.entries[loadedCache->persistent.numEntries].id = id;
-    loadedCache->persistent.entries[loadedCache->persistent.numEntries].size = size;
-    return loadedCache->persistent.entries[loadedCache->persistent.numEntries++].ramAddr;
+    loaded_cache->persistent.entries[loaded_cache->persistent.numEntries].id = id;
+    loaded_cache->persistent.entries[loaded_cache->persistent.numEntries].size = size;
+    return loaded_cache->persistent.entries[loaded_cache->persistent.numEntries++].ramAddr;
 }
 
 /*
- * func_8110A310
+ * AudioHeap_SearchCaches
  *
- * Calls func_8110B880(arg0, arg2) and returns its result if that is
+ * Calls AudioHeap_SearchPermanentCache(arg0, arg2) and returns its result if that is
  * non-zero.  Otherwise returns 0 if arg1 is 3, and
- * func_8110A368(arg0, arg1, arg2) for any other arg1.
+ * AudioHeap_SearchRegularCaches(arg0, arg1, arg2) for any other arg1.
  */
-s32 func_8110A368(s32 arg0, s32 arg1, s32 arg2);
-s32 func_8110B880(s32 arg0, s32 arg1);
+s32 AudioHeap_SearchRegularCaches(s32 arg0, s32 arg1, s32 arg2);
+s32 AudioHeap_SearchPermanentCache(s32 arg0, s32 arg1);
 
-s32 func_8110A310(s32 arg0, s32 arg1, s32 arg2) {
-    s32 result = func_8110B880(arg0, arg2);
+/**
+ * Looks up entry `arg2` of table `arg0`, in the permanent cache first, then the regular caches. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 AudioHeap_SearchCaches(s32 arg0, s32 arg1, s32 arg2) {
+    s32 result = AudioHeap_SearchPermanentCache(arg0, arg2);
 
     if (result != 0) {
         return result;
@@ -626,12 +621,14 @@ s32 func_8110A310(s32 arg0, s32 arg1, s32 arg2) {
     if (arg1 == 3) {
         return 0;
     }
-    return func_8110A368(arg0, arg1, arg2);
+    return AudioHeap_SearchRegularCaches(arg0, arg1, arg2);
 }
 
-typedef struct Entry8110A368 { s32 val; char pad4[6]; s16 key; } Entry8110A368;
-typedef struct Tbl8110A368 { u32 count; char pad4[0x10]; Entry8110A368 entries[1]; } Tbl8110A368;
-s32 func_8110A368(s32 arg0, s32 arg1, s32 arg2) {
+/**
+ * Looks up entry `arg2` of table `arg0` in its temporary or persistent cache. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 AudioHeap_SearchRegularCaches(s32 arg0, s32 arg1, s32 arg2) {
     Tbl8110A368* sub;
     Tbl8110A368* tbl;
     u32 i;
@@ -665,7 +662,7 @@ s32 func_8110A368(s32 arg0, s32 arg1, s32 arg2) {
         }
     }
     if (arg1 == 2) {
-        return func_8110A310(arg0, 0, arg2);
+        return AudioHeap_SearchCaches(arg0, 0, arg2);
     }
     return 0;
 }
@@ -675,8 +672,9 @@ s32 func_8110A368(s32 arg0, s32 arg1, s32 arg2) {
  * and q seeded with 262159.0f; as in the Ocarina of Time version
  * (func_800DDF80) the first loop writes to out instead of tmp, so the second
  * loop copies partly uninitialised values.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_8110A474(f32 p, f32 q, u16* out) {
+void AudioHeap_ComputeFilterCoefficients(f32 p, f32 q, u16* out) {
     s32 i;
     f32 tmp[16];
 
@@ -695,13 +693,14 @@ void func_8110A474(f32 p, f32 q, u16* out) {
     }
 }
 
-/*
- * func_8110A848
+/**
+ * AudioHeap_ClearFilter
  *
  * Sets the eight s16 values at arg0 to zero (the loop is unrolled by four in
  * the retail code).
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_8110A848(s16* arg0) {
+void AudioHeap_ClearFilter(s16* arg0) {
     s32 i;
 
     for (i = 0; i < 8; i++) {
@@ -711,14 +710,15 @@ void func_8110A848(s16* arg0) {
 
 extern s16 D_811371D8[];
 
-/*
- * func_8110A878
+/**
+ * AudioHeap_LoadLowPassFilter
  *
  * Copies eight s16 values into arg0 from entry arg1 of the table at
  * D_811371D8 (entries are 8 s16 = 16 bytes long; the loop is unrolled by four
  * in the retail code).
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_8110A878(s16* arg0, s32 arg1) {
+void AudioHeap_LoadLowPassFilter(s16* arg0, s32 arg1) {
     s16* src;
     s32 i;
 
@@ -730,14 +730,15 @@ void func_8110A878(s16* arg0, s32 arg1) {
 
 extern s16 D_811373C8[];
 
-/*
- * func_8110A8CC
+/**
+ * AudioHeap_LoadHighPassFilter
  *
  * Copies eight s16 values into arg0 from the table at D_811373C8. The entry is
  * numbered from 1: entry arg1 starts at D_811373C8 + (arg1 - 1) * 16 bytes
  * (8 s16 per entry; the loop is unrolled by four in the retail code).
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_8110A8CC(s16* arg0, s32 arg1) {
+void AudioHeap_LoadHighPassFilter(s16* arg0, s32 arg1) {
     s16* src;
     s32 i;
 
@@ -747,15 +748,19 @@ void func_8110A8CC(s16* arg0, s32 arg1) {
     }
 }
 
-void func_8110A924(s16* arg0, s32 arg1, s32 arg2) {
+/**
+ * Loads a low-pass, high-pass or band-pass filter from the two cutoffs. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioHeap_LoadFilter(s16* arg0, s32 arg1, s32 arg2) {
     s32 i;
 
     if ((arg1 == 0) && (arg2 == 0)) {
-        func_8110A878(arg0, 0);
+        AudioHeap_LoadLowPassFilter(arg0, 0);
     } else if (arg2 == 0) {
-        func_8110A878(arg0, arg1);
+        AudioHeap_LoadLowPassFilter(arg0, arg1);
     } else if (arg1 == 0) {
-        func_8110A8CC(arg0, arg2);
+        AudioHeap_LoadHighPassFilter(arg0, arg2);
     } else {
         for (i = 0; i < 8; i++) {
             arg0[i] = (D_811371D8[arg2 * 8 + i] + D_811373C8[arg2 * 8 + i]) / 2;
@@ -763,14 +768,13 @@ void func_8110A924(s16* arg0, s32 arg1, s32 arg2) {
     }
 }
 
-typedef struct Voice8110AA50 {
-    /* 0x000 */ char unk000[0xC];
-    /* 0x00C */ u16 unk_0C;
-    /* 0x00E */ char unk00E[0x14A];
-} Voice8110AA50; // size = 0x158
 extern Voice8110AA50 D_81184110[];
 extern s8 D_8118427B;
-void func_8110AA50(void) {
+/**
+ * Steps every reverb's settings once per audio frame. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioHeap_UpdateReverbs(void) {
     s32 n;
     s32 i;
     s32 j;
@@ -789,7 +793,11 @@ void func_8110AA50(void) {
 
 extern s16 D_811858C2;
 
-void func_8110AC14(void) {
+/**
+ * Clears the audio buffer that is being filled. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioHeap_ClearCurrentAiBuffer(void) {
     s32 idx = D_811858FC;
     s32 i;
 
@@ -801,10 +809,14 @@ void func_8110AC14(void) {
 
 extern volatile u8 D_81184657;
 extern s32 D_8118465C;
-void func_8110AFF0(void);
-void func_8110BFB0(void);
+void AudioHeap_Init(void);
+void AudioHeap_DiscardSampleCaches(void);
 
-s32 func_8110AC8C(void) {
+/**
+ * Runs one step of the audio reset: fade out, stop notes, clear buffers, reinitialize. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 AudioHeap_ResetStep(void) {
     s32 i;
     s32 j;
     s32 sp24;
@@ -818,7 +830,7 @@ s32 func_8110AC8C(void) {
     switch (D_81184657) {
         case 5:
             for (i = 0; i < D_811858B8.unk_14; i++) {
-                func_81112E00(&D_81184668 + i * 0x15C);
+                AudioSeq_SequencePlayerDisable(&D_81184668 + i * 0x15C);
             }
             D_8118465C = 4 / sp24;
             D_81184657--;
@@ -826,7 +838,7 @@ s32 func_8110AC8C(void) {
         case 4:
             if (D_8118465C != 0) {
                 D_8118465C--;
-                func_8110AA50();
+                AudioHeap_UpdateReverbs();
             } else {
                 for (i = 0; i < D_811858E8; i++) {
                     if (D_81184664[i].enabled && D_81184664[i].unk_5D != 0) {
@@ -841,25 +853,25 @@ s32 func_8110AC8C(void) {
         case 3:
             if (D_8118465C != 0) {
                 D_8118465C--;
-                func_8110AA50();
+                AudioHeap_UpdateReverbs();
             } else {
                 D_8118465C = 4 / sp24;
                 D_81184657--;
             }
             break;
         case 2:
-            func_8110AC14();
+            AudioHeap_ClearCurrentAiBuffer();
             if (!D_8118465C && !D_8118465C && !D_8118465C) {} // FAKE: empty test found by a fake search; only changes register use
             if (D_8118465C != 0) {
                 D_8118465C--;
             } else {
                 D_81184657--;
-                func_8110BFB0();
+                AudioHeap_DiscardSampleCaches();
             }
             if (!D_811858B8.unk_00) {} // FAKE: empty test found by the permuter; keeps &D_811858B8 in a saved register
             break;
         case 1:
-            func_8110AFF0();
+            AudioHeap_Init();
             D_81184657 = 0;
             for (i = 0; i < 3; i++) {
                 D_811859C4[i] = D_811858B8.unk_08;
@@ -876,103 +888,12 @@ s32 func_8110AC8C(void) {
     return 1;
 }
 
-typedef struct ReverbSettingsAFF0 {
-    /* 0x00 */ u8 downsampleRate;
-    /* 0x01 */ u8 windowSize;
-    /* 0x02 */ u16 decayRatio;
-    /* 0x04 */ u16 unk_4;
-    /* 0x06 */ u16 unk_6;
-    /* 0x08 */ u16 unk_8;
-    /* 0x0A */ s8 unk_A;
-    /* 0x0C */ u16 unk_C;
-    /* 0x0E */ s16 lowPassFilterCutoffLeft;
-    /* 0x10 */ s16 lowPassFilterCutoffRight;
-} ReverbSettingsAFF0; // size = 0x12
 
-typedef struct AudioSpecAFF0 {
-    /* 0x00 */ u32 frequency;
-    /* 0x04 */ u8 unk_04;
-    /* 0x05 */ u8 numNotes;
-    /* 0x06 */ u8 numSequencePlayers;
-    /* 0x07 */ u8 numReverbs;
-    /* 0x08 */ ReverbSettingsAFF0* reverbSettings;
-    /* 0x0C */ u16 unk_0C;
-    /* 0x10 */ s32 persistentSeqMem;
-    /* 0x14 */ s32 persistentFontMem;
-    /* 0x18 */ s32 persistentSampleMem;
-    /* 0x1C */ s32 temporarySeqMem;
-    /* 0x20 */ s32 temporaryFontMem;
-    /* 0x24 */ s32 temporarySampleMem;
-    /* 0x28 */ s32 persistentSampleCacheSize;
-    /* 0x2C */ s32 temporarySampleCacheSize;
-} AudioSpecAFF0; // size = 0x30
 
-typedef struct SampleAFF0 {
-    /* 0x00 */ u32 codec : 4;
-    /* 0x00 */ u32 medium : 2;
-    /* 0x00 */ u32 unk_bit26 : 1;
-    /* 0x00 */ u32 unk_bit25 : 1;
-    /* 0x01 */ u32 size : 24;
-    /* 0x04 */ s16* sampleAddr;
-    /* 0x08 */ struct LoopAFF0* loop;
-    /* 0x0C */ void* book;
-} SampleAFF0; // size = 0x10
 
-typedef struct LoopAFF0 {
-    /* 0x00 */ u32 start;
-    /* 0x04 */ u32 end;
-    /* 0x08 */ u32 count;
-} LoopAFF0;
 
-typedef struct ReverbItemAFF0 {
-    /* 0x00 */ s16 numSamplesAfterDownsampling;
-    /* 0x02 */ s16 chunkLen;
-    /* 0x04 */ s16* toDownsampleLeft;
-    /* 0x08 */ s16* toDownsampleRight;
-    /* 0x0C */ u8 unk0C[8];
-} ReverbItemAFF0; // size = 0x14
 
-typedef struct SynthesisReverbAFF0 {
-    /* 0x000 */ u8 resampleFlags;
-    /* 0x001 */ u8 useReverb;
-    /* 0x002 */ u8 framesToIgnore;
-    /* 0x003 */ u8 curFrame;
-    /* 0x004 */ u8 downsampleRate;
-    /* 0x005 */ s8 unk_05;
-    /* 0x006 */ u16 windowSize;
-    /* 0x008 */ u16 unk_08;
-    /* 0x00A */ u16 unk_0A;
-    /* 0x00C */ u16 decayRatio;
-    /* 0x00E */ s16 unk_0E;
-    /* 0x010 */ u16 unk_10;
-    /* 0x012 */ u16 unk_12;
-    /* 0x014 */ s32 nextRingBufPos;
-    /* 0x018 */ s32 unk_18;
-    /* 0x01C */ s32 bufSizePerChan;
-    /* 0x020 */ s16* leftRingBuf;
-    /* 0x024 */ s16* rightRingBuf;
-    /* 0x028 */ void* unk_28;
-    /* 0x02C */ void* unk_2C;
-    /* 0x030 */ void* unk_30;
-    /* 0x034 */ void* unk_34;
-    /* 0x038 */ ReverbItemAFF0 items[2][5];
-    /* 0x100 */ s16* filterLeft;
-    /* 0x104 */ s16* filterRight;
-    /* 0x108 */ s16* filterLeftState;
-    /* 0x10C */ s16* filterRightState;
-    /* 0x110 */ SampleAFF0* soundSample;
-    /* 0x114 */ f32 soundTuning;
-    /* 0x118 */ SampleAFF0 sample;
-    /* 0x128 */ LoopAFF0 loop;
-    /* 0x134 */ u8 unk134[0x158 - 0x134];
-} SynthesisReverbAFF0; // size = 0x158
 
-typedef struct SessionSplitAFF0 {
-    /* 0x00 */ s32 miscPoolSize;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ s32 unk_08;
-    /* 0x0C */ s32 cachePoolSize;
-} SessionSplitAFF0;
 
 typedef struct SplitAFF0 {
     /* 0x00 */ s32 a;
@@ -998,36 +919,34 @@ extern s32 D_811859B4;
 extern f32 D_811859B0;
 extern u32 D_8118568C;
 extern s32 D_8118557C;
-// func_8110B9F8 is defined as void in the next file, but this file calls it as
+// AudioHeap_InitSampleCaches is defined as void in the next file, but this file calls it as
 // if it returned a value (as with an implicit declaration); the call only
 // matches that way.
-s32 func_8110B9F8(s32, s32);
-void func_8110C618(s32);
+s32 AudioHeap_InitSampleCaches(s32, s32);
+void AudioLoad_InitSampleDmaBuffers(s32);
 void func_811152A4(s32);
 s32 func_80058100(s32);
 void func_8005C0A0(void);
 void func_8110FAF4(void);
-void func_81111130(void);
-void func_81111AF4(void);
+void AudioPlayback_InitNoteFreeList(void);
+void AudioPlayback_NoteInitAll(void);
 void func_8111539C(s32);
 void func_81115480(void);
 
-typedef struct PoolAFF0 {
-    /* 0x00 */ u8* start;
-    /* 0x04 */ u8* cur;
-    /* 0x08 */ s32 size;
-    /* 0x0C */ s32 count;
-} PoolAFF0;
 
 #define EXTERNAL_POOL_AFF0 (*(PoolAFF0*)&D_811842A0)
 #define REVERBS_AFF0 ((SynthesisReverbAFF0*)D_81184110)
 
-void func_8110AFF0(void) {
+/**
+ * Lays out the audio heap and reverbs for the current audio spec. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioHeap_Init(void) {
     UNUSED s32 pad[5]; // FAKE: stack pad of unknown origin; only reserves frame space
-    s32 persistentMem;
-    s32 temporaryMem;
-    s32 totalMem;
-    s32 wantMisc;
+    s32 persistent_mem;
+    s32 temporary_mem;
+    s32 total_mem;
+    s32 want_misc;
     s32 j;
     s32 i;
     ReverbSettingsAFF0* settings;
@@ -1064,32 +983,32 @@ void func_8110AFF0(void) {
         D_811858B8.unk_08 -= 0x10;
     }
     D_811858E4 = D_811858E8 * 0x14 * D_811858B8.unk_0C + spec->numReverbs * 0x20 + 0x1E0;
-    persistentMem = spec->persistentSeqMem + spec->persistentFontMem + spec->persistentSampleMem + spec->persistentSampleCacheSize + 0x10;
-    temporaryMem = spec->temporarySeqMem + spec->temporaryFontMem + spec->temporarySampleMem + spec->temporarySampleCacheSize + 0x10;
-    totalMem = persistentMem + temporaryMem;
-    wantMisc = D_81184298 - totalMem - 0x100;
-    D_81184620.miscPoolSize = wantMisc;
-    D_81184620.cachePoolSize = totalMem;
-    func_8110999C((s8*)&D_81184620);
-    D_81184630.a = persistentMem;
-    D_81184630.b = temporaryMem;
-    func_81109A18((s8*)&D_81184630);
+    persistent_mem = spec->persistentSeqMem + spec->persistentFontMem + spec->persistentSampleMem + spec->persistentSampleCacheSize + 0x10;
+    temporary_mem = spec->temporarySeqMem + spec->temporaryFontMem + spec->temporarySampleMem + spec->temporarySampleCacheSize + 0x10;
+    total_mem = persistent_mem + temporary_mem;
+    want_misc = D_81184298 - total_mem - 0x100;
+    D_81184620.miscPoolSize = want_misc;
+    D_81184620.cachePoolSize = total_mem;
+    AudioHeap_InitSessionPools((s8*)&D_81184620);
+    D_81184630.a = persistent_mem;
+    D_81184630.b = temporary_mem;
+    AudioHeap_InitCachePools((s8*)&D_81184630);
     D_81184638.a = spec->persistentSeqMem;
     D_81184638.b = spec->persistentFontMem;
     D_81184638.c = spec->persistentSampleMem;
-    func_81109A94((s8*)&D_81184638);
+    AudioHeap_InitPersistentCache((s8*)&D_81184638);
     D_81184648.a = spec->temporarySeqMem;
     D_81184648.b = spec->temporaryFontMem;
     D_81184648.c = spec->temporarySampleMem;
-    func_81109B50((s8*)&D_81184648);
-    func_8110B9F8(spec->persistentSampleCacheSize, spec->temporarySampleCacheSize);
+    AudioHeap_InitTemporaryCache((s8*)&D_81184648);
+    AudioHeap_InitSampleCaches(spec->persistentSampleCacheSize, spec->temporarySampleCacheSize);
     if (EXTERNAL_POOL_AFF0.start != NULL) {
         EXTERNAL_POOL_AFF0.cur = EXTERNAL_POOL_AFF0.start;
     }
-    func_811095E0();
+    AudioHeap_ResetLoadStatus();
     D_81184664 = (Rec81109678*)GbApu_AllocZeroed((unk_func_81206FA0*)&D_811842C0, D_811858E8 * 0xCC);
-    func_81111AF4();
-    func_81111130();
+    AudioPlayback_NoteInitAll();
+    AudioPlayback_InitNoteFreeList();
     D_81184288 = (void*)GbApu_AllocZeroed((unk_func_81206FA0*)&D_811842C0, D_811858B8.unk_0C * D_811858E8 * 0x18);
     for (i = 0; i != 2; i++) {
         D_81185900[i] = (void*)GbApu_AllocZeroed((unk_func_81206FA0*)&D_811842C0, D_811858E4 * 8);
@@ -1150,14 +1069,14 @@ void func_8110AFF0(void) {
         if (settings->lowPassFilterCutoffLeft != 0) {
             reverb->filterLeftState = (s16*)GbApu_Alloc((unk_func_81206FA0*)&D_811842C0, 0x20);
             reverb->filterLeft = (s16*)GbApu_Alloc((unk_func_81206FA0*)&D_811842C0, 0x10);
-            func_8110A878(reverb->filterLeft, settings->lowPassFilterCutoffLeft);
+            AudioHeap_LoadLowPassFilter(reverb->filterLeft, settings->lowPassFilterCutoffLeft);
         } else {
             reverb->filterLeft = NULL;
         }
         if (settings->lowPassFilterCutoffRight != 0) {
             reverb->filterRightState = (s16*)GbApu_Alloc((unk_func_81206FA0*)&D_811842C0, 0x20);
             reverb->filterRight = (s16*)GbApu_Alloc((unk_func_81206FA0*)&D_811842C0, 0x10);
-            func_8110A878(reverb->filterRight, settings->lowPassFilterCutoffRight);
+            AudioHeap_LoadLowPassFilter(reverb->filterRight, settings->lowPassFilterCutoffRight);
         } else {
             reverb->filterRight = NULL;
         }
@@ -1167,7 +1086,7 @@ void func_8110AFF0(void) {
         func_8111539C(j);
         func_811152A4(j);
     }
-    func_8110C618(D_811858E8);
+    AudioLoad_InitSampleDmaBuffers(D_811858E8);
     D_8118557C = 0;
     D_8118427C = 0x1000;
     func_8110FAF4();

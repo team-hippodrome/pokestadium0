@@ -17,7 +17,7 @@ extern Gfx D_80060990[];
 
 
 
-void Ui_DrawTexturedRect8x8(s32 x1, s32 y1, s32 width, s32 height, u8* texture);
+s32 Ui_DrawTexturedRect8x8(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4);
 void Ui_DrawBorderStyleA(s32 x1, s32 y1, s32 width, s32 height);
 void Ui_DrawBorderStyleB(s32 x1, s32 y1, s32 width, s32 height);
 void Ui_DrawBorderStyleC(s32 x1, s32 y1, s32 width, s32 height);

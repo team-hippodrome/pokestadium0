@@ -158,7 +158,7 @@ void Pokedex_SetPreviewSpecies(unk_func_888044BC_04C_02C* arg0, s32 arg1);
 s32 Pokedex_DrawPreview(unk_func_888044BC_04C_02C* arg0, s32 arg1, s32 arg2);
 void Pokedex_BuildPreviewPanel(unk_func_888044BC_04C* arg0, s32 arg1, s32 arg2, MemoryPool* arg3);
 void Pokedex_BuildRootWidget(unk_func_888044BC* arg0, s32 arg1, s32 arg2, u8* arg3, MemoryPool* arg4);
-s32 func_8A10122C(void);
+s32 Pokedex_RunIndexScreen(void);
 s32 Pokedex_ShowEntryMenu(void);
 void Pokedex_LoadIcon(u8* arg0, s32 arg1);
 s32 Pokedex_ShowEntry(void);

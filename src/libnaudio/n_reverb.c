@@ -29,7 +29,7 @@ Acmd* _n_filterBuffer(ALLowPass* lp, s32 buff, Acmd* p);
 /***********************************************************************
  * Reverb filter public interfaces
  ***********************************************************************/
-Acmd* n_alFxPull(s32 sampleOffset, Acmd* p) {
+Acmd* n_alFxPull(s32 sample_offset, Acmd* p) {
     Acmd* ptr = p;
     ALFx* r = (ALFx*)n_syn->auxBus->fx;
     s16 i, buff1, buff2, input, output;
@@ -40,7 +40,7 @@ Acmd* n_alFxPull(s32 sampleOffset, Acmd* p) {
     /*
      * pull channels going into this effect first
      */
-    ptr = n_alAuxBusPull(sampleOffset, p);
+    ptr = n_alAuxBusPull(sample_offset, p);
 
     input = N_AL_AUX_L_OUT;
     output = N_AL_AUX_R_OUT;
@@ -109,6 +109,12 @@ Acmd* n_alFxPull(s32 sampleOffset, Acmd* p) {
     return ptr;
 }
 
+/**
+ * This routine gets called by alSynSetFXParam. No checking takes place to
+ * verify the validity of the paramID or the param value. input and output
+ * values must be 8 byte aligned, so round down any param passed.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 n_alFxParamHdl(void* filter, s32 paramID, void* param) {
     ALFx* f = (ALFx*)filter;
     s32 p = (paramID - 2) % 8;

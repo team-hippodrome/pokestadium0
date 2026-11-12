@@ -5,37 +5,37 @@
 
 void func_821401D4(Particle*, f32);
 void func_8213E11C(Particle*, f32);
-s32 func_82137D74(s32);
-void func_8213EBF4(Particle*, s16);
-void func_8213F628(Particle*, f32);
-void func_8213F7C0(Particle*, f32);
+u32 ParticleMath_RandomRange(u32 arg0);
+void Particle_SetRotationStepY(Particle*, s16);
+void Particle_SetStepMagnitudeScaled(Particle*, f32);
+void Particle_SetMotionStepYScaled(Particle*, f32);
 void func_82143478(Particle*, s32);
-void func_8214050C(Particle*, s32);
-void func_82140594(Particle*, s32);
+void Particle_SetPrimAlpha(s8 *arg0, char arg1);
+void Particle_SetUnkA6(Particle*, s32);
 void func_8213C9D0(Particle*);
 
 void func_82168C20(Particle* arg0) {
     func_821401D4(arg0, 0.16f);
     func_8213E11C(arg0, -3.2f);
-    func_8213EBF4(arg0, func_82137D74(0x10000));
-    func_8213F628(arg0, 0.085f);
-    func_8213F7C0(arg0, 0.44f);
+    Particle_SetRotationStepY(arg0, ParticleMath_RandomRange(0x10000));
+    Particle_SetStepMagnitudeScaled(arg0, 0.085f);
+    Particle_SetMotionStepYScaled(arg0, 0.44f);
     func_82143478(arg0, 0x1A);
-    func_8214050C(arg0, 0xFF);
-    func_82140594(arg0, 2);
+    Particle_SetPrimAlpha(arg0, 0xFF);
+    Particle_SetUnkA6(arg0, 2);
     func_8213C9D0(arg0);
 }
 
 extern Vec3f D_8219A898;
 
 void func_82168CC4(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             func_82168C20(arg0);
             break;
 
         case 2:
-            BattleAnim_GetOwnerBonePosition(arg0->unk_10, arg0->unk_CD, &D_8219A898);
+            BattleAnim_GetOwnerBonePosition(arg0->pokemon, arg0->unk_CD, &D_8219A898);
             Particle_ApproachPosition(arg0, D_8219A898);
             Particle_Field1C_Approach_0B98C(arg0, 0.2f, 0.053f);
             Particle_PrimAlpha_ApproachAndStepState_0BC5C(arg0, 0x10, 0x1A);
@@ -51,12 +51,12 @@ void func_82168CC4(Particle* arg0) {
             break;
     }
 
-    if (arg0->unk_B2 > 0) {
+    if (arg0->lifecycle > 0) {
         Particle_AddVelocityXZFromRotationYViaImpulse(arg0);
         Particle_Field50_AddXFromField7C_09C58(arg0);
     }
 
-    if (BattleScene_IsParticipantModelVisible(arg0->unk_10)) {
+    if (BattleScene_IsParticipantModelVisible(arg0->pokemon)) {
         Particle_EnableRendering(arg0);
     } else {
         Particle_DisableRendering(arg0);

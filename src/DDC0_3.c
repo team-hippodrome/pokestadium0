@@ -13,10 +13,7 @@
 #include "audio_sound_state.h"
 #include "audio_channel.h"
 #include "audio_loop_point.h"
-typedef struct unk_D_800A8480 {
-  /* 0x0000 */ OSThread thread;
-  /* 0x01B0 */ char unk01B0[0x2030];
-} unk_D_800A8480;
+#include "33FE0_types_2.h"
 extern s32 D_800AAE30;
 extern s32 D_800AAF3C;
 
@@ -133,13 +130,13 @@ f32 Model_ComputeDistance(s16 (*a)[3], s16 (*b)[3]) {
     return sqrtf((dx * dx) + (dy * dy) + (dz * dz));
 }
 
-void Model_ExtrapolateVertexPosition(Vec3f* from, Vec3f* to, f32 currentTime, f32 deltaTime, f32 scale) {
-    s32 pad;
+void Model_ExtrapolateVertexPosition(Vec3f* from, Vec3f* to, f32 current_time, f32 delta_time, f32 scale) {
+    s32 pad; // FAKE: stack padding
     f32 temp_fv0;
     f32 temp_fa1;
     f32 temp_ft5;
 
-    if (deltaTime < 10e-05f) {
+    if (delta_time < 10e-05f) {
         return;
     }
 
@@ -147,8 +144,8 @@ void Model_ExtrapolateVertexPosition(Vec3f* from, Vec3f* to, f32 currentTime, f3
     temp_fa1 = to->y - from->y;
     temp_ft5 = to->z - from->z;
 
-    scale *= (currentTime - deltaTime) / deltaTime;
-    if (deltaTime < currentTime) {
+    scale *= (current_time - delta_time) / delta_time;
+    if (delta_time < current_time) {
         scale /= 2.0f;
     }
 

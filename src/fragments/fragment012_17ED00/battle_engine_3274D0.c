@@ -1,3 +1,4 @@
+#include "pokemon.h"
 /* Stadium Zero fragment012_17ED00. */
 /* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_3274D0.c. */
 
@@ -6,28 +7,31 @@
 
 #include "m2c_macros.h"
 
-void BattleAnim_SetupStartEffects18And73Descriptor11ScatterRiseFade(Particle* arg0);
-void BattleAnim_ApplyStartEffect18MoveKeyedRadialOffset(Particle* arg0);
-void BattleAnim_SetupStartEffect18MoveKeyedRadialPulse(Particle* arg0);
+void BattleAnim_SetupStrongElectricSpark(Particle* arg0);
+void BattleAnim_ApplyThunderThunderboltUseRadialOffset(Particle* arg0);
+void BattleAnim_SetupThunderThunderboltUseEffect(Particle* arg0);
 void BattleAnim_SetupSharedDescriptor0FDelayedRisingColumnFade(Particle* arg0);
 void BattleAnim_SetupSharedDescriptor0FDelayedRisingColumnRandomScale(Particle* arg0);
 void BattleAnim_SetupSharedDirectionalSprayFade(Particle* arg0);
 void BattleAnim_SetupSharedDescriptor13DirectionalSprayScaledFade(Particle* arg0);
-void BattleAnim_SetupStartEffect59EndEffect28DirectionalStreamFade(Particle* arg0);
+void BattleAnim_SetupThunderShockOuterJolts(Particle* arg0);
 void BattleAnim_SetupUnregisteredStraightDirectionalStreamFade(Particle* arg0);
 void BattleAnim_SetupEndEffect28Descriptor10UpwardBurstFade(Particle* arg0);
 void BattleAnim_SetupEndEffect28Descriptor10WideScatterBurstFade(Particle* arg0);
-void BattleAnim_CreateCollisionRandomEffect(void);
-void BattleAnim_EndEffect70Descriptor0F_13SprayColumnSequence(void);
+void BattleAnim_InitializeThunderPunchUse(void);
+void BattleAnim_InitializeHyperBeamHitSequence(void);
 
 void BattleAnim_CallbackStartEffects18And73Descriptor11ScatterRiseFade(Particle* arg0);
-void BattleAnim_CallbackSharedDescriptor0FDelayedRisingColumnFade(Particle* arg0);
-void BattleAnim_CallbackSharedDescriptor0FDelayedRisingColumnRandomScale(Particle* arg0);
+void BattleAnim_RunDeterministicRotatingBoltOfLightning(Particle* arg0);
+void BattleAnim_RunRandomRotatingBoltOfLightning(Particle* arg0);
 void BattleAnim_CallbackSharedDirectionalSprayFade(Particle* arg0);
 void BattleAnim_CallbackSharedDescriptor13DirectionalSprayScaledFade(Particle* arg0);
 
-void BattleAnim_SetupStartEffects18And73Descriptor11ScatterRiseFade(Particle* arg0) {
-    UNUSED s32 pad;
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_SetupStrongElectricSpark(Particle* arg0) {
+    UNUSED s32 pad; // FAKE: stack padding
     Vec3s sp2C;
 
     Particle_FieldAC_GetS16_0C038(arg0);
@@ -42,7 +46,7 @@ void BattleAnim_SetupStartEffects18And73Descriptor11ScatterRiseFade(Particle* ar
     Particle_AdvanceLifecycle(arg0);
 }
 
-M2C_UNK func_8213C938(s8 *);                      /* extern */
+void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
 M2C_UNK func_8213E5C8(s8 *);                      /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_82140548(s8 *, M2C_UNK, M2C_UNK);    /* extern */
@@ -64,42 +68,45 @@ void func_8214E67C(s8 *arg0) {
         func_82140548(arg0, 0, 0x40);
         break;
     case 4:
-        func_8213C938(arg0);
+        Particle_DisableAndDetach(arg0);
         break;
     }
     func_82140228(arg0, 0x3F800000, 0x3D4CCCCD);
     func_8213E5C8(arg0);
 }
 
-void BattleAnim_ApplyStartEffect18MoveKeyedRadialOffset(Particle* arg0) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_ApplyThunderThunderboltUseRadialOffset(Particle* arg0) {
     f32 sp1C = 0.0f;
 
-    switch (BattleAnim_GetOwnerSpecies(arg0->unk_10)) {
-        case 0x6:
+    switch (BattleAnim_GetOwnerSpecies(arg0->pokemon)) {
+        case CHARIZARD:
             sp1C = 15.0f;
             break;
 
-        case 0x73:
+        case KANGASKHAN:
             sp1C = 15.0f;
             break;
 
-        case 0x87:
+        case JOLTEON:
             sp1C = 10.0f;
             break;
 
-        case 0x95:
+        case DRAGONITE:
             sp1C = 10.0f;
             break;
 
-        case 0x1F:
+        case NIDOQUEEN:
             sp1C = 10.0f;
             break;
 
-        case 0x22:
+        case NIDOKING:
             sp1C = 10.0f;
             break;
 
-        case 0x71:
+        case CHANSEY:
             sp1C = 10.0f;
             break;
     }
@@ -108,18 +115,24 @@ void BattleAnim_ApplyStartEffect18MoveKeyedRadialOffset(Particle* arg0) {
     Particle_Field38_AddXZFromField94YOffset90_08FAC(arg0, 5.0f);
 }
 
-void BattleAnim_SetupStartEffect18MoveKeyedRadialPulse(Particle* arg0) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_SetupThunderThunderboltUseEffect(Particle* arg0) {
     Particle_Field1C_SetScaled_0B938(arg0, 0.1f);
     Particle_Field74_SetScaled_0AD8C(arg0, 0.0f);
-    BattleAnim_ApplyStartEffect18MoveKeyedRadialOffset(arg0);
+    BattleAnim_ApplyThunderThunderboltUseRadialOffset(arg0);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0x17);
     Particle_AdvanceLifecycle(arg0);
 }
 
-void BattleAnim_CallbackStartEffect18MoveKeyedRadialPulse(Particle* arg0) {
-    switch (arg0->unk_B2) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_RunThunderThunderboltUseEffect(Particle* arg0) {
+    switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_SetupStartEffect18MoveKeyedRadialPulse(arg0);
+            BattleAnim_SetupThunderThunderboltUseEffect(arg0);
             break;
 
         case 2:
@@ -154,8 +167,13 @@ void BattleAnim_SetupSharedDescriptor0FDelayedRisingColumnFade(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void BattleAnim_CallbackSharedDescriptor0FDelayedRisingColumnFade(Particle* arg0) {
-    switch (arg0->unk_B2) {
+/**
+ * Moves: Hyper Beam (hit), Thunder (use/hit), Thunder Shock (use/hit), Thunderbolt (use/hit)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_RunDeterministicRotatingBoltOfLightning(Particle* arg0) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupSharedDescriptor0FDelayedRisingColumnFade(arg0);
             break;
@@ -200,8 +218,13 @@ void BattleAnim_SetupSharedDescriptor0FDelayedRisingColumnRandomScale(Particle* 
     Particle_AdvanceLifecycle(arg0);
 }
 
-void BattleAnim_CallbackSharedDescriptor0FDelayedRisingColumnRandomScale(Particle* arg0) {
-    switch (arg0->unk_B2) {
+/**
+ * Moves: Hyper Beam (hit), Thunder (use/hit), Thunder Shock (use/hit), Thunderbolt (use/hit)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_RunRandomRotatingBoltOfLightning(Particle* arg0) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupSharedDescriptor0FDelayedRisingColumnRandomScale(arg0);
             break;
@@ -244,7 +267,7 @@ void BattleAnim_SetupSharedDirectionalSprayFade(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-M2C_UNK func_8213C938(s8 *);                      /* extern */
+void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
 M2C_UNK func_8213E5C8(s8 *);                      /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_82140548(s8 *, M2C_UNK, M2C_UNK);    /* extern */
@@ -267,14 +290,14 @@ void func_8214ED30(s8 *arg0) {
         func_82140548(arg0, 0, 0x40);
         break;
     case 4:
-        func_8213C938(arg0);
+        Particle_DisableAndDetach(arg0);
         break;
     }
     func_8213E5C8(arg0);
 }
 
 void BattleAnim_SetupSharedDescriptor13DirectionalSprayScaledFade(Particle* arg0) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     Vec3s sp2C;
 
     Particle_FieldAC_GetS16_0C038(arg0);
@@ -290,7 +313,7 @@ void BattleAnim_SetupSharedDescriptor13DirectionalSprayScaledFade(Particle* arg0
     Particle_AdvanceLifecycle(arg0);
 }
 
-M2C_UNK func_8213C938(s8 *);                      /* extern */
+void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
 M2C_UNK func_8213E5C8(s8 *);                      /* extern */
 M2C_UNK func_821402B8(s8 *);                      /* extern */
 M2C_UNK func_82140548(s8 *, M2C_UNK, M2C_UNK);    /* extern */
@@ -313,16 +336,19 @@ void func_8214EEE0(s8 *arg0) {
         func_82140548(arg0, 0, 0x40);
         break;
     case 4:
-        func_8213C938(arg0);
+        Particle_DisableAndDetach(arg0);
         break;
     }
     func_8213E5C8(arg0);
 }
 
-void BattleAnim_SetupStartEffect59EndEffect28DirectionalStreamFade(Particle* arg0) {
-    UNUSED s32 pad;
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_SetupThunderShockOuterJolts(Particle* arg0) {
+    UNUSED s32 pad; // FAKE: stack padding
     Vec3s sp2C;
-    UNUSED s32 pad2[2];
+    UNUSED s32 pad2[2]; // FAKE: stack padding
 
     Particle_FieldAC_GetS16_0C038(arg0);
     Particle_Field1C_SetScaled_0B938(arg0, 0.1f);
@@ -340,7 +366,7 @@ void BattleAnim_SetupStartEffect59EndEffect28DirectionalStreamFade(Particle* arg
     Particle_AdvanceLifecycle(arg0);
 }
 
-M2C_UNK func_8213C938(s8 *);                      /* extern */
+void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
 M2C_UNK func_8213E5C8(s8 *);                      /* extern */
 M2C_UNK func_821402B8(s8 *);                      /* extern */
 M2C_UNK func_82140548(s8 *, M2C_UNK, M2C_UNK);    /* extern */
@@ -362,7 +388,7 @@ void func_8214F06C(s8 *arg0) {
         func_82140548(arg0, 0, 0x10);
         break;
     case 4:
-        func_8213C938(arg0);
+        Particle_DisableAndDetach(arg0);
         break;
     }
     func_821402B8(arg0);
@@ -370,9 +396,9 @@ void func_8214F06C(s8 *arg0) {
 }
 
 void BattleAnim_SetupUnregisteredStraightDirectionalStreamFade(Particle* arg0) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     Vec3s sp2C;
-    UNUSED s32 pad2[2];
+    UNUSED s32 pad2[2]; // FAKE: stack padding
 
     Particle_FieldAC_GetS16_0C038(arg0);
     Particle_Field1C_SetScaled_0B938(arg0, 0.1f);
@@ -390,7 +416,7 @@ void BattleAnim_SetupUnregisteredStraightDirectionalStreamFade(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-M2C_UNK func_8213C938(s8 *);                      /* extern */
+void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
 M2C_UNK func_8213E5C8(s8 *);                      /* extern */
 M2C_UNK func_821402B8(s8 *);                      /* extern */
 M2C_UNK func_82140548(s8 *, M2C_UNK, M2C_UNK);    /* extern */
@@ -412,7 +438,7 @@ void func_8214F1E8(s8 *arg0) {
         func_82140548(arg0, 0, 0x10);
         break;
     case 4:
-        func_8213C938(arg0);
+        Particle_DisableAndDetach(arg0);
         break;
     }
     func_821402B8(arg0);
@@ -420,7 +446,7 @@ void func_8214F1E8(s8 *arg0) {
 }
 
 void BattleAnim_SetupEndEffect28Descriptor10UpwardBurstFade(Particle* arg0) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     Vec3f sp30;
     Vec3s sp28;
 
@@ -440,7 +466,7 @@ void BattleAnim_SetupEndEffect28Descriptor10UpwardBurstFade(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-M2C_UNK func_8213C938(s8 *);                      /* extern */
+void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
 M2C_UNK func_8213E5C8(s8 *);                      /* extern */
 M2C_UNK func_821402B8(s8 *);                      /* extern */
 M2C_UNK func_82140548(s8 *, M2C_UNK, M2C_UNK);    /* extern */
@@ -462,7 +488,7 @@ void func_8214F3D4(s8 *arg0) {
         func_82140548(arg0, 0, 0x40);
         break;
     case 4:
-        func_8213C938(arg0);
+        Particle_DisableAndDetach(arg0);
         break;
     }
     func_821402B8(arg0);
@@ -470,7 +496,7 @@ void func_8214F3D4(s8 *arg0) {
 }
 
 void BattleAnim_SetupEndEffect28Descriptor10WideScatterBurstFade(Particle* arg0) {
-    UNUSED s32 pad[4];
+    UNUSED s32 pad[4]; // FAKE: stack padding
     Vec3s sp28;
 
     Particle_FieldAC_GetS16_0C038(arg0);
@@ -487,7 +513,7 @@ void BattleAnim_SetupEndEffect28Descriptor10WideScatterBurstFade(Particle* arg0)
     Particle_AdvanceLifecycle(arg0);
 }
 
-M2C_UNK func_8213C938(s8 *);                      /* extern */
+void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
 M2C_UNK func_8213E5C8(s8 *);                      /* extern */
 M2C_UNK func_821402B8(s8 *);                      /* extern */
 M2C_UNK func_82140548(s8 *, M2C_UNK, M2C_UNK);    /* extern */
@@ -509,23 +535,27 @@ void func_8214F55C(s8 *arg0) {
         func_82140548(arg0, 0, 0x40);
         break;
     case 4:
-        func_8213C938(arg0);
+        Particle_DisableAndDetach(arg0);
         break;
     }
     func_821402B8(arg0);
     func_8213E5C8(arg0);
 }
 
-void BattleAnim_StartEffect18ScatterRadialAndColumnSequence(void) {
+/**
+ * initializes using thunderbolt or thunder
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_InitializeThunderThunderboltUse(void) {
     BattleAnim_SpawnCategory17MarkerSlot(0x64, 1);
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0x20, 3);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 3, 8, BattleAnim_CallbackStartEffects18And73Descriptor11ScatterRiseFade, &gBattleAnimParticleDescriptors[0x11], 8, 4, 2, 0, 0x25, 0);
     BattleAnim_AddSpawnDelay(0x19);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffect18MoveKeyedRadialPulse, &gBattleAnimParticleDescriptors[0x15], 0xE, 1, 2, 0, 0x25, 0);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffect18MoveKeyedRadialPulse, &gBattleAnimParticleDescriptors[0x16], 0xE, 1, 2, 0, 0x25, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunThunderThunderboltUseEffect, &gBattleAnimParticleDescriptors[0x15], 0xE, 1, 2, 0, 0x25, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunThunderThunderboltUseEffect, &gBattleAnimParticleDescriptors[0x16], 0xE, 1, 2, 0, 0x25, 0);
     BattleAnim_SpawnDescriptor25AlphaHoldFadeOut(8, 2, 8, 0x8, 0xFF);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_CallbackSharedDescriptor0FDelayedRisingColumnFade, &gBattleAnimParticleDescriptors[0xF], 0x14, 4, 7, 0, 0x25, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_CallbackSharedDescriptor0FDelayedRisingColumnRandomScale, &gBattleAnimParticleDescriptors[0xF], 0x14, 4, 7, 0, 0x25, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_RunDeterministicRotatingBoltOfLightning, &gBattleAnimParticleDescriptors[0xF], 0x14, 4, 7, 0, 0x25, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_RunRandomRotatingBoltOfLightning, &gBattleAnimParticleDescriptors[0xF], 0x14, 4, 7, 0, 0x25, 0);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_CallbackSharedDescriptor13DirectionalSprayScaledFade, &gBattleAnimParticleDescriptors[0x13], 0x14, 4, 7, 0, 0x25, 0);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_CallbackSharedDirectionalSprayFade, &gBattleAnimParticleDescriptors[0x13], 0x14, 4, 7, 0, 0x25, 0);
 }
@@ -538,7 +568,11 @@ extern M2C_UNK D_8218E618;
 extern M2C_UNK func_8214E9F0;
 extern M2C_UNK func_8214EBA4;
 
-void func_8214F84C(void) {
+/**
+ * initializes being hit by thunder shock or thunderbolt
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeThunderShockThunderboltHit(void) {
     func_8213B794(0x2C, 4, 0x10, 8, 0xFF);
     func_8213B644(0x30, 0x20, 8);
     func_8213B5D8(0, 8, 5, &func_8214ED30, &D_8218E618, 8, 3, 3, 0, 0x25, 0);
@@ -555,7 +589,11 @@ extern M2C_UNK D_8218E618;
 extern M2C_UNK func_8214E9F0;
 extern M2C_UNK func_8214EBA4;
 
-void func_8214F974(void) {
+/**
+ * initializes getting hit by thunder
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeThunderHit(void) {
     func_8213B794(0, 4, 8, 8, 0xC8);
     func_8213B644(0x30, 0x20, 8);
     func_8213B5D8(0, 8, 5, &func_8214ED30, &D_8218E618, 8, 3, 3, 0, 0x25, 0);
@@ -564,7 +602,11 @@ void func_8214F974(void) {
     func_8215EC44();
 }
 
-void BattleAnim_CreateStreamSprayColumnEffect(void) {
+/**
+ * initializes using thunder shock
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_InitializeThunderShockUse(void) {
     BattleAnim_SpawnCategory17MarkerSlot(0x64, 1);
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0x10, 3);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 8, 3, BattleAnim_CallbackStartEffect59EndEffect28DirectionalStreamFade, &gBattleAnimParticleDescriptors[0x14], 2, 1, 2, 0, 0x25, 0);
@@ -573,8 +615,8 @@ void BattleAnim_CreateStreamSprayColumnEffect(void) {
     BattleAnim_SpawnDescriptor25AlphaHoldFadeOutFullAlpha(8, 4, 8, 0x8);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 2, BattleAnim_CallbackSharedDescriptor13DirectionalSprayScaledFade, &gBattleAnimParticleDescriptors[0x13], 0x14, 4, 2, 0, 0x25, 0);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 5, 2, BattleAnim_CallbackSharedDirectionalSprayFade, &gBattleAnimParticleDescriptors[0x13], 0x14, 4, 2, 0, 0x25, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 6, 2, BattleAnim_CallbackSharedDescriptor0FDelayedRisingColumnFade, &gBattleAnimParticleDescriptors[0xF], 0x14, 2, 1, 0, 0x25, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 2, BattleAnim_CallbackSharedDescriptor0FDelayedRisingColumnRandomScale, &gBattleAnimParticleDescriptors[0xF], 0x14, 2, 1, 0, 0x25, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 6, 2, BattleAnim_RunDeterministicRotatingBoltOfLightning, &gBattleAnimParticleDescriptors[0xF], 0x14, 2, 1, 0, 0x25, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 2, BattleAnim_RunRandomRotatingBoltOfLightning, &gBattleAnimParticleDescriptors[0xF], 0x14, 2, 1, 0, 0x25, 0);
 }
 
 M2C_UNK func_8213B5D8(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK *, M2C_UNK *, s32, s32, s32, s32, s32, s32); /* extern */
@@ -592,14 +634,22 @@ void func_8214FCBC(void) {
     func_8213B5D8(0, 8, 2, &func_8214F06C, &D_8218E620, 0xC, 3, 3, 0, 0x25, 0);
 }
 
-void BattleAnim_CreateCollisionRandomEffect(void) {
+/**
+ * initializes using thunder punch
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_InitializeThunderPunchUse(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 5, BattleAnim_CallbackStartEffects18And73Descriptor11ScatterRiseFade, &gBattleAnimParticleDescriptors[0x11], 8, 4, 0x10, gBattleAnimCurrentAnchor, 0x25, 0);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 1, 0x24, BattleAnim_CallbackStartEffect73Descriptor15AnimatedColorImpulseFade, &gBattleAnimParticleDescriptors[0x15], 0, 1, 0x11, gBattleAnimCurrentAnchor, 0, 0);
 }
 
-void BattleAnim_EndEffect70Descriptor0F_13SprayColumnSequence(void) {
+/**
+ * initializes getting hit by hyper beam
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_InitializeHyperBeamHitSequence(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_CallbackSharedDescriptor13DirectionalSprayScaledFade, &gBattleAnimParticleDescriptors[0x13], 0x14, 4, 7, 0, 0x2C, 0);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_CallbackSharedDirectionalSprayFade, &gBattleAnimParticleDescriptors[0x13], 0x14, 3, 7, 0, 0xF, 0);
-    BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_CallbackSharedDescriptor0FDelayedRisingColumnFade, &gBattleAnimParticleDescriptors[0xF], 0x14, 1, 7, 0, 0x2C, 0);
-    BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_CallbackSharedDescriptor0FDelayedRisingColumnRandomScale, &gBattleAnimParticleDescriptors[0xF], 0x14, 1, 7, 0, 0xF, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_RunDeterministicRotatingBoltOfLightning, &gBattleAnimParticleDescriptors[0xF], 0x14, 1, 7, 0, 0x2C, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_RunRandomRotatingBoltOfLightning, &gBattleAnimParticleDescriptors[0xF], 0x14, 1, 7, 0, 0xF, 0);
 }

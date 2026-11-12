@@ -25,30 +25,25 @@ typedef struct Entry80066AD8 {
     const char* str;
     Color82000BC4 color;
 } Entry80066AD8;
-typedef struct Entry89100FC4 {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 type;
-    /* 0x04 */ const char* name;
-    /* 0x08 */ s32 unk_08;
-} Entry89100FC4; // size = 0xC
+#include "fragments/fragment016_252E10/89100020_89100914_types.h"
 typedef struct Label89100FC4 {
     Color82000BC4 color;
     const char* str;
 } Label89100FC4;
 
 extern u8 D_80073520[];
-M2C_UNK func_80029A64(s32, s32, s32, s32, Color_RGBA8);
+M2C_UNK Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
 extern s32 D_8910A7F8[3];
 void func_80027410(void*, void*, s32, s32, s32);
 void func_89109990(void*, void*, void*, s32);
 extern s32 D_800603C0;
 void func_8000B2F4(s32);
-void func_8002A8C4(s8 *, s32, s32, s32, s32);
+void Window_SetRect(s8 *, s32, s32, s32, s32);
 void func_80027804(s8*, s8*, s32, s32);
 void func_89109B60(s8*);
 void func_80027D68(s32, s32);
-void func_8002EC24(s8*, s8*, s8*, s32, void*, s32, s32);
-void func_891012A8();
+void ScrollList_Init(s8*, s8*, s8*, s32, void*, s32, s32);
+void LabPCList_DrawMonRow();
 void func_89105C54(s8*, s32, s32, s8*, Rgba891024A4);
 extern s32 D_8910D990[];
 extern Rgba891024A4 D_8910A7F4;
@@ -56,9 +51,9 @@ extern u8 D_8910A844[];
 extern u8 D_8910A848[];
 extern u8 D_8910A804[];
 extern u8 D_8910A84C[];
-s32 func_891005CC();
+s32 LabPCList_GetColumnCursorX();
 extern Entry80066AD8 D_80066AD8[];
-s32 func_8002D498(u8*, s32);
+s32 Pokemon_GetTypeIndex(u8*, s32);
 M2C_UNK func_8001A384(M2C_UNK, M2C_UNK);
 M2C_UNK func_8001A944(s32, s32, M2C_UNK *, ...);
 M2C_UNK func_8001AA9C(u8, u8, u8, u8);
@@ -67,7 +62,7 @@ M2C_UNK func_8001ABBC();
 extern Entry89100FC4 D_8006A9D4[];
 extern M2C_UNK D_800734A8;
 extern char D_8910DBAC[];
-s32 func_8002D454(s32, s32);
+s32 BattleMon_GetMoveIndexChecked(s32, s32);
 extern M2C_UNK D_800734A8;
 extern M2C_UNK D_8910DBB4;
 extern M2C_UNK D_8910DBBC;
@@ -83,7 +78,7 @@ extern char D_8910DBF0[];
 extern char D_8910DC04[];
 void Gfx_DrawTextureRgba16(s32, s32, s32, s32, u8*, s32, s32);
 extern s32 D_8910D990[];
-void func_8002ED18(s32*, void*, void*);
+void ScrollList_SetItems(s32*, void*, void*);
 void func_80027D94(s32, void*, void*, void*);
 void func_80027D68(s32, s32);
 s32 func_891096F4();
@@ -94,8 +89,8 @@ s32 func_89109898();
 s32 func_89109960();
 void func_8000A460(s8*, s8*);
 u32 func_800566BC(s8*);
-void func_89106424(s8*, void*, s8*, s32, s32);
-void func_89106570(s8*);
+void LabPCList_InitPopupMenu(s8*, void*, s8*, s32, s32);
+void LabPCList_PlacePopup(s8*);
 void func_8910A21C(s8*, s8*, s8*, s32);
 extern s8* D_8910A890[];
 extern u8 D_8910A898[];
@@ -103,35 +98,39 @@ extern u8 D_8910DC50[];
 extern s8 D_8910E2D0[];
 extern s8 D_8910E312[];
 s32 func_8003F6AC();
-s32 func_8002FD8C(void*);
-void func_800306E0(void*, s32);
-void func_891020F8(s8*);
+s32 ScrollList_UpdateCursor(void*);
+void ScrollList_SetCursor(void*, s32);
+void LabPCList_FormatGatherPrompt(s8*);
 void func_8000A460(s8 *, s8 *);
 u32 func_800566BC(s8*);
-void func_89106424(s8 *, void *, s8 *, s32, s32);
-void func_89106570(s8 *);
-void func_8002A8C4(s8 *, s32, s32, s32, s32);
+void LabPCList_InitPopupMenu(s8 *, void *, s8 *, s32, s32);
+void LabPCList_PlacePopup(s8 *);
+void Window_SetRect(s8 *, s32, s32, s32, s32);
 extern Rgba891024A4 D_8910A7F4;
 extern s8 *D_8910A8A8[];
 extern s8 D_8910A8B0[];
 extern u8 D_8910A8C8[];
 extern s8 D_8910E358[];
-s32 func_891025D8(void*);
-M2C_UNK func_89101D94();
+s32 LabPCList_UpdateHeaderCursor(void*);
+M2C_UNK LabPCList_ApplyFiltersAndSort();
 extern s32 D_8910E37C;
 
 
-s32 func_891066C0(s8*);
+s32 LabPCList_UpdatePopupMenu(s8*);
 void func_80027D68(s32, s32);
 void func_89105C54(s8*, s32, s32, s8*, Rgba891024A4);
-M2C_UNK func_89101D94();
+M2C_UNK LabPCList_ApplyFiltersAndSort();
 extern s32 D_8910D9D0;
 extern s32 D_8910D9D4;
 
-s32 func_89102AB8(s8* arg0) {
+/**
+ * Handles the sort menu: sort by name or number, gather battle Pokemon, clear selections, or choose the boxes to list.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 LabPCList_UpdateSortMenu(s8* arg0) {
     s32 buttons;
 
-    if (func_891066C0(arg0 + 0x9654) != 0) {
+    if (LabPCList_UpdatePopupMenu(arg0 + 0x9654) != 0) {
         return 0;
     }
     buttons = ((u16*)D_800603C0)[4];
@@ -153,14 +152,14 @@ s32 func_89102AB8(s8* arg0) {
                     M2C_FIELD(arg0, s32*, 0x88) = 0;
                     break;
                 case 2:
-                    func_89101D80(arg0, 0x20);
-                    func_89101D94(arg0);
+                    LabPCList_ToggleFilterFlag(arg0, 0x20);
+                    LabPCList_ApplyFiltersAndSort(arg0);
                     M2C_FIELD(arg0, s32*, 0x88) = 0;
                     break;
                 case 3:
-                    func_89100380((LabPCInitialStateFields*)arg0);
-                    func_89101D78(arg0);
-                    func_89101D94(arg0);
+                    LabPCList_ResetFilterState((LabPCInitialStateFields*)arg0);
+                    LabPCList_ClearFilterFlags(arg0);
+                    LabPCList_ApplyFiltersAndSort(arg0);
                     M2C_FIELD(arg0, s32*, 0x88) = 0;
                     break;
                 case 4:

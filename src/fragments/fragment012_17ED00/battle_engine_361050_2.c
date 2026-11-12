@@ -34,7 +34,10 @@ typedef struct unk_func_8437F85C_sp74 {
 #include "memmap.h"
 #include "memory.h"
 
-#include "fragments/clefairy_game/clefairy_game.h"
+#include "global.h"
+#include "fragments/particle_math/particle_math.h"
+#include "jpeg_stream.h"
+#include "controller.h"
 #include "geo_render.h"
 #include "model_animation.h"
 #include "model_animation_events.h"
@@ -52,7 +55,6 @@ typedef struct unk_func_8437F85C_sp74 {
 #include "gfx_rect.h"
 #include "controller.h"
 #include "fragments/widget_toolkit/widget_toolkit.h"
-#include "fragments/minigame_shared_graphics/minigame_shared_graphics.h"
 #include "memory.h"
 #include "stage_loader.h"
 typedef struct unk_D_861054C0 {
@@ -88,7 +90,7 @@ typedef struct unk_D_86106450 {
     /* 0x16C */ ModelNodeView* unk_16C;
 } unk_D_86106450;
 void ClefairyGame_DespawnPatternIcons(void);
-void ClefairyGame_SpawnPatternIcons(void);
+void func_82123D4C(void);
 typedef struct unk_D_861047B8 {
     /* 0x00 */ u8 unk_00[6];
     /* 0x06 */ u8 unk_06[4];
@@ -243,18 +245,7 @@ s32 Diorama_GroupStateCallback(s32, GraphNode*);
 #include "controller.h"
 #include "memory.h"
 #include "stage_loader.h"
-typedef struct unk_D_86B10BD0 {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ s32 unk_08;
-} unk_D_86B10BD0;
-typedef struct unk_D_86B10BE0 {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ s32 unk_08;
-    /* 0x0C */ s32 unk_0C;
-    /* 0x10 */ s32 unk_10;
-} unk_D_86B10BE0;
+#include "fragments/fragment012_17ED00/battle_engine_361050_2_types.h"
 extern unk_D_86B10BE0 D_8219A82C;
 
 void func_8216D990(void);

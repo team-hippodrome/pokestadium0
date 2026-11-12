@@ -45,7 +45,7 @@ f32 Model_ComputeScaledDistance(Vec3f* a, Vec3f* b, Vec3f* scale);
 f32 Model_ComputeDistance(s16 (*a)[3], s16 (*b)[3]);
 void Model_ExtrapolateVertexPosition(Vec3f* from, Vec3f* to, f32 currentTime, f32 deltaTime, f32 scale);
 
-void func_80035500(PosBlend* src, PosBlend* dst, f32 totalTime, f32 elapsed, f32 stiffness) {
+void func_80035500(PosBlend* src, PosBlend* dst, f32 total_time, f32 elapsed, f32 stiffness) {
     f32 sp3C;
     f32 sp38;
     f32 sp34;
@@ -64,8 +64,8 @@ void func_80035500(PosBlend* src, PosBlend* dst, f32 totalTime, f32 elapsed, f32
         sp3C = dst->base.x - src->base.x;
         sp38 = dst->base.y - src->base.y;
         sp34 = dst->base.z - src->base.z;
-        stiffness *= ((totalTime - elapsed) / elapsed);
-        if (elapsed < totalTime) {
+        stiffness *= ((total_time - elapsed) / elapsed);
+        if (elapsed < total_time) {
             stiffness /= 2.0f;
         }
         dst->base.x += sp3C * stiffness;
@@ -79,11 +79,11 @@ void func_80035500(PosBlend* src, PosBlend* dst, f32 totalTime, f32 elapsed, f32
 
 void func_80035694(StadiumModel* model) {
     s32 i;
-    s32 pad1[4];
+    s32 pad1[4]; // FAKE: stack padding
     s16* sp70;
-    s32 pad2[1];
+    s32 pad2[1]; // FAKE: stack padding
     s16* sp68;
-    s32 pad3[7];
+    s32 pad3[7]; // FAKE: stack padding
     ModelVertex* sp48;
     f32 temp_fv0;
     ModelSegment* sp40;
@@ -146,7 +146,7 @@ void func_80035694(StadiumModel* model) {
     mvtx->cmd.blendWeight = -1.0f;
 }
 
-void Model_ApplyTransformCommands(ModelSegment* segment, ModelVertex* vertices, StadiumModel* model, f32 deltaTime) {
+void Model_ApplyTransformCommands(ModelSegment* segment, ModelVertex* vertices, StadiumModel* model, f32 delta_time) {
     f32 temp_fs0;
     f32 temp_fv0;
     s16 temp_v1;
@@ -188,13 +188,13 @@ void Model_ApplyTransformCommands(ModelSegment* segment, ModelVertex* vertices, 
     
         if ((var_a0 != 0) || (var_a2 != 0)) {
             temp_fv0 = Model_ComputeScaledDistance(&temp_a3->position.base, &temp_v0_2->position.base, &model->position);
-            Model_ExtrapolateVertexPosition(&temp_a3->position.base, &temp_v0_2->position.base, temp_fs0, temp_fv0, deltaTime);
+            Model_ExtrapolateVertexPosition(&temp_a3->position.base, &temp_v0_2->position.base, temp_fs0, temp_fv0, delta_time);
         }
         
     }
 }
 
-void func_800359C0(ModelSegment* segment, ModelVertex* vertices, StadiumModel* model, f32 deltaTime) {
+void func_800359C0(ModelSegment* segment, ModelVertex* vertices, StadiumModel* model, f32 delta_time) {
     f32 temp_fs0;
     s16 temp_v1;
     s16 var_a0;
@@ -230,7 +230,7 @@ void func_800359C0(ModelSegment* segment, ModelVertex* vertices, StadiumModel* m
             if ((var_a0 != 0) || (var_a2 != 0)) {
                 temp_s0 = &temp_a3->position;
                 temp_s1 = &temp_v0_2->position;
-                func_80035500(temp_s0, temp_s1, temp_fs0, Model_ComputeScaledDistance(&temp_s0->base, &temp_s1->base, &model->position), deltaTime);
+                func_80035500(temp_s0, temp_s1, temp_fs0, Model_ComputeScaledDistance(&temp_s0->base, &temp_s1->base, &model->position), delta_time);
             }
             continue;
         }
@@ -238,45 +238,45 @@ void func_800359C0(ModelSegment* segment, ModelVertex* vertices, StadiumModel* m
     }
 }
 
-void Model_OffsetVertexHeights(ModelSegment* segment, ModelVertex* vertices, f32 yOffset) {
-    s16* indexTable;
+void Model_OffsetVertexHeights(ModelSegment* segment, ModelVertex* vertices, f32 y_offset) {
+    s16* index_table;
     s16* remap;
     s32 i;
     ModelVertex* tmp;
 
-    indexTable = Memmap_GetSegmentVaddr(segment->tableSegment);
+    index_table = Memmap_GetSegmentVaddr(segment->tableSegment);
     remap = Memmap_GetSegmentVaddr(segment->remapSegment);
     tmp = vertices;
     for(i = 0; i < segment->vertexCount; i++) {
-        if ((Model_GetVertexClass(indexTable, i) != 0) && (i == *remap)) {
-            tmp->position.base.y += yOffset;
+        if ((Model_GetVertexClass(index_table, i) != 0) && (i == *remap)) {
+            tmp->position.base.y += y_offset;
         }
         tmp++;
         remap++;
     }
 }
 
-void func_80035BA8(ModelSegment* segment, ModelVertex* vertices, f32 yOffset) {
-    s16* indexTable;
+void func_80035BA8(ModelSegment* segment, ModelVertex* vertices, f32 y_offset) {
+    s16* index_table;
     s16* var_s2;
     s32 temp_v0;
     ModelVertex* tmp;
     s32 i;
     PosBlend* temp_v0_2;
 
-    indexTable = Memmap_GetSegmentVaddr(segment->tableSegment);
+    index_table = Memmap_GetSegmentVaddr(segment->tableSegment);
     var_s2 = Memmap_GetSegmentVaddr(segment->remapSegment);
     tmp = vertices;
     for(i = 0; i < segment->vertexCount; i++) {
-        if ((Model_GetVertexClass(indexTable, i) != 0) && (i == *var_s2)) {
-            temp_v0 = Model_GetVertexHeightClass(indexTable, i);
+        if ((Model_GetVertexClass(index_table, i) != 0) && (i == *var_s2)) {
+            temp_v0 = Model_GetVertexHeightClass(index_table, i);
             temp_v0_2 = &tmp->position;
             switch (temp_v0) {
             case 1:
-                temp_v0_2->base.y += yOffset;
+                temp_v0_2->base.y += y_offset;
                 break;
             case 2:
-                temp_v0_2->base.y += yOffset * 0.25f;
+                temp_v0_2->base.y += y_offset * 0.25f;
                 break;
             }
         }
@@ -286,7 +286,7 @@ void func_80035BA8(ModelSegment* segment, ModelVertex* vertices, f32 yOffset) {
 }
 
 void func_80035CCC(ModelSegment* segment, ModelVertex* vertices, f32 arg2, StadiumModel* arg3) {
-    s16* indexTable;
+    s16* index_table;
     s16* remap;
     s32 type;
     ModelVertex* vertex;
@@ -296,12 +296,12 @@ void func_80035CCC(ModelSegment* segment, ModelVertex* vertices, f32 arg2, Stadi
     f32 one = 1.0f;
     f32 quarter = 0.25f;
 
-    indexTable = Memmap_GetSegmentVaddr(segment->tableSegment);
+    index_table = Memmap_GetSegmentVaddr(segment->tableSegment);
     remap = Memmap_GetSegmentVaddr(segment->remapSegment);
     vertex = vertices;
     for (i = 0; i < segment->vertexCount; i++) {
-        if ((Model_GetVertexClass(indexTable, i) != 0) && (i == *remap)) {
-            type = Model_GetVertexHeightClass(indexTable, i);
+        if ((Model_GetVertexClass(index_table, i) != 0) && (i == *remap)) {
+            type = Model_GetVertexHeightClass(index_table, i);
             position = &vertex->position;
             switch (type) {
             case 1:
@@ -323,18 +323,18 @@ void func_80035CCC(ModelSegment* segment, ModelVertex* vertices, f32 arg2, Stadi
 
 void func_80035E48(ModelSegment* segment, ModelVertex* vertices) {
     f32 drawGroup;
-    s16* indexTable;
+    s16* index_table;
     s16* remap;
     s32 i;
     PosBlend* position;
     ModelVertex* vertex;
 
     vertex = vertices;
-    indexTable = Memmap_GetSegmentVaddr(segment->tableSegment);
+    index_table = Memmap_GetSegmentVaddr(segment->tableSegment);
     remap = Memmap_GetSegmentVaddr(segment->remapSegment);
     for (i = 0; i < segment->vertexCount; i++) {
         position = &vertex->position;
-        if ((Model_GetVertexClass(indexTable, i) != 0) && (i == *remap)) {
+        if ((Model_GetVertexClass(index_table, i) != 0) && (i == *remap)) {
             if (Math_FAbs(position->offset.x) < 9.999999747e-05f) {
                 position->offset.x = 0.0f;
             }
@@ -443,7 +443,7 @@ void func_80036064(StadiumModel* model, MtxF* mtx) {
     }
 }
 
-void Model_WriteVtxBuffer(StadiumModel* model, Vtx* vtxBuf) {
+void Model_WriteVtxBuffer(StadiumModel* model, Vtx* vtx_buf) {
     ModelSegment* segment;
     ModelVertex* mvtx;
     Vtx* vtx;
@@ -454,7 +454,7 @@ void Model_WriteVtxBuffer(StadiumModel* model, Vtx* vtxBuf) {
         return;
     }
     mvtx = &model->mvtx;
-    vtx = vtxBuf;
+    vtx = vtx_buf;
     for(i = 0; i < segment->vertexCount; i++) {
         vtx->v.ob[0] = (s16)(mvtx->position.base.x * 10.0f);
         vtx->v.ob[1] = (s16)(mvtx->position.base.y * 10.0f);

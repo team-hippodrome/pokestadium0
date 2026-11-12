@@ -16,7 +16,11 @@ extern s32 D_8A21DE08;
 extern M2C_UNK D_8A21DE10;
 extern M2C_UNK D_8A21DA80;
 
-void func_8A200020(s32 arg0, s32 arg1, BattleMon* arg2) {
+/**
+ * Draws the status condition name in its color (the fainted entry when HP is 0).
+ * @unverified Name and comment guessed from the code.
+ */
+void MonSummary_DrawStatusCondition(s32 arg0, s32 arg1, BattleMon* arg2) {
     Entry80066AA0* e;
 
     if (arg2->hp == 0) {
@@ -28,19 +32,23 @@ void func_8A200020(s32 arg0, s32 arg1, BattleMon* arg2) {
     Font_Printf(arg0, arg1, e->str);
 }
 
-void func_8A20009C(s32 arg0, s32 arg1, BattleMon* arg2, s32 arg3) {
-    BattleHud_DrawHpBarTexture(arg0 + 0x16D, arg1 + 9, 0x94, arg2->hp, arg2->unk_26);
+/**
+ * Draws HP:, L%d and %3d/%3d.
+ * @unverified Name and comment guessed from the code.
+ */
+void MonSummary_DrawHpLevel(s32 arg0, s32 arg1, BattleMon* arg2, s32 arg3) {
+    BattleHud_DrawHpBarTexture(arg0 + 0x16D, arg1 + 9, 0x94, arg2->hp, arg2->maxHp);
     Font_BeginTranslucentTextRendering();
-    func_80027F20(arg3);
+    Font_SetColorForFlags(arg3);
     Font_SetActive(0x10, 0);
-    Font_Printf(arg0 + 0x4C, arg1 + 0xD, arg2->unk_30);
+    Font_Printf(arg0 + 0x4C, arg1 + 0xD, arg2->nickname);
     Gfx_SetEnvColor(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
     Font_SetActive(4, 0);
     Font_Printf(arg0 + 0x13B, arg1 + 6, D_8A21D850);
     Font_SetActive(8, 0);
-    Font_Printf(arg0 + 0x11B, arg1 + 0x19, D_8A21D854, arg2->unk_24);
-    Font_Printf(arg0 + 0x175, arg1 + 0x19, D_8A21D858, arg2->hp, arg2->unk_26);
-    func_8A200020(arg0 + 0xD4, arg1 + 0x19, arg2);
+    Font_Printf(arg0 + 0x11B, arg1 + 0x19, D_8A21D854, arg2->level);
+    Font_Printf(arg0 + 0x175, arg1 + 0x19, D_8A21D858, arg2->hp, arg2->maxHp);
+    MonSummary_DrawStatusCondition(arg0 + 0xD4, arg1 + 0x19, arg2);
     Font_EndTexturedTextRendering();
 }
 
@@ -55,34 +63,42 @@ void UI_DrawTextureRgba16(s32 arg0, s32 arg1, s32 arg2) {
 extern Color_RGBA8 D_8A203304;
 extern Color_RGBA8 D_8A203348;
 extern Color_RGBA8 D_80073520;
-void func_8002A0AC(s32, s32, s32, s32, Color_RGBA8);
-M2C_UNK func_80029A64(s32, s32, s32, s32, Color_RGBA8);
-void func_8A200274(s32 arg0, s32 arg1, BattleMon *arg2, s32 arg3, s32 arg4, s32 *arg5) {
-    s32 pad[3];
+void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
+M2C_UNK Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
+/**
+ * Draws a Pokemon list row with its HP and level; highlights it for the selection flags.
+ * @unverified Name and comment guessed from the code.
+ */
+void MonSummary_DrawListRow(s32 arg0, s32 arg1, BattleMon *arg2, s32 arg3, s32 arg4, s32 *arg5) {
+    s32 pad[3]; // FAKE: stack padding
     s32 kind = *arg5;
     Color_RGBA8 *color;
 
     if (arg4 & 0x18) {
-        func_8002A0AC(arg0 + 3, arg1 + 3, 0x20F, 0x2D, D_8A203304);
+        Ui_FillRectHighlighted(arg0 + 3, arg1 + 3, 0x20F, 0x2D, D_8A203304);
     }
-    func_8A20009C(arg0, arg1, arg2, arg4);
+    MonSummary_DrawHpLevel(arg0, arg1, arg2, arg4);
     if (arg4 & 0x12) {
         if (kind == 2) {
             color = &D_8A203348;
         } else {
             color = &D_80073520;
         }
-        func_80029A64(arg0 + 2, arg1 + 2, 0x211, 0x2F, *color);
+        Ui_DrawRoundedFrame(arg0 + 2, arg1 + 2, 0x211, 0x2F, *color);
     }
 }
 
-void func_8A20034C(s8 *arg0, s32 arg1, s32 arg2, s32 arg3) {
-    func_8002A8C4(arg0, arg1, arg2, 0x221, 0x168);
+/**
+ * Sets up the Pokemon list window (545x360) and its menu of MonSummary_DrawListRow rows.
+ * @unverified Name and comment guessed from the code.
+ */
+void MonSummary_InitListWindow(s8 *arg0, s32 arg1, s32 arg2, s32 arg3) {
+    Window_SetRect(arg0, arg1, arg2, 0x221, 0x168);
     M2C_FIELD(arg0, s32 *, 0x24) = 0;
     M2C_FIELD(arg0, s32 *, 0x20) = 0;
     M2C_FIELD(arg0, s32 *, 0x28) = 0;
     M2C_FIELD(arg0, s32 *, 0x14) = 0x1001;
-    func_8002D880(arg0 + 0x2C, arg3, arg0 + 0x50, (M2C_UNK *)func_8A200274, 0x215, 0x33);
+    Menu_Init(arg0 + 0x2C, arg3, arg0 + 0x50, (M2C_UNK *)MonSummary_DrawListRow, 0x215, 0x33);
 }
 
 extern s8 D_8007356C;
@@ -91,18 +107,22 @@ extern Color_RGBA8 D_8A203350;
 extern Color_RGBA8 D_8A203354;
 extern char* D_8A203358;
 extern char* D_8A20335C;
-void func_8002A550(s32 x, s32 y, s32 w, s32 h, Color_RGBA8 prim, Color_RGBA8 env);
+void Ui_FillRectPrimEnvColor(s32 x, s32 y, s32 w, s32 h, Color_RGBA8 prim, Color_RGBA8 env);
 void func_800189C0(s8*, s32);
-void func_800069CC(void);
-void func_8A2003C0(s8* arg0, s32 arg1) {
+void BgStage_DrawFrame(void);
+/**
+ * Draws the Pokemon list window: divider, footer bar and the rows.
+ * @unverified Name and comment guessed from the code.
+ */
+void MonSummary_DrawListWindow(s8* arg0, s32 arg1) {
     s32 flags = 0xFFED;
     s32 i;
     s32 x;
     s32 y;
 
-    if ((M2C_FIELD(arg0, s32*, 0x28) != 2) && (func_8002AB84() == 0)) {
-        func_80029658(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0x137, M2C_FIELD(arg0, s32*, 8), &D_8007356C);
-        func_8002A550(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0x13E, M2C_FIELD(arg0, s32*, 8) - 0xC, 0x24, D_8A203350, D_8A203354);
+    if ((M2C_FIELD(arg0, s32*, 0x28) != 2) && (Particle_Field50_SetXZFromField7C_09BB4() == 0)) {
+        Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0x137, M2C_FIELD(arg0, s32*, 8), &D_8007356C);
+        Ui_FillRectPrimEnvColor(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0x13E, M2C_FIELD(arg0, s32*, 8) - 0xC, 0x24, D_8A203350, D_8A203354);
         func_8001AB6C();
         func_8001A384(0x10, 0);
         func_8001A944(M2C_FIELD(arg0, s32*, 0) + 0x36, M2C_FIELD(arg0, s32*, 4) + 0x144, (arg1 == 2) ? D_8A20335C : D_8A203358);
@@ -127,18 +147,18 @@ void func_8A2003C0(s8* arg0, s32 arg1) {
                 flags = 0xFFFD;
                 break;
         }
-        func_8002D9B8(arg0 + 0x2C, M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, flags, (s32)&arg1);
+        Menu_DrawItems(arg0 + 0x2C, M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, flags, (s32)&arg1);
     }
 
     if ((M2C_FIELD(arg0, s32*, 0x28) == 1) || (M2C_FIELD(arg0, s32*, 0x28) == 2)) {
         func_800189C0(D_8A21DA50, 0);
-        func_800069CC();
+        BgStage_DrawFrame();
         x = M2C_FIELD(arg0, s32*, 0) + 6;
         y = M2C_FIELD(arg0, s32*, 4) + 6;
         for (i = 0; i < M2C_FIELD(M2C_FIELD(arg0, s8**, 0x2C), s32*, 8); i++) {
             if (((arg1 == 1) && (i == M2C_FIELD(arg0, s32*, 0x34))) ||
                 ((arg1 == 2) && (M2C_FIELD(arg0, u16**, 0x30)[i] & 8))) {
-                func_8002A0AC(x + 0x14, y + 5, 0x28, 0x28, D_8A203304);
+                Ui_FillRectHighlighted(x + 0x14, y + 5, 0x28, 0x28, D_8A203304);
             } else {
                 gSPDisplayList(gDisplayListHead++, D_80060270);
                 func_80029028(x + 0x14, y + 5, 0x28, 0x28, D_8A203304);
@@ -149,25 +169,33 @@ void func_8A2003C0(s8* arg0, s32 arg1) {
     }
 }
 
-void func_8A200770(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4) {
+/**
+ * Draws one menu row label with the selection highlight.
+ * @unverified Name and comment guessed from the code.
+ */
+void MonSummary_DrawMenuRow(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4) {
     if (arg4 & 0x10) {
-        func_8002A0AC(arg0 + 3, arg1 + 3, 0xA2, 0x1E, D_8A203304);
+        Ui_FillRectHighlighted(arg0 + 3, arg1 + 3, 0xA2, 0x1E, D_8A203304);
     }
     Font_BeginTranslucentTextRendering();
-    func_80027F20(arg4);
+    Font_SetColorForFlags(arg4);
     Font_SetActive(0x10, 0);
     Font_Printf(arg0 + 0xC, arg1 + 6, arg2);
     Font_EndTexturedTextRendering();
 }
 
 extern u8 D_8A203364[];
-s32 func_8002D3D0(u8*);
+s32 BattleMon_CountMoves(u8* arg0);
 void func_80027804(s8*, void*, s32, s32);
-void func_8A20080C(s8 *arg0, s32 arg1, s32 arg2, u8 *arg3)
+/**
+ * Sets up the small menu window (180x132).
+ * @unverified Name and comment guessed from the code.
+ */
+void MonSummary_InitMenuWindow(s8 *arg0, s32 arg1, s32 arg2, u8 *arg3)
 {
-  s8 *new_var;
+  s8 *new_var; // FAKE: permuter temp
   s8 *sp2C;
-  func_8002A8C4(arg0, arg1, arg2, 0xB4, 0x84);
+  Window_SetRect(arg0, arg1, arg2, 0xB4, 0x84);
   *((s32 *) (((s8 *) arg0) + 0x24)) = 0;
   new_var = ((s8 *) arg0) + 0x28;
   *((s32 *) (((s8 *) arg0) + 0x20)) = 0;
@@ -176,43 +204,48 @@ void func_8A20080C(s8 *arg0, s32 arg1, s32 arg2, u8 *arg3)
   *((Color_RGBA8 *) (((s8 *) arg0) + 0x18)) = D_8A203304;
   sp2C = arg0 + 0x50;
   func_80027804(sp2C, D_8A203364, 3, 3);
-  func_8002D880(arg0 + 0x2C, sp2C, arg0 + 0x5C, (M2C_UNK *) func_8A200770, 0xA8, 0x24);
+  Menu_Init(arg0 + 0x2C, sp2C, arg0 + 0x5C, (M2C_UNK *) MonSummary_DrawMenuRow, 0xA8, 0x24);
   if ((!arg0) && (!arg0))
   {
   }
   *((s32 *) (((s8 *) arg0) + 0x4C)) |= 0x10000;
-  if (((arg3[0] > 0) && (arg3[0] < 0x98)) && (func_8002D3D0(arg3) != 0))
+  if (((arg3[0] > 0) && (arg3[0] < 0x98)) && (BattleMon_CountMoves(arg3) != 0))
   {
     return;
   }
   *(*((u16 **) (((s8 *) arg0) + 0x30))) |= 1;
 }
 
-void func_8A2008F4(s8 *arg0) {
-    if (func_8002AB84() == 0) {
-        func_8002D9B8(arg0 + 0x2C, M2C_FIELD(arg0, s32 *, 0) + 6, M2C_FIELD(arg0, s32 *, 4) + 0xC, 0xFEF, 0);
+/**
+ * Draws the menu window's items.
+ * @unverified Name and comment guessed from the code.
+ */
+void MonSummary_DrawMenu(s8 *arg0) {
+    if (Particle_Field50_SetXZFromField7C_09BB4() == 0) {
+        Menu_DrawItems(arg0 + 0x2C, M2C_FIELD(arg0, s32 *, 0) + 6, M2C_FIELD(arg0, s32 *, 4) + 0xC, 0xFEF, 0);
     }
 }
 
 extern s8 *D_800603C0;
 M2C_UNK func_8003F6AC(M2C_UNK);
-s32 func_8002DC04(s8*);
+s32 Menu_UpdateCursor(s8*);
 s32 func_8002BC14(s32);
 /**
- * Menu-list input handler (same pattern as func_8200639C / func_8900408C). Does nothing and
- * returns 0 while func_8002DC04(arg0 + 0x2C) is non-zero. Otherwise reads the input result
+ * Menu-list input handler (same pattern as FreeBattle_UpdatePopupMenu / LabTerminal_UpdateMenuWindow). Does nothing and
+ * returns 0 while Menu_UpdateCursor(arg0 + 0x2C) is non-zero. Otherwise reads the input result
  * from func_8002BC14(D_800603C0): -1 returns -1; 1 looks at the entry for the cursor index
  * stored at arg0 + 0x34 in the halfword table pointed to by arg0 + 0x30 -- if bit 0 of that
  * entry is clear it returns index + 1, if set it plays sound effect func_8003F6AC(8) and
  * returns 0; any other result returns 0. (What the table bit means -- likely "disabled"
  * -- is inferred from the sound call only.)
+ * @unverified Name guessed from the code; comment kept.
  */
-s32 func_8A20093C(s8* arg0) {
+s32 MonSummary_UpdateMenuCursor(s8* arg0) {
     s32 sp1C = 0;
     s32 dir;
     s32 idx;
 
-    if (func_8002DC04(arg0 + 0x2C) == 0) {
+    if (Menu_UpdateCursor(arg0 + 0x2C) == 0) {
         dir = func_8002BC14((s32)D_800603C0);
         if (dir == -1) {
             sp1C = -1;
@@ -236,7 +269,11 @@ extern char D_8A21D8EC[];
 extern char D_8A21D8F0[];
 extern char D_8A21D8F4[];
 extern char D_8A21D8F8[];
-void func_8A2009CC(s32 arg0, s32 arg1, BattleMon* arg2) {
+/**
+ * Draws Attack, Defense, Speed and Special.
+ * @unverified Name and comment guessed from the code.
+ */
+void MonSummary_DrawStats(s32 arg0, s32 arg1, BattleMon* arg2) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(arg0, arg1, 0xF4, 0x86, D_8A203304);
     func_8001AB6C();
@@ -247,10 +284,10 @@ void func_8A2009CC(s32 arg0, s32 arg1, BattleMon* arg2) {
     func_8001A944(arg0 + 0xE, arg1 + 0x47, D_8A21D8D4);
     func_8001A944(arg0 + 0xE, arg1 + 0x67, D_8A21D8E0);
     func_8001AA9C(((Color_RGBA8*)&D_800734A8)->r, ((Color_RGBA8*)&D_800734A8)->g, ((Color_RGBA8*)&D_800734A8)->b, ((Color_RGBA8*)&D_800734A8)->a);
-    func_8001A944(arg0 + 0x9E, arg1 + 7, D_8A21D8EC, arg2->unk_28);
-    func_8001A944(arg0 + 0x9E, arg1 + 0x27, D_8A21D8F0, arg2->unk_2A);
-    func_8001A944(arg0 + 0x9E, arg1 + 0x47, D_8A21D8F4, arg2->unk_2C);
-    func_8001A944(arg0 + 0x9E, arg1 + 0x67, D_8A21D8F8, arg2->unk_2E);
+    func_8001A944(arg0 + 0x9E, arg1 + 7, D_8A21D8EC, arg2->attack);
+    func_8001A944(arg0 + 0x9E, arg1 + 0x27, D_8A21D8F0, arg2->defense);
+    func_8001A944(arg0 + 0x9E, arg1 + 0x47, D_8A21D8F4, arg2->speed);
+    func_8001A944(arg0 + 0x9E, arg1 + 0x67, D_8A21D8F8, arg2->special);
     func_8001ABBC();
 }
 
@@ -259,7 +296,11 @@ extern char D_8A21D904[];
 extern char D_8A21D908[];
 extern char D_8A21D90C[];
 extern char D_8A21D914[];
-void func_8A200B78(s32 arg0, s32 arg1, BattleMon* arg2) {
+/**
+ * Draws No.%03d, L%d, HP %3d/%3d and じょうたい/ (status).
+ * @unverified Name and comment guessed from the code.
+ */
+void MonSummary_DrawHeader(s32 arg0, s32 arg1, BattleMon* arg2) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(arg0, arg1, 0x122, 0x90, D_8A203304);
     func_8001AB6C();
@@ -267,24 +308,28 @@ void func_8A200B78(s32 arg0, s32 arg1, BattleMon* arg2) {
     Font_EnableTwoCycleTexturing();
     func_8001A384(0x10, 0);
     Gfx_SetPrimColor(0x5A, 0x6B, 0xFF, 0xFF);
-    func_8001A944(arg0 + 0x25, arg1 + 0x1E, arg2->unk_30);
+    func_8001A944(arg0 + 0x25, arg1 + 0x1E, arg2->nickname);
     Font_DisableTwoCycleTexturing();
     func_8001A384(8, 0);
     func_8001AA9C(((Color_RGBA8*)&D_800734A8)->r, ((Color_RGBA8*)&D_800734A8)->g, ((Color_RGBA8*)&D_800734A8)->b, ((Color_RGBA8*)&D_800734A8)->a);
-    func_8001A944(arg0 + 9, arg1 + 6, D_8A21D8FC, arg2->unk_00.unk_00);
-    func_8001A944(arg0 + 0xC9, arg1 + 0x21, D_8A21D904, arg2->unk_24);
+    func_8001A944(arg0 + 9, arg1 + 6, D_8A21D8FC, arg2->species.id);
+    func_8001A944(arg0 + 0xC9, arg1 + 0x21, D_8A21D904, arg2->level);
     func_8001A944(arg0 + 0x45, arg1 + 0x44, D_8A21D908);
-    func_8001A944(arg0 + 0x8D, arg1 + 0x58, D_8A21D90C, arg2->hp, arg2->unk_26);
+    func_8001A944(arg0 + 0x8D, arg1 + 0x58, D_8A21D90C, arg2->hp, arg2->maxHp);
     func_8001AA9C(0xFF, 0xC7, 0xC7, 0xFF);
     func_8001A944(arg0 + 0x23, arg1 + 0x74, D_8A21D914);
-    func_8A200020(arg0 + 0xAF, arg1 + 0x74, arg2);
+    MonSummary_DrawStatusCondition(arg0 + 0xAF, arg1 + 0x74, arg2);
     func_8001ABBC();
-    BattleHud_DrawHpBarTexture(arg0 + 0x85, arg1 + 0x48, 0x94, arg2->hp, arg2->unk_26);
+    BattleHud_DrawHpBarTexture(arg0 + 0x85, arg1 + 0x48, 0x94, arg2->hp, arg2->maxHp);
 }
 
-void func_8A200D44(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
+/**
+ * Draws the name of the species' type 1 or 2 in its type color; nothing for a missing type 2.
+ * @unverified Name and comment guessed from the code.
+ */
+void MonSummary_DrawTypeName(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     Color82000BC4 c;
-    s32 idx = func_8002D498(arg3, arg4);
+    s32 idx = Pokemon_GetTypeIndex(arg3, arg4);
 
     if (idx != -1) {
         c = D_80066AD8[idx].color;
@@ -310,24 +355,28 @@ extern char D_8A21D96C[];
 extern char D_8A21D974[];
 extern char D_8A21D978[];
 extern char D_8A21D97C[];
-void func_8002A550(s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
+void Ui_FillRectPrimEnvColor(s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
 s32 func_8A20219C(s32, s32);
-void func_8A200DE0(s32 arg0, s32 arg1, s32 arg2) {
-    s32 nextLevel;
-    s32 toNext;
+/**
+ * Draws Type 1/2, ID No., おやのなまえ (OT name), けいけんち (Exp) and the Exp to the next level.
+ * @unverified Name and comment guessed from the code.
+ */
+void MonSummary_DrawTrainerInfo(s32 arg0, s32 arg1, s32 arg2) {
+    s32 next_level;
+    s32 to_next;
 
-    if (((BattleMon*)arg2)->unk_24 == 100) {
-        nextLevel = 100;
+    if (((BattleMon*)arg2)->level == 100) {
+        next_level = 100;
     } else {
-        nextLevel = ((BattleMon*)arg2)->unk_24 + 1;
+        next_level = ((BattleMon*)arg2)->level + 1;
     }
-    toNext = func_8A20219C(((BattleMon*)arg2)->unk_00.unk_00, nextLevel) - ((BattleMon*)arg2)->unk_10;
-    func_8002A550(arg0, arg1, 0x122, 0xC8, D_8A203370, D_8A203374);
+    to_next = func_8A20219C(((BattleMon*)arg2)->species.id, next_level) - ((BattleMon*)arg2)->unk_10;
+    Ui_FillRectPrimEnvColor(arg0, arg1, 0x122, 0xC8, D_8A203370, D_8A203374);
     func_8001AB6C();
     func_8001A384(8, 0);
     func_8001AA9C(0xFF, 0xDA, 0xC7, 0xFF);
     func_8001A944(arg0 + 0x37, arg1 + 0xC, D_8A21D920);
-    if (func_8002D498(arg2, 1) != -1) {
+    if (Pokemon_GetTypeIndex(arg2, 1) != -1) {
         func_8001A944(arg0 + 0x37, arg1 + 0x28, D_8A21D92C);
     }
     func_8001AA9C(0xFF, 0xFF, 0xC7, 0xFF);
@@ -344,11 +393,11 @@ void func_8A200DE0(s32 arg0, s32 arg1, s32 arg2) {
     func_8001A944(arg0 + 0xAF, arg1 + 0x4C, D_8A21D96C, ((BattleMon*)arg2)->unk_0E);
     func_8001A944(arg0 + 0xAF, arg1 + 0x68, (char*)arg2 + 0x40);
     func_8001A944(arg0 + 0x87, arg1 + 0x8C, D_8A21D974, ((BattleMon*)arg2)->unk_10);
-    func_8001A944(arg0 + 0x40, arg1 + 0xA8, D_8A21D978, toNext);
-    func_8001A944(arg0 + 0xD7, arg1 + 0xA8, D_8A21D97C, nextLevel);
+    func_8001A944(arg0 + 0x40, arg1 + 0xA8, D_8A21D978, to_next);
+    func_8001A944(arg0 + 0xD7, arg1 + 0xA8, D_8A21D97C, next_level);
     func_8001ABBC();
-    func_8A200D44(arg0 + 0xAF, arg1 + 0xC, 8, arg2, 0);
-    func_8A200D44(arg0 + 0xAF, arg1 + 0x28, 8, arg2, 1);
+    MonSummary_DrawTypeName(arg0 + 0xAF, arg1 + 0xC, 8, arg2, 0);
+    MonSummary_DrawTypeName(arg0 + 0xAF, arg1 + 0x28, 8, arg2, 1);
 }
 
 typedef struct Entry8006A9D4 {
@@ -375,9 +424,9 @@ extern Color_RGBA8 D_8A203378;
 extern Color_RGBA8 D_8A20337C;
 extern char D_8A21D980[];
 extern char D_8A21D990[];
-void func_8002A3F8(s32, s32, s32);
+void Ui_DrawImageInStrips(s32, s32, s32);
 
-s32 func_8002D430(u8*, s32);
+s32 BattleMon_GetMoveIndex(u8*, s32);
 u32 func_800566BC(const char*);
 void func_8A2010C8(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 pad; // FAKE
@@ -393,16 +442,16 @@ void func_8A2010C8(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 cur;
     s32 max;
 
-    func_8002A550(arg0, arg1, 0x21C, 0x86, D_8A203378, D_8A20337C);
-    count = func_8002D3D0((u8*)arg2);
+    Ui_FillRectPrimEnvColor(arg0, arg1, 0x21C, 0x86, D_8A203378, D_8A20337C);
+    count = BattleMon_CountMoves((u8*)arg2);
     for (i = 0; i < count; i++) {
         hl = 0;
         if (arg3 == i) {
-            func_80029A64(D_8A203384[i].boxX + arg0, D_8A203384[i].boxY + arg1, 0xD0, 0x30, D_80073520);
+            Ui_DrawRoundedFrame(D_8A203384[i].boxX + arg0, D_8A203384[i].boxY + arg1, 0xD0, 0x30, D_80073520);
             hl = 2;
         }
-        func_8002A3F8(D_8A203384[i].icon, D_8A203384[i].iconX + arg0, D_8A203384[i].iconY + arg1);
-        move = func_8002D430((u8*)arg2, i);
+        Ui_DrawImageInStrips(D_8A203384[i].icon, D_8A203384[i].iconX + arg0, D_8A203384[i].iconY + arg1);
+        move = BattleMon_GetMoveIndex((u8*)arg2, i);
         func_8001AB6C();
         if (move == -2) {
             str = D_8A21D980;
@@ -421,14 +470,14 @@ void func_8A2010C8(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
         func_8001ABBC();
         if (move != -2) {
             cur = ((u8*)arg2)[i + 0x20];
-            step = gMoveData[move].unk_05 / 5;
+            step = gMoveData[move].pp / 5;
             if (step >= 7) {
                 step = 7;
             }
-            max = gMoveData[move].unk_05 + step * (cur >> 6);
+            max = gMoveData[move].pp + step * (cur >> 6);
             func_8001AB6C();
             func_8001A384(4, 0);
-            func_80027F20(hl);
+            Font_SetColorForFlags(hl);
             func_8001A944(D_8A203384[i].ppX + arg0, D_8A203384[i].ppY + arg1, D_8A21D990, cur & 0x3F, max);
             func_8001ABBC();
         }
@@ -436,7 +485,11 @@ void func_8A2010C8(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
 }
 
 
-void func_8A201394(s32 arg0, s32 arg1, BattleMon* arg2) {
+/**
+ * Draws the species name banner.
+ * @unverified Name and comment guessed from the code.
+ */
+void MonSummary_DrawSpeciesName(s32 arg0, s32 arg1, BattleMon* arg2) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(arg0, arg1, 0x122, 0x4E, D_8A203304);
     func_8001AB6C();
@@ -444,19 +497,19 @@ void func_8A201394(s32 arg0, s32 arg1, BattleMon* arg2) {
     func_8001ABE8();
     func_8001A384(0x10, 0);
     func_8001AAE4(0x5A, 0x6B, 0xFF, 0xFF);
-    func_8001A944(arg0 + 0x25, arg1 + 0x1E, *(char**)D_80064C44[arg2->unk_00.unk_00]);
+    func_8001A944(arg0 + 0x25, arg1 + 0x1E, *(char**)D_80064C44[arg2->species.id]);
     func_8001AC3C();
     func_8001A384(8, 0);
     func_8001AA9C(((Color_RGBA8*)&D_800734A8)->r, ((Color_RGBA8*)&D_800734A8)->g, ((Color_RGBA8*)&D_800734A8)->b, ((Color_RGBA8*)&D_800734A8)->a);
-    func_8001A944(arg0 + 9, arg1 + 6, "No.%03d", arg2->unk_00.unk_00);
-    func_8001A944(arg0 + 0xC9, arg1 + 0x21, "L%d", arg2->unk_24);
+    func_8001A944(arg0 + 9, arg1 + 6, "No.%03d", arg2->species.id);
+    func_8001A944(arg0 + 0xC9, arg1 + 0x21, "L%d", arg2->level);
     func_8001A384(4, 0);
-    func_8001A944(arg0 + 9, arg1 + 0x3C, "タイプ");
+    func_8001A944(arg0 + 9, arg1 + 0x3C, "タイプ"); // "Type"
     func_8001A944(arg0 + 0x4F, arg1 + 0x3C, "1/");
-    if (func_8002D498((s32)arg2, 1) != -1) {
+    if (Pokemon_GetTypeIndex((s32)arg2, 1) != -1) {
         func_8001A944(arg0 + 0xB9, arg1 + 0x3C, "2/");
     }
-    func_8A200D44(arg0 + 0x6F, arg1 + 0x3C, 4, (s32)arg2, 0);
-    func_8A200D44(arg0 + 0xD9, arg1 + 0x3C, 4, (s32)arg2, 1);
+    MonSummary_DrawTypeName(arg0 + 0x6F, arg1 + 0x3C, 4, (s32)arg2, 0);
+    MonSummary_DrawTypeName(arg0 + 0xD9, arg1 + 0x3C, 4, (s32)arg2, 1);
     func_8001ABBC();
 }

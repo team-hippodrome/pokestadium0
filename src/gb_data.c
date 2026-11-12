@@ -63,7 +63,7 @@ u16 Pokemon_LevelFromExp(s32 arg0, u32 arg1);
 void Pokemon_PrepareBattleMon(BattleMon* arg0);
 u8 Move_GetIdFromTableIndex(s32 tm_hm_index);
 u8 func_80020984(s32 arg0);
-u8 func_80020994(s32 arg0);
+u8 Species_FromInternalIndex(s32 arg0);
 void Deck_InitializeSaveBackend(DeckHandle* arg0);
 void Deck_InitializeBoxBackend(DeckHandle* arg0);
 DeckHandle* Deck_Open(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
@@ -73,7 +73,7 @@ s32 Deck_CloseAndFlushBox(DeckHandle* arg0);
 char* Text_UntranscodeName(char* arg0, char* arg1);
 s8* Text_CopyString(s8* arg0, s8* arg1);
 void Pokemon_FromGbRecord(BattleMon* arg0, GbPokemonRecord* arg1);
-void Pokemon_ToGbRecord(BattleMon* arg0, GbPokemonRecord* arg1);
+void Pokemon_ToGbRecord(s8 *arg0, s8 *arg1);
 s32 Deck_WriteEntries(u8* arg0, s32 arg1, DeckHandle* arg2);
 s32 GbSave_HasPlayerNameMarker(u8* arg0);
 s32 Deck_GetCapacity(s32 arg0);
@@ -102,6 +102,11 @@ void GbData_WriteU24BE(u8* arg0, s32 arg1) {
 
 extern char* D_80076FD0_jp;
 extern u16 D_80076FD4_jp[0x100];
+/**
+ * Converts a Game Boy name (terminated by 0x50) to EUC-JP; code 0x5D expands to the
+ * 10-byte trainer name D_80076FD0_jp points at.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 char* Text_UntranscodeName(char* arg0, char* arg1) {
     char* sp34 = arg0;
 
@@ -121,6 +126,11 @@ char* Text_UntranscodeName(char* arg0, char* arg1) {
     return sp34;
 }
 
+/**
+ * Converts an EUC-JP name back to Game Boy character codes by searching D_80076FD4_jp;
+ * the full-width space 0xA1A1 becomes 0x7F.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 char* Text_TranscodeName(char* arg0, char* arg1) {
     char* sp1C = arg0;
     s32 i;
@@ -160,6 +170,11 @@ char* Text_UntranscodeFixedName(char* arg0, char* arg1) {
     return Text_UntranscodeName(arg0, sp18);
 }
 
+/**
+ * Copies a two-byte EUC-JP string, clearing bit 0 of the first byte of katakana ヘ, ベ, ペ
+ * (0xA5D8-0xA5DA) and リ (0xA5EA), which turns them into hiragana へ, べ, ぺ, り.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s8* Text_CopyString(s8* arg0, s8* arg1) {
     s8* ret = arg0;
     u16 c;
@@ -210,7 +225,7 @@ s32 func_8001FAC8(s8 *);                          /* extern */
 M2C_UNK func_80056690(s8 *, s8 *, M2C_UNK);     /* extern */
 
 void func_8001FE84(s8 *arg0, s8 *arg1) {
-    M2C_FIELD(arg0, s8 *, 0) = func_80020994(M2C_FIELD(arg1, u8 *, 0));
+    M2C_FIELD(arg0, s8 *, 0) = Species_FromInternalIndex(M2C_FIELD(arg1, u8 *, 0));
     M2C_FIELD(arg0, s8 *, 1) = 0;
     M2C_FIELD(arg0, s16 *, 2) = func_8001FAB0(arg1 + 1);
     M2C_FIELD(arg0, u8 *, 4) = (u8) M2C_FIELD(arg1, u8 *, 3);
@@ -232,19 +247,19 @@ void func_8001FE84(s8 *arg0, s8 *arg1) {
 
 void Pokemon_FromGbRecordExt(BattleMon* arg0, GbPokemonRecordExt* arg1) {
     Pokemon_FromGbRecord(arg0, &arg1->unk_00);
-    arg0->unk_24 = arg1->unk_21;
-    arg0->unk_26 = GbData_ReadU16BE(arg1->unk_22);
-    arg0->unk_28 = GbData_ReadU16BE(arg1->unk_24);
-    arg0->unk_2A = GbData_ReadU16BE(arg1->unk_26);
-    arg0->unk_2C = GbData_ReadU16BE(arg1->unk_28);
-    arg0->unk_2E = GbData_ReadU16BE(arg1->unk_2A);
+    arg0->level = arg1->unk_21;
+    arg0->maxHp = GbData_ReadU16BE(arg1->unk_22);
+    arg0->attack = GbData_ReadU16BE(arg1->unk_24);
+    arg0->defense = GbData_ReadU16BE(arg1->unk_26);
+    arg0->speed = GbData_ReadU16BE(arg1->unk_28);
+    arg0->special = GbData_ReadU16BE(arg1->unk_2A);
 }
 
 M2C_UNK func_8001FAE8(s8 *, u16);                 /* extern */
 M2C_UNK func_8001FAF8(s8 *, s32);                 /* extern */
 M2C_UNK func_80056690(s8 *, s8 *, M2C_UNK);     /* extern */
 
-void func_8001FFE8(s8 *arg0, s8 *arg1) {
+void Pokemon_ToGbRecord(s8 *arg0, s8 *arg1) {
     M2C_FIELD(arg1, s8 *, 0) = func_80020984(M2C_FIELD(arg0, u8 *, 0));
     func_8001FAE8(arg1 + 1, M2C_FIELD(arg0, u16 *, 2));
     M2C_FIELD(arg1, u8 *, 3) = (u8) M2C_FIELD(arg0, u8 *, 4);
@@ -266,12 +281,12 @@ void func_8001FFE8(s8 *arg0, s8 *arg1) {
 
 void Pokemon_ToGbRecordExt(unk_func_88205880_00D0* arg0, GbPokemonRecordExt* arg1) {
     Pokemon_ToGbRecord(arg0->unk_000, arg1);
-    arg1->unk_21 = arg0->unk_000[0].unk_24;
-    GbData_WriteU16BE(arg1->unk_22, arg0->unk_000[0].unk_26);
-    GbData_WriteU16BE(arg1->unk_24, arg0->unk_000[0].unk_28);
-    GbData_WriteU16BE(arg1->unk_26, arg0->unk_000[0].unk_2A);
-    GbData_WriteU16BE(arg1->unk_28, arg0->unk_000[0].unk_2C);
-    GbData_WriteU16BE(arg1->unk_2A, arg0->unk_000[0].unk_2E);
+    arg1->unk_21 = arg0->unk_000[0].level;
+    GbData_WriteU16BE(arg1->unk_22, arg0->unk_000[0].maxHp);
+    GbData_WriteU16BE(arg1->unk_24, arg0->unk_000[0].attack);
+    GbData_WriteU16BE(arg1->unk_26, arg0->unk_000[0].defense);
+    GbData_WriteU16BE(arg1->unk_28, arg0->unk_000[0].speed);
+    GbData_WriteU16BE(arg1->unk_2A, arg0->unk_000[0].special);
 }
 
 u16 StatExpSqrt(u16 square) {
@@ -288,88 +303,88 @@ u16 StatExpSqrt(u16 square) {
 void func_80020188(void) {
 }
 
-u16 GetPokemonDV(s32 statId, u16 dvBits) { //GetPokemonDV
-    u16 dvValue;
+u16 GetPokemonDV(s32 stat_id, u16 dv_bits) { //GetPokemonDV
+    u16 dv_value;
 
-    switch (statId) {
+    switch (stat_id) {
         case STAT_HP: // HP DV (derived from the LSBs of other DVs)
-            dvValue = ((dvBits & 0x1000) >> 9)  // Special DV bit 0 → HP DV bit 0
-                    | ((dvBits & 0x0100) >> 6)  // Speed DV bit 0 → HP DV bit 1
-                    | ((dvBits & 0x0010) >> 3)  // Defense DV bit 0 → HP DV bit 2
-                    | (dvBits & 0x0001);        // Attack DV bit 0 → HP DV bit 3
+            dv_value = ((dv_bits & 0x1000) >> 9)  // Special DV bit 0 → HP DV bit 0
+                    | ((dv_bits & 0x0100) >> 6)  // Speed DV bit 0 → HP DV bit 1
+                    | ((dv_bits & 0x0010) >> 3)  // Defense DV bit 0 → HP DV bit 2
+                    | (dv_bits & 0x0001);        // Attack DV bit 0 → HP DV bit 3
             break;
 
         case STAT_SPECIAL: // Special DV
-            dvValue = (dvBits >> 12) & 0xF;
+            dv_value = (dv_bits >> 12) & 0xF;
             break;
 
         case STAT_SPEED: // Speed DV
-            dvValue = (dvBits >> 8) & 0xF;
+            dv_value = (dv_bits >> 8) & 0xF;
             break;
 
         case STAT_DEFENSE: // Defense DV
-            dvValue = (dvBits >> 4) & 0xF;
+            dv_value = (dv_bits >> 4) & 0xF;
             break;
 
         case STAT_ATTACK: // Attack DV
-            dvValue = dvBits & 0xF;
+            dv_value = dv_bits & 0xF;
             break;
     }
 
-    return dvValue;
+    return dv_value;
 }
 
-u32 CalculateStatValue(s32 statId, s32 speciesId, u16 statModifier, u16 level, u16 dvBits) {
-    u16 statValue;
-    u16 baseStat;
-    u16 dvValue;
+u32 CalculateStatValue(s32 stat_id, s32 species_id, u16 stat_modifier, u16 level, u16 dv_bits) {
+    u16 stat_value;
+    u16 base_stat;
+    u16 dv_value;
 
-    switch (statId) {
+    switch (stat_id) {
         case STAT_HP:
-            baseStat = gBaseStats[speciesId].baseHP;
+            base_stat = gBaseStats[species_id].baseHP;
             break;
         case STAT_SPECIAL:
-            baseStat = gBaseStats[speciesId].baseSpecial;
+            base_stat = gBaseStats[species_id].baseSpecial;
             break;
         case STAT_SPEED:
-            baseStat = gBaseStats[speciesId].baseSpeed;
+            base_stat = gBaseStats[species_id].baseSpeed;
             break;
         case STAT_DEFENSE:
-            baseStat = gBaseStats[speciesId].baseDefense;
+            base_stat = gBaseStats[species_id].baseDefense;
             break;
         case STAT_ATTACK:
-            baseStat = gBaseStats[speciesId].baseAttack;
+            base_stat = gBaseStats[species_id].baseAttack;
             break;
     }
 
     // Get the Pokémon's DV for the stat (or HP DV)
-    dvValue = GetPokemonDV(statId, dvBits);
+    dv_value = GetPokemonDV(stat_id, dv_bits);
 
     // Compute the preliminary stat value
-    statValue = (((StatExpSqrt(statModifier) / 4) + ((baseStat + dvValue) * 2)) * level) / 100;
+    stat_value = (((StatExpSqrt(stat_modifier) / 4) + ((base_stat + dv_value) * 2)) * level) / 100;
 
     // Add final adjustments
-    if (statId == STAT_HP) {
-        statValue += level + 10;
+    if (stat_id == STAT_HP) {
+        stat_value += level + 10;
     } else {
-        statValue += 5;
+        stat_value += 5;
     }
 
     // Cap at 999
-    if (statValue > 999) {
-        statValue = 999;
+    if (stat_value > 999) {
+        stat_value = 999;
     }
 
-    return statValue;
+    return stat_value;
 }
 
 void Pokemon_RecalcStats(BattleMon* arg0) {
-    arg0->unk_24 = Pokemon_LevelFromExp(arg0->unk_00.unk_00, arg0->unk_10);
-    arg0->unk_26 = CalculateStatValue(1, arg0->unk_00.unk_00, arg0->unk_14, arg0->unk_24, arg0->unk_1E);
-    arg0->unk_28 = CalculateStatValue(2, arg0->unk_00.unk_00, arg0->unk_16, arg0->unk_24, arg0->unk_1E);
-    arg0->unk_2A = CalculateStatValue(3, arg0->unk_00.unk_00, arg0->unk_18, arg0->unk_24, arg0->unk_1E);
-    arg0->unk_2C = CalculateStatValue(4, arg0->unk_00.unk_00, arg0->unk_1A, arg0->unk_24, arg0->unk_1E);
-    arg0->unk_2E = CalculateStatValue(5, arg0->unk_00.unk_00, arg0->unk_1C, arg0->unk_24, arg0->unk_1E);
+    arg0->level = Pokemon_LevelFromExp(arg0->species.id, arg0->unk_10);
+    arg0->maxHp = CalculateStatValue(1, arg0->species.id, arg0->unk_14, arg0->level, arg0->unk_1E);
+    arg0->attack = CalculateStatValue(2, arg0->species.id, arg0->unk_16, arg0->level, arg0->unk_1E);
+    arg0->defense = CalculateStatValue(3, arg0->species.id, arg0->unk_18, arg0->level, arg0->unk_1E);
+    arg0->speed = CalculateStatValue(4, arg0->species.id, arg0->unk_1A, arg0->level, arg0->unk_1E);
+    arg0->special = CalculateStatValue(5, arg0->species.id, arg0->unk_1C, arg0->level, arg0->unk_1E);
 }
 
 u16 Pokemon_StatExpForTarget(s32 arg0, s32 arg1, u16 arg2, u16 arg3, u16 arg4) {
@@ -441,12 +456,12 @@ void Pokemon_PrepareBattleMon(BattleMon* arg0) {
 
     Pokemon_RecalcStats(arg0);
     arg0->statusCondition = 0;
-    arg0->hp = arg0->unk_26;
+    arg0->hp = arg0->maxHp;
 
     for (i = 0; i < 4; i++) {
-        if (arg0->unk_09[i] != 0) {
-            temp_a3 = (arg0->unk_20[i] >> 6) & 3;
-            var_v0 = gMoveData[arg0->unk_09[i] - 1].unk_05;
+        if (arg0->moves[i] != 0) {
+            temp_a3 = (arg0->pp[i] >> 6) & 3;
+            var_v0 = gMoveData[arg0->moves[i] - 1].pp;
 
             if (var_v0 >= 0x28) {
                 var_v0 = var_v0 + (temp_a3 * 7);
@@ -454,7 +469,7 @@ void Pokemon_PrepareBattleMon(BattleMon* arg0) {
                 var_v0 = var_v0 + ((var_v0 / 5) * temp_a3);
             }
 
-            arg0->unk_20[i] = (temp_a3 << 6) + var_v0;
+            arg0->pp[i] = (temp_a3 << 6) + var_v0;
         }
     }
 }
@@ -471,7 +486,7 @@ u8 func_80020984(s32 arg0) {
     return D_8006B8FB[arg0];
 }
 
-u8 func_80020994(s32 arg0) {
+u8 Species_FromInternalIndex(s32 arg0) {
     extern u8 D_8006B993[];
 
     return D_8006B993[arg0];

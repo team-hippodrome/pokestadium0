@@ -44,7 +44,7 @@ void func_80022188(s32);
 void func_800230C4(s32);
 void func_800243B8(void);
 void func_8002D7D4(s32);
-void func_8900A1CC(s8* arg0);
+void PcBox_DrawScreen(s8* arg0);
 
 void func_890070BC(s8* arg0) {
     s32 any;
@@ -79,7 +79,7 @@ void func_890070BC(s8* arg0) {
         func_800230C4(D_89019108);
         if (func_8002207C(D_89019108) == 0) {
             func_8002D7D4(D_89019108);
-            func_8900A1CC(arg0);
+            PcBox_DrawScreen(arg0);
         }
         func_80022188(D_89019108);
     }
@@ -88,7 +88,11 @@ void func_890070BC(s8* arg0) {
     }
 }
 
-s32 func_8900721C(s32 arg0, s32 arg1, s32 arg2, s8* arg3, s32 arg4) {
+/**
+ * Opens deck (`arg0`, `arg1`, `arg2`), reads `arg4` entries into `arg3`, closes it and returns the read count.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 PcBox_ReadDeck(s32 arg0, s32 arg1, s32 arg2, s8* arg3, s32 arg4) {
     s32 sp1C;
     DeckHandle* sp18;
 
@@ -98,14 +102,14 @@ s32 func_8900721C(s32 arg0, s32 arg1, s32 arg2, s8* arg3, s32 arg4) {
     return sp1C;
 }
 
-s32 func_8900721C(M2C_UNK, M2C_UNK, s32, s8 *, s32); /* extern */
+s32 PcBox_ReadDeck(M2C_UNK, M2C_UNK, s32, s8 *, s32); /* extern */
 void func_89007264(s8 *arg0, M2C_UNK arg1, M2C_UNK arg2, s32 arg3)
 {
   s32 temp_v0;
-  s32 *new_var2;
-  int new_var;
+  s32 *new_var2; // FAKE: permuter temp
+  int new_var; // FAKE: permuter temp
   s32 var_s0;
-  arg0 = arg0;
+  arg0 = arg0; // FAKE: self-assignment
   new_var = 0;
   new_var = arg3 > new_var;
   var_s0 = 0;
@@ -113,7 +117,7 @@ void func_89007264(s8 *arg0, M2C_UNK arg1, M2C_UNK arg2, s32 arg3)
   {
     do
     {
-      temp_v0 = func_8900721C(arg1, arg2, var_s0, arg0, 0x1E);
+      temp_v0 = PcBox_ReadDeck(arg1, arg2, var_s0, arg0, 0x1E);
       var_s0 += 1;
       arg0 += 0x964;
       new_var2 = (s32 *) (((s8 *) arg0) + (-4));
@@ -128,7 +132,10 @@ typedef struct LabPCBoxEntry {
     /* 0x4 */ s32 unk_04;
 } LabPCBoxEntry; // size = 0x8
 
-s32 func_890072E4(s8* arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+s32 LabPC_NoEmptyBoxAvailable(s8* arg0) {
     s32 i;
     LabPCBoxEntry* var_a0 = M2C_FIELD(arg0, LabPCBoxEntry**, 0);
 
@@ -141,7 +148,10 @@ s32 func_890072E4(s8* arg0) {
     return 1;
 }
 
-s32 func_8900732C(s8* arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+s32 LabPC_AllBoxesEmpty(s8* arg0) {
     s32 i;
     LabPCBoxEntry* var_a0 = M2C_FIELD(arg0, LabPCBoxEntry**, 0);
 
@@ -154,23 +164,27 @@ s32 func_8900732C(s8* arg0) {
     return 1;
 }
 
-void func_8002A8C4(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
-void func_8002AE94(s8* arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 arg4, char* arg5);
+void Window_SetRect(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+void Window_InitLabeled(s8* arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 arg4, char* arg5);
 M2C_UNK func_8000B2F4(s32);
 extern s32 D_800603C0;
 extern u8 D_8900A870[];
 extern char D_89018E60[];
 extern char D_89018E68[];
-void func_89007374(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, u16 *arg6) {
-    func_8002A8C4(arg0, arg1, arg2, 0x1AE, 0x124);
+/**
+ * Sets up the confirm window (430x292) with its labeled Yes/No buttons.
+ * @unverified Name and comment guessed from the code.
+ */
+void PcBox_InitConfirmWindow(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, u16 *arg6) {
+    Window_SetRect(arg0, arg1, arg2, 0x1AE, 0x124);
     M2C_FIELD(arg0, s32 *, 0x24) = 0;
     M2C_FIELD(arg0, s32 *, 0x20) = 0;
     M2C_FIELD(arg0, s32 *, 0x28) = 0;
     M2C_FIELD(arg0, s32 *, 0x14) = 0x1001;
-    func_8002AE94(arg0 + 0x2C, M2C_FIELD(arg0, s32 *, 0) + 0x10A, M2C_FIELD(arg0, s32 *, 4) + 0x100, 0x48, *(Color_RGBA8 *)D_8900A870, D_89018E60);
+    Window_InitLabeled(arg0 + 0x2C, M2C_FIELD(arg0, s32 *, 0) + 0x10A, M2C_FIELD(arg0, s32 *, 4) + 0x100, 0x48, *(Color_RGBA8 *)D_8900A870, D_89018E60);
     M2C_FIELD(arg0, s32 *, 0x58) = 0xA;
     M2C_FIELD(arg0, s32 *, 0x60) = 0xC;
-    func_8002AE94(arg0 + 0x68, M2C_FIELD(arg0, s32 *, 0) + 0x15A, M2C_FIELD(arg0, s32 *, 4) + 0x100, 0x48, *(Color_RGBA8 *)D_8900A870, D_89018E68);
+    Window_InitLabeled(arg0 + 0x68, M2C_FIELD(arg0, s32 *, 0) + 0x15A, M2C_FIELD(arg0, s32 *, 4) + 0x100, 0x48, *(Color_RGBA8 *)D_8900A870, D_89018E68);
     M2C_FIELD(arg0, s32 *, 0xAC) = 2;
     M2C_FIELD(arg0, s32 *, 0xA8) = 0;
     M2C_FIELD(arg0, s32 *, 0xA4) = D_800603C0;
@@ -198,7 +212,7 @@ typedef struct Entry80066AD8 {
     Color890075E0 color;
 } Entry80066AD8;
 extern Entry80066AD8 D_80066AD8[];
-s32 func_8002D498(s32, s32);
+s32 Pokemon_GetTypeIndex(s32, s32);
 void func_8001AB6C(void);
 void func_8001A384(s32, s32);
 void func_8001ABBC(void);
@@ -216,7 +230,11 @@ extern M2C_UNK D_800734A8;
 extern char D_89018E70[];
 u32 func_800566BC(const char*);
 
-void func_890074E0(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
+/**
+ * Draws a move name in its type color, or the empty label for -2.
+ * @unverified Name and comment guessed from the code.
+ */
+void PcBox_DrawMoveName(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     Entry8006A9D4* entry;
     const char* str;
     Color890075E0* c;
@@ -238,9 +256,13 @@ void func_890074E0(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
 }
 
 
-void func_890075E0(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
+/**
+ * Draws the name of the species' type 1 or 2 in its type color; nothing for a missing type 2.
+ * @unverified Name and comment guessed from the code.
+ */
+void PcBox_DrawTypeName(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     Color890075E0 c;
-    s32 idx = func_8002D498(arg2, arg3);
+    s32 idx = Pokemon_GetTypeIndex(arg2, arg3);
 
     if (idx != -1) {
         c = D_80066AD8[idx].color;
@@ -309,7 +331,7 @@ extern char D_89018ED8[];
 extern char D_89018EDC[];
 extern char D_89018EE0[];
 extern char D_89018EE4[];
-void func_800069CC();
+void BgStage_DrawFrame(void);
 void func_80019008(s32, Mon89007678*, s32);
 u8* func_800196F8(s32);
 void func_8001AAE4(u8, u8, u8, u8);
@@ -317,28 +339,32 @@ void func_8001ABE8(void);
 void func_8001AC3C(void);
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 void func_80029028(s32, s32, s32, s32, Color_RGBA8);
-void func_80029658(s32, s32, s32, u8*);
-void func_8002A550(s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
+void Ui_DrawTexturedDivider(s32, s32, s32, u8*);
+void Ui_FillRectPrimEnvColor(s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
 s32 func_8002AE6C();
-void func_8002AF04(char*, s32);
-s32 func_8002D3D0(Mon89007678*);
-s32 func_8002D430(Mon89007678*, s32);
-void func_89007678(Screen89007678* arg0) {
+void Window_DrawLabeled(char*, s32);
+s32 BattleMon_CountMoves(u8* arg0);
+s32 BattleMon_GetMoveIndex(Mon89007678*, s32);
+/**
+ * Draws a Pokemon's status window: LV, HP, Type 1/2, Attack, Defense, Speed, Special.
+ * @unverified Name and comment guessed from the code.
+ */
+void PcBox_DrawMonStatusWindow(Screen89007678* arg0) {
     s32 y = arg0->y + 6;
     s32 x = arg0->x + 6;
-    s32 count = func_8002D3D0(arg0->mon);
+    s32 count = BattleMon_CountMoves(arg0->mon);
     s32 i;
     s32 n;
     s32 row;
     u8* tex;
 
     if (func_8002AE6C(arg0) == 0) {
-        func_80029658(arg0->x, arg0->y + 0xF3, arg0->w, D_8007356C);
+        Ui_DrawTexturedDivider(arg0->x, arg0->y + 0xF3, arg0->w, D_8007356C);
         gSPDisplayList(gDisplayListHead++, D_80060270);
         func_80029028(x, y, arg0->w - 0xC, 0x20, D_8900A874);
         func_80029028(x + 0x78, y + 0x20, arg0->w - 0x84, 0x78, D_8900A878);
         func_80029028(x, y + 0xF4, arg0->w - 0xC, 0x24, *(Color_RGBA8*)&D_8900A5BC);
-        func_8002A550(x, y + 0x98, arg0->w - 0xC, 0x56, D_8900A87C, D_8900A880);
+        Ui_FillRectPrimEnvColor(x, y + 0x98, arg0->w - 0xC, 0x56, D_8900A87C, D_8900A880);
         func_8001AB6C();
         func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF);
         func_8001A384(8, 0);
@@ -354,7 +380,7 @@ void func_89007678(Screen89007678* arg0) {
         func_8001A944(x + 0xB2, y + 5, D_89018E88, arg0->mon->level);
         func_8001A944(x + 0x140, y + 5, D_89018E8C, arg0->mon->maxHp);
         func_8001A944(x + 0x88, y + 0x28, D_89018E90);
-        if (func_8002D498((s32)arg0->mon, 1) != -1) {
+        if (Pokemon_GetTypeIndex((s32)arg0->mon, 1) != -1) {
             func_8001A944(x + 0x88, y + 0x64, D_89018E9C);
         }
         func_8001A944(x + 0x102, y + 0x28, D_89018EA8);
@@ -366,11 +392,11 @@ void func_89007678(Screen89007678* arg0) {
         func_8001A944(x + 0x15C, y + 0x60, D_89018EE0, arg0->mon->speed);
         func_8001A944(x + 0x15C, y + 0x7C, D_89018EE4, arg0->mon->special);
         for (i = 0; i < count; i++) {
-            func_890074E0(D_8900A884[i].x + x, D_8900A884[i].y + y, func_8002D430(arg0->mon, i), D_8900A884[i].centered);
+            PcBox_DrawMoveName(D_8900A884[i].x + x, D_8900A884[i].y + y, BattleMon_GetMoveIndex(arg0->mon, i), D_8900A884[i].centered);
         }
         func_8001ABBC();
-        func_890075E0(x + 0x9C, y + 0x40, (s32)arg0->mon, 0);
-        func_890075E0(x + 0x9C, y + 0x7C, (s32)arg0->mon, 1);
+        PcBox_DrawTypeName(x + 0x9C, y + 0x40, (s32)arg0->mon, 0);
+        PcBox_DrawTypeName(x + 0x9C, y + 0x7C, (s32)arg0->mon, 1);
         gSPDisplayList(gDisplayListHead++, D_80060290);
         for (i = 0; i < count; i++) {
             func_8001B884(D_8900A884[i].iconX + x, D_8900A884[i].y + y, 0x14, 0x14, (u8*)D_8900A884[i].icon, 0x14, 0x200000);
@@ -382,15 +408,15 @@ void func_89007678(Screen89007678* arg0) {
             func_8001A384(8, 0);
             func_8001A944(arg0->x + 0xE, arg0->y + 0x102, arg0->title);
             func_8001ABBC();
-            func_8002AF04(arg0->button1, (arg0->selection == 0) ? 2 : 0);
-            func_8002AF04(arg0->button2, (arg0->selection == 1) ? 2 : 0);
+            Window_DrawLabeled(arg0->button1, (arg0->selection == 0) ? 2 : 0);
+            Window_DrawLabeled(arg0->button2, (arg0->selection == 1) ? 2 : 0);
         }
         if (arg0->animLoaded == 0) {
             arg0->animLoaded = 1;
             func_80019008(arg0->anim, arg0->mon, 0x416D);
         }
         tex = func_800196F8(arg0->anim);
-        func_800069CC();
+        BgStage_DrawFrame();
         gSPDisplayList(gDisplayListHead++, D_80060290);
         gDPSetAlphaCompare(gDisplayListHead++, G_AC_NONE);
         for (row = 0; row < 0x78; row += n) {
@@ -409,7 +435,11 @@ void func_89007678(Screen89007678* arg0) {
 s32 Ui_HandleHorizontalSelectionInput(void* arg0);
 s32 Ui_GetSelectionDirection(void* arg0);
 
-s32 func_89007CD8(u8* arg0) {
+/**
+ * Moves the Yes/No cursor. Returns -1 on cancel or No, 1 on Yes.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 PcBox_UpdateConfirmCursor(u8* arg0) {
     s32 sp1C = 0;
     s32 dir;
 
@@ -437,12 +467,12 @@ extern Gfx D_80073438[];
 extern Gfx D_80073450[];
 extern u8 D_04011A60[];
 void func_80029028(s32, s32, s32, s32, Color_RGBA8);
-void func_8002A0AC(s32, s32, s32, s32, Color_RGBA8);
+void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
 void func_8001BCB4(s32, s32, s32, s32, u8*, s32, s32);
-void func_8002B788(s32, s32, u8);
-void func_80027F20(s32);
+void Trade_DrawDigitStrip(s32, s32, u8);
+void Font_SetColorForFlags(s32);
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
-u8* func_80018DEC(s32, s32);
+s32 PokeIcon_GetImage(s8 *arg0, s32 arg1);
 void func_89007D54(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4, s32 arg5) {
     s32 pad[4]; // FAKE
 
@@ -455,20 +485,20 @@ void func_89007D54(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4, s32 arg5) {
     func_80029028(arg0 + 0x59, arg1 + 1, 1, 0x40, D_8900A8D8);
     if (arg2 != NULL) {
         if (arg4 & 0x10) {
-            func_8002A0AC(arg0 + 3, arg1 + 3, 0x54, 0x2C, *(Color_RGBA8*)&D_8900A5BC);
-            func_8002A0AC(arg0 + 3, arg1 + 0x2F, 0x54, 0x10, D_8900A8D4);
+            Ui_FillRectHighlighted(arg0 + 3, arg1 + 3, 0x54, 0x2C, *(Color_RGBA8*)&D_8900A5BC);
+            Ui_FillRectHighlighted(arg0 + 3, arg1 + 0x2F, 0x54, 0x10, D_8900A8D4);
         }
         gSPDisplayList(gDisplayListHead++, D_80073450);
         gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
         func_8001BCB4(arg0 + 4, arg1 + 0x24, 8, 0xA, D_04011A60, 8, 0);
-        func_8002B788(arg0 + 0xE, arg1 + 0x22, arg2[0x24]);
+        Trade_DrawDigitStrip(arg0 + 0xE, arg1 + 0x22, arg2[0x24]);
         func_8001AB6C();
-        func_80027F20(arg4);
+        Font_SetColorForFlags(arg4);
         func_8001A384(4, 0);
         func_8001A944(arg0 + 5, arg1 + 0x30, arg2 + 0x30);
         func_8001ABBC();
         gSPDisplayList(gDisplayListHead++, D_80073408);
-        func_8001B884(arg0 + 0x2C, arg1 + 4, 0x28, 0x28, func_80018DEC(arg5, arg3), 0x28, 0x200000);
+        func_8001B884(arg0 + 0x2C, arg1 + 4, 0x28, 0x28, PokeIcon_GetImage(arg5, arg3), 0x28, 0x200000);
         gSPDisplayList(gDisplayListHead++, D_80073438);
     }
 }
@@ -477,27 +507,27 @@ typedef struct Str8900806C { char s[13]; } Str8900806C;
 char* func_8000A460(char*, const char*);
 void func_80018168(s32);
 void func_80027410(s8*, s8*, s32, s32, s32);
-void func_8002DECC(s8*, s8*, s8*, void*, s32, s32, s32);
+void GridMenu_Init(s8*, s8*, s8*, void*, s32, s32, s32);
 extern char D_89018EE8[];
 extern char D_89018EF0[];
 extern char D_89018EF8[];
 extern s8 D_890289E0[];
 void func_89007D54();
 void func_8900806C(s8* arg0, s32 arg1, s32 arg2, u8* arg3, s32 arg4, s32 arg5, s32 arg6) {
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     s32 i;
     u8* p;
 
     func_8000A460((char*)D_890289E0, (arg5 == 0) ? D_89018EE8 : D_89018EF0);
     *(Str8900806C*)(func_800566BC((char*)D_890289E0) + D_890289E0) = *(Str8900806C*)D_89018EF8;
     D_890289E0[func_800566BC((char*)D_890289E0) - 1] += arg6 + 1;
-    func_8002A8C4(arg0, arg1, arg2, 0x228, 0x156);
+    Window_SetRect(arg0, arg1, arg2, 0x228, 0x156);
     M2C_FIELD(arg0, s32*, 0x24) = 0;
     M2C_FIELD(arg0, s32*, 0x28) = 0;
     M2C_FIELD(arg0, s32*, 0x14) = 0x801;
     M2C_FIELD(arg0, s8**, 0x20) = D_890289E0;
     func_80027410(arg0 + 0x94, (s8*)arg3, 0x50, 0x1E, M2C_FIELD(arg3, s32*, 0x960));
-    func_8002DECC(arg0 + 0x2C, arg0 + 0x94, arg0 + 0x54, func_89007D54, 6, 0x5A, 0x42);
+    GridMenu_Init(arg0 + 0x2C, arg0 + 0x94, arg0 + 0x54, func_89007D54, 6, 0x5A, 0x42);
     M2C_FIELD(arg0, s32*, 0x4C) |= 0x10000;
     func_80018168(arg4);
     for (p = arg3, i = 0; i < M2C_FIELD(arg3, s32*, 0x960); i++, p += 0x50) {
@@ -508,30 +538,38 @@ void func_8900806C(s8* arg0, s32 arg1, s32 arg2, u8* arg3, s32 arg4, s32 arg5, s
     M2C_FIELD(arg0, s32*, 0x90) = arg4;
 }
 
-void func_800069CC();                            /* extern */
+void BgStage_DrawFrame(void);                            /* extern */
 M2C_UNK func_800189C0(s32, M2C_UNK);                /* extern */
 s32 func_8002AE6C();                                /* extern */
-M2C_UNK func_8002E230(s8 *, s32, s32, s32, s32);  /* extern */
+M2C_UNK GridMenu_DrawInlineItems(s8 *, s32, s32, s32, s32);  /* extern */
 
-void func_89008284(s8 *arg0, s32 arg1) {
+/**
+ * Draws the list window's rows (refreshing the icons unless flag 0x10 is set).
+ * @unverified Name and comment guessed from the code.
+ */
+void PcBox_DrawList(s8 *arg0, s32 arg1) {
     if (func_8002AE6C() == 0) {
         if (!(arg1 & 0x10)) {
             func_800189C0(M2C_FIELD(arg0, s32 *, 0x90), 0);
-            func_800069CC();
+            BgStage_DrawFrame();
         }
-        func_8002E230(arg0 + 0x2C, M2C_FIELD(arg0, s32 *, 0) + 6, M2C_FIELD(arg0, s32 *, 4) + 6, arg1 | 0xFFED, M2C_FIELD(arg0, s32 *, 0x90));
+        GridMenu_DrawInlineItems(arg0 + 0x2C, M2C_FIELD(arg0, s32 *, 0) + 6, M2C_FIELD(arg0, s32 *, 4) + 6, arg1 | 0xFFED, M2C_FIELD(arg0, s32 *, 0x90));
     }
 }
 
-s32 func_8002E3F0(void*);
+s32 GridMenu_UpdateCursor(void*);
 s32 func_8002BC14(s32);
 M2C_UNK func_8003F6AC(M2C_UNK);
 extern s32 D_800603C0;
-s32 func_890082FC(s32 arg0) {
+/**
+ * Moves the list cursor. Returns -1 on cancel, the 1-based row on confirm, otherwise 0.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 PcBox_UpdateListCursor(s32 arg0) {
     s32 sp1C = 0;
     s32 dir;
 
-    if (func_8002E3F0((u8*)arg0 + 0x2C) == 0) {
+    if (GridMenu_UpdateCursor((u8*)arg0 + 0x2C) == 0) {
         dir = func_8002BC14(D_800603C0);
         if (dir == -1) {
             func_8003F6AC(3);
@@ -545,8 +583,8 @@ s32 func_890082FC(s32 arg0) {
 
 extern Gfx D_80060270[];
 void func_80029028(s32, s32, s32, s32, Color_RGBA8);
-void func_8002A0AC(s32, s32, s32, s32, Color_RGBA8);
-void func_8002A3F8(void*, s32, s32);
+void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
+void Ui_DrawImageInStrips(void*, s32, s32);
 extern Color_RGBA8 D_8900A8F8;
 extern Color_RGBA8 D_8900A900;
 extern Color_RGBA8 D_8900A8DC[];
@@ -557,9 +595,13 @@ extern char D_89018F08[];
 extern u8 D_80073614[];
 extern u8 D_04011AB8[];
 extern Gfx D_80073450[];
-void func_8002B940(s32, s32, s32, s32);
+void Ui_DrawNumber(s32, s32, s32, s32);
 void func_8001BCB4(s32, s32, s32, s32, u8*, s32, s32);
-void func_89008370(s32 arg0, s32 arg1, u8** arg2, s32 arg3, s32 arg4) {
+/**
+ * Draws ボックス%d (Box %d).
+ * @unverified Name and comment guessed from the code.
+ */
+void PcBox_DrawBoxName(s32 arg0, s32 arg1, u8** arg2, s32 arg3, s32 arg4) {
     Color_RGBA8 color;
     s32 pad[2]; // FAKE
 
@@ -568,7 +610,7 @@ void func_89008370(s32 arg0, s32 arg1, u8** arg2, s32 arg3, s32 arg4) {
     func_80029028(arg0, arg1, 0xCE, 1, D_8900A8F0);
     func_80029028(arg0, arg1 + 0x1B, 0xCE, 1, D_8900A8F0);
     if (arg4 & 0x18) {
-        func_8002A0AC(arg0 + 3, arg1 + 3, 0xC8, 0x16, *(Color_RGBA8*)&D_8900A5BC);
+        Ui_FillRectHighlighted(arg0 + 3, arg1 + 3, 0xC8, 0x16, *(Color_RGBA8*)&D_8900A5BC);
     }
     func_8001AB6C();
     func_8001A384(8, 0);
@@ -584,10 +626,10 @@ void func_89008370(s32 arg0, s32 arg1, u8** arg2, s32 arg3, s32 arg4) {
     func_8001A944(arg0 + 8, arg1 + 4, D_89018F08, arg3 + 1);
     func_8001ABBC();
     if (M2C_FIELD(*arg2, s32*, 0x960) > 0) {
-        func_8002A3F8(D_80073614, arg0 + 0x78, arg1 + 4);
+        Ui_DrawImageInStrips(D_80073614, arg0 + 0x78, arg1 + 4);
     }
-    func_8002B940(arg0 + 0x98, arg1 + 8, M2C_FIELD(*arg2, s32*, 0x960), 2);
-    func_8002B940(arg0 + 0xB3, arg1 + 8, 0x1E, 2);
+    Ui_DrawNumber(arg0 + 0x98, arg1 + 8, M2C_FIELD(*arg2, s32*, 0x960), 2);
+    Ui_DrawNumber(arg0 + 0xB3, arg1 + 8, 0x1E, 2);
     gSPDisplayList(gDisplayListHead++, D_80073450);
     gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
     func_8001BCB4(arg0 + 0xAA, arg1 + 0xA, 8, 0xA, D_04011AB8, 8, 0);
@@ -597,7 +639,11 @@ extern char D_89018F14[];
 extern char D_89018F20[];
 extern u8 D_80073634[];
 
-void func_8900865C(s32 arg0, s32 arg1, u8** arg2, s32 arg3, s32 arg4) {
+/**
+ * Draws ボックス%d (Box %d) and its %2d/%2d fill count.
+ * @unverified Name and comment guessed from the code.
+ */
+void PcBox_DrawBoxCount(s32 arg0, s32 arg1, u8** arg2, s32 arg3, s32 arg4) {
     Color_RGBA8 color;
     s32 pad[11]; // FAKE
 
@@ -606,7 +652,7 @@ void func_8900865C(s32 arg0, s32 arg1, u8** arg2, s32 arg3, s32 arg4) {
     func_80029028(arg0, arg1, 0x104, 1, D_8900A900);
     func_80029028(arg0, arg1 + 0x37, 0x104, 1, D_8900A900);
     if (arg4 & 0x18) {
-        func_8002A0AC(arg0 + 3, arg1 + 3, 0xFE, 0x32, *(Color_RGBA8*)&D_8900A5BC);
+        Ui_FillRectHighlighted(arg0 + 3, arg1 + 3, 0xFE, 0x32, *(Color_RGBA8*)&D_8900A5BC);
     }
     func_8001AB6C();
     func_8001A384(0x10, 0);
@@ -625,7 +671,7 @@ void func_8900865C(s32 arg0, s32 arg1, u8** arg2, s32 arg3, s32 arg4) {
     func_8001A944(arg0 + 0xB0, arg1 + 0x14, D_89018F20, M2C_FIELD(*arg2, s32*, 0x960), 0x1E);
     func_8001ABBC();
     if (M2C_FIELD(*arg2, s32*, 0x960) > 0) {
-        func_8002A3F8(D_80073634, arg0 + 0x8C, arg1 + 0x10);
+        Ui_DrawImageInStrips(D_80073634, arg0 + 0x8C, arg1 + 0x10);
     }
 }
 
@@ -643,11 +689,15 @@ extern char D_89018F3C[];
 extern s32 D_89019114;
 extern Gfx D_80073408[];
 extern Gfx D_80073438[];
-void func_8002A550(s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
+void Ui_FillRectPrimEnvColor(s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 s32 func_8002BC44(s32);
-void func_80027F20(s32);
-void func_890088F8(s32 x, s32 y, s32 flags, s32 kind) {
+void Font_SetColorForFlags(s32);
+/**
+ * Draws ＧＢのカートリッジ (GB cartridge) or ６４のカセット (N64 cassette) for `kind`.
+ * @unverified Name and comment guessed from the code.
+ */
+void PcBox_DrawStorageLabel(s32 x, s32 y, s32 flags, s32 kind) {
     ColorPair890088F8* c;
 
     if (flags & 2) {
@@ -655,7 +705,7 @@ void func_890088F8(s32 x, s32 y, s32 flags, s32 kind) {
     } else {
         c = &D_8900A90C;
     }
-    func_8002A550(x, y, D_8900A914[kind], 0x2C, c->prim, c->env);
+    Ui_FillRectPrimEnvColor(x, y, D_8900A914[kind], 0x2C, c->prim, c->env);
     gSPDisplayList(gDisplayListHead++, D_80073408);
     switch (kind) {
         case 0:
@@ -667,7 +717,7 @@ void func_890088F8(s32 x, s32 y, s32 flags, s32 kind) {
     }
     gSPDisplayList(gDisplayListHead++, D_80073438);
     Font_BeginTranslucentTextRendering();
-    func_80027F20(flags);
+    Font_SetColorForFlags(flags);
     Font_SetActive(8, 0);
     switch (kind) {
         case 0:
@@ -681,7 +731,7 @@ void func_890088F8(s32 x, s32 y, s32 flags, s32 kind) {
 }
 
 void func_8002B018(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
-void func_8002D880(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5);
+void Menu_Init(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5);
 extern Rgba8900806C D_8900A91C;
 extern Rgba8900806C D_8900A920;
 extern Rgba8900806C D_8900A580[];
@@ -692,13 +742,17 @@ extern u8 D_8900E858[];
 extern u8 D_8900F5E0[];
 extern u8 D_89010368[];
 extern char D_89018F4C[];
-void func_89008AF4(s8* arg0, s32 x, s32 y, s8* arg3) {
-    func_8002A8C4(arg0 + 4, x, y, 0x234, 0x172);
+/**
+ * Sets up the ボックスのそうさ (box operation) window and its parts.
+ * @unverified Name and comment guessed from the code.
+ */
+void PcBox_InitOperationWindow(s8* arg0, s32 x, s32 y, s8* arg3) {
+    Window_SetRect(arg0 + 4, x, y, 0x234, 0x172);
     M2C_FIELD(arg0, s32*, 0x28) = 0;
     M2C_FIELD(arg0, s32*, 0x2C) = 0;
     M2C_FIELD(arg0, s32*, 0x18) = 0x801;
     M2C_FIELD(arg0, char**, 0x24) = D_89018F4C;
-    func_8002A8C4(arg0 + 0x30, M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) + 0x12C, M2C_FIELD(arg0, s32*, 0xC) - 0xC, 0x40);
+    Window_SetRect(arg0 + 0x30, M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) + 0x12C, M2C_FIELD(arg0, s32*, 0xC) - 0xC, 0x40);
     M2C_FIELD(arg0, s32*, 0x44) = 6;
     M2C_FIELD(arg0, Rgba8900806C*, 0x48) = D_8900A91C;
     M2C_FIELD(arg0, Rgba8900806C*, 0x4C) = D_8900A920;
@@ -730,32 +784,36 @@ void func_89008AF4(s8* arg0, s32 x, s32 y, s8* arg3) {
     M2C_FIELD(arg0, s32*, 0x15C) = 0;
     M2C_FIELD(arg0, s32*, 0x158) = D_800603C0;
     func_8000B2F4(D_800603C0);
-    func_8002D880(arg0 + 0x170, (s32)arg3, (s32)(arg0 + 0x1B8), (s32)func_89008370, 0xCE, 0x1C);
+    Menu_Init(arg0 + 0x170, (s32)arg3, (s32)(arg0 + 0x1B8), (s32)PcBox_DrawBoxName, 0xCE, 0x1C);
     M2C_FIELD(arg0, s32*, 0x190) |= 0x10000;
-    func_8002D880(arg0 + 0x194, (s32)(arg3 + 0x10), (s32)(arg0 + 0x1C8), (s32)func_8900865C, 0x104, 0x38);
+    Menu_Init(arg0 + 0x194, (s32)(arg3 + 0x10), (s32)(arg0 + 0x1C8), (s32)PcBox_DrawBoxCount, 0x104, 0x38);
     M2C_FIELD(arg0, s32*, 0x1B4) |= 0x10000;
     M2C_FIELD(arg0, s32*, 0) = 1;
 }
 
 extern s32 D_8900A924[];
 extern s32 D_8900A93C[];
-void func_890019C8(s32, s32, s32, s32);
+void LabItem_DrawTitleText(s32, s32, s32, s32);
 void func_89008EF0(s8* arg0) {
     if (M2C_FIELD(arg0, s32*, 0) == 1) {
         if (0) {}  // karodo
-        func_890019C8(M2C_FIELD(arg0, s32*, 0x30) + 0x58, M2C_FIELD(arg0, s32*, 0x34), D_8900A924[M2C_FIELD((0, arg0), s32*, 0x15C)], D_8900A93C[M2C_FIELD(arg0, s32*, 0x15C)]);
+        LabItem_DrawTitleText(M2C_FIELD(arg0, s32*, 0x30) + 0x58, M2C_FIELD(arg0, s32*, 0x34), D_8900A924[M2C_FIELD((0, arg0), s32*, 0x15C)], D_8900A93C[M2C_FIELD(arg0, s32*, 0x15C)]); // FAKE: comma expression
     }
 }
 
-void func_8002A8E0(s8*);
-void func_80029658(s32, s32, s32, u8*);
-void func_800295E8(s32, s32, s32, s32, u8*);
+void Window_DrawFrame(s8*);
+void Ui_DrawTexturedDivider(s32, s32, s32, u8*);
+void Ui_DrawTexturedFrameDecal(s32, s32, s32, s32, u8*);
 void func_8002B054(s8*, s32);
-void func_8002DAD8(s8*, s32, s32, s32, s32);
-void func_8002D024(s8*);
+void Menu_DrawInlineItems(s8*, s32, s32, s32, s32);
+void TextBox_Draw(s8*);
 extern u8 D_8007356C[];
 extern u8 D_800735C4[];
-void func_89008F4C(s8* arg0) {
+/**
+ * Draws the box operation window: frame, storage label and the two box lists.
+ * @unverified Name and comment guessed from the code.
+ */
+void PcBox_DrawOperationWindow(s8* arg0) {
     s32 sel = 0x10;
     s32 flags[2];
     s32 pad[2]; // FAKE
@@ -765,16 +823,16 @@ void func_89008F4C(s8* arg0) {
     if (func_8002AE6C(arg0 + 4) != 0) {
         return;
     }
-    func_8002A8E0(arg0 + 0x30);
+    Window_DrawFrame(arg0 + 0x30);
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) - 0xC, 0xA, *(Color_RGBA8*)&D_8900A5BC);
     func_80029028(M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) + 0x11C, M2C_FIELD(arg0, s32*, 0xC) - 0xC, 0xA, *(Color_RGBA8*)&D_8900A5BC);
     func_80029028(M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) + 0x10, 0xA, 0x10C, *(Color_RGBA8*)&D_8900A5BC);
     func_80029028(M2C_FIELD(arg0, s32*, 0xC) + M2C_FIELD(arg0, s32*, 4) - 0x10, M2C_FIELD(arg0, s32*, 8) + 0x10, 0xA, 0x10C, *(Color_RGBA8*)&D_8900A5BC);
     func_80029028(M2C_FIELD(arg0, s32*, 4) + 0xDE, M2C_FIELD(arg0, s32*, 8) + 0x10, 0x42, 0x10C, *(Color_RGBA8*)&D_8900A5BC);
-    func_80029658(M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 8) + 0x125, M2C_FIELD(arg0, s32*, 0xC), D_8007356C);
-    func_800295E8(M2C_FIELD(arg0, s32*, 4) + 0xE, M2C_FIELD(arg0, s32*, 8) + 0xE, 0xD2, 0x110, D_800735C4);
-    func_800295E8(M2C_FIELD(arg0, s32*, 4) + 0x11E, M2C_FIELD(arg0, s32*, 8) + 0xE, 0x108, 0x110, D_800735C4);
+    Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 8) + 0x125, M2C_FIELD(arg0, s32*, 0xC), D_8007356C);
+    Ui_DrawTexturedFrameDecal(M2C_FIELD(arg0, s32*, 4) + 0xE, M2C_FIELD(arg0, s32*, 8) + 0xE, 0xD2, 0x110, D_800735C4);
+    Ui_DrawTexturedFrameDecal(M2C_FIELD(arg0, s32*, 4) + 0x11E, M2C_FIELD(arg0, s32*, 8) + 0xE, 0x108, 0x110, D_800735C4);
     flags[1] = flags[0] = 0xFFED;
     switch (M2C_FIELD(arg0, s32*, 0)) {
         case 1:
@@ -808,23 +866,27 @@ void func_89008F4C(s8* arg0) {
     func_8002B054(arg0 + 0xD4, (M2C_FIELD(arg0, s32*, 0x15C) == 2) ? sel : 0);
     func_8002B054(arg0 + 0x100, (M2C_FIELD(arg0, s32*, 0x15C) == 3) ? sel : 0);
     func_8002B054(arg0 + 0x12C, (M2C_FIELD(arg0, s32*, 0x15C) == 4) ? sel : 0);
-    func_890088F8(M2C_FIELD(arg0, s32*, 4) + 0x10, M2C_FIELD(arg0, s32*, 8) + 0x10, 2, 0);
-    func_890088F8(M2C_FIELD(arg0, s32*, 4) + 0x120, M2C_FIELD(arg0, s32*, 8) + 0x10, 2, 1);
-    func_8002DAD8(arg0 + 0x170, M2C_FIELD(arg0, s32*, 4) + 0x10, M2C_FIELD(arg0, s32*, 8) + 0x3C, flags[0], 0);
-    func_8002DAD8(arg0 + 0x194, M2C_FIELD(arg0, s32*, 4) + 0x120, M2C_FIELD(arg0, s32*, 8) + 0x3C, flags[1], 0);
+    PcBox_DrawStorageLabel(M2C_FIELD(arg0, s32*, 4) + 0x10, M2C_FIELD(arg0, s32*, 8) + 0x10, 2, 0);
+    PcBox_DrawStorageLabel(M2C_FIELD(arg0, s32*, 4) + 0x120, M2C_FIELD(arg0, s32*, 8) + 0x10, 2, 1);
+    Menu_DrawInlineItems(arg0 + 0x170, M2C_FIELD(arg0, s32*, 4) + 0x10, M2C_FIELD(arg0, s32*, 8) + 0x3C, flags[0], 0);
+    Menu_DrawInlineItems(arg0 + 0x194, M2C_FIELD(arg0, s32*, 4) + 0x120, M2C_FIELD(arg0, s32*, 8) + 0x3C, flags[1], 0);
     func_89008EF0(arg0);
     if (M2C_FIELD(arg0, s32*, 0) == 7) {
-        func_8002D024(arg0 + 0x1E0);
+        TextBox_Draw(arg0 + 0x1E0);
     }
 }
 
-s32 func_8002DCE0(void* arg0);
+s32 Menu_UpdateCursorSkipDisabled(void* arg0);
 
-s32 func_890093AC(void* arg0) {
+/**
+ * Moves a menu cursor. Returns -1 on cancel, 1 on confirm, otherwise 0.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 PcBox_UpdateSimpleCursor(void* arg0) {
     s32 sp1C = 0;
     s32 dir;
 
-    if (func_8002DCE0(arg0) == 0) {
+    if (Menu_UpdateCursorSkipDisabled(arg0) == 0) {
         dir = Ui_GetSelectionDirection(gPlayer1Controller);
         if (dir == -1) {
             Audio_PlaySoundEffectById(3);
@@ -854,8 +916,9 @@ typedef struct {
  * the entry is `(*entries)[index]` with 8-byte entries. The operands of the
  * pointer addition are written `index + *entries` because that order gives the
  * retail temp numbering.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_89009414(void* arg0) {
+void PcBox_SwapSelectedEntries(void* arg0) {
     SwapEntry* a;
     SwapEntry* b;
     s32 tmp;
@@ -873,7 +936,11 @@ typedef struct Entry89009464 {
     s32 unk_00;
     s32 unk_04;
 } Entry89009464;
-void func_89009464(s32 arg0) {
+/**
+ * Swaps two entries of the same box list and marks both dirty.
+ * @unverified Name and comment guessed from the code.
+ */
+void PcBox_SwapEntriesInList(s32 arg0) {
     Entry89009464* a = (Entry89009464*)(M2C_FIELD(arg0, s32*, 0x218) * 8 + **M2C_FIELD(arg0, s32***, 0x1D8));
     Entry89009464* b = (Entry89009464*)(M2C_FIELD(arg0, s32**, 0x1D8)[2] * 8 + **M2C_FIELD(arg0, s32***, 0x1D8));
     s32 temp = b->unk_00;
@@ -889,8 +956,12 @@ typedef struct LabPCBoxList890094A8 {
     /* 0x4 */ s32 unk_04;
     /* 0x8 */ s32 count;
 } LabPCBoxList890094A8;
-s32 func_8002DDFC(s8 *);
-s32 func_890094A8(s8* arg0) {
+s32 Menu_SkipDisabledForward(s8 *);
+/**
+ * Disables the list rows of boxes that hold no Pokemon.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 PcBox_DisableEmptyBoxes(s8* arg0) {
     s32 i;
     LabPCBoxList890094A8* list = M2C_FIELD(arg0, LabPCBoxList890094A8**, 0);
     s32 n = list->count;
@@ -902,7 +973,7 @@ s32 func_890094A8(s8* arg0) {
         }
     }
     M2C_FIELD(arg0, s32*, 8) = 0;
-    return func_8002DDFC(arg0);
+    return Menu_SkipDisabledForward(arg0);
 }
 
 typedef struct LabPCBoxList890095DC {
@@ -911,7 +982,11 @@ typedef struct LabPCBoxList890095DC {
     /* 0x8 */ s32 count;
 } LabPCBoxList890095DC;
 
-void func_890095DC(s8* arg0) {
+/**
+ * Disables the list rows of boxes that already hold Pokemon.
+ * @unverified Name and comment guessed from the code.
+ */
+void PcBox_DisableNonEmptyBoxes(s8* arg0) {
     s32 i;
     LabPCBoxList890095DC* list = M2C_FIELD(arg0, LabPCBoxList890095DC**, 0);
     s32 n = list->count;
@@ -923,10 +998,14 @@ void func_890095DC(s8* arg0) {
         }
     }
     M2C_FIELD(arg0, s32*, 8) = 0;
-    func_8002DDFC(arg0);
+    Menu_SkipDisabledForward(arg0);
 }
 
-void func_89009710(s8 *arg0, s8 *arg1, s8 *arg2) {
+/**
+ * Sets the left and right box lists (either may be NULL) and resets their cursors.
+ * @unverified Name and comment guessed from the code.
+ */
+void PcBox_SetActiveLists(s8 *arg0, s8 *arg1, s8 *arg2) {
     if (arg1 != NULL) {
         M2C_FIELD(arg0, s8 **, 0x1D8) = arg1;
         M2C_FIELD(arg1, s32 *, 8) = 0;
@@ -961,13 +1040,17 @@ s32 func_89009738(u8 *arg0, s32 arg1) {
 
 s32 func_8000B30C(void);
 s32 func_8002B2B0(s8*);
-void func_8002CEEC(s8*, void*, s32, s32, s32);
-s32 func_8002D138(s8*);
-void func_8002D900(s8*);
+void TextBox_Init(s8*, void*, s32, s32, s32);
+s32 Ui_CheckConfirmPressed(s8*);
+void Menu_ClearItemFlags(s8*);
 extern void* D_8900A954[];
 extern u8 D_8900A96C[];
 
-s32 func_890097E0(s8* arg0) {
+/**
+ * Runs the box operation window's state machine (pick, move, swap, warnings such as ボックスのあきがありません "no free space in the box").
+ * @unverified Name and comment guessed from the code.
+ */
+s32 PcBox_UpdateOperationWindow(s8* arg0) {
     s32 ret = 0;
     s32 pad; // FAKE
     s32 next = 0;
@@ -991,64 +1074,64 @@ s32 func_890097E0(s8* arg0) {
                             ret = -1;
                             break;
                         case 0:
-                            if (func_8900732C(M2C_FIELD(arg0, s8**, 0x170)) != 0) {
+                            if (LabPC_AllBoxesEmpty(M2C_FIELD(arg0, s8**, 0x170)) != 0) {
                                 func_8003F6AC(8);
                                 M2C_FIELD(arg0, s32*, 0) = 7;
-                                func_8002CEEC(arg0 + 0x1E0, D_8900A954[M2C_FIELD(arg0, u32*, 0x15C)], 0, 1, 0);
-                            } else if (func_890072E4(M2C_FIELD(arg0, s8**, 0x194)) != 0) {
+                                TextBox_Init(arg0 + 0x1E0, D_8900A954[M2C_FIELD(arg0, u32*, 0x15C)], 0, 1, 0);
+                            } else if (LabPC_NoEmptyBoxAvailable(M2C_FIELD(arg0, s8**, 0x194)) != 0) {
                                 func_8003F6AC(8);
                                 M2C_FIELD(arg0, s32*, 0) = 7;
-                                func_8002CEEC(arg0 + 0x1E0, D_8900A96C, 0, 1, 0);
+                                TextBox_Init(arg0 + 0x1E0, D_8900A96C, 0, 1, 0);
                             } else {
                                 func_8003F6AC(2);
                                 next = 2;
-                                func_89009710(arg0, arg0 + 0x170, arg0 + 0x194);
+                                PcBox_SetActiveLists(arg0, arg0 + 0x170, arg0 + 0x194);
                             }
                             break;
                         case 1:
-                            if (func_8900732C(M2C_FIELD(arg0, s8**, 0x194)) != 0) {
+                            if (LabPC_AllBoxesEmpty(M2C_FIELD(arg0, s8**, 0x194)) != 0) {
                                 func_8003F6AC(8);
                                 M2C_FIELD(arg0, s32*, 0) = 7;
-                                func_8002CEEC(arg0 + 0x1E0, D_8900A954[M2C_FIELD(arg0, u32*, 0x15C)], 0, 1, 0);
-                            } else if (func_890072E4(M2C_FIELD(arg0, s8**, 0x170)) != 0) {
+                                TextBox_Init(arg0 + 0x1E0, D_8900A954[M2C_FIELD(arg0, u32*, 0x15C)], 0, 1, 0);
+                            } else if (LabPC_NoEmptyBoxAvailable(M2C_FIELD(arg0, s8**, 0x170)) != 0) {
                                 func_8003F6AC(8);
                                 M2C_FIELD(arg0, s32*, 0) = 7;
-                                func_8002CEEC(arg0 + 0x1E0, D_8900A96C, 0, 1, 0);
+                                TextBox_Init(arg0 + 0x1E0, D_8900A96C, 0, 1, 0);
                             } else {
                                 func_8003F6AC(2);
                                 next = 2;
-                                func_89009710(arg0, arg0 + 0x194, arg0 + 0x170);
+                                PcBox_SetActiveLists(arg0, arg0 + 0x194, arg0 + 0x170);
                             }
                             break;
                         case 2:
-                            if (func_8900732C(M2C_FIELD(arg0, s8**, 0x170)) != 0) {
+                            if (LabPC_AllBoxesEmpty(M2C_FIELD(arg0, s8**, 0x170)) != 0) {
                                 func_8003F6AC(8);
                                 M2C_FIELD(arg0, s32*, 0) = 7;
-                                func_8002CEEC(arg0 + 0x1E0, D_8900A954[M2C_FIELD(arg0, u32*, 0x15C)], 0, 1, 0);
+                                TextBox_Init(arg0 + 0x1E0, D_8900A954[M2C_FIELD(arg0, u32*, 0x15C)], 0, 1, 0);
                             } else {
                                 func_8003F6AC(2);
                                 M2C_FIELD(arg0, s32*, 0) = 2;
-                                func_89009710(arg0, arg0 + 0x170, NULL);
+                                PcBox_SetActiveLists(arg0, arg0 + 0x170, NULL);
                             }
                             break;
                         case 3:
-                            if ((func_8900732C(M2C_FIELD(arg0, s8**, 0x170)) != 0) ||
-                                (func_8900732C(M2C_FIELD(arg0, s8**, 0x194)) != 0)) {
+                            if ((LabPC_AllBoxesEmpty(M2C_FIELD(arg0, s8**, 0x170)) != 0) ||
+                                (LabPC_AllBoxesEmpty(M2C_FIELD(arg0, s8**, 0x194)) != 0)) {
                                 func_8003F6AC(8);
                                 M2C_FIELD(arg0, s32*, 0) = 7;
-                                func_8002CEEC(arg0 + 0x1E0, D_8900A954[M2C_FIELD(arg0, u32*, 0x15C)], 0, 1, 0);
+                                TextBox_Init(arg0 + 0x1E0, D_8900A954[M2C_FIELD(arg0, u32*, 0x15C)], 0, 1, 0);
                             } else {
                                 func_8003F6AC(2);
                                 next = 2;
-                                func_89009710(arg0, arg0 + 0x170, arg0 + 0x194);
+                                PcBox_SetActiveLists(arg0, arg0 + 0x170, arg0 + 0x194);
                             }
                             break;
                         case 4:
-                            if ((func_8900732C(M2C_FIELD(arg0, s8**, 0x170)) != 0) &&
-                                (func_8900732C(M2C_FIELD(arg0, s8**, 0x194)) != 0)) {
+                            if ((LabPC_AllBoxesEmpty(M2C_FIELD(arg0, s8**, 0x170)) != 0) &&
+                                (LabPC_AllBoxesEmpty(M2C_FIELD(arg0, s8**, 0x194)) != 0)) {
                                 func_8003F6AC(8);
                                 M2C_FIELD(arg0, s32*, 0) = 7;
-                                func_8002CEEC(arg0 + 0x1E0, D_8900A954[M2C_FIELD(arg0, u32*, 0x15C)], 0, 1, 0);
+                                TextBox_Init(arg0 + 0x1E0, D_8900A954[M2C_FIELD(arg0, u32*, 0x15C)], 0, 1, 0);
                             } else {
                                 func_8003F6AC(2);
                                 next = 6;
@@ -1060,7 +1143,7 @@ s32 func_890097E0(s8* arg0) {
             break;
 
         case 2:
-            r = func_890093AC(M2C_FIELD(arg0, s8**, 0x1D8));
+            r = PcBox_UpdateSimpleCursor(M2C_FIELD(arg0, s8**, 0x1D8));
             if (r == -1) {
                 back = 1;
             } else if (r == 1) {
@@ -1081,7 +1164,7 @@ s32 func_890097E0(s8* arg0) {
             break;
 
         case 3:
-            r = func_890093AC(M2C_FIELD(arg0, s8**, 0x1DC));
+            r = PcBox_UpdateSimpleCursor(M2C_FIELD(arg0, s8**, 0x1DC));
             if (r == -1) {
                 M2C_FIELD(arg0, s32*, 0) = 2;
             } else if (r == 1) {
@@ -1090,9 +1173,9 @@ s32 func_890097E0(s8* arg0) {
                     func_8003F6AC(8);
                 } else {
                     func_8003F6AC(0x18);
-                    func_89009414(arg0);
-                    if ((func_8900732C(M2C_FIELD(M2C_FIELD(arg0, s8**, 0x1D8), s8**, 0)) != 0) ||
-                        (func_890072E4(M2C_FIELD(M2C_FIELD(arg0, s8**, 0x1DC), s8**, 0)) != 0)) {
+                    PcBox_SwapSelectedEntries(arg0);
+                    if ((LabPC_AllBoxesEmpty(M2C_FIELD(M2C_FIELD(arg0, s8**, 0x1D8), s8**, 0)) != 0) ||
+                        (LabPC_NoEmptyBoxAvailable(M2C_FIELD(M2C_FIELD(arg0, s8**, 0x1DC), s8**, 0)) != 0)) {
                         back = 1;
                     } else {
                         next = 2;
@@ -1102,20 +1185,20 @@ s32 func_890097E0(s8* arg0) {
             break;
 
         case 5:
-            r = func_890093AC(M2C_FIELD(arg0, s8**, 0x1D8));
+            r = PcBox_UpdateSimpleCursor(M2C_FIELD(arg0, s8**, 0x1D8));
             if (r == -1) {
                 M2C_FIELD(M2C_FIELD(arg0, s8**, 0x1D8), u16**, 4)[M2C_FIELD(arg0, s32*, 0x218)] &= ~8;
                 M2C_FIELD(arg0, s32*, 0) = 2;
             } else if (r == 1) {
                 func_8003F6AC(0x18);
-                func_89009464(arg0);
+                PcBox_SwapEntriesInList(arg0);
                 M2C_FIELD(M2C_FIELD(arg0, s8**, 0x1D8), u16**, 4)[M2C_FIELD(arg0, s32*, 0x218)] &= ~8;
                 M2C_FIELD(arg0, s32*, 0) = 2;
             }
             break;
 
         case 4:
-            r = func_890093AC(M2C_FIELD(arg0, s8**, 0x1DC));
+            r = PcBox_UpdateSimpleCursor(M2C_FIELD(arg0, s8**, 0x1DC));
             if (r == -1) {
                 M2C_FIELD(arg0, s32*, 0) = 2;
             } else if (r == 1) {
@@ -1124,7 +1207,7 @@ s32 func_890097E0(s8* arg0) {
                     func_8003F6AC(8);
                 } else {
                     func_8003F6AC(0x18);
-                    func_89009414(arg0);
+                    PcBox_SwapSelectedEntries(arg0);
                     M2C_FIELD(arg0, s32*, 0) = 2;
                 }
             }
@@ -1153,7 +1236,7 @@ s32 func_890097E0(s8* arg0) {
             break;
 
         case 7:
-            if (func_8002D138(arg0 + 0x1E0) == 1) {
+            if (Ui_CheckConfirmPressed(arg0 + 0x1E0) == 1) {
                 M2C_FIELD(arg0, s32*, 0) = 1;
             }
             break;
@@ -1161,34 +1244,34 @@ s32 func_890097E0(s8* arg0) {
 
     if (back > 0) {
         if (back == 1) {
-            func_8002D900(arg0 + 0x170);
-            func_8002D900(arg0 + 0x194);
+            Menu_ClearItemFlags(arg0 + 0x170);
+            Menu_ClearItemFlags(arg0 + 0x194);
         }
         M2C_FIELD(arg0, s32*, 0) = back;
     }
     if (next > 0) {
         switch (next) {
             case 2:
-            func_8002D900(arg0 + 0x170);
-            func_8002D900(arg0 + 0x194);
-            func_890094A8(M2C_FIELD(arg0, s8**, 0x1D8));
+            Menu_ClearItemFlags(arg0 + 0x170);
+            Menu_ClearItemFlags(arg0 + 0x194);
+            PcBox_DisableEmptyBoxes(M2C_FIELD(arg0, s8**, 0x1D8));
             switch (M2C_FIELD(arg0, u32*, 0x15C)) {
                 case 0:
                 case 1:
-                    func_890095DC(M2C_FIELD(arg0, s8**, 0x1DC));
+                    PcBox_DisableNonEmptyBoxes(M2C_FIELD(arg0, s8**, 0x1DC));
                     break;
                 case 3:
-                    func_890094A8(M2C_FIELD(arg0, s8**, 0x1DC));
+                    PcBox_DisableEmptyBoxes(M2C_FIELD(arg0, s8**, 0x1DC));
                     break;
             }
             break;
             case 6: {
             s32 a;
             s32 b;
-            func_8002D900(arg0 + 0x170);
-            func_8002D900(arg0 + 0x194);
-            a = func_890094A8(arg0 + 0x170);
-            b = func_890094A8(arg0 + 0x194);
+            Menu_ClearItemFlags(arg0 + 0x170);
+            Menu_ClearItemFlags(arg0 + 0x194);
+            a = PcBox_DisableEmptyBoxes(arg0 + 0x170);
+            b = PcBox_DisableEmptyBoxes(arg0 + 0x194);
             if (a >= 0) {
                 M2C_FIELD(arg0, s32*, 0x16C) = 0xC;
                 M2C_FIELD(arg0, s32*, 0x168) = a;
@@ -1210,24 +1293,28 @@ s32 func_890097E0(s8* arg0) {
 }
 
 typedef struct Ent8900A014 { s32 unk0; s32 unk4; } Ent8900A014;
-s8* func_80017860(s32);
+s8 *PokeIcon_AllocFramebuffers(s32 arg0);
 s32 func_80017FDC(s8*, s32, s32, s32);
-void func_80017934(void);
+void PokeIcon_OpenModelArchives(void);
 s32 func_80018F2C(s8*, s32, s32, s32, s32, s32, s32, s32);
 void func_80027410(s8*, s8*, s32, s32, s32);
-void func_89008AF4(s8*, s32, s32, s8*);
+void PcBox_InitOperationWindow(s8*, s32, s32, s8*);
 extern u8 D_81000000[];
 extern u8 D_0015B1A0[];
 extern u8 D_0015E220[];
 
-void func_8900A014(s8* arg0) {
+/**
+ * Entry point: pushes the 'PBOX' pool state and creates the icon renderers.
+ * @unverified Name and comment guessed from the code.
+ */
+void PcBox_Init(s8* arg0) {
     s32 i;
 
     main_pool_push_state('PBOX');
-    M2C_FIELD(arg0, s8**, 0x7518) = func_80017860(1);
+    M2C_FIELD(arg0, s8**, 0x7518) = PokeIcon_AllocFramebuffers(1);
     M2C_FIELD(arg0, s32*, 0x751C) = func_80018F2C(M2C_FIELD(arg0, s8**, 0x7518), 0x80, 0x78, 0, 0, 0x78, 0x78, 0);
     M2C_FIELD(arg0, s32*, 0x7520) = func_80017FDC(M2C_FIELD(arg0, s8**, 0x7518), 0x1E, 0x28, 0x28);
-    func_80017934();
+    PokeIcon_OpenModelArchives();
     Fragment_Load(((((u32)D_81000000) & 0x0FF00000) >> 0x14) - 0x10, D_0015B1A0, D_0015E220);
     func_89007264(arg0 + 0x3E8, 0x21, D_89019108, 8);
     func_89007264(arg0 + 0x4F08, 0x11, 0, 4);
@@ -1241,38 +1328,46 @@ void func_8900A014(s8* arg0) {
     }
     func_80027410(arg0 + 0x74F8, arg0 + 0x7498, 8, 8, 8);
     func_80027410(arg0 + 0x7508, arg0 + 0x74D8, 8, 4, 4);
-    func_89008AF4(arg0 + 4, 0x26, 0x53, arg0 + 0x74F8);
+    PcBox_InitOperationWindow(arg0 + 4, 0x26, 0x53, arg0 + 0x74F8);
     M2C_FIELD(arg0, s32*, 0) = 1;
 }
 
 M2C_UNK func_80002620(M2C_UNK);                     /* extern */
 
-void func_8900A1A4(s32 arg0) {
+/**
+ * Pops the 'PBOX' pool state.
+ * @unverified Name and comment guessed from the code.
+ */
+void PcBox_Free(s32 arg0) {
     func_80002620(0x50424F58);
 }
 
-void func_8002C064(s32, s32, s32, s32, s32);
+void Ui_DrawTintedScreenBackground(s32, s32, s32, s32, s32);
 extern u8 D_8900A5B8[];
-void func_89008F4C(s8*);
-void func_8002CAD0(s8*);
-void func_89007678(Screen89007678*);
-void func_8900A1CC(s8* arg0) {
-    func_800069CC();
-    func_8002C064(0x38, 0x1E0, D_8900A5B8[0], D_8900A5B8[1], D_8900A5B8[2]);
+void PcBox_DrawOperationWindow(s8*);
+void SavePrompt_Draw(s8*);
+void PcBox_DrawMonStatusWindow(Screen89007678*);
+/**
+ * Draws the PC box screen for its current state, including the storage label and status window.
+ * @unverified Name and comment guessed from the code.
+ */
+void PcBox_DrawScreen(s8* arg0) {
+    BgStage_DrawFrame();
+    Ui_DrawTintedScreenBackground(0x38, 0x1E0, D_8900A5B8[0], D_8900A5B8[1], D_8900A5B8[2]);
     switch (*(s32*)arg0) {
         case 1:
-            func_89008F4C(arg0 + 4);
+            PcBox_DrawOperationWindow(arg0 + 4);
             break;
         case 4:
-            func_89008F4C(arg0 + 4);
-            func_8002CAD0(arg0 + 0x220);
+            PcBox_DrawOperationWindow(arg0 + 4);
+            SavePrompt_Draw(arg0 + 0x220);
             break;
         case 2:
-            func_89008284(arg0 + 0x284, 2);
+            PcBox_DrawList(arg0 + 0x284, 2);
             break;
         case 3:
-            func_89008284(arg0 + 0x284, 0x10);
-            func_89007678((Screen89007678*)(arg0 + 0x328));
+            PcBox_DrawList(arg0 + 0x284, 0x10);
+            PcBox_DrawMonStatusWindow((Screen89007678*)(arg0 + 0x328));
             break;
     }
 }
@@ -1282,7 +1377,11 @@ typedef struct Ent8900A298 {
     s32 unk4;
 } Ent8900A298;
 
-s32 func_8900A298(s8* arg0) {
+/**
+ * Returns 1 when any box or party list is dirty.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 PcBox_HasUnsavedChanges(s8* arg0) {
     s32 i;
 
     for (i = 0; i < 8; i++) {
@@ -1298,14 +1397,14 @@ s32 func_8900A298(s8* arg0) {
     return 0;
 }
 
-s32 func_890097E0(s8*);
-void func_8002CA34(s8*, s32, s32);
-void func_8002CC44(s8*);
-s32 func_8002CD7C(s8*);
-s32 func_8900A298(s8* arg0);
+s32 PcBox_UpdateOperationWindow(s8*);
+void SavePrompt_Init(s8*, s32, s32);
+void Save_DrawReportingWindow(s8*);
+s32 SavePrompt_Update(s8*);
+s32 PcBox_HasUnsavedChanges(s8* arg0);
 void func_890070BC(s8* arg0);
 void func_8900806C(s8* arg0, s32 arg1, s32 arg2, u8* arg3, s32 arg4, s32 arg5, s32 arg6);
-void func_89007374(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, u16 *arg6);
+void PcBox_InitConfirmWindow(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, u16 *arg6);
 typedef struct Item8900A324 {
     u8 unk0;
     char unk1[0x4F];
@@ -1332,7 +1431,11 @@ typedef struct Obj8900A324 {
     /* 0x7520 */ s32 unk7520;
 } Obj8900A324;
 #define OBJ ((Obj8900A324*)arg0)
-s32 func_8900A324(s8* arg0) {
+/**
+ * Runs the PC box screen's state machine for one frame.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 PcBox_UpdateScreen(s8* arg0) {
     s32 ret = 0;
     s32 r;
     Ent8900A324* ent;
@@ -1341,11 +1444,11 @@ s32 func_8900A324(s8* arg0) {
 
     switch (OBJ->state) {
         case 1:
-            r = func_890097E0(arg0 + 4);
+            r = PcBox_UpdateOperationWindow(arg0 + 4);
             if (r == -1) {
-                if (func_8900A298(arg0) != 0) {
+                if (PcBox_HasUnsavedChanges(arg0) != 0) {
                     OBJ->state = 4;
-                    func_8002CA34(arg0 + 0x220, 0xCA, 0xAD);
+                    SavePrompt_Init(arg0 + 0x220, 0xCA, 0xAD);
                 } else {
                     ret = 1;
                 }
@@ -1357,14 +1460,14 @@ s32 func_8900A324(s8* arg0) {
             }
             break;
         case 4:
-            r = func_8002CD7C(arg0 + 0x220);
+            r = SavePrompt_Update(arg0 + 0x220);
             if (r == -1) {
                 OBJ->state = 1;
             } else if (r > 0) {
                 ret = 1;
                 switch (r) {
                     case 1:
-                        func_8002CC44(arg0 + 0x220);
+                        Save_DrawReportingWindow(arg0 + 0x220);
                         func_890070BC(arg0);
                         break;
                     case 2:
@@ -1373,7 +1476,7 @@ s32 func_8900A324(s8* arg0) {
             }
             break;
         case 2:
-            r = func_890082FC((s32)(arg0 + 0x284));
+            r = PcBox_UpdateListCursor((s32)(arg0 + 0x284));
             if (r == -1) {
                 OBJ->state = 1;
             } else if (r > 0) {
@@ -1384,7 +1487,7 @@ s32 func_8900A324(s8* arg0) {
                 } else {
                     func_8003F6AC(2);
                     OBJ->state = 3;
-                    func_89007374(arg0 + 0x328, 0x69, 0x7D, (s32)entry, 0, D_800603C0, OBJ->unk751C);
+                    PcBox_InitConfirmWindow(arg0 + 0x328, 0x69, 0x7D, (s32)entry, 0, D_800603C0, OBJ->unk751C);
                 }
             }
             break;

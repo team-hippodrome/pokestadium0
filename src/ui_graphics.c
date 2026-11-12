@@ -80,10 +80,10 @@ void Ui_DrawBorderedPanelStyleB(s32 x1, s32 y1, s32 width, s32 height, u16 color
 void Ui_DrawBorderedPanelNoFill(s32 x1, s32 y1, s32 width, s32 height);
 void Ui_Draw20x20Icon(s32 arg0, s32 arg1, s32 arg2);
 
-void Ui_DrawTexturedRect8x8(s32 x1, s32 y1, s32 width, s32 height, u8* texture);
+s32 Ui_DrawTexturedRect8x8(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4);
 
-s32 func_8001D370(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
-    UNUSED s32 pad[4];
+s32 Ui_DrawTexturedRect8x8(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
+    UNUSED s32 pad[4]; // FAKE: stack padding
     s32 sp2C;
     s32 sp28;
 
@@ -378,7 +378,7 @@ void func_8001E9A0(s32 arg0, s32 arg1) {
 }
 
 /*
- * func_8001EBDC  (src/ui_graphics.c)  -- 465 words
+ * BattleHud_DrawHpBarTexture  (src/ui_graphics.c)  -- 465 words
  *
  * Draws a horizontal bar built from 8x12-texel pieces at screen
  * position (arg0, arg1).
@@ -406,7 +406,7 @@ extern u8 D_010067D0[];
 extern u8 D_01006890[];
 extern u8 D_01006950[];
 
-void func_8001EBDC(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
+void BattleHud_DrawHpBarTexture(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     u8* spDC;                 /* chosen fill texture */
     s32 spD8 = arg2 - 4;      /* usable width of the bar */
     /* empty part width = (max - current) / max * usable width */
@@ -462,7 +462,7 @@ void func_8001EBDC(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
 }
 
 /*
- * func_8001F320  (src/ui_graphics.c)  -- 451 words
+ * Widget_DrawMeterBar  (src/ui_graphics.c)  -- 451 words
  *
  * Draws a meter bar, 0x41 pixels wide and 5 tall, at screen position
  * (arg0, arg1) using 16-bit RGBA textures.
@@ -491,7 +491,10 @@ extern u8 D_01006C50[];
 extern u8 D_01006CF0[];
 extern u8 D_01006D18[];
 
-void func_8001F320(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Widget_DrawMeterBar(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     u8* spCC;  /* chosen fill texture */
     /* length of the empty part in pixels (0..48); arg3 is the maximum */
     s32 temp_lo = ((arg3 - arg2) * 0x30) / arg3;

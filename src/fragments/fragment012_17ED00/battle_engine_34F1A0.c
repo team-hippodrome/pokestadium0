@@ -8,16 +8,19 @@
 extern Trail40Variant D_821A8B70;
 extern Gfx D_82192CC8[];
 
-void Trail40Variant_ApplyRippleAtPoint(s16 arg0, s16 arg1);
-void Trail40Variant_InitPool(s16 arg0);
-void Trail40Variant_UpdateNodes(s32 arg0, s32 arg1);
-void Trail40Variant_WriteVertex(Trail40VariantNode* arg0, Vtx* arg1);
-s32 Trail40Variant_AdvanceTimer(void);
-Gfx* Trail40Variant_BuildGfx(Gfx* arg0);
+void SingTrail_ApplyRippleAtPoint(s16 arg0, s16 arg1);
+void SingTrail_InitPool(s16 arg0);
+void SingTrail_UpdateNodes(s32 arg0, s32 arg1);
+void SingTrail_WriteVertex(Trail40VariantNode* arg0, Vtx* arg1);
+s32 SingTrail_AdvanceTimer(void);
+Gfx* SingTrail_BuildGfx(Gfx* arg0);
 
 void Trail40Variant_SetupCameraTransform(void);
 
-void Trail40Variant_ApplyRippleAtPoint(s16 arg0, s16 arg1) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void SingTrail_ApplyRippleAtPoint(s16 arg0, s16 arg1) {
     Trail40VariantNode* var_s0 = &D_821A8B70.unk_0014[0][0];
     s32 i;
     s32 j;
@@ -28,7 +31,7 @@ void Trail40Variant_ApplyRippleAtPoint(s16 arg0, s16 arg1) {
         for (j = 0; j < 16; j++) {
             s32 tmp2 = arg0 - j;
 
-            if ((tmp2 == 0.0f) && (tmp1 == (0, 0.0f))) {
+            if ((tmp2 == 0.0f) && (tmp1 == (0, 0.0f))) { // FAKE: comma expression
                 var_s0->unk_1C += 1.5707963705062866;
             } else {
                 var_s0->unk_1C += 1.5707963705062866 / sqrtf(SQ((f32)tmp2) + SQ((f32)tmp1));
@@ -38,7 +41,10 @@ void Trail40Variant_ApplyRippleAtPoint(s16 arg0, s16 arg1) {
     }
 }
 
-void Trail40Variant_InitPool(s16 arg0) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void SingTrail_InitPool(s16 arg0) {
     s32 i;
     s32 j;
     s32 k;
@@ -71,12 +77,12 @@ void Trail40Variant_InitPool(s16 arg0) {
         }
     }
 
-    Trail40Variant_ApplyRippleAtPoint(8, 8);
+    SingTrail_ApplyRippleAtPoint(8, 8);
 
     for (k = 0; k < 10; k++) {
         s16 rand1 = RAND(16);
         s16 rand2 = RAND(16);
-        Trail40Variant_ApplyRippleAtPoint(rand1, rand2);
+        SingTrail_ApplyRippleAtPoint(rand1, rand2);
     }
 
     var_v0 = &D_821A8B70.unk_0014[0][0];
@@ -88,7 +94,10 @@ void Trail40Variant_InitPool(s16 arg0) {
     }
 }
 
-void Trail40Variant_UpdateNodes(s32 arg0, s32 arg1) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void SingTrail_UpdateNodes(s32 arg0, s32 arg1) {
     f32 sp84;
     f32 sp80;
     f32 sp7C;
@@ -104,7 +113,7 @@ void Trail40Variant_UpdateNodes(s32 arg0, s32 arg1) {
     f32 sp54;
     f32 sp50;
     f32 sp4C;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s16 sp46;
 
     sp6C = D_821A8B70.unk_0014[arg0][arg1].unk_00;
@@ -195,7 +204,10 @@ void Trail40Variant_UpdateNodes(s32 arg0, s32 arg1) {
     }
 }
 
-void Trail40Variant_WriteVertex(Trail40VariantNode* arg0, Vtx* arg1) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void SingTrail_WriteVertex(Trail40VariantNode* arg0, Vtx* arg1) {
     f32 r;
     f32 g;
     f32 b;
@@ -217,7 +229,10 @@ void Trail40Variant_WriteVertex(Trail40VariantNode* arg0, Vtx* arg1) {
     arg1->v.cn[3] = D_821A8B70.unk_0004;
 }
 
-s32 Trail40Variant_AdvanceTimer(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+s32 SingTrail_AdvanceTimer(void) {
     Trail40VariantNode* var_s1;
     s32 i;
     s32 j;
@@ -254,7 +269,7 @@ s32 Trail40Variant_AdvanceTimer(void) {
 
     for (i = 0; i < 16; i++) {
         for (j = 0; j < 16; j++) {
-            Trail40Variant_UpdateNodes(i, j);
+            SingTrail_UpdateNodes(i, j);
         }
     }
 
@@ -262,11 +277,14 @@ s32 Trail40Variant_AdvanceTimer(void) {
 }
 
 s32 func_8000515C(s32);
-s8* func_8213C80C(void);
+s32 BattleAnim_GetCameraContext(void);
 void func_80031F14(f32*, f32*, f32*);
 void func_800320A8(s32, f32, f32, f32, f32, f32, f32);
 extern s32 D_821A8B80;
-void func_821798E4(void) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Trail40Variant_SetupCameraTransform(void) {
     s8* temp_v0;
     f32 tmp1;
     f32 tmp2;
@@ -280,7 +298,7 @@ void func_821798E4(void) {
     f32 sp5C;
 
     D_821A8B80 = func_8000515C(0x40);
-    temp_v0 = func_8213C80C();
+    temp_v0 = BattleAnim_GetCameraContext();
 
     tmp4 = *(f32*)(temp_v0 + 0xB4);
     tmp5 = *(f32*)(temp_v0 + 0xB8);
@@ -304,7 +322,10 @@ void func_821798E4(void) {
     func_800320A8(D_821A8B80, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6);
 }
 
-Gfx* Trail40Variant_BuildGfx(Gfx* arg0) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+Gfx* SingTrail_BuildGfx(Gfx* arg0) {
     s32 i;
     s32 j;
     Trail40VariantNode* var_s2;
@@ -319,7 +340,7 @@ Gfx* Trail40Variant_BuildGfx(Gfx* arg0) {
     var_s2 = &D_821A8B70.unk_0014[0][0];
     for (i = 0; i < 16; i++) {
         for (j = 0; j < 16; j++) {
-            Trail40Variant_WriteVertex(var_s2, vtx);
+            SingTrail_WriteVertex(var_s2, vtx);
             var_s2++;
             vtx++;
         }

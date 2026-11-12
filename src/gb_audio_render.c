@@ -206,7 +206,7 @@ void func_80044BA8(u32 arg0, u8 arg1, u32 arg2) {
 }
 
 void func_80044D60(u32 arg0) {
-    s32 pad[3];
+    s32 pad[3]; // FAKE: stack padding
     s16 sp4C[4];
     u32 i;
     f32 var_fs0;

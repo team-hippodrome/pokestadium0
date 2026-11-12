@@ -1,14 +1,20 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
 #include "battle_engine_343BA0_8.h"
 
-void BattleAnim_StartEffect98Radial20_Init(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_SetupDisableUseRadial(void) {
     D_8219CB16 = 0;
     BattleAnim_ResetSharedEffectMatrix();
     Radial20_ResetPool();
     BattleAnim_StartEffect98Radial20_EmitVariantD();
 }
 
-s32 BattleAnim_StartEffect98Radial20_Update(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+s32 BattleAnim_RunDisableUseRadial(void) {
     D_8219CB16++;
     if (D_8219CB16 >= 0xB5) {
         return -1;
@@ -21,25 +27,34 @@ s32 BattleAnim_StartEffect98Radial20_Update(void) {
     return Radial20_IsComplete();
 }
 
-void BattleAnim_StartEffect98Radial20_Draw(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_DrawDisableUseRadial(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     gDisplayListHead = Radial20_Draw(gDisplayListHead);
 }
 
-void BattleAnim_StartEffect11Trail50Alt_Init(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_SetupRazorLeafUseTrail(void) {
     D_8219CB18 = 0;
     BattleAnim_ResetSharedEffectMatrix();
-    Trail50EffectAlt_Init();
+    RazorLeafTrail_Init();
 }
 
-s32 BattleAnim_StartEffect11Trail50Alt_Update(void) {
-    UNUSED s32 pad[1];
+/**
+ * @unverified Name from Stadium 1.
+ */
+s32 BattleAnim_RunRazorLeafUseTrail(void) {
+    UNUSED s32 pad[1]; // FAKE: stack padding
     Vec3f sp60;
     f32 sp5C;
     f32 sp58;
     f32 sp54;
-    UNUSED s32 pad2[2];
+    UNUSED s32 pad2[2]; // FAKE: stack padding
     f32 var_fv0;
     f32 sp44;
 
@@ -54,31 +69,40 @@ s32 BattleAnim_StartEffect11Trail50Alt_Update(void) {
         if (sp5C > 0.0) {
             var_fv0 = -var_fv0;
         }
-        Trail50EffectAlt_Start(sp5C, sp58, sp54, var_fv0, 0.0f, 0.0f, 0xFF, 0xFF, 0xFF, 0x64, 0.3f, 1.0f, 4.0f, 0x1E);
+        RazorLeafTrail_Start(sp5C, sp58, sp54, var_fv0, 0.0f, 0.0f, 0xFF, 0xFF, 0xFF, 0x64, 0.3f, 1.0f, 4.0f, 0x1E);
     }
-    Trail50EffectAlt_IsComplete();
+    RazorLeafTrail_IsComplete();
     return 0;
 }
 
-void BattleAnim_StartEffect11Trail50Alt_Draw(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_DrawRazorLeafUseTrail(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gDisplayListHead = Trail50EffectAlt_Draw(gDisplayListHead);
+    gDisplayListHead = RazorLeafTrail_Draw(gDisplayListHead);
 }
 
-void BattleAnim_StartEffect57Trail50_Init(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_SetupPetalDanceUseTrail(void) {
     D_8219CB1A = 0;
     BattleAnim_ResetSharedEffectMatrix();
-    Trail50Effect_Init();
+    PetalDanceTrail_Init();
 }
 
-s32 BattleAnim_StartEffect57Trail50_Update(void) {
-    UNUSED s32 pad[1];
+/**
+ * @unverified Name from Stadium 1.
+ */
+s32 BattleAnim_RunPetalDanceUseTrail(void) {
+    UNUSED s32 pad[1]; // FAKE: stack padding
     Vec3f sp60;
     f32 sp5C;
     f32 sp58;
     f32 sp54;
-    UNUSED s32 pad2[2];
+    UNUSED s32 pad2[2]; // FAKE: stack padding
     f32 var_fv0;
     f32 sp44;
 
@@ -93,55 +117,81 @@ s32 BattleAnim_StartEffect57Trail50_Update(void) {
         if (sp5C > 0.0) {
             var_fv0 = -var_fv0;
         }
-        Trail50Effect_Start(sp5C, sp58, sp54, var_fv0, 0.0f, 0.0f, 0xFF, 0xFF, 0xFF, 0x64, 0.3f, 1.0f, 4.0f, 0x1E);
+        PetalDanceTrail_Start(sp5C, sp58, sp54, var_fv0, 0.0f, 0.0f, 0xFF, 0xFF, 0xFF, 0x64, 0.3f, 1.0f, 4.0f, 0x1E);
     }
-    Trail50Effect_IsComplete();
+    PetalDanceTrail_IsComplete();
     return 0;
 }
 
-void BattleAnim_StartEffect57Trail50_Draw(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_DrawPetalDanceUseTrail(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gDisplayListHead = Trail50Effect_Draw(gDisplayListHead);
+    gDisplayListHead = PetalDanceTrail_Draw(gDisplayListHead);
 }
 
-void BattleAnim_StartEffect42Trail40_Init(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_SetupHypnosisScreechUseTrail(void) {
     Vec3f sp1C;
 
     BattleAnim_ResetSharedEffectMatrix();
     BattleAnim_EffectSecondaryOwnerAnchorPosition(&sp1C);
-    Trail40_Init(0x708);
+    HypnosisScreechTrail_Init(0x708);
 }
 
-s32 BattleAnim_StartEffect42Trail40_Update(void) {
-    return Trail40_IsComplete();
+/**
+ * @unverified Name from Stadium 1.
+ */
+s32 BattleAnim_RunHypnosisScreechUseTrail(void) {
+    return HypnosisScreechTrail_IsComplete();
 }
 
-void BattleAnim_StartEffect42Trail40_Draw(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_DrawHypnosisScreechUseTrail(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gDisplayListHead = Trail40_Draw(gDisplayListHead);
+    gDisplayListHead = HypnosisScreechTrail_Draw(gDisplayListHead);
 }
 
-void BattleAnim_StartEffect43Trail40Variant_Init(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_SetupSingUseTrail(void) {
     Vec3f sp1C;
 
     BattleAnim_ResetSharedEffectMatrix();
     BattleAnim_EffectSecondaryOwnerAnchorPosition(&sp1C);
-    Trail40Variant_InitPool(0x708);
+    SingTrail_InitPool(0x708);
 }
 
-s32 BattleAnim_StartEffect43Trail40Variant_Update(void) {
-    return Trail40Variant_AdvanceTimer();
+/**
+ * @unverified Name from Stadium 1.
+ */
+s32 BattleAnim_RunSingUseTrail(void) {
+    return SingTrail_AdvanceTimer();
 }
 
-void BattleAnim_StartEffect43Trail40Variant_Draw(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_DrawSingUseTrail(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gDisplayListHead = Trail40Variant_BuildGfx(gDisplayListHead);
+    gDisplayListHead = SingTrail_BuildGfx(gDisplayListHead);
 }
 
-void BattleAnim_StartEffect44Trail40GridAlt_Init(void) {
+/**
+ * Moves: Kinesis (use), Supersonic (use)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_SetupKinesisSupersonicUseTrail(void) {
     Vec3f sp1C;
 
     BattleAnim_ResetSharedEffectMatrix();
@@ -149,23 +199,43 @@ void BattleAnim_StartEffect44Trail40GridAlt_Init(void) {
     Trail40GridAlt_Init(0x708);
 }
 
-s32 BattleAnim_StartEffect44Trail40GridAlt_Update(void) {
+/**
+ * Moves: Kinesis (use), Supersonic (use)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1.
+ */
+s32 BattleAnim_RunKinesisSupersonicUseTrail(void) {
     return Trail40GridAlt_IsComplete();
 }
 
-void BattleAnim_StartEffect44Trail40GridAlt_Draw(void) {
+/**
+ * Moves: Kinesis (use), Supersonic (use)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_DrawKinesisSupersonicUseTrail(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     gDisplayListHead = Trail40GridAlt_Draw(gDisplayListHead);
 }
 
-void BattleAnim_StartEffect45FourStreamTrail_Init(void) {
+/**
+ * Moves: Sonic Boom (use)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_SetupSonicBoomUseFourStream(void) {
     D_8219CAC0 = 0;
     BattleAnim_ResetSharedEffectMatrix();
     FourStreamTrail_Init();
 }
 
-s32 func_8216F3A0(void) {
+/**
+ * Moves: Sonic Boom (use)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+s32 BattleAnim_RunSonicBoomUseFourStream(void) {
     s32 var_v1;
     Vec3f sp68;
     f32 sp64;
@@ -209,7 +279,12 @@ s32 func_8216F3A0(void) {
     return var_v1;
 }
 
-void BattleAnim_StartEffect45FourStreamTrail_Draw(void) {
+/**
+ * Moves: Sonic Boom (use)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_DrawSonicBoomUseFourStream(void) {
     if (D_8219CAC0 >= 2) {
         gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
@@ -217,13 +292,19 @@ void BattleAnim_StartEffect45FourStreamTrail_Draw(void) {
     }
 }
 
-void BattleAnim_StartEffect62OwnerLinkedFourStream_Init(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_SetupSpikeCannonUseFourStream(void) {
     D_8219CAC2 = 0;
     BattleAnim_ResetSharedEffectMatrix();
-    OwnerLinkedFourStream_Init();
+    SpikeCannonFourStream_Init();
 }
 
-s32 BattleAnim_StartEffect62OwnerLinkedFourStream_Update(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+s32 BattleAnim_RunSpikeCannonUseFourStream(void) {
     s32 var_v1;
     f32 sp60;
     f32 sp5C;
@@ -240,26 +321,34 @@ s32 BattleAnim_StartEffect62OwnerLinkedFourStream_Update(void) {
         sp54 *= 7.0f * __cosf(sp48);
         sp50 = __sinf(sp48) * 10.0f;
         sp4C = 0.0f;
-        OwnerLinkedFourStream_Start(sp60, sp5C, sp58, sp54, sp50, 0.0f, 0xD0, 0xFF, 0xFF, 0x80, D_FLT_82197950, 2.0f, 4.0f, 0x28);
+        SpikeCannonFourStream_Start(sp60, sp5C, sp58, sp54, sp50, 0.0f, 0xD0, 0xFF, 0xFF, 0x80, D_FLT_82197950, 2.0f, 4.0f, 0x28);
     }
 
     if (D_8219CAC2 >= 2) {
-        var_v1 = OwnerLinkedFourStream_IsComplete();
+        var_v1 = SpikeCannonFourStream_IsComplete();
     } else {
         var_v1 = 0;
     }
     return var_v1;
 }
 
-void BattleAnim_StartEffect62OwnerLinkedFourStream_Draw(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_DrawSpikeCannonUseFourStream(void) {
     if (D_8219CAC2 >= 2) {
         gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-        gDisplayListHead = OwnerLinkedFourStream_Draw(gDisplayListHead);
+        gDisplayListHead = SpikeCannonFourStream_Draw(gDisplayListHead);
     }
 }
 
-void BattleAnim_StartEffect67OwnerAnchoredFourStream_Init(void) {
+/**
+ * Moves: Pin Missile (use), Poison Sting (use), Twineedle (use)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_StingerMoves_Init(void) {
     Vec3f sp5C;
     f32 sp58;
     f32 sp54;
@@ -282,7 +371,12 @@ void BattleAnim_StartEffect67OwnerAnchoredFourStream_Init(void) {
     BattleAnim_SpawnSecondaryOwnerParticle(sp5C, 1);
 }
 
-s32 BattleAnim_StartEffect67OwnerAnchoredFourStream_Update(void) {
+/**
+ * Moves: Pin Missile (use), Poison Sting (use), Twineedle (use)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1.
+ */
+s32 BattleAnim_StingerMoves_Update(void) {
     D_8219CB08++;
     if (D_8219CB08 >= 0x32) {
         return -1;
@@ -291,13 +385,21 @@ s32 BattleAnim_StartEffect67OwnerAnchoredFourStream_Update(void) {
     return OwnerAnchoredFourStream_IsComplete();
 }
 
-void BattleAnim_StartEffect67OwnerAnchoredFourStream_Draw(void) {
+/**
+ * Moves: Pin Missile (use), Poison Sting (use), Twineedle (use)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_StingerMoves_Draw(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     gDisplayListHead = OwnerAnchoredFourStream_Draw(gDisplayListHead);
 }
 
-void BattleAnim_StartEffect78Radial20_EmitVariantA(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_EmitTriAttackUseRadial(void) {
     f32 sp5C;
     f32 sp58;
     f32 sp54;
@@ -309,17 +411,23 @@ void BattleAnim_StartEffect78Radial20_EmitVariantA(void) {
     sp50 *= 6.0f;
     sp4C *= 6.0f;
     sp48 *= 6.0f;
-    Radial20_VariantA(sp5C, sp58, sp54, sp50, sp4C, sp48, 9, 0xFF, 0xFF, 0xFF, 0xB4, D_FLT_82197958, 2.0f, 20.0f, 0x3C);
+    TriAttackRadial_EmitVariantA(sp5C, sp58, sp54, sp50, sp4C, sp48, 9, 0xFF, 0xFF, 0xFF, 0xB4, D_FLT_82197958, 2.0f, 20.0f, 0x3C);
 }
 
-void BattleAnim_StartEffect78Radial20_Init(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_SetupTriAttackUseRadial(void) {
     D_8219CB0A = 0;
     BattleAnim_ResetSharedEffectMatrix();
     Radial20_ResetPool();
-    BattleAnim_StartEffect78Radial20_EmitVariantA();
+    BattleAnim_EmitTriAttackUseRadial();
 }
 
-s32 BattleAnim_StartEffect78Radial20_Update(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+s32 BattleAnim_RunTriAttackUseRadial(void) {
     D_8219CB0A++;
     if (D_8219CB0A >= 0xB5) {
         return -1;
@@ -327,13 +435,19 @@ s32 BattleAnim_StartEffect78Radial20_Update(void) {
     return Radial20_IsComplete();
 }
 
-void BattleAnim_StartEffect78Radial20_Draw(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_DrawTriAttackUseRadial(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     gDisplayListHead = Radial20_Draw(gDisplayListHead);
 }
 
-void BattleAnim_StartEffect26DoubleTextureTrail_Seed(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_SeedAuroraBeamUseDoubleTextureTrail(void) {
     static unk_D_843C2C00_024 D_84387FC0 = { 2, 1, 0xE, 1, 2, 2, 3, 1 };
     static unk_D_843C2C00_024 D_84387FE0 = { 3, 5, 0, 5, 3, 7, 0, 5 };
     static unk_D_843C2C00_024 D_84388000 = { 2, 1, 0xE, 1, 2, 1, 3, 1 };
@@ -357,23 +471,35 @@ void BattleAnim_StartEffect26DoubleTextureTrail_Seed(void) {
                   2, 0, 0, &D_84388000, &D_84388020, 0, 0xFF, 0x64, 0x96, 0x64, 0x64, 0, 0xFF, 0xC8, 0, 0, 0, 0);
 }
 
-void BattleAnim_StartEffect26DoubleTextureTrail_Init(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_SetupAuroraBeamUseDoubleTextureTrail(void) {
     BattleAnim_ResetSharedEffectMatrix();
     DoubleTextureTrail_InitPool();
-    BattleAnim_StartEffect26DoubleTextureTrail_Seed();
+    BattleAnim_SeedAuroraBeamUseDoubleTextureTrail();
 }
 
-s32 BattleAnim_StartEffect26DoubleTextureTrail_Update(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+s32 BattleAnim_RunAuroraBeamUseDoubleTextureTrail(void) {
     return DoubleTextureTrail_UpdateAll();
 }
 
-void BattleAnim_StartEffect26DoubleTextureTrail_Draw(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_DrawAuroraBeamUseDoubleTextureTrail(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     gDisplayListHead = DoubleTextureTrail_DrawAll(gDisplayListHead);
 }
 
-void BattleAnim_StartEffect47SixSlotTrail_Seed(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_SeedIceBeamUseSixSlotTrail(void) {
     static unk_D_843C2C00_024 D_84388040 = { 3, 5, 1, 5, 1, 7, 3, 7 };
     static unk_D_843C2C00_024 D_84388060 = { 0x1F, 0x1F, 0x1F, 0, 7, 7, 7, 0 };
 
@@ -392,32 +518,44 @@ void BattleAnim_StartEffect47SixSlotTrail_Seed(void) {
     sp94 *= 12.0f;
     sp90 *= 12.0f;
 
-    BattleAnim_SixSlotTrail_Spawn(0, spA4, spA0, sp9C, sp98, sp94, sp90, 0xFF, 0xFF, 0xFF, 0xFF, 0, 0, 0x64, 0xFF, 0xFF, D_FLT_82197974, 2.0f,
+    HyperBeamIceBeamTrail_Spawn(0, spA4, spA0, sp9C, sp98, sp94, sp90, 0xFF, 0xFF, 0xFF, 0xFF, 0, 0, 0x64, 0xFF, 0xFF, D_FLT_82197974, 2.0f,
                   20.0f, 0x3C, 0x95, 0x95, 0, 0xA, 0, 0xD, 0, 0, 0, 0, &D_84388040, &D_84388060);
 }
 
-void BattleAnim_StartEffect47SixSlotTrail_Init(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_SetupIceBeamUseSixSlotTrail(void) {
     D_8219CB0C = 0;
     BattleAnim_ResetSharedEffectMatrix();
-    BattleAnim_SixSlotTrail_ResetPool();
-    BattleAnim_StartEffect47SixSlotTrail_Seed();
+    HyperBeamIceBeamTrail_ResetPool();
+    BattleAnim_SeedIceBeamUseSixSlotTrail();
 }
 
-s32 BattleAnim_StartEffect47SixSlotTrail_Update(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+s32 BattleAnim_RunIceBeamUseSixSlotTrail(void) {
     D_8219CB0C++;
     if ((D_8219CB0C % 10) == 0) {
-        BattleAnim_StartEffect47SixSlotTrail_Seed();
+        BattleAnim_SeedIceBeamUseSixSlotTrail();
     }
-    return BattleAnim_SixSlotTrail_UpdateAll();
+    return HyperBeamIceBeamTrail_UpdateAll();
 }
 
-void BattleAnim_StartEffect47SixSlotTrail_Draw(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_DrawIceBeamUseSixSlotTrail(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gDisplayListHead = BattleAnim_SixSlotTrail_DrawAll(gDisplayListHead);
+    gDisplayListHead = HyperBeamIceBeamTrail_DrawAll(gDisplayListHead);
 }
 
-void BattleAnim_StartEffect4DoubleTextureTrail_Seed(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_SeedPsybeamUseDoubleTextureTrail(void) {
     static unk_D_843C2C00_024 D_84388080 = { 3, 5, 1, 5, 6, 7, 2, 3 };
     static unk_D_843C2C00_024 D_843880A0 = { 0x1F, 0x1F, 0x1F, 0, 0, 7, 5, 7 };
     static unk_D_843C2C00_024 D_843880C0 = { 3, 5, 2, 5, 1, 7, 3, 7 };
@@ -442,17 +580,26 @@ void BattleAnim_StartEffect4DoubleTextureTrail_Seed(void) {
                   0, 0, 0);
 }
 
-void BattleAnim_StartEffect4DoubleTextureTrail_Init(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_SetupPsybeamUseDoubleTextureTrail(void) {
     BattleAnim_ResetSharedEffectMatrix();
     DoubleTextureTrail_InitPool();
-    BattleAnim_StartEffect4DoubleTextureTrail_Seed();
+    BattleAnim_SeedPsybeamUseDoubleTextureTrail();
 }
 
-s32 BattleAnim_StartEffect4DoubleTextureTrail_Update(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+s32 BattleAnim_RunPsybeamUseDoubleTextureTrail(void) {
     return DoubleTextureTrail_UpdateAll();
 }
 
-void BattleAnim_StartEffect4DoubleTextureTrail_Draw(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_DrawPsybeamUseDoubleTextureTrail(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     gDisplayListHead = DoubleTextureTrail_DrawAll(gDisplayListHead);
@@ -499,7 +646,10 @@ void BattleAnim_StartEffect77DoubleTextureTrail_Draw(void) {
     gDisplayListHead = DoubleTextureTrail_DrawAll(gDisplayListHead);
 }
 
-void BattleAnim_StartEffect70DoubleTextureTrail_Seed(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_SeedSolarBeamUseDoubleTextureTrail(void) {
     static unk_D_843C2C00_024 D_84388180 = { 2, 1, 0xE, 1, 2, 1, 3, 1 };
     static unk_D_843C2C00_024 D_843881A0 = { 3, 5, 0, 5, 0, 7, 5, 7 };
 
@@ -519,23 +669,35 @@ void BattleAnim_StartEffect70DoubleTextureTrail_Seed(void) {
                   0xFF, 0xFF, 0, 0x96);
 }
 
-void BattleAnim_StartEffect70DoubleTextureTrail_Init(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_SetupSolarBeamUseDoubleTextureTrail(void) {
     BattleAnim_ResetSharedEffectMatrix();
     DoubleTextureTrail_InitPool();
-    BattleAnim_StartEffect70DoubleTextureTrail_Seed();
+    BattleAnim_SeedSolarBeamUseDoubleTextureTrail();
 }
 
-s32 BattleAnim_StartEffect70DoubleTextureTrail_Update(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+s32 BattleAnim_RunSolarBeamUseDoubleTextureTrail(void) {
     return DoubleTextureTrail_UpdateAll();
 }
 
-void BattleAnim_StartEffect70DoubleTextureTrail_Draw(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_DrawSolarBeamUseDoubleTextureTrail(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     gDisplayListHead = DoubleTextureTrail_DrawAll(gDisplayListHead);
 }
 
-void BattleAnim_StartEffect39DoubleTextureTrail_Seed(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_SeedHyperBeamUseDoubleTextureTrail(void) {
     static unk_D_843C2C00_024 D_843881C0 = {
         0x00000002, 0x00000001, 0x0000000E, 0x00000001, 0x00000007, 0x00000007, 0x00000007, 0x00000003,
     };

@@ -37,16 +37,16 @@ typedef union ParticleDescriptorPayload {
 } ParticleDescriptorPayload;
 
 typedef struct ParticleDescriptor {
-    /* 0x00 */ s32 unk_00; /* unk_04: 1 = a, 3 = func */
-    /* 0x04 */ ParticleDescriptorPayload unk_04;
+    /* 0x00 */ s32 kind; /* unk_04: 1 = a, 3 = func */
+    /* 0x04 */ ParticleDescriptorPayload payload;
 } ParticleDescriptor; // size = 0x08
 
 typedef struct ParticleEmitter {
     /* 0x00 */ f32 unk_00;
-    /* 0x04 */ Vec3f unk_04;
-    /* 0x10 */ Vec3s unk_10;
-    /* 0x18 */ ParticleUpdateCallback unk_18;
-    /* 0x1C */ ParticleDescriptor* unk_1C;
+    /* 0x04 */ Vec3f origin;
+    /* 0x10 */ Vec3s rotation;
+    /* 0x18 */ ParticleUpdateCallback updateCallback;
+    /* 0x1C */ ParticleDescriptor* descriptor;
     /* 0x20 */ s32 unk_20;
     /* 0x24 */ u16 unk_24;
     /* 0x26 */ s16 unk_26;
@@ -59,42 +59,47 @@ typedef struct ParticleEmitter {
     /* 0x2F */ u8 unk_2F;
 } ParticleEmitter; // size = 0x30
 
+/*
+ * Same record as Stadium 1's Particle, but 4 bytes shorter: from 0x28 on, every
+ * field sits 4 bytes lower than in Stadium 1 (unk_XX names keep the Stadium 1
+ * offset). Field names follow Stadium 1. @unverified
+ */
 typedef struct Particle {
     /* 0x00 */ struct Particle* next;
     /* 0x04 */ struct Particle* prev;
-    /* 0x08 */ ParticleUpdateCallback unk_08;
-    /* 0x0C */ ParticleDescriptor* unk_0C;
-    /* 0x10 */ struct ActivePokemon* unk_10;
-    /* 0x14 */ DisplayObject* unk_14;
-    /* 0x18 */ u32 unk_18;
-    /* 0x1C */ f32 unk_1C;
+    /* 0x08 */ ParticleUpdateCallback updateCallback;
+    /* 0x0C */ ParticleDescriptor* descriptor;
+    /* 0x10 */ struct ActivePokemon* pokemon;
+    /* 0x14 */ DisplayObject* displayObject;
+    /* 0x18 */ u32 flags;
+    /* 0x1C */ f32 scale;
     /* 0x20 */ f32 unk_20;
     /* 0x24 */ f32 unk_24;
-    /* 0x28 */ Vec3f unk_2C;
-    /* 0x34 */ Vec3f unk_38;
+    /* 0x28 */ Vec3f worldPosition;
+    /* 0x34 */ Vec3f positionOffset;
     /* 0x40 */ char unk44[0xC];
-    /* 0x4C */ Vec3f unk_50;
-    /* 0x58 */ Vec3f unk_5C;
-    /* 0x64 */ Vec3f unk_68;
-    /* 0x70 */ f32 unk_74;
-    /* 0x74 */ f32 unk_78;
-    /* 0x78 */ Vec3f unk_7C;
+    /* 0x4C */ Vec3f motionOffset;
+    /* 0x58 */ Vec3f motionTarget;
+    /* 0x64 */ Vec3f origin;
+    /* 0x70 */ f32 stepMagnitude;
+    /* 0x74 */ f32 magnitudeStep;
+    /* 0x78 */ Vec3f motionStep;
     /* 0x84 */ char unk88[0xC];
-    /* 0x90 */ Vec3s unk_94;
-    /* 0x96 */ Vec3s unk_9A;
-    /* 0x9C */ Vec3s unk_A0;
+    /* 0x90 */ Vec3s rotation;
+    /* 0x96 */ Vec3s rotationStep;
+    /* 0x9C */ Vec3s rotationTarget;
     /* 0xA2 */ s16 unk_A6;
     /* 0xA4 */ s16 unk_A8;
     /* 0xA6 */ s16 unk_AA;
     /* 0xA8 */ s16 unk_AC;
     /* 0xAA */ s16 unk_AE;
     /* 0xAC */ s16 unk_B0;
-    /* 0xAE */ s16 unk_B2;
+    /* 0xAE */ s16 lifecycle;
     /* 0xB0 */ char unkB4[0x2];
-    /* 0xB2 */ s16 unk_B6;
-    /* 0xB4 */ s16 unk_B8;
-    /* 0xB6 */ s16 unk_BA;
-    /* 0xB8 */ s16 unk_BC;
+    /* 0xB2 */ s16 frameTimer;
+    /* 0xB4 */ s16 phase;
+    /* 0xB6 */ s16 phaseTimer;
+    /* 0xB8 */ s16 delayTimer;
     /* 0xBA */ u8 prim_r;
     /* 0xBB */ u8 prim_g;
     /* 0xBC */ u8 prim_b;
@@ -103,8 +108,8 @@ typedef struct Particle {
     /* 0xBF */ u8 env_b;
     /* 0xC0 */ u8 prim_a;
     /* 0xC1 */ char unkC5[0x1];
-    /* 0xC2 */ s8 unk_C6;
-    /* 0xC3 */ s8 unk_C7;
+    /* 0xC2 */ s8 loopsRemaining;
+    /* 0xC3 */ s8 textureFrame;
     /* 0xC4 */ char unkC8[0x2];
     /* 0xC6 */ u8 unk_CA;
     /* 0xC7 */ u8 unk_CB;
@@ -112,7 +117,7 @@ typedef struct Particle {
     /* 0xC9 */ u8 unk_CD;
     /* 0xCA */ u8 unk_CE;
     /* 0xCB */ u8 unk_CF;
-    /* 0xCC */ s8 unk_D0;
+    /* 0xCC */ s8 allocated;
 } Particle; // size = 0xD0
 
 typedef void (*func_unk_D_8140E724)(struct Particle*);
@@ -229,11 +234,11 @@ typedef struct arg1_func_81407874 {
 } arg1_func_81407874; // size >= 0x18
 
 typedef struct ParticleCameraState {
-    /* 0x00 */ MtxF unk_00;
-    /* 0x40 */ Vec3f unk_40;
-    /* 0x4C */ Vec3f unk_4C;
-    /* 0x58 */ Vec3f unk_58;
-    /* 0x64 */ Vec3f unk_64;
+    /* 0x00 */ MtxF viewMatrix;
+    /* 0x40 */ Vec3f eyePosition;
+    /* 0x4C */ Vec3f targetPosition;
+    /* 0x58 */ Vec3f lookDirection;
+    /* 0x64 */ Vec3f eyeDirection;
     /* 0x70 */ s16 unk_70;
     /* 0x72 */ s16 unk_72;
     /* 0x74 */ char unk74[0x2];
@@ -242,9 +247,9 @@ typedef struct ParticleCameraState {
 } ParticleCameraState; // size = 0x7C
 
 typedef struct ParticleRenderContext {
-    /* 0x00 */ Vec3f unk_00;
-    /* 0x0C */ CameraNode* unk_0C;
-    /* 0x10 */ ParticleCameraState unk_10;
+    /* 0x00 */ Vec3f scale;
+    /* 0x0C */ CameraNode* camera;
+    /* 0x10 */ ParticleCameraState cameraState;
 } ParticleRenderContext; // size = 0x8C
 
 typedef struct ParticleMatrixPool {
@@ -364,7 +369,7 @@ void ParticleMath_AddVec3s(Vec3s* arg0, Vec3s* arg1);
 f32 ParticleMath_DotVec3f(Vec3f arg0, Vec3f arg1);
 s32 ParticleMath_IsWithinRadius2D(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4);
 void ParticleMath_AdvanceRandomOffset(void);
-u32 ParticleMath_RandomRange(s32 arg0);
+u32 ParticleMath_RandomRange(u32 arg0);
 s32 ParticleMath_RandomRangeOffset(s32 arg0, s32 arg1);
 s32 ParticleMath_RandomSigned(s32 arg0);
 s32 ParticleMath_RandomSignedOffset(s32 arg0, s32 arg1);
@@ -518,7 +523,7 @@ void ParticleGfx_GraphNodeBuildDescriptorMaterialList(s32 arg0, arg1_func_87903D
 
 void Particle_ResetDefaults(Particle* arg0);
 Particle* Particle_Alloc(void);
-void Particle_Free(Particle* arg0);
+void Particle_Free(s8 *arg0);
 Particle* Particle_New(void);
 Particle* Particle_AllocChain(u8 arg0);
 void Particle_EmitBurstAtTransform(f32 arg0, Vec3f arg1, Vec3s arg2, ParticleUpdateCallback arg3, ParticleDescriptor* arg4, s16 arg5);
@@ -528,10 +533,10 @@ void Particle_EmitBurstFromObjectWithMetadata(DisplayObject* arg0, ParticleUpdat
 s32 Particle_CountActive(void);
 s32 Particle_CountActiveAlias(void);
 void Particle_InitLifecycle(Particle* arg0);
-void Particle_MarkInactive(Particle* arg0);
-void Particle_DisableAndDetach(Particle* arg0);
-s32 Particle_IsInactive(Particle* arg0);
-s32 Particle_IsRunning(Particle* arg0);
+void Particle_MarkInactive(s8 *arg0);
+void Particle_DisableAndDetach(s8 *arg0);
+s32 Particle_IsInactive(s8 *arg0);
+s32 Particle_IsRunning(s8 *arg0);
 void Particle_AdvanceLifecycle(Particle* arg0);
 s32 Particle_TickDelayTimer(Particle* arg0, s16 arg1);
 s32 Particle_TickDelayAndAdvanceLifecycle(Particle* arg0, s16 arg1);
@@ -547,9 +552,9 @@ void Particle_EnableFlag40(Particle* arg0);
 void Particle_DisableFlag40(Particle* arg0);
 void Particle_HasFlag40(Particle* arg0);
 void Particle_SetTextureFrame(Particle* arg0, s16 arg1);
-s32 Particle_AnimateFramesForward(Particle* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5);
+s32 Particle_AnimateFramesPingPong(Particle* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5);
 s32 Particle_AnimateFramesForwardAndAdvanceLifecycle(Particle* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5);
-s32 Particle_AnimateFramesReverse(Particle* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5);
+s32 Particle_AnimateFramesReverseFirstPingPong(Particle* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5);
 s32 Particle_AnimateFramesReverseAndAdvanceLifecycle(Particle* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5);
 s32 Particle_AnimateFramesPingPong(Particle* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5);
 s32 Particle_AnimateFramesPingPongAndAdvanceLifecycle(Particle* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5);
@@ -613,7 +618,7 @@ s32 Particle_Field50_ApproachXToField5C_09AD8(Particle* arg0, f32 arg1);
 s32 Particle_Field50_ApproachYToField5C_09B18(Particle* arg0, f32 arg1);
 s32 Particle_Field50_ApproachZToField5C_09B58(Particle* arg0, f32 arg1);
 void Particle_Field50_SetVecFromField7C_09B98(Particle* arg0);
-void Particle_Field50_SetXZFromField7C_09BB4(Particle* arg0);
+s32 Particle_Field50_SetXZFromField7C_09BB4(s32* arg0);
 void Particle_Field50_SetXYFromField7C_09BC8(Particle* arg0);
 void Particle_Field50_AddVecFromField7C_09BDC(Particle* arg0);
 void Particle_Field50_AddXZFromField7C_09C10(Particle* arg0);
@@ -624,7 +629,7 @@ void Particle_Field50_AddZFromField7C_09C80(Particle* arg0);
 void Particle_SetVelocityXZFromRotationY(Particle* arg0);
 void Particle_AddVelocityXZFromRotationYViaImpulse(Particle* arg0);
 void Particle_AddVelocityXYFromRotationZViaImpulse(Particle* arg0);
-void Particle_AddVelocityFromRotationTemplate1(Particle* arg0);
+void Particle_AddVelocityFromRotationTemplate1(s32 arg0);
 void Particle_AddVelocityFromRotationTemplate2(Particle* arg0);
 void Particle_AddVelocityFromRotationTemplate3(Particle* arg0);
 void Particle_AddVelocityFromRotationTemplate4(Particle* arg0);
@@ -645,7 +650,7 @@ void Particle_Field5C_SetZScaled_0A0AC(Particle* arg0, f32 arg1);
 s32 Particle_Field5C_ApproachY_0A0C4(Particle* arg0, f32 arg1, f32 arg2);
 f32 ParticleMath_ScaleApproachStep(f32 arg0);
 void Particle_ApproachPosition(Particle* arg0, Vec3f arg1);
-void Particle_Field94_SetVecFromVec3s_0A24C(Particle* arg0, Vec3s arg1);
+void Particle_Field9A_SetVecFromVec3s_0A37C(Particle* arg0, Vec3s arg1);
 void Particle_SetRotation(Particle* arg0, s16 arg1, s16 arg2, s16 arg3);
 void Particle_Field94_SetX_0A2A4(Particle* arg0, s16 arg1);
 void Particle_Field94_SetY_0A2B8(Particle* arg0, s16 arg1);
@@ -667,7 +672,7 @@ void Particle_SetRotationTargetFromCurrent(Particle* arg0);
 void Particle_Field94_AddVecFromField9A_0A480(Particle* arg0);
 void Particle_Field94_AddXFromField9A_0A4B4(Particle* arg0);
 void Particle_Field94_AddYFromField9A_0A4C8(Particle* arg0);
-void Particle_Field94_AddZFromField9A_0A4DC(Particle* arg0);
+void Particle_Field94_AddXFromField9A_0A4B4(Particle* arg0);
 void Particle_Field94_AddVecFromVec3s_0A4F0(Particle* arg0, Vec3s arg1);
 void Particle_Field94_AddVec_0A52C(Particle* arg0, s16 arg1, s16 arg2, s16 arg3);
 void Particle_Field94_AddX_0A578(Particle* arg0, s16 arg1);
@@ -701,7 +706,7 @@ void Particle_ComputeVectorFromRotationYZVariant(Particle* arg0, f32 arg1, Vec3f
 void Particle_Field74_SetScaled_0AD8C(Particle* arg0, f32 arg1);
 void Particle_Field78_SetScaled_0ADA4(Particle* arg0, f32 arg1);
 s32 Particle_Field74_Approach_0ADBC(Particle* arg0, f32 arg1, f32 arg2);
-s32 Particle_Field74_ApproachUsingField78_0AE00(Particle* arg0, f32 arg1);
+s32 Particle_StepMagnitude_ApproachUsingMagnitudeStep(Particle* arg0, f32 arg1);
 s32 Particle_Field78_Approach_0AE40(Particle* arg0, f32 arg1, f32 arg2);
 void Particle_Field7C_SetVecScaled_0AE84(Particle* arg0, Vec3f arg1);
 void Particle_SetVelocityImpulse(Particle* arg0, f32 arg1, f32 arg2, f32 arg3);
@@ -720,7 +725,7 @@ void Particle_Field7C_SetYFromField74AngleX_0B1C4(Particle* arg0);
 void Particle_Field7C_SetXFromField74AngleY_0B1EC(Particle* arg0);
 void Particle_Field7C_SetZFromField74AngleY_0B214(Particle* arg0);
 void Particle_Field7C_SetXYFromField74AngleZ_0B23C(Particle* arg0);
-void Particle_Field7C_SetXZFromField74AngleY_0B278(Particle* arg0);
+s32 Particle_Field7C_SetXZFromField74AngleY_0B278(void *arg0);
 void Particle_Field7C_SetVecFromField74AnglesXY_0B2B4(Particle* arg0);
 void Particle_Field7C_SetVecFromField74AnglesXZ_0B330(Particle* arg0);
 void Particle_Field7C_SetVecFromField74AnglesXYAlt_0B3AC(Particle* arg0);
@@ -748,7 +753,7 @@ void Particle_SetEnvColor(Particle* arg0, u8 arg1, u8 arg2, u8 arg3);
 s32 Particle_EnvR_Approach_0BB90(Particle* arg0, u8 arg1, u8 arg2);
 s32 Particle_EnvB_Approach_0BBC0(Particle* arg0, u8 arg1, u8 arg2);
 s32 Particle_EnvG_Approach_0BBF0(Particle* arg0, u8 arg1, u8 arg2);
-void Particle_SetPrimAlpha(Particle* arg0, u8 arg1);
+void Particle_SetPrimAlpha(s8 *arg0, char arg1);
 s32 Particle_PrimAlpha_Approach_0BC2C(Particle* arg0, u8 arg1, u8 arg2);
 s32 Particle_PrimAlpha_ApproachAndStepState_0BC5C(Particle* arg0, u8 arg1, u8 arg2);
 void Particle_FieldA6_SetS16_0BCA8(Particle* arg0, s16 arg1);

@@ -29,8 +29,8 @@ s32 func_88400064(s32 arg0, unk_D_86002F34_alt18* arg1) {
 }
 
 s32 func_884000CC(void) {
-    func_8000B1FC();
-    func_8000B220();
+    Cont_StartReadInputs();
+    Cont_ReadInputs();
     func_8001B5F0();
     return 0;
 }
@@ -41,7 +41,7 @@ void func_88400100(void) {
 s32 func_88400108(s32 arg0) {
     func_884000CC();
     func_800158C0();
-    func_800069CC();
+    BgStage_DrawFrame();
     func_80005770(&D_800AA150, 0, 0, 0x140, 0xF0);
     func_8001560C(D_88403370);
     return 0;
@@ -60,7 +60,7 @@ void func_88400168(s32 x, s32 y, s32 port, s32 game) {
 
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
     if (game == 0) {
-        gDPSetEnvColor(gDisplayListHead++, 0xFF, 0xFF, 0xFF, 0x64);
+        gDPSetEnvColor(gDisplayListHead++, 0xFF, 0xFF, 0xFF, 0x64); // #FFFFFF64
     }
     Gfx_DrawTextureRgba16(x, y, 0x32, 0x20, D_04007298, 0x40, 0);
     Gfx_DrawTextureRgba16(x, y + 0x20, 0x32, 0x19, D_04008298, 0x40, 0);
@@ -68,23 +68,23 @@ void func_88400168(s32 x, s32 y, s32 port, s32 game) {
     if (game != 0) {
         switch (game) {
             case 1:
-                gDPSetPrimColor(gDisplayListHead++, 0, 0, 0xFF, 0x00, 0x00, 0xFF);
+                gDPSetPrimColor(gDisplayListHead++, 0, 0, 0xFF, 0x00, 0x00, 0xFF); // #FF0000FF
                 break;
             case 2:
-                gDPSetPrimColor(gDisplayListHead++, 0, 0, 0x00, 0x96, 0x00, 0xFF);
+                gDPSetPrimColor(gDisplayListHead++, 0, 0, 0x00, 0x96, 0x00, 0xFF); // #009600FF
                 break;
             case 3:
-                gDPSetPrimColor(gDisplayListHead++, 0, 0, 0x00, 0x32, 0xFF, 0xFF);
+                gDPSetPrimColor(gDisplayListHead++, 0, 0, 0x00, 0x32, 0xFF, 0xFF); // #0032FFFF
                 break;
             case 7:
-                gDPSetPrimColor(gDisplayListHead++, 0, 0, 0xFF, 0xFF, 0x00, 0xFF);
+                gDPSetPrimColor(gDisplayListHead++, 0, 0, 0xFF, 0xFF, 0x00, 0xFF); // #FFFF00FF
                 break;
         }
         Gfx_DrawTextureIa8(x + 6, y + 0x10, 0x26, 0x22, D_04008F20, 0x28, 0);
-        gDPSetPrimColor(gDisplayListHead++, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF);
+        gDPSetPrimColor(gDisplayListHead++, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFFFF
         Gfx_DrawTextureIa8(x + 9, y + 0x17, 0x20, 0x14, icons[port], 0x20, 0);
     } else {
-        gDPSetPrimColor(gDisplayListHead++, 0, 0, 0x80, 0x80, 0x80, 0x64);
+        gDPSetPrimColor(gDisplayListHead++, 0, 0, 0x80, 0x80, 0x80, 0x64); // #80808064
         Gfx_DrawTextureIa8(x + 9, y + 0x17, 0x20, 0x14, icons[port], 0x20, 0);
     }
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
@@ -108,14 +108,18 @@ extern char D_884031F4[];
 extern char D_88403210[];
 void func_88400168(s32, s32, s32, s32);
 
-void func_88400458(s32 port, s32 x, s32 y) {
+/**
+ * Shows the Transfer Pak cartridge details (ID, No., trainer) for `port`, or an error: not a Pokemon cartridge, or no 64GB Pak inserted.
+ * @unverified Name and comment guessed from the code.
+ */
+void TransferPak_DrawStatusScreen(s32 port, s32 x, s32 y) {
     Color_RGB8 top = D_88402F7C;
     Color_RGB8 bottom = D_88402F80;
-    Color_RGB8 selTop = D_88402F84;
-    Color_RGB8 selBottom = D_88402F88;
+    Color_RGB8 sel_top = D_88402F84;
+    Color_RGB8 sel_bottom = D_88402F88;
 
     if (port == D_88403358) {
-        Ui_DrawGradientPanel(x, y, 0x80, 0x46, &selTop, &selBottom);
+        Ui_DrawGradientPanel(x, y, 0x80, 0x46, &sel_top, &sel_bottom);
     } else {
         Ui_DrawGradientPanel(x, y, 0x80, 0x46, &top, &bottom);
     }

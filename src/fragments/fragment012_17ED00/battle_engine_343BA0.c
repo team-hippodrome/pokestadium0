@@ -34,7 +34,7 @@ void func_821329F0(void) {
 M2C_UNK func_80006998(M2C_UNK);                     /* extern */
 M2C_UNK func_8212188C();                            /* extern */
 M2C_UNK func_82121D78(s32, M2C_UNK, M2C_UNK);       /* extern */
-M2C_UNK func_82124984(s8 *, s32, M2C_UNK);        /* extern */
+M2C_UNK BattleCamera_PlayShot(s8 *, s32, M2C_UNK);        /* extern */
 M2C_UNK func_82136918(s32, M2C_UNK);                /* extern */
 extern s8 *D_82199DE0;
 extern s8 *D_8219A580;
@@ -50,7 +50,7 @@ void func_821329F8(s32 arg0) {
     M2C_FIELD(D_8219A5A0, u16 *, 0x2C) = 0U;
     D_8219A580 = (&D_82199DE0)[M2C_FIELD(D_8219A5A0, u16 *, 0x2C)];
     M2C_FIELD(sp1C, s32 *, 8) = 0;
-    func_82124984(D_8219A580, arg0, 3);
+    BattleCamera_PlayShot(D_8219A580, arg0, 3);
     func_82136918(M2C_FIELD(D_8219A580, s32 *, 0x85C), 9);
     func_80006998(0);
     M2C_FIELD(D_8219A5A0, s32 *, 0x20) = (s32) (M2C_FIELD(D_8219A5A0, s32 *, 0x20) + 1);
@@ -153,7 +153,7 @@ void func_82132C14(UNUSED CameraNode* arg0) {
     if (func_821217DC(0xA) != 0) {
         st->rosterIndex++;
         mon = &((ActivePokemon*)D_8219A580)->teamRoster->pokemonPicked[st->rosterIndex];
-        ((ActivePokemon*)D_8219A580)->sessionTeams->displayModel = mon->unk_00.unk_00;
+        ((ActivePokemon*)D_8219A580)->sessionTeams->displayModel = mon->species.id;
         ((ActivePokemon*)D_8219A580)->sessionTeams->unk_04 = (TeamRoster*)&((ActivePokemon*)D_8219A580)->teamRoster->pokemonPicked[st->rosterIndex];
         ((ActivePokemon*)D_8219A580)->sessionTeams->uniqueStatusFlags |= 0x80;
         M2C_FIELD(D_8219A5A0, s32*, 0x20) = M2C_FIELD(D_8219A5A0, s32*, 0x20) + 1;
@@ -166,7 +166,7 @@ void func_82132C14(UNUSED CameraNode* arg0) {
  * Case 6 of the scene-state switch in func_82132D60. The word at
  * D_8219A580 + 0x85C is a pointer to a flag byte. If bit 0x10 of that byte is
  * set, the code clears bits 0x10 and 0x80 in it (the mask is 0xFF6F), calls
- * func_821088BC with D_8219A580, calls func_80005B98(0xF), and sets the word
+ * Battle_LoadOwnerModelForSwitchIn with D_8219A580, calls func_80005B98(0xF), and sets the word
  * at D_8219A5A0 + 0x20 to 2. D_8219A5A0 is the address of sBattleScene, whose
  * first member is `scene`, so that word is sBattleScene.scene->unk_20, the
  * field func_82132D60 switches on. The argument is not used. What the flag bits and the
@@ -178,7 +178,7 @@ void func_82132CDC(CameraNode* arg0) {
     flags = M2C_FIELD(D_8219A580, u8**, 0x85C);
     if (*flags & 0x10) {
         *flags &= 0xFF6F;
-        func_821088BC(D_8219A580);
+        Battle_LoadOwnerModelForSwitchIn(D_8219A580);
         func_80005B98(0xF);
         M2C_FIELD(D_8219A5A0, s32*, 0x20) = 2;
     }
@@ -196,7 +196,7 @@ void func_82132C14(CameraNode* arg0);
 void func_82132CDC(CameraNode* arg0);
 
 void func_82132D60(CameraNode* arg0) {
-    switch (sBattleScene.scene->unk_20) {
+    switch (sBattleScene.scene->phaseStep) {
         case 0:
             func_821329F8((s32)arg0);
             break;

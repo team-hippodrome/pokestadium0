@@ -1,3 +1,4 @@
+#include "moves.h"
 /* Stadium Zero fragment012_17ED00. */
 
 #include "fragments/battle_engine/battle_engine.h"
@@ -6,9 +7,9 @@
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_821337A0(s8 *arg0)
 {
-  int new_var;
+  int new_var; // FAKE: permuter temp
   new_var = (*((s32 *) (((s8 *) arg0) + 0x860))) + 0x1C;
-  *((u16 *) (((s8 *) new_var) + 2)) = (u16) (*((u16 *) (((s8 *) arg0) + 0x7D2)));
+  *((u16 *) (((s8 *) new_var) + 2)) = (u16) (*((u16 *) (((s8 *) arg0) + 0x7D2))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
 }
 
 /*
@@ -88,19 +89,19 @@ void func_82133868(void) {
     func_8211ED90();
     move = M2C_FIELD(self, u8*, 0x5A);
     switch (move) {
-        case 0x51:
+        case STRING_SHOT:
             M2C_FIELD(D_8219A5A0, s8*, 0x1A) = 3;
             break;
-        case 0x6A:
-        case 0x6B:
-        case 0x96:
+        case HARDEN:
+        case MINIMIZE:
+        case SPLASH:
             M2C_FIELD(D_8219A5A0, s32*, 0x48) = 7;
             break;
-        case 0x2F:
+        case SING:
             M2C_FIELD(D_8219A5A0, s32*, 0x48) = 0x16;
             M2C_FIELD(other, s8*, 0x15) = 3;
             break;
-        case 0x9C:
+        case REST:
             M2C_FIELD(D_8219A5A0, s32*, 0x48) = 0x15;
             M2C_FIELD(self, s8*, 0x15) = 3;
             break;
@@ -112,17 +113,17 @@ void func_82136708(s32, ActivePokemon*);
 M2C_UNK func_8213B31C(M2C_UNK);
 
 void func_821339CC(ActivePokemon* arg0) {
-    s32 pad;
+    s32 pad; // FAKE: stack padding
     s8* sp20 = (s8*)arg0->teamRoster + 0x1C;
     BattleMonRuntime* rt = &arg0->state.runtime;
 
     func_82101AD0();
-    if (rt->unk_15 & 7) {
+    if (rt->pendingStatusCondition & 7) {
         func_82136708(3, arg0);
     }
     M2C_FIELD(sp20, s8*, 5) = 0;
     M2C_FIELD(arg0, s16*, 0x7C2) = 0;
-    rt->unk_15 = 0;
+    rt->pendingStatusCondition = 0;
     func_8213B31C(1);
     func_8213B31C(2);
 }
@@ -209,7 +210,7 @@ void func_80005B98(s32);
 void func_80006998(s32);
 f32 func_8000F23C(f32, f32, f32, f32);
 void func_80010B3C(void*, s16, s16, s16, s16);
-void func_821088BC(s8*);
+void Battle_LoadOwnerModelForSwitchIn(ActivePokemon* active_pokemon);
 void func_8210BE1C(f32*, f32, s16);
 s16 func_8210BEE0(f32, f32, f32, f32);
 f32 func_8210BFA4(f32, f32, f32, f32);
@@ -298,7 +299,7 @@ void func_82133B6C(void) {
             if (D_8219A4F0.flags & 2) {
                 if (*M2C_FIELD(((s8**)&D_82199DE0)[0], u8**, 0x85C) & 0x10) {
                     *M2C_FIELD(((s8**)&D_82199DE0)[0], u8**, 0x85C) &= ~0x90;
-                    func_821088BC(((s8**)&D_82199DE0)[0]);
+                    Battle_LoadOwnerModelForSwitchIn(((s8**)&D_82199DE0)[0]);
                     if (D_8219A4F0.index == 4) {
                         M2C_FIELD(M2C_FIELD(((s8**)&D_82199DE0)[0], u8**, 0x85C), s16*, 2) = 0x96;
                     }
@@ -311,7 +312,7 @@ void func_82133B6C(void) {
             if (D_8219A4F0.flags & 4) {
                 if (*M2C_FIELD(((s8**)&D_82199DE0)[1], u8**, 0x85C) & 0x10) {
                     *M2C_FIELD(((s8**)&D_82199DE0)[1], u8**, 0x85C) &= ~0x90;
-                    func_821088BC(((s8**)&D_82199DE0)[1]);
+                    Battle_LoadOwnerModelForSwitchIn(((s8**)&D_82199DE0)[1]);
                     D_8219A4F0.flags &= ~4;
                     func_80005B98(0x18);
                     D_82199F10[0] = 0;

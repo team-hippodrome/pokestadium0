@@ -1,19 +1,19 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
 #include "gb_tower_emulator_86CB0.h"
 
-void func_811177E8(s32 numSamples, s16* out) {
+void func_811177E8(s32 num_samples, s16* out) {
     static u32 D_8122869C = 0;
 
     s32 i;
-    s8* mainData;
-    s8* altData;
+    s8* main_data;
+    s8* alt_data;
     s32 a;
     s32 b;
-    s32 mainEnd;
-    s32 altEnd;
+    s32 main_end;
+    s32 alt_end;
 
-    mainData = NULL;
-    altData = NULL;
+    main_data = NULL;
+    alt_data = NULL;
     if (D_81138B84.id != 0) {
         D_81138B94 = D_81138B8C;
         D_81138B8C = D_81138B84;
@@ -22,34 +22,34 @@ void func_811177E8(s32 numSamples, s16* out) {
         D_8122869C = 0x400;
     }
     if (D_81138B8C.id != 0) {
-        mainData = GB_AUDIO_STREAM_DATA[D_81138B8C.id];
-        mainEnd = GB_AUDIO_STREAM_SIZE[D_81138B8C.id];
+        main_data = GB_AUDIO_STREAM_DATA[D_81138B8C.id];
+        main_end = GB_AUDIO_STREAM_SIZE[D_81138B8C.id];
     }
     i = D_81138B94.id;
     if (i != 0) {
-        altData = GB_AUDIO_STREAM_DATA[i];
-        altEnd = GB_AUDIO_STREAM_SIZE[i];
+        alt_data = GB_AUDIO_STREAM_DATA[i];
+        alt_end = GB_AUDIO_STREAM_SIZE[i];
     }
 
-    for (i = 0; i < numSamples; i++) {
-        if (mainData != NULL) {
-            if (mainEnd == D_81138B8C.pos) {
+    for (i = 0; i < num_samples; i++) {
+        if (main_data != NULL) {
+            if (main_end == D_81138B8C.pos) {
                 D_81138B8C.id = 0;
-                mainData = NULL;
+                main_data = NULL;
                 a = 0;
             } else {
-                a = mainData[D_81138B8C.pos++];
+                a = main_data[D_81138B8C.pos++];
             }
         } else {
             a = 0;
         }
-        if (altData != NULL) {
-            if (altEnd == D_81138B94.pos) {
+        if (alt_data != NULL) {
+            if (alt_end == D_81138B94.pos) {
                 D_81138B94.id = 0;
-                altData = NULL;
+                alt_data = NULL;
                 b = 0;
             } else {
-                b = altData[D_81138B94.pos++];
+                b = alt_data[D_81138B94.pos++];
                 b = (s32)(b * D_8122869C) / 1024;
             }
         } else {

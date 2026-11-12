@@ -47,12 +47,7 @@ extern const char D_821978C8[];
 #include "cry.h"
 #include "matrix.h"
 #include "math_util.h"
-typedef struct unk_D_84392040 {
-    /* 0x00 */ char unk00[0xC];
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ f32 unk_10;
-    /* 0x14 */ char unk14[0x4];
-} unk_D_84392040;
+#include "fragments/fragment012_17ED00/battle_engine_315D50_types.h"
 #include "prevent_bss_reordering.h"
 extern s32 gBattleAnimFrameCounter;
 extern s32 gBattleAnimSpawnDelay;
@@ -455,15 +450,15 @@ extern u32 D_8218A544[];
  */
 void func_82135108(ActivePokemon* arg0) {
     s16 temp_a2;
-    UNUSED s32 padC[2];
+    UNUSED s32 padC[2]; // FAKE: stack padding
     s8* temp_a1;
-    UNUSED s32 padA[1];
+    UNUSED s32 padA[1]; // FAKE: stack padding
     s8* sp18;
 
     temp_a2 = arg0->displayObject.objectType - 1;
     temp_a1 = (s8*)((D_8218A2DC[temp_a2] & 0xFFFFFF) + (u32)&D_00434C00);
     sp18 = (s8*)((D_8218A544[temp_a2] & 0xFFFFFF) + (u32)&D_00434C00);
-    if (sBattleScene.scene->unk_1C == 9) {
+    if (sBattleScene.scene->mode == 9) {
         func_80003824(&D_FLT_8219A5B0, temp_a1, temp_a1 + 0x168, 0);
         return;
     }
@@ -477,7 +472,7 @@ void func_82135108(ActivePokemon* arg0) {
 void func_821351EC(UNUSED s32 arg0, UNUSED s32 arg1) {
 }
 
-void func_82107D24(ActivePokemon*, f32*);
+void BattleScene_GetParticipantAimPoint(ActivePokemon*, f32*);
 void func_8210BCF0(f32*, Vec3f*, f32*, s16*, s16*);
 void func_8000EEBC(void*, Vec3f*, f32, s16, s32);
 void func_8212254C(s32, s32, Vec3f, s32, s32, f32, f32);
@@ -494,7 +489,7 @@ void func_821351F8(CameraNode* arg0, ActivePokemon* arg1) {
     M2C_FIELD(D_8219A5A0, s8*, 0) = 0x19;
     M2C_FIELD(D_8219A5A0, s8*, 1) = 1;
     M2C_FIELD(D_8219A5A0, f32*, 4) = 0.0f;
-    M2C_FIELD(D_8219A5A0, s8*, 8) = 0;
+    D_8219A5A0->visibilityPolicy = 0;
     count = 0;
     func_82135108(arg1);
     p = (Vec3f*)&D_FLT_8219A5B0;
@@ -505,27 +500,27 @@ loop:
         p[-1].y = M2C_FIELD(arg1, f32*, 0x28) + p[-1].y;
         goto loop;
     }
-    M2C_FIELD(D_8219A5A0, s8*, 8) = count;
-    func_82107D24(arg1, &D_FLT_8219A718);
+    D_8219A5A0->visibilityPolicy = count;
+    BattleScene_GetParticipantAimPoint(arg1, &D_FLT_8219A718);
     func_8212254C((s32)arg1, (s32)arg0, *(Vec3f*)&D_FLT_8219A718, 0, 0, 0.0f, (f32)0.0);
-    D_FLT_8219A718 *= M2C_FIELD(arg1, s32*, 0x60C);
+    D_FLT_8219A718 *= arg1->facingDirection;
     func_8210BCF0(&D_FLT_8219A718, (Vec3f*)&D_FLT_8219A5B0, &sp40, &sp3E, &sp3C);
     func_8000EEBC((u8*)arg0 + 0xB4, (Vec3f*)((u8*)arg0 + 0xA8), sp40, sp3E, M2C_FIELD(arg1, u32*, 0x60C) * *(sp3Cp = &sp3C));
-    func_8212239C(arg1, arg0);
+    BattleCamera_CaptureModelOrbit(arg1, arg0);
 }
 
-void func_82107D24(ActivePokemon*, f32*);
+void BattleScene_GetParticipantAimPoint(ActivePokemon*, f32*);
 void func_8210BCF0(f32*, Vec3f*, f32*, s16*, s16*);
 void func_8000EEBC(void*, Vec3f*, f32, s16, s32);
 extern f32 D_FLT_8219A718;
 void func_82135384(ActivePokemon* arg0, CameraNode* arg1, Vec3f* arg2, Vec3f* arg3, s32 arg4, s32 arg5) {
     f32 sp2C;
-    s16 pad2A;
+    s16 pad2A; // FAKE: stack padding
     s16 sp28;
     s16 sp26;
     s16* sp26p;
-    func_82107D24(arg0, &D_FLT_8219A718);
-    D_FLT_8219A718 *= M2C_FIELD(arg0, s32*, 0x60C);
+    BattleScene_GetParticipantAimPoint(arg0, &D_FLT_8219A718);
+    D_FLT_8219A718 *= arg0->facingDirection;
     func_8210BCF0(&D_FLT_8219A718, &arg2[arg4 + arg5], &sp2C, &sp28, &sp26);
     func_8000EEBC((u8*)arg1 + 0xB4, &arg3[arg5], sp2C, sp28, M2C_FIELD(arg0, u32*, 0x60C) * *(sp26p = &sp26));
 }
@@ -547,21 +542,21 @@ void func_82135458(ActivePokemon* arg0, CameraNode* arg1) {
     u8* ptr = (u8*)&arg0->modelTransform;
     Vec3f sp58;
     Vec3f sp4C;
-    UNUSED s32 pad[3];
+    UNUSED s32 pad[3]; // FAKE: stack padding
     Vec3f sp34;
     f32 sp30;
     s16 sp2E;
     s16 sp2C;
 
-    BattleAnim_Vec3fCopy(&arg1->view.eyePosition, &M2C_FIELD(sBattleScene.scene, Vec3f*, 0xB4));
-    func_82121908(arg0, &sp58);
+    BattleAnim_Vec3fCopy(&arg1->view.eyePosition, &sBattleScene.scene->unk_C4);
+    Trade_UpdateWaitForBoxConfirm(arg0, &sp58);
     BattleAnim_CalculateDistanceAngles(&sp58, &M2C_FIELD(arg0, Vec3f*, 0x5D0), &sp30, &sp2E, &sp2C);
     BattleAnim_Vec3fCopy(&sp34, &arg1->view.targetPosition);
     if (D_FLT_82189350[arg0->displayObject.objectType][0] <= sp30) {
         Camera_ComputeEyeFromAngles(&sp58, &sp4C, M2C_FIELD(ptr, f32*, 0x38), M2C_FIELD(ptr, s16*, 0x30), M2C_FIELD(ptr, s16*, 0x32));
         BattleAnim_CalculateDistanceAngles(&sp34, &sp4C, &sp30, &sp2E, &sp2C);
     } else {
-        BattleAnim_CalculateDistanceAngles(&sp34, &M2C_FIELD(sBattleScene.scene, Vec3f*, 0xA8), &sp30, &sp2E, &sp2C);
+        BattleAnim_CalculateDistanceAngles(&sp34, &sBattleScene.scene->unk_B8, &sp30, &sp2E, &sp2C);
     }
     Camera_ComputeEyeFromAngles(&sp34, &arg1->view.targetPosition, sp30 * D_FLT_82196810, sp2E, sp2C);
 }
@@ -619,7 +614,7 @@ s32 func_82135734(CameraNode* arg0, ActivePokemon* arg1) {
         func_82135458(arg1, arg0);
     }
     var_v1 = M2C_FIELD(D_8219A5A0, s8*, 1);
-    if (M2C_FIELD(D_8219A5A0, s8*, 8) < (var_v1 + 3)) {
+    if (D_8219A5A0->visibilityPolicy < (var_v1 + 3)) {
         return 1;
     }
     if (var_v1 == 1) {
@@ -662,12 +657,12 @@ s32 func_82135734(CameraNode* arg0, ActivePokemon* arg1) {
  */
 s32 func_82135894(CameraNode* arg0, ActivePokemon* arg1) {
     f32 sp30[4];
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     s16 temp_a0;
     s8 var_v1;
 
     var_v1 = M2C_FIELD(D_8219A5A0, s8*, 1);
-    if ((var_v1 + 3) >= M2C_FIELD(D_8219A5A0, s8*, 8)) {
+    if ((var_v1 + 3) >= D_8219A5A0->visibilityPolicy) {
         return 1;
     }
     temp_a0 = arg1->displayObject.objectType;
@@ -710,7 +705,7 @@ void func_82135A04(s32 arg0) {
 }
 
 extern u8 D_8219A4F4;
-void func_82107D24(ActivePokemon*, f32*);
+void BattleScene_GetParticipantAimPoint(ActivePokemon*, f32*);
 void func_8210BCF0(f32*, Vec3f*, f32*, s16*, s16*);
 void func_8000EEBC(void*, Vec3f*, f32, s16, s32);
 void func_8212254C(s32, s32, Vec3f, s32, s32, f32, f32);
@@ -727,7 +722,7 @@ void func_82135A54(CameraNode* arg0, ActivePokemon* arg1) {
     M2C_FIELD(D_8219A5A0, u8*, 0) = D_8219A4F4;
     M2C_FIELD(D_8219A5A0, s8*, 1) = 1;
     M2C_FIELD(D_8219A5A0, f32*, 4) = 0.0f;
-    M2C_FIELD(D_8219A5A0, s8*, 8) = 0;
+    D_8219A5A0->visibilityPolicy = 0;
     count = 0;
     func_82135A04((s32)arg1);
     p = (Vec3f*)&D_FLT_8219A5B0;
@@ -738,13 +733,13 @@ loop:
         p[-1].y = M2C_FIELD(arg1, f32*, 0x28) + p[-1].y;
         goto loop;
     }
-    M2C_FIELD(D_8219A5A0, s8*, 8) = count;
-    func_82107D24(arg1, &D_FLT_8219A718);
+    D_8219A5A0->visibilityPolicy = count;
+    BattleScene_GetParticipantAimPoint(arg1, &D_FLT_8219A718);
     func_8212254C((s32)arg1, (s32)arg0, *(Vec3f*)&D_FLT_8219A718, 0, 0, 0.0f, (f32)0.0);
-    D_FLT_8219A718 *= M2C_FIELD(arg1, s32*, 0x60C);
+    D_FLT_8219A718 *= arg1->facingDirection;
     func_8210BCF0(&D_FLT_8219A718, (Vec3f*)&D_FLT_8219A5B0, &sp40, &sp3E, &sp3C);
     func_8000EEBC((u8*)arg0 + 0xB4, (Vec3f*)((u8*)arg0 + 0xA8), sp40, sp3E, M2C_FIELD(arg1, u32*, 0x60C) * *(sp3Cp = &sp3C));
-    func_8212239C(arg1, arg0);
+    BattleCamera_CaptureModelOrbit(arg1, arg0);
 }
 
 extern f32 D_FLT_82189350[][4];
@@ -765,13 +760,13 @@ void func_82135BE4(ActivePokemon* arg0, CameraNode* arg1) {
     u8* ptr = (u8*)&arg0->modelTransform;
     Vec3f sp58;
     Vec3f sp4C;
-    UNUSED s32 pad[3];
+    UNUSED s32 pad[3]; // FAKE: stack padding
     Vec3f sp34;
     f32 sp30;
     s16 sp2E;
     s16 sp2C;
 
-    func_82121908(arg0, &sp58);
+    Trade_UpdateWaitForBoxConfirm(arg0, &sp58);
     BattleAnim_CalculateDistanceAngles(&sp58, &M2C_FIELD(arg0, Vec3f*, 0x5D0), &sp30, &sp2E, &sp2C);
     BattleAnim_Vec3fCopy(&sp34, &arg1->view.targetPosition);
     Camera_ComputeEyeFromAngles(&sp58, &sp4C, M2C_FIELD(ptr, f32*, 0x38), M2C_FIELD(ptr, s16*, 0x30), M2C_FIELD(ptr, s16*, 0x32));
@@ -823,7 +818,7 @@ s32 func_82135E80(CameraNode* arg0, ActivePokemon* arg1) {
 
     func_82135BE4(arg1, arg0);
     var_v1 = M2C_FIELD(D_8219A5A0, s8*, 1);
-    if (M2C_FIELD(D_8219A5A0, s8*, 8) < (var_v1 + 3)) {
+    if (D_8219A5A0->visibilityPolicy < (var_v1 + 3)) {
         return 1;
     }
     if (var_v1 == 1) {

@@ -65,7 +65,7 @@ void Trail40GridAlt_Start(s32 arg0, s32 arg1) {
     f32 sp54;
     f32 sp50;
     f32 sp4C;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s16 sp46;
 
     sp6C = D_821AAB90.unk_0014[arg0][arg1].unk_00;
@@ -226,11 +226,14 @@ s32 Trail40GridAlt_IsComplete(void) {
 }
 
 s32 func_8000515C(s32);
-s8* func_8213C80C(void);
+s32 BattleAnim_GetCameraContext(void);
 void func_80031F14(f32*, f32*, f32*);
 void func_800320A8(s32, f32, f32, f32, f32, f32, f32);
 extern s32 D_821AABA0;
-void func_8217A8DC(void) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Trail40GridAlt_Reset(void) {
     s8* temp_v0;
     f32 tmp1;
     f32 tmp2;
@@ -244,7 +247,7 @@ void func_8217A8DC(void) {
     f32 sp5C;
 
     D_821AABA0 = func_8000515C(0x40);
-    temp_v0 = func_8213C80C();
+    temp_v0 = BattleAnim_GetCameraContext();
 
     tmp4 = *(f32*)(temp_v0 + 0xB4);
     tmp5 = *(f32*)(temp_v0 + 0xB8);

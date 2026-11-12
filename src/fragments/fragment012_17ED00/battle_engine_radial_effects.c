@@ -1,7 +1,10 @@
 /* Stadium Zero fragment012_17ED00. */
 /* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_343BA0.c, src/fragments/ekans_game/ekans_game.c. */
 
-#include "fragments/ekans_game/ekans_game.h"
+#include "global.h"
+#include "fragments/particle_math/particle_math.h"
+#include "jpeg_stream.h"
+#include "controller.h"
 #include "geo_render.h"
 #include "model_animation.h"
 #include "display_object_textures.h"
@@ -23,58 +26,6 @@
 #include "memory.h"
 #include "stage_loader.h"
 #include "geo_layout.h"
-typedef struct ActiveDiglettInfo {
-    /* 0x00 */ s16 diglettId;
-    /* 0x02 */ s16 state;
-    /* 0x04 */ s16 timer;
-    /* 0x06 */ s16 unk_06; //	0
-    /* 0x08 */ s16 gotHoop;
-    /* 0x0A */ s16 unk_0A; //	0
-    /* 0x0C */ s16 collidingActorId;
-} ActiveDiglettInfo;
-typedef struct ActorOriginPosition {
-    /* 0x00 */ Vec3f pos;
-    /* 0x0C */ char unk0C[0x6];
-    /* 0x12 */ s16 unk_12;
-    /* 0x12 */ s16 unk_14;
-} ActorOriginPosition;
-extern MiniActor miniDigletts[9];
-extern MiniActor miniDiglettHoles[9];
-extern MiniActor miniEkanses[4];
-extern ActiveDiglettInfo activeDigletts[3];
-extern s16 ekansMinigameCountdownStarted;
-extern u32 redDiglettTileTexture[];
-extern u32 yellowDiglettTileTexture[];
-extern u32 blueDiglettTileTexture[];
-extern u32 floorTexture1[];
-extern u32 floorTexture2[];
-extern u32 sceneDecorationTextureBlue[];
-extern u32 sceneDecorationTextureGreen[];
-extern u32 sceneDecorationTextureRed[];
-extern u32 sceneDecorationTextureYellow[];
-extern unk_D_86002F34_018 sceneTextures[];
-extern Vtx sceneGeometry_1[];
-extern Vtx sceneGeometry_2[];
-extern Vtx sceneGeometry_3[];
-extern Vtx sceneGeometry_4[];
-extern Vtx sceneGeometry_5[];
-extern Vtx sceneGeometry_6[];
-extern Vtx sceneGeometry_7[];
-extern Vtx sceneGeometry_8[];
-extern Vtx sceneGeometry_9[];
-extern Vtx sceneGeometry_10[];
-extern Vtx sceneGeometry_11[];
-extern Vtx sceneGeometry_12[];
-extern Vtx sceneGeometry_13[];
-extern u32 ekansShadowTexture[];
-extern MiniActor* miniDiglettPtr;
-extern MiniActor* miniDiglettHolePtr;
-extern MiniActor* miniEkansPtr;
-extern s16 miniEkansDifficulties[4][4];
-extern ActorOriginPosition skansActorInfo[];
-extern ActorOriginPosition diglettActorInfo[];
-extern s16 playerGUIScoreXPositions[];
-extern Color_RGB8 playerColors[];
 
 #include "fragments/battle_engine/battle_engine.h"
 #include "gallery.h"
@@ -100,23 +51,23 @@ extern s16 D_8219CB1A;
 extern const char D_821978C8[];
 
 void func_8216E0B0(void);
-s32 BattleAnim_EndEffect16_CompleteImmediately(void);
+s32 BattleAnim_SurfCompleteImmediately(void);
 void func_8216E0C0(void);
-void BattleAnim_StartEffect19Radial20_Init(void);
-s32 BattleAnim_StartEffect19Radial20_Update(void);
-void BattleAnim_StartEffect19Radial20_Draw(void);
+void BattleAnim_StartTrappingLassoMove_Init(void);
+s32 BattleAnim_StartTrappingLassoMove_Update(void);
+void BattleAnim_StartTrappingLassoMove_Draw(void);
 s32 BattleAnim_EndEffect9Radial20_Update(void);
 void BattleAnim_EndEffect9Radial20_Draw(void);
-void BattleAnim_StartEffect7TexturedRibbonSheet_Init(void);
-s32 BattleAnim_StartEffect7TexturedRibbonSheet_Update(void);
-void BattleAnim_StartEffect7TexturedRibbonSheet_Draw(void);
-void BattleAnim_StartEffect33Radial20_Init(void);
-s32 BattleAnim_StartEffect33Radial20_Update(void);
-void BattleAnim_StartEffect33Radial20_Draw(void);
-s32 BattleAnim_EndEffect32Radial20_Update(void);
-void BattleAnim_EndEffect32Radial20_Draw(void);
-s32 BattleAnim_EndEffect33Radial20_Update(void);
-void BattleAnim_EndEffect33Radial20_Draw(void);
+void BattleAnim_SetupSwiftUseRibbonSheet(void);
+s32 BattleAnim_RunSwiftUseRibbonSheet(void);
+void BattleAnim_DrawSwiftUseRibbonSheet(void);
+void BattleAnim_SetupStringShotUseRadial(void);
+s32 BattleAnim_RunStringShotUseRadial(void);
+void BattleAnim_DrawStringShotUseRadial(void);
+s32 BattleAnim_RunStringShotHitRadial(void);
+void BattleAnim_DrawStringShotHitRadial(void);
+s32 BattleAnim_RunDisableHitRadial(void);
+void BattleAnim_DrawDisableHitRadial(void);
 
 void BattleAnim_ResetSharedEffectMatrix(void);
 void BattleAnim_StartEffect19Radial20_EmitVariantD(void);
@@ -126,7 +77,12 @@ void BattleAnim_StartEffect33Radial20_EmitVariantC(void);
 void func_8216E0B0(void) {
 }
 
-s32 BattleAnim_EndEffect16_CompleteImmediately(void) {
+/**
+ * Moves: Surf (hit)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1.
+ */
+s32 BattleAnim_SurfCompleteImmediately(void) {
     return -1;
 }
 
@@ -135,7 +91,10 @@ void func_8216E0C0(void) {
 
 void BattleAnim_CalcVectorAtToDm(f32* arg0, f32* arg1, f32* arg2, f32* arg3, f32* arg4, f32* arg5);
 void func_82175440(f32, f32, f32, f32, f32, f32, s16, u8, u8, u8, u8, f32, f32, f32, s16);
-void func_8216E0C8(void) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void BattleAnim_StartEffect19Radial20_EmitVariantD(void) {
     f32 sp64;
     f32 sp60;
     f32 sp5C;
@@ -155,14 +114,24 @@ void func_8216E0C8(void) {
     func_82175440(sp64, sp60, sp5C, sp58, ((r1 % 4) * 0.01) + sp54 - 0.02, sp50 - ((r2 % 5) * 0.3) + 0.6, 3, 0x80, 0xC0, 0xFF, 0xC8, 0.1f, 2.0f, 5.0f, 0x3C);
 }
 
-void BattleAnim_StartEffect19Radial20_Init(void) {
+/**
+ * Moves: Bind (use), Constrict (use), Wrap (use)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_StartTrappingLassoMove_Init(void) {
     D_8219CB0E = 0;
     BattleAnim_ResetSharedEffectMatrix();
     Radial20_ResetPool();
     BattleAnim_StartEffect19Radial20_EmitVariantD();
 }
 
-s32 BattleAnim_StartEffect19Radial20_Update(void) {
+/**
+ * Moves: Bind (use), Constrict (use), Wrap (use)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1.
+ */
+s32 BattleAnim_StartTrappingLassoMove_Update(void) {
     D_8219CB0E++;
     if (D_8219CB0E >= 0xB5) {
         return -1;
@@ -174,7 +143,12 @@ s32 BattleAnim_StartEffect19Radial20_Update(void) {
     return Radial20_IsComplete();
 }
 
-void BattleAnim_StartEffect19Radial20_Draw(void) {
+/**
+ * Moves: Bind (use), Constrict (use), Wrap (use)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_StartTrappingLassoMove_Draw(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     gDisplayListHead = Radial20_Draw(gDisplayListHead);
@@ -190,11 +164,11 @@ void BattleAnim_EndEffect9Radial20_Init(void) {
     func_8216DAC0(&sp34);
     sp30 = BattleAnim_EffectTertiaryOwnerModelScale();
     BattleAnim_ResetSharedEffectMatrix();
-    Radial20_Init(sp34.x, sp34.y, sp34.z, sp30, 0x40, 0xFF, 0xFF, 0, 0, 0xFF);
+    LassoHit_Init(sp34.x, sp34.y, sp34.z, sp30, 0x40, 0xFF, 0xFF, 0, 0, 0xFF);
 }
 
 s32 BattleAnim_EndEffect9Radial20_Update(void) {
-    return Radial20_Update();
+    return LassoHit_Update();
 }
 
 void BattleAnim_EndEffect9Radial20_Draw(void) {
@@ -203,13 +177,16 @@ void BattleAnim_EndEffect9Radial20_Draw(void) {
     gDisplayListHead = Strip400_Draw(gDisplayListHead);
 }
 
-void func_8216E428(void) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void BattleAnim_StartEffect7TexturedRibbonSheet_Emit(void) {
     Vec3f pos;
     f32 x;
     f32 y;
     f32 z;
     f32 angle;
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     f32 scale = BattleAnim_EffectSecondaryOwnerModelScale();
 
     BattleAnim_EffectSecondaryOwnerAnchorPosition(&pos);
@@ -223,17 +200,23 @@ void func_8216E428(void) {
     x += scale * (30.0f - ((s32)guRandom() % 60));
     y += scale * (30.0f - ((s32)guRandom() % 60));
     z += scale * (30.0f - ((s32)guRandom() % 60));
-    TexturedRibbonSheet_Start(x, y, z, angle, 0.0f, 0.0f, 0xFF, 0xFF, 0, 0x3C, 0.3f, 0x1E);
+    SwiftRibbonSheet_Start(x, y, z, angle, 0.0f, 0.0f, 0xFF, 0xFF, 0, 0x3C, 0.3f, 0x1E);
 }
 
-void BattleAnim_StartEffect7TexturedRibbonSheet_Init(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_SetupSwiftUseRibbonSheet(void) {
     D_8219CB10 = 0;
     BattleAnim_ResetSharedEffectMatrix();
-    TexturedRibbonSheet_Init();
+    SwiftRibbonSheet_Init();
     BattleAnim_StartEffect7TexturedRibbonSheet_Emit();
 }
 
-s32 BattleAnim_StartEffect7TexturedRibbonSheet_Update(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+s32 BattleAnim_RunSwiftUseRibbonSheet(void) {
     D_8219CB10++;
     if (D_8219CB10 >= 0x709) {
         return -1;
@@ -243,13 +226,16 @@ s32 BattleAnim_StartEffect7TexturedRibbonSheet_Update(void) {
         BattleAnim_StartEffect7TexturedRibbonSheet_Emit();
     }
 
-    return TexturedRibbonSheet_IsComplete();
+    return SwiftRibbonSheet_IsComplete();
 }
 
-void BattleAnim_StartEffect7TexturedRibbonSheet_Draw(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_DrawSwiftUseRibbonSheet(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gDisplayListHead = TexturedRibbonSheet_Draw(gDisplayListHead);
+    gDisplayListHead = SwiftRibbonSheet_Draw(gDisplayListHead);
 }
 
 void BattleAnim_StartEffect33Radial20_EmitVariantC(void) {
@@ -269,14 +255,20 @@ void BattleAnim_StartEffect33Radial20_EmitVariantC(void) {
                       (sp60 - ((guRandom() % 5) * 0.3)) + 0.6, 3, 0xFF, 0xFF, 0xFF, 0x64, 0.1f, 1.0f, 3.0f, 0x3C);
 }
 
-void BattleAnim_StartEffect33Radial20_Init(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_SetupStringShotUseRadial(void) {
     D_8219CB12 = 0;
     BattleAnim_ResetSharedEffectMatrix();
     Radial20_ResetPool();
     BattleAnim_StartEffect33Radial20_EmitVariantC();
 }
 
-s32 BattleAnim_StartEffect33Radial20_Update(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+s32 BattleAnim_RunStringShotUseRadial(void) {
     D_8219CB12++;
     if (D_8219CB12 >= 0xB5) {
         return -1;
@@ -289,7 +281,10 @@ s32 BattleAnim_StartEffect33Radial20_Update(void) {
     return Radial20_IsComplete();
 }
 
-void BattleAnim_StartEffect33Radial20_Draw(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_DrawStringShotUseRadial(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     gDisplayListHead = Radial20_Draw(gDisplayListHead);
@@ -303,20 +298,29 @@ void func_8216E930(void) {
     BattleAnim_EffectSecondaryOwnerBonePosition(&sp34);
     sp30 = BattleAnim_EffectTertiaryOwnerModelScale();
     BattleAnim_ResetSharedEffectMatrix();
-    Radial20_Init(sp34.x, sp34.y, sp34.z, sp30, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF);
+    LassoHit_Init(sp34.x, sp34.y, sp34.z, sp30, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF);
 }
 
-s32 BattleAnim_EndEffect32Radial20_Update(void) {
-    return Radial20_Update();
+/**
+ * @unverified Name from Stadium 1.
+ */
+s32 BattleAnim_RunStringShotHitRadial(void) {
+    return LassoHit_Update();
 }
 
-void BattleAnim_EndEffect32Radial20_Draw(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_DrawStringShotHitRadial(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     gDisplayListHead = Strip400_Draw(gDisplayListHead);
 }
 
-void BattleAnim_EndEffect32Radial20_Init(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_SetupStringShotHitRadial(void) {
     Vec3f sp34;
     f32 sp30;
 
@@ -324,20 +328,29 @@ void BattleAnim_EndEffect32Radial20_Init(void) {
     BattleAnim_EffectSecondaryOwnerBonePosition(&sp34);
     sp30 = BattleAnim_EffectTertiaryOwnerModelScale();
     BattleAnim_ResetSharedEffectMatrix();
-    Radial20_Init(sp34.x, sp34.y, sp34.z, sp30, 0xFF, 0xFF, 0x40, 0xFF, 0xFF, 0x40);
+    LassoHit_Init(sp34.x, sp34.y, sp34.z, sp30, 0xFF, 0xFF, 0x40, 0xFF, 0xFF, 0x40);
 }
 
-s32 BattleAnim_EndEffect33Radial20_Update(void) {
-    return Radial20_Update();
+/**
+ * @unverified Name from Stadium 1.
+ */
+s32 BattleAnim_RunDisableHitRadial(void) {
+    return LassoHit_Update();
 }
 
-void BattleAnim_EndEffect33Radial20_Draw(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_DrawDisableHitRadial(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     gDisplayListHead = Strip400_Draw(gDisplayListHead);
 }
 
-void func_8216EB10(void) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void BattleAnim_StartEffect98Radial20_EmitVariantD(void) {
     f32 sp64;
     f32 sp60;
     f32 sp5C;

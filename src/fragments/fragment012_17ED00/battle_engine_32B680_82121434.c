@@ -21,20 +21,20 @@ void func_8212187C(s32);
 void func_821351F8(CameraNode*, ActivePokemon*);
 s32 func_8211F644(ActivePokemon*, CameraNode*);
 void func_82104C68(ActivePokemon*, s32);
-f32 func_82107EC8(ActivePokemon*);
-void func_8212239C(ActivePokemon*, CameraNode*);
+f32 BattleScene_GetParticipantHeight(ActivePokemon*);
+void BattleCamera_CaptureModelOrbit(ActivePokemon*, CameraNode*);
 extern f32 D_FLT_82196040;
-void func_8212239C(ActivePokemon*, CameraNode*);
+void BattleCamera_CaptureModelOrbit(ActivePokemon*, CameraNode*);
 void func_8212054C(CameraNode*);
 extern const f64 D_DBL_821960A0;
 extern f32 D_FLT_82189358[][4];
-void func_821206F4(CameraNode*);
-void func_821206F4(CameraNode*);
+void BattleScene_SelectNextIntroCameraShot(CameraNode*);
+void BattleScene_SelectNextIntroCameraShot(CameraNode*);
 void func_82122FD8(CameraNode*, ActivePokemon*);
 s32 func_821217DC(M2C_UNK);
 extern f32 D_FLT_82189358[][4];
-void func_821206F4(CameraNode*);
-void func_821206F4(CameraNode*);
+void BattleScene_SelectNextIntroCameraShot(CameraNode*);
+void BattleScene_SelectNextIntroCameraShot(CameraNode*);
 s32 func_82135734(CameraNode*, ActivePokemon*);
 s32 func_821217DC(M2C_UNK);
 void func_82122628(s32, Vec3f, s32, s32, f32, f32);
@@ -45,7 +45,7 @@ s32 func_82135734(CameraNode*, ActivePokemon*);
 void func_8212188C(void);
 extern s8 *D_8219A5A0;
 extern u8* D_800603C0;
-void func_800387BC(s32 arg0);
+void Audio_FadeCategoriesAndStreams(s32 arg0);
 
 extern u8 D_8219A4F4;
 extern u8* D_8218B2B8[];
@@ -55,19 +55,19 @@ void func_82108C0C(ActivePokemon*);
 
 void func_82121434(CameraNode* arg0) {
     if (D_8219A4F4 == 5) {
-        sBattleScene.scene->unk_20 = 0x18;
+        sBattleScene.scene->phaseStep = 0x18;
         func_8211F9C4(arg0);
         return;
     }
-    if (D_8218B2B8[D_8219A4F4][sBattleScene.scene->unk_0C] == 0xFF) {
-        sBattleScene.scene->unk_0C = 0;
+    if (D_8218B2B8[D_8219A4F4][sBattleScene.scene->bRollShotIndex] == 0xFF) {
+        sBattleScene.scene->bRollShotIndex = 0;
     }
-    sBattleScene.scene->unk_20 = D_8218B2B8[D_8219A4F4][sBattleScene.scene->unk_0C];
-    sBattleScene.scene->unk_0C++;
+    sBattleScene.scene->phaseStep = D_8218B2B8[D_8219A4F4][sBattleScene.scene->bRollShotIndex];
+    sBattleScene.scene->bRollShotIndex++;
     func_82108C0C(sActivePokemon[0]);
     func_82108C0C(sActivePokemon[1]);
     func_8212188C();
-    switch (sBattleScene.scene->unk_20) {
+    switch (sBattleScene.scene->phaseStep) {
         case 0:
             func_8211F6B8(arg0);
             break;

@@ -4,8 +4,8 @@
 #include "global.h"
 
 void func_82183DC4(void);
-void GalleryDebugger_SaveControllerPak(void);
-void GalleryDebugger_LoadControllerPak(void);
+void func_82183E1C(void);
+void func_821853EC(void);
 void GalleryDebugger_LoadDeckEntries(void);
 void GalleryDebugger_SaveDeckEntries(void);
 void GalleryDebugger_DrawMenu(void);

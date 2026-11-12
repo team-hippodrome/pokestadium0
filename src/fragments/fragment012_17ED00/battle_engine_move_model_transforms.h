@@ -41,7 +41,7 @@ void BattleAnim_UpdateSwayPhysicsToTarget(UNUSED ActivePokemon* owner, ActivePok
 void BattleScene_HideParticipantSecondaryModels(ActivePokemon* active_pokemon);
 
 /*
- * func_821094C0
+ * BattleScene_ShowSecondaryModelsAtMainTransform
  *
  * Resets the three trailing afterimage models of a Pokemon so that they show
  * at the main model's transform: for afterimages 0..2 it clears the field at
@@ -57,7 +57,7 @@ void BattleScene_HideParticipantSecondaryModels(ActivePokemon* active_pokemon);
  * 1 decomp, except that Zero loops over three afterimages where the donor
  * loops over two.
  */
-void func_821094C0(ActivePokemon* pokemon);
+void BattleScene_ShowSecondaryModelsAtMainTransform(ActivePokemon* pokemon);
 
 void BattleScene_UpdateSecondaryModelOrbit(ActivePokemon* pokemon);
 
@@ -66,11 +66,11 @@ void BattleScene_ShowSecondaryModelsAtMainPose(ActivePokemon* active_pokemon);
 extern Vec3f D_821891CC;
 s32 func_82109824(ActivePokemon* arg0);
 
-void func_82109CAC(UNUSED ActivePokemon* owner, ActivePokemon* animated_pokemon);
+void BattleAnim_PokeBallThrowStart(UNUSED ActivePokemon* owner, ActivePokemon* animated_pokemon);
 
-void func_82109D50(ActivePokemon* owner, ActivePokemon* animated_pokemon);
+void BattleAnim_PokeBallThrowContinue(ActivePokemon* owner, ActivePokemon* animated_pokemon);
 
-void func_82109E0C(s32 arg0, s8 *arg1);
+void BattleAnim_PokeBallThrow(s32 arg0, s8 *arg1);
 
 void BattleAnim_PokeBallLandStart(UNUSED ActivePokemon* owner, ActivePokemon* animated_pokemon);
 
@@ -79,7 +79,7 @@ void BattleAnim_PokeBallLandContinue(ActivePokemon* owner, ActivePokemon* animat
 M2C_UNK func_82109E60();                         /* extern */
 M2C_UNK func_82109EF8(s32, s8 *);                 /* extern */
 
-void func_82109FA8(s32 arg0, s8 *arg1);
+void BattleAnim_PokeBallLand(s32 arg0, s8 *arg1);
 
 void BattleAnim_FlyStart(UNUSED ActivePokemon* owner, ActivePokemon* animated_pokemon);
 
@@ -90,7 +90,7 @@ void BattleAnim_FlyContinue(ActivePokemon* owner, ActivePokemon* animated_pokemo
 M2C_UNK func_82109FFC(s32);                         /* extern */
 M2C_UNK func_8210A084(s32, s8 *);                 /* extern */
 
-void func_8210A120(s32 arg0, s8 *arg1);
+void BattleAnim_Fly(s32 arg0, s8 *arg1);
 
 void BattleAnim_WaterfallStart(UNUSED ActivePokemon* owner, ActivePokemon* animated_pokemon);
 
@@ -106,38 +106,38 @@ void func_8210A3DC(s32 arg0, s8 *arg1);
 
 M2C_UNK func_821099CC(s8 *);                      /* extern */
 
-void func_8210A4AC(s32 arg0, s8 *arg1);
+void BattleAnim_SubmissionStart(s32 arg0, s8 *arg1);
 
 s16 func_8000F1FC(s16, M2C_UNK, M2C_UNK, M2C_UNK);  /* extern */
 M2C_UNK func_82109AF4(s8 *, s16);                 /* extern */
 s32 func_8210A430(s32, s16, s16);                   /* extern */
 
-void func_8210A4F0(s32 arg0, s8 *arg1);
+void BattleAnim_SubmissionContinue(s32 arg0, s8 *arg1);
 
 extern const f64 D_DBL_82194920;
 void BattleAnim_SubmissionEnd(ActivePokemon* owner, ActivePokemon* animated_pokemon);
 
 void func_8210A584(UNUSED ActivePokemon* owner, UNUSED ActivePokemon* animated_pokemon);
-void func_8210A694(ActivePokemon* owner, ActivePokemon* animated_pokemon);
+void BattleAnim_Submission(ActivePokemon* owner, ActivePokemon* animated_pokemon);
 
 M2C_UNK func_821099CC(s8 *);                      /* extern */
 
-void func_8210A700(s32 arg0, s8 *arg1);
+void BattleAnim_DigStart(s32 arg0, s8 *arg1);
 
 s16 func_8000F1FC(s16, M2C_UNK, M2C_UNK, M2C_UNK);  /* extern */
 M2C_UNK func_82109AF4(s8 *, s16);                 /* extern */
 s32 func_8210A430(s32, s16, s16);                   /* extern */
 
-void func_8210A744(s32 arg0, s8 *arg1);
+void BattleAnim_DigContinue(s32 arg0, s8 *arg1);
 
 void func_8210A7D8(s32 arg0, s8* arg1);
-void func_8210A8CC(ActivePokemon* owner, ActivePokemon* animated_pokemon);
+void BattleAnim_Dig(ActivePokemon* owner, ActivePokemon* animated_pokemon);
 
 M2C_UNK func_8000D700(s32, M2C_UNK, s16, M2C_UNK);  /* extern */
 M2C_UNK func_82107790(s8 *);                      /* extern */
 M2C_UNK func_821099CC(s8 *);                      /* extern */
 
-void func_8210A938(s32 arg0, s8 *arg1);
+void BattleAnim_AgilityStart(s32 arg0, s8 *arg1);
 
 void BattleAnim_AgilityContinue(ActivePokemon* owner, ActivePokemon* animated_pokemon);
 
@@ -145,47 +145,47 @@ void BattleAnim_AgilityEnd(ActivePokemon* owner, ActivePokemon* animated_pokemon
 
 void func_8210A9B4(ActivePokemon* owner, ActivePokemon* animated_pokemon);
 void func_8210AAA4(UNUSED ActivePokemon* owner, UNUSED ActivePokemon* animated_pokemon);
-void func_8210ABC4(ActivePokemon* owner, ActivePokemon* animated_pokemon);
+void BattleAnim_Agility(ActivePokemon* owner, ActivePokemon* animated_pokemon);
 
 M2C_UNK func_8000D700(s32, M2C_UNK, s16, M2C_UNK);  /* extern */
 M2C_UNK func_82107790(s8 *);                      /* extern */
-void func_821094C0(ActivePokemon*);
+void BattleScene_ShowSecondaryModelsAtMainTransform(ActivePokemon*);
 
-void func_8210AC30(s32 arg0, s8 *arg1);
+void BattleAnim_DoubleTeamStart(s32 arg0, s8 *arg1);
 
 void BattleAnim_DoubleTeamContinue(UNUSED ActivePokemon* owner, ActivePokemon* animated_pokemon);
 
-void BattleAnim_PokeBallThrow(ActivePokemon* owner, ActivePokemon* animated_pokemon);
+void BattleAnim_DoubleTeam(ActivePokemon* owner, ActivePokemon* animated_pokemon);
 
 void BattleAnim_ResetOwnerFacingAndExitStatusIdle(ActivePokemon* arg0);
 
 M2C_UNK func_8000D700(s32, M2C_UNK, s16, M2C_UNK);  /* extern */
 M2C_UNK func_82107790(s8 *);                      /* extern */
 
-void func_8210ADBC(s32 arg0, s8 *arg1);
+void BattleAnim_SeismicTossStart(s32 arg0, s8 *arg1);
 
 void BattleAnim_SeismicTossContinue(UNUSED ActivePokemon* owner, ActivePokemon* animated_pokemon);
 
 void func_8210AE34(ActivePokemon* owner, ActivePokemon* animated_pokemon);
-void func_8210AFB8(ActivePokemon* owner, ActivePokemon* animated_pokemon);
+void BattleAnim_SeismicToss(ActivePokemon* owner, ActivePokemon* animated_pokemon);
 
 M2C_UNK func_82109764(s8 *);                      /* extern */
 M2C_UNK func_82109C88(s8 *);                      /* extern */
 
-void func_8210B00C(s8 *arg0, s8 *arg1);
+void BattleAnim_MinimizeStart(s8 *arg0, s8 *arg1);
 
 M2C_UNK func_8210942C(s32);                         /* extern */
 s32 func_82109824(ActivePokemon*);
 M2C_UNK func_8210C1A8(s32, M2C_UNK, M2C_UNK);       /* extern */
 
-void func_8210B06C(s32 arg0, s32 arg1);
+void BattleAnim_MinimizeContinue(s32 arg0, s32 arg1);
 
-void func_8210B0FC(ActivePokemon* owner, ActivePokemon* animated_pokemon);
+void BattleAnim_Minimize(ActivePokemon* owner, ActivePokemon* animated_pokemon);
 
-void func_8210B150(s32 arg0, s8 *arg1);
+void BattleAnim_WithdrawStart(s32 arg0, s8 *arg1);
 
 void func_8210B164(ActivePokemon* owner, ActivePokemon* animated_pokemon);
-void func_8210B22C(ActivePokemon* owner, ActivePokemon* animated_pokemon);
+void BattleAnim_Withdraw(ActivePokemon* owner, ActivePokemon* animated_pokemon);
 
 void BattleAnim_MeditateStart(UNUSED ActivePokemon* owner, ActivePokemon* animated_pokemon);
 
@@ -196,7 +196,7 @@ void BattleAnim_MeditateEnd(ActivePokemon* owner, ActivePokemon* animated_pokemo
 void func_8210B2C4(ActivePokemon* owner, ActivePokemon* animated_pokemon);
 void func_8210B3F0(UNUSED ActivePokemon* owner, UNUSED ActivePokemon* animated_pokemon);
 void func_8210B280(UNUSED ActivePokemon* owner, ActivePokemon* animated_pokemon);
-void func_8210B520(ActivePokemon* owner, ActivePokemon* animated_pokemon);
+void BattleAnim_Meditate(ActivePokemon* owner, ActivePokemon* animated_pokemon);
 
 void BattleAnim_SquishHitReactionStart(ActivePokemon* owner, ActivePokemon* animated_pokemon);
 
@@ -205,20 +205,20 @@ void BattleAnim_SquishHitReactionContinue(ActivePokemon* owner, ActivePokemon* a
 M2C_UNK func_8210B58C(s32);                         /* extern */
 M2C_UNK func_8210B5C8(s32, s8 *);                 /* extern */
 
-void func_8210B790(s32 arg0, s8 *arg1);
+void BattleAnim_SquishHitReaction(s32 arg0, s8 *arg1);
 
-void func_8210B7E4(ActivePokemon* owner, ActivePokemon* animated_pokemon);
+void BattleAnim_LassoMoveHitReactionStart(ActivePokemon* owner, ActivePokemon* animated_pokemon);
 
 void BattleAnim_LassoMoveHitReactionContinue(ActivePokemon* owner, ActivePokemon* animated_pokemon);
 
 M2C_UNK func_8210B824(s32, s8 *);                 /* extern */
 
-void func_8210B9F8(s32 arg0, s8 *arg1);
+void BattleAnim_LassoMoveHitReaction(s32 arg0, s8 *arg1);
 
-void func_8210BA4C(s32 arg0, s8 *arg1);
+void BattleAnim_SurfStart(s32 arg0, s8 *arg1);
 
-void func_8210BA64(ActivePokemon* owner, ActivePokemon* animated_pokemon);
-void func_8210BB28(ActivePokemon* owner, ActivePokemon* animated_pokemon);
+void BattleAnim_SurfContinue(ActivePokemon* owner, ActivePokemon* animated_pokemon);
+void BattleAnim_Surf(ActivePokemon* owner, ActivePokemon* animated_pokemon);
 
 void BattleAnim_PlayTransformInducingAnimation(s32 side_index);
 

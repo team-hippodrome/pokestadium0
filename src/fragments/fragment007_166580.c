@@ -4,20 +4,21 @@
 #include "m2c_macros.h"
 
 /* Unprototyped on purpose: different callers in this file pass one or two arguments. */
-s32 func_8002DC04();
-M2C_UNK func_8002E3F0();
-s32 func_8002DCE0();
-void func_82004518(s32, s32, s32);
+s32 Menu_UpdateCursor();
+M2C_UNK GridMenu_UpdateCursor();
+s32 Menu_UpdateCursorSkipDisabled();
+void FreeBattle_SetScreenState(s32, s32, s32);
 
-/*
- * func_82000020
+/**
+ * FreeBattle_ClearIndices
  *
  * Stores -1 into arg2 consecutive words of the s32 array arg0, starting at
  * index arg1 (indices arg1 .. arg1 + arg2 - 1). Does nothing when
  * arg1 + arg2 <= arg1, i.e. when arg2 is not positive. The compare is signed.
  * What the -1 entries mean is not established from this function.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_82000020(s32* arg0, s32 arg1, s32 arg2) {
+void FreeBattle_ClearIndices(s32* arg0, s32 arg1, s32 arg2) {
     s32 end;
 
     end = arg1 + arg2;
@@ -36,7 +37,11 @@ void func_80020C60(s32);
 void func_800207F8(u8*);
 extern u8 D_80065D00[];
 
-s32 func_82000058(s32 arg0, s32 arg1, s32 arg2, Entry82000058* entry) {
+/**
+ * Reads up to six Pokemon from deck (`arg0`, `arg1`, `arg2`) into `entry` and returns the count.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 FreeBattle_ReadTeam(s32 arg0, s32 arg1, s32 arg2, Entry82000058* entry) {
     s32 handle = func_80020AFC(arg0, arg1, arg2, 0);
     s32 i;
     u8* row;
@@ -65,14 +70,15 @@ typedef struct {
     /* 0x04 */ char unk04[0x50];
 } Slot54;
 
-/*
- * func_82000140
+/**
+ * FreeBattle_MarkEmptySlots
  *
  * Sets the first word (flag) to 1 in each of the slots arg1 .. 5 of an array
  * of six 0x54-byte slots starting at arg0 (nothing happens when arg1 >= 6).
  * The retail code unrolls the loop by four.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_82000140(Slot54* arg0, s32 arg1) {
+void FreeBattle_MarkEmptySlots(Slot54* arg0, s32 arg1) {
     s32 i;
 
     arg0 += arg1;
@@ -128,13 +134,13 @@ Slot54* func_820001B8(Slot54* arg0, s32* arg1) {
     return found;
 }
 
-typedef struct Mon82000258 {
-    /* 0x00 */ char unk00[0x28];
-    /* 0x28 */ u8 level;
-    /* 0x29 */ char unk29[0x2B];
-} Mon82000258; // size = 0x54
+#include "fragments/fragment007_166580_types_2.h"
 
-s32 func_82000258(Mon82000258* mons) {
+/**
+ * Returns 1 when no three of the six Pokemon have levels summing to 155 or less (the さいていレベル warning). The running sum keeps the levels of earlier `j` iterations, so later trios are overestimated.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 FreeBattle_AllTriosOverLevelLimit(Mon82000258* mons) {
     s32 i;
     s32 j;
     s32 k;
@@ -181,13 +187,17 @@ typedef struct {
 } SlotList;
 
 s32 func_80021894(s32);
-s32 func_80022C70(s32);
+s32 GbSave_GetTrainerId(s32 arg0);
 s32 func_80022D84(s32, void*);
 s32 func_800246A8(s32, s32);
-s32 func_800246C8(s32, s32);
-s32 func_8002479C(s32, s32, void*);
+s32 Deck_GetSaveEntryTrainerId(s32, s32);
+s32 Deck_GetSaveEntryName(s32 arg0, s32 arg1, u8* arg2);
 
-void func_820003D4(RecordList* arg0) {
+/**
+ * Reads the party of each Game Boy cartridge in the four Transfer Paks into the team list.
+ * @unverified Name and comment guessed from the code.
+ */
+void FreeBattle_LoadGbTeams(RecordList* arg0) {
     SlotList* rec = (SlotList*)arg0->records;
     s32 i;
 
@@ -199,9 +209,9 @@ void func_820003D4(RecordList* arg0) {
         rec->unk_01 = 0x20;
         rec->unk_02 = i;
         rec->unk_03 = 0;
-        func_82000140(rec->slots, func_82000058(rec->unk_01, rec->unk_02, rec->unk_03, (Entry82000058*)rec->slots));
+        FreeBattle_MarkEmptySlots(rec->slots, FreeBattle_ReadTeam(rec->unk_01, rec->unk_02, rec->unk_03, (Entry82000058*)rec->slots));
         rec->slotCount = 6;
-        rec->unk_04 = func_80022C70(rec->unk_02);
+        rec->unk_04 = GbSave_GetTrainerId(rec->unk_02);
         func_80022D84(rec->unk_02, rec->unk08);
         rec++;
     }
@@ -214,25 +224,26 @@ void func_820003D4(RecordList* arg0) {
         rec->unk_01 = 0x10;
         rec->unk_02 = 0;
         rec->unk_03 = i;
-        func_82000140(rec->slots, func_82000058(rec->unk_01, rec->unk_02, rec->unk_03, (Entry82000058*)rec->slots));
+        FreeBattle_MarkEmptySlots(rec->slots, FreeBattle_ReadTeam(rec->unk_01, rec->unk_02, rec->unk_03, (Entry82000058*)rec->slots));
         rec->slotCount = 6;
-        rec->unk_04 = func_800246C8(rec->unk_01, rec->unk_03);
-        func_8002479C(rec->unk_01, rec->unk_03, rec->unk08);
+        rec->unk_04 = Deck_GetSaveEntryTrainerId(rec->unk_01, rec->unk_03);
+        Deck_GetSaveEntryName(rec->unk_01, rec->unk_03, rec->unk08);
         rec++;
     }
 
     arg0->count = rec - (SlotList*)arg0->records;
 }
 
-/*
- * func_8200053C
+/**
+ * FreeBattle_AddRentalEntry
  *
  * Appends an empty record to a list of 0x214-byte records: initialises the
  * header of the record at index `count` (type byte = 2, the next three bytes
  * = 0), then sets `count` to the index of the following record, computed as a
  * pointer difference from the start of the list.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_8200053C(RecordList* arg0) {
+void FreeBattle_AddRentalEntry(RecordList* arg0) {
     Record214* rec;
 
     rec = &arg0->records[arg0->count];
@@ -284,8 +295,8 @@ void func_82000594(List82000594* arg0) {
     arg0->count = rec - arg0->records;
 }
 
-/*
- * func_820008C8
+/**
+ * FreeBattle_BuildTeamPointers
  *
  * Builds a table of pointers into a block of equally sized records.
  * arg1 holds the address of the first record at +0x00 and the record count
@@ -294,9 +305,10 @@ void func_82000594(List82000594* arg0) {
  * The count is then copied to arg0 + 0x08.  What the records are is not
  * known from the code alone.
  *
- * func_881025C8 is the same routine with a record size of 0x220.
+ * Registration_BuildTeamPointers is the same routine with a record size of 0x220.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_820008C8(s32* arg0, s32* arg1) {
+void FreeBattle_BuildTeamPointers(s32* arg0, s32* arg1) {
     s32 value = arg1[0];
     s32* out = (s32*)arg0[0];
     s32 i = 0;
@@ -315,16 +327,17 @@ void func_820008C8(s32* arg0, s32* arg1) {
 char* HAL_Strcpy(char*, char*);
 extern s32 D_82008F84;
 
-/*
- * func_82000900
+/**
+ * FreeBattle_InitNamedTeam
  *
  * Initialises a slot-list object: sets its four header bytes to 1, 0, 0, 0
  * and the word at +0x04 to 0; copies the string D_82008F84[arg1] (a table of string
  * pointers) into the buffer at +0x08 with HAL_Strcpy; clears the flag word of all six slots and then
- * sets them all with func_82000140(slots, 0) (so the explicit clear is
+ * sets them all with FreeBattle_MarkEmptySlots(slots, 0) (so the explicit clear is
  * overwritten); finally stores slotCount = 6.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_82000900(SlotList* arg0, s32 arg1) {
+void FreeBattle_InitNamedTeam(SlotList* arg0, s32 arg1) {
     s32 i;
 
     arg0->unk_00 = 1;
@@ -336,41 +349,42 @@ void func_82000900(SlotList* arg0, s32 arg1) {
     for (i = 0; i < 6; i++) {
         arg0->slots[i].flag = 0;
     }
-    func_82000140(arg0->slots, 0);
+    FreeBattle_MarkEmptySlots(arg0->slots, 0);
     arg0->slotCount = 6;
 }
 
 extern s32 D_800603C0;
-void func_8002A8C4(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+void Window_SetRect(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 extern Color_RGBA8 D_8200902C;
 extern char D_82009B80[];
 extern char D_82009B88[];
 extern s32 D_8200AC4C;
-void func_8002AE94(s8*, s32, s32, s32, Color_RGBA8, char*);
+void Window_InitLabeled(s8*, s32, s32, s32, Color_RGBA8, char*);
 void func_8000B2F4(s32);
 
 /**
  * Initialises the object arg0 (size and layout not established); a sibling of
- * func_82008524. Calls func_8002A8C4(arg0, arg1, arg2, 0x1AE, 0x124), clears the
+ * FreeBattle_InitLevelSumWarning. Calls Window_SetRect(arg0, arg1, arg2, 0x1AE, 0x124), clears the
  * words at 0x20, 0x24 and 0x28 and sets the word at 0x14 to 0x1001. Calls
- * func_8002AE94 twice, on the sub-objects at arg0 + 0x2C (string D_82009B80)
+ * Window_InitLabeled twice, on the sub-objects at arg0 + 0x2C (string D_82009B80)
  * and arg0 + 0x68 (string D_82009B88), both with width 0x48 and colour
  * D_8200902C and positions derived from the words at 0 and 4. Then sets the
  * words at 0x58, 0x60, 0xAC and 0xA8 to 0xA, 0xC, 2 and 0, stores D_800603C0
  * and then arg5 in the word at 0xA4 (calling func_8000B2F4 with each), stores
  * arg4 at 0xB4 and arg3 at 0xB0, and clears D_8200AC4C.
  * What the object is and what the constants mean is not established.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_820009A4(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
-    func_8002A8C4(arg0, arg1, arg2, 0x1AE, 0x124);
+void FreeBattle_InitConfirmWindow(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
+    Window_SetRect(arg0, arg1, arg2, 0x1AE, 0x124);
     M2C_FIELD(arg0, s32*, 0x24) = 0;
     M2C_FIELD(arg0, s32*, 0x20) = 0;
     M2C_FIELD(arg0, s32*, 0x28) = 0;
     M2C_FIELD(arg0, s32*, 0x14) = 0x1001;
-    func_8002AE94(arg0 + 0x2C, M2C_FIELD(arg0, s32*, 0) + 0x10A, M2C_FIELD(arg0, s32*, 4) + 0x100, 0x48, D_8200902C, D_82009B80);
+    Window_InitLabeled(arg0 + 0x2C, M2C_FIELD(arg0, s32*, 0) + 0x10A, M2C_FIELD(arg0, s32*, 4) + 0x100, 0x48, D_8200902C, D_82009B80);
     M2C_FIELD(arg0, s32*, 0x58) = 0xA;
     M2C_FIELD(arg0, s32*, 0x60) = 0xC;
-    func_8002AE94(arg0 + 0x68, M2C_FIELD(arg0, s32*, 0) + 0x15A, M2C_FIELD(arg0, s32*, 4) + 0x100, 0x48, D_8200902C, D_82009B88);
+    Window_InitLabeled(arg0 + 0x68, M2C_FIELD(arg0, s32*, 0) + 0x15A, M2C_FIELD(arg0, s32*, 4) + 0x100, 0x48, D_8200902C, D_82009B88);
     M2C_FIELD(arg0, s32*, 0xAC) = 2;
     M2C_FIELD(arg0, s32*, 0xA8) = 0;
     M2C_FIELD(arg0, s32*, 0xA4) = D_800603C0;
@@ -390,7 +404,7 @@ typedef struct Entry80066AD8 {
     Color82000BC4 color;
 } Entry80066AD8;
 extern Entry80066AD8 D_80066AD8[];
-s32 func_8002D498(s32, s32);
+s32 Pokemon_GetTypeIndex(s32, s32);
 void func_8001AB6C(void);
 void func_8001A384(s32, s32);
 void func_8001ABBC(void);
@@ -430,9 +444,13 @@ void func_82000AC4(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
 }
 
 
-void func_82000BC4(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
+/**
+ * Draws the colored type icon for type slot `arg3` of Pokemon `arg2`.
+ * @unverified Name and comment guessed from the code.
+ */
+void FreeBattle_DrawTypeIcon(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     Color82000BC4 c;
-    s32 idx = func_8002D498(arg2, arg3);
+    s32 idx = Pokemon_GetTypeIndex(arg2, arg3);
 
     if (idx != -1) {
         c = D_80066AD8[idx].color;
@@ -502,7 +520,7 @@ extern char D_82009BFC[];
 extern char D_82009C00[];
 extern char D_82009C04[];
 extern s32 D_8200AC48;
-void func_800069CC(void);
+void BgStage_DrawFrame(void);
 void func_80019008(s32, Mon82000C5C*, s32);
 u8* func_800196F8(s32);
 void func_8001AAE4(u8, u8, u8, u8);
@@ -510,28 +528,32 @@ void func_8001ABE8(void);
 void func_8001AC3C(void);
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 void func_80029028(s32, s32, s32, s32, Color82001CCC);
-void func_80029658(s32, s32, s32, u8*);
-void func_8002A550(s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
+void Ui_DrawTexturedDivider(s32, s32, s32, u8*);
+void Ui_FillRectPrimEnvColor(s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
 s32 func_8002AE6C(Screen82000C5C*);
-void func_8002AF04(char*, s32);
-s32 func_8002D3D0(Mon82000C5C*);
-s32 func_8002D430(Mon82000C5C*, s32);
-void func_82000C5C(Screen82000C5C* arg0) {
+void Window_DrawLabeled(char*, s32);
+s32 BattleMon_CountMoves(u8* arg0);
+s32 BattleMon_GetMoveIndex(Mon82000C5C*, s32);
+/**
+ * Draws a Pokemon's status window: LV, HP, Type 1/2, Attack, Defense, Speed, Special.
+ * @unverified Name and comment guessed from the code.
+ */
+void FreeBattle_DrawMonStatusWindow(Screen82000C5C* arg0) {
     s32 y = arg0->y + 6;
     s32 x = arg0->x + 6;
-    s32 count = func_8002D3D0(arg0->mon);
+    s32 count = BattleMon_CountMoves(arg0->mon);
     s32 i;
     s32 n;
     s32 row;
     u8* tex;
 
     if (func_8002AE6C(arg0) == 0) {
-        func_80029658(arg0->x, arg0->y + 0xF3, arg0->w, D_8007356C);
+        Ui_DrawTexturedDivider(arg0->x, arg0->y + 0xF3, arg0->w, D_8007356C);
         gSPDisplayList(gDisplayListHead++, D_80060270);
         func_80029028(x, y, arg0->w - 0xC, 0x20, D_82009030);
         func_80029028(x + 0x78, y + 0x20, arg0->w - 0x84, 0x78, D_82009034);
         func_80029028(x, y + 0xF4, arg0->w - 0xC, 0x24, D_82008F54);
-        func_8002A550(x, y + 0x98, arg0->w - 0xC, 0x56, D_82009038, D_8200903C);
+        Ui_FillRectPrimEnvColor(x, y + 0x98, arg0->w - 0xC, 0x56, D_82009038, D_8200903C);
         func_8001AB6C();
         func_8001AA9C(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
         func_8001A384(8, 0);
@@ -552,7 +574,7 @@ void func_82000C5C(Screen82000C5C* arg0) {
         func_8001A944(x + 0xB2, y + 5, D_82009BA8, arg0->mon->level);
         func_8001A944(x + 0x140, y + 5, D_82009BAC, arg0->mon->maxHp);
         func_8001A944(x + 0x88, y + 0x28, D_82009BB0);
-        if (func_8002D498((s32)arg0->mon, 1) != -1) {
+        if (Pokemon_GetTypeIndex((s32)arg0->mon, 1) != -1) {
             func_8001A944(x + 0x88, y + 0x64, D_82009BBC);
         }
         func_8001A944(x + 0x102, y + 0x28, D_82009BC8);
@@ -564,24 +586,24 @@ void func_82000C5C(Screen82000C5C* arg0) {
         func_8001A944(x + 0x15C, y + 0x60, D_82009C00, arg0->mon->speed);
         func_8001A944(x + 0x15C, y + 0x7C, D_82009C04, arg0->mon->special);
         for (i = 0; i < count; i++) {
-            func_82000AC4(D_82009040[i].x + x, D_82009040[i].y + y, func_8002D430(arg0->mon, i), D_82009040[i].centered);
+            func_82000AC4(D_82009040[i].x + x, D_82009040[i].y + y, BattleMon_GetMoveIndex(arg0->mon, i), D_82009040[i].centered);
         }
         func_8001ABBC();
-        func_82000BC4(x + 0x9C, y + 0x40, (s32)arg0->mon, 0);
-        func_82000BC4(x + 0x9C, y + 0x7C, (s32)arg0->mon, 1);
+        FreeBattle_DrawTypeIcon(x + 0x9C, y + 0x40, (s32)arg0->mon, 0);
+        FreeBattle_DrawTypeIcon(x + 0x9C, y + 0x7C, (s32)arg0->mon, 1);
         gSPDisplayList(gDisplayListHead++, D_80060290);
         for (i = 0; i < count; i++) {
             func_8001B884(D_82009040[i].iconX + x, D_82009040[i].y + y, 0x14, 0x14, (u8*)D_82009040[i].icon, 0x14, 0x200000);
         }
         gSPDisplayList(gDisplayListHead++, D_80060398);
-        func_8002AF04(arg0->button1, (arg0->selection == 0) ? 2 : 0);
-        func_8002AF04(arg0->button2, (arg0->selection == 1) ? 2 : 0);
+        Window_DrawLabeled(arg0->button1, (arg0->selection == 0) ? 2 : 0);
+        Window_DrawLabeled(arg0->button2, (arg0->selection == 1) ? 2 : 0);
         if (D_8200AC4C == 0) {
             D_8200AC4C = 1;
             func_80019008(D_8200AC48, arg0->mon, 0x416D);
         }
         tex = func_800196F8(D_8200AC48);
-        func_800069CC();
+        BgStage_DrawFrame();
         gSPDisplayList(gDisplayListHead++, D_80060290);
         gDPSetAlphaCompare(gDisplayListHead++, G_AC_NONE);
         for (row = 0; row < 0x78; row += n) {
@@ -641,7 +663,7 @@ typedef struct {
     /* 0x04 */ u16* flags;
 } FlagOwner;
 
-void func_8002D900(FlagOwner*);
+void Menu_ClearItemFlags(FlagOwner*);
 
 /**
  * For each of the six Slot54 entries in arg1 whose `flag` is zero and whose first
@@ -659,7 +681,7 @@ void func_82001340(FlagOwner* arg0, Slot54* arg1, s32 arg2) {
     Slot54* p;
 
     records = arg0->table->records;
-    func_8002D900(arg0);
+    Menu_ClearItemFlags(arg0);
     slot = 0;
     p = arg1;
     for (; slot != 0x1F8; slot += 0x54, p++) {
@@ -738,7 +760,11 @@ typedef struct Slot82001558 {
     /* 0x05 */ char unk05[0x4F];
 } Slot82001558; // size = 0x54
 
-s32 func_82001558(void* arg0, s32* index) {
+/**
+ * Counts the picked Pokemon that share a species with another pick and stores the first index.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 FreeBattle_CountDuplicateSpecies(void* arg0, s32* index) {
     Slot82001558* slots = arg0;
     s32 count = 0;
     s32 i;
@@ -807,14 +833,18 @@ extern u8 D_05000478[];
 void func_8001AB6C(void);
 void func_8001ABBC(void);
 void func_8001A384(s32, s32);
-void func_80027F20(s32);
-void func_8002A0AC(s32, s32, s32, s32, Color82001CCC);
+void Font_SetColorForFlags(s32);
+void Ui_FillRectHighlighted(s32, s32, s32, s32, Color82001CCC);
 void func_8001BCB4(s32, s32, s32, s32, void*, s32, s32);
-void func_8002B788(s32, s32, u8);
+void Trade_DrawDigitStrip(s32, s32, u8);
 void func_8001833C(s32, s32, s32*, u16);
-u8* func_80018DEC(s32, s32);
+s32 PokeIcon_GetImage(s8 *arg0, s32 arg1);
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
-void func_82001810(s32 x, s32 y, s32* entry, s32 frame, s32 flags, s32 arg5) {
+/**
+ * Draws one Pokemon cell of a team row: nickname, level and icon.
+ * @unverified Name and comment guessed from the code.
+ */
+void FreeBattle_DrawMonCell(s32 x, s32 y, s32* entry, s32 frame, s32 flags, s32 arg5) {
     IconCache82001810* cache = (IconCache82001810*)arg5;
     s32 pad[2]; // FAKE
     s32 key;
@@ -824,18 +854,18 @@ void func_82001810(s32 x, s32 y, s32* entry, s32 frame, s32 flags, s32 arg5) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(x, y, 0x84, 0x32, D_82008F58);
     if (flags & 0x10) {
-        func_8002A0AC(x + 3, y + 3, 0x7E, 0x2C, D_82008F58);
+        Ui_FillRectHighlighted(x + 3, y + 3, 0x7E, 0x2C, D_82008F58);
     }
     if (entry != NULL) {
         func_8001AB6C();
-        func_80027F20(flags);
+        Font_SetColorForFlags(flags);
         func_8001A384(4, 0);
         func_8001A944(x + 4, y + 4, (char*)entry + 0x30);
         func_8001ABBC();
         gSPDisplayList(gDisplayListHead++, D_80073450);
         gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
         func_8001BCB4(x + 0x2C, y + 0x19, 8, 0xA, D_04011A60, 8, 0);
-        func_8002B788(x + 0x38, y + 0x17, ((u8*)entry)[0x24]);
+        Trade_DrawDigitStrip(x + 0x38, y + 0x17, ((u8*)entry)[0x24]);
         key = cache->start + frame;
         idx = cache->base + key % cache->count;
         if (key != cache->slots[idx]) {
@@ -843,7 +873,7 @@ void func_82001810(s32 x, s32 y, s32* entry, s32 frame, s32 flags, s32 arg5) {
             func_8001833C(D_8200AC50, idx, entry, ((D_82008F58.c[1] << 3) & 0x7C0) | ((D_82008F58.c[2] >> 2) & 0x3E) | ((D_82008F58.c[0] << 8) & 0xF800) | 1);
         }
         gSPDisplayList(gDisplayListHead++, D_80073408);
-        func_8001B884(x + 0x56, y + 6, 0x28, 0x28, func_80018DEC(D_8200AC50, idx), 0x28, 0x200000);
+        func_8001B884(x + 0x56, y + 6, 0x28, 0x28, PokeIcon_GetImage(D_8200AC50, idx), 0x28, 0x200000);
         gSPDisplayList(gDisplayListHead++, D_80073438);
         if (flags & 0x800) {
             gSPDisplayList(gDisplayListHead++, D_80073408);
@@ -859,37 +889,47 @@ void func_82001810(s32 x, s32 y, s32* entry, s32 frame, s32 flags, s32 arg5) {
 }
 
 
-void func_82001810(s32, s32, s32*, s32, s32, s32);
+void FreeBattle_DrawMonCell(s32, s32, s32*, s32, s32, s32);
 
-void func_82001BB4(s32 arg0, s32 arg1, s32* arg2, s32 arg3, s32 arg4, s32 arg5) {
-    func_82001810(arg0, arg1, (*arg2 & 1) ? NULL : arg2 + 1, arg3, arg4, arg5);
+/**
+ * Draws a team slot's Pokemon cell, or an empty cell when the slot is empty.
+ * @unverified Name and comment guessed from the code.
+ */
+void FreeBattle_DrawSlotCell(s32 arg0, s32 arg1, s32* arg2, s32 arg3, s32 arg4, s32 arg5) {
+    FreeBattle_DrawMonCell(arg0, arg1, (*arg2 & 1) ? NULL : arg2 + 1, arg3, arg4, arg5);
 }
 
-/*
- * func_82001C00
+/**
+ * FreeBattle_FillTrainerPanel
  *
  * Emits the display list D_80060270, then fills a 0x88 by 0x64 rectangle at
  * (arg0, arg1) with the colour in arg2 using func_80029028
  * (Trade_DrawSolidFillRect).
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_82001C00(s32 arg0, s32 arg1, Color82001CCC arg2) {
+void FreeBattle_FillTrainerPanel(s32 arg0, s32 arg1, Color82001CCC arg2) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(arg0, arg1, 0x88, 0x64, arg2);
 }
 
-/*
- * func_82001C60
+/**
+ * FreeBattle_FillTeamPanel
  *
  * Emits the display list D_80060270, then fills a 0x18C by 0x64 rectangle at
  * (arg0 + 0x88, arg1) with the colour in arg2 using func_80029028
  * (Trade_DrawSolidFillRect).
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_82001C60(s32 arg0, s32 arg1, Color82001CCC arg2) {
+void FreeBattle_FillTeamPanel(s32 arg0, s32 arg1, Color82001CCC arg2) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(arg0 + 0x88, arg1, 0x18C, 0x64, arg2);
 }
 
-void func_82001CCC(s32 arg0, s32 arg1, Color82001CCC arg2) {
+/**
+ * Draws the top and bottom border lines of a team row.
+ * @unverified Name and comment guessed from the code.
+ */
+void FreeBattle_DrawRowBorders(s32 arg0, s32 arg1, Color82001CCC arg2) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(arg0, arg1, 0x214, 1, arg2);
     func_80029028(arg0, arg1 + 0x63, 0x214, 1, arg2);
@@ -897,25 +937,26 @@ void func_82001CCC(s32 arg0, s32 arg1, Color82001CCC arg2) {
 
 extern char D_82009C08[];
 void func_8001AAE4(u8, u8, u8, u8);
-void func_8001AB2C(s32);
+void Font_SetLineHeight(s32 arg0);
 void func_8001ABE8(void);
 void func_8001AC3C(void);
 
-/*
- * func_82001D64
+/**
+ * FreeBattle_DrawRentalPrompt
  *
- * Draws a filled rectangle with func_82001C60 using the colour D_82008F58,
+ * Draws a filled rectangle with FreeBattle_FillTeamPanel using the colour D_82008F58,
  * then switches the font to translucent, two-cycle text rendering (white
- * environment colour, font set mask 0x20, func_8001AB2C(0x2A), prim colour
+ * environment colour, font set mask 0x20, Font_SetLineHeight(0x2A), prim colour
  * 255/100/255/255) and prints the string D_82009C08 at
  * (arg0 + 0xAE, arg1 + 0xE) before ending text rendering. arg2 is not used.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_82001D64(s32 arg0, s32 arg1, s32 arg2) {
-    func_82001C60(arg0, arg1, D_82008F58);
+void FreeBattle_DrawRentalPrompt(s32 arg0, s32 arg1, s32 arg2) {
+    FreeBattle_FillTeamPanel(arg0, arg1, D_82008F58);
     func_8001AB6C();
     func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF);
     func_8001A384(0x20, 0);
-    func_8001AB2C(0x2A);
+    Font_SetLineHeight(0x2A);
     func_8001ABE8();
     func_8001AAE4(0xFF, 0x64, 0xFF, 0xFF);
     func_8001A944(arg0 + 0xAE, arg1 + 0xE, D_82009C08);
@@ -944,24 +985,28 @@ extern char D_82009C34[];
 extern char D_82009C48[];
 extern u8 D_04010918[];
 extern Gfx D_80073450[];
-u8 func_80022BAC(s32);
-void func_80027F20(s32);
-void func_8002A3F8(Img82001E20*, s32, s32);
-void func_8002BAB8(s32, s32, s32, s32);
+u8 GbSave_GetPortGame(s32 arg0);
+void Font_SetColorForFlags(s32);
+void Ui_DrawImageInStrips(Img82001E20*, s32, s32);
+void Ui_DrawNumberZeroPadded(s32, s32, s32, s32);
 void func_8002BC58(s32, s32, s32, s32);
 void func_8001BCB4(s32, s32, s32, s32, void*, s32, s32);
-void func_82001E20(s32 arg0, s32 arg1, s32 arg2, Slot82001E20* arg3) {
+/**
+ * Draws the レンタルポケモン (Rental Pokemon) list with its なまえ (Name) header.
+ * @unverified Name and comment guessed from the code.
+ */
+void FreeBattle_DrawRentalNameList(s32 arg0, s32 arg1, s32 arg2, Slot82001E20* arg3) {
     s32 pad[3]; // FAKE
     Img82001E20 img;
 
-    func_82001C00(arg0, arg1, D_82008F5C);
+    FreeBattle_FillTrainerPanel(arg0, arg1, D_82008F5C);
     if (arg3->flags == 0) {
         if (arg3->kind == 0x20) {
-            func_8002BC58(arg0 + 5, arg1 + 4, arg3->species, func_80022BAC(arg3->species));
+            func_8002BC58(arg0 + 5, arg1 + 4, arg3->species, GbSave_GetPortGame(arg3->species));
         } else if (arg3->kind == 0x10) {
-            func_8002A3F8(&D_82008F64, arg0 + 4, arg1 + 4);
+            Ui_DrawImageInStrips(&D_82008F64, arg0 + 4, arg1 + 4);
             func_8001AB6C();
-            func_80027F20(arg2);
+            Font_SetColorForFlags(arg2);
             func_8001A384(8, 0);
             func_8001A944(arg0 + 0x1B, arg1 + 0x1A, D_82009C2C, arg3->index + 1);
             func_8001ABBC();
@@ -969,11 +1014,11 @@ void func_82001E20(s32 arg0, s32 arg1, s32 arg2, Slot82001E20* arg3) {
     } else if (arg3->flags & 4) {
         img.width = img.height = img.stride = 0x40;
         img.pixels = D_8200AD08[arg3->index];
-        func_8002A3F8(&img, arg0 + 0x16, arg1 + 2);
+        Ui_DrawImageInStrips(&img, arg0 + 0x16, arg1 + 2);
     }
     if (arg3->flags & 2) {
         func_8001AB6C();
-        func_80027F20(arg2);
+        Font_SetColorForFlags(arg2);
         func_8001A384(4, 0);
         func_8001A944(arg0 + 4, arg1 + 0x41, D_82009C34);
         func_8001ABBC();
@@ -983,7 +1028,7 @@ void func_82001E20(s32 arg0, s32 arg1, s32 arg2, Slot82001E20* arg3) {
     func_8001AA9C(0xFF, 0xC8, 0xC8, 0xFF);
     func_8001A384(4, -1);
     func_8001A944(arg0 + 4, arg1 + 0x41, D_82009C48);
-    func_80027F20(arg2);
+    Font_SetColorForFlags(arg2);
     func_8001A384(4, 0);
     func_8001A944(arg0 + 0x38, arg1 + 0x41, arg3->name);
     func_8001ABBC();
@@ -991,7 +1036,7 @@ void func_82001E20(s32 arg0, s32 arg1, s32 arg2, Slot82001E20* arg3) {
         gSPDisplayList(gDisplayListHead++, D_80073450);
         gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
         func_8001BCB4(arg0 + 0x25, arg1 + 0x56, 0x28, 0xA, D_04010918, 0x28, 0);
-        func_8002BAB8(arg0 + 0x51, arg1 + 0x54, arg3->value, 5);
+        Ui_DrawNumberZeroPadded(arg0 + 0x51, arg1 + 0x54, arg3->value, 5);
     }
 }
 
@@ -1007,9 +1052,13 @@ extern u8* D_82008F74[];
 extern Gfx D_80073408[];
 extern Gfx D_80073438[];
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
-void func_820020EC(s32 arg0, s32 arg1, SlotList *arg2, s32 arg3, s32 arg4, SlotList **arg5)
+/**
+ * Draws a full team row: trainer panel and six Pokemon cells.
+ * @unverified Name and comment guessed from the code.
+ */
+void FreeBattle_DrawTeamRow(s32 arg0, s32 arg1, SlotList *arg2, s32 arg3, s32 arg4, SlotList **arg5)
 {
-  SlotList **new_var;
+  SlotList **new_var; // FAKE: permuter temp
   s32 hl;
   s32 *name;
   s32 i;
@@ -1018,11 +1067,11 @@ void func_820020EC(s32 arg0, s32 arg1, SlotList *arg2, s32 arg3, s32 arg4, SlotL
   SlotList *list = arg2; // FAKE: alias kept in s6 for loop bound
   if (arg2 != 0)
   {
-    func_82001E20(arg0, arg1, arg4, (Slot82001E20 *) arg2);
+    FreeBattle_DrawRentalNameList(arg0, arg1, arg4, (Slot82001E20 *) arg2);
     new_var = arg5;
     if (arg2->unk_00 & 2)
     {
-      func_82001D64(arg0, arg1, arg4);
+      FreeBattle_DrawRentalPrompt(arg0, arg1, arg4);
     }
     else
     {
@@ -1045,7 +1094,7 @@ void func_820020EC(s32 arg0, s32 arg1, SlotList *arg2, s32 arg3, s32 arg4, SlotL
               hl = 0x200;
             }
           }
-          func_82001810((arg0 + 0x88) + ((i % 3) * 0x84), ((i / 3) * 0x32) + arg1, name, i, hl, (s32) (&def));
+          FreeBattle_DrawMonCell((arg0 + 0x88) + ((i % 3) * 0x84), ((i / 3) * 0x32) + arg1, name, i, hl, (s32) (&def));
           i++;
         } while (i < list->slotCount);
       }
@@ -1057,15 +1106,15 @@ void func_820020EC(s32 arg0, s32 arg1, SlotList *arg2, s32 arg3, s32 arg4, SlotL
       {
         {
           Gfx *_g = (Gfx *) (gDisplayListHead++);
-          _g->words.w1 = (unsigned int) D_80073408;
-          _g->words.w0 = (((unsigned int) ((((unsigned int) 0xde) & ((0x01 << 8) - 1)) << 24)) | ((unsigned int) ((((unsigned int) 0x00) & ((0x01 << 8) - 1)) << 16))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 16) - 1)) << 0));
+          _g->words.w1 = (unsigned int) D_80073408; // FAKE: hand-expanded gbi macro
+          _g->words.w0 = (((unsigned int) ((((unsigned int) 0xde) & ((0x01 << 8) - 1)) << 24)) | ((unsigned int) ((((unsigned int) 0x00) & ((0x01 << 8) - 1)) << 16))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 16) - 1)) << 0)); // FAKE: hand-expanded gbi macro
         }
         ;
         func_8001B884(arg0 + 0x60, (arg1 + 5) + (i * 0xE), 0x28, 0xE, D_82008F74[i], 0x28, 0x200000);
         {
           Gfx *_g = (Gfx *) (gDisplayListHead++);
-          _g->words.w1 = (unsigned int) D_80073438;
-          _g->words.w0 = (((unsigned int) ((((unsigned int) 0xde) & ((0x01 << 8) - 1)) << 24)) | ((unsigned int) ((((unsigned int) 0x00) & ((0x01 << 8) - 1)) << 16))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 16) - 1)) << 0));
+          _g->words.w1 = (unsigned int) D_80073438; // FAKE: hand-expanded gbi macro
+          _g->words.w0 = (((unsigned int) ((((unsigned int) 0xde) & ((0x01 << 8) - 1)) << 24)) | ((unsigned int) ((((unsigned int) 0x00) & ((0x01 << 8) - 1)) << 16))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 16) - 1)) << 0)); // FAKE: hand-expanded gbi macro
         }
         ;
       }
@@ -1074,10 +1123,10 @@ void func_820020EC(s32 arg0, s32 arg1, SlotList *arg2, s32 arg3, s32 arg4, SlotL
   }
   else
   {
-    func_82001C00(arg0, arg1, D_82008F5C);
-    func_82001C60(arg0, arg1, D_82008F58);
+    FreeBattle_FillTrainerPanel(arg0, arg1, D_82008F5C);
+    FreeBattle_FillTeamPanel(arg0, arg1, D_82008F58);
   }
-  func_82001CCC(arg0, arg1, D_82008F60);
+  FreeBattle_DrawRowBorders(arg0, arg1, D_82008F60);
 }
 
 typedef struct {
@@ -1125,8 +1174,9 @@ void func_82002528(SlotFlags* arg0) {
  * For each of the six Slot54 entries reached through `*arg0->slots`, sets bit 0
  * of the matching u16 in `arg0->flags` when the entry's flag word does not have
  * bit 0x40 set. The meaning of the bits is not yet established.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_82002668(SlotFlags* arg0) {
+void FreeBattle_DisableUnpickedRows(SlotFlags* arg0) {
     Slot54* slots;
     s32 i;
 
@@ -1139,12 +1189,13 @@ void func_82002668(SlotFlags* arg0) {
 }
 
 /**
- * Counterpart of func_82002668: for each of the six Slot54 entries reached
+ * Counterpart of FreeBattle_DisableUnpickedRows: for each of the six Slot54 entries reached
  * through `*arg0->slots`, clears bit 0 of the matching u16 in `arg0->flags`
  * when the entry's flag word does not have bit 0x40 set.
  * The meaning of the bits is not yet established.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_82002778(SlotFlags* arg0) {
+void FreeBattle_EnableUnpickedRows(SlotFlags* arg0) {
     Slot54* slots;
     s32 i;
 
@@ -1164,18 +1215,22 @@ typedef struct MenuDef8200288C {
 } MenuDef8200288C;
 extern s32 D_8200AC58[];
 extern Color82001CCC D_82008F60;
-void func_8002E230(void*, s32, s32, s32, MenuDef8200288C*);
+void GridMenu_DrawInlineItems(void*, s32, s32, s32, MenuDef8200288C*);
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-void func_8200288C(s8 *arg0, s32 arg1)
+/**
+ * Draws the rental Pokemon list window; `arg1` picks the cursor style.
+ * @unverified Name and comment guessed from the code.
+ */
+void FreeBattle_DrawRentalListWindow(s8 *arg0, s32 arg1)
 {
   s32 x;
   s32 y;
-  s32 pad[2];
+  s32 pad[2]; // FAKE: stack padding
   MenuDef8200288C def;
   s32 mode;
- x = (*((s32 *) (((s8 *) arg0) + 0x14))) + 6; y = (*((s32 *) (((s8 *) arg0) + 0x18))) + 6;
+ x = (*((s32 *) (((s8 *) arg0) + 0x14))) + 6; y = (*((s32 *) (((s8 *) arg0) + 0x18))) + 6; // FAKE: decomp slop, raw pointer casts stand in for struct fields
   mode = 0xFFED;
-  func_82001E20(x, y, 2, arg0 + 0xC8);
+  FreeBattle_DrawRentalNameList(x, y, 2, arg0 + 0xC8);
   def.items = D_8200AC58;
   def.count = 0;
   def.itemCount = 0x18;
@@ -1192,6 +1247,6 @@ void func_8200288C(s8 *arg0, s32 arg1)
 
   }
 
-  func_8002E230(arg0 + 0x2F8, x + 0x88, y, mode, &def);
-  func_82001CCC(x, y, D_82008F60);
+  GridMenu_DrawInlineItems(arg0 + 0x2F8, x + 0x88, y, mode, &def);
+  FreeBattle_DrawRowBorders(x, y, D_82008F60);
 }

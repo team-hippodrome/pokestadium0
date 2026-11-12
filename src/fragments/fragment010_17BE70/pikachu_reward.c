@@ -45,7 +45,6 @@ extern u32 D_81701B4C[];
 #include "DDC0.h"
 #include "session.h"
 #include "save_data.h"
-#include "minigame_dispatch.h"
 #include "gb_save.h"
 #include "gb_tower_audio.h"
 #include "leo.h"
@@ -608,7 +607,7 @@ extern s32 D_81701B38;
 extern char* D_81701B3C;
 extern s32 D_81701B40;
 s32 func_81700A80(s32);
-void func_8003FE58(s32, s32, s32);
+void Audio_PlayMoveSound(s32, s32, s32);
 s32 func_800564D4(char*, const char*, ...);
 
 s32 func_817010E8(void) {
@@ -634,7 +633,7 @@ s32 func_817010E8(void) {
                 func_81700588(D_81701B34, 0x1E);
                 func_800199F8(&D_FLT_81702020, 0xA);
                 D_81701B04 = 0;
-                func_8003FE58(0x85, 0x19, 0);
+                Audio_PlayMoveSound(0x85, 0x19, 0);
                 func_81700630(D_81701B38, 1);
                 func_800564D4(buf, D_81701B3C, D_8006A9CC[M2C_FIELD(D_817027A8 + choice, u8*, 9)].name);
                 func_8000A7FC(0x3C);
@@ -711,9 +710,15 @@ void PikachuReward_ShowSaveStatusScreen(s32 arg0) {
 
 s32 func_80020AFC(M2C_UNK, s32, M2C_UNK, M2C_UNK);  /* extern */
 M2C_UNK func_80020C60(s32);                         /* extern */
-M2C_UNK func_80020DF0(M2C_UNK *, s32, s32);         /* extern */
-s32 func_80021B30(s32);                             /* extern */
-s32 func_80021FF4(s32);                             /* extern */
+/**
+ * M2C_UNK func_80020DF0(M2C_UNK *, s32, s32);         /* extern
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+/**
+ * s32 GbSave_PollCartRemoval(s32);                             /* extern
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+s32 GbSave_CommitMainData(s32);                             /* extern */
 M2C_UNK func_80022118(s32);                         /* extern */
 M2C_UNK func_80022188(s32);                         /* extern */
 M2C_UNK func_817012C0(M2C_UNK);                     /* extern */
@@ -731,11 +736,11 @@ void func_817014A4(s32 arg0) {
     func_817012C0(0);
     func_817012C0(0);
     func_80022118(arg0);
-    if (func_80021FF4(arg0) == 0) {
+    if (GbSave_CommitMainData(arg0) == 0) {
         do {
             var_s0 = 2;
 loop_3:
-            temp_v0_2 = func_80021B30(arg0);
+            temp_v0_2 = GbSave_PollCartRemoval(arg0);
             if (temp_v0_2 == 1) {
                 var_s0 = 1;
             }
@@ -748,12 +753,12 @@ loop_3:
             }
             func_817012C0(0);
             func_817012C0(0);
-        } while (func_80021FF4(arg0) == 0);
+        } while (GbSave_CommitMainData(arg0) == 0);
     }
     func_80022188(arg0);
 }
 
-void func_8003F96C(s32, s32);
+void Audio_PlayCry(s32, s32);
 M2C_UNK func_81700588(s32, M2C_UNK);
 M2C_UNK func_8170070C(s32);
 M2C_UNK func_81700630(s32, M2C_UNK);
@@ -762,7 +767,7 @@ extern s8* D_8170201C;
 M2C_UNK func_817015B0(s32 arg0) {
     s32 i;
 
-    func_8003F96C(0x19, 0);
+    Audio_PlayCry(0x19, 0);
     func_8170070C((s32)D_81701B44);
     func_81700588((s32)D_81701B44, 1);
     for (i = func_81700130(); i < 4; i++) {
@@ -851,12 +856,12 @@ extern u8 D_0042CC80[];
 extern u8 D_002E0BE0[];
 extern u8 D_002E2B90[];
 s32 func_81700064(s32);
-void func_8001A194(s32, s32);
+s32 Font_Init(s32 load_size, s32 side);
 
 void func_81701710(void);
 
 s32 Stadium_BonusPikachuReward(UNUSED s32 arg0, s32 arg1) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     StageContext* sp20;
 
     D_8170201C = (s8*)arg1;
@@ -865,7 +870,7 @@ s32 Stadium_BonusPikachuReward(UNUSED s32 arg0, s32 arg1) {
     if ((M2C_FIELD(D_8170201C, u16*, 0x1096) & 0x20) && (func_81700064(M2C_FIELD(D_8170201C, u8*, 0x1094)) != 0)) {
         Gfx_InitDisplayListBuffers(0x10000, 0);
         sp20 = StageContext_Allocate(0, 1, 3, 1, 2, 1);
-        func_8001A194(6, 0);
+        Font_Init(6, 0);
 
         Fragment_Load(((((u32)D_81000000) & 0x0FF00000) >> 0x14) - 0x10, D_0015B1A0, D_0015E220);
         Fragment_Load(((((u32)D_8FC00000) & 0x0FF00000) >> 0x14) - 0x10, D_0042C4A0, D_0042CC80);

@@ -33,7 +33,7 @@ void n_alSynNew(ALSynConfig* c) {
     ALFilter* sources;
     N_PVoice* m_sources;
     ALParam* params;
-    ALParam* paramPtr;
+    ALParam* param_ptr;
 
     n_syn->head = NULL;
     n_syn->numPVoices = c->maxPVoices;
@@ -85,25 +85,25 @@ void n_alSynNew(ALSynConfig* c) {
     params = alHeapAlloc(hp, c->maxUpdates, sizeof(ALParam));
     n_syn->paramList = 0;
     for (i = 0; i < c->maxUpdates; i++) {
-        paramPtr = &params[i];
-        paramPtr->next = n_syn->paramList;
-        n_syn->paramList = paramPtr;
+        param_ptr = &params[i];
+        param_ptr->next = n_syn->paramList;
+        n_syn->paramList = param_ptr;
     }
     n_syn->heap = hp;
 }
 
-Acmd* n_alAudioFrame(Acmd* cmdList, s32* cmdLen, s16* outBuf, s32 outLen) {
+Acmd* n_alAudioFrame(Acmd* cmd_list, s32* cmd_len, s16* out_buf, s32 outLen) {
     ALPlayer* client;
     s16 tmp = 0; /* Starting buffer in DMEM */
-    Acmd* cmdlEnd = cmdList;
-    Acmd* cmdPtr;
-    s32 nOut;
-    s16* lOutBuf = outBuf;
+    Acmd* cmdl_end = cmd_list;
+    Acmd* cmd_ptr;
+    s32 n_out;
+    s16* l_out_buf = out_buf;
 
 
     if (n_syn->head == 0) {
-        *cmdLen = 0;
-        return cmdList; /* nothing to do */
+        *cmd_len = 0;
+        return cmd_list; /* nothing to do */
     }
 
     /*
@@ -150,25 +150,25 @@ Acmd* n_alAudioFrame(Acmd* cmdList, s32* cmdLen, s16* outBuf, s32 outLen) {
      * Now build the command list in small chunks
      */
     while (outLen > 0) {
-        nOut = MIN(n_syn->maxOutSamples, outLen);
+        n_out = MIN(n_syn->maxOutSamples, outLen);
 
         /*
          * construct the command list for each physical voice by calling
          * the head of the filter chain.
          */
-        cmdPtr = cmdlEnd;
-        n_syn->sv_dramout = (s32)lOutBuf;
-        cmdlEnd = n_alSavePull(n_syn->curSamples, cmdPtr);
+        cmd_ptr = cmdl_end;
+        n_syn->sv_dramout = (s32)l_out_buf;
+        cmdl_end = n_alSavePull(n_syn->curSamples, cmd_ptr);
 
-        outLen -= nOut;
-        lOutBuf += nOut << 1; /* For Stereo */
-        n_syn->curSamples += nOut;
+        outLen -= n_out;
+        l_out_buf += n_out << 1; /* For Stereo */
+        n_syn->curSamples += n_out;
     }
-    *cmdLen = (s32)(cmdlEnd - cmdList);
+    *cmd_len = (s32)(cmdl_end - cmd_list);
 
     _n_collectPVoices(); /* collect free physical voices */
 
-    return cmdlEnd;
+    return cmdl_end;
 }
 
 ALParam* __n_allocParam(void) {
@@ -209,14 +209,20 @@ void _n_freePVoice(N_PVoice* pvoice) {
     alLink((ALLink*)pvoice, &n_syn->pLameList);
 }
 
-s32 func_800449E0(s32 micros) {
+/**
+ * Add 0.5 to adjust the average affect of
+ * the truncation error produced by casting
+ * a float to an int.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
+s32 _n_timeToSamplesNoRound(s32 micros) {
     f32 tmp = ((f32)micros) * n_syn->outputRate / 1000000.0 + 0.5;
 
     return (s32)tmp;
 }
 
-s32 func_800449E0(s32 micros);
+s32 _n_timeToSamplesNoRound(s32 micros);
 
-s32 func_80044A34(s32 micros) {
-    return func_800449E0(micros) & ~0xF;
+s32 _n_timeToSamples(s32 micros) {
+    return _n_timeToSamplesNoRound(micros) & ~0xF;
 }

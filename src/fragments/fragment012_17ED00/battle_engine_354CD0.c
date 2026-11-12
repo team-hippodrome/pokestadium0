@@ -7,15 +7,21 @@ extern Trail50Effect D_821B7F60[50];
 extern Gfx D_821932C0[];
 extern Gfx D_82193350[];
 
-void Trail50Effect_Init(void);
-void Trail50Effect_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9,
+void PetalDanceTrail_Init(void);
+/**
+ * @unverified Name from Stadium 1.
+ */
+void PetalDanceTrail_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9,
                    f32 argA, f32 argB, f32 argC, s16 argD);
-void Trail50Effect_Update(f32 arg0, Vec3f* arg1, f32 arg2);
-void Trail50Effect_AdvanceNodes(Trail50Effect* arg0);
-s32 Trail50Effect_IsComplete(void);
-Gfx* Trail50Effect_Draw(Gfx* arg0);
+void PetalDanceTrail_Update(f32 arg0, Vec3f* arg1, f32 arg2);
+void PetalDanceTrail_AdvanceNodes(Trail50Effect* arg0);
+s32 PetalDanceTrail_IsComplete(void);
+Gfx* PetalDanceTrail_Draw(Gfx* arg0);
 
-void Trail50Effect_Init(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void PetalDanceTrail_Init(void) {
     Trail50Effect* var_v0 = &D_821B7F60[0];
     Trail50EffectNode* var_a0;
     s32 i;
@@ -43,7 +49,7 @@ void Trail50Effect_Init(void) {
     }
 }
 
-void Trail50Effect_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9,
+void PetalDanceTrail_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9,
                    f32 argA, f32 argB, f32 argC, s16 argD) {
     Trail50Effect* var_v1;
     Trail50EffectNode* var_s0;
@@ -104,7 +110,10 @@ void Trail50Effect_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 a
     }
 }
 
-void Trail50Effect_Update(f32 arg0, Vec3f* arg1, f32 arg2) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void PetalDanceTrail_Update(f32 arg0, Vec3f* arg1, f32 arg2) {
     MtxF sp30;
     f32 temp_fv0 = (arg0 * 360.0) / 6.2831854820251465;
 
@@ -112,7 +121,10 @@ void Trail50Effect_Update(f32 arg0, Vec3f* arg1, f32 arg2) {
     guMtxXFMF(sp30.mf, 0.0f, 0.0f, arg2, &arg1->x, &arg1->y, &arg1->z);
 }
 
-void Trail50Effect_AdvanceNodes(Trail50Effect* arg0) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void PetalDanceTrail_AdvanceNodes(Trail50Effect* arg0) {
     s32 i;
     f32 temp_fs3 = arg0->unk_010;
     Trail50EffectNode* var_s0 = &arg0->unk_040[0];
@@ -176,7 +188,10 @@ void Trail50Effect_AdvanceNodes(Trail50Effect* arg0) {
     }
 }
 
-s32 Trail50Effect_IsComplete(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+s32 PetalDanceTrail_IsComplete(void) {
     s32 i;
     Trail50Effect* var_s0 = &D_821B7F60[0];
 
@@ -186,14 +201,17 @@ s32 Trail50Effect_IsComplete(void) {
             if ((var_s0->unk_002 == 1) && (var_s0->unk_006 < var_s0->unk_004)) {
                 var_s0->unk_000 = 0;
             } else {
-                Trail50Effect_AdvanceNodes(var_s0);
+                PetalDanceTrail_AdvanceNodes(var_s0);
             }
         }
     }
     return 0;
 }
 
-Gfx* Trail50Effect_Draw(Gfx* arg0) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+Gfx* PetalDanceTrail_Draw(Gfx* arg0) {
     s32 i;
     s32 j;
     s32 k;
@@ -201,7 +219,7 @@ Gfx* Trail50Effect_Draw(Gfx* arg0) {
     Trail50Effect* var_s5;
     Vtx* var_s0;
     Vec3f sp184;
-    UNUSED s32 pad[15];
+    UNUSED s32 pad[15]; // FAKE: stack padding
     Mtx* temp_v0;
     Mtx sp100;
     Mtx spC0;
@@ -235,7 +253,7 @@ Gfx* Trail50Effect_Draw(Gfx* arg0) {
 
             var_s0 = var_s5->unk_020;
             for (j = 0; j < 10; j++) {
-                Trail50Effect_Update(temp_s0->unk_08, &sp184, temp_s0->unk_04 * tmp);
+                PetalDanceTrail_Update(temp_s0->unk_08, &sp184, temp_s0->unk_04 * tmp);
 
                 var_s3 = temp_s0->unk_0C.y + sp184.y;
                 if (var_s3 < 0) {
@@ -251,7 +269,7 @@ Gfx* Trail50Effect_Draw(Gfx* arg0) {
                 var_s0->v.cn[3] = temp_s0->unk_00;
                 var_s0++;
 
-                Trail50Effect_Update(temp_s0->unk_08 + 3.1415927f, &sp184, temp_s0->unk_04 * tmp);
+                PetalDanceTrail_Update(temp_s0->unk_08 + 3.1415927f, &sp184, temp_s0->unk_04 * tmp);
 
                 var_s3 = temp_s0->unk_0C.y + sp184.y;
                 if (var_s3 < 0) {

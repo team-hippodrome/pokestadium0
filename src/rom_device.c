@@ -8,7 +8,10 @@ extern OSPiHandle* D_80100188;
 void Rom_DmaRead(u32 dev_addr, u32 dram_addr, u32 size);
 
 extern OSMesg D_8010018C;
-void func_80046040(s32 arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Rom_InitDevice(s32 arg0) {
     if (arg0 == 1) {
         D_80100188 = osDriveRomInit();
     } else {
@@ -49,7 +52,7 @@ void Rom_DmaRead(u32 dev_addr, u32 dram_addr, u32 size) {
 
 void func_800374E0(s32, s32);
 
-void func_80046170(s32 arg0, u32 arg1) {
+void Audio_SetChannelVolume(s32 arg0, u32 arg1) {
     s32 var_a1;
 
     switch (arg1) {

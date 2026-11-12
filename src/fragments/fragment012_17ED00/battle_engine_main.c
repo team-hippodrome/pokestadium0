@@ -89,7 +89,7 @@ s32 Battle_StageGeoDispatchCallback(s32 event, GraphNode* node) {
 // called every frame: bug boy in GLC
 // Orient the first stage light relative to the current camera's viewing axis.
 s32 Battle_StageLightAngleCallbackA(s32 event, unk_D_86002F34_alt18* light) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     f32 distance;
     s16 angle_x;
     s16 angle_y;
@@ -115,10 +115,14 @@ s32 Battle_StageMaterialTintCallback(s32 event, DisplayObject* object) {
 extern u8 D_8007838C[4];
 extern u8 D_82198D28[];
 
-void func_82100118(u8 arg0, u8 arg1, u8 arg2) {
-    D_82198D28[0] = arg0;
-    D_82198D28[1] = arg1;
-    D_82198D28[2] = arg2;
+/**
+ * Stores the RGB tint applied to the battle stage.
+ * @unverified Name from the header prototype; comment guessed from the code.
+ */
+void Battle_SetStageTintColor(u8 r, u8 g, u8 b) {
+    D_82198D28[0] = r;
+    D_82198D28[1] = g;
+    D_82198D28[2] = b;
 }
 
 // Called at the start of battles
@@ -133,7 +137,14 @@ extern u8 D_8FA08900[];
 extern u8 D_8FB08900[];
 extern Gfx D_80060398[];
 
-void func_82100148(void) {
+/**
+ * called every frame: bug boy in GLC
+ * Archive entry 2 returns a tagged backdrop value: NULL clears depth, -1 fills
+ * black, a value below 0x10000 is RGBA5551, and larger values address a texture.
+ * The 4 x 64 RGBA32 texture stretches over the upper half; its last row fills below.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ */
+void Battle_DrawStageBackdrop(void) {
     void* tex;
     s16 left;
     s16 right;
@@ -204,7 +215,13 @@ void Battle_RenderActivePokemonThumbnail(GraphNode* thumbnail_root, DepthBuffer*
 }
 
 s32 func_80006B50(s32 *, s32 *, s32 *, s32 *);
-void func_82100650(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
+/**
+ * called every frame: bug boy in GLC
+ * Use clipped destination offsets as 10.5 texture coordinates with a half-texel bias.
+ * @src/gfx_rect.c
+ * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ */
+void Battle_DrawClippedTextureRect(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 x0 = arg0;
     s32 y0 = arg1;
 
@@ -265,6 +282,11 @@ void Battle_FillActivePokemonThumbnail(GraphNode* thumbnail_root, DepthBuffer* t
     gDPSetTextureFilter(gDisplayListHead++, G_TF_BILERP);
 }
 
+/**
+ * Clear the faint-batch stamps for every picked Pokemon, including teammate rosters.
+ * BattleMon.unk_25 is written by Battle_UpdateFaintBatches when its current HP reaches zero.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Battle_ResetFaintBatches(void) {
     s32 side_index;
     s32 trainer_index;
@@ -282,6 +304,12 @@ void Battle_ResetFaintBatches(void) {
     }
 }
 
+/**
+ * called every frame: bug boy in GLC
+ * Stamp newly observed zero-HP Pokemon with the same batch number this frame.
+ * Increment once per nonempty batch, so simultaneous faints share a stamp.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Battle_UpdateFaintBatches(void) {
     s32 side_index;
     s32 trainer_index;
@@ -382,7 +410,13 @@ extern u8* D_800603C0;
 s32 func_800010B8(void);
 s32 func_8003BF40(u8*);
 void func_8000D304(void);
-void func_82100ED4(void) {
+/**
+ * triggers every frame: bug boy in GLC
+ * Count the initial two callbacks toward zero; once the gate is zero, the attract
+ * demo battle (mode 16) can request exit on a button press. The normal path waits for the scene result.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ */
+void Battle_UpdateCompletionGate(void) {
     u8 sp1F;
     if (D_82198D30 < 0) {
         D_82198D30++;
@@ -411,6 +445,13 @@ void func_82100ED4(void) {
 extern SessionContext* D_82198D10;
 void func_8000A7FC(s32);
 
+/**
+ * triggers every frame: bug boy in GLC
+ * BgStage_WaitForCondition passes the current fade mode and starts the exit fade
+ * after a nonzero return. Latch 2 prevents repeating the audio shutdown request.
+ * @src/stage_loader.c
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 Battle_FrameCallback(s32 fade_mode) {
     s32 battle_result = 0;
 
@@ -473,10 +514,17 @@ void Battle_CompleteRosterOrder(u8* roster_order, s32 number_of_pokemon_picked) 
 
 extern u8 D_82189170[];
 extern u8 D_82189174[];
-void func_82187738(TeamRoster*, TeamRoster*, s32, u8*, s32);
+void BattleAi_SelectTeam(TeamRoster*, TeamRoster*, s32, u8*, s32);
 
+/**
+ * triggers on battle start: bug boy in glc
+ * Ask the COM selection routine for the picked prefix, then copy the brought
+ * roster in that order. numberOfPokemonChosen keeps only the prefix length.
+ * @src/fragments/battle_engine/battle_engine_com_decision_logic.c
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Battle_SelectComRoster(void) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     u8 order_of_picked_pokemon[8];
     s32 difficulty;
     TeamRoster* com_roster;
@@ -499,17 +547,17 @@ void Battle_SelectComRoster(void) {
             break;
     }
 
-    if (com_roster->unk_000 & 2) {
+    if (com_roster->isHuman & 2) {
         number_of_pokemon_picked = com_roster->rosterInfo->numberOfPokemonCanBePicked;
         if (player_roster->numberOfPokemonBrought < number_of_pokemon_picked) {
             number_of_pokemon_picked = player_roster->numberOfPokemonBrought;
         }
-        func_82187738(player_roster, com_roster, difficulty, order_of_picked_pokemon, number_of_pokemon_picked);
+        BattleAi_SelectTeam(player_roster, com_roster, difficulty, order_of_picked_pokemon, number_of_pokemon_picked);
         Battle_CompleteRosterOrder(order_of_picked_pokemon, number_of_pokemon_picked);
         com_roster->numberOfPokemonBrought = number_of_pokemon_picked;
 
         for (i = 0; i < com_roster->rosterInfo->numberOfPokemonCanBePicked; i++) {
-            com_roster->pokemonPicked[i] = com_roster->rosterInfo->unk_028[order_of_picked_pokemon[i]];
+            com_roster->pokemonPicked[i] = com_roster->rosterInfo->battleMon[order_of_picked_pokemon[i]];
         }
     }
 }
@@ -522,7 +570,7 @@ void BattleScene_InitializeParticipantPresentation(BattleSessionTeams* side, unk
     side->unk_18 = model->unk_08->unk_00[0];
     side->uniqueStatusFlags |= 0xA0;
     side->unk_1C = 0;
-    side->displayModel = first_trainer->pokemonPicked[0].unk_00.unk_00;
+    side->displayModel = first_trainer->pokemonPicked[0].species.id;
     side->unk_04 = first_trainer->pokemonPicked;
     Trainer_RequestPokeIcon(side);
 }
@@ -572,7 +620,7 @@ extern u8 D_00326700[];
 extern u8 D_003139C0[];
 extern u8 D_00317EF0[];
 extern u8 D_0031C300[];
-s32 func_8001A194(s32, s32);
+s32 Font_Init(s32 load_size, s32 side);
 s32 func_800040B4(s32, u8*, u8*);
 void func_82101178(void);
 void func_821012D8(Unit82101324*, unk_D_86002F30*);
@@ -587,12 +635,12 @@ s32 func_82101324(s32* arg0) { // FAKE: s32 return (value unused) fixes caller r
     MemoryBlock* block;
     unk_D_86002F30* model;
 
-    func_82100118(0xFF, 0xFF, 0xFF);
+    Battle_SetStageTintColor(0xFF, 0xFF, 0xFF);
     Battle_SetStageScale(1.0f);
     if (D_82198D10->mode == 4) {
-        func_8001A194(4, 0);
+        Font_Init(4, 0);
     } else {
-        func_8001A194(3, 0);
+        Font_Init(3, 0);
     }
     D_82198D14[0].framebuffers = PokeIcon_AllocFramebuffers(3);
     D_82198D14[1].framebuffers = PokeIcon_AllocFramebuffers(3);

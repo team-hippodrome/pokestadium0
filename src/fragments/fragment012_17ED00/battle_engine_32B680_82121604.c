@@ -16,19 +16,19 @@ extern Vec3f D_8218B63C;
 void func_821224F4(CameraNode*);
 void func_82121D78(CameraNode*, f32, f32);
 void func_8212187C(s32);
-void func_8212239C(ActivePokemon*, CameraNode*);
+void BattleCamera_CaptureModelOrbit(ActivePokemon*, CameraNode*);
 extern f32 D_FLT_82196040;
-void func_8212239C(ActivePokemon*, CameraNode*);
+void BattleCamera_CaptureModelOrbit(ActivePokemon*, CameraNode*);
 void func_8212054C(CameraNode*);
 extern const f64 D_DBL_821960A0;
 extern f32 D_FLT_82189358[][4];
-void func_821206F4(CameraNode*);
-void func_821206F4(CameraNode*);
+void BattleScene_SelectNextIntroCameraShot(CameraNode*);
+void BattleScene_SelectNextIntroCameraShot(CameraNode*);
 void func_82122FD8(CameraNode*, ActivePokemon*);
 s32 func_821217DC(M2C_UNK);
 extern f32 D_FLT_82189358[][4];
-void func_821206F4(CameraNode*);
-void func_821206F4(CameraNode*);
+void BattleScene_SelectNextIntroCameraShot(CameraNode*);
+void BattleScene_SelectNextIntroCameraShot(CameraNode*);
 s32 func_821217DC(M2C_UNK);
 void func_82122628(s32, Vec3f, s32, s32, f32, f32);
 extern f32 D_FLT_821960A8;
@@ -40,8 +40,11 @@ extern u8* D_800603C0;
 void func_82120A34(CameraNode*);
 void func_82120A90(CameraNode*);
 void func_82121434(CameraNode*);
-void func_82121604(CameraNode* arg0) {
-    switch (sBattleScene.scene->unk_20) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Rental_TeamSlotsUpdate(CameraNode* arg0) {
+    switch (sBattleScene.scene->phaseStep) {
         case 1:
             func_82120A34(arg0);
             break;
@@ -76,7 +79,7 @@ void func_82121604(CameraNode* arg0) {
             func_82120FB0(arg0);
             break;
         case 23:
-            func_821210E4(arg0);
+            BattleScene_IntroCameraPresetHoldStep(arg0);
             break;
         case 25:
             func_8212116C(arg0);

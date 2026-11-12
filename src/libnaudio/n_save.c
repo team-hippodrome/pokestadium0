@@ -6,10 +6,10 @@
 
 Acmd* n_alSavePull(s32 sampleOffset, Acmd* p);
 
-Acmd* n_alSavePull(s32 sampleOffset, Acmd* p) {
+Acmd* n_alSavePull(s32 sample_offset, Acmd* p) {
     Acmd* ptr = p;
 
-    ptr = n_alMainBusPull(sampleOffset, ptr);
+    ptr = n_alMainBusPull(sample_offset, ptr);
 
     // clang-format off
     n_aInterleave(ptr++);                                           \

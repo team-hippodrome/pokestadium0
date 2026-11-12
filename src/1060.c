@@ -4,7 +4,7 @@
 #include "m2c_macros.h"
 
 M2C_UNK func_80000C14();                            /* extern */
-M2C_UNK func_80001234(M2C_UNK, M2C_UNK);            /* extern */
+M2C_UNK DpIntro_SetViMode(M2C_UNK, M2C_UNK);            /* extern */
 M2C_UNK func_80001868();                            /* extern */
 M2C_UNK func_80004E34();                            /* extern */
 M2C_UNK func_8000803C();                            /* extern */
@@ -18,9 +18,14 @@ extern M2C_UNK D_800269A0;
 extern M2C_UNK D_800809B0;
 extern M2C_UNK D_80082B60;
 
-void func_80000460(s32 arg0) {
+/**
+ * Idle thread: sets up the VI mode, interrupts and subsystems, starts thread 4,
+ * then idles. Name from Stadium 1's Idle_ThreadEntry.
+ * @unverified Name and comment guessed from the code.
+ */
+void Idle_ThreadEntry(s32 arg0) {
     func_8005BD80(0xFE);
-    func_80001234(0, 1);
+    DpIntro_SetViMode(0, 1);
     func_80052DC0(1);
     func_8000803C();
     func_80000C14();
@@ -43,10 +48,15 @@ M2C_UNK func_8005C130(M2C_UNK *);                   /* extern */
 extern M2C_UNK D_80080400;
 extern M2C_UNK D_800809B0;
 
-void func_80000550(void) {
+/**
+ * Boot entry: initializes the OS, then creates and starts the idle thread
+ * (id 1, Idle_ThreadEntry). Name from Stadium 1's Main.
+ * @unverified Name and comment guessed from the code.
+ */
+void Main(void) {
     func_80052180();
     func_800093C0(0);
     func_80002D58();
-    func_80051B20(&D_80080400, 1, &func_80000460, 0, &D_800809B0, 0x64);
+    func_80051B20(&D_80080400, 1, &Idle_ThreadEntry, 0, &D_800809B0, 0x64);
     func_8005C130(&D_80080400);
 }

@@ -3,7 +3,7 @@
 #include "global.h"
 
 /*
- * func_80025530
+ * fabsf
  *
  * Absolute value of a float.  The whole function is one `abs.s` followed by
  * the return, i.e. the compiler's built-in fabsf; the pragma below makes IDO
@@ -12,6 +12,6 @@
 f32 fabsf(f32 x);
 #pragma intrinsic(fabsf)
 
-f32 func_80025530(f32 arg0) {
+f32 fabsf(f32 arg0) {
     return fabsf(arg0);
 }

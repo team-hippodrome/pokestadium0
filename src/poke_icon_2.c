@@ -79,16 +79,16 @@ extern unk_D_8006FF00 D_80064C5C[];
 
 void PokeIcon_SetPreviewMon(unk_func_8001B1FC* arg0, BattleMon* arg1, u16 arg2) {
     arg1_func_80010CA8 sp2C;
-    s16 tmp1 = (s16)(D_80064C5C[arg1->unk_00.unk_00 - 1].unk_14 >> 0x10) >> 5;
-    s16 tmp2 = (s16)(D_80064C5C[arg1->unk_00.unk_00 - 1].unk_14 >> 5) >> 6;
-    s16 tmp3 = (s16)(D_80064C5C[arg1->unk_00.unk_00 - 1].unk_14 << 5) >> 5;
+    s16 tmp1 = (s16)(D_80064C5C[arg1->species.id - 1].unk_14 >> 0x10) >> 5;
+    s16 tmp2 = (s16)(D_80064C5C[arg1->species.id - 1].unk_14 >> 5) >> 6;
+    s16 tmp3 = (s16)(D_80064C5C[arg1->species.id - 1].unk_14 << 5) >> 5;
 
     arg0->unk_00 |= 1;
     arg0->unk_14 = arg1;
     arg0->unk_12 = 0x100;
     arg0->unk_10 = 0;
     arg0->unk_02 = arg2;
-    arg0->unk_18 = D_80064C5C[arg1->unk_00.unk_00 - 1].unk_02 / 100.0f;
+    arg0->unk_18 = D_80064C5C[arg1->species.id - 1].unk_02 / 100.0f;
 
     arg0->unk_24->position.x = tmp1;
     arg0->unk_24->position.y = tmp2;
@@ -96,10 +96,10 @@ void PokeIcon_SetPreviewMon(unk_func_8001B1FC* arg0, BattleMon* arg1, u16 arg2) 
 
     arg0->unk_24->rotation = D_8006045C;
     Model_ComputeSizeVariant(&sp2C, arg1);
-    PokeIcon_RequestFrameLoad(arg0->unk_1C, arg1->unk_00.unk_00, sp2C);
+    PokeIcon_RequestFrameLoad(arg0->unk_1C, arg1->species.id, sp2C);
     PokeIcon_WaitFrameLoad(arg0->unk_1C);
     ModelRenderer_ClearDisplayObject(arg0->unk_24);
-    Model_InitDisplayObject(arg0->unk_24, 0, arg1->unk_00.unk_00, arg0->unk_1C->loadedModel->modelRoot->unk_00[0]);
+    Model_InitDisplayObject(arg0->unk_24, 0, arg1->species.id, arg0->unk_1C->loadedModel->modelRoot->unk_00[0]);
     ModelAnim_SetAnimation(arg0->unk_24, 1);
     arg0->unk_24->node.renderFlags &= ~0x40;
     arg0->unk_24->node.renderFlags |= 0x80;

@@ -8,7 +8,7 @@
 #include "m2c_macros.h"
 
 extern u8 D_80073520[];
-M2C_UNK func_80029A64(s32, s32, s32, s32, Color_RGBA8);
+M2C_UNK Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
 
 M2C_UNK func_89109E5C(s32, s32, s32, s32);
 M2C_UNK func_89109FE0(s32);
@@ -55,13 +55,13 @@ typedef struct LabPCInitialStateFields {
     s32 unk_9B04;
 } LabPCInitialStateFields;
 typedef struct Rgba891024A4 { u8 r, g, b, a; } Rgba891024A4;
-void func_8002A8C4(s8 *, s32, s32, s32, s32);
+void Window_SetRect(s8 *, s32, s32, s32, s32);
 void func_80027804(s8*, s8*, s32, s32);
 void func_89109B60(s8*);
 M2C_UNK func_89109C6C(s32, s32);                    /* extern */
 void func_80027D68(s32, s32);
-void func_8002EC24(s8*, s8*, s8*, s32, void*, s32, s32);
-void func_891012A8();
+void ScrollList_Init(s8*, s8*, s8*, s32, void*, s32, s32);
+void LabPCList_DrawMonRow();
 void func_89105C54(s8*, s32, s32, s8*, Rgba891024A4);
 extern s32 D_8910D990[];
 extern Rgba891024A4 D_8910A7F4;
@@ -96,33 +96,12 @@ typedef struct Ctx89100688 {
 } Ctx89100688;
 void func_891000BC(s32 arg0);
 void func_89100294(Ctx89100294* arg0);
-s32 func_891005CC(Ctx89100688* arg0);
+s32 LabPCList_GetColumnCursorX(Ctx89100688* arg0);
 extern M2C_UNK D_800734A8;
 
 
-typedef struct Ctx891012A8 {
-    /* 0x0000 */ char unk0000[0x34];
-    /* 0x0034 */ s32 right;
-    /* 0x0038 */ char unk0038[0x84 - 0x38];
-    /* 0x0084 */ s32* widths;
-    /* 0x0088 */ char unk0088[0xB15C - 0x88];
-    /* 0xB15C */ s32 mode;
-    /* 0xB160 */ char unkB160[0xB548 - 0xB160];
-    /* 0xB548 */ s32* ranges;
-} Ctx891012A8;
+#include "fragments/fragment016_252E10/89100020_891012A8_types.h"
 
-typedef struct Entry891012A8 {
-    /* 0x00 */ u8 unk00[8];
-    /* 0x08 */ u8 species;
-    /* 0x09 */ u8 unk09[0x16 - 0x09];
-    /* 0x16 */ u16 level;
-    /* 0x18 */ u8 unk18[0x2C - 0x18];
-    /* 0x2C */ u8 unk2C;
-    /* 0x2D */ u8 unk2D;
-    /* 0x2E */ u16 stats[5];
-    /* 0x38 */ char nickname[0x10];
-    /* 0x48 */ char trainer[0x10];
-} Entry891012A8;
 
 extern Gfx D_80060270[];
 extern Color_RGBA8 D_8910A85C[2][2];
@@ -137,28 +116,32 @@ extern char D_8910DBE4[];
 extern char D_8910DBE8[];
 extern char D_8910DBEC[];
 void func_80029028(s32, s32, s32, s32, Color_RGBA8);
-void func_8002A0AC(s32, s32, s32, s32, Color_RGBA8);
-void func_8002BAB8(s32, s32, s32, s32);
-void func_80027F20(s32);
+void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
+void Ui_DrawNumberZeroPadded(s32, s32, s32, s32);
+void Font_SetColorForFlags(s32);
 void func_89101238(s32, s32, s8*, s32, s32);
 
-void func_891012A8(s32 x, s32 y, Entry891012A8 *entry, s32 row, s32 flags, Ctx891012A8 *ctx)
+/**
+ * Draws one Pokemon row of the list with the columns of the current detail page.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabPCList_DrawMonRow(s32 x, s32 y, Entry891012A8 *entry, s32 row, s32 flags, Ctx891012A8 *ctx)
 {
   s32 col;
   s32 cx;
   Color_RGBA8 *colors;
-  Color_RGBA8 *loopColors;
+  Color_RGBA8 *loop_colors;
   Ctx891012A8 *c = ctx;
   gSPDisplayList(gDisplayListHead++, D_80060270);
   colors = D_8910A85C[row & 1];
-  loopColors = D_8910A86C[row & 1];
+  loop_colors = D_8910A86C[row & 1];
   func_80029028(x, y, 0x26, 0x14, colors[0]);
   func_80029028(x + 0x26, y, 0x50, 0x14, colors[1]);
   col = c->ranges[c->mode];
   cx = x + 0x78;
   for (; cx < c->right; col++)
   {
-    func_80029028(cx, y, c->widths[col], 0x14, loopColors[col & 1]);
+    func_80029028(cx, y, c->widths[col], 0x14, loop_colors[col & 1]);
     cx += c->widths[col];
   }
 
@@ -166,13 +149,13 @@ void func_891012A8(s32 x, s32 y, Entry891012A8 *entry, s32 row, s32 flags, Ctx89
   {
     if (flags & 0x10)
     {
-      func_8002A0AC(x + 0x27, y + 1, 0x4E, 0x12, D_8910A860);
+      Ui_FillRectHighlighted(x + 0x27, y + 1, 0x4E, 0x12, D_8910A860);
     }
-    func_8002BAB8(x + 1, y + 4, row + 1, 4);
+    Ui_DrawNumberZeroPadded(x + 1, y + 4, row + 1, 4);
     if ((entry->species <= 0) || (entry->species >= 0x98))
     {
       func_8001AB6C();
-      func_80027F20(flags);
+      Font_SetColorForFlags(flags);
       func_8001A384(4, -1);
       func_8001A944(x + 0x28, y + 2, (M2C_UNK *) D_8910DBCC);
       func_8001ABBC();
@@ -180,13 +163,13 @@ void func_891012A8(s32 x, s32 y, Entry891012A8 *entry, s32 row, s32 flags, Ctx89
     else
     {
       func_8001AB6C();
-      if (1 & D_80064C5C[entry->species - 1].unk_0C)
+      if (1 & D_80064C5C[entry->species - 1].cupEligibilityFlags)
       {
         func_8001AA9C(0xFF, 0xC8, 0xA0, 0xFF);
       }
       else
       {
-        func_80027F20(flags);
+        Font_SetColorForFlags(flags);
       }
       func_8001A384(4, -1);
       func_8001A944(x + 0x28, y + 2, (M2C_UNK *) D_80064C5C[entry->species - 1].name);
@@ -202,7 +185,7 @@ void func_891012A8(s32 x, s32 y, Entry891012A8 *entry, s32 row, s32 flags, Ctx89
           break;
 
         case 1:
-          func_8002BAB8(cx + 4, y + 4, entry->level, 5);
+          Ui_DrawNumberZeroPadded(cx + 4, y + 4, entry->level, 5);
           break;
 
         case 2:
@@ -210,13 +193,13 @@ void func_891012A8(s32 x, s32 y, Entry891012A8 *entry, s32 row, s32 flags, Ctx89
           break;
 
         case 3:
-          func_891010AC(cx + 4, y + 2, (s8 ***) entry);
+          LabPCList_DrawLocationTabs(cx + 4, y + 2, (s8 ***) entry);
           break;
 
         case 4:
 
         case 5:
-          func_89100F1C(cx + 4, y + 2, &entry->species, col - 4);
+          LabPCList_DrawTypeIcon(cx + 4, y + 2, &entry->species, col - 4);
           break;
 
         case 6:
@@ -262,7 +245,7 @@ void func_891012A8(s32 x, s32 y, Entry891012A8 *entry, s32 row, s32 flags, Ctx89
 }
 
 /**
- * Fields of the scrolling list menu used by func_8910179C (same layout as GridMenu80031004
+ * Fields of the scrolling list menu used by LabPCList_DrawRowCursor (same layout as GridMenu80031004
  * in src/2E480.c; offsets not listed are unknown/unused here).
  */
 typedef struct ListMenu8910179C {
@@ -276,18 +259,19 @@ typedef struct ListMenu8910179C {
 } ListMenu8910179C;
 
 /**
- * Draws a fixed-size (0x50 x 0x14) cursor rectangle via func_80029A64 for a scrolling list
+ * Draws a fixed-size (0x50 x 0x14) cursor rectangle via Ui_DrawRoundedFrame for a scrolling list
  * menu: x = arg1 + 0x26, y = scrollTarget + arg2 - scroll, minus (cellHeight - 1) when flag
- * 0x400 is set; colour read from D_80073520. Compare func_80031004 and func_8002F32C.
+ * 0x400 is set; colour read from D_80073520. Compare ScrollGrid_DrawCursor and ScrollList_DrawCursor.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_8910179C(ListMenu8910179C* arg0, s32 arg1, s32 arg2) {
+void LabPCList_DrawRowCursor(ListMenu8910179C* arg0, s32 arg1, s32 arg2) {
     s32 y;
 
     y = arg0->scrollTarget + arg2 - arg0->scroll;
     if (arg0->flags & 0x400) {
         y = y - arg0->cellHeight + 1;
     }
-    func_80029A64(arg1 + 0x26, y, 0x50, 0x14, *(Color_RGBA8*)D_80073520);
+    Ui_DrawRoundedFrame(arg1 + 0x26, y, 0x50, 0x14, *(Color_RGBA8*)D_80073520);
 }
 
 extern u8 D_04006170[];
@@ -301,7 +285,11 @@ extern char D_8910DBF0[];
 extern char D_8910DC04[];
 void Gfx_DrawTextureRgba16(s32, s32, s32, s32, u8*, s32, s32);
 
-void func_89101818(s8* arg0) {
+/**
+ * Draws タテ／ヨコきりかえ (switch vertical/horizontal) and ページおくり%d/3 (page %d/3).
+ * @unverified Name and comment guessed from the code.
+ */
+void LabPCList_DrawPageHint(s8* arg0) {
     func_8001AB6C();
     func_8001AA9C(M2C_FIELD(&D_800734A8, u8*, 0), M2C_FIELD(&D_800734A8, u8*, 1), M2C_FIELD(&D_800734A8, u8*, 2), M2C_FIELD(&D_800734A8, u8*, 3));
     func_8001A384(8, 0);

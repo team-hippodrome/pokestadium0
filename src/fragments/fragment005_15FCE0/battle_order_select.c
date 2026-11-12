@@ -24,11 +24,11 @@ extern u16 D_82302800[];
 
 void BattleMenu_AppendOrderSlotIcon(s32 arg0, s32 arg1);
 void BattleMenu_ResetOrderSlotIcons(s32 arg0);
-void BattleMenu_DrawBorderedPanel(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4);
+void BattleMenu_DrawPanelBorder(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4);
 s32 BattleMenu_IsSlotAlreadySelected(unk_D_848037A0* arg0, s8 arg1);
 void BattleMenu_HandleOrderSelectPanel_LevelCapNoticeInput(Controller* arg0, unk_D_848037A0* arg1);
-void BattleMenu_RearrangeLeadPokemon(BattleSessionTeams* arg0, unk_D_84803760* arg1);
-void BattleMenu_FillDefaultOrder(s8* arg0, s32 arg1);
+void BattleMenu_SetLeadTagTeamMember(BattleSessionTeams* arg0, unk_D_84803760* arg1);
+void BattleMenu_AppendUnpickedSlots(s8* arg0, s32 arg1);
 
 extern void* D_84803784;
 extern char** D_84803790;
@@ -38,6 +38,12 @@ extern char D_82302A0C[];
 extern char D_82302A10[];
 extern char D_82302A20[];
 
+/**
+ * Draws the instructions for the L and R button at the bottom of the screen
+ * (L) Button to cancel
+ * (R) Button to check
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleMenu_DrawBottomActionButtons(void) {
     func_8001CC90(0, 0x1E0, 0xAB, 0x49, 0x66);
 
@@ -209,6 +215,10 @@ s32 BattleMenu_DrawSidebarRowTypeIcon(s32 arg0, s32 arg1, s8 arg2, s8 arg3) {
     return arg2;
 }
 
+/**
+ * Draws side 0's order sidebar and advances its selection icons.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleMenu_DrawTeamOrderSidebarTeam0(void) {
     unk_D_84803760* temp_v0 = &D_82302B20[0];
     s32 i;
@@ -244,6 +254,10 @@ void BattleMenu_DrawTeamOrderSidebarTeam0(void) {
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
+/**
+ * Draws side 1's order sidebar and advances its selection icons.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleMenu_DrawTeamOrderSidebarTeam1(void) {
     unk_D_84803760* temp_v0 = &D_82302B20[1];
     s32 i;
@@ -279,6 +293,10 @@ void BattleMenu_DrawTeamOrderSidebarTeam1(void) {
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
+/**
+ * Appends a growing selection icon owned by the given controller port.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleMenu_AppendOrderSlotIcon(s32 arg0, s32 arg1) {
     unk_D_84803760* temp_v0 = &D_82302B20[arg0];
 
@@ -287,6 +305,10 @@ void BattleMenu_AppendOrderSlotIcon(s32 arg0, s32 arg1) {
     temp_v0->unk_00++;
 }
 
+/**
+ * Starts shrinking all selection icons and clears the side's pick count.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleMenu_ResetOrderSlotIcons(s32 arg0) {
     unk_D_84803760* ptr = &D_82302B20[arg0];
     s32 i;
@@ -297,7 +319,11 @@ void BattleMenu_ResetOrderSlotIcons(s32 arg0) {
     ptr->unk_00 = 0;
 }
 
-void BattleMenu_DrawBorderedPanel(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4) {
+/**
+ * Draws a panel using the border color assigned to its controller port.
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleMenu_DrawPanelBorder(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4) {
     Ui_DrawBorderedPanelStyleB(arg0, arg1, arg2, arg3, D_82302800[arg4]);
 }
 
@@ -309,10 +335,14 @@ extern u8 D_03000B60[];
 extern u8 D_030016C0[];
 void func_8001A944(s32 x, s32 y, const char* fmt, ...);
 void func_8001D148(s32 x, s32 y, s32 width, s32 height, s32 r, s32 g, s32 b);
-s32 func_80018DEC(s8* arg0, s32 arg1);
+s32 PokeIcon_GetImage(s8 *arg0, s32 arg1);
 extern char D_82302A34[];
 extern s32 D_82302BCC;
-void func_82300BD0(s8* arg0) {
+/**
+ * Battle order select: draws the brought Pokemon grid with their levels (L%d).
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleMenu_DrawOrderSelectPartyGrid(s8* arg0) {
     s32 i;
     s16 x;
     s16 y;
@@ -323,7 +353,7 @@ void func_82300BD0(s8* arg0) {
     x = M2C_FIELD(arg0, s16*, 0x12);
     y = M2C_FIELD(arg0, s16*, 0x14);
 
-    BattleMenu_DrawBorderedPanel(x, y, 0x1D7, 0x5E, arg0[1]);
+    BattleMenu_DrawPanelBorder(x, y, 0x1D7, 0x5E, arg0[1]);
 
     gSPDisplayList(gDisplayListHead++, D_80060290);
 
@@ -334,12 +364,12 @@ void func_82300BD0(s8* arg0) {
     func_8001B884(x + 0xA1, y + 0x35, 0x1A, 0x1A, D_03000B60, 0x1C, 0x200000);
     func_8001B884(x + 0x13B, y + 0x35, 0x1A, 0x1A, D_030016C0, 0x1C, 0x200000);
 
-    func_8001B884(x + 0x23, y + 6, 0x28, 0x28, (u8*)func_80018DEC((s8*)D_82302BCC, arg0[0]), 0x28, 0x200000);
-    func_8001B884(x + 0xBD, y + 6, 0x28, 0x28, (u8*)func_80018DEC((s8*)D_82302BCC, arg0[0] + 4), 0x28, 0x200000);
-    func_8001B884(x + 0x157, y + 6, 0x28, 0x28, (u8*)func_80018DEC((s8*)D_82302BCC, arg0[0] + 8), 0x28, 0x200000);
-    func_8001B884(x + 0x23, y + 0x30, 0x28, 0x28, (u8*)func_80018DEC((s8*)D_82302BCC, arg0[0] + 0xC), 0x28, 0x200000);
-    func_8001B884(x + 0xBD, y + 0x30, 0x28, 0x28, (u8*)func_80018DEC((s8*)D_82302BCC, arg0[0] + 0x10), 0x28, 0x200000);
-    func_8001B884(x + 0x157, y + 0x30, 0x28, 0x28, (u8*)func_80018DEC((s8*)D_82302BCC, arg0[0] + 0x14), 0x28, 0x200000);
+    func_8001B884(x + 0x23, y + 6, 0x28, 0x28, (u8*)PokeIcon_GetImage((s8*)D_82302BCC, arg0[0]), 0x28, 0x200000);
+    func_8001B884(x + 0xBD, y + 6, 0x28, 0x28, (u8*)PokeIcon_GetImage((s8*)D_82302BCC, arg0[0] + 4), 0x28, 0x200000);
+    func_8001B884(x + 0x157, y + 6, 0x28, 0x28, (u8*)PokeIcon_GetImage((s8*)D_82302BCC, arg0[0] + 8), 0x28, 0x200000);
+    func_8001B884(x + 0x23, y + 0x30, 0x28, 0x28, (u8*)PokeIcon_GetImage((s8*)D_82302BCC, arg0[0] + 0xC), 0x28, 0x200000);
+    func_8001B884(x + 0xBD, y + 0x30, 0x28, 0x28, (u8*)PokeIcon_GetImage((s8*)D_82302BCC, arg0[0] + 0x10), 0x28, 0x200000);
+    func_8001B884(x + 0x157, y + 0x30, 0x28, 0x28, (u8*)PokeIcon_GetImage((s8*)D_82302BCC, arg0[0] + 0x14), 0x28, 0x200000);
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
@@ -377,10 +407,14 @@ extern char D_82302A4C[];
 extern char D_82302A60[];
 extern char D_82302A74[];
 extern char D_82302A7C[];
-void func_82300BD0(s8*);
-void func_8001AC7C(s32, s32, s32, s32, s32, s32, s32, s32);
+void BattleMenu_DrawOrderSelectPartyGrid(s8*);
+void Ui_DrawPrimColorRect(s32, s32, s32, s32, s32, s32, s32, s32);
 void func_8001E6C0(s32, s32);
-void func_823010E8(s8* arg0) {
+/**
+ * Battle order select: これで いいですか？ (Is this OK?) with はい (Yes) / えらびなおす (Choose again).
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleMenu_DrawOrderSelectConfirmPrompt(s8* arg0) {
     s32 x;
     s32 y;
 
@@ -392,8 +426,8 @@ void func_823010E8(s8* arg0) {
             x = 0x50;
             y = 0xF0;
         }
-        func_82300BD0(arg0);
-        BattleMenu_DrawBorderedPanel(x, y, 0x15F, 0x53, arg0[1]);
+        BattleMenu_DrawOrderSelectPartyGrid(arg0);
+        BattleMenu_DrawPanelBorder(x, y, 0x15F, 0x53, arg0[1]);
         if (arg0[0xA] == 0) {
             func_8001E6C0(x + 0x26, y + 0x30);
         } else {
@@ -408,8 +442,8 @@ void func_823010E8(s8* arg0) {
     } else {
         x = M2C_FIELD(arg0, s16*, 0x12);
         y = M2C_FIELD(arg0, s16*, 0x14);
-        func_82300BD0(arg0);
-        func_8001AC7C(x + 5, y + 5, 0x1CD, 0x54, 0, 0, 0, 0x80);
+        BattleMenu_DrawOrderSelectPartyGrid(arg0);
+        Ui_DrawPrimColorRect(x + 5, y + 5, 0x1CD, 0x54, 0, 0, 0, 0x80);
         if (arg0[0xA] == 0) {
             func_8001E6C0(x + 0x5C, y + 0x3C);
         } else {
@@ -431,7 +465,11 @@ extern char D_82302AB8[];
 extern char D_82302ACC[];
 
 
-void func_823012D0(s8* arg0) {
+/**
+ * Battle order select: レベルの ごうけいが 155を こえてしまいます (The level total goes over 155).
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleMenu_DrawLevelSumOverNotice(s8* arg0) {
     s32 x;
     s32 y;
 
@@ -443,7 +481,7 @@ void func_823012D0(s8* arg0) {
             x = 0x50;
             y = 0xF0;
         }
-        BattleMenu_DrawBorderedPanel(x, y, 0x15F, 0x53, arg0[1]);
+        BattleMenu_DrawPanelBorder(x, y, 0x15F, 0x53, arg0[1]);
         Font_BeginTranslucentTextRendering();
         Font_SetActive(0x10, 0);
         Gfx_SetEnvColor(0xFF, 0x63, 0x63, 0xFF);
@@ -454,8 +492,8 @@ void func_823012D0(s8* arg0) {
     } else {
         x = M2C_FIELD(arg0, s16*, 0x12);
         y = M2C_FIELD(arg0, s16*, 0x14);
-        func_82300BD0(arg0);
-        func_8001AC7C(x + 5, y + 5, 0x1CD, 0x54, 0, 0, 0, 0x80);
+        BattleMenu_DrawOrderSelectPartyGrid(arg0);
+        Ui_DrawPrimColorRect(x + 5, y + 5, 0x1CD, 0x54, 0, 0, 0, 0x80);
         Font_BeginTranslucentTextRendering();
         Font_SetActive(0x10, 0);
         Gfx_SetEnvColor(0xFF, 0x63, 0x63, 0xFF);
@@ -468,7 +506,11 @@ void func_823012D0(s8* arg0) {
 extern char** D_84803790;
 extern char D_82302AE4[];
 extern char D_82302AFC[];
-void func_82301448(unk_D_848037A0* arg0) {
+/**
+ * Draws the ready message, pulsing its text alpha for tag-team panels.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ */
+void BattleMenu_DrawOrderSelectPanel_Ready(unk_D_848037A0* arg0) {
     s32 sp3C;
     s32 sp38;
     s32 sp34;
@@ -482,8 +524,8 @@ void func_82301448(unk_D_848037A0* arg0) {
         }
         // clang-format on
         arg0->unk_0007 = 0;
-        func_82300BD0((s8*)arg0);
-        BattleMenu_DrawBorderedPanel(sp3C, sp38, 0x15F, 0x53, arg0->unk_0001);
+        BattleMenu_DrawOrderSelectPartyGrid((s8*)arg0);
+        BattleMenu_DrawPanelBorder(sp3C, sp38, 0x15F, 0x53, arg0->unk_0001);
         Font_BeginTranslucentTextRendering();
         Font_SetActive(0x20, -4);
         Font_EnableTwoCycleTexturing();
@@ -510,8 +552,8 @@ void func_82301448(unk_D_848037A0* arg0) {
             arg0->unk_0008 = 0;
         }
 
-        func_82300BD0((s8*)arg0);
-        func_8001AC7C(sp3C + 5, sp38 + 5, 0x1CD, 0x54, 0, 0, 0, 0x80);
+        BattleMenu_DrawOrderSelectPartyGrid((s8*)arg0);
+        Ui_DrawPrimColorRect(sp3C + 5, sp38 + 5, 0x1CD, 0x54, 0, 0, 0, 0x80);
         Font_BeginTranslucentTextRendering();
         Font_SetActive(0x20, 0);
         Font_EnableTwoCycleTexturing();
@@ -536,17 +578,21 @@ void BattleMenu_DrawConfirmButtonLabel(unk_D_848037A0* arg0) {
         sp24 = 0x123;
     }
 
-    BattleMenu_DrawBorderedPanel(sp26, sp24, 0x76, 0x20, arg0->unk_0001);
+    BattleMenu_DrawPanelBorder(sp26, sp24, 0x76, 0x20, arg0->unk_0001);
     Font_BeginTranslucentTextRendering();
     Font_SetActive(8, 0);
-    Font_Printf(sp26 + 9, sp24 + 5, arg0->unk_001C->unk_008);
+    Font_Printf(sp26 + 9, sp24 + 5, arg0->unk_001C->trainerName);
     Font_EndTexturedTextRendering();
 }
 
 extern s16 D_82302B40;
-void func_823010E8(s8*);
-void func_82301448(unk_D_848037A0*);
-void func_823016FC(unk_D_848037A0* arg0) {
+void BattleMenu_DrawOrderSelectConfirmPrompt(s8*);
+void BattleMenu_DrawOrderSelectPanel_Ready(unk_D_848037A0*);
+/**
+ * Draws the current panel mode when needed and updates its redraw countdown.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ */
+void BattleMenu_DrawOrderSelectPanel(unk_D_848037A0* arg0) {
     if ((D_82302B40 != 0) || (arg0->unk_0006 != 0)) {
         if ((D_82302B40 != 0) && (arg0->unk_0002 == -1)) {
             BattleMenu_DrawConfirmButtonLabel(arg0);
@@ -554,19 +600,19 @@ void func_823016FC(unk_D_848037A0* arg0) {
 
         switch (arg0->unk_0005) {
             case 0:
-                func_82300BD0((s8*)arg0);
+                BattleMenu_DrawOrderSelectPartyGrid((s8*)arg0);
                 break;
 
             case 1:
-                func_823010E8((s8*)arg0);
+                BattleMenu_DrawOrderSelectConfirmPrompt((s8*)arg0);
                 break;
 
             case 2:
-                func_823012D0((s8*)arg0);
+                BattleMenu_DrawLevelSumOverNotice((s8*)arg0);
                 break;
 
             case 3:
-                func_82301448(arg0);
+                BattleMenu_DrawOrderSelectPanel_Ready(arg0);
                 break;
         }
 
@@ -574,7 +620,7 @@ void func_823016FC(unk_D_848037A0* arg0) {
             arg0->unk_0006--;
         }
     } else if (arg0->unk_0005 == 3) {
-        func_82301448(arg0);
+        BattleMenu_DrawOrderSelectPanel_Ready(arg0);
     }
 }
 
@@ -595,7 +641,7 @@ void func_823017EC(void) {
     s32 var_v0;
     unk_D_84803548* ptr;
 
-    if (D_82302B48[1].unk_001C->unk_000 & 2) {
+    if (D_82302B48[1].unk_001C->isHuman & 2) {
         if (D_82302BD0->ruleCategory != 0) {
             var_v0 = 3;
         } else {
@@ -621,6 +667,10 @@ void func_823017EC(void) {
     }
 }
 
+/**
+ * Tests whether a roster slot already occurs in the panel's picked order.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 BattleMenu_IsSlotAlreadySelected(unk_D_848037A0* arg0, s8 arg1) {
     s32 i;
     s8 temp_v1;
@@ -638,12 +688,12 @@ s32 BattleMenu_IsSlotAlreadySelected(unk_D_848037A0* arg0, s8 arg1) {
 s32 func_823018F8(unk_D_848037A0* arg0) {
     s32 sum;
     s32 i;
-    s32 locked = (arg0->unk_001C->unk_000 & 2) != 0;
+    s32 locked = (arg0->unk_001C->isHuman & 2) != 0;
 
     if ((D_82302BD0->ruleCategory == 1) && !locked) {
         sum = 0;
         for (i = 0; i < arg0->unk_000B; i++) {
-            sum += arg0->unk_0018[arg0->unk_000C[i]].unk_24;
+            sum += arg0->unk_0018[arg0->unk_000C[i]].level;
         }
         if ((arg0->unk_000B == 2) && (sum >= 0x6A)) {
             return 1;
@@ -660,7 +710,7 @@ s32 func_823019AC(unk_D_848037A0* arg0) {
 
     if (D_82302BD0->ruleCategory != 0) {
         var_v1 = 3;
-    } else if (arg0->unk_001C->unk_000 & 2) {
+    } else if (arg0->unk_001C->isHuman & 2) {
         var_v1 = arg0->unk_0016;
         if (D_82302B48[0].unk_0016 < var_v1) {
             var_v1 = D_82302B48[0].unk_0016;
@@ -677,7 +727,11 @@ s32 func_823019AC(unk_D_848037A0* arg0) {
 
 s32 func_823018F8(unk_D_848037A0* arg0);
 s32 func_823019AC(unk_D_848037A0* arg0);
-void func_82301A2C(unk_D_848037A0* arg0, s8 arg1) {
+/**
+ * Opens a slot's details or adds it to the picked order and checks the result.
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleMenu_SelectSlotOrShowSummary(unk_D_848037A0* arg0, s8 arg1) {
     if (arg1 >= arg0->unk_0016) {
         Audio_PlaySoundEffectById(SFX_MENU_ERROR);
         return;
@@ -714,7 +768,11 @@ void func_82301A2C(unk_D_848037A0* arg0, s8 arg1) {
 M2C_UNK func_8003F6AC(M2C_UNK, s8 *);             /* extern */
 M2C_UNK func_82300B30(s8, s8 *);                  /* extern */
 extern unk_D_848037A0 D_82302B48[];
-void func_82301B2C(s8 *arg0) {
+/**
+ * Clears a nonempty panel's picks, resetting the partner panel when present.
+ * @unverified Name guessed from the code; comment kept.
+ */
+void BattleMenu_UndoSelections(s8 *arg0) {
     s8 temp_v1;
     s8 *temp_v0;
 
@@ -736,8 +794,12 @@ void func_82301B2C(s8 *arg0) {
     }
 }
 
-void func_82301A2C(unk_D_848037A0*, s8);
+void BattleMenu_SelectSlotOrShowSummary(unk_D_848037A0*, s8);
 
+/**
+ * Maps slot buttons to picking or checking Pokemon and handles L-cancel.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleMenu_HandleOrderSelectPanel_PartyInput(Controller* arg0, unk_D_848037A0* arg1) {
     if (BTN_IS_PRESSED(arg0, BTN_R)) {
         // clang-format off
@@ -745,29 +807,33 @@ void BattleMenu_HandleOrderSelectPanel_PartyInput(Controller* arg0, unk_D_848037
         // clang-format on
     }
 
-    if (arg0->unk_0A & 0x10) {
+    if (arg0->buttonReleased & 0x10) {
         arg1->unk_0009 = 0;
         arg1->unk_0006 = 2;
     }
 
     if (BTN_IS_PRESSED(arg0, BTN_L)) {
-        func_82301B2C(arg1);
+        BattleMenu_UndoSelections(arg1);
     } else if (BTN_IS_PRESSED(arg0, BTN_B)) {
-        func_82301A2C(arg1, 0);
+        BattleMenu_SelectSlotOrShowSummary(arg1, 0);
     } else if (BTN_IS_PRESSED(arg0, BTN_CLEFT)) {
-        func_82301A2C(arg1, 1);
+        BattleMenu_SelectSlotOrShowSummary(arg1, 1);
     } else if (BTN_IS_PRESSED(arg0, BTN_CUP)) {
-        func_82301A2C(arg1, 2);
+        BattleMenu_SelectSlotOrShowSummary(arg1, 2);
     } else if (BTN_IS_PRESSED(arg0, BTN_A)) {
-        func_82301A2C(arg1, 3);
+        BattleMenu_SelectSlotOrShowSummary(arg1, 3);
     } else if (BTN_IS_PRESSED(arg0, BTN_CDOWN)) {
-        func_82301A2C(arg1, 4);
+        BattleMenu_SelectSlotOrShowSummary(arg1, 4);
     } else if (BTN_IS_PRESSED(arg0, BTN_CRIGHT)) {
-        func_82301A2C(arg1, 5);
+        BattleMenu_SelectSlotOrShowSummary(arg1, 5);
     }
 }
 
 extern unk_D_848037A0 D_848037A0[4];
+/**
+ * Handles confirmation choices, accepting the order or restarting selection.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleMenu_HandleOrderSelectPanel_ConfirmInput(Controller* arg0, unk_D_848037A0* arg1) {
     unk_D_848037A0* temp_v0_2;
 
@@ -775,7 +841,7 @@ void BattleMenu_HandleOrderSelectPanel_ConfirmInput(Controller* arg0, unk_D_8480
         arg1->unk_0009 = 1;
         arg1->unk_0006 = 2;
     }
-    if (arg0->unk_0A & 0x10) {
+    if (arg0->buttonReleased & 0x10) {
         arg1->unk_0009 = 0;
         arg1->unk_0006 = 2;
     }
@@ -808,6 +874,10 @@ void BattleMenu_HandleOrderSelectPanel_ConfirmInput(Controller* arg0, unk_D_8480
     }
 }
 
+/**
+ * Dismisses the level-limit warning and clears this panel's picks.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleMenu_HandleOrderSelectPanel_LevelCapNoticeInput(Controller* arg0, unk_D_848037A0* arg1) {
     if (BTN_IS_PRESSED(arg0, BTN_A | BTN_B)) {
         arg1->unk_0005 = 0;
@@ -821,11 +891,15 @@ void BattleMenu_HandleOrderSelectPanel_LevelCapNoticeInput(Controller* arg0, unk
 
 extern Controller D_84816428;
 extern Controller D_82302BD8;
+/**
+ * Dispatches panel input while enabled and reports whether the panel is ready.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 BattleMenu_UpdateOrderSelectPanel(s32 arg0, unk_D_848037A0* arg1) {
     Controller* var_a0;
     s32 sp18 = 0;
 
-    if (arg1->unk_001C->unk_000 & 2) {
+    if (arg1->unk_001C->isHuman & 2) {
         var_a0 = &D_82302BD8;
     } else {
         var_a0 = &gControllers[arg1->unk_0001];
@@ -863,8 +937,12 @@ void func_82300020(void);
 extern s32 D_82302B44;
 void func_8230016C(void);
 void func_8000A7FC(u16 color);
+/**
+ * @src/stage_loader.c
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 BattleMenu_UpdateOrderSelect(s32 arg0) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s32 i;
     s32 var_s2;
     s32 sp30;
@@ -912,7 +990,11 @@ s32 BattleMenu_UpdateOrderSelect(s32 arg0) {
     return sp30;
 }
 
-void BattleMenu_RearrangeLeadPokemon(BattleSessionTeams* arg0, unk_D_84803760* arg1) {
+/**
+ * Moves the trainer owning the first selection into the lead tag-team position.
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleMenu_SetLeadTagTeamMember(BattleSessionTeams* arg0, unk_D_84803760* arg1) {
     TeamRoster* temp_v0;
     s32 tmp;
 
@@ -926,7 +1008,11 @@ void BattleMenu_RearrangeLeadPokemon(BattleSessionTeams* arg0, unk_D_84803760* a
     }
 }
 
-void BattleMenu_FillDefaultOrder(s8* arg0, s32 arg1) {
+/**
+ * Appends the unpicked roster slots in ascending order to fill six entries.
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleMenu_AppendUnpickedSlots(s8* arg0, s32 arg1) {
     s32 i;
     s32 j;
 
@@ -957,6 +1043,11 @@ typedef struct OrderSelectSlot {
     /* 0x1C */ TeamRoster* unk_001C;
 } OrderSelectSlot; // size = 0x20
 
+/**
+ * Copies final orders into battle rosters and sets each tag team's lead trainer.
+ * COM rosters keep their original order rather than using the scripted panel picks.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleMenu_CommitOrderSelection(void) {
     s32 i;
     s32 var_s4;
@@ -968,11 +1059,11 @@ void BattleMenu_CommitOrderSelection(void) {
 
     while (var_s4-- > 0) {
         temp_s1 = var_s2->unk_001C;
-        if (temp_s1->unk_000 & 2) {
+        if (temp_s1->isHuman & 2) {
             temp_s1->numberOfPokemonBrought = temp_s1->rosterInfo->numberOfPokemonCanBePicked;
-            _bcopy(temp_s1->rosterInfo->unk_028, temp_s1->pokemonPicked, sizeof(temp_s1->pokemonPicked));
+            _bcopy(temp_s1->rosterInfo->battleMon, temp_s1->pokemonPicked, sizeof(temp_s1->pokemonPicked));
         } else {
-            BattleMenu_FillDefaultOrder(var_s2->unk_000C, var_s2->unk_000B);
+            BattleMenu_AppendUnpickedSlots(var_s2->unk_000C, var_s2->unk_000B);
             temp_s1->numberOfPokemonBrought = var_s2->unk_000B;
 
             for (i = 0; i < temp_s1->rosterInfo->numberOfPokemonCanBePicked; i++) {
@@ -982,11 +1073,15 @@ void BattleMenu_CommitOrderSelection(void) {
         var_s2++;
     }
 
-    BattleMenu_RearrangeLeadPokemon(&D_82302BD0->battleSides[0], &D_82302B20[0]);
-    BattleMenu_RearrangeLeadPokemon(&D_82302BD0->battleSides[1], &D_82302B20[1]);
+    BattleMenu_SetLeadTagTeamMember(&D_82302BD0->battleSides[0], &D_82302B20[0]);
+    BattleMenu_SetLeadTagTeamMember(&D_82302BD0->battleSides[1], &D_82302B20[1]);
 }
 
 
+/**
+ * Initializes one trainer's panel and loads its roster icons.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleMenu_AddOrderSelectPanel(s16 arg0, s16 arg1, TeamRoster* arg2, s32 arg3, s32 arg4) {
     s32 i;
     unk_D_848037A0* temp_v1;
@@ -1007,12 +1102,12 @@ void BattleMenu_AddOrderSelectPanel(s16 arg0, s16 arg1, TeamRoster* arg2, s32 ar
     temp_v1->unk_0012 = arg0;
     temp_v1->unk_0014 = arg1;
     temp_v1->unk_0016 = arg2->rosterInfo->numberOfPokemonCanBePicked;
-    temp_v1->unk_0018 = arg2->rosterInfo->unk_028;
+    temp_v1->unk_0018 = arg2->rosterInfo->battleMon;
     temp_v1->unk_001C = arg2;
 
     for (i = 0; i < arg2->rosterInfo->numberOfPokemonCanBePicked; i++, j += 4) {
-        Pokemon_PrepareBattleMon(&arg2->rosterInfo->unk_028[i]);
-        func_8001833C((unk_func_8001A024*)D_82302BCC, j, &arg2->rosterInfo->unk_028[i], D_82302800[arg2->controllerPort]);
+        Pokemon_PrepareBattleMon(&arg2->rosterInfo->battleMon[i]);
+        func_8001833C((unk_func_8001A024*)D_82302BCC, j, &arg2->rosterInfo->battleMon[i], D_82302800[arg2->controllerPort]);
     }
 
     D_82302B44++;
@@ -1023,6 +1118,10 @@ extern s16 D_82302B42;
 extern s16 D_82302B40;
 extern s32 D_82302C00;
 extern Controller D_82302BD8;
+/**
+ * Resets selection state and creates controller-ordered panels for both sides.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleMenu_InitOrderSelectPanels(SessionContext* arg0) {
     BattleSessionTeams* temp_s0 = &arg0->battleSides[0];
 
@@ -1084,12 +1183,16 @@ extern u8 D_002F0A50[];
 extern u8 D_002F3BD0[];
 extern u8 D_003D64A0[];
 extern u8 D_003DCB60[];
-s8* func_80017860(s32);
+s8 *PokeIcon_AllocFramebuffers(s32 arg0);
 s32 func_80017FDC(s8*, s32, s32, s32);
-void func_8001A194(s32, s32);
-void func_80017934(void);
+s32 Font_Init(s32 load_size, s32 side);
+void PokeIcon_OpenModelArchives(void);
 s32 func_82301EF4();
 
+/**
+ * Loads selection resources, runs the screen through its fades, and commits the orders.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 BattleMenu_RunOrderSelectScreen(s32 arg0, s32 arg1) {
     StageContext* sp24;
 
@@ -1097,10 +1200,10 @@ s32 BattleMenu_RunOrderSelectScreen(s32 arg0, s32 arg1) {
 
     Gfx_InitDisplayListBuffers(0x10000, 0);
     sp24 = StageContext_Allocate(1, 1, 2, 0, 2, 1);
-    D_82302BC8 = func_80017860(1);
+    D_82302BC8 = PokeIcon_AllocFramebuffers(1);
     D_82302BCC = func_80017FDC(D_82302BC8, 0x18, 0x28, 0x28);
-    func_8001A194(0x3C, 0);
-    func_80017934();
+    Font_Init(0x3C, 0);
+    PokeIcon_OpenModelArchives();
 
     Fragment_Load(((((u32)D_81000000) & 0x0FF00000) >> 0x14) - 0x10, D_0015B1A0, D_0015E220);
     Asset_LoadToSegment(((u32)D_01000000 & 0x0F000000) >> 0x18, D_002E0BE0, D_002E2B90, 0);

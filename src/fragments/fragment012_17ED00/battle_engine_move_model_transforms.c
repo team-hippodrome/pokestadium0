@@ -12,9 +12,9 @@ void BattleAnim_UpdateTransform(ActivePokemon* owner, ActivePokemon* animated_po
     f32 temp_attacker_rotation_z;
     f32 temp_attacker_y1;
     f32 base_y_rotation;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     Vec3f rotation;
-    UNUSED s32 pad2;
+    UNUSED s32 pad2; // FAKE: stack padding
     f32 z_rotation_factor;
     f32 y_rotation_factor;
     f32 temp_attacker_y2;
@@ -50,9 +50,9 @@ void BattleAnim_UpdateSwayPhysicsToTarget(UNUSED ActivePokemon* owner, ActivePok
     f32 object_z;
     f32 object_y;
     f32 adjustment;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     Vec3f rotation;
-    UNUSED s32 pad2;
+    UNUSED s32 pad2; // FAKE: stack padding
     f32 adjusted_z_rotation;
     f32 adjusted_y_rotation;
     f32 temp_object_y;
@@ -94,7 +94,10 @@ void BattleScene_HideParticipantSecondaryModels(ActivePokemon* active_pokemon) {
 }
 
 
-void func_821094C0(ActivePokemon* pokemon) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void BattleScene_ShowSecondaryModelsAtMainTransform(ActivePokemon* pokemon) {
     s32 i;
     s16 sp64[] = { 0x0, 0xE38, 0xF1C8 }; // D_821891A8
 

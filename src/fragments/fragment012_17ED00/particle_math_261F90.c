@@ -120,20 +120,36 @@ void ParticleGfx_PushBillboardRotatedMatrixYScaled(CameraNode* arg0, Vec3f arg1,
 void ParticleGfx_PushTransformMatrixWithHalfTurnXY(Vec3f arg0, Vec3s arg3, f32 arg5);
 void ParticleGfx_PushDirectionMatrix(Vec3f arg0, Vec3f arg3, f32 arg6);
 
-u32 ParticleMath_RandomRange(s32 arg0);
+u32 ParticleMath_RandomRange(u32 arg0);
 
+/**
+ * Set every bit selected by mask.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleMath_BitwiseOr(s32* arg0, s32 arg1) {
     *arg0 |= arg1;
 }
 
+/**
+ * Clear every bit selected by mask.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleMath_BitwiseAndNot(s32* arg0, s32 arg1) {
     *arg0 &= ~arg1;
 }
 
+/**
+ * Toggle every bit selected by mask.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleMath_BitwiseXor(s32* arg0, s32 arg1) {
     *arg0 ^= arg1;
 }
 
+/**
+ * Return whether any bit selected by mask is set.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 ParticleMath_HasBits(s32* arg0, s32 arg1) {
     s32 var_v1 = 0;
 
@@ -143,6 +159,10 @@ s32 ParticleMath_HasBits(s32* arg0, s32 arg1) {
     return var_v1;
 }
 
+/**
+ * Return whether all bits selected by mask are clear.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 ParticleMath_LacksBits(s32* arg0, s32 arg1) {
     s32 var_v1 = 0;
 
@@ -152,6 +172,10 @@ s32 ParticleMath_LacksBits(s32* arg0, s32 arg1) {
     return var_v1;
 }
 
+/**
+ * Increase value toward target by step; return 1 only when this call reaches or crosses the target.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 ParticleMath_ApproachFloatUp(f32* arg0, f32 arg1, f32 arg2) {
     s32 var_v1 = 0;
 
@@ -165,6 +189,10 @@ s32 ParticleMath_ApproachFloatUp(f32* arg0, f32 arg1, f32 arg2) {
     return var_v1;
 }
 
+/**
+ * Decrease value toward target by step; return 1 only when this call reaches or crosses the target.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 ParticleMath_ApproachFloatDown(f32* arg0, f32 arg1, f32 arg2) {
     s32 var_v1 = 0;
 
@@ -178,6 +206,10 @@ s32 ParticleMath_ApproachFloatDown(f32* arg0, f32 arg1, f32 arg2) {
     return var_v1;
 }
 
+/**
+ * Increase value toward target by step; return 1 only when this call reaches or crosses the target.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 ParticleMath_ApproachS32Up(s32* arg0, s32 arg1, s32 arg2) {
     s32 var_v1 = 0;
 
@@ -191,6 +223,10 @@ s32 ParticleMath_ApproachS32Up(s32* arg0, s32 arg1, s32 arg2) {
     return var_v1;
 }
 
+/**
+ * Decrease value toward target by step; return 1 only when this call reaches or crosses the target.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 ParticleMath_ApproachS32Down(s32* arg0, s32 arg1, s32 arg2) {
     s32 var_v1 = 0;
 
@@ -204,6 +240,10 @@ s32 ParticleMath_ApproachS32Down(s32* arg0, s32 arg1, s32 arg2) {
     return var_v1;
 }
 
+/**
+ * Increase value toward target by step; return 1 only when this call reaches or crosses the target.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 ParticleMath_ApproachS16Up(s16* arg0, s16 arg1, s16 arg2) {
     s32 var_v1 = 0;
 
@@ -217,6 +257,10 @@ s32 ParticleMath_ApproachS16Up(s16* arg0, s16 arg1, s16 arg2) {
     return var_v1;
 }
 
+/**
+ * Increase value toward target by step; return 1 only when this call reaches or crosses the target.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 ParticleMath_ApproachU16Up(u16* arg0, u16 arg1, u16 arg2) {
     s32 var_v1 = 0;
 
@@ -230,6 +274,10 @@ s32 ParticleMath_ApproachU16Up(u16* arg0, u16 arg1, u16 arg2) {
     return var_v1;
 }
 
+/**
+ * Decrease value toward target by step; return 1 only when this call reaches or crosses the target.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 ParticleMath_ApproachS16Down(s16* arg0, s16 arg1, s16 arg2) {
     s32 var_v1 = 0;
 
@@ -243,6 +291,10 @@ s32 ParticleMath_ApproachS16Down(s16* arg0, s16 arg1, s16 arg2) {
     return var_v1;
 }
 
+/**
+ * Decrease value toward target by step; return 1 only when this call reaches or crosses the target.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 ParticleMath_ApproachU16Down(u16* arg0, s32 arg1, s32 arg2) {
     s32 var_v1 = 0;
     s32 temp_v0 = *arg0;
@@ -258,6 +310,10 @@ s32 ParticleMath_ApproachU16Down(u16* arg0, s32 arg1, s32 arg2) {
     return var_v1;
 }
 
+/**
+ * Increase value toward target by the pointed-to step; return 1 only when this call reaches or crosses the target.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 ParticleMath_ApproachFloatUpByPointer(f32* arg0, f32 arg1, f32* arg2) {
     s32 var_v1 = 0;
 
@@ -271,6 +327,10 @@ s32 ParticleMath_ApproachFloatUpByPointer(f32* arg0, f32 arg1, f32* arg2) {
     return var_v1;
 }
 
+/**
+ * Decrease value toward target by the pointed-to step; return 1 only when this call reaches or crosses the target.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 ParticleMath_ApproachFloatDownByPointer(f32* arg0, f32 arg1, f32* arg2) {
     s32 var_v1 = 0;
 
@@ -284,6 +344,10 @@ s32 ParticleMath_ApproachFloatDownByPointer(f32* arg0, f32 arg1, f32* arg2) {
     return var_v1;
 }
 
+/**
+ * Increase value toward target by the pointed-to step; return 1 only when this call reaches or crosses the target.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 ParticleMath_ApproachS32UpByPointer(s32* arg0, s32 arg1, s32* arg2) {
     s32 var_v1 = 0;
 
@@ -297,6 +361,10 @@ s32 ParticleMath_ApproachS32UpByPointer(s32* arg0, s32 arg1, s32* arg2) {
     return var_v1;
 }
 
+/**
+ * Decrease value toward target by the pointed-to step; return 1 only when this call reaches or crosses the target.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 ParticleMath_ApproachS32DownByPointer(s32* arg0, s32 arg1, s32* arg2) {
     s32 var_v1 = 0;
 
@@ -310,6 +378,10 @@ s32 ParticleMath_ApproachS32DownByPointer(s32* arg0, s32 arg1, s32* arg2) {
     return var_v1;
 }
 
+/**
+ * Increase value toward target by the pointed-to step; return 1 only when this call reaches or crosses the target.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 ParticleMath_ApproachS16UpByPointer(s16* arg0, s16 arg1, s16* arg2) {
     s32 var_v1 = 0;
 
@@ -323,6 +395,10 @@ s32 ParticleMath_ApproachS16UpByPointer(s16* arg0, s16 arg1, s16* arg2) {
     return var_v1;
 }
 
+/**
+ * Decrease value toward target by the pointed-to step; return 1 only when this call reaches or crosses the target.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 ParticleMath_ApproachS16DownByPointer(s16* arg0, s16 arg1, s16* arg2) {
     s32 var_v1 = 0;
 
@@ -369,6 +445,10 @@ s32 func_8213775C(s8* arg0, s8 arg1, s8 arg2) {
     return var_v1;
 }
 
+/**
+ * Move value toward target, clamp overshoot, and return 1 at the target.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 ParticleMath_ApproachU8(u8* arg0, u8 arg1, u8 arg2) {
     s32 var_v1 = 0;
     s16 var_a3 = *arg0;
@@ -427,6 +507,10 @@ s32 func_82137898(s16* arg0, s16 arg1, s16 arg2) {
     return var_v1;
 }
 
+/**
+ * Approach a wrapping 16-bit angle along the selected short arc; return 1 when the target is reached.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 ParticleMath_ApproachAngle(s16* arg0, s16 arg1, s16 arg2) {
     s32 a0 = *(u16*)arg0;
     s32 var_v1 = 0;
@@ -468,6 +552,10 @@ s32 ParticleMath_ApproachAngle(s16* arg0, s16 arg1, s16 arg2) {
     return var_v1;
 }
 
+/**
+ * Move value toward target, clamp overshoot, and return 1 at the target.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 ParticleMath_ApproachS32(s32* arg0, s32 arg1, s32 arg2) {
     s32 temp_v0 = *arg0;
     s32 var_v1 = 0;
@@ -501,6 +589,10 @@ s32 ParticleMath_ApproachS32(s32* arg0, s32 arg1, s32 arg2) {
     return var_v1;
 }
 
+/**
+ * Move value toward target, clamp overshoot, and return 1 at the target.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 ParticleMath_ApproachFloat(f32* arg0, f32 arg1, f32 arg2) {
     s32 var_v1 = 0;
 
@@ -533,6 +625,10 @@ s32 ParticleMath_ApproachFloat(f32* arg0, f32 arg1, f32 arg2) {
     return var_v1;
 }
 
+/**
+ * Advance by the signed step, clamp at the approached endpoint, and reverse the step there.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleMath_BounceFloat(f32* arg0, f32 arg1, f32 arg2, f32* arg3) {
     *arg0 += *arg3;
 
@@ -547,6 +643,10 @@ void ParticleMath_BounceFloat(f32* arg0, f32 arg1, f32 arg2, f32* arg3) {
     }
 }
 
+/**
+ * Advance by the signed step, clamp at the approached endpoint, and reverse the step there.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleMath_BounceS16(s16* arg0, s16 arg1, s16 arg2, s16* arg3) {
     *arg0 += *arg3;
     if (*arg3 >= 0) {
@@ -560,30 +660,50 @@ void ParticleMath_BounceS16(s16* arg0, s16 arg1, s16 arg2, s16* arg3) {
     }
 }
 
+/**
+ * Copy all three vector components to the destination.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleMath_CopyVec3f(Vec3f* arg0, Vec3f* arg1) {
     arg0->x = arg1->x;
     arg0->y = arg1->y;
     arg0->z = arg1->z;
 }
 
+/**
+ * Copy all three vector components to the destination.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleMath_CopyVec3s(Vec3s* arg0, Vec3s* arg1) {
     arg0->x = arg1->x;
     arg0->y = arg1->y;
     arg0->z = arg1->z;
 }
 
+/**
+ * Add all three source components to the destination in place.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleMath_AddVec3f(Vec3f* arg0, Vec3f* arg1) {
     arg0->x += arg1->x;
     arg0->y += arg1->y;
     arg0->z += arg1->z;
 }
 
+/**
+ * Add all three source components to the destination in place.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleMath_AddVec3s(Vec3s* arg0, Vec3s* arg1) {
     arg0->x += arg1->x;
     arg0->y += arg1->y;
     arg0->z += arg1->z;
 }
 
+/**
+ * Compare squared 2D distance with squared radius, including the boundary.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 ParticleMath_IsWithinRadius2D(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4) {
     s32 var_v1 = 0;
 
@@ -595,7 +715,7 @@ s32 ParticleMath_IsWithinRadius2D(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 ar
 
 u32 func_80055640();                                /* extern */
 
-u32 func_82137D74(u32 arg0) {
+u32 ParticleMath_RandomRange(u32 arg0) {
     u32 temp_v0;
     u32 var_v1;
 
@@ -608,18 +728,34 @@ u32 func_82137D74(u32 arg0) {
     return var_v1;
 }
 
+/**
+ * Add offset to a random value in [0, range) for a positive range.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 ParticleMath_RandomRangeOffset(s32 arg0, s32 arg1) {
     return ParticleMath_RandomRange(arg0) + arg1;
 }
 
+/**
+ * Return a random integer in [-range, range) for a positive range.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 ParticleMath_RandomSigned(s32 arg0) {
     return ParticleMath_RandomRange(arg0 * 2) - arg0;
 }
 
+/**
+ * Add offset to the signed random result.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 ParticleMath_RandomSignedOffset(s32 arg0, s32 arg1) {
     return ParticleMath_RandomSigned(arg0) + arg1;
 }
 
+/**
+ * Move a signed random result farther from zero by offset; zero takes the positive branch.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 ParticleMath_RandomSignedOffsetBySign(s32 arg0, s32 arg1) {
     s32 temp_v0 = ParticleMath_RandomSigned(arg0);
 
@@ -631,35 +767,67 @@ s32 ParticleMath_RandomSignedOffsetBySign(s32 arg0, s32 arg1) {
     return temp_v0;
 }
 
+/**
+ * Empty callback retained at its original entry point.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleMath_NoopStub(UNUSED s32 arg0) {
 }
 
+/**
+ * Return MathUtil_Atan2s for the vector's Y and Z components, in that argument order.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s16 ParticleMath_Atan2YZ(Vec3f arg0) {
     return MathUtil_Atan2s(arg0.y, arg0.z);
 }
 
+/**
+ * Return MathUtil_Atan2s for the vector's Z and X components, in that argument order.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s16 ParticleMath_Atan2ZX(Vec3f arg0) {
     return MathUtil_Atan2s(arg0.z, arg0.x);
 }
 
+/**
+ * Return MathUtil_Atan2s for the vector's X and Y components, in that argument order.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s16 ParticleMath_Atan2XY(Vec3f arg0) {
     return MathUtil_Atan2s(arg0.x, arg0.y);
 }
 
+/**
+ * Write the YZ, ZX, and XY atan2 results to the three destination components.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleMath_Vec3ToAngles(Vec3s* arg0, Vec3f arg1) {
     arg0->x = MathUtil_Atan2s(arg1.y, arg1.z);
     arg0->y = MathUtil_Atan2s(arg1.z, arg1.x);
     arg0->z = MathUtil_Atan2s(arg1.x, arg1.y);
 }
 
+/**
+ * Return x*cos(angle) - y*sin(angle), the rotated 2D X component.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 f32 ParticleMath_Rotate2DX(f32 arg0, f32 arg1, s16 arg2) {
     return (COSS(arg2) * arg0) - (SINS(arg2) * arg1);
 }
 
+/**
+ * Return x*sin(angle) + y*cos(angle), the rotated 2D Y component.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 f32 ParticleMath_Rotate2DY(f32 arg0, f32 arg1, s16 arg2) {
     return (SINS(arg2) * arg0) + (COSS(arg2) * arg1);
 }
 
+/**
+ * Rotate the supplied vector around the Y axis and return the destination.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 Vec3f* ParticleMath_RotateVec3fY(Vec3f* arg0, Vec3f arg1, Vec3s arg2) {
     f32 temp_fv0 = SINS(arg2.y);
     f32 temp_fv1 = COSS(arg2.y);
@@ -671,6 +839,10 @@ Vec3f* ParticleMath_RotateVec3fY(Vec3f* arg0, Vec3f arg1, Vec3s arg2) {
     return arg0;
 }
 
+/**
+ * Build (length*sin(angle), 0, length*cos(angle)) and return the destination.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 Vec3f* ParticleMath_MakeXZVectorFromAngle(Vec3f* arg0, f32 arg1, s16 arg2) {
     f32 temp_fv0 = SINS(arg2);
     f32 temp_fv1 = COSS(arg2);
@@ -682,6 +854,10 @@ Vec3f* ParticleMath_MakeXZVectorFromAngle(Vec3f* arg0, f32 arg1, s16 arg2) {
     return arg0;
 }
 
+/**
+ * Apply the explicit X/Y-angle transform to a copied vector and return the destination.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 Vec3f* ParticleMath_RotateVec3fXY(Vec3f* arg0, Vec3f arg1, Vec3s arg4) {
     f32 x = arg1.x;
     f32 y = arg1.y;
@@ -698,10 +874,18 @@ Vec3f* ParticleMath_RotateVec3fXY(Vec3f* arg0, Vec3f arg1, Vec3s arg4) {
     return arg0;
 }
 
+/**
+ * Return the Euclidean distance between two 3D points.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 f32 ParticleMath_Distance3D(Vec3f arg0, Vec3f arg1) {
     return sqrtf(SQ(arg1.x - arg0.x) + SQ(arg1.y - arg0.y) + SQ(arg1.z - arg0.z));
 }
 
+/**
+ * Normalize end - start into the destination; zero-length behavior belongs to Vec3f_Normalize.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 Vec3f* ParticleMath_NormalizedDirection(Vec3f* arg0, Vec3f arg1, Vec3f arg2) {
     arg0->x = arg2.x - arg1.x;
     arg0->y = arg2.y - arg1.y;
@@ -712,19 +896,19 @@ Vec3f* ParticleMath_NormalizedDirection(Vec3f* arg0, Vec3f arg1, Vec3f arg2) {
     return arg0;
 }
 
-s32 func_8213C80C(void);
+s32 BattleAnim_GetCameraContext(void);
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_82138244; signature not recovered. */
 #else
 void func_821381E4(Vec3f*, Vec3f, Vec3f);
-s32 func_8213C80C(void);
+s32 BattleAnim_GetCameraContext(void);
 void func_82137F10();
 void func_82138244(Vec3f *arg0, s32 arg1, f32 arg2) {
     Vec3f dir;
     CameraNode *camera;
 
-    camera = (CameraNode *)func_8213C80C();
+    camera = (CameraNode *)BattleAnim_GetCameraContext();
     func_821381E4(&dir, camera->view.eyePosition, camera->view.targetPosition);
     func_82137F10(arg1, dir);
     arg0->x = camera->view.eyePosition.x + arg2 * dir.x;
@@ -737,17 +921,25 @@ void func_82138244(Vec3f *arg0, s32 arg1, f32 arg2) {
 void func_8213831C(Vec3f* out, f32 distance) {
     Vec3f direction;
     CameraNode* camera;
-    camera = (CameraNode*)func_8213C80C();
+    camera = (CameraNode*)BattleAnim_GetCameraContext();
     ParticleMath_NormalizedDirection(&direction, camera->view.eyePosition, camera->view.targetPosition);
     out->x = camera->view.eyePosition.x + distance * direction.x;
     out->y = camera->view.eyePosition.y + distance * direction.y;
     out->z = camera->view.eyePosition.z + distance * direction.z;
 }
 
+/**
+ * Divide the 3D distance by the divisor and convert the result to s32.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 ParticleMath_DistanceScaled(Vec3f arg0, Vec3f arg1, f32 arg2) {
     return ParticleMath_Distance3D(arg0, arg1) / arg2;
 }
 
+/**
+ * Scale end - start to length and return the original distance / length as s32; no zero guard.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 ParticleMath_ScaleDirectionToLength(Vec3f* arg0, Vec3f arg1, Vec3f arg2, f32 arg3) {
     f32 temp_fv1;
 
@@ -764,6 +956,10 @@ s32 ParticleMath_ScaleDirectionToLength(Vec3f* arg0, Vec3f arg1, Vec3f arg2, f32
     return 1.0f / temp_fv1;
 }
 
+/**
+ * Rotate a +Z vector by independently sampled X/Y angles; this is not a uniform-sphere sampler.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 Vec3f* ParticleMath_RandomDirection(Vec3f* arg0, f32 arg1) {
     Vec3f sp2C;
     Vec3s sp24;
@@ -779,6 +975,10 @@ Vec3f* ParticleMath_RandomDirection(Vec3f* arg0, f32 arg1) {
     return arg0;
 }
 
+/**
+ * Multiply all three components in place and return the vector.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 Vec3f* ParticleMath_ScaleVec3f(Vec3f* arg0, f32 arg1) {
     arg0->x *= arg1;
     arg0->y *= arg1;
@@ -790,34 +990,50 @@ Vec3f* ParticleMath_ScaleVec3f(Vec3f* arg0, f32 arg1) {
 void func_821381E4(Vec3f*, Vec3f, Vec3f);
 
 /**
- * Takes the scene camera (func_8213C80C returns a CameraNode*), asks
+ * Takes the scene camera (BattleAnim_GetCameraContext returns a CameraNode*), asks
  * func_821381E4 for the direction from its eye to its target position (the
  * Vec3f arguments are passed by value, in $a1-$a3 and on the stack), and
  * passes the result's z and x components to MathUtil_Atan2s (the angle itself
  * is discarded).
  */
 void func_821385C0(void) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     Vec3f sp30;
     CameraNode* camera;
 
-    camera = (CameraNode*)func_8213C80C();
+    camera = (CameraNode*)BattleAnim_GetCameraContext();
     func_821381E4(&sp30, camera->view.eyePosition, camera->view.targetPosition);
     MathUtil_Atan2s(sp30.z, sp30.x);
 }
 
+/**
+ * Return the YZ-component atan2 of end - start in that argument order.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s16 ParticleMath_AngleXBetweenPoints(Vec3f arg0, Vec3f arg1) {
     return MathUtil_Atan2s(arg1.y - arg0.y, arg1.z - arg0.z);
 }
 
+/**
+ * Return the ZX-component atan2 of end - start in that argument order.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s16 ParticleMath_AngleYBetweenPoints(Vec3f arg0, Vec3f arg1) {
     return MathUtil_Atan2s(arg1.z - arg0.z, arg1.x - arg0.x);
 }
 
+/**
+ * Return the XY-component atan2 of end - start in that argument order.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s16 ParticleMath_AngleZBetweenPoints(Vec3f arg0, Vec3f arg1) {
     return MathUtil_Atan2s(arg1.x - arg0.x, arg1.y - arg0.y);
 }
 
+/**
+ * Select a fixed angular increment from the signed difference, or snap when the high bytes agree.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s16 ParticleMath_ApproachAngleCoarse(s16 arg0, s16 arg1) {
     s16 temp_v0 = arg1 - arg0;
 
@@ -846,9 +1062,17 @@ s16 ParticleMath_ApproachAngleCoarse(s16 arg0, s16 arg1) {
     return arg0;
 }
 
+/**
+ * Empty callback retained at its original entry point.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_NoopStub1(void) {
 }
 
+/**
+ * Convert a float matrix into the next pool slot and load it as MODELVIEW; stop emitting when all 364 slots are used.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_PushMatrix(MtxF* arg0) {
     if (gParticleMatrixPoolIndex < 0x16C) {
         MtxF_ToFixed(&gParticleMatrixPool->unk_0000[gParticleMatrixPoolIndex], arg0);
@@ -860,6 +1084,10 @@ void ParticleGfx_PushMatrix(MtxF* arg0) {
     }
 }
 
+/**
+ * Build a translated 2D rotation matrix and apply uniform scale.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_Build2DTransformMatrix(MtxF* arg0, s16 arg1, s16 arg2, s16 arg3, f32 arg4) {
     f32 temp_fv0 = SINS(arg3) * arg4;
     f32 temp_fv1 = COSS(arg3) * arg4;
@@ -885,6 +1113,10 @@ void ParticleGfx_Build2DTransformMatrix(MtxF* arg0, s16 arg1, s16 arg2, s16 arg3
     arg0->mf[3][3] = 1.0f;
 }
 
+/**
+ * Build a translated 2D rotation matrix and scale only its Y basis.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_Build2DTransformMatrixYScaled(MtxF* arg0, s16 arg1, s16 arg2, s16 arg3, f32 arg4) {
     f32 temp_fv0 = SINS(arg3);
     f32 temp_fv1 = COSS(arg3);
@@ -910,6 +1142,10 @@ void ParticleGfx_Build2DTransformMatrixYScaled(MtxF* arg0, s16 arg1, s16 arg2, s
     arg0->mf[3][3] = 1.0f;
 }
 
+/**
+ * Build the 2D transform with an added half turn and load it through the matrix pool.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_Push2DTransform(s16 arg0, s16 arg1, s16 arg2, f32 arg3) {
     MtxF sp20;
 
@@ -917,6 +1153,10 @@ void ParticleGfx_Push2DTransform(s16 arg0, s16 arg1, s16 arg2, f32 arg3) {
     ParticleGfx_PushMatrix(&sp20);
 }
 
+/**
+ * Build the 2D transform with an added half turn and load it through the matrix pool.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_Push2DTransformYScaled(s16 arg0, s16 arg1, s16 arg2, f32 arg3) {
     MtxF sp20;
 
@@ -924,6 +1164,10 @@ void ParticleGfx_Push2DTransformYScaled(s16 arg0, s16 arg1, s16 arg2, f32 arg3) 
     ParticleGfx_PushMatrix(&sp20);
 }
 
+/**
+ * Build a translated 3D rotation matrix and apply uniform scale.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_BuildTransformMatrix(MtxF* arg0, Vec3f arg1, Vec3s arg2, f32 arg3) {
     f32 temp_fa1;
     f32 temp_fs0;
@@ -962,6 +1206,10 @@ void ParticleGfx_BuildTransformMatrix(MtxF* arg0, Vec3f arg1, Vec3s arg2, f32 ar
     arg0->mf[3][3] = 1.0f;
 }
 
+/**
+ * Build a translated 3D rotation matrix and scale only its Y basis.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_BuildTransformMatrixYScaled(MtxF* arg0, Vec3f arg1, Vec3s arg2, f32 arg3) {
     f32 temp_fa0;
     f32 temp_fa1;
@@ -1000,6 +1248,10 @@ void ParticleGfx_BuildTransformMatrixYScaled(MtxF* arg0, Vec3f arg1, Vec3s arg2,
     arg0->mf[3][3] = 1.0f;
 }
 
+/**
+ * Build a translated 3D rotation matrix and scale its X/Y bases separately.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_BuildTransformMatrixXYScaled(MtxF* arg0, Vec3f arg1, Vec3s arg2, f32 arg3, f32 arg4) {
     f32 temp_fa0;
     f32 temp_fa1;
@@ -1038,6 +1290,10 @@ void ParticleGfx_BuildTransformMatrixXYScaled(MtxF* arg0, Vec3f arg1, Vec3s arg2
     arg0->mf[3][3] = 1.0f;
 }
 
+/**
+ * Build a translated billboard matrix by transposing the supplied view basis and applying uniform scale.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_BuildBillboardMatrix(MtxF* arg0, MtxF* arg1, Vec3f arg2, f32 arg3) {
     arg0->mf[0][0] = arg1->mf[0][0] * arg3;
     arg0->mf[0][1] = arg1->mf[1][0] * arg3;
@@ -1060,6 +1316,10 @@ void ParticleGfx_BuildBillboardMatrix(MtxF* arg0, MtxF* arg1, Vec3f arg2, f32 ar
     arg0->mf[3][3] = 1.0f;
 }
 
+/**
+ * Build a translated billboard matrix by transposing the supplied view basis and scaling only the second basis vector.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_BuildBillboardMatrixYScaled(MtxF* arg0, MtxF* arg1, Vec3f arg2, f32 arg3) {
     arg0->mf[0][0] = arg1->mf[0][0];
     arg0->mf[0][1] = arg1->mf[1][0];
@@ -1082,6 +1342,10 @@ void ParticleGfx_BuildBillboardMatrixYScaled(MtxF* arg0, MtxF* arg1, Vec3f arg2,
     arg0->mf[3][3] = 1.0f;
 }
 
+/**
+ * Build a translated billboard matrix by rotating its first two basis vectors and applying uniform scale.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_BuildBillboardRotatedMatrix(MtxF* arg0, MtxF* arg1, Vec3f arg2, f32 arg3, s16 arg4) {
     f32 temp_fv0 = SINS(arg4);
     f32 temp_fv1 = COSS(arg4);
@@ -1107,6 +1371,10 @@ void ParticleGfx_BuildBillboardRotatedMatrix(MtxF* arg0, MtxF* arg1, Vec3f arg2,
     arg0->mf[3][3] = 1.0f;
 }
 
+/**
+ * Build a translated billboard matrix by rotating its first two basis vectors and scaling only the second basis vector.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_BuildBillboardRotatedMatrixYScaled(MtxF* arg0, MtxF* arg1, Vec3f arg2, f32 arg3, s16 arg4) {
     f32 temp_fv0 = SINS(arg4);
     f32 temp_fv1 = COSS(arg4);
@@ -1132,6 +1400,10 @@ void ParticleGfx_BuildBillboardRotatedMatrixYScaled(MtxF* arg0, MtxF* arg1, Vec3
     arg0->mf[3][3] = 1.0f;
 }
 
+/**
+ * Build a scaled basis from a normalized direction and cross products, with the supplied translation.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_BuildDirectionMatrix(MtxF* arg0, Vec3f arg1, Vec3f arg2, s16 arg3, f32 arg4) {
     Vec3f sp3C;
     Vec3f sp30;
@@ -1165,6 +1437,10 @@ void ParticleGfx_BuildDirectionMatrix(MtxF* arg0, Vec3f arg1, Vec3f arg2, s16 ar
     arg0->mf[3][3] = 1.0f;
 }
 
+/**
+ * Build the corresponding transform and load it through the matrix pool.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_PushTransformMatrix(Vec3f arg0, Vec3s arg1, f32 arg2) {
     MtxF sp28;
 
@@ -1172,6 +1448,10 @@ void ParticleGfx_PushTransformMatrix(Vec3f arg0, Vec3s arg1, f32 arg2) {
     ParticleGfx_PushMatrix(&sp28);
 }
 
+/**
+ * Build the corresponding transform and load it through the matrix pool.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_PushTransformMatrixYScaled(Vec3f arg0, Vec3s arg1, f32 arg2) {
     MtxF sp28;
 
@@ -1179,6 +1459,10 @@ void ParticleGfx_PushTransformMatrixYScaled(Vec3f arg0, Vec3s arg1, f32 arg2) {
     ParticleGfx_PushMatrix(&sp28);
 }
 
+/**
+ * Build the corresponding transform and load it through the matrix pool.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_PushTransformMatrixXYScaled(Vec3f arg0, Vec3s arg1, f32 arg2, f32 arg3) {
     MtxF sp28;
 
@@ -1186,6 +1470,10 @@ void ParticleGfx_PushTransformMatrixXYScaled(Vec3f arg0, Vec3s arg1, f32 arg2, f
     ParticleGfx_PushMatrix(&sp28);
 }
 
+/**
+ * Build the corresponding transform and load it through the matrix pool.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_PushBillboardMatrix(CameraNode* arg0, Vec3f arg1, f32 arg4) {
     MtxF sp20;
 
@@ -1193,6 +1481,10 @@ void ParticleGfx_PushBillboardMatrix(CameraNode* arg0, Vec3f arg1, f32 arg4) {
     ParticleGfx_PushMatrix(&sp20);
 }
 
+/**
+ * Build the corresponding transform and load it through the matrix pool.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_PushBillboardRotatedMatrix(CameraNode* arg0, Vec3f arg1, f32 arg4, s16 arg5) {
     MtxF sp28;
 
@@ -1200,6 +1492,10 @@ void ParticleGfx_PushBillboardRotatedMatrix(CameraNode* arg0, Vec3f arg1, f32 ar
     ParticleGfx_PushMatrix(&sp28);
 }
 
+/**
+ * Build the corresponding transform and load it through the matrix pool.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_PushBillboardMatrixYScaled(CameraNode* arg0, Vec3f arg1, f32 arg4) {
     MtxF sp20;
 
@@ -1207,6 +1503,10 @@ void ParticleGfx_PushBillboardMatrixYScaled(CameraNode* arg0, Vec3f arg1, f32 ar
     ParticleGfx_PushMatrix(&sp20);
 }
 
+/**
+ * Build the corresponding transform and load it through the matrix pool.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_PushBillboardRotatedMatrixYScaled(CameraNode* arg0, Vec3f arg1, f32 arg4, s16 arg5) {
     MtxF sp28;
 
@@ -1214,6 +1514,10 @@ void ParticleGfx_PushBillboardRotatedMatrixYScaled(CameraNode* arg0, Vec3f arg1,
     ParticleGfx_PushMatrix(&sp28);
 }
 
+/**
+ * Add half turns to rotation X/Y, build the transform, and load it through the matrix pool.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_PushTransformMatrixWithHalfTurnXY(Vec3f arg0, Vec3s arg3, f32 arg5) {
     MtxF sp30;
     Vec3s sp28;
@@ -1226,6 +1530,10 @@ void ParticleGfx_PushTransformMatrixWithHalfTurnXY(Vec3f arg0, Vec3s arg3, f32 a
     ParticleGfx_PushMatrix(&sp30);
 }
 
+/**
+ * Build the corresponding transform and load it through the matrix pool.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_PushDirectionMatrix(Vec3f arg0, Vec3f arg3, f32 arg6) {
     MtxF sp30;
 

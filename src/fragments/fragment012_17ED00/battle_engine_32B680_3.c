@@ -1,3 +1,4 @@
+#include "pokemon.h"
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
 #include "battle_engine_32B680_3.h"
 
@@ -148,13 +149,13 @@ void BattleAnim_SelectParticleModelFrames(Particle* arg0, s32 arg1) {
             sp2A = 0x9D;
             sp28 = 0x9E;
 
-            switch (BattleAnim_GetOwnerSpecies(arg0->unk_10)) {
-                case 0x5F:
+            switch (BattleAnim_GetOwnerSpecies(arg0->pokemon)) {
+                case ONIX:
                     Particle_Field38_AddXZFromField94YOffset180_08F38(arg0, 15.0f);
                     Particle_Field38_SetYScaled_08CA0(arg0, 15.0f);
                     break;
 
-                case 0x82:
+                case GYARADOS:
                     Particle_Field38_AddXZFromField94YOffset180_08F38(arg0, 15.0f);
                     break;
             }
@@ -320,20 +321,20 @@ void BattleAnim_SelectParticleModelFrames(Particle* arg0, s32 arg1) {
             break;
     }
 
-    arg0->unk_14 = BattleAnim_AllocOwnerDisplayContext(arg0);
-    if (arg0->unk_14 != NULL) {
+    arg0->displayObject = BattleAnim_AllocOwnerDisplayContext(arg0);
+    if (arg0->displayObject != NULL) {
         switch (arg1) {
             case 0:
-                BattleAnim_InitModelWithAnim(arg0->unk_14, sp2A, sp28);
+                BattleAnim_InitModelWithAnim(arg0->displayObject, sp2A, sp28);
                 break;
 
             case 1:
-                BattleAnim_InitModel(arg0->unk_14, sp2A);
-                BattleAnim_BindModelAnimReversed(arg0->unk_14, sp28);
+                BattleAnim_InitModel(arg0->displayObject, sp2A);
+                BattleAnim_BindModelAnimReversed(arg0->displayObject, sp28);
                 break;
 
             case 2:
-                BattleAnim_InitModel(arg0->unk_14, sp2A);
+                BattleAnim_InitModel(arg0->displayObject, sp2A);
                 break;
         }
         Particle_Field1C_SetScaled_0B938(arg0, sp2C);
@@ -345,27 +346,38 @@ void BattleAnim_SelectParticleModelFrames(Particle* arg0, s32 arg1) {
 
 
 void BattleAnim_CallbackInitModelAnimWait(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SelectParticleModelFrames(arg0, 0);
             break;
 
         case 2:
-            if (ModelAnim_IsFinished(arg0->unk_14) != 0) {
+            if (ModelAnim_IsFinished(arg0->displayObject) != 0) {
                 Particle_MarkInactive(arg0);
             }
             break;
     }
 }
 
-void BattleAnim_CallbackInitModelAnim(Particle* arg0) {
-    if (arg0->unk_B2 == 1) {
+/**
+ * Moves: Barrier (use), Defense Curl (use), Dig (use/hit), Earthquake (hit), Fissure (hit), Light Screen
+ * (use), Pay Day (hit), Reflect (use), Sharpen (use), Withdraw (use)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_InitializeParticleModel(Particle* arg0) {
+    if (arg0->lifecycle == 1) {
         BattleAnim_SelectParticleModelFrames(arg0, 0);
     }
 }
 
-void BattleAnim_CallbackStartEffects83And103ModelAlphaFadeIn(Particle* arg0) {
-    switch (arg0->unk_B2) {
+/**
+ * Used for the Eyes in Leer and Glare.
+ * It is reused for additional flair in Sky Attack (hands an X shape on the bird)
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_RunScaryEyes(Particle* arg0) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SelectParticleModelFrames(arg0, 0);
             break;
@@ -376,14 +388,17 @@ void BattleAnim_CallbackStartEffects83And103ModelAlphaFadeIn(Particle* arg0) {
     }
 }
 
-void BattleAnim_CallbackInitModelAnimWaitCleanup(Particle* arg0) {
-    switch (arg0->unk_B2) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_RunDreamEaterUseEffect(Particle* arg0) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SelectParticleModelFrames(arg0, 1);
             break;
 
         case 2:
-            if (BattleAnim_IsModelAnimComplete(arg0->unk_14) != 0) {
+            if (BattleAnim_IsModelAnimComplete(arg0->displayObject) != 0) {
                 Particle_AdvanceLifecycle(arg0);
             }
             break;
@@ -395,13 +410,19 @@ void BattleAnim_CallbackInitModelAnimWaitCleanup(Particle* arg0) {
 }
 
 void BattleAnim_CallbackInitModelAnimMode2(Particle* arg0) {
-    if (arg0->unk_B2 == 1) {
+    if (arg0->lifecycle == 1) {
         BattleAnim_SelectParticleModelFrames(arg0, 2);
     }
 }
 
-void BattleAnim_CallbackInitModelAnimMode2Update(Particle* arg0) {
-    switch (arg0->unk_B2) {
+/**
+ * Moves: Absorb (use), Bide (use), Confusion (use), Focus Energy (use), Leech Life (use), Mega Drain (use),
+ * Psychic (use), Rage (use), Solar Beam (use), Waterfall (use/hit)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_RunFillScreenOverlay(Particle* arg0) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SelectParticleModelFrames(arg0, 2);
             break;
@@ -549,8 +570,11 @@ void BattleAnim_SetupMove86EndDescriptor24(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void BattleAnim_CallbackMove86EndDescriptor24(Particle* arg0) {
-    switch (arg0->unk_B2) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_RunThunderWaveHitEffect(Particle* arg0) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupMove86EndDescriptor24(arg0);
             break;
@@ -574,7 +598,7 @@ void BattleAnim_CallbackMove86EndDescriptor24(Particle* arg0) {
 
 void BattleAnim_SetupMove86StartDescriptor24(Particle* arg0) {
     Vec3f sp34;
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     s16 sp2A = Particle_FieldCD_GetU8_0C048(arg0);
 
     Particle_Field1C_SetScaled_0B938(arg0, 0.05f);
@@ -622,14 +646,17 @@ void func_82153E28(s8 *arg0) {
         func_82140548(arg0, 0, 0x20);
         break;
     case 4:
-        func_8213C938(arg0);
+        Particle_DisableAndDetach(arg0);
         break;
     }
     func_82140228(arg0, 0x41200000, 0x3D4CCCCD);
     func_8213E4D8(arg0);
 }
 
-void ParticleEffect_RegisterExplosion(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_InitializeThunderWaveUse(void) {
     BattleAnim_SpawnCategory17MarkerSlot(0x55, 1);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 8, 0xC, BattleAnim_CallbackMove86StartDescriptor24, &gBattleAnimParticleDescriptors[0x24], 0xA, 1, 4, 0, 0, 0);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 8, 0xC, BattleAnim_CallbackMove86StartDescriptor24, &gBattleAnimParticleDescriptors[0x24], 0xA, 1, 4, 1, 0, 0);
@@ -642,68 +669,71 @@ void func_82153FD8(void) {
 }
 
 
-void func_82154050(Particle* arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void BattleAnim_ApplyEffect1SpeciesMotion(Particle* arg0) {
     f32 offset = 0.0f;
     f32 scale = 0.12f;
 
-    switch (BattleAnim_GetOwnerSpecies(arg0->unk_10)) {
-        case 0xF:
+    switch (BattleAnim_GetOwnerSpecies(arg0->pokemon)) {
+        case BEEDRILL:
             offset = 5.0f;
             break;
-        case 0x16:
+        case FEAROW:
             offset = 3.0f;
             break;
-        case 0x1F:
+        case NIDOQUEEN:
             offset = 5.0f;
             break;
-        case 0x22:
+        case NIDOKING:
             offset = 3.0f;
             break;
-        case 0x39:
+        case PRIMEAPE:
             offset = 10.0f;
             break;
-        case 0x41:
+        case ALAKAZAM:
             offset = 8.0f;
             break;
-        case 0x4C:
+        case GOLEM:
             offset = 2.0f;
             break;
-        case 0x5B:
+        case CLOYSTER:
             offset = 5.0f;
             break;
-        case 0x5E:
+        case GENGAR:
             offset = 5.0f;
             break;
-        case 0x61:
+        case HYPNO:
             offset = 5.0f;
             break;
-        case 0x73:
+        case KANGASKHAN:
             offset = 12.0f;
             break;
-        case 0x7F:
+        case PINSIR:
             offset = 3.0f;
             break;
-        case 0x80:
+        case TAUROS:
             offset = 3.0f;
             break;
-        case 0x82:
+        case GYARADOS:
             scale = D_FLT_82196EC8;
             Particle_Field38_AddYScaled_08E90(arg0, 5.0f);
             break;
-        case 0x83:
+        case LAPRAS:
             scale = D_FLT_82196ECC;
             offset = 5.0f;
             break;
-        case 0x86:
+        case VAPOREON:
             offset = 3.0f;
             break;
-        case 0x88:
+        case FLAREON:
             offset = 3.0f;
             break;
-        case 0x8E:
+        case AERODACTYL:
             offset = 10.0f;
             break;
-        case 0x91:
+        case ZAPDOS:
             offset = 3.0f;
             break;
     }
@@ -718,7 +748,7 @@ void BattleAnim_SetupEffect1Descriptor2F(Particle* arg0) {
 }
 
 void BattleAnim_CallbackStartEffect1Descriptor2FPhaseFadeOut(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupEffect1Descriptor2F(arg0);
             break;

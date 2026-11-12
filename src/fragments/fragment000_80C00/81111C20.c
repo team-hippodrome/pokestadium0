@@ -107,7 +107,7 @@ typedef struct Track81111DC8 {
     /* 0x34 */ Voice81111DC8* voices[16];
 } Track81111DC8;
 void func_81111C20();
-void func_81112E00(Track81111DC8 *);
+void AudioSeq_SequencePlayerDisable(Track81111DC8 *);
 void func_81111DC8(Track81111DC8 *arg0) {
     s32 i;
 
@@ -121,7 +121,7 @@ void func_81111DC8(Track81111DC8 *arg0) {
             arg0->level = 0.0f;
         }
         if ((--arg0->timer == 0) && (arg0->state == 2)) {
-            func_81112E00(arg0);
+            AudioSeq_SequencePlayerDisable(arg0);
             return;
         }
     }
@@ -240,7 +240,7 @@ typedef struct Note81112278 {
 f32 func_81112024(vib)
     Vibrato81112278* vib;
 {
-    s32 pitchChange;
+    s32 pitch_change;
     f32 extent;
     f32 result;
     Channel81112278* seqChannel = vib->seqChannel;
@@ -282,10 +282,10 @@ f32 func_81112024(vib)
         return 1.0f;
     }
 
-    pitchChange = func_81111FE0((PhaseTableCursor*)vib);
+    pitch_change = func_81111FE0((PhaseTableCursor*)vib);
     extent = (f32)vib->extent / 4096.0f;
 
-    result = 1.0f + extent * (D_FLT_81136178[pitchChange] - 1.0f);
+    result = 1.0f + extent * (D_FLT_81136178[pitch_change] - 1.0f);
     return result;
 }
 
@@ -312,7 +312,7 @@ extern s16* D_81135F68;
 void func_81112278(Note81112278* note) {
     Vibrato81112278* vib;
     Channel81112278* seqChannel;
-    PlaybackState81112278* seqPlayerState = (PlaybackState81112278*)&note->priority;
+    PlaybackState81112278* seq_player_state = (PlaybackState81112278*)&note->priority;
 
     note->vibratoFreqScale = 1.0f;
     note->portamentoFreqScale = 1.0f;
@@ -338,7 +338,7 @@ void func_81112278(Note81112278* note) {
     }
     vib->delay = seqChannel->vibratoDelay;
 
-    seqPlayerState->portamento = seqPlayerState->parentLayer->portamento;
+    seq_player_state->portamento = seq_player_state->parentLayer->portamento;
 }
 
 void func_8111235C(s8 *arg0, s32 arg1, M2C_UNK arg2) {
@@ -377,8 +377,9 @@ extern f32 D_811858DC;
  * jump and restart; other points fade toward their target over their delay.
  * Same structure as AudioEffects_UpdateAdsr in the Ocarina of Time audio
  * library.
+ * @unverified Name guessed from the code; comment kept.
  */
-f32 func_81112380(Adsr81112380* adsr) {
+f32 AudioEffects_UpdateAdsr(Adsr81112380* adsr) {
     u8 action = adsr->action;
     u8 state = adsr->state;
 

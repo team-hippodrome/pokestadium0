@@ -13,12 +13,7 @@
 #include "cry.h"
 #include "matrix.h"
 #include "math_util.h"
-typedef struct unk_D_84392040 {
-    /* 0x00 */ char unk00[0xC];
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ f32 unk_10;
-    /* 0x14 */ char unk14[0x4];
-} unk_D_84392040;
+#include "fragments/fragment012_17ED00/battle_engine_315D50_types.h"
 #include "prevent_bss_reordering.h"
 extern s32 gBattleAnimFrameCounter;
 extern s32 gBattleAnimSpawnDelay;
@@ -427,14 +422,14 @@ void func_82134DC8(s32 arg0) {
 /*
  * func_82134DEC
  *
- * Calls func_8003F96C(arg0, 2) with arg0 taken as a signed 16-bit value
+ * Calls Audio_PlayCry(arg0, 2) with arg0 taken as a signed 16-bit value
  * (sign-extended before the call).  The `* 1` is there on purpose: it makes
  * IDO emit the separate shift pair (sll 16 / sra 16) the retail code has
  * instead of folding it into the argument register.
  */
-void func_8003F96C(s32, s32);
+void Audio_PlayCry(s32, s32);
 void func_82134DEC(s16 arg0) {
-    func_8003F96C(arg0 * 1, 2);
+    Audio_PlayCry(arg0 * 1, 2); // FAKE: no-op * 1
 }
 
 extern f32 D_FLT_82189360[][4];
@@ -494,13 +489,13 @@ s32 func_82107A5C(s8*);
  * audio calls, but that is a guess).
  */
 void func_82134FD0(ActivePokemon* arg0) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     BattleMon* mon = &arg0->teamRoster->pokemonPicked[arg0->state.rosterIndex];
 
-    func_80041940(func_82107A5C(arg0), mon->hp, mon->unk_26);
+    func_80041940(func_82107A5C(arg0), mon->hp, mon->maxHp);
     if (arg0->displayObject.objectType != 0x98) {
         if ((mon->statusCondition & 7) || (mon->statusCondition & 0x20) ||
-            (sBattleScene.scene->unk_48 == 0x1F) || (sBattleScene.scene->unk_48 == 0x1B)) {
+            (sBattleScene.scene->moveEffectKind == 0x1F) || (sBattleScene.scene->moveEffectKind == 0x1B)) {
             func_80042508(func_82107A5C(arg0) | 0x10);
         } else {
             func_80042508(func_82107A5C(arg0));
@@ -514,10 +509,10 @@ void func_82135098(s8 *arg0)
 {
   s8 *sp18;
   s8 *temp_v1;
-  temp_v1 = (((*((s32 *) (((s8 *) arg0) + 0x794))) * 0x50) + (*((s32 *) (((s8 *) arg0) + 0x860)))) + 0x1C;
+  temp_v1 = (((*((s32 *) (((s8 *) arg0) + 0x794))) * 0x50) + (*((s32 *) (((s8 *) arg0) + 0x860)))) + 0x1C; // FAKE: decomp slop, raw pointer casts stand in for struct fields
   if ((*((s16 *) (((s8 *) arg0) + 0x1A))) != 0x98)
   {
     sp18 = temp_v1;
-    func_80041940(func_82107A5C(arg0), *((u16 *) (((s8 *) arg0) + 0x7D2)), *((u16 *) (((s8 *) temp_v1) + 0x26)), arg0);
+    func_80041940(func_82107A5C(arg0), *((u16 *) (((s8 *) arg0) + 0x7D2)), *((u16 *) (((s8 *) temp_v1) + 0x26)), arg0); // FAKE: decomp slop, raw pointer casts stand in for struct fields
   }
 }

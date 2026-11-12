@@ -8,7 +8,7 @@
 #include "m2c_macros.h"
 
 extern u8 D_80073520[];
-M2C_UNK func_80029A64(s32, s32, s32, s32, Color_RGBA8);
+M2C_UNK Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
 
 typedef struct Ctx89100914 {
     /* 0x0000 */ char unk0000[0x30];
@@ -46,17 +46,21 @@ extern char D_8910DB7C[];
 extern char D_8910DB88[];
 extern char D_8910DB94[];
 extern char D_8910DBA0[];
-s32 func_891005CC(Ctx89100914* arg0);
+s32 LabPCList_GetColumnCursorX(Ctx89100914* arg0);
 void func_80029028(s32, s32, s32, s32, Color_RGBA8);
-void func_8002A0AC(s32, s32, s32, s32, Color_RGBA8);
-void func_80027F20(s32);
+void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
+void Font_SetColorForFlags(s32);
 void Gfx_DrawTextureIa8(s32 x1, s32 y1, s32 draw_width, s32 height, u8* texture, s32 load_width, s32 texture_spread_x_mode);
 void Font_BeginTranslucentTextRendering(void);
 void Font_EndTexturedTextRendering(void);
 void Gfx_SetEnvColor(s32 r, s32 g, s32 b, s32 a);
 void Font_SetActive(s32 mask, s32 arg1);
 void Font_Printf(s32 x, s32 y, const char* fmt, ...);
-void func_89100914(Ctx89100914* arg0, s32 arg1, s32 arg2, s32 arg3) {
+/**
+ * Draws the list column headers: Pokemon, nickname, ID, OT, location, Type 1/2, level, HP, Attack...
+ * @unverified Name and comment guessed from the code.
+ */
+void LabPCList_DrawDetailColumns(Ctx89100914* arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 x;
     s32 i;
     s32 hl;
@@ -70,7 +74,7 @@ void func_89100914(Ctx89100914* arg0, s32 arg1, s32 arg2, s32 arg3) {
         x += arg0->widths[i];
     }
     if (arg3 & 0x10) {
-        func_8002A0AC(func_891005CC(arg0) + 1, arg2 + 1, arg0->widths[arg0->ranges[arg0->mode] + arg0->cursor - 2] - 2, 0x12, *(Color_RGBA8*)D_8910A860);
+        Ui_FillRectHighlighted(LabPCList_GetColumnCursorX(arg0) + 1, arg2 + 1, arg0->widths[arg0->ranges[arg0->mode] + arg0->cursor - 2] - 2, 0x12, *(Color_RGBA8*)D_8910A860);
     }
     gSPDisplayList(gDisplayListHead++, D_80073450);
     gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
@@ -83,7 +87,7 @@ void func_89100914(Ctx89100914* arg0, s32 arg1, s32 arg2, s32 arg3) {
     Font_BeginTranslucentTextRendering();
     for (x = arg1 + 0x78, i = arg0->ranges[arg0->mode]; x < arg0->xEnd; i++) {
         hl = (i + 2 == arg0->ranges[arg0->mode] + arg0->cursor) ? 0x12 : 0;
-        func_80027F20(hl & arg3);
+        Font_SetColorForFlags(hl & arg3);
         switch (i) {
             case 0:
                 Font_SetActive(4, -1);
@@ -163,18 +167,22 @@ typedef struct Entry80066AD8 {
     Color82000BC4 color;
 } Entry80066AD8;
 extern Entry80066AD8 D_80066AD8[];
-s32 func_8002D498(u8*, s32);
+s32 Pokemon_GetTypeIndex(u8*, s32);
 M2C_UNK func_8001A384(M2C_UNK, M2C_UNK);
 M2C_UNK func_8001A944(s32, s32, M2C_UNK *, ...);
 M2C_UNK func_8001AA9C(u8, u8, u8, u8);
 M2C_UNK func_8001AB6C();
 M2C_UNK func_8001ABBC();
 
-void func_89100F1C(s32 arg0, s32 arg1, u8* arg2, s32 arg3) {
+/**
+ * Draws the colored type icon for type slot `arg3` of Pokemon `arg2`.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabPCList_DrawTypeIcon(s32 arg0, s32 arg1, u8* arg2, s32 arg3) {
     Color82000BC4 c;
     s32 idx;
 
-    if ((*arg2 > 0) && (*arg2 < 0x98) && ((idx = func_8002D498(arg2, arg3)) != -1)) {
+    if ((*arg2 > 0) && (*arg2 < 0x98) && ((idx = Pokemon_GetTypeIndex(arg2, arg3)) != -1)) {
         c = D_80066AD8[idx].color;
         func_8001AB6C();
         func_8001A384(4, 0);
@@ -184,12 +192,7 @@ void func_89100F1C(s32 arg0, s32 arg1, u8* arg2, s32 arg3) {
     }
 }
 
-typedef struct Entry89100FC4 {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 type;
-    /* 0x04 */ const char* name;
-    /* 0x08 */ s32 unk_08;
-} Entry89100FC4; // size = 0xC
+#include "fragments/fragment016_252E10/89100020_89100914_types.h"
 typedef struct Label89100FC4 {
     Color82000BC4 color;
     const char* str;
@@ -197,13 +200,13 @@ typedef struct Label89100FC4 {
 extern Entry89100FC4 D_8006A9D4[];
 extern M2C_UNK D_800734A8;
 extern char D_8910DBAC[];
-s32 func_8002D454(s32, s32);
+s32 BattleMon_GetMoveIndexChecked(s32, s32);
 void func_89100FC4(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     const char* str;
     Color82000BC4 color;
     s32 idx;
 
-    idx = func_8002D454(arg2, arg3);
+    idx = BattleMon_GetMoveIndexChecked(arg2, arg3);
     if (idx != -1) {
         if (idx == -2) {
             color = *(Color82000BC4*)&D_800734A8;
@@ -232,7 +235,11 @@ extern M2C_UNK D_8910DBBC;
 extern M2C_UNK D_8910DBC0;
 extern M2C_UNK D_8910DBC4;
 
-void func_891010AC(s32 arg0, s32 arg1, s8 ***arg2) {
+/**
+ * Draws the location tabs てもち (Party), GB and パーク.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabPCList_DrawLocationTabs(s32 arg0, s32 arg1, s8 ***arg2) {
     s32 temp_v0;
 
     func_8001AB6C();

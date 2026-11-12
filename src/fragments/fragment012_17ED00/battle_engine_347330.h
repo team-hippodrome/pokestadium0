@@ -44,23 +44,23 @@ extern s32 pad_D_84388E38[2];
 extern Gfx D_82192890[];
 extern s32 pad_D_84388F78[2];
 
-void RibbonMesh_Init(void);
-void RibbonMesh_Configure(RibbonMesh* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8,
+void MistHaze_Init(void);
+void MistHaze_Configure(RibbonMesh* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8,
                    s32 arg9);
-void RibbonMesh_Spawn(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, s32 arg5);
-void RibbonMesh_UpdateEnvAlpha(RibbonMesh* arg0);
-s32 RibbonMesh_Update(RibbonMesh* arg0);
-s32 RibbonMesh_UpdatePool(void);
-Gfx* RibbonMesh_Draw(Gfx* arg0, RibbonMesh* arg1);
-Gfx* RibbonMesh_DrawPool(Gfx* arg0);
-void TerrainGrid_BuildCameraBounds(unk_D_843975E8* arg0, f32 arg1);
-f32 TerrainGrid_SampleHeightAndSlope(f32 x, f32 z, f32* rotation_x);
-s32 TerrainGrid_UpdateWaves(void);
-void TerrainGrid_Init(s32 arg0, s16 arg1, s16 arg2);
-s32 TerrainGrid_Update(void);
-Gfx* TerrainGrid_Draw(Gfx* arg0);
+void MistHaze_Spawn(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, s32 arg5);
+void MistHaze_UpdateEnvAlpha(RibbonMesh* arg0);
+s32 MistHaze_Update(RibbonMesh* arg0);
+s32 MistHaze_UpdatePool(void);
+Gfx* MistHaze_Draw(Gfx* arg0, RibbonMesh* arg1);
+Gfx* MistHaze_DrawPool(Gfx* arg0);
+void SurfTerrainGrid_BuildCameraBounds(unk_D_843975E8* arg0, f32 arg1);
+f32 SurfTerrainGrid_SampleHeightAndSlope(f32 x, f32 z, f32* rotation_x);
+s32 SurfTerrainGrid_UpdateWaves(void);
+void SurfTerrainGrid_Init(s32 arg0, s16 arg1, s16 arg2);
+s32 SurfTerrainGrid_Update(void);
+Gfx* SurfTerrainGrid_Draw(Gfx* arg0);
 
-void RibbonMesh_Configure(RibbonMesh* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8,
+void MistHaze_Configure(RibbonMesh* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8,
                    s32 arg9);
 
 extern const f64 D_DBL_821979B8;
@@ -83,10 +83,10 @@ extern const f64 D_DBL_821979F0;
  *
  * Called by BattleAnim_SurfContinue to keep the Surf rider on the wave:
  * the return value is added to the model's base height and the tilt becomes its
- * X rotation. Also called by TerrainGrid_Draw to compare the camera-aligned
+ * X rotation. Also called by SurfTerrainGrid_Draw to compare the camera-aligned
  * quad corners against the water surface.
  * //@src/fragments/battle_engine/battle_engine_2F3CB0.c
- * //@src/fragments/battle_engine/battle_engine_347330.c TerrainGrid_UpdateWaves
+ * //@src/fragments/battle_engine/battle_engine_347330.c SurfTerrainGrid_UpdateWaves
  */
 
 extern const f64 D_DBL_82197A28;

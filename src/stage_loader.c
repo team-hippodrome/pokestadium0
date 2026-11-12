@@ -12,12 +12,7 @@
 #include "util.h"
 #include "profiler.h"
 #include "stdarg.h"
-typedef struct unk_D_80068CA0 {
-    /* 0x00 */ struct unk_D_80068CA0* next;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ s8 unk_08[4];
-} unk_D_80068CA0;
+#include "stage_loader_types.h"
 extern s32 gShowCPUProfiler;
 extern s32 gShowMEMProfiler;
 extern s32 D_80068C98_Pad[2];
@@ -440,7 +435,7 @@ void StageContext_SetClearColor(u16 color) {
     }
 }
 
-void func_800069CC(void) {
+void BgStage_DrawFrame(void) {
     if (stage != NULL) {
         GfxImage_SetRenderTarget(&gDisplayListHead, stage->renderTargets[stage->renderTargetIndex]);
         gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, stage->clearLeft, stage->clearTop, stage->clearRight + 1, stage->clearBottom + 1);

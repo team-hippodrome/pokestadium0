@@ -5,7 +5,7 @@
 
 s32 func_80059790(OSMesgQueue* queue, s32 channel, u16 address, u8* buffer, s32 arg4);
 
-s32 func_8005AB30(OSPfs* pfs, u8 bank) {
+s32 __osPfsSelectBank(OSPfs* pfs, u8 bank) {
     u8 buffer[BLOCKSIZE];
     s32 i;
     s32 ret;
@@ -16,7 +16,7 @@ s32 func_8005AB30(OSPfs* pfs, u8 bank) {
 
     ret = func_80059790(pfs->queue, pfs->channel, 0x400, buffer, 0);
     if (ret == 0) {
-        M2C_FIELD(pfs, u8*, 0x65) = bank;
+        pfs->activebank = bank;
     }
     return ret;
 }

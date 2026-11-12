@@ -87,7 +87,7 @@ void Gfx_DrawNumberDigits(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 s32 Ui_GetSelectionDirection(unk_func_8002EBD8_arg0* arg0);
 s32 GbSave_GameToCategoryIndex(s32 arg0);
 Color_RGBA8 Color_InterpolateFromGray(Color_RGBA8 arg0, f32 arg1);
-s32 BattleMon_CountMoves(BattleMon* arg0);
+s32 BattleMon_CountMoves(u8* arg0);
 ret_func_8002ED08* Move_GetDisplayInfo(s32 arg0);
 MoveData* Move_GetData(s32 arg0);
 s32 Species_GetMoveSlot(BattleMon* arg0, s32 arg1);

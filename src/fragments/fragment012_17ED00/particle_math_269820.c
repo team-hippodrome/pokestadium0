@@ -22,18 +22,7 @@ extern ParticleDescriptor gDefaultParticleDescriptor;
 #include "controller.h"
 #include "memory.h"
 #include "stage_loader.h"
-typedef struct unk_D_86B10BD0 {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ s32 unk_08;
-} unk_D_86B10BD0;
-typedef struct unk_D_86B10BE0 {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ s32 unk_08;
-    /* 0x0C */ s32 unk_0C;
-    /* 0x10 */ s32 unk_10;
-} unk_D_86B10BE0;
+#include "fragments/fragment012_17ED00/battle_engine_361050_2_types.h"
 extern unk_D_86B10BE0 D_8219A82C;
 
 #include "m2c_macros.h"
@@ -48,36 +37,56 @@ s16 Particle_FieldAA_GetS16_0C068(Particle* arg0);
 s16 Particle_FieldA6_GetS16_0BCBC(Particle* arg0);
 void FirstClearBonus_HideDialogBox(void);
 
-void Particle_SetPrimAlpha(Particle* arg0, u8 arg1);
+void Particle_SetPrimAlpha(s8 *arg0, char arg1);
 void Particle_FieldA6_SetS16_0BCA8(Particle* arg0, s16 arg1);
 void Particle_FieldA8_SetS16_0BE14(Particle* arg0, s16 arg1);
 void Particle_FieldAC_SetS16_0BED8(Particle* arg0, s16 arg1);
 void Particle_FieldCF_SetU8_0BEEC(Particle* arg0, u8 arg1);
 
+/**
+ * Store the parameter only when it differs from the field-specific sentinel.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_SetFieldOffsetACIfNotSentinel(Particle* arg0, s16 arg1) {
     if ((u32)arg0 != -1) {
         Particle_FieldAC_SetS16_0BED8(arg0, arg1);
     }
 }
 
+/**
+ * Store the parameter only when it differs from the field-specific sentinel.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_SetFieldOffsetCFIfNotSentinel(Particle* arg0, u8 arg1) {
     if ((u32)arg0 != -1) {
         Particle_FieldCF_SetU8_0BEEC(arg0, arg1);
     }
 }
 
+/**
+ * Store the parameter only when it differs from the field-specific sentinel.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_SetFieldOffsetA6IfNotSentinel(Particle* arg0, s16 arg1) {
     if ((u32)arg0 != -1) {
         Particle_FieldA6_SetS16_0BCA8(arg0, arg1);
     }
 }
 
+/**
+ * Store the parameter only when it differs from the field-specific sentinel.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_SetFieldOffsetA8IfNotSentinel(Particle* arg0, s16 arg1) {
     if ((u32)arg0 != -1) {
         Particle_FieldA8_SetS16_0BE14(arg0, arg1);
     }
 }
 
+/**
+ * Store the parameter only when it differs from the field-specific sentinel.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_SetFieldOffsetCEIfNotSentinel(Particle* arg0, u8 arg1) {
     if ((u32)arg0 != -1) {
         arg0->unk_CE = arg1;
@@ -86,7 +95,7 @@ void Particle_SetFieldOffsetCEIfNotSentinel(Particle* arg0, u8 arg1) {
 
 void func_8213C3B8(s8 *arg0, unsigned char arg1)
 {
-  int new_var;
+  int new_var; // FAKE: permuter temp
   new_var = arg0 != ((s8 *) (-1));
   if (new_var)
   {
@@ -100,12 +109,20 @@ void func_8213C3D4(s8 *arg0, s16 arg1) {
     }
 }
 
+/**
+ * Store the parameter only when it differs from the field-specific sentinel.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_SetPrimAlphaIfNotSentinel(Particle* arg0, u8 arg1) {
     if ((u32)arg0 != -1) {
         Particle_SetPrimAlpha(arg0, arg1);
     }
 }
 
+/**
+ * Store the parameter only when it differs from the field-specific sentinel.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_SetFieldOffsetAAIfNotSentinel(Particle* arg0, s16 arg1) {
     if ((u32)arg0 != -1) {
         arg0->unk_AE = arg1;
@@ -118,43 +135,74 @@ void func_8213C444(s8 *arg0, s16 arg1) {
     }
 }
 
-u8 func_8213C464(s8 *arg0) {
+/**
+ * Returns the particle's unk_CE.
+ * @unverified Name and comment guessed from the code.
+ */
+u8 Particle_GetUnkCE(s8 *arg0) {
     return M2C_FIELD(arg0, u8 *, 0xCA);
 }
 
-u8 func_8213C46C(s8 *arg0) {
+/**
+ * Returns the particle's unk_CD.
+ * @unverified Name and comment guessed from the code.
+ */
+u8 Particle_GetUnkCD(s8 *arg0) {
     return M2C_FIELD(arg0, u8 *, 0xC9);
 }
 
+/**
+ * Return the particle's unk_AA field.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s16 Particle_FieldAA_GetS16_0C068(Particle* arg0) {
     return arg0->unk_AE;
 }
 
-s16 func_8213C47C(s8 *arg0) {
+/**
+ * Returns the particle's unk_AC.
+ * @unverified Name and comment guessed from the code.
+ */
+s16 Particle_GetUnkAC(s8 *arg0) {
     return M2C_FIELD(arg0, s16 *, 0xA8);
 }
 
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 s16 func_8213C484(s8 *arg0)
 {
-  u8 new_var;
+  u8 new_var; // FAKE: permuter temp
   new_var = *((u8 *) (((s8 *) arg0) + 0xCB));
   return (s16) new_var;
 }
 
+/**
+ * Return the particle's unk_A6 field.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s16 Particle_FieldA6_GetS16_0BCBC(Particle* arg0) {
     return arg0->unk_AA;
 }
 
-s16 func_8213C49C(s8 *arg0) {
+/**
+ * Returns the particle's unk_A6.
+ * @unverified Name and comment guessed from the code.
+ */
+s16 Particle_GetUnkA6(s8 *arg0) {
     return M2C_FIELD(arg0, s16 *, 0xA2);
 }
 
-s16 func_8213C4A4(s8 *arg0) {
+/**
+ * Returns the particle's unk_A8.
+ * @unverified Name and comment guessed from the code.
+ */
+s16 Particle_GetUnkA8(s8 *arg0) {
     return M2C_FIELD(arg0, s16 *, 0xA4);
 }
 
-void func_8213C4AC(s32 arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void BattleAnim_SetEffectStateFlag(s32 arg0) {
     (*(s32 *)&D_8219A82C) = arg0;
 }
 

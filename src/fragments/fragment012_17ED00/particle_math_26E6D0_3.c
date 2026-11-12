@@ -50,19 +50,27 @@ void ParticleGfx_RecolorEnvRandomPalette(Particle* arg0);
 s32 ParticleGfx_ApproachPrimPalette(Particle* arg0, u16 arg1, u8 arg2);
 s32 ParticleGfx_ApproachEnvPalette(Particle* arg0, u16 arg1, u8 arg2);
 s32 ParticleGfx_ApproachPrimEnvPalettePair(Particle* arg0, u16 arg1, u8 arg2);
-void BattleAnim_SetupGlobalTintColorFadeDetach(Particle* arg0);
+void BattleAnim_SetupBackgroundRecolor(Particle* arg0);
 void func_82143C08(void);
-void BattleAnim_SetupOwnerModelTintPaletteCycle(Particle* arg0);
+void BattleAnim_SetupIceBeamBlizzardHitHueChange(Particle* arg0);
 
 void ParticleGfx_RecolorPrim(Particle* arg0, u16 arg1);
 void ParticleGfx_RecolorEnv(Particle* arg0, u16 arg1);
 
+/**
+ * Copy the selected RGB palette entry or pair into the caller's color buffers.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_CopyPaletteRgb(u8* arg0, u16 arg1) {
     arg0[0] = gParticlePalette[arg1][0];
     arg0[1] = gParticlePalette[arg1][1];
     arg0[2] = gParticlePalette[arg1][2];
 }
 
+/**
+ * Copy the selected RGB palette entry or pair into the caller's color buffers.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_CopyPalettePairRgb(u8* arg0, u8* arg1, u16 arg2) {
     u8 sp1C = gParticlePalettePairs[arg2][0];
     u8 sp1E = gParticlePalettePairs[arg2][1];
@@ -83,6 +91,10 @@ void func_82143440(u8* arg0, u16 arg1) {
     arg0[0xBF] = gParticlePalette[arg1][2];
 }
 
+/**
+ * Set the particle's primitive and environment RGB channels from the selected palette pair, leaving alpha unchanged.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_RecolorPrimEnvFromPalettePair(Particle* arg0, u16 arg1) {
     u8 sp1C = gParticlePalettePairs[arg1][0];
     u8 sp1E = gParticlePalettePairs[arg1][1];
@@ -91,22 +103,43 @@ void ParticleGfx_RecolorPrimEnvFromPalettePair(Particle* arg0, u16 arg1) {
     ParticleGfx_RecolorEnv(arg0, sp1E);
 }
 
+/**
+ * Set the particle's primitive RGB channels from the selected palette-set index, leaving alpha unchanged.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_RecolorPrimFromPaletteSetA(Particle* arg0, s16 arg1) {
     ParticleGfx_RecolorPrim(arg0, gParticlePaletteSetA[arg1]);
 }
 
+/**
+ * Set the particle's environment RGB channels from the selected palette-set index, leaving alpha unchanged.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_RecolorEnvFromPaletteSetA(Particle* arg0, s16 arg1) {
     ParticleGfx_RecolorEnv(arg0, gParticlePaletteSetA[arg1]);
 }
 
+/**
+ * Set the particle's primitive RGB channels from the selected palette-set index, leaving alpha unchanged.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_RecolorPrimFromPaletteSetB(Particle* arg0, s16 arg1) {
     ParticleGfx_RecolorPrim(arg0, gParticlePaletteSetB[arg1]);
 }
 
+/**
+ * Set the particle's environment RGB channels from the selected palette-set index, leaving alpha unchanged.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_RecolorEnvFromPaletteSetB(Particle* arg0, s16 arg1) {
     ParticleGfx_RecolorEnv(arg0, gParticlePaletteSetB[arg1]);
 }
 
+/**
+ * Set the particle's primitive and environment RGB channels from the selected palette-set index, leaving alpha
+ * unchanged.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_RecolorPrimEnvFromPaletteSetA(Particle* arg0, s16 arg1) {
     u8 sp1F = gParticlePaletteSetA[arg1];
 
@@ -114,6 +147,11 @@ void ParticleGfx_RecolorPrimEnvFromPaletteSetA(Particle* arg0, s16 arg1) {
     ParticleGfx_RecolorEnv(arg0, sp1F);
 }
 
+/**
+ * Set the particle's primitive and environment RGB channels from the selected palette-set index, leaving alpha
+ * unchanged.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_RecolorPrimEnvFromPaletteSetB(Particle* arg0, s16 arg1) {
     u8 sp1F = gParticlePaletteSetB[arg1];
 
@@ -121,14 +159,27 @@ void ParticleGfx_RecolorPrimEnvFromPaletteSetB(Particle* arg0, s16 arg1) {
     ParticleGfx_RecolorEnv(arg0, sp1F);
 }
 
+/**
+ * Set the particle's primitive RGB channels from a randomly selected palette index, leaving alpha unchanged.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_RecolorPrimRandomPalette(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, gParticleRandomPaletteIndices[(ParticleMath_RandomRange(5) & 0xFF)]);
 }
 
+/**
+ * Set the particle's environment RGB channels from a randomly selected palette index, leaving alpha unchanged.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_RecolorEnvRandomPalette(Particle* arg0) {
     ParticleGfx_RecolorEnv(arg0, gParticleRandomPaletteIndices[ParticleMath_RandomRange(5) & 0xFF]);
 }
 
+/**
+ * Approach each selected RGB channel toward its palette value; return 1 only when all channel helpers report
+ * completion.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 ParticleGfx_ApproachPrimPalette(Particle* arg0, u16 arg1, u8 arg2) {
     s32 sp2C = 0;
     s32 sp28;
@@ -148,6 +199,11 @@ s32 ParticleGfx_ApproachPrimPalette(Particle* arg0, u16 arg1, u8 arg2) {
     return sp2C;
 }
 
+/**
+ * Approach each selected RGB channel toward its palette value; return 1 only when all channel helpers report
+ * completion.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 ParticleGfx_ApproachEnvPalette(Particle* arg0, u16 arg1, u8 arg2) {
     s32 sp2C = 0;
     s32 sp28;
@@ -167,6 +223,11 @@ s32 ParticleGfx_ApproachEnvPalette(Particle* arg0, u16 arg1, u8 arg2) {
     return sp2C;
 }
 
+/**
+ * Approach each selected RGB channel toward its palette value; return 1 only when all channel helpers report
+ * completion.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 ParticleGfx_ApproachPrimEnvPalettePair(Particle* arg0, u16 arg1, u8 arg2) {
     s32 sp44 = 0;
     s32 sp40;
@@ -193,15 +254,29 @@ s32 ParticleGfx_ApproachPrimEnvPalettePair(Particle* arg0, u16 arg1, u8 arg2) {
     return sp44;
 }
 
-void BattleAnim_SetupGlobalTintColorFadeDetach(Particle* arg0) {
+/**
+ * Moves: Absorb (use), Aurora Beam (use/hit), Barrier (use), Bide (use), Blizzard (use/hit), Bubble Beam
+ * (use/hit), Confuse Ray (use/hit), Confusion (use/hit), Conversion (use), Double-Edge (use), Dragon Rage
+ * (use), Dream Eater (use), Earthquake (use), Explosion (use/hit), Fire Blast (use/hit), Fire Spin (use),
+ * Fissure (use), Flamethrower (use), Flash (use/hit), Focus Energy (use), Glare (use), Guillotine (use), Horn
+ * Drill (use), Hydro Pump (use), Hyper Beam (use), Ice Beam (use/hit), Leech Life (use), Leer (use), Light
+ * Screen (use), Lovely Kiss (use), Mega Drain (use), Mimic (use), Night Shade (use), Petal Dance (use),
+ * Psybeam (use/hit), Psychic (use/hit), Psywave (use), Rage (use), Razor Leaf (use/hit), Recover (use),
+ * Reflect (use), Self-Destruct (use/hit), Skull Bash (use), Sky Attack (use/hit), Solar Beam (use/hit), Sonic
+ * Boom (use), Swift (use), Take Down (use), Thunder (use/hit), Thunder Shock (use/hit), Thunder Wave (hit),
+ * Thunderbolt (use/hit), Tri Attack (use)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_SetupBackgroundRecolor(Particle* arg0) {
     BattleAnim_LoadGlobalTintToParticle(arg0);
     Particle_AdvanceLifecycle(arg0);
 }
 
 s32 func_8213C494(s8 *);                          /* extern */
-M2C_UNK func_8213C938(s8 *);                      /* extern */
+void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
-M2C_UNK func_82140410(s8 *);                      /* extern */
+M2C_UNK Particle_StorePrimColorInTemp(s8 *);                      /* extern */
 s32 func_821436A0(s8 *, u8, s32);                 /* extern */
 M2C_UNK func_8214390C(s8 *);                      /* extern */
 
@@ -219,23 +294,33 @@ void func_82143934(s8 *arg0) {
         }
         break;
     case 3:
-        func_8213C938(arg0);
+        Particle_DisableAndDetach(arg0);
         break;
     }
-    func_82140410(arg0);
+    Particle_StorePrimColorInTemp(arg0);
 }
 
-void BattleAnim_SetupOwnerModelTintRampDetach(Particle* arg0) {
+/**
+ * Moves: Acid (hit), Acid Armor (use), Confuse Ray (use/hit), Confusion (hit), Defense Curl (use), Dragon Rage
+ * (hit), Ember (hit), Explosion (use/hit), Fire Punch (hit), Flamethrower (hit), Flash (use/hit), Guillotine
+ * (hit), Harden (use), Horn Drill (hit), Hyper Beam (use/hit), Ice Punch (hit), Lick (hit), Mega Kick (hit),
+ * Mega Punch (hit), Night Shade (hit), Psychic (hit), Self-Destruct (use/hit), Sharpen (use), Skull Bash
+ * (hit), Sky Attack (use), Sludge (hit), Solar Beam (use), Substitute (use), Thunder Punch (hit), Toxic (hit),
+ * Transform (use)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_SetupTargetHueChange(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
     Particle_FieldAE_SetS16_0BF4C(arg0, arg0->unk_A6);
     Particle_AdvanceLifecycle(arg0);
 }
 
 M2C_UNK func_80019B28(s32, u8, u8, u8, s32);        /* extern */
-M2C_UNK func_8213C938(s8 *);                      /* extern */
-s32 func_8213C9B0(s8 *);                          /* extern */
+void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
+s32 Particle_IsRunning(s8 *arg0);                          /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
-s32 func_8214083C(s8 *, u8, s16);                 /* extern */
+s32 Particle_ApproachUnkAE(s8 *, u8, s16);                 /* extern */
 M2C_UNK func_821439D0(s8 *);                      /* extern */
 
 void func_82143A18(s8 *arg0) {
@@ -247,29 +332,43 @@ void func_82143A18(s8 *arg0) {
         func_821439D0(arg0);
         break;
     case 2:
-        if (func_8214083C(arg0, M2C_FIELD(arg0, u8 *, 0xC9), M2C_FIELD(arg0, s16 *, 0xA6)) != 0) {
+        if (Particle_ApproachUnkAE(arg0, M2C_FIELD(arg0, u8 *, 0xC9), M2C_FIELD(arg0, s16 *, 0xA6)) != 0) {
             func_8213C9D0(arg0);
         }
         break;
     case 3:
-        func_8213C938(arg0);
+        Particle_DisableAndDetach(arg0);
         break;
     }
-    if (func_8213C9B0(arg0) != 0) {
+    if (Particle_IsRunning(arg0) != 0) {
         func_80019B28(M2C_FIELD(arg0, s32 *, 0x10), M2C_FIELD(arg0, u8 *, 0xBA), M2C_FIELD(arg0, u8 *, 0xBB), M2C_FIELD(arg0, u8 *, 0xBC), (s32) M2C_FIELD(arg0, s16 *, 0xAA));
     }
 }
 
-void BattleAnim_SetupOwnerModelTintPulseDetach(Particle* arg0) {
+/**
+ * Moves: Barrier (use), Bide (use), Confusion (use), Focus Energy (use), Growth (use), Light Screen (use),
+ * Lovely Kiss (hit), Poison Gas (hit), Poison Powder (hit), Psychic (use), Psywave (hit), Rage (use), Reflect
+ * (use), Sleep Powder (hit), Smog (hit), Soft-Boiled (use), Spore (hit), Struggle (use), Stun Spore (hit),
+ * Thrash (use)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_SetupUserHueChange(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
     Particle_FieldAE_SetS16_0BF4C(arg0, arg0->unk_CE);
     Particle_AdvanceLifecycle(arg0);
 }
 
-void BattleAnim_CallbackOwnerModelTintPulseDetach(Particle* arg0) {
-    switch (arg0->unk_B2) {
+/**
+ * Changes User's Hue. Examples:
+ * - Thrash -> red
+ * - Recover -> rainbow
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_RunUserHueChange(Particle* arg0) {
+    switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_SetupOwnerModelTintPulseDetach(arg0);
+            BattleAnim_SetupUserHueChange(arg0);
             break;
 
         case 2:
@@ -294,7 +393,7 @@ void BattleAnim_CallbackOwnerModelTintPulseDetach(Particle* arg0) {
     }
 
     if (Particle_IsRunning(arg0) != 0) {
-        Model_SetMaterialColor(&arg0->unk_10->displayObject, arg0->prim_r, arg0->prim_g, arg0->prim_b, arg0->unk_AE);
+        Model_SetMaterialColor(&arg0->pokemon->displayObject, arg0->prim_r, arg0->prim_g, arg0->prim_b, arg0->unk_AE);
     }
 }
 
@@ -302,8 +401,8 @@ void func_82143C08(void) {
 }
 
 M2C_UNK func_80019B28(s32, u8, u8, u8, s32);        /* extern */
-M2C_UNK func_8213C938(s8 *);                      /* extern */
-s32 func_8213C9B0(s8 *);                          /* extern */
+void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
+s32 Particle_IsRunning(s8 *arg0);                          /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
 M2C_UNK func_821406B4(s8 *);                      /* extern */
 M2C_UNK func_82143AD0(s8 *);                      /* extern */
@@ -320,15 +419,15 @@ void func_82143C10(s8 *arg0) {
         func_821406B4(arg0);
         break;
     case 3:
-        if (func_8214083C(arg0, 0, M2C_FIELD(arg0, s16 *, 0xA6)) != 0) {
+        if (Particle_ApproachUnkAE(arg0, 0, M2C_FIELD(arg0, s16 *, 0xA6)) != 0) {
             func_8213C9D0(arg0);
         }
         break;
     case 4:
-        func_8213C938(arg0);
+        Particle_DisableAndDetach(arg0);
         break;
     }
-    if (func_8213C9B0(arg0) != 0) {
+    if (Particle_IsRunning(arg0) != 0) {
         func_80019B28(M2C_FIELD(arg0, s32 *, 0x10), M2C_FIELD(arg0, u8 *, 0xBA), M2C_FIELD(arg0, u8 *, 0xBB), M2C_FIELD(arg0, u8 *, 0xBC), (s32) M2C_FIELD(arg0, s16 *, 0xAA));
     }
 }
@@ -340,10 +439,10 @@ void func_82143CE0(Particle* arg0) {
 }
 
 M2C_UNK func_80019B28(s32, u8, u8, u8, s32);        /* extern */
-M2C_UNK func_8213C930(s8 *);                      /* extern */
-s32 func_8213C9B0(s8 *);                          /* extern */
+void Particle_MarkInactive(s8 *arg0);                      /* extern */
+s32 Particle_IsRunning(s8 *arg0);                          /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
-M2C_UNK func_82140828(s8 *, M2C_UNK);             /* extern */
+M2C_UNK Particle_SetUnkAE(s8 *, M2C_UNK);             /* extern */
 
 void func_82143D28(s8 *arg0) {
     s16 temp_v0;
@@ -355,15 +454,15 @@ void func_82143D28(s8 *arg0) {
         break;
     case 2:
         if (func_821436A0(arg0, M2C_FIELD(arg0, u8 *, 0xC9), M2C_FIELD(arg0, u8 *, 0xA7)) != 0) {
-            func_82140828(arg0, 0);
+            Particle_SetUnkAE(arg0, 0);
             func_8213C9D0(arg0);
         }
         break;
     case 3:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
-    if (func_8213C9B0(arg0) != 0) {
+    if (Particle_IsRunning(arg0) != 0) {
         func_80019B28(M2C_FIELD(arg0, s32 *, 0x10), M2C_FIELD(arg0, u8 *, 0xBA), M2C_FIELD(arg0, u8 *, 0xBB), M2C_FIELD(arg0, u8 *, 0xBC), (s32) M2C_FIELD(arg0, s16 *, 0xAA));
     }
 }
@@ -375,8 +474,8 @@ void func_82143DE8(Particle* arg0) {
 }
 
 M2C_UNK func_80019B28(s32, u8, u8, u8, s32);        /* extern */
-M2C_UNK func_8213C930(s8 *);                      /* extern */
-s32 func_8213C9B0(s8 *);                          /* extern */
+void Particle_MarkInactive(s8 *arg0);                      /* extern */
+s32 Particle_IsRunning(s8 *arg0);                          /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
 
 void func_82143E30(s8 *arg0) {
@@ -393,24 +492,32 @@ void func_82143E30(s8 *arg0) {
         }
         break;
     case 3:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
-    if (func_8213C9B0(arg0) != 0) {
+    if (Particle_IsRunning(arg0) != 0) {
         func_80019B28(M2C_FIELD(arg0, s32 *, 0x10), M2C_FIELD(arg0, u8 *, 0xBA), M2C_FIELD(arg0, u8 *, 0xBB), M2C_FIELD(arg0, u8 *, 0xBC), (s32) M2C_FIELD(arg0, s16 *, 0xAA));
     }
 }
 
-void BattleAnim_SetupOwnerModelTintPaletteCycle(Particle* arg0) {
+/**
+ * Sets the hue coloration change of a pokemon hit by ice beam or blizzard
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_SetupIceBeamBlizzardHitHueChange(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
     Particle_FieldAE_SetS16_0BF4C(arg0, 0);
     Particle_AdvanceLifecycle(arg0);
 }
 
-void BattleAnim_CallbackOwnerModelTintPaletteCycle(Particle* arg0) {
-    switch (arg0->unk_B2) {
+/**
+ * Runs the hue coloration of a pokemon hit by ice beam or blizzard
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_RunIceBeamBlizzardHitHueChange(Particle* arg0) {
+    switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_SetupOwnerModelTintPaletteCycle(arg0);
+            BattleAnim_SetupIceBeamBlizzardHitHueChange(arg0);
             break;
 
         case 2:
@@ -433,7 +540,7 @@ void BattleAnim_CallbackOwnerModelTintPaletteCycle(Particle* arg0) {
     }
 
     if (Particle_IsRunning(arg0) != 0) {
-        Model_SetMaterialColor(&arg0->unk_10->displayObject, arg0->prim_r, arg0->prim_g, arg0->prim_b, arg0->unk_AE);
+        Model_SetMaterialColor(&arg0->pokemon->displayObject, arg0->prim_r, arg0->prim_g, arg0->prim_b, arg0->unk_AE);
     }
 }
 
@@ -444,8 +551,8 @@ void func_82144010(Particle* arg0) {
 }
 
 M2C_UNK func_80019B28(s32, u8, u8, u8, s32);        /* extern */
-M2C_UNK func_8213C930(s8 *);                      /* extern */
-s32 func_8213C9B0(s8 *);                          /* extern */
+void Particle_MarkInactive(s8 *arg0);                      /* extern */
+s32 Particle_IsRunning(s8 *arg0);                          /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
 M2C_UNK func_82140874(s8 *, M2C_UNK, u8);         /* extern */
 
@@ -466,10 +573,10 @@ void func_82144058(s8 *arg0) {
         func_82140874(arg0, 0, M2C_FIELD(arg0, u8 *, 0xCA));
         break;
     case 4:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
-    if (func_8213C9B0(arg0) != 0) {
+    if (Particle_IsRunning(arg0) != 0) {
         func_80019B28(M2C_FIELD(arg0, s32 *, 0x10), M2C_FIELD(arg0, u8 *, 0xBA), M2C_FIELD(arg0, u8 *, 0xBB), M2C_FIELD(arg0, u8 *, 0xBC), (s32) M2C_FIELD(arg0, s16 *, 0xAA));
     }
 }

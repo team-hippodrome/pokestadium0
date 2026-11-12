@@ -115,10 +115,10 @@ void n_alFxNew(ALFx** fx_ar, ALSynConfig* c, ALHeap* hp) {
     }
 }
 
-void alN_PVoiceNew(N_PVoice* mv, ALDMANew dmaNew, ALHeap* hp) {
+void alN_PVoiceNew(N_PVoice* mv, ALDMANew dma_new, ALHeap* hp) {
     mv->dc_state = alHeapAlloc(hp, 1, sizeof(ADPCM_STATE));
     mv->dc_lstate = alHeapAlloc(hp, 1, sizeof(ADPCM_STATE));
-    mv->dc_dma = dmaNew(&mv->dc_dmaState);
+    mv->dc_dma = dma_new(&mv->dc_dmaState);
     mv->dc_lastsam = 0;
     mv->dc_first = 1;
     mv->dc_memin = 0;

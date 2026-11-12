@@ -127,16 +127,16 @@ void Jpeg_InitializeDspTask(UnkStruct80001380* arg0, unk_func_80003680_sp90* arg
     osCreateMesgQueue(&arg0->queue, &arg0->mesg, 1);
 }
 
-void func_800033B8(s8 *arg0, s32 arg1, s8 *arg2)
+void Jpeg_BuildDspInput(s8 *arg0, s32 arg1, s8 *arg2)
 {
-  *((s32 *) (((s8 *) arg0) + 0)) = (s32) (*((s32 *) (((s8 *) arg2) + 0x14)));
-  *((u8 *) (((s8 *) arg0) + 4)) = (u8) (*((u8 *) (((s8 *) arg2) + 0)));
+  *((s32 *) (((s8 *) arg0) + 0)) = (s32) (*((s32 *) (((s8 *) arg2) + 0x14))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+  *((u8 *) (((s8 *) arg0) + 4)) = (u8) (*((u8 *) (((s8 *) arg2) + 0))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
   *((s8 *) (((s8 *) arg0) + 5)) = 0;
   *((s32 *) (((s8 *) arg0) + 8)) = arg1;
   *((s32 *) (((s8 *) arg0) + 0xC)) = (s32) (arg1 + 0xA8);
   *((s32 *) (((s8 *) arg0) + 0x10)) = (s32) (arg1 + 0x54);
   *((s32 *) (((s8 *) arg0) + 0x14)) = (s32) (arg1 + 0xFC);
-  *((u8 *) (((s8 *) arg0) + 0x18)) = (u8) (*((u8 *) (((s8 *) arg2) + 1)));
+  *((u8 *) (((s8 *) arg0) + 0x18)) = (u8) (*((u8 *) (((s8 *) arg2) + 1))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
 }
 
 void Jpeg_BuildDspOutput(unk_func_80003680_sp90* arg0, u8(arg1)[2][0x80], unk_func_80003680_sp300* arg2) {
@@ -148,7 +148,12 @@ void Jpeg_BuildDspOutput(unk_func_80003680_sp90* arg0, u8(arg1)[2][0x80], unk_fu
     arg0->unk_14 = (u32)&arg1[1] & 0x1FFFFFFF;
 }
 
-void func_8000342C(void) {
+/**
+ * Spins (with a capped counter) until func_80005014 returns 0 and at least one
+ * controller is connected.
+ * @unverified Name and comment guessed from the code.
+ */
+void Jpeg_WaitForControllerReady(void) {
     s32 timeout = 0;
 
     while ((func_80005014() != 0) || (Cont_GetControllerBits() == 0)) {
@@ -187,7 +192,7 @@ s32 Jpeg_DecodeImage(u32 addr, s32 arg1, u8* arg2) {
     Jpeg_BuildDspInput(&sp74, &spB0, &sp300);
     Jpeg_BuildDspOutput(&sp90, &sp200, &sp300);
     Jpeg_InitializeDspTask(&sp318, &sp90);
-    func_8000342C();
+    Jpeg_WaitForControllerReady();
 
     for (i = 0; i < sp300.height; i += 16) {
         for (j = 0; j < sp300.width; j += 16) {

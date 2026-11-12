@@ -111,10 +111,10 @@ f32 BattleAnim_GetOwnerModelScale(ActivePokemon* arg0) {
     return BattleAnim_GetSpeciesBaseScale(arg0);
 }
 
-M2C_UNK func_82107BC4();                            /* extern */
+M2C_UNK ActivePokemon_GetSizeRatio();                            /* extern */
 
 void func_8213C75C(void) {
-    func_82107BC4();
+    ActivePokemon_GetSizeRatio();
 }
 
 f32 BattleAnim_GetSecondaryOwnerModelScale(void) {
@@ -135,7 +135,7 @@ void BattleAnim_GetTertiaryOwnerSpeciesBaseScale(void) {
 
 extern s32 D_8219A878;
 
-s32 func_8213C80C(void) {
+s32 BattleAnim_GetCameraContext(void) {
     return D_8219A878;
 }
 
@@ -143,10 +143,10 @@ Particle* BattleAnim_SpawnSecondaryOwnerParticle(Vec3f arg0, u8 arg1) {
     Particle* sp1C = Particle_New();
 
     if ((u32)sp1C != -1) {
-        ParticleMath_CopyVec3f(&sp1C->unk_68, &arg0);
-        BattleAnim_ConfigureSecondaryOwnerParticleVariant(sp1C, arg1);
-        sp1C->unk_10 = gBattleAnimSecondaryOwner;
-        sp1C->unk_14 = NULL;
+        ParticleMath_CopyVec3f(&sp1C->origin, &arg0);
+        BattleAnim_InitStingerMoveParticle(sp1C, arg1);
+        sp1C->pokemon = gBattleAnimSecondaryOwner;
+        sp1C->displayObject = NULL;
         sp1C->unk_CD = 0xFF;
         sp1C->unk_CC = 0x15;
         sp1C->unk_CA = 0;
@@ -156,9 +156,9 @@ Particle* BattleAnim_SpawnSecondaryOwnerParticle(Vec3f arg0, u8 arg1) {
 
 void BattleAnim_SetParticlePosition(Particle* arg0, Vec3f arg1) {
     if ((u32)arg0 != -1) {
-        arg0->unk_68.x = arg1.x;
-        arg0->unk_68.y = arg1.y;
-        arg0->unk_68.z = arg1.z;
+        arg0->origin.x = arg1.x;
+        arg0->origin.y = arg1.y;
+        arg0->origin.z = arg1.z;
     }
 }
 
@@ -166,23 +166,27 @@ void BattleAnim_MarkParticleInactive(Particle* arg0) {
     Particle_MarkInactive(arg0);
 }
 
+/**
+ * Start lifecycle 1 with a no-op descriptor, null associations, phase zero, and rendering enabled.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_InitLifecycle(Particle* arg0) {
-    arg0->unk_B2 = 1;
-    arg0->unk_0C = &gDefaultParticleDescriptor;
-    arg0->unk_08 = NULL;
-    arg0->unk_10 = 0;
-    arg0->unk_14 = 0;
-    arg0->unk_B8 = 0;
+    arg0->lifecycle = 1;
+    arg0->descriptor = &gDefaultParticleDescriptor;
+    arg0->updateCallback = NULL;
+    arg0->pokemon = 0;
+    arg0->displayObject = 0;
+    arg0->phase = 0;
     Particle_SetFlags(arg0, 4);
 }
 
-void func_8213C930(s8 *arg0) {
+void Particle_MarkInactive(s8 *arg0) {
     M2C_FIELD(arg0, s16 *, 0xAE) = 0;
 }
 
 M2C_UNK func_8213D260();                            /* extern */
 
-void func_8213C938(s8 *arg0) {
+void Particle_DisableAndDetach(s8 *arg0) {
     M2C_FIELD(arg0, s16 *, 0xAE) = 0;
     M2C_FIELD(arg0, s32 *, 8) = 0;
     M2C_FIELD(arg0, s32 *, 0xC) = 0;
@@ -191,12 +195,12 @@ void func_8213C938(s8 *arg0) {
 
 void BattleAnim_DestroyParticle(Particle* arg0) {
     BattleAnim_ReleaseParticleModel(arg0);
-    arg0->unk_18 = 0;
+    arg0->flags = 0;
     Particle_DisableAndDetach(arg0);
     Particle_Free(arg0);
 }
 
-s32 func_8213C994(s8 *arg0) {
+s32 Particle_IsInactive(s8 *arg0) {
     s32 var_v1;
 
     var_v1 = 0;
@@ -206,7 +210,7 @@ s32 func_8213C994(s8 *arg0) {
     return var_v1;
 }
 
-s32 func_8213C9B0(s8 *arg0) {
+s32 Particle_IsRunning(s8 *arg0) {
     s32 var_v1;
 
     var_v1 = 0;
@@ -216,22 +220,30 @@ s32 func_8213C9B0(s8 *arg0) {
     return var_v1;
 }
 
+/**
+ * Clear the frame-animation initialization bit and advance the lifecycle.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_AdvanceLifecycle(Particle* arg0) {
     Particle_ClearFlags(arg0, 1);
-    arg0->unk_B2++;
+    arg0->lifecycle++;
 }
 
+/**
+ * Initialize once under flag 0x80, decrement immediately, and finish at zero while clearing that flag.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 Particle_TickDelayTimer(Particle* arg0, s16 arg1) {
     s32 sp1C = 0;
 
     if (Particle_LacksFlags(arg0, 0x80) != 0) {
         Particle_SetFlags(arg0, 0x80);
-        arg0->unk_BC = arg1;
+        arg0->delayTimer = arg1;
     }
 
-    arg0->unk_BC--;
-    if (arg0->unk_BC <= 0) {
-        arg0->unk_BC = 0;
+    arg0->delayTimer--;
+    if (arg0->delayTimer <= 0) {
+        arg0->delayTimer = 0;
         Particle_ClearFlags(arg0, 0x80);
         sp1C = 1;
     }

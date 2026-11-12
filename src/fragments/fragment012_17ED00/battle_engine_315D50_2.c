@@ -13,12 +13,7 @@
 #include "cry.h"
 #include "matrix.h"
 #include "math_util.h"
-typedef struct unk_D_84392040 {
-    /* 0x00 */ char unk00[0xC];
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ f32 unk_10;
-    /* 0x14 */ char unk14[0x4];
-} unk_D_84392040;
+#include "fragments/fragment012_17ED00/battle_engine_315D50_types.h"
 #include "prevent_bss_reordering.h"
 extern s32 gBattleAnimFrameCounter;
 extern s32 gBattleAnimSpawnDelay;
@@ -425,7 +420,7 @@ void BattleAnim_UpdateEffectCallbacks(UNUSED CameraNode* arg0);
 void BattleAnim_DrawEffectCallbacks(UNUSED CameraNode* arg0);
 
 void BattleAnim_SetQueuedEffectList(u8 effect_list_index);
-void BattleAnim_QueueMoveEffect(s32 move_id, ActivePokemon* user, ActivePokemon* user_fallback, s16 default_anchor, s16 alternate_anchor);
+void BattleAnim_QueueMoveEffect(s32 arg0, s32 arg1, s32 arg2, s16 arg3, s16 arg4);
 
 u8 BattleAnim_GetCurrentEffectList(void) {
     return sBattleAnimCurrentEffectList;
@@ -453,7 +448,7 @@ extern s32 D_8219A810;
 extern s32 D_8219A814;
 extern s32 D_8219A818;
 
-void func_82136478(s32 arg0, s32 arg1, s32 arg2, s16 arg3, s16 arg4) {
+void BattleAnim_QueueMoveEffect(s32 arg0, s32 arg1, s32 arg2, s16 arg3, s16 arg4) {
     D_8219A7D8 = 1;
     D_8219A7D4 = arg0;
     D_8219A7CC = 0;
@@ -511,7 +506,10 @@ extern s32 D_8219A7FC;
 extern s32 D_8219A800;
 extern s32 D_8219A804;
 
-void func_8213668C(s32 arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void BattleAnim_QueueEffectList9(s32 arg0) {
     D_8219A7FC = 1;
     D_8219A804 = 9;
     D_8219A800 = arg0;
@@ -522,7 +520,7 @@ extern s32 D_8219A7E8;
 extern s16 D_8219A80C;
 extern s32 D_8219A810;
 
-void func_821366B0(u8 arg0, s32 arg1) {
+void BattleAnim_QueueEffectList(u8 arg0, s32 arg1) {
     D_8219A7E8 = 1;
     func_8213644C(arg0);
     D_8219A810 = arg1;

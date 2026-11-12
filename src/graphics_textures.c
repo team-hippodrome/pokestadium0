@@ -43,7 +43,10 @@ void Gfx_SetViewportDimensions(Vp* viewport, s16 width, s16 height) {
 
 s32 func_80006B50(s32*, s32*, s32*, s32*);
 
-void func_8000A610(s32 x1, s32 y1, s32 x2, s32 y2, s32 stepX, s32 stepY, s32 mode) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Gfx_DrawTexturedRect(s32 x1, s32 y1, s32 x2, s32 y2, s32 stepX, s32 stepY, s32 mode) {
     s32 s = x1;
     s32 t = y1;
 

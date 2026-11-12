@@ -142,7 +142,7 @@ void DoubleTextureTrail_Spawn(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, 
 void DoubleTextureTrail_RotateVertexOffset(f32 arg0, Vec3f* arg1, f32 arg2) {
     UNUSED MtxF sp70;
     MtxF sp30;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
 
     guRotateF(sp30.mf, (360.0f * arg0) / 6.2831855f, 1.0f, 0.0f, 0.0f);
     guMtxXFMF(sp30.mf, 0.0f, 0.0f, arg2, &arg1->x, &arg1->y, &arg1->z);
@@ -150,7 +150,7 @@ void DoubleTextureTrail_RotateVertexOffset(f32 arg0, Vec3f* arg1, f32 arg2) {
 
 void DoubleTextureTrail_Update(DoubleTextureTrail* arg0) {
     unk_D_843C2C00_0B0* var_v0;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s32 i;
     Vec3f sp58;
     Vec3f sp4C;
@@ -229,7 +229,10 @@ s32 DoubleTextureTrail_UpdateAll(void) {
     return 0;
 }
 
-Gfx* func_82180AF4(Gfx* arg0, DoubleTextureTrail* arg1, s16 arg2, s16 arg3) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+Gfx* WaterParticle_DrawPass(Gfx* arg0, DoubleTextureTrail* arg1, s16 arg2, s16 arg3) {
     s32 i;
     s32 j;
     Vtx* sp44;
@@ -305,7 +308,7 @@ Gfx* DoubleTextureTrail_DrawAll(Gfx* arg0) {
     Vec3f spE8;
     Vec3f spDC;
     CameraNode* spD8;
-    UNUSED s32 pad[3];
+    UNUSED s32 pad[3]; // FAKE: stack padding
     Vtx* var_s0;
 
     spD8 = BattleAnim_GetCameraContext();

@@ -36,12 +36,17 @@ Strip400Node sTrailPoints[400];
 extern s32 pad_D_84398F48[2];
 extern s32 pad_D_84389178[2];
 
-void Radial20_Init(f32 arg0, f32 arg1, f32 arg2, f32 arg3, u8 arg4, u8 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9);
+void LassoHit_Init(f32 arg0, f32 arg1, f32 arg2, f32 arg3, u8 arg4, u8 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9);
 f32 Strip400_GetTailFadeRatio(void);
 void Radial20_RotateVertexOffset(f32 arg0, UNUSED Vec3f* arg1, Vec3f* arg2, f32 arg3, UNUSED f32 arg4, UNUSED f32 arg5,
                    UNUSED f32 arg6);
 
-void Radial20_Init(f32 arg0, f32 arg1, f32 arg2, f32 arg3, u8 arg4, u8 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9) {
+/**
+ * Moves: Bind (hit), Constrict (hit), Disable (hit), String Shot (hit), Wrap (hit)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1.
+ */
+void LassoHit_Init(f32 arg0, f32 arg1, f32 arg2, f32 arg3, u8 arg4, u8 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9) {
     Strip400State* ptr1 = &sTrailState;
     Strip400Node* ptr2;
     s32 i;
@@ -93,7 +98,12 @@ f32 Strip400_GetTailFadeRatio(void) {
     return tmp;
 }
 
-s32 func_821742F0(void) {
+/**
+ * Moves: Bind (hit), Constrict (hit), Disable (hit), String Shot (hit), Wrap (hit)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+s32 LassoHit_Update(void) {
     s32 i;
     f32 spB8;
     f32 temp_fs0_2;
@@ -194,7 +204,10 @@ s32 func_821742F0(void) {
 }
 
 extern Gfx D_82192AB0[];
-Gfx* func_821748CC(Gfx* arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+Gfx* Strip400_Draw(Gfx* arg0) {
     Vtx* vtx;
     s32 i;
     Strip400Node* var_a0;
@@ -288,7 +301,10 @@ void Radial20_ResetPool(void) {
 
 extern Radial20 D_84398F50[10];
 extern Radial20 D_821A3490[10];
-void func_82174C30(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s16 arg6, u8 arg7, u8 arg8, u8 arg9,
+/**
+ * @unverified Name from Stadium 1, matched by code similarity.
+ */
+void TriAttackRadial_EmitVariantA(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s16 arg6, u8 arg7, u8 arg8, u8 arg9,
                    u8 argA, f32 argB, f32 argC, f32 argD, s16 argE) {
     Radial20* var_v0;
     Radial20Node* var_a1_2;
@@ -387,7 +403,10 @@ void Radial20_VariantB(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg
 }
 
 extern Radial20 D_821A3490[10];
-void func_82175068(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s16 arg6, u8 arg7, u8 arg8, u8 arg9,
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Radial20_VariantC(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s16 arg6, u8 arg7, u8 arg8, u8 arg9,
                    u8 argA, f32 argB, f32 argC, f32 argD, s16 argE) {
     Radial20* var_v0;
     Radial20Node* var_s0;
@@ -596,9 +615,12 @@ void Radial20_RotateVertexOffset(f32 arg0, UNUSED Vec3f* arg1, Vec3f* arg2, f32 
     guMtxXFMF(sp30.mf, 0.0f, 0.0f, arg3, &arg2->x, &arg2->y, &arg2->z);
 }
 
-void func_82175C74(Radial20* arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Radial20_UpdateNode(Radial20* arg0) {
     Radial20Node* var_v0;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s32 i;
     Vec3f sp28;
 
@@ -775,7 +797,10 @@ extern u8 D_82192B50[];
 extern u8 D_82192B54[];
 extern u8 D_82192B58[];
 extern f32 D_82192B5C[];
-Gfx* func_821765B4(Gfx* arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+Gfx* Radial20_Draw(Gfx* arg0) {
     s32 i;
     s32 x;
     s32 j;

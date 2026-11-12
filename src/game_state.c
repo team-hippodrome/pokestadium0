@@ -13,7 +13,6 @@
 #include "DDC0.h"
 #include "session.h"
 #include "save_data.h"
-#include "minigame_dispatch.h"
 #include "gb_save.h"
 #include "gb_tower_audio.h"
 #include "leo.h"
@@ -129,7 +128,11 @@ typedef struct { s32 w[0x14]; } Unk50Bytes;
 extern u8 D_800AAF50[];
 extern M2C_UNK D_8007B7B8;
 
-M2C_UNK func_80025640(M2C_UNK arg0, M2C_UNK *arg1, M2C_UNK *arg2, s32 arg3) {
+/**
+ * Sets up trainer slot `arg1` as a human player on controller port `arg0` with roster info `arg2`.
+ * @unverified Name and comment guessed from the code.
+ */
+M2C_UNK Session_InitHumanTrainer(M2C_UNK arg0, M2C_UNK *arg1, M2C_UNK *arg2, s32 arg3) {
 
     M2C_FIELD(arg1, s8 *, 0) = 1;
     M2C_FIELD(arg1, s8 *, 1) = arg0;
@@ -159,7 +162,7 @@ void func_8002572C(s8 *arg0, s32 arg1) {
     M2C_FIELD(arg0, s32 *, 0x20) = 0;
 }
 
-M2C_UNK func_80025640(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
+M2C_UNK Session_InitHumanTrainer(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
 extern M2C_UNK D_800AE8F4;
 extern M2C_UNK D_800AEAF8;
 typedef struct { s16 unk_00; u8 unk_02; u8 unk_03; } Unk800AF104;
@@ -168,28 +171,36 @@ extern M2C_UNK D_800AF30C;
 extern M2C_UNK D_800AF924;
 extern M2C_UNK D_800AF94C;
 
-M2C_UNK func_80025758(M2C_UNK arg0, M2C_UNK arg1, M2C_UNK arg2) {
-    M2C_FIELD(&D_800AE8F0, s8 *, 0) = arg0;
-    M2C_FIELD(&D_800AE8F0, s8 *, 1) = 1;
-    M2C_FIELD(&D_800AE8F0, s8 *, 3) = 1;
-    func_80025640(0, &D_800AE8F4, (M2C_UNK *)&D_800AF104, arg1);
-    func_80025640(1, &D_800AEAF8, &D_800AF30C, arg2);
+/**
+ * Sets the session mode to `arg0` and sets up both trainer slots and battle sides.
+ * @unverified Name and comment guessed from the code.
+ */
+M2C_UNK Session_InitTwoTrainers(M2C_UNK arg0, M2C_UNK arg1, M2C_UNK arg2) {
+    D_800AE8F0.unk_0000 = arg0;
+    D_800AE8F0.unk_0001 = 1;
+    D_800AE8F0.unk_0003 = 1;
+    Session_InitHumanTrainer(0, &D_800AE8F4, (M2C_UNK *)&D_800AF104, arg1);
+    Session_InitHumanTrainer(1, &D_800AEAF8, &D_800AF30C, arg2);
     func_8002572C((s8 *)&D_800AF924, (s32)&D_800AE8F4);
     func_8002572C((s8 *)&D_800AF94C, (s32)&D_800AEAF8);
 }
 
 /*
- * func_800257F0
+ * Session_LoadPortSnapshot
  *
  * If arg0 is a valid controller-port index (0 to 3), copies that port's
  * save snapshot into the buffer at D_800AF9A8 with GbSave_CopyPortSnapshot
  * (its return value is ignored).  Otherwise the first byte of the buffer is
  * cleared.  The buffer is the destination that func_80025830 later passes on
- * as its second argument to func_80025260.
+ * as its second argument to Save_WriteContinueData.
  */
 extern GbSavePortSnapshot D_800AF9A8;
 
-void func_800257F0(s32 arg0) {
+/**
+ * Copies the GB save snapshot of port `arg0` into the session; clears it for an invalid port.
+ * @unverified Name and comment guessed from the code.
+ */
+void Session_LoadPortSnapshot(s32 arg0) {
     if ((arg0 >= 0) && (arg0 < 4)) {
         GbSave_CopyPortSnapshot(arg0, &D_800AF9A8);
         return;
@@ -205,7 +216,7 @@ typedef struct ContinueDataZ {
     /* 0x04 */ u8 opponentHistory[8];
 } ContinueDataZ; // size = 0xC
 extern M2C_UNK D_800AF974;
-void func_80025260(ContinueDataZ* arg0, void* arg1, BattleMon* arg2, s32 arg3);
+void Save_WriteContinueData(ContinueDataZ* arg0, void* arg1, BattleMon* arg2, s32 arg3);
 
 void func_80025830(void) {
     ContinueDataZ sp1C;
@@ -215,7 +226,7 @@ void func_80025830(void) {
     sp1C.modeSelection = gSessionContext.modeSelection;
     sp1C.round = gSessionContext.roundOrDemoId + 1;
     _bcopy(&D_800AF974, sp1C.opponentHistory, 8);
-    func_80025260(&sp1C, &D_800AF9A8, info->unk_028, info->numberOfPokemonCanBePicked);
+    Save_WriteContinueData(&sp1C, &D_800AF9A8, info->battleMon, info->numberOfPokemonCanBePicked);
     Save_CommitTypedRecord(0x15, 0);
 }
 
@@ -235,7 +246,7 @@ void func_800258B4(void) {
 typedef struct { u8 b[3]; } Unk3Bytes;
 typedef struct { u8 b[11]; } Unk11Bytes;
 M2C_UNK func_8000A460(M2C_UNK *, M2C_UNK *);
-s32 func_80022C70(s16);
+s32 GbSave_GetTrainerId(s32 arg0);
 M2C_UNK func_80022D84(s16, M2C_UNK *);
 extern s32 D_800603C0;
 extern s16 D_800733D4;
@@ -258,7 +269,7 @@ void func_80025910(s32 arg0)
   *((s8 **) (st + 0x200)) = st + 0x814;
   if ((arg0 != 0) && (D_800733D4 == 0))
   {
-    (*((s32 *) (st + 0x1C))) = func_80022C70(D_800733D4);
+    (*((s32 *) (st + 0x1C))) = GbSave_GetTrainerId(D_800733D4);
     func_80022D84(D_800733D4, (st + 0xC));
   }
   else
@@ -275,7 +286,7 @@ void func_80025910(s32 arg0)
   func_8002572C((s8 *) ((st + 0x1034)), (s32) ((st + 4)));
 }
 
-s8 func_800253BC(M2C_UNK *, s8 *, M2C_UNK *);       /* extern */
+s8 Save_ReadContinueData(M2C_UNK *, s8 *, M2C_UNK *);       /* extern */
 void func_80025910(s32);                          /* extern */
 s32 func_80057910(s8 *, M2C_UNK *, M2C_UNK);        /* extern */
 extern s8 D_800AE8F6;
@@ -285,18 +296,18 @@ extern M2C_UNK D_800AE910;
  * func_80025A64
  *
  * Clears the byte at D_800AE8F0 + 0x1095, then calls
- * func_800253BC(&D_800AFB10, buf, &D_800AE910) with a 0x162-byte local
+ * Save_ReadContinueData(&D_800AFB10, buf, &D_800AE910) with a 0x162-byte local
  * buffer. If it returns -1 the function returns 0. Otherwise the result is
  * stored to the byte D_800AE8F6 and:
  *  - if buf[0] == 0: calls func_80025910(buf[0]), sets bit 0 of the byte at
  *    D_800AE8F0 + 0x1095, sets the byte at + 0x1094 to 0xFF, calls
- *    func_800257F0(-1) and returns 1;
+ *    Session_LoadPortSnapshot(-1) and returns 1;
  *  - otherwise, if D_800733D4 is in 0..3, GbSave_CopyPortSnapshot(D_800733D4,
  *    &D_800AF9A8) is non-zero and func_80057910(buf, &D_800AF9A8, 0x162)
  *    returns 0 (func_80057910 is libultra bcmp, so: the 0x162 bytes of buf
  *    equal the snapshot just copied): calls func_80025910(buf[0]), sets
  *    bit 0 of + 0x1095, stores D_800733D4 at + 0x1094, calls
- *    func_800257F0(D_800733D4) and returns 1;
+ *    Session_LoadPortSnapshot(D_800733D4) and returns 1;
  *  - in every other case returns 0.
  *
  * What the buffer, D_800AE8F0's fields and the two helpers do is not
@@ -307,26 +318,26 @@ extern M2C_UNK D_800AE910;
  */
 s32 func_80025A64(void) {
     s8 buf[0x162];
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s32 ret;
     s8 temp_v0;
 
     ret = 0;
-    M2C_FIELD(&D_800AE8F0, u8 *, 0x1095) = 0U;
-    temp_v0 = func_800253BC(&D_800AFB10, buf, &D_800AE910);
+    D_800AE8F0.unk_1095 = 0U;
+    temp_v0 = Save_ReadContinueData(&D_800AFB10, buf, &D_800AE910);
     if (temp_v0 != -1) {
         D_800AE8F6 = temp_v0;
         if (buf[0] == 0) {
             func_80025910(buf[0]);
-            M2C_FIELD(&D_800AE8F0, u8 *, 0x1095) = (u8) (M2C_FIELD(&D_800AE8F0, u8 *, 0x1095) | 1);
-            M2C_FIELD(&D_800AE8F0, u8 *, 0x1094) = 0xFF;
-            func_800257F0(-1);
+            D_800AE8F0.unk_1095 = (u8) (D_800AE8F0.unk_1095 | 1);
+            D_800AE8F0.unk_1094 = 0xFF;
+            Session_LoadPortSnapshot(-1);
             ret = 1;
         } else if ((D_800733D4 >= 0) && (D_800733D4 < 4) && (GbSave_CopyPortSnapshot(D_800733D4, &D_800AF9A8) != 0) && (func_80057910(buf, &D_800AF9A8, 0x162) == 0)) {
             func_80025910(buf[0]);
-            M2C_FIELD(&D_800AE8F0, u8 *, 0x1095) = (u8) (M2C_FIELD(&D_800AE8F0, u8 *, 0x1095) | 1);
+            D_800AE8F0.unk_1095 = (u8) (D_800AE8F0.unk_1095 | 1);
             M2C_FIELD(&D_800AE8F0, s8 *, 0x1094) = (s8) D_800733D4;
-            func_800257F0((s32) D_800733D4);
+            Session_LoadPortSnapshot((s32) D_800733D4);
             ret = 1;
         }
     }
@@ -382,10 +393,14 @@ extern char D_8007B858[];
 extern char D_8007B874[];
 extern char D_8007B894[];
 
-void func_80025C0C(s32 arg0) {
+/**
+ * Full-screen Game Boy save error: remove the cartridge, clean the connector and insert it again without turning the power off; "could not save (report)"; "wrong cartridge or the data changed". `arg0` picks the message.
+ * @unverified Name and comment guessed from the code.
+ */
+void Save_DrawGbReportErrorScreen(s32 arg0) {
     Color_RGB8 sp2C = D_800733DC;
     Color_RGB8 sp28 = D_800733E0;
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
 
     BgStage_DrawFrame();
     GfxImage_FillCurrent(&gDisplayListHead, 1);
@@ -414,10 +429,14 @@ extern Color_RGB8 D_800733E4;
 extern Color_RGB8 D_800733E8;
 extern char D_8007B8B4[];
 
-void func_80025D8C(void) {
+/**
+ * Full-screen レポートちゅうです (Saving...) message.
+ * @unverified Name and comment guessed from the code.
+ */
+void Save_DrawReportingScreen(void) {
     Color_RGB8 sp2C = D_800733E4;
     Color_RGB8 sp28 = D_800733E8;
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
 
     BgStage_DrawFrame();
     GfxImage_FillCurrent(&gDisplayListHead, 1);
@@ -434,42 +453,46 @@ M2C_UNK func_80002620(M2C_UNK);                     /* extern */
 M2C_UNK func_80003EB8(u32, M2C_UNK *, M2C_UNK *, M2C_UNK); /* extern */
 M2C_UNK func_80006724();                            /* extern */
 M2C_UNK func_8000675C();                            /* extern */
-M2C_UNK func_8001A194(M2C_UNK, M2C_UNK);            /* extern */
+s32 Font_Init(s32 load_size, s32 side);            /* extern */
 M2C_UNK func_8001A360();                            /* extern */
-s32 func_80021B30(s32);                             /* extern */
-void func_80025C0C(s32);
-void func_80025D8C(void);
+s32 GbSave_PollCartRemoval(s32);                             /* extern */
+void Save_DrawGbReportErrorScreen(s32);
+void Save_DrawReportingScreen(void);
 extern M2C_UNK D_002E0BE0;
 extern M2C_UNK D_002E2B90;
 extern M2C_UNK D_01000000;
 
-void func_80025E3C(s32 arg0) {
+/**
+ * Pushes the 'GBER' pool state and shows the GB report error screen until the cartridge check passes.
+ * @unverified Name and comment guessed from the code.
+ */
+void Save_RunGbReportErrorScreen(s32 arg0) {
     M2C_UNK var_s0;
     s32 temp_v0;
 
     var_s0 = 2;
     func_8000256C(0x47424552);
-    func_8001A194(0x18, 0);
+    Font_Init(0x18, 0);
     func_80003EB8((u32) ((s32) &D_01000000 & 0x0F000000) >> 0x18, &D_002E0BE0, &D_002E2B90, 0);
     func_8000675C();
     do {
-        temp_v0 = func_80021B30(arg0);
+        temp_v0 = GbSave_PollCartRemoval(arg0);
         if (temp_v0 == 1) {
             var_s0 = 1;
         }
         if (temp_v0 == 3) {
             var_s0 = 3;
         }
-        func_80025C0C(var_s0);
+        Save_DrawGbReportErrorScreen(var_s0);
     } while (temp_v0 != 2);
-    func_80025D8C();
-    func_80025D8C();
+    Save_DrawReportingScreen();
+    Save_DrawReportingScreen();
     func_80006724();
     func_8001A360();
     func_80002620(0x47424552);
 }
 
-M2C_UNK func_80025758(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
+M2C_UNK Session_InitTwoTrainers(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
 M2C_UNK func_80025B60(s32, M2C_UNK *, M2C_UNK *, M2C_UNK, s32); /* extern */
 extern M2C_UNK D_0015F390;
 extern M2C_UNK D_0015F8F0;
@@ -481,7 +504,7 @@ extern M2C_UNK D_82100000;
 
 void func_80025F3C(void) {
     func_80025B60(((u32) ((s32) &D_81500000 & 0x0FF00000) >> 0x14) - 0x10, &D_0015F390, &D_0015F8F0, 0, 0);
-    func_80025758(5, 3, 3);
+    Session_InitTwoTrainers(5, 3, 3);
     func_80025B60(((u32) ((s32) &D_82100000 & 0x0FF00000) >> 0x14) - 0x10, &D_0017ED00, &D_00232510, 0, (s32) &D_800AE8F0);
     D_800733C8 = 0x8010;
 }
@@ -518,14 +541,14 @@ extern u8 D_00235D70[];
 extern u8 D_00238BD0[];
 extern s16 D_800AF986;
 extern StageContext *D_800AF9A4;
-void func_80021A8C(s32);
+s32 GbSave_LoadPort(s32 arg0);
 s32 func_80021E64(s32);
 void GbSave_ValidateBeforeWrite(s32);
 void GbSave_RequirePakPresent(s32);
-s32 func_80022B4C(s32);
+u8 GbSave_GetSaveState(s32 arg0);
 s32 GbSave_GetBoxCount(s32);
 void func_80023C30(void);
-void func_80025E3C(s32);
+void Save_RunGbReportErrorScreen(s32);
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_800260C4(void)
 {
@@ -535,7 +558,7 @@ void func_800260C4(void)
   Gfx_InitDisplayListBuffers(0x10000, 0);
   D_800AF9A4 = StageContext_Allocate(1, 1, 2, 0, 2, 1);
   StageContext_Activate(D_800AF9A4);
-  if (((*((u16 *) (((s8 *) (&D_800AE8F0)) + 0x1096))) & 1) && (!((*((u16 *) (((s8 *) (&D_800AE8F0)) + 0x1096))) & 2)))
+  if (((*((u16 *) (((s8 *) (&D_800AE8F0)) + 0x1096))) & 1) && (!((*((u16 *) (((s8 *) (&D_800AE8F0)) + 0x1096))) & 2))) // FAKE: decomp slop, raw pointer casts stand in for struct fields
   {
     *((u16 *) (((s8 *) (&D_800AE8F0)) + 0x1096)) |= 0x100;
   }
@@ -556,7 +579,7 @@ void func_800260C4(void)
     if (D_800733D8 != 0)
     {
       D_800733D8 = 0;
-      if (func_80022B4C(D_800733D4) == 0)
+      if (GbSave_GetSaveState(D_800733D4) == 0)
       {
         if (pushed)
         {
@@ -564,13 +587,13 @@ void func_800260C4(void)
         }
         pushed = 1;
         main_pool_push_state('BUDT');
-        func_80021A8C(D_800733D4);
+        GbSave_LoadPort(D_800733D4);
         if (GbSave_GetBoxCount(D_800733D4) == 0)
         {
           GbSave_ValidateBeforeWrite(D_800733D4);
           while (func_80021E64(D_800733D4) == 0)
           {
-            func_80025E3C(D_800733D4);
+            Save_RunGbReportErrorScreen(D_800733D4);
           }
 
           GbSave_RequirePakPresent(D_800733D4);
@@ -646,7 +669,7 @@ void func_80026368(void)
         D_800AE8F0.unk_0000 = 4;
         info = roster->rosterInfo;
         roster->numberOfPokemonBrought = info->numberOfPokemonCanBePicked;
-        _bcopy(info->unk_028, roster->pokemonPicked, 0x1E0);
+        _bcopy(info->battleMon, roster->pokemonPicked, 0x1E0);
         func_80025B60((((u32) (((s32) (&D_82100000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0017ED00, &D_00232510_2, 0, (s32) &D_800AE8F0);
         if (prev == 1)
         {
@@ -659,7 +682,7 @@ void func_80026368(void)
       }
       if (D_800AE8F0.unk_1096 & 4)
       {
-        func_80025758(6, 0xA, 0xD);
+        Session_InitTwoTrainers(6, 0xA, 0xD);
         D_800AE8F0.unk_0003 = 8;
         func_80025B60((((u32) (((s32) (&D_82100000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0017ED00, &D_00232510_2, 0, (s32) &D_800AE8F0);
       }
@@ -678,14 +701,14 @@ extern s32 D_800733CC;
 void func_8000A838(s32);
 void func_8000A8DC(void);
 void func_8000A904(void);
-void func_8000AC78(UnkInputStruct8000D738*);
+void GbTower_Start(UnkInputStruct8000D738*);
 s32 func_8000ADE8(void);
 void func_8000AE1C(UnkInputStruct8000D738*);
 void func_800268E4(s32, s32);
-void func_80021C6C(s32);
+void GbSave_ForceReloadPort(s32);
 void func_80023C30(void);
 void func_80025130(s32);
-void func_8002404C(s32, s32);
+void Save_CommitTypedRecord(s32, s32);
 
 void State_GbTower(void) {
     s32 sp2C;
@@ -699,7 +722,7 @@ void State_GbTower(void) {
     sp24.unk_04 = main_pool_alloc(sizeof(*sp24.unk_04), 0);
 
     func_80025B60(((u32) ((s32) &D_81300000 & 0x0FF00000) >> 0x14) - 0x10, &D_0015F8F0, &D_0015FCE0, D_800733D4, (s32) &sp24);
-    func_8000AC78(&sp24);
+    GbTower_Start(&sp24);
 
     sp2C = func_8000ADE8();
 
@@ -711,10 +734,10 @@ void State_GbTower(void) {
         func_800268E4(D_800733D4, sp2C);
     }
 
-    func_80021C6C(D_800733D4);
+    GbSave_ForceReloadPort(D_800733D4);
     func_80023C30();
     func_80025130(sp24.unk_00);
-    func_8002404C(0x14, 0);
+    Save_CommitTypedRecord(0x14, 0);
     D_800733C8 = D_800733CC;
     D_800AF988 = 1;
     main_pool_pop_state('EMU0');
@@ -762,7 +785,11 @@ void func_80026368(void);
 void func_8002677C(void);
 void func_800268A8(void);
 
-void func_800269A0(s32 arg0) {
+/**
+ * Pushes the 'GAME' pool state and runs the top-level state machine (0x8001, 0x8010, 0x8040, 0x8050, 0x8060, 0x8080, 0xF000) forever.
+ * @unverified Name and comment guessed from the code.
+ */
+void Game_RunStateLoop(s32 arg0) {
     s32 state;
 
     func_800594D0(0x01000F00);
@@ -770,7 +797,7 @@ void func_800269A0(s32 arg0) {
     func_8000D20C();
     func_800177DC();
     func_8000256C(0x47414D45);
-    M2C_FIELD(&D_800AE8F0, s8*, 0) = 1;
+    D_800AE8F0.unk_0000 = 1;
     while (1) {
         state = D_800733C8;
         switch (state) {
@@ -876,7 +903,7 @@ extern s32 D_800733F0;
  * and slots match the ROM (0x38 bytes, blocks at sp+0x30 and sp+0x2C).
  */
 s32 func_800270B4(s16 arg0, s16 arg1, s16 arg2, s32 arg3, s16 arg4, s16 arg5) {
-    s32 pad;
+    s32 pad; // FAKE: stack padding
     s32 sp30;
     s32 sp2C;
 
@@ -894,7 +921,7 @@ void Display_DisableBlackout(void) {
 extern s32 D_800733F0;
 volatile long long func_80027140(s32 arg0, s8 *arg1)
 {
-  s32 new_var;
+  s32 new_var; // FAKE: permuter temp
   new_var = arg0;
   if ((new_var == 2) && (D_800733F0 != 0))
   {

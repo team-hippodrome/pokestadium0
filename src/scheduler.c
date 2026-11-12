@@ -221,13 +221,21 @@ M2C_UNK func_8000A8BC();                            /* extern */
 M2C_UNK func_80026980();                            /* extern */
 extern s16 D_800AA148;
 
-void func_80004AE0(void) {
+/**
+ * Handles the pre-NMI (reset button) message: sets D_800AA148 and calls the
+ * shutdown hooks func_8000A8BC and func_80026980.
+ * @unverified Name from Stadium 1, where the same call sits in the same place.
+ */
+void Sched_HandlePreNMI(void) {
     D_800AA148 = 1;
     func_8000A8BC();
     func_80026980();
 }
 
-void func_80004B10(void) {
+/**
+ * @unverified Name from Stadium 1, matched by code similarity.
+ */
+void Sched_HandleRetrace(void) {
     D_800A9710.time = osGetTime();
     D_800A9710.unk_A34++;
 
@@ -305,12 +313,12 @@ void Sched_HandleRdpEvent(void) {
  *   - register the queue for the video retrace message (0x66) and for the
  *     RSP-done (0x64), RDP-done (0x65) and pre-NMI (0x68) OS events.
  * Then it blocks on the queue forever and dispatches on the message:
- *   0x66 video retrace    -> func_80004B10
+ *   0x66 video retrace    -> Sched_HandleRetrace
  *   0x64 RSP finished     -> Sched_HandleRspEvent
  *   0x65 RDP finished     -> Sched_HandleRdpEvent
  *   0x67 start next task  -> Sched_StartPendingTask (sent by other
  *                            scheduler code with osSendMesg)
- *   0x68 pre-NMI          -> func_80004AE0
+ *   0x68 pre-NMI          -> Sched_HandlePreNMI
  * Unknown messages are ignored.  `arg0` is the thread argument and is unused.
  */
 void Sched_ThreadEntry(void* arg0) {
@@ -328,7 +336,7 @@ void Sched_ThreadEntry(void* arg0) {
 
         switch (sp24) {
             case 0x66:
-                func_80004B10();
+                Sched_HandleRetrace();
                 break;
 
             case 0x64:
@@ -344,7 +352,7 @@ void Sched_ThreadEntry(void* arg0) {
                 break;
 
             case 0x68:
-                func_80004AE0();
+                Sched_HandlePreNMI();
                 break;
         }
     }
@@ -367,14 +375,14 @@ void func_80004EA8(s8 *arg0)
 {
   s8 *var_a1;
   s8 *var_v1;
-  if ((*((s8 **) (((s8 *) (&(*((s8 *) (&D_800A9710))))) + 0xA10))) == 0)
+  if ((*((s8 **) (((s8 *) (&(*((s8 *) (&D_800A9710))))) + 0xA10))) == 0) // FAKE: decomp slop, raw pointer casts stand in for struct fields
   {
     *((s8 **) ((&(*((s8 *) (&D_800A9710)))) + 0xA10)) = arg0;
   }
   else
   {
-    var_v1 = *((s8 **) (((s8 *) (&(*((s8 *) (&D_800A9710))))) + 0xA10));
-    var_a1 = *((s8 **) (((s8 *) (*((s8 **) (((s8 *) (&(*((s8 *) (&D_800A9710))))) + 0xA10)))) + 0x28));
+    var_v1 = *((s8 **) (((s8 *) (&(*((s8 *) (&D_800A9710))))) + 0xA10)); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+    var_a1 = *((s8 **) (((s8 *) (*((s8 **) (((s8 *) (&(*((s8 *) (&D_800A9710))))) + 0xA10)))) + 0x28)); // FAKE: decomp slop, raw pointer casts stand in for struct fields
     if (var_a1 != 0)
     {
       do

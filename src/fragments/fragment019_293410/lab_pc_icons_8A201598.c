@@ -4,12 +4,12 @@
 extern s32 D_8A21DE08;
 extern M2C_UNK D_8A21DE10;
 
-s32 func_80001AA4(void);
+s32 Display_IsFrameReady(void);
 s32 func_80002BA4(void*, s32);
 s32 func_80017304(s32, BinArchive*, s32, void*, s32);
 s32 func_8001FA8C(s32);
-s32 func_8002D3D0(u8*);
-s32 func_8002D454();
+s32 BattleMon_CountMoves(u8* arg0);
+s32 BattleMon_GetMoveIndexChecked();
 typedef struct Move8A201D3C { u8 unk00; u8 unk01; u8 power; u8 type; u8 unk04; u8 unk05; } Move8A201D3C;
 extern Move8A201D3C D_8006B190[];
 extern BinArchive* D_8A21DA54;
@@ -76,9 +76,12 @@ extern char D_8A21D9D8[];
 extern char D_8A21D9DC[];
 typedef struct Entry8006A9DC { char* str; s32 unk4; s32 unk8; } Entry8006A9DC;
 extern Entry8006A9DC D_8006A9DC[];
-/* Declared s32 with no return statement: only then does IDO stop reading the
- * move id from v0 after the -2 check. */
-s32 func_8A2018E0(s32 arg0, s32 arg1, s32 arg2, s32 arg3)
+/**
+ * Declared s32 with no return statement: only then does IDO stop reading the
+ * move id from v0 after the -2 check.
+ * @unverified Name guessed from the code; comment kept.
+ */
+s32 MonSummary_DrawMoveInfo(s32 arg0, s32 arg1, s32 arg2, s32 arg3)
 {
     s32 move;
     func_8A201598(arg0 + 4, arg1 + 2, (u8*)D_8A21DA70[arg3]);
@@ -86,13 +89,13 @@ s32 func_8A2018E0(s32 arg0, s32 arg1, s32 arg2, s32 arg3)
     func_80029028(arg0, arg1, 0x122, 2, D_8A203424);
     func_80029028(arg0, arg1 + 2, 4, 0x82, D_8A203424);
     func_80029028(arg0 + 0x11E, arg1 + 2, 4, 0x82, D_8A203424);
-    move = func_8002D454(arg2, arg3);
+    move = BattleMon_GetMoveIndexChecked(arg2, arg3);
     if (move != (-2)) {
-        s32 typeId;
+        s32 type_id;
         Entry80066AD8 *type;
         s32 pp;
-        typeId = func_8001FA8C(D_8006B190[move].type);
-        type = &D_80066AD8[typeId];
+        type_id = func_8001FA8C(D_8006B190[move].type);
+        type = &D_80066AD8[type_id];
         pp = ((((D_8006B190[move].unk04 * 100) / 255) + 2) / 5) * 5;
         func_8001AB6C();
         func_8001A384(4, 0);
@@ -102,7 +105,7 @@ s32 func_8A2018E0(s32 arg0, s32 arg1, s32 arg2, s32 arg3)
         func_8001A944(arg0 + 9, arg1 + 0x17, D_8A21D9C8);
         func_8001AA9C(type->color.r, type->color.g, type->color.b, type->color.a);
         func_8001A944(arg0 + 0x49, arg1 + 4, type->str);
-        func_8001AA9C(*((u8 *) (((s8 *) (&D_800734A8)) + 0)), *((u8 *) (((s8 *) (&D_800734A8)) + 1)), *((u8 *) (((s8 *) (&D_800734A8)) + 2)), *((u8 *) (((s8 *) (&D_800734A8)) + 3)));
+        func_8001AA9C(*((u8 *) (((s8 *) (&D_800734A8)) + 0)), *((u8 *) (((s8 *) (&D_800734A8)) + 1)), *((u8 *) (((s8 *) (&D_800734A8)) + 2)), *((u8 *) (((s8 *) (&D_800734A8)) + 3))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
         Font_SetLineHeight(0x14);
         if (D_8006B190[move].power >= 2)
         {
@@ -120,13 +123,17 @@ s32 func_8A2018E0(s32 arg0, s32 arg1, s32 arg2, s32 arg3)
     }
 }
 
-void func_8A201C08(s32 arg0, s32 arg1, s32 arg2) {
+/**
+ * Draws the rendered 3D model preview texture, 8 rows at a time.
+ * @unverified Name and comment guessed from the code.
+ */
+void MonSummary_DrawModelPreview(s32 arg0, s32 arg1, s32 arg2) {
     u8* tex;
     s32 i;
     s32 n;
 
     tex = func_800196F8(D_8A21DA4C);
-    func_800069CC();
+    BgStage_DrawFrame();
     gSPDisplayList(gDisplayListHead++, D_80060290);
     gDPSetAlphaCompare(gDisplayListHead++, G_AC_NONE);
     for (i = 0; i < 0xD2; i += n) {
@@ -142,67 +149,79 @@ void func_8A201C08(s32 arg0, s32 arg1, s32 arg2) {
 }
 
 
-void func_8A201D3C(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
-    s32 unused;
+/**
+ * Sets up the summary page window (552x362) and its move list.
+ * @unverified Name and comment guessed from the code.
+ */
+void MonSummary_InitPageWindow(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
+    s32 unused; // FAKE: stack padding
     s32 count;
     s32 i;
     s32 handle;
     s32 move;
 
-    func_8002A8C4(arg0, arg1, arg2, 0x228, 0x16A);
+    Window_SetRect(arg0, arg1, arg2, 0x228, 0x16A);
     M2C_FIELD(arg0, s32*, 0x28) = 0;
     M2C_FIELD(arg0, s32*, 0x20) = 0;
     M2C_FIELD(arg0, s32*, 0x24) = 0;
     M2C_FIELD(arg0, s32*, 0x14) = 0x1001;
     M2C_FIELD(arg0, s32*, 0x34) = 0;
     M2C_FIELD(arg0, s32*, 0x2C) = arg3;
-    count = func_8002D3D0((u8*)arg3);
-    while (func_80001AA4() == 0) {
+    count = BattleMon_CountMoves((u8*)arg3);
+    while (Display_IsFrameReady() == 0) {
     }
     for (i = 0; i < count; i++) {
         handle = func_80002BA4(D_8A21DA60[i], 0x14800);
-        move = func_8002D454(arg3, i);
+        move = BattleMon_GetMoveIndexChecked(arg3, i);
         D_8A21DA70[i] = func_80017304(handle, D_8A21DA54, func_8001FA8C((move == -2) ? 0 : D_8006B190[move].type), D_8A21DA58, 0x3000);
     }
 }
 
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-void func_8A201EAC(s8 *arg0, s32 arg1)
+/**
+ * Draws the summary page: header, stats, trainer info and moves.
+ * @unverified Name and comment guessed from the code.
+ */
+void MonSummary_DrawPage(s8 *arg0, s32 arg1)
 {
   s32 temp_v0;
-  if (((*((s32 *) (((s8 *) arg0) + 0x28))) != 2) && (func_8002AB84() == 0))
+  if (((*((s32 *) (((s8 *) arg0) + 0x28))) != 2) && (Particle_Field50_SetXZFromField7C_09BB4() == 0))
   {
     if (arg1 == 0)
     {
-      func_80029864((*((s32 *) (((s8 *) arg0) + 0))) + 0xF9, *((s32 *) (((s8 *) arg0) + 4)), *((s32 *) (((s8 *) arg0) + 0xC)), &D_8007356C);
-      func_80029658(*((s32 *) (((s8 *) arg0) + 0)), (*((s32 *) (((s8 *) arg0) + 4))) + 0xD7, 0x100, &D_8007356C);
-      func_80029658((*((s32 *) (((s8 *) arg0) + 0))) + 0xFA, (*((s32 *) (((s8 *) arg0) + 4))) + 0x95, 0x12E, &D_8007356C);
-      func_8A2009CC((*((s32 *) (((s8 *) arg0) + 0))) + 6, (*((s32 *) (((s8 *) arg0) + 4))) + 0xDE, *((s32 *) (((s8 *) arg0) + 0x2C)));
-      func_8A200B78((*((s32 *) (((s8 *) arg0) + 0))) + 0x100, (*((s32 *) (((s8 *) arg0) + 4))) + 6, *((s32 *) (((s8 *) arg0) + 0x2C)));
-      func_8A200DE0((*((s32 *) (((s8 *) arg0) + 0))) + 0x100, (*((s32 *) (((s8 *) arg0) + 4))) + 0x9C, *((s32 *) (((s8 *) arg0) + 0x2C)));
+      func_80029864((*((s32 *) (((s8 *) arg0) + 0))) + 0xF9, *((s32 *) (((s8 *) arg0) + 4)), *((s32 *) (((s8 *) arg0) + 0xC)), &D_8007356C); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+      Ui_DrawTexturedDivider(*((s32 *) (((s8 *) arg0) + 0)), (*((s32 *) (((s8 *) arg0) + 4))) + 0xD7, 0x100, &D_8007356C); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+      Ui_DrawTexturedDivider((*((s32 *) (((s8 *) arg0) + 0))) + 0xFA, (*((s32 *) (((s8 *) arg0) + 4))) + 0x95, 0x12E, &D_8007356C); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+      MonSummary_DrawStats((*((s32 *) (((s8 *) arg0) + 0))) + 6, (*((s32 *) (((s8 *) arg0) + 4))) + 0xDE, *((s32 *) (((s8 *) arg0) + 0x2C))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+      MonSummary_DrawHeader((*((s32 *) (((s8 *) arg0) + 0))) + 0x100, (*((s32 *) (((s8 *) arg0) + 4))) + 6, *((s32 *) (((s8 *) arg0) + 0x2C))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+      MonSummary_DrawTrainerInfo((*((s32 *) (((s8 *) arg0) + 0))) + 0x100, (*((s32 *) (((s8 *) arg0) + 4))) + 0x9C, *((s32 *) (((s8 *) arg0) + 0x2C))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
     }
     else
     {
-      func_80029658(*((s32 *) (((s8 *) arg0) + 0)), (*((s32 *) (((s8 *) arg0) + 4))) + 0xD7, *((s32 *) (((s8 *) arg0) + 8)), &D_8007356C);
-      func_80029864((*((s32 *) (((s8 *) arg0) + 0))) + 0xF9, *((s32 *) (((s8 *) arg0) + 4)), 0xDE, &D_8007356C);
-      func_8A201394((*((s32 *) (((s8 *) arg0) + 0))) + 0x100, (*((s32 *) (((s8 *) arg0) + 4))) + 6, *((s32 *) (((s8 *) arg0) + 0x2C)));
-      func_8A2010C8((*((s32 *) (((s8 *) arg0) + 0))) + 6, (*((s32 *) (((s8 *) arg0) + 4))) + 0xDE, *((s32 *) (((s8 *) arg0) + 0x2C)), *((s32 *) (((s8 *) arg0) + 0x30)));
-      func_8A2018E0((*((s32 *) (((s8 *) arg0) + 0))) + 0x100, (*((s32 *) (((s8 *) arg0) + 4))) + 0x54, *((s32 *) (((s8 *) arg0) + 0x2C)), *((s32 *) (((s8 *) arg0) + 0x30)));
+      Ui_DrawTexturedDivider(*((s32 *) (((s8 *) arg0) + 0)), (*((s32 *) (((s8 *) arg0) + 4))) + 0xD7, *((s32 *) (((s8 *) arg0) + 8)), &D_8007356C); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+      func_80029864((*((s32 *) (((s8 *) arg0) + 0))) + 0xF9, *((s32 *) (((s8 *) arg0) + 4)), 0xDE, &D_8007356C); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+      MonSummary_DrawSpeciesName((*((s32 *) (((s8 *) arg0) + 0))) + 0x100, (*((s32 *) (((s8 *) arg0) + 4))) + 6, *((s32 *) (((s8 *) arg0) + 0x2C))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+      func_8A2010C8((*((s32 *) (((s8 *) arg0) + 0))) + 6, (*((s32 *) (((s8 *) arg0) + 4))) + 0xDE, *((s32 *) (((s8 *) arg0) + 0x2C)), *((s32 *) (((s8 *) arg0) + 0x30))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+      MonSummary_DrawMoveInfo((*((s32 *) (((s8 *) arg0) + 0))) + 0x100, (*((s32 *) (((s8 *) arg0) + 4))) + 0x54, *((s32 *) (((s8 *) arg0) + 0x2C)), *((s32 *) (((s8 *) arg0) + 0x30))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
     }
   }
   temp_v0 = *((s32 *) (((s8 *) arg0) + 0x28));
-  if (((temp_v0 ^ 0) == 1) || (temp_v0 == 2))
+  if (((temp_v0 ^ 0) == 1) || (temp_v0 == 2)) // FAKE: no-op ^ 0
   {
     if ((*((s32 *) (((s8 *) arg0) + 0x34))) == 0)
     {
       *((s32 *) (((s8 *) arg0) + 0x34)) = 1;
       func_80019008(D_8A21DA4C, *((s32 *) (((s8 *) arg0) + 0x2C)), 0x108D);
     }
-    func_8A201C08(0x32, 0x5A, *((s32 *) (((s8 *) arg0) + 0x2C)));
+    MonSummary_DrawModelPreview(0x32, 0x5A, *((s32 *) (((s8 *) arg0) + 0x2C)));
   }
 }
 
-s32 func_8A202078(s8 *arg0) {
+/**
+ * Returns the page picked with the C buttons (up 0, right 1, down 2, left 3), or -1.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 MonSummary_GetCButtonPage(s8 *arg0) {
     s32 var_s0;
     u16 temp_v0;
 
@@ -219,7 +238,7 @@ s32 func_8A202078(s8 *arg0) {
             var_s0 = 3;
         }
         if (var_s0 >= 0) {
-            if (func_8002D454(M2C_FIELD(arg0, s32 *, 0x2C), var_s0, arg0) == -1) {
+            if (BattleMon_GetMoveIndexChecked(M2C_FIELD(arg0, s32 *, 0x2C), var_s0, arg0) == -1) {
                 func_8003F6AC(8);
             } else {
                 func_8003F6AC(2);
@@ -235,8 +254,12 @@ s32 func_8A202078(s8 *arg0) {
     return var_s0 >= 0;
 }
 
-void func_8A202160(void) {
-    func_8002C064(0x38, 0x1E0, M2C_FIELD(&D_8A203300, u8 *, 0), M2C_FIELD(&D_8A203300, u8 *, 1), (s32) M2C_FIELD(&D_8A203300, u8 *, 2));
+/**
+ * Draws the tinted summary screen background.
+ * @unverified Name and comment guessed from the code.
+ */
+void MonSummary_DrawBackground(void) {
+    Ui_DrawTintedScreenBackground(0x38, 0x1E0, M2C_FIELD(&D_8A203300, u8 *, 0), M2C_FIELD(&D_8A203300, u8 *, 1), (s32) M2C_FIELD(&D_8A203300, u8 *, 2));
 }
 
 s32 LabPC_ComputeExpForLevel(s32 arg0, s32 arg1) {
@@ -282,7 +305,10 @@ void func_8A202390(s8 *arg0) {
     func_80020C60(sp18);
 }
 
-void func_8A2023F4(s32* arg0, s32 arg1) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void LabPC_WriteDeckBack(s32* arg0, s32 arg1) {
     s32* sp2C;
     s32 i;
     s32 temp_s3;
@@ -298,7 +324,7 @@ void func_8A2023F4(s32* arg0, s32 arg1) {
     func_80020C60(temp_s3);
     if (func_8002207C(D_8A21DA40) == 0) {
         func_8002D7D4(D_8A21DA40);
-        func_8A20261C((M2C_UNK*)arg1);
+        MonSummary_DrawScreen((M2C_UNK*)arg1);
     }
     func_80022188(D_8A21DA40);
 }
@@ -321,7 +347,7 @@ void func_8A2024D0(s8 *arg0) {
         func_8001833C((unk_func_8001A024*)D_8A21DA50, i, (BattleMon*)(M2C_FIELD(arg0, s32 *, 0x170) + i * 0x50),
                       GPACK_RGBA5551(D_8A203304.r, D_8A203304.g, D_8A203304.b, 1));
     }
-    func_8A20034C(arg0 + 0x10, 0x2F, 0x4D, (s32)(arg0 + 0x180));
+    MonSummary_InitListWindow(arg0 + 0x10, 0x2F, 0x4D, (s32)(arg0 + 0x180));
 }
 
 typedef struct Ctx8A20261C {
@@ -336,70 +362,74 @@ typedef struct Ctx8A20261C {
     /* 0x0D4 */ s8 unk0D4[0x38];
     /* 0x10C */ s8 unk10C[0x4];
 } Ctx8A20261C;
-s32 func_8002AAC4(s8*);
-void func_8002CAD0(s8*);
-void func_8A2003C0(s8*, s32);
+s32 Particle_Field7C_SetXZFromField74AngleY_0B278(void *arg0);
+void SavePrompt_Draw(s8*);
+void MonSummary_DrawListWindow(s8*, s32);
 #define CTX ((Ctx8A20261C*)arg0)
-void func_8A20261C(void* arg0) {
-    func_800069CC();
+/**
+ * Draws the summary screen for its current state.
+ * @unverified Name and comment guessed from the code.
+ */
+void MonSummary_DrawScreen(void* arg0) {
+    BgStage_DrawFrame();
     switch (CTX->state) {
         case 1:
-            if (func_8002AAC4(CTX->list) != 0) {
-                func_8A202160();
+            if (Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->list) != 0) {
+                MonSummary_DrawBackground();
             }
-            func_8A2003C0(CTX->list, 0);
+            MonSummary_DrawListWindow(CTX->list, 0);
             break;
         case 2:
             if ((CTX->mode == 4) || (CTX->mode == 7)) {
-                func_8A202160();
-                func_8002AAC4(CTX->list);
-                func_8002AAC4(CTX->unk070);
-                func_8A2003C0(CTX->list, 1);
-            } else if (func_8002AAC4(CTX->unk070) != 0) {
+                MonSummary_DrawBackground();
+                Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->list);
+                Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->unk070);
+                MonSummary_DrawListWindow(CTX->list, 1);
+            } else if (Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->unk070) != 0) {
                 CTX->unk034 = (CTX->unk038 <= 0) ? CTX->unk034 : 4;
-                func_8002AAC4(CTX->list);
-                func_8A2003C0(CTX->list, 1);
+                Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->list);
+                MonSummary_DrawListWindow(CTX->list, 1);
                 CTX->unk034 = (CTX->unk038 <= 0) ? CTX->unk034 : 4;
             } else {
-                func_8002AAC4(CTX->list);
-                func_8A2003C0(CTX->list, 1);
+                Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->list);
+                MonSummary_DrawListWindow(CTX->list, 1);
             }
-            func_8A2008F4(CTX->unk070);
+            MonSummary_DrawMenu(CTX->unk070);
             break;
         case 3:
-            if (func_8002AAC4(CTX->list) != 0) {
-                func_8A202160();
+            if (Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->list) != 0) {
+                MonSummary_DrawBackground();
             }
-            func_8A2003C0(CTX->list, 2);
+            MonSummary_DrawListWindow(CTX->list, 2);
             break;
         case 4:
-            if (func_8002AAC4(CTX->unk0D4) != 0) {
-                func_8A202160();
+            if (Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->unk0D4) != 0) {
+                MonSummary_DrawBackground();
             }
-            func_8A201EAC(CTX->unk0D4, 0);
+            MonSummary_DrawPage(CTX->unk0D4, 0);
             break;
         case 5:
-            if (func_8002AAC4(CTX->unk0D4) != 0) {
-                func_8A202160();
+            if (Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->unk0D4) != 0) {
+                MonSummary_DrawBackground();
             }
-            func_8A201EAC(CTX->unk0D4, 1);
+            MonSummary_DrawPage(CTX->unk0D4, 1);
             break;
         case 6:
             if (CTX->mode == 7) {
-                func_8A202160();
-                func_8002AAC4(CTX->list);
-                func_8002AAC4(CTX->unk10C);
-                func_8A2003C0(CTX->list, 0);
-            } else if (func_8002AAC4(CTX->unk10C) != 0) {
+                MonSummary_DrawBackground();
+                Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->list);
+                Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->unk10C);
+                MonSummary_DrawListWindow(CTX->list, 0);
+            } else if (Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->unk10C) != 0) {
                 CTX->unk034 = (CTX->unk038 <= 0) ? CTX->unk034 : 4;
-                func_8002AAC4(CTX->list);
-                func_8A2003C0(CTX->list, 0);
+                Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->list);
+                MonSummary_DrawListWindow(CTX->list, 0);
                 CTX->unk034 = (CTX->unk038 <= 0) ? CTX->unk034 : 4;
             } else {
-                func_8002AAC4(CTX->list);
-                func_8A2003C0(CTX->list, 0);
+                Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->list);
+                MonSummary_DrawListWindow(CTX->list, 0);
             }
-            func_8002CAD0(CTX->unk10C);
+            SavePrompt_Draw(CTX->unk10C);
             break;
     }
 }
@@ -412,17 +442,21 @@ void func_8A202904(s8 *arg0, s32 arg1, s32 arg2) {
 }
 
 typedef struct Ctx8A20291C { char pad[0x18C]; s32 ptrs[6]; } Ctx8A20291C;
-s32 func_8002DC04(s8*);
+s32 Menu_UpdateCursor(s8*);
 s32 func_8002BC14(s32);
-void func_8002CA34(s8*, s32, s32);
-void func_8002D900(s8*);
-s32 func_8002CD7C(s8*);
-void func_8002CC44(s8*);
-s32 func_8A20093C(s8*);
-void func_8A20080C(s8* arg0, s32 arg1, s32 arg2, u8* arg3);
-s32 func_8A202078(s8* arg0);
-void func_8A2023F4(s32* arg0, s32 arg1);
-M2C_UNK func_8A20291C(M2C_UNK* ctx) {
+void SavePrompt_Init(s8*, s32, s32);
+void Menu_ClearItemFlags(s8*);
+s32 SavePrompt_Update(s8*);
+void Save_DrawReportingWindow(s8*);
+s32 MonSummary_UpdateMenuCursor(s8*);
+void MonSummary_InitMenuWindow(s8* arg0, s32 arg1, s32 arg2, u8* arg3);
+s32 MonSummary_GetCButtonPage(s8* arg0);
+void LabPC_WriteDeckBack(s32* arg0, s32 arg1);
+/**
+ * Runs the summary screen's state machine for one frame.
+ * @unverified Name and comment guessed from the code.
+ */
+M2C_UNK MonSummary_UpdateScreen(M2C_UNK* ctx) {
     s32 ret = 0;
     s8* arg0 = (s8*)ctx;
     s32 res;
@@ -443,14 +477,14 @@ M2C_UNK func_8A20291C(M2C_UNK* ctx) {
 
     switch (M2C_FIELD(arg0, s32*, 0)) {
         case 1:
-            if (func_8002DC04(arg0 + 0x3C) != 0) {
+            if (Menu_UpdateCursor(arg0 + 0x3C) != 0) {
                 M2C_FIELD(arg0, s32*, 0x34) = (M2C_FIELD(arg0, s32*, 0x38) <= 0) ? M2C_FIELD(arg0, s32*, 0x34) : 4;
             } else {
                 res = func_8002BC14((s32)D_800603C0);
                 if (res == -1) {
                     func_8003F6AC(3);
                     if (M2C_FIELD(arg0, s32*, 0x384) != 0) {
-                        func_8002CA34(arg0 + 0x10C, 0xCA, 0xAD);
+                        SavePrompt_Init(arg0 + 0x10C, 0xCA, 0xAD);
                         M2C_FIELD(arg0, s32*, 0) = 6;
                         M2C_FIELD(arg0, s8**, 8) = arg0 + 0x10C;
                     } else {
@@ -458,14 +492,14 @@ M2C_UNK func_8A20291C(M2C_UNK* ctx) {
                     }
                 } else if (res == 1) {
                     func_8003F6AC(2);
-                    func_8A20080C(arg0 + 0x70, 0x194, 0x123, (u8*)((Ctx8A20291C*)arg0)->ptrs[M2C_FIELD(arg0, s32*, 0x44)]);
+                    MonSummary_InitMenuWindow(arg0 + 0x70, 0x194, 0x123, (u8*)((Ctx8A20291C*)arg0)->ptrs[M2C_FIELD(arg0, s32*, 0x44)]);
                     M2C_FIELD(arg0, s32*, 0) = 2;
                     M2C_FIELD(arg0, s8**, 8) = arg0 + 0x70;
                 }
             }
             break;
         case 2:
-            res = func_8A20093C(arg0 + 0x70);
+            res = MonSummary_UpdateMenuCursor(arg0 + 0x70);
             if (res == -1) {
                 func_8003F6AC(3);
                 func_8A202904(arg0, 1, (s32)(arg0 + 0x10));
@@ -476,7 +510,7 @@ M2C_UNK func_8A20291C(M2C_UNK* ctx) {
                         func_8A202904(arg0, 4, (s32)(arg0 + 0xD4));
                         M2C_FIELD(arg0, s32*, 0x104) = 0;
                         M2C_FIELD(arg0, s32*, 0x34) = 7;
-                        func_8A201D3C(arg0 + 0xD4, 0x2C, 0x54, ((Ctx8A20291C*)arg0)->ptrs[M2C_FIELD(arg0, s32*, 0x44)]);
+                        MonSummary_InitPageWindow(arg0 + 0xD4, 0x2C, 0x54, ((Ctx8A20291C*)arg0)->ptrs[M2C_FIELD(arg0, s32*, 0x44)]);
                         break;
                     case 2:
                         func_8003F6AC(2);
@@ -487,7 +521,7 @@ M2C_UNK func_8A20291C(M2C_UNK* ctx) {
                     case 3:
                         func_8003F6AC(3);
                         if (M2C_FIELD(arg0, s32*, 0x384) != 0) {
-                            func_8002CA34(arg0 + 0x10C, 0xD4, 0xAD);
+                            SavePrompt_Init(arg0 + 0x10C, 0xD4, 0xAD);
                             func_8A202904(arg0, 6, (s32)(arg0 + 0x10C));
                         } else {
                             func_8A202904(arg0, 7, 0);
@@ -498,7 +532,7 @@ M2C_UNK func_8A20291C(M2C_UNK* ctx) {
             }
             break;
         case 3:
-            if (func_8002DC04(arg0 + 0x3C) != 0) {
+            if (Menu_UpdateCursor(arg0 + 0x3C) != 0) {
                 M2C_FIELD(arg0, s32*, 0x34) = (M2C_FIELD(arg0, s32*, 0x38) <= 0) ? M2C_FIELD(arg0, s32*, 0x34) : 4;
             } else {
                 res = func_8002BC14((s32)D_800603C0);
@@ -507,7 +541,7 @@ M2C_UNK func_8A20291C(M2C_UNK* ctx) {
                     M2C_FIELD(arg0, s32*, 0) = 1;
                     M2C_FIELD(arg0, s8**, 8) = arg0 + 0x10;
                     M2C_FIELD(arg0, s32*, 0x34) = (M2C_FIELD(arg0, s32*, 0x38) <= 0) ? M2C_FIELD(arg0, s32*, 0x34) : 4;
-                    func_8002D900(arg0 + 0x3C);
+                    Menu_ClearItemFlags(arg0 + 0x3C);
                 } else if (res == 1) {
                     func_8003F6AC(0x18);
                     res = ((Ctx8A20291C*)arg0)->ptrs[M2C_FIELD(arg0, s32*, 0x6C)];
@@ -519,7 +553,7 @@ M2C_UNK func_8A20291C(M2C_UNK* ctx) {
                     M2C_FIELD(arg0, s32*, 0) = 1;
                     M2C_FIELD(arg0, s8**, 8) = arg0 + 0x10;
                     M2C_FIELD(arg0, s32*, 0x34) = (M2C_FIELD(arg0, s32*, 0x38) <= 0) ? M2C_FIELD(arg0, s32*, 0x34) : 4;
-                    func_8002D900(arg0 + 0x3C);
+                    Menu_ClearItemFlags(arg0 + 0x3C);
                 }
             }
             break;
@@ -536,7 +570,7 @@ M2C_UNK func_8A20291C(M2C_UNK* ctx) {
             }
             break;
         case 5:
-            if (func_8A202078(arg0 + 0xD4) == 0) {
+            if (MonSummary_GetCButtonPage(arg0 + 0xD4) == 0) {
                 res = func_8002BC14((s32)D_800603C0);
                 if (res == -1) {
                     func_8003F6AC(3);
@@ -550,14 +584,14 @@ M2C_UNK func_8A20291C(M2C_UNK* ctx) {
             }
             break;
         case 6:
-            res = func_8002CD7C(arg0 + 0x10C);
+            res = SavePrompt_Update(arg0 + 0x10C);
             if (res == -1) {
                 func_8A202904(arg0, 1, (s32)(arg0 + 0x10));
             } else if (res > 0) {
                 switch (res) {
                     case 1:
-                        func_8002CC44(arg0 + 0x10C);
-                        func_8A2023F4((s32*)(arg0 + 0x180), (s32)arg0);
+                        Save_DrawReportingWindow(arg0 + 0x10C);
+                        LabPC_WriteDeckBack((s32*)(arg0 + 0x180), (s32)arg0);
                         func_8A202904(arg0, 7, 0);
                         M2C_FIELD(arg0, s32*, 0x34) = 7;
                         break;
@@ -575,7 +609,10 @@ M2C_UNK func_8A20291C(M2C_UNK* ctx) {
     return ret;
 }
 
-void func_8A202EF4(void) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void BattlePrep_RenderFrame(void) {
     D_8A21DA40 = func_80025BD8();
     D_8A21DE08 = D_8A21DA40;
     if (D_8A21DE08 != -1) {
@@ -589,13 +626,13 @@ extern s32 D_8A203428;
 extern s32 D_8A20342C;
 /*
  * Second name for D_8A203428. The fade-out store in this function family
- * (also func_8200579C, func_8900429C, func_891049E8, func_8A101B30) does not
+ * (also func_8200579C, func_8900429C, LabPCList_UpdateFade, func_8A101B30) does not
  * share the counter's address with the load before it, which only happens
  * when the two accesses name different symbols.
  */
 extern s32 D_8A203428_2;
 extern M2C_UNK D_8A21D9E4;
-M2C_UNK func_80028060(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
+M2C_UNK GbSave_DrawSummaryBar(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
 void func_8002C8D8(ColF50*, ColF50, f32);
 s32 func_8A202F50(u8 arg0) {
     ColF50 sp2C;
@@ -610,16 +647,16 @@ s32 func_8A202F50(u8 arg0) {
         n--;
         D_8A203428_2 = n;
     }
-    func_800069CC();
+    BgStage_DrawFrame();
     if (D_8A21DE08 == -1) {
         var_a1 = NULL;
     } else {
         var_a1 = &D_8A21DE10;
     }
-    func_80028060(0, var_a1, &D_8A21D9E4, D_8A21DE08);
+    GbSave_DrawSummaryBar(0, var_a1, &D_8A21D9E4, D_8A21DE08);
     n = D_8A203428;
     func_8002C8D8(&sp2C, *(ColF50*)&D_8A203300, n / (f64)8.0f);
-    func_8002C064(0x38, 0x1E0, sp2C.r, sp2C.g, sp2C.b);
+    Ui_DrawTintedScreenBackground(0x38, 0x1E0, sp2C.r, sp2C.g, sp2C.b);
     if (D_8A20342C == 0) {
         n = D_8A203428;
         n++;
@@ -628,16 +665,24 @@ s32 func_8A202F50(u8 arg0) {
     return 0;
 }
 
-void func_8A203070(s32 arg0) {
-    func_8000B1FC();
-    func_8000B220();
+/**
+ * One frame: reads the controllers, then draws and updates the summary screen.
+ * @unverified Name and comment guessed from the code.
+ */
+void MonSummary_RunFrame(s32 arg0) {
+    Cont_StartReadInputs();
+    Cont_ReadInputs();
     func_8001B5F0();
     func_800158C0();
-    func_8A20261C(&D_8A21DA80);
-    func_8A20291C(&D_8A21DA80);
+    MonSummary_DrawScreen(&D_8A21DA80);
+    MonSummary_UpdateScreen(&D_8A21DA80);
 }
 
-s32 func_8A2030C0(UNUSED s32 arg0, UNUSED s32 arg1, UNUSED s32 arg2) {
+/**
+ * Entry point: pushes the 'VIEW' pool state, loads the font and archive, and creates the model preview and icon list.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 MonSummary_Init(UNUSED s32 arg0, UNUSED s32 arg1, UNUSED s32 arg2) {
     s32 i;
 
     main_pool_push_state('VIEW');
@@ -657,10 +702,10 @@ s32 func_8A2030C0(UNUSED s32 arg0, UNUSED s32 arg1, UNUSED s32 arg2) {
         D_8A21DA60[i] = main_pool_alloc(0x14800, 0);
     }
 
-    func_8A202EF4();
+    BattlePrep_RenderFrame();
     StageLoader_UpdateSegments();
     BgStage_RunUntilCondition(8, func_8A202F50);
-    BgStage_RunUntilCondition(0, (s32 (*)(u8))func_8A203070);
+    BgStage_RunUntilCondition(0, (s32 (*)(u8))MonSummary_RunFrame);
     BgStage_RunUntilCondition(8, func_8A202F50);
     StageLoader_WaitForRetrace();
     Font_Free();

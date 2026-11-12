@@ -12,13 +12,7 @@
 #include "audio_cache.h"
 #include "cry.h"
 #include "audio_fade.h"
-typedef struct unk_D_80077970 {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ u8 unk_02;
-    /* 0x03 */ u8 unk_03;
-    /* 0x04 */ u8 unk_04;
-} unk_D_80077970;
+#include "audio_commands_types.h"
 extern u8 pad_D_800FC694[4];
 extern unk_D_800FC6CC* D_800B41E4;
 extern u8* D_800B41E8;
@@ -69,14 +63,14 @@ extern s32 D_800B4190;
 extern s32 D_800B4188;
 extern s32 D_800B41A4;
 extern s32 D_800775A8;
-s32 func_80037B7C(s32);
+s32 Audio_QueueSetMonoOutputCommand(s32 handle);
 s32 func_80037AC4(s32, s32);
 s32 func_8003834C(s32, s32, s32, s32, s32, s32, s32);
 void func_8003A710(u8*);
 void func_80037D4C(s32, f32);
 void func_80037E84(s32, s32);
 void func_80037DF4(s32, s32);
-void func_8003FE58(s32, s32, s32);
+void Audio_PlayMoveSound(s32, s32, s32);
 M2C_UNK func_80037AC4(s32, M2C_UNK);                /* extern */
 extern u8 D_80077524;
 extern s32 D_800FD64C;
@@ -118,7 +112,7 @@ void func_80043CE8(s32, f32, s32);
 void func_80042508(u32 arg0) {
     s32 other;
     u32 pct;
-    u32 otherPct;
+    u32 other_pct;
 
     if (arg0 < 2) {
         D_80077550++;
@@ -141,7 +135,7 @@ void func_80042508(u32 arg0) {
             }
             other = arg0 ^ 1;
             pct = (u32)(D_800FD698[arg0] * 100) / (u32)D_800FD6A8[arg0];
-            otherPct = (u32)(D_800FD698[other] * 100) / (u32)D_800FD6A8[other];
+            other_pct = (u32)(D_800FD698[other] * 100) / (u32)D_800FD6A8[other];
 
             if (D_800FD6B0[arg0] != 0) {
                 D_8007756C = 1;
@@ -217,7 +211,7 @@ void func_80042508(u32 arg0) {
                 func_80043CE8(0x36, 0.0f, 0x80);
                 return;
             }
-            if ((D_800FD698[arg0] != 0) && (otherPct < 21)) {
+            if ((D_800FD698[arg0] != 0) && (other_pct < 21)) {
                 if (D_800FD6B4[other] < 3) {
                     func_80043CE8(0x40, 0.0f, 0x80);
                     return;
@@ -819,14 +813,14 @@ s32 func_8004D300(s32);
  * osSetIntMask) and restored afterwards.
  */
 void func_80043CE8(s32 arg0, f32 arg1, s32 arg2) {
-    s32 prevMask;
+    s32 prev_mask;
     QueuedEntry80043CE8* entry;
     u32 level;
     u32 idx;
     u32 count;
 
     if ((D_80077528 == 0) && (D_80077538 != 0) && (D_8007753C == 0)) {
-        prevMask = func_8004D300(1);
+        prev_mask = func_8004D300(1);
         count = D_80077558;
         if (count < 2) {
             idx = D_8007758C;
@@ -842,7 +836,7 @@ void func_80043CE8(s32 arg0, f32 arg1, s32 arg2) {
             D_80077558 = count + 1;
             D_8007758C %= 10;
         }
-        func_8004D300(prevMask);
+        func_8004D300(prev_mask);
     }
 }
 
@@ -854,13 +848,16 @@ extern u32 D_80077598;
 extern u8 D_8007759C;
 extern s32 D_800775A0;
 extern u8 D_800B3CC8;
-s32 func_80037B7C(s32);
+s32 Audio_QueueSetMonoOutputCommand(s32 handle);
 s32 func_800383DC(s32, s32, s32, s32, s32, s32, s32);
 
-void func_80043DD0(void) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Audio_UpdateBattleAudioFrame(void) {
     s32 ret;
 
-    if ((D_80077538 != 0) && (D_8007753C == 0) && (func_80037B7C(D_80077590) == 0) && (D_80077588 != D_8007758C) &&
+    if ((D_80077538 != 0) && (D_8007753C == 0) && (Audio_QueueSetMonoOutputCommand(D_80077590) == 0) && (D_80077588 != D_8007758C) &&
         (D_800B3CC8 == 0)) {
         ret = func_800383DC(D_800B418C, D_800B41A8, D_800FD6C0[D_80077588].id, D_800FD6C0[D_80077588].level, 0x80, 0, -1);
         if (ret != -1) {
@@ -910,8 +907,11 @@ extern u8* D_800B419C;
 s32 func_80037F68(u8*, u8*);
 void func_80037C04(s32, u32);
 
-s32 func_80044158(u8* arg0) {
-    UNUSED s32 pad[2];
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+s32 Audio_LoadWaveTablesAndMusic(u8* arg0) {
+    UNUSED s32 pad[2]; // FAKE: stack padding
     u8* sp1C;
 
     D_800FD690 = arg0;

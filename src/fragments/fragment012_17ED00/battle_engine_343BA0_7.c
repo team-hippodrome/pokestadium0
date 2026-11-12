@@ -31,21 +31,21 @@ void BattleAnim_EffectSecondaryOwnerBonePosition(Vec3f* arg0);
 f32 BattleAnim_EffectTertiaryOwnerModelScale(void);
 f32 BattleAnim_EffectSecondaryOwnerModelScale(void);
 void BattleAnim_ResetSharedEffectMatrix(void);
-void BattleAnim_Effect5RibbonMesh_Init(void);
-s32 BattleAnim_Effect5RibbonMesh_Update(void);
-void BattleAnim_Effect5RibbonMesh_Draw(void);
+void BattleAnim_SetupMistUseRibbonMesh(void);
+s32 BattleAnim_RunMistUseRibbonMesh(void);
+void BattleAnim_DrawMistUseRibbonMesh(void);
 void BattleAnim_EndEffect1RibbonMesh_Init(void);
 s32 BattleAnim_EndEffect1RibbonMesh_Update(void);
 void BattleAnim_EndEffect1RibbonMesh_Draw(void);
 void BattleAnim_EndEffect19RibbonMesh_Init(void);
 s32 BattleAnim_EndEffect19RibbonMesh_Update(void);
 void BattleAnim_EndEffect19RibbonMesh_Draw(void);
-void BattleAnim_Effect54RibbonMesh_Init(void);
-s32 BattleAnim_Effect54RibbonMesh_Update(void);
-void BattleAnim_Effect54RibbonMesh_Draw(void);
-void BattleAnim_StartEffect34TerrainGrid_Init(void);
-s32 BattleAnim_StartEffect34TerrainGrid_Update(void);
-void BattleAnim_StartEffect34TerrainGrid_Draw(void);
+void BattleAnim_SetupHazeUseRibbonMesh(void);
+s32 BattleAnim_RunHazeUseRibbonMesh(void);
+void BattleAnim_DrawHazeUseRibbonMesh(void);
+void BattleAnim_SetupSurfUseTerrainGrid(void);
+s32 BattleAnim_RunSurfUseTerrainGrid(void);
+void BattleAnim_DrawSurfUseTerrainGrid(void);
 
 void Battle_GetTertiaryOwnerBonePositionUnused(Vec3f* arg0) {
     BattleAnim_GetTertiaryOwnerBonePosition(arg0);
@@ -78,7 +78,7 @@ void BattleAnim_CalcVectorAtToDm(f32* arg0, f32* arg1, f32* arg2, f32* arg3, f32
     f32 sp3C;
     f32 sp38;
     f32 sp34;
-    UNUSED s32 pad[3];
+    UNUSED s32 pad[3]; // FAKE: stack padding
     f32 sp24;
     f32 sp20;
     f32 sp1C;
@@ -112,25 +112,40 @@ void BattleAnim_ResetSharedEffectMatrix(void) {
     guRotateRPY(&D_8219CAC8, 0.0f, 0.0f, 0.0f);
 }
 
-void BattleAnim_Effect5RibbonMesh_Init(void) {
+/**
+ * Moves: Mist (use)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_SetupMistUseRibbonMesh(void) {
     Vec3f sp24;
     f32 sp20;
 
     BattleAnim_ResetSharedEffectMatrix();
     BattleAnim_EffectSecondaryOwnerBonePosition(&sp24);
     sp20 = BattleAnim_EffectSecondaryOwnerModelScale();
-    RibbonMesh_Init();
-    RibbonMesh_Spawn(sp24.x, sp24.y, sp24.z, 40.0f, sp20, 0);
+    MistHaze_Init();
+    MistHaze_Spawn(sp24.x, sp24.y, sp24.z, 40.0f, sp20, 0);
 }
 
-s32 BattleAnim_Effect5RibbonMesh_Update(void) {
-    return RibbonMesh_UpdatePool();
+/**
+ * Moves: Mist (use)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1.
+ */
+s32 BattleAnim_RunMistUseRibbonMesh(void) {
+    return MistHaze_UpdatePool();
 }
 
-void BattleAnim_Effect5RibbonMesh_Draw(void) {
+/**
+ * Moves: Mist (use)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_DrawMistUseRibbonMesh(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gDisplayListHead = RibbonMesh_DrawPool(gDisplayListHead);
+    gDisplayListHead = MistHaze_DrawPool(gDisplayListHead);
 }
 
 void BattleAnim_EndEffect1RibbonMesh_Init(void) {
@@ -140,18 +155,18 @@ void BattleAnim_EndEffect1RibbonMesh_Init(void) {
     BattleAnim_ResetSharedEffectMatrix();
     BattleAnim_EffectSecondaryOwnerBonePosition(&sp24);
     sp20 = BattleAnim_EffectTertiaryOwnerModelScale();
-    RibbonMesh_Init();
-    RibbonMesh_Spawn(sp24.x, sp24.y, sp24.z, 40.0f, sp20, 1);
+    MistHaze_Init();
+    MistHaze_Spawn(sp24.x, sp24.y, sp24.z, 40.0f, sp20, 1);
 }
 
 s32 BattleAnim_EndEffect1RibbonMesh_Update(void) {
-    return RibbonMesh_UpdatePool();
+    return MistHaze_UpdatePool();
 }
 
 void BattleAnim_EndEffect1RibbonMesh_Draw(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gDisplayListHead = RibbonMesh_DrawPool(gDisplayListHead);
+    gDisplayListHead = MistHaze_DrawPool(gDisplayListHead);
 }
 
 void BattleAnim_EndEffect19RibbonMesh_Init(void) {
@@ -161,62 +176,80 @@ void BattleAnim_EndEffect19RibbonMesh_Init(void) {
     BattleAnim_ResetSharedEffectMatrix();
     BattleAnim_EffectSecondaryOwnerBonePosition(&sp24);
     sp20 = BattleAnim_EffectTertiaryOwnerModelScale();
-    RibbonMesh_Init();
-    RibbonMesh_Spawn(sp24.x, sp24.y, sp24.z, 40.0f, sp20, 0);
-    RibbonMesh_Spawn(sp24.x, sp24.y, sp24.z, 38.0f, sp20, 1);
+    MistHaze_Init();
+    MistHaze_Spawn(sp24.x, sp24.y, sp24.z, 40.0f, sp20, 0);
+    MistHaze_Spawn(sp24.x, sp24.y, sp24.z, 38.0f, sp20, 1);
 }
 
 s32 BattleAnim_EndEffect19RibbonMesh_Update(void) {
-    return RibbonMesh_UpdatePool();
+    return MistHaze_UpdatePool();
 }
 
 void BattleAnim_EndEffect19RibbonMesh_Draw(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gDisplayListHead = RibbonMesh_DrawPool(gDisplayListHead);
+    gDisplayListHead = MistHaze_DrawPool(gDisplayListHead);
 }
 
-void BattleAnim_Effect54RibbonMesh_Init(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_SetupHazeUseRibbonMesh(void) {
     Vec3f sp24;
     f32 sp20;
 
     BattleAnim_ResetSharedEffectMatrix();
     BattleAnim_EffectSecondaryOwnerBonePosition(&sp24);
     sp20 = BattleAnim_EffectSecondaryOwnerModelScale();
-    RibbonMesh_Init();
-    RibbonMesh_Spawn(sp24.x, sp24.y, sp24.z, 40.0f, sp20, 0);
-    RibbonMesh_Spawn(sp24.x, sp24.y, sp24.z, 38.0f, sp20, 1);
+    MistHaze_Init();
+    MistHaze_Spawn(sp24.x, sp24.y, sp24.z, 40.0f, sp20, 0);
+    MistHaze_Spawn(sp24.x, sp24.y, sp24.z, 38.0f, sp20, 1);
 }
 
-s32 BattleAnim_Effect54RibbonMesh_Update(void) {
-    return RibbonMesh_UpdatePool();
+/**
+ * @unverified Name from Stadium 1.
+ */
+s32 BattleAnim_RunHazeUseRibbonMesh(void) {
+    return MistHaze_UpdatePool();
 }
 
-void BattleAnim_Effect54RibbonMesh_Draw(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_DrawHazeUseRibbonMesh(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gDisplayListHead = RibbonMesh_DrawPool(gDisplayListHead);
+    gDisplayListHead = MistHaze_DrawPool(gDisplayListHead);
 }
 
-void BattleAnim_StartEffect34TerrainGrid_Init(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_SetupSurfUseTerrainGrid(void) {
     Vec3f sp1C;
 
     BattleAnim_EffectSecondaryOwnerAnchorPosition(&sp1C);
     BattleAnim_ResetSharedEffectMatrix();
 
     if (sp1C.x < 0.0) {
-        TerrainGrid_Init(1, 0, 0x4650);
+        SurfTerrainGrid_Init(1, 0, 0x4650);
     } else {
-        TerrainGrid_Init(-1, 0, 0x4650);
+        SurfTerrainGrid_Init(-1, 0, 0x4650);
     }
 }
 
-s32 BattleAnim_StartEffect34TerrainGrid_Update(void) {
-    return TerrainGrid_Update();
+/**
+ * @unverified Name from Stadium 1.
+ */
+s32 BattleAnim_RunSurfUseTerrainGrid(void) {
+    return SurfTerrainGrid_Update();
 }
 
-void BattleAnim_StartEffect34TerrainGrid_Draw(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_DrawSurfUseTerrainGrid(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gDisplayListHead = TerrainGrid_Draw(gDisplayListHead);
+    gDisplayListHead = SurfTerrainGrid_Draw(gDisplayListHead);
 }

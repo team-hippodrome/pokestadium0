@@ -30,12 +30,16 @@ typedef struct unk_func_88313894 {
 
 #include "fragments/particle_math/particle_math.h"
 #include "m2c_macros.h"
-void func_8002ED18(s8*, s32, s8*);
+void ScrollList_SetItems(s8*, s32, s8*);
 
 void func_89004708(void);
 void func_89004710(void);
 
-void func_89004680(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
+/**
+ * Writes the list `arg3` to deck (`arg0`, `arg1`, `arg2`) and closes it, flushing box decks 0x10..0x13.
+ * @unverified Name and comment guessed from the code.
+ */
+void PcSort_WriteDeck(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
     DeckHandle* sp1C = Deck_Open(arg0, arg1, arg2, 1);
 
     Deck_WriteEntries(M2C_FIELD(arg3, u8**, 0), M2C_FIELD(arg3, s32*, 8), sp1C);
@@ -53,7 +57,11 @@ void func_89004708(void) {
 void func_89004710(void) {
 }
 
-void func_89004718(s8* arg0, s8* arg1) {
+/**
+ * Sets the 0x100 flag on each of the 13 box rows whose box is empty.
+ * @unverified Name and comment guessed from the code.
+ */
+void PcSort_DisableEmptyBoxes(s8* arg0, s8* arg1) {
     s32 i;
 
     for (i = 0; i < 13; i++) {
@@ -63,7 +71,11 @@ void func_89004718(s8* arg0, s8* arg1) {
     }
 }
 
-void func_890047E4(s8 *arg0, s8 *arg1) {
+/**
+ * Sets the 0x200 flag on the first row when the list holds exactly one Pokemon.
+ * @unverified Name and comment guessed from the code.
+ */
+void PcSort_DisableIfSingleMon(s8 *arg0, s8 *arg1) {
     u16 *temp_v0;
 
     if (M2C_FIELD(arg1, s32 *, 8) == 1) {
@@ -72,7 +84,11 @@ void func_890047E4(s8 *arg0, s8 *arg1) {
     }
 }
 
-void func_8900480C(s8* arg0, s8* arg1) {
+/**
+ * Sets the 0x400 flag on each of the 13 box rows whose box is full.
+ * @unverified Name and comment guessed from the code.
+ */
+void PcSort_DisableFullBoxes(s8* arg0, s8* arg1) {
     s32 i;
 
     for (i = 0; i < 13; i++) {
@@ -82,7 +98,11 @@ void func_8900480C(s8* arg0, s8* arg1) {
     }
 }
 
-void func_890048EC(s8 *arg0, s32 arg1) {
+/**
+ * Sets the disabled flag (1) on menu row `arg1`.
+ * @unverified Name and comment guessed from the code.
+ */
+void PcSort_DisableRow(s8 *arg0, s32 arg1) {
     u16 *temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s32 *, 0x30) + (arg1 * 2);
@@ -92,18 +112,22 @@ void func_890048EC(s8 *arg0, s32 arg1) {
 typedef struct Rgba89004908 {
     /* 0x0 */ u8 r, g, b, a;
 } Rgba89004908; // size = 0x4
-void func_8002A0AC(s32, s32, s32, s32, Rgba89004908);
+void Ui_FillRectHighlighted(s32, s32, s32, s32, Rgba89004908);
 M2C_UNK func_8001AA9C(u8, u8, u8, u8);
 extern Rgba89004908 D_8900A5BC;
 extern Rgba89004908 D_8900A730[];
 extern Rgba89004908 D_800734B0[];
 extern M2C_UNK D_800734A8;
-void func_89004908(s32 x, s32 y, char* str, UNUSED s32 index, s32 flags) {
+/**
+ * Draws one menu row label with the selection highlight (dimmed when disabled).
+ * @unverified Name and comment guessed from the code.
+ */
+void PcSort_DrawMenuRow(s32 x, s32 y, char* str, UNUSED s32 index, s32 flags) {
     Rgba89004908 color;
-    UNUSED s32 pad[4];
+    UNUSED s32 pad[4]; // FAKE: stack padding
 
     if (flags & 0x10) {
-        func_8002A0AC(x + 3, y + 3, 0xD2, 0x16, D_8900A5BC);
+        Ui_FillRectHighlighted(x + 3, y + 3, 0xD2, 0x16, D_8900A5BC);
     }
     Font_BeginTranslucentTextRendering();
     if (flags & 1) {
@@ -124,42 +148,54 @@ void func_89004908(s32 x, s32 y, char* str, UNUSED s32 index, s32 flags) {
     Font_EndTexturedTextRendering();
 }
 
-void func_8002A8C4(s8*, s32, s32, s32, s32);
-void func_8002D880(s8*, s32, s32, s32, s32, s32);
+void Window_SetRect(s8*, s32, s32, s32, s32);
+void Menu_Init(s8*, s32, s32, s32, s32, s32);
 M2C_UNK func_80027804();
-void func_89004AD4(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
-    s32 pad[2];
+/**
+ * Sets up a menu window whose height fits `arg4` rows.
+ * @unverified Name and comment guessed from the code.
+ */
+void PcSort_InitMenuWindow(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
+    s32 pad[2]; // FAKE: stack padding
 
-    func_8002A8C4((s8 *)arg0, arg1, arg2, 0xBC, (arg4 * 0x1C) + 0x14);
+    Window_SetRect((s8 *)arg0, arg1, arg2, 0xBC, (arg4 * 0x1C) + 0x14);
     M2C_FIELD(arg0, s32 *, 0x28) = 0;
     M2C_FIELD(arg0, s32 *, 0x20) = 0;
     M2C_FIELD(arg0, s32 *, 0x24) = 0;
     M2C_FIELD(arg0, s32 *, 0x14) = 0;
     M2C_FIELD(arg0, Rgba89004908 *, 0x18) = D_8900A5BC;
     func_80027804((s8 *)arg0 + 0x50, arg3, arg4, arg4);
-    func_8002D880((s8 *)arg0 + 0x2C, (s32)((s8 *)arg0 + 0x50), (s32)((s8 *)arg0 + 0x5C), (s32)func_89004908, 0xB0, 0x1C);
+    Menu_Init((s8 *)arg0 + 0x2C, (s32)((s8 *)arg0 + 0x50), (s32)((s8 *)arg0 + 0x5C), (s32)PcSort_DrawMenuRow, 0xB0, 0x1C);
     M2C_FIELD(arg0, s32 *, 0x34) = arg5;
     M2C_FIELD(arg0, s32 *, 0x4C) |= 0x10000;
 }
 
 s32 func_8002AE6C();                                /* extern */
-M2C_UNK func_8002D9B8(s8 *, s32, s32, M2C_UNK, s32); /* extern */
+M2C_UNK Menu_DrawItems(s8 *, s32, s32, M2C_UNK, s32); /* extern */
 
-void func_89004B98(s8 *arg0) {
+/**
+ * Draws the menu window's items.
+ * @unverified Name and comment guessed from the code.
+ */
+void PcSort_DrawMenu(s8 *arg0) {
     if (func_8002AE6C() == 0) {
-        func_8002D9B8(arg0 + 0x2C, M2C_FIELD(arg0, s32 *, 0) + 6, M2C_FIELD(arg0, s32 *, 4) + 0xA, 0xFFEF, 0);
+        Menu_DrawItems(arg0 + 0x2C, M2C_FIELD(arg0, s32 *, 0) + 6, M2C_FIELD(arg0, s32 *, 4) + 0xA, 0xFFEF, 0);
     }
 }
 
-s32 func_8002DCE0(void*);
+s32 Menu_UpdateCursorSkipDisabled(void*);
 s32 func_8002BC14(s32);
 M2C_UNK func_8003F6AC(M2C_UNK);
 extern s32 D_800603C0;
-s32 func_89004BE0(s32 arg0) {
+/**
+ * Moves the menu cursor. Returns -1 on cancel, the 1-based row on confirm, otherwise 0.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 PcSort_UpdateMenuCursor(s32 arg0) {
     s32 sp1C = 0;
     s32 dir;
 
-    if (func_8002DCE0((u8*)arg0 + 0x2C) == 0) {
+    if (Menu_UpdateCursorSkipDisabled((u8*)arg0 + 0x2C) == 0) {
         dir = func_8002BC14(D_800603C0);
         if (dir == -1) {
             func_8003F6AC(3);
@@ -176,15 +212,19 @@ extern Rgba89004908 D_8900A73C;
 extern Rgba89004908 D_8900A744;
 extern char D_890189B0[];
 void func_80029028(s32, s32, s32, s32, Rgba89004908);
-void func_80027F20(s32);
-void func_89004C54(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4) {
+void Font_SetColorForFlags(s32);
+/**
+ * Draws a Pokemon list row with its level (Ｌ%d).
+ * @unverified Name and comment guessed from the code.
+ */
+void PcSort_DrawMonRow(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4) {
     u8* mon = arg2;
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(arg0, arg1 + 1, 0xCC, 0x1A, D_8900A73C);
     func_80029028(arg0, arg1, 0xCC, 1, D_8900A744);
     func_80029028(arg0, arg1 + 0x1B, 0xCC, 1, D_8900A744);
     if (arg4 & 0x18) {
-        func_8002A0AC(arg0 + 3, arg1 + 3, 0xC6, 0x16, D_8900A5BC);
+        Ui_FillRectHighlighted(arg0 + 3, arg1 + 3, 0xC6, 0x16, D_8900A5BC);
     }
     if (mon != NULL) {
         Font_BeginTranslucentTextRendering();
@@ -192,7 +232,7 @@ void func_89004C54(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4) {
         if ((mon[0] > 0) && (mon[0] < 0x98) && (D_80064C44[mon[0]][8] & 1)) {
             func_8001AA9C(0xFF, 0xC8, 0xA0, 0xFF);
         } else {
-            func_80027F20(arg4);
+            Font_SetColorForFlags(arg4);
         }
         Font_Printf(arg0 + 0xA, arg1 + 4, (char*)(mon + 0x30));
         Font_SetActive(4, 0);
@@ -201,44 +241,59 @@ void func_89004C54(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4) {
     }
 }
 
-void func_89004E1C(s8* arg0, s32 arg1) {
-    func_8002ED18(arg0, arg1, arg0 + 0x44);
+/**
+ * Points the Pokemon list at a new set of entries.
+ * @unverified Name and comment guessed from the code.
+ */
+void PcSort_SetMonList(s8* arg0, s32 arg1) {
+    ScrollList_SetItems(arg0, arg1, arg0 + 0x44);
 }
 
-void func_8002EC24(s8*, s32, s8*, s32, void*, s32, s32);
-void func_89004C54(s32, s32, u8*, s32, s32);
+void ScrollList_Init(s8*, s32, s8*, s32, void*, s32, s32);
+void PcSort_DrawMonRow(s32, s32, u8*, s32, s32);
 
-void func_89004E3C(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
+/**
+ * Sets up the scrolling Pokemon list at (`arg1`, `arg2`) with PcSort_DrawMonRow rows.
+ * @unverified Name and comment guessed from the code.
+ */
+void PcSort_InitMonList(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     M2C_FIELD(arg0, s32*, 0x80) = arg1;
     M2C_FIELD(arg0, s32*, 0x84) = arg2;
-    func_8002EC24(arg0, arg3, arg0 + 0x44, 6, func_89004C54, 0xCC, 0x1C);
+    ScrollList_Init(arg0, arg3, arg0 + 0x44, 6, PcSort_DrawMonRow, 0xCC, 0x1C);
     M2C_FIELD(arg0, s32*, 0x20) |= 0x10000;
 }
 
 void func_8002F9D8(void *, s32, s32, s32, s32);
-void func_8002F6C4(void *, s32, s32, s32, s32);
-void func_8002BAB8(s32, s32, s32, s32);
+void ScrollList_DrawInlineItems(void *, s32, s32, s32, s32);
+void Ui_DrawNumberZeroPadded(s32, s32, s32, s32);
 void func_8001BCB4(s32, s32, s32, s32, void *, s32, s32);
 extern Gfx D_80073450[];
 extern u8 D_04011AB8[];
-void func_89004EB0(s8 *arg0, s32 arg1) {
+/**
+ * Draws the scrolling Pokemon list (paged when 0x200 is set) and its scroll bar.
+ * @unverified Name and comment guessed from the code.
+ */
+void PcSort_DrawMonList(s8 *arg0, s32 arg1) {
     if (arg1 & 0x200) {
         func_8002F9D8(arg0, M2C_FIELD(arg0, s32 *, 0x80), M2C_FIELD(arg0, s32 *, 0x84) + 0x10, arg1 | 0xFFED, 0);
     } else {
-        func_8002F6C4(arg0, M2C_FIELD(arg0, s32 *, 0x80), M2C_FIELD(arg0, s32 *, 0x84) + 0x10, arg1 | 0xFFED, 0);
+        ScrollList_DrawInlineItems(arg0, M2C_FIELD(arg0, s32 *, 0x80), M2C_FIELD(arg0, s32 *, 0x84) + 0x10, arg1 | 0xFFED, 0);
     }
-    func_8002BAB8(M2C_FIELD(arg0, s32 *, 0x80) + 0x98, M2C_FIELD(arg0, s32 *, 0x84) + 0xBA, M2C_FIELD(M2C_FIELD(arg0, s8 **, 0), s32 *, 8), 2);
-    func_8002BAB8(M2C_FIELD(arg0, s32 *, 0x80) + 0xB3, M2C_FIELD(arg0, s32 *, 0x84) + 0xBA, M2C_FIELD(M2C_FIELD(arg0, s8 **, 0), s32 *, 4), 2);
+    Ui_DrawNumberZeroPadded(M2C_FIELD(arg0, s32 *, 0x80) + 0x98, M2C_FIELD(arg0, s32 *, 0x84) + 0xBA, M2C_FIELD(M2C_FIELD(arg0, s8 **, 0), s32 *, 8), 2);
+    Ui_DrawNumberZeroPadded(M2C_FIELD(arg0, s32 *, 0x80) + 0xB3, M2C_FIELD(arg0, s32 *, 0x84) + 0xBA, M2C_FIELD(M2C_FIELD(arg0, s8 **, 0), s32 *, 4), 2);
     gSPDisplayList(gDisplayListHead++, D_80073450);
     gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
     func_8001BCB4(M2C_FIELD(arg0, s32 *, 0x80) + 0xAA, M2C_FIELD(arg0, s32 *, 0x84) + 0xBC, 8, 0xA, D_04011AB8, 8, 0);
 }
 
-s32 func_8002FD8C(void*);
+s32 ScrollList_UpdateCursor(void*);
 s32 func_80030230(void*);
 
-/* Navigate the selected menu mode, then report cancel or confirm input. */
-s32 func_89004FE4(void* menu, u32 flags) {
+/**
+ * Navigate the selected menu mode, then report cancel or confirm input.
+ * @unverified Name guessed from the code; comment kept.
+ */
+s32 PcSort_UpdateMonList(void* menu, u32 flags) {
     s32 result = 0;
     s32 moved;
     s32 action;
@@ -246,7 +301,7 @@ s32 func_89004FE4(void* menu, u32 flags) {
     if (flags & 0x200) {
         moved = func_80030230(menu);
     } else {
-        moved = func_8002FD8C(menu);
+        moved = ScrollList_UpdateCursor(menu);
     }
     if (moved == 0) {
         action = func_8002BC14(D_800603C0);
@@ -267,7 +322,7 @@ void func_89005068(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3, s32 arg4)
 }
 
 void func_8002B018(s8*, s32, s32, s32, s32, s32, void*);
-void func_8002DECC(s8*, s8*, s8*, void*, s32, s32, s32);
+void GridMenu_Init(s8*, s8*, s8*, void*, s32, s32, s32);
 void func_80027410(s8*, s8*, s32, s32, s32);
 extern Rgba89004908 D_8900A580[];
 extern Rgba89004908 D_8900A750;
@@ -280,14 +335,18 @@ extern u8 D_89010368[];
 extern u8 D_89011E78[];
 extern char D_890189B8[];
 
-void func_89005098(s8* arg0, s32 x, s32 y, s8* arg3, s8* arg4) {
+/**
+ * Sets up the ポケモンのせいり (organize Pokemon) window and its lists.
+ * @unverified Name and comment guessed from the code.
+ */
+void PcSort_InitOrganizeWindow(s8* arg0, s32 x, s32 y, s8* arg3, s8* arg4) {
 
-    func_8002A8C4(arg0 + 4, x, y, 0x234, 0x172);
+    Window_SetRect(arg0 + 4, x, y, 0x234, 0x172);
     M2C_FIELD(arg0, s32*, 0x28) = 0;
     M2C_FIELD(arg0, s32*, 0x2C) = 0;
     M2C_FIELD(arg0, s32*, 0x18) = 0x801;
     M2C_FIELD(arg0, char**, 0x24) = D_890189B8;
-    func_8002A8C4(arg0 + 0x30, M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) + 0x100, M2C_FIELD(arg0, s32*, 0xC) - 0xC, 0x6C);
+    Window_SetRect(arg0 + 0x30, M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) + 0x100, M2C_FIELD(arg0, s32*, 0xC) - 0xC, 0x6C);
     M2C_FIELD(arg0, s32*, 0x44) = 6;
     M2C_FIELD(arg0, Rgba89004908*, 0x48) = D_8900A750;
     M2C_FIELD(arg0, Rgba89004908*, 0x4C) = D_8900A754;
@@ -316,11 +375,11 @@ void func_89005098(s8* arg0, s32 x, s32 y, s8* arg3, s8* arg4) {
     M2C_FIELD(arg0, Rgba89004908*, 0x148) = D_8900A580[13];
     M2C_FIELD(arg0, Rgba89004908*, 0x14C) = D_8900A5BC;
     func_80027410(arg0 + 0x158, arg0 + 0x50, 0x2C, 6, 6);
-    func_8002DECC(arg0 + 0x168, arg0 + 0x158, arg0 + 0x190, func_89005068, 2, 0, 0);
+    GridMenu_Init(arg0 + 0x168, arg0 + 0x158, arg0 + 0x190, func_89005068, 2, 0, 0);
     M2C_FIELD(arg0, s32*, 0x290) = 1;
     M2C_FIELD(arg0, s32*, 0x28C) = 0;
-    func_89004E3C(arg0 + 0x294, M2C_FIELD(arg0, s32*, 4) + 0xE, M2C_FIELD(arg0, s32*, 8) + 0x2C, (s32)arg3);
-    func_89004E3C(arg0 + 0x31C, M2C_FIELD(arg0, s32*, 4) + 0x15A, M2C_FIELD(arg0, s32*, 8) + 0x2C, (s32)(arg3 + M2C_FIELD(arg0, s32*, 0x290) * 0x10));
+    PcSort_InitMonList(arg0 + 0x294, M2C_FIELD(arg0, s32*, 4) + 0xE, M2C_FIELD(arg0, s32*, 8) + 0x2C, (s32)arg3);
+    PcSort_InitMonList(arg0 + 0x31C, M2C_FIELD(arg0, s32*, 4) + 0x15A, M2C_FIELD(arg0, s32*, 8) + 0x2C, (s32)(arg3 + M2C_FIELD(arg0, s32*, 0x290) * 0x10));
     M2C_FIELD(arg0, s8**, 0x3A8) = arg3;
     M2C_FIELD(arg0, s8**, 0x3AC) = arg4;
     func_80027410(arg0 + 0x3B0, M2C_FIELD(arg3, s8**, 0), 0x50, M2C_FIELD(arg3, s32*, 4), 0);
@@ -332,8 +391,8 @@ M2C_UNK func_8001A944(s32, s32, s32);
 M2C_UNK func_8001AB6C();
 M2C_UNK func_8001ABBC();
 void func_8001B884(s32, s32, s32, s32, void*, s32, s32);
-void func_80027F20(s32);
-void func_8002A550(s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
+void Font_SetColorForFlags(s32);
+void Ui_FillRectPrimEnvColor(s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
 s32 func_8002BC44(s32);
 extern Gfx D_80073408[];
 extern Gfx D_80073438[];
@@ -344,7 +403,11 @@ extern void* D_89017A80[];
 extern u8 D_89017A98[];
 extern s32 D_89019114;
 
-void func_890054D4(s32 arg0, s32 x, s32 y, s32 flags, u32 idx) {
+/**
+ * Draws a box tab with its name, highlighted when selected.
+ * @unverified Name and comment guessed from the code.
+ */
+void PcSort_DrawBoxTab(s32 arg0, s32 x, s32 y, s32 flags, u32 idx) {
     Color_RGBA8* col;
 
     if (flags & 2) {
@@ -352,7 +415,7 @@ void func_890054D4(s32 arg0, s32 x, s32 y, s32 flags, u32 idx) {
     } else {
         col = D_8900A794;
     }
-    func_8002A550(x, y, 0xCC, 0x1E, col[0], col[1]);
+    Ui_FillRectPrimEnvColor(x, y, 0xCC, 0x1E, col[0], col[1]);
     if (idx != -1) {
         gSPDisplayList(gDisplayListHead++, D_80073408);
         switch (idx) {
@@ -376,7 +439,7 @@ void func_890054D4(s32 arg0, s32 x, s32 y, s32 flags, u32 idx) {
         }
         gSPDisplayList(gDisplayListHead++, D_80073438);
         func_8001AB6C();
-        func_80027F20(flags);
+        Font_SetColorForFlags(flags);
         func_8001A384(8, 0);
         func_8001A944(x + 0x2B, y + 5, D_8900A758[idx]);
         func_8001ABBC();
@@ -390,9 +453,9 @@ typedef struct Slot890056A4 {
     s32 iconX;
     void* tex;
 } Slot890056A4;
-s32 func_8002D3D0(u8*);
-s32 func_8002D430(s32, s32);
-void func_890074E0(s32, s32, s32, s32);
+s32 BattleMon_CountMoves(u8* arg0);
+s32 BattleMon_GetMoveIndex(s32, s32);
+void PcBox_DrawMoveName(s32, s32, s32, s32);
 extern Slot890056A4 D_8900A79C[];
 extern char D_89018AC4[];
 extern char D_89018AD0[];
@@ -407,12 +470,16 @@ extern char D_89018B14[];
 extern Gfx D_80060290[];
 extern Gfx D_80060398[];
 
-void func_890056A4(s32 x, s32 y, u8* mon) {
+/**
+ * Draws Attack, Defense, Speed, Special and HP:%3d (？？？？？ when unknown).
+ * @unverified Name and comment guessed from the code.
+ */
+void PcSort_DrawMonStats(s32 x, s32 y, u8* mon) {
     s32 count;
     s32 i;
     char* name;
 
-    count = func_8002D3D0(mon);
+    count = BattleMon_CountMoves(mon);
     Font_BeginTranslucentTextRendering();
     func_8001AA9C(0xFF, 0xC8, 0xC8, 0xFF);
     Font_SetActive(4, 0);
@@ -434,7 +501,7 @@ void func_890056A4(s32 x, s32 y, u8* mon) {
     Font_Printf(x + 0x15C, y + 0x54, D_89018B10, *(u16*)(mon + 0x2C));
     Font_Printf(x + 0x1E7, y + 0x54, D_89018B14, *(u16*)(mon + 0x2E));
     for (i = 0; i < count; i++) {
-        func_890074E0(D_8900A79C[i].x + x, D_8900A79C[i].y + y, func_8002D430((s32)mon, i), D_8900A79C[i].type);
+        PcBox_DrawMoveName(D_8900A79C[i].x + x, D_8900A79C[i].y + y, BattleMon_GetMoveIndex((s32)mon, i), D_8900A79C[i].type);
     }
     Font_EndTexturedTextRendering();
     gSPDisplayList(gDisplayListHead++, D_80060290);
@@ -447,16 +514,20 @@ void func_890056A4(s32 x, s32 y, u8* mon) {
 M2C_UNK func_8001A384(M2C_UNK, M2C_UNK);            /* extern */
 M2C_UNK func_8001A944(s32, s32, s32);               /* extern */
 M2C_UNK func_8001AA9C(u8, u8, u8, u8);              /* extern */
-M2C_UNK func_8001AB2C(M2C_UNK);                     /* extern */
+void Font_SetLineHeight(s32 arg0);                     /* extern */
 M2C_UNK func_8001AB6C();                            /* extern */
 M2C_UNK func_8001ABBC();                            /* extern */
 extern M2C_UNK D_800734A8;
 
-void func_89005958(s32 arg0, s32 arg1, s32 arg2) {
+/**
+ * Draws `arg2` in the small font.
+ * @unverified Name and comment guessed from the code.
+ */
+void PcSort_DrawSmallText(s32 arg0, s32 arg1, s32 arg2) {
     func_8001AB6C();
     func_8001A384(0x10, 0);
     func_8001AA9C(M2C_FIELD(&D_800734A8, u8 *, 0), M2C_FIELD(&D_800734A8, u8 *, 1), M2C_FIELD(&D_800734A8, u8 *, 2), M2C_FIELD(&D_800734A8, u8 *, 3));
-    func_8001AB2C(0x2C);
+    Font_SetLineHeight(0x2C);
     func_8001A944(arg0 + 0xC, arg1 + 0x14, arg2);
     func_8001ABBC();
 }
@@ -465,22 +536,26 @@ extern s32 D_8900A7EC[];
 extern s32 D_8900A804[];
 extern s32 D_8900A81C[];
 extern s32 D_8900A834[];
-void func_890019C8(s32, s32, s32, s32);
-void func_890056A4();
+void LabItem_DrawTitleText(s32, s32, s32, s32);
+void PcSort_DrawMonStats();
 
-void func_890059D0(s32* arg0) {
+/**
+ * Draws the help line for the organize window's current state.
+ * @unverified Name and comment guessed from the code.
+ */
+void PcSort_DrawHelpText(s32* arg0) {
     s32 idx = arg0[0x170 / 4];
     s32** list;
 
     switch (arg0[0]) {
         case 1:
-            func_890019C8(arg0[0x30 / 4] + 0x58, arg0[0x34 / 4] + 0x1A, D_8900A7EC[idx], D_8900A834[idx]);
+            LabItem_DrawTitleText(arg0[0x30 / 4] + 0x58, arg0[0x34 / 4] + 0x1A, D_8900A7EC[idx], D_8900A834[idx]);
             break;
         case 2:
-            func_89005958(arg0[0x30 / 4], arg0[0x34 / 4], D_8900A804[idx]);
+            PcSort_DrawSmallText(arg0[0x30 / 4], arg0[0x34 / 4], D_8900A804[idx]);
             break;
         case 3:
-            func_89005958(arg0[0x30 / 4], arg0[0x34 / 4], D_8900A81C[idx]);
+            PcSort_DrawSmallText(arg0[0x30 / 4], arg0[0x34 / 4], D_8900A81C[idx]);
             break;
         case 4:
         case 6:
@@ -490,39 +565,43 @@ void func_890059D0(s32* arg0) {
             } else {
                 list = (s32**)&arg0[0x294 / 4];
             }
-            func_890056A4(arg0[0x30 / 4], arg0[0x34 / 4], ((s32*)list)[2] * 0x50 + *list[0]);
+            PcSort_DrawMonStats(arg0[0x30 / 4], arg0[0x34 / 4], ((s32*)list)[2] * 0x50 + *list[0]);
             break;
     }
 }
 
-void func_8002A8E0(s8*);
-void func_80029658(s32, s32, s32, void*);
-void func_800295E8(s32, s32, s32, s32, void*);
-void func_8002E230(s8*, s32, s32, s32, s32);
-void func_8002D024(s8*);
+void Window_DrawFrame(s8*);
+void Ui_DrawTexturedDivider(s32, s32, s32, void*);
+void Ui_DrawTexturedFrameDecal(s32, s32, s32, s32, void*);
+void GridMenu_DrawInlineItems(s8*, s32, s32, s32, s32);
+void TextBox_Draw(s8*);
 extern u8 D_8007356C[];
 extern u8 D_800735C4[];
 
-void func_89005AE0(s8* arg0) {
+/**
+ * Draws the organize Pokemon window: frame, lists and help line.
+ * @unverified Name and comment guessed from the code.
+ */
+void PcSort_DrawOrganizeWindow(s8* arg0) {
     s32 pad[1]; // FAKE: stack padding
     s32 m1;
     s32 m2;
     s32 mode;
 
     if (func_8002AE6C(arg0 + 4) == 0) {
-        func_8002A8E0(arg0 + 0x30);
+        Window_DrawFrame(arg0 + 0x30);
         gSPDisplayList(gDisplayListHead++, D_80060270);
         func_80029028(M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) - 0xC, 8, D_8900A5BC);
         func_80029028(M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) + 0xF4, M2C_FIELD(arg0, s32*, 0xC) - 0xC, 6, D_8900A5BC);
         func_80029028(M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) + 0xE, 8, 0xE6, D_8900A5BC);
         func_80029028(M2C_FIELD(arg0, s32*, 0xC) + M2C_FIELD(arg0, s32*, 4) - 0xE, M2C_FIELD(arg0, s32*, 8) + 0xE, 8, 0xE6, D_8900A5BC);
         func_80029028(M2C_FIELD(arg0, s32*, 4) + 0xDA, M2C_FIELD(arg0, s32*, 8) + 0xE, 0x80, 0xE6, D_8900A5BC);
-        func_80029658(M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 0x34) - 7, M2C_FIELD(arg0, s32*, 0xC), D_8007356C);
-        func_800295E8(M2C_FIELD(arg0, s32*, 4) + 0xC, M2C_FIELD(arg0, s32*, 8) + 0xC, 0xD0, 0xEA, D_800735C4);
-        func_800295E8(M2C_FIELD(arg0, s32*, 4) + 0x158, M2C_FIELD(arg0, s32*, 8) + 0xC, 0xD0, 0xEA, D_800735C4);
-        func_8002E230(arg0 + 0x168, 0, 0, (M2C_FIELD(arg0, s32*, 0) == 1) ? 2 : 0x10, 0);
-        func_890054D4((s32)arg0, M2C_FIELD(arg0, s32*, 4) + 0xE, M2C_FIELD(arg0, s32*, 8) + 0xE, 0, M2C_FIELD(arg0, s32*, 0x28C));
-        func_890054D4((s32)arg0, M2C_FIELD(arg0, s32*, 4) + 0x15A, M2C_FIELD(arg0, s32*, 8) + 0xE, 0, M2C_FIELD(arg0, s32*, 0x290));
+        Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 0x34) - 7, M2C_FIELD(arg0, s32*, 0xC), D_8007356C);
+        Ui_DrawTexturedFrameDecal(M2C_FIELD(arg0, s32*, 4) + 0xC, M2C_FIELD(arg0, s32*, 8) + 0xC, 0xD0, 0xEA, D_800735C4);
+        Ui_DrawTexturedFrameDecal(M2C_FIELD(arg0, s32*, 4) + 0x158, M2C_FIELD(arg0, s32*, 8) + 0xC, 0xD0, 0xEA, D_800735C4);
+        GridMenu_DrawInlineItems(arg0 + 0x168, 0, 0, (M2C_FIELD(arg0, s32*, 0) == 1) ? 2 : 0x10, 0);
+        PcSort_DrawBoxTab((s32)arg0, M2C_FIELD(arg0, s32*, 4) + 0xE, M2C_FIELD(arg0, s32*, 8) + 0xE, 0, M2C_FIELD(arg0, s32*, 0x28C));
+        PcSort_DrawBoxTab((s32)arg0, M2C_FIELD(arg0, s32*, 4) + 0x15A, M2C_FIELD(arg0, s32*, 8) + 0xE, 0, M2C_FIELD(arg0, s32*, 0x290));
         m1 = 0xFDED;
         m2 = 0xFDED;
         mode = M2C_FIELD(arg0, s32*, 0);
@@ -538,35 +617,43 @@ void func_89005AE0(s8* arg0) {
                 m2 |= 2;
                 break;
         }
-        func_89004EB0(arg0 + 0x294, m1);
-        func_89004EB0(arg0 + 0x31C, m2);
+        PcSort_DrawMonList(arg0 + 0x294, m1);
+        PcSort_DrawMonList(arg0 + 0x31C, m2);
         if ((M2C_FIELD(arg0, s32*, 0) == 2) || (M2C_FIELD(arg0, s32*, 0) == 0xA)) {
-            func_89004B98(arg0 + 0x19C);
+            PcSort_DrawMenu(arg0 + 0x19C);
         }
         if ((M2C_FIELD(arg0, s32*, 0) == 3) || (M2C_FIELD(arg0, s32*, 0) == 0xB)) {
-            func_89004B98(arg0 + 0x214);
+            PcSort_DrawMenu(arg0 + 0x214);
         }
-        func_890059D0((s32*)arg0);
+        PcSort_DrawHelpText((s32*)arg0);
         if ((M2C_FIELD(arg0, s32*, 0) == 0xA) || (M2C_FIELD(arg0, s32*, 0) == 0xB) || (M2C_FIELD(arg0, s32*, 0) == 0xC) || (M2C_FIELD(arg0, s32*, 0) == 0xD)) {
-            func_8002D024(arg0 + 0x3C0);
+            TextBox_Draw(arg0 + 0x3C0);
         }
     }
 }
 
 void func_89000020(void* arg0, void* arg1);
-void func_89000048(void*);
+void LabItem_RemoveSelectedEntry(void*);
 
-void func_89005E14(s8* arg0) {
+/**
+ * Moves the selected Pokemon into the destination box and marks both boxes changed.
+ * @unverified Name and comment guessed from the code.
+ */
+void PcSort_MoveSelectedMon(s8* arg0) {
     M2C_FIELD(arg0, s32**, 0x3AC)[M2C_FIELD(arg0, s32*, 0x248)] = 1;
     M2C_FIELD(arg0, s32**, 0x3AC)[M2C_FIELD(arg0, s32*, 0x1D0)] = M2C_FIELD(arg0, s32**, 0x3AC)[M2C_FIELD(arg0, s32*, 0x248)];
     func_89000020(arg0 + 0x31C, (void*)(M2C_FIELD(arg0, s32**, 0x294)[3] * M2C_FIELD(arg0, s32*, 0x29C) + M2C_FIELD(arg0, s32**, 0x294)[0]));
-    func_89000048(arg0 + 0x294);
+    LabItem_RemoveSelectedEntry(arg0 + 0x294);
 }
 
 void func_80027654(s32* matrix, u8* out, s32 row);
 void func_80027700(s32* matrix, u8* in, s32 row);
 
-void func_89005EA4(s8* arg0) {
+/**
+ * Swaps two entries of the source list.
+ * @unverified Name and comment guessed from the code.
+ */
+void PcSort_SwapWithinList(s8* arg0) {
     u8 row[0x50];
     s32* matrix = M2C_FIELD(arg0, s32**, 0x294);
 
@@ -577,7 +664,11 @@ void func_89005EA4(s8* arg0) {
 }
 
 
-void func_89005F2C(s8* arg0) {
+/**
+ * Swaps the selected entries of the source and destination lists.
+ * @unverified Name and comment guessed from the code.
+ */
+void PcSort_SwapBetweenLists(s8* arg0) {
     u8 row[0x50];
     s32* matrix;
 
@@ -589,31 +680,39 @@ void func_89005F2C(s8* arg0) {
     M2C_FIELD(arg0, s32**, 0x3AC)[M2C_FIELD(arg0, s32*, 0x28C)] = M2C_FIELD(arg0, s32**, 0x3AC)[M2C_FIELD(arg0, s32*, 0x290)];
 }
 
-void func_89000048(void*);
+void LabItem_RemoveSelectedEntry(void*);
 
-void func_89005FD8(s8* arg0) {
-    func_89000048(arg0 + 0x294);
+/**
+ * Removes the selected Pokemon from its box and marks the box changed.
+ * @unverified Name and comment guessed from the code.
+ */
+void PcSort_ReleaseSelectedMon(s8* arg0) {
+    LabItem_RemoveSelectedEntry(arg0 + 0x294);
     M2C_FIELD(arg0, s32**, 0x3AC)[M2C_FIELD(arg0, s32*, 0x28C)] = 1;
     M2C_FIELD(arg0, s32*, 0) = (((M2C_FIELD(arg0, s32*, 0x28C) == 0) ? 1 : 0) == M2C_FIELD(M2C_FIELD(arg0, s8**, 0x294), s32*, 8)) ? 1 : 4;
 }
 
 
-void func_89006054(s8 *arg0) {
+/**
+ * Shows the selected box's Pokemon in the destination list.
+ * @unverified Name and comment guessed from the code.
+ */
+void PcSort_OpenBox(s8 *arg0) {
     s32 temp_v0;
     s8 *temp_a0;
 
     temp_v0 = M2C_FIELD(arg0, s32 *, 0x248);
     temp_a0 = arg0 + 0x31C;
     M2C_FIELD(temp_a0, s32 *, -0x8C) = temp_v0;
-    func_89004E1C(temp_a0, M2C_FIELD(arg0, s32 *, 0x3A8) + (temp_v0 * 0x10));
+    PcSort_SetMonList(temp_a0, M2C_FIELD(arg0, s32 *, 0x3A8) + (temp_v0 * 0x10));
     M2C_FIELD(arg0, s32 *, 0) = 4;
 }
 
-void func_8002CEEC(s8*, s8*, s32, s32, s32);
-s32 func_8002D138(s8*);
-void func_8002D900(s8*);
-void func_8002DDFC(s8*);
-s32 func_8002E3F0(s8*);
+void TextBox_Init(s8*, s8*, s32, s32, s32);
+s32 Ui_CheckConfirmPressed(s8*);
+void Menu_ClearItemFlags(s8*);
+void Menu_SkipDisabledForward(s8*);
+s32 GridMenu_UpdateCursor(s8*);
 extern s8* D_8900A84C[];
 extern s8 D_89018D8C[];
 extern s8 D_89018DA4[];
@@ -623,7 +722,11 @@ typedef struct Mon8900609C {
     u8 unk01[0x4F];
 } Mon8900609C;
 
-s32 func_8900609C(s8* arg0) {
+/**
+ * Runs the organize Pokemon window's state machine (move, swap, release).
+ * @unverified Name and comment guessed from the code.
+ */
+s32 PcSort_UpdateOrganizeWindow(s8* arg0) {
     s32 ret;
     s32 res;
     s32 next;
@@ -635,7 +738,7 @@ s32 func_8900609C(s8* arg0) {
     next = 0;
     switch (M2C_FIELD(arg0, s32*, 0)) {
         case 1:
-            if (func_8002E3F0(arg0 + 0x168) == 0) {
+            if (GridMenu_UpdateCursor(arg0 + 0x168) == 0) {
                 res = func_8002BC14(D_800603C0);
                 if (res == -1) {
                     func_8003F6AC(3);
@@ -648,7 +751,7 @@ s32 func_8900609C(s8* arg0) {
                         func_8003F6AC(2);
                         next = 2;
                         if ((M2C_FIELD(arg0, s32*, 0x170) == 3) || (M2C_FIELD(arg0, s32*, 0x170) == 4) || (M2C_FIELD(arg0, s32*, 0x170) == 5)) {
-                            func_89004E1C(arg0 + 0x31C, (s32)(arg0 + 0x3B0));
+                            PcSort_SetMonList(arg0 + 0x31C, (s32)(arg0 + 0x3B0));
                             M2C_FIELD(arg0, s32*, 0x290) = -1;
                         }
                     }
@@ -656,23 +759,23 @@ s32 func_8900609C(s8* arg0) {
             }
             break;
         case 2:
-            res = func_89004BE0(arg0 + 0x19C);
+            res = PcSort_UpdateMenuCursor(arg0 + 0x19C);
             if (res == -1) {
                 M2C_FIELD(arg0, s32*, 0) = 1;
             } else if (res > 0) {
                 flags = M2C_FIELD(arg0, u16**, 0x1CC)[M2C_FIELD(arg0, s32*, 0x1D0)];
                 if (flags & 0x100) {
                     M2C_FIELD(arg0, s32*, 0) = 0xA;
-                    func_8002CEEC(arg0 + 0x3C0, D_8900A84C[M2C_FIELD(arg0, s32*, 0x170)], 0, 1, 0);
+                    TextBox_Init(arg0 + 0x3C0, D_8900A84C[M2C_FIELD(arg0, s32*, 0x170)], 0, 1, 0);
                     func_8003F6AC(8);
                 } else if (flags & 0x200) {
                     func_8003F6AC(8);
                     M2C_FIELD(arg0, s32*, 0) = 0xA;
-                    func_8002CEEC(arg0 + 0x3C0, D_89018D8C, 0, 1, 0);
+                    TextBox_Init(arg0 + 0x3C0, D_89018D8C, 0, 1, 0);
                 } else {
                     func_8003F6AC(2);
                     M2C_FIELD(arg0, s32*, 0x28C) = M2C_FIELD(arg0, s32*, 0x1D0);
-                    func_89004E1C(arg0 + 0x294, (M2C_FIELD(arg0, s32*, 0x1D0) * 0x10) + M2C_FIELD(arg0, s32*, 0x3A8));
+                    PcSort_SetMonList(arg0 + 0x294, (M2C_FIELD(arg0, s32*, 0x1D0) * 0x10) + M2C_FIELD(arg0, s32*, 0x3A8));
                     if ((M2C_FIELD(arg0, s32*, 0x170) == 3) || (M2C_FIELD(arg0, s32*, 0x170) == 4) || (M2C_FIELD(arg0, s32*, 0x170) == 5)) {
                         M2C_FIELD(arg0, s32*, 0) = 4;
                     } else {
@@ -682,7 +785,7 @@ s32 func_8900609C(s8* arg0) {
             }
             break;
         case 3:
-            res = func_89004BE0(arg0 + 0x214);
+            res = PcSort_UpdateMenuCursor(arg0 + 0x214);
             if (res == -1) {
                 next = 2;
             } else if (res > 0) {
@@ -690,19 +793,19 @@ s32 func_8900609C(s8* arg0) {
                 if (flags & 0x100) {
                     func_8003F6AC(8);
                     M2C_FIELD(arg0, s32*, 0) = 0xB;
-                    func_8002CEEC(arg0 + 0x3C0, D_8900A84C[M2C_FIELD(arg0, s32*, 0x170)], 0, 1, 0);
+                    TextBox_Init(arg0 + 0x3C0, D_8900A84C[M2C_FIELD(arg0, s32*, 0x170)], 0, 1, 0);
                 } else if (flags & 0x400) {
                     func_8003F6AC(8);
                     M2C_FIELD(arg0, s32*, 0) = 0xB;
-                    func_8002CEEC(arg0 + 0x3C0, D_89018DA4, 0, 1, 0);
+                    TextBox_Init(arg0 + 0x3C0, D_89018DA4, 0, 1, 0);
                 } else {
                     func_8003F6AC(2);
-                    func_89006054(arg0);
+                    PcSort_OpenBox(arg0);
                 }
             }
             break;
         case 4:
-            res = func_89004FE4(arg0 + 0x294, 0);
+            res = PcSort_UpdateMonList(arg0 + 0x294, 0);
             if (res == -1) {
                 M2C_FIELD(arg0, s32*, 0) = 1;
             } else if (res == 1) {
@@ -738,12 +841,12 @@ s32 func_8900609C(s8* arg0) {
             }
             break;
         case 5:
-            res = func_89004FE4(arg0 + 0x31C, 0x200);
+            res = PcSort_UpdateMonList(arg0 + 0x31C, 0x200);
             if (res == -1) {
                 M2C_FIELD(arg0, s32*, 0) = 4;
             } else if (res == 1) {
                 func_8003F6AC(0x18);
-                func_89005E14(arg0);
+                PcSort_MoveSelectedMon(arg0);
                 if ((((M2C_FIELD(arg0, s32*, 0x28C) == 0) ? 1 : 0) == M2C_FIELD(M2C_FIELD(arg0, s8**, 0x294), s32*, 8)) ||
                     (M2C_FIELD(M2C_FIELD(arg0, s8**, 0x31C), s32*, 4) == M2C_FIELD(M2C_FIELD(arg0, s8**, 0x31C), s32*, 8))) {
                     M2C_FIELD(arg0, s32*, 0) = 1;
@@ -753,44 +856,44 @@ s32 func_8900609C(s8* arg0) {
             }
             break;
         case 6:
-            res = func_89004FE4(arg0 + 0x294, 0);
+            res = PcSort_UpdateMonList(arg0 + 0x294, 0);
             if (res == -1) {
-                func_8002D900(arg0 + 0x294);
+                Menu_ClearItemFlags(arg0 + 0x294);
                 M2C_FIELD(arg0, s32*, 0) = 4;
             } else if (res == 1) {
                 func_8003F6AC(0x18);
-                func_89005EA4(arg0);
-                func_8002D900(arg0 + 0x294);
+                PcSort_SwapWithinList(arg0);
+                Menu_ClearItemFlags(arg0 + 0x294);
                 M2C_FIELD(arg0, s32*, 0) = 4;
             }
             break;
         case 7:
-            res = func_89004FE4(arg0 + 0x31C, 0);
+            res = PcSort_UpdateMonList(arg0 + 0x31C, 0);
             if (res == -1) {
                 M2C_FIELD(arg0, s32*, 0) = 4;
             } else if (res == 1) {
                 func_8003F6AC(0x18);
-                func_89005F2C(arg0);
+                PcSort_SwapBetweenLists(arg0);
                 M2C_FIELD(arg0, s32*, 0) = 4;
             }
             break;
         case 10:
-            if (func_8002D138(arg0 + 0x3C0) == 1) {
+            if (Ui_CheckConfirmPressed(arg0 + 0x3C0) == 1) {
                 M2C_FIELD(arg0, s32*, 0) = 2;
             }
             break;
         case 11:
-            if (func_8002D138(arg0 + 0x3C0) == 1) {
+            if (Ui_CheckConfirmPressed(arg0 + 0x3C0) == 1) {
                 M2C_FIELD(arg0, s32*, 0) = 3;
             }
             break;
         case 12:
-            if (func_8002D138(arg0 + 0x3C0) == 1) {
+            if (Ui_CheckConfirmPressed(arg0 + 0x3C0) == 1) {
                 M2C_FIELD(arg0, s32*, 0) = 4;
             }
             break;
         case 13:
-            if (func_8002D138(arg0 + 0x3C0) == 1) {
+            if (Ui_CheckConfirmPressed(arg0 + 0x3C0) == 1) {
                 M2C_FIELD(arg0, s32*, 0) = 7;
             }
             break;
@@ -798,24 +901,24 @@ s32 func_8900609C(s8* arg0) {
     if (next > 0) {
         switch (next) {
             case 2:
-                func_89004AD4(arg0 + 0x19C, M2C_FIELD(arg0, s32*, 4) + 0x25, M2C_FIELD(arg0, s32*, 8) - 0x14,
+                PcSort_InitMenuWindow(arg0 + 0x19C, M2C_FIELD(arg0, s32*, 4) + 0x25, M2C_FIELD(arg0, s32*, 8) - 0x14,
                               (s32)D_8900A758, 0xD, M2C_FIELD(arg0, s32*, 0x28C));
-                func_89004718(arg0 + 0x19C, (s8*)M2C_FIELD(arg0, s32*, 0x3A8));
+                PcSort_DisableEmptyBoxes(arg0 + 0x19C, (s8*)M2C_FIELD(arg0, s32*, 0x3A8));
                 if ((M2C_FIELD(arg0, s32*, 0x170) == 0) || (M2C_FIELD(arg0, s32*, 0x170) == 5)) {
-                    func_890047E4(arg0 + 0x19C, (s8*)M2C_FIELD(arg0, s32*, 0x3A8));
+                    PcSort_DisableIfSingleMon(arg0 + 0x19C, (s8*)M2C_FIELD(arg0, s32*, 0x3A8));
                 }
                 break;
             case 3:
-                func_89004AD4(arg0 + 0x214, M2C_FIELD(arg0, s32*, 4) + 0x173, M2C_FIELD(arg0, s32*, 8) - 0x14,
+                PcSort_InitMenuWindow(arg0 + 0x214, M2C_FIELD(arg0, s32*, 4) + 0x173, M2C_FIELD(arg0, s32*, 8) - 0x14,
                               (s32)D_8900A758, 0xD, M2C_FIELD(arg0, s32*, 0x290));
                 if (M2C_FIELD(arg0, s32*, 0x170) == 0) {
-                    func_8900480C(arg0 + 0x214, (s8*)M2C_FIELD(arg0, s32*, 0x3A8));
+                    PcSort_DisableFullBoxes(arg0 + 0x214, (s8*)M2C_FIELD(arg0, s32*, 0x3A8));
                 } else if (M2C_FIELD(arg0, s32*, 0x170) == 2) {
-                    func_89004718(arg0 + 0x214, (s8*)M2C_FIELD(arg0, s32*, 0x3A8));
+                    PcSort_DisableEmptyBoxes(arg0 + 0x214, (s8*)M2C_FIELD(arg0, s32*, 0x3A8));
                 }
-                func_890048EC(arg0 + 0x214, M2C_FIELD(arg0, s32*, 0x28C));
+                PcSort_DisableRow(arg0 + 0x214, M2C_FIELD(arg0, s32*, 0x28C));
                 M2C_FIELD(arg0, s32*, 0x248) = 0;
-                func_8002DDFC(arg0 + 0x240);
+                Menu_SkipDisabledForward(arg0 + 0x240);
                 break;
         }
         M2C_FIELD(arg0, s32*, 0) = next;
@@ -823,23 +926,27 @@ s32 func_8900609C(s8* arg0) {
     return ret;
 }
 
-s8* func_80017860(s32);
-void func_80017934(void);
+s8 *PokeIcon_AllocFramebuffers(s32 arg0);
+void PokeIcon_OpenModelArchives(void);
 s32 func_80018F2C(s8*, s32, s32, s32, s32, s32, s32, s32);
 void func_80027410(s8*, s8*, s32, s32, s32);
 void func_89000448(s32, s32, s32, s8*);
-void func_89005098(s8*, s32, s32, s8*, s8*);
+void PcSort_InitOrganizeWindow(s8*, s32, s32, s8*, s8*);
 extern u8 D_81000000[];
 extern u8 D_0015B1A0[];
 extern u8 D_0015E220[];
 extern s32 D_89019108;
-void func_890067B0(s8* arg0, s32 arg1) {
+/**
+ * Pushes the 'OTPC' pool state, opens the icon archives, and reads the boxes.
+ * @unverified Name and comment guessed from the code.
+ */
+void PcSort_Init(s8* arg0, s32 arg1) {
     s32 i;
 
     main_pool_push_state('OTPC');
-    M2C_FIELD(arg0, s8**, 4) = func_80017860(1);
+    M2C_FIELD(arg0, s8**, 4) = PokeIcon_AllocFramebuffers(1);
     M2C_FIELD(arg0, s32*, 8) = func_80018F2C(M2C_FIELD(arg0, s8**, 4), 0x80, 0x78, 0, 0, 0x78, 0x78, 0);
-    func_80017934();
+    PokeIcon_OpenModelArchives();
     Fragment_Load(((((u32)D_81000000) & 0x0FF00000) >> 0x14) - 0x10, D_0015B1A0, D_0015E220);
     M2C_FIELD(arg0, s32*, 0xC) = arg1;
     func_80027410(arg0 + 0x778C, arg0 + 0x52C, 0x50, 6, 0);
@@ -862,40 +969,48 @@ void func_890067B0(s8* arg0, s32 arg1) {
         ((s32*)(arg0 + 0x785C))[i] = 0;
         i++;
     } while (i != 13);
-    func_89005098(arg0 + 0x10, 0x26, 0x53, arg0 + 0x778C, arg0 + 0x785C);
+    PcSort_InitOrganizeWindow(arg0 + 0x10, 0x26, 0x53, arg0 + 0x778C, arg0 + 0x785C);
     M2C_FIELD(arg0, s32*, 0) = 1;
 }
 
 M2C_UNK func_80002620(M2C_UNK);                     /* extern */
 
-void func_890069C0(s32 arg0) {
+/**
+ * Pops the 'OTPC' pool state.
+ * @unverified Name and comment guessed from the code.
+ */
+void PcSort_Free(s32 arg0) {
     func_80002620(0x4F545043);
 }
 
-void func_8002C064(s32, s32, s32, s32, s32);
-void func_89005AE0();
-void func_8002CAD0(void*);
-void func_89007678(void*);
+void Ui_DrawTintedScreenBackground(s32, s32, s32, s32, s32);
+void PcSort_DrawOrganizeWindow();
+void SavePrompt_Draw(void*);
+void PcBox_DrawMonStatusWindow(void*);
 extern Color_RGB8 D_8900A5B8;
 
-void func_890069E8(s32* arg0) {
+/**
+ * Draws the Pokemon sorting screen for its current state, including the status window.
+ * @unverified Name and comment guessed from the code.
+ */
+void PcSort_DrawScreen(s32* arg0) {
     BgStage_DrawFrame();
-    func_8002C064(0x38, 0x1E0, D_8900A5B8.r, D_8900A5B8.g, D_8900A5B8.b);
+    Ui_DrawTintedScreenBackground(0x38, 0x1E0, D_8900A5B8.r, D_8900A5B8.g, D_8900A5B8.b);
     switch (*arg0) {
         case 1:
-            func_89005AE0(arg0 + 4);
+            PcSort_DrawOrganizeWindow(arg0 + 4);
             break;
         case 2:
-            func_89005AE0(arg0 + 4);
-            func_8002CAD0((u8*)arg0 + 0x408);
+            PcSort_DrawOrganizeWindow(arg0 + 4);
+            SavePrompt_Draw((u8*)arg0 + 0x408);
             break;
         case 3:
-            func_89005AE0(arg0 + 4);
-            func_89007678((u8*)arg0 + 0x46C);
+            PcSort_DrawOrganizeWindow(arg0 + 4);
+            PcBox_DrawMonStatusWindow((u8*)arg0 + 0x46C);
             break;
         case 4:
-            func_89005AE0(arg0 + 4);
-            func_89007678((u8*)arg0 + 0x46C);
+            PcSort_DrawOrganizeWindow(arg0 + 4);
+            PcBox_DrawMonStatusWindow((u8*)arg0 + 0x46C);
             break;
     }
 }
@@ -903,7 +1018,11 @@ void func_890069E8(s32* arg0) {
 M2C_UNK func_80023268(s32, u8, M2C_UNK);            /* extern */
 extern s32 D_89019108;
 
-void func_89006AB4(s8 *arg0) {
+/**
+ * Requests the icon of each species in list `arg0`.
+ * @unverified Name and comment guessed from the code.
+ */
+void PcSort_LoadMonIcons(s8 *arg0) {
     s32 var_s1;
     u8 *var_s0;
 
@@ -933,7 +1052,11 @@ s32 func_8002207C(s32);
 void func_80022188(s32);
 void func_800243B8(void);
 void func_8002D7D4(s32);
-void func_89006B2C(Save89006B2C* arg0) {
+/**
+ * Writes the changed boxes back to the save and flushes it.
+ * @unverified Name and comment guessed from the code.
+ */
+void PcSort_SaveChanges(Save89006B2C* arg0) {
     s32 dirty = 0;
     s32 i;
     s32 saved = 0;
@@ -951,18 +1074,18 @@ void func_89006B2C(Save89006B2C* arg0) {
         func_80022118(D_89019108);
     }
     if (arg0->flag0 != 0) {
-        func_89004680(0x20, D_89019108, 0, (u8*)arg0->entry0);
-        func_89006AB4(arg0->entry0);
+        PcSort_WriteDeck(0x20, D_89019108, 0, (u8*)arg0->entry0);
+        PcSort_LoadMonIcons(arg0->entry0);
     }
     for (i = 0; i < 8; i++) {
         if (arg0->flags[i] != 0) {
-            func_89004680(0x21, D_89019108, i, (u8*)arg0->entries[i]);
-            func_89006AB4(arg0->entries[i]);
+            PcSort_WriteDeck(0x21, D_89019108, i, (u8*)arg0->entries[i]);
+            PcSort_LoadMonIcons(arg0->entries[i]);
         }
     }
     for (i = 0; i < 4; i++) {
         if (arg0->flags2[i] != 0) {
-            func_89004680(0x11, D_89019108, i, arg0->entries2[i]);
+            PcSort_WriteDeck(0x11, D_89019108, i, arg0->entries2[i]);
             saved = 1;
         }
     }
@@ -970,7 +1093,7 @@ void func_89006B2C(Save89006B2C* arg0) {
         func_800230C4(D_89019108);
         if (func_8002207C(D_89019108) == 0) {
             func_8002D7D4(D_89019108);
-            func_890069E8((s32*)arg0);
+            PcSort_DrawScreen((s32*)arg0);
         }
         func_80022188(D_89019108);
     }
@@ -979,7 +1102,11 @@ void func_89006B2C(Save89006B2C* arg0) {
     }
 }
 
-s32 func_89006CDC(s8* arg0) {
+/**
+ * Returns 1 when any of the 13 boxes changed.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 PcSort_HasUnsavedChanges(s8* arg0) {
     s32 i;
 
     for (i = 0; i < 13; i++) {
@@ -990,16 +1117,20 @@ s32 func_89006CDC(s8* arg0) {
     return 0;
 }
 
-void func_8002CA34(s8* arg0, s32 arg1, s32 arg2);
-void func_8002CC44(s8* arg0);
-s32 func_8002CD7C(s8* arg0);
-void func_800407B0(s32, s32, s32);
-s32 func_8900609C(s8* arg0);
-void func_89007374(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, u16* arg6);
-s32 func_89007CD8(s8* arg0);
+void SavePrompt_Init(s8* arg0, s32 arg1, s32 arg2);
+void Save_DrawReportingWindow(s8* arg0);
+s32 SavePrompt_Update(s8* arg0);
+s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2);
+s32 PcSort_UpdateOrganizeWindow(s8* arg0);
+void PcBox_InitConfirmWindow(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, u16* arg6);
+s32 PcBox_UpdateConfirmCursor(s8* arg0);
 extern u8 D_89018DBC[];
 
-s32 func_89006D60(s8* arg0) {
+/**
+ * Runs the Pokemon organizer's state machine for one frame.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 PcSort_UpdateScreen(s8* arg0) {
     s32 ret = 0;
     s8* sub;
     u8* mon;
@@ -1007,30 +1138,30 @@ s32 func_89006D60(s8* arg0) {
 
     switch (M2C_FIELD(arg0, s32*, 0)) {
         case 1:
-            res = func_8900609C(arg0 + 0x10);
+            res = PcSort_UpdateOrganizeWindow(arg0 + 0x10);
             if (res == -1) {
-                if (func_89006CDC(arg0) != 0) {
+                if (PcSort_HasUnsavedChanges(arg0) != 0) {
                     M2C_FIELD(arg0, s32*, 0) = 2;
-                    func_8002CA34(arg0 + 0x408, 0xCA, 0xAD);
+                    SavePrompt_Init(arg0 + 0x408, 0xCA, 0xAD);
                 } else {
                     ret = 1;
                 }
             } else if (res == 2) {
                 mon = M2C_FIELD(arg0, s32*, 0x2AC) * 0x50 + M2C_FIELD(arg0, u8***, 0x2A4)[0];
                 M2C_FIELD(arg0, s32*, 0) = 3;
-                func_89007374(arg0 + 0x46C, 0x69, 0x7D, (s32)mon, 0,
+                PcBox_InitConfirmWindow(arg0 + 0x46C, 0x69, 0x7D, (s32)mon, 0,
                               D_800603C0, M2C_FIELD(arg0, u16**, 8));
             } else if (res == 3) {
                 mon = M2C_FIELD(arg0, s32*, 0x2AC) * 0x50 + M2C_FIELD(arg0, u8***, 0x2A4)[0];
                 M2C_FIELD(arg0, s32*, 0) = 4;
-                func_89007374(arg0 + 0x46C, 0x69, 0x7D, (s32)mon,
+                PcBox_InitConfirmWindow(arg0 + 0x46C, 0x69, 0x7D, (s32)mon,
                               (s32)D_89018DBC, D_800603C0, M2C_FIELD(arg0, u16**, 8));
                 M2C_FIELD(arg0, s32*, 0x514) = 1;
             }
             break;
         case 2:
             sub = arg0 + 0x408;
-            res = func_8002CD7C(sub);
+            res = SavePrompt_Update(sub);
             if (res == -1) {
                 M2C_FIELD(arg0, s32*, 0) = 1;
             } else if (res > 0) {
@@ -1040,8 +1171,8 @@ s32 func_89006D60(s8* arg0) {
                     case 2:
                         break;
                     case 1:
-                        func_8002CC44(sub);
-                        func_89006B2C((Save89006B2C*)arg0);
+                        Save_DrawReportingWindow(sub);
+                        PcSort_SaveChanges((Save89006B2C*)arg0);
                         break;
                 }
             }
@@ -1054,13 +1185,13 @@ s32 func_89006D60(s8* arg0) {
             }
             break;
         case 4:
-            res = func_89007CD8(arg0 + 0x46C);
+            res = PcBox_UpdateConfirmCursor(arg0 + 0x46C);
             if (res == -1) {
                 func_8003F6AC(3);
                 M2C_FIELD(arg0, s32*, 0) = 1;
             } else if (res == 1) {
-                func_800407B0(0x57, 0, 0);
-                func_89005FD8(arg0 + 0x10);
+                Audio_PlayCommand(0x57, 0, 0);
+                PcSort_ReleaseSelectedMon(arg0 + 0x10);
                 M2C_FIELD(arg0, s32*, 0) = 1;
             }
             break;

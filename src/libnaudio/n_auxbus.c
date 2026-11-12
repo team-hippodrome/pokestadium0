@@ -5,7 +5,7 @@
 
 Acmd* n_alAuxBusPull(s32 sampleOffset, Acmd* p);
 
-Acmd* n_alAuxBusPull(s32 sampleOffset, Acmd* p) {
+Acmd* n_alAuxBusPull(s32 sample_offset, Acmd* p) {
     Acmd* ptr = p;
     N_ALAuxBus* m = (N_ALAuxBus*)n_syn->auxBus;
     N_PVoice** sources = m->sources;
@@ -14,6 +14,6 @@ Acmd* n_alAuxBusPull(s32 sampleOffset, Acmd* p) {
     aClearBuffer(ptr++, N_AL_AUX_L_OUT, N_AL_DIVIDED << 1);
 
     for (i = 0; i < m->sourceCount; i++)
-        ptr = n_alEnvmixerPull(sources[i], sampleOffset, ptr);
+        ptr = n_alEnvmixerPull(sources[i], sample_offset, ptr);
     return ptr;
 }

@@ -24,7 +24,10 @@
 #include "math_util.h"
 #include "memory.h"
 #include "stage_loader.h"
-#include "fragments/minigame_actor_framework/minigame_actor_framework.h"
+#include "global.h"
+#include "fragments/particle_math/particle_math.h"
+#include "jpeg_stream.h"
+#include "controller.h"
 #include "gb_save.h"
 #include "m2c_macros.h"
 extern u8 D_30074E0[];
@@ -100,7 +103,7 @@ extern s16 D_82203550;
 extern Color_RGBA8 D_822036A0;
 extern s8* D_822036A4;
 extern s32 D_822036A8;
-M2C_UNK func_800407B0(M2C_UNK, M2C_UNK, M2C_UNK);
+s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2);
 s32 Completion_LightAngleCallbackA(s32, GraphNode*);
 s32 Completion_LightAngleCallbackB(s32, GraphNode*);
 typedef struct unk_D_86B0DBCC {
@@ -155,7 +158,6 @@ typedef struct unk_D_86B0EBE0 {
 } unk_D_86B0EBE0;
 extern s32 pad_D_86B0C4BC[3];
 
-#include "fragments/jigglypuff_doodle/jigglypuff_doodle.h"
 #include "math.h"
 #include "geo_render.h"
 #include "model_animation_events.h"
@@ -172,7 +174,6 @@ extern s32 pad_D_86B0C4BC[3];
 #include "matrix.h"
 #include "controller.h"
 #include "fragments/widget_toolkit/widget_toolkit.h"
-#include "fragments/minigame_shared_graphics/minigame_shared_graphics.h"
 #include "memory.h"
 #include "stage_loader.h"
 typedef struct unk_D_86301730 {
@@ -193,7 +194,11 @@ s32 Completion_LightAngleCallbackA(s32 arg0, GraphNode* arg1);
 void func_82200848(void);
 void func_82200850(void);
 
-void func_82200020(s32 arg0, CameraNode* arg1) {
+/**
+ * Camera node callback: sets the perspective (fov 39, near 50, far 6400) and eye position on the first call.
+ * @unverified Name and comment guessed from the code.
+ */
+void VsScene_SetupCamera(s32 arg0, CameraNode* arg1) {
     if (arg0 == 0) {
         GeoCamera_SetPerspective(arg1, 39.0f, 50.0f, 6400.0f);
         GeoCamera_SetEyeAtUp(arg1, 0.0f, 0.0f, 1507.0f, 0.0f, 0.0f, -165.0f, 0);
@@ -216,7 +221,7 @@ s32 Completion_LightAngleCallbackA(s32 arg0, GraphNode* arg1) {
 
 void func_822000F0(s32 arg0, s8 *arg1)
 {
-  s8 **new_var;
+  s8 **new_var; // FAKE: permuter temp
   if (arg0 == 0)
   {
     new_var = *((s8 ***) (((s8 *) arg1) + 0x14));
@@ -224,19 +229,27 @@ void func_822000F0(s32 arg0, s8 *arg1)
   }
 }
 
-M2C_UNK func_8000B1FC();                            /* extern */
-M2C_UNK func_8000B220();                            /* extern */
+void Cont_StartReadInputs(void);                            /* extern */
+void Cont_ReadInputs(void);                            /* extern */
 M2C_UNK func_8001B5F0();                            /* extern */
 
-s32 func_82200108(void) {
-    func_8000B1FC();
-    func_8000B220();
+/**
+ * Makes the per-frame calls the scene runs before drawing (Cont_StartReadInputs, Cont_ReadInputs, func_8001B5F0).
+ * @unverified Name and comment guessed from the code.
+ */
+s32 VsScene_BeginFrame(void) {
+    Cont_StartReadInputs();
+    Cont_ReadInputs();
     func_8001B5F0();
     return 0;
 }
 
 
-void func_8220013C(void) {
+/**
+ * Pushes the 'ICON' pool state and decides, per side, whether its team is shown.
+ * @unverified Name and comment guessed from the code.
+ */
+void VsScene_PrepareTeams(void) {
     unk_D_82203170* team;
     s32 i;
 
@@ -304,8 +317,12 @@ extern u8* D_86B10828;
 extern GraphNode* D_86B106B4;
 void func_82200278(void);
 
-s32 func_82200510(s32 arg0) {
-    s32 sp24 = func_82200108();
+/**
+ * Draws one frame of the scene into the offscreen image.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 VsScene_DrawFrameToImage(s32 arg0) {
+    s32 sp24 = VsScene_BeginFrame();
 
     GeoRender_AdvanceFrameCounter();
     PokeIcon_ProcessNextSlot((unk_func_8001A024*)D_82203264, 0);
@@ -318,8 +335,12 @@ s32 func_82200510(s32 arg0) {
     return sp24;
 }
 
-s32 func_822005A8(s32 arg0) {
-    s32 sp24 = func_82200108();
+/**
+ * Draws one frame of the scene over the background stage.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 VsScene_DrawFrame(s32 arg0) {
+    s32 sp24 = VsScene_BeginFrame();
 
     GeoRender_AdvanceFrameCounter();
     PokeIcon_ProcessNextSlot((unk_func_8001A024*)D_82203264, 0);
@@ -340,8 +361,8 @@ s32 func_80027214(s8 *, s32);                       /* extern */
  * 0x3C-byte local buffers with func_800273E8: from D_82202CD0 and D_82202CEC
  * when the byte *D_822036A4 is 0, from D_82202C60 and D_82202C7C otherwise.
  * Then, while func_80027214(buf1, rec + 0xA8) returns non-zero, it calls
- * func_80027214(buf2, rec + 0xB4), then func_82200510(0) and
- * func_80006780(), and stops as soon as func_82200510 returns non-zero.
+ * func_80027214(buf2, rec + 0xB4), then VsScene_DrawFrameToImage(0) and
+ * func_80006780(), and stops as soon as VsScene_DrawFrameToImage returns non-zero.
  *
  * Same buffer pair and loop as func_88401E24. What the buffers, the record
  * and the helpers are is not established.
@@ -370,7 +391,7 @@ void func_82200618(void) {
     } while (0);
     while (func_80027214(sp7C, sp3C + 0xA8) != 0) {
         func_80027214(sp40, sp3C + 0xB4);
-        temp_s0_2 = func_82200510(0);
+        temp_s0_2 = VsScene_DrawFrameToImage(0);
         func_80006780();
         if (temp_s0_2 != 0) {
             break;
@@ -407,7 +428,7 @@ void func_82200714(void) {
             func_8000A7FC(0x3C);
         }
         func_80027214(sp50, rec + 0xB4);
-        done = func_82200510(0);
+        done = VsScene_DrawFrameToImage(0);
         func_80006780();
         if (done != 0) {
             break;
@@ -422,13 +443,17 @@ void func_82200850(void) {
 }
 
 
-void func_82200858(unk_D_82203170* arg0, s32 arg1) {
+/**
+ * Requests the icon of each Pokemon a side can pick and stores the images.
+ * @unverified Name and comment guessed from the code.
+ */
+void VsScene_LoadTeamIcons(unk_D_82203170* arg0, s32 arg1) {
     s32 i;
     s32 slot = arg1 * 6;
 
     for (i = 0; i < 6; i++) {
         if (i < arg0->unk_40[0]->numberOfPokemonCanBePicked) {
-            func_8001833C((unk_func_8001A024*)D_82203264, slot, &arg0->unk_40[0]->unk_028[i], 1);
+            func_8001833C((unk_func_8001A024*)D_82203264, slot, &arg0->unk_40[0]->battleMon[i], 1);
         }
         arg0->unk_08[i] = PokeIcon_GetImage((unk_func_8001A024*)D_82203264, slot++);
     }
@@ -472,36 +497,36 @@ void func_8220091C(void) {
             break;
     }
     if (((DemoState*)D_822036A4)->unk_0000 == 0) {
-        func_800407B0(0x3C, 0, track);
+        Audio_PlayCommand(0x3C, 0, track);
     } else {
-        func_800407B0(0x3C, ((DemoState*)D_822036A4)->unk_0003, track);
+        Audio_PlayCommand(0x3C, ((DemoState*)D_822036A4)->unk_0003, track);
     }
     obj->rootId = ((DemoState*)D_822036A4)->unk_0003;
     if (((DemoState*)D_822036A4)->unk_0000 != 0) {
         if (((DemoState*)D_822036A4)->unk_0003 == 7) {
             Model_InitDisplayObject(&D_82203268, ((DemoState*)D_822036A4)->unk_0003, 0, (ModelNodeView*)D_82203248);
             ModelAnim_BindTransformCurve(&D_82203268, 1, D_8ED0FACC, 0x10000);
-            BgStage_RunUntilCondition(0x6E, (s32(*)(u8))func_822005A8);
+            BgStage_RunUntilCondition(0x6E, (s32(*)(u8))VsScene_DrawFrame);
             ModelRenderer_ClearDisplayObject(&D_82203268);
         } else if (((DemoState*)D_822036A4)->unk_0003 == 8) {
             Model_InitDisplayObject(&D_82203268, ((DemoState*)D_822036A4)->unk_0003, 0, (ModelNodeView*)D_82203248);
             ModelAnim_BindTransformCurve(&D_82203268, 1, D_8EE0FDE0, 0x10000);
-            BgStage_RunUntilCondition(0x6E, (s32(*)(u8))func_822005A8);
+            BgStage_RunUntilCondition(0x6E, (s32(*)(u8))VsScene_DrawFrame);
             ModelRenderer_ClearDisplayObject(&D_82203268);
         } else {
             Model_InitDisplayObject(&D_82203268, ((DemoState*)D_822036A4)->unk_0003, 0, (ModelNodeView*)D_82203248);
             ModelAnim_BindTransformCurve(&D_82203268, 1, D_8EC145CC, 0x10000);
-            BgStage_RunUntilCondition(0x64, (s32(*)(u8))func_822005A8);
+            BgStage_RunUntilCondition(0x64, (s32(*)(u8))VsScene_DrawFrame);
             ModelRenderer_ClearDisplayObject(&D_82203268);
         }
     }
     Model_InitDisplayObject(&D_82203268, ((DemoState*)D_822036A4)->unk_0003, 0, (ModelNodeView*)D_8220324C);
     if ((D_82203170[0].unk_00 == 2) || (D_82203170[1].unk_00 == 2)) {
         ModelAnim_BindTransformCurve(&D_82203268, 1, D_8F5054C8, 0x10000);
-        BgStage_RunUntilCondition(0x64, (s32(*)(u8))func_822005A8);
+        BgStage_RunUntilCondition(0x64, (s32(*)(u8))VsScene_DrawFrame);
     } else {
         ModelAnim_BindTransformCurve(&D_82203268, 1, D_8F5054AC, 0x10000);
-        BgStage_RunUntilCondition(0xA0, (s32(*)(u8))func_822005A8);
+        BgStage_RunUntilCondition(0xA0, (s32(*)(u8))VsScene_DrawFrame);
     }
 }
 
@@ -517,9 +542,9 @@ void func_82200C04(void) {
 
     Fragment_LoadAndCall((((u32)D_82400000 & 0x0FF00000) >> 0x14) - 0x10, D_00175570, D_0017BE70, 0,
                          (u32)D_822036A4);
-    func_8220013C();
-    func_82200858(&D_82203170[0], 0);
-    func_82200858(&D_82203170[1], 1);
+    VsScene_PrepareTeams();
+    VsScene_LoadTeamIcons(&D_82203170[0], 0);
+    VsScene_LoadTeamIcons(&D_82203170[1], 1);
     if (((DemoState*)D_822036A4)->unk_0000 == 0) {
         Vec3f_FromVec3s(&camera->view.targetPosition, (Vec3s*)(D_82202CEC + 2));
         Vec3f_FromVec3s(&camera->view.eyePosition, (Vec3s*)(D_82202CD0 + 2));
@@ -534,7 +559,7 @@ void func_82200C04(void) {
     } else {
         Audio_PlayMusicIfChanged(6);
     }
-    BgStage_RunUntilCondition(0x40, func_82200510);
+    BgStage_RunUntilCondition(0x40, VsScene_DrawFrameToImage);
     func_82200618();
     func_8220091C();
     func_82200714();
@@ -578,19 +603,19 @@ void func_82200E2C(void) {
         roster = state->players[0].unk_14[0];
         info = roster->rosterInfo;
         for (i = 0; i < info->numberOfPokemonCanBePicked; i++) {
-            if (info->unk_028[i].unk_00.unk_01 != 0) {
+            if (info->battleMon[i].species.unk_01 != 0) {
                 return;
             }
         }
 
         for (i = 0; i < roster->numberOfPokemonBrought; i++) {
             mon = &roster->pokemonPicked[i];
-            if ((mon->unk_00.unk_00 == 0x19) && (mon->unk_00.unk_01 == 0)) {
+            if ((mon->species.id == 0x19) && (mon->species.unk_01 == 0)) {
                 for (j = 0; j < 4; j++) {
-                    if (mon->unk_09[j] == 0) {
+                    if (mon->moves[j] == 0) {
                         break;
                     }
-                    if (mon->unk_09[j] == 0x39) {
+                    if (mon->moves[j] == 0x39) {
                         return;
                     }
                 }
@@ -601,12 +626,12 @@ void func_82200E2C(void) {
     }
 }
 
-s32 func_800251A8(void);
-void func_800251C8(u16 arg0);
+s32 Save_GetProgressFlags(void);
+void Save_SetProgressFlags(u16 arg0);
 
 void func_82200F08(void) {
-    u16 lo = func_800251A8() & 0xFF;
-    u16 hi = (func_800251A8() >> 8) & 0xFF;
+    u16 lo = Save_GetProgressFlags() & 0xFF;
+    u16 hi = (Save_GetProgressFlags() >> 8) & 0xFF;
 
     ((DemoState*)D_822036A4)->unk_1096 |= 2;
 
@@ -615,14 +640,14 @@ void func_82200F08(void) {
         func_82200E2C();
         if (!(hi & 1)) {
             hi |= 1;
-            func_800251C8((hi << 8) | lo);
+            Save_SetProgressFlags((hi << 8) | lo);
             func_82200DA4();
             Save_CommitTypedRecord(0x14, 0);
         }
     } else if (((DemoState*)D_822036A4)->unk_0000 == 2) {
         if (((DemoState*)D_822036A4)->unk_0002 >= lo) {
             lo++;
-            func_800251C8((hi << 8) | lo);
+            Save_SetProgressFlags((hi << 8) | lo);
             Save_CommitTypedRecord(0x14, 0);
         }
         if (((DemoState*)D_822036A4)->unk_0002 == 3) {
@@ -630,7 +655,7 @@ void func_82200F08(void) {
             func_82200E2C();
             if (!(hi & 2)) {
                 hi |= 2;
-                func_800251C8((hi << 8) | lo);
+                Save_SetProgressFlags((hi << 8) | lo);
                 func_82200DA4();
                 Save_CommitTypedRecord(0x14, 0);
             }
@@ -638,7 +663,10 @@ void func_82200F08(void) {
     }
 }
 
-void func_8001EBDC(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4); //@src/ui_graphics.c
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void BattleHud_DrawHpBarTexture(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4); //@src/ui_graphics.c
 
 /**
  * Draws the HP bar of every Pokemon both teams brought, each into its own slot
@@ -672,10 +700,10 @@ void func_82201084(s32 arg0) {
             for (j = 0; j < 2; j++) {
                 mon = p->unk_38[j]->pokemonPicked;
                 for (k = 0; k < p->unk_38[j]->numberOfPokemonBrought; k++, mon++) {
-                    scaled = (mon->unk_26 * arg0) / 100;
+                    scaled = (mon->maxHp * arg0) / 100;
                     hp = (mon->hp >= scaled) ? mon->hp : scaled;
                     GfxImage_SetRenderTarget(&gDisplayListHead, D_82203210[i * 6 + j * 3 + k]);
-                    func_8001EBDC(0, 0, 104, hp, mon->unk_26);
+                    BattleHud_DrawHpBarTexture(0, 0, 104, hp, mon->maxHp);
                 }
             }
         } else {
@@ -685,10 +713,10 @@ void func_82201084(s32 arg0) {
 
             mon = p->unk_38[0]->pokemonPicked;
             for (k = 0; k < p->unk_38[0]->numberOfPokemonBrought; k++, mon++) {
-                scaled = (mon->unk_26 * arg0) / 100;
+                scaled = (mon->maxHp * arg0) / 100;
                 hp = (mon->hp >= scaled) ? mon->hp : scaled;
                 GfxImage_SetRenderTarget(&gDisplayListHead, D_82203210[i * 6 + k]);
-                func_8001EBDC(0, 0, 104, hp, mon->unk_26);
+                BattleHud_DrawHpBarTexture(0, 0, 104, hp, mon->maxHp);
             }
         }
     }
@@ -702,13 +730,17 @@ void func_82201348(DepthBuffer* arg0) {
 
     GfxImage_SetRenderTarget(&gDisplayListHead, arg0);
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
-    gDPSetEnvColor(gDisplayListHead++, 255, 50, 20, 255);
+    gDPSetEnvColor(gDisplayListHead++, 255, 50, 20, 255); // #FF3214FF
     func_8001C058(0, 0, 0x40, 0x20, sp34, 0x40, 0);
     func_8001C058(0, 0x20, 0x40, 0x20, sp34 + 0x400, 0x40, 0);
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
-void func_82201444(unk_D_82203170* arg0, s32 arg1) {
+/**
+ * Requests the icons of both members of a two-trainer side, three Pokemon each.
+ * @unverified Name and comment guessed from the code.
+ */
+void VsScene_LoadTagTeamIcons(unk_D_82203170* arg0, s32 arg1) {
     s32 slot = arg1 * 6;
     s32 i;
     s32 j;
@@ -738,7 +770,7 @@ void func_82201444(unk_D_82203170* arg0, s32 arg1) {
 
 void func_82201600(s32 arg0) {
     s32 idx;
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     TeamRoster* team;
     s32 k;
     s32 j;
@@ -755,7 +787,7 @@ void func_82201600(s32 arg0) {
                     if (arg0 == team->pokemonPicked[k].unk_25) {
                         idx = i * 6 + j * 3 + k;
                         func_82201348(*(DepthBuffer**)(M2C_FIELD(D_82203264, s8**, 8) + idx * 0x14 + 0xC));
-                        func_800407B0(0x3D, 2, idx + 1);
+                        Audio_PlayCommand(0x3D, 2, idx + 1);
                     }
                 }
             }
@@ -765,7 +797,7 @@ void func_82201600(s32 arg0) {
                 if (arg0 == (team->pokemonPicked + k)->unk_25) {
                     idx = i * 6 + k;
                     func_82201348(*(DepthBuffer**)(M2C_FIELD(D_82203264, s8**, 8) + idx * 0x14 + 0xC));
-                    func_800407B0(0x3D, 2, idx + 1);
+                    Audio_PlayCommand(0x3D, 2, idx + 1);
                 }
             }
         }
@@ -785,7 +817,7 @@ s32 func_822017F0(void) {
             for (j = 0; j < 2; j++) {
                 mon = p->unk_38[j]->pokemonPicked;
                 for (k = 0; k < p->unk_38[j]->numberOfPokemonBrought; k++, mon++) {
-                    if (mon->hp < mon->unk_26) {
+                    if (mon->hp < mon->maxHp) {
                         return 1;
                     }
                 }
@@ -793,7 +825,7 @@ s32 func_822017F0(void) {
         } else {
             mon = p->unk_38[0]->pokemonPicked;
             for (k = 0; k < p->unk_38[0]->numberOfPokemonBrought; k++, mon++) {
-                if (mon->hp < mon->unk_26) {
+                if (mon->hp < mon->maxHp) {
                     return 1;
                 }
             }
@@ -805,8 +837,8 @@ s32 func_822017F0(void) {
 M2C_UNK func_80006780();                            /* extern */
 M2C_UNK func_80006828(M2C_UNK, M2C_UNK (*)(M2C_UNK)); /* extern */
 s32 func_80018E24(s32);                             /* extern */
-M2C_UNK func_800407B0(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
-M2C_UNK func_822005A8(M2C_UNK);                     /* extern */
+s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2);   /* extern */
+M2C_UNK VsScene_DrawFrame(M2C_UNK);                     /* extern */
 void func_82201084(s32);
 void func_82201600(s32);
 s32 func_822017F0();                                /* extern */
@@ -816,21 +848,21 @@ void func_822018EC(void) {
     s32 var_s0_2;
     s32 var_s0_3;
 
-    func_800407B0(0x3D, 0, 0);
-    func_80006828(5, func_822005A8);
+    Audio_PlayCommand(0x3D, 0, 0);
+    func_80006828(5, VsScene_DrawFrame);
     if (func_822017F0() != 0) {
-        func_800407B0(0x3D, 1, 0);
+        Audio_PlayCommand(0x3D, 1, 0);
     }
     var_s0 = 0x64;
     do {
         func_82201084(var_s0);
-        func_822005A8(0);
+        VsScene_DrawFrame(0);
         func_80006780();
         var_s0 -= 4;
     } while (var_s0 >= 0);
     if (func_80018E24(D_82203264) == 0) {
         do {
-            func_822005A8(0);
+            VsScene_DrawFrame(0);
             func_80006780();
         } while (func_80018E24(D_82203264) == 0);
     }
@@ -839,32 +871,32 @@ void func_822018EC(void) {
         var_s0_3 = 1;
         do {
             func_82201600(var_s0_3);
-            func_80006828(6, func_822005A8);
+            func_80006828(6, VsScene_DrawFrame);
             var_s0_3 += 1;
         } while (var_s0_3 != 0xD);
     } else {
         do {
             func_82201600(var_s0_2);
-            func_80006828(8, func_822005A8);
+            func_80006828(8, VsScene_DrawFrame);
             var_s0_2 += 1;
         } while (var_s0_2 != 7);
     }
-    func_80006828(0x1E, func_822005A8);
+    func_80006828(0x1E, VsScene_DrawFrame);
 }
 
 M2C_UNK func_8001107C(M2C_UNK *, M2C_UNK, M2C_UNK *); /* extern */
-M2C_UNK func_800407B0(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
+s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2);   /* extern */
 extern M2C_UNK D_8F6256E0;
 
 void func_82201A3C(void) {
     if (M2C_FIELD(D_822036A4, u8 *, 0x1050) == 1) {
-        func_800407B0(0x3D, 3, 0);
+        Audio_PlayCommand(0x3D, 3, 0);
     } else {
-        func_800407B0(0x3D, 4, 0);
+        Audio_PlayCommand(0x3D, 4, 0);
     }
     M2C_FIELD(&D_82203268, u8 *, 2) = (u8) (M2C_FIELD(&D_82203268, u8 *, 2) | 0x20);
     func_8001107C(&D_82203268, 0, &D_8F6256E0);
-    func_80006828(0x96, &func_822005A8);
+    func_80006828(0x96, &VsScene_DrawFrame);
 }
 
 extern Color_RGB8 D_8220308C;
@@ -879,7 +911,11 @@ extern u8 D_8F625F00[];
 extern Gfx D_80060290[];
 void func_80025830(void);
 
-s32 func_82201AC4(void) {
+/**
+ * Asks トーナメントをつづけますか？ (Continue the tournament?) with つづける (Continue) / ちゅうだんする (Quit), plus the GB cartridge warning.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 Tournament_RunContinuePrompt(void) {
     Color_RGB8 top = D_8220308C;
     Color_RGB8 bottom = D_82203090;
     s32 sel = 0;
@@ -890,7 +926,7 @@ s32 func_82201AC4(void) {
     D_822033D0.node.renderFlags &= ~0x20;
     D_82203538.node.renderFlags &= ~0x20;
     do {
-        func_822005A8(0);
+        VsScene_DrawFrame(0);
         if (gPlayer1Controller->buttonPressed & (BTN_DLEFT | BTN_DRIGHT)) {
             Audio_PlaySoundEffectById(1);
             sel ^= 1;
@@ -915,7 +951,7 @@ s32 func_82201AC4(void) {
         Audio_PlaySoundEffectById(0x1D);
         func_80025830();
         do {
-            func_822005A8(0);
+            VsScene_DrawFrame(0);
             Ui_DrawGradientPanel(0x1E, 0xAA, 0x104, 0x32, &top, &bottom);
             Font_BeginTranslucentTextRendering();
             Font_SetActive(2, 0);
@@ -925,7 +961,7 @@ s32 func_82201AC4(void) {
             Font_EndTexturedTextRendering();
             func_80006780();
         } while (gPlayer1Controller->buttonPressed == 0);
-        func_800407B0(0x56, 0, 0);
+        Audio_PlayCommand(0x56, 0, 0);
     }
     D_822033D0.node.renderFlags |= 0x20;
     D_82203538.node.renderFlags |= 0x20;
@@ -933,7 +969,7 @@ s32 func_82201AC4(void) {
 }
 
 void func_82200F08(void);
-s32 func_82201AC4(void);
+s32 Tournament_RunContinuePrompt(void);
 
 s32 func_82201DF8(void) {
     s32 sp24 = 0;
@@ -943,20 +979,20 @@ s32 func_82201DF8(void) {
         Model_InitDisplayObject(&D_82203538, 1, 0, D_82203258);
         ModelAnim_BindTransformCurve(&D_822033D0, 1, D_82202C1C[((DemoState*)D_822036A4)->unk_0003], 0x10000);
         ModelAnim_BindTransformCurve(&D_82203538, 1, D_82202C3C[((DemoState*)D_822036A4)->unk_0003], 0x10000);
-        func_800407B0(0x50, 0, 0);
+        Audio_PlayCommand(0x50, 0, 0);
         D_8220354C = ((DemoState*)D_822036A4)->unk_0003 - 1;
         if (((DemoState*)D_822036A4)->unk_0003 == 8) {
-            BgStage_RunUntilCondition(0x5A, func_822005A8);
-            func_800407B0(0x51, 0, 0);
-            BgStage_RunUntilCondition(0x19, func_822005A8);
-            func_800407B0(0x52, 0, 0);
-            BgStage_RunUntilCondition(0x37, func_822005A8);
+            BgStage_RunUntilCondition(0x5A, VsScene_DrawFrame);
+            Audio_PlayCommand(0x51, 0, 0);
+            BgStage_RunUntilCondition(0x19, VsScene_DrawFrame);
+            Audio_PlayCommand(0x52, 0, 0);
+            BgStage_RunUntilCondition(0x37, VsScene_DrawFrame);
             func_82200F08();
         } else {
-            BgStage_RunUntilCondition(0x55, func_822005A8);
-            func_800407B0(0x51, 0, 0);
-            BgStage_RunUntilCondition(0xF, func_822005A8);
-            sp24 = func_82201AC4();
+            BgStage_RunUntilCondition(0x55, VsScene_DrawFrame);
+            Audio_PlayCommand(0x51, 0, 0);
+            BgStage_RunUntilCondition(0xF, VsScene_DrawFrame);
+            sp24 = Tournament_RunContinuePrompt();
         }
     }
     return sp24;
@@ -964,7 +1000,7 @@ s32 func_82201DF8(void) {
 
 extern u8 D_8F625614[];
 extern u8 D_8F61F87C[];
-void func_82201444(unk_D_82203170* arg0, s32 arg1);
+void VsScene_LoadTagTeamIcons(unk_D_82203170* arg0, s32 arg1);
 void func_82201084(s32);
 void func_82200714(void);
 void func_80041374(s32 arg0, s32 arg1);
@@ -972,9 +1008,9 @@ void func_80041374(s32 arg0, s32 arg1);
 void func_82201F90(void) {
     CameraNode* camera = D_82203240->children;
 
-    func_8220013C();
-    func_82201444(&D_82203170[0], 0);
-    func_82201444(&D_82203170[1], 1);
+    VsScene_PrepareTeams();
+    VsScene_LoadTagTeamIcons(&D_82203170[0], 0);
+    VsScene_LoadTagTeamIcons(&D_82203170[1], 1);
     Vec3f_SetComponentsDuplicate(&camera->view.targetPosition, -1200.0f, 300.0f, 0.0f);
     Vec3f_SetComponentsDuplicate(&camera->view.eyePosition, 200.0f, 50.0f, 0.0f);
     StageLoader_RunFrames(2);
@@ -1000,7 +1036,7 @@ void func_82201F90(void) {
 extern u8 D_82400000[];
 extern u8 D_00175570[];
 extern u8 D_0017BE70[];
-void func_8220013C(void);
+void VsScene_PrepareTeams(void);
 void func_8220091C(void);
 
 void func_822020FC(void) {
@@ -1013,15 +1049,15 @@ void func_822020FC(void) {
             main_pool_pop_state('ICON');
             Fragment_LoadAndCall((((u32)D_82400000 & 0x0FF00000) >> 0x14) - 0x10, D_00175570, D_0017BE70, 0,
                                  (u32)D_822036A4);
-            func_8220013C();
-            func_82200858(&D_82203170[0], 0);
-            func_82200858(&D_82203170[1], 1);
+            VsScene_PrepareTeams();
+            VsScene_LoadTeamIcons(&D_82203170[0], 0);
+            VsScene_LoadTeamIcons(&D_82203170[1], 1);
             D_822033E8 = ((DemoState*)D_822036A4)->unk_0003;
             D_82203550 = ((DemoState*)D_822036A4)->unk_0003;
             Audio_PlayMusicIfChanged(0xF);
             func_8220091C();
         } else {
-            BgStage_RunUntilCondition(0x20, func_822005A8);
+            BgStage_RunUntilCondition(0x20, VsScene_DrawFrame);
             ((DemoState*)D_822036A4)->unk_1096 |= 1;
         }
     } else {
@@ -1032,9 +1068,9 @@ void func_822020FC(void) {
 void func_82202228(void) {
     CameraNode* camera = D_82203240->children;
 
-    func_8220013C();
-    func_82201444(&D_82203170[0], 0);
-    func_82201444(&D_82203170[1], 1);
+    VsScene_PrepareTeams();
+    VsScene_LoadTagTeamIcons(&D_82203170[0], 0);
+    VsScene_LoadTagTeamIcons(&D_82203170[1], 1);
     Vec3f_SetComponentsDuplicate(&camera->view.targetPosition, -1200.0f, 300.0f, 0.0f);
     Vec3f_SetComponentsDuplicate(&camera->view.eyePosition, 200.0f, 50.0f, 0.0f);
     StageLoader_RunFrames(2);
@@ -1066,7 +1102,11 @@ void func_82202228(void) {
 }
 
 
-void func_822023D4(void) {
+/**
+ * Allocates twelve 104x12 images for the names and clears them.
+ * @unverified Name and comment guessed from the code.
+ */
+void VsScene_AllocNameImages(void) {
     s32 i;
     s32 j;
 
@@ -1088,7 +1128,11 @@ extern u8 D_8EB37440[];
 extern u8 D_8F20A788[];
 void func_800270B4(s32 arg0, s32 arg1, s32 arg2, u8* arg3, s32 arg4, s32 arg5);
 
-void func_82202494(s32 arg0) {
+/**
+ * Builds the scene's geo layout for the current stage kind.
+ * @unverified Name and comment guessed from the code.
+ */
+void VsScene_LoadGeoLayout(s32 arg0) {
     MemoryBlock* block = MainPool_AllocState(main_pool_get_available(), 0);
 
     switch (D_822036A8) {
@@ -1129,7 +1173,7 @@ void func_82202494(s32 arg0) {
         func_800270B4(0, 0, 0, D_82203208->img_p, 0xC80, 0x960);
         ModelAnim_BindTransformCurve(D_82203200, 1, D_8F20A788, 0x10000);
     }
-    func_822023D4();
+    VsScene_AllocNameImages();
     ModelRenderer_InitDisplayRoots();
     ModelRenderer_AttachDisplayObject(&D_82203268);
     ModelRenderer_AttachDisplayObject(&D_822033D0);
@@ -1171,11 +1215,15 @@ extern u8 D_00380D60[];
 extern u8 D_00385D60[];
 extern u8 D_0038A540[];
 s32 func_80023C30(void);
-void func_8001A194(s32 arg0, s32 arg1);
+s32 Font_Init(s32 load_size, s32 side);
 
 #define DEMO_FRAGMENT_ID(vram) ((((u32)(vram) & 0x0FF00000) >> 0x14) - 0x10)
 
-s32 func_82202728(s32 arg0, s8* arg1) {
+/**
+ * Entry point: pushes the 'BTLS' pool state, loads the round's stage and fragments, and runs the pre-battle scene for mode `arg0`.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 VsScene_Run(s32 arg0, s8* arg1) {
     s32 round;
     s32 sp24;
 
@@ -1209,7 +1257,7 @@ s32 func_82202728(s32 arg0, s8* arg1) {
     D_82203204 = StageContext_Allocate(0, 1, 3, 1, 2, 1);
     D_82203208 = GfxImage_Allocate(0, 2, 0x140, 0xF0, 1);
     GfxImage_AttachDepthBuffer(D_82203208, D_82203204->renderTargets[0]->depth_p);
-    func_8001A194(0x2A, 0);
+    Font_Init(0x2A, 0);
     Asset_LoadToSegment(((u32)D_01000000 & 0x0F000000) >> 0x18, D_002E0BE0, D_002E2B90, 0);
     Fragment_Load(DEMO_FRAGMENT_ID(D_81000000), D_0015B1A0, D_0015E220);
     Fragment_Load(DEMO_FRAGMENT_ID(D_8F200000), D_003553C0, D_0035C390);
@@ -1247,7 +1295,7 @@ s32 func_82202728(s32 arg0, s8* arg1) {
     D_82203264 = (s32)PokeIcon_CreateRenderList(D_82203260, 0xC, 0x40, 0x40);
     D_8220325C = BinArchive_Open(D_002F5940, D_003139C0, 1, 1);
     PokeIcon_OpenModelArchives();
-    func_82202494(sp24);
+    VsScene_LoadGeoLayout(sp24);
     StageContext_Activate(D_82203204);
 
     switch (arg0) {
