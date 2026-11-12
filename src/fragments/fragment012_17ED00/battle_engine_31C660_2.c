@@ -74,7 +74,7 @@ void BattleAnim_SetupOwnerModelTintRandomPaletteCycle(Particle* arg0) {
 }
 
 void BattleAnim_CallbackOwnerModelTintRandomPaletteCycle(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupOwnerModelTintRandomPaletteCycle(arg0);
             break;
@@ -113,7 +113,7 @@ void BattleAnim_SetupRainbowHueChange(Particle* arg0) {
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_RunRainbowHueChange(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupRainbowHueChange(arg0);
             break;
@@ -233,7 +233,7 @@ void BattleAnim_SetupWhiteHueChange(Particle* arg0) {
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_RunWhiteHueChange(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupWhiteHueChange(arg0);
             break;
@@ -280,7 +280,7 @@ void func_821448D4(s8 *arg0)
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_RunFullScreenHueChange(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupDescriptor25AlphaHoldFadeOut(arg0);
             break;
@@ -308,7 +308,7 @@ void BattleAnim_SetupDescriptor25AlphaFadeInHold(Particle* arg0) {
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_RunPokemonAndFullScreenHueChange(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupDescriptor25AlphaFadeInHold(arg0);
             break;
@@ -357,7 +357,7 @@ void BattleAnim_SetupDescriptor25PaletteFadeOut(Particle* arg0) {
 }
 
 void BattleAnim_CallbackDescriptor25PaletteFadeOut(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupDescriptor25PaletteFadeOut(arg0);
             break;
@@ -382,7 +382,7 @@ void BattleAnim_SetupDescriptor25PaletteFadeIn(Particle* arg0) {
 }
 
 void BattleAnim_CallbackDescriptor25PaletteFadeIn(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupDescriptor25PaletteFadeIn(arg0);
             break;

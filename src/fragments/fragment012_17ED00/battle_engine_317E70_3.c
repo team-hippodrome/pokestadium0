@@ -143,7 +143,7 @@ Particle* BattleAnim_SpawnSecondaryOwnerParticle(Vec3f arg0, u8 arg1) {
     Particle* sp1C = Particle_New();
 
     if ((u32)sp1C != -1) {
-        ParticleMath_CopyVec3f(&sp1C->unk_68, &arg0);
+        ParticleMath_CopyVec3f(&sp1C->origin, &arg0);
         BattleAnim_InitStingerMoveParticle(sp1C, arg1);
         sp1C->pokemon = gBattleAnimSecondaryOwner;
         sp1C->displayObject = NULL;
@@ -156,9 +156,9 @@ Particle* BattleAnim_SpawnSecondaryOwnerParticle(Vec3f arg0, u8 arg1) {
 
 void BattleAnim_SetParticlePosition(Particle* arg0, Vec3f arg1) {
     if ((u32)arg0 != -1) {
-        arg0->unk_68.x = arg1.x;
-        arg0->unk_68.y = arg1.y;
-        arg0->unk_68.z = arg1.z;
+        arg0->origin.x = arg1.x;
+        arg0->origin.y = arg1.y;
+        arg0->origin.z = arg1.z;
     }
 }
 
@@ -167,12 +167,12 @@ void BattleAnim_MarkParticleInactive(Particle* arg0) {
 }
 
 void Particle_InitLifecycle(Particle* arg0) {
-    arg0->unk_B2 = 1;
+    arg0->lifecycle = 1;
     arg0->descriptor = &gDefaultParticleDescriptor;
     arg0->updateCallback = NULL;
     arg0->pokemon = 0;
     arg0->displayObject = 0;
-    arg0->unk_B8 = 0;
+    arg0->phase = 0;
     Particle_SetFlags(arg0, 4);
 }
 
@@ -218,7 +218,7 @@ s32 func_8213C9B0(s8 *arg0) {
 
 void Particle_AdvanceLifecycle(Particle* arg0) {
     Particle_ClearFlags(arg0, 1);
-    arg0->unk_B2++;
+    arg0->lifecycle++;
 }
 
 s32 Particle_TickDelayTimer(Particle* arg0, s16 arg1) {
@@ -226,12 +226,12 @@ s32 Particle_TickDelayTimer(Particle* arg0, s16 arg1) {
 
     if (Particle_LacksFlags(arg0, 0x80) != 0) {
         Particle_SetFlags(arg0, 0x80);
-        arg0->phase = arg1;
+        arg0->delayTimer = arg1;
     }
 
-    arg0->phase--;
-    if (arg0->phase <= 0) {
-        arg0->phase = 0;
+    arg0->delayTimer--;
+    if (arg0->delayTimer <= 0) {
+        arg0->delayTimer = 0;
         Particle_ClearFlags(arg0, 0x80);
         sp1C = 1;
     }

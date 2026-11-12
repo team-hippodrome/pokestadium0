@@ -133,7 +133,7 @@ void BattleAnim_SetupBubbleBubbles(Particle* arg0, s16 arg1) {
 void BattleAnim_RunBubbleBubbles(Particle* arg0) {
     s16 temp_a1 = Particle_FieldCF_GetS16_0C058(arg0);
 
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupBubbleBubbles(arg0, temp_a1);
             break;
@@ -185,8 +185,8 @@ s32 func_8213EFF8(Particle* arg0, s32 arg1, s32 arg2);
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_ContinueBubbleBeamBubblesSlow(Particle* arg0) {
-    if (arg0->unk_B8 == 1) {
-        func_8213EFF8(arg0, arg0->unk_B0, arg0->unk_9A.x);
+    if (arg0->phase == 1) {
+        func_8213EFF8(arg0, arg0->unk_B0, arg0->rotationStep.x);
         Particle_AddVelocityFromRotationTemplate1(arg0);
     }
 }
@@ -363,7 +363,7 @@ void BattleAnim_SetupUnusedRotatingSparkVariant(Particle* arg0) {
 }
 
 void BattleAnim_MotionUnusedRotatingSparkVariant(Particle* arg0) {
-    switch (arg0->unk_B8) {
+    switch (arg0->phase) {
         case 1:
             if (Particle_TickPhaseTimer(arg0, 2) != 0) {
                 Particle_AdvancePhase(arg0);
@@ -376,7 +376,7 @@ void BattleAnim_MotionUnusedRotatingSparkVariant(Particle* arg0) {
             break;
     }
 
-    if (arg0->unk_B8 > 0) {
+    if (arg0->phase > 0) {
         Particle_AddVelocityFromRotationTemplate5(arg0);
     }
 }
@@ -448,7 +448,7 @@ void BattleAnim_SetupUnusedAimedSparkVariant(Particle* arg0) {
 }
 
 void BattleAnim_CallbackUnusedAimedSparkVariant(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupUnusedAimedSparkVariant(arg0);
             break;
@@ -501,7 +501,7 @@ void BattleAnim_SetupWaterGunAndHydroPumpEmitterFade(Particle* arg0) {
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_RunWaterGunAndHydroPumpEmitterFade(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupWaterGunAndHydroPumpEmitterFade(arg0);
             break;
@@ -622,7 +622,7 @@ void BattleAnim_SetupHydroPumpBurstEmitter(Particle* arg0) {
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_RunHydroPumpBurstEmitter(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupHydroPumpBurstEmitter(arg0);
             break;
@@ -750,7 +750,7 @@ void BattleAnim_SetupWaterGunProjectile(Particle* arg0) {
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_RunWaterGunProjectile(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupWaterGunProjectile(arg0);
             break;
@@ -796,8 +796,8 @@ void BattleAnim_SetupIceBeamColdBreath(Particle* arg0) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_ContinueIceBeamColdBreath(Particle* arg0) {
-    if (arg0->unk_B8 == 1) {
-        Particle_ApproachRotationXTo(arg0, arg0->unk_B0, arg0->unk_9A.x);
+    if (arg0->phase == 1) {
+        Particle_ApproachRotationXTo(arg0, arg0->unk_B0, arg0->rotationStep.x);
         Particle_AddVelocityFromRotationTemplate1(arg0);
         Particle_Field38_AddYScaled_08E90(arg0, -0.2f);
     }
@@ -860,7 +860,7 @@ void BattleAnim_SetupMegaKickAndPunchProjectile(Particle* arg0) {
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_RunMegaKickAndPunchProjectile(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupMegaKickAndPunchProjectile(arg0);
             break;
@@ -899,7 +899,7 @@ void BattleAnim_SetupInitialBeamEmanator(Particle* arg0) {
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_RunInitialBeamEmanator(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupInitialBeamEmanator(arg0);
             break;
@@ -984,7 +984,7 @@ void BattleAnim_SetupStrongBeamHitEffect(Particle* arg0) {
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_RunStrongBeamHitEffect(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupStrongBeamHitEffect(arg0);
             break;
@@ -1025,7 +1025,7 @@ void BattleAnim_SetupPsybeamHitSparkFlicker(Particle* arg0) {
 void BattleAnim_RunPsybeamHitSparkFlicker(Particle* arg0) {
     Particle_FieldCF_GetS16_0C058(arg0);
 
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupPsybeamHitSparkFlicker(arg0);
             break;
@@ -1076,7 +1076,7 @@ void BattleAnim_SetupAuroraBeamHitSpark(Particle* arg0) {
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_RunAuroraBeamHitSpark(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupAuroraBeamHitSpark(arg0);
             break;
@@ -1589,7 +1589,7 @@ void BattleAnim_SetupBubbleBubbleBeamSharedEffect(Particle* arg0) {
     Particle_FieldCF_GetS16_0C058(arg0);
     sp24 = Particle_FieldAC_GetS16_0C038(arg0);
     Particle_Field1C_SetScaled_0B938(arg0, 0.05f);
-    Particle_SetRotationTargetXY(arg0, arg0->unk_94.x, arg0->unk_94.y + 0x8000);
+    Particle_SetRotationTargetXY(arg0, arg0->rotation.x, arg0->rotation.y + 0x8000);
     Particle_Field9A_SetXY_0A3A0(arg0, 0x800, 0x300);
     sp28.x = sp24 << 0xC;
     sp28.y = ParticleMath_RandomSignedOffsetBySign(0x3000, 0x1000);
@@ -1602,7 +1602,7 @@ void BattleAnim_SetupBubbleBubbleBeamSharedEffect(Particle* arg0) {
 }
 
 void BattleAnim_CallbackEndEffects34And53Descriptor45RotatingBounceFade(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupBubbleBubbleBeamSharedEffect(arg0);
             break;
@@ -1613,7 +1613,7 @@ void BattleAnim_CallbackEndEffects34And53Descriptor45RotatingBounceFade(Particle
             Particle_ApproachRotationTargetY(arg0);
             if (Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0) != 0) {
                 Particle_FieldA6_SetS16_0BCA8(arg0, ParticleMath_RandomRangeOffset(0xC, 0x20));
-                if (arg0->unk_94.y >= arg0->unk_A0.y) {
+                if (arg0->rotation.y >= arg0->rotationTarget.y) {
                     Particle_FieldA0_SetX_0A400(arg0, -0x4000);
                 } else {
                     Particle_FieldA0_SetX_0A400(arg0, 0x4000);
@@ -1650,7 +1650,7 @@ void BattleAnim_SetupHydroPumpColorShiftFade(Particle* arg0) {
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
     Particle_SetPrimAlpha(arg0, 0xC8);
     Particle_FieldA6_SetS16_0BCA8(arg0, 0x18);
-    arg0->unk_74 = 0.02f;
+    arg0->stepMagnitude = 0.02f;
     Particle_AdvanceLifecycle(arg0);
 }
 

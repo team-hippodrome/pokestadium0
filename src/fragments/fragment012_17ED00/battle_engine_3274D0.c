@@ -130,7 +130,7 @@ void BattleAnim_SetupThunderThunderboltUseEffect(Particle* arg0) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_RunThunderThunderboltUseEffect(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupThunderThunderboltUseEffect(arg0);
             break;
@@ -173,7 +173,7 @@ void BattleAnim_SetupSharedDescriptor0FDelayedRisingColumnFade(Particle* arg0) {
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_RunDeterministicRotatingBoltOfLightning(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupSharedDescriptor0FDelayedRisingColumnFade(arg0);
             break;
@@ -224,7 +224,7 @@ void BattleAnim_SetupSharedDescriptor0FDelayedRisingColumnRandomScale(Particle* 
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_RunRandomRotatingBoltOfLightning(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupSharedDescriptor0FDelayedRisingColumnRandomScale(arg0);
             break;

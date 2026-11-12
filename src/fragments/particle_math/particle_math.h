@@ -59,6 +59,11 @@ typedef struct ParticleEmitter {
     /* 0x2F */ u8 unk_2F;
 } ParticleEmitter; // size = 0x30
 
+/*
+ * Same record as Stadium 1's Particle, but 4 bytes shorter: from 0x28 on, every
+ * field sits 4 bytes lower than in Stadium 1 (unk_XX names keep the Stadium 1
+ * offset). Field names follow Stadium 1. @unverified
+ */
 typedef struct Particle {
     /* 0x00 */ struct Particle* next;
     /* 0x04 */ struct Particle* prev;
@@ -70,31 +75,31 @@ typedef struct Particle {
     /* 0x1C */ f32 scale;
     /* 0x20 */ f32 unk_20;
     /* 0x24 */ f32 unk_24;
-    /* 0x28 */ Vec3f unk_2C;
-    /* 0x34 */ Vec3f unk_38;
+    /* 0x28 */ Vec3f worldPosition;
+    /* 0x34 */ Vec3f positionOffset;
     /* 0x40 */ char unk44[0xC];
-    /* 0x4C */ Vec3f unk_50;
-    /* 0x58 */ Vec3f unk_5C;
-    /* 0x64 */ Vec3f unk_68;
-    /* 0x70 */ f32 unk_74;
-    /* 0x74 */ f32 stepMagnitude;
-    /* 0x78 */ Vec3f unk_7C;
+    /* 0x4C */ Vec3f motionOffset;
+    /* 0x58 */ Vec3f motionTarget;
+    /* 0x64 */ Vec3f origin;
+    /* 0x70 */ f32 stepMagnitude;
+    /* 0x74 */ f32 magnitudeStep;
+    /* 0x78 */ Vec3f motionStep;
     /* 0x84 */ char unk88[0xC];
-    /* 0x90 */ Vec3s unk_94;
-    /* 0x96 */ Vec3s unk_9A;
-    /* 0x9C */ Vec3s unk_A0;
+    /* 0x90 */ Vec3s rotation;
+    /* 0x96 */ Vec3s rotationStep;
+    /* 0x9C */ Vec3s rotationTarget;
     /* 0xA2 */ s16 unk_A6;
     /* 0xA4 */ s16 unk_A8;
     /* 0xA6 */ s16 unk_AA;
     /* 0xA8 */ s16 unk_AC;
     /* 0xAA */ s16 unk_AE;
     /* 0xAC */ s16 unk_B0;
-    /* 0xAE */ s16 unk_B2;
+    /* 0xAE */ s16 lifecycle;
     /* 0xB0 */ char unkB4[0x2];
-    /* 0xB2 */ s16 lifecycle;
-    /* 0xB4 */ s16 unk_B8;
-    /* 0xB6 */ s16 frameTimer;
-    /* 0xB8 */ s16 phase;
+    /* 0xB2 */ s16 frameTimer;
+    /* 0xB4 */ s16 phase;
+    /* 0xB6 */ s16 phaseTimer;
+    /* 0xB8 */ s16 delayTimer;
     /* 0xBA */ u8 prim_r;
     /* 0xBB */ u8 prim_g;
     /* 0xBC */ u8 prim_b;
@@ -103,8 +108,8 @@ typedef struct Particle {
     /* 0xBF */ u8 env_b;
     /* 0xC0 */ u8 prim_a;
     /* 0xC1 */ char unkC5[0x1];
-    /* 0xC2 */ s8 unk_C6;
-    /* 0xC3 */ s8 unk_C7;
+    /* 0xC2 */ s8 loopsRemaining;
+    /* 0xC3 */ s8 textureFrame;
     /* 0xC4 */ char unkC8[0x2];
     /* 0xC6 */ u8 unk_CA;
     /* 0xC7 */ u8 unk_CB;
@@ -112,7 +117,7 @@ typedef struct Particle {
     /* 0xC9 */ u8 unk_CD;
     /* 0xCA */ u8 unk_CE;
     /* 0xCB */ u8 unk_CF;
-    /* 0xCC */ s8 unk_D0;
+    /* 0xCC */ s8 allocated;
 } Particle; // size = 0xD0
 
 typedef void (*func_unk_D_8140E724)(struct Particle*);

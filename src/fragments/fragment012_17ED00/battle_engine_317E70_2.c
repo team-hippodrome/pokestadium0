@@ -143,7 +143,7 @@ Particle* Particle_Alloc(void) {
     Particle* var_a0 = &gParticlePool[var_v0];
 
     for (i = 0; i < 0x12C; i++) {
-        if (var_a0->unk_D0 == 0) {
+        if (var_a0->allocated == 0) {
             break;
         }
 
@@ -159,7 +159,7 @@ Particle* Particle_Alloc(void) {
     if (i >= 0x12C) {
         var_a0 = (Particle*)-1;
     } else {
-        var_a0->unk_D0 = 1;
+        var_a0->allocated = 1;
 
         Particle_ResetDefaults(var_a0);
 
@@ -262,8 +262,8 @@ Particle* Particle_AllocChain(u8 arg0) {
 
 void BattleAnim_InitializeParticleChain(Particle* arg0, Vec3f arg1, Vec3s arg2, s32 arg3, s32 arg4) {
     while (arg0 != NULL) {
-        ParticleMath_CopyVec3f(&arg0->unk_68, &arg1);
-        ParticleMath_CopyVec3s(&arg0->unk_94, &arg2);
+        ParticleMath_CopyVec3f(&arg0->origin, &arg1);
+        ParticleMath_CopyVec3s(&arg0->rotation, &arg2);
         arg0->updateCallback = arg3;
         arg0->descriptor = arg4;
         arg0->pokemon = 0;
@@ -285,16 +285,16 @@ void BattleAnim_CloneParticleState(Particle* arg0, Particle* arg1, ParticleUpdat
     arg0->unk_CD = 0xFF;
     arg0->unk_CE = arg1->unk_CE;
     arg0->unk_CB = arg1->unk_CB;
-    arg0->unk_74 = arg1->unk_74;
+    arg0->stepMagnitude = arg1->stepMagnitude;
 
     Particle_FieldAC_SetS16_0BED8(arg0, arg4);
 
-    ParticleMath_CopyVec3f(&arg0->unk_38, &arg1->unk_38);
-    ParticleMath_CopyVec3f(&arg0->unk_50, &arg1->unk_50);
-    ParticleMath_CopyVec3f(&arg0->unk_68, &arg1->unk_68);
-    ParticleMath_CopyVec3f(&arg0->unk_7C, &arg1->unk_7C);
-    ParticleMath_CopyVec3s(&arg0->unk_94, &arg1->unk_94);
-    ParticleMath_CopyVec3s(&arg0->unk_9A, &arg1->unk_9A);
+    ParticleMath_CopyVec3f(&arg0->positionOffset, &arg1->positionOffset);
+    ParticleMath_CopyVec3f(&arg0->motionOffset, &arg1->motionOffset);
+    ParticleMath_CopyVec3f(&arg0->origin, &arg1->origin);
+    ParticleMath_CopyVec3f(&arg0->motionStep, &arg1->motionStep);
+    ParticleMath_CopyVec3s(&arg0->rotation, &arg1->rotation);
+    ParticleMath_CopyVec3s(&arg0->rotationStep, &arg1->rotationStep);
 
     if (arg1->unk_CA == 4) {
         arg0->unk_CA = 0;
@@ -334,9 +334,9 @@ Particle* BattleAnim_CreateProceduralParticle(s16 arg0, s16 arg1, s32 arg2, f32 
     Particle* temp_v0 = Particle_New();
 
     if ((u32)temp_v0 != -1) {
-        Vec3f_SetComponentsDuplicate(&temp_v0->unk_38, arg0, arg1, 0.0f);
+        Vec3f_SetComponentsDuplicate(&temp_v0->positionOffset, arg0, arg1, 0.0f);
         Particle_UpdateWorldTransform(temp_v0);
-        Vec3s_SetComponents(&temp_v0->unk_94, arg2, arg2, arg2);
+        Vec3s_SetComponents(&temp_v0->rotation, arg2, arg2, arg2);
         temp_v0->scale = arg3;
         Particle_SetFlags(temp_v0, 0x108);
     }
@@ -352,82 +352,82 @@ void BattleAnim_InitializeParticleAnchor(Particle* arg0) {
 
     switch (arg0->unk_CC) {
         case 0:
-            BattleScene_GetParticipantModelPosition(arg0->pokemon, &arg0->unk_68);
+            BattleScene_GetParticipantModelPosition(arg0->pokemon, &arg0->origin);
             break;
 
         case 1:
-            BattleAnim_GetOwnerDefaultAnchorPosition(arg0->pokemon, &arg0->unk_68);
+            BattleAnim_GetOwnerDefaultAnchorPosition(arg0->pokemon, &arg0->origin);
             break;
 
         case 27:
-            BattleAnim_GetOwnerDefaultAnchorPosition(arg0->pokemon, &arg0->unk_68);
-            arg0->unk_68.y = 0.0f;
+            BattleAnim_GetOwnerDefaultAnchorPosition(arg0->pokemon, &arg0->origin);
+            arg0->origin.y = 0.0f;
             break;
 
         case 9:
-            BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->unk_68);
+            BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
             break;
 
         case 10:
-            BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->unk_68);
-            arg0->unk_68.y = 0.0f;
+            BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
+            arg0->origin.y = 0.0f;
             break;
 
         case 11:
-            BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->unk_68);
+            BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
             BattleScene_GetParticipantModelRotation(arg0->pokemon, &sp28);
             Trade_UpdateBoxSlotBob(arg0->pokemon, &sp30);
             ParticleMath_MakeXZVectorFromAngle(&sp3C, sp30.x * 25.0f, sp28.y);
-            ParticleMath_AddVec3f(&arg0->unk_68, &sp3C);
+            ParticleMath_AddVec3f(&arg0->origin, &sp3C);
             break;
 
         case 12:
-            BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->unk_68);
+            BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
             BattleScene_GetParticipantModelRotation(arg0->pokemon, &sp28);
             Trade_UpdateBoxSlotBob(arg0->pokemon, &sp30);
             ParticleMath_MakeXZVectorFromAngle(&sp3C, sp30.x * 25.0f, sp28.y + 0x8000);
-            ParticleMath_AddVec3f(&arg0->unk_68, &sp3C);
+            ParticleMath_AddVec3f(&arg0->origin, &sp3C);
             break;
 
         case 13:
-            BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->unk_68);
+            BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
             Trade_UpdateBoxSlotBob(arg0->pokemon, &sp30);
-            arg0->unk_68.y += sp30.y * 25.0f;
+            arg0->origin.y += sp30.y * 25.0f;
             break;
 
         case 14:
-            BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->unk_68);
+            BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
             Trade_UpdateBoxSlotBob(arg0->pokemon, &sp30);
-            arg0->unk_68.y -= sp30.y * 25.0f;
-            if (arg0->unk_68.y <= 0.0f) {
-                arg0->unk_68.y = 0.0f;
+            arg0->origin.y -= sp30.y * 25.0f;
+            if (arg0->origin.y <= 0.0f) {
+                arg0->origin.y = 0.0f;
             }
             break;
 
         case 15:
-            BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->unk_68);
+            BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
             BattleScene_GetParticipantModelRotation(arg0->pokemon, &sp28);
             Trade_UpdateBoxSlotBob(arg0->pokemon, &sp30);
             ParticleMath_MakeXZVectorFromAngle(&sp3C, sp30.x * 25.0f, sp28.y);
-            ParticleMath_AddVec3f(&arg0->unk_68, &sp3C);
-            arg0->unk_68.y = 0.0f;
+            ParticleMath_AddVec3f(&arg0->origin, &sp3C);
+            arg0->origin.y = 0.0f;
             break;
 
         case 17:
-            BattleAnim_GetOwnerBonePosition(arg0->pokemon, arg0->unk_CD, &arg0->unk_68);
-            func_80015908(arg0->pokemon, arg0->unk_CD, &arg0->unk_68);
+            BattleAnim_GetOwnerBonePosition(arg0->pokemon, arg0->unk_CD, &arg0->origin);
+            func_80015908(arg0->pokemon, arg0->unk_CD, &arg0->origin);
             break;
 
         case 19:
-            func_80015908(arg0->pokemon, arg0->unk_CD, &arg0->unk_68);
+            func_80015908(arg0->pokemon, arg0->unk_CD, &arg0->origin);
             BattleScene_GetParticipantModelRotation(arg0->pokemon, &sp28);
             Trade_UpdateBoxSlotBob(arg0->pokemon, &sp30);
             ParticleMath_MakeXZVectorFromAngle(&sp3C, sp30.x * 25.0f, sp28.y);
-            ParticleMath_AddVec3f(&arg0->unk_68, &sp3C);
+            ParticleMath_AddVec3f(&arg0->origin, &sp3C);
             break;
 
         case 30:
-            BattleScene_GetParticipantPokeBallPosition(arg0->pokemon, &arg0->unk_68);
+            BattleScene_GetParticipantPokeBallPosition(arg0->pokemon, &arg0->origin);
             break;
     }
 }
@@ -440,64 +440,64 @@ void BattleAnim_UpdateParticleAnchor(Particle* arg0) {
 
     switch (arg0->unk_CC) {
         case 2:
-            BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->unk_68);
+            BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
             break;
 
         case 3:
-            BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->unk_68);
-            arg0->unk_68.y = 0.0f;
+            BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
+            arg0->origin.y = 0.0f;
             break;
 
         case 4:
-            BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->unk_68);
+            BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
             BattleScene_GetParticipantModelRotation(arg0->pokemon, &sp28);
             Trade_UpdateBoxSlotBob(arg0->pokemon, &sp30);
             ParticleMath_MakeXZVectorFromAngle(&sp3C, sp30.x * 25.0f, sp28.y);
-            ParticleMath_AddVec3f(&arg0->unk_68, &sp3C);
+            ParticleMath_AddVec3f(&arg0->origin, &sp3C);
             break;
 
         case 5:
-            BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->unk_68);
+            BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
             BattleScene_GetParticipantModelRotation(arg0->pokemon, &sp28);
             Trade_UpdateBoxSlotBob(arg0->pokemon, &sp30);
             ParticleMath_MakeXZVectorFromAngle(&sp3C, sp30.x * 25.0f, sp28.y + 0x8000);
-            ParticleMath_AddVec3f(&arg0->unk_68, &sp3C);
+            ParticleMath_AddVec3f(&arg0->origin, &sp3C);
             break;
 
         case 6:
-            BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->unk_68);
+            BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
             Trade_UpdateBoxSlotBob(arg0->pokemon, &sp30);
-            arg0->unk_68.y += sp30.y * 25.0f;
+            arg0->origin.y += sp30.y * 25.0f;
             break;
 
         case 7:
-            BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->unk_68);
+            BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
             Trade_UpdateBoxSlotBob(arg0->pokemon, &sp30);
-            arg0->unk_68.y -= sp30.y * 25.0f;
-            if (arg0->unk_68.y <= 0.0f) {
-                arg0->unk_68.y = 0.0f;
+            arg0->origin.y -= sp30.y * 25.0f;
+            if (arg0->origin.y <= 0.0f) {
+                arg0->origin.y = 0.0f;
             }
             break;
 
         case 8:
-            BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->unk_68);
+            BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
             BattleScene_GetParticipantModelRotation(arg0->pokemon, &sp28);
             Trade_UpdateBoxSlotBob(arg0->pokemon, &sp30);
             ParticleMath_MakeXZVectorFromAngle(&sp3C, sp30.x * 25.0f, sp28.y);
-            ParticleMath_AddVec3f(&arg0->unk_68, &sp3C);
-            arg0->unk_68.y = 0.0f;
+            ParticleMath_AddVec3f(&arg0->origin, &sp3C);
+            arg0->origin.y = 0.0f;
             break;
 
         case 16:
-            BattleAnim_GetOwnerBonePosition(arg0->pokemon, arg0->unk_CD, &arg0->unk_68);
+            BattleAnim_GetOwnerBonePosition(arg0->pokemon, arg0->unk_CD, &arg0->origin);
             break;
 
         case 18:
-            BattleAnim_GetOwnerBonePosition(arg0->pokemon, arg0->unk_CD, &arg0->unk_68);
+            BattleAnim_GetOwnerBonePosition(arg0->pokemon, arg0->unk_CD, &arg0->origin);
             break;
 
         case 29:
-            BattleScene_GetParticipantPokeBallPosition(arg0->pokemon, &arg0->unk_68);
+            BattleScene_GetParticipantPokeBallPosition(arg0->pokemon, &arg0->origin);
             break;
     }
 }
@@ -515,7 +515,7 @@ void func_8213A68C(void) {
     Particle* var_s0 = gParticlePool;
 
     for (i = 0; i < 300; i++, var_s0++) {
-        if (var_s0->unk_D0 != 0) {
+        if (var_s0->allocated != 0) {
             BattleAnim_UpdateParticleAnchor(var_s0);
             if ((var_s0->pokemon == NULL) || (Particle_HasFlags(var_s0, 0x108) != 0)) {
                 gParticleRenderContext.scale.x = 1.0f;
@@ -655,7 +655,7 @@ void BattleAnim_InitializeParticleFromEffect(Particle* arg0, ActivePokemon* arg1
 
         if (arg1 != NULL) {
             BattleAnim_InitializeParticleAnchor(arg0);
-            BattleScene_GetParticipantModelRotation(arg0->pokemon, &arg0->unk_94);
+            BattleScene_GetParticipantModelRotation(arg0->pokemon, &arg0->rotation);
         }
 
         if ((arg2->unk_16 & 0xFFFFu) == 0x12) {
@@ -788,7 +788,7 @@ s32 Particle_CountActive(void) {
     Particle* ptr = gParticlePool;
 
     for (i = 0; i < 0x12C; i++, ptr++) {
-        if (ptr->unk_D0 != 0) {
+        if (ptr->allocated != 0) {
             var_v1++;
         }
     }
@@ -826,7 +826,7 @@ void BattleAnim_CleanupEffectsRetainingCategories47(void) {
     }
 
     for (i = 0; i < 300; i++, var_s2++) {
-        if (var_s2->unk_D0 != 0) {
+        if (var_s2->allocated != 0) {
             if ((var_s2->unk_CA != 4) && (var_s2->unk_CA != 7)) {
                 BattleAnim_DestroyParticle(var_s2);
             }
@@ -846,7 +846,7 @@ void BattleAnim_CleanupEffectsRetainingCategory4(void) {
     }
 
     for (i = 0; i < 300; i++, var_s2++) {
-        if ((var_s2->unk_D0 != 0) && (var_s2->unk_CA != 4)) {
+        if ((var_s2->allocated != 0) && (var_s2->unk_CA != 4)) {
             BattleAnim_DestroyParticle(var_s2);
         }
     }
@@ -924,7 +924,7 @@ void BattleAnim_StopParticlesForOwnerCategory(u8 arg0, ActivePokemon* arg1) {
     Particle* var_s0 = gParticlePool;
 
     for (i = 0; i < 300; i++, var_s0++) {
-        if ((var_s0->unk_D0 != 0) && (var_s0->unk_CA == 4) && (var_s0->unk_CB == arg0) && (arg1 == var_s0->pokemon)) {
+        if ((var_s0->allocated != 0) && (var_s0->unk_CA == 4) && (var_s0->unk_CB == arg0) && (arg1 == var_s0->pokemon)) {
             Particle_AdvanceLifecycle(var_s0);
         }
     }

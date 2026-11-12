@@ -123,7 +123,7 @@ void BattleAnim_SetupRazorWindHitEffect(Particle* arg0) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_RunRazorWindHitEffect(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupRazorWindHitEffect(arg0);
             break;
@@ -219,7 +219,7 @@ void BattleAnim_SetupPetalDanceRazorLeafHitEffect(Particle* arg0) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_RunPetalDanceRazorLeafHitEffect(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupPetalDanceRazorLeafHitEffect(arg0);
             break;
@@ -498,7 +498,7 @@ void BattleAnim_SetupSandAttackUseEffect(Particle* arg0) {
     s16 sp24 = Particle_FieldAC_GetS16_0C038(arg0);
 
     Particle_Field1C_SetScaled_0B938(arg0, 0.25f);
-    arg0->unk_5C.y = (MathUtil_Random_ZeroOne() * 0.5f) + 0.4f;
+    arg0->motionTarget.y = (MathUtil_Random_ZeroOne() * 0.5f) + 0.4f;
     Particle_Field94_AddY_0A594(arg0, 0x800 - ((0x1000 / func_8213C494(arg0)) * sp24));
     Particle_Field74_SetScaled_0AD8C(arg0, (2.0f * MathUtil_Random_ZeroOne()) + 5.0f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0x32);
@@ -634,7 +634,7 @@ void BattleAnim_CallbackSharedDescriptors3EAnd3FAnimatedRiseFade_InitParticle(Pa
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleAnim_CallbackSharedDescriptors3EAnd3FAnimatedRiseFade(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_CallbackSharedDescriptors3EAnd3FAnimatedRiseFade_InitParticle(arg0);
             break;
@@ -779,7 +779,7 @@ void BattleAnim_SetupGroundedCircularHitSpark(Particle* arg0) {
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_RunGroundedCircularHitSpark(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupGroundedCircularHitSpark(arg0);
             break;
@@ -975,7 +975,7 @@ void BattleAnim_SetupPhysicalHitPurpleSmoke(Particle* arg0) {
 void BattleAnim_RunPhysicalHitPurpleSmoke(Particle* arg0) {
     s16 sp2E = Particle_FieldCF_GetS16_0C058(arg0);
 
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupPhysicalHitPurpleSmoke(arg0);
             break;
@@ -1030,7 +1030,7 @@ void BattleAnim_CallbackEndEffect52Descriptor42BurstChild_InitParticle(Particle*
 }
 
 void BattleAnim_CallbackEndEffect52Descriptor42BurstChild(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_CallbackEndEffect52Descriptor42BurstChild_InitParticle(arg0);
             break;
@@ -1078,7 +1078,7 @@ void BattleAnim_SetupSwiftHitEffect2(Particle* arg0) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_RunSwiftHitEffect2(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupSwiftHitEffect2(arg0);
             break;
@@ -1192,7 +1192,7 @@ void BattleAnim_SetupSharedScalePulseFallSetup(Particle* arg0) {
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_RunSparkleHit(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupSharedScalePulseFallSetup(arg0);
             break;
@@ -1220,7 +1220,7 @@ void BattleAnim_RunSparkleHit(Particle* arg0) {
 
     if (Particle_IsRenderingEnabled(arg0) != 0) {
         Particle_Field74_AdvanceAndAddNegY_CheckField2CYNonPositive_09FD8(arg0);
-        if (arg0->unk_2C.y < 0.0f) {
+        if (arg0->worldPosition.y < 0.0f) {
             Particle_MarkInactive(arg0);
         }
     }
@@ -1250,7 +1250,7 @@ void BattleAnim_SetupBlizzardHitEffect(Particle* arg0) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_RunBlizzardHitEffect(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupBlizzardHitEffect(arg0);
             break;
@@ -1282,7 +1282,7 @@ void BattleAnim_RunBlizzardHitEffect(Particle* arg0) {
 }
 
 void func_821627C0(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupSharedScalePulseFallSetup(arg0);
             break;
@@ -1310,7 +1310,7 @@ void func_821627C0(Particle* arg0) {
 
     if (Particle_IsRenderingEnabled(arg0) != 0) {
         func_8213E528(arg0);
-        if (arg0->unk_2C.y < 0.0f) {
+        if (arg0->worldPosition.y < 0.0f) {
             Particle_MarkInactive(arg0);
         }
     }
@@ -1335,7 +1335,7 @@ void BattleAnim_SetupThunderPunchHitEffect(Particle* arg0) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_RunThunderPunchHitEffect(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupThunderPunchHitEffect(arg0);
             break;
@@ -1444,7 +1444,7 @@ void BattleAnim_SetupDefaultHitSpark(Particle* arg0) {
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_RunDefaultHitSpark(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupDefaultHitSpark(arg0);
             break;
@@ -1565,7 +1565,7 @@ void BattleAnim_SetupStrongPurpleHitSmoke(Particle* arg0) {
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_RunStrongPurpleHitSmoke(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupStrongPurpleHitSmoke(arg0);
             break;
@@ -1580,7 +1580,7 @@ void BattleAnim_RunStrongPurpleHitSmoke(Particle* arg0) {
         case 3:
             func_8213CCEC(arg0, 0, 3, 1, 1, 0);
             Particle_AddVelocityXZFromRotationYPlusHalfTurn(arg0);
-            if ((Particle_FieldA6_DecrementToZeroStep1_0BDAC != 0) && (arg0->unk_B8 == 0)) {
+            if ((Particle_FieldA6_DecrementToZeroStep1_0BDAC != 0) && (arg0->phase == 0)) {
                 Particle_AdvancePhase(arg0);
             }
             break;
@@ -1590,7 +1590,7 @@ void BattleAnim_RunStrongPurpleHitSmoke(Particle* arg0) {
             break;
     }
 
-    if (arg0->unk_B8 == 1) {
+    if (arg0->phase == 1) {
         BattleAnim_EmitParticleBurstWithMetadata(arg0, BattleAnim_CallbackEndEffects39And41And45And46And83Descriptor3DMetadataBurstChild, &gBattleAnimParticleDescriptors[0x3D], 1, 8, 0);
         Particle_AdvancePhase(arg0);
     }
@@ -1632,7 +1632,7 @@ void BattleAnim_SetupPointyMoveHitSpark(Particle* arg0) {
  * @unverified Name and comment from Stadium 1.
  */
 s32 BattleAnim_RunPointyMoveHitSpark(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupPointyMoveHitSpark(arg0);
             break;
@@ -1647,7 +1647,7 @@ s32 BattleAnim_RunPointyMoveHitSpark(Particle* arg0) {
         case 3:
             func_8213CCEC(arg0, 0, 3, 1, 1, 0);
             Particle_AddVelocityXZFromRotationYPlusHalfTurn(arg0);
-            if ((Particle_FieldA6_DecrementToZeroStep1_0BDAC != NULL) && (arg0->unk_B8 == 0)) {
+            if ((Particle_FieldA6_DecrementToZeroStep1_0BDAC != NULL) && (arg0->phase == 0)) {
                 Particle_AdvancePhase(arg0);
             }
             break;
@@ -1657,7 +1657,7 @@ s32 BattleAnim_RunPointyMoveHitSpark(Particle* arg0) {
             break;
     }
 
-    switch (arg0->unk_B8) {
+    switch (arg0->phase) {
         case 1:
             BattleAnim_EmitParticleBurst(arg0, BattleAnim_CallbackEndEffects37And38Descriptor38BurstChild, &gBattleAnimParticleDescriptors[0x38], 8);
             Particle_AdvancePhase(arg0);
@@ -1695,7 +1695,7 @@ void BattleAnim_SetupFirePunchUseEffect1(Particle* arg0) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_RunFirePunchUseEffect1(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupFirePunchUseEffect1(arg0);
             break;
@@ -1952,7 +1952,7 @@ void func_82163E60(Particle* arg0) {
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
     Particle_SetPrimAlpha(arg0, 0xC8);
     Particle_FieldA6_SetS16_0BCA8(arg0, 0x18);
-    arg0->unk_74 = D_FLT_82197730;
+    arg0->stepMagnitude = D_FLT_82197730;
     Particle_AdvanceLifecycle(arg0);
 }
 

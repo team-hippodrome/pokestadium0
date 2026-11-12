@@ -39,7 +39,7 @@ void BattleAnim_InitModelAnimationSlot(Particle* arg0, s16 arg1) {
 void BattleAnim_CallbackStartEffects12And129DelayedModelAnimWait(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
 
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             Particle_FieldA6_SetS16_0BCA8(arg0, sp26 * 8);
             Particle_AdvanceLifecycle(arg0);
@@ -274,7 +274,7 @@ void BattleAnim_InitEffect125Model(Particle* arg0, UNUSED s16 arg1) {
 void BattleAnim_CallbackStartEffect125ModelBurstEmitter(Particle* arg0) {
     s16 temp_a1 = Particle_FieldAC_GetS16_0C038(arg0);
 
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_InitEffect125Model(arg0, temp_a1);
             break;
@@ -361,7 +361,7 @@ void BattleAnim_InitEffect65Overlay(Particle* arg0) {
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_RunSporePowderMoveOverlay(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_InitEffect65Overlay(arg0);
             break;
@@ -398,7 +398,7 @@ void BattleAnim_InitEffect28Overlay(Particle* arg0) {
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_RunGasAttack(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_InitEffect28Overlay(arg0);
             break;
@@ -468,7 +468,7 @@ void BattleAnim_SetupLeechSeedUseEffect2(Particle* arg0) {
 }
 
 void BattleAnim_CallbackStartEffect8ModelBurstEmitter(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupLeechSeedUseEffect2(arg0);
             break;
@@ -787,7 +787,7 @@ void BattleAnim_InitMove146Model(Particle* arg0) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_RunDizzyPunchHitEffect(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_InitMove146Model(arg0);
             break;
@@ -852,7 +852,7 @@ void BattleAnim_InitEffect49Model(Particle* arg0) {
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleAnim_CallbackEndEffect49Model33Anim34WaitCleanup(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             func_82156654(arg0);
             break;
@@ -873,7 +873,7 @@ void BattleAnim_CallbackEndEffect49Model33Anim34WaitCleanup(Particle* arg0) {
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleAnim_CallbackEndEffect21ModelAnimWait(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             func_82156654(arg0);
             break;
@@ -951,7 +951,7 @@ void BattleAnim_SetupFlyUpwardMovementEffect(Particle* arg0) {
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_RunFlyUpwardMovementEffect(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupFlyUpwardMovementEffect(arg0);
             break;
@@ -1049,7 +1049,7 @@ void BattleAnim_InitEffects63And75Model(Particle* arg0) {
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleAnim_CallbackStartEffects63And75ModelAnimWait(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             func_82156E54(arg0);
             break;
@@ -1221,7 +1221,7 @@ void BattleAnim_InitEffects63And75Model38(Particle* arg0) {
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleAnim_CallbackStartEffects63And75Model38FadeIn(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             func_82157354(arg0);
             break;
@@ -1448,7 +1448,7 @@ void BattleAnim_InitializeRazorWindUse(void) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_RunBoomUseEffect1(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SelectParticleModelFrames(arg0, 0);
             break;
@@ -1480,7 +1480,7 @@ void BattleAnim_CallbackStartEffects50And82ScalePulse_InitParticle(Particle* arg
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_RunBoomUseEffect2(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_CallbackStartEffects50And82ScalePulse_InitParticle(arg0);
             break;
@@ -1680,7 +1680,7 @@ void func_821588C0(s8 *arg0) {
 void BattleAnim_RunBoomUseEffect6(Particle* arg0) {
     s16 sp26 = Particle_FieldCE_GetS32_0C040(arg0);
 
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SelectParticleModelFrames(arg0, 2);
             Particle_Field1C_SetScaled_0B938(arg0, 0.5f);
@@ -2125,7 +2125,7 @@ f32 BattleAnim_GetSpeciesScaleAdjust(Particle* arg0) {
 }
 
 void BattleAnim_CallbackStartEffect69ModelPhaseWait(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SelectParticleModelFrames(arg0, 0);
             break;
@@ -2200,7 +2200,7 @@ void BattleAnim_CallbackStartEffect17ModelAnimFinish_InitParticle(Particle* arg0
 }
 
 void BattleAnim_CallbackStartEffect17ModelAnimFinish(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_CallbackStartEffect17ModelAnimFinish_InitParticle(arg0);
             break;
@@ -2254,7 +2254,7 @@ void BattleAnim_SetupSlimePuddle(Particle* arg0) {
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_RunSlimePuddle(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupSlimePuddle(arg0);
             break;
@@ -2750,7 +2750,7 @@ void func_8215B83C(s8 *arg0) {
 void BattleAnim_RunPsychedelicOverlay(Particle* arg0) {
     u32 temp_v0 = Particle_FieldCD_GetU8_0C048(arg0);
 
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_CallbackStartEffects95To97EndEffects62And63ModelFadeIn_InitParticle(arg0);
             break;
@@ -3331,7 +3331,7 @@ void BattleAnim_SetupBarrageUseEffect1(Particle* arg0) {
 }
 
 void BattleAnim_CallbackStartEffect101ModelBurstEmitter(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupBarrageUseEffect1(arg0);
             break;
@@ -3441,7 +3441,7 @@ void BattleAnim_SetupPsywaveEffect(Particle* arg0) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_RunPsywaveEffect(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupPsywaveEffect(arg0);
             break;
@@ -3506,7 +3506,7 @@ void BattleAnim_InitializePsywaveHit(void) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_RunConfusionPsychicHitEffect(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SelectParticleModelFrames(arg0, 2);
             break;
@@ -3762,7 +3762,7 @@ void BattleAnim_InitializeSolarBeamUse2(void) {
 }
 
 void BattleAnim_CallbackEndEffect76DefaultDescriptorModelFade(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SelectParticleModelFrames(arg0, 0);
             Particle_FieldA6_SetS16_0BCA8(arg0, 2);
@@ -3833,7 +3833,7 @@ void BattleAnim_InitializeHornDrillHit(void) {
 void BattleAnim_RunWeakSpear(Particle* arg0) {
     s16 sp26 = Particle_FieldCE_GetS32_0C040(arg0);
 
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SelectParticleModelFrames(arg0, 0);
             if (sp26 == 1) {
@@ -4013,7 +4013,7 @@ void BattleAnim_CallbackStartEffect132Descriptor39DelayedRiseFade_InitParticle(P
 }
 
 void BattleAnim_CallbackStartEffect132Descriptor39DelayedRiseFade(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_CallbackStartEffect132Descriptor39DelayedRiseFade_InitParticle(arg0);
             break;
@@ -4035,7 +4035,7 @@ void BattleAnim_CallbackStartEffect132Descriptor39DelayedRiseFade(Particle* arg0
 
         case 4:
             func_8213F658(arg0, 0x40800000, 0x3F000000);
-            func_8213E1FC(arg0, arg0->unk_74);
+            func_8213E1FC(arg0, arg0->stepMagnitude);
             Particle_PrimAlpha_Approach_0BC2C(arg0, 0, 0x10);
             if (Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0) != 0) {
                 break;

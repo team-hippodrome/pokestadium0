@@ -100,7 +100,7 @@ s32 func_8213EFF8(Particle* arg0, s32 arg1, s32 arg2);
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_ContinueFireBreathFlameFading(Particle* arg0) {
-    switch (arg0->unk_B8) {
+    switch (arg0->phase) {
         case 1:
             if (Particle_TickPhaseTimer(arg0, 2) != 0) {
                 Particle_AdvancePhase(arg0);
@@ -115,7 +115,7 @@ void BattleAnim_ContinueFireBreathFlameFading(Particle* arg0) {
             break;
     }
 
-    if (arg0->unk_B8 > 0) {
+    if (arg0->phase > 0) {
         Particle_AddVelocityFromRotationTemplate1(arg0);
     }
 }
@@ -127,7 +127,7 @@ void BattleAnim_ContinueFireBreathFlameFading(Particle* arg0) {
 void BattleAnim_RunFireBreathFlameFading(Particle* arg0) {
     s16 sp2E = Particle_FieldCF_GetS16_0C058(arg0);
 
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupFireBreathFlameFading(arg0, sp2E);
             break;
@@ -204,7 +204,7 @@ void BattleAnim_SetupUnusedDescriptor4FColorCycleScaleFadeVariant(Particle* arg0
 }
 
 void BattleAnim_MotionUnusedDescriptor4FColorCycleScaleFadeVariant(Particle* arg0) {
-    switch (arg0->unk_B8) {
+    switch (arg0->phase) {
         case 1:
             if (Particle_TickPhaseTimer(arg0, 2) != 0) {
                 Particle_AdvancePhase(arg0);
@@ -217,13 +217,13 @@ void BattleAnim_MotionUnusedDescriptor4FColorCycleScaleFadeVariant(Particle* arg
             break;
     }
 
-    if (arg0->unk_B8 > 0) {
+    if (arg0->phase > 0) {
         Particle_AddVelocityFromRotationTemplate7B(arg0);
     }
 }
 
 void BattleAnim_CallbackUnusedDescriptor4FColorCycleScaleFadeVariant(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupUnusedDescriptor4FColorCycleScaleFadeVariant(arg0);
             break;
@@ -299,7 +299,7 @@ s32 func_8213EFF8(Particle* arg0, s32 arg1, s32 arg2);
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_ContinueFireBreathFlameGeometry(Particle* arg0) {
-    switch (arg0->unk_B8) {
+    switch (arg0->phase) {
         case 1:
             if (Particle_TickPhaseTimer(arg0, 1) != 0) {
                 Particle_AdvancePhase(arg0);
@@ -314,7 +314,7 @@ void BattleAnim_ContinueFireBreathFlameGeometry(Particle* arg0) {
             break;
     }
 
-    if (arg0->unk_B8 > 0) {
+    if (arg0->phase > 0) {
         Particle_AddVelocityFromRotationTemplate1(arg0);
     }
 }
@@ -389,7 +389,7 @@ void BattleAnim_SetupFireBreathFlameColoration(Particle* arg0, s16 arg1) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_ContinueFireBreathFlameColoration(Particle* arg0) {
-    switch (arg0->unk_B8) {
+    switch (arg0->phase) {
         case 1:
             if (Particle_TickPhaseTimer(arg0, arg0->unk_AE) != 0) {
                 Particle_AdvancePhase(arg0);
@@ -404,7 +404,7 @@ void BattleAnim_ContinueFireBreathFlameColoration(Particle* arg0) {
             break;
     }
 
-    if (arg0->unk_B8 > 0) {
+    if (arg0->phase > 0) {
         Particle_AddVelocityFromRotationTemplate1(arg0);
     }
 }
@@ -412,7 +412,7 @@ void BattleAnim_ContinueFireBreathFlameColoration(Particle* arg0) {
 void BattleAnim_CallbackStartEffects23And35And84Descriptor4FRotatingFallColorCycle(Particle* arg0) {
     s16 temp_v0 = Particle_FieldCF_GetS16_0C058(arg0);
 
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupFireBreathFlameColoration(arg0, temp_v0);
             break;
@@ -468,7 +468,7 @@ void BattleAnim_CallbackStartEffects23And35And84Descriptor4FRotatingFallColorCyc
         func_8213CC10((s8*)arg0, 0, 7, 1, 2, -1);
         Particle_Field1C_Approach_0B98C(arg0, 0.02f, 0.015f);
         BattleAnim_ContinueFireBreathFlameColoration(arg0);
-        if (arg0->unk_2C.y <= 0.0f) {
+        if (arg0->worldPosition.y <= 0.0f) {
             Particle_MarkInactive(arg0);
         }
     }
@@ -493,7 +493,7 @@ void BattleAnim_SetupExpandingHitSpark(Particle* arg0) {
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_RunExpandingHitSpark(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupExpandingHitSpark(arg0);
             break;
@@ -525,7 +525,7 @@ void BattleAnim_RunExpandingHitSpark(Particle* arg0) {
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_RunPsybeamHitSparkDrift(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupExpandingHitSpark(arg0);
             break;
@@ -555,7 +555,7 @@ void BattleAnim_RunPsybeamHitSparkDrift(Particle* arg0) {
 }
 
 void BattleAnim_CallbackUnusedGrowFadeVariant(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupExpandingHitSpark(arg0);
             break;
@@ -720,7 +720,7 @@ void BattleAnim_SetupUnusedVariant2(Particle* arg0) {
 }
 
 void BattleAnim_CallbackUnusedVariant2(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 3:
             break;
 
@@ -903,7 +903,7 @@ s32 func_8213F658(Particle* arg0, f32 arg1, f32 arg2);
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_RunEmberUseEffect(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupEmberUseEffect(arg0);
             break;
@@ -1049,7 +1049,7 @@ void BattleAnim_SetupBackgroundBombExplosion(Particle* arg0) {
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_RunBackgroundBombExplosion(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupBackgroundBombExplosion(arg0);
             break;
@@ -1063,7 +1063,7 @@ void BattleAnim_RunBackgroundBombExplosion(Particle* arg0) {
         case 3:
             Particle_Field1C_ApproachField24ByField20_0BA1C(arg0);
             func_8213CCEC(arg0, 2, 7, 1, 1, 0);
-            if (arg0->unk_C7 >= 6) {
+            if (arg0->textureFrame >= 6) {
                 Particle_PrimAlpha_Approach_0BC2C(arg0, 0x64, 0x4E);
             }
             break;
@@ -1371,7 +1371,7 @@ void BattleAnim_SetupEmberHitSmoke(Particle* arg0) {
 
 s32 func_8213F658(Particle* arg0, f32 arg1, f32 arg2);
 void BattleAnim_CallbackEndEffect56Descriptor47SpreadScaleAlphaRise(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupEmberHitSmoke(arg0);
             break;
@@ -1663,7 +1663,7 @@ void BattleAnim_SetupFlamethrowerHitRotation(Particle* arg0, s16 arg1, s16 arg2)
 void BattleAnim_RunFlamethrowerHitRotation(Particle* arg0, s32 arg1) {
     s16 temp_v0 = Particle_FieldCF_GetS16_0C058(arg0);
 
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupFlamethrowerHitRotation(arg0, arg1, temp_v0);
             break;
@@ -1760,7 +1760,7 @@ void BattleAnim_SetupFireBlastHitFrontFlames(Particle* arg0) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_ContinueFireBlastHitFrontFlames(Particle* arg0) {
-    switch (arg0->unk_B8) {
+    switch (arg0->phase) {
         case 1:
             if (Particle_TickPhaseTimer(arg0, 1) != 0) {
                 Particle_AdvancePhase(arg0);
@@ -1775,7 +1775,7 @@ void BattleAnim_ContinueFireBlastHitFrontFlames(Particle* arg0) {
             break;
     }
 
-    if (arg0->unk_B8 > 0) {
+    if (arg0->phase > 0) {
         Particle_AddVelocityFromRotationTemplate1(arg0);
     }
 }
@@ -1872,7 +1872,7 @@ void BattleAnim_SetupDaimonji(Particle* arg0) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_ContinueDaimonji(Particle* arg0) {
-    switch (arg0->unk_B8) {
+    switch (arg0->phase) {
         case 1:
             if (Particle_TickPhaseTimer(arg0, 2) != 0) {
                 Particle_AdvancePhase(arg0);
@@ -1886,7 +1886,7 @@ void BattleAnim_ContinueDaimonji(Particle* arg0) {
             break;
     }
 
-    if (arg0->unk_B8 > 0) {
+    if (arg0->phase > 0) {
         Particle_AddVelocityFromRotationTemplate5(arg0);
     }
 }
@@ -1897,7 +1897,7 @@ void BattleAnim_ContinueDaimonji(Particle* arg0) {
  * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
 void BattleAnim_RunDaimonji(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupDaimonji(arg0);
             break;

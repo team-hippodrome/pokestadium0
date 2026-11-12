@@ -5,7 +5,7 @@
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleAnim_CallbackDescriptor26BurstChild(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_CallbackDescriptor26BurstChild_InitParticle(arg0);
             break;
@@ -13,7 +13,7 @@ void BattleAnim_CallbackDescriptor26BurstChild(Particle* arg0) {
         case 2:
             if (Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0) != 0) {
                 Particle_EnableRendering(arg0);
-                ParticleMath_ScaleDirectionToLength(&arg0->unk_7C, arg0->unk_50, D_8219A880, arg0->unk_74);
+                ParticleMath_ScaleDirectionToLength(&arg0->motionStep, arg0->motionOffset, D_8219A880, arg0->stepMagnitude);
             }
             break;
 
@@ -21,7 +21,7 @@ void BattleAnim_CallbackDescriptor26BurstChild(Particle* arg0) {
             Particle_Field7C_ScaleVec_0B14C(arg0, 1.5f);
             if (Particle_TickDelayAndAdvanceLifecycle(arg0, 4) != 0) {
                 Particle_Field74_SetScaled_0AD8C(arg0, 10.0f);
-                Particle_FieldA6_SetS16_0BCA8(arg0, ParticleMath_ScaleDirectionToLength(&arg0->unk_7C, arg0->unk_50, D_8219A880, arg0->unk_74));
+                Particle_FieldA6_SetS16_0BCA8(arg0, ParticleMath_ScaleDirectionToLength(&arg0->motionStep, arg0->motionOffset, D_8219A880, arg0->stepMagnitude));
             }
             break;
 
@@ -58,7 +58,7 @@ void func_82165BC8(s32 arg0) {
 }
 
 void BattleAnim_CallbackDescriptor26BurstEmitter(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_CallbackDescriptor26BurstEmitter_InitParticle(arg0);
             break;

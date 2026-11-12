@@ -305,7 +305,7 @@ void BattleAnim_SetupUserHueChange(Particle* arg0) {
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_RunUserHueChange(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupUserHueChange(arg0);
             break;
@@ -454,7 +454,7 @@ void BattleAnim_SetupIceBeamBlizzardHitHueChange(Particle* arg0) {
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_RunIceBeamBlizzardHitHueChange(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupIceBeamBlizzardHitHueChange(arg0);
             break;

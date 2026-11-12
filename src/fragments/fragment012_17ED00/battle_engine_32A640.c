@@ -48,7 +48,7 @@ void BattleAnim_UnusedResetAppearanceAndAdvance(Particle* arg0) {
 }
 
 void BattleAnim_CallbackUnusedGenericFadeApproach(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 0:
             break;
 
@@ -92,7 +92,7 @@ void BattleAnim_SetupOrphanDescriptor2BSpinFade(Particle* arg0) {
 void func_8213E1FC(Particle* arg0, f32 arg1);
 s32 func_8213F658(Particle* arg0, f32 arg1, f32 arg2);
 void BattleAnim_CallbackOrphanDescriptor2BSpinFade(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupOrphanDescriptor2BSpinFade(arg0);
             break;
@@ -119,11 +119,11 @@ void BattleAnim_CallbackOrphanDescriptor2BSpinFade(Particle* arg0) {
             break;
     }
 
-    switch (arg0->unk_B8) {
+    switch (arg0->phase) {
         case 1:
             func_8213F658(arg0, 50.0f, 0.5f);
             func_8213E1FC(arg0, 1.0f);
-            Particle_UpdateRotatingVelocityXZ(arg0, arg0->unk_74, 0x1000);
+            Particle_UpdateRotatingVelocityXZ(arg0, arg0->stepMagnitude, 0x1000);
             Particle_Field94_AddX_0A578(arg0, 0x2000);
             Particle_Field94_AddZ_0A5B0(arg0, 0x3000);
             break;
@@ -131,7 +131,7 @@ void BattleAnim_CallbackOrphanDescriptor2BSpinFade(Particle* arg0) {
         case 2:
             func_8213F658(arg0, 0.0f, 1.0f);
             func_8213E1FC(arg0, -2.0f);
-            Particle_UpdateRotatingVelocityXZ(arg0, arg0->unk_74, 0x1000);
+            Particle_UpdateRotatingVelocityXZ(arg0, arg0->stepMagnitude, 0x1000);
             Particle_Field94_AddX_0A578(arg0, 0x2000);
             Particle_Field94_AddZ_0A5B0(arg0, 0x3000);
             break;
@@ -216,7 +216,7 @@ void func_8213ECD0(Particle* arg0);
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_RunPetalDanceLingeringHitEffect(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupPetalDanceLingeringHitEffect(arg0);
             break;
@@ -241,12 +241,12 @@ void BattleAnim_RunPetalDanceLingeringHitEffect(Particle* arg0) {
                 Particle_Field9A_SetX_0A3C4(arg0, ParticleMath_RandomSignedOffsetBySign(0x1000, 0x600));
                 Particle_FieldB0_SetS16_0BFEC(arg0, ParticleMath_RandomSignedOffsetBySign(0x400, 0x400));
                 Particle_Field9A_SetZ_0A3EC(arg0, ParticleMath_RandomSignedOffsetBySign(0x1000, 0x600));
-                arg0->unk_38.x += arg0->unk_50.x;
-                arg0->unk_50.x = 0;
-                arg0->unk_38.z += arg0->unk_50.z;
-                arg0->unk_50.z = 0;
+                arg0->positionOffset.x += arg0->motionOffset.x;
+                arg0->motionOffset.x = 0;
+                arg0->positionOffset.z += arg0->motionOffset.z;
+                arg0->motionOffset.z = 0;
                 Particle_AdvancePhase(arg0);
-                arg0->unk_7C.y = -((ParticleMath_RandomRange(8) * 0.1f) + 0.5f);
+                arg0->motionStep.y = -((ParticleMath_RandomRange(8) * 0.1f) + 0.5f);
             }
             break;
 
@@ -259,21 +259,21 @@ void BattleAnim_RunPetalDanceLingeringHitEffect(Particle* arg0) {
             break;
     }
 
-    switch (arg0->unk_B8) {
+    switch (arg0->phase) {
         case 1:
             func_8213F658(arg0, 20.0f, 0.5f);
-            func_8213E1FC(arg0, arg0->unk_7C.y);
-            Particle_UpdateRotatingVelocityXZ(arg0, arg0->unk_74, arg0->unk_AE);
+            func_8213E1FC(arg0, arg0->motionStep.y);
+            Particle_UpdateRotatingVelocityXZ(arg0, arg0->stepMagnitude, arg0->unk_AE);
             break;
 
         case 2:
             Particle_FieldAE_Approach_0BF60(arg0, 0, 0x200);
-            func_8213E1FC(arg0, arg0->unk_7C.y);
-            Particle_UpdateRotatingVelocityXZ(arg0, arg0->unk_74, arg0->unk_AE);
+            func_8213E1FC(arg0, arg0->motionStep.y);
+            Particle_UpdateRotatingVelocityXZ(arg0, arg0->stepMagnitude, arg0->unk_AE);
             break;
 
         case 3:
-            func_8213E1FC(arg0, arg0->unk_7C.y);
+            func_8213E1FC(arg0, arg0->motionStep.y);
             Particle_UpdateRotatingVelocityXZ(arg0, 5.0f, 0x400);
             break;
     }
@@ -282,7 +282,7 @@ void BattleAnim_RunPetalDanceLingeringHitEffect(Particle* arg0) {
         func_8213ECD0(arg0);
         Particle_Field94_AddY_0A594(arg0, arg0->unk_B0);
         Particle_Field94_AddXFromField9A_0A4B4(arg0);
-        if (arg0->unk_2C.y < 0.0f) {
+        if (arg0->worldPosition.y < 0.0f) {
             Particle_MarkInactive(arg0);
         }
     }
@@ -300,7 +300,7 @@ void BattleAnim_SetupSlowFallingHitEffect(Particle* arg0) {
     switch (sp24) {
         case 0:
             Particle_Field1C_SetScaled_0B938(arg0, 0.12f);
-            arg0->unk_5C.y = -((ParticleMath_RandomRange(0xA) * 0.1f) + 0.5f);
+            arg0->motionTarget.y = -((ParticleMath_RandomRange(0xA) * 0.1f) + 0.5f);
             Particle_Field38_AddYScaled_08E90(arg0, ParticleMath_RandomRange(0x28) + 0x1E);
             Particle_SetRandomVelocityXSymmetric(arg0, 0x1E, 0);
             Particle_SetRandomVelocityZSymmetric(arg0, 0x1E, 0);
@@ -308,7 +308,7 @@ void BattleAnim_SetupSlowFallingHitEffect(Particle* arg0) {
 
         case 1:
             Particle_Field1C_SetScaled_0B938(arg0, 0.2f);
-            arg0->unk_5C.y = -((ParticleMath_RandomRange(4) * 0.1f) + 0.2f);
+            arg0->motionTarget.y = -((ParticleMath_RandomRange(4) * 0.1f) + 0.2f);
             Particle_Field38_AddYScaled_08E90(arg0, ParticleMath_RandomSigned(0x14) + 0x1E);
             Particle_SetRandomVelocityXSymmetric(arg0, 0xF, 5);
             Particle_SetRandomVelocityZSymmetric(arg0, 0x14, 5);
@@ -336,7 +336,7 @@ void func_8213ECD0(Particle* arg0);
 void BattleAnim_RunSlowFallingHitEffect(Particle* arg0) {
     s16 sp26 = Particle_FieldCE_GetS32_0C040(arg0);
 
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupSlowFallingHitEffect(arg0);
             break;
@@ -366,8 +366,8 @@ void BattleAnim_RunSlowFallingHitEffect(Particle* arg0) {
             break;
     }
 
-    if (arg0->unk_B8 == 1) {
-        func_8213E1FC(arg0, arg0->unk_5C.y);
+    if (arg0->phase == 1) {
+        func_8213E1FC(arg0, arg0->motionTarget.y);
         Particle_UpdateRotatingVelocityXZ(arg0, 5.0f, 0x400);
     }
 
@@ -375,7 +375,7 @@ void BattleAnim_RunSlowFallingHitEffect(Particle* arg0) {
         func_8213ECD0(arg0);
         Particle_Field94_AddYFromField9A_0A4C8(arg0);
         Particle_Field94_AddXFromField9A_0A4B4(arg0);
-        if (arg0->unk_2C.y < 0.0f) {
+        if (arg0->worldPosition.y < 0.0f) {
             Particle_MarkInactive(arg0);
         }
     }

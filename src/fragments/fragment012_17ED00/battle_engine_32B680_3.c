@@ -346,7 +346,7 @@ void BattleAnim_SelectParticleModelFrames(Particle* arg0, s32 arg1) {
 
 
 void BattleAnim_CallbackInitModelAnimWait(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SelectParticleModelFrames(arg0, 0);
             break;
@@ -366,7 +366,7 @@ void BattleAnim_CallbackInitModelAnimWait(Particle* arg0) {
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_InitializeParticleModel(Particle* arg0) {
-    if (arg0->unk_B2 == 1) {
+    if (arg0->lifecycle == 1) {
         BattleAnim_SelectParticleModelFrames(arg0, 0);
     }
 }
@@ -377,7 +377,7 @@ void BattleAnim_InitializeParticleModel(Particle* arg0) {
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_RunScaryEyes(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SelectParticleModelFrames(arg0, 0);
             break;
@@ -392,7 +392,7 @@ void BattleAnim_RunScaryEyes(Particle* arg0) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_RunDreamEaterUseEffect(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SelectParticleModelFrames(arg0, 1);
             break;
@@ -410,7 +410,7 @@ void BattleAnim_RunDreamEaterUseEffect(Particle* arg0) {
 }
 
 void BattleAnim_CallbackInitModelAnimMode2(Particle* arg0) {
-    if (arg0->unk_B2 == 1) {
+    if (arg0->lifecycle == 1) {
         BattleAnim_SelectParticleModelFrames(arg0, 2);
     }
 }
@@ -422,7 +422,7 @@ void BattleAnim_CallbackInitModelAnimMode2(Particle* arg0) {
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_RunFillScreenOverlay(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SelectParticleModelFrames(arg0, 2);
             break;
@@ -574,7 +574,7 @@ void BattleAnim_SetupMove86EndDescriptor24(Particle* arg0) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_RunThunderWaveHitEffect(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupMove86EndDescriptor24(arg0);
             break;
@@ -748,7 +748,7 @@ void BattleAnim_SetupEffect1Descriptor2F(Particle* arg0) {
 }
 
 void BattleAnim_CallbackStartEffect1Descriptor2FPhaseFadeOut(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupEffect1Descriptor2F(arg0);
             break;

@@ -2,7 +2,7 @@
 #include "battle_engine_339CA0.h"
 
 void BattleAnim_CallbackUnusedGrowingSparkVariant(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupUnusedGrowingSparkVariant(arg0);
             break;

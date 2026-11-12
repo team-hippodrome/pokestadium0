@@ -129,7 +129,7 @@ void BattleAnim_InitStartEffect135Descriptor1CRisingScale(Particle* arg0) {
 }
 
 void BattleAnim_CallbackStartEffect135Descriptor1CRisingScaleFade(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_InitStartEffect135Descriptor1CRisingScale(arg0);
             break;
@@ -177,7 +177,7 @@ void func_821501B4(s32 arg0)
 }
 
 void BattleAnim_CallbackStartEffect135ExpandingFlashFade(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_InitStartEffect135ExpandingFlash(arg0);
             break;
@@ -216,7 +216,7 @@ void BattleAnim_InitStartEffect139Descriptor42FallingScale(Particle* arg0) {
 
 s32 func_8213F658(Particle* arg0, f32 arg1, f32 arg2);
 void BattleAnim_CallbackStartEffect139Descriptor42FallingScaleFade(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_InitStartEffect139Descriptor42FallingScale(arg0);
             break;
@@ -312,7 +312,7 @@ void BattleAnim_InitStartEffect141Descriptor1CGridRise(Particle* arg0) {
 }
 
 void BattleAnim_CallbackStartEffect141Descriptor1CGridRiseFade(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_InitStartEffect141Descriptor1CGridRise(arg0);
             break;
@@ -396,7 +396,7 @@ void func_8213ECD0(Particle* arg0);
 void BattleAnim_CallbackStartEffects133And134And143Descriptor44ModeOrbitSwirl(Particle* arg0) {
     Particle_FieldCE_GetS32_0C040(arg0);
 
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_InitStartEffects133And134And143Descriptor44ModeOrbit(arg0);
             break;
@@ -428,7 +428,7 @@ void BattleAnim_CallbackStartEffects133And134And143Descriptor44ModeOrbitSwirl(Pa
     }
 
     if (Particle_IsRenderingEnabled(arg0) != 0) {
-        switch (arg0->unk_B8) {
+        switch (arg0->phase) {
             case 1:
                 func_8213ECD0(arg0);
                 Particle_SetPositionFromRotationTemplate1(arg0, arg0->unk_AE);
@@ -457,7 +457,7 @@ void BattleAnim_InitStartEffects133And134And143Descriptor38MetadataBurst(Particl
 
 void func_8213E1FC(Particle* arg0, f32 arg1);
 void BattleAnim_CallbackStartEffects133And134And143Descriptor38MetadataBurstEmitter(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_InitStartEffects133And134And143Descriptor38MetadataBurst(arg0);
             break;

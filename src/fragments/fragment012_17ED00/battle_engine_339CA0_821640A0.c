@@ -6,7 +6,7 @@
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_RunAcidArmorUseEffect2(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupAcidArmorUseEffect2(arg0);
             break;
@@ -394,7 +394,7 @@ void BattleAnim_SetupBarrageUseEffect2(Particle* arg0) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_RunBarrageUseEffect2(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupBarrageUseEffect2(arg0);
             break;
@@ -479,7 +479,7 @@ void BattleAnim_CallbackDescriptor50BurstEmitter_InitParticle(Particle* arg0) {
 }
 
 void BattleAnim_CallbackDescriptor50BurstEmitter(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_CallbackDescriptor50BurstEmitter_InitParticle(arg0);
             break;
@@ -540,7 +540,7 @@ void BattleAnim_SetupSolarBeamUseEffect(Particle* arg0) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_RunSolarBeamUseEffect(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupSolarBeamUseEffect(arg0);
             break;
@@ -581,7 +581,7 @@ void BattleAnim_SetupQiChargeChild(Particle* arg0) {
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_RunQiChargeChild(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupQiChargeChild(arg0);
             break;
@@ -629,7 +629,7 @@ void BattleAnim_SetupQiCharge(Particle* arg0) {
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleAnim_CallbackStartEffects29And60And104And110DefaultDescriptorBurstEmitter(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             func_82165854(arg0);
             break;

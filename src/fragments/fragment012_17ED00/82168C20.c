@@ -29,7 +29,7 @@ void func_82168C20(Particle* arg0) {
 extern Vec3f D_8219A898;
 
 void func_82168CC4(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             func_82168C20(arg0);
             break;
@@ -51,7 +51,7 @@ void func_82168CC4(Particle* arg0) {
             break;
     }
 
-    if (arg0->unk_B2 > 0) {
+    if (arg0->lifecycle > 0) {
         Particle_AddVelocityXZFromRotationYViaImpulse(arg0);
         Particle_Field50_AddXFromField7C_09C58(arg0);
     }
