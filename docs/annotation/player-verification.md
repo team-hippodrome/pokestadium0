@@ -416,3 +416,24 @@ The level-total notice needs cup rules and wasn't triggered.
 `BattleMenu_DrawBottomActionButtons` never ran on that screen, though the L/R
 hint is on screen. The hint may be drawn once when the screen opens, before
 the savestate, so that name keeps its tag.
+
+## Re-check after the debugger fix
+
+The missed breakpoint hits came from two places. One was a resume race in
+the debugger, now fixed. The other was in my sweep script: `emu.wait_frames`
+resumes a stop that lands just before the call. The script now waits with
+`emu.wait_break` and never resumes a stop it hasn't seen.
+
+I re-ran the sweep for the 50 functions named above. Each move-specific
+callback reached the same moves as before, so those docs stand. The confusion
+callbacks depend on the dice, and this time they ran after Psybeam's
+confusion side effect. Watching one on screen showed that use-move variant 11
+is the self-hit, 「わけも わからず じぶんを こうげきした！」 with red ?! marks.
+It is now `BattleScene_UseMoveStepConfusionSelfHit`.
+
+The cartridge check screen comes after the title: 「ポケモンの カートリッジが
+セット されていません。…」 with an 「オプション」 button. The first pass had its
+loop and draw functions as `Options_RunTitle` and `Options_DrawTitle`. They
+are now `TransferPak_RunCartridgeCheckScreen` and
+`TransferPak_DrawCartridgeCheckScreen`. C-Right opens the options menu, and A
+on バックアップ opens the clear-save prompt, so those names are confirmed.

@@ -1169,7 +1169,7 @@ func_8212954C,0x8212954C,src/fragments/fragment012_17ED00/battle_engine_309ED0_8
 func_8212960C,0x8212960C,src/fragments/fragment012_17ED00/battle_engine_309ED0_82128CDC.c,func_8212960C,hand,,c
 func_821296E4,0x821296E4,src/fragments/fragment012_17ED00/battle_engine_309ED0_82128CDC.c,func_821296E4,hand,,c
 func_821297BC,0x821297BC,src/fragments/fragment012_17ED00/battle_engine_309ED0_82128CDC.c,BattleScene_UseMoveStepMultiHit,hand,,c
-func_821299B0,0x821299B0,src/fragments/fragment012_17ED00/battle_engine_309ED0_82128CDC.c,BattleScene_UseMoveStepShowConfused,hand,,c
+func_821299B0,0x821299B0,src/fragments/fragment012_17ED00/battle_engine_309ED0_82128CDC.c,BattleScene_UseMoveStepConfusionSelfHit,hand,,c
 func_82129AE8,0x82129AE8,src/fragments/fragment012_17ED00/battle_engine_309ED0_82128CDC.c,BattleScene_ActionStepUseMove,hand,,c
 func_82129C1C,0x82129C1C,src/fragments/fragment012_17ED00/battle_engine_309ED0_82128CDC.c,BattleScene_ActionSetupAnimationVariantB,hand,,c
 func_82129D10,0x82129D10,src/fragments/fragment012_17ED00/battle_engine_309ED0_82128CDC.c,func_82129D10,hand,,c

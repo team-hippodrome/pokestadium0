@@ -220,7 +220,7 @@ void func_82129414(CameraNode*);
 void func_821296E4(CameraNode* arg0);
 
 void BattleAnim_QueueEffectList(u8 arg0, s32 arg1);
-void BattleScene_UseMoveStepShowConfused(CameraNode* arg0);
+void BattleScene_UseMoveStepConfusionSelfHit(CameraNode* arg0);
 
 extern ActivePokemon* D_84390204;
 M2C_UNK func_82124284(s32, s32, f32);

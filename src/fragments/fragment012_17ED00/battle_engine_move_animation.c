@@ -581,7 +581,8 @@ void BattleScene_TickMoveUseEnd(ActivePokemon* active_pokemon) {
 /**
  * Enter callback of presentation row 22: resets the Pokemon to its idle cue animation (clearing
  * the underground flags for Dugtrio) before a confused Pokemon acts.
- * Player sweep: reached only by Supersonic and Confuse Ray, on the confused COM Pokemon's turn.
+ * Player sweeps: runs on the confused COM Pokemon's turn (seen after Supersonic, Confuse Ray, and
+ * Psybeam's confusion side effect).
  * @unverified The wobble animation was not watched on screen.
  */
 void BattleScene_EnterConfusedRow(ActivePokemon* active_pokemon) {

@@ -392,12 +392,14 @@ void BattleScene_UseMoveStepMultiHit(CameraNode* arg0) {
 }
 
 /**
- * Use-move step variant 11 (BattleScene_ActionStepUseMove): shows message +0x148 for the acting
- * side, plays camera shot 3 and queues effect list 7 on the actor, then waits for its cue.
- * Player sweep: reached only by Supersonic and Confuse Ray, on the confused COM Pokemon's turn.
- * @unverified Message +0x148 is probably the 'is confused' line; not yet read on screen.
+ * Use-move step variant 11 (BattleScene_ActionStepUseMove), the confusion self-hit: shows message
+ * +0x148 for the acting side, plays camera shot 3 and queues effect list 7 on the actor, then
+ * waits for its cue.
+ * Seen in play: with the COM's Pinsir (カイのすけ) confused, it showed 「わけも わからず じぶんを こうげきした！」 with
+ * the red ?! marks over its head. It also ran in the sweeps after Supersonic, Confuse Ray and
+ * Psybeam's confusion side effect.
  */
-void BattleScene_UseMoveStepShowConfused(CameraNode* arg0) {
+void BattleScene_UseMoveStepConfusionSelfHit(CameraNode* arg0) {
     switch (sBattleScene.scene->phaseSubstep) {
         case 0:
             if (BattleScene_AdvanceCameraFrameCounter(0x14) != 0) {
@@ -473,7 +475,7 @@ void BattleScene_ActionStepUseMove(CameraNode* arg0, s32 arg1) {
             BattleScene_UseMoveStepMultiHit(arg0);
             break;
         case 11:
-            BattleScene_UseMoveStepShowConfused(arg0);
+            BattleScene_UseMoveStepConfusionSelfHit(arg0);
             break;
         default:
             func_82128FBC(arg0);
