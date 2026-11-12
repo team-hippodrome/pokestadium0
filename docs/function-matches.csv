@@ -451,10 +451,10 @@ func_81101FA0,0x81101FA0,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0
 func_81101FE8,0x81101FE8,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,GbPak_InitializeCartridgeMapper,hand,,c
 func_811020A8,0x811020A8,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,func_811020A8,hand,,c
 func_81102168,0x81102168,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,func_81102168,m2c,m2c,c
-func_811021D4,0x811021D4,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,func_811021D4,hand,,c
+func_811021D4,0x811021D4,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,GbPak_ProbeCartridge,hand,,c
 func_81102280,0x81102280,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,GbPak_SelectRomAddress,hand,,c
 func_81102344,0x81102344,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,GbPak_SelectRamBank,hand,,c
-func_811023DC,0x811023DC,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,func_811023DC,hand,,c
+func_811023DC,0x811023DC,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,GbPak_CheckTransferStatus,hand,,c
 func_81102460,0x81102460,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,func_81102460,hand,,c
 func_81102690,0x81102690,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,GbPak_TransferBankedRam,hand,,c
 func_811027A8,0x811027A8,src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c,func_811027A8,hand,,c
@@ -679,7 +679,7 @@ func_823018AC,0x823018AC,src/fragments/fragment005_15FCE0/battle_order_select.c,
 func_823018F8,0x823018F8,src/fragments/fragment005_15FCE0/battle_order_select.c,func_823018F8,hand,,c
 func_823019AC,0x823019AC,src/fragments/fragment005_15FCE0/battle_order_select.c,func_823019AC,hand,,c
 func_82301A2C,0x82301A2C,src/fragments/fragment005_15FCE0/battle_order_select.c,BattleMenu_SelectSlotOrShowSummary,hand,,c
-func_82301B2C,0x82301B2C,src/fragments/fragment005_15FCE0/battle_order_select.c,func_82301B2C,m2c,m2c,c
+func_82301B2C,0x82301B2C,src/fragments/fragment005_15FCE0/battle_order_select.c,BattleMenu_UndoSelections,m2c,m2c,c
 func_82301BBC,0x82301BBC,src/fragments/fragment005_15FCE0/battle_order_select.c,BattleMenu_HandleOrderSelectPanel_PartyInput,hand,,c
 func_82301CCC,0x82301CCC,src/fragments/fragment005_15FCE0/battle_order_select.c,BattleMenu_HandleOrderSelectPanel_ConfirmInput,hand,,c
 func_82301DDC,0x82301DDC,src/fragments/fragment005_15FCE0/battle_order_select.c,BattleMenu_HandleOrderSelectPanel_LevelCapNoticeInput,s1,stadium1:src/fragments/battle_order_select/battle_order_select.c,c
@@ -5342,7 +5342,7 @@ func_800049E8,0x800049E8,src/scheduler.c,func_800049E8,m2c,m2c,c
 func_80004A38,0x80004A38,src/scheduler.c,Sched_TryStartTask,s1,stadium1:src/scheduler.c,c
 func_80004A6C,0x80004A6C,src/scheduler.c,Sched_StartPendingTask,s1,stadium1:src/scheduler.c,c
 func_80004AA8,0x80004AA8,src/scheduler.c,Sched_TryYieldActiveTask,s1,stadium1:src/scheduler.c,c
-func_80004AE0,0x80004AE0,src/scheduler.c,func_80004AE0,m2c,m2c,c
+func_80004AE0,0x80004AE0,src/scheduler.c,Sched_HandlePreNMI,m2c,m2c,c
 func_80004B10,0x80004B10,src/scheduler.c,Sched_HandleRetrace,hand,,c
 func_80004C04,0x80004C04,src/scheduler.c,Sched_HandleRspEvent,s1,stadium1:src/scheduler.c,c
 func_80004CC8,0x80004CC8,src/scheduler.c,Sched_HandleRdpEvent,s1,stadium1:src/scheduler.c,c

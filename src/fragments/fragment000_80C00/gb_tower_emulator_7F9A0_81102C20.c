@@ -95,7 +95,7 @@ s32 func_81101FE8(s8 *);                            /* extern */
 s32 func_81102F7C(s32, s32, s32);                     /* extern */
 
 /*
- * func_811021D4
+ * GbPak_ProbeCartridge
  *
  * Returns 0 right away when bit 0 of the byte at arg0 + 0x9B is set.
  * Otherwise runs func_81102168(arg0), then func_81101FE8(arg0) while the
@@ -114,7 +114,7 @@ s32 func_81102F7C(s32, s32, s32);                     /* extern */
  * triple test is needed (one or two do not match). The same kind of empty
  * test already exists in func_88100100.
  */
-s32 func_811021D4(u8 *arg0);
+s32 GbPak_ProbeCartridge(u8 *arg0);
 
 s32 GbPak_SelectRomAddress(unk_D_8122B2C0* arg0, s32 arg1);
 
@@ -157,16 +157,16 @@ typedef struct GbpakChannel811023DC {
     /* 0xA3 */ char unkA3[0x1];
 } GbpakChannel811023DC; // size = 0xA4
 GbpakChannel811023DC D_811561C8[4];
-s32 func_811023DC(OSPfs* arg0);
+s32 GbPak_CheckTransferStatus(OSPfs* arg0);
 
-s32 func_811021D4(u8*);
+s32 GbPak_ProbeCartridge(u8*);
 s32 func_81102280(u8*, s32);
-s32 func_811023DC(OSPfs*);
+s32 GbPak_CheckTransferStatus(OSPfs*);
 s32 func_81102460(u8* arg0);
 
-s32 func_811021D4(u8*);
+s32 GbPak_ProbeCartridge(u8*);
 s32 func_81102344(u8*, s32);
-s32 func_811023DC(OSPfs*);
+s32 GbPak_CheckTransferStatus(OSPfs*);
 
 s32 GbPak_TransferBankedRam(u8* arg0, s32 arg1);
 
@@ -375,7 +375,7 @@ void func_811030F0(s32 arg0) {
             if (func_81101FE8((s8*)ch) != 0) {
                 goto error;
             }
-            if (func_811023DC(pfs) != 0) {
+            if (GbPak_CheckTransferStatus(pfs) != 0) {
                 goto error;
             }
             if (!(ch->status & 1)) {
@@ -419,7 +419,7 @@ void func_811030F0(s32 arg0) {
                 }
                 break;
             case 5:
-                if (func_811021D4((u8*)ch) != 0) {
+                if (GbPak_ProbeCartridge((u8*)ch) != 0) {
                     goto error;
                 }
                 if (func_81102344((u8*)ch, (u32)ch->addr >> 13) != 0) {
@@ -464,7 +464,7 @@ void func_811030F0(s32 arg0) {
                 ch->sramState[ch->bankEntry[0] & 0x7F] = 0;
                 break;
             case 8:
-                if (func_811023DC(pfs) != 0) {
+                if (GbPak_CheckTransferStatus(pfs) != 0) {
                     goto error;
                 }
                 break;

@@ -756,7 +756,11 @@ void BattleMenu_SelectSlotOrShowSummary(unk_D_848037A0* arg0, s8 arg1) {
 M2C_UNK func_8003F6AC(M2C_UNK, s8 *);             /* extern */
 M2C_UNK func_82300B30(s8, s8 *);                  /* extern */
 extern unk_D_848037A0 D_82302B48[];
-void func_82301B2C(s8 *arg0) {
+/**
+ * Clears a nonempty panel's picks, resetting the partner panel when present.
+ * @unverified Name guessed from the code; comment kept.
+ */
+void BattleMenu_UndoSelections(s8 *arg0) {
     s8 temp_v1;
     s8 *temp_v0;
 
@@ -797,7 +801,7 @@ void BattleMenu_HandleOrderSelectPanel_PartyInput(Controller* arg0, unk_D_848037
     }
 
     if (BTN_IS_PRESSED(arg0, BTN_L)) {
-        func_82301B2C(arg1);
+        BattleMenu_UndoSelections(arg1);
     } else if (BTN_IS_PRESSED(arg0, BTN_B)) {
         BattleMenu_SelectSlotOrShowSummary(arg1, 0);
     } else if (BTN_IS_PRESSED(arg0, BTN_CLEFT)) {

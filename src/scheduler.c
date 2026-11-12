@@ -221,7 +221,12 @@ M2C_UNK func_8000A8BC();                            /* extern */
 M2C_UNK func_80026980();                            /* extern */
 extern s16 D_800AA148;
 
-void func_80004AE0(void) {
+/**
+ * Handles the pre-NMI (reset button) message: sets D_800AA148 and calls the
+ * shutdown hooks func_8000A8BC and func_80026980.
+ * @unverified Name from Stadium 1, where the same call sits in the same place.
+ */
+void Sched_HandlePreNMI(void) {
     D_800AA148 = 1;
     func_8000A8BC();
     func_80026980();
@@ -313,7 +318,7 @@ void Sched_HandleRdpEvent(void) {
  *   0x65 RDP finished     -> Sched_HandleRdpEvent
  *   0x67 start next task  -> Sched_StartPendingTask (sent by other
  *                            scheduler code with osSendMesg)
- *   0x68 pre-NMI          -> func_80004AE0
+ *   0x68 pre-NMI          -> Sched_HandlePreNMI
  * Unknown messages are ignored.  `arg0` is the thread argument and is unused.
  */
 void Sched_ThreadEntry(void* arg0) {
@@ -347,7 +352,7 @@ void Sched_ThreadEntry(void* arg0) {
                 break;
 
             case 0x68:
-                func_80004AE0();
+                Sched_HandlePreNMI();
                 break;
         }
     }

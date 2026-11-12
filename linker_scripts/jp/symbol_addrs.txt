@@ -3995,3 +3995,7 @@ BattleAnim_Meditate = 0x8210B520; // type:func
 BattleAnim_SquishHitReaction = 0x8210B790; // type:func
 BattleAnim_LassoMoveHitReaction = 0x8210B9F8; // type:func
 BattleAnim_LassoMoveHitReactionStart = 0x8210B7E4; // type:func
+Sched_HandlePreNMI = 0x80004AE0; // type:func
+GbPak_ProbeCartridge = 0x811021D4; // type:func
+GbPak_CheckTransferStatus = 0x811023DC; // type:func
+BattleMenu_UndoSelections = 0x82301B2C; // type:func

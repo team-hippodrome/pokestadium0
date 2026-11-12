@@ -152,27 +152,13 @@ s32 func_81102168(s8 *arg0) {
 s32 func_81101FE8(s8 *);                            /* extern */
 s32 func_81102F7C(s32, s32, s32);                     /* extern */
 
-/*
- * func_811021D4
- *
- * Returns 0 right away when bit 0 of the byte at arg0 + 0x9B is set.
- * Otherwise runs func_81102168(arg0), then func_81101FE8(arg0) while the
- * result is 0, then, if bit 0 of the byte at 0x9B is (now) set and the byte
- * at 0x98 is non-zero, func_811020A8(arg0), then
- * func_81102F7C(byte 0x9C, word 0x94, byte 0x98), stopping at the first
- * non-zero result. If the result is non-zero, clears bit 0 of the byte at
- * 0x9B. Returns the result.
- *
- * Same record as GbPak_TransferBankedRam and func_811020A8 take; what the
- * flag bit and the other fields mean is not established.
- *
- * Matching note: the empty `if` on `arg0` has no meaning of its own. It was
- * found with decomp-permuter and is the only form tried that makes the
- * compiler copy arg0 to s0 before the first load, as the ROM does; the
- * triple test is needed (one or two do not match). The same kind of empty
- * test already exists in func_88100100.
+/**
+ * Before each transfer: checks the connector, resets the mapper, re-reads the
+ * cartridge header ID and compares it with cartridgeId (detects a swapped cartridge),
+ * then re-verifies the RAM probe block if one was written.
+ * @unverified Name guessed from the code; comment kept.
  */
-s32 func_811021D4(u8 *arg0) {
+s32 GbPak_ProbeCartridge(u8 *arg0) {
     s32 ret;
 
     if (((!arg0) && (!arg0)) && (!arg0)) {  // FAKE
@@ -288,7 +274,11 @@ typedef struct GbpakChannel811023DC {
     /* 0xA3 */ char unkA3[0x1];
 } GbpakChannel811023DC; // size = 0xA4
 extern GbpakChannel811023DC D_811561C8[4];
-s32 func_811023DC(OSPfs* arg0) {
+/**
+ * Reads the Transfer Pak status; returns 0 only when bit 7 is set and bit 6 is clear.
+ * @unverified Name guessed from the code; comment kept.
+ */
+s32 GbPak_CheckTransferStatus(OSPfs* arg0) {
     s32 ret = osGbpakGetStatus(arg0, &D_811561C8[arg0->channel].status);
 
     if (ret == 0) {
@@ -297,9 +287,9 @@ s32 func_811023DC(OSPfs* arg0) {
     return ret;
 }
 
-s32 func_811021D4(u8*);
+s32 GbPak_ProbeCartridge(u8*);
 s32 func_81102280(u8*, s32);
-s32 func_811023DC(OSPfs*);
+s32 GbPak_CheckTransferStatus(OSPfs*);
 s32 func_81102460(u8* arg0) {
     s32 ret;
     u8* buf;
@@ -309,7 +299,7 @@ s32 func_81102460(u8* arg0) {
     s32 sum;
     s32 off;
 
-    ret = func_811021D4(arg0);
+    ret = GbPak_ProbeCartridge(arg0);
     buf = M2C_FIELD(arg0, u8**, 0x54);
     addr = M2C_FIELD(arg0, s32*, 0x8C);
     remaining = M2C_FIELD(arg0, s32*, 0x80);
@@ -352,14 +342,14 @@ s32 func_81102460(u8* arg0) {
         }
     }
     if (ret == 0) {
-        ret = func_811023DC(M2C_FIELD(arg0, OSPfs**, 0x50));
+        ret = GbPak_CheckTransferStatus(M2C_FIELD(arg0, OSPfs**, 0x50));
     }
     return ret;
 }
 
-s32 func_811021D4(u8*);
+s32 GbPak_ProbeCartridge(u8*);
 s32 func_81102344(u8*, s32);
-s32 func_811023DC(OSPfs*);
+s32 GbPak_CheckTransferStatus(OSPfs*);
 
 /**
  * Reads (is_write == 0) or writes (is_write != 0) transferSize bytes of banked cartridge
@@ -375,7 +365,7 @@ s32 GbPak_TransferBankedRam(u8* arg0, s32 arg1) {
     s32 var_v1;
     s32 var_s2;
 
-    var_v0 = func_811021D4(arg0);
+    var_v0 = GbPak_ProbeCartridge(arg0);
     var_v1 = var_v0;
     var_s3 = M2C_FIELD(arg0, u8**, 0x54);
     var_s2 = M2C_FIELD(arg0, s32*, 0x8C);
@@ -398,7 +388,7 @@ s32 GbPak_TransferBankedRam(u8* arg0, s32 arg1) {
         }
     }
     if (var_v0 == 0) {
-        var_v1 = func_811023DC(M2C_FIELD(arg0, OSPfs**, 0x50));
+        var_v1 = GbPak_CheckTransferStatus(M2C_FIELD(arg0, OSPfs**, 0x50));
     }
     return var_v1;
 }
