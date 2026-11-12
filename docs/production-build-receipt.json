@@ -4,8 +4,8 @@
   "output_sha256": "ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b",
   "full_rom_identical": true,
   "compare": true,
-  "c_owners": 5412,
-  "asm_owners": 32,
+  "c_owners": 5413,
+  "asm_owners": 31,
   "linked_images": 260,
   "sdk_asm_owners": 25,
   "original_assembly_sources_sha256": {
@@ -664,7 +664,7 @@
     "tools/cflags_overrides.json": "e3db3b29e01736a27242afda3777cee3db0d330f000cd8eb6230ba10fc8479d1",
     "tools/asm-processor/asm_processor.py": "4351bbaf43ad1862a73dd81bce9c445f354cfe62b4a02b647afb0d788156dec3",
     "tools/asm-processor/build.py": "fa6a16c5c4d43b65b51f086274a50a6d4867c42189ef6053076b751523c16c5c",
-    "docs/function-matches.csv": "74c648de563b7b4bc951b64562f45535085be613c48d05d78c0d5afbfc18a1b5",
+    "docs/function-matches.csv": "c8ab53246b9c0bfa6a641fec2c81f50dd833ae510d545a51b8e50f662f1143a1",
     "linker_scripts/jp/symbol_addrs.txt": "7793ea86643996d488126092ac46aefb79ebd778f2a120c5392784f7bd54e234"
   },
   "binutils": {
@@ -866,7 +866,7 @@
     "src/fragments/fragment012_17ED00/particle_math_26E6D0.c": "db0eea2fb8a1213b96f9b7fe293faf96dab17fda49f25b90465aca62b04ca039",
     "src/fragments/fragment012_17ED00/particle_math_26E6D0_2.c": "3f224465f6a774f97bae0bca4529e165237020aa32b6630dadc52304b4b853a6",
     "src/fragments/fragment012_17ED00/particle_math_26E6D0_3.c": "f0a6213871cd4e3baae1d9b905e8ff098d5e5059c92250264da0269018343318",
-    "src/fragments/fragment013_232510/demo_scenes_161E60.c": "1a883f97c24dcabb2c97a0dc8feb274585ffc439e4a5cd86bdef8b5ed4a20ff1",
+    "src/fragments/fragment013_232510/demo_scenes_161E60.c": "80f888219466a66b5b96d03a8e7c512ed4acc39eebaa9976422188d58395adda",
     "src/fragments/fragment014_235D70/lab_pc_icons.c": "867d8f721c0d9bad3fadf521ae1ac350c5df2d80bf902b525197770720a82ba3",
     "src/fragments/fragment014_235D70/lab_pc_icons_88000020.c": "a970e15916bded7744d68ca2cc4075e931ceb5a94ba8b86ba3b9aef85acb83f5",
     "src/fragments/fragment015_238BD0/89006FC0.c": "bd7cece0c736bae65bc3176bf33845dc3678b7a3ede94a28e16136edfa1d351e",
