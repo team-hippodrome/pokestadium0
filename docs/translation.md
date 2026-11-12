@@ -172,3 +172,16 @@ blocked behind the font work.
   `func_80019F70` (or its tables) produces blank glyphs.
 - **The announcer pak is per-region.** Zero's clip ids and count are not Stadium 1's, so the fork's
   `text/announcer.json` is a format reference only, never content.
+
+## IPL3 boot checksum (2026-11-12)
+
+IPL3 verifies a CRC over the **first megabyte** of the ROM (0x1000..0x101000) against the header
+words at 0x10/0x14 and halts on a mismatch. A halt is a black screen with no exception, so every
+patch below 0x101000 looked like "the game hangs".
+
+Evidence: a one-byte change in the font sheet (0x2B2D00, above 1 MB) boots; a one-word commutative
+operand swap in the loader (0x1AD44, below 1 MB) hangs.
+
+Zero is CIC-NUS-6103; its seed is 0xA3886759 and the final mix is `(a3^t2)+t3`, `(s0^a2)+t4`.
+`tools/fonts_en.py` ports Project64's `CalculateRomCrc` (`rom_crc`, `detect_seed`, `fix_checksum`),
+re-stamps the header after patching, and the checker refuses a ROM whose stamp is stale.
