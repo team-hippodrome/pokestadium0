@@ -1740,7 +1740,7 @@ s32 BattleAnim_RunPointyMoveHitSpark(Particle* arg0) {
         case 3:
             Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 3, 1, 1, 0);
             Particle_AddVelocityXZFromRotationYPlusHalfTurn(arg0);
-            if ((Particle_DecrementUnkA6ToZero != NULL) && (arg0->phase == 0)) {
+            if ((Particle_DecrementUnkA6ToZero != NULL) && (arg0->phase == 0)) { //!bug: compares the function pointer instead of calling it
                 Particle_AdvancePhase(arg0);
             }
             break;
