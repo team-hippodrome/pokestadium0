@@ -111,7 +111,7 @@ void BattleAnim_CallbackOrphanDescriptor2BSpinFade(Particle* arg0) {
             break;
 
         case 4:
-            if (Particle_TickDelayAndAdvanceLifecycle(arg0, 0x14) != 0) {}
+            if (Particle_TickDelayAndAdvanceLifecycle(arg0, 0x14) != 0) {} // karodo
             break;
 
         case 5:

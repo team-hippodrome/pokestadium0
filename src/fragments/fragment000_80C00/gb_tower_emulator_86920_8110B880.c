@@ -338,7 +338,7 @@ s32 func_8110B880(s32 arg0, s32 arg1) {
 }
 
 s32 func_8110B8D8(s32 x, s32 y, s32 size) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s32 index = D_81184440.unk_0C;
 
     D_81184440.unk_10[index].unk_0 = func_81109868((M2C_UNK*)&D_81184440, size);
@@ -604,7 +604,7 @@ s8 *func_8110BF28(s32 arg0)
 {
   s32 temp_v0_2;
   s8 *temp_v0;
-  s32 *new_var;
+  s32 *new_var; // FAKE: permuter temp
   new_var = (s32 *) (&D_811845F4);
   temp_v0_2 = func_81109868(&(*((s8 *) (&D_811845D0))), arg0);
   if (temp_v0_2 == 0)
@@ -621,10 +621,10 @@ s8 *func_8110BF28(s32 arg0)
 
 
 void func_8110BFB0(void) {
-    UNUSED s32 pad2[1];
+    UNUSED s32 pad2[1]; // FAKE: stack padding
     s32 j;
     s32 count;
-    UNUSED s32 pad[5];
+    UNUSED s32 pad[5]; // FAKE: stack padding
     s32 a;
     s32 b;
     s8* slot;
@@ -722,11 +722,11 @@ extern s8 D_81137ACC[];
 s32 func_8110DBA0();
 
 void* func_8110C2D8(u32 devAddr, u32 size, s32 arg2, u8* dmaIndexRef, s32 medium) {
-    UNUSED s32 pad1;
+    UNUSED s32 pad1; // FAKE: stack padding
     Timer8110C1C0* dma;
     s32 hasDma = FALSE;
     u32 dmaDevAddr;
-    UNUSED u32 pad2;
+    UNUSED u32 pad2; // FAKE: stack padding
     u32 dmaIndex;
     u32 transfer;
     s32 bufferPos;
@@ -949,8 +949,8 @@ void func_8110CB70(s8 *arg0, s32 arg1, unsigned short arg2)
   var_v0 = 0;
   if ((*((s16 *) (((s8 *) arg0) + 0))) > 0)
   {
- var_a2 = arg0; do { var_v0 += 1; if (((*((s32 *) (((s8 *) var_a2) + 0x14))) != 0) && ((*((s8 *) (((s8 *) var_a2) + 0x18))) == 2)) {
-        *((s32 *) (((s8 *) var_a2) + 0x10)) = (s32) ((*((s32 *) (((s8 *) var_a2) + 0x10))) + arg1);
+ var_a2 = arg0; do { var_v0 += 1; if (((*((s32 *) (((s8 *) var_a2) + 0x14))) != 0) && ((*((s8 *) (((s8 *) var_a2) + 0x18))) == 2)) { // FAKE: decomp slop, raw pointer casts stand in for struct fields
+        *((s32 *) (((s8 *) var_a2) + 0x10)) = (s32) ((*((s32 *) (((s8 *) var_a2) + 0x10))) + arg1); // FAKE: decomp slop, raw pointer casts stand in for struct fields
       }
       var_a2 += 0x10;
  } while (var_v0 < (*((s16 *) (((s8 *) arg0) + 0)))); }
@@ -1327,7 +1327,7 @@ s32 func_8110D5BC(s32 tableType, s32 id, s32* didAllocate) {
     s32 status;
     u32 romAddr;
     s32 cachePolicy;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
 
     ramAddr = func_8110D7EC(tableType, id);
     if (ramAddr != 0) {

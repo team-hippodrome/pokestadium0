@@ -6,7 +6,7 @@ void BattleScene_UpdateSecondaryModelTrailPosition(ActivePokemon* pokemon, s16 n
     f32 distance;
     s16 angle_x;
     s16 angle_y;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     f32 eye[3] = { 0.5f, 0.4f, 0.3f };    // Zero afterimage spacing at D_821891D8
     f32 rate[3] = { 0.98f, 0.96f, 0.95f }; // D_84384644
 
@@ -419,7 +419,7 @@ void BattleAnim_PokeBallThrow(ActivePokemon* owner, ActivePokemon* animated_poke
 }
 
 void BattleAnim_ResetOwnerFacingAndExitStatusIdle(ActivePokemon* arg0) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     CameraNode* sp18 = sBattleScene.scene->camera;
 
     BattleScene_PositionParticipantModel(arg0);
@@ -691,7 +691,7 @@ void func_8210B7E4(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
 void BattleAnim_LassoMoveHitReactionContinue(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     BattleMonRuntime* runtime = &animated_pokemon->state.runtime;
     f32 scale_delta;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
 
     if (runtime->scaleResize == 0) {
         scale_delta = (1.0f - Strip400_GetTailFadeRatio()) * 0.6f;

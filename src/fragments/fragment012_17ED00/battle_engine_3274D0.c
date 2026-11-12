@@ -27,7 +27,7 @@ void BattleAnim_CallbackSharedDirectionalSprayFade(Particle* arg0);
 void BattleAnim_CallbackSharedDescriptor13DirectionalSprayScaledFade(Particle* arg0);
 
 void BattleAnim_SetupStartEffects18And73Descriptor11ScatterRiseFade(Particle* arg0) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     Vec3s sp2C;
 
     Particle_FieldAC_GetS16_0C038(arg0);
@@ -274,7 +274,7 @@ void func_8214ED30(s8 *arg0) {
 }
 
 void BattleAnim_SetupSharedDescriptor13DirectionalSprayScaledFade(Particle* arg0) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     Vec3s sp2C;
 
     Particle_FieldAC_GetS16_0C038(arg0);
@@ -320,9 +320,9 @@ void func_8214EEE0(s8 *arg0) {
 }
 
 void BattleAnim_SetupStartEffect59EndEffect28DirectionalStreamFade(Particle* arg0) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     Vec3s sp2C;
-    UNUSED s32 pad2[2];
+    UNUSED s32 pad2[2]; // FAKE: stack padding
 
     Particle_FieldAC_GetS16_0C038(arg0);
     Particle_Field1C_SetScaled_0B938(arg0, 0.1f);
@@ -370,9 +370,9 @@ void func_8214F06C(s8 *arg0) {
 }
 
 void BattleAnim_SetupUnregisteredStraightDirectionalStreamFade(Particle* arg0) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     Vec3s sp2C;
-    UNUSED s32 pad2[2];
+    UNUSED s32 pad2[2]; // FAKE: stack padding
 
     Particle_FieldAC_GetS16_0C038(arg0);
     Particle_Field1C_SetScaled_0B938(arg0, 0.1f);
@@ -420,7 +420,7 @@ void func_8214F1E8(s8 *arg0) {
 }
 
 void BattleAnim_SetupEndEffect28Descriptor10UpwardBurstFade(Particle* arg0) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     Vec3f sp30;
     Vec3s sp28;
 
@@ -470,7 +470,7 @@ void func_8214F3D4(s8 *arg0) {
 }
 
 void BattleAnim_SetupEndEffect28Descriptor10WideScatterBurstFade(Particle* arg0) {
-    UNUSED s32 pad[4];
+    UNUSED s32 pad[4]; // FAKE: stack padding
     Vec3s sp28;
 
     Particle_FieldAC_GetS16_0C038(arg0);

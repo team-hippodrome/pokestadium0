@@ -422,7 +422,7 @@ void func_89003E2C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, char *arg5,
 extern Color_RGBA8 D_8900A6FC;
 extern Color_RGBA8 D_8900A700;
 void func_89003ECC(s8* arg0) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s32 sp38;
     s32 h;
 

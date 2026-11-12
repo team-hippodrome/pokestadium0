@@ -15,7 +15,7 @@ s32 Jpeg_DecodeHuffmanSymbol(JpegHuffmanTable* hTable, s16* outCoeff, s8* outZer
 u16 Jpeg_ReadBits(u8 len);
 
 s32 Jpeg_DecodeMcus(JpegDecoder* decoder, u16* mcuBuff, s32 count, u8 isFollowing, JpegDecoderState* state) {
-    s16 pad;
+    s16 pad; // FAKE: stack padding
     s16 unk0;
     s16 unk1;
     s16 unk2;

@@ -706,7 +706,7 @@ void func_8213AC3C(s8* arg0) {
 }
 
 void BattleAnim_SpawnSingleParticle(BattleAnimEffectSlot* arg0) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     ActivePokemon* sp18 = arg0->unk_08;
 
     BattleAnim_InitializeParticleFromEffect(Particle_New(), sp18, arg0, 0);

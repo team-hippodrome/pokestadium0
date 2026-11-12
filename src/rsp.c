@@ -36,8 +36,8 @@ void Storage_ResetDisk(void);
 void Storage_QueueRequest(void* arg0, s32 arg1);
 
 s32 Storage_InitializeLeoManager(void) {
-    UNUSED s32 unused;
-    UNUSED s32 unused2[6];
+    UNUSED s32 unused; // FAKE: stack padding
+    UNUSED s32 unused2[6]; // FAKE: stack padding
     s32 result;
 
     result = LeoCJCreateLeoManager(0x95, 0x96, &D_80086F7C, 0x10);

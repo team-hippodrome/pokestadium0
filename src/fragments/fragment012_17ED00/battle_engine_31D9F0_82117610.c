@@ -7,10 +7,10 @@ extern u8 D_03006CA0[];
 extern u8 D_03006D00[];
 
 void func_82117610(s16 x, s16 y) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s8 buf[12];
     f32 time = D_FLT_82199EB0 / 30.0f;
-    UNUSED s32 pad2[3];
+    UNUSED s32 pad2[3]; // FAKE: stack padding
 
     Font_BeginTranslucentTextRendering();
     Font_SetActive(1, 0);
@@ -26,10 +26,10 @@ void func_82117610(s16 x, s16 y) {
 
 
 void func_8211778C(s16 x, s16 y) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s8 buf[12];
     f32 time = D_FLT_82199EB4 / 30.0f;
-    UNUSED s32 pad2[3];
+    UNUSED s32 pad2[3]; // FAKE: stack padding
 
     Font_BeginTranslucentTextRendering();
     Font_SetActive(1, 0);
@@ -46,7 +46,7 @@ void func_8211778C(s16 x, s16 y) {
 
 void BattleHud_DrawPartyBallRow(ActivePokemon* arg0, s16 arg1, s16 arg2) {
     u8* sp74[] = { D_03006C40, D_03006CA0, D_03006D00 };
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s32 i;
     s32 j;
     s32 var_v0_2;
@@ -132,7 +132,7 @@ void BattleHud_DrawPartyBallRow(ActivePokemon* arg0, s16 arg1, s16 arg2) {
 
 
 void BattleHud_DrawMonStatusBoxPlayer(ActivePokemon* arg0, s16 arg1, s16 arg2, u16 arg3, s32 arg4) {
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     TeamRoster* sp80;
     BattleMon* sp7C;
     Color_RGB8* temp_v0_2;
@@ -220,7 +220,7 @@ void BattleHud_DrawMonStatusBoxPlayer(ActivePokemon* arg0, s16 arg1, s16 arg2, u
 }
 
 void BattleHud_DrawMonStatusBoxOpponent(ActivePokemon* arg0, s16 arg1, s16 arg2, u16 arg3, s32 arg4) {
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     TeamRoster* sp80;
     BattleMon* sp7C;
     Color_RGB8* temp_v0;

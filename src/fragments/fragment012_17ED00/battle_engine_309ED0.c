@@ -6,7 +6,7 @@ void BattleScene_ResetAnimationStep(void) {
 }
 
 s32 func_82124A50(ActivePokemon* arg0) {
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     s32 sp1C = 0;
 
     if (!(arg0->state.flags & 0x2000)) {
@@ -40,7 +40,7 @@ s32 func_82124A50(ActivePokemon* arg0) {
 }
 
 s32 BattleScene_AdvanceOwnerAnimation98(ActivePokemon* arg0) {
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     s32 sp1C = 0;
 
     if (!(arg0->state.flags & 0x2000)) {
@@ -70,7 +70,7 @@ s32 BattleScene_AdvanceOwnerAnimation98(ActivePokemon* arg0) {
 }
 
 s32 func_82124BF8(ActivePokemon* arg0) {
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     s32 sp1C = 0;
 
     if (!(arg0->state.flags & 0x1000)) {
@@ -102,7 +102,7 @@ s32 func_82124BF8(ActivePokemon* arg0) {
 
 
 s32 BattleScene_AdvanceBothOwnerAnimations(void) {
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     s32 sp1C = 0;
     ActivePokemonState* temp_a1 = &sActivePokemon[0]->state;
     ActivePokemonState* temp_a2 = &sActivePokemon[1]->state;

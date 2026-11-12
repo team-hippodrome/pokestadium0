@@ -209,7 +209,7 @@ void func_8216E428(void) {
     f32 y;
     f32 z;
     f32 angle;
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     f32 scale = BattleAnim_EffectSecondaryOwnerModelScale();
 
     BattleAnim_EffectSecondaryOwnerAnchorPosition(&pos);

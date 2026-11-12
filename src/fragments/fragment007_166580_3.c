@@ -250,7 +250,7 @@ extern Color_RGBA8 D_82009108;
  * What the constants mean is not established. `pad` places sp38 at sp+0x38 as in the ROM.
  */
 void func_82005EE4(s8* arg0, s32 arg1) {
-    s32 pad;
+    s32 pad; // FAKE: stack padding
     s32 sp38;
     s32 temp_s1;
 
@@ -349,13 +349,13 @@ void func_8002D9B8(s32, s32, s32, s32, s8 *);  /* extern */
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_82006348(s8 *arg0, s32 arg1)
 {
-  s8 *new_var;
+  s8 *new_var; // FAKE: permuter temp
   if (func_8002AE6C() == 0)
   {
     if (arg0 && arg0)
     {
     }
-    func_8002D9B8(new_var = arg0 + 0x2C, (*((s32 *) (((s8 *) arg0) + 0))) + 6, (*((s32 *) (((s8 *) arg0) + 4))) + 0xC, arg1 | 0xFFED, arg0);
+    func_8002D9B8(new_var = arg0 + 0x2C, (*((s32 *) (((s8 *) arg0) + 0))) + 6, (*((s32 *) (((s8 *) arg0) + 4))) + 0xC, arg1 | 0xFFED, arg0); // FAKE: decomp slop, raw pointer casts stand in for struct fields
   }
 }
 
@@ -380,7 +380,7 @@ s32 func_8200639C(s32 arg0) {
 
 extern M2C_UNK D_800734A8;
 void func_82006410(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4) {
-    UNUSED s32 pad[4];
+    UNUSED s32 pad[4]; // FAKE: stack padding
     Color_RGBA8 c;
 
     if (arg4 & 0x10) {
@@ -464,7 +464,7 @@ extern M2C_UNK D_82009F70;
  * sp+0x28.
  */
 void func_820066E8(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
-    s32 pad;
+    s32 pad; // FAKE: stack padding
     s8 *sp2C;
     s8 *sp28;
     s32 var_v1;
@@ -587,7 +587,7 @@ s32 func_820069B8(void* arg0) {
 }
 
 void func_82006AC0(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4) {
-    UNUSED s32 pad[4];
+    UNUSED s32 pad[4]; // FAKE: stack padding
     Color_RGBA8 c;
 
     if (arg4 & 0x10) {
@@ -678,7 +678,7 @@ extern M2C_UNK D_82009FCC;
  * before the constant 1 so that its load comes first.
  */
 void func_82006C74(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
-    s32 pad;
+    s32 pad; // FAKE: stack padding
     s8 *sp2C;
     s8 *sp28;
     s32 var_v1;
@@ -889,7 +889,7 @@ typedef struct Box82007398 {
 } Box82007398;
 
 void func_82007398(s32 arg0, s32 arg1, s32* arg2, s32 arg3, s32 arg4) {
-    UNUSED s32 pad[3];
+    UNUSED s32 pad[3]; // FAKE: stack padding
     Box82007398 sp24;
 
     if (arg4 & 0x10) {
@@ -1027,7 +1027,7 @@ void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
  * retail stack frame.
  */
 void func_82007784(s32 arg0, s32 arg1, IconPanel* arg2, s32 arg3, s32 arg4) {
-    UNUSED s32 pad[5];
+    UNUSED s32 pad[5]; // FAKE: stack padding
     s32 sp28;
 
     if (arg4 & 0x10) {
@@ -1049,7 +1049,7 @@ void func_82007784(s32 arg0, s32 arg1, IconPanel* arg2, s32 arg3, s32 arg4) {
 extern u8 D_8200A040[];
 extern u8 D_820091C4[];
 void func_820078BC(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     s32 n;
     s32 i;
 

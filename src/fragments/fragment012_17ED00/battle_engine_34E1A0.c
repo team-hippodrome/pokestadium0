@@ -63,7 +63,7 @@ void Trail40_Start(s32 arg0, s32 arg1) {
     f32 sp54;
     f32 sp50;
     f32 sp4C;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s16 sp46;
 
     sp6C = sWaterSurface.unk_0014[arg0][arg1].unk_00;

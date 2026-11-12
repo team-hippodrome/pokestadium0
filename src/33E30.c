@@ -55,7 +55,7 @@ Gfx* Gfx_DrawTriangleMarker(Gfx* arg0, Vec3f* arg1, u8 arg2, u8 arg3, u8 arg4, u
     Mtx spF8;
     Mtx spB8;
     Mtx sp78;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     MtxF sp34;
 
     sp144 = arg1->x;

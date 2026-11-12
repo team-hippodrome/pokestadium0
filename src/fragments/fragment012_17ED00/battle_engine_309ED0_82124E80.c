@@ -483,7 +483,7 @@ void func_821261A0(void* arg0, void* arg1, s32 arg2) {
 }
 
 s32 func_82126220(ActivePokemon* active_pokemon) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     BattleMon* party_pokemon = &active_pokemon->teamRoster->pokemonPicked[active_pokemon->state.rosterIndex];
     ActivePokemonState* state = &active_pokemon->state;
 
@@ -541,7 +541,7 @@ void func_8211EE8C(void);
 void func_82105E38(ActivePokemon*, s32);
 u16 func_8210C020(s32); // BattleAnim_RandomRange
 void func_821264E4(CameraNode* arg0) {
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     ActivePokemonState* state = &sActivePokemon[!sBattleScene.scene->unk_2C]->state;
     u8* rec = D_82189180[!sBattleScene.scene->unk_2C] + 0x72D;
     u16 sel;
@@ -657,7 +657,7 @@ void func_82126A1C(UNUSED CameraNode* arg0) {
 }
 
 void func_82126A24(CameraNode* arg0) {
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     ActivePokemonState* state = &sActivePokemon[!sBattleScene.scene->unk_2C]->state;
     u8* rec = D_82189180[!sBattleScene.scene->unk_2C] + 0x79B;
     u16 sel;
@@ -727,7 +727,7 @@ void BattleScene_PhaseSendOutAfterFaint(CameraNode* arg0) {
 
 void func_82126D20(UNUSED CameraNode* arg0) {
     ActivePokemonState* state;
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     BattleMon* mon;
     s32 side;
 
@@ -1164,7 +1164,7 @@ void func_82102010(ActivePokemon*);
 s32 func_82101FD4(ActivePokemon*);
 void func_82128510(CameraNode* arg0) {
     f32 sp44;
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     s16 sp3A;
     s8* scene = D_8219A5A0;
 

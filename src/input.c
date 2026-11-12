@@ -140,7 +140,7 @@ void func_8001CE20(s32 x, s32 y, s32 width, s32 height) {
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                         G_TX_NOLOD);
     if (x % 128 != 0) {
-        UNUSED s32 pad;
+        UNUSED s32 pad; // FAKE: stack padding
         n = 128 - x % 128;
         gSPTextureRectangle(gDisplayListHead++, x << 2, y << 2, (x + n) << 2, (y + height) << 2, G_TX_RENDERTILE,
                             (x % 128) << 5, 0, 0x400, 0x400);
@@ -160,7 +160,7 @@ void func_8001CE20(s32 x, s32 y, s32 width, s32 height) {
 }
 
 void func_8001D148(s32 x, s32 y, s32 width, s32 height, s32 r, s32 g, s32 b) {
-    UNUSED s32 pad[7];
+    UNUSED s32 pad[7]; // FAKE: stack padding
     s32 s;
     s32 n;
 

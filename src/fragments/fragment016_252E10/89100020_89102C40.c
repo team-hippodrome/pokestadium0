@@ -119,7 +119,7 @@ void func_891066E0(s8*, s32, s32, Rgba891024A4, s32, s32, s32);
 s32 func_89101D44(s8*, s32);
 
 s32 func_89102C40(s8* arg0) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     u32 sel;
     s32 a;
     s32 b;
@@ -229,7 +229,7 @@ s32 func_89102EC8(s8 *arg)
 {
   Ctx89102EC8 *arg0 = (Ctx89102EC8 *) arg;
   s32 ret;
-  Ctx89102EC8 *new_var;
+  Ctx89102EC8 *new_var; // FAKE: permuter temp
   ret = func_89106C98(arg0->unk9830);
   if (ret == (-1))
   {

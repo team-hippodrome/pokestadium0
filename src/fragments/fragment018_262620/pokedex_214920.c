@@ -94,7 +94,7 @@ s32 func_800231C8(s32, s32);
 void func_8001A944(s32, s32, const char*, ...);
 void func_8A100104(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s32* arg5) {
     s32 sorted;
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     s32 idx;
     s32 progress;
 
@@ -290,7 +290,7 @@ void func_8A100808(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4) {
 extern M2C_UNK D_8A1057E8;
 M2C_UNK func_80027804();
 void func_8A1008A4(void* arg0, s32 arg1, s32 arg2) {
-    s32 pad;
+    s32 pad; // FAKE: stack padding
 
     func_8002A8C4((s8*)arg0, arg1, arg2, 0xB4, 0xA8);
     M2C_FIELD(arg0, s32*, 0x24) = 0;
@@ -676,7 +676,7 @@ M2C_UNK func_80006780();
 s32 func_8A1013C0(s32, s32 *);
 
 s32 func_8A1014EC(void) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s32 sp50;
     s32 temp_v0;
     s32 temp_v0_2;
@@ -723,7 +723,7 @@ s32 func_8002AAC4(void*);
 void func_8A101020(void*, s32, s32);
 
 s32 func_8A10164C(s32 arg0, s32 arg1) {
-    UNUSED s32 pad[4];
+    UNUSED s32 pad[4]; // FAKE: stack padding
     s32 sp1C;
 
     GeoRender_AdvanceFrameCounter();

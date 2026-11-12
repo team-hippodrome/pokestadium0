@@ -223,7 +223,7 @@ extern Gfx D_80060270[];
 extern Color88100D9C D_88102D9C;
 extern Color88100D9C D_88102DA0;
 void func_881005E4(s8* arg0, s32 arg1) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s32 sp38;
     s32 h;
 
@@ -452,7 +452,7 @@ void func_8002BC58(s32, s32, u8, s32);
 void func_8002A3F8(u8*, s32, s32);
 void func_8002BAB8(s32, s32, s32, s32);
 void func_88100E34(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
-    UNUSED s32 pad[3];
+    UNUSED s32 pad[3]; // FAKE: stack padding
 
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(arg0, arg1, 0x88, 0x64, D_88102D7C);
@@ -590,7 +590,7 @@ void func_88101670(s8 *arg0, s32 arg1) {
 s32 func_88101690(s8 *arg0)
 {
  if (0) { }  // karodo
-  return (*((s32 *) (((s8 *) arg0) + 0))) >= ((*((s32 *) (((s8 *) arg0) + 4))) * (*((s32 *) (((s8 *) arg0) + 8))));
+  return (*((s32 *) (((s8 *) arg0) + 0))) >= ((*((s32 *) (((s8 *) arg0) + 4))) * (*((s32 *) (((s8 *) arg0) + 8)))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
 }
 
 s32 func_881016B0(s32 *arg0) {

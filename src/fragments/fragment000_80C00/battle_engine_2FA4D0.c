@@ -202,7 +202,7 @@ extern u8 D_81184658;
  * ROM's branch layout.
  */
 s32 func_8110FF1C(void) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     u32 sp18;
 
     if (func_8004D1C0(D_81186250, &sp18, 0) == -1) {

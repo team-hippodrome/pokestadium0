@@ -1009,7 +1009,7 @@ extern Gfx D_80073438[];
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 void func_820020EC(s32 arg0, s32 arg1, SlotList *arg2, s32 arg3, s32 arg4, SlotList **arg5)
 {
-  SlotList **new_var;
+  SlotList **new_var; // FAKE: permuter temp
   s32 hl;
   s32 *name;
   s32 i;
@@ -1057,15 +1057,15 @@ void func_820020EC(s32 arg0, s32 arg1, SlotList *arg2, s32 arg3, s32 arg4, SlotL
       {
         {
           Gfx *_g = (Gfx *) (gDisplayListHead++);
-          _g->words.w1 = (unsigned int) D_80073408;
-          _g->words.w0 = (((unsigned int) ((((unsigned int) 0xde) & ((0x01 << 8) - 1)) << 24)) | ((unsigned int) ((((unsigned int) 0x00) & ((0x01 << 8) - 1)) << 16))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 16) - 1)) << 0));
+          _g->words.w1 = (unsigned int) D_80073408; // FAKE: hand-expanded gbi macro
+          _g->words.w0 = (((unsigned int) ((((unsigned int) 0xde) & ((0x01 << 8) - 1)) << 24)) | ((unsigned int) ((((unsigned int) 0x00) & ((0x01 << 8) - 1)) << 16))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 16) - 1)) << 0)); // FAKE: hand-expanded gbi macro
         }
         ;
         func_8001B884(arg0 + 0x60, (arg1 + 5) + (i * 0xE), 0x28, 0xE, D_82008F74[i], 0x28, 0x200000);
         {
           Gfx *_g = (Gfx *) (gDisplayListHead++);
-          _g->words.w1 = (unsigned int) D_80073438;
-          _g->words.w0 = (((unsigned int) ((((unsigned int) 0xde) & ((0x01 << 8) - 1)) << 24)) | ((unsigned int) ((((unsigned int) 0x00) & ((0x01 << 8) - 1)) << 16))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 16) - 1)) << 0));
+          _g->words.w1 = (unsigned int) D_80073438; // FAKE: hand-expanded gbi macro
+          _g->words.w0 = (((unsigned int) ((((unsigned int) 0xde) & ((0x01 << 8) - 1)) << 24)) | ((unsigned int) ((((unsigned int) 0x00) & ((0x01 << 8) - 1)) << 16))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 16) - 1)) << 0)); // FAKE: hand-expanded gbi macro
         }
         ;
       }
@@ -1170,10 +1170,10 @@ void func_8200288C(s8 *arg0, s32 arg1)
 {
   s32 x;
   s32 y;
-  s32 pad[2];
+  s32 pad[2]; // FAKE: stack padding
   MenuDef8200288C def;
   s32 mode;
- x = (*((s32 *) (((s8 *) arg0) + 0x14))) + 6; y = (*((s32 *) (((s8 *) arg0) + 0x18))) + 6;
+ x = (*((s32 *) (((s8 *) arg0) + 0x14))) + 6; y = (*((s32 *) (((s8 *) arg0) + 0x18))) + 6; // FAKE: decomp slop, raw pointer casts stand in for struct fields
   mode = 0xFFED;
   func_82001E20(x, y, 2, arg0 + 0xC8);
   def.items = D_8200AC58;

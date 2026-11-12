@@ -533,15 +533,15 @@ void func_8002ED50(s8 *arg0) {
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_8002ED70(s8 *arg0)
 {
-  s32 *new_var3;
-  s32 *new_var2;
+  s32 *new_var3; // FAKE: permuter temp
+  s32 *new_var2; // FAKE: permuter temp
   int temp_v0;
-  s8 *new_var;
-  s32 *new_var4;
+  s8 *new_var; // FAKE: permuter temp
+  s32 *new_var4; // FAKE: permuter temp
   new_var = (s8 *) arg0;
   new_var4 = (s32 *) (new_var + 0x34);
   new_var3 = &(*new_var4);
-  temp_v0 = ((*(new_var2 = new_var3)) - ((*((s32 *) (((s8 *) arg0) + 0x24))) * (*((s32 *) (((s8 *) arg0) + 0x10))))) + 1;
+  temp_v0 = ((*(new_var2 = new_var3)) - ((*((s32 *) (((s8 *) arg0) + 0x24))) * (*((s32 *) (((s8 *) arg0) + 0x10))))) + 1; // FAKE: decomp slop, raw pointer casts stand in for struct fields
   if ((*((s32 *) (((s8 *) arg0) + 0x2C))) < temp_v0)
   {
     *((s32 *) (new_var + 0x2C)) = temp_v0;
@@ -582,7 +582,7 @@ void func_8002EDA8(ScrollMenu8002F6C4 *menu)
     {
       t2 = ((menu->cursor + 1) * menu->rowSpacing) - 1;
       speed = *((s32 *) (((s8 *) menu) + 0x38));
-      *((s32 *) (((s8 *) menu) + 0x34)) += ((t2 - (*((s32 *) (((s8 *) menu) + 0x34)))) < speed) ? (t2 - (*((s32 *) (((s8 *) menu) + 0x34)))) : (speed);
+      *((s32 *) (((s8 *) menu) + 0x34)) += ((t2 - (*((s32 *) (((s8 *) menu) + 0x34)))) < speed) ? (t2 - (*((s32 *) (((s8 *) menu) + 0x34)))) : (speed); // FAKE: decomp slop, raw pointer casts stand in for struct fields
       func_8002ED70((s8 *) menu);
       if (t2 == (*((s32 *) (((s8 *) menu) + 0x34))))
       {
@@ -600,7 +600,7 @@ void func_8002EDA8(ScrollMenu8002F6C4 *menu)
       {
         t1 = menu->scroll;
         t3 = *((s32 *) (((s8 *) menu) + 0x30));
-        t1 = ((t1 - t3) < (*((s32 *) (((s8 *) menu) + 0x3C)))) ? (t1 - t3) : (*((s32 *) (((s8 *) menu) + 0x3C)));
+        t1 = ((t1 - t3) < (*((s32 *) (((s8 *) menu) + 0x3C)))) ? (t1 - t3) : (*((s32 *) (((s8 *) menu) + 0x3C))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
         menu->scroll -= t1;
         if (1) {} // karodo
         *((s32 *) (((s8 *) menu) + 0x34)) -= t1;
@@ -617,7 +617,7 @@ void func_8002EDA8(ScrollMenu8002F6C4 *menu)
       if (!((*((u16 *) (((s8 *) menu) + 0x28))) & 0x100))
       {
         t3 = *((s32 *) (((s8 *) menu) + 0x30));
-        t1 = ((t3 - menu->scroll) < (*((s32 *) (((s8 *) menu) + 0x3C)))) ? (t3 - menu->scroll) : (*((s32 *) (((s8 *) menu) + 0x3C)));
+        t1 = ((t3 - menu->scroll) < (*((s32 *) (((s8 *) menu) + 0x3C)))) ? (t3 - menu->scroll) : (*((s32 *) (((s8 *) menu) + 0x3C))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
         menu->scroll += t1;
         if (1) {} // karodo
         *((s32 *) (((s8 *) menu) + 0x34)) += t1;
@@ -777,7 +777,7 @@ void func_8002F6C4(ScrollMenu8002F6C4* menu, s32 x, s32 y, s32 mask, s32 arg4) {
 void func_8002F9D8(ScrollMenu8002F6C4* menu, s32 x, s32 y, s32 mask, s32 arg4) {
     MenuDef8002E230* def = menu->def;
     u8* items = def->items;
-    s32 pad[2];
+    s32 pad[2]; // FAKE: stack padding
     s32 height = menu->rowSpacing * menu->rows;
     s32 i;
     s32 rowY;
@@ -1148,8 +1148,8 @@ void func_800309FC(s8 *arg0) {
 void func_80030A1C(s8 *arg0)
 {
   s32 temp_v0;
-  s8 *new_var;
-  temp_v0 = ((*((s32 *) (((s8 *) arg0) + 0x34))) - ((*((s32 *) (((s8 *) arg0) + 0x24))) * (*((s32 *) (((s8 *) arg0) + 0x10))))) + 1;
+  s8 *new_var; // FAKE: permuter temp
+  temp_v0 = ((*((s32 *) (((s8 *) arg0) + 0x34))) - ((*((s32 *) (((s8 *) arg0) + 0x24))) * (*((s32 *) (((s8 *) arg0) + 0x10))))) + 1; // FAKE: decomp slop, raw pointer casts stand in for struct fields
   new_var = ((s8 *) arg0) + 0x2C;
   if ((*((s32 *) (((s8 *) arg0) + 0x2C))) < temp_v0)
   {

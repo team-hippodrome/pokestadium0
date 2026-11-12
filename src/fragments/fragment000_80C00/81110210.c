@@ -61,8 +61,8 @@ void func_81110210(s8* note, ReverbInfo81110210* reverbInfo) {
     f32 volRight;
     f32 volLeft;
     s32 smallPanIndex;
-    UNUSED u32 pad;
-    UNUSED u32 pad1;
+    UNUSED u32 pad; // FAKE: stack padding
+    UNUSED u32 pad1; // FAKE: stack padding
     u8 strongRight;
     u8 strongLeft;
     f32 velocity;
@@ -394,7 +394,7 @@ void func_81110798(void)
         goto d;
       }
       else
-        if (((!playbackState->parentLayer->enabled) && (playbackState->unk_04 == 0)) && ((playbackState->priority >= 1) ^ 0))
+        if (((!playbackState->parentLayer->enabled) && (playbackState->unk_04 == 0)) && ((playbackState->priority >= 1) ^ 0)) // FAKE: no-op ^ 0
       {
       }
       else
@@ -1054,9 +1054,9 @@ extern f32 D_FLT_811858D4;
 void func_811116BC(s8 *arg0, s8 *arg1)
 {
   *((s8 **) (((s8 *) arg0) + 0x48)) = arg1;
-  *((u8 *) (((s8 *) arg0) + 0x30)) = (u8) (*((u8 *) (((s8 *) (*((s8 **) (((s8 *) arg1) + 0x54)))) + 5)));
+  *((u8 *) (((s8 *) arg0) + 0x30)) = (u8) (*((u8 *) (((s8 *) (*((s8 **) (((s8 *) arg1) + 0x54)))) + 5))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
   *((f32 *) (((s8 *) arg0) + 0x6C)) = (f32) D_FLT_811858D4;
-  *((u8 *) (((s8 *) arg0) + 0x5C)) = (u8) ((*((u8 *) (((s8 *) arg0) + 0x5C))) | 0x10);
+  *((u8 *) (((s8 *) arg0) + 0x5C)) = (u8) ((*((u8 *) (((s8 *) arg0) + 0x5C))) | 0x10); // FAKE: decomp slop, raw pointer casts stand in for struct fields
 }
 
 /*
@@ -1123,12 +1123,12 @@ s8 *func_81111784(s8 *arg0, s8 *arg1)
   s32 prioA;
   s32 prioB;
   prioA = (prioB = 0x10);
-  a = func_811114E8(arg0 + 0x20, *((u8 *) (((s8 *) (*((u8 **) (((s8 *) arg1) + 0x54)))) + 5)));
+  a = func_811114E8(arg0 + 0x20, *((u8 *) (((s8 *) (*((u8 **) (((s8 *) arg1) + 0x54)))) + 5))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
   if (a != 0)
   {
     prioA = *((u8 *) (((s8 *) a) + 0x30));
   }
-  b = func_811114E8(arg0 + 0x30, *((u8 *) (((s8 *) (*((u8 **) (((s8 *) arg1) + 0x54)))) + 5)));
+  b = func_811114E8(arg0 + 0x30, *((u8 *) (((s8 *) (*((u8 **) (((s8 *) arg1) + 0x54)))) + 5))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
   if (b != 0)
   {
     prioB = *((u8 *) (((s8 *) b) + 0x30));
@@ -1137,16 +1137,16 @@ s8 *func_81111784(s8 *arg0, s8 *arg1)
   {
     return 0;
   }
-  if (prioB < (prioA ^ 0))
+  if (prioB < (prioA ^ 0)) // FAKE: no-op ^ 0
   {
     func_811114BC(b);
     func_81111688(b, (s32) arg1);
     func_81112EAC(arg0 + 0x20, (Rec81111130 *) b);
-    *((u8 *) (((s8 *) b) + 0x30)) = *((u8 *) (((s8 *) (*((u8 **) (((s8 *) arg1) + 0x54)))) + 5));
+    *((u8 *) (((s8 *) b) + 0x30)) = *((u8 *) (((s8 *) (*((u8 **) (((s8 *) arg1) + 0x54)))) + 5)); // FAKE: decomp slop, raw pointer casts stand in for struct fields
     return b;
   }
   *((s8 **) (((s8 *) a) + 0x48)) = arg1;
-  *((u8 *) (((s8 *) a) + 0x30)) = *((u8 *) (((s8 *) (*((u8 **) (((s8 *) arg1) + 0x54)))) + 5));
+  *((u8 *) (((s8 *) a) + 0x30)) = *((u8 *) (((s8 *) (*((u8 **) (((s8 *) arg1) + 0x54)))) + 5)); // FAKE: decomp slop, raw pointer casts stand in for struct fields
   return a;
 }
 

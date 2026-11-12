@@ -461,7 +461,7 @@ void func_8A104290(void) {
     s16 sp40;
     s16 sp3E;
     s16 sp3C;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s32 temp_v0_2;
     Gfx* temp_v0;
     s32 sp2C;
@@ -582,7 +582,7 @@ void Pokedex_EaseVec3Toward(Vec3f* arg0, Vec3f* arg1) {
 }
 
 void Pokedex_UpdateAreaMapFrame(void) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     CameraNode* node = D_8A1302CC->children;
     Vec3f* vec;
     Vec3f sp28;

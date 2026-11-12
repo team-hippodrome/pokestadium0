@@ -115,7 +115,7 @@ void func_80018168(s8 *arg0) {
 
 void func_80018234(unk_func_8001A024* arg0, s32 arg1, s32 arg2, u16 arg3) {
     DepthBuffer* buf;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
 
     if (arg1 < arg0->unk_01) {
         buf = arg0->unk_08[arg1].unk_0C;
@@ -134,7 +134,7 @@ void func_80018234(unk_func_8001A024* arg0, s32 arg1, s32 arg2, u16 arg3) {
 void func_80019BDC(arg1_func_80010CA8*);
 void func_8001833C(unk_func_8001A024* arg0, s32 arg1, BattleMon* arg2, u16 arg3) {
     DepthBuffer* buf;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
 
     if (arg1 < arg0->unk_01) {
         buf = arg0->unk_08[arg1].unk_0C;
@@ -268,7 +268,7 @@ s32 PokeIcon_ProcessNextSlot(unk_func_8001A024* arg0, s32 arg1) {
 }
 
 s32 PokeIcon_ProcessAllSlots(unk_func_8001A024* arg0, s32 arg1) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     arg1_func_80010CA8 sp48;
     s32 sp44;
     s32 var_s1;

@@ -926,7 +926,7 @@ AudioCmd* func_8110938C(AudioCmd* cmd, ZNoteSubEu* noteSubEu, ZNoteSynthesisStat
     s32 reverbVol;
     u16 curVolLeft;
     u16 targetVolLeft;
-    UNUSED s16 pad2;
+    UNUSED s16 pad2; // FAKE: stack padding
     u16 curVolRight;
     s16 rampLeft;
     s16 rampRight;

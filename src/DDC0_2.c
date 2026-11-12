@@ -95,7 +95,7 @@ void Model_BuildVertexRuntimeData(StadiumModel* model, MtxF* mtx) {
     s32 i;
     s32 var_a0;
     s32 var_s3;
-    UNUSED s32 pad[8];
+    UNUSED s32 pad[8]; // FAKE: stack padding
 
     segment = Memmap_GetSegmentVaddr(model->modelSegment);
     base = &model->mvtx;
@@ -317,7 +317,7 @@ void func_80033BE4(StadiumModel* model, s16 maxDist, f32 radius, f32 ax, f32 ay,
 }
 
 void func_800340F4(StadiumModel* model) {
-    u32 pad[2];
+    u32 pad[2]; // FAKE: stack padding
     ModelSegment* segment;
     s16* indexTable;
     f32 var_fv0;
@@ -370,9 +370,9 @@ void func_800341E8(ModelSegment* segment, ModelVertex* vertices) {
     ModelVertex* v2;
     ModelVertex* vtx;
     Vec3fCounter* counter;
-    UNUSED s32 pad[4];
+    UNUSED s32 pad[4]; // FAKE: stack padding
     s16* remap;
-    UNUSED s32 pad2[4];
+    UNUSED s32 pad2[4]; // FAKE: stack padding
 
     triangleCount = segment->triangleCount;
     vertexCount = segment->vertexCount;
@@ -447,7 +447,7 @@ void func_800346C4(ModelSegment* segment, StadiumTransform* xf, s32 index, Model
     f32 x1, y1, z1;
     f32 x2, y2, z2;
     MtxF* mtx;
-    s32 pad0[4];
+    s32 pad0[4]; // FAKE: stack padding
     f32 sp184, sp180, sp17C;
     f32 sp178, sp174, sp170;
     f32 sp16C, sp168, sp164;
@@ -458,7 +458,7 @@ void func_800346C4(ModelSegment* segment, StadiumTransform* xf, s32 index, Model
     f32 sp130, sp12C, sp128;
     f32 w0, w1, w2;
     f32 bx, by, bz;
-    s32 pad1[27];
+    s32 pad1[27]; // FAKE: stack padding
     s16* spA0;
     s16 temp_s6;
     s16* temp_v0;
@@ -545,7 +545,7 @@ void Model_ApplyVertexTransforms(StadiumModel* model) {
 void func_80034A74(u32 modelSegment, StadiumTransform* xf, s32 index, ModelVertex* vertices) {
     ModelBlendWeight* wt;
     ModelVertex* vtx;
-    s32 pad0[3];
+    s32 pad0[3]; // FAKE: stack padding
     f32 sp180;
     f32 sp17C;
     f32 sp178;
@@ -567,7 +567,7 @@ void func_80034A74(u32 modelSegment, StadiumTransform* xf, s32 index, ModelVerte
     f32 sp138;
     f32 sp134;
     f32 sp130;
-    s32 pad1[10];
+    s32 pad1[10]; // FAKE: stack padding
     f32 sp104;
     f32 sp100;
     f32 spFC;
@@ -579,9 +579,9 @@ void func_80034A74(u32 modelSegment, StadiumTransform* xf, s32 index, ModelVerte
     f32 y;
     f32 z;
     f32 temp_fv0;
-    s32 pad2[4];
+    s32 pad2[4]; // FAKE: stack padding
     s16 spCA;
-    s32 pad3[1];
+    s32 pad3[1]; // FAKE: stack padding
     s16* spC0;
     MtxF* mtx;
     f32 temp_fs0;

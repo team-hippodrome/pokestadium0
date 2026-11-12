@@ -155,18 +155,18 @@ extern s16 D_811858CC;
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_81109764(s32 arg0)
 {
-  s32 new_var2;
-  s8 *new_var;
+  s32 new_var2; // FAKE: permuter temp
+  s8 *new_var; // FAKE: permuter temp
   s32 var_s1;
   var_s1 = 0;
   if (D_811858CC > 0)
   {
     new_var = &D_81184668;
-    new_var = new_var;
+    new_var = new_var; // FAKE: self-assignment
     new_var2 = arg0;
     do
     {
-      if (((((u32) (*((u32 *) (((s8 *) new_var) + 0)))) >> 0x1F) != 0) && (new_var2 == (*((u8 *) (((s8 *) new_var) + 4)))))
+      if (((((u32) (*((u32 *) (((s8 *) new_var) + 0)))) >> 0x1F) != 0) && (new_var2 == (*((u8 *) (((s8 *) new_var) + 4))))) // FAKE: decomp slop, raw pointer casts stand in for struct fields
       {
         func_81112E00(new_var);
       }

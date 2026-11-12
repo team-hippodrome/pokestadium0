@@ -229,7 +229,7 @@ s32 Leo_HandleResetCompletion(void) {
 
 s32 Leo_HandleBootBlockCompletion(unk_D_800AA680* arg0) {
     s32 sp24;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
 
     if (osRecvMesg(&D_800AB218, &sp24, 0) != -1) {
         switch (sp24) {
@@ -336,7 +336,7 @@ s32 Leo_HandlePayloadCompletion(void) {
 }
 
 s32 Leo_PollDiskReady(void) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     u8 sp23;
     s32 temp_v0 = LeoTestUnitReady(&sp23);
 

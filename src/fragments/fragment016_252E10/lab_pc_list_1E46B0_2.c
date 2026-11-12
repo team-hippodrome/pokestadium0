@@ -82,7 +82,7 @@ typedef struct unk_func_89109990 {
 
 void func_80027804(void*, u8**, s32, s32);
 void func_89109990(unk_func_89109990* arg0, u8** arg1, u8* arg2, s32 arg3) {
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     unk_func_89109990_010* var_s1 = arg0->unk_10;
     s32 var_t0 = 0;
     s32 i;
@@ -267,7 +267,7 @@ s32 func_8002479C(s32, s32, u8*);
 s32 func_80024ADC(s32, s32);
 s32 func_8000A4E8(char*, char*);
 void func_89109E5C(unk_func_8830867C_02C_154* arg0, void* arg1, void* arg2, void* arg3) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s32 temp_s1;
     char sp54[4];
     unk_func_8002D860 sp48;

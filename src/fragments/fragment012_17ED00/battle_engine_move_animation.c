@@ -123,7 +123,7 @@ void BattleScene_QueueRowEffectList3(ActivePokemon* actor, s32 effect_entry) {
  */
 // played on gengar using thunderbolt in bug boy glc fight
 void BattleAnim_PlayMoveEffectScript(ActivePokemon* user, s32 move_id) {
-    UNUSED s16 pad;
+    UNUSED s16 pad; // FAKE: stack padding
     s16 camera_shot;
     s32 target_side_index;
 
@@ -141,7 +141,7 @@ void BattleAnim_PlayMoveEffectScript(ActivePokemon* user, s32 move_id) {
 // guess: plays during changing moves like skull base
 // but for some reason connected to fury swipes too?
 void BattleAnim_PlayChargingMoveEffectScript(ActivePokemon* user, s32 move_id) {
-    UNUSED s16 pad;
+    UNUSED s16 pad; // FAKE: stack padding
     s16 camera_shot;
     s32 target_side_index;
 
@@ -156,7 +156,7 @@ void BattleAnim_PlayChargingMoveEffectScript(ActivePokemon* user, s32 move_id) {
  */
 // play on move end
 void BattleAnim_PlayMoveEffectEnd(ActivePokemon* user, s32 move_id) {
-    UNUSED s16 pad;
+    UNUSED s16 pad; // FAKE: stack padding
     s16 default_anchor; // TODO: more descriptive name
     s32 target_side;
 
@@ -176,7 +176,7 @@ s32 func_82101FD4(ActivePokemon*);
 void func_8210568C(ActivePokemon*, s32, s32);
 
 void BattleScene_TickStartRowAnimRecord(ActivePokemon* active_pokemon) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s32 row_index = active_pokemon->animationState;
     s32 cue_index = sBattleSceneStateRowTable[row_index].unk_20;
     MovePresentationCue* cue;
@@ -390,7 +390,7 @@ void func_82102398(ActivePokemon* active_pokemon) {
 
 void func_82122104(ActivePokemon*);
 void func_821024C8(ActivePokemon* active_pokemon) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s16 species = active_pokemon->displayObject.objectType - 1;
     BattleMonRuntime* pokemon_runtime;
     MovePresentationCue* cue;
@@ -469,7 +469,7 @@ void func_8210278C(ActivePokemon* active_pokemon) {
 
 void Battle_HandleStatBoostingMoveAnimation(ActivePokemon* active_pokemon) {
     BattleMonRuntime* runtime = &active_pokemon->state.runtime;
-    UNUSED s16 pad;
+    UNUSED s16 pad; // FAKE: stack padding
     s16 move;
     MovePresentationCue* anim;
 
@@ -506,7 +506,7 @@ void func_82102A34(ActivePokemon* active_pokemon) {
 }
 
 void func_82102AEC(ActivePokemon* active_pokemon) {
-    UNUSED s32 pad[3];
+    UNUSED s32 pad[3]; // FAKE: stack padding
     s16 species;
     u8* cues;
     u8* state;
@@ -542,7 +542,7 @@ void func_82102C3C(ActivePokemon* active_pokemon) {
     ActivePokemonState* state;
     MovePresentationCue* cue;
     s32 side;
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
 
     state = &active_pokemon->state;
     side = BattleScene_GetParticipantSideIndex(active_pokemon);
@@ -564,7 +564,7 @@ void func_82102C3C(ActivePokemon* active_pokemon) {
 
 void func_82122104(ActivePokemon*);
 void func_82102D10(ActivePokemon* active_pokemon) {
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     BattleMonRuntime* runtime;
     MovePresentationCue* cue;
 
@@ -624,14 +624,14 @@ void func_82102E94(ActivePokemon* active_pokemon) {
 void func_82108A88(ActivePokemon*, s32, s32);
 extern s32 D_82199F78;
 void func_82102FF4(ActivePokemon* active_pokemon) {
-    UNUSED s32 pad0;
+    UNUSED s32 pad0; // FAKE: stack padding
     s32 row = 0xA5;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s32 side = BattleScene_GetParticipantSideIndex(active_pokemon) == 0;
     MovePresentationCue* cue = &sSideBattleCues[side]->moveCues[0xA8];
     ActivePokemonState* state = &sActivePokemon[side]->state;
     ActivePokemon* target = sActivePokemon[side];
-    UNUSED s32 pad2[3];
+    UNUSED s32 pad2[3]; // FAKE: stack padding
 
     if ((state->flags & 1) && ((target->displayObject.objectType == 0x39) || (target->displayObject.objectType == 0x67))) {
         row = 0xAF;
@@ -701,7 +701,7 @@ void func_821032B0(ActivePokemon* active_pokemon) {
 
 void func_82134EBC(ActivePokemon*, s32);
 void func_821033DC(ActivePokemon* active_pokemon) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     MovePresentationCue* hit_cue = (MovePresentationCue*)((u8*)sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon)] + 0x738);
 
     ModelAnim_SetFrame(&active_pokemon->displayObject, 0);
@@ -716,7 +716,7 @@ void func_8210343C(ActivePokemon* active_pokemon) {
     MovePresentationCue* cue;
     BattleMon* party_pokemon;
     ActivePokemonState* state;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
 
     cue = &sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon)]->moveCues[cue_index];
     party_pokemon = &active_pokemon->teamRoster->pokemonPicked[M2C_FIELD(active_pokemon, s32*, 0x9D0)];
@@ -747,7 +747,7 @@ void func_8210343C(ActivePokemon* active_pokemon) {
 void func_82134DEC(s16);
 
 void BattleScene_TickRow1PlayOwnerCry(ActivePokemon* active_pokemon) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     ActivePokemonState* state = &active_pokemon->state;
     BattleMon* party_pokemon_ptr = &active_pokemon->teamRoster->pokemonPicked[M2C_FIELD(active_pokemon, s32*, 0x9D0)];
 
@@ -787,7 +787,7 @@ void func_821036F4(ActivePokemon *active_pokemon)
       }
       else
       {
-        func_8003F96C(species ^ 0, 3);
+        func_8003F96C(species ^ 0, 3); // FAKE: no-op ^ 0
       }
       if (state->flags & 0x200)
       {
@@ -828,7 +828,7 @@ void func_8210384C(ActivePokemon* active_pokemon) {
 }
 
 void func_82103998(ActivePokemon* active_pokemon) {
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     s32 row_index = active_pokemon->animationState;
 
     if (BattleAnim_TryRegisterAssetTables(active_pokemon) != 0) {
@@ -878,7 +878,7 @@ void BattleScene_ResetOwnerModelIfLoaded(ActivePokemon* active_pokemon) {
 }
 
 void BattleScene_EnterRow8StartMappedMoveAnim(ActivePokemon* active_pokemon) {
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     s32 charge_move_cue = sChargeMoveCues[active_pokemon->state.runtime.usedMove - 1];
     MovePresentationCue* cue;
 
@@ -893,7 +893,7 @@ void func_82103C64(ActivePokemon* active_pokemon) {
     BattleMonRuntime* runtime;
     s16 species_ob1;
     s16 move;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     MovePresentationCue* cue;
 
     species_ob1 = active_pokemon->displayObject.objectType - 1;
@@ -922,11 +922,11 @@ void func_82103C64(ActivePokemon* active_pokemon) {
 }
 
 void func_82103DA4(ActivePokemon* active_pokemon) {
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     MovePresentationCue* entry;
     BattleMon* mon;
     s32 cue;
-    UNUSED s32 pad2;
+    UNUSED s32 pad2; // FAKE: stack padding
 
     mon = &active_pokemon->teamRoster->pokemonPicked[active_pokemon->thumbnail.tagTeam];
     active_pokemon->animationTimer = 0;
@@ -1125,14 +1125,14 @@ void BattleScene_TickQueueList3Selector2OrCFromB10(ActivePokemon* active_pokemon
 }
 
 void func_821044C8(ActivePokemon* active_pokemon) {
-    UNUSED s32 pad0;
+    UNUSED s32 pad0; // FAKE: stack padding
     s32 row = 0xA5;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s32 side = BattleScene_GetParticipantSideIndex(active_pokemon) == 0;
     MovePresentationCue* cue = &sSideBattleCues[side]->moveCues[0xA8];
     ActivePokemonState* state = &sActivePokemon[side]->state;
     ActivePokemon* target = sActivePokemon[side];
-    UNUSED s32 pad2[3];
+    UNUSED s32 pad2[3]; // FAKE: stack padding
 
     if ((state->flags & 1) && ((target->displayObject.objectType == 0x39) || (target->displayObject.objectType == 0x67))) {
         row = 0xAF;
@@ -1182,7 +1182,7 @@ void func_82104648(ActivePokemon* active_pokemon) {
 
 void func_82134EBC(ActivePokemon*, s32);
 void func_821047C4(ActivePokemon* active_pokemon) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     MovePresentationCue* cue;
     s32 other;
 
@@ -1226,7 +1226,7 @@ void func_800199F8(ActivePokemon*, u8);
 void func_821054C4(ActivePokemon*, s32);
 
 void func_821049E8(ActivePokemon* arg0) {
-    s32 pad;
+    s32 pad; // FAKE: stack padding
     Record82104AFC* rec =
         &((Record82104AFC*)D_82189180[BattleScene_GetParticipantSideIndex(arg0)])[D_82189190[D_8219A50C] - 1];
 
@@ -1393,9 +1393,9 @@ void func_82101F00(ActivePokemon*);
 void func_821054C4(ActivePokemon*, s32);
 
 void BattleScene_StartHitCueAnimation(ActivePokemon* active_pokemon) {
-    UNUSED s32 pad[4];
+    UNUSED s32 pad[4]; // FAKE: stack padding
     MovePresentationCue* cue = (MovePresentationCue*)((u8*)sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon)] + 0x738);
-    UNUSED s32 pad2;
+    UNUSED s32 pad2; // FAKE: stack padding
 
     if (func_82101FD4(active_pokemon) != 0) {
         func_82101F00(active_pokemon);
@@ -1428,7 +1428,7 @@ void func_82105140(ActivePokemon* active_pokemon) {
 
 void func_82101C24(ActivePokemon*, s32);
 void func_821051B0(ActivePokemon* active_pokemon) {
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     s32 side;
 
     if (active_pokemon == sActivePokemon[0]) {
@@ -1449,10 +1449,10 @@ void func_82101B54(ActivePokemon*, s32);
 extern s32 D_8219A75C;
 void func_82108A88(ActivePokemon*, s32, s32);
 void func_8210524C(ActivePokemon* active_pokemon) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     BattleMonRuntime* runtime;
     MovePresentationCue* cue;
-    UNUSED s32 pad2;
+    UNUSED s32 pad2; // FAKE: stack padding
 
     runtime = &active_pokemon->state.runtime;
     cue = &sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon)]->moveCues[runtime->usedMove - 1];
@@ -1573,7 +1573,7 @@ void BattleAnim_SetModelEventTrackFromRow(ActivePokemon* pokemon, s32 cue_index)
 s32 func_82101FC4();
 
 s32 BattleAnim_TrySetModelEventTrackFromRow(ActivePokemon* active_pokemon, s32 cue_index, s32 event_state) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s32 event_track;
 
     if (func_82101FC4(active_pokemon) != 0) {
@@ -1594,7 +1594,7 @@ s32 BattleAnim_TrySetModelEventTrackFromRow(ActivePokemon* active_pokemon, s32 c
 }
 
 void func_8210568C(ActivePokemon* active_pokemon, s32 cue_index, s32 event_state) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s32 event_track;
 
     if (func_82101FC4(active_pokemon) == 0) {
@@ -1627,7 +1627,7 @@ s32 func_82105724(ActivePokemon* arg0, s32 arg1) {
 }
 
 s32 BattleScene_IsRowWaitCompleteWithEventCount(ActivePokemon* active_pokemon, s32 frame_limit) {
-    UNUSED u8 unused_value;
+    UNUSED u8 unused_value; // FAKE: stack padding
     BattleMon* party_pokemon = &active_pokemon->teamRoster->pokemonPicked[M2C_FIELD(active_pokemon, s32*, 0x9D0)];
     u8* cue = (u8*)sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon)] + 0x722;
 
@@ -1655,7 +1655,7 @@ s32 BattleScene_IsRowWaitCompleteWithEventCount(ActivePokemon* active_pokemon, s
 s32 func_821058E8(ActivePokemon* active_pokemon, s32 frame_limit) {
     MovePresentationCue* idle_cue;
     BattleMon* party_pokemon;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     MovePresentationCue* move_cue;
 
     party_pokemon = &active_pokemon->teamRoster->pokemonPicked[M2C_FIELD(active_pokemon, s32*, 0x9D0)];
@@ -1702,7 +1702,7 @@ s32 func_821058E8(ActivePokemon* active_pokemon, s32 frame_limit) {
 s32 func_82105AB0(ActivePokemon* active_pokemon, s32 frame_limit) {
     MovePresentationCue* idle_cue;
     BattleMon* party_pokemon;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s32 charge_move;
     MovePresentationCue* move_cue;
 
@@ -1809,14 +1809,14 @@ void func_82105D3C(s8* arg0) {
 
 s32 func_82105E38(s8 *arg0, unsigned short arg1)
 {
-  s8 *new_var;
+  s8 *new_var; // FAKE: permuter temp
   new_var = (s8 *) arg0;
   *((u16 *) (new_var + 0x7C2)) = (u16) ((*((u16 *) (new_var + 0x7C2))) | arg1);
 }
 
 s32 func_82105E4C(s8 *arg0, unsigned short arg1)
 {
-  *((u16 *) (((s8 *) arg0) + 0x7C2)) = (u16) ((*((u16 *) (((s8 *) arg0) + 0x7C2))) & (~arg1));
+  *((u16 *) (((s8 *) arg0) + 0x7C2)) = (u16) ((*((u16 *) (((s8 *) arg0) + 0x7C2))) & (~arg1)); // FAKE: decomp slop, raw pointer casts stand in for struct fields
 }
 
 /**
@@ -1828,7 +1828,7 @@ void func_82105E64(ActivePokemon* active_pokemon) {
 void BattleScene_ResetBothParticipantsAnimationState(void) {
     ActivePokemonState* side1_pokemon_state;
     ActivePokemonState* side2_pokemon_state;
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     ActivePokemon* side1_pokemon;
     ActivePokemon* side2_pokemon;
     MovePresentationCue* cue;
@@ -1865,9 +1865,9 @@ void BattleScene_ResetBothParticipantsAnimationState(void) {
 }
 
 void func_82105FCC(ActivePokemon* active_pokemon) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     ActivePokemonState* other_state;
-    UNUSED s32 pad2;
+    UNUSED s32 pad2; // FAKE: stack padding
     BattleMonRuntime* other_runtime;
     ActivePokemonState* state;
 
@@ -1901,7 +1901,7 @@ void func_82106144(ActivePokemon* active_pokemon) {
 }
 
 void BattleScene_CleanupOpponentSpecialAnimFlag(ActivePokemon* active_pokemon) {
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     ActivePokemon* target = sActivePokemon[BattleScene_GetParticipantSideIndex(active_pokemon) == 0];
 
     if (target->state.flags & ACTIVE_UNDERGROUND) {

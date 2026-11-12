@@ -77,7 +77,7 @@ void ModelRenderer_ApplySlotScale(u8 index) {
 void ModelRenderer_RebuildSlotMatrix(u8 index) {
     MtxF* temp_a0;
     
-    s32 pad[2];
+    s32 pad[2]; // FAKE: stack padding
     f32 spC0;
     f32 spBC;
     f32 spB8;

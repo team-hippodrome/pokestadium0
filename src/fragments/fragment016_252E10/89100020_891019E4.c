@@ -264,7 +264,7 @@ void func_89101D78(s8 *arg0) {
 s32 func_89101D80(s8 *arg0, s32 arg1)
 {
   s32 temp_t7;
-  s32 new_var;
+  s32 new_var; // FAKE: permuter temp
   new_var = arg1;
   temp_t7 = ((*((s32 *) (((s8 *) arg0) + 0x7C))) ^ new_var) & 0xFFFFFFFFFFFFFFFFu;
   *((s32 *) (((s8 *) arg0) + 0x7C)) = temp_t7;
@@ -634,9 +634,9 @@ s32 func_89106254(s32);                             /* extern */
 M2C_UNK func_89109C6C(s32, s32);                    /* extern */
 s32 func_891028CC(s8 *arg0)
 {
-  s8 *new_var2;
+  s8 *new_var2; // FAKE: permuter temp
   s32 temp_v0;
-  s8 *new_var;
+  s8 *new_var; // FAKE: permuter temp
   temp_v0 = func_89106254(arg0 + 0x230);
   new_var2 = arg0 + 0x9648;
   if (temp_v0 == (-1))

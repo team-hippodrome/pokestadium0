@@ -79,11 +79,11 @@ void func_80035500(PosBlend* src, PosBlend* dst, f32 totalTime, f32 elapsed, f32
 
 void func_80035694(StadiumModel* model) {
     s32 i;
-    s32 pad1[4];
+    s32 pad1[4]; // FAKE: stack padding
     s16* sp70;
-    s32 pad2[1];
+    s32 pad2[1]; // FAKE: stack padding
     s16* sp68;
-    s32 pad3[7];
+    s32 pad3[7]; // FAKE: stack padding
     ModelVertex* sp48;
     f32 temp_fv0;
     ModelSegment* sp40;

@@ -544,7 +544,7 @@ OSTask* func_8003B868(OSTask* arg0) {
     s32 cmdLen;
     s32 samplesLeft;
     OSTask sp38;
-    s32 pad[2];
+    s32 pad[2]; // FAKE: stack padding
     AudioInfo* info;
 
     info = __am.audioInfo[audFrameCt % 3];

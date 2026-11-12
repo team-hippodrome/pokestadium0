@@ -455,7 +455,7 @@ void func_821608FC(s8 *arg0) {
 }
 
 void BattleAnim_CallbackStartEffect31Descriptor49TieredRiseImpulseFade_InitParticle(Particle* arg0) {
-    UNUSED s16 pad;
+    UNUSED s16 pad; // FAKE: stack padding
     s16 sp24 = Particle_FieldAC_GetS16_0C038(arg0);
 
     Particle_Field1C_SetScaled_0B938(arg0, 0.25f);

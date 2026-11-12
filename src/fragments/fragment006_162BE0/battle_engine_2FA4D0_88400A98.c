@@ -140,7 +140,7 @@ void func_88401040(void) {
     s8 sp50[0x3C];
     s32 i = 0;
     s32 rec;
-    s32 pad;
+    s32 pad; // FAKE: stack padding
 
     rec = M2C_FIELD(D_88403370, s32 *, 0xC);
     func_800273E8(sp8C, (s32) &D_88402DB4);
@@ -172,7 +172,7 @@ void func_8840115C(void) {
     s8 sp50[0x3C];
     s32 i = 0;
     s32 rec;
-    s32 pad;
+    s32 pad; // FAKE: stack padding
 
     rec = M2C_FIELD(D_88403370, s32 *, 0xC);
     if (D_800AF986 & 0x18) {
@@ -282,7 +282,7 @@ void func_884014B4(s32 arg0, u8 arg1) {
 void func_8840173C(s32 arg0, s32 arg1) {
     Color_RGB8 sp4C = { 0x00, 0x00, 0x32 };
     Color_RGB8 sp48 = { 0x00, 0x00, 0xC8 };
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s16 pos[2];
     s32 temp;
 
@@ -562,7 +562,7 @@ void func_88402174(void) {
     s8 sp58[0x3C];
     s32 i = 0;
     s32 temp_s1;
-    s32 pad;
+    s32 pad; // FAKE: stack padding
 
     temp_s1 = M2C_FIELD(D_88403370, s32 *, 0xC);
     func_800273E8(sp94, (s32) &D_88402E94);

@@ -86,7 +86,7 @@ void Particle_SetFieldOffsetCEIfNotSentinel(Particle* arg0, u8 arg1) {
 
 void func_8213C3B8(s8 *arg0, unsigned char arg1)
 {
-  int new_var;
+  int new_var; // FAKE: permuter temp
   new_var = arg0 != ((s8 *) (-1));
   if (new_var)
   {
@@ -137,7 +137,7 @@ s16 func_8213C47C(s8 *arg0) {
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 s16 func_8213C484(s8 *arg0)
 {
-  u8 new_var;
+  u8 new_var; // FAKE: permuter temp
   new_var = *((u8 *) (((s8 *) arg0) + 0xCB));
   return (s16) new_var;
 }

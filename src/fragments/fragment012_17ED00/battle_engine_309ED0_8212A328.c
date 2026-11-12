@@ -2,7 +2,7 @@
 #include "battle_engine_309ED0.h"
 
 void func_8212A328(CameraNode* arg0, s32 arg1) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     BattleMonRuntime* runtime = &((ActivePokemon*)D_8219A540)->state.runtime;
 
     if (BattleScene_AdvanceOwnerAnimation98((ActivePokemon*)D_8219A540) != 0) {

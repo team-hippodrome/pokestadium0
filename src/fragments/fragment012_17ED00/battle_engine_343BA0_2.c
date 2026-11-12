@@ -233,7 +233,7 @@ M2C_UNK func_80019B28(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32);
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_82133534(CameraNode *arg0)
 {
-  s32 pad[2];
+  s32 pad[2]; // FAKE: stack padding
   Arr82133534 sp28 = D_8218B350;
   s32 v;
   D_8219A594 = func_8000F1FC(D_8219A594, 0, 0x28, 0x28);

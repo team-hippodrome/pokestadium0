@@ -105,7 +105,7 @@ void func_8217DDD4(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u
 void OwnerAnchoredFourStream_Update(f32 arg0, Vec3f* arg1, f32 arg2) {
     UNUSED MtxF sp70;
     MtxF sp30;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
 
     guRotateF(sp30.mf, (arg0 * 360.0) / 6.2831854820251465, 1.0f, 0.0f, 0.0f);
     guMtxXFMF(sp30.mf, 0.0f, 0.0f, arg2, &arg1->x, &arg1->y, &arg1->z);
@@ -164,16 +164,16 @@ void OwnerAnchoredFourStream_UpdateNodeChain(OwnerAnchoredFourStream* arg0) {
 M2C_UNK func_8217E0C0(M2C_UNK *);                   /* extern */
 s32 func_8217E34C(void)
 {
-  s8 *new_var;
+  s8 *new_var; // FAKE: permuter temp
   s32 var_s1;
   new_var = (s8*)D_821B6F00;
   var_s1 = 0;
   do
   {
-    new_var = (s8 *) ((0, new_var));
+    new_var = (s8 *) ((0, new_var)); // FAKE: comma expression
     if ((*((s16 *) (new_var + 0))) == 1)
     {
-      new_var = new_var;
+      new_var = new_var; // FAKE: self-assignment
       *((s16 *) (new_var + 2)) = (s16) ((*((s16 *) (new_var + 2))) + 1);
       if ((*((s16 *) (new_var + 4))) < (*((s16 *) (new_var + 2))))
       {
@@ -200,7 +200,7 @@ Gfx* func_8217E3E0(Gfx* arg0) {
     OwnerAnchoredFourStreamZero* var_s5;
     Vtx* var_s0;
     Vec3f sp154;
-    UNUSED s32 pad[15];
+    UNUSED s32 pad[15]; // FAKE: stack padding
     Mtx* temp_v0;
     Mtx sp100;
     Mtx spC0;

@@ -200,7 +200,7 @@ void func_800239F0(arg0)
 s32 func_800237AC(s32, s32);
 void func_800245E0(s32, s32);
 void func_80023A20(s32 arg0, s32 arg1) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s32 size;
     s32 primary;
     s32 backup;
@@ -274,7 +274,7 @@ M2C_UNK func_8004FD20(s32, M2C_UNK);                /* extern */
 s32 func_80023C30(void)
 {
   s32 temp_v0;
-  int new_var;
+  int new_var; // FAKE: permuter temp
   s32 var_s0;
   s32 var_s0_2;
   if ((*((s32 *) (&D_8006BBA0))) == 0)
@@ -849,7 +849,7 @@ s32 func_80025168(s8 arg0) {
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 s32 func_800251A8(void)
 {
-  return (((*((u8 *) (((s8 *) (*((s8 **) (&D_800AE8E0)))) + 0x7A48))) << 8) | (*((u8 *) (((s8 *) (*((s8 **) (&D_800AE8E0)))) + 0x7A49)))) & 0xFFFF;
+  return (((*((u8 *) (((s8 *) (*((s8 **) (&D_800AE8E0)))) + 0x7A48))) << 8) | (*((u8 *) (((s8 *) (*((s8 **) (&D_800AE8E0)))) + 0x7A49)))) & 0xFFFF; // FAKE: decomp slop, raw pointer casts stand in for struct fields
 }
 
 void func_800251C8(u16 arg0) {

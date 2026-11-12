@@ -598,7 +598,7 @@ void Radial20_RotateVertexOffset(f32 arg0, UNUSED Vec3f* arg1, Vec3f* arg2, f32 
 
 void func_82175C74(Radial20* arg0) {
     Radial20Node* var_v0;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s32 i;
     Vec3f sp28;
 

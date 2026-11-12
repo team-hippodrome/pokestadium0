@@ -201,7 +201,7 @@ Gfx* Trail50Effect_Draw(Gfx* arg0) {
     Trail50Effect* var_s5;
     Vtx* var_s0;
     Vec3f sp184;
-    UNUSED s32 pad[15];
+    UNUSED s32 pad[15]; // FAKE: stack padding
     Mtx* temp_v0;
     Mtx sp100;
     Mtx spC0;

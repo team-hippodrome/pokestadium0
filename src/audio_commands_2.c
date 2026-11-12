@@ -911,7 +911,7 @@ s32 func_80037F68(u8*, u8*);
 void func_80037C04(s32, u32);
 
 s32 func_80044158(u8* arg0) {
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     u8* sp1C;
 
     D_800FD690 = arg0;

@@ -102,10 +102,10 @@ s32 func_8900721C(M2C_UNK, M2C_UNK, s32, s8 *, s32); /* extern */
 void func_89007264(s8 *arg0, M2C_UNK arg1, M2C_UNK arg2, s32 arg3)
 {
   s32 temp_v0;
-  s32 *new_var2;
-  int new_var;
+  s32 *new_var2; // FAKE: permuter temp
+  int new_var; // FAKE: permuter temp
   s32 var_s0;
-  arg0 = arg0;
+  arg0 = arg0; // FAKE: self-assignment
   new_var = 0;
   new_var = arg3 > new_var;
   var_s0 = 0;
@@ -484,7 +484,7 @@ extern char D_89018EF8[];
 extern s8 D_890289E0[];
 void func_89007D54();
 void func_8900806C(s8* arg0, s32 arg1, s32 arg2, u8* arg3, s32 arg4, s32 arg5, s32 arg6) {
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     s32 i;
     u8* p;
 
@@ -743,7 +743,7 @@ void func_890019C8(s32, s32, s32, s32);
 void func_89008EF0(s8* arg0) {
     if (M2C_FIELD(arg0, s32*, 0) == 1) {
         if (0) {}  // karodo
-        func_890019C8(M2C_FIELD(arg0, s32*, 0x30) + 0x58, M2C_FIELD(arg0, s32*, 0x34), D_8900A924[M2C_FIELD((0, arg0), s32*, 0x15C)], D_8900A93C[M2C_FIELD(arg0, s32*, 0x15C)]);
+        func_890019C8(M2C_FIELD(arg0, s32*, 0x30) + 0x58, M2C_FIELD(arg0, s32*, 0x34), D_8900A924[M2C_FIELD((0, arg0), s32*, 0x15C)], D_8900A93C[M2C_FIELD(arg0, s32*, 0x15C)]); // FAKE: comma expression
     }
 }
 

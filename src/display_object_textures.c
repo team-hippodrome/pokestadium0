@@ -108,7 +108,7 @@ Fragment* Asset_AllocAndCopyFragment(MainPoolState* arg0, PERSSZP* arg1, s32 arg
 }
 
 Fragment* Fragment_LoadFromRomRange(MainPoolState* arg0, s32 start, s32 end, PERSSZP* arg3, s32 arg4) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     u32 size = ALIGN16(end - start);
     Fragment* var_v1 = NULL;
 
@@ -172,7 +172,7 @@ Fragment* BinArchive_LoadFileFromLbaRange(MainPoolState* arg0, BinArchive* arg1,
 }
 
 Fragment* BinArchive_LoadFileToPool(MainPoolState* arg0, BinArchive* arg1, s32 arg2, u32 arg3, s32 arg4) {
-    s32 pad[4];
+    s32 pad[4]; // FAKE: stack padding
     Fragment* var_s0 = NULL;
     BinArchiveFile* sp2C = (u8*)arg1 + sizeof(BinArchive) + (arg2 * sizeof(BinArchiveFile));
 
@@ -235,7 +235,7 @@ void Fragment_ProcessGeoLayoutList(MemoryBlock* arg0, arg1_func_80019420* arg1) 
 }
 
 void PokeIcon_LoadModelArchive(unk_func_80019600* arg0) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     MemoryBlock* sp28;
     Fragment* sp24;
 

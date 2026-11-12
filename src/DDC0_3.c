@@ -134,7 +134,7 @@ f32 Model_ComputeDistance(s16 (*a)[3], s16 (*b)[3]) {
 }
 
 void Model_ExtrapolateVertexPosition(Vec3f* from, Vec3f* to, f32 currentTime, f32 deltaTime, f32 scale) {
-    s32 pad;
+    s32 pad; // FAKE: stack padding
     f32 temp_fv0;
     f32 temp_fa1;
     f32 temp_ft5;

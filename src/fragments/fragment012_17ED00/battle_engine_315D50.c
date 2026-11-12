@@ -434,7 +434,7 @@ void func_82134DC8(s32 arg0) {
  */
 void func_8003F96C(s32, s32);
 void func_82134DEC(s16 arg0) {
-    func_8003F96C(arg0 * 1, 2);
+    func_8003F96C(arg0 * 1, 2); // FAKE: no-op * 1
 }
 
 extern f32 D_FLT_82189360[][4];
@@ -494,7 +494,7 @@ s32 func_82107A5C(s8*);
  * audio calls, but that is a guess).
  */
 void func_82134FD0(ActivePokemon* arg0) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     BattleMon* mon = &arg0->teamRoster->pokemonPicked[arg0->state.rosterIndex];
 
     func_80041940(func_82107A5C(arg0), mon->hp, mon->unk_26);
@@ -514,10 +514,10 @@ void func_82135098(s8 *arg0)
 {
   s8 *sp18;
   s8 *temp_v1;
-  temp_v1 = (((*((s32 *) (((s8 *) arg0) + 0x794))) * 0x50) + (*((s32 *) (((s8 *) arg0) + 0x860)))) + 0x1C;
+  temp_v1 = (((*((s32 *) (((s8 *) arg0) + 0x794))) * 0x50) + (*((s32 *) (((s8 *) arg0) + 0x860)))) + 0x1C; // FAKE: decomp slop, raw pointer casts stand in for struct fields
   if ((*((s16 *) (((s8 *) arg0) + 0x1A))) != 0x98)
   {
     sp18 = temp_v1;
-    func_80041940(func_82107A5C(arg0), *((u16 *) (((s8 *) arg0) + 0x7D2)), *((u16 *) (((s8 *) temp_v1) + 0x26)), arg0);
+    func_80041940(func_82107A5C(arg0), *((u16 *) (((s8 *) arg0) + 0x7D2)), *((u16 *) (((s8 *) temp_v1) + 0x26)), arg0); // FAKE: decomp slop, raw pointer casts stand in for struct fields
   }
 }

@@ -347,7 +347,7 @@ extern s32 D_8218C8C0;
 
 void func_8211576C(void) {
     ActivePokemonState* sp34 = &sActivePokemon[sBattleScene.scene->unk_2C]->state;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s32 var_t0;
     u8 temp_v0;
 

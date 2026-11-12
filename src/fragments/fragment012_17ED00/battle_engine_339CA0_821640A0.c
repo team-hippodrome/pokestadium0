@@ -353,7 +353,7 @@ void func_82164F04(s8 *arg0) {
 }
 
 void BattleAnim_CallbackStartEffect101Descriptor3DMetadataBurstChild_InitParticle(Particle* arg0) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
 
     Particle_FieldAC_GetS16_0C038(arg0);
     Particle_FieldCD_GetU8_0C048(arg0);

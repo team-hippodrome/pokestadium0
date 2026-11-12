@@ -303,7 +303,7 @@ void func_811151C8(s32 arg0) {
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_81115254(s8 *arg0)
 {
-  s8 *new_var;
+  s8 *new_var; // FAKE: permuter temp
   s32 temp_t8;
   if ((*((s32 *) (((s8 *) arg0) + 0xD8))) > 0)
   {

@@ -131,7 +131,7 @@ void ParticleGfx_NoopStub3(void) {
 s32 func_82168F54(s32 arg0)
 {
   s32 var_v1;
-  arg0 = arg0;
+  arg0 = arg0; // FAKE: self-assignment
   var_v1 = 0;
   do
   {

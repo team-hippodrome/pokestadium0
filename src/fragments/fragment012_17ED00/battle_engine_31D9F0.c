@@ -8,10 +8,10 @@ void func_82116D28(void) {
 }
 
 void BattleHud_DrawLevelNumber(s32 arg0, s32 arg1, s32 arg2) {
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     s8* var_s2;
     s8 sp58[2];
-    UNUSED s32 pad2[2];
+    UNUSED s32 pad2[2]; // FAKE: stack padding
     u8** temp_s4;
 
     var_s2 = &sp58;
@@ -40,9 +40,9 @@ void BattleHud_DrawLevelNumber(s32 arg0, s32 arg1, s32 arg2) {
 }
 
 void BattleHud_DrawHpFractionText(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     s8 sp70[7];
-    UNUSED s32 pad2;
+    UNUSED s32 pad2; // FAKE: stack padding
     u8** temp_s2;
     u8* var_v0;
     s32 i;
@@ -94,7 +94,7 @@ void func_82116FF4(s16 arg0, s16 arg1, s32 arg2, s32 arg3, s32 arg4) {
 }
 
 void func_821170D0(s16 arg0, s16 arg1, s32 arg2, s32 arg3, u16 arg4, s32 arg5) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s16 wave;
     s16 alpha;
     u32 half;
@@ -167,7 +167,7 @@ void func_821172F0(ActivePokemon* arg0, BattleMon* arg1, unk_D_84385790* arg2, s
 }
 
 s32 BattleHud_DrawBorderTile(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
-    UNUSED s32 pad[4];
+    UNUSED s32 pad[4]; // FAKE: stack padding
     s32 sp2C;
     s32 sp28;
 

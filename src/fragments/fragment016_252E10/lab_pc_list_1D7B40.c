@@ -129,7 +129,7 @@ extern char D_8910E000[];
 extern char D_8910E010[];
 
 void func_89104EB4(s32 arg0, s32 arg1, s32* arg2, s32 arg3, s32 arg4, s32* arg5) {
-    UNUSED s32 padA[4];
+    UNUSED s32 padA[4]; // FAKE: stack padding
     const char* name;
     s32 temp;
     s32 alpha;
@@ -263,7 +263,7 @@ s32 func_89105200(Box89105200* arg0) {
 void func_89105340(s8 *arg0, s32 arg1, s32 arg2)
 {
   u16 *temp_v0;
-  int new_var;
+  int new_var; // FAKE: permuter temp
   *((s32 *) (((s8 *) arg0) + 0x7C)) = arg1;
   new_var = arg1 * 4;
   *((s32 *) (((s8 *) arg0) + 0x80)) = (s32) (arg2 - 1);
@@ -359,7 +359,7 @@ extern u8 D_8910CF80[];
 extern char D_8910E018[];
 void func_89105560(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     Color_RGBA8 color;
-    s32 pad[6];
+    s32 pad[6]; // FAKE: stack padding
     s32 sel;
 
     if (arg4 & 8) {
@@ -529,7 +529,7 @@ extern Color_RGBA8 D_8910A934[];
 extern Color_RGBA8 D_800734A8[];
 void func_89105AD4(s32 arg0, s32 arg1, char** arg2, s32 arg3, s32 arg4) {
     Color_RGBA8 color;
-    s32 pad[5];
+    s32 pad[5]; // FAKE: stack padding
     s32 sel;
 
     if (arg4 & 8) {
@@ -563,7 +563,7 @@ extern Rgba8910576C D_8910A93C;
 extern Rgba8910576C D_8910A940;
 extern char D_8910E024[];
 void func_89105C54(s8* arg0, s32 arg1, s32 arg2, s8* arg3, Rgba8910576C arg4) {
-    s32 pad[5];
+    s32 pad[5]; // FAKE: stack padding
     s32 list;
 
     func_8002A8C4(arg0 + 4, arg1, arg2, 0x134, 0xCE);
@@ -605,7 +605,7 @@ extern Gfx D_80060290[];
 extern Gfx D_80060398[];
 extern u8 D_8910D138[];
 void func_89105E70(s8* arg0, s32 arg1) {
-    UNUSED s32 pad[3];
+    UNUSED s32 pad[3]; // FAKE: stack padding
     s32 sp38 = 0xFFED;
     s32 sp34 = 0;
 
@@ -831,14 +831,14 @@ M2C_UNK func_8002D9B8(s32, s32, s32, s32, s8 *);  /* extern */
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_8910666C(s8 *arg0, s32 arg1)
 {
-  s8 *new_var;
+  s8 *new_var; // FAKE: permuter temp
   if (func_8002AE6C() == 0)
   {
     new_var = (s8 *) arg0;
     if ((arg0 && arg0) && arg0)
     {
     }
-    func_8002D9B8(arg0 + 0x40, (*((s32 *) (((s8 *) arg0) + 0))) + 6, (*((s32 *) (new_var + 4))) + 0xA, arg1 | 0xFFED, arg0);
+    func_8002D9B8(arg0 + 0x40, (*((s32 *) (((s8 *) arg0) + 0))) + 6, (*((s32 *) (new_var + 4))) + 0xA, arg1 | 0xFFED, arg0); // FAKE: decomp slop, raw pointer casts stand in for struct fields
     if (arg1)
     {
     }
@@ -1064,14 +1064,14 @@ s32 func_89106F74(s8 *arg0)
   {
     return 0;
   }
-  temp_a1 = *((u16 *) (((s8 *) (*((s8 **) (&D_800603C0)))) + 8));
-  if ((*((u16 *) (((s8 *) (*((s8 **) (&D_800603C0)))) + 8))) & 0x200)
+  temp_a1 = *((u16 *) (((s8 *) (*((s8 **) (&D_800603C0)))) + 8)); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+  if ((*((u16 *) (((s8 *) (*((s8 **) (&D_800603C0)))) + 8))) & 0x200) // FAKE: decomp slop, raw pointer casts stand in for struct fields
   {
     *((s32 *) (((s8 *) arg0) + 0x10)) = (s32) (temp_v0 | 8);
     var_v1 = 0x200;
   }
   else
-    if ((*((u16 *) (((s8 *) (*((s8 **) (&D_800603C0)))) + 8))) & 0x100)
+    if ((*((u16 *) (((s8 *) (*((s8 **) (&D_800603C0)))) + 8))) & 0x100) // FAKE: decomp slop, raw pointer casts stand in for struct fields
   {
     *((s32 *) (((s8 *) arg0) + 0x10)) = (s32) (temp_v0 & (~8));
     var_v1 = 0x100;
@@ -1772,13 +1772,13 @@ s32 func_891089BC(s8 *arg0)
       else
         if (((u16 *) D_800603C0)[4] & 0x8000)
       {
-        if (!((*((u16 **) (((s8 *) self) + 0x50)))[*((s32 *) (((s8 *) self) + 0x54))] & 1))
+        if (!((*((u16 **) (((s8 *) self) + 0x50)))[*((s32 *) (((s8 *) self) + 0x54))] & 1)) // FAKE: decomp slop, raw pointer casts stand in for struct fields
         {
           func_8003F6AC(2);
           func_89106424(self + 0x94, (s32 *) D_8910AAE8, (s32) (self + 0x90), 1, 0);
-          func_8002A8C4(self + 0xC0, (*((s32 *) (((s8 *) self) + 0))) + 6, (((*((s32 *) (((s8 *) self) + 4))) + (*((s32 *) (((s8 *) self) + 0x80)))) - (*((s32 *) (((s8 *) self) + 0x78)))) + 0x16, (*((s32 *) (((s8 *) self) + 8))) - 0xC, 0x1C);
-          *((s32 *) (((s8 *) self) + 0x108)) = ((*((s32 *) (((s8 *) self) + 8))) + (*((s32 *) (((s8 *) self) + 0)))) - 6;
-          *((s32 *) (((s8 *) self) + 0x10C)) = (*((s32 *) (((s8 *) self) + 4))) + 0xF6;
+          func_8002A8C4(self + 0xC0, (*((s32 *) (((s8 *) self) + 0))) + 6, (((*((s32 *) (((s8 *) self) + 4))) + (*((s32 *) (((s8 *) self) + 0x80)))) - (*((s32 *) (((s8 *) self) + 0x78)))) + 0x16, (*((s32 *) (((s8 *) self) + 8))) - 0xC, 0x1C); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+          *((s32 *) (((s8 *) self) + 0x108)) = ((*((s32 *) (((s8 *) self) + 8))) + (*((s32 *) (((s8 *) self) + 0)))) - 6; // FAKE: decomp slop, raw pointer casts stand in for struct fields
+          *((s32 *) (((s8 *) self) + 0x10C)) = (*((s32 *) (((s8 *) self) + 4))) + 0xF6; // FAKE: decomp slop, raw pointer casts stand in for struct fields
           func_89106570((Popup89106570 *) (self + 0x94));
           *((Rgba891084B4 *) (((s8 *) self) + 0xAC)) = D_8910AAEC;
           *((u32 *) (((s8 *) self) + 0x1B0)) = 1;
@@ -1804,7 +1804,7 @@ s32 func_891089BC(s8 *arg0)
       {
         if ((*((s32 *) (((s8 *) self) + 0xDC))) == 0)
         {
-          entry = (*(*((u8 *****) (((s8 *) self) + 0x4C))))[*((s32 *) (((s8 *) self) + 0x54))];
+          entry = (*(*((u8 *****) (((s8 *) self) + 0x4C))))[*((s32 *) (((s8 *) self) + 0x54))]; // FAKE: decomp slop, raw pointer casts stand in for struct fields
           if ((*((s32 *) (((s8 *) entry) + 8))) >= 100)
           {
             n = func_8002D3D0((*((u8 **) (((s8 *) self) + 0x1AC))) + 8);
@@ -1820,13 +1820,13 @@ s32 func_891089BC(s8 *arg0)
               {
                 species = (*entry[0]) - 146;
               }
-              func_89104FC0(self + 0x110, (*((s32 *) (((s8 *) self) + 0))) + 0xD5, (*((s32 *) (((s8 *) self) + 4))) + 0x81, (*((u8 **) (((s8 *) self) + 0x1AC))) + 8);
+              func_89104FC0(self + 0x110, (*((s32 *) (((s8 *) self) + 0))) + 0xD5, (*((s32 *) (((s8 *) self) + 4))) + 0x81, (*((u8 **) (((s8 *) self) + 0x1AC))) + 8); // FAKE: decomp slop, raw pointer casts stand in for struct fields
               *((s32 *) (((s8 *) self) + 0x144)) = n;
               func_89105340(self + 0x110, *((s32 *) (((s8 *) self) + 0x144)), func_80020974(species));
             }
             else
             {
-              func_89104FC0(self + 0x110, (*((s32 *) (((s8 *) self) + 0))) + 0xD5, (*((s32 *) (((s8 *) self) + 4))) + 0x81, (*((u8 **) (((s8 *) self) + 0x1AC))) + 8);
+              func_89104FC0(self + 0x110, (*((s32 *) (((s8 *) self) + 0))) + 0xD5, (*((s32 *) (((s8 *) self) + 4))) + 0x81, (*((u8 **) (((s8 *) self) + 0x1AC))) + 8); // FAKE: decomp slop, raw pointer casts stand in for struct fields
               func_89105144(self + 0x110);
               *((u32 *) (((s8 *) self) + 0x1B0)) = 3;
             }
@@ -1835,10 +1835,10 @@ s32 func_891089BC(s8 *arg0)
             if ((*((s32 *) (((s8 *) entry) + 8))) >= 50)
           {
             func_8003F6AC(2);
-            func_89104FC0(self + 0x110, (*((s32 *) (((s8 *) self) + 0))) + 0xD5, (*((s32 *) (((s8 *) self) + 4))) + 0x81, (*((u8 **) (((s8 *) self) + 0x1AC))) + 8);
+            func_89104FC0(self + 0x110, (*((s32 *) (((s8 *) self) + 0))) + 0xD5, (*((s32 *) (((s8 *) self) + 4))) + 0x81, (*((u8 **) (((s8 *) self) + 0x1AC))) + 8); // FAKE: decomp slop, raw pointer casts stand in for struct fields
             for (i = 0; i < 4; i++)
             {
-              if ((((*((s32 *) (((s8 *) self) + (0x170 + (i * 4))))) == (-1)) || ((*((s32 *) (((s8 *) self) + (0x170 + (i * 4))))) == (-2))) || ((*((u8 **) (((s8 *) self) + 0x1AC)))[0x28 + i] >= 0xC0))
+              if ((((*((s32 *) (((s8 *) self) + (0x170 + (i * 4))))) == (-1)) || ((*((s32 *) (((s8 *) self) + (0x170 + (i * 4))))) == (-2))) || ((*((u8 **) (((s8 *) self) + 0x1AC)))[0x28 + i] >= 0xC0)) // FAKE: decomp slop, raw pointer casts stand in for struct fields
               {
                 (*((u16 **) (((s8 *) self) + 0x140)))[i] |= 1;
               }
@@ -1873,7 +1873,7 @@ s32 func_891089BC(s8 *arg0)
       else
         if (((u16 *) D_800603C0)[4] & 0x8000)
       {
-        if (!((*((u16 **) (((s8 *) self) + 0x140)))[*((s32 *) (((s8 *) self) + 0x144))] & 1))
+        if (!((*((u16 **) (((s8 *) self) + 0x140)))[*((s32 *) (((s8 *) self) + 0x144))] & 1)) // FAKE: decomp slop, raw pointer casts stand in for struct fields
         {
           func_8003F6AC(0x22);
           *((u32 *) (((s8 *) self) + 0x1B0)) = 0;
@@ -1898,11 +1898,11 @@ s32 func_891089BC(s8 *arg0)
       else
         if (((u16 *) D_800603C0)[4] & 0x8000)
       {
-        if (!((*((u16 **) (((s8 *) self) + 0x140)))[*((s32 *) (((s8 *) self) + 0x144))] & 1))
+        if (!((*((u16 **) (((s8 *) self) + 0x140)))[*((s32 *) (((s8 *) self) + 0x144))] & 1)) // FAKE: decomp slop, raw pointer casts stand in for struct fields
         {
           u8 **entry2;
           s32 sp38;
-          entry2 = (*(*((u8 *****) (((s8 *) self) + 0x4C))))[*((s32 *) (((s8 *) self) + 0x54))];
+          entry2 = (*(*((u8 *****) (((s8 *) self) + 0x4C))))[*((s32 *) (((s8 *) self) + 0x54))]; // FAKE: decomp slop, raw pointer casts stand in for struct fields
           if ((*entry2[0]) >= 201)
           {
             sp38 = (*entry2[0]) - 201;
@@ -1924,7 +1924,7 @@ s32 func_891089BC(s8 *arg0)
       break;
 
     case 4:
-      if (((*((s32 *) (((s8 *) self) + 0x188))) == 0) && (((u16 *) D_800603C0)[4] & 0xC000))
+      if (((*((s32 *) (((s8 *) self) + 0x188))) == 0) && (((u16 *) D_800603C0)[4] & 0xC000)) // FAKE: decomp slop, raw pointer casts stand in for struct fields
     {
       func_8003F6AC(3);
       *((u32 *) (((s8 *) self) + 0x1B0)) = 0;

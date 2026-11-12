@@ -384,7 +384,7 @@ void func_8210EFAC(S0LearnMon* pokemon, u16 pokemon_id) {
 extern u8 D_8218C930[][2];
 
 void func_8210F24C(s8* arg0) {
-    s32 pad;
+    s32 pad; // FAKE: stack padding
     s8* state = arg0 + 0x7C6;
 
     M2C_FIELD(arg0, s8*, 0x851) = 1;
@@ -403,12 +403,12 @@ void func_8210F24C(s8* arg0) {
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_8210F2F4(s8 *arg0)
 {
-  int new_var2;
-  u16 *new_var;
+  int new_var2; // FAKE: permuter temp
+  u16 *new_var; // FAKE: permuter temp
   ;
   new_var = ((s8 *) arg0) + 0x7D2;
   new_var2 = ((*((s32 *) (((s8 *) arg0) + 0x860))) + ((*((s32 *) (((s8 *) arg0) + 0x794))) * 0x50)) + ((0, 0x1C));  // FAKE
-  *((u16 *) (((s8 *) new_var2) + 2)) = (u16) (*((u16 *) new_var));
+  *((u16 *) (((s8 *) new_var2) + 2)) = (u16) (*((u16 *) new_var)); // FAKE: decomp slop, raw pointer casts stand in for struct fields
  if (1) { }  // karodo
 }
 
@@ -443,5 +443,5 @@ extern f64 D_DBL_82195778;
 u32 func_80053A80(void);
 u8 func_8210F3F0(void)
 {
-  return (D_82199F7C += (u8) ((u32) ((((f32) ((s32) ((u16) (func_80053A80() / 5577)))) / D_DBL_82195770) * D_DBL_82195778))) ^ 0;
+  return (D_82199F7C += (u8) ((u32) ((((f32) ((s32) ((u16) (func_80053A80() / 5577)))) / D_DBL_82195770) * D_DBL_82195778))) ^ 0; // FAKE: no-op ^ 0
 }

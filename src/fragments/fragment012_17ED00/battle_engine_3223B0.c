@@ -146,7 +146,7 @@ void BattleAnim_CallbackStartEffect48Descriptor45RisingSparkFade(Particle* arg0)
 }
 
 void BattleAnim_CallbackStartEffects77And120Descriptor45DeceleratingSparkFade_InitParticle(Particle* arg0) {
-    UNUSED s32 pad[3];
+    UNUSED s32 pad[3]; // FAKE: stack padding
     s16 sp22 = Particle_FieldAC_GetS16_0C038(arg0);
 
     Particle_FieldCF_GetS16_0C058(arg0);
@@ -216,7 +216,7 @@ void func_82149C60(s8 *arg0) {
 void BattleAnim_CallbackStartEffects77And120Descriptor45AimedSparkFade_InitParticle(Particle* arg0) {
     s16 sp56 = Particle_FieldAC_GetS16_0C038(arg0);
     f32 var_fa0;
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     Vec3f sp3C;
     Vec3f sp30;
     s16 sp2E;
@@ -281,7 +281,7 @@ void func_82149EEC(s8 *arg0) {
 }
 
 void BattleAnim_SetupUnusedRotatingSparkVariant(Particle* arg0) {
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     f32 temp_fv0;
     Vec3f sp40;
     Vec3f sp34;
@@ -481,7 +481,7 @@ void BattleAnim_CallbackStartEffects6And58AnimatedScaleAlphaFade(Particle* arg0)
 }
 
 void BattleAnim_CallbackStartEffect58Descriptor0ABurstChild_InitParticle(Particle* arg0) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
 
     Particle_FieldAC_GetS16_0C038(arg0);
     Particle_Field1C_SetScaled_0B938(arg0, 0.5f);
@@ -592,7 +592,7 @@ void BattleAnim_CallbackStartEffect58Descriptor08MetadataBurstEmitter(Particle* 
 }
 
 void BattleAnim_CallbackStartEffect6Descriptor0ABurstChild_InitParticle(Particle* arg0) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
 
     Particle_FieldAC_GetS16_0C038(arg0);
     Particle_Field1C_SetScaled_0B938(arg0, 0.2f);
@@ -707,7 +707,7 @@ void BattleAnim_CallbackStartEffect6DefaultDescriptorBurstEmitter(Particle* arg0
 }
 
 void BattleAnim_CallbackStartEffect47Descriptor4AAnimatedScaleFade_InitParticle(Particle* arg0) {
-    UNUSED s32 pad[3];
+    UNUSED s32 pad[3]; // FAKE: stack padding
     s16 sp22 = Particle_FieldAC_GetS16_0C038(arg0);
     s16 sp20 = Particle_FieldCF_GetS16_0C058(arg0);
 
@@ -945,7 +945,7 @@ void BattleAnim_CallbackEndEffect68Descriptor54FlickerExpandingFade(Particle* ar
 }
 
 void BattleAnim_CallbackEndEffect69Descriptor54ExpandingHoldFade_InitParticle(Particle* arg0) {
-    UNUSED s16 pad;
+    UNUSED s16 pad; // FAKE: stack padding
     s16 sp24;
 
     Particle_FieldCF_GetS16_0C058(arg0);
@@ -1115,7 +1115,7 @@ void func_8214BB94(s8 *arg0) {
 }
 
 void BattleAnim_CallbackSharedDescriptor19RecolorAnimatedFade_InitParticle(Particle* arg0) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
 
     switch (Particle_FieldCF_GetS16_0C058(arg0)) {
         case 0:
@@ -1429,7 +1429,7 @@ void func_8214C598(s8 *arg0) {
 
 void BattleAnim_CallbackEndEffects34And53Descriptor45RotatingBounceFade_InitParticle(Particle* arg0) {
     Vec3s sp28;
-    UNUSED s16 pad;
+    UNUSED s16 pad; // FAKE: stack padding
     s16 sp24;
 
     Particle_FieldCF_GetS16_0C058(arg0);
@@ -1609,7 +1609,7 @@ void func_8214CB84(s8 *arg0) {
 }
 
 void BattleAnim_CallbackEndEffects2And27Descriptor0AFallingSparkFade_InitParticle(Particle* arg0) {
-    UNUSED s16 pad;
+    UNUSED s16 pad; // FAKE: stack padding
     s16 sp2C;
 
     Particle_FieldAC_GetS16_0C038(arg0);
@@ -1918,7 +1918,7 @@ void func_8214E028(void) {
 extern ParticleDescriptor D_8218E588[86];
 extern ParticleDescriptor D_8218E588[86];
 void InitParticleEffectSet_WithComplex(void) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
 
     BattleAnim_SpawnOwnerModelTintRampDetach(0, 0x17, 0xFF, 0, 8);
     BattleAnim_SpawnOwnerModelTintPaletteApproachInactive(4, 0x17, 0x17, 0x10, 0xFF);
@@ -1931,7 +1931,7 @@ void InitParticleEffectSet_WithComplex(void) {
 
 extern ParticleDescriptor D_8218E588[86];
 void BattleAnim_EndEffect71PaletteApproachWithExpandingScaleFades(void) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
 
     BattleAnim_SpawnOwnerModelTintPaletteApproachInactive(4, 0x8, 0x17, 0x10, 0xFF);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackSharedExpandingScaleAlphaFade, &D_8218E728, 0, 1, 0x10, gBattleAnimCurrentAnchor, 0x17, 0);

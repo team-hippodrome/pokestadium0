@@ -131,7 +131,7 @@ s32 func_80057910(M2C_UNK *, void *, u32); /* extern */
 extern M2C_UNK D_811564A0;
 extern M2C_UNK D_811564C0;
 s32 func_811020A8(void *arg0) {
-    s32 pad;
+    s32 pad; // FAKE: stack padding
     s32 sp28;
     s32 var_v0;
     s32 var_v1;

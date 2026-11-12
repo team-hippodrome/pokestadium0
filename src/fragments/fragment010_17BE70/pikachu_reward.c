@@ -856,7 +856,7 @@ void func_8001A194(s32, s32);
 void func_81701710(void);
 
 s32 Stadium_BonusPikachuReward(UNUSED s32 arg0, s32 arg1) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     StageContext* sp20;
 
     D_8170201C = (s8*)arg1;

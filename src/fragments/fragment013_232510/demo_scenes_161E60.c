@@ -216,7 +216,7 @@ s32 Completion_LightAngleCallbackA(s32 arg0, GraphNode* arg1) {
 
 void func_822000F0(s32 arg0, s8 *arg1)
 {
-  s8 **new_var;
+  s8 **new_var; // FAKE: permuter temp
   if (arg0 == 0)
   {
     new_var = *((s8 ***) (((s8 *) arg1) + 0x14));
@@ -738,7 +738,7 @@ void func_82201444(unk_D_82203170* arg0, s32 arg1) {
 
 void func_82201600(s32 arg0) {
     s32 idx;
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     TeamRoster* team;
     s32 k;
     s32 j;

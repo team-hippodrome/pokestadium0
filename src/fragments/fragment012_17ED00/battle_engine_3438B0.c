@@ -424,7 +424,7 @@ void func_8212C398(s32 arg0)
 {
   s32 temp_v0;
   s32 var_v1;
- temp_v0 = func_8210C020(3, arg0); D_8219A568 = temp_v0; var_v1 = temp_v0; if (temp_v0 >= 4) { D_8219A568 = 0 ^ 0; var_v1 = 0; } switch (var_v1) { case 0:
+ temp_v0 = func_8210C020(3, arg0); D_8219A568 = temp_v0; var_v1 = temp_v0; if (temp_v0 >= 4) { D_8219A568 = 0 ^ 0; var_v1 = 0; } switch (var_v1) { case 0: // FAKE: no-op ^ 0
       func_82124984(D_8219A544, arg0, 0);
       return;
 
@@ -853,7 +853,7 @@ void func_8212D194(CameraNode* arg0) {
 
 
 void func_8212D504(CameraNode* arg0) {
-    UNUSED s32 pad[3];
+    UNUSED s32 pad[3]; // FAKE: stack padding
     u8* sp30 = (u8*)D_8219A544 + 0x7C6;
     u8* sp2C = (u8*)D_8219A540 + 0x7C6;
     u8* sp28 = (u8*)D_8219A544 + 0x78C;
@@ -1512,7 +1512,7 @@ void func_8212F118(s32 arg0) {
 
 
 void func_8212F16C(CameraNode* arg0) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s32 side = sBattleScene.scene->unk_2C;
     u8* sp1C = D_82189180[side] + 0x738;
 

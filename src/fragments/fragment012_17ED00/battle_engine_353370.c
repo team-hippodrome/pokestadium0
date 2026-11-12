@@ -90,7 +90,7 @@ void OwnerLinkedFourStream_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg
 void OwnerLinkedFourStream_Update(f32 arg0, Vec3f* arg1, f32 arg2) {
     UNUSED MtxF sp70;
     MtxF sp30;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
 
     guRotateF(sp30.mf, (arg0 * 360.0) / 6.2831854820251465, 1.0f, 0.0f, 0.0f);
     guMtxXFMF(sp30.mf, 0.0f, 0.0f, arg2, &arg1->x, &arg1->y, &arg1->z);
@@ -189,12 +189,12 @@ Gfx* OwnerLinkedFourStream_Draw(Gfx* arg0) {
     OwnerLinkedFourStreamNode* temp_s0;
     Mtx* temp_v0;
     Vec3f sp154;
-    UNUSED s32 pad[14];
+    UNUSED s32 pad[14]; // FAKE: stack padding
     s16 var_s3;
     Vtx* var_s0;
     Mtx spD0;
     Mtx sp90;
-    UNUSED s32 pad2;
+    UNUSED s32 pad2; // FAKE: stack padding
 
     var_s5 = &D_821B5E30[0];
     for (i = 0; i < 4; i++, var_s5++) {

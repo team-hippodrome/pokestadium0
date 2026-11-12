@@ -310,7 +310,7 @@ void TerrainGrid_BuildCameraBounds(unk_D_843975E8* arg0, f32 arg1) {
     f32 sp9C;
     f32 var_fs0;
     f32 sp94;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     f32 sp8C;
     f32 sp44;
     f32 sp84;
@@ -385,7 +385,7 @@ void TerrainGrid_BuildCameraBounds(unk_D_843975E8* arg0, f32 arg1) {
 
 
 f32 TerrainGrid_SampleHeightAndSlope(f32 x, f32 z, f32* rotation_x) {
-    UNUSED s32 pad1[2];
+    UNUSED s32 pad1[2]; // FAKE: stack padding
     f32 height;
     // Corner naming: c<i><j> is the grid vertex at (cell_x + i, cell_z + j).
     // Each corner is read as world X, height (Y), world Z.
@@ -401,7 +401,7 @@ f32 TerrainGrid_SampleHeightAndSlope(f32 x, f32 z, f32* rotation_x) {
     f32 c11_x;
     f32 c11_y;
     f32 c11_z;
-    UNUSED s32 pad2[8];
+    UNUSED s32 pad2[8]; // FAKE: stack padding
     f32 dx_to_c11;
     f32 dz_to_c11;
     f32 dx_to_c10;
@@ -652,7 +652,7 @@ void TerrainGrid_Init(s32 arg0, s16 arg1, s16 arg2) {
 }
 
 s32 TerrainGrid_Update(void) {
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     s32 sp1C = TerrainGrid_UpdateWaves();
 
     D_821A1B20 = (D_821A1B20 - 1) & 0x3FFF;

@@ -13,7 +13,7 @@ extern s16 D_81200D20[];
 extern s32 D_81200DA8;
 
 void func_81200020(void) {
-    s32 unused;
+    s32 unused; // FAKE: stack padding
     s32 len;
     s32 x;
     s32 idx;

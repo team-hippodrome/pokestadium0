@@ -188,7 +188,7 @@ void BattleAnim_AllocateReflectiveTextureDisplayList(s32 arg0, arg1_func_84344CE
 }
 
 void func_82154C9C(Particle* arg0) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     f32 scale = 1.2f;
 
     switch (BattleAnim_GetOwnerSpecies(arg0->unk_10)) {
@@ -581,9 +581,9 @@ void func_82155D3C(s8 *arg0) {
 }
 
 void BattleAnim_CallbackEndEffect23Descriptor4AAnimatedFade_InitParticle(Particle* arg0) {
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
-    UNUSED s16 pad2;
+    UNUSED s16 pad2; // FAKE: stack padding
     s16 sp22;
 
     Particle_FieldCE_GetS32_0C040(arg0);
@@ -903,7 +903,7 @@ void ParticleEffect_RegisterLargeExplosionAndEffects(void) {
 }
 
 void BattleAnim_BuildEffect63DisplayList(Gfx* arg0, s32 arg1, u16 arg2) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     Particle* sp28 = BattleAnim_GetOwnerContextParticle(D_8006049C);
 
     ParticleGfx_SetAnimatedTileSizeOnList(arg0++, 1, 0x28, 0x20, 0x20);
@@ -1370,10 +1370,10 @@ void BattleAnim_CallbackStartEffects50And82ScalePulse(Particle* arg0) {
 }
 
 void BattleAnim_CallbackStartEffects50And82Descriptor48AnimatedScaleFade_InitParticle(Particle* arg0) {
-    UNUSED s16 pad;
+    UNUSED s16 pad; // FAKE: stack padding
     s16 sp34;
     Vec3s sp2C;
-    UNUSED s32 pad2[3];
+    UNUSED s32 pad2[3]; // FAKE: stack padding
 
     Particle_FieldAC_GetS16_0C038(arg0);
     sp34 = Particle_FieldCF_GetS16_0C058(arg0);
@@ -1427,8 +1427,8 @@ void func_82158450(s8 *arg0) {
 }
 
 void BattleAnim_CallbackStartEffects50And82Descriptor4AAnimatedVerticalFade_InitParticle(Particle* arg0) {
-    UNUSED s32 pad[2];
-    UNUSED s16 pad2;
+    UNUSED s32 pad[2]; // FAKE: stack padding
+    UNUSED s16 pad2; // FAKE: stack padding
     s16 sp24;
 
     Particle_FieldAC_GetS16_0C038(arg0);
@@ -1620,7 +1620,7 @@ void func_82158BA4(s8 *arg0) {
 }
 
 void BattleAnim_CallbackEndEffects81And82Descriptor4AAnimatedColorFade_InitParticle(Particle* arg0) {
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
 
     Particle_FieldCE_GetS32_0C040(arg0);
@@ -1673,9 +1673,9 @@ void func_82158E20(s8 *arg0) {
 }
 
 void BattleAnim_CallbackEndEffects81And82Descriptor4FAnimatedPaletteFade_InitParticle(Particle* arg0) {
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
-    UNUSED s16 pad2;
+    UNUSED s16 pad2; // FAKE: stack padding
     s16 sp22;
 
     Particle_FieldCE_GetS32_0C040(arg0);
@@ -2057,7 +2057,7 @@ void BattleAnim_CallbackEndEffect7ModelScaleAlphaFade(Particle* arg0) {
 }
 
 void Gfx_DrawParticlePaletteBased(Gfx* arg0, u8* arg1, UNUSED u16 arg2) {
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     s16 sp2E = Particle_FieldCF_GetS16_0C058(BattleAnim_GetOwnerContextParticle(D_8006049C));
     u8 sp2D;
     u8 sp2C;
@@ -2341,7 +2341,7 @@ void BattleAnim_StartEffect39Descriptor26ModelAnimWaitSequence(void) {
 }
 
 void ParticleEffect_SimpleBurstScript(void) {
-    UNUSED s16 pad;
+    UNUSED s16 pad; // FAKE: stack padding
     s16 sp34;
 
     switch (BattleAnim_GetQueuedMoveId()) {
@@ -2512,7 +2512,7 @@ void Gfx_PaletteParticleDL(Gfx* arg0, u8* arg1, UNUSED u16 arg2) {
     s16 var_a2;
     s16 var_a3;
     s16 var_s1;
-    UNUSED s16 pad2;
+    UNUSED s16 pad2; // FAKE: stack padding
     s16 spB2;
     s16 spB0;
     s16 spAE;
@@ -3121,9 +3121,9 @@ void BattleAnim_CallbackStartEffect49EndEffect66ModelFadeIn(Particle* arg0) {
 }
 
 void Gfx_SimpleNodeDL(Gfx* arg0, arg1_func_8434E21C* arg1, UNUSED u16 arg2) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     Particle* sp48 = BattleAnim_GetOwnerContextParticle(D_8006049C);
-    UNUSED s16 pad2;
+    UNUSED s16 pad2; // FAKE: stack padding
     s16 sp44;
     s16 sp42;
 
@@ -3261,7 +3261,7 @@ void ParticleEffect_PlaySoundAndReset(void) {
 
 void ParticleEffect_DrawQuad(Gfx* arg0, arg1_func_8434E21C* arg1, UNUSED u16 arg2) {
     Particle* temp_v0;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s16 var_t2;
     s16 tmp;
     s16 sp82;
@@ -3274,7 +3274,7 @@ void ParticleEffect_DrawQuad(Gfx* arg0, arg1_func_8434E21C* arg1, UNUSED u16 arg
     s16 sp74;
     s16 var_s1;
     s16 var_t1;
-    UNUSED s16 pad2;
+    UNUSED s16 pad2; // FAKE: stack padding
     s16 var_t5;
 
     temp_v0 = BattleAnim_GetOwnerContextParticle(D_8006049C);

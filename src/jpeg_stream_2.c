@@ -58,10 +58,10 @@ void Dma_InitializeCompletionQueue(void) {
 }
 
 void Yay0_DecompressAndRelocate(u8* in_header, u8* memory) {
-    UNUSED s32 pad2;
+    UNUSED s32 pad2; // FAKE: stack padding
     PERSSZP* header = in_header;
     u32* sp2C = (u32*)header + 6;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s32 sp24 = header->decompressed_size2 - header->decompressed_size1;
     u32 var_v0;
 
@@ -168,7 +168,7 @@ void* Asset_LoadCompressed(u8* romStart, u8* romEnd, s32 arg2, s32 arg3) {
     u32* addr;
     u32* newaddr;
     u32* ret;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     int side;
 
     side = (arg2 == 0) ? MEMORY_POOL_RIGHT : MEMORY_POOL_LEFT;
@@ -298,7 +298,7 @@ u8* Asset_LoadToSegment(s32 id, u8* rom_start, u8* rom_end, s32 arg3) {
 }
 
 MainPoolBlock* Asset_LoadToSegmentByLbaRange(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     unk_func_800041C0 sp28;
     MainPoolBlock* temp_v0 = Storage_LoadAssetByLbaRange(Storage_SetLbaRange(&sp28, arg1, arg2), arg3);
 
@@ -323,7 +323,7 @@ void Fragment_FreeCallback(u32 base_addr, u32 addr) {
 }
 
 void Fragment_Register(s32 arg0, Fragment* addr) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     u32 sp20 = main_pool_get_block_dist(addr);
 
     main_pool_set_func(addr, arg0 + 0x81000000, &Fragment_FreeCallback);
@@ -476,7 +476,7 @@ void* BinArchive_LoadFileBuffered(BinArchive* arg0, BinArchiveFile* arg1) {
 
 void* BinArchive_GetFile(BinArchive* archive, s32 file_number) {
     Fragment* var_a2 = NULL;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     BinArchiveFile* sp18 = (u8*)archive + sizeof(BinArchive) + (file_number * sizeof(BinArchiveFile));
 
     if (file_number < archive->num_files) {

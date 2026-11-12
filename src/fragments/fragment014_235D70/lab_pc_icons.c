@@ -81,7 +81,7 @@ extern u8 D_88001FE0[];
 extern u8 D_88001FE4[];
 M2C_UNK func_880002D8(s32 arg0, s32 arg1, s32 arg2) {
     s8 *obj = (s8 *)arg0;
-    s32 pad;
+    s32 pad; // FAKE: stack padding
 
     func_8002A8C4(obj, arg1, arg2, 0x174, 0x112);
     M2C_FIELD(obj, s32 *, 0x24) = 0;
@@ -520,7 +520,7 @@ void func_880013EC(u8 *arg0, s32 arg1, s32 arg2, s32 *arg3) {
     M2C_FIELD(arg0, s32 *, 0xC) = arg1;
     if (arg1 > 0) {
         temp_v0 = arg1 * 4;
-        func_880012FC(arg0 + 0x2F8, 0x2E, 0x53, *((M2C_UNK*)((u8*)&D_88002230 + temp_v0)), *((M2C_UNK*)((u8*)&D_88002240 + temp_v0)));
+        func_880012FC(arg0 + 0x2F8, 0x2E, 0x53, *((M2C_UNK*)((u8*)&D_88002230 + temp_v0)), *((M2C_UNK*)((u8*)&D_88002240 + temp_v0))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
     }
 }
 
@@ -671,8 +671,8 @@ extern s32 D_88002B20;
  * the modes and D_80073400 mean is not established.
  */
 void func_8800187C(void) {
-    s32 pad1;
-    s32 pad2;
+    s32 pad1; // FAKE: stack padding
+    s32 pad2; // FAKE: stack padding
     s32 sp24;
     s32 var_s0;
 

@@ -58,7 +58,7 @@ extern Color_RGBA8 D_80073520;
 void func_8002A0AC(s32, s32, s32, s32, Color_RGBA8);
 M2C_UNK func_80029A64(s32, s32, s32, s32, Color_RGBA8);
 void func_8A200274(s32 arg0, s32 arg1, BattleMon *arg2, s32 arg3, s32 arg4, s32 *arg5) {
-    s32 pad[3];
+    s32 pad[3]; // FAKE: stack padding
     s32 kind = *arg5;
     Color_RGBA8 *color;
 
@@ -165,7 +165,7 @@ s32 func_8002D3D0(u8*);
 void func_80027804(s8*, void*, s32, s32);
 void func_8A20080C(s8 *arg0, s32 arg1, s32 arg2, u8 *arg3)
 {
-  s8 *new_var;
+  s8 *new_var; // FAKE: permuter temp
   s8 *sp2C;
   func_8002A8C4(arg0, arg1, arg2, 0xB4, 0x84);
   *((s32 *) (((s8 *) arg0) + 0x24)) = 0;

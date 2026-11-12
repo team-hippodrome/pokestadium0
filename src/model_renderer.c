@@ -146,11 +146,11 @@ ModelAnimationBank* ModelAnim_GetAnimationRecord(DisplayObject* arg0, s32 arg1) 
 extern unk_D_8006FF00 D_80064C5C[];
 
 arg1_func_80010CA8* func_80019BDC(arg1_func_80010CA8* arg0, BattleMon* arg1) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     char sp38[0xB];
     arg1_func_80010CA8 sp34;
     unk_D_8006FF00* sp30;
-    UNUSED s32 pad2;
+    UNUSED s32 pad2; // FAKE: stack padding
     u8 var_a0;
     s8* var_v1;
 

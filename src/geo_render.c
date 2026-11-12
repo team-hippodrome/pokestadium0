@@ -948,7 +948,7 @@ void Geo_ProcessNodeChildren(GraphNode* arg0) {
 }
 
 void Geo_NodeReference(GraphNode* arg0) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     GraphNode* temp_a1 = ((unk_D_86002F34*)arg0)->unk_18;
 
     if ((temp_a1 != NULL) && (temp_a1->flags & 1)) {
@@ -1242,7 +1242,7 @@ void func_8001473C(s8 *arg0)
  goto dummy_label_201075; dummy_label_201075: ;  // FAKE
  do { } while (0);  // karodo
   ;
-  if ((((s16) ((s32) (*((f32 *) (((s8 *) ((&(*((s8 *) (&D_800AB460)))) + ((*((s32 *) (((s8 *) (&(*((s8 *) (&D_800AB460))))) + 0x10A0))) << 6))) + 0x38))))) >= (*((s16 *) (((s8 *) arg0) + 0x18)))) && (((s16) ((s32) (*((f32 *) (((s8 *) ((&(*((s8 *) (&D_800AB460)))) + ((*((s32 *) (((s8 *) (&(*((s8 *) (&D_800AB460))))) + 0x10A0))) << 6))) + 0x38))))) < (*((s16 *) (((s8 *) arg0) + 0x1A)))))
+  if ((((s16) ((s32) (*((f32 *) (((s8 *) ((&(*((s8 *) (&D_800AB460)))) + ((*((s32 *) (((s8 *) (&(*((s8 *) (&D_800AB460))))) + 0x10A0))) << 6))) + 0x38))))) >= (*((s16 *) (((s8 *) arg0) + 0x18)))) && (((s16) ((s32) (*((f32 *) (((s8 *) ((&(*((s8 *) (&D_800AB460)))) + ((*((s32 *) (((s8 *) (&(*((s8 *) (&D_800AB460))))) + 0x10A0))) << 6))) + 0x38))))) < (*((s16 *) (((s8 *) arg0) + 0x1A))))) // FAKE: decomp slop, raw pointer casts stand in for struct fields
   {
     func_8001380C();
   }
@@ -1478,7 +1478,7 @@ M2C_UNK func_8001380C(s8 *);                      /* extern */
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_80014F78(s8 *arg0)
 {
-  s32 new_var;
+  s32 new_var; // FAKE: permuter temp
   s32 temp_a1;
   temp_a1 = *((s32 *) (((s8 *) arg0) + 0x18));
   new_var = temp_a1;
@@ -1487,7 +1487,7 @@ void func_80014F78(s8 *arg0)
     if ((!arg0) && (!arg0))
     {
     }
-    func_800135FC(*((u8 *) (((s8 *) arg0) + 3)), new_var, 0, (*((u8 *) (((s8 *) arg0) + 2))) & 4);
+    func_800135FC(*((u8 *) (((s8 *) arg0) + 3)), new_var, 0, (*((u8 *) (((s8 *) arg0) + 2))) & 4); // FAKE: decomp slop, raw pointer casts stand in for struct fields
   }
   func_8001380C((0, arg0));  // FAKE
 }

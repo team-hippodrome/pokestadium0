@@ -550,13 +550,13 @@ s32 func_820038B0(s8 *arg0)
   u8 *rec;
   if ((*((s32 *) (((s8 *) arg0) + 8))) != 0)
   {
-    next = *((s32 *) (((s8 *) (*((s8 **) (((s8 *) arg0) + 0xC)))) + 0x28));
+    next = *((s32 *) (((s8 *) (*((s8 **) (((s8 *) arg0) + 0xC)))) + 0x28)); // FAKE: decomp slop, raw pointer casts stand in for struct fields
     if (next == 4)
     {
       if ((arg0 && arg0) && arg0) // FAKE: keeps arg0 in a0 for the state read above
       {
       }
-      *((s32 *) (((s8 *) arg0) + 4)) = *((s32 *) (((s8 *) arg0) + 8));
+      *((s32 *) (((s8 *) arg0) + 4)) = *((s32 *) (((s8 *) arg0) + 8)); // FAKE: decomp slop, raw pointer casts stand in for struct fields
       if ((*((s32 *) (((s8 *) arg0) + 8))) == 0xD)
       {
         ret = 1;
@@ -588,7 +588,7 @@ s32 func_820038B0(s8 *arg0)
         if (next == 1)
       {
         s32 sp40;
-        rec = (*(*((u8 ****) (((s8 *) arg0) + 0xC4))))[*((s32 *) (((s8 *) arg0) + 0x48))];
+        rec = (*(*((u8 ****) (((s8 *) arg0) + 0xC4))))[*((s32 *) (((s8 *) arg0) + 0x48))]; // FAKE: decomp slop, raw pointer casts stand in for struct fields
         if (((*((s32 *) (((s8 *) arg0) + 0x740))) == 0) && ((func_820001B8(rec + 0x1C, &sp40), sp40 == 6)))
         {
           func_8003F6AC(8);
@@ -614,7 +614,7 @@ s32 func_820038B0(s8 *arg0)
           *((s32 *) (((s8 *) arg0) + 0x318)) |= 0x10000;
           func_820023E8(arg0 + 0x2F8);
           func_82002BF8(arg0, func_820036A8(arg0), 0);
-          *((s32 *) (((s8 *) arg0) + 0x310)) = *((s32 *) (((s8 *) arg0) + 0x744));
+          *((s32 *) (((s8 *) arg0) + 0x310)) = *((s32 *) (((s8 *) arg0) + 0x744)); // FAKE: decomp slop, raw pointer casts stand in for struct fields
           func_8000B2F4(*((s32 *) (((s8 *) arg0) + 0x744)));
         }
       }
@@ -633,7 +633,7 @@ s32 func_820038B0(s8 *arg0)
       else
         if (next == 1)
       {
-        if (((Slot54 *) (arg0 + 0xE4))[*((s32 *) (((s8 *) arg0) + 0x300))].flag & 0x40)
+        if (((Slot54 *) (arg0 + 0xE4))[*((s32 *) (((s8 *) arg0) + 0x300))].flag & 0x40) // FAKE: decomp slop, raw pointer casts stand in for struct fields
         {
           func_8003F6AC(2);
           func_82002BF8(arg0, 3, 0);
@@ -714,7 +714,7 @@ s32 func_820038B0(s8 *arg0)
         if (next == 1)
       {
         func_8003F6AC(2);
-        if (((Slot54 *) (arg0 + 0xE4))[*((s32 *) (((s8 *) arg0) + 0x300))].flag & 1)
+        if (((Slot54 *) (arg0 + 0xE4))[*((s32 *) (((s8 *) arg0) + 0x300))].flag & 1) // FAKE: decomp slop, raw pointer casts stand in for struct fields
         {
           func_82002BF8(arg0, 8, 0);
         }
@@ -745,7 +745,7 @@ s32 func_820038B0(s8 *arg0)
       else
         if (next == 1)
       {
-        if (!((*((u16 **) (((s8 *) arg0) + 0x6E8)))[*((s32 *) (((s8 *) arg0) + 0x6EC))] & 1))
+        if (!((*((u16 **) (((s8 *) arg0) + 0x6E8)))[*((s32 *) (((s8 *) arg0) + 0x6EC))] & 1)) // FAKE: decomp slop, raw pointer casts stand in for struct fields
         {
           func_8003F6AC(2);
           func_82002BF8(arg0, 9, 0);
@@ -814,7 +814,7 @@ s32 func_820038B0(s8 *arg0)
       break;
 
     case 12:
-      if ((*((u16 *) (((s8 *) (*((u16 **) (((s8 *) arg0) + 0x744)))) + 8))) & 0xC000)
+      if ((*((u16 *) (((s8 *) (*((u16 **) (((s8 *) arg0) + 0x744)))) + 8))) & 0xC000) // FAKE: decomp slop, raw pointer casts stand in for struct fields
     {
       func_8003F6AC(2);
       func_82002BF8(arg0, 1, 1);

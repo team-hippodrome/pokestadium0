@@ -657,7 +657,7 @@ void func_8003A598(void*, void*, s32);
 void func_8003A2B8(s8*);
 u32 func_8003A4A8();
 s32 func_80037508(s32* song) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s32 handle;
     s32 mask;
     s32 count;
@@ -1323,7 +1323,7 @@ s32 func_8004D300(s32);
  * voice re-queue call.
  */
 void func_80038588(void) {
-    UNUSED s32 pad[4];
+    UNUSED s32 pad[4]; // FAKE: stack padding
     s32 mask;
     u32 i;
     s8* p;
@@ -2043,7 +2043,7 @@ f32 Audio_ExpApproximation(f32 arg0) {
 }
 
 void Audio_RelocateSoundBank(u8* arg0, s32 arg1) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     u32 i;
     f32 var_fv0;
     SoundBank* soundbank = arg0;

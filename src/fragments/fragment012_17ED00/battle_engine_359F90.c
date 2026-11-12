@@ -496,8 +496,8 @@ void Battle_InitPokemonRuntimeState(ActivePokemon* arg0) {
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 s32 func_82110EAC(s8 *arg0)
 {
-  int new_var;
-  if ((*((u16 *) (((s8 *) ((*((s32 *) (((s8 *) arg0) + 0x860))) + ((*((s32 *) (((s8 *) arg0) + 0x7A4))) * 0x50))) + (new_var = -0x32)))) != 0)
+  int new_var; // FAKE: permuter temp
+  if ((*((u16 *) (((s8 *) ((*((s32 *) (((s8 *) arg0) + 0x860))) + ((*((s32 *) (((s8 *) arg0) + 0x7A4))) * 0x50))) + (new_var = -0x32)))) != 0) // FAKE: decomp slop, raw pointer casts stand in for struct fields
   {
     return 1;
   }

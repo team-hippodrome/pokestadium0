@@ -83,7 +83,7 @@ void Ui_Draw20x20Icon(s32 arg0, s32 arg1, s32 arg2);
 void Ui_DrawTexturedRect8x8(s32 x1, s32 y1, s32 width, s32 height, u8* texture);
 
 s32 func_8001D370(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
-    UNUSED s32 pad[4];
+    UNUSED s32 pad[4]; // FAKE: stack padding
     s32 sp2C;
     s32 sp28;
 

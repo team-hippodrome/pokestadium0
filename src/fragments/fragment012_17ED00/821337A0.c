@@ -6,9 +6,9 @@
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_821337A0(s8 *arg0)
 {
-  int new_var;
+  int new_var; // FAKE: permuter temp
   new_var = (*((s32 *) (((s8 *) arg0) + 0x860))) + 0x1C;
-  *((u16 *) (((s8 *) new_var) + 2)) = (u16) (*((u16 *) (((s8 *) arg0) + 0x7D2)));
+  *((u16 *) (((s8 *) new_var) + 2)) = (u16) (*((u16 *) (((s8 *) arg0) + 0x7D2))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
 }
 
 /*
@@ -112,7 +112,7 @@ void func_82136708(s32, ActivePokemon*);
 M2C_UNK func_8213B31C(M2C_UNK);
 
 void func_821339CC(ActivePokemon* arg0) {
-    s32 pad;
+    s32 pad; // FAKE: stack padding
     s8* sp20 = (s8*)arg0->teamRoster + 0x1C;
     BattleMonRuntime* rt = &arg0->state.runtime;
 

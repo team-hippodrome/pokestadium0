@@ -797,7 +797,7 @@ void func_8213E450(Particle* arg0) {
 
 void func_8213E474(s8 *arg0)
 {
-  *((f32 *) (((s8 *) arg0) + 0x4C)) = (f32) ((*((f32 *) (((s8 *) arg0) + 0x78))) + (*((f32 *) (((s8 *) arg0) + 0x4C))));
+  *((f32 *) (((s8 *) arg0) + 0x4C)) = (f32) ((*((f32 *) (((s8 *) arg0) + 0x78))) + (*((f32 *) (((s8 *) arg0) + 0x4C)))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
 }
 
 void Particle_Field50_AddXFromField7C_09C58(Particle* arg0) {
@@ -1095,13 +1095,13 @@ void func_8213EC9C(Particle* arg0) {
 
 void func_8213ECD0(s8 *arg0)
 {
-  s16 *new_var;
-  *((s16 *) (((0, (s8 *) arg0)) + 0x90)) = (s16) ((*(new_var = (s16 *) (((s8 *) arg0) + 0x96))) + (*((s16 *) (((s8 *) arg0) + 0x90))));
+  s16 *new_var; // FAKE: permuter temp
+  *((s16 *) (((0, (s8 *) arg0)) + 0x90)) = (s16) ((*(new_var = (s16 *) (((s8 *) arg0) + 0x96))) + (*((s16 *) (((s8 *) arg0) + 0x90)))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
 }
 
 void func_8213ECE4(s8 *arg0)
 {
-  *((s16 *) (((s8 *) arg0) + 0x92)) = (s16) ((*((s16 *) (((s8 *) arg0) + 0x98))) + (*((s16 *) (((s8 *) arg0) + 0x92))));
+  *((s16 *) (((s8 *) arg0) + 0x92)) = (s16) ((*((s16 *) (((s8 *) arg0) + 0x98))) + (*((s16 *) (((s8 *) arg0) + 0x92)))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
  if (0) { }  // karodo
 }
 
@@ -1689,8 +1689,8 @@ void func_821404DC(s32 arg0, s32 arg1, s32 arg2) {
 
 void func_8214050C(s8 *arg0, char arg1)
 {
-  s8 *new_var;
-  s8 *new_var2;
+  s8 *new_var; // FAKE: permuter temp
+  s8 *new_var2; // FAKE: permuter temp
   new_var2 = arg0;
   new_var = (s8 *) new_var2;
   *((s8 *) (new_var + 0xC0)) = arg1;
@@ -1788,7 +1788,7 @@ s32 Particle_FieldA8_DecrementToZeroStep1AndStepState_0BE8C(Particle* arg0) {
 
 void func_821407A8(s8 *arg0, int arg1)
 {
-  int *new_var;
+  int *new_var; // FAKE: permuter temp
   new_var = &arg1;
   *((s8 *) (((s8 *) arg0) + 0xC6)) = *new_var;
 }
@@ -1799,14 +1799,14 @@ void func_821407B4(s8 *arg0, s16 arg1) {
 
 void func_821407C8(s8 *arg0, unsigned char arg1)
 {
-  s8 *new_var;
+  s8 *new_var; // FAKE: permuter temp
   new_var = (s8 *) (((s8 *) arg0) + 0xCB);
   *new_var = arg1;
 }
 
 void func_821407D4(s8 *arg0, unsigned char arg1)
 {
-  s8 *new_var;
+  s8 *new_var; // FAKE: permuter temp
   new_var = ((s8 *) arg0) + 0xCB;
   *((s8 *) new_var) = arg1;
 }

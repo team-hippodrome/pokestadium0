@@ -197,7 +197,7 @@ Gfx* AuxiliaryEffect_DrawOne(Gfx* arg0, AuxiliaryEffectNode* arg1, MtxF* arg2) {
 }
 
 Gfx* AuxiliaryEffect_Draw(s16 arg0, Gfx* arg1) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     AuxiliaryEffect* temp_s3 = &D_821CEEA0[arg0];
     AuxiliaryEffectNode* var_s0;
     s32 i;

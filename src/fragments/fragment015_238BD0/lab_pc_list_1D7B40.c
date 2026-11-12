@@ -100,7 +100,7 @@ extern Rgba89004908 D_800734B0[];
 extern M2C_UNK D_800734A8;
 void func_89004908(s32 x, s32 y, char* str, UNUSED s32 index, s32 flags) {
     Rgba89004908 color;
-    UNUSED s32 pad[4];
+    UNUSED s32 pad[4]; // FAKE: stack padding
 
     if (flags & 0x10) {
         func_8002A0AC(x + 3, y + 3, 0xD2, 0x16, D_8900A5BC);
@@ -128,7 +128,7 @@ void func_8002A8C4(s8*, s32, s32, s32, s32);
 void func_8002D880(s8*, s32, s32, s32, s32, s32);
 M2C_UNK func_80027804();
 void func_89004AD4(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
-    s32 pad[2];
+    s32 pad[2]; // FAKE: stack padding
 
     func_8002A8C4((s8 *)arg0, arg1, arg2, 0xBC, (arg4 * 0x1C) + 0x14);
     M2C_FIELD(arg0, s32 *, 0x28) = 0;

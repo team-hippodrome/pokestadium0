@@ -369,9 +369,9 @@ u16 func_81116258(void) {
 }
 
 void func_811164CC(u16 reg, u8 value) {
-    s32 pad;
+    s32 pad; // FAKE: stack padding
     s32 i;
-    s32 pad2;
+    s32 pad2; // FAKE: stack padding
 
     if ((reg == 0x26) && !(value & 0x80)) {
         for (i = 0x23; i != 0xF; i--) {
@@ -601,7 +601,7 @@ void func_81116C88(s32 numSamples, s16* out) {
     s32 first;
     s32 startTime;
     u32 lastTime;
-    s32 pad[3];
+    s32 pad[3]; // FAKE: stack padding
 
     first = TRUE;
     count = 0;
@@ -751,7 +751,7 @@ void func_81117068(u16 arg0, u8 arg1, u16 arg2) {
 }
 
 void GbApu_ResetChannels(void) {
-  s32 pad[6];
+  s32 pad[6]; // FAKE: stack padding
   s32 i;
   OSMesgQueue sp24;
   OSMesg sp20;
@@ -842,7 +842,7 @@ s32 func_811174D8(void) {
     s32 status;
     s16* queued;
     s16* buf;
-    s32 pad[2];
+    s32 pad[2]; // FAKE: stack padding
     s16* len;
     s16** bufPtr;
 

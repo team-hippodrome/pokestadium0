@@ -968,7 +968,7 @@ void func_81104930(void) {
     func_81103C40(pos + 0x280, D_811208F8, 0, 0xC, 0xC);
     dst = pos + 0x29C;
     /* The comma expression is what gives the ROM's register allocation. */
-    for (p = D_811541FC; (0, p) != &D_811541FC[5]; p++) {
+    for (p = D_811541FC; (0, p) != &D_811541FC[5]; p++) { // FAKE: comma expression
         func_8110427C((u16*)dst, D_8115659C + *p * 0xC0, 0xFFFE, 0xC, 0xC, 0x10);
         dst += 0x18;
     }
@@ -986,7 +986,7 @@ extern u32 D_811565AC;
 extern u32 D_811565B0;
 s32 func_81104B18(s32 arg0, M2C_UNK arg1)
 {
-  s32 new_var;
+  s32 new_var; // FAKE: permuter temp
   s32 temp_v1;
   u32 temp_t6;
   temp_v1 = (D_811565AC + 0x3F) & (~0x3F);
@@ -998,7 +998,7 @@ s32 func_81104B18(s32 arg0, M2C_UNK arg1)
     goto loop_1;
 
   }
-  return new_var;
+  return new_var; // FAKE: permuter temp
 }
 
 s32 func_81102970(s32, s32);                     /* extern */

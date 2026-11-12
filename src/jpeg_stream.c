@@ -129,14 +129,14 @@ void Jpeg_InitializeDspTask(UnkStruct80001380* arg0, unk_func_80003680_sp90* arg
 
 void func_800033B8(s8 *arg0, s32 arg1, s8 *arg2)
 {
-  *((s32 *) (((s8 *) arg0) + 0)) = (s32) (*((s32 *) (((s8 *) arg2) + 0x14)));
-  *((u8 *) (((s8 *) arg0) + 4)) = (u8) (*((u8 *) (((s8 *) arg2) + 0)));
+  *((s32 *) (((s8 *) arg0) + 0)) = (s32) (*((s32 *) (((s8 *) arg2) + 0x14))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+  *((u8 *) (((s8 *) arg0) + 4)) = (u8) (*((u8 *) (((s8 *) arg2) + 0))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
   *((s8 *) (((s8 *) arg0) + 5)) = 0;
   *((s32 *) (((s8 *) arg0) + 8)) = arg1;
   *((s32 *) (((s8 *) arg0) + 0xC)) = (s32) (arg1 + 0xA8);
   *((s32 *) (((s8 *) arg0) + 0x10)) = (s32) (arg1 + 0x54);
   *((s32 *) (((s8 *) arg0) + 0x14)) = (s32) (arg1 + 0xFC);
-  *((u8 *) (((s8 *) arg0) + 0x18)) = (u8) (*((u8 *) (((s8 *) arg2) + 1)));
+  *((u8 *) (((s8 *) arg0) + 0x18)) = (u8) (*((u8 *) (((s8 *) arg2) + 1))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
 }
 
 void Jpeg_BuildDspOutput(unk_func_80003680_sp90* arg0, u8(arg1)[2][0x80], unk_func_80003680_sp300* arg2) {

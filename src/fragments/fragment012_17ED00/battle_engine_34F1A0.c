@@ -28,7 +28,7 @@ void Trail40Variant_ApplyRippleAtPoint(s16 arg0, s16 arg1) {
         for (j = 0; j < 16; j++) {
             s32 tmp2 = arg0 - j;
 
-            if ((tmp2 == 0.0f) && (tmp1 == (0, 0.0f))) {
+            if ((tmp2 == 0.0f) && (tmp1 == (0, 0.0f))) { // FAKE: comma expression
                 var_s0->unk_1C += 1.5707963705062866;
             } else {
                 var_s0->unk_1C += 1.5707963705062866 / sqrtf(SQ((f32)tmp2) + SQ((f32)tmp1));
@@ -104,7 +104,7 @@ void Trail40Variant_UpdateNodes(s32 arg0, s32 arg1) {
     f32 sp54;
     f32 sp50;
     f32 sp4C;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s16 sp46;
 
     sp6C = D_821A8B70.unk_0014[arg0][arg1].unk_00;

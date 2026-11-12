@@ -272,7 +272,7 @@ s32 func_81112EEC(s8*);
 void func_81111090();
 s32 func_811129E0(Owner811129E0* arg0, s32 arg1) {
     Part811129E0* p;
-    s32 pad;
+    s32 pad; // FAKE: stack padding
     if (arg0->slots[arg1] == NULL) {
         arg0->slots[arg1] = (Part811129E0*)func_81112EEC((s8*)&D_81184928);
         if (arg0->slots[arg1] == NULL) {
@@ -407,12 +407,12 @@ void func_81112EAC(s8 *arg0, s8 *arg1)
 {
   if ((*((s8 **) (((s8 *) arg1) + 0))) == 0)
   {
-    *((s8 **) (((s8 *) (*((s8 **) (((s8 *) arg0) + 0)))) + 4)) = arg1;
-    *((s8 **) (((s8 *) arg1) + 0)) = (s8 *) (*((s8 **) (((s8 *) arg0) + 0)));
+    *((s8 **) (((s8 *) (*((s8 **) (((s8 *) arg0) + 0)))) + 4)) = arg1; // FAKE: decomp slop, raw pointer casts stand in for struct fields
+    *((s8 **) (((s8 *) arg1) + 0)) = (s8 *) (*((s8 **) (((s8 *) arg0) + 0))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
     *((s8 **) (((s8 *) arg1) + 4)) = arg0;
     *((s8 **) (((s8 *) arg0) + 0)) = arg1;
-    *((s32 *) (((s8 *) arg0) + 8)) = ((s32) ((*((s32 *) (((s8 *) arg0) + 8))) + 1)) ^ 0;
-    *((s32 *) (((s8 *) arg1) + 0xC)) = (s32) (*((s32 *) (((s8 *) arg0) + 0xC)));
+    *((s32 *) (((s8 *) arg0) + 8)) = ((s32) ((*((s32 *) (((s8 *) arg0) + 8))) + 1)) ^ 0; // FAKE: decomp slop, raw pointer casts stand in for struct fields
+    *((s32 *) (((s8 *) arg1) + 0xC)) = (s32) (*((s32 *) (((s8 *) arg0) + 0xC))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
   }
 }
 
@@ -446,12 +446,12 @@ void func_81112F2C(void) {
 
 u8 func_81112FB0(u8 **arg0)
 {
-  u8 new_var;
+  u8 new_var; // FAKE: permuter temp
   u8 *temp_a1;
   new_var = *(*arg0);
   temp_a1 = *arg0;
   *arg0 = temp_a1 + 1;
-  return new_var;
+  return new_var; // FAKE: permuter temp
 }
 
 s16 func_81112FC4(u8** arg0) {

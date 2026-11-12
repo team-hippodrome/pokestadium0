@@ -89,9 +89,9 @@ u8 func_82107A30(s8 *arg0) {
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 u8 func_82107A3C(s8 *arg0)
 {
-  int new_var;
+  int new_var; // FAKE: permuter temp
   new_var = (*((u8 *) (((s8 *) arg0) + 0x7B7))) == 0;
-  return *((u8 *) (((s8 *) (*((s8 **) (((s8 *) ((*((s32 *) (((s8 *) arg0) + 0x85C))) + (new_var * 4))) + 8)))) + 2));
+  return *((u8 *) (((s8 *) (*((s8 **) (((s8 *) ((*((s32 *) (((s8 *) arg0) + 0x85C))) + (new_var * 4))) + 8)))) + 2)); // FAKE: decomp slop, raw pointer casts stand in for struct fields
 }
 
 s32 BattleScene_GetParticipantSideIndex(ActivePokemon* active_pokemon) {
@@ -102,8 +102,8 @@ s32 BattleScene_GetParticipantSideIndex(ActivePokemon* active_pokemon) {
 }
 
 u8 BattleScene_GetMoveCueDefaultAnchor(ActivePokemon* active_pokemon) {
-    UNUSED s32 pad;
-    UNUSED s16 pad2;
+    UNUSED s32 pad; // FAKE: stack padding
+    UNUSED s16 pad2; // FAKE: stack padding
     s16 move_index = active_pokemon->state.runtime.usedMove - 1;
     MovePresentationCue* move_cue = &sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon)]->moveCues[move_index];
 
@@ -111,8 +111,8 @@ u8 BattleScene_GetMoveCueDefaultAnchor(ActivePokemon* active_pokemon) {
 }
 
 u8 BattleScene_GetMoveCueAlternateAnchor(ActivePokemon* active_pokemon) {
-    UNUSED s32 pad;
-    UNUSED s16 pad2;
+    UNUSED s32 pad; // FAKE: stack padding
+    UNUSED s16 pad2; // FAKE: stack padding
     s16 move_index = active_pokemon->state.runtime.usedMove - 1;
     MovePresentationCue* move_cue = &sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon)]->moveCues[move_index];
 
@@ -288,8 +288,8 @@ s32 func_82107F68(u8* arg0) {
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 s32 func_82107F88(s8 *arg0)
 {
-  unsigned int new_var;
-  return ((*((s32 *) (((s8 *) ((*((s32 *) (((s8 *) arg0) + 0x85C))) + ((*((u8 *) (((s8 *) arg0) + 0x7B9))) * 4))) + 8))) + ((*((s32 *) (((s8 *) arg0) + 0x794))) * 0x50)) + (new_var = 0x4C);
+  unsigned int new_var; // FAKE: permuter temp
+  return ((*((s32 *) (((s8 *) ((*((s32 *) (((s8 *) arg0) + 0x85C))) + ((*((u8 *) (((s8 *) arg0) + 0x7B9))) * 4))) + 8))) + ((*((s32 *) (((s8 *) arg0) + 0x794))) * 0x50)) + (new_var = 0x4C); // FAKE: decomp slop, raw pointer casts stand in for struct fields
 }
 
 void BattleScene_InitializeParticipantOwnerModel(ActivePokemon* active_pokemon) {
@@ -350,7 +350,7 @@ void func_8000D41C(Vec3f*, f32, f32, f32);
 void func_8210213C(ActivePokemon*);
 void func_821081D0(ActivePokemon* active_pokemon) {
     s32 side;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     ModelNodeView* model_view;
     s16 model_id;
 
@@ -409,10 +409,10 @@ void BattleScene_InitializeParticipantAuxiliaryModel(ActivePokemon* active_pokem
 }
 
 void BattleScene_ReinitParticipantBodyModel(ActivePokemon* owner, ActivePokemon* pokemon, s16 object_type) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     ModelNodeView* model_node = Battle_GetLoadedModelNode(owner, 0);
     s32 side = BattleScene_GetParticipantSideIndex(owner);
-    UNUSED s32 pad2;
+    UNUSED s32 pad2; // FAKE: stack padding
 
     ModelRenderer_ClearDisplayObject(&pokemon->displayObject);
 
@@ -516,7 +516,7 @@ void Battle_ResetEventTrack(ActivePokemon* active_pokemon) {
 
 void Battle_LoadOwnerModelForSpecies(ActivePokemon* active_pokemon) {
     ActivePokemonState* state = &active_pokemon->state;
-    UNUSED s32 pad[3];
+    UNUSED s32 pad[3]; // FAKE: stack padding
     s16 object_type;
 
     Battle_GetLoadedModelNode(active_pokemon, 0);
@@ -531,7 +531,7 @@ void Battle_LoadOwnerModelForSpecies(ActivePokemon* active_pokemon) {
 
 void func_821088BC(ActivePokemon* active_pokemon) {
     ActivePokemonState* state = &active_pokemon->state;
-    UNUSED s32 pad[3];
+    UNUSED s32 pad[3]; // FAKE: stack padding
     s16 object_type;
 
     Battle_GetLoadedModelNode(active_pokemon, 0);
@@ -560,7 +560,7 @@ void Battle_ReloadSubstituteDoll(ActivePokemon* active_pokemon) {
 }
 
 void Battle_ReloadDisplayModel(ActivePokemon* active_pokemon) {
-    UNUSED s32 pad[3];
+    UNUSED s32 pad[3]; // FAKE: stack padding
     ActivePokemonState* state = &active_pokemon->state;
     s16 object_type = Battle_GetDisplayModelId(active_pokemon, 0);
 

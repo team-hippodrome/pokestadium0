@@ -864,7 +864,7 @@ extern s32 D_82302B44;
 void func_8230016C(void);
 void func_8000A7FC(u16 color);
 s32 BattleMenu_UpdateOrderSelect(s32 arg0) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s32 i;
     s32 var_s2;
     s32 sp30;

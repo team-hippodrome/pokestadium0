@@ -87,13 +87,13 @@ extern s8* D_8219A5A0;
  * arg0's anchor point.
  */
 u16 func_82121954(ActivePokemon* arg0, CameraNode* arg1, ActivePokemon* a2, s16 arg3, f32 arg4) {
-    UNUSED s32 pad[6];
+    UNUSED s32 pad[6]; // FAKE: stack padding
     f32 sp94;
     f32 sp90;
     f32 sp8C;
     f32 sp88;
     f32 sp84;
-    UNUSED s32 pad2;
+    UNUSED s32 pad2; // FAKE: stack padding
     f32 sp7C;
     f32 sp78;
     ActivePokemon* arg2;
@@ -242,7 +242,7 @@ void BattleScene_SetDamageShakeAmplitude(ActivePokemon* arg0) {
 }
 
 void BattleScene_ApplyCameraShake(CameraNode* arg0) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     f32 sp30;
     f32 temp_fv0;
     s16 sp2A;
@@ -353,7 +353,7 @@ typedef struct BattleCameraModelState {
 extern f32 D_FLT_82189354[][4];
 void func_8212239C(ActivePokemon* pokemon, CameraNode* camera) {
     BattleCameraModelState* model = (BattleCameraModelState*)&pokemon->modelTransform;
-    UNUSED s32 pad[3];
+    UNUSED s32 pad[3]; // FAKE: stack padding
     Vec3f_SetComponentsDuplicate(&pokemon->modelTransform.unk_18, M2C_FIELD(pokemon, f32*, 0x5DC), M2C_FIELD(pokemon, f32*, 0x5E0), M2C_FIELD(pokemon, f32*, 0x5E4));
     pokemon->modelTransform.unk_18.y = M2C_FIELD(pokemon, f32*, 0x5E0) + (pokemon->displayObject.position.y - D_FLT_82189354[pokemon->displayObject.objectType][0]);
     BattleAnim_Vec3fCopy((Vec3f*)(D_8219A5A0 + 0xA8), &camera->view.targetPosition);
@@ -434,7 +434,7 @@ void BattleScene_CameraHelperNop(UNUSED CameraNode* arg0) {
  * Note: the "pad" array only reproduces the retail frame size.
  */
 void func_821227C0(CameraNode* arg0, ActivePokemon* arg1) {
-    UNUSED s32 pad[9];
+    UNUSED s32 pad[9]; // FAKE: stack padding
     f32 sp38;
     s16 sp36;
     s16 sp34;
@@ -485,7 +485,7 @@ void BattleScene_ApproachCameraTarget(CameraNode* arg0, ActivePokemon* arg1) {
     f32 sp34;
     s16 sp32;
     s16 sp30;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
 
     func_82121908(arg1, &sp50);
     BattleAnim_CalculateDistanceAngles(&sp50, &M2C_FIELD(arg1, Vec3f*, 0x5D0), &sp34, &sp32, &sp30);
@@ -674,7 +674,7 @@ void func_82122FD8(CameraNode* arg0, ActivePokemon* arg1) {
     u8* ptr = (u8*)&arg1->modelTransform;
     Vec3f sp58;
     Vec3f sp4C;
-    UNUSED s32 pad[3];
+    UNUSED s32 pad[3]; // FAKE: stack padding
     Vec3f sp34;
     f32 sp30;
     s16 sp2E;
@@ -782,7 +782,7 @@ void BattleScene_ApproachCameraZoom(CameraNode* arg0, ActivePokemon* arg1) {
 }
 
 void func_82123684(CameraNode* arg0, ActivePokemon* arg1) {
-    UNUSED s32 pad[3];
+    UNUSED s32 pad[3]; // FAKE: stack padding
     Vec3f sp50;
     Vec3f sp44;
     f32 sp40;

@@ -125,9 +125,9 @@ void func_8211FAC4(CameraNode* arg0) {
 f32 func_82107EC8(ActivePokemon*);
 void func_8212239C(ActivePokemon*, CameraNode*);
 void func_8211FB54(CameraNode* arg0) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     f32 dist;
-    UNUSED s32 pad2;
+    UNUSED s32 pad2; // FAKE: stack padding
     s16 angle;
     ActivePokemon* pokemon;
 
@@ -148,7 +148,7 @@ void func_8211FB54(CameraNode* arg0) {
 }
 
 void func_8211FCC8(CameraNode* arg0) {
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     f32 sp4C;
     UNUSED CameraNode** pad2 = &arg0;
     u16 sp46;
@@ -172,7 +172,7 @@ void func_8211FCC8(CameraNode* arg0) {
 }
 
 void func_8211FF08(CameraNode* arg0) {
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     f32 sp4C;
     UNUSED CameraNode** pad2 = &arg0;
     u16 sp46;
@@ -211,7 +211,7 @@ extern f32 D_FLT_82196040;
 void func_82120134(CameraNode* arg0) {
     ActivePokemon* ap;
     f32 dist;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s16 angle;
 
     BattleScene_ClearCameraOffsetVectors();

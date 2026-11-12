@@ -188,7 +188,7 @@ s8 GbCart_IdentifyGame(s32 arg0) {
 }
 
 s32 GbSave_CheckMainDataUnchanged(s32 arg0) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s32 sp18 = 0;
 
     if ((GbPak_MbcRead(arg0, &D_800AD338, 0x2580, 0x1020) == 0) &&
@@ -281,7 +281,7 @@ s32 func_80021410(s32 arg0) {
 
 extern GbSavePort D_800AC910[4];
 s32 GbSave_ReadBoxBank(s32 arg0, s32 arg1) {
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     u8* sp1C = sGbSavePorts[arg0].unk_44 + arg1 * 0x15A0;
 
     return GbPak_MbcRead(arg0, sp1C, (arg1 == 0) ? 0x4000 : 0x6000, 0x15A0) == 0;
@@ -450,7 +450,7 @@ s32 func_80021910(s32 arg0) {
 }
 
 s32 func_80021A8C(s32 arg0) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     u8 sp2B;
     s32 temp_s1;
 

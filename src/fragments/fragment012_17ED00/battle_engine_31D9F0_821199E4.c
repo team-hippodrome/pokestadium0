@@ -2,7 +2,7 @@
 #include "battle_engine_31D9F0.h"
 
 s32 BattleHud_DrawMovePpTextLTR(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     s8 sp70[7];
     s32 i;
     u8** temp_s2;
@@ -47,7 +47,7 @@ s32 BattleHud_DrawMovePpTextLTR(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
 
 
 s32 BattleHud_DrawMovePpTextRTL(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     s8 sp70[7];
     s32 i;
     u8** temp_s2;
@@ -1122,7 +1122,7 @@ extern s32 D_8219A768;
 void func_8211DDC0(s16 arg0, s16 arg1) {
     char buf[16];
     s32 val;
-    UNUSED s32 pad[1];
+    UNUSED s32 pad[1]; // FAKE: stack padding
 
     val = M2C_FIELD(D_82199DE0, s32*, 0x620);
     func_8001AC7C(arg0, arg1, 0xAA, 0x70, 0, 0, 0, 0x3C);
@@ -1184,7 +1184,7 @@ extern char D_82195F6C[];
 void func_8211E164(s16 arg0, s16 arg1) {
     char buf[16];
     s32 val;
-    UNUSED s32 pad[1];
+    UNUSED s32 pad[1]; // FAKE: stack padding
 
     val = M2C_FIELD(D_82199DE0, s32*, 0x620);
     func_8001AC7C(arg0, arg1, 0xAA, 0x5A, 0, 0, 0, 0x3C);
@@ -1229,7 +1229,7 @@ extern char D_82195FBC[];
 extern char D_82195FC0[];
 void func_8211E414(s16 arg0, s16 arg1) {
     char buf[16];
-    UNUSED s32 pad[1];
+    UNUSED s32 pad[1]; // FAKE: stack padding
     s32 val = M2C_FIELD(D_82199DE0, s32*, 0x620);
 
     func_8001AC7C(arg0, arg1, 0xAA, 0x36, 0, 0, 0, 0x3C);

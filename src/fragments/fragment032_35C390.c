@@ -35,7 +35,7 @@ Gfx* func_8F5000AC(Gfx* gfx, void* segment) {
 }
 
 void func_8F50010C(s32 arg0, DemoGeoNode* arg1) {
-    s32 pad;
+    s32 pad; // FAKE: stack padding
     DemoGeoTeam* teams;
 
     if (arg0 == 2) {
@@ -79,7 +79,7 @@ Gfx* func_8F500238(Gfx* gfx, void* segment) {
 
 void func_8F500298(s32 arg0, DemoGeoNode *arg1)
 {
-  s32 pad;
+  s32 pad; // FAKE: stack padding
   DemoGeoTeam *teams;
   s32 team;
   s32 slot;

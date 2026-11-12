@@ -104,7 +104,7 @@ s32 func_821119F8(void) {
 // FAKE: decomp slop. Raw offset casts stand in for battle mon fields.
 void func_82111A78(void)
 {
-  if (((*((u8 *) (((s8 *) D_8219A3C0) + 0x44))) == 0x78) || ((*((u8 *) (((s8 *) D_8219A3C0) + 0x44))) == 0x99))
+  if (((*((u8 *) (((s8 *) D_8219A3C0) + 0x44))) == 0x78) || ((*((u8 *) (((s8 *) D_8219A3C0) + 0x44))) == 0x99)) // FAKE: decomp slop, raw pointer casts stand in for struct fields
   {
     if ((*((u8 *) (((s8 *) D_8219A3C4) + 0x4C))) & 0x40)
     {
@@ -213,7 +213,7 @@ extern u8 D_8218ADEC[];
 s32 func_8210FA2C(s32, u8*, s32);
 s32 func_8210F3F0(void);
 s32 func_82111CD4(void) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s32 v;
 
     D_82199F32 = 0;
@@ -522,7 +522,7 @@ void func_821125C0(void) {
                 // FAKE: the self-assignment leaves a no-code statement on the case 6
                 // entry, which keeps the case 7 branch above (b to the next instruction).
                 user = sBattleUser;
-                user = user;
+                user = user; // FAKE: self-assignment
             block_28:
                 func_82111A78();
                 user = sBattleUser;
@@ -595,7 +595,7 @@ s32 func_82107F88(ActivePokemon*);
 void func_8210F730(ActivePokemon*);
 extern s32 D_8218C710;
 void func_821129E4(ActivePokemon* arg0) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s32 sp1C = func_82107A5C(arg0);
     ActivePokemonState* temp_a10;
     BattleMonRuntime* temp_a11;

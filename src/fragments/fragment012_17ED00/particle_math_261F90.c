@@ -797,7 +797,7 @@ void func_821381E4(Vec3f*, Vec3f, Vec3f);
  * is discarded).
  */
 void func_821385C0(void) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     Vec3f sp30;
     CameraNode* camera;
 

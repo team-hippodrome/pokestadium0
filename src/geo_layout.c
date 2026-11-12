@@ -300,7 +300,7 @@ void geo_layout_cmd_create_switch_case(void) {
 void geo_layout_cmd_create_translate_rotate(void) {
     Vec3s sp30;
     Vec3f sp24;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     unk_D_800ABE00_cmd1B* cmd = (unk_D_800ABE00_cmd1B*)gGeoLayoutCommand;
 
     Vec3f_FromVec3s(&sp24, &cmd->unk_0A);

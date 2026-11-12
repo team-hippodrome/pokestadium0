@@ -52,7 +52,7 @@ extern s8 D_800734B8;
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_80027F20(s32 arg0)
 {
-  s8 *new_var;
+  s8 *new_var; // FAKE: permuter temp
   if (arg0 & 0x18)
   {
     new_var = &D_800734B8;
@@ -61,7 +61,7 @@ void func_80027F20(s32 arg0)
     if (arg0 & 1)
   {
     new_var = &D_800734B0;
-    new_var = new_var;
+    new_var = new_var; // FAKE: self-assignment
   }
   else
   {
@@ -72,7 +72,7 @@ void func_80027F20(s32 arg0)
     new_var += 4;
   }
   new_var = (s8 *) new_var;
-  func_8001AA9C(*((u8 *) (new_var + 0)), *((u8 *) (new_var + 1)), *((u8 *) (new_var + 2)), *((u8 *) (((s8 *) new_var) + 3)));
+  func_8001AA9C(*((u8 *) (new_var + 0)), *((u8 *) (new_var + 1)), *((u8 *) (new_var + 2)), *((u8 *) (((s8 *) new_var) + 3))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
 }
 
 /*
@@ -488,7 +488,7 @@ void func_8002A550(s32 x, s32 y, s32 w, s32 h, Color_RGBA8 prim, Color_RGBA8 env
 // FAKE: decomp slop. Raw pointer-offset casts and the new_var alias stand in for struct fields.
 void func_8002A8C4(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4)
 {
-  s8 *new_var;
+  s8 *new_var; // FAKE: permuter temp
   *((s32 *) (((s8 *) arg0) + 0)) = arg1;
   *((s32 *) (((s8 *) arg0) + 4)) = arg2;
   new_var = arg0;

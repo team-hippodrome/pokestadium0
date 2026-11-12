@@ -69,7 +69,7 @@ void BattleAnim_DefaultEndEffect_Init(void);
 void BattleAnim_CallbackSharedRotatingColorFadeMotion(Particle* arg0, s32 arg1);
 
 void BattleAnim_CallbackStartEffects23And35And84Descriptor4FColorCycleScaleFade_InitParticle(Particle* arg0, s16 arg1) {
-    UNUSED s32 pad[3];
+    UNUSED s32 pad[3]; // FAKE: stack padding
     s16 sp22 = Particle_FieldAC_GetS16_0C038(arg0);
 
     Particle_Field1C_SetScaled_0B938(arg0, 0.25f);
@@ -181,7 +181,7 @@ void BattleAnim_CallbackStartEffects23And35And84Descriptor4FColorCycleScaleFade(
 }
 
 void BattleAnim_SetupUnusedDescriptor4FColorCycleScaleFadeVariant(Particle* arg0) {
-    UNUSED s32 pad[3];
+    UNUSED s32 pad[3]; // FAKE: stack padding
     s16 sp22 = Particle_FieldAC_GetS16_0C038(arg0);
 
     Particle_Field1C_SetScaled_0B938(arg0, 0.25f);
@@ -256,7 +256,7 @@ void BattleAnim_CallbackUnusedDescriptor4FColorCycleScaleFadeVariant(Particle* a
 }
 
 void BattleAnim_CallbackStartEffects23And35And84Descriptor3DAlphaScaleFade_InitParticle(Particle* arg0) {
-    UNUSED s32 pad[3];
+    UNUSED s32 pad[3]; // FAKE: stack padding
     s16 sp22 = Particle_FieldAC_GetS16_0C038(arg0);
     s16 sp20 = Particle_FieldCF_GetS16_0C058(arg0);
 
@@ -343,7 +343,7 @@ void func_82145498(s8 *arg0) {
 }
 
 void BattleAnim_CallbackStartEffects23And35And84Descriptor4FRotatingFallColorCycle_InitParticle(Particle* arg0, s16 arg1) {
-    UNUSED s32 pad[3];
+    UNUSED s32 pad[3]; // FAKE: stack padding
     s16 sp22 = Particle_FieldAC_GetS16_0C038(arg0);
 
     Particle_Field1C_SetScaled_0B938(arg0, 0.2f);
@@ -817,7 +817,7 @@ void func_82146378(s8 *arg0) {
 
 void BattleAnim_CallbackStartEffect22Descriptor3DRotatingAlphaPaletteFade_InitParticle(Particle* arg0) {
     Vec3s sp28;
-    UNUSED s32 pad[1];
+    UNUSED s32 pad[1]; // FAKE: stack padding
 
     Particle_FieldCF_GetS16_0C058(arg0);
     Particle_FieldAC_GetS16_0C038(arg0);
@@ -887,7 +887,7 @@ void func_82146674(void) {
 }
 
 void BattleAnim_ApproachParticleColorFromVariantIndex(Particle* arg0) {
-    UNUSED u16 pad;
+    UNUSED u16 pad; // FAKE: stack padding
     u16 sp1C;
     u16 sp1A;
 
@@ -1115,7 +1115,7 @@ void func_82146D38(s8 *arg0) {
 void BattleAnim_CallbackEndEffect40Descriptor3DSpreadRisingColorFade_InitParticle(Particle* arg0) {
     s16 sp36 = Particle_FieldAC_GetS16_0C038(arg0);
     Vec3s sp30;
-    UNUSED s32 pad[3];
+    UNUSED s32 pad[3]; // FAKE: stack padding
 
     Particle_SetRandomVelocityXYZ(arg0, 5, 5, 5);
     Particle_Field1C_SetScaled_0B938(arg0, 0.5f);
@@ -1200,7 +1200,7 @@ void BattleAnim_CallbackEndEffect56Descriptor46RisingScaleAlphaFade_InitParticle
     Particle_Field9A_SetXY_0A3A0(arg0, 0, 0);
     BattleAnim_SetParticleColorFromVariantIndex(arg0, (sp36 % 4) & 0xFF);
     Particle_SetPrimAlpha(arg0, 0xC8);
-    Particle_FieldA6_SetS16_0BCA8(arg0, sp36 * 1);
+    Particle_FieldA6_SetS16_0BCA8(arg0, sp36 * 1); // FAKE: no-op * 1
     Particle_SetTextureFrame(arg0, 2);
     Particle_DisableRendering(arg0);
     Particle_AdvanceLifecycle(arg0);
@@ -1244,7 +1244,7 @@ void func_821471D8(s8 *arg0) {
 void BattleAnim_CallbackEndEffect56Descriptor47SpreadScaleAlphaRise_InitParticle(Particle* arg0) {
     s16 sp36 = Particle_FieldAC_GetS16_0C038(arg0);
     Vec3s sp30;
-    UNUSED s32 pad[3];
+    UNUSED s32 pad[3]; // FAKE: stack padding
 
     Particle_SetRandomVelocityXYZ(arg0, 5, 0xA, 0xA);
     Particle_Field1C_SetScaled_0B938(arg0, 0.90000004f);
@@ -1295,7 +1295,7 @@ void BattleAnim_CallbackEndEffect56Descriptor47SpreadScaleAlphaRise(Particle* ar
 void BattleAnim_CallbackEndEffects54And56Descriptor3DRisingColorScaleFade_InitParticle(Particle* arg0) {
     s16 sp36 = Particle_FieldAC_GetS16_0C038(arg0);
     Vec3s sp30;
-    UNUSED s32 pad[3];
+    UNUSED s32 pad[3]; // FAKE: stack padding
 
     Particle_SetRandomVelocityXYZ(arg0, 5, 5, 5);
     Particle_Field1C_SetScaled_0B938(arg0, 0.75f);
@@ -1487,7 +1487,7 @@ void func_82147A68(s8 *arg0) {
 }
 
 void BattleAnim_CallbackSharedRotatingColorFadeSetup(Particle* arg0, s16 arg1, s16 arg2) {
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
 
     Particle_Field38_SetYScaled_08CA0(arg0, -10.0f);
@@ -1583,7 +1583,7 @@ void BattleAnim_CallbackEndEffects15And22Descriptor4ERotatingColorFadeVariant1(P
 
 void BattleAnim_CallbackEndEffects15And22And59Descriptor3DRotatingAlphaScaleFade_InitParticle(Particle* arg0) {
     s16 sp36 = Particle_FieldCF_GetS16_0C058(arg0);
-    UNUSED s32 pad[3];
+    UNUSED s32 pad[3]; // FAKE: stack padding
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
 
     Particle_Field1C_SetScaled_0B938(arg0, 0.4f);
@@ -1671,7 +1671,7 @@ void func_82148090(s8 *arg0) {
 }
 
 void BattleAnim_CallbackEndEffect59Descriptor4FRotatingColorScaleFade_InitParticle(Particle* arg0) {
-    UNUSED s32 pad[3];
+    UNUSED s32 pad[3]; // FAKE: stack padding
     s16 sp22 = Particle_FieldAC_GetS16_0C038(arg0);
     s16 sp20 = Particle_FieldCF_GetS16_0C058(arg0);
 
@@ -1779,7 +1779,7 @@ void func_821483A0(Particle* arg0) {
 }
 
 void BattleAnim_CallbackEndEffect59Descriptor4FColorScaleFade_InitParticle(Particle* arg0) {
-    UNUSED s32 pad[3];
+    UNUSED s32 pad[3]; // FAKE: stack padding
     s16 sp22 = Particle_FieldAC_GetS16_0C038(arg0);
 
     Particle_FieldCF_GetS16_0C058(arg0);

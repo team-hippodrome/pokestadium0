@@ -793,7 +793,7 @@ s32 func_8110B9A8(s32, s32, s32, s8);
 
 
 void func_8110EF7C(s32 fontId, s32 fontData, RelocInfo8110EF7C* relocInfo, s32 async) {
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     s32 sampleRamAddr;
     Sample8110EF7C* sample;
     s32 size;
@@ -889,7 +889,7 @@ s32 func_8110F310(s32 arg0) {
     u32 preloadIndex;
     u32 key;
     u32 nChunks;
-    s32 pad;
+    s32 pad; // FAKE: stack padding
 
     if (D_8118557C > 0) {
         if (arg0 != 0) {

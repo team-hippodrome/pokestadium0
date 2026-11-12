@@ -34,12 +34,12 @@ void BattleAnim_StartEffect11Trail50Alt_Init(void) {
 }
 
 s32 BattleAnim_StartEffect11Trail50Alt_Update(void) {
-    UNUSED s32 pad[1];
+    UNUSED s32 pad[1]; // FAKE: stack padding
     Vec3f sp60;
     f32 sp5C;
     f32 sp58;
     f32 sp54;
-    UNUSED s32 pad2[2];
+    UNUSED s32 pad2[2]; // FAKE: stack padding
     f32 var_fv0;
     f32 sp44;
 
@@ -73,12 +73,12 @@ void BattleAnim_StartEffect57Trail50_Init(void) {
 }
 
 s32 BattleAnim_StartEffect57Trail50_Update(void) {
-    UNUSED s32 pad[1];
+    UNUSED s32 pad[1]; // FAKE: stack padding
     Vec3f sp60;
     f32 sp5C;
     f32 sp58;
     f32 sp54;
-    UNUSED s32 pad2[2];
+    UNUSED s32 pad2[2]; // FAKE: stack padding
     f32 var_fv0;
     f32 sp44;
 

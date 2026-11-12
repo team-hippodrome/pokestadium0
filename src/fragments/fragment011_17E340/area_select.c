@@ -356,7 +356,7 @@ extern u32 D_8EA1B414[];
 extern ModelNodeView* D_818008A4;
 extern s16 D_818008D0;
 void TransferPak_InitScene(void) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     MemoryBlock* sp18;
 
     sp18 = MainPool_AllocState(main_pool_get_available(), 0);
@@ -412,7 +412,7 @@ extern M2C_UNK D_8EA00000;
  * What the calls do is not established from this function.
  */
 s32 func_81800634(s32 arg0, s32 arg1) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s32 sp20;
 
     D_818008AC = arg1;

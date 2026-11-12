@@ -83,7 +83,7 @@ void ParticleEffect_TextureSetup(void) {
 }
 
 void ParticleEffect_ModeSetup(void) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
 
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackSharedDescriptor34DelayedFrameMotion, &gBattleAnimParticleDescriptors[0x34], 0, 1, 0x11, 9, 3, 5);
     BattleAnim_CreateEffectSlotForCurrentOwner(2, BattleAnim_CallbackEndEffect67Descriptor3DAnimatedGravityFade, &gBattleAnimParticleDescriptors[0x3D], 0, 8, 0x10, 0x64, 0, 0);
@@ -172,7 +172,7 @@ void func_82166E7C(void) {
 }
 
 void ParticleEffect_DynamicCollisionSetup(void) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
 
     if (BattleAnim_GetOwnerSpecies(gBattleAnimSecondaryOwner) == 0x7B) {
         func_82167274();
@@ -187,7 +187,7 @@ void ParticleEffect_DynamicCollisionSetup(void) {
 }
 
 void ParticleEffect_HandleStateSetup(void) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
 
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackSharedDescriptor29ScaleAnimFade, &gBattleAnimParticleDescriptors[0x29], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0xB, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(4, BattleAnim_CallbackSharedDescriptor29ScaleAnimFade, &gBattleAnimParticleDescriptors[0x29], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0xB, 1);
@@ -203,7 +203,7 @@ void func_82167274(void) {
 }
 
 void ParticleEffect_StateCollisionSetupDesc29ScaleAnimFade(void) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
 
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackSharedDescriptor29ScaleAnimFade, &gBattleAnimParticleDescriptors[0x29], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0xD, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(4, BattleAnim_CallbackSharedDescriptor29ScaleAnimFade, &gBattleAnimParticleDescriptors[0x29], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0xD, 1);
@@ -213,7 +213,7 @@ void ParticleEffect_StateCollisionSetupDesc29ScaleAnimFade(void) {
 }
 
 void ParticleEffect_StateCollisionSetupDesc2BGravityFall(void) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
 
     BattleAnim_SpawnDescriptor25AlphaHoldFadeOut(0, 2, 0x10, 0x27, 0xFF);
     BattleAnim_CreateEffectSlotForCurrentOwner(3, BattleAnim_CallbackSharedOwnerKeyedAnimGrowFade, &gBattleAnimParticleDescriptors[0x2A], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0xD, 2);

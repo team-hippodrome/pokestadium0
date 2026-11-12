@@ -367,14 +367,14 @@ void func_80004EA8(s8 *arg0)
 {
   s8 *var_a1;
   s8 *var_v1;
-  if ((*((s8 **) (((s8 *) (&(*((s8 *) (&D_800A9710))))) + 0xA10))) == 0)
+  if ((*((s8 **) (((s8 *) (&(*((s8 *) (&D_800A9710))))) + 0xA10))) == 0) // FAKE: decomp slop, raw pointer casts stand in for struct fields
   {
     *((s8 **) ((&(*((s8 *) (&D_800A9710)))) + 0xA10)) = arg0;
   }
   else
   {
-    var_v1 = *((s8 **) (((s8 *) (&(*((s8 *) (&D_800A9710))))) + 0xA10));
-    var_a1 = *((s8 **) (((s8 *) (*((s8 **) (((s8 *) (&(*((s8 *) (&D_800A9710))))) + 0xA10)))) + 0x28));
+    var_v1 = *((s8 **) (((s8 *) (&(*((s8 *) (&D_800A9710))))) + 0xA10)); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+    var_a1 = *((s8 **) (((s8 *) (*((s8 **) (((s8 *) (&(*((s8 *) (&D_800A9710))))) + 0xA10)))) + 0x28)); // FAKE: decomp slop, raw pointer casts stand in for struct fields
     if (var_a1 != 0)
     {
       do

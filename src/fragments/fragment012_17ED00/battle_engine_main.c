@@ -89,7 +89,7 @@ s32 Battle_StageGeoDispatchCallback(s32 event, GraphNode* node) {
 // called every frame: bug boy in GLC
 // Orient the first stage light relative to the current camera's viewing axis.
 s32 Battle_StageLightAngleCallbackA(s32 event, unk_D_86002F34_alt18* light) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     f32 distance;
     s16 angle_x;
     s16 angle_y;
@@ -476,7 +476,7 @@ extern u8 D_82189174[];
 void func_82187738(TeamRoster*, TeamRoster*, s32, u8*, s32);
 
 void Battle_SelectComRoster(void) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     u8 order_of_picked_pokemon[8];
     s32 difficulty;
     TeamRoster* com_roster;

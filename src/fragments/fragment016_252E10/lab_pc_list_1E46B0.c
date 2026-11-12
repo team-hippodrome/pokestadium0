@@ -288,7 +288,7 @@ int LabPCList_FilterByLevelRange(unk_func_8830867C_02C_0CC* a0, u8* arg1) {
 }
 
 s32 LabPCList_FilterByAnyType(unk_func_8830867C_02C_0CC* arg0, unk_func_8830867C_02C_C54_01C* a1) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s32 i;
     s32 j;
     s32 var_v1;
@@ -347,7 +347,7 @@ s32 LabPCList_FilterBySpeciesId(unk_func_8830867C_02C_0CC* arg0, s32* arg1) {
 }
 
 s32 LabPCList_FilterByExactTypePair(unk_func_8830867C_02C_0CC* arg0, unk_func_8830867C_02C_C54_014* a1) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s32 i;
     s32 j;
     s32 var_v1;

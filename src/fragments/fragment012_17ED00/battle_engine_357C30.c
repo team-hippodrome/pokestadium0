@@ -171,7 +171,7 @@ void BattleAnim_SixSlotTrail_ComputeCameraRelativeOffset(s32 arg0, Vec3f* arg1, 
 void BattleAnim_SixSlotTrail_ComputeRotatedOffset(f32 arg0, Vec3f* arg1, Vec3f* arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6) {
     UNUSED Mtx sp70;
     Mtx sp30;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
 
     guRotateF(&sp30, (360.0f * arg0) / 6.2831855f, 1.0f, 0.0f, 0.0f);
     guMtxXFMF(&sp30, 0.0f, 0.0f, arg3, &arg2->x, &arg2->y, &arg2->z);
@@ -182,7 +182,7 @@ void BattleAnim_SixSlotTrail_UpdateSlot(unk_D_843C3508* arg0) {
     s32 spA8;
     s32 i;
     Vec3f sp98;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     f32 temp_fs1;
     f32 temp_fs1_2;
     f32 temp_fs2;
@@ -280,7 +280,7 @@ Gfx* BattleAnim_SixSlotTrail_DrawSegments(Gfx* arg0, unk_D_843C3508* arg1) {
 
 Gfx* BattleAnim_SixSlotTrail_LoadTextures(Gfx* arg0, unk_D_843C3508* arg1) {
     unk_D_843C2C00_064* ptr;
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
 
     ptr = &arg1->unk_068;
     gDPLoadTextureTile_4b(arg0++, sBattleAnimAssetPointers[arg1->unk_020], G_IM_FMT_I, 32, 0, 0, 0, 31, 31, 0,
@@ -321,7 +321,7 @@ Gfx* BattleAnim_SixSlotTrail_DrawAll(Gfx* arg0) {
     s32 k;
     Vec3f spF0;
     Vtx* var_s1;
-    s32 pad[12];
+    s32 pad[12]; // FAKE: stack padding
 
     BattleAnim_GetCameraContext();
 

@@ -574,7 +574,7 @@ void BattleAnim_CallbackMove86EndDescriptor24(Particle* arg0) {
 
 void BattleAnim_SetupMove86StartDescriptor24(Particle* arg0) {
     Vec3f sp34;
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     s16 sp2A = Particle_FieldCD_GetU8_0C048(arg0);
 
     Particle_Field1C_SetScaled_0B938(arg0, 0.05f);

@@ -25,11 +25,11 @@ void Mtx_BuildDirectionRotation(Mtx* mtx, f32 arg1, f32 arg2, f32 arg3, f32 arg4
     f32 sp140;
     f32 temp_fa0;
     f32 temp_fa1;
-    UNUSED s32 pad[1];
+    UNUSED s32 pad[1]; // FAKE: stack padding
     Mtx spF0;
     Mtx spB0;
     Mtx sp70;
-    UNUSED s32 pad2[16];
+    UNUSED s32 pad2[16]; // FAKE: stack padding
 
     temp_fa1 = arg4 - arg1;
     temp_fa0 = arg6 - arg3;
@@ -119,8 +119,8 @@ void Vec3f_NormalizeSafe(Vec3f* vec) {
 void Mtx_BuildTranslatedDirectionRotation(Mtx* mtx, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6) {
     f32 sp10C;
     f32 sp108;
-    UNUSED s32 pad;
-    UNUSED s32 pad2;
+    UNUSED s32 pad; // FAKE: stack padding
+    UNUSED s32 pad2; // FAKE: stack padding
     f32 temp_fa1;
     f32 temp_fv0;
     Mtx spB8;

@@ -469,11 +469,11 @@ void func_82185378(s8 *arg0, s8 *arg1)
   *((s8 *) (((s8 *) arg0) + 0x56)) = 0;
   var_v1 = arg0;
   var_v0 = 0;
-  *((u16 *) (((s8 *) arg0) + 0x2A)) = (u16) (*((u16 *) (((s8 *) arg1) + 0x28)));
-  *((u16 *) (((s8 *) arg0) + 0x2C)) = (u16) (*((u16 *) (((s8 *) arg1) + 0x2A)));
-  *((u16 *) (((s8 *) arg0) + 0x2E)) = (u16) (*((u16 *) (((s8 *) arg1) + 0x2C)));
+  *((u16 *) (((s8 *) arg0) + 0x2A)) = (u16) (*((u16 *) (((s8 *) arg1) + 0x28))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+  *((u16 *) (((s8 *) arg0) + 0x2C)) = (u16) (*((u16 *) (((s8 *) arg1) + 0x2A))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+  *((u16 *) (((s8 *) arg0) + 0x2E)) = (u16) (*((u16 *) (((s8 *) arg1) + 0x2C))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
   var_v1 = (s8 *) var_v1;
-  *((u16 *) (((s8 *) arg0) + 0x30)) = (u16) (*((u16 *) (((s8 *) arg1) + 0x2E)));
+  *((u16 *) (((s8 *) arg0) + 0x30)) = (u16) (*((u16 *) (((s8 *) arg1) + 0x2E))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
   do
   {
     var_v0 += 4;
@@ -501,11 +501,11 @@ void JigglypuffGame_UpdateEffects(void) {
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 s32 func_8218540C(s8 *arg0, s8 *arg1)
 {
-  if ((*((u8 *) (((s8 *) arg1) + 0x75))) & (*((u8 *) (((s8 *) arg0) + 0x76))))
+  if ((*((u8 *) (((s8 *) arg1) + 0x75))) & (*((u8 *) (((s8 *) arg0) + 0x76)))) // FAKE: decomp slop, raw pointer casts stand in for struct fields
   {
     return 1;
   }
-  if (((s32) (*((u16 *) (((s8 *) arg1) + 0x3A)))) < ((s32) (*((u16 *) (((s8 *) arg0) + 0x3A)))))
+  if (((s32) (*((u16 *) (((s8 *) arg1) + 0x3A)))) < ((s32) (*((u16 *) (((s8 *) arg0) + 0x3A))))) // FAKE: decomp slop, raw pointer casts stand in for struct fields
   {
     return 1;
   }
@@ -575,7 +575,7 @@ s32 func_821855F0(BattleSlotZ *arg0)
 {
   s32 i;
   BattleSlotZ *p;
-  int new_var;
+  int new_var; // FAKE: permuter temp
   if ((arg0 == D_821CF298) && (((u8 *) D_821CF2A0)[0x21] & 7))
   {
     new_var = !D_821CF288;
@@ -667,7 +667,7 @@ extern u8* D_821CF29C;
 s32 func_821858DC(u8 *arg0)
 {
   s32 i;
-  if ((arg0[0x5A] & 1) || (((*((u16 *) (((s8 *) arg0) + 0x34))) / 2) < (*((u16 *) (((s8 *) arg0) + 0x72)))))
+  if ((arg0[0x5A] & 1) || (((*((u16 *) (((s8 *) arg0) + 0x34))) / 2) < (*((u16 *) (((s8 *) arg0) + 0x72))))) // FAKE: decomp slop, raw pointer casts stand in for struct fields
   {
     return -1;
   }
@@ -764,7 +764,7 @@ extern u8 D_8006B18B[];
 s32 func_82185BE0(u8 *arg0, s32 arg1) {
     s32 i;
     s32 t;
-    s32 pad;
+    s32 pad; // FAKE: stack padding
     u8 *p;
 
     if (func_82185494() != 0) {
@@ -1258,23 +1258,23 @@ extern s8 *D_821CF2A0;
 void func_821869C4(s8 *arg0, s8 *arg1)
 {
   long temp_v1;
-  u8 *new_var;
-  *((u16 *) (((s8 *) arg0) + 0x28)) = (u16) (*((u16 *) (((s8 *) arg1) + 0x28)));
-  *((u16 *) (((s8 *) arg0) + 0xC)) = (u16) (*((u16 *) (((s8 *) arg1) + 0xC)));
-  *((u8 *) (((s8 *) arg0) + 0x15)) = (u8) (*((u8 *) (((s8 *) arg1) + 0x15)));
+  u8 *new_var; // FAKE: permuter temp
+  *((u16 *) (((s8 *) arg0) + 0x28)) = (u16) (*((u16 *) (((s8 *) arg1) + 0x28))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+  *((u16 *) (((s8 *) arg0) + 0xC)) = (u16) (*((u16 *) (((s8 *) arg1) + 0xC))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+  *((u8 *) (((s8 *) arg0) + 0x15)) = (u8) (*((u8 *) (((s8 *) arg1) + 0x15))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
   func_80058410(arg1 + 0x44, arg0 + 0x44, 6);
-  *((u8 *) (((s8 *) arg0) + 0x4A)) = (u8) (*((u8 *) (((s8 *) arg1) + 0x4A)));
-  *((u8 *) (((s8 *) arg0) + 0x4B)) = (u8) (*((u8 *) (((s8 *) arg1) + 0x4B)));
-  *((u8 *) (((s8 *) arg0) + 0x4C)) = (u8) (*((u8 *) (((s8 *) arg1) + 0x4C)));
-  *((u8 *) (((s8 *) arg0) + 0x4D)) = (u8) (*((u8 *) (((s8 *) arg1) + 0x4D)));
-  *((u8 *) (((s8 *) arg0) + 0x4E)) = (u8) (*((u8 *) (((s8 *) arg1) + 0x4E)));
-  *((u16 *) (((s8 *) arg0) + 0x54)) = (u16) (*((u16 *) (((s8 *) arg1) + 0x54)));
-  *((u8 *) (((s8 *) arg0) + 0x56)) = (u8) (*(new_var = (u8 *) (((s8 *) arg1) + 0x56)));
-  *((u8 *) (((s8 *) arg0) + 0x57)) = (u8) (*((u8 *) (((s8 *) arg1) + 0x57)));
-  *((u8 *) (((s8 *) arg0) + 0x58)) = (u8) (*((u8 *) (((s8 *) arg1) + 0x58)));
-  *((u8 *) (((s8 *) arg0) + 0x59)) = (u8) (*((u8 *) (((s8 *) arg1) + 0x59)));
-  *((u8 *) (((s8 *) arg0) + 0x5A)) = (u8) (*((u8 *) (((s8 *) arg1) + 0x5A)));
-  *((u8 *) (((s8 *) arg0) + 0x5B)) = (u8) (*((u8 *) (((s8 *) arg1) + 0x5B)));
+  *((u8 *) (((s8 *) arg0) + 0x4A)) = (u8) (*((u8 *) (((s8 *) arg1) + 0x4A))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+  *((u8 *) (((s8 *) arg0) + 0x4B)) = (u8) (*((u8 *) (((s8 *) arg1) + 0x4B))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+  *((u8 *) (((s8 *) arg0) + 0x4C)) = (u8) (*((u8 *) (((s8 *) arg1) + 0x4C))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+  *((u8 *) (((s8 *) arg0) + 0x4D)) = (u8) (*((u8 *) (((s8 *) arg1) + 0x4D))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+  *((u8 *) (((s8 *) arg0) + 0x4E)) = (u8) (*((u8 *) (((s8 *) arg1) + 0x4E))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+  *((u16 *) (((s8 *) arg0) + 0x54)) = (u16) (*((u16 *) (((s8 *) arg1) + 0x54))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+  *((u8 *) (((s8 *) arg0) + 0x56)) = (u8) (*(new_var = (u8 *) (((s8 *) arg1) + 0x56))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+  *((u8 *) (((s8 *) arg0) + 0x57)) = (u8) (*((u8 *) (((s8 *) arg1) + 0x57))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+  *((u8 *) (((s8 *) arg0) + 0x58)) = (u8) (*((u8 *) (((s8 *) arg1) + 0x58))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+  *((u8 *) (((s8 *) arg0) + 0x59)) = (u8) (*((u8 *) (((s8 *) arg1) + 0x59))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+  *((u8 *) (((s8 *) arg0) + 0x5A)) = (u8) (*((u8 *) (((s8 *) arg1) + 0x5A))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+  *((u8 *) (((s8 *) arg0) + 0x5B)) = (u8) (*((u8 *) (((s8 *) arg1) + 0x5B))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
   func_80058410(arg1 + 0x5C, arg0 + 0x5C, 8);
   if ((*((u8 *) (((s8 *) arg1) + 0x4E))) & 8)
   {
@@ -1285,8 +1285,8 @@ void func_821869C4(s8 *arg0, s8 *arg1)
   temp_v1 = *((u8 *) (((s8 *) D_821CF2A0) + 0x78));
   if (((s32) temp_v1) < 4)
   {
-    *((u8 *) (((s8 *) (arg0 + temp_v1)) + 0x1F)) = (u8) (*((u8 *) (((s8 *) (arg1 + temp_v1)) + 0x1F)));
-    *((u8 *) (((s8 *) (arg0 + (*((u8 *) (((s8 *) D_821CF2A0) + 0x78))))) + 0x32)) = (u8) (*((u8 *) (((s8 *) D_821CF2A0) + 0x79)));
+    *((u8 *) (((s8 *) (arg0 + temp_v1)) + 0x1F)) = (u8) (*((u8 *) (((s8 *) (arg1 + temp_v1)) + 0x1F))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+    *((u8 *) (((s8 *) (arg0 + (*((u8 *) (((s8 *) D_821CF2A0) + 0x78))))) + 0x32)) = (u8) (*((u8 *) (((s8 *) D_821CF2A0) + 0x79))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
   }
 }
 

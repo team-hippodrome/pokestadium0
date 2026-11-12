@@ -174,7 +174,7 @@ typedef struct Big891003A4 {
     /* 0xB594 */ s32 unkB594;
 } Big891003A4;
 void func_891003A4(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
-    UNUSED s32 pad[1];
+    UNUSED s32 pad[1]; // FAKE: stack padding
 
     func_89100140((Ctx89100140*)arg0);
     func_8002A8C4(arg0, arg1, arg2, 0x234, 0x17E);

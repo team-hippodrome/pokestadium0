@@ -250,7 +250,7 @@ void BattleAnim_CallbackStartEffect139Descriptor42FallingScaleFade(Particle* arg
 }
 
 void BattleAnim_InitStartEffect139Descriptor22SpinFade(Particle* arg0) {
-    UNUSED s16 pad;
+    UNUSED s16 pad; // FAKE: stack padding
     s16 sp2C;
 
     Particle_FieldAC_GetS16_0C038(arg0);
@@ -409,7 +409,7 @@ void BattleAnim_CallbackStartEffects133And134And143Descriptor44ModeOrbitSwirl(Pa
             break;
 
         case 3:
-            if (Particle_Field1C_ApproachAndStepState_0B9D0(arg0, 0.3f, 0.05f) != 0) {}
+            if (Particle_Field1C_ApproachAndStepState_0B9D0(arg0, 0.3f, 0.05f) != 0) {} // karodo
             break;
 
         case 4:
@@ -516,7 +516,7 @@ void func_82150EB0(void) {
 }
 
 void BattleAnim_StartEffect135ExpandingFlashAndRisingScaleFade(void) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
 
     BattleAnim_SpawnDescriptor25AlphaHoldFadeOutFullAlpha(0, 0, 0x10, 8);
     BattleAnim_SpawnOwnerModelTintRampDetach(0, 0x8, 0xFF, 0xFF, 0xFF);
@@ -549,7 +549,7 @@ extern ParticleDescriptor D_8218E588[86];
 extern M2C_UNK D_8218E7A0;
 extern M2C_UNK D_8218E748;
 void BattleAnim_StartEffect143ModeOrbitAndMetadataBurst(void) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
 
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 8, 6);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 1, 4, BattleAnim_CallbackStartEffects133And134And143Descriptor44ModeOrbitSwirl, &D_8218E7A0, 0, 8, 9, 0, 0x3C, 2);

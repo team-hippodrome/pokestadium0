@@ -455,9 +455,9 @@ extern u32 D_8218A544[];
  */
 void func_82135108(ActivePokemon* arg0) {
     s16 temp_a2;
-    UNUSED s32 padC[2];
+    UNUSED s32 padC[2]; // FAKE: stack padding
     s8* temp_a1;
-    UNUSED s32 padA[1];
+    UNUSED s32 padA[1]; // FAKE: stack padding
     s8* sp18;
 
     temp_a2 = arg0->displayObject.objectType - 1;
@@ -520,7 +520,7 @@ void func_8000EEBC(void*, Vec3f*, f32, s16, s32);
 extern f32 D_FLT_8219A718;
 void func_82135384(ActivePokemon* arg0, CameraNode* arg1, Vec3f* arg2, Vec3f* arg3, s32 arg4, s32 arg5) {
     f32 sp2C;
-    s16 pad2A;
+    s16 pad2A; // FAKE: stack padding
     s16 sp28;
     s16 sp26;
     s16* sp26p;
@@ -547,7 +547,7 @@ void func_82135458(ActivePokemon* arg0, CameraNode* arg1) {
     u8* ptr = (u8*)&arg0->modelTransform;
     Vec3f sp58;
     Vec3f sp4C;
-    UNUSED s32 pad[3];
+    UNUSED s32 pad[3]; // FAKE: stack padding
     Vec3f sp34;
     f32 sp30;
     s16 sp2E;
@@ -662,7 +662,7 @@ s32 func_82135734(CameraNode* arg0, ActivePokemon* arg1) {
  */
 s32 func_82135894(CameraNode* arg0, ActivePokemon* arg1) {
     f32 sp30[4];
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     s16 temp_a0;
     s8 var_v1;
 
@@ -765,7 +765,7 @@ void func_82135BE4(ActivePokemon* arg0, CameraNode* arg1) {
     u8* ptr = (u8*)&arg0->modelTransform;
     Vec3f sp58;
     Vec3f sp4C;
-    UNUSED s32 pad[3];
+    UNUSED s32 pad[3]; // FAKE: stack padding
     Vec3f sp34;
     f32 sp30;
     s16 sp2E;

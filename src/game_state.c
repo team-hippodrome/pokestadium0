@@ -307,7 +307,7 @@ extern M2C_UNK D_800AE910;
  */
 s32 func_80025A64(void) {
     s8 buf[0x162];
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s32 ret;
     s8 temp_v0;
 
@@ -385,7 +385,7 @@ extern char D_8007B894[];
 void func_80025C0C(s32 arg0) {
     Color_RGB8 sp2C = D_800733DC;
     Color_RGB8 sp28 = D_800733E0;
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
 
     BgStage_DrawFrame();
     GfxImage_FillCurrent(&gDisplayListHead, 1);
@@ -417,7 +417,7 @@ extern char D_8007B8B4[];
 void func_80025D8C(void) {
     Color_RGB8 sp2C = D_800733E4;
     Color_RGB8 sp28 = D_800733E8;
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
 
     BgStage_DrawFrame();
     GfxImage_FillCurrent(&gDisplayListHead, 1);
@@ -535,7 +535,7 @@ void func_800260C4(void)
   Gfx_InitDisplayListBuffers(0x10000, 0);
   D_800AF9A4 = StageContext_Allocate(1, 1, 2, 0, 2, 1);
   StageContext_Activate(D_800AF9A4);
-  if (((*((u16 *) (((s8 *) (&D_800AE8F0)) + 0x1096))) & 1) && (!((*((u16 *) (((s8 *) (&D_800AE8F0)) + 0x1096))) & 2)))
+  if (((*((u16 *) (((s8 *) (&D_800AE8F0)) + 0x1096))) & 1) && (!((*((u16 *) (((s8 *) (&D_800AE8F0)) + 0x1096))) & 2))) // FAKE: decomp slop, raw pointer casts stand in for struct fields
   {
     *((u16 *) (((s8 *) (&D_800AE8F0)) + 0x1096)) |= 0x100;
   }
@@ -876,7 +876,7 @@ extern s32 D_800733F0;
  * and slots match the ROM (0x38 bytes, blocks at sp+0x30 and sp+0x2C).
  */
 s32 func_800270B4(s16 arg0, s16 arg1, s16 arg2, s32 arg3, s16 arg4, s16 arg5) {
-    s32 pad;
+    s32 pad; // FAKE: stack padding
     s32 sp30;
     s32 sp2C;
 
@@ -894,7 +894,7 @@ void Display_DisableBlackout(void) {
 extern s32 D_800733F0;
 volatile long long func_80027140(s32 arg0, s8 *arg1)
 {
-  s32 new_var;
+  s32 new_var; // FAKE: permuter temp
   new_var = arg0;
   if ((new_var == 2) && (D_800733F0 != 0))
   {
