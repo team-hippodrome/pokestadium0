@@ -291,7 +291,7 @@ M2C_UNK func_8000B2F4(s32);
  * sets offset 0x1C to 0xC00 and offset 0x20 to 0, then stores D_800603C0 at
  * offset 0x18 and passes it to func_8000B2F4. What the fields mean is not
  * established.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-12) in せいとん: ran when ポケモンのせいり was opened from the せいとん menu.
  */
 void GridMenu_Init(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6) {
     M2C_FIELD(arg0, s32*, 0x24) = arg4;
@@ -308,7 +308,7 @@ void GridMenu_ClearItemFlags(u8* arg0);
 
 /**
  * Points the grid menu at item table `arg1` with flags `arg2`, puts the cursor on the first item and clears the item flags.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in せいとん: called from GridMenu_Init when ポケモンのせいり was opened.
  */
 void GridMenu_SetItems(s8 *arg0, s32 arg1, s32 arg2) {
     M2C_FIELD(arg0, s32 *, 0) = arg1;
@@ -319,7 +319,7 @@ void GridMenu_SetItems(s8 *arg0, s32 arg1, s32 arg2) {
 
 /**
  * Clears the flags of every item.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in せいとん: called from GridMenu_SetItems when ポケモンのせいり was opened.
  */
 void GridMenu_ClearItemFlags(u8* arg0) {
     s32 i;
@@ -373,7 +373,8 @@ void GridMenu_DrawItems(Menu8002E230* menu, s32 x, s32 y, s32 mask, s32 arg4) {
 void GridMenu_DrawCursor(Menu8002E230*, s32, s32);
 /**
  * Draws every cell of the grid; items are stored inline.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): drew the main menu's 3 x 3 item grid (せいとん, いちらん, ずかん, バトル, てもち, GB,
+ * OFF, とうろく) every frame.
  */
 void GridMenu_DrawInlineItems(Menu8002E230* menu, s32 x, s32 y, s32 mask, s32 arg4) {
     MenuDef8002E230* def = menu->def;
@@ -829,7 +830,8 @@ void ScrollList_DrawItems(ScrollMenu8002F6C4* menu, s32 x, s32 y, s32 mask, s32 
 
 /**
  * Draws the visible rows inside a scissor box; items are stored inline.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in せいとん > ポケモンのせいり: drew the left (てもち, x 0x34) and right (GBのボックス1,
+ * x 0x180) Pokémon lists every frame.
  */
 void ScrollList_DrawInlineItems(ScrollMenu8002F6C4* menu, s32 x, s32 y, s32 mask, s32 arg4) {
     MenuDef8002E230* def = menu->def;
