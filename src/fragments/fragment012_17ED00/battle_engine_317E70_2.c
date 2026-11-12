@@ -115,9 +115,9 @@ void Particle_ResetDefaults(Particle* arg0) {
     Particle_InitLifecycle(arg0);
     Particle_SetPosition(arg0, 0.0f, 0.0f, 0.0f);
     Particle_SetOrigin(arg0, 0.0f, 0.0f, 0.0f);
-    Particle_SetVelocity(arg0, 0.0f, 0.0f, 0.0f);
+    Particle_SetMotionOffset(arg0, 0.0f, 0.0f, 0.0f);
     Particle_SetVelocityTarget(arg0, 0.0f, 0.0f, 0.0f);
-    Particle_SetVelocityImpulse(arg0, 0.0f, 0.0f, 0.0f);
+    Particle_SetMotionStep(arg0, 0.0f, 0.0f, 0.0f);
     Particle_Field74_SetScaled_0AD8C(arg0, 0.0f);
     Particle_Field78_SetScaled_0ADA4(arg0, 0.0f);
     Particle_SetRotation(arg0, 0, 0, 0);

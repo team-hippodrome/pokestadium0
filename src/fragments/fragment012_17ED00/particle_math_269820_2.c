@@ -100,7 +100,8 @@ s32 Particle_FieldAE_Approach_0BF60(Particle* arg0, s16 arg1, s16 arg2);
 
 /**
  * Tick the delay timer and advance lifecycle when it expires.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed lifecycle (0xAE) of
+ * the live particle, e.g. 0x2 -> 0x3.
  */
 s32 Particle_TickDelayAndAdvanceLifecycle(Particle* arg0, s16 arg1) {
     s32 sp1C = Particle_TickDelayTimer(arg0, arg1);
@@ -113,7 +114,8 @@ s32 Particle_TickDelayAndAdvanceLifecycle(Particle* arg0, s16 arg1) {
 
 /**
  * Set the selected particle flag bits.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed flags (0x18) of the
+ * live particle, e.g. 0x0 -> 0x4.
  */
 void Particle_SetFlags(Particle* arg0, s32 arg1) {
     arg0->flags |= arg1;
@@ -121,7 +123,8 @@ void Particle_SetFlags(Particle* arg0, s32 arg1) {
 
 /**
  * Clear the selected particle flag bits.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed flags (0x18) of the
+ * live particle, e.g. 0x4 -> 0x0.
  */
 void Particle_ClearFlags(Particle* arg0, s32 arg1) {
     arg0->flags &= ~arg1;
@@ -441,7 +444,8 @@ s32 Particle_AnimateFramesReverseAndAdvanceLifecycle(Particle* arg0, s16 arg1, s
 
 /**
  * Set phase to one and clear the phase-timer initialization bit.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed phase (0xB4) of the
+ * live particle, e.g. 0x0 -> 0x1.
  */
 void Particle_BeginPhase(Particle* arg0) {
     arg0->phase = 1;
@@ -459,7 +463,8 @@ void Particle_ResetPhase(Particle* arg0) {
 
 /**
  * Increments the particle's phase.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed phase (0xB4) of the
+ * live particle, e.g. 0x1 -> 0x2.
  */
 void Particle_IncrementPhase(s8 *arg0) {
     M2C_FIELD(arg0, s16 *, 0xB4) = (s16) (M2C_FIELD(arg0, s16 *, 0xB4) + 1);
@@ -467,7 +472,8 @@ void Particle_IncrementPhase(s8 *arg0) {
 
 /**
  * Initialize under flag 2, decrement immediately, and finish only after the timer becomes negative.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed phaseTimer (0xB6) of
+ * the live particle, e.g. 0x0 -> 0x1.
  */
 s32 Particle_TickPhaseTimer(Particle* arg0, s16 arg1) {
     s32 sp1C = 0;
@@ -487,7 +493,8 @@ s32 Particle_TickPhaseTimer(Particle* arg0, s16 arg1) {
 
 /**
  * Sum origin and both offset terms; copy the resulting transform and alpha to an associated DisplayObject.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed worldPosition
+ * (0x28-0x30) of the live particle, e.g. -23.555 -> 160.
  */
 void Particle_UpdateWorldTransform(Particle* arg0) {
     arg0->worldPosition.x = arg0->origin.x + arg0->positionOffset.x + arg0->motionOffset.x;
@@ -542,7 +549,8 @@ extern f32 D_FLT_8219A824;
 
 /**
  * Sets the particle's positionOffset.x to arg1 times the particle scale D_FLT_8219A824.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed positionOffset.x
+ * (0x34) of the live particle, e.g. 0 -> 23.4.
  */
 void Particle_SetPosOffsetXScaled(s8 *arg0, f32 arg1) {
     M2C_FIELD(arg0, f32 *, 0x34) = (f32) (arg1 * D_FLT_8219A824);
@@ -552,7 +560,8 @@ extern f32 D_FLT_8219A824;
 
 /**
  * Sets the particle's positionOffset.y to arg1 times the particle scale D_FLT_8219A824.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed positionOffset.y
+ * (0x38) of the live particle, e.g. 0 -> -17.6.
  */
 void Particle_SetPosOffsetYScaled(s8 *arg0, f32 arg1) {
     M2C_FIELD(arg0, f32 *, 0x38) = (f32) (arg1 * D_FLT_8219A824);
@@ -562,7 +571,8 @@ extern f32 D_FLT_8219A824;
 
 /**
  * Sets the particle's positionOffset.z to arg1 times the particle scale D_FLT_8219A824.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed positionOffset.z
+ * (0x3C) of the live particle, e.g. 0 -> 23.4.
  */
 void Particle_SetPosOffsetZScaled(s8 *arg0, f32 arg1) {
     M2C_FIELD(arg0, f32 *, 0x3C) = (f32) (arg1 * D_FLT_8219A824);
@@ -600,7 +610,8 @@ extern f32 D_FLT_8219A824;
 
 /**
  * Adds arg1 times the particle scale D_FLT_8219A824 to the particle's positionOffset.y.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed positionOffset.y
+ * (0x38) of the live particle, e.g. 10.56 -> 28.16.
  */
 void Particle_AddPosOffsetYScaled(s8 *arg0, f32 arg1) {
     M2C_FIELD(arg0, f32 *, 0x38) = (f32) (M2C_FIELD(arg0, f32 *, 0x38) + (arg1 * D_FLT_8219A824));
@@ -655,7 +666,8 @@ void Particle_AddVelocityFromDirVector(Particle* arg0, f32 arg1) {
 
 /**
  * Set the base position offset using Particle_ComputeVectorFromRotationXYZAlt and context scaling.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed positionOffset
+ * (0x34-0x3C) of the live particle, e.g. 0 -> 4.142.
  */
 void Particle_SetPositionFromRotationTemplate1(Particle* arg0, f32 arg1) {
     Vec3f sp1C;
@@ -677,7 +689,8 @@ void Particle_SetPositionFromRotationTemplate2(Particle* arg0, f32 arg1) {
 
 /**
  * Add Particle_ComputeVectorFromRotationXYZAlt's result to the base position offset with context scaling.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed positionOffset
+ * (0x34-0x3C) of the live particle, e.g. 0 -> -0.74.
  */
 void Particle_AddPositionFromRotationTemplate1(Particle* arg0, f32 arg1) {
     Vec3f sp1C;
@@ -709,7 +722,8 @@ extern f32 D_FLT_8219A824;
 
 /**
  * Sets the particle's positionOffset.x to a random value from func_82137DF4(arg1) times the particle scale D_FLT_8219A824.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed positionOffset.x
+ * (0x34) of the live particle, e.g. 0 -> 47.52.
  */
 void Particle_SetPosOffsetXRandomScaled(s8 *arg0, M2C_UNK arg1) {
     M2C_FIELD(arg0, f32 *, 0x34) = (f32) ((f32) func_82137DF4(arg1) * D_FLT_8219A824);
@@ -731,7 +745,8 @@ extern f32 D_FLT_8219A824;
 
 /**
  * Sets the particle's positionOffset.z to a random value from func_82137DF4(arg1) times the particle scale D_FLT_8219A824.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed positionOffset.z
+ * (0x3C) of the live particle, e.g. 0 -> 44.
  */
 void Particle_SetPosOffsetZRandomScaled(s8 *arg0, M2C_UNK arg1) {
     M2C_FIELD(arg0, f32 *, 0x3C) = (f32) ((f32) func_82137DF4(arg1) * D_FLT_8219A824);
@@ -753,7 +768,8 @@ extern f32 D_FLT_8219A824;
 
 /**
  * Sets the particle's positionOffset.y to a random value from func_82137DF4(arg1) times the particle scale D_FLT_8219A824, plus arg2.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed positionOffset.y
+ * (0x38) of the live particle, e.g. 0 -> 1.2.
  */
 void Particle_SetPosOffsetYRandomScaledPlus(s8 *arg0, M2C_UNK arg1, s32 arg2) {
     M2C_FIELD(arg0, f32 *, 0x38) = (f32) (((f32) func_82137DF4(arg1) * D_FLT_8219A824) + (f32) arg2);
@@ -775,7 +791,8 @@ extern f32 D_FLT_8219A824;
 
 /**
  * Sets positionOffset.x to the random value from func_82137DF4 pushed `arg2` units away from zero, times D_FLT_8219A824.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed positionOffset.x
+ * (0x34) of the live particle, e.g. 0 -> 44.
  */
 void Particle_SetRandomPositionOffsetXWithGap(s8 *arg0, M2C_UNK arg1, s32 arg2) {
     f32 temp_f0;
@@ -811,7 +828,8 @@ extern f32 D_FLT_8219A824;
 
 /**
  * Z version of Particle_SetRandomPositionOffsetXWithGap.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed positionOffset.z
+ * (0x3C) of the live particle, e.g. 0 -> -51.04.
  */
 void Particle_SetRandomPositionOffsetZWithGap(s8 *arg0, M2C_UNK arg1, s32 arg2) {
     f32 temp_f0;
@@ -893,9 +911,11 @@ void Particle_SetOrigin(Particle* arg0, f32 arg1, f32 arg2, f32 arg3) {
 }
 
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Sets motionOffset (0x4C, the displacement Particle_ApplyMotionStep accumulates) to the scaled (x, y, z). Was
+ * Particle_SetVelocity: in play (2026-11-12, move animations) Particle_ApplyMotionStep added motionStep (0x78)
+ * into this field each frame, so this is a position offset, not a velocity.
  */
-void Particle_SetVelocity(Particle* arg0, f32 arg1, f32 arg2, f32 arg3) {
+void Particle_SetMotionOffset(Particle* arg0, f32 arg1, f32 arg2, f32 arg3) {
     M2C_FIELD(arg0, f32*, 0x4C) = arg1 * gParticleRenderContext.scale.y;
     M2C_FIELD(arg0, f32*, 0x4C + 4) = arg2 * gParticleRenderContext.scale.y;
     M2C_FIELD(arg0, f32*, 0x4C + 8) = arg3 * gParticleRenderContext.scale.y;
@@ -1020,7 +1040,8 @@ void Particle_CopyMotionStepToOffsetXY(s8 *arg0) {
 
 /**
  * Adds motionStep to motionOffset.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed motionOffset
+ * (0x4C-0x54) of the live particle, e.g. 0 -> 3.55.
  */
 M2C_UNK Particle_ApplyMotionStep(s32 arg0) {
     ((Particle*)arg0)->motionOffset.x += ((Particle*)arg0)->motionStep.x;
@@ -1299,7 +1320,8 @@ void Particle_SetRotation(Particle* arg0, s16 arg1, s16 arg2, s16 arg3) {
 
 /**
  * Sets the particle's rotation.x to arg1.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed rotation.x (0x90) of
+ * the live particle, e.g. 0x0 -> 0x76ef.
  */
 void Particle_SetRotationX(s8 *arg0, s16 arg1) {
     M2C_FIELD(arg0, s16 *, 0x90) = arg1;
@@ -1307,7 +1329,8 @@ void Particle_SetRotationX(s8 *arg0, s16 arg1) {
 
 /**
  * Sets the particle's rotation.y to arg1.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed rotation.y (0x92) of
+ * the live particle, e.g. 0xc000 -> 0x1a98.
  */
 void Particle_SetRotationY(s8 *arg0, s16 arg1) {
     M2C_FIELD(arg0, s16 *, 0x92) = arg1;
@@ -1315,7 +1338,8 @@ void Particle_SetRotationY(s8 *arg0, s16 arg1) {
 
 /**
  * Sets the particle's rotation.z to arg1.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed rotation.z (0x94) of
+ * the live particle, e.g. 0x0 -> 0xd4a3.
  */
 void Particle_SetRotationZ(s8 *arg0, s16 arg1) {
     M2C_FIELD(arg0, s16 *, 0x94) = arg1;
@@ -1386,7 +1410,8 @@ void Particle_SetRotationStepXY(s8 *arg0, s16 arg1, s16 arg2) {
 
 /**
  * Sets the particle's rotationStep.x to arg1.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed rotationStep.x (0x96)
+ * of the live particle, e.g. 0x0 -> 0x1000.
  */
 void Particle_SetRotationStepX(s8 *arg0, s16 arg1) {
     M2C_FIELD(arg0, s16 *, 0x96) = arg1;
@@ -1394,7 +1419,8 @@ void Particle_SetRotationStepX(s8 *arg0, s16 arg1) {
 
 /**
  * Sets the particle's rotationStep.y to arg1.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed rotationStep.y (0x98)
+ * of the live particle, e.g. 0x0 -> 0x44ac.
  */
 void Particle_SetRotationStepY(s8 *arg0, s16 arg1) {
     M2C_FIELD(arg0, s16 *, 0x98) = arg1;
@@ -1402,7 +1428,8 @@ void Particle_SetRotationStepY(s8 *arg0, s16 arg1) {
 
 /**
  * Sets the particle's rotationStep.z to arg1.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed rotationStep.z (0x9A)
+ * of the live particle, e.g. 0x0 -> 0x995.
  */
 void Particle_SetRotationStepZ(s8 *arg0, s16 arg1) {
     M2C_FIELD(arg0, s16 *, 0x9A) = arg1;
@@ -1410,7 +1437,8 @@ void Particle_SetRotationStepZ(s8 *arg0, s16 arg1) {
 
 /**
  * Sets the particle's rotationTarget.x to arg1.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed rotationTarget.x
+ * (0x9C) of the live particle, e.g. 0x0 -> 0xc000.
  */
 void Particle_SetRotationTargetX(s8 *arg0, s16 arg1) {
     M2C_FIELD(arg0, s16 *, 0x9C) = arg1;
@@ -1418,7 +1446,8 @@ void Particle_SetRotationTargetX(s8 *arg0, s16 arg1) {
 
 /**
  * Sets the particle's rotationTarget.y to arg1.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed rotationTarget.y
+ * (0x9E) of the live particle, e.g. 0x0 -> 0x4000.
  */
 void Particle_SetRotationTargetY(s8 *arg0, s16 arg1) {
     M2C_FIELD(arg0, s16 *, 0x9E) = arg1;
@@ -1426,7 +1455,8 @@ void Particle_SetRotationTargetY(s8 *arg0, s16 arg1) {
 
 /**
  * Set the X/Y rotation targets, leaving Z unchanged.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed rotationTarget
+ * (0x9C/0x9E) of the live particle, e.g. 0x0 -> 0x4000.
  */
 void Particle_SetRotationTargetXY(Particle* arg0, s16 arg1, s16 arg2) {
     Particle_FieldA0_SetX_0A400(arg0, arg1);
@@ -1455,7 +1485,8 @@ void Particle_ApplyRotationStep(Particle* arg0) {
 
 /**
  * Adds rotationStep.x to rotation.x.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed rotation.x (0x90) of
+ * the live particle, e.g. 0xb01c -> 0xae15.
  */
 void Particle_ApplyRotationStepX(s8 *arg0)
 {
@@ -1493,7 +1524,8 @@ void Particle_AddRotationXYZ(s8 *arg0, s16 arg1, s16 arg2, s16 arg3) {
 
 /**
  * Adds arg1 to the particle's rotation.x.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed rotation.x (0x90) of
+ * the live particle, e.g. 0x0 -> 0x1160.
  */
 void Particle_AddRotationX(s8 *arg0, s16 arg1) {
     M2C_FIELD(arg0, s16 *, 0x90) = (s16) (M2C_FIELD(arg0, s16 *, 0x90) + arg1);
@@ -1501,7 +1533,8 @@ void Particle_AddRotationX(s8 *arg0, s16 arg1) {
 
 /**
  * Adds arg1 to the particle's rotation.y.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed rotation.y (0x92) of
+ * the live particle, e.g. 0x4000 -> 0x3f46.
  */
 void Particle_AddRotationY(s8 *arg0, s16 arg1) {
     M2C_FIELD(arg0, s16 *, 0x92) = (s16) (M2C_FIELD(arg0, s16 *, 0x92) + arg1);
@@ -1509,7 +1542,8 @@ void Particle_AddRotationY(s8 *arg0, s16 arg1) {
 
 /**
  * Adds arg1 to the particle's rotation.z.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed rotation.z (0x94) of
+ * the live particle, e.g. 0x0 -> 0x2000.
  */
 void Particle_AddRotationZ(s8 *arg0, s16 arg1) {
     M2C_FIELD(arg0, s16 *, 0x94) = (s16) (M2C_FIELD(arg0, s16 *, 0x94) + arg1);
@@ -1550,7 +1584,8 @@ M2C_UNK func_82137940(s8 *, s16, s16, s8 *);    /* extern */
 
 /**
  * Steps the particle's rotation.x toward a target (helper of the approach family).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed rotation.x (0x90) of
+ * the live particle, e.g. 0xe02 -> 0xfe02.
  */
 void Particle_ApproachRotationX(s8 *arg0) {
     func_82137940(arg0 + 0x90, M2C_FIELD(arg0, s16 *, 0x9C), M2C_FIELD(arg0, s16 *, 0x96), arg0);
@@ -1560,7 +1595,8 @@ M2C_UNK func_82137940(s8 *, s16, s16, s8 *);    /* extern */
 
 /**
  * Steps the particle's rotation.y toward a target (helper of the approach family).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed rotation.y (0x92) of
+ * the live particle, e.g. 0xec64 -> 0xef64.
  */
 void Particle_ApproachRotationY(s8 *arg0) {
     func_82137940(arg0 + 0x92, M2C_FIELD(arg0, s16 *, 0x9E), M2C_FIELD(arg0, s16 *, 0x98), arg0);
@@ -1597,7 +1633,8 @@ void Particle_ApproachRotationTargetXYZ(Particle* arg0) {
 
 /**
  * Approach rotation.x using the stored or supplied target and step.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed rotation.x (0x90) of
+ * the live particle, e.g. 0xd45 -> 0x1545.
  */
 void Particle_ApproachRotationXTo(Particle* arg0, s16 arg1, s16 arg2) {
     ParticleMath_ApproachAngle(&arg0->rotation.x, arg1, arg2);
@@ -1796,7 +1833,8 @@ void Particle_SetMagnitudeStepScaled(s8 *arg0, f32 arg1) {
 
 /**
  * Moves stepMagnitude toward `arg1` (times the render scale) with ParticleMath_ApproachFloat.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed stepMagnitude (0x70)
+ * of the live particle, e.g. 7.04 -> 5.72.
  */
 s32 Particle_ApproachStepMagnitude(Particle* arg0, f32 arg1, f32 arg2) {
     return ParticleMath_ApproachFloat(&arg0->stepMagnitude, arg1 * gParticleRenderContext.scale.y, arg2 * gParticleRenderContext.scale.y);
@@ -1825,9 +1863,10 @@ void Particle_SetMotionStepScaled(Particle* arg0, Vec3f arg1) {
 }
 
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Sets motionStep (0x78), the per-frame velocity that Particle_ApplyMotionStep adds to motionOffset, to the
+ * scaled (x, y, z). Was Particle_SetVelocityImpulse. Seen in play (2026-11-12) in move animations: wrote 0x78-0x80.
  */
-void Particle_SetVelocityImpulse(Particle* arg0, f32 arg1, f32 arg2, f32 arg3) {
+void Particle_SetMotionStep(Particle* arg0, f32 arg1, f32 arg2, f32 arg3) {
     M2C_FIELD(arg0, f32*, 0x78) = arg1 * gParticleRenderContext.scale.y;
     M2C_FIELD(arg0, f32*, 0x78 + 4) = arg2 * gParticleRenderContext.scale.y;
     M2C_FIELD(arg0, f32*, 0x78 + 8) = arg3 * gParticleRenderContext.scale.y;
@@ -1847,7 +1886,8 @@ extern f32 D_FLT_8219A824;
 
 /**
  * Sets the particle's motionStep.y to arg1 times the particle scale D_FLT_8219A824.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed motionStep.y (0x7C) of
+ * the live particle, e.g. 0 -> 2.112.
  */
 void Particle_SetMotionStepYScaled(s8 *arg0, f32 arg1) {
     M2C_FIELD(arg0, f32 *, 0x7C) = (f32) (arg1 * D_FLT_8219A824);
@@ -2105,7 +2145,8 @@ void Particle_Field1C_SetScaled_0B938(Particle* arg0, f32 arg1) {
 
 /**
  * Set particle scale directly, without render-context scaling.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed scale (0x1C) of the
+ * live particle, e.g. 1 -> 5.3.
  */
 void Particle_SetScale(Particle* arg0, f32 arg1) {
     arg0->scale = arg1;
@@ -2167,7 +2208,8 @@ M2C_UNK func_82137804(s32, s32, s32);               /* extern */
 
 /**
  * Steps the particle's primRed toward a target (helper of the approach family).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed prim_r (0xBA) of the
+ * live particle, e.g. 0xffff -> 0xf7ff.
  */
 void Particle_ApproachPrimRed(s32 arg0, s32 arg1, s32 arg2) {
     func_82137804(arg0 + 0xBA, arg1 & 0xFF, arg2 & 0xFF);
@@ -2177,7 +2219,8 @@ M2C_UNK func_82137804(s32, s32, s32);               /* extern */
 
 /**
  * Steps the particle's primGreen toward a target (helper of the approach family).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed prim_g (0xBB) of the
+ * live particle, e.g. 0xf7ff -> 0xf7f7.
  */
 void Particle_ApproachPrimGreen(s32 arg0, s32 arg1, s32 arg2) {
     func_82137804(arg0 + 0xBB, arg1 & 0xFF, arg2 & 0xFF);
@@ -2187,7 +2230,8 @@ M2C_UNK func_82137804(s32, s32, s32);               /* extern */
 
 /**
  * Steps the particle's primBlue toward a target (helper of the approach family).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed prim_b (0xBC) of the
+ * live particle, e.g. 0xffffffff -> 0xf7ffffff.
  */
 void Particle_ApproachPrimBlue(s32 arg0, s32 arg1, s32 arg2) {
     func_82137804(arg0 + 0xBC, arg1 & 0xFF, arg2 & 0xFF);
@@ -2222,7 +2266,8 @@ void BattleAnim_LoadGlobalTintToParticle(s8 *arg0) {
 
 /**
  * Set envRed, envGreen, envBlue.
- * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed env_r/g/b (0xBD-0xBF)
+ * of the live particle, e.g. 0xffffff64 -> 0xffffffff.
  */
 void Particle_SetEnvColor(Particle* arg0, u8 arg1, u8 arg2, u8 arg3) {
     arg0->env_r = arg1;
@@ -2234,7 +2279,8 @@ M2C_UNK func_82137804(s32, s32, s32);               /* extern */
 
 /**
  * Steps the particle's envRed toward a target (helper of the approach family).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed env_r (0xBD) of the
+ * live particle, e.g. 0xff0000 -> 0xdf0000.
  */
 void Particle_ApproachEnvRed(s32 arg0, s32 arg1, s32 arg2) {
     func_82137804(arg0 + 0xBD, arg1 & 0xFF, arg2 & 0xFF);
@@ -2244,7 +2290,8 @@ M2C_UNK func_82137804(s32, s32, s32);               /* extern */
 
 /**
  * Steps the particle's envBlue toward a target (helper of the approach family).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed env_b (0xBF) of the
+ * live particle, e.g. 0xf7c0cfff -> 0xf7c0cff7.
  */
 void Particle_ApproachEnvBlue(s32 arg0, s32 arg1, s32 arg2) {
     func_82137804(arg0 + 0xBF, arg1 & 0xFF, arg2 & 0xFF);
@@ -2254,7 +2301,8 @@ M2C_UNK func_82137804(s32, s32, s32);               /* extern */
 
 /**
  * Steps the particle's envGreen toward a target (helper of the approach family).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed env_g (0xBE) of the
+ * live particle, e.g. 0xe7ffff00 -> 0xe7ffe700.
  */
 void Particle_ApproachEnvGreen(s32 arg0, s32 arg1, s32 arg2) {
     func_82137804(arg0 + 0xBE, arg1 & 0xFF, arg2 & 0xFF);
@@ -2273,7 +2321,8 @@ M2C_UNK func_82137804(s32, s32, s32);               /* extern */
 
 /**
  * Steps the particle's primAlpha toward a target (helper of the approach family).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in move animations (30-move sweep): it changed prim_a (0xC0) of the
+ * live particle, e.g. 0xc8000000 -> 0xc4000000.
  */
 void Particle_ApproachPrimAlpha(s32 arg0, s32 arg1, s32 arg2) {
     func_82137804(arg0 + 0xC0, arg1 & 0xFF, arg2 & 0xFF);

@@ -542,7 +542,7 @@ IDNo/12345, ハナ, ヒノコ and カメ at L5) and asked 「このポケモン�
 After はい the party went into slot 01, shown with Ditto placeholders until the
 copy finished. Then came 「メタモンのへんしんがおわりました。ポケモンは
 GBカートリッジに そのまま のこっています。」. 32 `Registration_*` names were
-confirmed. The view and delete lists were not opened.
+confirmed. The view and delete lists are covered in「とうろく, view and delete」 below.
 
 ## いちらん and せいとん
 
@@ -855,4 +855,32 @@ The menu has three entries: ポケモンを とうろくする, とうろくし�
 Confirming はい on 「このポケモンをけす？」 ran `Registration_WriteAllTeams`, and
 the game said 「へんしん していた メタモンが もとの すがたに もどった。」. With no
 team left, the みる and けす entries were greyed out.
+
+## Particle helpers, field by field
+
+Thirty moves were used once each from the battle command savestate, among
+them Flamethrower, Thunderbolt, Psychic, Blizzard, Hydro Pump, Fire Blast,
+Hyper Beam, Surf, Toxic, Leech Seed, Self-Destruct and Earthquake. Every
+tagged particle helper had a breakpoint (helper script `psweep.py`, not
+committed). On a helper's first three calls, the 0xD0-byte particle at `a0`
+was read at entry and at return and the two were compared. 194 of the 409
+helpers ran.
+
+* 46 `Particle_*` helpers changed exactly the field their name gives, with the
+  value their arguments call for. Examples: `Particle_SetFlags` set flag 4;
+  `Particle_SetPosOffsetXScaled(15)` wrote 23.4 (15 × scale 1.56) to 0x34;
+  `Particle_ApproachPrimAlpha` stepped prim_a down by 4 per call. Each lost
+  its tag, and its doc gives one observed change.
+* The motion fields: `Particle_ApplyMotionStep` adds motionStep (0x78) to
+  motionOffset (0x4C) every frame. So motionOffset is a displacement and
+  motionStep is the velocity. `Particle_SetVelocity` (which writes 0x4C) is
+  now `Particle_SetMotionOffset`, and `Particle_SetVelocityImpulse` (which
+  writes 0x78) is now `Particle_SetMotionStep`.
+* Left tagged:
+  * the render-flag helpers, which need a visual check that flag 4 really hides
+    the particle;
+  * the placeholder `Particle_FieldXX_..._0XXXX` names and the `Particle_SetUnkXX`
+    setters, which should get real names first;
+  * graphics helpers such as texture loads and the billboard matrix, where the
+    bytes at `a0` say nothing.
 

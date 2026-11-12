@@ -601,7 +601,7 @@ void Particle_SetRandomVelocityXYZ(Particle* arg0, s32 arg1, s32 arg2, s32 arg3)
 void Particle_SetRandomRotatedVelocityXY(Particle* arg0, s32 arg1, s32 arg2);
 
 void Particle_SetOrigin(Particle* arg0, f32 arg1, f32 arg2, f32 arg3);
-void Particle_SetVelocity(Particle* arg0, f32 arg1, f32 arg2, f32 arg3);
+void Particle_SetMotionOffset(Particle* arg0, f32 arg1, f32 arg2, f32 arg3);
 void Particle_Field50_SetXScaled_098E8(Particle* arg0, f32 arg1);
 void Particle_Field50_SetYScaled_09900(Particle* arg0, f32 arg1);
 void Particle_Field50_SetZScaled_09918(Particle* arg0, f32 arg1);
@@ -709,7 +709,7 @@ s32 Particle_Field74_Approach_0ADBC(Particle* arg0, f32 arg1, f32 arg2);
 s32 Particle_StepMagnitude_ApproachUsingMagnitudeStep(Particle* arg0, f32 arg1);
 s32 Particle_Field78_Approach_0AE40(Particle* arg0, f32 arg1, f32 arg2);
 void Particle_Field7C_SetVecScaled_0AE84(Particle* arg0, Vec3f arg1);
-void Particle_SetVelocityImpulse(Particle* arg0, f32 arg1, f32 arg2, f32 arg3);
+void Particle_SetMotionStep(Particle* arg0, f32 arg1, f32 arg2, f32 arg3);
 void Particle_Field7C_SetXScaled_0AF0C(Particle* arg0, f32 arg1);
 void Particle_Field7C_SetYScaled_0AF24(Particle* arg0, f32 arg1);
 void Particle_Field7C_SetZScaled_0AF3C(Particle* arg0, f32 arg1);

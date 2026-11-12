@@ -3223,7 +3223,7 @@ func_8213DE50,0x8213DE50,src/fragments/fragment012_17ED00/particle_math_269820_2
 func_8213DF24,0x8213DF24,src/fragments/fragment012_17ED00/particle_math_269820_2.c,Particle_SetRandomRotatedVelocityXY,s1,stadium1:src/fragments/particle_math/particle_math_269820.c,c
 func_8213DFF4,0x8213DFF4,src/fragments/fragment012_17ED00/particle_math_269820_2.c,Particle_AddRandomPositionOffsetXYZ,s1,stadium1:src/fragments/particle_math/particle_math_269820.c,c
 func_8213E0A4,0x8213E0A4,src/fragments/fragment012_17ED00/particle_math_269820_2.c,Particle_SetOrigin,m2c,m2c,c
-func_8213E0C4,0x8213E0C4,src/fragments/fragment012_17ED00/particle_math_269820_2.c,Particle_SetVelocity,hand,,c
+func_8213E0C4,0x8213E0C4,src/fragments/fragment012_17ED00/particle_math_269820_2.c,Particle_SetMotionOffset,hand,,c
 func_8213E104,0x8213E104,src/fragments/fragment012_17ED00/particle_math_269820_2.c,Particle_SetMotionOffsetXScaled,m2c,m2c,c
 func_8213E11C,0x8213E11C,src/fragments/fragment012_17ED00/particle_math_269820_2.c,Particle_Field50_SetXScaled_098E8,s1,stadium1:src/fragments/particle_math/particle_math_269820.c,c
 func_8213E134,0x8213E134,src/fragments/fragment012_17ED00/particle_math_269820_2.c,Particle_Field50_SetYScaled_09900,s1,stadium1:src/fragments/particle_math/particle_math_269820.c,c
@@ -3332,7 +3332,7 @@ func_8213F658,0x8213F658,src/fragments/fragment012_17ED00/particle_math_269820_2
 func_8213F69C,0x8213F69C,src/fragments/fragment012_17ED00/particle_math_269820_2.c,Particle_StepMagnitude_ApproachUsingMagnitudeStep,hand,,c
 func_8213F6DC,0x8213F6DC,src/fragments/fragment012_17ED00/particle_math_269820_2.c,Particle_Field74_Approach_0ADBC,s1,stadium1:src/fragments/particle_math/particle_math_269820.c,c
 func_8213F720,0x8213F720,src/fragments/fragment012_17ED00/particle_math_269820_2.c,Particle_SetMotionStepScaled,hand,,c
-func_8213F768,0x8213F768,src/fragments/fragment012_17ED00/particle_math_269820_2.c,Particle_SetVelocityImpulse,hand,,c
+func_8213F768,0x8213F768,src/fragments/fragment012_17ED00/particle_math_269820_2.c,Particle_SetMotionStep,hand,,c
 func_8213F7A8,0x8213F7A8,src/fragments/fragment012_17ED00/particle_math_269820_2.c,Particle_SetMotionStepXScaled,m2c,m2c,c
 func_8213F7C0,0x8213F7C0,src/fragments/fragment012_17ED00/particle_math_269820_2.c,Particle_SetMotionStepYScaled,m2c,m2c,c
 func_8213F7D8,0x8213F7D8,src/fragments/fragment012_17ED00/particle_math_269820_2.c,Particle_SetMotionStepZScaled,m2c,m2c,c
