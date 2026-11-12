@@ -531,6 +531,10 @@ void BattleAnim_StartEffect135ExpandingFlashAndRisingScaleFade(void) {
 extern ParticleDescriptor D_8218E588[86];
 extern M2C_UNK D_8218E7A0;
 extern M2C_UNK D_8218E748;
+/**
+ * Effect start init 132 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Explosion, Self Destruct.
+ */
 void BattleAnim_StartEffect134ModeOrbitAndMetadataBurst(void) {
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 8, 6);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 5, BattleAnim_CallbackStartEffects133And134And143Descriptor44ModeOrbitSwirl, &D_8218E7A0, 0, 4, 9, 0, 0x3C, 1);

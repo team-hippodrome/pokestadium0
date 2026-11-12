@@ -64,7 +64,8 @@ void BattleAnim_CallbackStartEffects12And129DelayedModelAnimWait(Particle* arg0)
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Effect start init 12 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Amnesia.
  */
 void BattleAnim_InitializeAmnesiaUse(void) {
     BattleAnim_SpawnCategory17MarkerSlot(0x55, 1);
@@ -135,7 +136,8 @@ void func_82154704(s8* arg0) {
 /**
  * Moves: Barrier (use), Light Screen (use), Reflect (use)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Effect start init 14 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Barrier, Light Screen, Reflect.
  */
 void BattleAnim_InitializeScreenMove(void) {
     s32 temp_v0;
@@ -373,7 +375,8 @@ void BattleAnim_RunSporePowderMoveOverlay(Particle* arg0) {
 }
 
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Effect start init 65 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Poison Powder, Sleep Powder, Spore, Stun Spore.
  */
 void ParticleEffect_RegisterParticleNodes(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_RunSporePowderMoveOverlay, &gBattleAnimParticleDescriptors[0x32], 0, 1, 0x18, 0, 0, 0);
@@ -409,7 +412,12 @@ void BattleAnim_RunGasAttack(Particle* arg0) {
     }
 }
 
-void func_821553D0(void) {
+/**
+ * Effect init for the start of the Haze and Poison Gas and Smokescreen animation.
+ * Effect start init 28 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Haze, Poison Gas, Smokescreen.
+ */
+void BattleAnim_InitializeHazePoisonGasSmokescreenUse(void) {
     func_8213B560(8, &func_82155380, &D_8218E720, 0, 1, 0x18, 0, 0x1C, 0);
     func_8213B560(0, &func_82163D7C, &D_8218E7B8, 0, 0xF, 0x11, (s32) D_8219A80A, 0, 0);
 }
@@ -417,6 +425,8 @@ void func_821553D0(void) {
 /**
  * Effect init that spawns the Smog animation. Player sweep (all 165 moves used in battle): only
  * Smog reached this function.
+ * Effect start init 76 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Smog.
  */
 void BattleAnim_InitializeSmogUse(void) {
     func_8213B560(8, &func_82155380, &D_8218E720, 0, 1, 0x18, 0, 0x1E, 0);
@@ -426,6 +436,8 @@ void BattleAnim_InitializeSmogUse(void) {
 /**
  * Effect init that spawns the Mist animation. Player sweep (all 165 moves used in battle): only
  * Mist reached this function.
+ * Effect start init 53 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Mist.
  */
 void BattleAnim_InitializeMistUse(void) {
     func_8213B560(8, &func_82155380, &D_8218E720, 0, 1, 0x18, 0, 0x1D, 0);
@@ -554,7 +566,8 @@ void func_821558F4(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1, matched by code similarity.
+ * Effect start init 8 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Leech Seed.
  */
 void BattleAnim_InitializeLeechSeedUse(void) {
     func_8213B5D8(0, 4, 5, &func_82155724, &D_8218E580, 0, 2, 0x11, (s32) D_8219A80A, 0, 0);
@@ -562,7 +575,8 @@ void BattleAnim_InitializeLeechSeedUse(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Effect end init 31 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Leech Seed.
  */
 void BattleAnim_InitializeLeechSeedHit(void) {
     s32 i;
@@ -584,7 +598,8 @@ void BattleAnim_InitializeLeechSeedHit(void) {
 
 /**
  * initializes being hit by Pay Day
- * @unverified Name and comment from Stadium 1.
+ * Effect end init 13 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Pay Day.
  */
 void BattleAnim_InitializePayDayHit(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_InitializeParticleModel, &gDefaultParticleDescriptor, 0, 1, 0xA, 0, 0x22, 0);
@@ -699,7 +714,8 @@ void BattleAnim_RunBlizzard(s8 *arg0) {
 
 /**
  * initializes using blizzard
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Effect start init 34 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Blizzard.
  */
 void BattleAnim_InitializeBlizzardUse(void) {
     func_8213B644(0, 0x10, 0x33);
@@ -709,7 +725,8 @@ void BattleAnim_InitializeBlizzardUse(void) {
 
 /**
  * initializes being hit by blizzard
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Effect end init 23 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Blizzard.
  */
 void BattleAnim_InitializeBlizzardHit(void) {
     func_8213B5D8(0, 8, 3, &func_82152F44, &D_8218E580, 0, 1, 0xC, 0, 0x2A, 0);
@@ -821,7 +838,8 @@ void BattleAnim_RunDizzyPunchHitEffect(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Effect end init 6 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Dizzy Punch.
  */
 void BattleAnim_InitializeDizzyPunchHit(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunDizzyPunchHitEffect, &gDefaultParticleDescriptor, 0x1E, 1, 6, gBattleAnimCurrentAnchor, 0, 0);
@@ -928,7 +946,12 @@ void ParticleEffect_RegisterColorAnim(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackEndEffect49Model33Anim34WaitCleanup, &gDefaultParticleDescriptor, 0, 1, 2, gBattleAnimCurrentAnchor, 1, 0);
 }
 
-void ParticleEffect_RegisterModeSpecific(void) {
+/**
+ * Effect init for the end (impact) of the Absorb and Leech Life and Mega Drain animation.
+ * Effect end init 21 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Absorb, Leech Life, Mega Drain.
+ */
+void BattleAnim_InitializeDrainingMoveHit(void) {
     switch (BattleAnim_GetQueuedMoveId()) {
         case LEECH_LIFE:
             BattleAnim_SpawnDrainFlameHueChange(0, 0xA, 0x3E, 2, 0xC8, 0x10);
@@ -988,14 +1011,16 @@ void BattleAnim_RunFlyUpwardMovementEffect(Particle* arg0) {
 
 /**
  * initializes the first turn of using fly
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Effect start init 40 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Fly.
  */
 void BattleAnim_InitializeFlyUse(void) {
     func_8213B560(0, &func_82156B0C, &D_8218E580, 0xA, 1, 0xA, 0, 0, 0);
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Effect start init 86 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Teleport.
  */
 void BattleAnim_InitializeTeleportUse(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunFlyUpwardMovementEffect, &gDefaultParticleDescriptor, 0x40, 1, 0xA, 0, 0, 0);
@@ -1316,13 +1341,19 @@ void Particle_CreateDisplayList_GreenPrim(s32 arg0, arg1_func_84344CE8* arg1) {
     }
 }
 
-void ParticleEffect_RegisterHandlers_Default(void) {
+/**
+ * Effect init for the start of the Rock Slide and Rock Throw animation.
+ * Effect start init 63 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Rock Slide, Rock Throw.
+ */
+void BattleAnim_InitializeRockThrowRockSlideUse(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffects63And75ModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 0xA, 0, 0, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffects63And75Model38FadeIn, &gDefaultParticleDescriptor, 0, 1, 0xA, 0, 0, 0);
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Effect end init 10 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Rock Slide, Rock Throw.
  */
 void BattleAnim_InitializeRockSlideRockThrowHit(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackEndEffects10And50ModelAnimColorFade, &gDefaultParticleDescriptor, 0, 1, 0xA, 0, 1, 0);
@@ -1336,7 +1367,8 @@ void BattleAnim_InitializeRockSlideRockThrowHit(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Effect start init 75 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Strength.
  */
 void BattleAnim_InitializeStrengthUse(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffects63And75ModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 0xA, 0, 1, 0);
@@ -1344,7 +1376,8 @@ void BattleAnim_InitializeStrengthUse(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Effect end init 50 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Strength.
  */
 void BattleAnim_InitializeStrengthHit(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackEndEffects10And50ModelAnimColorFade, &gDefaultParticleDescriptor, 0, 1, 0xA, 0, 8, 0);
@@ -1352,7 +1385,8 @@ void BattleAnim_InitializeStrengthHit(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Effect start init 64 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Egg Bomb.
  */
 void BattleAnim_InitializeEggBombUse(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackInitModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 0xA, 0, 0x23, 0);
@@ -1445,7 +1479,8 @@ void Particle_CreateDisplayList_BluePrim(s32 arg0, arg1_func_84344CE8* arg1) {
 
 /**
  * Full screen overlay for gust, razor wind, and whirlwind
- * @unverified Name and comment from Stadium 1.
+ * Effect start init 10 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Gust, Whirlwind.
  */
 void BattleAnim_InitializeStrongWind(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackInitModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 0xE, 0, 0x25, 0);
@@ -1454,7 +1489,8 @@ void BattleAnim_InitializeStrongWind(void) {
 
 /**
  * initializes charging razor wind
- * @unverified Name and comment from Stadium 1.
+ * Effect start init 72 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Razor Wind.
  */
 void BattleAnim_InitializeRazorWindUse(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackInitModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 0xE, 0, 0x25, 0);
@@ -1906,7 +1942,8 @@ void BattleAnim_RunBoomHitEffect3(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1, matched by code similarity.
+ * Effect start init 50, start init 82 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all
+ * 165 moves used: it ran for exactly Explosion, Self Destruct.
  */
 void BattleAnim_InitializeBoomUse(void) {
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0x10, 6);
@@ -1932,7 +1969,8 @@ void BattleAnim_InitializeBoomUse(void) {
 }
 
 /**
- * @unverified Name from Stadium 1, matched by code similarity.
+ * Effect end init 81, end init 82 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165
+ * moves used: it ran for exactly Explosion, Self Destruct.
  */
 void BattleAnim_InitializeBoomHit(void) {
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0xFF, 6);
@@ -2040,7 +2078,8 @@ void Particle_CreateDisplayList_TempColors(s32 arg0, arg1_func_84344CE8* arg1) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Effect start init 71 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Clamp, Vice Grip.
  */
 void BattleAnim_InitializeClampViceGripUse(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffects71And74And111SpecialModelColorCycle, &gDefaultParticleDescriptor, 0, 1, 0x14, 0, 0, 0);
@@ -2048,7 +2087,8 @@ void BattleAnim_InitializeClampViceGripUse(void) {
 
 /**
  * initializes using guillotine
- * @unverified Name and comment from Stadium 1.
+ * Effect start init 111 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Guillotine.
  */
 void BattleAnim_InitializeGuillotineUse(void) {
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0x20, 0);
@@ -2058,7 +2098,8 @@ void BattleAnim_InitializeGuillotineUse(void) {
 /**
  * Moves: Bite (use), Hyper Fang (use), Super Fang (use)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Effect start init 74 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Bite, Hyper Fang, Super Fang.
  */
 void BattleAnim_InitializeBitingMoveUse(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffects71And74And111SpecialModelColorCycle, &gDefaultParticleDescriptor, 0, 1, 0x14, 0, 1, 0);
@@ -2067,7 +2108,8 @@ void BattleAnim_InitializeBitingMoveUse(void) {
 /**
  * Moves: Bite (hit), Clamp (hit), Hyper Fang (hit), Super Fang (hit), Vice Grip (hit)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Effect end init 41 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Bite, Clamp, Hyper Fang, Super Fang, Vice Grip.
  */
 void BattleAnim_InitializeBitingMoveHit(void) {
     BattleAnim_InitializeBitingMoveEndEffect();
@@ -2113,7 +2155,8 @@ void Particle_CreateDisplayList_DualTileAntiDiagonal1(s32 arg0, arg1_func_84344C
 
 /**
  * initializes using swords dance
- * @unverified Name and comment from Stadium 1.
+ * Effect start init 68 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Swords Dance.
  */
 void BattleAnim_InitializeSwordsDanceUse(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackInitModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 2, 0, 0x28, 0);
@@ -2155,7 +2198,12 @@ void BattleAnim_CallbackStartEffect69ModelPhaseWait(Particle* arg0) {
     }
 }
 
-void func_82159FC8(void) {
+/**
+ * Effect init for the start of the Dig animation.
+ * Effect start init 69 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Dig.
+ */
+void BattleAnim_InitializeDigBurrowUse(void) {
     func_8213B560(0, &func_82159F70, &D_8218E580, 0, 1, 0xA, 0, 0x29, 0);
     func_8213B5D8(5, 2, 0xA, &BattleAnim_RunDigHitDust, &D_8218E7D0, 0, 2, 0xA, 0, 0x44, 9);
     func_8213B5D8(0xA, 5, 6, &BattleAnim_RunDigHitRocks, &D_8218E708, 0, 3, 0xA, 0, 0x44, 0xB);
@@ -2179,7 +2227,8 @@ void BattleAnim_InitializeDigHit(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Effect start init 55 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Kinesis.
  */
 void BattleAnim_InitializeKinesisUse(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackInitModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 0xB, 0, 0, 0);
@@ -2188,7 +2237,8 @@ void BattleAnim_InitializeKinesisUse(void) {
 }
 
 /**
- * @unverified Name from Stadium 1, matched by code similarity.
+ * Effect start init 79 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Bone Club.
  */
 void BattleAnim_InitializeBoneClubUse(void) {
     func_8213B560(0, &func_82152F44, &D_8218E580, 0, 1, 4, 0, 1, 0);
@@ -2196,7 +2246,8 @@ void BattleAnim_InitializeBoneClubUse(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Effect start init 80 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Bonemerang.
  */
 void BattleAnim_InitializeBonemerangUse(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackInitModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 0xB, gBattleAnimCurrentAnchor, 2, 0);
@@ -2500,12 +2551,17 @@ s16 BattleAnim_GetMoveKeyedTrailVariantParam(void) {
 
 /**
  * Handles the slime using in Toxic, Sludge, and Acid
- * @unverified Name and comment from Stadium 1.
+ * Effect start init 17 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Acid, Sludge, Toxic.
  */
 void BattleAnim_InitializeSlimeMove(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffect17ModelAnimFinish, &gDefaultParticleDescriptor, 0, 1, 0x11, gBattleAnimCurrentAnchor, BattleAnim_GetSlimeVariantIndex(), 0);
 }
 
+/**
+ * Effect end init 7 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Acid, Lick, Sludge, Toxic.
+ */
 void ParticleEffect_PaletteMultiBurst(void) {
     s16 sp4E;
     s16 sp44;
@@ -2575,7 +2631,8 @@ void Gfx_ParticleRedPrimAllocCallback(s32 arg0, arg1_func_84344CE8* arg1) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Effect start init 83 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Glare, Leer.
  */
 void BattleAnim_InitializeGlareLeerUse(void) {
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0x10, 6);
@@ -2591,7 +2648,8 @@ void BattleAnim_InitializeHyperBeamUseSequence(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Effect start init 37 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Earthquake, Fissure.
  */
 void BattleAnim_InitializeEarthquakeFissureUse(void) {
     UNUSED s16 pad; // FAKE: stack padding
@@ -2621,14 +2679,16 @@ void BattleAnim_InitializeEarthquakeFissureHit(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Effect end init 75 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Earthquake.
  */
 void BattleAnim_InitializeEarthquakeHit(void) {
     BattleAnim_InitializeEarthquakeFissureHit();
 }
 
 /**
- * @unverified Name from Stadium 1, matched by code similarity.
+ * Effect start init 87 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Defense Curl.
  */
 void BattleAnim_InitializeDefenseCurlUse(void) {
     func_8213BC00(4, 8, 0, 0xFF, 0x40);
@@ -2638,7 +2698,8 @@ void BattleAnim_InitializeDefenseCurlUse(void) {
 }
 
 /**
- * @unverified Name from Stadium 1, matched by code similarity.
+ * Effect start init 88 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Sharpen.
  */
 void BattleAnim_InitializeSharpenUse(void) {
     func_8213BC00(6, 8, 0, 0xFF, 0x40);
@@ -2681,11 +2742,12 @@ void BattleAnim_InitializeSpeedLines(void) {
 
 void func_8215B5B8(void) {
     func_8213B644(0, 0x20, 0xE);
-    func_8215B558();
+    BattleAnim_InitializeQuickAttackHiJumpKickUse();
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Effect start init 91 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Withdraw.
  */
 void BattleAnim_InitializeWithdrawUse(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_InitializeParticleModel, &gDefaultParticleDescriptor, 0, 1, 0xE, 0, 9, 0);
@@ -2694,6 +2756,8 @@ void BattleAnim_InitializeWithdrawUse(void) {
 /**
  * Effect init that spawns the Lick animation. Player sweep (all 165 moves used in battle): only
  * Lick reached this function.
+ * Effect start init 92 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Lick.
  */
 void BattleAnim_InitializeLickUse(void) {
     if (func_8213C4D0(0x5E) == 0) {
@@ -2725,7 +2789,8 @@ f32 func_8215B6A4(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1, matched by code similarity.
+ * Effect start init 94 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Lovely Kiss.
  */
 void BattleAnim_InitializeLovelyKissUse(void) {
     func_8213B560(0, &func_82152F44, &D_8218E580, 0, 1, 0xB, 0, 0xB, 0);
@@ -2733,7 +2798,8 @@ void BattleAnim_InitializeLovelyKissUse(void) {
 }
 
 /**
- * @unverified Name from Stadium 1, matched by code similarity.
+ * Effect end init 61 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Lovely Kiss.
  */
 void BattleAnim_InitializeLovelyKissHit(void) {
     func_8213BC7C(0, 1, 0x16, 0xFF, 0, 8);
@@ -3028,7 +3094,8 @@ void Gfx_PaletteParticleDLCallback(s32 arg0, arg1_func_84344CE8* arg1) {
 }
 
 /**
- * @unverified Name from Stadium 1, matched by code similarity.
+ * Effect start init 95 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Dream Eater.
  */
 void BattleAnim_InitializeDreamEaterUse(void) {
     func_8213B560(0, &func_8215B904, &D_8218E580, 0, 1, 0xC, 0, 0, 0);
@@ -3063,7 +3130,8 @@ void BattleAnim_InitializeDreamEaterHit(void) {
 /**
  * Moves: Absorb (use), Leech Life (use), Mega Drain (use)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Effect start init 24 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Absorb, Leech Life, Mega Drain.
  */
 void BattleAnim_CreateDrainingMoveOverlay(void) {
     switch (BattleAnim_GetQueuedMoveId()) {
@@ -3085,14 +3153,16 @@ void BattleAnim_CreateDrainingMoveOverlay(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Effect start init 96 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Meditate.
  */
 void BattleAnim_InitializeMeditateUse(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunPsychedelicOverlay, &gDefaultParticleDescriptor, 0, 1, 0xC, 4, 0, 0);
 }
 
 /**
- * @unverified Name from Stadium 1, matched by code similarity.
+ * Effect start init 97 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Night Shade.
  */
 void BattleAnim_InitializeNightShadeUse(void) {
     func_8213B560(0, &func_8215B904, &D_8218E580, 0, 1, 0xC, 2, 0, 0);
@@ -3104,7 +3174,8 @@ void BattleAnim_InitializeNightShadeUse(void) {
 /**
  * Moves: Night Shade (hit)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Effect end init 63 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Night Shade.
  */
 void BattleAnim_InitializeNightShadeHit(void) {
     func_8213B720(0, 2, 0x10, 8);
@@ -3213,7 +3284,8 @@ void func_8215CCF0(void) {
 }
 
 /**
- * @unverified Name from Stadium 1, matched by code similarity.
+ * Effect start init 93 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Confuse Ray.
  */
 void BattleAnim_InitializeConfuseRayUse(void) {
     func_8213B560(0, &func_8215C984, &D_8218E580, 0, 1, 0xA, 0, 0, 0);
@@ -3229,7 +3301,8 @@ void BattleAnim_InitializeConfuseRayUse(void) {
 /**
  * Moves: Confuse Ray (hit)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Effect end init 60 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Confuse Ray.
  */
 void BattleAnim_InitializeConfuseRayHit(void) {
     func_8213B560(0, &BattleAnim_ConfuseRayParticleUpdate, &D_8218E580, 0, 1, 0xA, 0, 0, 0);
@@ -3267,7 +3340,12 @@ void Gfx_WaterAnimDLCallback(s32 arg0, arg1_func_84344CE8* arg1) {
     }
 }
 
-void ParticleEffect_BasicMultiBurst(void) {
+/**
+ * Effect init for the start of the Waterfall animation.
+ * Effect start init 99 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Waterfall.
+ */
+void BattleAnim_InitializeWaterfallUse(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunFillScreenOverlay, &D_8218E580, 0xFF, 1, 0xC, 0, 0xE, 8);
     BattleAnim_AddSpawnDelay(4);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 0x10, BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E7D0, 0, 2, 0xE, 0, 0x33, 3);
@@ -3277,17 +3355,23 @@ void ParticleEffect_BasicMultiBurst(void) {
 }
 
 /**
- * Effect init that spawns the Waterfall animation. Player sweep (all 165 moves used in battle):
- * only Waterfall reached this function.
+ * Effect init for the end (impact) of the Waterfall animation.
+ * Effect end init 64 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Waterfall.
  */
-void BattleAnim_InitializeWaterfallUseA(void) {
+void BattleAnim_InitializeWaterfallHit(void) {
     func_8213B560(0, &func_821530F4, &D_8218E580, 0xFF, 1, 0xC, 0, 0xF, 0x40);
     BattleAnim_InitializeWaterfallUseB();
     func_8213B464(0x10);
     func_8213B5D8(0, 4, 5, &func_82164AD0, &D_8218E5D8, 0, 1, 0xE, 0, 0xC, 4);
 }
 
-void ParticleEffect_BasicMultiBurstDelayedSprayOnly(void) {
+/**
+ * Effect init for the start of the Surf animation.
+ * Effect start init 36 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Surf.
+ */
+void BattleAnim_InitializeSurfUseSpray(void) {
     BattleAnim_AddSpawnDelay(0x41);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 0x20, BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E7D0, 0, 2, 7, 0, 0x33, 8);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 0x20, BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E650, 0, 2, 7, 0, 0xC, 8);
@@ -3298,7 +3382,8 @@ void ParticleEffect_BasicMultiBurstDelayedSprayOnly(void) {
 /**
  * Moves: Surf (hit)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Effect end init 16 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Surf.
  */
 void BattleAnim_InitializeSurfHit(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 4, BattleAnim_CallbackEndEffect16MultiDescriptorAnimatedFallFade, &D_8218E7D0, 0, 3, 0xE, 0, 0x33, 0xC);
@@ -3309,7 +3394,8 @@ void BattleAnim_InitializeSurfHit(void) {
 }
 
 /**
- * @unverified Name from Stadium 1, matched by code similarity.
+ * Effect start init 100 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Crabhammer.
  */
 void BattleAnim_InitializeCrabhammerUse(void) {
     func_8213B560(0, &func_82152F44, &D_8218E580, 0, 1, 0x13, (s32) D_8219A80A, 0x10, 0);
@@ -3398,7 +3484,8 @@ void BattleAnim_CallbackStartEffect101ModelBurstEmitter(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Effect start init 101 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Barrage.
  */
 void BattleAnim_InitializeBarrageUse(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffect101ModelBurstEmitter, &gDefaultParticleDescriptor, 0, 1, 0x11, gBattleAnimCurrentAnchor, 0, 0);
@@ -3442,7 +3529,8 @@ void func_8215DAEC(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Effect end init 65 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Barrage.
  */
 void BattleAnim_InitializeBarrageHit(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackMove140EndEffect65EmitDescriptor4A, &gDefaultParticleDescriptor, 0, 1, 0x11, gBattleAnimCurrentAnchor, 0, 0);
@@ -3514,7 +3602,8 @@ void Gfx_SimpleNodeDLCallback(s32 arg0, arg1_func_84344CE8* arg1) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Effect start init 49 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Psywave.
  */
 void BattleAnim_InitializePsywaveUse(void) {
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0x10, 0);
@@ -3522,7 +3611,8 @@ void BattleAnim_InitializePsywaveUse(void) {
 }
 
 /**
- * @unverified Name from Stadium 1, matched by code similarity.
+ * Effect end init 66 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Psywave.
  */
 void BattleAnim_InitializePsywaveHit(void) {
     func_8213BC7C(0, 2, 8, 0xFF, 0, 0x10);
@@ -3558,7 +3648,8 @@ void BattleAnim_RunConfusionPsychicHitEffect(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1, matched by code similarity.
+ * Effect start init 106 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Psychic.
  */
 void BattleAnim_InitializePsychicUse(void) {
     func_8213B644(0, 5, 0);
@@ -3568,7 +3659,8 @@ void BattleAnim_InitializePsychicUse(void) {
 }
 
 /**
- * @unverified Name from Stadium 1, matched by code similarity.
+ * Effect start init 107 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Confusion.
  */
 void BattleAnim_InitializeConfusionUse(void) {
     func_8213B644(0, 6, 0);
@@ -3577,7 +3669,12 @@ void BattleAnim_InitializeConfusionUse(void) {
     func_8213BC7C(0x32, 1, 8, 0, 0xFF, 0x20);
 }
 
-void func_8215E1A8(void) {
+/**
+ * Effect init for the end (impact) of the Psychic animation.
+ * Effect end init 74 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Psychic.
+ */
+void BattleAnim_InitializePsychicHit(void) {
     func_8213B644(0, 0x40, 0);
     func_8213B560(0, &func_8215DFB4, &D_8218E580, 0xFF, 1, 0xC, 8, 0x18, 0x20);
     func_8213B5D8(4, 4, 4, &func_82162C68, &D_8218E728, 0, 3, 9, 0, 0x18, 0xD);
@@ -3588,7 +3685,12 @@ void func_8215E1A8(void) {
     func_8213B644(8, 4, 8);
 }
 
-void func_8215E2C4(void) {
+/**
+ * Effect init for the end (impact) of the Confusion animation.
+ * Effect end init 73 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Confusion.
+ */
+void BattleAnim_InitializeConfusionHit(void) {
     func_8213B644(0, 0x40, 0);
     func_8213B560(0, &func_8215DFB4, &D_8218E580, 0xFF, 1, 0xC, 7, 0x17, 0x20);
     func_8213B5D8(4, 4, 4, &func_82162C68, &D_8218E728, 0, 3, 9, 0, 0x18, 0xD);
@@ -3600,7 +3702,8 @@ void func_8215E2C4(void) {
 }
 
 /**
- * @unverified Name from Stadium 1, matched by code similarity.
+ * Effect start init 3 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Focus Energy.
  */
 void BattleAnim_InitializeFocusEnergyUse(void) {
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0x10, 6);
@@ -3619,7 +3722,8 @@ void BattleAnim_InitializeBideRageUseSequence(void) {
 }
 
 /**
- * @unverified Name from Stadium 1, matched by code similarity.
+ * Effect start init 104 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Sky Attack.
  */
 void BattleAnim_InitializeSkyAttackUse1(void) {
     func_82168844(0xE);
@@ -3781,7 +3885,8 @@ void BattleAnim_InitializeThunderHitSequence(void) {
 }
 
 /**
- * @unverified Name from Stadium 1, matched by code similarity.
+ * Effect start init 105 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Solar Beam.
  */
 void BattleAnim_InitializeSolarBeamUse2(void) {
     func_8213B560(0, &func_821530F4, &D_8218E580, 0xBE, 1, 9, 6, 0x15, 2);
@@ -3812,7 +3917,8 @@ void BattleAnim_CallbackEndEffect76DefaultDescriptorModelFade(Particle* arg0) {
 
 /**
  * Using to make a horizontal cylindrical hit spark for Skull Bash, Mega Punch, and Mega Kick
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Effect end init 76 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Mega Kick, Mega Punch.
  */
 void BattleAnim_InitializeLargePhysicalHitSpark(void) {
     func_8213BC00(4, 8, 0xFF, 0, 0x20);
@@ -3821,7 +3927,8 @@ void BattleAnim_InitializeLargePhysicalHitSpark(void) {
 
 /**
  * initializes using drill peck
- * @unverified Name and comment from Stadium 1.
+ * Effect start init 113 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Drill Peck.
  */
 void BattleAnim_InitializeDrillPeckUse(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackInitModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 0x11, gBattleAnimCurrentAnchor, 0x1B, 1);
@@ -3829,7 +3936,8 @@ void BattleAnim_InitializeDrillPeckUse(void) {
 
 /**
  * initializes being hit by drill peck
- * @unverified Name and comment from Stadium 1.
+ * Effect end init 77 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Drill Peck.
  */
 void BattleAnim_InitializeDrillPeckHit(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackInitModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 0x11, gBattleAnimCurrentAnchor, 0x1C, 1);
@@ -3837,7 +3945,8 @@ void BattleAnim_InitializeDrillPeckHit(void) {
 
 /**
  * initializes getting using horn drill
- * @unverified Name and comment from Stadium 1.
+ * Effect start init 121 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Horn Drill.
  */
 void BattleAnim_InitializeHornDrillUse(void) {
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0x20, 0);
@@ -3887,7 +3996,8 @@ void BattleAnim_RunWeakSpear(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1, matched by code similarity.
+ * Effect start init 118 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Fury Attack, Peck.
  */
 void BattleAnim_InitializeFuryAttackPeckUse(void) {
     func_8213B5D8(0, 2, 3, &func_8215EFF8, &D_8218E580, 0, 1, 0x11, 7, 0x20, 0);
@@ -3895,7 +4005,8 @@ void BattleAnim_InitializeFuryAttackPeckUse(void) {
 
 /**
  * initializes using horn attack
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Effect start init 119 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Horn Attack.
  */
 void BattleAnim_InitializeHornAttackUse(void) {
     func_8213B560(0, &func_8215EFF8, &D_8218E580, 0, 1, 0x11, 7, 0x20, 1);
@@ -3922,7 +4033,8 @@ void func_8215F1B0(s8 *arg0) {
 /**
  * Moves: Body Slam (hit), Fly (hit), Seismic Toss (hit), Stomp (hit)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Effect end init 79 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Body Slam, Seismic Toss, Stomp.
  */
 void BattleAnim_InitializeVerticalLandingHitSpark(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackEndEffect79DefaultDescriptorPaletteFade, &gDefaultParticleDescriptor, 0, 1, 0xA, 0, 0x1F, 0);
@@ -3931,6 +4043,8 @@ void BattleAnim_InitializeVerticalLandingHitSpark(void) {
 /**
  * Effect init that spawns the Sonicboom animation. Player sweep (all 165 moves used in battle):
  * only Sonicboom reached this function.
+ * Effect start init 45 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Sonic Boom.
  */
 void BattleAnim_InitializeSonicBoomUse(void) {
     func_8213B644(0, 8, 0x20);
@@ -4010,6 +4124,10 @@ void ParticleEffect_CreateSmoke(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunDefaultHitSpark, &gBattleAnimParticleDescriptors[0x34], 0, 1, 0x11, 9, 0, 6);
 }
 
+/**
+ * Effect start init 129 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Double Edge, Struggle, Submission, Take Down.
+ */
 void ParticleEffect_CreateSmokeHighPriority(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0x10, BattleAnim_RunDefaultHitSpark, &gBattleAnimParticleDescriptors[0x34], 0, 1, 0x11, 9, 0, 6);
 }

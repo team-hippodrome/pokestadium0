@@ -654,7 +654,8 @@ void func_82153E28(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Effect start init 38 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Thunder Wave.
  */
 void BattleAnim_InitializeThunderWaveUse(void) {
     BattleAnim_SpawnCategory17MarkerSlot(0x55, 1);
@@ -663,7 +664,12 @@ void BattleAnim_InitializeThunderWaveUse(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 8, 0xC, BattleAnim_CallbackMove86StartDescriptor24, &gBattleAnimParticleDescriptors[0x24], 0xA, 1, 4, 2, 0, 0);
 }
 
-void func_82153FD8(void) {
+/**
+ * Effect init for the end (impact) of the Thunder Wave animation.
+ * Effect end init 17 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Thunder Wave.
+ */
+void BattleAnim_InitializeThunderWaveHit(void) {
     func_8213B644(0x30, 0x20, 8);
     func_8213B5D8(0, 0xC, 0xA, &func_82153C50, &D_8218E6A8, 0x14, 1, 4, (s32) D_8219A80A, 0, 0);
 }
@@ -765,6 +771,10 @@ void BattleAnim_CallbackStartEffect1Descriptor2FPhaseFadeOut(Particle* arg0) {
     }
 }
 
+/**
+ * Effect start init 1 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Hypnosis, Lovely Kiss, Sing, Sleep Powder, Spore.
+ */
 void func_821542BC(void) {
     func_8213B560(0, &func_82154248, &D_8218E700, 0, 1, 0x10, 7, 0, 0);
 }

@@ -355,3 +355,35 @@ From `sBattleSceneStateRowTable` and the rows each move entered:
 `BattleScene_UseMoveStepMultiHit` (use-move variant 10) ran for exactly the
 ten multi-hit moves. Sounds can't be heard in the headless run, so the
 landing-sound names keep `@unverified`.
+
+## Effect inits, from the effect-id dispatcher
+
+Move animations start through two tables indexed by effect id:
+`sMoveAnimEffectStartInitFuncs` (`BattleAnim_RunEffectInitStart`, called when
+the move is used) and `D_8218EA6C` (`BattleAnim_RunEffectInitEnd`, called at
+the impact, about 128 frames later). With breakpoints on just those two
+dispatchers, each of the 165 moves was used once and the effect ids logged
+(the COM's turn left out). This is exact, unlike the many-breakpoint sweeps.
+
+* 160 table entries ran for a known set of moves. Each now says which in its
+  doc, and the `@unverified` tag is gone where the name matched.
+* The `...Use` names belong to the start table and the `...Hit` names to the
+  end table, as the first pass guessed.
+* 24 names were wrong or generic and are renamed after the moves that ran
+  them. Examples: `ParticleEffect_InitExplosionSet` is
+  `BattleAnim_InitializeFlamethrowerHit`, and `InitParticleEffectSet_WithComplex`
+  is `BattleAnim_InitializeHyperBeamHit`. `BattleAnim_InitializeWaterfallUseA`
+  is Waterfall's end init, so it is now `BattleAnim_InitializeWaterfallHit`.
+  `func_82153FD8`, `func_8215E2C4` and `func_8215E1A8` are the Thunder Wave,
+  Confusion and Psychic end inits.
+* Dig's first turn uses start init 69, now `BattleAnim_InitializeDigBurrowUse`.
+  `BattleAnim_InitializeDigUse` (start 52) never ran, so it keeps its tag. It
+  may be the second turn, which the 700-frame window doesn't reach. The same
+  goes for Sky Attack's and Solar Beam's other halves, and for Recover and
+  Soft-Boiled, which fail at full HP.
+
+Caveat for the earlier sweeps: with dozens of execution breakpoints set, the
+debugger missed some hits that it caught with two breakpoints set. For
+example, `BattleAnim_InitializeIceBeamHit` was missed with 21 breakpoints and
+caught with 2. So "only move X reached this" in the earlier per-function sweep
+can undercount the moves. The move that was seen did reach the function.

@@ -2030,6 +2030,8 @@ extern M2C_UNK func_82146504;
 /**
  * Effect init that spawns the Ember animation. Player sweep (all 165 moves used in battle): only
  * Ember reached this function.
+ * Effect start init 22 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Ember.
  */
 void BattleAnim_InitializeEmberUse(void) {
     func_8213B794(0, 0, 0x40, 8, 0xC8);
@@ -2040,7 +2042,12 @@ void BattleAnim_InitializeEmberUse(void) {
 
 extern ParticleDescriptor D_8218E588[86];
 extern ParticleDescriptor D_8218E7B8;
-void ParticleEffect_InitSetTintRampRisingSpread(void) {
+/**
+ * Effect init for the end (impact) of the Ember animation.
+ * Effect end init 56 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Ember.
+ */
+void BattleAnim_InitializeEmberHit(void) {
     BattleAnim_SpawnDescriptor25AlphaHoldFadeOut(2, 0, 0x40, 0x8, 0xC8);
     BattleAnim_SpawnOwnerModelTintRampDetach(0, 0xA, 0xFF, 0, 0x30);
     BattleAnim_CreateEffectSlotForCurrentOwner(4, BattleAnim_CallbackEndEffect56Descriptor46RisingScaleAlphaFade, &D_8218E7B0, 0, 6, 0x10, 9, 0, 0);
@@ -2058,7 +2065,8 @@ extern M2C_UNK D_8218E7B0;
 
 /**
  * initialize being hit by fire punch
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Effect end init 54 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Fire Punch.
  */
 void BattleAnim_InitializeFirePunchHit(void) {
     func_8213B794(2, 0, 0x40, 8, 0xC8);
@@ -2079,7 +2087,8 @@ extern M2C_UNK func_82145718;
 
 /**
  * initializes smoke for flamethrower and fire blast
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Effect start init 23 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Fire Blast, Flamethrower.
  */
 void BattleAnim_InitializeFireBlastFlamethrowerUseSmoke(void) {
     func_8213C220(0x64, 1);
@@ -2091,7 +2100,12 @@ void BattleAnim_InitializeFireBlastFlamethrowerUseSmoke(void) {
 
 extern ParticleDescriptor D_8218E588[86];
 extern M2C_UNK D_8218E7F0;
-void ParticleEffect_InitExplosionSet(void) {
+/**
+ * Effect init for the end (impact) of the Flamethrower animation.
+ * Effect end init 22 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Flamethrower.
+ */
+void BattleAnim_InitializeFlamethrowerHit(void) {
     BattleAnim_SpawnDrainFlameHueChange(0xA, 0x9, 0xE, 8, 0xC8, 0x10);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 2, 0x14, BattleAnim_RunFlamethrowerHitRotationWeak, &D_8218E7F0, 0, 1, 0x11, 9, 0, 0);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 2, 2, BattleAnim_RunFlamethrowerHitRotationStrong, &D_8218E7F0, 0, 0xC, 0x11, 9, 0, 0);
@@ -2112,6 +2126,8 @@ extern M2C_UNK func_82145718;
 /**
  * Effect init that spawns the Dragon Rage animation. Player sweep (all 165 moves used in battle):
  * only Dragon Rage reached this function.
+ * Effect start init 35 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Dragon Rage.
  */
 void BattleAnim_InitializeDragonRageUse(void) {
     func_8213B644(0, 8, 6);
@@ -2121,7 +2137,12 @@ void BattleAnim_InitializeDragonRageUse(void) {
 }
 
 extern ParticleDescriptor D_8218E588[86];
-void ParticleEffect_InitExplosionSetTintPalette35(void) {
+/**
+ * Effect init for the end (impact) of the Dragon Rage animation.
+ * Effect end init 15 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Dragon Rage.
+ */
+void BattleAnim_InitializeDragonRageHit(void) {
     BattleAnim_SpawnDrainFlameHueChange(0xA, 0x33, 0x2C, 8, 0xC8, 0x10);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 2, 0x14, BattleAnim_RunFlamethrowerHitRotationWeak, &D_8218E7F0, 0, 1, 0x11, 9, 1, 0);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 2, 2, BattleAnim_RunFlamethrowerHitRotationStrong, &D_8218E7F0, 0, 0xC, 0x11, 9, 1, 0);
@@ -2142,6 +2163,8 @@ extern M2C_UNK func_82145718;
 /**
  * Effect init that spawns the Fire Spin animation. Player sweep (all 165 moves used in battle):
  * only Fire Spin reached this function.
+ * Effect start init 84 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Fire Spin.
  */
 void BattleAnim_InitializeFireSpinUse(void) {
     func_8213B644(0, 8, 6);
@@ -2157,7 +2180,8 @@ extern M2C_UNK D_8218E7F8;
 
 /**
  * initialize flames that make up the ring that engulfs a pokemon being hit by fire spin
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Effect end init 29 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Fire Spin.
  */
 void BattleAnim_InitializeFireSpinHitFlames(void) {
     func_8213B560(0, &BattleAnim_FireSpinParticleUpdate, &D_8218E598, 0, 0x12, 0xE, 0, 0, 0);
@@ -2174,7 +2198,12 @@ void BattleAnim_DefaultStartEffect_Init(void) {
 extern ParticleDescriptor D_8218E588[86];
 extern M2C_UNK D_8218E5A8;
 extern M2C_UNK D_8218E7C0;
-void ParticleEffect_InitSparkleSet(void) {
+/**
+ * Effect init for the end (impact) of the Egg Bomb animation.
+ * Effect end init 40 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Egg Bomb.
+ */
+void BattleAnim_InitializeEggBombHit(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunExpandingHitSpark, &D_8218E5A8, 0, 1, 0x10, 9, 0x12, 0);
     BattleAnim_SpawnDescriptor25AlphaHoldFadeOut(0, 0, 0x40, 0x8, 0xC8);
     BattleAnim_SpawnBeamBoomWaterfallHueChange(4, 0x8, 0x17, 0x20, 0xFF);
@@ -2190,7 +2219,12 @@ void ParticleEffect_InitSparkleSet(void) {
 void BattleAnim_DefaultEndEffect_Init(void) {
 }
 
-void ParticleEffect_InitCombinedSet(void) {
+/**
+ * Effect init for the end (impact) of the Fire Blast animation.
+ * Effect end init 59 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Fire Blast.
+ */
+void BattleAnim_InitializeFireBlastHit(void) {
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0xFF, 0);
     BattleAnim_SpawnDrainFlameHueChange(0xA, 9, 0xE, 8, 0xC8, 0x10);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(4, 8, 0x14, BattleAnim_CallbackEndEffects15And22And59Descriptor3DRotatingAlphaScaleFade, &D_8218E580[0x3E], 0, 2, 0xE, 0, 0, 0);

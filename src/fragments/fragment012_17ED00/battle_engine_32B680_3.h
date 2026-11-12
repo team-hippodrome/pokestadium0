@@ -147,7 +147,7 @@ void BattleAnim_InitEffects63And75Model38(Particle* arg0);
 void Particle_CreateDisplayList_Alpha(s32 arg0, arg1_func_84344CE8* arg1);
 void Particle_CreateDisplayList_Texture4b(s32 arg0, arg1_func_84344CE8* arg1);
 void Particle_CreateDisplayList_GreenPrim(s32 arg0, arg1_func_84344CE8* arg1);
-void ParticleEffect_RegisterHandlers_Default(void);
+void BattleAnim_InitializeRockThrowRockSlideUse(void);
 void BattleAnim_InitializeRockSlideRockThrowHit(void);
 void BattleAnim_InitializeStrengthUse(void);
 void BattleAnim_InitializeStrengthHit(void);
@@ -310,7 +310,7 @@ extern M2C_UNK D_8218E6A8;
 extern s16 D_8219A80A;
 extern M2C_UNK func_82153C50;
 
-void func_82153FD8(void);
+void BattleAnim_InitializeThunderWaveHit(void);
 
 extern const f32 D_FLT_82196EC8;
 extern const f32 D_FLT_82196ECC;
@@ -380,7 +380,7 @@ extern M2C_UNK D_8218E7B8;
 extern M2C_UNK func_82155380;
 extern M2C_UNK func_82163D7C;
 
-void func_821553D0(void);
+void BattleAnim_InitializeHazePoisonGasSmokescreenUse(void);
 
 M2C_UNK func_8213B560(M2C_UNK, M2C_UNK *, M2C_UNK *, M2C_UNK, s32, s32, s32, s32, s32); /* extern */
 
@@ -463,7 +463,7 @@ void BattleAnim_CallbackEndEffect49Model33Anim34WaitCleanup(Particle* arg0);
 
 void BattleAnim_CallbackEndEffect21ModelAnimWait(Particle* arg0);
 
-void ParticleEffect_RegisterModeSpecific(void);
+void BattleAnim_InitializeDrainingMoveHit(void);
 
 void BattleAnim_RunFlyUpwardMovementEffect(Particle* arg0);
 
@@ -634,7 +634,7 @@ extern M2C_UNK func_82159F70;
 extern M2C_UNK BattleAnim_RunDigHitDust;
 extern M2C_UNK BattleAnim_RunDigHitRocks;
 
-void func_82159FC8(void);
+void BattleAnim_InitializeDigBurrowUse(void);
 
 M2C_UNK func_8213B560(M2C_UNK, M2C_UNK *, M2C_UNK *, M2C_UNK, s32, s32, s32, s32, s32); /* extern */
 M2C_UNK func_8213B5D8(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK *, M2C_UNK *, s32, s32, s32, s32, s32, s32); /* extern */
@@ -667,7 +667,7 @@ M2C_UNK func_82168504();                            /* extern */
 void BattleAnim_InitializeSharpenUse(void);
 
 M2C_UNK func_8213B644(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
-M2C_UNK func_8215B558();                            /* extern */
+M2C_UNK BattleAnim_InitializeQuickAttackHiJumpKickUse();                            /* extern */
 
 void func_8215B5B8(void);
 
@@ -758,7 +758,7 @@ void BattleAnim_InitializeConfuseRayHit(void);
 
 extern M2C_UNK D_8218E5F8;
 extern M2C_UNK D_8218E5D8;
-void ParticleEffect_BasicMultiBurst(void);
+void BattleAnim_InitializeWaterfallUse(void);
 
 M2C_UNK func_8213B464(M2C_UNK);                     /* extern */
 M2C_UNK func_8213B560(M2C_UNK, M2C_UNK *, M2C_UNK *, M2C_UNK, s32, s32, s32, s32, s32); /* extern */
@@ -766,9 +766,9 @@ M2C_UNK func_8213B5D8(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK *, M2C_UNK *, s32, s32,
 M2C_UNK BattleAnim_InitializeWaterfallUseB();                            /* extern */
 extern M2C_UNK func_821530F4;
 
-void BattleAnim_InitializeWaterfallUseA(void);
+void BattleAnim_InitializeWaterfallHit(void);
 
-void ParticleEffect_BasicMultiBurstDelayedSprayOnly(void);
+void BattleAnim_InitializeSurfUseSpray(void);
 
 extern M2C_UNK D_8218E7A8;
 void BattleAnim_InitializeSurfHit(void);
@@ -829,7 +829,7 @@ M2C_UNK func_8213B720(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK); /* extern */
 M2C_UNK func_8213BC00(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32); /* extern */
 extern M2C_UNK func_8215DFB4;
 
-void func_8215E1A8(void);
+void BattleAnim_InitializePsychicHit(void);
 
 M2C_UNK func_8213B464(M2C_UNK);                     /* extern */
 M2C_UNK func_8213B560(M2C_UNK, M2C_UNK *, M2C_UNK *, M2C_UNK, s32, s32, s32, s32, s32); /* extern */
@@ -838,7 +838,7 @@ M2C_UNK func_8213B644(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
 M2C_UNK func_8213B720(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK); /* extern */
 M2C_UNK func_8213BC00(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32); /* extern */
 
-void func_8215E2C4(void);
+void BattleAnim_InitializeConfusionHit(void);
 
 void BattleAnim_InitializeFocusEnergyUse(void);
 

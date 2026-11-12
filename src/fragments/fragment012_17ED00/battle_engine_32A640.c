@@ -399,7 +399,8 @@ void BattleAnim_OrphanDescriptor2BAnd2EEmitterSequence(void) {
 
 /**
  * initializes being hit by pedal dance
- * @unverified Name and comment from Stadium 1.
+ * Effect end init 26 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Petal Dance.
  */
 void BattleAnim_InitializePetalDanceHit(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 2, 0x14, BattleAnim_RunPetalDanceLingeringHitEffect, &gBattleAnimParticleDescriptors[0x2C], 0, 4, 0xE, 0, 0, 0);
@@ -408,7 +409,8 @@ void BattleAnim_InitializePetalDanceHit(void) {
 
 /**
  * initializes being hit by wing attack
- * @unverified Name and comment from Stadium 1.
+ * Effect end init 87 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Wing Attack.
  */
 void BattleAnim_InitializeWingAttackHit(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 2, 5, BattleAnim_RunSlowFallingHitEffect, &gBattleAnimParticleDescriptors[0x2D], 0, 1, 0xE, 0, 0, 1);

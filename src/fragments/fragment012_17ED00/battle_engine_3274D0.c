@@ -544,7 +544,8 @@ void func_8214F55C(s8 *arg0) {
 
 /**
  * initializes using thunderbolt or thunder
- * @unverified Name and comment from Stadium 1.
+ * Effect start init 18 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Thunder, Thunderbolt.
  */
 void BattleAnim_InitializeThunderThunderboltUse(void) {
     BattleAnim_SpawnCategory17MarkerSlot(0x64, 1);
@@ -570,7 +571,8 @@ extern M2C_UNK func_8214EBA4;
 
 /**
  * initializes being hit by thunder shock or thunderbolt
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Effect end init 8 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Thunder Shock, Thunderbolt.
  */
 void BattleAnim_InitializeThunderShockThunderboltHit(void) {
     func_8213B794(0x2C, 4, 0x10, 8, 0xFF);
@@ -591,7 +593,8 @@ extern M2C_UNK func_8214EBA4;
 
 /**
  * initializes getting hit by thunder
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Effect end init 72 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Thunder.
  */
 void BattleAnim_InitializeThunderHit(void) {
     func_8213B794(0, 4, 8, 8, 0xC8);
@@ -604,7 +607,8 @@ void BattleAnim_InitializeThunderHit(void) {
 
 /**
  * initializes using thunder shock
- * @unverified Name and comment from Stadium 1.
+ * Effect start init 59 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Thunder Shock.
  */
 void BattleAnim_InitializeThunderShockUse(void) {
     BattleAnim_SpawnCategory17MarkerSlot(0x64, 1);
@@ -636,7 +640,8 @@ void func_8214FCBC(void) {
 
 /**
  * initializes using thunder punch
- * @unverified Name and comment from Stadium 1.
+ * Effect start init 73 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Thunder Punch.
  */
 void BattleAnim_InitializeThunderPunchUse(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 5, BattleAnim_CallbackStartEffects18And73Descriptor11ScatterRiseFade, &gBattleAnimParticleDescriptors[0x11], 8, 4, 0x10, gBattleAnimCurrentAnchor, 0x25, 0);

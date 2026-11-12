@@ -545,7 +545,7 @@ void BattleAnim_CallbackUnusedGrowingSparkVariant(Particle* arg0);
 
 extern M2C_UNK D_8218E798;
 extern M2C_UNK D_8218E7D0;
-void ParticleEffect_TextureSetup(void);
+void BattleAnim_InitializeIcePunchUse(void);
 
 void BattleAnim_InitializeIcePunchHit(void);
 
@@ -576,7 +576,7 @@ void func_82166DC4(void);
  *
  * Starts the effect slots of one battle animation.  If func_82107CF0
  * (applied to the word at D_8219A814) returns 0x7B, the animation is
- * replaced by a single call to func_8216713C() (it takes no argument) and
+ * replaced by a single call to BattleAnim_InitializeCutUse() (it takes no argument) and
  * nothing else happens.
  * Otherwise it creates three slots running func_8215FAA4 on descriptor
  * D_8218E6D0 (start delays 0, 4 and 0xA; the last argument 0, 1, 2 is the
@@ -590,7 +590,7 @@ void func_82166DC4(void);
  * that is reused by the three calls, hence the sp30 variable.
  */
 s32 func_82107CF0(s32);
-void func_8216713C(void);
+void BattleAnim_InitializeCutUse(void);
 M2C_UNK func_8213B720(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK);
 extern M2C_UNK D_8218E6C8;
 extern M2C_UNK D_8218E6D0;
@@ -598,8 +598,8 @@ extern s32 D_8219A814;
 
 void BattleAnim_InitializeScratchSlashUse(void);
 
-void BattleAnim_InitializeCutCrabhammerUse(void);
-void ParticleEffect_DynamicCollisionSetup(void);
+void BattleAnim_InitializeCutCrabhammerHit(void);
+void BattleAnim_InitializeScratchSlashHit(void);
 
 void BattleAnim_InitializeCutSlashScratchEffect(void);
 

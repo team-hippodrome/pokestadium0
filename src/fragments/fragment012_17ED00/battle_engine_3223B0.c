@@ -1834,7 +1834,8 @@ void BattleAnim_RunHydroPumpWaterGunProjectileHit(s8 *arg0) {
 
 /**
  * Starts the effect for Mega Punch
- * @unverified Name and comment from Stadium 1.
+ * Effect start init 15 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Mega Punch.
  */
 void BattleAnim_StartMegaPunchEffect(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(4, BattleAnim_RunMegaKickAndPunchProjectile, &gBattleAnimParticleDescriptors[8], 0, 4, 0x11, gBattleAnimCurrentAnchor, 0, 0);
@@ -1848,6 +1849,8 @@ extern M2C_UNK func_8214B0FC;
 /**
  * Effect init that spawns the Mega Kick animation. Player sweep (all 165 moves used in battle):
  * only Mega Kick reached this function.
+ * Effect start init 2 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Mega Kick.
  */
 void BattleAnim_InitializeMegaKickUse(void) {
     func_8213B560(0, &func_8214B0FC, &D_8218E5C8, 0, 4, 0x11, (s32) D_8219A80A, 0, 0);
@@ -1861,6 +1864,8 @@ extern M2C_UNK func_821499D4;
 /**
  * Effect init that spawns the Bubble animation. Player sweep (all 165 moves used in battle): only
  * Bubble reached this function.
+ * Effect start init 48 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Bubble.
  */
 void BattleAnim_InitializeBubbleUse(void) {
     func_8213B5D8(0, 1, 0x3C, &func_821499D4, &D_8218E7A8, 0, 1, 0x11, (s32) D_8219A80A, 0, 0);
@@ -1868,7 +1873,12 @@ void BattleAnim_InitializeBubbleUse(void) {
 
 extern ParticleDescriptor D_8218E580[86];
 extern M2C_UNK D_8218E728;
-void InitParticleEffectGroup_Basic(void) {
+/**
+ * Effect init for the end (impact) of the Bubble animation.
+ * Effect end init 34 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Bubble.
+ */
+void BattleAnim_InitializeBubbleHit(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunDefaultHitSpark, &D_8218E728, 0, 1, 0x11, 9, 3, 5);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackEndEffects34And53Descriptor45RotatingBounceFade, &D_8218E7A8, 0, 0x10, 0x11, 9, 0, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_CallbackEndEffects34And53Descriptor45RotatingBounceFade, &D_8218E7A8, 0, 0x10, 0x11, 9, 0, 0);
@@ -1876,7 +1886,8 @@ void InitParticleEffectGroup_Basic(void) {
 
 /**
  * initializes water gun
- * @unverified Name and comment from Stadium 1.
+ * Effect start init 6 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Water Gun.
  */
 void BattleAnim_InitializeWaterGunUse(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(3, BattleAnim_RunWaterGunAndHydroPumpEmitterFade, &gBattleAnimParticleDescriptors[0xE], 0, 1, 0x11, gBattleAnimCurrentAnchor, 0, 1);
@@ -1887,7 +1898,12 @@ void BattleAnim_InitializeWaterGunUse(void) {
 extern M2C_UNK D_8218E650;
 extern M2C_UNK D_8218E7D8;
 extern M2C_UNK D_8218E5D8;
-void InitComplexParticleSequence(void) {
+/**
+ * Effect init for the end (impact) of the Water Gun animation.
+ * Effect end init 2 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Water Gun.
+ */
+void BattleAnim_InitializeWaterGunHit(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 1, 0xF, BattleAnim_CallbackEndEffect2Descriptor19AnimatedAlphaFade, &D_8218E650, 0, 1, 0x10, gBattleAnimCurrentAnchor, 0x26, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(0xC, BattleAnim_CallbackEndEffect2Descriptor4BModeColorShiftFade, &D_8218E7D8, 0, 1, 0xA, 0, 0x4C, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(0xC, BattleAnim_CallbackEndEffect2Descriptor4BModeColorShiftFade, &D_8218E7D8, 0, 1, 0xA, 0, 0x4C, 1);
@@ -1897,7 +1913,8 @@ void InitComplexParticleSequence(void) {
 
 /**
  * initializes hydro pump
- * @unverified Name and comment from Stadium 1.
+ * Effect start init 58 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Hydro Pump.
  */
 void BattleAnim_InitializeHydroPumpUse(void) {
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0x40, 6);
@@ -1918,7 +1935,8 @@ extern M2C_UNK func_82145998;
 
 /**
  * initializes hydro pump
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Effect end init 27 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Hydro Pump.
  */
 void BattleAnim_InitializeHydroPumpHit(void) {
     func_8213BD78(4, 8, 0x33, 0x10, 0xFF);
@@ -1940,7 +1958,8 @@ extern M2C_UNK func_8214B1F8;
 
 /**
  * initializes ice beam
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Effect start init 47 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Ice Beam.
  */
 void BattleAnim_InitializeIceBeamUse(void) {
     func_8213B6AC(0, 0, 0x20, 8, 0xA0);
@@ -1960,6 +1979,8 @@ extern M2C_UNK func_8214B1F8;
 /**
  * Effect init that spawns the Psybeam animation. Player sweep (all 165 moves used in battle):
  * only Psybeam reached this function.
+ * Effect start init 4 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Psybeam.
  */
 void BattleAnim_InitializePsybeamUse(void) {
     func_8213B6AC(0, 0, 0x20, 8, 0xA0);
@@ -1976,6 +1997,8 @@ extern s16 D_8219A80A;
 /**
  * Effect init that spawns the Bubblebeam animation. Player sweep (all 165 moves used in battle):
  * only Bubblebeam reached this function.
+ * Effect start init 77, start init 120 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all
+ * 165 moves used: it ran for exactly Bubble Beam.
  */
 void BattleAnim_InitializeBubbleBeamUse(void) {
     func_8213B644(0, 8, 6);
@@ -1993,6 +2016,8 @@ extern M2C_UNK func_8214B1F8;
 /**
  * Effect init that spawns the Aurora Beam animation. Player sweep (all 165 moves used in battle):
  * only Aurora Beam reached this function.
+ * Effect start init 26 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Aurora Beam.
  */
 void BattleAnim_InitializeAuroraBeamUse(void) {
     func_8213B6AC(0, 0, 0x20, 8, 0xA0);
@@ -2013,6 +2038,8 @@ extern M2C_UNK func_8214B1F8;
 /**
  * Effect init that spawns the Hyper Beam animation. Player sweep (all 165 moves used in battle):
  * only Hyper Beam reached this function.
+ * Effect start init 39 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Hyper Beam.
  */
 void BattleAnim_InitializeHyperBeamUse(void) {
     func_8213B6AC(0, 0, 0x20, 8, 0xA0);
@@ -2047,6 +2074,8 @@ extern M2C_UNK func_8214B1F8;
 /**
  * Effect init that spawns the Tri Attack animation. Player sweep (all 165 moves used in battle):
  * only Tri Attack reached this function.
+ * Effect start init 78 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Tri Attack.
  */
 void BattleAnim_InitializeTriAttackUse(void) {
     func_8213B6AC(0, 0, 0x20, 8, 0xA0);
@@ -2090,7 +2119,8 @@ extern M2C_UNK BattleAnim_IceBeamParticleUpdateB;
 
 /**
  * sets being hit by ice beam
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Effect end init 67 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Ice Beam.
  */
 void BattleAnim_InitializeIceBeamHit(void) {
     func_8213BE70(0, 8, 0x33, 0x10, 0xDC, 0x20);
@@ -2116,7 +2146,8 @@ extern M2C_UNK func_8214B5A0;
 
 /**
  * initializes being hit by psybeam
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Effect end init 68 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Psybeam.
  */
 void BattleAnim_InitializePsybeamHit(void) {
     func_8213C060(4, 0x32, 0x20, 0xA0);
@@ -2127,7 +2158,12 @@ void BattleAnim_InitializePsybeamHit(void) {
 }
 
 extern ParticleDescriptor D_8218E588[86];
-void InitParticleEffectSet_WithCustomCallback(void) {
+/**
+ * Effect init for the end (impact) of the Bubble Beam animation.
+ * Effect end init 53 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Bubble Beam.
+ */
+void BattleAnim_InitializeBubbleBeamHit(void) {
     BattleAnim_SpawnBeamBoomWaterfallHueChange(4, 0x8, 0x21, 0x10, 0xFF);
     BattleAnim_CreateEffectSlotForCurrentOwner(3, BattleAnim_RunExpandingHitSpark, &D_8218E5A8, 0, 1, 0x10, gBattleAnimCurrentAnchor, 0x33, 0);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(3, 5, 3, BattleAnim_CallbackSharedDescriptor19RecolorAnimatedFade, &D_8218E650, 0, 8, 0x10, gBattleAnimCurrentAnchor, 0, 0);
@@ -2147,7 +2183,8 @@ extern M2C_UNK func_8214B77C;
 
 /**
  * initialize being hit by aurora beam
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Effect end init 69 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Aurora Beam.
  */
 void BattleAnim_InitializeAuroraBeamHit(void) {
     func_8213C060(4, 0x32, 0x20, 0xA0);
@@ -2159,7 +2196,12 @@ void BattleAnim_InitializeAuroraBeamHit(void) {
 
 extern ParticleDescriptor D_8218E588[86];
 extern ParticleDescriptor D_8218E588[86];
-void InitParticleEffectSet_WithComplex(void) {
+/**
+ * Effect init for the end (impact) of the Hyper Beam animation.
+ * Effect end init 70 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Hyper Beam.
+ */
+void BattleAnim_InitializeHyperBeamHit(void) {
     UNUSED s32 pad; // FAKE: stack padding
 
     BattleAnim_SpawnOwnerModelTintRampDetach(0, 0x17, 0xFF, 0, 8);
@@ -2186,7 +2228,8 @@ void BattleAnim_EndEffect71PaletteApproachWithExpandingScaleFades(void) {
 
 /**
  * initializes being hit by tri attack
- * @unverified Name and comment from Stadium 1.
+ * Effect end init 86 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Tri Attack.
  */
 void BattleAnim_InitializeTriAttackHit(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 2, 8, BattleAnim_CallbackEndEffect86Descriptor19ModePositionedAnimFade, &gBattleAnimParticleDescriptors[0x19], 0, 1, 0x11, gBattleAnimCurrentAnchor, 0x49, 0);
