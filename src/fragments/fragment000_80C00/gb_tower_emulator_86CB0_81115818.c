@@ -994,7 +994,8 @@ s32 GbAudio_UpdateFrame(void) {
 
 /**
  * 1 while the GB Tower pause/options menu is open: output menu sounds instead of the GB APU mix.
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): called with 1 when C-Up opened the GB Tower menu over Pocket
+ * Monsters Green.
  */
 void GbAudio_SetMenuSoundMode(s32 arg0) {
   D_81138B80 = arg0;
@@ -1002,7 +1003,7 @@ void GbAudio_SetMenuSoundMode(s32 arg0) {
 
 /**
  * Starts menu sound `id` (index into sGbMenuSoundData) on the next GbAudio_RenderMenuSounds.
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): called with sound 1 when C-Up opened the GB Tower menu.
  */
 void GbAudio_PlayMenuSound(s32 arg0) {
   D_81138B84.id = arg0;

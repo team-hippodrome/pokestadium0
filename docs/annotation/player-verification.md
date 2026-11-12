@@ -721,3 +721,7 @@ Nidorino) played in the GB Tower:
   fixed point).
 * The four channel updates keep their tags, because play cannot tell square 1
   from square 2.
+* GB Tower menu: C-Up opens メニュー (ゲームをつづける, ゲームをやめる,
+  せつめい・コンフィグ). This calls `GbAudio_SetMenuSoundMode(1)` and
+  `GbAudio_PlayMenuSound(1)`. Its text is drawn by `GbEmu_DrawTextCommands`
+  from a command list whose headers and glyph counts match each line.
