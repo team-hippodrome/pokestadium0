@@ -443,7 +443,7 @@ extern s8 *D_8219A5A0;
 
 /**
  * Move effect 0x55 (Gen 1 SplashEffect).
- * @unverified Name from its slot in sMoveEffectHandlers, which follows the Gen 1 effect table.
+ * In the per-move sweep only Splash ran it.
  */
 void Battle_Effect_Splash(void) {
     M2C_FIELD(D_8219A5A0, s32 *, 0x48) = 7;
@@ -455,7 +455,7 @@ extern s32 D_8218C8D4;
 /**
  * Move effect 0x56 (Gen 1 DisableEffect): disables a random move of the target for 1-8 turns.
  * Sets moveEffectKind 0x20, or 8 when it fails.
- * @unverified Name from its slot in sMoveEffectHandlers, which follows the Gen 1 effect table.
+ * In the per-move sweep only Disable ran it.
  */
 void Battle_Effect_Disable(void) {
     s32 slot;
@@ -561,7 +561,8 @@ extern s32 D_8218C8F4;
  * Move effect 0x38 (Gen 1 HealEffect): Recover and Soft-Boiled restore half the max HP, Rest
  * restores it all and puts the user to sleep. Fails at full HP (moveEffectKind 0x1C), otherwise
  * sets moveEffectKind 0x15.
- * @unverified Name from its slot in sMoveEffectHandlers, which follows the Gen 1 effect table.
+ * In the per-move sweep exactly Recover, Soft-Boiled and Rest ran it (at full HP, so all three
+ * took the failed path to phase 28).
  */
 void Battle_Effect_Heal(void) {
     u8 temp_v0;
@@ -608,7 +609,7 @@ extern s32 D_8218C8FC;
 /**
  * Move effect 0x39 (Gen 1 TransformEffect): copies the target's species, types, moves (5 PP
  * each), stats and stat stages. Sets moveEffectKind 0x0F.
- * @unverified Name from its slot in sMoveEffectHandlers, which follows the Gen 1 effect table.
+ * In the per-move sweep only Transform ran it.
  */
 void Battle_Effect_Transform(void) {
     s32 i;

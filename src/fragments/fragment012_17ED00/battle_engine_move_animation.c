@@ -1009,10 +1009,10 @@ void BattleScene_ResetOwnerModelIfLoaded(ActivePokemon* active_pokemon) {
 }
 
 /**
- * State row 8 enter: starts the charge cue mapped from the used move.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Enter callback of row 8: plays the user's charge-turn cue from sChargeMoveCues. In the per-move
+ * sweep row 8 ran for exactly Razor Wind, Fly, Solar Beam, Dig, Skull Bash and Sky Attack.
  */
-void BattleScene_EnterRow8StartMappedMoveAnim(ActivePokemon* active_pokemon) {
+void BattleScene_EnterChargeTurnRow(ActivePokemon* active_pokemon) {
     UNUSED s32 pad[2]; // FAKE: stack padding
     s32 charge_move_cue = sChargeMoveCues[active_pokemon->state.runtime.usedMove - 1];
     MovePresentationCue* cue;
@@ -1318,7 +1318,14 @@ void BattleScene_EnterStatusHitRow(ActivePokemon* active_pokemon) {
     }
 }
 
-void func_82104648(ActivePokemon* active_pokemon) {
+/**
+ * Row 14 tick: at the end of the user's cue, ends the move effect on the target, plays the
+ * confusion sequence when the target became confused, and plays the hit sound unless the move
+ * failed. In the per-move sweep row 14 ran for exactly the 13 status moves (Sing, Supersonic,
+ * Poison Powder, Stun Spore, Sleep Powder, Thunder Wave, Toxic, Hypnosis, Confuse Ray, Glare,
+ * Poison Gas, Lovely Kiss, Spore).
+ */
+void BattleScene_TickStatusHitEnd(ActivePokemon* active_pokemon) {
     s32 side = BattleScene_GetParticipantSideIndex(active_pokemon);
     MovePresentationCue* cue;
     BattleMonRuntime* runtime = &active_pokemon->state.runtime;
@@ -1344,7 +1351,11 @@ void func_82104648(ActivePokemon* active_pokemon) {
 }
 
 void func_82134EBC(ActivePokemon*, s32);
-void func_821047C4(ActivePokemon* active_pokemon) {
+/**
+ * Row 11 tick: when the stat could still be lowered, queues the stat-down effect on the target.
+ * In the per-move sweep row 11 ran only for stat-lowering moves and side effects.
+ */
+void BattleScene_TickStatDownPlayEffect(ActivePokemon* active_pokemon) {
     UNUSED s32 pad; // FAKE: stack padding
     MovePresentationCue* cue;
     s32 other;
@@ -1363,7 +1374,12 @@ void func_821047C4(ActivePokemon* active_pokemon) {
 }
 
 extern u8 D_82199FCC;
-void func_821048BC(ActivePokemon* active_pokemon) {
+/**
+ * Row 11 tick: at the end of the user's cue, plays the move's sound on the target (variant 1 or
+ * 5). In the per-move sweep row 11 ran for the 9 stat-lowering moves and the 6 damaging moves
+ * with a stat-lowering side effect (Acid, Bubble Beam, Aurora Beam, Psychic, Constrict, Bubble).
+ */
+void BattleScene_TickStatDownPlaySound(ActivePokemon* active_pokemon) {
     BattleMonRuntime* runtime;
     MovePresentationCue* cue;
     s32 other;

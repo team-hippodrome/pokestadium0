@@ -1097,7 +1097,7 @@ void BattleScene_TickAssetLoadQueueRowEffectList3(ActivePokemon* active_pokemon)
 void BattleScene_TickQueueRowEffectList3OnFirstFrame(ActivePokemon* active_pokemon);
 void BattleScene_TickRow21CleanupAndEnterState18(ActivePokemon* active_pokemon);
 void BattleScene_ResetOwnerModelIfLoaded(ActivePokemon* active_pokemon);
-void BattleScene_EnterRow8StartMappedMoveAnim(ActivePokemon* active_pokemon);
+void BattleScene_EnterChargeTurnRow(ActivePokemon* active_pokemon);
 void BattleScene_TickRow8PlayMoveEffectScriptB(ActivePokemon* active_pokemon);
 void BattleScene_EnterRow9SetEventTrack(ActivePokemon* active_pokemon);
 void BattleScene_EnterRow9QueueEffectList6(ActivePokemon* active_pokemon);

@@ -295,3 +295,41 @@ Battle_Random has to be patched before the move is entered: the turn's
 first action is resolved when both actions are committed (`Battle_StartTurn`),
 not when its presentation plays. A constant 0 or 1 also hangs the game,
 because `Battle_RandomizeDamage` and some effects loop until the roll is in range.
+
+### Full sweep, all 165 moves
+
+Phases each move's turn passed through (1P acting first), and the rows entered on 1P:
+
+| Phase / row | Moves | Name |
+|---|---|---|
+| phase 8 | Guillotine, Horn Drill, Fissure (target higher level), Whirlwind, Roar, Teleport, Counter, Dream Eater on an awake target | `BattleScene_PhaseMoveMissed` |
+| phase 9 | Take Down, Double-Edge, Submission, Struggle | `BattleScene_PhaseRecoilDamage` |
+| phase 12 / 13 | Fly / Dig | `BattleScene_PhaseFlyUp` / `BattleScene_PhaseDigUnder` |
+| phase 14 | Razor Wind, Solar Beam, Skull Bash, Sky Attack | `BattleScene_PhaseChargeUp` |
+| phase 15 | Transform | `BattleScene_PhaseTransform` |
+| phase 17 (COM's turn) | after Bind, Wrap, Fire Spin, Clamp, and after the sleep moves | `BattleScene_PhaseCannotMove` |
+| phase 20 (COM's turn) | after Supersonic, Confuse Ray | `BattleScene_PhaseConfusionSelfHit` |
+| phase 22 | the 13 status moves | `BattleScene_PhaseInflictStatus` |
+| phase 25 | Substitute | `BattleScene_PhaseSubstitute` |
+| phase 26 | Sand Attack, Tail Whip, Leer, Growl, String Shot, Screech, Smokescreen, Kinesis, Flash | `BattleScene_PhaseLowerStat` |
+| phase 27 | Bide | `BattleScene_PhaseBide` |
+| phase 28 | Recover, Soft-Boiled, Rest (at full HP), Mirror Move | `BattleScene_PhaseMoveFailedMessage` |
+| phase 29 | Haze | `BattleScene_PhaseHaze` |
+| phase 30, then 5 | Self-Destruct, Explosion | `BattleScene_PhaseExplosion` |
+| phase 31 (COM's turn) | after Stun Spore, Thunder Wave | `BattleScene_PhaseFullParalysis` |
+| phase 32 | Disable | `BattleScene_PhaseDisable` |
+| row 8 | Razor Wind, Fly, Solar Beam, Dig, Skull Bash, Sky Attack | `BattleScene_EnterChargeTurnRow` |
+| row 11 | the stat-lowering moves and the 6 damaging moves with a stat-down side effect | `BattleScene_TickStatDown*` |
+| row 14 | the 13 status moves | `BattleScene_TickStatusHitEnd` |
+| row 19 | the 10 multi-hit moves | `BattleScene_EnterRepeatHitRow` |
+
+Effect handlers ran for exactly their Gen 1 move sets (for example
+`Battle_Effect_Sleep`: Sing, Sleep Powder, Hypnosis, Lovely Kiss, Spore;
+`Battle_Effect_FreezeBurnParalyze`: the 13 moves with a burn, freeze or
+paralysis side effect; `Battle_Effect_Flinch`: Stomp, Rolling Kick, Headbutt,
+Bite, Low Kick, Bone Club, Hyper Fang), so their tags are gone.
+
+Phase 21 (`BattleScene_PhaseHeal`) wasn't seen in the sweep because Nidorino
+was at full HP. With its HP set to 30, Recover healed it (「ニドニドは
+たいりょくを かいふくした！」), but the phase watch missed the transition, so
+that name keeps `@unverified`.

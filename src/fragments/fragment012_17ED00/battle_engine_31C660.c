@@ -26,7 +26,7 @@ extern s32 D_8218C7C4;
 /**
  * Move effects 0x01 and 0x20 (Gen 1 SleepEffect): puts the target to sleep for 1-3 turns unless
  * it already has a status, the move misses or Sleep Clause applies. Sets moveEffectKind 0x16.
- * @unverified Name from its slots in sMoveEffectHandlers, which follow the Gen 1 effect table.
+ * In the per-move sweep exactly Sing, Sleep Powder, Hypnosis, Lovely Kiss and Spore ran it.
  */
 void Battle_Effect_Sleep(void) {
     s32 sp24;

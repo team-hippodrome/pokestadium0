@@ -685,7 +685,7 @@ void BattleScene_PhaseSelfEffect(CameraNode* arg0) {
 
 /**
  * Phase 30 (moveEffectKind 0x1E, set by BattleEffect_Explosion): Self-Destruct and Explosion.
- * @unverified Name from the moveEffectKind that leads here.
+ * In the per-move sweep only Self-Destruct and Explosion entered phase 30 (then 5, the faint).
  */
 void BattleScene_PhaseExplosion(CameraNode* arg0) {
     u8* sp1C = (u8*)D_8219A540 + 0x7C6;
@@ -777,7 +777,8 @@ void BattleScene_PhaseExplosion(CameraNode* arg0) {
  * Phase 28 (moveEffectKind 0x1C): the user's move does nothing and only messages show. Set when
  * the user flinched, when Recover or Rest fails at full HP and when Mirror Move has nothing to
  * copy.
- * @unverified Name from the moveEffectKind setters.
+ * In the per-move sweep Recover, Soft-Boiled and Rest at full HP and Mirror Move with nothing to
+ * copy entered phase 28.
  */
 void BattleScene_PhaseMoveFailedMessage(CameraNode* arg0) {
     sBattleScene.scene->cameraPresetId = 4;
@@ -828,6 +829,8 @@ void BattleScene_PhaseMoveFailedMessage(CameraNode* arg0) {
 
 /**
  * Phase 21 (moveEffectKind 0x15, set by Battle_Effect_Heal): Recover, Soft-Boiled and Rest.
+ * Not reached in the sweep: 1P's Nidorino was at full HP, so heal moves failed to phase 28
+ * instead.
  * @unverified Name from the moveEffectKind that leads here.
  */
 void BattleScene_PhaseHeal(CameraNode* arg0) {
@@ -909,7 +912,7 @@ void BattleScene_PhaseHeal(CameraNode* arg0) {
 
 /**
  * Phase 15 (moveEffectKind 0x0F, set by Battle_Effect_Transform).
- * @unverified Name from the moveEffectKind that leads here.
+ * In the per-move sweep only Transform entered phase 15.
  */
 void BattleScene_PhaseTransform(CameraNode* arg0) {
     UNUSED s32 pad[3]; // FAKE: stack padding
@@ -1051,7 +1054,7 @@ void func_80042A6C(s32);
 
 /**
  * Phase 27 (moveEffectKind 0x1B): Bide, when it starts and while it stores energy.
- * @unverified Name from the moveEffectKind setters (BattleEffect_Bide, Battle_CheckMonCanAct).
+ * In the per-move sweep only Bide entered phase 27.
  */
 void BattleScene_PhaseBide(CameraNode* arg0) {
     sBattleScene.scene->cameraPresetId = 4;
@@ -1239,7 +1242,7 @@ void func_82123314(CameraNode*, ActivePokemon*);
 f32 BattleScene_GetParticipantHeight(ActivePokemon*);
 /**
  * Phase 13 (moveEffectKind 0x0D, set by Battle_Effect_Charge for Dig): the first turn of Dig.
- * @unverified Name from the moveEffectKind that leads here.
+ * In the per-move sweep only Dig entered phase 13.
  */
 void BattleScene_PhaseDigUnder(CameraNode* arg0) {
     switch (sBattleScene.scene->phaseStep) {
@@ -1779,7 +1782,7 @@ void BattleScene_PhaseLowerStat(CameraNode* arg0) {
 
 /**
  * Phase 32 (moveEffectKind 0x20, set by Battle_Effect_Disable).
- * @unverified Name from the moveEffectKind that leads here.
+ * In the per-move sweep only Disable entered phase 32.
  */
 void BattleScene_PhaseDisable(CameraNode* arg0) {
     BattleMonRuntime* runtime = &((ActivePokemon*)D_8219A544)->state.runtime;
@@ -1981,7 +1984,7 @@ s32 func_82124BF8(ActivePokemon*);
 /**
  * Phase 9 (moveEffectKind 9). The acting Pokemon takes damage from its own move: plays effect list 9, the
  * hit cue animation and the damage shake, then commits pendingHp to hp.
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * In the per-move sweep exactly Take Down, Double-Edge, Submission and Struggle entered phase 9.
  */
 void BattleScene_PhaseRecoilDamage(CameraNode* arg0) {
     BattleMonRuntime* self = &sActivePokemon[sBattleScene.scene->actingSide]->state.runtime;
