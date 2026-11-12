@@ -62,7 +62,7 @@ M2C_UNK func_8001ABBC();
 extern Entry89100FC4 D_8006A9D4[];
 extern M2C_UNK D_800734A8;
 extern char D_8910DBAC[];
-s32 func_8002D454(s32, s32);
+s32 BattleMon_GetMoveIndexChecked(s32, s32);
 extern M2C_UNK D_800734A8;
 extern M2C_UNK D_8910DBB4;
 extern M2C_UNK D_8910DBBC;

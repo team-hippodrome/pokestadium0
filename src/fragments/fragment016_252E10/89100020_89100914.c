@@ -200,13 +200,13 @@ typedef struct Label89100FC4 {
 extern Entry89100FC4 D_8006A9D4[];
 extern M2C_UNK D_800734A8;
 extern char D_8910DBAC[];
-s32 func_8002D454(s32, s32);
+s32 BattleMon_GetMoveIndexChecked(s32, s32);
 void func_89100FC4(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     const char* str;
     Color82000BC4 color;
     s32 idx;
 
-    idx = func_8002D454(arg2, arg3);
+    idx = BattleMon_GetMoveIndexChecked(arg2, arg3);
     if (idx != -1) {
         if (idx == -2) {
             color = *(Color82000BC4*)&D_800734A8;

@@ -416,7 +416,7 @@ void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 void func_8001AA60(s32, s32, s32);
 void Font_SetColorForFlags(s32);
 void Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
-void func_8002D024(s8*);
+void TextBox_Draw(s8*);
 extern Gfx D_80073408[];
 extern Gfx D_80073438[];
 extern Color_RGBA8 D_80073520;
@@ -473,14 +473,14 @@ void LabItem_DrawCountSelector(s8* arg0) {
         func_8001AA60(M2C_FIELD(arg0, s32*, 4) + 0x36, M2C_FIELD(arg0, s32*, 8) + 0x10, M2C_FIELD(arg0, s32*, 0x34) % 10 + '0');
         Font_EndTexturedTextRendering();
         if (M2C_FIELD(arg0, s32*, 0) == 1) {
-            func_8002D024(arg0 + 0x48);
+            TextBox_Draw(arg0 + 0x48);
         }
     }
 }
 
 s32 func_8002B638(s8 *);                          /* extern */
 s32 func_8002BC14(s32);                             /* extern */
-M2C_UNK func_8002CEEC(s8 *, M2C_UNK *, M2C_UNK, M2C_UNK, s32); /* extern */
+M2C_UNK TextBox_Init(s8 *, M2C_UNK *, M2C_UNK, M2C_UNK, s32); /* extern */
 s32 Ui_CheckConfirmPressed(s8 *);                          /* extern */
 M2C_UNK func_8003F6AC(M2C_UNK);                     /* extern */
 extern s32 D_800603C0;
@@ -507,7 +507,7 @@ s32 LabItem_UpdateCountSelector(s8 *arg0) {
             } else if (temp_v0_2 == 1) {
                 if (M2C_FIELD(arg0, s32 *, 0x30) < M2C_FIELD(arg0, s32 *, 0x34)) {
                     func_8003F6AC(8);
-                    func_8002CEEC(arg0 + 0x48, &D_89018474, 0, 1, 0);
+                    TextBox_Init(arg0 + 0x48, &D_89018474, 0, 1, 0);
                     M2C_FIELD(arg0, s32 *, 0) = 1;
                 } else {
                     func_8003F6AC(2);
@@ -721,7 +721,7 @@ void LabItem_InitItemList(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
 
 void func_8002F9D8(void *, s32, s32, s32, s32);
 void ScrollList_DrawInlineItems(void *, s32, s32, s32, s32);
-void func_8002BAB8(s32, s32, s32, s32);
+void Ui_DrawNumberZeroPadded(s32, s32, s32, s32);
 void func_8001BCB4(s32, s32, s32, s32, void *, s32, s32);
 extern Gfx D_80073450[];
 extern u8 D_04011AB8[];
@@ -735,8 +735,8 @@ void LabItem_DrawItemList(s8 *arg0, s32 arg1) {
     } else {
         ScrollList_DrawInlineItems(arg0, M2C_FIELD(arg0, s32 *, 0x10C), M2C_FIELD(arg0, s32 *, 0x110) + 0x10, arg1 | 0xFFED, 0);
     }
-    func_8002BAB8(M2C_FIELD(arg0, s32 *, 0x10C) + 0xA8, M2C_FIELD(arg0, s32 *, 0x110) + 0xF2, M2C_FIELD(M2C_FIELD(arg0, s8 **, 0), s32 *, 8), 3);
-    func_8002BAB8(M2C_FIELD(arg0, s32 *, 0x10C) + 0xCE, M2C_FIELD(arg0, s32 *, 0x110) + 0xF2, M2C_FIELD(M2C_FIELD(arg0, s8 **, 0), s32 *, 4), 3);
+    Ui_DrawNumberZeroPadded(M2C_FIELD(arg0, s32 *, 0x10C) + 0xA8, M2C_FIELD(arg0, s32 *, 0x110) + 0xF2, M2C_FIELD(M2C_FIELD(arg0, s8 **, 0), s32 *, 8), 3);
+    Ui_DrawNumberZeroPadded(M2C_FIELD(arg0, s32 *, 0x10C) + 0xCE, M2C_FIELD(arg0, s32 *, 0x110) + 0xF2, M2C_FIELD(M2C_FIELD(arg0, s8 **, 0), s32 *, 4), 3);
     gSPDisplayList(gDisplayListHead++, D_80073450);
     gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
     func_8001BCB4(M2C_FIELD(arg0, s32 *, 0x10C) + 0xC4, M2C_FIELD(arg0, s32 *, 0x110) + 0xF4, 8, 0xA, D_04011AB8, 8, 0);
@@ -1023,7 +1023,7 @@ void LabItem_DrawOrganizeWindow(s8 *arg0)
     LabItem_DrawHelpText((s32 *) arg0);
     if (((((*((s32 *) (((s8 *) arg0) + 0))) == 9) || ((*((s32 *) (((s8 *) arg0) + 0))) == 0xA)) || ((*((s32 *) (((s8 *) arg0) + 0))) == 0xB)) || ((*((s32 *) (((s8 *) arg0) + 0))) == 0xC)) // FAKE: decomp slop, raw pointer casts stand in for struct fields
     {
-      func_8002D024(arg0 + 0x4AC);
+      TextBox_Draw(arg0 + 0x4AC);
     }
     if ((*((s32 *) (((s8 *) arg0) + 0))) == 8)
     {
@@ -1162,7 +1162,7 @@ s32 LabItem_UpdateOrganizeWindow(s8* arg0) {
             }
             if ((*(u16**)(arg0 + 0x13C))[*(s32*)(arg0 + 0x140)] & 0x100) {
                 *(s32*)arg0 = 9;
-                func_8002CEEC(arg0 + 0x4AC, (void*)D_8900A688[*(s32*)(arg0 + 0x104)], 0, 1, 0);
+                TextBox_Init(arg0 + 0x4AC, (void*)D_8900A688[*(s32*)(arg0 + 0x104)], 0, 1, 0);
                 func_8003F6AC(8);
                 break;
             }
@@ -1189,7 +1189,7 @@ s32 LabItem_UpdateOrganizeWindow(s8* arg0) {
             if ((*(u16**)(arg0 + 0x1A0))[*(s32*)(arg0 + 0x1A4)] & 0x100) {
                 func_8003F6AC(8);
                 *(s32*)arg0 = 10;
-                func_8002CEEC(arg0 + 0x4AC, (void*)D_8900A688[*(s32*)(arg0 + 0x104)], 0, 1, 0);
+                TextBox_Init(arg0 + 0x4AC, (void*)D_8900A688[*(s32*)(arg0 + 0x104)], 0, 1, 0);
                 break;
             }
             func_8003F6AC(2);
@@ -1215,7 +1215,7 @@ s32 LabItem_UpdateOrganizeWindow(s8* arg0) {
             if (*(s32*)(arg0 + 0x104) == 0) {
                 if (func_80031C24(*ptr) != 0 && *(s32*)(arg0 + 0x1D8) == 2) {
                     func_8003F6AC(8);
-                    func_8002CEEC(arg0 + 0x4AC, (void*)D_8900A694, 1, 2, 0xC);
+                    TextBox_Init(arg0 + 0x4AC, (void*)D_8900A694, 1, 2, 0xC);
                     *(s32*)arg0 = 11;
                     break;
                 }
@@ -1223,7 +1223,7 @@ s32 LabItem_UpdateOrganizeWindow(s8* arg0) {
                 if (v == 0) {
                     func_8003F6AC(8);
                     *(s32*)arg0 = 11;
-                    func_8002CEEC(arg0 + 0x4AC, D_89018648, 0, 1, 0);
+                    TextBox_Init(arg0 + 0x4AC, D_89018648, 0, 1, 0);
                     break;
                 }
                 func_8003F6AC(2);
@@ -1240,7 +1240,7 @@ s32 LabItem_UpdateOrganizeWindow(s8* arg0) {
             if (*(s32*)(arg0 + 0x104) == 2) {
                 if (func_80031C24(*ptr) != 0 && *(s32*)(arg0 + 0x1D8) == 2) {
                     func_8003F6AC(8);
-                    func_8002CEEC(arg0 + 0x4AC, (void*)D_8900A694, 1, 2, 0xC);
+                    TextBox_Init(arg0 + 0x4AC, (void*)D_8900A694, 1, 2, 0xC);
                     *(s32*)arg0 = 11;
                     break;
                 }
@@ -1312,7 +1312,7 @@ s32 LabItem_UpdateOrganizeWindow(s8* arg0) {
             if (func_80031C24(*ptr2) != 0 &&
                 *(s32*)(arg0 + 0x1D4) == 2) {
                 func_8003F6AC(8);
-                func_8002CEEC(arg0 + 0x4AC, (void*)D_8900A694, 1, 2, 0xC);
+                TextBox_Init(arg0 + 0x4AC, (void*)D_8900A694, 1, 2, 0xC);
                 *(s32*)arg0 = 12;
                 break;
             }

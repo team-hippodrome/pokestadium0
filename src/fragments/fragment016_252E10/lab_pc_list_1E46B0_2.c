@@ -468,7 +468,7 @@ s32 LabPCList_CanLearnMoveByLevelUp(s32 arg0, s32 arg1) {
 
 s32 func_80020974(s32);
 s32 func_8002D3D0(u8*);
-s32 func_8002D430(s32, s32);
+s32 BattleMon_GetMoveIndex(s32, s32);
 
 void func_8910A4C8(s8* arg0, u8* arg1) {
     s32 i;
@@ -506,7 +506,7 @@ void func_8910A4C8(s8* arg0, u8* arg1) {
         } else if (M2C_FIELD(e, s32*, 8) >= 50) {
             n2 = func_8002D3D0(arg1);
             for (j = 0; j < n2; j++) {
-                if ((func_8002D430((s32)arg1, j) != -2) && ((arg1 + j)[0x20] < 0xC0)) {
+                if ((BattleMon_GetMoveIndex((s32)arg1, j) != -2) && ((arg1 + j)[0x20] < 0xC0)) {
                     break;
                 }
             }

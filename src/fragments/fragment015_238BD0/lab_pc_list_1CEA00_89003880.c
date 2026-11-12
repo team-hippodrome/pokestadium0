@@ -74,7 +74,7 @@ void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 void func_8001AA60(s32, s32, s32);
 void Font_SetColorForFlags(s32);
 void Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
-void func_8002D024(s8*);
+void TextBox_Draw(s8*);
 extern Gfx D_80073408[];
 extern Gfx D_80073438[];
 extern Color_RGBA8 D_80073520;
@@ -106,7 +106,7 @@ void ScrollList_Init(s8*, s32, s8*, s32, void*, s32, s32);
 void LabItem_DrawItemCountRow();
 void func_8002F9D8(void *, s32, s32, s32, s32);
 void ScrollList_DrawInlineItems(void *, s32, s32, s32, s32);
-void func_8002BAB8(s32, s32, s32, s32);
+void Ui_DrawNumberZeroPadded(s32, s32, s32, s32);
 void func_8001BCB4(s32, s32, s32, s32, void *, s32, s32);
 extern Gfx D_80073450[];
 extern u8 D_04011AB8[];
@@ -283,9 +283,9 @@ s32 LabItem_HasUnsavedChanges(s32* arg0) {
     return 0;
 }
 
-void func_8002CA34(s8*, s32, s32);
+void SavePrompt_Init(s8*, s32, s32);
 void LabItem_InitConfirmWindow(s8*, s32, s32, s8*, s8*);
-s32 func_8002CD7C(s8*);
+s32 SavePrompt_Update(s8*);
 void Save_DrawReportingWindow(s8*);
 s32 LabItem_UpdateConfirmWindow(s8*);
 void LabItem_InitDeleteDataWindow(s8*, s32, s32, s8*);
@@ -314,7 +314,7 @@ s32 LabItem_UpdateScreen(s8* arg0) {
             if (res == -1) {
                 if (LabItem_HasUnsavedChanges((s32*)arg0) != 0) {
                     M2C_FIELD(arg0, s32*, 0) = 2;
-                    func_8002CA34(arg0 + 0x4E8, 0xCA, 0xAD);
+                    SavePrompt_Init(arg0 + 0x4E8, 0xCA, 0xAD);
                 } else {
                     ret = 1;
                 }
@@ -329,7 +329,7 @@ s32 LabItem_UpdateScreen(s8* arg0) {
             }
             break;
         case 2:
-            res = func_8002CD7C(arg0 + 0x4E8);
+            res = SavePrompt_Update(arg0 + 0x4E8);
             if (res == -1) {
                 M2C_FIELD(arg0, s32*, 0) = 1;
             } else if (res > 0) {

@@ -352,7 +352,7 @@ void FreeBattle_DrawShortageWarning(s8*);
 void FreeBattle_DrawLevelSumWarning(s8*);
 void FreeBattle_DrawEntryConfirm(s8*);
 void FreeBattle_DrawMonStatusWindow(s8*);
-void func_8002D024(s8*);
+void TextBox_Draw(s8*);
 extern s32 D_8200AC50;
 /**
  * Draws the rental selection screen for its current state (choosing label, list, entry confirm, status window).
@@ -427,7 +427,7 @@ void FreeBattle_DrawRentalScreen(s8* arg0) {
             func_800189C0(D_8200AC50, 0);
             func_800069CC();
             ScrollList_DrawItems(arg0 + 0x40, M2C_FIELD(arg0, s32*, 0x14) + 6, M2C_FIELD(arg0, s32*, 0x18) + 0x16, 0xFFF, M2C_FIELD(arg0, s32*, 0x73C));
-            func_8002D024(arg0 + 0x74C);
+            TextBox_Draw(arg0 + 0x74C);
             break;
     }
 }
@@ -601,7 +601,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *arg0)
         if (((*((s32 *) (((s8 *) arg0) + 0x740))) == 0) && ((func_820001B8(rec + 0x1C, &sp40), sp40 == 6)))
         {
           func_8003F6AC(8);
-          func_8002CEEC(arg0 + 0x74C, D_82009D04, 1, 2, 9);
+          TextBox_Init(arg0 + 0x74C, D_82009D04, 1, 2, 9);
           func_82002BF8(arg0, 0xC, 0);
         }
         else

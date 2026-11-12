@@ -21,8 +21,8 @@ void FreeBattle_InitOpponentSelect(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 a
 void FreeBattle_InitEntryScreen(s8* arg0);
 void FreeBattle_InitPopupMenu(s8* arg0, s32 arg1, s32 arg2, List82004518* arg3, s8* arg4, Color_RGBA8 arg5);
 void func_82007C30(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s8* arg6);
-void func_8002D188(s8* arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4);
-s32 func_800251A8(void);
+void BlinkingTextBox_Init(s8* arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4);
+s32 Save_GetProgressFlags(void);
 extern u8 D_82009014[];
 extern u8 D_82009004[];
 extern u8 D_82008FCC[];
@@ -111,7 +111,7 @@ void FreeBattle_SetScreenState(s8* arg0, s32 arg1, s32 arg2) {
             break;
         case 9:
             if (!(arg2 & 2)) {
-                FreeBattle_InitCupSelect(arg0 + 0x44EC, 0x60, 0xA4, func_800251A8() & 0xFF);
+                FreeBattle_InitCupSelect(arg0 + 0x44EC, 0x60, 0xA4, Save_GetProgressFlags() & 0xFF);
             }
             view = arg0 + 0x44EC;
             break;
@@ -164,7 +164,7 @@ void FreeBattle_SetScreenState(s8* arg0, s32 arg1, s32 arg2) {
             break;
         case 11:
             if (!(arg2 & 2)) {
-                func_8002D188(arg0 + 0x4E1C, (s32)D_82009DFC, 0, 1, 0);
+                BlinkingTextBox_Init(arg0 + 0x4E1C, (s32)D_82009DFC, 0, 1, 0);
             }
             break;
     }
@@ -254,7 +254,7 @@ void FreeBattle_DrawOpponentSelect(s8*);
 void func_82006DF8(s8*);
 void FreeBattle_DrawCupSelect(s8*, s32);
 void FreeBattle_DrawRentalScreen(s8*);
-void func_8002D2BC(s8*);
+void BlinkingTextBox_Draw(s8*);
 /**
  * Draws the battle setup screen for its current state.
  * @unverified Name and comment guessed from the code.
@@ -311,7 +311,7 @@ M2C_UNK FreeBattle_DrawScreen(s32 arg0) {
             break;
         case 11:
             FreeBattle_DrawRentalScreen(base + 0x4690);
-            func_8002D2BC(base + 0x4E1C);
+            BlinkingTextBox_Draw(base + 0x4E1C);
             break;
     }
 }

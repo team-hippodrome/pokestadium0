@@ -74,7 +74,7 @@ void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 void func_8001AA60(s32, s32, s32);
 void Font_SetColorForFlags(s32);
 void Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
-void func_8002D024(s8*);
+void TextBox_Draw(s8*);
 extern Gfx D_80073408[];
 extern Gfx D_80073438[];
 extern Color_RGBA8 D_80073520;
@@ -106,7 +106,7 @@ void ScrollList_Init(s8*, s32, s8*, s32, void*, s32, s32);
 void LabItem_DrawItemCountRow();
 void func_8002F9D8(void *, s32, s32, s32, s32);
 void ScrollList_DrawInlineItems(void *, s32, s32, s32, s32);
-void func_8002BAB8(s32, s32, s32, s32);
+void Ui_DrawNumberZeroPadded(s32, s32, s32, s32);
 void func_8001BCB4(s32, s32, s32, s32, void *, s32, s32);
 extern Gfx D_80073450[];
 extern u8 D_04011AB8[];
@@ -215,7 +215,7 @@ void LabItem_DrawScreen(void* arg) {
             break;
         case 2:
             LabItem_DrawOrganizeWindow(arg0 + 4);
-            func_8002CAD0(arg0 + 0x4E8);
+            SavePrompt_Draw(arg0 + 0x4E8);
             break;
         case 3:
             LabItem_DrawOrganizeWindow(arg0 + 4);

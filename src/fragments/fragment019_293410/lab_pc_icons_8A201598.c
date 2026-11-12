@@ -9,7 +9,7 @@ s32 func_80002BA4(void*, s32);
 s32 func_80017304(s32, BinArchive*, s32, void*, s32);
 s32 func_8001FA8C(s32);
 s32 func_8002D3D0(u8*);
-s32 func_8002D454();
+s32 BattleMon_GetMoveIndexChecked();
 typedef struct Move8A201D3C { u8 unk00; u8 unk01; u8 power; u8 type; u8 unk04; u8 unk05; } Move8A201D3C;
 extern Move8A201D3C D_8006B190[];
 extern BinArchive* D_8A21DA54;
@@ -89,7 +89,7 @@ s32 MonSummary_DrawMoveInfo(s32 arg0, s32 arg1, s32 arg2, s32 arg3)
     func_80029028(arg0, arg1, 0x122, 2, D_8A203424);
     func_80029028(arg0, arg1 + 2, 4, 0x82, D_8A203424);
     func_80029028(arg0 + 0x11E, arg1 + 2, 4, 0x82, D_8A203424);
-    move = func_8002D454(arg2, arg3);
+    move = BattleMon_GetMoveIndexChecked(arg2, arg3);
     if (move != (-2)) {
         s32 type_id;
         Entry80066AD8 *type;
@@ -172,7 +172,7 @@ void MonSummary_InitPageWindow(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     }
     for (i = 0; i < count; i++) {
         handle = func_80002BA4(D_8A21DA60[i], 0x14800);
-        move = func_8002D454(arg3, i);
+        move = BattleMon_GetMoveIndexChecked(arg3, i);
         D_8A21DA70[i] = func_80017304(handle, D_8A21DA54, func_8001FA8C((move == -2) ? 0 : D_8006B190[move].type), D_8A21DA58, 0x3000);
     }
 }
@@ -238,7 +238,7 @@ s32 MonSummary_GetCButtonPage(s8 *arg0) {
             var_s0 = 3;
         }
         if (var_s0 >= 0) {
-            if (func_8002D454(M2C_FIELD(arg0, s32 *, 0x2C), var_s0, arg0) == -1) {
+            if (BattleMon_GetMoveIndexChecked(M2C_FIELD(arg0, s32 *, 0x2C), var_s0, arg0) == -1) {
                 func_8003F6AC(8);
             } else {
                 func_8003F6AC(2);
@@ -363,7 +363,7 @@ typedef struct Ctx8A20261C {
     /* 0x10C */ s8 unk10C[0x4];
 } Ctx8A20261C;
 s32 func_8002AAC4(s8*);
-void func_8002CAD0(s8*);
+void SavePrompt_Draw(s8*);
 void MonSummary_DrawListWindow(s8*, s32);
 #define CTX ((Ctx8A20261C*)arg0)
 /**
@@ -429,7 +429,7 @@ void MonSummary_DrawScreen(void* arg0) {
                 func_8002AAC4(CTX->list);
                 MonSummary_DrawListWindow(CTX->list, 0);
             }
-            func_8002CAD0(CTX->unk10C);
+            SavePrompt_Draw(CTX->unk10C);
             break;
     }
 }
@@ -444,9 +444,9 @@ void func_8A202904(s8 *arg0, s32 arg1, s32 arg2) {
 typedef struct Ctx8A20291C { char pad[0x18C]; s32 ptrs[6]; } Ctx8A20291C;
 s32 Menu_UpdateCursor(s8*);
 s32 func_8002BC14(s32);
-void func_8002CA34(s8*, s32, s32);
+void SavePrompt_Init(s8*, s32, s32);
 void Menu_ClearItemFlags(s8*);
-s32 func_8002CD7C(s8*);
+s32 SavePrompt_Update(s8*);
 void Save_DrawReportingWindow(s8*);
 s32 MonSummary_UpdateMenuCursor(s8*);
 void MonSummary_InitMenuWindow(s8* arg0, s32 arg1, s32 arg2, u8* arg3);
@@ -484,7 +484,7 @@ M2C_UNK MonSummary_UpdateScreen(M2C_UNK* ctx) {
                 if (res == -1) {
                     func_8003F6AC(3);
                     if (M2C_FIELD(arg0, s32*, 0x384) != 0) {
-                        func_8002CA34(arg0 + 0x10C, 0xCA, 0xAD);
+                        SavePrompt_Init(arg0 + 0x10C, 0xCA, 0xAD);
                         M2C_FIELD(arg0, s32*, 0) = 6;
                         M2C_FIELD(arg0, s8**, 8) = arg0 + 0x10C;
                     } else {
@@ -521,7 +521,7 @@ M2C_UNK MonSummary_UpdateScreen(M2C_UNK* ctx) {
                     case 3:
                         func_8003F6AC(3);
                         if (M2C_FIELD(arg0, s32*, 0x384) != 0) {
-                            func_8002CA34(arg0 + 0x10C, 0xD4, 0xAD);
+                            SavePrompt_Init(arg0 + 0x10C, 0xD4, 0xAD);
                             func_8A202904(arg0, 6, (s32)(arg0 + 0x10C));
                         } else {
                             func_8A202904(arg0, 7, 0);
@@ -584,7 +584,7 @@ M2C_UNK MonSummary_UpdateScreen(M2C_UNK* ctx) {
             }
             break;
         case 6:
-            res = func_8002CD7C(arg0 + 0x10C);
+            res = SavePrompt_Update(arg0 + 0x10C);
             if (res == -1) {
                 func_8A202904(arg0, 1, (s32)(arg0 + 0x10));
             } else if (res > 0) {

@@ -56,7 +56,7 @@ M2C_UNK func_8001ABBC();
 extern Entry89100FC4 D_8006A9D4[];
 extern M2C_UNK D_800734A8;
 extern char D_8910DBAC[];
-s32 func_8002D454(s32, s32);
+s32 BattleMon_GetMoveIndexChecked(s32, s32);
 extern M2C_UNK D_800734A8;
 extern M2C_UNK D_8910DBB4;
 extern M2C_UNK D_8910DBBC;
@@ -440,7 +440,7 @@ s32 func_89103370(s8 **arg0) {
     return var_v1;
 }
 
-void func_8002CEEC(s8* arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4);
+void TextBox_Init(s8* arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4);
 #include "fragments/fragment016_252E10/89100020_89102C40_types.h"
 extern Info891033A0 D_80065D00[];
 extern s8 D_8910DD40[];
@@ -493,7 +493,7 @@ s32 LabPCList_UpdateMonMenu(s8* arg0) {
             case 2:
                 if (func_89103370((s8**)entry) != 0) {
                     func_8003F6AC(8);
-                    func_8002CEEC(arg0 + 0xB55C, (s32)D_8910DD40, 0, 1, 0);
+                    TextBox_Init(arg0 + 0xB55C, (s32)D_8910DD40, 0, 1, 0);
                     M2C_FIELD(arg0, s32*, 0x88) = 0xB;
                 } else {
                     func_8003F6AC(2);
@@ -508,7 +508,7 @@ s32 LabPCList_UpdateMonMenu(s8* arg0) {
                     ret = 2;
                 } else {
                     func_8003F6AC(8);
-                    func_8002CEEC(arg0 + 0xB55C, (s32)D_8910DD58, 0, 1, 0);
+                    TextBox_Init(arg0 + 0xB55C, (s32)D_8910DD58, 0, 1, 0);
                     M2C_FIELD(arg0, s32*, 0x88) = 0xC;
                 }
                 break;

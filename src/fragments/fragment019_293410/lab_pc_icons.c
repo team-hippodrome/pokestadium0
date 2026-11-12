@@ -426,7 +426,7 @@ extern char D_8A21D980[];
 extern char D_8A21D990[];
 void Ui_DrawImageInStrips(s32, s32, s32);
 
-s32 func_8002D430(u8*, s32);
+s32 BattleMon_GetMoveIndex(u8*, s32);
 u32 func_800566BC(const char*);
 void func_8A2010C8(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 pad; // FAKE
@@ -451,7 +451,7 @@ void func_8A2010C8(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
             hl = 2;
         }
         Ui_DrawImageInStrips(D_8A203384[i].icon, D_8A203384[i].iconX + arg0, D_8A203384[i].iconY + arg1);
-        move = func_8002D430((u8*)arg2, i);
+        move = BattleMon_GetMoveIndex((u8*)arg2, i);
         func_8001AB6C();
         if (move == -2) {
             str = D_8A21D980;

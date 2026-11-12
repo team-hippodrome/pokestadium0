@@ -117,7 +117,7 @@ extern char D_8910DBE8[];
 extern char D_8910DBEC[];
 void func_80029028(s32, s32, s32, s32, Color_RGBA8);
 void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
-void func_8002BAB8(s32, s32, s32, s32);
+void Ui_DrawNumberZeroPadded(s32, s32, s32, s32);
 void Font_SetColorForFlags(s32);
 void func_89101238(s32, s32, s8*, s32, s32);
 
@@ -151,7 +151,7 @@ void LabPCList_DrawMonRow(s32 x, s32 y, Entry891012A8 *entry, s32 row, s32 flags
     {
       Ui_FillRectHighlighted(x + 0x27, y + 1, 0x4E, 0x12, D_8910A860);
     }
-    func_8002BAB8(x + 1, y + 4, row + 1, 4);
+    Ui_DrawNumberZeroPadded(x + 1, y + 4, row + 1, 4);
     if ((entry->species <= 0) || (entry->species >= 0x98))
     {
       func_8001AB6C();
@@ -185,7 +185,7 @@ void LabPCList_DrawMonRow(s32 x, s32 y, Entry891012A8 *entry, s32 row, s32 flags
           break;
 
         case 1:
-          func_8002BAB8(cx + 4, y + 4, entry->level, 5);
+          Ui_DrawNumberZeroPadded(cx + 4, y + 4, entry->level, 5);
           break;
 
         case 2:

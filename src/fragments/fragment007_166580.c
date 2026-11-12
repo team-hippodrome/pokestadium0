@@ -533,7 +533,7 @@ void Ui_FillRectPrimEnvColor(s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
 s32 func_8002AE6C(Screen82000C5C*);
 void Window_DrawLabeled(char*, s32);
 s32 func_8002D3D0(Mon82000C5C*);
-s32 func_8002D430(Mon82000C5C*, s32);
+s32 BattleMon_GetMoveIndex(Mon82000C5C*, s32);
 /**
  * Draws a Pokemon's status window: LV, HP, Type 1/2, Attack, Defense, Speed, Special.
  * @unverified Name and comment guessed from the code.
@@ -586,7 +586,7 @@ void FreeBattle_DrawMonStatusWindow(Screen82000C5C* arg0) {
         func_8001A944(x + 0x15C, y + 0x60, D_82009C00, arg0->mon->speed);
         func_8001A944(x + 0x15C, y + 0x7C, D_82009C04, arg0->mon->special);
         for (i = 0; i < count; i++) {
-            func_82000AC4(D_82009040[i].x + x, D_82009040[i].y + y, func_8002D430(arg0->mon, i), D_82009040[i].centered);
+            func_82000AC4(D_82009040[i].x + x, D_82009040[i].y + y, BattleMon_GetMoveIndex(arg0->mon, i), D_82009040[i].centered);
         }
         func_8001ABBC();
         FreeBattle_DrawTypeIcon(x + 0x9C, y + 0x40, (s32)arg0->mon, 0);
@@ -988,7 +988,7 @@ extern Gfx D_80073450[];
 u8 func_80022BAC(s32);
 void Font_SetColorForFlags(s32);
 void Ui_DrawImageInStrips(Img82001E20*, s32, s32);
-void func_8002BAB8(s32, s32, s32, s32);
+void Ui_DrawNumberZeroPadded(s32, s32, s32, s32);
 void func_8002BC58(s32, s32, s32, s32);
 void func_8001BCB4(s32, s32, s32, s32, void*, s32, s32);
 /**
@@ -1036,7 +1036,7 @@ void FreeBattle_DrawRentalNameList(s32 arg0, s32 arg1, s32 arg2, Slot82001E20* a
         gSPDisplayList(gDisplayListHead++, D_80073450);
         gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
         func_8001BCB4(arg0 + 0x25, arg1 + 0x56, 0x28, 0xA, D_04010918, 0x28, 0);
-        func_8002BAB8(arg0 + 0x51, arg1 + 0x54, arg3->value, 5);
+        Ui_DrawNumberZeroPadded(arg0 + 0x51, arg1 + 0x54, arg3->value, 5);
     }
 }
 

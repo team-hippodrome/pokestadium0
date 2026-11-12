@@ -117,7 +117,7 @@ extern char D_8910DBE8[];
 extern char D_8910DBEC[];
 void func_80029028(s32, s32, s32, s32, Color_RGBA8);
 void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
-void func_8002BAB8(s32, s32, s32, s32);
+void Ui_DrawNumberZeroPadded(s32, s32, s32, s32);
 void Font_SetColorForFlags(s32);
 void func_89101238(s32, s32, s8*, s32, s32);
 
@@ -133,7 +133,7 @@ void LabPCList_DrawPopupMenu(s8*, s32);
 void PcSort_DrawEmptyLabel(s8*);
 void LabPCList_DrawTypeFilter(s8*);
 void LabPCList_DrawMoveFilter(s8*);
-void func_8002D024(s8*);
+void TextBox_Draw(s8*);
 extern u8 D_8007356C[];
 extern Gfx D_80060270[];
 extern Color_RGBA8 D_8910A88C;
@@ -222,7 +222,7 @@ void LabPCList_DrawListScreen(s8* arg0) {
             break;
         case 11:
         case 12:
-            func_8002D024(arg0 + 0xB55C);
+            TextBox_Draw(arg0 + 0xB55C);
             break;
     }
 }

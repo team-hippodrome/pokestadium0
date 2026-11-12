@@ -57,7 +57,7 @@ M2C_UNK func_8001ABBC();
 extern Entry89100FC4 D_8006A9D4[];
 extern M2C_UNK D_800734A8;
 extern char D_8910DBAC[];
-s32 func_8002D454(s32, s32);
+s32 BattleMon_GetMoveIndexChecked(s32, s32);
 extern M2C_UNK D_800734A8;
 extern M2C_UNK D_8910DBB4;
 extern M2C_UNK D_8910DBBC;
@@ -123,7 +123,7 @@ s32 LabPCList_UpdateMoveFilter(s8*);
 void LabPCList_CommitMoveFilter(s8*, s8*);
 extern u8 D_8910A8DC[];
 extern s32 D_8910DD34[];
-void func_8002CEEC(s8* arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4);
+void TextBox_Init(s8* arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4);
 extern Info891033A0 D_80065D00[];
 extern s8 D_8910DD40[];
 extern s8 D_8910DD58[];
@@ -601,9 +601,9 @@ void LabPCList_InitScreen(void* arg0) {
     LabPCList_InitListWindow((s8*)arg0 + 4, 0x26, 0x48, (s8*)arg0 + 0xB7E4);
 }
 
-void func_8002CA34(s8*, s32, s32);
+void SavePrompt_Init(s8*, s32, s32);
 void Save_DrawReportingWindow(s8*);
-s32 func_8002CD7C(s8*);
+s32 SavePrompt_Update(s8*);
 void LabPCList_SaveChanges(s8*);
 void LabPCList_InitItemWindow(s8*, s32, s32, s8*, s8*, s32);
 s32 LabPCList_UpdateItemWindow(s8*);
@@ -614,7 +614,7 @@ void func_8910A4C8(s8*, s32);
  * Per-frame update for a four-state object at arg0 (state word at offset 0).
  * Returns 1 when the caller should leave this screen. The sub-objects at
  * 4, 0xB59C, 0xB600 and 0xB7B4 are driven by the LabPCList_UpdateList,
- * func_8002CD7C, LabPCList_UpdateItemWindow and LabPCList_UpdateMessageWindow updates.
+ * SavePrompt_Update, LabPCList_UpdateItemWindow and LabPCList_UpdateMessageWindow updates.
  * @unverified Name guessed from the code; comment kept.
  */
 s32 LabPCList_UpdateScreen(s8* arg0) {
@@ -628,7 +628,7 @@ s32 LabPCList_UpdateScreen(s8* arg0) {
             r = LabPCList_UpdateList(sub);
             if (r == 1) {
                 if (M2C_FIELD(arg0, s32*, 0xB55C) != 0) {
-                    func_8002CA34(arg0 + 0xB59C, 0xCA, 0xAD);
+                    SavePrompt_Init(arg0 + 0xB59C, 0xCA, 0xAD);
                     M2C_FIELD(arg0, s32*, 0) = 1;
                 } else {
                     ret = 1;
@@ -645,7 +645,7 @@ s32 LabPCList_UpdateScreen(s8* arg0) {
             break;
         case 1:
             sub = arg0 + 0xB59C;
-            r = func_8002CD7C(sub);
+            r = SavePrompt_Update(sub);
             if (r == -1) {
                 M2C_FIELD(arg0, s32*, 0) = 0;
             } else if (r > 0) {
@@ -715,7 +715,7 @@ void LabPCList_DrawBackground(void) {
 
 void func_800069CC(void);
 s32 func_8002AAC4(void*);
-void func_8002CAD0(void*);
+void SavePrompt_Draw(void*);
 void PcSort_DrawUseItemPrompt(void*);
 void LabPCList_DrawMessageWindow(void*);
 
@@ -737,7 +737,7 @@ M2C_UNK LabPCList_DrawScreen(M2C_UNK* arg0) {
                 LabPCList_DrawBackground();
             }
             LabPCList_DrawListScreen(arg0 + 1);
-            func_8002CAD0((s8*)arg0 + 0xB59C);
+            SavePrompt_Draw((s8*)arg0 + 0xB59C);
             break;
         case 2:
             if (func_8002AAC4(arg0 + 1) != 0) {

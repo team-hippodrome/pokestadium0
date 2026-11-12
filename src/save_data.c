@@ -329,7 +329,11 @@ void func_80023D3C(s32 arg0, s32 arg1) {
     func_8001FB10(arg0 + 0x40, sp24);
 }
 
-void func_80023DB8(s32 arg0, s32 arg1) {
+/**
+ * Packs a BattleMon into a GB-format save record with its transcoded name and trainer data.
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleMon_ToGbSaveRecord(s32 arg0, s32 arg1) {
     M2C_FIELD(arg0, u8*, 4) = M2C_FIELD(arg0, u8*, 0x24);
     Pokemon_ToGbRecord((BattleMon*)arg0, (GbPokemonRecord*)arg1);
     Text_TranscodeName((char*)(arg1 + 0x21), (char*)(arg0 + 0x30));
@@ -819,13 +823,13 @@ s32 func_80024F14(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
     if ((arg2 < count) || ((arg2 == count) && (arg2 < max))) {
         switch (arg0) {
             case 16:
-                func_80023DB8((s32)arg3, (s32)((u8*)&(*(Save80023F38**)&D_800AE8E0)->a[arg1] + arg2 * 0x2D + 0x14));
+                BattleMon_ToGbSaveRecord((s32)arg3, (s32)((u8*)&(*(Save80023F38**)&D_800AE8E0)->a[arg1] + arg2 * 0x2D + 0x14));
                 break;
             case 17:
-                func_80023DB8((s32)arg3, (s32)((u8*)&(*(Save80023F38**)&D_800AE8E0)->b[arg1] + arg2 * 0x2D + 0x14));
+                BattleMon_ToGbSaveRecord((s32)arg3, (s32)((u8*)&(*(Save80023F38**)&D_800AE8E0)->b[arg1] + arg2 * 0x2D + 0x14));
                 break;
             case 19:
-                func_80023DB8((s32)arg3, (s32)((u8*)&(*(Save80023F38**)&D_800AE8E0)->d + arg2 * 0x2D + 4));
+                BattleMon_ToGbSaveRecord((s32)arg3, (s32)((u8*)&(*(Save80023F38**)&D_800AE8E0)->d + arg2 * 0x2D + 4));
                 break;
             case 18:
                 ((Pair80024D88*)((u8*)&(*(Save80023F38**)&D_800AE8E0)->c[arg1] + 0xC))[arg2] = *(Pair80024D88*)arg3;
@@ -868,12 +872,20 @@ s32 func_80025168(s8 arg0) {
 }
 
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-s32 func_800251A8(void)
+/**
+ * Returns the 16-bit progress flags at save offset 0x7A48.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 Save_GetProgressFlags(void)
 {
   return (((*((u8 *) (((s8 *) (*((s8 **) (&D_800AE8E0)))) + 0x7A48))) << 8) | (*((u8 *) (((s8 *) (*((s8 **) (&D_800AE8E0)))) + 0x7A49)))) & 0xFFFF; // FAKE: decomp slop, raw pointer casts stand in for struct fields
 }
 
-void func_800251C8(u16 arg0) {
+/**
+ * Sets the progress flags at save offset 0x7A48 and writes the block.
+ * @unverified Name and comment guessed from the code.
+ */
+void Save_SetProgressFlags(u16 arg0) {
     M2C_FIELD(D_800AE8E0, u8 *, 0x7A48) = (arg0 >> 8) & 0xFF;
     M2C_FIELD(D_800AE8E0, u8 *, 0x7A49) = arg0 & 0xFF;
     func_80023F38(0x14, 0, 2);
@@ -901,7 +913,11 @@ typedef struct SaveF80025260 {
     /* 0x11E */ SaveBlob80025260 blob;
     /* 0x280 */ u8 mask;
 } SaveF80025260;
-void func_80025260(SaveName80025260* arg0, SaveBlob80025260* arg1, SaveMon80025260* arg2, s32 arg3) {
+/**
+ * Fills the continue block at save offset 0x7A60 with the name, session and Pokemon data.
+ * @unverified Name and comment guessed from the code.
+ */
+void Save_WriteContinueData(SaveName80025260* arg0, SaveBlob80025260* arg1, SaveMon80025260* arg2, s32 arg3) {
     SaveF80025260* f;
     s32 i;
 
@@ -913,7 +929,7 @@ void func_80025260(SaveName80025260* arg0, SaveBlob80025260* arg1, SaveMon800252
         f->count = arg3;
         f->mask = 0;
         for (i = 0; i < arg3; i++) {
-            func_80023DB8((s32)&arg2[i], (s32)f->records[i]);
+            BattleMon_ToGbSaveRecord((s32)&arg2[i], (s32)f->records[i]);
             if (arg2[i].unk1 == 1) {
                 f->mask |= 1 << i;
             }
@@ -934,7 +950,11 @@ typedef struct {
 } ContinueBlock7A60;
 typedef struct { u8 unk_00; u8 unk_01; u8 pad[0x4E]; } Mon50;
 
-s16 func_800253BC(Unk12Bytes* arg0, Unk162Bytes* arg1, Mon50* arg2) {
+/**
+ * Reads the continue block at save offset 0x7A60 back; returns -1 when it is empty.
+ * @unverified Name and comment guessed from the code.
+ */
+s16 Save_ReadContinueData(Unk12Bytes* arg0, Unk162Bytes* arg1, Mon50* arg2) {
     s16 count = -1;
     ContinueBlock7A60* blk;
     s32 i;

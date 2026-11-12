@@ -184,7 +184,7 @@ M2C_UNK func_80025758(M2C_UNK arg0, M2C_UNK arg1, M2C_UNK arg2) {
  * save snapshot into the buffer at D_800AF9A8 with GbSave_CopyPortSnapshot
  * (its return value is ignored).  Otherwise the first byte of the buffer is
  * cleared.  The buffer is the destination that func_80025830 later passes on
- * as its second argument to func_80025260.
+ * as its second argument to Save_WriteContinueData.
  */
 extern GbSavePortSnapshot D_800AF9A8;
 
@@ -204,7 +204,7 @@ typedef struct ContinueDataZ {
     /* 0x04 */ u8 opponentHistory[8];
 } ContinueDataZ; // size = 0xC
 extern M2C_UNK D_800AF974;
-void func_80025260(ContinueDataZ* arg0, void* arg1, BattleMon* arg2, s32 arg3);
+void Save_WriteContinueData(ContinueDataZ* arg0, void* arg1, BattleMon* arg2, s32 arg3);
 
 void func_80025830(void) {
     ContinueDataZ sp1C;
@@ -214,7 +214,7 @@ void func_80025830(void) {
     sp1C.modeSelection = gSessionContext.modeSelection;
     sp1C.round = gSessionContext.roundOrDemoId + 1;
     _bcopy(&D_800AF974, sp1C.opponentHistory, 8);
-    func_80025260(&sp1C, &D_800AF9A8, info->battleMon, info->numberOfPokemonCanBePicked);
+    Save_WriteContinueData(&sp1C, &D_800AF9A8, info->battleMon, info->numberOfPokemonCanBePicked);
     Save_CommitTypedRecord(0x15, 0);
 }
 
@@ -274,7 +274,7 @@ void func_80025910(s32 arg0)
   func_8002572C((s8 *) ((st + 0x1034)), (s32) ((st + 4)));
 }
 
-s8 func_800253BC(M2C_UNK *, s8 *, M2C_UNK *);       /* extern */
+s8 Save_ReadContinueData(M2C_UNK *, s8 *, M2C_UNK *);       /* extern */
 void func_80025910(s32);                          /* extern */
 s32 func_80057910(s8 *, M2C_UNK *, M2C_UNK);        /* extern */
 extern s8 D_800AE8F6;
@@ -284,7 +284,7 @@ extern M2C_UNK D_800AE910;
  * func_80025A64
  *
  * Clears the byte at D_800AE8F0 + 0x1095, then calls
- * func_800253BC(&D_800AFB10, buf, &D_800AE910) with a 0x162-byte local
+ * Save_ReadContinueData(&D_800AFB10, buf, &D_800AE910) with a 0x162-byte local
  * buffer. If it returns -1 the function returns 0. Otherwise the result is
  * stored to the byte D_800AE8F6 and:
  *  - if buf[0] == 0: calls func_80025910(buf[0]), sets bit 0 of the byte at
@@ -312,7 +312,7 @@ s32 func_80025A64(void) {
 
     ret = 0;
     D_800AE8F0.unk_1095 = 0U;
-    temp_v0 = func_800253BC(&D_800AFB10, buf, &D_800AE910);
+    temp_v0 = Save_ReadContinueData(&D_800AFB10, buf, &D_800AE910);
     if (temp_v0 != -1) {
         D_800AE8F6 = temp_v0;
         if (buf[0] == 0) {

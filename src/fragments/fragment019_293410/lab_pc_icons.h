@@ -121,7 +121,7 @@ extern s8 D_8007356C;
 void MonSummary_DrawPage(s8 *arg0, s32 arg1);
 
 s32 func_80022B40();                                /* extern */
-s32 func_8002D454();                /* extern */
+s32 BattleMon_GetMoveIndexChecked();                /* extern */
 M2C_UNK func_8003F6AC(M2C_UNK);                     /* extern */
 extern s8 *D_800603C0;
 

@@ -163,7 +163,7 @@ void func_89104EB4(s32 arg0, s32 arg1, s32* arg2, s32 arg3, s32 arg4, s32* arg5)
 typedef struct Str89104FC0 { s8 c[4]; } Str89104FC0;
 extern Str89104FC0 D_8910A91C;
 s32 func_8002D3D0(u8*);
-s32 func_8002D430(s32, s32);
+s32 BattleMon_GetMoveIndex(s32, s32);
 void func_80027410(void*, void*, s32, s32, s32);
 void func_89104EB4();
 
@@ -172,7 +172,7 @@ void func_89104FC0(s8* arg0, s32 arg1, s32 arg2, u8* arg3) {
     s32 i;
 
     for (i = 0; i < n; i++) {
-        M2C_FIELD(arg0, s32*, 0x60 + i * 4) = func_8002D430((s32)arg3, i);
+        M2C_FIELD(arg0, s32*, 0x60 + i * 4) = BattleMon_GetMoveIndex((s32)arg3, i);
     }
     for (i = n; i < 4; i++) {
         M2C_FIELD(arg0, s32*, 0x60 + i * 4) = -1;
@@ -1120,7 +1120,7 @@ extern Gfx D_80060270[];
 extern u8 D_8910A968[];
 extern u8 D_8910A970[];
 void func_80029028(s32, s32, s32, s32, Color_RGBA8);
-void func_8002B940(s32, s32, s32, s32);
+void Ui_DrawNumber(s32, s32, s32, s32);
 /**
  * Draws one numbered row of the type filter list.
  * @unverified Name and comment guessed from the code.
@@ -1133,7 +1133,7 @@ void LabPCList_DrawTypeFilterRow(s32 arg0, s32 arg1, char **arg2, s32 arg3, s32 
     if (arg4 & 8) {
         Ui_FillRectHighlighted(arg0 + 3, arg1 + 3, 0xA8, 0x16, *(Color_RGBA8 *)D_8910A968);
     }
-    func_8002B940(arg0 + 9, arg1 + 8, arg3 + 1, 2);
+    Ui_DrawNumber(arg0 + 9, arg1 + 8, arg3 + 1, 2);
     Font_BeginTranslucentTextRendering();
     Font_SetColorForFlags(arg4);
     Font_SetActive(8, 0);
@@ -1403,7 +1403,7 @@ void LabPCList_DrawMoveFilterRow(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg
     if (arg4 & 8) {
         Ui_FillRectHighlighted(arg0 + 3, arg1 + 3, 0xCE, 0x16, *(Color_RGBA8 *)D_8910AAC0);
     }
-    func_8002B940(arg0 + 9, arg1 + 8, arg3 + 1, 3);
+    Ui_DrawNumber(arg0 + 9, arg1 + 8, arg3 + 1, 3);
     Font_BeginTranslucentTextRendering();
     Font_SetColorForFlags(arg4);
     Font_SetActive(8, 0);

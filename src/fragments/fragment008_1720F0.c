@@ -517,7 +517,7 @@ void func_8001BCB4(s32, s32, s32, s32, void*, s32, s32);
 s32 func_80022BAC(u8);
 void func_8002BC58(s32, s32, u8, s32);
 void Ui_DrawImageInStrips(u8*, s32, s32);
-void func_8002BAB8(s32, s32, s32, s32);
+void Ui_DrawNumberZeroPadded(s32, s32, s32, s32);
 /**
  * Draws the team source (GB cartridge port or registered slot number), なまえ (name) and trainer id.
  * @unverified Name and comment guessed from the code.
@@ -551,7 +551,7 @@ void Registration_DrawTrainerPanel(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
         gSPDisplayList(gDisplayListHead++, D_80073450);
         gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
         func_8001BCB4(arg0 + 0x25, arg1 + 0x56, 0x28, 0xA, D_04010918, 0x28, 0);
-        func_8002BAB8(arg0 + 0x51, arg1 + 0x54, M2C_FIELD(arg3, s32*, 4), 5);
+        Ui_DrawNumberZeroPadded(arg0 + 0x51, arg1 + 0x54, M2C_FIELD(arg3, s32*, 4), 5);
     }
 }
 
@@ -580,7 +580,7 @@ extern Gfx D_80073438[];
 extern u8 D_04011A60[];
 s32 func_80018DEC(s8*, s32);
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
-void func_8002B940(s32, s32, s32, s32);
+void Ui_DrawNumber(s32, s32, s32, s32);
 void func_8001833C(void*, s32, void*, u16);
 /**
  * Draws one Pokemon cell of a team row: nickname, level and icon.
@@ -601,7 +601,7 @@ void Registration_DrawMonCell(s32 x, s32 y, u8* entry, s32 id, s32 color, IconCa
         Font_EndTexturedTextRendering();
         gSPDisplayList(gDisplayListHead++, D_80073450);
         func_8001BCB4(x + 0x2C, y + 0x19, 8, 0xA, D_04011A60, 8, 0);
-        func_8002B940(x + 0x38, y + 0x17, entry[0x24], 3);
+        Ui_DrawNumber(x + 0x38, y + 0x17, entry[0x24], 3);
         slot = cache->base + id % cache->count;
         p = &cache->slots[slot];
         if (id != *p) {
@@ -635,7 +635,7 @@ void Registration_DrawEmptyMonCell(s32 arg0, s32 arg1) {
 extern Gfx D_80073450[];
 extern u8 D_04011A60[];
 void func_8001BCB4(s32, s32, s32, s32, void*, s32, s32);
-void func_8002B940(s32, s32, s32, s32);
+void Ui_DrawNumber(s32, s32, s32, s32);
 void func_88101478(s32 x, s32 y, u8* entry, s32 frame, s32 color, s32* anim) {
     s32 idx;
 
@@ -649,7 +649,7 @@ void func_88101478(s32 x, s32 y, u8* entry, s32 frame, s32 color, s32* anim) {
         Font_EndTexturedTextRendering();
         gSPDisplayList(gDisplayListHead++, D_80073450);
         func_8001BCB4(x + 0x2C, y + 0x19, 8, 0xA, D_04011A60, 8, 0);
-        func_8002B940(x + 0x38, y + 0x17, entry[0x24], 3);
+        Ui_DrawNumber(x + 0x38, y + 0x17, entry[0x24], 3);
         idx = frame % anim[2] + anim[1];
         gSPDisplayList(gDisplayListHead++, D_80073408);
         func_8001B884(x + 0x56, y + 6, 0x28, 0x28, (u8*)func_80018DEC((s8*)D_88103074, idx), 0x28, 0x200000);

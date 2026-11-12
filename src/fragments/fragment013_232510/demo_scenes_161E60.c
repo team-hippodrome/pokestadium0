@@ -626,12 +626,12 @@ void func_82200E2C(void) {
     }
 }
 
-s32 func_800251A8(void);
-void func_800251C8(u16 arg0);
+s32 Save_GetProgressFlags(void);
+void Save_SetProgressFlags(u16 arg0);
 
 void func_82200F08(void) {
-    u16 lo = func_800251A8() & 0xFF;
-    u16 hi = (func_800251A8() >> 8) & 0xFF;
+    u16 lo = Save_GetProgressFlags() & 0xFF;
+    u16 hi = (Save_GetProgressFlags() >> 8) & 0xFF;
 
     ((DemoState*)D_822036A4)->unk_1096 |= 2;
 
@@ -640,14 +640,14 @@ void func_82200F08(void) {
         func_82200E2C();
         if (!(hi & 1)) {
             hi |= 1;
-            func_800251C8((hi << 8) | lo);
+            Save_SetProgressFlags((hi << 8) | lo);
             func_82200DA4();
             Save_CommitTypedRecord(0x14, 0);
         }
     } else if (((DemoState*)D_822036A4)->unk_0000 == 2) {
         if (((DemoState*)D_822036A4)->unk_0002 >= lo) {
             lo++;
-            func_800251C8((hi << 8) | lo);
+            Save_SetProgressFlags((hi << 8) | lo);
             Save_CommitTypedRecord(0x14, 0);
         }
         if (((DemoState*)D_822036A4)->unk_0002 == 3) {
@@ -655,7 +655,7 @@ void func_82200F08(void) {
             func_82200E2C();
             if (!(hi & 2)) {
                 hi |= 2;
-                func_800251C8((hi << 8) | lo);
+                Save_SetProgressFlags((hi << 8) | lo);
                 func_82200DA4();
                 Save_CommitTypedRecord(0x14, 0);
             }

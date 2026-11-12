@@ -147,7 +147,7 @@ extern u8 D_04010918[];
 void Ui_FillRectRgba5551(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 arg4);
 s32 GbSave_GameToCategoryIndex(s32 arg0);
 void func_8001AA60(s32, s32, s32);
-void func_8002BAB8(s32 x, s32 y, s32 value, s32 digits);
+void Ui_DrawNumberZeroPadded(s32 x, s32 y, s32 value, s32 digits);
 u32 func_800566BC(s32);
 
 /**
@@ -202,7 +202,7 @@ void GbSave_DrawSummaryBar(s32 y, GbSaveSummary* summary, char* label, s32 arg3)
         gSPScisTextureRectangle(gDisplayListHead++, 255 << 2, (y + 41) << 2, 295 << 2, (y + 51) << 2, G_TX_RENDERTILE, 0,
                                 0, 1 << 10, 1 << 10);
         if (summary->state == 0) {
-            func_8002BAB8(0x12A, y + 39, summary->trainerId, 5);
+            Ui_DrawNumberZeroPadded(0x12A, y + 39, summary->trainerId, 5);
         }
         gSPDisplayList(gDisplayListHead++, D_80073408);
         gDPLoadTextureBlock(gDisplayListHead++, D_800734E0[GbSave_GameToCategoryIndex(summary->game)], G_IM_FMT_RGBA,
@@ -220,11 +220,19 @@ void GbSave_DrawSummaryBar(s32 y, GbSaveSummary* summary, char* label, s32 arg3)
     func_8001ABBC();
 }
 
-void func_80028C80(s32 width, s32 height, void* texture, s32 fmt) {
+/**
+ * Loads an 8-bit texture block of `width` x `height` in format `fmt`.
+ * @unverified Name and comment guessed from the code.
+ */
+void Gfx_LoadTextureBlock8b(s32 width, s32 height, void* texture, s32 fmt) {
     gDPLoadTextureBlock(gDisplayListHead++, texture, fmt, G_IM_SIZ_8b, width, height, 0, G_TX_CLAMP, G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 }
 
-void func_80028E5C(s32 width, s32 height, void* texture, s32 fmt) {
+/**
+ * Loads a 16-bit texture block of `width` x `height` in format `fmt`.
+ * @unverified Name and comment guessed from the code.
+ */
+void Gfx_LoadTextureBlock16b(s32 width, s32 height, void* texture, s32 fmt) {
     gDPLoadTextureBlock(gDisplayListHead++, texture, fmt, G_IM_SIZ_16b, width, height, 0, G_TX_CLAMP, G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 }
 
@@ -1027,7 +1035,11 @@ void Trade_DrawDigitStrip(s32 arg0, s32 arg1, s32 arg2) {
 
 extern Gfx D_80073450[];
 extern u8 *D_80073584[];
-void func_8002B940(s32 x, s32 y, s32 value, s32 digits) {
+/**
+ * Draws `value` right-aligned in `digits` digit images, without leading zeros.
+ * @unverified Name and comment guessed from the code.
+ */
+void Ui_DrawNumber(s32 x, s32 y, s32 value, s32 digits) {
     s32 first;
 
     gSPDisplayList(gDisplayListHead++, D_80073450);
@@ -1045,7 +1057,11 @@ void func_8002B940(s32 x, s32 y, s32 value, s32 digits) {
 
 extern Gfx D_80073450[];
 extern u8 *D_80073584[];
-void func_8002BAB8(s32 x, s32 y, s32 value, s32 digits) {
+/**
+ * Draws `value` in `digits` digit images, with leading zeros.
+ * @unverified Name and comment guessed from the code.
+ */
+void Ui_DrawNumberZeroPadded(s32 x, s32 y, s32 value, s32 digits) {
 
     gSPDisplayList(gDisplayListHead++, D_80073450);
     gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
@@ -1212,7 +1228,7 @@ void BattleInfoWidget_DrawLabel(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 ar
 }
 
 /*
- * func_8002CA34
+ * SavePrompt_Init
  *
  * Initialises a record like Pokedex_InitEntryWindow does, with the first five words
  * set by Window_SetRect to (arg1, arg2, 0xF8, 0xAE, 0), the words at +0x20,
@@ -1229,7 +1245,11 @@ M2C_UNK Menu_Init(s8 *, s8 *, s8 *, M2C_UNK *, s32, s32); /* extern */
 extern M2C_UNK D_800736AC;
 extern M2C_UNK func_8002C998;
 
-void func_8002CA34(s8 *arg0, s32 arg1, s32 arg2) {
+/**
+ * Sets up the save-before-leaving window (248x174) with its menu.
+ * @unverified Name and comment guessed from the code.
+ */
+void SavePrompt_Init(s8 *arg0, s32 arg1, s32 arg2) {
     s8 *sp2C;
     s8 *temp_a0;
 
@@ -1254,7 +1274,11 @@ extern Color_RGBA8 D_800736BC;
 extern Color8002A354 D_800736C0;
 extern u8 D_8007B920[];
 
-void func_8002CAD0(s32* arg0) {
+/**
+ * Draws the save-before-leaving window.
+ * @unverified Name and comment guessed from the code.
+ */
+void SavePrompt_Draw(s32* arg0) {
     if (func_8002AE6C() != 0) {
         return;
     }
@@ -1302,7 +1326,11 @@ s32 func_8002BC14(s32);
 s32 Menu_UpdateCursor(void *, void *);
 extern s32 D_800603C0;
 
-s32 func_8002CD7C(s8 *arg0) {
+/**
+ * Handles the save-before-leaving window. Returns -1 on cancel, 1 to save, 2 to leave without saving.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 SavePrompt_Update(s8 *arg0) {
     s32 ret = 0;
 
     if ((M2C_FIELD(arg0, s32 *, 0x28) != 1) && (M2C_FIELD(arg0, s32 *, 0x28) != 2)) {
@@ -1339,7 +1367,11 @@ s32 func_8002CD7C(s8 *arg0) {
 extern u8 D_80073554[];
 void Window_DrawFrame(s32* arg0);
 
-s32 func_8002CE5C(s32* arg0) {
+/**
+ * Draws the window frame, hiding it every other four frames while blinking is on. Returns 1 while hidden.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 Window_DrawBlinkingFrame(s32* arg0) {
     s32 t = arg0[8]++;
 
     t %= 8;
@@ -1357,7 +1389,11 @@ extern Ent8002D188 D_800736D0[];
 u32 func_800566BC(s32);
 extern u8 D_800736E8[];
 extern u8 D_800736EC[];
-void func_8002CEEC(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4) {
+/**
+ * Sets up a text box sized to string `arg1`.
+ * @unverified Name and comment guessed from the code.
+ */
+void TextBox_Init(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4) {
     u32 len;
     s32 w;
     s32 h;
@@ -1386,7 +1422,11 @@ void func_8002CEEC(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4) {
 }
 
 extern Rgba8002D188 D_800736F0[];
-void func_8002D024(s32* arg0) {
+/**
+ * Draws a text box and its text.
+ * @unverified Name and comment guessed from the code.
+ */
+void TextBox_Draw(s32* arg0) {
     if (func_8002AE6C(arg0) != 0) {
         return;
     }
@@ -1418,7 +1458,11 @@ s32 Ui_CheckConfirmPressed(UNUSED s32 arg0) {
 extern u8 D_800736F8[];
 extern u8 D_800736FC[];
 u32 func_800566BC(s32);
-void func_8002D188(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4) {
+/**
+ * Sets up a blinking text box sized to string `arg1`.
+ * @unverified Name and comment guessed from the code.
+ */
+void BlinkingTextBox_Init(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4) {
     u32 len;
     s32 w;
     s32 h;
@@ -1446,8 +1490,12 @@ void func_8002D188(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4) {
 }
 
 extern Rgba8002D188 D_80073700[];
-void func_8002D2BC(s32* arg0) {
-    if (func_8002CE5C(arg0) != 0) {
+/**
+ * Draws a blinking text box and its text.
+ * @unverified Name and comment guessed from the code.
+ */
+void BlinkingTextBox_Draw(s32* arg0) {
+    if (Window_DrawBlinkingFrame(arg0) != 0) {
         return;
     }
     func_8001AB6C();
@@ -1472,18 +1520,12 @@ s32 func_8002D3D0(u8* arg0) {
     return 4;
 }
 
-/*
- * func_8002D430
- *
- * Reads the byte at offset 9 of the record at (arg0 + arg1) and turns it
- * into a zero-based index:
- *    byte 0         -> -1
- *    byte 1..165    -> byte - 1      (0..164)
- *    byte >= 166    -> -2
- * i.e. the byte is a 1-based id with 165 valid values.  What the id
- * identifies has not been determined.
+/**
+ * Returns the zero-based move id in move slot `arg1` of BattleMon `arg0` (moves start at 0x09):
+ * -1 for an empty slot, -2 for an id past the 165 Gen 1 moves.
+ * @unverified Name guessed from the code; comment kept.
  */
-s32 func_8002D430(s32 arg0, s32 arg1) {
+s32 BattleMon_GetMoveIndex(s32 arg0, s32 arg1) {
     u8* p = (u8*)(arg0 + arg1);
     s32 id = p[9];
     s32 r;
@@ -1497,13 +1539,17 @@ s32 func_8002D430(s32 arg0, s32 arg1) {
 }
 
 s32 func_8002D3D0(u8*);
-s32 func_8002D430(s32, s32);                        /* extern */
+s32 BattleMon_GetMoveIndex(s32, s32);                        /* extern */
 
-s32 func_8002D454(s32 arg0, s32 arg1) {
+/**
+ * Returns -1 for a slot past the filled moves, otherwise BattleMon_GetMoveIndex.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 BattleMon_GetMoveIndexChecked(s32 arg0, s32 arg1) {
     if (arg1 >= func_8002D3D0((u8*)arg0)) {
         return -1;
     }
-    return func_8002D430(arg0, arg1);
+    return BattleMon_GetMoveIndex(arg0, arg1);
 }
 
 s32 func_8001FA8C(s32);
