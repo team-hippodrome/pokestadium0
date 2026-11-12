@@ -789,7 +789,8 @@ s32 BattleAi_GetTypeMultiplier(s8* arg0, s8* arg1, s32 move) {
 /**
  * Returns the move if the battler knows it, has PP left for it and it is not the
  * disabled move (byte 0x63); otherwise 0.
- * @unverified Name and comment guessed from the code (COM AI pass).
+ * Seen in play (2026-11-12): during a COM decision it returned each move it was asked about
+ * (0x0B, 0x42, 0x68, 0x75) for COM's Pinsir, whose AI record holds exactly those four moves with 30, 25, 15 and 10 PP.
  */
 s32 BattleAi_CanUseMove(s8 *arg0, s32 arg1) {
     s32 i;
@@ -810,7 +811,8 @@ s32 BattleAi_CanUseMove(s8 *arg0, s32 arg1) {
 
 /**
  * Returns Recover, Softboiled or Rest if the battler can use one, otherwise 0.
- * @unverified Name and comment guessed from the code (COM AI pass).
+ * Seen in play (2026-11-12): returned 0x69 (Recover) for COM's Gengar after Recover was put in
+ * its move slot 3, and 0 for 1P's Nidorino, which has no healing move.
  */
 u8 BattleAi_FindUsableHealingMove(u8 *arg0) {
     s32 i;

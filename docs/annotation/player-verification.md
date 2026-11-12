@@ -653,3 +653,6 @@ on both sides of the call.
 * Battle start: `BattleScene_SendOutSide0` ran as 1P's Poké Ball burst open,
   and `BattleScene_SendOutSide1` ran just after 1P's Onix was out.
   `ActivePokemon_GetNickname` returned ニドニド for 1P's Nidorino.
+* COM AI helpers: `BattleAi_CanUseMove` returned each of Pinsir's four moves
+  (all with PP left), and `BattleAi_FindUsableHealingMove` returned Recover
+  for Gengar once Recover was in its moves, and 0 for Nidorino.
