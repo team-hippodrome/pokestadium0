@@ -141,7 +141,7 @@ void Pokedex_DrawListRow(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s32
 /*
  * Pokedex_InitListWindow
  *
- * Initialises a record in the same way as Pokedex_InitEntryWindow, MonSummary_InitListWindow and
+ * Initialises a record in the same way as Pokedex_InitEntryWindow, PartyScreen_InitList and
  * SavePrompt_Init: Window_SetRect fills the first five words with
  * (arg1, arg2, 0x110, 0x16E, 0), the words at +0x24 and +0x28 are cleared,
  * +0x14 is set to 0x801 and +0x20 to the address of D_8A12FC38.  It then
@@ -374,7 +374,7 @@ s32 Pokedex_UpdateMenuCursor(s32 arg0) {
 /**
  * Pokedex_InitEntryWindow
  *
- * Initialises a record in the same way as MonSummary_InitListWindow and SavePrompt_Init:
+ * Initialises a record in the same way as PartyScreen_InitList and SavePrompt_Init:
  * Window_SetRect fills the first five words with (arg1, arg2, 0x228, 0x15C, 0)
  * (the last two constants look like a width and a height, not confirmed),
  * the words at +0x20, +0x24 and +0x28 are cleared, and +0x14 is set to

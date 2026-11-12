@@ -66,7 +66,7 @@ s32 GbSave_InvalidateMainDataChecksum(s32 arg0);
 s32 GbSave_ReadBoxBank(s32 arg0, s32 arg1);
 s32 GbSave_WriteBoxBank(s32 arg0, s32 arg1);
 void GbSave_ReleasePortBuffers(s32 arg0, u32 arg1);
-void GbSave_CheckLocationFlag(s32 arg0);
+void GbSave_CheckSavedAtPokemonCenter(s32 arg0);
 s32 GbSave_OpenMainData(s32 arg0);
 s32 GbSave_EnsureMainDataLoaded(s32 arg0);
 s32 GbSave_OpenBoxData(s32 arg0);

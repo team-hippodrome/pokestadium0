@@ -125,7 +125,8 @@ s32 MonSummary_DrawMoveInfo(s32 arg0, s32 arg1, s32 arg2, s32 arg3)
 
 /**
  * Draws the rendered 3D model preview texture, 8 rows at a time.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): the turning 3D model on the left of the page; the C buttons rotate
+ * it.
  */
 void MonSummary_DrawModelPreview(s32 arg0, s32 arg1, s32 arg2) {
     u8* tex;
@@ -151,7 +152,7 @@ void MonSummary_DrawModelPreview(s32 arg0, s32 arg1, s32 arg2) {
 
 /**
  * Sets up the summary page window (552x362) and its move list.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): opened by つよさをみる.
  */
 void MonSummary_InitPageWindow(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 unused; // FAKE: stack padding
@@ -179,8 +180,9 @@ void MonSummary_InitPageWindow(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
 
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 /**
- * Draws the summary page: header, stats, trainer info and moves.
- * @unverified Name and comment guessed from the code.
+ * Draws the summary page: header, stats and trainer info. The てもち page shows no moves.
+ * Seen in play (2026-11-12): the つよさをみる page (3D model, No., level, HP, status, stats, types, ID,
+ * OT, Exp).
  */
 void MonSummary_DrawPage(s8 *arg0, s32 arg1)
 {
@@ -256,9 +258,9 @@ s32 MonSummary_GetCButtonPage(s8 *arg0) {
 
 /**
  * Draws the tinted summary screen background.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): the てもち screen background.
  */
-void MonSummary_DrawBackground(void) {
+void PartyScreen_DrawBackground(void) {
     Ui_DrawTintedScreenBackground(0x38, 0x1E0, M2C_FIELD(&D_8A203300, u8 *, 0), M2C_FIELD(&D_8A203300, u8 *, 1), (s32) M2C_FIELD(&D_8A203300, u8 *, 2));
 }
 
@@ -324,7 +326,7 @@ void LabPC_WriteDeckBack(s32* arg0, s32 arg1) {
     func_80020C60(temp_s3);
     if (func_8002207C(D_8A21DA40) == 0) {
         func_8002D7D4(D_8A21DA40);
-        MonSummary_DrawScreen((M2C_UNK*)arg1);
+        PartyScreen_Draw((M2C_UNK*)arg1);
     }
     func_80022188(D_8A21DA40);
 }
@@ -347,7 +349,7 @@ void func_8A2024D0(s8 *arg0) {
         func_8001833C((unk_func_8001A024*)D_8A21DA50, i, (BattleMon*)(M2C_FIELD(arg0, s32 *, 0x170) + i * 0x50),
                       GPACK_RGBA5551(D_8A203304.r, D_8A203304.g, D_8A203304.b, 1));
     }
-    MonSummary_InitListWindow(arg0 + 0x10, 0x2F, 0x4D, (s32)(arg0 + 0x180));
+    PartyScreen_InitList(arg0 + 0x10, 0x2F, 0x4D, (s32)(arg0 + 0x180));
 }
 
 typedef struct Ctx8A20261C {
@@ -364,70 +366,70 @@ typedef struct Ctx8A20261C {
 } Ctx8A20261C;
 s32 Particle_Field7C_SetXZFromField74AngleY_0B278(void *arg0);
 void SavePrompt_Draw(s8*);
-void MonSummary_DrawListWindow(s8*, s32);
+void PartyScreen_DrawList(s8*, s32);
 #define CTX ((Ctx8A20261C*)arg0)
 /**
  * Draws the summary screen for its current state.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): draws the てもち screen each frame.
  */
-void MonSummary_DrawScreen(void* arg0) {
+void PartyScreen_Draw(void* arg0) {
     BgStage_DrawFrame();
     switch (CTX->state) {
         case 1:
             if (Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->list) != 0) {
-                MonSummary_DrawBackground();
+                PartyScreen_DrawBackground();
             }
-            MonSummary_DrawListWindow(CTX->list, 0);
+            PartyScreen_DrawList(CTX->list, 0);
             break;
         case 2:
             if ((CTX->mode == 4) || (CTX->mode == 7)) {
-                MonSummary_DrawBackground();
+                PartyScreen_DrawBackground();
                 Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->list);
                 Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->unk070);
-                MonSummary_DrawListWindow(CTX->list, 1);
+                PartyScreen_DrawList(CTX->list, 1);
             } else if (Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->unk070) != 0) {
                 CTX->unk034 = (CTX->unk038 <= 0) ? CTX->unk034 : 4;
                 Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->list);
-                MonSummary_DrawListWindow(CTX->list, 1);
+                PartyScreen_DrawList(CTX->list, 1);
                 CTX->unk034 = (CTX->unk038 <= 0) ? CTX->unk034 : 4;
             } else {
                 Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->list);
-                MonSummary_DrawListWindow(CTX->list, 1);
+                PartyScreen_DrawList(CTX->list, 1);
             }
-            MonSummary_DrawMenu(CTX->unk070);
+            PartyScreen_DrawActionMenu(CTX->unk070);
             break;
         case 3:
             if (Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->list) != 0) {
-                MonSummary_DrawBackground();
+                PartyScreen_DrawBackground();
             }
-            MonSummary_DrawListWindow(CTX->list, 2);
+            PartyScreen_DrawList(CTX->list, 2);
             break;
         case 4:
             if (Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->unk0D4) != 0) {
-                MonSummary_DrawBackground();
+                PartyScreen_DrawBackground();
             }
             MonSummary_DrawPage(CTX->unk0D4, 0);
             break;
         case 5:
             if (Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->unk0D4) != 0) {
-                MonSummary_DrawBackground();
+                PartyScreen_DrawBackground();
             }
             MonSummary_DrawPage(CTX->unk0D4, 1);
             break;
         case 6:
             if (CTX->mode == 7) {
-                MonSummary_DrawBackground();
+                PartyScreen_DrawBackground();
                 Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->list);
                 Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->unk10C);
-                MonSummary_DrawListWindow(CTX->list, 0);
+                PartyScreen_DrawList(CTX->list, 0);
             } else if (Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->unk10C) != 0) {
                 CTX->unk034 = (CTX->unk038 <= 0) ? CTX->unk034 : 4;
                 Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->list);
-                MonSummary_DrawListWindow(CTX->list, 0);
+                PartyScreen_DrawList(CTX->list, 0);
                 CTX->unk034 = (CTX->unk038 <= 0) ? CTX->unk034 : 4;
             } else {
                 Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->list);
-                MonSummary_DrawListWindow(CTX->list, 0);
+                PartyScreen_DrawList(CTX->list, 0);
             }
             SavePrompt_Draw(CTX->unk10C);
             break;
@@ -448,15 +450,16 @@ void SavePrompt_Init(s8*, s32, s32);
 void Menu_ClearItemFlags(s8*);
 s32 SavePrompt_Update(s8*);
 void Save_DrawReportingWindow(s8*);
-s32 MonSummary_UpdateMenuCursor(s8*);
-void MonSummary_InitMenuWindow(s8* arg0, s32 arg1, s32 arg2, u8* arg3);
+s32 PartyScreen_UpdateActionMenu(s8*);
+void PartyScreen_InitActionMenu(s8* arg0, s32 arg1, s32 arg2, u8* arg3);
 s32 MonSummary_GetCButtonPage(s8* arg0);
 void LabPC_WriteDeckBack(s32* arg0, s32 arg1);
 /**
  * Runs the summary screen's state machine for one frame.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): runs the てもち screen: list, action menu, summary page and the ならびかえ
+ * (reorder) prompt 「どこに いどうしますか？」.
  */
-M2C_UNK MonSummary_UpdateScreen(M2C_UNK* ctx) {
+M2C_UNK PartyScreen_Update(M2C_UNK* ctx) {
     s32 ret = 0;
     s8* arg0 = (s8*)ctx;
     s32 res;
@@ -492,14 +495,14 @@ M2C_UNK MonSummary_UpdateScreen(M2C_UNK* ctx) {
                     }
                 } else if (res == 1) {
                     func_8003F6AC(2);
-                    MonSummary_InitMenuWindow(arg0 + 0x70, 0x194, 0x123, (u8*)((Ctx8A20291C*)arg0)->ptrs[M2C_FIELD(arg0, s32*, 0x44)]);
+                    PartyScreen_InitActionMenu(arg0 + 0x70, 0x194, 0x123, (u8*)((Ctx8A20291C*)arg0)->ptrs[M2C_FIELD(arg0, s32*, 0x44)]);
                     M2C_FIELD(arg0, s32*, 0) = 2;
                     M2C_FIELD(arg0, s8**, 8) = arg0 + 0x70;
                 }
             }
             break;
         case 2:
-            res = MonSummary_UpdateMenuCursor(arg0 + 0x70);
+            res = PartyScreen_UpdateActionMenu(arg0 + 0x70);
             if (res == -1) {
                 func_8003F6AC(3);
                 func_8A202904(arg0, 1, (s32)(arg0 + 0x10));
@@ -667,15 +670,16 @@ s32 func_8A202F50(u8 arg0) {
 
 /**
  * One frame: reads the controllers, then draws and updates the summary screen.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): runs every frame of the てもち (party) screen, reached from the main
+ * menu with a crafted Pocket Monsters Green save.
  */
-void MonSummary_RunFrame(s32 arg0) {
+void PartyScreen_RunFrame(s32 arg0) {
     Cont_StartReadInputs();
     Cont_ReadInputs();
     func_8001B5F0();
     func_800158C0();
-    MonSummary_DrawScreen(&D_8A21DA80);
-    MonSummary_UpdateScreen(&D_8A21DA80);
+    PartyScreen_Draw(&D_8A21DA80);
+    PartyScreen_Update(&D_8A21DA80);
 }
 
 /**
@@ -705,7 +709,7 @@ s32 MonSummary_Init(UNUSED s32 arg0, UNUSED s32 arg1, UNUSED s32 arg2) {
     BattlePrep_RenderFrame();
     StageLoader_UpdateSegments();
     BgStage_RunUntilCondition(8, func_8A202F50);
-    BgStage_RunUntilCondition(0, (s32 (*)(u8))MonSummary_RunFrame);
+    BgStage_RunUntilCondition(0, (s32 (*)(u8))PartyScreen_RunFrame);
     BgStage_RunUntilCondition(8, func_8A202F50);
     StageLoader_WaitForRetrace();
     Font_Free();

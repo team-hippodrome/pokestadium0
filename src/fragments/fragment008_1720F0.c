@@ -286,7 +286,7 @@ M2C_UNK func_8003F6AC(M2C_UNK);
 extern s32 D_800603C0;
 
 /**
- * Menu-list input handler (same pattern as MonSummary_UpdateMenuCursor and FreeBattle_UpdatePopupMenu). Returns 0
+ * Menu-list input handler (same pattern as PartyScreen_UpdateActionMenu and FreeBattle_UpdatePopupMenu). Returns 0
  * immediately unless the word at arg0 + 0x28 is 1 or 2. Then, while Menu_UpdateCursor(arg0 + 0x2C)
  * is zero, reads the input result from func_8002BC14(D_800603C0): -1 plays sound
  * func_8003F6AC(3) and returns -1; 1 checks the halfword table at arg0 + 0x30 indexed by the

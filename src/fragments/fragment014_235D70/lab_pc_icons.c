@@ -712,7 +712,7 @@ s32 MainMenu_UpdateScreen(s8* arg0) {
 s32 func_80002D98(M2C_UNK);
 M2C_UNK func_8000B2F4(s32);
 u8 GbSave_GetSaveState(s32 arg0);
-s32 func_80022F00(s32);
+s32 GbSave_HasPokedex(s32);
 s32 func_80022EDC(s32);
 s32 func_80025BD8();
 M2C_UNK func_80027FF8(M2C_UNK *, s32);
@@ -728,7 +728,7 @@ extern s32 D_88002B20;
  *  1. id = func_80025BD8(); D_88002B00 = id; if (D_88002B00 != -1) pass it with
  *     &D_88002B08 to func_80027FF8.
  *  2. Picks a mode from id: id == -1 -> 4; else GbSave_GetSaveState(id) != 0 -> 3;
- *     else func_80022F00(id) == 0 -> 2; else func_80022EDC(id) == 0 -> 1; else 0.
+ *     else GbSave_HasPokedex(id) == 0 -> 2; else func_80022EDC(id) == 0 -> 1; else 0.
  *  3. D_88002B20 = func_80002D98(0x3B0), then
  *     MainMenu_InitScreen(D_88002B20, mode, D_80073400 == 0 ? 4 : D_80073400 - 1, &D_88002B20)
  *     and finally func_8000B2F4(D_800603C0).
@@ -752,7 +752,7 @@ void MainMenu_LoadGbSaveSummary(void) {
         var_s0 = 4;
     } else if (GbSave_GetSaveState(sp24) != 0) {
         var_s0 = 3;
-    } else if (func_80022F00(sp24) == 0) {
+    } else if (GbSave_HasPokedex(sp24) == 0) {
         var_s0 = 2;
     } else if (func_80022EDC(sp24) == 0) {
         var_s0 = 1;

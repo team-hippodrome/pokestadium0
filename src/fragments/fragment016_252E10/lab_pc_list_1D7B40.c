@@ -420,7 +420,7 @@ M2C_UNK func_8003F6AC(M2C_UNK);
 extern s32 D_800603C0;
 
 /**
- * List-menu input handler (same family as MonSummary_UpdateMenuCursor). arg0 is the menu object (passed as
+ * List-menu input handler (same family as PartyScreen_UpdateActionMenu). arg0 is the menu object (passed as
  * an integer address here, as elsewhere in this file). Calls Menu_UpdateCursor(arg0 + 0x20) and
  * acts on its result: 0x200 plays sound func_8003F6AC(1) and returns 2. 0 reads the button
  * halfword at D_800603C0 + 8: if bit 0x8000 is set it plays sound 2, toggles bit 3 of the

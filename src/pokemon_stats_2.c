@@ -341,8 +341,14 @@ void GbSave_ReleasePortBuffers(s32 arg0, u32 arg1) {
     }
 }
 
-void GbSave_CheckLocationFlag(s32 arg0) {
-    extern u8 D_8006BB90[12];
+/**
+ * Sets port flag 0x4000 when the save's current map (byte 0x80 of the main-data copy, save offset
+ * 0x2600) is one of the twelve Pokemon Center maps in sPokemonCenterMapIds (0x29 Viridian ...
+ * 0xB6 Rock Tunnel). Seen in play (2026-11-12): with map 0 the main menu warns 「ポケモンセンターにいない」;
+ * with map 0x29 it adds せいとん and いちらん.
+ */
+void GbSave_CheckSavedAtPokemonCenter(s32 arg0) {
+    extern u8 sPokemonCenterMapIds[12];
 
     s32 i;
     s32 temp_t1 = sGbSavePorts[arg0].unk_40[0x80];
@@ -350,7 +356,7 @@ void GbSave_CheckLocationFlag(s32 arg0) {
     sGbSavePorts[arg0].unk_00 &= ~0x4000;
 
     for (i = 0; i < 12; i++) {
-        if (D_8006BB90[i] == temp_t1) {
+        if (sPokemonCenterMapIds[i] == temp_t1) {
             sGbSavePorts[arg0].unk_00 |= 0x4000;
             break;
         }
@@ -383,7 +389,7 @@ s32 GbSave_OpenMainData(s32 arg0) {
         }
 
         if (sp28 != 0) {
-            GbSave_CheckLocationFlag(arg0);
+            GbSave_CheckSavedAtPokemonCenter(arg0);
         } else {
             main_pool_try_free(sGbSavePorts[arg0].unk_40);
         }
@@ -1244,12 +1250,21 @@ s32 func_80022E88(s32 arg0) {
  * comes from the Stadium 1 decomp, where the same test is written against
  * the 0x58-byte Stadium 1 record.
  */
+/**
+ * Seen in play (2026-11-12): see GbSave_CheckSavedAtPokemonCenter; this flag decides the
+ * 「ポケモンセンターにいない」 warning and the せいとん and いちらん items.
+ */
 s32 GbSave_SavedAtPokemonCenter(s32 arg0) {
     return (sGbSavePorts[arg0].unk_00 & 0x4000) != 0;
 }
 
 extern s8 D_800AD210;
-s32 func_80022F00(s32 arg0) {
+/**
+ * Returns 1 when the port's Gen 1 save has the got-Pokedex event flag: bit 0x20 of byte 0x46D of
+ * the main-data copy, which is save file offset 0x29ED. Seen in play (2026-11-12): with that bit
+ * clear the main menu greys out ずかん and warns 「ずかんをもっていない」; setting it enables ずかん.
+ */
+s32 GbSave_HasPokedex(s32 arg0) {
     s32 var_v1;
     s8 *temp_v0;
 

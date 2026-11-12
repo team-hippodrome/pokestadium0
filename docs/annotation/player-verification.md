@@ -497,3 +497,25 @@ stay greyed out.
   (「△でメニュー」).
 * The GB CPU core is the asm function func_81118018. It keeps the GB PC in
   `s7` and dispatches on the opcode byte; the handler at 0x81119090 is `jr e`.
+
+## A Gen 1 save: てもち, ずかん and the full main menu
+
+A Pocket Monsters Green save was built by hand. Its offsets come from Green's
+own save routine: name at 0xA598, main data at 0xA59E (0x737 bytes), party
+at 0xAED5 (0x158 bytes) and the checksum at 0xB594. The save holds three
+level-5 starters with nicknames ハナ, ヒノコ and カメ, and the trainer サトシ
+with ID 12345. Zero showed exactly these on the cartridge screen and in
+てもち, so the party, nickname, OT and ID offsets are right.
+
+* てもち (`PartyScreen_*`, fragment019). The screen has a party list, an
+  action menu (つよさをみる / ならびかえ / やめる) and the つよさをみる page
+  (`MonSummary_*`). That page shows the 3D model (rotated with the C buttons),
+  No., level, HP, status, stats, types, ID, OT, Exp and 「あと 44で L6」, but
+  no moves. ならびかえ asks 「どこに いどうしますか？」 and moves the Pokémon.
+* ずかん unlocks with the got-Pokédex flag (`GbSave_HasPokedex`, bit 0x20 at
+  save offset 0x29ED). Without it the menu warns 「ずかんをもっていない」.
+* The current map (save offset 0x2600) must be a Pokémon Center
+  (`GbSave_CheckSavedAtPokemonCenter`, table `sPokemonCenterMapIds`: 0x29,
+  0x3A, 0x40, 0x44, 0x51, 0x59, 0x85, 0x8D, 0x9A, 0xAB, 0xAE, 0xB6). Without it
+  the menu warns 「ポケモンセンターにいない」. With it the menu gains せいとん and
+  いちらん and shows the Pokémon Stadium logo.

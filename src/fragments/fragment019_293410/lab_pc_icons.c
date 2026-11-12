@@ -18,7 +18,7 @@ extern M2C_UNK D_8A21DA80;
 
 /**
  * Draws the status condition name in its color (the fainted entry when HP is 0).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): ふつう (no status) on the party rows and on the summary page.
  */
 void MonSummary_DrawStatusCondition(s32 arg0, s32 arg1, BattleMon* arg2) {
     Entry80066AA0* e;
@@ -34,9 +34,9 @@ void MonSummary_DrawStatusCondition(s32 arg0, s32 arg1, BattleMon* arg2) {
 
 /**
  * Draws HP:, L%d and %3d/%3d.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): HP: and L5 19/ 19 on the party rows.
  */
-void MonSummary_DrawHpLevel(s32 arg0, s32 arg1, BattleMon* arg2, s32 arg3) {
+void PartyScreen_DrawHpLevel(s32 arg0, s32 arg1, BattleMon* arg2, s32 arg3) {
     BattleHud_DrawHpBarTexture(arg0 + 0x16D, arg1 + 9, 0x94, arg2->hp, arg2->maxHp);
     Font_BeginTranslucentTextRendering();
     Font_SetColorForFlags(arg3);
@@ -67,9 +67,9 @@ void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
 M2C_UNK Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
 /**
  * Draws a Pokemon list row with its HP and level; highlights it for the selection flags.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): one row per party Pokemon (icon, nickname, status, level, HP bar).
  */
-void MonSummary_DrawListRow(s32 arg0, s32 arg1, BattleMon *arg2, s32 arg3, s32 arg4, s32 *arg5) {
+void PartyScreen_DrawListRow(s32 arg0, s32 arg1, BattleMon *arg2, s32 arg3, s32 arg4, s32 *arg5) {
     s32 pad[3]; // FAKE: stack padding
     s32 kind = *arg5;
     Color_RGBA8 *color;
@@ -77,7 +77,7 @@ void MonSummary_DrawListRow(s32 arg0, s32 arg1, BattleMon *arg2, s32 arg3, s32 a
     if (arg4 & 0x18) {
         Ui_FillRectHighlighted(arg0 + 3, arg1 + 3, 0x20F, 0x2D, D_8A203304);
     }
-    MonSummary_DrawHpLevel(arg0, arg1, arg2, arg4);
+    PartyScreen_DrawHpLevel(arg0, arg1, arg2, arg4);
     if (arg4 & 0x12) {
         if (kind == 2) {
             color = &D_8A203348;
@@ -89,16 +89,16 @@ void MonSummary_DrawListRow(s32 arg0, s32 arg1, BattleMon *arg2, s32 arg3, s32 a
 }
 
 /**
- * Sets up the Pokemon list window (545x360) and its menu of MonSummary_DrawListRow rows.
+ * Sets up the Pokemon list window (545x360) and its menu of PartyScreen_DrawListRow rows.
  * @unverified Name and comment guessed from the code.
  */
-void MonSummary_InitListWindow(s8 *arg0, s32 arg1, s32 arg2, s32 arg3) {
+void PartyScreen_InitList(s8 *arg0, s32 arg1, s32 arg2, s32 arg3) {
     Window_SetRect(arg0, arg1, arg2, 0x221, 0x168);
     M2C_FIELD(arg0, s32 *, 0x24) = 0;
     M2C_FIELD(arg0, s32 *, 0x20) = 0;
     M2C_FIELD(arg0, s32 *, 0x28) = 0;
     M2C_FIELD(arg0, s32 *, 0x14) = 0x1001;
-    Menu_Init(arg0 + 0x2C, arg3, arg0 + 0x50, (M2C_UNK *)MonSummary_DrawListRow, 0x215, 0x33);
+    Menu_Init(arg0 + 0x2C, arg3, arg0 + 0x50, (M2C_UNK *)PartyScreen_DrawListRow, 0x215, 0x33);
 }
 
 extern s8 D_8007356C;
@@ -112,9 +112,9 @@ void func_800189C0(s8*, s32);
 void BgStage_DrawFrame(void);
 /**
  * Draws the Pokemon list window: divider, footer bar and the rows.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): the party list window with the footer 「ポケモンを えらんで ください」.
  */
-void MonSummary_DrawListWindow(s8* arg0, s32 arg1) {
+void PartyScreen_DrawList(s8* arg0, s32 arg1) {
     s32 flags = 0xFFED;
     s32 i;
     s32 x;
@@ -171,9 +171,9 @@ void MonSummary_DrawListWindow(s8* arg0, s32 arg1) {
 
 /**
  * Draws one menu row label with the selection highlight.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): one row of that menu.
  */
-void MonSummary_DrawMenuRow(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4) {
+void PartyScreen_DrawActionMenuRow(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4) {
     if (arg4 & 0x10) {
         Ui_FillRectHighlighted(arg0 + 3, arg1 + 3, 0xA2, 0x1E, D_8A203304);
     }
@@ -189,9 +189,9 @@ s32 BattleMon_CountMoves(u8* arg0);
 void func_80027804(s8*, void*, s32, s32);
 /**
  * Sets up the small menu window (180x132).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): opens when a party Pokemon is picked: つよさをみる / ならびかえ / やめる.
  */
-void MonSummary_InitMenuWindow(s8 *arg0, s32 arg1, s32 arg2, u8 *arg3)
+void PartyScreen_InitActionMenu(s8 *arg0, s32 arg1, s32 arg2, u8 *arg3)
 {
   s8 *new_var; // FAKE: permuter temp
   s8 *sp2C;
@@ -204,7 +204,7 @@ void MonSummary_InitMenuWindow(s8 *arg0, s32 arg1, s32 arg2, u8 *arg3)
   *((Color_RGBA8 *) (((s8 *) arg0) + 0x18)) = D_8A203304;
   sp2C = arg0 + 0x50;
   func_80027804(sp2C, D_8A203364, 3, 3);
-  Menu_Init(arg0 + 0x2C, sp2C, arg0 + 0x5C, (M2C_UNK *) MonSummary_DrawMenuRow, 0xA8, 0x24);
+  Menu_Init(arg0 + 0x2C, sp2C, arg0 + 0x5C, (M2C_UNK *) PartyScreen_DrawActionMenuRow, 0xA8, 0x24);
   if ((!arg0) && (!arg0))
   {
   }
@@ -218,9 +218,9 @@ void MonSummary_InitMenuWindow(s8 *arg0, s32 arg1, s32 arg2, u8 *arg3)
 
 /**
  * Draws the menu window's items.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): draws the つよさをみる / ならびかえ / やめる menu.
  */
-void MonSummary_DrawMenu(s8 *arg0) {
+void PartyScreen_DrawActionMenu(s8 *arg0) {
     if (Particle_Field50_SetXZFromField7C_09BB4() == 0) {
         Menu_DrawItems(arg0 + 0x2C, M2C_FIELD(arg0, s32 *, 0) + 6, M2C_FIELD(arg0, s32 *, 4) + 0xC, 0xFEF, 0);
     }
@@ -238,9 +238,9 @@ s32 func_8002BC14(s32);
  * entry is clear it returns index + 1, if set it plays sound effect func_8003F6AC(8) and
  * returns 0; any other result returns 0. (What the table bit means -- likely "disabled"
  * -- is inferred from the sound call only.)
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-12): moves the cursor over つよさをみる / ならびかえ / やめる and returns the pick.
  */
-s32 MonSummary_UpdateMenuCursor(s8* arg0) {
+s32 PartyScreen_UpdateActionMenu(s8* arg0) {
     s32 sp1C = 0;
     s32 dir;
     s32 idx;
@@ -271,7 +271,7 @@ extern char D_8A21D8F4[];
 extern char D_8A21D8F8[];
 /**
  * Draws Attack, Defense, Speed and Special.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): こうげき/ぼうぎょ/すばやさ/とくしゅ with the save's stat values.
  */
 void MonSummary_DrawStats(s32 arg0, s32 arg1, BattleMon* arg2) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
@@ -298,7 +298,7 @@ extern char D_8A21D90C[];
 extern char D_8A21D914[];
 /**
  * Draws No.%03d, L%d, HP %3d/%3d and じょうたい/ (status).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): No.004, ヒノコ L5, HP 18/ 18, じょうたい/ ふつう.
  */
 void MonSummary_DrawHeader(s32 arg0, s32 arg1, BattleMon* arg2) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
@@ -325,7 +325,7 @@ void MonSummary_DrawHeader(s32 arg0, s32 arg1, BattleMon* arg2) {
 
 /**
  * Draws the name of the species' type 1 or 2 in its type color; nothing for a missing type 2.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): ほのお for Charmander; くさ and どく for Bulbasaur.
  */
 void MonSummary_DrawTypeName(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     Color82000BC4 c;
@@ -359,7 +359,7 @@ void Ui_FillRectPrimEnvColor(s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
 s32 func_8A20219C(s32, s32);
 /**
  * Draws Type 1/2, ID No., おやのなまえ (OT name), けいけんち (Exp) and the Exp to the next level.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): タイプ1/2, ID No./ 12345, おやのなまえ/ サトシ, けいけんち/ 135 and あと 44で L6.
  */
 void MonSummary_DrawTrainerInfo(s32 arg0, s32 arg1, s32 arg2) {
     s32 next_level;
