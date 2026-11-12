@@ -556,14 +556,14 @@ void ProcessBattleTurn(void) {
                             return;
                         }
                         if (sBattleMoveFailed != 0) {
-                            Battle_QueueMoveFailureAndApplyRecoil();
+                            Battle_PrintMoveFailureText();
                             if (sBattleUser->moveCache.effect != 7) {
                                 break;
                             }
                         } else {
-                            Battle_ApplyDamageAnimation();
-                            Battle_PlayMoveSound();
-                            Battle_UpdateBattleLog();
+                            Battle_ApplyAttackToTarget();
+                            Battle_PrintCriticalOHKOText();
+                            Battle_DisplayEffectiveness();
                             D_82199F36 = 1;
                         }
                         if (IsByteInArray(sBattleUser->moveCache.effect, D_8218AD80, 0xA) != 0) {
@@ -572,7 +572,7 @@ void ProcessBattleTurn(void) {
                         if (sBattleTarget->hp == 0) {
                             return;
                         }
-                        Battle_ApplyRageContinuation();
+                        Battle_HandleBuildingRage();
                         if (sBattleUser->immobilizedReason & 4) {
                             sBattleUser->effectTurnsLeft--;
                             if (sBattleUser->effectTurnsLeft != 0) {

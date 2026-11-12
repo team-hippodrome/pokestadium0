@@ -56,15 +56,15 @@ void func_8212AD10(CameraNode*, void*);
 void func_8212B270(CameraNode*, void*);
 void func_8212BA28(CameraNode*, void*);
 
-void func_8212BF28(CameraNode* arg0, void* arg1);
+void BattleScene_ActionStepReaction(CameraNode* arg0, void* arg1);
 
 extern u8* D_8218B2F4[];
 extern u8 D_8219A4F4;
 extern u8 D_80073D84[];
-void func_82128CDC(CameraNode*, s32);
-void func_82128F2C(CameraNode*, s32);
-void func_82129AE8(CameraNode*, s32);
-void func_8212A328(CameraNode*, s32);
+void BattleScene_ActionStepIntro(CameraNode*, s32);
+void BattleScene_ActionStepSetHitCount(CameraNode*, s32);
+void BattleScene_ActionStepUseMove(CameraNode*, s32);
+void BattleScene_ActionStepTravel(CameraNode*, s32);
 void BattleScene_PhaseFirstAction(CameraNode* arg0);
 
 extern u8* D_8218B320[];

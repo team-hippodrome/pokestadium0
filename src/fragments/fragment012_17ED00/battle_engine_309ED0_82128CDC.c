@@ -20,13 +20,19 @@ s32 func_82101FD4(ActivePokemon*);
 s32 func_82125F54(void);
 void func_82105FCC(s32);
 
-void func_82128CDC(CameraNode* arg0, s32 arg1) {
+/**
+ * Step 0 of an action phase (2 or 3). Starts a switch instead when the action is one
+ * (BattleScene_TryStartSwitchAction), otherwise runs the user's intro camera variant from the
+ * per-move table at D_80073D84 (every move uses variant 5 outside mode 10).
+ * @unverified Name and comment from the code and the D_80073D84 table read in game.
+ */
+void BattleScene_ActionStepIntro(CameraNode* arg0, s32 arg1) {
     s8* sp1C = (s8*)D_8219A544 + 0x78C;
 
     func_821079E8(0x1FFE);
     func_82106374((s32)sActivePokemon[0]);
     func_82106374((s32)sActivePokemon[1]);
-    if ((func_821250D4() == 0) && (func_82125F54() == 0)) {
+    if ((BattleScene_TryStartSwitchAction() == 0) && (func_82125F54() == 0)) {
         func_82105FCC(D_8219A544);
         if (sBattleScene.scene->moveEffectKind == 0xC) {
             arg1 = 0;
@@ -84,7 +90,12 @@ void func_82128E34(s32 arg0) {
     }
 }
 
-void func_82128F2C(CameraNode* arg0, s32 arg1) {
+/**
+ * Step 1 of an action phase: copies sMultihitCount into the hit counters, then enters the effect
+ * phase for moves that skip the attack animation (BattleScene_TryEnterEffectPhaseBeforeLaunch).
+ * @unverified Name and comment from the code.
+ */
+void BattleScene_ActionStepSetHitCount(CameraNode* arg0, s32 arg1) {
     BattleScene* scene;
     u8 temp_v1;
     int off;
@@ -100,7 +111,7 @@ void func_82128F2C(CameraNode* arg0, s32 arg1) {
     if (1) {  // karodo
     }
     D_8219A574 = D_8219A570 = sMultihitCount;
-    if (func_82125CC8() == 0) {
+    if (BattleScene_TryEnterEffectPhaseBeforeLaunch() == 0) {
         func_82128E34((s32)arg0);
     }
 }
@@ -405,7 +416,12 @@ void func_821299B0(CameraNode* arg0) {
 
 extern s32 D_8219A568;
 
-void func_82129AE8(CameraNode* arg0, s32 arg1) {
+/**
+ * Step 2 of an action phase: runs the move-use camera variant (table column 2 of D_80073D84; 10
+ * for multi-hit moves, 11 for the confusion self-hit).
+ * @unverified Name and comment from the code and the D_80073D84 table read in game.
+ */
+void BattleScene_ActionStepUseMove(CameraNode* arg0, s32 arg1) {
     s32 temp = M2C_FIELD(D_8219A5A0, s32*, 0x48);
 
     if (temp == 0x18) {

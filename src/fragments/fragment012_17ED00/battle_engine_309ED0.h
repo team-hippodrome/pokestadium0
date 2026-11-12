@@ -121,12 +121,12 @@ void func_82125C80(s32 arg0);
 
 s32 func_82125930(M2C_UNK);                         /* extern */
 
-s32 func_82125CC8(void);
+s32 BattleScene_TryEnterEffectPhaseBeforeLaunch(void);
 
 s32 func_82125930(M2C_UNK);                         /* extern */
 extern u8 D_82199F31;
 
-s32 func_82125E5C(void);
+s32 BattleScene_TryEnterEffectPhaseBeforeImpact(void);
 
 s32 BattleScene_PrepareResidualStatusPresentation(void);
 
@@ -303,7 +303,7 @@ typedef struct MoveAnimInfoZ {
 extern MoveAnimInfoZ D_80073D90[];
 void func_82106144(s32);
 void func_8212A250(CameraNode*);
-void func_8212A328(CameraNode* arg0, s32 arg1);
+void BattleScene_ActionStepTravel(CameraNode* arg0, s32 arg1);
 
 extern s32 D_8219A578;
 

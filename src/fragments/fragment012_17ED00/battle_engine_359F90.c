@@ -583,10 +583,11 @@ void Battle_LoadMoveCache(void) {
 
 extern s32 D_8218C780;
 /**
- * Temporarily make the damaged Rage user the effect user and apply its Attack boost.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Gen 1 HandleBuildingRage: when the target is using Rage and its Attack stage isn't maxed,
+ * queues the rage message and raises its Attack through BattleEffect_ApplyStatBoost.
+ * @unverified Name and comment from the code (matches the Gen 1 engine).
  */
-void Battle_ApplyRageContinuation(void) {
+void Battle_HandleBuildingRage(void) {
     BattleMonRuntime* sp1C;
 
     if ((sBattleTarget->volatileStatusFlags & 0x40) && ((sBattleTarget->unk_5C[0]) != 0xD)) {
@@ -613,7 +614,12 @@ extern s32 D_8218C7A8;
 extern s32 D_8218C7AC;
 
 // Matches the ROM, but uses rodata data that is not placed in this file yet.
-void Battle_UpdateBattleLog(void) {
+/**
+ * Gen 1 DisplayEffectiveness: queues the super effective message when the type multiplier is
+ * above 10, or the not very effective message when it is below 10.
+ * @unverified Name and comment from the code (matches the Gen 1 engine).
+ */
+void Battle_DisplayEffectiveness(void) {
     sTypeEffectiveness = D_82199F3F & 0x7F;
     if (sTypeEffectiveness >= 0xB) {
         BattleMessage_Format(D_8219A520 + 0x88, 0x29, D_8218C7A8);
@@ -626,7 +632,12 @@ extern s32 D_8218C778;
 extern s32 D_8218C77C;
 
 // Matches the ROM, but uses rodata data that is not placed in this file yet.
-void Battle_PlayMoveSound(void) {
+/**
+ * Gen 1 PrintCriticalOHKOText: queues the critical hit (sBattleCritFlag 1) or one-hit KO (2)
+ * message, sets hitReactionKind 2 and stores the flag on the target.
+ * @unverified Name and comment from the code (matches the Gen 1 engine).
+ */
+void Battle_PrintCriticalOHKOText(void) {
     BattleMonRuntime* sp1C = &sActivePokemon[!sBattleScene.scene->actingSide]->state.runtime;
 
     switch (sBattleCritFlag) {
@@ -644,9 +655,13 @@ void Battle_PlayMoveSound(void) {
 }
 
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Gen 1 ApplyAttackToEnemyPokemon: sets the fixed damage of OHKO moves, Super Fang (half the
+ * target's HP), Seismic Toss and Night Shade (user level), Sonic Boom (20), Dragon Rage (40) and
+ * Psywave (random 1 to 1.5x level), then applies the damage. Moves with no power and no special
+ * damage do nothing.
+ * @unverified Name and comment from the code (matches the Gen 1 engine).
  */
-void Battle_ApplyDamageAnimation(void) {
+void Battle_ApplyAttackToTarget(void) {
     s32 n;
 
     switch (((u8*)D_8219A3C0)[0x45]) {
@@ -703,10 +718,12 @@ extern s32 D_8218C76C;
 extern s32 D_8218C770;
 extern s32 D_8218C774;
 /**
- * Queue move failure and apply Jump Kick crash damage by temporarily swapping user and target.
- * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ * Gen 1 PrintMoveFailureText: queues the doesn't affect / missed / failed message for a move that
+ * failed. A Jump Kick or Hi Jump Kick miss (effect 0x2D) then deals the user 1/8 of the damage as
+ * crash damage (moveEffectKind 0x10).
+ * @unverified Name and comment from the code (matches the Gen 1 engine).
  */
-void Battle_QueueMoveFailureAndApplyRecoil(void) {
+void Battle_PrintMoveFailureText(void) {
     BattleMonRuntime* sp1C;
 
     if (D_82199F3F & 0x7F) {

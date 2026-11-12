@@ -1,7 +1,13 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
 #include "battle_engine_309ED0.h"
 
-void func_8212A328(CameraNode* arg0, s32 arg1) {
+/**
+ * Step 3 of an action phase: waits for the user's animation, enters the miss or status phase when
+ * one is pending (BattleScene_TryEnterEffectPhaseBeforeImpact), otherwise runs the travel camera
+ * variant (table column 3 of D_80073D84).
+ * @unverified Name and comment from the code and the D_80073D84 table read in game.
+ */
+void BattleScene_ActionStepTravel(CameraNode* arg0, s32 arg1) {
     UNUSED s32 pad; // FAKE: stack padding
     BattleMonRuntime* runtime = &((ActivePokemon*)D_8219A540)->state.runtime;
 
@@ -15,7 +21,7 @@ void func_8212A328(CameraNode* arg0, s32 arg1) {
     if ((arg1 != 5) && (arg1 != 6) && (arg1 != 7)) {
         D_8219A568 = arg1;
     }
-    if (func_82125E5C() != 0) {
+    if (BattleScene_TryEnterEffectPhaseBeforeImpact() != 0) {
         return;
     }
     func_821255EC(arg0);

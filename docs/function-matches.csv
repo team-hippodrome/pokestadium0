@@ -1110,7 +1110,7 @@ func_82124E80,0x82124E80,src/fragments/fragment012_17ED00/battle_engine_309ED0_8
 func_82124EB4,0x82124EB4,src/fragments/fragment012_17ED00/battle_engine_309ED0_82124E80.c,func_82124EB4,m2c,m2c,c
 func_82124EF4,0x82124EF4,src/fragments/fragment012_17ED00/battle_engine_309ED0_82124E80.c,func_82124EF4,s1,stadium1:src/fragments/battle_engine/battle_engine_339CA0.c,c
 func_82124EFC,0x82124EFC,src/fragments/fragment012_17ED00/battle_engine_309ED0_82124E80.c,func_82124EFC,hand,,c
-func_821250D4,0x821250D4,src/fragments/fragment012_17ED00/battle_engine_309ED0_82124E80.c,func_821250D4,hand,,c
+func_821250D4,0x821250D4,src/fragments/fragment012_17ED00/battle_engine_309ED0_82124E80.c,BattleScene_TryStartSwitchAction,hand,,c
 func_82125224,0x82125224,src/fragments/fragment012_17ED00/battle_engine_309ED0_82124E80.c,BattleScene_InitializeSwitchActions,s1,stadium1:src/fragments/battle_engine/battle_engine_309ED0.c,c
 func_82125384,0x82125384,src/fragments/fragment012_17ED00/battle_engine_309ED0_82124E80.c,func_82125384,hand,,c
 func_821254B0,0x821254B0,src/fragments/fragment012_17ED00/battle_engine_309ED0_82124E80.c,func_821254B0,hand,,c
@@ -1128,8 +1128,8 @@ func_821259E8,0x821259E8,src/fragments/fragment012_17ED00/battle_engine_309ED0_8
 func_82125AC8,0x82125AC8,src/fragments/fragment012_17ED00/battle_engine_309ED0_82124E80.c,BattleScene_UpdateDisplayedHpAndTransition,hand,,c
 func_82125C34,0x82125C34,src/fragments/fragment012_17ED00/battle_engine_309ED0_82124E80.c,func_82125C34,m2c,m2c,c
 func_82125C80,0x82125C80,src/fragments/fragment012_17ED00/battle_engine_309ED0_82124E80.c,func_82125C80,hand,,c
-func_82125CC8,0x82125CC8,src/fragments/fragment012_17ED00/battle_engine_309ED0_82124E80.c,func_82125CC8,m2c,m2c,c
-func_82125E5C,0x82125E5C,src/fragments/fragment012_17ED00/battle_engine_309ED0_82124E80.c,func_82125E5C,m2c,m2c,c
+func_82125CC8,0x82125CC8,src/fragments/fragment012_17ED00/battle_engine_309ED0_82124E80.c,BattleScene_TryEnterEffectPhaseBeforeLaunch,m2c,m2c,c
+func_82125E5C,0x82125E5C,src/fragments/fragment012_17ED00/battle_engine_309ED0_82124E80.c,BattleScene_TryEnterEffectPhaseBeforeImpact,m2c,m2c,c
 func_82125F54,0x82125F54,src/fragments/fragment012_17ED00/battle_engine_309ED0_82124E80.c,BattleScene_PrepareResidualStatusPresentation,hand,,c
 func_82125FD0,0x82125FD0,src/fragments/fragment012_17ED00/battle_engine_309ED0_82124E80.c,BattleScene_UpdateActiveOwnerPointers,hand,,c
 func_8212601C,0x8212601C,src/fragments/fragment012_17ED00/battle_engine_309ED0_82124E80.c,BattleScene_InitTurnPresentation,m2c,m2c,c
@@ -1157,9 +1157,9 @@ func_8212817C,0x8212817C,src/fragments/fragment012_17ED00/battle_engine_309ED0_8
 func_82128510,0x82128510,src/fragments/fragment012_17ED00/battle_engine_309ED0_82124E80.c,func_82128510,hand,,c
 func_82128780,0x82128780,src/fragments/fragment012_17ED00/battle_engine_309ED0_82124E80.c,func_82128780,hand,,c
 func_82128848,0x82128848,src/fragments/fragment012_17ED00/battle_engine_309ED0_82124E80.c,func_82128848,hand,,c
-func_82128CDC,0x82128CDC,src/fragments/fragment012_17ED00/battle_engine_309ED0_82128CDC.c,func_82128CDC,hand,,c
+func_82128CDC,0x82128CDC,src/fragments/fragment012_17ED00/battle_engine_309ED0_82128CDC.c,BattleScene_ActionStepIntro,hand,,c
 func_82128E34,0x82128E34,src/fragments/fragment012_17ED00/battle_engine_309ED0_82128CDC.c,func_82128E34,hand,,c
-func_82128F2C,0x82128F2C,src/fragments/fragment012_17ED00/battle_engine_309ED0_82128CDC.c,func_82128F2C,hand,,c
+func_82128F2C,0x82128F2C,src/fragments/fragment012_17ED00/battle_engine_309ED0_82128CDC.c,BattleScene_ActionStepSetHitCount,hand,,c
 func_82128FBC,0x82128FBC,src/fragments/fragment012_17ED00/battle_engine_309ED0_82128CDC.c,func_82128FBC,hand,,c
 func_821290CC,0x821290CC,src/fragments/fragment012_17ED00/battle_engine_309ED0_82128CDC.c,func_821290CC,hand,,c
 func_821291E4,0x821291E4,src/fragments/fragment012_17ED00/battle_engine_309ED0_82128CDC.c,func_821291E4,hand,,c
@@ -1170,7 +1170,7 @@ func_8212960C,0x8212960C,src/fragments/fragment012_17ED00/battle_engine_309ED0_8
 func_821296E4,0x821296E4,src/fragments/fragment012_17ED00/battle_engine_309ED0_82128CDC.c,func_821296E4,hand,,c
 func_821297BC,0x821297BC,src/fragments/fragment012_17ED00/battle_engine_309ED0_82128CDC.c,func_821297BC,hand,,c
 func_821299B0,0x821299B0,src/fragments/fragment012_17ED00/battle_engine_309ED0_82128CDC.c,func_821299B0,hand,,c
-func_82129AE8,0x82129AE8,src/fragments/fragment012_17ED00/battle_engine_309ED0_82128CDC.c,func_82129AE8,hand,,c
+func_82129AE8,0x82129AE8,src/fragments/fragment012_17ED00/battle_engine_309ED0_82128CDC.c,BattleScene_ActionStepUseMove,hand,,c
 func_82129C1C,0x82129C1C,src/fragments/fragment012_17ED00/battle_engine_309ED0_82128CDC.c,BattleScene_ActionSetupAnimationVariantB,hand,,c
 func_82129D10,0x82129D10,src/fragments/fragment012_17ED00/battle_engine_309ED0_82128CDC.c,func_82129D10,hand,,c
 func_82129E30,0x82129E30,src/fragments/fragment012_17ED00/battle_engine_309ED0_82128CDC.c,func_82129E30,m2c,m2c,c
@@ -1178,7 +1178,7 @@ func_82129F5C,0x82129F5C,src/fragments/fragment012_17ED00/battle_engine_309ED0_8
 func_8212A074,0x8212A074,src/fragments/fragment012_17ED00/battle_engine_309ED0_82128CDC.c,func_8212A074,m2c,m2c,c
 func_8212A190,0x8212A190,src/fragments/fragment012_17ED00/battle_engine_309ED0_82128CDC.c,func_8212A190,hand,,c
 func_8212A250,0x8212A250,src/fragments/fragment012_17ED00/battle_engine_309ED0_82128CDC.c,func_8212A250,hand,,c
-func_8212A328,0x8212A328,src/fragments/fragment012_17ED00/battle_engine_309ED0_8212A328.c,func_8212A328,hand,,c
+func_8212A328,0x8212A328,src/fragments/fragment012_17ED00/battle_engine_309ED0_8212A328.c,BattleScene_ActionStepTravel,hand,,c
 func_8212A4A4,0x8212A4A4,src/fragments/fragment012_17ED00/battle_engine_309ED0_8212A328.c,func_8212A4A4,m2c,m2c,c
 func_8212A4CC,0x8212A4CC,src/fragments/fragment012_17ED00/battle_engine_309ED0_8212A328.c,func_8212A4CC,m2c,m2c,c
 func_8212A554,0x8212A554,src/fragments/fragment012_17ED00/battle_engine_309ED0_8212A328.c,func_8212A554,m2c,m2c,c
@@ -2172,7 +2172,7 @@ func_8212B260,0x8212B260,src/fragments/fragment012_17ED00/battle_engine_3438B0.c
 func_8212B268,0x8212B268,src/fragments/fragment012_17ED00/battle_engine_3438B0.c,BattleAnim_RenderNop2,s1,stadium1:src/fragments/battle_engine/battle_engine_3438B0.c,c
 func_8212B270,0x8212B270,src/fragments/fragment012_17ED00/battle_engine_3438B0.c,func_8212B270,hand,,c
 func_8212BA28,0x8212BA28,src/fragments/fragment012_17ED00/battle_engine_3438B0.c,func_8212BA28,hand,,c
-func_8212BF28,0x8212BF28,src/fragments/fragment012_17ED00/battle_engine_3438B0.c,func_8212BF28,hand,,c
+func_8212BF28,0x8212BF28,src/fragments/fragment012_17ED00/battle_engine_3438B0.c,BattleScene_ActionStepReaction,hand,,c
 func_8212BFF0,0x8212BFF0,src/fragments/fragment012_17ED00/battle_engine_3438B0.c,BattleScene_PhaseFirstAction,hand,,c
 func_8212C1C4,0x8212C1C4,src/fragments/fragment012_17ED00/battle_engine_3438B0.c,BattleScene_PhaseSecondAction,hand,,c
 func_8212C398,0x8212C398,src/fragments/fragment012_17ED00/battle_engine_3438B0.c,func_8212C398,m2c,m2c+permuter,c
@@ -2503,11 +2503,11 @@ func_82110EE4,0x82110EE4,src/fragments/fragment012_17ED00/battle_engine_359F90.c
 func_82110FB0,0x82110FB0,src/fragments/fragment012_17ED00/battle_engine_359F90.c,func_82110FB0,s1,stadium1:src/fragments/battle_engine/battle_engine_359F90.c,c
 func_82110FB8,0x82110FB8,src/fragments/fragment012_17ED00/battle_engine_359F90.c,func_82110FB8,s1,stadium1:src/fragments/battle_engine/battle_engine_359F90.c,c
 func_82110FC0,0x82110FC0,src/fragments/fragment012_17ED00/battle_engine_359F90.c,Battle_LoadMoveCache,s1,stadium1:src/fragments/battle_engine/battle_engine_359F90.c,c
-func_82111080,0x82111080,src/fragments/fragment012_17ED00/battle_engine_359F90.c,Battle_ApplyRageContinuation,hand,,c
-func_82111150,0x82111150,src/fragments/fragment012_17ED00/battle_engine_359F90.c,Battle_UpdateBattleLog,hand,,c
-func_821111D0,0x821111D0,src/fragments/fragment012_17ED00/battle_engine_359F90.c,Battle_PlayMoveSound,hand,,c
-func_821112AC,0x821112AC,src/fragments/fragment012_17ED00/battle_engine_359F90.c,Battle_ApplyDamageAnimation,hand,,c
-func_821113E8,0x821113E8,src/fragments/fragment012_17ED00/battle_engine_359F90.c,Battle_QueueMoveFailureAndApplyRecoil,hand,,c
+func_82111080,0x82111080,src/fragments/fragment012_17ED00/battle_engine_359F90.c,Battle_HandleBuildingRage,hand,,c
+func_82111150,0x82111150,src/fragments/fragment012_17ED00/battle_engine_359F90.c,Battle_DisplayEffectiveness,hand,,c
+func_821111D0,0x821111D0,src/fragments/fragment012_17ED00/battle_engine_359F90.c,Battle_PrintCriticalOHKOText,hand,,c
+func_821112AC,0x821112AC,src/fragments/fragment012_17ED00/battle_engine_359F90.c,Battle_ApplyAttackToTarget,hand,,c
+func_821113E8,0x821113E8,src/fragments/fragment012_17ED00/battle_engine_359F90.c,Battle_PrintMoveFailureText,hand,,c
 func_821115F4,0x821115F4,src/fragments/fragment012_17ED00/battle_engine_359F90.c,Battle_IncrementMoveUsage,hand,,c
 func_82111664,0x82111664,src/fragments/fragment012_17ED00/battle_engine_359F90.c,Battle_Effect_Metronome,s1,stadium1:src/fragments/battle_engine/battle_engine_359F90.c,c
 func_821116C0,0x821116C0,src/fragments/fragment012_17ED00/battle_engine_359F90.c,Battle_ApplyPoisonOrBurnDamage,s1,stadium1:src/fragments/battle_engine/battle_engine_359F90.c,c

@@ -313,7 +313,13 @@ void func_8212BA28(CameraNode* arg0, void* arg1) {
 }
 
 
-void func_8212BF28(CameraNode* arg0, void* arg1) {
+/**
+ * Step 4 of an action phase: commits the target's pending status and runs the target reaction for
+ * hitReactionKind (0 normal, 1 last hit of a multi-hit move, 2 critical hit or OHKO, 3 side
+ * effect).
+ * @unverified Name and comment from the code.
+ */
+void BattleScene_ActionStepReaction(CameraNode* arg0, void* arg1) {
     s32 other;
 
     func_821255EC(arg0);
@@ -345,37 +351,37 @@ void BattleScene_PhaseFirstAction(CameraNode* arg0) {
     if (sBattleScene.scene->mode == n) {
         switch (sBattleScene.scene->phaseStep) {
             case 0:
-                func_82128CDC(arg0, D_8218B2F4[D_8219A4F4][0]);
+                BattleScene_ActionStepIntro(arg0, D_8218B2F4[D_8219A4F4][0]);
                 break;
             case 1:
-                func_82128F2C(arg0, 0);
+                BattleScene_ActionStepSetHitCount(arg0, 0);
                 break;
             case 2:
-                func_82129AE8(arg0, D_8218B2F4[D_8219A4F4][1]);
+                BattleScene_ActionStepUseMove(arg0, D_8218B2F4[D_8219A4F4][1]);
                 break;
             case 3:
-                func_8212A328(arg0, D_8218B2F4[D_8219A4F4][2]);
+                BattleScene_ActionStepTravel(arg0, D_8218B2F4[D_8219A4F4][2]);
                 break;
             case 4:
-                func_8212BF28(arg0, (void*)D_8218B2F4[D_8219A4F4][3]);
+                BattleScene_ActionStepReaction(arg0, (void*)D_8218B2F4[D_8219A4F4][3]);
                 break;
         }
     } else {
         switch (sBattleScene.scene->phaseStep) {
             case 0:
-                func_82128CDC(arg0, *(u16*)(D_80073D84 + 2 + sp[0x5A] * n));
+                BattleScene_ActionStepIntro(arg0, *(u16*)(D_80073D84 + 2 + sp[0x5A] * n));
                 break;
             case 1:
-                func_82128F2C(arg0, 0);
+                BattleScene_ActionStepSetHitCount(arg0, 0);
                 break;
             case 2:
-                func_82129AE8(arg0, *(u16*)(D_80073D84 + 4 + sp[0x5A] * n));
+                BattleScene_ActionStepUseMove(arg0, *(u16*)(D_80073D84 + 4 + sp[0x5A] * n));
                 break;
             case 3:
-                func_8212A328(arg0, *(u16*)(D_80073D84 + 6 + sp[0x5A] * n));
+                BattleScene_ActionStepTravel(arg0, *(u16*)(D_80073D84 + 6 + sp[0x5A] * n));
                 break;
             case 4:
-                func_8212BF28(arg0, (void*)*(u16*)(D_80073D84 + 8 + sp[0x5A] * n));
+                BattleScene_ActionStepReaction(arg0, (void*)*(u16*)(D_80073D84 + 8 + sp[0x5A] * n));
                 break;
         }
     }
@@ -393,37 +399,37 @@ void BattleScene_PhaseSecondAction(CameraNode* arg0) {
     if (sBattleScene.scene->mode == n) {
         switch (sBattleScene.scene->phaseStep) {
             case 0:
-                func_82128CDC(arg0, D_8218B320[D_8219A4F4][0]);
+                BattleScene_ActionStepIntro(arg0, D_8218B320[D_8219A4F4][0]);
                 break;
             case 1:
-                func_82128F2C(arg0, 0);
+                BattleScene_ActionStepSetHitCount(arg0, 0);
                 break;
             case 2:
-                func_82129AE8(arg0, D_8218B320[D_8219A4F4][1]);
+                BattleScene_ActionStepUseMove(arg0, D_8218B320[D_8219A4F4][1]);
                 break;
             case 3:
-                func_8212A328(arg0, D_8218B320[D_8219A4F4][2]);
+                BattleScene_ActionStepTravel(arg0, D_8218B320[D_8219A4F4][2]);
                 break;
             case 4:
-                func_8212BF28(arg0, (void*)D_8218B320[D_8219A4F4][3]);
+                BattleScene_ActionStepReaction(arg0, (void*)D_8218B320[D_8219A4F4][3]);
                 break;
         }
     } else {
         switch (sBattleScene.scene->phaseStep) {
             case 0:
-                func_82128CDC(arg0, *(u16*)(D_80073D84 + 2 + sp[0x5A] * n));
+                BattleScene_ActionStepIntro(arg0, *(u16*)(D_80073D84 + 2 + sp[0x5A] * n));
                 break;
             case 1:
-                func_82128F2C(arg0, 0);
+                BattleScene_ActionStepSetHitCount(arg0, 0);
                 break;
             case 2:
-                func_82129AE8(arg0, *(u16*)(D_80073D84 + 4 + sp[0x5A] * n));
+                BattleScene_ActionStepUseMove(arg0, *(u16*)(D_80073D84 + 4 + sp[0x5A] * n));
                 break;
             case 3:
-                func_8212A328(arg0, *(u16*)(D_80073D84 + 6 + sp[0x5A] * n));
+                BattleScene_ActionStepTravel(arg0, *(u16*)(D_80073D84 + 6 + sp[0x5A] * n));
                 break;
             case 4:
-                func_8212BF28(arg0, (void*)*(u16*)(D_80073D84 + 8 + sp[0x5A] * n));
+                BattleScene_ActionStepReaction(arg0, (void*)*(u16*)(D_80073D84 + 8 + sp[0x5A] * n));
                 break;
         }
     }
