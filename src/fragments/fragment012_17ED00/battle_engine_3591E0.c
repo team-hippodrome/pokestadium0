@@ -140,7 +140,7 @@ Gfx* AuxiliaryEffect_DrawOne(Gfx* arg0, AuxiliaryEffectNode* arg1, MtxF* arg2) {
     guMtxCatL(arg2, spBC, spBC);
 
     gSPMatrix(arg0++, spBC, G_MTX_PUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gDPSetPrimColor(arg0++, 0, 0, 255, 255, 255, 200);
+    gDPSetPrimColor(arg0++, 0, 0, 255, 255, 255, 200); // #FFFFFFC8
     gSPDisplayList(arg0++, D_82193E18);
     gSPPopMatrix(arg0++, G_MTX_MODELVIEW);
 

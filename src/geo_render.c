@@ -566,7 +566,7 @@ void func_800128E0(s8 *arg0) {
     M2C_FIELD(arg0, u32 *, 4) = 0xFFFFFFFF;
     gDPPipeSync(gDisplayListHead++);
     gDPSetCycleType(gDisplayListHead++, G_CYC_2CYCLE);
-    gDPSetPrimColor(gDisplayListHead++, 0, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF);
+    gDPSetPrimColor(gDisplayListHead++, 0, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFFFF
     GeoRender_SetCombineMode(gDisplayListHead++, D_80060534);
 }
 

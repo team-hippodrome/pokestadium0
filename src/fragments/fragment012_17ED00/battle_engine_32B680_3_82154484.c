@@ -168,20 +168,20 @@ void BattleAnim_BuildReflectiveTextureDisplayList(Gfx* arg0, s32 arg1, u16 arg2)
     switch (BattleAnim_GetQueuedMoveId()) {
         case BARRIER:
             gDPPipeSync(arg0++);
-            gDPSetPrimColor(arg0++, 0, 0x80, 255, 255, 255, 255);
-            gDPSetEnvColor(arg0++, 155, 255, 255, 255);
+            gDPSetPrimColor(arg0++, 0, 0x80, 255, 255, 255, 255); // #FFFFFFFF
+            gDPSetEnvColor(arg0++, 155, 255, 255, 255); // #9BFFFFFF
             break;
 
         case LIGHT_SCREEN:
             gDPPipeSync(arg0++);
-            gDPSetPrimColor(arg0++, 0, 0x80, 255, 255, 255, 255);
-            gDPSetEnvColor(arg0++, 255, 255, 100, 255);
+            gDPSetPrimColor(arg0++, 0, 0x80, 255, 255, 255, 255); // #FFFFFFFF
+            gDPSetEnvColor(arg0++, 255, 255, 100, 255); // #FFFF64FF
             break;
 
         case REFLECT:
             gDPPipeSync(arg0++);
-            gDPSetPrimColor(arg0++, 0, 0x80, 255, 255, 100, 255);
-            gDPSetEnvColor(arg0++, 255, 100, 0, 255);
+            gDPSetPrimColor(arg0++, 0, 0x80, 255, 255, 100, 255); // #FFFF64FF
+            gDPSetEnvColor(arg0++, 255, 100, 0, 255); // #FF6400FF
             break;
     }
 
@@ -997,7 +997,7 @@ void BattleAnim_BuildEffect63DisplayList(Gfx* arg0, s32 arg1, u16 arg2) {
     gDPPipeSync(arg0++);
 
     gDPSetPrimColor(arg0++, 0, 0x80, 255, 255, 255, sp28->prim_a);
-    gDPSetEnvColor(arg0++, 255, 55, 100, 255);
+    gDPSetEnvColor(arg0++, 255, 55, 100, 255); // #FF3764FF
 
     gSPEndDisplayList(arg0++);
 }
@@ -1015,7 +1015,7 @@ void BattleAnim_BuildEffect75DisplayList(Gfx* arg0, UNUSED s32 arg1, UNUSED u16 
     gDPPipeSync(arg0++);
 
     gDPSetPrimColor(arg0++, 0, 0x80, 255, 255, 255, temp_v0->prim_a);
-    gDPSetEnvColor(arg0++, 255, 255, 100, 255);
+    gDPSetEnvColor(arg0++, 255, 255, 100, 255); // #FFFF64FF
 
     gSPEndDisplayList(arg0++);
 }
@@ -1238,7 +1238,7 @@ void Gfx_DrawParticleAlpha(Gfx* arg0, s32 arg1, u16 arg2) {
     gDPPipeSync(arg0++);
 
     gDPSetPrimColor(arg0++, 0, 0xC8, 255, 255, 255, temp_v0->prim_a);
-    gDPSetEnvColor(arg0++, 255, 155, 0, 255);
+    gDPSetEnvColor(arg0++, 255, 155, 0, 255); // #FF9B00FF
 
     arg0 = BattleAnim_BuildAnimatedTileDisplayListFromStruct(arg0, arg1, 0x20, 5, 1, 0, 0, 0, -1, 0, 0, 0);
 
@@ -1258,7 +1258,7 @@ void Gfx_DrawParticleTexture4b(Gfx* arg0, u8* arg1, UNUSED u16 arg2) {
     gDPPipeSync(arg0++);
 
     gDPSetPrimColor(arg0++, 0, 0, 255, 255, 255, temp_v0->prim_r);
-    gDPSetEnvColor(arg0++, 255, 155, 0, 255);
+    gDPSetEnvColor(arg0++, 255, 155, 0, 255); // #FF9B00FF
     gDPSetCombineLERP(arg0++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, COMBINED,
                       0, 0, 0, COMBINED);
     gDPSetTextureLUT(arg0++, G_TT_NONE);
@@ -1282,7 +1282,7 @@ void Gfx_DrawParticleGreenPrim(Gfx* arg0, u8* arg1, UNUSED u16 arg2) {
     gDPPipeSync(arg0++);
 
     gDPSetPrimColor(arg0++, 0, 0, 255, 255, 255, temp_v0->prim_g);
-    gDPSetEnvColor(arg0++, 255, 255, 0, 255);
+    gDPSetEnvColor(arg0++, 255, 255, 0, 255); // #FFFF00FF
     gDPSetCombineLERP(arg0++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, COMBINED,
                       0, 0, 0, COMBINED);
     gDPSetTextureLUT(arg0++, G_TT_NONE);
@@ -1394,7 +1394,7 @@ void Gfx_DrawParticleCyanEnv(Gfx* arg0, arg1_func_8434E21C* arg1, UNUSED u16 arg
     BattleAnim_GetOwnerContextParticle(D_8006049C);
 
     gDPPipeSync(arg0++);
-    gDPSetEnvColor(arg0++, 155, 255, 255, 255);
+    gDPSetEnvColor(arg0++, 155, 255, 255, 255); // #9BFFFFFF
 
     arg0 = BattleAnim_BuildAnimatedTileDisplayListFromStruct(arg0, arg1, 0x20, 5, 2, 1, 0xE, 0xF, 0, 4, 0xC, 5);
 
@@ -1413,7 +1413,7 @@ void Gfx_DrawParticleBluePrim(Gfx* arg0, arg1_func_8434E21C* arg1, UNUSED u16 ar
 
     gDPPipeSync(arg0++);
     gDPSetPrimColor(arg0++, 0, 0x80, 255, 255, 255, temp_v0->prim_a);
-    gDPSetEnvColor(arg0++, 0, 255, 255, 255);
+    gDPSetEnvColor(arg0++, 0, 255, 255, 255); // #00FFFFFF
 
     arg0 = BattleAnim_BuildAnimatedTileDisplayListFromStruct(arg0, arg1, 0x20, 5, -3, -5, 0xD, 3, 0, -2, 0xF, 2);
 

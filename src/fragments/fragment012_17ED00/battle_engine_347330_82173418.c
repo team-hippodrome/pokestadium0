@@ -93,7 +93,7 @@ Gfx* SurfTerrainGrid_Draw(Gfx* arg0) {
 
     gDPSetPrimColor(arg0++, 0, 0xB4, 255, 255, 255, var_t0);
     gDPSetEnvColor(arg0++, 0, 0x64, 0xC8, var_a2);
-    gDPSetBlendColor(arg0++, 255, 255, 255, 255);
+    gDPSetBlendColor(arg0++, 255, 255, 255, 255); // #FFFFFFFF
 
     gDPLoadTextureTile_4b(arg0++, sBattleAnimAssetPointers[0xB8], G_IM_FMT_I, 32, 0, 0, 0, 31, 31, 0, G_TX_NOMIRROR | G_TX_WRAP,
                           G_TX_NOMIRROR | G_TX_WRAP, 5, 5, 1, 1);

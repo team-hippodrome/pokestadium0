@@ -190,10 +190,10 @@ void Pokedex_BuildMapMarkersDisplayList(void) {
 
         if (D_8A130458[i].unk_00 == 1) {
             if ((i + 1) == D_8A12FAD8[D_8A1302D6]) {
-                gDPSetPrimColor(temp_v0++, 0xFF, 0xFF, 255, 150, 100, 255);
+                gDPSetPrimColor(temp_v0++, 0xFF, 0xFF, 255, 150, 100, 255); // #FF9664FF
                 guScale(&sp168, 8.0f, 8.0f, 8.0f);
             } else {
-                gDPSetPrimColor(temp_v0++, 0xFF, 0xFF, 255, 255, 255, 255);
+                gDPSetPrimColor(temp_v0++, 0xFF, 0xFF, 255, 255, 255, 255); // #FFFFFFFF
                 guScale(&sp168, 4.0f, 4.0f, 4.0f);
             }
             guTranslate(&sp1A8, vec->x, vec->y, vec->z);
@@ -277,7 +277,7 @@ void Pokedex_BuildOverviewMarkersDisplayList(void) {
         temp_t1 = (D_8A12FA00[D_8A12FAD8[D_8A1302D6] - 1].unk_00 * 8) + 0x4F;
         temp_t2 = (D_8A12FA00[D_8A12FAD8[D_8A1302D6] - 1].unk_02 * 8) + 0x2F;
 
-        gDPSetPrimColor(temp_v0++, 0xFF, 0xFF, 150, 30, 0, 255);
+        gDPSetPrimColor(temp_v0++, 0xFF, 0xFF, 150, 30, 0, 255); // #961E00FF
 
         gDPPipeSync(temp_v0++);
 
@@ -298,7 +298,7 @@ void Pokedex_BuildOverviewMarkersDisplayList(void) {
 
 Gfx* Pokedex_DrawMapPinIcon(Gfx* arg0, s16 arg1, s16 arg2) {
     gSPDisplayList(arg0++, D_8A12EC18);
-    gDPSetPrimColor(arg0++, 0xFF, 0xFF, 255, 255, 255, 255);
+    gDPSetPrimColor(arg0++, 0xFF, 0xFF, 255, 255, 255, 255); // #FFFFFFFF
     gDPPipeSync(arg0++);
     gDPLoadTextureBlock(arg0++, D_8A12E788, G_IM_FMT_IA, G_IM_SIZ_8b, 16, 12, 0, G_TX_MIRROR | G_TX_CLAMP,
                         G_TX_MIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
@@ -385,19 +385,19 @@ Gfx* func_8A1033CC(Gfx* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, 
     if (arg6 == 1) {
         switch (D_8A1302DE) {
             case 0:
-                gDPSetPrimColor(arg0++, 0xFF, 0xFF, 106, 40, 20, 200);
+                gDPSetPrimColor(arg0++, 0xFF, 0xFF, 106, 40, 20, 200); // #6A2814C8
                 break;
 
             case 1:
-                gDPSetPrimColor(arg0++, 0xFF, 0xFF, 0, 44, 0, 200);
+                gDPSetPrimColor(arg0++, 0xFF, 0xFF, 0, 44, 0, 200); // #002C00C8
                 break;
 
             case 2:
-                gDPSetPrimColor(arg0++, 0xFF, 0xFF, 0, 0, 139, 200);
+                gDPSetPrimColor(arg0++, 0xFF, 0xFF, 0, 0, 139, 200); // #00008BC8
                 break;
 
             case 3:
-                gDPSetPrimColor(arg0++, 0xFF, 0xFF, 160, 160, 0, 200);
+                gDPSetPrimColor(arg0++, 0xFF, 0xFF, 160, 160, 0, 200); // #A0A000C8
                 break;
 
             default:
@@ -408,7 +408,7 @@ Gfx* func_8A1033CC(Gfx* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, 
                             G_TX_MIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
         gSPTextureRectangle(arg0++, (tmp + 2) << 2, (arg2 + 2) << 2, ((tmp + arg3) - 2) << 2,
                             ((arg2 + arg4) - 2) << 2, G_TX_RENDERTILE, 0, 0, 0x0400, 0x0400);
-        gDPSetPrimColor(arg0++, 0xFF, 0xFF, 255, 255, 255, 200);
+        gDPSetPrimColor(arg0++, 0xFF, 0xFF, 255, 255, 255, 200); // #FFFFFFC8
     }
     y = arg2;
     switch (arg5) {

@@ -706,7 +706,7 @@ void func_82201348(DepthBuffer* arg0) {
 
     GfxImage_SetRenderTarget(&gDisplayListHead, arg0);
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
-    gDPSetEnvColor(gDisplayListHead++, 255, 50, 20, 255);
+    gDPSetEnvColor(gDisplayListHead++, 255, 50, 20, 255); // #FF3214FF
     func_8001C058(0, 0, 0x40, 0x20, sp34, 0x40, 0);
     func_8001C058(0, 0x20, 0x40, 0x20, sp34 + 0x400, 0x40, 0);
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);

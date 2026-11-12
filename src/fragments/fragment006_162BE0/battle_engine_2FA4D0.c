@@ -60,7 +60,7 @@ void func_88400168(s32 x, s32 y, s32 port, s32 game) {
 
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
     if (game == 0) {
-        gDPSetEnvColor(gDisplayListHead++, 0xFF, 0xFF, 0xFF, 0x64);
+        gDPSetEnvColor(gDisplayListHead++, 0xFF, 0xFF, 0xFF, 0x64); // #FFFFFF64
     }
     Gfx_DrawTextureRgba16(x, y, 0x32, 0x20, D_04007298, 0x40, 0);
     Gfx_DrawTextureRgba16(x, y + 0x20, 0x32, 0x19, D_04008298, 0x40, 0);
@@ -68,23 +68,23 @@ void func_88400168(s32 x, s32 y, s32 port, s32 game) {
     if (game != 0) {
         switch (game) {
             case 1:
-                gDPSetPrimColor(gDisplayListHead++, 0, 0, 0xFF, 0x00, 0x00, 0xFF);
+                gDPSetPrimColor(gDisplayListHead++, 0, 0, 0xFF, 0x00, 0x00, 0xFF); // #FF0000FF
                 break;
             case 2:
-                gDPSetPrimColor(gDisplayListHead++, 0, 0, 0x00, 0x96, 0x00, 0xFF);
+                gDPSetPrimColor(gDisplayListHead++, 0, 0, 0x00, 0x96, 0x00, 0xFF); // #009600FF
                 break;
             case 3:
-                gDPSetPrimColor(gDisplayListHead++, 0, 0, 0x00, 0x32, 0xFF, 0xFF);
+                gDPSetPrimColor(gDisplayListHead++, 0, 0, 0x00, 0x32, 0xFF, 0xFF); // #0032FFFF
                 break;
             case 7:
-                gDPSetPrimColor(gDisplayListHead++, 0, 0, 0xFF, 0xFF, 0x00, 0xFF);
+                gDPSetPrimColor(gDisplayListHead++, 0, 0, 0xFF, 0xFF, 0x00, 0xFF); // #FFFF00FF
                 break;
         }
         Gfx_DrawTextureIa8(x + 6, y + 0x10, 0x26, 0x22, D_04008F20, 0x28, 0);
-        gDPSetPrimColor(gDisplayListHead++, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF);
+        gDPSetPrimColor(gDisplayListHead++, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFFFF
         Gfx_DrawTextureIa8(x + 9, y + 0x17, 0x20, 0x14, icons[port], 0x20, 0);
     } else {
-        gDPSetPrimColor(gDisplayListHead++, 0, 0, 0x80, 0x80, 0x80, 0x64);
+        gDPSetPrimColor(gDisplayListHead++, 0, 0, 0x80, 0x80, 0x80, 0x64); // #80808064
         Gfx_DrawTextureIa8(x + 9, y + 0x17, 0x20, 0x14, icons[port], 0x20, 0);
     }
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);

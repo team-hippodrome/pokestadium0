@@ -45,7 +45,7 @@ void TextRenderer_SetupGlyphState(void) {
     gDPSetCycleType(D_800AA1D0++, G_CYC_1CYCLE);
     gDPSetTexturePersp(D_800AA1D0++, G_TP_NONE);
     gDPSetTextureFilter(D_800AA1D0++, G_TF_POINT);
-    gDPSetPrimColor(D_800AA1D0++, 0, 0, 255, 255, 255, 255);
+    gDPSetPrimColor(D_800AA1D0++, 0, 0, 255, 255, 255, 255); // #FFFFFFFF
     gDPSetRenderMode(D_800AA1D0++, G_RM_TEX_EDGE, G_RM_TEX_EDGE2);
     gDPSetCombineMode(D_800AA1D0++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
     gDPLoadTextureBlock_4b(D_800AA1D0++, (u32)D_8005F770 & 0x1FFFFFFF, G_IM_FMT_IA, 96, 48, 0,

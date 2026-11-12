@@ -158,12 +158,12 @@ Gfx* func_80032C74(Gfx* gfx) {
             break;
         case 0x92:
             gSPDisplayList(gfx++, D_80074540);
-            gDPSetEnvColor(gfx++, 0xFF, 0x20, 0x00, 0x00);
+            gDPSetEnvColor(gfx++, 0xFF, 0x20, 0x00, 0x00); // #FF200000
             break;
         case 0x7E:
             gSPDisplayList(gfx++, D_800744D8);
-            gDPSetEnvColor(gfx++, 0xFF, 0x20, 0x00, 0x00);
-            gDPSetPrimColor(gfx++, 0xFF, 0xFF, 0xFF, 0xFF, 0x05, 0xFF);
+            gDPSetEnvColor(gfx++, 0xFF, 0x20, 0x00, 0x00); // #FF200000
+            gDPSetPrimColor(gfx++, 0xFF, 0xFF, 0xFF, 0xFF, 0x05, 0xFF); // #FFFF05FF
             break;
     }
     return gfx;
