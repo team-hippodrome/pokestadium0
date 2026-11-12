@@ -39,7 +39,7 @@ void func_82113668(void) {
         }
 
         if (sBattleTarget->pendingStatusCondition == 0) {
-            HandleMoveEffectFlags();
+            Battle_MoveHitTest();
             if ((sBattleMoveFailed == 0) && (Battle_SleepClauseInEffect(sActivePokemon[!sBattleScene.scene->actingSide]) == 0)) {
                 goto block_9;
             }
@@ -98,7 +98,7 @@ void Battle_Effect_Poison(void) {
             default:
                 sBattleScene.scene->moveEffectKind = 0x16;
                 sTypeEffectiveness = 0xA;
-                HandleMoveEffectFlags();
+                Battle_MoveHitTest();
                 if (sBattleMoveFailed != 0) {
                     BattleMessage_Format(sp1C, -0x7D, D_8218C7C8, ActivePokemon_GetNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
                     return;
@@ -403,7 +403,7 @@ void Battle_Effect_LowerStat(void) {
             goto block_14;
         }
     } else {
-        HandleMoveEffectFlags();
+        Battle_MoveHitTest();
 
         if (sBattleMoveFailed != 0) {
             goto end;

@@ -199,3 +199,22 @@ names; renamed after what each showed:
 
 Phase 34 (`func_82126E34`) runs the same steps 0–3 with its own step 4
 (`func_82126D20`); it was not seen in play.
+
+## Move execution (`ProcessBattleTurn` callees, `battle_engine_317E70.c`, `battle_engine_359F90.c`)
+
+These were `func_` names. Breakpoints over a turn where COM's Pinsir used
+Double Team and then 1P's Nidorino used Thunderbolt (savestate at the command
+menu, 1P move slot 0 patched to Thunderbolt):
+
+| Function | What the game did |
+|---|---|
+| `Battle_CheckForDisobedience` (was `func_82111DC4`) | Called once per move, returned 1 every time. Zero has no disobedience. |
+| `BattleMessage_PrintUsedMove` (was `func_821102F0`) | Called once per move before damage; the box then read 「ニドニドの １０まんボルト！」. |
+| `ActivePokemon_GetMoveName` (was `func_82107F68`) | Returned 「かげぶんしん」 for Pinsir and 「１０まんボルト」 for Nidorino. |
+| `Battle_RandomizeDamage` (was `func_8210F8E8`) | Damage 23 → 20 and 23 → 19 in two runs; 23 → 23 with Battle_Random forced to 255. |
+| `Battle_CalcHitChance` (was `func_82110890`) | Accuracy 255 → 168 against evasion stage 8 (+1 after Double Team), which is 255 × 66/100. |
+| `Battle_MoveHitTest` (was `HandleMoveEffectFlags`) | Calls the two above; with Battle_Random forced to 255 it called `Battle_MoveMissed`. |
+| `Battle_MoveMissed` (was `func_82110984`) | Called only in the forced-miss run; the box read 「しかし ニドニドの こうげきは はずれた！」 and Pinsir kept 75/75. |
+
+`Battle_CheckExplosionVsSubstitute` (was `func_82111A78`) runs after every
+move, but its body does nothing in Zero, so it keeps `@unverified`.

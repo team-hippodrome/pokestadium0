@@ -208,9 +208,13 @@ extern s32 D_8218C75C;
 extern s32 D_8218C760;
 extern s32 D_8218C764;
 s32 func_8210FA2C(s32, u8*, s32);
-s32 func_82107F68(ActivePokemon*);
+s32 ActivePokemon_GetMoveName(ActivePokemon*);
 
-void func_821102F0(void) {
+/**
+ * Queues the "<nickname> used <move>" message, picking one of the five Gen 1 endings by move set;
+ * Metronome and Mirror Move use a second message slot.
+ */
+void BattleMessage_PrintUsedMove(void) {
     BattleMonRuntime* runtime = &sActivePokemon[sBattleScene.scene->actingSide]->state.runtime;
     s32 type;
 
@@ -230,46 +234,46 @@ void func_821102F0(void) {
         switch (type) {
             case 0:
                 BattleMessage_Format(D_8219A520 + 0x388, 0x14, D_8218C754, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]),
-                              func_82107F68(sActivePokemon[sBattleScene.scene->actingSide]));
+                              ActivePokemon_GetMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
             case 1:
                 BattleMessage_Format(D_8219A520 + 0x388, 0x15, D_8218C758, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]),
-                              func_82107F68(sActivePokemon[sBattleScene.scene->actingSide]));
+                              ActivePokemon_GetMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
             case 2:
                 BattleMessage_Format(D_8219A520 + 0x388, 0x16, D_8218C75C, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]),
-                              func_82107F68(sActivePokemon[sBattleScene.scene->actingSide]));
+                              ActivePokemon_GetMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
             case 3:
                 BattleMessage_Format(D_8219A520 + 0x388, 0x17, D_8218C760, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]),
-                              func_82107F68(sActivePokemon[sBattleScene.scene->actingSide]));
+                              ActivePokemon_GetMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
             case 4:
                 BattleMessage_Format(D_8219A520 + 0x388, 0x18, D_8218C764, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]),
-                              func_82107F68(sActivePokemon[sBattleScene.scene->actingSide]));
+                              ActivePokemon_GetMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
         }
     } else {
         switch (type) {
             case 0:
                 BattleMessage_Format(D_8219A520 + 0xC8, 0x14, D_8218C754, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]),
-                              func_82107F68(sActivePokemon[sBattleScene.scene->actingSide]));
+                              ActivePokemon_GetMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
             case 1:
                 BattleMessage_Format(D_8219A520 + 0xC8, 0x15, D_8218C758, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]),
-                              func_82107F68(sActivePokemon[sBattleScene.scene->actingSide]));
+                              ActivePokemon_GetMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
             case 2:
                 BattleMessage_Format(D_8219A520 + 0xC8, 0x16, D_8218C75C, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]),
-                              func_82107F68(sActivePokemon[sBattleScene.scene->actingSide]));
+                              ActivePokemon_GetMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
             case 3:
                 BattleMessage_Format(D_8219A520 + 0xC8, 0x17, D_8218C760, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]),
-                              func_82107F68(sActivePokemon[sBattleScene.scene->actingSide]));
+                              ActivePokemon_GetMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
             case 4:
                 BattleMessage_Format(D_8219A520 + 0xC8, 0x18, D_8218C764, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]),
-                              func_82107F68(sActivePokemon[sBattleScene.scene->actingSide]));
+                              ActivePokemon_GetMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
         }
     }
@@ -299,7 +303,11 @@ void Battle_DecrementPP(s32 arg0) {
 extern s8 *D_8219A3C0;
 extern s8 *D_8219A3C4;
 extern u8 D_8218AC34[][2];
-void func_82110890(void) {
+/**
+ * Gen 1 CalcHitChance: scales the move's accuracy by the user's accuracy stage and the target's
+ * evasion stage, clamped to 1-255.
+ */
+void Battle_CalcHitChance(void) {
 
     s32 idx = ((u8*)D_8219A3C0)[0x60];
     s32 i;
@@ -327,7 +335,11 @@ extern s8 *D_8219A3C0;
 extern s8 *D_8219A3C4;
 extern s8 *D_8219A5A0;
 
-void func_82110984(void) {
+/**
+ * Marks the move as missed: clears the damage, sets the missed flag and clears the user's
+ * thrashing bit (0x20 of byte 0x4C).
+ */
+void Battle_MoveMissed(void) {
     s32 temp_v0;
 
     D_82199F50 = 0;
@@ -344,18 +356,18 @@ void func_82110984(void) {
     M2C_FIELD(D_8219A3C0, u8 *, 0x4C) = (u8) (M2C_FIELD(D_8219A3C0, u8 *, 0x4C) & 0xFFDF);
 }
 
-void func_82110984(void);
+void Battle_MoveMissed(void);
 u8 Battle_Random(void);
 /**
- * Check recharge, Dream Eater, Substitute, semi-invulnerability, Mist and accuracy.
- * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ * Gen 1 MoveHitTest: Dream Eater on a target that isn't asleep, Swift, moves into Fly or Dig,
+ * Substitute, Mist and the accuracy roll each end in Battle_MoveMissed.
  */
-void HandleMoveEffectFlags(void) {
+void Battle_MoveHitTest(void) {
     s8* p = D_8219A3C0;
     u8 effect = M2C_FIELD(p, u8*, 0x45);
 
     if ((effect == 8) && !(M2C_FIELD(D_8219A3C4, u8*, 0x15) & 7)) {
-        func_82110984();
+        Battle_MoveMissed();
         return;
     }
     if (M2C_FIELD(D_8219A3C4, u8*, 0x4D) & 0x10) {
@@ -363,24 +375,24 @@ void HandleMoveEffectFlags(void) {
             return;
         }
         if ((effect == 3) || (effect == 8)) {
-            func_82110984();
+            Battle_MoveMissed();
             return;
         }
     }
     if (M2C_FIELD(D_8219A3C4, u8*, 0x4C) & 0x40) {
-        func_82110984();
+        Battle_MoveMissed();
         return;
     }
     if ((((effect >= 0x12) && (effect < 0x1A)) || ((effect >= 0x3A) && (effect < 0x42))) && (M2C_FIELD(D_8219A3C4, u8*, 0x4D) & 2)) {
-        func_82110984();
+        Battle_MoveMissed();
         return;
     }
     if (M2C_FIELD(p, u8*, 0x4D) & 1) {
         return;
     }
-    func_82110890();
+    Battle_CalcHitChance();
     if (Battle_Random() >= M2C_FIELD(D_8219A3C0, u8*, 0x48)) {
-        func_82110984();
+        Battle_MoveMissed();
     }
 }
 

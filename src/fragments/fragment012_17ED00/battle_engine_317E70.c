@@ -45,7 +45,7 @@ extern u8 sHighCritMoves[];
 void BattleMessage_Format(s32, s32, s32, ...);
 
 void BattleAnim_EffectEndNop(void);
-s32 func_82111DC4(void);
+s32 Battle_CheckForDisobedience(void);
 s32 Battle_CheckFaintAfterMove(void);
 
 void Battle_CheckDefeatAtStatusHp(ActivePokemon* arg0);
@@ -85,7 +85,12 @@ s32 Battle_TryLoadFollowupMoveFromTarget(void) {
 }
 
 // FAKE: decomp slop. Raw offset casts stand in for battle mon fields.
-void func_82111A78(void)
+/**
+ * Self-Destruct and Explosion check of the target's Substitute and state; the body does nothing
+ * in Zero. Runs after every move.
+ * @unverified Name and comment from the code.
+ */
+void Battle_CheckExplosionVsSubstitute(void)
 {
   if (((*((u8 *) (((s8 *) D_8219A3C0) + 0x44))) == 0x78) || ((*((u8 *) (((s8 *) D_8219A3C0) + 0x44))) == 0x99)) // FAKE: decomp slop, raw pointer casts stand in for struct fields
   {
@@ -189,7 +194,7 @@ s32 Battle_Effect_Counter(void) {
         }
 
         sBattleMoveFailed = 0;
-        HandleMoveEffectFlags();
+        Battle_MoveHitTest();
         return 0;
     }
     return 0;
@@ -237,7 +242,11 @@ s32 Battle_CheckCriticalHit(void) {
     return 1;
 }
 
-s32 func_82111DC4(void) {
+/**
+ * Stadium has no disobedience, so the Gen 1 CheckForDisobedience step is a stub that always lets
+ * the Pokemon act.
+ */
+s32 Battle_CheckForDisobedience(void) {
     return 1;
 }
 
@@ -444,8 +453,8 @@ extern s32 D_8218C714;
    table that is this file's placed .rodata, so it is referenced by address. */
 extern char D_8219574C[];
 void ActivePokemon_SetStateFlags(ActivePokemon*, s32);
-void func_821102F0(void);
-void func_8210F8E8(void);
+void BattleMessage_PrintUsedMove(void);
+void Battle_RandomizeDamage(void);
 
 /**
  * Resolves the current action: move selection, hit and damage checks, then
@@ -470,7 +479,7 @@ void ProcessBattleTurn(void) {
                     sBattleUser->immobilizedReason &= ~(0x40 | 0x10);
                     ActivePokemon_SetStateFlags(sActivePokemon[sBattleScene.scene->actingSide], 8);
                 } else {
-                    if (func_82111DC4() == 0) {
+                    if (Battle_CheckForDisobedience() == 0) {
                         user = sBattleUser;
                         goto block_29a;
                     }
@@ -483,7 +492,7 @@ void ProcessBattleTurn(void) {
                     }
                 }
             case 3:
-                func_821102F0();
+                BattleMessage_PrintUsedMove();
                 Battle_DecrementPP(sBattleScene.scene->actingSide);
                 if (IsByteInArray(sBattleUser->moveCache.effect, D_8218AD4C, 0x10) != 0) {
                     BattleEffect_ExecuteMoveEffect();
@@ -502,12 +511,12 @@ void ProcessBattleTurn(void) {
                             goto block_29;
                         }
                         Battle_ApplyTypeEffectAndSTAB();
-                        func_8210F8E8();
+                        Battle_RandomizeDamage();
                     } else {
                         goto block_24;
                     }
                 }
-                HandleMoveEffectFlags();
+                Battle_MoveHitTest();
             case 5:
             block_24:
                 if (sBattleMoveFailed != 0) {
@@ -526,7 +535,7 @@ void ProcessBattleTurn(void) {
                 user = sBattleUser;
                 user = user; // FAKE: self-assignment
             block_28:
-                func_82111A78();
+                Battle_CheckExplosionVsSubstitute();
                 user = sBattleUser;
             block_29a:
                 effect = user->moveCache.effect;

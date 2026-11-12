@@ -274,7 +274,7 @@ void Battle_Effect_Confuse(void) {
     sConfused = 0;
 
     if (!(sBattleTarget->volatileStatusFlags & 0x10)) {
-        HandleMoveEffectFlags();
+        Battle_MoveHitTest();
         if ((sBattleMoveFailed == 0) && !(sBattleTarget->immobilizedReason & 0x80)) {
             sConfused = 1;
             sBattleTarget->immobilizedReason |= 0x80;
@@ -298,7 +298,7 @@ void Battle_Effect_Paralyze(void) {
     sBattleScene.scene->moveEffectKind = 0x16;
     if (sBattleTarget->pendingStatusCondition == 0) {
         if ((sBattleUser->moveCache.type != 0x17) || ((sBattleTarget->roster[6] != 4) && (sBattleTarget->roster[7] != 4))) {
-            HandleMoveEffectFlags();
+            Battle_MoveHitTest();
             if (sBattleMoveFailed == 0) {
                 sBattleTarget->pendingStatusCondition |= 0x40;
                 ApplyParalysisSpeedCut(sActivePokemon[!sBattleScene.scene->actingSide]);
@@ -380,7 +380,7 @@ void BattleEffect_Mimic(void) {
     u8 temp_v0;
 
     sBattleScene.scene->moveEffectKind = 7;
-    HandleMoveEffectFlags();
+    Battle_MoveHitTest();
 
     if ((sBattleMoveFailed == 0) && !(sBattleTarget->immobilizedReason & 0x40)) {
         D_82199F37 = 1;
@@ -405,7 +405,7 @@ extern s32 D_8218C8C8;
 
 // Matches the ROM, but uses rodata data that is not placed in this file yet.
 void Battle_Effect_LeechSeed(void) {
-    HandleMoveEffectFlags();
+    Battle_MoveHitTest();
 
     if ((sBattleMoveFailed == 0) && (sBattleTarget->roster[6] != 0x16) && (sBattleTarget->roster[7] != 0x16)) {
         if (!(sBattleTarget->volatileStatusFlags & 0x80)) {
@@ -436,7 +436,7 @@ void func_82115A14(void) {
     s32 turns;
     s32 name;
 
-    HandleMoveEffectFlags();
+    Battle_MoveHitTest();
     if (sBattleMoveFailed == 0) {
         sBattleScene.scene->moveEffectKind = 0x20;
         if (sBattleTarget->disabledMoveState == 0) {

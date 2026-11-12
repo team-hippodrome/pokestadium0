@@ -313,7 +313,10 @@ typedef struct {
 } unk_D_8006A9CC; // size = 0xC
 extern unk_D_8006A9CC D_8006A9CC[];
 
-s32 func_82107F68(u8* arg0) {
+/**
+ * Returns the name string of the Pokemon's current move (move cache byte at 0x80A).
+ */
+s32 ActivePokemon_GetMoveName(u8* arg0) {
     return D_8006A9CC[arg0[0x80A]].unk_00;
 }
 

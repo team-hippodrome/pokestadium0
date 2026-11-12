@@ -1191,7 +1191,7 @@ func_8210F4E0,0x8210F4E0,src/fragments/fragment012_17ED00/battle_engine_313D60.c
 func_8210F4E8,0x8210F4E8,src/fragments/fragment012_17ED00/battle_engine_313D60.c,ShowDamageMessage,hand,,c
 func_8210F688,0x8210F688,src/fragments/fragment012_17ED00/battle_engine_313D60.c,Battle_ResetTransientRuntimeState,s1,stadium1:src/fragments/battle_engine/battle_engine_359F90.c,c
 func_8210F730,0x8210F730,src/fragments/fragment012_17ED00/battle_engine_313D60.c,Battle_ResetEntityState,hand,,c
-func_8210F8E8,0x8210F8E8,src/fragments/fragment012_17ED00/battle_engine_313D60.c,func_8210F8E8,m2c,m2c,c
+func_8210F8E8,0x8210F8E8,src/fragments/fragment012_17ED00/battle_engine_313D60.c,Battle_RandomizeDamage,m2c,m2c,c
 func_8210F954,0x8210F954,src/fragments/fragment012_17ED00/battle_engine_313D60.c,Battle_DetermineMoveOrder,s1,stadium1:src/fragments/battle_engine/battle_engine_359F90.c,c
 func_8210FA2C,0x8210FA2C,src/fragments/fragment012_17ED00/battle_engine_313D60.c,IsByteInArray,s1,stadium1:src/fragments/battle_engine/battle_engine_359F90.c,c
 func_8210FA74,0x8210FA74,src/fragments/fragment012_17ED00/battle_engine_313D60.c,func_8210FA74,s1,stadium1:src/fragments/battle_engine/battle_engine_359F90.c,c
@@ -1260,11 +1260,11 @@ func_82137160,0x82137160,src/fragments/fragment012_17ED00/battle_engine_315D50_3
 func_82137188,0x82137188,src/fragments/fragment012_17ED00/battle_engine_315D50_3.c,BattleAnim_Reset,hand,,c
 func_821119F0,0x821119F0,src/fragments/fragment012_17ED00/battle_engine_317E70.c,BattleAnim_EffectEndNop,s1,stadium1:src/fragments/battle_engine/battle_engine_317E70.c,c
 func_821119F8,0x821119F8,src/fragments/fragment012_17ED00/battle_engine_317E70.c,Battle_TryLoadFollowupMoveFromTarget,m2c,m2c,c
-func_82111A78,0x82111A78,src/fragments/fragment012_17ED00/battle_engine_317E70.c,func_82111A78,hand,,c
+func_82111A78,0x82111A78,src/fragments/fragment012_17ED00/battle_engine_317E70.c,Battle_CheckExplosionVsSubstitute,hand,,c
 func_82111AC4,0x82111AC4,src/fragments/fragment012_17ED00/battle_engine_317E70.c,Battle_ApplyTypeEffectAndSTAB,hand,,c
 func_82111C00,0x82111C00,src/fragments/fragment012_17ED00/battle_engine_317E70.c,Battle_Effect_Counter,hand,,c
 func_82111CD4,0x82111CD4,src/fragments/fragment012_17ED00/battle_engine_317E70.c,Battle_CheckCriticalHit,hand,,c
-func_82111DC4,0x82111DC4,src/fragments/fragment012_17ED00/battle_engine_317E70.c,func_82111DC4,s1,stadium1:src/fragments/particle_math/particle_math_26F9B0.c,c
+func_82111DC4,0x82111DC4,src/fragments/fragment012_17ED00/battle_engine_317E70.c,Battle_CheckForDisobedience,s1,stadium1:src/fragments/particle_math/particle_math_26F9B0.c,c
 func_82111DCC,0x82111DCC,src/fragments/fragment012_17ED00/battle_engine_317E70.c,Battle_CheckMonCanAct,hand,,c
 func_821125C0,0x821125C0,src/fragments/fragment012_17ED00/battle_engine_317E70.c,ProcessBattleTurn,hand,,c
 func_821129E4,0x821129E4,src/fragments/fragment012_17ED00/battle_engine_317E70.c,Battle_HandleFaint,hand,,c
@@ -2489,11 +2489,11 @@ func_8210FD70,0x8210FD70,src/fragments/fragment012_17ED00/battle_engine_359F90.c
 func_8210FDD0,0x8210FDD0,src/fragments/fragment012_17ED00/battle_engine_359F90.c,InitBattleParameters,hand,,c
 func_8210FF40,0x8210FF40,src/fragments/fragment012_17ED00/battle_engine_359F90.c,Battle_CalcDamage,hand,,c
 func_8211009C,0x8211009C,src/fragments/fragment012_17ED00/battle_engine_359F90.c,Battle_ApplyDamage,hand,,c
-func_821102F0,0x821102F0,src/fragments/fragment012_17ED00/battle_engine_359F90.c,func_821102F0,hand,,c
+func_821102F0,0x821102F0,src/fragments/fragment012_17ED00/battle_engine_359F90.c,BattleMessage_PrintUsedMove,hand,,c
 func_821107F0,0x821107F0,src/fragments/fragment012_17ED00/battle_engine_359F90.c,Battle_DecrementPP,s1,stadium1:src/fragments/battle_engine/battle_engine_359F90.c,c
-func_82110890,0x82110890,src/fragments/fragment012_17ED00/battle_engine_359F90.c,func_82110890,hand,,c
-func_82110984,0x82110984,src/fragments/fragment012_17ED00/battle_engine_359F90.c,func_82110984,m2c,m2c,c
-func_82110A10,0x82110A10,src/fragments/fragment012_17ED00/battle_engine_359F90.c,HandleMoveEffectFlags,hand,,c
+func_82110890,0x82110890,src/fragments/fragment012_17ED00/battle_engine_359F90.c,Battle_CalcHitChance,hand,,c
+func_82110984,0x82110984,src/fragments/fragment012_17ED00/battle_engine_359F90.c,Battle_MoveMissed,m2c,m2c,c
+func_82110A10,0x82110A10,src/fragments/fragment012_17ED00/battle_engine_359F90.c,Battle_MoveHitTest,hand,,c
 func_82110B44,0x82110B44,src/fragments/fragment012_17ED00/battle_engine_359F90.c,ActivePokemon_CommitPendingStatus,s1,stadium1:src/fragments/battle_engine/battle_engine_359F90.c,c
 func_82110B6C,0x82110B6C,src/fragments/fragment012_17ED00/battle_engine_359F90.c,ApplyParalysisSpeedCut,s1,stadium1:src/fragments/battle_engine/battle_engine_359F90.c,c
 func_82110BA4,0x82110BA4,src/fragments/fragment012_17ED00/battle_engine_359F90.c,ApplyBurnAttackCut,s1,stadium1:src/fragments/battle_engine/battle_engine_359F90.c,c
@@ -2602,7 +2602,7 @@ func_82107EC8,0x82107EC8,src/fragments/fragment012_17ED00/battle_engine_helper.c
 func_82107F18,0x82107F18,src/fragments/fragment012_17ED00/battle_engine_helper.c,BattleScene_GetParticipantModelRadiusScaled,hand,,c
 func_82107F3C,0x82107F3C,src/fragments/fragment012_17ED00/battle_engine_helper.c,Battle_GetLoadedModelNode,s1,stadium1:src/fragments/battle_engine/battle_engine_helper.c,c
 func_82107F58,0x82107F58,src/fragments/fragment012_17ED00/battle_engine_helper.c,ActivePokemon_GetDisplayModel,m2c,m2c,c
-func_82107F68,0x82107F68,src/fragments/fragment012_17ED00/battle_engine_helper.c,func_82107F68,hand,,c
+func_82107F68,0x82107F68,src/fragments/fragment012_17ED00/battle_engine_helper.c,ActivePokemon_GetMoveName,hand,,c
 func_82107F88,0x82107F88,src/fragments/fragment012_17ED00/battle_engine_helper.c,ActivePokemon_GetNickname,m2c,m2c+permuter,c
 func_82107FB8,0x82107FB8,src/fragments/fragment012_17ED00/battle_engine_helper.c,BattleScene_InitializeParticipantOwnerModel,hand,,c
 func_82108090,0x82108090,src/fragments/fragment012_17ED00/battle_engine_helper.c,BattleScene_InitializeParticipantSecondaryModels,hand,,c

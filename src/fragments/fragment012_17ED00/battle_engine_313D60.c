@@ -155,7 +155,11 @@ void Battle_ResetEntityState(ActivePokemon* active_pokemon) {
 u8 Battle_Random(void);                                /* extern */
 extern u16 D_82199F50;
 
-void func_8210F8E8(void) {
+/**
+ * Gen 1 RandomizeDamage: when the damage is at least 2, multiplies it by a random 217-255 and
+ * divides by 255.
+ */
+void Battle_RandomizeDamage(void) {
     s32 temp_v0;
 
     if ((s32) D_82199F50 >= 2) {

@@ -3006,7 +3006,7 @@ void Battle_ApplyDamage(void);
 void Battle_DecrementPP(s32 arg0);
 void ApplyAccuracyStageMultipliers(void);
 void MarkAttackFailed(void);
-void HandleMoveEffectFlags(void);
+void Battle_MoveHitTest(void);
 void Battle_ApplyAnimStateEffects(s32 arg0);
 void ApplyParalysisSpeedCut(ActivePokemon* active_pokemon);
 void ApplyBurnAttackCut(ActivePokemon* active_pokemon);
