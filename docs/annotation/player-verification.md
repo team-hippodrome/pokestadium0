@@ -730,3 +730,15 @@ Nidorino) played in the GB Tower:
   (`GridMenu_UpdateCursorSkipDisabled`). In いちらん, the list cursor moves
   through `ScrollList_UpdateCursor`. Row numbers and IDs are drawn by
   `Ui_DrawNumberZeroPadded` (1 in 4 digits as 0001, ID 12345 in 5 digits).
+
+## Transfer Pak boot scan
+
+This was traced from power-on with Green in port 1:
+
+1. `GbSave_ScanAllPorts` calls `GbTower_ScanPaks`, which returns 0x10001.
+2. `GbPak_ReadRom` reads the header from 0x120, which matches the ROM
+   (POKEMON GREEN).
+3. `GbPak_DetectRam` checks cartridge RAM with two `GbPak_VerifyPattern`
+   rounds, each writing with `GbPak_MbcWrite` and reading back with
+   `GbPak_MbcRead`.
+4. `GbSave_OpenMainData` runs, and `GbTower_SetPollMask(1)` ends the scan.

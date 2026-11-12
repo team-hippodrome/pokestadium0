@@ -37,7 +37,9 @@ s32 GbPak_VerifyPattern(s32 arg0, void* arg1);
 /**
  * Writes a 32-byte pattern to cartridge RAM 0xA000 through the MBC, reads it back
  * and returns 1 if it matches and the pak status bit 2 is clear.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12) at power-on with a Transfer Pak holding Pocket Monsters Green in port
+ * 1: wrote a pattern through GbPak_MbcWrite, read it back through GbPak_MbcRead and returned 1,
+ * both times it ran.
  */
 s32 GbPak_VerifyPattern(s32 arg0, void* arg1) {
     u8 sp47;
@@ -55,7 +57,8 @@ s32 GbPak_VerifyPattern(s32 arg0, void* arg1) {
 /**
  * Detects working cartridge RAM by verifying 0x55, 0xAA and then an osGetCount
  * pattern; the last pattern is left in the pattern buffer for GbTower_VerifyPakStillInserted.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12) at power-on with a Transfer Pak holding Pocket Monsters Green in port
+ * 1: ran GbPak_VerifyPattern twice (both returned 1), then returned 1.
  */
 s32 GbPak_DetectRam(s32 arg0, u8* arg1) {
     s32 var_s0 = 0;
@@ -110,7 +113,8 @@ s32 GbTower_ProbePak(s32 arg0, u8* arg1, u8* arg2) {
 /**
  * Returns 1 if the pak has not latched a reset (OS_GBPAK_RSTB_DETECTION clear), i.e. the
  * cartridge was not removed; powers the pak off when keep_powered == 0.
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12) at power-on with a Transfer Pak holding Pocket Monsters Green in port
+ * 1: returned 1 for port 1, twice during the boot scan.
  */
 s32 GbTower_IsPakInserted(s32 arg0, u8 arg1) {
     u8 status;
@@ -149,7 +153,8 @@ extern u8 D_800AB1F6;
 /**
  * Initializes every plugged-in Transfer Pak and checks its cartridge. Returns
  * (gGbPakUsableMask << 16) | gGbPakInitMask.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12) at power-on with a Transfer Pak holding Pocket Monsters Green in port
+ * 1: returned 0x10001, port 1 both usable and inserted.
  */
 s32 GbTower_ScanPaks(void) {
     s32 i;
@@ -263,7 +268,8 @@ s32 GbTower_VerifyPakStillInserted(s32 arg0, void* arg1) {
 
 /**
  * Reads cartridge memory through osGbmbcReadWrite if the port is usable.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12) at power-on with a Transfer Pak holding Pocket Monsters Green in port
+ * 1: GbPak_VerifyPattern read its pattern back through it (returned 0, success).
  */
 s32 GbPak_MbcRead(s32 arg0, void* arg1, u16 arg2, u16 arg3) {
     s32 var_v1;
@@ -277,7 +283,8 @@ s32 GbPak_MbcRead(s32 arg0, void* arg1, u16 arg2, u16 arg3) {
 
 /**
  * Writes cartridge memory through osGbmbcReadWrite if the port is usable.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12) at power-on with a Transfer Pak holding Pocket Monsters Green in port
+ * 1: GbPak_VerifyPattern wrote its pattern through it (returned 0, success).
  */
 s32 GbPak_MbcWrite(s32 arg0, void* arg1, u16 arg2, u16 arg3) {
     s32 var_v1;
@@ -291,7 +298,8 @@ s32 GbPak_MbcWrite(s32 arg0, void* arg1, u16 arg2, u16 arg3) {
 
 /**
  * Reads raw Transfer Pak address space through osGbpakReadWrite if the port is usable.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12) at power-on with a Transfer Pak holding Pocket Monsters Green in port
+ * 1: GbPak_ReadRom read the header through it (returned 0, success).
  */
 s32 GbPak_RawRead(s32 arg0, u8* arg1, u16 arg2, u16 arg3) {
     s32 var_v1;
@@ -350,7 +358,9 @@ int GbPak_SelectRomBank(s32 arg0, s32 arg1) {
 /**
  * Reads a linear range of cartridge ROM, aligned to 32 bytes, switching banks
  * for addresses at or above 0x4000.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12) at power-on with a Transfer Pak holding Pocket Monsters Green in port
+ * 1: read the cartridge header range from 0x120 into 0x80082A00. The bytes matched the ROM,
+ * including the title POKEMON GREEN at 0x134.
  */
 s32 GbPak_ReadRom(s32 arg0, u8* arg1, s32 arg2, s32 arg3) {
     s32 ret = 1;
@@ -400,7 +410,8 @@ s32 GbPak_ReadRom(s32 arg0, u8* arg1, s32 arg2, s32 arg3) {
 
 /**
  * Sets the ports polled by GbTower_PollPakConnection; returns the old mask.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12) at power-on with a Transfer Pak holding Pocket Monsters Green in port
+ * 1: was set to 1 (port 1) at the end of the scan and returned the old mask 0.
  */
 u8 GbTower_SetPollMask(u8 arg0) {
     u8 temp_v0 = D_800AB1F7;
