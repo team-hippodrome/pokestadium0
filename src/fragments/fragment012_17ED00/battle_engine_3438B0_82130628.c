@@ -257,7 +257,6 @@ void BattleScene_PhaseWithdrawFainted(CameraNode* arg0) {
 
 /**
  * Phase 18: sends out the replacement after a faint (seen in play, on the turn after the faint).
- * @unverified Phase number seen in play (player agent); handler body only skimmed.
  */
 void BattleScene_PhaseSendOutAfterFaint(CameraNode* arg0) {
     ActivePokemonState* sp3C = &sActivePokemon[sBattleScene.scene->actingSide]->state;

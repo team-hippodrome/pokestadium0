@@ -334,7 +334,6 @@ void func_8212BF28(CameraNode* arg0, void* arg1) {
 
 /**
  * Phase 2: runs once both trainers have committed their actions, before the first mover acts.
- * @unverified Phase number seen in play (player agent); handler body only skimmed.
  */
 void BattleScene_PhaseActionsCommitted(CameraNode* arg0) {
     s32 n = 10;
@@ -382,7 +381,6 @@ void BattleScene_PhaseActionsCommitted(CameraNode* arg0) {
 
 /**
  * Phase 3: the second mover acts.
- * @unverified Phase number seen in play (player agent); handler body only skimmed.
  */
 void BattleScene_PhaseSecondMoverAction(CameraNode* arg0) {
     s32 n = 10;
@@ -591,7 +589,6 @@ void func_8212C78C(s32 arg0) {
 
 /**
  * Phase 7: the first mover acts. In play this showed its move, or こんらんしている！ (is confused) for a confused Pokemon.
- * @unverified Phase number seen in play (player agent); handler body only skimmed.
  */
 void BattleScene_PhaseFirstMoverAction(CameraNode* arg0) {
     sBattleScene.scene->cameraPresetId = 4;
@@ -1089,7 +1086,6 @@ s32 func_82105724(ActivePokemon*, s32);
 void func_82105E64(ActivePokemon*);
 /**
  * Phase 29: presents Haze (seen in play).
- * @unverified Phase number seen in play (player agent); handler body only skimmed.
  */
 void BattleScene_PhaseHaze(CameraNode* arg0) {
     switch (sBattleScene.scene->phaseStep) {
@@ -1367,7 +1363,6 @@ void func_8212E9C8(ActivePokemon* arg0) {
 
 /**
  * Phase 20: a confused Pokemon hurts itself (seen in play: 75 to 63 HP). Shows the message, enters state row 15, and steps the HP down.
- * @unverified Phase number seen in play (player agent); handler body only skimmed.
  */
 void BattleScene_PhaseConfusionSelfHit(CameraNode* arg0) {
     func_821255EC(arg0);
@@ -1420,7 +1415,6 @@ void BattleScene_PhaseConfusionSelfHit(CameraNode* arg0) {
 
 /**
  * Phase 31: からだが しびれて うごけない (is fully paralyzed), seen in play.
- * @unverified Phase number seen in play (player agent); handler body only skimmed.
  */
 void BattleScene_PhaseFullParalysis(CameraNode* arg0) {
     sBattleScene.scene->cameraPresetId = 4;
@@ -1617,7 +1611,6 @@ void func_8212F16C(CameraNode* arg0) {
 
 /**
  * Phase 8: presents a damaging move's effect. In play it ran for Poison Sting, Double-Edge, Absorb and Double Slap. Stadium 1 used this number for the move-failed message.
- * @unverified Phase number seen in play (player agent); handler body only skimmed.
  */
 void BattleScene_PhaseMoveDamage(CameraNode* arg0) {
     ActivePokemonState* sp1C = &D_8219A540->state;
@@ -1656,7 +1649,6 @@ void BattleScene_PhaseMoveDamage(CameraNode* arg0) {
 
 /**
  * Phase 22: seen in play for Confuse Ray. Other moves that confuse may share it.
- * @unverified Phase number seen in play (player agent); handler body only skimmed.
  */
 void BattleScene_PhaseConfuseRay(CameraNode* arg0) {
     sBattleScene.scene->cameraPresetId = 2;
@@ -1819,7 +1811,6 @@ void func_8212F9FC(CameraNode* arg0) {
  * when the acting Pokemon has unk_15 bits 0x18 or unk_4D bit 0x80 set. Plays effect list 5 or 6 (unk_15 bits)
  * and effect list 10 (unk_4D bit 0x80), then flips the acting side and enters BattleScene_PhaseConfusionSelfHit if the
  * acting Pokemon reaches 0 HP.
- * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
 void BattleScene_PhaseResidualDamageAfterMove(CameraNode* arg0) {
     u8* sp2C = (u8*)sActivePokemon[sBattleScene.scene->actingSide] + 0x7C6;

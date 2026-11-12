@@ -441,7 +441,6 @@ void BattleScene_UpdateActiveOwnerPointers(void) {
 
 /**
  * Phase 0 of BattleScene_UpdatePhase: sets up the scene for a new turn, then the turn moves on to phase 1.
- * @unverified Phase number seen in play (player agent); handler body only skimmed.
  */
 void BattleScene_InitTurnPresentation(s32 arg0) {
     s8 *sp34;
@@ -711,7 +710,6 @@ void BattleScene_AdvanceSendOutFollowupCamera(CameraNode* arg0) {
 
 /**
  * Phase 5: a Pokemon faints (seen in play: ひんし shown during this phase, then phase 4). The step helpers it calls still carry Stadium 1 send-out names, which may be wrong.
- * @unverified Phase number seen in play (player agent); handler body only skimmed.
  */
 void BattleScene_PhaseFaint(CameraNode* arg0) {
     switch (sBattleScene.scene->phaseStep) {
@@ -858,7 +856,6 @@ void func_82126F70(CameraNode* arg0) {
 
 /**
  * Phase 1: the command phase, while the menus are open. In play, every turn passes through it.
- * @unverified Phase number seen in play (player agent); handler body only skimmed.
  */
 void BattleScene_PhaseCommand(CameraNode* arg0) {
     switch (sBattleScene.scene->phaseStep) {

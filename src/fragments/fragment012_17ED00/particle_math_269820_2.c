@@ -219,7 +219,6 @@ void Particle_SetTextureFrame(Particle* arg0, s16 arg1) {
 
 /**
  * Steps textureFrame from `arg1` up to `arg2` by `arg3` every `arg4` frames, restarting `arg5` times. Returns 1 when the last loop ends on `arg2`. Flag 1 marks it as started.
- * @unverified Name and comment guessed from the code.
  */
 s32 Particle_AnimateFramesForwardLooped(Particle* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5) {
     s32 sp1C = 0;
@@ -256,7 +255,6 @@ s32 Particle_AnimateFramesForwardLooped(Particle*, s16, s16, s16, s16, s16);
 
 /**
  * Particle_AnimateFramesForwardLooped, then clears flag 1 and advances the lifecycle when it finishes.
- * @unverified Name and comment guessed from the code.
  */
 s32 Particle_AnimateFramesForwardLoopedThenAdvance(Particle* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5) {
     s32 sp24 = Particle_AnimateFramesForwardLooped(arg0, arg1, arg2, arg3, arg4, arg5);
@@ -887,7 +885,6 @@ void Particle_AddRandomPositionOffsetXYZ(Particle* arg0, s32 arg1, s32 arg2, s32
 
 /**
  * Sets origin (unscaled).
- * @unverified Name and comment guessed from the code.
  */
 void Particle_SetOrigin(Particle* arg0, f32 arg1, f32 arg2, f32 arg3) {
     arg0->origin.x = arg1;
@@ -1006,7 +1003,6 @@ void Particle_CopyMotionStepToOffset(s8 *arg0) {
 
 /**
  * Sets motionOffset.x and .z to motionStep.
- * @unverified Name and comment guessed from the code.
  */
 void Particle_CopyMotionStepToOffsetXZ(s8 *arg0) {
     M2C_FIELD(arg0, f32 *, 0x4C) = (f32) M2C_FIELD(arg0, f32 *, 0x78);
@@ -1294,7 +1290,6 @@ void Particle_Field9A_SetVecFromVec3s_0A37C(Particle* arg0, Vec3s arg1) {
 
 /**
  * Sets rotation.
- * @unverified Name and comment guessed from the code.
  */
 void Particle_SetRotation(Particle* arg0, s16 arg1, s16 arg2, s16 arg3) {
     arg0->rotation.x = arg1;
@@ -1470,7 +1465,6 @@ void Particle_ApplyRotationStepX(s8 *arg0)
 
 /**
  * Adds rotationStep.y to rotation.y.
- * @unverified Name and comment guessed from the code.
  */
 void Particle_ApplyRotationStepY(s8 *arg0)
 {
@@ -1490,7 +1484,6 @@ void Particle_Field94_AddVecFromVec3s_0A4F0(Particle* arg0, Vec3s arg1) {
 
 /**
  * Adds the three angles to rotation.
- * @unverified Name and comment guessed from the code.
  */
 void Particle_AddRotationXYZ(s8 *arg0, s16 arg1, s16 arg2, s16 arg3) {
     M2C_FIELD(arg0, s16 *, 0x90) = (s16) (M2C_FIELD(arg0, s16 *, 0x90) + arg1);
@@ -1620,7 +1613,6 @@ void Particle_ApproachRotationYAngle(Particle* arg0, s16 arg1, s16 arg2) {
 
 /**
  * Lowers rotation.x by `arg2` toward `arg1`. Returns 1 when it reaches `arg1`.
- * @unverified Name and comment guessed from the code.
  */
 s32 Particle_DecreaseRotationXTo(Particle* arg0, s32 arg1, s32 arg2) {
     s32 var_v1 = 0;

@@ -121,3 +121,48 @@ Barrier, Harden, Defense Curl, Growth, Rest, Whirlwind, Roar, Rolling Kick,
 Jump Kick, Hi Jump Kick, Earthquake, Fissure, Thrash, Petal Dance, Transform,
 Substitute, Mimic, Metronome, Rage, Reflect, Light Screen, Mist. Case 1
 (`BattleAnim_PokeBallThrow`) and case 11 (`func_8210A3DC`) were not seen.
+
+## Battle phases (`BattleScene_UpdatePhase`, `battle_engine_3438B0_82130628.c`)
+
+sBattleScene.scene->phase (+0x38) logged every frame, with Battle_Random
+patched to a constant (`jr ra; li v0,N`) to force confusion and paralysis.
+Each turn ran 0 → 1 → 2 → 7 → 3 → effect → 4. The first pass named the case
+handlers from this log (78fed92), and these lost their tags:
+
+| Phase | Seen | Handler |
+|---|---|---|
+| 0 | start of every turn | `BattleScene_InitTurnPresentation` |
+| 1 | command menu open | `BattleScene_PhaseCommand` |
+| 2 | both actions committed | `BattleScene_PhaseActionsCommitted` |
+| 7 | first mover acts (or 「こんらんしている！」) | `BattleScene_PhaseFirstMoverAction` |
+| 3 | second mover acts | `BattleScene_PhaseSecondMoverAction` |
+| 8 | damage from Poison Sting, Double-Edge, Absorb, Double Slap | `BattleScene_PhaseMoveDamage` |
+| 6 | poison damage right after the poisoned COM moved | `BattleScene_PhaseResidualDamageAfterMove` |
+| 29 | Haze | `BattleScene_PhaseHaze` |
+| 22 | Confuse Ray | `BattleScene_PhaseConfuseRay` |
+| 20 | confusion self-hit (Pinsir 75 → 63, Battle_Random = 255) | `BattleScene_PhaseConfusionSelfHit` |
+| 31 | 「からだが しびれて うごけない」 (Battle_Random = 0) | `BattleScene_PhaseFullParalysis` |
+| 5 | Pinsir drops to 0 and shows ひんし | `BattleScene_PhaseFaint` |
+| 18 | Gengar sent out after the faint | `BattleScene_PhaseSendOutAfterFaint` |
+
+Phases 9 and 11 never came up (Double-Edge's recoil stayed inside phase 8).
+
+## Particle helpers (`particle_math_269820_2.c`)
+
+Breakpoints on the 33 helpers named in 5ea6285, with the Particle at a0 read
+before and after each call, over Pinsir's Double Team and 1P using
+Thunderbolt, Ice Beam, Flamethrower, Psychic, Hyper Beam, Razor Leaf,
+Earthquake, Solar Beam, Fire Blast, Blizzard, Thunder, Swift, Sludge and
+Bubble Beam. Only these ran, and each did what its name says:
+
+| Function | Call seen | Change |
+|---|---|---|
+| `Particle_SetOrigin` | (p, 0, 0, 0) | origin (-23.6, 125.3, -142.3) → (0, 0, 0) |
+| `Particle_SetRotation` | (p, 0, 0, 0) | rotation x, y → 0 |
+| `Particle_AnimateFramesForwardLooped`, `...ThenAdvance` | (p, 0, 7, 1, ...) | textureFrame 0 → 1 → 2 as frameTimer runs |
+| `Particle_DecreaseRotationXTo` | (p, -0x1800, 0x800) | rotation.x 0xD6C → 0x56C |
+| `Particle_ApplyRotationStepY` | Solar Beam | rotation.y 0x404A → 0x444A |
+| `Particle_CopyMotionStepToOffsetXZ` | Solar Beam | motionOffset x, z set, y untouched |
+| `Particle_AddRotationXYZ` | (p, 0x5F8, -0x35C, 0), Bubble Beam | rotation.x +0x5F8, rotation.y -0x35C |
+
+The other 25 helpers did not run for any of these moves and keep `@unverified`.
