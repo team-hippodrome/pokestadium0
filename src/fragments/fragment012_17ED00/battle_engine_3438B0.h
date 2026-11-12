@@ -112,12 +112,12 @@ void BattleScene_PhaseSelfEffect(CameraNode* arg0);
 
 void func_8212C6E8(ActivePokemon*, CameraNode*, s32);
 void func_82122A7C(CameraNode*, ActivePokemon*);
-void BattleScene_Phase30(CameraNode* arg0);
+void BattleScene_PhaseExplosion(CameraNode* arg0);
 
 M2C_UNK func_8211EE8C();
-void func_8212CF90(CameraNode* arg0);
+void BattleScene_PhaseMoveFailedMessage(CameraNode* arg0);
 
-void func_8212D194(CameraNode* arg0);
+void BattleScene_PhaseHeal(CameraNode* arg0);
 
 s32 func_821217DC(s32);
 void func_821233EC(CameraNode*, ActivePokemon*);
@@ -127,10 +127,10 @@ void func_82107160(ActivePokemon*);
 void func_82101B54(ActivePokemon*, s32);
 void Audio_PlayMoveSound(s32, s32, s32);
 void func_82125C34(CameraNode*);
-void func_8212D504(CameraNode* arg0);
+void BattleScene_PhaseTransform(CameraNode* arg0);
 
 void func_821020FC(s8*);
-void func_8212D820(CameraNode* arg0);
+void BattleScene_PhaseSubstitute(CameraNode* arg0);
 
 void func_821224F4();
 void ActivePokemon_SetStateFlags(ActivePokemon*, s32);
@@ -138,13 +138,13 @@ void func_8212311C(CameraNode*, ActivePokemon*, f32);
 s32 func_82121820(s32);
 void func_8213C4B8(void);
 extern f32 D_FLT_82189354[][4];
-void func_8212E0B0(CameraNode* arg0);
+void BattleScene_PhaseFlyUp(CameraNode* arg0);
 
 extern s32 D_84390220;
 extern ActivePokemon* D_84390204;
 extern s32 D_84390224;
 
-void func_8212E7B0(CameraNode* arg0);
+void BattleScene_PhaseCannotMove(CameraNode* arg0);
 
 s32 Battle_ClearRuntimeFlags(s8 *arg0, unsigned short arg1);
 void func_82136708(s32, ActivePokemon*);
@@ -170,7 +170,7 @@ void BattleScene_PhaseEndTurn(s32 arg0);
 
 void func_82108C0C(ActivePokemon* active_pokemon);
 s32 func_82124B30(ActivePokemon*);
-void func_8212F16C(CameraNode* arg0);
+void BattleScene_PhaseCrashDamage(CameraNode* arg0);
 
 extern s32 D_84390228;
 extern ActivePokemon* D_84390200;
@@ -178,13 +178,13 @@ void func_8210626C(ActivePokemon*);
 
 void BattleScene_PhaseMoveMissed(CameraNode* arg0);
 
-void BattleScene_PhaseConfuseRay(CameraNode* arg0);
+void BattleScene_PhaseInflictStatus(CameraNode* arg0);
 
 void func_82125AC8(CameraNode* arg0);
-void func_8212F6E4(CameraNode* arg0);
+void BattleScene_PhaseLowerStat(CameraNode* arg0);
 
 s16 func_82107B54(ActivePokemon*);
-void func_8212F894(CameraNode* arg0);
+void BattleScene_PhaseDisable(CameraNode* arg0);
 
 void func_821365E8(s32, ActivePokemon*);
 void func_82125AC8(CameraNode*);
@@ -211,7 +211,7 @@ Vec3f* Vec3f_SetComponentsDuplicate(Vec3f* dest, f32 x, f32 y, f32 z);
 s32 ModelAnim_IsAnimationDone(DisplayObject* display_object);
 void func_82130D48(ActivePokemon*);
 void func_8212562C(void);
-void BattleScene_PhaseWithdrawFainted(CameraNode* arg0);
+void BattleScene_PhaseWithdraw(CameraNode* arg0);
 
 void BattleCamera_CaptureModelOrbit(ActivePokemon* arg0, CameraNode* arg1);
 void func_82122A7C(CameraNode* arg0, ActivePokemon* arg1);
@@ -222,10 +222,10 @@ void BattleScene_InitTurnPresentation(CameraNode* arg0);
 void BattleScene_PhaseFaint(CameraNode* arg0);
 void func_82126E34(CameraNode* arg0);
 void BattleScene_PhaseCommand(CameraNode* arg0);
-void BattleScene_Phase38(CameraNode* arg0);
+void BattleScene_PhaseBide(CameraNode* arg0);
 void BattleScene_PhaseHaze(CameraNode* arg0);
-void BattleScene_Phase13(CameraNode* arg0);
-void BattleScene_Phase14(CameraNode* arg0);
+void BattleScene_PhaseDigUnder(CameraNode* arg0);
+void BattleScene_PhaseChargeUp(CameraNode* arg0);
 void BattleScene_PhaseConfusionSelfHit(CameraNode* arg0);
 void BattleScene_PhaseMoveMissed(CameraNode* arg0);
 void BattleScene_PhaseRecoilDamage(CameraNode* arg0);

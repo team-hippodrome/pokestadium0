@@ -665,9 +665,10 @@ void BattleScene_PhaseSelfEffect(CameraNode* arg0) {
 
 
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Phase 30 (moveEffectKind 0x1E, set by BattleEffect_Explosion): Self-Destruct and Explosion.
+ * @unverified Name from the moveEffectKind that leads here.
  */
-void BattleScene_Phase30(CameraNode* arg0) {
+void BattleScene_PhaseExplosion(CameraNode* arg0) {
     u8* sp1C = (u8*)D_8219A540 + 0x7C6;
 
     switch (sBattleScene.scene->phaseStep) {
@@ -753,7 +754,13 @@ void BattleScene_Phase30(CameraNode* arg0) {
 }
 
 
-void func_8212CF90(CameraNode* arg0) {
+/**
+ * Phase 28 (moveEffectKind 0x1C): the user's move does nothing and only messages show. Set when
+ * the user flinched, when Recover or Rest fails at full HP and when Mirror Move has nothing to
+ * copy.
+ * @unverified Name from the moveEffectKind setters.
+ */
+void BattleScene_PhaseMoveFailedMessage(CameraNode* arg0) {
     sBattleScene.scene->cameraPresetId = 4;
 
     switch (sBattleScene.scene->phaseStep) {
@@ -800,7 +807,11 @@ void func_8212CF90(CameraNode* arg0) {
 }
 
 
-void func_8212D194(CameraNode* arg0) {
+/**
+ * Phase 21 (moveEffectKind 0x15, set by Battle_Effect_Heal): Recover, Soft-Boiled and Rest.
+ * @unverified Name from the moveEffectKind that leads here.
+ */
+void BattleScene_PhaseHeal(CameraNode* arg0) {
 
     u8* sp24 = (u8*)D_8219A544 + 0x78C;
 
@@ -877,7 +888,11 @@ void func_8212D194(CameraNode* arg0) {
 }
 
 
-void func_8212D504(CameraNode* arg0) {
+/**
+ * Phase 15 (moveEffectKind 0x0F, set by Battle_Effect_Transform).
+ * @unverified Name from the moveEffectKind that leads here.
+ */
+void BattleScene_PhaseTransform(CameraNode* arg0) {
     UNUSED s32 pad[3]; // FAKE: stack padding
     u8* sp30 = (u8*)D_8219A544 + 0x7C6;
     u8* sp2C = (u8*)D_8219A540 + 0x7C6;
@@ -948,7 +963,10 @@ void func_8212D504(CameraNode* arg0) {
 }
 
 
-void func_8212D820(CameraNode* arg0) {
+/**
+ * Phase 25 (moveEffectKind 0x19, set by Battle_Effect_Substitute).
+ */
+void BattleScene_PhaseSubstitute(CameraNode* arg0) {
     BattleMonRuntime* sp1C = &sActivePokemon[sBattleScene.scene->actingSide]->state.runtime;
     ActivePokemonState* sp18 = &sActivePokemon[sBattleScene.scene->actingSide]->state;
 
@@ -1013,19 +1031,10 @@ void func_8212D820(CameraNode* arg0) {
 void func_80042A6C(s32);
 
 /**
- * Camera state machine (sibling of BattleScene_PhaseSelfEffect). Sets scene->unk_50 = 4 and switches on
- * scene->unk_20:
- * 0: once func_82105724(D_8219A544, 0x1E) succeeds, runs the shared camera setup
- * (func_821255B4, func_8212C78C, BattleMessage_ShowForSide, ...), plays sound 0x2E, resets the
- * camera frame counter and advances to state 1.
- * 1: while scene->unk_54 == 1, eases the camera field at +0x2C towards 60.0f; when the frame
- * counter reaches 0x32, clears the message cursor and advances to state 2.
- * 2: same easing, caches Battle_StepPartyHpToDisplay for both active Pokemon in D_8219A560/D_8219A564,
- * sets scene->unk_34 = 3 if byte 0x820 of D_8219A540 is 0xFF, resets the frame counter
- * and animation step and finishes through func_82125C80.
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Phase 27 (moveEffectKind 0x1B): Bide, when it starts and while it stores energy.
+ * @unverified Name from the moveEffectKind setters (BattleEffect_Bide, Battle_CheckMonCanAct).
  */
-void BattleScene_Phase38(CameraNode* arg0) {
+void BattleScene_PhaseBide(CameraNode* arg0) {
     sBattleScene.scene->cameraPresetId = 4;
     switch (sBattleScene.scene->phaseStep) {
         case 0:
@@ -1156,7 +1165,11 @@ void BattleScene_PhaseHaze(CameraNode* arg0) {
     }
 }
 
-void func_8212E0B0(CameraNode* arg0) {
+/**
+ * Phase 12 (moveEffectKind 0x0C, set by Battle_Effect_Charge for Fly): the first turn of Fly.
+ * @unverified Name from the moveEffectKind that leads here.
+ */
+void BattleScene_PhaseFlyUp(CameraNode* arg0) {
     switch (sBattleScene.scene->phaseStep) {
         case 0:
             if (func_82105724((ActivePokemon*)D_8219A544, 0x1E) != 0) {
@@ -1206,9 +1219,10 @@ void func_8212E0B0(CameraNode* arg0) {
 void func_82123314(CameraNode*, ActivePokemon*);
 f32 BattleScene_GetParticipantHeight(ActivePokemon*);
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Phase 13 (moveEffectKind 0x0D, set by Battle_Effect_Charge for Dig): the first turn of Dig.
+ * @unverified Name from the moveEffectKind that leads here.
  */
-void BattleScene_Phase13(CameraNode* arg0) {
+void BattleScene_PhaseDigUnder(CameraNode* arg0) {
     switch (sBattleScene.scene->phaseStep) {
         case 0:
             if (func_82105724((ActivePokemon*)D_8219A544, 0x1E) != 0) {
@@ -1270,24 +1284,11 @@ void func_8212189C(void);
 s32 BattleScene_IsMoveKeyedRowWaitComplete(ActivePokemon*, s32);
 void func_82124A40(void);
 /**
- * BattleScene_Phase14: two-step camera/animation state for a battle move effect.
- * Sets the scene's unk_50 to 4, then switches on the scene state counter
- * (unk_20):
- * 0: calls BattleCamera_PlayShot for the active Pokemon (D_8219A544) and waits on
- * func_82105724(.., 0x1E), a "move cue reached" check that falls back to
- * a 0x1E-frame wait when the Pokemon is frozen, asleep, airborne or
- * underground.  Once it reports true the effect is set up
- * (func_821255B4, BattleMessage_ShowForSide, func_8212188C/func_8212189C,
- * func_82104C68 with 8, ActivePokemon_CommitPendingStatus) and the state counter advances.
- * 1: calls func_8211EE8C when func_82121798(0x28) fires, refreshes
- * D_8219A560/D_8219A564 from the two entries of sActivePokemon (the
- * indices unk_2C and !unk_2C), and when BattleScene_IsMoveKeyedRowWaitComplete(.., 0x1E) -- the
- * same kind of cue check -- reports true calls func_82124A40 and
- * func_82125C80.
- * Same shape as BattleScene_PhaseSelfEffect and func_8212E7B0.
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Phase 14 (moveEffectKind 0x0E, set by Battle_Effect_Charge): the first turn of Razor Wind,
+ * Solar Beam, Skull Bash and Sky Attack.
+ * @unverified Name from the moveEffectKind that leads here.
  */
-void BattleScene_Phase14(CameraNode* arg0) {
+void BattleScene_PhaseChargeUp(CameraNode* arg0) {
     sBattleScene.scene->cameraPresetId = 4;
     switch (sBattleScene.scene->phaseStep) {
         case 0:
@@ -1317,7 +1318,13 @@ void BattleScene_Phase14(CameraNode* arg0) {
     }
 }
 
-void func_8212E7B0(CameraNode* arg0) {
+/**
+ * Phase 17 (moveEffectKind 0x11, set by Battle_CheckMonCanAct): the user can't act because it is
+ * asleep or frozen, the target holds it with a trapping move, it must recharge, or its move is
+ * disabled.
+ * @unverified Name from the moveEffectKind setters.
+ */
+void BattleScene_PhaseCannotMove(CameraNode* arg0) {
     sBattleScene.scene->cameraPresetId = 4;
     switch (sBattleScene.scene->phaseStep) {
         case 0:
@@ -1554,7 +1561,12 @@ void BattleScene_PhaseEndTurn(s32 arg0) {
 }
 
 
-void func_8212F16C(CameraNode* arg0) {
+/**
+ * Phase 16 (moveEffectKind 0x10, set by Battle_PrintMoveFailureText): Jump Kick and Hi Jump Kick
+ * missed and the user takes crash damage.
+ * @unverified Name from the moveEffectKind that leads here.
+ */
+void BattleScene_PhaseCrashDamage(CameraNode* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
     s32 side = sBattleScene.scene->actingSide;
     u8* sp1C = D_82189180[side] + 0x738;
@@ -1664,9 +1676,11 @@ void BattleScene_PhaseMoveMissed(CameraNode* arg0) {
 }
 
 /**
- * Phase 22: seen in play for Confuse Ray. Other moves that confuse may share it.
+ * Phase 22 (moveEffectKind 0x16): a status move hits the target. Set by Battle_Effect_Sleep,
+ * Battle_Effect_Poison, Battle_Effect_Paralyze and Battle_Effect_Confuse. Seen in play for
+ * Confuse Ray.
  */
-void BattleScene_PhaseConfuseRay(CameraNode* arg0) {
+void BattleScene_PhaseInflictStatus(CameraNode* arg0) {
     sBattleScene.scene->cameraPresetId = 2;
     func_821255EC(arg0);
 
@@ -1697,7 +1711,12 @@ void BattleScene_PhaseConfuseRay(CameraNode* arg0) {
     }
 }
 
-void func_8212F6E4(CameraNode* arg0) {
+/**
+ * Phase 26 (moveEffectKind 0x1A, set by Battle_Effect_LowerStat): a move that lowers the target's
+ * stat.
+ * @unverified Name from the moveEffectKind that leads here.
+ */
+void BattleScene_PhaseLowerStat(CameraNode* arg0) {
     sBattleScene.scene->cameraPresetId = 2;
     func_821255EC(arg0);
 
@@ -1738,7 +1757,11 @@ void func_8212F6E4(CameraNode* arg0) {
     }
 }
 
-void func_8212F894(CameraNode* arg0) {
+/**
+ * Phase 32 (moveEffectKind 0x20, set by Battle_Effect_Disable).
+ * @unverified Name from the moveEffectKind that leads here.
+ */
+void BattleScene_PhaseDisable(CameraNode* arg0) {
     BattleMonRuntime* runtime = &((ActivePokemon*)D_8219A544)->state.runtime;
 
     sBattleScene.scene->cameraPresetId = 2;
