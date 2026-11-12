@@ -46,15 +46,15 @@ s32 Battle_StepPartyHpToDisplay(ActivePokemon*);
 s32 func_82105C8C(ActivePokemon*, s32);
 s32 func_82124BF8(ActivePokemon*);
 void func_8212A4CC(CameraNode*, s32*, s32*);
-void func_8212B270(CameraNode* arg0, void* arg1);
+void BattleScene_ReactionMultiHitEnd(CameraNode* arg0, void* arg1);
 
-void func_8212BA28(CameraNode* arg0, void* arg1);
+void BattleScene_ReactionSideEffect(CameraNode* arg0, void* arg1);
 
 void func_821255EC(CameraNode*);
-void func_8212A850(CameraNode*, void*);
-void func_8212AD10(CameraNode*, void*);
-void func_8212B270(CameraNode*, void*);
-void func_8212BA28(CameraNode*, void*);
+void BattleScene_ReactionNormal(CameraNode*, void*);
+void BattleScene_ReactionCritical(CameraNode*, void*);
+void BattleScene_ReactionMultiHitEnd(CameraNode*, void*);
+void BattleScene_ReactionSideEffect(CameraNode*, void*);
 
 void BattleScene_ActionStepReaction(CameraNode* arg0, void* arg1);
 

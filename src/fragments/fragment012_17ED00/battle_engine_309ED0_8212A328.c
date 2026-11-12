@@ -168,7 +168,12 @@ void func_8212A768(ActivePokemon* arg0, CameraNode* arg1, s32 arg2) {
 }
 
 
-void func_8212A850(CameraNode* arg0, s32 arg1) {
+/**
+ * Step 4 reaction for an ordinary hit (hitReactionKind 0). Ran in play for every damaging move
+ * that hit.
+ * @unverified Name from BattleScene_ActionStepReaction's dispatch.
+ */
+void BattleScene_ReactionNormal(CameraNode* arg0, s32 arg1) {
     BattleMonRuntime* sp1C = &((ActivePokemon*)D_8219A540)->state.runtime;
 
     switch (sBattleScene.scene->phaseSubstep) {
@@ -275,7 +280,12 @@ void func_8212A850(CameraNode* arg0, s32 arg1) {
 }
 
 
-void func_8212AD10(CameraNode* arg0, s32 arg1) {
+/**
+ * Step 4 reaction for a critical hit or one-hit KO (hitReactionKind 2, set by
+ * Battle_PrintCriticalOHKOText).
+ * @unverified Name from BattleScene_ActionStepReaction's dispatch.
+ */
+void BattleScene_ReactionCritical(CameraNode* arg0, s32 arg1) {
     BattleMonRuntime* sp1C = &((ActivePokemon*)D_8219A540)->state.runtime;
 
     switch (sBattleScene.scene->phaseSubstep) {

@@ -4730,3 +4730,7 @@ BattleScene_EnterMissRowPlaySound = 0x82103EF4; // type:func
 BattleScene_EnterCannotMoveRow = 0x82103DA4; // type:func
 BattleScene_EnterIdleRow = 0x8210343C; // type:func
 ActivePokemon_ResetCueTimer = 0x82101EC0; // type:func
+BattleScene_ReactionNormal = 0x8212A850; // type:func
+BattleScene_ReactionMultiHitEnd = 0x8212B270; // type:func
+BattleScene_ReactionCritical = 0x8212AD10; // type:func
+BattleScene_ReactionSideEffect = 0x8212BA28; // type:func

@@ -25,7 +25,12 @@ void BattleAnim_RenderNop2(void) {
 }
 
 
-void func_8212B270(CameraNode* arg0, void* arg1) {
+/**
+ * Step 4 reaction after the last hit of a multi-hit move, when the hit count message shows
+ * (hitReactionKind 1, set in ProcessBattleTurn).
+ * @unverified Name from BattleScene_ActionStepReaction's dispatch.
+ */
+void BattleScene_ReactionMultiHitEnd(CameraNode* arg0, void* arg1) {
     u8* sp24 = (u8*)D_8219A544 + 0x7C6;
     Cue8212B270* temp_v1 = (sp24[0x5A] - 1) + (Cue8212B270*)D_82189180[func_82107A5C(D_8219A540)];
     volatile s32 sp1C;
@@ -197,7 +202,12 @@ void func_8212B270(CameraNode* arg0, void* arg1) {
 }
 
 
-void func_8212BA28(CameraNode* arg0, void* arg1) {
+/**
+ * Step 4 reaction when the hit also lowered a stat or confused the target (hitReactionKind 3, set
+ * by Battle_Effect_LowerStat and Battle_Effect_ConfuseChance).
+ * @unverified Name from BattleScene_ActionStepReaction's dispatch.
+ */
+void BattleScene_ReactionSideEffect(CameraNode* arg0, void* arg1) {
 
     u8* sp1C = (u8*)D_8219A540 + 0x7C6;
 
@@ -327,13 +337,13 @@ void BattleScene_ActionStepReaction(CameraNode* arg0, void* arg1) {
     other = sBattleScene.scene->actingSide == 0;
     ActivePokemon_CommitPendingStatus(sActivePokemon[other]);
     if (sBattleScene.scene->hitReactionKind == 3) {
-        func_8212BA28(arg0, arg1);
+        BattleScene_ReactionSideEffect(arg0, arg1);
     } else if (sBattleScene.scene->hitReactionKind == 1) {
-        func_8212B270(arg0, arg1);
+        BattleScene_ReactionMultiHitEnd(arg0, arg1);
     } else if (sBattleScene.scene->hitReactionKind == 2) {
-        func_8212AD10(arg0, arg1);
+        BattleScene_ReactionCritical(arg0, arg1);
     } else {
-        func_8212A850(arg0, arg1);
+        BattleScene_ReactionNormal(arg0, arg1);
     }
 }
 

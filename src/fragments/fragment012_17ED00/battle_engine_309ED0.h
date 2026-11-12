@@ -330,8 +330,8 @@ void ActivePokemon_CommitPendingStatus(ActivePokemon*);
 void func_82135098(ActivePokemon*);
 void func_821061A8(ActivePokemon*);
 s32 func_82122DFC(CameraNode*, ActivePokemon*);
-void func_8212A850(CameraNode* arg0, s32 arg1);
+void BattleScene_ReactionNormal(CameraNode* arg0, s32 arg1);
 
-void func_8212AD10(CameraNode* arg0, s32 arg1);
+void BattleScene_ReactionCritical(CameraNode* arg0, s32 arg1);
 
 #endif
