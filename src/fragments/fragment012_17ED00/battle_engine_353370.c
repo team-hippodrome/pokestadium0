@@ -7,15 +7,21 @@
 extern OwnerLinkedFourStream D_821B5E30[4];
 extern Gfx D_82193220[];
 
-void OwnerLinkedFourStream_Init(void);
-void OwnerLinkedFourStream_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9,
+void SpikeCannonFourStream_Init(void);
+/**
+ * @unverified Name from Stadium 1.
+ */
+void SpikeCannonFourStream_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9,
                    f32 argA, f32 argB, f32 argC, s16 argD);
-void OwnerLinkedFourStream_Update(f32 arg0, Vec3f* arg1, f32 arg2);
-void OwnerLinkedFourStream_UpdateNodeChain(OwnerLinkedFourStream* arg0);
-s32 OwnerLinkedFourStream_IsComplete(void);
-Gfx* OwnerLinkedFourStream_Draw(Gfx* arg0);
+void SpikeCannonFourStream_Update(f32 arg0, Vec3f* arg1, f32 arg2);
+void SpikeCannonFourStream_UpdateNodeChain(OwnerLinkedFourStream* arg0);
+s32 SpikeCannonFourStream_IsComplete(void);
+Gfx* SpikeCannonFourStream_Draw(Gfx* arg0);
 
-void OwnerLinkedFourStream_Init(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void SpikeCannonFourStream_Init(void) {
     s32 i;
     s32 j;
     OwnerLinkedFourStream* var_a2 = &D_821B5E30[0];
@@ -37,7 +43,7 @@ void OwnerLinkedFourStream_Init(void) {
     }
 }
 
-void OwnerLinkedFourStream_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9,
+void SpikeCannonFourStream_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9,
                    f32 argA, f32 argB, f32 argC, s16 argD) {
     s32 i;
     s32 j;
@@ -87,7 +93,10 @@ void OwnerLinkedFourStream_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg
     }
 }
 
-void OwnerLinkedFourStream_Update(f32 arg0, Vec3f* arg1, f32 arg2) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void SpikeCannonFourStream_Update(f32 arg0, Vec3f* arg1, f32 arg2) {
     UNUSED MtxF sp70;
     MtxF sp30;
     UNUSED s32 pad; // FAKE: stack padding
@@ -96,7 +105,10 @@ void OwnerLinkedFourStream_Update(f32 arg0, Vec3f* arg1, f32 arg2) {
     guMtxXFMF(sp30.mf, 0.0f, 0.0f, arg2, &arg1->x, &arg1->y, &arg1->z);
 }
 
-void OwnerLinkedFourStream_UpdateNodeChain(OwnerLinkedFourStream* arg0) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void SpikeCannonFourStream_UpdateNodeChain(OwnerLinkedFourStream* arg0) {
     OwnerLinkedFourStreamNode* var_s0 = &arg0->unk_038[0];
     s32 i;
     f32 var_ft4;
@@ -163,7 +175,10 @@ void OwnerLinkedFourStream_UpdateNodeChain(OwnerLinkedFourStream* arg0) {
     }
 }
 
-s32 OwnerLinkedFourStream_IsComplete(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+s32 SpikeCannonFourStream_IsComplete(void) {
     s32 i;
     OwnerLinkedFourStream* var_s0 = &D_821B5E30[0];
 
@@ -174,14 +189,17 @@ s32 OwnerLinkedFourStream_IsComplete(void) {
                 var_s0->unk_000 = 0;
                 BattleAnim_MarkParticleInactive(var_s0->unk_034);
             } else {
-                OwnerLinkedFourStream_UpdateNodeChain(var_s0);
+                SpikeCannonFourStream_UpdateNodeChain(var_s0);
             }
         }
     }
     return 0;
 }
 
-Gfx* OwnerLinkedFourStream_Draw(Gfx* arg0) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+Gfx* SpikeCannonFourStream_Draw(Gfx* arg0) {
     s32 i;
     s32 j;
     s32 k;
@@ -218,7 +236,7 @@ Gfx* OwnerLinkedFourStream_Draw(Gfx* arg0) {
             var_s0 = var_s5->unk_018;
 
             for (j = 0; j < 15; j++) {
-                OwnerLinkedFourStream_Update(temp_s0->unk_08, &sp154, temp_s0->unk_04);
+                SpikeCannonFourStream_Update(temp_s0->unk_08, &sp154, temp_s0->unk_04);
 
                 var_s3 = temp_s0->unk_0C.y + sp154.y;
                 if (var_s3 < 0) {
@@ -234,7 +252,7 @@ Gfx* OwnerLinkedFourStream_Draw(Gfx* arg0) {
                 var_s0->v.cn[3] = temp_s0->unk_00;
                 var_s0++;
 
-                OwnerLinkedFourStream_Update(temp_s0->unk_08 + 3.1415927f, &sp154, temp_s0->unk_04);
+                SpikeCannonFourStream_Update(temp_s0->unk_08 + 3.1415927f, &sp154, temp_s0->unk_04);
 
                 var_s3 = temp_s0->unk_0C.y + sp154.y;
                 if (var_s3 < 0) {

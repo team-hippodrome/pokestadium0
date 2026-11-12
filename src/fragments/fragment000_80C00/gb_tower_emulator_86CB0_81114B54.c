@@ -527,7 +527,11 @@ void func_81215DDC_jp(void) {
     func_81210390_jp(0x06020004, -1);
 }
 
-void GbApu_SetNoisePeriodBounds(s32 arg0, s32 arg1) {
+/**
+ * No callers.
+ * @unverified Name and comment from Stadium 1.
+ */
+void GbApu_SetNoiseLoopBounds(s32 arg0, s32 arg1) {
     D_81138AD0 = arg0;
     D_81138AD4 = arg1;
 }

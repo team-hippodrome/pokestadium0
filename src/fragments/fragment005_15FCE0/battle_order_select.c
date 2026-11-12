@@ -24,11 +24,11 @@ extern u16 D_82302800[];
 
 void BattleMenu_AppendOrderSlotIcon(s32 arg0, s32 arg1);
 void BattleMenu_ResetOrderSlotIcons(s32 arg0);
-void BattleMenu_DrawBorderedPanel(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4);
+void BattleMenu_DrawPanelBorder(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4);
 s32 BattleMenu_IsSlotAlreadySelected(unk_D_848037A0* arg0, s8 arg1);
 void BattleMenu_HandleOrderSelectPanel_LevelCapNoticeInput(Controller* arg0, unk_D_848037A0* arg1);
-void BattleMenu_RearrangeLeadPokemon(BattleSessionTeams* arg0, unk_D_84803760* arg1);
-void BattleMenu_FillDefaultOrder(s8* arg0, s32 arg1);
+void BattleMenu_SetLeadTagTeamMember(BattleSessionTeams* arg0, unk_D_84803760* arg1);
+void BattleMenu_AppendUnpickedSlots(s8* arg0, s32 arg1);
 
 extern void* D_84803784;
 extern char** D_84803790;
@@ -297,7 +297,11 @@ void BattleMenu_ResetOrderSlotIcons(s32 arg0) {
     ptr->unk_00 = 0;
 }
 
-void BattleMenu_DrawBorderedPanel(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4) {
+/**
+ * Draws a panel using the border color assigned to its controller port.
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleMenu_DrawPanelBorder(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4) {
     Ui_DrawBorderedPanelStyleB(arg0, arg1, arg2, arg3, D_82302800[arg4]);
 }
 
@@ -323,7 +327,7 @@ void func_82300BD0(s8* arg0) {
     x = M2C_FIELD(arg0, s16*, 0x12);
     y = M2C_FIELD(arg0, s16*, 0x14);
 
-    BattleMenu_DrawBorderedPanel(x, y, 0x1D7, 0x5E, arg0[1]);
+    BattleMenu_DrawPanelBorder(x, y, 0x1D7, 0x5E, arg0[1]);
 
     gSPDisplayList(gDisplayListHead++, D_80060290);
 
@@ -393,7 +397,7 @@ void func_823010E8(s8* arg0) {
             y = 0xF0;
         }
         func_82300BD0(arg0);
-        BattleMenu_DrawBorderedPanel(x, y, 0x15F, 0x53, arg0[1]);
+        BattleMenu_DrawPanelBorder(x, y, 0x15F, 0x53, arg0[1]);
         if (arg0[0xA] == 0) {
             func_8001E6C0(x + 0x26, y + 0x30);
         } else {
@@ -443,7 +447,7 @@ void func_823012D0(s8* arg0) {
             x = 0x50;
             y = 0xF0;
         }
-        BattleMenu_DrawBorderedPanel(x, y, 0x15F, 0x53, arg0[1]);
+        BattleMenu_DrawPanelBorder(x, y, 0x15F, 0x53, arg0[1]);
         Font_BeginTranslucentTextRendering();
         Font_SetActive(0x10, 0);
         Gfx_SetEnvColor(0xFF, 0x63, 0x63, 0xFF);
@@ -483,7 +487,7 @@ void func_82301448(unk_D_848037A0* arg0) {
         // clang-format on
         arg0->unk_0007 = 0;
         func_82300BD0((s8*)arg0);
-        BattleMenu_DrawBorderedPanel(sp3C, sp38, 0x15F, 0x53, arg0->unk_0001);
+        BattleMenu_DrawPanelBorder(sp3C, sp38, 0x15F, 0x53, arg0->unk_0001);
         Font_BeginTranslucentTextRendering();
         Font_SetActive(0x20, -4);
         Font_EnableTwoCycleTexturing();
@@ -536,7 +540,7 @@ void BattleMenu_DrawConfirmButtonLabel(unk_D_848037A0* arg0) {
         sp24 = 0x123;
     }
 
-    BattleMenu_DrawBorderedPanel(sp26, sp24, 0x76, 0x20, arg0->unk_0001);
+    BattleMenu_DrawPanelBorder(sp26, sp24, 0x76, 0x20, arg0->unk_0001);
     Font_BeginTranslucentTextRendering();
     Font_SetActive(8, 0);
     Font_Printf(sp26 + 9, sp24 + 5, arg0->unk_001C->unk_008);
@@ -912,7 +916,11 @@ s32 BattleMenu_UpdateOrderSelect(s32 arg0) {
     return sp30;
 }
 
-void BattleMenu_RearrangeLeadPokemon(BattleSessionTeams* arg0, unk_D_84803760* arg1) {
+/**
+ * Moves the trainer owning the first selection into the lead tag-team position.
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleMenu_SetLeadTagTeamMember(BattleSessionTeams* arg0, unk_D_84803760* arg1) {
     TeamRoster* temp_v0;
     s32 tmp;
 
@@ -926,7 +934,11 @@ void BattleMenu_RearrangeLeadPokemon(BattleSessionTeams* arg0, unk_D_84803760* a
     }
 }
 
-void BattleMenu_FillDefaultOrder(s8* arg0, s32 arg1) {
+/**
+ * Appends the unpicked roster slots in ascending order to fill six entries.
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleMenu_AppendUnpickedSlots(s8* arg0, s32 arg1) {
     s32 i;
     s32 j;
 
@@ -972,7 +984,7 @@ void BattleMenu_CommitOrderSelection(void) {
             temp_s1->numberOfPokemonBrought = temp_s1->rosterInfo->numberOfPokemonCanBePicked;
             _bcopy(temp_s1->rosterInfo->unk_028, temp_s1->pokemonPicked, sizeof(temp_s1->pokemonPicked));
         } else {
-            BattleMenu_FillDefaultOrder(var_s2->unk_000C, var_s2->unk_000B);
+            BattleMenu_AppendUnpickedSlots(var_s2->unk_000C, var_s2->unk_000B);
             temp_s1->numberOfPokemonBrought = var_s2->unk_000B;
 
             for (i = 0; i < temp_s1->rosterInfo->numberOfPokemonCanBePicked; i++) {
@@ -982,8 +994,8 @@ void BattleMenu_CommitOrderSelection(void) {
         var_s2++;
     }
 
-    BattleMenu_RearrangeLeadPokemon(&D_82302BD0->battleSides[0], &D_82302B20[0]);
-    BattleMenu_RearrangeLeadPokemon(&D_82302BD0->battleSides[1], &D_82302B20[1]);
+    BattleMenu_SetLeadTagTeamMember(&D_82302BD0->battleSides[0], &D_82302B20[0]);
+    BattleMenu_SetLeadTagTeamMember(&D_82302BD0->battleSides[1], &D_82302B20[1]);
 }
 
 

@@ -233,7 +233,7 @@ void Battle_SetActiveMoveFromSlotIndex(void) {
 }
 
 s32 Battle_CheckMoveSuccess(void) {
-    Battle_ExecuteMoveEffect();
+    BattleEffect_ExecuteMoveEffect();
 
     if (sBattleMoveFailed == 1) {
         return 0;

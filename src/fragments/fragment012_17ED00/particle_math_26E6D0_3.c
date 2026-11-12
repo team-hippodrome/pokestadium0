@@ -50,9 +50,9 @@ void ParticleGfx_RecolorEnvRandomPalette(Particle* arg0);
 s32 ParticleGfx_ApproachPrimPalette(Particle* arg0, u16 arg1, u8 arg2);
 s32 ParticleGfx_ApproachEnvPalette(Particle* arg0, u16 arg1, u8 arg2);
 s32 ParticleGfx_ApproachPrimEnvPalettePair(Particle* arg0, u16 arg1, u8 arg2);
-void BattleAnim_SetupGlobalTintColorFadeDetach(Particle* arg0);
+void BattleAnim_SetupBackgroundRecolor(Particle* arg0);
 void func_82143C08(void);
-void BattleAnim_SetupOwnerModelTintPaletteCycle(Particle* arg0);
+void BattleAnim_SetupIceBeamBlizzardHitHueChange(Particle* arg0);
 
 void ParticleGfx_RecolorPrim(Particle* arg0, u16 arg1);
 void ParticleGfx_RecolorEnv(Particle* arg0, u16 arg1);
@@ -193,7 +193,21 @@ s32 ParticleGfx_ApproachPrimEnvPalettePair(Particle* arg0, u16 arg1, u8 arg2) {
     return sp44;
 }
 
-void BattleAnim_SetupGlobalTintColorFadeDetach(Particle* arg0) {
+/**
+ * Moves: Absorb (use), Aurora Beam (use/hit), Barrier (use), Bide (use), Blizzard (use/hit), Bubble Beam
+ * (use/hit), Confuse Ray (use/hit), Confusion (use/hit), Conversion (use), Double-Edge (use), Dragon Rage
+ * (use), Dream Eater (use), Earthquake (use), Explosion (use/hit), Fire Blast (use/hit), Fire Spin (use),
+ * Fissure (use), Flamethrower (use), Flash (use/hit), Focus Energy (use), Glare (use), Guillotine (use), Horn
+ * Drill (use), Hydro Pump (use), Hyper Beam (use), Ice Beam (use/hit), Leech Life (use), Leer (use), Light
+ * Screen (use), Lovely Kiss (use), Mega Drain (use), Mimic (use), Night Shade (use), Petal Dance (use),
+ * Psybeam (use/hit), Psychic (use/hit), Psywave (use), Rage (use), Razor Leaf (use/hit), Recover (use),
+ * Reflect (use), Self-Destruct (use/hit), Skull Bash (use), Sky Attack (use/hit), Solar Beam (use/hit), Sonic
+ * Boom (use), Swift (use), Take Down (use), Thunder (use/hit), Thunder Shock (use/hit), Thunder Wave (hit),
+ * Thunderbolt (use/hit), Tri Attack (use)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_SetupBackgroundRecolor(Particle* arg0) {
     BattleAnim_LoadGlobalTintToParticle(arg0);
     Particle_AdvanceLifecycle(arg0);
 }
@@ -225,7 +239,17 @@ void func_82143934(s8 *arg0) {
     func_82140410(arg0);
 }
 
-void BattleAnim_SetupOwnerModelTintRampDetach(Particle* arg0) {
+/**
+ * Moves: Acid (hit), Acid Armor (use), Confuse Ray (use/hit), Confusion (hit), Defense Curl (use), Dragon Rage
+ * (hit), Ember (hit), Explosion (use/hit), Fire Punch (hit), Flamethrower (hit), Flash (use/hit), Guillotine
+ * (hit), Harden (use), Horn Drill (hit), Hyper Beam (use/hit), Ice Punch (hit), Lick (hit), Mega Kick (hit),
+ * Mega Punch (hit), Night Shade (hit), Psychic (hit), Self-Destruct (use/hit), Sharpen (use), Skull Bash
+ * (hit), Sky Attack (use), Sludge (hit), Solar Beam (use), Substitute (use), Thunder Punch (hit), Toxic (hit),
+ * Transform (use)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_SetupTargetHueChange(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
     Particle_FieldAE_SetS16_0BF4C(arg0, arg0->unk_A6);
     Particle_AdvanceLifecycle(arg0);
@@ -260,16 +284,30 @@ void func_82143A18(s8 *arg0) {
     }
 }
 
-void BattleAnim_SetupOwnerModelTintPulseDetach(Particle* arg0) {
+/**
+ * Moves: Barrier (use), Bide (use), Confusion (use), Focus Energy (use), Growth (use), Light Screen (use),
+ * Lovely Kiss (hit), Poison Gas (hit), Poison Powder (hit), Psychic (use), Psywave (hit), Rage (use), Reflect
+ * (use), Sleep Powder (hit), Smog (hit), Soft-Boiled (use), Spore (hit), Struggle (use), Stun Spore (hit),
+ * Thrash (use)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_SetupUserHueChange(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
     Particle_FieldAE_SetS16_0BF4C(arg0, arg0->unk_CE);
     Particle_AdvanceLifecycle(arg0);
 }
 
-void BattleAnim_CallbackOwnerModelTintPulseDetach(Particle* arg0) {
+/**
+ * Changes User's Hue. Examples:
+ * - Thrash -> red
+ * - Recover -> rainbow
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_RunUserHueChange(Particle* arg0) {
     switch (arg0->unk_B2) {
         case 1:
-            BattleAnim_SetupOwnerModelTintPulseDetach(arg0);
+            BattleAnim_SetupUserHueChange(arg0);
             break;
 
         case 2:
@@ -401,16 +439,24 @@ void func_82143E30(s8 *arg0) {
     }
 }
 
-void BattleAnim_SetupOwnerModelTintPaletteCycle(Particle* arg0) {
+/**
+ * Sets the hue coloration change of a pokemon hit by ice beam or blizzard
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_SetupIceBeamBlizzardHitHueChange(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
     Particle_FieldAE_SetS16_0BF4C(arg0, 0);
     Particle_AdvanceLifecycle(arg0);
 }
 
-void BattleAnim_CallbackOwnerModelTintPaletteCycle(Particle* arg0) {
+/**
+ * Runs the hue coloration of a pokemon hit by ice beam or blizzard
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_RunIceBeamBlizzardHitHueChange(Particle* arg0) {
     switch (arg0->unk_B2) {
         case 1:
-            BattleAnim_SetupOwnerModelTintPaletteCycle(arg0);
+            BattleAnim_SetupIceBeamBlizzardHitHueChange(arg0);
             break;
 
         case 2:

@@ -70,7 +70,7 @@ void BattleAnim_EffectEndNop(void);
 s32 func_82111DC4(void);
 s32 Battle_CheckFaintAfterMove(void);
 
-void Battle_CheckAllBroughtFainted_HP(ActivePokemon* arg0);
+void Battle_CheckDefeatAtStatusHp(ActivePokemon* arg0);
 void Battle_CheckAllBroughtFainted_Status(ActivePokemon* arg0);
 void Battle_CheckAllBroughtFainted_PP(ActivePokemon* arg0);
 void Battle_CheckAllBroughtFainted_Level(ActivePokemon* arg0);
@@ -463,7 +463,7 @@ void func_821125C0(void) {
 
         switch (func_82111DCC()) {
             case 2:
-                Battle_ExecuteMoveAnimation();
+                Battle_LoadMoveCache();
                 if (sBattleUser->unk_4C & 0x10) {
                     sBattleUser->unk_4C &= ~(0x40 | 0x10);
                     func_82105E38(sActivePokemon[sBattleScene.scene->unk_2C], 8);
@@ -476,7 +476,7 @@ void func_821125C0(void) {
                     switch (sBattleUser->moveCache.unk_01) {
                         case 0x27:
                         case 0x2B:
-                            Battle_ExecuteMoveEffect();
+                            BattleEffect_ExecuteMoveEffect();
                             return;
                     }
                 }
@@ -484,11 +484,11 @@ void func_821125C0(void) {
                 func_821102F0();
                 Battle_DecrementPP(sBattleScene.scene->unk_2C);
                 if (IsByteInArray(sBattleUser->moveCache.unk_01, D_8218AD4C, 0x10) != 0) {
-                    Battle_ExecuteMoveEffect();
+                    BattleEffect_ExecuteMoveEffect();
                     return;
                 }
                 if (IsByteInArray(sBattleUser->moveCache.unk_01, D_8218AD5C, 2) != 0) {
-                    Battle_ExecuteMoveEffect();
+                    BattleEffect_ExecuteMoveEffect();
                 }
             case 4:
                 if (IsByteInArray(sBattleUser->moveCache.unk_01, D_8218AD60, 2) == 0) {
@@ -541,7 +541,7 @@ void func_821125C0(void) {
                         goto block_5;
                     default:
                         if (IsByteInArray(effect, D_8218AD64, 0x1B) != 0) {
-                            Battle_ExecuteMoveEffect();
+                            BattleEffect_ExecuteMoveEffect();
                             return;
                         }
                         if (sBattleMoveFailed != 0) {
@@ -556,7 +556,7 @@ void func_821125C0(void) {
                             D_82199F36 = 1;
                         }
                         if (IsByteInArray(sBattleUser->moveCache.unk_01, D_8218AD80, 0xA) != 0) {
-                            Battle_ExecuteMoveEffect();
+                            BattleEffect_ExecuteMoveEffect();
                         }
                         if (sBattleTarget->unk_0C == 0) {
                             return;
@@ -579,7 +579,7 @@ void func_821125C0(void) {
                         if (IsByteInArray(sBattleUser->moveCache.unk_01, D_8218AD8C, 0x10) != 0) {
                             break;
                         }
-                        Battle_ExecuteMoveEffect();
+                        BattleEffect_ExecuteMoveEffect();
                         break;
                 }
                 break;
@@ -627,7 +627,11 @@ void func_821129E4(ActivePokemon* arg0) {
     func_8211EF74((s32)&((u8(*)[0x40])(D_8219A520 + 0x448))[sp1C], 3, D_8218C710, func_82107F88(sActivePokemon[sp1C]));
 }
 
-void Battle_CheckAllBroughtFainted_HP(ActivePokemon* arg0) {
+/**
+ * Test remaining roster HP using the active Pokemon's staged HP value for this checkpoint.
+ * @unverified Name and comment from Stadium 1.
+ */
+void Battle_CheckDefeatAtStatusHp(ActivePokemon* arg0) {
     ActivePokemonState* ptr1 = &arg0->state;
     BattleMon* temp_v0;
     s32 i;
@@ -793,7 +797,7 @@ s32 Battle_CheckFaintAfterMove(void) {
         return 0;
     } else if ((sBattleUser->unk_0C != 0) && (sBattleTarget->unk_0C != 0) && (sBattleUser->unk_15 & 0x18) &&
                (sBattleUser->unk_0E == 0)) {
-        Battle_CheckAllBroughtFainted_HP(sActivePokemon[sBattleScene.scene->unk_2C]);
+        Battle_CheckDefeatAtStatusHp(sActivePokemon[sBattleScene.scene->unk_2C]);
         return 0;
     } else if ((sBattleUser->unk_0C != 0) && (sBattleTarget->unk_0C != 0) && (sBattleUser->unk_4D & 0x80) &&
                (sBattleUser->unk_10 == 0)) {

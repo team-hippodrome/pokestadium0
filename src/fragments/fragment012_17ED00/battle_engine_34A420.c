@@ -36,12 +36,17 @@ Strip400Node sTrailPoints[400];
 extern s32 pad_D_84398F48[2];
 extern s32 pad_D_84389178[2];
 
-void Radial20_Init(f32 arg0, f32 arg1, f32 arg2, f32 arg3, u8 arg4, u8 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9);
+void LassoHit_Init(f32 arg0, f32 arg1, f32 arg2, f32 arg3, u8 arg4, u8 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9);
 f32 Strip400_GetTailFadeRatio(void);
 void Radial20_RotateVertexOffset(f32 arg0, UNUSED Vec3f* arg1, Vec3f* arg2, f32 arg3, UNUSED f32 arg4, UNUSED f32 arg5,
                    UNUSED f32 arg6);
 
-void Radial20_Init(f32 arg0, f32 arg1, f32 arg2, f32 arg3, u8 arg4, u8 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9) {
+/**
+ * Moves: Bind (hit), Constrict (hit), Disable (hit), String Shot (hit), Wrap (hit)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1.
+ */
+void LassoHit_Init(f32 arg0, f32 arg1, f32 arg2, f32 arg3, u8 arg4, u8 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9) {
     Strip400State* ptr1 = &sTrailState;
     Strip400Node* ptr2;
     s32 i;

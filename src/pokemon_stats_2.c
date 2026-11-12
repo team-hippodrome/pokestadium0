@@ -373,7 +373,7 @@ s32 func_8002178C(s32 arg0) {
         }
 
         sp28 = GbSave_ReadMainData(arg0);
-        if (GbTower_CheckPakRemoved(arg0, sp2F) == 0) {
+        if (GbTower_IsPakInserted(arg0, sp2F) == 0) {
             Game_ShutdownAndLoadFragment(arg0, 2);
         }
 
@@ -428,7 +428,7 @@ s32 func_80021910(s32 arg0) {
                 sp2C = GbSave_ReadBoxBank(arg0, 1);
             }
 
-            if (GbTower_CheckPakRemoved(arg0, sp37) == 0) {
+            if (GbTower_IsPakInserted(arg0, sp37) == 0) {
                 Game_ShutdownAndLoadFragment(arg0, 2);
             }
 
@@ -461,7 +461,7 @@ s32 func_80021A8C(s32 arg0) {
     temp_s1 = GbSave_EnsureMainDataLoaded(arg0);
     temp_s1 &= func_80021910(arg0);
 
-    if (GbTower_CheckPakRemoved(arg0, sp2B) == 0) {
+    if (GbTower_IsPakInserted(arg0, sp2B) == 0) {
         Game_ShutdownAndLoadFragment(arg0, 2);
     }
 
@@ -479,7 +479,7 @@ extern GbSavePort D_800AC910[4];
  * Per-port state machine that waits for a Game Boy cartridge to be pulled
  * out and put back, then checks it is the same one.  D_8006BB9C[arg0] is
  * the state:
- *   0  start the removal check (GbTower_CheckPakRemoved), fall into 1
+ *   0  start the removal check (GbTower_IsPakInserted), fall into 1
  *   1  wait until the cartridge is off (GbPak_IsCartOff)
  *   2  wait until it is back on (GbPak_IsCartOn); returns 1 meanwhile
  *   3  re-initialise the pak (GbTower_ReinitPak); if that worked, return 3,
@@ -496,7 +496,7 @@ s32 func_80021B30(s32 arg0) {
 
     switch (D_8006BB9C[arg0]) {
         case 0:
-            GbTower_CheckPakRemoved(arg0, 0);
+            GbTower_IsPakInserted(arg0, 0);
             D_8006BB9C[arg0] += 1;
             // fallthrough
 
@@ -591,7 +591,7 @@ s32 func_80021CF4(void) {
                     var_s0->unk_03 = 3;
                 }
             }
-            GbTower_CheckPakRemoved(i, 0);
+            GbTower_IsPakInserted(i, 0);
         }
     }
 
@@ -621,7 +621,7 @@ s32 func_80021E64(s32 arg0) {
         Game_ShutdownAndLoadFragment(arg0, 2);
     }
     ret = GbSave_RebuildAndWriteSave(arg0);
-    ret &= GbTower_CheckPakRemoved(arg0, sp33);
+    ret &= GbTower_IsPakInserted(arg0, sp33);
     return ret;
 }
 
@@ -639,7 +639,7 @@ s32 GbSave_WriteBoxBanks(s32 arg0) {
         if (sp28 != 0) {
             sp28 = GbSave_WriteBoxBank(arg0, 1);
         }
-        sp28 &= GbTower_CheckPakRemoved(arg0, sp2F);
+        sp28 &= GbTower_IsPakInserted(arg0, sp2F);
     }
     return sp28;
 }
@@ -653,7 +653,7 @@ s32 func_80021FF4(s32 arg0) {
             Game_ShutdownAndLoadFragment(arg0, 2);
         }
         sp28 = func_80021334(arg0);
-        sp28 &= GbTower_CheckPakRemoved(arg0, sp2F);
+        sp28 &= GbTower_IsPakInserted(arg0, sp2F);
     }
     return sp28;
 }
@@ -675,7 +675,7 @@ s32 GbSave_RebuildAndWriteSave(s32 arg0) {
         }
     }
 
-    sp28 &= GbTower_CheckPakRemoved(arg0, sp2F);
+    sp28 &= GbTower_IsPakInserted(arg0, sp2F);
     return sp28;
 }
 
@@ -692,7 +692,7 @@ void GbSave_ValidateBeforeWrite(s32 arg0) {
 }
 
 void GbSave_RequirePakPresent(s32 arg0) {
-    if (GbTower_CheckPakRemoved(arg0, 0) == 0) {
+    if (GbTower_IsPakInserted(arg0, 0) == 0) {
         Game_ShutdownAndLoadFragment(arg0, 2);
     }
 }

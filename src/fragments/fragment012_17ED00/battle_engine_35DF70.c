@@ -13,16 +13,20 @@ s32 func_8211EF74(s32, s32, s32, ...);
 extern s32 D_8219A520;
 s32 func_82107F88(ActivePokemon*);
 
-void Battle_Effect_Bide(void);
-void Battle_Effect_Thrash(void);
-void Battle_Effect_MultiHit(void);
-void Battle_Effect_Recharge(void);
-void Battle_Effect_Rage(void);
-void Battle_ExecuteMoveEffect(void);
+void BattleEffect_Bide(void);
+void BattleEffect_Thrash(void);
+void BattleEffect_MultiHit(void);
+void BattleEffect_Recharge(void);
+void BattleEffect_Rage(void);
+void BattleEffect_ExecuteMoveEffect(void);
 
-void Battle_RunMoveEffect(void);
+void BattleEffect_RunMoveEffect(void);
 
-void Battle_Effect_Bide(void) {
+/**
+ * Start Bide with a cleared damage accumulator and a two- or three-turn duration.
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleEffect_Bide(void) {
     sBattleScene.scene->unk_48 = 0x1B;
     sBattleUser->moveCache.unk_01 = 0;
     sBattleUser->unk_4C |= 1;
@@ -30,7 +34,11 @@ void Battle_Effect_Bide(void) {
     sBattleUser->unk_4F = (Battle_Random() & 1) + 2;
 }
 
-void Battle_Effect_Thrash(void) {
+/**
+ * Lock Thrash/Petal Dance into a two- or three-turn continuation.
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleEffect_Thrash(void) {
     sBattleUser->moveCache.unk_01 = 0;
     sBattleUser->unk_4C |= 2;
     sBattleUser->unk_4F = (Battle_Random() & 1) + 2;
@@ -49,7 +57,11 @@ void Battle_Effect_ForceSwitchOrFlee(void) {
     func_8211EF74(D_8219A520 + 0x88, -0x52, D_8218C874, func_82107F88(sActivePokemon[!sBattleScene.scene->unk_2C]));
 }
 
-void Battle_Effect_MultiHit(void) {
+/**
+ * Initialize total/remaining hits; Twineedle then uses the secondary poison effect.
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleEffect_MultiHit(void) {
     s32 var_v1;
 
     if (!(sBattleUser->unk_4C & 4)) {
@@ -107,7 +119,11 @@ void func_82114C20(void) {
     }
 }
 
-void Battle_Effect_OHKO(void) {
+/**
+ * Reject a slower OHKO user, otherwise set the damage sentinel and OHKO result.
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleEffect_OHKO(void) {
     sBattleDamage = 0;
     sBattleCritFlag = 0xFF;
     if (sBattleUser->speed < sBattleTarget->speed) {
@@ -327,11 +343,19 @@ void Battle_Effect_Substitute(void) {
     func_8211EF74(D_8219A520 + 0x88, -0x29, D_8218C918, func_82107F88(sActivePokemon[sBattleScene.scene->unk_2C]));
 }
 
-void Battle_Effect_Recharge(void) {
+/**
+ * Mark the user as needing a recharge turn; Battle_CheckMonCanAct consumes the flag.
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleEffect_Recharge(void) {
     sBattleUser->unk_4D |= 0x20;
 }
 
-void Battle_Effect_Rage(void) {
+/**
+ * Enable Rage's move lock and subsequent Attack boosts.
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleEffect_Rage(void) {
     sBattleUser->unk_4D |= 0x40;
 }
 
@@ -616,7 +640,11 @@ void Battle_Effect_ReflectLightScreen(void) {
     }
 }
 
-void Battle_RunMoveEffect(void) {
+/**
+ * Dispatch the cached effect through its 1-based handler slot; NULL slots do nothing.
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleEffect_RunMoveEffect(void) {
     BattleMonRuntime* ptr = &sActivePokemon[sBattleScene.scene->unk_2C]->state.runtime;
     s32 idx = ptr->moveCache.unk_01;
 
@@ -625,6 +653,10 @@ void Battle_RunMoveEffect(void) {
     }
 }
 
-void Battle_ExecuteMoveEffect(void) {
-    Battle_RunMoveEffect();
+/**
+ * Entry point used by the turn engine to invoke the cached move-effect handler.
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleEffect_ExecuteMoveEffect(void) {
+    BattleEffect_RunMoveEffect();
 }

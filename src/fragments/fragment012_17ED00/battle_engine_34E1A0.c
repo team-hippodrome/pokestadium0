@@ -8,15 +8,18 @@
 extern Trail40 sWaterSurface;
 extern Gfx D_82192B98[];
 
-void Trail40_Init(s16 arg0);
-void Trail40_Start(s32 arg0, s32 arg1);
-void Trail40Node_FillVertex(Trail40Node* arg0, Vtx* arg1);
-s32 Trail40_IsComplete(void);
-Gfx* Trail40_Draw(Gfx* arg0);
+void HypnosisScreechTrail_Init(s16 arg0);
+void HypnosisScreechTrail_Start(s32 arg0, s32 arg1);
+void HypnosisScreechTrailNode_FillVertex(Trail40Node* arg0, Vtx* arg1);
+s32 HypnosisScreechTrail_IsComplete(void);
+Gfx* HypnosisScreechTrail_Draw(Gfx* arg0);
 
 void Trail40_Reset(void);
 
-void Trail40_Init(s16 arg0) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void HypnosisScreechTrail_Init(s16 arg0) {
     s32 i;
     s32 j;
     s16 tmp1;
@@ -47,7 +50,10 @@ void Trail40_Init(s16 arg0) {
     }
 }
 
-void Trail40_Start(s32 arg0, s32 arg1) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void HypnosisScreechTrail_Start(s32 arg0, s32 arg1) {
     f32 sp84;
     f32 sp80;
     f32 sp7C;
@@ -154,7 +160,10 @@ void Trail40_Start(s32 arg0, s32 arg1) {
     }
 }
 
-void Trail40Node_FillVertex(Trail40Node* arg0, Vtx* arg1) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void HypnosisScreechTrailNode_FillVertex(Trail40Node* arg0, Vtx* arg1) {
     f32 r;
     f32 g;
     f32 b;
@@ -176,7 +185,10 @@ void Trail40Node_FillVertex(Trail40Node* arg0, Vtx* arg1) {
     arg1->v.cn[3] = sWaterSurface.unk_0004;
 }
 
-s32 Trail40_IsComplete(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+s32 HypnosisScreechTrail_IsComplete(void) {
     Trail40Node* var_s1;
     s32 i;
     s32 j;
@@ -216,7 +228,7 @@ s32 Trail40_IsComplete(void) {
 
     for (i = 0; i < 16; i++) {
         for (j = 0; j < 16; j++) {
-            Trail40_Start(i, j);
+            HypnosisScreechTrail_Start(i, j);
         }
     }
 
@@ -266,7 +278,10 @@ void func_821787C4(void) {
     func_800320A8(D_821A6F60, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6);
 }
 
-Gfx* Trail40_Draw(Gfx* arg0) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+Gfx* HypnosisScreechTrail_Draw(Gfx* arg0) {
     s32 i;
     s32 j;
     Trail40Node* var_s2;
@@ -281,7 +296,7 @@ Gfx* Trail40_Draw(Gfx* arg0) {
     var_s2 = &sWaterSurface.unk_0014[0][0];
     for (i = 0; i < 16; i++) {
         for (j = 0; j < 16; j++) {
-            Trail40Node_FillVertex(var_s2, vtx);
+            HypnosisScreechTrailNode_FillVertex(var_s2, vtx);
             var_s2++;
             vtx++;
         }

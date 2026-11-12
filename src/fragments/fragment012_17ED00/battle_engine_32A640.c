@@ -30,16 +30,16 @@ extern const char D_821978C8[];
 
 void BattleAnim_UnusedResetAppearanceAndAdvance(Particle* arg0);
 void BattleAnim_SetupOrphanDescriptor2BSpinFade(Particle* arg0);
-void BattleAnim_SetupEndEffect26Descriptor2CGravityScatterFall(Particle* arg0);
+void BattleAnim_SetupPetalDanceLingeringHitEffect(Particle* arg0);
 void BattleAnim_DefaultStartEffect_Draw(void);
 void BattleAnim_OrphanDescriptor2BAnd2EEmitterSequence(void);
-void RegisterParticleEffect_ComplexMovement(void);
-void RegisterParticleEffect_Burst(void);
+void BattleAnim_InitializePetalDanceHit(void);
+void BattleAnim_InitializeWingAttackHit(void);
 
 void BattleAnim_CallbackOrphanDescriptor2BSpinFade(Particle* arg0);
 void BattleAnim_CallbackOrphanDescriptor2EScatterFade(Particle* arg0);
-void BattleAnim_CallbackEndEffect26Descriptor2CGravityScatterFall(Particle* arg0);
-void BattleAnim_CallbackEndEffects85And87GravityFallDelay(Particle* arg0);
+void BattleAnim_RunPetalDanceLingeringHitEffect(Particle* arg0);
+void BattleAnim_RunSlowFallingHitEffect(Particle* arg0);
 
 void BattleAnim_UnusedResetAppearanceAndAdvance(Particle* arg0) {
     Particle_SetPrimColor(arg0, 0xFF, 0xFF, 0xFF);
@@ -186,7 +186,10 @@ void func_82151A5C(s8 *arg0) {
     }
 }
 
-void BattleAnim_SetupEndEffect26Descriptor2CGravityScatterFall(Particle* arg0) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_SetupPetalDanceLingeringHitEffect(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
 
     Particle_Field1C_SetScaled_0B938(arg0, 0.12f);
@@ -208,10 +211,14 @@ void BattleAnim_SetupEndEffect26Descriptor2CGravityScatterFall(Particle* arg0) {
 void func_8213E1FC(Particle* arg0, f32 arg1);
 s32 func_8213F658(Particle* arg0, f32 arg1, f32 arg2);
 void func_8213ECD0(Particle* arg0);
-void BattleAnim_CallbackEndEffect26Descriptor2CGravityScatterFall(Particle* arg0) {
+/**
+ * Handles the floating pedals that linger when being hit by pedal dance
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_RunPetalDanceLingeringHitEffect(Particle* arg0) {
     switch (arg0->unk_B2) {
         case 1:
-            BattleAnim_SetupEndEffect26Descriptor2CGravityScatterFall(arg0);
+            BattleAnim_SetupPetalDanceLingeringHitEffect(arg0);
             break;
 
         case 2:
@@ -281,7 +288,10 @@ void BattleAnim_CallbackEndEffect26Descriptor2CGravityScatterFall(Particle* arg0
     }
 }
 
-void BattleAnim_SetupEndEffects85And87GravityFallDelay(Particle* arg0) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_SetupSlowFallingHitEffect(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
     s16 sp24 = Particle_FieldCE_GetS32_0C040(arg0);
 
@@ -319,12 +329,16 @@ void BattleAnim_SetupEndEffects85And87GravityFallDelay(Particle* arg0) {
 
 void func_8213E1FC(Particle* arg0, f32 arg1);
 void func_8213ECD0(Particle* arg0);
-void BattleAnim_CallbackEndEffects85And87GravityFallDelay(Particle* arg0) {
+/**
+ * Handles the leaves that spawn when being hit by vine whip and the feathers that spawn when being hit by wing attack
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_RunSlowFallingHitEffect(Particle* arg0) {
     s16 sp26 = Particle_FieldCE_GetS32_0C040(arg0);
 
     switch (arg0->unk_B2) {
         case 1:
-            BattleAnim_SetupEndEffects85And87GravityFallDelay(arg0);
+            BattleAnim_SetupSlowFallingHitEffect(arg0);
             break;
 
         case 2:
@@ -383,12 +397,20 @@ void BattleAnim_OrphanDescriptor2BAnd2EEmitterSequence(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackOrphanDescriptor2EScatterFade, &gBattleAnimParticleDescriptors[0x2E], 0, 0x10, 2, 0, 0, 0);
 }
 
-void RegisterParticleEffect_ComplexMovement(void) {
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 2, 0x14, BattleAnim_CallbackEndEffect26Descriptor2CGravityScatterFall, &gBattleAnimParticleDescriptors[0x2C], 0, 4, 0xE, 0, 0, 0);
-    BattleAnim_EndEffect26DelayedDescriptor29ScatterSequence();
+/**
+ * initializes being hit by pedal dance
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_InitializePetalDanceHit(void) {
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 2, 0x14, BattleAnim_RunPetalDanceLingeringHitEffect, &gBattleAnimParticleDescriptors[0x2C], 0, 4, 0xE, 0, 0, 0);
+    BattleAnim_InitializePetalDanceHitSequence();
 }
 
-void RegisterParticleEffect_Burst(void) {
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 2, 5, BattleAnim_CallbackEndEffects85And87GravityFallDelay, &gBattleAnimParticleDescriptors[0x2D], 0, 1, 0xE, 0, 0, 1);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 5, BattleAnim_CallbackEndEffects85And87GravityFallDelay, &gBattleAnimParticleDescriptors[0x2D], 0, 1, 0xE, 0, 0, 1);
+/**
+ * initializes being hit by wing attack
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_InitializeWingAttackHit(void) {
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 2, 5, BattleAnim_RunSlowFallingHitEffect, &gBattleAnimParticleDescriptors[0x2D], 0, 1, 0xE, 0, 0, 1);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 5, BattleAnim_RunSlowFallingHitEffect, &gBattleAnimParticleDescriptors[0x2D], 0, 1, 0xE, 0, 0, 1);
 }

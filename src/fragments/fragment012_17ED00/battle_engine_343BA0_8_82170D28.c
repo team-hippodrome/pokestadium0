@@ -1,7 +1,10 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
 #include "battle_engine_343BA0_8.h"
 
-void BattleAnim_StartEffect39SixSlotTrail_Seed(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_SeedHyperBeamUseSixSlotTrail(void) {
     static unk_D_843C2C00_024 D_84388240 = {
         0x00000002, 0x00000001, 0x0000000E, 0x00000001, 0x00000002, 0x00000001, 0x00000003, 0x00000001,
     };
@@ -25,31 +28,40 @@ void BattleAnim_StartEffect39SixSlotTrail_Seed(void) {
     sp94 *= 12.0f;
     sp90 *= 12.0f;
 
-    BattleAnim_SixSlotTrail_Spawn(0, spA4, spA0, sp9C, sp98, sp94, sp90, 0xFF, 0xFF, 0x64, 0x32, 0xC8, 0xFF, 0x32, 0, 0xFF, 0.4f, 2.0f,
+    HyperBeamIceBeamTrail_Spawn(0, spA4, spA0, sp9C, sp98, sp94, sp90, 0xFF, 0xFF, 0x64, 0x32, 0xC8, 0xFF, 0x32, 0, 0xFF, 0.4f, 2.0f,
                   5.0f, 0x3C, 0x95, 0x95, 0, 0x14, 0, 0xD, 0, 0x19, 0, 0xD, &D_84388240, &D_84388260);
 }
 
 
-void BattleAnim_StartEffect39CombinedTrail_Init(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_SetupHyperBeamUseCombinedTrail(void) {
     BattleAnim_ResetSharedEffectMatrix();
     DoubleTextureTrail_InitPool();
-    BattleAnim_StartEffect39DoubleTextureTrail_Seed();
-    BattleAnim_SixSlotTrail_ResetPool();
-    BattleAnim_StartEffect39SixSlotTrail_Seed();
+    BattleAnim_SeedHyperBeamUseDoubleTextureTrail();
+    HyperBeamIceBeamTrail_ResetPool();
+    BattleAnim_SeedHyperBeamUseSixSlotTrail();
 }
 
-s32 BattleAnim_StartEffect39CombinedTrail_Update(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+s32 BattleAnim_RunHyperBeamUseCombinedTrail(void) {
     D_8219CB14++;
     if ((D_8219CB14 % 10) == 0) {
-        BattleAnim_StartEffect39SixSlotTrail_Seed();
+        BattleAnim_SeedHyperBeamUseSixSlotTrail();
     }
-    BattleAnim_SixSlotTrail_UpdateAll();
+    HyperBeamIceBeamTrail_UpdateAll();
     return DoubleTextureTrail_UpdateAll();
 }
 
-void BattleAnim_StartEffect39CombinedTrail_Draw(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_DrawHyperBeamUseCombinedTrail(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     gDisplayListHead = DoubleTextureTrail_DrawAll(gDisplayListHead);
-    gDisplayListHead = BattleAnim_SixSlotTrail_DrawAll(gDisplayListHead);
+    gDisplayListHead = HyperBeamIceBeamTrail_DrawAll(gDisplayListHead);
 }

@@ -68,7 +68,7 @@ void func_81117068(u16, u8, u16);
 void GbApu_ResetChannels(void);
 void GbApu_Reset(unk_D_8122B2F8*);
 void func_811173F4(void);
-void GbAudio_SetAlternateRendererEnabled(s32);
+void GbAudio_SetMenuSoundMode(s32);
 #define GB_EMU_PAL_Y_SCALE 0.833f
 
 #include "m2c_macros.h"

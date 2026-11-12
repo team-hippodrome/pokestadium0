@@ -12,14 +12,20 @@
 extern s32 D_81600A70;
 extern s32 D_81600A74;
 
-s32 FatalError_DrawFrame(u8 arg0);
+s32 TransferPakError_DrawFrame(u8 arg0);
 
-void FatalError_DrawBackgroundPattern(s32 arg0, s32 arg1, s32 arg2);
+void TransferPakError_DrawBackgroundPattern(s32 arg0, s32 arg1, s32 arg2);
 void FatalError_DrawMessagePanel(s32 arg0);
 void FatalError_DrawPortDiagram(s32 arg0);
 
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
-void FatalError_DrawBackgroundPattern(s32 arg0, s32 arg1, s32 arg2) {
+/**
+ * Fills the 320x240 screen with the green Poke Ball wallpaper from transfer_pak_error_ui
+ * (64x64 RGBA16 at segment offset 0x0), drawn in COPY mode as 64x16 strips.
+ * The three arguments (0x55, 0x70, 0x88 from TransferPakError_DrawFrame) are unused.
+ * @unverified Name and comment from Stadium 1.
+ */
+void TransferPakError_DrawBackgroundPattern(s32 arg0, s32 arg1, s32 arg2) {
     s32 i;
     s32 j;
     s32 idx;
@@ -104,9 +110,13 @@ void FatalError_DrawPortDiagram(s32 arg0) {
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
-s32 FatalError_DrawFrame(u8 arg0) {
+/**
+ * Per-frame draw callback: wallpaper, message window and port diagram for the stored error.
+ * @unverified Name and comment from Stadium 1.
+ */
+s32 TransferPakError_DrawFrame(u8 arg0) {
     BgStage_DrawFrame();
-    FatalError_DrawBackgroundPattern(0x55, 0x70, 0x88);
+    TransferPakError_DrawBackgroundPattern(0x55, 0x70, 0x88);
     FatalError_DrawMessagePanel(D_81600A74);
     FatalError_DrawPortDiagram(D_81600A70);
     return 0;
@@ -129,6 +139,6 @@ void func_816007C4(s32 arg0, s32 arg1) {
     StageContext_Activate(temp_s0);
 
     while (TRUE) {
-        BgStage_WaitForCondition(FatalError_DrawFrame, 8, 8);
+        BgStage_WaitForCondition(TransferPakError_DrawFrame, 8, 8);
     }
 }

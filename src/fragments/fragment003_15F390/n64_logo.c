@@ -18,7 +18,7 @@
 void N64Logo_DrawLogoTexture(void);
 s32 N64Logo_DrawFrame(UNUSED u8 arg0);
 void N64Logo_WaitForElapsed(u64 arg0);
-void N64Logo_ScanGbSavePorts(void);
+void N64Logo_ScanTransferPaks(void);
 
 void N64Logo_DrawLogoTexture(void) {
     s32 var_t4;
@@ -60,7 +60,21 @@ void N64Logo_WaitForElapsed(u64 arg0) {
     }
 }
 
-void N64Logo_ScanGbSavePorts(void) {
+/**
+ * Boot-time Transfer Pak scan, run once while the logo is held on screen.
+ * GbSave_ScanAllPorts (via GbTower_ScanPaks) initializes every plugged-in Transfer Pak,
+ * identifies supported Pokemon Red/Green/Blue/Yellow cartridges for the region, checks
+ * cartridge RAM, resets the per-port Game Boy save cache and enables disconnect polling for
+ * ports holding a recognized Pokemon cartridge. This is the only caller of
+ * GbSave_ScanAllPorts, so later Transfer Pak features rely on this boot scan.
+ * N64Logo_Main starts its 1-second hold timer before the scan, so the controller-bus work
+ * overlaps the logo instead of adding a blank delay.
+ * A faulty pak or cartridge sends the game straight to the fatal error screen via
+ * Game_ShutdownAndLoadFragment. //@src/pokemon_stats.c //@src/gb_tower.c
+ * Allocations made during the scan are released when the 'GPAK' pool state is popped.
+ * @unverified Name and comment from Stadium 1.
+ */
+void N64Logo_ScanTransferPaks(void) {
     main_pool_push_state('GPAK');
 
     GbSave_ScanAllPorts();
@@ -106,7 +120,7 @@ s32 N64Logo_Main(UNUSED s32 arg0, UNUSED s32 arg1) {
 
     Audio_PlaySoundEffectById(SFX_N64_LOGO);
     sp28 = osGetTime();
-    N64Logo_ScanGbSavePorts();
+    N64Logo_ScanTransferPaks();
     N64Logo_WaitForElapsed(sp28);
     StageFade_Start(0x10);
     BgStage_RunUntilCondition(0x10, N64Logo_DrawFrame);

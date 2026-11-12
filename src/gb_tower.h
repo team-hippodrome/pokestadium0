@@ -6,7 +6,7 @@
 s32 GbPak_VerifyPattern(s32 arg0, void* arg1);
 s32 GbPak_DetectRam(s32 arg0, u8* arg1);
 s32 GbTower_ProbePak(s32 arg0, u8* arg1, u8* arg2);
-s32 GbTower_CheckPakRemoved(s32 arg0, u8 arg1);
+s32 GbTower_IsPakInserted(s32 arg0, u8 arg1);
 void GbTower_PowerOffAllPaks(void);
 s32 GbPak_IsPokemonCartridge(OSGbpakId* header);
 s32 GbTower_ScanPaks(void);

@@ -144,7 +144,7 @@ Particle* BattleAnim_SpawnSecondaryOwnerParticle(Vec3f arg0, u8 arg1) {
 
     if ((u32)sp1C != -1) {
         ParticleMath_CopyVec3f(&sp1C->unk_68, &arg0);
-        BattleAnim_ConfigureSecondaryOwnerParticleVariant(sp1C, arg1);
+        BattleAnim_InitStingerMoveParticle(sp1C, arg1);
         sp1C->unk_10 = gBattleAnimSecondaryOwner;
         sp1C->unk_14 = NULL;
         sp1C->unk_CD = 0xFF;

@@ -6,14 +6,20 @@
 
 #include "m2c_macros.h"
 
-void BattleAnim_SetupOwnerModelTintPaletteFade(Particle* arg0);
+void BattleAnim_SetupDrainFlameHueChange(Particle* arg0);
 void BattleAnim_SetupParticleRecolorTransparent(Particle* arg0);
-void BattleAnim_SetupDescriptor25AlphaFadeInHoldOut(Particle* arg0);
+void BattleAnim_SetupWhiteHueChange(Particle* arg0);
 void BattleAnim_SetupDescriptor25AlphaFadeInHold(Particle* arg0);
 void BattleAnim_SetupDescriptor25PaletteFadeOut(Particle* arg0);
 void BattleAnim_SetupDescriptor25PaletteFadeIn(Particle* arg0);
 
-void BattleAnim_SetupOwnerModelTintPaletteFade(Particle* arg0) {
+/**
+ * Sets up the hue change upon being hit by
+ * - A Draining move (absorb, mega drain, leech life)
+ * - A flame-emitting move (Flamethrower, Fire blast, fire spin, dragon rage)
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_SetupDrainFlameHueChange(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
     Particle_FieldAE_SetS16_0BF4C(arg0, 0);
     Particle_AdvanceLifecycle(arg0);
@@ -84,7 +90,11 @@ void BattleAnim_CallbackOwnerModelTintRandomPaletteCycle(Particle* arg0) {
     }
 }
 
-void BattleAnim_SetupOwnerModelTintPaletteRotateFadeDetach(Particle* arg0) {
+/**
+ * Sets up the rainbow hue shift triggered by the user's Recover or by an incoming Psybeam or Aurora Beam.
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_SetupRainbowHueChange(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, gParticlePaletteSetA[0]);
     Particle_FieldAE_SetS16_0BF4C(arg0, 1);
     Particle_FieldCF_SetU8_0BEEC(arg0, gParticlePaletteSetA[1]);
@@ -98,10 +108,14 @@ void BattleAnim_SetupOwnerModelTintPaletteRotateFadeDetach(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void BattleAnim_CallbackOwnerModelTintPaletteRotateFadeDetach(Particle* arg0) {
+/**
+ * Runs the rainbow hue shift triggered by the user's Recover or by an incoming Psybeam or Aurora Beam.
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_RunRainbowHueChange(Particle* arg0) {
     switch (arg0->unk_B2) {
         case 1:
-            BattleAnim_SetupOwnerModelTintPaletteRotateFadeDetach(arg0);
+            BattleAnim_SetupRainbowHueChange(arg0);
             break;
 
         case 2:
@@ -128,7 +142,13 @@ void BattleAnim_CallbackOwnerModelTintPaletteRotateFadeDetach(Particle* arg0) {
     }
 }
 
-void BattleAnim_SetupOwnerModelAlphaFade(Particle* arg0) {
+/**
+ * Set up Fading the user's model to invisible for Teleport, defense curl, sky attack, acid armor and sharpen.
+ * These moves do not replace the user's model like transform or substitute and do not have unique animation varients
+ * like withdrawal; which are not covered by this function.
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_SetupInvisibility(Particle* arg0) {
     arg0->prim_a = arg0->unk_A6;
     Particle_AdvanceLifecycle(arg0);
 }
@@ -192,16 +212,30 @@ void func_82144750(s8 *arg0) {
     func_80019B28(M2C_FIELD(arg0, s32 *, 0x10), M2C_FIELD(arg0, u8 *, 0xBA), M2C_FIELD(arg0, u8 *, 0xBB), M2C_FIELD(arg0, u8 *, 0xBC), (s32) M2C_FIELD(arg0, u8 *, 0xC0));
 }
 
-void BattleAnim_SetupDescriptor25AlphaFadeInHoldOut(Particle* arg0) {
+/**
+ * Sets up coloration changes to pure white for using Blizzard, Confuse Ray, Self-destruct, Flash, or Explosion.
+ * Blizzard's effect is more subtle and doesn't change the user completely white like the other listed moves.
+ * It is used in blizzard to make the user's hue match that of the arena.
+ * Also used for the poke ball's hue change.
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_SetupWhiteHueChange(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
     Particle_SetPrimAlpha(arg0, 0);
     Particle_AdvanceLifecycle(arg0);
 }
 
-void BattleAnim_CallbackDescriptor25AlphaFadeInHoldOut(Particle* arg0) {
+/**
+ * Runs coloration changes to pure white for using Blizzard, Confuse Ray, Self-destruct, Flash, or Explosion.
+ * Blizzard's effect is more subtle and doesn't change the user completely white like the other listed moves.
+ * It is used in blizzard to make the user's hue match that of the arena.
+ * Also used for the poke ball's hue change.
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_RunWhiteHueChange(Particle* arg0) {
     switch (arg0->unk_B2) {
         case 1:
-            BattleAnim_SetupDescriptor25AlphaFadeInHoldOut(arg0);
+            BattleAnim_SetupWhiteHueChange(arg0);
             break;
 
         case 2:
@@ -235,7 +269,17 @@ void func_821448D4(s8 *arg0)
   func_8213C9D0(arg0);
 }
 
-void BattleAnim_CallbackDescriptor25AlphaHoldFadeOut(Particle* arg0) {
+/**
+ * handles full screen hue overlay changes to a single color. Examples:
+ * - Vine whip -> green
+ * - Slash -> red
+ * - Fire punch -> white
+ *
+ * BattleAnim_DrawFadingFullScreenColorOverlay in @battle_engine_particle_renderers.c is the equivalent for moves
+ * that change both the full screen hue and the pokemon hue at the same time
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_RunFullScreenHueChange(Particle* arg0) {
     switch (arg0->unk_B2) {
         case 1:
             BattleAnim_SetupDescriptor25AlphaHoldFadeOut(arg0);
@@ -259,7 +303,11 @@ void BattleAnim_SetupDescriptor25AlphaFadeInHold(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void BattleAnim_CallbackDescriptor25AlphaFadeInHold(Particle* arg0) {
+/**
+ * Used to change the Pokemon and screen hue at the same time for Blizzard, Boom, Confuse Ray, and Flash
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_RunPokemonAndFullScreenHueChange(Particle* arg0) {
     switch (arg0->unk_B2) {
         case 1:
             BattleAnim_SetupDescriptor25AlphaFadeInHold(arg0);

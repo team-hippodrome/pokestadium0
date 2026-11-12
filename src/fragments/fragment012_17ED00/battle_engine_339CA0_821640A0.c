@@ -1,10 +1,13 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
 #include "battle_engine_339CA0.h"
 
-void BattleAnim_CallbackStartEffect81Descriptor3DRisingAnimFade(Particle* arg0) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_RunAcidArmorUseEffect2(Particle* arg0) {
     switch (arg0->unk_B2) {
         case 1:
-            BattleAnim_CallbackStartEffect81Descriptor3DRisingAnimFade_InitParticle(arg0);
+            BattleAnim_SetupAcidArmorUseEffect2(arg0);
             break;
 
         case 2:
@@ -352,7 +355,10 @@ void func_82164F04(s8 *arg0) {
     }
 }
 
-void BattleAnim_CallbackStartEffect101Descriptor3DMetadataBurstChild_InitParticle(Particle* arg0) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_SetupBarrageUseEffect2(Particle* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
 
     Particle_FieldAC_GetS16_0C038(arg0);
@@ -365,10 +371,13 @@ void BattleAnim_CallbackStartEffect101Descriptor3DMetadataBurstChild_InitParticl
     Particle_AdvanceLifecycle(arg0);
 }
 
-void BattleAnim_CallbackStartEffect101Descriptor3DMetadataBurstChild(Particle* arg0) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_RunBarrageUseEffect2(Particle* arg0) {
     switch (arg0->unk_B2) {
         case 1:
-            BattleAnim_CallbackStartEffect101Descriptor3DMetadataBurstChild_InitParticle(arg0);
+            BattleAnim_SetupBarrageUseEffect2(arg0);
             break;
 
         case 2:
@@ -495,7 +504,10 @@ void func_8216547C(s8 *arg0) {
     }
 }
 
-void BattleAnim_CallbackSharedDescriptor3CExpandingFadeIn_InitParticle(Particle* arg0) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_SetupSolarBeamUseEffect(Particle* arg0) {
     s16 sp26 = Particle_FieldCF_GetS16_0C058(arg0);
 
     Particle_Field1C_SetScaled_0B938(arg0, 0.2f);
@@ -505,10 +517,13 @@ void BattleAnim_CallbackSharedDescriptor3CExpandingFadeIn_InitParticle(Particle*
     Particle_AdvanceLifecycle(arg0);
 }
 
-void BattleAnim_CallbackSharedDescriptor3CExpandingFadeIn(Particle* arg0) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_RunSolarBeamUseEffect(Particle* arg0) {
     switch (arg0->unk_B2) {
         case 1:
-            BattleAnim_CallbackSharedDescriptor3CExpandingFadeIn_InitParticle(arg0);
+            BattleAnim_SetupSolarBeamUseEffect(arg0);
             break;
 
         case 2:
@@ -522,7 +537,10 @@ void BattleAnim_CallbackSharedDescriptor3CExpandingFadeIn(Particle* arg0) {
     }
 }
 
-void BattleAnim_CallbackStartEffects29And60And104And110Descriptor44BurstChild_InitParticle(Particle* arg0) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_SetupQiChargeChild(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
     s16 sp24 = Particle_FieldCF_GetS16_0C058(arg0);
 
@@ -538,10 +556,15 @@ void BattleAnim_CallbackStartEffects29And60And104And110Descriptor44BurstChild_In
     Particle_AdvanceLifecycle(arg0);
 }
 
-void BattleAnim_CallbackStartEffects29And60And104And110Descriptor44BurstChild(Particle* arg0) {
+/**
+ * Moves: Conversion (use), Mimic (use), Recover (use), Sky Attack (use), Solar Beam (use)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_RunQiChargeChild(Particle* arg0) {
     switch (arg0->unk_B2) {
         case 1:
-            BattleAnim_CallbackStartEffects29And60And104And110Descriptor44BurstChild_InitParticle(arg0);
+            BattleAnim_SetupQiChargeChild(arg0);
             break;
 
         case 2:
@@ -572,11 +595,14 @@ void BattleAnim_CallbackStartEffects29And60And104And110Descriptor44BurstChild(Pa
     }
 }
 
-void BattleAnim_CallbackStartEffects29And60And104And110DefaultDescriptorBurstEmitter_InitParticle(Particle* arg0) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_SetupQiCharge(Particle* arg0) {
     Particle_FieldAC_GetS16_0C038(arg0);
     Particle_Field94_SetY_0A2B8(arg0, ParticleMath_RandomRange(0x10000));
     func_8213E11C(arg0, ParticleMath_RandomSignedOffsetBySign(0x28, 0x28));
-    BattleAnim_EmitParticleBurst(arg0, BattleAnim_CallbackStartEffects29And60And104And110Descriptor44BurstChild, &D_8218E580[0x44], 5);
+    BattleAnim_EmitParticleBurst(arg0, BattleAnim_RunQiChargeChild, &D_8218E580[0x44], 5);
     Particle_AdvanceLifecycle(arg0);
 }
 

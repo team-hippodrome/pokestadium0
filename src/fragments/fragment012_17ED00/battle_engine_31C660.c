@@ -15,7 +15,7 @@ typedef void (*func_D_8438AE50)(void);
 extern func_D_8438AE50 sMoveEffectHandlers[];
 
 void func_82113660(void);
-void Battle_Effect_Explosion(void);
+void BattleEffect_Explosion(void);
 
 void func_82113660(void) {
 }
@@ -147,7 +147,11 @@ void Battle_Effect_DrainHP(void) {
     }
 }
 
-void Battle_Effect_Explosion(void) {
+/**
+ * Faint the user of Explosion/Self-Destruct and clear its major status and Leech Seed.
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleEffect_Explosion(void) {
     sBattleScene.scene->unk_48 = 0x1E;
     sBattleUser->unk_0C = 0;
     sBattleUser->unk_15 = 0;

@@ -358,13 +358,24 @@ void BattleAnim_CallbackInitModelAnimWait(Particle* arg0) {
     }
 }
 
-void BattleAnim_CallbackInitModelAnim(Particle* arg0) {
+/**
+ * Moves: Barrier (use), Defense Curl (use), Dig (use/hit), Earthquake (hit), Fissure (hit), Light Screen
+ * (use), Pay Day (hit), Reflect (use), Sharpen (use), Withdraw (use)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_InitializeParticleModel(Particle* arg0) {
     if (arg0->unk_B2 == 1) {
         BattleAnim_SelectParticleModelFrames(arg0, 0);
     }
 }
 
-void BattleAnim_CallbackStartEffects83And103ModelAlphaFadeIn(Particle* arg0) {
+/**
+ * Used for the Eyes in Leer and Glare.
+ * It is reused for additional flair in Sky Attack (hands an X shape on the bird)
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_RunScaryEyes(Particle* arg0) {
     switch (arg0->unk_B2) {
         case 1:
             BattleAnim_SelectParticleModelFrames(arg0, 0);
@@ -376,7 +387,10 @@ void BattleAnim_CallbackStartEffects83And103ModelAlphaFadeIn(Particle* arg0) {
     }
 }
 
-void BattleAnim_CallbackInitModelAnimWaitCleanup(Particle* arg0) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_RunDreamEaterUseEffect(Particle* arg0) {
     switch (arg0->unk_B2) {
         case 1:
             BattleAnim_SelectParticleModelFrames(arg0, 1);
@@ -400,7 +414,13 @@ void BattleAnim_CallbackInitModelAnimMode2(Particle* arg0) {
     }
 }
 
-void BattleAnim_CallbackInitModelAnimMode2Update(Particle* arg0) {
+/**
+ * Moves: Absorb (use), Bide (use), Confusion (use), Focus Energy (use), Leech Life (use), Mega Drain (use),
+ * Psychic (use), Rage (use), Solar Beam (use), Waterfall (use/hit)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_RunFillScreenOverlay(Particle* arg0) {
     switch (arg0->unk_B2) {
         case 1:
             BattleAnim_SelectParticleModelFrames(arg0, 2);
@@ -549,7 +569,10 @@ void BattleAnim_SetupMove86EndDescriptor24(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void BattleAnim_CallbackMove86EndDescriptor24(Particle* arg0) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_RunThunderWaveHitEffect(Particle* arg0) {
     switch (arg0->unk_B2) {
         case 1:
             BattleAnim_SetupMove86EndDescriptor24(arg0);
@@ -629,7 +652,10 @@ void func_82153E28(s8 *arg0) {
     func_8213E4D8(arg0);
 }
 
-void ParticleEffect_RegisterExplosion(void) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_InitializeThunderWaveUse(void) {
     BattleAnim_SpawnCategory17MarkerSlot(0x55, 1);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 8, 0xC, BattleAnim_CallbackMove86StartDescriptor24, &gBattleAnimParticleDescriptors[0x24], 0xA, 1, 4, 0, 0, 0);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 8, 0xC, BattleAnim_CallbackMove86StartDescriptor24, &gBattleAnimParticleDescriptors[0x24], 0xA, 1, 4, 1, 0, 0);

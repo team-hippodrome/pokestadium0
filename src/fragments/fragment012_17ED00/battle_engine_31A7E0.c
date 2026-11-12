@@ -5,14 +5,17 @@
 
 #include "m2c_macros.h"
 
-void BattleAnim_InitSecondaryOwnerParticleBlueFadeGrow(Particle* arg0);
-void BattleAnim_InitSecondaryOwnerParticleBlueGrow(Particle* arg0);
-void BattleAnim_ConfigureSecondaryOwnerParticleVariant(Particle* arg0, u8 arg1);
+void BattleAnim_InitStingerTrailColor(Particle* arg0);
+void BattleAnim_InitStingerTrailColorDuplicate(Particle* arg0);
+void BattleAnim_InitStingerMoveParticle(Particle* arg0, u8 arg1);
 
 void BattleAnim_UpdateSecondaryOwnerParticleBlueFadeGrow(Particle* arg0);
 void BattleAnim_UpdateSecondaryOwnerParticleBlueGrow(Particle* arg0);
 
-void BattleAnim_InitSecondaryOwnerParticleBlueFadeGrow(Particle* arg0) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_InitStingerTrailColor(Particle* arg0) {
     Particle_Field1C_SetScaled_0B938(arg0, 0.1f);
     Particle_SetPrimColor(arg0, 0xFF, 0xFF, 0xFF);
     Particle_SetEnvColor(arg0, 0x64, 0xC8, 0xFF);
@@ -48,7 +51,10 @@ void func_8214098C(s8 *arg0) {
     }
 }
 
-void BattleAnim_InitSecondaryOwnerParticleBlueGrow(Particle* arg0) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_InitStingerTrailColorDuplicate(Particle* arg0) {
     Particle_Field1C_SetScaled_0B938(arg0, 0.1f);
     Particle_SetPrimColor(arg0, 0xFF, 0xFF, 0xFF);
     Particle_SetEnvColor(arg0, 0x64, 0xC8, 0xFF);
@@ -69,7 +75,10 @@ void func_82140AB4(s8 *arg0) {
     }
 }
 
-void BattleAnim_ConfigureSecondaryOwnerParticleVariant(Particle* arg0, u8 arg1) {
+/**
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_InitStingerMoveParticle(Particle* arg0, u8 arg1) {
     switch (arg1) {
         case 1:
             arg0->unk_08 = BattleAnim_UpdateSecondaryOwnerParticleBlueFadeGrow;

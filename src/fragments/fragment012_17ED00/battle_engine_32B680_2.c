@@ -83,8 +83,8 @@ extern Gfx D_821903D0[];
 extern Vtx D_82190E50[];
 
 void ParticleEffect_Noop(UNUSED s32 arg0, UNUSED s32 arg1);
-void BattleAnim_DrawAsset76Ia8FrameWithAsset77I4OverlayPipelineA(Particle* arg0, CameraNode* arg1);
-void BattleAnim_DrawAsset76Ia8FrameWithAsset77I4OverlayPipelineB(Particle* arg0, CameraNode* arg1);
+void BattleAnim_DrawFlameHit(Particle* arg0, CameraNode* arg1);
+void BattleAnim_DrawFlameUse(Particle* arg0, CameraNode* arg1);
 void func_82142678(UNUSED ActivePokemon* active_pokemon, UNUSED s32 unused);
 
 void BattleAnim_DrawAsset76Ia8FrameWithAsset77I4Overlay(Particle* arg0, CameraNode* arg1);
@@ -100,13 +100,22 @@ void BattleAnim_DrawAsset76Ia8FrameWithAsset77I4Overlay(Particle* arg0, CameraNo
     ParticleGfx_DrawModelQuad(arg1, arg0->unk_2C, arg0->unk_1C, D_82191080);
 }
 
-void BattleAnim_DrawAsset76Ia8FrameWithAsset77I4OverlayPipelineA(Particle* arg0, CameraNode* arg1) {
+/**
+ * Draw the flames when being *hit* by Flamethrower or dragon rage
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_DrawFlameHit(Particle* arg0, CameraNode* arg1) {
     gSPDisplayList(gDisplayListHead++, D_821904C8);
 
     BattleAnim_DrawAsset76Ia8FrameWithAsset77I4Overlay(arg0, arg1);
 }
 
-void BattleAnim_DrawAsset76Ia8FrameWithAsset77I4OverlayPipelineB(Particle* arg0, CameraNode* arg1) {
+/**
+ * Draw the flames when using Flamethrower, Dragon Rage, Fire Spin, Rage, Bide, Self-Destruct, Fire Blast, Sky Attack,
+ * or Explosion
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_DrawFlameUse(Particle* arg0, CameraNode* arg1) {
     gSPDisplayList(gDisplayListHead++, D_82190548);
 
     BattleAnim_DrawAsset76Ia8FrameWithAsset77I4Overlay(arg0, arg1);
@@ -125,7 +134,11 @@ void BattleAnim_DrawAsset1FAnimatedI4WithAsset20DisplayList(Particle* arg0, Came
     gSPDisplayList(gDisplayListHead++, sBattleAnimAssetPointers[0x20]);
 }
 
-s32 BattleAnim_DrawAssetBcRgba16WithAssetBdDisplayList(Particle* arg0, UNUSED CameraNode* arg1) {
+/**
+ * Raws the rocks that spawn out of the tunnel when pokemon other than diglett and dugtrio use dig
+ * @unverified Name and comment from Stadium 1.
+ */
+s32 BattleAnim_DrawDigRocks(Particle* arg0, UNUSED CameraNode* arg1) {
     ParticleGfx_PushTransformMatrix(arg0->unk_2C, arg0->unk_94, arg0->unk_1C);
 
     gSPDisplayList(gDisplayListHead++, gDL_ItemIcon);
@@ -165,7 +178,11 @@ void BattleAnim_DrawAssets27And28LayeredI4QuadVariantB(Particle* arg0, UNUSED Ca
     ParticleGfx_DrawQuadVertices(D_821918C0);
 }
 
-void BattleAnim_DrawAsset29DualI4LayeredQuad(Particle* arg0, UNUSED CameraNode* arg1) {
+/**
+ * Draw the lightest mist for mist/smoke moves (Mist, Smokescreen, Haze, Smog, Poison Gas)
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_DrawMistLightest(Particle* arg0, UNUSED CameraNode* arg1) {
     ParticleGfx_Push2DTransform(arg0->unk_2C.x, arg0->unk_2C.y, arg0->unk_94.z, arg0->unk_1C);
 
     gSPDisplayList(gDisplayListHead++, D_821904C8);

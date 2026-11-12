@@ -17,7 +17,7 @@ s32 GbPak_MbcWrite(s32 arg0, void* arg1, u16 arg2, u16 arg3);
 
 s32 GbPak_DetectRam(s32 arg0, u8* arg1);
 s32 GbTower_ProbePak(s32 arg0, u8* arg1, u8* arg2);
-s32 GbTower_CheckPakRemoved(s32 arg0, u8 arg1);
+s32 GbTower_IsPakInserted(s32 arg0, u8 arg1);
 void GbTower_PowerOffAllPaks(void);
 s32 GbPak_IsCartOff(s32 arg0);
 s32 GbPak_IsCartOn(s32 arg0);
@@ -92,7 +92,12 @@ s32 GbTower_ProbePak(s32 arg0, u8* arg1, u8* arg2) {
     return sp28;
 }
 
-s32 GbTower_CheckPakRemoved(s32 arg0, u8 arg1) {
+/**
+ * Returns 1 if the pak has not latched a reset (OS_GBPAK_RSTB_DETECTION clear), i.e. the
+ * cartridge was not removed; powers the pak off when keep_powered == 0.
+ * @unverified Name and comment from Stadium 1.
+ */
+s32 GbTower_IsPakInserted(s32 arg0, u8 arg1) {
     u8 status;
     s32 temp_v1;
 

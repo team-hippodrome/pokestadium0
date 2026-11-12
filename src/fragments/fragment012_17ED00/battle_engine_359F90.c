@@ -63,7 +63,7 @@ extern s32 D_8219A520;
 void ComputeAllPokemonStats(BattleMon* arg0);
 void func_82110FB0(void);
 void func_82110FB8(void);
-void Battle_ExecuteMoveAnimation(void);
+void Battle_LoadMoveCache(void);
 s32 Battle_Effect_Metronome(void);
 void Battle_ApplyPoisonOrBurnDamage(void);
 void func_82111870(void);
@@ -538,7 +538,11 @@ void func_82110FB0(void) {
 void func_82110FB8(void) {
 }
 
-void Battle_ExecuteMoveAnimation(void) {
+/**
+ * Load all six cached move-data bytes for usedMove; no animation is executed here.
+ * @unverified Name and comment from Stadium 1.
+ */
+void Battle_LoadMoveCache(void) {
     sBattleUser->moveCache.lastMove = gMoveData[sBattleUser->usedMove - 1].unk_00;
     sBattleUser->moveCache.unk_01 = gMoveData[sBattleUser->usedMove - 1].unk_01;
     sBattleUser->moveCache.unk_02 = gMoveData[sBattleUser->usedMove - 1].unk_02;
@@ -718,7 +722,7 @@ s32 Battle_Effect_Metronome(void) {
         } while (move_pulled == 0 || move_pulled >= 0xA5);
     } while (move_pulled == METRONOME);
     sBattleUser->usedMove = move_pulled;
-    Battle_ExecuteMoveAnimation();
+    Battle_LoadMoveCache();
     return 1;
 }
 

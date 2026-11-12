@@ -902,10 +902,18 @@ s32 func_811174D8(void) {
     return 0;
 }
 
-void GbAudio_SetAlternateRendererEnabled(s32 arg0) {
+/**
+ * 1 while the GB Tower pause/options menu is open: output menu sounds instead of the GB APU mix.
+ * @unverified Name and comment from Stadium 1.
+ */
+void GbAudio_SetMenuSoundMode(s32 arg0) {
   D_81138B80 = arg0;
 }
 
-void GbAudio_SetAlternateStreamId(s32 arg0) {
+/**
+ * Starts menu sound `id` (index into sGbMenuSoundData) on the next GbAudio_RenderMenuSounds.
+ * @unverified Name and comment from Stadium 1.
+ */
+void GbAudio_PlayMenuSound(s32 arg0) {
   D_81138B84.id = arg0;
 }

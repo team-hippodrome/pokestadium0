@@ -742,7 +742,7 @@ void func_8210BA64(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     f32* model_row;
 
     animated_pokemon->animationState++;
-    water_height = TerrainGrid_SampleHeightAndSlope(owner->displayObject.position.x, owner->displayObject.position.z, &rotation_x);
+    water_height = SurfTerrainGrid_SampleHeightAndSlope(owner->displayObject.position.x, owner->displayObject.position.z, &rotation_x);
     model_row = D_FLT_8218935C[owner->displayObject.objectType];
     owner->displayObject.position.y = model_row[-2] + (water_height + 5.0f);
     owner->displayObject.rotation.x = (s16)rotation_x * 182;
