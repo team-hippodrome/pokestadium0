@@ -50,8 +50,8 @@ s32 Battle_CheckFaintAfterMove(void);
 
 void Battle_CheckAllBroughtFainted_PoisonBurn(ActivePokemon* arg0);
 void Battle_CheckAllBroughtFainted_Status(ActivePokemon* arg0);
-void Battle_CheckAllBroughtFainted_PP(ActivePokemon* arg0);
-void Battle_CheckAllBroughtFainted_Level(ActivePokemon* arg0);
+void Battle_CheckAllBroughtFainted_PendingHp(ActivePokemon* arg0);
+void Battle_CheckAllBroughtFainted_Hp(ActivePokemon* arg0);
 
 void BattleAnim_EffectEndNop(void) {
 }
@@ -716,9 +716,12 @@ void Battle_CheckAllBroughtFainted_Status(ActivePokemon* arg0) {
 }
 
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Like Battle_CheckAllBroughtFainted_Hp, but sums the active Pokemon's pendingHp (runtime
+ * +0x12). Battle_CheckFaintAfterMove calls it when both HP values are nonzero but the
+ * user's pendingHp is 0. Renamed from Battle_CheckAllBroughtFainted_PP: it reads HP, not PP.
+ * @unverified Renamed from the code; never ran in play.
  */
-void Battle_CheckAllBroughtFainted_PP(ActivePokemon* arg0) {
+void Battle_CheckAllBroughtFainted_PendingHp(ActivePokemon* arg0) {
     ActivePokemonState* ptr1 = &arg0->state;
     BattleMon* temp_v0;
     s32 i;
@@ -749,9 +752,13 @@ void Battle_CheckAllBroughtFainted_PP(ActivePokemon* arg0) {
 }
 
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Runs when a Pokemon's HP is 0 after a move. Sums the side's remaining HP: 0 ends the
+ * battle (state 0x12), otherwise the faint is handled.
+ * Seen in play (2026-11-12): ran for COM's Pinsir when 1P's Poison Sting knocked it out, and
+ * in the per-move sweep only for Explosion and Selfdestruct (the user fainting). Renamed from
+ * Battle_CheckAllBroughtFainted_Level: it reads the HP field, not the level.
  */
-void Battle_CheckAllBroughtFainted_Level(ActivePokemon* arg0) {
+void Battle_CheckAllBroughtFainted_Hp(ActivePokemon* arg0) {
     ActivePokemonState* ptr1 = &arg0->state;
     BattleMon* temp_v0;
     s32 i;
@@ -823,15 +830,15 @@ s32 Battle_CheckSideDefeatAfterResidualStatus(ActivePokemon* arg0) {
  */
 s32 Battle_CheckFaintAfterMove(void) {
     if (sBattleTarget->hp == 0) {
-        Battle_CheckAllBroughtFainted_Level(sActivePokemon[!sBattleScene.scene->actingSide]);
+        Battle_CheckAllBroughtFainted_Hp(sActivePokemon[!sBattleScene.scene->actingSide]);
     }
 
     if (sBattleUser->hp == 0) {
-        Battle_CheckAllBroughtFainted_Level(sActivePokemon[sBattleScene.scene->actingSide]);
+        Battle_CheckAllBroughtFainted_Hp(sActivePokemon[sBattleScene.scene->actingSide]);
     }
 
     if ((sBattleUser->hp != 0) && (sBattleTarget->hp != 0) && (sBattleUser->pendingHp == 0)) {
-        Battle_CheckAllBroughtFainted_PP(sActivePokemon[sBattleScene.scene->actingSide]);
+        Battle_CheckAllBroughtFainted_PendingHp(sActivePokemon[sBattleScene.scene->actingSide]);
         return 0;
     } else if ((sBattleUser->hp != 0) && (sBattleTarget->hp != 0) && (sBattleUser->pendingStatusCondition & 0x18) &&
                (sBattleUser->hpAfterPoisonBurn == 0)) {

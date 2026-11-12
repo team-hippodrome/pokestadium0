@@ -623,3 +623,8 @@ starters for Petal Dance, Razor Leaf, Spike Cannon, Swift, and the Hyper Beam
 and Ice Beam trail). Where the sweep and the comment disagree, the evidence
 line says how. For example, Bide does not use the flame under the Pokémon,
 and Disable does not use the lasso hit.
+* Faint checks: the four `Battle_CheckAllBroughtFainted_*` variants differ
+  only in which HP field of the active Pokémon they add up. The one that ran
+  when Pinsir was knocked out reads `hp`, so `_Level` is now `_Hp`. `_PP`
+  reads `pendingHp` and is now `_PendingHp`, though it still has its tag
+  because it never ran.
