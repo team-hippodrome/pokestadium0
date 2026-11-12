@@ -70,7 +70,7 @@ void func_8003A710(u8*);
 void func_80037D4C(s32, f32);
 void func_80037E84(s32, s32);
 void func_80037DF4(s32, s32);
-void func_8003FE58(s32, s32, s32);
+void Audio_PlayMoveSound(s32, s32, s32);
 M2C_UNK func_80037AC4(s32, M2C_UNK);                /* extern */
 extern u8 D_80077524;
 extern s32 D_800FD64C;

@@ -176,7 +176,7 @@ void func_8212A850(CameraNode* arg0, s32 arg1) {
             BattleMessage_ShowForSide(D_8219A520 + 0x88, sBattleScene.scene->actingSide);
             BattleScene_EnterStateRow((ActivePokemon*)D_8219A544, 4);
             func_8212A768((ActivePokemon*)D_8219A540, arg0, arg1);
-            func_8212239C((ActivePokemon*)D_8219A540, arg0);
+            BattleCamera_CaptureModelOrbit((ActivePokemon*)D_8219A540, arg0);
             ActivePokemon_CommitPendingStatus((ActivePokemon*)D_8219A540);
             func_82135098((ActivePokemon*)D_8219A540);
             func_821061A8((ActivePokemon*)D_8219A540);
@@ -282,7 +282,7 @@ void func_8212AD10(CameraNode* arg0, s32 arg1) {
             BattleMessage_ShowForSide(D_8219A520 + 0x148, sBattleScene.scene->actingSide);
             BattleScene_EnterStateRow((ActivePokemon*)D_8219A544, 4);
             func_8212A768((ActivePokemon*)D_8219A540, arg0, arg1);
-            func_8212239C((ActivePokemon*)D_8219A540, arg0);
+            BattleCamera_CaptureModelOrbit((ActivePokemon*)D_8219A540, arg0);
             ActivePokemon_CommitPendingStatus((ActivePokemon*)D_8219A540);
             func_821061A8((ActivePokemon*)D_8219A540);
             func_82135098((ActivePokemon*)D_8219A540);

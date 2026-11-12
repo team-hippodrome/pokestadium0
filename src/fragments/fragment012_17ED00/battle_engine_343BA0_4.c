@@ -506,7 +506,7 @@ loop:
     D_FLT_8219A718 *= arg1->facingDirection;
     func_8210BCF0(&D_FLT_8219A718, (Vec3f*)&D_FLT_8219A5B0, &sp40, &sp3E, &sp3C);
     func_8000EEBC((u8*)arg0 + 0xB4, (Vec3f*)((u8*)arg0 + 0xA8), sp40, sp3E, M2C_FIELD(arg1, u32*, 0x60C) * *(sp3Cp = &sp3C));
-    func_8212239C(arg1, arg0);
+    BattleCamera_CaptureModelOrbit(arg1, arg0);
 }
 
 void BattleScene_GetParticipantAimPoint(ActivePokemon*, f32*);
@@ -739,7 +739,7 @@ loop:
     D_FLT_8219A718 *= arg1->facingDirection;
     func_8210BCF0(&D_FLT_8219A718, (Vec3f*)&D_FLT_8219A5B0, &sp40, &sp3E, &sp3C);
     func_8000EEBC((u8*)arg0 + 0xB4, (Vec3f*)((u8*)arg0 + 0xA8), sp40, sp3E, M2C_FIELD(arg1, u32*, 0x60C) * *(sp3Cp = &sp3C));
-    func_8212239C(arg1, arg0);
+    BattleCamera_CaptureModelOrbit(arg1, arg0);
 }
 
 extern f32 D_FLT_82189350[][4];

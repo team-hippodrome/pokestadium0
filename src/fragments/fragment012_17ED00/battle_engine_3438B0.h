@@ -36,7 +36,7 @@ void func_82104C68(ActivePokemon*, s32);
 void func_8212A768(ActivePokemon*, CameraNode*, void*);
 void func_82124E80(void);
 void func_82135098(ActivePokemon*);
-void func_8212239C(ActivePokemon*, CameraNode*);
+void BattleCamera_CaptureModelOrbit(ActivePokemon*, CameraNode*);
 s32 func_82122DFC(CameraNode*, ActivePokemon*);
 void ActivePokemon_CommitPendingStatus(ActivePokemon*);
 void func_8212A4A4(s32);
@@ -71,7 +71,7 @@ extern u8* D_8218B320[];
 void func_8212C1C4(CameraNode* arg0);
 
 s32 func_8210C020(M2C_UNK, s32);                    /* extern */
-void func_82124984(s32, s32, s32);
+void BattleCamera_PlayShot(s32, s32, s32);
 extern s32 D_8219A568;
 void func_8212C398(s32 arg0);
 
@@ -125,7 +125,7 @@ void func_8210881C(ActivePokemon*);
 void func_82107408(ActivePokemon*);
 void func_82107160(ActivePokemon*);
 void func_82101B54(ActivePokemon*, s32);
-void func_8003FE58(s32, s32, s32);
+void Audio_PlayMoveSound(s32, s32, s32);
 void func_82125C34(CameraNode*);
 void func_8212D504(CameraNode* arg0);
 
@@ -213,7 +213,7 @@ void func_82130D48(ActivePokemon*);
 void func_8212562C(void);
 void BattleScene_PhaseWithdrawFainted(CameraNode* arg0);
 
-void func_8212239C(ActivePokemon* arg0, CameraNode* arg1);
+void BattleCamera_CaptureModelOrbit(ActivePokemon* arg0, CameraNode* arg1);
 void func_82122A7C(CameraNode* arg0, ActivePokemon* arg1);
 void func_821311A0(CameraNode* arg0);
 

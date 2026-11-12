@@ -503,7 +503,7 @@ void func_890059D0(s32* arg0) {
     }
 }
 
-void func_8002A8E0(s8*);
+void Window_DrawFrame(s8*);
 void Ui_DrawTexturedDivider(s32, s32, s32, void*);
 void Ui_DrawTexturedFrameDecal(s32, s32, s32, s32, void*);
 void func_8002E230(s8*, s32, s32, s32, s32);
@@ -518,7 +518,7 @@ void func_89005AE0(s8* arg0) {
     s32 mode;
 
     if (func_8002AE6C(arg0 + 4) == 0) {
-        func_8002A8E0(arg0 + 0x30);
+        Window_DrawFrame(arg0 + 0x30);
         gSPDisplayList(gDisplayListHead++, D_80060270);
         func_80029028(M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) - 0xC, 8, D_8900A5BC);
         func_80029028(M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) + 0xF4, M2C_FIELD(arg0, s32*, 0xC) - 0xC, 6, D_8900A5BC);

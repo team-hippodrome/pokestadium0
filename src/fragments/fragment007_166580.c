@@ -509,7 +509,7 @@ void func_80029028(s32, s32, s32, s32, Color82001CCC);
 void Ui_DrawTexturedDivider(s32, s32, s32, u8*);
 void Ui_FillRectPrimEnvColor(s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
 s32 func_8002AE6C(Screen82000C5C*);
-void func_8002AF04(char*, s32);
+void Window_DrawLabeled(char*, s32);
 s32 func_8002D3D0(Mon82000C5C*);
 s32 func_8002D430(Mon82000C5C*, s32);
 /**
@@ -574,8 +574,8 @@ void FreeBattle_DrawMonStatusWindow(Screen82000C5C* arg0) {
             func_8001B884(D_82009040[i].iconX + x, D_82009040[i].y + y, 0x14, 0x14, (u8*)D_82009040[i].icon, 0x14, 0x200000);
         }
         gSPDisplayList(gDisplayListHead++, D_80060398);
-        func_8002AF04(arg0->button1, (arg0->selection == 0) ? 2 : 0);
-        func_8002AF04(arg0->button2, (arg0->selection == 1) ? 2 : 0);
+        Window_DrawLabeled(arg0->button1, (arg0->selection == 0) ? 2 : 0);
+        Window_DrawLabeled(arg0->button2, (arg0->selection == 1) ? 2 : 0);
         if (D_8200AC4C == 0) {
             D_8200AC4C = 1;
             func_80019008(D_8200AC48, arg0->mon, 0x416D);
@@ -946,7 +946,7 @@ extern u8 D_04010918[];
 extern Gfx D_80073450[];
 u8 func_80022BAC(s32);
 void Font_SetColorForFlags(s32);
-void func_8002A3F8(Img82001E20*, s32, s32);
+void Ui_DrawImageInStrips(Img82001E20*, s32, s32);
 void func_8002BAB8(s32, s32, s32, s32);
 void func_8002BC58(s32, s32, s32, s32);
 void func_8001BCB4(s32, s32, s32, s32, void*, s32, s32);
@@ -963,7 +963,7 @@ void FreeBattle_DrawRentalNameList(s32 arg0, s32 arg1, s32 arg2, Slot82001E20* a
         if (arg3->kind == 0x20) {
             func_8002BC58(arg0 + 5, arg1 + 4, arg3->species, func_80022BAC(arg3->species));
         } else if (arg3->kind == 0x10) {
-            func_8002A3F8(&D_82008F64, arg0 + 4, arg1 + 4);
+            Ui_DrawImageInStrips(&D_82008F64, arg0 + 4, arg1 + 4);
             func_8001AB6C();
             Font_SetColorForFlags(arg2);
             func_8001A384(8, 0);
@@ -973,7 +973,7 @@ void FreeBattle_DrawRentalNameList(s32 arg0, s32 arg1, s32 arg2, Slot82001E20* a
     } else if (arg3->flags & 4) {
         img.width = img.height = img.stride = 0x40;
         img.pixels = D_8200AD08[arg3->index];
-        func_8002A3F8(&img, arg0 + 0x16, arg1 + 2);
+        Ui_DrawImageInStrips(&img, arg0 + 0x16, arg1 + 2);
     }
     if (arg3->flags & 2) {
         func_8001AB6C();

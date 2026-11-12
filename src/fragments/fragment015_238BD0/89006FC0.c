@@ -326,7 +326,7 @@ void func_80029028(s32, s32, s32, s32, Color_RGBA8);
 void Ui_DrawTexturedDivider(s32, s32, s32, u8*);
 void Ui_FillRectPrimEnvColor(s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
 s32 func_8002AE6C();
-void func_8002AF04(char*, s32);
+void Window_DrawLabeled(char*, s32);
 s32 func_8002D3D0(Mon89007678*);
 s32 func_8002D430(Mon89007678*, s32);
 /**
@@ -392,8 +392,8 @@ void PcBox_DrawMonStatusWindow(Screen89007678* arg0) {
             func_8001A384(8, 0);
             func_8001A944(arg0->x + 0xE, arg0->y + 0x102, arg0->title);
             func_8001ABBC();
-            func_8002AF04(arg0->button1, (arg0->selection == 0) ? 2 : 0);
-            func_8002AF04(arg0->button2, (arg0->selection == 1) ? 2 : 0);
+            Window_DrawLabeled(arg0->button1, (arg0->selection == 0) ? 2 : 0);
+            Window_DrawLabeled(arg0->button2, (arg0->selection == 1) ? 2 : 0);
         }
         if (arg0->animLoaded == 0) {
             arg0->animLoaded = 1;
@@ -556,7 +556,7 @@ s32 func_890082FC(s32 arg0) {
 extern Gfx D_80060270[];
 void func_80029028(s32, s32, s32, s32, Color_RGBA8);
 void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
-void func_8002A3F8(void*, s32, s32);
+void Ui_DrawImageInStrips(void*, s32, s32);
 extern Color_RGBA8 D_8900A8F8;
 extern Color_RGBA8 D_8900A900;
 extern Color_RGBA8 D_8900A8DC[];
@@ -598,7 +598,7 @@ void PcBox_DrawBoxName(s32 arg0, s32 arg1, u8** arg2, s32 arg3, s32 arg4) {
     func_8001A944(arg0 + 8, arg1 + 4, D_89018F08, arg3 + 1);
     func_8001ABBC();
     if (M2C_FIELD(*arg2, s32*, 0x960) > 0) {
-        func_8002A3F8(D_80073614, arg0 + 0x78, arg1 + 4);
+        Ui_DrawImageInStrips(D_80073614, arg0 + 0x78, arg1 + 4);
     }
     func_8002B940(arg0 + 0x98, arg1 + 8, M2C_FIELD(*arg2, s32*, 0x960), 2);
     func_8002B940(arg0 + 0xB3, arg1 + 8, 0x1E, 2);
@@ -643,7 +643,7 @@ void PcBox_DrawBoxCount(s32 arg0, s32 arg1, u8** arg2, s32 arg3, s32 arg4) {
     func_8001A944(arg0 + 0xB0, arg1 + 0x14, D_89018F20, M2C_FIELD(*arg2, s32*, 0x960), 0x1E);
     func_8001ABBC();
     if (M2C_FIELD(*arg2, s32*, 0x960) > 0) {
-        func_8002A3F8(D_80073634, arg0 + 0x8C, arg1 + 0x10);
+        Ui_DrawImageInStrips(D_80073634, arg0 + 0x8C, arg1 + 0x10);
     }
 }
 
@@ -769,7 +769,7 @@ void func_89008EF0(s8* arg0) {
     }
 }
 
-void func_8002A8E0(s8*);
+void Window_DrawFrame(s8*);
 void Ui_DrawTexturedDivider(s32, s32, s32, u8*);
 void Ui_DrawTexturedFrameDecal(s32, s32, s32, s32, u8*);
 void func_8002B054(s8*, s32);
@@ -787,7 +787,7 @@ void func_89008F4C(s8* arg0) {
     if (func_8002AE6C(arg0 + 4) != 0) {
         return;
     }
-    func_8002A8E0(arg0 + 0x30);
+    Window_DrawFrame(arg0 + 0x30);
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) - 0xC, 0xA, *(Color_RGBA8*)&D_8900A5BC);
     func_80029028(M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) + 0x11C, M2C_FIELD(arg0, s32*, 0xC) - 0xC, 0xA, *(Color_RGBA8*)&D_8900A5BC);

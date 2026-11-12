@@ -465,7 +465,7 @@ void func_8A100F20(s32 arg0, s32 arg1) {
 
 s32 Ui_DrawTexturedDivider(s32, s32, s32, void*);
 s32 func_80029864(s32, s32, s32, void*);
-s32 func_8002A3F8(void*, s32, s32);
+s32 Ui_DrawImageInStrips(void*, s32, s32);
 s32 func_8002AB84();
 void func_8A100A24(s32, s32, s32, u8*);
 void Pokedex_DrawEntryInfo(s32, s32);
@@ -484,7 +484,7 @@ extern u8 D_8A11FC18;
  * Ui_DrawTexturedDivider, and the word at offset 0x28 is a mode value. When the mode
  * is not 2 and func_8002AB84() returns 0, it runs Ui_DrawTexturedDivider,
  * func_80029864, Pokedex_DrawEntryInfo and func_8A100F20 at those offsets. When the
- * mode is 1 or 2 it also calls func_8002A3F8 on D_8A11FC18 with (0x32, 0x5A)
+ * mode is 1 or 2 it also calls Ui_DrawImageInStrips on D_8A11FC18 with (0x32, 0x5A)
  * and then func_8A100A24(0x32, 0x5A, v, arg1), where v is 0xFF if arg2 >= 2
  * and 0x64 otherwise. What the individual calls draw is not established here;
  * the field meanings are inferred from the offsets only.
@@ -500,7 +500,7 @@ void func_8A101020(void* arg0, s32 arg1, s32 arg2) {
     }
     temp_v0 = M2C_FIELD(arg0, s32*, 0x28);
     if ((temp_v0 == 1) || (temp_v0 == 2)) {
-        func_8002A3F8(&D_8A11FC18, 0x32, 0x5A);
+        Ui_DrawImageInStrips(&D_8A11FC18, 0x32, 0x5A);
         func_8A100A24(0x32, 0x5A, (arg2 >= 2) ? 0xFF : 0x64, arg1);
     }
 }

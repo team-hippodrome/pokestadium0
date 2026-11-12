@@ -460,7 +460,11 @@ typedef struct Img8002A3F8 {
 extern Gfx D_80073408[];
 extern Gfx D_80073438[];
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
-void func_8002A3F8(Img8002A3F8 *arg0, s32 x, s32 y) {
+/**
+ * Draws an RGBA16 image at (x, y) in horizontal strips that fit the 4 KB texture memory.
+ * @unverified Name and comment guessed from the code.
+ */
+void Ui_DrawImageInStrips(Img8002A3F8 *arg0, s32 x, s32 y) {
     s32 stride;
     s32 rows;
     s32 max_rows;
@@ -534,7 +538,11 @@ extern Gfx D_80073480[];
 extern u8 D_800735C4[];
 extern u8 D_800735DC[];
 
-void func_8002A8E0(s32* arg0) {
+/**
+ * Draws a window's frame and fill from its rect, flags and color; width and height are at least 16.
+ * @unverified Name and comment guessed from the code.
+ */
+void Window_DrawFrame(s32* arg0) {
     UNUSED s32 pad1; // FAKE: unused locals that only pad the stack frame
     UNUSED s32 pad2; // FAKE
     UNUSED s32 pad3; // FAKE
@@ -734,7 +742,11 @@ void Window_InitLabeled(s8* arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 arg4
 extern Color_RGBA8 D_80073520;
 void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
 void Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
-void func_8002AF04(s8* arg0, s32 arg1) {
+/**
+ * Draws a labeled window: frame, highlight or rounded border from the flags, then its label in the flag color.
+ * @unverified Name and comment guessed from the code.
+ */
+void Window_DrawLabeled(s8* arg0, s32 arg1) {
     func_8002A32C(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 8), M2C_FIELD(arg0, s32*, 0xC));
     if ((M2C_FIELD(arg0, s32*, 0x10) & 8) || (arg1 & 0x10)) {
         Ui_FillRectHighlighted(M2C_FIELD(arg0, s32*, 0) + 1, M2C_FIELD(arg0, s32*, 4) + 1, M2C_FIELD(arg0, s32*, 8) - 2, M2C_FIELD(arg0, s32*, 0xC) - 2, M2C_FIELD(arg0, Color_RGBA8*, 0x20));
@@ -1081,7 +1093,7 @@ void func_8002BC58(s32 x, s32 y, s32 arg2, s32 game) {
     Img8002A3F8 img = D_80073674;
     Color_RGBA8* color = &D_80073684[GbSave_GameToCategoryIndex(game)];
 
-    func_8002A3F8(&img, x, y);
+    Ui_DrawImageInStrips(&img, x, y);
     gSPDisplayList(gDisplayListHead++, D_80073450);
     gDPSetCombineMode(gDisplayListHead++, G_CC_MODULATEIDECALA_PRIM, G_CC_MODULATEIDECALA_PRIM);
     gDPSetPrimColor(gDisplayListHead++, 0, 0, color->r, color->g, color->b, color->a);
@@ -1150,7 +1162,7 @@ void func_8002C1B4(s32 x, s32 y, s32 str, s32 flags) {
     gDPLoadTextureBlock(gDisplayListHead++, D_04010FD8, G_IM_FMT_RGBA, G_IM_SIZ_16b, 48, 28, 0, G_TX_CLAMP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
     gSPTextureRectangle(gDisplayListHead++, (x + width + 8) << 2, y << 2, (x + width + 0x38) << 2, (y + 0x1C) << 2, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
     if (flags & 0x2000) {
-        func_8002A3F8(&D_800735F4, x + 8, y + 4);
+        Ui_DrawImageInStrips(&D_800735F4, x + 8, y + 4);
     }
     func_8001AB6C();
     func_8001A384(8, 0);
@@ -1325,7 +1337,7 @@ s32 func_8002CD7C(s8 *arg0) {
 }
 
 extern u8 D_80073554[];
-void func_8002A8E0(s32* arg0);
+void Window_DrawFrame(s32* arg0);
 
 s32 func_8002CE5C(s32* arg0) {
     s32 t = arg0[8]++;
@@ -1334,7 +1346,7 @@ s32 func_8002CE5C(s32* arg0) {
     if ((arg0[9] == 0) && (t >= 4)) {
         return 1;
     }
-    func_8002A8E0(arg0);
+    Window_DrawFrame(arg0);
     Ui_DrawTexturedFrameDecal(arg0[0], arg0[1], arg0[2], arg0[3], D_80073554);
     return 0;
 }

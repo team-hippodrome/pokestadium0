@@ -114,7 +114,11 @@ void func_82124770();
 void func_82124790();
 void func_821247B0();
 void func_821247D0();
-void func_82124984(void* arg0, void* arg1, s32 arg2) {
+/**
+ * Runs camera shot `arg2` (0-4, default 0) for Pokemon `arg0` on camera `arg1`.
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleCamera_PlayShot(void* arg0, void* arg1, s32 arg2) {
     switch (arg2) {
         case 0:
             func_82124750(arg1, arg0);

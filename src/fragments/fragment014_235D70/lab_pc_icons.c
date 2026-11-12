@@ -106,7 +106,7 @@ extern char D_88002308[];
 extern char D_88002328[];
 void Ui_DrawTexturedDivider(s32, s32, s32, u8 *);
 void func_80029028(s32, s32, s32, s32, Color_RGBA8);
-void func_8002A8E0(void*);
+void Window_DrawFrame(void*);
 void Menu_DrawItems(s8 *, s32, s32, s32, s32);
 /**
  * Draws トーナメントのつづきをする？ (Continue the tournament?).
@@ -114,7 +114,7 @@ void Menu_DrawItems(s8 *, s32, s32, s32, s32);
  */
 void MainMenu_DrawContinueTournamentPrompt(s8* arg0) {
     if (func_8002AE6C() == 0) {
-        func_8002A8E0(arg0 + 0x2C);
+        Window_DrawFrame(arg0 + 0x2C);
         Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32 *, 0), M2C_FIELD(arg0, s32 *, 4) + 0x8D, M2C_FIELD(arg0, s32 *, 8), D_8007356C);
         gSPDisplayList(gDisplayListHead++, D_80060270);
         func_80029028(M2C_FIELD(arg0, s32 *, 0) + 6, M2C_FIELD(arg0, s32 *, 4) + 0x94, M2C_FIELD(arg0, s32 *, 8) - 0xC, 0x78, D_88001FE8);
@@ -412,7 +412,7 @@ s32 func_8002AE6C();
 extern u8 D_800734A8[4];
 extern u8 D_8007356C[];
 void Ui_DrawTexturedDivider(s32, s32, s32, u8 *);
-void func_8002AF04(s8 *, s32);
+void Window_DrawLabeled(s8 *, s32);
 void func_880005E8(s32, s32, s32, s32, s32, u8*, s32);
 void func_88001128(s8 *arg0) {
     s32* p;
@@ -426,8 +426,8 @@ void func_88001128(s8 *arg0) {
         Font_Printf(M2C_FIELD(arg0, s32 *, 0) + 0x8A, M2C_FIELD(arg0, s32 *, 4) + 0xA, M2C_FIELD(arg0, char **, 0x34));
         Font_Printf(M2C_FIELD(arg0, s32 *, 0) + 0xBC, M2C_FIELD(arg0, s32 *, 4) + 0x68, M2C_FIELD(arg0, char **, 0x38));
         Font_EndTexturedTextRendering();
-        func_8002AF04(arg0 + 0x3C, (M2C_FIELD(arg0, s32 *, 0xB8) == 0) ? 2 : 0);
-        func_8002AF04(arg0 + 0x78, (M2C_FIELD(arg0, s32 *, 0xB8) == 1) ? 2 : 0);
+        Window_DrawLabeled(arg0 + 0x3C, (M2C_FIELD(arg0, s32 *, 0xB8) == 0) ? 2 : 0);
+        Window_DrawLabeled(arg0 + 0x78, (M2C_FIELD(arg0, s32 *, 0xB8) == 1) ? 2 : 0);
         p = M2C_FIELD(arg0, s32 **, 0xC0);
         func_880005E8(M2C_FIELD(arg0, s32 *, 0) + 0xA, M2C_FIELD(arg0, s32 *, 4) + 0xA, p[2], p[3], p[4], (u8*)p[5], 0xFF);
     }

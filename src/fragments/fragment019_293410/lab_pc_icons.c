@@ -395,7 +395,7 @@ extern Color_RGBA8 D_8A203378;
 extern Color_RGBA8 D_8A20337C;
 extern char D_8A21D980[];
 extern char D_8A21D990[];
-void func_8002A3F8(s32, s32, s32);
+void Ui_DrawImageInStrips(s32, s32, s32);
 
 s32 func_8002D430(u8*, s32);
 u32 func_800566BC(const char*);
@@ -421,7 +421,7 @@ void func_8A2010C8(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
             Ui_DrawRoundedFrame(D_8A203384[i].boxX + arg0, D_8A203384[i].boxY + arg1, 0xD0, 0x30, D_80073520);
             hl = 2;
         }
-        func_8002A3F8(D_8A203384[i].icon, D_8A203384[i].iconX + arg0, D_8A203384[i].iconY + arg1);
+        Ui_DrawImageInStrips(D_8A203384[i].icon, D_8A203384[i].iconX + arg0, D_8A203384[i].iconY + arg1);
         move = func_8002D430((u8*)arg2, i);
         func_8001AB6C();
         if (move == -2) {

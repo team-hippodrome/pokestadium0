@@ -345,7 +345,7 @@ void func_89105504(s32 arg0) {
     }
 }
 
-void func_8002A3F8(void*, s32, s32);
+void Ui_DrawImageInStrips(void*, s32, s32);
 void Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 extern u8 D_80073614[];
@@ -367,9 +367,9 @@ void PcSort_DrawBoxName(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     s32 sel;
 
     if (arg4 & 8) {
-        func_8002A3F8(D_80073614, arg0 + 8, arg1 + 4);
+        Ui_DrawImageInStrips(D_80073614, arg0 + 8, arg1 + 4);
     } else {
-        func_8002A3F8(D_80073624, arg0 + 8, arg1 + 4);
+        Ui_DrawImageInStrips(D_80073624, arg0 + 8, arg1 + 4);
     }
     sel = arg4 & 2;
     if (sel) {
@@ -406,13 +406,13 @@ void func_8910576C(void* arg0, s32 arg1, s32 arg2, void* arg3, s32 arg4, Rgba891
 }
 
 M2C_UNK Ui_DrawTexturedFrameDecal(s32, s32, s32, s32, M2C_UNK *); /* extern */
-M2C_UNK func_8002A8E0(s8 *);                      /* extern */
+M2C_UNK Window_DrawFrame(s8 *);                      /* extern */
 M2C_UNK func_8002DAD8(s8 *, s32, s32, s32, s8 *); /* extern */
 extern M2C_UNK D_80073554;
 
 void func_891057FC(s8 *arg0, s32 arg1) {
     Ui_DrawTexturedFrameDecal(M2C_FIELD(arg0, s32 *, 0) - 6, M2C_FIELD(arg0, s32 *, 4) - 6, M2C_FIELD(arg0, s32 *, 8) + 0xC, M2C_FIELD(arg0, s32 *, 0xC) + 0xC, &D_80073554);
-    func_8002A8E0(arg0);
+    Window_DrawFrame(arg0);
     func_8002DAD8(arg0 + 0x20, M2C_FIELD(arg0, s32 *, 0), M2C_FIELD(arg0, s32 *, 4) + 4, arg1 | 0xFFED, arg0);
 }
 
@@ -524,7 +524,7 @@ void BattleInfoWidget_ApplyEntrySelection(unk_func_8830867C_034* arg0, s32 arg1)
     M2C_FIELD(ptr2, s32*, 0xC) = (M2C_FIELD(arg0, u16**, 0x74)[arg1] & 8) != 0;
 }
 
-void func_8002A3F8(void*, s32, s32);
+void Ui_DrawImageInStrips(void*, s32, s32);
 void Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
 extern u8 D_80073614[];
 extern u8 D_80073624[];
@@ -537,9 +537,9 @@ void func_89105AD4(s32 arg0, s32 arg1, char** arg2, s32 arg3, s32 arg4) {
     s32 sel;
 
     if (arg4 & 8) {
-        func_8002A3F8(D_80073614, arg0 + 8, arg1 + 4);
+        Ui_DrawImageInStrips(D_80073614, arg0 + 8, arg1 + 4);
     } else {
-        func_8002A3F8(D_80073624, arg0 + 8, arg1 + 4);
+        Ui_DrawImageInStrips(D_80073624, arg0 + 8, arg1 + 4);
     }
     sel = arg4 & 2;
     if (sel) {
@@ -601,7 +601,7 @@ void func_89105C54(s8* arg0, s32 arg1, s32 arg2, s8* arg3, Rgba8910576C arg4) {
 
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 void Ui_DrawTexturedDivider(s32, s32, s32, void*);
-void func_8002AF04(s8 *, s32);
+void Window_DrawLabeled(s8 *, s32);
 extern u8 D_8007356C[];
 extern Color_RGBA8 D_800734A8[];
 extern char D_8910E02C[];
@@ -614,8 +614,8 @@ void func_89105E70(s8* arg0, s32 arg1) {
     s32 sp34 = 0;
 
     if (func_8002AE6C(arg0 + 4) == 0) {
-        func_8002A8E0(arg0 + 0x30);
-        func_8002A8E0(arg0 + 0x50);
+        Window_DrawFrame(arg0 + 0x30);
+        Window_DrawFrame(arg0 + 0x50);
         Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 8) + 0x45, M2C_FIELD(arg0, s32*, 0xC), D_8007356C);
         Font_BeginTranslucentTextRendering();
         Gfx_SetEnvColor(D_800734A8[0].r, D_800734A8[0].g, D_800734A8[0].b, D_800734A8[0].a);
@@ -636,7 +636,7 @@ void func_89105E70(s8* arg0, s32 arg1) {
             }
         }
         func_8002DAD8(arg0 + 0x70, M2C_FIELD(arg0, s32*, 0x50), M2C_FIELD(arg0, s32*, 0x54) + 4, sp38, arg0);
-        func_8002AF04(arg0 + 0x94, sp34);
+        Window_DrawLabeled(arg0 + 0x94, sp34);
         if (M2C_FIELD(arg0, s32*, 0xD4) == 1) {
             func_891057FC(arg0 + 0xDC, (M2C_FIELD(arg0, s32*, 0) == 1) ? 2 : 0);
         } else if (M2C_FIELD(arg0, s32*, 0xD4) == 2) {
@@ -937,7 +937,7 @@ void func_89106864(s8* arg0, s32 x, s32 y, s32 flags) {
     func_8001ABBC();
 }
 
-void func_8002AF04(s8 *, s32);
+void Window_DrawLabeled(s8 *, s32);
 void func_89106864(s8 *, s32, s32, s32);
 extern char D_8910E094[];
 /**
@@ -953,8 +953,8 @@ void PcSort_DrawEmptyLabel(s8 *arg0) {
         func_8001ABBC();
         func_89106864(arg0 + 0xA4, M2C_FIELD(arg0, s32 *, 0) + 0xE, M2C_FIELD(arg0, s32 *, 4) + 0x10, (M2C_FIELD(arg0, s32 *, 0xE4) == 0) ? 2 : 0);
         func_89106864(arg0 + 0xB8, M2C_FIELD(arg0, s32 *, 0) + 0x7A, M2C_FIELD(arg0, s32 *, 4) + 0x10, (M2C_FIELD(arg0, s32 *, 0xE4) == 1) ? 2 : 0);
-        func_8002AF04(arg0 + 0x68, (M2C_FIELD(arg0, s32 *, 0xE4) == 2 && M2C_FIELD(arg0, s32 *, 0xD0) == 0) ? 2 : 0);
-        func_8002AF04(arg0 + 0x2C, (M2C_FIELD(arg0, s32 *, 0xE4) == 2 && M2C_FIELD(arg0, s32 *, 0xD0) == 1) ? 2 : 0);
+        Window_DrawLabeled(arg0 + 0x68, (M2C_FIELD(arg0, s32 *, 0xE4) == 2 && M2C_FIELD(arg0, s32 *, 0xD0) == 0) ? 2 : 0);
+        Window_DrawLabeled(arg0 + 0x2C, (M2C_FIELD(arg0, s32 *, 0xE4) == 2 && M2C_FIELD(arg0, s32 *, 0xD0) == 1) ? 2 : 0);
     }
 }
 
@@ -1224,11 +1224,11 @@ void func_891074CC(Ctx891074CC* arg0) {
     if (func_8002AE6C() == 0) {
         hl = (arg0->mode == 0) ? 2 : 0x10;
         for (i = 0; i < 2; i++) {
-            func_8002AF04(arg0->buttons[i], (i == arg0->cursor) ? hl : 0);
+            Window_DrawLabeled(arg0->buttons[i], (i == arg0->cursor) ? hl : 0);
         }
         hl = (arg0->mode == 0) ? 2 : 0;
-        func_8002AF04(arg0->unk0E8, (arg0->cursor == 2) ? hl : 0);
-        func_8002AF04(arg0->unk0AC, (arg0->cursor == 3) ? hl : 0);
+        Window_DrawLabeled(arg0->unk0E8, (arg0->cursor == 2) ? hl : 0);
+        Window_DrawLabeled(arg0->unk0AC, (arg0->cursor == 3) ? hl : 0);
         Ui_DrawTexturedFrameDecal(arg0->x + 0x96, arg0->y + 0xE, 0xB2, 0x104, D_800735C4);
         mask = 0xFFED;
         if (arg0->mode == 1) {
@@ -1458,11 +1458,11 @@ void func_89107D7C(Ctx89107D7C* arg0) {
     if (func_8002AE6C() == 0) {
         hl = (arg0->mode == 0) ? 2 : 0x10;
         for (i = 0; i < 4; i++) {
-            func_8002AF04(arg0->buttons[i], (i == arg0->cursor) ? hl : 0);
+            Window_DrawLabeled(arg0->buttons[i], (i == arg0->cursor) ? hl : 0);
         }
         hl = (arg0->mode == 0) ? 2 : 0;
-        func_8002AF04(arg0->unk168, (arg0->cursor == 4) ? hl : 0);
-        func_8002AF04(arg0->unk12C, (arg0->cursor == 5) ? hl : 0);
+        Window_DrawLabeled(arg0->unk168, (arg0->cursor == 4) ? hl : 0);
+        Window_DrawLabeled(arg0->unk12C, (arg0->cursor == 5) ? hl : 0);
         Ui_DrawTexturedFrameDecal(arg0->x + 0xAE, arg0->y + 0xE, 0xD8, 0x104, D_800735C4);
         mask = 0xFFED;
         if (arg0->mode == 1) {
@@ -1710,7 +1710,7 @@ void PcSort_DrawUseItemPrompt(s8* arg0) {
     char buf[0x70];
 
     if (func_8002AB84() == 0) {
-        func_8002A8E0(arg0 + 0x2C);
+        Window_DrawFrame(arg0 + 0x2C);
         Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 0x30) - 7, M2C_FIELD(arg0, s32*, 8), D_8007356C);
         flags = 0xFFED;
         flags |= (M2C_FIELD(arg0, s32*, 0x1B0) == 0) ? 2 : 0x10;

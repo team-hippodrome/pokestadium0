@@ -74,7 +74,7 @@ extern char** sBattleControllerDisconnectedMessage;
 
 #include "m2c_macros.h"
 
-void func_8003FE58(u8, s32, s32);
+void Audio_PlayMoveSound(u8, s32, s32);
 
 void BattleScene_ClearStateTickCallbacks(void);
 void BattleScene_QueueRowEffectList3(ActivePokemon* actor, s32 effect_entry);
@@ -489,17 +489,17 @@ void func_8210278C(ActivePokemon* active_pokemon) {
             if (sBattleScene.scene->hitReactionKind == 1) {
                 if (--D_8219A574 < 0) {
                     if (sBattleMoveFailed != 0) {
-                        func_8003FE58(runtime->usedMove, active_pokemon->displayObject.objectType, 2);
+                        Audio_PlayMoveSound(runtime->usedMove, active_pokemon->displayObject.objectType, 2);
                     } else {
-                        func_8003FE58(runtime->usedMove, active_pokemon->displayObject.objectType, 0);
+                        Audio_PlayMoveSound(runtime->usedMove, active_pokemon->displayObject.objectType, 0);
                     }
                 } else {
-                    func_8003FE58(runtime->usedMove, active_pokemon->displayObject.objectType, 3);
+                    Audio_PlayMoveSound(runtime->usedMove, active_pokemon->displayObject.objectType, 3);
                 }
             } else if (sBattleMoveFailed != 0) {
-                func_8003FE58(runtime->usedMove, active_pokemon->displayObject.objectType, 2);
+                Audio_PlayMoveSound(runtime->usedMove, active_pokemon->displayObject.objectType, 2);
             } else {
-                func_8003FE58(runtime->usedMove, active_pokemon->displayObject.objectType, 0);
+                Audio_PlayMoveSound(runtime->usedMove, active_pokemon->displayObject.objectType, 0);
             }
             sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
         }
@@ -580,7 +580,7 @@ void BattleScene_TickRow21PlaySpeciesSound(ActivePokemon* active_pokemon) {
 
     if ((M2C_FIELD(cue, u8*, 4) + 1) == M2C_FIELD(active_pokemon, s32*, 0x620)) {
         if (func_82101F84((s8*)active_pokemon) == 0) {
-            func_8003FE58(1, active_pokemon->displayObject.objectType, 0);
+            Audio_PlayMoveSound(1, active_pokemon->displayObject.objectType, 0);
             sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
         }
     }
@@ -652,17 +652,17 @@ void func_82102E94(ActivePokemon* active_pokemon) {
             if (sBattleScene.scene->hitReactionKind == 1) {
                 if (--D_8219A574 < 0) {
                     if (sBattleMoveFailed != 0) {
-                        func_8003FE58(runtime->usedMove, active_pokemon->displayObject.objectType, 2);
+                        Audio_PlayMoveSound(runtime->usedMove, active_pokemon->displayObject.objectType, 2);
                     } else {
-                        func_8003FE58(runtime->usedMove, active_pokemon->displayObject.objectType, 0);
+                        Audio_PlayMoveSound(runtime->usedMove, active_pokemon->displayObject.objectType, 0);
                     }
                 } else {
-                    func_8003FE58(runtime->usedMove, active_pokemon->displayObject.objectType, 3);
+                    Audio_PlayMoveSound(runtime->usedMove, active_pokemon->displayObject.objectType, 3);
                 }
             } else if (sBattleMoveFailed != 0) {
-                func_8003FE58(runtime->usedMove, active_pokemon->displayObject.objectType, 2);
+                Audio_PlayMoveSound(runtime->usedMove, active_pokemon->displayObject.objectType, 2);
             } else {
-                func_8003FE58(runtime->usedMove, active_pokemon->displayObject.objectType, 0);
+                Audio_PlayMoveSound(runtime->usedMove, active_pokemon->displayObject.objectType, 0);
             }
             sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
         }
@@ -738,9 +738,9 @@ void func_821032B0(ActivePokemon* active_pokemon) {
     if (cue->endFrame + 1 == sActivePokemon[other]->animationTimer) {
         if (func_82101F84((s8*)active_pokemon) == 0) {
             if (D_82199FCC == 1) {
-                func_8003FE58(runtime->usedMove, sActivePokemon[other]->displayObject.objectType, 1);
+                Audio_PlayMoveSound(runtime->usedMove, sActivePokemon[other]->displayObject.objectType, 1);
             } else {
-                func_8003FE58(runtime->usedMove, sActivePokemon[other]->displayObject.objectType, 5);
+                Audio_PlayMoveSound(runtime->usedMove, sActivePokemon[other]->displayObject.objectType, 5);
             }
             sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
         }
@@ -837,11 +837,11 @@ void func_821036F4(ActivePokemon *active_pokemon)
       species = active_pokemon->displayObject.objectType;
       if (species >= 152)
       {
-        func_8003F96C(state->model, 3);
+        Audio_PlayCry(state->model, 3);
       }
       else
       {
-        func_8003F96C(species ^ 0, 3); // FAKE: no-op ^ 0
+        Audio_PlayCry(species ^ 0, 3); // FAKE: no-op ^ 0
       }
       if (state->flags & 0x200)
       {
@@ -867,9 +867,9 @@ void func_8210384C(ActivePokemon* active_pokemon) {
         if (BattleAnim_IsAssetLoadBusy(active_pokemon) == 0) {
             species = active_pokemon->displayObject.objectType;
             if (species >= 152) {
-                func_8003F96C(state->model, 4);
+                Audio_PlayCry(state->model, 4);
             } else {
-                func_8003F96C(species ^ 0, 4); // FAKE
+                Audio_PlayCry(species ^ 0, 4); // FAKE
             }
             if (state->flags & 0x200) {
                 func_800414B0(BattleScene_GetParticipantSideIndex(active_pokemon), 0, active_pokemon->displayObject.objectType, 0x1B);
@@ -994,7 +994,7 @@ void BattleScene_TickRow8PlayMoveEffectScriptB(ActivePokemon* active_pokemon) {
 
         sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
 
-        func_8003FE58(runtime->usedMove, species_ob1 + 1, 4);
+        Audio_PlayMoveSound(runtime->usedMove, species_ob1 + 1, 4);
     }
 }
 
@@ -1043,7 +1043,7 @@ void BattleScene_EnterRow9QueueEffectList6(ActivePokemon* active_pokemon) {
  * Move-animation tick callback (compare func_821032B0, which has an extra branch on
  * D_82199FCC). Looks up the used move's presentation cue for the opposing side; when the
  * opponent's animationTimer reaches cue->endFrame + 1 and func_82101F84 reports nothing
- * blocking, plays move sound/effect func_8003FE58(usedMove, objectType, 5) and replaces the
+ * blocking, plays move sound/effect Audio_PlayMoveSound(usedMove, objectType, 5) and replaces the
  * current tick-slot callback with the sentinel (unregisters itself).
  */
 void func_82103EF4(ActivePokemon* active_pokemon) {
@@ -1056,7 +1056,7 @@ void func_82103EF4(ActivePokemon* active_pokemon) {
     other = BattleScene_GetParticipantSideIndex(active_pokemon) == 0;
     if (cue->endFrame + 1 == sActivePokemon[other]->animationTimer) {
         if (func_82101F84((s8*)active_pokemon) == 0) {
-            func_8003FE58(runtime->usedMove, active_pokemon->displayObject.objectType, 5);
+            Audio_PlayMoveSound(runtime->usedMove, active_pokemon->displayObject.objectType, 5);
             sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
         }
     }
@@ -1264,7 +1264,7 @@ void func_82104648(ActivePokemon* active_pokemon) {
             target = &sActivePokemon[side == 0];
             BattleAnim_PlayMoveEffectEnd(*target, runtime->usedMove);
             if ((sBattleMoveFailed == 0) || (sConfused == 1)) {
-                func_8003FE58(runtime->usedMove, (*target)->displayObject.objectType, 1);
+                Audio_PlayMoveSound(runtime->usedMove, (*target)->displayObject.objectType, 1);
             }
             sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
         }
@@ -1302,9 +1302,9 @@ void func_821048BC(ActivePokemon* active_pokemon) {
     if (cue->endFrame + 1 == sActivePokemon[other]->animationTimer) {
         if (func_82101F84((s8*)active_pokemon) == 0) {
             if (D_82199FCC == 1) {
-                func_8003FE58(runtime->usedMove, sActivePokemon[other]->displayObject.objectType, 1);
+                Audio_PlayMoveSound(runtime->usedMove, sActivePokemon[other]->displayObject.objectType, 1);
             } else {
-                func_8003FE58(runtime->usedMove, sActivePokemon[other]->displayObject.objectType, 5);
+                Audio_PlayMoveSound(runtime->usedMove, sActivePokemon[other]->displayObject.objectType, 5);
             }
             sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
         }
@@ -1515,7 +1515,7 @@ extern s32 D_8219A74C;
 void func_821050D0(ActivePokemon* active_pokemon) {
     if (D_8219A74C == active_pokemon->animationTimer) {
         if (func_82101F84((s8*)active_pokemon) == 0) {
-            func_8003FE58(M2C_FIELD(active_pokemon, u8*, 0x820), active_pokemon->displayObject.objectType, 1);
+            Audio_PlayMoveSound(M2C_FIELD(active_pokemon, u8*, 0x820), active_pokemon->displayObject.objectType, 1);
             sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
         }
     }
@@ -1524,7 +1524,7 @@ void func_821050D0(ActivePokemon* active_pokemon) {
 void func_82105140(ActivePokemon* active_pokemon) {
     if (D_8219A74C == active_pokemon->animationTimer) {
         if (func_82101F84((s8*)active_pokemon) == 0) {
-            func_8003FE58(M2C_FIELD(active_pokemon, u8*, 0x820), active_pokemon->displayObject.objectType, 0);
+            Audio_PlayMoveSound(M2C_FIELD(active_pokemon, u8*, 0x820), active_pokemon->displayObject.objectType, 0);
             sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
         }
     }

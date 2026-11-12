@@ -310,7 +310,7 @@ M2C_UNK func_8001ABBC();                            /* extern */
 void Ui_DrawTexturedDivider(s32, s32, s32, void*);
 void Ui_FillRectPrimEnvColor(s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
 void func_80029028(s32, s32, s32, s32, Color_RGBA8);
-void func_8002AF04(s8*, s32);
+void Window_DrawLabeled(s8*, s32);
 extern u8 D_8007356C[];
 extern M2C_UNK D_800734A8;
 extern Gfx D_80060270[];
@@ -332,8 +332,8 @@ void func_89000694(s8* arg0) {
         func_8001AB2C(0x1C);
         func_8001A944(M2C_FIELD(arg0, s32*, 0) + 0xE, M2C_FIELD(arg0, s32*, 4) + 0xA, M2C_FIELD(arg0, s32*, 0x30));
         func_8001ABBC();
-        func_8002AF04(arg0 + 0x34, (M2C_FIELD(arg0, s32*, 0xB0) == 0) ? 2 : 0);
-        func_8002AF04(arg0 + 0x70, (M2C_FIELD(arg0, s32*, 0xB0) == 1) ? 2 : 0);
+        Window_DrawLabeled(arg0 + 0x34, (M2C_FIELD(arg0, s32*, 0xB0) == 0) ? 2 : 0);
+        Window_DrawLabeled(arg0 + 0x70, (M2C_FIELD(arg0, s32*, 0xB0) == 1) ? 2 : 0);
     }
 }
 
@@ -895,7 +895,7 @@ void func_89001B88(s32* arg0) {
 void Ui_DrawTexturedFrameDecal(s32, s32, s32, s32, u8*);
 extern u8 D_800735C4[];
 void func_8002B054(s8*, s32);
-void func_8002A8E0(void*);
+void Window_DrawFrame(void*);
 void func_890017FC(s8* arg0, s32 x, s32 y, s32 flags, s32 icon);
 void func_890012C4(s8* arg0, s32 arg1);
 void func_89001CB0(s8 *arg0)
@@ -904,7 +904,7 @@ void func_89001CB0(s8 *arg0)
   s32 flags;
   if (func_8002AE6C(arg0 + 4) == 0)
   {
-    func_8002A8E0(arg0 + 0x30);
+    Window_DrawFrame(arg0 + 0x30);
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028((*((s32 *) (((s8 *) arg0) + 4))) + 6, (*((s32 *) (((s8 *) arg0) + 8))) + 6, (*((s32 *) (((s8 *) arg0) + 0xC))) - 0xC, 6, *((Color_RGBA8 *) (&D_8900A5BC))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
     func_80029028((*((s32 *) (((s8 *) arg0) + 4))) + 6, (*((s32 *) (((s8 *) arg0) + 8))) + 0x12A, (*((s32 *) (((s8 *) arg0) + 0xC))) - 0xC, 6, *((Color_RGBA8 *) (&D_8900A5BC))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
@@ -1278,7 +1278,7 @@ extern Color_RGBA8 D_8900A698;
 extern u8 D_8900A69C[];
 extern char D_89018660[];
 extern char D_8901866C[];
-void func_8002A3F8(void*, s32, s32);
+void Ui_DrawImageInStrips(void*, s32, s32);
 void Font_SetColorForFlags(s32);
 /**
  * Draws なまえ/%s (Name) and ID No/%05d.
@@ -1292,7 +1292,7 @@ void LabItem_DrawTrainerInfo(s32 arg0, s32 arg1, s8* arg2, s32 arg3, s32 arg4) {
     if (arg4 & 0x10) {
         Ui_FillRectHighlighted(arg0 + 3, arg1 + 3, 0x136, 0x38, D_8900A5BC);
     }
-    func_8002A3F8(D_8900A69C, arg0 + 0xB, arg1 + 0xB);
+    Ui_DrawImageInStrips(D_8900A69C, arg0 + 0xB, arg1 + 0xB);
     Font_BeginTranslucentTextRendering();
     Font_SetColorForFlags(arg4);
     Font_SetActive(0x10, 0);
@@ -1339,14 +1339,14 @@ void func_89002C10(s8* arg, s32 arg1, s32 arg2, s8* arg3) {
 }
 
 void Ui_DrawTexturedDivider(s32, s32, s32, void*);
-void func_8002A8E0(void*);
+void Window_DrawFrame(void*);
 void func_8002DAD8(void*, s32, s32, s32, s32);
 extern u8 D_8007356C[];
 extern u8 D_89018688[];
 void func_89002D14(s8* arg0, s32 arg1) {
     if (func_8002AE6C() == 0) {
         Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 0x30) - 7, M2C_FIELD(arg0, s32*, 8), D_8007356C);
-        func_8002A8E0(arg0 + 0x2C);
+        Window_DrawFrame(arg0 + 0x2C);
         func_8002DAD8(arg0 + 0x4C, M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, 0xFFEF, 0);
         func_8001AB6C();
         func_8001A384(8, 0);
@@ -1477,12 +1477,12 @@ void func_8900323C(s32 *arg0) {
 void Ui_DrawTexturedFrameDecal(s32, s32, s32, s32, u8*);
 extern u8 D_800735C4[];
 void func_8002B054(s8*, s32);
-void func_8002A8E0(void*);
+void Window_DrawFrame(void*);
 void func_890032E4(s8* arg0) {
     s32 v;
 
     if (func_8002AE6C(arg0 + 4) == 0) {
-        func_8002A8E0(arg0 + 0x30);
+        Window_DrawFrame(arg0 + 0x30);
         Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 0x34) - 7, M2C_FIELD(arg0, s32*, 0xC), D_8007356C);
         gSPDisplayList(gDisplayListHead++, D_80060270);
         func_80029028(M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) + 6, 0x82, 0x136, *(Color_RGBA8*)&D_8900A5BC);

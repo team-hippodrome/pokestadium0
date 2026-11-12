@@ -172,7 +172,7 @@ void BattleScene_PhaseWithdrawFainted(CameraNode* arg0) {
     switch (sBattleScene.scene->phaseStep) {
         case 0:
             func_821255EC(arg0);
-            func_82124984((s32)temp_s0, (s32)arg0, 2);
+            BattleCamera_PlayShot((s32)temp_s0, (s32)arg0, 2);
             BattleScene_ResetCameraFrameCounter();
             BattleMessage_ShowForSide(D_8219A520 + 0x1C8, sBattleScene.scene->actingSide);
             sBattleScene.scene->phaseStep++;
@@ -229,8 +229,8 @@ void BattleScene_PhaseWithdrawFainted(CameraNode* arg0) {
 
         case 6:
             func_82104C68(temp_s0, 0x12);
-            func_82124984((s32)temp_s0, (s32)arg0, 3);
-            func_8212239C(temp_s0, arg0);
+            BattleCamera_PlayShot((s32)temp_s0, (s32)arg0, 3);
+            BattleCamera_CaptureModelOrbit(temp_s0, arg0);
             BattleMessage_ShowForSide(D_8219A520 + 0x88, sBattleScene.scene->actingSide);
             BattleScene_ResetCameraFrameCounter();
             sBattleScene.scene->phaseStep++;
@@ -314,15 +314,15 @@ void func_821311A0(CameraNode* arg0) {
                 BattleScene_ResetCameraFrameCounter();
                 BattleAnim_QueueEffectList3(3, temp_s0, temp_s0, 0xFF, 0xFF);
                 BattleScene_EnterStateRow(temp_s0, 0x12);
-                func_82124984((s32)temp_s0, (s32)arg0, 3);
-                func_8212239C(temp_s0, arg0);
+                BattleCamera_PlayShot((s32)temp_s0, (s32)arg0, 3);
+                BattleCamera_CaptureModelOrbit(temp_s0, arg0);
                 sBattleScene.scene->phaseStep += 1;
             }
             break;
 
         case 5:
-            func_82124984((s32)temp_s0, (s32)arg0, 3);
-            func_8212239C(temp_s0, arg0);
+            BattleCamera_PlayShot((s32)temp_s0, (s32)arg0, 3);
+            BattleCamera_CaptureModelOrbit(temp_s0, arg0);
             sBattleScene.scene->phaseStep += 1;
             break;
 
@@ -586,8 +586,8 @@ void BattleScene_SendOutSide0(CameraNode* arg0) {
     BattleMessage_ShowForSide(D_8219A520 + 0x448, 0);
     sActivePokemon[0]->displayObject.node.flags |= 1;
     sActivePokemon[0]->pokeBall.node.flags &= ~1;
-    func_82124984((s32)sActivePokemon[0], (s32)arg0, 3);
-    func_8212239C(sActivePokemon[0], arg0);
+    BattleCamera_PlayShot((s32)sActivePokemon[0], (s32)arg0, 3);
+    BattleCamera_CaptureModelOrbit(sActivePokemon[0], arg0);
     func_82104C68(sActivePokemon[0], 0x10);
     sBattleScene.scene->substepFrameCounter = 0;
     sBattleScene.scene->phaseStep++;
@@ -617,8 +617,8 @@ void BattleScene_SendOutSide1(CameraNode* arg0) {
     BattleMessage_ShowForSide(D_8219A520 + 0x488, 1);
     BattleScene_ResetCameraFrameCounter();
     M2C_FIELD(sActivePokemon[1], u8*, 0x1) |= 1;
-    func_82124984((s32)sActivePokemon[1], (s32)arg0, 3);
-    func_8212239C(sActivePokemon[1], arg0);
+    BattleCamera_PlayShot((s32)sActivePokemon[1], (s32)arg0, 3);
+    BattleCamera_CaptureModelOrbit(sActivePokemon[1], arg0);
     func_82104C68(sActivePokemon[1], 0x10);
     sBattleScene.scene->phaseStep++;
     sBattleScene.scene->substepFrameCounter = 0;

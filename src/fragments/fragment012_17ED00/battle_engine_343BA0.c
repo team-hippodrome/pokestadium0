@@ -34,7 +34,7 @@ void func_821329F0(void) {
 M2C_UNK func_80006998(M2C_UNK);                     /* extern */
 M2C_UNK func_8212188C();                            /* extern */
 M2C_UNK func_82121D78(s32, M2C_UNK, M2C_UNK);       /* extern */
-M2C_UNK func_82124984(s8 *, s32, M2C_UNK);        /* extern */
+M2C_UNK BattleCamera_PlayShot(s8 *, s32, M2C_UNK);        /* extern */
 M2C_UNK func_82136918(s32, M2C_UNK);                /* extern */
 extern s8 *D_82199DE0;
 extern s8 *D_8219A580;
@@ -50,7 +50,7 @@ void func_821329F8(s32 arg0) {
     M2C_FIELD(D_8219A5A0, u16 *, 0x2C) = 0U;
     D_8219A580 = (&D_82199DE0)[M2C_FIELD(D_8219A5A0, u16 *, 0x2C)];
     M2C_FIELD(sp1C, s32 *, 8) = 0;
-    func_82124984(D_8219A580, arg0, 3);
+    BattleCamera_PlayShot(D_8219A580, arg0, 3);
     func_82136918(M2C_FIELD(D_8219A580, s32 *, 0x85C), 9);
     func_80006998(0);
     M2C_FIELD(D_8219A5A0, s32 *, 0x20) = (s32) (M2C_FIELD(D_8219A5A0, s32 *, 0x20) + 1);

@@ -181,7 +181,7 @@ extern Color_RGBA8 D_82009100;
 void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
 void Ui_DrawTexturedDivider(s32, s32, s32, void*);
 void Ui_FillRectPrimEnvColor(s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
-void func_8002AF04(s8*, s32);
+void Window_DrawLabeled(s8*, s32);
 extern u8 D_8007356C;
 void Font_SetColorForFlags(s32);
 
@@ -407,20 +407,20 @@ extern Color_RGBA8 D_82009150;
 extern Color_RGBA8 D_82009154;
 extern Color_RGBA8 D_82009158;
 extern Offset82006508 D_8200915C[];
-void func_8002A3F8(void*, s32, s32);
+void Ui_DrawImageInStrips(void*, s32, s32);
 void Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
 
 void func_82006508(s32 x, s32 y, s32 present, s32 active, s32 markA, s32 markB) {
     s32 i;
 
     Ui_FillRectPrimEnvColor(x, y, 0x186, 0x8D, D_8200914C, D_82009150);
-    func_8002A3F8(D_8200911C, x + 0x88, y + 5);
+    Ui_DrawImageInStrips(D_8200911C, x + 0x88, y + 5);
     for (i = 0; i != 4; i++) {
         if ((present >> i) & 1) {
             if ((active >> i) & 1) {
-                func_8002A3F8(D_8200912C, D_8200915C[i].x + x, D_8200915C[i].y + y);
+                Ui_DrawImageInStrips(D_8200912C, D_8200915C[i].x + x, D_8200915C[i].y + y);
             } else {
-                func_8002A3F8(D_8200913C, D_8200915C[i].x + x, D_8200915C[i].y + y + 0xC);
+                Ui_DrawImageInStrips(D_8200913C, D_8200915C[i].x + x, D_8200915C[i].y + y + 0xC);
             }
         }
         if ((markA >> i) & 1) {
@@ -494,7 +494,7 @@ void func_820066E8(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
     Menu_SkipDisabledForward(sp28, arg3);
 }
 
-void func_8002A3F8(void*, s32, s32);
+void Ui_DrawImageInStrips(void*, s32, s32);
 void func_82006508(s32, s32, s32, s32, s32, s32);
 extern u8 D_8200910C[];
 extern char D_82009F84[];
@@ -502,7 +502,7 @@ extern char D_82009F84[];
 /**
  * Draws the object arg0 (layout not established; x at +0, y at +4, width at +8) while
  * func_8002AE6C() is zero: a frame via Ui_DrawTexturedDivider (at y + 0x92), a filled bar via
- * func_80029028 (colour D_82009100, height 0x70), the picture D_8200910C via func_8002A3F8,
+ * func_80029028 (colour D_82009100, height 0x70), the picture D_8200910C via Ui_DrawImageInStrips,
  * the text D_82009F84 in the colour from D_800734A8, the sub-object at +0x38 via
  * Menu_DrawItems, and finally func_82006508 with the words at +0x68 and +0x70, 1 and a
  * value chosen from the word at +0x40 (0 -> 2, 1 -> 4, 2 -> 8, otherwise 0).
@@ -518,7 +518,7 @@ void func_82006810(s8* arg0) {
         Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0x92, M2C_FIELD(arg0, s32*, 8), &D_8007356C);
         gSPDisplayList(gDisplayListHead++, D_80060270);
         func_80029028(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0x99, M2C_FIELD(arg0, s32*, 8) - 0xC, 0x70, *(Color82001CCC*)&D_82009100);
-        func_8002A3F8(D_8200910C, M2C_FIELD(arg0, s32*, 0) + 0xA9, M2C_FIELD(arg0, s32*, 4) + 0xC1);
+        Ui_DrawImageInStrips(D_8200910C, M2C_FIELD(arg0, s32*, 0) + 0xA9, M2C_FIELD(arg0, s32*, 4) + 0xC1);
         func_8001AB6C();
         func_8001AA9C(M2C_FIELD(&D_800734A8, u8*, 0), M2C_FIELD(&D_800734A8, u8*, 1), M2C_FIELD(&D_800734A8, u8*, 2), M2C_FIELD(&D_800734A8, u8*, 3));
         func_8001A384(8, 0);
@@ -724,7 +724,7 @@ void func_82006DF8(s8* arg0) {
         Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 8) + 0x92, M2C_FIELD(arg0, s32*, 0xC), &D_8007356C);
         gSPDisplayList(gDisplayListHead++, D_80060270);
         func_80029028(M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) + 0x99, M2C_FIELD(arg0, s32*, 0xC) - 0xC, 0xC4, *(Color82001CCC*)&D_82009100);
-        func_8002A3F8(D_8200910C, M2C_FIELD(arg0, s32*, 4) + 0xA9, M2C_FIELD(arg0, s32*, 8) + 0xF9);
+        Ui_DrawImageInStrips(D_8200910C, M2C_FIELD(arg0, s32*, 4) + 0xA9, M2C_FIELD(arg0, s32*, 8) + 0xF9);
         if (M2C_FIELD(arg0, s32*, 0) != 0) {
             if (M2C_FIELD(arg0, s32*, 0) == 1) {
                 maskB = 0xFEF;
@@ -894,7 +894,7 @@ void func_82007398(s32 arg0, s32 arg1, s32* arg2, s32 arg3, s32 arg4) {
     }
     sp24.unk_08 = sp24.unk_04 = sp24.unk_00 = 0x98;
     sp24.unk_0C = arg2[2];
-    func_8002A3F8((void*)&sp24, arg0 + 0x10, arg1 + 8);
+    Ui_DrawImageInStrips((void*)&sp24, arg0 + 0x10, arg1 + 8);
     Font_BeginTranslucentTextRendering();
     Font_SetColorForFlags(arg4);
     Font_SetActive(0x10, 0);
@@ -1327,7 +1327,7 @@ extern char D_8200A124[];
  * (D_8200A124), which is printed with the word at +0xB0 passed twice as extra
  * arguments to func_8001A944. See func_82008640 for the sequence of calls; the
  * selection index at +0xA8 again decides which of the two sub-objects (+0x2C,
- * +0x68) gets 2 from func_8002AF04 and which gets 0.
+ * +0x68) gets 2 from Window_DrawLabeled and which gets 0.
  * What the constants mean is not established.
  */
 void func_820082EC(s8* arg0) {
@@ -1342,8 +1342,8 @@ void func_820082EC(s8* arg0) {
         func_8001AB2C(0x1C);
         func_8001A944(M2C_FIELD(arg0, s32*, 0) + 0xE, M2C_FIELD(arg0, s32*, 4) + 0xE, D_8200A124, M2C_FIELD(arg0, s32*, 0xB0), M2C_FIELD(arg0, s32*, 0xB0));
         func_8001ABBC();
-        func_8002AF04(arg0 + 0x2C, (M2C_FIELD(arg0, s32*, 0xA8) == 0) ? 2 : 0);
-        func_8002AF04(arg0 + 0x68, (M2C_FIELD(arg0, s32*, 0xA8) == 1) ? 2 : 0);
+        Window_DrawLabeled(arg0 + 0x2C, (M2C_FIELD(arg0, s32*, 0xA8) == 0) ? 2 : 0);
+        Window_DrawLabeled(arg0 + 0x68, (M2C_FIELD(arg0, s32*, 0xA8) == 1) ? 2 : 0);
     }
 }
 
@@ -1424,7 +1424,7 @@ extern char D_8200A198[];
  * while func_8002AE6C() is non-zero. Otherwise it draws the frame with
  * Ui_DrawTexturedDivider and Ui_FillRectPrimEnvColor, emits D_80060270 and fills a bar with
  * func_80029028 (colour D_82009100), then prints the string D_8200A198 with the
- * font colour from D_800734A8 via func_8001A944, and finally calls func_8002AF04
+ * font colour from D_800734A8 via func_8001A944, and finally calls Window_DrawLabeled
  * on the two sub-objects with 2 for the one whose index (0 for +0x2C, 1 for +0x68)
  * equals the selection at +0xA8 and 0 for the other.
  * What the constants mean is not established.
@@ -1441,8 +1441,8 @@ void func_82008640(s8* arg0) {
         func_8001AB2C(0x1C);
         func_8001A944(M2C_FIELD(arg0, s32*, 0) + 0xE, M2C_FIELD(arg0, s32*, 4) + 0xE, D_8200A198);
         func_8001ABBC();
-        func_8002AF04(arg0 + 0x2C, (M2C_FIELD(arg0, s32*, 0xA8) == 0) ? 2 : 0);
-        func_8002AF04(arg0 + 0x68, (M2C_FIELD(arg0, s32*, 0xA8) == 1) ? 2 : 0);
+        Window_DrawLabeled(arg0 + 0x2C, (M2C_FIELD(arg0, s32*, 0xA8) == 0) ? 2 : 0);
+        Window_DrawLabeled(arg0 + 0x68, (M2C_FIELD(arg0, s32*, 0xA8) == 1) ? 2 : 0);
     }
 }
 
@@ -1524,7 +1524,7 @@ extern char D_8200A208[];
  * func_820082EC with a shorter frame (height 0x30) and colours D_82009238 /
  * D_8200923C, text D_8200A208 in a larger font size (0x10), and a selection index
  * at +0xE4 (rather than +0xA8) that decides which of the sub-objects at +0x2C, +0x68
- * and, only when the word at +0xEC is non-zero, +0xA4 is passed 2 by func_8002AF04
+ * and, only when the word at +0xEC is non-zero, +0xA4 is passed 2 by Window_DrawLabeled
  * (index 0, 1 or 2 respectively); the others get 0.
  * What the constants mean is not established.
  * @unverified Name guessed from the code; comment kept.
@@ -1540,10 +1540,10 @@ void FreeBattle_DrawEntryConfirm(s8* arg0) {
         func_8001A384(0x10, 0);
         func_8001A944(M2C_FIELD(arg0, s32*, 0) + 0x12, M2C_FIELD(arg0, s32*, 4) + 0x12, D_8200A208);
         func_8001ABBC();
-        func_8002AF04(arg0 + 0x2C, (M2C_FIELD(arg0, s32*, 0xE4) == 0) ? 2 : 0);
-        func_8002AF04(arg0 + 0x68, (M2C_FIELD(arg0, s32*, 0xE4) == 1) ? 2 : 0);
+        Window_DrawLabeled(arg0 + 0x2C, (M2C_FIELD(arg0, s32*, 0xE4) == 0) ? 2 : 0);
+        Window_DrawLabeled(arg0 + 0x68, (M2C_FIELD(arg0, s32*, 0xE4) == 1) ? 2 : 0);
         if (M2C_FIELD(arg0, s32*, 0xEC) != 0) {
-            func_8002AF04(arg0 + 0xA4, (M2C_FIELD(arg0, s32*, 0xE4) == 2) ? 2 : 0);
+            Window_DrawLabeled(arg0 + 0xA4, (M2C_FIELD(arg0, s32*, 0xE4) == 2) ? 2 : 0);
         }
     }
 }

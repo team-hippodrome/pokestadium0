@@ -329,7 +329,7 @@ extern Color88100D9C D_88102DA8;
 extern Color88100D9C D_88102DAC;
 void Ui_DrawTexturedDivider(s32, s32, s32, void*);
 void Ui_FillRectPrimEnvColor(s32, s32, s32, s32, Color88100D9C, Color88100D9C);
-void func_8002AF04(s8*, s32);
+void Window_DrawLabeled(s8*, s32);
 
 void func_881009A0(s8* arg0) {
     if (func_8002AE6C() == 0) {
@@ -342,8 +342,8 @@ void func_881009A0(s8* arg0) {
         Font_SetActive(0x10, 0);
         Font_Printf(M2C_FIELD(arg0, s32*, 0) + 0x12, M2C_FIELD(arg0, s32*, 4) + 0x12, M2C_FIELD(arg0, char**, 0xB0));
         Font_EndTexturedTextRendering();
-        func_8002AF04(arg0 + 0x2C, (M2C_FIELD(arg0, s32*, 0xA8) == 0) ? 2 : 0);
-        func_8002AF04(arg0 + 0x68, (M2C_FIELD(arg0, s32*, 0xA8) == 1) ? 2 : 0);
+        Window_DrawLabeled(arg0 + 0x2C, (M2C_FIELD(arg0, s32*, 0xA8) == 0) ? 2 : 0);
+        Window_DrawLabeled(arg0 + 0x68, (M2C_FIELD(arg0, s32*, 0xA8) == 1) ? 2 : 0);
     }
 }
 
@@ -449,7 +449,7 @@ extern u8 D_04010918[];
 void func_8001BCB4(s32, s32, s32, s32, void*, s32, s32);
 s32 func_80022BAC(u8);
 void func_8002BC58(s32, s32, u8, s32);
-void func_8002A3F8(u8*, s32, s32);
+void Ui_DrawImageInStrips(u8*, s32, s32);
 void func_8002BAB8(s32, s32, s32, s32);
 void func_88100E34(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
     UNUSED s32 pad[3]; // FAKE: stack padding
@@ -460,7 +460,7 @@ void func_88100E34(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
         if (arg3[1] == 0x20) {
             func_8002BC58(arg0 + 5, arg1 + 4, arg3[2], func_80022BAC(arg3[2]));
         } else if (arg3[1] == 0x10) {
-            func_8002A3F8(D_88102DB8, arg0 + 4, arg1 + 4);
+            Ui_DrawImageInStrips(D_88102DB8, arg0 + 4, arg1 + 4);
             Font_BeginTranslucentTextRendering();
             Font_SetColorForFlags(arg2);
             Font_SetActive(8, 0);
@@ -831,7 +831,7 @@ extern char D_88102F54[];
 extern char D_88102F6C[];
 extern char D_88102FC8[];
 s32 ScrollList_UpdateCursor(s8*);
-void func_8003FE58(s32, s32, s32);
+void Audio_PlayMoveSound(s32, s32, s32);
 void func_80027868(s32, s32);
 
 s32 func_88102184(s8* arg0) {
@@ -892,7 +892,7 @@ s32 func_88102184(s8* arg0) {
             break;
         case 4:
             if (M2C_FIELD(arg0, s32*, 0x3C4) % 15 == 0) {
-                func_8003FE58(0x90, 1, 0);
+                Audio_PlayMoveSound(0x90, 1, 0);
             }
             if (func_881016BC(arg0 + 0x3C4) != 0) {
                 func_8003F6AC(0x1E);
@@ -920,7 +920,7 @@ s32 func_88102184(s8* arg0) {
             break;
         case 7:
             if (M2C_FIELD(arg0, s32*, 0x3C4) % 15 == 0) {
-                func_8003FE58(0x90, 1, 0);
+                Audio_PlayMoveSound(0x90, 1, 0);
             }
             if (Audio_QueueSoundAvoidingRecent((s32*)(arg0 + 0x3C4)) != 0) {
                 func_8003F6AC(0x1F);

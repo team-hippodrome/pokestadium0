@@ -357,7 +357,11 @@ typedef struct BattleCameraModelState {
     u8 pad00[0x30]; s16 rotationX; s16 rotationY; u8 pad34[4]; f32 distance;
 } BattleCameraModelState;
 extern f32 D_FLT_82189354[][4];
-void func_8212239C(ActivePokemon* pokemon, CameraNode* camera) {
+/**
+ * Saves the camera target and eye, then records the distance and angles from this Pokemon's model focus point to the camera target.
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleCamera_CaptureModelOrbit(ActivePokemon* pokemon, CameraNode* camera) {
     BattleCameraModelState* model = (BattleCameraModelState*)&pokemon->modelTransform;
     UNUSED s32 pad[3]; // FAKE: stack padding
     Vec3f_SetComponentsDuplicate(&pokemon->modelTransform.unk_18, M2C_FIELD(pokemon, f32*, 0x5DC), M2C_FIELD(pokemon, f32*, 0x5E0), M2C_FIELD(pokemon, f32*, 0x5E4));

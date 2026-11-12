@@ -756,7 +756,11 @@ void func_80037D4C(s32, f32);
 void func_80037E84(s32, s32);
 void func_80037DF4(s32, s32);
 
-s32 func_8003F96C(u32 arg0, u32 arg1) {
+/**
+ * Loads and plays the cry of `arg0` (1-based national dex, below 152) into one of three rotating buffers.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 Audio_PlayCry(u32 arg0, u32 arg1) {
     u8 pad[0x28C]; // FAKE
     s32 sp30;
     u32 start;
@@ -819,10 +823,10 @@ s32 func_8003F96C(u32 arg0, u32 arg1) {
     return D_800FD5F8[D_80077520];
 }
 
-s32 func_8003FE58(u32, u32, u32);
+s32 Audio_PlayMoveSound(u32, u32, u32);
 
 void func_8003FE34(s32 arg0, s32 arg1) {
-    func_8003FE58(arg0, 1, arg1);
+    Audio_PlayMoveSound(arg0, 1, arg1);
 }
 
 extern u8 D_80077062[];
@@ -836,7 +840,11 @@ extern s32 D_800FD650;
 extern s32 D_800FD670[4];
 void func_800386E4(s32, s32);
 s32 func_800407B0(s32, s32, s32);
-s32 func_8003FE58(u32 move_id, u32 species, u32 sound_kind) {
+/**
+ * Loads and plays the sound of `move_id` (1-based, below 167) for `species`; some species/move pairs are skipped. Some moves add a cry or a second sound.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 Audio_PlayMoveSound(u32 move_id, u32 species, u32 sound_kind) {
     s32 var;
     u32 size;
     s32 ret;
@@ -1121,7 +1129,7 @@ skip:
 
             case 0x2D:
             case 0x2E:
-                func_8003F96C(species, 0);
+                Audio_PlayCry(species, 0);
                 break;
         }
     }

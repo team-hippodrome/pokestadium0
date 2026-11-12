@@ -156,7 +156,7 @@ void func_8210568C(ActivePokemon*, s32, s32);
 M2C_UNK func_80019B28(s32, u8, u8, u8, s32);
 s32 func_82126220(ActivePokemon* active_pokemon);
 
-void func_8212239C(ActivePokemon* arg0, CameraNode* arg1);
+void BattleCamera_CaptureModelOrbit(ActivePokemon* arg0, CameraNode* arg1);
 s32 func_82126220(ActivePokemon*);
 void BattleScene_AdvanceSendOutPreparation(CameraNode* arg0);
 
@@ -189,7 +189,7 @@ extern s32 D_8219A520;
 void func_82104C68(ActivePokemon*, s32);
 void func_82128E34(s32 arg0);
 
-void func_82124984(ActivePokemon* arg0, CameraNode* arg1, s32 arg2);
+void BattleCamera_PlayShot(ActivePokemon* arg0, CameraNode* arg1, s32 arg2);
 void func_821228B0(CameraNode* arg0, ActivePokemon* arg1);
 s32 func_821058E8(ActivePokemon* arg0, s32 arg1);
 

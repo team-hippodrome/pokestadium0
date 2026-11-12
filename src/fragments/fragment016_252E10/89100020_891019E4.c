@@ -123,7 +123,7 @@ void func_89101238(s32, s32, s8*, s32, s32);
 
 s32 func_8002AB84(void);
 void func_8002C5A4(s32, s32, s32);
-void func_8002A8E0(s8*);
+void Window_DrawFrame(s8*);
 void Ui_DrawTexturedDivider(s32, s32, s32, u8*);
 void func_8002F030(s8*, s32, s32, s32, s32);
 void func_8002F3C4(s8*, s32, s32, s32, s8*);
@@ -154,7 +154,7 @@ void LabPCList_DrawListScreen(s8* arg0) {
         return;
     }
     func_8002C5A4(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) - 0xA, 0x1F4);
-    func_8002A8E0(arg0 + 0x4C);
+    Window_DrawFrame(arg0 + 0x4C);
     Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0x23, M2C_FIELD(arg0, s32*, 8), D_8007356C);
     LabPCList_DrawPageHint(arg0);
     func_8002F030(arg0 + 0xB160, M2C_FIELD(arg0, s32*, 0x2C), M2C_FIELD(arg0, s32*, 0x30) - 0x10,

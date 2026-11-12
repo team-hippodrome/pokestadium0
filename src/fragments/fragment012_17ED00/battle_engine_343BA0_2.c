@@ -65,7 +65,7 @@ void func_82132EB4(s32 arg0, s32 arg1, f32 arg2, f32 arg3, s16 arg4, s16 arg5) {
 
 extern s16 D_8219A4F0[];
 extern s8* D_8219A590;
-void func_82124984(s8* arg0, CameraNode* arg1, s32 arg2);
+void BattleCamera_PlayShot(s8* arg0, CameraNode* arg1, s32 arg2);
 
 void func_82132F88(CameraNode* arg0) {
     D_8219A4F0[0xE] = 0;
@@ -74,7 +74,7 @@ void func_82132F88(CameraNode* arg0) {
     BattleScene_ResetCameraFrameCounter();
     sBattleScene.scene->actingSide = 0;
     D_8219A590 = (s8*)sActivePokemon[sBattleScene.scene->actingSide];
-    func_82124984(D_8219A590, arg0, 3);
+    BattleCamera_PlayShot(D_8219A590, arg0, 3);
     Battle_SetStageScale(0.0f);
     sBattleScene.scene->phaseStep++;
 }
@@ -186,7 +186,7 @@ void func_8213334C(CameraNode* arg0) {
  * 0xFF, then:
  *   - if D_8219A50C == 5: calls func_82135E80(arg0, D_8219A590); if the
  *     upper halfword of the word at offset 0x48 of the object
- *     D_8219A590 points to is 0x26, calls func_8003FE58(0x38, 9, 0); and if
+ *     D_8219A590 points to is 0x26, calls Audio_PlayMoveSound(0x38, 9, 0); and if
  *     func_821217DC(0x37) returns non-zero, sets the word at offset 0x40
  *     of the object D_8219A5A0 points to to 3, calls func_80006998(0xFFFF),
  *     func_80005C4C(4) and Audio_FadeAndClearStoredSounds(), and sets the word at offset
@@ -199,7 +199,7 @@ void func_8213334C(CameraNode* arg0) {
  */
 M2C_UNK func_80005C4C(M2C_UNK);
 M2C_UNK func_80006998(M2C_UNK);
-M2C_UNK func_8003FE58(M2C_UNK, M2C_UNK, M2C_UNK);
+M2C_UNK Audio_PlayMoveSound(M2C_UNK, M2C_UNK, M2C_UNK);
 M2C_UNK Audio_FadeAndClearStoredSounds();
 s32 func_821217DC(M2C_UNK);
 M2C_UNK func_82135E80(CameraNode*, s8*);
@@ -211,7 +211,7 @@ void func_8213346C(CameraNode* arg0) {
     if (D_8219A50C == 5) {
         func_82135E80(arg0, D_8219A590);
         if (((s32) M2C_FIELD(D_8219A590, s32 *, 0x48) >> 0x10) == 0x26) {
-            func_8003FE58(0x38, 9, 0);
+            Audio_PlayMoveSound(0x38, 9, 0);
         }
         if (func_821217DC(0x37) != 0) {
             M2C_FIELD(D_8219A5A0, s32 *, 0x40) = 3;

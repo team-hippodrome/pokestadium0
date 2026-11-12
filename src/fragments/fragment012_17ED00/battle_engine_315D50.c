@@ -422,14 +422,14 @@ void func_82134DC8(s32 arg0) {
 /*
  * func_82134DEC
  *
- * Calls func_8003F96C(arg0, 2) with arg0 taken as a signed 16-bit value
+ * Calls Audio_PlayCry(arg0, 2) with arg0 taken as a signed 16-bit value
  * (sign-extended before the call).  The `* 1` is there on purpose: it makes
  * IDO emit the separate shift pair (sll 16 / sra 16) the retail code has
  * instead of folding it into the argument register.
  */
-void func_8003F96C(s32, s32);
+void Audio_PlayCry(s32, s32);
 void func_82134DEC(s16 arg0) {
-    func_8003F96C(arg0 * 1, 2); // FAKE: no-op * 1
+    Audio_PlayCry(arg0 * 1, 2); // FAKE: no-op * 1
 }
 
 extern f32 D_FLT_82189360[][4];

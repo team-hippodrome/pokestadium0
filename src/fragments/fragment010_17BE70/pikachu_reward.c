@@ -607,7 +607,7 @@ extern s32 D_81701B38;
 extern char* D_81701B3C;
 extern s32 D_81701B40;
 s32 func_81700A80(s32);
-void func_8003FE58(s32, s32, s32);
+void Audio_PlayMoveSound(s32, s32, s32);
 s32 func_800564D4(char*, const char*, ...);
 
 s32 func_817010E8(void) {
@@ -633,7 +633,7 @@ s32 func_817010E8(void) {
                 func_81700588(D_81701B34, 0x1E);
                 func_800199F8(&D_FLT_81702020, 0xA);
                 D_81701B04 = 0;
-                func_8003FE58(0x85, 0x19, 0);
+                Audio_PlayMoveSound(0x85, 0x19, 0);
                 func_81700630(D_81701B38, 1);
                 func_800564D4(buf, D_81701B3C, D_8006A9CC[M2C_FIELD(D_817027A8 + choice, u8*, 9)].name);
                 func_8000A7FC(0x3C);
@@ -758,7 +758,7 @@ loop_3:
     func_80022188(arg0);
 }
 
-void func_8003F96C(s32, s32);
+void Audio_PlayCry(s32, s32);
 M2C_UNK func_81700588(s32, M2C_UNK);
 M2C_UNK func_8170070C(s32);
 M2C_UNK func_81700630(s32, M2C_UNK);
@@ -767,7 +767,7 @@ extern s8* D_8170201C;
 M2C_UNK func_817015B0(s32 arg0) {
     s32 i;
 
-    func_8003F96C(0x19, 0);
+    Audio_PlayCry(0x19, 0);
     func_8170070C((s32)D_81701B44);
     func_81700588((s32)D_81701B44, 1);
     for (i = func_81700130(); i < 4; i++) {

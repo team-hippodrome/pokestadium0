@@ -306,22 +306,22 @@ s32 func_800407B0(u32 arg0, s32 arg1, s32 arg2) {
             break;
 
         case 0x1E:
-            ret = func_8003FE58(0xA6, 1, 0);
+            ret = Audio_PlayMoveSound(0xA6, 1, 0);
             break;
         case 0x1F:
-            ret = func_8003FE58(0xA6, 1, 1);
+            ret = Audio_PlayMoveSound(0xA6, 1, 1);
             break;
         case 0x20:
-            ret = func_8003FE58(0xA6, 1, 2);
+            ret = Audio_PlayMoveSound(0xA6, 1, 2);
             break;
         case 0x21:
-            ret = func_8003FE58(0xA6, 1, 3);
+            ret = Audio_PlayMoveSound(0xA6, 1, 3);
             break;
         case 0x22:
-            ret = func_8003FE58(0xA6, 1, 4);
+            ret = Audio_PlayMoveSound(0xA6, 1, 4);
             break;
         case 0x23:
-            ret = func_8003FE58(0xA6, 1, 5);
+            ret = Audio_PlayMoveSound(0xA6, 1, 5);
             break;
 
         default:
