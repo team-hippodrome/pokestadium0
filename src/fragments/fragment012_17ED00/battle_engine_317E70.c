@@ -67,7 +67,8 @@ extern s8 *D_8219A5A0;
 /**
  * Mirror Move: copies the target's last move into the user (fails when it is
  * Mirror Move or none). Name from Stadium 1.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Mirror Move.
  */
 s32 Battle_TryLoadFollowupMoveFromTarget(void) {
     u8 temp_v0;
@@ -607,7 +608,8 @@ void func_8210F730(ActivePokemon*);
 extern s32 D_8218C710;
 /**
  * Mark fainting, clear continuation state and remove temporary effects from the opponent.
- * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Self-Destruct, Explosion.
  */
 void Battle_HandleFaint(ActivePokemon* arg0) {
     UNUSED s32 pad; // FAKE: stack padding

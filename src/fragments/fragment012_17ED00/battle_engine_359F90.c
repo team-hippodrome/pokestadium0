@@ -790,7 +790,8 @@ s32 Battle_Effect_Metronome(void) {
 
 /**
  * Stage poison/burn HP loss, scaling it by the Toxic counter when active.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Fire Punch, Poison Sting, Twineedle, Flamethrower, Poison Powder, Toxic, Smog, Fire Blast.
  */
 void Battle_ApplyPoisonOrBurnDamage(void) {
     u16 var_a0;

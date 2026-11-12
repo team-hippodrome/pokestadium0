@@ -174,7 +174,8 @@ void BattleAnim_SetupSharedDescriptor0FDelayedRisingColumnFade(Particle* arg0) {
 /**
  * Moves: Hyper Beam (hit), Thunder (use/hit), Thunder Shock (use/hit), Thunderbolt (use/hit)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Hyper Beam, Thunder Shock, Thunderbolt, Thunder.
  */
 void BattleAnim_RunDeterministicRotatingBoltOfLightning(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -225,7 +226,8 @@ void BattleAnim_SetupSharedDescriptor0FDelayedRisingColumnRandomScale(Particle* 
 /**
  * Moves: Hyper Beam (hit), Thunder (use/hit), Thunder Shock (use/hit), Thunderbolt (use/hit)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Hyper Beam, Thunder Shock, Thunderbolt, Thunder.
  */
 void BattleAnim_RunRandomRotatingBoltOfLightning(Particle* arg0) {
     switch (arg0->lifecycle) {

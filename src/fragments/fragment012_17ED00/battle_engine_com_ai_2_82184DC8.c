@@ -1202,7 +1202,8 @@ s32 BattleAi_NoVenusaurChanseyJynxPicked(s32 arg0) {
 /**
  * Copies a zero-terminated list of up to four moves into a four-byte array,
  * padding with zeros.
- * @unverified Name and comment guessed from the code (COM AI pass).
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Transform.
  */
 void BattleAi_CopyMoveList(u8* arg0, u8* arg1) {
     s32 i;

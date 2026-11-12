@@ -326,7 +326,8 @@ Gfx* MistHaze_DrawPool(Gfx* arg0) {
 
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Surf.
  */
 void SurfTerrainGrid_BuildCameraBounds(unk_D_843975E8* arg0, f32 arg1) {
     CameraNode* spB4 = BattleAnim_GetCameraContext();
@@ -427,7 +428,8 @@ void SurfTerrainGrid_BuildCameraBounds(unk_D_843975E8* arg0, f32 arg1) {
  * quad corners against the water surface.
  * //@src/fragments/battle_engine/battle_engine_2F3CB0.c
  * //@src/fragments/battle_engine/battle_engine_ribbon_mesh_and_surf_grid.c SurfTerrainGrid_UpdateWaves
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Surf.
  */
 f32 SurfTerrainGrid_SampleHeightAndSlope(f32 x, f32 z, f32* rotation_x) {
     UNUSED s32 pad1[2]; // FAKE: stack padding
@@ -558,7 +560,8 @@ f32 SurfTerrainGrid_SampleHeightAndSlope(f32 x, f32 z, f32* rotation_x) {
 
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Surf.
  */
 s32 SurfTerrainGrid_UpdateWaves(void) {
     s32 i;
@@ -653,7 +656,8 @@ s32 SurfTerrainGrid_UpdateWaves(void) {
 
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Surf.
  */
 void SurfTerrainGrid_Init(s32 arg0, s16 arg1, s16 arg2) {
     s32 i;
@@ -703,7 +707,8 @@ void SurfTerrainGrid_Init(s32 arg0, s16 arg1, s16 arg2) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Surf.
  */
 s32 SurfTerrainGrid_Update(void) {
     UNUSED s32 pad[2]; // FAKE: stack padding

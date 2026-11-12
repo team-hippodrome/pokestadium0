@@ -46,7 +46,8 @@ void BattleAnim_RunMegaKickAndPunchProjectile(Particle* arg0);
 void BattleAnim_CallbackEndEffect86Descriptor19ModePositionedAnimFade(Particle* arg0);
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Surf.
  */
 void BattleAnim_SetupSurfHitSpark(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
@@ -78,7 +79,8 @@ M2C_UNK func_82149660(s8 *);                      /* extern */
 
 /**
  * Handles the hit spark from being hit by Surf
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Surf.
  */
 void BattleAnim_RunSurfHitSpark(s8 *arg0) {
     s16 temp_v0;
@@ -908,7 +910,8 @@ void BattleAnim_RunMegaKickAndPunchProjectile(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Ice Beam, Psybeam, Aurora Beam, Hyper Beam, Tri Attack.
  */
 void BattleAnim_SetupInitialBeamEmanator(Particle* arg0) {
     Particle_Field1C_SetScaled_0B938(arg0, 1.0f);
@@ -921,7 +924,8 @@ void BattleAnim_SetupInitialBeamEmanator(Particle* arg0) {
 /**
  * Runs the first emanator that shows up in Ice Beam, Psybeam, Aurora Beam, Hyper Beam, Solar Beam, and Tri Attack.
  * Most Beam mosts switch to the Pulsing emanator after a few frames
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Ice Beam, Psybeam, Aurora Beam, Hyper Beam, Tri Attack.
  */
 void BattleAnim_RunInitialBeamEmanator(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -941,7 +945,8 @@ void BattleAnim_RunInitialBeamEmanator(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Ice Beam, Psybeam, Aurora Beam, Hyper Beam.
  */
 void BattleAnim_SetupPulsingBeamEmanator(Particle* arg0) {
     Particle_Field1C_SetScaled_0B938(arg0, 0.4f);
@@ -962,7 +967,8 @@ M2C_UNK func_8214B280(s8 *);                      /* extern */
 
 /**
  * handles the pulsing beam emanator for Ice Beam, Psybeam, Aurora Beam, Hyper Beam, and Solar Beam
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Ice Beam, Psybeam, Aurora Beam, Hyper Beam.
  */
 void BattleAnim_RunPulsingBeamEmanator(s8 *arg0) {
     s16 temp_v0;
@@ -992,7 +998,8 @@ void BattleAnim_RunPulsingBeamEmanator(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Ice Beam, Hyper Beam.
  */
 void BattleAnim_SetupStrongBeamHitEffect(Particle* arg0) {
     Particle_Field1C_SetScaled_0B938(arg0, 2.0f);
@@ -1006,7 +1013,8 @@ void BattleAnim_SetupStrongBeamHitEffect(Particle* arg0) {
 
 /**
  * Handles the hit effect from being hit by Ice beam, Hyper Beam, Solarbeam, or Sky attack
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Ice Beam, Hyper Beam.
  */
 void BattleAnim_RunStrongBeamHitEffect(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -1281,7 +1289,8 @@ void BattleAnim_RunWaterGunHitEffect(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Psybeam, Bubble Beam, Aurora Beam.
  */
 void BattleAnim_SetupWeakBeamHitEffect(Particle* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
@@ -1325,7 +1334,8 @@ extern s32 D_8219A790;
 
 /**
  * handles shared effect being hit by Psybeam, bubble beam, and aurora beam
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Psybeam, Bubble Beam, Aurora Beam.
  */
 void BattleAnim_RunWeakBeamHitEffect(s8 *arg0) {
     s16 sp2E;

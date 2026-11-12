@@ -84,7 +84,8 @@ void BattleAnim_InitializeSurfUse(void) {
 /**
  * Moves: Surf (hit)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Surf.
  */
 s32 BattleAnim_SurfCompleteImmediately(void) {
     return -1;
@@ -211,7 +212,8 @@ void BattleAnim_StartEffect7TexturedRibbonSheet_Emit(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Swift.
  */
 void BattleAnim_SetupSwiftUseRibbonSheet(void) {
     D_8219CB10 = 0;
@@ -221,7 +223,8 @@ void BattleAnim_SetupSwiftUseRibbonSheet(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Swift.
  */
 s32 BattleAnim_RunSwiftUseRibbonSheet(void) {
     D_8219CB10++;
@@ -237,7 +240,8 @@ s32 BattleAnim_RunSwiftUseRibbonSheet(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Swift.
  */
 void BattleAnim_DrawSwiftUseRibbonSheet(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

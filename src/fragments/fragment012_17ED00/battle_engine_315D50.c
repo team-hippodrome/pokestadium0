@@ -438,7 +438,8 @@ extern f32 D_FLT_82189360[][4];
  * Plays the landing sound for the Pokemon's size: audio command 6 for size 25 and up, 7 for 12.5
  * and up, else 8. The size comes from the per-species float table D_FLT_82189360.
  * Player sweep: reached only by Self-Destruct and Explosion.
- * @unverified The sound itself was not heard (headless run).
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Self-Destruct, Explosion.
  */
 void ActivePokemon_PlayLandingSoundBySize(ActivePokemon* active_pokemon) {
     s16 idx = active_pokemon->displayObject.objectType - 1;

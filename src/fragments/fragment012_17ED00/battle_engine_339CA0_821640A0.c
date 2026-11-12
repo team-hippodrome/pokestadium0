@@ -316,7 +316,8 @@ void BattleAnim_RunSplashOfWater(s8 *arg0) {
 /**
  * Moves: Dig (hit)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Dig.
  */
 void BattleAnim_RunDigHitDust(s8 *arg0) {
     s16 temp_v0;
@@ -348,7 +349,8 @@ void BattleAnim_RunDigHitDust(s8 *arg0) {
 /**
  * Moves: Dig (hit)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Dig.
  */
 void BattleAnim_RunDigHitRocks(s8 *arg0) {
     s16 temp_v0;
@@ -562,7 +564,8 @@ void BattleAnim_RunSolarBeamUseEffect(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Solar Beam, Mimic, Metronome, Sky Attack, Conversion.
  */
 void BattleAnim_SetupQiChargeChild(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
@@ -583,7 +586,8 @@ void BattleAnim_SetupQiChargeChild(Particle* arg0) {
 /**
  * Moves: Conversion (use), Mimic (use), Recover (use), Sky Attack (use), Solar Beam (use)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Solar Beam, Mimic, Metronome, Sky Attack, Conversion.
  */
 void BattleAnim_RunQiChargeChild(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -620,7 +624,8 @@ void BattleAnim_RunQiChargeChild(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Solar Beam, Mimic, Metronome, Sky Attack, Conversion.
  */
 void BattleAnim_SetupQiCharge(Particle* arg0) {
     Particle_FieldAC_GetS16_0C038(arg0);

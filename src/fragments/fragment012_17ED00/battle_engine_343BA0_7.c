@@ -192,7 +192,8 @@ void BattleAnim_EndEffect19RibbonMesh_Draw(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Haze.
  */
 void BattleAnim_SetupHazeUseRibbonMesh(void) {
     Vec3f sp24;
@@ -207,14 +208,16 @@ void BattleAnim_SetupHazeUseRibbonMesh(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Haze.
  */
 s32 BattleAnim_RunHazeUseRibbonMesh(void) {
     return MistHaze_UpdatePool();
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Haze.
  */
 void BattleAnim_DrawHazeUseRibbonMesh(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -223,7 +226,8 @@ void BattleAnim_DrawHazeUseRibbonMesh(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Surf.
  */
 void BattleAnim_SetupSurfUseTerrainGrid(void) {
     Vec3f sp1C;
@@ -239,14 +243,16 @@ void BattleAnim_SetupSurfUseTerrainGrid(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Surf.
  */
 s32 BattleAnim_RunSurfUseTerrainGrid(void) {
     return SurfTerrainGrid_Update();
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Surf.
  */
 void BattleAnim_DrawSurfUseTerrainGrid(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

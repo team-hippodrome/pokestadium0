@@ -19,7 +19,8 @@ s32 SwiftRibbonSheet_IsComplete(void);
 Gfx* SwiftRibbonSheet_Draw(Gfx* arg0);
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Swift.
  */
 void SwiftRibbonSheet_Init(void) {
     TexturedRibbonSheet* var_v0;
@@ -104,7 +105,8 @@ void SwiftRibbonSheet_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f3
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Swift.
  */
 void SwiftRibbonSheet_Update(f32 arg0, Vec3f* arg1, f32 arg2) {
     MtxF sp30;
@@ -114,7 +116,8 @@ void SwiftRibbonSheet_Update(f32 arg0, Vec3f* arg1, f32 arg2) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Swift.
  */
 void SwiftRibbonSheet_UpdateRecord(TexturedRibbonSheet* arg0) {
     s32 i;
@@ -165,7 +168,8 @@ void SwiftRibbonSheet_UpdateRecord(TexturedRibbonSheet* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Swift.
  */
 s32 SwiftRibbonSheet_IsComplete(void) {
     s32 i;
@@ -191,7 +195,8 @@ s32 SwiftRibbonSheet_IsComplete(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Swift.
  */
 Gfx* SwiftRibbonSheet_Draw(Gfx* arg0) {
     s32 i;

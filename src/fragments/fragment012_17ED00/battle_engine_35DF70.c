@@ -24,7 +24,8 @@ void BattleEffect_RunMoveEffect(void);
 
 /**
  * Start Bide with a cleared damage accumulator and a two- or three-turn duration.
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Bide.
  */
 void BattleEffect_Bide(void) {
     sBattleScene.scene->moveEffectKind = 0x1B;
@@ -60,7 +61,9 @@ void Battle_Effect_ForceSwitchOrFlee(void) {
 
 /**
  * Initialize total/remaining hits; Twineedle then uses the secondary poison effect.
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Double Slap, Comet Punch, Double Kick, Fury Attack, Twineedle, Pin Missile, Spike Cannon,
+ * Barrage, Fury Swipes, Bonemerang.
  */
 void BattleEffect_MultiHit(void) {
     s32 var_v1;
@@ -364,7 +367,8 @@ void Battle_Effect_Substitute(void) {
 
 /**
  * Mark the user as needing a recharge turn; Battle_CheckMonCanAct consumes the flag.
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Hyper Beam.
  */
 void BattleEffect_Recharge(void) {
     sBattleUser->volatileStatusFlags |= 0x20;
@@ -372,7 +376,8 @@ void BattleEffect_Recharge(void) {
 
 /**
  * Enable Rage's move lock and subsequent Attack boosts.
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Rage.
  */
 void BattleEffect_Rage(void) {
     sBattleUser->volatileStatusFlags |= 0x40;

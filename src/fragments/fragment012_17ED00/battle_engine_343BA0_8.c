@@ -2,7 +2,8 @@
 #include "battle_engine_343BA0_8.h"
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Disable.
  */
 void BattleAnim_SetupDisableUseRadial(void) {
     D_8219CB16 = 0;
@@ -12,7 +13,8 @@ void BattleAnim_SetupDisableUseRadial(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Disable.
  */
 s32 BattleAnim_RunDisableUseRadial(void) {
     D_8219CB16++;
@@ -28,7 +30,8 @@ s32 BattleAnim_RunDisableUseRadial(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Disable.
  */
 void BattleAnim_DrawDisableUseRadial(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -169,7 +172,8 @@ void BattleAnim_DrawHypnosisScreechUseTrail(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Sing.
  */
 void BattleAnim_SetupSingUseTrail(void) {
     Vec3f sp1C;
@@ -180,14 +184,16 @@ void BattleAnim_SetupSingUseTrail(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Sing.
  */
 s32 BattleAnim_RunSingUseTrail(void) {
     return SingTrail_AdvanceTimer();
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Sing.
  */
 void BattleAnim_DrawSingUseTrail(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

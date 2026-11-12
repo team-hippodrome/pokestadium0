@@ -2,7 +2,8 @@
 #include "battle_engine_347330.h"
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Surf.
  */
 Gfx* SurfTerrainGrid_Draw(Gfx* arg0) {
     static Gfx D_84388F80[] = {

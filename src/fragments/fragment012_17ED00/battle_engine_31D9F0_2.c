@@ -1861,7 +1861,8 @@ void func_82148090(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Fire Blast.
  */
 void BattleAnim_SetupDaimonji(Particle* arg0) {
     UNUSED s32 pad[3]; // FAKE: stack padding
@@ -1910,7 +1911,8 @@ void BattleAnim_SetupDaimonji(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Fire Blast.
  */
 void BattleAnim_ContinueDaimonji(Particle* arg0) {
     switch (arg0->phase) {
@@ -1935,7 +1937,8 @@ void BattleAnim_ContinueDaimonji(Particle* arg0) {
 /**
  * used to create the Daimonji of Fire blast that spells out 大
  * https://en.wikipedia.org/wiki/Gozan_no_Okuribi
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Fire Blast.
  */
 void BattleAnim_RunDaimonji(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -1980,7 +1983,8 @@ void BattleAnim_RunDaimonji(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Fire Blast.
  */
 void BattleAnim_SetupDaimonjiColoration(Particle* arg0) {
     UNUSED s32 pad[3]; // FAKE: stack padding
@@ -2014,7 +2018,8 @@ M2C_UNK func_8214851C(s8 *);                      /* extern */
 
 /**
  * Colors the Daimonji created when being hit by fire blast
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Fire Blast.
  */
 void BattleAnim_RunDaimonjiColoration(s8 *arg0) {
     s16 temp_v0;
