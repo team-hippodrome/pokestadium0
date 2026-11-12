@@ -54,11 +54,11 @@ void func_82132E28(s32 arg0, s32 arg1, s32 arg2) {
     }
 }
 
-void func_82107D24(s32, Vec3f*);
+void BattleScene_GetParticipantAimPoint(s32, Vec3f*);
 void func_8212254C(s32, s32, Vec3f, s32, s32, f32, f32);
 void func_82122628(s32, Vec3f, s32, s32, f32, f32);
 void func_82132EB4(s32 arg0, s32 arg1, f32 arg2, f32 arg3, s16 arg4, s16 arg5) {
-    func_82107D24(arg1, &sBattleScene.scene->unk_D0);
+    BattleScene_GetParticipantAimPoint(arg1, &sBattleScene.scene->unk_D0);
     func_8212254C(arg1, arg0, sBattleScene.scene->unk_D0, 0, 0x4000, arg3, 0.0f);
     func_82122628(arg0, sBattleScene.scene->unk_D0, arg4, arg5, arg2, 0.0f);
 }

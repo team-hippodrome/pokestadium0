@@ -125,7 +125,7 @@ void func_8211FAC4(CameraNode* arg0) {
     }
 }
 
-f32 func_82107EC8(ActivePokemon*);
+f32 BattleScene_GetParticipantHeight(ActivePokemon*);
 void func_8212239C(ActivePokemon*, CameraNode*);
 void func_8211FB54(CameraNode* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
@@ -143,7 +143,7 @@ void func_8211FB54(CameraNode* arg0) {
         BattleAnim_GetOwnerDefaultAnchorPosition(pokemon, &sBattleScene.scene->unk_D0);
         dist = BattleScene_ScaleCameraDistance(pokemon, 3.5f, 300.0f);
         angle = BattleScene_GetParticipantFacingAngle(pokemon);
-        BattleScene_SetCameraAtFromPosition(arg0, sBattleScene.scene->unk_D0, 0, angle, 0.0f, func_82107EC8(pokemon) * 1.5f);
+        BattleScene_SetCameraAtFromPosition(arg0, sBattleScene.scene->unk_D0, 0, angle, 0.0f, BattleScene_GetParticipantHeight(pokemon) * 1.5f);
         BattleScene_SetCameraEyeFromPosition(arg0, sBattleScene.scene->unk_D0, 0, BattleScene_GetParticipantFacingAngle(pokemon), dist, 0.0f);
         func_8212239C(pokemon, arg0);
         sBattleScene.scene->phaseStep++;
@@ -167,7 +167,7 @@ void func_8211FCC8(CameraNode* arg0) {
         dist *= BattleAnim_GetSpeciesBaseScale(pokemon) * 0.5 * sp46 + 1.0;
         if (dist > 500.0f) dist = 500.0f;
         sp46 = BattleAnim_RandomRange(4);
-        sp4C = func_82107EC8(pokemon) * sp46;
+        sp4C = BattleScene_GetParticipantHeight(pokemon) * sp46;
         BattleScene_SetCameraAtFromAnchor(pokemon, arg0, sBattleScene.scene->unk_D0, 0, 0, 0.0f, 0);
         BattleScene_SetCameraEyeFromPosition(arg0, sBattleScene.scene->unk_D0, 0, 0x4000 - BattleAnim_RandomRange(0xB4) * 0xB6, dist, sp4C);
         func_8212239C(pokemon, arg0); sBattleScene.scene->phaseStep++;
@@ -191,7 +191,7 @@ void func_8211FF08(CameraNode* arg0) {
         dist *= BattleAnim_GetSpeciesBaseScale(pokemon) * 0.5f * sp46 + 1.0f;
         if (dist > 500.0f) dist = 500.0f;
         sp46 = BattleAnim_RandomRange(4);
-        sp4C = func_82107EC8(pokemon) * sp46;
+        sp4C = BattleScene_GetParticipantHeight(pokemon) * sp46;
         BattleScene_SetCameraAtFromAnchor(pokemon, arg0, sBattleScene.scene->unk_D0, 0, 0, 0.0f, 0);
         BattleScene_SetCameraEyeFromPosition(arg0, sBattleScene.scene->unk_D0, 0, 0x4000 - BattleAnim_RandomRange(0xB4) * 0xB6, dist, sp4C);
         func_8212239C(pokemon, arg0); sBattleScene.scene->phaseStep++;
@@ -206,8 +206,8 @@ extern f32 D_FLT_82196040;
  * Unless BattleScene_SkipIntroIfFainted handles it, it enters state row 0x10, stores the
  * Pokemon's default anchor position in scene->unk_D0, derives a camera distance (factor
  * 3.5f, base 300.0f), aims the camera at the anchor using the Pokemon's facing angle and
- * a height offset of -func_82107EC8(ap), puts the eye at the same anchor with
- * -func_82107EC8(ap) * 0.2f, calls func_8212239C(ap, camera) and advances
+ * a height offset of -BattleScene_GetParticipantHeight(ap), puts the eye at the same anchor with
+ * -BattleScene_GetParticipantHeight(ap) * 0.2f, calls func_8212239C(ap, camera) and advances
  * scene->unk_20.
  * `pad` only reserves the stack slot the retail frame has between `dist` and `angle`.
  */
@@ -225,9 +225,9 @@ void func_82120134(CameraNode* arg0) {
         BattleAnim_GetOwnerDefaultAnchorPosition(ap, &sBattleScene.scene->unk_D0);
         dist = BattleScene_ScaleCameraDistance(ap, 3.5f, 300.0f);
         angle = BattleScene_GetParticipantFacingAngle(ap);
-        BattleScene_SetCameraAtFromAnchor(ap, arg0, sBattleScene.scene->unk_D0, 0, angle, 0.0f, -func_82107EC8(ap));
+        BattleScene_SetCameraAtFromAnchor(ap, arg0, sBattleScene.scene->unk_D0, 0, angle, 0.0f, -BattleScene_GetParticipantHeight(ap));
         angle = BattleScene_GetParticipantFacingAngle(ap);
-        BattleScene_SetCameraEyeFromPosition(arg0, sBattleScene.scene->unk_D0, 0, angle, dist, -func_82107EC8(ap) * 0.2f);
+        BattleScene_SetCameraEyeFromPosition(arg0, sBattleScene.scene->unk_D0, 0, angle, dist, -BattleScene_GetParticipantHeight(ap) * 0.2f);
         func_8212239C(ap, arg0);
         sBattleScene.scene->phaseStep += 1;
     }

@@ -162,10 +162,10 @@ extern u8 D_8218AC50[];
 
 /* The definition has no return statement, so the value left in v0 by its last
  * call comes back. Reading it as u16 here is what makes IDO keep a saved copy. */
-u16 func_8210EED8(s8*, s8*, u8);
+u16 BattleCalc_EstimateDamage(s8*, s8*, u8);
 /**
  * Expected damage of a move from attacker arg0 to defender arg1 (both battle
- * Pokemon records). Starts from func_8210EED8's damage, returns 0 for moves the AI
+ * Pokemon records). Starts from BattleCalc_EstimateDamage's damage, returns 0 for moves the AI
  * never uses for damage (status moves, healing, Self-Destruct, Explosion; Dream
  * Eater unless the target sleeps), doubles multi-hit moves, adds 75% for
  * high-critical moves, reduces two-turn moves when slower or the target knows Fly
@@ -177,7 +177,7 @@ s32 BattleAI_EstimateDamage(s8* arg0, s8* arg1, u8 move) {
     s32 score;
     s32 power;
 
-    power = func_8210EED8(arg0, arg1, move);
+    power = BattleCalc_EstimateDamage(arg0, arg1, move);
     score = power;
     switch (move) {
         case DREAM_EATER:

@@ -21,7 +21,7 @@ void func_8212187C(s32);
 void func_821351F8(CameraNode*, ActivePokemon*);
 s32 func_8211F644(ActivePokemon*, CameraNode*);
 void func_82104C68(ActivePokemon*, s32);
-f32 func_82107EC8(ActivePokemon*);
+f32 BattleScene_GetParticipantHeight(ActivePokemon*);
 void func_8212239C(ActivePokemon*, CameraNode*);
 extern f32 D_FLT_82196040;
 void func_8212239C(ActivePokemon*, CameraNode*);

@@ -472,7 +472,7 @@ void func_82135108(ActivePokemon* arg0) {
 void func_821351EC(UNUSED s32 arg0, UNUSED s32 arg1) {
 }
 
-void func_82107D24(ActivePokemon*, f32*);
+void BattleScene_GetParticipantAimPoint(ActivePokemon*, f32*);
 void func_8210BCF0(f32*, Vec3f*, f32*, s16*, s16*);
 void func_8000EEBC(void*, Vec3f*, f32, s16, s32);
 void func_8212254C(s32, s32, Vec3f, s32, s32, f32, f32);
@@ -501,7 +501,7 @@ loop:
         goto loop;
     }
     D_8219A5A0->visibilityPolicy = count;
-    func_82107D24(arg1, &D_FLT_8219A718);
+    BattleScene_GetParticipantAimPoint(arg1, &D_FLT_8219A718);
     func_8212254C((s32)arg1, (s32)arg0, *(Vec3f*)&D_FLT_8219A718, 0, 0, 0.0f, (f32)0.0);
     D_FLT_8219A718 *= arg1->facingDirection;
     func_8210BCF0(&D_FLT_8219A718, (Vec3f*)&D_FLT_8219A5B0, &sp40, &sp3E, &sp3C);
@@ -509,7 +509,7 @@ loop:
     func_8212239C(arg1, arg0);
 }
 
-void func_82107D24(ActivePokemon*, f32*);
+void BattleScene_GetParticipantAimPoint(ActivePokemon*, f32*);
 void func_8210BCF0(f32*, Vec3f*, f32*, s16*, s16*);
 void func_8000EEBC(void*, Vec3f*, f32, s16, s32);
 extern f32 D_FLT_8219A718;
@@ -519,7 +519,7 @@ void func_82135384(ActivePokemon* arg0, CameraNode* arg1, Vec3f* arg2, Vec3f* ar
     s16 sp28;
     s16 sp26;
     s16* sp26p;
-    func_82107D24(arg0, &D_FLT_8219A718);
+    BattleScene_GetParticipantAimPoint(arg0, &D_FLT_8219A718);
     D_FLT_8219A718 *= arg0->facingDirection;
     func_8210BCF0(&D_FLT_8219A718, &arg2[arg4 + arg5], &sp2C, &sp28, &sp26);
     func_8000EEBC((u8*)arg1 + 0xB4, &arg3[arg5], sp2C, sp28, M2C_FIELD(arg0, u32*, 0x60C) * *(sp26p = &sp26));
@@ -705,7 +705,7 @@ void func_82135A04(s32 arg0) {
 }
 
 extern u8 D_8219A4F4;
-void func_82107D24(ActivePokemon*, f32*);
+void BattleScene_GetParticipantAimPoint(ActivePokemon*, f32*);
 void func_8210BCF0(f32*, Vec3f*, f32*, s16*, s16*);
 void func_8000EEBC(void*, Vec3f*, f32, s16, s32);
 void func_8212254C(s32, s32, Vec3f, s32, s32, f32, f32);
@@ -734,7 +734,7 @@ loop:
         goto loop;
     }
     D_8219A5A0->visibilityPolicy = count;
-    func_82107D24(arg1, &D_FLT_8219A718);
+    BattleScene_GetParticipantAimPoint(arg1, &D_FLT_8219A718);
     func_8212254C((s32)arg1, (s32)arg0, *(Vec3f*)&D_FLT_8219A718, 0, 0, 0.0f, (f32)0.0);
     D_FLT_8219A718 *= arg1->facingDirection;
     func_8210BCF0(&D_FLT_8219A718, (Vec3f*)&D_FLT_8219A5B0, &sp40, &sp3E, &sp3C);

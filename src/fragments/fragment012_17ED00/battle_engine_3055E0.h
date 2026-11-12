@@ -134,7 +134,7 @@ typedef struct unk_func_883164C0 {
 #include "audio_category_fade.h"
 
 #include "m2c_macros.h"
-f32 func_82107EC8();
+f32 BattleScene_GetParticipantHeight();
 
 f32 BattleScene_ScaleCameraDistance(ActivePokemon* arg0, f32 arg1, f32 arg2);
 s32 BattleScene_AdvanceCameraSubstepCounter(s32 arg0);

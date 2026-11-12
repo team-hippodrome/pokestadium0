@@ -157,7 +157,12 @@ typedef struct TypeMatchupZ {
 } TypeMatchupZ; // size = 0x3
 extern TypeMatchupZ D_8218AC50[];
 
-void func_8210EB28(u8* attacker, u8* defender) {
+/**
+ * Damage-estimate version of Battle_ApplyTypeEffectAndSTAB for any attacker and
+ * defender (battle Pokemon records), working on D_82199F50.
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleCalc_ApplyTypeEffectAndStab(u8* attacker, u8* defender) {
     TypeMatchupZ* entry;
     u8 attType1 = attacker[0x1C];
     u8 attType2 = attacker[0x1D];
@@ -231,7 +236,12 @@ void BattleAI_PrepareDamageCalcState(BattleMonRuntime* arg0, BattleMonRuntime* a
     }
 }
 
-void func_8210EDBC(UNUSED u8* arg0, UNUSED u8* arg1) {
+/**
+ * Gen 1 base damage ((level * 2 / 5 + 2) * power * attack / defense) / 50 + 2,
+ * capped at 997, added to D_82199F50.
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleCalc_AddBaseDamage(UNUSED u8* arg0, UNUSED u8* arg1) {
     u8 tmp = D_8219A494.unk_01;
 
     if (tmp == 7) {
@@ -259,21 +269,22 @@ extern u8 D_82199F33;
 void func_8210E9C0(u8*, u8*);
 void func_8210EAC4();
 void func_8210EC0C(u8*, u8*, u8);
-void func_8210EDBC(u8*, u8*);
+void BattleCalc_AddBaseDamage(u8*, u8*);
 
 /**
- * Runs the sequence func_8210EC0C, func_8210EDBC, func_8210EB28,
+ * Runs the sequence func_8210EC0C, BattleCalc_AddBaseDamage, BattleCalc_ApplyTypeEffectAndStab,
  * func_8210EAC4 and func_8210E9C0 for the attacker/defender pair
  * (arg0, arg1). The flag D_82199F32 is saved into D_82199F33 and cleared
  * for the first four steps, and restored before the last one. arg2 is only
  * handed on to func_8210EC0C.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_8210EED8(u8* arg0, u8* arg1, u8 arg2) {
+void BattleCalc_EstimateDamage(u8* arg0, u8* arg1, u8 arg2) {
     D_82199F33 = D_82199F32;
     D_82199F32 = 0;
     func_8210EC0C(arg0, arg1, arg2);
-    func_8210EDBC(arg0, arg1);
-    func_8210EB28(arg0, arg1);
+    BattleCalc_AddBaseDamage(arg0, arg1);
+    BattleCalc_ApplyTypeEffectAndStab(arg0, arg1);
     func_8210EAC4();
     D_82199F32 = D_82199F33;
     func_8210E9C0(arg0, arg1);
@@ -317,7 +328,12 @@ extern S0Learnset D_8218D62C[];
 extern u8 D_8218AD9C[];
 extern u8* D_8218ADC8[];
 u8 Move_GetIdFromTableIndex(s32);
-void func_8210EFAC(S0LearnMon* pokemon, u16 pokemon_id) {
+/**
+ * Clears a move slot's illegal flag when the species can have that move (start
+ * moves, level-up moves or TM/HM).
+ * @unverified Name and comment guessed from the code.
+ */
+void Battle_MarkLegalMovesForSpecies(S0LearnMon* pokemon, u16 pokemon_id) {
     s32 move_index;
     s32 i;
     s32 lookup;
@@ -377,7 +393,12 @@ void func_8210EFAC(S0LearnMon* pokemon, u16 pokemon_id) {
 
 extern u8 D_8218C930[][2];
 
-void func_8210F24C(s8* arg0) {
+/**
+ * Marks all four moves illegal, then clears the flags for moves the species or
+ * its pre-evolutions (D_8218C930) can learn.
+ * @unverified Name and comment guessed from the code.
+ */
+void Battle_CheckMovesetLegality(s8* arg0) {
     s32 pad; // FAKE: stack padding
     s8* state = arg0 + 0x7C6;
 
@@ -385,12 +406,12 @@ void func_8210F24C(s8* arg0) {
     M2C_FIELD(arg0, s8*, 0x852) = 1;
     M2C_FIELD(arg0, s8*, 0x853) = 1;
     M2C_FIELD(arg0, s8*, 0x854) = 1;
-    func_8210EFAC(arg0, M2C_FIELD(state, u8*, 0xB) - 1);
+    Battle_MarkLegalMovesForSpecies(arg0, M2C_FIELD(state, u8*, 0xB) - 1);
     if (D_8218C930[M2C_FIELD(state, u8*, 0xB) - 1][0] != 0) {
-        func_8210EFAC(arg0, D_8218C930[M2C_FIELD(state, u8*, 0xB) - 1][0] - 1);
+        Battle_MarkLegalMovesForSpecies(arg0, D_8218C930[M2C_FIELD(state, u8*, 0xB) - 1][0] - 1);
     }
     if (D_8218C930[M2C_FIELD(state, u8*, 0xB) - 1][1] != 0) {
-        func_8210EFAC(arg0, D_8218C930[M2C_FIELD(state, u8*, 0xB) - 1][1] - 1);
+        Battle_MarkLegalMovesForSpecies(arg0, D_8218C930[M2C_FIELD(state, u8*, 0xB) - 1][1] - 1);
     }
 }
 
@@ -409,8 +430,12 @@ void func_8210F2F4(s8 *arg0)
 extern ActivePokemon* D_8219A540;
 void func_80043860(s32);
 
-// Integer-step version of Stadium 1's BattleScene_AnimateDisplayedHpToRuntime.
-s32 func_8210F31C(ActivePokemon* arg0) {
+/**
+ * Steps the party Pokemon's HP one point toward the battle display HP. Returns 1
+ * once they are equal.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 Battle_StepPartyHpToDisplay(ActivePokemon* arg0) {
     BattleMonRuntime* rt = &arg0->state.runtime;
     BattleMon* mon = &arg0->teamRoster->pokemonPicked[arg0->state.rosterIndex];
 

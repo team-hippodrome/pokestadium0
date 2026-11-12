@@ -64,7 +64,12 @@ extern s8 *D_8219A3C4;
 extern s32 D_8219A520;
 extern s8 *D_8219A5A0;
 
-s32 func_821119F8(void) {
+/**
+ * Mirror Move: copies the target's last move into the user (fails when it is
+ * Mirror Move or none). Name from Stadium 1.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 Battle_TryLoadFollowupMoveFromTarget(void) {
     u8 temp_v0;
 
     temp_v0 = M2C_FIELD(D_8219A3C4, u8 *, 0x58);
@@ -104,8 +109,8 @@ void func_82111A78(void)
 extern TypeEffectivenessEntry D_8218AC50[];
 extern u8 D_82199F3F;
 
-/*
- * func_82111AC4
+/**
+ * Battle_ApplyTypeEffectAndSTAB
  *
  * Applies a type-chart table to sBattleDamage. moveType is
  * sBattleUser->moveCache.unk_03. If it equals either of sBattleUser's two
@@ -118,11 +123,12 @@ extern u8 D_82199F3F;
  * set to 1 if the result is 0.
  *
  * The four type bytes are read into locals before the first test, as in the
- * retail code. func_8210EB28 walks the same table. Stadium 1's equivalent is
+ * retail code. BattleCalc_ApplyTypeEffectAndStab walks the same table. Stadium 1's equivalent is
  * Battle_ApplyTypeEffectAndSTAB, which has extra Struggle and effectiveness
  * counting logic that this version does not.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_82111AC4(void) {
+void Battle_ApplyTypeEffectAndSTAB(void) {
     TypeEffectivenessEntry* entry;
     u8 userType1;
     u8 userType2;
@@ -190,7 +196,12 @@ extern u8 D_80065CED[];
 extern u8 D_8218ADEC[];
 s32 func_8210FA2C(s32, u8*, s32);
 s32 func_8210F3F0(void);
-s32 func_82111CD4(void) {
+/**
+ * Gen 1 critical-hit roll from the species' base speed (halved, or doubled
+ * without Focus Energy, capped at 255). Name from Stadium 1.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 Battle_CheckCriticalHit(void) {
     UNUSED s32 pad; // FAKE: stack padding
     s32 v;
 
@@ -249,7 +260,13 @@ extern s32 D_8218C74C;
 extern s32 D_8218C750;
 extern MoveName82111DCC D_8006A9CC[];
 
-s32 func_82111DCC(void) {
+/**
+ * Before-move checks for the acting Pokemon: sleep countdown, freeze, and the
+ * other conditions that stop it acting. Returns a code the turn loop switches on.
+ * Name from Stadium 1.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 Battle_CheckMonCanAct(void) {
     BattleMonRuntime* sp34;
     char* sp30;
     u16 sp2E;
@@ -426,9 +443,12 @@ void func_82105E38(ActivePokemon*, s32);
 void func_821102F0(void);
 void func_8210F8E8(void);
 
-/* Resolve the current action: move selection, hit and damage checks, then effect dispatch.
-   Stadium 1 calls it ProcessBattleTurn. */
-void func_821125C0(void) {
+/**
+ * Resolves the current action: move selection, hit and damage checks, then
+ * effect dispatch. Name from Stadium 1's ProcessBattleTurn.
+ * @unverified Name and comment guessed from the code.
+ */
+void ProcessBattleTurn(void) {
     s8 sp2C[12];
     u8 effect;
     BattleMonRuntime* user;
@@ -439,7 +459,7 @@ void func_821125C0(void) {
         D_82199F36 = 0;
         D_82199F3F = 0xA;
 
-        switch (func_82111DCC()) {
+        switch (Battle_CheckMonCanAct()) {
             case 2:
                 Battle_LoadMoveCache();
                 if (sBattleUser->immobilizedReason & 0x10) {
@@ -470,14 +490,14 @@ void func_821125C0(void) {
                 }
             case 4:
                 if (IsByteInArray(sBattleUser->moveCache.effect, D_8218AD60, 2) == 0) {
-                    func_82111CD4();
+                    Battle_CheckCriticalHit();
                     if (Battle_Effect_Counter() != 0) {
                         InitBattleParameters();
                         if (Battle_CalcDamage() == 0) {
                             effect = sBattleUser->moveCache.effect;
                             goto block_29;
                         }
-                        func_82111AC4();
+                        Battle_ApplyTypeEffectAndSTAB();
                         func_8210F8E8();
                     } else {
                         goto block_24;
@@ -509,7 +529,7 @@ void func_821125C0(void) {
             block_29:
                 switch (effect) {
                     case 9: // Mirror Move
-                        if (func_821119F8() == 0) {
+                        if (Battle_TryLoadFollowupMoveFromTarget() == 0) {
                             break;
                         }
                         D_82199F41 = 0;
@@ -799,7 +819,7 @@ s32 Battle_CheckFaintAfterMove(void) {
 
 void func_82110B44(ActivePokemon*);
 void func_8210F2F4(ActivePokemon*);
-void func_821125C0(void);
+void ProcessBattleTurn(void);
 /**
  * Initialize one action's shared state, resolve its turn and residuals, then check defeat.
  * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
@@ -830,7 +850,7 @@ void Battle_ResolveMonAction(void)
     sBattleTarget->displayHp = 0x384;
     func_8210F2F4(sActivePokemon[0]);
     func_8210F2F4(sActivePokemon[1]);
-    func_821125C0();
+    ProcessBattleTurn();
     sBattleUser->displayHp = 0x384;
     sBattleTarget->displayHp = 0x384;
     sBattleUser->unk_0E = 0x384;
@@ -858,7 +878,7 @@ void Battle_ResolveMonAction(void)
     func_8210F2F4(sActivePokemon[1]);
     return;
   }
-  func_821125C0();
+  ProcessBattleTurn();
   Battle_ApplyResidualEffects();
   if (sp1C->effectTurnsLeft == 0)
   {

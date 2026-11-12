@@ -482,11 +482,11 @@ void func_82129D10(CameraNode* arg0) {
             BattleAnim_CleanupEffects(1);
             BattleScene_ClearCameraOffsetVectors();
             BattleScene_SetPhaseFlag();
-            func_82124284((s32)arg0, D_8219A540, func_82107EC8(D_8219A540) * 2.0f);
+            func_82124284((s32)arg0, D_8219A540, BattleScene_GetParticipantHeight(D_8219A540) * 2.0f);
             break;
         case 1:
             if (BattleAnim_IsSessionBusy((ActivePokemon*)D_8219A540) == 0) {
-                func_821243DC((s32)arg0, D_8219A540, func_82107EC8(D_8219A540) * 2.0f);
+                func_821243DC((s32)arg0, D_8219A540, BattleScene_GetParticipantHeight(D_8219A540) * 2.0f);
                 if (sBattleScene.scene->unk_74 <= 1.0f) {
                     BattleScene_CleanupParticipantEffectMode((ActivePokemon*)D_8219A544);
                     sBattleScene.scene->phaseStep++;
@@ -508,10 +508,10 @@ void func_82129E30(s32 arg0) {
         func_8213B31C(1);
         func_821224F4();
         func_82125580();
-        func_82124284(arg0, D_8219A540, -func_82107EC8(D_8219A540) * D_FLT_821963A0);
+        func_82124284(arg0, D_8219A540, -BattleScene_GetParticipantHeight(D_8219A540) * D_FLT_821963A0);
         return;
     case 1:
-        func_821243DC(arg0, D_8219A540, -func_82107EC8(D_8219A540) * D_FLT_821963A4);
+        func_821243DC(arg0, D_8219A540, -BattleScene_GetParticipantHeight(D_8219A540) * D_FLT_821963A4);
         if (M2C_FIELD(D_8219A5A0, f32 *, 0x74) <= 1.0f) {
             func_82106374(D_8219A544);
             func_82125570();

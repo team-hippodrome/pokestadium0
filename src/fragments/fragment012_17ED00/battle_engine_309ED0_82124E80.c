@@ -334,8 +334,8 @@ void BattleScene_UpdateDisplayedHpAndTransition(CameraNode* arg0) {
 }
 
 void func_82125C34(s32 arg0) {
-    D_8219A560 = func_8210F31C(D_82199DE0);
-    D_8219A564 = func_8210F31C(D_82199DE4);
+    D_8219A560 = Battle_StepPartyHpToDisplay(D_82199DE0);
+    D_8219A564 = Battle_StepPartyHpToDisplay(D_82199DE4);
     func_82125AC8(arg0);
 }
 
@@ -1070,7 +1070,7 @@ void func_82127DFC(CameraNode* arg0) {
                 func_821255EC((s8*)arg0);
                 BattleAnim_GetOwnerDefaultAnchorPosition((ActivePokemon*)D_8219A544, &sBattleScene.scene->unk_D0);
                 step = func_82121750((ActivePokemon*)D_8219A544, 3.5f, 250.0f);
-                BattleScene_SetCameraAtFromAnchor((ActivePokemon*)D_8219A544, arg0, sBattleScene.scene->unk_D0, 0, func_82107CC4((ActivePokemon*)D_8219A544), 0.0f, func_82107EC8((ActivePokemon*)D_8219A544) * 2.5f);
+                BattleScene_SetCameraAtFromAnchor((ActivePokemon*)D_8219A544, arg0, sBattleScene.scene->unk_D0, 0, func_82107CC4((ActivePokemon*)D_8219A544), 0.0f, BattleScene_GetParticipantHeight((ActivePokemon*)D_8219A544) * 2.5f);
                 BattleScene_SetCameraEyeFromPosition(arg0, sBattleScene.scene->unk_D0, 0, func_82107CC4((ActivePokemon*)D_8219A544), step, 0.0f);
                 func_8211F034(D_8219A520 + 0x188, sBattleScene.scene->actingSide);
                 func_82134FD0((ActivePokemon*)D_8219A544);
@@ -1131,7 +1131,7 @@ void func_8212817C(CameraNode* arg0) {
                 func_821255EC((s8*)arg0);
                 BattleAnim_GetOwnerDefaultAnchorPosition((ActivePokemon*)D_8219A544, &sBattleScene.scene->unk_D0);
                 step = func_82121750((ActivePokemon*)D_8219A544, 3.5f, 250.0f);
-                BattleScene_SetCameraAtFromAnchor((ActivePokemon*)D_8219A544, arg0, sBattleScene.scene->unk_D0, 0, func_82107CC4((ActivePokemon*)D_8219A544), 0.0f, -func_82107EC8((ActivePokemon*)D_8219A544) * 1.5f);
+                BattleScene_SetCameraAtFromAnchor((ActivePokemon*)D_8219A544, arg0, sBattleScene.scene->unk_D0, 0, func_82107CC4((ActivePokemon*)D_8219A544), 0.0f, -BattleScene_GetParticipantHeight((ActivePokemon*)D_8219A544) * 1.5f);
                 BattleScene_SetCameraEyeFromPosition(arg0, sBattleScene.scene->unk_D0, 0, func_82107CC4((ActivePokemon*)D_8219A544), step, 0.0f);
                 func_8211F034(D_8219A520 + 0x188, sBattleScene.scene->actingSide);
                 func_82102010((ActivePokemon*)D_8219A544);
@@ -1193,7 +1193,7 @@ void func_82128510(CameraNode* arg0) {
                 BattleAnim_GetOwnerDefaultAnchorPosition((ActivePokemon*)D_8219A544, &sBattleScene.scene->unk_D0);
                 sp44 = func_82121750((ActivePokemon*)D_8219A544, 3.5f, 300.0f);
                 sp3A = func_82107CC4((ActivePokemon*)D_8219A544);
-                BattleScene_SetCameraAtFromAnchor((ActivePokemon*)D_8219A544, arg0, sBattleScene.scene->unk_D0, 0, sp3A, 0.0f, 2.0f * -func_82107EC8((ActivePokemon*)D_8219A544));
+                BattleScene_SetCameraAtFromAnchor((ActivePokemon*)D_8219A544, arg0, sBattleScene.scene->unk_D0, 0, sp3A, 0.0f, 2.0f * -BattleScene_GetParticipantHeight((ActivePokemon*)D_8219A544));
                 BattleScene_SetCameraEyeFromPosition(arg0, sBattleScene.scene->unk_D0, 0, func_82107CC4((ActivePokemon*)D_8219A544), sp44, -150.0f);
                 func_8211F034(D_8219A520 + 0x188, sBattleScene.scene->actingSide);
                 func_82134FD0((ActivePokemon*)D_8219A544);

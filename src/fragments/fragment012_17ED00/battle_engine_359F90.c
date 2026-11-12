@@ -396,7 +396,7 @@ void ApplyBurnAttackCut(ActivePokemon* arg0) {
     }
 }
 
-void func_8210F24C(ActivePokemon*);
+void Battle_CheckMovesetLegality(ActivePokemon*);
 void func_80041940(s32, s32, s32);
 
 void Battle_InitPokemonRuntimeState(ActivePokemon* arg0) {
@@ -475,7 +475,7 @@ void Battle_InitPokemonRuntimeState(ActivePokemon* arg0) {
     for (i = 0; i < 8; i++) { sp24->unk_5C[i] = 7; }
     // clang-format on
 
-    func_8210F24C(arg0);
+    Battle_CheckMovesetLegality(arg0);
     func_80041940(BattleScene_GetParticipantSideIndex(arg0), sp34->hp, sp34->maxHp);
 }
 

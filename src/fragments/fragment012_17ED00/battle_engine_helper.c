@@ -209,36 +209,45 @@ void BattleScene_GetParticipantModelPosition(ActivePokemon* pokemon, Vec3f* dest
     dest->z = pokemon->displayObject.position.z;
 }
 
-f32 func_82107EC8(ActivePokemon*);
-void func_82107D24(ActivePokemon *arg0, u8 *arg1) {
+f32 BattleScene_GetParticipantHeight(ActivePokemon*);
+/**
+ * World point where effects aim at the participant: its position, raised by its
+ * height for grounded species, never below its height.
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleScene_GetParticipantAimPoint(ActivePokemon *arg0, u8 *arg1) {
     if (*D_FLT_82189354[arg0->displayObject.objectType] != 0.0f) {
         M2C_FIELD(arg1, f32 *, 0) = (f32) arg0->displayObject.position.x;
         M2C_FIELD(arg1, f32 *, 4) = (f32) arg0->displayObject.position.y;
         M2C_FIELD(arg1, f32 *, 8) = (f32) arg0->displayObject.position.z;
     } else {
         M2C_FIELD(arg1, f32 *, 0) = (f32) arg0->displayObject.position.x;
-        M2C_FIELD(arg1, f32 *, 4) = (f32) (func_82107EC8(arg0) + arg0->displayObject.position.y);
+        M2C_FIELD(arg1, f32 *, 4) = (f32) (BattleScene_GetParticipantHeight(arg0) + arg0->displayObject.position.y);
         M2C_FIELD(arg1, f32 *, 8) = (f32) arg0->displayObject.position.z;
     }
     if (M2C_FIELD(arg1, f32 *, 4) < 0.0f) {
-        M2C_FIELD(arg1, f32 *, 4) = func_82107EC8(arg0);
+        M2C_FIELD(arg1, f32 *, 4) = BattleScene_GetParticipantHeight(arg0);
     }
 }
 
 f32 func_8210791C(ActivePokemon*);
-f32 func_82107EC8(ActivePokemon*);
-void func_82107DDC(ActivePokemon* active_pokemon, Vec3f* out) {
+f32 BattleScene_GetParticipantHeight(ActivePokemon*);
+/**
+ * Like BattleScene_GetParticipantAimPoint, but in screen x (func_8210791C) with z 0.
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleScene_GetParticipantScreenAimPoint(ActivePokemon* active_pokemon, Vec3f* out) {
     if (D_FLT_82189354[active_pokemon->displayObject.objectType][0] != 0.0f) {
         out->x = func_8210791C(active_pokemon);
         out->y = active_pokemon->displayObject.position.y;
         out->z = 0.0f;
     } else {
         out->x = func_8210791C(active_pokemon);
-        out->y = func_82107EC8(active_pokemon) + active_pokemon->displayObject.position.y;
+        out->y = BattleScene_GetParticipantHeight(active_pokemon) + active_pokemon->displayObject.position.y;
         out->z = 0.0f;
     }
     if (out->y < 0.0f) {
-        out->y = func_82107EC8(active_pokemon);
+        out->y = BattleScene_GetParticipantHeight(active_pokemon);
     }
 }
 
@@ -250,15 +259,16 @@ void func_82107EA0(s8 *arg0, s8 *arg1) {
 
 extern f32 D_FLT_82189350[][4];
 
-/*
- * func_82107EC8
+/**
+ * BattleScene_GetParticipantHeight
  *
  * Returns the table width (first float of the object type's entry in
  * D_FLT_82189350) unscaled when modelTransformId is 0x10, otherwise the same
  * width times the display object's Y scale. What transform 0x10 is has not been
  * established; the value is used literally here.
+ * @unverified Name guessed from the code; comment kept.
  */
-f32 func_82107EC8(ActivePokemon* active_pokemon) {
+f32 BattleScene_GetParticipantHeight(ActivePokemon* active_pokemon) {
     if (active_pokemon->modelTransformId == 0x10) {
         return D_FLT_82189350[active_pokemon->displayObject.objectType][0];
     }

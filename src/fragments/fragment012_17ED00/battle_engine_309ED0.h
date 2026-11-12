@@ -109,7 +109,7 @@ s32 func_82125930(M2C_UNK);
 
 void BattleScene_UpdateDisplayedHpAndTransition(CameraNode* arg0);
 
-s32 func_8210F31C(s32);                             /* extern */
+s32 Battle_StepPartyHpToDisplay(s32);                             /* extern */
 M2C_UNK func_82125AC8(s32);                         /* extern */
 extern s32 D_82199DE0;
 extern s32 D_82199DE4;
@@ -227,12 +227,12 @@ M2C_UNK func_82124284(s32, s32, f32);
 M2C_UNK func_821243DC(s32, s32, f32);
 void BattleScene_ActionSetupAnimationVariantB(CameraNode* arg0);
 
-f32 func_82107EC8(s32);
+f32 BattleScene_GetParticipantHeight(s32);
 
 void func_82129D10(CameraNode* arg0);
 
 M2C_UNK func_82106374(s32);                         /* extern */
-f32 func_82107EC8(s32);                             /* extern */
+f32 BattleScene_GetParticipantHeight(s32);                             /* extern */
 M2C_UNK func_821224F4();                            /* extern */
 M2C_UNK func_82124284(s32, s32, f32);               /* extern */
 M2C_UNK func_821243DC(s32, s32, f32);               /* extern */
