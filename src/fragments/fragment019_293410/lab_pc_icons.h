@@ -37,21 +37,21 @@ typedef struct Entry80066AA0 {
 extern Entry80066AA0 D_80066AA0[];
 extern Entry80066AA0 D_80066AA8;
 s32 func_8001FA30(u8);
-void func_8A200020(s32 arg0, s32 arg1, BattleMon* arg2);
+void MonSummary_DrawStatusCondition(s32 arg0, s32 arg1, BattleMon* arg2);
 
 extern M2C_UNK D_800734A8;
 extern char D_8A21D850[];
 extern char D_8A21D854[];
 extern char D_8A21D858[];
 void Font_SetColorForFlags(s32);
-void func_8A200020(s32, s32, BattleMon*);
+void MonSummary_DrawStatusCondition(s32, s32, BattleMon*);
 void MonSummary_DrawHpLevel(s32 arg0, s32 arg1, BattleMon* arg2, s32 arg3);
 
 extern s8* D_8A21DA50;
 void UI_DrawTextureRgba16(s32 arg0, s32 arg1, s32 arg2);
 
 /*
- * func_8A20034C
+ * MonSummary_InitListWindow
  *
  * Initialises a record like Pokedex_InitEntryWindow does: Window_SetRect fills the first
  * five words with (arg1, arg2, 0x221, 0x168, 0), the words at +0x20, +0x24
@@ -64,17 +64,17 @@ void UI_DrawTextureRgba16(s32 arg0, s32 arg1, s32 arg2);
 M2C_UNK Menu_Init(s8 *, s32, s8 *, M2C_UNK *, s32, s32); /* extern */
 /* MonSummary_DrawListRow is defined in lab_pc_icons.c. */
 
-void func_8A20034C(s8 *arg0, s32 arg1, s32 arg2, s32 arg3);
+void MonSummary_InitListWindow(s8 *arg0, s32 arg1, s32 arg2, s32 arg3);
 
 extern Color_RGBA8 D_8A203304;
 void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
 
-void func_8A200770(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4);
+void MonSummary_DrawMenuRow(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4);
 
 s32 func_8002AB84();                                /* extern */
 M2C_UNK Menu_DrawItems(s8 *, s32, s32, M2C_UNK, s32); /* extern */
 
-void func_8A2008F4(s8 *arg0);
+void MonSummary_DrawMenu(s8 *arg0);
 
 typedef struct Color82000BC4 {
     u8 r, g, b, a;
@@ -91,20 +91,20 @@ void func_8001ABBC(void);
 void func_8001AA9C(u8, u8, u8, u8);
 void func_8001A944(s32, s32, const char*, ...);
 
-void func_8A200D44(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+void MonSummary_DrawTypeName(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 
 extern Gfx D_80060270[];
 void func_80029028(s32, s32, s32, s32, Color_RGBA8);
 void func_8001ABE8(void);
 void func_8001AAE4(s32, s32, s32, s32);
 void func_8001AC3C(void);
-void func_8A201394(s32 arg0, s32 arg1, BattleMon* arg2);
+void MonSummary_DrawSpeciesName(s32 arg0, s32 arg1, BattleMon* arg2);
 
 u8* func_800196F8(s32);
 void func_800069CC(void);
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 extern s32 D_8A21DA4C;
-void func_8A201C08(s32 arg0, s32 arg1, s32 arg2);
+void MonSummary_DrawModelPreview(s32 arg0, s32 arg1, s32 arg2);
 
 M2C_UNK func_80019008(s32, s32, M2C_UNK);           /* extern */
 M2C_UNK Ui_DrawTexturedDivider(s32, s32, s32, M2C_UNK *);    /* extern */
@@ -114,9 +114,9 @@ void MonSummary_DrawStats(s32, s32, BattleMon*);
 void MonSummary_DrawHeader();
 void MonSummary_DrawTrainerInfo(s32, s32, s32);
 void func_8A2010C8(s32, s32, s32, s32);
-void func_8A201394();
+void MonSummary_DrawSpeciesName();
 s32 MonSummary_DrawMoveInfo(s32, s32, s32, s32);
-void func_8A201C08(s32, s32, s32);
+void MonSummary_DrawModelPreview(s32, s32, s32);
 extern s8 D_8007356C;
 void MonSummary_DrawPage(s8 *arg0, s32 arg1);
 
@@ -125,12 +125,12 @@ s32 func_8002D454();                /* extern */
 M2C_UNK func_8003F6AC(M2C_UNK);                     /* extern */
 extern s8 *D_800603C0;
 
-s32 func_8A202078(s8 *arg0);
+s32 MonSummary_GetCButtonPage(s8 *arg0);
 
 M2C_UNK Ui_DrawTintedScreenBackground(M2C_UNK, M2C_UNK, u8, u8, s32); /* extern */
 extern M2C_UNK D_8A203300;
 
-void func_8A202160(void);
+void MonSummary_DrawBackground(void);
 
 s32 func_80020AFC(M2C_UNK, s32, M2C_UNK, M2C_UNK);  /* extern */
 M2C_UNK func_80020C60(s32);                         /* extern */
@@ -144,7 +144,7 @@ void func_80020DF0(s32, s32, s32);
 s32 func_8002207C(s32);
 void func_8002D7D4(s32);
 void func_80022188(s32);
-void func_8A20261C(void*);
+void MonSummary_DrawScreen(void*);
 
 void LabPC_WriteDeckBack(s32* arg0, s32 arg1);
 
@@ -154,11 +154,11 @@ M2C_UNK func_8000B1FC();                            /* extern */
 M2C_UNK func_8000B220();                            /* extern */
 M2C_UNK func_800158C0();                            /* extern */
 M2C_UNK func_8001B5F0();                            /* extern */
-void func_8A20261C(void*);
-M2C_UNK func_8A20291C(M2C_UNK *);                   /* extern */
+void MonSummary_DrawScreen(void*);
+M2C_UNK MonSummary_UpdateScreen(M2C_UNK *);                   /* extern */
 extern M2C_UNK D_8A21DA80;
 
-void func_8A203070(s32 arg0);
+void MonSummary_RunFrame(s32 arg0);
 
 extern u8 D_81000000[];
 extern u8 D_0015B1A0[];
@@ -181,6 +181,6 @@ extern void* D_8A21DA58;
 extern void* D_8A21DA60[4];
 void BattlePrep_RenderFrame(void);
 s32 func_8A202F50(u8);
-s32 func_8A2030C0(UNUSED s32 arg0, UNUSED s32 arg1, UNUSED s32 arg2);
+s32 MonSummary_Init(UNUSED s32 arg0, UNUSED s32 arg1, UNUSED s32 arg2);
 
 #endif

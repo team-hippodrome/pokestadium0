@@ -16,7 +16,11 @@ extern s32 D_8A21DE08;
 extern M2C_UNK D_8A21DE10;
 extern M2C_UNK D_8A21DA80;
 
-void func_8A200020(s32 arg0, s32 arg1, BattleMon* arg2) {
+/**
+ * Draws the status condition name in its color (the fainted entry when HP is 0).
+ * @unverified Name and comment guessed from the code.
+ */
+void MonSummary_DrawStatusCondition(s32 arg0, s32 arg1, BattleMon* arg2) {
     Entry80066AA0* e;
 
     if (arg2->hp == 0) {
@@ -44,7 +48,7 @@ void MonSummary_DrawHpLevel(s32 arg0, s32 arg1, BattleMon* arg2, s32 arg3) {
     Font_SetActive(8, 0);
     Font_Printf(arg0 + 0x11B, arg1 + 0x19, D_8A21D854, arg2->level);
     Font_Printf(arg0 + 0x175, arg1 + 0x19, D_8A21D858, arg2->hp, arg2->maxHp);
-    func_8A200020(arg0 + 0xD4, arg1 + 0x19, arg2);
+    MonSummary_DrawStatusCondition(arg0 + 0xD4, arg1 + 0x19, arg2);
     Font_EndTexturedTextRendering();
 }
 
@@ -84,7 +88,11 @@ void MonSummary_DrawListRow(s32 arg0, s32 arg1, BattleMon *arg2, s32 arg3, s32 a
     }
 }
 
-void func_8A20034C(s8 *arg0, s32 arg1, s32 arg2, s32 arg3) {
+/**
+ * Sets up the Pokemon list window (545x360) and its menu of MonSummary_DrawListRow rows.
+ * @unverified Name and comment guessed from the code.
+ */
+void MonSummary_InitListWindow(s8 *arg0, s32 arg1, s32 arg2, s32 arg3) {
     Window_SetRect(arg0, arg1, arg2, 0x221, 0x168);
     M2C_FIELD(arg0, s32 *, 0x24) = 0;
     M2C_FIELD(arg0, s32 *, 0x20) = 0;
@@ -102,7 +110,11 @@ extern char* D_8A20335C;
 void Ui_FillRectPrimEnvColor(s32 x, s32 y, s32 w, s32 h, Color_RGBA8 prim, Color_RGBA8 env);
 void func_800189C0(s8*, s32);
 void func_800069CC(void);
-void func_8A2003C0(s8* arg0, s32 arg1) {
+/**
+ * Draws the Pokemon list window: divider, footer bar and the rows.
+ * @unverified Name and comment guessed from the code.
+ */
+void MonSummary_DrawListWindow(s8* arg0, s32 arg1) {
     s32 flags = 0xFFED;
     s32 i;
     s32 x;
@@ -157,7 +169,11 @@ void func_8A2003C0(s8* arg0, s32 arg1) {
     }
 }
 
-void func_8A200770(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4) {
+/**
+ * Draws one menu row label with the selection highlight.
+ * @unverified Name and comment guessed from the code.
+ */
+void MonSummary_DrawMenuRow(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4) {
     if (arg4 & 0x10) {
         Ui_FillRectHighlighted(arg0 + 3, arg1 + 3, 0xA2, 0x1E, D_8A203304);
     }
@@ -171,7 +187,11 @@ void func_8A200770(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4) {
 extern u8 D_8A203364[];
 s32 func_8002D3D0(u8*);
 void func_80027804(s8*, void*, s32, s32);
-void func_8A20080C(s8 *arg0, s32 arg1, s32 arg2, u8 *arg3)
+/**
+ * Sets up the small menu window (180x132).
+ * @unverified Name and comment guessed from the code.
+ */
+void MonSummary_InitMenuWindow(s8 *arg0, s32 arg1, s32 arg2, u8 *arg3)
 {
   s8 *new_var; // FAKE: permuter temp
   s8 *sp2C;
@@ -184,7 +204,7 @@ void func_8A20080C(s8 *arg0, s32 arg1, s32 arg2, u8 *arg3)
   *((Color_RGBA8 *) (((s8 *) arg0) + 0x18)) = D_8A203304;
   sp2C = arg0 + 0x50;
   func_80027804(sp2C, D_8A203364, 3, 3);
-  Menu_Init(arg0 + 0x2C, sp2C, arg0 + 0x5C, (M2C_UNK *) func_8A200770, 0xA8, 0x24);
+  Menu_Init(arg0 + 0x2C, sp2C, arg0 + 0x5C, (M2C_UNK *) MonSummary_DrawMenuRow, 0xA8, 0x24);
   if ((!arg0) && (!arg0))
   {
   }
@@ -196,7 +216,11 @@ void func_8A20080C(s8 *arg0, s32 arg1, s32 arg2, u8 *arg3)
   *(*((u16 **) (((s8 *) arg0) + 0x30))) |= 1;
 }
 
-void func_8A2008F4(s8 *arg0) {
+/**
+ * Draws the menu window's items.
+ * @unverified Name and comment guessed from the code.
+ */
+void MonSummary_DrawMenu(s8 *arg0) {
     if (func_8002AB84() == 0) {
         Menu_DrawItems(arg0 + 0x2C, M2C_FIELD(arg0, s32 *, 0) + 6, M2C_FIELD(arg0, s32 *, 4) + 0xC, 0xFEF, 0);
     }
@@ -214,8 +238,9 @@ s32 func_8002BC14(s32);
  * entry is clear it returns index + 1, if set it plays sound effect func_8003F6AC(8) and
  * returns 0; any other result returns 0. (What the table bit means -- likely "disabled"
  * -- is inferred from the sound call only.)
+ * @unverified Name guessed from the code; comment kept.
  */
-s32 func_8A20093C(s8* arg0) {
+s32 MonSummary_UpdateMenuCursor(s8* arg0) {
     s32 sp1C = 0;
     s32 dir;
     s32 idx;
@@ -293,12 +318,16 @@ void MonSummary_DrawHeader(s32 arg0, s32 arg1, BattleMon* arg2) {
     func_8001A944(arg0 + 0x8D, arg1 + 0x58, D_8A21D90C, arg2->hp, arg2->maxHp);
     func_8001AA9C(0xFF, 0xC7, 0xC7, 0xFF);
     func_8001A944(arg0 + 0x23, arg1 + 0x74, D_8A21D914);
-    func_8A200020(arg0 + 0xAF, arg1 + 0x74, arg2);
+    MonSummary_DrawStatusCondition(arg0 + 0xAF, arg1 + 0x74, arg2);
     func_8001ABBC();
     BattleHud_DrawHpBarTexture(arg0 + 0x85, arg1 + 0x48, 0x94, arg2->hp, arg2->maxHp);
 }
 
-void func_8A200D44(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
+/**
+ * Draws the name of the species' type 1 or 2 in its type color; nothing for a missing type 2.
+ * @unverified Name and comment guessed from the code.
+ */
+void MonSummary_DrawTypeName(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     Color82000BC4 c;
     s32 idx = Pokemon_GetTypeIndex(arg3, arg4);
 
@@ -367,8 +396,8 @@ void MonSummary_DrawTrainerInfo(s32 arg0, s32 arg1, s32 arg2) {
     func_8001A944(arg0 + 0x40, arg1 + 0xA8, D_8A21D978, to_next);
     func_8001A944(arg0 + 0xD7, arg1 + 0xA8, D_8A21D97C, next_level);
     func_8001ABBC();
-    func_8A200D44(arg0 + 0xAF, arg1 + 0xC, 8, arg2, 0);
-    func_8A200D44(arg0 + 0xAF, arg1 + 0x28, 8, arg2, 1);
+    MonSummary_DrawTypeName(arg0 + 0xAF, arg1 + 0xC, 8, arg2, 0);
+    MonSummary_DrawTypeName(arg0 + 0xAF, arg1 + 0x28, 8, arg2, 1);
 }
 
 typedef struct Entry8006A9D4 {
@@ -456,7 +485,11 @@ void func_8A2010C8(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
 }
 
 
-void func_8A201394(s32 arg0, s32 arg1, BattleMon* arg2) {
+/**
+ * Draws the species name banner.
+ * @unverified Name and comment guessed from the code.
+ */
+void MonSummary_DrawSpeciesName(s32 arg0, s32 arg1, BattleMon* arg2) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(arg0, arg1, 0x122, 0x4E, D_8A203304);
     func_8001AB6C();
@@ -476,7 +509,7 @@ void func_8A201394(s32 arg0, s32 arg1, BattleMon* arg2) {
     if (Pokemon_GetTypeIndex((s32)arg2, 1) != -1) {
         func_8001A944(arg0 + 0xB9, arg1 + 0x3C, "2/");
     }
-    func_8A200D44(arg0 + 0x6F, arg1 + 0x3C, 4, (s32)arg2, 0);
-    func_8A200D44(arg0 + 0xD9, arg1 + 0x3C, 4, (s32)arg2, 1);
+    MonSummary_DrawTypeName(arg0 + 0x6F, arg1 + 0x3C, 4, (s32)arg2, 0);
+    MonSummary_DrawTypeName(arg0 + 0xD9, arg1 + 0x3C, 4, (s32)arg2, 1);
     func_8001ABBC();
 }

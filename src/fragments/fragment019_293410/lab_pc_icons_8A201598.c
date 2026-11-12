@@ -123,7 +123,11 @@ s32 MonSummary_DrawMoveInfo(s32 arg0, s32 arg1, s32 arg2, s32 arg3)
     }
 }
 
-void func_8A201C08(s32 arg0, s32 arg1, s32 arg2) {
+/**
+ * Draws the rendered 3D model preview texture, 8 rows at a time.
+ * @unverified Name and comment guessed from the code.
+ */
+void MonSummary_DrawModelPreview(s32 arg0, s32 arg1, s32 arg2) {
     u8* tex;
     s32 i;
     s32 n;
@@ -145,7 +149,11 @@ void func_8A201C08(s32 arg0, s32 arg1, s32 arg2) {
 }
 
 
-void func_8A201D3C(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
+/**
+ * Sets up the summary page window (552x362) and its move list.
+ * @unverified Name and comment guessed from the code.
+ */
+void MonSummary_InitPageWindow(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 unused; // FAKE: stack padding
     s32 count;
     s32 i;
@@ -192,7 +200,7 @@ void MonSummary_DrawPage(s8 *arg0, s32 arg1)
     {
       Ui_DrawTexturedDivider(*((s32 *) (((s8 *) arg0) + 0)), (*((s32 *) (((s8 *) arg0) + 4))) + 0xD7, *((s32 *) (((s8 *) arg0) + 8)), &D_8007356C); // FAKE: decomp slop, raw pointer casts stand in for struct fields
       func_80029864((*((s32 *) (((s8 *) arg0) + 0))) + 0xF9, *((s32 *) (((s8 *) arg0) + 4)), 0xDE, &D_8007356C); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-      func_8A201394((*((s32 *) (((s8 *) arg0) + 0))) + 0x100, (*((s32 *) (((s8 *) arg0) + 4))) + 6, *((s32 *) (((s8 *) arg0) + 0x2C))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+      MonSummary_DrawSpeciesName((*((s32 *) (((s8 *) arg0) + 0))) + 0x100, (*((s32 *) (((s8 *) arg0) + 4))) + 6, *((s32 *) (((s8 *) arg0) + 0x2C))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
       func_8A2010C8((*((s32 *) (((s8 *) arg0) + 0))) + 6, (*((s32 *) (((s8 *) arg0) + 4))) + 0xDE, *((s32 *) (((s8 *) arg0) + 0x2C)), *((s32 *) (((s8 *) arg0) + 0x30))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
       MonSummary_DrawMoveInfo((*((s32 *) (((s8 *) arg0) + 0))) + 0x100, (*((s32 *) (((s8 *) arg0) + 4))) + 0x54, *((s32 *) (((s8 *) arg0) + 0x2C)), *((s32 *) (((s8 *) arg0) + 0x30))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
     }
@@ -205,11 +213,15 @@ void MonSummary_DrawPage(s8 *arg0, s32 arg1)
       *((s32 *) (((s8 *) arg0) + 0x34)) = 1;
       func_80019008(D_8A21DA4C, *((s32 *) (((s8 *) arg0) + 0x2C)), 0x108D);
     }
-    func_8A201C08(0x32, 0x5A, *((s32 *) (((s8 *) arg0) + 0x2C)));
+    MonSummary_DrawModelPreview(0x32, 0x5A, *((s32 *) (((s8 *) arg0) + 0x2C)));
   }
 }
 
-s32 func_8A202078(s8 *arg0) {
+/**
+ * Returns the page picked with the C buttons (up 0, right 1, down 2, left 3), or -1.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 MonSummary_GetCButtonPage(s8 *arg0) {
     s32 var_s0;
     u16 temp_v0;
 
@@ -242,7 +254,11 @@ s32 func_8A202078(s8 *arg0) {
     return var_s0 >= 0;
 }
 
-void func_8A202160(void) {
+/**
+ * Draws the tinted summary screen background.
+ * @unverified Name and comment guessed from the code.
+ */
+void MonSummary_DrawBackground(void) {
     Ui_DrawTintedScreenBackground(0x38, 0x1E0, M2C_FIELD(&D_8A203300, u8 *, 0), M2C_FIELD(&D_8A203300, u8 *, 1), (s32) M2C_FIELD(&D_8A203300, u8 *, 2));
 }
 
@@ -308,7 +324,7 @@ void LabPC_WriteDeckBack(s32* arg0, s32 arg1) {
     func_80020C60(temp_s3);
     if (func_8002207C(D_8A21DA40) == 0) {
         func_8002D7D4(D_8A21DA40);
-        func_8A20261C((M2C_UNK*)arg1);
+        MonSummary_DrawScreen((M2C_UNK*)arg1);
     }
     func_80022188(D_8A21DA40);
 }
@@ -331,7 +347,7 @@ void func_8A2024D0(s8 *arg0) {
         func_8001833C((unk_func_8001A024*)D_8A21DA50, i, (BattleMon*)(M2C_FIELD(arg0, s32 *, 0x170) + i * 0x50),
                       GPACK_RGBA5551(D_8A203304.r, D_8A203304.g, D_8A203304.b, 1));
     }
-    func_8A20034C(arg0 + 0x10, 0x2F, 0x4D, (s32)(arg0 + 0x180));
+    MonSummary_InitListWindow(arg0 + 0x10, 0x2F, 0x4D, (s32)(arg0 + 0x180));
 }
 
 typedef struct Ctx8A20261C {
@@ -348,66 +364,70 @@ typedef struct Ctx8A20261C {
 } Ctx8A20261C;
 s32 func_8002AAC4(s8*);
 void func_8002CAD0(s8*);
-void func_8A2003C0(s8*, s32);
+void MonSummary_DrawListWindow(s8*, s32);
 #define CTX ((Ctx8A20261C*)arg0)
-void func_8A20261C(void* arg0) {
+/**
+ * Draws the summary screen for its current state.
+ * @unverified Name and comment guessed from the code.
+ */
+void MonSummary_DrawScreen(void* arg0) {
     func_800069CC();
     switch (CTX->state) {
         case 1:
             if (func_8002AAC4(CTX->list) != 0) {
-                func_8A202160();
+                MonSummary_DrawBackground();
             }
-            func_8A2003C0(CTX->list, 0);
+            MonSummary_DrawListWindow(CTX->list, 0);
             break;
         case 2:
             if ((CTX->mode == 4) || (CTX->mode == 7)) {
-                func_8A202160();
+                MonSummary_DrawBackground();
                 func_8002AAC4(CTX->list);
                 func_8002AAC4(CTX->unk070);
-                func_8A2003C0(CTX->list, 1);
+                MonSummary_DrawListWindow(CTX->list, 1);
             } else if (func_8002AAC4(CTX->unk070) != 0) {
                 CTX->unk034 = (CTX->unk038 <= 0) ? CTX->unk034 : 4;
                 func_8002AAC4(CTX->list);
-                func_8A2003C0(CTX->list, 1);
+                MonSummary_DrawListWindow(CTX->list, 1);
                 CTX->unk034 = (CTX->unk038 <= 0) ? CTX->unk034 : 4;
             } else {
                 func_8002AAC4(CTX->list);
-                func_8A2003C0(CTX->list, 1);
+                MonSummary_DrawListWindow(CTX->list, 1);
             }
-            func_8A2008F4(CTX->unk070);
+            MonSummary_DrawMenu(CTX->unk070);
             break;
         case 3:
             if (func_8002AAC4(CTX->list) != 0) {
-                func_8A202160();
+                MonSummary_DrawBackground();
             }
-            func_8A2003C0(CTX->list, 2);
+            MonSummary_DrawListWindow(CTX->list, 2);
             break;
         case 4:
             if (func_8002AAC4(CTX->unk0D4) != 0) {
-                func_8A202160();
+                MonSummary_DrawBackground();
             }
             MonSummary_DrawPage(CTX->unk0D4, 0);
             break;
         case 5:
             if (func_8002AAC4(CTX->unk0D4) != 0) {
-                func_8A202160();
+                MonSummary_DrawBackground();
             }
             MonSummary_DrawPage(CTX->unk0D4, 1);
             break;
         case 6:
             if (CTX->mode == 7) {
-                func_8A202160();
+                MonSummary_DrawBackground();
                 func_8002AAC4(CTX->list);
                 func_8002AAC4(CTX->unk10C);
-                func_8A2003C0(CTX->list, 0);
+                MonSummary_DrawListWindow(CTX->list, 0);
             } else if (func_8002AAC4(CTX->unk10C) != 0) {
                 CTX->unk034 = (CTX->unk038 <= 0) ? CTX->unk034 : 4;
                 func_8002AAC4(CTX->list);
-                func_8A2003C0(CTX->list, 0);
+                MonSummary_DrawListWindow(CTX->list, 0);
                 CTX->unk034 = (CTX->unk038 <= 0) ? CTX->unk034 : 4;
             } else {
                 func_8002AAC4(CTX->list);
-                func_8A2003C0(CTX->list, 0);
+                MonSummary_DrawListWindow(CTX->list, 0);
             }
             func_8002CAD0(CTX->unk10C);
             break;
@@ -428,11 +448,15 @@ void func_8002CA34(s8*, s32, s32);
 void func_8002D900(s8*);
 s32 func_8002CD7C(s8*);
 void Save_DrawReportingWindow(s8*);
-s32 func_8A20093C(s8*);
-void func_8A20080C(s8* arg0, s32 arg1, s32 arg2, u8* arg3);
-s32 func_8A202078(s8* arg0);
+s32 MonSummary_UpdateMenuCursor(s8*);
+void MonSummary_InitMenuWindow(s8* arg0, s32 arg1, s32 arg2, u8* arg3);
+s32 MonSummary_GetCButtonPage(s8* arg0);
 void LabPC_WriteDeckBack(s32* arg0, s32 arg1);
-M2C_UNK func_8A20291C(M2C_UNK* ctx) {
+/**
+ * Runs the summary screen's state machine for one frame.
+ * @unverified Name and comment guessed from the code.
+ */
+M2C_UNK MonSummary_UpdateScreen(M2C_UNK* ctx) {
     s32 ret = 0;
     s8* arg0 = (s8*)ctx;
     s32 res;
@@ -468,14 +492,14 @@ M2C_UNK func_8A20291C(M2C_UNK* ctx) {
                     }
                 } else if (res == 1) {
                     func_8003F6AC(2);
-                    func_8A20080C(arg0 + 0x70, 0x194, 0x123, (u8*)((Ctx8A20291C*)arg0)->ptrs[M2C_FIELD(arg0, s32*, 0x44)]);
+                    MonSummary_InitMenuWindow(arg0 + 0x70, 0x194, 0x123, (u8*)((Ctx8A20291C*)arg0)->ptrs[M2C_FIELD(arg0, s32*, 0x44)]);
                     M2C_FIELD(arg0, s32*, 0) = 2;
                     M2C_FIELD(arg0, s8**, 8) = arg0 + 0x70;
                 }
             }
             break;
         case 2:
-            res = func_8A20093C(arg0 + 0x70);
+            res = MonSummary_UpdateMenuCursor(arg0 + 0x70);
             if (res == -1) {
                 func_8003F6AC(3);
                 func_8A202904(arg0, 1, (s32)(arg0 + 0x10));
@@ -486,7 +510,7 @@ M2C_UNK func_8A20291C(M2C_UNK* ctx) {
                         func_8A202904(arg0, 4, (s32)(arg0 + 0xD4));
                         M2C_FIELD(arg0, s32*, 0x104) = 0;
                         M2C_FIELD(arg0, s32*, 0x34) = 7;
-                        func_8A201D3C(arg0 + 0xD4, 0x2C, 0x54, ((Ctx8A20291C*)arg0)->ptrs[M2C_FIELD(arg0, s32*, 0x44)]);
+                        MonSummary_InitPageWindow(arg0 + 0xD4, 0x2C, 0x54, ((Ctx8A20291C*)arg0)->ptrs[M2C_FIELD(arg0, s32*, 0x44)]);
                         break;
                     case 2:
                         func_8003F6AC(2);
@@ -546,7 +570,7 @@ M2C_UNK func_8A20291C(M2C_UNK* ctx) {
             }
             break;
         case 5:
-            if (func_8A202078(arg0 + 0xD4) == 0) {
+            if (MonSummary_GetCButtonPage(arg0 + 0xD4) == 0) {
                 res = func_8002BC14((s32)D_800603C0);
                 if (res == -1) {
                     func_8003F6AC(3);
@@ -641,16 +665,24 @@ s32 func_8A202F50(u8 arg0) {
     return 0;
 }
 
-void func_8A203070(s32 arg0) {
+/**
+ * One frame: reads the controllers, then draws and updates the summary screen.
+ * @unverified Name and comment guessed from the code.
+ */
+void MonSummary_RunFrame(s32 arg0) {
     func_8000B1FC();
     func_8000B220();
     func_8001B5F0();
     func_800158C0();
-    func_8A20261C(&D_8A21DA80);
-    func_8A20291C(&D_8A21DA80);
+    MonSummary_DrawScreen(&D_8A21DA80);
+    MonSummary_UpdateScreen(&D_8A21DA80);
 }
 
-s32 func_8A2030C0(UNUSED s32 arg0, UNUSED s32 arg1, UNUSED s32 arg2) {
+/**
+ * Entry point: pushes the 'VIEW' pool state, loads the font and archive, and creates the model preview and icon list.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 MonSummary_Init(UNUSED s32 arg0, UNUSED s32 arg1, UNUSED s32 arg2) {
     s32 i;
 
     main_pool_push_state('VIEW');
@@ -673,7 +705,7 @@ s32 func_8A2030C0(UNUSED s32 arg0, UNUSED s32 arg1, UNUSED s32 arg2) {
     BattlePrep_RenderFrame();
     StageLoader_UpdateSegments();
     BgStage_RunUntilCondition(8, func_8A202F50);
-    BgStage_RunUntilCondition(0, (s32 (*)(u8))func_8A203070);
+    BgStage_RunUntilCondition(0, (s32 (*)(u8))MonSummary_RunFrame);
     BgStage_RunUntilCondition(8, func_8A202F50);
     StageLoader_WaitForRetrace();
     Font_Free();
