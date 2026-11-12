@@ -12,13 +12,7 @@
 #include "audio_cache.h"
 #include "cry.h"
 #include "audio_fade.h"
-typedef struct unk_D_80077970 {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ u8 unk_02;
-    /* 0x03 */ u8 unk_03;
-    /* 0x04 */ u8 unk_04;
-} unk_D_80077970;
+#include "audio_commands_types.h"
 extern u8 pad_D_800FC694[4];
 extern unk_D_800FC6CC* D_800B41E4;
 extern u8* D_800B41E8;

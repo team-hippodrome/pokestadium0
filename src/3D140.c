@@ -42,17 +42,7 @@ typedef struct AMAudioMgr {
     ///* 0x1F8 */ OSMesg audioReplyMsgBuf[MAX_MESGS];
     /* 0x238 */ ALGlobals g;
 } AMAudioMgr;
-typedef struct AMDMABuffer {
-    /* 0x00 */ ALLink node;
-    /* 0x08 */ u32 startAddr;
-    /* 0x0C */ u32 lastFrame;
-    /* 0x10 */ char* ptr;
-} AMDMABuffer;
-typedef struct AMDMAState {
-    /* 0x00 */ u8 initialized;
-    /* 0x04 */ AMDMABuffer* firstUsed;
-    /* 0x08 */ AMDMABuffer* firstFree;
-} AMDMAState;
+#include "33FE0_types.h"
 typedef struct unk_D_800FCB48 {
     /* 0x00 */ u16 unk_00[16];
     /* 0x20 */ s32 unk_20;
@@ -67,10 +57,6 @@ typedef struct unk_D_800FCB48 {
     /* 0x7C */ s32 unk_7C;
     /* 0x80 */ s32 unk_80;
 } unk_D_800FCB48;
-typedef struct unk_D_80078548 {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
-} unk_D_80078548;
 extern s32 D_80075C30;
 extern s8 D_800B3CE0;
 extern u8 D_800B3CE8;

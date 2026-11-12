@@ -146,7 +146,7 @@ void func_89100380(LabPCInitialStateFields* state) {
     state->unk_9B04 = 0;
 }
 
-typedef struct Rgba891024A4 { u8 r, g, b, a; } Rgba891024A4;
+#include "fragments/fragment016_252E10/89100020_types_3.h"
 void func_8002A8C4(s8 *, s32, s32, s32, s32);
 void func_80027804(s8*, s8*, s32, s32);
 void func_89109B60(s8*);

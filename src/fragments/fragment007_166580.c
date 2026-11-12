@@ -128,11 +128,7 @@ Slot54* func_820001B8(Slot54* arg0, s32* arg1) {
     return found;
 }
 
-typedef struct Mon82000258 {
-    /* 0x00 */ char unk00[0x28];
-    /* 0x28 */ u8 level;
-    /* 0x29 */ char unk29[0x2B];
-} Mon82000258; // size = 0x54
+#include "fragments/fragment007_166580_types_2.h"
 
 s32 func_82000258(Mon82000258* mons) {
     s32 i;

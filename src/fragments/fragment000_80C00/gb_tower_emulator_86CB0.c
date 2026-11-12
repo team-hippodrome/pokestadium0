@@ -155,12 +155,7 @@ s32 func_811126B8(SeqPlayer811126B8* seqPlayer, SeqScriptState811126B8* state, s
     return 0;
 }
 
-typedef struct Item8111539C {
-    /* 0x00 */ u32 active : 1;
-    /* 0x00 */ u32 unk00 : 31;
-    /* 0x04 */ char unk04[0x48];
-    /* 0x4C */ void* owners[2];
-} Item8111539C;
+#include "fragments/fragment000_80C00/gb_tower_emulator_86CB0_types_2.h"
 extern Item8111539C D_81184850;
 
 void func_811110E0(void*);

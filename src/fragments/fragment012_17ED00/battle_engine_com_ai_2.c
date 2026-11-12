@@ -782,7 +782,7 @@ u8* BattleAI_FindByte(u8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     return NULL;
 }
 
-typedef struct Move82184ADC { u8 unk00; u8 unk01; u8 power; u8 type; u8 unk04; u8 unk05; } Move82184ADC;
+#include "fragments/fragment012_17ED00/battle_engine_com_ai_2_types.h"
 extern Move82184ADC D_8006B190[];
 extern u8 D_8218AC50[];
 /**

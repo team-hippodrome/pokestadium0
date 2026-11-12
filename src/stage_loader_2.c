@@ -12,12 +12,7 @@
 #include "util.h"
 #include "profiler.h"
 #include "stdarg.h"
-typedef struct unk_D_80068CA0 {
-    /* 0x00 */ struct unk_D_80068CA0* next;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ s8 unk_08[4];
-} unk_D_80068CA0;
+#include "stage_loader_types.h"
 extern s32 gShowCPUProfiler;
 extern s32 gShowMEMProfiler;
 extern s32 D_80068C98_Pad[2];

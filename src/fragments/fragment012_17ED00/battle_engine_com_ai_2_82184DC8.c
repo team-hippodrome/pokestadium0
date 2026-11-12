@@ -183,7 +183,7 @@ typedef struct BattleSlotZ {
     /* 0x80 */ u8 pad80[0x10];
 } BattleSlotZ; // size = 0x90
 extern BattleSlotZ* D_821CF298;
-typedef struct Move82184ADC { u8 unk00; u8 unk01; u8 power; u8 type; u8 unk04; u8 unk05; } Move82184ADC;
+#include "fragments/fragment012_17ED00/battle_engine_com_ai_2_types.h"
 extern Move82184ADC D_8006B190[];
 extern u8 D_8218AC50[];
 

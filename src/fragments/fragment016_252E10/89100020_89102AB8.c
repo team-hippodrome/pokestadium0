@@ -25,12 +25,7 @@ typedef struct Entry80066AD8 {
     const char* str;
     Color82000BC4 color;
 } Entry80066AD8;
-typedef struct Entry89100FC4 {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 type;
-    /* 0x04 */ const char* name;
-    /* 0x08 */ s32 unk_08;
-} Entry89100FC4; // size = 0xC
+#include "fragments/fragment016_252E10/89100020_89100914_types.h"
 typedef struct Label89100FC4 {
     Color82000BC4 color;
     const char* str;

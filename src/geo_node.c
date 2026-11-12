@@ -10,10 +10,7 @@
 #include "util.h"
 #include "matrix.h"
 #include "model_animation_events.h"
-typedef struct unk_func_80016B30_arg0 {
-    /* 0x00 */ Vec3s vec;
-    /* 0x06 */ s16 unk_06;
-} unk_func_80016B30_arg0;
+#include "geo_node_types.h"
 typedef union AnimFixedFrame {
     struct {
         s16 whole;

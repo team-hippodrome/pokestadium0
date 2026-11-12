@@ -895,10 +895,7 @@ s32 Pokedex_CheckAreaMapExit(void) {
     return 0;
 }
 
-typedef struct unk_D_80064C60 {
-    /* 0x00 */ char* unk_00;
-    /* 0x04 */ char unk04[0x18];
-} unk_D_80064C60; // size = 0x1C
+#include "fragments/fragment018_262620/pokedex_214920_types.h"
 extern unk_D_80064C60 D_80064C60[];
 extern s16 D_8A130432;
 extern s16 D_8A130446;

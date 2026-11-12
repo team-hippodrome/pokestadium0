@@ -14,13 +14,7 @@ extern u16 D_82199F56;
 extern u16 D_82199F58;
 extern u8 D_82199F32;
 extern unk_D_843C6148 D_8219A494;
-typedef struct unk_func_8437F068_sp28 {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
-} unk_func_8437F068_sp28;
-typedef struct unk_func_8437F85C_sp74 {
-    /* 0x00 */ s32 unk_00[6];
-} unk_func_8437F85C_sp74;
+#include "fragments/fragment012_17ED00/battle_engine_361050_types.h"
 
 #include "fragments/battle_engine/battle_engine.h"
 #include "model_animation.h"

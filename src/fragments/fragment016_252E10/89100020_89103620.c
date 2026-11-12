@@ -24,7 +24,7 @@ typedef struct Label89100FC4 {
     Color82000BC4 color;
     const char* str;
 } Label89100FC4;
-typedef struct Info891033A0 { u8 unk00[6]; u8 unk06; u8 unk07; u8 unk08[0xF]; } Info891033A0;
+#include "fragments/fragment016_252E10/89100020_89102C40_types.h"
 
 extern u8 D_80073520[];
 M2C_UNK func_80029A64(s32, s32, s32, s32, Color_RGBA8);

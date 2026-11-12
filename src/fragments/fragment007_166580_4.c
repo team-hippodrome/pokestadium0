@@ -7,11 +7,7 @@ typedef struct {
     /* 0x00 */ s32 flag;
     /* 0x04 */ char unk04[0x50];
 } Slot54;
-typedef struct Mon82000258 {
-    /* 0x00 */ char unk00[0x28];
-    /* 0x28 */ u8 level;
-    /* 0x29 */ char unk29[0x2B];
-} Mon82000258; // size = 0x54
+#include "fragments/fragment007_166580_types_2.h"
 typedef struct {
     /* 0x00 */ u8 id;
     /* 0x01 */ char unk01[0x4F];

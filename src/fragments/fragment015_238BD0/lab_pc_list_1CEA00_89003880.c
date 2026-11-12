@@ -68,9 +68,7 @@ extern Color_RGBA8 D_8900A5CC;
 s32 func_8002B390(s8*);
 s32 func_8002BC14(s32);
 extern s32 D_800603C0;
-typedef struct Rgba89000D50 {
-    /* 0x0 */ u8 r, g, b, a;
-} Rgba89000D50; // size = 0x4
+#include "fragments/fragment015_238BD0/lab_pc_list_1CEA00_types.h"
 extern Rgba89000D50 D_8900A5BC;
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 void func_8001AA60(s32, s32, s32);
@@ -114,10 +112,6 @@ extern Gfx D_80073450[];
 extern u8 D_04011AB8[];
 s32 func_8002FD8C(void*);
 s32 func_80030230(void*);
-typedef struct ColorPair890017FC {
-    /* 0x0 */ Color_RGBA8 prim;
-    /* 0x4 */ Color_RGBA8 env;
-} ColorPair890017FC;
 extern ColorPair890017FC D_8900A608;
 extern ColorPair890017FC D_8900A610;
 extern u8* D_89017A80[];
@@ -158,7 +152,6 @@ extern char D_89018660[];
 extern char D_8901866C[];
 void func_8002A3F8(void*, s32, s32);
 void func_80027F20(s32);
-typedef struct Col89002C10 { u8 r, g, b, a; } Col89002C10;
 extern Col89002C10 D_8900A6AC;
 extern Col89002C10 D_8900A6B0;
 extern char D_89018678[];

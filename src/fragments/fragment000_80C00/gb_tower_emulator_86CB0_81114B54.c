@@ -9,12 +9,7 @@ u16 func_81112650(u8** stream, u8 kind);
 s32 func_811126B8(void*, void*, s32, s32);
 void func_81112BF0(s8* arg0, u16 mask);
 void func_81112E00(u8* arg0);
-typedef struct Item8111539C {
-    /* 0x00 */ u32 active : 1;
-    /* 0x00 */ u32 unk00 : 31;
-    /* 0x04 */ char unk04[0x48];
-    /* 0x4C */ void* owners[2];
-} Item8111539C;
+#include "fragments/fragment000_80C00/gb_tower_emulator_86CB0_types_2.h"
 void func_81112B84(Item8111539C*);
 
 typedef struct ScriptState81114B54 {

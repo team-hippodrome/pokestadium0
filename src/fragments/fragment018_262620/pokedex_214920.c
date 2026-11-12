@@ -78,10 +78,7 @@ s32 func_8A1000C0(s8 *arg0) {
     return var_v1;
 }
 
-typedef struct unk_D_80064C60 {
-    /* 0x00 */ char* unk_00;
-    /* 0x04 */ char unk04[0x18];
-} unk_D_80064C60; // size = 0x1C
+#include "fragments/fragment018_262620/pokedex_214920_types.h"
 extern unk_D_80064C60 D_80064C60[];
 extern Gfx D_80060270[];
 extern Color_RGBA8 D_8A1057D4;

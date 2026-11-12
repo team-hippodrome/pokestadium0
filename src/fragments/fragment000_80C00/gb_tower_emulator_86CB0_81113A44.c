@@ -1,11 +1,7 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
 #include "gb_tower_emulator_86CB0.h"
 
-typedef struct AudioStreamFlags {
-    u8 pad0 : 4;
-    u8 active : 1;
-    u8 pad1 : 3;
-} AudioStreamFlags;
+#include "fragments/fragment000_80C00/gb_tower_emulator_86CB0_types.h"
 
 typedef struct SeqPlayer81113A44 {
     /* 0x00 */ u32 enabled : 1;

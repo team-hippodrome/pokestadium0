@@ -367,9 +367,7 @@ s32 func_89000828(s8* arg0) {
     return ret;
 }
 
-typedef struct Rgba89000D50 {
-    /* 0x0 */ u8 r, g, b, a;
-} Rgba89000D50; // size = 0x4
+#include "fragments/fragment015_238BD0/lab_pc_list_1CEA00_types.h"
 extern Rgba89000D50 D_8900A5BC;
 
 void func_890008C8(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
@@ -764,10 +762,6 @@ void func_8900147C(s8* arg0, s32 x, s32 y, s8* arg3, s32* arg4, s32* arg5) {
     func_80027410(arg0 + 0x49C, M2C_FIELD(M2C_FIELD(arg0, s8**, 0x490), s8**, 0), 2, M2C_FIELD(M2C_FIELD(arg0, s8**, 0x490), s32*, 4), 0);
 }
 
-typedef struct ColorPair890017FC {
-    /* 0x0 */ Color_RGBA8 prim;
-    /* 0x4 */ Color_RGBA8 env;
-} ColorPair890017FC;
 
 extern ColorPair890017FC D_8900A608;
 extern ColorPair890017FC D_8900A610;
@@ -1300,7 +1294,6 @@ void func_89002A80(s32 arg0, s32 arg1, s8* arg2, s32 arg3, s32 arg4) {
     Font_EndTexturedTextRendering();
 }
 
-typedef struct Col89002C10 { u8 r, g, b, a; } Col89002C10;
 typedef struct Win89002C10 {
     s32 x; s32 y; s32 w; s32 h; s32 unk10; s32 unk14; s32 unk18; s32 unk1C;
     void* unk20; s32 unk24; s32 unk28;

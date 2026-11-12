@@ -13,10 +13,7 @@
 #include "audio_sound_state.h"
 #include "audio_channel.h"
 #include "audio_loop_point.h"
-typedef struct unk_D_800A8480 {
-  /* 0x0000 */ OSThread thread;
-  /* 0x01B0 */ char unk01B0[0x2030];
-} unk_D_800A8480;
+#include "33FE0_types_2.h"
 extern s32 D_800AAE30;
 extern s32 D_800AAF3C;
 

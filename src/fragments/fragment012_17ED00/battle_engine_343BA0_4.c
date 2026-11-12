@@ -47,12 +47,7 @@ extern const char D_821978C8[];
 #include "cry.h"
 #include "matrix.h"
 #include "math_util.h"
-typedef struct unk_D_84392040 {
-    /* 0x00 */ char unk00[0xC];
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ f32 unk_10;
-    /* 0x14 */ char unk14[0x4];
-} unk_D_84392040;
+#include "fragments/fragment012_17ED00/battle_engine_315D50_types.h"
 #include "prevent_bss_reordering.h"
 extern s32 gBattleAnimFrameCounter;
 extern s32 gBattleAnimSpawnDelay;

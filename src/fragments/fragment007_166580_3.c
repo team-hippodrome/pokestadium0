@@ -4,10 +4,7 @@
 #include "global.h"
 #include "m2c_macros.h"
 
-typedef struct Entry82000058 {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ u8 unk_04[0x50];
-} Entry82000058; // size = 0x54
+#include "fragments/fragment007_166580_types.h"
 s32 func_80020AFC(s32, s32, s32, s32);
 s32 func_80020CE4(void*, s32, s32);
 void func_80020C60(s32);
