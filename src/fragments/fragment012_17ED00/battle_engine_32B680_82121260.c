@@ -53,7 +53,6 @@ void BattleMenu_ResetCommandTimer(void);
 /**
  * Per-frame update while unk_1C is 1 (b-roll camera mode): runs the action selection phase and
  * dispatches to the update function of the current b-roll shot (odd cameraCounter values).
- * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
 void BattleScene_UpdateBRollCameraSequence(CameraNode* arg0) {
     if (sBattleScene.scene->mode == 1) {

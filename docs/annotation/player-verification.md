@@ -88,5 +88,6 @@ battle with all PP at 0.
 | `BattleScene_CompleteCpuMoveAction` | Taken when the COM was asleep: it confirms Fight without a choice | renamed `BattleScene_AutoConfirmCpuMove` |
 | `BattleMenu_GetUsableMovePpMask` | Returned 1 (not a PP mask) for a COM with all PP at 0; the COM then used Struggle | renamed `BattleMenu_MustStruggle` |
 | `func_8210C8A0` | With all PP at 0, A showed 「ニドニドは だすことの できる わざが ない」 and a second A used Struggle | named `BattleMenu_HandleNoUsableMoves` |
+| `BattleScene_UpdateBRollCameraSequence` | Runs every frame of the command phase (it calls `Battle_ChooseActionsForMode`) while the camera cuts between idle shots of both Pokémon, as seen on screen | verified |
 | `BattleMenu_TakeControlOnBPress`, `BattleMenu_TakeControlOnCButtonPress` | Run in 1P too (B at the command menu, the forced Pokémon menu), but the tag-team handover they describe needs a two-player team, which was not tested | still `@unverified` |
 | `BattleMenu_TryConfirmMove`, `BattleDemo_PlayScriptedInput`, `Battle_PrepareTurnInput`, `Battle_InitParticipantRuntime`, `Battle_InitBothParticipants` | Not reached by these tests (the demo functions belong to battle mode 5) | still `@unverified` |
