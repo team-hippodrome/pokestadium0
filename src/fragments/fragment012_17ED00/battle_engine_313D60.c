@@ -93,7 +93,7 @@ extern u8 D_82199F3F;
 extern u8 D_82199F30;
 /**
  * Clear the incoming participant's temporary effects and the opponent's trapping lock.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12): ran on the same switch-in.
  */
 void Battle_ResetTransientRuntimeState(s32 arg0, s32 arg1) {
     BattleMonRuntime* sp1C = &sActivePokemon[arg0]->state.runtime;

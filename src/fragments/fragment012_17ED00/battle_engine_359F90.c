@@ -441,7 +441,8 @@ void func_80041940(s32, s32, s32);
 
 /**
  * Populate runtime species, HP, types, moves, stats and neutral stages from the selected roster.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12): filled Onix's runtime state on the switch-in; the HUD then showed
+ * イワワ L20 ふつう 49/ 49.
  */
 void Battle_InitPokemonRuntimeState(ActivePokemon* arg0) {
     ActivePokemonState* sp28;

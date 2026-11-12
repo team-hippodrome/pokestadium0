@@ -711,7 +711,7 @@ void Battle_SetModelToHitAnim(ActivePokemon* active_pokemon) {
 
 /**
  * Points teamRoster at sessionTeams->teamMember[index].
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): picked Onix's roster entry when it was switched in.
  */
 void ActivePokemon_SelectTeamRoster(s8 *arg0, s32 arg1) {
     M2C_FIELD(arg0, s32 *, 0x860) = (s32) M2C_FIELD((M2C_FIELD(arg0, s32 *, 0x85C) + (arg1 * 4)), s32 *, 8);
@@ -719,7 +719,7 @@ void ActivePokemon_SelectTeamRoster(s8 *arg0, s32 arg1) {
 
 /**
  * Sets state.teamMemberIndex.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): set the switched-in team member (Onix).
  */
 void ActivePokemon_SetTeamMemberIndex(void *arg0, s32 arg1) {
     M2C_FIELD(arg0, s8 *, 0x7B7) = arg1;

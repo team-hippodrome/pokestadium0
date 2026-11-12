@@ -916,7 +916,8 @@ void Battle_ResolveMonAction(void)
 
 /**
  * Initialize an entering participant's runtime and clear its transient battle state.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12): ran when 1P switched Nidorino (ニドニド) out for Onix (イワワ), which
+ * entered with full HP 49/ 49.
  */
 void BeginBattleForEntity(ActivePokemon* arg0) {
     ActivePokemonState* sp24;
