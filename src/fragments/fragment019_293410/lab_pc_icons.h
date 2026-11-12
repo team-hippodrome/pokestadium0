@@ -71,7 +71,7 @@ void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
 
 void MonSummary_DrawMenuRow(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4);
 
-s32 func_8002AB84();                                /* extern */
+s32 Particle_Field50_SetXZFromField7C_09BB4();                                /* extern */
 M2C_UNK Menu_DrawItems(s8 *, s32, s32, M2C_UNK, s32); /* extern */
 
 void MonSummary_DrawMenu(s8 *arg0);
@@ -101,7 +101,7 @@ void func_8001AC3C(void);
 void MonSummary_DrawSpeciesName(s32 arg0, s32 arg1, BattleMon* arg2);
 
 u8* func_800196F8(s32);
-void func_800069CC(void);
+void BgStage_DrawFrame(void);
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 extern s32 D_8A21DA4C;
 void MonSummary_DrawModelPreview(s32 arg0, s32 arg1, s32 arg2);
@@ -109,7 +109,7 @@ void MonSummary_DrawModelPreview(s32 arg0, s32 arg1, s32 arg2);
 M2C_UNK func_80019008(s32, s32, M2C_UNK);           /* extern */
 M2C_UNK Ui_DrawTexturedDivider(s32, s32, s32, M2C_UNK *);    /* extern */
 M2C_UNK func_80029864(s32, s32, s32, M2C_UNK *);    /* extern */
-s32 func_8002AB84();                                /* extern */
+s32 Particle_Field50_SetXZFromField7C_09BB4();                                /* extern */
 void MonSummary_DrawStats(s32, s32, BattleMon*);
 void MonSummary_DrawHeader();
 void MonSummary_DrawTrainerInfo(s32, s32, s32);
@@ -150,8 +150,8 @@ void LabPC_WriteDeckBack(s32* arg0, s32 arg1);
 
 void func_8A202904(s8 *arg0, s32 arg1, s32 arg2);
 
-M2C_UNK func_8000B1FC();                            /* extern */
-M2C_UNK func_8000B220();                            /* extern */
+void Cont_StartReadInputs(void);                            /* extern */
+void Cont_ReadInputs(void);                            /* extern */
 M2C_UNK func_800158C0();                            /* extern */
 M2C_UNK func_8001B5F0();                            /* extern */
 void MonSummary_DrawScreen(void*);

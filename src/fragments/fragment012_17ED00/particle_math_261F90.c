@@ -120,7 +120,7 @@ void ParticleGfx_PushBillboardRotatedMatrixYScaled(CameraNode* arg0, Vec3f arg1,
 void ParticleGfx_PushTransformMatrixWithHalfTurnXY(Vec3f arg0, Vec3s arg3, f32 arg5);
 void ParticleGfx_PushDirectionMatrix(Vec3f arg0, Vec3f arg3, f32 arg6);
 
-u32 ParticleMath_RandomRange(s32 arg0);
+u32 ParticleMath_RandomRange(u32 arg0);
 
 /**
  * Set every bit selected by mask.
@@ -715,7 +715,7 @@ s32 ParticleMath_IsWithinRadius2D(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 ar
 
 u32 func_80055640();                                /* extern */
 
-u32 func_82137D74(u32 arg0) {
+u32 ParticleMath_RandomRange(u32 arg0) {
     u32 temp_v0;
     u32 var_v1;
 
@@ -896,19 +896,19 @@ Vec3f* ParticleMath_NormalizedDirection(Vec3f* arg0, Vec3f arg1, Vec3f arg2) {
     return arg0;
 }
 
-s32 func_8213C80C(void);
+s32 BattleAnim_GetCameraContext(void);
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_82138244; signature not recovered. */
 #else
 void func_821381E4(Vec3f*, Vec3f, Vec3f);
-s32 func_8213C80C(void);
+s32 BattleAnim_GetCameraContext(void);
 void func_82137F10();
 void func_82138244(Vec3f *arg0, s32 arg1, f32 arg2) {
     Vec3f dir;
     CameraNode *camera;
 
-    camera = (CameraNode *)func_8213C80C();
+    camera = (CameraNode *)BattleAnim_GetCameraContext();
     func_821381E4(&dir, camera->view.eyePosition, camera->view.targetPosition);
     func_82137F10(arg1, dir);
     arg0->x = camera->view.eyePosition.x + arg2 * dir.x;
@@ -921,7 +921,7 @@ void func_82138244(Vec3f *arg0, s32 arg1, f32 arg2) {
 void func_8213831C(Vec3f* out, f32 distance) {
     Vec3f direction;
     CameraNode* camera;
-    camera = (CameraNode*)func_8213C80C();
+    camera = (CameraNode*)BattleAnim_GetCameraContext();
     ParticleMath_NormalizedDirection(&direction, camera->view.eyePosition, camera->view.targetPosition);
     out->x = camera->view.eyePosition.x + distance * direction.x;
     out->y = camera->view.eyePosition.y + distance * direction.y;
@@ -990,7 +990,7 @@ Vec3f* ParticleMath_ScaleVec3f(Vec3f* arg0, f32 arg1) {
 void func_821381E4(Vec3f*, Vec3f, Vec3f);
 
 /**
- * Takes the scene camera (func_8213C80C returns a CameraNode*), asks
+ * Takes the scene camera (BattleAnim_GetCameraContext returns a CameraNode*), asks
  * func_821381E4 for the direction from its eye to its target position (the
  * Vec3f arguments are passed by value, in $a1-$a3 and on the stack), and
  * passes the result's z and x components to MathUtil_Atan2s (the angle itself
@@ -1001,7 +1001,7 @@ void func_821385C0(void) {
     Vec3f sp30;
     CameraNode* camera;
 
-    camera = (CameraNode*)func_8213C80C();
+    camera = (CameraNode*)BattleAnim_GetCameraContext();
     func_821381E4(&sp30, camera->view.eyePosition, camera->view.targetPosition);
     MathUtil_Atan2s(sp30.z, sp30.x);
 }

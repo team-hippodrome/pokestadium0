@@ -236,7 +236,7 @@ s32 HypnosisScreechTrail_IsComplete(void) {
 }
 
 s32 func_8000515C(s32);
-s8* func_8213C80C(void);
+s32 BattleAnim_GetCameraContext(void);
 void func_80031F14(f32*, f32*, f32*);
 void func_800320A8(s32, f32, f32, f32, f32, f32, f32);
 extern s32 D_821A6F60;
@@ -257,7 +257,7 @@ void Trail40_Reset(void) {
     f32 sp5C;
 
     D_821A6F60 = func_8000515C(0x40);
-    temp_v0 = func_8213C80C();
+    temp_v0 = BattleAnim_GetCameraContext();
 
     tmp4 = *(f32*)(temp_v0 + 0xB4);
     tmp5 = *(f32*)(temp_v0 + 0xB8);

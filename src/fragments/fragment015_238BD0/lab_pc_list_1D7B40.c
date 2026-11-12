@@ -453,7 +453,7 @@ typedef struct Slot890056A4 {
     s32 iconX;
     void* tex;
 } Slot890056A4;
-s32 func_8002D3D0(u8*);
+s32 BattleMon_CountMoves(u8* arg0);
 s32 BattleMon_GetMoveIndex(s32, s32);
 void PcBox_DrawMoveName(s32, s32, s32, s32);
 extern Slot890056A4 D_8900A79C[];
@@ -479,7 +479,7 @@ void PcSort_DrawMonStats(s32 x, s32 y, u8* mon) {
     s32 i;
     char* name;
 
-    count = func_8002D3D0(mon);
+    count = BattleMon_CountMoves(mon);
     Font_BeginTranslucentTextRendering();
     func_8001AA9C(0xFF, 0xC8, 0xC8, 0xFF);
     Font_SetActive(4, 0);
@@ -514,7 +514,7 @@ void PcSort_DrawMonStats(s32 x, s32 y, u8* mon) {
 M2C_UNK func_8001A384(M2C_UNK, M2C_UNK);            /* extern */
 M2C_UNK func_8001A944(s32, s32, s32);               /* extern */
 M2C_UNK func_8001AA9C(u8, u8, u8, u8);              /* extern */
-M2C_UNK func_8001AB2C(M2C_UNK);                     /* extern */
+void Font_SetLineHeight(s32 arg0);                     /* extern */
 M2C_UNK func_8001AB6C();                            /* extern */
 M2C_UNK func_8001ABBC();                            /* extern */
 extern M2C_UNK D_800734A8;
@@ -527,7 +527,7 @@ void PcSort_DrawSmallText(s32 arg0, s32 arg1, s32 arg2) {
     func_8001AB6C();
     func_8001A384(0x10, 0);
     func_8001AA9C(M2C_FIELD(&D_800734A8, u8 *, 0), M2C_FIELD(&D_800734A8, u8 *, 1), M2C_FIELD(&D_800734A8, u8 *, 2), M2C_FIELD(&D_800734A8, u8 *, 3));
-    func_8001AB2C(0x2C);
+    Font_SetLineHeight(0x2C);
     func_8001A944(arg0 + 0xC, arg1 + 0x14, arg2);
     func_8001ABBC();
 }
@@ -926,7 +926,7 @@ s32 PcSort_UpdateOrganizeWindow(s8* arg0) {
     return ret;
 }
 
-s8* func_80017860(s32);
+s8 *PokeIcon_AllocFramebuffers(s32 arg0);
 void PokeIcon_OpenModelArchives(void);
 s32 func_80018F2C(s8*, s32, s32, s32, s32, s32, s32, s32);
 void func_80027410(s8*, s8*, s32, s32, s32);
@@ -944,7 +944,7 @@ void PcSort_Init(s8* arg0, s32 arg1) {
     s32 i;
 
     main_pool_push_state('OTPC');
-    M2C_FIELD(arg0, s8**, 4) = func_80017860(1);
+    M2C_FIELD(arg0, s8**, 4) = PokeIcon_AllocFramebuffers(1);
     M2C_FIELD(arg0, s32*, 8) = func_80018F2C(M2C_FIELD(arg0, s8**, 4), 0x80, 0x78, 0, 0, 0x78, 0x78, 0);
     PokeIcon_OpenModelArchives();
     Fragment_Load(((((u32)D_81000000) & 0x0FF00000) >> 0x14) - 0x10, D_0015B1A0, D_0015E220);
@@ -1120,7 +1120,7 @@ s32 PcSort_HasUnsavedChanges(s8* arg0) {
 void SavePrompt_Init(s8* arg0, s32 arg1, s32 arg2);
 void Save_DrawReportingWindow(s8* arg0);
 s32 SavePrompt_Update(s8* arg0);
-void func_800407B0(s32, s32, s32);
+s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2);
 s32 PcSort_UpdateOrganizeWindow(s8* arg0);
 void PcBox_InitConfirmWindow(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, u16* arg6);
 s32 PcBox_UpdateConfirmCursor(s8* arg0);
@@ -1190,7 +1190,7 @@ s32 PcSort_UpdateScreen(s8* arg0) {
                 func_8003F6AC(3);
                 M2C_FIELD(arg0, s32*, 0) = 1;
             } else if (res == 1) {
-                func_800407B0(0x57, 0, 0);
+                Audio_PlayCommand(0x57, 0, 0);
                 PcSort_ReleaseSelectedMon(arg0 + 0x10);
                 M2C_FIELD(arg0, s32*, 0) = 1;
             }

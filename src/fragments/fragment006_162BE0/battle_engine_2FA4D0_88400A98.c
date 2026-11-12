@@ -73,7 +73,7 @@ void func_88400CE8(s32 arg0) {
         func_88400A1C(0x1E, 0x20, 0x104, 0x34);
         func_8001AB6C();
         func_8001A384(4, -1);
-        func_8001AB2C(0x14);
+        Font_SetLineHeight(0x14);
         func_8001A944(0x2E, 0x28, arg0);
         func_88400C48(0x104, 0x3C);
         func_8001ABBC();
@@ -114,7 +114,7 @@ void func_88400F4C(void) {
     func_80006828(0x73, &func_88400108);
     M2C_FIELD(&D_884034E0, u8 *, 2) = (u8) (M2C_FIELD(&D_884034E0, u8 *, 2) & 0xFFDF);
     func_88400A98();
-    func_800407B0(0x51, 0, 0);
+    Audio_PlayCommand(0x51, 0, 0);
     if (D_800AF986 & 8) {
         func_88400CE8(D_88402D88);
         func_88400DAC(D_88402D8C);
@@ -538,7 +538,7 @@ void func_88401F38(void) {
     func_80010F9C(&D_88403648, 0x2E);
     M2C_FIELD(&D_88403648, u8 *, 2) = (u8) (M2C_FIELD(&D_88403648, u8 *, 2) | 0x20);
     if (D_88403358 >= 0) {
-        func_80019924(&D_88403378, 0, 0, *((M2C_UNK*)((u8*)&D_884037B0 + (sp1F * 4))));
+        Model_InitDisplayObject(&D_88403378, 0, 0, *((M2C_UNK*)((u8*)&D_884037B0 + (sp1F * 4))));
         func_80010F14(&D_88403378, 1, *((M2C_UNK*)((u8*)&D_88402D74 + (sp1F * 4))), 0x10000);
         func_80010F9C(&D_88403378, 0x2E);
     }
@@ -742,15 +742,15 @@ void func_884026A4(s32 arg0) {
     D_884037B0 = (s32)process_geo_layout(sp20, D_8F4A4240);
     D_884037B4 = (s32)process_geo_layout(sp20, D_8F4B2AF0);
     D_884037B8 = (s32)process_geo_layout(sp20, D_8F4959C8);
-    func_80019924(&D_88403648, 0, 0, (s32)process_geo_layout(sp20, D_8F4886F8));
+    Model_InitDisplayObject(&D_88403648, 0, 0, (s32)process_geo_layout(sp20, D_8F4886F8));
     if (D_800AF986 & 8) {
-        func_80019924(&D_884034E0, 1, 0, (s32)process_geo_layout(sp20, D_8E825FE8));
+        Model_InitDisplayObject(&D_884034E0, 1, 0, (s32)process_geo_layout(sp20, D_8E825FE8));
         func_80010F14(&D_884034E0, 1, &D_8E802B64, 0x10000);
         M2C_FIELD(&D_884034E0, u8 *, 1) &= ~1;
         Vec3f_SetComponentsDuplicate(&D_88403504, 0.0f, 275.0f, 750.0f);
         Vec3f_SetComponentsDuplicate(&D_88403510, 3.0f, 3.0f, 3.0f);
     } else if (D_800AF986 & 0x10) {
-        func_80019924(&D_884034E0, 0, 0, (s32)process_geo_layout(sp20, D_8E924770));
+        Model_InitDisplayObject(&D_884034E0, 0, 0, (s32)process_geo_layout(sp20, D_8E924770));
         func_80010F14(&D_884034E0, 1, &D_8E902B64, 0x10000);
         M2C_FIELD(&D_884034E0, u8 *, 1) &= ~1;
         Vec3f_SetComponentsDuplicate(&D_88403504, 0.0f, 275.0f, 750.0f);
@@ -768,7 +768,7 @@ void func_884026A4(s32 arg0) {
     M2C_FIELD(&D_88403648, u8 *, 2) &= ~0x20;
     if (D_88403358 >= 0) {
         func_80025100(&sp27, 0);
-        func_80019924(&D_88403378, 0, 0, *((M2C_UNK*)((u8*)&D_884037B0 + (sp27 * 4))));
+        Model_InitDisplayObject(&D_88403378, 0, 0, *((M2C_UNK*)((u8*)&D_884037B0 + (sp27 * 4))));
         func_80010F14(&D_88403378, 1, *((M2C_UNK**)((u8*)&D_88402D74 + (sp27 * 4))), 0xFFFF0000);
         func_80010F9C(&D_88403378, 0x4A);
         M2C_FIELD(&D_88403378, u8 *, 2) &= ~0x20;
@@ -816,7 +816,7 @@ s32 Fragment006_Main(s32 arg0, s32 arg1) {
         Fragment_Load(((((u32)D_8E900000) & 0x0FF00000) >> 0x14) - 0x10, D_003CE090, D_003D64A0);
     }
 
-    func_8001A194(0xF, 0);
+    Font_Init(0xF, 0);
     func_88402538();
     func_884025E4();
     func_884026A4(arg0);

@@ -246,7 +246,7 @@ void func_800258B4(void) {
 typedef struct { u8 b[3]; } Unk3Bytes;
 typedef struct { u8 b[11]; } Unk11Bytes;
 M2C_UNK func_8000A460(M2C_UNK *, M2C_UNK *);
-s32 func_80022C70(s16);
+s32 GbSave_GetTrainerId(s32 arg0);
 M2C_UNK func_80022D84(s16, M2C_UNK *);
 extern s32 D_800603C0;
 extern s16 D_800733D4;
@@ -269,7 +269,7 @@ void func_80025910(s32 arg0)
   *((s8 **) (st + 0x200)) = st + 0x814;
   if ((arg0 != 0) && (D_800733D4 == 0))
   {
-    (*((s32 *) (st + 0x1C))) = func_80022C70(D_800733D4);
+    (*((s32 *) (st + 0x1C))) = GbSave_GetTrainerId(D_800733D4);
     func_80022D84(D_800733D4, (st + 0xC));
   }
   else
@@ -453,7 +453,7 @@ M2C_UNK func_80002620(M2C_UNK);                     /* extern */
 M2C_UNK func_80003EB8(u32, M2C_UNK *, M2C_UNK *, M2C_UNK); /* extern */
 M2C_UNK func_80006724();                            /* extern */
 M2C_UNK func_8000675C();                            /* extern */
-M2C_UNK func_8001A194(M2C_UNK, M2C_UNK);            /* extern */
+s32 Font_Init(s32 load_size, s32 side);            /* extern */
 M2C_UNK func_8001A360();                            /* extern */
 s32 GbSave_PollCartRemoval(s32);                             /* extern */
 void Save_DrawGbReportErrorScreen(s32);
@@ -472,7 +472,7 @@ void Save_RunGbReportErrorScreen(s32 arg0) {
 
     var_s0 = 2;
     func_8000256C(0x47424552);
-    func_8001A194(0x18, 0);
+    Font_Init(0x18, 0);
     func_80003EB8((u32) ((s32) &D_01000000 & 0x0F000000) >> 0x18, &D_002E0BE0, &D_002E2B90, 0);
     func_8000675C();
     do {
@@ -541,11 +541,11 @@ extern u8 D_00235D70[];
 extern u8 D_00238BD0[];
 extern s16 D_800AF986;
 extern StageContext *D_800AF9A4;
-void func_80021A8C(s32);
+s32 GbSave_LoadPort(s32 arg0);
 s32 func_80021E64(s32);
 void GbSave_ValidateBeforeWrite(s32);
 void GbSave_RequirePakPresent(s32);
-s32 func_80022B4C(s32);
+u8 GbSave_GetSaveState(s32 arg0);
 s32 GbSave_GetBoxCount(s32);
 void func_80023C30(void);
 void Save_RunGbReportErrorScreen(s32);
@@ -579,7 +579,7 @@ void func_800260C4(void)
     if (D_800733D8 != 0)
     {
       D_800733D8 = 0;
-      if (func_80022B4C(D_800733D4) == 0)
+      if (GbSave_GetSaveState(D_800733D4) == 0)
       {
         if (pushed)
         {
@@ -587,7 +587,7 @@ void func_800260C4(void)
         }
         pushed = 1;
         main_pool_push_state('BUDT');
-        func_80021A8C(D_800733D4);
+        GbSave_LoadPort(D_800733D4);
         if (GbSave_GetBoxCount(D_800733D4) == 0)
         {
           GbSave_ValidateBeforeWrite(D_800733D4);

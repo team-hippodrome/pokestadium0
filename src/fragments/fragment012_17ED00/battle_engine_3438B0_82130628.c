@@ -32,16 +32,16 @@ void BattleScene_PhaseResidualDamageWithoutMove(CameraNode* arg0) {
                     M2C_FIELD(sp2C, u16*, 0xC) = M2C_FIELD(sp2C, u16*, 0xE);
                     M2C_FIELD(sp28, u16*, 0xC) = M2C_FIELD(sp28, u16*, 0xE);
                     if (sp2C[0x15] & 0x10) {
-                        func_821366B0(6, (ActivePokemon*)D_8219A544);
+                        BattleAnim_QueueEffectList(6, (ActivePokemon*)D_8219A544);
                     } else {
-                        func_821366B0(5, (ActivePokemon*)D_8219A544);
+                        BattleAnim_QueueEffectList(5, (ActivePokemon*)D_8219A544);
                     }
                     sBattleScene.scene->phaseStep++;
                 } else {
                     BattleMessage_ShowForSide(D_8219A520 + 0x288, sBattleScene.scene->actingSide);
                     M2C_FIELD(sp2C, u16*, 0xC) = M2C_FIELD(sp2C, u16*, 0x10);
                     M2C_FIELD(sp28, u16*, 0xC) = M2C_FIELD(sp28, u16*, 0x10);
-                    func_821366B0(0xA, (ActivePokemon*)D_8219A544);
+                    BattleAnim_QueueEffectList(0xA, (ActivePokemon*)D_8219A544);
                     sBattleScene.scene->phaseStep = 3;
                 }
             }
@@ -59,11 +59,11 @@ void BattleScene_PhaseResidualDamageWithoutMove(CameraNode* arg0) {
                     BattleScene_SetPhase(arg0, 5);
                     sBattleScene.scene->actingSide = !sBattleScene.scene->actingSide;
                 } else if (sp2C[0x4D] & 0x80) {
-                    func_800407B0(0x22, 0, 0);
+                    Audio_PlayCommand(0x22, 0, 0);
                     BattleMessage_ShowForSide(D_8219A520 + 0x288, sBattleScene.scene->actingSide);
                     M2C_FIELD(sp2C, u16*, 0xC) = M2C_FIELD(sp2C, u16*, 0x10);
                     M2C_FIELD(sp28, u16*, 0xC) = M2C_FIELD(sp28, u16*, 0x10);
-                    func_821366B0(0xA, (ActivePokemon*)D_8219A544);
+                    BattleAnim_QueueEffectList(0xA, (ActivePokemon*)D_8219A544);
                     sBattleScene.scene->phaseStep++;
                 } else {
                     sBattleScene.scene->phaseStep = 4;
@@ -221,7 +221,7 @@ void BattleScene_PhaseWithdrawFainted(CameraNode* arg0) {
                 Battle_LoadOwnerModelForSwitchIn(temp_s0);
                 func_82107408(temp_s0);
                 BattleAnim_QueueEffectList3(3, temp_s0, temp_s0, 0xFF, 0xFF);
-                func_800407B0(2, 0, 0);
+                Audio_PlayCommand(2, 0, 0);
                 BattleScene_RebindParticipantTeamMember(temp_s0, sp2C[0x2D]);
                 sBattleScene.scene->phaseStep++;
             }
@@ -501,7 +501,7 @@ void func_82131A3C(CameraNode* arg0) {
         func_80041374(4, 0x3C);
     }
     if (func_821217DC(0x50) != 0) {
-        func_800407B0(1, 0xFE, 0);
+        Audio_PlayCommand(1, 0xFE, 0);
         Vec3f_SetComponentsDuplicate((Vec3f*)((u8*)arg0 + 0xB4), 0.0f, 75.0f, 0.0f);
         Vec3f_SetComponentsDuplicate((Vec3f*)((u8*)arg0 + 0xA8), -1.79f, 0.075f, 155.2f);
         ActivePokemon_SetModelTransform((s8*)sActivePokemon[0], 1, 0);
@@ -517,7 +517,7 @@ void func_82131C64(s32 arg0) {
     M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 0), u8 *, 1) = (u8) (M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 0), u8 *, 1) & 0xFFFE);
     M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 4), u8 *, 1) = (u8) (M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 4), u8 *, 1) & 0xFFFE);
     if (M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 0), f32 *, 0x64C) == 0.0f) {
-        func_800407B0(1, 1, 0);
+        Audio_PlayCommand(1, 1, 0);
         ActivePokemon_SetModelTransform(M2C_FIELD(&D_82199DE0, s8 **, 4), 1, 0);
         func_821365B0(0xA, M2C_FIELD(&D_82199DE0, s8 **, 4), M2C_FIELD(&D_82199DE0, s8 **, 4), 0xFF, 0xFF);
         M2C_FIELD(D_8219A5A0, s32 *, 0x20) = (s32) (M2C_FIELD(D_8219A5A0, s32 *, 0x20) + 1);
@@ -610,7 +610,7 @@ void func_821321A4(CameraNode* arg0) {
  * @unverified Name and comment guessed from the code.
  */
 void BattleScene_SendOutSide1(CameraNode* arg0) {
-    func_800407B0(2, 0, 0);
+    Audio_PlayCommand(2, 0, 0);
     BattleAnim_QueueEffectList3(3, sActivePokemon[1], sActivePokemon[1], 0xFF, 0xFF);
     BattleMessage_Format(D_8219A520 + 0x488, 0, (s32)D_8219665C, ActivePokemon_GetNickname(sActivePokemon[1]));
     func_8211EE8C();

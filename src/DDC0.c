@@ -85,7 +85,7 @@ M2C_UNK func_800082D0();                            /* extern */
 M2C_UNK func_8003B868(s8 *);                      /* extern */
 M2C_UNK func_8003BC9C(M2C_UNK);                     /* extern */
 M2C_UNK func_8003E1F8();                            /* extern */
-M2C_UNK func_80046170(M2C_UNK, M2C_UNK);            /* extern */
+void Audio_SetChannelVolume(s32 arg0, u32 arg1);            /* extern */
 M2C_UNK func_8004CFB0(M2C_UNK *, M2C_UNK, M2C_UNK); /* extern */
 M2C_UNK func_800567E0(M2C_UNK *, M2C_UNK *, M2C_UNK); /* extern */
 extern s32 D_800AAE30;
@@ -109,7 +109,7 @@ void func_8000A92C(s32 arg0) {
     func_8004CFB0(&D_800AAED4, 0x444F4E45, 0);
     func_8003E1F8();
     func_8003BC9C(1);
-    func_80046170(3, 4);
+    Audio_SetChannelVolume(3, 4);
 loop_1:
     func_80004920(&D_800AAE38);
     func_800082D0();

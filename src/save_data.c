@@ -625,7 +625,7 @@ s32 Deck_GetSaveEntryTrainerId(s32 arg0, s32 arg1) {
 }
 
 s32 func_800246A8(s32, s32);
-s32 func_8002479C(s32 arg0, s32 arg1, u8* arg2) {
+s32 Deck_GetSaveEntryName(s32 arg0, s32 arg1, u8* arg2) {
     s32 ret = 0;
     s32 src;
 
@@ -673,7 +673,7 @@ s32 func_8002488C(s32 arg0, s32 arg1, u8* arg2) {
     return ret;
 }
 
-void func_80024954(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4) {
+void Deck_SetSaveEntryTrainerIdAndName(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4) {
     switch (arg0) {
         case 16: {
             s8* rec = (s8*)&(*(Save80023F38**)&D_800AE8E0)->a[arg1];
@@ -792,7 +792,7 @@ void func_80024C80(s32 arg0, s32 arg1) {
 }
 
 typedef struct { u8 a; u8 b; } Pair80024D88;
-s32 func_80024D88(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
+s32 Deck_ReadSaveEntry(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
     s32 ret = 0;
 
     if (arg2 < func_80024ADC()) {
@@ -815,7 +815,7 @@ s32 func_80024D88(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
     return ret;
 }
 
-s32 func_80024F14(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
+s32 Save_WriteTypedRecord(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
     s32 ret = 0;
     s32 max = Deck_GetSaveRecordCapacity(arg0);
     s32 count = func_80024ADC(arg0, arg1);

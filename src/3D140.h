@@ -83,7 +83,7 @@ extern u8 mus_sound_effect_blocked;
 
 
 
-void amCreateAudioMgr(ALSynConfig*, amConfig*, u32, s32, s32);
+void amCreateAudioMgr(ALSynConfig* c, amConfig* amc, u32 num_dma_buffers, s32 arg3, s32 arg4);
 OSTask* Audio_CreateFrameTask(OSTask*);
 void __clearAudioDMA(void);
 void Cry_PlayFromPokedex(s32);

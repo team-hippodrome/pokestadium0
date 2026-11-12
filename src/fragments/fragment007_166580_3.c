@@ -25,7 +25,7 @@ s32 Pokemon_GetTypeIndex(s32, s32);
 void func_8001AB6C(void);
 void func_8001A384(s32, s32);
 void func_8001ABBC(void);
-void func_8001AB2C(s32);
+void Font_SetLineHeight(s32 arg0);
 void func_8001AA9C(u8, u8, u8, u8);
 void func_8001A944(s32, s32, const char*, ...);
 
@@ -87,8 +87,8 @@ s32 func_80002D98(s32);
 void FreeBattle_InitBattleModeScreen(s32);
 void func_8200573C(void);
 
-M2C_UNK func_8000B1FC();                            /* extern */
-M2C_UNK func_8000B220();                            /* extern */
+void Cont_StartReadInputs(void);                            /* extern */
+void Cont_ReadInputs(void);                            /* extern */
 M2C_UNK FreeBattle_DrawScreen(s32);                         /* extern */
 M2C_UNK FreeBattle_UpdateScreen(s32);                         /* extern */
 extern s32 D_8200AD28;
@@ -116,8 +116,8 @@ s32 func_800044AC(s32, s32);
 
 void func_8200597C(void);
 
-void func_8001A194(s32, s32);
-s32 func_80017860(s32);
+s32 Font_Init(s32 load_size, s32 side);
+s8 *PokeIcon_AllocFramebuffers(s32 arg0);
 u16* func_80018F2C(s32, s32, s32, s32, s32, s32, s32, s32);
 s32 func_80017FDC(s32, s32, s32, s32);
 s32 func_80004154(u8*, u8*, s32, s32);
@@ -271,7 +271,7 @@ void FreeBattle_DrawMenuWindow(s8* arg0, s32 arg1) {
         func_8001AB6C();
         func_8001AA9C(M2C_FIELD(&D_800734A8, u8*, 0), M2C_FIELD(&D_800734A8, u8*, 1), M2C_FIELD(&D_800734A8, u8*, 2), M2C_FIELD(&D_800734A8, u8*, 3));
         func_8001A384(8, 0);
-        func_8001AB2C(0x1C);
+        Font_SetLineHeight(0x1C);
         func_8001A944(M2C_FIELD(arg0, s32*, 0) + 0xE, M2C_FIELD(arg0, s32*, 4) + temp_s1 + 0x10, ((char**)M2C_FIELD(arg0, s32*, 0x7C))[M2C_FIELD(arg0, s32*, 0x34)]);
         func_8001ABBC();
     }
@@ -1003,7 +1003,7 @@ void FreeBattle_DrawBattleModeWindow(s8* arg0) {
         func_8001AB6C();
         func_8001AA9C(M2C_FIELD(&D_800734A8, u8*, 0), M2C_FIELD(&D_800734A8, u8*, 1), M2C_FIELD(&D_800734A8, u8*, 2), M2C_FIELD(&D_800734A8, u8*, 3));
         func_8001A384(8, 0);
-        func_8001AB2C(0x1C);
+        Font_SetLineHeight(0x1C);
         func_8001A944(M2C_FIELD(arg0, s32*, 0) + 0x14, M2C_FIELD(arg0, s32*, 4) + 0xEC, ((Entry8200752C*)M2C_FIELD(arg0, s32*, 0x68))[M2C_FIELD(arg0, s32*, 0x34)].text);
         func_8001ABBC();
     }
@@ -1227,8 +1227,8 @@ extern Color82001CCC D_82009204[];
 extern Gfx D_80073408[];
 extern Gfx D_80073438[];
 void func_800189C0(s32, s32);
-void func_800069CC(void);
-u8* func_80018DEC(s32, s32);
+void BgStage_DrawFrame(void);
+s32 PokeIcon_GetImage(s8 *arg0, s32 arg1);
 
 void func_82007D94(s8* arg0, s32 arg1) {
     s32 i;
@@ -1244,7 +1244,7 @@ void func_82007D94(s8* arg0, s32 arg1) {
             func_80029028((i % 7) * 0x4F + x0, (i / 7) * 0x3C + y0, 0x4F, 0x3C, D_82009204[i & 1]);
         }
         func_800189C0(M2C_FIELD(arg0, s32*, 0xDC), 0);
-        func_800069CC();
+        BgStage_DrawFrame();
         entry = M2C_FIELD(arg0, s8**, 0xCC);
         for (i = 0; i < M2C_FIELD(arg0, s32*, 0xD4); i++) {
             func_8001AB6C();
@@ -1255,7 +1255,7 @@ void func_82007D94(s8* arg0, s32 arg1) {
             func_8001A944(x + 2, y + 0x2A, entry + 0x30);
             func_8001ABBC();
             gSPDisplayList(gDisplayListHead++, D_80073408);
-            func_8001B884(x + 0x26, y + 2, 0x28, 0x28, func_80018DEC(M2C_FIELD(arg0, s32*, 0xDC), i), 0x28, 0x200000);
+            func_8001B884(x + 0x26, y + 2, 0x28, 0x28, PokeIcon_GetImage(M2C_FIELD(arg0, s32*, 0xDC), i), 0x28, 0x200000);
             gSPDisplayList(gDisplayListHead++, D_80073438);
             entry += 0x50;
         }
@@ -1313,7 +1313,7 @@ void FreeBattle_InitDuplicateWarning(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
 void func_8001AB6C(void);
 void func_8001AA9C(u8, u8, u8, u8);
 void func_8001A384(s32, s32);
-void func_8001AB2C(s32);
+void Font_SetLineHeight(s32 arg0);
 void func_8001A944(s32, s32, const char*, ...);
 void func_8001ABBC(void);
 extern M2C_UNK D_800734A8;
@@ -1328,7 +1328,7 @@ void FreeBattle_DrawDuplicateWarning(s8* arg0) {
         func_8001AB6C();
         func_8001AA9C(M2C_FIELD(&D_800734A8, u8*, 0), M2C_FIELD(&D_800734A8, u8*, 1), M2C_FIELD(&D_800734A8, u8*, 2), M2C_FIELD(&D_800734A8, u8*, 3));
         func_8001A384(8, 0);
-        func_8001AB2C(0x1C);
+        Font_SetLineHeight(0x1C);
         func_8001A944(M2C_FIELD(arg0, s32*, 0) + 0xE, M2C_FIELD(arg0, s32*, 4) + 0xE, D_8200A0B0, M2C_FIELD(arg0, s32*, 0x4C));
         func_8001ABBC();
     }
@@ -1397,7 +1397,7 @@ void FreeBattle_DrawShortageWarning(s8* arg0) {
         func_8001AB6C();
         func_8001AA9C(M2C_FIELD(&D_800734A8, u8*, 0), M2C_FIELD(&D_800734A8, u8*, 1), M2C_FIELD(&D_800734A8, u8*, 2), M2C_FIELD(&D_800734A8, u8*, 3));
         func_8001A384(8, 0);
-        func_8001AB2C(0x1C);
+        Font_SetLineHeight(0x1C);
         func_8001A944(M2C_FIELD(arg0, s32*, 0) + 0xE, M2C_FIELD(arg0, s32*, 4) + 0xE, D_8200A124, M2C_FIELD(arg0, s32*, 0xB0), M2C_FIELD(arg0, s32*, 0xB0));
         func_8001ABBC();
         Window_DrawLabeled(arg0 + 0x2C, (M2C_FIELD(arg0, s32*, 0xA8) == 0) ? 2 : 0);
@@ -1502,7 +1502,7 @@ void FreeBattle_DrawLevelSumWarning(s8* arg0) {
         func_8001AB6C();
         func_8001AA9C(M2C_FIELD(&D_800734A8, u8*, 0), M2C_FIELD(&D_800734A8, u8*, 1), M2C_FIELD(&D_800734A8, u8*, 2), M2C_FIELD(&D_800734A8, u8*, 3));
         func_8001A384(8, 0);
-        func_8001AB2C(0x1C);
+        Font_SetLineHeight(0x1C);
         func_8001A944(M2C_FIELD(arg0, s32*, 0) + 0xE, M2C_FIELD(arg0, s32*, 4) + 0xE, D_8200A198);
         func_8001ABBC();
         Window_DrawLabeled(arg0 + 0x2C, (M2C_FIELD(arg0, s32*, 0xA8) == 0) ? 2 : 0);

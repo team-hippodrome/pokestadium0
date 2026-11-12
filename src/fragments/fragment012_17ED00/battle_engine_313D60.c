@@ -152,7 +152,7 @@ void Battle_ResetEntityState(ActivePokemon* active_pokemon) {
     }
 }
 
-s32 func_8210F3F0();                                /* extern */
+u8 Battle_Random(void);                                /* extern */
 extern u16 D_82199F50;
 
 void func_8210F8E8(void) {
@@ -160,7 +160,7 @@ void func_8210F8E8(void) {
 
     if ((s32) D_82199F50 >= 2) {
         do {
-            temp_v0 = func_8210F3F0();
+            temp_v0 = Battle_Random();
         } while (temp_v0 < 0xD9);
         D_82199F50 = (u16) ((s32) (D_82199F50 * temp_v0) / 255);
     }

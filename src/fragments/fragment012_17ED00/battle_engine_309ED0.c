@@ -89,7 +89,7 @@ s32 func_82124BF8(ActivePokemon* arg0) {
             if (arg0->sessionTeams->uniqueStatusFlags & 0x10) {
                 arg0->sessionTeams->uniqueStatusFlags &= ~0x90;
                 func_82108A0C(arg0);
-                func_82105E4C(arg0, 0x3800);
+                Battle_ClearRuntimeFlags(arg0, 0x3800);
                 sBattleScene.scene->modelReloadStep++;
             }
             break;

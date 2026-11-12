@@ -138,7 +138,7 @@ void func_80047FB0(u8*, s32, s32);
 void func_80037F48(s32, s32);
 void func_8003A710(u8*);
 s32 func_800371A4(s8*);
-void func_80046170(s32, s32);
+void Audio_SetChannelVolume(s32 arg0, u32 arg1);
 
 s32 func_8003E1F8(void) {
     u32 i;
@@ -313,8 +313,8 @@ s32 func_8003E1F8(void) {
     config.unk_24 = 0x30;
     config.unk_28 = 0x500;
     ret = func_800371A4((s8*)&config);
-    func_80046170(2, 2);
-    func_80046170(1, 3);
+    Audio_SetChannelVolume(2, 2);
+    Audio_SetChannelVolume(1, 3);
     return ret;
 }
 
@@ -340,7 +340,7 @@ extern s32 D_800B419C;
 extern u8* D_800B41F0;
 extern s32 D_800FD608;
 extern u32 D_800FD684;
-s32 func_80037B7C(s32);
+s32 Audio_QueueSetMonoOutputCommand(s32 handle);
 void func_80037C04(s32, u32);
 void func_800419F8(u32);
 
@@ -357,7 +357,7 @@ s32 Audio_StartMusicTrack(u32 track_id) {
     if (track_id == 0x1E) {
         return 0;
     }
-    if (func_80037B7C(D_800FD608) != 0) {
+    if (Audio_QueueSetMonoOutputCommand(D_800FD608) != 0) {
         Audio_StopAllSoundEffects();
         D_800FD608 = 0;
     }
@@ -748,7 +748,7 @@ extern s32 D_800B4190;
 extern s32 D_800B4188;
 extern s32 D_800B41A4;
 extern s32 D_800775A8;
-s32 func_80037B7C(s32);
+s32 Audio_QueueSetMonoOutputCommand(s32 handle);
 s32 func_80037AC4(s32, s32);
 s32 func_8003834C(s32, s32, s32, s32, s32, s32, s32);
 void func_8003A710(u8*);
@@ -774,7 +774,7 @@ s32 Audio_PlayCry(u32 arg0, u32 arg1) {
     }
     D_80077520++;
     D_80077520 %= 3;
-    if (func_80037B7C(D_800FD5F8[D_80077520]) != 0) {
+    if (Audio_QueueSetMonoOutputCommand(D_800FD5F8[D_80077520]) != 0) {
         D_80077520 += 2;
         D_80077520 %= 3;
         return 0;
@@ -839,7 +839,7 @@ extern s32 D_800FD64C;
 extern s32 D_800FD650;
 extern s32 D_800FD670[4];
 void func_800386E4(s32, s32);
-s32 func_800407B0(s32, s32, s32);
+s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2);
 /**
  * Loads and plays the sound of `move_id` (1-based, below 167) for `species`; some species/move pairs are skipped. Some moves add a cry or a second sound.
  * @unverified Name and comment guessed from the code.
@@ -907,14 +907,14 @@ s32 Audio_PlayMoveSound(u32 move_id, u32 species, u32 sound_kind) {
     }
 
     for (i = 0; i < 4; i++) {
-        if (func_80037B7C(D_800FD670[i]) != 0) {
+        if (Audio_QueueSetMonoOutputCommand(D_800FD670[i]) != 0) {
             func_800386E4(D_800FD670[i], 0xF);
             D_800FD670[i] = 0;
         }
     }
 
 skip:
-    if (func_80037B7C(D_800FD648) != 0) {
+    if (Audio_QueueSetMonoOutputCommand(D_800FD648) != 0) {
         func_80037AC4(D_800FD648, 2);
         D_800FD648 = 0;
     }
@@ -926,7 +926,7 @@ skip:
 
     switch (sound_kind) {
         case 4:
-            if (func_80037B7C(D_800FD650) != 0) {
+            if (Audio_QueueSetMonoOutputCommand(D_800FD650) != 0) {
                 func_80037AC4(D_800FD650, 0x14);
                 D_800FD650 = 0;
             }
@@ -955,7 +955,7 @@ skip:
             break;
 
         case 0:
-            if (func_80037B7C(D_800FD650) != 0) {
+            if (Audio_QueueSetMonoOutputCommand(D_800FD650) != 0) {
                 func_80037AC4(D_800FD650, 0x14);
                 D_800FD650 = 0;
             }
@@ -992,7 +992,7 @@ skip:
             switch (move_id) {
                 case LEER: case SUPERSONIC: case BLIZZARD: case BUBBLEBEAM: case AURORA_BEAM: case HYPER_BEAM: case CONFUSE_RAY: case KINESIS:
                 case GLARE:
-                    if (func_80037B7C(D_800FD650) != 0) {
+                    if (Audio_QueueSetMonoOutputCommand(D_800FD650) != 0) {
                         func_80037AC4(D_800FD650, 0x3C);
                         D_800FD650 = 0;
                     }
@@ -1000,14 +1000,14 @@ skip:
 
                 case BIND: case WRAP: case DISABLE: case FLAMETHROWER: case ABSORB: case MEGA_DRAIN: case RAZOR_LEAF: case PETAL_DANCE:
                 case STRING_SHOT: case DRAGON_RAGE: case MIMIC: case FIRE_BLAST: case CONSTRICT: case DREAM_EATER: case LEECH_LIFE: case CONVERSION:
-                    if (func_80037B7C(D_800FD650) != 0) {
+                    if (Audio_QueueSetMonoOutputCommand(D_800FD650) != 0) {
                         func_80037AC4(D_800FD64C, 0x14);
                         D_800FD650 = 0;
                     }
                     break;
 
                 default:
-                    if (func_80037B7C(D_800FD650) != 0) {
+                    if (Audio_QueueSetMonoOutputCommand(D_800FD650) != 0) {
                         func_80037AC4(D_800FD650, 2);
                         D_800FD650 = 0;
                     }
@@ -1023,7 +1023,7 @@ skip:
             break;
 
         case 2:
-            if (func_80037B7C(D_800FD650) != 0) {
+            if (Audio_QueueSetMonoOutputCommand(D_800FD650) != 0) {
                 func_80037AC4(D_800FD650, 0x14);
                 D_800FD650 = 0;
             }
@@ -1054,7 +1054,7 @@ skip:
             break;
 
         case 3:
-            if (func_80037B7C(D_800FD650) != 0) {
+            if (Audio_QueueSetMonoOutputCommand(D_800FD650) != 0) {
                 func_80037AC4(D_800FD650, 0x14);
                 D_800FD650 = 0;
             }
@@ -1070,14 +1070,14 @@ skip:
                     return 0;
 
                 case SUPERSONIC:
-                    if (func_80037B7C(D_800FD650) != 0) {
+                    if (Audio_QueueSetMonoOutputCommand(D_800FD650) != 0) {
                         func_80037AC4(D_800FD650, 0x28);
                         D_800FD650 = 0;
                     }
                     return 0;
 
                 default:
-                    if (func_80037B7C(D_800FD650) != 0) {
+                    if (Audio_QueueSetMonoOutputCommand(D_800FD650) != 0) {
                         func_80037AC4(D_800FD650, 0x3C);
                         D_800FD650 = 0;
                     }
@@ -1124,7 +1124,7 @@ skip:
                 break;
 
             case 0x9C:
-                func_800407B0(0x32, species, 0);
+                Audio_PlayCommand(0x32, species, 0);
                 break;
 
             case 0x2D:

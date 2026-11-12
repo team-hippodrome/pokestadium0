@@ -90,15 +90,15 @@ void BattleEffect_MultiHit(void) {
     }
 }
 
-s32 func_8210F3F0(void);
+u8 Battle_Random(void);
 
 /*
  * func_82114C20
  *
  * Does nothing if bit 0x10 of sBattleTarget->unk_4D is set. Otherwise it clears
- * bit 0x20 of sBattleTarget->unk_4D, calls func_8210F3F0(), and sets bit 0x08
+ * bit 0x20 of sBattleTarget->unk_4D, calls Battle_Random(), and sets bit 0x08
  * of sBattleTarget->unk_4C when the result is below a limit: 0x1A when
- * sBattleUser->moveCache.unk_01 is 0x1F, otherwise 0x4D. (func_8210F3F0 is
+ * sBattleUser->moveCache.unk_01 is 0x1F, otherwise 0x4D. (Battle_Random is
  * called exactly once on each path.) What the flag bits and the limits mean
  * is not established from this function.
  *
@@ -109,10 +109,10 @@ void func_82114C20(void) {
     if (!(sBattleTarget->volatileStatusFlags & 0x10)) {
         sBattleTarget->volatileStatusFlags &= 0xFFDF;
         if (sBattleUser->moveCache.effect == 0x1F) {
-            if (func_8210F3F0() >= 0x1A) {
+            if (Battle_Random() >= 0x1A) {
                 return;
             }
-        } else if (func_8210F3F0() >= 0x4D) {
+        } else if (Battle_Random() >= 0x4D) {
             return;
         }
         sBattleTarget->immobilizedReason |= 8;
@@ -180,16 +180,16 @@ void func_82114D10(void) {
 
 extern u8* D_8219A3C0;
 extern u8* D_8219A3C4;
-s32 func_8210F3F0(void);
+u8 Battle_Random(void);
 void func_82114F9C(void) {
     s32 v;
 
     if (!(D_8219A3C0[0x4C] & 0x20)) {
         D_8219A3C4[0x4D] &= ~0x20;
         D_8219A3C0[0x4C] |= 0x20;
-        v = func_8210F3F0() & 3;
+        v = Battle_Random() & 3;
         if (v >= 2) {
-            v = func_8210F3F0() & 3;
+            v = Battle_Random() & 3;
         }
         D_8219A3C0[0x4F] = v + 1;
     }

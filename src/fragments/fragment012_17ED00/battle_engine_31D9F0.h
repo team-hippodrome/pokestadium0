@@ -44,10 +44,10 @@ u32 func_800566BC(s8*);                            /* extern */
 M2C_UNK func_82116CF4(s32, s32, M2C_UNK, M2C_UNK, s8 *, s8 *); /* extern */
 extern s8 D_8218B008;
 extern s8 D_8218B014;
-void func_82116FF4(s16 arg0, s16 arg1, s32 arg2, s32 arg3, s32 arg4);
+void BattleHud_DrawSpeciesNameLabel(s16 arg0, s16 arg1, s32 arg2, s32 arg3, s32 arg4);
 
 extern s8 D_8219597C;
-void func_821170D0(s16 arg0, s16 arg1, s32 arg2, s32 arg3, u16 arg4, s32 arg5);
+void BattleHud_DrawSpeciesNameLabelBlink(s16 arg0, s16 arg1, s32 arg2, s32 arg3, u16 arg4, s32 arg5);
 
 void BattleHud_DrawSpeciesNameLabelAuto(ActivePokemon* arg0, TeamRoster* arg1, s16 arg2, s16 arg3, s32 arg4, u16 arg5, s32 arg6);
 

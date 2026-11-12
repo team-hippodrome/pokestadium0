@@ -174,7 +174,7 @@ u8 leoRecal_w(void);
 u8 leoSeek_i(u16 rwmode);
 u8 leoSeek_w(void);
 s32 leoRecv_event_mesg(s32 control);
-u32 leoChk_err_retry(u32 sense);
+s32 leoChk_err_retry(u32 arg0);
 u8 leoChk_cur_drvmode(void);
 void leoDrive_reset(void);
 u32 leoChkUnit_atten(void);

@@ -34,15 +34,15 @@ s32 Ui_GetSelectionDirection(unk_func_8002EBD8_arg0* arg0);
 Color_RGBA8 Color_InterpolateFromGray(Color_RGBA8 arg0, f32 arg1);
 
 s32 Ui_AdjustNumericSelection(unk_func_8830867C_044_038_030* arg0, s32 arg1);
-void Particle_Field50_SetXZFromField7C_09BB4(Particle* arg0);
-void Particle_Field7C_SetXZFromField74AngleY_0B278(Particle* arg0);
+s32 Particle_Field50_SetXZFromField7C_09BB4(s32* arg0);
+s32 Particle_Field7C_SetXZFromField74AngleY_0B278(void *arg0);
 
 void func_8001AA9C(u8, u8, u8, u8);
 void func_8001AB6C(void);
 void func_8001A384(s32, s32);
 void func_8001A944(s32, s32, s32);
 void func_8001ABBC(void);
-void func_8001AB2C(s32);
+void Font_SetLineHeight(s32 arg0);
 void func_8001ABE8(void);
 void func_8001AAE4(u8, u8, u8, u8);
 void func_8001AC3C(void);
@@ -601,7 +601,7 @@ void Window_DrawFrame(s32* arg0) {
 }
 
 /*
- * func_8002AAC4
+ * Particle_Field7C_SetXZFromField74AngleY_0B278
  *
  * Advances a small step counter held in the object `arg0`: the counter is
  * the word at offset 0x24 and a second word at offset 0x28 receives a value
@@ -619,7 +619,7 @@ void Window_DrawFrame(s32* arg0) {
  */
 M2C_UNK func_8003F6AC();
 
-s32 func_8002AAC4(void *arg0) {
+s32 Particle_Field7C_SetXZFromField74AngleY_0B278(void *arg0) {
     s32 var_v1;
     s32 var_v0;
 
@@ -656,7 +656,7 @@ extern u8 D_80073554[];
 void func_8002C1B4(s32, s32, s32, s32);
 void func_8002C5A4(); // no prototype: callers pass a fourth argument the definition ignores
 
-s32 func_8002AB84(s32* arg0) {
+s32 Particle_Field50_SetXZFromField7C_09BB4(s32* arg0) {
     UNUSED s32 pad1; // FAKE: unused locals that only pad the stack frame
     UNUSED s32 pad2; // FAKE
     UNUSED s32 pad3; // FAKE
@@ -1290,7 +1290,7 @@ void SavePrompt_Draw(s32* arg0) {
     func_8001AB6C();
     func_8001AA9C(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
     func_8001A384(8, 0);
-    func_8001AB2C(0x1C);
+    Font_SetLineHeight(0x1C);
     func_8001A944(arg0[0] + 0xE, arg0[1] + 0xA, (s32)D_8007B920);
     func_8001ABBC();
 }
@@ -1433,7 +1433,7 @@ void TextBox_Draw(s32* arg0) {
     func_8001AB6C();
     func_8001A384(D_800736D0[arg0[12]].unk8, 0);
     func_8001AA9C(D_800736F0[0].r, D_800736F0[0].g, D_800736F0[0].b, D_800736F0[0].a);
-    func_8001AB2C(D_800736D0[arg0[12]].w + D_800736D0[arg0[12]].h);
+    Font_SetLineHeight(D_800736D0[arg0[12]].w + D_800736D0[arg0[12]].h);
     func_8001ABE8();
     func_8001AAE4(D_800736F0[1].r, D_800736F0[1].g, D_800736F0[1].b, D_800736F0[1].a);
     func_8001A944(arg0[0] + D_800736D0[arg0[12]].h + 6, arg0[1] + D_800736D0[arg0[12]].h + 6, arg0[11]);
@@ -1501,7 +1501,7 @@ void BlinkingTextBox_Draw(s32* arg0) {
     func_8001AB6C();
     func_8001A384(D_800736D0[arg0[11]].unk8, 0);
     func_8001AA9C(D_80073700[0].r, D_80073700[0].g, D_80073700[0].b, D_80073700[0].a);
-    func_8001AB2C(D_800736D0[arg0[11]].w + D_800736D0[arg0[11]].h);
+    Font_SetLineHeight(D_800736D0[arg0[11]].w + D_800736D0[arg0[11]].h);
     func_8001ABE8();
     func_8001AAE4(D_80073700[1].r, D_80073700[1].g, D_80073700[1].b, D_80073700[1].a);
     func_8001A944(arg0[0] + D_800736D0[arg0[11]].h + 6, arg0[1] + D_800736D0[arg0[11]].h + 6, arg0[10]);
@@ -1509,7 +1509,7 @@ void BlinkingTextBox_Draw(s32* arg0) {
     func_8001ABBC();
 }
 
-s32 func_8002D3D0(u8* arg0) {
+s32 BattleMon_CountMoves(u8* arg0) {
     s32 i;
 
     for (i = 0; i < 4; i++) {
@@ -1538,7 +1538,7 @@ s32 BattleMon_GetMoveIndex(s32 arg0, s32 arg1) {
     return r;
 }
 
-s32 func_8002D3D0(u8*);
+s32 BattleMon_CountMoves(u8* arg0);
 s32 BattleMon_GetMoveIndex(s32, s32);                        /* extern */
 
 /**
@@ -1546,7 +1546,7 @@ s32 BattleMon_GetMoveIndex(s32, s32);                        /* extern */
  * @unverified Name and comment guessed from the code.
  */
 s32 BattleMon_GetMoveIndexChecked(s32 arg0, s32 arg1) {
-    if (arg1 >= func_8002D3D0((u8*)arg0)) {
+    if (arg1 >= BattleMon_CountMoves((u8*)arg0)) {
         return -1;
     }
     return BattleMon_GetMoveIndex(arg0, arg1);
@@ -1574,7 +1574,7 @@ s32 Pokemon_GetTypeIndex(BattleMon* arg0, s32 arg1) {
 }
 
 s32 func_80006780();
-void func_800069CC(void);
+void BgStage_DrawFrame(void);
 extern u8 D_80073554[];
 extern Color8002A354 D_80073708;
 extern u8 D_8007B950[];
@@ -1588,7 +1588,7 @@ extern u8 D_8007B9D0[];
  * @unverified Name and comment guessed from the code.
  */
 void Save_DrawReportResultWindow(s32 arg0) {
-    func_800069CC();
+    BgStage_DrawFrame();
     Ui_DrawTexturedFrameDecal(0x6E, 0x72, 0x1A4, 0x114, D_80073554);
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(0x74, 0x78, 0x198, 0x108, D_80073708);
@@ -1629,7 +1629,7 @@ void Save_DrawReportResultWindow(s32 arg0) {
         func_8001A944(0x128, 0xF0, (s32)D_8007B9BC);
         func_8001AC3C();
         func_8001AA9C(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
-        func_8001AB2C(0x24);
+        Font_SetLineHeight(0x24);
         func_8001A944(0x80, 0xF0, (s32)D_8007B9D0);
         func_8001ABBC();
     }

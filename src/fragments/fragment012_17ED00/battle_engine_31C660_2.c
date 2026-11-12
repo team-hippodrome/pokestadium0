@@ -26,14 +26,14 @@ void BattleAnim_SetupDrainFlameHueChange(Particle* arg0) {
 }
 
 M2C_UNK func_80019B28(s32, u8, u8, u8, s32);        /* extern */
-M2C_UNK func_8213C930(s8 *);                      /* extern */
-s32 func_8213C9B0(s8 *);                          /* extern */
+void Particle_MarkInactive(s8 *arg0);                      /* extern */
+s32 Particle_IsRunning(s8 *arg0);                          /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
 s32 Particle_ApproachUnkAE(s8 *, s16, u8);                 /* extern */
 s32 func_821436A0(s8 *, u8, u8);                  /* extern */
 M2C_UNK func_82144130(s8 *);                      /* extern */
 
-void func_82144170(s8 *arg0) {
+void BattleAnim_CallbackOwnerModelTintPaletteFade(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -52,10 +52,10 @@ void func_82144170(s8 *arg0) {
         }
         break;
     case 4:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
-    if (func_8213C9B0(arg0) != 0) {
+    if (Particle_IsRunning(arg0) != 0) {
         func_80019B28(M2C_FIELD(arg0, s32 *, 0x10), M2C_FIELD(arg0, u8 *, 0xBA), M2C_FIELD(arg0, u8 *, 0xBB), M2C_FIELD(arg0, u8 *, 0xBC), (s32) M2C_FIELD(arg0, s16 *, 0xAA));
     }
 }
@@ -154,13 +154,13 @@ void BattleAnim_SetupInvisibility(Particle* arg0) {
 }
 
 M2C_UNK func_80019B6C(s32, u8);                     /* extern */
-M2C_UNK func_8213C930(s8 *);                      /* extern */
-s32 func_8213C9B0(s8 *);                          /* extern */
+void Particle_MarkInactive(s8 *arg0);                      /* extern */
+s32 Particle_IsRunning(s8 *arg0);                          /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
 s32 Particle_ApproachPrimAlpha(s8 *, u8, u8);                  /* extern */
 M2C_UNK func_82144644(s8 *);                      /* extern */
 
-void func_82144668(s8 *arg0) {
+void BattleAnim_CallbackOwnerModelAlphaFade(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -174,10 +174,10 @@ void func_82144668(s8 *arg0) {
         }
         break;
     case 3:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
-    if (func_8213C9B0(arg0) != 0) {
+    if (Particle_IsRunning(arg0) != 0) {
         func_80019B6C(M2C_FIELD(arg0, s32 *, 0x10), M2C_FIELD(arg0, u8 *, 0xC0));
     }
 }
@@ -189,7 +189,7 @@ void BattleAnim_SetupParticleRecolorTransparent(Particle* arg0) {
 }
 
 M2C_UNK func_80019B28(s32, u8, u8, u8, s32);        /* extern */
-M2C_UNK func_8213C938(s8 *);                      /* extern */
+void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
 M2C_UNK func_82144710(s8 *);                      /* extern */
 
 void func_82144750(s8 *arg0) {
@@ -205,7 +205,7 @@ void func_82144750(s8 *arg0) {
         break;
     case 3:
         if (Particle_ApproachPrimAlpha(arg0, 0, 8) != 0) {
-            func_8213C938(arg0);
+            Particle_DisableAndDetach(arg0);
         }
         break;
     }
@@ -256,16 +256,16 @@ void BattleAnim_RunWhiteHueChange(Particle* arg0) {
 
 s32 func_8213C484();                                /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
-M2C_UNK func_8214050C(s8 *, u8);                  /* extern */
+void Particle_SetPrimAlpha(s8 *arg0, char arg1);                  /* extern */
 M2C_UNK func_82143408(s8 *, s32);                 /* extern */
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-void func_821448D4(s8 *arg0)
+void BattleAnim_SetupDescriptor25AlphaHoldFadeOut(s8 *arg0)
 {
   func_82143408(arg0, func_8213C484() & 0xFFFF);
   if (arg0)
   {
   }
-  func_8214050C(arg0, *((u8 *) (((s8 *) arg0) + 0xC9)));
+  Particle_SetPrimAlpha(arg0, *((u8 *) (((s8 *) arg0) + 0xC9)));
   func_8213C9D0(arg0);
 }
 
@@ -331,10 +331,10 @@ void func_82144A54(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-M2C_UNK func_8213C938(s8 *);                      /* extern */
+void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
 s32 func_82140690();                                /* extern */
 
-void func_82144A9C(s8 *arg0) {
+void BattleAnim_CallbackDescriptor25AlphaHoldDetach(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -344,7 +344,7 @@ void func_82144A9C(s8 *arg0) {
         return;
     case 2:
         if (func_82140690() != 0) {
-            func_8213C938(arg0);
+            Particle_DisableAndDetach(arg0);
         }
         return;
     }

@@ -102,7 +102,7 @@ void Util_DrawRect(Gfx** dlist, s32 ulx, s32 lrx, u16 color) {
 void func_80002EC8(Gfx** dlist) {
     MainPool* pool = main_pool_get_pool();
     UNUSED s32 pad; // FAKE: stack padding
-    s32 available = func_8000255C();
+    s32 available = main_pool_get_available();
 
     if (available >= 0) {
         s32 baseX = 30;

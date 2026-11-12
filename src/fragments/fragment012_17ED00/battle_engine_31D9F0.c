@@ -77,7 +77,7 @@ void BattleHud_DrawHpFractionText(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
-void func_82116FF4(s16 arg0, s16 arg1, s32 arg2, s32 arg3, s32 arg4) {
+void BattleHud_DrawSpeciesNameLabel(s16 arg0, s16 arg1, s32 arg2, s32 arg3, s32 arg4) {
     u32 sp24;
     s32 temp_v0;
 
@@ -93,7 +93,7 @@ void func_82116FF4(s16 arg0, s16 arg1, s32 arg2, s32 arg3, s32 arg4) {
     func_8001ABBC();
 }
 
-void func_821170D0(s16 arg0, s16 arg1, s32 arg2, s32 arg3, u16 arg4, s32 arg5) {
+void BattleHud_DrawSpeciesNameLabelBlink(s16 arg0, s16 arg1, s32 arg2, s32 arg3, u16 arg4, s32 arg5) {
     UNUSED s32 pad; // FAKE: stack padding
     s16 wave;
     s16 alpha;

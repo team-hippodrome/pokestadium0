@@ -103,7 +103,7 @@ extern s16 D_82203550;
 extern Color_RGBA8 D_822036A0;
 extern s8* D_822036A4;
 extern s32 D_822036A8;
-M2C_UNK func_800407B0(M2C_UNK, M2C_UNK, M2C_UNK);
+s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2);
 s32 Completion_LightAngleCallbackA(s32, GraphNode*);
 s32 Completion_LightAngleCallbackB(s32, GraphNode*);
 typedef struct unk_D_86B0DBCC {
@@ -229,17 +229,17 @@ void func_822000F0(s32 arg0, s8 *arg1)
   }
 }
 
-M2C_UNK func_8000B1FC();                            /* extern */
-M2C_UNK func_8000B220();                            /* extern */
+void Cont_StartReadInputs(void);                            /* extern */
+void Cont_ReadInputs(void);                            /* extern */
 M2C_UNK func_8001B5F0();                            /* extern */
 
 /**
- * Makes the per-frame calls the scene runs before drawing (func_8000B1FC, func_8000B220, func_8001B5F0).
+ * Makes the per-frame calls the scene runs before drawing (Cont_StartReadInputs, Cont_ReadInputs, func_8001B5F0).
  * @unverified Name and comment guessed from the code.
  */
 s32 VsScene_BeginFrame(void) {
-    func_8000B1FC();
-    func_8000B220();
+    Cont_StartReadInputs();
+    Cont_ReadInputs();
     func_8001B5F0();
     return 0;
 }
@@ -497,9 +497,9 @@ void func_8220091C(void) {
             break;
     }
     if (((DemoState*)D_822036A4)->unk_0000 == 0) {
-        func_800407B0(0x3C, 0, track);
+        Audio_PlayCommand(0x3C, 0, track);
     } else {
-        func_800407B0(0x3C, ((DemoState*)D_822036A4)->unk_0003, track);
+        Audio_PlayCommand(0x3C, ((DemoState*)D_822036A4)->unk_0003, track);
     }
     obj->rootId = ((DemoState*)D_822036A4)->unk_0003;
     if (((DemoState*)D_822036A4)->unk_0000 != 0) {
@@ -787,7 +787,7 @@ void func_82201600(s32 arg0) {
                     if (arg0 == team->pokemonPicked[k].unk_25) {
                         idx = i * 6 + j * 3 + k;
                         func_82201348(*(DepthBuffer**)(M2C_FIELD(D_82203264, s8**, 8) + idx * 0x14 + 0xC));
-                        func_800407B0(0x3D, 2, idx + 1);
+                        Audio_PlayCommand(0x3D, 2, idx + 1);
                     }
                 }
             }
@@ -797,7 +797,7 @@ void func_82201600(s32 arg0) {
                 if (arg0 == (team->pokemonPicked + k)->unk_25) {
                     idx = i * 6 + k;
                     func_82201348(*(DepthBuffer**)(M2C_FIELD(D_82203264, s8**, 8) + idx * 0x14 + 0xC));
-                    func_800407B0(0x3D, 2, idx + 1);
+                    Audio_PlayCommand(0x3D, 2, idx + 1);
                 }
             }
         }
@@ -837,7 +837,7 @@ s32 func_822017F0(void) {
 M2C_UNK func_80006780();                            /* extern */
 M2C_UNK func_80006828(M2C_UNK, M2C_UNK (*)(M2C_UNK)); /* extern */
 s32 func_80018E24(s32);                             /* extern */
-M2C_UNK func_800407B0(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
+s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2);   /* extern */
 M2C_UNK VsScene_DrawFrame(M2C_UNK);                     /* extern */
 void func_82201084(s32);
 void func_82201600(s32);
@@ -848,10 +848,10 @@ void func_822018EC(void) {
     s32 var_s0_2;
     s32 var_s0_3;
 
-    func_800407B0(0x3D, 0, 0);
+    Audio_PlayCommand(0x3D, 0, 0);
     func_80006828(5, VsScene_DrawFrame);
     if (func_822017F0() != 0) {
-        func_800407B0(0x3D, 1, 0);
+        Audio_PlayCommand(0x3D, 1, 0);
     }
     var_s0 = 0x64;
     do {
@@ -885,14 +885,14 @@ void func_822018EC(void) {
 }
 
 M2C_UNK func_8001107C(M2C_UNK *, M2C_UNK, M2C_UNK *); /* extern */
-M2C_UNK func_800407B0(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
+s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2);   /* extern */
 extern M2C_UNK D_8F6256E0;
 
 void func_82201A3C(void) {
     if (M2C_FIELD(D_822036A4, u8 *, 0x1050) == 1) {
-        func_800407B0(0x3D, 3, 0);
+        Audio_PlayCommand(0x3D, 3, 0);
     } else {
-        func_800407B0(0x3D, 4, 0);
+        Audio_PlayCommand(0x3D, 4, 0);
     }
     M2C_FIELD(&D_82203268, u8 *, 2) = (u8) (M2C_FIELD(&D_82203268, u8 *, 2) | 0x20);
     func_8001107C(&D_82203268, 0, &D_8F6256E0);
@@ -961,7 +961,7 @@ s32 Tournament_RunContinuePrompt(void) {
             Font_EndTexturedTextRendering();
             func_80006780();
         } while (gPlayer1Controller->buttonPressed == 0);
-        func_800407B0(0x56, 0, 0);
+        Audio_PlayCommand(0x56, 0, 0);
     }
     D_822033D0.node.renderFlags |= 0x20;
     D_82203538.node.renderFlags |= 0x20;
@@ -979,18 +979,18 @@ s32 func_82201DF8(void) {
         Model_InitDisplayObject(&D_82203538, 1, 0, D_82203258);
         ModelAnim_BindTransformCurve(&D_822033D0, 1, D_82202C1C[((DemoState*)D_822036A4)->unk_0003], 0x10000);
         ModelAnim_BindTransformCurve(&D_82203538, 1, D_82202C3C[((DemoState*)D_822036A4)->unk_0003], 0x10000);
-        func_800407B0(0x50, 0, 0);
+        Audio_PlayCommand(0x50, 0, 0);
         D_8220354C = ((DemoState*)D_822036A4)->unk_0003 - 1;
         if (((DemoState*)D_822036A4)->unk_0003 == 8) {
             BgStage_RunUntilCondition(0x5A, VsScene_DrawFrame);
-            func_800407B0(0x51, 0, 0);
+            Audio_PlayCommand(0x51, 0, 0);
             BgStage_RunUntilCondition(0x19, VsScene_DrawFrame);
-            func_800407B0(0x52, 0, 0);
+            Audio_PlayCommand(0x52, 0, 0);
             BgStage_RunUntilCondition(0x37, VsScene_DrawFrame);
             func_82200F08();
         } else {
             BgStage_RunUntilCondition(0x55, VsScene_DrawFrame);
-            func_800407B0(0x51, 0, 0);
+            Audio_PlayCommand(0x51, 0, 0);
             BgStage_RunUntilCondition(0xF, VsScene_DrawFrame);
             sp24 = Tournament_RunContinuePrompt();
         }
@@ -1215,7 +1215,7 @@ extern u8 D_00380D60[];
 extern u8 D_00385D60[];
 extern u8 D_0038A540[];
 s32 func_80023C30(void);
-void func_8001A194(s32 arg0, s32 arg1);
+s32 Font_Init(s32 load_size, s32 side);
 
 #define DEMO_FRAGMENT_ID(vram) ((((u32)(vram) & 0x0FF00000) >> 0x14) - 0x10)
 
@@ -1257,7 +1257,7 @@ s32 VsScene_Run(s32 arg0, s8* arg1) {
     D_82203204 = StageContext_Allocate(0, 1, 3, 1, 2, 1);
     D_82203208 = GfxImage_Allocate(0, 2, 0x140, 0xF0, 1);
     GfxImage_AttachDepthBuffer(D_82203208, D_82203204->renderTargets[0]->depth_p);
-    func_8001A194(0x2A, 0);
+    Font_Init(0x2A, 0);
     Asset_LoadToSegment(((u32)D_01000000 & 0x0F000000) >> 0x18, D_002E0BE0, D_002E2B90, 0);
     Fragment_Load(DEMO_FRAGMENT_ID(D_81000000), D_0015B1A0, D_0015E220);
     Fragment_Load(DEMO_FRAGMENT_ID(D_8F200000), D_003553C0, D_0035C390);

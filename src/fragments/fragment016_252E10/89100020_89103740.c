@@ -713,8 +713,8 @@ void LabPCList_DrawBackground(void) {
     Ui_DrawTintedScreenBackground(0x38, 0x1E0, M2C_FIELD(&D_8910A7F0, u8 *, 0), M2C_FIELD(&D_8910A7F0, u8 *, 1), (s32) M2C_FIELD(&D_8910A7F0, u8 *, 2));
 }
 
-void func_800069CC(void);
-s32 func_8002AAC4(void*);
+void BgStage_DrawFrame(void);
+s32 Particle_Field7C_SetXZFromField74AngleY_0B278(void *arg0);
 void SavePrompt_Draw(void*);
 void PcSort_DrawUseItemPrompt(void*);
 void LabPCList_DrawMessageWindow(void*);
@@ -724,32 +724,32 @@ void LabPCList_DrawMessageWindow(void*);
  * @unverified Name and comment guessed from the code.
  */
 M2C_UNK LabPCList_DrawScreen(M2C_UNK* arg0) {
-    func_800069CC();
+    BgStage_DrawFrame();
     switch (*arg0) {
         case 0:
-            if (func_8002AAC4(arg0 + 1) != 0) {
+            if (Particle_Field7C_SetXZFromField74AngleY_0B278(arg0 + 1) != 0) {
                 LabPCList_DrawBackground();
             }
             LabPCList_DrawListScreen(arg0 + 1);
             break;
         case 1:
-            if (func_8002AAC4(arg0 + 1) != 0) {
+            if (Particle_Field7C_SetXZFromField74AngleY_0B278(arg0 + 1) != 0) {
                 LabPCList_DrawBackground();
             }
             LabPCList_DrawListScreen(arg0 + 1);
             SavePrompt_Draw((s8*)arg0 + 0xB59C);
             break;
         case 2:
-            if (func_8002AAC4(arg0 + 1) != 0) {
+            if (Particle_Field7C_SetXZFromField74AngleY_0B278(arg0 + 1) != 0) {
                 LabPCList_DrawBackground();
             }
-            if (func_8002AAC4((s8*)arg0 + 0xB600) != 0) {
+            if (Particle_Field7C_SetXZFromField74AngleY_0B278((s8*)arg0 + 0xB600) != 0) {
                 LabPCList_DrawListScreen(arg0 + 1);
             }
             PcSort_DrawUseItemPrompt((s8*)arg0 + 0xB600);
             break;
         case 3:
-            if (func_8002AAC4(arg0 + 1) != 0) {
+            if (Particle_Field7C_SetXZFromField74AngleY_0B278(arg0 + 1) != 0) {
                 LabPCList_DrawBackground();
             }
             LabPCList_DrawListScreen(arg0 + 1);
@@ -804,7 +804,7 @@ s32 LabPCList_UpdateFade(s32 arg0) {
         n--;
         D_8910A908_2 = n;
     }
-    func_800069CC();
+    BgStage_DrawFrame();
     if (D_8910E37C == -1) {
         var_a1 = NULL;
     } else {
@@ -822,8 +822,8 @@ s32 LabPCList_UpdateFade(s32 arg0) {
     return 0;
 }
 
-M2C_UNK func_8000B1FC();                            /* extern */
-M2C_UNK func_8000B220();                            /* extern */
+void Cont_StartReadInputs(void);                            /* extern */
+void Cont_ReadInputs(void);                            /* extern */
 s32 LabPCList_UpdateScreen(s8*);
 M2C_UNK LabPCList_DrawScreen(M2C_UNK *);                   /* extern */
 extern M2C_UNK D_8910E3D0;
@@ -833,8 +833,8 @@ extern M2C_UNK D_8910E3D0;
  * @unverified Name and comment guessed from the code.
  */
 void LabPCList_RunFrame(s32 arg0) {
-    func_8000B1FC();
-    func_8000B220();
+    Cont_StartReadInputs();
+    Cont_ReadInputs();
     LabPCList_DrawScreen(&D_8910E3D0);
     LabPCList_UpdateScreen(&D_8910E3D0);
 }
@@ -859,7 +859,7 @@ s32 LabPCList_UpdateFade(s32);
  *
  *   1. main_pool_push_state('TERM') saves the main pool state under that tag;
  *      the matching main_pool_pop_state('TERM') is near the end.
- *   2. func_8001A194(0x3C, 0) is called (Font_Init in symbol_addrs.txt).
+ *   2. Font_Init(0x3C, 0) is called (Font_Init in symbol_addrs.txt).
  *   3. Two assets are loaded with Asset_LoadToSegment: the ROM range
  *      D_002E0BE0..D_002E2B90 into segment 1 and D_00400F70..D_004076E0 into
  *      segment 4.  The segment number is bits 24-27 of the address of
@@ -879,7 +879,7 @@ s32 LabPCList_UpdateFade(s32);
  */
 s32 LabPCList_Init(s32 arg0, s32 arg1) {
     main_pool_push_state('TERM');
-    func_8001A194(0x3C, 0);
+    Font_Init(0x3C, 0);
     Asset_LoadToSegment(((u32)D_01000000 & 0x0F000000) >> 0x18, D_002E0BE0, D_002E2B90, 0);
     Asset_LoadToSegment(((u32)D_04000000 & 0x0F000000) >> 0x18, D_00400F70, D_004076E0, 0);
     BattlePrep_UpdateSingleBattleIntroFrame();

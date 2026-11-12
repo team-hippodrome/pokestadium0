@@ -152,8 +152,8 @@ extern u8 D_8111F470[];
 extern u8 D_8111E678[];
 void func_800093E0(void*, void*);
 void func_811027A8(GbpakChannel811023DC*);
-void func_8000B1FC(void);
-void func_8000B220(void);
+void Cont_StartReadInputs(void);
+void Cont_ReadInputs(void);
 u8 func_81118018(void*, s32);
 void func_80056730(void*, s32, void*);
 void func_811177D0(s32);
@@ -222,8 +222,8 @@ s32 GbEmu_UpdateFrame(void) {
         timer = &D_811565B8;
         err = func_81102AC8(D_811565A0);
         if (err == 0) {
-            func_8000B1FC();
-            func_8000B220();
+            Cont_StartReadInputs();
+            Cont_ReadInputs();
             if ((++*timer & 3) == 0) {
                 D_811561C8[D_811565A0].request = 8;
                 func_8004CFB0(&D_81156458, D_811565A0, 1);

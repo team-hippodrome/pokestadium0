@@ -199,7 +199,7 @@ extern u8 D_82199F32;
 extern u8 D_80065CED[];
 extern u8 D_8218ADEC[];
 s32 func_8210FA2C(s32, u8*, s32);
-s32 func_8210F3F0(void);
+u8 Battle_Random(void);
 /**
  * Gen 1 critical-hit roll from the species' base speed (halved, or doubled
  * without Focus Energy, capped at 255). Name from Stadium 1.
@@ -230,7 +230,7 @@ s32 Battle_CheckCriticalHit(void) {
     } else {
         v >>= 1;
     }
-    if (func_8210F3F0() >= v) {
+    if (Battle_Random() >= v) {
         return 0;
     }
     D_82199F32 = 1;
@@ -340,7 +340,7 @@ s32 Battle_CheckMonCanAct(void) {
             BattleMessage_Format(D_8219A520 + 0x188, 0xC, D_8218C734, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]));
         } else {
             BattleMessage_Format(D_8219A520 + 0x188, 0xD, D_8218C738, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]));
-            if (func_8210F3F0() >= 0x80) {
+            if (Battle_Random() >= 0x80) {
                 sBattleScene.scene->moveEffectKind = 0x14;
                 sBattleUser->immobilizedReason &= 0x80;
                 BattleMessage_Format(D_8219A520 + 0x148, 0xE, D_8218C73C);
@@ -376,7 +376,7 @@ s32 Battle_CheckMonCanAct(void) {
         return 0;
     }
 
-    if ((sBattleUser->pendingStatusCondition & 0x40) && (func_8210F3F0() < 0x3F)) {
+    if ((sBattleUser->pendingStatusCondition & 0x40) && (Battle_Random() < 0x3F)) {
         BattleMessage_Format(D_8219A520 + 0x88, 0x10, D_8218C744, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]));
         sBattleScene.scene->moveEffectKind = 0x1F;
     label1:
@@ -413,7 +413,7 @@ s32 Battle_CheckMonCanAct(void) {
         }
         sBattleUser->immobilizedReason &= 0xFFFD;
         sBattleUser->immobilizedReason |= 0x80;
-        sBattleUser->confusionTurnsLeft = (func_8210F3F0() & 3) + 2;
+        sBattleUser->confusionTurnsLeft = (Battle_Random() & 3) + 2;
         return 4;
     }
 

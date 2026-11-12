@@ -166,7 +166,7 @@ void func_82132C14(UNUSED CameraNode* arg0) {
  * Case 6 of the scene-state switch in func_82132D60. The word at
  * D_8219A580 + 0x85C is a pointer to a flag byte. If bit 0x10 of that byte is
  * set, the code clears bits 0x10 and 0x80 in it (the mask is 0xFF6F), calls
- * func_821088BC with D_8219A580, calls func_80005B98(0xF), and sets the word
+ * Battle_LoadOwnerModelForSwitchIn with D_8219A580, calls func_80005B98(0xF), and sets the word
  * at D_8219A5A0 + 0x20 to 2. D_8219A5A0 is the address of sBattleScene, whose
  * first member is `scene`, so that word is sBattleScene.scene->unk_20, the
  * field func_82132D60 switches on. The argument is not used. What the flag bits and the
@@ -178,7 +178,7 @@ void func_82132CDC(CameraNode* arg0) {
     flags = M2C_FIELD(D_8219A580, u8**, 0x85C);
     if (*flags & 0x10) {
         *flags &= 0xFF6F;
-        func_821088BC(D_8219A580);
+        Battle_LoadOwnerModelForSwitchIn(D_8219A580);
         func_80005B98(0xF);
         M2C_FIELD(D_8219A5A0, s32*, 0x20) = 2;
     }

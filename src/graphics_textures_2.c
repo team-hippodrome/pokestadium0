@@ -55,10 +55,10 @@ s32 Font_GetSetIndexFromMask(s32 mask) {
  *
  * Takes the next free slot index from func_8001A0A4 and fills the 8-byte
  * entry at that index in the table at the start of *font_context: three
- * size bytes (arg1, arg2, arg3 -- their meaning is not established; func_8001A194
+ * size bytes (arg1, arg2, arg3 -- their meaning is not established; Font_Init
  * passes e.g. 0x20/0x20/0x20 for mask 0x20 and 0xA/0xA/0x10 for mask 0x1) and
  * the pointer to the font file.  The slot index is then stored at
- * font_context + 0x38 (FontContext::unk_50, cleared by func_8001A194).
+ * font_context + 0x38 (FontContext::unk_50, cleared by Font_Init).
  *
  * `mask` is not used by the retail code; the empty `if (mask) {}` is only there
  * so IDO does not spill the unused argument register.
@@ -85,7 +85,7 @@ void func_8001A118(s32 mask, s32 arg1, s32 arg2, s32 arg3, void* file) {
 }
 
 /*
- * func_8001A194 (Font_Init in symbol_addrs.txt)
+ * Font_Init (Font_Init in symbol_addrs.txt)
  *
  * Creates the font context.  Allocates a 0x3C-byte block from the main pool
  * on heap `side` (the second argument is passed straight through to
@@ -111,7 +111,7 @@ extern u8 D_002B2C80[];
 extern u8 D_002E0BE0[];
 void func_8001A118(s32 mask, s32 arg1, s32 arg2, s32 arg3, void* file);
 
-s32 func_8001A194(s32 load_size, s32 side) {
+s32 Font_Init(s32 load_size, s32 side) {
     font_context = main_pool_alloc_with_func(sizeof(*font_context), side, 'PRNT', (AllocateFunc)Font_ResetContext);
     font_context->unk_48 = BinArchive_Open(D_002B2C80, D_002E0BE0, 1, 1);
     font_context->unk_50 = 0;
@@ -270,7 +270,7 @@ void Gfx_SetPrimColor(s32 r, s32 g, s32 b, s32 a) {
 }
 
 extern s8 *D_800AD200;
-void func_8001AB2C(s32 arg0) {
+void Font_SetLineHeight(s32 arg0) {
     M2C_FIELD(D_800AD200, s8 *, 0x3A) = arg0;
 }
 

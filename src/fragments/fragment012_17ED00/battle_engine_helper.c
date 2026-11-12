@@ -193,7 +193,7 @@ u16 Battle_GetActiveMonHp(ActivePokemon* active_pokemon) {
     return party_pokemon->hp;
 }
 
-s16 func_82107CC4(s8 *arg0) {
+s16 BattleScene_GetParticipantFacingAngle(s8 *arg0) {
     return (s16) (M2C_FIELD(arg0, s32 *, 0x60C) << 0xE);
 }
 
@@ -583,7 +583,7 @@ void Battle_LoadOwnerModelForSpecies(ActivePokemon* active_pokemon) {
     Vec3f_SetComponentsDuplicate(&active_pokemon->displayObject.scale, 1.0f, 1.0f, 1.0f);
 }
 
-void func_821088BC(ActivePokemon* active_pokemon) {
+void Battle_LoadOwnerModelForSwitchIn(ActivePokemon* active_pokemon) {
     ActivePokemonState* state = &active_pokemon->state;
     UNUSED s32 pad[3]; // FAKE: stack padding
     s16 object_type;

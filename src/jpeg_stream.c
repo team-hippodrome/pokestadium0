@@ -127,7 +127,7 @@ void Jpeg_InitializeDspTask(UnkStruct80001380* arg0, unk_func_80003680_sp90* arg
     osCreateMesgQueue(&arg0->queue, &arg0->mesg, 1);
 }
 
-void func_800033B8(s8 *arg0, s32 arg1, s8 *arg2)
+void Jpeg_BuildDspInput(s8 *arg0, s32 arg1, s8 *arg2)
 {
   *((s32 *) (((s8 *) arg0) + 0)) = (s32) (*((s32 *) (((s8 *) arg2) + 0x14))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
   *((u8 *) (((s8 *) arg0) + 4)) = (u8) (*((u8 *) (((s8 *) arg2) + 0))); // FAKE: decomp slop, raw pointer casts stand in for struct fields

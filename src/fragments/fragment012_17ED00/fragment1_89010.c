@@ -63,7 +63,7 @@ extern s8 *D_8219A5A0;
 void func_8212188C(void);
 void func_8000D41C(Vec3f*, f32, f32, f32);
 void func_8210BCF0(Vec3f*, Vec3f*, s8*, s8*, s8*);
-M2C_UNK func_800407B0(M2C_UNK, M2C_UNK, M2C_UNK);
+s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2);
 void func_80041914(s32, s32);
 void func_82136918(u8*, s32);
 void func_821324D8(CameraNode* arg0) {
@@ -73,7 +73,7 @@ void func_821324D8(CameraNode* arg0) {
     func_8210BCF0(&arg0->view.targetPosition, &arg0->view.eyePosition, D_8219A5A0 + 0x74, D_8219A5A0 + 0x58, D_8219A5A0 + 0x5A);
     (*(u8**)&D_82199DE0)[1] &= ~1;
     ((u8**)&D_82199DE0)[1][1] &= ~1;
-    func_800407B0(4, 0, 0);
+    Audio_PlayCommand(4, 0, 0);
     func_80041914(*(u8*)(*(u8**)(((u8**)&D_82199DE0)[0] + 0x860) + 2), *(u8*)(*(u8**)(((u8**)&D_82199DE0)[1] + 0x860) + 2));
     func_82136918(*(u8**)((*(u8**)&D_82199DE0) + 0x85C), 3);
     M2C_FIELD(D_8219A5A0, s32 *, 0x20)++;
@@ -120,7 +120,7 @@ void func_821326E4(CameraNode* arg0) {
     func_8210BCF0(&arg0->view.targetPosition, &arg0->view.eyePosition, (s8*)&sp3C, (s8*)&sp3A, (s8*)&sp38);
     func_8000EEBC(&arg0->view.targetPosition, &arg0->view.eyePosition, M2C_FIELD(D_8219A5A0, f32*, 0x74), sp3A, M2C_FIELD(D_8219A5A0, s16*, 0x5A));
     if (func_821217DC(0x6E) != 0) {
-        func_800407B0(1, 0xFE, 0);
+        Audio_PlayCommand(1, 0xFE, 0);
         func_8000D41C(&arg0->view.targetPosition, 0.0f, 75.0f, 0.0f);
         func_8000D41C(&arg0->view.eyePosition, -1.79f, 0.075f, 155.2f);
         ActivePokemon_SetModelTransform(*(s8**)&D_82199DE0, 1, 0);

@@ -335,7 +335,7 @@ extern u8 D_03000B60[];
 extern u8 D_030016C0[];
 void func_8001A944(s32 x, s32 y, const char* fmt, ...);
 void func_8001D148(s32 x, s32 y, s32 width, s32 height, s32 r, s32 g, s32 b);
-s32 func_80018DEC(s8* arg0, s32 arg1);
+s32 PokeIcon_GetImage(s8 *arg0, s32 arg1);
 extern char D_82302A34[];
 extern s32 D_82302BCC;
 /**
@@ -364,12 +364,12 @@ void BattleMenu_DrawOrderSelectPartyGrid(s8* arg0) {
     func_8001B884(x + 0xA1, y + 0x35, 0x1A, 0x1A, D_03000B60, 0x1C, 0x200000);
     func_8001B884(x + 0x13B, y + 0x35, 0x1A, 0x1A, D_030016C0, 0x1C, 0x200000);
 
-    func_8001B884(x + 0x23, y + 6, 0x28, 0x28, (u8*)func_80018DEC((s8*)D_82302BCC, arg0[0]), 0x28, 0x200000);
-    func_8001B884(x + 0xBD, y + 6, 0x28, 0x28, (u8*)func_80018DEC((s8*)D_82302BCC, arg0[0] + 4), 0x28, 0x200000);
-    func_8001B884(x + 0x157, y + 6, 0x28, 0x28, (u8*)func_80018DEC((s8*)D_82302BCC, arg0[0] + 8), 0x28, 0x200000);
-    func_8001B884(x + 0x23, y + 0x30, 0x28, 0x28, (u8*)func_80018DEC((s8*)D_82302BCC, arg0[0] + 0xC), 0x28, 0x200000);
-    func_8001B884(x + 0xBD, y + 0x30, 0x28, 0x28, (u8*)func_80018DEC((s8*)D_82302BCC, arg0[0] + 0x10), 0x28, 0x200000);
-    func_8001B884(x + 0x157, y + 0x30, 0x28, 0x28, (u8*)func_80018DEC((s8*)D_82302BCC, arg0[0] + 0x14), 0x28, 0x200000);
+    func_8001B884(x + 0x23, y + 6, 0x28, 0x28, (u8*)PokeIcon_GetImage((s8*)D_82302BCC, arg0[0]), 0x28, 0x200000);
+    func_8001B884(x + 0xBD, y + 6, 0x28, 0x28, (u8*)PokeIcon_GetImage((s8*)D_82302BCC, arg0[0] + 4), 0x28, 0x200000);
+    func_8001B884(x + 0x157, y + 6, 0x28, 0x28, (u8*)PokeIcon_GetImage((s8*)D_82302BCC, arg0[0] + 8), 0x28, 0x200000);
+    func_8001B884(x + 0x23, y + 0x30, 0x28, 0x28, (u8*)PokeIcon_GetImage((s8*)D_82302BCC, arg0[0] + 0xC), 0x28, 0x200000);
+    func_8001B884(x + 0xBD, y + 0x30, 0x28, 0x28, (u8*)PokeIcon_GetImage((s8*)D_82302BCC, arg0[0] + 0x10), 0x28, 0x200000);
+    func_8001B884(x + 0x157, y + 0x30, 0x28, 0x28, (u8*)PokeIcon_GetImage((s8*)D_82302BCC, arg0[0] + 0x14), 0x28, 0x200000);
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
@@ -1183,9 +1183,9 @@ extern u8 D_002F0A50[];
 extern u8 D_002F3BD0[];
 extern u8 D_003D64A0[];
 extern u8 D_003DCB60[];
-s8* func_80017860(s32);
+s8 *PokeIcon_AllocFramebuffers(s32 arg0);
 s32 func_80017FDC(s8*, s32, s32, s32);
-void func_8001A194(s32, s32);
+s32 Font_Init(s32 load_size, s32 side);
 void PokeIcon_OpenModelArchives(void);
 s32 func_82301EF4();
 
@@ -1200,9 +1200,9 @@ s32 BattleMenu_RunOrderSelectScreen(s32 arg0, s32 arg1) {
 
     Gfx_InitDisplayListBuffers(0x10000, 0);
     sp24 = StageContext_Allocate(1, 1, 2, 0, 2, 1);
-    D_82302BC8 = func_80017860(1);
+    D_82302BC8 = PokeIcon_AllocFramebuffers(1);
     D_82302BCC = func_80017FDC(D_82302BC8, 0x18, 0x28, 0x28);
-    func_8001A194(0x3C, 0);
+    Font_Init(0x3C, 0);
     PokeIcon_OpenModelArchives();
 
     Fragment_Load(((((u32)D_81000000) & 0x0FF00000) >> 0x14) - 0x10, D_0015B1A0, D_0015E220);

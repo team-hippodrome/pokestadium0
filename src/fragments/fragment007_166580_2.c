@@ -6,7 +6,7 @@
 typedef struct { u8 b[9]; } Bytes9;
 extern u8 D_8200AC30[];
 extern char D_800AAF50[];
-s32 func_80022C70(s32);
+s32 GbSave_GetTrainerId(s32 arg0);
 s32 func_80020AFC(s32, s32, s32, s32);
 u8 func_80020CE4(void*, s32, s32);
 void func_80020C60(s32);
@@ -18,7 +18,7 @@ void func_8000A460(void*, void*);
  * Initialises the slot list arg0 together with its extra block arg1 (layouts
  * not established; see func_82008D7C for the caller). Sets byte 0 of arg0 to 1
  * and byte 1 to arg2, stores &D_800AAF50[arg2] (entries of 0x24 bytes) at
- * arg0 + 4 and func_80022C70(arg3) at arg0 + 0x18, and stores arg1 at
+ * arg0 + 4 and GbSave_GetTrainerId(arg3) at arg0 + 0x18, and stores arg1 at
  * arg0 + 0x1FC. Allocates a handle with func_80020AFC(0x20, arg3, 0, 0), uses
  * it with func_80020CE4(arg0 + 0x1C, 6, handle) to set byte 2 of arg0, then
  * releases it with func_80020C60. Calls func_80022D84(arg3, arg0 + 8).
@@ -35,7 +35,7 @@ void func_82008C40(void* arg0, void* arg1, s32 arg2, s32 arg3) {
     M2C_FIELD(arg0, s8*, 0) = 1;
     M2C_FIELD(arg0, s8*, 1) = arg2;
     M2C_FIELD(arg0, char**, 4) = D_800AAF50 + arg2 * 0x24;
-    M2C_FIELD(arg0, s32*, 0x18) = func_80022C70(arg3);
+    M2C_FIELD(arg0, s32*, 0x18) = GbSave_GetTrainerId(arg3);
     M2C_FIELD(arg0, u8*, 2) = 0;
     M2C_FIELD(arg0, void**, 0x1FC) = arg1;
     sp2C = func_80020AFC(0x20, arg3, 0, 0);

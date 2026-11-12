@@ -210,7 +210,7 @@ void func_80005B98(s32);
 void func_80006998(s32);
 f32 func_8000F23C(f32, f32, f32, f32);
 void func_80010B3C(void*, s16, s16, s16, s16);
-void func_821088BC(s8*);
+void Battle_LoadOwnerModelForSwitchIn(ActivePokemon* active_pokemon);
 void func_8210BE1C(f32*, f32, s16);
 s16 func_8210BEE0(f32, f32, f32, f32);
 f32 func_8210BFA4(f32, f32, f32, f32);
@@ -299,7 +299,7 @@ void func_82133B6C(void) {
             if (D_8219A4F0.flags & 2) {
                 if (*M2C_FIELD(((s8**)&D_82199DE0)[0], u8**, 0x85C) & 0x10) {
                     *M2C_FIELD(((s8**)&D_82199DE0)[0], u8**, 0x85C) &= ~0x90;
-                    func_821088BC(((s8**)&D_82199DE0)[0]);
+                    Battle_LoadOwnerModelForSwitchIn(((s8**)&D_82199DE0)[0]);
                     if (D_8219A4F0.index == 4) {
                         M2C_FIELD(M2C_FIELD(((s8**)&D_82199DE0)[0], u8**, 0x85C), s16*, 2) = 0x96;
                     }
@@ -312,7 +312,7 @@ void func_82133B6C(void) {
             if (D_8219A4F0.flags & 4) {
                 if (*M2C_FIELD(((s8**)&D_82199DE0)[1], u8**, 0x85C) & 0x10) {
                     *M2C_FIELD(((s8**)&D_82199DE0)[1], u8**, 0x85C) &= ~0x90;
-                    func_821088BC(((s8**)&D_82199DE0)[1]);
+                    Battle_LoadOwnerModelForSwitchIn(((s8**)&D_82199DE0)[1]);
                     D_8219A4F0.flags &= ~4;
                     func_80005B98(0x18);
                     D_82199F10[0] = 0;

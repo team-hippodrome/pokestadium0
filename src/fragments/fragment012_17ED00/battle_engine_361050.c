@@ -460,7 +460,7 @@ extern u8 D_82199F7C;
 extern f64 D_DBL_82195770;
 extern f64 D_DBL_82195778;
 u32 func_80053A80(void);
-u8 func_8210F3F0(void)
+u8 Battle_Random(void)
 {
   return (D_82199F7C += (u8) ((u32) ((((f32) ((s32) ((u16) (func_80053A80() / 5577)))) / D_DBL_82195770) * D_DBL_82195778))) ^ 0; // FAKE: no-op ^ 0
 }

@@ -646,7 +646,7 @@ void func_82153E28(s8 *arg0) {
         func_82140548(arg0, 0, 0x20);
         break;
     case 4:
-        func_8213C938(arg0);
+        Particle_DisableAndDetach(arg0);
         break;
     }
     func_82140228(arg0, 0x41200000, 0x3D4CCCCD);

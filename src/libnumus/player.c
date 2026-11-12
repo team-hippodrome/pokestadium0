@@ -519,7 +519,7 @@ typedef struct PlayerChannelZero_1E {
     /* 0x1F */ char unk1F[0x5];
 } PlayerChannelZero_1E; // size = 0x24
 
-/* Block passed as the first argument of func_8003B2E0 (synthesizer set-up).
+/* Block passed as the first argument of amCreateAudioMgr (synthesizer set-up).
  * Field meanings beyond what func_800371A4 writes are not established. */
 typedef struct SynInitCfgZero {
     /* 0x00 */ s32 f00;
@@ -532,7 +532,7 @@ typedef struct SynInitCfgZero {
     /* 0x1C */ s8 f1C;
 } SynInitCfgZero;
 
-/* Block passed as the second argument of func_8003B2E0; filled from the init
+/* Block passed as the second argument of amCreateAudioMgr; filled from the init
  * configuration at offsets 0x18, 0x20 and 0x1C. */
 typedef struct SynInitRateZero {
     /* 0x00 */ s32 f00;
@@ -560,7 +560,7 @@ extern ALPlayer D_800B3610;
 extern ALHeap D_800B3628;
 extern void* D_800B363C;
 void func_8003A564(void*, s32, s32);
-s32 func_8003B2E0(SynInitCfgZero*, SynInitRateZero*, s32, s32, s32);
+void amCreateAudioMgr(ALSynConfig* c, amConfig* amc, u32 num_dma_buffers, s32 arg3, s32 arg4);
 void func_800468F0(ALPlayer*);
 void* func_8005C0D0(s32, s32, void*, s32, s32);
 s32 func_800388BC(void*);
@@ -571,11 +571,11 @@ s32 func_800388BC(void*);
  *   0x00 channel count (D_800B3638)        0x04 ALHeap* used for all allocation
  *   0x08 pointer stored in D_800B3664 and D_800B3668
  *   0x0C -> D_800B3644, 0x10 -> D_800B3648 (the song table that func_80037828 indexes)
- *   0x14, 0x18, 0x1C, 0x20, 0x24, 0x28: values forwarded to func_8003B2E0.
+ *   0x14, 0x18, 0x1C, 0x20, 0x24, 0x28: values forwarded to amCreateAudioMgr.
  * Steps: set D_800B364C to 50 if the word at 0x80000300 is 0 (osTvType == PAL), else 60,
  * and D_800B3650 to 1000000 / D_800B364C; allocate and zero the 0x1C-byte-per-channel
  * table D_800B363C and the 0x148-byte-per-channel array D_800B3640; build the two
- * parameter blocks and call func_8003B2E0; call func_800374E0(7, 0x7FFF); reset the
+ * parameter blocks and call amCreateAudioMgr; call func_800374E0(7, 0x7FFF); reset the
  * handle counter D_800B365C to 1 and D_800B3660 to 0x12345678, and clear D_800B3CC4,
  * D_800B3CC8, D_800B3CCC, D_80075C34 and D_800B3CD0;
  * register the player at D_800B3610 (handler func_800388BC, clientData = itself) with
@@ -616,7 +616,7 @@ s32 func_800371A4(s8* arg0) {
     rate.f00 = M2C_FIELD(arg0, s32*, 0x18);
     rate.f04 = M2C_FIELD(arg0, s32*, 0x20);
     rate.f08 = M2C_FIELD(arg0, s32*, 0x1C);
-    func_8003B2E0(&cfg, &rate, M2C_FIELD(arg0, s32*, 0x24), M2C_FIELD(arg0, s32*, 0x28), D_800B364C);
+    amCreateAudioMgr(&cfg, &rate, M2C_FIELD(arg0, s32*, 0x24), M2C_FIELD(arg0, s32*, 0x28), D_800B364C);
     func_800374E0(7, 0x7FFF);
     D_800B365C = 1;
     D_800B3660 = 0x12345678;
@@ -890,7 +890,7 @@ s32 func_80037AC4(s32 handle, s32 duration) {
     return count;
 }
 
-s32 func_80037B7C(s32 handle) {
+s32 Audio_QueueSetMonoOutputCommand(s32 handle) {
     channel_t* cp;
     s32 i;
     s32 count;

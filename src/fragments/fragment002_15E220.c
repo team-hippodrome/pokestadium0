@@ -241,7 +241,7 @@ s32 func_812009C4(s32 arg0) {
  * the screen).  Judging by its body it runs once per frame.  Returns 0, or a
  * result code: 0xF000, 0x8020 or 0x8010.
  *
- * Each call it runs the frame helpers (func_8000B1FC, func_8000B220) and
+ * Each call it runs the frame helpers (Cont_StartReadInputs, Cont_ReadInputs) and
  * increments the frame counter D_81201018.  When `arg0` is 0 it reads the
  * input word func_8000D0DC(D_81201014); the upper halfword of that word is
  * the value tested and passed on below:
@@ -252,20 +252,20 @@ s32 func_812009C4(s32 arg0) {
  *     func_8003F6AC(0xF), result 0x8020;
  *   - otherwise, if the button test above failed and
  *     func_812009C4(upper halfword) != 0: func_81200190(), result 0x8010.
- * It then calls func_800069CC, func_8120047C and, when the low bit of
+ * It then calls BgStage_DrawFrame, func_8120047C and, when the low bit of
  * func_8000B2E8() is set, func_812007B0(0x74, 0xC0); then func_81200020
  * and Leo_DrawErrorScreen(lower halfword of the input word).  A non-zero result
  * is reported with func_80006998 (0xFFFF for 0x8020, otherwise 1).
  *
- * Note for matching: the empty `if (!sp1C) {}` after func_8000B220 does
+ * Note for matching: the empty `if (!sp1C) {}` after Cont_ReadInputs does
  * nothing at run time; decomp-permuter found that it changes the register
  * allocation to the ROM's.  It is not evidence of what the original source
  * looked like.
  */
-void func_8000B1FC(void);
-M2C_UNK func_8000B220();
+void Cont_StartReadInputs(void);
+void Cont_ReadInputs(void);
 s32 func_8000B2E8();
-M2C_UNK func_800069CC();
+void BgStage_DrawFrame(void);
 M2C_UNK func_80006998(M2C_UNK);
 s32 func_8000D0DC(s32);
 M2C_UNK Audio_FadeCategoriesAndStreams(M2C_UNK);
@@ -283,8 +283,8 @@ s32 func_81200A20(s32 arg0) {
 
     sp1C = 0;
     sp18 = 0;
-    func_8000B1FC();
-    func_8000B220();
+    Cont_StartReadInputs();
+    Cont_ReadInputs();
     if (!sp1C) {  // karodo
     }
     D_81201018 += 1;
@@ -304,7 +304,7 @@ s32 func_81200A20(s32 arg0) {
             sp1C = 0x8010;
         }
     }
-    func_800069CC();
+    BgStage_DrawFrame();
     func_8120047C();
     if (func_8000B2E8() & 1) {
         func_812007B0(0x74, 0xC0);
@@ -333,8 +333,8 @@ M2C_UNK func_800066C8();                            /* extern */
 s32 func_800068DC(M2C_UNK *, M2C_UNK, M2C_UNK);     /* extern */
 M2C_UNK func_8000A838(M2C_UNK);                     /* extern */
 M2C_UNK func_8000D280();                            /* extern */
-M2C_UNK func_8001A194(M2C_UNK, M2C_UNK);            /* extern */
-M2C_UNK func_800407B0(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
+s32 Font_Init(s32 load_size, s32 side);            /* extern */
+s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2);   /* extern */
 M2C_UNK Audio_LoadWaveTablesAndMusic(s32);                         /* extern */
 M2C_UNK func_80044268();                            /* extern */
 extern M2C_UNK D_002E0BE0;
@@ -357,7 +357,7 @@ s32 func_81200B80(s32 arg0, M2C_UNK arg1) {
     func_8000256C(0x5449544C);
     func_80005040(0x10000, 0);
     sp20 = func_8000645C(0, 1, 2, 0, 2, 1);
-    func_8001A194(6, 0);
+    Font_Init(6, 0);
     func_80003EB8((u32) ((s32) &D_01000000 & 0x0F000000) >> 0x18, &D_002E0BE0, &D_002E2B90, 0);
     func_80003EB8((u32) ((s32) &D_02000000 & 0x0F000000) >> 0x18, &D_002EBCB0, &D_002F0A50, 0);
     D_81201014 = func_800023C4(0x4510, 0);
@@ -373,7 +373,7 @@ s32 func_81200B80(s32 arg0, M2C_UNK arg1) {
     func_8000A838(0);
     func_80044268();
     if (sp24 == 0x8080) {
-        func_800407B0(0x3C, 0xA, 0);
+        Audio_PlayCommand(0x3C, 0xA, 0);
     }
     func_800050AC();
     func_80002620(0x5449544C);

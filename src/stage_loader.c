@@ -435,7 +435,7 @@ void StageContext_SetClearColor(u16 color) {
     }
 }
 
-void func_800069CC(void) {
+void BgStage_DrawFrame(void) {
     if (stage != NULL) {
         GfxImage_SetRenderTarget(&gDisplayListHead, stage->renderTargets[stage->renderTargetIndex]);
         gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, stage->clearLeft, stage->clearTop, stage->clearRight + 1, stage->clearBottom + 1);

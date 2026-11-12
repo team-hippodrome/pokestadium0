@@ -151,11 +151,11 @@ void BattleAnim_SetupOrphanDescriptor2EScatterFade(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-M2C_UNK func_8213C938(s8 *);                      /* extern */
+void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
 M2C_UNK func_8213CA80(s8 *, M2C_UNK);             /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
 s32 func_8213CB7C(s8 *);                          /* extern */
-M2C_UNK func_8213E528(s8 *);                      /* extern */
+void Particle_AddVelocityFromRotationTemplate1(s32 arg0);                      /* extern */
 M2C_UNK Particle_AddRotationZ(s8 *, M2C_UNK);             /* extern */
 s32 func_821406B4(s8 *);                          /* extern */
 M2C_UNK func_821519AC(s8 *);                      /* extern */
@@ -177,11 +177,11 @@ void func_82151A5C(s8 *arg0) {
         func_8213CA80(arg0, 0x46);
         break;
     case 4:
-        func_8213C938(arg0);
+        Particle_DisableAndDetach(arg0);
         break;
     }
     if (func_8213CB7C(arg0) != 0) {
-        func_8213E528(arg0);
+        Particle_AddVelocityFromRotationTemplate1(arg0);
         Particle_AddRotationZ(arg0, 0x2000);
     }
 }

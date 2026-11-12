@@ -588,7 +588,7 @@ Entry8110EABC* func_8110E9A8(s32 dev_addr, s32 ramAddr, u32 size, s32 medium, s3
 
 extern volatile s32 D_811859D4;
 void func_8110EB40(Entry8110EABC*, s32);
-void func_8110EABC(s32 arg0) {
+void Battle_ApplyAnimStateEffects(s32 arg0) {
     s32 i;
 
     if (D_811859D4 != 1U) {
@@ -888,7 +888,7 @@ s32 func_8004D1C0(OSMesgQueue*, u32*, s32);
  * the next pending request on the stack is started. Returns 0 while a DMA is
  * still in flight or on reset (arg0 != 0), otherwise 1.
  */
-s32 func_8110F310(s32 arg0) {
+s32 BattleAnim_EndSleepStatusAnimation(s32 arg0) {
     Sample8110EF7C* sample;
     u32 preload_index;
     u32 key;

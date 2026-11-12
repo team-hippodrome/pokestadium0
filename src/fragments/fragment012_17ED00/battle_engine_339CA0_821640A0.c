@@ -217,7 +217,7 @@ void func_82164AD0(s8 *arg0) {
         func_8213E77C(arg0);
         return;
     case 4:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
 }
@@ -293,7 +293,7 @@ void BattleAnim_RunSplashOfWater(s8 *arg0) {
         func_821406B4(arg0);
         break;
     case 4:                                         /* switch 1 */
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
     temp_v0_2 = M2C_FIELD(arg0, s16 *, 0xB4);
@@ -335,10 +335,10 @@ void BattleAnim_RunDigHitDust(s8 *arg0) {
         Particle_ApproachPrimAlpha(arg0, 0x40, M2C_FIELD(arg0, u8 *, 0xAB));
         break;
     case 4:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
-    if (func_8213C9B0(arg0) != 0) {
+    if (Particle_IsRunning(arg0) != 0) {
         func_8213F940(arg0, 0xC0000000, 0x3E99999A);
         Particle_ApplyMotionStep(arg0);
     }
@@ -364,11 +364,11 @@ void BattleAnim_RunDigHitRocks(s8 *arg0) {
         break;
     case 3:
         if (M2C_FIELD(arg0, f32 *, 0x2C) < 0.0f) {
-            func_8213C930(arg0);
+            Particle_MarkInactive(arg0);
         }
         break;
     }
-    if (func_8213C9B0(arg0) != 0) {
+    if (Particle_IsRunning(arg0) != 0) {
         func_8213F940(arg0, 0xC1200000, 0x3F4CCCCD);
         Particle_ApplyMotionStep(arg0);
     }
@@ -445,10 +445,10 @@ void func_82165224(s8 *arg0) {
         }
         break;
     case 3:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
-    if (func_8213C9B0(arg0) != 0) {
+    if (Particle_IsRunning(arg0) != 0) {
         func_821402B8(arg0);
         func_8213F940(arg0, 0xBFC00000, 0x3DCCCCCD);
         Particle_ApplyMotionStep(arg0);
@@ -513,10 +513,10 @@ void func_8216547C(s8 *arg0) {
         }
         break;
     case 3:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
-    if (func_8213C9B0(arg0) != 0) {
+    if (Particle_IsRunning(arg0) != 0) {
         func_821402B8(arg0);
         func_8213F940(arg0, 0xBFC00000, 0x3E4CCCCD);
         Particle_ApplyMotionStep(arg0);
@@ -635,7 +635,7 @@ void BattleAnim_CallbackStartEffects29And60And104And110DefaultDescriptorBurstEmi
             break;
 
         case 2:
-            func_8213C938(arg0);
+            Particle_DisableAndDetach(arg0);
             break;
     }
 }

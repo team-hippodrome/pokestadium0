@@ -345,7 +345,7 @@ void func_82110984(void) {
 }
 
 void func_82110984(void);
-s32 func_8210F3F0(void);
+u8 Battle_Random(void);
 /**
  * Check recharge, Dream Eater, Substitute, semi-invulnerability, Mist and accuracy.
  * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
@@ -379,7 +379,7 @@ void HandleMoveEffectFlags(void) {
         return;
     }
     func_82110890();
-    if (func_8210F3F0() >= M2C_FIELD(D_8219A3C0, u8*, 0x48)) {
+    if (Battle_Random() >= M2C_FIELD(D_8219A3C0, u8*, 0x48)) {
         func_82110984();
     }
 }
@@ -665,7 +665,7 @@ void Battle_ApplyDamageAnimation(void) {
                         n = (n >> 1) + n;
                         do {
                             do {
-                                r = func_8210F3F0();
+                                r = Battle_Random();
                             } while (r == 0);
                         } while (r >= n);
                         n = r;

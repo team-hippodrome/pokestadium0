@@ -179,7 +179,7 @@ void FreeBattle_SetScreenState(s8* arg0, s32 arg1, s32 arg2) {
     }
 }
 
-u8 func_80022B4C(s32);
+u8 GbSave_GetSaveState(s32 arg0);
 u8 func_8000B2E8(void);
 
 /**
@@ -187,7 +187,7 @@ u8 func_8000B2E8(void);
  *
  * Recomputes two masks in the object at arg0 and then calls
  * FreeBattle_SetScreenState(arg0, 1, 0). Word +0x5018 gets bit i set for each i in 0..3
- * where func_80022B4C(i) returns 0. Word +0x5010 is set to func_8000B2E8()
+ * where GbSave_GetSaveState(i) returns 0. Word +0x5010 is set to func_8000B2E8()
  * and word +0x5014 to the number of bits among bits 0..3 of that value that
  * are set.
  * @unverified Name guessed from the code; comment kept.
@@ -197,7 +197,7 @@ void FreeBattle_InitBattleModeScreen(s32 arg0) {
 
     M2C_FIELD(arg0, s32*, 0x5018) = 0;
     for (i = 0; i < 4; i++) {
-        if (func_80022B4C(i) == 0) {
+        if (GbSave_GetSaveState(i) == 0) {
             M2C_FIELD(arg0, s32*, 0x5018) |= 1 << i;
         }
     }
@@ -243,7 +243,7 @@ void FreeBattle_InitEntryScreen(s8 *arg0)
   FreeBattle_InitEntrySelect(arg0 + 0x4690, 0x30, 0x5C, (s32) (arg0 + 0x4320), (s32) (arg0 + 0x4340), M2C_FIELD(arg0, s32*, 0x4374));
 }
 
-void func_800069CC(void);
+void BgStage_DrawFrame(void);
 M2C_UNK Ui_DrawTintedScreenBackground(M2C_UNK, M2C_UNK, u8, u8, s32);
 extern u8 D_82008F50[];
 void FreeBattle_DrawBattleModeWindow(s8*);
@@ -262,7 +262,7 @@ void BlinkingTextBox_Draw(s8*);
 M2C_UNK FreeBattle_DrawScreen(s32 arg0) {
     s8* base = (s8*)arg0;
 
-    func_800069CC();
+    BgStage_DrawFrame();
     Ui_DrawTintedScreenBackground(0x38, 0x1E0, D_82008F50[0], D_82008F50[1], D_82008F50[2]);
     switch (*(s32*)base) {
         case 1:
@@ -327,7 +327,7 @@ typedef struct Blobs82004E9C {
 void func_80027814(s8*, s8*, s32);
 s32 func_8002BC14(s32);
 void func_8003F6AC(s32);
-void func_800407B0(s32, s32, s32);
+s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2);
 void FreeBattle_ClearIndices(void*, s32, s32);
 void func_82002C3C(s8*);
 s32 FreeBattle_UpdateEntrySelect(s8*);
@@ -530,7 +530,7 @@ s32 FreeBattle_UpdateScreen(s8* arg0) {
                 }
                 if (M2C_FIELD(arg0, s32*, 0x4354) >= 5) {
                     func_820044D0(arg0);
-                    func_800407B0(0x53, 0, 0);
+                    Audio_PlayCommand(0x53, 0, 0);
                     FreeBattle_SetScreenState(arg0, 0xB, 0);
                 } else {
                     M2C_FIELD(arg0, s32*, 0x4DC8) = M2C_FIELD(arg0, s32*, 0x4354) + 1;
@@ -633,7 +633,7 @@ extern s32 D_820090D8;
 extern s32 D_820090D4_2;
 extern M2C_UNK D_82009E10;
 M2C_UNK GbSave_DrawSummaryBar(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
-void func_800069CC(void);
+void BgStage_DrawFrame(void);
 M2C_UNK Ui_DrawTintedScreenBackground(M2C_UNK, M2C_UNK, u8, u8, s32);
 void func_8002C8D8(Col8200579C*, Col8200579C, f32);
 s32 func_8200579C(s32 arg0) {
@@ -649,7 +649,7 @@ s32 func_8200579C(s32 arg0) {
         n--;
         D_820090D4_2 = n;
     }
-    func_800069CC();
+    BgStage_DrawFrame();
     if (D_8200AD2C == -1) {
         var_a1 = NULL;
     } else {
@@ -667,8 +667,8 @@ s32 func_8200579C(s32 arg0) {
     return 0;
 }
 
-M2C_UNK func_8000B1FC();                            /* extern */
-M2C_UNK func_8000B220();                            /* extern */
+void Cont_StartReadInputs(void);                            /* extern */
+void Cont_ReadInputs(void);                            /* extern */
 M2C_UNK FreeBattle_DrawScreen(s32);                         /* extern */
 s32 FreeBattle_UpdateScreen(s8*);
 extern s32 D_8200AD28;
@@ -678,8 +678,8 @@ extern s32 D_8200AD28;
  * @unverified Name and comment guessed from the code.
  */
 void FreeBattle_RunFrame(s32 arg0) {
-    func_8000B1FC();
-    func_8000B220();
+    Cont_StartReadInputs();
+    Cont_ReadInputs();
     FreeBattle_DrawScreen(D_8200AD28);
     FreeBattle_UpdateScreen((s8*) D_8200AD28);
 }
@@ -728,8 +728,8 @@ void func_8200597C(void) {
     }
 }
 
-void func_8001A194(s32, s32);
-s32 func_80017860(s32);
+s32 Font_Init(s32 load_size, s32 side);
+s8 *PokeIcon_AllocFramebuffers(s32 arg0);
 u16* func_80018F2C(s32, s32, s32, s32, s32, s32, s32, s32);
 s32 func_80017FDC(s32, s32, s32, s32);
 s32 func_80004154(u8*, u8*, s32, s32);
@@ -775,8 +775,8 @@ extern s32 D_8200AD28;
 extern s8 D_800AE8F0;
 extern s32 D_82008F84;
 M2C_UNK func_820059EC(void) {
-    func_8001A194(0x3C, 0);
-    D_8200AC44 = func_80017860(1);
+    Font_Init(0x3C, 0);
+    D_8200AC44 = PokeIcon_AllocFramebuffers(1);
     D_8200AC48 = func_80018F2C(D_8200AC44, 0x80, 0x78, 0, 0, 0x78, 0x78, 0);
     *D_8200AC48 &= ~2;
     *D_8200AC48 &= ~4;

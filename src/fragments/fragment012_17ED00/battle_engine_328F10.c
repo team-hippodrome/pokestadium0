@@ -261,8 +261,8 @@ void BattleAnim_InitStartEffect139Descriptor22SpinFade(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-M2C_UNK func_8213C938(s8 *);                      /* extern */
-M2C_UNK func_8213E528(s8 *);                      /* extern */
+void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
+void Particle_AddVelocityFromRotationTemplate1(s32 arg0);                      /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_821406B4(s8 *);                      /* extern */
@@ -279,11 +279,11 @@ void func_82150504(s8 *arg0) {
     case 2:
         func_82140228(arg0, 0x3DCCCCCD, 0x3C23D70A);
         Particle_ApproachPrimAlpha(arg0, 0, 8);
-        func_8213E528(arg0);
+        Particle_AddVelocityFromRotationTemplate1(arg0);
         func_821406B4(arg0);
         return;
     case 3:
-        func_8213C938(arg0);
+        Particle_DisableAndDetach(arg0);
         return;
     }
 }

@@ -394,7 +394,7 @@ s16 _getVol(s16 arg0, s32 arg1, s16 arg2, u16 arg3) {
 
 extern s32 D_80075E00;
 extern s32 D_800B3F94;
-void func_8003B2E0(ALSynConfig* c, amConfig* amc, u32 num_dma_buffers, s32 arg3, s32 arg4) {
+void amCreateAudioMgr(ALSynConfig* c, amConfig* amc, u32 num_dma_buffers, s32 arg3, s32 arg4) {
     u32 i;
     f32 fsize;
 

@@ -162,13 +162,13 @@ void func_89104EB4(s32 arg0, s32 arg1, s32* arg2, s32 arg3, s32 arg4, s32* arg5)
 
 typedef struct Str89104FC0 { s8 c[4]; } Str89104FC0;
 extern Str89104FC0 D_8910A91C;
-s32 func_8002D3D0(u8*);
+s32 BattleMon_CountMoves(u8* arg0);
 s32 BattleMon_GetMoveIndex(s32, s32);
 void func_80027410(void*, void*, s32, s32, s32);
 void func_89104EB4();
 
 void func_89104FC0(s8* arg0, s32 arg1, s32 arg2, u8* arg3) {
-    s32 n = func_8002D3D0(arg3);
+    s32 n = BattleMon_CountMoves(arg3);
     s32 i;
 
     for (i = 0; i < n; i++) {
@@ -1782,7 +1782,7 @@ void PcSort_DrawUseItemPrompt(s8* arg0) {
     s32 y;
     char buf[0x70];
 
-    if (func_8002AB84() == 0) {
+    if (Particle_Field50_SetXZFromField7C_09BB4() == 0) {
         Window_DrawFrame(arg0 + 0x2C);
         Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 0x30) - 7, M2C_FIELD(arg0, s32*, 8), D_8007356C);
         flags = 0xFFED;
@@ -1900,7 +1900,7 @@ s32 LabPCList_UpdateItemWindow(s8 *arg0)
           entry = (*(*((u8 *****) (((s8 *) self) + 0x4C))))[*((s32 *) (((s8 *) self) + 0x54))]; // FAKE: decomp slop, raw pointer casts stand in for struct fields
           if ((*((s32 *) (((s8 *) entry) + 8))) >= 100)
           {
-            n = func_8002D3D0((*((u8 **) (((s8 *) self) + 0x1AC))) + 8);
+            n = BattleMon_CountMoves((*((u8 **) (((s8 *) self) + 0x1AC))) + 8);
             func_8003F6AC(2);
             if (n < 4)
             {

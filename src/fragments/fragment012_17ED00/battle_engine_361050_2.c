@@ -90,7 +90,7 @@ typedef struct unk_D_86106450 {
     /* 0x16C */ ModelNodeView* unk_16C;
 } unk_D_86106450;
 void ClefairyGame_DespawnPatternIcons(void);
-void ClefairyGame_SpawnPatternIcons(void);
+void func_82123D4C(void);
 typedef struct unk_D_861047B8 {
     /* 0x00 */ u8 unk_00[6];
     /* 0x06 */ u8 unk_06[4];

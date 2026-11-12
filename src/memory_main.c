@@ -20,7 +20,7 @@ void main_pool_set_func(void* block, s32 arg, AllocateFunc func);
 size_t main_pool_get_block_dist(MainPoolBlock* block);
 MainPool* main_pool_get_pool(void);
 
-u32 main_pool_get_available(void);
+s32 main_pool_get_available(void);
 
 /**
  * Initialize the main memory pool. This pool is conceptually a pair of stacks
@@ -167,16 +167,16 @@ void* main_pool_alloc(u32 size, s32 side) {
 }
 
 M2C_UNK func_80002230(s32, M2C_UNK);                /* extern */
-s32 func_8000255C(void);
+s32 main_pool_get_available(void);
 M2C_UNK func_8004CFB0(M2C_UNK *, M2C_UNK, M2C_UNK); /* extern */
 M2C_UNK func_8004D1C0(M2C_UNK *, M2C_UNK, M2C_UNK); /* extern */
 extern M2C_UNK D_800A94A4;
 
-void func_80002420(s32 arg0) {
+void main_pool_try_free(s32 arg0) {
     func_8004D1C0(&D_800A94A4, 0, 1);
     func_80002230(arg0, 1);
     func_8004CFB0(&D_800A94A4, 0, 0);
-    func_8000255C();
+    main_pool_get_available();
 }
 
 /**
@@ -211,7 +211,7 @@ void* main_pool_realloc(void* addr, size_t size) {
 
 extern s32 D_800A94BC;
 
-s32 func_8000255C(void) {
+s32 main_pool_get_available(void) {
     return D_800A94BC - 0x10;
 }
 
@@ -308,7 +308,7 @@ u32 main_pool_pop_state(u32 arg) {
     } while (sMemPool.mainState != NULL);
 
     osSendMesg(&sMemPool.queue, NULL, OS_MESG_NOBLOCK);
-    return func_8000255C();
+    return main_pool_get_available();
 }
 
 /*

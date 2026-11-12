@@ -75,15 +75,15 @@ void BattleAnim_CloneParticleState(Particle* arg0, Particle* arg1, ParticleUpdat
 Particle* BattleAnim_CreateProceduralParticle(s16 arg0, s16 arg1, s32 arg2, f32 arg3);
 void BattleAnim_DestroyParticle(Particle* arg0);
 void BattleAnim_InitializeParticleFromEffect(Particle* arg0, ActivePokemon* arg1, BattleAnimEffectSlot* arg2, s16 arg3);
-void BattleAnim_SpawnStandardParticles(BattleAnimEffectSlot* arg0);
-void BattleAnim_SpawnBatchedParticles(BattleAnimEffectSlot* arg0);
+void BattleAnim_SpawnStandardParticles(s8 *arg0);
+void BattleAnim_SpawnBatchedParticles(s8* arg0);
 void BattleAnim_CleanupEffectsRetainingCategories47(void);
 void BattleAnim_CleanupEffectsRetainingCategory4(void);
 void BattleAnim_ClearEffectCallbacks(void);
 void BattleAnim_SetEffectStateFlag(s32 arg0);
 Particle* Particle_Alloc(void);
 s32 Particle_CountActive(void);
-s32 Particle_IsInactive(Particle* arg0);
+s32 Particle_IsInactive(s8 *arg0);
 s32 Particle_HasFlags(Particle* arg0, s32 arg1);
 void Particle_UpdateWorldTransform(Particle* arg0);
 void Particle_UpdateFrameCounters(void);
@@ -210,7 +210,7 @@ BattleAnimEffectSlot* BattleAnim_AllocEffectSlot(void) {
     return var_v1;
 }
 
-void func_82139BE8(s8 *arg0) {
+void Particle_Free(s8 *arg0) {
     s8 **temp_v0;
     s8 *temp_v0_2;
 
@@ -688,7 +688,7 @@ s32 func_82139C38();                                /* extern */
 s32 func_82139C58(s32);                             /* extern */
 void BattleAnim_InitializeParticleFromEffect(Particle* arg0, ActivePokemon* arg1, BattleAnimEffectSlot* arg2, s16 arg3);
 
-void func_8213AB88(s8 *arg0) {
+void BattleAnim_SpawnStandardParticles(s8 *arg0) {
     s16 temp_s2;
     s16 var_s0;
     s32 temp_s3;
@@ -708,7 +708,7 @@ void func_8213AB88(s8 *arg0) {
     }
 }
 
-void func_8213AC3C(s8* arg0) {
+void BattleAnim_SpawnBatchedParticles(s8* arg0) {
     s16 step;
     s16 count;
     s16 i;

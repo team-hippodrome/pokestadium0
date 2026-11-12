@@ -63,7 +63,7 @@ extern s32 D_800B4190;
 extern s32 D_800B4188;
 extern s32 D_800B41A4;
 extern s32 D_800775A8;
-s32 func_80037B7C(s32);
+s32 Audio_QueueSetMonoOutputCommand(s32 handle);
 s32 func_80037AC4(s32, s32);
 s32 func_8003834C(s32, s32, s32, s32, s32, s32, s32);
 void func_8003A710(u8*);
@@ -848,7 +848,7 @@ extern u32 D_80077598;
 extern u8 D_8007759C;
 extern s32 D_800775A0;
 extern u8 D_800B3CC8;
-s32 func_80037B7C(s32);
+s32 Audio_QueueSetMonoOutputCommand(s32 handle);
 s32 func_800383DC(s32, s32, s32, s32, s32, s32, s32);
 
 /**
@@ -857,7 +857,7 @@ s32 func_800383DC(s32, s32, s32, s32, s32, s32, s32);
 void Audio_UpdateBattleAudioFrame(void) {
     s32 ret;
 
-    if ((D_80077538 != 0) && (D_8007753C == 0) && (func_80037B7C(D_80077590) == 0) && (D_80077588 != D_8007758C) &&
+    if ((D_80077538 != 0) && (D_8007753C == 0) && (Audio_QueueSetMonoOutputCommand(D_80077590) == 0) && (D_80077588 != D_8007758C) &&
         (D_800B3CC8 == 0)) {
         ret = func_800383DC(D_800B418C, D_800B41A8, D_800FD6C0[D_80077588].id, D_800FD6C0[D_80077588].level, 0x80, 0, -1);
         if (ret != -1) {

@@ -52,7 +52,7 @@ void Rom_DmaRead(u32 dev_addr, u32 dram_addr, u32 size) {
 
 void func_800374E0(s32, s32);
 
-void func_80046170(s32 arg0, u32 arg1) {
+void Audio_SetChannelVolume(s32 arg0, u32 arg1) {
     s32 var_a1;
 
     switch (arg1) {

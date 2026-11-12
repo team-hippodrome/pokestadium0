@@ -447,7 +447,7 @@ void func_821555D4(s8 *arg0) {
         Particle_ApproachPrimAlpha(arg0, 0x20, 0x18);
         break;
     case 3:
-        func_8213C938(arg0);
+        Particle_DisableAndDetach(arg0);
         break;
     }
     func_82140228(arg0, 0x3DCCCCCD, 0x3C23D70A);
@@ -523,7 +523,7 @@ void func_821558F4(s8 *arg0) {
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
     switch (temp_v0) {                              /* irregular */
     case 1:
-        Particle_SetUnkA6(arg0, func_82137D74(0x18));
+        Particle_SetUnkA6(arg0, ParticleMath_RandomRange(0x18));
         func_8213C9D0(arg0);
         return;
     case 2:
@@ -620,7 +620,7 @@ void func_82155D3C(s8 *arg0) {
         func_82140548(arg0, 0xFF, 0x20);
         break;
     }
-    if (func_8213C9B0(arg0) != 0) {
+    if (Particle_IsRunning(arg0) != 0) {
         func_8213831C(arg0 + 0x4C, 0x45674000);
     }
 }
@@ -676,7 +676,7 @@ void BattleAnim_RunBlizzard(s8 *arg0) {
         Particle_ApproachPrimAlpha(arg0, 0x40, 8);
         return;
     case 4:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
 }
@@ -1142,7 +1142,7 @@ void BattleAnim_RunFallingRock(s8 *arg0) {
         }
         return;
     case 4:
-        func_8213C938(arg0);
+        Particle_DisableAndDetach(arg0);
         break;
     }
 }
@@ -1382,10 +1382,10 @@ void func_82157E28(s8 *arg0) {
         Particle_ApproachPrimAlpha(arg0, 0x9B, 8);
         break;
     case 3:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
-    if (func_8213C9B0(arg0) != 0) {
+    if (Particle_IsRunning(arg0) != 0) {
         func_8213831C(arg0 + 0x4C, 0x43480000);
     }
 }
@@ -1548,7 +1548,7 @@ void BattleAnim_RunBoomUseEffect3(s8 *arg0) {
     case 3:
         Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 2, 0);
         func_82140228(arg0, 0x40200000, 0x3E800000);
-        func_8213E528(arg0);
+        Particle_AddVelocityFromRotationTemplate1(arg0);
         Particle_AddPosOffsetYScaled(arg0, 0.5f);
         if (func_82140690(arg0) != 0) {
             Particle_ApproachPrimAlpha(arg0, 0x20, 0x10);
@@ -1558,7 +1558,7 @@ void BattleAnim_RunBoomUseEffect3(s8 *arg0) {
         }
         break;
     case 4:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
 }
@@ -1612,7 +1612,7 @@ void BattleAnim_RunBoomUseEffect4(s8 *arg0) {
         }
         break;
     case 4:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
 }
@@ -1669,7 +1669,7 @@ void func_821588C0(s8 *arg0) {
         }
         break;
     case 4:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
 }
@@ -1763,7 +1763,7 @@ void BattleAnim_RunBoomHitEffect1(s8 *arg0) {
         }
         break;
     case 4:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
 }
@@ -1822,7 +1822,7 @@ void BattleAnim_RunBoomHitEffect2(s8 *arg0) {
         }
         break;
     case 4:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
 }
@@ -1880,7 +1880,7 @@ void BattleAnim_RunBoomHitEffect3(s8 *arg0) {
         func_8213E6BC(arg0);
         break;
     case 4:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
     if (func_8213CB7C(arg0) != 0) {
@@ -1990,11 +1990,11 @@ void func_82159898(s8 *arg0) {
         break;
     case 4:
         if (func_8001104C(M2C_FIELD(arg0, s32 *, 0x14)) != 0) {
-            func_8213C930(arg0);
+            Particle_MarkInactive(arg0);
         }
         break;
     }
-    if (func_8213C9B0(arg0) != 0) {
+    if (Particle_IsRunning(arg0) != 0) {
         if (sp26 == 0) {
             func_8213831C(arg0 + 0x4C, 0x432A0000);
             return;
@@ -2736,11 +2736,11 @@ void func_8215B83C(s8 *arg0) {
             func_82136D58(M2C_FIELD(arg0, s32 *, 0x14), 0x8D);
         }
         func_821401D4(arg0, 0x3F800000);
-        func_8214050C(arg0, 0);
+        Particle_SetPrimAlpha(arg0, 0);
         func_8213C9D0(arg0);
         return;
     }
-    func_8213C938(arg0);
+    Particle_DisableAndDetach(arg0);
 }
 
 /**
@@ -3311,7 +3311,7 @@ void func_8215D76C(s8 *arg0) {
         Particle_ApproachPrimAlpha(arg0, 0x20, 0x40);
         break;
     case 3:
-        func_8213C938(arg0);
+        Particle_DisableAndDetach(arg0);
         break;
     }
     func_82140228(arg0, 0x3F000000, 0x3DCCCCCD);
@@ -3405,11 +3405,11 @@ void func_8215DAEC(s8 *arg0) {
         func_8213CA80(arg0, 7);
         break;
     case 3:
-        func_8213C938(arg0);
+        Particle_DisableAndDetach(arg0);
         break;
     }
     if (func_8213CB7C(arg0) != 0) {
-        func_8213E528(arg0);
+        Particle_AddVelocityFromRotationTemplate1(arg0);
     }
 }
 
@@ -3885,7 +3885,7 @@ void func_8215F1B0(s8 *arg0) {
         func_821437E0(arg0, 0x33, 0x24);
         Particle_ApproachPrimAlpha(arg0, 0xFF, 0x1D);
         if (func_8001104C(M2C_FIELD(arg0, s32 *, 0x14)) != 0) {
-            func_8213C930(arg0);
+            Particle_MarkInactive(arg0);
         }
         return;
     }
@@ -3957,7 +3957,7 @@ void func_8215F3EC(s8 *arg0) {
         }
         break;
     case 4:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
 }

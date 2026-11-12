@@ -41,7 +41,7 @@ void BattleScene_FinishSendOutCameraClose(CameraNode* arg0);
 void BattleScene_AdvanceSendOutFollowupCamera(CameraNode* arg0);
 void BattleScene_CompleteSendOutFollowup(UNUSED CameraNode* arg0);
 
-void func_82105E4C(ActivePokemon*, s32);
+s32 Battle_ClearRuntimeFlags(s8 *arg0, unsigned short arg1);
 
 void func_8210211C(ActivePokemon* active_pokemon);
 void func_82108A0C(ActivePokemon* active_pokemon);
@@ -219,7 +219,7 @@ void func_8212960C(CameraNode* arg0);
 void func_82129414(CameraNode*);
 void func_821296E4(CameraNode* arg0);
 
-void func_821366B0(s32, ActivePokemon*);
+void BattleAnim_QueueEffectList(u8 arg0, s32 arg1);
 void func_821299B0(CameraNode* arg0);
 
 extern ActivePokemon* D_84390204;

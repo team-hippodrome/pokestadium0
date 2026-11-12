@@ -58,14 +58,14 @@ extern CameraNode* D_80060488;
 
 s32 func_88400064(s32 arg0, unk_D_86002F34_alt18* arg1);
 
-M2C_UNK func_8000B1FC();                            /* extern */
-M2C_UNK func_8000B220();                            /* extern */
+void Cont_StartReadInputs(void);                            /* extern */
+void Cont_ReadInputs(void);                            /* extern */
 M2C_UNK func_8001B5F0();                            /* extern */
 
 s32 func_884000CC(void);
 
 M2C_UNK func_80005770(M2C_UNK *, M2C_UNK, M2C_UNK, M2C_UNK, s32); /* extern */
-M2C_UNK func_800069CC();                            /* extern */
+void BgStage_DrawFrame(void);                            /* extern */
 M2C_UNK func_8001560C(s32);                         /* extern */
 M2C_UNK func_800158C0();                            /* extern */
 extern M2C_UNK D_800AA150;
@@ -89,7 +89,7 @@ void func_88400C48(s16 arg0, s16 arg1);
 M2C_UNK func_80006780();                            /* extern */
 M2C_UNK func_8001A384(M2C_UNK, M2C_UNK);            /* extern */
 M2C_UNK func_8001A944(M2C_UNK, M2C_UNK, s32);       /* extern */
-M2C_UNK func_8001AB2C(M2C_UNK);                     /* extern */
+void Font_SetLineHeight(s32 arg0);                     /* extern */
 M2C_UNK func_8001AB6C();                            /* extern */
 M2C_UNK func_8001ABBC();                            /* extern */
 M2C_UNK func_8003F6AC(M2C_UNK);                     /* extern */
@@ -113,7 +113,7 @@ void func_88400DAC(s8* arg0);
  *   3. func_80006828(0x73, func_88400108) (BgStage_RunUntilCondition) is
  *      run, i.e. timer value 0x73 with func_88400108 as the callback.
  *   4. Bit 5 (0x20) of byte 2 of D_884034E0 is cleared, func_88400A98() is
- *      called and func_800407B0(0x51, 0, 0) (Audio_PlayCommand) is called.
+ *      called and Audio_PlayCommand(0x51, 0, 0) (Audio_PlayCommand) is called.
  *   5. Depending on bit 3 (value 8) of D_800AF986, the pair
  *      (D_88402D88, D_88402D8C) or the pair (D_88402D90, D_88402D94) is
  *      used: func_88400CE8 is called with the first value, func_88400DAC
@@ -124,7 +124,7 @@ void func_88400DAC(s8* arg0);
  */
 M2C_UNK func_80006828(M2C_UNK, M2C_UNK *);          /* extern */
 M2C_UNK func_8000A7B0(M2C_UNK);                     /* extern */
-M2C_UNK func_800407B0(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
+s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2);   /* extern */
 extern u16 D_800AF986;
 extern s32 D_88402D88;
 extern s8 *D_88402D8C;
@@ -166,7 +166,7 @@ M2C_UNK func_8003F6AC(M2C_UNK);
 M2C_UNK func_80006828(M2C_UNK, M2C_UNK *);
 M2C_UNK func_80010F14(M2C_UNK *, M2C_UNK, M2C_UNK *, M2C_UNK); /* extern */
 M2C_UNK func_8001107C(M2C_UNK *, M2C_UNK, M2C_UNK *); /* extern */
-void func_80019924(M2C_UNK *, M2C_UNK, M2C_UNK, s32); /* extern */
+void Model_InitDisplayObject(DisplayObject* display_object, s16 root_id, s16 object_type, ModelNodeView* child); /* extern */
 M2C_UNK func_80025100(s8 *, M2C_UNK);               /* extern */
 extern M2C_UNK D_88402D74;
 extern M2C_UNK D_884037B0;

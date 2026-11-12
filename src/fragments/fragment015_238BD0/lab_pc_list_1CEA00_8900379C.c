@@ -199,7 +199,7 @@ void Window_DrawFrame(void*);
 s32 func_8002B2B0(void *);
 s32 LabItem_UpdateItemList(void *, u32);
 
-M2C_UNK func_800069CC();
+void BgStage_DrawFrame(void);
 /**
  * Draws the item organizer for its current state.
  * @unverified Name and comment guessed from the code.
@@ -207,7 +207,7 @@ M2C_UNK func_800069CC();
 void LabItem_DrawScreen(void* arg) {
     s8* arg0 = arg;
 
-    func_800069CC();
+    BgStage_DrawFrame();
     LabItem_DrawBackground();
     switch (M2C_FIELD(arg0, s32*, 0)) {
         case 1:

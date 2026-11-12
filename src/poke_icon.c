@@ -29,7 +29,7 @@ s32 PokeIcon_CaptureGeoNode(s32 arg0, GraphNode* arg1) {
     return 0;
 }
 
-s32 func_8000255C();                                /* extern */
+s32 main_pool_get_available(void);                                /* extern */
 s32 func_80002B10(s32, M2C_UNK);                    /* extern */
 M2C_UNK func_80002B60(s32);                         /* extern */
 M2C_UNK func_80010B3C(s32, M2C_UNK, M2C_UNK, s16, s32); /* extern */
@@ -41,7 +41,7 @@ void func_80017F54(s8 *arg0, s16 arg1, s16 arg2) {
     s32 sp24;
     s32 temp_v0;
 
-    temp_v0 = func_80002B10(func_8000255C(), 0);
+    temp_v0 = func_80002B10(main_pool_get_available(), 0);
     sp24 = temp_v0;
     M2C_FIELD(arg0, s8 **, 0xC) = func_80016C70(temp_v0, &D_80060740);
     M2C_FIELD(arg0, s32 *, 0x10) = (s32) D_800AD1B0;
@@ -390,7 +390,7 @@ void PokeIcon_RedrawSlot(unk_func_8001A024* arg0, s32 arg1) {
     }
 }
 
-s32 func_80018DEC(s8 *arg0, s32 arg1) {
+s32 PokeIcon_GetImage(s8 *arg0, s32 arg1) {
     s32 var_v1;
 
     var_v1 = 0;

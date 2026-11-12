@@ -856,7 +856,7 @@ extern u8 D_0042CC80[];
 extern u8 D_002E0BE0[];
 extern u8 D_002E2B90[];
 s32 func_81700064(s32);
-void func_8001A194(s32, s32);
+s32 Font_Init(s32 load_size, s32 side);
 
 void func_81701710(void);
 
@@ -870,7 +870,7 @@ s32 Stadium_BonusPikachuReward(UNUSED s32 arg0, s32 arg1) {
     if ((M2C_FIELD(D_8170201C, u16*, 0x1096) & 0x20) && (func_81700064(M2C_FIELD(D_8170201C, u8*, 0x1094)) != 0)) {
         Gfx_InitDisplayListBuffers(0x10000, 0);
         sp20 = StageContext_Allocate(0, 1, 3, 1, 2, 1);
-        func_8001A194(6, 0);
+        Font_Init(6, 0);
 
         Fragment_Load(((((u32)D_81000000) & 0x0FF00000) >> 0x14) - 0x10, D_0015B1A0, D_0015E220);
         Fragment_Load(((((u32)D_8FC00000) & 0x0FF00000) >> 0x14) - 0x10, D_0042C4A0, D_0042CC80);

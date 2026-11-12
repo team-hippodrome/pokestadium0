@@ -620,7 +620,7 @@ extern u8 D_00326700[];
 extern u8 D_003139C0[];
 extern u8 D_00317EF0[];
 extern u8 D_0031C300[];
-s32 func_8001A194(s32, s32);
+s32 Font_Init(s32 load_size, s32 side);
 s32 func_800040B4(s32, u8*, u8*);
 void func_82101178(void);
 void func_821012D8(Unit82101324*, unk_D_86002F30*);
@@ -638,9 +638,9 @@ s32 func_82101324(s32* arg0) { // FAKE: s32 return (value unused) fixes caller r
     Battle_SetStageTintColor(0xFF, 0xFF, 0xFF);
     Battle_SetStageScale(1.0f);
     if (D_82198D10->mode == 4) {
-        func_8001A194(4, 0);
+        Font_Init(4, 0);
     } else {
-        func_8001A194(3, 0);
+        Font_Init(3, 0);
     }
     D_82198D14[0].framebuffers = PokeIcon_AllocFramebuffers(3);
     D_82198D14[1].framebuffers = PokeIcon_AllocFramebuffers(3);

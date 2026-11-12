@@ -181,7 +181,7 @@ void func_82122104(s32 arg0);
 
 M2C_UNK func_8000EEBC(s32, s32, f32, s16, s32);     /* extern */
 
-s32 func_821221C0(s32 arg0, s16 arg1, s16 arg2);
+s32 BattleScene_ApproachCameraRoll(s32 arg0, s16 arg1, s16 arg2);
 
 s32 BattleScene_ApproachCameraRollNoEyeUpdate(UNUSED CameraNode* arg0, s16 arg1, s16 arg2);
 
@@ -238,7 +238,7 @@ void func_82124544(CameraNode* arg0, ActivePokemon* arg1, f32 arg2, f32 arg3, f3
 extern f32 D_FLT_82196274;
 f32 func_8000F23C(f32, f32, f32, f32);
 void func_8210C1A8(f32*, f32, f32);
-s32 func_82107CC4(s32);
+s16 BattleScene_GetParticipantFacingAngle(s8 *arg0);
 void func_8212254C(s32, s32, Vec3f, s32, s32, f32, f32);
 void func_82122684(s32, s16, s16, f32, f32);
 void func_82124664(s32 arg0, s32 arg1, s16 arg2);

@@ -187,11 +187,11 @@ typedef struct {
 } SlotList;
 
 s32 func_80021894(s32);
-s32 func_80022C70(s32);
+s32 GbSave_GetTrainerId(s32 arg0);
 s32 func_80022D84(s32, void*);
 s32 func_800246A8(s32, s32);
 s32 Deck_GetSaveEntryTrainerId(s32, s32);
-s32 func_8002479C(s32, s32, void*);
+s32 Deck_GetSaveEntryName(s32 arg0, s32 arg1, u8* arg2);
 
 /**
  * Reads the party of each Game Boy cartridge in the four Transfer Paks into the team list.
@@ -211,7 +211,7 @@ void FreeBattle_LoadGbTeams(RecordList* arg0) {
         rec->unk_03 = 0;
         FreeBattle_MarkEmptySlots(rec->slots, FreeBattle_ReadTeam(rec->unk_01, rec->unk_02, rec->unk_03, (Entry82000058*)rec->slots));
         rec->slotCount = 6;
-        rec->unk_04 = func_80022C70(rec->unk_02);
+        rec->unk_04 = GbSave_GetTrainerId(rec->unk_02);
         func_80022D84(rec->unk_02, rec->unk08);
         rec++;
     }
@@ -227,7 +227,7 @@ void FreeBattle_LoadGbTeams(RecordList* arg0) {
         FreeBattle_MarkEmptySlots(rec->slots, FreeBattle_ReadTeam(rec->unk_01, rec->unk_02, rec->unk_03, (Entry82000058*)rec->slots));
         rec->slotCount = 6;
         rec->unk_04 = Deck_GetSaveEntryTrainerId(rec->unk_01, rec->unk_03);
-        func_8002479C(rec->unk_01, rec->unk_03, rec->unk08);
+        Deck_GetSaveEntryName(rec->unk_01, rec->unk_03, rec->unk08);
         rec++;
     }
 
@@ -520,7 +520,7 @@ extern char D_82009BFC[];
 extern char D_82009C00[];
 extern char D_82009C04[];
 extern s32 D_8200AC48;
-void func_800069CC(void);
+void BgStage_DrawFrame(void);
 void func_80019008(s32, Mon82000C5C*, s32);
 u8* func_800196F8(s32);
 void func_8001AAE4(u8, u8, u8, u8);
@@ -532,7 +532,7 @@ void Ui_DrawTexturedDivider(s32, s32, s32, u8*);
 void Ui_FillRectPrimEnvColor(s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
 s32 func_8002AE6C(Screen82000C5C*);
 void Window_DrawLabeled(char*, s32);
-s32 func_8002D3D0(Mon82000C5C*);
+s32 BattleMon_CountMoves(u8* arg0);
 s32 BattleMon_GetMoveIndex(Mon82000C5C*, s32);
 /**
  * Draws a Pokemon's status window: LV, HP, Type 1/2, Attack, Defense, Speed, Special.
@@ -541,7 +541,7 @@ s32 BattleMon_GetMoveIndex(Mon82000C5C*, s32);
 void FreeBattle_DrawMonStatusWindow(Screen82000C5C* arg0) {
     s32 y = arg0->y + 6;
     s32 x = arg0->x + 6;
-    s32 count = func_8002D3D0(arg0->mon);
+    s32 count = BattleMon_CountMoves(arg0->mon);
     s32 i;
     s32 n;
     s32 row;
@@ -603,7 +603,7 @@ void FreeBattle_DrawMonStatusWindow(Screen82000C5C* arg0) {
             func_80019008(D_8200AC48, arg0->mon, 0x416D);
         }
         tex = func_800196F8(D_8200AC48);
-        func_800069CC();
+        BgStage_DrawFrame();
         gSPDisplayList(gDisplayListHead++, D_80060290);
         gDPSetAlphaCompare(gDisplayListHead++, G_AC_NONE);
         for (row = 0; row < 0x78; row += n) {
@@ -838,7 +838,7 @@ void Ui_FillRectHighlighted(s32, s32, s32, s32, Color82001CCC);
 void func_8001BCB4(s32, s32, s32, s32, void*, s32, s32);
 void Trade_DrawDigitStrip(s32, s32, u8);
 void func_8001833C(s32, s32, s32*, u16);
-u8* func_80018DEC(s32, s32);
+s32 PokeIcon_GetImage(s8 *arg0, s32 arg1);
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 /**
  * Draws one Pokemon cell of a team row: nickname, level and icon.
@@ -873,7 +873,7 @@ void FreeBattle_DrawMonCell(s32 x, s32 y, s32* entry, s32 frame, s32 flags, s32 
             func_8001833C(D_8200AC50, idx, entry, ((D_82008F58.c[1] << 3) & 0x7C0) | ((D_82008F58.c[2] >> 2) & 0x3E) | ((D_82008F58.c[0] << 8) & 0xF800) | 1);
         }
         gSPDisplayList(gDisplayListHead++, D_80073408);
-        func_8001B884(x + 0x56, y + 6, 0x28, 0x28, func_80018DEC(D_8200AC50, idx), 0x28, 0x200000);
+        func_8001B884(x + 0x56, y + 6, 0x28, 0x28, PokeIcon_GetImage(D_8200AC50, idx), 0x28, 0x200000);
         gSPDisplayList(gDisplayListHead++, D_80073438);
         if (flags & 0x800) {
             gSPDisplayList(gDisplayListHead++, D_80073408);
@@ -937,7 +937,7 @@ void FreeBattle_DrawRowBorders(s32 arg0, s32 arg1, Color82001CCC arg2) {
 
 extern char D_82009C08[];
 void func_8001AAE4(u8, u8, u8, u8);
-void func_8001AB2C(s32);
+void Font_SetLineHeight(s32 arg0);
 void func_8001ABE8(void);
 void func_8001AC3C(void);
 
@@ -946,7 +946,7 @@ void func_8001AC3C(void);
  *
  * Draws a filled rectangle with FreeBattle_FillTeamPanel using the colour D_82008F58,
  * then switches the font to translucent, two-cycle text rendering (white
- * environment colour, font set mask 0x20, func_8001AB2C(0x2A), prim colour
+ * environment colour, font set mask 0x20, Font_SetLineHeight(0x2A), prim colour
  * 255/100/255/255) and prints the string D_82009C08 at
  * (arg0 + 0xAE, arg1 + 0xE) before ending text rendering. arg2 is not used.
  * @unverified Name guessed from the code; comment kept.
@@ -956,7 +956,7 @@ void FreeBattle_DrawRentalPrompt(s32 arg0, s32 arg1, s32 arg2) {
     func_8001AB6C();
     func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF);
     func_8001A384(0x20, 0);
-    func_8001AB2C(0x2A);
+    Font_SetLineHeight(0x2A);
     func_8001ABE8();
     func_8001AAE4(0xFF, 0x64, 0xFF, 0xFF);
     func_8001A944(arg0 + 0xAE, arg1 + 0xE, D_82009C08);
@@ -985,7 +985,7 @@ extern char D_82009C34[];
 extern char D_82009C48[];
 extern u8 D_04010918[];
 extern Gfx D_80073450[];
-u8 func_80022BAC(s32);
+u8 GbSave_GetPortGame(s32 arg0);
 void Font_SetColorForFlags(s32);
 void Ui_DrawImageInStrips(Img82001E20*, s32, s32);
 void Ui_DrawNumberZeroPadded(s32, s32, s32, s32);
@@ -1002,7 +1002,7 @@ void FreeBattle_DrawRentalNameList(s32 arg0, s32 arg1, s32 arg2, Slot82001E20* a
     FreeBattle_FillTrainerPanel(arg0, arg1, D_82008F5C);
     if (arg3->flags == 0) {
         if (arg3->kind == 0x20) {
-            func_8002BC58(arg0 + 5, arg1 + 4, arg3->species, func_80022BAC(arg3->species));
+            func_8002BC58(arg0 + 5, arg1 + 4, arg3->species, GbSave_GetPortGame(arg3->species));
         } else if (arg3->kind == 0x10) {
             Ui_DrawImageInStrips(&D_82008F64, arg0 + 4, arg1 + 4);
             func_8001AB6C();

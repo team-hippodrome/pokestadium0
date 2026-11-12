@@ -274,7 +274,7 @@ void BattleAnim_SetupBackgroundRecolor(Particle* arg0) {
 }
 
 s32 func_8213C494(s8 *);                          /* extern */
-M2C_UNK func_8213C938(s8 *);                      /* extern */
+void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
 M2C_UNK Particle_StorePrimColorInTemp(s8 *);                      /* extern */
 s32 func_821436A0(s8 *, u8, s32);                 /* extern */
@@ -294,7 +294,7 @@ void func_82143934(s8 *arg0) {
         }
         break;
     case 3:
-        func_8213C938(arg0);
+        Particle_DisableAndDetach(arg0);
         break;
     }
     Particle_StorePrimColorInTemp(arg0);
@@ -317,8 +317,8 @@ void BattleAnim_SetupTargetHueChange(Particle* arg0) {
 }
 
 M2C_UNK func_80019B28(s32, u8, u8, u8, s32);        /* extern */
-M2C_UNK func_8213C938(s8 *);                      /* extern */
-s32 func_8213C9B0(s8 *);                          /* extern */
+void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
+s32 Particle_IsRunning(s8 *arg0);                          /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
 s32 Particle_ApproachUnkAE(s8 *, u8, s16);                 /* extern */
 M2C_UNK func_821439D0(s8 *);                      /* extern */
@@ -337,10 +337,10 @@ void func_82143A18(s8 *arg0) {
         }
         break;
     case 3:
-        func_8213C938(arg0);
+        Particle_DisableAndDetach(arg0);
         break;
     }
-    if (func_8213C9B0(arg0) != 0) {
+    if (Particle_IsRunning(arg0) != 0) {
         func_80019B28(M2C_FIELD(arg0, s32 *, 0x10), M2C_FIELD(arg0, u8 *, 0xBA), M2C_FIELD(arg0, u8 *, 0xBB), M2C_FIELD(arg0, u8 *, 0xBC), (s32) M2C_FIELD(arg0, s16 *, 0xAA));
     }
 }
@@ -401,8 +401,8 @@ void func_82143C08(void) {
 }
 
 M2C_UNK func_80019B28(s32, u8, u8, u8, s32);        /* extern */
-M2C_UNK func_8213C938(s8 *);                      /* extern */
-s32 func_8213C9B0(s8 *);                          /* extern */
+void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
+s32 Particle_IsRunning(s8 *arg0);                          /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
 M2C_UNK func_821406B4(s8 *);                      /* extern */
 M2C_UNK func_82143AD0(s8 *);                      /* extern */
@@ -424,10 +424,10 @@ void func_82143C10(s8 *arg0) {
         }
         break;
     case 4:
-        func_8213C938(arg0);
+        Particle_DisableAndDetach(arg0);
         break;
     }
-    if (func_8213C9B0(arg0) != 0) {
+    if (Particle_IsRunning(arg0) != 0) {
         func_80019B28(M2C_FIELD(arg0, s32 *, 0x10), M2C_FIELD(arg0, u8 *, 0xBA), M2C_FIELD(arg0, u8 *, 0xBB), M2C_FIELD(arg0, u8 *, 0xBC), (s32) M2C_FIELD(arg0, s16 *, 0xAA));
     }
 }
@@ -439,8 +439,8 @@ void func_82143CE0(Particle* arg0) {
 }
 
 M2C_UNK func_80019B28(s32, u8, u8, u8, s32);        /* extern */
-M2C_UNK func_8213C930(s8 *);                      /* extern */
-s32 func_8213C9B0(s8 *);                          /* extern */
+void Particle_MarkInactive(s8 *arg0);                      /* extern */
+s32 Particle_IsRunning(s8 *arg0);                          /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
 M2C_UNK Particle_SetUnkAE(s8 *, M2C_UNK);             /* extern */
 
@@ -459,10 +459,10 @@ void func_82143D28(s8 *arg0) {
         }
         break;
     case 3:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
-    if (func_8213C9B0(arg0) != 0) {
+    if (Particle_IsRunning(arg0) != 0) {
         func_80019B28(M2C_FIELD(arg0, s32 *, 0x10), M2C_FIELD(arg0, u8 *, 0xBA), M2C_FIELD(arg0, u8 *, 0xBB), M2C_FIELD(arg0, u8 *, 0xBC), (s32) M2C_FIELD(arg0, s16 *, 0xAA));
     }
 }
@@ -474,8 +474,8 @@ void func_82143DE8(Particle* arg0) {
 }
 
 M2C_UNK func_80019B28(s32, u8, u8, u8, s32);        /* extern */
-M2C_UNK func_8213C930(s8 *);                      /* extern */
-s32 func_8213C9B0(s8 *);                          /* extern */
+void Particle_MarkInactive(s8 *arg0);                      /* extern */
+s32 Particle_IsRunning(s8 *arg0);                          /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
 
 void func_82143E30(s8 *arg0) {
@@ -492,10 +492,10 @@ void func_82143E30(s8 *arg0) {
         }
         break;
     case 3:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
-    if (func_8213C9B0(arg0) != 0) {
+    if (Particle_IsRunning(arg0) != 0) {
         func_80019B28(M2C_FIELD(arg0, s32 *, 0x10), M2C_FIELD(arg0, u8 *, 0xBA), M2C_FIELD(arg0, u8 *, 0xBB), M2C_FIELD(arg0, u8 *, 0xBC), (s32) M2C_FIELD(arg0, s16 *, 0xAA));
     }
 }
@@ -551,8 +551,8 @@ void func_82144010(Particle* arg0) {
 }
 
 M2C_UNK func_80019B28(s32, u8, u8, u8, s32);        /* extern */
-M2C_UNK func_8213C930(s8 *);                      /* extern */
-s32 func_8213C9B0(s8 *);                          /* extern */
+void Particle_MarkInactive(s8 *arg0);                      /* extern */
+s32 Particle_IsRunning(s8 *arg0);                          /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
 M2C_UNK func_82140874(s8 *, M2C_UNK, u8);         /* extern */
 
@@ -573,10 +573,10 @@ void func_82144058(s8 *arg0) {
         func_82140874(arg0, 0, M2C_FIELD(arg0, u8 *, 0xCA));
         break;
     case 4:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
-    if (func_8213C9B0(arg0) != 0) {
+    if (Particle_IsRunning(arg0) != 0) {
         func_80019B28(M2C_FIELD(arg0, s32 *, 0x10), M2C_FIELD(arg0, u8 *, 0xBA), M2C_FIELD(arg0, u8 *, 0xBB), M2C_FIELD(arg0, u8 *, 0xBC), (s32) M2C_FIELD(arg0, s16 *, 0xAA));
     }
 }

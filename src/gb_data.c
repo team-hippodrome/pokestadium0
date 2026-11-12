@@ -63,7 +63,7 @@ u16 Pokemon_LevelFromExp(s32 arg0, u32 arg1);
 void Pokemon_PrepareBattleMon(BattleMon* arg0);
 u8 Move_GetIdFromTableIndex(s32 tm_hm_index);
 u8 func_80020984(s32 arg0);
-u8 func_80020994(s32 arg0);
+u8 Species_FromInternalIndex(s32 arg0);
 void Deck_InitializeSaveBackend(DeckHandle* arg0);
 void Deck_InitializeBoxBackend(DeckHandle* arg0);
 DeckHandle* Deck_Open(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
@@ -73,7 +73,7 @@ s32 Deck_CloseAndFlushBox(DeckHandle* arg0);
 char* Text_UntranscodeName(char* arg0, char* arg1);
 s8* Text_CopyString(s8* arg0, s8* arg1);
 void Pokemon_FromGbRecord(BattleMon* arg0, GbPokemonRecord* arg1);
-void Pokemon_ToGbRecord(BattleMon* arg0, GbPokemonRecord* arg1);
+void Pokemon_ToGbRecord(s8 *arg0, s8 *arg1);
 s32 Deck_WriteEntries(u8* arg0, s32 arg1, DeckHandle* arg2);
 s32 GbSave_HasPlayerNameMarker(u8* arg0);
 s32 Deck_GetCapacity(s32 arg0);
@@ -225,7 +225,7 @@ s32 func_8001FAC8(s8 *);                          /* extern */
 M2C_UNK func_80056690(s8 *, s8 *, M2C_UNK);     /* extern */
 
 void func_8001FE84(s8 *arg0, s8 *arg1) {
-    M2C_FIELD(arg0, s8 *, 0) = func_80020994(M2C_FIELD(arg1, u8 *, 0));
+    M2C_FIELD(arg0, s8 *, 0) = Species_FromInternalIndex(M2C_FIELD(arg1, u8 *, 0));
     M2C_FIELD(arg0, s8 *, 1) = 0;
     M2C_FIELD(arg0, s16 *, 2) = func_8001FAB0(arg1 + 1);
     M2C_FIELD(arg0, u8 *, 4) = (u8) M2C_FIELD(arg1, u8 *, 3);
@@ -259,7 +259,7 @@ M2C_UNK func_8001FAE8(s8 *, u16);                 /* extern */
 M2C_UNK func_8001FAF8(s8 *, s32);                 /* extern */
 M2C_UNK func_80056690(s8 *, s8 *, M2C_UNK);     /* extern */
 
-void func_8001FFE8(s8 *arg0, s8 *arg1) {
+void Pokemon_ToGbRecord(s8 *arg0, s8 *arg1) {
     M2C_FIELD(arg1, s8 *, 0) = func_80020984(M2C_FIELD(arg0, u8 *, 0));
     func_8001FAE8(arg1 + 1, M2C_FIELD(arg0, u16 *, 2));
     M2C_FIELD(arg1, u8 *, 3) = (u8) M2C_FIELD(arg0, u8 *, 4);
@@ -486,7 +486,7 @@ u8 func_80020984(s32 arg0) {
     return D_8006B8FB[arg0];
 }
 
-u8 func_80020994(s32 arg0) {
+u8 Species_FromInternalIndex(s32 arg0) {
     extern u8 D_8006B993[];
 
     return D_8006B993[arg0];

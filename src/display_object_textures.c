@@ -313,7 +313,7 @@ void PokeIcon_StartThread(void) {
 s8 *func_800023C4(M2C_UNK, M2C_UNK);              /* extern */
 M2C_UNK func_800567E0(s8 *, s8 *, M2C_UNK);     /* extern */
 
-s8 *func_80017860(s32 arg0) {
+s8 *PokeIcon_AllocFramebuffers(s32 arg0) {
     s8 *temp_v0;
 
     temp_v0 = func_800023C4(0x64, 1);
@@ -482,7 +482,7 @@ void func_80017D00(s32 arg0) {
 M2C_UNK func_80017BA0(s32, s32);                    /* extern */
 M2C_UNK func_8004D1C0(s32, s32 *, M2C_UNK);         /* extern */
 
-void func_80017D38(s32 arg0) {
+void PokeIcon_WaitBackgroundLoad(s32 arg0) {
     s32 sp1C;
 
     func_8004D1C0(arg0 + 0x44, &sp1C, 1);

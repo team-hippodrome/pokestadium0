@@ -61,7 +61,7 @@ void func_8215FAA4(s8 *arg0) {
         func_82140548(arg0, 0, 0x40);
         break;
     case 4:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
     func_82140228(arg0, 0x40600000, 0x3E800000);
@@ -270,7 +270,7 @@ void BattleAnim_RunSlashingMoveFullScreenFlash(s8 *arg0) {
         func_8213CA80(arg0, 0x14);
         break;
     case 3:
-        func_8213C938(arg0);
+        Particle_DisableAndDetach(arg0);
         break;
     }
     func_82140228(arg0, 0x40C66666, 0x3F800000);
@@ -313,7 +313,7 @@ void BattleAnim_RunSlashMoveWhiteFlashOverlay(s8 *arg0) {
         func_8213CA80(arg0, 0x14);
         break;
     case 3:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
     func_82140228(arg0, 0x40C00000, 0x3F800000);
@@ -363,7 +363,7 @@ void func_821603C8(s8 *arg0) {
         func_82140548(arg0, 0, 0x20);
         break;
     case 4:
-        func_8213C938(arg0);
+        Particle_DisableAndDetach(arg0);
         break;
     }
     Particle_AnimateFramesForwardLooped(arg0, 0, 7, 1, 2, 0);
@@ -403,7 +403,7 @@ void func_82160528(s8 *arg0) {
         func_8213E6BC(arg0);
         return;
     case 4:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
 }
@@ -423,7 +423,7 @@ void BattleAnim_SetupSmallSand(s8 *arg0) {
     Particle_AddRotationY(arg0, (s16) (0x1800 - ((0x3000 / func_8213C494(arg0)) * sp26)));
     Particle_SetStepMagnitudeScaled(arg0, (2.0f * func_8000F150()) + 3.0f);
     func_82143478(arg0, sp24);
-    func_8214050C(arg0, 0xB4);
+    Particle_SetPrimAlpha(arg0, 0xB4);
     func_8213C9D0(arg0);
 }
 
@@ -451,7 +451,7 @@ void BattleAnim_RunSmallSand(s8 *arg0) {
         func_82140548(arg0, 0, 0x20);
         return;
     case 4:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         return;
     }
 }
@@ -471,7 +471,7 @@ void BattleAnim_SetupLargeSand(s8 *arg0) {
     Particle_AddRotationY(arg0, (s16) (0x1800 - ((0x3000 / func_8213C494(arg0)) * sp26)));
     Particle_SetStepMagnitudeScaled(arg0, (func_8000F150() * 2.5f) + 3.0f);
     func_82143478(arg0, sp24);
-    func_8214050C(arg0, 0xB4);
+    Particle_SetPrimAlpha(arg0, 0xB4);
     func_8213C9D0(arg0);
 }
 
@@ -500,7 +500,7 @@ void BattleAnim_RunLargeSand(s8 *arg0) {
         }
         break;
     case 4:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
     func_8213E4D8(arg0);
@@ -538,7 +538,7 @@ void func_82160AF0(s8 *arg0) {
         func_8213E4D8(arg0);
         return;
     case 3:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         return;
     }
 }
@@ -553,7 +553,7 @@ void func_82160BB8(s8 *arg0) {
     Particle_AddRotationY(arg0, (s16) (0x2000 - ((0x4000 / func_8213C494(arg0)) * sp26)));
     Particle_SetStepMagnitudeScaled(arg0, func_8000F150() + 1.0f);
     func_82143478(arg0, 0xA);
-    func_8214050C(arg0, 0x64);
+    Particle_SetPrimAlpha(arg0, 0x64);
     func_8213C9D0(arg0);
 }
 
@@ -579,7 +579,7 @@ void func_82160CCC(s8 *arg0) {
         }
         return;
     case 4:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
 }
@@ -628,7 +628,7 @@ void BattleAnim_RunSandAttackHitEffect(s8 *arg0) {
         }
         break;
     case 4:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
 }
@@ -728,7 +728,7 @@ void func_82161288(s8 *arg0) {
         func_8213E7A0(arg0);
         return;
     case 4:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
 }
@@ -773,7 +773,7 @@ void func_8216140C(s8 *arg0) {
         func_8213E6BC(arg0);
         return;
     case 4:
-        func_8213C938(arg0);
+        Particle_DisableAndDetach(arg0);
         break;
     }
 }
@@ -842,11 +842,11 @@ void func_821616BC(s8 *arg0) {
         }
         break;
     case 3:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
-    if (func_8213C9B0(arg0) != 0) {
-        func_8213E528(arg0);
+    if (Particle_IsRunning(arg0) != 0) {
+        Particle_AddVelocityFromRotationTemplate1(arg0);
     }
 }
 
@@ -904,11 +904,11 @@ void BattleAnim_RunPointyMoveHitSparkChild(s8 *arg0) {
         }
         break;
     case 3:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
-    if (func_8213C9B0(arg0) != 0) {
-        func_8213E528(arg0);
+    if (Particle_IsRunning(arg0) != 0) {
+        Particle_AddVelocityFromRotationTemplate1(arg0);
     }
 }
 
@@ -1325,7 +1325,7 @@ void func_821627C0(Particle* arg0) {
     }
 
     if (Particle_IsRenderingEnabled(arg0) != 0) {
-        func_8213E528(arg0);
+        Particle_AddVelocityFromRotationTemplate1(arg0);
         if (arg0->worldPosition.y < 0.0f) {
             Particle_MarkInactive(arg0);
         }
@@ -1793,7 +1793,7 @@ void func_8216374C(s8 *arg0) {
         func_8213E4D8(arg0);
         return;
     case 4:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
 }
@@ -1861,7 +1861,7 @@ void func_821639EC(s8 *arg0) {
         func_8213E4D8(arg0);
         return;
     case 4:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
 }
@@ -1955,10 +1955,10 @@ void func_82163D7C(s8 *arg0) {
         Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 2, 0);
         Particle_ApproachPrimAlpha(arg0, 0x64, 6);
         func_82140228(arg0, 0x40000000, 0x3D99999A);
-        func_8213E528(arg0);
+        Particle_AddVelocityFromRotationTemplate1(arg0);
         return;
     case 4:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
 }
@@ -1992,7 +1992,7 @@ void func_82163ED0(s8 *arg0) {
         func_82140548(arg0, 0, 0xC);
         return;
     case 4:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         return;
     }
 }

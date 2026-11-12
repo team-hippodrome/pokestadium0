@@ -121,7 +121,7 @@ void Ui_DrawNumberZeroPadded(s32, s32, s32, s32);
 void Font_SetColorForFlags(s32);
 void func_89101238(s32, s32, s8*, s32, s32);
 
-s32 func_8002AB84(void);
+s32 Particle_Field50_SetXZFromField7C_09BB4(void);
 void func_8002C5A4(s32, s32, s32);
 void Window_DrawFrame(s8*);
 void Ui_DrawTexturedDivider(s32, s32, s32, u8*);
@@ -150,7 +150,7 @@ void LabPCList_DrawListScreen(s8* arg0) {
     s32 y;
     s32 flags[2]; // FAKE (only [0] is used; has to live on the stack)
 
-    if (func_8002AB84() != 0) {
+    if (Particle_Field50_SetXZFromField7C_09BB4() != 0) {
         return;
     }
     func_8002C5A4(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) - 0xA, 0x1F4);

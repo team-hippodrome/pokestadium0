@@ -198,7 +198,7 @@ void func_8002B054(s8*, s32);
 void Window_DrawFrame(void*);
 s32 func_8002B2B0(void *);
 s32 LabItem_UpdateItemList(void *, u32);
-M2C_UNK func_800069CC();
+void BgStage_DrawFrame(void);
 
 
 extern s32 D_89019108;
@@ -454,7 +454,7 @@ void LabTerminal_DrawMenuWindow(s8* arg0) {
         Font_BeginTranslucentTextRendering();
         func_8001AA9C(M2C_FIELD(&D_800734A8, u8 *, 0), M2C_FIELD(&D_800734A8, u8 *, 1), M2C_FIELD(&D_800734A8, u8 *, 2), M2C_FIELD(&D_800734A8, u8 *, 3));
         Font_SetActive(8, 0);
-        func_8001AB2C(0x1C);
+        Font_SetLineHeight(0x1C);
         Font_Printf(M2C_FIELD(arg0, s32*, 0) + 0xE, M2C_FIELD(arg0, s32*, 4) + h + 0x10, (*(char***)(arg0 + 0x7C))[M2C_FIELD(arg0, s32*, 0x34)]);
         Font_EndTexturedTextRendering();
     }
@@ -502,7 +502,7 @@ void LabTerminal_InitMainMenu(s32 arg0) {
     LabTerminal_InitMenuWindow(arg0, 0x30, 0x5C, 0x170, 0xCE, D_8900A704, 3, D_8900A710, 3, D_890188F4);
 }
 
-M2C_UNK func_800069CC();                            /* extern */
+void BgStage_DrawFrame(void);                            /* extern */
 M2C_UNK GbSave_DrawSummaryBar(M2C_UNK, M2C_UNK *, M2C_UNK *, s32); /* extern */
 void LabTerminal_DrawMenuWindow(s8*);
 extern M2C_UNK D_89018900;
@@ -516,7 +516,7 @@ extern M2C_UNK D_89019110;
 void LabTerminal_DrawMainScreen(s32 arg0) {
     M2C_UNK *var_a1;
 
-    func_800069CC();
+    BgStage_DrawFrame();
     if (D_89019108 == -1) {
         var_a1 = NULL;
     } else {
@@ -596,7 +596,7 @@ s32 func_8900429C(s32 arg0) {
         n--;
         D_8900A71C_2 = n;
     }
-    func_800069CC();
+    BgStage_DrawFrame();
     if (D_89019108 == -1) {
         var_a1 = NULL;
     } else {
@@ -614,8 +614,8 @@ s32 func_8900429C(s32 arg0) {
     return 0;
 }
 
-M2C_UNK func_8000B1FC();                            /* extern */
-M2C_UNK func_8000B220();                            /* extern */
+void Cont_StartReadInputs(void);                            /* extern */
+void Cont_ReadInputs(void);                            /* extern */
 void func_89003650(s8*);
 void LabItem_DrawScreen(void*);
 M2C_UNK PcSort_Init(M2C_UNK *, M2C_UNK *);        /* extern */
@@ -642,8 +642,8 @@ s32 LabTerminal_RunFrame(s32 arg0) {
     s32 temp_v0;
 
     sp1C = 0;
-    func_8000B1FC();
-    func_8000B220();
+    Cont_StartReadInputs();
+    Cont_ReadInputs();
     switch (D_890289D4) {                           /* switch 1; irregular */
     case 1:                                         /* switch 1 */
         LabTerminal_DrawMainScreen(&D_89028950);
@@ -710,7 +710,7 @@ s32 func_8900429C(s32);
  *
  *   1. main_pool_push_state('TERM') saves the main pool state under that tag;
  *      the matching main_pool_pop_state('TERM') is near the end.
- *   2. func_8001A194(0x3C, 0) is called (Font_Init in symbol_addrs.txt).
+ *   2. Font_Init(0x3C, 0) is called (Font_Init in symbol_addrs.txt).
  *   3. Two assets are loaded with Asset_LoadToSegment: the ROM range
  *      D_002E0BE0..D_002E2B90 into segment 1 and D_00400F70..D_004076E0 into
  *      segment 4.  The segment number is bits 24-27 of the address of
@@ -730,7 +730,7 @@ s32 func_8900429C(s32);
  */
 s32 LabTerminal_Init(s32 arg0, s32 arg1) {
     main_pool_push_state('TERM');
-    func_8001A194(0x3C, 0);
+    Font_Init(0x3C, 0);
     Asset_LoadToSegment(((u32)D_01000000 & 0x0F000000) >> 0x18, D_002E0BE0, D_002E2B90, 0);
     Asset_LoadToSegment(((u32)D_04000000 & 0x0F000000) >> 0x18, D_00400F70, D_004076E0, 0);
     LabTerminal_InitScreen();

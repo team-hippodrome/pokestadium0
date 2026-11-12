@@ -5,23 +5,23 @@
 
 void func_821401D4(Particle*, f32);
 void func_8213E11C(Particle*, f32);
-s32 func_82137D74(s32);
+u32 ParticleMath_RandomRange(u32 arg0);
 void Particle_SetRotationStepY(Particle*, s16);
 void Particle_SetStepMagnitudeScaled(Particle*, f32);
 void Particle_SetMotionStepYScaled(Particle*, f32);
 void func_82143478(Particle*, s32);
-void func_8214050C(Particle*, s32);
+void Particle_SetPrimAlpha(s8 *arg0, char arg1);
 void Particle_SetUnkA6(Particle*, s32);
 void func_8213C9D0(Particle*);
 
 void func_82168C20(Particle* arg0) {
     func_821401D4(arg0, 0.16f);
     func_8213E11C(arg0, -3.2f);
-    Particle_SetRotationStepY(arg0, func_82137D74(0x10000));
+    Particle_SetRotationStepY(arg0, ParticleMath_RandomRange(0x10000));
     Particle_SetStepMagnitudeScaled(arg0, 0.085f);
     Particle_SetMotionStepYScaled(arg0, 0.44f);
     func_82143478(arg0, 0x1A);
-    func_8214050C(arg0, 0xFF);
+    Particle_SetPrimAlpha(arg0, 0xFF);
     Particle_SetUnkA6(arg0, 2);
     func_8213C9D0(arg0);
 }

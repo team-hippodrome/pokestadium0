@@ -130,7 +130,7 @@ void Registration_WriteAllTeams(void *arg0) {
 s32 func_80024ADC(s32, s32);
 void func_80027410(s8*, s8*, s32, s32, s32);
 s32 Deck_GetSaveEntryTrainerId(s32, s32);
-void func_8002479C(s32, s32, u8*);
+s32 Deck_GetSaveEntryName(s32 arg0, s32 arg1, u8* arg2);
 /**
  * Reads every used registered slot (deck 0x10) with its trainer id and name.
  * @unverified Name and comment guessed from the code.
@@ -153,14 +153,14 @@ void Registration_LoadRegisteredTeams(s8* arg0) {
         func_80027410((s8*)p + 0x18, (s8*)p + 0x28, 0x54, 6, 0);
         Registration_ReadTeam(p[1], p[2], p[3], (s32*)(p + 0x18));
         M2C_FIELD(p, s32*, 4) = Deck_GetSaveEntryTrainerId(p[1], p[3]);
-        func_8002479C(p[1], p[3], p + 8);
+        Deck_GetSaveEntryName(p[1], p[3], p + 8);
         p += 0x220;
     }
     M2C_FIELD(arg0, s32*, 8) = (p - M2C_FIELD(arg0, u8**, 0)) / 0x220;
 }
 
 s32 func_80021894(s32);
-s32 func_80022C70(s32);
+s32 GbSave_GetTrainerId(s32 arg0);
 void func_80022D84(s32, u8*);
 /**
  * Reads the party of each Game Boy cartridge in the four Transfer Paks (deck 0x20).
@@ -180,7 +180,7 @@ void Registration_LoadGbTeams(s8* arg0) {
         p[3] = 0;
         func_80027410((s8*)p + 0x18, (s8*)p + 0x28, 0x54, 6, 0);
         Registration_ReadTeam(p[1], p[2], p[3], (s32*)(p + 0x18));
-        M2C_FIELD(p, s32*, 4) = func_80022C70(p[2]);
+        M2C_FIELD(p, s32*, 4) = GbSave_GetTrainerId(p[2]);
         func_80022D84(p[2], p + 8);
         p += 0x220;
     }
@@ -514,7 +514,7 @@ extern char D_88102F2C[];
 extern Gfx D_80073450[];
 extern u8 D_04010918[];
 void func_8001BCB4(s32, s32, s32, s32, void*, s32, s32);
-s32 func_80022BAC(u8);
+u8 GbSave_GetPortGame(s32 arg0);
 void func_8002BC58(s32, s32, u8, s32);
 void Ui_DrawImageInStrips(u8*, s32, s32);
 void Ui_DrawNumberZeroPadded(s32, s32, s32, s32);
@@ -529,7 +529,7 @@ void Registration_DrawTrainerPanel(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
     func_80029028(arg0, arg1, 0x88, 0x64, D_88102D7C);
     if (arg3[0] == 0) {
         if (arg3[1] == 0x20) {
-            func_8002BC58(arg0 + 5, arg1 + 4, arg3[2], func_80022BAC(arg3[2]));
+            func_8002BC58(arg0 + 5, arg1 + 4, arg3[2], GbSave_GetPortGame(arg3[2]));
         } else if (arg3[1] == 0x10) {
             Ui_DrawImageInStrips(D_88102DB8, arg0 + 4, arg1 + 4);
             Font_BeginTranslucentTextRendering();
@@ -578,7 +578,7 @@ extern s32 D_88103074;
 extern Gfx D_80073408[];
 extern Gfx D_80073438[];
 extern u8 D_04011A60[];
-s32 func_80018DEC(s8*, s32);
+s32 PokeIcon_GetImage(s8 *arg0, s32 arg1);
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 void Ui_DrawNumber(s32, s32, s32, s32);
 void func_8001833C(void*, s32, void*, u16);
@@ -610,7 +610,7 @@ void Registration_DrawMonCell(s32 x, s32 y, u8* entry, s32 id, s32 color, IconCa
         }
         if (cache) {} // FAKE: keeps cache live through the block above so the colour table address takes t1
         gSPDisplayList(gDisplayListHead++, D_80073408);
-        func_8001B884(x + 0x56, y + 6, 0x28, 0x28, (u8*)func_80018DEC((s8*)D_88103074, slot), 0x28, 0x200000);
+        func_8001B884(x + 0x56, y + 6, 0x28, 0x28, (u8*)PokeIcon_GetImage((s8*)D_88103074, slot), 0x28, 0x200000);
         gSPDisplayList(gDisplayListHead++, D_80073438);
     }
 }
@@ -618,7 +618,7 @@ void Registration_DrawMonCell(s32 x, s32 y, u8* entry, s32 id, s32 color, IconCa
 extern s32 D_88103074;
 extern Gfx D_80073408[];
 extern Gfx D_80073438[];
-s32 func_80018DEC(s8*, s32);
+s32 PokeIcon_GetImage(s8 *arg0, s32 arg1);
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 /**
  * Draws an empty Pokemon cell with the placeholder icon.
@@ -628,7 +628,7 @@ void Registration_DrawEmptyMonCell(s32 arg0, s32 arg1) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(arg0, arg1, 0x84, 0x32, D_88102D78[0]);
     gSPDisplayList(gDisplayListHead++, D_80073408);
-    func_8001B884(arg0 + 0x56, arg1 + 6, 0x28, 0x28, (u8*)func_80018DEC((s8*)D_88103074, 0x18), 0x28, 0x200000);
+    func_8001B884(arg0 + 0x56, arg1 + 6, 0x28, 0x28, (u8*)PokeIcon_GetImage((s8*)D_88103074, 0x18), 0x28, 0x200000);
     gSPDisplayList(gDisplayListHead++, D_80073438);
 }
 
@@ -652,7 +652,7 @@ void func_88101478(s32 x, s32 y, u8* entry, s32 frame, s32 color, s32* anim) {
         Ui_DrawNumber(x + 0x38, y + 0x17, entry[0x24], 3);
         idx = frame % anim[2] + anim[1];
         gSPDisplayList(gDisplayListHead++, D_80073408);
-        func_8001B884(x + 0x56, y + 6, 0x28, 0x28, (u8*)func_80018DEC((s8*)D_88103074, idx), 0x28, 0x200000);
+        func_8001B884(x + 0x56, y + 6, 0x28, 0x28, (u8*)PokeIcon_GetImage((s8*)D_88103074, idx), 0x28, 0x200000);
         gSPDisplayList(gDisplayListHead++, D_80073438);
     }
 }
@@ -893,7 +893,7 @@ void Registration_DrawTeamListRow(IndexedDrawer* arg0) {
 }
 
 void func_800189C0(s32, s32);
-void func_800069CC(void);
+void BgStage_DrawFrame(void);
 void ScrollList_DrawItems(s8*, s32, s32, s32, s32);
 void Registration_DrawTeamRowWithTrainer(s32, s32, s8*, s32, s32);
 void Registration_DrawMessageWindow(s8*);
@@ -903,7 +903,7 @@ void Registration_DrawMessageWindow(s8*);
  */
 void Registration_DrawTeamList(s8* arg0) {
     func_800189C0(D_88103074, 0);
-    func_800069CC();
+    BgStage_DrawFrame();
     if (func_8002AE6C(arg0 + 8) == 0) {
         switch (M2C_FIELD(arg0, u32*, 4)) {
             case 0:
@@ -1184,7 +1184,7 @@ void Registration_InitScreen(s32 arg0) {
     *(s32 *)arg0 = 0;
 }
 
-void func_800069CC(void);
+void BgStage_DrawFrame(void);
 void Ui_DrawTintedScreenBackground(s32, s32, s32, s32, s32);
 extern u8 D_88102D70[];
 void Registration_DrawMainMenu(s8*, s32);
@@ -1195,7 +1195,7 @@ void Registration_DrawTeamList(s8*);
  */
 M2C_UNK Registration_DrawScreen(s32 a) {
     s32* arg0 = (s32*)a;
-    func_800069CC();
+    BgStage_DrawFrame();
     Ui_DrawTintedScreenBackground(0x38, 0x1E0, D_88102D70[0], D_88102D70[1], D_88102D70[2]);
     switch (arg0[0]) {
         case 0:
@@ -1328,7 +1328,7 @@ s32 Registration_UpdateFade(s32 arg0) {
         D_88102DCC_2 = n;
     }
     func_800189C0(D_88103074, 0);
-    func_800069CC();
+    BgStage_DrawFrame();
     if (D_88103078 == -1) {
         var_a1 = NULL;
     } else {
@@ -1346,8 +1346,8 @@ s32 Registration_UpdateFade(s32 arg0) {
     return 0;
 }
 
-M2C_UNK func_8000B1FC();                            /* extern */
-M2C_UNK func_8000B220();                            /* extern */
+void Cont_StartReadInputs(void);                            /* extern */
+void Cont_ReadInputs(void);                            /* extern */
 M2C_UNK Registration_DrawScreen(s32);                         /* extern */
 s32 Registration_UpdateScreen(s32);
 extern s32 D_881030F8;
@@ -1357,8 +1357,8 @@ extern s32 D_881030F8;
  * @unverified Name and comment guessed from the code.
  */
 void Registration_RunFrame(s32 arg0) {
-    func_8000B1FC();
-    func_8000B220();
+    Cont_StartReadInputs();
+    Cont_ReadInputs();
     Registration_DrawScreen(D_881030F8);
     Registration_UpdateScreen(D_881030F8);
 }
@@ -1381,10 +1381,10 @@ M2C_UNK func_800040B4(s32, M2C_UNK *, M2C_UNK *);
 M2C_UNK func_80006724();
 M2C_UNK func_8000675C();
 M2C_UNK func_80006828(M2C_UNK, void*);
-s32 func_80017860(M2C_UNK);
+s8 *PokeIcon_AllocFramebuffers(s32 arg0);
 M2C_UNK PokeIcon_OpenModelArchives();
 s32 func_80017FDC(s32, M2C_UNK, M2C_UNK, M2C_UNK);
-M2C_UNK func_8001A194(M2C_UNK, M2C_UNK);
+s32 Font_Init(s32 load_size, s32 side);
 M2C_UNK func_80025BA0(s32, M2C_UNK *, M2C_UNK *, M2C_UNK, s32);
 extern M2C_UNK D_0015B1A0;
 extern M2C_UNK D_0015E220;
@@ -1409,8 +1409,8 @@ extern s32 D_88103074;
  */
 s32 Registration_Init(s32 arg0, s32 arg1) {
     func_8000256C(0x52454753);
-    func_8001A194(0x3C, 0);
-    D_88103070 = func_80017860(1);
+    Font_Init(0x3C, 0);
+    D_88103070 = PokeIcon_AllocFramebuffers(1);
     D_88103074 = func_80017FDC(D_88103070, 0x19, 0x28, 0x28);
     PokeIcon_OpenModelArchives();
     func_800040B4(((u32)((s32)&D_81000000 & 0x0FF00000) >> 0x14) - 0x10, &D_0015B1A0, &D_0015E220);

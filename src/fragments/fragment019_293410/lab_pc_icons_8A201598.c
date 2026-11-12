@@ -8,7 +8,7 @@ s32 Display_IsFrameReady(void);
 s32 func_80002BA4(void*, s32);
 s32 func_80017304(s32, BinArchive*, s32, void*, s32);
 s32 func_8001FA8C(s32);
-s32 func_8002D3D0(u8*);
+s32 BattleMon_CountMoves(u8* arg0);
 s32 BattleMon_GetMoveIndexChecked();
 typedef struct Move8A201D3C { u8 unk00; u8 unk01; u8 power; u8 type; u8 unk04; u8 unk05; } Move8A201D3C;
 extern Move8A201D3C D_8006B190[];
@@ -133,7 +133,7 @@ void MonSummary_DrawModelPreview(s32 arg0, s32 arg1, s32 arg2) {
     s32 n;
 
     tex = func_800196F8(D_8A21DA4C);
-    func_800069CC();
+    BgStage_DrawFrame();
     gSPDisplayList(gDisplayListHead++, D_80060290);
     gDPSetAlphaCompare(gDisplayListHead++, G_AC_NONE);
     for (i = 0; i < 0xD2; i += n) {
@@ -167,7 +167,7 @@ void MonSummary_InitPageWindow(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     M2C_FIELD(arg0, s32*, 0x14) = 0x1001;
     M2C_FIELD(arg0, s32*, 0x34) = 0;
     M2C_FIELD(arg0, s32*, 0x2C) = arg3;
-    count = func_8002D3D0((u8*)arg3);
+    count = BattleMon_CountMoves((u8*)arg3);
     while (Display_IsFrameReady() == 0) {
     }
     for (i = 0; i < count; i++) {
@@ -185,7 +185,7 @@ void MonSummary_InitPageWindow(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
 void MonSummary_DrawPage(s8 *arg0, s32 arg1)
 {
   s32 temp_v0;
-  if (((*((s32 *) (((s8 *) arg0) + 0x28))) != 2) && (func_8002AB84() == 0))
+  if (((*((s32 *) (((s8 *) arg0) + 0x28))) != 2) && (Particle_Field50_SetXZFromField7C_09BB4() == 0))
   {
     if (arg1 == 0)
     {
@@ -362,7 +362,7 @@ typedef struct Ctx8A20261C {
     /* 0x0D4 */ s8 unk0D4[0x38];
     /* 0x10C */ s8 unk10C[0x4];
 } Ctx8A20261C;
-s32 func_8002AAC4(s8*);
+s32 Particle_Field7C_SetXZFromField74AngleY_0B278(void *arg0);
 void SavePrompt_Draw(s8*);
 void MonSummary_DrawListWindow(s8*, s32);
 #define CTX ((Ctx8A20261C*)arg0)
@@ -371,10 +371,10 @@ void MonSummary_DrawListWindow(s8*, s32);
  * @unverified Name and comment guessed from the code.
  */
 void MonSummary_DrawScreen(void* arg0) {
-    func_800069CC();
+    BgStage_DrawFrame();
     switch (CTX->state) {
         case 1:
-            if (func_8002AAC4(CTX->list) != 0) {
+            if (Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->list) != 0) {
                 MonSummary_DrawBackground();
             }
             MonSummary_DrawListWindow(CTX->list, 0);
@@ -382,34 +382,34 @@ void MonSummary_DrawScreen(void* arg0) {
         case 2:
             if ((CTX->mode == 4) || (CTX->mode == 7)) {
                 MonSummary_DrawBackground();
-                func_8002AAC4(CTX->list);
-                func_8002AAC4(CTX->unk070);
+                Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->list);
+                Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->unk070);
                 MonSummary_DrawListWindow(CTX->list, 1);
-            } else if (func_8002AAC4(CTX->unk070) != 0) {
+            } else if (Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->unk070) != 0) {
                 CTX->unk034 = (CTX->unk038 <= 0) ? CTX->unk034 : 4;
-                func_8002AAC4(CTX->list);
+                Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->list);
                 MonSummary_DrawListWindow(CTX->list, 1);
                 CTX->unk034 = (CTX->unk038 <= 0) ? CTX->unk034 : 4;
             } else {
-                func_8002AAC4(CTX->list);
+                Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->list);
                 MonSummary_DrawListWindow(CTX->list, 1);
             }
             MonSummary_DrawMenu(CTX->unk070);
             break;
         case 3:
-            if (func_8002AAC4(CTX->list) != 0) {
+            if (Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->list) != 0) {
                 MonSummary_DrawBackground();
             }
             MonSummary_DrawListWindow(CTX->list, 2);
             break;
         case 4:
-            if (func_8002AAC4(CTX->unk0D4) != 0) {
+            if (Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->unk0D4) != 0) {
                 MonSummary_DrawBackground();
             }
             MonSummary_DrawPage(CTX->unk0D4, 0);
             break;
         case 5:
-            if (func_8002AAC4(CTX->unk0D4) != 0) {
+            if (Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->unk0D4) != 0) {
                 MonSummary_DrawBackground();
             }
             MonSummary_DrawPage(CTX->unk0D4, 1);
@@ -417,16 +417,16 @@ void MonSummary_DrawScreen(void* arg0) {
         case 6:
             if (CTX->mode == 7) {
                 MonSummary_DrawBackground();
-                func_8002AAC4(CTX->list);
-                func_8002AAC4(CTX->unk10C);
+                Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->list);
+                Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->unk10C);
                 MonSummary_DrawListWindow(CTX->list, 0);
-            } else if (func_8002AAC4(CTX->unk10C) != 0) {
+            } else if (Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->unk10C) != 0) {
                 CTX->unk034 = (CTX->unk038 <= 0) ? CTX->unk034 : 4;
-                func_8002AAC4(CTX->list);
+                Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->list);
                 MonSummary_DrawListWindow(CTX->list, 0);
                 CTX->unk034 = (CTX->unk038 <= 0) ? CTX->unk034 : 4;
             } else {
-                func_8002AAC4(CTX->list);
+                Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->list);
                 MonSummary_DrawListWindow(CTX->list, 0);
             }
             SavePrompt_Draw(CTX->unk10C);
@@ -647,7 +647,7 @@ s32 func_8A202F50(u8 arg0) {
         n--;
         D_8A203428_2 = n;
     }
-    func_800069CC();
+    BgStage_DrawFrame();
     if (D_8A21DE08 == -1) {
         var_a1 = NULL;
     } else {
@@ -670,8 +670,8 @@ s32 func_8A202F50(u8 arg0) {
  * @unverified Name and comment guessed from the code.
  */
 void MonSummary_RunFrame(s32 arg0) {
-    func_8000B1FC();
-    func_8000B220();
+    Cont_StartReadInputs();
+    Cont_ReadInputs();
     func_8001B5F0();
     func_800158C0();
     MonSummary_DrawScreen(&D_8A21DA80);

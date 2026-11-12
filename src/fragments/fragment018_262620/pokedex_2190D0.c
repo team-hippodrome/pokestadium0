@@ -680,7 +680,7 @@ extern char D_8A12FE1C[];
 extern s16 D_8A130432;
 extern char D_8A1302E8[];
 extern s16 D_8A130446;
-void func_800069CC(void);
+void BgStage_DrawFrame(void);
 /**
  * Draws the habitat page: のすみか (habitat), せいそくちふめい (habitat unknown), level, rate, and the button hint to show or hide the GB map.
  * @unverified Name and comment guessed from the code.
@@ -703,7 +703,7 @@ s32 Pokedex_DrawHabitatPage(s32 arg0)
   s32 pad[1]; // FAKE: unused stack word
   Pokedex_UpdateAreaMapFrame();
   GeoRender_AdvanceFrameCounter();
-  func_800069CC();
+  BgStage_DrawFrame();
   Geo_RenderRootNode(D_8A1302CC);
   Font_BeginTranslucentTextRendering();
   Font_SetActive(1, 0);

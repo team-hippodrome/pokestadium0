@@ -324,7 +324,7 @@ s32 GbSave_WriteBoxBank(s32 arg0, s32 arg1) {
 }
 
 extern s8 D_800AD210;
-void func_80021678(s32 arg0, u32 arg1) {
+void GbSave_ReleasePortBuffers(s32 arg0, u32 arg1) {
     s8 *temp_v0;
     s8 *temp_v0_2;
 
@@ -457,7 +457,7 @@ s32 GbSave_OpenBoxData(s32 arg0) {
     return sp2C;
 }
 
-s32 func_80021A8C(s32 arg0) {
+s32 GbSave_LoadPort(s32 arg0) {
     UNUSED s32 pad; // FAKE: stack padding
     u8 sp2B;
     s32 temp_s1;
@@ -783,7 +783,7 @@ void GbSave_LoadBoxPokemon(BattleMon* arg0, s32 arg1, s32 arg2, s32 arg3) {
 }
 
 /*
- * func_800224E8
+ * GbSave_SaveBoxPokemon
  *
  * Stores battle Pokemon arg0 into slot arg3 of box arg2 of Game Boy port
  * arg1, if that box exists (GbSave_GetBoxEntry returns non-NULL): the
@@ -795,7 +795,7 @@ void GbSave_LoadBoxPokemon(BattleMon* arg0, s32 arg1, s32 arg2, s32 arg3) {
  *
  * Same structure as GbSave_SaveBoxPokemon in the Stadium 1 decomp.
  */
-void func_800224E8(BattleMon* arg0, s32 arg1, s32 arg2, s32 arg3) {
+void GbSave_SaveBoxPokemon(BattleMon* arg0, s32 arg1, s32 arg2, s32 arg3) {
     GbSaveBoxZero* sp2C = (GbSaveBoxZero*)GbSave_GetBoxEntry(arg1, arg2);
 
     if (sp2C != NULL) {
@@ -1078,7 +1078,7 @@ s32 GbSave_GetPresentPortMask(void) {
 }
 
 extern s8 D_800AD213;
-u8 func_80022B4C(s32 arg0) {
+u8 GbSave_GetSaveState(s32 arg0) {
     return *(&D_800AD213 + (arg0 * 0x48));
 }
 
@@ -1097,7 +1097,7 @@ s32 GbSave_GetPortAvailability(s32 arg0) {
 }
 
 extern s8 D_800AD212;
-u8 func_80022BAC(s32 arg0) {
+u8 GbSave_GetPortGame(s32 arg0) {
     return *(&D_800AD212 + (arg0 * 0x48));
 }
 
@@ -1135,7 +1135,7 @@ s32 GbSave_RefreshPlayerIdentity(s32 arg0) {
 }
 
 /*
- * func_80022C40
+ * GbSave_CopyPlayerIdentity
  *
  * Copies the 8-byte cached player identity of Game Boy port arg0 (the
  * halfword at port offset 0x38 followed by the 6-byte name at 0x3A, the
@@ -1144,7 +1144,7 @@ s32 GbSave_RefreshPlayerIdentity(s32 arg0) {
  * 0x10-byte record with the same 64-bit load/store; Zero's record is
  * only 8 bytes and its port stride is 0x48.
  */
-void func_80022C40(s32 arg0, void* arg1) {
+void GbSave_CopyPlayerIdentity(s32 arg0, void* arg1) {
     u64* ptr = (u64*)&sGbSavePorts[arg0].unk_38;
     u64* ptr2 = arg1;
 
@@ -1152,7 +1152,7 @@ void func_80022C40(s32 arg0, void* arg1) {
 }
 
 extern s8 D_800AD210;
-s32 func_80022C70(s32 arg0) {
+s32 GbSave_GetTrainerId(s32 arg0) {
     s8 *temp_v0;
 
     temp_v0 = (arg0 * 0x48) + &D_800AD210;

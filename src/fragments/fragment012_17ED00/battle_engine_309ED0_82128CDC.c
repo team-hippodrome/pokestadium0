@@ -12,7 +12,7 @@ f32 func_8000F23C(f32, f32, f32, f32);
 void func_8210C104(s16*, s16, s16);
 void ModelAnim_SetFrame(DisplayObject* display_object, s16 animation_timer);
 f32 func_82121750(ActivePokemon*, f32, f32);
-s16 func_82107CC4(ActivePokemon*);
+s16 BattleScene_GetParticipantFacingAngle(s8 *arg0);
 void func_82134FD0(ActivePokemon*);
 void func_82102010(ActivePokemon*);
 s32 func_82101FD4(ActivePokemon*);
@@ -384,7 +384,7 @@ void func_821299B0(CameraNode* arg0) {
                 BattleCamera_PlayShot((ActivePokemon*)D_8219A544, arg0, 3);
                 BattleCamera_CaptureModelOrbit((ActivePokemon*)D_8219A544, arg0);
                 BattleScene_ResetCameraSubstepCounter();
-                func_821366B0(7, (ActivePokemon*)D_8219A544);
+                BattleAnim_QueueEffectList(7, (ActivePokemon*)D_8219A544);
             }
             break;
         case 1:

@@ -64,7 +64,7 @@ void BattleAnim_SetupSurfHitSpark(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-M2C_UNK func_8213C938(s8 *);                      /* extern */
+void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
 s32 func_8213CB7C(s8 *);                          /* extern */
 M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
@@ -100,7 +100,7 @@ void BattleAnim_RunSurfHitSpark(s8 *arg0) {
         }
         break;
     case 4:
-        func_8213C938(arg0);
+        Particle_DisableAndDetach(arg0);
         break;
     }
     if (func_8213CB7C(arg0) != 0) {
@@ -191,8 +191,8 @@ void BattleAnim_ContinueBubbleBeamBubblesSlow(Particle* arg0) {
     }
 }
 
-s32 func_82137D74(M2C_UNK);                         /* extern */
-M2C_UNK func_8213C930(s8 *);                      /* extern */
+u32 ParticleMath_RandomRange(u32 arg0);                         /* extern */
+void Particle_MarkInactive(s8 *arg0);                      /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
 s32 func_8213CB7C(s8 *);                          /* extern */
 M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
@@ -219,7 +219,7 @@ void BattleAnim_RunBubbleBeamBubblesSlow(s8 *arg0) {
         if (func_821406B4(arg0) != 0) {
             func_8213D238(arg0);
             func_8213CB3C(arg0);
-            Particle_SetUnkA6(arg0, (s16) (func_82137D74(0xA) + 8));
+            Particle_SetUnkA6(arg0, (s16) (ParticleMath_RandomRange(0xA) + 8));
         }
         break;
     case 3:
@@ -229,7 +229,7 @@ void BattleAnim_RunBubbleBeamBubblesSlow(s8 *arg0) {
         }
         break;
     case 4:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
     if (func_8213CB7C(arg0) != 0) {
@@ -268,11 +268,11 @@ void BattleAnim_SetupBubbleBeamBubblesFast(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-s32 func_82137D74(M2C_UNK);                         /* extern */
-M2C_UNK func_8213C938(s8 *);                      /* extern */
+u32 ParticleMath_RandomRange(u32 arg0);                         /* extern */
+void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
 M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
-M2C_UNK func_8213E528(s8 *);                      /* extern */
+void Particle_AddVelocityFromRotationTemplate1(s32 arg0);                      /* extern */
 M2C_UNK func_821402B8(s8 *);                      /* extern */
 s32 func_82140690(s8 *);                          /* extern */
 s32 func_821406B4(s8 *);                          /* extern */
@@ -292,21 +292,21 @@ void BattleAnim_RunBubbleBeamBubblesFast(s8 *arg0) {
         return;
     case 2:
         if (func_821406B4(arg0) != 0) {
-            Particle_SetUnkA6(arg0, (s16) (func_82137D74(0x14) + 0xF));
+            Particle_SetUnkA6(arg0, (s16) (ParticleMath_RandomRange(0x14) + 0xF));
             func_8213CB3C(arg0);
             return;
         }
         return;
     case 3:
         func_821402B8(arg0);
-        func_8213E528(arg0);
+        Particle_AddVelocityFromRotationTemplate1(arg0);
         if (func_82140690(arg0) != 0) {
             Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 3, 1, 1, 0);
             return;
         }
         break;
     case 4:
-        func_8213C938(arg0);
+        Particle_DisableAndDetach(arg0);
         break;
     }
 }
@@ -381,7 +381,7 @@ void BattleAnim_MotionUnusedRotatingSparkVariant(Particle* arg0) {
     }
 }
 
-M2C_UNK func_8213C930(s8 *);                      /* extern */
+void Particle_MarkInactive(s8 *arg0);                      /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
 s32 func_8213CB7C(s8 *);                          /* extern */
 M2C_UNK func_8213D238(s8 *);                      /* extern */
@@ -409,7 +409,7 @@ void func_8214A220(s8 *arg0) {
         func_821406B4(arg0);
         break;
     case 4:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
     if (func_8213CB7C(arg0) != 0) {
@@ -532,10 +532,10 @@ void BattleAnim_SetupHydroPumpBurstChild(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-M2C_UNK func_8213C930(s8 *);                      /* extern */
+void Particle_MarkInactive(s8 *arg0);                      /* extern */
 M2C_UNK func_8213CA80(s8 *, M2C_UNK);             /* extern */
 M2C_UNK Particle_AddPosOffsetYScaled(s8 *, M2C_UNK);             /* extern */
-M2C_UNK func_8213E528(s8 *);                      /* extern */
+void Particle_AddVelocityFromRotationTemplate1(s32 arg0);                      /* extern */
 M2C_UNK Particle_ApproachStepMagnitude(s8 *, f32, f32);    /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
@@ -553,12 +553,12 @@ void func_8214A6B4(s8 *arg0) {
         func_82140228(arg0, 0x3E99999A, 0x3D4CCCCD);
         Particle_ApproachPrimAlpha(arg0, 0x20, 0x10);
         Particle_ApproachStepMagnitude(arg0, 0.5f, 0.05f);
-        func_8213E528(arg0);
+        Particle_AddVelocityFromRotationTemplate1(arg0);
         Particle_AddPosOffsetYScaled(arg0, 0xBF800000);
         func_8213CA80(arg0, 0x10);
         return;
     case 3:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         return;
     }
 }
@@ -580,7 +580,7 @@ void BattleAnim_SetupHydroPumpMetadataBurstChild(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-M2C_UNK func_8213C938(s8 *);                      /* extern */
+void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 s32 Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);        /* extern */
@@ -600,7 +600,7 @@ void func_8214A7F4(s8 *arg0) {
         }
         break;
     case 3:
-        func_8213C938(arg0);
+        Particle_DisableAndDetach(arg0);
         break;
     }
     func_82140228(arg0, 0x3EB33333, 0x3D4CCCCD);
@@ -656,10 +656,10 @@ void BattleAnim_SetupWaterGunProjectileChild(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-M2C_UNK func_8213C930(s8 *);                      /* extern */
+void Particle_MarkInactive(s8 *arg0);                      /* extern */
 M2C_UNK func_8213CA80(s8 *, M2C_UNK);             /* extern */
 M2C_UNK Particle_AddPosOffsetYScaled(s8 *, M2C_UNK);             /* extern */
-M2C_UNK func_8213E528(s8 *);                      /* extern */
+void Particle_AddVelocityFromRotationTemplate1(s32 arg0);                      /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_8214A9DC(s8 *);                      /* extern */
@@ -675,12 +675,12 @@ void func_8214AA60(s8 *arg0) {
     case 2:
         func_82140228(arg0, 0x3DCCCCCD, 0x3CA3D70A);
         Particle_ApproachPrimAlpha(arg0, 0x20, 0xC);
-        func_8213E528(arg0);
+        Particle_AddVelocityFromRotationTemplate1(arg0);
         Particle_AddPosOffsetYScaled(arg0, 0xBF000000);
         func_8213CA80(arg0, 0x10);
         return;
     case 3:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         return;
     }
 }
@@ -708,7 +708,7 @@ void BattleAnim_SetupWaterGunProjectileMetadata(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-M2C_UNK func_8213C938(s8 *);                      /* extern */
+void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 s32 Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);        /* extern */
@@ -728,7 +728,7 @@ void func_8214ABAC(s8 *arg0) {
         }
         break;
     case 3:
-        func_8213C938(arg0);
+        Particle_DisableAndDetach(arg0);
         break;
     }
     func_82140228(arg0, 0x3DCCCCCD, 0x3CA3D70A);
@@ -803,7 +803,7 @@ void BattleAnim_ContinueIceBeamColdBreath(Particle* arg0) {
     }
 }
 
-M2C_UNK func_8213C930(s8 *);                      /* extern */
+void Particle_MarkInactive(s8 *arg0);                      /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
 s32 func_8213CB7C(s8 *);                          /* extern */
 M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
@@ -832,7 +832,7 @@ void func_8214AF58(s8 *arg0) {
         Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 2, 0);
         break;
     case 4:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
     if (func_8213CB7C(arg0) != 0) {
@@ -928,7 +928,7 @@ void BattleAnim_SetupPulsingBeamEmanator(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-M2C_UNK func_8213C938(s8 *);                      /* extern */
+void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
 M2C_UNK func_821401F8(s8 *, M2C_UNK);             /* extern */
 M2C_UNK func_82140210(s8 *, M2C_UNK);             /* extern */
 s32 func_821402E4(s8 *);                          /* extern */
@@ -962,7 +962,7 @@ void BattleAnim_RunPulsingBeamEmanator(s8 *arg0) {
         break;
     }
     if (func_82140690(arg0) != 0) {
-        func_8213C938(arg0);
+        Particle_DisableAndDetach(arg0);
     }
 }
 
@@ -1120,10 +1120,10 @@ void BattleAnim_SetupStrongOutwardMovingLargeHitSpark(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-M2C_UNK func_8213C930(s8 *);                      /* extern */
-s32 func_8213C9B0(s8 *);                          /* extern */
+void Particle_MarkInactive(s8 *arg0);                      /* extern */
+s32 Particle_IsRunning(s8 *arg0);                          /* extern */
 M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
-M2C_UNK func_8213E528(s8 *);                      /* extern */
+void Particle_AddVelocityFromRotationTemplate1(s32 arg0);                      /* extern */
 M2C_UNK Particle_ApproachStepMagnitude(s8 *, f32, f32);    /* extern */
 M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_8214B84C(s8 *);                      /* extern */
@@ -1145,12 +1145,12 @@ void BattleAnim_RunStrongOutwardMovingLargeHitSpark(s8 *arg0) {
         Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 2, 0);
         break;
     case 3:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
-    if (func_8213C9B0(arg0) != 0) {
+    if (Particle_IsRunning(arg0) != 0) {
         Particle_ApproachStepMagnitude(arg0, 3.4f, 1.0f);
-        func_8213E528(arg0);
+        Particle_AddVelocityFromRotationTemplate1(arg0);
     }
 }
 
@@ -1167,10 +1167,10 @@ void BattleAnim_SetupBlizzardHitUpwardColdAir(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-M2C_UNK func_8213C930(s8 *);                      /* extern */
-s32 func_8213C9B0(s8 *);                          /* extern */
+void Particle_MarkInactive(s8 *arg0);                      /* extern */
+s32 Particle_IsRunning(s8 *arg0);                          /* extern */
 M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
-M2C_UNK func_8213E528(s8 *);                      /* extern */
+void Particle_AddVelocityFromRotationTemplate1(s32 arg0);                      /* extern */
 M2C_UNK Particle_ApproachStepMagnitude(s8 *, f32, f32);    /* extern */
 M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_8214B9A8(s8 *);                      /* extern */
@@ -1192,12 +1192,12 @@ void BattleAnim_RunBlizzardHitUpwardColdAir(s8 *arg0) {
         Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 2, 0);
         break;
     case 3:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
-    if (func_8213C9B0(arg0) != 0) {
+    if (Particle_IsRunning(arg0) != 0) {
         Particle_ApproachStepMagnitude(arg0, 2.5f, 0.75f);
-        func_8213E528(arg0);
+        Particle_AddVelocityFromRotationTemplate1(arg0);
     }
 }
 
@@ -1214,10 +1214,10 @@ void BattleAnim_SetupWaterGunHitEffect(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-M2C_UNK func_8213C930(s8 *);                      /* extern */
-s32 func_8213C9B0(s8 *);                          /* extern */
+void Particle_MarkInactive(s8 *arg0);                      /* extern */
+s32 Particle_IsRunning(s8 *arg0);                          /* extern */
 M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
-M2C_UNK func_8213E528(s8 *);                      /* extern */
+void Particle_AddVelocityFromRotationTemplate1(s32 arg0);                      /* extern */
 M2C_UNK Particle_ApproachStepMagnitude(s8 *, f32, f32);    /* extern */
 M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_8214BAFC(s8 *);                      /* extern */
@@ -1238,12 +1238,12 @@ void BattleAnim_RunWaterGunHitEffect(s8 *arg0) {
         Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 2, 0);
         break;
     case 3:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
-    if (func_8213C9B0(arg0) != 0) {
+    if (Particle_IsRunning(arg0) != 0) {
         Particle_ApproachStepMagnitude(arg0, 1.5f, 0.4f);
-        func_8213E528(arg0);
+        Particle_AddVelocityFromRotationTemplate1(arg0);
     }
 }
 
@@ -1277,10 +1277,10 @@ void BattleAnim_SetupWeakBeamHitEffect(Particle* arg0) {
 }
 
 s16 func_8213C484();                                /* extern */
-M2C_UNK func_8213C930(s8 *);                      /* extern */
-s32 func_8213C9B0(s8 *);                          /* extern */
+void Particle_MarkInactive(s8 *arg0);                      /* extern */
+s32 Particle_IsRunning(s8 *arg0);                          /* extern */
 M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
-M2C_UNK func_8213E528(s8 *);                      /* extern */
+void Particle_AddVelocityFromRotationTemplate1(s32 arg0);                      /* extern */
 M2C_UNK Particle_ApproachStepMagnitude(s8 *, f32, f32);    /* extern */
 M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_821434FC(s8 *, s16);                 /* extern */
@@ -1309,25 +1309,25 @@ void BattleAnim_RunWeakBeamHitEffect(s8 *arg0) {
         Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 2, 0);
         break;
     case 3:                                         /* switch 1 */
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
-    if (func_8213C9B0(arg0) != 0) {
+    if (Particle_IsRunning(arg0) != 0) {
         Particle_ApproachStepMagnitude(arg0, 1.5f, 0.5f);
-        func_8213E528(arg0);
+        Particle_AddVelocityFromRotationTemplate1(arg0);
         switch (sp2E) {                             /* switch 2; irregular */
         case 0:                                     /* switch 2 */
-            func_821434FC(arg0, func_82137D74(6));
+            func_821434FC(arg0, ParticleMath_RandomRange(6));
             return;
         case 1:                                     /* switch 2 */
             if (D_8219A790 == 0) {
-                func_82143530(arg0, func_82137D74(6));
-                func_82143564(arg0, func_82137D74(6));
+                func_82143530(arg0, ParticleMath_RandomRange(6));
+                func_82143564(arg0, ParticleMath_RandomRange(6));
                 return;
             }
             break;
         case 2:                                     /* switch 2 */
-            func_821435E0(arg0, func_82137D74(6));
+            func_821435E0(arg0, ParticleMath_RandomRange(6));
             break;
         }
     }
@@ -1373,10 +1373,10 @@ void BattleAnim_SetupTriAttackHitSpark(Particle* arg0) {
 }
 
 M2C_UNK Particle_GetUnkCE();                            /* extern */
-M2C_UNK func_8213C930(s8 *);                      /* extern */
+void Particle_MarkInactive(s8 *arg0);                      /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
 M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
-M2C_UNK func_8213E528(s8 *);                      /* extern */
+void Particle_AddVelocityFromRotationTemplate1(s32 arg0);                      /* extern */
 M2C_UNK Particle_ApproachStepMagnitude(s8 *, f32, f32);    /* extern */
 M2C_UNK func_821402B8(s8 *);                      /* extern */
 M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
@@ -1407,10 +1407,10 @@ void BattleAnim_RunTriAttackHitSpark(s8 *arg0) {
         Particle_ApproachPrimAlpha(arg0, 0x20, 0x16);
         Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 2, 0);
         Particle_ApproachStepMagnitude(arg0, 1.5f, 0.1f);
-        func_8213E528(arg0);
+        Particle_AddVelocityFromRotationTemplate1(arg0);
         return;
     case 4:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
 }
@@ -1434,10 +1434,10 @@ void BattleAnim_SetupStrongOutwardMovingSmallHitSpark(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-M2C_UNK func_8213C938(s8 *);                      /* extern */
+void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
 M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
-M2C_UNK func_8213E528(s8 *);                      /* extern */
+void Particle_AddVelocityFromRotationTemplate1(s32 arg0);                      /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK Particle_SetUnkA6(s8 *, M2C_UNK);             /* extern */
@@ -1462,14 +1462,14 @@ void func_8214C208(s8 *arg0) {
     case 3:
         Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 1, 0);
         func_82140228(arg0, 0x3F000000, 0x3DCCCCCD);
-        func_8213E528(arg0);
+        Particle_AddVelocityFromRotationTemplate1(arg0);
         if (func_82140690(arg0) != 0) {
             Particle_ApproachPrimAlpha(arg0, 0, 0x20);
             return;
         }
         break;
     case 4:
-        func_8213C938(arg0);
+        Particle_DisableAndDetach(arg0);
         break;
     }
 }
@@ -1489,10 +1489,10 @@ void BattleAnim_SetupUnusedIndexedFadeVariantA(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-M2C_UNK func_8213C930(s8 *);                      /* extern */
+void Particle_MarkInactive(s8 *arg0);                      /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
 M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
-M2C_UNK func_8213E528(s8 *);                      /* extern */
+void Particle_AddVelocityFromRotationTemplate1(s32 arg0);                      /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK Particle_SetUnkA6(s8 *, M2C_UNK);             /* extern */
@@ -1517,14 +1517,14 @@ void func_8214C3C8(s8 *arg0) {
     case 3:
         Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 1, 0);
         func_82140228(arg0, 0x3ECCCCCD, 0x3DCCCCCD);
-        func_8213E528(arg0);
+        Particle_AddVelocityFromRotationTemplate1(arg0);
         if (func_82140690(arg0) != 0) {
             Particle_ApproachPrimAlpha(arg0, 0, 0x20);
             return;
         }
         break;
     case 4:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
 }
@@ -1544,10 +1544,10 @@ void BattleAnim_SetupUnusedIndexedFadeVariantB(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-M2C_UNK func_8213C930(s8 *);                      /* extern */
+void Particle_MarkInactive(s8 *arg0);                      /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
 M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
-M2C_UNK func_8213E528(s8 *);                      /* extern */
+void Particle_AddVelocityFromRotationTemplate1(s32 arg0);                      /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_8214C4C4(s8 *);                      /* extern */
 
@@ -1569,10 +1569,10 @@ void func_8214C598(s8 *arg0) {
     case 3:
         func_82140228(arg0, 0x3F000000, 0x3CCCCCCD);
         Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 2, 7, 1, 1, 0);
-        func_8213E528(arg0);
+        Particle_AddVelocityFromRotationTemplate1(arg0);
         return;
     case 4:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
 }
@@ -1654,7 +1654,7 @@ void BattleAnim_SetupHydroPumpColorShiftFade(Particle* arg0) {
 }
 
 M2C_UNK func_82137AB4(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_8213C930(s8 *);                      /* extern */
+void Particle_MarkInactive(s8 *arg0);                      /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, s32);        /* extern */
 M2C_UNK Particle_ApproachPrimRed(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK Particle_ApproachPrimGreen(s8 *, M2C_UNK, M2C_UNK);    /* extern */
@@ -1695,7 +1695,7 @@ void BattleAnim_RunHydroPumpColorShiftFade(s8 *arg0) {
         func_82140548(arg0, 0, 0xC);
         return;
     case 4:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         return;
     }
 }
@@ -1731,7 +1731,7 @@ void BattleAnim_SetupWaterGunEmitterColoration(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-M2C_UNK func_8213C930(s8 *);                      /* extern */
+void Particle_MarkInactive(s8 *arg0);                      /* extern */
 M2C_UNK func_821402B8(s8 *);                      /* extern */
 M2C_UNK Particle_ApproachPrimRed(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK Particle_ApproachPrimGreen(s8 *, M2C_UNK, M2C_UNK);    /* extern */
@@ -1769,7 +1769,7 @@ void BattleAnim_RunWaterGunEmitterColoration(s8 *arg0) {
         func_82140548(arg0, 0, 0xC);
         break;
     case 4:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
     func_821402B8(arg0);
@@ -1792,10 +1792,10 @@ void BattleAnim_SetupHydroPumpWaterGunProjectileHit(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-M2C_UNK func_8213C930(s8 *);                      /* extern */
+void Particle_MarkInactive(s8 *arg0);                      /* extern */
 M2C_UNK func_8213CA80(s8 *, M2C_UNK);             /* extern */
 M2C_UNK Particle_AddPosOffsetYScaled(s8 *, M2C_UNK);             /* extern */
-M2C_UNK func_8213E528(s8 *);                      /* extern */
+void Particle_AddVelocityFromRotationTemplate1(s32 arg0);                      /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_8214CC90(s8 *);                      /* extern */
@@ -1815,16 +1815,16 @@ void BattleAnim_RunHydroPumpWaterGunProjectileHit(s8 *arg0) {
     case 2:
         func_82140228(arg0, 0x3E99999A, 0x3CA3D70A);
         Particle_ApproachPrimAlpha(arg0, 0x20, 0xC);
-        func_8213E528(arg0);
+        Particle_AddVelocityFromRotationTemplate1(arg0);
         Particle_AddPosOffsetYScaled(arg0, 0xBF800000);
         func_8213CA80(arg0, 0x10);
         break;
     case 3:
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
         break;
     }
     if (M2C_FIELD(arg0, f32 *, 0x2C) < 0.0f) {
-        func_8213C930(arg0);
+        Particle_MarkInactive(arg0);
     }
 }
 

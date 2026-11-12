@@ -37,7 +37,7 @@ s16 Particle_FieldAA_GetS16_0C068(Particle* arg0);
 s16 Particle_FieldA6_GetS16_0BCBC(Particle* arg0);
 void FirstClearBonus_HideDialogBox(void);
 
-void Particle_SetPrimAlpha(Particle* arg0, u8 arg1);
+void Particle_SetPrimAlpha(s8 *arg0, char arg1);
 void Particle_FieldA6_SetS16_0BCA8(Particle* arg0, s16 arg1);
 void Particle_FieldA8_SetS16_0BE14(Particle* arg0, s16 arg1);
 void Particle_FieldAC_SetS16_0BED8(Particle* arg0, s16 arg1);

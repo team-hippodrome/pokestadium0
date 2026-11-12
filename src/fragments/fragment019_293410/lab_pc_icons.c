@@ -109,7 +109,7 @@ extern char* D_8A203358;
 extern char* D_8A20335C;
 void Ui_FillRectPrimEnvColor(s32 x, s32 y, s32 w, s32 h, Color_RGBA8 prim, Color_RGBA8 env);
 void func_800189C0(s8*, s32);
-void func_800069CC(void);
+void BgStage_DrawFrame(void);
 /**
  * Draws the Pokemon list window: divider, footer bar and the rows.
  * @unverified Name and comment guessed from the code.
@@ -120,7 +120,7 @@ void MonSummary_DrawListWindow(s8* arg0, s32 arg1) {
     s32 x;
     s32 y;
 
-    if ((M2C_FIELD(arg0, s32*, 0x28) != 2) && (func_8002AB84() == 0)) {
+    if ((M2C_FIELD(arg0, s32*, 0x28) != 2) && (Particle_Field50_SetXZFromField7C_09BB4() == 0)) {
         Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0x137, M2C_FIELD(arg0, s32*, 8), &D_8007356C);
         Ui_FillRectPrimEnvColor(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0x13E, M2C_FIELD(arg0, s32*, 8) - 0xC, 0x24, D_8A203350, D_8A203354);
         func_8001AB6C();
@@ -152,7 +152,7 @@ void MonSummary_DrawListWindow(s8* arg0, s32 arg1) {
 
     if ((M2C_FIELD(arg0, s32*, 0x28) == 1) || (M2C_FIELD(arg0, s32*, 0x28) == 2)) {
         func_800189C0(D_8A21DA50, 0);
-        func_800069CC();
+        BgStage_DrawFrame();
         x = M2C_FIELD(arg0, s32*, 0) + 6;
         y = M2C_FIELD(arg0, s32*, 4) + 6;
         for (i = 0; i < M2C_FIELD(M2C_FIELD(arg0, s8**, 0x2C), s32*, 8); i++) {
@@ -185,7 +185,7 @@ void MonSummary_DrawMenuRow(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4) 
 }
 
 extern u8 D_8A203364[];
-s32 func_8002D3D0(u8*);
+s32 BattleMon_CountMoves(u8* arg0);
 void func_80027804(s8*, void*, s32, s32);
 /**
  * Sets up the small menu window (180x132).
@@ -209,7 +209,7 @@ void MonSummary_InitMenuWindow(s8 *arg0, s32 arg1, s32 arg2, u8 *arg3)
   {
   }
   *((s32 *) (((s8 *) arg0) + 0x4C)) |= 0x10000;
-  if (((arg3[0] > 0) && (arg3[0] < 0x98)) && (func_8002D3D0(arg3) != 0))
+  if (((arg3[0] > 0) && (arg3[0] < 0x98)) && (BattleMon_CountMoves(arg3) != 0))
   {
     return;
   }
@@ -221,7 +221,7 @@ void MonSummary_InitMenuWindow(s8 *arg0, s32 arg1, s32 arg2, u8 *arg3)
  * @unverified Name and comment guessed from the code.
  */
 void MonSummary_DrawMenu(s8 *arg0) {
-    if (func_8002AB84() == 0) {
+    if (Particle_Field50_SetXZFromField7C_09BB4() == 0) {
         Menu_DrawItems(arg0 + 0x2C, M2C_FIELD(arg0, s32 *, 0) + 6, M2C_FIELD(arg0, s32 *, 4) + 0xC, 0xFEF, 0);
     }
 }
@@ -443,7 +443,7 @@ void func_8A2010C8(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 max;
 
     Ui_FillRectPrimEnvColor(arg0, arg1, 0x21C, 0x86, D_8A203378, D_8A20337C);
-    count = func_8002D3D0((u8*)arg2);
+    count = BattleMon_CountMoves((u8*)arg2);
     for (i = 0; i < count; i++) {
         hl = 0;
         if (arg3 == i) {

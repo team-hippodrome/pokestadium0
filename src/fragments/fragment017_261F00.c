@@ -21,7 +21,7 @@ void LabMenu_DrawItem(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     }
 }
 
-M2C_UNK func_800069CC();                            /* extern */
+void BgStage_DrawFrame(void);                            /* extern */
 M2C_UNK func_8001A384(M2C_UNK, M2C_UNK);            /* extern */
 M2C_UNK func_8001AAE4(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK); /* extern */
 M2C_UNK func_8001AB6C();                            /* extern */
@@ -44,7 +44,7 @@ extern M2C_UNK D_8A000640;
  * @unverified Name and comment guessed from the code.
  */
 s32 LabMenu_Draw(s32 arg0) {
-    func_800069CC();
+    BgStage_DrawFrame();
     func_8001CC90(0, 0x1E0, 0x32, 0x64, 0xA2);
     func_8001E6C0(0xA0, (D_8A0005F0 * 0x1E) + 0xC8);
     func_8001AB6C();
@@ -144,8 +144,8 @@ void LabMenu_LoadSelectedFragment(void) {
 }
 
 extern s32 D_800603C0;
-void func_8000B1FC(void);
-void func_8000B220(void);
+void Cont_StartReadInputs(void);
+void Cont_ReadInputs(void);
 void func_8001B5F0(void);
 void func_80005B98(s32);
 void func_8003F6AC(s32);
@@ -157,8 +157,8 @@ void LabMenu_UpdateCursor(void);
 s32 LabMenu_RunFrame(s32 arg0) {
     s32 ret = 0;
 
-    func_8000B1FC();
-    func_8000B220();
+    Cont_StartReadInputs();
+    Cont_ReadInputs();
     func_8001B5F0();
     if (arg0 == 1) {
         func_80005B98(8);
@@ -187,7 +187,7 @@ M2C_UNK func_8000675C();                            /* extern */
 M2C_UNK func_80006828(M2C_UNK, M2C_UNK *);          /* extern */
 M2C_UNK func_8000A7B0(M2C_UNK);                     /* extern */
 M2C_UNK func_8000B2F4(s32);                         /* extern */
-M2C_UNK func_8001A194(M2C_UNK, M2C_UNK);            /* extern */
+s32 Font_Init(s32 load_size, s32 side);            /* extern */
 M2C_UNK func_8001A360();                            /* extern */
 extern M2C_UNK D_002E0BE0;
 extern M2C_UNK D_002E2B90;
@@ -204,7 +204,7 @@ s32 LabMenu_RunFrame(s32);
  */
 s32 LabMenu_Init(s32 arg0, M2C_UNK arg1) {
     func_8000256C(0x424D4E55);
-    func_8001A194(0x30, 0);
+    Font_Init(0x30, 0);
     func_80003EB8((u32) ((s32) &D_01000000 & 0x0F000000) >> 0x18, &D_002E0BE0, &D_002E2B90, 0);
     func_80003EB8((u32) ((s32) &D_02000000 & 0x0F000000) >> 0x18, &D_002F0A50, &D_002F3BD0, 0);
     func_8000B2F4(D_800603C0);

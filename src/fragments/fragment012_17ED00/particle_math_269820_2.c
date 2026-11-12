@@ -1085,7 +1085,7 @@ void Particle_AddVelocityFromRotationTemplate2(Particle* arg0) {
 M2C_UNK Particle_ApplyMotionStep(s32);                         /* extern */
 M2C_UNK func_8213FB50();                            /* extern */
 
-void func_8213E528(s32 arg0) {
+void Particle_AddVelocityFromRotationTemplate1(s32 arg0) {
     func_8213FB50();
     Particle_ApplyMotionStep(arg0);
 }
@@ -2268,7 +2268,7 @@ void Particle_ApproachEnvGreen(s32 arg0, s32 arg1, s32 arg2) {
     func_82137804(arg0 + 0xBE, arg1 & 0xFF, arg2 & 0xFF);
 }
 
-void func_8214050C(s8 *arg0, char arg1)
+void Particle_SetPrimAlpha(s8 *arg0, char arg1)
 {
   s8 *new_var; // FAKE: permuter temp
   s8 *new_var2; // FAKE: permuter temp

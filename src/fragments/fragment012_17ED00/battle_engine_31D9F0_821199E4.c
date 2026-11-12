@@ -621,7 +621,7 @@ void BattleHud_DrawCompactMonStatusBox(ActivePokemon* arg0, s16 arg1, s16 arg2, 
     BattleHud_DrawTranslucentShadowRect(arg1 - 2, arg2 - 2, 0x4C, 0x2D, 0);
 }
 
-M2C_UNK func_8001AB2C(M2C_UNK);
+void Font_SetLineHeight(s32 arg0);
 void Battle_DrawGradientRectWrapper(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGB8* arg4, Color_RGB8* arg5);
 void BattleHud_DrawTranslucentShadowRect(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 
@@ -632,7 +632,7 @@ void func_8211C1B8(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
     Battle_DrawGradientRectWrapper(arg1 + 1, arg2 + 1, 0xEE, 0x24, (Color_RGB8*)(&D_8218B008 + arg0 * 3), (Color_RGB8*)(&D_8218B014 + arg0 * 3));
     func_8001AB6C();
     func_8001A384(2, 0);
-    func_8001AB2C(0x10);
+    Font_SetLineHeight(0x10);
     func_8001A944(arg1 + 0xA, arg2 + 5, arg3);
     func_8001ABBC();
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
@@ -658,7 +658,7 @@ void func_8211C43C(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
     Battle_DrawGradientRectWrapper(arg1 + 1, arg2 + 1, 0xC8, 0x24, (Color_RGB8*)(&D_8218B008 + arg0 * 3), (Color_RGB8*)(&D_8218B014 + arg0 * 3));
     func_8001AB6C();
     func_8001A384(2, 0);
-    func_8001AB2C(0x10);
+    Font_SetLineHeight(0x10);
     func_8001A944(arg1 + 0xA, arg2 + 5, arg3);
     func_8001ABBC();
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);

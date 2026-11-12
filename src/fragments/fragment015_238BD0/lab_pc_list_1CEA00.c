@@ -317,7 +317,7 @@ s32 func_8002AE6C();                                /* extern */
 M2C_UNK func_8001A384(M2C_UNK, M2C_UNK);            /* extern */
 M2C_UNK func_8001A944(s32, s32, ...);
 M2C_UNK func_8001AA9C(u8, u8, u8, u8);              /* extern */
-M2C_UNK func_8001AB2C(M2C_UNK);                     /* extern */
+void Font_SetLineHeight(s32 arg0);                     /* extern */
 M2C_UNK func_8001AB6C();                            /* extern */
 M2C_UNK func_8001ABBC();                            /* extern */
 void Ui_DrawTexturedDivider(s32, s32, s32, void*);
@@ -346,7 +346,7 @@ void LabItem_DrawConfirmWindow(s8* arg0) {
         }
         func_8001AA9C(M2C_FIELD(&D_800734A8, u8 *, 0), M2C_FIELD(&D_800734A8, u8 *, 1), M2C_FIELD(&D_800734A8, u8 *, 2), M2C_FIELD(&D_800734A8, u8 *, 3));
         func_8001A384(8, 0);
-        func_8001AB2C(0x1C);
+        Font_SetLineHeight(0x1C);
         func_8001A944(M2C_FIELD(arg0, s32*, 0) + 0xE, M2C_FIELD(arg0, s32*, 4) + 0xA, M2C_FIELD(arg0, s32*, 0x30));
         func_8001ABBC();
         Window_DrawLabeled(arg0 + 0x34, (M2C_FIELD(arg0, s32*, 0xB0) == 0) ? 2 : 0);
@@ -917,7 +917,7 @@ void LabItem_DrawCenteredText(s32 arg0, s32 arg1, char* arg2) {
 M2C_UNK func_8001A384(M2C_UNK, M2C_UNK);            /* extern */
 M2C_UNK func_8001A944(s32, s32, ...);
 M2C_UNK func_8001AA9C(u8, u8, u8, u8);              /* extern */
-M2C_UNK func_8001AB2C(M2C_UNK);                     /* extern */
+void Font_SetLineHeight(s32 arg0);                     /* extern */
 M2C_UNK func_8001AB6C();                            /* extern */
 M2C_UNK func_8001ABBC();                            /* extern */
 extern M2C_UNK D_800734A8;
@@ -930,7 +930,7 @@ void LabItem_DrawSmallText(s32 arg0, s32 arg1, s32 arg2) {
     func_8001AB6C();
     func_8001A384(8, 0);
     func_8001AA9C(M2C_FIELD(&D_800734A8, u8 *, 0), M2C_FIELD(&D_800734A8, u8 *, 1), M2C_FIELD(&D_800734A8, u8 *, 2), M2C_FIELD(&D_800734A8, u8 *, 3));
-    func_8001AB2C(0x1C);
+    Font_SetLineHeight(0x1C);
     func_8001A944(arg0 + 8, arg1 + 4, arg2);
     func_8001ABBC();
 }
@@ -1453,7 +1453,7 @@ void LabItem_DrawDeleteDataWindow(s8* arg0, s32 arg1) {
         if (!arg0) { // FAKE: empty test only changes register allocation; needed to match
         }
         func_8001AA9C(M2C_FIELD(&D_800734A8, u8 *, 0), M2C_FIELD(&D_800734A8, u8 *, 1), M2C_FIELD(&D_800734A8, u8 *, 2), M2C_FIELD(&D_800734A8, u8 *, 3));
-        func_8001AB2C(0x1C);
+        Font_SetLineHeight(0x1C);
         func_8001A944(M2C_FIELD(arg0, s32*, 0x2C) + 8, M2C_FIELD(arg0, s32*, 0x30) + 8, D_89018688);
         func_8001ABBC();
     }

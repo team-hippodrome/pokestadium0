@@ -29,8 +29,8 @@ s32 func_88400064(s32 arg0, unk_D_86002F34_alt18* arg1) {
 }
 
 s32 func_884000CC(void) {
-    func_8000B1FC();
-    func_8000B220();
+    Cont_StartReadInputs();
+    Cont_ReadInputs();
     func_8001B5F0();
     return 0;
 }
@@ -41,7 +41,7 @@ void func_88400100(void) {
 s32 func_88400108(s32 arg0) {
     func_884000CC();
     func_800158C0();
-    func_800069CC();
+    BgStage_DrawFrame();
     func_80005770(&D_800AA150, 0, 0, 0x140, 0xF0);
     func_8001560C(D_88403370);
     return 0;

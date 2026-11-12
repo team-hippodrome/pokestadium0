@@ -50,7 +50,7 @@ void ModelRenderer_AttachSecondaryDisplayObject(DisplayObject* arg0) {
 // passes object_type as a second argument (a1) in the ROM.
 void func_800325B0(u32 arg0, u32 arg1);
 
-void func_80019924(DisplayObject* display_object, s16 root_id, s16 object_type, ModelNodeView* child) {
+void Model_InitDisplayObject(DisplayObject* display_object, s16 root_id, s16 object_type, ModelNodeView* child) {
     DisplayObject* obj; // FAKE
 
     GraphNode_AppendChild(&display_object->node, child);

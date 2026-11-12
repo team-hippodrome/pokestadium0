@@ -178,7 +178,7 @@ void GeoRender_PushScale(Vec3f* arg0) {
 extern s32 D_800ABCF0;
 extern unk_D_800ABCC0 D_800ABCC0[2];
 /*
- * func_8001148C
+ * ModelAnim_BeginCurveContext
  *
  * Fills the global record D_800AC690 from the object `arg0` and the data
  * block arg0->unk_4 (`temp_s1`):
@@ -198,7 +198,7 @@ s32 func_80002C80(s32);
 s32 ModelAnim_AdvanceCurveFrame(TransformAnimRaw* arg0);
 extern u8 D_800AC690;
 
-void func_8001148C(void *arg0, s32 arg1) {
+void ModelAnim_BeginCurveContext(void *arg0, s32 arg1) {
     s16 *temp_s1;
 
     temp_s1 = M2C_FIELD(arg0, s16 **, 4);
@@ -1064,9 +1064,9 @@ extern s32 D_800AB450;
 extern s32 D_800AB454;
 extern s32 D_800AB458;
 extern s32 D_800AB45C;
-s32 func_8000255C(void);
+s32 main_pool_get_available(void);
 s32 func_80002B10(s32, s32);
-void func_80002420(s32);
+void main_pool_try_free(s32 arg0);
 void func_80013398(Root80013DC8*);
 s32 func_8001380C();
 /**
@@ -1086,12 +1086,12 @@ void Geo_NodeModelPartRoot(Root80013DC8* arg0) {
         D_800AB454 = 0;
         D_800AB458 = 0;
         D_800AB45C = 0;
-        D_800AB240 = func_80002B10(func_8000255C(), 0);
+        D_800AB240 = func_80002B10(main_pool_get_available(), 0);
         D_80060494 = (CameraNode*)arg0;
         func_8001380C(arg0);
         func_80013398(arg0);
         D_80060494 = NULL;
-        func_80002420(D_800AB240);
+        main_pool_try_free(D_800AB240);
     }
 }
 

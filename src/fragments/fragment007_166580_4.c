@@ -344,7 +344,7 @@ void func_820032E8(s8* arg0) {
 
 s32 func_8002AE6C(s8*);
 void func_800189C0(s32, s32);
-void func_800069CC(void);
+void BgStage_DrawFrame(void);
 void ScrollList_DrawItems(s8*, s32, s32, s32, s32);
 void FreeBattle_DrawRentalListWindow(s8*, s32);
 void FreeBattle_DrawDuplicateWarning(s8*);
@@ -366,12 +366,12 @@ void FreeBattle_DrawRentalScreen(s8* arg0) {
     switch (M2C_FIELD(arg0, s32*, 4)) {
         case 1:
             func_800189C0(D_8200AC50, 0);
-            func_800069CC();
+            BgStage_DrawFrame();
             ScrollList_DrawItems(arg0 + 0x40, M2C_FIELD(arg0, s32*, 0x14) + 6, M2C_FIELD(arg0, s32*, 0x18) + 0x16, 0xFFF, M2C_FIELD(arg0, s32*, 0x73C));
             break;
         case 2:
             func_800189C0(D_8200AC50, 0);
-            func_800069CC();
+            BgStage_DrawFrame();
             FreeBattle_DrawRentalListWindow(arg0, 1);
             func_82003234(arg0);
             FreeBattle_DrawDuplicateWarning(arg0 + 0x320);
@@ -379,28 +379,28 @@ void FreeBattle_DrawRentalScreen(s8* arg0) {
         case 6:
         case 8:
             func_800189C0(D_8200AC50, 0);
-            func_800069CC();
+            BgStage_DrawFrame();
             FreeBattle_DrawRentalListWindow(arg0, (M2C_FIELD(arg0, s32*, 4) == 6) ? 1 : 2);
             FreeBattle_DrawRentalTitleWindow(arg0, (M2C_FIELD(arg0, s32*, 4) == 6) ? 0 : 1);
             func_820032E8(arg0);
             break;
         case 10:
             func_800189C0(D_8200AC50, 0);
-            func_800069CC();
+            BgStage_DrawFrame();
             FreeBattle_DrawRentalListWindow(arg0, 0);
             func_82003234(arg0);
             FreeBattle_DrawEntryConfirm(arg0 + 0x4DC);
             break;
         case 4:
             func_800189C0(D_8200AC50, 0);
-            func_800069CC();
+            BgStage_DrawFrame();
             FreeBattle_DrawRentalListWindow(arg0, 0);
             func_82003234(arg0);
             FreeBattle_DrawShortageWarning(arg0 + 0x370);
             break;
         case 5:
             func_800189C0(D_8200AC50, 0);
-            func_800069CC();
+            BgStage_DrawFrame();
             FreeBattle_DrawRentalListWindow(arg0, 0);
             func_82003234(arg0);
             FreeBattle_DrawLevelSumWarning(arg0 + 0x428);
@@ -419,13 +419,13 @@ void FreeBattle_DrawRentalScreen(s8* arg0) {
             break;
         case 11:
             func_800189C0(D_8200AC50, 0);
-            func_800069CC();
+            BgStage_DrawFrame();
             FreeBattle_DrawRentalListWindow(arg0, 0);
             func_82003234(arg0);
             break;
         case 12:
             func_800189C0(D_8200AC50, 0);
-            func_800069CC();
+            BgStage_DrawFrame();
             ScrollList_DrawItems(arg0 + 0x40, M2C_FIELD(arg0, s32*, 0x14) + 6, M2C_FIELD(arg0, s32*, 0x18) + 0x16, 0xFFF, M2C_FIELD(arg0, s32*, 0x73C));
             TextBox_Draw(arg0 + 0x74C);
             break;

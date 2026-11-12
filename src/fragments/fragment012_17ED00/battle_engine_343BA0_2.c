@@ -257,7 +257,7 @@ void func_82133534(CameraNode *arg0)
 }
 
 M2C_UNK func_80019B28(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32); /* extern */
-M2C_UNK func_821088BC(s8 *);                      /* extern */
+void Battle_LoadOwnerModelForSwitchIn(ActivePokemon* active_pokemon);                      /* extern */
 M2C_UNK func_8213B31C(M2C_UNK);                     /* extern */
 extern s8 *D_8219A590;
 extern u8 D_8219A594;
@@ -270,7 +270,7 @@ void func_82133640(s32 arg0) {
         func_8213B31C(2);
         temp_v0 = M2C_FIELD(D_8219A590, u8 **, 0x85C);
         *temp_v0 &= 0xFF6F;
-        func_821088BC(D_8219A590);
+        Battle_LoadOwnerModelForSwitchIn(D_8219A590);
         func_82133028(arg0);
         func_80019B28(D_8219A590, 0, 0, 0, 0xFF);
         D_8219A594 = 0;

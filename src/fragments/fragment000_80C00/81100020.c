@@ -359,8 +359,8 @@ void func_81104D84(s32);
 void func_80004F34(void*, s32);
 void func_81103D30(void);
 void func_811177DC(s32);
-void func_8000B1FC(void);
-void func_8000B220(void);
+void Cont_StartReadInputs(void);
+void Cont_ReadInputs(void);
 s32 func_811064DC(void);
 void func_81104930(void);
 void func_81104AE4(void);
@@ -445,8 +445,8 @@ void func_81100C84(s8* arg0) {
             break;
 
         case 3:
-            func_8000B1FC();
-            func_8000B220();
+            Cont_StartReadInputs();
+            Cont_ReadInputs();
             if (--D_81154C50 != 0) {
                 if (func_811064DC() != 0) {
                     goto error;
@@ -464,8 +464,8 @@ void func_81100C84(s8* arg0) {
 
         case 4:
             fade[3] = 0xBF;
-            func_8000B1FC();
-            func_8000B220();
+            Cont_StartReadInputs();
+            Cont_ReadInputs();
             if (func_811064DC() != 0) {
                 goto error;
             }
@@ -581,8 +581,8 @@ void func_81100C84(s8* arg0) {
 
         case 7:
             fade[3] = 0xBF;
-            func_8000B1FC();
-            func_8000B220();
+            Cont_StartReadInputs();
+            Cont_ReadInputs();
             if (func_811064DC() != 0) {
                 goto error;
             }
@@ -641,8 +641,8 @@ void func_81100C84(s8* arg0) {
 
         case 9:
             fade[3] = 0xBF;
-            func_8000B1FC();
-            func_8000B220();
+            Cont_StartReadInputs();
+            Cont_ReadInputs();
             if (func_811064DC() != 0) {
                 goto error;
             }
@@ -712,8 +712,8 @@ void func_81100C84(s8* arg0) {
 
         case 11:
             fade[3] = 0xBF;
-            func_8000B1FC();
-            func_8000B220();
+            Cont_StartReadInputs();
+            Cont_ReadInputs();
             if (func_811064DC() != 0) {
                 goto error;
             }

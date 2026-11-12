@@ -135,7 +135,7 @@ void BattleAnim_GetTertiaryOwnerSpeciesBaseScale(void) {
 
 extern s32 D_8219A878;
 
-s32 func_8213C80C(void) {
+s32 BattleAnim_GetCameraContext(void) {
     return D_8219A878;
 }
 
@@ -180,13 +180,13 @@ void Particle_InitLifecycle(Particle* arg0) {
     Particle_SetFlags(arg0, 4);
 }
 
-void func_8213C930(s8 *arg0) {
+void Particle_MarkInactive(s8 *arg0) {
     M2C_FIELD(arg0, s16 *, 0xAE) = 0;
 }
 
 M2C_UNK func_8213D260();                            /* extern */
 
-void func_8213C938(s8 *arg0) {
+void Particle_DisableAndDetach(s8 *arg0) {
     M2C_FIELD(arg0, s16 *, 0xAE) = 0;
     M2C_FIELD(arg0, s32 *, 8) = 0;
     M2C_FIELD(arg0, s32 *, 0xC) = 0;
@@ -200,7 +200,7 @@ void BattleAnim_DestroyParticle(Particle* arg0) {
     Particle_Free(arg0);
 }
 
-s32 func_8213C994(s8 *arg0) {
+s32 Particle_IsInactive(s8 *arg0) {
     s32 var_v1;
 
     var_v1 = 0;
@@ -210,7 +210,7 @@ s32 func_8213C994(s8 *arg0) {
     return var_v1;
 }
 
-s32 func_8213C9B0(s8 *arg0) {
+s32 Particle_IsRunning(s8 *arg0) {
     s32 var_v1;
 
     var_v1 = 0;

@@ -579,7 +579,7 @@ void MainMenu_InitScreen(u8 *arg0, s32 arg1, s32 arg2, s32 *arg3) {
     }
 }
 
-M2C_UNK func_800069CC();                            /* extern */
+void BgStage_DrawFrame(void);                            /* extern */
 M2C_UNK Ui_DrawTintedScreenBackground(M2C_UNK, M2C_UNK, u8, u8, s32); /* extern */
 void MainMenu_DrawContinueTournamentPrompt(s8 *);
 M2C_UNK MainMenu_DrawItemList(s8 *, M2C_UNK);             /* extern */
@@ -593,7 +593,7 @@ extern M2C_UNK D_88002254;
 void MainMenu_DrawScreen(s8 *arg0) {
     s32 temp_v0;
 
-    func_800069CC();
+    BgStage_DrawFrame();
     Ui_DrawTintedScreenBackground(0x38, 0x1E0, M2C_FIELD(&D_88002254, u8 *, 0), M2C_FIELD(&D_88002254, u8 *, 1), (s32) M2C_FIELD(&D_88002254, u8 *, 2));
     temp_v0 = M2C_FIELD(arg0, s32 *, 0);
     switch (temp_v0) {                              /* irregular */
@@ -709,7 +709,7 @@ s32 MainMenu_UpdateScreen(s8* arg0) {
 
 s32 func_80002D98(M2C_UNK);
 M2C_UNK func_8000B2F4(s32);
-s32 func_80022B4C(s32);
+u8 GbSave_GetSaveState(s32 arg0);
 s32 func_80022F00(s32);
 s32 func_80022EDC(s32);
 s32 func_80025BD8();
@@ -725,7 +725,7 @@ extern s32 D_88002B20;
  * MainMenu_InitScreen. Steps:
  *  1. id = func_80025BD8(); D_88002B00 = id; if (D_88002B00 != -1) pass it with
  *     &D_88002B08 to func_80027FF8.
- *  2. Picks a mode from id: id == -1 -> 4; else func_80022B4C(id) != 0 -> 3;
+ *  2. Picks a mode from id: id == -1 -> 4; else GbSave_GetSaveState(id) != 0 -> 3;
  *     else func_80022F00(id) == 0 -> 2; else func_80022EDC(id) == 0 -> 1; else 0.
  *  3. D_88002B20 = func_80002D98(0x3B0), then
  *     MainMenu_InitScreen(D_88002B20, mode, D_80073400 == 0 ? 4 : D_80073400 - 1, &D_88002B20)
@@ -748,7 +748,7 @@ void MainMenu_LoadGbSaveSummary(void) {
     }
     if (sp24 == -1) {
         var_s0 = 4;
-    } else if (func_80022B4C(sp24) != 0) {
+    } else if (GbSave_GetSaveState(sp24) != 0) {
         var_s0 = 3;
     } else if (func_80022F00(sp24) == 0) {
         var_s0 = 2;
@@ -788,14 +788,14 @@ s32 MainMenu_DrawFadeInBackground(s32 arg0) {
         if (D_880022C4) {}  // karodo
         func_80005B98(1);
     }
-    func_800069CC();
+    BgStage_DrawFrame();
     sp24 = MainMenu_ScaleColor(*(Color_RGBA8*)&D_88002254, D_880022C4 / 20.0);
     Ui_DrawTintedScreenBackground(0, 0x1E0, sp24.r, sp24.g, sp24.b);
     D_880022C4++;
     return 0;
 }
 
-M2C_UNK func_800069CC();                            /* extern */
+void BgStage_DrawFrame(void);                            /* extern */
 M2C_UNK Ui_DrawTintedScreenBackground(M2C_UNK, M2C_UNK, u8, u8, s32); /* extern */
 extern M2C_UNK D_88002254;
 
@@ -804,7 +804,7 @@ extern M2C_UNK D_88002254;
  * @unverified Name and comment guessed from the code.
  */
 s32 MainMenu_DrawBackground(s32 arg0) {
-    func_800069CC();
+    BgStage_DrawFrame();
     Ui_DrawTintedScreenBackground(0, 0x1E0, M2C_FIELD(&D_88002254, u8 *, 0), M2C_FIELD(&D_88002254, u8 *, 1), (s32) M2C_FIELD(&D_88002254, u8 *, 2));
     return 0;
 }
@@ -822,7 +822,7 @@ s32 MainMenu_DrawSummaryBarSlideIn(UNUSED s32 arg0) {
     M2C_UNK *var_a1;
 
     sp1C = ((D_880022C8 * 0x38) / 6) - 0x38;
-    func_800069CC();
+    BgStage_DrawFrame();
     if (D_88002B00 == -1) {
         var_a1 = NULL;
     } else {
@@ -833,7 +833,7 @@ s32 MainMenu_DrawSummaryBarSlideIn(UNUSED s32 arg0) {
     return 0;
 }
 
-M2C_UNK func_800069CC();                            /* extern */
+void BgStage_DrawFrame(void);                            /* extern */
 M2C_UNK GbSave_DrawSummaryBar(M2C_UNK, M2C_UNK *, M2C_UNK *, s32); /* extern */
 extern M2C_UNK D_88002A9C;
 extern s32 D_88002B00;
@@ -846,7 +846,7 @@ extern M2C_UNK D_88002B08;
 s32 MainMenu_DrawSummaryBar(s32 arg0) {
     M2C_UNK *var_a1;
 
-    func_800069CC();
+    BgStage_DrawFrame();
     if (D_88002B00 == -1) {
         var_a1 = NULL;
     } else {
@@ -857,7 +857,7 @@ s32 MainMenu_DrawSummaryBar(s32 arg0) {
 }
 
 M2C_UNK func_80005B98(M2C_UNK);                     /* extern */
-M2C_UNK func_800069CC();                            /* extern */
+void BgStage_DrawFrame(void);                            /* extern */
 M2C_UNK GbSave_DrawSummaryBar(M2C_UNK, M2C_UNK *, M2C_UNK *, s32); /* extern */
 M2C_UNK Ui_DrawTintedScreenBackground(M2C_UNK, M2C_UNK, u8, u8, s32); /* extern */
 extern M2C_UNK D_88002254;
@@ -876,7 +876,7 @@ s32 MainMenu_DrawSummaryBarAndBackground(s32 arg0) {
     if (arg0 == 1) {
         func_80005B98(0xF);
     }
-    func_800069CC();
+    BgStage_DrawFrame();
     if (D_88002B00 == -1) {
         var_a1 = NULL;
     } else {
@@ -888,8 +888,8 @@ s32 MainMenu_DrawSummaryBarAndBackground(s32 arg0) {
     return 0;
 }
 
-M2C_UNK func_8000B1FC();                            /* extern */
-M2C_UNK func_8000B220();                            /* extern */
+void Cont_StartReadInputs(void);                            /* extern */
+void Cont_ReadInputs(void);                            /* extern */
 M2C_UNK func_8001B5F0();                            /* extern */
 s32 MainMenu_UpdateScreen(s8*);
 extern s32 D_88002B20;
@@ -902,8 +902,8 @@ s32 MainMenu_RunFrame(s32 arg0) {
     s32 sp1C;
 
     sp1C = 0;
-    func_8000B1FC();
-    func_8000B220();
+    Cont_StartReadInputs();
+    Cont_ReadInputs();
     func_8001B5F0();
     MainMenu_DrawScreen(D_88002B20);
     if (arg0 == 0) {
@@ -944,7 +944,7 @@ s32 func_80006828(M2C_UNK, M2C_UNK *);              /* extern */
 M2C_UNK func_80006998(M2C_UNK);                     /* extern */
 M2C_UNK func_8000A7B0(M2C_UNK);                     /* extern */
 M2C_UNK func_8000A7FC(M2C_UNK);                     /* extern */
-M2C_UNK func_8001A194(M2C_UNK, M2C_UNK);            /* extern */
+s32 Font_Init(s32 load_size, s32 side);            /* extern */
 M2C_UNK func_8001A360();                            /* extern */
 void MainMenu_LoadGbSaveSummary(void);                          /* extern */
 extern M2C_UNK D_002E0BE0;
@@ -968,7 +968,7 @@ s32 MainMenu_Init(s32 arg0) {
     s32 temp_v0;
 
     func_8000256C(0x434F4D50);
-    func_8001A194(0x18, 0);
+    Font_Init(0x18, 0);
     func_80003EB8((u32) ((s32) &D_01000000 & 0x0F000000) >> 0x18, &D_002E0BE0, &D_002E2B90, 0);
     func_80003EB8((u32) ((s32) &D_04000000 & 0x0F000000) >> 0x18, &D_00400F70, &D_004076E0, 0);
     func_80003EB8((u32) ((s32) &D_05000000 & 0x0F000000) >> 0x18, &D_004076E0, &D_004199E0, 0);

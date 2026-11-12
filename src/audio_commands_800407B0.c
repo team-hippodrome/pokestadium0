@@ -1,5 +1,5 @@
 /* Stadium Zero resident code. */
-/* Split from audio_commands.c so the jump tables of func_800407B0 land at 0x8007E87C. */
+/* Split from audio_commands.c so the jump tables of Audio_PlayCommand land at 0x8007E87C. */
 
 #include "audio_commands.h"
 #include "audio_commands_category2.h"
@@ -34,14 +34,14 @@ extern s32 D_800FD654;
 extern s32 D_800FD66C;
 extern s32 D_800FD680;
 extern s32 D_800FD738;
-s32 func_80037B7C(s32);
+s32 Audio_QueueSetMonoOutputCommand(s32 handle);
 s32 func_80037AC4(s32, s32);
 void func_80037C04(s32, u32);
 s32 func_8003834C(s32, s32, s32, s32, s32, s32, s32);
 s32 func_80047260(s32);
 void func_80043B00(s32, s32);
 
-s32 func_800407B0(u32 arg0, s32 arg1, s32 arg2) {
+s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2) {
     s32 pad[3]; // FAKE
     s32 ret;
     s32 pan;
@@ -52,7 +52,7 @@ s32 func_800407B0(u32 arg0, s32 arg1, s32 arg2) {
 
     switch (arg0) {
         case 0:
-            if (func_80037B7C(D_800FD654) != 0) {
+            if (Audio_QueueSetMonoOutputCommand(D_800FD654) != 0) {
                 return 0;
             }
             ret = D_800FD654 = func_8003834C(D_800B4188, D_800B41A4, 1, 0x70, 0x80, 0, -1);
@@ -167,7 +167,7 @@ s32 func_800407B0(u32 arg0, s32 arg1, s32 arg2) {
             break;
 
         case 0x3C:
-            if (func_80037B7C(D_800FD738) != 0) {
+            if (Audio_QueueSetMonoOutputCommand(D_800FD738) != 0) {
                 func_80037AC4(D_800FD738, 100);
                 D_800FD738 = 0;
             }
@@ -278,21 +278,21 @@ s32 func_800407B0(u32 arg0, s32 arg1, s32 arg2) {
         case 0x46:
             switch (arg1) {
                 case 1:
-                    if (func_80037B7C(D_800FD680) == 0) {
+                    if (Audio_QueueSetMonoOutputCommand(D_800FD680) == 0) {
                         D_800FD680 = func_8003834C(D_800B4188, D_800B41A4, 0x22, 0x50, 0x80, 0, -1);
                     } else {
                         func_80037C04(D_800FD680, 0x50);
                     }
                     break;
                 case 2:
-                    if (func_80037B7C(D_800FD680) == 0) {
+                    if (Audio_QueueSetMonoOutputCommand(D_800FD680) == 0) {
                         D_800FD680 = func_8003834C(D_800B4188, D_800B41A4, 0x22, 0x50, 0x80, 0, -1);
                     } else {
                         func_80037C04(D_800FD680, 0x50);
                     }
                     break;
                 case 3:
-                    if (func_80037B7C(D_800FD680) == 0) {
+                    if (Audio_QueueSetMonoOutputCommand(D_800FD680) == 0) {
                         D_800FD680 = func_8003834C(D_800B4188, D_800B41A4, 0x22, 0x50, 0x80, 0, -1);
                     } else {
                         func_80037C04(D_800FD680, 0x50);

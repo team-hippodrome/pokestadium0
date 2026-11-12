@@ -331,7 +331,7 @@ extern char D_89018ED8[];
 extern char D_89018EDC[];
 extern char D_89018EE0[];
 extern char D_89018EE4[];
-void func_800069CC();
+void BgStage_DrawFrame(void);
 void func_80019008(s32, Mon89007678*, s32);
 u8* func_800196F8(s32);
 void func_8001AAE4(u8, u8, u8, u8);
@@ -343,7 +343,7 @@ void Ui_DrawTexturedDivider(s32, s32, s32, u8*);
 void Ui_FillRectPrimEnvColor(s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
 s32 func_8002AE6C();
 void Window_DrawLabeled(char*, s32);
-s32 func_8002D3D0(Mon89007678*);
+s32 BattleMon_CountMoves(u8* arg0);
 s32 BattleMon_GetMoveIndex(Mon89007678*, s32);
 /**
  * Draws a Pokemon's status window: LV, HP, Type 1/2, Attack, Defense, Speed, Special.
@@ -352,7 +352,7 @@ s32 BattleMon_GetMoveIndex(Mon89007678*, s32);
 void PcBox_DrawMonStatusWindow(Screen89007678* arg0) {
     s32 y = arg0->y + 6;
     s32 x = arg0->x + 6;
-    s32 count = func_8002D3D0(arg0->mon);
+    s32 count = BattleMon_CountMoves(arg0->mon);
     s32 i;
     s32 n;
     s32 row;
@@ -416,7 +416,7 @@ void PcBox_DrawMonStatusWindow(Screen89007678* arg0) {
             func_80019008(arg0->anim, arg0->mon, 0x416D);
         }
         tex = func_800196F8(arg0->anim);
-        func_800069CC();
+        BgStage_DrawFrame();
         gSPDisplayList(gDisplayListHead++, D_80060290);
         gDPSetAlphaCompare(gDisplayListHead++, G_AC_NONE);
         for (row = 0; row < 0x78; row += n) {
@@ -472,7 +472,7 @@ void func_8001BCB4(s32, s32, s32, s32, u8*, s32, s32);
 void Trade_DrawDigitStrip(s32, s32, u8);
 void Font_SetColorForFlags(s32);
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
-u8* func_80018DEC(s32, s32);
+s32 PokeIcon_GetImage(s8 *arg0, s32 arg1);
 void func_89007D54(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4, s32 arg5) {
     s32 pad[4]; // FAKE
 
@@ -498,7 +498,7 @@ void func_89007D54(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4, s32 arg5) {
         func_8001A944(arg0 + 5, arg1 + 0x30, arg2 + 0x30);
         func_8001ABBC();
         gSPDisplayList(gDisplayListHead++, D_80073408);
-        func_8001B884(arg0 + 0x2C, arg1 + 4, 0x28, 0x28, func_80018DEC(arg5, arg3), 0x28, 0x200000);
+        func_8001B884(arg0 + 0x2C, arg1 + 4, 0x28, 0x28, PokeIcon_GetImage(arg5, arg3), 0x28, 0x200000);
         gSPDisplayList(gDisplayListHead++, D_80073438);
     }
 }
@@ -538,7 +538,7 @@ void func_8900806C(s8* arg0, s32 arg1, s32 arg2, u8* arg3, s32 arg4, s32 arg5, s
     M2C_FIELD(arg0, s32*, 0x90) = arg4;
 }
 
-void func_800069CC();                            /* extern */
+void BgStage_DrawFrame(void);                            /* extern */
 M2C_UNK func_800189C0(s32, M2C_UNK);                /* extern */
 s32 func_8002AE6C();                                /* extern */
 M2C_UNK GridMenu_DrawInlineItems(s8 *, s32, s32, s32, s32);  /* extern */
@@ -551,7 +551,7 @@ void PcBox_DrawList(s8 *arg0, s32 arg1) {
     if (func_8002AE6C() == 0) {
         if (!(arg1 & 0x10)) {
             func_800189C0(M2C_FIELD(arg0, s32 *, 0x90), 0);
-            func_800069CC();
+            BgStage_DrawFrame();
         }
         GridMenu_DrawInlineItems(arg0 + 0x2C, M2C_FIELD(arg0, s32 *, 0) + 6, M2C_FIELD(arg0, s32 *, 4) + 6, arg1 | 0xFFED, M2C_FIELD(arg0, s32 *, 0x90));
     }
@@ -1293,7 +1293,7 @@ s32 PcBox_UpdateOperationWindow(s8* arg0) {
 }
 
 typedef struct Ent8900A014 { s32 unk0; s32 unk4; } Ent8900A014;
-s8* func_80017860(s32);
+s8 *PokeIcon_AllocFramebuffers(s32 arg0);
 s32 func_80017FDC(s8*, s32, s32, s32);
 void PokeIcon_OpenModelArchives(void);
 s32 func_80018F2C(s8*, s32, s32, s32, s32, s32, s32, s32);
@@ -1311,7 +1311,7 @@ void PcBox_Init(s8* arg0) {
     s32 i;
 
     main_pool_push_state('PBOX');
-    M2C_FIELD(arg0, s8**, 0x7518) = func_80017860(1);
+    M2C_FIELD(arg0, s8**, 0x7518) = PokeIcon_AllocFramebuffers(1);
     M2C_FIELD(arg0, s32*, 0x751C) = func_80018F2C(M2C_FIELD(arg0, s8**, 0x7518), 0x80, 0x78, 0, 0, 0x78, 0x78, 0);
     M2C_FIELD(arg0, s32*, 0x7520) = func_80017FDC(M2C_FIELD(arg0, s8**, 0x7518), 0x1E, 0x28, 0x28);
     PokeIcon_OpenModelArchives();
@@ -1352,7 +1352,7 @@ void PcBox_DrawMonStatusWindow(Screen89007678*);
  * @unverified Name and comment guessed from the code.
  */
 void PcBox_DrawScreen(s8* arg0) {
-    func_800069CC();
+    BgStage_DrawFrame();
     Ui_DrawTintedScreenBackground(0x38, 0x1E0, D_8900A5B8[0], D_8900A5B8[1], D_8900A5B8[2]);
     switch (*(s32*)arg0) {
         case 1:
