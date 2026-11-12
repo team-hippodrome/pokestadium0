@@ -453,7 +453,8 @@ typedef struct Big891033A0 {
 } Big891033A0;
 /**
  * Handles the menu opened on a selected Pokemon.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): was handling the popup
+ * opened with A on フシギダネ.
  */
 s32 LabPCList_UpdateMonMenu(s8* arg0) {
     s32 ret = 0;

@@ -302,7 +302,8 @@ s32 func_89109898();
 s32 func_89109960();
 /**
  * Rebuilds the visible list from the source boxes using the active filter flags.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): ran when OK was pressed on
+ * 「どこのポケモンを いちらん するか」 with てもち chosen, and the list then showed the three party Pokémon.
  */
 M2C_UNK LabPCList_ApplyFiltersAndSort(Ctx89101D94* arg0) {
     ScrollList_SetItems(&arg0->unkB160, arg0->unk9648, arg0->unkB1A4);
@@ -426,7 +427,8 @@ extern s8 D_8910E312[];
 
 /**
  * Builds the "<species>をあつめる / をかいじょする" (gather / ungather) prompt for the selected Pokemon.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): A on フシギダネ built the popup's
+ * first row, 「フシギダネをあつめる」.
  */
 void LabPCList_FormatGatherPrompt(s8* arg0) {
     func_8000A460(D_8910E2D0, *(s8**)D_80064C44[M2C_FIELD(M2C_FIELD(arg0, s8****, 0xB160)[0][M2C_FIELD(arg0, s32*, 0xB168)], u8*, 8)]);
@@ -605,7 +607,8 @@ s32 LabPCList_UpdateHeaderCursor(Ctx891025D8* arg0) {
 
 /**
  * Browse state: list or header input, C-Left/C-Right change the detail page, L/R move the focus.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): was running while browsing;
+ * C-Right turned the detail page from ページおくり1/3 to 2/3 (the move columns).
  */
 s32 LabPCList_UpdateBrowse(Ctx89100294* arg0) {
     s32 done = FALSE;

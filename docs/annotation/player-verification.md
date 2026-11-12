@@ -670,3 +670,17 @@ scene phase and step read at each first entry:
    `BattleScene_ReactionNormal` (hitReactionKind 0).
 3. `BattleScene_StartSecondAction` handed over to COM.
 4. `BattleScene_PhaseEndTurn` ran at phase 4.
+
+## いちらん menus
+
+Opened on the party list (フシギダネ, ヒトカゲ and ゼニガメ):
+
+* C-Right turned the detail page (1/3 to 2/3, the move columns).
+* A on a Pokémon opened the popup (`LabPCList_InitPopupMenu`,
+  `LabPCList_PlacePopup`, `LabPCList_UpdateMonMenu`). Its first row was
+  「フシギダネをあつめる」 (`LabPCList_FormatGatherPrompt`), followed by
+  おなじタイプをあつめる, いどうする and どうぐをつかう.
+* いどうする opened 「どこへ？」 with てもちのポケモン, ゲームボーイのボックス and
+  64カセットのボックス (`LabPCList_UpdateDestinationMenu`).
+* どうぐをつかう said つかえるどうぐがありません, because the test save holds no
+  items.

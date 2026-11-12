@@ -262,7 +262,8 @@ typedef struct ListMenu8910179C {
  * Draws a fixed-size (0x50 x 0x14) cursor rectangle via Ui_DrawRoundedFrame for a scrolling list
  * menu: x = arg1 + 0x26, y = scrollTarget + arg2 - scroll, minus (cellHeight - 1) when flag
  * 0x400 is set; colour read from D_80073520. Compare ScrollGrid_DrawCursor and ScrollList_DrawCursor.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): drew the cursor on the フシギダネ
+ * row.
  */
 void LabPCList_DrawRowCursor(ListMenu8910179C* arg0, s32 arg1, s32 arg2) {
     s32 y;

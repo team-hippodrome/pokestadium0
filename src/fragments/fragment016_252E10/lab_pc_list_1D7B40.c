@@ -729,7 +729,8 @@ s32 func_89106254(s8 *arg0) {
 
 /**
  * Draws one popup menu row with the selection highlight.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): drew the popup rows, with
+ * the highlight on the selected one.
  */
 void LabPCList_DrawPopupRow(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s8* arg5) {
     s32 temp_v0 = M2C_FIELD(arg5, s32*, 8) - 0xC;
@@ -746,7 +747,8 @@ void LabPCList_DrawPopupRow(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, 
 
 /**
  * Sets up a popup menu sized to its widest string.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): A on フシギダネ set up the popup
+ * (フシギダネをあつめる, おなじタイプをあつめる, いどうする, どうぐをつかう).
  */
 void LabPCList_InitPopupMenu(s8 *arg0, s32 *arg1, s32 arg2, s32 arg3, s32 arg4) {
     s32 i;
@@ -806,7 +808,8 @@ typedef struct Popup89106570 {
  * anchor (or to its left when that would overflow) and is pushed up by the
  * overflow, at least 8; otherwise it goes below the anchor (or above it) and
  * is pushed left the same way.  Field names describe that geometry only.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): placed that popup over the
+ * list next to the selected row.
  */
 void LabPCList_PlacePopup(Popup89106570* arg0) {
     s32 over;
@@ -844,7 +847,7 @@ M2C_UNK Menu_DrawItems(s32, s32, s32, s32, s8 *);  /* extern */
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 /**
  * Draws a popup menu's items.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): drew that popup's four rows.
  */
 void LabPCList_DrawPopupMenu(s8 *arg0, s32 arg1)
 {
@@ -866,7 +869,8 @@ M2C_UNK Menu_UpdateCursor(s32);                         /* extern */
 
 /**
  * Moves a popup menu's cursor.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): D-Down twice moved the popup
+ * cursor from フシギダネをあつめる to いどうする.
  */
 s32 LabPCList_UpdatePopupMenu(s32 arg0) {
     return Menu_UpdateCursor(arg0 + 0x40);

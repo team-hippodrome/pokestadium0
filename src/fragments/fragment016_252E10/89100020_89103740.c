@@ -213,7 +213,8 @@ extern u8 D_8910A8E8[];
 void func_89103144(s8*, Ref89103740*, s32);
 /**
  * Handles the どこへ？ (where to?) menu: party, GB box, Stadium box, or a box list.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): いどうする opened 「どこへ？」 with
+ * てもちのポケモン, ゲームボーイのボックス and 64カセットのボックス while this ran.
  */
 s32 LabPCList_UpdateDestinationMenu(Ctx89103858* arg0) {
     s32 ret = 0;
@@ -594,7 +595,8 @@ s32 LabPCList_UpdateList(s8* arg0) {
  * Clears the first word of arg0 and initialises the sub-objects at offsets 4
  * and 0xB7E4 with LabPCList_InitListWindow(arg0 + 4, 0x26, 0x48, arg0 + 0xB7E4). What the
  * object is is not established.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): ran on entry, right before
+ * LabPCList_InitListWindow.
  */
 void LabPCList_InitScreen(void* arg0) {
     M2C_FIELD(arg0, s32*, 0) = 0;
@@ -877,7 +879,8 @@ s32 LabPCList_UpdateFade(s32);
  *      D_00235D70..D_00238BD0.
  *
  * Returns 0x8040.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): ran when いちらん was entered
+ * from the main menu, before LabPCList_InitScreen.
  */
 s32 LabPCList_Init(s32 arg0, s32 arg1) {
     main_pool_push_state('TERM');
