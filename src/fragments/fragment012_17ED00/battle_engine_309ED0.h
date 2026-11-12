@@ -32,7 +32,7 @@ void BattleScene_SetPhase(UNUSED CameraNode* arg0, s32 arg1);
 s32 BattleScene_TransitionToPhaseFull(s32 arg0);
 s32 BattleScene_TransitionToPhase(s32 arg0);
 void func_82126A1C(UNUSED CameraNode* arg0);
-void BattleScene_PhaseSendOutAfterFaint(CameraNode* arg0);
+void BattleScene_PhaseFaint(CameraNode* arg0);
 
 void BattleScene_AdvanceSendOutPreparation(CameraNode* arg0);
 void BattleScene_AdvanceSendOutCamera(CameraNode* arg0);
@@ -141,7 +141,7 @@ M2C_UNK func_82124A40();                            /* extern */
 extern M2C_UNK D_8218B630;
 extern f32 D_FLT_821962A4;
 
-void func_8212601C(s32 arg0);
+void BattleScene_InitTurnPresentation(s32 arg0);
 
 void BattleScene_CameraShotTargetHighThunk(void*, void*);
 s32 func_82124810(void*, void*);
@@ -178,7 +178,7 @@ void func_82126EE0(CameraNode* arg0);
 
 void func_82126F70(CameraNode* arg0);
 
-void BattleScene_Phase2(CameraNode* arg0);
+void BattleScene_PhaseCommand(CameraNode* arg0);
 
 void func_821272C0(s8 *arg0);
 

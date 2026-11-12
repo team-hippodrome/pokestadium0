@@ -439,7 +439,11 @@ void BattleScene_UpdateActiveOwnerPointers(void) {
     sBattleScene.scene->cameraPresetId = 0;
 }
 
-void func_8212601C(s32 arg0) {
+/**
+ * Phase 0 of BattleScene_UpdatePhase: sets up the scene for a new turn, then the turn moves on to phase 1.
+ * @unverified Phase number seen in play (player agent); handler body only skimmed.
+ */
+void BattleScene_InitTurnPresentation(s32 arg0) {
     s8 *sp34;
     s8 *sp30;
 
@@ -706,13 +710,10 @@ void BattleScene_AdvanceSendOutFollowupCamera(CameraNode* arg0) {
 }
 
 /**
- * Phase 18. Replacement after a faint (REPLACEMENT_INVOLUNTARY_SWITCH, selected by
- * BattleScene_PrepareReplacementTransition): loads the chosen team member's model, opens its Poke Ball, and
- * sends it out. Unlike BattleScene_PhaseVoluntarySwitch, there is no withdraw step.
- * Zero's BattleScene_UpdatePhase runs this for phase 5, not 18: Zero's phase numbers do not all match Stadium 1's.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Phase 5: a Pokemon faints (seen in play: ひんし shown during this phase, then phase 4). The step helpers it calls still carry Stadium 1 send-out names, which may be wrong.
+ * @unverified Phase number seen in play (player agent); handler body only skimmed.
  */
-void BattleScene_PhaseSendOutAfterFaint(CameraNode* arg0) {
+void BattleScene_PhaseFaint(CameraNode* arg0) {
     switch (sBattleScene.scene->phaseStep) {
         case 0:
             BattleScene_AdvanceSendOutPreparation(arg0);
@@ -855,7 +856,11 @@ void func_82126F70(CameraNode* arg0) {
     }
 }
 
-void BattleScene_Phase2(CameraNode* arg0) {
+/**
+ * Phase 1: the command phase, while the menus are open. In play, every turn passes through it.
+ * @unverified Phase number seen in play (player agent); handler body only skimmed.
+ */
+void BattleScene_PhaseCommand(CameraNode* arg0) {
     switch (sBattleScene.scene->phaseStep) {
         case 0:
             func_82126EE0(arg0);

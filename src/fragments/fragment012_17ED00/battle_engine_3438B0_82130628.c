@@ -255,7 +255,11 @@ void BattleScene_PhaseWithdrawFainted(CameraNode* arg0) {
 }
 
 
-void func_821311A0(CameraNode* arg0) {
+/**
+ * Phase 18: sends out the replacement after a faint (seen in play, on the turn after the faint).
+ * @unverified Phase number seen in play (player agent); handler body only skimmed.
+ */
+void BattleScene_PhaseSendOutAfterFaint(CameraNode* arg0) {
     ActivePokemonState* sp3C = &sActivePokemon[sBattleScene.scene->actingSide]->state;
     ActivePokemonState* sp38 = &sActivePokemon[!sBattleScene.scene->actingSide]->state;
     ActivePokemon* temp_s0 = sActivePokemon[sBattleScene.scene->actingSide];
@@ -363,29 +367,29 @@ void BattleScene_UpdatePhase(CameraNode* arg0) {
     func_82125FD0();
     switch (sBattleScene.scene->phase) {
     case 0:
-        func_8212601C(arg0);
+        BattleScene_InitTurnPresentation(arg0);
         BattleScene_SetPhase(arg0, 1);
         /* fallthrough */
     case 1:
-        func_82127250(arg0);
+        BattleScene_PhaseCommand(arg0);
         break;
     case 2:
-        func_8212BFF0(arg0);
+        BattleScene_PhaseActionsCommitted(arg0);
         break;
     case 3:
-        func_8212C1C4(arg0);
+        BattleScene_PhaseSecondMoverAction(arg0);
         break;
     case 4:
-        func_8212F118((s32)arg0);
+        BattleScene_PhaseEndTurn((s32)arg0);
         break;
     case 7:
-        func_8212C874(arg0);
+        BattleScene_PhaseFirstMoverAction(arg0);
         break;
     case 30:
         BattleScene_Phase30(arg0);
         break;
     case 29:
-        func_8212DE30(arg0);
+        BattleScene_PhaseHaze(arg0);
         break;
     case 28:
         func_8212CF90(arg0);
@@ -415,16 +419,16 @@ void BattleScene_UpdatePhase(CameraNode* arg0) {
         func_8212E7B0(arg0);
         break;
     case 31:
-        func_8212ECC8(arg0);
+        BattleScene_PhaseFullParalysis(arg0);
         break;
     case 20:
-        func_8212EA84(arg0);
+        BattleScene_PhaseConfusionSelfHit(arg0);
         break;
     case 8:
-        func_8212F440(arg0);
+        BattleScene_PhaseMoveDamage(arg0);
         break;
     case 22:
-        func_8212F5B4(arg0);
+        BattleScene_PhaseConfuseRay(arg0);
         break;
     case 32:
         func_8212F894(arg0);
@@ -454,13 +458,13 @@ void BattleScene_UpdatePhase(CameraNode* arg0) {
         BattleScene_PhaseWithdrawFainted(arg0);
         break;
     case 18:
-        func_821311A0(arg0);
+        BattleScene_PhaseSendOutAfterFaint(arg0);
         break;
     case 26:
         func_8212F6E4(arg0);
         break;
     case 5:
-        func_82126C74(arg0);
+        BattleScene_PhaseFaint(arg0);
         break;
     case 34:
         func_82126E34(arg0);
