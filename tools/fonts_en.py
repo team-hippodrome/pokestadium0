@@ -122,14 +122,14 @@ def font_context_address(rom):
     return ((w[6] & 0xFFFF) << 16) + low
 
 
-def font_load_words(rom):
-    """func_8001A118 with the glyph base moved past the 0x90-byte advance table."""
+def font_load_words(rom, shift=ADVANCES):
+    """func_8001A118 with the glyph base moved `shift` bytes past the file start."""
     r = words_at(rom, LOAD_FUNC, 0x7C // 4)
     if (r[9] >> 26) != 0x23 or (r[9] & 0xFFFF) != 0x28:
         raise SystemExit('the arg4 spill in func_8001A118 moved: unexpected build')
     if (r[12] >> 26) != 0x2B:
         raise SystemExit('the set pointer store in func_8001A118 moved: unexpected build')
-    out = r[0:12] + [addiu(T6, T6, ADVANCES), r[12]]           # set->tex = file + 0x90
+    out = r[0:12] + [addiu(T6, T6, shift), r[12]]              # set->tex = file + shift
     out += [r[14], sb(T9, 0, T8), r[18], sb(T2, 1, T8), r[22], sb(T5, 2, T8)]
     out += [r[25], r[26], r[27], r[28], r[29], r[30]]
     return out + [NOP] * (len(r) - len(out))
@@ -198,6 +198,54 @@ def map_is_latin(table):
             and max(upper) < GLYPHS and max(lower) < GLYPHS)
 
 
+CIC_SEEDS = {'6101': 0xF8CA4DDC, '6102': 0xF8CA4DDC, '6103': 0xA3886759,
+             '6105': 0xDF26F436, '6106': 0x1FEA617A}
+CRC_LENGTH = 0x100000  # IPL3 checksums only the first megabyte of the ROM
+M32 = 0xFFFFFFFF
+
+
+def rom_crc(rom, seed):
+    """IPL3's ROM checksum, ported from Project64's CN64Rom::CalculateRomCrc."""
+    a3 = t2 = t3 = s0 = a2 = t4 = seed
+    for t0 in range(0, CRC_LENGTH, 4):
+        v0 = struct.unpack_from('>I', rom, 0x1000 + t0)[0]
+        v1 = (a3 + v0) & M32
+        if v1 < a3:
+            t2 = (t2 + 1) & M32
+        sa = v0 & 0x1F
+        a0 = ((v0 << sa) | (v0 >> ((0x20 - sa) & 0x1F))) & M32
+        a3 = v1
+        t3 ^= v0
+        s0 = (s0 + a0) & M32
+        a2 = (a3 ^ v0 ^ a2) & M32 if a2 < v0 else (a2 ^ a0)
+        t4 = ((v0 ^ s0) + t4) & M32
+    if seed == CIC_SEEDS['6103']:
+        return ((a3 ^ t2) + t3) & M32, ((s0 ^ a2) + t4) & M32
+    if seed == CIC_SEEDS['6106']:
+        return ((a3 * t2) + t3) & M32, ((s0 * a2) + t4) & M32
+    return (a3 ^ t2 ^ t3) & M32, (s0 ^ a2 ^ t4) & M32
+
+
+def detect_seed(rom):
+    """The CIC seed of an untouched build, found by matching its header checksum."""
+    stored = struct.unpack_from('>2I', rom, 0x10)
+    seed = next((s for s in set(CIC_SEEDS.values()) if rom_crc(rom, s) == stored), None)
+    if seed is None:
+        raise SystemExit('unrecognised CIC: header checksum matches no known seed')
+    return seed
+
+
+def fix_checksum(rom, seed):
+    """Rewrite 0x10/0x14 so IPL3's boot checksum accepts the patched ROM.
+
+    Anything below 0x101000 changes the checksum; IPL3 halts on a mismatch, which is a black
+    screen and no fault - so every patched ROM must be re-stamped.
+    """
+    computed = rom_crc(rom, seed)
+    struct.pack_into('>2I', rom, 0x10, *computed)
+    return computed
+
+
 def patch(rom, us, stage='full'):
     """stage: full = archive + map + loader patch, data = archive + map, map = map only,
     archive = archive only. The narrower stages exist to bisect a boot fault."""
@@ -215,6 +263,7 @@ def patch(rom, us, stage='full'):
     if not map_is_latin(table):
         raise SystemExit('no ASCII glyph map at %#x in that dump' % US_ASCII_MAP)
 
+    seed = detect_seed(rom)
     out = bytearray(rom)
     if stage in ('full', 'data', 'archive'):
         out[ZERO_FONTS:ZERO_FONTS + total] = us[US_FONTS:US_FONTS + total]
@@ -224,15 +273,23 @@ def patch(rom, us, stage='full'):
     patches = []
     if stage in ('full', 'data', 'map', 'code'):
         patches.append((MAP_FUNC, font_map_words(rom)))
-    if stage in ('full', 'code', 'loader'):
-        patches.insert(0, (LOAD_FUNC, font_load_words(rom)))
+    if stage == 'micro':
+        # One commutative operand swap inside the retail loader: proves a code patch lands where the
+        # CPU reads it, with no behavioural change at all.
+        retail_words = words_at(rom, LOAD_FUNC, 0x7C // 4)
+        assert (retail_words[11] & 0x3F) == 0x21, 'operand add expected'
+        swap = (retail_words[11] & ~((0x1F << 21) | (0x1F << 16))) | (3 << 21) | (15 << 16)
+        patches.append((LOAD_FUNC, retail_words[:11] + [swap] + retail_words[12:]))
+    if stage in ('full', 'code', 'loader', 'loader0'):
+        patches.insert(0, (LOAD_FUNC, font_load_words(rom, 0 if stage == 'loader0' else ADVANCES)))
     for vram, words in patches:
         struct.pack_into('>%dI' % len(words), out, vram - ROM_BIAS, *words)
-    check(bytes(out), us, rom, stage)
+    fix_checksum(out, seed)
+    check(bytes(out), us, rom, stage, seed)
     return bytes(out)
 
 
-def check(rom, us, retail, stage='full'):
+def check(rom, us, retail, stage='full', seed=None):
     """Raises unless rom carries the English archive, its map and both function patches.
 
     retail is the unpatched build, the source of the instruction words the patches reuse.
@@ -246,15 +303,20 @@ def check(rom, us, retail, stage='full'):
     if stage in ('full', 'data', 'map'):
         if rom[ZERO_ASCII_MAP:ZERO_ASCII_MAP + MAP_BYTES] != us[US_ASCII_MAP:US_ASCII_MAP + MAP_BYTES]:
             raise SystemExit("ASCII glyph map differs from Stadium 1's")
-    loader_patched = words_at(rom, LOAD_FUNC, 0x7C // 4) == font_load_words(retail)
-    loader_retail = words_at(rom, LOAD_FUNC, 0x7C // 4) == words_at(retail, LOAD_FUNC, 0x7C // 4)
-    if not (loader_patched or loader_retail):
-        raise SystemExit('the font loader patch is neither applied nor retail')
-    if stage in ('full', 'data', 'map', 'code') and words_at(rom, MAP_FUNC, 0x120 // 4) != font_map_words(retail):
-        raise SystemExit('the glyph map patch is not in place')
+    if stage == 'micro':
+        rw = words_at(retail, LOAD_FUNC, 0x7C // 4)
+        expected_loader = rw[:11] + [(rw[11] & ~((0x1F << 21) | (0x1F << 16))) | (3 << 21) | (15 << 16)] + rw[12:]
+    else:
+        expected_loader = (font_load_words(retail, 0 if stage == 'loader0' else ADVANCES)
+                           if stage in ('full', 'code', 'loader', 'loader0')
+                           else words_at(retail, LOAD_FUNC, 0x7C // 4))
+    if words_at(rom, LOAD_FUNC, 0x7C // 4) != expected_loader:
+        raise SystemExit('the font loader patch is not in place')
+    if rom_crc(rom, seed or detect_seed(retail)) != struct.unpack_from('>2I', rom, 0x10):
+        raise SystemExit('header checksum does not match the patched ROM: IPL3 would hang')
     print('%s: font archive %#x bytes, glyph map %s, loader %s'
           % (stage, total, 'patched' if stage in ('full', 'data', 'map', 'code') else 'retail',
-             'patched' if loader_patched else 'retail'))
+             'patched' if stage in ('full', 'code', 'loader', 'loader0') else 'retail'))
 
 
 def _retail_stub(rom):
@@ -414,7 +476,7 @@ def main():
     ap.add_argument('--rom', default='build/pokestadium0-jp.z64')
     ap.add_argument('--us', help='Stadium 1 US baserom.z64, the source of the English font')
     ap.add_argument('--out')
-    ap.add_argument('--stage', choices=['full', 'data', 'code', 'map', 'archive', 'loader'], default='full',
+    ap.add_argument('--stage', choices=['full', 'data', 'code', 'map', 'archive', 'loader', 'loader0', 'micro'], default='full',
                     help='full: archive + map + loader; data: archive + map; code: map + loader; '
                          'map/archive: one of them (bisecting a boot fault)')
     ap.add_argument('--base', default='build/pokestadium0-jp.z64',
