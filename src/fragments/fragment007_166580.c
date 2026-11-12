@@ -89,13 +89,19 @@ void FreeBattle_MarkEmptySlots(Slot54* arg0, s32 arg1) {
 }
 
 /*
- * func_820001B8
+ * FreeBattle_FindFlaggedSlot
  *
  * Scans the six 0x54-byte slots starting at arg0 from slot 5 down to slot 0.
  * Stores in *arg1 how many have a non-zero first word (flag) and returns the
  * lowest-numbered such slot, or NULL when none is set.
  */
-Slot54* func_820001B8(Slot54* arg0, s32* arg1) {
+/**
+ * Scans a team's six slots from last to first and returns the first slot with a nonzero flag,
+ * storing how many slots are flagged in *count.
+ * Seen in play: runs when A picks a team on 「エントリーポケモンのせんたく」.
+ * @unverified Name from the code.
+ */
+Slot54* FreeBattle_FindFlaggedSlot(Slot54* arg0, s32* arg1) {
     Slot54* found = NULL;
     s32 count = 0;
 
@@ -908,7 +914,7 @@ void FreeBattle_DrawMonCell(s32, s32, s32*, s32, s32, s32);
 
 /**
  * Draws a team slot's Pokemon cell, or an empty cell when the slot is empty.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: draws each Pokemon cell of the picked team's window.
  */
 void FreeBattle_DrawSlotCell(s32 arg0, s32 arg1, s32* arg2, s32 arg3, s32 arg4, s32 arg5) {
     FreeBattle_DrawMonCell(arg0, arg1, (*arg2 & 1) ? NULL : arg2 + 1, arg3, arg4, arg5);
@@ -1150,12 +1156,12 @@ typedef struct {
 } SlotFlags;
 
 /**
- * For each of the six Slot54 entries reached through `*arg0->slots`, sets bit
- * 0x200 in the matching u16 of `arg0->flags` when the entry's flag word has bit 0
- * clear and at least one of the bits 0x26 set.
- * The meaning of the bits is not yet established.
+ * Sets bit 0x200 on each of the six slots whose Pokemon a rule forbids (flags 0x26) and that is
+ * not empty (flag 1).
+ * Seen in play: runs when A picks a team on 「エントリーポケモンのせんたく」.
+ * @unverified Name from the code.
  */
-void func_820023E8(SlotFlags* arg0) {
+void FreeBattle_MarkIneligibleSlots(SlotFlags* arg0) {
     Slot54* slots;
     s32 i;
 
@@ -1234,7 +1240,8 @@ void GridMenu_DrawInlineItems(void*, s32, s32, s32, MenuDef8200288C*);
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 /**
  * Draws the rental Pokemon list window; `arg1` picks the cursor style.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: draws the picked team's window (trainer panel and six Pokemon) under the confirm
+ * prompt.
  */
 void FreeBattle_DrawRentalListWindow(s8 *arg0, s32 arg1)
 {

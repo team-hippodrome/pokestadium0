@@ -331,7 +331,7 @@ s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2);
 void FreeBattle_ClearIndices(void*, s32, s32);
 void FreeBattle_InitEntryListCursor(s8*);
 s32 FreeBattle_UpdateEntrySelect(s8*);
-void func_820044D0(s8*);
+void FreeBattle_CommitEntries(s8*);
 s32 FreeBattle_UpdateMenuWindow(s8*);
 s32 FreeBattle_UpdatePopupMenu(s8*);
 s32 FreeBattle_UpdateOpponentSelect(s8*);
@@ -529,7 +529,7 @@ s32 FreeBattle_UpdateScreen(s8* arg0) {
                     }
                 }
                 if (M2C_FIELD(arg0, s32*, 0x4354) >= 5) {
-                    func_820044D0(arg0);
+                    FreeBattle_CommitEntries(arg0);
                     Audio_PlayCommand(0x53, 0, 0);
                     FreeBattle_SetScreenState(arg0, 0xB, 0);
                 } else {
@@ -693,7 +693,7 @@ extern M2C_UNK D_8200AD30;
 
 /**
  * Draws the setup screen and the GB save summary bar.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: runs as 「エントリーけってい」 fades out after both teams are entered.
  */
 s32 FreeBattle_DrawScreenWithSummary(s32 arg0) {
     M2C_UNK *var_a1;

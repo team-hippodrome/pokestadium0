@@ -63,7 +63,7 @@ void FreeBattle_SetEntryScreenState(s8 *arg0, s32 arg1, s32 arg2);
 
 extern Color82001CCC D_82008F5C;
 extern Color82001CCC D_82008F58;
-void func_82003234(s8* arg0);
+void FreeBattle_DrawTeamWindowPanels(s8* arg0);
 
 void func_820032E8(s8* arg0);
 
@@ -72,11 +72,11 @@ extern char D_800735C4[];
 
 void func_82003688(s32 arg0);
 
-void func_82004240(s8 *arg0);
+void FreeBattle_ClearSideRoster(s8 *arg0);
 
-M2C_UNK func_82004268(s8 *, s8 *, s8 *, s32, s32, s32); /* extern */
+M2C_UNK FreeBattle_BuildBattleRosters(s8 *, s8 *, s8 *, s32, s32, s32); /* extern */
 
-void func_820044D0(s8 *arg0);
+void FreeBattle_CommitEntries(s8 *arg0);
 
 extern s32 D_8200AD28;
 extern s32 D_8200AD2C;
@@ -1570,7 +1570,7 @@ extern char D_8200A1FC[];
  * and 3 (arg3 != 0) or 2 (arg3 == 0) at 0xE8, and stores D_800603C0 and then arg4 in the
  * word at 0xE0 (calling func_8000B2F4 with each).
  * What the object is and what the constants mean is not established.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play: A on a team opens 「このデータでエントリーします。 はい いいえ」 and runs this.
  */
 void FreeBattle_InitRentalConfirm(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     Window_SetRect(arg0, arg1, arg2, 0x18C, 0x66);
@@ -1608,7 +1608,7 @@ extern char D_8200A208[];
  * and, only when the word at +0xEC is non-zero, +0xA4 is passed 2 by Window_DrawLabeled
  * (index 0, 1 or 2 respectively); the others get 0.
  * What the constants mean is not established.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play: draws 「このデータでエントリーします。」 with はい / いいえ.
  */
 void FreeBattle_DrawEntryConfirm(s8* arg0) {
     if (func_8002AE6C() == 0) {
@@ -1635,7 +1635,7 @@ M2C_UNK func_8003F6AC(M2C_UNK);                     /* extern */
 
 /**
  * Handles the rental confirm window.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: runs while 「このデータでエントリーします。」 is open; はい enters the team.
  */
 s32 FreeBattle_UpdateRentalConfirm(s8 *arg0) {
     s32 temp_v0;

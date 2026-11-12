@@ -348,7 +348,13 @@ void FreeBattle_DrawRentalTitleWindow(s8* arg0, s32 arg1) {
     ScrollGrid_DrawItems(arg0 + 0x6E4, M2C_FIELD(arg0, s32*, 0x14) + 8, M2C_FIELD(arg0, s32*, 0x18) + 0xAC, sp44, &sp34);
 }
 
-void func_82003234(s8* arg0) {
+/**
+ * Draws the two textured panels behind the picked team's window (left the trainer column, right
+ * the Pokemon).
+ * Seen in play: runs while 「このデータでエントリーします。」 is shown over the picked team.
+ * @unverified Which panel is which not checked.
+ */
+void FreeBattle_DrawTeamWindowPanels(s8* arg0) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(M2C_FIELD(arg0, s32*, 0x14) + 6, M2C_FIELD(arg0, s32*, 0x18) + 0x6A, 0x88, 0xE8, D_82008F5C);
     func_80029028(M2C_FIELD(arg0, s32*, 0x14) + 0x8E, M2C_FIELD(arg0, s32*, 0x18) + 0x6A, 0x18C, 0xE8, D_82008F58);
@@ -391,7 +397,7 @@ void FreeBattle_DrawRentalScreen(s8* arg0) {
             func_800189C0(D_8200AC50, 0);
             BgStage_DrawFrame();
             FreeBattle_DrawRentalListWindow(arg0, 1);
-            func_82003234(arg0);
+            FreeBattle_DrawTeamWindowPanels(arg0);
             FreeBattle_DrawDuplicateWarning(arg0 + 0x320);
             break;
         case 6:
@@ -406,21 +412,21 @@ void FreeBattle_DrawRentalScreen(s8* arg0) {
             func_800189C0(D_8200AC50, 0);
             BgStage_DrawFrame();
             FreeBattle_DrawRentalListWindow(arg0, 0);
-            func_82003234(arg0);
+            FreeBattle_DrawTeamWindowPanels(arg0);
             FreeBattle_DrawEntryConfirm(arg0 + 0x4DC);
             break;
         case 4:
             func_800189C0(D_8200AC50, 0);
             BgStage_DrawFrame();
             FreeBattle_DrawRentalListWindow(arg0, 0);
-            func_82003234(arg0);
+            FreeBattle_DrawTeamWindowPanels(arg0);
             FreeBattle_DrawShortageWarning(arg0 + 0x370);
             break;
         case 5:
             func_800189C0(D_8200AC50, 0);
             BgStage_DrawFrame();
             FreeBattle_DrawRentalListWindow(arg0, 0);
-            func_82003234(arg0);
+            FreeBattle_DrawTeamWindowPanels(arg0);
             FreeBattle_DrawLevelSumWarning(arg0 + 0x428);
             break;
         case 7:
@@ -432,14 +438,14 @@ void FreeBattle_DrawRentalScreen(s8* arg0) {
             break;
         case 3:
             FreeBattle_DrawRentalListWindow(arg0, 2);
-            func_82003234(arg0);
+            FreeBattle_DrawTeamWindowPanels(arg0);
             FreeBattle_DrawMonStatusWindow(arg0 + 0x5CC);
             break;
         case 11:
             func_800189C0(D_8200AC50, 0);
             BgStage_DrawFrame();
             FreeBattle_DrawRentalListWindow(arg0, 0);
-            func_82003234(arg0);
+            FreeBattle_DrawTeamWindowPanels(arg0);
             break;
         case 12:
             func_800189C0(D_8200AC50, 0);
@@ -490,14 +496,14 @@ s32 FreeBattle_AllTriosOverLevelLimit(Mon82000258*);
  *   1. FreeBattle_CountDuplicateSpecies reports a positive count: call FreeBattle_InitDuplicateWarning on the struct at +0x320,
  *      store the reported slot index in `cur`, call FreeBattle_DisableUnpickedRows on +0x2F8,
  *      return 2.
- *   2. func_820001B8 finds a flagged slot: set `picked`, store its index in
+ *   2. FreeBattle_FindFlaggedSlot finds a flagged slot: set `picked`, store its index in
  *      `cur`, then return 8 if bit 0 of unk_784 is set, otherwise call
  *      FreeBattle_InitShortageWarning on the struct at +0x370 and return 4.
  *   3. `mode` is 1 and FreeBattle_AllTriosOverLevelLimit is non-zero: return 6 if bit 1 of unk_784
  *      is set, otherwise 5.
  * Otherwise (including when `mode` is 0) returns 0xA.
  * What the individual return values mean is not established from this function.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play: runs when A picks a team on the entry screen.
  */
 s32 FreeBattle_CheckEntryRules(SlotMenu* arg0) {
     Slot54* found;
@@ -517,7 +523,7 @@ s32 FreeBattle_CheckEntryRules(SlotMenu* arg0) {
             FreeBattle_DisableUnpickedRows((SlotFlags*)((s8*)arg0 + 0x2F8));
             ret = 2;
         } else {
-            found = func_820001B8(arg0->slots, &sp38);
+            found = FreeBattle_FindFlaggedSlot(arg0->slots, &sp38);
             if (found != NULL) {
                 arg0->picked = 1;
                 arg0->cur = found - arg0->slots;
@@ -616,7 +622,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *arg0)
       {
         s32 sp40;
         rec = (*(*((u8 ****) (((s8 *) arg0) + 0xC4))))[*((s32 *) (((s8 *) arg0) + 0x48))]; // FAKE: decomp slop, raw pointer casts stand in for struct fields
-        if (((*((s32 *) (((s8 *) arg0) + 0x740))) == 0) && ((func_820001B8(rec + 0x1C, &sp40), sp40 == 6)))
+        if (((*((s32 *) (((s8 *) arg0) + 0x740))) == 0) && ((FreeBattle_FindFlaggedSlot(rec + 0x1C, &sp40), sp40 == 6)))
         {
           func_8003F6AC(8);
           TextBox_Init(arg0 + 0x74C, D_82009D04, 1, 2, 9);
@@ -639,7 +645,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *arg0)
           GridMenu_Init(arg0 + 0x2F8, arg0 + 0x2DC, arg0 + 0x2EC, FreeBattle_DrawSlotCell, 3, 0x84, 0x32);
           *((s32 *) (((s8 *) arg0) + 0x6EC)) = 0;
           *((s32 *) (((s8 *) arg0) + 0x318)) |= 0x10000;
-          func_820023E8(arg0 + 0x2F8);
+          FreeBattle_MarkIneligibleSlots(arg0 + 0x2F8);
           FreeBattle_SetEntryScreenState(arg0, FreeBattle_CheckEntryRules(arg0), 0);
           *((s32 *) (((s8 *) arg0) + 0x310)) = *((s32 *) (((s8 *) arg0) + 0x744)); // FAKE: decomp slop, raw pointer casts stand in for struct fields
           func_8000B2F4(*((s32 *) (((s8 *) arg0) + 0x744)));
@@ -874,7 +880,13 @@ extern char D_82009D28[];
 extern char D_82009D40[];
 char* func_8000A460(char*, const char*);
 void func_80058410(void*, void*, s32, s32);
-void func_82004020(u8* arg0, u8* arg1, s32 arg2, Src82004020* arg3) {
+/**
+ * Copies a picked team into a battle roster: its name (the preset or saved name), source buffer
+ * and its non-empty Pokemon, then builds the display copy.
+ * Seen in play: runs on 「エントリーけってい」.
+ * @unverified Name from the code.
+ */
+void FreeBattle_CopyTeamToRoster(u8* arg0, u8* arg1, s32 arg2, Src82004020* arg3) {
     s32 i;
     s32 n;
     char* name;
@@ -913,7 +925,11 @@ void func_82004020(u8* arg0, u8* arg1, s32 arg2, Src82004020* arg3) {
     func_8000A460((char*)(arg1 + 0x14), name);
 }
 
-void func_82004240(s8 *arg0) {
+/**
+ * Zeroes one side's roster header in D_8200ACF8.
+ * Seen in play: runs on 「エントリーけってい」.
+ */
+void FreeBattle_ClearSideRoster(s8 *arg0) {
     M2C_FIELD(arg0, s8 *, 0) = 0;
     M2C_FIELD(arg0, s8 *, 1) = 0;
     M2C_FIELD(arg0, s16 *, 2) = 0;
@@ -928,7 +944,14 @@ void func_82004240(s8 *arg0) {
 extern s8* D_8200ACF8;
 void Session_LoadPortSnapshot(u8);
 
-void func_82004268(s32* arg0, s32* arg1, Src82004020** arg2, s32 arg3, s32 arg4, s32 arg5) {
+/**
+ * Builds the battle rosters in D_8200ACF8 for each side's picked teams
+ * (FreeBattle_CopyTeamToRoster), clears both side headers first and, in modes 1 and 2, loads the
+ * picked port's session snapshot.
+ * Seen in play: runs on 「エントリーけってい」.
+ * @unverified Layout from the code.
+ */
+void FreeBattle_BuildBattleRosters(s32* arg0, s32* arg1, Src82004020** arg2, s32 arg3, s32 arg4, s32 arg5) {
     Src82004020* src;
 
     D_8200ACF8[0] = arg3;
@@ -949,36 +972,41 @@ void func_82004268(s32* arg0, s32* arg1, Src82004020** arg2, s32 arg3, s32 arg4,
     }
     M2C_FIELD(D_8200ACF8, u32*, 0x108C) = -1;
     M2C_FIELD(D_8200ACF8, u32*, 0x1090) = -1;
-    func_82004240(D_8200ACF8 + 0x1034);
-    func_82004240(D_8200ACF8 + 0x105C);
+    FreeBattle_ClearSideRoster(D_8200ACF8 + 0x1034);
+    FreeBattle_ClearSideRoster(D_8200ACF8 + 0x105C);
     D_8200ACF8[4] = 0;
     D_8200ACF8[0x208] = 0;
     D_8200ACF8[0x40C] = 0;
     D_8200ACF8[0x610] = 0;
     if (arg0[0] > 0) {
-        func_82004020(D_8200ACF8 + 4, D_8200ACF8 + 0x814, arg0[0], arg2[arg0[0] - 1]);
+        FreeBattle_CopyTeamToRoster(D_8200ACF8 + 4, D_8200ACF8 + 0x814, arg0[0], arg2[arg0[0] - 1]);
         M2C_FIELD(D_8200ACF8, s8**, 0x103C + M2C_FIELD(D_8200ACF8, u8*, 0x1035) * 4) = D_8200ACF8 + 4;
         M2C_FIELD(D_8200ACF8, u8*, 0x1035)++;
     }
     if (arg0[1] > 0) {
-        func_82004020(D_8200ACF8 + 0x208, D_8200ACF8 + 0xA1C, arg0[1], arg2[arg0[1] - 1]);
+        FreeBattle_CopyTeamToRoster(D_8200ACF8 + 0x208, D_8200ACF8 + 0xA1C, arg0[1], arg2[arg0[1] - 1]);
         M2C_FIELD(D_8200ACF8, s8**, 0x103C + M2C_FIELD(D_8200ACF8, u8*, 0x1035) * 4) = D_8200ACF8 + 0x208;
         M2C_FIELD(D_8200ACF8, u8*, 0x1035)++;
     }
     if (arg1[0] > 0) {
-        func_82004020(D_8200ACF8 + 0x40C, D_8200ACF8 + 0xC24, arg1[0], arg2[arg1[0] - 1]);
+        FreeBattle_CopyTeamToRoster(D_8200ACF8 + 0x40C, D_8200ACF8 + 0xC24, arg1[0], arg2[arg1[0] - 1]);
         M2C_FIELD(D_8200ACF8, s8**, 0x1064 + M2C_FIELD(D_8200ACF8, u8*, 0x105D) * 4) = D_8200ACF8 + 0x40C;
         M2C_FIELD(D_8200ACF8, u8*, 0x105D)++;
     }
     if (arg1[1] > 0) {
-        func_82004020(D_8200ACF8 + 0x610, D_8200ACF8 + 0xE2C, arg1[1], arg2[arg1[1] - 1]);
+        FreeBattle_CopyTeamToRoster(D_8200ACF8 + 0x610, D_8200ACF8 + 0xE2C, arg1[1], arg2[arg1[1] - 1]);
         M2C_FIELD(D_8200ACF8, s8**, 0x1064 + M2C_FIELD(D_8200ACF8, u8*, 0x105D) * 4) = D_8200ACF8 + 0x610;
         M2C_FIELD(D_8200ACF8, u8*, 0x105D)++;
     }
 }
 
-void func_82004268(s32*, s32*, Src82004020**, s32, s32, s32);
+void FreeBattle_BuildBattleRosters(s32*, s32*, Src82004020**, s32, s32, s32);
 
-void func_820044D0(s8 *arg0) {
-    func_82004268((s32*)(arg0 + 0x4358), (s32*)(arg0 + 0x4360), (Src82004020**)(arg0 + 0x4340), M2C_FIELD(arg0, s32 *, 0x4370), M2C_FIELD(arg0, s32 *, 0x4374), M2C_FIELD(arg0, s32 *, 0x501C));
+/**
+ * Commits both sides' picked teams to the battle (FreeBattle_BuildBattleRosters with the entry
+ * screen's state).
+ * Seen in play: runs when はい confirms the COM's team and 「エントリーけってい」 appears.
+ */
+void FreeBattle_CommitEntries(s8 *arg0) {
+    FreeBattle_BuildBattleRosters((s32*)(arg0 + 0x4358), (s32*)(arg0 + 0x4360), (Src82004020**)(arg0 + 0x4340), M2C_FIELD(arg0, s32 *, 0x4370), M2C_FIELD(arg0, s32 *, 0x4374), M2C_FIELD(arg0, s32 *, 0x501C));
 }
