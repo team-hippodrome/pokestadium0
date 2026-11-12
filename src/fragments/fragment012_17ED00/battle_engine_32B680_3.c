@@ -1,3 +1,4 @@
+#include "pokemon.h"
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
 #include "battle_engine_32B680_3.h"
 
@@ -149,12 +150,12 @@ void BattleAnim_SelectParticleModelFrames(Particle* arg0, s32 arg1) {
             sp28 = 0x9E;
 
             switch (BattleAnim_GetOwnerSpecies(arg0->pokemon)) {
-                case 0x5F:
+                case ONIX:
                     Particle_Field38_AddXZFromField94YOffset180_08F38(arg0, 15.0f);
                     Particle_Field38_SetYScaled_08CA0(arg0, 15.0f);
                     break;
 
-                case 0x82:
+                case GYARADOS:
                     Particle_Field38_AddXZFromField94YOffset180_08F38(arg0, 15.0f);
                     break;
             }
@@ -676,63 +677,63 @@ void BattleAnim_ApplyEffect1SpeciesMotion(Particle* arg0) {
     f32 scale = 0.12f;
 
     switch (BattleAnim_GetOwnerSpecies(arg0->pokemon)) {
-        case 0xF:
+        case BEEDRILL:
             offset = 5.0f;
             break;
-        case 0x16:
+        case FEAROW:
             offset = 3.0f;
             break;
-        case 0x1F:
+        case NIDOQUEEN:
             offset = 5.0f;
             break;
-        case 0x22:
+        case NIDOKING:
             offset = 3.0f;
             break;
-        case 0x39:
+        case PRIMEAPE:
             offset = 10.0f;
             break;
-        case 0x41:
+        case ALAKAZAM:
             offset = 8.0f;
             break;
-        case 0x4C:
+        case GOLEM:
             offset = 2.0f;
             break;
-        case 0x5B:
+        case CLOYSTER:
             offset = 5.0f;
             break;
-        case 0x5E:
+        case GENGAR:
             offset = 5.0f;
             break;
-        case 0x61:
+        case HYPNO:
             offset = 5.0f;
             break;
-        case 0x73:
+        case KANGASKHAN:
             offset = 12.0f;
             break;
-        case 0x7F:
+        case PINSIR:
             offset = 3.0f;
             break;
-        case 0x80:
+        case TAUROS:
             offset = 3.0f;
             break;
-        case 0x82:
+        case GYARADOS:
             scale = D_FLT_82196EC8;
             Particle_Field38_AddYScaled_08E90(arg0, 5.0f);
             break;
-        case 0x83:
+        case LAPRAS:
             scale = D_FLT_82196ECC;
             offset = 5.0f;
             break;
-        case 0x86:
+        case VAPOREON:
             offset = 3.0f;
             break;
-        case 0x88:
+        case FLAREON:
             offset = 3.0f;
             break;
-        case 0x8E:
+        case AERODACTYL:
             offset = 10.0f;
             break;
-        case 0x91:
+        case ZAPDOS:
             offset = 3.0f;
             break;
     }

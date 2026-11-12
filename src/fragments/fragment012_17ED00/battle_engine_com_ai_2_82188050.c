@@ -44,7 +44,7 @@ s32 BattleAI_ReplaceHyperBeam(s32 arg0) {
                             case HYDRO_PUMP:
                             case SUBMISSION:
                             case EGG_BOMB:
-                            case CLAMP:
+                            case 0x80: /* Clamp; the CLAMP name is taken by the macro */
                             case FURY_SWIPES:
                                 if (tier < 3) {
                                     break;

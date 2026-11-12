@@ -1,3 +1,4 @@
+#include "pokemon.h"
 /* Stadium Zero fragment012_17ED00. */
 /* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_3274D0.c. */
 
@@ -81,31 +82,31 @@ void BattleAnim_ApplyThunderThunderboltUseRadialOffset(Particle* arg0) {
     f32 sp1C = 0.0f;
 
     switch (BattleAnim_GetOwnerSpecies(arg0->pokemon)) {
-        case 0x6:
+        case CHARIZARD:
             sp1C = 15.0f;
             break;
 
-        case 0x73:
+        case KANGASKHAN:
             sp1C = 15.0f;
             break;
 
-        case 0x87:
+        case JOLTEON:
             sp1C = 10.0f;
             break;
 
-        case 0x95:
+        case DRAGONITE:
             sp1C = 10.0f;
             break;
 
-        case 0x1F:
+        case NIDOQUEEN:
             sp1C = 10.0f;
             break;
 
-        case 0x22:
+        case NIDOKING:
             sp1C = 10.0f;
             break;
 
-        case 0x71:
+        case CHANSEY:
             sp1C = 10.0f;
             break;
     }

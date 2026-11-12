@@ -1,3 +1,4 @@
+#include "moves.h"
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
 #include "battle_engine_339CA0.h"
 
@@ -1853,34 +1854,34 @@ void BattleAnim_RecolorParticleByQueuedMoveId(Particle* arg0) {
     s16 sp1E;
 
     switch (BattleAnim_GetQueuedMoveId()) {
-        case 0x4D:
+        case POISONPOWDER:
             sp1E = 0x43;
             break;
-        case 0x4E:
+        case STUN_SPORE:
             sp1E = 5;
             break;
-        case 0x4F:
+        case SLEEP_POWDER:
             sp1E = 0xC;
             break;
-        case 0x93:
+        case SPORE:
             sp1E = 5;
             break;
-        case 0x1C:
+        case SAND_ATTACK:
             sp1E = 0x31;
             break;
-        case 0x6C:
+        case SMOKESCREEN:
             sp1E = 0x1C;
             break;
-        case 0x7B:
+        case SMOG:
             sp1E = 0x1E;
             break;
-        case 0x36:
+        case MIST:
             sp1E = 0x1D;
             break;
-        case 0x72:
+        case HAZE:
             sp1E = 0x1E;
             break;
-        case 0x8B:
+        case POISON_GAS:
             sp1E = 0x1E;
             break;
     }

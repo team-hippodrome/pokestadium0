@@ -1,3 +1,5 @@
+#include "pokemon.h"
+#include "moves.h"
 /* Stadium Zero resident code. */
 /* C ported from the Stadium 1 decomp: src/audio_commands.c, src/audio_data.c. */
 
@@ -855,12 +857,12 @@ s32 func_8003FE58(u32 move_id, u32 species, u32 sound_kind) {
     }
 
     switch (species) {
-        case 9:
+        case BLASTOISE:
             switch (move_id) {
-                case 0x6E:
+                case WITHDRAW:
                     goto skip;
 
-                case 0x82:
+                case SKULL_BASH:
                     if (sound_kind == 4) {
                         goto skip;
                     }
@@ -868,37 +870,37 @@ s32 func_8003FE58(u32 move_id, u32 species, u32 sound_kind) {
             }
             break;
 
-        case 0x19:
+        case PIKACHU:
             if (move_id == 0x39) {
                 goto skip;
             }
             break;
 
-        case 0x4C:
+        case GOLEM:
             switch (move_id) {
-                case 0x39:
-                case 0x54:
-                case 0x69:
-                case 0x79:
-                case 0x82:
-                case 0x96:
+                case SURF:
+                case THUNDERSHOCK:
+                case RECOVER:
+                case EGG_BOMB:
+                case SKULL_BASH:
+                case SPLASH:
                     goto skip;
             }
             break;
 
-        case 0x71:
+        case CHANSEY:
             if ((move_id == 0x27) || (move_id == 0x64) || (move_id == 0x70) || (move_id == 0x71) || (move_id == 0x73)) {
                 goto skip;
             }
             break;
 
-        case 0x44:
-        case 0x5B:
-        case 0x5F:
-        case 0x67:
-        case 0x80:
-        case 0x90:
-        case 0x92:
+        case MACHAMP:
+        case CLOYSTER:
+        case ONIX:
+        case EXEGGUTOR:
+        case TAUROS:
+        case ARTICUNO:
+        case MOLTRES:
             goto skip;
     }
 
@@ -927,20 +929,20 @@ skip:
                 D_800FD650 = 0;
             }
             switch (move_id) {
-                case 0x5B:
+                case DIG:
                     func_80043CE8(0x4B, 0.0f, 0x80);
                     var = 4;
                     break;
 
-                case 0x13:
+                case FLY:
                     func_80043CE8(0x4A, 0.0f, 0x80);
                     var = 4;
                     break;
 
-                case 0xD:
-                case 0x4C:
-                case 0x82:
-                case 0x8F:
+                case RAZOR_WIND:
+                case SOLARBEAM:
+                case SKULL_BASH:
+                case SKY_ATTACK:
                     func_80043CE8(0x52, 0.0f, 0x80);
                     var = 4;
                     break;
@@ -959,9 +961,9 @@ skip:
                 return 0;
             }
             switch (move_id) {
-                case 0x35:
-                case 0x52:
-                case 0x53:
+                case FLAMETHROWER:
+                case DRAGON_RAGE:
+                case FIRE_SPIN:
                     if (D_80077062[species * 8] == 1) {
                         var = 0;
                     } else {
@@ -969,8 +971,8 @@ skip:
                     }
                     break;
 
-                case 0x78:
-                case 0x99:
+                case SELFDESTRUCT:
+                case EXPLOSION:
                     func_80043CE8(0x23, 0.0f, 0x80);
                     var = 0;
                     D_8007757C = 1;
@@ -986,16 +988,16 @@ skip:
                 func_80043CE8(0x53, 0.0f, 0x80);
             }
             switch (move_id) {
-                case 0x2B: case 0x30: case 0x3B: case 0x3D: case 0x3E: case 0x3F: case 0x6D: case 0x86:
-                case 0x89:
+                case LEER: case SUPERSONIC: case BLIZZARD: case BUBBLEBEAM: case AURORA_BEAM: case HYPER_BEAM: case CONFUSE_RAY: case KINESIS:
+                case GLARE:
                     if (func_80037B7C(D_800FD650) != 0) {
                         func_80037AC4(D_800FD650, 0x3C);
                         D_800FD650 = 0;
                     }
                     break;
 
-                case 0x14: case 0x23: case 0x32: case 0x35: case 0x47: case 0x48: case 0x4B: case 0x50:
-                case 0x51: case 0x52: case 0x66: case 0x7E: case 0x84: case 0x8A: case 0x8D: case 0xA0:
+                case BIND: case WRAP: case DISABLE: case FLAMETHROWER: case ABSORB: case MEGA_DRAIN: case RAZOR_LEAF: case PETAL_DANCE:
+                case STRING_SHOT: case DRAGON_RAGE: case MIMIC: case FIRE_BLAST: case CONSTRICT: case DREAM_EATER: case LEECH_LIFE: case CONVERSION:
                     if (func_80037B7C(D_800FD650) != 0) {
                         func_80037AC4(D_800FD64C, 0x14);
                         D_800FD650 = 0;
@@ -1009,10 +1011,10 @@ skip:
                     }
                     break;
 
-                case 0xB: case 0xC: case 0xD: case 0x10: case 0x12: case 0x2F: case 0x39: case 0x4D:
-                case 0x4E: case 0x4F: case 0x54: case 0x55: case 0x56: case 0x57: case 0x5F: case 0x65:
-                case 0x67: case 0x6C: case 0x72: case 0x78: case 0x7B: case 0x7F: case 0x80: case 0x81:
-                case 0x8B: case 0x8E: case 0x93: case 0x94: case 0x95: case 0x99:
+                case VICEGRIP: case GUILLOTINE: case RAZOR_WIND: case GUST: case WHIRLWIND: case SING: case SURF: case POISONPOWDER:
+                case STUN_SPORE: case SLEEP_POWDER: case THUNDERSHOCK: case THUNDERBOLT: case THUNDER_WAVE: case THUNDER: case HYPNOSIS: case NIGHT_SHADE:
+                case SCREECH: case SMOKESCREEN: case HAZE: case SELFDESTRUCT: case SMOG: case WATERFALL: case 0x80: /* Clamp; the CLAMP name is taken by the macro */ case SWIFT:
+                case POISON_GAS: case LOVELY_KISS: case SPORE: case FLASH: case PSYWAVE: case EXPLOSION:
                     break;
             }
             var = 1;
@@ -1024,18 +1026,18 @@ skip:
                 D_800FD650 = 0;
             }
             switch (move_id) {
-                case 0xE: case 0x36: case 0x4A: case 0x60: case 0x61: case 0x66: case 0x68: case 0x69:
-                case 0x6A: case 0x6B: case 0x6E: case 0x6F: case 0x70: case 0x71: case 0x72: case 0x73:
-                case 0x74: case 0x85: case 0x87: case 0x90: case 0x97: case 0x9C: case 0x9F: case 0xA4:
+                case SWORDS_DANCE: case MIST: case GROWTH: case MEDITATE: case AGILITY: case MIMIC: case DOUBLE_TEAM: case RECOVER:
+                case HARDEN: case MINIMIZE: case WITHDRAW: case DEFENSE_CURL: case BARRIER: case LIGHT_SCREEN: case HAZE: case REFLECT:
+                case FOCUS_ENERGY: case AMNESIA: case SOFTBOILED: case TRANSFORM: case ACID_ARMOR: case REST: case SHARPEN: case SUBSTITUTE:
                     return 0;
 
-                case 0x1: case 0x2: case 0x3: case 0x4: case 0x6: case 0xA: case 0xB: case 0xC:
-                case 0xF: case 0x15: case 0x16: case 0x17: case 0x20: case 0x2C: case 0x44: case 0x7D:
-                case 0x80: case 0x9A: case 0x9E: case 0xA2: case 0xA3:
+                case POUND: case KARATE_CHOP: case DOUBLESLAP: case COMET_PUNCH: case PAY_DAY: case SCRATCH: case VICEGRIP: case GUILLOTINE:
+                case CUT: case SLAM: case VINE_WHIP: case STOMP: case HORN_DRILL: case BITE: case COUNTER: case BONE_CLUB:
+                case 0x80: /* Clamp; the CLAMP name is taken by the macro */ case FURY_SWIPES: case HYPER_FANG: case SUPER_FANG: case SLASH:
                     var = 2;
                     break;
 
-                case 0x35: case 0x52: case 0x53:
+                case FLAMETHROWER: case DRAGON_RAGE: case FIRE_SPIN:
                     if (D_80077062[species * 8] == 1) {
                         var = 0;
                     } else {
@@ -1059,13 +1061,13 @@ skip:
 
         case 5:
             switch (move_id) {
-                case 0xD: case 0x10: case 0x12: case 0x2F: case 0x39: case 0x4D: case 0x4E: case 0x4F:
-                case 0x54: case 0x55: case 0x56: case 0x57: case 0x5F: case 0x67: case 0x6C: case 0x6D:
-                case 0x72: case 0x78: case 0x7B: case 0x80: case 0x81: case 0x8B: case 0x8E: case 0x93:
-                case 0x94: case 0x99:
+                case RAZOR_WIND: case GUST: case WHIRLWIND: case SING: case SURF: case POISONPOWDER: case STUN_SPORE: case SLEEP_POWDER:
+                case THUNDERSHOCK: case THUNDERBOLT: case THUNDER_WAVE: case THUNDER: case HYPNOSIS: case SCREECH: case SMOKESCREEN: case CONFUSE_RAY:
+                case HAZE: case SELFDESTRUCT: case SMOG: case 0x80: /* Clamp; the CLAMP name is taken by the macro */ case SWIFT: case POISON_GAS: case LOVELY_KISS: case SPORE:
+                case FLASH: case EXPLOSION:
                     return 0;
 
-                case 0x30:
+                case SUPERSONIC:
                     if (func_80037B7C(D_800FD650) != 0) {
                         func_80037AC4(D_800FD650, 0x28);
                         D_800FD650 = 0;

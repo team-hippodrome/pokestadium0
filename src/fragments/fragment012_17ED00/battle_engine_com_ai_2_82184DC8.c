@@ -243,7 +243,7 @@ s32 BattleAI_EstimateDamage(s8* arg0, s8* arg1, u8 move) {
         case TWINEEDLE:
         case PIN_MISSILE:
         case FIRE_SPIN:
-        case CLAMP:
+        case 0x80: /* Clamp; the CLAMP name is taken by the macro */
         case SPIKE_CANNON:
         case BARRAGE:
         case FURY_SWIPES:

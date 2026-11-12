@@ -1,3 +1,4 @@
+#include "pokemon.h"
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
 #include "battle_engine_339CA0.h"
 
@@ -227,31 +228,31 @@ void BattleAnim_ApplySpeciesKeyedSpawnOffset(Particle* arg0) {
     f32 sp18 = 30.0f;
 
     switch (BattleAnim_GetOwnerSpecies(arg0->pokemon)) {
-        case 3:
+        case VENUSAUR:
             sp1C = 40.0f;
             break;
 
-        case 0x5F:
+        case ONIX:
             sp1C = 25.0f;
             break;
 
-        case 0x67:
+        case EXEGGUTOR:
             sp1C = 35.0f;
             break;
 
-        case 0x71:
+        case CHANSEY:
             sp18 = 35.0f;
             break;
 
-        case 0x73:
+        case KANGASKHAN:
             sp1C = 40.0f;
             break;
 
-        case 0x82:
+        case GYARADOS:
             sp1C = 20.0f;
             break;
 
-        case 0x83:
+        case LAPRAS:
             sp1C = 30.0f;
             break;
     }

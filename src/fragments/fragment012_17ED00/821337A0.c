@@ -1,3 +1,4 @@
+#include "moves.h"
 /* Stadium Zero fragment012_17ED00. */
 
 #include "fragments/battle_engine/battle_engine.h"
@@ -88,19 +89,19 @@ void func_82133868(void) {
     func_8211ED90();
     move = M2C_FIELD(self, u8*, 0x5A);
     switch (move) {
-        case 0x51:
+        case STRING_SHOT:
             M2C_FIELD(D_8219A5A0, s8*, 0x1A) = 3;
             break;
-        case 0x6A:
-        case 0x6B:
-        case 0x96:
+        case HARDEN:
+        case MINIMIZE:
+        case SPLASH:
             M2C_FIELD(D_8219A5A0, s32*, 0x48) = 7;
             break;
-        case 0x2F:
+        case SING:
             M2C_FIELD(D_8219A5A0, s32*, 0x48) = 0x16;
             M2C_FIELD(other, s8*, 0x15) = 3;
             break;
-        case 0x9C:
+        case REST:
             M2C_FIELD(D_8219A5A0, s32*, 0x48) = 0x15;
             M2C_FIELD(self, s8*, 0x15) = 3;
             break;

@@ -1,3 +1,4 @@
+#include "pokemon.h"
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
 #include "battle_engine_32B680_3.h"
 
@@ -8,52 +9,52 @@ void BattleAnim_ApplyModelSpeciesOffset(Particle* arg0) {
     f32 offset = 0.0f;
 
     switch (BattleAnim_GetOwnerSpecies(arg0->pokemon)) {
-        case 0xF:
+        case BEEDRILL:
             offset = -13.0f;
             break;
-        case 0x16:
+        case FEAROW:
             offset = -15.0f;
             break;
-        case 0x19:
+        case PIKACHU:
             offset = -10.0f;
             break;
-        case 0x22:
+        case NIDOKING:
             offset = 10.0f;
             break;
-        case 0x3B:
+        case ARCANINE:
             offset = 25.0f;
             break;
-        case 0x4C:
+        case GOLEM:
             offset = -10.0f;
             break;
-        case 0x52:
+        case MAGNETON:
             offset = -8.0f;
             break;
-        case 0x5B:
+        case CLOYSTER:
             offset = -12.0f;
             break;
-        case 0x67:
+        case EXEGGUTOR:
             offset = 5.0f;
             Particle_Field38_AddXZFromField94Y_08ED0(arg0, 10.0f);
             break;
-        case 0x79:
+        case STARMIE:
             offset = -8.0f;
             break;
-        case 0x7F:
+        case PINSIR:
             offset = 5.0f;
             break;
-        case 0x80:
+        case TAUROS:
             offset = -12.0f;
             break;
-        case 0x82:
+        case GYARADOS:
             offset = -10.0f;
             Particle_Field1C_SetScaled_0B938(arg0, 0.15f);
             break;
-        case 0x86:
+        case VAPOREON:
             offset = -5.0f;
             Particle_Field38_AddXZFromField94YOffsetMinus90_0901C(arg0, 5.0f);
             break;
-        case 0x87:
+        case JOLTEON:
             offset = -15.0f;
             break;
     }

@@ -1,3 +1,5 @@
+#include "pokemon.h"
+#include "moves.h"
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
 #include "battle_engine_32B680_3.h"
 
@@ -164,19 +166,19 @@ void BattleAnim_BuildReflectiveTextureDisplayList(Gfx* arg0, s32 arg1, u16 arg2)
     BattleAnim_SetupReflectiveCamera();
 
     switch (BattleAnim_GetQueuedMoveId()) {
-        case 0x70:
+        case BARRIER:
             gDPPipeSync(arg0++);
             gDPSetPrimColor(arg0++, 0, 0x80, 255, 255, 255, 255);
             gDPSetEnvColor(arg0++, 155, 255, 255, 255);
             break;
 
-        case 0x71:
+        case LIGHT_SCREEN:
             gDPPipeSync(arg0++);
             gDPSetPrimColor(arg0++, 0, 0x80, 255, 255, 255, 255);
             gDPSetEnvColor(arg0++, 255, 255, 100, 255);
             break;
 
-        case 0x73:
+        case REFLECT:
             gDPPipeSync(arg0++);
             gDPSetPrimColor(arg0++, 0, 0x80, 255, 255, 100, 255);
             gDPSetEnvColor(arg0++, 255, 100, 0, 255);
@@ -203,52 +205,52 @@ void BattleAnim_ApplyEffect125ModelScaleOffset(Particle* arg0) {
     f32 scale = 1.2f;
 
     switch (BattleAnim_GetOwnerSpecies(arg0->pokemon)) {
-        case 0x3:
+        case VENUSAUR:
             scale = 1.5f;
             break;
-        case 0x19:
+        case PIKACHU:
             scale = 0.6f;
             break;
-        case 0x22:
+        case NIDOKING:
             scale = 1.5f;
             break;
-        case 0x33:
+        case DUGTRIO:
             scale = 1.0f;
             break;
-        case 0x41:
+        case ALAKAZAM:
             scale = 0.9f;
             break;
-        case 0x44:
+        case MACHAMP:
             scale = 1.5f;
             break;
-        case 0x7B:
+        case SCYTHER:
             scale = 1.5f;
             break;
-        case 0x82:
+        case GYARADOS:
             scale = 0.8f;
             break;
-        case 0x83:
+        case LAPRAS:
             scale = 0.8f;
             break;
-        case 0x84:
+        case DITTO:
             scale = 0.8f;
             break;
-        case 0x87:
+        case JOLTEON:
             scale = 0.8f;
             break;
-        case 0x8E:
+        case AERODACTYL:
             scale = 2.5f;
             break;
-        case 0x8F:
+        case SNORLAX:
             scale = 1.5f;
             break;
-        case 0x90:
+        case ARTICUNO:
             scale = 1.5f;
             break;
-        case 0x91:
+        case ZAPDOS:
             scale = 2.5f;
             break;
-        case 0x92:
+        case MOLTRES:
             scale = 1.5f;
             break;
     }
@@ -816,15 +818,15 @@ void BattleAnim_InitEffect49Model(Particle* arg0) {
     u16 sp24;
 
     switch (BattleAnim_GetQueuedMoveId()) {
-        case 0x47:
+        case ABSORB:
             sp24 = 0x18;
             break;
 
-        case 0x48:
+        case MEGA_DRAIN:
             sp24 = 0x1F;
             break;
 
-        case 0x8D:
+        case LEECH_LIFE:
             sp24 = 0x21;
             break;
     }
@@ -912,15 +914,15 @@ void ParticleEffect_RegisterColorAnim(void) {
 
 void ParticleEffect_RegisterModeSpecific(void) {
     switch (BattleAnim_GetQueuedMoveId()) {
-        case 0x8D:
+        case LEECH_LIFE:
             BattleAnim_SpawnDrainFlameHueChange(0, 0xA, 0x3E, 2, 0xC8, 0x10);
             break;
 
-        case 0x47:
+        case ABSORB:
             BattleAnim_SpawnDrainFlameHueChange(0, 0x35, 0x3E, 2, 0xC8, 0x10);
             break;
 
-        case 0x48:
+        case MEGA_DRAIN:
             BattleAnim_SpawnDrainFlameHueChange(0, 0x27, 0x3E, 2, 0xC8, 0x10);
             break;
     }
@@ -1150,51 +1152,51 @@ void BattleAnim_ApplyEffects63And75SpeciesScaleOffset(Particle* arg0) {
     f32 sp18 = 0.0f;
 
     switch (BattleAnim_GetOwnerSpecies(arg0->pokemon)) {
-        case 0x3:
+        case VENUSAUR:
             sp1C = 1.0f;
             sp18 = 5.0f;
             break;
 
-        case 0x22:
+        case NIDOKING:
             sp1C = 1.0f;
             sp18 = 5.0f;
             break;
 
-        case 0x4C:
+        case GOLEM:
             sp1C = 0.8f;
             sp18 = 5.0f;
             break;
 
-        case 0x5E:
+        case GENGAR:
             sp1C = 0.8f;
             sp18 = 5.0f;
             break;
 
-        case 0x80:
+        case TAUROS:
             sp1C = 0.8f;
             sp18 = 10.0f;
             break;
 
-        case 0x82:
+        case GYARADOS:
             sp18 = 20.0f;
             break;
 
-        case 0x88:
+        case FLAREON:
             sp1C = 1.2f;
             sp18 = 10.0f;
             break;
 
-        case 0x8E:
+        case AERODACTYL:
             sp1C = 1.2f;
             sp18 = 20.0f;
             break;
 
-        case 0x91:
+        case ZAPDOS:
             sp1C = 1.2f;
             sp18 = 15.0f;
             break;
 
-        case 0x95:
+        case DRAGONITE:
             sp18 = 10.0f;
             break;
     }
@@ -2106,16 +2108,16 @@ f32 BattleAnim_GetSpeciesScaleAdjust(Particle* arg0) {
     f32 sp1C = 1.0f;
 
     switch (BattleAnim_GetOwnerSpecies(arg0->pokemon)) {
-        case 0x3B:
+        case ARCANINE:
             sp1C = 1.45f;
             break;
 
-        case 0x5F:
+        case ONIX:
             Particle_Field38_AddXZFromField94YOffsetMinus90_0901C(arg0, 20.0f);
             sp1C = 0.9f;
             break;
 
-        case 0x82:
+        case GYARADOS:
             sp1C = 0.9f;
             break;
     }
@@ -2412,19 +2414,19 @@ s16 BattleAnim_GetSlimeVariantIndex(void) {
     s16 sp1E;
 
     switch (BattleAnim_GetQueuedMoveId()) {
-        case 0x7C:
+        case SLUDGE:
             sp1E = 0;
             break;
 
-        case 0x33:
+        case ACID:
             sp1E = 1;
             break;
 
-        case 0x5C:
+        case TOXIC:
             sp1E = 2;
             break;
 
-        case 0x7A:
+        case LICK:
             sp1E = 3;
             break;
     }
@@ -2436,19 +2438,19 @@ s16 BattleAnim_GetMoveKeyedTintRampParam(void) {
     s16 sp1E;
 
     switch (BattleAnim_GetQueuedMoveId()) {
-        case 0x7C:
+        case SLUDGE:
             sp1E = 0x10;
             break;
 
-        case 0x33:
+        case ACID:
             sp1E = 0x29;
             break;
 
-        case 0x5C:
+        case TOXIC:
             sp1E = 0x3B;
             break;
 
-        case 0x7A:
+        case LICK:
             sp1E = 0x36;
             break;
     }
@@ -2460,19 +2462,19 @@ s16 BattleAnim_GetMoveKeyedTrailVariantParam(void) {
     s16 sp1E;
 
     switch (BattleAnim_GetQueuedMoveId()) {
-        case 0x7C:
+        case SLUDGE:
             sp1E = 8;
             break;
 
-        case 0x33:
+        case ACID:
             sp1E = 0x33;
             break;
 
-        case 0x5C:
+        case TOXIC:
             sp1E = 0x33;
             break;
 
-        case 0x7A:
+        case LICK:
             sp1E = 0x33;
             break;
     }
@@ -2511,15 +2513,15 @@ f32 func_8215AEA4(Particle* arg0) {
     f32 sp1C = 0.5f;
 
     switch (BattleAnim_GetOwnerSpecies(arg0->pokemon)) {
-        case 0x5F:
+        case ONIX:
             sp1C = 0.3f;
             break;
 
-        case 0x82:
+        case GYARADOS:
             sp1C = 0.25f;
             break;
 
-        case 0x83:
+        case LAPRAS:
             sp1C = 0.4f;
             break;
     }
@@ -2580,11 +2582,11 @@ void BattleAnim_InitializeEarthquakeFissureUse(void) {
     s16 sp34;
 
     switch (BattleAnim_GetQueuedMoveId()) {
-        case 0x59:
+        case EARTHQUAKE:
             sp34 = 0xE;
             break;
 
-        case 0x5A:
+        case FISSURE:
             sp34 = 0;
             break;
     }
@@ -2684,16 +2686,16 @@ f32 func_8215B6A4(Particle* arg0) {
     f32 b = 1.0f;
 
     switch (BattleAnim_GetOwnerSpecies(arg0->pokemon)) {
-        case 0x5F:
+        case ONIX:
             Particle_Field38_AddXZFromField94YOffsetMinus90_0901C(arg0, 15.0f);
             a = 10.0f;
             b = 0.5f;
             break;
-        case 0x82:
+        case GYARADOS:
             a = 10.0f;
             b = 0.4f;
             break;
-        case 0x83:
+        case LAPRAS:
             a = 10.0f;
             b = 0.4f;
             break;
@@ -3045,17 +3047,17 @@ void BattleAnim_InitializeDreamEaterHit(void) {
  */
 void BattleAnim_CreateDrainingMoveOverlay(void) {
     switch (BattleAnim_GetQueuedMoveId()) {
-        case 0x8D:
+        case LEECH_LIFE:
             BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0x10, 6);
             BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunFillScreenOverlay, &gDefaultParticleDescriptor, 0x80, 1, 0xC, 0xD, 0x1A, 0x20);
             break;
 
-        case 0x47:
+        case ABSORB:
             BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0x10, 0x37);
             BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunFillScreenOverlay, &gDefaultParticleDescriptor, 0x80, 1, 0xC, 0xB, 0x1A, 0x20);
             break;
 
-        case 0x48:
+        case MEGA_DRAIN:
             BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0x10, 0x1F);
             BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunFillScreenOverlay, &gDefaultParticleDescriptor, 0x80, 1, 0xC, 0xC, 0x1A, 0x20);
             break;

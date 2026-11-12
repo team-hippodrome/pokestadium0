@@ -157,22 +157,22 @@ void func_82114D10(void) {
     }
 
     switch (sBattleUser->moveCache.lastMove) {
-        case 0xD:
+        case RAZOR_WIND:
             func_8211EF74(D_8219A520 + 0xC8, -0x51, D_8218C878, func_82107F88(sActivePokemon[sBattleScene.scene->actingSide]));
             break;
-        case 0x4C:
+        case SOLARBEAM:
             func_8211EF74(D_8219A520 + 0xC8, -0x50, D_8218C87C, func_82107F88(sActivePokemon[sBattleScene.scene->actingSide]));
             break;
-        case 0x82:
+        case SKULL_BASH:
             func_8211EF74(D_8219A520 + 0xC8, -0x4F, D_8218C880, func_82107F88(sActivePokemon[sBattleScene.scene->actingSide]));
             break;
-        case 0x8F:
+        case SKY_ATTACK:
             func_8211EF74(D_8219A520 + 0xC8, -0x4E, D_8218C884, func_82107F88(sActivePokemon[sBattleScene.scene->actingSide]));
             break;
-        case 0x13:
+        case FLY:
             func_8211EF74(D_8219A520 + 0x148, -0x4D, D_8218C888, func_82107F88(sActivePokemon[sBattleScene.scene->actingSide]));
             break;
-        case 0x5B:
+        case DIG:
             func_8211EF74(D_8219A520 + 0x148, -0x4C, D_8218C88C, func_82107F88(sActivePokemon[sBattleScene.scene->actingSide]));
             break;
     }
