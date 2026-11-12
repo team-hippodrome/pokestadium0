@@ -451,7 +451,7 @@ void func_8A201394(s32 arg0, s32 arg1, BattleMon* arg2) {
     func_8001A944(arg0 + 9, arg1 + 6, "No.%03d", arg2->species.id);
     func_8001A944(arg0 + 0xC9, arg1 + 0x21, "L%d", arg2->level);
     func_8001A384(4, 0);
-    func_8001A944(arg0 + 9, arg1 + 0x3C, "タイプ");
+    func_8001A944(arg0 + 9, arg1 + 0x3C, "タイプ"); // "Type"
     func_8001A944(arg0 + 0x4F, arg1 + 0x3C, "1/");
     if (func_8002D498((s32)arg2, 1) != -1) {
         func_8001A944(arg0 + 0xB9, arg1 + 0x3C, "2/");

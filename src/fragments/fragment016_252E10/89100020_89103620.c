@@ -134,14 +134,14 @@ u32 func_800566BC(s8*);
 void func_89103620(s8* arg0, s32 arg1, s32 arg2) {
     switch (arg1) {
         case 0:
-            *(Str7_89103620*)arg0 = *(Str7_89103620*)"てもち";
+            *(Str7_89103620*)arg0 = *(Str7_89103620*)"てもち"; // "Party"
             break;
         case 1:
-            *(Str9_89103620*)arg0 = *(Str9_89103620*)"ＧＢ　０";
+            *(Str9_89103620*)arg0 = *(Str9_89103620*)"ＧＢ　０"; // "GB 0"
             arg0[func_800566BC(arg0) - 1] += arg2 + 1;
             break;
         case 2:
-            *(Str9_89103620*)arg0 = *(Str9_89103620*)"６４　０";
+            *(Str9_89103620*)arg0 = *(Str9_89103620*)"６４　０"; // "64 0"
             arg0[func_800566BC(arg0) - 1] += arg2 + 1;
             break;
     }
