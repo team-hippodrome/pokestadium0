@@ -231,7 +231,7 @@ void DisplayWorker_ThreadMain(UNUSED void* arg0) {
     func_80004EA8(&D_80087ABC);
     func_80001140(D_80087AE8);
     while (1) {
-        if (M2C_FIELD(&D_800A9710, s16*, 0xA38) > 0) {
+        if (D_800A9710.unk_A38 > 0) {
             func_80001558();
             continue;
         }

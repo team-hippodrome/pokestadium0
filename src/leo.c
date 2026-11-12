@@ -57,7 +57,7 @@ s32 Leo_ValidateBootDiskId(void) {
     if ((s32) M2C_FIELD(&D_80084D10, u8 *, 0) >= 0x5B) {
         return 1;
     }
-    if (M2C_FIELD(&D_80084D10, u8 *, 5) != 1) {
+    if (D_80084D10.diskNumber != 1) {
         return 1;
     }
     func_80058410(&D_80084D10, &D_800001A0, 0x20);

@@ -705,7 +705,7 @@ void BattleAnim_LassoMoveHitReactionContinue(ActivePokemon* owner, ActivePokemon
         BattleAnim_ApproachF(&owner->displayObject.scale.z, 0.65 - scale_delta, 0.5f);
     }
 
-    if (M2C_FIELD(animated_pokemon, s32*, 0x608)++ == 0x96) {
+    if (animated_pokemon->doubleTeamTimer++ == 0x96) {
         if (runtime->scaleResize == 0) {
             Vec3f_SetComponentsDuplicate(&owner->displayObject.scale, 1.0f, 1.0f, 1.0f);
         } else {

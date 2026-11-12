@@ -116,7 +116,7 @@ void func_8000A92C(s32 arg0) {
 loop_1:
     func_80004920(&D_800AAE38);
     func_800082D0();
-    if ((D_800AAE30 != 0) && (M2C_FIELD(&D_800A9710, s16 *, 0xA38) < 0x15)) {
+    if ((D_800AAE30 != 0) && (D_800A9710.unk_A38 < 0x15)) {
         func_8003B868(&D_800AAE68 + (D_800AAF38 * 0x68) + 0x20);
         func_80004F34(&D_800AAE68 + (D_800AAF38 * 0x68), 0);
     }

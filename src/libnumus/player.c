@@ -292,12 +292,12 @@ u8* Audio_PushVoiceLoopState(channel_t* cp, u8* ptr) {
 }
 
 u8* Audio_PopVoiceLoopState(channel_t* cp, u8* ptr) {
-    s32 index = M2C_FIELD(cp, u8*, 0xEE) - 1;
+    s32 index = cp->trigger_off - 1;
 
     if (((u8*)((u8*)cp + 0x130))[index] != 0xFF) {
         ((u8*)((u8*)cp + 0x130))[index]--;
         if (!((u8*)((u8*)cp + 0x130))[index]) {
-            M2C_FIELD(cp, u8*, 0xEE) = index;
+            cp->trigger_off = index;
             index = -1;
         }
     }
@@ -342,8 +342,8 @@ u8* Audio_DisableVoicePeriodicPitchModulation(channel_t* cp, u8* ptr) {
 }
 
 u8* Audio_SetVoiceDefaultVelocity(channel_t* cp, u8* ptr) {
-    M2C_FIELD(cp, u8*, 0xE6) = *ptr++;
-    M2C_FIELD(cp, u8*, 0xE5) = 0;
+    cp->wobble_off_speed = *ptr++;
+    cp->wobble_on_speed = 0;
     return ptr;
 }
 
@@ -420,8 +420,8 @@ u8* Audio_SetRandomVoiceVolume(channel_t* cp, u8* ptr) {
 }
 
 u8* func_80036EE0(channel_t* cp, u8* ptr) {
-    M2C_FIELD(cp, u8*, 0xCB) = Audio_RandomScale(*ptr++);
-    M2C_FIELD(cp, u8*, 0xCB) += *ptr++;
+    cp->pan = Audio_RandomScale(*ptr++);
+    cp->pan += *ptr++;
     return ptr;
 }
 
@@ -467,8 +467,8 @@ u8* Audio_SetVoiceVolumeScale(channel_t* cp, u8* ptr) {
 }
 
 u8* Audio_SetVoicePanModulation(channel_t* cp, u8* ptr) {
-    M2C_FIELD(cp, u8*, 0xE7) = *ptr++;
-    if (!M2C_FIELD(cp, u8*, 0xE7)) {
+    cp->wobble_counter = *ptr++;
+    if (!cp->wobble_counter) {
         M2C_FIELD(cp, u16*, 0xBC) = 0x80;
     }
     return ptr;
@@ -823,7 +823,7 @@ void func_8003798C(s32 flags, s32 duration) {
     mask = osSetIntMask(1);
 
     for (i = 0, cp = mus_channels; i < (s32)max_channels; i++, cp++) {
-        if (((M2C_FIELD(cp, u16 *, 0xB2) != 0) && (flags & MUSFLAG_EFFECTS)) || ((M2C_FIELD(cp, u16 *, 0xB2) == 0) && (flags & MUSFLAG_SONGS))) {
+        if (((cp->IsFX != 0) && (flags & MUSFLAG_EFFECTS)) || ((cp->IsFX == 0) && (flags & MUSFLAG_SONGS))) {
             cp->duration = duration;
             cp->duration_scale = scale;
         }
@@ -847,7 +847,7 @@ s32 Audio_IsSoundPlaying(s32 flags) {
 
     for (i = 0, cp = mus_channels, count = 0; i < (s32)max_channels; i++, cp++) {
         if ((cp->pdata != NULL) && (cp->pdata != (u8*)-1)) {
-            if (((M2C_FIELD(cp, u16 *, 0xB2) != 0) && (flags & MUSFLAG_EFFECTS)) || ((M2C_FIELD(cp, u16 *, 0xB2) == 0) && (flags & MUSFLAG_SONGS))) {
+            if (((cp->IsFX != 0) && (flags & MUSFLAG_EFFECTS)) || ((cp->IsFX == 0) && (flags & MUSFLAG_SONGS))) {
                 count++;
             }
         }
@@ -1026,7 +1026,7 @@ s32 func_80037DF4(s32 handle, s32 tempo) {
         if (handle == cp->handle) {
             cp->temscale = tempo;
             count++;
-            cp->channel_tempo = (M2C_FIELD(cp, u16 *, 0xB4) * tempo) >> 7;
+            cp->channel_tempo = (cp->channel_tempo_save * tempo) >> 7;
         }
     }
 
@@ -1813,19 +1813,19 @@ f32 Audio_AdvanceVoicePitch(channel_t* arg0, f32 offset) {
 }
 
 void Audio_UpdateVoicePlaybackEnd(channel_t* arg0) {
-    if (M2C_FIELD(arg0, u16*, 0xA6) != 0x7FFF) {
-        if (M2C_FIELD(arg0, u16*, 0xBE) != 0) {
-            M2C_FIELD(arg0, s64*, 0x28) = (s32)(M2C_FIELD(arg0, u16*, 0xBE) << 8) + M2C_FIELD(arg0, s64*, 0x20);
+    if (arg0->note_duration != 0x7FFF) {
+        if (arg0->cutoff != 0) {
+            M2C_FIELD(arg0, s64*, 0x28) = (s32)(arg0->cutoff << 8) + M2C_FIELD(arg0, s64*, 0x20);
         } else {
-            M2C_FIELD(arg0, s64*, 0x28) = M2C_FIELD(arg0, s64*, 0x18) - (s32)(M2C_FIELD(arg0, u16*, 0xC0) << 8);
+            M2C_FIELD(arg0, s64*, 0x28) = M2C_FIELD(arg0, s64*, 0x18) - (s32)(arg0->endit << 8);
         }
     } else {
         M2C_FIELD(arg0, s64*, 0x28) = 0x7FFFFFFF;
     }
 
-    M2C_FIELD(arg0, u8*, 0xD2) = M2C_FIELD(arg0, u8*, 0xCE);
-    M2C_FIELD(arg0, u8*, 0xD3) = M2C_FIELD(arg0, u8*, 0xCD);
-    M2C_FIELD(arg0, u8*, 0xD1) = 1;
+    arg0->env_current_vol = arg0->env_init_vol;
+    arg0->env_decay_begin = arg0->env_speed;
+    arg0->env_state = 1;
 }
 
 void func_8003A800(void*, s32);
@@ -1891,9 +1891,9 @@ void func_800395D0(channel_t* arg0) {
 }
 
 void func_80039A44(channel_t* cp) {
-    M2C_FIELD(cp, u32*, 0xA0) = M2C_FIELD(cp, u64*, 0x20);
+    cp->sweep_frame = cp->note_end_frame;
     M2C_FIELD(cp, u8*, 0xEC) = 0;
-    M2C_FIELD(cp, u8*, 0xED) = M2C_FIELD(cp, s16*, 0xBC) & 0x80;
+    cp->env_trigger_off = cp->sweep_amount & 0x80;
 }
 
 void Audio_AdvancePanModulation(channel_t* arg0) {
@@ -1903,7 +1903,7 @@ void Audio_AdvancePanModulation(channel_t* arg0) {
     do {
         arg0->sweep_frame += 0x100;
 
-        temp_v1 = (M2C_FIELD(arg0, u8*, 0xE7) * 2) + M2C_FIELD(arg0, u8*, 0xEC);
+        temp_v1 = (arg0->wobble_counter * 2) + M2C_FIELD(arg0, u8*, 0xEC);
         if (temp_v1 < 0x80) {
             M2C_FIELD(arg0, u8*, 0xEC) = temp_v1;
             continue;
@@ -1911,12 +1911,12 @@ void Audio_AdvancePanModulation(channel_t* arg0) {
 
         M2C_FIELD(arg0, u8*, 0xEC) = temp_v1 & 0x7F;
         temp_v1 >>= 7;
-        if (M2C_FIELD(arg0, u8*, 0xED) == 0) {
+        if (arg0->env_trigger_off == 0) {
             var_v0 = arg0->sweep_amount;
             var_v0 += temp_v1;
             if (var_v0 >= 0xFF) {
                 var_v0 = 0xFE;
-                M2C_FIELD(arg0, u8*, 0xED) = 1;
+                arg0->env_trigger_off = 1;
             }
             arg0->sweep_amount = var_v0;
         } else {
@@ -1924,7 +1924,7 @@ void Audio_AdvancePanModulation(channel_t* arg0) {
             var_v0 -= temp_v1;
             if ((var_v0 >= 0xFF) || (var_v0 == 0)) {
                 var_v0 = 1;
-                M2C_FIELD(arg0, u8*, 0xED) = 0;
+                arg0->env_trigger_off = 0;
             }
             arg0->sweep_amount = var_v0;
         }
@@ -1955,21 +1955,21 @@ f32 Audio_AdvancePeriodicPitchModulation(channel_t* arg0) {
 #undef CH_S8
 
 f32 Audio_ComputeSinePitchModulation(channel_t* arg0) {
-    s32 temp_v0 = M2C_FIELD(arg0, u16*, 0xB6) - M2C_FIELD(arg0, u8*, 0xC4);
+    s32 temp_v0 = arg0->wobble_frame - arg0->vib_delay;
     f32 tmp;
 
     if (temp_v0 > 0) {
-        tmp = M2C_FIELD(arg0, f32*, 0x40) * __sinf(((temp_v0 / (f32)(u32)M2C_FIELD(arg0, u8*, 0xE8)) * 2) * 3.14159260000000007);
-        M2C_FIELD(arg0, f32*, 0x78) = tmp;
+        tmp = arg0->vib_amount * __sinf(((temp_v0 / (f32)(u32)arg0->vib_speed) * 2) * 3.14159260000000007);
+        arg0->vibrato = tmp;
     }
-    return M2C_FIELD(arg0, f32*, 0x78);
+    return arg0->vibrato;
 }
 
 void Audio_AdvancePitchEnvelope(channel_t* arg0) {
     s32 tmp;
 
     do {
-        M2C_FIELD(arg0, u64*, 0x8) += 0x100;
+        arg0->channel_frame += 0x100;
 
         arg0->cont_vol_repeat_count--;
         if (arg0->cont_vol_repeat_count) {
@@ -1991,14 +1991,14 @@ void Audio_AdvancePitchEnvelope(channel_t* arg0) {
             arg0->volume = tmp;
             arg0->cont_vol_repeat_count = 1;
         }
-    } while (M2C_FIELD(arg0, u64*, 0x8) < M2C_FIELD(arg0, u64*, 0x0));
+    } while (arg0->channel_frame < M2C_FIELD(arg0, u64*, 0x0));
 }
 
 void Audio_AdvanceVolumeEnvelope(channel_t* arg0) {
     u8 tmp;
 
     do {
-        M2C_FIELD(arg0, u64*, 0x10) += 0x100;
+        arg0->volume_frame += 0x100;
 
         arg0->cont_pb_repeat_count--;
         if (arg0->cont_pb_repeat_count) {
@@ -2021,7 +2021,7 @@ void Audio_AdvanceVolumeEnvelope(channel_t* arg0) {
             arg0->pitchbend_calc = arg0->pitchbend * arg0->bendrange;
             arg0->cont_pb_repeat_count = 1;
         }
-    } while (M2C_FIELD(arg0, u64*, 0x10) < M2C_FIELD(arg0, u64*, 0x0));
+    } while (arg0->volume_frame < M2C_FIELD(arg0, u64*, 0x0));
 }
 
 f32 Audio_ExpApproximation(f32 arg0) {
@@ -2260,15 +2260,15 @@ s32 func_8003A638(channel_t* cp, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     func_8003A2B8((s8*)cp);
     M2C_FIELD(cp, s32*, 0x88) = (s32)D_800B3668;
     M2C_FIELD(cp, s16*, 0xB2) = arg1;
-    M2C_FIELD(cp, s16*, 0xAA) = arg2;
-    M2C_FIELD(cp, s16*, 0xBC) = arg3;
-    M2C_FIELD(cp, s32*, 0x60) = arg4;
+    cp->volume_scale = arg2;
+    cp->sweep_amount = arg3;
+    cp->priority = arg4;
     mask = func_8004D300(uninit);
-    M2C_FIELD(cp, s32*, 0x5C) = D_800B365C;
+    cp->handle = D_800B365C;
     D_800B365C++;
     val = ((s32*)D_800B3644)[arg1];
     M2C_FIELD(cp, s32*, 0x8C) = val;
     M2C_FIELD(cp, s32*, 0x30) = val;
     func_8004D300(mask);
-    return M2C_FIELD(cp, s32*, 0x5C);
+    return cp->handle;
 }

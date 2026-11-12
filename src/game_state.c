@@ -168,9 +168,9 @@ extern M2C_UNK D_800AF924;
 extern M2C_UNK D_800AF94C;
 
 M2C_UNK func_80025758(M2C_UNK arg0, M2C_UNK arg1, M2C_UNK arg2) {
-    M2C_FIELD(&D_800AE8F0, s8 *, 0) = arg0;
-    M2C_FIELD(&D_800AE8F0, s8 *, 1) = 1;
-    M2C_FIELD(&D_800AE8F0, s8 *, 3) = 1;
+    D_800AE8F0.unk_0000 = arg0;
+    D_800AE8F0.unk_0001 = 1;
+    D_800AE8F0.unk_0003 = 1;
     func_80025640(0, &D_800AE8F4, (M2C_UNK *)&D_800AF104, arg1);
     func_80025640(1, &D_800AEAF8, &D_800AF30C, arg2);
     func_8002572C((s8 *)&D_800AF924, (s32)&D_800AE8F4);
@@ -311,19 +311,19 @@ s32 func_80025A64(void) {
     s8 temp_v0;
 
     ret = 0;
-    M2C_FIELD(&D_800AE8F0, u8 *, 0x1095) = 0U;
+    D_800AE8F0.unk_1095 = 0U;
     temp_v0 = func_800253BC(&D_800AFB10, buf, &D_800AE910);
     if (temp_v0 != -1) {
         D_800AE8F6 = temp_v0;
         if (buf[0] == 0) {
             func_80025910(buf[0]);
-            M2C_FIELD(&D_800AE8F0, u8 *, 0x1095) = (u8) (M2C_FIELD(&D_800AE8F0, u8 *, 0x1095) | 1);
-            M2C_FIELD(&D_800AE8F0, u8 *, 0x1094) = 0xFF;
+            D_800AE8F0.unk_1095 = (u8) (D_800AE8F0.unk_1095 | 1);
+            D_800AE8F0.unk_1094 = 0xFF;
             func_800257F0(-1);
             ret = 1;
         } else if ((D_800733D4 >= 0) && (D_800733D4 < 4) && (GbSave_CopyPortSnapshot(D_800733D4, &D_800AF9A8) != 0) && (func_80057910(buf, &D_800AF9A8, 0x162) == 0)) {
             func_80025910(buf[0]);
-            M2C_FIELD(&D_800AE8F0, u8 *, 0x1095) = (u8) (M2C_FIELD(&D_800AE8F0, u8 *, 0x1095) | 1);
+            D_800AE8F0.unk_1095 = (u8) (D_800AE8F0.unk_1095 | 1);
             M2C_FIELD(&D_800AE8F0, s8 *, 0x1094) = (s8) D_800733D4;
             func_800257F0((s32) D_800733D4);
             ret = 1;
@@ -769,7 +769,7 @@ void func_800269A0(s32 arg0) {
     func_8000D20C();
     func_800177DC();
     func_8000256C(0x47414D45);
-    M2C_FIELD(&D_800AE8F0, s8*, 0) = 1;
+    D_800AE8F0.unk_0000 = 1;
     while (1) {
         state = D_800733C8;
         switch (state) {

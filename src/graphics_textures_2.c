@@ -308,7 +308,7 @@ void Font_EnableTwoCycleTexturing(void) {
 extern Gfx D_800609D8[];
 
 void Font_DisableTwoCycleTexturing(void) {
-    M2C_FIELD(font_context, u8*, 0x3B) &= ~3;
+    font_context->line_break_flag &= ~3;
     gSPDisplayList(gDisplayListHead++, D_800609D8);
 }
 

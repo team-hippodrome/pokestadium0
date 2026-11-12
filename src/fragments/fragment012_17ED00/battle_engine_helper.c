@@ -128,7 +128,7 @@ s16 BattleScene_GetHitCueDefaultAnchor(ActivePokemon* active_pokemon) {
 s16 func_82107B54(ActivePokemon* active_pokemon) {
     MovePresentationCue* hit_cue = &sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon)]->hitCue;
 
-    return M2C_FIELD(hit_cue, u8*, 3);
+    return hit_cue->alternateAnchor;
 }
 
 extern f32 D_FLT_82189350[][4];
@@ -396,7 +396,7 @@ void BattleScene_InitializeParticipantModel(ActivePokemon* active_pokemon) {
         BattleScene_PositionParticipantModel(active_pokemon);
         active_pokemon->displayObject.rotation.y = -0x4000;
     }
-    func_8000D41C(&M2C_FIELD(active_pokemon, Vec3f*, 0x5DC), M2C_FIELD(active_pokemon, s32*, 0x60C) * D_82199DF0[side][0], D_82199DF0[side][1], D_82199DF0[side][2]);
+    func_8000D41C(&M2C_FIELD(active_pokemon, Vec3f*, 0x5DC), active_pokemon->facingDirection * D_82199DF0[side][0], D_82199DF0[side][1], D_82199DF0[side][2]);
 }
 
 void BattleScene_InitializeParticipantAuxiliaryModel(ActivePokemon* active_pokemon) {
@@ -455,7 +455,7 @@ void BattleScene_ReinitParticipantBodyModel(ActivePokemon* owner, ActivePokemon*
             pokemon->displayObject.rotation.y = -0x4000;
         }
     }
-    func_8000D41C(&M2C_FIELD(owner, Vec3f*, 0x5DC), M2C_FIELD(owner, s32*, 0x60C) * D_82199DF0[side][0], D_82199DF0[side][1], D_82199DF0[side][2]);
+    func_8000D41C(&M2C_FIELD(owner, Vec3f*, 0x5DC), owner->facingDirection * D_82199DF0[side][0], D_82199DF0[side][1], D_82199DF0[side][2]);
 }
 
 void BattleScene_ReinitParticipantThumbnailModel(ActivePokemon* pokemon, ThumbnailState* thumbnail, s16 object_type) {
@@ -552,7 +552,7 @@ void func_821088BC(ActivePokemon* active_pokemon) {
     BattleScene_ReinitParticipantThumbnailModel(active_pokemon, &active_pokemon->thumbnail, object_type);
     func_82108648(active_pokemon, object_type);
     Battle_ResetEventTrack(active_pokemon);
-    M2C_FIELD(state, u8*, 0x2E) = 0;
+    state->unk_2D = 0;
     state->flags &= 0x3800;
     Vec3f_SetComponentsDuplicate(&active_pokemon->displayObject.scale, 1.0f, 1.0f, 1.0f);
 }
@@ -681,8 +681,8 @@ void BattleScene_RebindParticipantTeamMember(ActivePokemon* pokemon, s32 team_me
 
     BattleScene_BindParticipantTeamRoster(pokemon, team_member_index);
     BattleScene_SetParticipantTeamMember(pokemon, team_member_index);
-    M2C_FIELD(pokemon, s32*, 0x9D0) = M2C_FIELD(state, s32*, 0x8);
-    M2C_FIELD(pokemon, s32*, 0x9D4) = M2C_FIELD(state, u8*, 0x2B);
+    M2C_FIELD(pokemon, s32*, 0x9D0) = state->rosterIndex;
+    M2C_FIELD(pokemon, s32*, 0x9D4) = state->teamMemberIndex;
 }
 
 s32 Battle_FreezeClauseInEffect(ActivePokemon* active_pokemon) {

@@ -60,7 +60,7 @@ void func_8211E890(ActivePokemon* arg0, ActivePokemonState* arg1) {
                     } else {
                         func_8211B900(arg0, 0x60, 0xF, sp2C->controllerPort);
                     }
-                } else if (M2C_FIELD(arg1, u8*, 0x2E) == 0x10) {
+                } else if (arg1->unk_2D == 0x10) {
                     func_821196A4(arg0, 0x60, 0xF, sp2C->controllerPort);
                 } else {
                     func_82119364(arg0, 0x60, 0xF, sp2C->controllerPort);
@@ -105,7 +105,7 @@ void func_8211EB10(ActivePokemon* arg0, ActivePokemonState* arg1) {
                     } else {
                         func_8211B900(arg0, 0x18, 0x79, sp2C->controllerPort);
                     }
-                } else if (M2C_FIELD(arg1, u8*, 0x2E) == 0x10) {
+                } else if (arg1->unk_2D == 0x10) {
                     func_821196A4(arg0, 0x9A, 0xCE, sp2C->controllerPort);
                 } else {
                     func_82119364(arg0, 0x62, 0xCE, sp2C->controllerPort);
@@ -343,9 +343,9 @@ void func_8211F2E0(ActivePokemon* arg0) {
     arg0->captionState.unk_08[arg0->captionState.unk_04] = 0;
     if (arg0->captionState.unk_48[0] != 0) {
         if (arg0 == sSide1ActivePokemon) {
-            func_8211C43C(M2C_FIELD(roster, u8*, 1), 0x5F, 0xE, arg0->captionState.unk_08);
+            func_8211C43C(roster->controllerPort, 0x5F, 0xE, arg0->captionState.unk_08);
         } else {
-            func_8211C43C(M2C_FIELD(roster, u8*, 1), 0x17, 0xBB, arg0->captionState.unk_08);
+            func_8211C43C(roster->controllerPort, 0x17, 0xBB, arg0->captionState.unk_08);
         }
     }
 }

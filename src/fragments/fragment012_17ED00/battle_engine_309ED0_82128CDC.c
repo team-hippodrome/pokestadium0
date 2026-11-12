@@ -108,7 +108,7 @@ void func_82128F2C(CameraNode* arg0, s32 arg1) {
 void func_82128FBC(CameraNode* arg0) {
     switch (sBattleScene.scene->phaseSubstep) {
         case 0:
-            M2C_FIELD(sBattleScene.scene, s32*, 0x50) = 4;
+            sBattleScene.scene->cameraPresetId = 4;
             if (BattleScene_AdvanceCameraFrameCounter(0x14) != 0) {
                 BattleScene_SetPhaseFlag();
                 func_82124984((ActivePokemon*)D_8219A544, arg0, 0);
@@ -117,7 +117,7 @@ void func_82128FBC(CameraNode* arg0) {
             }
             break;
         case 1:
-            M2C_FIELD(sBattleScene.scene, s32*, 0x50) = 4;
+            sBattleScene.scene->cameraPresetId = 4;
             func_821228B0(arg0, (ActivePokemon*)D_8219A544);
             if (BattleScene_AdvanceCameraSubstepCounter(0xF) != 0) {
                 Battle_ClearMessageCursor();
@@ -126,7 +126,7 @@ void func_82128FBC(CameraNode* arg0) {
                 Battle_ClearMessageCursor();
                 BattleScene_ResetCameraFrameCounter();
                 BattleScene_ClearPhaseFlag();
-                M2C_FIELD(sBattleScene.scene, s32*, 0x50) = 0;
+                sBattleScene.scene->cameraPresetId = 0;
                 sBattleScene.scene->phaseStep++;
             }
             break;
@@ -136,7 +136,7 @@ void func_82128FBC(CameraNode* arg0) {
 void func_821290CC(CameraNode* arg0) {
     switch (sBattleScene.scene->phaseSubstep) {
         case 0:
-            M2C_FIELD(sBattleScene.scene, s32*, 0x50) = 4;
+            sBattleScene.scene->cameraPresetId = 4;
             if (BattleScene_AdvanceCameraFrameCounter(0x14) != 0) {
                 BattleScene_SetPhaseFlag();
                 func_82124984((ActivePokemon*)D_8219A544, arg0, 1);
@@ -146,7 +146,7 @@ void func_821290CC(CameraNode* arg0) {
             }
             break;
         case 1:
-            M2C_FIELD(sBattleScene.scene, s32*, 0x50) = 4;
+            sBattleScene.scene->cameraPresetId = 4;
             func_821228B0(arg0, (ActivePokemon*)D_8219A544);
             if (BattleScene_AdvanceCameraSubstepCounter(0xF) != 0) {
                 Battle_ClearMessageCursor();
@@ -155,7 +155,7 @@ void func_821290CC(CameraNode* arg0) {
                 Battle_ClearMessageCursor();
                 BattleScene_ResetCameraFrameCounter();
                 BattleScene_ClearPhaseFlag();
-                M2C_FIELD(sBattleScene.scene, s32*, 0x50) = 0;
+                sBattleScene.scene->cameraPresetId = 0;
                 sBattleScene.scene->phaseStep++;
             }
             break;
@@ -165,7 +165,7 @@ void func_821290CC(CameraNode* arg0) {
 void func_821291E4(CameraNode* arg0) {
     switch (sBattleScene.scene->phaseSubstep) {
         case 0:
-            M2C_FIELD(sBattleScene.scene, s32*, 0x50) = 4;
+            sBattleScene.scene->cameraPresetId = 4;
             if (BattleScene_AdvanceCameraFrameCounter(0x14) != 0) {
                 BattleScene_SetPhaseFlag();
                 func_82124984((ActivePokemon*)D_8219A544, arg0, 2);
@@ -175,7 +175,7 @@ void func_821291E4(CameraNode* arg0) {
             }
             break;
         case 1:
-            M2C_FIELD(sBattleScene.scene, s32*, 0x50) = 4;
+            sBattleScene.scene->cameraPresetId = 4;
             func_821228B0(arg0, (ActivePokemon*)D_8219A544);
             if (BattleScene_AdvanceCameraSubstepCounter(0xF) != 0) {
                 Battle_ClearMessageCursor();
@@ -184,7 +184,7 @@ void func_821291E4(CameraNode* arg0) {
                 Battle_ClearMessageCursor();
                 BattleScene_ResetCameraFrameCounter();
                 BattleScene_ClearPhaseFlag();
-                M2C_FIELD(sBattleScene.scene, s32*, 0x50) = 0;
+                sBattleScene.scene->cameraPresetId = 0;
                 sBattleScene.scene->phaseStep++;
             }
             break;
@@ -194,7 +194,7 @@ void func_821291E4(CameraNode* arg0) {
 void func_821292FC(CameraNode* arg0) {
     switch (sBattleScene.scene->phaseSubstep) {
         case 0:
-            M2C_FIELD(sBattleScene.scene, s32*, 0x50) = 4;
+            sBattleScene.scene->cameraPresetId = 4;
             if (BattleScene_AdvanceCameraFrameCounter(0x14) != 0) {
                 BattleScene_SetPhaseFlag();
                 func_82124984((ActivePokemon*)D_8219A544, arg0, 3);
@@ -204,7 +204,7 @@ void func_821292FC(CameraNode* arg0) {
             }
             break;
         case 1:
-            M2C_FIELD(sBattleScene.scene, s32*, 0x50) = 4;
+            sBattleScene.scene->cameraPresetId = 4;
             func_821228B0(arg0, (ActivePokemon*)D_8219A544);
             if (BattleScene_AdvanceCameraSubstepCounter(0xF) != 0) {
                 Battle_ClearMessageCursor();
@@ -213,7 +213,7 @@ void func_821292FC(CameraNode* arg0) {
                 Battle_ClearMessageCursor();
                 BattleScene_ResetCameraFrameCounter();
                 BattleScene_ClearPhaseFlag();
-                M2C_FIELD(sBattleScene.scene, s32*, 0x50) = 0;
+                sBattleScene.scene->cameraPresetId = 0;
                 sBattleScene.scene->phaseStep++;
             }
             break;
@@ -453,10 +453,10 @@ void func_82129AE8(CameraNode* arg0, s32 arg1) {
 }
 
 void BattleScene_ActionSetupAnimationVariantB(CameraNode* arg0) {
-    M2C_FIELD(sBattleScene.scene, s32*, 0x50) = 2;
+    sBattleScene.scene->cameraPresetId = 2;
     switch (sBattleScene.scene->phaseSubstep) {
         case 0:
-            M2C_FIELD(sBattleScene.scene, s32*, 0x50) = 2;
+            sBattleScene.scene->cameraPresetId = 2;
             BattleAnim_CleanupEffects(1);
             BattleScene_ClearCameraOffsetVectors();
             BattleScene_SetPhaseFlag();
@@ -465,7 +465,7 @@ void BattleScene_ActionSetupAnimationVariantB(CameraNode* arg0) {
 
         case 1:
             func_821243DC((s32)arg0, D_8219A540, 0.0f);
-            if (M2C_FIELD(sBattleScene.scene, f32*, 0x74) <= 1.0f) {
+            if (sBattleScene.scene->unk_74 <= 1.0f) {
                 BattleScene_CleanupParticipantEffectMode((ActivePokemon*)D_8219A544);
                 sBattleScene.scene->phaseStep++;
                 BattleScene_ResetCameraFrameCounter();
@@ -476,7 +476,7 @@ void BattleScene_ActionSetupAnimationVariantB(CameraNode* arg0) {
 }
 
 void func_82129D10(CameraNode* arg0) {
-    M2C_FIELD(sBattleScene.scene, s32*, 0x50) = 2;
+    sBattleScene.scene->cameraPresetId = 2;
     switch (sBattleScene.scene->phaseSubstep) {
         case 0:
             BattleAnim_CleanupEffects(1);
@@ -487,7 +487,7 @@ void func_82129D10(CameraNode* arg0) {
         case 1:
             if (BattleAnim_IsSessionBusy((ActivePokemon*)D_8219A540) == 0) {
                 func_821243DC((s32)arg0, D_8219A540, func_82107EC8(D_8219A540) * 2.0f);
-                if (M2C_FIELD(sBattleScene.scene, f32*, 0x74) <= 1.0f) {
+                if (sBattleScene.scene->unk_74 <= 1.0f) {
                     BattleScene_CleanupParticipantEffectMode((ActivePokemon*)D_8219A544);
                     sBattleScene.scene->phaseStep++;
                     BattleScene_ClearPhaseFlag();

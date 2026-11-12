@@ -16,7 +16,7 @@ s32 __osPfsSelectBank(OSPfs* pfs, u8 bank) {
 
     ret = func_80059790(pfs->queue, pfs->channel, 0x400, buffer, 0);
     if (ret == 0) {
-        M2C_FIELD(pfs, u8*, 0x65) = bank;
+        pfs->activebank = bank;
     }
     return ret;
 }

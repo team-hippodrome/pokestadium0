@@ -553,7 +553,7 @@ void func_82120E70(CameraNode* arg0) {
         return;
     }
     BattleAnim_StepToS16(&M2C_FIELD(sBattleScene.scene, s16*, 0x6E), 0x149E, 0x2D);
-    func_82122628((s32)arg0, M2C_FIELD(sBattleScene.scene, Vec3f*, 0xC0), M2C_FIELD(sBattleScene.scene, s16*, 0x6E),
+    func_82122628((s32)arg0, sBattleScene.scene->unk_D0, M2C_FIELD(sBattleScene.scene, s16*, 0x6E),
                   BattleScene_GetParticipantFacingAngle(sActivePokemon[sBattleScene.scene->actingSide]), sBattleScene.scene->unk_74, 0.0f);
     BattleAnim_ApproachF(&M2C_FIELD(arg0, f32*, 0x2C), sBattleScene.scene->verticalFieldOfView, 0.08f);
     temp_f0 = sBattleScene.scene->verticalFieldOfView;
@@ -588,7 +588,7 @@ void func_82120FB0(CameraNode* arg0) {
     }
     temp_f0 = func_82121750(sActivePokemon[sBattleScene.scene->actingSide], 2.5f, 300.0f);
     BattleAnim_ApproachF(&sBattleScene.scene->unk_74, temp_f0, 0.08f);
-    func_82122628((s32)arg0, M2C_FIELD(sBattleScene.scene, Vec3f*, 0xC0), 0,
+    func_82122628((s32)arg0, sBattleScene.scene->unk_D0, 0,
                   BattleScene_GetParticipantFacingAngle(sActivePokemon[sBattleScene.scene->actingSide]), sBattleScene.scene->unk_74, 0.0f);
     if (sBattleScene.scene->unk_74 < (temp_f0 + 0.2f)) {
         BattleScene_SelectNextIntroCameraShot(arg0);

@@ -53,7 +53,7 @@ s32 func_8210C778(ActivePokemon* arg0) {
     s32 pad; // FAKE: stack padding
 
     if (state->selectedCommandOption == 3) {
-        if ((M2C_FIELD(controller, u16*, 8) & 0x20) && (other->unk_2D != 0x10)) {
+        if ((controller->buttonPressed & 0x20) && (other->unk_2D != 0x10)) {
             if (state->selectedCommand == 2) {
                 func_8210C738(arg0, other, controller);
             }
@@ -628,7 +628,7 @@ void func_8210D4B4(ActivePokemon* active_pokemon);
 s32 BattleScene_HandlePlayerActionInput(ActivePokemon* arg0) {
     ActivePokemonState* opponent_state = &sActivePokemon[BattleScene_GetParticipantSideIndex(arg0) == 0]->state;
 
-    if (M2C_FIELD(opponent_state, u8*, 0x2E) == 0x10) {
+    if (opponent_state->unk_2D == 0x10) {
         if (func_8210C708(arg0) != 0) {
             return 1;
         }

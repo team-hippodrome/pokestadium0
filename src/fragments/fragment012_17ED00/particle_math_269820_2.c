@@ -1493,7 +1493,7 @@ void Particle_Field7C_SetXFromField74AngleY_0B1EC(Particle* arg0) {
 }
 
 void func_8213FA88(Particle* arg0) {
-    M2C_FIELD(arg0, f32*, 0x78) = M2C_FIELD(arg0, f32*, 0x70) * SINS(M2C_FIELD(arg0, u16*, 0x92));
+    M2C_FIELD(arg0, f32*, 0x78) = arg0->unk_74 * SINS(M2C_FIELD(arg0, u16*, 0x92));
 }
 
 void Particle_Field7C_SetYFromField74AngleX_0B1C4(Particle* arg0) {
@@ -1504,8 +1504,8 @@ void Particle_Field7C_SetYFromField74AngleX_0B1C4(Particle* arg0) {
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void Particle_Field7C_SetVecFromField74AnglesXZ_0B330(Particle* arg0) {
-    M2C_FIELD(arg0, f32*, 0x78) = M2C_FIELD(arg0, f32*, 0x70) * COSS(M2C_FIELD(arg0, u16*, 0x94));
-    M2C_FIELD(arg0, f32*, 0x7C) = M2C_FIELD(arg0, f32*, 0x70) * SINS(M2C_FIELD(arg0, u16*, 0x94));
+    M2C_FIELD(arg0, f32*, 0x78) = arg0->unk_74 * COSS(M2C_FIELD(arg0, u16*, 0x94));
+    M2C_FIELD(arg0, f32*, 0x7C) = arg0->unk_74 * SINS(M2C_FIELD(arg0, u16*, 0x94));
 }
 
 void Particle_Field7C_SetXYFromField74AngleZ_0B23C(Particle* arg0) {
@@ -1709,9 +1709,9 @@ void BattleAnim_LoadGlobalTintToParticle(s8 *arg0) {
  * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
  */
 void Particle_SetEnvColor(Particle* arg0, u8 arg1, u8 arg2, u8 arg3) {
-    M2C_FIELD(arg0, u8*, 0xBD) = arg1;
-    M2C_FIELD(arg0, u8*, 0xBE) = arg2;
-    M2C_FIELD(arg0, u8*, 0xBF) = arg3;
+    arg0->env_r = arg1;
+    arg0->env_g = arg2;
+    arg0->env_b = arg3;
 }
 
 M2C_UNK func_82137804(s32, s32, s32);               /* extern */

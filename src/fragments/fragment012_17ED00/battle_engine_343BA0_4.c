@@ -494,7 +494,7 @@ void func_821351F8(CameraNode* arg0, ActivePokemon* arg1) {
     M2C_FIELD(D_8219A5A0, s8*, 0) = 0x19;
     M2C_FIELD(D_8219A5A0, s8*, 1) = 1;
     M2C_FIELD(D_8219A5A0, f32*, 4) = 0.0f;
-    M2C_FIELD(D_8219A5A0, s8*, 8) = 0;
+    D_8219A5A0->visibilityPolicy = 0;
     count = 0;
     func_82135108(arg1);
     p = (Vec3f*)&D_FLT_8219A5B0;
@@ -505,10 +505,10 @@ loop:
         p[-1].y = M2C_FIELD(arg1, f32*, 0x28) + p[-1].y;
         goto loop;
     }
-    M2C_FIELD(D_8219A5A0, s8*, 8) = count;
+    D_8219A5A0->visibilityPolicy = count;
     func_82107D24(arg1, &D_FLT_8219A718);
     func_8212254C((s32)arg1, (s32)arg0, *(Vec3f*)&D_FLT_8219A718, 0, 0, 0.0f, (f32)0.0);
-    D_FLT_8219A718 *= M2C_FIELD(arg1, s32*, 0x60C);
+    D_FLT_8219A718 *= arg1->facingDirection;
     func_8210BCF0(&D_FLT_8219A718, (Vec3f*)&D_FLT_8219A5B0, &sp40, &sp3E, &sp3C);
     func_8000EEBC((u8*)arg0 + 0xB4, (Vec3f*)((u8*)arg0 + 0xA8), sp40, sp3E, M2C_FIELD(arg1, u32*, 0x60C) * *(sp3Cp = &sp3C));
     func_8212239C(arg1, arg0);
@@ -525,7 +525,7 @@ void func_82135384(ActivePokemon* arg0, CameraNode* arg1, Vec3f* arg2, Vec3f* ar
     s16 sp26;
     s16* sp26p;
     func_82107D24(arg0, &D_FLT_8219A718);
-    D_FLT_8219A718 *= M2C_FIELD(arg0, s32*, 0x60C);
+    D_FLT_8219A718 *= arg0->facingDirection;
     func_8210BCF0(&D_FLT_8219A718, &arg2[arg4 + arg5], &sp2C, &sp28, &sp26);
     func_8000EEBC((u8*)arg1 + 0xB4, &arg3[arg5], sp2C, sp28, M2C_FIELD(arg0, u32*, 0x60C) * *(sp26p = &sp26));
 }
@@ -553,7 +553,7 @@ void func_82135458(ActivePokemon* arg0, CameraNode* arg1) {
     s16 sp2E;
     s16 sp2C;
 
-    BattleAnim_Vec3fCopy(&arg1->view.eyePosition, &M2C_FIELD(sBattleScene.scene, Vec3f*, 0xB4));
+    BattleAnim_Vec3fCopy(&arg1->view.eyePosition, &sBattleScene.scene->unk_C4);
     Trade_UpdateWaitForBoxConfirm(arg0, &sp58);
     BattleAnim_CalculateDistanceAngles(&sp58, &M2C_FIELD(arg0, Vec3f*, 0x5D0), &sp30, &sp2E, &sp2C);
     BattleAnim_Vec3fCopy(&sp34, &arg1->view.targetPosition);
@@ -561,7 +561,7 @@ void func_82135458(ActivePokemon* arg0, CameraNode* arg1) {
         Camera_ComputeEyeFromAngles(&sp58, &sp4C, M2C_FIELD(ptr, f32*, 0x38), M2C_FIELD(ptr, s16*, 0x30), M2C_FIELD(ptr, s16*, 0x32));
         BattleAnim_CalculateDistanceAngles(&sp34, &sp4C, &sp30, &sp2E, &sp2C);
     } else {
-        BattleAnim_CalculateDistanceAngles(&sp34, &M2C_FIELD(sBattleScene.scene, Vec3f*, 0xA8), &sp30, &sp2E, &sp2C);
+        BattleAnim_CalculateDistanceAngles(&sp34, &sBattleScene.scene->unk_B8, &sp30, &sp2E, &sp2C);
     }
     Camera_ComputeEyeFromAngles(&sp34, &arg1->view.targetPosition, sp30 * D_FLT_82196810, sp2E, sp2C);
 }
@@ -619,7 +619,7 @@ s32 func_82135734(CameraNode* arg0, ActivePokemon* arg1) {
         func_82135458(arg1, arg0);
     }
     var_v1 = M2C_FIELD(D_8219A5A0, s8*, 1);
-    if (M2C_FIELD(D_8219A5A0, s8*, 8) < (var_v1 + 3)) {
+    if (D_8219A5A0->visibilityPolicy < (var_v1 + 3)) {
         return 1;
     }
     if (var_v1 == 1) {
@@ -667,7 +667,7 @@ s32 func_82135894(CameraNode* arg0, ActivePokemon* arg1) {
     s8 var_v1;
 
     var_v1 = M2C_FIELD(D_8219A5A0, s8*, 1);
-    if ((var_v1 + 3) >= M2C_FIELD(D_8219A5A0, s8*, 8)) {
+    if ((var_v1 + 3) >= D_8219A5A0->visibilityPolicy) {
         return 1;
     }
     temp_a0 = arg1->displayObject.objectType;
@@ -727,7 +727,7 @@ void func_82135A54(CameraNode* arg0, ActivePokemon* arg1) {
     M2C_FIELD(D_8219A5A0, u8*, 0) = D_8219A4F4;
     M2C_FIELD(D_8219A5A0, s8*, 1) = 1;
     M2C_FIELD(D_8219A5A0, f32*, 4) = 0.0f;
-    M2C_FIELD(D_8219A5A0, s8*, 8) = 0;
+    D_8219A5A0->visibilityPolicy = 0;
     count = 0;
     func_82135A04((s32)arg1);
     p = (Vec3f*)&D_FLT_8219A5B0;
@@ -738,10 +738,10 @@ loop:
         p[-1].y = M2C_FIELD(arg1, f32*, 0x28) + p[-1].y;
         goto loop;
     }
-    M2C_FIELD(D_8219A5A0, s8*, 8) = count;
+    D_8219A5A0->visibilityPolicy = count;
     func_82107D24(arg1, &D_FLT_8219A718);
     func_8212254C((s32)arg1, (s32)arg0, *(Vec3f*)&D_FLT_8219A718, 0, 0, 0.0f, (f32)0.0);
-    D_FLT_8219A718 *= M2C_FIELD(arg1, s32*, 0x60C);
+    D_FLT_8219A718 *= arg1->facingDirection;
     func_8210BCF0(&D_FLT_8219A718, (Vec3f*)&D_FLT_8219A5B0, &sp40, &sp3E, &sp3C);
     func_8000EEBC((u8*)arg0 + 0xB4, (Vec3f*)((u8*)arg0 + 0xA8), sp40, sp3E, M2C_FIELD(arg1, u32*, 0x60C) * *(sp3Cp = &sp3C));
     func_8212239C(arg1, arg0);
@@ -823,7 +823,7 @@ s32 func_82135E80(CameraNode* arg0, ActivePokemon* arg1) {
 
     func_82135BE4(arg1, arg0);
     var_v1 = M2C_FIELD(D_8219A5A0, s8*, 1);
-    if (M2C_FIELD(D_8219A5A0, s8*, 8) < (var_v1 + 3)) {
+    if (D_8219A5A0->visibilityPolicy < (var_v1 + 3)) {
         return 1;
     }
     if (var_v1 == 1) {

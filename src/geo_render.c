@@ -1454,7 +1454,7 @@ void func_80014E78(s8 *arg0) {
         func_800135FC(M2C_FIELD(arg0, u8 *, 3), temp_a1, 0, M2C_FIELD(arg0, u8 *, 2) & 4);
     }
     func_8001380C(arg0);
-    M2C_FIELD(&D_800AB460, s32 *, 0x10A0) = (s32) (M2C_FIELD(&D_800AB460, s32 *, 0x10A0) - 1);
+    D_800AB460.unk_10A0 = (s32) (D_800AB460.unk_10A0 - 1);
 }
 
 M2C_UNK func_8001380C();
