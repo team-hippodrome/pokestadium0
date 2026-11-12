@@ -224,7 +224,7 @@ def patch(rom, us, stage='full'):
     patches = []
     if stage in ('full', 'data', 'map', 'code'):
         patches.append((MAP_FUNC, font_map_words(rom)))
-    if stage in ('full', 'code'):
+    if stage in ('full', 'code', 'loader'):
         patches.insert(0, (LOAD_FUNC, font_load_words(rom)))
     for vram, words in patches:
         struct.pack_into('>%dI' % len(words), out, vram - ROM_BIAS, *words)
@@ -414,7 +414,7 @@ def main():
     ap.add_argument('--rom', default='build/pokestadium0-jp.z64')
     ap.add_argument('--us', help='Stadium 1 US baserom.z64, the source of the English font')
     ap.add_argument('--out')
-    ap.add_argument('--stage', choices=['full', 'data', 'code', 'map', 'archive'], default='full',
+    ap.add_argument('--stage', choices=['full', 'data', 'code', 'map', 'archive', 'loader'], default='full',
                     help='full: archive + map + loader; data: archive + map; code: map + loader; '
                          'map/archive: one of them (bisecting a boot fault)')
     ap.add_argument('--base', default='build/pokestadium0-jp.z64',
