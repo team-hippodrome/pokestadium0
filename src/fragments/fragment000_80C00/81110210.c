@@ -547,7 +547,7 @@ typedef struct ParticleBank81110CA8 {
     /* 0x8 */ u8** entries2;
 } ParticleBank81110CA8; // size = 0xC
 
-s32 func_8110CA2C(s32 arg0);
+s32 AudioLoad_IsFontLoadComplete(s32 arg0);
 extern ParticleBank81110CA8* D_811858B0;
 extern s32 D_811859D0;
 
@@ -555,7 +555,7 @@ u8* func_81110CA8(s32 arg0, s32 arg1) {
     ParticleBank81110CA8* bank;
     u8* ret;
 
-    if (func_8110CA2C(arg0) == 0) {
+    if (AudioLoad_IsFontLoadComplete(arg0) == 0) {
         D_811859D0 = arg0 + 0x10000000;
         return NULL;
     }
@@ -576,7 +576,7 @@ u8* func_81110D6C(s32 arg0, s32 arg1) {
     ParticleBank81110CA8* bank;
     u8* ret;
 
-    if (func_8110CA2C(arg0) == 0) {
+    if (AudioLoad_IsFontLoadComplete(arg0) == 0) {
         D_811859D0 = arg0 + 0x10000000;
         return NULL;
     }

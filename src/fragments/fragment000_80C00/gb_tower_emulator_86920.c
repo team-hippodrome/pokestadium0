@@ -329,7 +329,7 @@ typedef struct Cache81109C0C {
 extern u8 D_81184654[1];
 extern u8 D_81184655[1];
 extern u8 D_81184656[1];
-void func_8110CAE0(s32, s32);
+void AudioLoad_SetFontLoadStatus(s32, s32);
 
 void* func_81109C0C(s32 table_type, s32 size, s32 cache, s32 id) {
     Cache81109C0C* loaded_cache;
@@ -382,7 +382,7 @@ void* func_81109C0C(s32 table_type, s32 size, s32 cache, s32 id) {
                 }
 
                 if (i == D_811858E8) {
-                    func_8110CAE0(t_cache->entries[0].id, 3);
+                    AudioLoad_SetFontLoadStatus(t_cache->entries[0].id, 3);
                     load_status_entry0 = 3;
                 }
             }
@@ -395,7 +395,7 @@ void* func_81109C0C(s32 table_type, s32 size, s32 cache, s32 id) {
                 }
 
                 if (i == D_811858E8) {
-                    func_8110CAE0(t_cache->entries[1].id, 3);
+                    AudioLoad_SetFontLoadStatus(t_cache->entries[1].id, 3);
                     load_status_entry1 = 3;
                 }
             }
@@ -562,15 +562,15 @@ void* func_81109C0C(s32 table_type, s32 size, s32 cache, s32 id) {
 /*
  * func_8110A310
  *
- * Calls func_8110B880(arg0, arg2) and returns its result if that is
+ * Calls AudioHeap_SearchPermanentCache(arg0, arg2) and returns its result if that is
  * non-zero.  Otherwise returns 0 if arg1 is 3, and
  * func_8110A368(arg0, arg1, arg2) for any other arg1.
  */
 s32 func_8110A368(s32 arg0, s32 arg1, s32 arg2);
-s32 func_8110B880(s32 arg0, s32 arg1);
+s32 AudioHeap_SearchPermanentCache(s32 arg0, s32 arg1);
 
 s32 func_8110A310(s32 arg0, s32 arg1, s32 arg2) {
-    s32 result = func_8110B880(arg0, arg2);
+    s32 result = AudioHeap_SearchPermanentCache(arg0, arg2);
 
     if (result != 0) {
         return result;
@@ -856,7 +856,7 @@ extern s32 D_8118557C;
 // if it returned a value (as with an implicit declaration); the call only
 // matches that way.
 s32 func_8110B9F8(s32, s32);
-void func_8110C618(s32);
+void AudioLoad_InitSampleDmaBuffers(s32);
 void func_811152A4(s32);
 s32 func_80058100(s32);
 void func_8005C0A0(void);
@@ -1015,7 +1015,7 @@ void func_8110AFF0(void) {
         func_8111539C(j);
         func_811152A4(j);
     }
-    func_8110C618(D_811858E8);
+    AudioLoad_InitSampleDmaBuffers(D_811858E8);
     D_8118557C = 0;
     D_8118427C = 0x1000;
     func_8110FAF4();

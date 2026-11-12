@@ -104,9 +104,9 @@ typedef struct Cache81109C0C {
 extern u8 D_81184654[1];
 extern u8 D_81184655[1];
 extern u8 D_81184656[1];
-void func_8110CAE0(s32, s32);
+void AudioLoad_SetFontLoadStatus(s32, s32);
 s32 func_8110A368(s32 arg0, s32 arg1, s32 arg2);
-s32 func_8110B880(s32 arg0, s32 arg1);
+s32 AudioHeap_SearchPermanentCache(s32 arg0, s32 arg1);
 extern s16 D_811371D8[];
 extern s16 D_811373C8[];
 extern Voice8110AA50 D_81184110[];
@@ -135,7 +135,7 @@ extern s32 D_811859B4;
 extern f32 D_811859B0;
 extern u32 D_8118568C;
 extern s32 D_8118557C;
-void func_8110C618(s32);
+void AudioLoad_InitSampleDmaBuffers(s32);
 void func_811152A4(s32);
 s32 func_80058100(s32);
 void func_8005C0A0(void);
@@ -161,7 +161,11 @@ typedef struct unk_D_81184440 {
 } unk_D_81184440;
 
 extern unk_D_81184440 D_81184440;
-s32 func_8110B880(s32 arg0, s32 arg1) {
+/**
+ * Returns the permanent cache entry for table `arg0`, id `arg1`, or 0. Name follows the Zelda 64 audio driver, whose loader this matches.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 AudioHeap_SearchPermanentCache(s32 arg0, s32 arg1) {
     s32 i;
 
     for (i = 0; i < D_81184440.unk_0C; i++) {
@@ -173,7 +177,11 @@ s32 func_8110B880(s32 arg0, s32 arg1) {
     return 0;
 }
 
-s32 func_8110B8D8(s32 x, s32 y, s32 size) {
+/**
+ * Allocates `size` bytes in the permanent cache for table `x`, id `y`. Name follows the Zelda 64 audio driver, whose loader this matches.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 AudioHeap_AllocPermanent(s32 x, s32 y, s32 size) {
     UNUSED s32 pad; // FAKE: stack padding
     s32 index = D_81184440.unk_0C;
 
@@ -370,7 +378,7 @@ typedef struct {
 typedef struct Entry8110D4E0 { u8 unk00; u8 unk01; u8 unk02; u8 unk03; u8** instruments; u8** drums; } Entry8110D4E0;
 extern Entry8110D4E0* D_811858B0;
 extern u8* D_811858A0;
-s32 func_8110CA2C(s32 arg0);
+s32 AudioLoad_IsFontLoadComplete(s32 arg0);
 u8* func_81110CA8(s32, s32);
 u8* func_81110D6C(s32, s32);
 
@@ -393,7 +401,7 @@ void func_8110BD20(SampleCacheEntry8110BA8C* entry) {
         if (((sample_bank_id1 != 0xFF) && (entry->sampleBankId == sample_bank_id1)) ||
             ((sample_bank_id2 != 0xFF) && (entry->sampleBankId == sample_bank_id2)) || entry->sampleBankId == 0) {
             if (func_8110A310(1, 2, font_id) != 0) {
-                if (func_8110CA2C(font_id) != 0) {
+                if (AudioLoad_IsFontLoadComplete(font_id) != 0) {
                     for (inst_id = 0; inst_id < D_811858B0[font_id].unk00; inst_id++) {
                         inst = func_81110CA8(font_id, inst_id);
                         if (inst != NULL) {
@@ -476,7 +484,7 @@ void func_8110BFB0(void) {
         b = D_811858B0[i].unk03;
         if ((a != 0xFF) || (b != 0xFFU)) {
             off = 0x12;
-            if ((func_8110A310(1, 3, i) != 0) && (func_8110CA2C(i) != 0)) {
+            if ((func_8110A310(1, 3, i) != 0) && (AudioLoad_IsFontLoadComplete(i) != 0)) {
                 slot = (s8*)&D_811845D0;
                 for (j = 0; j < D_811845F4; j++, slot += 0x14) {
                     if ((a != slot[off]) && (b != slot[0x12]) && (slot[0x12] != 0)) {
@@ -525,7 +533,11 @@ extern u8 D_81185698[];
 extern u8 D_81185798[];
 extern u8 D_8118589A;
 extern u8 D_8118589B;
-void func_8110C1C0(void) {
+/**
+ * Ticks down the time-to-live of each sample DMA buffer and returns expired ones to the free list. Name follows the Zelda 64 audio driver, whose loader this matches.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioLoad_DecreaseSampleDmaTtls(void) {
     u32 i;
     Timer8110C1C0* t;
     for (i = 0; i < D_81185690; i++) {
@@ -555,9 +567,13 @@ extern u8 D_81185638[];
 extern u32 D_811858F4;
 extern u8 D_81185618[];
 extern s8 D_81137ACC[];
-s32 func_8110DBA0();
+s32 AudioLoad_Dma();
 
-void* func_8110C2D8(u32 devAddr, u32 size, s32 arg2, u8* dma_index_ref, s32 medium) {
+/**
+ * Returns RAM holding the sample bytes at `devAddr`, reusing a cached DMA buffer or starting a new DMA. Name follows the Zelda 64 audio driver, whose loader this matches.
+ * @unverified Name and comment guessed from the code.
+ */
+void* AudioLoad_DmaSampleData(u32 devAddr, u32 size, s32 arg2, u8* dma_index_ref, s32 medium) {
     UNUSED s32 pad1; // FAKE: stack padding
     Timer8110C1C0* dma;
     s32 has_dma = FALSE;
@@ -622,7 +638,7 @@ void* func_8110C2D8(u32 devAddr, u32 size, s32 arg2, u8* dma_index_ref, s32 medi
     dma->count = 3;
     dma->devAddr = dma_dev_addr;
     dma->sizeUnused = transfer;
-    func_8110DBA0(&D_81185638[D_811858F4++ * 0x18], 0, 0, dma_dev_addr, dma->ramAddr, transfer, D_81185618, medium, D_81137ACC);
+    AudioLoad_Dma(&D_81185638[D_811858F4++ * 0x18], 0, 0, dma_dev_addr, dma->ramAddr, transfer, D_81185618, medium, D_81137ACC);
     *dma_index_ref = dma_index;
     return (devAddr - dma_dev_addr) + dma->ramAddr;
 }
@@ -636,8 +652,9 @@ extern s32 D_811858E0;
  * is filled with the buffer indices and the rest of the queue cleared. Same
  * structure as AudioLoad_InitSampleDmaBuffers in the Ocarina of Time audio
  * library.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_8110C618(s32 num_notes) {
+void AudioLoad_InitSampleDmaBuffers(s32 num_notes) {
     s32 i;
 
     D_811858E0 = 0xA0;
@@ -705,7 +722,11 @@ void func_8110C618(s32 num_notes) {
 
 extern u8 D_81184655[1];
 
-s32 func_8110CA2C(s32 arg0) {
+/**
+ * Returns 1 when font `arg0` is loaded (status 2 or above) or is 0xFF. Name follows the Zelda 64 audio driver, whose loader this matches.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 AudioLoad_IsFontLoadComplete(s32 arg0) {
     if (arg0 == 0xFF) {
         return 1;
     }
@@ -717,7 +738,11 @@ s32 func_8110CA2C(s32 arg0) {
 
 extern u8 D_81184656[1];
 
-s32 func_8110CA68(s32 arg0) {
+/**
+ * Returns 1 when sequence `arg0` is loaded (status 2 or above) or is 0xFF. Name follows the Zelda 64 audio driver, whose loader this matches.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 AudioLoad_IsSeqLoadComplete(s32 arg0) {
     if (arg0 == 0xFF) {
         return 1;
     }
@@ -729,7 +754,11 @@ s32 func_8110CA68(s32 arg0) {
 
 extern u8 D_81184654[1];
 
-s32 func_8110CAA4(s32 arg0) {
+/**
+ * Returns 1 when sample bank `arg0` is loaded (status 2 or above) or is 0xFF. Name follows the Zelda 64 audio driver, whose loader this matches.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 AudioLoad_IsSampleLoadComplete(s32 arg0) {
     if (arg0 == 0xFF) {
         return 1;
     }
@@ -740,7 +769,11 @@ s32 func_8110CAA4(s32 arg0) {
 }
 
 extern u8 D_81184655[1];
-void func_8110CAE0(s32 arg0, s32 arg1) {
+/**
+ * Sets font `arg0`'s load status unless it is permanent (5). Name follows the Zelda 64 audio driver, whose loader this matches.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioLoad_SetFontLoadStatus(s32 arg0, s32 arg1) {
     u8 *temp_v0;
 
     if (arg0 != 0xFF) {
@@ -752,7 +785,11 @@ void func_8110CAE0(s32 arg0, s32 arg1) {
 }
 
 extern u8 D_81184656[1];
-void func_8110CB10(s32 arg0, s32 arg1) {
+/**
+ * Sets sequence `arg0`'s load status unless it is permanent (5). Name follows the Zelda 64 audio driver, whose loader this matches.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioLoad_SetSeqLoadStatus(s32 arg0, s32 arg1) {
     u8 *temp_v0;
 
     if (arg0 != 0xFF) {
@@ -764,7 +801,11 @@ void func_8110CB10(s32 arg0, s32 arg1) {
 }
 
 extern u8 D_81184654[1];
-void func_8110CB40(s32 arg0, s32 arg1) {
+/**
+ * Sets sample bank `arg0`'s load status unless it is permanent (5). Name follows the Zelda 64 audio driver, whose loader this matches.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioLoad_SetSampleLoadStatus(s32 arg0, s32 arg1) {
     u8 *temp_v0;
 
     if (arg0 != 0xFF) {
@@ -794,7 +835,7 @@ void func_8110CB70(s8 *arg0, s32 arg1, unsigned short arg2)
 
 extern u8* D_811858A8;
 extern u16 D_811858AC;
-s32 func_8110D7B0(M2C_UNK, s32);
+s32 AudioLoad_GetRealTableIndex(M2C_UNK, s32);
 s32 func_8110D4E0(s32);
 
 s32 func_8110CBD0(s32 arg0, s32* arg1) {
@@ -806,7 +847,7 @@ s32 func_8110CBD0(s32 arg0, s32* arg1) {
     if (arg0 >= D_811858AC) {
         return 0;
     }
-    off = ((u16*)D_811858A8)[func_8110D7B0(0, arg0)];
+    off = ((u16*)D_811858A8)[AudioLoad_GetRealTableIndex(0, arg0)];
     id = 0xFF;
     count = *(off + D_811858A8);
     off++;
@@ -820,14 +861,14 @@ s32 func_8110CBD0(s32 arg0, s32* arg1) {
 }
 
 extern u16 D_811858AC;
-s32 func_8110D7B0(M2C_UNK, s32);
+s32 AudioLoad_GetRealTableIndex(M2C_UNK, s32);
 s32 func_8110CBD0(s32, s32*);
 s32 func_8110D3D4(s32);
 void func_8110CC94(s32 arg0, s32 arg1) {
     s32 sp18[2];
 
     if (arg0 < D_811858AC) {
-        arg0 = func_8110D7B0(0, arg0);
+        arg0 = AudioLoad_GetRealTableIndex(0, arg0);
         if (arg1 & 2) {
             func_8110CBD0(arg0, sp18);
         }
@@ -846,7 +887,7 @@ typedef struct Stream8110CD0C {
     /* 0x04 */ s32 unk04;
 } Stream8110CD0C;
 void func_8110DB8C(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3);
-void func_8110DA68(s32, s32, u32, s32);
+void AudioLoad_SyncDma(s32, s32, u32, s32);
 extern u8* D_811858A4;
 s32 func_8110CD0C(Stream8110CD0C* arg0, s32 arg1) {
     s32 ret;
@@ -860,7 +901,7 @@ s32 func_8110CD0C(Stream8110CD0C* arg0, s32 arg1) {
             if (arg0->mode == 1) {
                 func_8110DB8C(arg0->unk04, ret, arg0->addr, *(s16*)(D_811858A4 + 2));
             } else {
-                func_8110DA68(arg0->unk04, ret, arg0->addr, arg0->mode);
+                AudioLoad_SyncDma(arg0->unk04, ret, arg0->addr, arg0->mode);
             }
             arg0->mode = 0;
             arg0->unk04 = ret;
@@ -896,11 +937,11 @@ s32 func_8110CDF0(s32 arg0, s32 arg1, s32 arg2) {
 }
 
 M2C_UNK func_8004CFB0(s32, M2C_UNK, M2C_UNK);       /* extern */
-s32 func_8110D7B0(M2C_UNK, s32);                    /* extern */
+s32 AudioLoad_GetRealTableIndex(M2C_UNK, s32);                    /* extern */
 s32 func_8110DCC0(M2C_UNK, s32, s32, s32, s32);     /* extern */
 
 void func_8110CEC0(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
-    if (func_8110DCC0(2, func_8110D7B0(2, arg0), arg1, arg2, arg3) == 0) {
+    if (func_8110DCC0(2, AudioLoad_GetRealTableIndex(2, arg0), arg1, arg2, arg3) == 0) {
         func_8004CFB0(arg3, 0, 0);
     }
 }
@@ -910,11 +951,11 @@ void func_8110CF24(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 off;
     s32 count;
 
-    off = ((u16*)D_811858A8)[func_8110D7B0(0, arg0)];
+    off = ((u16*)D_811858A8)[AudioLoad_GetRealTableIndex(0, arg0)];
     count = *(off + D_811858A8);
     off++;
     while (count > 0) {
-        func_8110DCC0(1, func_8110D7B0(1, D_811858A8[off++]), arg1, arg2, arg3);
+        func_8110DCC0(1, AudioLoad_GetRealTableIndex(1, D_811858A8[off++]), arg1, arg2, arg3);
         count--;
     }
 }
@@ -925,7 +966,7 @@ void func_8110CF24(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
 u8* Audio_CountActiveSoundsByCategory(s32 arg0, s32* arg1) {
     s32 off;
 
-    off = ((u16*)D_811858A8)[func_8110D7B0(0, arg0)];
+    off = ((u16*)D_811858A8)[AudioLoad_GetRealTableIndex(0, arg0)];
     *arg1 = *(off + D_811858A8);
     off++;
     if (*arg1 == 0) {
@@ -941,15 +982,15 @@ void func_8110D054(s32 arg0) {
     s32 count;
     s32 id;
 
-    off = ((u16*)D_811858A8)[func_8110D7B0(0, arg0)];
+    off = ((u16*)D_811858A8)[AudioLoad_GetRealTableIndex(0, arg0)];
     count = *(off + D_811858A8);
     off++;
     while (count > 0) {
         count--;
-        id = func_8110D7B0(1, D_811858A8[off++]);
-        if (func_8110B880(1, id) == 0) {
+        id = AudioLoad_GetRealTableIndex(1, D_811858A8[off++]);
+        if (AudioHeap_SearchPermanentCache(1, id) == 0) {
             func_8110D110(id);
-            func_8110CAE0(id, 0);
+            AudioLoad_SetFontLoadStatus(id, 0);
         }
     }
 }
@@ -982,29 +1023,34 @@ typedef struct Slot8110D214 {
     /* 0x004 */ char unk004[0x158];
 } Slot8110D214; // size = 0x15C
 extern Slot8110D214 D_81184740[];
-s32 func_8110D278(s32, s32, s32);
+s32 AudioLoad_SyncInitSeqPlayerInternal(s32, s32, s32);
 
 /**
  * Clears the first word of slot arg0 in the D_81184740 array (stride 0x15C) and
- * returns func_8110D278(arg0, arg1, arg2); returns 0 without touching anything if
+ * returns AudioLoad_SyncInitSeqPlayerInternal(arg0, arg1, arg2); returns 0 without touching anything if
  * D_811859D4 is nonzero. arg1 and arg2 are passed through unchanged. Sibling of
- * func_8110D214, which stores its arg2 instead of 0 and passes 0 as the last argument.
+ * AudioLoad_SyncInitSeqPlayerSkipTicks, which stores its arg2 instead of 0 and passes 0 as the last argument.
  * What the slot and the flag mean is not established.
+ * @unverified Name guessed from the code; comment kept.
  */
-s32 func_8110D1B8(s32 arg0, s32 arg1, s32 arg2) {
+s32 AudioLoad_SyncInitSeqPlayer(s32 arg0, s32 arg1, s32 arg2) {
     if (D_811859D4 != 0) {
         return 0;
     }
     D_81184740[arg0].unk_000 = 0;
-    return func_8110D278(arg0, arg1, arg2);
+    return AudioLoad_SyncInitSeqPlayerInternal(arg0, arg1, arg2);
 }
 
-s32 func_8110D214(s32 arg0, s32 arg1, s32 arg2) {
+/**
+ * Like AudioLoad_SyncInitSeqPlayer, but skips the first `arg2` ticks. Name follows the Zelda 64 audio driver, whose loader this matches.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 AudioLoad_SyncInitSeqPlayerSkipTicks(s32 arg0, s32 arg1, s32 arg2) {
     if (D_811859D4 != 0) {
         return 0;
     }
     D_81184740[arg0].unk_000 = arg2;
-    return func_8110D278(arg0, arg1, 0);
+    return AudioLoad_SyncInitSeqPlayerInternal(arg0, arg1, 0);
 }
 
 typedef struct Flags8110D278 {
@@ -1015,7 +1061,11 @@ typedef struct Flags8110D278 {
 s32 func_8110D3D4(s32);
 void func_811152A4(s32);
 void func_81115254(s8*);
-s32 func_8110D278(s32 arg0, s32 arg1, s32 arg2) {
+/**
+ * Loads the sequence and its fonts, then initializes player `arg0` to play it. Name follows the Zelda 64 audio driver, whose loader this matches.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 AudioLoad_SyncInitSeqPlayerInternal(s32 arg0, s32 arg1, s32 arg2) {
     s8* slot;
     u8 id;
     s32 count;
@@ -1027,7 +1077,7 @@ s32 func_8110D278(s32 arg0, s32 arg1, s32 arg2) {
         return 0;
     }
     slot = &D_81184668 + arg0 * 0x15C;
-    arg1 = func_8110D7B0(0, arg1);
+    arg1 = AudioLoad_GetRealTableIndex(0, arg1);
     func_81112E00(slot);
     id = 0xFF;
     /* do-while(0) block (likely a macro in the original) is required for the register choice */
@@ -1056,28 +1106,28 @@ s32 func_8110D278(s32 arg0, s32 arg1, s32 arg2) {
     }
 }
 
-s32 func_8110D5BC(s32 tableType, s32 id, s32* didAllocate);
+s32 AudioLoad_SyncLoad(s32 tableType, s32 id, s32* didAllocate);
 
 s32 func_8110D3D4(s32 arg0) {
     s32 idx;
     s32 sp18;
 
-    idx = func_8110D7B0(0, arg0);
-    func_8110D5BC(0, idx, &sp18);
+    idx = AudioLoad_GetRealTableIndex(0, arg0);
+    AudioLoad_SyncLoad(0, idx, &sp18);
 }
 
-u8* func_8110D840(s32);
-s32 func_8110D7EC(s32, s32);
+u8* AudioLoad_GetLoadTable(s32);
+s32 AudioLoad_SearchCaches(s32, s32);
 #define ENTRY ((u8*)&((s32(*)[4])table)[arg0])
 s32 func_8110D408(s32 arg0, s32* arg1) {
     s32 ret;
-    u8* table = func_8110D840(2);
+    u8* table = AudioLoad_GetLoadTable(2);
     s32 state;
     s32 sp28;
 
-    arg0 = func_8110D7B0(2, arg0);
-    if ((ret = func_8110D7EC(2, arg0)) != 0) {
-        func_8110CB40(arg0, 2);
+    arg0 = AudioLoad_GetRealTableIndex(2, arg0);
+    if ((ret = AudioLoad_SearchCaches(2, arg0)) != 0) {
+        AudioLoad_SetSampleLoadStatus(arg0, 2);
         *arg1 = 0;
         return ret;
     }
@@ -1086,7 +1136,7 @@ s32 func_8110D408(s32 arg0, s32* arg1) {
         *arg1 = (s8)ENTRY[0x18];
         return *(s32*)(ENTRY + 0x10);
     }
-    if ((ret = func_8110D5BC(2, arg0, &sp28)) != 0) {
+    if ((ret = AudioLoad_SyncLoad(2, arg0, &sp28)) != 0) {
         *arg1 = 0;
         return ret;
     }
@@ -1106,7 +1156,7 @@ s32 func_8110D4E0(s32 arg0) {
     s32 sp30;
     s32 sp20[4];
 
-    arg0 = func_8110D7B0(1, arg0);
+    arg0 = AudioLoad_GetRealTableIndex(1, arg0);
     a = D_811858B0[arg0].unk02;
     b = D_811858B0[arg0].unk03;
     sp20[0] = a;
@@ -1121,7 +1171,7 @@ s32 func_8110D4E0(s32 arg0) {
     } else {
         sp20[3] = 0;
     }
-    ret = func_8110D5BC(1, arg0, &sp38);
+    ret = AudioLoad_SyncLoad(1, arg0, &sp38);
     if (ret == 0) {
         return 0;
     }
@@ -1157,8 +1207,9 @@ s32 func_81109C0C(s32, s32, s32, s32);
  * allocated. *didAllocate says whether new memory was used (0 when the entry
  * was already cached). The table's load status is updated. Same structure as
  * AudioLoad_SyncLoad in the Ocarina of Time audio library.
+ * @unverified Name guessed from the code; comment kept.
  */
-s32 func_8110D5BC(s32 table_type, s32 id, s32* did_allocate) {
+s32 AudioLoad_SyncLoad(s32 table_type, s32 id, s32* did_allocate) {
     u32 size;
     AudioTable8110D5BC* table;
     s32 ram_addr;
@@ -1168,12 +1219,12 @@ s32 func_8110D5BC(s32 table_type, s32 id, s32* did_allocate) {
     s32 cachePolicy;
     UNUSED s32 pad; // FAKE: stack padding
 
-    ram_addr = func_8110D7EC(table_type, id);
+    ram_addr = AudioLoad_SearchCaches(table_type, id);
     if (ram_addr != 0) {
         *did_allocate = 0;
         status = 2;
     } else {
-        table = (AudioTable8110D5BC*)func_8110D840(table_type);
+        table = (AudioTable8110D5BC*)AudioLoad_GetLoadTable(table_type);
         size = table->entries[id].size;
         size = ALIGN16(size);
         medium = table->entries[id].medium;
@@ -1181,7 +1232,7 @@ s32 func_8110D5BC(s32 table_type, s32 id, s32* did_allocate) {
         romAddr = table->entries[id].romAddr;
         switch (cachePolicy) {
             case 0:
-                ram_addr = func_8110B8D8(table_type, id, size);
+                ram_addr = AudioHeap_AllocPermanent(table_type, id, size);
                 if (ram_addr == 0) {
                     return ram_addr;
                 }
@@ -1211,7 +1262,7 @@ s32 func_8110D5BC(s32 table_type, s32 id, s32* did_allocate) {
         if (medium == 1) {
             func_8110DB8C(romAddr, ram_addr, size, table->unkMediumParam);
         } else {
-            func_8110DA68(romAddr, ram_addr, size, medium);
+            AudioLoad_SyncDma(romAddr, ram_addr, size, medium);
         }
 
         status = cachePolicy == 0 ? 5 : 2;
@@ -1219,22 +1270,26 @@ s32 func_8110D5BC(s32 table_type, s32 id, s32* did_allocate) {
 
     switch (table_type) {
         case 0:
-            func_8110CB10(id, status);
+            AudioLoad_SetSeqLoadStatus(id, status);
             break;
         case 1:
-            func_8110CAE0(id, status);
+            AudioLoad_SetFontLoadStatus(id, status);
             break;
         case 2:
-            func_8110CB40(id, status);
+            AudioLoad_SetSampleLoadStatus(id, status);
             break;
     }
 
     return ram_addr;
 }
 
-u8* func_8110D840(s32);
-s32 func_8110D7B0(s32 arg0, s32 arg1) {
-    s32* entry = (s32*)(func_8110D840(arg0) + arg1 * 16);
+u8* AudioLoad_GetLoadTable(s32);
+/**
+ * Returns the real index of entry `arg1` in load table `arg0`: an entry with size 0 is an alias whose ROM address field holds the real index. Name follows the Zelda 64 audio driver, whose loader this matches.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 AudioLoad_GetRealTableIndex(s32 arg0, s32 arg1) {
+    s32* entry = (s32*)(AudioLoad_GetLoadTable(arg0) + arg1 * 16);
 
     if (entry[5] == 0) {
         arg1 = entry[4];
@@ -1244,11 +1299,15 @@ s32 func_8110D7B0(s32 arg0, s32 arg1) {
 
 s32 func_8110A310(s32, M2C_UNK, s32);               /* extern */
 
-s32 func_8110D7EC(s32 arg0, s32 arg1) {
+/**
+ * Looks entry `arg1` of table `arg0` up in the permanent cache, then the other caches. Name follows the Zelda 64 audio driver, whose loader this matches.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 AudioLoad_SearchCaches(s32 arg0, s32 arg1) {
     s32 temp_v0;
     s32 temp_v0_2;
 
-    temp_v0_2 = func_8110B880(arg0, arg1);
+    temp_v0_2 = AudioHeap_SearchPermanentCache(arg0, arg1);
     if (temp_v0_2 != 0) {
         return temp_v0_2;
     }
@@ -1263,8 +1322,8 @@ extern u8* D_8118589C;
 extern u8* D_811858A0;
 extern u8* D_811858A4;
 
-/*
- * func_8110D840
+/**
+ * AudioLoad_GetLoadTable
  *
  * Returns the pointer stored in D_8118589C, D_811858A0 or D_811858A4 for
  * arg0 = 0, 1 or 2, and NULL for any other value (the caller treats the result
@@ -1272,8 +1331,9 @@ extern u8* D_811858A4;
  * tables are is not established.
  * Matching note: the result is built in a local and returned once; separate
  * `return` statements in each case give a different register choice.
+ * @unverified Name guessed from the code; comment kept.
  */
-u8* func_8110D840(s32 arg0) {
+u8* AudioLoad_GetLoadTable(s32 arg0) {
     u8* ret;
     ret = NULL;
     switch (arg0) {
@@ -1297,8 +1357,9 @@ void func_8110EE3C(void* sampleP, u32 fontDataAddr, void* relocInfo);
  * lists, each drum's and instrument's samples and envelope, and records the
  * font's drum and instrument lists in D_811858B0. Same structure as
  * AudioLoad_RelocateFont in the Ocarina of Time audio library.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_8110D884(s32 font_id, u32 font_data, void* reloc_info) {
+void AudioLoad_RelocateFont(s32 font_id, u32 font_data, void* reloc_info) {
     u32 reloc2;
     u32 reloc;
     s32 i;
@@ -1360,8 +1421,12 @@ extern u8 D_81185650[];
 extern u8 D_81185670[];
 void func_80056730(s32, u32);
 void func_8004D1C0(void*, s32, s32);
-s32 func_8110DBA0();
-void func_8110DA68(s32 arg0, s32 arg1, u32 arg2, s32 arg3) {
+s32 AudioLoad_Dma();
+/**
+ * Copies `arg2` bytes (rounded up to 16) from ROM `arg0` to RAM `arg1` in 1 KB DMA chunks and waits for each. Name follows the Zelda 64 audio driver, whose loader this matches.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioLoad_SyncDma(s32 arg0, s32 arg1, u32 arg2, s32 arg3) {
 
     arg2 = (arg2 + 0xF) & ~0xF;
     func_80056730(arg1, arg2);
@@ -1369,14 +1434,14 @@ void func_8110DA68(s32 arg0, s32 arg1, u32 arg2, s32 arg3) {
         if (arg2 < 0x400) {
             break;
         }
-        func_8110DBA0(D_81185670, 1, 0, arg0, arg1, 0x400, D_81185650, arg3, D_81137C1C);
+        AudioLoad_Dma(D_81185670, 1, 0, arg0, arg1, 0x400, D_81185650, arg3, D_81137C1C);
         func_8004D1C0(D_81185650, 0, 1);
         arg2 -= 0x400;
         arg0 += 0x400;
         arg1 += 0x400;
     }
     if (arg2 != 0) {
-        func_8110DBA0(D_81185670, 1, 0, arg0, arg1, arg2, D_81185650, arg3, D_81137C28);
+        AudioLoad_Dma(D_81185670, 1, 0, arg0, arg1, arg2, D_81185650, arg3, D_81137C28);
         func_8004D1C0(D_81185650, 0, 1);
     }
 }
@@ -1397,7 +1462,11 @@ typedef struct IoMesg8110DBA0 {
 s32 func_800593D0(void);
 s32 func_80051E60(void);
 void func_80056530(s32, IoMesg8110DBA0*, s32);
-s32 func_8110DBA0(IoMesg8110DBA0* mb, s32 pri, s32 direction, u32 devAddr, void* dramAddr, u32 size, void* mq, s32 kind) {
+/**
+ * Starts a PI DMA for audio data through the message queue `mq`; refuses when more than 16 are pending. Name follows the Zelda 64 audio driver, whose loader this matches.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 AudioLoad_Dma(IoMesg8110DBA0* mb, s32 pri, s32 direction, u32 devAddr, void* dramAddr, u32 size, void* mq, s32 kind) {
     s32 handle;
 
     if ((u32)D_811859D4 > 16) {

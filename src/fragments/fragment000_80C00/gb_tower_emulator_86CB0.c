@@ -3,10 +3,10 @@
 
 extern u8 D_81138690[];
 void func_81112CE8(u8*, s32);
-s32 func_8110CA2C(s32);
-s32 func_8110CA68(s32);
-void func_8110CAE0(s32, s32);
-void func_8110CB10(s32, s32);
+s32 AudioLoad_IsFontLoadComplete(s32);
+s32 AudioLoad_IsSeqLoadComplete(s32);
+void AudioLoad_SetFontLoadStatus(s32, s32);
+void AudioLoad_SetSeqLoadStatus(s32, s32);
 extern M2C_UNK D_81184380;
 u8* func_81110CA8(s32, s32);
 typedef struct TradeFlags81112E00 {
@@ -385,11 +385,11 @@ void func_81112E00(u8* arg0) {
     func_811111E0((s8*)arg0 + 0x98);
     ((TradeFlags81112E00*)arg0)->bit6 = 1;
     ((TradeFlags81112E00*)arg0)->bit7 = 0;
-    if (func_8110CA68(arg0[4]) != 0) {
-        func_8110CB10(arg0[4], 3);
+    if (AudioLoad_IsSeqLoadComplete(arg0[4]) != 0) {
+        AudioLoad_SetSeqLoadStatus(arg0[4], 3);
     }
-    if (func_8110CA2C(arg0[5]) != 0) {
-        func_8110CAE0(arg0[5], 4);
+    if (AudioLoad_IsFontLoadComplete(arg0[5]) != 0) {
+        AudioLoad_SetFontLoadStatus(arg0[5], 4);
     }
     if (arg0[5] == M2C_FIELD(&D_81184380, s16*, 0x3E)) {
         M2C_FIELD(&D_81184380, s32*, 0x20) = 1;

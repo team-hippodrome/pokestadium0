@@ -543,7 +543,7 @@ typedef struct ZNote {
 
 void* func_811092F4(AudioCmd*, s8*, s32, u16, u16, s32);
 extern s16 D_81136A58[];
-u8* func_8110C2D8(u8*, s32, s32, u8*, u32);
+u8* AudioLoad_DmaSampleData(u8*, s32, s32, u8*, u32);
 AudioCmd* func_8110938C(AudioCmd*, ZNoteSubEu*, ZNoteSynthesisState*, s32, u16, s32, s32);
 
 #define ZALIGN(val, amnt) (((val) + (1 << amnt) - 1) & ~((1 << amnt) - 1))
@@ -737,7 +737,7 @@ AudioCmd* func_81108750(s32 note_index, ZNoteSubEu* noteSubEu, ZNoteSynthesisSta
                     if (audioBookSample->medium == 0) {
                         v0_2 = sp84 + (temp * unk_s6) + sampleAddr;
                     } else {
-                        v0_2 = func_8110C2D8(sp84 + (temp * unk_s6) + sampleAddr, ZALIGN(t0 * unk_s6 + 16, 4), flags,
+                        v0_2 = AudioLoad_DmaSampleData(sp84 + (temp * unk_s6) + sampleAddr, ZALIGN(t0 * unk_s6 + 16, 4), flags,
                                              &synthesisState->sampleDmaIndex, audioBookSample->medium);
                     }
 

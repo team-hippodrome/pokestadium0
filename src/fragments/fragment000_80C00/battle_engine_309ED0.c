@@ -27,12 +27,12 @@ void func_8110DC90(void) {
 void func_8110DC98(void) {
 }
 
-void func_8110D5BC(Particle* arg0, s32 arg1, s32* arg2);
+void AudioLoad_SyncLoad(Particle* arg0, s32 arg1, s32* arg2);
 
 void func_8110DCA0(Particle* arg0, s32 arg1) {
     s32 sp1C;
 
-    func_8110D5BC(arg0, arg1, &sp1C);
+    AudioLoad_SyncLoad(arg0, arg1, &sp1C);
 }
 
 typedef struct AudioTableEntry8110DCC0 {
@@ -56,14 +56,14 @@ typedef struct AudioTable8110DCC0 {
 extern u8 D_81184654[];
 extern u8 D_81184655[];
 extern u8 D_81184656[];
-s32 func_8110D7EC(s32, s32);
-struct Table8110D840* func_8110D840(s32);
-s32 func_8110B8D8(s32, s32, s32);
+s32 AudioLoad_SearchCaches(s32, s32);
+struct Table8110D840* AudioLoad_GetLoadTable(s32);
+s32 AudioHeap_AllocPermanent(s32, s32, s32);
 s32 func_81109C0C(s32, s32, s32, s32);
 s32 func_8004CFB0(OSMesgQueue*, OSMesg, s32);
-void func_8110CAE0(s32, s32);
-void func_8110CB10(s32, s32);
-void func_8110CB40(s32, s32);
+void AudioLoad_SetFontLoadStatus(s32, s32);
+void AudioLoad_SetSeqLoadStatus(s32, s32);
+void AudioLoad_SetSampleLoadStatus(s32, s32);
 struct Entry8110EABC* func_8110E9A8(s32, s32, u32, s32, s32, OSMesgQueue*, u32);
 
 /**
@@ -102,12 +102,12 @@ s32 func_8110DCC0(s32 table_type, s32 id, s32 n_chunks, s32 ret_data, OSMesgQueu
             break;
     }
 
-    ram_addr = func_8110D7EC(table_type, id);
+    ram_addr = AudioLoad_SearchCaches(table_type, id);
     if (ram_addr != 0) {
         load_status = 2;
         func_8004CFB0(ret_queue, (OSMesg)(ret_data << 0x18), 0);
     } else {
-        table = (AudioTable8110DCC0*)func_8110D840(table_type);
+        table = (AudioTable8110DCC0*)AudioLoad_GetLoadTable(table_type);
         size = table->entries[id].size;
         size = ALIGN16(size);
         medium = table->entries[id].medium;
@@ -117,7 +117,7 @@ s32 func_8110DCC0(s32 table_type, s32 id, s32 n_chunks, s32 ret_data, OSMesgQueu
 
         switch (cachePolicy) {
             case 0:
-                ram_addr = func_8110B8D8(table_type, id, size);
+                ram_addr = AudioHeap_AllocPermanent(table_type, id, size);
                 if (ram_addr == 0) {
                     return ram_addr;
                 }
@@ -150,13 +150,13 @@ s32 func_8110DCC0(s32 table_type, s32 id, s32 n_chunks, s32 ret_data, OSMesgQueu
 
     switch (table_type) {
         case 0:
-            func_8110CB10(id, load_status);
+            AudioLoad_SetSeqLoadStatus(id, load_status);
             break;
         case 1:
-            func_8110CAE0(id, load_status);
+            AudioLoad_SetFontLoadStatus(id, load_status);
             break;
         case 2:
-            func_8110CB40(id, load_status);
+            AudioLoad_SetSampleLoadStatus(id, load_status);
             break;
     }
 
@@ -507,12 +507,12 @@ void func_8110E784(s32 reset_status) {
 }
 
 extern u8 D_81137E3C[];
-void func_8110DBA0(s8*, s32, s32, s32, s32, s32, OSMesgQueue*, s32, u8*);
+void AudioLoad_Dma(s8*, s32, s32, s32, s32, s32, OSMesgQueue*, s32, u8*);
 
 void func_8110E910(s8* arg0, s32 arg1) {
     osInvalDCache((void*)M2C_FIELD(arg0, s32*, 8), arg1);
     osCreateMesgQueue((OSMesgQueue*)(arg0 + 0x2C), (OSMesg*)(arg0 + 0x44), 1);
-    func_8110DBA0(arg0 + 0x48, 0, 0, M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 8), arg1, (OSMesgQueue*)(arg0 + 0x2C), *(u8*)arg0, D_81137E3C);
+    AudioLoad_Dma(arg0 + 0x48, 0, 0, M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 8), arg1, (OSMesgQueue*)(arg0 + 0x2C), *(u8*)arg0, D_81137E3C);
 }
 
 void func_8110E994(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3) {
@@ -638,14 +638,14 @@ void func_8110EB40(Entry8110EABC* load, s32 reset_status) {
         info = (u32)load->info;
         switch ((u8)(info >> 16)) {
             case 0:
-                func_8110CB10((u8)(info >> 8), (u8)info);
+                AudioLoad_SetSeqLoadStatus((u8)(info >> 8), (u8)info);
                 break;
             case 2:
-                func_8110CB40((u8)(info >> 8), (u8)info);
+                AudioLoad_SetSampleLoadStatus((u8)(info >> 8), (u8)info);
                 break;
             case 1:
                 font_id = (u8)(info >> 8);
-                func_8110CAE0(font_id, (u8)info);
+                AudioLoad_SetFontLoadStatus(font_id, (u8)info);
                 sampleBankId1 = D_811858B0[font_id].unk_02;
                 sampleBankId2 = D_811858B0[font_id].unk_03;
                 reloc_info.sampleBankId1 = sampleBankId1;
@@ -684,7 +684,7 @@ void func_8110ED98(s8* arg0, u32 arg1) {
     arg1 = (arg1 + 0xF) & ~0xF;
     osInvalDCache((void*)M2C_FIELD(arg0, s32*, 0xC), arg1);
     osCreateMesgQueue((OSMesgQueue*)(arg0 + 0x20), (OSMesg*)(arg0 + 0x38), 1);
-    func_8110DBA0(arg0 + 0x3C, 0, 0, M2C_FIELD(arg0, s32*, 8), M2C_FIELD(arg0, s32*, 0xC), arg1, (OSMesgQueue*)(arg0 + 0x20), arg0[2], D_81137F04);
+    AudioLoad_Dma(arg0 + 0x3C, 0, 0, M2C_FIELD(arg0, s32*, 8), M2C_FIELD(arg0, s32*, 0xC), arg1, (OSMesgQueue*)(arg0 + 0x20), arg0[2], D_81137F04);
     if (arg1) {}  // karodo
 }
 
@@ -785,9 +785,9 @@ extern Preload8110EF7C D_81184B78[];
 extern s32 D_8118557C;
 extern OSMesgQueue D_811855F8;
 extern u8* D_811858A4;
-void func_8110D884(s32, s32, RelocInfo8110EF7C*);
+void AudioLoad_RelocateFont(s32, s32, RelocInfo8110EF7C*);
 void func_8110DB8C(s32, s32, u32, s16);
-void func_8110DA68(s32, s32, u32, s32);
+void AudioLoad_SyncDma(s32, s32, u32, s32);
 
 s32 func_8110B9A8(s32, s32, s32, s8);
 
@@ -809,7 +809,7 @@ void func_8110EF7C(s32 font_id, s32 font_data, RelocInfo8110EF7C* reloc_info, s3
     }
 
     D_81185578 = 0;
-    func_8110D884(font_id, font_data, reloc_info);
+    AudioLoad_RelocateFont(font_id, font_data, reloc_info);
 
     size = 0;
     for (i = 0; i < D_81185578; i++) {
@@ -852,7 +852,7 @@ void func_8110EF7C(s32 font_id, s32 font_data, RelocInfo8110EF7C* reloc_info, s3
                     sample->sampleAddr = sample_ram_addr;
                     sample->medium = 0;
                 } else {
-                    func_8110DA68(sample->sampleAddr, sample_ram_addr, sample->size, sample->medium);
+                    AudioLoad_SyncDma(sample->sampleAddr, sample_ram_addr, sample->size, sample->medium);
                     sample->sampleAddr = sample_ram_addr;
                     sample->medium = 0;
                 }
@@ -1114,7 +1114,7 @@ void func_8110F6A4(s32 font_id, s32 async, RelocInfo8110EF7C* reloc_info) {
                     sample->sampleAddr = sample_ram_addr;
                     sample->medium = 0;
                 } else {
-                    func_8110DA68(sample->sampleAddr, sample_ram_addr, sample->size, sample->medium);
+                    AudioLoad_SyncDma(sample->sampleAddr, sample_ram_addr, sample->size, sample->medium);
                     sample->sampleAddr = sample_ram_addr;
                     sample->medium = 0;
                 }
@@ -1161,11 +1161,11 @@ typedef struct Table8110D840 {
     /* 0x00 */ char unk00[0x10];
     /* 0x10 */ Entry8110D840 entries[1];
 } Table8110D840;
-Table8110D840* func_8110D840(s32);
-s32 func_8110D7B0(s32, s32);
+Table8110D840* AudioLoad_GetLoadTable(s32);
+s32 AudioLoad_GetRealTableIndex(s32, s32);
 void func_8110F6A4(s32, s32, RelocInfo8110EF7C*);
 void func_8110FAF4(void) {
-    Table8110D840* base = func_8110D840(2);
+    Table8110D840* base = AudioLoad_GetLoadTable(2);
     s32 i;
     s32 idx;
     s32 buf[8];
@@ -1173,11 +1173,11 @@ void func_8110FAF4(void) {
 
     for (i = 0; i < D_8118444C; i++) {
         if (D_81184440.unk_10[i].unk_8 == 1) {
-            id = func_8110D7B0(1, D_81184440.unk_10[i].unk_A);
+            id = AudioLoad_GetRealTableIndex(1, D_81184440.unk_10[i].unk_A);
             buf[0] = D_811858B0[id].unk_02;
-            buf[0] = func_8110D7B0(2, buf[0]);
+            buf[0] = AudioLoad_GetRealTableIndex(2, buf[0]);
             buf[1] = D_811858B0[id].unk_03;
-            buf[1] = func_8110D7B0(2, buf[1]);
+            buf[1] = AudioLoad_GetRealTableIndex(2, buf[1]);
             buf[4] = base->entries[buf[0]].unk_08;
             idx = buf[1];
             buf[5] = base->entries[idx].unk_08;

@@ -1,10 +1,10 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
 #include "gb_tower_emulator_86CB0.h"
 
-s32 func_8110CA2C(s32);
-s32 func_8110CA68(s32);
-void func_8110CAE0(s32, s32);
-void func_8110CB10(s32, s32);
+s32 AudioLoad_IsFontLoadComplete(s32);
+s32 AudioLoad_IsSeqLoadComplete(s32);
+void AudioLoad_SetFontLoadStatus(s32, s32);
+void AudioLoad_SetSeqLoadStatus(s32, s32);
 u16 func_81112650(u8** stream, u8 kind);
 s32 func_811126B8(void*, void*, s32, s32);
 void func_81112BF0(s8* arg0, u16 mask);
@@ -83,12 +83,12 @@ void func_81114B54(SeqPlayer81114B54* seq_player) {
     if (!seq_player->enabled) {
         return;
     }
-    if (!func_8110CA68(seq_player->seqId) || !func_8110CA2C(seq_player->defaultBank)) {
+    if (!AudioLoad_IsSeqLoadComplete(seq_player->seqId) || !AudioLoad_IsFontLoadComplete(seq_player->defaultBank)) {
         func_81112E00((u8*)seq_player);
         return;
     }
-    func_8110CB10(seq_player->seqId, 2);
-    func_8110CAE0(seq_player->defaultBank, 2);
+    AudioLoad_SetSeqLoadStatus(seq_player->seqId, 2);
+    AudioLoad_SetFontLoadStatus(seq_player->defaultBank, 2);
 
     if (seq_player->muted && (seq_player->muteBehavior & 0x80)) {
         return;
