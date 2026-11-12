@@ -123,7 +123,7 @@ void func_89101238(s32, s32, s8*, s32, s32);
 
 /**
  * Draws one Pokemon row of the list with the columns of the current detail page.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): the rows 0001 フシギダネ ハナ 12345 サトシ てもち くさ どく, 0002 ヒトカゲ, 0003 ゼニガメ.
  */
 void LabPCList_DrawMonRow(s32 x, s32 y, Entry891012A8 *entry, s32 row, s32 flags, Ctx891012A8 *ctx)
 {
@@ -193,7 +193,7 @@ void LabPCList_DrawMonRow(s32 x, s32 y, Entry891012A8 *entry, s32 row, s32 flags
           break;
 
         case 3:
-          LabPCList_DrawLocationTabs(cx + 4, y + 2, (s8 ***) entry);
+          LabPCList_DrawLocation(cx + 4, y + 2, (s8 ***) entry);
           break;
 
         case 4:
@@ -287,7 +287,7 @@ void Gfx_DrawTextureRgba16(s32, s32, s32, s32, u8*, s32, s32);
 
 /**
  * Draws タテ／ヨコきりかえ (switch vertical/horizontal) and ページおくり%d/3 (page %d/3).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): Lタテ／ヨコきりかえR and ページおくり1／3.
  */
 void LabPCList_DrawPageHint(s8* arg0) {
     func_8001AB6C();

@@ -538,7 +538,7 @@ s32 LabPCList_UpdateStadiumBoxMenu();
 s32 Ui_CheckConfirmPressed(void*);
 /**
  * Runs the list window's state machine (browse, sort menu, filters, moves).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): ran the list window.
  */
 s32 LabPCList_UpdateList(s8* arg0) {
     s32 ret = 0;
@@ -615,7 +615,7 @@ void func_8910A4C8(s8*, s32);
  * Returns 1 when the caller should leave this screen. The sub-objects at
  * 4, 0xB59C, 0xB600 and 0xB7B4 are driven by the LabPCList_UpdateList,
  * SavePrompt_Update, LabPCList_UpdateItemWindow and LabPCList_UpdateMessageWindow updates.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-12): ran the いちらん screen.
  */
 s32 LabPCList_UpdateScreen(s8* arg0) {
     s32 ret = 0;
@@ -707,7 +707,7 @@ extern M2C_UNK D_8910A7F0;
 
 /**
  * Draws the tinted terminal screen background.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): the いちらん background.
  */
 void LabPCList_DrawBackground(void) {
     Ui_DrawTintedScreenBackground(0x38, 0x1E0, M2C_FIELD(&D_8910A7F0, u8 *, 0), M2C_FIELD(&D_8910A7F0, u8 *, 1), (s32) M2C_FIELD(&D_8910A7F0, u8 *, 2));
@@ -721,7 +721,7 @@ void LabPCList_DrawMessageWindow(void*);
 
 /**
  * Draws the lab PC list for its current state.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): drew the いちらん screen.
  */
 M2C_UNK LabPCList_DrawScreen(M2C_UNK* arg0) {
     BgStage_DrawFrame();
@@ -764,9 +764,11 @@ extern M2C_UNK D_8910E380;
 extern M2C_UNK D_8910E3D0;
 
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Seen in play (2026-11-12): runs once when いちらん opens; it reads the active controller port and
+ * calls LabPCList_InitScreen. The old name BattlePrep_UpdateSingleBattleIntroFrame was a Stadium
+ * 1 name for the same address.
  */
-void BattlePrep_UpdateSingleBattleIntroFrame(void) {
+void LabPCList_Setup(void) {
     D_8910E37C = func_80025BD8();
     if (D_8910E37C != -1) {
         func_80027FF8(&D_8910E380, D_8910E37C);
@@ -830,7 +832,7 @@ extern M2C_UNK D_8910E3D0;
 
 /**
  * One frame of the Pokemon list screen.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): ran every frame of いちらん.
  */
 void LabPCList_RunFrame(s32 arg0) {
     Cont_StartReadInputs();
@@ -864,7 +866,7 @@ s32 LabPCList_UpdateFade(s32);
  *      D_002E0BE0..D_002E2B90 into segment 1 and D_00400F70..D_004076E0 into
  *      segment 4.  The segment number is bits 24-27 of the address of
  *      D_01000000 / D_04000000.
- *   4. BattlePrep_UpdateSingleBattleIntroFrame() and StageLoader_UpdateSegments() are called.
+ *   4. LabPCList_Setup() and StageLoader_UpdateSegments() are called.
  *   5. BgStage_RunUntilCondition is run three times, with timer values 8, 0
  *      and 8: the first and third with callback LabPCList_UpdateFade, the second
  *      with LabPCList_RunFrame.  What those callbacks do is not established
@@ -882,7 +884,7 @@ s32 LabPCList_Init(s32 arg0, s32 arg1) {
     Font_Init(0x3C, 0);
     Asset_LoadToSegment(((u32)D_01000000 & 0x0F000000) >> 0x18, D_002E0BE0, D_002E2B90, 0);
     Asset_LoadToSegment(((u32)D_04000000 & 0x0F000000) >> 0x18, D_00400F70, D_004076E0, 0);
-    BattlePrep_UpdateSingleBattleIntroFrame();
+    LabPCList_Setup();
     StageLoader_UpdateSegments();
     BgStage_RunUntilCondition(8, LabPCList_UpdateFade);
     BgStage_RunUntilCondition(0, LabPCList_RunFrame);

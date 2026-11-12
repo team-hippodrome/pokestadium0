@@ -143,7 +143,7 @@ void func_89100688(s8*);
 void LabPCList_DrawHeaderCursor(s8*);
 /**
  * Draws the lab PC list screen: page hint, column headers and rows.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): the いちらん list with the page hint, column headers and rows.
  */
 void LabPCList_DrawListScreen(s8* arg0) {
     s32 sel;
@@ -478,7 +478,7 @@ void LabPCList_FormatGatherPrompt(s8*);
 
 /**
  * Handles list input while the cursor is on the Pokemon rows.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): moved the cursor over the rows.
  */
 s32 LabPCList_UpdateListCursor(Ctx89102344* arg0) {
     s32 ret;
@@ -661,7 +661,8 @@ s32 func_89106254(s32);                             /* extern */
 M2C_UNK func_89109C6C(s32, s32);                    /* extern */
 /**
  * Handles the window that chooses which boxes to list.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): ran the 「どこのポケモンを いちらん するか えらんでください。」 window (てもち / ゲームボーイのボックス /
+ * 64カセットのボックス, OK).
  */
 s32 LabPCList_UpdateSourceSelect(s8 *arg0)
 {

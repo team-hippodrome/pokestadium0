@@ -3679,7 +3679,7 @@ func_89100870,0x89100870,src/fragments/fragment016_252E10/89100020.c,LabPCList_D
 func_89100914,0x89100914,src/fragments/fragment016_252E10/89100020_89100914.c,LabPCList_DrawDetailColumns,hand,,c
 func_89100F1C,0x89100F1C,src/fragments/fragment016_252E10/89100020_89100914.c,LabPCList_DrawTypeIcon,hand,,c
 func_89100FC4,0x89100FC4,src/fragments/fragment016_252E10/89100020_89100914.c,func_89100FC4,hand,,c
-func_891010AC,0x891010AC,src/fragments/fragment016_252E10/89100020_89100914.c,LabPCList_DrawLocationTabs,m2c,m2c,c
+func_891010AC,0x891010AC,src/fragments/fragment016_252E10/89100020_89100914.c,LabPCList_DrawLocation,m2c,m2c,c
 func_89101238,0x89101238,src/fragments/fragment016_252E10/89100020_89100914.c,LabPCList_DrawPlainText,hand,,c
 func_891012A8,0x891012A8,src/fragments/fragment016_252E10/89100020_891012A8.c,LabPCList_DrawMonRow,hand,,c
 func_8910179C,0x8910179C,src/fragments/fragment016_252E10/89100020_891012A8.c,LabPCList_DrawRowCursor,hand,,c
@@ -3724,7 +3724,7 @@ func_891044F0,0x891044F0,src/fragments/fragment016_252E10/89100020_89103740.c,La
 func_8910452C,0x8910452C,src/fragments/fragment016_252E10/89100020_89103740.c,LabPCList_UpdateScreen,hand,,c
 func_89104818,0x89104818,src/fragments/fragment016_252E10/89100020_89103740.c,LabPCList_DrawBackground,m2c,m2c,c
 func_89104854,0x89104854,src/fragments/fragment016_252E10/89100020_89103740.c,LabPCList_DrawScreen,hand,,c
-func_89104998,0x89104998,src/fragments/fragment016_252E10/89100020_89103740.c,BattlePrep_UpdateSingleBattleIntroFrame,hand,,c
+func_89104998,0x89104998,src/fragments/fragment016_252E10/89100020_89103740.c,LabPCList_Setup,hand,,c
 func_891049E8,0x891049E8,src/fragments/fragment016_252E10/89100020_89103740.c,LabPCList_UpdateFade,hand,,c
 func_89104B08,0x89104B08,src/fragments/fragment016_252E10/89100020_89103740.c,LabPCList_RunFrame,m2c,m2c,c
 func_89104B48,0x89104B48,src/fragments/fragment016_252E10/89100020_89103740.c,LabPCList_Init,hand,,c

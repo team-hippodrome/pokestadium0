@@ -58,7 +58,7 @@ void Font_SetActive(s32 mask, s32 arg1);
 void Font_Printf(s32 x, s32 y, const char* fmt, ...);
 /**
  * Draws the list column headers: Pokemon, nickname, ID, OT, location, Type 1/2, level, HP, Attack...
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): the headers ポケモン, ニックネーム, ID, おや, ばしょ, タイプ1, タイプ2.
  */
 void LabPCList_DrawDetailColumns(Ctx89100914* arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 x;
@@ -176,7 +176,7 @@ M2C_UNK func_8001ABBC();
 
 /**
  * Draws the colored type icon for type slot `arg3` of Pokemon `arg2`.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): くさ, どく, ほのお and みず in their type colors.
  */
 void LabPCList_DrawTypeIcon(s32 arg0, s32 arg1, u8* arg2, s32 arg3) {
     Color82000BC4 c;
@@ -236,10 +236,11 @@ extern M2C_UNK D_8910DBC0;
 extern M2C_UNK D_8910DBC4;
 
 /**
- * Draws the location tabs てもち (Party), GB and パーク.
- * @unverified Name and comment guessed from the code.
+ * Draws a row's ばしょ (location) value, picked by the box id: てもち (party), a GB or 64
+ * cartridge box number, and so on.
+ * Seen in play (2026-11-12): てもち in the ばしょ column for the three party Pokemon.
  */
-void LabPCList_DrawLocationTabs(s32 arg0, s32 arg1, s8 ***arg2) {
+void LabPCList_DrawLocation(s32 arg0, s32 arg1, s8 ***arg2) {
     s32 temp_v0;
 
     func_8001AB6C();

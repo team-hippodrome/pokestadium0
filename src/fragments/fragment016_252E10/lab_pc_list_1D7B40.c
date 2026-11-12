@@ -359,7 +359,7 @@ extern u8 D_8910CF80[];
 extern char D_8910E018[];
 /**
  * Draws ボックス%d (Box %d).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): ボックス1 ... ボックス4 in the 64カセットのボックス submenu.
  */
 void PcSort_DrawBoxName(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     Color_RGBA8 color;
