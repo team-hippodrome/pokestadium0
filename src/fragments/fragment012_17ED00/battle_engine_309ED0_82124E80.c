@@ -21,7 +21,8 @@ void func_82124EF4(void) {
 /**
  * Called once both actions are committed: sets the acting side from Battle_DetermineMoveOrder
  * (skipping a side with no move), records the order for the COM AI, enters phase 0 and resolves
- * the first action with Battle_ResolveMonAction. Ran every turn in play.
+ * the first action with Battle_ResolveMonAction. Ran in play from Battle_ChooseActions on a Struggle turn and
+ * on the second turn of Razor Wind and Fly.
  * @unverified Name from the code.
  */
 void Battle_StartTurn(void) {

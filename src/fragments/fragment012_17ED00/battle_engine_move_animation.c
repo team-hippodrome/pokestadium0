@@ -642,7 +642,7 @@ void func_82122104(ActivePokemon*);
 /**
  * Row 19 tick: when the repeated cue ends, starts the move's effect script again and sets the
  * model transform.
- * @unverified Name from the code.
+ * In the per-move sweep only Double Slap, Comet Punch and Double Kick ran it.
  */
 void BattleScene_TickRepeatHitStartEffect(ActivePokemon* active_pokemon) {
     UNUSED s32 pad[2]; // FAKE: stack padding
@@ -676,7 +676,7 @@ void BattleScene_TickRepeatHitStartEffect(ActivePokemon* active_pokemon) {
 
 /**
  * Row 19 tick: plays the hit sound for the repeated hit, like BattleScene_TickMoveUsePlaySound.
- * @unverified Name from the code.
+ * In the per-move sweep only Double Slap, Comet Punch and Double Kick ran it.
  */
 void BattleScene_TickRepeatHitPlaySound(ActivePokemon* active_pokemon) {
     MovePresentationCue* cue;

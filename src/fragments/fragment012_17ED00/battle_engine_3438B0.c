@@ -28,7 +28,7 @@ void BattleAnim_RenderNop2(void) {
 /**
  * Step 4 reaction after the last hit of a multi-hit move, when the hit count message shows
  * (hitReactionKind 1, set in ProcessBattleTurn).
- * @unverified Name from BattleScene_ActionStepReaction's dispatch.
+ * In the per-move sweep (moves 1-33) only Double Slap, Comet Punch and Double Kick ran it.
  */
 void BattleScene_ReactionMultiHitEnd(CameraNode* arg0, void* arg1) {
     u8* sp24 = (u8*)D_8219A544 + 0x7C6;
@@ -1725,7 +1725,7 @@ void BattleScene_PhaseInflictStatus(CameraNode* arg0) {
 /**
  * Phase 26 (moveEffectKind 0x1A, set by Battle_Effect_LowerStat): a move that lowers the target's
  * stat.
- * @unverified Name from the moveEffectKind that leads here.
+ * In the per-move sweep (moves 1-33) only Sand Attack ran it.
  */
 void BattleScene_PhaseLowerStat(CameraNode* arg0) {
     sBattleScene.scene->cameraPresetId = 2;

@@ -283,7 +283,8 @@ void BattleScene_ReactionNormal(CameraNode* arg0, s32 arg1) {
 /**
  * Step 4 reaction for a critical hit or one-hit KO (hitReactionKind 2, set by
  * Battle_PrintCriticalOHKOText).
- * @unverified Name from BattleScene_ActionStepReaction's dispatch.
+ * In the per-move sweep (moves 1-33) only Karate Chop and Slash ran it, the two high critical-hit
+ * moves.
  */
 void BattleScene_ReactionCritical(CameraNode* arg0, s32 arg1) {
     BattleMonRuntime* sp1C = &((ActivePokemon*)D_8219A540)->state.runtime;
