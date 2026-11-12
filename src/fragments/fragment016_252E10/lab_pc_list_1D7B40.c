@@ -203,7 +203,7 @@ void BattleMoveListWidget_DisableRestrictedMoves(unk_func_8830867C_04C_078* arg0
     }
 }
 
-M2C_UNK func_8002DAD8(s8*, s32, s32, s32, s8*);
+M2C_UNK Menu_DrawInlineItems(s8*, s32, s32, s32, s8*);
 
 void func_891051A4(Box89104E38* arg0) {
     s8* label;
@@ -213,7 +213,7 @@ void func_891051A4(Box89104E38* arg0) {
 
         sp2C[0] = arg0->w - 0xC;
         label = arg0->label;
-        func_8002DAD8(label, arg0->x + 6, arg0->y + 0xA, 0xFFEF, (s8*)sp2C);
+        Menu_DrawInlineItems(label, arg0->x + 6, arg0->y + 0xA, 0xFFEF, (s8*)sp2C);
     }
     /* Empty test kept from the permuter: it keeps arg0 in $s0 as in the ROM. */
     if (arg0) {  // karodo
@@ -255,7 +255,7 @@ s32 func_89105200(Box89105200* arg0) {
         color = 0xFEED;
         params[0] = ((30 - arg0->timer) * 0xFF) / 30;
     }
-    func_8002DAD8(arg0->label, arg0->x + 6, arg0->y + 0xA, color, (s8*)params);
+    Menu_DrawInlineItems(arg0->label, arg0->x + 6, arg0->y + 0xA, color, (s8*)params);
     return arg0->timer == 0;
 }
 
@@ -407,13 +407,13 @@ void func_8910576C(void* arg0, s32 arg1, s32 arg2, void* arg3, s32 arg4, Rgba891
 
 M2C_UNK Ui_DrawTexturedFrameDecal(s32, s32, s32, s32, M2C_UNK *); /* extern */
 M2C_UNK Window_DrawFrame(s8 *);                      /* extern */
-M2C_UNK func_8002DAD8(s8 *, s32, s32, s32, s8 *); /* extern */
+M2C_UNK Menu_DrawInlineItems(s8 *, s32, s32, s32, s8 *); /* extern */
 extern M2C_UNK D_80073554;
 
 void func_891057FC(s8 *arg0, s32 arg1) {
     Ui_DrawTexturedFrameDecal(M2C_FIELD(arg0, s32 *, 0) - 6, M2C_FIELD(arg0, s32 *, 4) - 6, M2C_FIELD(arg0, s32 *, 8) + 0xC, M2C_FIELD(arg0, s32 *, 0xC) + 0xC, &D_80073554);
     Window_DrawFrame(arg0);
-    func_8002DAD8(arg0 + 0x20, M2C_FIELD(arg0, s32 *, 0), M2C_FIELD(arg0, s32 *, 4) + 4, arg1 | 0xFFED, arg0);
+    Menu_DrawInlineItems(arg0 + 0x20, M2C_FIELD(arg0, s32 *, 0), M2C_FIELD(arg0, s32 *, 4) + 4, arg1 | 0xFFED, arg0);
 }
 
 M2C_UNK func_8003F6AC(M2C_UNK);
@@ -635,7 +635,7 @@ void func_89105E70(s8* arg0, s32 arg1) {
                 }
             }
         }
-        func_8002DAD8(arg0 + 0x70, M2C_FIELD(arg0, s32*, 0x50), M2C_FIELD(arg0, s32*, 0x54) + 4, sp38, arg0);
+        Menu_DrawInlineItems(arg0 + 0x70, M2C_FIELD(arg0, s32*, 0x50), M2C_FIELD(arg0, s32*, 0x54) + 4, sp38, arg0);
         Window_DrawLabeled(arg0 + 0x94, sp34);
         if (M2C_FIELD(arg0, s32*, 0xD4) == 1) {
             func_891057FC(arg0 + 0xDC, (M2C_FIELD(arg0, s32*, 0) == 1) ? 2 : 0);
@@ -1251,7 +1251,7 @@ typedef struct Ctx891074CC {
     /* 0x1DC */ s32 mode;
 } Ctx891074CC;
 extern u8 D_800735C4[];
-void func_8002F3C4(s8*, s32, s32, s32, s32);
+void ScrollList_DrawItems(s8*, s32, s32, s32, s32);
 
 /**
  * Draws the type filter window.
@@ -1275,7 +1275,7 @@ void LabPCList_DrawTypeFilter(Ctx891074CC* arg0) {
         if (arg0->mode == 1) {
             mask = 0xFFEF;
         }
-        func_8002F3C4(arg0->text, arg0->x + 0x98, arg0->y + 0x20, mask, 0);
+        ScrollList_DrawItems(arg0->text, arg0->x + 0x98, arg0->y + 0x20, mask, 0);
     }
 }
 
@@ -1505,7 +1505,7 @@ typedef struct Ctx89107D7C {
     /* 0x1B0 */ s8 text[0x19C];
     /* 0x34C */ s32 mode;
 } Ctx89107D7C;
-void func_8002F6C4(s8*, s32, s32, s32, s32);
+void ScrollList_DrawInlineItems(s8*, s32, s32, s32, s32);
 
 /**
  * Draws the move filter window.
@@ -1529,7 +1529,7 @@ void LabPCList_DrawMoveFilter(Ctx89107D7C* arg0) {
         if (arg0->mode == 1) {
             mask = 0xFFEF;
         }
-        func_8002F6C4(arg0->text, arg0->x + 0xB0, arg0->y + 0x20, mask, 0);
+        ScrollList_DrawInlineItems(arg0->text, arg0->x + 0xB0, arg0->y + 0x20, mask, 0);
     }
 }
 
@@ -1787,7 +1787,7 @@ void PcSort_DrawUseItemPrompt(s8* arg0) {
         Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 0x30) - 7, M2C_FIELD(arg0, s32*, 8), D_8007356C);
         flags = 0xFFED;
         flags |= (M2C_FIELD(arg0, s32*, 0x1B0) == 0) ? 2 : 0x10;
-        func_8002F3C4(arg0 + 0x4C, M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0x16, flags, 0);
+        ScrollList_DrawItems(arg0 + 0x4C, M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0x16, flags, 0);
         if (M2C_FIELD(M2C_FIELD(arg0, s8**, 0x4C), s32*, 8) > 0) {
             Font_BeginTranslucentTextRendering();
             Font_SetActive(8, 0);

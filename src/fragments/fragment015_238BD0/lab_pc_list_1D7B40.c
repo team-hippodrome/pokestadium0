@@ -30,7 +30,7 @@ typedef struct unk_func_88313894 {
 
 #include "fragments/particle_math/particle_math.h"
 #include "m2c_macros.h"
-void func_8002ED18(s8*, s32, s8*);
+void ScrollList_SetItems(s8*, s32, s8*);
 
 void func_89004708(void);
 void func_89004710(void);
@@ -183,7 +183,7 @@ void PcSort_DrawMenu(s8 *arg0) {
     }
 }
 
-s32 func_8002DCE0(void*);
+s32 Menu_UpdateCursorSkipDisabled(void*);
 s32 func_8002BC14(s32);
 M2C_UNK func_8003F6AC(M2C_UNK);
 extern s32 D_800603C0;
@@ -195,7 +195,7 @@ s32 PcSort_UpdateMenuCursor(s32 arg0) {
     s32 sp1C = 0;
     s32 dir;
 
-    if (func_8002DCE0((u8*)arg0 + 0x2C) == 0) {
+    if (Menu_UpdateCursorSkipDisabled((u8*)arg0 + 0x2C) == 0) {
         dir = func_8002BC14(D_800603C0);
         if (dir == -1) {
             func_8003F6AC(3);
@@ -246,7 +246,7 @@ void PcSort_DrawMonRow(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4) {
  * @unverified Name and comment guessed from the code.
  */
 void PcSort_SetMonList(s8* arg0, s32 arg1) {
-    func_8002ED18(arg0, arg1, arg0 + 0x44);
+    ScrollList_SetItems(arg0, arg1, arg0 + 0x44);
 }
 
 void ScrollList_Init(s8*, s32, s8*, s32, void*, s32, s32);
@@ -264,7 +264,7 @@ void PcSort_InitMonList(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
 }
 
 void func_8002F9D8(void *, s32, s32, s32, s32);
-void func_8002F6C4(void *, s32, s32, s32, s32);
+void ScrollList_DrawInlineItems(void *, s32, s32, s32, s32);
 void func_8002BAB8(s32, s32, s32, s32);
 void func_8001BCB4(s32, s32, s32, s32, void *, s32, s32);
 extern Gfx D_80073450[];
@@ -277,7 +277,7 @@ void PcSort_DrawMonList(s8 *arg0, s32 arg1) {
     if (arg1 & 0x200) {
         func_8002F9D8(arg0, M2C_FIELD(arg0, s32 *, 0x80), M2C_FIELD(arg0, s32 *, 0x84) + 0x10, arg1 | 0xFFED, 0);
     } else {
-        func_8002F6C4(arg0, M2C_FIELD(arg0, s32 *, 0x80), M2C_FIELD(arg0, s32 *, 0x84) + 0x10, arg1 | 0xFFED, 0);
+        ScrollList_DrawInlineItems(arg0, M2C_FIELD(arg0, s32 *, 0x80), M2C_FIELD(arg0, s32 *, 0x84) + 0x10, arg1 | 0xFFED, 0);
     }
     func_8002BAB8(M2C_FIELD(arg0, s32 *, 0x80) + 0x98, M2C_FIELD(arg0, s32 *, 0x84) + 0xBA, M2C_FIELD(M2C_FIELD(arg0, s8 **, 0), s32 *, 8), 2);
     func_8002BAB8(M2C_FIELD(arg0, s32 *, 0x80) + 0xB3, M2C_FIELD(arg0, s32 *, 0x84) + 0xBA, M2C_FIELD(M2C_FIELD(arg0, s8 **, 0), s32 *, 4), 2);
@@ -322,7 +322,7 @@ void func_89005068(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3, s32 arg4)
 }
 
 void func_8002B018(s8*, s32, s32, s32, s32, s32, void*);
-void func_8002DECC(s8*, s8*, s8*, void*, s32, s32, s32);
+void GridMenu_Init(s8*, s8*, s8*, void*, s32, s32, s32);
 void func_80027410(s8*, s8*, s32, s32, s32);
 extern Rgba89004908 D_8900A580[];
 extern Rgba89004908 D_8900A750;
@@ -375,7 +375,7 @@ void PcSort_InitOrganizeWindow(s8* arg0, s32 x, s32 y, s8* arg3, s8* arg4) {
     M2C_FIELD(arg0, Rgba89004908*, 0x148) = D_8900A580[13];
     M2C_FIELD(arg0, Rgba89004908*, 0x14C) = D_8900A5BC;
     func_80027410(arg0 + 0x158, arg0 + 0x50, 0x2C, 6, 6);
-    func_8002DECC(arg0 + 0x168, arg0 + 0x158, arg0 + 0x190, func_89005068, 2, 0, 0);
+    GridMenu_Init(arg0 + 0x168, arg0 + 0x158, arg0 + 0x190, func_89005068, 2, 0, 0);
     M2C_FIELD(arg0, s32*, 0x290) = 1;
     M2C_FIELD(arg0, s32*, 0x28C) = 0;
     PcSort_InitMonList(arg0 + 0x294, M2C_FIELD(arg0, s32*, 4) + 0xE, M2C_FIELD(arg0, s32*, 8) + 0x2C, (s32)arg3);
@@ -573,7 +573,7 @@ void PcSort_DrawHelpText(s32* arg0) {
 void Window_DrawFrame(s8*);
 void Ui_DrawTexturedDivider(s32, s32, s32, void*);
 void Ui_DrawTexturedFrameDecal(s32, s32, s32, s32, void*);
-void func_8002E230(s8*, s32, s32, s32, s32);
+void GridMenu_DrawInlineItems(s8*, s32, s32, s32, s32);
 void func_8002D024(s8*);
 extern u8 D_8007356C[];
 extern u8 D_800735C4[];
@@ -599,7 +599,7 @@ void PcSort_DrawOrganizeWindow(s8* arg0) {
         Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 0x34) - 7, M2C_FIELD(arg0, s32*, 0xC), D_8007356C);
         Ui_DrawTexturedFrameDecal(M2C_FIELD(arg0, s32*, 4) + 0xC, M2C_FIELD(arg0, s32*, 8) + 0xC, 0xD0, 0xEA, D_800735C4);
         Ui_DrawTexturedFrameDecal(M2C_FIELD(arg0, s32*, 4) + 0x158, M2C_FIELD(arg0, s32*, 8) + 0xC, 0xD0, 0xEA, D_800735C4);
-        func_8002E230(arg0 + 0x168, 0, 0, (M2C_FIELD(arg0, s32*, 0) == 1) ? 2 : 0x10, 0);
+        GridMenu_DrawInlineItems(arg0 + 0x168, 0, 0, (M2C_FIELD(arg0, s32*, 0) == 1) ? 2 : 0x10, 0);
         PcSort_DrawBoxTab((s32)arg0, M2C_FIELD(arg0, s32*, 4) + 0xE, M2C_FIELD(arg0, s32*, 8) + 0xE, 0, M2C_FIELD(arg0, s32*, 0x28C));
         PcSort_DrawBoxTab((s32)arg0, M2C_FIELD(arg0, s32*, 4) + 0x15A, M2C_FIELD(arg0, s32*, 8) + 0xE, 0, M2C_FIELD(arg0, s32*, 0x290));
         m1 = 0xFDED;
@@ -710,9 +710,9 @@ void PcSort_OpenBox(s8 *arg0) {
 
 void func_8002CEEC(s8*, s8*, s32, s32, s32);
 s32 Ui_CheckConfirmPressed(s8*);
-void func_8002D900(s8*);
+void Menu_ClearItemFlags(s8*);
 void Menu_SkipDisabledForward(s8*);
-s32 func_8002E3F0(s8*);
+s32 GridMenu_UpdateCursor(s8*);
 extern s8* D_8900A84C[];
 extern s8 D_89018D8C[];
 extern s8 D_89018DA4[];
@@ -738,7 +738,7 @@ s32 PcSort_UpdateOrganizeWindow(s8* arg0) {
     next = 0;
     switch (M2C_FIELD(arg0, s32*, 0)) {
         case 1:
-            if (func_8002E3F0(arg0 + 0x168) == 0) {
+            if (GridMenu_UpdateCursor(arg0 + 0x168) == 0) {
                 res = func_8002BC14(D_800603C0);
                 if (res == -1) {
                     func_8003F6AC(3);
@@ -858,12 +858,12 @@ s32 PcSort_UpdateOrganizeWindow(s8* arg0) {
         case 6:
             res = PcSort_UpdateMonList(arg0 + 0x294, 0);
             if (res == -1) {
-                func_8002D900(arg0 + 0x294);
+                Menu_ClearItemFlags(arg0 + 0x294);
                 M2C_FIELD(arg0, s32*, 0) = 4;
             } else if (res == 1) {
                 func_8003F6AC(0x18);
                 PcSort_SwapWithinList(arg0);
-                func_8002D900(arg0 + 0x294);
+                Menu_ClearItemFlags(arg0 + 0x294);
                 M2C_FIELD(arg0, s32*, 0) = 4;
             }
             break;

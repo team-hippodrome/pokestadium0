@@ -29,7 +29,7 @@ typedef struct {
     /* 0x04 */ u16* flags;
 } SlotFlags;
 
-M2C_UNK func_8002E3F0();
+M2C_UNK GridMenu_UpdateCursor();
 void FreeBattle_SetScreenState(s8*, s32, s32);
 extern s32 D_8200AC58[];
 void func_8001AB6C(void);
@@ -38,7 +38,7 @@ void func_8001ABBC(void);
 void func_8001AA9C(u8, u8, u8, u8);
 void func_8001A944(s32, s32, const char*, ...);
 extern M2C_UNK D_800734A8;
-void func_8002D900(FlagOwner*);
+void Menu_ClearItemFlags(FlagOwner*);
 extern Gfx D_80060270[];
 void func_80029028(s32, s32, s32, s32, Color82001CCC);
 extern Color82001CCC D_82008F5C;
@@ -49,7 +49,7 @@ extern s32 D_82009C6C;
 extern s32 D_82009C84;
 void FreeBattle_InitLevelSumWarning(s8* arg0, s32 arg1, s32 arg2, s32 arg3);
 void FreeBattle_InitRentalConfirm(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
-void func_80031B88(FlagOwner*);
+void ScrollGrid_SyncCursor(FlagOwner*);
 
 void func_82002980(arg0)
     s8* arg0;
@@ -85,12 +85,12 @@ void func_82002980(arg0)
                     color = ((Slot54*)(arg0 + 0xE4))[M2C_FIELD(arg0, s32*, 0x300)].unk04[0];
                 }
                 func_82001340((FlagOwner*)(arg0 + 0x6E4), (Slot54*)(arg0 + 0xE4), color);
-                func_80031B88((FlagOwner*)(arg0 + 0x6E4));
+                ScrollGrid_SyncCursor((FlagOwner*)(arg0 + 0x6E4));
             }
             panel = arg0 + 0x14;
             break;
         case 6:
-            func_8002D900((FlagOwner*)(arg0 + 0x6E4));
+            Menu_ClearItemFlags((FlagOwner*)(arg0 + 0x6E4));
             panel = arg0 + 0x14;
             break;
         case 3:
@@ -129,7 +129,7 @@ void func_82002BF8(s8 *arg0, s32 arg1, s32 arg2) {
     func_82002980();
 }
 
-void func_800306E0(s8*, s32);
+void ScrollList_SetCursor(s8*, s32);
 extern u8 D_800AAF50[];
 typedef struct List82002C3C {
     u8** items;
@@ -156,7 +156,7 @@ void func_82002C3C(s8* arg0) {
             }
         }
     }
-    func_800306E0(arg0 + 0x40, sel);
+    ScrollList_SetCursor(arg0 + 0x40, sel);
     mode = M2C_FIELD(arg0, s32*, 0x738);
     if (mode == 5) {
         M2C_FIELD(arg0, u8**, 0x744) = D_800AAF50;
@@ -178,7 +178,7 @@ void FreeBattle_DrawMonCell();
 extern M2C_UNK FreeBattle_DrawTeamRow;
 void Window_SetRect(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 M2C_UNK ScrollList_Init(s8*, s32, s8*, M2C_UNK, M2C_UNK*, s32, s32);
-M2C_UNK func_80030894(s8*, s8*, s8*, M2C_UNK, s32, M2C_UNK*, s32, s32);
+M2C_UNK ScrollGrid_Init(s8*, s8*, s8*, M2C_UNK, s32, M2C_UNK*, s32, s32);
 M2C_UNK func_80027410(s8*, s32, M2C_UNK, M2C_UNK, s32);
 void func_80018168(s8* arg0);
 void func_82002C3C(s8*);
@@ -193,7 +193,7 @@ void func_82002C3C(s8*);
  *   - fills the first 0x28 words of D_8200AC58 with -1,
  *   - stores 1 at +0x738, arg4 at +0x73C and the mode arg5 at +0x740, and calls func_82002C3C,
  *   - when arg5 != 0, builds the record view at +0x684 (source D_8200ACFC if arg5 == 1,
- *     otherwise D_8200AD00, with different dimensions), links it through func_80030894
+ *     otherwise D_8200AD00, with different dimensions), links it through ScrollGrid_Init
  *     at +0x6E4/+0x694 (passing &FreeBattle_DrawMonCell) and sets bit 0x10000 at +0x704,
  *   - finally calls func_80018168 on D_8200AC50.
  * The meaning of arg1..arg5 beyond what is stored above is not established.
@@ -224,7 +224,7 @@ void FreeBattle_InitEntrySelect(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4
             var_s1 = arg0 + 0x684;
             func_80027410(var_s1, D_8200AD00, 0x50, 0x21, 0x21);
         }
-        func_80030894(arg0 + 0x6E4, var_s1, arg0 + 0x694, 4, 3, &FreeBattle_DrawMonCell, 0x84, 0x32);
+        ScrollGrid_Init(arg0 + 0x6E4, var_s1, arg0 + 0x694, 4, 3, &FreeBattle_DrawMonCell, 0x84, 0x32);
         M2C_FIELD(arg0, s32*, 0x704) = M2C_FIELD(arg0, s32*, 0x704) | 0x10000;
     }
     func_80018168((s8*)D_8200AC50);
@@ -294,7 +294,7 @@ typedef struct {
 
 extern Color82001CCC D_820090C0;
 extern s32 D_8200AC58[];
-void func_800310D8(void*, s32, s32, s32, TableArgs*);
+void ScrollGrid_DrawItems(void*, s32, s32, s32, TableArgs*);
 
 /**
  * Draws using the menu object arg0 (layout not established; it reads the words
@@ -302,7 +302,7 @@ void func_800310D8(void*, s32, s32, s32, TableArgs*);
  * (+6, +0x88) with the third argument being word 0x1C minus 0xC, emits the
  * display list D_80060270 and fills a 2 by 0xB6 rectangle with colour D_820090C0
  * at (+6, +0x9C). Then builds a TableArgs {D_8200AC58, 0x18, 0x10, 0} and calls
- * func_800310D8 on the sub-object at arg0 + 0x6E4 at (+8, +0xAC) with a mode
+ * ScrollGrid_DrawItems on the sub-object at arg0 + 0x6E4 at (+8, +0xAC) with a mode
  * word of 0xFED, or 0xFEF when arg1 is 1, or 0xFFD when arg1 is 2.
  * What the mode word's bits mean is not yet established.
  * @unverified Name guessed from the code; comment kept.
@@ -327,7 +327,7 @@ void FreeBattle_DrawRentalTitleWindow(s8* arg0, s32 arg1) {
             sp44 = 0xFFD;
             break;
     }
-    func_800310D8(arg0 + 0x6E4, M2C_FIELD(arg0, s32*, 0x14) + 8, M2C_FIELD(arg0, s32*, 0x18) + 0xAC, sp44, &sp34);
+    ScrollGrid_DrawItems(arg0 + 0x6E4, M2C_FIELD(arg0, s32*, 0x14) + 8, M2C_FIELD(arg0, s32*, 0x18) + 0xAC, sp44, &sp34);
 }
 
 void func_82003234(s8* arg0) {
@@ -345,7 +345,7 @@ void func_820032E8(s8* arg0) {
 s32 func_8002AE6C(s8*);
 void func_800189C0(s32, s32);
 void func_800069CC(void);
-void func_8002F3C4(s8*, s32, s32, s32, s32);
+void ScrollList_DrawItems(s8*, s32, s32, s32, s32);
 void FreeBattle_DrawRentalListWindow(s8*, s32);
 void FreeBattle_DrawDuplicateWarning(s8*);
 void FreeBattle_DrawShortageWarning(s8*);
@@ -367,7 +367,7 @@ void FreeBattle_DrawRentalScreen(s8* arg0) {
         case 1:
             func_800189C0(D_8200AC50, 0);
             func_800069CC();
-            func_8002F3C4(arg0 + 0x40, M2C_FIELD(arg0, s32*, 0x14) + 6, M2C_FIELD(arg0, s32*, 0x18) + 0x16, 0xFFF, M2C_FIELD(arg0, s32*, 0x73C));
+            ScrollList_DrawItems(arg0 + 0x40, M2C_FIELD(arg0, s32*, 0x14) + 6, M2C_FIELD(arg0, s32*, 0x18) + 0x16, 0xFFF, M2C_FIELD(arg0, s32*, 0x73C));
             break;
         case 2:
             func_800189C0(D_8200AC50, 0);
@@ -426,14 +426,14 @@ void FreeBattle_DrawRentalScreen(s8* arg0) {
         case 12:
             func_800189C0(D_8200AC50, 0);
             func_800069CC();
-            func_8002F3C4(arg0 + 0x40, M2C_FIELD(arg0, s32*, 0x14) + 6, M2C_FIELD(arg0, s32*, 0x18) + 0x16, 0xFFF, M2C_FIELD(arg0, s32*, 0x73C));
+            ScrollList_DrawItems(arg0 + 0x40, M2C_FIELD(arg0, s32*, 0x14) + 6, M2C_FIELD(arg0, s32*, 0x18) + 0x16, 0xFFF, M2C_FIELD(arg0, s32*, 0x73C));
             func_8002D024(arg0 + 0x74C);
             break;
     }
 }
 
 s32 func_82003688(s32 arg0) {
-    return func_8002E3F0(arg0 + 0x2F8);
+    return GridMenu_UpdateCursor(arg0 + 0x2F8);
 }
 
 typedef struct { s32 w[20]; } Words80;
@@ -618,7 +618,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *arg0)
             *((Blk820038B0 *) (arg0 + 0xC8)) = *((Blk820038B0 *) rec);
           }
           func_80027410(arg0 + 0x2DC, (s32) (arg0 + 0xE4), 0x54, 6, 6);
-          func_8002DECC(arg0 + 0x2F8, arg0 + 0x2DC, arg0 + 0x2EC, FreeBattle_DrawSlotCell, 3, 0x84, 0x32);
+          GridMenu_Init(arg0 + 0x2F8, arg0 + 0x2DC, arg0 + 0x2EC, FreeBattle_DrawSlotCell, 3, 0x84, 0x32);
           *((s32 *) (((s8 *) arg0) + 0x6EC)) = 0;
           *((s32 *) (((s8 *) arg0) + 0x318)) |= 0x10000;
           func_820023E8(arg0 + 0x2F8);
@@ -736,7 +736,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *arg0)
       break;
 
     case 8:
-      if (func_8003152C(arg0 + 0x6E4) == 0)
+      if (ScrollGrid_UpdateCursor(arg0 + 0x6E4) == 0)
     {
       next = func_8002BC14(*((s32 *) (((s8 *) arg0) + 0x744)));
       if (next == (-1))

@@ -67,7 +67,7 @@ void func_82003234(s8* arg0);
 
 void func_820032E8(s8* arg0);
 
-M2C_UNK func_8002E3F0();                            /* extern */
+M2C_UNK GridMenu_UpdateCursor();                            /* extern */
 extern char D_800735C4[];
 
 void func_82003688(s32 arg0);
@@ -575,7 +575,7 @@ void FreeBattle_DrawOpponentSelect(s8* arg0) {
 /**
  * Variant of FreeBattle_UpdateBattleModeWindow whose sub-object is at arg0 + 0x38. Returns 0
  * immediately unless the word at arg0 + 0x28 is 1 or 2. Otherwise, if
- * func_8002DCE0(arg0 + 0x38, arg0) returns 0, it reads
+ * Menu_UpdateCursorSkipDisabled(arg0 + 0x38, arg0) returns 0, it reads
  * func_8002BC14(D_800603C0): -1 calls func_8003F6AC(3) and returns -1; 1 calls
  * func_8003F6AC(2), returns 1 and maps the word at arg0 + 0x40 (0..3) to the
  * value 2..5 stored in the word at arg0 + 0x64. Any other value returns 0.
@@ -589,7 +589,7 @@ s32 FreeBattle_UpdateOpponentSelect(void* arg0) {
     if ((tmp != 1) && (tmp != 2)) {
         return 0;
     }
-    if (func_8002DCE0((u8*)arg0 + 0x38, arg0) == 0) {
+    if (Menu_UpdateCursorSkipDisabled((u8*)arg0 + 0x38, arg0) == 0) {
         tmp = func_8002BC14(D_800603C0);
         if (tmp == -1) {
             func_8003F6AC(3);
@@ -808,7 +808,7 @@ void func_82006DF8(s8* arg0) {
     }
 }
 
-void func_8002D900(u8*, void*);
+void Menu_ClearItemFlags(u8*, void*);
 // The seven result cases were one macro in the original: IDO only schedules
 // these three stores the way the ROM does when they share a source line.
 #define SET_PAIR_82007030(owner, first, second, count) \
@@ -823,7 +823,7 @@ s32 func_82007030(void* arg0) {
     }
     switch (M2C_FIELD(arg0, u32*, 0)) {
         case 1:
-            if (func_8002DCE0((u8*)arg0 + 0x48, arg0) == 0) {
+            if (Menu_UpdateCursorSkipDisabled((u8*)arg0 + 0x48, arg0) == 0) {
                 res = func_8002BC14(D_800603C0);
                 if (res == -1) {
                     func_8003F6AC(3);
@@ -871,12 +871,12 @@ s32 func_82007030(void* arg0) {
             }
             break;
         case 0:
-        if (func_8002DCE0((u8*)arg0 + 0x6C, arg0) == 0) {
+        if (Menu_UpdateCursorSkipDisabled((u8*)arg0 + 0x6C, arg0) == 0) {
             res = func_8002BC14(D_800603C0);
             if (res == -1) {
                 func_8003F6AC(3);
                 M2C_FIELD(arg0, u32*, 0) = 1;
-                func_8002D900((u8*)arg0 + 0x6C, arg0);
+                Menu_ClearItemFlags((u8*)arg0 + 0x6C, arg0);
                 func_82006BB8((HalfBankOwner*)arg0);
             } else if (res == 1) {
                 func_8003F6AC(2);
@@ -942,7 +942,7 @@ void func_82007398(s32 arg0, s32 arg1, s32* arg2, s32 arg3, s32 arg4) {
  * Window_SetRect(arg0, arg1, arg2, 0x190, 0x12E), clears the words at 0x24
  * and 0x28, sets the word at 0x14 to 0x801 and the word at 0x20 to arg4.
  * Calls func_80027410 on the sub-object at arg0 + 0x54 with (arg3, 0xC, 2, 2),
- * then func_8002DECC on the sub-objects at 0x2C, 0x54 and 0x64 with
+ * then GridMenu_Init on the sub-objects at 0x2C, 0x54 and 0x64 with
  * func_82007398 as a callback and the values 2, 0xB8 and 0xC8. Finally sets
  * bit 0x10000 in the word at 0x4C and stores arg3 at 0x68.
  *
@@ -952,7 +952,7 @@ void func_82007398(s32 arg0, s32 arg1, s32* arg2, s32 arg3, s32 arg4) {
  */
 void Window_SetRect(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 M2C_UNK func_80027410(s8 *, s32, M2C_UNK, M2C_UNK, s32); /* extern */
-M2C_UNK func_8002DECC(s8 *, s8 *, s8 *, M2C_UNK *, s32, s32, s32); /* extern */
+M2C_UNK GridMenu_Init(s8 *, s8 *, s8 *, M2C_UNK *, s32, s32, s32); /* extern */
 
 /**
  * Sets up the バトルモード (battle mode) window.
@@ -965,7 +965,7 @@ void FreeBattle_InitBattleModeWindow(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32
     M2C_FIELD(arg0, s32 *, 0x14) = 0x801;
     M2C_FIELD(arg0, s32 *, 0x20) = arg4;
     func_80027410(arg0 + 0x54, arg3, 0xC, 2, 2);
-    func_8002DECC(arg0 + 0x2C, arg0 + 0x54, arg0 + 0x64, (M2C_UNK*)func_82007398, 2, 0xB8, 0xC8);
+    GridMenu_Init(arg0 + 0x2C, arg0 + 0x54, arg0 + 0x64, (M2C_UNK*)func_82007398, 2, 0xB8, 0xC8);
     M2C_FIELD(arg0, s32 *, 0x4C) = (s32)(M2C_FIELD(arg0, s32 *, 0x4C) | 0x10000);
     M2C_FIELD(arg0, s32 *, 0x68) = arg3;
 }
@@ -978,14 +978,14 @@ typedef struct Entry8200752C {
 
 extern Color_RGBA8 D_820091BC;
 extern Color_RGBA8 D_820091C0;
-M2C_UNK func_8002E230(s8*, s32, s32, s32, s32);
+M2C_UNK GridMenu_DrawInlineItems(s8*, s32, s32, s32, s32);
 
 /**
  * Draws the object arg0 (layout not established; x at +0, y at +4, width at +8)
  * while func_8002AE6C() is zero: a box via Ui_DrawTexturedFrameDecal (D_800735C4), the frame via
  * Ui_DrawTexturedDivider, a filled bar via func_80029028 (colour D_82009100, height 0xDC), a second
  * panel via Ui_FillRectPrimEnvColor (colours D_820091BC / D_820091C0), the sub-object at +0x2C via
- * func_8002E230, and the text pointer stored at index [+0x34] of the table of 12-byte
+ * GridMenu_DrawInlineItems, and the text pointer stored at index [+0x34] of the table of 12-byte
  * records pointed to by the word at +0x68 (the pointer is the second word of a record),
  * printed in the colour from D_800734A8 via func_8001A944.
  * What the constants mean is not established.
@@ -999,7 +999,7 @@ void FreeBattle_DrawBattleModeWindow(s8* arg0) {
         gSPDisplayList(gDisplayListHead++, D_80060270);
         func_80029028(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) - 0xC, 0xDC, *(Color82001CCC*)&D_82009100);
         Ui_FillRectPrimEnvColor(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0xE8, M2C_FIELD(arg0, s32*, 8) - 0xC, 0x40, D_820091BC, D_820091C0);
-        func_8002E230(arg0 + 0x2C, M2C_FIELD(arg0, s32*, 0) + 0x10, M2C_FIELD(arg0, s32*, 4) + 0x10, 0xFFEF, 0);
+        GridMenu_DrawInlineItems(arg0 + 0x2C, M2C_FIELD(arg0, s32*, 0) + 0x10, M2C_FIELD(arg0, s32*, 4) + 0x10, 0xFFEF, 0);
         func_8001AB6C();
         func_8001AA9C(M2C_FIELD(&D_800734A8, u8*, 0), M2C_FIELD(&D_800734A8, u8*, 1), M2C_FIELD(&D_800734A8, u8*, 2), M2C_FIELD(&D_800734A8, u8*, 3));
         func_8001A384(8, 0);
@@ -1015,7 +1015,7 @@ extern s32 D_800603C0;
  * FreeBattle_UpdateBattleModeWindow
  *
  * Returns 0 immediately unless the word at arg0 + 0x28 is 1 or 2. Otherwise,
- * if func_8002E3F0(arg0 + 0x2C, arg0) returns 0, it reads func_8002BC14(D_800603C0):
+ * if GridMenu_UpdateCursor(arg0 + 0x2C, arg0) returns 0, it reads func_8002BC14(D_800603C0):
  * -1 calls func_8003F6AC(3) and returns -1; 1 calls func_8003F6AC(2) and
  * returns the word at arg0 + 0x34 plus 1; any other value returns 0.
  * (FreeBattle_UpdatePopupMenu is the same pattern without the mode check.)
@@ -1029,7 +1029,7 @@ s32 FreeBattle_UpdateBattleModeWindow(void* arg0) {
     if ((tmp != 1) && (tmp != 2)) {
         return 0;
     }
-    if (func_8002E3F0((u8*)arg0 + 0x2C, arg0) == 0) {
+    if (GridMenu_UpdateCursor((u8*)arg0 + 0x2C, arg0) == 0) {
         tmp = func_8002BC14(D_800603C0);
         if (tmp == -1) {
             func_8003F6AC(3);
@@ -1118,7 +1118,7 @@ void FreeBattle_InitCupSelect(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
 }
 
 s32 func_8002AE6C();                                /* extern */
-M2C_UNK func_8002DAD8(s8 *, s32, s32, s32, s32);  /* extern */
+M2C_UNK Menu_DrawInlineItems(s8 *, s32, s32, s32, s32);  /* extern */
 
 /**
  * Draws the choose cup window.
@@ -1126,13 +1126,13 @@ M2C_UNK func_8002DAD8(s8 *, s32, s32, s32, s32);  /* extern */
  */
 void FreeBattle_DrawCupSelect(s8 *arg0, s32 arg1) {
     if (func_8002AE6C() == 0) {
-        func_8002DAD8(arg0 + 0x2C, M2C_FIELD(arg0, s32 *, 0) + 6, M2C_FIELD(arg0, s32 *, 4) + 0xC, arg1 | 0xFFED, 0);
+        Menu_DrawInlineItems(arg0 + 0x2C, M2C_FIELD(arg0, s32 *, 0) + 6, M2C_FIELD(arg0, s32 *, 4) + 0xC, arg1 | 0xFFED, 0);
     }
 }
 
 /**
  * Variant of FreeBattle_UpdateBattleModeWindow with an extra check. Returns 0 immediately unless the
- * word at arg0 + 0x28 is 1 or 2. Otherwise, if func_8002DCE0(arg0 + 0x2C, arg0)
+ * word at arg0 + 0x28 is 1 or 2. Otherwise, if Menu_UpdateCursorSkipDisabled(arg0 + 0x2C, arg0)
  * returns 0, it reads func_8002BC14(D_800603C0): -1 calls func_8003F6AC(3) and
  * returns -1; 1 looks at bit 0 of the u16 at index arg0->unk_34 of the array
  * pointed to by the word at arg0 + 0x30. If that bit is clear it calls
@@ -1148,7 +1148,7 @@ s32 FreeBattle_UpdateCupSelect(void* arg0) {
     if ((tmp != 1) && (tmp != 2)) {
         return 0;
     }
-    if (func_8002DCE0((u8*)arg0 + 0x2C, arg0) == 0) {
+    if (Menu_UpdateCursorSkipDisabled((u8*)arg0 + 0x2C, arg0) == 0) {
         tmp = func_8002BC14(D_800603C0);
         if (tmp == -1) {
             func_8003F6AC(3);

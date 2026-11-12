@@ -507,7 +507,7 @@ typedef struct Str8900806C { char s[13]; } Str8900806C;
 char* func_8000A460(char*, const char*);
 void func_80018168(s32);
 void func_80027410(s8*, s8*, s32, s32, s32);
-void func_8002DECC(s8*, s8*, s8*, void*, s32, s32, s32);
+void GridMenu_Init(s8*, s8*, s8*, void*, s32, s32, s32);
 extern char D_89018EE8[];
 extern char D_89018EF0[];
 extern char D_89018EF8[];
@@ -527,7 +527,7 @@ void func_8900806C(s8* arg0, s32 arg1, s32 arg2, u8* arg3, s32 arg4, s32 arg5, s
     M2C_FIELD(arg0, s32*, 0x14) = 0x801;
     M2C_FIELD(arg0, s8**, 0x20) = D_890289E0;
     func_80027410(arg0 + 0x94, (s8*)arg3, 0x50, 0x1E, M2C_FIELD(arg3, s32*, 0x960));
-    func_8002DECC(arg0 + 0x2C, arg0 + 0x94, arg0 + 0x54, func_89007D54, 6, 0x5A, 0x42);
+    GridMenu_Init(arg0 + 0x2C, arg0 + 0x94, arg0 + 0x54, func_89007D54, 6, 0x5A, 0x42);
     M2C_FIELD(arg0, s32*, 0x4C) |= 0x10000;
     func_80018168(arg4);
     for (p = arg3, i = 0; i < M2C_FIELD(arg3, s32*, 0x960); i++, p += 0x50) {
@@ -541,7 +541,7 @@ void func_8900806C(s8* arg0, s32 arg1, s32 arg2, u8* arg3, s32 arg4, s32 arg5, s
 void func_800069CC();                            /* extern */
 M2C_UNK func_800189C0(s32, M2C_UNK);                /* extern */
 s32 func_8002AE6C();                                /* extern */
-M2C_UNK func_8002E230(s8 *, s32, s32, s32, s32);  /* extern */
+M2C_UNK GridMenu_DrawInlineItems(s8 *, s32, s32, s32, s32);  /* extern */
 
 /**
  * Draws the list window's rows (refreshing the icons unless flag 0x10 is set).
@@ -553,11 +553,11 @@ void PcBox_DrawList(s8 *arg0, s32 arg1) {
             func_800189C0(M2C_FIELD(arg0, s32 *, 0x90), 0);
             func_800069CC();
         }
-        func_8002E230(arg0 + 0x2C, M2C_FIELD(arg0, s32 *, 0) + 6, M2C_FIELD(arg0, s32 *, 4) + 6, arg1 | 0xFFED, M2C_FIELD(arg0, s32 *, 0x90));
+        GridMenu_DrawInlineItems(arg0 + 0x2C, M2C_FIELD(arg0, s32 *, 0) + 6, M2C_FIELD(arg0, s32 *, 4) + 6, arg1 | 0xFFED, M2C_FIELD(arg0, s32 *, 0x90));
     }
 }
 
-s32 func_8002E3F0(void*);
+s32 GridMenu_UpdateCursor(void*);
 s32 func_8002BC14(s32);
 M2C_UNK func_8003F6AC(M2C_UNK);
 extern s32 D_800603C0;
@@ -569,7 +569,7 @@ s32 PcBox_UpdateListCursor(s32 arg0) {
     s32 sp1C = 0;
     s32 dir;
 
-    if (func_8002E3F0((u8*)arg0 + 0x2C) == 0) {
+    if (GridMenu_UpdateCursor((u8*)arg0 + 0x2C) == 0) {
         dir = func_8002BC14(D_800603C0);
         if (dir == -1) {
             func_8003F6AC(3);
@@ -805,7 +805,7 @@ void Window_DrawFrame(s8*);
 void Ui_DrawTexturedDivider(s32, s32, s32, u8*);
 void Ui_DrawTexturedFrameDecal(s32, s32, s32, s32, u8*);
 void func_8002B054(s8*, s32);
-void func_8002DAD8(s8*, s32, s32, s32, s32);
+void Menu_DrawInlineItems(s8*, s32, s32, s32, s32);
 void func_8002D024(s8*);
 extern u8 D_8007356C[];
 extern u8 D_800735C4[];
@@ -868,15 +868,15 @@ void PcBox_DrawOperationWindow(s8* arg0) {
     func_8002B054(arg0 + 0x12C, (M2C_FIELD(arg0, s32*, 0x15C) == 4) ? sel : 0);
     PcBox_DrawStorageLabel(M2C_FIELD(arg0, s32*, 4) + 0x10, M2C_FIELD(arg0, s32*, 8) + 0x10, 2, 0);
     PcBox_DrawStorageLabel(M2C_FIELD(arg0, s32*, 4) + 0x120, M2C_FIELD(arg0, s32*, 8) + 0x10, 2, 1);
-    func_8002DAD8(arg0 + 0x170, M2C_FIELD(arg0, s32*, 4) + 0x10, M2C_FIELD(arg0, s32*, 8) + 0x3C, flags[0], 0);
-    func_8002DAD8(arg0 + 0x194, M2C_FIELD(arg0, s32*, 4) + 0x120, M2C_FIELD(arg0, s32*, 8) + 0x3C, flags[1], 0);
+    Menu_DrawInlineItems(arg0 + 0x170, M2C_FIELD(arg0, s32*, 4) + 0x10, M2C_FIELD(arg0, s32*, 8) + 0x3C, flags[0], 0);
+    Menu_DrawInlineItems(arg0 + 0x194, M2C_FIELD(arg0, s32*, 4) + 0x120, M2C_FIELD(arg0, s32*, 8) + 0x3C, flags[1], 0);
     func_89008EF0(arg0);
     if (M2C_FIELD(arg0, s32*, 0) == 7) {
         func_8002D024(arg0 + 0x1E0);
     }
 }
 
-s32 func_8002DCE0(void* arg0);
+s32 Menu_UpdateCursorSkipDisabled(void* arg0);
 
 /**
  * Moves a menu cursor. Returns -1 on cancel, 1 on confirm, otherwise 0.
@@ -886,7 +886,7 @@ s32 PcBox_UpdateSimpleCursor(void* arg0) {
     s32 sp1C = 0;
     s32 dir;
 
-    if (func_8002DCE0(arg0) == 0) {
+    if (Menu_UpdateCursorSkipDisabled(arg0) == 0) {
         dir = Ui_GetSelectionDirection(gPlayer1Controller);
         if (dir == -1) {
             Audio_PlaySoundEffectById(3);
@@ -1042,7 +1042,7 @@ s32 func_8000B30C(void);
 s32 func_8002B2B0(s8*);
 void func_8002CEEC(s8*, void*, s32, s32, s32);
 s32 Ui_CheckConfirmPressed(s8*);
-void func_8002D900(s8*);
+void Menu_ClearItemFlags(s8*);
 extern void* D_8900A954[];
 extern u8 D_8900A96C[];
 
@@ -1244,16 +1244,16 @@ s32 PcBox_UpdateOperationWindow(s8* arg0) {
 
     if (back > 0) {
         if (back == 1) {
-            func_8002D900(arg0 + 0x170);
-            func_8002D900(arg0 + 0x194);
+            Menu_ClearItemFlags(arg0 + 0x170);
+            Menu_ClearItemFlags(arg0 + 0x194);
         }
         M2C_FIELD(arg0, s32*, 0) = back;
     }
     if (next > 0) {
         switch (next) {
             case 2:
-            func_8002D900(arg0 + 0x170);
-            func_8002D900(arg0 + 0x194);
+            Menu_ClearItemFlags(arg0 + 0x170);
+            Menu_ClearItemFlags(arg0 + 0x194);
             PcBox_DisableEmptyBoxes(M2C_FIELD(arg0, s8**, 0x1D8));
             switch (M2C_FIELD(arg0, u32*, 0x15C)) {
                 case 0:
@@ -1268,8 +1268,8 @@ s32 PcBox_UpdateOperationWindow(s8* arg0) {
             case 6: {
             s32 a;
             s32 b;
-            func_8002D900(arg0 + 0x170);
-            func_8002D900(arg0 + 0x194);
+            Menu_ClearItemFlags(arg0 + 0x170);
+            Menu_ClearItemFlags(arg0 + 0x194);
             a = PcBox_DisableEmptyBoxes(arg0 + 0x170);
             b = PcBox_DisableEmptyBoxes(arg0 + 0x194);
             if (a >= 0) {

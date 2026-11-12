@@ -445,7 +445,7 @@ typedef struct Ctx8A20291C { char pad[0x18C]; s32 ptrs[6]; } Ctx8A20291C;
 s32 Menu_UpdateCursor(s8*);
 s32 func_8002BC14(s32);
 void func_8002CA34(s8*, s32, s32);
-void func_8002D900(s8*);
+void Menu_ClearItemFlags(s8*);
 s32 func_8002CD7C(s8*);
 void Save_DrawReportingWindow(s8*);
 s32 MonSummary_UpdateMenuCursor(s8*);
@@ -541,7 +541,7 @@ M2C_UNK MonSummary_UpdateScreen(M2C_UNK* ctx) {
                     M2C_FIELD(arg0, s32*, 0) = 1;
                     M2C_FIELD(arg0, s8**, 8) = arg0 + 0x10;
                     M2C_FIELD(arg0, s32*, 0x34) = (M2C_FIELD(arg0, s32*, 0x38) <= 0) ? M2C_FIELD(arg0, s32*, 0x34) : 4;
-                    func_8002D900(arg0 + 0x3C);
+                    Menu_ClearItemFlags(arg0 + 0x3C);
                 } else if (res == 1) {
                     func_8003F6AC(0x18);
                     res = ((Ctx8A20291C*)arg0)->ptrs[M2C_FIELD(arg0, s32*, 0x6C)];
@@ -553,7 +553,7 @@ M2C_UNK MonSummary_UpdateScreen(M2C_UNK* ctx) {
                     M2C_FIELD(arg0, s32*, 0) = 1;
                     M2C_FIELD(arg0, s8**, 8) = arg0 + 0x10;
                     M2C_FIELD(arg0, s32*, 0x34) = (M2C_FIELD(arg0, s32*, 0x38) <= 0) ? M2C_FIELD(arg0, s32*, 0x34) : 4;
-                    func_8002D900(arg0 + 0x3C);
+                    Menu_ClearItemFlags(arg0 + 0x3C);
                 }
             }
             break;

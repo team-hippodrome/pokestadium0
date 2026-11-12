@@ -297,7 +297,7 @@ void MainMenu_DrawItem(s32 a0, s32 a1, s32 a2, s32 mode, s32 flags, f32* scale) 
 }
 
 void func_80027410(void*, void*, s32, s32, s32);
-void func_8002DECC(void*, void*, void*, void*, s32, s32, s32);
+void GridMenu_Init(void*, void*, void*, void*, s32, s32, s32);
 s32 func_800226BC(s32, s32, s32);
 s32 func_80025BD8();
 void MainMenu_DrawItem();
@@ -308,7 +308,7 @@ void MainMenu_DrawItem();
 M2C_UNK MainMenu_InitItemList(u8* arg0, s32 arg1, s32 arg2) {
     M2C_FIELD(arg0, s32*, 4) = 0;
     func_80027410(arg0 + 0x1E0, arg0 + 0x30, 0x30, 9, 9);
-    func_8002DECC(arg0 + 8, arg0 + 0x1E0, arg0 + 0x1F0, MainMenu_DrawItem, 3, 0, 0);
+    GridMenu_Init(arg0 + 8, arg0 + 0x1E0, arg0 + 0x1F0, MainMenu_DrawItem, 3, 0, 0);
     M2C_FIELD(arg0, s32*, 0x10) = arg1;
     M2C_FIELD(arg0, u16**, 0xC)[1] |= 1;
     switch (arg2) {
@@ -375,7 +375,7 @@ s32 MainMenu_StepItemFade(s8 *arg0) {
 }
 
 extern u8 D_05018868[];
-void func_8002E230(s8*, s32, s32, s32, f32*);
+void GridMenu_DrawInlineItems(s8*, s32, s32, s32, f32*);
 
 /**
  * Draws the main menu items with the current fade.
@@ -406,7 +406,7 @@ s32 MainMenu_DrawItemList(s8* arg0, s32 arg1) {
             color = arg1 | 0xFFED;
             break;
     }
-    func_8002E230(arg0 + 8, 0, 0, color, &alpha);
+    GridMenu_DrawInlineItems(arg0 + 8, 0, 0, color, &alpha);
     MainMenu_DrawImageWithAlpha(0xE6, 0x56, 0xC8, 0x64, 0xC8, D_05018868, 255.0f * alpha);
     return ret;
 }
@@ -620,7 +620,7 @@ extern s32 D_8800227C[];
 extern s32 D_880022A0[];
 extern Color_RGBA8 D_88001FEC[];
 extern u8 D_88002034[][0x18];
-s32 func_8002E70C(s8*);
+s32 GridMenu_UpdateCursorSkipDisabled(s8*);
 void func_800245E0(s32, s32);
 s32 MainMenu_LoadSelectedFragment(s32);
 /**
@@ -666,7 +666,7 @@ s32 MainMenu_UpdateScreen(s8* arg0) {
             }
             break;
         case 2:
-            if (func_8002E70C(arg0 + 0x34) == 0) {
+            if (GridMenu_UpdateCursorSkipDisabled(arg0 + 0x34) == 0) {
                 dir = func_8002BC14(D_800603C0);
                 if (dir == -1) {
                     func_8003F6AC(8);

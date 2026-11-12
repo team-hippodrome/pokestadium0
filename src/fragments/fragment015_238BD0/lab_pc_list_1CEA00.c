@@ -59,7 +59,7 @@ typedef struct unk_D_88218070 {
 
 #include "fragments/particle_math/particle_math.h"
 #include "m2c_macros.h"
-void func_8002ED18(s8*, s32, s8*);
+void ScrollList_SetItems(s8*, s32, s8*);
 
 void func_8900020C(void);
 s32 LabItem_ComputeRemainingCapacity(s32 arg0, unk_func_8820BE14_06C* arg1);
@@ -85,7 +85,7 @@ typedef struct LabItemCursor {
 } LabItemCursor;
 
 void func_800275E4(s32, s32);
-void func_80030744(s32*, s32);
+void ScrollList_SetCursorKeepOffset(s32*, s32);
 
 /**
  * LabItem_RemoveSelectedEntry
@@ -101,7 +101,7 @@ void func_80030744(s32*, s32);
  *      value is not used here.
  *   2. If the index is now at or past the (already decremented) count, i.e.
  *      the removed row was the last one, it is decremented.
- *   3. func_80030744(arg0, index) is called
+ *   3. ScrollList_SetCursorKeepOffset(arg0, index) is called
  *      (WidgetTree_SetScrollableGridIndexPreserveScroll in symbol_addrs.txt).
  *
  * symbol_addrs.txt names this function WidgetTree_RemoveScrollableGridEntry,
@@ -117,12 +117,12 @@ void LabItem_RemoveSelectedEntry(LabItemCursor* arg0) {
     if (arg0->unk_08 >= M2C_FIELD(arg0->unk_00, s32*, 8)) {
         arg0->unk_08 -= 1;
     }
-    func_80030744((s32*)arg0, arg0->unk_08);
+    ScrollList_SetCursorKeepOffset((s32*)arg0, arg0->unk_08);
 }
 
 void func_800275E4(s32, s32);
 int func_800274E0();
-void func_80030744(s32*, s32);
+void ScrollList_SetCursorKeepOffset(s32*, s32);
 
 void func_890000A4(s32* arg0, s32 arg1, s32 arg2) {
     s32 i;
@@ -167,7 +167,7 @@ void func_890000A4(s32* arg0, s32 arg1, s32 arg2) {
         func_800274E0(temp_s4, sp3C, var_s3++);
     }
 
-    func_80030744(arg0, arg0[2]);
+    ScrollList_SetCursorKeepOffset(arg0, arg0[2]);
 }
 
 /**
@@ -637,7 +637,7 @@ void LabItem_DrawMenu(s8 *arg0) {
     }
 }
 
-s32 func_8002DCE0(void*);
+s32 Menu_UpdateCursorSkipDisabled(void*);
 /**
  * Moves the menu cursor. Returns -1 on cancel, the 1-based row on confirm, otherwise 0.
  * @unverified Name and comment guessed from the code.
@@ -646,7 +646,7 @@ s32 LabItem_UpdateMenuCursor(s32 arg0) {
     s32 sp1C = 0;
     s32 dir;
 
-    if (func_8002DCE0((u8*)arg0 + 0x2C) == 0) {
+    if (Menu_UpdateCursorSkipDisabled((u8*)arg0 + 0x2C) == 0) {
         dir = func_8002BC14(D_800603C0);
         if (dir == -1) {
             func_8003F6AC(3);
@@ -702,7 +702,7 @@ void LabItem_DrawItemCountRow(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4) 
 }
 
 void func_89001230(s8* arg0, s32 arg1) {
-    func_8002ED18(arg0, arg1, arg0 + 0x44);
+    ScrollList_SetItems(arg0, arg1, arg0 + 0x44);
 }
 
 void ScrollList_Init(s8*, s32, s8*, s32, void*, s32, s32);
@@ -720,7 +720,7 @@ void LabItem_InitItemList(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
 }
 
 void func_8002F9D8(void *, s32, s32, s32, s32);
-void func_8002F6C4(void *, s32, s32, s32, s32);
+void ScrollList_DrawInlineItems(void *, s32, s32, s32, s32);
 void func_8002BAB8(s32, s32, s32, s32);
 void func_8001BCB4(s32, s32, s32, s32, void *, s32, s32);
 extern Gfx D_80073450[];
@@ -733,7 +733,7 @@ void LabItem_DrawItemList(s8 *arg0, s32 arg1) {
     if (arg1 & 0x200) {
         func_8002F9D8(arg0, M2C_FIELD(arg0, s32 *, 0x10C), M2C_FIELD(arg0, s32 *, 0x110) + 0x10, arg1 | 0xFFED, 0);
     } else {
-        func_8002F6C4(arg0, M2C_FIELD(arg0, s32 *, 0x10C), M2C_FIELD(arg0, s32 *, 0x110) + 0x10, arg1 | 0xFFED, 0);
+        ScrollList_DrawInlineItems(arg0, M2C_FIELD(arg0, s32 *, 0x10C), M2C_FIELD(arg0, s32 *, 0x110) + 0x10, arg1 | 0xFFED, 0);
     }
     func_8002BAB8(M2C_FIELD(arg0, s32 *, 0x10C) + 0xA8, M2C_FIELD(arg0, s32 *, 0x110) + 0xF2, M2C_FIELD(M2C_FIELD(arg0, s8 **, 0), s32 *, 8), 3);
     func_8002BAB8(M2C_FIELD(arg0, s32 *, 0x10C) + 0xCE, M2C_FIELD(arg0, s32 *, 0x110) + 0xF2, M2C_FIELD(M2C_FIELD(arg0, s8 **, 0), s32 *, 4), 3);
@@ -1286,7 +1286,7 @@ s32 LabItem_UpdateOrganizeWindow(s8* arg0) {
         case 7:
             v = LabItem_UpdateItemList(arg0 + 0x1E4, 0);
             if (v == -1) {
-                func_8002D900(arg0 + 0x1E4);
+                Menu_ClearItemFlags(arg0 + 0x1E4);
                 *(s32*)arg0 = 4;
                 break;
             }
@@ -1295,7 +1295,7 @@ s32 LabItem_UpdateOrganizeWindow(s8* arg0) {
             }
             func_8003F6AC(0x18);
             func_89002248(arg0);
-            func_8002D900(arg0 + 0x1E4);
+            Menu_ClearItemFlags(arg0 + 0x1E4);
             *(s32*)arg0 = 4;
             break;
 
@@ -1436,7 +1436,7 @@ void LabItem_InitDeleteDataWindow(s8* arg, s32 arg1, s32 arg2, s8* arg3) {
 
 void Ui_DrawTexturedDivider(s32, s32, s32, void*);
 void Window_DrawFrame(void*);
-void func_8002DAD8(void*, s32, s32, s32, s32);
+void Menu_DrawInlineItems(void*, s32, s32, s32, s32);
 extern u8 D_8007356C[];
 extern u8 D_89018688[];
 /**
@@ -1447,7 +1447,7 @@ void LabItem_DrawDeleteDataWindow(s8* arg0, s32 arg1) {
     if (func_8002AE6C() == 0) {
         Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 0x30) - 7, M2C_FIELD(arg0, s32*, 8), D_8007356C);
         Window_DrawFrame(arg0 + 0x2C);
-        func_8002DAD8(arg0 + 0x4C, M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, 0xFFEF, 0);
+        Menu_DrawInlineItems(arg0 + 0x4C, M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, 0xFFEF, 0);
         func_8001AB6C();
         func_8001A384(8, 0);
         if (!arg0) { // FAKE: empty test only changes register allocation; needed to match

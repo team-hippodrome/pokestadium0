@@ -5,8 +5,8 @@
 
 /* Unprototyped on purpose: different callers in this file pass one or two arguments. */
 s32 Menu_UpdateCursor();
-M2C_UNK func_8002E3F0();
-s32 func_8002DCE0();
+M2C_UNK GridMenu_UpdateCursor();
+s32 Menu_UpdateCursorSkipDisabled();
 void FreeBattle_SetScreenState(s32, s32, s32);
 
 /**
@@ -663,7 +663,7 @@ typedef struct {
     /* 0x04 */ u16* flags;
 } FlagOwner;
 
-void func_8002D900(FlagOwner*);
+void Menu_ClearItemFlags(FlagOwner*);
 
 /**
  * For each of the six Slot54 entries in arg1 whose `flag` is zero and whose first
@@ -681,7 +681,7 @@ void func_82001340(FlagOwner* arg0, Slot54* arg1, s32 arg2) {
     Slot54* p;
 
     records = arg0->table->records;
-    func_8002D900(arg0);
+    Menu_ClearItemFlags(arg0);
     slot = 0;
     p = arg1;
     for (; slot != 0x1F8; slot += 0x54, p++) {
@@ -1215,7 +1215,7 @@ typedef struct MenuDef8200288C {
 } MenuDef8200288C;
 extern s32 D_8200AC58[];
 extern Color82001CCC D_82008F60;
-void func_8002E230(void*, s32, s32, s32, MenuDef8200288C*);
+void GridMenu_DrawInlineItems(void*, s32, s32, s32, MenuDef8200288C*);
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 /**
  * Draws the rental Pokemon list window; `arg1` picks the cursor style.
@@ -1247,6 +1247,6 @@ void FreeBattle_DrawRentalListWindow(s8 *arg0, s32 arg1)
 
   }
 
-  func_8002E230(arg0 + 0x2F8, x + 0x88, y, mode, &def);
+  GridMenu_DrawInlineItems(arg0 + 0x2F8, x + 0x88, y, mode, &def);
   FreeBattle_DrawRowBorders(x, y, D_82008F60);
 }

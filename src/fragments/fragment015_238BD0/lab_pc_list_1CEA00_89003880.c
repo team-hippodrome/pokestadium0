@@ -34,7 +34,7 @@ extern s32 pad_D_8831A4DC[8];
 #include "stage_loader.h"
 #include "fragments/particle_math/particle_math.h"
 #include "m2c_macros.h"
-void func_8002ED18(s8*, s32, s8*);
+void ScrollList_SetItems(s8*, s32, s8*);
 void func_8900020C(void);
 s32 LabItem_ComputeRemainingCapacity(s32 arg0, unk_func_8820BE14_06C* arg1);
 s32 LabItem_ComputeMaxTransferQuantity(s32 arg0, unk_func_8820BE14_06C* arg1);
@@ -42,10 +42,10 @@ s32 LabItem_FindOrAllocateGamePakBoxSlot(unk_func_8821421C_07C* arg0, s32 arg1, 
 void LabItem_LoadGamePakBoxSlots(unk_func_8821421C_07C* arg0);
 void LabItem_ReadDeckEntries(s32 arg0, s32 arg1, s32 arg2, unk_func_8820BE14_06C* arg3);
 void func_800275E4(s32, s32);
-void func_80030744(s32*, s32);
+void ScrollList_SetCursorKeepOffset(s32*, s32);
 void func_800275E4(s32, s32);
 int func_800274E0();
-void func_80030744(s32*, s32);
+void ScrollList_SetCursorKeepOffset(s32*, s32);
 extern M2C_UNK D_8900A5B8;
 void Window_SetRect(s8*, s32, s32, s32, s32);
 void Window_InitLabeled(s8*, s32, s32, s32, Color_RGBA8, char*);
@@ -92,7 +92,7 @@ extern M2C_UNK D_800734A8;
 void Window_SetRect(s8*, s32, s32, s32, s32);
 void Menu_Init(s8*, s32, s32, s32, s32, s32);
 M2C_UNK func_80027804();
-s32 func_8002DCE0(void*);
+s32 Menu_UpdateCursorSkipDisabled(void*);
 extern Gfx D_80060270[];
 extern Rgba89000D50 D_8900A5E0;
 extern Rgba89000D50 D_8900A5E8;
@@ -105,7 +105,7 @@ void Font_SetColorForFlags(s32);
 void ScrollList_Init(s8*, s32, s8*, s32, void*, s32, s32);
 void LabItem_DrawItemCountRow();
 void func_8002F9D8(void *, s32, s32, s32, s32);
-void func_8002F6C4(void *, s32, s32, s32, s32);
+void ScrollList_DrawInlineItems(void *, s32, s32, s32, s32);
 void func_8002BAB8(s32, s32, s32, s32);
 void func_8001BCB4(s32, s32, s32, s32, void *, s32, s32);
 extern Gfx D_80073450[];
@@ -161,7 +161,7 @@ void Menu_Init(s8*, s32, s32, s32, s32, s32);
 void func_80027410(s8*, s8*, s32, s32, s32);
 void Ui_DrawTexturedDivider(s32, s32, s32, void*);
 void Window_DrawFrame(void*);
-void func_8002DAD8(void*, s32, s32, s32, s32);
+void Menu_DrawInlineItems(void*, s32, s32, s32, s32);
 extern u8 D_8007356C[];
 extern u8 D_89018688[];
 s32 Menu_UpdateCursor(void*);

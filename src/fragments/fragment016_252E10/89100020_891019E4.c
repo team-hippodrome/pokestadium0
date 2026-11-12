@@ -125,8 +125,8 @@ s32 func_8002AB84(void);
 void func_8002C5A4(s32, s32, s32);
 void Window_DrawFrame(s8*);
 void Ui_DrawTexturedDivider(s32, s32, s32, u8*);
-void func_8002F030(s8*, s32, s32, s32, s32);
-void func_8002F3C4(s8*, s32, s32, s32, s8*);
+void ScrollList_DrawScrollArrows(s8*, s32, s32, s32, s32);
+void ScrollList_DrawItems(s8*, s32, s32, s32, s8*);
 void LabPCList_DrawDetailColumns(s8*, s32, s32, s32);
 void func_89105E70(s8*, s32);
 void LabPCList_DrawPopupMenu(s8*, s32);
@@ -157,7 +157,7 @@ void LabPCList_DrawListScreen(s8* arg0) {
     Window_DrawFrame(arg0 + 0x4C);
     Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0x23, M2C_FIELD(arg0, s32*, 8), D_8007356C);
     LabPCList_DrawPageHint(arg0);
-    func_8002F030(arg0 + 0xB160, M2C_FIELD(arg0, s32*, 0x2C), M2C_FIELD(arg0, s32*, 0x30) - 0x10,
+    ScrollList_DrawScrollArrows(arg0 + 0xB160, M2C_FIELD(arg0, s32*, 0x2C), M2C_FIELD(arg0, s32*, 0x30) - 0x10,
                   M2C_FIELD(arg0, s32*, 0x38) + M2C_FIELD(arg0, s32*, 0x30), M2C_FIELD(arg0, s32*, 0x34));
     y = M2C_FIELD(arg0, s32*, 0x30) + 0x16;
     if (M2C_FIELD(arg0, s32*, 0x8C) == 0) {
@@ -165,7 +165,7 @@ void LabPCList_DrawListScreen(s8* arg0) {
     } else {
         flags[0] = 0;
     }
-    func_8002F3C4(arg0 + 0xB160, M2C_FIELD(arg0, s32*, 0x2C), y, flags[0] | 0xFFED, arg0);
+    ScrollList_DrawItems(arg0 + 0xB160, M2C_FIELD(arg0, s32*, 0x2C), y, flags[0] | 0xFFED, arg0);
     sel = (M2C_FIELD(arg0, s32*, 0x8C) == 1) ? (((M2C_FIELD(arg0, u32*, 0x88) != 0) ? 0x10 : 0) | 2) : 0;
     LabPCList_DrawDetailColumns(arg0, M2C_FIELD(arg0, s32*, 0x2C), M2C_FIELD(arg0, s32*, 0x30), sel);
     gSPDisplayList(gDisplayListHead++, D_80060270);
@@ -291,7 +291,7 @@ typedef struct Ctx89101D94 {
     /* 0xB1A4 */ char unkB1A4[4];
 } Ctx89101D94;
 extern s32 D_8910D990[];
-void func_8002ED18(s32*, void*, void*);
+void ScrollList_SetItems(s32*, void*, void*);
 void func_80027D94(s32, void*, void*, void*);
 void func_80027D68(s32, s32);
 s32 func_891096F4();
@@ -305,31 +305,31 @@ s32 func_89109960();
  * @unverified Name and comment guessed from the code.
  */
 M2C_UNK LabPCList_ApplyFiltersAndSort(Ctx89101D94* arg0) {
-    func_8002ED18(&arg0->unkB160, arg0->unk9648, arg0->unkB1A4);
+    ScrollList_SetItems(&arg0->unkB160, arg0->unk9648, arg0->unkB1A4);
     if (arg0->unk7C != 0) {
         if (arg0->unk7C & 1) {
             func_80027D94(arg0->unkB160, arg0->unk6C, func_891096F4, arg0->unk9828);
-            func_8002ED18(&arg0->unkB160, arg0->unk6C, arg0->unkB1A4);
+            ScrollList_SetItems(&arg0->unkB160, arg0->unk6C, arg0->unkB1A4);
         }
         if (arg0->unk7C & 2) {
             func_80027D94(arg0->unkB160, arg0->unk6C, func_89109720, arg0->unk9918);
-            func_8002ED18(&arg0->unkB160, arg0->unk6C, arg0->unkB1A4);
+            ScrollList_SetItems(&arg0->unkB160, arg0->unk6C, arg0->unkB1A4);
         }
         if (arg0->unk7C & 4) {
             func_80027D94(arg0->unkB160, arg0->unk6C, func_891097E4, arg0->unk9B00);
-            func_8002ED18(&arg0->unkB160, arg0->unk6C, arg0->unkB1A4);
+            ScrollList_SetItems(&arg0->unkB160, arg0->unk6C, arg0->unkB1A4);
         }
         if (arg0->unk7C & 8) {
             func_80027D94(arg0->unkB160, arg0->unk6C, func_89109884, arg0->unk9E58);
-            func_8002ED18(&arg0->unkB160, arg0->unk6C, arg0->unkB1A4);
+            ScrollList_SetItems(&arg0->unkB160, arg0->unk6C, arg0->unkB1A4);
         }
         if (arg0->unk7C & 0x10) {
             func_80027D94(arg0->unkB160, arg0->unk6C, func_89109898, arg0->unk9E5C);
-            func_8002ED18(&arg0->unkB160, arg0->unk6C, arg0->unkB1A4);
+            ScrollList_SetItems(&arg0->unkB160, arg0->unk6C, arg0->unkB1A4);
         }
         if (arg0->unk7C & 0x20) {
             func_80027D94(arg0->unkB160, arg0->unk6C, func_89109960, NULL);
-            func_8002ED18(&arg0->unkB160, arg0->unk6C, arg0->unkB1A4);
+            ScrollList_SetItems(&arg0->unkB160, arg0->unk6C, arg0->unkB1A4);
         }
     }
     func_80027D68(arg0->unkB160, D_8910D990[arg0->unk78]);
@@ -473,7 +473,7 @@ typedef struct Ctx89102344 {
 
 s32 func_8003F6AC();
 s32 ScrollList_UpdateCursor(void*);
-void func_800306E0(void*, s32);
+void ScrollList_SetCursor(void*, s32);
 void LabPCList_FormatGatherPrompt(s8*);
 
 /**
@@ -487,7 +487,7 @@ s32 LabPCList_UpdateListCursor(Ctx89102344* arg0) {
         func_8003F6AC(1);
         arg0->unk8C = 2;
         arg0->unkB550 = 1;
-        func_800306E0(&arg0->list, arg0->unkB18C / arg0->unkB170);
+        ScrollList_SetCursor(&arg0->list, arg0->unkB18C / arg0->unkB170);
         return 1;
     }
     ret = ScrollList_UpdateCursor(&arg0->list) != 0;

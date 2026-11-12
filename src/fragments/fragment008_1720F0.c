@@ -894,7 +894,7 @@ void Registration_DrawTeamListRow(IndexedDrawer* arg0) {
 
 void func_800189C0(s32, s32);
 void func_800069CC(void);
-void func_8002F3C4(s8*, s32, s32, s32, s32);
+void ScrollList_DrawItems(s8*, s32, s32, s32, s32);
 void Registration_DrawTeamRowWithTrainer(s32, s32, s8*, s32, s32);
 void Registration_DrawMessageWindow(s8*);
 /**
@@ -909,7 +909,7 @@ void Registration_DrawTeamList(s8* arg0) {
             case 0:
             case 1:
             case 2:
-                func_8002F3C4(arg0 + 0x54, M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) + 0x16, 0xFFFF, 0);
+                ScrollList_DrawItems(arg0 + 0x54, M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) + 0x16, 0xFFFF, 0);
                 break;
             case 3:
                 Registration_DrawTeamListRow((IndexedDrawer*)arg0);
