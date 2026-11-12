@@ -133,7 +133,8 @@ typedef struct Str9_89103620 { char s[9]; } Str9_89103620;
 u32 func_800566BC(s8*);
 /**
  * Writes the name of a location: てもち (party), ＧＢ N (GB box N) and so on.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: kind 0 gave てもち, kind 1 box 0 gave GB 1, and kind 2 box 0
+ * gave 64 1, all in the いどう message.
  */
 void LabPCList_FormatLocationName(s8* arg0, s32 arg1, s32 arg2) {
     switch (arg1) {

@@ -142,7 +142,8 @@ void func_80027868(s8*, s32);
 void func_80027814(s8*, Ref89103740*, s32);
 /**
  * Moves the selected Pokemon to location kind `arg2`, box `arg3`, and shows the いどう (moved) message.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: ran with kind 1 (GB) or 2 (64 cartridge) and box 0, showed
+ * the いどう message and left two Pokémon in the party.
  */
 void LabPCList_MoveMonTo(Ctx89103740* arg0, Ref89103740* arg1, s32 arg2, s32 arg3, Msg89103740* arg4) {
     Item89103740* items = M2C_FIELD(arg0, Item89103740**, 0x420);
@@ -305,7 +306,8 @@ typedef struct Ctx89103C54 {
 
 /**
  * Moves the Pokemon to the chosen Game Boy box.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: いどうする > ゲームボーイのボックス showed ボックス1-8; ボックス1 moved フシギダネ out of
+ * the party (「いどう てもち -> GB 1」).
  */
 s32 LabPCList_UpdateGbBoxMenu(Ctx89103C54* arg0) {
     s32 ret = 0;
@@ -336,7 +338,8 @@ s32 LabPCList_UpdateGbBoxMenu(Ctx89103C54* arg0) {
 
 /**
  * Moves the Pokemon to the chosen Stadium (64 cartridge) box.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: いどうする > 64カセットのボックス showed ボックス1-4; ボックス1 moved フシギダネ out of
+ * the party (「いどう てもち -> 64 1」).
  */
 s32 LabPCList_UpdateStadiumBoxMenu(Ctx89103C54* arg0) {
     s32 ret = 0;

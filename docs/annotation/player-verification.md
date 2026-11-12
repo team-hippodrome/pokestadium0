@@ -733,6 +733,11 @@ Opened on the party list (フシギダネ, ヒトカゲ and ゼニガメ):
   * B then asked 「ないようが へんこうされています」. レポートしてやめる ran
     `LabPCList_SaveChanges`, and the .sav on the Transfer Pak was rewritten
     with the new HP stat exp, max HP, bag count and checksum.
+* いどうする: ゲームボーイのボックス lists ボックス1-8 and 64カセットのボックス lists
+  ボックス1-4. Choosing ボックス1 ran `LabPCList_MoveMonTo` with kind 1 or 2 and
+  box 0. The message read 「いどう てもち → GB 1」 (or 64 1), with the names coming
+  from `LabPCList_FormatLocationName`. `LabPCList_ReindexBoxSlots` renumbered
+  the two Pokémon left in the party from slots 1, 2 to 0, 1.
 
 ## せいとん, ポケモンを いどうする
 

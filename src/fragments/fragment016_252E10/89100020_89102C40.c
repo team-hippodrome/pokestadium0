@@ -521,7 +521,9 @@ s32 LabPCList_UpdateMonMenu(s8* arg0) {
 }
 
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Renumbers the slot index (entry[1]) of every Pokemon left in a box after one is taken out. Seen
+ * in play (2026-11-12) in いちらん: after フシギダネ left the party, the two remaining entries went from
+ * slots 1, 2 to 0, 1.
  */
 void LabPCList_ReindexBoxSlots(u8* arg0) {
     s32 i;
