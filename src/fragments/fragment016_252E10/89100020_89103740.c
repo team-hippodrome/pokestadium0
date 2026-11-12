@@ -812,7 +812,7 @@ s32 func_891049E8(s32);
  * func_89104B48
  *
  * Fragment entry point.  It has the same steps as func_89004560 (and the Pokedex
- * entry function func_8A101ED4), differing only in the functions it calls in
+ * entry function Pokedex_Init), differing only in the functions it calls in
  * steps 4 and 5.  Neither argument is used.  The steps are:
  *
  *   1. main_pool_push_state('TERM') saves the main pool state under that tag;

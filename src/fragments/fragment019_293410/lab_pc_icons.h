@@ -53,7 +53,7 @@ void UI_DrawTextureRgba16(s32 arg0, s32 arg1, s32 arg2);
 /*
  * func_8A20034C
  *
- * Initialises a record like func_8A1009E0 does: Window_SetRect fills the first
+ * Initialises a record like Pokedex_InitEntryWindow does: Window_SetRect fills the first
  * five words with (arg1, arg2, 0x221, 0x168, 0), the words at +0x20, +0x24
  * and +0x28 are cleared and +0x14 is set to 0x1001.  It then calls
  * Menu_Init on the sub-object at arg0 + 0x2C with arg3, the area at
