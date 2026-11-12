@@ -835,3 +835,14 @@ Each main menu item was chosen and confirmed with はい, and the argument of
 
 `MainMenu_Free` ran on the way out.
 
+## せいとん, saving a box move
+
+This was run from a fresh boot. Before the debugger fix, a savestate did not
+carry the pak's cart RAM, so saving after loading an older state gave
+「64GBパックが ただしくセットされていません」. In ポケモンのせいり, ハナ was moved
+from てもち into GBのボックス1 (`PcSort_MoveSelectedMon`): the counts went from
+03/06 and 00/30 to 02/06 and 01/30. On leaving, `PcSort_HasUnsavedChanges`
+returned 1. レポートしてやめる ran `PcSort_SaveChanges`, which called
+`PcSort_WriteDeck` for decks 0x20 (party) and 0x21 (GB box 1). The .sav then
+held party count 2 and current-box count 1.
+
