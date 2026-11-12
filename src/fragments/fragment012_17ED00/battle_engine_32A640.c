@@ -90,7 +90,7 @@ void BattleAnim_SetupOrphanDescriptor2BSpinFade(Particle* arg0) {
 }
 
 void func_8213E1FC(Particle* arg0, f32 arg1);
-s32 func_8213F658(Particle* arg0, f32 arg1, f32 arg2);
+s32 Particle_ApproachStepMagnitude(Particle* arg0, f32 arg1, f32 arg2);
 void BattleAnim_CallbackOrphanDescriptor2BSpinFade(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -121,7 +121,7 @@ void BattleAnim_CallbackOrphanDescriptor2BSpinFade(Particle* arg0) {
 
     switch (arg0->phase) {
         case 1:
-            func_8213F658(arg0, 50.0f, 0.5f);
+            Particle_ApproachStepMagnitude(arg0, 50.0f, 0.5f);
             func_8213E1FC(arg0, 1.0f);
             Particle_UpdateRotatingVelocityXZ(arg0, arg0->stepMagnitude, 0x1000);
             Particle_Field94_AddX_0A578(arg0, 0x2000);
@@ -129,7 +129,7 @@ void BattleAnim_CallbackOrphanDescriptor2BSpinFade(Particle* arg0) {
             break;
 
         case 2:
-            func_8213F658(arg0, 0.0f, 1.0f);
+            Particle_ApproachStepMagnitude(arg0, 0.0f, 1.0f);
             func_8213E1FC(arg0, -2.0f);
             Particle_UpdateRotatingVelocityXZ(arg0, arg0->stepMagnitude, 0x1000);
             Particle_Field94_AddX_0A578(arg0, 0x2000);
@@ -209,8 +209,8 @@ void BattleAnim_SetupPetalDanceLingeringHitEffect(Particle* arg0) {
 }
 
 void func_8213E1FC(Particle* arg0, f32 arg1);
-s32 func_8213F658(Particle* arg0, f32 arg1, f32 arg2);
-void func_8213ECD0(Particle* arg0);
+s32 Particle_ApproachStepMagnitude(Particle* arg0, f32 arg1, f32 arg2);
+void Particle_ApplyRotationStepX(Particle* arg0);
 /**
  * Handles the floating pedals that linger when being hit by pedal dance
  * @unverified Name and comment from Stadium 1.
@@ -261,7 +261,7 @@ void BattleAnim_RunPetalDanceLingeringHitEffect(Particle* arg0) {
 
     switch (arg0->phase) {
         case 1:
-            func_8213F658(arg0, 20.0f, 0.5f);
+            Particle_ApproachStepMagnitude(arg0, 20.0f, 0.5f);
             func_8213E1FC(arg0, arg0->motionStep.y);
             Particle_UpdateRotatingVelocityXZ(arg0, arg0->stepMagnitude, arg0->unk_AE);
             break;
@@ -279,7 +279,7 @@ void BattleAnim_RunPetalDanceLingeringHitEffect(Particle* arg0) {
     }
 
     if (Particle_IsRenderingEnabled(arg0) != 0) {
-        func_8213ECD0(arg0);
+        Particle_ApplyRotationStepX(arg0);
         Particle_Field94_AddY_0A594(arg0, arg0->unk_B0);
         Particle_Field94_AddXFromField9A_0A4B4(arg0);
         if (arg0->worldPosition.y < 0.0f) {
@@ -328,7 +328,7 @@ void BattleAnim_SetupSlowFallingHitEffect(Particle* arg0) {
 }
 
 void func_8213E1FC(Particle* arg0, f32 arg1);
-void func_8213ECD0(Particle* arg0);
+void Particle_ApplyRotationStepX(Particle* arg0);
 /**
  * Handles the leaves that spawn when being hit by vine whip and the feathers that spawn when being hit by wing attack
  * @unverified Name and comment from Stadium 1.
@@ -372,7 +372,7 @@ void BattleAnim_RunSlowFallingHitEffect(Particle* arg0) {
     }
 
     if (Particle_IsRenderingEnabled(arg0) != 0) {
-        func_8213ECD0(arg0);
+        Particle_ApplyRotationStepX(arg0);
         Particle_Field94_AddYFromField9A_0A4C8(arg0);
         Particle_Field94_AddXFromField9A_0A4B4(arg0);
         if (arg0->worldPosition.y < 0.0f) {

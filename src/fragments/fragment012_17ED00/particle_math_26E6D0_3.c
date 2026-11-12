@@ -276,7 +276,7 @@ void BattleAnim_SetupBackgroundRecolor(Particle* arg0) {
 s32 func_8213C494(s8 *);                          /* extern */
 M2C_UNK func_8213C938(s8 *);                      /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
-M2C_UNK func_82140410(s8 *);                      /* extern */
+M2C_UNK Particle_StorePrimColorInTemp(s8 *);                      /* extern */
 s32 func_821436A0(s8 *, u8, s32);                 /* extern */
 M2C_UNK func_8214390C(s8 *);                      /* extern */
 
@@ -297,7 +297,7 @@ void func_82143934(s8 *arg0) {
         func_8213C938(arg0);
         break;
     }
-    func_82140410(arg0);
+    Particle_StorePrimColorInTemp(arg0);
 }
 
 /**

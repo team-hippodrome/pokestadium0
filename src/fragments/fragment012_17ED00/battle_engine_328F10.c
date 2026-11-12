@@ -213,7 +213,7 @@ void BattleAnim_InitStartEffect139Descriptor42FallingScale(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-s32 func_8213F658(Particle* arg0, f32 arg1, f32 arg2);
+s32 Particle_ApproachStepMagnitude(Particle* arg0, f32 arg1, f32 arg2);
 void BattleAnim_CallbackStartEffect139Descriptor42FallingScaleFade(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -243,7 +243,7 @@ void BattleAnim_CallbackStartEffect139Descriptor42FallingScaleFade(Particle* arg
             break;
     }
 
-    func_8213F658(arg0, 0.2, 0.2f);
+    Particle_ApproachStepMagnitude(arg0, 0.2, 0.2f);
     Particle_AddVelocityFromRotationTemplate1(arg0);
     Particle_Field38_AddYScaled_08E90(arg0, -1.0f);
 }
@@ -391,7 +391,7 @@ void BattleAnim_InitStartEffects133And134And143Descriptor44ModeOrbit(Particle* a
     Particle_AdvanceLifecycle(arg0);
 }
 
-void func_8213ECD0(Particle* arg0);
+void Particle_ApplyRotationStepX(Particle* arg0);
 void BattleAnim_CallbackStartEffects133And134And143Descriptor44ModeOrbitSwirl(Particle* arg0) {
     Particle_FieldCE_GetS32_0C040(arg0);
 
@@ -429,12 +429,12 @@ void BattleAnim_CallbackStartEffects133And134And143Descriptor44ModeOrbitSwirl(Pa
     if (Particle_IsRenderingEnabled(arg0) != 0) {
         switch (arg0->phase) {
             case 1:
-                func_8213ECD0(arg0);
+                Particle_ApplyRotationStepX(arg0);
                 Particle_SetPositionFromRotationTemplate1(arg0, arg0->unk_AE);
                 break;
 
             case 2:
-                func_8213ECD0(arg0);
+                Particle_ApplyRotationStepX(arg0);
                 Particle_FieldAE_Approach_0BF60(arg0, 0, arg0->unk_B0);
                 Particle_SetPositionFromRotationTemplate1(arg0, arg0->unk_AE);
                 break;

@@ -55,7 +55,7 @@ void func_8215FAA4(s8 *arg0) {
         func_8215F930(arg0);
         break;
     case 2:
-        func_8213CCEC(arg0, 0, 7, 1, 1, 0);
+        Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 1, 0);
         break;
     case 3:
         func_82140548(arg0, 0, 0x40);
@@ -135,7 +135,7 @@ void BattleAnim_RunRazorWindHitEffect(Particle* arg0) {
             break;
 
         case 3:
-            func_8213CCEC(arg0, 0, 7, 1, 1, 0);
+            Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 1, 0);
             Particle_Field1C_Approach_0B98C(arg0, 3.5f, 0.25f);
             break;
 
@@ -231,7 +231,7 @@ void BattleAnim_RunPetalDanceRazorLeafHitEffect(Particle* arg0) {
             break;
 
         case 3:
-            func_8213CCEC(arg0, 0, 7, 2, 1, 0);
+            Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 2, 1, 0);
             break;
 
         case 4:
@@ -358,7 +358,7 @@ void func_821603C8(s8 *arg0) {
         func_8213C938(arg0);
         break;
     }
-    func_8213CC10(arg0, 0, 7, 1, 2, 0);
+    Particle_AnimateFramesForwardLooped(arg0, 0, 7, 1, 2, 0);
     func_82140228(arg0, 0x40A00000, 0x3ECCCCCD);
 }
 
@@ -390,7 +390,7 @@ void func_82160528(s8 *arg0) {
         }
         return;
     case 3:
-        func_8213CCEC(arg0, 0, 7, 1, 2, 0);
+        Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 2, 0);
         Particle_ApproachPrimAlpha(arg0, 0x64, 6);
         func_8213E6BC(arg0);
         return;
@@ -429,9 +429,9 @@ void BattleAnim_RunSmallSand(s8 *arg0) {
         func_821605F8(arg0);
         return;
     case 2:
-        func_8213CCEC(arg0, 0, 7, 1, 2, 0);
+        Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 2, 0);
         func_82140228(arg0, 0x3F400000, 0x3CCCCCCD);
-        func_8213F658(arg0, 0.5f, 0.25f);
+        Particle_ApproachStepMagnitude(arg0, 0.5f, 0.25f);
         func_8213E1FC(arg0, M2C_FIELD(arg0, s32 *, 0x5C));
         func_8213E4D8(arg0);
         return;
@@ -473,9 +473,9 @@ void BattleAnim_RunLargeSand(s8 *arg0) {
         func_821607E8(arg0);
         break;
     case 2:
-        func_8213CCEC(arg0, 0, 7, 1, 3, 0);
+        Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 3, 0);
         func_82140228(arg0, 0x3F800000, 0x3D4CCCCD);
-        func_8213F658(arg0, 0.5f, 0.25f);
+        Particle_ApproachStepMagnitude(arg0, 0.5f, 0.25f);
         func_8213E1FC(arg0, M2C_FIELD(arg0, s32 *, 0x5C));
         break;
     case 3:
@@ -515,7 +515,7 @@ void func_82160AF0(s8 *arg0) {
         func_821609F0(arg0);
         return;
     case 2:
-        func_8213CCEC(arg0, 0, 7, 1, 2, 0);
+        Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 2, 0);
         Particle_ApproachPrimAlpha(arg0, 0x64, 9);
         func_82140228(arg0, 0x3ECCCCCD, 0x3CCCCCCD);
         func_8213E1FC(arg0, M2C_FIELD(arg0, s32 *, 0x5C));
@@ -550,9 +550,9 @@ void func_82160CCC(s8 *arg0) {
         func_82160BB8(arg0);
         return;
     case 2:
-        func_8213CCEC(arg0, 0, 7, 1, 2, 0);
+        Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 2, 0);
         func_82140228(arg0, 0x3F400000, 0x3CCCCCCD);
-        func_8213F658(arg0, 0.5f, 0.2f);
+        Particle_ApproachStepMagnitude(arg0, 0.5f, 0.2f);
         func_8213E1FC(arg0, M2C_FIELD(arg0, s32 *, 0x5C));
         func_8213E4D8(arg0);
         return;
@@ -604,7 +604,7 @@ void BattleAnim_RunSandAttackHitEffect(s8 *arg0) {
         return;
     case 3:
         func_82140228(arg0, 0x3F000000, 0x3CA3D70A);
-        func_8213CC10(arg0, 0, 7, 1, 2, 0);
+        Particle_AnimateFramesForwardLooped(arg0, 0, 7, 1, 2, 0);
         Particle_ApproachPrimAlpha(arg0, 0x64, 6);
         if (func_8213E7A0(arg0) != 0) {
             func_8213C9D0(arg0);
@@ -640,9 +640,9 @@ void BattleAnim_CallbackSharedDescriptors3EAnd3FAnimatedRiseFade(Particle* arg0)
             break;
 
         case 2:
-            func_8213CCEC((s8*)arg0, 0, 7, 1, 2, 0);
+            Particle_AnimateFramesForwardLoopedThenAdvance((s8*)arg0, 0, 7, 1, 2, 0);
             Particle_Field1C_Approach_0B98C(arg0, 0.8f, 0.1f);
-            func_8213F658((s8*)arg0, 1.0, 1.0f);
+            Particle_ApproachStepMagnitude((s8*)arg0, 1.0, 1.0f);
             if (Particle_FieldA6_DecrementToZeroStep1_0BDAC(arg0) != 0) {
                 Particle_Field7C_ApproachY_0B180(arg0, 0.5f, 0.4f);
                 Particle_Field50_AddXFromField7C_09C58(arg0);
@@ -707,7 +707,7 @@ void func_82161288(s8 *arg0) {
         }
         return;
     case 3:
-        func_8213CCEC(arg0, 0, 7, 1, 2, 0);
+        Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 2, 0);
         Particle_ApproachPrimAlpha(arg0, 0x64, 6);
         func_8213E7A0(arg0);
         return;
@@ -746,7 +746,7 @@ void func_8216140C(s8 *arg0) {
         }
         return;
     case 3:
-        func_8213CCEC(arg0, 0, 7, 1, 2, 0);
+        Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 2, 0);
         Particle_ApproachPrimRed(arg0, 0x64, 9);
         Particle_ApproachEnvRed(arg0, 0, 0x10);
         Particle_ApproachEnvGreen(arg0, 0x32, 3);
@@ -820,7 +820,7 @@ void func_821616BC(s8 *arg0) {
         func_821615F8(arg0);
         break;
     case 2:
-        func_8213F658(arg0, 2.0f, 0.5f);
+        Particle_ApproachStepMagnitude(arg0, 2.0f, 0.5f);
         if ((func_82140690(arg0) != 0) && (Particle_ApproachPrimAlpha(arg0, 0, 0x40) != 0)) {
             func_8213C9D0(arg0);
         }
@@ -882,7 +882,7 @@ void BattleAnim_RunPointyMoveHitSparkChild(s8 *arg0) {
         break;
     case 2:
         func_82140228(arg0, 0x3DCCCCCD, 0x3C23D70A);
-        func_8213F658(arg0, 3.0f, 0.75f);
+        Particle_ApproachStepMagnitude(arg0, 3.0f, 0.75f);
         if ((func_82140690(arg0) != 0) && (Particle_ApproachPrimAlpha(arg0, 0, 0x40) != 0)) {
             func_8213C9D0(arg0);
         }
@@ -980,24 +980,24 @@ void BattleAnim_RunPhysicalHitPurpleSmoke(Particle* arg0) {
             BattleAnim_SetupPhysicalHitPurpleSmoke(arg0);
             break;
         case 2:
-            func_8213CCEC(arg0, 0, 7, 1, 2, 0);
+            Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 2, 0);
 
             switch (sp2E) {
                 case 3:
                     Particle_PrimR_Approach_0BAE4(arg0, 0, 9);
-                    func_8213F658(arg0, 1.0f, 0.75f);
+                    Particle_ApproachStepMagnitude(arg0, 1.0f, 0.75f);
                     Particle_PrimAlpha_Approach_0BC2C(arg0, 0x32, 6);
                     break;
 
                 case 4:
-                    func_8213F658(arg0, 1.0f, 0.75f);
+                    Particle_ApproachStepMagnitude(arg0, 1.0f, 0.75f);
                     Particle_Field38_AddYScaled_08E90(arg0, 0.5f);
                     Particle_PrimAlpha_Approach_0BC2C(arg0, 0x32, 6);
                     break;
 
                 default:
                     Particle_PrimG_Approach_0BB14(arg0, 0x64, 6);
-                    func_8213F658(arg0, 2.0f, 0.5f);
+                    Particle_ApproachStepMagnitude(arg0, 2.0f, 0.5f);
                     break;
             }
             break;
@@ -1043,7 +1043,7 @@ void BattleAnim_CallbackEndEffect52Descriptor42BurstChild(Particle* arg0) {
 
         case 3:
             Particle_Field1C_ApproachAndStepState_0B9D0(arg0, 0.3f, 0.05f);
-            func_8213F658(arg0, 3.0f, 1.0f);
+            Particle_ApproachStepMagnitude(arg0, 3.0f, 1.0f);
             break;
 
         case 4:
@@ -1062,7 +1062,7 @@ void BattleAnim_CallbackEndEffect52Descriptor42BurstChild(Particle* arg0) {
     if (Particle_IsRenderingEnabled(arg0) != 0) {
         Particle_Field94_AddXFromField9A_0A4B4(arg0);
         Particle_Field7C_SetVecFromField74AnglesXY_0B2B4(arg0);
-        func_8213E3F8(arg0);
+        Particle_ApplyMotionStep(arg0);
     }
 }
 
@@ -1347,7 +1347,7 @@ void BattleAnim_RunThunderPunchHitEffect(Particle* arg0) {
             break;
 
         case 3:
-            func_8213CCEC(arg0, 0, 5, 1, 1, 2);
+            Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 5, 1, 1, 2);
             break;
 
         case 4:
@@ -1456,7 +1456,7 @@ void BattleAnim_RunDefaultHitSpark(Particle* arg0) {
             break;
 
         case 3:
-            func_8213CCEC(arg0, 0, 3, 1, 1, 0);
+            Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 3, 1, 1, 0);
             Particle_AddVelocityXZFromRotationYPlusHalfTurn(arg0);
             break;
 
@@ -1578,7 +1578,7 @@ void BattleAnim_RunStrongPurpleHitSmoke(Particle* arg0) {
             break;
 
         case 3:
-            func_8213CCEC(arg0, 0, 3, 1, 1, 0);
+            Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 3, 1, 1, 0);
             Particle_AddVelocityXZFromRotationYPlusHalfTurn(arg0);
             if ((Particle_FieldA6_DecrementToZeroStep1_0BDAC != 0) && (arg0->phase == 0)) {
                 Particle_AdvancePhase(arg0);
@@ -1645,7 +1645,7 @@ s32 BattleAnim_RunPointyMoveHitSpark(Particle* arg0) {
             break;
 
         case 3:
-            func_8213CCEC(arg0, 0, 3, 1, 1, 0);
+            Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 3, 1, 1, 0);
             Particle_AddVelocityXZFromRotationYPlusHalfTurn(arg0);
             if ((Particle_FieldA6_DecrementToZeroStep1_0BDAC != NULL) && (arg0->phase == 0)) {
                 Particle_AdvancePhase(arg0);
@@ -1701,7 +1701,7 @@ void BattleAnim_RunFirePunchUseEffect1(Particle* arg0) {
             break;
 
         case 2:
-            func_8213CC10(arg0, 0, 5, 1, 1, -1);
+            Particle_AnimateFramesForwardLooped(arg0, 0, 5, 1, 1, -1);
             Particle_Field1C_Approach_0B98C(arg0, 0.3f, 0.01f);
             Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0);
             break;
@@ -1765,8 +1765,8 @@ void func_8216374C(s8 *arg0) {
         }
         return;
     case 3:
-        func_8213CCEC(arg0, 0, 7, 1, 1, 0);
-        func_8213F658(arg0, 0.2f, 0.25f);
+        Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 1, 0);
+        Particle_ApproachStepMagnitude(arg0, 0.2f, 0.25f);
         func_82140228(arg0, 0x3F000000, 0x3CA3D70A);
         Particle_ApproachPrimBlue(arg0, 0, 0x20);
         Particle_ApproachEnvGreen(arg0, 0, 0x20);
@@ -1833,8 +1833,8 @@ void func_821639EC(s8 *arg0) {
         }
         return;
     case 3:
-        func_8213CCEC(arg0, 0, 7, 1, 1, 0);
-        func_8213F658(arg0, 0.2f, 0.25f);
+        Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 1, 0);
+        Particle_ApproachStepMagnitude(arg0, 0.2f, 0.25f);
         func_82140228(arg0, 0x3F000000, 0x3CA3D70A);
         Particle_ApproachPrimBlue(arg0, 0, 0x20);
         Particle_ApproachEnvGreen(arg0, 0, 0x20);
@@ -1936,7 +1936,7 @@ void func_82163D7C(s8 *arg0) {
         }
         return;
     case 3:
-        func_8213CCEC(arg0, 0, 7, 1, 2, 0);
+        Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 2, 0);
         Particle_ApproachPrimAlpha(arg0, 0x64, 6);
         func_82140228(arg0, 0x40000000, 0x3D99999A);
         func_8213E528(arg0);

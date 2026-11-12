@@ -39,7 +39,7 @@ void BattleAnim_CallbackDescriptor26BurstChild(Particle* arg0) {
     }
 
     if (Particle_IsRenderingEnabled(arg0) != 0) {
-        func_8213E3F8(arg0);
+        Particle_ApplyMotionStep(arg0);
     }
 }
 
@@ -70,7 +70,7 @@ void BattleAnim_CallbackDescriptor26BurstEmitter(Particle* arg0) {
             break;
 
         case 3:
-            if (func_8213CCEC(arg0, 0, 0xF, 2, 1, 0) != 0) {
+            if (Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 0xF, 2, 1, 0) != 0) {
                 BattleAnim_EmitParticleBurst(arg0, BattleAnim_CallbackDescriptor26BurstChild, &gBattleAnimParticleDescriptors[0x26], 5);
             }
             break;

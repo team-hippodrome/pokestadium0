@@ -24,7 +24,7 @@ void BattleAnim_RunAcidArmorUseEffect2(Particle* arg0) {
             break;
 
         case 4:
-            func_8213CCEC(arg0, 0, 7, 1, 2, 0);
+            Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 2, 0);
             Particle_PrimAlpha_Approach_0BC2C(arg0, 0x40, 4);
             Particle_AddVelocityYFromFieldOffset74(arg0);
             break;
@@ -212,7 +212,7 @@ void func_82164AD0(s8 *arg0) {
         }
         return;
     case 3:
-        func_8213CCEC(arg0, 0, 7, 1, (s32) M2C_FIELD(arg0, s16 *, 0xAC), 0);
+        Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, (s32) M2C_FIELD(arg0, s16 *, 0xAC), 0);
         Particle_ApproachPrimAlpha(arg0, 0x40, M2C_FIELD(arg0, u8 *, 0xAB));
         func_8213E77C(arg0);
         return;
@@ -286,7 +286,7 @@ void BattleAnim_RunSplashOfWater(s8 *arg0) {
         }
         break;
     case 3:                                         /* switch 1 */
-        func_8213CC10(arg0, 0, 7, 1, 2, 0);
+        Particle_AnimateFramesForwardLooped(arg0, 0, 7, 1, 2, 0);
         Particle_ApproachPrimAlpha(arg0, 0x40, 2);
         func_8213E7F4(arg0);
         func_8213E71C(arg0, 0x41200000);
@@ -331,7 +331,7 @@ void BattleAnim_RunDigHitDust(s8 *arg0) {
         }
         break;
     case 3:
-        func_8213CCEC(arg0, 0, 7, 1, (s32) M2C_FIELD(arg0, s16 *, 0xAC), 0);
+        Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, (s32) M2C_FIELD(arg0, s16 *, 0xAC), 0);
         Particle_ApproachPrimAlpha(arg0, 0x40, M2C_FIELD(arg0, u8 *, 0xAB));
         break;
     case 4:
@@ -340,7 +340,7 @@ void BattleAnim_RunDigHitDust(s8 *arg0) {
     }
     if (func_8213C9B0(arg0) != 0) {
         func_8213F940(arg0, 0xC0000000, 0x3E99999A);
-        func_8213E3F8(arg0);
+        Particle_ApplyMotionStep(arg0);
     }
 }
 
@@ -370,7 +370,7 @@ void BattleAnim_RunDigHitRocks(s8 *arg0) {
     }
     if (func_8213C9B0(arg0) != 0) {
         func_8213F940(arg0, 0xC1200000, 0x3F4CCCCD);
-        func_8213E3F8(arg0);
+        Particle_ApplyMotionStep(arg0);
     }
 }
 
@@ -400,7 +400,7 @@ void BattleAnim_RunBarrageUseEffect2(Particle* arg0) {
             break;
 
         case 2:
-            func_8213CCEC(arg0, 0, 7, 1, 2, 0);
+            Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 2, 0);
             Particle_PrimAlpha_Approach_0BC2C(arg0, 0x80, 8);
             Particle_AddVelocityFromRotationTemplate1(arg0);
             break;
@@ -439,7 +439,7 @@ void func_82165224(s8 *arg0) {
         func_82165100(arg0);
         break;
     case 2:
-        func_8213CCEC(arg0, 1, 7, 1, 2, 0);
+        Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 1, 7, 1, 2, 0);
         if (func_82140690(arg0) != 0) {
             Particle_ApproachPrimAlpha(arg0, 0x64, 0x10);
         }
@@ -451,7 +451,7 @@ void func_82165224(s8 *arg0) {
     if (func_8213C9B0(arg0) != 0) {
         func_821402B8(arg0);
         func_8213F940(arg0, 0xBFC00000, 0x3DCCCCCD);
-        func_8213E3F8(arg0);
+        Particle_ApplyMotionStep(arg0);
     }
 }
 
@@ -507,7 +507,7 @@ void func_8216547C(s8 *arg0) {
         BattleAnim_InitSharedVerticalFadeParticle(arg0);
         break;
     case 2:
-        func_8213CCEC(arg0, 1, 7, 1, 2, 0);
+        Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 1, 7, 1, 2, 0);
         if (func_82140690(arg0) != 0) {
             Particle_ApproachPrimAlpha(arg0, 0x64, 0x10);
         }
@@ -519,7 +519,7 @@ void func_8216547C(s8 *arg0) {
     if (func_8213C9B0(arg0) != 0) {
         func_821402B8(arg0);
         func_8213F940(arg0, 0xBFC00000, 0x3E4CCCCD);
-        func_8213E3F8(arg0);
+        Particle_ApplyMotionStep(arg0);
     }
 }
 
