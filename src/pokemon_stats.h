@@ -114,12 +114,12 @@ s32 GbSave_SavedAtPokemonCenter(s32 arg0);
 s32 GbSave_HasPokedex(s32 arg0);
 s32 GbSave_HasProgressFlag1000(s32 arg0);
 s32 GbSave_CopyPortSnapshot(s32 arg0, GbSavePortSnapshot* arg1);
-void GbSave_MarkSeenBits(char* arg0, s32 arg1, u8* arg2);
-void GbSave_RebuildSeenBitfield(s32 arg0);
+void GbSave_MarkSpeciesHeld(char* arg0, s32 arg1, u8* arg2);
+void GbSave_RebuildHeldSpecies(s32 arg0);
 s32 GbSave_GetSpeciesProgressLevel(s32 arg0, s32 arg1);
 void GbSave_SetSeenOwnedBits(s32 arg0, s32 arg1, s32 arg2);
-s32 GbSave_CountSpeciesProgressField036(s32 arg0);
-s32 GbSave_CountSpeciesProgressField023(s32 arg0);
-s32 GbSave_CountSpeciesProgressField06(s32 arg0);
+s32 GbSave_CountSeenSpecies(s32 arg0);
+s32 GbSave_CountOwnedSpecies(s32 arg0);
+s32 GbSave_CountHeldSpecies(s32 arg0);
 
 #endif // _232C0_H_

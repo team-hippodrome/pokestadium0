@@ -480,7 +480,7 @@ s32 GbSave_LoadPort(s32 arg0) {
     }
 
     if (temp_s1 != 0) {
-        GbSave_RebuildSeenBitfield(arg0);
+        GbSave_RebuildHeldSpecies(arg0);
     }
 
     return temp_s1;
@@ -1308,9 +1308,13 @@ s32 GbSave_CopyPortSnapshot(s32 arg0, GbSavePortSnapshot* arg1) {
 }
 
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Sets the bit of each species in the list arg2 (arg1 internal species indices) in the bit array
+ * arg0.
+ * Seen in play (2026-11-12): on entering ずかん it ran for the party (3 Pokemon) and the current
+ * GB box (0) into the held-species bits that GbSave_CountHeldSpecies counts for もっているかず.
+ * Renamed from GbSave_MarkSeenBits: the bits are the Pokemon the player holds, not the seen flags.
  */
-void GbSave_MarkSeenBits(char* arg0, s32 arg1, u8* arg2) {
+void GbSave_MarkSpeciesHeld(char* arg0, s32 arg1, u8* arg2) {
     s32 temp_v0;
     s32 h;
 
@@ -1322,7 +1326,13 @@ void GbSave_MarkSeenBits(char* arg0, s32 arg1, u8* arg2) {
     }
 }
 
-void GbSave_RebuildSeenBitfield(s32 arg0) {
+/**
+ * Rebuilds the held-species bits (unk_05) of port arg0 from the party, the current GB box and the
+ * Stadium boxes.
+ * @unverified Renamed from GbSave_RebuildSeenBitfield after its callee was seen in play; the
+ * Stadium box lists were empty in the test save.
+ */
+void GbSave_RebuildHeldSpecies(s32 arg0) {
     GbSavePortZero* ptr = &sGbSavePorts[arg0];
     u8* temp_s0 = ptr->unk_40;
     u8* ptr6 = ptr->unk_05;
@@ -1334,12 +1344,12 @@ void GbSave_RebuildSeenBitfield(s32 arg0) {
         ptr6[i] = 0;
     }
 
-    GbSave_MarkSeenBits(ptr6, temp_s0[0x955], temp_s0 + 0x956);
-    GbSave_MarkSeenBits(ptr6, temp_s0[0xAAD], temp_s0 + 0xAAE);
+    GbSave_MarkSpeciesHeld(ptr6, temp_s0[0x955], temp_s0 + 0x956);
+    GbSave_MarkSpeciesHeld(ptr6, temp_s0[0xAAD], temp_s0 + 0xAAE);
 
     for (i = 0; i < 4; i++) {
-        GbSave_MarkSeenBits(ptr6, ptr541[i * 0x566], ptr541 + i * 0x566 + 1);
-        GbSave_MarkSeenBits(ptr6, ptr542[i * 0x566], ptr542 + i * 0x566 + 1);
+        GbSave_MarkSpeciesHeld(ptr6, ptr541[i * 0x566], ptr541 + i * 0x566 + 1);
+        GbSave_MarkSpeciesHeld(ptr6, ptr542[i * 0x566], ptr542 + i * 0x566 + 1);
     }
 }
 
@@ -1398,19 +1408,13 @@ void func_80023268(s32 arg0, s32 arg1, s32 arg2) {
 }
 
 /**
- * GbSave_CountSpeciesProgressField036
- *
- * Counts the set bits among the first 0x97 (151) bits of the bit array at
- * offset 0x31 of the main save data of Game Boy port arg0 (bit i is bit
- * i % 8 of byte i / 8).  Which Pokedex flag set that array is (seen or
- * owned) is not established here; see GbSave_CountSpeciesProgressField023 for the other array,
- * at offset 0x1E.
- *
- * Same structure as GbSave_CountSpeciesProgressField036 in the Stadium 1
- * decomp (its VERSION_JP offset is also 0x31).
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Counts the species marked seen in the Game Boy save of port arg0: the first 151 bits of the
+ * Pokedex seen array (main data +0x13, at offset 0x31 of the bank copy).
+ * Seen in play (2026-11-12): returned 3 for the test save, and 8 after the first byte of that
+ * array was set to 0xFF in memory; ずかん then showed みつけたかず 8. Renamed from
+ * GbSave_CountSpeciesProgressField036 (Stadium 1's name for the same function).
  */
-s32 GbSave_CountSpeciesProgressField036(s32 arg0) {
+s32 GbSave_CountSeenSpecies(s32 arg0) {
     s32 i;
     s32 temp_v1 = 0;
 
@@ -1422,17 +1426,13 @@ s32 GbSave_CountSpeciesProgressField036(s32 arg0) {
 }
 
 /**
- * GbSave_CountSpeciesProgressField023
- *
- * Same as GbSave_CountSpeciesProgressField036 but over the bit array at offset 0x1E of the main
- * save data: counts the set bits among the first 0x97 (151) bits, where
- * bit i is bit i % 8 of byte i / 8.
- *
- * Same structure as GbSave_CountSpeciesProgressField023 in the Stadium 1
- * decomp (its VERSION_JP offset is also 0x1E).
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Counts the species marked owned in the Game Boy save of port arg0: the first 151 bits of the
+ * Pokedex owned array (main data +0, at offset 0x1E of the bank copy).
+ * Seen in play (2026-11-12): returned 3 for the test save, and 7 after four more bits of that
+ * array were set in memory; ずかん then showed つかまえたかず 7. Renamed from
+ * GbSave_CountSpeciesProgressField023 (Stadium 1's name for the same function).
  */
-s32 GbSave_CountSpeciesProgressField023(s32 arg0) {
+s32 GbSave_CountOwnedSpecies(s32 arg0) {
     s32 i;
     s32 temp_v1 = 0;
 
@@ -1444,9 +1444,13 @@ s32 GbSave_CountSpeciesProgressField023(s32 arg0) {
 }
 
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Counts the species in the held-species bits (unk_05) that GbSave_RebuildHeldSpecies builds from
+ * the party, the current GB box and the Stadium boxes.
+ * Seen in play (2026-11-12): returned 3 for a save holding フシギダネ, ヒトカゲ and ゼニガメ, shown as
+ * もっているかず 3 in ずかん; an extra bit set by hand was cleared again by the rebuild before the
+ * count. Renamed from GbSave_CountSpeciesProgressField06.
  */
-s32 GbSave_CountSpeciesProgressField06(s32 arg0) {
+s32 GbSave_CountHeldSpecies(s32 arg0) {
     s32 i;
     s32 temp_v1 = 0;
 

@@ -742,3 +742,15 @@ This was traced from power-on with Green in port 1:
    rounds, each writing with `GbPak_MbcWrite` and reading back with
    `GbPak_MbcRead`.
 4. `GbSave_OpenMainData` runs, and `GbTower_SetPollMask(1)` ends the scan.
+
+## ずかん counts
+
+The three counts in ずかん (みつけたかず, つかまえたかず and もっているかず) were all
+3 for the test save. Setting extra bits in memory before entering ずかん told
+them apart. Extra seen bits raised みつけたかず to 8, which is
+`GbSave_CountSeenSpecies` (was `..._CountSpeciesProgressField036`). Extra
+owned bits raised つかまえたかず to 7, which is `GbSave_CountOwnedSpecies` (was
+`..._Field023`). もっているかず is `GbSave_CountHeldSpecies` (was `..._Field06`).
+It counts bits that `GbSave_MarkSpeciesHeld` (was `GbSave_MarkSeenBits`)
+rebuilds from the party and boxes on every entry, so a bit added by hand was
+cleared again.
