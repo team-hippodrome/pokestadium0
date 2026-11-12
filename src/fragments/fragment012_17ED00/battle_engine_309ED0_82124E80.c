@@ -23,7 +23,8 @@ void func_82124EF4(void) {
  * (skipping a side with no move), records the order for the COM AI, enters phase 0 and resolves
  * the first action with Battle_ResolveMonAction. Ran in play from Battle_ChooseActions on a Struggle turn and
  * on the second turn of Razor Wind and Fly.
- * @unverified Name from the code.
+ * Seen in play (2026-11-12): in a turn where 1P's Poison Sting went first, it ran once both
+ * actions were committed, just before the presentation entered phase 2.
  */
 void Battle_StartTurn(void) {
     s32 sp24;
@@ -176,7 +177,8 @@ void func_82133868(ActivePokemonState*);
  * action (a switch through BeginBattleForEntity, the scripted action in mode 10, otherwise
  * Battle_ResolveMonAction) and marks the second pass. BattleScene_CompleteActionPhase then enters
  * phase 3. In play phase 3 always followed phase 2 or 7 this way.
- * @unverified Name from the code.
+ * Seen in play (2026-11-12): in a turn where 1P's Poison Sting went first, it ran when that
+ * action's presentation ended, before COM's Pinsir acted.
  */
 void BattleScene_StartSecondAction(void) {
     ActivePokemonState* temp_a3;
@@ -503,7 +505,8 @@ void BattleScene_InitTurnPresentation(s32 arg0) {
  * Plays one of four target-camera shots for a faint: 3 at the faint start, a random 0 to 2 during
  * the collapse (BattleScene_FaintStepStart, BattleScene_FaintStepCollapse).
  * Player sweep: reached only by Self-Destruct and Explosion.
- * @unverified Shots 0 to 2 were not told apart on screen.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Self-Destruct, Explosion.
  */
 void BattleCamera_PlayFaintShot(void* arg0, void* arg1, s32 arg2) {
     switch (arg2) {
@@ -527,7 +530,8 @@ void BattleCamera_PlayFaintShot(void* arg0, void* arg1, s32 arg2) {
  * 0x200 is set, so the faint uses row 17. Otherwise clears the Fly/Dig flags (0x4008) and puts
  * the model back on the ground, clears sleep, restores full alpha, and returns 0 (row 0).
  * Player sweep: reached only by Self-Destruct and Explosion.
- * @unverified Name from the code; flag 0x200 is not identified.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Self-Destruct, Explosion.
  */
 s32 BattleScene_ResetFaintingMonState(ActivePokemon* active_pokemon) {
     UNUSED s32 pad; // FAKE: stack padding

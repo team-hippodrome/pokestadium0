@@ -142,7 +142,8 @@ void func_80027868(s8*, s32);
 void func_80027814(s8*, Ref89103740*, s32);
 /**
  * Moves the selected Pokemon to location kind `arg2`, box `arg3`, and shows the いどう (moved) message.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: ran with kind 1 (GB) or 2 (64 cartridge) and box 0, showed
+ * the いどう message and left two Pokémon in the party.
  */
 void LabPCList_MoveMonTo(Ctx89103740* arg0, Ref89103740* arg1, s32 arg2, s32 arg3, Msg89103740* arg4) {
     Item89103740* items = M2C_FIELD(arg0, Item89103740**, 0x420);
@@ -213,7 +214,8 @@ extern u8 D_8910A8E8[];
 void func_89103144(s8*, Ref89103740*, s32);
 /**
  * Handles the どこへ？ (where to?) menu: party, GB box, Stadium box, or a box list.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): いどうする opened 「どこへ？」 with
+ * てもちのポケモン, ゲームボーイのボックス and 64カセットのボックス while this ran.
  */
 s32 LabPCList_UpdateDestinationMenu(Ctx89103858* arg0) {
     s32 ret = 0;
@@ -304,7 +306,8 @@ typedef struct Ctx89103C54 {
 
 /**
  * Moves the Pokemon to the chosen Game Boy box.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: いどうする > ゲームボーイのボックス showed ボックス1-8; ボックス1 moved フシギダネ out of
+ * the party (「いどう てもち -> GB 1」).
  */
 s32 LabPCList_UpdateGbBoxMenu(Ctx89103C54* arg0) {
     s32 ret = 0;
@@ -335,7 +338,8 @@ s32 LabPCList_UpdateGbBoxMenu(Ctx89103C54* arg0) {
 
 /**
  * Moves the Pokemon to the chosen Stadium (64 cartridge) box.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: いどうする > 64カセットのボックス showed ボックス1-4; ボックス1 moved フシギダネ out of
+ * the party (「いどう てもち -> 64 1」).
  */
 s32 LabPCList_UpdateStadiumBoxMenu(Ctx89103C54* arg0) {
     s32 ret = 0;
@@ -381,7 +385,11 @@ s32 func_8002057C(u8, u16);
 void func_800203FC(BattleMon*);
 void func_8910A764();
 /**
- * @unverified Name from Stadium 1, matched by code similarity.
+ * Uses a vitamin (HP Up, Protein, Iron, Carbos, Calcium; 0x23-0x27) or a Rare Candy (0x28) on the
+ * Pokemon and fills in the old and new values for the result message.
+ * Seen in play (2026-11-12) in いちらん: マックスアップ (HP Up) on フシギダネ showed HP 19 -> 20, and
+ * ふしぎなアメ showed レベル 5 -> 6 with the stats recomputed. After レポートしてやめる the Game Boy save
+ * had HP stat exp +0xA00, max HP 20 and one HP Up fewer.
  */
 void LabPCList_ApplyVitaminItem(u8** arg0, u8** arg1, Msg89103F04* arg2) {
     BattleMon* mon;
@@ -474,7 +482,7 @@ void func_8910A764(s32, u8*, s32, Msg891041D8*);
 
 /**
  * Uses a PP Up on move `arg2` of the Pokemon and writes the result message.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: ポイントアップ on フシギダネ, move slot 0, showed 「たいあたりのPP」 35 -> 42.
  */
 void LabPCList_ApplyPpUpItem(u8** arg0, s32 arg1, s32 arg2, Msg891041D8* arg3) {
     u8* ptr;
@@ -506,7 +514,8 @@ void LabPCList_ConsumeUsedTmItem(u8** arg0);
 
 /**
  * Teaches the TM or HM move `arg1` in move slot `arg2` (item ids from 0xC9 are TMs, below are HMs).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: わざマシン06 on フシギダネ ran this with slot 2, and どくどく (Toxic) then
+ * appeared as わざ3.
  */
 void LabPCList_TeachTmHmMove(u8** arg0, u8** arg1, s32 arg2) {
     u8* ptr;
@@ -594,7 +603,8 @@ s32 LabPCList_UpdateList(s8* arg0) {
  * Clears the first word of arg0 and initializes the sub-objects at offsets 4
  * and 0xB7E4 with LabPCList_InitListWindow(arg0 + 4, 0x26, 0x48, arg0 + 0xB7E4). What the
  * object is is not established.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): ran on entry, right before
+ * LabPCList_InitListWindow.
  */
 void LabPCList_InitScreen(void* arg0) {
     M2C_FIELD(arg0, s32*, 0) = 0;
@@ -877,7 +887,8 @@ s32 LabPCList_UpdateFade(s32);
  *      D_00235D70..D_00238BD0.
  *
  * Returns 0x8040.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): ran when いちらん was entered
+ * from the main menu, before LabPCList_InitScreen.
  */
 s32 LabPCList_Init(s32 arg0, s32 arg1) {
     main_pool_push_state('TERM');

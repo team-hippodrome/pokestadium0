@@ -658,9 +658,13 @@ extern u8* D_821CF29C;
 /**
  * Picks Recover or Softboiled, or Rest unless Rest was one of the last two moves,
  * when the COM is below 40% HP. Never heals when the last move was a healing
- * move, or when the damage taken last turn (0x72) is more than half the max HP
- * (healing would not keep up). Returns the move slot or -1.
- * @unverified Name and comment guessed from the code (COM AI pass).
+ * move, or when the value at 0x72 is more than half the max HP. Returns the move
+ * slot or -1.
+ * Seen in play (2026-11-12): COM's Gengar at 20/ 72 HP with Recover in slot 3 got
+ * slot 3 back, then ゲンのすけは じこさいせいを した！ and its HP rose to 56/ 72.
+ * 0x72 is not the damage this Pokémon took last turn: Gengar had not been hit, yet
+ * 0x72 held 52 (left over after a super-effective Poison Sting knocked out the
+ * Pinsir before it) and blocked the heal until it was cleared.
  */
 s32 BattleAi_PickHealingMove(u8 *arg0)
 {
@@ -1202,7 +1206,8 @@ s32 BattleAi_NoVenusaurChanseyJynxPicked(s32 arg0) {
 /**
  * Copies a zero-terminated list of up to four moves into a four-byte array,
  * padding with zeros.
- * @unverified Name and comment guessed from the code (COM AI pass).
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Transform.
  */
 void BattleAi_CopyMoveList(u8* arg0, u8* arg1) {
     s32 i;
@@ -1282,7 +1287,9 @@ extern s8 *D_821CF2A0;
  * record arg0: HP, status, last move, volatile state and stat stages. Moves and PP
  * are copied in full only when the opponent's flag bit 3 (0x4E) is set; otherwise
  * only the move just used is recorded.
- * @unverified Name and comment guessed from the code (COM AI pass).
+ * Seen in play (2026-11-12): after two turns, COM's record of 1P's Nidorino held HP 44 (the HUD
+ * showed 44/ 69) and only the two moves Nidorino had used, Poison Sting and Tail Whip, out of its
+ * four.
  */
 void BattleAi_CopyVisibleBattleState(s8 *arg0, s8 *arg1)
 {

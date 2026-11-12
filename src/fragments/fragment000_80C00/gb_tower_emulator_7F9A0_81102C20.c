@@ -599,7 +599,10 @@ extern u16 D_811223C0[];
  * 0x80|flags, x, y, font height (0x0A = font1, 0x0C = font2), palette index, length,
  * then ASCII characters mapped through sFont1GlyphTable/sFont2GlyphTable.
  * A zero byte ends the list.
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): opening the GB Tower menu (C-Up) passed the list 80 38 07 0C 0B 04 +
+ * 4 glyphs (メニュー), 80 20 1B 0C 0A 08 + 8 glyphs (ゲームをつづける), C0 03 59 0C 09 0A + 10 glyphs
+ * (このメニューをぬけて), matching flags, x, y, font height, palette, length and characters; the same glyph
+ * bytes repeat for the same kana (71 65 4C 3B = メニュー).
  */
 void GbEmu_DrawTextCommands(u16* fb, u8* cmd) {
     u8* ptr;
@@ -1099,7 +1102,9 @@ s32 GbPak_IdentifyCartridge(u8* arg0) {
  * For a cartridge with RAM bank 1 loaded, checks the Gen 1 main save: the player name at 0x598
  * must end in 0x50 within 6 bytes (else 11), and the byte after 0x598-0x1593 must be the inverted
  * sum (else 10). Returns 0 when the save is valid.
- * @unverified Name and comment from the code; no Transfer Pak was emulated.
+ * Seen in play (2026-11-12): starting GB from the main menu with a valid Pocket Monsters Green
+ * save ran this right after the cartridge RAM was read, and it returned 0. The game then booted
+ * (GAME FREAK logo).
  */
 s32 GbPak_CheckGen1SaveChecksum(s8* arg0) {
     s32 i;

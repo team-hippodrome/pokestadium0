@@ -93,7 +93,7 @@ extern u8 D_82199F3F;
 extern u8 D_82199F30;
 /**
  * Clear the incoming participant's temporary effects and the opponent's trapping lock.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12): ran on the same switch-in.
  */
 void Battle_ResetTransientRuntimeState(s32 arg0, s32 arg1) {
     BattleMonRuntime* sp1C = &sActivePokemon[arg0]->state.runtime;
@@ -172,7 +172,8 @@ void Battle_RandomizeDamage(void) {
 
 /**
  * Return which participant acts first using Quick Attack, Counter, Speed and a random tie break.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12): returned 1 (COM first) with Pinsir at Speed 50 against Nidorino, and
+ * Pinsir moved first; with Pinsir's Speed set to 1 it returned 0 and 1P moved first.
  */
 u16 Battle_DetermineMoveOrder(ActivePokemon* pokemon, ActivePokemon* other_pokemon) {
     BattleMonRuntime* runtime = &pokemon->state.runtime;
@@ -210,7 +211,8 @@ u16 Battle_DetermineMoveOrder(ActivePokemon* pokemon, ActivePokemon* other_pokem
 
 /**
  * Test membership in a byte array of the supplied length.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12): returned 0 for 0x28 (Poison Sting) in the two-byte list 0E 4A and in
+ * the five-byte list 60 69 75 78 85.
  */
 s32 IsByteInArray(u8 lookup, u8* array, s32 array_length) {
     while (array_length--) {

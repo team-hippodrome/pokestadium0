@@ -417,7 +417,7 @@ void LabTerminal_DrawMenuRow(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4,
 M2C_UNK func_80027804();
 /**
  * Sets up a terminal menu window with its rows and title.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in せいとん: ran on entry as the せいとん menu window appeared.
  */
 void LabTerminal_InitMenuWindow(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, char *arg5, s32 arg6, char *arg7, s32 arg8, char *arg9) {
 
@@ -496,7 +496,7 @@ void LabTerminal_InitMenuWindow(s32, s32, s32, s32, s32, char*, s32, char*, s32,
  * followed by 0x30, 0x5C, 0x170, 0xCE, D_8900A704, 3, D_8900A710, 3 and
  * D_890188F4. What LabTerminal_InitMenuWindow does (it is still assembly) and what the
  * arguments mean are not established.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-12) in せいとん: set up the first menu: ポケモンを いどうする, どうぐを いどうする, ボックスを いどうする.
  */
 void LabTerminal_InitMainMenu(s32 arg0) {
     LabTerminal_InitMenuWindow(arg0, 0x30, 0x5C, 0x170, 0xCE, D_8900A704, 3, D_8900A710, 3, D_890188F4);
@@ -726,7 +726,7 @@ s32 func_8900429C(s32);
  *      D_00235D70..D_00238BD0.
  *
  * Returns 0x8040.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-12) in せいとん: ran when せいとん was entered from the main menu.
  */
 s32 LabTerminal_Init(s32 arg0, s32 arg1) {
     main_pool_push_state('TERM');

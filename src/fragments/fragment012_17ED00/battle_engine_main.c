@@ -521,7 +521,9 @@ void BattleAi_SelectTeam(TeamRoster*, TeamRoster*, s32, u8*, s32);
  * Ask the COM selection routine for the picked prefix, then copy the brought
  * roster in that order. numberOfPokemonChosen keeps only the prefix length.
  * @src/fragments/battle_engine/battle_engine_com_decision_logic.c
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12): ran once when 1P confirmed its order for a COM free battle, before
+ * the first send-out; COM then brought Pinsir (カイのすけ), Gengar (ゲンのすけ) and Pikachu (ピカのすけ) in that
+ * order.
  */
 void Battle_SelectComRoster(void) {
     UNUSED s32 pad; // FAKE: stack padding

@@ -399,7 +399,8 @@ void BattleAnim_InitEffect28Overlay(Particle* arg0) {
 /**
  * Moves: Haze (use), Mist (use), Poison Gas (use), Smog (use), Smokescreen (use)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Mist, Smokescreen, Haze, Smog, Poison Gas.
  */
 void BattleAnim_RunGasAttack(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -1170,7 +1171,8 @@ void BattleAnim_InitEffects10And50Model(Particle* arg0) {
 /**
  * Moves: Rock Slide (hit), Rock Throw (hit), Strength (hit)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Strength, Rock Throw, Rock Slide.
  */
 void BattleAnim_RunFallingRock(s8 *arg0) {
     s16 temp_v0;
@@ -1402,7 +1404,8 @@ void BattleAnim_InitializeEggBombUse(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): Soft-Boiled used with 1P's HP lowered to 20 ran this as start effect
+ * 0x42.
  */
 void BattleAnim_InitializeSoftBoiledUse(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackInitModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 0xA, 0, 0x24, 0);
@@ -1507,7 +1510,8 @@ void BattleAnim_InitializeRazorWindUse(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Self-Destruct, Explosion.
  */
 void BattleAnim_RunBoomUseEffect1(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -1539,7 +1543,8 @@ void BattleAnim_CallbackStartEffects50And82ScalePulse_InitParticle(Particle* arg
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Self-Destruct, Explosion.
  */
 void BattleAnim_RunBoomUseEffect2(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -1563,7 +1568,8 @@ void BattleAnim_RunBoomUseEffect2(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Self-Destruct, Explosion.
  */
 void BattleAnim_SetupBoomUseEffect3(Particle* arg0) {
     UNUSED s16 pad; // FAKE: stack padding
@@ -1590,7 +1596,8 @@ void BattleAnim_SetupBoomUseEffect3(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Self-Destruct, Explosion.
  */
 void BattleAnim_RunBoomUseEffect3(s8 *arg0) {
     s16 temp_v0;
@@ -1626,7 +1633,8 @@ void BattleAnim_RunBoomUseEffect3(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Self-Destruct, Explosion.
  */
 void BattleAnim_SetupBoomUseEffect4(Particle* arg0) {
     UNUSED s32 pad[2]; // FAKE: stack padding
@@ -1646,7 +1654,8 @@ void BattleAnim_SetupBoomUseEffect4(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Self-Destruct, Explosion.
  */
 void BattleAnim_RunBoomUseEffect4(s8 *arg0) {
     s16 temp_v0;
@@ -1737,7 +1746,8 @@ void func_821588C0(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Self-Destruct, Explosion.
  */
 void BattleAnim_RunBoomUseEffect6(Particle* arg0) {
     s16 sp26 = Particle_FieldCE_GetS32_0C040(arg0);
@@ -1792,7 +1802,8 @@ void BattleAnim_RunBoomUseEffect6(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Self-Destruct, Explosion.
  */
 void BattleAnim_RunBoomHitEffect1(s8 *arg0) {
     s16 temp_v1;
@@ -1831,7 +1842,8 @@ void BattleAnim_RunBoomHitEffect1(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Self-Destruct, Explosion.
  */
 void BattleAnim_SetupBoomHitEffect2(Particle* arg0) {
     UNUSED s32 pad[2]; // FAKE: stack padding
@@ -1856,7 +1868,8 @@ void BattleAnim_SetupBoomHitEffect2(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Self-Destruct, Explosion.
  */
 void BattleAnim_RunBoomHitEffect2(s8 *arg0) {
     s16 temp_v0;
@@ -1890,7 +1903,8 @@ void BattleAnim_RunBoomHitEffect2(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Self-Destruct, Explosion.
  */
 void BattleAnim_SetupBoomHitEffect3(Particle* arg0) {
     UNUSED s32 pad[2]; // FAKE: stack padding
@@ -1917,7 +1931,8 @@ void BattleAnim_SetupBoomHitEffect3(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Self-Destruct, Explosion.
  */
 void BattleAnim_RunBoomHitEffect3(s8 *arg0) {
     s16 temp_v0;
@@ -2005,7 +2020,8 @@ void BattleAnim_TransformNop(UNUSED ActivePokemon* owner, UNUSED ActivePokemon* 
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Vise Grip, Guillotine, Bite, Clamp, Hyper Fang, Super Fang.
  */
 void BattleAnim_SetupBitingEffect(Particle* arg0) {
     s16 sp26 = Particle_FieldCF_GetS16_0C058(arg0);
@@ -2220,14 +2236,15 @@ void BattleAnim_InitializeDigBurrowUse(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): Dig's second turn, the attack out of the ground, ran this as start
+ * effect 0x34. The first turn uses 0x45 (BattleAnim_InitializeDigBurrowUse).
  */
 void BattleAnim_InitializeDigUse(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_InitializeParticleModel, &gDefaultParticleDescriptor, 0, 1, 0xA, 0, 0x16, 0);
 }
 
 /**
- * @unverified Name from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): Dig's second turn ran this as end effect 0x4E.
  */
 void BattleAnim_InitializeDigHit(void) {
     func_8213B560(0, &func_82152FB0, &D_8218E580, 0, 1, 0xA, 0, 0x1D, 0);
@@ -2487,7 +2504,8 @@ void Gfx_ParticlePaletteColorOnlyCallback(s32 arg0, arg1_func_84344CE8* arg1) {
 /**
  * Moves: Acid (use/hit), Lick (hit), Sludge (use/hit), Toxic (use/hit)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Acid, Lick, Sludge and Toxic.
  */
 s16 BattleAnim_GetSlimeVariantIndex(void) {
     s16 sp1E;
@@ -2683,7 +2701,8 @@ void BattleAnim_InitializeEarthquakeFissureUse(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Earthquake.
  */
 void BattleAnim_InitializeEarthquakeFissureHit(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(6, BattleAnim_InitializeParticleModel, &gDefaultParticleDescriptor, 0, 1, 0xA, 0, 4, 2);
@@ -2845,7 +2864,8 @@ void func_8215B83C(s8 *arg0) {
 
 /**
  * Used to make the overlays for mediate, night shade, and dream eater
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Meditate, Night Shade, Dream Eater.
  */
 void BattleAnim_RunPsychedelicOverlay(Particle* arg0) {
     u32 temp_v0 = Particle_FieldCD_GetU8_0C048(arg0);
@@ -3126,7 +3146,7 @@ void BattleAnim_InitializeDreamEaterUse(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): Dream Eater on a sleeping COM Pinsir ran this as end effect 0x3E.
  */
 void BattleAnim_InitializeDreamEaterHit(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunPsychedelicOverlay, &gDefaultParticleDescriptor, 0, 1, 0xC, 1, 0, 0);
@@ -3736,7 +3756,8 @@ void BattleAnim_InitializeFocusEnergyUse(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Rage.
  */
 void BattleAnim_InitializeBideRageUseSequence(void) {
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0x20, 6);
@@ -3756,7 +3777,8 @@ void BattleAnim_InitializeSkyAttackUse1(void) {
 }
 
 /**
- * @unverified Name from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): Sky Attack's second turn ran this as start effect 0x67. The charge
+ * turn uses 0x68.
  */
 void BattleAnim_InitializeSkyAttackUse2(void) {
     func_8213B644(0, 0x20, 6);
@@ -3767,7 +3789,7 @@ void BattleAnim_InitializeSkyAttackUse2(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): Sky Attack's second turn ran this as end effect 0x19.
  */
 void BattleAnim_InitializeSkyAttackHit(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackInitModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 9, 0, 0x13, 0);

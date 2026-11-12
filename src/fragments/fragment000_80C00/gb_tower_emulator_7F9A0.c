@@ -369,7 +369,8 @@ s32 GbPak_CheckTransferStatus(OSPfs*);
 /**
  * Reads (is_write == 0) or writes (is_write != 0) transferSize bytes of banked cartridge
  * RAM at gbAddress, selecting each 8 KB bank as it goes.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12): starting GB from the main menu ran this as a read (is_write 0) of
+ * cartridge RAM, just before GbPak_CheckGen1SaveChecksum checked the save; returned 0.
  */
 s32 GbPak_TransferBankedRam(u8* arg0, s32 arg1) {
     s32 temp_v0;

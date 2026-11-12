@@ -172,7 +172,8 @@ extern Gfx D_80073450[];
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 /**
  * Draws an IA image at (x, y) in strips with primitive alpha `alpha`.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) on the main menu: it drew the 0x60 x 0x40 item pictures at x 0x59
+ * (せいとん column) and 0x1C7 (いちらん column).
  */
 void MainMenu_DrawImageWithAlpha(s32 x, s32 y, s32 w, s32 h, s32 stride, u8* pixels, s32 alpha) {
     s32 rows;
@@ -919,7 +920,7 @@ extern s32 D_88002B20;
 
 /**
  * Frees the main menu state.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): ran once as the main menu was left for いちらん.
  */
 void MainMenu_Free(void) {
     func_80002DC0(D_88002B20);

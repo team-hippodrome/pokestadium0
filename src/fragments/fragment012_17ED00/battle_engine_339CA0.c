@@ -870,7 +870,8 @@ void func_821616BC(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Horn Attack, Poison Sting, Twineedle, Pin Missile, Peck, Spike Cannon.
  */
 void BattleAnim_SetupPointyMoveHitSparkChild(Particle* arg0) {
     Vec3s sp28;
@@ -905,7 +906,8 @@ void BattleAnim_SetupPointyMoveHitSparkChild(Particle* arg0) {
  * Moves: Horn Attack (hit), Horn Drill (hit), Peck (hit), Pin Missile (hit), Poison Sting (hit), Spike Cannon
  * (hit), Twineedle (hit)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Horn Attack, Poison Sting, Twineedle, Pin Missile, Peck, Spike Cannon.
  */
 void BattleAnim_RunPointyMoveHitSparkChild(s8 *arg0) {
     s16 temp_v0;
@@ -1102,7 +1104,8 @@ void BattleAnim_CallbackEndEffect52Descriptor42BurstChild(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Swift.
  */
 void BattleAnim_SetupSwiftHitEffect2(Particle* arg0) {
     BattleAnim_EmitParticleBurst(arg0, BattleAnim_CallbackEndEffect52Descriptor42BurstChild, &gBattleAnimParticleDescriptors[0x42], 0xC);
@@ -1110,7 +1113,8 @@ void BattleAnim_SetupSwiftHitEffect2(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Swift.
  */
 void BattleAnim_RunSwiftHitEffect2(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -1640,7 +1644,8 @@ void BattleAnim_RunStrongPurpleHitSmoke(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Horn Attack, Poison Sting, Twineedle, Pin Missile, Peck, Spike Cannon.
  */
 void BattleAnim_SetupPointyMoveHitSpark(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
@@ -1672,7 +1677,8 @@ void BattleAnim_SetupPointyMoveHitSpark(Particle* arg0) {
  * Moves: Horn Attack (hit), Horn Drill (hit), Peck (hit), Pin Missile (hit), Poison Sting (hit), Spike Cannon
  * (hit), Twineedle (hit)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Horn Attack, Poison Sting, Twineedle, Pin Missile, Peck, Spike Cannon.
  */
 s32 BattleAnim_RunPointyMoveHitSpark(Particle* arg0) {
     switch (arg0->lifecycle) {

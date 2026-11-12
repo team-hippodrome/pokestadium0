@@ -48,10 +48,10 @@ void BattleAnim_EffectEndNop(void);
 s32 Battle_CheckForDisobedience(void);
 s32 Battle_CheckFaintAfterMove(void);
 
-void Battle_CheckDefeatAtStatusHp(ActivePokemon* arg0);
+void Battle_CheckAllBroughtFainted_PoisonBurn(ActivePokemon* arg0);
 void Battle_CheckAllBroughtFainted_Status(ActivePokemon* arg0);
-void Battle_CheckAllBroughtFainted_PP(ActivePokemon* arg0);
-void Battle_CheckAllBroughtFainted_Level(ActivePokemon* arg0);
+void Battle_CheckAllBroughtFainted_PendingHp(ActivePokemon* arg0);
+void Battle_CheckAllBroughtFainted_Hp(ActivePokemon* arg0);
 
 void BattleAnim_EffectEndNop(void) {
 }
@@ -67,7 +67,8 @@ extern s8 *D_8219A5A0;
 /**
  * Mirror Move: copies the target's last move into the user (fails when it is
  * Mirror Move or none). Name from Stadium 1.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Mirror Move.
  */
 s32 Battle_TryLoadFollowupMoveFromTarget(void) {
     u8 temp_v0;
@@ -131,7 +132,8 @@ extern u8 D_82199F3F;
  * retail code. BattleCalc_ApplyTypeEffectAndStab walks the same table. Stadium 1's equivalent is
  * Battle_ApplyTypeEffectAndSTAB, which has extra Struggle and effectiveness
  * counting logic that this version does not.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-12): took the Poison Sting damage from 4 to 12: same-type bonus to 6
+ * (flag 0x80), then 20/10 for Poison against Bug (flags 0x94); the game then showed こうかは ばつぐんだ！
  */
 void Battle_ApplyTypeEffectAndSTAB(void) {
     TypeEffectivenessEntry* entry;
@@ -208,7 +210,8 @@ u8 Battle_Random(void);
 /**
  * Gen 1 critical-hit roll from the species' base speed (halved, or doubled
  * without Focus Energy, capped at 255). Name from Stadium 1.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): with Battle_Random forced to 2 for this call only it returned 1, and
+ * the battle showed きゅうしょに あたった！ (A critical hit!) for Nidorino's Poison Sting.
  */
 s32 Battle_CheckCriticalHit(void) {
     UNUSED s32 pad; // FAKE: stack padding
@@ -459,7 +462,9 @@ void Battle_RandomizeDamage(void);
 /**
  * Resolves the current action: move selection, hit and damage checks, then
  * effect dispatch. Name from Stadium 1's ProcessBattleTurn.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): resolved 1P's Poison Sting at commit: the move cache load,
+ * Battle_CheckCriticalHit, Battle_CalcDamage, Battle_ApplyTypeEffectAndSTAB and the effect
+ * dispatch all ran inside it.
  */
 void ProcessBattleTurn(void) {
     s8 sp2C[12];
@@ -607,7 +612,8 @@ void func_8210F730(ActivePokemon*);
 extern s32 D_8218C710;
 /**
  * Mark fainting, clear continuation state and remove temporary effects from the opponent.
- * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Self-Destruct, Explosion.
  */
 void Battle_HandleFaint(ActivePokemon* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
@@ -643,10 +649,14 @@ void Battle_HandleFaint(ActivePokemon* arg0) {
 }
 
 /**
- * Test remaining roster HP using the active Pokemon's staged HP value for this checkpoint.
- * @unverified Name and comment from Stadium 1.
+ * Runs when the acting Pokemon's poison or burn damage this turn leaves it at 0 HP
+ * (hpAfterPoisonBurn). Sums the side's remaining HP with that value for the active
+ * Pokemon: 0 ends the battle (state 0x12), otherwise the faint is handled.
+ * Seen in play (2026-11-12): COM's poisoned Gengar at 3/ 72 HP ran this at turn commit
+ * with hpAfterPoisonBurn 0; then 「ゲンのすけは どく」, it fainted, and COM sent out Pikachu.
+ * Renamed from Battle_CheckDefeatAtStatusHp.
  */
-void Battle_CheckDefeatAtStatusHp(ActivePokemon* arg0) {
+void Battle_CheckAllBroughtFainted_PoisonBurn(ActivePokemon* arg0) {
     ActivePokemonState* ptr1 = &arg0->state;
     BattleMon* temp_v0;
     s32 i;
@@ -654,7 +664,7 @@ void Battle_CheckDefeatAtStatusHp(ActivePokemon* arg0) {
 
     for (i = 0; i < BattleScene_GetTeamMemberTeamSize(arg0); i++) {
         if (i == ptr1->rosterIndex) {
-            var_s2 += arg0->state.runtime.unk_0E;
+            var_s2 += arg0->state.runtime.hpAfterPoisonBurn;
         } else {
             temp_v0 = &arg0->teamRoster->pokemonPicked[i];
             var_s2 += temp_v0->hp;
@@ -710,9 +720,12 @@ void Battle_CheckAllBroughtFainted_Status(ActivePokemon* arg0) {
 }
 
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Like Battle_CheckAllBroughtFainted_Hp, but sums the active Pokemon's pendingHp (runtime
+ * +0x12). Battle_CheckFaintAfterMove calls it when both HP values are nonzero but the
+ * user's pendingHp is 0. Renamed from Battle_CheckAllBroughtFainted_PP: it reads HP, not PP.
+ * @unverified Renamed from the code; never ran in play.
  */
-void Battle_CheckAllBroughtFainted_PP(ActivePokemon* arg0) {
+void Battle_CheckAllBroughtFainted_PendingHp(ActivePokemon* arg0) {
     ActivePokemonState* ptr1 = &arg0->state;
     BattleMon* temp_v0;
     s32 i;
@@ -743,9 +756,13 @@ void Battle_CheckAllBroughtFainted_PP(ActivePokemon* arg0) {
 }
 
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Runs when a Pokemon's HP is 0 after a move. Sums the side's remaining HP: 0 ends the
+ * battle (state 0x12), otherwise the faint is handled.
+ * Seen in play (2026-11-12): ran for COM's Pinsir when 1P's Poison Sting knocked it out, and
+ * in the per-move sweep only for Explosion and Selfdestruct (the user fainting). Renamed from
+ * Battle_CheckAllBroughtFainted_Level: it reads the HP field, not the level.
  */
-void Battle_CheckAllBroughtFainted_Level(ActivePokemon* arg0) {
+void Battle_CheckAllBroughtFainted_Hp(ActivePokemon* arg0) {
     ActivePokemonState* ptr1 = &arg0->state;
     BattleMon* temp_v0;
     s32 i;
@@ -787,7 +804,7 @@ s32 Battle_CheckSideDefeatAfterResidualStatus(ActivePokemon* arg0) {
 
     if (arg0->state.runtime.pendingStatusCondition & 0x18) {
         var_s2 = 0;
-        if (arg0->state.runtime.unk_0E == 0) {
+        if (arg0->state.runtime.hpAfterPoisonBurn == 0) {
             for (i = 0; i < BattleScene_GetTeamMemberTeamSize(arg0); i++) {
                 temp_v0 = &arg0->teamRoster->pokemonPicked[i];
                 var_s2 += temp_v0->hp;
@@ -813,23 +830,25 @@ s32 Battle_CheckSideDefeatAfterResidualStatus(ActivePokemon* arg0) {
 
 /**
  * Select the appropriate roster-HP defeat check for direct damage and residual checkpoints.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12): in a turn where 1P's Poison Sting went first, it ran after the
+ * action resolved. When Pinsir dropped to 0 HP it led to Battle_CheckAllBroughtFainted_Hp, and
+ * when poison took Gengar to 0 it led to Battle_CheckAllBroughtFainted_PoisonBurn.
  */
 s32 Battle_CheckFaintAfterMove(void) {
     if (sBattleTarget->hp == 0) {
-        Battle_CheckAllBroughtFainted_Level(sActivePokemon[!sBattleScene.scene->actingSide]);
+        Battle_CheckAllBroughtFainted_Hp(sActivePokemon[!sBattleScene.scene->actingSide]);
     }
 
     if (sBattleUser->hp == 0) {
-        Battle_CheckAllBroughtFainted_Level(sActivePokemon[sBattleScene.scene->actingSide]);
+        Battle_CheckAllBroughtFainted_Hp(sActivePokemon[sBattleScene.scene->actingSide]);
     }
 
     if ((sBattleUser->hp != 0) && (sBattleTarget->hp != 0) && (sBattleUser->pendingHp == 0)) {
-        Battle_CheckAllBroughtFainted_PP(sActivePokemon[sBattleScene.scene->actingSide]);
+        Battle_CheckAllBroughtFainted_PendingHp(sActivePokemon[sBattleScene.scene->actingSide]);
         return 0;
     } else if ((sBattleUser->hp != 0) && (sBattleTarget->hp != 0) && (sBattleUser->pendingStatusCondition & 0x18) &&
-               (sBattleUser->unk_0E == 0)) {
-        Battle_CheckDefeatAtStatusHp(sActivePokemon[sBattleScene.scene->actingSide]);
+               (sBattleUser->hpAfterPoisonBurn == 0)) {
+        Battle_CheckAllBroughtFainted_PoisonBurn(sActivePokemon[sBattleScene.scene->actingSide]);
         return 0;
     } else if ((sBattleUser->hp != 0) && (sBattleTarget->hp != 0) && (sBattleUser->volatileStatusFlags & 0x80) &&
                (sBattleUser->unk_10 == 0)) {
@@ -843,7 +862,9 @@ void func_8210F2F4(ActivePokemon*);
 void ProcessBattleTurn(void);
 /**
  * Initialize one action's shared state, resolve its turn and residuals, then check defeat.
- * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ * Seen in play (2026-11-12): at commit of a Poison Sting turn it called ProcessBattleTurn,
+ * Battle_ApplyResidualEffects and Battle_CheckFaintAfterMove in that order (return addresses
+ * 0x80128868, 0x80128870, 0x801288A8 in its body).
  */
 void Battle_ResolveMonAction(void)
 {
@@ -874,8 +895,8 @@ void Battle_ResolveMonAction(void)
     ProcessBattleTurn();
     sBattleUser->hp = 900;
     sBattleTarget->hp = 900;
-    sBattleUser->unk_0E = 0x384;
-    sBattleTarget->unk_0E = 0x384;
+    sBattleUser->hpAfterPoisonBurn = 900;
+    sBattleTarget->hpAfterPoisonBurn = 900;
     sBattleUser->unk_10 = 0x384;
     sBattleTarget->unk_10 = 0x384;
     func_8210F2F4(sActivePokemon[0]);
@@ -891,8 +912,8 @@ void Battle_ResolveMonAction(void)
     }
     ((BattleMonRuntime *) D_8219A3C0)->hp = 0x384; // FAKE: alias of sBattleUser via s8* symbol
     ((BattleMonRuntime *) D_8219A3C4)->hp = 0x384; // FAKE: alias of sBattleTarget
-    ((BattleMonRuntime *) D_8219A3C0)->unk_0E = 0x384; // FAKE
-    ((BattleMonRuntime *) D_8219A3C4)->unk_0E = 0x384; // FAKE
+    ((BattleMonRuntime *) D_8219A3C0)->hpAfterPoisonBurn = 0x384; // FAKE
+    ((BattleMonRuntime *) D_8219A3C4)->hpAfterPoisonBurn = 0x384; // FAKE
     ((BattleMonRuntime *) D_8219A3C0)->unk_10 = 0x384; // FAKE
     ((BattleMonRuntime *) D_8219A3C4)->unk_10 = 0x384; // FAKE
     func_8210F2F4(sActivePokemon[0]);
@@ -914,7 +935,8 @@ void Battle_ResolveMonAction(void)
 
 /**
  * Initialize an entering participant's runtime and clear its transient battle state.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12): ran when 1P switched Nidorino (ニドニド) out for Onix (イワワ), which
+ * entered with full HP 49/ 49.
  */
 void BeginBattleForEntity(ActivePokemon* arg0) {
     ActivePokemonState* sp24;

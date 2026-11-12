@@ -154,7 +154,8 @@ void Battle_Effect_DrainHP(void) {
 
 /**
  * Faint the user of Explosion/Self-Destruct and clear its major status and Leech Seed.
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Self-Destruct, Explosion.
  */
 void BattleEffect_Explosion(void) {
     sBattleScene.scene->moveEffectKind = 0x1E;

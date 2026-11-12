@@ -130,7 +130,7 @@ void ScrollList_DrawItems(s8*, s32, s32, s32, s8*);
 void LabPCList_DrawDetailColumns(s8*, s32, s32, s32);
 void func_89105E70(s8*, s32);
 void LabPCList_DrawPopupMenu(s8*, s32);
-void PcSort_DrawEmptyLabel(s8*);
+void LabPCList_DrawLevelInputWindow(s8*);
 void LabPCList_DrawTypeFilter(s8*);
 void LabPCList_DrawMoveFilter(s8*);
 void TextBox_Draw(s8*);
@@ -195,7 +195,7 @@ void LabPCList_DrawListScreen(s8* arg0) {
             LabPCList_DrawPopupMenu(arg0 + 0x9654, 2);
             break;
         case 4:
-            PcSort_DrawEmptyLabel(arg0 + 0x9830);
+            LabPCList_DrawLevelInputWindow(arg0 + 0x9830);
             break;
         case 5:
             LabPCList_DrawTypeFilter(arg0 + 0x9920);
@@ -229,7 +229,8 @@ void LabPCList_DrawListScreen(s8* arg0) {
 
 /**
  * Returns whether any of filter flags `arg1` is active.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: opening レベルをきめてあつめる called this with 1; it returned 0 with
+ * no level filter, and 1 once 006から100 had been applied (かいじょ is then usable).
  */
 s32 LabPCList_HasFilterFlag(s8 *arg0, s32 arg1) {
     return (M2C_FIELD(arg0, s32 *, 0x7C) & arg1) != 0;
@@ -237,7 +238,8 @@ s32 LabPCList_HasFilterFlag(s8 *arg0, s32 arg1) {
 
 /**
  * Turns on filter flags `arg1`.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: choosing どく in タイプであつめる and pressing あつめる called this with
+ * 2, the flag word at +0x7C went 0 -> 2, and the list then showed only フシギダネ.
  */
 void LabPCList_SetFilterFlag(s8 *arg0, s32 arg1) {
     M2C_FIELD(arg0, s32 *, 0x7C) = (s32) (M2C_FIELD(arg0, s32 *, 0x7C) | arg1);
@@ -245,7 +247,8 @@ void LabPCList_SetFilterFlag(s8 *arg0, s32 arg1) {
 
 /**
  * Turns off filter flags `arg1`.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: pressing かいじょ in タイプであつめる called this with 2, the flag word
+ * at +0x7C went 2 -> 0, and all three party Pokémon came back.
  */
 void LabPCList_ClearFilterFlag(s8 *arg0, M2C_UNK arg1) {
     M2C_FIELD(arg0, s32 *, 0x7C) = (s32) (M2C_FIELD(arg0, s32 *, 0x7C) & ~arg1);
@@ -253,7 +256,7 @@ void LabPCList_ClearFilterFlag(s8 *arg0, M2C_UNK arg1) {
 
 /**
  * Turns off every filter flag.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: すべてのせんたくをやめる took the flag word from 0x20 to 0.
  */
 void LabPCList_ClearFilterFlags(s8 *arg0) {
     M2C_FIELD(arg0, s32 *, 0x7C) = 0;
@@ -262,7 +265,8 @@ void LabPCList_ClearFilterFlags(s8 *arg0) {
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 /**
  * Toggles filter flags `arg1` and returns whether they are now on.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: バトルようのポケモンをあつめる called this with 0x20; the flag word went 0
+ * -> 0x20 and it returned 0x20 (on). The menu entry then read バトルようのポケモンをかいじょする.
  */
 s32 LabPCList_ToggleFilterFlag(s8 *arg0, s32 arg1)
 {
@@ -302,7 +306,8 @@ s32 func_89109898();
 s32 func_89109960();
 /**
  * Rebuilds the visible list from the source boxes using the active filter flags.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): ran when OK was pressed on
+ * 「どこのポケモンを いちらん するか」 with てもち chosen, and the list then showed the three party Pokémon.
  */
 M2C_UNK LabPCList_ApplyFiltersAndSort(Ctx89101D94* arg0) {
     ScrollList_SetItems(&arg0->unkB160, arg0->unk9648, arg0->unkB1A4);
@@ -426,7 +431,8 @@ extern s8 D_8910E312[];
 
 /**
  * Builds the "<species>をあつめる / をかいじょする" (gather / ungather) prompt for the selected Pokemon.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): A on フシギダネ built the popup's
+ * first row, 「フシギダネをあつめる」.
  */
 void LabPCList_FormatGatherPrompt(s8* arg0) {
     func_8000A460(D_8910E2D0, *(s8**)D_80064C44[M2C_FIELD(M2C_FIELD(arg0, s8****, 0xB160)[0][M2C_FIELD(arg0, s32*, 0xB168)], u8*, 8)]);
@@ -535,7 +541,8 @@ extern u8 D_8910A8C8[];
 extern s8 D_8910E358[];
 /**
  * Sets up the sort menu: by name, by number, gather battle Pokemon, clear selections, choose what to list.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: A on the ポケモン header opened the menu アイウエオじゅんにならべる,
+ * ポケモンばんごうでならべる, バトルようのポケモンをあつめる, すべてのせんたくをやめる, いちらんするポケモンをえらぶ.
  */
 void LabPCList_InitSortMenu(Screen891024A4 *arg0) {
     func_8000A460(D_8910E358, D_8910A8B0);
@@ -567,7 +574,8 @@ s32 func_8002B390(s32*);
 
 /**
  * Handles input while the cursor is on the header buttons.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: R moved the focus to the column headers, and D-Left/D-Right
+ * moved the highlight between ニックネーム, ID, おや and ばしょ while this ran.
  */
 s32 LabPCList_UpdateHeaderCursor(Ctx891025D8* arg0) {
     s32 ret = 0;
@@ -605,7 +613,8 @@ s32 LabPCList_UpdateHeaderCursor(Ctx891025D8* arg0) {
 
 /**
  * Browse state: list or header input, C-Left/C-Right change the detail page, L/R move the focus.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): was running while browsing;
+ * C-Right turned the detail page from ページおくり1/3 to 2/3 (the move columns).
  */
 s32 LabPCList_UpdateBrowse(Ctx89100294* arg0) {
     s32 done = FALSE;
@@ -735,7 +744,8 @@ extern s32 D_8910E37C;
 
 /**
  * Writes the changed boxes back to the save.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: ran on レポートしてやめる (B after an item was used, 「ないようが
+ * へんこうされています」), and the Game Boy save on the Transfer Pak then held the changed party and bag.
  */
 void LabPCList_SaveChanges(s32 arg0) {
     s32 sp1C;

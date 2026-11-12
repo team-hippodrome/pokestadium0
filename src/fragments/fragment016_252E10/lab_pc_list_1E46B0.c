@@ -237,7 +237,8 @@ s32 func_89109580(unk_func_8830867C_02C_0CC* arg0, unk_func_8830867C_02C_0CC* ar
 }
 
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Seen in play (2026-11-12) in いちらん: ran when the list was sorted from the おや (OT) column's
+ * popup.
  */
 s32 LabPCList_CompareByOtName(unk_func_88316128* arg0, unk_func_88316128* arg1) {
     s32 var_v0;

@@ -125,7 +125,9 @@ extern u16 D_82199F54;
 extern u16 D_82199F58;
 /**
  * Calculate base damage, halving defense for boom moves and delegating OHKO success.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12): for Nidorino's Poison Sting (level 20, Attack 43, power 15) against
+ * Pinsir (Defense 62) it set sBattleDamage to 4, which is the Gen 1 base damage
+ * ((20*2/5+2)*15*43/62)/50+2.
  */
 s32 Battle_CalcDamage(void) {
     s32 temp_v0 = sBattleUser->moveCache.effect;
@@ -161,7 +163,7 @@ extern s32 D_8218C7B4;
 void ActivePokemon_SetStateFlags(ActivePokemon*, s32);
 /**
  * Subtract damage from Substitute or target HP and update the associated continuation state.
- * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ * Seen in play (2026-11-12): took Pinsir from 75 to 65 HP with sBattleDamage 10.
  */
 void Battle_ApplyDamage(void) {
     BattleMonRuntime* target = sBattleTarget;
@@ -281,7 +283,7 @@ void BattleMessage_PrintUsedMove(void) {
 
 /**
  * Spend PP unless the active continuation suppresses it; update stored PP outside Transform.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12): 1P's Poison Sting went from 35 to 34 PP across this call.
  */
 void Battle_DecrementPP(s32 arg0) {
     BattleMonRuntime* temp_v0;
@@ -408,7 +410,8 @@ void ActivePokemon_CommitPendingStatus(ActivePokemon* arg0) {
 
 /**
  * Quarter modified Speed when paralyzed, retaining a minimum of one.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12): after 1P's Thunder Wave paralysed COM's Pinsir (status byte 0x40),
+ * it cut Pinsir's modified Speed from 50 to 12; an earlier call with status 0 left it at 50.
  */
 void ApplyParalysisSpeedCut(ActivePokemon* arg0) {
     BattleMonRuntime* temp_v0 = &arg0->state.runtime;
@@ -423,7 +426,8 @@ void ApplyParalysisSpeedCut(ActivePokemon* arg0) {
 
 /**
  * Halve modified Attack when burned, retaining a minimum of one.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12): with COM's Pinsir burned (status byte 0x10) it cut Pinsir's modified
+ * Attack from 71 to 35.
  */
 void ApplyBurnAttackCut(ActivePokemon* arg0) {
     BattleMonRuntime* temp_v0 = &arg0->state.runtime;
@@ -441,7 +445,8 @@ void func_80041940(s32, s32, s32);
 
 /**
  * Populate runtime species, HP, types, moves, stats and neutral stages from the selected roster.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12): filled Onix's runtime state on the switch-in; the HUD then showed
+ * イワワ L20 ふつう 49/ 49.
  */
 void Battle_InitPokemonRuntimeState(ActivePokemon* arg0) {
     ActivePokemonState* sp28;
@@ -570,7 +575,8 @@ void func_82110FB8(void) {
 
 /**
  * Load all six cached move-data bytes for usedMove; no animation is executed here.
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): for 1P's Poison Sting it filled the cache with 28 02 0F 03 FF 23:
+ * move 40, effect 2 (may poison), power 15, type 3 (Poison), accuracy 255, 35 PP.
  */
 void Battle_LoadMoveCache(void) {
     sBattleUser->moveCache.lastMove = gMoveData[sBattleUser->usedMove - 1].moveId;
@@ -790,15 +796,16 @@ s32 Battle_Effect_Metronome(void) {
 
 /**
  * Stage poison/burn HP loss, scaling it by the Toxic counter when active.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Fire Punch, Poison Sting, Twineedle, Flamethrower, Poison Powder, Toxic, Smog, Fire Blast.
  */
 void Battle_ApplyPoisonOrBurnDamage(void) {
     u16 var_a0;
 
     if (sBattleUser->pendingHp != 0xFFFF) {
-        sBattleUser->unk_0E = sBattleUser->pendingHp;
+        sBattleUser->hpAfterPoisonBurn = sBattleUser->pendingHp;
     } else {
-        sBattleUser->unk_0E = sBattleUser->hp;
+        sBattleUser->hpAfterPoisonBurn = sBattleUser->hp;
     }
 
     var_a0 = (sBattleUser->maxHp >> 4) & 0xFFFF;
@@ -811,13 +818,13 @@ void Battle_ApplyPoisonOrBurnDamage(void) {
         var_a0 *= sBattleUser->toxicCounter;
     }
 
-    if (sBattleUser->unk_0E < var_a0) {
-        sBattleUser->unk_0E = 0;
+    if (sBattleUser->hpAfterPoisonBurn < var_a0) {
+        sBattleUser->hpAfterPoisonBurn = 0;
     } else {
-        sBattleUser->unk_0E -= var_a0;
+        sBattleUser->hpAfterPoisonBurn -= var_a0;
     }
 
-    sBattleUser->unk_10 = sBattleUser->unk_0E;
+    sBattleUser->unk_10 = sBattleUser->hpAfterPoisonBurn;
 }
 
 /**
@@ -890,7 +897,7 @@ s32 Battle_ApplyResidualEffects(void) {
             BattleMessage_Format(D_8219A520 + 0x248, 1, D_8218C708, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]));
         }
         Battle_ApplyPoisonOrBurnDamage();
-        sBattleTarget->unk_0E = sBattleTarget->hp;
+        sBattleTarget->hpAfterPoisonBurn = sBattleTarget->hp;
     }
 
     if (sBattleUser->volatileStatusFlags & 0x80) {

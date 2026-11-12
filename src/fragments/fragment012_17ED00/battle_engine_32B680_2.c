@@ -102,7 +102,8 @@ void BattleAnim_DrawAsset76Ia8FrameWithAsset77I4Overlay(Particle* arg0, CameraNo
 
 /**
  * Draw the flames when being *hit* by Flamethrower or dragon rage
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Flamethrower, Dragon Rage.
  */
 void BattleAnim_DrawFlameHit(Particle* arg0, CameraNode* arg1) {
     gSPDisplayList(gDisplayListHead++, D_821904C8);
@@ -136,7 +137,8 @@ void BattleAnim_DrawAsset1FAnimatedI4WithAsset20DisplayList(Particle* arg0, Came
 
 /**
  * Raws the rocks that spawn out of the tunnel when pokemon other than diglett and dugtrio use dig
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Dig.
  */
 s32 BattleAnim_DrawDigRocks(Particle* arg0, UNUSED CameraNode* arg1) {
     ParticleGfx_PushTransformMatrix(arg0->worldPosition, arg0->rotation, arg0->scale);
@@ -180,7 +182,8 @@ void BattleAnim_DrawAssets27And28LayeredI4QuadVariantB(Particle* arg0, UNUSED Ca
 
 /**
  * Draw the lightest mist for mist/smoke moves (Mist, Smokescreen, Haze, Smog, Poison Gas)
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Haze, Mist, Poison Gas, Smog and Smokescreen.
  */
 void BattleAnim_DrawMistLightest(Particle* arg0, UNUSED CameraNode* arg1) {
     ParticleGfx_Push2DTransform(arg0->worldPosition.x, arg0->worldPosition.y, arg0->rotation.z, arg0->scale);

@@ -209,7 +209,8 @@ void BattleAnim_InitializeSubmissionHit(void) {
 /**
  * Moves: Bite (hit), Clamp (hit), Guillotine (hit), Hyper Fang (hit), Super Fang (hit), Vice Grip (hit)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Vise Grip, Bite, Clamp, Hyper Fang, Super Fang.
  */
 void BattleAnim_InitializeBitingMoveEndEffect(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunStrongPurpleHitSmoke, &gBattleAnimParticleDescriptors[0x34], 0, 7, 0xA, 0, 0xB, 0);
@@ -546,7 +547,8 @@ void BattleAnim_InitializeBodySlamUse(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Earthquake.
  */
 void BattleAnim_InitializeEarthquakeFissureHitSequence(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(4, BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E580[0x4A], 0, 8, 0xA, 0, 0x33, 1);
@@ -597,7 +599,8 @@ void BattleAnim_InitializeSubstituteTransformUse(void) {
 /**
  * Moves: Conversion (use), Mimic (use), Recover (use), Sky Attack (use), Solar Beam (use)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Solar Beam, Mimic, Metronome, Sky Attack, Conversion.
  */
 void BattleAnim_InitializeQiCharge(s32 arg0) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 1, 4, BattleAnim_CallbackStartEffects29And60And104And110DefaultDescriptorBurstEmitter, &gDefaultParticleDescriptor, 0, 1, 2, 0, arg0, 0);

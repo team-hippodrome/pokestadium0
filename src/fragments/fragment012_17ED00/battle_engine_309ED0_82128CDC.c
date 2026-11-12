@@ -24,7 +24,8 @@ void func_82105FCC(s32);
  * Step 0 of an action phase (2 or 3). Starts a switch instead when the action is one
  * (BattleScene_TryStartSwitchAction), otherwise runs the user's intro camera variant from the
  * per-move table at D_80073D84 (every move uses variant 5 outside mode 10).
- * @unverified Name and comment from the code and the D_80073D84 table read in game.
+ * Seen in play (2026-11-12): in a turn where 1P's Poison Sting went first, it ran at phase 2,
+ * step 0, and called BattleScene_TryStartSwitchAction.
  */
 void BattleScene_ActionStepIntro(CameraNode* arg0, s32 arg1) {
     s8* sp1C = (s8*)D_8219A544 + 0x78C;
@@ -93,7 +94,8 @@ void func_82128E34(s32 arg0) {
 /**
  * Step 1 of an action phase: copies sMultihitCount into the hit counters, then enters the effect
  * phase for moves that skip the attack animation (BattleScene_TryEnterEffectPhaseBeforeLaunch).
- * @unverified Name and comment from the code.
+ * Seen in play (2026-11-12): in a turn where 1P's Poison Sting went first, it ran at phase 2,
+ * step 1.
  */
 void BattleScene_ActionStepSetHitCount(CameraNode* arg0, s32 arg1) {
     BattleScene* scene;
@@ -434,7 +436,8 @@ extern s32 D_8219A568;
 /**
  * Step 2 of an action phase: runs the move-use camera variant (table column 2 of D_80073D84; 10
  * for multi-hit moves, 11 for the confusion self-hit).
- * @unverified Name and comment from the code and the D_80073D84 table read in game.
+ * Seen in play (2026-11-12): in a turn where 1P's Poison Sting went first, it ran at phase 2,
+ * step 2, as the move-use shot began.
  */
 void BattleScene_ActionStepUseMove(CameraNode* arg0, s32 arg1) {
     s32 temp = M2C_FIELD(D_8219A5A0, s32*, 0x48);

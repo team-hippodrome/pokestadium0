@@ -233,7 +233,7 @@ u32 func_800566BC(const char*);
 
 /**
  * Draws a move name in its type color, or the empty label for -2.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in せいとん: drew ハナ's moves たいあたり and なきごえ beside its stats in ポケモンのせいり.
  */
 void PcBox_DrawMoveName(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     Entry8006A9D4* entry;

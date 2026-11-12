@@ -109,15 +109,16 @@ void BattleAnim_InitParticleSystem(void) {
 
 /**
  * Initialize lifecycle, motion parameters, rotation, timers, and white colors without clearing the entire allocation.
- * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ * Seen in play (2026-11-12) during Flamethrower: ran on each newly allocated slot before
+ * Particle_Alloc returned it.
  */
 void Particle_ResetDefaults(Particle* arg0) {
     Particle_InitLifecycle(arg0);
     Particle_SetPosition(arg0, 0.0f, 0.0f, 0.0f);
     Particle_SetOrigin(arg0, 0.0f, 0.0f, 0.0f);
-    Particle_SetVelocity(arg0, 0.0f, 0.0f, 0.0f);
+    Particle_SetMotionOffset(arg0, 0.0f, 0.0f, 0.0f);
     Particle_SetVelocityTarget(arg0, 0.0f, 0.0f, 0.0f);
-    Particle_SetVelocityImpulse(arg0, 0.0f, 0.0f, 0.0f);
+    Particle_SetMotionStep(arg0, 0.0f, 0.0f, 0.0f);
     Particle_Field74_SetScaled_0AD8C(arg0, 0.0f);
     Particle_Field78_SetScaled_0ADA4(arg0, 0.0f);
     Particle_SetRotation(arg0, 0, 0, 0);
@@ -139,7 +140,9 @@ void Particle_ResetDefaults(Particle* arg0) {
 
 /**
  * Search the 300-slot pool from the rolling index, initialize a free slot, or return (Particle*)-1.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12) during Flamethrower: successive calls returned consecutive pool slots
+ * 0x802993A0, 0x80299470 and 0x80299540, 0xD0 apart (the Particle size). Each one went through
+ * Particle_ResetDefaults first.
  */
 Particle* Particle_Alloc(void) {
     s32 i;
@@ -236,7 +239,8 @@ void BattleAnim_FreeEffectSlot(BattleAnimEffectSlot* arg0) {
 
 /**
  * Allocate one particle using the shared pool allocator.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12) during Flamethrower: returned the slot from Particle_Alloc
+ * (0x802993A0, 0x80299470, 0x80299540).
  */
 Particle* Particle_New(void) {
     return Particle_Alloc();
@@ -620,7 +624,8 @@ typedef void (*ParticleDrawFn2)(Particle*, s32);
 typedef void (*ParticleDrawFnCam)(Particle*, CameraNode*);
 /**
  * For kind 1, optionally run per-particle setup then draw; kind 3 calls the direct render callback.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12) during Flamethrower: ran each frame for the three newly allocated
+ * particles.
  */
 void Particle_DispatchDraw(Particle* arg0, CameraNode* arg1) {
     s8* desc = (s8*)arg0->descriptor;

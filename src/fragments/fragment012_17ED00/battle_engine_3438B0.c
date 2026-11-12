@@ -327,7 +327,8 @@ void BattleScene_ReactionSideEffect(CameraNode* arg0, void* arg1) {
  * Step 4 of an action phase: commits the target's pending status and runs the target reaction for
  * hitReactionKind (0 normal, 1 last hit of a multi-hit move, 2 critical hit or OHKO, 3 side
  * effect).
- * @unverified Name and comment from the code.
+ * Seen in play (2026-11-12): in a turn where 1P's Poison Sting went first, it ran at phase 2,
+ * step 4, with hitReactionKind 0, and called BattleScene_ReactionNormal.
  */
 void BattleScene_ActionStepReaction(CameraNode* arg0, void* arg1) {
     s32 other;
@@ -831,7 +832,8 @@ void BattleScene_PhaseMoveFailedMessage(CameraNode* arg0) {
  * Phase 21 (moveEffectKind 0x15, set by Battle_Effect_Heal): Recover, Soft-Boiled and Rest.
  * Not reached in the sweep: 1P's Nidorino was at full HP, so heal moves failed to phase 28
  * instead.
- * @unverified Name from the moveEffectKind that leads here.
+ * Seen in play (2026-11-12): Recover with Nidorino at 20/69 HP ran this phase, and the HUD then
+ * showed 54/69 (half its max HP restored).
  */
 void BattleScene_PhaseHeal(CameraNode* arg0) {
 
@@ -1566,7 +1568,8 @@ void func_8212F044(CameraNode* arg0) {
 
 /**
  * Phase 4: ends the turn and returns to phase 0.
- * @unverified Phase number seen in play (player agent); handler body only skimmed.
+ * Seen in play (2026-11-12): in a turn where 1P's Poison Sting went first, it ran at phase 4
+ * after both actions, and the battle went back to the command menu.
  */
 void BattleScene_PhaseEndTurn(s32 arg0) {
     s32 temp_v0;

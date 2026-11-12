@@ -353,7 +353,8 @@ extern f32 D_82199DF0[][4];
 /**
  * Loads the species' model, animation and texture data for the Pokemon's side into its slots. Ran
  * in play when 1P switched and when 1P used Substitute (the doll model).
- * @unverified Name from the code.
+ * Seen in play (2026-11-12): ran when 1P switched Nidorino for Onix, and in the per-move sweep
+ * only for Substitute (the doll model) and Transform (the target's model).
  */
 void ActivePokemon_LoadSpeciesModelAssets(ActivePokemon* arg0) {
     s16 saved;
@@ -583,7 +584,8 @@ void BattleScene_TickMoveUseEnd(ActivePokemon* active_pokemon) {
  * the underground flags for Dugtrio) before a confused Pokemon acts.
  * Player sweeps: runs on the confused COM Pokemon's turn (seen after Supersonic, Confuse Ray, and
  * Psybeam's confusion side effect).
- * @unverified The wobble animation was not watched on screen.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Psybeam, Confuse Ray.
  */
 void BattleScene_EnterConfusedRow(ActivePokemon* active_pokemon) {
     UNUSED s32 pad[3]; // FAKE: stack padding
@@ -1128,7 +1130,8 @@ void BattleScene_EnterRow9QueueEffectList6(ActivePokemon* active_pokemon) {
 /**
  * Second enter callback of row 12 (the miss, entered on the user from phase 8): plays the move's
  * miss sound when the target's cue reaches its end frame. In play row 12 ran for every miss.
- * @unverified Name from the code.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Guillotine, Whirlwind, Horn Drill, Roar, Disable, Counter, Fissure, Teleport, Dream Eater.
  */
 void BattleScene_EnterMissRowPlaySound(ActivePokemon* active_pokemon) {
     BattleMonRuntime* runtime;
@@ -1205,7 +1208,8 @@ void ActivePokemon_PlayLandingSoundBySize(ActivePokemon*);
  * 0x16, 0x52 and 0x8E.
  * Player sweep: reached only by Self-Destruct and Explosion, the two moves that make the user
  * faint (row 0).
- * @unverified The sound itself was not heard (headless run).
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Self-Destruct, Explosion.
  */
 void BattleScene_TickFaintRowPlayLandingSound(ActivePokemon* active_pokemon) {
     u8* cue = ((u8*)sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon)]) + 0x72D;
@@ -1251,7 +1255,8 @@ extern f32 D_FLT_82189354[];
  * Tick of the faint rows 0 and 7: at the cue's effect frame, queues effect list 2 or 12 (by
  * cue[9]) on the fainting Pokemon and plays audio command 3.
  * Player sweep: reached only by Self-Destruct and Explosion (row 0).
- * @unverified Effect lists 2 and 12 were not told apart on screen.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Self-Destruct, Explosion.
  */
 void BattleScene_TickFaintRowQueueCollapseEffect(ActivePokemon* active_pokemon) {
     u8* cue = (u8*)sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon)] + 0x72D;
@@ -1940,7 +1945,9 @@ s32 func_821058E8(ActivePokemon* active_pokemon, s32 frame_limit) {
 
 /**
  * Battle_IsRowAnimationSettled for the charge cue mapped from the used move.
- * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for the charging moves Razor Wind, Skull Bash, Sky Attack and Solar Beam, and for Metronome
+ * (through the move it called).
  */
 s32 BattleScene_IsMoveKeyedRowWaitComplete(ActivePokemon* active_pokemon, s32 frame_limit) {
     MovePresentationCue* idle_cue;

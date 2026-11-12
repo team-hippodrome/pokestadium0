@@ -388,7 +388,8 @@ extern u8 D_03009D80[];
 extern char D_821959F8[];
 /**
  * Draws the small かくにん (Confirm) button.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): first ran on the frame before the R かくにん button appeared beside
+ * COM's panel while COM picked a replacement for its fainted Pinsir (カイのすけ).
  */
 void BattleMenu_DrawConfirmButton(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
     s32 i;

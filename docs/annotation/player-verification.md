@@ -332,7 +332,8 @@ Bite, Low Kick, Bone Club, Hyper Fang), so their tags are gone.
 Phase 21 (`BattleScene_PhaseHeal`) wasn't seen in the sweep because Nidorino
 was at full HP. With its HP set to 30, Recover healed it (「ニドニドは
 たいりょくを かいふくした！」), but the phase watch missed the transition, so
-that name keeps `@unverified`.
+that name kept `@unverified`. A later run with a breakpoint on it caught
+the phase (Recover at 20/69 HP, then 54/69), so the tag is gone.
 
 ## Move-specific animation callbacks and presentation rows
 
@@ -542,7 +543,7 @@ IDNo/12345, ハナ, ヒノコ and カメ at L5) and asked 「このポケモン�
 After はい the party went into slot 01, shown with Ditto placeholders until the
 copy finished. Then came 「メタモンのへんしんがおわりました。ポケモンは
 GBカートリッジに そのまま のこっています。」. 32 `Registration_*` names were
-confirmed. The view and delete lists were not opened.
+confirmed. The view and delete lists are covered in「とうろく, view and delete」 below.
 
 ## いちらん and せいとん
 
@@ -574,3 +575,359 @@ Drill, Fissure), the stinger trail (Poison Sting, Twineedle, Pin Missile) and
 the fire-breath flames (Flamethrower, Dragon Rage, Fire Spin, Fire Blast).
 `BattleAnim_InitializeCutSlashScratchEffect` ran only for Cut, so it is now
 `BattleAnim_InitializeCutEffect`.
+
+## Switch, surrender, faint and COM healing
+
+These scenarios start from a COM free battle (1P ガール team, COM むしとり team).
+
+* Switch: B, then C-Left, sent Onix (イワワ) in for Nidorino. This ran
+  `BeginBattleForEntity`, the runtime-state init and reset pair, and the roster
+  selection helpers.
+* Surrender: Start opens 「こうさんしますか？ いいえ はい」. Choosing はい shows both
+  teams, then COM's かち screen. `BattleMenu_DrawSurrenderPrompt` never ran and
+  has no direct callers; the prompt on screen is drawn by
+  `BattleMenu_DrawSurrenderPromptWithCursor`.
+* Faint: COM's Pinsir (カイのすけ) was set to 1 HP and speed 1. Poison Sting
+  (こうかは ばつぐんだ！) knocked it out (ひんし), then 「もういい！ もどれ！」. COM
+  picked Gengar behind the R かくにん button (`BattleMenu_DrawConfirmButton`) and
+  sent it out with ゆけっ！ゲンのすけ (`ActivePokemon_GetPokeBallAimPoint`).
+* COM healing: Gengar was set to 20/ 72 HP with Recover in slot 3.
+  `BattleAi_PickHealingMove` returned 3 and Gengar used じこさいせい (HP 56/ 72),
+  but only after offset 0x72 of the AI record was cleared. That offset held 52
+  although Gengar had not been hit, so it is not "damage taken last turn".
+* Poison: writing 0x08 to the runtime status byte (+0x15) put どく on COM
+  Gengar's HUD and it lost 4/ 72 HP at the end of its turn. With Gengar at
+  3/ 72 HP the poison knocked it out (「ゲンのすけは どく」, ひんし) and COM sent
+  out Pikachu. At commit, `BattleMonRuntime` +0x0E was 0 while HP was still 3:
+  `Battle_ApplyPoisonOrBurnDamage` stages the HP left after the poison or burn
+  damage there, so the field is now `hpAfterPoisonBurn`. The check that ran
+  is now `Battle_CheckAllBroughtFainted_PoisonBurn` (was
+  `Battle_CheckDefeatAtStatusHp`). `BattleScene_PhaseResidualDamageFaintCheck`
+  did not run for this knockout, so it keeps its tag.
+* COM team pick: confirming 1P's order ran `Battle_SelectComRoster` and the
+  `BattleAi_*` pick helpers once, before the first send-out. COM brought
+  Pinsir, Gengar and Pikachu. The pick helpers' scoring is not shown on
+  screen, so they keep their tags.
+* COM's view of 1P: after Nidorino had used Poison Sting and Tail Whip, the
+  AI record of Nidorino listed only those two moves and HP 44 (HUD 44/ 69),
+  which confirms `BattleAi_CopyVisibleBattleState`.
+
+## Sweep cross-check against move lists in comments
+
+Several effect functions name their moves in the comment, not the function
+name. Where the per-move sweep ran the function for exactly those moves, the
+tag came off (31 names: the Egg Bomb blasts, the Boom small explosions, the
+after-impact smoke, the falling leaves and feathers, the lightest mist, the
+hue change, the hit sparks, the slime variants, Surf's splash, the lasso hit,
+the stinger trail colors, the Disable radial, and the single-move trail
+starters for Petal Dance, Razor Leaf, Spike Cannon, Swift, and the Hyper Beam
+and Ice Beam trail). Where the sweep and the comment disagree, the evidence
+line says how. For example, Bide does not use the flame under the Pokémon,
+and Disable does not use the lasso hit.
+* Faint checks: the four `Battle_CheckAllBroughtFainted_*` variants differ
+  only in which HP field of the active Pokémon they add up. The one that ran
+  when Pinsir was knocked out reads `hp`, so `_Level` is now `_Hp`. `_PP`
+  reads `pendingHp` and is now `_PendingHp`, though it still has its tag
+  because it never ran.
+
+## Battle mechanics checked in RAM
+
+These checks used breakpoints on entry and return, with the runtime fields read
+on both sides of the call.
+
+* Paralysis: Thunder Wave paralysed Pinsir (status 0x40), and
+  `ApplyParalysisSpeedCut` took its Speed from 50 to 12.
+* Burn: with Pinsir's status set to 0x10, `ApplyBurnAttackCut` took its
+  Attack from 71 to 35.
+* PP: Poison Sting went from 35 to 34 PP in `Battle_DecrementPP`.
+* Move order: `Battle_DetermineMoveOrder` returned 1 (COM first) at Speed 50,
+  and 0 once Pinsir's Speed was set to 1. The battle followed both results.
+* Critical hits: `Battle_CheckCriticalHit` returned 1 with the random roll
+  forced to 2 for that call, and the game showed きゅうしょに あたった！
+* Damage: Nidorino's Poison Sting on Pinsir went through `Battle_CalcDamage`
+  (base 4, the Gen 1 formula), `Battle_ApplyTypeEffectAndSTAB` (6 for the
+  same-type bonus, then 12 for Poison against Bug), the random roll (10), and
+  `Battle_ApplyDamage` (75 to 65 HP). `Battle_LoadMoveCache` had loaded
+  Poison Sting's six data bytes (28 02 0F 03 FF 23).
+* Messages: `BattleMessage_Format` built 「ニドニドのどくばり!」 with id 0x18,
+  and 「こうかは ばつぐんだ！」 with id 0x29.
+* Battle start: `BattleScene_SendOutSide0` ran as 1P's Poké Ball burst open,
+  and `BattleScene_SendOutSide1` ran just after 1P's Onix was out.
+  `ActivePokemon_GetNickname` returned ニドニド for 1P's Nidorino.
+* COM AI helpers: `BattleAi_CanUseMove` returned each of Pinsir's four moves
+  (all with PP left), and `BattleAi_FindUsableHealingMove` returned Recover
+  for Gengar once Recover was in its moves, and 0 for Nidorino.
+
+## Turn flow
+
+The turn flow was traced on a turn where 1P's Poison Sting went first, with
+scene phase and step read at each first entry:
+
+1. `Battle_StartTurn` ran at commit, along with `ProcessBattleTurn` and the
+   effect dispatch (`BattleEffect_ExecuteMoveEffect`, then
+   `BattleEffect_RunMoveEffect`, for effect 2).
+2. Phase 2 stepped through `BattleScene_ActionStepIntro` (0), `SetHitCount`
+   (1), `UseMove` (2), `Travel` (3) and `Reaction` (4). The reaction was
+   `BattleScene_ReactionNormal` (hitReactionKind 0).
+3. `BattleScene_StartSecondAction` handed over to COM.
+4. `BattleScene_PhaseEndTurn` ran at phase 4.
+
+## いちらん menus
+
+Opened on the party list (フシギダネ, ヒトカゲ and ゼニガメ):
+
+* C-Right turned the detail page (1/3 to 2/3, the move columns).
+* A on a Pokémon opened the popup (`LabPCList_InitPopupMenu`,
+  `LabPCList_PlacePopup`, `LabPCList_UpdateMonMenu`). Its first row was
+  「フシギダネをあつめる」 (`LabPCList_FormatGatherPrompt`), followed by
+  おなじタイプをあつめる, いどうする and どうぐをつかう.
+* いどうする opened 「どこへ？」 with てもちのポケモン, ゲームボーイのボックス and
+  64カセットのボックス (`LabPCList_UpdateDestinationMenu`).
+* どうぐをつかう said つかえるどうぐがありません, because no item in the test save
+  could be used on フシギダネ.
+* Sort and filter: R moves the focus to the column headers. A on ポケモン
+  opens the sort menu (`LabPCList_InitSortMenu`), with アイウエオじゅんにならべる,
+  ポケモンばんごうでならべる, バトルようのポケモンをあつめる, すべてのせんたくをやめる
+  and いちらんするポケモンをえらぶ. Both sorts reordered the party as
+  expected. A on おや sorted through `LabPCList_CompareByOtName`. A on
+  タイプ1 opens タイプであつめる (`LabPCList_InitTypeFilter`).
+* Caution for breakpoint evidence: once the screen is left, the fragment is
+  unloaded and other code runs at the same addresses. Hits after the fade-out
+  (the filter-flag helpers, `LabPCList_TeachTmHmMove` and others) were false,
+  and those names keep their tags.
+* Type filter, checked again with the fragment-aware breakpoints (pj64
+  a7fc7bc), so every hit came from いちらん itself. In タイプであつめる, どく
+  went into the first slot. あつめる then ran `LabPCList_CommitTypeFilter`,
+  which wrote count 1 and type 0x03 (Poison). Next `LabPCList_SetFilterFlag(2)`
+  changed the flag word at +0x7C from 0 to 2, and `LabPCList_ApplyFiltersAndSort`
+  ran. After that only フシギダネ was listed. かいじょ ran
+  `LabPCList_ClearFilterFlag(2)`, the flag word went back to 0, and all three
+  Pokémon returned.
+* Move filter: on detail page 2/3, R then A on the わざ header opens
+  わざであつめる (`LabPCList_InitMoveFilter`). It has four slots and a move
+  list in kana order, where D-Right pages by 8 (ひっかく is 126, ひっさつまえば
+  127). With ひっかく chosen, あつめる ran `LabPCList_CommitMoveFilter` and set
+  flag 4, and only ヒトカゲ was left. With ひっさつまえば chosen, it wrote move
+  0x9E and count 1, and the list was empty. かいじょ cleared flag 4.
+* Level filter: on page 3/3, A on the レベル header opens たかいじゅんにならべる,
+  ひくいじゅんにならべる and レベルをきめてあつめる. The last opens
+  「レベルのにゅうりょく」, showing 001 から 100. Its draw function was named
+  `PcSort_DrawEmptyLabel` because から was read as "Empty". Here it means
+  "from", so the function is now `LabPCList_DrawLevelInputWindow`. Raising the
+  lower bound to 006 and pressing あつめる set flag 1 and stored 6/100, which
+  emptied the Lv 5 party. Reopening the window then made
+  `LabPCList_HasFilterFlag(1)` return 1, and かいじょ was enabled. かいじょ
+  cleared flag 1.
+* Sort menu: バトルようのポケモンをあつめる toggled flag 0x20, which keeps only
+  Pokémon registered for battle. The test party has none, so the list went
+  empty, and the entry became バトルようのポケモンをかいじょする.
+  すべてのせんたくをやめる ran `LabPCList_ResetFilterState` and
+  `LabPCList_ClearFilterFlags`, which took the flags from 0x20 to 0 and restored
+  the list.
+* どうぐをつかう, using a local Green save with six bag items added (never
+  committed). The window 「フシギダネがつかえるどうぐ」 listed マックスアップ,
+  タウリン, ふしぎなアメ, ポイントアップ, わざマシン06 and ひでんマシン01.
+  * HP Up gave HP 19 → 20 and Rare Candy gave レベル 5 → 6. Both go through
+    `LabPCList_ApplyVitaminItem`.
+  * PP Up on たいあたり gave PP 35 → 42 (`LabPCList_ApplyPpUpItem`).
+  * TM06 put どくどく into slot 2 (`LabPCList_TeachTmHmMove`).
+  * B then asked 「ないようが へんこうされています」. レポートしてやめる ran
+    `LabPCList_SaveChanges`, and the .sav on the Transfer Pak was rewritten
+    with the new HP stat exp, max HP, bag count and checksum.
+* いどうする: ゲームボーイのボックス lists ボックス1-8 and 64カセットのボックス lists
+  ボックス1-4. Choosing ボックス1 ran `LabPCList_MoveMonTo` with kind 1 or 2 and
+  box 0. The message read 「いどう てもち → GB 1」 (or 64 1), with the names coming
+  from `LabPCList_FormatLocationName`. `LabPCList_ReindexBoxSlots` renumbered
+  the two Pokémon left in the party from slots 1, 2 to 0, 1.
+* Save-before-leaving prompt: `SavePrompt_Update` returned 1 for
+  レポートしてやめる (after which `Save_DrawReportingWindow` drew レポートちゅう),
+  2 for レポートしないでやめる, and -1 for キャンセル or B.
+* Column helpers: `Pokemon_GetTypeIndex` gave くさ 0xB, どく 3, ほのお 9 and みず
+  0xA, and -1 for a missing second type. `BattleMon_GetMoveIndex` gave the
+  zero-based move id (たいあたり 0x21 → 0x20). `BattleMon_GetMoveIndexChecked`
+  gave -1 for empty slots.
+
+## せいとん, ポケモンを いどうする
+
+Entering せいとん ran `LabTerminal_Init` and set up the three-entry menu
+(`LabTerminal_InitMainMenu`). ポケモンを いどうする asks 「どこからいどうする？」,
+then 「どこへいどうする？」 (てもち is greyed out as a destination). Choosing
+GBのボックス2 opened it on the right (`PcSort_OpenBox`). With ハナ (フシギダネ)
+selected, the panel showed HP: 19, こうげき 9, ぼうぎょ 9, すばやさ 9, とくしゅ 11
+(`PcSort_DrawMonStats`) and the moves たいあたり and なきごえ
+(`PcBox_DrawMoveName`).
+
+## GB Tower sound
+
+These were probed while Pocket Monsters Green's intro (Gengar against
+Nidorino) played in the GB Tower:
+
+* Green's NR50 write went through `GbApu_QueueRegisterWrite` (0xFF24, 0x77,
+  timestamp). The next `GbApu_RenderBuffer` applied it through
+  `GbApu_WriteRegister` (0x24, 0x77).
+* `GbAudio_UpdateFrame` renders 784 samples a frame. Each sample calls the
+  square 1, square 2, wave and noise updates, in that order.
+* Reading NR52 through `GbMem_ReadIoRegister` gave 0x8F.
+* `GbApu_FreqToStep2x` and `GbApu_FreqToStep` returned exactly the
+  131072/(2048-p) and 65536/(2048-p) Hz steps (32 steps at 48 kHz, 16.16
+  fixed point).
+* The four channel updates keep their tags, because play cannot tell square 1
+  from square 2.
+* GB Tower menu: C-Up opens メニュー (ゲームをつづける, ゲームをやめる,
+  せつめい・コンフィグ). This calls `GbAudio_SetMenuSoundMode(1)` and
+  `GbAudio_PlayMenuSound(1)`. Its text is drawn by `GbEmu_DrawTextCommands`
+  from a command list whose headers and glyph counts match each line.
+* Shared menus: the main menu with no GB cartridge enables only バトル and OFF,
+  and the grid cursor skips the disabled cells
+  (`GridMenu_UpdateCursorSkipDisabled`). In いちらん, the list cursor moves
+  through `ScrollList_UpdateCursor`. Row numbers and IDs are drawn by
+  `Ui_DrawNumberZeroPadded` (1 in 4 digits as 0001, ID 12345 in 5 digits).
+
+## Transfer Pak boot scan
+
+This was traced from power-on with Green in port 1:
+
+1. `GbSave_ScanAllPorts` calls `GbTower_ScanPaks`, which returns 0x10001.
+2. `GbPak_ReadRom` reads the header from 0x120, which matches the ROM
+   (POKEMON GREEN).
+3. `GbPak_DetectRam` checks cartridge RAM with two `GbPak_VerifyPattern`
+   rounds, each writing with `GbPak_MbcWrite` and reading back with
+   `GbPak_MbcRead`.
+4. `GbSave_OpenMainData` runs, and `GbTower_SetPollMask(1)` ends the scan.
+
+## ずかん counts
+
+The three counts in ずかん (みつけたかず, つかまえたかず and もっているかず) were all
+3 for the test save. Setting extra bits in memory before entering ずかん told
+them apart. Extra seen bits raised みつけたかず to 8, which is
+`GbSave_CountSeenSpecies` (was `..._CountSpeciesProgressField036`). Extra
+owned bits raised つかまえたかず to 7, which is `GbSave_CountOwnedSpecies` (was
+`..._Field023`). もっているかず is `GbSave_CountHeldSpecies` (was `..._Field06`).
+It counts bits that `GbSave_MarkSpeciesHeld` (was `GbSave_MarkSeenBits`)
+rebuilds from the party and boxes on every entry, so a bit added by hand was
+cleared again.
+
+## Order screen
+
+On the order screen of a COM free battle:
+
+* COM's panel is ready at once (じゅんび かんりょう！) from scripted input
+  (`BattleMenu_FeedScriptedComOrderInput`).
+* Each C/A/B button adds a slot (`BattleMenu_SelectSlotOrShowSummary`), and L
+  clears the picks (`BattleMenu_UndoSelections`).
+* After six picks, 「これで いいですか？ はい / えらびなおす」 appears, and はい
+  commits the order (`BattleMenu_CommitOrderSelection`).
+
+## Main menu choices
+
+Each main menu item was chosen and confirmed with はい, and the argument of
+`MainMenu_LoadSelectedFragment` was logged:
+
+| Choice | Item | Fragment base |
+|---|---|---|
+| 0 | せいとん | 0x89000000 |
+| 2 | いちらん | 0x89100000 |
+| 3 | ずかん | 0x8A100000 |
+| 4 | バトル | 0x82000000 |
+| 5 | てもち | 0x8A200000 |
+| 6 | GB | none (returns 0x8060) |
+| 7 | OFF | 0x88400000 |
+| 8 | とうろく | 0x88100000 |
+
+`MainMenu_Free` ran on the way out.
+
+## せいとん, saving a box move
+
+This was run from a fresh boot. Before the debugger fix, a savestate did not
+carry the pak's cart RAM, so saving after loading an older state gave
+「64GBパックが ただしくセットされていません」. In ポケモンのせいり, ハナ was moved
+from てもち into GBのボックス1 (`PcSort_MoveSelectedMon`): the counts went from
+03/06 and 00/30 to 02/06 and 01/30. On leaving, `PcSort_HasUnsavedChanges`
+returned 1. レポートしてやめる ran `PcSort_SaveChanges`, which called
+`PcSort_WriteDeck` for decks 0x20 (party) and 0x21 (GB box 1). The .sav then
+held party count 2 and current-box count 1.
+
+## とうろく, view and delete
+
+The menu has three entries: ポケモンを とうろくする, とうろくした ポケモンをみる and
+とうろくした ポケモンをけす. Registering the party ended with
+「メタモンのへんしんがおわりました」, and the team was stored as slot 02. みる ran
+`Registration_OpenViewList` and けす ran `Registration_OpenDeleteList`.
+Confirming はい on 「このポケモンをけす？」 ran `Registration_WriteAllTeams`, and
+the game said 「へんしん していた メタモンが もとの すがたに もどった。」. With no
+team left, the みる and けす entries were greyed out.
+
+## Particle helpers, field by field
+
+Thirty moves were used once each from the battle command savestate, among
+them Flamethrower, Thunderbolt, Psychic, Blizzard, Hydro Pump, Fire Blast,
+Hyper Beam, Surf, Toxic, Leech Seed, Self-Destruct and Earthquake. Every
+tagged particle helper had a breakpoint (helper script `psweep.py`, not
+committed). On a helper's first three calls, the 0xD0-byte particle at `a0`
+was read at entry and at return and the two were compared. 194 of the 409
+helpers ran.
+
+* 46 `Particle_*` helpers changed exactly the field their name gives, with the
+  value their arguments call for. Examples: `Particle_SetFlags` set flag 4;
+  `Particle_SetPosOffsetXScaled(15)` wrote 23.4 (15 × scale 1.56) to 0x34;
+  `Particle_ApproachPrimAlpha` stepped prim_a down by 4 per call. Each lost
+  its tag, and its doc gives one observed change.
+* The motion fields: `Particle_ApplyMotionStep` adds motionStep (0x78) to
+  motionOffset (0x4C) every frame. So motionOffset is a displacement and
+  motionStep is the velocity. `Particle_SetVelocity` (which writes 0x4C) is
+  now `Particle_SetMotionOffset`, and `Particle_SetVelocityImpulse` (which
+  writes 0x78) is now `Particle_SetMotionStep`.
+* Left tagged:
+  * the placeholder `Particle_FieldXX_..._0XXXX` names and the `Particle_SetUnkXX`
+    setters, which should get real names first;
+  * graphics helpers such as texture loads and the billboard matrix, where the
+    bytes at `a0` say nothing.
+
+## Menu and scroll-list widgets
+
+The いちらん sort popup is a `Menu_*` list. `Menu_ClearItemFlags` ran over its
+5 items, and the cursor moved one row per D-Down, stopping on the disabled
+すべてのせんたくをやめる too. The タイプであつめる list is a `ScrollList_*` with
+15 items (the Gen 1 types). Paging it with D-Right ran
+`ScrollList_ScrollDownToCursor`. The main table is drawn with
+`ScrollList_DrawItems` and `ScrollList_DrawScrollArrows`.
+
+## Game Boy save path, boot to せいとん save
+
+Traced from a fresh boot with the Green save, through a せいとん move of one
+Pokémon into GBのボックス1, to レポートしてやめる:
+
+1. At boot, `GbSave_ScanAllPorts` runs `GbSave_OpenMainData` for port 0 (with
+   `GbTower_ProbePak`).
+2. Opening せいとん runs `GbSave_OpenMainData` and `GbSave_OpenBoxData`. Then
+   `Deck_ReadEntry` runs for deck 0x20 entries 0-2, through
+   `GbSave_LoadMainPokemon`.
+3. Saving truncates deck 0x20 (`Deck_DeleteEntry`, old count 3) and writes
+   entries 0-1 (`Deck_WriteEntry` → `GbSave_SaveMainPokemon` →
+   `Deck_AppendEntry`). Deck 0x21 is then truncated and gets the moved
+   Pokémon.
+4. Finally the main-data checksum is written, followed by
+   `GbSave_WriteBoxBank` 0 and 1.
+
+The checksum writer was `GbSave_InvalidateMainDataChecksum`, a name taken from
+Stadium 1. The .sav it left behind had a valid checksum (0x55 at 0x3594), so it
+is now `GbSave_WriteMainDataChecksum`.
+
+Render flag: with `Particle_EnableRendering` patched to return at once,
+Flamethrower ran on the same frames but its flames were never drawn. Flag 4
+is the render flag, so the enable, disable and test helpers lost their tags.
+
+## Move inits the 700-frame sweep missed
+
+Run again with longer windows or a matching setup:
+
+* Dig's second turn ran start 0x34 (`BattleAnim_InitializeDigUse`) and end
+  0x4E (`BattleAnim_InitializeDigHit`).
+* Sky Attack's second turn ran start 0x67 (`..._SkyAttackUse2`) and end 0x19
+  (`..._SkyAttackHit`).
+* Soft-Boiled at 20 HP ran start 0x42.
+* Dream Eater on a sleeping target ran end 0x3E.
+
+Guillotine and Horn Drill still miss Pinsir, which is level 25 against
+Nidorino's 20, so their hit inits keep their tags.
+

@@ -653,7 +653,8 @@ extern unk_D_84803548* D_823028A8[];
  * one entry per countdown, so the COM picks its order like a player.
  * Seen in play: runs every frame on the order screen against the COM, whose panel shows 「じゅんび
  * かんりょう！」.
- * @unverified Name from the code.
+ * Seen in play (2026-11-12) on the order screen of a COM free battle: ran each frame for the COM
+ * side, whose panel showed じゅんび かんりょう！ (ready) without any input.
  */
 void BattleMenu_FeedScriptedComOrderInput(void) {
     s32 var_v0;
@@ -687,7 +688,8 @@ void BattleMenu_FeedScriptedComOrderInput(void) {
 
 /**
  * Tests whether a roster slot already occurs in the panel's picked order.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12) on the order screen of a COM free battle: returned 1 for slots 0 and
+ * 1 of COM's finished order.
  */
 s32 BattleMenu_IsSlotAlreadySelected(unk_D_848037A0* arg0, s8 arg1) {
     s32 i;
@@ -760,7 +762,9 @@ s32 BattleMenu_OrderExceedsLevelSumLimit(unk_D_848037A0* arg0);
 s32 BattleMenu_IsOrderComplete(unk_D_848037A0* arg0);
 /**
  * Opens a slot's details or adds it to the picked order and checks the result.
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12) on the order screen of a COM free battle: B added slot 0 (イワワ) to
+ * 1P's order and C-Left added slot 1 (パルパル); each call checked
+ * BattleMenu_OrderExceedsLevelSumLimit, which returned 0.
  */
 void BattleMenu_SelectSlotOrShowSummary(unk_D_848037A0* arg0, s8 arg1) {
     if (arg1 >= arg0->unk_0016) {
@@ -801,7 +805,8 @@ M2C_UNK func_82300B30(s8, s8 *);                  /* extern */
 extern unk_D_848037A0 D_82302B48[];
 /**
  * Clears a nonempty panel's picks, resetting the partner panel when present.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-12) on the order screen of a COM free battle: L cleared 1P's picks after
+ * two had been made; the pick markers emptied.
  */
 void BattleMenu_UndoSelections(s8 *arg0) {
     s8 temp_v1;
@@ -924,7 +929,8 @@ extern Controller D_84816428;
 extern Controller D_82302BD8;
 /**
  * Dispatches panel input while enabled and reports whether the panel is ready.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12) on the order screen of a COM free battle: returned 0 for 1P's panel
+ * before any pick and 1 for COM's panel, which was already ready.
  */
 s32 BattleMenu_UpdateOrderSelectPanel(s32 arg0, unk_D_848037A0* arg1) {
     Controller* var_a0;
@@ -1077,7 +1083,8 @@ typedef struct OrderSelectSlot {
 /**
  * Copies final orders into battle rosters and sets each tag team's lead trainer.
  * COM rosters keep their original order rather than using the scripted panel picks.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12) on the order screen of a COM free battle: ran when はい was chosen at
+ * 「これで いいですか？」 after all six picks, then the battle started in that order.
  */
 void BattleMenu_CommitOrderSelection(void) {
     s32 i;

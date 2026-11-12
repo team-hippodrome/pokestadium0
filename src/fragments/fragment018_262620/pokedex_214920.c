@@ -269,9 +269,9 @@ void Pokedex_InitCountsWindow(void* arg0, s32 arg1, s32 arg2) {
 }
 
 s32 func_8002AE6C();
-s32 GbSave_CountSpeciesProgressField036(s32);
-s32 GbSave_CountSpeciesProgressField023(s32);
-s32 GbSave_CountSpeciesProgressField06(s32);
+s32 GbSave_CountSeenSpecies(s32);
+s32 GbSave_CountOwnedSpecies(s32);
+s32 GbSave_CountHeldSpecies(s32);
 extern u8 D_800734A8[4];
 extern char D_8A12FC6C[];
 extern char D_8A12FC7C[];
@@ -294,9 +294,9 @@ void Pokedex_DrawCounts(void* arg0) {
         Gfx_SetEnvColor(0xCC, 0x98, 0x98, 0xFF);
         Font_Printf(M2C_FIELD(arg0, s32*, 0) + 0xE, M2C_FIELD(arg0, s32*, 4) + 0x46, D_8A12FC8C);
         Gfx_SetEnvColor(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
-        Font_Printf(M2C_FIELD(arg0, s32*, 0) + 0xAE, M2C_FIELD(arg0, s32*, 4) + 0xE, D_8A12FC9C, GbSave_CountSpeciesProgressField036(D_8A12FFB0));
-        Font_Printf(M2C_FIELD(arg0, s32*, 0) + 0xAE, M2C_FIELD(arg0, s32*, 4) + 0x2A, D_8A12FCA0, GbSave_CountSpeciesProgressField023(D_8A12FFB0));
-        Font_Printf(M2C_FIELD(arg0, s32*, 0) + 0xAE, M2C_FIELD(arg0, s32*, 4) + 0x46, D_8A12FCA4, GbSave_CountSpeciesProgressField06(D_8A12FFB0));
+        Font_Printf(M2C_FIELD(arg0, s32*, 0) + 0xAE, M2C_FIELD(arg0, s32*, 4) + 0xE, D_8A12FC9C, GbSave_CountSeenSpecies(D_8A12FFB0));
+        Font_Printf(M2C_FIELD(arg0, s32*, 0) + 0xAE, M2C_FIELD(arg0, s32*, 4) + 0x2A, D_8A12FCA0, GbSave_CountOwnedSpecies(D_8A12FFB0));
+        Font_Printf(M2C_FIELD(arg0, s32*, 0) + 0xAE, M2C_FIELD(arg0, s32*, 4) + 0x46, D_8A12FCA4, GbSave_CountHeldSpecies(D_8A12FFB0));
         Font_EndTexturedTextRendering();
     }
 }
@@ -1157,7 +1157,7 @@ s32 Pokedex_Init(s32 arg0, s32 arg1) {
     D_8A12FF9C = StageContext_GetCurrent();
     D_8A12FFA0 = StageContext_Allocate(0, 1, 2, 1, 2, 0);
     Pokedex_InitFramebuffers();
-    GbSave_RebuildSeenBitfield(D_8A12FFB0);
+    GbSave_RebuildHeldSpecies(D_8A12FFB0);
     Font_Init(0x3D, 0);
     D_8A12FFA4 = PokeIcon_AllocFramebuffers(1);
     PokeIcon_OpenModelArchives();

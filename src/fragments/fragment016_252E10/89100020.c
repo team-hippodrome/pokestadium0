@@ -140,7 +140,8 @@ typedef struct LabPCInitialStateFields {
 
 /**
  * Resets the list filters: level range 1..100, and no type or move filter.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: すべてのせんたくをやめる ran this, then LabPCList_ClearFilterFlags, and
+ * the full party list came back.
  */
 void LabPCList_ResetFilterState(LabPCInitialStateFields* state) {
     /* IDO schedules these byte stores together when they share a source line. */
@@ -179,7 +180,8 @@ typedef struct Big891003A4 {
 } Big891003A4;
 /**
  * Sets up the Pokemon list window (564x382) and its widgets.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): ran on entry as the list
+ * window appeared.
  */
 void LabPCList_InitListWindow(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     UNUSED s32 pad[1]; // FAKE: stack padding

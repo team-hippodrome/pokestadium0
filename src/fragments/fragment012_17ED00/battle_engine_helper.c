@@ -260,7 +260,8 @@ void BattleScene_GetParticipantScreenAimPoint(ActivePokemon* active_pokemon, Vec
 
 /**
  * Writes the Poke Ball's position, raised by 2.5 units, to `arg1`.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): ran during ゆけっ！ゲンのすけ, while the Poké Ball for COM's replacement
+ * Gengar was in the air (its shadow on the floor), and not before.
  */
 void ActivePokemon_GetPokeBallAimPoint(s8 *arg0, s8 *arg1) {
     M2C_FIELD(arg1, f32 *, 0) = (f32) M2C_FIELD(arg0, f32 *, 0x648);
@@ -323,7 +324,8 @@ s32 ActivePokemon_GetMoveName(u8* arg0) {
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 /**
  * Returns the nickname (+0x30 in BattleMon) of this Pokemon in the roster of the teammate named by state.replacementState.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): for 1P's Nidorino it returned the string ニドニド, the nickname shown on
+ * its HUD.
  */
 s32 ActivePokemon_GetNickname(s8 *arg0)
 {
@@ -711,7 +713,7 @@ void Battle_SetModelToHitAnim(ActivePokemon* active_pokemon) {
 
 /**
  * Points teamRoster at sessionTeams->teamMember[index].
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): picked Onix's roster entry when it was switched in.
  */
 void ActivePokemon_SelectTeamRoster(s8 *arg0, s32 arg1) {
     M2C_FIELD(arg0, s32 *, 0x860) = (s32) M2C_FIELD((M2C_FIELD(arg0, s32 *, 0x85C) + (arg1 * 4)), s32 *, 8);
@@ -719,7 +721,7 @@ void ActivePokemon_SelectTeamRoster(s8 *arg0, s32 arg1) {
 
 /**
  * Sets state.teamMemberIndex.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): set the switched-in team member (Onix).
  */
 void ActivePokemon_SetTeamMemberIndex(void *arg0, s32 arg1) {
     M2C_FIELD(arg0, s8 *, 0x7B7) = arg1;

@@ -37,7 +37,8 @@ void func_89004710(void);
 
 /**
  * Writes the list `arg3` to deck (`arg0`, `arg1`, `arg2`) and closes it, flushing box decks 0x10..0x13.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in せいとん: during PcSort_SaveChanges it ran for deck 0x20 (the party)
+ * and 0x21 (GB box 1), the two lists the move changed.
  */
 void PcSort_WriteDeck(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
     DeckHandle* sp1C = Deck_Open(arg0, arg1, arg2, 1);
@@ -291,7 +292,8 @@ s32 func_80030230(void*);
 
 /**
  * Navigate the selected menu mode, then report cancel or confirm input.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-12) in せいとん: handled the てもち list with the cursor on ハナ after the source
+ * and destination were chosen.
  */
 s32 PcSort_UpdateMonList(void* menu, u32 flags) {
     s32 result = 0;
@@ -472,7 +474,8 @@ extern Gfx D_80060398[];
 
 /**
  * Draws Attack, Defense, Speed, Special and HP:%3d (？？？？？ when unknown).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in せいとん: drew ハナ's stats under the lists: こうげき 9, ぼうぎょ 9, すばやさ 9,
+ * とくしゅ 11 and HP: 19.
  */
 void PcSort_DrawMonStats(s32 x, s32 y, u8* mon) {
     s32 count;
@@ -637,7 +640,8 @@ void LabItem_RemoveSelectedEntry(void*);
 
 /**
  * Moves the selected Pokemon into the destination box and marks both boxes changed.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in せいとん > ポケモンをいどうする: moving ハナ (フシギダネ) from てもち into GBのボックス1
+ * changed the counts from 03/06 and 00/30 to 02/06 and 01/30.
  */
 void PcSort_MoveSelectedMon(s8* arg0) {
     M2C_FIELD(arg0, s32**, 0x3AC)[M2C_FIELD(arg0, s32*, 0x248)] = 1;
@@ -695,7 +699,8 @@ void PcSort_ReleaseSelectedMon(s8* arg0) {
 
 /**
  * Shows the selected box's Pokemon in the destination list.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in せいとん: after GBのボックス2 was chosen under 「どこへいどうする？」, it ran and that
+ * box appeared as the destination list (00/30).
  */
 void PcSort_OpenBox(s8 *arg0) {
     s32 temp_v0;
@@ -1054,7 +1059,8 @@ void func_800243B8(void);
 void func_8002D7D4(s32);
 /**
  * Writes the changed boxes back to the save and flushes it.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in せいとん: レポートしてやめる after the move ran this, which wrote decks 0x20
+ * and 0x21, and the Game Boy .sav then had party count 2 and current-box count 1.
  */
 void PcSort_SaveChanges(Save89006B2C* arg0) {
     s32 dirty = 0;
@@ -1104,7 +1110,8 @@ void PcSort_SaveChanges(Save89006B2C* arg0) {
 
 /**
  * Returns 1 when any of the 13 boxes changed.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in せいとん: returned 1 after that move, when leaving opened 「ないようが
+ * へんこうされています」.
  */
 s32 PcSort_HasUnsavedChanges(s8* arg0) {
     s32 i;

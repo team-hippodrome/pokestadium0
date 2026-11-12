@@ -361,7 +361,8 @@ void BattleScene_PhaseSendOutAfterFaint(CameraNode* arg0) {
 /**
  * Runs the per-frame battle presentation phase selected by scene->phase and phaseStep. Move-specific phases
  * (7, 12-15, 17, 25, 27-31, 38) are entered through BattleScene_PhaseDispatchMoveEffect.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12): in a turn where 1P's Poison Sting went first, it was running the
+ * presentation from the frame after Battle_StartTurn (phase 0, then 2).
  */
 void BattleScene_UpdatePhase(CameraNode* arg0) {
     func_82125FD0();
@@ -593,7 +594,8 @@ void BattleScene_OpeningStepWaitSide0Ball(s32 arg0) {
 
 /**
  * Battle start: sends out side 0's Pokemon with ゆけっ！%s (Go! %s).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): at the start of a COM free battle it first ran as 1P's Poké Ball
+ * burst open, before COM's send-out.
  */
 void BattleScene_SendOutSide0(CameraNode* arg0) {
     sActivePokemon[0]->displayObject.node.flags &= ~1;
@@ -630,7 +632,8 @@ void BattleScene_OpeningStepWaitSide0SendOut(CameraNode* arg0) {
 
 /**
  * Battle start: sends out side 1's Pokemon with ゆけっ！%s (Go! %s).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): at the start of the same battle it first ran right after 1P's Onix
+ * had come out, for COM's send-out.
  */
 void BattleScene_SendOutSide1(CameraNode* arg0) {
     Audio_PlayCommand(2, 0, 0);
