@@ -877,8 +877,6 @@ helpers ran.
   now `Particle_SetMotionOffset`, and `Particle_SetVelocityImpulse` (which
   writes 0x78) is now `Particle_SetMotionStep`.
 * Left tagged:
-  * the render-flag helpers, which need a visual check that flag 4 really hides
-    the particle;
   * the placeholder `Particle_FieldXX_..._0XXXX` names and the `Particle_SetUnkXX`
     setters, which should get real names first;
   * graphics helpers such as texture loads and the billboard matrix, where the
@@ -913,4 +911,8 @@ Pokémon into GBのボックス1, to レポートしてやめる:
 The checksum writer was `GbSave_InvalidateMainDataChecksum`, a name taken from
 Stadium 1. The .sav it left behind had a valid checksum (0x55 at 0x3594), so it
 is now `GbSave_WriteMainDataChecksum`.
+
+Render flag: with `Particle_EnableRendering` patched to return at once,
+Flamethrower ran on the same frames but its flames were never drawn. Flag 4
+is the render flag, so the enable, disable and test helpers lost their tags.
 

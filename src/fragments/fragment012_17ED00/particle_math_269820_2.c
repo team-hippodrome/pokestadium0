@@ -166,7 +166,9 @@ s32 Particle_LacksFlags(Particle* arg0, s32 arg1) {
 
 /**
  * Set flag 4, which gates drawing in both particle render passes.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12): with this function stubbed to return at once, Flamethrower's flames
+ * never appeared (same frame, same savestate), while the battle went on normally. In the move
+ * sweep it set flag 4.
  */
 void Particle_EnableRendering(Particle* arg0) {
     Particle_SetFlags(arg0, 4);
@@ -174,7 +176,8 @@ void Particle_EnableRendering(Particle* arg0) {
 
 /**
  * Clear flag 4 to suppress drawing without freeing the particle.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12) in move animations: cleared flag 4, the flag Particle_EnableRendering
+ * sets and which the flames need in order to be drawn.
  */
 void Particle_DisableRendering(Particle* arg0) {
     Particle_ClearFlags(arg0, 4);
@@ -182,7 +185,8 @@ void Particle_DisableRendering(Particle* arg0) {
 
 /**
  * Test flag 4, the per-particle drawing gate.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12) in move animations: tests flag 4, the render flag confirmed by
+ * stubbing Particle_EnableRendering.
  */
 s32 Particle_IsRenderingEnabled(Particle* arg0) {
     return Particle_HasFlags(arg0, 4);
