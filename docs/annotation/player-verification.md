@@ -438,3 +438,31 @@ loop and draw functions as `Options_RunTitle` and `Options_DrawTitle`. They
 are now `TransferPak_RunCartridgeCheckScreen` and
 `TransferPak_DrawCartridgeCheckScreen`. C-Right opens the options menu, and A
 on バックアップ opens the clear-save prompt, so those names are confirmed.
+
+## Menus walked through in play
+
+With no Game Boy cartridge, the main menu greys out ずかん, てもち, GB and
+とうろく, so only バトル and OFF can be entered. Walked and screenshotted:
+
+* The cartridge check screen and オプション, including the clear-save prompt.
+* メインメニュー and the バトル description window.
+* バトルモード (`FreeBattle_DrawBattleModeCard`).
+* たいせんルールせんたく and each rule's たいせんする / ルールをみる (the rules
+  list popup).
+* あいてをせんたく (1P VS COM; 2P to 4P dimmed).
+* エントリーポケモンのせんたく: the Free Battle preset teams, the L50～55 and
+  L1～30 rental grids with the 「レンタルしますか？」 status window, and
+  「このデータでエントリーします。」. Then エントリーけってい, which builds the
+  battle rosters.
+* トーナメントせんたく and カップせんたく (only モンスターボールカップ open).
+* The tournament VS scene (`VsScene_*`): the stadium, a zoom into the big
+  screen's flames, the 「バトル」 title, then 「トレーナー 1P VS トレーナー
+  むしとり しょうねん」.
+
+Functions that ran on each screen were caught with breakpoints. A name lost
+its tag only where the screen showed what the name says. About 30 helpers on
+these screens got names from their code and from the moment they ran.
+
+Not reached: the screens after a tournament win. Scripted inputs in a
+tournament battle didn't land reliably, and setting COM HP mid-battle stalled
+the next send-out once.
