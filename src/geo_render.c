@@ -102,7 +102,8 @@ Vec3f* GeoRender_FindAnchorPosition(DisplayObject* display_object, s16 lookup_id
 
 void func_80011D14(Vtx* arg0, CameraOverlay* arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5, s16 arg6,
                    s16 arg7);
-void Geo_NodeModelPartRoot(GraphNode* arg0);
+struct Root80013DC8;
+void Geo_NodeModelPartRoot(struct Root80013DC8* arg0);
 
 void GeoRender_InitMatrixStack(void) {
     D_800AB460.unk_10A0 = 0;
@@ -666,16 +667,17 @@ void func_80012DC8(s8* arg0, s8* arg1) {
     }
 }
 
-/*
- * func_80012E68
+/**
+ * GeoRender_DisableTexture
  *
  * If the word at arg0 + 0x0C is non-zero, appends a G_TEXTURE command with
  * both scales 0xFFFF and the texture off (gSPTexture(..., 0xFFFF, 0xFFFF, 0,
  * G_TX_RENDERTILE, G_OFF)) to the display list. Then clears the words at
  * arg0 + 0x0C, + 0x10 and + 0x14. The second argument is not used (retail only
  * spills it to its stack home).
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_80012E68(s32* arg0, s32 arg1) {
+void GeoRender_DisableTexture(s32* arg0, s32 arg1) {
     if (arg0[3] != 0) {
         gSPTexture(gDisplayListHead++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF);
     }
@@ -835,7 +837,7 @@ void func_80013398(struct Root80013DC8 *arg0)
           }
           else
           {
-            func_80012E68((s32 *) (&ctx), (s32) entry);
+            GeoRender_DisableTexture((s32 *) (&ctx), (s32) entry);
           }
           func_80012D04((s8 *) (&ctx), entry);
           func_80012DC8((s8 *) (&ctx), entry);
@@ -880,7 +882,11 @@ extern s32 D_800AB450;
 extern s32 D_800AB454;
 extern s32 D_800AB458;
 extern s32 D_800AB45C;
-void func_800135FC(s16 layer, s32 arg1, s32 arg2, s32 arg3) {
+/**
+ * Queues display list `arg1` on render layer `layer` with the current matrix.
+ * @unverified Name and comment guessed from the code.
+ */
+void GeoRender_SubmitLayerDisplayList(s16 layer, s32 arg1, s32 arg2, s32 arg3) {
     s16 flag;
     GeoLayerEntry* entry;
 
@@ -1063,7 +1069,11 @@ s32 func_80002B10(s32, s32);
 void func_80002420(s32);
 void func_80013398(Root80013DC8*);
 s32 func_8001380C();
-void func_80013DC8(Root80013DC8* arg0) {
+/**
+ * Renders a model part root once: resets the material state, renders the children, then flushes the layers. Stadium 1 name for the same handler.
+ * @unverified Name and comment guessed from the code.
+ */
+void Geo_NodeModelPartRoot(Root80013DC8* arg0) {
     s32 i;
 
     if ((D_80060494 == NULL) && (arg0->children != NULL)) {
@@ -1146,7 +1156,11 @@ void GeoRender_SetFog(GraphNode* arg0) {
     gDPSetColor(gDisplayListHead++, G_SETFOGCOLOR, arg->unk_1C);
 }
 
-void func_8001426C(GraphNode* arg0) {
+/**
+ * Adds the node's directional light to the current light set (at most seven).
+ * @unverified Name and comment guessed from the code.
+ */
+void Geo_NodeLight(GraphNode* arg0) {
     unk_D_86002F34_alt4* arg = (unk_D_86002F34_alt4*)arg0;
     Light* light;
     Ambient* ambient;
@@ -1228,7 +1242,7 @@ void Geo_NodeShadowContext(GraphNode* arg0) {
         D_800AB460.unk_10A0++;
 
         GeoRender_CommitMatrix();
-        func_800135FC(0, (s32)D_01002580, 0, 1);
+        GeoRender_SubmitLayerDisplayList(0, (s32)D_01002580, 0, 1);
 
         D_800AB460.unk_10A0--;
     }
@@ -1290,8 +1304,11 @@ void Geo_NodeTranslate(GraphNode* arg0) {
 
 extern s32 D_800AB248[];
 void func_8000ED9C(MtxF* dest, Vec3f* local_position, Vec3s* rotate, Vec3f* scale, MtxF* basis, MtxF* transform);
-/* Geo_NodeAnimatedPart from Stadium 1, with the joint evaluation inlined. D_800AC690 is declared as u8 in this file, so it is cast to the anim record type. */
-void func_800148AC(GraphNode* arg0) {
+/**
+ * Geo_NodeAnimatedPart from Stadium 1, with the joint evaluation inlined. D_800AC690 is declared as u8 in this file, so it is cast to the anim record type.
+ * @unverified Name guessed from the code; comment kept.
+ */
+void Geo_NodeAnimatedPart(GraphNode* arg0) {
     Vec3s sp98;
     Vec3f sp8C;
     Vec3f sp80;
@@ -1360,13 +1377,13 @@ void func_800148AC(GraphNode* arg0) {
 }
 
 /*
- * func_80014BF0
+ * Geo_NodeDisplayListPart
  *
  * If the word at +0x18 of arg0 is not 0, calls
- * func_800135FC(byte at +3, that word, D_800AB248[halfword at +0x1C],
+ * GeoRender_SubmitLayerDisplayList(byte at +3, that word, D_800AB248[halfword at +0x1C],
  * byte at +2 & 4), and then in every case calls func_8001380C(arg0)
  * (Geo_ProcessNodeChildren in symbol_addrs.txt).  D_800AB248 is read as an
- * array of words indexed by a signed halfword of arg0.  What func_800135FC
+ * array of words indexed by a signed halfword of arg0.  What GeoRender_SubmitLayerDisplayList
  * does with these values is not established (it is still assembly).
  *
  * Context from the Stadium 1 decomp (not proof for this ROM): there, the
@@ -1378,12 +1395,16 @@ void func_800148AC(GraphNode* arg0) {
  */
 extern s32 D_800AB248[];
 
-void func_80014BF0(void *arg0) {
+/**
+ * Submits the node's display list on its layer, then renders the children. Stadium 1 name for the same handler.
+ * @unverified Name and comment guessed from the code.
+ */
+void Geo_NodeDisplayListPart(void *arg0) {
     s32 temp_a1;
 
     temp_a1 = M2C_FIELD(arg0, s32 *, 0x18);
     if (temp_a1 != 0) {
-        func_800135FC(M2C_FIELD(arg0, u8 *, 3), temp_a1, D_800AB248[M2C_FIELD(arg0, s16 *, 0x1C)], M2C_FIELD(arg0, u8 *, 2) & 4);
+        GeoRender_SubmitLayerDisplayList(M2C_FIELD(arg0, u8 *, 3), temp_a1, D_800AB248[M2C_FIELD(arg0, s16 *, 0x1C)], M2C_FIELD(arg0, u8 *, 2) & 4);
     }
     func_8001380C(arg0);
 }
@@ -1391,7 +1412,11 @@ void func_80014BF0(void *arg0) {
 void func_80011838(EventTrackState*, s32);
 void func_8000E41C(MtxF*, MtxF*, MtxF*, Vec3f*);
 extern s32 D_800AB44C;
-void func_80014C4C(GraphNode* arg0) {
+/**
+ * Renders a display object: evaluates its animation curves and pushes its transform. Stadium 1 name for the same handler.
+ * @unverified Name and comment guessed from the code.
+ */
+void Geo_NodeModelPart(GraphNode* arg0) {
     MtxF sp28;
     DisplayObject* arg = (DisplayObject*)arg0;
 
@@ -1446,13 +1471,17 @@ void func_80014C4C(GraphNode* arg0) {
 M2C_UNK func_80011294(s32);                         /* extern */
 M2C_UNK func_8001380C(s8 *);                      /* extern */
 
-void func_80014E78(s8 *arg0) {
+/**
+ * Pushes the node's matrix, then submits its display list. Stadium 1 name for the same handler.
+ * @unverified Name and comment guessed from the code.
+ */
+void Geo_NodeDisplayListMatrix(s8 *arg0) {
     s32 temp_a1;
 
     func_80011294(arg0 + 0x1C);
     temp_a1 = M2C_FIELD(arg0, s32 *, 0x18);
     if (temp_a1 != 0) {
-        func_800135FC(M2C_FIELD(arg0, u8 *, 3), temp_a1, 0, M2C_FIELD(arg0, u8 *, 2) & 4);
+        GeoRender_SubmitLayerDisplayList(M2C_FIELD(arg0, u8 *, 3), temp_a1, 0, M2C_FIELD(arg0, u8 *, 2) & 4);
     }
     func_8001380C(arg0);
     D_800AB460.unk_10A0 = (s32) (D_800AB460.unk_10A0 - 1);
@@ -1463,7 +1492,11 @@ void func_8000E41C(MtxF*, MtxF*, MtxF*, Vec3f*);
 M2C_UNK func_8001380C(s8 *);
 M2C_UNK func_80011210(MtxF *);                      /* extern */
 
-void func_80014EDC(s8 *arg0) {
+/**
+ * Pushes a scaled copy of the current matrix, then submits the node's display list. Stadium 1 name for the same handler.
+ * @unverified Name and comment guessed from the code.
+ */
+void Geo_NodeScale(s8 *arg0) {
     MtxF sp28;
     s32 temp_a1;
 
@@ -1472,7 +1505,7 @@ void func_80014EDC(s8 *arg0) {
     func_80011210(&sp28);
     temp_a1 = M2C_FIELD(arg0, s32 *, 0x18);
     if (temp_a1 != 0) {
-        func_800135FC(M2C_FIELD(arg0, u8 *, 3), temp_a1, 0, M2C_FIELD(arg0, u8 *, 2) & 4);
+        GeoRender_SubmitLayerDisplayList(M2C_FIELD(arg0, u8 *, 3), temp_a1, 0, M2C_FIELD(arg0, u8 *, 2) & 4);
     }
     func_8001380C(arg0);
     D_800AB460.unk_10A0 -= 1;
@@ -1480,7 +1513,11 @@ void func_80014EDC(s8 *arg0) {
 
 M2C_UNK func_8001380C(s8 *);                      /* extern */
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-void func_80014F78(s8 *arg0)
+/**
+ * Submits the node's display list with no matrix, then renders the children. Stadium 1 name for the same handler.
+ * @unverified Name and comment guessed from the code.
+ */
+void Geo_NodeDisplayList(s8 *arg0)
 {
   s32 new_var; // FAKE: permuter temp
   s32 temp_a1;
@@ -1491,7 +1528,7 @@ void func_80014F78(s8 *arg0)
     if ((!arg0) && (!arg0))
     {
     }
-    func_800135FC(*((u8 *) (((s8 *) arg0) + 3)), new_var, 0, (*((u8 *) (((s8 *) arg0) + 2))) & 4); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+    GeoRender_SubmitLayerDisplayList(*((u8 *) (((s8 *) arg0) + 3)), new_var, 0, (*((u8 *) (((s8 *) arg0) + 2))) & 4); // FAKE: decomp slop, raw pointer casts stand in for struct fields
   }
   func_8001380C((0, arg0));  // FAKE
 }
@@ -1594,8 +1631,9 @@ Gfx* func_8001B3AC(s16 x, s16 y, s16 arg2, s16 arg3, Color_RGBA8_u32 color, cons
 /**
  * Geo callback for a text node: prints the node's formatted string with its
  * font and colour and queues the resulting display list on the node's layer.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_800152AC(GraphNode* arg0) {
+void Geo_NodeText(GraphNode* arg0) {
     GeoTextNode* arg = (GeoTextNode*)arg0;
     Gfx* dl;
 
@@ -1603,7 +1641,7 @@ void func_800152AC(GraphNode* arg0) {
         Font_SetActive(arg->font, arg->fontArg);
         dl = func_8001B3AC(arg->x, arg->y, arg->w, arg->h, arg->arg, arg->text);
         if (dl != NULL) {
-            func_800135FC(arg->node.renderLayer, (s32)dl, 0, arg->node.renderFlags & 4);
+            GeoRender_SubmitLayerDisplayList(arg->node.renderLayer, (s32)dl, 0, arg->node.renderFlags & 4);
         }
     }
     Geo_ProcessNodeChildren(arg0);
@@ -1663,9 +1701,9 @@ void Geo_NodeShadow(GraphNode* arg0) {
         gDPSetEnvColor(&temp_s1[0], 0, 0, 0, (s32)(150.0f * sp80));
 
         if (D_8006049C->node.renderFlags & 2) {
-            func_800135FC(6, (u32)temp_s1 & 0x1FFFFFFF, 0, 1);
+            GeoRender_SubmitLayerDisplayList(6, (u32)temp_s1 & 0x1FFFFFFF, 0, 1);
         } else {
-            func_800135FC(5, (u32)temp_s1 & 0x1FFFFFFF, 0, 1);
+            GeoRender_SubmitLayerDisplayList(5, (u32)temp_s1 & 0x1FFFFFFF, 0, 1);
         }
 
         Geo_ProcessNodeChildren(arg0);
