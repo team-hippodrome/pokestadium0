@@ -743,7 +743,7 @@ func_820008C8,0x820008C8,src/fragments/fragment007_166580.c,FreeBattle_BuildTeam
 func_82000900,0x82000900,src/fragments/fragment007_166580.c,FreeBattle_InitNamedTeam,hand,,c
 func_820009A4,0x820009A4,src/fragments/fragment007_166580.c,FreeBattle_InitConfirmWindow,hand,,c
 func_82000AC4,0x82000AC4,src/fragments/fragment007_166580.c,FreeBattle_DrawMoveName,hand,,c
-func_82000BC4,0x82000BC4,src/fragments/fragment007_166580.c,FreeBattle_DrawTypeIcon,hand,,c
+func_82000BC4,0x82000BC4,src/fragments/fragment007_166580.c,FreeBattle_DrawTypeName,hand,,c
 func_82000C5C,0x82000C5C,src/fragments/fragment007_166580.c,FreeBattle_DrawMonStatusWindow,hand,,c
 func_820012B4,0x820012B4,src/fragments/fragment007_166580.c,FreeBattle_UpdateRentalConfirmChoice,hand,,c
 func_82001340,0x82001340,src/fragments/fragment007_166580.c,FreeBattle_MarkPickedRentals,hand,,c

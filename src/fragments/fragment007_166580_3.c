@@ -42,7 +42,7 @@ u32 func_800566BC(const char*);
 
 void FreeBattle_DrawMoveName(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 
-void FreeBattle_DrawTypeIcon(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
+void FreeBattle_DrawTypeName(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 
 s32 func_8002B390(s32);
 s32 func_8002BC14(s32);

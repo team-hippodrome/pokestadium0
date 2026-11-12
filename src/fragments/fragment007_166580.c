@@ -469,7 +469,7 @@ void FreeBattle_DrawMoveName(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
  * Draws the colored type icon for type slot `arg3` of Pokemon `arg2`.
  * Seen in play: draws タイプ1/タイプ2 (くさ, どく) in the rental status window.
  */
-void FreeBattle_DrawTypeIcon(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
+void FreeBattle_DrawTypeName(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     Color82000BC4 c;
     s32 idx = Pokemon_GetTypeIndex(arg2, arg3);
 
@@ -611,8 +611,8 @@ void FreeBattle_DrawMonStatusWindow(Screen82000C5C* arg0) {
             FreeBattle_DrawMoveName(D_82009040[i].x + x, D_82009040[i].y + y, BattleMon_GetMoveIndex(arg0->mon, i), D_82009040[i].centered);
         }
         func_8001ABBC();
-        FreeBattle_DrawTypeIcon(x + 0x9C, y + 0x40, (s32)arg0->mon, 0);
-        FreeBattle_DrawTypeIcon(x + 0x9C, y + 0x7C, (s32)arg0->mon, 1);
+        FreeBattle_DrawTypeName(x + 0x9C, y + 0x40, (s32)arg0->mon, 0);
+        FreeBattle_DrawTypeName(x + 0x9C, y + 0x7C, (s32)arg0->mon, 1);
         gSPDisplayList(gDisplayListHead++, D_80060290);
         for (i = 0; i < count; i++) {
             func_8001B884(D_82009040[i].iconX + x, D_82009040[i].y + y, 0x14, 0x14, (u8*)D_82009040[i].icon, 0x14, 0x200000);
