@@ -696,7 +696,8 @@ void Battle_Effect_ReflectLightScreen(void) {
 
 /**
  * Dispatch the cached effect through its 1-based handler slot; NULL slots do nothing.
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in a turn where 1P's Poison Sting went first, it ran with effect 2,
+ * the effect byte of Poison Sting's move cache.
  */
 void BattleEffect_RunMoveEffect(void) {
     BattleMonRuntime* ptr = &sActivePokemon[sBattleScene.scene->actingSide]->state.runtime;
@@ -709,7 +710,8 @@ void BattleEffect_RunMoveEffect(void) {
 
 /**
  * Entry point used by the turn engine to invoke the cached move-effect handler.
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in a turn where 1P's Poison Sting went first, it ran at commit with
+ * effect 2, the effect byte of Poison Sting's move cache, and called BattleEffect_RunMoveEffect.
  */
 void BattleEffect_ExecuteMoveEffect(void) {
     BattleEffect_RunMoveEffect();

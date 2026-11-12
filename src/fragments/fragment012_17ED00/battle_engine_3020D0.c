@@ -247,7 +247,8 @@ extern void* D_8219A520;
 
 /**
  * Shows a message built by BattleMessage_Format in `side`'s trainer color and plays its announcer clip (bit 7 picks the second clip bank), then clears the id.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): in a turn where 1P's Poison Sting went first, it ran for side 0 at
+ * phase 2, step 0, as 「ニドニドの どくばり！」 appeared in 1P's blue message box.
  */
 void BattleMessage_ShowForSide(s8* arg0, s32 side) {
     ActivePokemon* ap;

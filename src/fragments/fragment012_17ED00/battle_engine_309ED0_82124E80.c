@@ -23,7 +23,8 @@ void func_82124EF4(void) {
  * (skipping a side with no move), records the order for the COM AI, enters phase 0 and resolves
  * the first action with Battle_ResolveMonAction. Ran in play from Battle_ChooseActions on a Struggle turn and
  * on the second turn of Razor Wind and Fly.
- * @unverified Name from the code.
+ * Seen in play (2026-11-12): in a turn where 1P's Poison Sting went first, it ran once both
+ * actions were committed, just before the presentation entered phase 2.
  */
 void Battle_StartTurn(void) {
     s32 sp24;
@@ -176,7 +177,8 @@ void func_82133868(ActivePokemonState*);
  * action (a switch through BeginBattleForEntity, the scripted action in mode 10, otherwise
  * Battle_ResolveMonAction) and marks the second pass. BattleScene_CompleteActionPhase then enters
  * phase 3. In play phase 3 always followed phase 2 or 7 this way.
- * @unverified Name from the code.
+ * Seen in play (2026-11-12): in a turn where 1P's Poison Sting went first, it ran when that
+ * action's presentation ended, before COM's Pinsir acted.
  */
 void BattleScene_StartSecondAction(void) {
     ActivePokemonState* temp_a3;

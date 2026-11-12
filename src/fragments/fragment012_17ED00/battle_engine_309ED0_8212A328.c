@@ -5,7 +5,8 @@
  * Step 3 of an action phase: waits for the user's animation, enters the miss or status phase when
  * one is pending (BattleScene_TryEnterEffectPhaseBeforeImpact), otherwise runs the travel camera
  * variant (table column 3 of D_80073D84).
- * @unverified Name and comment from the code and the D_80073D84 table read in game.
+ * Seen in play (2026-11-12): in a turn where 1P's Poison Sting went first, it ran at phase 2,
+ * step 3.
  */
 void BattleScene_ActionStepTravel(CameraNode* arg0, s32 arg1) {
     UNUSED s32 pad; // FAKE: stack padding
@@ -171,7 +172,8 @@ void func_8212A768(ActivePokemon* arg0, CameraNode* arg1, s32 arg2) {
 /**
  * Step 4 reaction for an ordinary hit (hitReactionKind 0). Ran in play for every damaging move
  * that hit.
- * @unverified Name from BattleScene_ActionStepReaction's dispatch.
+ * Seen in play (2026-11-12): in a turn where 1P's Poison Sting went first, it ran from step 4
+ * with hitReactionKind 0 for the ordinary hit on Pinsir.
  */
 void BattleScene_ReactionNormal(CameraNode* arg0, s32 arg1) {
     BattleMonRuntime* sp1C = &((ActivePokemon*)D_8219A540)->state.runtime;

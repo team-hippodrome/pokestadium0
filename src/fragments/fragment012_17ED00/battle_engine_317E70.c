@@ -828,7 +828,9 @@ s32 Battle_CheckSideDefeatAfterResidualStatus(ActivePokemon* arg0) {
 
 /**
  * Select the appropriate roster-HP defeat check for direct damage and residual checkpoints.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12): in a turn where 1P's Poison Sting went first, it ran after the
+ * action resolved. When Pinsir dropped to 0 HP it led to Battle_CheckAllBroughtFainted_Hp, and
+ * when poison took Gengar to 0 it led to Battle_CheckAllBroughtFainted_PoisonBurn.
  */
 s32 Battle_CheckFaintAfterMove(void) {
     if (sBattleTarget->hp == 0) {

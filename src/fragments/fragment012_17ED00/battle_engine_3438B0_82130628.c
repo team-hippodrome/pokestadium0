@@ -361,7 +361,8 @@ void BattleScene_PhaseSendOutAfterFaint(CameraNode* arg0) {
 /**
  * Runs the per-frame battle presentation phase selected by scene->phase and phaseStep. Move-specific phases
  * (7, 12-15, 17, 25, 27-31, 38) are entered through BattleScene_PhaseDispatchMoveEffect.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12): in a turn where 1P's Poison Sting went first, it was running the
+ * presentation from the frame after Battle_StartTurn (phase 0, then 2).
  */
 void BattleScene_UpdatePhase(CameraNode* arg0) {
     func_82125FD0();

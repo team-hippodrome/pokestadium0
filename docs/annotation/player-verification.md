@@ -656,3 +656,17 @@ on both sides of the call.
 * COM AI helpers: `BattleAi_CanUseMove` returned each of Pinsir's four moves
   (all with PP left), and `BattleAi_FindUsableHealingMove` returned Recover
   for Gengar once Recover was in its moves, and 0 for Nidorino.
+
+## Turn flow
+
+The turn flow was traced on a turn where 1P's Poison Sting went first, with
+scene phase and step read at each first entry:
+
+1. `Battle_StartTurn` ran at commit, along with `ProcessBattleTurn` and the
+   effect dispatch (`BattleEffect_ExecuteMoveEffect`, then
+   `BattleEffect_RunMoveEffect`, for effect 2).
+2. Phase 2 stepped through `BattleScene_ActionStepIntro` (0), `SetHitCount`
+   (1), `UseMove` (2), `Travel` (3) and `Reaction` (4). The reaction was
+   `BattleScene_ReactionNormal` (hitReactionKind 0).
+3. `BattleScene_StartSecondAction` handed over to COM.
+4. `BattleScene_PhaseEndTurn` ran at phase 4.
