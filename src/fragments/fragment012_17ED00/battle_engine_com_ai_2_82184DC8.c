@@ -1287,7 +1287,9 @@ extern s8 *D_821CF2A0;
  * record arg0: HP, status, last move, volatile state and stat stages. Moves and PP
  * are copied in full only when the opponent's flag bit 3 (0x4E) is set; otherwise
  * only the move just used is recorded.
- * @unverified Name and comment guessed from the code (COM AI pass).
+ * Seen in play (2026-11-12): after two turns, COM's record of 1P's Nidorino held HP 44 (the HUD
+ * showed 44/ 69) and only the two moves Nidorino had used, Poison Sting and Tail Whip, out of its
+ * four.
  */
 void BattleAi_CopyVisibleBattleState(s8 *arg0, s8 *arg1)
 {

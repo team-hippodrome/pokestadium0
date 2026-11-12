@@ -603,3 +603,10 @@ These scenarios start from a COM free battle (1P ガール team, COM むしと�
   is now `Battle_CheckAllBroughtFainted_PoisonBurn` (was
   `Battle_CheckDefeatAtStatusHp`). `BattleScene_PhaseResidualDamageFaintCheck`
   did not run for this knockout, so it keeps its tag.
+* COM team pick: confirming 1P's order ran `Battle_SelectComRoster` and the
+  `BattleAi_*` pick helpers once, before the first send-out. COM brought
+  Pinsir, Gengar and Pikachu. The pick helpers' scoring is not shown on
+  screen, so they keep their tags.
+* COM's view of 1P: after Nidorino had used Poison Sting and Tail Whip, the
+  AI record of Nidorino listed only those two moves and HP 44 (HUD 44/ 69),
+  which confirms `BattleAi_CopyVisibleBattleState`.
