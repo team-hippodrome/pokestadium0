@@ -519,9 +519,10 @@ s32 func_82126220(ActivePokemon* active_pokemon) {
 }
 
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Faint, step 0: sets up the faint presentation (a frame or two before the message).
+ * Seen in play (Pinsir fainting to Poison Sting); Stadium 1 used these steps for a send-out.
  */
-void BattleScene_AdvanceSendOutPreparation(CameraNode* arg0) {
+void BattleScene_FaintStepStart(CameraNode* arg0) {
     if (func_82124A50(sActivePokemon[!sBattleScene.scene->actingSide]) == 0) {
         Battle_ClearRuntimeFlags(sActivePokemon[!sBattleScene.scene->actingSide], 0x3800);
         func_821261A0(sActivePokemon[!sBattleScene.scene->actingSide], arg0, 3);
@@ -547,9 +548,10 @@ void func_8211EE8C(void);
 void ActivePokemon_SetStateFlags(ActivePokemon*, s32);
 u16 func_8210C020(s32); // BattleAnim_RandomRange
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Faint, step 1: 「…は たおれた！」 and the fainting animation with sparkles (about 60 frames in play).
+ * Seen in play (Pinsir fainting to Poison Sting); Stadium 1 used these steps for a send-out.
  */
-void BattleScene_AdvanceSendOutCamera(CameraNode* arg0) {
+void BattleScene_FaintStepCollapse(CameraNode* arg0) {
     UNUSED s32 pad[2]; // FAKE: stack padding
     ActivePokemonState* state = &sActivePokemon[!sBattleScene.scene->actingSide]->state;
     u8* rec = D_82189180[!sBattleScene.scene->actingSide] + 0x72D;
@@ -586,7 +588,11 @@ void BattleScene_AdvanceSendOutCamera(CameraNode* arg0) {
     }
 }
 
-void BattleScene_AdvanceSendOutCameraClose(CameraNode* arg0) {
+/**
+ * Faint, step 2: the fainted Pokemon turns into a ball of light and disappears.
+ * Seen in play (Pinsir fainting to Poison Sting); Stadium 1 used these steps for a send-out.
+ */
+void BattleScene_FaintStepVanish(CameraNode* arg0) {
     func_821229AC(arg0, sActivePokemon[!sBattleScene.scene->actingSide]);
     if (BattleScene_AdvanceCameraFrameCounter(0x19) != 0) {
         func_8211EE8C();
@@ -595,7 +601,11 @@ void BattleScene_AdvanceSendOutCameraClose(CameraNode* arg0) {
     }
 }
 
-void BattleScene_FinishSendOutCameraClose(CameraNode* arg0) {
+/**
+ * Faint, step 3: waits 5 camera frames, then marks the Pokemon fainted (state 0x10).
+ * Seen in play (Pinsir fainting to Poison Sting); Stadium 1 used these steps for a send-out.
+ */
+void BattleScene_FaintStepFinishVanish(CameraNode* arg0) {
     ActivePokemonState* temp_s0 = &sActivePokemon[!sBattleScene.scene->actingSide]->state;
 
     func_821229AC(arg0, sActivePokemon[!sBattleScene.scene->actingSide]);
@@ -617,9 +627,10 @@ void BattleScene_FinishSendOutCameraClose(CameraNode* arg0) {
 }
 
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Faint, step 4: refreshes the HUD, then goes to the end of the turn (phase 4), to the other side's faint (phase 5) or sets the winner when that side has nothing left.
+ * Seen in play (Pinsir fainting to Poison Sting); Stadium 1 used these steps for a send-out.
  */
-void BattleScene_CompleteSendOutFollowup(UNUSED CameraNode* arg0) {
+void BattleScene_FaintStepEnd(UNUSED CameraNode* arg0) {
     ActivePokemonState* other;
     ActivePokemonState* self;
     s32 side;
@@ -714,23 +725,23 @@ void BattleScene_AdvanceSendOutFollowupCamera(CameraNode* arg0) {
 void BattleScene_PhaseFaint(CameraNode* arg0) {
     switch (sBattleScene.scene->phaseStep) {
         case 0:
-            BattleScene_AdvanceSendOutPreparation(arg0);
+            BattleScene_FaintStepStart(arg0);
             break;
 
         case 1:
-            BattleScene_AdvanceSendOutCamera(arg0);
+            BattleScene_FaintStepCollapse(arg0);
             break;
 
         case 2:
-            BattleScene_AdvanceSendOutCameraClose(arg0);
+            BattleScene_FaintStepVanish(arg0);
             break;
 
         case 3:
-            BattleScene_FinishSendOutCameraClose(arg0);
+            BattleScene_FaintStepFinishVanish(arg0);
             break;
 
         case 4:
-            BattleScene_CompleteSendOutFollowup(arg0);
+            BattleScene_FaintStepEnd(arg0);
             break;
 
         case 5:
@@ -775,19 +786,19 @@ void func_82126D20(UNUSED CameraNode* arg0) {
 void func_82126E34(CameraNode* arg0) {
     switch (sBattleScene.scene->phaseStep) {
         case 0:
-            BattleScene_AdvanceSendOutPreparation(arg0);
+            BattleScene_FaintStepStart(arg0);
             break;
 
         case 1:
-            BattleScene_AdvanceSendOutCamera(arg0);
+            BattleScene_FaintStepCollapse(arg0);
             break;
 
         case 2:
-            BattleScene_AdvanceSendOutCameraClose(arg0);
+            BattleScene_FaintStepVanish(arg0);
             break;
 
         case 3:
-            BattleScene_FinishSendOutCameraClose(arg0);
+            BattleScene_FaintStepFinishVanish(arg0);
             break;
 
         case 4:

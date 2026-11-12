@@ -182,3 +182,20 @@ the Pokémon menu (B) and the surrender prompt (Start, 「こうさんします�
 These lost their tags. Not reached: `BattleMenu_DrawSurrenderPrompt`,
 `BattleMenu_DrawConfirmButton`, `BattleHud_DrawCompactMonStatusBox` and the
 `BattleDebug_*` overlays.
+
+## Faint steps (`battle_engine_309ED0_82124E80.c`)
+
+scene->phaseStep (+0x20) logged during phase 5 while Pinsir fainted to Poison
+Sting, with a screenshot at each step. The steps carried Stadium 1 send-out
+names; renamed after what each showed:
+
+| Step | Frames | Shown | Was | Now |
+|---|---|---|---|---|
+| 0 | 1–2 | (setup) | `BattleScene_AdvanceSendOutPreparation` | `BattleScene_FaintStepStart` |
+| 1 | ~60 | 「カイのすけは たおれた！」, fainting animation | `BattleScene_AdvanceSendOutCamera` | `BattleScene_FaintStepCollapse` |
+| 2 | ~12 | turns into light and vanishes | `BattleScene_AdvanceSendOutCameraClose` | `BattleScene_FaintStepVanish` |
+| 3 | ~2 | marks the Pokémon fainted | `BattleScene_FinishSendOutCameraClose` | `BattleScene_FaintStepFinishVanish` |
+| 4 | — | picks phase 4 / 5 / winner | `BattleScene_CompleteSendOutFollowup` | `BattleScene_FaintStepEnd` |
+
+Phase 34 (`func_82126E34`) runs the same steps 0–3 with its own step 4
+(`func_82126D20`); it was not seen in play.
