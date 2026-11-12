@@ -166,3 +166,19 @@ Bubble Beam. Only these ran, and each did what its name says:
 | `Particle_AddRotationXYZ` | (p, 0x5F8, -0x35C, 0), Bubble Beam | rotation.x +0x5F8, rotation.y -0x35C |
 
 The other 25 helpers did not run for any of these moves and keep `@unverified`.
+
+## Battle HUD and menu drawing (`battle_engine_31D9F0_*.c`, `battle_engine_3020D0.c`)
+
+Breakpoints while opening the command menu, the Fight menu (A, then R held),
+the Pokémon menu (B) and the surrender prompt (Start, 「こうさんしますか？ いいえ はい」):
+
+- Every frame: `Battle_RenderHud` → `BattleMenu_DrawSide0Menus` (1P box, the
+  six party balls under it, `BattleMenu_DrawCommandMenu`) and
+  `BattleMenu_DrawSide1Menus` (COM box).
+- After A: `BattleMenu_DrawBackConfirmBar` (the 「L もどる R かくにん」 bar).
+- While R is held: `BattleMenu_DrawMovePanel` with the PP text helpers.
+- After Start: `BattleMenu_DrawSurrenderPromptWithCursor`.
+
+These lost their tags. Not reached: `BattleMenu_DrawSurrenderPrompt`,
+`BattleMenu_DrawConfirmButton`, `BattleHud_DrawCompactMonStatusBox` and the
+`BattleDebug_*` overlays.

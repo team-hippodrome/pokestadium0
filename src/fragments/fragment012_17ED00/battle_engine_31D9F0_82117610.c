@@ -313,7 +313,6 @@ extern char D_821959D0[];
 extern char D_821959DC[];
 /**
  * Draws the battle command menu: たたかう (Fight), ポケモン (Pokemon), にげる (Run).
- * @unverified Name and comment guessed from the code.
  */
 void BattleMenu_DrawCommandMenu(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
     s32 i;
@@ -354,7 +353,6 @@ extern char D_821959E4[];
 extern char D_821959EC[];
 /**
  * Draws the wide button bar with もどる (Back) and かくにん (Confirm).
- * @unverified Name and comment guessed from the code.
  */
 void BattleMenu_DrawBackConfirmBar(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
     s32 i;

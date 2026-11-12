@@ -110,7 +110,6 @@ typedef struct MovePpInit {
 } MovePpInit;
 /**
  * Draws the move panel with names and PP. Moves not revealed yet show ？？？？？.
- * @unverified Name and comment guessed from the code.
  */
 void BattleMenu_DrawMovePanel(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3) {
     s32 i;
@@ -685,7 +684,6 @@ extern char D_82195A7C[];
 extern char D_82195A84[];
 /**
  * Draws the こうさんしますか? (Surrender?) prompt with the No/Yes cursor at state.unk_2F.
- * @unverified Name and comment guessed from the code.
  */
 void BattleMenu_DrawSurrenderPromptWithCursor(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3) {
     s32 pad[2]; // FAKE
