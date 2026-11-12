@@ -108,8 +108,8 @@ s32 Audio_GetDiskReadyStatus(u8* arg0);
 void Audio_SetDiskReadyPolling(s32 arg0);
 
 extern s16 D_80075D00[];
-Acmd* func_8003AECC(N_PVoice* filter, s16* inp, s16* outp, s32 outCount, Acmd* p);
-s16 func_8003B280(s16 arg0, s32 arg1, s16 arg2, u16 arg3);
+Acmd* _pullSubFrame(N_PVoice* filter, s16* inp, s16* outp, s32 outCount, Acmd* p);
+s16 _getVol(s16 arg0, s32 arg1, s16 arg2, u16 arg3);
 
 /**
  * Envelope mixer pull: applies the voice envelope and pan, then mixes into the output buffers.
@@ -174,7 +174,7 @@ Acmd* n_alEnvmixerPull(N_PVoice* filter, s32 sample_offset, Acmd* p) {
             case (AL_FILTER_SET_FXAMT):
             case (AL_FILTER_SET_PAN):
             case (AL_FILTER_SET_VOLUME):
-                ptr = func_8003AECC(e, &inp, &loutp, samples, ptr);
+                ptr = _pullSubFrame(e, &inp, &loutp, samples, ptr);
 
                 if (e->em_delta >= e->em_segEnd || samples == 0) {
                     e->em_ltgt = (e->em_volume * D_80075D00[e->em_pan]) >> 15;
@@ -183,8 +183,8 @@ Acmd* n_alEnvmixerPull(N_PVoice* filter, s32 sample_offset, Acmd* p) {
                     e->em_cvolL = e->em_ltgt;
                     e->em_cvolR = e->em_rtgt;
                 } else {
-                    e->em_cvolL = func_8003B280(e->em_cvolL, e->em_delta, e->em_lratm, e->em_lratl);
-                    e->em_cvolR = func_8003B280(e->em_cvolR, e->em_delta, e->em_rratm, e->em_rratl);
+                    e->em_cvolL = _getVol(e->em_cvolL, e->em_delta, e->em_lratm, e->em_lratl);
+                    e->em_cvolR = _getVol(e->em_cvolR, e->em_delta, e->em_rratm, e->em_rratl);
                 }
 
                 if (e->em_cvolL == 0) {
@@ -225,7 +225,7 @@ Acmd* n_alEnvmixerPull(N_PVoice* filter, s32 sample_offset, Acmd* p) {
                 e->em_motion = AL_PLAYING;
             } break;
             case (AL_FILTER_STOP_VOICE): {
-                ptr = func_8003AECC(e, &inp, &loutp, samples, ptr);
+                ptr = _pullSubFrame(e, &inp, &loutp, samples, ptr);
                 n_alEnvmixerParam(e, AL_FILTER_RESET, 0);
             } break;
 
@@ -235,19 +235,19 @@ Acmd* n_alEnvmixerPull(N_PVoice* filter, s32 sample_offset, Acmd* p) {
                 _n_freePVoice((N_PVoice*)param->pvoice);
             } break;
             case (AL_FILTER_SET_PITCH):
-                ptr = func_8003AECC(e, &inp, &loutp, samples, ptr);
+                ptr = _pullSubFrame(e, &inp, &loutp, samples, ptr);
                 e->rs_ratio = e->em_ctrlList->data.f;
                 break;
             case (AL_FILTER_SET_UNITY_PITCH):
-                ptr = func_8003AECC(e, &inp, &loutp, samples, ptr);
+                ptr = _pullSubFrame(e, &inp, &loutp, samples, ptr);
                 e->rs_upitch = 1;
                 break;
             case (AL_FILTER_SET_WAVETABLE):
-                ptr = func_8003AECC(e, &inp, &loutp, samples, ptr);
+                ptr = _pullSubFrame(e, &inp, &loutp, samples, ptr);
                 n_alLoadParam(e, AL_FILTER_SET_WAVETABLE, (void*)e->em_ctrlList->data.i);
                 break;
             default:
-                ptr = func_8003AECC(e, &inp, &loutp, samples, ptr);
+                ptr = _pullSubFrame(e, &inp, &loutp, samples, ptr);
                 n_alEnvmixerParam(e, e->em_ctrlList->type, (void*)e->em_ctrlList->data.i);
                 break;
         }
@@ -263,7 +263,7 @@ Acmd* n_alEnvmixerPull(N_PVoice* filter, s32 sample_offset, Acmd* p) {
         _n_freeParam(this_param);
     }
 
-    ptr = func_8003AECC(e, &inp, &loutp, out_count, ptr);
+    ptr = _pullSubFrame(e, &inp, &loutp, out_count, ptr);
 
     if (e->em_delta > e->em_segEnd) {
         e->em_delta = e->em_segEnd;
@@ -306,7 +306,11 @@ s32 n_alEnvmixerParam(N_PVoice* filter, s32 paramID, void* param) {
 s16 func_8003B0F8(f64 vol, f64 tgt, s32 count, u16* ratel);
 extern s16 D_80075D00[];
 
-Acmd* func_8003AECC(N_PVoice* filter, s16* inp, s16* outp, s32 out_count, Acmd* p) {
+/**
+ * libultra n_env.c envelope mixer helper: pulls one subframe of samples through the voice.
+ * @unverified Name from Stadium 1, where the same call sits in the same switch case.
+ */
+Acmd* _pullSubFrame(N_PVoice* filter, s16* inp, s16* outp, s32 out_count, Acmd* p) {
     Acmd* ptr = p;
     N_PVoice* e = filter;
     s16* inpp = N_AL_RESAMPLER_OUT;
@@ -372,7 +376,11 @@ s16 func_8003B0F8(f64 vol, f64 tgt, s32 count, u16* ratel) {
     return s;
 }
 
-s16 func_8003B280(s16 arg0, s32 arg1, s16 arg2, u16 arg3) {
+/**
+ * libultra n_env.c helper: steps the envelope volume over the given number of samples.
+ * @unverified Name from Stadium 1, where the same call sits in the same switch case.
+ */
+s16 _getVol(s16 arg0, s32 arg1, s16 arg2, u16 arg3) {
     s32 delta;
 
     arg1 >>= 3;

@@ -110,7 +110,7 @@ M2C_UNK func_8215F930(s8 *);                      /* extern */
 
 void func_8215FAA4(s8 *arg0);
 
-void func_8216008C(Particle* arg0);
+void BattleAnim_SetupSlashingMoveFullScreenFlash(Particle* arg0);
 
 s16 Particle_GetUnkCE();                                /* extern */
 M2C_UNK func_8213C938(s8 *);                      /* extern */
@@ -125,7 +125,7 @@ void BattleAnim_RunSlashingMoveFullScreenFlash(s8 *arg0);
 
 void Particle_SetPosition(Particle* arg0, f32 arg1, f32 arg2, f32 arg3);
 
-void func_821601C0(Particle* arg0);
+void BattleAnim_SetupSlashMoveWhiteFlashOverlay(Particle* arg0);
 
 s16 Particle_GetUnkCE();                                /* extern */
 M2C_UNK func_8213C930(s8 *);                      /* extern */
@@ -170,7 +170,7 @@ M2C_UNK func_821401D4(s8 *, M2C_UNK);             /* extern */
 M2C_UNK func_8214050C(s8 *, M2C_UNK);             /* extern */
 M2C_UNK func_82143478(s8 *, u16);                 /* extern */
 
-void func_821605F8(s8 *arg0);
+void BattleAnim_SetupSmallSand(s8 *arg0);
 
 M2C_UNK func_8213C930(s8 *);                      /* extern */
 M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
@@ -193,7 +193,7 @@ M2C_UNK func_821401D4(s8 *, M2C_UNK);             /* extern */
 M2C_UNK func_8214050C(s8 *, M2C_UNK);             /* extern */
 M2C_UNK func_82143478(s8 *, u16);                 /* extern */
 
-void func_821607E8(s8 *arg0);
+void BattleAnim_SetupLargeSand(s8 *arg0);
 
 M2C_UNK func_8213C930(s8 *);                      /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */

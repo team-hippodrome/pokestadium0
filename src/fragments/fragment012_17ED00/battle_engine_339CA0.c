@@ -240,7 +240,11 @@ void BattleAnim_RunPetalDanceRazorLeafHitEffect(Particle* arg0) {
     }
 }
 
-void func_8216008C(Particle* arg0) {
+/**
+ * Particle setup for the full-screen flash of slashing moves.
+ * @unverified Name from Stadium 1, where the same call sits in the same switch case.
+ */
+void BattleAnim_SetupSlashingMoveFullScreenFlash(Particle* arg0) {
     Particle_Field1C_SetScaled_0B938(arg0, 1.0f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
     Particle_Field94_AddZ_0A5B0(arg0, 0x2500);
@@ -260,7 +264,7 @@ void BattleAnim_RunSlashingMoveFullScreenFlash(s8 *arg0) {
     temp_v1 = M2C_FIELD(arg0, s16 *, 0xAE);
     switch (temp_v1) {                              /* irregular */
     case 1:
-        func_8216008C(arg0);
+        BattleAnim_SetupSlashingMoveFullScreenFlash(arg0);
         break;
     case 2:
         func_8213CA80(arg0, 0x14);
@@ -278,7 +282,11 @@ void BattleAnim_RunSlashingMoveFullScreenFlash(s8 *arg0) {
     }
 }
 
-void func_821601C0(Particle* arg0) {
+/**
+ * Particle setup for the white flash overlay of Slash.
+ * @unverified Name from Stadium 1, where the same call sits in the same switch case.
+ */
+void BattleAnim_SetupSlashMoveWhiteFlashOverlay(Particle* arg0) {
     Particle_Field1C_SetScaled_0B938(arg0, 1.0f);
     Particle_SetPosition(arg0, 320.0f, 0.0f, 0.0f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
@@ -299,7 +307,7 @@ void BattleAnim_RunSlashMoveWhiteFlashOverlay(s8 *arg0) {
     temp_v1 = M2C_FIELD(arg0, s16 *, 0xAE);
     switch (temp_v1) {                              /* irregular */
     case 1:
-        func_821601C0(arg0);
+        BattleAnim_SetupSlashMoveWhiteFlashOverlay(arg0);
         break;
     case 2:
         func_8213CA80(arg0, 0x14);
@@ -400,7 +408,11 @@ void func_82160528(s8 *arg0) {
     }
 }
 
-void func_821605F8(s8 *arg0) {
+/**
+ * Particle setup for a small sand grain.
+ * @unverified Name from Stadium 1, where the same call sits in the same switch case.
+ */
+void BattleAnim_SetupSmallSand(s8 *arg0) {
     s16 sp26;
     u16 sp24;
 
@@ -426,7 +438,7 @@ void BattleAnim_RunSmallSand(s8 *arg0) {
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_821605F8(arg0);
+        BattleAnim_SetupSmallSand(arg0);
         return;
     case 2:
         Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 2, 0);
@@ -444,7 +456,11 @@ void BattleAnim_RunSmallSand(s8 *arg0) {
     }
 }
 
-void func_821607E8(s8 *arg0) {
+/**
+ * Particle setup for a large sand grain.
+ * @unverified Name from Stadium 1, where the same call sits in the same switch case.
+ */
+void BattleAnim_SetupLargeSand(s8 *arg0) {
     s16 sp26;
     u16 sp24;
 
@@ -470,7 +486,7 @@ void BattleAnim_RunLargeSand(s8 *arg0) {
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_821607E8(arg0);
+        BattleAnim_SetupLargeSand(arg0);
         break;
     case 2:
         Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 3, 0);
