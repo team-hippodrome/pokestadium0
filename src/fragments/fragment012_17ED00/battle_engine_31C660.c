@@ -216,7 +216,11 @@ extern StatStageMultiplier D_8218ADF4[];
 extern s32 D_8218C7F0;
 extern s32 D_8218C808;
 extern s32 D_8218C820;
-void func_82113FC8(void) {
+/**
+ * Apply the Rage follow-up stat boost, using its separate message queue.
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleEffect_ApplyStatBoost(void) {
     s32 sp24;
     s32 var_a3;
     u16* sp1C;

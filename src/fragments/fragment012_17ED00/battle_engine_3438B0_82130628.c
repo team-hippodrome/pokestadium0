@@ -1,7 +1,12 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
 #include "battle_engine_3438B0.h"
 
-void func_82130628(CameraNode* arg0) {
+/**
+ * Phase 35. Same residual damage presentation as BattleScene_PhaseResidualDamageAfterMove for a Pokemon that
+ * has no move this turn (usedMove high nibble 0xF); entered by BattleScene_PrepareResidualStatusPresentation.
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleScene_PhaseResidualDamageWithoutMove(CameraNode* arg0) {
     u8* sp2C = (u8*)sActivePokemon[sBattleScene.scene->unk_2C] + 0x7C6;
     u8* sp28 = (u8*)sActivePokemon[!sBattleScene.scene->unk_2C] + 0x7C6;
     ActivePokemon* cur = sActivePokemon[sBattleScene.scene->unk_2C];
@@ -94,7 +99,13 @@ void func_82130628(CameraNode* arg0) {
 }
 
 
-void func_82130B10(CameraNode* arg0) {
+/**
+ * Phase 33. Shows residual damage on the acting Pokemon only (the other HP bar is treated as settled). If
+ * it reaches 0 HP, flips the acting side and enters BattleScene_PhaseFaintAfterResidualDamage; otherwise
+ * continues with BattleScene_CleanupActionAndAdvance.
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleScene_PhaseResidualDamageFaintCheck(CameraNode* arg0) {
     u8* sp1C = (u8*)sActivePokemon[sBattleScene.scene->unk_2C] + 0x7C6;
     u8* sp18 = (u8*)sActivePokemon[!sBattleScene.scene->unk_2C] + 0x7C6;
 
@@ -417,16 +428,16 @@ void BattleScene_UpdatePhase(CameraNode* arg0) {
         func_82130494(arg0);
         break;
     case 6:
-        func_8212FC98(arg0);
+        BattleScene_PhaseResidualDamageAfterMove(arg0);
         break;
     case 33:
-        func_82130B10(arg0);
+        BattleScene_PhaseResidualDamageFaintCheck(arg0);
         break;
     case 35:
-        func_82130628(arg0);
+        BattleScene_PhaseResidualDamageWithoutMove(arg0);
         break;
     case 9:
-        func_821301EC(arg0);
+        BattleScene_PhaseRecoilDamage(arg0);
         break;
     case 16:
         func_8212F16C(arg0);

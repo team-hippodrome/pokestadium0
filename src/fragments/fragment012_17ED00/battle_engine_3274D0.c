@@ -567,7 +567,11 @@ extern M2C_UNK D_8218E618;
 extern M2C_UNK func_8214E9F0;
 extern M2C_UNK func_8214EBA4;
 
-void func_8214F84C(void) {
+/**
+ * initializes being hit by thunder shock or thunderbolt
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeThunderShockThunderboltHit(void) {
     func_8213B794(0x2C, 4, 0x10, 8, 0xFF);
     func_8213B644(0x30, 0x20, 8);
     func_8213B5D8(0, 8, 5, &func_8214ED30, &D_8218E618, 8, 3, 3, 0, 0x25, 0);
@@ -584,7 +588,11 @@ extern M2C_UNK D_8218E618;
 extern M2C_UNK func_8214E9F0;
 extern M2C_UNK func_8214EBA4;
 
-void func_8214F974(void) {
+/**
+ * initializes getting hit by thunder
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeThunderHit(void) {
     func_8213B794(0, 4, 8, 8, 0xC8);
     func_8213B644(0x30, 0x20, 8);
     func_8213B5D8(0, 8, 5, &func_8214ED30, &D_8218E618, 8, 3, 3, 0, 0x25, 0);

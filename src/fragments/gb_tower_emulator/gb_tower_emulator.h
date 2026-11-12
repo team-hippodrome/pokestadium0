@@ -21,7 +21,7 @@ extern u8 D_102BA0_END[];
 void GbEmu_Init(unk_D_800AA660*);
 void GbEmu_RunFrame(unk_D_800AA660*);
 void GbEmu_AudioVideoTick(unk_D_800AA664*);
-void func_811174D8();
+void GbAudio_UpdateFrame();
 void GbEmu_InitContext(unk_D_8122B2C0*);
 s32 osGbSetNextBuffer(void*, s32);
 void GbAudio_PlayMenuSound(s32);

@@ -259,7 +259,12 @@ void BattleAnim_ApplySpeciesKeyedSpawnOffset(Particle* arg0) {
 }
 
 
-void func_82164CA4(s8 *arg0) {
+/**
+ * Moves: Surf (hit)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_RunSplashOfWater(s8 *arg0) {
     s16 temp_v0;
     s16 temp_v0_2;
 
@@ -303,7 +308,12 @@ void func_82164CA4(s8 *arg0) {
     }
 }
 
-void func_82164E18(s8 *arg0) {
+/**
+ * Moves: Dig (hit)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_RunDigHitDust(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -330,7 +340,12 @@ void func_82164E18(s8 *arg0) {
     }
 }
 
-void func_82164F04(s8 *arg0) {
+/**
+ * Moves: Dig (hit)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_RunDigHitRocks(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);

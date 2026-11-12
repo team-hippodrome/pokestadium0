@@ -65,7 +65,7 @@ extern u8* gGbEmuFont1Data;
 extern u8* gGbEmuFont2Data;
 void func_812070A0(void);
 void GbApu_SelectRegionClock(s32);
-void func_81117068(u16, u8, u16);
+void GbApu_QueueRegisterWrite(u16, u8, u16);
 void GbApu_ResetChannels(void);
 void GbApu_Reset(unk_D_8122B2F8*);
 void func_811173F4(void);
@@ -79,10 +79,10 @@ s32 GbEmu_PixelOpDitherB(s32 arg0, s32 arg1);
 s32 GbEmu_PixelOpAverage555(s32 arg0, s32 arg1);
 s32 GbEmu_PixelOpReplace(UNUSED s32 arg0, s32 arg1);
 void GbEmu_BlitWithPixelOp(u16* dst, u16* src, s32 mode, s32 width, s32 height);
-void func_81103D60(u16* dst, u16* src, s32 color, s32 width, s32 height);
-void func_8110427C(u16* dst, u8* alpha_map, s32 color, s32 width, s32 height, u32 alpha_stride);
+void GbEmu_BlitTinted(u16* dst, u16* src, s32 color, s32 width, s32 height);
+void GbEmu_BlendColorWithAlphaMap(u16* dst, u8* alpha_map, s32 color, s32 width, s32 height, u32 alpha_stride);
 void GbEmu_Delay(OSTime arg0);
-void func_81107128(u16* arg0, u16* arg1, s16* arg2, s32 arg3, s32 arg4);
+void GbEmu_BlendScrollingLayer(u16* arg0, u16* arg1, s16* arg2, s32 arg3, s32 arg4);
 
 M2C_UNK func_8005C670(s32, M2C_UNK, u16, M2C_UNK *, s32); /* extern */
 extern M2C_UNK D_81156480;
@@ -592,13 +592,13 @@ extern u16 D_81122380[];
 extern u16 D_811223A0[];
 extern u16 D_811223C0[];
 /**
- * Draws a list of glyph-strip commands into a 320-pixel-wide RGBA16 framebuffer.
- * Each command is a 6-byte header followed by its glyph indices: flags (0 ends
- * the list; bit 0 = x bit 8, 0x20 = also draw colour-0 pixels, 0x40 = glyphs
- * overlap by one pixel), x, y, glyph size (0xA or 0xC), palette index and
- * glyph count.
+ * Draws a list of text commands into a 320-wide RGBA5551 image. Each command is
+ * 0x80|flags, x, y, font height (0x0A = font1, 0x0C = font2), palette index, length,
+ * then ASCII characters mapped through sFont1GlyphTable/sFont2GlyphTable.
+ * A zero byte ends the list.
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
-void func_81103850(u16* fb, u8* cmd) {
+void GbEmu_DrawTextCommands(u16* fb, u8* cmd) {
     u8* ptr;
     u8* data;
     u8* src;
@@ -753,7 +753,11 @@ void func_81103D30(void) {
     func_8005C0A0();
 }
 
-void func_81103D60(u16* dst, u16* src, s32 color, s32 width, s32 height) {
+/**
+ * Copies an image using its blue channel as intensity to scale the given color.
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void GbEmu_BlitTinted(u16* dst, u16* src, s32 color, s32 width, s32 height) {
     s32 x;
     s32 y;
     s32 intensity;
@@ -768,7 +772,11 @@ void func_81103D60(u16* dst, u16* src, s32 color, s32 width, s32 height) {
     }
 }
 
-void func_8110427C(u16* dst, u8* alpha_map, s32 color, s32 width, s32 height, u32 alpha_stride) {
+/**
+ * Additively blends a solid color into the destination using a 4-bit alpha map.
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void GbEmu_BlendColorWithAlphaMap(u16* dst, u8* alpha_map, s32 color, s32 width, s32 height, u32 alpha_stride) {
   u16* dst_row;
   u8* alpha_row;
   s32 x;
@@ -800,15 +808,20 @@ void func_8110445C(u8* arg0, s32 arg1, s32 arg2) {
     s32 i;
 
     for (i = 8; i < arg2 - 8; i += 8) {
-        func_81103D60((u16*)arg0 + i, D_811206F8, arg1, 8, 0x10);
+        GbEmu_BlitTinted((u16*)arg0 + i, D_811206F8, arg1, 8, 0x10);
     }
-    func_81103D60((u16*)arg0, D_811205F8, arg1, 8, 0x10);
-    func_81103D60((u16*)(arg0 + arg2 * 2 - 0x10), D_811207F8, arg1, 8, 0x10);
+    GbEmu_BlitTinted((u16*)arg0, D_811205F8, arg1, 8, 0x10);
+    GbEmu_BlitTinted((u16*)(arg0 + arg2 * 2 - 0x10), D_811207F8, arg1, 8, 0x10);
 }
 
 extern u16 D_81120FD8[];
 void func_80052100(void*, s32);
-void func_81104540(u16* arg0, s32 arg1, s32 arg2) {
+/**
+ * Draws one 12x11 frame of the animated Transfer Pak access icon; direction selects
+ * the mirrored (zero) or normal direction, frame selects the frame (0-10).
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void GbEmu_DrawAccessIcon(u16* arg0, s32 arg1, s32 arg2) {
     u16* src;
     u32 row;
     s32 y;
@@ -894,14 +907,14 @@ void func_811047A0(s32 arg0) {
     }
     p = &D_811541F0[arg0];
     do {
-        func_8110427C((u16*)dst, D_81156598 + *p * 0xA0, 0xFFFE, 0xC, 0xA, 0x10);
+        GbEmu_BlendColorWithAlphaMap((u16*)dst, D_81156598 + *p * 0xA0, 0xFFFE, 0xC, 0xA, 0x10);
         i += 0x12;
         dst += 0x12;
         p++;
     } while (i != 0x6C);
     func_81103C40(pos + 0x7FE, D_81120A18, 0, 0x10, 0xA);
     func_81103C40(pos + 0x5C2, (u8*)&D_81120B58[D_81156594 * 12 * 12], 0, 0xC, 0xC);
-    func_81104540((u16*)pos, arg0, 0);
+    GbEmu_DrawAccessIcon((u16*)pos, arg0, 0);
     D_811565A2 = 0;
     D_81154C00 = D_81156590;
 }
@@ -969,7 +982,7 @@ void func_81104930(void) {
     dst = pos + 0x29C;
     /* The comma expression is what gives the ROM's register allocation. */
     for (p = D_811541FC; (0, p) != &D_811541FC[5]; p++) { // FAKE: comma expression
-        func_8110427C((u16*)dst, D_8115659C + *p * 0xC0, 0xFFFE, 0xC, 0xC, 0x10);
+        GbEmu_BlendColorWithAlphaMap((u16*)dst, D_8115659C + *p * 0xC0, 0xFFFE, 0xC, 0xC, 0x10);
         dst += 0x18;
     }
     D_81154C00 = D_81156540.framebuffer;

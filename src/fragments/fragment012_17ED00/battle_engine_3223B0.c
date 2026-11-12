@@ -76,7 +76,11 @@ s32 func_82140690(s8 *);                          /* extern */
 s32 func_821406B4(s8 *);                          /* extern */
 M2C_UNK func_82149660(s8 *);                      /* extern */
 
-void func_821497DC(s8 *arg0) {
+/**
+ * Handles the hit spark from being hit by Surf
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_RunSurfHitSpark(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -199,7 +203,11 @@ s32 func_821406B4(s8 *);                          /* extern */
 M2C_UNK func_82149ADC(s8 *);                      /* extern */
 M2C_UNK func_82149C20(s8 *);                      /* extern */
 
-void func_82149C60(s8 *arg0) {
+/**
+ * handles the slower additional bubbles that appear when using bubble beam as opposed to bubble
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_RunBubbleBeamBubblesSlow(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -270,7 +278,11 @@ s32 func_82140690(s8 *);                          /* extern */
 s32 func_821406B4(s8 *);                          /* extern */
 M2C_UNK func_82149D74(s8 *);                      /* extern */
 
-void func_82149EEC(s8 *arg0) {
+/**
+ * handles the faster additional bubbles that appear when using bubble beam as opposed to bubble
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_RunBubbleBeamBubblesFast(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -923,7 +935,11 @@ s32 func_821402E4(s8 *);                          /* extern */
 s32 func_82140690(s8 *);                          /* extern */
 M2C_UNK func_8214B280(s8 *);                      /* extern */
 
-void func_8214B310(s8 *arg0) {
+/**
+ * handles the pulsing beam emanator for Ice Beam, Psybeam, Aurora Beam, Hyper Beam, and Solar Beam
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_RunPulsingBeamEmanator(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -1112,7 +1128,11 @@ M2C_UNK func_8213F658(s8 *, f32, f32);    /* extern */
 M2C_UNK func_82140518(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_8214B84C(s8 *);                      /* extern */
 
-void func_8214B8E4(s8 *arg0) {
+/**
+ * Handles hit effect shared by Hydro Pump, Ice Beam, Hyper Beam, Solar Beam, Waterfall, and Sky Attack
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_RunStrongOutwardMovingLargeHitSpark(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -1155,7 +1175,11 @@ M2C_UNK func_8213F658(s8 *, f32, f32);    /* extern */
 M2C_UNK func_82140518(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_8214B9A8(s8 *);                      /* extern */
 
-void func_8214BA3C(s8 *arg0) {
+/**
+ * Handles the cold air that emanates upward from pokemon hit by blizzard
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_RunBlizzardHitUpwardColdAir(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -1198,7 +1222,10 @@ M2C_UNK func_8213F658(s8 *, f32, f32);    /* extern */
 M2C_UNK func_82140518(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_8214BAFC(s8 *);                      /* extern */
 
-void func_8214BB94(s8 *arg0) {
+/**
+ * @unverified Name from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_RunWaterGunHitEffect(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -1263,7 +1290,11 @@ M2C_UNK func_821435E0(s8 *, s16);                 /* extern */
 M2C_UNK func_8214BC58(s8 *);                      /* extern */
 extern s32 D_8219A790;
 
-void func_8214BD78(s8 *arg0) {
+/**
+ * handles shared effect being hit by Psybeam, bubble beam, and aurora beam
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_RunWeakBeamHitEffect(s8 *arg0) {
     s16 sp2E;
     s16 temp_v1;
 
@@ -1352,7 +1383,11 @@ M2C_UNK func_82140518(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 s32 func_821406B4(s8 *);                          /* extern */
 M2C_UNK func_8214BEE8(s8 *);                      /* extern */
 
-void func_8214C048(s8 *arg0) {
+/**
+ * Handles the Tri Attack hit spark
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_RunTriAttackHitSpark(s8 *arg0) {
     s16 temp_v1;
 
     func_8213C464();
@@ -1632,7 +1667,11 @@ M2C_UNK func_82140548(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_821406B4(s8 *);                      /* extern */
 M2C_UNK func_8214C8E0(s8 *);                      /* extern */
 
-void func_8214C950(s8 *arg0) {
+/**
+ * Handles the growth, color shift, and fade of a Hydro Pump particle
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_RunHydroPumpColorShiftFade(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -1705,7 +1744,11 @@ M2C_UNK func_82140548(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_821406B4(s8 *);                      /* extern */
 M2C_UNK func_8214CA90(s8 *);                      /* extern */
 
-void func_8214CB84(s8 *arg0) {
+/**
+ * Handles the coloring of the burst emitter for Water gun
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_RunWaterGunEmitterColoration(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -1758,7 +1801,11 @@ M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_82140518(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_8214CC90(s8 *);                      /* extern */
 
-void func_8214CD28(s8 *arg0) {
+/**
+ * Handles the projectile shared by being hit by water gun and hydro pump
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_RunHydroPumpWaterGunProjectileHit(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -1858,13 +1905,17 @@ extern M2C_UNK D_8218E7D8;
 extern s16 D_8219A80A;
 extern M2C_UNK func_82145998;
 
-void func_8214D320(void) {
+/**
+ * initializes hydro pump
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeHydroPumpHit(void) {
     func_8213BD78(4, 8, 0x33, 0x10, 0xFF);
     func_8213B560(0, &func_82145998, &D_8218E5A8, 0, 1, 0x10, (s32) D_8219A80A, 0x33, 0);
-    func_8213B5D8(0, 5, 3, &func_8214B8E4, &D_8218E650, 0, 8, 0x10, (s32) D_8219A80A, 0x26, 0);
+    func_8213B5D8(0, 5, 3, &BattleAnim_RunStrongOutwardMovingLargeHitSpark, &D_8218E650, 0, 8, 0x10, (s32) D_8219A80A, 0x26, 0);
     func_8213B5D8(0xA, 1, 8, &func_8214C208, &D_8218E650, 0, 3, 0x11, (s32) D_8219A80A, 0x26, 0);
-    func_8213B560(0xC, &func_8214C950, &D_8218E7D8, 0, 1, 0xA, 0, 0x4C, 0);
-    func_8213B5D8(2, 1, 0x10, &func_8214CD28, &D_8218E5D8, 0, 4, 0x11, (s32) D_8219A80A, 0x4C, 0);
+    func_8213B560(0xC, &BattleAnim_RunHydroPumpColorShiftFade, &D_8218E7D8, 0, 1, 0xA, 0, 0x4C, 0);
+    func_8213B5D8(2, 1, 0x10, &BattleAnim_RunHydroPumpWaterGunProjectileHit, &D_8218E5D8, 0, 4, 0x11, (s32) D_8219A80A, 0x4C, 0);
 }
 
 M2C_UNK func_8213B560(M2C_UNK, M2C_UNK *, M2C_UNK *, M2C_UNK, s32, s32, s32, s32, s32); /* extern */
@@ -1876,11 +1927,15 @@ extern M2C_UNK D_8218E818;
 extern s16 D_8219A80A;
 extern M2C_UNK func_8214B1F8;
 
-void func_8214D4C4(void) {
+/**
+ * initializes ice beam
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeIceBeamUse(void) {
     func_8213B6AC(0, 0, 0x20, 8, 0xA0);
     func_8213B644(0, 8, 0x33);
     func_8213B560(0, &func_8214B1F8, &D_8218E818, 0, 1, 0x10, (s32) D_8219A80A, 0x40, 0);
-    func_8213B560(6, &func_8214B310, &D_8218E818, 0x6E, 1, 0x10, (s32) D_8219A80A, 0x40, 1);
+    func_8213B560(6, &BattleAnim_RunPulsingBeamEmanator, &D_8218E818, 0x6E, 1, 0x10, (s32) D_8219A80A, 0x40, 1);
     func_8213B5D8(0, 3, 0x1E, &func_8214AF58, &D_8218E7D0, 0, 1, 0x11, (s32) D_8219A80A, 0x13, 0);
 }
 
@@ -1895,7 +1950,7 @@ void func_8214D5E4(void) {
     func_8213B6AC(0, 0, 0x20, 8, 0xA0);
     func_8213B644(0, 8, 6);
     func_8213B560(0, &func_8214B1F8, &D_8218E818, 0, 1, 0x10, (s32) D_8219A80A, 0xD, 0);
-    func_8213B560(6, &func_8214B310, &D_8218E818, 0x46, 1, 0x10, (s32) D_8219A80A, 0xD, 1);
+    func_8213B560(6, &BattleAnim_RunPulsingBeamEmanator, &D_8218E818, 0x46, 1, 0x10, (s32) D_8219A80A, 0xD, 1);
 }
 
 M2C_UNK func_8213B5D8(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK *, M2C_UNK *, s32, s32, s32, s32, s32, s32); /* extern */
@@ -1905,8 +1960,8 @@ extern s16 D_8219A80A;
 
 void func_8214D6B4(void) {
     func_8213B644(0, 8, 6);
-    func_8213B5D8(0, 1, 0x3C, &func_82149EEC, &D_8218E7A8, 0, 4, 0x11, (s32) D_8219A80A, 0, 0);
-    func_8213B5D8(0, 1, 0x3C, &func_82149C60, &D_8218E7A8, 0, 1, 0x11, (s32) D_8219A80A, 0, 0);
+    func_8213B5D8(0, 1, 0x3C, &BattleAnim_RunBubbleBeamBubblesFast, &D_8218E7A8, 0, 4, 0x11, (s32) D_8219A80A, 0, 0);
+    func_8213B5D8(0, 1, 0x3C, &BattleAnim_RunBubbleBeamBubblesSlow, &D_8218E7A8, 0, 1, 0x11, (s32) D_8219A80A, 0, 0);
 }
 
 M2C_UNK func_8213B560(M2C_UNK, M2C_UNK *, M2C_UNK *, M2C_UNK, s32, s32, s32, s32, s32); /* extern */
@@ -1920,7 +1975,7 @@ void func_8214D774(void) {
     func_8213B6AC(0, 0, 0x20, 8, 0xA0);
     func_8213B644(0, 8, 6);
     func_8213B560(0, &func_8214B1F8, &D_8218E818, 0, 1, 0x10, (s32) D_8219A80A, 0x41, 0);
-    func_8213B560(6, &func_8214B310, &D_8218E818, 0x46, 1, 0x10, (s32) D_8219A80A, 0x41, 1);
+    func_8213B560(6, &BattleAnim_RunPulsingBeamEmanator, &D_8218E818, 0x46, 1, 0x10, (s32) D_8219A80A, 0x41, 1);
 }
 
 M2C_UNK func_8213B560(M2C_UNK, M2C_UNK *, M2C_UNK *, M2C_UNK, s32, s32, s32, s32, s32); /* extern */
@@ -1938,7 +1993,7 @@ void func_8214D844(void) {
     func_8213B644(0, 0x20, 0xE);
     func_8213B560(0, &func_8214B1F8, &D_8218E818, 0, 1, 0x10, (s32) D_8219A80A, 0x2C, 0);
     func_8215B110();
-    func_8213B560(6, &func_8214B310, &D_8218E818, 0x46, 1, 0x10, (s32) D_8219A80A, 0x2C, 1);
+    func_8213B560(6, &BattleAnim_RunPulsingBeamEmanator, &D_8218E818, 0x46, 1, 0x10, (s32) D_8219A80A, 0x2C, 1);
 }
 
 M2C_UNK func_8213B560(M2C_UNK, M2C_UNK *, M2C_UNK *, M2C_UNK, s32, s32, s32, s32, s32); /* extern */
@@ -1952,7 +2007,7 @@ void func_8214D938(void) {
     func_8213B6AC(0, 0, 0x20, 8, 0xA0);
     func_8213B644(0, 8, 0x20);
     func_8213B560(0, &func_8214B1F8, &D_8218E818, 0, 1, 0x10, (s32) D_8219A80A, 0x17, 0);
-    func_8213B560(6, &func_8214B310, &D_8218E818, 0x46, 1, 0x10, (s32) D_8219A80A, 0x17, 1);
+    func_8213B560(6, &BattleAnim_RunPulsingBeamEmanator, &D_8218E818, 0x46, 1, 0x10, (s32) D_8219A80A, 0x17, 1);
 }
 
 M2C_UNK func_8213B560(M2C_UNK, M2C_UNK *, M2C_UNK *, M2C_UNK, s32, s32, s32, s32, s32); /* extern */
@@ -1979,7 +2034,7 @@ extern M2C_UNK func_82145998;
 void func_8214DA90(void) {
     func_8213BD78(4, 8, 0x33, 0xC, 0xFF);
     func_8213B560(0, &func_82145998, &D_8218E5A8, 0, 1, 0x10, (s32) D_8219A80A, 0x33, 0);
-    func_8213B5D8(0, 5, 3, &func_8214B8E4, &D_8218E650, 0, 8, 0x10, (s32) D_8219A80A, 0x26, 0);
+    func_8213B5D8(0, 5, 3, &BattleAnim_RunStrongOutwardMovingLargeHitSpark, &D_8218E650, 0, 8, 0x10, (s32) D_8219A80A, 0x26, 0);
     func_8213B5D8(0xA, 1, 3, &func_8214C208, &D_8218E650, 0, 8, 0x11, (s32) D_8219A80A, 0x26, 0);
 }
 
@@ -1998,10 +2053,14 @@ extern M2C_UNK func_8214B468;
 extern M2C_UNK func_82161288;
 extern M2C_UNK func_821627C0;
 
-void func_8214DBA8(void) {
+/**
+ * sets being hit by ice beam
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeIceBeamHit(void) {
     func_8213BE70(0, 8, 0x33, 0x10, 0xDC, 0x20);
     func_8213B560(3, &func_82145998, &D_8218E5A8, 0, 1, 0x10, (s32) D_8219A80A, 0x33, 0);
-    func_8213B5D8(0, 5, 3, &func_8214B8E4, &D_8218E650, 0, 8, 0x10, (s32) D_8219A80A, 0x26, 0);
+    func_8213B5D8(0, 5, 3, &BattleAnim_RunStrongOutwardMovingLargeHitSpark, &D_8218E650, 0, 8, 0x10, (s32) D_8219A80A, 0x26, 0);
     func_8213B5D8(4, 4, 2, &func_8214B468, &D_8218E820, 0, 1, 0x10, (s32) D_8219A80A, 0x33, 0);
     func_8213B5D8(0xC, 1, 3, &func_8214C208, &D_8218E650, 0, 8, 0x11, (s32) D_8219A80A, 0x26, 0);
     func_8213B5D8(0xE, 4, 2, &func_82161288, &D_8218E770, 0, 6, 0x10, 0x64, 0, 0);
@@ -2020,11 +2079,15 @@ extern s16 D_8219A80A;
 extern M2C_UNK func_82145A58;
 extern M2C_UNK func_8214B5A0;
 
-void func_8214DDC0(void) {
+/**
+ * initializes being hit by psybeam
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializePsybeamHit(void) {
     func_8213C060(4, 0x32, 0x20, 0xA0);
     func_8213B5D8(4, 4, 3, &func_8214B5A0, &D_8218E820, 0, 1, 0x10, (s32) D_8219A80A, 0, 0);
     func_8213B560(3, &func_82145A58, &D_8218E660, 0, 1, 0x10, (s32) D_8219A80A, 0x21, 0);
-    func_8213B5D8(3, 5, 3, &func_8214BD78, &D_8218E650, 0, 8, 0x10, (s32) D_8219A80A, 1, 0);
+    func_8213B5D8(3, 5, 3, &BattleAnim_RunWeakBeamHitEffect, &D_8218E650, 0, 8, 0x10, (s32) D_8219A80A, 1, 0);
     func_8213B644(0x30, 0x20, 8);
 }
 
@@ -2047,10 +2110,14 @@ extern M2C_UNK D_8218E820;
 extern s16 D_8219A80A;
 extern M2C_UNK func_8214B77C;
 
-void func_8214E028(void) {
+/**
+ * initialize being hit by aurora beam
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeAuroraBeamHit(void) {
     func_8213C060(4, 0x32, 0x20, 0xA0);
     func_8213B560(4, &func_8214B77C, &D_8218E820, 0, 9, 0x10, (s32) D_8219A80A, 0, 0);
-    func_8213B5D8(3, 5, 3, &func_8214BD78, &D_8218E650, 0, 8, 0x10, (s32) D_8219A80A, 0, 0);
+    func_8213B5D8(3, 5, 3, &BattleAnim_RunWeakBeamHitEffect, &D_8218E650, 0, 8, 0x10, (s32) D_8219A80A, 0, 0);
     func_8213B5D8(0xC, 1, 3, &func_8214C208, &D_8218E650, 0, 8, 0x11, (s32) D_8219A80A, 0x39, 0);
     func_8213B644(0x16, 0x20, 8);
 }

@@ -364,7 +364,10 @@ u16 func_80020234(s32, u8, s32, u8, s32);
 s32 func_8002057C(u8, u16);
 void func_800203FC(BattleMon*);
 void func_8910A764();
-void func_89103F04(u8** arg0, u8** arg1, Msg89103F04* arg2) {
+/**
+ * @unverified Name from Stadium 1, matched by code similarity.
+ */
+void LabPCList_ApplyVitaminItem(u8** arg0, u8** arg1, Msg89103F04* arg2) {
     BattleMon* mon;
     u16 oldMaxHp;
 
@@ -641,7 +644,7 @@ s32 func_8910452C(s8* arg0) {
 
                     switch (r) {
                         case 1:
-                            func_89103F04((u8**)a0, (u8**)a1, (Msg89103F04*)(arg0 + 0xB7E4));
+                            LabPCList_ApplyVitaminItem((u8**)a0, (u8**)a1, (Msg89103F04*)(arg0 + 0xB7E4));
                             break;
                         case 2:
                             func_891041D8((u8**)a0, a1, M2C_FIELD(arg0, s32*, 0xB744), (Msg891041D8*)(arg0 + 0xB7E4));

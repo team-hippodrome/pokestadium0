@@ -6,7 +6,7 @@ Usage:
     tools/rename_symbol.py --map renames.txt     # one "OLD NEW" pair per line
 
 Whole-word replacement in src/, include/, linker_scripts/jp/, yamls/ and
-docs/function-matches.csv. It refuses to rename onto a name that already
+docs/function-matches.csv (c_name column only). It refuses to rename onto a name that already
 exists, so two symbols never merge by accident. Run `make rom` afterwards;
 a rename changes no code, but a missed reference fails the link.
 """
@@ -64,12 +64,30 @@ def main():
     rx = re.compile(r"\b(" + "|".join(re.escape(k) for k in sorted(mapping, key=len, reverse=True)) + r")\b")
     changed = 0
     for p, t in texts.items():
-        n = rx.sub(lambda m: mapping[m.group(1)], t)
+        if p.endswith("function-matches.csv"):
+            # Column 1 (owner) is the address-keyed owner id; only c_name (column 4) is a C name.
+            out = []
+            for line in t.split("\n"):
+                cols = line.split(",")
+                if len(cols) > 3:
+                    cols[3] = rx.sub(lambda m: mapping[m.group(1)], cols[3])
+                out.append(",".join(cols))
+            n = "\n".join(out)
+        else:
+            n = rx.sub(lambda m: mapping[m.group(1)], t)
         if n != t:
             with open(p, "w", encoding="utf-8", errors="surrogateescape") as fh:
                 fh.write(n)
             changed += 1
-    print(f"renamed {len(mapping)} symbols in {changed} files")
+    # A func_XXXXXXXX name implies its address; a real name needs a symbol_addrs entry.
+    sym = os.path.join(ROOT, "linker_scripts/jp/symbol_addrs.txt")
+    have = set(re.findall(r"^(\w+)\s*=", open(sym).read(), re.M))
+    add = [f"{new} = 0x{old[5:]}; // type:func" for old, new in pairs
+           if re.fullmatch(r"func_[0-9A-F]{8}", old) and new not in have]
+    if add:
+        with open(sym, "a") as fh:
+            fh.write("\n".join(add) + "\n")
+    print(f"renamed {len(mapping)} symbols in {changed} files; {len(add)} symbol_addrs entries added")
 
 
 if __name__ == "__main__":

@@ -619,7 +619,14 @@ s32 func_82140690(s8 *);                          /* extern */
 s32 func_821406B4(s8 *);                          /* extern */
 M2C_UNK func_82145C28(s8 *);                      /* extern */
 
-void func_82145CC4(s8 *arg0) {
+/**
+ * handles the flame that appears under a pokemon when:
+ * - charging Sky Attack
+ * - Using Rage or Bide
+ * - Being hit by Fire Spin
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_RunOscillatingFlameUnderneathPokemon(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -798,7 +805,11 @@ M2C_UNK func_821437E0(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_821461C4(s8 *);                      /* extern */
 extern M2C_UNK D_8218E7D0;
 
-void func_8214622C(s8 *arg0) {
+/**
+ * handles the projectile made when Ember is used
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_RunEmberProjectile(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -1096,7 +1107,11 @@ M2C_UNK func_82140518(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 s32 func_821406B4(s8 *);                          /* extern */
 M2C_UNK func_821469BC(s8 *);                      /* extern */
 
-void func_82146AF4(s8 *arg0) {
+/**
+ * Handles the smaller explosions being hit by Explosion and Self-destruct (Boom)
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_RunBoomSmallExplosion(s8 *arg0) {
     s16 temp_v1;
 
     func_8213C464();
@@ -1231,7 +1246,11 @@ s32 func_821406B4(s8 *);                          /* extern */
 M2C_UNK func_8214667C(s8 *);                      /* extern */
 M2C_UNK func_82146E1C(s8 *);                      /* extern */
 
-void func_82146F34(s8 *arg0) {
+/**
+ * Handles secondary explosion from being hit by egg bomb
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_RunSecondaryBombExplosion(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -1420,7 +1439,11 @@ s32 func_821406B4(s8 *);                          /* extern */
 M2C_UNK func_8214667C(s8 *);                      /* extern */
 M2C_UNK func_821474CC(s8 *);                      /* extern */
 
-void func_821475F4(s8 *arg0) {
+/**
+ * Creates the lingering hit spark when hit by fire punch or ember
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_RunFirePunchLingeringHitSpark(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -1489,7 +1512,11 @@ M2C_UNK func_82140518(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 s32 func_821406B4(s8 *);                          /* extern */
 M2C_UNK func_82147710(s8 *);                      /* extern */
 
-void func_82147880(s8 *arg0) {
+/**
+ * Handles the dissipating and spreading smoke from being hit by fire punch and egg bomb
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_RunAfterImpactSmoke(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -1554,7 +1581,11 @@ M2C_UNK func_821404DC(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_82140518(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_8214795C(s8 *);                      /* extern */
 
-void func_82147A68(s8 *arg0) {
+/**
+ * handles the small bursts of fire that appear when hit by fire punch
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_RunFirePunchHitEffect(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -1860,7 +1891,12 @@ void BattleAnim_ContinueDaimonji(Particle* arg0) {
     }
 }
 
-void func_821483A0(Particle* arg0) {
+/**
+ * used to create the Daimonji of Fire blast that spells out 大
+ * https://en.wikipedia.org/wiki/Gozan_no_Okuribi
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_RunDaimonji(Particle* arg0) {
     switch (arg0->unk_B2) {
         case 1:
             BattleAnim_SetupDaimonji(arg0);
@@ -1935,7 +1971,11 @@ s32 func_82140690(s8 *);                          /* extern */
 s32 func_821406B4(s8 *);                          /* extern */
 M2C_UNK func_8214851C(s8 *);                      /* extern */
 
-void func_821485C8(s8 *arg0) {
+/**
+ * Colors the Daimonji created when being hit by fire blast
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_RunDaimonjiColoration(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -1979,7 +2019,7 @@ void func_821486FC(void) {
     func_8213B794(0, 0, 0x40, 8, 0xC8);
     func_8213B560(1, &func_82146378, &D_8218E728, 0, 1, 0x10, (s32) D_8219A80A, 0, 0);
     func_8213B560(2, &func_82146504, &D_8218E770, 0, 3, 0x11, (s32) D_8219A80A, 0, 0);
-    func_8213B560(4, &func_8214622C, &D_8218E7B0, 0, 1, 0x11, (s32) D_8219A80A, 0, 0);
+    func_8213B560(4, &BattleAnim_RunEmberProjectile, &D_8218E7B0, 0, 1, 0x11, (s32) D_8219A80A, 0, 0);
 }
 
 extern ParticleDescriptor D_8218E588[86];
@@ -2000,12 +2040,16 @@ M2C_UNK func_8213BC00(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32); /* extern */
 extern M2C_UNK D_8218E770;
 extern M2C_UNK D_8218E7B0;
 
-void func_82148948(void) {
+/**
+ * initialize being hit by fire punch
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeFirePunchHit(void) {
     func_8213B794(2, 0, 0x40, 8, 0xC8);
     func_8213BC00(2, 9, 0xC8, 0, 0x10);
-    func_8213B560(0, &func_82147A68, &D_8218E7B0, 0, 3, 0x10, 9, 0, 0);
-    func_8213B560(0xA, &func_82147880, &D_8218E7B0, 0, 8, 0x11, 9, 0, 0);
-    func_8213B5D8(0xC, 2, 2, &func_821475F4, &D_8218E770, 0, 4, 0x11, 9, 0, 0);
+    func_8213B560(0, &BattleAnim_RunFirePunchHitEffect, &D_8218E7B0, 0, 3, 0x10, 9, 0, 0);
+    func_8213B560(0xA, &BattleAnim_RunAfterImpactSmoke, &D_8218E7B0, 0, 8, 0x11, 9, 0, 0);
+    func_8213B5D8(0xC, 2, 2, &BattleAnim_RunFirePunchLingeringHitSpark, &D_8218E770, 0, 4, 0x11, 9, 0, 0);
 }
 
 M2C_UNK func_8213B5D8(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK *, M2C_UNK *, s32, s32, s32, s32, s32, s32); /* extern */
@@ -2017,7 +2061,11 @@ extern s16 D_8219A80A;
 extern M2C_UNK func_82144E24;
 extern M2C_UNK func_82145718;
 
-void func_82148A58(void) {
+/**
+ * initializes smoke for flamethrower and fire blast
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeFireBlastFlamethrowerUseSmoke(void) {
     func_8213C220(0x64, 1);
     func_8213B644(0, 8, 6);
     func_8213B5D8(0, 2, 0x3C, &func_82144E24, &D_8218E7F8, 0, 1, 0x11, (s32) D_8219A80A, 0, 0);
@@ -2083,9 +2131,13 @@ M2C_UNK func_8213BF70(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern *
 extern M2C_UNK D_8218E598;
 extern M2C_UNK D_8218E7F8;
 
-void func_82149120(void) {
+/**
+ * initialize flames that make up the ring that engulfs a pokemon being hit by fire spin
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeFireSpinHitFlames(void) {
     func_8213B560(0, &func_82145EC0, &D_8218E598, 0, 0x12, 0xE, 0, 0, 0);
-    func_8213B560(8, &func_82145CC4, &D_8218E7F8, 0, 0x20, 7, 0, 0, 0);
+    func_8213B560(8, &BattleAnim_RunOscillatingFlameUnderneathPokemon, &D_8218E7F8, 0, 0x20, 7, 0, 0, 0);
     func_8213BF70(8, 9, 0xE, 8, 0xC8, 0x10);
 }
 

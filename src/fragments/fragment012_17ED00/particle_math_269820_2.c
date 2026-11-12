@@ -669,7 +669,11 @@ void Particle_SetRandomRotatedVelocityXY(Particle* arg0, s32 arg1, s32 arg2) {
     arg0->unk_38.z = sp20.z * gParticleRenderContext.unk_00.y;
 }
 
-void func_8213DFF4(Particle* arg0, s32 arg1, s32 arg2, s32 arg3) {
+/**
+ * Add independent signed random components to the base position offset with render-context scaling.
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void Particle_AddRandomPositionOffsetXYZ(Particle* arg0, s32 arg1, s32 arg2, s32 arg3) {
     Vec3f sp24;
 
     sp24.x = ParticleMath_RandomSigned(arg1);
@@ -835,10 +839,10 @@ void func_8213E528(s32 arg0) {
 
 M2C_UNK func_8213E3F8(s32);                         /* extern */
 
-void func_8213FBCC(Particle* arg0);
+void Particle_MotionStep_SetVecFromField74AnglesXZ(Particle* arg0);
 
 void func_8213E550(s32 arg0) {
-    func_8213FBCC((Particle*)arg0);
+    Particle_MotionStep_SetVecFromField74AnglesXZ((Particle*)arg0);
     func_8213E3F8(arg0);
 }
 
@@ -1325,7 +1329,11 @@ s32 func_8213F658(Particle* arg0, f32 arg1, f32 arg2) {
     return ParticleMath_ApproachFloat(&arg0->unk_74, arg1 * gParticleRenderContext.unk_00.y, arg2 * gParticleRenderContext.unk_00.y);
 }
 
-s32 func_8213F69C(Particle* arg0, f32 arg1) {
+/**
+ * Approach stepMagnitude, magnitudeStep using the stored or supplied target and step.
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+s32 Particle_StepMagnitude_ApproachUsingMagnitudeStep(Particle* arg0, f32 arg1) {
     return ParticleMath_ApproachFloat(&arg0->unk_74, arg1 * gParticleRenderContext.unk_00.y, arg0->unk_78);
 }
 
@@ -1405,7 +1413,11 @@ s32 Particle_Field7C_IncrementYUntilAtLeast_0AFA8(Particle* arg0, f32 arg1, f32 
     return var_v1;
 }
 
-s32 func_8213F8EC(Particle* arg0, f32 arg1, f32 arg2) {
+/**
+ * Decrease the selected field toward its threshold and return the completion result.
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+s32 Particle_MotionStep_DecrementYUntilAtMost(Particle* arg0, f32 arg1, f32 arg2) {
     s32 var_v1 = 0;
     f32 temp_fv0;
 
@@ -1485,7 +1497,11 @@ void Particle_Field7C_SetVecFromField74AnglesXY_0B2B4(Particle* arg0) {
     arg0->unk_7C.z = arg0->unk_74 * COSS(arg0->unk_94.x) * COSS(arg0->unk_94.y);
 }
 
-void func_8213FBCC(Particle* arg0) {
+/**
+ * Evaluate the explicit trigonometric component formula and store/add the resulting motion term.
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void Particle_MotionStep_SetVecFromField74AnglesXZ(Particle* arg0) {
     arg0->unk_7C.x = arg0->unk_74 * SINS(arg0->unk_94.x) * SINS(arg0->unk_94.z);
     arg0->unk_7C.y = -arg0->unk_74 * SINS(arg0->unk_94.x) * COSS(arg0->unk_94.z);
     arg0->unk_7C.z = arg0->unk_74 * COSS(arg0->unk_94.x);

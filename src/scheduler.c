@@ -227,7 +227,10 @@ void func_80004AE0(void) {
     func_80026980();
 }
 
-void func_80004B10(void) {
+/**
+ * @unverified Name from Stadium 1, matched by code similarity.
+ */
+void Sched_HandleRetrace(void) {
     D_800A9710.time = osGetTime();
     D_800A9710.unk_A34++;
 
@@ -305,7 +308,7 @@ void Sched_HandleRdpEvent(void) {
  *   - register the queue for the video retrace message (0x66) and for the
  *     RSP-done (0x64), RDP-done (0x65) and pre-NMI (0x68) OS events.
  * Then it blocks on the queue forever and dispatches on the message:
- *   0x66 video retrace    -> func_80004B10
+ *   0x66 video retrace    -> Sched_HandleRetrace
  *   0x64 RSP finished     -> Sched_HandleRspEvent
  *   0x65 RDP finished     -> Sched_HandleRdpEvent
  *   0x67 start next task  -> Sched_StartPendingTask (sent by other
@@ -328,7 +331,7 @@ void Sched_ThreadEntry(void* arg0) {
 
         switch (sp24) {
             case 0x66:
-                func_80004B10();
+                Sched_HandleRetrace();
                 break;
 
             case 0x64:

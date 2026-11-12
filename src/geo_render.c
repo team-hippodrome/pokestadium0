@@ -185,7 +185,7 @@ extern unk_D_800ABCC0 D_800ABCC0[2];
  * Fills the global record D_800AC690 from the object `arg0` and the data
  * block arg0->unk_4 (`temp_s1`):
  *
- *   - if arg1 != 0, arg0->unk_8 = func_80011774(arg0) first;
+ *   - if arg1 != 0, arg0->unk_8 = ModelAnim_AdvanceCurveFrame(arg0) first;
  *   - arg0->unk_12 (halfword at 0x12) = D_80060484;
  *   - D_800AC690[0] = 1;  D_800AC690[1] = first halfword of the block & 4;
  *     D_800AC690 word 4 = the block pointer;
@@ -193,11 +193,11 @@ extern unk_D_800ABCC0 D_800ABCC0[2];
  *   - D_800AC690 words 8, 0xC, 0x10, 0x14 = func_80002C80 of the block's
  *     words at 0xC, 0x10, 0x14, 0x18.
  *
- * What the record is used for is not established; func_80011774 and
+ * What the record is used for is not established; ModelAnim_AdvanceCurveFrame and
  * func_80002C80 are not described here.
  */
 s32 func_80002C80(s32);
-s32 func_80011774(TransformAnimRaw* arg0);
+s32 ModelAnim_AdvanceCurveFrame(TransformAnimRaw* arg0);
 extern u8 D_800AC690;
 
 void func_8001148C(void *arg0, s32 arg1) {
@@ -205,7 +205,7 @@ void func_8001148C(void *arg0, s32 arg1) {
 
     temp_s1 = M2C_FIELD(arg0, s16 **, 4);
     if (arg1 != 0) {
-        M2C_FIELD(arg0, s32 *, 8) = func_80011774((TransformAnimRaw*)arg0);
+        M2C_FIELD(arg0, s32 *, 8) = ModelAnim_AdvanceCurveFrame((TransformAnimRaw*)arg0);
     }
     M2C_FIELD(arg0, u16 *, 0x12) = (u16) D_80060484;
     M2C_FIELD(&D_800AC690, s8 *, 0) = 1;
@@ -289,7 +289,10 @@ f32 ModelAnim_EvaluateScaleChannel(unk_D_800ABCC0* arg0, s32 arg1) {
     return var_fv1;
 }
 
-s32 func_80011774(TransformAnimRaw* arg0) {
+/**
+ * @unverified Name from Stadium 1, matched by code similarity.
+ */
+s32 ModelAnim_AdvanceCurveFrame(TransformAnimRaw* arg0) {
     AnimFixedFrame spC;
     AnimFixedFrame* ptr;
     TransformAnimData* temp_v0;

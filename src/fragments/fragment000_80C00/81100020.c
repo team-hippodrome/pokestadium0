@@ -32,7 +32,7 @@ extern u8 D_8111E374[];
 extern u8 D_8111E3A8[];
 extern u8 D_8111E3CC[];
 extern u8 D_8111E3E0[];
-void func_81103850(s8* arg0, u8* arg1);
+void GbEmu_DrawTextCommands(s8* arg0, u8* arg1);
 s32 func_81103C40(s32, s32*, s32, s32, s32);
 extern s32 D_8111C568;
 void func_811000DC(s8* arg0, u8 arg1) {
@@ -40,7 +40,7 @@ void func_811000DC(s8* arg0, u8 arg1) {
     u8* last;
 
     arg0 += 0x787C;
-    func_81103850(arg0, D_8111E318);
+    GbEmu_DrawTextCommands(arg0, D_8111E318);
     for (i = 0; i != 0x140; i += 0x20) {
         func_81103C40((s32)(arg0 + 0xC806 + i), &D_8111C4F0, 0, 0xC, 5);
     }
@@ -61,10 +61,10 @@ void func_811000DC(s8* arg0, u8 arg1) {
         D_8111E364[4] = 8;
         last = D_8111E3A8;
     }
-    func_81103850(arg0, D_8111E324);
-    func_81103850(arg0, D_8111E364);
-    func_81103850(arg0, D_8111E3CC);
-    func_81103850(arg0, last);
+    GbEmu_DrawTextCommands(arg0, D_8111E324);
+    GbEmu_DrawTextCommands(arg0, D_8111E364);
+    GbEmu_DrawTextCommands(arg0, D_8111E3CC);
+    GbEmu_DrawTextCommands(arg0, last);
 }
 
 extern s32 D_8111D0A8[];
@@ -151,15 +151,15 @@ void func_81100390(s32 arg0, s32 arg1, s32 arg2) {
         fb = arg0 - 0x4B00;
     } else {
         func_81103C40(arg0 + 0xF22, &D_8111D3A8, 0, 0x10, 0xC);
-        func_81103850((s8*)arg0, D_8111E40C);
+        GbEmu_DrawTextCommands((s8*)arg0, D_8111E40C);
         if (D_8111E308 == 1) {
-            func_81103850((s8*)arg0, D_8111E454);
+            GbEmu_DrawTextCommands((s8*)arg0, D_8111E454);
         } else {
-            func_81103850((s8*)arg0, D_8111E47C);
+            GbEmu_DrawTextCommands((s8*)arg0, D_8111E47C);
         }
     }
-    func_81103850((s8*)fb, D_8111E4A0);
-    func_81103850((s8*)fb, D_8111E4AC);
+    GbEmu_DrawTextCommands((s8*)fb, D_8111E4A0);
+    GbEmu_DrawTextCommands((s8*)fb, D_8111E4AC);
     func_81103C40(fb + 0x138AE, &D_8111CDA8, 0, 0x10, 0xC);
     fb += 0xBB80;
     func_81103C40(fb, &D_8111C6A8, 0, 8, 8);
@@ -224,7 +224,7 @@ void func_81100390(s32 arg0, s32 arg1, s32 arg2) {
 }
 
 void func_811000DC(s8* arg0, u8 arg1);
-void func_81103850(s8* arg0, u8* arg1);
+void GbEmu_DrawTextCommands(s8* arg0, u8* arg1);
 s32 func_81103C40(s32, s32*, s32, s32, s32);
 extern u8 D_8111E4BC[];
 extern s32 D_8111C568;
@@ -234,7 +234,7 @@ void func_81100818(s8* arg0, s32 arg1) {
     arg0 += 0x787C;
     D_8111E4BC[arg1 ? 4 : 0xC] = 8;
     D_8111E4BC[arg1 ? 0xC : 4] = 0xA;
-    func_81103850(arg0, D_8111E4BC);
+    GbEmu_DrawTextCommands(arg0, D_8111E4BC);
     func_81103C40((s32)&((u16*)(arg0 + 0x13B00))[arg1 ? 0xE : 0x45], &D_8111C568, 0, 0x10, 0xA);
 }
 
@@ -353,7 +353,7 @@ extern u8 D_8111E4E4[];
 extern u8 D_8111E540[];
 s32 func_811056CC(void);
 void func_811173F4(void);
-void func_811172AC(void);
+void GbAudio_RampToSilence(void);
 s32 func_81106700(void);
 void func_81104D84(s32);
 void func_80004F34(void*, s32);
@@ -544,7 +544,7 @@ void func_81100C84(s8* arg0) {
         shutdown:
         func_81103728(1 << D_811565A0);
         osViBlack(1);
-        func_811172AC();
+        GbAudio_RampToSilence();
         func_81104B88(20);
         func_81103D30();
         osWritebackDCacheAll();
@@ -750,8 +750,8 @@ void func_81100C84(s8* arg0) {
 
         case 21:
             fade[3] = 0xFF;
-            func_81103850(*(s8**)(D_81154C30[D_81154C3C] + 8), D_8111E4D0);
-            func_81103850(*(s8**)(D_81154C30[D_81154C3C] + 8), D_8111E4E4);
+            GbEmu_DrawTextCommands(*(s8**)(D_81154C30[D_81154C3C] + 8), D_8111E4D0);
+            GbEmu_DrawTextCommands(*(s8**)(D_81154C30[D_81154C3C] + 8), D_8111E4E4);
             if (func_8110665C() == 0) {
                 D_81154C53 = 30;
                 D_81154C4D = 22;
@@ -759,10 +759,10 @@ void func_81100C84(s8* arg0) {
             break;
 
         case 22:
-            func_81103850(*(s8**)(D_81154C30[D_81154C3C] + 8), D_8111E4D0);
+            GbEmu_DrawTextCommands(*(s8**)(D_81154C30[D_81154C3C] + 8), D_8111E4D0);
         case 26:
             fade[3] = 0xFF;
-            func_81103850(*(s8**)(D_81154C30[D_81154C3C] + 8), D_8111E4E4);
+            GbEmu_DrawTextCommands(*(s8**)(D_81154C30[D_81154C3C] + 8), D_8111E4E4);
             if (func_8110665C() != 0) {
                 if (D_81154C53 == 0) {
                     if (func_8110659C() == 0) {
@@ -779,13 +779,13 @@ void func_81100C84(s8* arg0) {
 
         case 23:
             fade[3] = 0xFF;
-            func_81103850(*(s8**)(D_81154C30[D_81154C3C] + 8), D_8111E4E4);
+            GbEmu_DrawTextCommands(*(s8**)(D_81154C30[D_81154C3C] + 8), D_8111E4E4);
             D_81154C4D = 24;
             break;
 
         case 24:
             fade[3] = 0xFF;
-            func_81103850(*(s8**)(D_81154C30[D_81154C3C] + 8), D_8111E4E4);
+            GbEmu_DrawTextCommands(*(s8**)(D_81154C30[D_81154C3C] + 8), D_8111E4E4);
             if (func_81102C20(D_811565A0) == 0) {
                 func_811177D0(0);
                 D_81154C40 = 0;
@@ -800,8 +800,8 @@ void func_81100C84(s8* arg0) {
 
         case 25:
             fade[3] = 0xFF;
-            func_81103850(*(s8**)(D_81154C30[D_81154C3C] + 8), D_8111E540);
-            func_81103850(*(s8**)(D_81154C30[D_81154C3C] + 8), D_8111E4E4);
+            GbEmu_DrawTextCommands(*(s8**)(D_81154C30[D_81154C3C] + 8), D_8111E540);
+            GbEmu_DrawTextCommands(*(s8**)(D_81154C30[D_81154C3C] + 8), D_8111E4E4);
             if (func_8110665C() == 0) {
                 D_81154C53 = 30;
                 D_81154C4D = 26;

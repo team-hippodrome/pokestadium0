@@ -338,7 +338,7 @@ extern M2C_UNK D_8218E7A0;
 extern M2C_UNK func_82152FB0;
 extern M2C_UNK func_821624FC;
 
-void func_821548B8(void);
+void BattleAnim_InitializeScreenMove(void);
 
 void func_82154C9C(Particle* arg0);
 
@@ -418,7 +418,7 @@ M2C_UNK func_8213B5D8(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK *, M2C_UNK *, s32, s32,
 extern M2C_UNK func_82155724;
 extern M2C_UNK func_82164AD0;
 
-void func_821559E4(void);
+void BattleAnim_InitializeLeechSeedUse(void);
 
 M2C_UNK func_8213831C(s8 *, M2C_UNK);             /* extern */
 s32 func_8213C9B0(s8 *);                          /* extern */
@@ -436,24 +436,24 @@ M2C_UNK func_82140518(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 s32 func_821406B4(s8 *);                          /* extern */
 M2C_UNK func_82155DB8(s8 *);                      /* extern */
 
-void func_82155EF0(s8 *arg0);
+void BattleAnim_RunBlizzard(s8 *arg0);
 
 M2C_UNK func_8213B560(M2C_UNK, M2C_UNK *, M2C_UNK *, M2C_UNK, s32, s32, s32, s32, s32); /* extern */
 M2C_UNK func_8213B644(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
 M2C_UNK func_8213B8EC(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32); /* extern */
 
-void func_82155FD0(void);
+void BattleAnim_InitializeBlizzardUse(void);
 
 M2C_UNK func_8213B458(M2C_UNK);                     /* extern */
 M2C_UNK func_8213B5D8(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK *, M2C_UNK *, s32, s32, s32, s32, s32, s32); /* extern */
 M2C_UNK func_8213B644(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
 M2C_UNK func_8213BE70(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 extern M2C_UNK D_8218E650;
-extern M2C_UNK func_8214BA3C;
+extern M2C_UNK BattleAnim_RunBlizzardHitUpwardColdAir;
 extern M2C_UNK func_82152F44;
 extern M2C_UNK func_821626F4;
 
-void func_8215604C(void);
+void BattleAnim_InitializeBlizzardHit(void);
 
 void BattleAnim_InitMove146Model(Particle* arg0);
 
@@ -470,7 +470,7 @@ void BattleAnim_RunFlyUpwardMovementEffect(Particle* arg0);
 M2C_UNK func_8213B560(M2C_UNK, M2C_UNK *, M2C_UNK *, M2C_UNK, s32, s32, s32, s32, s32); /* extern */
 extern M2C_UNK func_82156B0C;
 
-void func_82156B90(void);
+void BattleAnim_InitializeFlyUse(void);
 
 void func_82156E54(Particle* arg0);
 void func_82156EF0(Particle* arg0);
@@ -483,7 +483,7 @@ M2C_UNK func_82140380(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_821403B0(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_82156F70(s8 *);                      /* extern */
 
-void func_821570E8(s8 *arg0);
+void BattleAnim_RunFallingRock(s8 *arg0);
 
 void func_82157354(Particle* arg0);
 void func_821573BC(Particle* arg0);
@@ -519,7 +519,7 @@ s32 func_82140690(s8 *);                          /* extern */
 s32 func_821406B4(s8 *);                          /* extern */
 M2C_UNK func_82158344(s8 *);                      /* extern */
 
-void func_82158450(s8 *arg0);
+void BattleAnim_RunBoomUseEffect3(s8 *arg0);
 
 M2C_UNK func_8213C930(s8 *);                      /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
@@ -532,7 +532,7 @@ s32 func_82140690(s8 *);                          /* extern */
 s32 func_821406B4(s8 *);                          /* extern */
 M2C_UNK func_8215856C(s8 *);                      /* extern */
 
-void func_8215863C(s8 *arg0);
+void BattleAnim_RunBoomUseEffect4(s8 *arg0);
 
 M2C_UNK func_8213C464();                            /* extern */
 M2C_UNK func_8213C930(s8 *);                      /* extern */
@@ -565,7 +565,7 @@ M2C_UNK func_82143478(s8 *, M2C_UNK);             /* extern */
 M2C_UNK func_821437E0(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_82152730(s8 *, M2C_UNK);             /* extern */
 
-void func_82158BA4(s8 *arg0);
+void BattleAnim_RunBoomHitEffect1(s8 *arg0);
 
 void BattleAnim_SetupBoomHitEffect2(Particle* arg0);
 
@@ -580,7 +580,7 @@ s32 func_82140690(s8 *);                          /* extern */
 s32 func_821406B4(s8 *);                          /* extern */
 M2C_UNK func_82158CE0(s8 *);                      /* extern */
 
-void func_82158E20(s8 *arg0);
+void BattleAnim_RunBoomHitEffect2(s8 *arg0);
 
 M2C_UNK func_8213C930(s8 *);                      /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
@@ -595,12 +595,12 @@ s32 func_821406B4(s8 *);                          /* extern */
 M2C_UNK func_821437E0(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_82158F20(s8 *);                      /* extern */
 
-void func_82159060(s8 *arg0);
+void BattleAnim_RunBoomHitEffect3(s8 *arg0);
 
 extern ParticleDescriptor D_8218E580[86];
-void func_8215917C(void);
+void BattleAnim_InitializeBoomUse(void);
 
-void func_82159548(void);
+void BattleAnim_InitializeBoomHit(void);
 
 /**
  * Empty function. Not referenced in C.
@@ -623,7 +623,7 @@ void func_82159898(s8 *arg0);
 M2C_UNK func_8213BC00(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32); /* extern */
 M2C_UNK func_82166B34();                            /* extern */
 
-void func_82159C40(void);
+void BattleAnim_InitializeGuillotineHit(void);
 
 void BattleAnim_CallbackStartEffect69ModelPhaseWait(Particle* arg0);
 
@@ -631,8 +631,8 @@ M2C_UNK func_8213B560(M2C_UNK, M2C_UNK *, M2C_UNK *, M2C_UNK, s32, s32, s32, s32
 M2C_UNK func_8213B5D8(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK *, M2C_UNK *, s32, s32, s32, s32, s32, s32); /* extern */
 extern M2C_UNK D_8218E708;
 extern M2C_UNK func_82159F70;
-extern M2C_UNK func_82164E18;
-extern M2C_UNK func_82164F04;
+extern M2C_UNK BattleAnim_RunDigHitDust;
+extern M2C_UNK BattleAnim_RunDigHitRocks;
 
 void func_82159FC8(void);
 
@@ -641,12 +641,12 @@ M2C_UNK func_8213B5D8(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK *, M2C_UNK *, s32, s32,
 extern M2C_UNK D_8218E728;
 extern M2C_UNK func_82162C68;
 
-void func_8215A108(void);
+void BattleAnim_InitializeDigHit(void);
 
 M2C_UNK func_8213B560(M2C_UNK, M2C_UNK *, M2C_UNK *, M2C_UNK, s32, s32, s32, s32, s32); /* extern */
 M2C_UNK func_8213B720(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK); /* extern */
 
-void func_8215A2DC(void);
+void BattleAnim_InitializeBoneClubUse(void);
 
 f32 func_8215AEA4(Particle* arg0);
 
@@ -657,14 +657,14 @@ M2C_UNK func_8213BC00(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32); /* extern */
 M2C_UNK func_8213C1BC(M2C_UNK);                     /* extern */
 M2C_UNK func_82168504();                            /* extern */
 
-void func_8215B2B8(void);
+void BattleAnim_InitializeDefenseCurlUse(void);
 
 M2C_UNK func_8213B560(M2C_UNK, M2C_UNK *, M2C_UNK *, M2C_UNK, s32, s32, s32, s32, s32); /* extern */
 M2C_UNK func_8213BC00(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32); /* extern */
 M2C_UNK func_8213C1BC(M2C_UNK);                     /* extern */
 M2C_UNK func_82168504();                            /* extern */
 
-void func_8215B338(void);
+void BattleAnim_InitializeSharpenUse(void);
 
 M2C_UNK func_8213B644(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
 M2C_UNK func_8215B558();                            /* extern */
@@ -681,12 +681,12 @@ f32 func_8215B6A4(Particle* arg0);
 M2C_UNK func_8213B560(M2C_UNK, M2C_UNK *, M2C_UNK *, M2C_UNK, s32, s32, s32, s32, s32); /* extern */
 M2C_UNK func_8213B644(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
 
-void func_8215B764(void);
+void BattleAnim_InitializeLovelyKissUse(void);
 
 M2C_UNK func_8213B560(M2C_UNK, M2C_UNK *, M2C_UNK *, M2C_UNK, s32, s32, s32, s32, s32); /* extern */
 M2C_UNK func_8213BC7C(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 
-void func_8215B7C8(void);
+void BattleAnim_InitializeLovelyKissHit(void);
 
 s32 func_82136AC0(s8 *);                          /* extern */
 M2C_UNK func_82136D58(s32, M2C_UNK);                /* extern */
@@ -703,7 +703,7 @@ M2C_UNK func_8213B644(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
 extern M2C_UNK func_82153040;
 extern M2C_UNK func_8215B904;
 
-void func_8215C158(void);
+void BattleAnim_InitializeDreamEaterUse(void);
 
 void BattleAnim_CreateDrainingMoveOverlay(void);
 
@@ -712,14 +712,14 @@ M2C_UNK func_8213B560(M2C_UNK, M2C_UNK *, M2C_UNK *, M2C_UNK, s32, s32, s32, s32
 M2C_UNK func_8213B644(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
 M2C_UNK func_8213B720(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK); /* extern */
 
-void func_8215C7AC(void);
+void BattleAnim_InitializeNightShadeUse(void);
 
 M2C_UNK func_8213B560(M2C_UNK, M2C_UNK *, M2C_UNK *, M2C_UNK, s32, s32, s32, s32, s32); /* extern */
 M2C_UNK func_8213B5D8(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK *, M2C_UNK *, s32, s32, s32, s32, s32, s32); /* extern */
 M2C_UNK func_8213B720(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK); /* extern */
 M2C_UNK func_8213BC00(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32); /* extern */
 
-void func_8215C82C(void);
+void BattleAnim_InitializeNightShadeHit(void);
 
 s32 func_821385C0();                                /* extern */
 M2C_UNK func_8213EAD4(s8 *, s16);                 /* extern */
@@ -746,7 +746,7 @@ M2C_UNK func_8213B720(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK); /* extern */
 M2C_UNK func_8213B878(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK); /* extern */
 M2C_UNK func_8213BC00(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32); /* extern */
 
-void func_8215CD18(void);
+void BattleAnim_InitializeConfuseRayUse(void);
 
 M2C_UNK func_8213B464(M2C_UNK);                     /* extern */
 M2C_UNK func_8213B560(M2C_UNK, M2C_UNK *, M2C_UNK *, M2C_UNK, s32, s32, s32, s32, s32); /* extern */
@@ -754,7 +754,7 @@ M2C_UNK func_8213B644(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
 M2C_UNK func_8213B720(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK); /* extern */
 M2C_UNK func_8213BC00(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32); /* extern */
 
-void func_8215CE20(void);
+void BattleAnim_InitializeConfuseRayHit(void);
 
 extern M2C_UNK D_8218E5F8;
 extern M2C_UNK D_8218E5D8;
@@ -771,12 +771,12 @@ void func_8215D31C(void);
 void ParticleEffect_BasicMultiBurstDelayedSprayOnly(void);
 
 extern M2C_UNK D_8218E7A8;
-void func_8215D520(void);
+void BattleAnim_InitializeSurfHit(void);
 
 M2C_UNK func_8213B560(M2C_UNK, M2C_UNK *, M2C_UNK *, M2C_UNK, s32, s32, s32, s32, s32); /* extern */
 M2C_UNK func_8213B720(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK); /* extern */
 
-void func_8215D6B4(void);
+void BattleAnim_InitializeCrabhammerUse(void);
 
 M2C_UNK func_8213C938(s8 *);                      /* extern */
 M2C_UNK func_8213CCEC(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
@@ -803,7 +803,7 @@ M2C_UNK func_8213B5D8(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK *, M2C_UNK *, s32, s32,
 M2C_UNK func_8213BC7C(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 extern M2C_UNK func_8215DCE8;
 
-void func_8215DEF4(void);
+void BattleAnim_InitializePsywaveHit(void);
 
 void BattleAnim_RunConfusionPsychicHitEffect(Particle* arg0);
 
@@ -812,14 +812,14 @@ M2C_UNK func_8213B644(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
 M2C_UNK func_8213B6AC(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32); /* extern */
 M2C_UNK func_8213BC7C(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 
-void func_8215E050(void);
+void BattleAnim_InitializePsychicUse(void);
 
 M2C_UNK func_8213B560(M2C_UNK, M2C_UNK *, M2C_UNK *, M2C_UNK, s32, s32, s32, s32, s32); /* extern */
 M2C_UNK func_8213B644(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
 M2C_UNK func_8213B6AC(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32); /* extern */
 M2C_UNK func_8213BC7C(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 
-void func_8215E0FC(void);
+void BattleAnim_InitializeConfusionUse(void);
 
 M2C_UNK func_8213B464(M2C_UNK);                     /* extern */
 M2C_UNK func_8213B560(M2C_UNK, M2C_UNK *, M2C_UNK *, M2C_UNK, s32, s32, s32, s32, s32); /* extern */
@@ -840,7 +840,7 @@ M2C_UNK func_8213BC00(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32); /* extern */
 
 void func_8215E2C4(void);
 
-void func_8215E3E0(void);
+void BattleAnim_InitializeFocusEnergyUse(void);
 
 M2C_UNK func_8213B560(M2C_UNK, M2C_UNK *, M2C_UNK *, M2C_UNK, s32, s32, s32, s32, s32); /* extern */
 M2C_UNK func_8213B644(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
@@ -848,9 +848,9 @@ M2C_UNK func_8213BC00(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32); /* extern */
 M2C_UNK func_8213BD78(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32); /* extern */
 M2C_UNK func_82168844(M2C_UNK);                     /* extern */
 extern M2C_UNK D_8218E7F8;
-extern M2C_UNK func_82145CC4;
+extern M2C_UNK BattleAnim_RunOscillatingFlameUnderneathPokemon;
 
-void func_8215E57C(void);
+void BattleAnim_InitializeSkyAttackUse1(void);
 
 M2C_UNK func_8213B560(M2C_UNK, M2C_UNK *, M2C_UNK *, M2C_UNK, s32, s32, s32, s32, s32); /* extern */
 M2C_UNK func_8213B5D8(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK *, M2C_UNK *, s32, s32, s32, s32, s32, s32); /* extern */
@@ -859,13 +859,13 @@ M2C_UNK func_8213BC00(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32); /* extern */
 M2C_UNK func_8213C0D8(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK); /* extern */
 extern M2C_UNK func_82152FE0;
 
-void func_8215E61C(void);
+void BattleAnim_InitializeSkyAttackUse2(void);
 
 M2C_UNK func_8213B560(M2C_UNK, M2C_UNK *, M2C_UNK *, M2C_UNK, s32, s32, s32, s32, s32); /* extern */
 M2C_UNK func_8213BC00(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32); /* extern */
-M2C_UNK func_82168A50();                            /* extern */
+M2C_UNK BattleAnim_InitializeSolarBeamUseSequence();                            /* extern */
 
-void func_8215EC9C(void);
+void BattleAnim_InitializeSolarBeamUse2(void);
 
 void BattleAnim_CallbackEndEffect76DefaultDescriptorModelFade(Particle* arg0);
 
@@ -873,23 +873,23 @@ M2C_UNK func_8213B560(M2C_UNK, M2C_UNK *, M2C_UNK *, M2C_UNK, s32, s32, s32, s32
 M2C_UNK func_8213BC00(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32); /* extern */
 extern M2C_UNK func_8215ED1C;
 
-void func_8215EDC0(void);
+void BattleAnim_InitializeLargePhysicalHitSpark(void);
 
 M2C_UNK func_8213B560(M2C_UNK, M2C_UNK *, M2C_UNK *, M2C_UNK, s32, s32, s32, s32, s32); /* extern */
 M2C_UNK func_8213BC00(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32); /* extern */
 
-void func_8215EF60(void);
+void BattleAnim_InitializeHornDrillHit(void);
 
 void BattleAnim_RunWeakSpear(Particle* arg0);
 
 M2C_UNK func_8213B5D8(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK *, M2C_UNK *, s32, s32, s32, s32, s32, s32); /* extern */
 extern M2C_UNK func_8215EFF8;
 
-void func_8215F0F0(void);
+void BattleAnim_InitializeFuryAttackPeckUse(void);
 
 M2C_UNK func_8213B560(M2C_UNK, M2C_UNK *, M2C_UNK *, M2C_UNK, s32, s32, s32, s32, s32); /* extern */
 
-void func_8215F154(void);
+void BattleAnim_InitializeHornAttackUse(void);
 
 s32 func_8001104C(s32);                             /* extern */
 M2C_UNK func_8213C930(s8 *);                      /* extern */

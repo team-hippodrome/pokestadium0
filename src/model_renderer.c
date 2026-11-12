@@ -145,7 +145,11 @@ ModelAnimationBank* ModelAnim_GetAnimationRecord(DisplayObject* arg0, s32 arg1) 
 
 extern unk_D_8006FF00 D_80064C5C[];
 
-arg1_func_80010CA8* func_80019BDC(arg1_func_80010CA8* arg0, BattleMon* arg1) {
+/**
+ * Derive the material color variant from a non-default nickname, OT id, and OT name.
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+arg1_func_80010CA8* Model_ComputeNicknameColorVariant(arg1_func_80010CA8* arg0, BattleMon* arg1) {
     UNUSED s32 pad; // FAKE: stack padding
     char sp38[0xB];
     arg1_func_80010CA8 sp34;

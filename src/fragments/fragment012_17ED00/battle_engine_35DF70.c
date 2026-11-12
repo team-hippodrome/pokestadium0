@@ -369,7 +369,11 @@ extern u8 D_82199F37;
 extern s32 D_8218C8BC;
 extern s32 D_8218C8C0;
 
-void func_8211576C(void) {
+/**
+ * Replace the selected move slot with a randomly chosen nonempty target move.
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleEffect_Mimic(void) {
     ActivePokemonState* sp34 = &sActivePokemon[sBattleScene.scene->unk_2C]->state;
     UNUSED s32 pad; // FAKE: stack padding
     s32 var_t0;

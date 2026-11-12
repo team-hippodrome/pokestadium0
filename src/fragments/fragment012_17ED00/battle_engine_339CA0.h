@@ -121,7 +121,7 @@ M2C_UNK func_821403E0(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_821404AC(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_821404DC(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 
-void func_821600E0(s8 *arg0);
+void BattleAnim_RunSlashingMoveFullScreenFlash(s8 *arg0);
 
 void func_8213D3FC(Particle* arg0, f32 arg1, f32 arg2, f32 arg3);
 
@@ -137,7 +137,7 @@ M2C_UNK func_821404AC(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_821404DC(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_82140518(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 
-void func_82160230(s8 *arg0);
+void BattleAnim_RunSlashMoveWhiteFlashOverlay(s8 *arg0);
 
 void BattleAnim_CallbackSharedOwnerKeyedAnimGrowFade_InitParticle(Particle* arg0);
 
@@ -180,7 +180,7 @@ M2C_UNK func_8213F658(s8 *, f32, f32);    /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_82140548(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 
-void func_82160704(s8 *arg0);
+void BattleAnim_RunSmallSand(s8 *arg0);
 
 f32 func_8000F150();                                /* extern */
 s16 func_8213C47C();                                /* extern */
@@ -204,7 +204,7 @@ M2C_UNK func_8213F658(s8 *, f32, f32);    /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 s32 func_82140518(s8 *, M2C_UNK, M2C_UNK);        /* extern */
 
-void func_821608FC(s8 *arg0);
+void BattleAnim_RunLargeSand(s8 *arg0);
 
 void BattleAnim_SetupSandAttackUseEffect(Particle* arg0);
 
@@ -250,7 +250,7 @@ M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_82140518(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_82160DC4(s8 *);                      /* extern */
 
-void func_82160EAC(s8 *arg0);
+void BattleAnim_RunSandAttackHitEffect(s8 *arg0);
 
 /*
  * func_82161074
@@ -322,7 +322,7 @@ s32 func_82140518(s8 *, M2C_UNK, M2C_UNK);        /* extern */
 s32 func_82140690(s8 *);                          /* extern */
 M2C_UNK func_8216177C(s8 *);                      /* extern */
 
-void func_82161890(s8 *arg0);
+void BattleAnim_RunPointyMoveHitSparkChild(s8 *arg0);
 
 void BattleAnim_CallbackEndEffect52Descriptor42BurstChild_InitParticle(Particle* arg0);
 
@@ -458,7 +458,7 @@ M2C_UNK func_82140594(s8 *, M2C_UNK);             /* extern */
 s32 func_821406B4(s8 *);                          /* extern */
 M2C_UNK func_82164B9C(s8 *);                      /* extern */
 
-void func_82164CA4(s8 *arg0);
+void BattleAnim_RunSplashOfWater(s8 *arg0);
 
 M2C_UNK func_8213C930(s8 *);                      /* extern */
 s32 func_8213C9B0(s8 *);                          /* extern */
@@ -468,7 +468,7 @@ M2C_UNK func_8213E3F8(s8 *);                      /* extern */
 M2C_UNK func_8213F940(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 s32 func_821406B4(s8 *);                          /* extern */
 
-void func_82164E18(s8 *arg0);
+void BattleAnim_RunDigHitDust(s8 *arg0);
 
 M2C_UNK func_8213C930(s8 *);                      /* extern */
 s32 func_8213C9B0(s8 *);                          /* extern */
@@ -477,7 +477,7 @@ M2C_UNK func_8213E3F8(s8 *);                      /* extern */
 M2C_UNK func_8213F940(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 s32 func_821406B4(s8 *);                          /* extern */
 
-void func_82164F04(s8 *arg0);
+void BattleAnim_RunDigHitRocks(s8 *arg0);
 
 void BattleAnim_RunBarrageUseEffect2(Particle* arg0);
 
@@ -560,7 +560,7 @@ extern M2C_UNK func_8214E67C;
 extern M2C_UNK func_82162938;
 extern M2C_UNK func_82162C68;
 
-void func_8216669C(void);
+void BattleAnim_InitializeThunderPunchHit(void);
 
 M2C_UNK func_8213B644(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
 
@@ -572,7 +572,7 @@ extern s16 D_8219A80A;
 void func_82166DC4(void);
 
 /*
- * func_82166E7C
+ * BattleAnim_InitializeScratchSlashUse
  *
  * Starts the effect slots of one battle animation.  If func_82107CF0
  * (applied to the word at D_8219A814) returns 0x7B, the animation is
@@ -580,7 +580,7 @@ void func_82166DC4(void);
  * nothing else happens.
  * Otherwise it creates three slots running func_8215FAA4 on descriptor
  * D_8218E6D0 (start delays 0, 4 and 0xA; the last argument 0, 1, 2 is the
- * only value that differs), one slot running func_821600E0 on descriptor
+ * only value that differs), one slot running BattleAnim_RunSlashingMoveFullScreenFlash on descriptor
  * D_8218E6C8 with start delay 0x1E, and then calls func_8213B720 with
  * (0x23, 0, 0x10, 0x12).
  *
@@ -596,7 +596,7 @@ extern M2C_UNK D_8218E6C8;
 extern M2C_UNK D_8218E6D0;
 extern s32 D_8219A814;
 
-void func_82166E7C(void);
+void BattleAnim_InitializeScratchSlashUse(void);
 
 void func_82167274(void);
 void ParticleEffect_DynamicCollisionSetup(void);
@@ -634,7 +634,7 @@ M2C_UNK func_8213B560(M2C_UNK, M2C_UNK *, M2C_UNK *, M2C_UNK, s32, s32, s32, s32
 M2C_UNK func_8213BC7C(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 extern M2C_UNK D_8218E7B8;
 
-void func_821678F4(void);
+void BattleAnim_InitializePowderSporeGasMoveHit(void);
 
 M2C_UNK func_8213B5D8(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK *, M2C_UNK *, s32, s32, s32, s32, s32, s32); /* extern */
 extern M2C_UNK D_8218E7C8;
@@ -652,7 +652,7 @@ extern M2C_UNK D_8218E770;
 extern M2C_UNK D_8218E7D8;
 extern M2C_UNK func_821640A0;
 
-void func_82167C60(void);
+void BattleAnim_InitializeAcidArmorUse(void);
 
 M2C_UNK func_8213B464(M2C_UNK);                     /* extern */
 M2C_UNK func_8213B560(M2C_UNK, M2C_UNK *, M2C_UNK *, M2C_UNK, s32, s32, s32, s32, s32); /* extern */
@@ -661,22 +661,22 @@ M2C_UNK func_8213B720(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK); /* extern */
 M2C_UNK func_8213B878(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK); /* extern */
 M2C_UNK func_8213BC00(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32); /* extern */
 
-void func_82167D48(void);
+void BattleAnim_InitializeFlashUse(void);
 
 M2C_UNK func_8213B464(M2C_UNK);                     /* extern */
 M2C_UNK func_8213B644(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
 M2C_UNK func_8213B720(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK); /* extern */
 M2C_UNK func_8213BC00(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32); /* extern */
 
-void func_82167E28(void);
+void BattleAnim_InitializeFlashHit(void);
 
 M2C_UNK func_8213B560(M2C_UNK, M2C_UNK *, M2C_UNK *, M2C_UNK, s32, s32, s32, s32, s32); /* extern */
 M2C_UNK func_8213B5D8(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK *, M2C_UNK *, s32, s32, s32, s32, s32, s32); /* extern */
 M2C_UNK func_8213BC7C(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 M2C_UNK func_8215E510();                            /* extern */
 extern M2C_UNK D_8218E7F8;
-extern M2C_UNK func_82145CC4;
-void func_82167EB4(void);
+extern M2C_UNK BattleAnim_RunOscillatingFlameUnderneathPokemon;
+void BattleAnim_InitializeBideRageUse(void);
 
 void BattleAnim_InitializeStruggleThrashUse(void);
 
@@ -689,7 +689,7 @@ void BattleAnim_InitializeSubstituteTransformUse(void);
 M2C_UNK func_8213B644(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
 M2C_UNK func_82168844(M2C_UNK);                     /* extern */
 
-void func_82168A10(void);
+void BattleAnim_InitializeMimicConversionUse(void);
 
 M2C_UNK func_8213B560(M2C_UNK, M2C_UNK *, M2C_UNK *, M2C_UNK, s32, s32, s32, s32, s32); /* extern */
 M2C_UNK func_8213B644(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
@@ -697,7 +697,7 @@ M2C_UNK func_82168844(M2C_UNK);                     /* extern */
 extern M2C_UNK D_8218E768;
 extern M2C_UNK func_821655C0;
 
-void func_82168A50(void);
+void BattleAnim_InitializeSolarBeamUseSequence(void);
 
 M2C_UNK func_8213BC7C(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 
@@ -707,6 +707,6 @@ M2C_UNK func_8213B5D8(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK *, M2C_UNK *, s32, s32,
 M2C_UNK func_8213BC00(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32); /* extern */
 extern M2C_UNK func_821624FC;
 
-void func_82168B98(void);
+void BattleAnim_InitializeHardenUse(void);
 
 #endif

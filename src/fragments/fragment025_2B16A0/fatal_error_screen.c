@@ -123,7 +123,20 @@ s32 TransferPakError_DrawFrame(u8 arg0) {
 }
 
 extern char** D_81100938;
-void func_816007C4(s32 arg0, s32 arg1) {
+/**
+ * Entry point of the Transfer Pak fatal error screen, reached only through
+ * Game_ShutdownAndLoadFragment(port, message_id) after the game has blanked video, powered off
+ * all Transfer Paks and faded out audio. //@src/game_state.c
+ * Callers in gb_tower.c and pokemon_stats.c mostly pass 1 for Transfer Pak communication
+ * failures (osGbpak* errors, failed connection polling, Game Boy save changed before a write)
+ * and 2 for cartridge-side failures (connector check, cartridge RAM detection, cartridge reset
+ * or removal); State_GbTower forwards the Game Boy emulator exit code, where 3 means an invalid
+ * Game Boy opcode or an emulator heap allocation failure.
+ * Loads transfer_pak_error_ui and text file 0xD, then draws forever: the only exit is turning
+ * the console off, as the message instructs.
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void TransferPakError_Main(s32 arg0, s32 arg1) {
     StageContext* temp_s0;
 
     D_81600A70 = arg0;

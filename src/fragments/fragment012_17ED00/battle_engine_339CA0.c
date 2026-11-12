@@ -246,7 +246,12 @@ void func_8216008C(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void func_821600E0(s8 *arg0) {
+/**
+ * Moves: Cut (use), Fury Swipes (use), Scratch (use), Slash (use), Vine Whip (use)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_RunSlashingMoveFullScreenFlash(s8 *arg0) {
     s16 sp26;
     s16 temp_v1;
 
@@ -280,7 +285,12 @@ void func_821601C0(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void func_82160230(s8 *arg0) {
+/**
+ * Moves: Crabhammer (hit), Cut (hit), Fury Swipes (hit), Scratch (hit), Slash (hit), Vine Whip (hit)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_RunSlashMoveWhiteFlashOverlay(s8 *arg0) {
     s16 sp26;
     s16 temp_v1;
 
@@ -404,7 +414,12 @@ void func_821605F8(s8 *arg0) {
     func_8213C9D0(arg0);
 }
 
-void func_82160704(s8 *arg0) {
+/**
+ * Moves: Sand Attack (use)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_RunSmallSand(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -443,7 +458,12 @@ void func_821607E8(s8 *arg0) {
     func_8213C9D0(arg0);
 }
 
-void func_821608FC(s8 *arg0) {
+/**
+ * Moves: Sand Attack (use)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_RunLargeSand(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -564,7 +584,10 @@ void BattleAnim_SetupSandAttackHitEffect(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void func_82160EAC(s8 *arg0) {
+/**
+ * @unverified Name from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_RunSandAttackHitEffect(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -839,7 +862,13 @@ void BattleAnim_SetupPointyMoveHitSparkChild(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void func_82161890(s8 *arg0) {
+/**
+ * Moves: Horn Attack (hit), Horn Drill (hit), Peck (hit), Pin Missile (hit), Poison Sting (hit), Spike Cannon
+ * (hit), Twineedle (hit)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_RunPointyMoveHitSparkChild(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);

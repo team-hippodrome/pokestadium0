@@ -131,7 +131,7 @@ void func_80018234(unk_func_8001A024* arg0, s32 arg1, s32 arg2, u16 arg3) {
     }
 }
 
-void func_80019BDC(arg1_func_80010CA8*);
+void Model_ComputeNicknameColorVariant(arg1_func_80010CA8*);
 void func_8001833C(unk_func_8001A024* arg0, s32 arg1, BattleMon* arg2, u16 arg3) {
     DepthBuffer* buf;
     UNUSED s32 pad; // FAKE: stack padding
@@ -144,7 +144,7 @@ void func_8001833C(unk_func_8001A024* arg0, s32 arg1, BattleMon* arg2, u16 arg3)
             arg0->unk_08[arg1].unk_14.ptr = (u8*)arg2;
             arg0->unk_08[arg1].unk_02 = arg3 & 0xFFFE;
             arg0->unk_08[arg1].unk_08 = *(s16*)&gSpeciesDataById[arg2->unk_00.unk_00 - 1][0x1A] / 100.0f;
-            func_80019BDC(&arg0->unk_08[arg1].unk_10);
+            Model_ComputeNicknameColorVariant(&arg0->unk_08[arg1].unk_10);
         } else {
             arg0->unk_08[arg1].unk_00 = 1;
             arg0->unk_08[arg1].unk_02 = arg3 & 0xFFFE;

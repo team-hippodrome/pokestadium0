@@ -98,7 +98,12 @@ f32 Strip400_GetTailFadeRatio(void) {
     return tmp;
 }
 
-s32 func_821742F0(void) {
+/**
+ * Moves: Bind (hit), Constrict (hit), Disable (hit), String Shot (hit), Wrap (hit)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+s32 LassoHit_Update(void) {
     s32 i;
     f32 spB8;
     f32 temp_fs0_2;
@@ -293,7 +298,10 @@ void Radial20_ResetPool(void) {
 
 extern Radial20 D_84398F50[10];
 extern Radial20 D_821A3490[10];
-void func_82174C30(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s16 arg6, u8 arg7, u8 arg8, u8 arg9,
+/**
+ * @unverified Name from Stadium 1, matched by code similarity.
+ */
+void TriAttackRadial_EmitVariantA(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s16 arg6, u8 arg7, u8 arg8, u8 arg9,
                    u8 argA, f32 argB, f32 argC, f32 argD, s16 argE) {
     Radial20* var_v0;
     Radial20Node* var_a1_2;

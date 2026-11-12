@@ -15,7 +15,7 @@
 #include "m2c_macros.h"
 
 void GbEmu_BlitWithPixelOp(u16* dst, u16* src, s32 mode, s32 width, s32 height);
-void func_81107128(u16* arg0, u16* arg1, s16* arg2, s32 arg3, s32 arg4);
+void GbEmu_BlendScrollingLayer(u16* arg0, u16* arg1, s16* arg2, s32 arg3, s32 arg4);
 
 s32 func_811020A8(void *arg0);
 
@@ -74,7 +74,7 @@ void func_80058410(void*, void*, s32);
 extern s32 D_81154C48;
 
 void func_81103D30(void);
-void func_81104540(u16* arg0, s32 arg1, s32 arg2);
+void GbEmu_DrawAccessIcon(u16* arg0, s32 arg1, s32 arg2);
 void func_81104618(s32 arg0);
 void func_811047A0(s32 arg0);
 void func_81104930(void);
@@ -207,7 +207,7 @@ s32 func_811056CC(void) {
             if (++D_811565A3 >= 11) {
                 D_811565A3 = 0;
             }
-            func_81104540((u16*)(GB_RUN->unk_50 + 0xB0), 0, D_811565A3);
+            GbEmu_DrawAccessIcon((u16*)(GB_RUN->unk_50 + 0xB0), 0, D_811565A3);
             GB_RUN->buttons = 0;
         } else {
             func_81103D30();
@@ -275,7 +275,7 @@ s32 func_811056CC(void) {
             if (++*(u8*)&D_811565A2 >= 11) { // FAKE
                 *(u8*)&D_811565A2 = 0; // FAKE
             }
-            func_81104540((u16*)(GB_RUN->unk_50 + 0xB0), 1, *(u8*)&D_811565A2); // FAKE
+            GbEmu_DrawAccessIcon((u16*)(GB_RUN->unk_50 + 0xB0), 1, *(u8*)&D_811565A2); // FAKE
         }
         GB_RUN->buttons = 0;
     }
@@ -586,11 +586,11 @@ extern s16 D_8260854C;
 extern s16 D_8260854E;
 extern s16 D_800AA148;
 extern s32 D_81156550;
-void func_811174D8(void);
+void GbAudio_UpdateFrame(void);
 void osViBlack(u8);
 void VictoryPalace_ResetPillarGlow(UNUSED s32 arg0) {
     if ((*(u8*)&D_81156546 == 0) && (D_800AA148 == 0)) {
-        func_811174D8();
+        GbAudio_UpdateFrame();
         ((u8*)D_81156550)[0xFF26] = GbMem_ReadIoRegister(0xFF26);
     }
     if (D_800AA148 != 0) {
@@ -606,7 +606,12 @@ extern u16 D_81124AC0[];
 extern u16 D_81124B40[];
 extern u16 D_81124BC0[];
 extern u16 D_81124C40[];
-void func_811068A0(u16* arg0) {
+/**
+ * Draws a 46x46 framed panel (8x8 edge and corner tiles from sUiGraphics) with a
+ * solid interior, used behind each party icon on the loading screen.
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void GbEmu_DrawFramedPanel(u16* arg0) {
     s32 i;
     s32 j;
 
@@ -698,8 +703,8 @@ extern u16 D_81127638[];
 extern u16 D_811278E0[];
 extern u16 D_81127B88[];
 extern u8 D_8112A938[];
-void func_81103850(u16*, u8*);
-void func_811068A0(u16* arg0);
+void GbEmu_DrawTextCommands(u16*, u8*);
+void GbEmu_DrawFramedPanel(u16* arg0);
 u32 func_80053A80(void);
 M2C_UNK func_8005C0A0();
 void func_81106CC8(u16* dst, u8 (*arg1)[0xC80], s32 arg2, s32 arg3) {
@@ -724,10 +729,10 @@ void func_81106CC8(u16* dst, u8 (*arg1)[0xC80], s32 arg2, s32 arg3) {
     _bcopy(dst + 0x10540, D_811565D0, 0x2580);
     D_811565D4 = (u16*)func_81104B18(0x2580, 0);
     bzero(D_811565D4, 0x2580);
-    func_81103850(D_811565D4, D_8112A938);
+    GbEmu_DrawTextCommands(D_811565D4, D_8112A938);
 
     for (i = 0; i < 6; i++) {
-        func_811068A0(dst + 0xB916 + i * 46);
+        GbEmu_DrawFramedPanel(dst + 0xB916 + i * 46);
         osInvalDCache(arg1[i], sizeof(arg1[i]));
         GbEmu_BlitWithPixelOp(dst + 0xBCD9 + i * 46, (u16*)arg1[i], 0, 40, 40);
     }
@@ -792,7 +797,11 @@ void func_81106CC8(u16* dst, u8 (*arg1)[0xC80], s32 arg2, s32 arg3) {
     D_811565CC = 0;
 }
 
-void func_81107128(u16* arg0, u16* arg1, s16* arg2, s32 arg3, s32 arg4) {
+/**
+ * Adds a scrolling image layer to the destination with per-channel saturation.
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void GbEmu_BlendScrollingLayer(u16* arg0, u16* arg1, s16* arg2, s32 arg3, s32 arg4) {
     s32 i;
     s32 j;
     s32 var_v1;
@@ -844,7 +853,7 @@ void func_8110724C(void) {
         if (D_811565CC >= 0x140) {
             D_811565CC = 0;
         }
-        func_81107128(D_811565D4, D_811565D0, (s16*)(D_811565C0 + 0x20A80), 0xF, D_811565CC);
+        GbEmu_BlendScrollingLayer(D_811565D4, D_811565D0, (s16*)(D_811565C0 + 0x20A80), 0xF, D_811565CC);
         func_8005C0A0();
     }
 }

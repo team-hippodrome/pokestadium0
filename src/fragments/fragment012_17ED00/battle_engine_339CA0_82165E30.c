@@ -133,7 +133,10 @@ void BattleAnim_InitializeIcePunchHit(void) {
     BattleAnim_SpawnOwnerModelTintRampDetach(0, 0x33, 0xE0, 0, 0x20);
 }
 
-void func_8216669C(void) {
+/**
+ * @unverified Name from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeThunderPunchHit(void) {
     func_8213B560(0, &func_82162C68, &D_8218E728, 0, 1, 0x11, 9, 3, 5);
     func_8213B560(4, &func_82162938, &D_8218E788, 0, 1, 0x10, 0x64, 0, 0);
     func_8213B5D8(0, 4, 5, &func_8214E67C, &D_8218E610, 8, 4, 2, 0, 0, 0);
@@ -214,11 +217,14 @@ void BattleAnim_StartEffect137Descriptor3FRisingFade(void) {
 }
 
 void func_82166DC4(void) {
-    func_8213B5D8(0, 3, 2, &func_82160704, &D_8218E7D0, 0, 6, 0x11, (s32) D_8219A80A, 0x11, 0);
-    func_8213B5D8(0, 4, 2, &func_821608FC, &D_8218E7D0, 0, 4, 0x11, (s32) D_8219A80A, 0x11, 0);
+    func_8213B5D8(0, 3, 2, &BattleAnim_RunSmallSand, &D_8218E7D0, 0, 6, 0x11, (s32) D_8219A80A, 0x11, 0);
+    func_8213B5D8(0, 4, 2, &BattleAnim_RunLargeSand, &D_8218E7D0, 0, 4, 0x11, (s32) D_8219A80A, 0x11, 0);
 }
 
-void func_82166E7C(void) {
+/**
+ * @unverified Name from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeScratchSlashUse(void) {
     void (*sp30)(s8*);
 
     if (func_82107CF0(D_8219A814) == 0x7B) {
@@ -229,7 +235,7 @@ void func_82166E7C(void) {
     func_8213B560(0, (M2C_UNK*)sp30, &D_8218E6D0, 0, 3, 0x10, (s32) D_8219A80A, 0xB, 0);
     func_8213B560(4, (M2C_UNK*)sp30, &D_8218E6D0, 0, 3, 0x10, (s32) D_8219A80A, 0xB, 1);
     func_8213B560(0xA, (M2C_UNK*)sp30, &D_8218E6D0, 0, 3, 0x10, (s32) D_8219A80A, 0xB, 2);
-    func_8213B560(0x1E, &func_821600E0, &D_8218E6C8, 0, 1, 0x18, 0, 0xF, 0);
+    func_8213B560(0x1E, &BattleAnim_RunSlashingMoveFullScreenFlash, &D_8218E6C8, 0, 1, 0x18, 0, 0xF, 0);
     func_8213B720(0x23, 0, 0x10, 0x12);
 }
 
@@ -266,7 +272,7 @@ void BattleAnim_InitializeCutSlashScratchEffect(void) {
 void func_82167274(void) {
     func_8213B794(0, 2, 0x10, 0x12, 0xFF);
     func_8213B560(3, &func_821603C8, &D_8218E6D8, 0, 1, 0x10, (s32) D_8219A80A, 0x10, 2);
-    func_8213B560(3, &func_82160230, &D_8218E790, 0, 1, 0x18, 0, 0xF, 0);
+    func_8213B560(3, &BattleAnim_RunSlashMoveWhiteFlashOverlay, &D_8218E790, 0, 1, 0x18, 0, 0xF, 0);
 }
 
 /**
@@ -336,7 +342,12 @@ void BattleAnim_InitializePetalDanceHitSequence(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0x30, BattleAnim_RunPetalDanceRazorLeafHitEffect, &gBattleAnimParticleDescriptors[0x29], 0, 8, 0x10, 9, 1, 0);
 }
 
-void func_821678F4(void) {
+/**
+ * Moves: Poison Gas (hit), Poison Powder (hit), Sleep Powder (hit), Smog (hit), Spore (hit), Stun Spore (hit)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializePowderSporeGasMoveHit(void) {
     s32 temp_v0;
 
     temp_v0 = func_8213646C();
@@ -365,8 +376,8 @@ void func_821678F4(void) {
 
 void func_82167A8C(void) {
     func_8213B5D8(0, 2, 3, &func_82160AF0, &D_8218E7C8, 0, 8, 0x11, (s32) D_8219A80A, 0, 0);
-    func_8213B5D8(0, 3, 2, &func_82160704, &D_8218E7B8, 0, 6, 0x11, (s32) D_8219A80A, 0x31, 0);
-    func_8213B5D8(0, 4, 2, &func_821608FC, &D_8218E7B8, 0, 4, 0x11, (s32) D_8219A80A, 0x31, 0);
+    func_8213B5D8(0, 3, 2, &BattleAnim_RunSmallSand, &D_8218E7B8, 0, 6, 0x11, (s32) D_8219A80A, 0x31, 0);
+    func_8213B5D8(0, 4, 2, &BattleAnim_RunLargeSand, &D_8218E7B8, 0, 4, 0x11, (s32) D_8219A80A, 0x31, 0);
 }
 
 /**
@@ -378,7 +389,10 @@ void BattleAnim_InitializeSandAttackHit(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffects28And53And65And76Descriptor47AnimatedScaleMotion, &D_8218E580[0x47], 0, 7, 0x10, 0x64, 1, 0);
 }
 
-void func_82167C60(void) {
+/**
+ * @unverified Name from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeAcidArmorUse(void) {
     func_8213C0D8(0, 0xFF, 0x30, 6);
     func_8213C0D8(0x24, 0, 0, 0xFF);
     func_8213BC00(0, 0x21, 0, 0xFF, 8);
@@ -387,7 +401,12 @@ void func_82167C60(void) {
     func_8213B5D8(0, 8, 4, &func_821640A0, &D_8218E770, 0, 3, 9, 0, 0x30, 0);
 }
 
-void func_82167D48(void) {
+/**
+ * Moves: Flash (use)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeFlashUse(void) {
     func_8213B644(0, 0x20, 6);
     func_8213BC00(8, 8, 0, 0xFF, 0x40);
     func_8213B878(0xC, 5, 0x10, 8);
@@ -398,7 +417,10 @@ void func_82167D48(void) {
     func_8213BC00(0, 8, 0xFF, 0, 0x10);
 }
 
-void func_82167E28(void) {
+/**
+ * @unverified Name from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeFlashHit(void) {
     func_8213B644(0, 0x20, 6);
     func_8213BC00(8, 8, 0, 0xFF, 0x40);
     func_8213B720(0, 0, 0x10, 8);
@@ -407,14 +429,17 @@ void func_82167E28(void) {
     func_8213BC00(0, 8, 0xFF, 0, 0x10);
 }
 
-void func_82167EB4(void) {
+/**
+ * @unverified Name from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeBideRageUse(void) {
     M2C_UNK *sp38;
 
     func_8213BC7C(0, 1, 0xA, 0, 0xC8, 0x10);
     sp38 = &func_82164AD0;
     func_8213B5D8(6, 4, 0xE, &func_82164AD0, &D_8218E770, 0, 1, 0x11, 7, 0x1A, 0);
     func_8213B5D8(7, 8, 7, &func_82164AD0, &D_8218E770, 0, 1, 0x11, 7, 0x1A, 0);
-    func_8213B560(0, &func_82145CC4, &D_8218E7F8, 0, 0x20, 7, 0, 0, 0);
+    func_8213B560(0, &BattleAnim_RunOscillatingFlameUnderneathPokemon, &D_8218E7F8, 0, 0x20, 7, 0, 0, 0);
     func_8215E510();
 }
 
@@ -506,13 +531,21 @@ void BattleAnim_InitializeQiCharge(s32 arg0) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0x3C, 1, 8, BattleAnim_CallbackStartEffects29And60And104And110DefaultDescriptorBurstEmitter, &gDefaultParticleDescriptor, 0, 1, 2, 0, arg0, 0);
 }
 
-void func_82168A10(void) {
+/**
+ * Moves: Conversion (use), Mimic (use)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeMimicConversionUse(void) {
     func_8213B644(0, 8, 6);
     func_82168844(0xE);
     func_8213B644(0x64, 0x20, 8);
 }
 
-void func_82168A50(void) {
+/**
+ * @unverified Name from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeSolarBeamUseSequence(void) {
     func_8213B644(0, 8, 6);
     func_82168844(0x17);
     func_8213B560(0xA, &func_821655C0, &D_8218E768, 0x1A, 1, 5, 0, 0x33, 0);
@@ -533,7 +566,10 @@ void BattleAnim_InitializeRecoverUse(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(4, 8, 5, BattleAnim_RunSparkleHit, &gBattleAnimParticleDescriptors[0x42], 0, 8, 9, 0, 0xC, 9);
 }
 
-void func_82168B98(void) {
+/**
+ * @unverified Name from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeHardenUse(void) {
     func_8213BC00(0, 8, 0xFF, 0, 0x20);
     func_8213B5D8(4, 2, 2, &func_821624FC, &D_8218E798, 0, 8, 9, 0, 0x17, 1);
 }

@@ -1770,7 +1770,14 @@ void func_8212F9FC(CameraNode* arg0) {
 }
 
 
-void func_8212FC98(CameraNode* arg0) {
+/**
+ * Phase 6. Poison/burn-style residual damage after a move: BattleScene_UpdateDisplayedHpAndTransition enters it
+ * when the acting Pokemon has unk_15 bits 0x18 or unk_4D bit 0x80 set. Plays effect list 5 or 6 (unk_15 bits)
+ * and effect list 10 (unk_4D bit 0x80), then flips the acting side and enters BattleScene_PhaseFaint if the
+ * acting Pokemon reaches 0 HP.
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleScene_PhaseResidualDamageAfterMove(CameraNode* arg0) {
     u8* sp2C = (u8*)sActivePokemon[sBattleScene.scene->unk_2C] + 0x7C6;
     u8* sp28 = (u8*)sActivePokemon[!sBattleScene.scene->unk_2C] + 0x7C6;
     ActivePokemon* sp24 = sActivePokemon[sBattleScene.scene->unk_2C];
@@ -1877,7 +1884,12 @@ void func_821237B0(CameraNode*, ActivePokemon*);
 void func_82123684(CameraNode*, ActivePokemon*);
 void func_82134EBC(ActivePokemon*, s32);
 s32 func_82124BF8(ActivePokemon*);
-void func_821301EC(CameraNode* arg0) {
+/**
+ * Phase 9 (moveEffectKind 9). The acting Pokemon takes damage from its own move: plays effect list 9, the
+ * hit cue animation, and the damage shake while displayHp moves toward unk_12, then updates HP.
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleScene_PhaseRecoilDamage(CameraNode* arg0) {
     BattleMonRuntime* self = &sActivePokemon[sBattleScene.scene->unk_2C]->state.runtime;
     BattleMonRuntime* other = &sActivePokemon[!sBattleScene.scene->unk_2C]->state.runtime;
 

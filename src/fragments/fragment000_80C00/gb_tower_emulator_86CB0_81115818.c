@@ -10,7 +10,12 @@ u32 GbApu_FreqToStep(u16 arg0) {
   return temp;
 }
 
-u32 func_811158F4(u16 arg0, u16 arg1, u16 arg2) {
+/**
+ * Applies NR43: selects the 16 KB noise waveform for (shift, width), its loop start, and returns
+ * the playback step for the clock divider.
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+u32 GbApu_ConfigureNoiseTable(u16 arg0, u16 arg1, u16 arg2) {
     u32 temp;
     s32 temp2;
 
@@ -31,7 +36,13 @@ u32 GbApu_FreqToStep2x(u16 arg0) {
 void func_81115AF0(void) {
 }
 
-s32 func_81115AF8(u32 arg0, s32 arg1) {
+/**
+ * One sample (0..0x7F) of waveform `type` at step `pos`: 0-3 are the NRx1 duty cycles 12.5%, 25%,
+ * 50% and 75% over 32 steps, 6 reads the selected noise waveform, 7 wave RAM (4-bit << 3).
+ * Types 4 and 5 are unused and return nothing.
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+s32 GbApu_GetWaveformSample(u32 arg0, s32 arg1) {
     switch (arg0) {
     case 0:
         if ((arg1 >= 4) && (arg1 < 8)) {
@@ -82,7 +93,7 @@ u16 GbApu_UpdateSquare1Channel(void) {
         gGbApuSquare1.unk_4C = 0U;
     }
     {
-        s32 temp_v0 = func_81115AF8(gGbApuSquare1.unk_3B, gGbApuSquare1.unk_08.unk_00);
+        s32 temp_v0 = GbApu_GetWaveformSample(gGbApuSquare1.unk_3B, gGbApuSquare1.unk_08.unk_00);
         gGbApuSquare1.unk_08.unk_02 += gGbApuSquare1.unk_0C;
         gGbApuSquare1.unk_08.unk_02 &= 0x1FFFFF;
         if (gGbApuSquare1.unk_4C == 1) {
@@ -173,7 +184,7 @@ s32 GbApu_UpdateSquare2Channel(void) {
     } else {
         gGbApuSquare2.unk_4C = 0U;
     }
-    temp_v0 = func_81115AF8(gGbApuSquare2.unk_3B, gGbApuSquare2.unk_08.unk_00);
+    temp_v0 = GbApu_GetWaveformSample(gGbApuSquare2.unk_3B, gGbApuSquare2.unk_08.unk_00);
     gGbApuSquare2.unk_08.unk_02 += gGbApuSquare2.unk_0C;
     gGbApuSquare2.unk_08.unk_02 &= 0x1FFFFF;
     if (gGbApuSquare2.unk_4C == 1) {
@@ -258,7 +269,7 @@ u16 GbApu_UpdateWaveChannel(void) {
             }
         }
     }
-    temp_a0 = func_81115AF8(7, gGbApuWave.unk_08.unk_00);
+    temp_a0 = GbApu_GetWaveformSample(7, gGbApuWave.unk_08.unk_00);
     gGbApuWave.unk_08.unk_02 += gGbApuWave.unk_0C;
     gGbApuWave.unk_08.unk_02 &= 0x1FFFFF;
     if (gGbApuWave.unk_4C - 1 == 0) {
@@ -291,7 +302,12 @@ u16 func_81207C5C_Empty(void) {
     
 }
 
-u16 func_81116258(void) {
+/**
+ * Noise channel counterpart of GbApu_UpdateSquare1Channel. The step slews toward a new NR43
+ * value over ~128 samples and the applied amplitude moves one unit every 95 samples.
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+u16 GbApu_UpdateNoiseChannel(void) {
     static s32 D_8120EB6C = 0;
     u16 temp_v0;
     u32 var_a2;
@@ -314,7 +330,7 @@ u16 func_81116258(void) {
         gGbApuNoise.unk_20 = gGbApuNoise.unk_3C;
         gGbApuNoise.unk_0C = gGbApuNoise.unk_40;
     }
-    temp_v0 = func_81115AF8(6, gGbApuNoise.unk_08.unk_00);
+    temp_v0 = GbApu_GetWaveformSample(6, gGbApuNoise.unk_08.unk_00);
     gGbApuNoise.unk_08.unk_02 += var_a2;
     if (gGbApuNoise.unk_08.unk_00  >= (u32)D_81138AD4) {
         gGbApuNoise.unk_08.unk_00  = D_81138AD0;
@@ -368,14 +384,18 @@ u16 func_81116258(void) {
     return (temp_v0 << 1);
 }
 
-void func_811164CC(u16 reg, u8 value) {
+/**
+ * Applies one queued write to sound register 0xFF00 + reg (NR10-NR52, wave RAM 0x30-0x3F).
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void GbApu_WriteRegister(u16 reg, u8 value) {
     s32 pad; // FAKE: stack padding
     s32 i;
     s32 pad2; // FAKE: stack padding
 
     if ((reg == 0x26) && !(value & 0x80)) {
         for (i = 0x23; i != 0xF; i--) {
-            func_811164CC(i, 0);
+            GbApu_WriteRegister(i, 0);
         }
     }
 
@@ -524,7 +544,7 @@ void func_811164CC(u16 reg, u8 value) {
             break;
         case 0x22:
             gGbApuNoise.unk_10 = GB_APU_REGS.shift4;
-            gGbApuNoise.unk_0C = func_811158F4(GB_APU_REGS.shift4, GB_APU_REGS.width4, GB_APU_REGS.ratio4);
+            gGbApuNoise.unk_0C = GbApu_ConfigureNoiseTable(GB_APU_REGS.shift4, GB_APU_REGS.width4, GB_APU_REGS.ratio4);
             if (gGbApuNoise.unk_00 == 0) {
                 gGbApuNoise.unk_40 = gGbApuNoise.unk_0C;
             }
@@ -576,7 +596,13 @@ void func_811164CC(u16 reg, u8 value) {
     }
 }
 
-void func_81116C88(s32 numSamples, s16* out) {
+/**
+ * Renders sample_count interleaved stereo samples of GB sound. Drains the register-write queue,
+ * applies each write when the buffer position reaches its timestamp, then mixes the four
+ * channels per NR51 panning and NR50 master volume.
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void GbApu_RenderBuffer(s32 numSamples, s16* out) {
     s32 i;
     u32 sq1R;
     u32 sq1L;
@@ -647,12 +673,12 @@ void func_81116C88(s32 numSamples, s16* out) {
                 if (((s32)pos & 0xFFFF) < D_81180848[idx].time) {
                     break;
                 }
-                func_811164CC(D_81180848[idx].reg, D_81180848[idx].value);
+                GbApu_WriteRegister(D_81180848[idx].reg, D_81180848[idx].value);
                 count--;
                 idx++;
             }
         } else if ((count != 0) && (((s32)pos & 0xFFFF) >= D_81180848[idx].time)) {
-            func_811164CC(D_81180848[idx].reg, D_81180848[idx].value);
+            GbApu_WriteRegister(D_81180848[idx].reg, D_81180848[idx].value);
             count--;
             idx++;
         }
@@ -660,7 +686,7 @@ void func_81116C88(s32 numSamples, s16* out) {
         sq1 = GbApu_UpdateSquare1Channel();
         sq2 = GbApu_UpdateSquare2Channel();
         wave = GbApu_UpdateWaveChannel();
-        noise = func_81116258();
+        noise = GbApu_UpdateNoiseChannel();
 
         noiseL = GB_APU_REGS.noiseLeft ? noise : 0;
         noiseR = GB_APU_REGS.noiseRight ? noise : 0;
@@ -684,7 +710,7 @@ void func_81116C88(s32 numSamples, s16* out) {
     }
 
     while (count != 0) {
-        func_811164CC(D_81180848[idx].reg, D_81180848[idx].value);
+        GbApu_WriteRegister(D_81180848[idx].reg, D_81180848[idx].value);
         count--;
         idx++;
     }
@@ -695,7 +721,13 @@ void func_81116C88(s32 numSamples, s16* out) {
     D_811824B8.unk_03 = 0;
 }
 
-void func_81117068(u16 arg0, u8 arg1, u16 arg2) {
+/**
+ * Called by the CPU core's I/O write path for sound registers: queues (address - 0xFF00, value,
+ * timestamp) for GbApu_RenderBuffer and records triggers (NRx4 bit 7) and NR52 power-offs in
+ * sGbApuStatusOverride so NR52 reads are correct before the write is rendered.
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void GbApu_QueueRegisterWrite(u16 arg0, u8 arg1, u16 arg2) {
     s32 temp_v1;
 
     temp_v1 = arg0 + 0xFFFF0100;
@@ -759,7 +791,7 @@ void GbApu_ResetChannels(void) {
   osCreateMesgQueue(&sp24, &sp20, 1);
   osCreateMesgQueue(&D_811824C0, D_811824D8, GB_APU_WRITE_QUEUE_LEN);
   for (i = 0x50; i > 0xF; i--) {
-      func_811164CC(i, 0);
+      GbApu_WriteRegister(i, 0);
   }
   gGbApuSquare1.unk_3C = 0;
   gGbApuSquare2.unk_3C = 0;
@@ -776,7 +808,12 @@ void GbApu_Reset(s32 arg0) {
   GbApu_ResetChannels();
 }
 
-void func_811172AC(void) {
+/**
+ * Resets the APU and submits 640 samples ramping linearly from the last output sample to zero,
+ * avoiding a click when audio stops. No C callers.
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void GbAudio_RampToSilence(void) {
     void* sp34 = D_811859B8[0];
     f32 x = (f32) D_81180700;
     f32 y = (f32) D_81180702;
@@ -835,7 +872,13 @@ u8 GbMem_ReadIoRegister(u16 arg0) {
   return gGbMemoryMap[arg0 & 0xFFFF];
 }
 
-s32 func_811174D8(void) {
+/**
+ * Per-frame AI service. Submits the buffer rendered last frame with osGbSetNextBuffer, then renders
+ * the next one: samplesPerFrame minus what the AI still holds, plus 128, rounded to 16 and clamped
+ * to [min, max]. Source is the GB APU, or the menu sounds while sGbAudioMenuSoundMode is set.
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+s32 GbAudio_UpdateFrame(void) {
     u32 aiLen;
     s32 n;
     s32 idx;
@@ -892,7 +935,7 @@ s32 func_811174D8(void) {
         *len = D_811858B8.unk_08;
     }
     if (D_81138B80 == 0) {
-        func_81116C88(*len, buf);
+        GbApu_RenderBuffer(*len, buf);
     } else {
         func_811177E8(*len, buf);
     }

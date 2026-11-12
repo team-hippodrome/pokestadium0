@@ -50,7 +50,12 @@ void func_800387BC(s32 arg0);
 void func_8210E924(void);
 void func_8210C6F8(void);
 
-void func_82121260(CameraNode* arg0) {
+/**
+ * Per-frame update while unk_1C is 1 (b-roll camera mode): runs the action selection phase and
+ * dispatches to the update function of the current b-roll shot (odd cameraCounter values).
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleScene_UpdateBRollCameraSequence(CameraNode* arg0) {
     if (sBattleScene.scene->unk_1C == 1) {
         if ((sBattleScene.scene->unk_30 == 0) && (sActivePokemon[0]->thumbnail.camera->viewport.x == 0x17) &&
             (sActivePokemon[1]->thumbnail.camera->viewport.x == 0x103)) {

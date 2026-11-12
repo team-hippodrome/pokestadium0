@@ -8,9 +8,9 @@
  *
  * `arg1` holds a s16 at +0 (copied to arg0+0x16 and used as the lookup key), a s16 at
  * +2 (copied to arg0+0x18) and a u8 at +4 (copied, widened, to arg0+0x1A).  arg0+0x14
- * and the words at arg0+0x8 / +0xC are cleared.  func_800443C4(&obj, key) then looks
+ * and the words at arg0+0x8 / +0xC are cleared.  _allocatePVoice(&obj, key) then looks
  * up an object.  If it leaves a non-NULL `obj`, the two are linked (obj+0x8 and
- * arg0+0x8 point at each other).  If func_800443C4 also returned non-zero, obj's word
+ * arg0+0x8 point at each other).  If _allocatePVoice also returned non-zero, obj's word
  * at +0x88 is set to 0x200 (after clearing word +0x8 of the record that obj+0x8 pointed
  * at before the link) and two blocks are posted with func_8003AE2C(obj, 3, block): the
  * first has halfword +8 = 0xB (word +4 = D_80075E44[+0x1C], word +0xC = 0, word +0x10 = obj[+0x88] - 0x40) and,
@@ -22,7 +22,7 @@
 
 #include "m2c_macros.h"
 M2C_UNK func_8003AE2C(void *, M2C_UNK, void *);
-s32 func_800443C4(void **, s16);
+s32 _allocatePVoice(void **, s16);
 void *func_800448F8();
 extern void *D_80075E44;
 
@@ -39,7 +39,7 @@ s32 func_80044290(void *arg0, void *arg1) {
     M2C_FIELD(arg0, s16 *, 0x18) = (s16) M2C_FIELD(arg1, s16 *, 2);
     M2C_FIELD(arg0, s16 *, 0x14) = 0;
     M2C_FIELD(arg0, void **, 8) = NULL;
-    found = func_800443C4(&obj, M2C_FIELD(arg1, s16 *, 0));
+    found = _allocatePVoice(&obj, M2C_FIELD(arg1, s16 *, 0));
     if (obj) {
         if (found != 0) {
             M2C_FIELD(obj, s32 *, 0x88) = 0x200;
@@ -86,7 +86,10 @@ typedef struct Synth800443C4 {
 } Synth800443C4;
 void func_8004D600(ALLink800443C4*);
 void func_8004D630(ALLink800443C4*, ALLink800443C4*);
-s32 func_800443C4(void** pvoice, s16 priority) {
+/**
+ * @unverified Name from Stadium 1, matched by code similarity.
+ */
+s32 _allocatePVoice(void** pvoice, s16 priority) {
     ALLink800443C4* dl;
     PVoice800443C4* pv;
     s32 stolen = 0;

@@ -13,7 +13,11 @@ extern char D_8007DBA0[];
 extern char D_8007DBA8[];
 extern char D_8007DBAC[];
 void func_8005666C();
-void func_80032FD0(s32 *arg0) {
+/**
+ * Prints an Mtx as 8 rows of 2 hex words via rmonPrintf.
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void Debug_PrintMtx(s32 *arg0) {
     s32 i;
     s32 j;
     s32 *p = arg0;
@@ -33,7 +37,11 @@ extern char D_8007DBB0[];
 extern char D_8007DBBC[];
 extern char D_8007DBC0[];
 
-void func_80033078(f32* arg0) {
+/**
+ * Prints an MtxF as 4x4 floats via rmonPrintf.
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void Debug_PrintMtxF(f32* arg0) {
     s32 i;
     s32 j;
     f32* p = arg0;

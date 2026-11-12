@@ -681,7 +681,11 @@ s32 func_823019AC(unk_D_848037A0* arg0) {
 
 s32 func_823018F8(unk_D_848037A0* arg0);
 s32 func_823019AC(unk_D_848037A0* arg0);
-void func_82301A2C(unk_D_848037A0* arg0, s8 arg1) {
+/**
+ * Opens a slot's details or adds it to the picked order and checks the result.
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleMenu_SelectSlotOrShowSummary(unk_D_848037A0* arg0, s8 arg1) {
     if (arg1 >= arg0->unk_0016) {
         Audio_PlaySoundEffectById(SFX_MENU_ERROR);
         return;
@@ -740,7 +744,7 @@ void func_82301B2C(s8 *arg0) {
     }
 }
 
-void func_82301A2C(unk_D_848037A0*, s8);
+void BattleMenu_SelectSlotOrShowSummary(unk_D_848037A0*, s8);
 
 void BattleMenu_HandleOrderSelectPanel_PartyInput(Controller* arg0, unk_D_848037A0* arg1) {
     if (BTN_IS_PRESSED(arg0, BTN_R)) {
@@ -757,17 +761,17 @@ void BattleMenu_HandleOrderSelectPanel_PartyInput(Controller* arg0, unk_D_848037
     if (BTN_IS_PRESSED(arg0, BTN_L)) {
         func_82301B2C(arg1);
     } else if (BTN_IS_PRESSED(arg0, BTN_B)) {
-        func_82301A2C(arg1, 0);
+        BattleMenu_SelectSlotOrShowSummary(arg1, 0);
     } else if (BTN_IS_PRESSED(arg0, BTN_CLEFT)) {
-        func_82301A2C(arg1, 1);
+        BattleMenu_SelectSlotOrShowSummary(arg1, 1);
     } else if (BTN_IS_PRESSED(arg0, BTN_CUP)) {
-        func_82301A2C(arg1, 2);
+        BattleMenu_SelectSlotOrShowSummary(arg1, 2);
     } else if (BTN_IS_PRESSED(arg0, BTN_A)) {
-        func_82301A2C(arg1, 3);
+        BattleMenu_SelectSlotOrShowSummary(arg1, 3);
     } else if (BTN_IS_PRESSED(arg0, BTN_CDOWN)) {
-        func_82301A2C(arg1, 4);
+        BattleMenu_SelectSlotOrShowSummary(arg1, 4);
     } else if (BTN_IS_PRESSED(arg0, BTN_CRIGHT)) {
-        func_82301A2C(arg1, 5);
+        BattleMenu_SelectSlotOrShowSummary(arg1, 5);
     }
 }
 

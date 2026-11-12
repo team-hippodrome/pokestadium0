@@ -230,7 +230,12 @@ void BattleAnim_SetupSonicBoomUseFourStream(void) {
     FourStreamTrail_Init();
 }
 
-s32 func_8216F3A0(void) {
+/**
+ * Moves: Sonic Boom (use)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+s32 BattleAnim_RunSonicBoomUseFourStream(void) {
     s32 var_v1;
     Vec3f sp68;
     f32 sp64;

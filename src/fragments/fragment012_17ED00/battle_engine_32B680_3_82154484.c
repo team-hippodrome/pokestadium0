@@ -130,7 +130,12 @@ void func_82154704(s8* arg0) {
     func_8213D604(arg0, var_f20);
 }
 
-void func_821548B8(void) {
+/**
+ * Moves: Barrier (use), Light Screen (use), Reflect (use)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeScreenMove(void) {
     s32 temp_v0;
 
     func_8213B560(0, &func_82152FB0, &D_8218E580, 0x1E, 1, 0xB, 0, 0x1E, 0);
@@ -528,7 +533,10 @@ void func_821558F4(s8 *arg0) {
     }
 }
 
-void func_821559E4(void) {
+/**
+ * @unverified Name from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeLeechSeedUse(void) {
     func_8213B5D8(0, 4, 5, &func_82155724, &D_8218E580, 0, 2, 0x11, (s32) D_8219A80A, 0, 0);
     func_8213B5D8(0, 8, 3, &func_82164AD0, &D_8218E7D0, 0, 1, 0x11, (s32) D_8219A80A, 0x33, 6);
 }
@@ -635,7 +643,10 @@ void BattleAnim_SetupBlizzard(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void func_82155EF0(s8 *arg0) {
+/**
+ * @unverified Name from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_RunBlizzard(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -662,19 +673,27 @@ void func_82155EF0(s8 *arg0) {
     }
 }
 
-void func_82155FD0(void) {
+/**
+ * initializes using blizzard
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeBlizzardUse(void) {
     func_8213B644(0, 0x10, 0x33);
     func_8213B8EC(0, 0xFF, 0x10, 8, 0x96);
     func_8213B560(0, &func_82155D3C, &D_8218E580, 0x1E, 1, 0x14, 0, 0, 0);
 }
 
-void func_8215604C(void) {
+/**
+ * initializes being hit by blizzard
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeBlizzardHit(void) {
     func_8213B5D8(0, 8, 3, &func_82152F44, &D_8218E580, 0, 1, 0xC, 0, 0x2A, 0);
     func_8213BE70(4, 8, 0x33, 8, 0xC8, 0x18);
     func_8213B458(4);
-    func_8213B5D8(0, 4, 6, &func_82155EF0, &D_8218E7D0, 0, 4, 0xB, 9, 0x13, 0);
+    func_8213B5D8(0, 4, 6, &BattleAnim_RunBlizzard, &D_8218E7D0, 0, 4, 0xB, 9, 0x13, 0);
     func_8213B5D8(0, 2, 0xC, &func_821626F4, &D_8218E7A0, 0, 4, 0xB, 9, 0x18, 0xB);
-    func_8213B5D8(0, 5, 4, &func_8214BA3C, &D_8218E650, 0, 6, 0x10, (s32) D_8219A80A, 0x26, 0);
+    func_8213B5D8(0, 5, 4, &BattleAnim_RunBlizzardHitUpwardColdAir, &D_8218E650, 0, 6, 0x10, (s32) D_8219A80A, 0x26, 0);
     func_8213B644(0x32, 0x20, 8);
 }
 
@@ -937,7 +956,11 @@ void BattleAnim_RunFlyUpwardMovementEffect(Particle* arg0) {
     }
 }
 
-void func_82156B90(void) {
+/**
+ * initializes the first turn of using fly
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeFlyUse(void) {
     func_8213B560(0, &func_82156B0C, &D_8218E580, 0xA, 1, 0xA, 0, 0, 0);
 }
 
@@ -1077,7 +1100,12 @@ void BattleAnim_InitEffects10And50Model(Particle* arg0) {
     }
 }
 
-void func_821570E8(s8 *arg0) {
+/**
+ * Moves: Rock Slide (hit), Rock Throw (hit), Strength (hit)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_RunFallingRock(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -1476,7 +1504,10 @@ void BattleAnim_SetupBoomUseEffect3(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void func_82158450(s8 *arg0) {
+/**
+ * @unverified Name from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_RunBoomUseEffect3(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -1529,7 +1560,10 @@ void BattleAnim_SetupBoomUseEffect4(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void func_8215863C(s8 *arg0) {
+/**
+ * @unverified Name from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_RunBoomUseEffect4(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -1672,7 +1706,10 @@ void BattleAnim_RunBoomUseEffect6(Particle* arg0) {
     }
 }
 
-void func_82158BA4(s8 *arg0) {
+/**
+ * @unverified Name from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_RunBoomHitEffect1(s8 *arg0) {
     s16 temp_v1;
 
     func_8213C464();
@@ -1733,7 +1770,10 @@ void BattleAnim_SetupBoomHitEffect2(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void func_82158E20(s8 *arg0) {
+/**
+ * @unverified Name from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_RunBoomHitEffect2(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -1791,7 +1831,10 @@ void BattleAnim_SetupBoomHitEffect3(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void func_82159060(s8 *arg0) {
+/**
+ * @unverified Name from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_RunBoomHitEffect3(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -1823,7 +1866,10 @@ void func_82159060(s8 *arg0) {
     }
 }
 
-void func_8215917C(void) {
+/**
+ * @unverified Name from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeBoomUse(void) {
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0x10, 6);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunBoomUseEffect1, &gDefaultParticleDescriptor, 0x19, 1, 0xE, 0, 0x27, 0);
     BattleAnim_SpawnDescriptor25AlphaFadeInHold(0, 0, 4, 0x8, 0x80);
@@ -1846,7 +1892,10 @@ void func_8215917C(void) {
     BattleAnim_SpawnOwnerModelTintRampDetach(0x48, 0xE, 0xDC, 0xB4, 6);
 }
 
-void func_82159548(void) {
+/**
+ * @unverified Name from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeBoomHit(void) {
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0xFF, 6);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackEndEffects81And82ModelScalePaletteFade, &gDefaultParticleDescriptor, 0, 1, 0xB, 0, 0x21, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(4, BattleAnim_CallbackEndEffects81And82ModelScalePaletteFade, &gDefaultParticleDescriptor, 0, 1, 0xB, 0, 0x21, 0);
@@ -1985,7 +2034,11 @@ void BattleAnim_InitializeBitingMoveHit(void) {
     BattleAnim_InitializeBitingMoveEndEffect();
 }
 
-void func_82159C40(void) {
+/**
+ * initializes being hit by guillotine
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeGuillotineHit(void) {
     func_8213BC00(0, 0xA, 0, 0xFF, 0x40);
     func_82166B34();
     func_8213BC00(0x30, 0xA, 0xFF, 0, 2);
@@ -2065,8 +2118,8 @@ void BattleAnim_CallbackStartEffect69ModelPhaseWait(Particle* arg0) {
 
 void func_82159FC8(void) {
     func_8213B560(0, &func_82159F70, &D_8218E580, 0, 1, 0xA, 0, 0x29, 0);
-    func_8213B5D8(5, 2, 0xA, &func_82164E18, &D_8218E7D0, 0, 2, 0xA, 0, 0x44, 9);
-    func_8213B5D8(0xA, 5, 6, &func_82164F04, &D_8218E708, 0, 3, 0xA, 0, 0x44, 0xB);
+    func_8213B5D8(5, 2, 0xA, &BattleAnim_RunDigHitDust, &D_8218E7D0, 0, 2, 0xA, 0, 0x44, 9);
+    func_8213B5D8(0xA, 5, 6, &BattleAnim_RunDigHitRocks, &D_8218E708, 0, 3, 0xA, 0, 0x44, 0xB);
 }
 
 /**
@@ -2076,11 +2129,14 @@ void BattleAnim_InitializeDigUse(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_InitializeParticleModel, &gDefaultParticleDescriptor, 0, 1, 0xA, 0, 0x16, 0);
 }
 
-void func_8215A108(void) {
+/**
+ * @unverified Name from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeDigHit(void) {
     func_8213B560(0, &func_82152FB0, &D_8218E580, 0, 1, 0xA, 0, 0x1D, 0);
     func_8213B5D8(0, 3, 3, &func_82162C68, &D_8218E728, 0, 1, 0xE, 9, 0, 0xF);
-    func_8213B5D8(4, 1, 4, &func_82164E18, &D_8218E7D0, 0, 8, 0x1B, 0, 0x44, 0xA);
-    func_8213B560(4, &func_82164F04, &D_8218E708, 0, 0xC, 0x1B, 0, 0x44, 0xB);
+    func_8213B5D8(4, 1, 4, &BattleAnim_RunDigHitDust, &D_8218E7D0, 0, 8, 0x1B, 0, 0x44, 0xA);
+    func_8213B560(4, &BattleAnim_RunDigHitRocks, &D_8218E708, 0, 0xC, 0x1B, 0, 0x44, 0xB);
 }
 
 /**
@@ -2092,7 +2148,10 @@ void BattleAnim_InitializeKinesisUse(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(4, 4, 3, BattleAnim_RunSparkleHit, &gBattleAnimParticleDescriptors[0x42], 0, 4, 0xB, 0, 0x17, 0xA);
 }
 
-void func_8215A2DC(void) {
+/**
+ * @unverified Name from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeBoneClubUse(void) {
     func_8213B560(0, &func_82152F44, &D_8218E580, 0, 1, 4, 0, 1, 0);
     func_8213B720(0x1D, 2, 0x20, 0x12);
 }
@@ -2529,14 +2588,20 @@ void BattleAnim_InitializeEarthquakeHit(void) {
     BattleAnim_InitializeEarthquakeFissureHit();
 }
 
-void func_8215B2B8(void) {
+/**
+ * @unverified Name from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeDefenseCurlUse(void) {
     func_8213BC00(4, 8, 0, 0xFF, 0x40);
     func_8213C1BC(8);
     func_8213B560(0xC, &func_82152FB0, &D_8218E580, 0, 1, 0xE, 0, 6, 0);
     func_82168504();
 }
 
-void func_8215B338(void) {
+/**
+ * @unverified Name from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeSharpenUse(void) {
     func_8213BC00(6, 8, 0, 0xFF, 0x40);
     func_8213C1BC(0xA);
     func_8213B560(0xC, &func_82152FB0, &D_8218E580, 0, 1, 0xA, 0, 7, 0);
@@ -2616,12 +2681,18 @@ f32 func_8215B6A4(Particle* arg0) {
     return b;
 }
 
-void func_8215B764(void) {
+/**
+ * @unverified Name from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeLovelyKissUse(void) {
     func_8213B560(0, &func_82152F44, &D_8218E580, 0, 1, 0xB, 0, 0xB, 0);
     func_8213B644(0x2A, 0x10, 0x15);
 }
 
-void func_8215B7C8(void) {
+/**
+ * @unverified Name from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeLovelyKissHit(void) {
     func_8213BC7C(0, 1, 0x16, 0xFF, 0, 8);
     func_8213B560(0, &func_82152F44, &D_8218E580, 0, 1, 9, 0, 0xC, 0);
 }
@@ -2913,7 +2984,10 @@ void Gfx_PaletteParticleDLCallback(s32 arg0, arg1_func_84344CE8* arg1) {
     }
 }
 
-void func_8215C158(void) {
+/**
+ * @unverified Name from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeDreamEaterUse(void) {
     func_8213B560(0, &func_8215B904, &D_8218E580, 0, 1, 0xC, 0, 0, 0);
     func_8213B560(0, &func_82153040, &D_8218E580, 0, 1, 9, 0, 0xD, 0);
     func_8213B560(4, &func_82153040, &D_8218E580, 0, 1, 9, 1, 0xD, 0);
@@ -2974,14 +3048,22 @@ void BattleAnim_InitializeMeditateUse(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunPsychedelicOverlay, &gDefaultParticleDescriptor, 0, 1, 0xC, 4, 0, 0);
 }
 
-void func_8215C7AC(void) {
+/**
+ * @unverified Name from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeNightShadeUse(void) {
     func_8213B560(0, &func_8215B904, &D_8218E580, 0, 1, 0xC, 2, 0, 0);
     func_8213B644(0, 8, 0);
     func_8213B464(0x40);
     func_8213B720(0, 2, 0x10, 8);
 }
 
-void func_8215C82C(void) {
+/**
+ * Moves: Night Shade (hit)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeNightShadeHit(void) {
     func_8213B720(0, 2, 0x10, 8);
     func_8213BC00(4, 8, 0xFF, 0, 8);
     func_8213B560(0, &func_8215B904, &D_8218E580, 0, 1, 0xC, 3, 0, 0);
@@ -3083,7 +3165,10 @@ void func_8215CCF0(void) {
     func_8213B644(0x10, 0x10, 8);
 }
 
-void func_8215CD18(void) {
+/**
+ * @unverified Name from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeConfuseRayUse(void) {
     func_8213B560(0, &func_8215C984, &D_8218E580, 0, 1, 0xA, 0, 0, 0);
     func_8213B644(0, 0x20, 3);
     func_8213BC00(8, 8, 0, 0xFF, 0x40);
@@ -3094,7 +3179,12 @@ void func_8215CD18(void) {
     func_8213BC00(0, 8, 0xFF, 0, 0x10);
 }
 
-void func_8215CE20(void) {
+/**
+ * Moves: Confuse Ray (hit)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeConfuseRayHit(void) {
     func_8213B560(0, &func_8215CA9C, &D_8218E580, 0, 1, 0xA, 0, 0, 0);
     func_8213B720(0, 0, 0x10, 8);
     func_8213B644(0, 0x20, 3);
@@ -3154,7 +3244,12 @@ void ParticleEffect_BasicMultiBurstDelayedSprayOnly(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 8, 0xA, BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E5D8, 0, 2, 7, 0, 0xC, 4);
 }
 
-void func_8215D520(void) {
+/**
+ * Moves: Surf (hit)
+ * TODO: Human contributor add screenshot
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeSurfHit(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 4, BattleAnim_CallbackEndEffect16MultiDescriptorAnimatedFallFade, &D_8218E7D0, 0, 3, 0xE, 0, 0x33, 0xC);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 4, BattleAnim_CallbackEndEffect16MultiDescriptorAnimatedFallFade, &D_8218E650, 0, 3, 0xE, 0, 0xC, 0xC);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 4, BattleAnim_CallbackEndEffect16MultiDescriptorAnimatedFallFade, &D_8218E5F8, 0, 3, 0xE, 0, 0xC, 0xC);
@@ -3162,7 +3257,10 @@ void func_8215D520(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 2, 0xC, BattleAnim_CallbackEndEffect16Descriptor45DelayedRotatingMotion, &D_8218E7A8, 0, 4, 0x11, 7, 0x33, 0);
 }
 
-void func_8215D6B4(void) {
+/**
+ * @unverified Name from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeCrabhammerUse(void) {
     func_8213B560(0, &func_82152F44, &D_8218E580, 0, 1, 0x13, (s32) D_8219A80A, 0x10, 0);
     func_8213B720(0x22, 0, 0x10, 8);
 }
@@ -3372,7 +3470,10 @@ void BattleAnim_InitializePsywaveUse(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunPsywaveEffect, &gDefaultParticleDescriptor, 0, 1, 9, 0, 0, 0);
 }
 
-void func_8215DEF4(void) {
+/**
+ * @unverified Name from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializePsywaveHit(void) {
     func_8213BC7C(0, 2, 8, 0xFF, 0, 0x10);
     func_8213B560(0, &func_8215DCE8, &D_8218E580, 0, 1, 9, 0, 1, 0);
     func_8213B5D8(4, 4, 4, &func_82162C68, &D_8218E728, 0, 3, 9, 0, 0x18, 0xD);
@@ -3405,14 +3506,20 @@ void BattleAnim_RunConfusionPsychicHitEffect(Particle* arg0) {
     }
 }
 
-void func_8215E050(void) {
+/**
+ * @unverified Name from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializePsychicUse(void) {
     func_8213B644(0, 5, 0);
     func_8213B560(0, &func_821530F4, &D_8218E580, 0xFF, 1, 0xC, 8, 0x18, 5);
     func_8213BC7C(0x32, 1, 8, 0, 0xFF, 0x20);
     func_8213B6AC(0x32, 1, 0x20, 8, 0xFF);
 }
 
-void func_8215E0FC(void) {
+/**
+ * @unverified Name from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeConfusionUse(void) {
     func_8213B644(0, 6, 0);
     func_8213B560(0, &func_821530F4, &D_8218E580, 0xFF, 1, 0xC, 7, 0x17, 6);
     func_8213B6AC(0x32, 1, 0x20, 8, 0xFF);
@@ -3441,7 +3548,10 @@ void func_8215E2C4(void) {
     func_8213B644(8, 4, 8);
 }
 
-void func_8215E3E0(void) {
+/**
+ * @unverified Name from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeFocusEnergyUse(void) {
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0x10, 6);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunFillScreenOverlay, &gDefaultParticleDescriptor, 0x80, 1, 0xC, 0xA, 0x1A, 4);
     BattleAnim_SpawnOwnerModelTintPulseDetach(0, 1, 0xA, 0, 0xC8, 3);
@@ -3457,15 +3567,21 @@ void BattleAnim_InitializeBideRageUseSequence(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunFillScreenOverlay, &gDefaultParticleDescriptor, 0x80, 1, 0xC, 0xA, 0x1A, 0x20);
 }
 
-void func_8215E57C(void) {
+/**
+ * @unverified Name from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeSkyAttackUse1(void) {
     func_82168844(0xE);
     func_8213B644(0, 2, 0xE);
     func_8213BC00(0, 0xA, 0, 0xC8, 4);
     func_8213BD78(0x32, 0xA, 0x17, 2, 0xC8);
-    func_8213B560(0x40, &func_82145CC4, &D_8218E7F8, 0, 0x20, 7, 0, 0, 0);
+    func_8213B560(0x40, &BattleAnim_RunOscillatingFlameUnderneathPokemon, &D_8218E7F8, 0, 0x20, 7, 0, 0, 0);
 }
 
-void func_8215E61C(void) {
+/**
+ * @unverified Name from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeSkyAttackUse2(void) {
     func_8213B644(0, 0x20, 6);
     func_8213BC00(0, 0x12, 0, 0x80, 0x10);
     func_8213C0D8(0, 0xFF, 0, 0x10);
@@ -3613,10 +3729,13 @@ void BattleAnim_InitializeThunderHitSequence(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackInitModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 0xE, 5, 0x14, 0);
 }
 
-void func_8215EC9C(void) {
+/**
+ * @unverified Name from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeSolarBeamUse2(void) {
     func_8213B560(0, &func_821530F4, &D_8218E580, 0xBE, 1, 9, 6, 0x15, 2);
     func_8213BC00(8, 8, 0, 0xFF, 4);
-    func_82168A50();
+    BattleAnim_InitializeSolarBeamUseSequence();
 }
 
 void BattleAnim_CallbackEndEffect76DefaultDescriptorModelFade(Particle* arg0) {
@@ -3640,7 +3759,11 @@ void BattleAnim_CallbackEndEffect76DefaultDescriptorModelFade(Particle* arg0) {
     }
 }
 
-void func_8215EDC0(void) {
+/**
+ * Using to make a horizontal cylindrical hit spark for Skull Bash, Mega Punch, and Mega Kick
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeLargePhysicalHitSpark(void) {
     func_8213BC00(4, 8, 0xFF, 0, 0x20);
     func_8213B560(4, &func_8215ED1C, &D_8218E580, 0, 1, 9, 0, 0x19, 0);
 }
@@ -3670,7 +3793,11 @@ void BattleAnim_InitializeHornDrillUse(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackInitModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 0x11, gBattleAnimCurrentAnchor, 0x1B, 1);
 }
 
-void func_8215EF60(void) {
+/**
+ * initializes getting hit by horn drill
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeHornDrillHit(void) {
     func_8213BC00(0, 0xA, 0, 0xFF, 0x40);
     func_8213B560(0, &func_82152F44, &D_8218E580, 0, 1, 0x11, (s32) D_8219A80A, 0x1C, 1);
     func_8213BC00(0x30, 0xA, 0xFF, 0, 2);
@@ -3708,11 +3835,18 @@ void BattleAnim_RunWeakSpear(Particle* arg0) {
     }
 }
 
-void func_8215F0F0(void) {
+/**
+ * @unverified Name from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeFuryAttackPeckUse(void) {
     func_8213B5D8(0, 2, 3, &func_8215EFF8, &D_8218E580, 0, 1, 0x11, 7, 0x20, 0);
 }
 
-void func_8215F154(void) {
+/**
+ * initializes using horn attack
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void BattleAnim_InitializeHornAttackUse(void) {
     func_8213B560(0, &func_8215EFF8, &D_8218E580, 0, 1, 0x11, 7, 0x20, 1);
 }
 

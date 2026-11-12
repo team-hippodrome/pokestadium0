@@ -197,13 +197,13 @@ s32 func_82124A50(ActivePokemon*);
 void func_82108C0C(ActivePokemon*);
 M2C_UNK func_800407B0(M2C_UNK, M2C_UNK, M2C_UNK);
 s32 func_82107CA0(ActivePokemon*);
-void func_8212FC98(CameraNode* arg0);
+void BattleScene_PhaseResidualDamageAfterMove(CameraNode* arg0);
 
 s32 func_82124A50(ActivePokemon* active_pokemon);
 void func_82124894(CameraNode* arg0, ActivePokemon* arg1);
 void BattleScene_Phase10(CameraNode* arg0);
 
-void func_82130628(CameraNode* arg0);
+void BattleScene_PhaseResidualDamageWithoutMove(CameraNode* arg0);
 
 void func_82130D48(ActivePokemon* active_pokemon);
 
@@ -228,9 +228,9 @@ void func_8212E350(CameraNode* arg0);
 void func_8212E634(CameraNode* arg0);
 void func_8212EA84(CameraNode* arg0);
 void func_8212F440(CameraNode* arg0);
-void func_821301EC(CameraNode* arg0);
+void BattleScene_PhaseRecoilDamage(CameraNode* arg0);
 void func_82130494(CameraNode* arg0);
-void func_82130B10(CameraNode* arg0);
+void BattleScene_PhaseResidualDamageFaintCheck(CameraNode* arg0);
 // Zero numbers its phases differently, so the cases call the Zero handlers by address.
 void BattleScene_UpdatePhase(CameraNode* arg0);
 

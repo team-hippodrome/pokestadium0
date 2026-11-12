@@ -64,7 +64,7 @@ extern u8* gGbEmuFont1Data;
 extern u8* gGbEmuFont2Data;
 void func_812070A0(void);
 void GbApu_SelectRegionClock(s32);
-void func_81117068(u16, u8, u16);
+void GbApu_QueueRegisterWrite(u16, u8, u16);
 void GbApu_ResetChannels(void);
 void GbApu_Reset(unk_D_8122B2F8*);
 void func_811173F4(void);
@@ -78,10 +78,10 @@ s32 GbEmu_PixelOpDitherB(s32 arg0, s32 arg1);
 s32 GbEmu_PixelOpAverage555(s32 arg0, s32 arg1);
 s32 GbEmu_PixelOpReplace(UNUSED s32 arg0, s32 arg1);
 void GbEmu_BlitWithPixelOp(u16* dst, u16* src, s32 mode, s32 width, s32 height);
-void func_81103D60(u16* dst, u16* src, s32 color, s32 width, s32 height);
-void func_8110427C(u16* dst, u8* alpha_map, s32 color, s32 width, s32 height, u32 alpha_stride);
+void GbEmu_BlitTinted(u16* dst, u16* src, s32 color, s32 width, s32 height);
+void GbEmu_BlendColorWithAlphaMap(u16* dst, u8* alpha_map, s32 color, s32 width, s32 height, u32 alpha_stride);
 void GbEmu_Delay(OSTime arg0);
-void func_81107128(u16* arg0, u16* arg1, s16* arg2, s32 arg3, s32 arg4);
+void GbEmu_BlendScrollingLayer(u16* arg0, u16* arg1, s16* arg2, s32 arg3, s32 arg4);
 
 M2C_UNK func_8005C670(s32, M2C_UNK, u16, M2C_UNK *, s32); /* extern */
 extern M2C_UNK D_81156480;

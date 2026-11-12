@@ -90,7 +90,7 @@ void BattleAnim_StartEffect98Radial20_EmitVariantD(void);
 void BattleAnim_EmitTriAttackUseRadial(void);
 
 /*
- * func_8216F3A0
+ * BattleAnim_RunSonicBoomUseFourStream
  *
  * Per-frame update of the "four stream trail" part of effect 45: counts
  * frames in D_8219CAC0 (returns -1, which ends the effect, from frame 0x32
@@ -113,7 +113,7 @@ extern f32 D_FLT_82197934;
 extern f64 D_DBL_82197938;
 extern f64 D_DBL_82197940;
 
-s32 func_8216F3A0(void);
+s32 BattleAnim_RunSonicBoomUseFourStream(void);
 
 extern const f32 D_FLT_82197948;
 extern const f32 D_FLT_8219794C;
