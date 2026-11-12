@@ -248,7 +248,7 @@ void FreeBattle_LoadGbTeams(RecordList* arg0) {
  * header of the record at index `count` (type byte = 2, the next three bytes
  * = 0), then sets `count` to the index of the following record, computed as a
  * pointer difference from the start of the list.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play: under L50～55 rules the entry list opens with one 「レンタルポケモン」 row, and this runs.
  */
 void FreeBattle_AddRentalEntry(RecordList* arg0) {
     Record214* rec;
@@ -349,7 +349,7 @@ extern s32 D_82008F84;
  * pointers) into the buffer at +0x08 with HAL_Strcpy; clears the flag word of all six slots and then
  * sets them all with FreeBattle_MarkEmptySlots(slots, 0) (so the explicit clear is
  * overwritten); finally stores slotCount = 6.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play: A on the rental row starts a new team named 「なまえ 1P」 and runs this.
  */
 void FreeBattle_InitNamedTeam(SlotList* arg0, s32 arg1) {
     s32 i;
@@ -387,7 +387,8 @@ void func_8000B2F4(s32);
  * and then arg5 in the word at 0xA4 (calling func_8000B2F4 with each), stores
  * arg4 at 0xB4 and arg3 at 0xB0, and clears D_8200AC4C.
  * What the object is and what the constants mean is not established.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play: A on a rental Pokemon opens its status window with 「レンタルしますか？ はい いいえ」 and runs
+ * this.
  */
 void FreeBattle_InitConfirmWindow(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
     Window_SetRect(arg0, arg1, arg2, 0x1AE, 0x124);
@@ -436,7 +437,13 @@ extern M2C_UNK D_800734A8;
 extern char D_82009B90[];
 u32 func_800566BC(const char*);
 
-void func_82000AC4(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
+/**
+ * Draws a move name in its type's color (D_80066AD8 by D_8006A9D4[move].type), centred if asked;
+ * move -2 draws the no-move string.
+ * Seen in play: the rental status window lists the four moves on the C buttons in type colors
+ * (メガドレイン and ソーラービーム green, どくどく purple, ねむりごな green).
+ */
+void FreeBattle_DrawMoveName(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     Entry8006A9D4* entry;
     const char* str;
     Color82000BC4* c;
@@ -460,7 +467,7 @@ void func_82000AC4(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
 
 /**
  * Draws the colored type icon for type slot `arg3` of Pokemon `arg2`.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: draws タイプ1/タイプ2 (くさ, どく) in the rental status window.
  */
 void FreeBattle_DrawTypeIcon(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     Color82000BC4 c;
@@ -550,7 +557,8 @@ s32 BattleMon_CountMoves(u8* arg0);
 s32 BattleMon_GetMoveIndex(Mon82000C5C*, s32);
 /**
  * Draws a Pokemon's status window: LV, HP, Type 1/2, Attack, Defense, Speed, Special.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: draws the rental status window (name, LV 50, HP, タイプ1/タイプ2, こうげき/ぼうぎょ/すばやさ/とくしゅ,
+ * and four moves).
  */
 void FreeBattle_DrawMonStatusWindow(Screen82000C5C* arg0) {
     s32 y = arg0->y + 6;
@@ -600,7 +608,7 @@ void FreeBattle_DrawMonStatusWindow(Screen82000C5C* arg0) {
         func_8001A944(x + 0x15C, y + 0x60, D_82009C00, arg0->mon->speed);
         func_8001A944(x + 0x15C, y + 0x7C, D_82009C04, arg0->mon->special);
         for (i = 0; i < count; i++) {
-            func_82000AC4(D_82009040[i].x + x, D_82009040[i].y + y, BattleMon_GetMoveIndex(arg0->mon, i), D_82009040[i].centered);
+            FreeBattle_DrawMoveName(D_82009040[i].x + x, D_82009040[i].y + y, BattleMon_GetMoveIndex(arg0->mon, i), D_82009040[i].centered);
         }
         func_8001ABBC();
         FreeBattle_DrawTypeIcon(x + 0x9C, y + 0x40, (s32)arg0->mon, 0);
@@ -637,7 +645,12 @@ s32 func_8002B390(s32);
 s32 func_8002BC14(s32);
 M2C_UNK func_8003F6AC(M2C_UNK);
 
-s32 func_820012B4(s8* arg0) {
+/**
+ * Runs the はい/いいえ choice of 「レンタルしますか？」: returns 1 for はい, -1 for いいえ or B (with the cancel
+ * sound), 0 while undecided.
+ * Seen in play: runs while the rental status window asks 「レンタルしますか？」.
+ */
+s32 FreeBattle_UpdateRentalConfirmChoice(s8* arg0) {
     s32 ret = 0;
     s32 temp_v0;
 
@@ -680,13 +693,12 @@ typedef struct {
 void Menu_ClearItemFlags(FlagOwner*);
 
 /**
- * For each of the six Slot54 entries in arg1 whose `flag` is zero and whose first
- * payload byte (offset 4) differs from arg2, scans the owner's record table; every
- * record whose id byte equals that payload byte gets bits 0x101 set in the
- * owner's parallel `flags` array (indexed by record number).
- * The meaning of the ids/flags is not yet known; names are structural only.
+ * Clears the rental grid's item flags, then flags (0x101) every rental Pokemon already in the
+ * team being built, except the one in slot arg2.
+ * Seen in play: runs when the L50～55 rental grid 「レンタルポケモン」 opens.
+ * @unverified The flagged look was not checked on screen.
  */
-void func_82001340(FlagOwner* arg0, Slot54* arg1, s32 arg2) {
+void FreeBattle_MarkPickedRentals(FlagOwner* arg0, Slot54* arg1, s32 arg2) {
     Record50* records;
     Record50* rec;
     s32 i;
@@ -970,7 +982,7 @@ void func_8001AC3C(void);
  * environment colour, font set mask 0x20, Font_SetLineHeight(0x2A), prim colour
  * 255/100/255/255) and prints the string D_82009C08 at
  * (arg0 + 0xAE, arg1 + 0xE) before ending text rendering. arg2 is not used.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play: draws 「レンタルポケモンから 6たいえらぶ」 in the rental entry row.
  */
 void FreeBattle_DrawRentalPrompt(s32 arg0, s32 arg1, s32 arg2) {
     FreeBattle_FillTeamPanel(arg0, arg1, D_82008F58);

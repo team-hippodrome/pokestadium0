@@ -90,7 +90,7 @@ void FreeBattle_EnterEntryScreenState(arg0)
                 } else {
                     color = ((Slot54*)(arg0 + 0xE4))[M2C_FIELD(arg0, s32*, 0x300)].unk04[0];
                 }
-                func_82001340((FlagOwner*)(arg0 + 0x6E4), (Slot54*)(arg0 + 0xE4), color);
+                FreeBattle_MarkPickedRentals((FlagOwner*)(arg0 + 0x6E4), (Slot54*)(arg0 + 0xE4), color);
                 ScrollGrid_SyncCursor((FlagOwner*)(arg0 + 0x6E4));
             }
             panel = arg0 + 0x14;
@@ -262,7 +262,7 @@ void Ui_DrawPrimColorRect(s32, s32, s32, s32, s32, s32, s32, s32);
  * prints the string D_82009CC8 at (arg0 + 0x10, arg1 + 2) in the colour
  * stored at D_800734A8 using font 4.
  * What this draws is not yet established.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play: draws the 「レンタルポケモン」 title bar of the rental grid.
  */
 void FreeBattle_DrawRentalTitle(s32 arg0, s32 arg1, s32 arg2) {
     gSPDisplayList(gDisplayListHead++, D_80073450);
@@ -323,7 +323,7 @@ void ScrollGrid_DrawItems(void*, s32, s32, s32, TableArgs*);
  * ScrollGrid_DrawItems on the sub-object at arg0 + 0x6E4 at (+8, +0xAC) with a mode
  * word of 0xFED, or 0xFEF when arg1 is 1, or 0xFFD when arg1 is 2.
  * What the mode word's bits mean is not yet established.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play: draws the 「レンタルポケモン」 window holding the L50 rental grid (フシギバナ, リザードン, カメックス, …).
  */
 void FreeBattle_DrawRentalTitleWindow(s8* arg0, s32 arg1) {
     s32 sp44;
@@ -360,7 +360,12 @@ void FreeBattle_DrawTeamWindowPanels(s8* arg0) {
     func_80029028(M2C_FIELD(arg0, s32*, 0x14) + 0x8E, M2C_FIELD(arg0, s32*, 0x18) + 0x6A, 0x18C, 0xE8, D_82008F58);
 }
 
-void func_820032E8(s8* arg0) {
+/**
+ * Draws the two short textured panels of the team being built above the rental grid (the 「なまえ 1P」
+ * row).
+ * Seen in play: runs while the L50～55 rental grid is open.
+ */
+void FreeBattle_DrawRentalTeamPanels(s8* arg0) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(M2C_FIELD(arg0, s32*, 0x14) + 6, M2C_FIELD(arg0, s32*, 0x18) + 0x6A, 0x88, 0x1E, D_82008F5C);
     func_80029028(M2C_FIELD(arg0, s32*, 0x14) + 0x8E, M2C_FIELD(arg0, s32*, 0x18) + 0x6A, 0x18C, 0x1E, D_82008F58);
@@ -406,7 +411,7 @@ void FreeBattle_DrawRentalScreen(s8* arg0) {
             BgStage_DrawFrame();
             FreeBattle_DrawRentalListWindow(arg0, (M2C_FIELD(arg0, s32*, 4) == 6) ? 1 : 2);
             FreeBattle_DrawRentalTitleWindow(arg0, (M2C_FIELD(arg0, s32*, 4) == 6) ? 0 : 1);
-            func_820032E8(arg0);
+            FreeBattle_DrawRentalTeamPanels(arg0);
             break;
         case 10:
             func_800189C0(D_8200AC50, 0);
@@ -433,7 +438,7 @@ void FreeBattle_DrawRentalScreen(s8* arg0) {
         case 9:
             FreeBattle_DrawRentalListWindow(arg0, 2);
             FreeBattle_DrawRentalTitleWindow(arg0, (M2C_FIELD(arg0, s32*, 4) == 7) ? 0 : 2);
-            func_820032E8(arg0);
+            FreeBattle_DrawRentalTeamPanels(arg0);
             FreeBattle_DrawMonStatusWindow(arg0 + 0x5CC);
             break;
         case 3:
@@ -551,13 +556,11 @@ s32 FreeBattle_CheckEntryRules(SlotMenu* arg0) {
 extern s32 D_8200AC58[];
 
 /**
- * Copies the 0x50-byte record `*records[recordIndex]` into the payload of the
- * Slot54 selected by `cur`, clears that slot's `flag`, clears the s16 at
- * unk_2FC[cur], and sets D_8200AC58[(unk_48 * 6 + cur) % 24] to -1.
- * Also sets unk_734 to 1 and ORs bit 0 into unk_784.
- * The meaning of these fields is not yet established; names are structural only.
+ * Puts the rental Pokemon under the cursor into the team's current slot and marks the team
+ * changed.
+ * Seen in play: はい on 「レンタルしますか？」 adds the Pokemon (フシギバナ L50) to the 「なまえ 1P」 row.
  */
-void func_820037D0(SlotMenu* arg0) {
+void FreeBattle_RentSelectedMon(SlotMenu* arg0) {
     arg0->unk_734 = 1;
     arg0->unk_784 |= 1;
     *(Words80*)arg0->slots[arg0->cur].unk04 = (*arg0->records)[arg0->recordIndex];
@@ -680,7 +683,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *arg0)
       break;
 
     case 3:
-      next = func_820012B4(arg0 + 0x5CC);
+      next = FreeBattle_UpdateRentalConfirmChoice(arg0 + 0x5CC);
       if (next == (-1))
     {
       FreeBattle_SetEntryScreenState(arg0, 2, 3);
@@ -792,7 +795,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *arg0)
       break;
 
     case 7:
-      next = func_820012B4(arg0 + 0x5CC);
+      next = FreeBattle_UpdateRentalConfirmChoice(arg0 + 0x5CC);
       if (next == (-1))
     {
       FreeBattle_SetEntryScreenState(arg0, 6, 3);
@@ -806,7 +809,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *arg0)
       break;
 
     case 9:
-      next = func_820012B4(arg0 + 0x5CC);
+      next = FreeBattle_UpdateRentalConfirmChoice(arg0 + 0x5CC);
       if (next == (-1))
     {
       FreeBattle_SetEntryScreenState(arg0, 8, 3);
@@ -815,7 +818,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *arg0)
       if (next == 1)
     {
       func_8003F6AC(0x22);
-      func_820037D0(arg0);
+      FreeBattle_RentSelectedMon(arg0);
       FreeBattle_SetEntryScreenState(arg0, FreeBattle_CheckEntryRules(arg0), 1);
     }
       break;

@@ -40,7 +40,7 @@ extern M2C_UNK D_800734A8;
 extern char D_82009B90[];
 u32 func_800566BC(const char*);
 
-void func_82000AC4(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
+void FreeBattle_DrawMoveName(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 
 void FreeBattle_DrawTypeIcon(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 
@@ -48,7 +48,7 @@ s32 func_8002B390(s32);
 s32 func_8002BC14(s32);
 M2C_UNK func_8003F6AC(M2C_UNK);
 
-s32 func_820012B4(s8* arg0);
+s32 FreeBattle_UpdateRentalConfirmChoice(s8* arg0);
 
 typedef struct Color82001CCC {
     u8 c[4];
@@ -65,7 +65,7 @@ extern Color82001CCC D_82008F5C;
 extern Color82001CCC D_82008F58;
 void FreeBattle_DrawTeamWindowPanels(s8* arg0);
 
-void func_820032E8(s8* arg0);
+void FreeBattle_DrawRentalTeamPanels(s8* arg0);
 
 M2C_UNK GridMenu_UpdateCursor();                            /* extern */
 extern char D_800735C4[];
