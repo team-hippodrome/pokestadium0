@@ -52,7 +52,7 @@ typedef struct BattleMon {
     /* 0x2A */ u16 defense;
     /* 0x2C */ u16 speed;
     /* 0x2E */ u16 special;
-    /* 0x30 */ u8 unk_30[11];
+    /* 0x30 */ u8 nickname[11]; // @unverified: ActivePokemon_GetNickname passes it as the %s of "Go! %s"
     /* 0x3B */ u8 unk_3B[11];
     /* 0x46 */ u8 unk_46[7];
     /* 0x4D */ u8 pad4D;

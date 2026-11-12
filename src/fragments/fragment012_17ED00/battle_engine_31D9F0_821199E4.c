@@ -358,7 +358,7 @@ void func_8211AEA4(TeamRoster* arg0, BattleMon* arg1, s32 arg2, s32 arg3, s32 ar
 
     Font_BeginTranslucentTextRendering();
     Font_SetActive(1, 0);
-    Font_Printf(arg2 + 0x18, arg3 + 2, arg1->unk_30);
+    Font_Printf(arg2 + 0x18, arg3 + 2, arg1->nickname);
     Font_EndTexturedTextRendering();
 
     if (arg0->pokemonPicked[arg4].hp == 0) {
@@ -397,7 +397,7 @@ void func_8211B208(TeamRoster* arg0, BattleMon* arg1, s32 arg2, s32 arg3, s32 ar
 
     Font_BeginTranslucentTextRendering();
     Font_SetActive(1, 0);
-    Font_Printf(arg2 + 0x18, arg3 + 2, arg1->unk_30);
+    Font_Printf(arg2 + 0x18, arg3 + 2, arg1->nickname);
     Font_EndTexturedTextRendering();
 
     if (arg0->pokemonPicked[arg4].hp == 0) {

@@ -158,8 +158,8 @@ void func_821172F0(ActivePokemon* arg0, BattleMon* arg1, unk_D_84385790* arg2, s
     BattleHud_DrawHpFractionText(arg3 + 0xC, arg4 + 0x1F, arg1->hp, arg1->maxHp);
     func_8001AB6C();
     func_8001A384(2, 0);
-    half = func_800566BC((s32)arg1->unk_30) >> 1;
-    func_8001A944((arg3 - (half * 5)) + 0x1D, arg4 + 2, arg1->unk_30);
+    half = func_800566BC((s32)arg1->nickname) >> 1;
+    func_8001A944((arg3 - (half * 5)) + 0x1D, arg4 + 2, arg1->nickname);
     func_8001A384(1, 0);
     func_8001AA9C(arg2->unk_04.r, arg2->unk_04.g, arg2->unk_04.b, 0xFF);
     func_8001A944(arg3 + 0x1F, arg4 + 0xE, arg2->unk_00);

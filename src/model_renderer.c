@@ -163,12 +163,12 @@ arg1_func_80010CA8* Model_ComputeNicknameColorVariant(arg1_func_80010CA8* arg0, 
 
     Text_CopySpeciesName(sp38, arg1->species.id);
 
-    if (HAL_Strcmp(arg1->unk_30, sp38) != 0) {
+    if (HAL_Strcmp(arg1->nickname, sp38) != 0) {
         var_a0 = ((arg1->unk_0E >> 8) & 0xFF) + (arg1->unk_0E & 0xFF);
 
         if (1) {}  // karodo
 
-        var_v1 = arg1->unk_30;
+        var_v1 = arg1->nickname;
         while (*var_v1) {
             var_a0 += *var_v1++ & 0xFF;
             var_a0 += 0;

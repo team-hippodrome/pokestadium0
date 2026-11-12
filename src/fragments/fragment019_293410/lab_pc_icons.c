@@ -37,7 +37,7 @@ void MonSummary_DrawHpLevel(s32 arg0, s32 arg1, BattleMon* arg2, s32 arg3) {
     Font_BeginTranslucentTextRendering();
     Font_SetColorForFlags(arg3);
     Font_SetActive(0x10, 0);
-    Font_Printf(arg0 + 0x4C, arg1 + 0xD, arg2->unk_30);
+    Font_Printf(arg0 + 0x4C, arg1 + 0xD, arg2->nickname);
     Gfx_SetEnvColor(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
     Font_SetActive(4, 0);
     Font_Printf(arg0 + 0x13B, arg1 + 6, D_8A21D850);
@@ -283,7 +283,7 @@ void MonSummary_DrawHeader(s32 arg0, s32 arg1, BattleMon* arg2) {
     Font_EnableTwoCycleTexturing();
     func_8001A384(0x10, 0);
     Gfx_SetPrimColor(0x5A, 0x6B, 0xFF, 0xFF);
-    func_8001A944(arg0 + 0x25, arg1 + 0x1E, arg2->unk_30);
+    func_8001A944(arg0 + 0x25, arg1 + 0x1E, arg2->nickname);
     Font_DisableTwoCycleTexturing();
     func_8001A384(8, 0);
     func_8001AA9C(((Color_RGBA8*)&D_800734A8)->r, ((Color_RGBA8*)&D_800734A8)->g, ((Color_RGBA8*)&D_800734A8)->b, ((Color_RGBA8*)&D_800734A8)->a);
