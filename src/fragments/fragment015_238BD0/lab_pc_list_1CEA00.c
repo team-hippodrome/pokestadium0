@@ -569,7 +569,7 @@ void LabItem_DisableRow(s8 *arg0, s32 arg1) {
  *   - else flags & 0x100: D_8900A5D4[(flags & 2) ? 0 : 1];
  *   - otherwise: D_800734A8[(flags & 2) ? 0 : 1];
  * and the string is printed at (x + 8, y + 4) with font set 8 in translucent text
- * mode.  `index` is unused.  (A shorter sibling of func_89004908, which has two more
+ * mode.  `index` is unused.  (A shorter sibling of PcSort_DrawMenuRow, which has two more
  * colour tables.)
  */
 void Ui_FillRectHighlighted(s32, s32, s32, s32, Rgba89000D50);

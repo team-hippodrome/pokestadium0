@@ -618,10 +618,10 @@ M2C_UNK func_8000B1FC();                            /* extern */
 M2C_UNK func_8000B220();                            /* extern */
 void func_89003650(s8*);
 void LabItem_DrawScreen(void*);
-M2C_UNK func_890067B0(M2C_UNK *, M2C_UNK *);        /* extern */
-M2C_UNK func_890069C0(M2C_UNK *);                   /* extern */
+M2C_UNK PcSort_Init(M2C_UNK *, M2C_UNK *);        /* extern */
+M2C_UNK PcSort_Free(M2C_UNK *);                   /* extern */
 M2C_UNK PcSort_DrawScreen(M2C_UNK *);                   /* extern */
-s32 func_89006D60(M2C_UNK *);                       /* extern */
+s32 PcSort_UpdateScreen(M2C_UNK *);                       /* extern */
 M2C_UNK PcBox_Init(M2C_UNK *);                   /* extern */
 M2C_UNK PcBox_Free(M2C_UNK *);                   /* extern */
 M2C_UNK PcBox_DrawScreen(M2C_UNK *);                   /* extern */
@@ -654,7 +654,7 @@ s32 LabTerminal_RunFrame(s32 arg0) {
             D_890289D4 = temp_v0 + 1;
             switch (D_890289D4) {                   /* switch 2; irregular */
             case 2:                                 /* switch 2 */
-                func_890067B0(&D_89019B98, &D_89018918);
+                PcSort_Init(&D_89019B98, &D_89018918);
                 break;
             case 3:                                 /* switch 2 */
                 func_89003650((s8*)&D_89019128);
@@ -673,9 +673,9 @@ s32 LabTerminal_RunFrame(s32 arg0) {
         break;
     case 2:                                         /* switch 1 */
         PcSort_DrawScreen(&D_89019B98);
-        if (func_89006D60(&D_89019B98) != 0) {
+        if (PcSort_UpdateScreen(&D_89019B98) != 0) {
             D_890289D4 = 1;
-            func_890069C0(&D_89019B98);
+            PcSort_Free(&D_89019B98);
         }
         break;
     case 4:                                         /* switch 1 */
