@@ -87,8 +87,8 @@ typedef struct LabItemCursor {
 void func_800275E4(s32, s32);
 void func_80030744(s32*, s32);
 
-/*
- * func_89000048
+/**
+ * LabItem_RemoveSelectedEntry
  *
  * Removes one row from the grid referenced by the cursor arg0 and fixes up
  * the cursor.  arg0->unk_00 is the grid and arg0->unk_08 the current index.
@@ -110,8 +110,9 @@ void func_80030744(s32*, s32);
  * and positive, sets the index to count - 1.  Zero's version operates on a
  * byte matrix and the retail code simply subtracts 1 from the index, so the
  * name is a rough match at best.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_89000048(LabItemCursor* arg0) {
+void LabItem_RemoveSelectedEntry(LabItemCursor* arg0) {
     func_800275E4((s32)arg0->unk_00, arg0->unk_08);
     if (arg0->unk_08 >= M2C_FIELD(arg0->unk_00, s32*, 8)) {
         arg0->unk_08 -= 1;
@@ -169,11 +170,15 @@ void func_890000A4(s32* arg0, s32 arg1, s32 arg2) {
     func_80030744(arg0, arg0[2]);
 }
 
-void func_890001B4(LabItemCursor* arg0, s32 arg1) {
+/**
+ * Takes `arg1` from the selected item's count, removing the entry when nothing is left.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabItem_DecreaseSelectedCount(LabItemCursor* arg0, s32 arg1) {
     u8* temp_v1 = &arg0->unk_00->unk_00[arg0->unk_00->unk_0C * arg0->unk_08];
 
     if (arg1 >= temp_v1[1]) {
-        func_89000048(arg0);
+        LabItem_RemoveSelectedEntry(arg0);
         return;
     }
     temp_v1[1] -= arg1;
@@ -272,7 +277,11 @@ void LabItem_WriteDeckBack(s32 arg0, s32 arg1, s32 arg2, unk_func_8820BE14_06C* 
 M2C_UNK Ui_DrawTintedScreenBackground(M2C_UNK, M2C_UNK, u8, u8, s32); /* extern */
 extern M2C_UNK D_8900A5B8;
 
-void func_8900054C(void) {
+/**
+ * Draws the tinted terminal screen background.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabItem_DrawBackground(void) {
     Ui_DrawTintedScreenBackground(0x38, 0x1E0, M2C_FIELD(&D_8900A5B8, u8 *, 0), M2C_FIELD(&D_8900A5B8, u8 *, 1), (s32) M2C_FIELD(&D_8900A5B8, u8 *, 2));
 }
 
@@ -283,7 +292,11 @@ extern Color_RGBA8 D_8900A5C0;
 extern char D_89018460[];
 extern char D_89018468[];
 extern s32 D_800603C0;
-void func_89000588(s8* arg0, s32 arg1, s32 arg2, char *arg3, s32 arg4) {
+/**
+ * Sets up the confirm window (268x146) with message `arg3` and labeled Yes/No buttons.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabItem_InitConfirmWindow(s8* arg0, s32 arg1, s32 arg2, char *arg3, s32 arg4) {
     Window_SetRect(arg0, arg1, arg2, 0x10C, 0x92);
     M2C_FIELD(arg0, s32*, 0x24) = 0;
     M2C_FIELD(arg0, s32*, 0x28) = 0;
@@ -318,7 +331,11 @@ extern Color_RGBA8 D_8900A5C4;
 extern Color_RGBA8 D_8900A5C8;
 extern Color_RGBA8 D_8900A5CC;
 
-void func_89000694(s8* arg0) {
+/**
+ * Draws the confirm window: divider, message and buttons.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabItem_DrawConfirmWindow(s8* arg0) {
     if (func_8002AE6C() == 0) {
         Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0x61, M2C_FIELD(arg0, s32*, 8), D_8007356C);
         Ui_FillRectPrimEnvColor(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) - 0xC, 0x5C, D_8900A5C4, D_8900A5C8);
@@ -341,7 +358,11 @@ s32 func_8002B390(s8*);
 s32 func_8002BC14(s32);
 extern s32 D_800603C0;
 
-s32 func_89000828(s8* arg0) {
+/**
+ * Handles input on the confirm window while it is open.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 LabItem_UpdateConfirmWindow(s8* arg0) {
     s32 ret = 0;
 
     switch (M2C_FIELD(arg0, s32*, 0x28)) {
@@ -370,7 +391,11 @@ s32 func_89000828(s8* arg0) {
 #include "fragments/fragment015_238BD0/lab_pc_list_1CEA00_types.h"
 extern Rgba89000D50 D_8900A5BC;
 
-void func_890008C8(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
+/**
+ * Sets up the item count selector (84x52).
+ * @unverified Name and comment guessed from the code.
+ */
+void LabItem_InitCountSelector(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     Window_SetRect(arg0 + 4, arg1, arg2, 0x54, 0x34);
     M2C_FIELD(arg0, s32*, 0x28) = 0;
     M2C_FIELD(arg0, s32*, 0x24) = 0;
@@ -401,7 +426,11 @@ extern u8 D_04002340[];
 extern u8 D_04002448[];
 extern char D_89018470[];
 
-void func_89000960(s8* arg0) {
+/**
+ * Draws the count selector with its ×count and the up/down arrows.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabItem_DrawCountSelector(s8* arg0) {
     UNUSED s32 pad[1]; // FAKE: stack padding
     s32 x;
     s32 v;
@@ -457,7 +486,11 @@ M2C_UNK func_8003F6AC(M2C_UNK);                     /* extern */
 extern s32 D_800603C0;
 extern M2C_UNK D_89018474;
 
-s32 func_89000BEC(s8 *arg0) {
+/**
+ * Handles the count selector input; shows どうぐがいっぱいです (the items are full) when needed.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 LabItem_UpdateCountSelector(s8 *arg0) {
     s32 sp2C;
     s32 temp_v0;
     s32 temp_v0_2;
@@ -516,7 +549,11 @@ void func_89000CF0(s8 *arg0, s8 *arg1)
   while (var_v0 != 3);
 }
 
-void func_89000D34(s8 *arg0, s32 arg1) {
+/**
+ * Sets the disabled flag (1) on menu row `arg1`.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabItem_DisableRow(s8 *arg0, s32 arg1) {
     u16 *temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s32 *, 0x30) + (arg1 * 2);
@@ -524,7 +561,7 @@ void func_89000D34(s8 *arg0, s32 arg1) {
 }
 
 /*
- * func_89000D50: draws one line of text `str` at (x, y) in the Lab PC list style.
+ * LabItem_DrawMenuRow: draws one line of text `str` at (x, y) in the Lab PC list style.
  *
  * `flags` bit 0x10 first draws a 0xD2 x 0x16 highlight (Ui_FillRectHighlighted, colour
  * D_8900A5BC) at (x + 3, y + 3).  The text colour is then picked:
@@ -539,7 +576,11 @@ void Ui_FillRectHighlighted(s32, s32, s32, s32, Rgba89000D50);
 M2C_UNK func_8001AA9C(u8, u8, u8, u8);
 extern Rgba89000D50 D_8900A5D4[];
 extern M2C_UNK D_800734A8;
-void func_89000D50(s32 x, s32 y, char* str, UNUSED s32 index, s32 flags) {
+/**
+ * Draws one menu row label with the selection highlight (dimmed when disabled).
+ * @unverified Name and comment guessed from the code.
+ */
+void LabItem_DrawMenuRow(s32 x, s32 y, char* str, UNUSED s32 index, s32 flags) {
     Rgba89000D50 color;
     UNUSED s32 pad[4]; // FAKE: stack padding
 
@@ -564,7 +605,11 @@ void func_89000D50(s32 x, s32 y, char* str, UNUSED s32 index, s32 flags) {
 void Window_SetRect(s8*, s32, s32, s32, s32);
 void Menu_Init(s8*, s32, s32, s32, s32, s32);
 M2C_UNK func_80027804();
-void func_89000E98(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
+/**
+ * Sets up a menu window whose height fits `arg4` rows.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabItem_InitMenuWindow(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
     s32 pad[2]; // FAKE: stack padding
 
     Window_SetRect((s8 *)arg0, arg1, arg2, 0xE4, (arg4 * 0x1C) + 0x14);
@@ -574,7 +619,7 @@ void func_89000E98(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5)
     M2C_FIELD(arg0, s32 *, 0x14) = 0;
     M2C_FIELD(arg0, Rgba89000D50 *, 0x18) = D_8900A5BC;
     func_80027804((s8 *)arg0 + 0x50, arg3, arg4, arg4);
-    Menu_Init((s8 *)arg0 + 0x2C, (s32)((s8 *)arg0 + 0x50), (s32)((s8 *)arg0 + 0x5C), (s32)func_89000D50, 0xD8, 0x1C);
+    Menu_Init((s8 *)arg0 + 0x2C, (s32)((s8 *)arg0 + 0x50), (s32)((s8 *)arg0 + 0x5C), (s32)LabItem_DrawMenuRow, 0xD8, 0x1C);
     M2C_FIELD(arg0, s32 *, 0x34) = arg5;
     M2C_FIELD(arg0, s32 *, 0x4C) |= 0x10000;
 }
@@ -582,14 +627,22 @@ void func_89000E98(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5)
 s32 func_8002AE6C();                                /* extern */
 M2C_UNK Menu_DrawItems(s8 *, s32, s32, M2C_UNK, s32); /* extern */
 
-void func_89000F5C(s8 *arg0) {
+/**
+ * Draws the menu window's items.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabItem_DrawMenu(s8 *arg0) {
     if (func_8002AE6C() == 0) {
         Menu_DrawItems(arg0 + 0x2C, M2C_FIELD(arg0, s32 *, 0) + 6, M2C_FIELD(arg0, s32 *, 4) + 0xA, 0xFFEF, 0);
     }
 }
 
 s32 func_8002DCE0(void*);
-s32 func_89000FA4(s32 arg0) {
+/**
+ * Moves the menu cursor. Returns -1 on cancel, the 1-based row on confirm, otherwise 0.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 LabItem_UpdateMenuCursor(s32 arg0) {
     s32 sp1C = 0;
     s32 dir;
 
@@ -655,7 +708,11 @@ void func_89001230(s8* arg0, s32 arg1) {
 void ScrollList_Init(s8*, s32, s8*, s32, void*, s32, s32);
 void LabItem_DrawItemCountRow();
 
-void func_89001250(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
+/**
+ * Sets up the scrolling item list at (`arg1`, `arg2`) with LabItem_DrawItemCountRow rows.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabItem_InitItemList(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     M2C_FIELD(arg0, s32*, 0x10C) = arg1;
     M2C_FIELD(arg0, s32*, 0x110) = arg2;
     ScrollList_Init(arg0, arg3, arg0 + 0x44, 8, LabItem_DrawItemCountRow, 0xEC, 0x1C);
@@ -668,7 +725,11 @@ void func_8002BAB8(s32, s32, s32, s32);
 void func_8001BCB4(s32, s32, s32, s32, void *, s32, s32);
 extern Gfx D_80073450[];
 extern u8 D_04011AB8[];
-void func_890012C4(s8 *arg0, s32 arg1) {
+/**
+ * Draws the scrolling item list and its scroll bar.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabItem_DrawItemList(s8 *arg0, s32 arg1) {
     if (arg1 & 0x200) {
         func_8002F9D8(arg0, M2C_FIELD(arg0, s32 *, 0x10C), M2C_FIELD(arg0, s32 *, 0x110) + 0x10, arg1 | 0xFFED, 0);
     } else {
@@ -684,8 +745,11 @@ void func_890012C4(s8 *arg0, s32 arg1) {
 s32 ScrollList_UpdateCursor(void*);
 s32 func_80030230(void*);
 
-/* Navigate the selected menu mode, then report cancel or confirm input. */
-s32 func_890013F8(void* menu, u32 flags) {
+/**
+ * Navigate the selected menu mode, then report cancel or confirm input.
+ * @unverified Name guessed from the code; comment kept.
+ */
+s32 LabItem_UpdateItemList(void* menu, u32 flags) {
     s32 result = 0;
     s32 moved;
     s32 action;
@@ -722,7 +786,11 @@ extern char D_890190F0[];
 extern char D_890184CC[];
 extern s32 D_8901911C;
 extern u8 D_8900A5F4[];
-void func_8900147C(s8* arg0, s32 x, s32 y, s8* arg3, s32* arg4, s32* arg5) {
+/**
+ * Sets up the どうぐのせいり (organize items) window for %sのパソコン (%s's PC).
+ * @unverified Name and comment guessed from the code.
+ */
+void LabItem_InitOrganizeWindow(s8* arg0, s32 x, s32 y, s8* arg3, s32* arg4, s32* arg5) {
     Window_SetRect(arg0 + 4, x, y, 0x234, 0x174);
     M2C_FIELD(arg0, s32*, 0x28) = 0;
     M2C_FIELD(arg0, s32*, 0x2C) = 0;
@@ -761,8 +829,8 @@ void func_8900147C(s8* arg0, s32 x, s32 y, s8* arg3, s32* arg4, s32* arg5) {
     M2C_FIELD(arg0, s8**, 0x490) = arg3;
     M2C_FIELD(arg0, s32**, 0x494) = arg4;
     M2C_FIELD(arg0, s32**, 0x498) = arg5;
-    func_89001250(arg0 + 0x1E4, M2C_FIELD(arg0, s32*, 4) + 0xC, M2C_FIELD(arg0, s32*, 8) + 0x2A, (s32)(arg3 + M2C_FIELD(arg0, s32*, 0x1D4) * 0x10));
-    func_89001250(arg0 + 0x2F8, M2C_FIELD(arg0, s32*, 4) + 0x13C, M2C_FIELD(arg0, s32*, 8) + 0x2A, (s32)(arg3 + M2C_FIELD(arg0, s32*, 0x1D8) * 0x10));
+    LabItem_InitItemList(arg0 + 0x1E4, M2C_FIELD(arg0, s32*, 4) + 0xC, M2C_FIELD(arg0, s32*, 8) + 0x2A, (s32)(arg3 + M2C_FIELD(arg0, s32*, 0x1D4) * 0x10));
+    LabItem_InitItemList(arg0 + 0x2F8, M2C_FIELD(arg0, s32*, 4) + 0x13C, M2C_FIELD(arg0, s32*, 8) + 0x2A, (s32)(arg3 + M2C_FIELD(arg0, s32*, 0x1D8) * 0x10));
     func_80027410(arg0 + 0x49C, M2C_FIELD(M2C_FIELD(arg0, s8**, 0x490), s8**, 0), 2, M2C_FIELD(M2C_FIELD(arg0, s8**, 0x490), s32*, 4), 0);
 }
 
@@ -817,7 +885,11 @@ M2C_UNK func_8001ABE8();                            /* extern */
 M2C_UNK func_8001AC3C();                            /* extern */
 u32 func_800566BC(s32);                             /* extern */
 
-void func_890019C8(s32 arg0, s32 arg1, s32 arg2, s8 *arg3) {
+/**
+ * Draws title text with the two-color (prim/env) font style from `arg3`.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabItem_DrawTitleText(s32 arg0, s32 arg1, s32 arg2, s8 *arg3) {
     func_8001AB6C();
     func_8001A384(0x20, 0);
     func_8001AA9C(M2C_FIELD(arg3, u8 *, 0), M2C_FIELD(arg3, u8 *, 1), M2C_FIELD(arg3, u8 *, 2), M2C_FIELD(arg3, u8 *, 3));
@@ -830,7 +902,11 @@ void func_890019C8(s32 arg0, s32 arg1, s32 arg2, s8 *arg3) {
 
 extern M2C_UNK D_800734A8;
 
-void func_89001A7C(s32 arg0, s32 arg1, char* arg2) {
+/**
+ * Draws `arg2` centered in the 376-pixel help area.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabItem_DrawCenteredText(s32 arg0, s32 arg1, char* arg2) {
     Font_BeginTranslucentTextRendering();
     Font_SetActive(0x10, 0);
     Gfx_SetEnvColor(M2C_FIELD(&D_800734A8, u8*, 0), M2C_FIELD(&D_800734A8, u8*, 1), M2C_FIELD(&D_800734A8, u8*, 2), M2C_FIELD(&D_800734A8, u8*, 3));
@@ -846,7 +922,11 @@ M2C_UNK func_8001AB6C();                            /* extern */
 M2C_UNK func_8001ABBC();                            /* extern */
 extern M2C_UNK D_800734A8;
 
-void func_89001B10(s32 arg0, s32 arg1, s32 arg2) {
+/**
+ * Draws `arg2` in the small font.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabItem_DrawSmallText(s32 arg0, s32 arg1, s32 arg2) {
     func_8001AB6C();
     func_8001A384(8, 0);
     func_8001AA9C(M2C_FIELD(&D_800734A8, u8 *, 0), M2C_FIELD(&D_800734A8, u8 *, 1), M2C_FIELD(&D_800734A8, u8 *, 2), M2C_FIELD(&D_800734A8, u8 *, 3));
@@ -865,19 +945,23 @@ extern char* D_8900A660[];
 extern char* D_8900A66C[];
 extern s8* D_8900A678[];
 s32 func_80031BC0(u8, char *);
-void func_89001B88(s32* arg0) {
+/**
+ * Draws the help line for the organize window's current state.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabItem_DrawHelpText(s32* arg0) {
     char sp2C[0x54];
     List89001B88* list;
 
     switch (arg0[0]) {
         case 1:
-            func_890019C8(arg0[0xC] + 0x58, arg0[0xD], D_8900A650[arg0[0x41]], D_8900A678[arg0[0x41]]);
+            LabItem_DrawTitleText(arg0[0xC] + 0x58, arg0[0xD], D_8900A650[arg0[0x41]], D_8900A678[arg0[0x41]]);
             break;
         case 2:
-            func_89001A7C(arg0[0xC] + 0x58, arg0[0xD], D_8900A660[arg0[0x41]]);
+            LabItem_DrawCenteredText(arg0[0xC] + 0x58, arg0[0xD], D_8900A660[arg0[0x41]]);
             break;
         case 3:
-            func_89001A7C(arg0[0xC] + 0x58, arg0[0xD], D_8900A66C[arg0[0x41]]);
+            LabItem_DrawCenteredText(arg0[0xC] + 0x58, arg0[0xD], D_8900A66C[arg0[0x41]]);
             break;
         case 4:
         case 6:
@@ -887,7 +971,7 @@ void func_89001B88(s32* arg0) {
             } else {
                 list = (List89001B88*)(arg0 + 0x79);
             }
-            func_89001B10(arg0[0xC] + 0x58, arg0[0xD], func_80031BC0((*list->data)[list->index * 2], sp2C));
+            LabItem_DrawSmallText(arg0[0xC] + 0x58, arg0[0xD], func_80031BC0((*list->data)[list->index * 2], sp2C));
             break;
     }
 }
@@ -897,8 +981,12 @@ extern u8 D_800735C4[];
 void func_8002B054(s8*, s32);
 void Window_DrawFrame(void*);
 void func_890017FC(s8* arg0, s32 x, s32 y, s32 flags, s32 icon);
-void func_890012C4(s8* arg0, s32 arg1);
-void func_89001CB0(s8 *arg0)
+void LabItem_DrawItemList(s8* arg0, s32 arg1);
+/**
+ * Draws the organize items window: frame, lists and help line.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabItem_DrawOrganizeWindow(s8 *arg0)
 {
   s32 v;
   s32 flags;
@@ -920,26 +1008,26 @@ void func_89001CB0(s8 *arg0)
     func_8002B054(arg0 + 0xA8, ((*((s32 *) (((s8 *) arg0) + 0x104))) == 1) ? (v) : (0));
  func_8002B054(arg0 + 0xD4, ((*((s32 *) (((s8 *) arg0) + 0x104))) == 2) ? (v) : (0)); func_890017FC(arg0, (*((s32 *) (((s8 *) arg0) + 4))) + 0xC, (*((s32 *) (((s8 *) arg0) + 8))) + 0xC, 0, *((s32 *) (((s8 *) arg0) + 0x1D4))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
     func_890017FC(arg0, (*((s32 *) (((s8 *) arg0) + 4))) + 0x13C, (*((s32 *) (((s8 *) arg0) + 8))) + 0xC, 0, *((s32 *) (((s8 *) arg0) + 0x1D8))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-    func_890012C4(arg0 + 0x1E4, (((*((s32 *) (((s8 *) arg0) + 0))) == 4) || ((*((s32 *) (((s8 *) arg0) + 0))) == 7)) ? (2) : ((((*((s32 *) (((s8 *) arg0) + 0))) == 5) || ((*((s32 *) (((s8 *) arg0) + 0))) == 6)) ? (0x10) : (0))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+    LabItem_DrawItemList(arg0 + 0x1E4, (((*((s32 *) (((s8 *) arg0) + 0))) == 4) || ((*((s32 *) (((s8 *) arg0) + 0))) == 7)) ? (2) : ((((*((s32 *) (((s8 *) arg0) + 0))) == 5) || ((*((s32 *) (((s8 *) arg0) + 0))) == 6)) ? (0x10) : (0))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
     flags = ((((*((s32 *) (((s8 *) arg0) + 0))) == 5) || ((*((s32 *) (((s8 *) arg0) + 0))) == 6)) ? 2 : 0); // FAKE: decomp slop, raw pointer casts stand in for struct fields
     flags |= (((*((s32 *) (((s8 *) arg0) + 0))) == 5) ? 0x200 : 0);
-    func_890012C4(arg0 + 0x2F8, flags);
+    LabItem_DrawItemList(arg0 + 0x2F8, flags);
     if (((*((s32 *) (((s8 *) arg0) + 0))) == 2) || ((*((s32 *) (((s8 *) arg0) + 0))) == 9)) // FAKE: decomp slop, raw pointer casts stand in for struct fields
     {
-      func_89000F5C(arg0 + 0x10C);
+      LabItem_DrawMenu(arg0 + 0x10C);
     }
     if (((*((s32 *) (((s8 *) arg0) + 0))) == 3) || ((*((s32 *) (((s8 *) arg0) + 0))) == 0xA)) // FAKE: decomp slop, raw pointer casts stand in for struct fields
     {
-      func_89000F5C(arg0 + 0x170);
+      LabItem_DrawMenu(arg0 + 0x170);
     }
-    func_89001B88((s32 *) arg0);
+    LabItem_DrawHelpText((s32 *) arg0);
     if (((((*((s32 *) (((s8 *) arg0) + 0))) == 9) || ((*((s32 *) (((s8 *) arg0) + 0))) == 0xA)) || ((*((s32 *) (((s8 *) arg0) + 0))) == 0xB)) || ((*((s32 *) (((s8 *) arg0) + 0))) == 0xC)) // FAKE: decomp slop, raw pointer casts stand in for struct fields
     {
       func_8002D024(arg0 + 0x4AC);
     }
     if ((*((s32 *) (((s8 *) arg0) + 0))) == 8)
     {
-      func_89000960(arg0 + 0x410);
+      LabItem_DrawCountSelector(arg0 + 0x410);
     }
   }
 }
@@ -965,7 +1053,7 @@ void func_890020C0(u8* arg0) {
     M2C_FIELD(arg0, s32**, 0x494)[M2C_FIELD(arg0, s32*, 0x140)] = M2C_FIELD(arg0, s32**, 0x494)[M2C_FIELD(arg0, s32*, 0x1A4)];
     if (LabItem_IsQuantitylessItemForOperation(item[0]) != 0) {
         func_89000020((unk_func_8830867C_02C_0CC*)(arg0 + 0x2F8), (void*)(CURSOR(arg0)->grid->data + CURSOR(arg0)->grid->stride * CURSOR(arg0)->selected));
-        func_89000048((LabItemCursor*)CURSOR(arg0));
+        LabItem_RemoveSelectedEntry((LabItemCursor*)CURSOR(arg0));
     } else {
         func_890000A4((s32*)(arg0 + 0x2F8), item[0], M2C_FIELD(arg0, s32*, 0x444));
         LabItem_SubtractSelectedItemQuantity((unk_func_8820BE14_02C_038*)CURSOR(arg0), M2C_FIELD(arg0, s32*, 0x444));
@@ -1023,7 +1111,11 @@ extern s8 D_89018648[];
 typedef struct Pair89002318 { u8 unk0; u8 unk1; } Pair89002318;
 typedef struct Ent89002318 { char unk0[0x10]; } Ent89002318;
 
-s32 func_89002318(s8* arg0) {
+/**
+ * Runs the organize items window's state machine (move, toss, deposit, withdraw).
+ * @unverified Name and comment guessed from the code.
+ */
+s32 LabItem_UpdateOrganizeWindow(s8* arg0) {
     s32 ret = 0;
     s32 idx;
     s32 next = 0;
@@ -1060,7 +1152,7 @@ s32 func_89002318(s8* arg0) {
             break;
 
         case 2:
-            v = func_89000FA4(arg0 + 0x10C);
+            v = LabItem_UpdateMenuCursor(arg0 + 0x10C);
             if (v == -1) {
                 *(s32*)arg0 = 1;
                 break;
@@ -1086,7 +1178,7 @@ s32 func_89002318(s8* arg0) {
             break;
 
         case 3:
-            v = func_89000FA4(arg0 + 0x170);
+            v = LabItem_UpdateMenuCursor(arg0 + 0x170);
             if (v == -1) {
                 next = 2;
                 break;
@@ -1111,7 +1203,7 @@ s32 func_89002318(s8* arg0) {
             break;
 
         case 4:
-            v = func_890013F8(arg0 + 0x1E4, 0);
+            v = LabItem_UpdateItemList(arg0 + 0x1E4, 0);
             if (v == -1) {
                 *(s32*)arg0 = 1;
                 break;
@@ -1136,7 +1228,7 @@ s32 func_89002318(s8* arg0) {
                 }
                 func_8003F6AC(2);
                 if (func_80031CC8(*ptr) == 0) {
-                    func_890008C8(arg0 + 0x410, *(s32*)(arg0 + 0x2F0) + 0x98,
+                    LabItem_InitCountSelector(arg0 + 0x410, *(s32*)(arg0 + 0x2F0) + 0x98,
                                   *(s32*)(arg0 + 0x2F4) + *(s32*)(arg0 + 0x218) - *(s32*)(arg0 + 0x210) + 0x2C,
                                   ptr[1], v);
                     *(s32*)arg0 = 8;
@@ -1163,7 +1255,7 @@ s32 func_89002318(s8* arg0) {
             break;
 
         case 8:
-            v = func_89000BEC(arg0 + 0x410);
+            v = LabItem_UpdateCountSelector(arg0 + 0x410);
             if (v == -1) {
                 *(s32*)arg0 = 4;
                 break;
@@ -1174,7 +1266,7 @@ s32 func_89002318(s8* arg0) {
             break;
 
         case 5:
-            v = func_890013F8(arg0 + 0x2F8, 0x200);
+            v = LabItem_UpdateItemList(arg0 + 0x2F8, 0x200);
             if (v == -1) {
                 *(s32*)arg0 = 4;
                 break;
@@ -1192,7 +1284,7 @@ s32 func_89002318(s8* arg0) {
             break;
 
         case 7:
-            v = func_890013F8(arg0 + 0x1E4, 0);
+            v = LabItem_UpdateItemList(arg0 + 0x1E4, 0);
             if (v == -1) {
                 func_8002D900(arg0 + 0x1E4);
                 *(s32*)arg0 = 4;
@@ -1208,7 +1300,7 @@ s32 func_89002318(s8* arg0) {
             break;
 
         case 6:
-            v = func_890013F8(arg0 + 0x2F8, 0);
+            v = LabItem_UpdateItemList(arg0 + 0x2F8, 0);
             if (v == -1) {
                 *(s32*)arg0 = 4;
                 break;
@@ -1254,17 +1346,17 @@ s32 func_89002318(s8* arg0) {
     if (next > 0) {
         switch (next) {
             case 2:
-                func_89000E98(arg0 + 0x10C, *(s32*)(arg0 + 4) + 0x1F, *(s32*)(arg0 + 8) + 0x29, *(s32*)(arg0 + 0x1DC),
+                LabItem_InitMenuWindow(arg0 + 0x10C, *(s32*)(arg0 + 4) + 0x1F, *(s32*)(arg0 + 8) + 0x29, *(s32*)(arg0 + 0x1DC),
                               *(s32*)(arg0 + 0x1E0), *(s32*)(arg0 + 0x1D4));
                 func_89000CF0(arg0 + 0x10C, *(s8**)(arg0 + 0x490));
                 break;
             case 3:
-                func_89000E98(arg0 + 0x170, *(s32*)(arg0 + 4) + 0x14F, *(s32*)(arg0 + 8) + 0x29, *(s32*)(arg0 + 0x1DC),
+                LabItem_InitMenuWindow(arg0 + 0x170, *(s32*)(arg0 + 4) + 0x14F, *(s32*)(arg0 + 8) + 0x29, *(s32*)(arg0 + 0x1DC),
                               *(s32*)(arg0 + 0x1E0), *(s32*)(arg0 + 0x1D8));
                 if (*(s32*)(arg0 + 0x104) == 2) {
                     func_89000CF0(arg0 + 0x170, *(s8**)(arg0 + 0x490));
                 }
-                func_89000D34(arg0 + 0x170, *(s32*)(arg0 + 0x1D4));
+                LabItem_DisableRow(arg0 + 0x170, *(s32*)(arg0 + 0x1D4));
                 *(s32*)(arg0 + 0x1A4) = 0;
                 Menu_SkipDisabledForward(arg0 + 0x19C);
                 break;
@@ -1321,7 +1413,11 @@ void LabItem_DrawTrainerInfo();
 void Window_SetRect(s8*, s32, s32, s32, s32);
 void Menu_Init(s8*, s32, s32, s32, s32, s32);
 void func_80027410(s8*, s8*, s32, s32, s32);
-void func_89002C10(s8* arg, s32 arg1, s32 arg2, s8* arg3) {
+/**
+ * Sets up the データをけす (delete data) window.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabItem_InitDeleteDataWindow(s8* arg, s32 arg1, s32 arg2, s8* arg3) {
     Win89002C10* arg0 = (Win89002C10*)arg;
     s32 pad; // FAKE: stack padding
     Window_SetRect(arg, arg1, arg2, 0x148, 0x14A);
@@ -1343,7 +1439,11 @@ void Window_DrawFrame(void*);
 void func_8002DAD8(void*, s32, s32, s32, s32);
 extern u8 D_8007356C[];
 extern u8 D_89018688[];
-void func_89002D14(s8* arg0, s32 arg1) {
+/**
+ * Draws the delete data window.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabItem_DrawDeleteDataWindow(s8* arg0, s32 arg1) {
     if (func_8002AE6C() == 0) {
         Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 0x30) - 7, M2C_FIELD(arg0, s32*, 8), D_8007356C);
         Window_DrawFrame(arg0 + 0x2C);
@@ -1361,7 +1461,11 @@ void func_89002D14(s8* arg0, s32 arg1) {
 
 s32 Menu_UpdateCursor(void*);
 
-s32 func_89002DE4(unk_func_8820E99C_030* arg0) {
+/**
+ * Moves the delete data cursor. Returns -1 on cancel, 1 on confirm.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 LabItem_UpdateDeleteDataCursor(unk_func_8820E99C_030* arg0) {
     s32 sp1C = 0;
     s32 dir;
 
@@ -1418,7 +1522,7 @@ void func_89002E58(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     M2C_FIELD(arg0, s32*, 0xD8) = 0;
     M2C_FIELD(arg0, s32*, 0xD4) = D_800603C0;
     func_8000B2F4(D_800603C0);
-    func_89001250(arg0 + 0xE0, M2C_FIELD(arg0, s32*, 4) + 0x88, M2C_FIELD(arg0, s32*, 8) + 0x36, arg4);
+    LabItem_InitItemList(arg0 + 0xE0, M2C_FIELD(arg0, s32*, 4) + 0x88, M2C_FIELD(arg0, s32*, 8) + 0x36, arg4);
     M2C_FIELD(arg0, s32*, 0x1F4) = arg3;
     M2C_FIELD(arg0, s32*, 0) = 1;
 }
@@ -1465,11 +1569,11 @@ void func_8900323C(s32 *arg0) {
 
     switch (arg0[0]) {
         case 1:
-            func_890019C8(arg0[0xC], arg0[0xD], D_8900A6CC[arg0[0x36]], D_8900A6D8[arg0[0x36]]);
+            LabItem_DrawTitleText(arg0[0xC], arg0[0xD], D_8900A6CC[arg0[0x36]], D_8900A6D8[arg0[0x36]]);
             break;
         case 2:
             list = (List89001B88 *)(arg0 + 0x38);
-            func_89001B10(arg0[0xC], arg0[0xD], func_80031BC0((*list->data)[list->index * 2], sp2C));
+            LabItem_DrawSmallText(arg0[0xC], arg0[0xD], func_80031BC0((*list->data)[list->index * 2], sp2C));
             break;
     }
 }
@@ -1495,13 +1599,13 @@ void func_890032E4(s8* arg0) {
         func_8002B054(arg0 + 0xA8, (M2C_FIELD(arg0, s32*, 0xD8) == 0) ? v : 0);
         func_8002B054(arg0 + 0x7C, (M2C_FIELD(arg0, s32*, 0xD8) == 1) ? v : 0);
         func_890030C8(M2C_FIELD(arg0, s32*, 4) + 0x88, M2C_FIELD(arg0, s32*, 8) + 0xC, M2C_FIELD(arg0, s8**, 0x1F4), 0);
-        func_890012C4(arg0 + 0xE0, (M2C_FIELD(arg0, s32*, 0) == 2) ? 2 : 0);
+        LabItem_DrawItemList(arg0 + 0xE0, (M2C_FIELD(arg0, s32*, 0) == 2) ? 2 : 0);
         func_8900323C((s32*)arg0);
     }
 }
 
 s32 func_8002B2B0(void *);
-s32 func_890013F8(void *, u32);
+s32 LabItem_UpdateItemList(void *, u32);
 s32 func_8900352C(s32* arg0) {
     s32 ret = 0;
 
@@ -1531,7 +1635,7 @@ s32 func_8900352C(s32* arg0) {
             }
             break;
         case 2:
-            if (func_890013F8(arg0 + 0x38, 0) == -1) {
+            if (LabItem_UpdateItemList(arg0 + 0x38, 0) == -1) {
                 arg0[0] = 1;
             }
             break;
@@ -1556,7 +1660,7 @@ typedef struct Ctx89003650 {
 s32 func_890002D4(Entry89003650*, s32, s32*);
 void func_890003C0(Entry89003650*);
 void func_89000448(s32, s32, s32, s8*);
-void func_8900147C(s8*, s32, s32, s8*, s32*, s32*);
+void LabItem_InitOrganizeWindow(s8*, s32, s32, s8*, s32*, s32*);
 extern s32 D_89019108;
 extern s32 D_89019118;
 extern s32 D_8901911C;
@@ -1579,6 +1683,6 @@ void func_89003650(Ctx89003650* arg0) {
         arg0->sel[i] = 0;
         i++;
     } while (i != 3);
-    func_8900147C(arg0->unk004, 0x26, 0x51, arg0->list0, arg0->sel, &arg0->idx);
+    LabItem_InitOrganizeWindow(arg0->unk004, 0x26, 0x51, arg0->list0, arg0->sel, &arg0->idx);
     arg0->unk000 = 1;
 }

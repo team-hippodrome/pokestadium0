@@ -811,7 +811,7 @@ s32 func_891049E8(s32);
 /*
  * func_89104B48
  *
- * Fragment entry point.  It has the same steps as func_89004560 (and the Pokedex
+ * Fragment entry point.  It has the same steps as LabTerminal_Init (and the Pokedex
  * entry function Pokedex_Init), differing only in the functions it calls in
  * steps 4 and 5.  Neither argument is used.  The steps are:
  *

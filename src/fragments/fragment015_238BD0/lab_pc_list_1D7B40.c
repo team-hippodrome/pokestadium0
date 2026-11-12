@@ -473,7 +473,7 @@ extern s32 D_8900A7EC[];
 extern s32 D_8900A804[];
 extern s32 D_8900A81C[];
 extern s32 D_8900A834[];
-void func_890019C8(s32, s32, s32, s32);
+void LabItem_DrawTitleText(s32, s32, s32, s32);
 void PcSort_DrawMonStats();
 
 void func_890059D0(s32* arg0) {
@@ -482,7 +482,7 @@ void func_890059D0(s32* arg0) {
 
     switch (arg0[0]) {
         case 1:
-            func_890019C8(arg0[0x30 / 4] + 0x58, arg0[0x34 / 4] + 0x1A, D_8900A7EC[idx], D_8900A834[idx]);
+            LabItem_DrawTitleText(arg0[0x30 / 4] + 0x58, arg0[0x34 / 4] + 0x1A, D_8900A7EC[idx], D_8900A834[idx]);
             break;
         case 2:
             func_89005958(arg0[0x30 / 4], arg0[0x34 / 4], D_8900A804[idx]);
@@ -562,13 +562,13 @@ void func_89005AE0(s8* arg0) {
 }
 
 void func_89000020(void* arg0, void* arg1);
-void func_89000048(void*);
+void LabItem_RemoveSelectedEntry(void*);
 
 void func_89005E14(s8* arg0) {
     M2C_FIELD(arg0, s32**, 0x3AC)[M2C_FIELD(arg0, s32*, 0x248)] = 1;
     M2C_FIELD(arg0, s32**, 0x3AC)[M2C_FIELD(arg0, s32*, 0x1D0)] = M2C_FIELD(arg0, s32**, 0x3AC)[M2C_FIELD(arg0, s32*, 0x248)];
     func_89000020(arg0 + 0x31C, (void*)(M2C_FIELD(arg0, s32**, 0x294)[3] * M2C_FIELD(arg0, s32*, 0x29C) + M2C_FIELD(arg0, s32**, 0x294)[0]));
-    func_89000048(arg0 + 0x294);
+    LabItem_RemoveSelectedEntry(arg0 + 0x294);
 }
 
 void func_80027654(s32* matrix, u8* out, s32 row);
@@ -597,10 +597,10 @@ void func_89005F2C(s8* arg0) {
     M2C_FIELD(arg0, s32**, 0x3AC)[M2C_FIELD(arg0, s32*, 0x28C)] = M2C_FIELD(arg0, s32**, 0x3AC)[M2C_FIELD(arg0, s32*, 0x290)];
 }
 
-void func_89000048(void*);
+void LabItem_RemoveSelectedEntry(void*);
 
 void func_89005FD8(s8* arg0) {
-    func_89000048(arg0 + 0x294);
+    LabItem_RemoveSelectedEntry(arg0 + 0x294);
     M2C_FIELD(arg0, s32**, 0x3AC)[M2C_FIELD(arg0, s32*, 0x28C)] = 1;
     M2C_FIELD(arg0, s32*, 0) = (((M2C_FIELD(arg0, s32*, 0x28C) == 0) ? 1 : 0) == M2C_FIELD(M2C_FIELD(arg0, s8**, 0x294), s32*, 8)) ? 1 : 4;
 }

@@ -197,37 +197,41 @@ extern u8 D_800735C4[];
 void func_8002B054(s8*, s32);
 void Window_DrawFrame(void*);
 s32 func_8002B2B0(void *);
-s32 func_890013F8(void *, u32);
+s32 LabItem_UpdateItemList(void *, u32);
 
 M2C_UNK func_800069CC();
-void func_8900379C(void* arg) {
+/**
+ * Draws the item organizer for its current state.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabItem_DrawScreen(void* arg) {
     s8* arg0 = arg;
 
     func_800069CC();
-    func_8900054C();
+    LabItem_DrawBackground();
     switch (M2C_FIELD(arg0, s32*, 0)) {
         case 1:
-            func_89001CB0(arg0 + 4);
+            LabItem_DrawOrganizeWindow(arg0 + 4);
             break;
         case 2:
-            func_89001CB0(arg0 + 4);
+            LabItem_DrawOrganizeWindow(arg0 + 4);
             func_8002CAD0(arg0 + 0x4E8);
             break;
         case 3:
-            func_89001CB0(arg0 + 4);
-            func_89000694(arg0 + 0x54C);
+            LabItem_DrawOrganizeWindow(arg0 + 4);
+            LabItem_DrawConfirmWindow(arg0 + 0x54C);
             break;
         case 4:
-            func_89002D14(arg0 + 0x604, 2);
+            LabItem_DrawDeleteDataWindow(arg0 + 0x604, 2);
             break;
         case 5:
-            func_89002D14(arg0 + 0x604, 0x10);
+            LabItem_DrawDeleteDataWindow(arg0 + 0x604, 0x10);
             func_890032E4(arg0 + 0x68C);
             break;
         case 6:
-            func_89002D14(arg0 + 0x604, 0x10);
+            LabItem_DrawDeleteDataWindow(arg0 + 0x604, 0x10);
             func_890032E4(arg0 + 0x68C);
-            func_89000694(arg0 + 0x54C);
+            LabItem_DrawConfirmWindow(arg0 + 0x54C);
             break;
     }
 }

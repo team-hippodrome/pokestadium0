@@ -793,11 +793,11 @@ void PcBox_InitOperationWindow(s8* arg0, s32 x, s32 y, s8* arg3) {
 
 extern s32 D_8900A924[];
 extern s32 D_8900A93C[];
-void func_890019C8(s32, s32, s32, s32);
+void LabItem_DrawTitleText(s32, s32, s32, s32);
 void func_89008EF0(s8* arg0) {
     if (M2C_FIELD(arg0, s32*, 0) == 1) {
         if (0) {}  // karodo
-        func_890019C8(M2C_FIELD(arg0, s32*, 0x30) + 0x58, M2C_FIELD(arg0, s32*, 0x34), D_8900A924[M2C_FIELD((0, arg0), s32*, 0x15C)], D_8900A93C[M2C_FIELD(arg0, s32*, 0x15C)]); // FAKE: comma expression
+        LabItem_DrawTitleText(M2C_FIELD(arg0, s32*, 0x30) + 0x58, M2C_FIELD(arg0, s32*, 0x34), D_8900A924[M2C_FIELD((0, arg0), s32*, 0x15C)], D_8900A93C[M2C_FIELD(arg0, s32*, 0x15C)]); // FAKE: comma expression
     }
 }
 
