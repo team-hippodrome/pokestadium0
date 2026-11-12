@@ -754,3 +754,14 @@ owned bits raised つかまえたかず to 7, which is `GbSave_CountOwnedSpecies
 It counts bits that `GbSave_MarkSpeciesHeld` (was `GbSave_MarkSeenBits`)
 rebuilds from the party and boxes on every entry, so a bit added by hand was
 cleared again.
+
+## Order screen
+
+On the order screen of a COM free battle:
+
+* COM's panel is ready at once (じゅんび かんりょう！) from scripted input
+  (`BattleMenu_FeedScriptedComOrderInput`).
+* Each C/A/B button adds a slot (`BattleMenu_SelectSlotOrShowSummary`), and L
+  clears the picks (`BattleMenu_UndoSelections`).
+* After six picks, 「これで いいですか？ はい / えらびなおす」 appears, and はい
+  commits the order (`BattleMenu_CommitOrderSelection`).
