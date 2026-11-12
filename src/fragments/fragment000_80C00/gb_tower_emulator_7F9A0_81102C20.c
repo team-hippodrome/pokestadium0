@@ -89,7 +89,7 @@ s32 func_811020A8(void *arg0);
 
 s32 func_80051110(s32, s8 *, s8 *);             /* extern */
 
-s32 func_81102168(s8 *arg0);
+s32 GbPak_CheckCartInserted(s8 *arg0);
 
 s32 func_81101FE8(s8 *);                            /* extern */
 s32 GbPak_WriteVerifiedSramBlock(s32, s32, s32);                     /* extern */
@@ -98,7 +98,7 @@ s32 GbPak_WriteVerifiedSramBlock(s32, s32, s32);                     /* extern *
  * GbPak_ProbeCartridge
  *
  * Returns 0 right away when bit 0 of the byte at arg0 + 0x9B is set.
- * Otherwise runs func_81102168(arg0), then func_81101FE8(arg0) while the
+ * Otherwise runs GbPak_CheckCartInserted(arg0), then func_81101FE8(arg0) while the
  * result is 0, then, if bit 0 of the byte at 0x9B is (now) set and the byte
  * at 0x98 is non-zero, func_811020A8(arg0), then
  * GbPak_WriteVerifiedSramBlock(byte 0x9C, word 0x94, byte 0x98), stopping at the first
@@ -162,7 +162,7 @@ s32 GbPak_CheckTransferStatus(OSPfs* arg0);
 s32 GbPak_ProbeCartridge(u8*);
 s32 func_81102280(u8*, s32);
 s32 GbPak_CheckTransferStatus(OSPfs*);
-s32 func_81102460(u8* arg0);
+s32 GbPak_ReadRomSummed(u8* arg0);
 
 s32 GbPak_ProbeCartridge(u8*);
 s32 func_81102344(u8*, s32);
@@ -177,7 +177,7 @@ extern volatile u8 D_81156476;
 extern OSMesgQueue D_81156458;
 s32 func_8004CFB0(OSMesgQueue*, s32, s32);
 
-s32 func_81102970(s32 chan, s32 bank);
+s32 GbPak_RequestBankLoad(s32 chan, s32 bank);
 
 extern volatile u8 D_81156475;
 extern volatile u8 D_81156476;
@@ -185,7 +185,7 @@ extern volatile u8 D_81156477;
 extern OSMesgQueue D_81156458;
 s32 func_8004CFB0(OSMesgQueue*, s32, s32);
 
-s32 func_81102AC8(s32 arg0);
+s32 GbPak_WriteBackDirtySramBlock(s32 arg0);
 
 /**
  * Reads each clean 0x100-byte block of cartridge RAM back and compares it with the cached copy; a
@@ -204,7 +204,7 @@ s32 GbPak_VerifyRamBlocks(s32 arg0) {
     ch2 = ch;
     retries = 20;
     for (;;) {
-        r = func_81102AC8(arg0);
+        r = GbPak_WriteBackDirtySramBlock(arg0);
         if (r >= 3) {
         fail:
             for (i = 0; i < ch->ramSize >> 8; i++) {
@@ -239,7 +239,7 @@ restart:
                 if (retries == 0) {
                     goto fail;
                 }
-                if ((func_81102168((s8*)ch) != 0) || ((ch->unk98 != 0) && (func_811020A8(ch) != 0))) {
+                if ((GbPak_CheckCartInserted((s8*)ch) != 0) || ((ch->unk98 != 0) && (func_811020A8(ch) != 0))) {
                     goto fail;
                 }
                 retries--;
@@ -299,7 +299,8 @@ void func_81102EB0(u8*, s32);
 /**
  * Selects the SRAM bank for the address, then writes a 0x20-byte block at 0xA000 + offset and
  * reads it back until three writes in a row compare equal.
- * @unverified Name and comment from the code; no Transfer Pak was emulated.
+ * Seen in play (2026-11-12): wrote and read back 0x55, 0xAA and 0xAC blocks at GB 0xA000 when the
+ * GB item started.
  */
 s32 GbPak_WriteVerifiedSramBlock(s32 arg0, s32 arg1, s32 arg2) {
     GbpakChannel811023DC* ch = &D_811561C8[arg0];
@@ -344,7 +345,9 @@ s32 GbPak_CheckGen1SaveChecksum(s8*);
 /**
  * Game Boy Pak I/O thread: takes a channel number from the queue and serves that channel's
  * request (init and read the cartridge ID, read or write cartridge RAM). 0xFF ends the thread.
- * @unverified Name and comment from the code; no Transfer Pak was emulated.
+ * Seen in play (2026-11-12): serviced requests 6 (bank load with checksum check), 8 (status) and
+ * 4 (power off) while Green loaded. A bank whose 0x2000-byte sums differ from the table sets
+ * error 1.
  */
 void GbPak_IoThreadMain(s32 arg0) {
     s32 pad0; // FAKE
@@ -384,7 +387,7 @@ void GbPak_IoThreadMain(s32 arg0) {
             if (osGbpakReadId(pfs, (OSGbpakId*)idp, &ch->status) != 0) {
                 goto error;
             }
-            if (func_81102168((s8*)ch) != 0) {
+            if (GbPak_CheckCartInserted((s8*)ch) != 0) {
                 goto error;
             }
             if (func_81101FE8((s8*)ch) != 0) {
@@ -419,7 +422,7 @@ void GbPak_IoThreadMain(s32 arg0) {
         idp = (u8*)ch;
         switch (ch->request & 0x7F) {
             case 1:
-                if (func_81102460((u8*)ch) != 0) {
+                if (GbPak_ReadRomSummed((u8*)ch) != 0) {
                     goto error;
                 }
                 break;
@@ -450,7 +453,7 @@ void GbPak_IoThreadMain(s32 arg0) {
                 goto error;
             case 6:
                 *(s32*)ch->unk88 = ch->sum;
-                if (func_81102460((u8*)ch) != 0) {
+                if (GbPak_ReadRomSummed((u8*)ch) != 0) {
                     goto error;
                 }
                 if ((((u16*)ch->bankEntry)[1] ^ (ch->sum - *(s32*)ch->unk88)) & 0xFFFF) {
@@ -459,7 +462,7 @@ void GbPak_IoThreadMain(s32 arg0) {
                 *(s32*)ch->unk88 = ch->sum;
                 ch->buf += ch->size;
                 ch->addr += ch->size;
-                if (func_81102460((u8*)ch) != 0) {
+                if (GbPak_ReadRomSummed((u8*)ch) != 0) {
                     goto error;
                 }
                 if ((((u16*)ch->bankEntry)[2] ^ (ch->sum - *(s32*)ch->unk88)) & 0xFFFF) {
@@ -515,7 +518,7 @@ void GbPak_IoThreadMain();
 /**
  * Clears the four Transfer Pak channel records, gives each its OSPfs and starts the Game Boy Pak
  * I/O thread (GbPak_IoThreadMain) on the given message queue.
- * @unverified Name and comment from the code; no Transfer Pak was emulated.
+ * Seen in play (2026-11-12): runs when the GB item is entered, before the cartridge loads.
  */
 void GbPak_StartIoThread(s32 arg0, s32 arg1, s32 arg2) {
     s32 i;
@@ -845,7 +848,8 @@ void func_80052100(void*, s32);
 /**
  * Draws one 12x11 frame of the animated Transfer Pak access icon; direction selects
  * the mirrored (zero) or normal direction, frame selects the frame (0-10).
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): draws the animated pak icon on the 「ロードちゅう」 banner below the GB
+ * screen while Green loads.
  */
 void GbEmu_DrawAccessIcon(u16* arg0, s32 arg1, s32 arg2) {
     u16* src;
@@ -1045,11 +1049,11 @@ s32 GbEmu_AllocAligned64(s32 arg0, M2C_UNK arg1)
   return new_var; // FAKE: permuter temp
 }
 
-s32 func_81102970(s32, s32);                     /* extern */
+s32 GbPak_RequestBankLoad(s32, s32);                     /* extern */
 extern u8 D_811565A0;
 
 void func_81104B60(s32 arg0) {
-    func_81102970(D_811565A0, arg0);
+    GbPak_RequestBankLoad(D_811565A0, arg0);
 }
 
 /**
@@ -1072,7 +1076,9 @@ extern u8 D_81122854[];
 /**
  * Compares the cartridge header title and version bytes with the four known cartridges in
  * D_81122854 and returns 4..1 for a match, 0 for none.
- * @unverified Name and comment from the code; no Transfer Pak was emulated.
+ * Seen in play (2026-11-12): the table D_81122854 holds YELLOW, BLUE, GREEN and RED with
+ * destination 0 (Japan) and licensee 01, so it returns 4 Yellow, 3 Blue, 2 Green, 1 Red; Pocket
+ * Monsters Green got 2 and went on to load. The version byte is not compared.
  */
 s32 GbPak_IdentifyCartridge(u8* arg0) {
     u8 buf[8];
@@ -1124,7 +1130,8 @@ extern s32 D_81154C48;
 /**
  * Blacks out the screen, resets the VI X scale, stores the error code in D_81154C48 and returns
  * -1.
- * @unverified Name and comment from the code.
+ * Seen in play (2026-11-12): error 1 after a failed bank checksum blacked out the screen and led
+ * to the 「64GBパックが ただしくセットされていません」 screen.
  */
 s32 GbEmu_BlackScreenAndFail(s32 arg0) {
     osViBlack(1);
@@ -1140,7 +1147,7 @@ s32 func_80025BD8(void);
 void func_80052DC0(s32);
 void func_8005C280(f32);
 void func_81100020(void);
-void func_811027A8(GbpakChannel811023DC*);
+void GbPak_QueueNextBankLoad(GbpakChannel811023DC*);
 void func_81106CC8(u16*, u8 (*)[0xC80], s32, s32);
 void func_81117B20(Screen81104930*);
 extern u8 D_8111E570[];
@@ -1162,7 +1169,18 @@ extern u8 D_81122694[];
 extern u8 D_81122774[];
 extern f32 D_FLT_81154254;
 
-s32 func_81104DD0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
+/**
+ * Starts a Game Boy session on Transfer Pak channel arg3: allocates the GB memory, ROM and RAM
+ * buffers and identifies the cartridge on every port (GbPak_IdentifyCartridge). A cartridge
+ * without a bank list (Yellow, or a revision the tables don't cover) has its four SRAM banks and
+ * whole ROM copied before play; Red, Green and Blue instead stream their banks in the background
+ * while the game runs. For a streamed load it keeps ROM bytes 0x000-0x101 in D_811565A8 and
+ * replaces them with the boot stub D_8111E570, which ends in `jr $` at 0x100. GbEmu_UpdateFrame
+ * puts the real bytes back once the GB PC reaches 0x100 while banks are still loading. Seen in
+ * play: with Green this showed the 「ロードちゅう」 banner and the Nintendo logo, then the game's own
+ * copyright screen.
+ */
+s32 GbEmu_LoadCartridge(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
     GbpakChannel811023DC* cur;
     GbpakChannel811023DC* slot;
     u8* buf;
@@ -1304,9 +1322,9 @@ s32 func_81104DD0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
         func_811047A0(0);
         func_8005C0A0();
         D_81156476 = 1;
-        func_81102970(D_811565A0, 0);
+        GbPak_RequestBankLoad(D_811565A0, 0);
         while (*cur->bankState != 0) {
-            func_811027A8(cur);
+            GbPak_QueueNextBankLoad(cur);
             if (cur->error != 0) {
             fail:
                 GbEmu_BlackScreenAndFail(1);

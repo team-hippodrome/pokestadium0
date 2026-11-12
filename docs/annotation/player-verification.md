@@ -466,3 +466,34 @@ these screens got names from their code and from the moment they ran.
 Not reached: the screens after a tournament win. Scripted inputs in a
 tournament battle didn't land reliably, and setting COM HP mid-battle stalled
 the next send-out once.
+
+## The GB item with a Japanese cartridge
+
+These screens were played with Pocket Monsters Green (Rev 1) in an emulated
+Transfer Pak. Julius uploaded the cartridges, which are used only locally and
+are never committed. With the pak inserted, the main menu enables GB but warns
+「GBのポケモンがいない」, because the save is blank. ずかん, てもち and とうろく
+stay greyed out.
+
+* Cartridge check. `GbPak_IdentifyCartridge` compares the header with a table
+  holding YELLOW, BLUE, GREEN and RED. Each entry needs destination 0 (Japan)
+  and licensee 01, and the version byte is not compared. So Zero accepts
+  Pocket Monsters Pikachu (Yellow) even though its title screen predates it.
+* Streaming. Red, Green and Blue are streamed bank by bank while the game
+  runs, behind the 「ロードちゅう」 banner. Each bank's two 0x2000-byte halves
+  are summed and compared with tables for Red v0/v1, Green v0/v1 and Blue v0
+  (D_811223F4 ... D_81122774). Yellow has no table, so it is copied whole
+  before play. All five tables match the uploaded dumps.
+* Mapper writes. `GbPak_WriteMapperRegister` (was WriteFilledRegisterBlock)
+  writes a 32-byte block with the value only in its last byte. The debugger
+  read byte 0, so the ROM bank never changed and the first bank checksum
+  failed with 「64GBパックが ただしくセットされていません」. That was fixed in the
+  debugger (pj64-pokestadium-debug 455668a).
+* Boot hand-off. During streaming the GB runs a boot stub that ends in
+  `jr $` at 0x100. Once the GB PC reaches 0x100, `GbEmu_UpdateFrame` puts the
+  real header bytes back. The emulated pak loads faster than the stub runs, so
+  the hand-off was done by hand. After that Green showed its copyright screen
+  and the Gengar and Nidorino intro inside Zero's GB frame
+  (「△でメニュー」).
+* The GB CPU core is the asm function func_81118018. It keeps the GB PC in
+  `s7` and dispatches on the opcode byte; the handler at 0x81119090 is `jr e`.

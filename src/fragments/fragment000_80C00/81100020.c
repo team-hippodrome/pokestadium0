@@ -281,7 +281,7 @@ void func_800535A0(u8*);
 void func_800567E0(u8*, u8*, s32);
 void func_80058FB0(s32);
 void GbPak_StartIoThread(s32, s32, u8*);
-s32 func_81104DD0(s32, s32, s32, s32, s8*);
+s32 GbEmu_LoadCartridge(s32, s32, s32, s32, s8*);
 void AudioLoad_Init(void);
 void func_811171DC(void);
 void func_81117288(s32);
@@ -314,7 +314,7 @@ void func_811008DC(s8* arg0) {
         D_8111E308 = 0;
     }
     D_81154C4F = D_8111E308;
-    switch (func_81104DD0(*(s32*)(D_81154C30[D_81154C3C] + 8), D_81154C38, 0x158000, func_80025BD8(), arg0)) {
+    switch (GbEmu_LoadCartridge(*(s32*)(D_81154C30[D_81154C3C] + 8), D_81154C38, 0x158000, func_80025BD8(), arg0)) {
         case 1:
         default:
             D_81154C4E = 1;
