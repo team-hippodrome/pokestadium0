@@ -1414,7 +1414,7 @@ s32 GbSave_CountSpeciesProgressField036(s32 arg0) {
     s32 i;
     s32 temp_v1 = 0;
 
-    for (i = 0; i < 0x97; i++) {
+    for (i = 0; i < 151; i++) {
         temp_v1 += (sGbSavePorts[arg0].unk_40[0x31 + i / 8] >> (i % 8)) & 1;
     }
 
@@ -1436,7 +1436,7 @@ s32 GbSave_CountSpeciesProgressField023(s32 arg0) {
     s32 i;
     s32 temp_v1 = 0;
 
-    for (i = 0; i < 0x97; i++) {
+    for (i = 0; i < 151; i++) {
         temp_v1 += (sGbSavePorts[arg0].unk_40[0x1E + i / 8] >> (i % 8)) & 1;
     }
 
@@ -1450,7 +1450,7 @@ s32 GbSave_CountSpeciesProgressField06(s32 arg0) {
     s32 i;
     s32 temp_v1 = 0;
 
-    for (i = 0; i < 0x97; i++) {
+    for (i = 0; i < 151; i++) {
         temp_v1 += (sGbSavePorts[arg0].unk_05[i / 8] >> (i % 8)) & 1;
     }
 

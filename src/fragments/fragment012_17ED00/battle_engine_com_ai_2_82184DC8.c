@@ -389,7 +389,7 @@ s32 BattleAi_GetBestDamage(u8 *arg0, u8 *arg1, s32 arg2)
     goto slots;
   }
 
-  for (i = 0; i < 0x4E; i++)
+  for (i = 0; i < 78; i++)
   {
     move = D_82194578[i];
     if (((move != 0) && (((move != SELFDESTRUCT) && (move != EXPLOSION)) || (arg2 > 0))) && (BattleAi_MayKnowMove(arg0, move) != 0))

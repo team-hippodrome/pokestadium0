@@ -136,7 +136,7 @@ void BattleMenu_DrawMovePanel(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3)
         BattleHud_DrawBorderTile(arg1 + 0xC0, arg2 + i * 8, 8, 8, D_03009740);
     }
     BattleHud_DrawBorderTile(arg1 + 0xC0, arg2 + 0x33, 8, 8, D_030097C0);
-    for (i = 1; i < 0x18; i++) {
+    for (i = 1; i < 24; i++) {
         BattleHud_DrawBorderTile(arg1 + i * 8, arg2 - 1, 8, 8, D_03009940);
         BattleHud_DrawBorderTile(arg1 + i * 8, arg2 + 0x33, 8, 8, D_030098C0);
     }
@@ -932,7 +932,7 @@ void func_8211D06C(void) {
         gDPSetRenderMode(gDisplayListHead++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
         gDPSetTexturePersp(gDisplayListHead++, G_TP_NONE);
         gDPSetEnvColor(gDisplayListHead++, 0xFF, 0xFF, 0xFF, D_8219A4F0[1]);
-        for (i = 0, tex = D_03001DA0; i != 0x2A; i++, tex += 0x90) {
+        for (i = 0, tex = D_03001DA0; i != 42; i++, tex += 0x90) {
             func_8001BCB4(0x58, i + 0x63, 0x90, 1, tex, 0x90, 0);
         }
         gDPPipeSync(gDisplayListHead++);

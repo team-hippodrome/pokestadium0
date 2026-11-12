@@ -1249,7 +1249,7 @@ void func_82007D94(s8* arg0, s32 arg1) {
     s8* entry;
 
     if (func_8002AE6C() == 0) {
-        for (i = 0; i < 0x2A; i++) {
+        for (i = 0; i < 42; i++) {
             gSPDisplayList(gDisplayListHead++, D_80060270);
             func_80029028((i % 7) * 0x4F + x0, (i / 7) * 0x3C + y0, 0x4F, 0x3C, D_82009204[i & 1]);
         }

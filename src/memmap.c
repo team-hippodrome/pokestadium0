@@ -235,7 +235,7 @@ uintptr_t Memmap_GetLoadedFragmentVaddr(uintptr_t addr) {
     struct MemoryMap* fraglist = gFragments;
     int i, UNUSED j;
 
-    for (i = 0, fraglist = gFragments; i < 0xF0; i++, fraglist++) {
+    for (i = 0, fraglist = gFragments; i < 240; i++, fraglist++) {
         if (addr >= fraglist->vaddr) {
             size_t diff = addr - fraglist->vaddr;
             if (diff < fraglist->size) {

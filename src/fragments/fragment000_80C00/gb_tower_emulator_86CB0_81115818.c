@@ -854,7 +854,7 @@ void GbAudio_RampToSilence(void) {
     s32 idx;
 
     GbApu_ResetChannels();
-    for (i = 0, idx = 0; i != 0x280; i++) {
+    for (i = 0, idx = 0; i != 640; i++) {
         ((s16*)sp34)[idx + 0] = x;
         ((s16*)sp34)[idx + 1] = y;
         x -= dx;

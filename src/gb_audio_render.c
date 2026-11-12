@@ -752,7 +752,7 @@ void GbAudio_ClearInterpolationHistory(void) {
 void GbAudio_ClearOutputBuffer(void) {
     s32 i;
 
-    for (i = 0; i < 0xB80; i++) {
+    for (i = 0; i < 2944; i++) {
         D_800B41EC[i] = 0;
     }
     D_800FDED0 = 0;

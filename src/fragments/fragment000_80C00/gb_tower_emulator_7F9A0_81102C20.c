@@ -1335,7 +1335,7 @@ s32 GbEmu_LoadCartridge(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
             }
         }
         D_811565A4 = 1;
-        for (i = 0; i < 0x102; i++) {
+        for (i = 0; i < 258; i++) {
             D_811565A8[i] = D_81156540.unk_1C[i];
             D_81156540.unk_1C[i] = D_8111E570[i];
         }

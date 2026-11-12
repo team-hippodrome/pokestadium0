@@ -802,7 +802,7 @@ void AudioHeap_ClearCurrentAiBuffer(void) {
     s32 i;
 
     D_811859C4[idx] = D_811858C2;
-    for (i = 0; i < 0x7E0; i++) {
+    for (i = 0; i < 2016; i++) {
         D_811859B8[idx][i] = 0;
     }
 }
@@ -875,7 +875,7 @@ s32 AudioHeap_ResetStep(void) {
             D_81184657 = 0;
             for (i = 0; i < 3; i++) {
                 D_811859C4[i] = D_811858B8.unk_08;
-                for (j = 0; j < 0x7E0; j++) {
+                for (j = 0; j < 2016; j++) {
                     D_811859B8[i][j] = 0;
                 }
             }

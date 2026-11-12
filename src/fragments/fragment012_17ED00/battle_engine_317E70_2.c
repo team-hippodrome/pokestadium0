@@ -146,7 +146,7 @@ Particle* Particle_Alloc(void) {
     s32 var_v0 = gParticlePoolIndex;
     Particle* var_a0 = &gParticlePool[var_v0];
 
-    for (i = 0; i < 0x12C; i++) {
+    for (i = 0; i < 300; i++) {
         if (var_a0->allocated == 0) {
             break;
         }
@@ -807,7 +807,7 @@ s32 Particle_CountActive(void) {
     s32 var_v1 = 0;
     Particle* ptr = gParticlePool;
 
-    for (i = 0; i < 0x12C; i++, ptr++) {
+    for (i = 0; i < 300; i++, ptr++) {
         if (ptr->allocated != 0) {
             var_v1++;
         }

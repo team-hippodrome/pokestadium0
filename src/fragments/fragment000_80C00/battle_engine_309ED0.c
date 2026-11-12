@@ -282,7 +282,7 @@ void AudioLoad_Init(void) {
 
     for (i = 0; i < 3; i++) {
         buf = D_811859B8[i] = func_81109868(D_811842B0, 0xFC0);
-        for (j = 0; j < 0x7E0; j++) {
+        for (j = 0; j < 2016; j++) {
             *buf++ = 0;
         }
     }
