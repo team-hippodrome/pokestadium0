@@ -63,6 +63,6 @@ Related engine function: `Battle_DetermineMoveOrder` returned 1 when the COM
 
 ### Field note for the struct pass
 
-`BattleMonRuntime.displayHp` (0x0C) is the Pokémon's real HP: the HUD, the
-COM AI and fainting all follow it. `currentHp` (0x12) is 0xFFFF between turns
+`BattleMonRuntime.hp` (0x0C, was `displayHp`) is the Pokémon's real HP: the HUD, the
+COM AI and fainting all follow it. `pendingHp` (0x12, was `currentHp`) is 0xFFFF between turns
 and only holds an HP value while damage is being worked out.

@@ -560,7 +560,7 @@ void ProcessBattleTurn(void) {
                         if (IsByteInArray(sBattleUser->moveCache.effect, D_8218AD80, 0xA) != 0) {
                             BattleEffect_ExecuteMoveEffect();
                         }
-                        if (sBattleTarget->displayHp == 0) {
+                        if (sBattleTarget->hp == 0) {
                             return;
                         }
                         Battle_ApplyRageContinuation();
@@ -807,22 +807,22 @@ s32 Battle_CheckSideDefeatAfterResidualStatus(ActivePokemon* arg0) {
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 Battle_CheckFaintAfterMove(void) {
-    if (sBattleTarget->displayHp == 0) {
+    if (sBattleTarget->hp == 0) {
         Battle_CheckAllBroughtFainted_Level(sActivePokemon[!sBattleScene.scene->actingSide]);
     }
 
-    if (sBattleUser->displayHp == 0) {
+    if (sBattleUser->hp == 0) {
         Battle_CheckAllBroughtFainted_Level(sActivePokemon[sBattleScene.scene->actingSide]);
     }
 
-    if ((sBattleUser->displayHp != 0) && (sBattleTarget->displayHp != 0) && (sBattleUser->currentHp == 0)) {
+    if ((sBattleUser->hp != 0) && (sBattleTarget->hp != 0) && (sBattleUser->pendingHp == 0)) {
         Battle_CheckAllBroughtFainted_PP(sActivePokemon[sBattleScene.scene->actingSide]);
         return 0;
-    } else if ((sBattleUser->displayHp != 0) && (sBattleTarget->displayHp != 0) && (sBattleUser->pendingStatusCondition & 0x18) &&
+    } else if ((sBattleUser->hp != 0) && (sBattleTarget->hp != 0) && (sBattleUser->pendingStatusCondition & 0x18) &&
                (sBattleUser->unk_0E == 0)) {
         Battle_CheckDefeatAtStatusHp(sActivePokemon[sBattleScene.scene->actingSide]);
         return 0;
-    } else if ((sBattleUser->displayHp != 0) && (sBattleTarget->displayHp != 0) && (sBattleUser->volatileStatusFlags & 0x80) &&
+    } else if ((sBattleUser->hp != 0) && (sBattleTarget->hp != 0) && (sBattleUser->volatileStatusFlags & 0x80) &&
                (sBattleUser->unk_10 == 0)) {
         Battle_CheckAllBroughtFainted_Status(sActivePokemon[sBattleScene.scene->actingSide]);
         return 0;
@@ -849,8 +849,8 @@ void Battle_ResolveMonAction(void)
   sBattleScene.scene->hitReactionKind = 0;
   sBattleScene.scene->rageFollowupPhase = 0;
   sBattleScene.scene->moveEffectKind = 0;
-  sp1C->currentHp = 0xFFFF;
-  sp18->currentHp = 0xFFFF;
+  sp1C->pendingHp = 0xFFFF;
+  sp18->pendingHp = 0xFFFF;
   Battle_ClearAllMessageQueues();
   ActivePokemon_CommitPendingStatus(sActivePokemon[0]);
   ActivePokemon_CommitPendingStatus(sActivePokemon[1]);
@@ -858,13 +858,13 @@ void Battle_ResolveMonAction(void)
   sBattleTarget = sp18;
   if ((sBattleScene.scene->mode == 6) || (sBattleScene.scene->mode == 5))
   {
-    sBattleUser->displayHp = 0x384;
-    sBattleTarget->displayHp = 0x384;
+    sBattleUser->hp = 0x384;
+    sBattleTarget->hp = 0x384;
     func_8210F2F4(sActivePokemon[0]);
     func_8210F2F4(sActivePokemon[1]);
     ProcessBattleTurn();
-    sBattleUser->displayHp = 0x384;
-    sBattleTarget->displayHp = 0x384;
+    sBattleUser->hp = 0x384;
+    sBattleTarget->hp = 0x384;
     sBattleUser->unk_0E = 0x384;
     sBattleTarget->unk_0E = 0x384;
     sBattleUser->unk_10 = 0x384;
@@ -880,8 +880,8 @@ void Battle_ResolveMonAction(void)
     {
       sp18->immobilizedReason &= ~0x20;
     }
-    ((BattleMonRuntime *) D_8219A3C0)->displayHp = 0x384; // FAKE: alias of sBattleUser via s8* symbol
-    ((BattleMonRuntime *) D_8219A3C4)->displayHp = 0x384; // FAKE: alias of sBattleTarget
+    ((BattleMonRuntime *) D_8219A3C0)->hp = 0x384; // FAKE: alias of sBattleUser via s8* symbol
+    ((BattleMonRuntime *) D_8219A3C4)->hp = 0x384; // FAKE: alias of sBattleTarget
     ((BattleMonRuntime *) D_8219A3C0)->unk_0E = 0x384; // FAKE
     ((BattleMonRuntime *) D_8219A3C4)->unk_0E = 0x384; // FAKE
     ((BattleMonRuntime *) D_8219A3C0)->unk_10 = 0x384; // FAKE
@@ -922,8 +922,8 @@ void BeginBattleForEntity(ActivePokemon* arg0) {
 
     sp24->moveSelectionLocked = 0;
     sp20->moveSelectionLocked = 0;
-    ptr1->currentHp = 0xFFFF;
-    ptr2->currentHp = 0xFFFF;
+    ptr1->pendingHp = 0xFFFF;
+    ptr2->pendingHp = 0xFFFF;
 
     sConfused = 1;
     sStatCanBeChangedFurther = 1;

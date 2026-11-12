@@ -104,7 +104,7 @@ u16 BattleAi_ApplyMoveEffectDamageOverride(BattleMonRuntime* arg0, BattleMonRunt
             break;
 
         case 40:
-            D_82199F50 = arg0->displayHp / 2;
+            D_82199F50 = arg0->hp / 2;
             if (D_82199F50 == 0) {
                 D_82199F50 = 1;
             }
@@ -439,11 +439,11 @@ s32 Battle_StepPartyHpToDisplay(ActivePokemon* arg0) {
     BattleMonRuntime* rt = &arg0->state.runtime;
     BattleMon* mon = &arg0->teamRoster->pokemonPicked[arg0->state.rosterIndex];
 
-    if (mon->hp == rt->displayHp) {
+    if (mon->hp == rt->hp) {
         return 1;
     }
-    mon->hp = Math_StepToS32(mon->hp, rt->displayHp, 1, 1);
-    if (mon->hp == rt->displayHp) {
+    mon->hp = Math_StepToS32(mon->hp, rt->hp, 1, 1);
+    if (mon->hp == rt->hp) {
         if (arg0->displayObject.objectType == 0x98) {
             return 1;
         }

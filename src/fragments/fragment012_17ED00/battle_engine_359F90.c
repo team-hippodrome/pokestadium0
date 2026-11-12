@@ -189,11 +189,11 @@ void Battle_ApplyDamage(void) {
             }
         }
     } else {
-        if (sBattleDamage < target->displayHp) {
-            target->displayHp -= sBattleDamage;
+        if (sBattleDamage < target->hp) {
+            target->hp -= sBattleDamage;
         } else {
-            sBattleDamage = target->displayHp;
-            target->displayHp = 0;
+            sBattleDamage = target->hp;
+            target->hp = 0;
         }
     }
 }
@@ -444,7 +444,7 @@ void Battle_InitPokemonRuntimeState(ActivePokemon* arg0) {
 
     sp24->unk_14 = sp28->rosterIndex;
     sp24->id = sp34->species.id;
-    sp24->displayHp = sp34->hp;
+    sp24->hp = sp34->hp;
     sp24->pendingStatusCondition = sp34->statusCondition;
     sp24->roster[6] = sp34->type1;
     sp24->roster[7] = sp34->type2;
@@ -765,10 +765,10 @@ s32 Battle_Effect_Metronome(void) {
 void Battle_ApplyPoisonOrBurnDamage(void) {
     u16 var_a0;
 
-    if (sBattleUser->currentHp != 0xFFFF) {
-        sBattleUser->unk_0E = sBattleUser->currentHp;
+    if (sBattleUser->pendingHp != 0xFFFF) {
+        sBattleUser->unk_0E = sBattleUser->pendingHp;
     } else {
-        sBattleUser->unk_0E = sBattleUser->displayHp;
+        sBattleUser->unk_0E = sBattleUser->hp;
     }
 
     var_a0 = (sBattleUser->maxHp >> 4) & 0xFFFF;
@@ -799,11 +799,11 @@ void Battle_ApplyLeechSeedDamage(void) {
     s32 v;
 
     if (!(sBattleUser->pendingStatusCondition & 0x18)) {
-        v = sBattleUser->currentHp;
+        v = sBattleUser->pendingHp;
         if (v != 0xFFFF) {
             sBattleUser->unk_10 = v;
         } else {
-            sBattleUser->unk_10 = sBattleUser->displayHp;
+            sBattleUser->unk_10 = sBattleUser->hp;
         }
     }
     v = (sBattleUser->maxHp >> 4) & 0xFFFF;
@@ -824,7 +824,7 @@ void Battle_ApplyLeechSeedDamage(void) {
     } else {
         sBattleUser->unk_10 = v - amount;
     }
-    sBattleTarget->unk_10 = sBattleTarget->displayHp;
+    sBattleTarget->unk_10 = sBattleTarget->hp;
     sBattleTarget->unk_10 = sBattleTarget->unk_10 + amount;
     v = sBattleTarget->maxHp;
     if (v < sBattleTarget->unk_10) {
@@ -848,7 +848,7 @@ void func_82111870(void);
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 Battle_ApplyResidualEffects(void) {
-    if (sBattleTarget->displayHp == 0) {
+    if (sBattleTarget->hp == 0) {
         return 0;
     }
 
@@ -859,7 +859,7 @@ s32 Battle_ApplyResidualEffects(void) {
             BattleMessage_Format(D_8219A520 + 0x248, 1, D_8218C708, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]));
         }
         Battle_ApplyPoisonOrBurnDamage();
-        sBattleTarget->unk_0E = sBattleTarget->displayHp;
+        sBattleTarget->unk_0E = sBattleTarget->hp;
     }
 
     if (sBattleUser->volatileStatusFlags & 0x80) {
@@ -868,7 +868,7 @@ s32 Battle_ApplyResidualEffects(void) {
         BattleMessage_Format(D_8219A520 + 0x288, 2, D_8218C70C, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]));
     }
 
-    if (sBattleUser->displayHp != 0) {
+    if (sBattleUser->hp != 0) {
         return 0;
     }
     return 1;

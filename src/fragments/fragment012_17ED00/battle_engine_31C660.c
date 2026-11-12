@@ -134,10 +134,10 @@ void Battle_Effect_DrainHP(void) {
         sBattleDamage = 1;
     }
 
-    if (sBattleUser->maxHp < sBattleUser->displayHp + sBattleDamage) {
-        sBattleUser->displayHp = sBattleUser->maxHp;
+    if (sBattleUser->maxHp < sBattleUser->hp + sBattleDamage) {
+        sBattleUser->hp = sBattleUser->maxHp;
     } else {
-        sBattleUser->displayHp += sBattleDamage;
+        sBattleUser->hp += sBattleDamage;
     }
 
     if (sBattleUser->moveCache.effect == 8) {
@@ -153,7 +153,7 @@ void Battle_Effect_DrainHP(void) {
  */
 void BattleEffect_Explosion(void) {
     sBattleScene.scene->moveEffectKind = 0x1E;
-    sBattleUser->displayHp = 0;
+    sBattleUser->hp = 0;
     sBattleUser->pendingStatusCondition = 0;
     sBattleUser->volatileStatusFlags &= ~0x80;
 }

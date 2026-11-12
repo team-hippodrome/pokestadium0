@@ -1930,7 +1930,7 @@ void func_82134EBC(ActivePokemon*, s32);
 s32 func_82124BF8(ActivePokemon*);
 /**
  * Phase 9 (moveEffectKind 9). The acting Pokemon takes damage from its own move: plays effect list 9, the
- * hit cue animation, and the damage shake while displayHp moves toward unk_12, then updates HP.
+ * hit cue animation and the damage shake, then commits pendingHp to hp.
  * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
 void BattleScene_PhaseRecoilDamage(CameraNode* arg0) {
@@ -1955,8 +1955,8 @@ void BattleScene_PhaseRecoilDamage(CameraNode* arg0) {
                 BattleScene_ResetCameraFrameCounter();
                 func_821237B0(arg0, sActivePokemon[sBattleScene.scene->actingSide]);
                 BattleMessage_ShowForSide(D_8219A520 + 0x408, sBattleScene.scene->actingSide);
-                self->displayHp = self->currentHp;
-                other->displayHp = other->currentHp;
+                self->hp = self->pendingHp;
+                other->hp = other->pendingHp;
                 sBattleScene.scene->phaseStep++;
             }
             break;

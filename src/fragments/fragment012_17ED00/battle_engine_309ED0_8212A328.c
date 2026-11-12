@@ -200,7 +200,7 @@ void func_8212A850(CameraNode* arg0, s32 arg1) {
         case 2:
             D_8219A560 = Battle_StepPartyHpToDisplay((s32)(ActivePokemon*)D_8219A540);
             D_8219A564 = Battle_StepPartyHpToDisplay(D_8219A544);
-            if (sp1C->displayHp != 0) {
+            if (sp1C->hp != 0) {
                 if (BattleScene_IsRowAnimWaitComplete((ActivePokemon*)D_8219A540, 0xF) != 0) {
                     sBattleScene.scene->phaseSubstep++;
                 }
@@ -318,7 +318,7 @@ void func_8212AD10(CameraNode* arg0, s32 arg1) {
         case 3:
             D_8219A560 = Battle_StepPartyHpToDisplay((s32)(ActivePokemon*)D_8219A540);
             D_8219A564 = Battle_StepPartyHpToDisplay(D_8219A544);
-            if (sp1C->displayHp != 0) {
+            if (sp1C->hp != 0) {
                 if (BattleScene_IsRowAnimWaitComplete((ActivePokemon*)D_8219A540, 0xF) != 0) {
                     sBattleScene.scene->phaseSubstep++;
                 }

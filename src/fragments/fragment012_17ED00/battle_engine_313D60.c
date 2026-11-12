@@ -72,12 +72,12 @@ void ShowDamageMessage(s32 attacker, s32 defender) {
     BattleMonRuntime* runtime = &sActivePokemon[defender]->state.runtime;
     s32 pct;
 
-    if (runtime->displayHp == 0) {
+    if (runtime->hp == 0) {
         BattleMessage_Format(D_8219A520 + 0x88, 0x21, D_8218C788, ActivePokemon_GetNickname(*atk));
         return;
     }
-    state->unk_28 = runtime->displayHp;
-    pct = (runtime->displayHp * 0x19) / (runtime->maxHp >> 2);
+    state->unk_28 = runtime->hp;
+    pct = (runtime->hp * 0x19) / (runtime->maxHp >> 2);
     if (pct >= 0x46) {
         BattleMessage_Format(D_8219A520 + 0x88, 0x21, D_8218C788, ActivePokemon_GetNickname(*atk));
     } else if (pct >= 0x28) {
@@ -132,9 +132,9 @@ void Battle_ResetEntityState(ActivePokemon* active_pokemon) {
     s32 var_v0;
 
     if (active_pokemon == sActivePokemon[0]) {
-        var_v0 = ((sp1C->unk_28 - temp_a2->displayHp) * 0x19) / (temp_a2->maxHp >> 2);
+        var_v0 = ((sp1C->unk_28 - temp_a2->hp) * 0x19) / (temp_a2->maxHp >> 2);
     } else {
-        var_v0 = ((sp18->unk_28 - temp_a1->displayHp) * 0x19) / (temp_a1->maxHp >> 2);
+        var_v0 = ((sp18->unk_28 - temp_a1->hp) * 0x19) / (temp_a1->maxHp >> 2);
     }
 
     if (var_v0 == 0) {
