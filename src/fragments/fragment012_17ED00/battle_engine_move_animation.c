@@ -245,7 +245,7 @@ void BattleScene_ResetOpponentStateFrameCounter(ActivePokemon* active_pokemon) {
 }
 
 /**
- * trigger on up on the dialogue box disappearing after move use
+ * trigger on up on the dialog box disappearing after move use
  * used to animate moves that throw rocks
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle and a Pound
  * turn.

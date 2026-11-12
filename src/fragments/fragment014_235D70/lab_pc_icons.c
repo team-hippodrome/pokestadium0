@@ -526,7 +526,7 @@ extern Color_RGBA8 D_88002230;
 void Window_SetRect(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 
 /**
- * Initialises the object arg0 (size and layout not established; same
+ * Initializes the object arg0 (size and layout not established; same
  * family as FreeBattle_InitLevelSumWarning). Calls Window_SetRect(arg0, arg1, arg2, 0x224, 0x60),
  * clears the words at 0x20, 0x24 and 0x28, sets the word at 0x14 to 0x2800,
  * copies the 4-byte color D_88002230 to arg0 + 0x18, then stores arg3 at 0x20

@@ -350,7 +350,7 @@ extern s32 D_82008F84;
 /**
  * FreeBattle_InitNamedTeam
  *
- * Initialises a slot-list object: sets its four header bytes to 1, 0, 0, 0
+ * Initializes a slot-list object: sets its four header bytes to 1, 0, 0, 0
  * and the word at +0x04 to 0; copies the string D_82008F84[arg1] (a table of string
  * pointers) into the buffer at +0x08 with HAL_Strcpy; clears the flag word of all six slots and then
  * sets them all with FreeBattle_MarkEmptySlots(slots, 0) (so the explicit clear is
@@ -383,7 +383,7 @@ void Window_InitLabeled(s8*, s32, s32, s32, Color_RGBA8, char*);
 void func_8000B2F4(s32);
 
 /**
- * Initialises the object arg0 (size and layout not established); a sibling of
+ * Initializes the object arg0 (size and layout not established); a sibling of
  * FreeBattle_InitLevelSumWarning. Calls Window_SetRect(arg0, arg1, arg2, 0x1AE, 0x124), clears the
  * words at 0x20, 0x24 and 0x28 and sets the word at 0x14 to 0x1001. Calls
  * Window_InitLabeled twice, on the sub-objects at arg0 + 0x2C (string D_82009B80)

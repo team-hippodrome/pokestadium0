@@ -232,7 +232,7 @@ s32 AudioHeap_ResetStep(void);
 void func_8110CB70(AudioTable8110DCC0*, u8*, s32);
 
 /**
- * Initialises the audio system: clears the heap and the audio globals, sets up
+ * Initializes the audio system: clears the heap and the audio globals, sets up
  * the message queues and the three output buffers, points the sequence, font
  * and sample tables at their ROM copies and fills in each font's sample bank
  * ids and instrument and drum counts. Same structure as AudioLoad_Init in the

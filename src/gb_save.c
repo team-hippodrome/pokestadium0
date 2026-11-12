@@ -766,7 +766,7 @@ void Particle_SetVelocityXZFromRotationY(Particle* arg0) {
 }
 
 /**
- * Initialises a text-box style object at arg0: stores the constants 0x14,
+ * Initializes a text-box style object at arg0: stores the constants 0x14,
  * 8, 6, 2 and 0 at offsets 0x24..0x34, runs Window_SetRect(arg0, arg1, arg2,
  * arg3, 0x18), then sets offset 0x14 to 1, offset 0x20 to the color arg4
  * (a 4-byte struct passed by value, stored with unaligned stores) and offset
@@ -1299,7 +1299,7 @@ void BattleInfoWidget_DrawLabel(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 ar
 /*
  * SavePrompt_Init
  *
- * Initialises a record like Pokedex_InitEntryWindow does, with the first five words
+ * Initializes a record like Pokedex_InitEntryWindow does, with the first five words
  * set by Window_SetRect to (arg1, arg2, 0xF8, 0xAE, 0), the words at +0x20,
  * +0x24 and +0x28 cleared and +0x14 set to 0x1001.  It then sets up two
  * sub-objects: func_80027804 is called on the area at arg0 + 0x50 with

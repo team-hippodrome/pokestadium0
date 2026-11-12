@@ -15,7 +15,7 @@ void func_80058410(void*, void*, s32);
 void func_8000A460(void*, void*);
 
 /**
- * Initialises the slot list arg0 together with its extra block arg1 (layouts
+ * Initializes the slot list arg0 together with its extra block arg1 (layouts
  * not established; see func_82008D7C for the caller). Sets byte 0 of arg0 to 1
  * and byte 1 to arg2, stores &D_800AAF50[arg2] (entries of 0x24 bytes) at
  * arg0 + 4 and GbSave_GetTrainerId(arg3) at arg0 + 0x18, and stores arg1 at
