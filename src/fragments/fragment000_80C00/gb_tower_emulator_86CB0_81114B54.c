@@ -5,10 +5,10 @@ s32 AudioLoad_IsFontLoadComplete(s32);
 s32 AudioLoad_IsSeqLoadComplete(s32);
 void AudioLoad_SetFontLoadStatus(s32, s32);
 void AudioLoad_SetSeqLoadStatus(s32, s32);
-u16 func_81112650(u8** stream, u8 kind);
-s32 func_811126B8(void*, void*, s32, s32);
-void func_81112BF0(s8* arg0, u16 mask);
-void func_81112E00(u8* arg0);
+u16 AudioSeq_GetScriptControlFlowArgument(u8** stream, u8 kind);
+s32 AudioSeq_HandleScriptFlowControl(void*, void*, s32, s32);
+void AudioSeq_SequencePlayerSetupChannels(s8* arg0, u16 mask);
+void AudioSeq_SequencePlayerDisable(u8* arg0);
 #include "fragments/fragment000_80C00/gb_tower_emulator_86CB0_types_2.h"
 void func_81112B84(Item8111539C*);
 
@@ -84,7 +84,7 @@ void func_81114B54(SeqPlayer81114B54* seq_player) {
         return;
     }
     if (!AudioLoad_IsSeqLoadComplete(seq_player->seqId) || !AudioLoad_IsFontLoadComplete(seq_player->defaultBank)) {
-        func_81112E00((u8*)seq_player);
+        AudioSeq_SequencePlayerDisable((u8*)seq_player);
         return;
     }
     AudioLoad_SetSeqLoadStatus(seq_player->seqId, 2);
@@ -112,12 +112,12 @@ void func_81114B54(SeqPlayer81114B54* seq_player) {
     } else {
         seq_player->recalculateVolume = 1;
         while (1) {
-            cmd = func_81112FB0(&state->pc);
+            cmd = AudioSeq_ScriptReadU8(&state->pc);
             if (cmd >= 0xF2) {
-                value = func_811126B8(seq_player, state, cmd, func_81112650(&state->pc, cmd));
+                value = AudioSeq_HandleScriptFlowControl(seq_player, state, cmd, AudioSeq_GetScriptControlFlowArgument(&state->pc, cmd));
                 if (value != 0) {
                     if (value == -1) {
-                        func_81112E00((u8*)seq_player);
+                        AudioSeq_SequencePlayerDisable((u8*)seq_player);
                     } else {
                         seq_player->delay = value;
                     }
@@ -127,7 +127,7 @@ void func_81114B54(SeqPlayer81114B54* seq_player) {
                 switch (cmd) {
                     case 0xF1:
                         AudioPlayback_NotePoolClear((s8*)&seq_player->notePool);
-                        AudioPlayback_NotePoolFill(&seq_player->notePool, func_81112FB0(&state->pc));
+                        AudioPlayback_NotePoolFill(&seq_player->notePool, AudioSeq_ScriptReadU8(&state->pc));
                         break;
                     case 0xF0:
                         AudioPlayback_NotePoolClear((s8*)&seq_player->notePool);
@@ -135,10 +135,10 @@ void func_81114B54(SeqPlayer81114B54* seq_player) {
                     case 0xDF:
                         seq_player->transposition = 0;
                     case 0xDE:
-                        seq_player->transposition += (s8)func_81112FB0(&state->pc);
+                        seq_player->transposition += (s8)AudioSeq_ScriptReadU8(&state->pc);
                         break;
                     case 0xDD:
-                        seq_player->tempo = func_81112FB0(&state->pc) * 48;
+                        seq_player->tempo = AudioSeq_ScriptReadU8(&state->pc) * 48;
                         if (seq_player->tempo > D_811858EC) {
                             seq_player->tempo = (u16)D_811858EC;
                         }
@@ -147,11 +147,11 @@ void func_81114B54(SeqPlayer81114B54* seq_player) {
                         }
                         break;
                     case 0xDC:
-                        seq_player->tempoChange = (s8)func_81112FB0(&state->pc) * 48;
+                        seq_player->tempoChange = (s8)AudioSeq_ScriptReadU8(&state->pc) * 48;
                         break;
                     case 0xDA:
-                        cmd = func_81112FB0(&state->pc);
-                        temp = func_81112FC4(&state->pc);
+                        cmd = AudioSeq_ScriptReadU8(&state->pc);
+                        temp = AudioSeq_ScriptReadS16(&state->pc);
                         switch (cmd) {
                             case 0:
                             case 1:
@@ -168,7 +168,7 @@ void func_81114B54(SeqPlayer81114B54* seq_player) {
                         }
                         break;
                     case 0xDB:
-                        value = func_81112FB0(&state->pc);
+                        value = AudioSeq_ScriptReadU8(&state->pc);
                         switch (seq_player->state) {
                             case 1:
                                 seq_player->state = 0;
@@ -186,27 +186,27 @@ void func_81114B54(SeqPlayer81114B54* seq_player) {
                         }
                         break;
                     case 0xD9:
-                        seq_player->fadeVolumeScale = (s8)func_81112FB0(&state->pc) / 127.0f;
+                        seq_player->fadeVolumeScale = (s8)AudioSeq_ScriptReadU8(&state->pc) / 127.0f;
                         break;
                     case 0xD7:
-                        temp = func_81112FC4(&state->pc);
-                        func_81112BF0((s8*)seq_player, temp);
+                        temp = AudioSeq_ScriptReadS16(&state->pc);
+                        AudioSeq_SequencePlayerSetupChannels((s8*)seq_player, temp);
                         break;
                     case 0xD6:
-                        func_81112FC4(&state->pc);
+                        AudioSeq_ScriptReadS16(&state->pc);
                         break;
                     case 0xD5:
-                        seq_player->muteVolumeScale = (s8)func_81112FB0(&state->pc) / 127.0f;
+                        seq_player->muteVolumeScale = (s8)AudioSeq_ScriptReadU8(&state->pc) / 127.0f;
                         break;
                     case 0xD4:
                         seq_player->muted = 1;
                         break;
                     case 0xD3:
-                        seq_player->muteBehavior = func_81112FB0(&state->pc);
+                        seq_player->muteBehavior = AudioSeq_ScriptReadU8(&state->pc);
                         break;
                     case 0xD1:
                     case 0xD2:
-                        temp = func_81112FC4(&state->pc);
+                        temp = AudioSeq_ScriptReadS16(&state->pc);
                         data = seq_player->seqData + temp;
                         if (cmd == 0xD2) {
                             seq_player->shortNoteVelocityTable = data;
@@ -215,20 +215,20 @@ void func_81114B54(SeqPlayer81114B54* seq_player) {
                         }
                         break;
                     case 0xD0:
-                        seq_player->noteAllocPolicy = func_81112FB0(&state->pc);
+                        seq_player->noteAllocPolicy = AudioSeq_ScriptReadU8(&state->pc);
                         break;
                     case 0xCC:
-                        state->value = func_81112FB0(&state->pc);
+                        state->value = AudioSeq_ScriptReadU8(&state->pc);
                         break;
                     case 0xC9:
-                        state->value &= func_81112FB0(&state->pc);
+                        state->value &= AudioSeq_ScriptReadU8(&state->pc);
                         break;
                     case 0xC8:
-                        state->value -= func_81112FB0(&state->pc);
+                        state->value -= AudioSeq_ScriptReadU8(&state->pc);
                         break;
                     case 0xC7:
-                        cmd = func_81112FB0(&state->pc);
-                        temp = func_81112FC4(&state->pc);
+                        cmd = AudioSeq_ScriptReadU8(&state->pc);
+                        temp = AudioSeq_ScriptReadS16(&state->pc);
                         data = seq_player->seqData + temp;
                         *data = (u8)state->value + cmd;
                         break;
@@ -236,7 +236,7 @@ void func_81114B54(SeqPlayer81114B54* seq_player) {
                         seq_player->stopScript = 1;
                         return;
                     case 0xC5:
-                        seq_player->scriptCounter = (u16)func_81112FC4(&state->pc);
+                        seq_player->scriptCounter = (u16)AudioSeq_ScriptReadS16(&state->pc);
                         break;
                 }
             } else {
@@ -265,8 +265,8 @@ void func_81114B54(SeqPlayer81114B54* seq_player) {
                         func_81112B84((Item8111539C*)seq_player->channels[lo_bits]);
                         break;
                     case 0x90:
-                        temp = func_81112FC4(&state->pc);
-                        func_81112D68((Particle2D68**)seq_player, lo_bits, (s32)(seq_player->seqData + temp));
+                        temp = AudioSeq_ScriptReadS16(&state->pc);
+                        AudioSeq_SequenceChannelEnable((Particle2D68**)seq_player, lo_bits, (s32)(seq_player->seqData + temp));
                         break;
                     case 0x60:
                     case 0xA0:
@@ -346,12 +346,12 @@ typedef struct Chan811152A4 {
 } Chan811152A4; // size = 0x15C
 extern u8 D_81136978[];
 extern u8 D_81136988[];
-void func_81112894(void*);
+void AudioSeq_InitSequenceChannel(void*);
 void func_811152A4(s32 arg0) {
     Chan811152A4* chan = (Chan811152A4*)&D_81184668[arg0];
     s32 i;
 
-    func_81112E00((u8*)chan);
+    AudioSeq_SequencePlayerDisable((u8*)chan);
     chan->bit02 = 0;
     chan->unk10 = 0;
     chan->unk01 = 1;
@@ -371,7 +371,7 @@ void func_811152A4(s32 arg0) {
     chan->unk24 = 0.0f;
     chan->unk28 = 0.5f;
     for (i = 0; i < 16; i++) {
-        func_81112894(chan->items[i]);
+        AudioSeq_InitSequenceChannel(chan->items[i]);
     }
 }
 
@@ -435,7 +435,7 @@ void func_81115480(void) {
     s32 j;
     Rec81115480* rec;
 
-    func_81112F2C();
+    AudioSeq_InitLayerFreelist();
     for (i = 0; i < 1; i++) {
         ((Emu81115480*)D_811847C8)[i].unk54 = 0;
         ((Emu81115480*)D_811847C8)[i].b80 = 0;

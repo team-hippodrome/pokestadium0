@@ -2,7 +2,7 @@
 #include "gb_tower_emulator_86CB0.h"
 
 extern u8 D_81138690[];
-void func_81112CE8(u8*, s32);
+void AudioSeq_SequencePlayerDisableChannels(u8*, s32);
 s32 AudioLoad_IsFontLoadComplete(s32);
 s32 AudioLoad_IsSeqLoadComplete(s32);
 void AudioLoad_SetFontLoadStatus(s32, s32);
@@ -60,15 +60,19 @@ extern GbEmuEntryZ D_811847C8[1];
 extern s16 D_811858CC;
 extern Entry811151C8 D_81184668[];
 
-u16 func_81112650(u8** stream, u8 kind) {
+/**
+ * Reads the argument of a control-flow command of kind `kind` from the script stream. Zelda 64 audio driver (seqplayer.c), same position and shape.
+ * @unverified Name and comment guessed from the code.
+ */
+u16 AudioSeq_GetScriptControlFlowArgument(u8** stream, u8 kind) {
     u8 flags = D_81138690[kind];
     u16 value = 0;
 
     if (((flags & 0xFF) & 3) == 1) {
         if (!(flags & 0x80)) {
-            value = func_81112FB0(stream);
+            value = AudioSeq_ScriptReadU8(stream);
         } else {
-            value = func_81112FC4(stream);
+            value = AudioSeq_ScriptReadS16(stream);
         }
     }
     return value;
@@ -87,9 +91,13 @@ typedef struct SeqPlayer811126B8 {
     /* 0x18 */ u8* seqData;
 } SeqPlayer811126B8;
 
-u16 func_81112FFC(u8** arg0);
+u16 AudioSeq_ScriptReadCompressedU16(u8** arg0);
 
-s32 func_811126B8(SeqPlayer811126B8* seq_player, SeqScriptState811126B8* state, s32 cmd, s32 cmd_arg) {
+/**
+ * Runs a script control-flow command (end, call, loop, jump, branch). Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 AudioSeq_HandleScriptFlowControl(SeqPlayer811126B8* seq_player, SeqScriptState811126B8* state, s32 cmd, s32 cmd_arg) {
     u8 depth;
 
     switch (cmd) {
@@ -100,7 +108,7 @@ s32 func_811126B8(SeqPlayer811126B8* seq_player, SeqScriptState811126B8* state, 
             state->pc = state->stack[--state->depth];
             break;
         case 0xFD:
-            return func_81112FFC(&state->pc);
+            return AudioSeq_ScriptReadCompressedU16(&state->pc);
         case 0xFE:
             return 1;
         case 0xFC:
@@ -170,7 +178,11 @@ typedef struct Bits81112894 {
     u8 b01 : 1;
 } Bits81112894;
 extern u8 D_81136998[];
-void func_81112894(void* obj) {
+/**
+ * Resets a sequence channel to its defaults. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioSeq_InitSequenceChannel(void* obj) {
     s8* arg0 = obj;
     s32 i;
 
@@ -263,13 +275,17 @@ typedef struct Owner811129E0 {
     Part811129E0* slots[11];
     Pair811129E0 unk7C;
 } Owner811129E0;
-s32 func_81112EEC(s8*);
+s32 AudioSeq_AudioListPopBack(s8*);
 void AudioPlayback_SeqLayerNoteDecay();
-s32 func_811129E0(Owner811129E0* arg0, s32 arg1) {
+/**
+ * Gives channel `arg0` a layer in slot `arg1`, taking one from the free list when needed. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 AudioSeq_SeqChannelSetLayer(Owner811129E0* arg0, s32 arg1) {
     Part811129E0* p;
     s32 pad; // FAKE: stack padding
     if (arg0->slots[arg1] == NULL) {
-        arg0->slots[arg1] = (Part811129E0*)func_81112EEC((s8*)&D_81184928);
+        arg0->slots[arg1] = (Part811129E0*)AudioSeq_AudioListPopBack((s8*)&D_81184928);
         if (arg0->slots[arg1] == NULL) {
             arg0->slots[arg1] = NULL;
             return -1;
@@ -306,7 +322,11 @@ s32 func_811129E0(Owner811129E0* arg0, s32 arg1) {
     return 0;
 }
 
-void func_81112AF8(Particle31FlagsA* arg0) {
+/**
+ * Decays the layer's note and turns the layer off. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioSeq_SeqLayerDisable(Particle31FlagsA* arg0) {
     if (arg0 != NULL) {
         AudioPlayback_SeqLayerNoteDecay(arg0);
         arg0->b80 = 0;
@@ -314,12 +334,16 @@ void func_81112AF8(Particle31FlagsA* arg0) {
     }
 }
 
-void func_81112B34(s8** arg0, s32 arg1) {
+/**
+ * Returns layer slot `arg1` of a channel to the free list. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioSeq_SeqLayerFree(s8** arg0, s32 arg1) {
     s8* temp = arg0[arg1 + 0x14];
 
     if (temp != NULL) {
-        func_81112EAC((s8*)&D_81184928, temp + 0x74);
-        func_81112AF8((Particle31FlagsA*)temp);
+        AudioSeq_AudioListPushBack((s8*)&D_81184928, temp + 0x74);
+        AudioSeq_SeqLayerDisable((Particle31FlagsA*)temp);
         arg0[arg1 + 0x14] = NULL;
     }
 }
@@ -328,14 +352,18 @@ void Particle31_ResetAllSlots(DisplayObject* arg0) {
     s32 i;
 
     for (i = 0; i < 4; i++) {
-        func_81112B34(arg0, i);
+        AudioSeq_SeqLayerFree(arg0, i);
     }
     AudioPlayback_NotePoolClear((s8*)arg0 + 0x84);
     ((Particle31Flags*)arg0)->b80 = 0;
     ((Particle31Flags*)arg0)->b40 = 1;
 }
 
-void func_81112BF0(s8* arg0, u16 mask) {
+/**
+ * Resets each channel selected in `mask`. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioSeq_SequencePlayerSetupChannels(s8* arg0, u16 mask) {
     s32 i;
     s8* item;
 
@@ -352,7 +380,11 @@ void func_81112BF0(s8* arg0, u16 mask) {
 
 void func_81112B84(Item8111539C*);
 
-void func_81112CE8(u8* seqPlayer, s32 channel_bits) {
+/**
+ * Disables each channel selected in `channel_bits`. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioSeq_SequencePlayerDisableChannels(u8* seqPlayer, s32 channel_bits) {
     Item8111539C* channel;
     s32 i;
 
@@ -364,7 +396,11 @@ void func_81112CE8(u8* seqPlayer, s32 channel_bits) {
     }
 }
 
-void func_81112D68(Particle2D68** arg0, u8 arg1, s32 arg2) {
+/**
+ * Starts channel `arg1` at script address `arg2`. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioSeq_SequenceChannelEnable(Particle2D68** arg0, u8 arg1, s32 arg2) {
     Particle2D68* p = arg0[arg1 + 13];
     s32 i;
 
@@ -375,13 +411,17 @@ void func_81112D68(Particle2D68** arg0, u8 arg1, s32 arg2) {
     p->unk_1E = 0;
     for (i = 0; i < 4; i++) {
         if (p->unk_50[i] != NULL) {
-            func_81112B34((s8**)p, i);
+            AudioSeq_SeqLayerFree((s8**)p, i);
         }
     }
 }
 
-void func_81112E00(u8* arg0) {
-    func_81112CE8(arg0, 0xFFFF);
+/**
+ * Stops a sequence player: disables its channels, clears its note pool and marks its data discardable. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioSeq_SequencePlayerDisable(u8* arg0) {
+    AudioSeq_SequencePlayerDisableChannels(arg0, 0xFFFF);
     AudioPlayback_NotePoolClear((s8*)arg0 + 0x98);
     ((TradeFlags81112E00*)arg0)->bit6 = 1;
     ((TradeFlags81112E00*)arg0)->bit7 = 0;
@@ -398,7 +438,11 @@ void func_81112E00(u8* arg0) {
     }
 }
 
-void func_81112EAC(s8 *arg0, s8 *arg1)
+/**
+ * Appends an item to the end of a list if it is on no list. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioSeq_AudioListPushBack(s8 *arg0, s8 *arg1)
 {
   if ((*((s8 **) (((s8 *) arg1) + 0))) == 0)
   {
@@ -411,7 +455,11 @@ void func_81112EAC(s8 *arg0, s8 *arg1)
   }
 }
 
-s32 func_81112EEC(s8 *arg0) {
+/**
+ * Removes and returns the last item of a list, or 0 when it is empty. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 AudioSeq_AudioListPopBack(s8 *arg0) {
     s8 *temp_v1;
 
     temp_v1 = M2C_FIELD(arg0, s8 **, 0);
@@ -425,7 +473,11 @@ s32 func_81112EEC(s8 *arg0) {
     return M2C_FIELD(temp_v1, s32 *, 8);
 }
 
-void func_81112F2C(void) {
+/**
+ * Puts every sequence layer on the free list. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioSeq_InitLayerFreelist(void) {
     s32 i;
 
     D_81184928.next = &D_81184928;
@@ -435,11 +487,15 @@ void func_81112F2C(void) {
     for (i = 0; i < 1; i++) {
         D_811847C8[i].owner = &D_811847C8[i];
         D_811847C8[i].next = NULL;
-        func_81112EAC((s8*)&D_81184928, (s8*)&D_811847C8[i].next);
+        AudioSeq_AudioListPushBack((s8*)&D_81184928, (s8*)&D_811847C8[i].next);
     }
 }
 
-u8 func_81112FB0(u8 **arg0)
+/**
+ * Reads one byte from the script stream. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+u8 AudioSeq_ScriptReadU8(u8 **arg0)
 {
   u8 new_var; // FAKE: permuter temp
   u8 *temp_a1;
@@ -449,22 +505,27 @@ u8 func_81112FB0(u8 **arg0)
   return new_var; // FAKE: permuter temp
 }
 
-s16 func_81112FC4(u8** arg0) {
+/**
+ * Reads a big-endian 16-bit value from the script stream. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+s16 AudioSeq_ScriptReadS16(u8** arg0) {
     s16 tmp = *(*arg0)++ << 8;
 
     tmp = *(*arg0)++ | tmp;
     return tmp;
 }
 
-/*
- * func_81112FFC
+/**
+ * AudioSeq_ScriptReadCompressedU16
  *
  * Reads a one- or two-byte value from the byte stream whose current position
  * is stored at *arg0, advancing that position. If the first byte has bit 7
  * clear it is the result. Otherwise the result is ((first & 0x7F) << 8) |
  * second byte, and the position advances past both bytes.
+ * @unverified Name guessed from the code; comment kept.
  */
-u16 func_81112FFC(u8** arg0) {
+u16 AudioSeq_ScriptReadCompressedU16(u8** arg0) {
     u16 v;
 
     v = *(*arg0)++;
@@ -487,12 +548,16 @@ typedef struct Particle303C {
     char pad44[4];
     s32 unk48;
 } Particle303C;
-void func_81113140();
-s32 func_811132E4();
+void AudioSeq_SeqLayerProcessScriptStep1();
+s32 AudioSeq_SeqLayerProcessScriptStep2();
 s32 func_81113A44();
-s32 func_81113650();
-s32 func_811131CC();
-void func_8111303C(Particle303C* arg0) {
+s32 AudioSeq_SeqLayerProcessScriptStep4();
+s32 AudioSeq_SeqLayerProcessScriptStep5();
+/**
+ * Runs a layer's script for one tick. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioSeq_SeqLayerProcessScript(Particle303C* arg0) {
     s32 ret;
     if (arg0->b80) {
         if (arg0->unk40 >= 2) {
@@ -502,15 +567,15 @@ void func_8111303C(Particle303C* arg0) {
                 arg0->b20 = 1;
             }
         } else {
-            func_81113140(arg0);
-            ret = func_811132E4(arg0);
+            AudioSeq_SeqLayerProcessScriptStep1(arg0);
+            ret = AudioSeq_SeqLayerProcessScriptStep2(arg0);
             if (ret != -1) {
                 ret = func_81113A44(arg0, ret);
                 if (ret != -1) {
-                    ret = func_81113650(arg0, ret);
+                    ret = AudioSeq_SeqLayerProcessScriptStep4(arg0, ret);
                 }
                 if (ret != -1) {
-                    func_811131CC(arg0, ret);
+                    AudioSeq_SeqLayerProcessScriptStep5(arg0, ret);
                 }
                 if (arg0->b20 == 1 && (arg0->unk48 != 0 || arg0->b10)) {
                     AudioPlayback_SeqLayerNoteDecay((Particle31FlagsA*)arg0);
@@ -520,7 +585,11 @@ void func_8111303C(Particle303C* arg0) {
     }
 }
 
-void func_81113140(Particle3140* arg0) {
+/**
+ * Decays or releases the layer's note before the next script command. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioSeq_SeqLayerProcessScriptStep1(Particle3140* arg0) {
     if (!arg0->b10) {
         AudioPlayback_SeqLayerNoteDecay((Particle31FlagsA*)arg0);
     } else if (arg0->unk_48 != NULL && arg0 == arg0->unk_48->unk_48) {
@@ -570,7 +639,11 @@ typedef struct Note811131CC {
     /* 0x44 */ Layer811131CC* parentLayer;
 } Note811131CC;
 
-s32 func_811131CC(Layer811131CC* layer, u32 same_sound) {
+/**
+ * Gets a note for the layer, reusing the current one for the same sound. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 AudioSeq_SeqLayerProcessScriptStep5(Layer811131CC* layer, u32 same_sound) {
     Note811131CC* note;
 
     if (!layer->stopSomething && layer->sound != NULL && layer->sound->sample->codec == 2 &&
@@ -657,7 +730,11 @@ typedef struct Layer811132E4 {
 extern f32 D_81136378[];
 u8 func_81113E84(u8* arg0, u8 arg1, u8** arg2, u8* arg3);
 
-s32 func_811132E4(Layer811132E4* layer) {
+/**
+ * Runs layer script commands until a note command. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 AudioSeq_SeqLayerProcessScriptStep2(Layer811132E4* layer) {
     Channel811132E4* channel = layer->channel;
     ScriptState811132E4* state = &layer->scriptState;
     SeqPlayer811132E4* seqPlayer = channel->seqPlayer;
@@ -667,16 +744,16 @@ s32 func_811132E4(Layer811132E4* layer) {
     u16 velocity;
 
     while (1) {
-        cmd = func_81112FB0(&state->pc);
+        cmd = AudioSeq_ScriptReadU8(&state->pc);
         if (cmd <= 0xC0) {
             return cmd;
         }
         if (cmd >= 0xF2) {
-            cmd_arg16 = func_81112650(&state->pc, cmd);
-            if (func_811126B8(seqPlayer, state, cmd, cmd_arg16) == 0) {
+            cmd_arg16 = AudioSeq_GetScriptControlFlowArgument(&state->pc, cmd);
+            if (AudioSeq_HandleScriptFlowControl(seqPlayer, state, cmd, cmd_arg16) == 0) {
                 continue;
             }
-            func_81112AF8((Particle31FlagsA*)layer);
+            AudioSeq_SeqLayerDisable((Particle31FlagsA*)layer);
             return -1;
         }
 
@@ -710,11 +787,11 @@ s32 func_811132E4(Layer811132E4* layer) {
                 AudioPlayback_SeqLayerNoteDecay((Particle31FlagsA*)layer);
                 break;
             case 0xC3:
-                cmd_arg16 = func_81112FFC(&state->pc);
+                cmd_arg16 = AudioSeq_ScriptReadCompressedU16(&state->pc);
                 layer->shortNoteDefaultDelay = cmd_arg16;
                 break;
             case 0xC6:
-                cmd = func_81112FB0(&state->pc);
+                cmd = AudioSeq_ScriptReadU8(&state->pc);
                 if (cmd >= 0x7F) {
                     if (cmd == 0x7F) {
                         layer->instOrWave = 0;
@@ -732,8 +809,8 @@ s32 func_811132E4(Layer811132E4* layer) {
                 }
                 break;
             case 0xC7:
-                layer->portamentoMode = func_81112FB0(&state->pc);
-                cmd = func_81112FB0(&state->pc);
+                layer->portamentoMode = AudioSeq_ScriptReadU8(&state->pc);
+                cmd = AudioSeq_ScriptReadU8(&state->pc);
                 cmd += channel->transposition;
                 cmd += layer->transposition;
                 cmd += seqPlayer->transposition;
@@ -745,26 +822,26 @@ s32 func_811132E4(Layer811132E4* layer) {
                     layer->portamentoTime = *(state->pc++);
                     break;
                 }
-                cmd_arg16 = func_81112FFC(&state->pc);
+                cmd_arg16 = AudioSeq_ScriptReadCompressedU16(&state->pc);
                 layer->portamentoTime = cmd_arg16;
                 break;
             case 0xC8:
                 layer->portamentoMode = 0;
                 break;
             case 0xCB:
-                cmd_arg16 = func_81112FC4(&state->pc);
+                cmd_arg16 = AudioSeq_ScriptReadS16(&state->pc);
                 layer->envelope = seqPlayer->seqData + cmd_arg16;
             case 0xCF:
-                layer->releaseRate = func_81112FB0(&state->pc);
+                layer->releaseRate = AudioSeq_ScriptReadU8(&state->pc);
                 break;
             case 0xCC:
                 layer->ignoreDrumPan = 1;
                 break;
             case 0xCD:
-                layer->unk01 = func_81112FB0(&state->pc);
+                layer->unk01 = AudioSeq_ScriptReadU8(&state->pc);
                 break;
             case 0xCE:
-                layer->freqScale = D_81136378[(u8)(func_81112FB0(&state->pc) + 0x80)];
+                layer->freqScale = D_81136378[(u8)(AudioSeq_ScriptReadU8(&state->pc) + 0x80)];
                 break;
             default:
                 switch (cmd & 0xF0) {
@@ -870,7 +947,11 @@ extern Reverb81113650 D_81184110[];
 u8* AudioPlayback_GetInstrumentTunedSample(u8* arg0, s32 arg1);
 u8* AudioPlayback_GetDrum(s32 arg0, s32 arg1);
 
-s32 func_81113650(Layer81113650* layer, s32 cmd_semitone) {
+/**
+ * Sets up the note's instrument, pitch and velocity from a note command. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 AudioSeq_SeqLayerProcessScriptStep4(Layer81113650* layer, s32 cmd_semitone) {
     s32 same_sound = 1;
     s32 instOrWave;
     s32 vel;

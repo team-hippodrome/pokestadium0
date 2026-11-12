@@ -248,11 +248,11 @@ typedef struct Particle31FlagsA {
 } Particle31FlagsA;
 
 void AudioPlayback_SeqLayerNoteDecay(Particle31FlagsA*);
-void func_81112AF8(Particle31FlagsA* arg0);
+void AudioSeq_SeqLayerDisable(Particle31FlagsA* arg0);
 
 extern struct GbEmuListZ D_81184928;
-void func_81112EAC(s8* arg0, s8* arg1);
-void func_81112B34(s8** arg0, s32 arg1);
+void AudioSeq_AudioListPushBack(s8* arg0, s8* arg1);
+void AudioSeq_SeqLayerFree(s8** arg0, s32 arg1);
 
 typedef struct Particle31Flags {
     u8 b80 : 1;
@@ -261,7 +261,7 @@ typedef struct Particle31Flags {
 
 void AudioPlayback_NotePoolClear(s8*);
 
-void func_81112B34();
+void AudioSeq_SeqLayerFree();
 void Particle31_ResetAllSlots(DisplayObject* arg0);
 
 typedef struct Particle2D68 {
@@ -276,11 +276,11 @@ typedef struct Particle2D68 {
     u8 unk_78;
 } Particle2D68;
 
-void func_81112D68(Particle2D68** arg0, u8 arg1, s32 arg2);
+void AudioSeq_SequenceChannelEnable(Particle2D68** arg0, u8 arg1, s32 arg2);
 
-void func_81112EAC(s8 *arg0, s8 *arg1);
+void AudioSeq_AudioListPushBack(s8 *arg0, s8 *arg1);
 
-s32 func_81112EEC(s8 *arg0);
+s32 AudioSeq_AudioListPopBack(s8 *arg0);
 
 typedef struct GbEmuListZ {
     /* 0x00 */ void* next;
@@ -298,11 +298,11 @@ typedef struct GbEmuEntryZ {
 extern GbEmuListZ D_81184928;
 extern GbEmuEntryZ D_811847C8[1];
 
-void func_81112F2C(void);
+void AudioSeq_InitLayerFreelist(void);
 
-u8 func_81112FB0(u8 **arg0);
+u8 AudioSeq_ScriptReadU8(u8 **arg0);
 
-s16 func_81112FC4(u8** arg0);
+s16 AudioSeq_ScriptReadS16(u8** arg0);
 
 typedef struct Particle3140 {
     u32 b80 : 1;
@@ -318,7 +318,7 @@ typedef struct Particle3140 {
     struct Particle3140* unk_48;
 } Particle3140;
 
-void func_81113140(Particle3140* arg0);
+void AudioSeq_SeqLayerProcessScriptStep1(Particle3140* arg0);
 
 /*
  * func_81113F84

@@ -66,7 +66,7 @@ s32 func_81113A44(Layer81113A44* layer, s32 cmd) {
     f32 float_delta;
 
     if (cmd == 0xC0) {
-        layer->delay = func_81112FFC(&state->pc);
+        layer->delay = AudioSeq_ScriptReadCompressedU16(&state->pc);
         layer->stopSomething = 1;
         return -1;
     }
@@ -76,13 +76,13 @@ s32 func_81113A44(Layer81113A44* layer, s32 cmd) {
     if (channel->largeNotes == 1) {
         switch (cmd & 0xC0) {
             case 0x00:
-                delay = func_81112FFC(&state->pc);
+                delay = AudioSeq_ScriptReadCompressedU16(&state->pc);
                 velocity = *(state->pc++);
                 layer->gateTime = *(state->pc++);
                 layer->lastDelay = delay;
                 break;
             case 0x40:
-                delay = func_81112FFC(&state->pc);
+                delay = AudioSeq_ScriptReadCompressedU16(&state->pc);
                 velocity = *(state->pc++);
                 layer->gateTime = 0;
                 layer->lastDelay = delay;
@@ -101,7 +101,7 @@ s32 func_81113A44(Layer81113A44* layer, s32 cmd) {
     } else {
         switch (cmd & 0xC0) {
             case 0x00:
-                delay = func_81112FFC(&state->pc);
+                delay = AudioSeq_ScriptReadCompressedU16(&state->pc);
                 layer->lastDelay = delay;
                 break;
             case 0x40:
@@ -310,9 +310,9 @@ void AudioHeap_LoadFilter(s16*, s32, s32);
 s32 func_8110E500(s32, u8, s8*);
 void AudioPlayback_NotePoolFill(void*, s32);
 void func_81112B84(void*);
-s32 func_811129E0(void*, s32);
-void func_8111303C(void*);
-s32 func_811126B8(void*, void*, s32, s32);
+s32 AudioSeq_SeqChannelSetLayer(void*, s32);
+void AudioSeq_SeqLayerProcessScript(void*);
+s32 AudioSeq_HandleScriptFlowControl(void*, void*, s32, s32);
 
 void func_81113FA8(Channel81113FA8* channel) {
     s32 i;
@@ -344,20 +344,20 @@ void func_81113FA8(Channel81113FA8* channel) {
         u32 parameters[3];
         s32 result;
 
-        command = func_81112FB0(&scriptState->pc);
+        command = AudioSeq_ScriptReadU8(&scriptState->pc);
         if (command >= 0xB0) {
             highBits = (D_81138690 + 0xB0)[command - 0xB0]; // FAKE: the +0xB0/-0xB0 pair only changes register allocation
             low_bits = highBits & 3;
 
             for (i = 0; i < low_bits; i++, highBits <<= 1) {
                 if (!(highBits & 0x80)) {
-                    parameters[i] = func_81112FB0(&scriptState->pc);
+                    parameters[i] = AudioSeq_ScriptReadU8(&scriptState->pc);
                 } else {
-                    parameters[i] = func_81112FC4(&scriptState->pc);
+                    parameters[i] = AudioSeq_ScriptReadS16(&scriptState->pc);
                 }
             }
             if (command >= 0xF2) {
-                result = func_811126B8(seqPlayer, scriptState, command, parameters[0]);
+                result = AudioSeq_HandleScriptFlowControl(seqPlayer, scriptState, command, parameters[0]);
                 if (result != 0) {
                     if (result == -1) {
                         func_81112B84(channel);
@@ -594,11 +594,11 @@ void func_81113FA8(Channel81113FA8* channel) {
                         channel->noteAllocPolicy = parameters[1];
                         command = (u8)parameters[2];
                         func_81113E54((u8*)channel, command);
-                        channel->transposition = (s8)func_81112FB0(&scriptState->pc);
-                        channel->newPan = func_81112FB0(&scriptState->pc);
-                        channel->panChannelWeight = func_81112FB0(&scriptState->pc);
-                        channel->reverb = func_81112FB0(&scriptState->pc);
-                        channel->reverbIndex = func_81112FB0(&scriptState->pc);
+                        channel->transposition = (s8)AudioSeq_ScriptReadU8(&scriptState->pc);
+                        channel->newPan = AudioSeq_ScriptReadU8(&scriptState->pc);
+                        channel->panChannelWeight = AudioSeq_ScriptReadU8(&scriptState->pc);
+                        channel->reverb = AudioSeq_ScriptReadU8(&scriptState->pc);
+                        channel->reverbIndex = AudioSeq_ScriptReadU8(&scriptState->pc);
                         channel->changePan = 1;
                         break;
                     case 0xEC:
@@ -683,16 +683,16 @@ void func_81113FA8(Channel81113FA8* channel) {
                     }
                     break;
                 case 0x88:
-                    offset = func_81112FC4(&scriptState->pc);
-                    if (!func_811129E0(channel, low_bits)) {
+                    offset = AudioSeq_ScriptReadS16(&scriptState->pc);
+                    if (!AudioSeq_SeqChannelSetLayer(channel, low_bits)) {
                         channel->layers[low_bits]->pc = &seqPlayer->seqData[offset];
                     }
                     break;
                 case 0x90:
-                    func_81112B34((s8**)channel, low_bits);
+                    AudioSeq_SeqLayerFree((s8**)channel, low_bits);
                     break;
                 case 0x98:
-                    if (scriptState->value != -1 && func_811129E0(channel, low_bits) != -1) {
+                    if (scriptState->value != -1 && AudioSeq_SeqChannelSetLayer(channel, low_bits) != -1) {
                         data = (*channel->dynTable)[scriptState->value];
                         offset = (data[0] << 8) + data[1];
                         channel->layers[low_bits]->pc = &seqPlayer->seqData[offset];
@@ -722,15 +722,15 @@ void func_81113FA8(Channel81113FA8* channel) {
                     scriptState->value -= channel->soundScriptIO[low_bits];
                     break;
                 case 0x20:
-                    offset = func_81112FC4(&scriptState->pc);
-                    func_81112D68((Particle2D68**)seqPlayer, low_bits, (s32)&seqPlayer->seqData[offset]);
+                    offset = AudioSeq_ScriptReadS16(&scriptState->pc);
+                    AudioSeq_SequenceChannelEnable((Particle2D68**)seqPlayer, low_bits, (s32)&seqPlayer->seqData[offset]);
                     break;
                 case 0x30:
-                    command = func_81112FB0(&scriptState->pc);
+                    command = AudioSeq_ScriptReadU8(&scriptState->pc);
                     seqPlayer->channels[low_bits]->soundScriptIO[command] = scriptState->value;
                     break;
                 case 0x40:
-                    command = func_81112FB0(&scriptState->pc);
+                    command = AudioSeq_ScriptReadU8(&scriptState->pc);
                     scriptState->value = seqPlayer->channels[low_bits]->soundScriptIO[command];
                     break;
             }
@@ -739,7 +739,7 @@ void func_81113FA8(Channel81113FA8* channel) {
 exit_loop:
     for (i = 0; i < 4; i++) {
         if (channel->layers[i] != NULL) {
-            func_8111303C(channel->layers[i]);
+            AudioSeq_SeqLayerProcessScript(channel->layers[i]);
         }
     }
 }

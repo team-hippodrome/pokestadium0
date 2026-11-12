@@ -373,7 +373,7 @@ extern f32 D_811858D4;
 void AudioPlayback_SeqLayerNoteRelease(Particle* arg0);
 void AudioPlayback_AudioListRemove(s8*);
 void AudioPlayback_AudioListPushFront(M2C_UNK* arg0, M2C_UNK* arg1);
-s32 func_81112EAC(s8*, struct Rec81111130*);
+s32 AudioSeq_AudioListPushBack(s8*, struct Rec81111130*);
 void AudioPlayback_NoteInitForLayer(s8* arg0, s8* arg1);
 void func_81112B84(Channel81110798*);
 void func_81112278(Note81110798*);
@@ -463,13 +463,13 @@ void AudioPlayback_ProcessNotes(void)
               AudioPlayback_NoteInitForLayer((s8 *) note, (s8 *) playbackState->wantedParentLayer);
               func_81112278(note);
               AudioPlayback_AudioListRemove((s8 *) note);
-              func_81112EAC(note->pool + 0x30, (struct Rec81111130 *) note);
+              AudioSeq_AudioListPushBack(note->pool + 0x30, (struct Rec81111130 *) note);
               playbackState->wantedParentLayer = (Layer81110798 *) (-1);
               goto process;
             }
             AudioPlayback_NoteDisable((Note8111073C *) note);
             AudioPlayback_AudioListRemove((s8 *) note);
-            func_81112EAC(note->pool, (struct Rec81111130 *) note);
+            AudioSeq_AudioListPushBack(note->pool, (struct Rec81111130 *) note);
             playbackState->wantedParentLayer = (Layer81110798 *) (-1);
           }
           else
@@ -480,7 +480,7 @@ void AudioPlayback_ProcessNotes(void)
             }
             AudioPlayback_NoteDisable((Note8111073C *) note);
             AudioPlayback_AudioListRemove((s8 *) note);
-            func_81112EAC(note->pool, (struct Rec81111130 *) note);
+            AudioSeq_AudioListPushBack(note->pool, (struct Rec81111130 *) note);
           }
         }
         else
@@ -497,7 +497,7 @@ void AudioPlayback_ProcessNotes(void)
         }
         AudioPlayback_NoteDisable((Note8111073C *) note);
         AudioPlayback_AudioListRemove((s8 *) note);
-        func_81112EAC(note->pool, (struct Rec81111130 *) note);
+        AudioSeq_AudioListPushBack(note->pool, (struct Rec81111130 *) note);
       }
       else
       {
@@ -835,7 +835,7 @@ void AudioPlayback_InitNoteList(s8 *arg0) {
  * Calls AudioPlayback_InitNoteList on four 16-byte blocks at arg0 + 0x00, 0x10, 0x20 and
  * 0x30.  AudioPlayback_InitNoteList stores the block's own address in its first two words
  * and clears the third, giving an empty circular list head {next, prev,
- * count, owner}: AudioPlayback_AudioListPushFront and func_81112EAC, which insert into such a
+ * count, owner}: AudioPlayback_AudioListPushFront and AudioSeq_AudioListPushBack, which insert into such a
  * list, link through the first two words, increment the third and copy the
  * fourth into the inserted node.  Afterwards arg0 itself is stored in the
  * fourth word (offset 0xC) of each block.
@@ -860,7 +860,7 @@ typedef struct Rec81111130 {
     /* 0x0C */ u8 pad0C[0xCC - 0xC];
 } Rec81111130; // size = 0xCC
 
-s32 func_81112EAC(s8*, Rec81111130*);
+s32 AudioSeq_AudioListPushBack(s8*, Rec81111130*);
 extern Rec81111130* D_81184664;
 extern s8 D_81184938;
 extern s32 D_811858E8;
@@ -871,7 +871,7 @@ extern s32 D_811858E8;
  * Calls AudioPlayback_InitNoteLists(&D_81184938), then for each of the D_811858E8 records of
  * the array at D_81184664 (0xCC bytes each, indexed directly each time):
  * stores the record's own address at offset 8, clears the word at offset 0,
- * and calls func_81112EAC(&D_81184938, record). AudioHeap_DiscardFont, which walks the
+ * and calls AudioSeq_AudioListPushBack(&D_81184938, record). AudioHeap_DiscardFont, which walks the
  * same array, passes the same list argument to the same function. What the
  * records are is not established from this function.
  * @unverified Name guessed from the code; comment kept.
@@ -883,7 +883,7 @@ void AudioPlayback_InitNoteFreeList(void) {
     for (i = 0; i < D_811858E8; i++) {
         D_81184664[i].unk_08 = &D_81184664[i];
         D_81184664[i].unk_00 = 0;
-        func_81112EAC(&D_81184938, &D_81184664[i]);
+        AudioSeq_AudioListPushBack(&D_81184938, &D_81184664[i]);
     }
 }
 
@@ -950,12 +950,12 @@ void AudioPlayback_NotePoolClear(NotePool811111E0* pool) {
                 break;
             }
             AudioPlayback_AudioListRemove((s8*)cur);
-            func_81112EAC(dest, (Rec81111130*)cur);
+            AudioSeq_AudioListPushBack(dest, (Rec81111130*)cur);
         }
     }
 }
 
-s32 func_81112EEC(s8 *);
+s32 AudioSeq_AudioListPopBack(s8 *);
 /**
  * Takes `arg1` notes from the global free lists into a pool. Zelda 64 audio driver.
  * @unverified Name and comment guessed from the code.
@@ -992,11 +992,11 @@ void AudioPlayback_NotePoolFill(s8* arg0, s32 arg1) {
                 break;
         }
         while (n < arg1) {
-            r = func_81112EEC(src);
+            r = AudioSeq_AudioListPopBack(src);
             if (r == 0) {
                 break;
             }
-            func_81112EAC(dst, (Rec81111130*)r);
+            AudioSeq_AudioListPushBack(dst, (Rec81111130*)r);
             n++;
         }
     }
@@ -1145,7 +1145,7 @@ void AudioPlayback_NoteReleaseAndTakeOwnership(s8 *arg0, s8 *arg1)
  * arg0 + 0x30.  The list heads are 16-byte blocks laid out as
  * {next, prev, count, owner}, as set up by AudioPlayback_InitNoteList and AudioPlayback_InitNoteLists.
  *
- *   1. func_81112EEC(arg0) unlinks the first node of the list at arg0 and
+ *   1. AudioSeq_AudioListPopBack(arg0) unlinks the first node of the list at arg0 and
  *      returns the word stored at offset 8 of that node (0 if the list is
  *      empty).  That value is the entry used below and the return value.
  *   2. If it is not 0, AudioPlayback_NoteInitForLayer(entry, arg1) is called on it, and
@@ -1155,7 +1155,7 @@ void AudioPlayback_NoteReleaseAndTakeOwnership(s8 *arg0, s8 *arg1)
  * Returns the entry, or 0 if there was none.  What AudioPlayback_NoteInitForLayer does with
  * arg1 is not established (it is still assembly).
  */
-s32 func_81112EEC(s8 *);
+s32 AudioSeq_AudioListPopBack(s8 *);
 void AudioPlayback_NoteInitForLayer(s8*, s8*);
 
 /**
@@ -1165,7 +1165,7 @@ void AudioPlayback_NoteInitForLayer(s8*, s8*);
 s32 AudioPlayback_AllocNoteFromDisabled(s8 *arg0, s32 arg1) {
     s32 ret;
 
-    ret = func_81112EEC(arg0);
+    ret = AudioSeq_AudioListPopBack(arg0);
     if (ret != 0) {
         AudioPlayback_NoteInitForLayer((s8*)ret, (s8*)arg1);
         AudioPlayback_AudioListPushFront((M2C_UNK *) (arg0 + 0x30), (M2C_UNK *) ret);
@@ -1178,14 +1178,14 @@ s32 AudioPlayback_AllocNoteFromDisabled(s8 *arg0, s32 arg1) {
  *
  * Like AudioPlayback_AllocNoteFromDisabled, but it takes the entry from the list headed at
  * arg0 + 0x10, initialises it with AudioPlayback_NoteReleaseAndTakeOwnership(entry, arg1), and inserts
- * it at the front of the list headed at arg0 + 0x20 with func_81112EAC.
+ * it at the front of the list headed at arg0 + 0x20 with AudioSeq_AudioListPushBack.
  * List heads are {next, prev, count, owner} blocks (see AudioPlayback_InitNoteList).
  *
- * func_81112EEC unlinks the first node of the list at arg0 + 0x10 and
+ * AudioSeq_AudioListPopBack unlinks the first node of the list at arg0 + 0x10 and
  * returns the word at offset 8 of that node, or 0 if the list is empty.
  * Returns that entry, or 0 if there was none; nothing else happens then.
  */
-s32 func_81112EEC(s8 *);
+s32 AudioSeq_AudioListPopBack(s8 *);
 
 /**
  * Takes over a decaying note for a layer. Zelda 64 audio driver.
@@ -1194,10 +1194,10 @@ s32 func_81112EEC(s8 *);
 s32 AudioPlayback_AllocNoteFromDecaying(s8 *arg0, s8 *arg1) {
     s32 ret;
 
-    ret = func_81112EEC(arg0 + 0x10);
+    ret = AudioSeq_AudioListPopBack(arg0 + 0x10);
     if (ret != 0) {
         AudioPlayback_NoteReleaseAndTakeOwnership((s8 *) ret, arg1);
-        func_81112EAC(arg0 + 0x20, (s8 *) ret);
+        AudioSeq_AudioListPushBack(arg0 + 0x20, (s8 *) ret);
     }
     return ret;
 }
@@ -1232,7 +1232,7 @@ s8 *AudioPlayback_AllocNoteFromActive(s8 *arg0, s8 *arg1)
   {
     AudioPlayback_AudioListRemove(b);
     AudioPlayback_NoteReleaseOwnerAndQueueLayer(b, (s32) arg1);
-    func_81112EAC(arg0 + 0x20, (Rec81111130 *) b);
+    AudioSeq_AudioListPushBack(arg0 + 0x20, (Rec81111130 *) b);
     *((u8 *) (((s8 *) b) + 0x30)) = *((u8 *) (((s8 *) (*((u8 **) (((s8 *) arg1) + 0x54)))) + 5)); // FAKE: decomp slop, raw pointer casts stand in for struct fields
     return b;
   }
@@ -1254,7 +1254,7 @@ s8* AudioPlayback_AllocNote(s8* arg0) {
         if ((voice != NULL) && (arg0 == M2C_FIELD(voice, s8**, 0x40)) && (M2C_FIELD(voice, s32*, 0x48) == -1)) {
             AudioPlayback_NoteReleaseAndTakeOwnership(voice, arg0);
             AudioPlayback_AudioListRemove(voice);
-            func_81112EAC(M2C_FIELD(voice, s8**, 0xC) + 0x20, (Rec81111130*)voice);
+            AudioSeq_AudioListPushBack(M2C_FIELD(voice, s8**, 0xC) + 0x20, (Rec81111130*)voice);
             return voice;
         }
     }

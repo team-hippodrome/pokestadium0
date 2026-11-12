@@ -107,7 +107,7 @@ typedef struct Track81111DC8 {
     /* 0x34 */ Voice81111DC8* voices[16];
 } Track81111DC8;
 void func_81111C20();
-void func_81112E00(Track81111DC8 *);
+void AudioSeq_SequencePlayerDisable(Track81111DC8 *);
 void func_81111DC8(Track81111DC8 *arg0) {
     s32 i;
 
@@ -121,7 +121,7 @@ void func_81111DC8(Track81111DC8 *arg0) {
             arg0->level = 0.0f;
         }
         if ((--arg0->timer == 0) && (arg0->state == 2)) {
-            func_81112E00(arg0);
+            AudioSeq_SequencePlayerDisable(arg0);
             return;
         }
     }

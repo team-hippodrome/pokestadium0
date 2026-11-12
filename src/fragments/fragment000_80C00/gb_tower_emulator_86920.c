@@ -70,7 +70,7 @@ void AudioHeap_ResetLoadStatus(void) {
 
 s32 AudioPlayback_NoteDisable(Rec81109678*);
 s32 AudioPlayback_AudioListRemove(Rec81109678*);
-s32 func_81112EAC(s8*, Rec81109678*);
+s32 AudioSeq_AudioListPushBack(s8*, Rec81109678*);
 extern Rec81109678* D_81184664;
 extern s8 D_81184938;
 extern s32 D_811858E8;
@@ -83,7 +83,7 @@ extern s32 D_811858E8;
  * byte at 0x33 equals arg0: if the bytes at 0x34 and 0x30 are 0 and non-zero
  * respectively, it clears bit 7 and then sets bit 6 of the byte that the
  * pointer at 0x44 points to. In every matching record it then calls
- * AudioPlayback_NoteDisable(rec), AudioPlayback_AudioListRemove(rec) and func_81112EAC(&D_81184938, rec).
+ * AudioPlayback_NoteDisable(rec), AudioPlayback_AudioListRemove(rec) and AudioSeq_AudioListPushBack(&D_81184938, rec).
  * Records whose byte at 0x33 differs are skipped. What the record and the
  * flag bits mean is not established from this function.
  *
@@ -107,12 +107,12 @@ void AudioHeap_DiscardFont(s32 arg0) {
             }
             AudioPlayback_NoteDisable(p);
             AudioPlayback_AudioListRemove(p);
-            func_81112EAC(&D_81184938, p);
+            AudioSeq_AudioListPushBack(&D_81184938, p);
         }
     }
 }
 
-M2C_UNK func_81112E00(M2C_UNK *);                   /* extern */
+M2C_UNK AudioSeq_SequencePlayerDisable(M2C_UNK *);                   /* extern */
 extern s8 D_81184668;
 extern s16 D_811858CC;
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
@@ -135,7 +135,7 @@ void AudioHeap_DiscardSequence(s32 arg0)
     {
       if (((((u32) (*((u32 *) (((s8 *) new_var) + 0)))) >> 0x1F) != 0) && (new_var2 == (*((u8 *) (((s8 *) new_var) + 4))))) // FAKE: decomp slop, raw pointer casts stand in for struct fields
       {
-        func_81112E00(new_var);
+        AudioSeq_SequencePlayerDisable(new_var);
       }
       var_s1 += 1;
       new_var += 0x15C;
@@ -830,7 +830,7 @@ s32 AudioHeap_ResetStep(void) {
     switch (D_81184657) {
         case 5:
             for (i = 0; i < D_811858B8.unk_14; i++) {
-                func_81112E00(&D_81184668 + i * 0x15C);
+                AudioSeq_SequencePlayerDisable(&D_81184668 + i * 0x15C);
             }
             D_8118465C = 4 / sp24;
             D_81184657--;

@@ -46,11 +46,11 @@ extern u8 D_81184656[1];
 s32 AudioHeap_SearchCaches(s32, M2C_UNK, s32);
 s32 AudioPlayback_NoteDisable(Rec81109678*);
 s32 AudioPlayback_AudioListRemove(Rec81109678*);
-s32 func_81112EAC(s8*, Rec81109678*);
+s32 AudioSeq_AudioListPushBack(s8*, Rec81109678*);
 extern Rec81109678* D_81184664;
 extern s8 D_81184938;
 extern s32 D_811858E8;
-M2C_UNK func_81112E00(M2C_UNK *);                   /* extern */
+M2C_UNK AudioSeq_SequencePlayerDisable(M2C_UNK *);                   /* extern */
 extern s8 D_81184668;
 extern s16 D_811858CC;
 M2C_UNK func_811098C0(M2C_UNK *, s32, s32);
@@ -1078,7 +1078,7 @@ s32 AudioLoad_SyncInitSeqPlayerInternal(s32 arg0, s32 arg1, s32 arg2) {
     }
     slot = &D_81184668 + arg0 * 0x15C;
     arg1 = AudioLoad_GetRealTableIndex(0, arg1);
-    func_81112E00(slot);
+    AudioSeq_SequencePlayerDisable(slot);
     id = 0xFF;
     /* do-while(0) block (likely a macro in the original) is required for the register choice */
     do {  // FAKE
