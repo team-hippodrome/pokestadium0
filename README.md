@@ -50,6 +50,12 @@ against the ROM, without linking.
 
 Do not commit ROMs or extracted retail assets.
 
+## Naming
+
+The game's text is Japanese, but annotations use official English names
+(フーディン → Alakazam, モンスターボール → Poké Ball, だいもんじ → Fire Blast).
+Look names up in the [Gen 1 Japanese → English glossary](docs/glossary.md).
+
 ## Progress and evidence
 
 - [Coverage](COVERAGE.md): first-pass owner counts and bytes built from C.
