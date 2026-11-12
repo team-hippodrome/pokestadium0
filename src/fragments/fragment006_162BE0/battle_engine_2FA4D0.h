@@ -192,7 +192,7 @@ void func_884022AC(void);                            /* extern */
 extern s8 D_88402DD0;
 extern s8 D_88402DEC;
 extern s32 D_88403360;
-s32 func_884023F0(void);
+s32 TransferPak_EnterWithPakSkippingCheck(void);
 
 typedef struct GbPortSummaryZ {
     /* 0x00 */ u8 saveState;
@@ -236,8 +236,8 @@ extern u8 D_00235D70[];
 extern u8 D_00238BD0[];
 void func_884025E4(void);
 void func_884026A4(s32);
-s32 func_88402334(void);
-s32 func_8840248C(void);
+s32 TransferPak_EnterCheckScreenNoPaks(void);
+s32 TransferPak_EnterCheckScreenOnReturn(void);
 
 s32 Fragment006_Main(s32 arg0, s32 arg1);
 

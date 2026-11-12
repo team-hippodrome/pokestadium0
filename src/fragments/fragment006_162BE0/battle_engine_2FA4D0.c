@@ -167,7 +167,12 @@ void TransferPak_DrawStatusScreen(s32 port, s32 x, s32 y) {
 
 // Moves the cursor around a 2x2 grid of slots on D-pad presses, skipping
 // to the diagonal slot when the adjacent one is empty.
-s32 func_8840079C(s32 cursor) {
+/**
+ * Moves the cartridge cursor between the four controller ports on D-pad up/down/left/right,
+ * skipping ports without a Game Boy cartridge (D_88403310[port].game).
+ * @unverified Needs a Transfer Pak to see; name from the code.
+ */
+s32 TransferPak_MoveCartridgeCursor(s32 cursor) {
     if ((M2C_FIELD(D_800603C0, u16*, 8) & 0x800) && (cursor >= 2)) {
         if (D_88403310[cursor ^ 2].game != 0) {
             func_8003F6AC(0x25);

@@ -699,7 +699,7 @@ func_88400100,0x88400100,src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c
 func_88400108,0x88400108,src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c,func_88400108,m2c,m2c,c
 func_88400168,0x88400168,src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c,func_88400168,hand,,c
 func_88400458,0x88400458,src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c,TransferPak_DrawStatusScreen,hand,,c
-func_8840079C,0x8840079C,src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c,func_8840079C,hand,,c
+func_8840079C,0x8840079C,src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c,TransferPak_MoveCartridgeCursor,hand,,c
 func_88400A1C,0x88400A1C,src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c,Trade_DrawSaveSeqMessageBackdrop,s1,stadium1:src/fragments/trade_machine/trade_machine_291D60.c,c
 func_88400A98,0x88400A98,src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c,func_88400A98,m2c,m2c,c
 func_88400B70,0x88400B70,src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c,func_88400B70,m2c,m2c,c
@@ -709,13 +709,13 @@ func_88400DAC,0x88400DAC,src/fragments/fragment006_162BE0/battle_engine_2FA4D0_8
 func_88400F4C,0x88400F4C,src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c,func_88400F4C,m2c,m2c,c
 func_88401040,0x88401040,src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c,func_88401040,hand,,c
 func_8840115C,0x8840115C,src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c,func_8840115C,hand,,c
-func_88401290,0x88401290,src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c,Options_DrawTitle,hand,,c
+func_88401290,0x88401290,src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c,TransferPak_DrawCartridgeCheckScreen,hand,,c
 func_884014B4,0x884014B4,src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c,Options_DrawMenu,hand,,c
 func_8840173C,0x8840173C,src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c,Options_DrawClearSavePrompt,hand,,c
 func_88401970,0x88401970,src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c,Options_RunClearSavePrompt,hand,,c
 func_88401A88,0x88401A88,src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c,Save_InitializeBank3,hand,,c
 func_88401B40,0x88401B40,src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c,Options_RunMenu,hand,,c
-func_88401D54,0x88401D54,src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c,Options_RunTitle,hand,,c
+func_88401D54,0x88401D54,src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c,TransferPak_RunCartridgeCheckScreen,hand,,c
 func_88401E24,0x88401E24,src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c,func_88401E24,hand,,c
 func_88401F38,0x88401F38,src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c,func_88401F38,hand,,c
 func_88402038,0x88402038,src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c,func_88402038,m2c,m2c,c
@@ -723,9 +723,9 @@ func_88402098,0x88402098,src/fragments/fragment006_162BE0/battle_engine_2FA4D0_8
 func_88402174,0x88402174,src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c,func_88402174,hand,,c
 func_884022A4,0x884022A4,src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c,func_884022A4,s1,stadium1:src/fragments/battle_engine/battle_engine_3020D0.c,c
 func_884022AC,0x884022AC,src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c,func_884022AC,hand,,c
-func_88402334,0x88402334,src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c,func_88402334,hand,,c
-func_884023F0,0x884023F0,src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c,func_884023F0,m2c,m2c,c
-func_8840248C,0x8840248C,src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c,func_8840248C,hand,,c
+func_88402334,0x88402334,src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c,TransferPak_EnterCheckScreenNoPaks,hand,,c
+func_884023F0,0x884023F0,src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c,TransferPak_EnterWithPakSkippingCheck,m2c,m2c,c
+func_8840248C,0x8840248C,src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c,TransferPak_EnterCheckScreenOnReturn,hand,,c
 func_88402538,0x88402538,src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c,func_88402538,hand,,c
 func_884025E4,0x884025E4,src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c,func_884025E4,hand,,c
 func_884026A4,0x884026A4,src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c,func_884026A4,hand,,c

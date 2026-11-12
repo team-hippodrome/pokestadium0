@@ -202,19 +202,22 @@ extern char* D_88402D84;
 extern char D_88403228[];
 extern u8 D_8F4B2B30[];
 extern Gfx D_80060398[];
-s32 func_8840079C(s32);
+s32 TransferPak_MoveCartridgeCursor(s32);
 void TransferPak_DrawStatusScreen(s32, s32, s32);
 
 /**
- * Draws the オプション (Options) title.
- * @unverified Name and comment guessed from the code.
+ * Draws the cartridge check screen. With a cartridge cursor it shows the four ports' Transfer Pak
+ * status (TransferPak_DrawStatusScreen); without one, the 'no Pokemon cartridge is set' message.
+ * Then it draws the 「オプション」 button with its C-Right icon.
+ * Seen in play: runs every frame on that screen, without a Transfer Pak. The first pass had it as
+ * Options_DrawTitle.
  */
-void Options_DrawTitle(void) {
+void TransferPak_DrawCartridgeCheckScreen(void) {
     Color_RGB8 top = D_88402F94;
     Color_RGB8 bottom = D_88402F98;
 
     if (D_88403358 >= 0) {
-        D_88403358 = func_8840079C(D_88403358);
+        D_88403358 = TransferPak_MoveCartridgeCursor(D_88403358);
         Ui_DrawGradientPanel(0x1E, 0x1E, 0x104, 0x18, &top, &bottom);
         Font_BeginTranslucentTextRendering();
         Font_SetActive(2, -1);
@@ -255,7 +258,7 @@ extern char D_884032A0[];
 extern u8 D_8F4B2EB0[];
 /**
  * Draws the options: ステレオ/モノラル (Stereo/Mono), あり/なし (On/Off), バックアップ (Backup), おわり (End).
- * @unverified Name and comment guessed from the code.
+ * Seen in play: draws 「オプション」 with サウンド/じっきょう/バックアップ/おわり; the cursor moves with D-Down.
  */
 void Options_DrawMenu(s32 arg0, u8 arg1) {
     Color_RGB8 sp44 = {0x00, 0x00, 0x32};
@@ -289,7 +292,7 @@ void Options_DrawMenu(s32 arg0, u8 arg1) {
 
 /**
  * ６４のセーブデータをクリアします よろしいですか？ / ほんとうにいいんですね？ (Clear the N64 save data, OK? / Really?) with はい/いいえ.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: draws 「64のセーブデータをクリアします よろしいですか？」 with はい / いいえ.
  */
 void Options_DrawClearSavePrompt(s32 arg0, s32 arg1) {
     Color_RGB8 sp4C = { 0x00, 0x00, 0x32 };
@@ -342,7 +345,7 @@ void Options_DrawClearSavePrompt(s32 arg0, s32 arg1) {
 
 /**
  * Loop for the clear-save prompt: Left/Right toggles the choice, A confirms, B cancels (returns No).
- * @unverified Name and comment guessed from the code.
+ * Seen in play: A on バックアップ enters it (「64のセーブデータをクリアします よろしいですか？ はい いいえ」); B backs out.
  */
 s32 Options_RunClearSavePrompt(s32 arg0, s32 arg1, u8 arg2) {
     s32 loop = 1;
@@ -403,7 +406,8 @@ void func_80025224(u8);
 void Save_CommitTypedRecord(s32, s32);
 /**
  * Loop for the options menu: Up/Down move the cursor through four entries and the chosen settings are saved.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: C-Right on the cartridge check screen opens 「オプション」 (サウンド ステレオ, じっきょう あり, バックアップ,
+ * おわり) and enters this.
  */
 void Options_RunMenu(void) {
     s32 done = 0;
@@ -478,16 +482,19 @@ void Options_RunMenu(void) {
 }
 
 /**
- * Loop for the options title screen: A returns 1, B returns 2, C-right opens Options_RunMenu.
- * @unverified Name and comment guessed from the code.
+ * Loop of the screen shown after the title: draws it each frame. A (with a cartridge picked)
+ * commits the chosen port and returns 1, B returns 2, and C-Right opens the options menu
+ * (Options_RunMenu).
+ * Seen in play: with no Transfer Pak, the screen read 「ポケモンの カートリッジが セット されていません。…」 with an
+ * 「オプション」 button, and C-Right opened the options menu. The first pass had it as Options_RunTitle.
  */
-s32 Options_RunTitle(void) {
+s32 TransferPak_RunCartridgeCheckScreen(void) {
     s32 var_s0;
 
     var_s0 = 0;
     do {
         func_88400108(0);
-        Options_DrawTitle();
+        TransferPak_DrawCartridgeCheckScreen();
         func_80006780();
         if (M2C_FIELD(D_800603C0, u16 *, 8) & 0x8000) {
             var_s0 = 1;
@@ -621,7 +628,13 @@ void func_884022AC(void) {
     }
 }
 
-s32 func_88402334(void) {
+/**
+ * Fragment006_Main entry when no Transfer Pak is detected (D_800AF986 == 0): sets up the screen
+ * and runs TransferPak_RunCartridgeCheckScreen.
+ * @unverified Name from the code; this path ran in play (no paks), but the function was already
+ * running when breakpoints went in.
+ */
+s32 TransferPak_EnterCheckScreenNoPaks(void) {
     s32 sp1C;
     s32 sp18;
     s32 temp_v0;
@@ -636,7 +649,7 @@ s32 func_88402334(void) {
     func_8000D520(sp18 + 0xA8, &D_88402DB4 + 2);
     func_80006828(5, &func_88400108);
     func_88401040();
-    temp_v0 = Options_RunTitle();
+    temp_v0 = TransferPak_RunCartridgeCheckScreen();
     sp1C = temp_v0;
     if (temp_v0 == 1) {
         func_884022AC();
@@ -646,7 +659,12 @@ s32 func_88402334(void) {
     return sp1C;
 }
 
-s32 func_884023F0(void) {
+/**
+ * Fragment006_Main entry when a Transfer Pak is present: commits the detected cartridge
+ * (func_80025BE4) and continues without the check loop.
+ * @unverified Name from the code.
+ */
+s32 TransferPak_EnterWithPakSkippingCheck(void) {
     s32 sp1C;
 
     sp1C = M2C_FIELD(D_88403370, s32 *, 0xC);
@@ -663,7 +681,12 @@ s32 func_884023F0(void) {
     return 1;
 }
 
-s32 func_8840248C(void) {
+/**
+ * Fragment006_Main entry when arg0 != 0 (coming back from the menus): rebuilds the scene and runs
+ * the cartridge check loop again.
+ * @unverified Name from the code.
+ */
+s32 TransferPak_EnterCheckScreenOnReturn(void) {
     s32 sp1C;
     s32 sp18;
     s32 temp_v0;
@@ -677,7 +700,7 @@ s32 func_8840248C(void) {
     func_8000D520(sp18 + 0xA8, &D_88402E94 + 2);
     func_88402174();
     func_88402038();
-    temp_v0 = Options_RunTitle();
+    temp_v0 = TransferPak_RunCartridgeCheckScreen();
     sp1C = temp_v0;
     if (temp_v0 == 1) {
         func_884022AC();
@@ -826,12 +849,12 @@ s32 Fragment006_Main(s32 arg0, s32 arg1) {
 
     if (arg0 == 0) {
         if (D_800AF986 == 0) {
-            result = func_88402334();
+            result = TransferPak_EnterCheckScreenNoPaks();
         } else {
-            result = func_884023F0();
+            result = TransferPak_EnterWithPakSkippingCheck();
         }
     } else {
-        result = func_8840248C();
+        result = TransferPak_EnterCheckScreenOnReturn();
     }
 
     StageContext_SaveAndSwitch((StageContext*)D_88403368);
