@@ -171,7 +171,6 @@ u16 BattleCalc_EstimateDamage(s8*, s8*, u8);
  * high-critical moves, reduces two-turn moves when slower or the target knows Fly
  * or Dig, uses half the target's HP for Super Fang, and zeroes Fissure against
  * Flying and the OHKO moves against Ghost.
- * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_EstimateDamage(s8* arg0, s8* arg1, u8 move) {
     s32 score;
@@ -302,7 +301,6 @@ extern u32 D_821945C4[];
 /**
  * Returns the move if the battler's species can learn it, otherwise 0.
  * D_821944CF maps a move to its learnset bit index.
- * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_SpeciesCanLearnMove(u8 *arg0, s32 arg1) {
     s32 v = 0;
@@ -331,7 +329,6 @@ s32 BattleAi_SpeciesCanLearnMove(u8*, s32);
 /**
  * Returns the move if the battler is known to have it with PP left, or if its
  * species could learn it.
- * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_MayKnowMove(u8* arg0, s32 arg1) {
     s32 i;
@@ -356,7 +353,6 @@ extern u8 D_82194578[];
  * attacker's moves when they are known (the party flag bit 2, or a full move
  * list); otherwise it considers every move in the D_82194578 list the species
  * could learn, with Self-Destruct and Explosion only when arg2 > 0.
- * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_GetBestDamage(u8 *arg0, u8 *arg1, s32 arg2)
 {
@@ -465,7 +461,6 @@ void func_82185404(void) {
  * Returns 1 if battler arg0 is expected to move before arg1: either it has
  * already been seen to move first against it (mask bytes 0x75/0x76) or its
  * speed is higher.
- * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_MovesFirst(s8 *arg0, s8 *arg1)
 {
@@ -623,7 +618,6 @@ check:
 /**
  * Picks a stat-boosting move while that stat stage is below +6. Returns the move
  * slot or -1.
- * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_PickStatBoostMove(u8* arg0) {
     s32 i;
@@ -663,7 +657,9 @@ extern u8* D_821CF29C;
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 /**
  * Picks Recover or Softboiled, or Rest unless Rest was one of the last two moves,
- * when the COM is below 40% HP. Returns the move slot or -1.
+ * when the COM is below 40% HP. Never heals when the last move was a healing
+ * move, or when the damage taken last turn (0x72) is more than half the max HP
+ * (healing would not keep up). Returns the move slot or -1.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_PickHealingMove(u8 *arg0)
@@ -722,7 +718,6 @@ s32 BattleAi_PickStrongestMove(s32);
 /**
  * Picks Toxic against a healthy non-Poison opponent, or Leech Seed against a
  * poisoned non-Grass opponent that is not seeded yet. Returns the move slot or -1.
- * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_PickToxicOrLeechSeed(u8 *arg0) {
     s32 i;
@@ -772,7 +767,6 @@ extern u8 D_8006B18B[];
  * Picks a stat-lowering move (Sand Attack, Tail Whip, Leer, Growl, String Shot,
  * Screech, Smokescreen, Kinesis, Flash) while the opponent's stage for that stat
  * is at least -1 and it was not the last move used. Returns the move slot or -1.
- * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_PickStatLowerMove(u8 *arg0, s32 arg1) {
     s32 i;
@@ -1079,7 +1073,6 @@ extern u8* D_821CF29C;
 /**
  * Picks Thunder Wave (not against Ground types), Stun Spore or Glare against a
  * healthy opponent while both sides are above 30% HP. Returns the move slot or -1.
- * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_PickParalysisMove(u8 *arg0, u8 *arg1) {
     s32 i;
@@ -1111,7 +1104,6 @@ s32 BattleAi_SleepClauseAllows();
 /**
  * Picks a sleep move against a healthy opponent when Sleep Clause allows it and
  * the last move was not already a sleep move. Returns the move slot or -1.
- * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_PickSleepMove(u8 *arg0, u8 *arg1) {
     s32 i;
@@ -1153,7 +1145,6 @@ s32 BattleAi_PickSleepMove(u8 *arg0, u8 *arg1) {
 /**
  * Picks a boom move (Self-Destruct or Explosion) unless the opponent cannot act.
  * Returns the move slot or -1.
- * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_PickBoomMove(u8 *arg0, u8 *arg1) {
     s32 i;
@@ -1236,7 +1227,6 @@ M2C_UNK func_80058410(s8*, s8*, M2C_UNK);
  * Fills a battle Pokemon record (BattleMonRuntime layout) from a party Pokemon
  * (BattleMon layout): species, HP, status, types, moves, DVs, level, max HP,
  * stats and PP.
- * @unverified Name and comment guessed from the code (COM AI pass).
  */
 void BattleAi_LoadBattlerFromPartyMon(s8* arg0, s8* arg1) {
     M2C_FIELD(arg0, u8*, 0xB) = M2C_FIELD(arg1, u8*, 0);
@@ -1265,7 +1255,6 @@ s32 BattleAi_CalcSpecial(s32, s32);
  * Fills a battle Pokemon record from base stats when the real party data is
  * hidden: species, HP and max HP, types, DVs 0x7777, level and stats computed with
  * BattleAi_CalcStat.
- * @unverified Name and comment guessed from the code (COM AI pass).
  */
 void BattleAi_LoadBattlerFromSpecies(s8* arg0, s32 species, s32 level) {
     BaseStats821868E8* stats;
@@ -1382,7 +1371,6 @@ typedef struct Side82186AF4 {
  * side, sets its party bit, loads it from the real data (party flag bit 1) or
  * from base stats, and counts its moves (stopping at an empty slot or Mimic). arg2 is the AI
  * mode byte; mode 2 and up raises the switch threshold to 10.
- * @unverified Name and comment guessed from the code (COM AI pass).
  */
 void BattleAi_InitSide(Side82186AF4 *arg0, Party82186AF4 *arg1, s32 arg2)
 {
@@ -1552,7 +1540,6 @@ void BattleAi_AddTrainerPickScore(u8 *, s32);
  * Scores every unfainted, unpicked (arg1 == 0) or picked (arg1 != 0) Pokemon of
  * the COM side and returns the best legal one, marking it as picked. arg0 is the
  * opponent battler to score against, or NULL for the whole opposing team.
- * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_PickNextPokemon(u8 *arg0, s32 arg1, s32 arg2, s32 arg3)
 {
@@ -1623,7 +1610,6 @@ extern u8 D_821CF2B8[];
 /**
  * Picks arg0 Pokemon for the COM team, then sometimes moves the one with the best
  * damage ratio against the opponent's team into the lead.
- * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_PickTeam(s32 arg0)
 {
@@ -1709,7 +1695,6 @@ s32 BattleAi_PickTeam(s32);
  * Team-selection entry point. Seeds the AI random source, builds both sides from
  * the parties arg0 (COM) and arg1 (opponent) and writes the chosen party indices
  * to arg3. Returns 0, or nonzero when the picks fell back to the first slots.
- * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_SelectTeam(u8* arg0, u8* arg1, s32 arg2, s8* arg3, s32 arg4) {
     s32 j;
@@ -1757,7 +1742,6 @@ s32 BattleAi_SelectTeam(u8* arg0, u8* arg1, s32 arg2, s8* arg3, s32 arg4) {
  * A switch is forced when the active Pokemon fainted, is frozen or must recharge,
  * or is asleep with a low stage; otherwise candidates are tried in rounds that
  * relax the required damage ratio.
- * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_ChooseSwitch(void) {
     s32 flag;

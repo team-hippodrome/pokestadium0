@@ -211,7 +211,6 @@ extern u32 D_821CF2B4;
  * 17-bit shift register, reduced to 0..99. Seeded by BattleAi_SelectTeam.
  * Stadium 1 has the same generator in its audio code, which is where the old
  * name came from.
- * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_RandomPercent(void) {
     D_821CF2B0 = (D_821CF2B0 * 0x41C64E6D) + 0x3039;
@@ -229,7 +228,6 @@ s32 func_80053A80();                                /* extern */
 
 /**
  * Advances BattleAi_RandomPercent 0..31 times, using bits 4..8 of func_80053A80.
- * @unverified Name and comment guessed from the code (COM AI pass).
  */
 void BattleAi_StirRandom(void) {
     u32 var_s0;
@@ -251,7 +249,6 @@ f32 func_80055340(f32);                             /* extern */
 /**
  * Gen 1 stat formula without DVs: ((sqrt(statExp) / 4 + base * 2) * level) / 100 + 5.
  * The callers pass statExp 0xFFFF (maximum stat experience).
- * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_CalcStat(s32 arg0, s32 arg1, s32 arg2) {
     return ((s32) ((((s32) func_80055340((f32) arg1) / 4) + (arg0 * 2)) * arg2) / 100) + 5;
@@ -259,7 +256,6 @@ s32 BattleAi_CalcStat(s32 arg0, s32 arg1, s32 arg2) {
 
 /**
  * Max HP from base HP and level: BattleAi_CalcStat(base, 0xFFFF, level) + level + 5.
- * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_CalcMaxHp(s32 arg0, s32 arg1) {
     return BattleAi_CalcStat(arg0, 0xFFFF, arg1) + arg1 + 5;
@@ -267,7 +263,6 @@ s32 BattleAi_CalcMaxHp(s32 arg0, s32 arg1) {
 
 /**
  * Attack from base stat and level (max stat experience).
- * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_CalcAttack(s32 arg0, s32 arg1) {
     return BattleAi_CalcStat(arg0, 0xFFFF, arg1);
@@ -275,7 +270,6 @@ s32 BattleAi_CalcAttack(s32 arg0, s32 arg1) {
 
 /**
  * Defense from base stat and level (max stat experience).
- * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_CalcDefense(s32 arg0, s32 arg1) {
     return BattleAi_CalcStat(arg0, 0xFFFF, arg1);
@@ -283,7 +277,6 @@ s32 BattleAi_CalcDefense(s32 arg0, s32 arg1) {
 
 /**
  * Speed from base stat and level (max stat experience).
- * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_CalcSpeed(s32 arg0, s32 arg1) {
     return BattleAi_CalcStat(arg0, 0xFFFF, arg1);
@@ -291,7 +284,6 @@ s32 BattleAi_CalcSpeed(s32 arg0, s32 arg1) {
 
 /**
  * Special from base stat and level (max stat experience).
- * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_CalcSpecial(s32 arg0, s32 arg1) {
     return BattleAi_CalcStat(arg0, 0xFFFF, arg1);
@@ -301,7 +293,6 @@ s32 BattleAi_CalcSpecial(s32 arg0, s32 arg1) {
 /**
  * Current HP as a percentage of max HP (battler bytes 0x18 / 0x34), at least 1
  * while the Pokemon has any HP left, 0 when fainted.
- * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_GetHpPercent(s8 *arg0)
 {
@@ -843,7 +834,6 @@ u8 BattleAi_FindUsableHealingMove(u8 *arg0) {
 
 /**
  * Returns 1 if either of the battler's types is arg1.
- * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_HasType(s8 *arg0, s32 arg1) {
     if ((arg1 == M2C_FIELD(arg0, u8 *, 0x28)) || (arg1 == M2C_FIELD(arg0, u8 *, 0x29))) {

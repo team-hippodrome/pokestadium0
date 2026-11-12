@@ -1,7 +1,9 @@
 # COM battle AI (fragment012, from 0x82183AE0)
 
-Everything here is a first-pass reading of the code and is `@unverified`: no
-player agent or human has checked it in game yet. Function names are in
+This started as a first-pass reading of the code. The player agent has since
+checked the entry points and most move pickers in game (Free Battle, 1P vs
+COM); see `docs/annotation/player-verification.md` for what was run. Names that
+still carry `@unverified` were seen running but their rules were not tested. Function names are in
 `src/fragments/fragment012_17ED00/battle_engine_com_ai*.c`.
 
 ## Entry points
@@ -10,7 +12,7 @@ player agent or human has checked it in game yet. Function names are in
 |---|---|---|
 | `BattleAi_SelectTeam` | team selection | writes the chosen party indices; seeds the AI's random source |
 | `BattleAi_ChooseTurnAction` | every COM turn | 0..3 = move slot, 4 + n = switch to party slot n (also stored in `D_821CF2A4`) |
-| `BattleAi_RecordUsedMove` | after both sides act | learns the opponent's moves and PP, and who moved first |
+| `BattleAi_RecordUsedMove` | after both sides pick, before the moves run | learns the opponent's moves and PP, and who moved first |
 
 `BattleAi_ChooseTurnAction` tries `BattleAi_ChooseSwitch` first. If it doesn't
 switch, it calls `BattleAi_ChooseRandomMove` (mode 3) or `BattleAi_ChooseMove`.
@@ -67,6 +69,8 @@ through raw `u8 *` offsets today.
   - Never counts status moves, healing moves, Self-Destruct or Explosion as damage.
 - **Hidden information**: when the opponent's moves are not revealed, `BattleAi_GetBestDamage` assumes any move its species can learn from the `D_82194578` list.
 - **Sleep Clause**: `BattleAi_SleepClauseAllows`.
+- **Heal timing** (`BattleAi_ChooseMove`): the COM only heals when it moves first and slot 0 does not knock the opponent out, and never when it took more than half its max HP last turn.
+- **Thunder Wave**: the paralysis picker stops at the first usable paralysis move, so a Thunder Wave in an earlier slot than Stun Spore blocks both against a Ground type (seen in game).
 - **Team levels**: three picks must sum to 150..155 (`BattleAi_LevelSumAllowed`, Nintendo Cup '97 rules).
 - **Per-trainer picks** (`BattleAi_AddTrainerPickScore`):
   - Hand-written preferences keyed by the COM trainer's id word (0x6974, 0x95EC, 0x6299, 0xC0FC, 0x3C5E, 0x813A, 0x77CB, 0xBBBD, 0x940F, 0xD870, 0xCD7E, 0x4FC7).
