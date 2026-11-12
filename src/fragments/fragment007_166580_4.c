@@ -259,7 +259,7 @@ void Ui_DrawPrimColorRect(s32, s32, s32, s32, s32, s32, s32, s32);
  * func_8001B884 at (arg0, arg1) with D_05000008 as its texture argument (arg2
  * is passed straight through as the third argument), calls Ui_DrawPrimColorRect with
  * (arg0 + 0xE, arg1, 0x84, 0x14, ...) and then
- * prints the string D_82009CC8 at (arg0 + 0x10, arg1 + 2) in the colour
+ * prints the string D_82009CC8 at (arg0 + 0x10, arg1 + 2) in the color
  * stored at D_800734A8 using font 4.
  * What this draws is not yet established.
  * Seen in play: draws the 「レンタルポケモン」 title bar of the rental grid.
@@ -283,12 +283,12 @@ extern char D_82009CF0[];
 void Ui_DrawTexturedFrameDecal(s32, s32, s32, s32, char*);
 
 /**
- * Draws a labelled box using the menu object arg0 (layout not established; it
+ * Draws a labeled box using the menu object arg0 (layout not established; it
  * reads the words at 0x14, 0x18 and the mode index at 0x738). Calls
  * Ui_DrawTexturedFrameDecal at (word 0x14 + 0x127, word 0x18 - 0x12) with size 0xA6 by 0x14
  * and D_800735C4, emits D_80060270 and fills a 0xA2 by 0x10 rectangle at
- * (+0x129, -0x10) with the colour D_82009098[mode - 1]. Then prints the string
- * D_82009CF0 at (+0x12A, -0x10) in the colour D_800734A8, font 4, passing
+ * (+0x129, -0x10) with the color D_82009098[mode - 1]. Then prints the string
+ * D_82009CF0 at (+0x12A, -0x10) in the color D_800734A8, font 4, passing
  * D_820090A8[mode] as the extra argument.
  * Seen in play: draws 「1Pせんたくちゅう」 next to the entry screen title.
  */
@@ -318,7 +318,7 @@ void ScrollGrid_DrawItems(void*, s32, s32, s32, TableArgs*);
  * Draws using the menu object arg0 (layout not established; it reads the words
  * at 0x14, 0x18 and 0x1C as position/size values): calls FreeBattle_DrawRentalTitle at
  * (+6, +0x88) with the third argument being word 0x1C minus 0xC, emits the
- * display list D_80060270 and fills a 2 by 0xB6 rectangle with colour D_820090C0
+ * display list D_80060270 and fills a 2 by 0xB6 rectangle with color D_820090C0
  * at (+6, +0x9C). Then builds a TableArgs {D_8200AC58, 0x18, 0x10, 0} and calls
  * ScrollGrid_DrawItems on the sub-object at arg0 + 0x6E4 at (+8, +0xAC) with a mode
  * word of 0xFED, or 0xFEF when arg1 is 1, or 0xFFD when arg1 is 2.

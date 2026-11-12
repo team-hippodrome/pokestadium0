@@ -285,7 +285,7 @@ void func_89100688(Ctx89100688* arg0) {
  * Draws a highlight rectangle (via Ui_DrawRoundedFrame) for the screen object arg0, positioned from
  * the two words at arg0 + 0x2C / 0x30 (what they mean is not established). The word at
  * arg0 + 0xB550 selects the shape: 0 draws a 0x26 x 0x14 rectangle at the origin, 1 a
- * 0x50 x 0x14 rectangle offset 0x26 to the right; other values draw nothing. The colour is
+ * 0x50 x 0x14 rectangle offset 0x26 to the right; other values draw nothing. The color is
  * read from D_80073520. (Compare LabPCList_DrawRowCursor.)
  * @unverified Name guessed from the code; comment kept.
  */

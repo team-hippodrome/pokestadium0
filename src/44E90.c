@@ -3,7 +3,7 @@
 #include "global.h"
 
 /*
- * n_alSynAllocVoice: initialises the record `arg0` from the descriptor `arg1` and
+ * n_alSynAllocVoice: initializes the record `arg0` from the descriptor `arg1` and
  * tries to attach a second object to it.
  *
  * `arg1` holds a s16 at +0 (copied to arg0+0x16 and used as the lookup key), a s16 at

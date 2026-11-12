@@ -258,7 +258,7 @@ void BattleAnim_RunSandAttackHitEffect(s8 *arg0);
  * Per-frame callback of the "animated rise and fade" particle used by
  * descriptors 0x3E and 0x3F.  It switches on the particle's lifecycle state
  * (the halfword at offset 0xAE; the donor calls it `lifecycle`):
- *   1  initialise (the _InitParticle function, func_82160FA0)
+ *   1  initialize (the _InitParticle function, func_82160FA0)
  *   2  animate frames 0..7 forward, ease the scale (field at 0x1C) toward 0.8
  *      by 0.1, ease the second float (Particle_ApproachStepMagnitude) toward 1.0 by 1.0, and
  *      once the countdown at offset 0xA6 has reached zero move the Y motion
@@ -379,8 +379,8 @@ void func_82163D7C(s8 *arg0);
 /*
  * BattleAnim_AcidArmorParticleUpdateB
  *
- * Particle initialiser: sets the particle's scale to 0.2, recolours its
- * primitive/environment colours from its descriptor's palette pair, sets
+ * Particle initializer: sets the particle's scale to 0.2, recolours its
+ * primitive/environment colors from its descriptor's palette pair, sets
  * the primitive alpha to 0xC8, stores 0x18 with Particle_FieldA6_SetS16_0BCA8,
  * sets the float at offset 0x70 (the donor calls it stepMagnitude; the
  * value, 0.02 in the donor, is the rodata float D_FLT_82197730 here) and

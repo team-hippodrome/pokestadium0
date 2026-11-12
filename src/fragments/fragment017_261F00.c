@@ -77,7 +77,7 @@ extern s32 D_8A0005F0;
  * func_8003F6AC(1) and decrements it, wrapping -1 to 5; any other value does
  * nothing.
  * Matching note: the empty `if (!D_8A0005F0) {}` before the first call has no
- * effect on behaviour. It was found with decomp-permuter and is the only form
+ * effect on behavior. It was found with decomp-permuter and is the only form
  * tried that gives the ROM's register for the address of D_8A0005F0 (v1
  * instead of v0). Same kind of workaround as in func_81200A20.
  * @unverified Name guessed from the code; comment kept.

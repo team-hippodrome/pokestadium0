@@ -591,7 +591,7 @@ s32 LabPCList_UpdateList(s8* arg0) {
 }
 
 /**
- * Clears the first word of arg0 and initialises the sub-objects at offsets 4
+ * Clears the first word of arg0 and initializes the sub-objects at offsets 4
  * and 0xB7E4 with LabPCList_InitListWindow(arg0 + 4, 0x26, 0x48, arg0 + 0xB7E4). What the
  * object is is not established.
  * @unverified Name guessed from the code; comment kept.

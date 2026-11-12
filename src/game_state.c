@@ -831,7 +831,7 @@ void Game_RunStateLoop(s32 arg0) {
  * func_80026B50
  *
  * Builds a display list that draws a 320x240 RGBA16 image `tex` as a grid of
- * 10 columns by 4 rows of 32x60 texel tiles, centred on (x, y) and scaled to
+ * 10 columns by 4 rows of 32x60 texel tiles, centered on (x, y) and scaled to
  * width x height. For each column it loads 32 vertices into the RSP, then for
  * each row it loads that tile into TMEM, writes the tile's four corner
  * vertices into `vtx` (shade 0x00007F, alpha 0xFF) and draws it as two

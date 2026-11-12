@@ -194,12 +194,12 @@ s32 func_81800074(s32 arg0) {
  *
  * Draws a rectangular vertical-gradient panel.  The four arguments are the
  * panel's x, y, width and height (as s16), passed straight on to
- * Ui_DrawGradientPanel.  The top colour is dark blue (R0 G0 B50) and the
- * bottom colour is a brighter blue (R0 G0 B200).
+ * Ui_DrawGradientPanel.  The top color is dark blue (R0 G0 B50) and the
+ * bottom color is a brighter blue (R0 G0 B200).
  */
 void func_818000D0(s16 arg0, s16 arg1, s16 arg2, s16 arg3) {
-    Color_RGB8 sp24 = { 0x00, 0x00, 0x32 }; /* top colour    */
-    Color_RGB8 sp20 = { 0x00, 0x00, 0xC8 }; /* bottom colour */
+    Color_RGB8 sp24 = { 0x00, 0x00, 0x32 }; /* top color    */
+    Color_RGB8 sp20 = { 0x00, 0x00, 0xC8 }; /* bottom color */
 
     Ui_DrawGradientPanel(arg0, arg1, arg2, arg3, &sp24, &sp20);
 }
@@ -279,7 +279,7 @@ M2C_UNK func_8180003C();
  * the three float fields are is not established from this function.
  *
  * Matching notes: the declaration order (var_s0, var_s2, target) and the
- * initialisation order (var_s0, target, var_s2) decide which saved registers
+ * initialization order (var_s0, target, var_s2) decide which saved registers
  * the three values get. The `(var_s0 ^ 0)` in the loop test is a
  * matching-only construct (found with decomp-permuter): it only swaps the
  * operand order of the final `bne` to the retail order; `(var_s0 | 0)` does

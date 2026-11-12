@@ -94,7 +94,7 @@ void Font_SetColorForFlags(s32 arg0)
  *
  * This is the same selection as Font_SetColorForFlags just above, except that bit
  * 0x01 selects D_800734C0 here and D_800734B0 there.  What the four bytes
- * mean is not established from the code (they look like colour components).
+ * mean is not established from the code (they look like color components).
  */
 extern s8 D_800734C0;
 void func_80027F8C(s32 arg0) {
@@ -380,7 +380,7 @@ extern u8 D_04009EE0[];
 extern u8 D_04009F28[];
 extern u8 D_04009F70[];
 /**
- * Draws a hollow frame in a flat colour from the four 8x8 edge textures at
+ * Draws a hollow frame in a flat color from the four 8x8 edge textures at
  * D_04009E98 (top), D_04009F70 (right), D_04009F28 (bottom) and D_04009EE0 (left).
  * w and h are clamped to at least 16.
  *
@@ -730,7 +730,7 @@ void Particle_SetVelocityXZFromRotationY(Particle* arg0) {
 /**
  * Initialises a text-box style object at arg0: stores the constants 0x14,
  * 8, 6, 2 and 0 at offsets 0x24..0x34, runs Window_SetRect(arg0, arg1, arg2,
- * arg3, 0x18), then sets offset 0x14 to 1, offset 0x20 to the colour arg4
+ * arg3, 0x18), then sets offset 0x14 to 1, offset 0x20 to the color arg4
  * (a 4-byte struct passed by value, stored with unaligned stores) and offset
  * 0x38 to the string pointer arg5. What the fields mean is not established.
  * @unverified Name guessed from the code; comment kept.

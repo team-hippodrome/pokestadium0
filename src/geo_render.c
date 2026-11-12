@@ -1630,7 +1630,7 @@ typedef struct GeoTextNode {
 Gfx* func_8001B3AC(s16 x, s16 y, s16 arg2, s16 arg3, Color_RGBA8_u32 color, const char* fmt, ...);
 /**
  * Geo callback for a text node: prints the node's formatted string with its
- * font and colour and queues the resulting display list on the node's layer.
+ * font and color and queues the resulting display list on the node's layer.
  * @unverified Name guessed from the code; comment kept.
  */
 void Geo_NodeText(GraphNode* arg0) {

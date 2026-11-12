@@ -387,7 +387,7 @@ void func_8001E9A0(s32 arg0, s32 arg1) {
  * `temp_lo` is the empty part's width and `sp1C` the filled part's width.
  * The fill texture depends on the ratio arg3/arg4:
  *   below 10/48 -> texture 0x01006B90, below 27/48 -> 0x01006AD0,
- *   otherwise   -> 0x01006A10  (colour names unknown; check in game).
+ *   otherwise   -> 0x01006A10  (color names unknown; check in game).
  * Pieces drawn: a left piece, a right piece, the filled part, the empty part.
  *
  * Origin: Stadium 1 BattleHud_DrawHpBarTexture (so the bar is probably an
@@ -468,16 +468,16 @@ void BattleHud_DrawHpBarTexture(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4
  * (arg0, arg1) using 16-bit RGBA textures.
  *   arg2 = current value, arg3 = maximum value.
  * The bar is 48 pixels long: `temp_lo` pixels are drawn as the "empty" part and
- * `sp14` pixels as the "filled" part (sp14 = 48 - empty).  The fill colour
+ * `sp14` pixels as the "filled" part (sp14 = 48 - empty).  The fill color
  * depends on how full the bar is:
  *   below 10/48 of max -> texture 0x01006D90 (low),
  *   below 27/48 of max -> texture 0x01006D68 (medium),
  *   otherwise          -> texture 0x01006D40 (high).
- * (The colour names are a guess from the thresholds - check them in game.)
+ * (The color names are a guess from the thresholds - check them in game.)
  *
  * Origin: this is the Stadium 1 function Widget_DrawMeterBar (so the bar is
  * probably a HP-style gauge, but that is inferred from the name only).  Stadium 1 used a
- * single symbol for the first two colours; Zero has three distinct textures.
+ * single symbol for the first two colors; Zero has three distinct textures.
  *
  * Verified: compiles with IDO 7.1 -O2 -mips2 (repo flags and headers) to the same words as the retail ROM, relocations compared by address.
  */
@@ -500,7 +500,7 @@ void Widget_DrawMeterBar(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 temp_lo = ((arg3 - arg2) * 0x30) / arg3;
     s32 sp14 = 0x30 - temp_lo;  /* length of the filled part, 0..48 pixels */
 
-    /* pick the fill colour from the fill ratio (integer maths, as in retail) */
+    /* pick the fill color from the fill ratio (integer math, as in retail) */
     if (arg2 < ((arg3 * 0xA) / 48)) {
         spCC = D_01006D90;
     } else if (arg2 < ((arg3 * 0x1B) / 48)) {

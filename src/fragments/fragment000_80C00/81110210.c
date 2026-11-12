@@ -1177,7 +1177,7 @@ s32 AudioPlayback_AllocNoteFromDisabled(s8 *arg0, s32 arg1) {
  * AudioPlayback_AllocNoteFromDecaying
  *
  * Like AudioPlayback_AllocNoteFromDisabled, but it takes the entry from the list headed at
- * arg0 + 0x10, initialises it with AudioPlayback_NoteReleaseAndTakeOwnership(entry, arg1), and inserts
+ * arg0 + 0x10, initializes it with AudioPlayback_NoteReleaseAndTakeOwnership(entry, arg1), and inserts
  * it at the front of the list headed at arg0 + 0x20 with AudioSeq_AudioListPushBack.
  * List heads are {next, prev, count, owner} blocks (see AudioPlayback_InitNoteList).
  *

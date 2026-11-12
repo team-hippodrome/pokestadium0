@@ -477,7 +477,7 @@ s32 Registration_UpdateMessageWindow(s32 arg0) {
  * Appends a call of display list D_80060270 to the current display list and
  * then calls func_80029028(arg0, arg1, 0x88, 0x64, arg2). arg0 and arg1 are
  * passed straight through (the retail code never touches $a0/$a1); arg2 is a
- * 4-byte colour passed by value.
+ * 4-byte color passed by value.
  * @unverified Name guessed from the code; comment kept.
  */
 void Registration_FillTrainerPanel(s32 arg0, s32 arg1, Color88100D9C arg2) {
@@ -489,7 +489,7 @@ void Registration_FillTrainerPanel(s32 arg0, s32 arg1, Color88100D9C arg2) {
  * Appends a call of display list D_80060270 to the current display list and
  * then calls func_80029028(arg0 + 0x88, arg1, 0x18C, 0x64, arg2). arg1 is
  * passed straight through (the retail code never touches $a1); arg2 is a
- * 4-byte colour passed by value.
+ * 4-byte color passed by value.
  * @unverified Name guessed from the code; comment kept.
  */
 void Registration_FillTeamPanel(s32 arg0, s32 arg1, Color88100D9C arg2) {
@@ -608,7 +608,7 @@ void Registration_DrawMonCell(s32 x, s32 y, u8* entry, s32 id, s32 color, IconCa
             *p = id;
             func_8001833C(D_88103074, slot, entry, ((D_88102D78[0].c[1] << 3) & 0x7C0) | ((D_88102D78[0].c[2] >> 2) & 0x3E) | ((D_88102D78[0].c[0] << 8) & 0xF800) | 1);
         }
-        if (cache) {} // FAKE: keeps cache live through the block above so the colour table address takes t1
+        if (cache) {} // FAKE: keeps cache live through the block above so the color table address takes t1
         gSPDisplayList(gDisplayListHead++, D_80073408);
         func_8001B884(x + 0x56, y + 6, 0x28, 0x28, (u8*)PokeIcon_GetImage((s8*)D_88103074, slot), 0x28, 0x200000);
         gSPDisplayList(gDisplayListHead++, D_80073438);

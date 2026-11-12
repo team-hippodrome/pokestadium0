@@ -244,7 +244,7 @@ void FreeBattle_LoadGbTeams(RecordList* arg0) {
 /**
  * FreeBattle_AddRentalEntry
  *
- * Appends an empty record to a list of 0x214-byte records: initialises the
+ * Appends an empty record to a list of 0x214-byte records: initializes the
  * header of the record at index `count` (type byte = 2, the next three bytes
  * = 0), then sets `count` to the index of the following record, computed as a
  * pointer difference from the start of the list.
@@ -381,7 +381,7 @@ void func_8000B2F4(s32);
  * FreeBattle_InitLevelSumWarning. Calls Window_SetRect(arg0, arg1, arg2, 0x1AE, 0x124), clears the
  * words at 0x20, 0x24 and 0x28 and sets the word at 0x14 to 0x1001. Calls
  * Window_InitLabeled twice, on the sub-objects at arg0 + 0x2C (string D_82009B80)
- * and arg0 + 0x68 (string D_82009B88), both with width 0x48 and colour
+ * and arg0 + 0x68 (string D_82009B88), both with width 0x48 and color
  * D_8200902C and positions derived from the words at 0 and 4. Then sets the
  * words at 0x58, 0x60, 0xAC and 0xA8 to 0xA, 0xC, 2 and 0, stores D_800603C0
  * and then arg5 in the word at 0xA4 (calling func_8000B2F4 with each), stores
@@ -936,7 +936,7 @@ void FreeBattle_DrawSlotCell(s32 arg0, s32 arg1, s32* arg2, s32 arg3, s32 arg4, 
  * FreeBattle_FillTrainerPanel
  *
  * Emits the display list D_80060270, then fills a 0x88 by 0x64 rectangle at
- * (arg0, arg1) with the colour in arg2 using func_80029028
+ * (arg0, arg1) with the color in arg2 using func_80029028
  * (Trade_DrawSolidFillRect).
  * Seen in play: fills each team row's trainer panel (portrait, 「なまえ ガール」, IDNo/15235).
  */
@@ -949,7 +949,7 @@ void FreeBattle_FillTrainerPanel(s32 arg0, s32 arg1, Color82001CCC arg2) {
  * FreeBattle_FillTeamPanel
  *
  * Emits the display list D_80060270, then fills a 0x18C by 0x64 rectangle at
- * (arg0 + 0x88, arg1) with the colour in arg2 using func_80029028
+ * (arg0 + 0x88, arg1) with the color in arg2 using func_80029028
  * (Trade_DrawSolidFillRect).
  * @unverified Name guessed from the code; comment kept.
  */
@@ -977,9 +977,9 @@ void func_8001AC3C(void);
 /**
  * FreeBattle_DrawRentalPrompt
  *
- * Draws a filled rectangle with FreeBattle_FillTeamPanel using the colour D_82008F58,
+ * Draws a filled rectangle with FreeBattle_FillTeamPanel using the color D_82008F58,
  * then switches the font to translucent, two-cycle text rendering (white
- * environment colour, font set mask 0x20, Font_SetLineHeight(0x2A), prim colour
+ * environment color, font set mask 0x20, Font_SetLineHeight(0x2A), prim color
  * 255/100/255/255) and prints the string D_82009C08 at
  * (arg0 + 0xAE, arg1 + 0xE) before ending text rendering. arg2 is not used.
  * Seen in play: draws 「レンタルポケモンから 6たいえらぶ」 in the rental entry row.

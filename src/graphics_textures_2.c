@@ -366,7 +366,7 @@ s32 func_8001AFB0(Gfx** arg0, s16 x, s16 y, s16 arg3, s16 arg4, u16 chr) {
 /**
  * Builds a small display list in freshly allocated display-list memory:
  * lighting is switched off, textures are enabled with full scale, a two-cycle
- * combiner (TEXEL0 * ENVIRONMENT) is selected, the environment colour is set
+ * combiner (TEXEL0 * ENVIRONMENT) is selected, the environment color is set
  * to arg1, the caller's display list
  * arg0 is called, and lighting is switched back on.
  *

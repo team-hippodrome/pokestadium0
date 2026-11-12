@@ -123,7 +123,7 @@ void Menu_ClearItemFlags(u8* arg0) {
 /**
  * Draws the cursor rectangle (via Ui_DrawRoundedFrame) for a list menu with one cell per row:
  * x = arg1 + 2, y = cursor * cellHeight + arg2 + 2, size = (cellWidth - 4) x (cellHeight - 4),
- * colour read from D_80073520. Compare ScrollList_DrawCursor and ScrollGrid_DrawCursor. The separate `y`
+ * color read from D_80073520. Compare ScrollList_DrawCursor and ScrollGrid_DrawCursor. The separate `y`
  * local only fixes the order in which the fields are loaded.
  * @unverified Name guessed from the code; comment kept.
  */
@@ -330,7 +330,7 @@ void GridMenu_ClearItemFlags(u8* arg0) {
  * Draws the cursor rectangle (via Ui_DrawRoundedFrame) for a multi-column menu: the cursor cell is
  * at column cursor % columns, row cursor / columns, so x = column * colSpacing + arg_x + 2 and
  * y = row * rowSpacing + arg_y + 2; the size is (colSpacing - 4) x (rowSpacing - 4) and the
- * colour is read from D_80073520. Compare ScrollGrid_DrawCursor. The `px`/`py` locals only fix the
+ * color is read from D_80073520. Compare ScrollGrid_DrawCursor. The `px`/`py` locals only fix the
  * evaluation order of the argument expressions.
  * @unverified Name guessed from the code; comment kept.
  */
@@ -755,7 +755,7 @@ void ScrollList_DrawScrollArrows(ScrollMenu8002F6C4* menu, s32 x, s32 topY, s32 
  * Draws the cursor rectangle (via Ui_DrawRoundedFrame) for a scrolling list menu. Same shape as
  * ScrollGrid_DrawCursor but with x = arg1 + 2 (no column calculation) and the rectangle size taken from
  * cellWidth/cellHeight minus 4: y = scrollTarget + arg2 - scroll + 2, and when flag 0x400 is
- * set, (cellHeight - 1) is subtracted from it. The colour argument is read from D_80073520.
+ * set, (cellHeight - 1) is subtracted from it. The color argument is read from D_80073520.
  * Matching note: the redundant (s32) cast on arg2 only fixes the operand order of the addu.
  * @unverified Name guessed from the code; comment kept.
  */
@@ -1366,7 +1366,7 @@ void ScrollGrid_DrawScrollArrows(GridMenu800310D8* menu, s32 x, s32 y) {
  * The column is cursor % columns, so x = column * cellWidth + arg1. y is
  * scrollTarget + arg2 - scroll + 2; when flag 0x400 is set, (cellHeight - 1)
  * is subtracted from it. The rectangle size is the cell size minus 4 in each
- * direction, and the colour argument is read from D_80073520.
+ * direction, and the color argument is read from D_80073520.
  * @unverified Name guessed from the code; comment kept.
  */
 void ScrollGrid_DrawCursor(GridMenu80031004* arg0, s32 arg1, s32 arg2) {

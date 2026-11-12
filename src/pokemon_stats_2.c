@@ -496,7 +496,7 @@ extern GbSavePort D_800AC910[4];
  *   0  start the removal check (GbTower_IsPakInserted), fall into 1
  *   1  wait until the cartridge is off (GbPak_IsCartOff)
  *   2  wait until it is back on (GbPak_IsCartOn); returns 1 meanwhile
- *   3  re-initialise the pak (GbTower_ReinitPak); if that worked, return 3,
+ *   3  re-initialize the pak (GbTower_ReinitPak); if that worked, return 3,
  *      or 2 if the cartridge also identifies as the same game as before
  *      (GbCart_IdentifyGame == port byte 2) and
  *      GbTower_VerifyPakStillInserted accepts the port's data at offset

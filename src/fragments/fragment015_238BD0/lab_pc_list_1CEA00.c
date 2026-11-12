@@ -563,14 +563,14 @@ void LabItem_DisableRow(s8 *arg0, s32 arg1) {
 /*
  * LabItem_DrawMenuRow: draws one line of text `str` at (x, y) in the Lab PC list style.
  *
- * `flags` bit 0x10 first draws a 0xD2 x 0x16 highlight (Ui_FillRectHighlighted, colour
- * D_8900A5BC) at (x + 3, y + 3).  The text colour is then picked:
+ * `flags` bit 0x10 first draws a 0xD2 x 0x16 highlight (Ui_FillRectHighlighted, color
+ * D_8900A5BC) at (x + 3, y + 3).  The text color is then picked:
  *   - flags & 1: D_800734A8[1] with alpha forced to 0x4C;
  *   - else flags & 0x100: D_8900A5D4[(flags & 2) ? 0 : 1];
  *   - otherwise: D_800734A8[(flags & 2) ? 0 : 1];
  * and the string is printed at (x + 8, y + 4) with font set 8 in translucent text
  * mode.  `index` is unused.  (A shorter sibling of PcSort_DrawMenuRow, which has two more
- * colour tables.)
+ * color tables.)
  */
 void Ui_FillRectHighlighted(s32, s32, s32, s32, Rgba89000D50);
 M2C_UNK func_8001AA9C(u8, u8, u8, u8);
