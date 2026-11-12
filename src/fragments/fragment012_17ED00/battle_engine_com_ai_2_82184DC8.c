@@ -658,9 +658,13 @@ extern u8* D_821CF29C;
 /**
  * Picks Recover or Softboiled, or Rest unless Rest was one of the last two moves,
  * when the COM is below 40% HP. Never heals when the last move was a healing
- * move, or when the damage taken last turn (0x72) is more than half the max HP
- * (healing would not keep up). Returns the move slot or -1.
- * @unverified Name and comment guessed from the code (COM AI pass).
+ * move, or when the value at 0x72 is more than half the max HP. Returns the move
+ * slot or -1.
+ * Seen in play (2026-11-12): COM's Gengar at 20/ 72 HP with Recover in slot 3 got
+ * slot 3 back, then ゲンのすけは じこさいせいを した！ and its HP rose to 56/ 72.
+ * 0x72 is not the damage this Pokémon took last turn: Gengar had not been hit, yet
+ * 0x72 held 52 (left over after a super-effective Poison Sting knocked out the
+ * Pinsir before it) and blocked the heal until it was cleared.
  */
 s32 BattleAi_PickHealingMove(u8 *arg0)
 {

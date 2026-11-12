@@ -574,3 +574,23 @@ Drill, Fissure), the stinger trail (Poison Sting, Twineedle, Pin Missile) and
 the fire-breath flames (Flamethrower, Dragon Rage, Fire Spin, Fire Blast).
 `BattleAnim_InitializeCutSlashScratchEffect` ran only for Cut, so it is now
 `BattleAnim_InitializeCutEffect`.
+
+## Switch, surrender, faint and COM healing
+
+These scenarios start from a COM free battle (1P ガール team, COM むしとり team).
+
+* Switch: B, then C-Left, sent Onix (イワワ) in for Nidorino. This ran
+  `BeginBattleForEntity`, the runtime-state init and reset pair, and the roster
+  selection helpers.
+* Surrender: Start opens 「こうさんしますか？ いいえ はい」. Choosing はい shows both
+  teams, then COM's かち screen. `BattleMenu_DrawSurrenderPrompt` never ran and
+  has no direct callers; the prompt on screen is drawn by
+  `BattleMenu_DrawSurrenderPromptWithCursor`.
+* Faint: COM's Pinsir (カイのすけ) was set to 1 HP and speed 1. Poison Sting
+  (こうかは ばつぐんだ！) knocked it out (ひんし), then 「もういい！ もどれ！」. COM
+  picked Gengar behind the R かくにん button (`BattleMenu_DrawConfirmButton`) and
+  sent it out with ゆけっ！ゲンのすけ (`ActivePokemon_GetPokeBallAimPoint`).
+* COM healing: Gengar was set to 20/ 72 HP with Recover in slot 3.
+  `BattleAi_PickHealingMove` returned 3 and Gengar used じこさいせい (HP 56/ 72),
+  but only after offset 0x72 of the AI record was cleared. That offset held 52
+  although Gengar had not been hit, so it is not "damage taken last turn".

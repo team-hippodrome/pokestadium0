@@ -260,7 +260,8 @@ void BattleScene_GetParticipantScreenAimPoint(ActivePokemon* active_pokemon, Vec
 
 /**
  * Writes the Poke Ball's position, raised by 2.5 units, to `arg1`.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): ran during ゆけっ！ゲンのすけ, while the Poké Ball for COM's replacement
+ * Gengar was in the air (its shadow on the floor), and not before.
  */
 void ActivePokemon_GetPokeBallAimPoint(s8 *arg0, s8 *arg1) {
     M2C_FIELD(arg1, f32 *, 0) = (f32) M2C_FIELD(arg0, f32 *, 0x648);
