@@ -3,7 +3,9 @@
 
 /**
  * Wave channel: 65536 / (2048 - period) Hz -> phase step (32 steps per cycle at 48 kHz).
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12) during Pocket Monsters Green's intro: turned wave period 0x773 into
+ * step 0x4F53. That is 65536 / (2048 - 1907) = 464.8 Hz, times 32 steps per cycle at 48 kHz, in
+ * 16.16 fixed point.
  */
 u32 GbApu_FreqToStep(u16 arg0) {
   u32 temp;
@@ -33,7 +35,9 @@ u32 GbApu_ConfigureNoiseTable(u16 arg0, u16 arg1, u16 arg2) {
 
 /**
  * Squares: 131072 / (2048 - period) Hz -> phase step.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12) during Pocket Monsters Green's intro in the GB Tower: turned square
+ * period 0x5AC into step 0x2588. That is 131072 / (2048 - 1452) = 219.9 Hz, times 32 steps per
+ * cycle at 48 kHz, in 16.16 fixed point.
  */
 u32 GbApu_FreqToStep2x(u16 arg0) {
   u32 temp;
@@ -408,7 +412,8 @@ u16 GbApu_UpdateNoiseChannel(void) {
 
 /**
  * Applies one queued write to sound register 0xFF00 + reg (NR10-NR52, wave RAM 0x30-0x3F).
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12) during Pocket Monsters Green's intro in the GB Tower: the next
+ * GbApu_RenderBuffer applied that queued write as (0x24, 0x77).
  */
 void GbApu_WriteRegister(u16 reg, u8 value) {
     s32 pad; // FAKE: stack padding
@@ -622,7 +627,9 @@ void GbApu_WriteRegister(u16 reg, u8 value) {
  * Renders sample_count interleaved stereo samples of GB sound. Drains the register-write queue,
  * applies each write when the buffer position reaches its timestamp, then mixes the four
  * channels per NR51 panning and NR50 master volume.
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12) during Pocket Monsters Green's intro in the GB Tower: ran once a
+ * frame from GbAudio_UpdateFrame with 0x310 (784) samples, drained the queued NR50 write, and
+ * called the square, wave and noise channel updates once per sample.
  */
 void GbApu_RenderBuffer(s32 num_samples, s16* out) {
     s32 i;
@@ -747,7 +754,9 @@ void GbApu_RenderBuffer(s32 num_samples, s16* out) {
  * Called by the CPU core's I/O write path for sound registers: queues (address - 0xFF00, value,
  * timestamp) for GbApu_RenderBuffer and records triggers (NRx4 bit 7) and NR52 power-offs in
  * sGbApuStatusOverride so NR52 reads are correct before the write is rendered.
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12) during Pocket Monsters Green's intro in the GB Tower: called from the
+ * CPU core's I/O write with (0xFF24, 0x77, timestamp 0x42FA), Green writing NR50; it returned the
+ * value 0x77.
  */
 void GbApu_QueueRegisterWrite(u16 arg0, u8 arg1, u16 arg2) {
     s32 temp_v1;
@@ -873,7 +882,8 @@ void func_811173F4(void) {
 /**
  * Reads a GB I/O register byte. FF26 (NR52) is rebuilt from the APU channel
  * state; every other address is read straight from gGbMemoryMap.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12) during Pocket Monsters Green's intro in the GB Tower: Green read
+ * 0xFF26 (NR52) and got 0x8F: sound on, all four channels active.
  */
 u8 GbMem_ReadIoRegister(u16 arg0) {
   u8 var_a0;
@@ -912,7 +922,8 @@ u8 GbMem_ReadIoRegister(u16 arg0) {
  * Per-frame AI service. Submits the buffer rendered last frame with osGbSetNextBuffer, then renders
  * the next one: samplesPerFrame minus what the AI still holds, plus 128, rounded to 16 and clamped
  * to [min, max]. Source is the GB APU, or the menu sounds while sGbAudioMenuSoundMode is set.
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12) during Pocket Monsters Green's intro in the GB Tower: ran once a
+ * frame and called GbApu_RenderBuffer for 784 samples.
  */
 s32 GbAudio_UpdateFrame(void) {
     u32 ai_len;

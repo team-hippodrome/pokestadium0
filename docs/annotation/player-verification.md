@@ -704,3 +704,20 @@ GBのボックス2 opened it on the right (`PcSort_OpenBox`). With ハナ (フ�
 selected, the panel showed HP: 19, こうげき 9, ぼうぎょ 9, すばやさ 9, とくしゅ 11
 (`PcSort_DrawMonStats`) and the moves たいあたり and なきごえ
 (`PcBox_DrawMoveName`).
+
+## GB Tower sound
+
+These were probed while Pocket Monsters Green's intro (Gengar against
+Nidorino) played in the GB Tower:
+
+* Green's NR50 write went through `GbApu_QueueRegisterWrite` (0xFF24, 0x77,
+  timestamp). The next `GbApu_RenderBuffer` applied it through
+  `GbApu_WriteRegister` (0x24, 0x77).
+* `GbAudio_UpdateFrame` renders 784 samples a frame. Each sample calls the
+  square 1, square 2, wave and noise updates, in that order.
+* Reading NR52 through `GbMem_ReadIoRegister` gave 0x8F.
+* `GbApu_FreqToStep2x` and `GbApu_FreqToStep` returned exactly the
+  131072/(2048-p) and 65536/(2048-p) Hz steps (32 steps at 48 kHz, 16.16
+  fixed point).
+* The four channel updates keep their tags, because play cannot tell square 1
+  from square 2.
