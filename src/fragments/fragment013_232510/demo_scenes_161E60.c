@@ -638,11 +638,61 @@ void func_82200F08(void) {
     }
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_82201084; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment013_232510/func_82201084.s")
-#endif
+void func_8001EBDC(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4); //@src/ui_graphics.c
+
+/**
+ * Draws the HP bar of every Pokemon both teams brought, each into its own slot
+ * image in D_82203210 (team i owns slots i * 6 to i * 6 + 5).
+ *
+ * The bar shows max(hp, unk_26 * arg0 / 100) out of unk_26. unk_26 is passed
+ * as the bar's maximum, so it is probably the maximum HP (func_822017F0 also
+ * checks hp < unk_26). func_822018EC calls this with arg0 counting from 100
+ * down to 0 in steps of 4, so each bar starts full and drains to the Pokemon's
+ * current HP.
+ *
+ * A team with unk_00 == 2 has two rosters (unk_38[0] and unk_38[1]) that use
+ * three slots each; any other team has one roster that uses all six slots.
+ *
+ * Each branch declares its own mon/hp/scaled. With one shared set, the loop
+ * constant 2 is kept in a2 instead of retail's a0.
+ */
+void func_82201084(s32 arg0) {
+    s32 i;
+    s32 j;
+    s32 k;
+    unk_D_82203170* p;
+
+    for (i = 0; i < 2; i++) {
+        p = &D_82203170[i];
+        if (p->unk_00 == 2) {
+            BattleMon* mon;
+            s32 hp;
+            s32 scaled;
+
+            for (j = 0; j < 2; j++) {
+                mon = p->unk_38[j]->pokemonPicked;
+                for (k = 0; k < p->unk_38[j]->numberOfPokemonBrought; k++, mon++) {
+                    scaled = (mon->unk_26 * arg0) / 100;
+                    hp = (mon->hp >= scaled) ? mon->hp : scaled;
+                    GfxImage_SetRenderTarget(&gDisplayListHead, D_82203210[i * 6 + j * 3 + k]);
+                    func_8001EBDC(0, 0, 104, hp, mon->unk_26);
+                }
+            }
+        } else {
+            BattleMon* mon;
+            s32 hp;
+            s32 scaled;
+
+            mon = p->unk_38[0]->pokemonPicked;
+            for (k = 0; k < p->unk_38[0]->numberOfPokemonBrought; k++, mon++) {
+                scaled = (mon->unk_26 * arg0) / 100;
+                hp = (mon->hp >= scaled) ? mon->hp : scaled;
+                GfxImage_SetRenderTarget(&gDisplayListHead, D_82203210[i * 6 + k]);
+                func_8001EBDC(0, 0, 104, hp, mon->unk_26);
+            }
+        }
+    }
+}
 
 extern u8 D_8F625700[];
 void func_8001C058(s32, s32, s32, s32, u8*, s32, s32);
