@@ -53,10 +53,12 @@ s32 BinArchive_GetCachedFile(BinArchive* archive, s32 file_number);
 s32 Jpeg_DecodeImage(u32 addr, s32 arg1, u8* arg2);
 void Dma_WriteChunks(u32 write_start, u32 buffer_start, u32 buffer_end, s32 arg3);
 
+/** Creates the message queue used to wait for DMA completion. */
 void Dma_InitializeCompletionQueue(void) {
     osCreateMesgQueue(&D_800A96F0, &D_800A9708, 1);
 }
 
+/** Decompresses a Yay0 asset into memory and relocates it. */
 void Yay0_DecompressAndRelocate(u8* in_header, u8* memory) {
     UNUSED s32 pad2; // FAKE: stack padding
     PERSSZP* header = in_header;
@@ -82,6 +84,7 @@ void Yay0_DecompressAndRelocate(u8* in_header, u8* memory) {
     osWritebackDCache(memory, header->decompressed_size2);
 }
 
+/** Reads data from the cartridge in chunks, waiting for each DMA to complete. */
 void Dma_ReadChunks(u8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 var_s0;
     OSMesgQueue* mesq = &D_800A96F0;
@@ -101,6 +104,10 @@ void Dma_ReadChunks(u8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     }
 }
 
+/**
+ * Writes a buffer to the cartridge in chunks, waiting for each DMA to
+ * complete.
+ */
 void Dma_WriteChunks(u32 write_start, u32 buffer_start, u32 buffer_end, s32 arg3) {
     s32 chunk_size;
     s32 buffer;
@@ -121,6 +128,7 @@ void Dma_WriteChunks(u32 write_start, u32 buffer_start, u32 buffer_end, s32 arg3
     }
 }
 
+/** Allocates memory for and decodes a JPEG image. */
 void* Jpeg_LoadDecodedImage(u8* addr, PRESJPEG* arg1, s32 side) {
     s32 new_addr = main_pool_alloc(arg1->unk_0C + 0x100, side);
 
@@ -140,6 +148,7 @@ void* Jpeg_LoadDecodedImage(u8* addr, PRESJPEG* arg1, s32 side) {
     return new_addr;
 }
 
+/** Allocates memory for and decompresses a Yay0 asset. */
 s32 Yay0_LoadDecompressedAsset(s32 arg0, PERSSZP* arg1, s32 side) {
     s32 vaddr = main_pool_alloc(arg1->decompressed_size2, side);
 
@@ -152,6 +161,7 @@ s32 Yay0_LoadDecompressedAsset(s32 arg0, PERSSZP* arg1, s32 side) {
     return vaddr;
 }
 
+/** Allocates memory and copies an uncompressed asset from the cartridge. */
 u32* Asset_CopyUncompressed(u8* arg0, s32 arg1, u32 arg2, s32 arg3) {
     u32* sp1C = main_pool_alloc(arg2, arg3);
 
@@ -164,6 +174,7 @@ u32* Asset_CopyUncompressed(u8* arg0, s32 arg1, u32 arg2, s32 arg3) {
     return sp1C;
 }
 
+/** Loads an asset from a ROM range, decompressing it when it is compressed. */
 void* Asset_LoadCompressed(u8* romStart, u8* romEnd, s32 arg2, s32 arg3) {
     u32* addr;
     u32* newaddr;
@@ -201,6 +212,7 @@ void* Asset_LoadCompressed(u8* romStart, u8* romEnd, s32 arg2, s32 arg3) {
     return ret;
 }
 
+/** Loads an asset from a range described by a storage descriptor. */
 void* Storage_LoadAssetByLbaRange(unk_func_800041C0* arg0, s32 arg1) {
     s32 sp44;
     u32* sp40;
@@ -237,6 +249,7 @@ void* Storage_LoadAssetByLbaRange(unk_func_800041C0* arg0, s32 arg1) {
     return sp40;
 }
 
+/** Fills a storage descriptor with a block-address range. */
 unk_func_800041C0* Storage_SetLbaRange(unk_func_800041C0* arg0, s32 arg1, s32 arg2) {
     arg0->unk_00 = arg1;
     arg0->unk_02 = arg2 - arg1;
@@ -247,6 +260,7 @@ unk_func_800041C0* Storage_SetLbaRange(unk_func_800041C0* arg0, s32 arg1, s32 ar
     return arg0;
 }
 
+/** Fills a storage descriptor with a byte range. */
 unk_func_800041C0* Storage_SetByteRange(unk_func_800041C0* arg0, u32 arg1, u32 offset, u32 size) {
     s32 sp2C;
     s32 sp28;
@@ -271,6 +285,7 @@ unk_func_800041C0* Storage_SetByteRange(unk_func_800041C0* arg0, u32 arg1, u32 o
     return arg0;
 }
 
+/** Prefetches a block-address range into memory. */
 void Storage_PrefetchLbaRange(s32 arg0, s32 arg1, s32 arg2) {
     unk_func_800041C0 sp1C;
 
@@ -278,6 +293,7 @@ void Storage_PrefetchLbaRange(s32 arg0, s32 arg1, s32 arg2) {
     Storage_LoadAssetByLbaRange(&sp1C, arg2);
 }
 
+/** Clears the segment base entry when its memory block is freed. */
 void Memmap_ClearSegmentOnBlockFree(u32 block_addr, u32 addr) {
     u32 base = addr & 0xFF000000;
     u32 sp1C = addr & 0xFFFFFF;
@@ -287,6 +303,7 @@ void Memmap_ClearSegmentOnBlockFree(u32 block_addr, u32 addr) {
     }
 }
 
+/** Loads an asset from a ROM range and maps it at a segment. */
 u8* Asset_LoadToSegment(s32 id, u8* rom_start, u8* rom_end, s32 arg3) {
     u8* vaddr = Asset_LoadCompressed(rom_start, rom_end, arg3, 0);
 
@@ -297,6 +314,7 @@ u8* Asset_LoadToSegment(s32 id, u8* rom_start, u8* rom_end, s32 arg3) {
     return vaddr;
 }
 
+/** Loads an asset from a block-address range and maps it at a segment. */
 MainPoolBlock* Asset_LoadToSegmentByLbaRange(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     UNUSED s32 pad; // FAKE: stack padding
     unk_func_800041C0 sp28;
@@ -310,6 +328,7 @@ MainPoolBlock* Asset_LoadToSegmentByLbaRange(s32 arg0, s32 arg1, s32 arg2, s32 a
     return temp_v0;
 }
 
+/** Callback run when a fragment's memory block is freed. */
 void Fragment_FreeCallback(u32 base_addr, u32 addr) {
     u32 sp1C;
     u32 temp_a0;
@@ -322,6 +341,7 @@ void Fragment_FreeCallback(u32 base_addr, u32 addr) {
     }
 }
 
+/** Registers a loaded fragment so it is freed with its block. */
 void Fragment_Register(s32 arg0, Fragment* addr) {
     UNUSED s32 pad; // FAKE: stack padding
     u32 sp20 = main_pool_get_block_dist(addr);
@@ -337,6 +357,7 @@ void Fragment_Register(s32 arg0, Fragment* addr) {
     }
 }
 
+/** Loads a fragment from a ROM range and registers it. */
 ret_func_80004454 Fragment_Load(s32 arg0, u8* romStart, u8* romEnd) {
     void* addr = Asset_LoadCompressed(romStart, romEnd, 0, 0);
 
@@ -346,6 +367,7 @@ ret_func_80004454 Fragment_Load(s32 arg0, u8* romStart, u8* romEnd) {
     return addr;
 }
 
+/** Loads a fragment from a block-address range and registers it. */
 void* Fragment_LoadByLbaRange(s32 arg0, s32 arg1, s32 arg2) {
     Fragment* sp2C;
     unk_func_800041C0 sp20;
@@ -357,6 +379,7 @@ void* Fragment_LoadByLbaRange(s32 arg0, s32 arg1, s32 arg2) {
     return sp2C;
 }
 
+/** Loads a bin archive's header from a ROM range. */
 BinArchive* BinArchive_Open(u8* romStart, u8* romEnd, s32 arg2, s32 arg3) {
     BinArchive* ret = NULL;
     u32 sp28;
@@ -411,6 +434,7 @@ BinArchive* BinArchive_Open(u8* romStart, u8* romEnd, s32 arg2, s32 arg3) {
     return ret;
 }
 
+/** Loads a bin archive from a block-address range. */
 void* BinArchive_LoadByLbaRange(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     BinArchive* var_a0;
     unk_func_800041C0 sp20;
@@ -457,16 +481,19 @@ void* BinArchive_LoadByLbaRange(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     return var_a0;
 }
 
+/** Frees a bin archive. */
 void BinArchive_Free(void* arg0) {
     main_pool_try_free(arg0);
 }
 
+/** Loads one archive file directly from the ROM. */
 Fragment* BinArchive_LoadFileFromRom(BinArchive* arg0, BinArchiveFile* arg1) {
     u8* temp_a0 = arg0->unk_04 + arg1->offset;
 
     return Asset_LoadCompressed(temp_a0, arg1->size + temp_a0, 0, 0);
 }
 
+/** Loads one archive file through the buffered storage path. */
 void* BinArchive_LoadFileBuffered(BinArchive* arg0, BinArchiveFile* arg1) {
     unk_func_800041C0 sp1C;
 
@@ -474,6 +501,7 @@ void* BinArchive_LoadFileBuffered(BinArchive* arg0, BinArchiveFile* arg1) {
     return Storage_LoadAssetByLbaRange(&sp1C, 0);
 }
 
+/** Returns the loaded copy of an archive file, loading it if needed. */
 void* BinArchive_GetFile(BinArchive* archive, s32 file_number) {
     Fragment* var_a2 = NULL;
     UNUSED s32 pad; // FAKE: stack padding
@@ -504,6 +532,7 @@ void* BinArchive_GetFile(BinArchive* archive, s32 file_number) {
     return var_a2;
 }
 
+/** Returns the cached copy of an archive file, if there is one. */
 s32 BinArchive_GetCachedFile(BinArchive* archive, s32 file_number) {
     BinArchiveFile* sp18 = (u8*)archive + sizeof(BinArchive) + (file_number * sizeof(BinArchiveFile));
     s32 var_v1 = 0;

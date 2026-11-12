@@ -105,6 +105,7 @@ void func_80011D14(Vtx* arg0, CameraOverlay* arg1, s16 arg2, s16 arg3, s16 arg4,
 struct Root80013DC8;
 void Geo_NodeModelPartRoot(struct Root80013DC8* arg0);
 
+/** Resets the geo matrix stack to a single identity matrix. */
 void GeoRender_InitMatrixStack(void) {
     D_800AB460.unk_10A0 = 0;
     D_800AB460.unk_1080[0] = 0;
@@ -113,12 +114,17 @@ void GeoRender_InitMatrixStack(void) {
     MtxF_ToFixed(D_800AB460.unk_1000[0], D_800AB460.unk_0000);
 }
 
+/**
+ * Converts the top float matrix of the stack to fixed point in display-list
+ * memory.
+ */
 void GeoRender_CommitMatrix(void) {
     D_800AB460.unk_1080[D_800AB460.unk_10A0] = 0;
     D_800AB460.unk_1000[D_800AB460.unk_10A0] = Gfx_AllocDisplayList(sizeof(MtxF) * 1);
     MtxF_ToFixed(D_800AB460.unk_1000[D_800AB460.unk_10A0], &D_800AB460.unk_0000[D_800AB460.unk_10A0]);
 }
 
+/** Replaces the top of the matrix stack with the given matrix. */
 void GeoRender_SetMatrix(MtxF* arg0) {
     MtxF_Copy(&D_800AB460.unk_0000[D_800AB460.unk_10A0], arg0);
     D_800AB460.unk_1080[D_800AB460.unk_10A0] = 0;
@@ -126,6 +132,7 @@ void GeoRender_SetMatrix(MtxF* arg0) {
     MtxF_ToFixed(D_800AB460.unk_1000[D_800AB460.unk_10A0], &D_800AB460.unk_0000[D_800AB460.unk_10A0]);
 }
 
+/** Pushes the top matrix multiplied by the given matrix onto the stack. */
 void GeoRender_PushMultipliedMatrix(MtxF* arg0) {
     MtxF* temp_a0;
 
@@ -138,6 +145,7 @@ void GeoRender_PushMultipliedMatrix(MtxF* arg0) {
     MtxF_ToFixed(D_800AB460.unk_1000[D_800AB460.unk_10A0], &D_800AB460.unk_0000[D_800AB460.unk_10A0]);
 }
 
+/** Pushes a matrix built from the given vector onto the stack. */
 void GeoRender_PushScaledMatrix(Vec3f* arg0) {
     MtxF* temp_a0;
 
@@ -152,6 +160,10 @@ void GeoRender_PushScaledMatrix(Vec3f* arg0) {
     MtxF_ToFixed(D_800AB460.unk_1000[D_800AB460.unk_10A0], &D_800AB460.unk_0000[D_800AB460.unk_10A0]);
 }
 
+/**
+ * Returns the matrix at a non-positive offset from the top of the stack, or
+ * NULL when out of range.
+ */
 MtxF* GeoRender_GetRelativeMatrix(s32 arg0) {
     MtxF* var_v1 = NULL;
 
@@ -162,11 +174,16 @@ MtxF* GeoRender_GetRelativeMatrix(s32 arg0) {
     return var_v1;
 }
 
+/** Resets the scale stack to the initial scale. */
 void GeoRender_ResetTransformStack(void) {
     D_800AC508.unk_180 = 0;
     D_800AC508.unk_000[0] = D_80060464;
 }
 
+/**
+ * Pushes the current scale multiplied component-wise by the given vector onto
+ * the scale stack.
+ */
 void GeoRender_PushScale(Vec3f* arg0) {
     D_800AC508.unk_000[D_800AC508.unk_180 + 1].x = D_800AC508.unk_000[D_800AC508.unk_180].x * arg0->x;
     D_800AC508.unk_000[D_800AC508.unk_180 + 1].y = D_800AC508.unk_000[D_800AC508.unk_180].y * arg0->y;
@@ -198,6 +215,7 @@ s32 func_80002C80(s32);
 s32 ModelAnim_AdvanceCurveFrame(TransformAnimRaw* arg0);
 extern u8 D_800AC690;
 
+/** Starts evaluating an animation curve set, setting up its channel context. */
 void ModelAnim_BeginCurveContext(void *arg0, s32 arg1) {
     s16 *temp_s1;
 
@@ -219,6 +237,10 @@ void ModelAnim_BeginCurveContext(void *arg0, s32 arg1) {
     }
 }
 
+/**
+ * Evaluates one translation channel of an animation curve at the current
+ * frame.
+ */
 f32 ModelAnim_EvaluateTranslationChannel(unk_D_800ABCC0* arg0, s32 arg1) {
     f32 ret;
     s32 var_a2;
@@ -239,6 +261,7 @@ f32 ModelAnim_EvaluateTranslationChannel(unk_D_800ABCC0* arg0, s32 arg1) {
     return ret;
 }
 
+/** Evaluates one rotation channel of an animation curve at the current frame. */
 s16 ModelAnim_EvaluateRotationChannel(unk_D_800ABCC0* arg0, s32 arg1) {
     s32 var_a1;
     s16 var_v1;
@@ -257,6 +280,7 @@ s16 ModelAnim_EvaluateRotationChannel(unk_D_800ABCC0* arg0, s32 arg1) {
     return var_v1;
 }
 
+/** Evaluates one scale channel of an animation curve at the current frame. */
 f32 ModelAnim_EvaluateScaleChannel(unk_D_800ABCC0* arg0, s32 arg1) {
     f32 var_fv1;
     s16 var_a2;
@@ -351,6 +375,7 @@ void func_80011838(EventTrackState* arg0, s32 arg1) {
     }
 }
 
+/** Finds which event-track entry a frame falls into. */
 s32 ModelAnim_ResolveEventIndex(s32 arg0, unk_func_80017540_arg1* arg1, s32 arg2) {
     unk_func_80017540_arg1* temp_v0 = &arg1[arg2];
     s32 ret;
@@ -363,6 +388,7 @@ s32 ModelAnim_ResolveEventIndex(s32 arg0, unk_func_80017540_arg1* arg1, s32 arg2
     return ret;
 }
 
+/** Advances an event track's frame counter. */
 s16 ModelAnim_AdvanceEventFrame(EventTrackState* arg0) {
     s16 var_v1;
     EventTrackData* temp_v0;
@@ -383,6 +409,7 @@ s16 ModelAnim_AdvanceEventFrame(EventTrackState* arg0) {
     return var_v1;
 }
 
+/** Builds the vertices of the full-screen fade quad. */
 Vtx* GeoOverlay_BuildFadeQuad(CameraOverlay* arg0, CameraOrthographic* arg1) {
     u8 sp47;
     Vtx* temp_v0 = Gfx_AllocDisplayList(sizeof(Vtx) * 4);
@@ -411,6 +438,7 @@ Vtx* GeoOverlay_BuildFadeQuad(CameraOverlay* arg0, CameraOrthographic* arg1) {
     return temp_v0;
 }
 
+/** Draws the full-screen fade quad. */
 void GeoOverlay_DrawFadeQuad(CameraOverlay* arg0, CameraOrthographic* arg1) {
     Vtx* temp_v0 = GeoOverlay_BuildFadeQuad(arg0, arg1);
 
@@ -449,6 +477,7 @@ void func_80011D14(Vtx* arg0, CameraOverlay* arg1, s16 arg2, s16 arg3, s16 arg4,
                   arg1->color.r, arg1->color.g, arg1->color.b, 0xFF);
 }
 
+/** Builds the vertices of the rotating-quad screen overlay. */
 Vtx* GeoOverlay_BuildRotatingQuad(CameraOverlay* arg0) {
     Vtx* temp_v0 = Gfx_AllocDisplayList(sizeof(Vtx) * 8);
     Vtx* temp_s0;
@@ -485,6 +514,7 @@ Vtx* GeoOverlay_BuildRotatingQuad(CameraOverlay* arg0) {
     return temp_v0;
 }
 
+/** Draws the rotating-quad screen overlay. */
 void GeoOverlay_DrawRotatingQuad(CameraOverlay* arg0, UNUSED CameraOrthographic* arg1) {
     Vtx* temp_v0 = GeoOverlay_BuildRotatingQuad(arg0);
 
@@ -531,6 +561,7 @@ void GeoOverlay_DrawRotatingQuad(CameraOverlay* arg0, UNUSED CameraOrthographic*
     }
 }
 
+/** Draws the camera's screen overlay according to its mode. */
 void GeoOverlay_Draw(CameraOverlay* arg0, CameraOrthographic* arg1) {
     if (arg0->mode != 0) {
         gDPPipeSync(gDisplayListHead++);
@@ -552,6 +583,7 @@ void GeoOverlay_Draw(CameraOverlay* arg0, CameraOrthographic* arg1) {
     }
 }
 
+/** Writes a color combiner setting from a combine-mode description. */
 void GeoRender_SetCombineMode(Gfx* arg0, arg1_func_81407874_014_000_010* arg1) {
     gDPSetCombine(arg0++,
                   GCCc0w0(arg1->unk_00, arg1->unk_02, arg1->unk_04, arg1->unk_06) | GCCc1w0(arg1->unk_08, arg1->unk_0A),
@@ -690,6 +722,7 @@ extern s16 D_8006F2A4[];
 extern unk_D_800ABB28* D_800ABCB8;
 extern s16 D_80060624[];
 
+/** Binds a texture for rendering, loading it on first use. */
 void GeoRender_BindTexture(unk_D_800ABB28* arg0, unk_D_800ABB10* arg1) {
     unk_D_86002F34_alt11_018* temp_t0;
     s32 var_a3;
@@ -935,6 +968,7 @@ void GeoRender_SubmitLayerDisplayList(s16 layer, s32 arg1, s32 arg2, s32 arg3) {
     }
 }
 
+/** Processes every child of a graph node. */
 void Geo_ProcessNodeChildren(GraphNode* arg0) {
     GraphNode* temp_s2 = arg0->children;
     GraphNode* var_s0 = temp_s2;
@@ -953,6 +987,7 @@ void Geo_ProcessNodeChildren(GraphNode* arg0) {
     }
 }
 
+/** Geo node handler: processes the node it references. */
 void Geo_NodeReference(GraphNode* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
     GraphNode* temp_a1 = ((unk_D_86002F34*)arg0)->unk_18;
@@ -968,6 +1003,10 @@ void Geo_NodeReference(GraphNode* arg0) {
     Geo_ProcessNodeChildren(arg0);
 }
 
+/**
+ * Geo node handler: sets up the camera's view and projection, then processes
+ * children.
+ */
 void Geo_NodeCamera(GraphNode* arg0) {
     UNUSED MtxF pad_mtx;
     CameraNode* arg = (CameraNode*)arg0;
@@ -1009,6 +1048,10 @@ void Geo_NodeCamera(GraphNode* arg0) {
     D_80060488 = NULL;
 }
 
+/**
+ * Geo node handler: marks the node as the current pass while processing its
+ * children.
+ */
 void Geo_NodeType3Pass(GraphNode* arg0) {
     D_8006048C = arg0;
     Geo_ProcessNodeChildren(arg0);
@@ -1018,6 +1061,7 @@ void Geo_NodeType3Pass(GraphNode* arg0) {
 extern u8 D_800AC690;
 extern EventTrackRender D_800AC6A8;
 
+/** Geo node handler: root of a model; processes its children. */
 void Geo_NodeModelRoot(GraphNode* arg0) {
     unk_D_86002F34_alt1* arg = (unk_D_86002F34_alt1*)arg0;
 
@@ -1095,6 +1139,10 @@ void Geo_NodeModelPartRoot(Root80013DC8* arg0) {
     }
 }
 
+/**
+ * Geo node handler: applies the orthographic projection, then processes
+ * children.
+ */
 void Geo_NodeOrtho(GraphNode* arg0) {
     if ((D_80060494 == NULL) && (arg0->children != NULL)) {
         gSPPerspNormalize(gDisplayListHead++, 0xFFFF);
@@ -1105,6 +1153,10 @@ void Geo_NodeOrtho(GraphNode* arg0) {
     }
 }
 
+/**
+ * Geo node handler: applies the perspective projection, then processes
+ * children.
+ */
 void Geo_NodePerspective(GraphNode* arg0) {
     if ((D_80060494 == NULL) && (arg0->children != NULL)) {
         gSPLookAt(gDisplayListHead++, (u32)&D_80060488->view.unk_44->l & 0x1FFFFFFF);
@@ -1120,6 +1172,7 @@ void Geo_NodePerspective(GraphNode* arg0) {
     }
 }
 
+/** Geo node handler: fills the viewport with the background. */
 void Geo_NodeBackground(GraphNode* arg0) {
     unk_D_86002F34_alt2* arg = (unk_D_86002F34_alt2*)arg0;
     CameraViewport* ptr = &D_80060488->viewport;
@@ -1130,6 +1183,7 @@ void Geo_NodeBackground(GraphNode* arg0) {
     gDPSetCycleType(gDisplayListHead++, G_CYC_2CYCLE);
 }
 
+/** Geo node handler: clears the depth buffer over the viewport. */
 void Geo_NodeClearDepth(UNUSED GraphNode* arg0) {
     CameraViewport* ptr = &D_80060488->viewport;
 
@@ -1139,6 +1193,7 @@ void Geo_NodeClearDepth(UNUSED GraphNode* arg0) {
     gDPSetCycleType(gDisplayListHead++, G_CYC_2CYCLE);
 }
 
+/** Geo node handler for type 9; does nothing. */
 void Geo_NodeType9Empty(UNUSED GraphNode* arg0) {
 }
 
@@ -1197,9 +1252,14 @@ void Geo_NodeLight(GraphNode* arg0) {
     D_80060490->unk_1C++;
 }
 
+/** Geo node handler for type 12; does nothing. */
 void Geo_NodeType12Empty(UNUSED GraphNode* arg0) {
 }
 
+/**
+ * Geo node handler: sets the ambient and directional lights, then processes
+ * children.
+ */
 void Geo_NodeAmbientLight(GraphNode* arg0) {
     unk_D_86002F34_alt4* arg = (unk_D_86002F34_alt4*)arg0;
     s32 i;
@@ -1228,6 +1288,10 @@ void Geo_NodeAmbientLight(GraphNode* arg0) {
 
 extern unk_D_86002F34_alt11* D_800604A0;
 extern Gfx D_01002580[];
+/**
+ * Geo node handler: records the shadow context from the current matrix, then
+ * processes children.
+ */
 void Geo_NodeShadowContext(GraphNode* arg0) {
     unk_D_86002F34_alt11* arg = (unk_D_86002F34_alt11*)arg0;
     MtxF* temp_v0 = &D_800AB460.unk_0000[D_800AB460.unk_10A0];
@@ -1266,6 +1330,7 @@ void func_8001473C(s8 *arg0)
   }
 }
 
+/** Geo node handler: processes only the child selected by the node's index. */
 void Geo_NodeSwitchCase(GraphNode* arg0) {
     unk_D_86002F34_alt3* arg = (unk_D_86002F34_alt3*)arg0;
     s32 i;
@@ -1282,6 +1347,10 @@ void Geo_NodeSwitchCase(GraphNode* arg0) {
     }
 }
 
+/**
+ * Geo node handler: pushes a rotation and translation matrix, then processes
+ * children.
+ */
 void Geo_NodeTranslateRotate(GraphNode* arg0) {
     MtxF sp20;
     unk_D_86002F34_alt5* arg = (unk_D_86002F34_alt5*)arg0;
@@ -1293,6 +1362,7 @@ void Geo_NodeTranslateRotate(GraphNode* arg0) {
     D_800AB460.unk_10A0--;
 }
 
+/** Geo node handler: pushes a translation matrix, then processes children. */
 void Geo_NodeTranslate(GraphNode* arg0) {
     unk_D_86002F34_alt5* arg = (unk_D_86002F34_alt5*)arg0;
 
@@ -1592,6 +1662,7 @@ void func_80014FC4(GeoMaterialNode *arg0)
   func_8001380C((s8 *) arg0);
 }
 
+/** Records the current matrix position for a model anchor. */
 void GeoRender_RecordAnchorPosition(s32 arg0) {
     MtxF* temp_a1;
     ModelAnchor* ptr;
@@ -1609,6 +1680,7 @@ void GeoRender_RecordAnchorPosition(s32 arg0) {
     }
 }
 
+/** Geo node handler: records an anchor position, then processes children. */
 void Geo_NodeAnchor(GraphNode* arg0) {
     unk_D_86002F34_alt3* arg = (unk_D_86002F34_alt3*)arg0;
 
@@ -1712,6 +1784,7 @@ void Geo_NodeShadow(GraphNode* arg0) {
     }
 }
 
+/** Renders a root graph node and its children. */
 void Geo_RenderRootNode(GraphNode* node) {
     unk_D_86002F34_alt1* arg = (unk_D_86002F34_alt1*)node;
 
@@ -1737,6 +1810,7 @@ void Geo_RenderRootNode(GraphNode* node) {
     D_80060480 = 0;
 }
 
+/** Runs graph-node callbacks over a sibling list with the given argument. */
 void Geo_ProcessCallbacks(GraphNode* arg0, s32 arg1) {
     GraphNode* var_s1 = arg0;
     GraphNode** var_s0;
@@ -1784,14 +1858,17 @@ void Geo_ProcessCallbacks(GraphNode* arg0, s32 arg1) {
     } while (var_s1 != arg0);
 }
 
+/** Sets the geo render mode. */
 void GeoRender_SetMode(s32 arg0) {
     D_80060480 = arg0;
 }
 
+/** Advances the geo render frame counter. */
 void GeoRender_AdvanceFrameCounter(void) {
     D_80060484++;
 }
 
+/** Returns whether the current model was last updated this frame. */
 s32 GeoRender_IsModelFrameCurrent(void) {
     s32 var_v1 = 1;
 
@@ -1801,6 +1878,9 @@ s32 GeoRender_IsModelFrameCurrent(void) {
     return var_v1;
 }
 
+/**
+ * Looks up an anchor position on a display object by id and copies it to dest.
+ */
 Vec3f* GeoRender_FindAnchorPosition(DisplayObject* display_object, s16 lookup_id, Vec3f* dest) {
     s32 i;
     // FAKE

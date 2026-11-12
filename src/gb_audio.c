@@ -103,6 +103,7 @@ void func_8003E0B0(unk_D_800FC6D4* arg0);
 
 void GbMusic_StartMusic(u8 arg0);
 
+/** Advances all eight Game Boy music channels by one tick. */
 void GbMusic_UpdateChannels(void) {
     s32 i;
 
@@ -113,6 +114,10 @@ void GbMusic_UpdateChannels(void) {
     }
 }
 
+/**
+ * Starts the Game Boy music sequence with the given id; 0xFF stops music and
+ * resets the APU.
+ */
 void GbMusic_StartSequenceById(u8 arg0) {
     D_800B4144 = arg0;
     if (arg0 == 0xFF) {
@@ -124,6 +129,7 @@ void GbMusic_StartSequenceById(u8 arg0) {
     }
 }
 
+/** Starts a sequence looked up from the sequence table by index. */
 s32 GbMusic_StartTableSequence(u16 arg0) {
     s32 a;
     s32 offset;
@@ -154,6 +160,10 @@ s32 GbMusic_StartTableSequence(u16 arg0) {
     return 1;
 }
 
+/**
+ * Advances one channel's note timer and decodes its next commands when the
+ * note ends.
+ */
 void GbMusic_UpdateChannel(u32 arg0) {
     if (D_800B3FE0[arg0] < 2) {
         D_800B4000[arg0].unk_03 = D_800B4000[arg0].unk_04;
@@ -209,6 +219,10 @@ void GbMusic_UpdateChannel(u32 arg0) {
     }
 }
 
+/**
+ * Decodes and runs the commands in a channel's stream until a note or rest is
+ * produced.
+ */
 void GbMusic_DecodeChannelCommands(u32 arg0) {
     u32 var_v0;
     u8 temp_v0;
@@ -275,6 +289,7 @@ void GbMusic_DecodeChannelCommands(u32 arg0) {
     } while (!var_v0 ^ 0);  // FAKE
 }
 
+/** Music command: ends the channel or returns from a called sub-sequence. */
 u8 GbMusic_CmdEndOrReturn(u32 arg0) {
     if (D_800B3FE8[arg0] & 2) {
         D_800B3FE8[arg0] &= ~2;
@@ -310,6 +325,7 @@ u8 GbMusic_CmdEndOrReturn(u32 arg0) {
     return 1;
 }
 
+/** Music command: calls a sub-sequence, saving the return address. */
 u8 GbMusic_CmdCall(u32 arg0) {
     u8 sp1F;
     u8 temp_v0;
@@ -325,6 +341,7 @@ u8 GbMusic_CmdCall(u32 arg0) {
     return 0;
 }
 
+/** Music command: repeats a section of the stream a given number of times. */
 u8 GbMusic_CmdLoop(u32 arg0) {
     u8 sp27;
     u8 sp26;
@@ -347,11 +364,13 @@ u8 GbMusic_CmdLoop(u32 arg0) {
     return 0;
 }
 
+/** Music command: toggles the channel's fine-pitch flag. */
 u8 GbMusic_CmdToggleFinePitch(u32 arg0) {
     D_800B3FE8[arg0] ^= 1;
     return 0;
 }
 
+/** Music command: sets the channel's volume envelope. */
 u8 GbMusic_CmdSetEnvelope(u32 arg0) {
     u8 temp_a0;
     u8 temp_a1;
@@ -380,6 +399,7 @@ u8 GbMusic_CmdSetEnvelope(u32 arg0) {
     return 0;
 }
 
+/** Music command: starts a pitch slide on the channel. */
 u8 GbMusic_CmdPitchSlide(u32 arg0) {
     UNUSED s32 pad; // FAKE: stack padding
     u8 temp_v0;
@@ -392,11 +412,13 @@ u8 GbMusic_CmdPitchSlide(u32 arg0) {
     return 1;
 }
 
+/** Music command: sets the channel's pulse duty cycle. */
 u8 GbMusic_CmdSetDutyCycle(u32 arg0) {
     D_800B40B0[arg0] = GbMusic_ReadStreamByte(arg0) << 6;
     return 0;
 }
 
+/** Music command: sets the music tempo. */
 u8 GbMusic_CmdSetTempo(u32 arg0) {
     u8 sp1F;
     u8 sp1E;
@@ -421,11 +443,13 @@ u8 GbMusic_CmdSetTempo(u32 arg0) {
     return 0;
 }
 
+/** Music command: sets the stereo panning mask. */
 u8 GbMusic_CmdSetPanMask(u32 arg0) {
     D_800B40D0[1] = GbMusic_ReadStreamByte(arg0);
     return 0;
 }
 
+/** Music command: starts another sequence. */
 u8 GbMusic_CmdPlaySequence(u32 arg0) {
     GbMusic_StartSequenceById(GbMusic_ReadStreamByte(arg0));
     if (D_800B3FF8 == 0) {
@@ -435,6 +459,7 @@ u8 GbMusic_CmdPlaySequence(u32 arg0) {
     return 0;
 }
 
+/** Music command: sets a duty-cycle rotation pattern for the channel. */
 u8 GbMusic_CmdSetDutyRotation(u32 arg0) {
     u8 temp_v0 = GbMusic_ReadStreamByte(arg0);
 
@@ -444,16 +469,21 @@ u8 GbMusic_CmdSetDutyRotation(u32 arg0) {
     return 0;
 }
 
+/** Music command: writes the master volume register. */
 u8 GbMusic_CmdSetMasterVolume(u32 arg0) {
     GbAudio_QueueRegisterWrite(0xFF24, GbMusic_ReadStreamByte(arg0), 0);
     return 0;
 }
 
+/** Music command: enables the volume envelope on the channel. */
 u8 GbMusic_CmdEnableEnvelope(u32 arg0) {
     D_800B3FF0[arg0] |= 1;
     return 0;
 }
 
+/**
+ * Music command: sets the note length from the low nibble of the command byte.
+ */
 u8 GbMusic_CmdSetNoteLength(u32 arg0, u8 arg1) {
     u8 var_a1;
 
@@ -472,11 +502,16 @@ u8 GbMusic_CmdSetNoteLength(u32 arg0, u8 arg1) {
     return 0;
 }
 
+/** Music command: sets the octave from the low nibble of the command byte. */
 u8 GbMusic_CmdSetOctave(u32 arg0, u8 arg1) {
     D_800B40C8[arg0] = arg1 & 0xF;
     return 0;
 }
 
+/**
+ * Music command: plays a note on a pulse channel together with its duty
+ * setting.
+ */
 s32 GbMusic_CmdPlayNoteWithDuty(u32 arg0, u8 arg1) {
     u8 sp27;
     u8 sp26;
@@ -503,6 +538,7 @@ s32 GbMusic_CmdPlayNoteWithDuty(u32 arg0, u8 arg1) {
     return var_v1;
 }
 
+/** Music command: plays a note, triggering it on the four sound channels. */
 u8 GbMusic_CmdPlayNote(u32 arg0, u8 arg1) {
     if (arg0 < 4) {
         GbMusic_TriggerNoteFromByte(arg0, arg1);
@@ -522,6 +558,7 @@ u8 GbMusic_CmdPlayNote(u32 arg0, u8 arg1) {
     return 0;
 }
 
+/** Decodes a note byte (pitch and length) and triggers the note on a channel. */
 u8 GbMusic_TriggerNoteFromByte(u32 arg0, u8 arg1) {
     u8 sp1F;
     s32 temp_v0 = arg1 & 0xF0;
@@ -544,6 +581,7 @@ u8 GbMusic_TriggerNoteFromByte(u32 arg0, u8 arg1) {
     return 1;
 }
 
+/** Computes a note's frequency and duration and schedules it on a channel. */
 s32 GbMusic_ScheduleNote(u32 arg0, u8 arg1) {
     u16 sp26;
     u16 tmp;
@@ -585,6 +623,7 @@ s32 GbMusic_ScheduleNote(u32 arg0, u8 arg1) {
     return 0x80;
 }
 
+/** Writes the registers that trigger a note on a channel. */
 s32 GbMusic_TriggerChannelNote(u32 arg0, u16 arg1, u16 arg2) {
     u16 var_s1;
     s32 tmp;
@@ -615,6 +654,7 @@ s32 GbMusic_TriggerChannelNote(u32 arg0, u16 arg1, u16 arg2) {
     return 1;
 }
 
+/** Writes the channel's stereo panning bits to the panning register. */
 s32 GbMusic_UpdateChannelPanning(u32 arg0) {
     u8 tmp;
     u8 sp1E;
@@ -637,6 +677,7 @@ s32 GbMusic_UpdateChannelPanning(u32 arg0) {
     return 1;
 }
 
+/** Writes a channel's duty and length register. */
 s32 GbMusic_WriteChannelDutyLength(u32 arg0) {
     u8 sp1F = D_800B3FE0[arg0];
     u8 tmp;
@@ -651,6 +692,7 @@ s32 GbMusic_WriteChannelDutyLength(u32 arg0) {
     return 1;
 }
 
+/** Writes a channel's frequency registers. */
 s32 GbMusic_WriteChannelFrequency(u32 arg0, u16 arg1) {
     u8 sp2E[4];
     s32 var_s2;
@@ -691,6 +733,7 @@ s32 GbMusic_WriteChannelFrequency(u32 arg0, u16 arg1) {
     return 1;
 }
 
+/** Applies the tempo to the upper channels while no sound effect is active. */
 void GbMusic_UpdateHighChannelTempo(void) {
     s32 tmp;
 
@@ -702,6 +745,7 @@ void GbMusic_UpdateHighChannelTempo(void) {
     }
 }
 
+/** Writes a transposed frequency, unless a sound effect is active. */
 void GbMusic_WriteTransposedFrequency(u16 arg0, u16 arg1) {
     if (GbMusic_IsSfxActive() != 0) {
         u16 sp18 = D_800B415C;
@@ -712,6 +756,10 @@ void GbMusic_WriteTransposedFrequency(u16 arg0, u16 arg1) {
     }
 }
 
+/**
+ * Steps the stream back one byte while a sound effect is active; returns 1 if
+ * it did.
+ */
 s32 GbMusic_RewindIfSfxActive(u32 arg0) {
     if (GbMusic_IsSfxActive() != 0) {
         D_800B40D8[arg0]--;
@@ -720,6 +768,7 @@ s32 GbMusic_RewindIfSfxActive(u32 arg0) {
     return 0;
 }
 
+/** Returns whether a sound effect currently occupies the shared channel. */
 s32 GbMusic_IsSfxActive(void) {
     if ((D_800B3FD8[4] < D_80075FBC) && (D_800B3FD8[4] >= D_80075FB8)) {
         return 1;
@@ -727,6 +776,7 @@ s32 GbMusic_IsSfxActive(void) {
     return 0;
 }
 
+/** Advances a channel's pitch slide by one step. */
 void GbMusic_AdvancePitchSlide(u32 arg0) {
     u8 sp1F;
     u8 sp1E;
@@ -750,6 +800,7 @@ void GbMusic_AdvancePitchSlide(u32 arg0) {
     GbAudio_QueueRegisterWrite(sp1C + 1, sp1E, 0);
 }
 
+/** Starts a pitch slide toward the given frequency. */
 s32 GbMusic_StartPitchSlide(u32 arg0, u16 arg1) {
     D_800B4028[arg0].unk_00 = arg1;
     if (arg1 < D_800B4028[arg0].unk_04) {
@@ -761,6 +812,7 @@ s32 GbMusic_StartPitchSlide(u32 arg0, u16 arg1) {
     return 1;
 }
 
+/** Advances the channel's duty-cycle rotation. */
 void GbMusic_RotateChannelDuty(u32 arg0) {
     u8 sp1F;
     u16 sp1C;
@@ -774,10 +826,15 @@ void GbMusic_RotateChannelDuty(u32 arg0) {
     GbAudio_QueueRegisterWrite(sp1C, (sp1F | (GbAudio_GetRegisterValue(sp1C) & 0x3F) & 0xFF), 0);
 }
 
+/** Reads the next byte from a channel's command stream. */
 u8 GbMusic_ReadStreamByte(u32 arg0) {
     return *D_800B40D8[arg0]++;
 }
 
+/**
+ * Returns the Game Boy register address of the given channel and register
+ * number.
+ */
 u16 GbMusic_GetChannelRegister(u32 arg0, s32 arg1) {
     UNUSED s32 pad; // FAKE: stack padding
     u16 D_800785BC[] = {
@@ -788,6 +845,7 @@ u16 GbMusic_GetChannelRegister(u32 arg0, s32 arg1) {
     return ret;
 }
 
+/** Returns the frequency value for a note and octave. */
 u16 GbMusic_GetNoteFrequency(u8 arg0, u8 arg1) {
     s16 sp8[] = {
         0xF82C, 0xF89D, 0xF907, 0xF96B, 0xF9CA, 0xFA23, 0xFA77, 0xFAC7, 0xFB12, 0xFB58, 0xFB9B, 0xFBDA,
@@ -869,6 +927,7 @@ void GbMusic_StartMusic(u8 arg0) {
 }
 
 
+/** Starts a sound effect on the shared sound channels. */
 void GbMusic_StartSfx(u8 arg0) {
     u8 i;
 
@@ -923,6 +982,7 @@ void GbMusic_StartSfx(u8 arg0) {
     GbMusic_BindSequenceTracks(arg0);
 }
 
+/** Resets the emulated Game Boy sound hardware. */
 void GbMusic_ResetApu(void) {
     s32 i;
 
@@ -955,6 +1015,7 @@ void GbMusic_ResetApu(void) {
     D_800B40D0[1] = 0xFF;
 }
 
+/** Binds a sequence's tracks to the sound channels. */
 void GbMusic_BindSequenceTracks(u8 arg0) {
     u32 i;
     u8 x;
@@ -994,6 +1055,7 @@ void GbMusic_BindSequenceTracks(u8 arg0) {
     }
 }
 
+/** Returns the number of active upper sound channels. */
 s32 GbMusic_CountActiveHighChannels(void) {
     s32 ret = 0;
     s32 i;
