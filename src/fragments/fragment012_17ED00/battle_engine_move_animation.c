@@ -578,7 +578,13 @@ void BattleScene_TickMoveUseEnd(ActivePokemon* active_pokemon) {
     }
 }
 
-void func_82102AEC(ActivePokemon* active_pokemon) {
+/**
+ * Enter callback of presentation row 22: resets the Pokemon to its idle cue animation (clearing
+ * the underground flags for Dugtrio) before a confused Pokemon acts.
+ * Player sweep: reached only by Supersonic and Confuse Ray, on the confused COM Pokemon's turn.
+ * @unverified The wobble animation was not watched on screen.
+ */
+void BattleScene_EnterConfusedRow(ActivePokemon* active_pokemon) {
     UNUSED s32 pad[3]; // FAKE: stack padding
     s16 species;
     u8* cues;
@@ -805,7 +811,12 @@ void BattleScene_TickHitReactionPlaySound(ActivePokemon* active_pokemon) {
 }
 
 void func_82134EBC(ActivePokemon*, s32);
-void func_821033DC(ActivePokemon* active_pokemon) {
+/**
+ * Enter callback of presentation row 15, which BattleScene_PhaseConfusionSelfHit starts: plays
+ * the hit cue animation on the confused Pokemon. Player sweep: reached only by Supersonic and
+ * Confuse Ray, when the confused COM Pokemon hurt itself (phase 20, row 15).
+ */
+void BattleScene_EnterConfusionSelfHitRow(ActivePokemon* active_pokemon) {
     UNUSED s32 pad; // FAKE: stack padding
     MovePresentationCue* hit_cue = (MovePresentationCue*)((u8*)sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon)] + 0x738);
 
@@ -919,7 +930,13 @@ void func_821036F4(ActivePokemon *active_pokemon)
   }
 }
 
-void func_8210384C(ActivePokemon* active_pokemon) {
+/**
+ * Tick of presentation row 18, entered by BattleScene_PhaseSendOutAfterFaint and after the model
+ * swap rows 10 and 21: once the model has loaded, plays its cry (variant 4) unless it is asleep,
+ * frozen or flagged 0x4000. Player sweep: reached by Transform (which swaps the model through row
+ * 21).
+ */
+void BattleScene_TickSendOutRowPlayCry(ActivePokemon* active_pokemon) {
     s32 species;
     ActivePokemonState* state = &active_pokemon->state;
     BattleMon* party_pokemon_ptr = &active_pokemon->teamRoster->pokemonPicked[M2C_FIELD(active_pokemon, s32*, 0x9D0)];
@@ -1166,10 +1183,10 @@ extern s32 D_8218A7B0;
 extern s32 D_82199E48;
 extern u8* D_82189180[];
 extern f32 D_FLT_82189354[];
-void func_82134E18(ActivePokemon*);
+void ActivePokemon_PlayLandingSoundBySize(ActivePokemon*);
 
 /*
- * func_82104038: per-tick check that is a sibling of func_82104120 and func_82104AFC
+ * BattleScene_TickFaintRowPlayLandingSound: per-tick check that is a sibling of func_82104120 and func_82104AFC
  * (same id table and the same cue-record test, no state-tick change).
  *
  * Reads the Pokemon's move/animation id (u16 at +0x1A).  For an id whose D_FLT_82189354
@@ -1177,11 +1194,19 @@ void func_82134E18(ActivePokemon*);
  * D_8218A7B0 into the first word of entry D_82199E48 of D_82199E14 and returns.
  * Otherwise, when byte 4 of the side's cue record (sSideBattleCues[side] + 0x72D,
  * `side` from BattleScene_GetParticipantSideIndex) plus one equals the animation timer
- * at +0x620 and BattleAnim_IsAssetLoadBusy reports nothing pending, it calls func_82134E18 and then
+ * at +0x620 and BattleAnim_IsAssetLoadBusy reports nothing pending, it calls ActivePokemon_PlayLandingSoundBySize and then
  * performs the same store.  (What D_82199E14 / D_8218A7B0 are used for is not
  * established here.)
  */
-void func_82104038(ActivePokemon* active_pokemon) {
+/**
+ * Faint row (row 0) tick: when the fainting animation reaches its last frame, plays the landing
+ * thud via ActivePokemon_PlayLandingSoundBySize. Species with a hover height skip it, except
+ * 0x16, 0x52 and 0x8E.
+ * Player sweep: reached only by Self-Destruct and Explosion, the two moves that make the user
+ * faint (row 0).
+ * @unverified The sound itself was not heard (headless run).
+ */
+void BattleScene_TickFaintRowPlayLandingSound(ActivePokemon* active_pokemon) {
     u8* cue = ((u8*)sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon)]) + 0x72D;
     u16 id;
 
@@ -1191,7 +1216,7 @@ void func_82104038(ActivePokemon* active_pokemon) {
         return;
     }
     if (((cue[4] + 1) == M2C_FIELD(active_pokemon, s32*, 0x620)) && (BattleAnim_IsAssetLoadBusy((s8*)active_pokemon) == 0)) {
-        func_82134E18(active_pokemon);
+        ActivePokemon_PlayLandingSoundBySize(active_pokemon);
         D_82199E14[D_82199E48].unk_00 = D_8218A7B0;
     }
 }
@@ -1221,7 +1246,13 @@ void func_82104120(ActivePokemon* active_pokemon) {
 
 typedef struct { f32 v; f32 pad[3]; } RestHeightRow2;
 extern f32 D_FLT_82189354[];
-void func_82104208(ActivePokemon* active_pokemon) {
+/**
+ * Tick of the faint rows 0 and 7: at the cue's effect frame, queues effect list 2 or 12 (by
+ * cue[9]) on the fainting Pokemon and plays audio command 3.
+ * Player sweep: reached only by Self-Destruct and Explosion (row 0).
+ * @unverified Effect lists 2 and 12 were not told apart on screen.
+ */
+void BattleScene_TickFaintRowQueueCollapseEffect(ActivePokemon* active_pokemon) {
     u8* cue = (u8*)sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon)] + 0x72D;
     s32 first_effect_frame;
 
@@ -1514,7 +1545,7 @@ void BattleScene_TickStateCallbacks(void) {
  * func_82104DB0
  *
  * If the word at offset 0x620 of the object `arg0` equals D_8219A754 and
- * BattleAnim_IsAssetLoadBusy(arg0) returns 0: calls func_82134E18(arg0) and stores
+ * BattleAnim_IsAssetLoadBusy(arg0) returns 0: calls ActivePokemon_PlayLandingSoundBySize(arg0) and stores
  * D_8218A7B0 into the first word of entry D_82199E48 of the table
  * D_82199E14, whose entries are 8 bytes each (the index is scaled by 8 in
  * the ROM; the second word of an entry is not touched here).
@@ -1525,7 +1556,7 @@ extern s32 D_8219A754;
 
 void func_82104DB0(s8 *arg0) {
     if ((D_8219A754 == M2C_FIELD(arg0, s32 *, 0x620)) && (BattleAnim_IsAssetLoadBusy(arg0) == 0)) {
-        func_82134E18(arg0);
+        ActivePokemon_PlayLandingSoundBySize(arg0);
         D_82199E14[D_82199E48].unk_00 = D_8218A7B0;
     }
 }

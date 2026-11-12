@@ -499,7 +499,13 @@ void BattleScene_InitTurnPresentation(s32 arg0) {
     M2C_FIELD(D_8219A5A0, s32 *, 0x20) = (s32) (M2C_FIELD(D_8219A5A0, s32 *, 0x20) + 1);
 }
 
-void func_821261A0(void* arg0, void* arg1, s32 arg2) {
+/**
+ * Plays one of four target-camera shots for a faint: 3 at the faint start, a random 0 to 2 during
+ * the collapse (BattleScene_FaintStepStart, BattleScene_FaintStepCollapse).
+ * Player sweep: reached only by Self-Destruct and Explosion.
+ * @unverified Shots 0 to 2 were not told apart on screen.
+ */
+void BattleCamera_PlayFaintShot(void* arg0, void* arg1, s32 arg2) {
     switch (arg2) {
         case 0:
             BattleScene_CameraShotTargetHighThunk(arg1, arg0);
@@ -516,7 +522,14 @@ void func_821261A0(void* arg0, void* arg1, s32 arg2) {
     }
 }
 
-s32 func_82126220(ActivePokemon* active_pokemon) {
+/**
+ * Called by BattleScene_FaintStepStart. Returns 1 (after clearing flags 0x60C) when state flag
+ * 0x200 is set, so the faint uses row 17. Otherwise clears the Fly/Dig flags (0x4008) and puts
+ * the model back on the ground, clears sleep, restores full alpha, and returns 0 (row 0).
+ * Player sweep: reached only by Self-Destruct and Explosion.
+ * @unverified Name from the code; flag 0x200 is not identified.
+ */
+s32 BattleScene_ResetFaintingMonState(ActivePokemon* active_pokemon) {
     UNUSED s32 pad; // FAKE: stack padding
     BattleMon* party_pokemon = &active_pokemon->teamRoster->pokemonPicked[active_pokemon->state.rosterIndex];
     ActivePokemonState* state = &active_pokemon->state;
@@ -556,13 +569,13 @@ s32 func_82126220(ActivePokemon* active_pokemon) {
 void BattleScene_FaintStepStart(CameraNode* arg0) {
     if (func_82124A50(sActivePokemon[!sBattleScene.scene->actingSide]) == 0) {
         Battle_ClearRuntimeFlags(sActivePokemon[!sBattleScene.scene->actingSide], 0x3800);
-        func_821261A0(sActivePokemon[!sBattleScene.scene->actingSide], arg0, 3);
+        BattleCamera_PlayFaintShot(sActivePokemon[!sBattleScene.scene->actingSide], arg0, 3);
         Audio_FadeAndClearStoredSounds();
         BattleAnim_CleanupEffects(2);
         BattleScene_ResetCameraFrameCounter();
         Battle_ClearMessageCursor();
         BattleCamera_CaptureModelOrbit(sActivePokemon[!sBattleScene.scene->actingSide], arg0);
-        if (func_82126220(sActivePokemon[!sBattleScene.scene->actingSide]) != 0) {
+        if (BattleScene_ResetFaintingMonState(sActivePokemon[!sBattleScene.scene->actingSide]) != 0) {
             BattleScene_EnterStateRow(sActivePokemon[!sBattleScene.scene->actingSide], 0x11);
             sBattleScene.scene->phaseStep = 0xA;
         } else {
@@ -596,7 +609,7 @@ void BattleScene_FaintStepCollapse(CameraNode* arg0) {
                     break;
                 }
             }
-            func_821261A0(sActivePokemon[!sBattleScene.scene->actingSide], arg0, sel);
+            BattleCamera_PlayFaintShot(sActivePokemon[!sBattleScene.scene->actingSide], arg0, sel);
         }
         if (func_82121820(0x1E) != 0) {
             func_821235E0(arg0, sActivePokemon[!sBattleScene.scene->actingSide]);
@@ -727,7 +740,7 @@ void BattleScene_AdvanceSendOutFollowupCamera(CameraNode* arg0) {
                     break;
                 }
             }
-            func_821261A0(sActivePokemon[!sBattleScene.scene->actingSide], arg0, sel);
+            BattleCamera_PlayFaintShot(sActivePokemon[!sBattleScene.scene->actingSide], arg0, sel);
         }
         if (func_82121820(0x1E) != 0) {
             func_821235E0(arg0, sActivePokemon[!sBattleScene.scene->actingSide]);

@@ -434,7 +434,13 @@ void func_82134DEC(s16 arg0) {
 
 extern f32 D_FLT_82189360[][4];
 
-void func_82134E18(ActivePokemon* active_pokemon) {
+/**
+ * Plays the landing sound for the Pokemon's size: audio command 6 for size 25 and up, 7 for 12.5
+ * and up, else 8. The size comes from the per-species float table D_FLT_82189360.
+ * Player sweep: reached only by Self-Destruct and Explosion.
+ * @unverified The sound itself was not heard (headless run).
+ */
+void ActivePokemon_PlayLandingSoundBySize(ActivePokemon* active_pokemon) {
     s16 idx = active_pokemon->displayObject.objectType - 1;
     f32 height = D_FLT_82189360[idx][0];
 

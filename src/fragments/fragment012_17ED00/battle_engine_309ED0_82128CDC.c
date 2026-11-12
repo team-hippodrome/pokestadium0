@@ -384,7 +384,13 @@ void func_821297BC(CameraNode* arg0) {
     }
 }
 
-void func_821299B0(CameraNode* arg0) {
+/**
+ * Use-move step variant 11 (BattleScene_ActionStepUseMove): shows message +0x148 for the acting
+ * side, plays camera shot 3 and queues effect list 7 on the actor, then waits for its cue.
+ * Player sweep: reached only by Supersonic and Confuse Ray, on the confused COM Pokemon's turn.
+ * @unverified Message +0x148 is probably the 'is confused' line; not yet read on screen.
+ */
+void BattleScene_UseMoveStepShowConfused(CameraNode* arg0) {
     switch (sBattleScene.scene->phaseSubstep) {
         case 0:
             if (BattleScene_AdvanceCameraFrameCounter(0x14) != 0) {
@@ -460,7 +466,7 @@ void BattleScene_ActionStepUseMove(CameraNode* arg0, s32 arg1) {
             func_821297BC(arg0);
             break;
         case 11:
-            func_821299B0(arg0);
+            BattleScene_UseMoveStepShowConfused(arg0);
             break;
         default:
             func_82128FBC(arg0);
