@@ -138,6 +138,11 @@ void func_80004EF0(s32);
 void func_8004D9B0(s32);
 void func_80002620(s32);
 
+/**
+ * Ends the session: copies the session parameters back (button bindings), restores
+ * the pak poll mask and destroys both threads.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void GbTower_Stop(UnkInputStruct8000D738* arg0) {
     *arg0 = M2C_FIELD(D_800AAF40, UnkInputStruct8000D738*, 0x2200);
     func_8000C610(D_800AAF48);

@@ -47,6 +47,10 @@ void func_82140D58(s8 *arg0, s32 arg1) {
     func_8216C008((M2C_FIELD(arg0, s8 *, 0xC3) * 0x120) + arg1, 0x18, 0x18);
 }
 
+/**
+ * Load a texture frame selected by the shared particle clock using ParticleGfx_LoadTextureI4Alias.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureCallbackI4FrameMod10_32x64(UNUSED Particle* arg0, u8* texture) {
     ParticleGfx_LoadTextureI4Alias(&texture[(gParticleFrameCounter % 10) * (32 * 64 / 2)], 32, 64);
 }
@@ -57,10 +61,18 @@ void func_82140DD8(s8 *arg0, s32 arg1) {
     func_8216BFE8((M2C_FIELD(arg0, s8 *, 0xC3) << 0xA) + arg1, 0x20, 0x40);
 }
 
+/**
+ * Load the supplied texture using ParticleGfx_LoadTextureI4Alias.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureCallbackI4_64x64(UNUSED Particle* arg0, u8* texture) {
     ParticleGfx_LoadTextureI4Alias(texture, 64, 64);
 }
 
+/**
+ * Load a texture frame selected by the shared particle clock using ParticleGfx_LoadTextureI4Alias.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureCallbackI4FrameMod8_64x64(UNUSED Particle* arg0, u8* texture) {
     ParticleGfx_LoadTextureI4Alias(&texture[gParticleFrameMod8 * (64 * 64 / 2)], 64, 64);
 }

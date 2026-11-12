@@ -40,22 +40,58 @@ void ParticleGfx_SetAnimatedTileSizeOnList(Gfx* gfx, s32 arg1, s32 arg2, s32 arg
 void ParticleGfx_SetAnimatedAuxTileSizeOnList(Gfx* gfx, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 void ParticleGfx_SetPartiallyAnimatedTileSize(Gfx* gfx, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 void ParticleGfx_SetPartiallyAnimatedAuxTileSize(Gfx* gfx, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+/**
+ * Append a 32-bit texture block load with caller-supplied format and addressing.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureBlock32(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
                    s32 shiftt);
+/**
+ * Append a 32-bit texture tile load with caller-supplied format and addressing.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureTile32(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
                    s32 shiftt);
+/**
+ * Append a 16-bit texture block load with caller-supplied format and addressing.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureBlock16(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
                    s32 shiftt);
+/**
+ * Append a 16-bit texture tile load with caller-supplied format and addressing.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureTile16(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
                    s32 shiftt);
+/**
+ * Append a 8-bit texture block load with caller-supplied format and addressing.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureBlock8(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
                    s32 shiftt);
+/**
+ * Append a 8-bit texture tile load with caller-supplied format and addressing.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureTile8(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
                    s32 shiftt);
+/**
+ * Append a 4-bit texture block load with caller-supplied format and addressing.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureBlock4(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
                    s32 shiftt);
+/**
+ * Append a 4-bit texture tile load with caller-supplied format and addressing.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureTile4(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
                    s32 shiftt);
+/**
+ * Load textures into the explicitly selected TMEM regions/tiles for multi-texture rendering.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureMultiBlock4(u8* texture, s32 tmem, s32 rtile, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks,
                    s32 maskt, s32 shifts, s32 shiftt);
 void ParticleGfx_LoadTextureRgba32(u8* texture, s32 width, s32 height);
@@ -112,19 +148,35 @@ void ParticleGfx_DrawI4TextureAtlasTiled(u8* texture, Vtx* vtx, s32 arg2, s32 ar
 
 s32 ParticleGfx_TextureSizeLog2(s32 size);
 
+/**
+ * Append an RDP pipeline synchronization command.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_PipeSync(void) {
     gDPPipeSync(gDisplayListHead++);
 }
 
+/**
+ * Synchronize the RDP, select one-cycle mode, and disable RSP texturing.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_SetTextureState(void) {
     gDPPipeSync(gDisplayListHead++);
     gDPSetCycleType(gDisplayListHead++, G_CYC_1CYCLE);
     gSPTexture(gDisplayListHead++, 0x0001, 0x0001, 0, G_TX_RENDERTILE, G_OFF);
 }
 
+/**
+ * Empty callback retained at its original entry point.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_NoopStub2(void) {
 }
 
+/**
+ * Empty callback retained at its original entry point.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_NoopStub3(void) {
 }
 
@@ -150,20 +202,36 @@ void func_82168FAC(u16* palette) {
     gDPLoadTLUT_pal256(gDisplayListHead++, palette);
 }
 
+/**
+ * Synchronize the pipeline and write the supplied RGBA channels to the selected RDP color register.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_SetPrimColor(u8 r, u8 g, u8 b, u8 a) {
     gDPSetPrimColor(gDisplayListHead++, 0, 0, r, g, b, a);
 }
 
+/**
+ * Synchronize the pipeline and write the supplied RGBA channels to the selected RDP color register.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_SetFogColor(u8 r, u8 g, u8 b, u8 a) {
     gDPPipeSync(gDisplayListHead++);
     gDPSetFogColor(gDisplayListHead++, r, g, b, a);
 }
 
+/**
+ * Synchronize the pipeline and write the supplied RGBA channels to the selected RDP color register.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_SetBlendColor(u8 r, u8 g, u8 b, u8 a) {
     gDPPipeSync(gDisplayListHead++);
     gDPSetBlendColor(gDisplayListHead++, r, g, b, a);
 }
 
+/**
+ * Synchronize the pipeline and write the supplied RGBA channels to the selected RDP color register.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_SetEnvColor(u8 r, u8 g, u8 b, u8 a) {
     gDPPipeSync(gDisplayListHead++);
     gDPSetEnvColor(gDisplayListHead++, r, g, b, a);
@@ -175,6 +243,10 @@ void func_82169200(u8 arg0, u8 arg1, u8 arg2, u8 arg3, u8 arg4, u8 arg5, u8 arg6
     gDPSetEnvColor(gDisplayListHead++, arg3, arg4, arg5, 0);
 }
 
+/**
+ * Synchronize the pipeline, write the supplied color parameters, and select this wrapper's explicit RDP combiner.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_SetPrimEnvColorCombine(u8 prim_r, u8 prim_g, u8 prim_b, u8 env_r, u8 env_g, u8 env_b, u8 prim_a) {
     gDPPipeSync(gDisplayListHead++);
     gDPSetPrimColor(gDisplayListHead++, 0, 0, prim_r, prim_g, prim_b, prim_a);
@@ -183,6 +255,10 @@ void ParticleGfx_SetPrimEnvColorCombine(u8 prim_r, u8 prim_g, u8 prim_b, u8 env_
                       COMBINED, 0, 0, 0, COMBINED);
 }
 
+/**
+ * Synchronize the pipeline, write the supplied color parameters, and select this wrapper's explicit RDP combiner.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_SetPrimEnvNoiseCombine(u8 prim_r, u8 prim_g, u8 prim_b, u8 env_r, u8 env_g, u8 env_b, u8 prim_a) {
     gDPPipeSync(gDisplayListHead++);
     gDPSetPrimColor(gDisplayListHead++, 0, 0, prim_r, prim_g, prim_b, prim_a);
@@ -191,6 +267,10 @@ void ParticleGfx_SetPrimEnvNoiseCombine(u8 prim_r, u8 prim_g, u8 prim_b, u8 env_
                       ENVIRONMENT, COMBINED, 0, PRIMITIVE, 0);
 }
 
+/**
+ * Synchronize the pipeline, write the supplied color parameters, and select this wrapper's explicit RDP combiner.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_SetPrimEnvColorShadeCombine(u8 prim_r, u8 prim_g, u8 prim_b, u8 prim_a, u8 env_r, u8 env_g, u8 env_b, u8 env_a) {
     gDPPipeSync(gDisplayListHead++);
     gDPSetPrimColor(gDisplayListHead++, 0, 0, prim_r, prim_g, prim_b, prim_a);
@@ -199,6 +279,10 @@ void ParticleGfx_SetPrimEnvColorShadeCombine(u8 prim_r, u8 prim_g, u8 prim_b, u8
                       COMBINED, 0, SHADE, 0, COMBINED, 0, SHADE, 0);
 }
 
+/**
+ * Synchronize the pipeline, write the supplied color parameters, and select this wrapper's explicit RDP combiner.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_SetPrimColorTextureCombine(u8 r, u8 g, u8 b, u8 a) {
     gDPPipeSync(gDisplayListHead++);
     gDPSetPrimColor(gDisplayListHead++, 0, 0, r, g, b, a);
@@ -206,6 +290,10 @@ void ParticleGfx_SetPrimColorTextureCombine(u8 r, u8 g, u8 b, u8 a) {
                       COMBINED);
 }
 
+/**
+ * Synchronize the pipeline, write the supplied color parameters, and select this wrapper's explicit RDP combiner.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_SetPrimEnvLodCombine(u8 l, u8 prim_r, u8 prim_g, u8 prim_b, u8 prim_a, u8 env_r, u8 env_g, u8 env_b) {
     gDPPipeSync(gDisplayListHead++);
     gDPSetPrimColor(gDisplayListHead++, 0, l, prim_r, prim_g, prim_b, prim_a);
@@ -214,6 +302,10 @@ void ParticleGfx_SetPrimEnvLodCombine(u8 l, u8 prim_r, u8 prim_g, u8 prim_b, u8 
                       PRIMITIVE, ENVIRONMENT, COMBINED, ENVIRONMENT, COMBINED, 0, PRIMITIVE, 0);
 }
 
+/**
+ * Synchronize the pipeline, write the supplied color parameters, and select this wrapper's explicit RDP combiner.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_SetPrimEnvLodTextureCombine(u8 l, u8 prim_r, u8 prim_g, u8 prim_b, u8 prim_a, u8 env_r, u8 env_g, u8 env_b) {
     gDPPipeSync(gDisplayListHead++);
     gDPSetPrimColor(gDisplayListHead++, 0, l, prim_r, prim_g, prim_b, prim_a);
@@ -222,6 +314,10 @@ void ParticleGfx_SetPrimEnvLodTextureCombine(u8 l, u8 prim_r, u8 prim_g, u8 prim
                       ENVIRONMENT, COMBINED, ENVIRONMENT, COMBINED, 0, PRIMITIVE, 0);
 }
 
+/**
+ * Synchronize the pipeline, write the supplied color parameters, and select this wrapper's explicit RDP combiner.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_SetTextureAlphaCombine(u8 a) {
     gDPPipeSync(gDisplayListHead++);
     gDPSetPrimColor(gDisplayListHead++, 0, 0, 255, 255, 255, a);
@@ -229,31 +325,55 @@ void ParticleGfx_SetTextureAlphaCombine(u8 a) {
                       COMBINED);
 }
 
+/**
+ * Write bounds for the render tile, scrolling S positively and T negatively with the particle clock.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_SetAnimatedTileSize(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     gDPSetTileSize(gDisplayListHead++, G_TX_RENDERTILE, arg0 * gParticleFrameCounter, -arg1 * gParticleFrameCounter,
                    (((arg0 * gParticleFrameCounter) + arg2) - 1) << 2, (((-arg1 * gParticleFrameCounter) + arg3) - 1) << 2);
 }
 
+/**
+ * Write bounds for auxiliary tile 1, scrolling S positively and T negatively with the particle clock.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_SetAnimatedAuxTileSize(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     gDPSetTileSize(gDisplayListHead++, 1, arg0 * gParticleFrameCounter, -arg1 * gParticleFrameCounter,
                    (((arg0 * gParticleFrameCounter) + arg2) - 1) << 2, (((-arg1 * gParticleFrameCounter) + arg3) - 1) << 2);
 }
 
+/**
+ * Write bounds for the render tile, scrolling S positively and T negatively with the particle clock.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_SetAnimatedTileSizeOnList(Gfx* gfx, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     gDPSetTileSize(gfx, G_TX_RENDERTILE, arg1 * gParticleFrameCounter, -arg2 * gParticleFrameCounter, (((arg1 * gParticleFrameCounter) + arg3) - 1) << 2,
                    (((-arg2 * gParticleFrameCounter) + arg4) - 1) << 2);
 }
 
+/**
+ * Write bounds for auxiliary tile 1, scrolling S positively and T negatively with the particle clock.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_SetAnimatedAuxTileSizeOnList(Gfx* gfx, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     gDPSetTileSize(gfx, 1, arg1 * gParticleFrameCounter, -arg2 * gParticleFrameCounter, (((arg1 * gParticleFrameCounter) + arg3) - 1) << 2,
                    (((-arg2 * gParticleFrameCounter) + arg4) - 1) << 2);
 }
 
+/**
+ * Write bounds for the render tile with fixed S and clock-scrolled negative T.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_SetPartiallyAnimatedTileSize(Gfx* gfx, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     gDPSetTileSize(gfx, G_TX_RENDERTILE, arg1, -arg2 * gParticleFrameCounter, ((arg3 + arg1) - 1) << 2,
                    (((-arg2 * gParticleFrameCounter) + arg4) - 1) << 2);
 }
 
+/**
+ * Write bounds for auxiliary tile 1 with fixed S and clock-scrolled negative T.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_SetPartiallyAnimatedAuxTileSize(Gfx* gfx, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     gDPSetTileSize(gfx, 1, arg1, -arg2 * gParticleFrameCounter, ((arg3 + arg1) - 1) << 2,
                    (((-arg2 * gParticleFrameCounter) + arg4) - 1) << 2);
@@ -399,21 +519,37 @@ void ParticleGfx_LoadTextureMultiBlock4(u8* texture, s32 tmem, s32 rtile, s32 fm
                          shifts, shiftt);
 }
 
+/**
+ * Append an RGBA32 texture block load with the specified addressing modes.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureRgba32(u8* texture, s32 width, s32 height) {
     ParticleGfx_LoadTextureBlock32(texture, G_IM_FMT_RGBA, width, height, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
                   G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 }
 
+/**
+ * Append an RGBA32 texture tile load with the specified addressing modes.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureTileRgba32(u8* texture, s32 width, s32 height) {
     ParticleGfx_LoadTextureTile32(texture, G_IM_FMT_RGBA, width, height, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
                   G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 }
 
+/**
+ * Append an RGBA16 texture block load with the specified addressing modes.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureRgba16(u8* texture, s32 width, s32 height) {
     ParticleGfx_LoadTextureBlock16(texture, G_IM_FMT_RGBA, width, height, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
                   G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 }
 
+/**
+ * Load textures into the explicitly selected TMEM regions/tiles for multi-texture rendering.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureRgba16Dual(u8* texture1, u8* texture2, s32 width, s32 height) {
     gDPLoadMultiTile(gDisplayListHead++, texture1, 0x000, G_TX_RENDERTILE, G_IM_FMT_RGBA, G_IM_SIZ_16b, width, height,
                      0, 0, width - 1, height - 1, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
@@ -424,6 +560,10 @@ void ParticleGfx_LoadTextureRgba16Dual(u8* texture1, u8* texture2, s32 width, s3
                      G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 }
 
+/**
+ * Append an RGBA16 texture block load with the specified addressing modes.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureRgba16WrapS(u8* texture, s32 width, s32 height) {
     s32 masks = ParticleGfx_TextureSizeLog2(width);
 
@@ -431,6 +571,10 @@ void ParticleGfx_LoadTextureRgba16WrapS(u8* texture, s32 width, s32 height) {
                   G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 }
 
+/**
+ * Append an RGBA16 texture block load with the specified addressing modes.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureRgba16WrapT(u8* texture, s32 width, s32 height) {
     s32 maskt = ParticleGfx_TextureSizeLog2(height);
 
@@ -438,6 +582,10 @@ void ParticleGfx_LoadTextureRgba16WrapT(u8* texture, s32 width, s32 height) {
                   G_TX_NOMASK, maskt, G_TX_NOLOD, G_TX_NOLOD);
 }
 
+/**
+ * Append an RGBA16 texture block load with the specified addressing modes.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureRgba16WrapST(u8* texture, s32 width, s32 height) {
     s32 masks = ParticleGfx_TextureSizeLog2(width);
     s32 maskt = ParticleGfx_TextureSizeLog2(height);
@@ -446,36 +594,64 @@ void ParticleGfx_LoadTextureRgba16WrapST(u8* texture, s32 width, s32 height) {
                   G_TX_NOLOD, G_TX_NOLOD);
 }
 
+/**
+ * Append an RGBA16 texture block load with the specified addressing modes.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureRgba16WrapSWithMask(u8* texture, s32 width, s32 height, s32 masks) {
     ParticleGfx_LoadTextureBlock16(texture, G_IM_FMT_RGBA, width, height, G_TX_MIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_CLAMP, masks,
                   G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 }
 
+/**
+ * Append an RGBA16 texture tile load with the specified addressing modes.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureTileRgba16(u8* texture, s32 width, s32 height) {
     ParticleGfx_LoadTextureTile16(texture, G_IM_FMT_RGBA, width, height, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
                   G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 }
 
+/**
+ * Append an IA16 texture block load with the specified addressing modes.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureIa16(u8* texture, s32 width, s32 height) {
     ParticleGfx_LoadTextureBlock16(texture, G_IM_FMT_IA, width, height, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
                   G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 }
 
+/**
+ * Append an IA16 texture tile load with the specified addressing modes.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureTileIa16(u8* texture, s32 width, s32 height) {
     ParticleGfx_LoadTextureTile16(texture, G_IM_FMT_IA, width, height, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
                   G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 }
 
+/**
+ * Append an IA8 texture block load with the specified addressing modes.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureIa8(u8* texture, s32 width, s32 height) {
     ParticleGfx_LoadTextureBlock8(texture, G_IM_FMT_IA, width, height, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
                   G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 }
 
+/**
+ * Append an IA8 texture tile load with the specified addressing modes.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureTileIa8(u8* texture, s32 width, s32 height) {
     ParticleGfx_LoadTextureTile8(texture, G_IM_FMT_IA, width, height, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
                   G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 }
 
+/**
+ * Append an IA8 texture block load with the specified addressing modes.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureIa8WrapST(u8* texture, s32 width, s32 height) {
     s32 masks = ParticleGfx_TextureSizeLog2(width);
     s32 maskt = ParticleGfx_TextureSizeLog2(height);
@@ -484,11 +660,19 @@ void ParticleGfx_LoadTextureIa8WrapST(u8* texture, s32 width, s32 height) {
                   G_TX_NOLOD, G_TX_NOLOD);
 }
 
+/**
+ * Append an I8 texture block load with the specified addressing modes.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureI8(u8* texture, s32 width, s32 height) {
     ParticleGfx_LoadTextureBlock8(texture, G_IM_FMT_I, width, height, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
                   G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 }
 
+/**
+ * Append an I8 texture block load with the specified addressing modes.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureI8WrapST(u8* texture, s32 width, s32 height) {
     s32 masks = ParticleGfx_TextureSizeLog2(width);
     s32 maskt = ParticleGfx_TextureSizeLog2(height);
@@ -497,39 +681,71 @@ void ParticleGfx_LoadTextureI8WrapST(u8* texture, s32 width, s32 height) {
                   G_TX_NOLOD, G_TX_NOLOD);
 }
 
+/**
+ * Append an I8 texture tile load with the specified addressing modes.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureTileI8(u8* texture, s32 width, s32 height) {
     ParticleGfx_LoadTextureTile8(texture, G_IM_FMT_I, width, height, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
                   G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 }
 
+/**
+ * Forward the texture and dimensions to the matching texture-load wrapper.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureI8Alias(u8* texture, s32 width, s32 height) {
     ParticleGfx_LoadTextureI8(texture, width, height);
 }
 
+/**
+ * Forward the texture and dimensions to the matching texture-load wrapper.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureTileI8Alias(u8* texture, s32 width, s32 height) {
     ParticleGfx_LoadTextureTileI8(texture, width, height);
 }
 
+/**
+ * Append an IA4 texture tile load with the specified addressing modes.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureTileIa4(u8* texture, s32 width, s32 height) {
     ParticleGfx_LoadTextureTile4(texture, G_IM_FMT_IA, width, height, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
                   G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 }
 
+/**
+ * Append an I4 texture tile load with the specified addressing modes.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureTileI4(u8* texture, s32 width, s32 height) {
     ParticleGfx_LoadTextureTile4(texture, G_IM_FMT_I, width, height, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
                   G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 }
 
+/**
+ * Append an IA4 texture block load with the specified addressing modes.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureIa4(u8* texture, s32 width, s32 height) {
     ParticleGfx_LoadTextureBlock4(texture, G_IM_FMT_IA, width, height, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
                   G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 }
 
+/**
+ * Append an I4 texture block load with the specified addressing modes.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureI4(u8* texture, s32 width, s32 height) {
     ParticleGfx_LoadTextureBlock4(texture, G_IM_FMT_I, width, height, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
                   G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 }
 
+/**
+ * Append an I4 texture block load with the specified addressing modes.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureI4WrapST(u8* texture, s32 width, s32 height) {
     s32 masks = ParticleGfx_TextureSizeLog2(width);
     s32 maskt = ParticleGfx_TextureSizeLog2(height);
@@ -538,14 +754,26 @@ void ParticleGfx_LoadTextureI4WrapST(u8* texture, s32 width, s32 height) {
                   G_TX_NOLOD, G_TX_NOLOD);
 }
 
+/**
+ * Forward the texture and dimensions to the matching texture-load wrapper.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureI4Alias(u8* texture, s32 width, s32 height) {
     ParticleGfx_LoadTextureI4(texture, width, height);
 }
 
+/**
+ * Forward the texture and dimensions to the matching texture-load wrapper.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureTileI4Alias(u8* texture, s32 width, s32 height) {
     ParticleGfx_LoadTextureTileI4(texture, width, height);
 }
 
+/**
+ * Append an I4 texture block load with the specified addressing modes.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureI4WrapS(u8* texture, s32 width, s32 height) {
     s32 masks = ParticleGfx_TextureSizeLog2(width);
 
@@ -553,6 +781,10 @@ void ParticleGfx_LoadTextureI4WrapS(u8* texture, s32 width, s32 height) {
                   G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 }
 
+/**
+ * Append an I4 texture block load with the specified addressing modes.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureI4WrapSTNoMirror(u8* texture, s32 width, s32 height) {
     s32 masks = ParticleGfx_TextureSizeLog2(width);
     s32 maskt = ParticleGfx_TextureSizeLog2(height);
@@ -561,6 +793,10 @@ void ParticleGfx_LoadTextureI4WrapSTNoMirror(u8* texture, s32 width, s32 height)
                   maskt, G_TX_NOLOD, G_TX_NOLOD);
 }
 
+/**
+ * Load textures into the explicitly selected TMEM regions/tiles for multi-texture rendering.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureI4MultiBlockWrapST(u8* texture, s32 width, s32 height) {
     s32 tmem = 0x100;
     s32 rtile = 1;
@@ -571,6 +807,10 @@ void ParticleGfx_LoadTextureI4MultiBlockWrapST(u8* texture, s32 width, s32 heigh
                   masks, maskt, G_TX_NOLOD, G_TX_NOLOD);
 }
 
+/**
+ * Load textures into the explicitly selected TMEM regions/tiles for multi-texture rendering.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureI4MultiBlockWrapSTWithShift(u8* texture, s32 width, s32 height, s32 shifts, s32 shiftt) {
     s32 tmem = 0x100;
     s32 rtile = 1;
@@ -581,21 +821,37 @@ void ParticleGfx_LoadTextureI4MultiBlockWrapSTWithShift(u8* texture, s32 width, 
                   masks, maskt, shifts, shiftt);
 }
 
+/**
+ * Append an CI8 texture block load with the specified addressing modes.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureCi8(u8* texture, s32 width, s32 height) {
     ParticleGfx_LoadTextureBlock8(texture, G_IM_FMT_CI, width, height, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
                   G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 }
 
+/**
+ * Append an CI8 texture block load with the specified addressing modes.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureCi8WrapSWithMask(u8* texture, s32 width, s32 height, s32 masks) {
     ParticleGfx_LoadTextureBlock8(texture, G_IM_FMT_CI, width, height, G_TX_MIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_CLAMP, masks,
                   G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 }
 
+/**
+ * Append an CI8 texture tile load with the specified addressing modes.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureTileCi8(u8* texture, s32 width, s32 height) {
     ParticleGfx_LoadTextureTile8(texture, G_IM_FMT_CI, width, height, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
                   G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 }
 
+/**
+ * Load textures into the explicitly selected TMEM regions/tiles for multi-texture rendering.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_LoadTextureDualRgba16I8(u8* texture1, u8* texture2, s32 width, s32 height) {
     gDPSetCombineLERP(gDisplayListHead++, 0, 0, 0, TEXEL0, 0, 0, 0, TEXEL1, 0, 0, 0, COMBINED, 0, 0, 0, COMBINED);
 
@@ -613,14 +869,26 @@ void ParticleGfx_LoadTextureDualRgba16I8(u8* texture1, u8* texture2, s32 width, 
     gDPSetTileSize(gDisplayListHead++, 1, 0, 0, (width - 1) << 2, (height - 1) << 2);
 }
 
+/**
+ * Load four vertices and emit two triangles.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_DrawQuadVertices(Vtx* arg0) {
     gSPVertex(gDisplayListHead++, arg0, 4, 0);
     gSPDisplayList(gDisplayListHead++, D_82191910);
 }
 
+/**
+ * Empty callback retained at its original entry point.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_NoopStub4(void) {
 }
 
+/**
+ * Load the supplied position/rotation/scale transform, then draw the selected vertices.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_DrawTransformedQuad(Vec3f arg0, Vec3s arg1, f32 arg2, Vtx* arg3) {
     ParticleGfx_PushTransformMatrix(arg0, arg1, arg2);
 
@@ -628,6 +896,10 @@ void ParticleGfx_DrawTransformedQuad(Vec3f arg0, Vec3s arg1, f32 arg2, Vtx* arg3
     gSPDisplayList(gDisplayListHead++, D_82191910);
 }
 
+/**
+ * Load the supplied position/rotation/scale transform, then draw the selected vertices.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_DrawTransformedQuadYScaled(Vec3f arg0, Vec3s arg1, f32 arg3, Vtx* arg4) {
     ParticleGfx_PushTransformMatrixYScaled(arg0, arg1, arg3);
 
@@ -635,6 +907,10 @@ void ParticleGfx_DrawTransformedQuadYScaled(Vec3f arg0, Vec3s arg1, f32 arg3, Vt
     gSPDisplayList(gDisplayListHead++, D_82191910);
 }
 
+/**
+ * Load the supplied position/rotation/scale transform, then draw the selected vertices.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_DrawTransformedQuadXYScaled(Vec3f arg0, Vec3s arg1, f32 arg2, f32 arg3, Vtx* arg4) {
     ParticleGfx_PushTransformMatrixXYScaled(arg0, arg1, arg2, arg3);
 
@@ -642,6 +918,10 @@ void ParticleGfx_DrawTransformedQuadXYScaled(Vec3f arg0, Vec3s arg1, f32 arg2, f
     gSPDisplayList(gDisplayListHead++, D_82191910);
 }
 
+/**
+ * Load the supplied position/rotation/scale transform, then draw the selected vertices.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_DrawTransformedTriangle(Vec3f arg0, Vec3s arg1, f32 arg2, Vtx* arg3) {
     ParticleGfx_PushTransformMatrix(arg0, arg1, arg2);
 
@@ -649,6 +929,10 @@ void ParticleGfx_DrawTransformedTriangle(Vec3f arg0, Vec3s arg1, f32 arg2, Vtx* 
     gSPDisplayList(gDisplayListHead++, D_82191900);
 }
 
+/**
+ * Load a camera-facing transform, then draw the selected quad or triangle vertices.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_DrawModelQuad(CameraNode* arg0, Vec3f arg1, f32 arg2, Vtx* arg3) {
     ParticleGfx_PushBillboardMatrix(arg0, arg1, arg2);
 
@@ -656,6 +940,10 @@ void ParticleGfx_DrawModelQuad(CameraNode* arg0, Vec3f arg1, f32 arg2, Vtx* arg3
     gSPDisplayList(gDisplayListHead++, D_82191910);
 }
 
+/**
+ * Load a camera-facing transform, then draw the selected quad or triangle vertices.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_DrawModelQuadRotated(CameraNode* arg0, Vec3f arg1, f32 arg2, Vtx* arg3, s16 arg4) {
     ParticleGfx_PushBillboardRotatedMatrix(arg0, arg1, arg2, arg4);
 
@@ -663,6 +951,10 @@ void ParticleGfx_DrawModelQuadRotated(CameraNode* arg0, Vec3f arg1, f32 arg2, Vt
     gSPDisplayList(gDisplayListHead++, D_82191910);
 }
 
+/**
+ * Load a camera-facing transform, then draw the selected quad or triangle vertices.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_DrawModelQuadYScaled(CameraNode* arg0, Vec3f arg1, f32 arg2, Vtx* arg3) {
     ParticleGfx_PushBillboardMatrixYScaled(arg0, arg1, arg2);
 
@@ -670,6 +962,10 @@ void ParticleGfx_DrawModelQuadYScaled(CameraNode* arg0, Vec3f arg1, f32 arg2, Vt
     gSPDisplayList(gDisplayListHead++, D_82191910);
 }
 
+/**
+ * Load a camera-facing transform, then draw the selected quad or triangle vertices.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_DrawModelQuadRotatedYScaled(CameraNode* arg0, Vec3f arg1, f32 arg2, Vtx* arg3, s16 arg4) {
     ParticleGfx_PushBillboardRotatedMatrixYScaled(arg0, arg1, arg2, arg4);
 
@@ -677,6 +973,10 @@ void ParticleGfx_DrawModelQuadRotatedYScaled(CameraNode* arg0, Vec3f arg1, f32 a
     gSPDisplayList(gDisplayListHead++, D_82191910);
 }
 
+/**
+ * Load a camera-facing transform, then draw the selected quad or triangle vertices.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_DrawModelTriangle(CameraNode* arg0, Vec3f arg1, f32 arg2, Vtx* arg3) {
     ParticleGfx_PushBillboardMatrix(arg0, arg1, arg2);
 
@@ -684,6 +984,10 @@ void ParticleGfx_DrawModelTriangle(CameraNode* arg0, Vec3f arg1, f32 arg2, Vtx* 
     gSPDisplayList(gDisplayListHead++, D_82191900);
 }
 
+/**
+ * Load a camera-facing transform, then draw the selected quad or triangle vertices.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_DrawModelTriangleRotated(CameraNode* arg0, Vec3f arg1, f32 arg2, Vtx* arg3, s16 arg4) {
     ParticleGfx_PushBillboardRotatedMatrix(arg0, arg1, arg2, arg4);
 
@@ -691,6 +995,10 @@ void ParticleGfx_DrawModelTriangleRotated(CameraNode* arg0, Vec3f arg1, f32 arg2
     gSPDisplayList(gDisplayListHead++, D_82191900);
 }
 
+/**
+ * Walk the texture atlas in fixed-size chunks, loading each chunk and drawing its four corresponding vertices.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_DrawI8TextureAtlas(u8* texture, Vtx* vtx, s32 arg2, s32 arg3, s32 width, s32 height) {
     s32 i;
     s32 j;
@@ -712,6 +1020,10 @@ void ParticleGfx_DrawI8TextureAtlas(u8* texture, Vtx* vtx, s32 arg2, s32 arg3, s
     gSPTexture(gDisplayListHead++, 0x0001, 0x0001, 0, G_TX_RENDERTILE, G_OFF);
 }
 
+/**
+ * Walk the texture atlas in fixed-size chunks, loading each chunk and drawing its four corresponding vertices.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_DrawIa16TextureAtlas(u8* texture, Vtx* vtx, s32 arg2, s32 arg3, s32 width, s32 height) {
     s32 i;
     s32 j;
@@ -733,6 +1045,10 @@ void ParticleGfx_DrawIa16TextureAtlas(u8* texture, Vtx* vtx, s32 arg2, s32 arg3,
     gSPTexture(gDisplayListHead++, 0x0001, 0x0001, 0, G_TX_RENDERTILE, G_OFF);
 }
 
+/**
+ * Walk the texture atlas in fixed-size chunks, loading each chunk and drawing its four corresponding vertices.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_DrawIa8TextureAtlas(u8* texture, Vtx* vtx, s32 arg2, s32 arg3, s32 width, s32 height) {
     s32 i;
     s32 j;
@@ -754,6 +1070,10 @@ void ParticleGfx_DrawIa8TextureAtlas(u8* texture, Vtx* vtx, s32 arg2, s32 arg3, 
     gSPTexture(gDisplayListHead++, 0x0001, 0x0001, 0, G_TX_RENDERTILE, G_OFF);
 }
 
+/**
+ * Walk the texture atlas in fixed-size chunks, loading each chunk and drawing its four corresponding vertices.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_DrawI4TextureAtlas(u8* texture, Vtx* vtx, s32 arg2, s32 arg3, s32 width, s32 height) {
     s32 i;
     s32 j;
@@ -775,6 +1095,10 @@ void ParticleGfx_DrawI4TextureAtlas(u8* texture, Vtx* vtx, s32 arg2, s32 arg3, s
     gSPTexture(gDisplayListHead++, 0x0001, 0x0001, 0, G_TX_RENDERTILE, G_OFF);
 }
 
+/**
+ * Walk the texture atlas in fixed-size chunks, loading each chunk and drawing its four corresponding vertices.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_DrawI4TextureAtlasTiled(u8* texture, Vtx* vtx, s32 arg2, s32 arg3, s32 width, s32 height) {
     s32 i;
     s32 j;

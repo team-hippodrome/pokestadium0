@@ -1,6 +1,10 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
 #include "gb_tower_emulator_86CB0.h"
 
+/**
+ * Wave channel: 65536 / (2048 - period) Hz -> phase step (32 steps per cycle at 48 kHz).
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 u32 GbApu_FreqToStep(u16 arg0) {
   u32 temp;
   if (arg0 == 0) {
@@ -27,6 +31,10 @@ u32 GbApu_ConfigureNoiseTable(u16 arg0, u16 arg1, u16 arg2) {
     return temp;
 }
 
+/**
+ * Squares: 131072 / (2048 - period) Hz -> phase step.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 u32 GbApu_FreqToStep2x(u16 arg0) {
   u32 temp;
   temp = ((131072.0f / (0x800 - arg0)) / 1500.0f) * 65536;
@@ -74,6 +82,11 @@ s32 GbApu_GetWaveformSample(u32 arg0, s32 arg1) {
     }
 }
 
+/**
+ * Produces one sample of square channel 1 and advances its frequency sweep (NR10), volume
+ * envelope (NR12) and length timer. A stopped channel decays to silence instead of cutting off.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 u16 GbApu_UpdateSquare1Channel(void) {
     u16 var_t0;
 
@@ -166,6 +179,10 @@ u16 GbApu_UpdateSquare1Channel(void) {
     return var_t0;
 }
 
+/**
+ * Produces one sample of square channel 2 (GbApu_UpdateSquare1Channel without the sweep).
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 GbApu_UpdateSquare2Channel(void) {
     s32 temp_v0;
     s32 var_a3;
@@ -237,6 +254,11 @@ s32 GbApu_UpdateSquare2Channel(void) {
     return var_a3;
 }
 
+/**
+ * Produces one sample of the wave channel from wave RAM at the NR32 output level, averaged with
+ * the previous sample. On a retrigger the old note fades out before the phase restarts.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 u16 GbApu_UpdateWaveChannel(void) {
     u16 temp_v0;
     u16 temp_a0;
@@ -782,6 +804,11 @@ void GbApu_QueueRegisterWrite(u16 arg0, u8 arg1, u16 arg2) {
     }
 }
 
+/**
+ * Creates the register-write queue, zeroes every sound register (0xFF10-0xFF50) through
+ * GbApu_WriteRegister and silences all four channels.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void GbApu_ResetChannels(void) {
   s32 pad[6]; // FAKE: stack padding
   s32 i;
@@ -803,6 +830,10 @@ void GbApu_ResetChannels(void) {
   gGbApuNoise.unk_08.unk_02 = 0;
 }
 
+/**
+ * noise_table: the decompressed noise waveforms (GbEmu_Init / GbEmu_InitContext).
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void GbApu_Reset(s32 arg0) {
   D_81180704 = arg0;
   GbApu_ResetChannels();
@@ -839,6 +870,11 @@ void GbAudio_RampToSilence(void) {
 void func_811173F4(void) {
 }
 
+/**
+ * Reads a GB I/O register byte. FF26 (NR52) is rebuilt from the APU channel
+ * state; every other address is read straight from gGbMemoryMap.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 u8 GbMem_ReadIoRegister(u16 arg0) {
   u8 var_a0;
   u8 var_a1;

@@ -165,6 +165,10 @@ void BattleAnim_PlayMoveEffectEnd(ActivePokemon* user, s32 move_id) {
     BattleAnim_QueueMoveEffectEnd(move_id, sActivePokemon[target_side], user, default_anchor, BattleScene_GetHitCueAlternateAnchor(user));
 }
 
+/**
+ * play on move end
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleScene_TickClearAnimRecordIfLoaded(ActivePokemon* active_pokemon) {
     if (BattleAnim_TryRegisterAssetTables(active_pokemon) != 0) {
         active_pokemon->animationTimer = 0;
@@ -175,6 +179,10 @@ void BattleScene_TickClearAnimRecordIfLoaded(ActivePokemon* active_pokemon) {
 s32 func_82101FD4(ActivePokemon*);
 void func_8210568C(ActivePokemon*, s32, s32);
 
+/**
+ * triggers on faint
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleScene_TickStartRowAnimRecord(ActivePokemon* active_pokemon) {
     UNUSED s32 pad; // FAKE: stack padding
     s32 row_index = active_pokemon->animationState;
@@ -193,6 +201,10 @@ void BattleScene_TickStartRowAnimRecord(ActivePokemon* active_pokemon) {
 
 extern ModelDimensions D_8218934C[];
 
+/**
+ * trigger unknown
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleScene_TickQueueRowEffectList3AtAnimEnd(ActivePokemon* active_pokemon) {
     s32 row_index = active_pokemon->animationState;
     s32 cue_index = sBattleSceneStateRowTable[row_index].unk_20;
@@ -211,10 +223,19 @@ void func_82101EC0(s8 *arg0) {
     M2C_FIELD(arg0, s32 *, 0x620) = 0;
 }
 
+/**
+ * trigger on up on the dialogue box disappearing after move use
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleScene_ResetOpponentStateFrameCounter(ActivePokemon* active_pokemon) {
     sActivePokemon[BattleScene_GetParticipantSideIndex(active_pokemon) == 0]->animationTimer = 0;
 }
 
+/**
+ * trigger on up on the dialogue box disappearing after move use
+ * used to animate moves that throw rocks
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleAnim_SetFlagForRockThrowingMoves(ActivePokemon* active_pokemon) {
     BattleMonRuntime* active_pokemon_runtime = &active_pokemon->state.runtime;
 
@@ -248,6 +269,11 @@ s32 func_82101FC4(s8 *arg0) {
     return *M2C_FIELD(arg0, u8 **, 0x85C) & 0xD0;
 }
 
+/**
+ * Registers the session's animation asset tables once loading is idle.
+ * Returns 1 if registered, 0 if still busy.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 BattleAnim_TryRegisterAssetTables(ActivePokemon* active_pokemon) {
     if (BattleAnim_PollAssetLoadBusyFlags(active_pokemon) == 0) {
         BattleAnim_RegisterAssetTablesForSession(active_pokemon->sessionTeams);
@@ -256,6 +282,10 @@ s32 BattleAnim_TryRegisterAssetTables(ActivePokemon* active_pokemon) {
     return 0;
 }
 
+/**
+ * Loads the resource list for the participant's active animation row.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleScene_LoadMoveResourceList(ActivePokemon* active_pokemon) {
     // FAKE
     if (sBattleScene.scene->moveEffectKind == 0xE) {
@@ -265,6 +295,10 @@ void BattleScene_LoadMoveResourceList(ActivePokemon* active_pokemon) {
     }
 }
 
+/**
+ * Loads the resource list for the current state row's mode.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleScene_LoadRowResourceList(ActivePokemon* active_pokemon) {
     s32 row_index = active_pokemon->animationState;
 
@@ -345,6 +379,11 @@ void func_8210213C(ActivePokemon* arg0) {
     func_80003824(D_82199DF0[side], src, src + 0x10, 0);
 }
 
+/**
+ * State row 10 tick: requests a model reload at frame 20; once it completes,
+ * loads the switch-in owner model, frames the camera and enters state row 18.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleScene_TickRow10CleanupAndEnterState18(ActivePokemon* active_pokemon) {
     if (active_pokemon->animationTimer == 20) {
         active_pokemon->sessionTeams->uniqueStatusFlags |= 0x80;
@@ -467,6 +506,11 @@ void func_8210278C(ActivePokemon* active_pokemon) {
     }
 }
 
+/**
+ * When the move cue reaches its stat-effect frame, queues the stat-raise
+ * particle effect and sound for self-boosting moves.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Battle_HandleStatBoostingMoveAnimation(ActivePokemon* active_pokemon) {
     BattleMonRuntime* runtime = &active_pokemon->state.runtime;
     UNUSED s16 pad; // FAKE: stack padding
@@ -527,6 +571,10 @@ void func_82102AEC(ActivePokemon* active_pokemon) {
     }
 }
 
+/**
+ * State row 21 tick: when move cue 0 ends, plays the species sound.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleScene_TickRow21PlaySpeciesSound(ActivePokemon* active_pokemon) {
     s8* cue = (s8*)sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon)];
 
@@ -746,6 +794,12 @@ void func_8210343C(ActivePokemon* active_pokemon) {
 
 void func_82134DEC(s16);
 
+/**
+ * State row 1 tick: on frame 1 plays the cry (the real species while behind
+ * a Substitute), unless ACTIVE_UNDERGROUND or ACTIVE_FREEZE is set
+ * or the Pokemon has STATUS_SLEEP_MASK bits set.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleScene_TickRow1PlayOwnerCry(ActivePokemon* active_pokemon) {
     UNUSED s32 pad; // FAKE: stack padding
     ActivePokemonState* state = &active_pokemon->state;
@@ -841,6 +895,10 @@ void func_82103998(ActivePokemon* active_pokemon) {
     }
 }
 
+/**
+ * State tick: on frame 1, queues the row's effect list 3 entry and sound 3.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleScene_TickQueueRowEffectList3OnFirstFrame(ActivePokemon* active_pokemon) {
     BattleScene_GetParticipantSideIndex(active_pokemon);
     if ((active_pokemon->animationTimer == 1) && (BattleAnim_IsAssetLoadBusy(active_pokemon) == 0)) {
@@ -852,6 +910,11 @@ void BattleScene_TickQueueRowEffectList3OnFirstFrame(ActivePokemon* active_pokem
     }
 }
 
+/**
+ * State row 20 tick: requests a model reload at frame 79; once it completes,
+ * loads the switch-in owner model, frames the camera and enters state row 18.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleScene_TickRow20CleanupAndEnterState18(ActivePokemon* active_pokemon) {
     if (active_pokemon->animationTimer == 79) {
         active_pokemon->sessionTeams->uniqueStatusFlags |= 0x80;
@@ -870,6 +933,11 @@ void BattleScene_TickRow20CleanupAndEnterState18(ActivePokemon* active_pokemon) 
     }
 }
 
+/**
+ * Once a requested model reload completes, resets the owner model to the
+ * neutral placeholder.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleScene_ResetOwnerModelIfLoaded(ActivePokemon* active_pokemon) {
     if (active_pokemon->sessionTeams->uniqueStatusFlags & 0x10) {
         active_pokemon->sessionTeams->uniqueStatusFlags &= ~0x90;
@@ -877,6 +945,10 @@ void BattleScene_ResetOwnerModelIfLoaded(ActivePokemon* active_pokemon) {
     }
 }
 
+/**
+ * State row 8 enter: starts the charge cue mapped from the used move.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleScene_EnterRow8StartMappedMoveAnim(ActivePokemon* active_pokemon) {
     UNUSED s32 pad[2]; // FAKE: stack padding
     s32 charge_move_cue = sChargeMoveCues[active_pokemon->state.runtime.usedMove - 1];
@@ -951,6 +1023,11 @@ void func_82103DA4(ActivePokemon* active_pokemon) {
     }
 }
 
+/**
+ * State row 9 enter: when the opponent is bound by Bind, Wrap or String Shot,
+ * queues the binding effect and model flags.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleScene_EnterRow9QueueEffectList6(ActivePokemon* active_pokemon) {
     BattleMonRuntime* runtime = &sActivePokemon[BattleScene_GetParticipantSideIndex(active_pokemon) == 0]->state.runtime;
 
@@ -985,6 +1062,11 @@ void func_82103EF4(ActivePokemon* active_pokemon) {
     }
 }
 
+/**
+ * State row 13: plays battle sounds 20 and/or 33 from runtime bits 0x08/0x10,
+ * then retires the slot.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleScene_Row13PlaySequences14And21(ActivePokemon* active_pokemon) {
     BattleMonRuntime* runtime = &active_pokemon->state.runtime;
 
@@ -1108,6 +1190,10 @@ void func_82104208(ActivePokemon* active_pokemon) {
     }
 }
 
+/**
+ * Same as BattleScene_TickQueueList3Selector2OrC, using cue unk_B10.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleScene_TickQueueList3Selector2OrCFromB10(ActivePokemon* active_pokemon) {
     u8* cue = (u8*)sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon)] + 0x79B;
     s32 first_effect_frame;
@@ -1305,6 +1391,11 @@ void BattleScene_SetOpponentEventTrackA6(ActivePokemon* active_pokemon) {
     BattleAnim_SetModelEventTrackFromRow(sActivePokemon[BattleScene_GetParticipantSideIndex(active_pokemon)], BATTLE_CUE_A60);
 }
 
+/**
+ * Enters state row `row_index`: runs its three enter callbacks and registers
+ * its four tick callbacks.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleScene_EnterStateRow(ActivePokemon* active_pokemon, s32 row_index) {
     active_pokemon->animationState = row_index;
 
@@ -1318,6 +1409,10 @@ void BattleScene_EnterStateRow(ActivePokemon* active_pokemon, s32 row_index) {
     BattleScene_RegisterStateTickCallback(active_pokemon, sBattleSceneStateRowTable[row_index].unk_04[6]);
 }
 
+/**
+ * Advances both participants' timers and runs every tick slot.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleScene_TickStateCallbacks(void) {
     sActivePokemon[0]->animationTimer++;
     sActivePokemon[1]->animationTimer++;
@@ -1397,6 +1492,10 @@ s32 func_82101FD4(ActivePokemon*);
 void func_82101F00(ActivePokemon*);
 void func_821054C4(ActivePokemon*, s32);
 
+/**
+ * Starts the hit cue animation and event track from frame 0.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleScene_StartHitCueAnimation(ActivePokemon* active_pokemon) {
     UNUSED s32 pad[4]; // FAKE: stack padding
     MovePresentationCue* cue = (MovePresentationCue*)((u8*)sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon)] + 0x738);
@@ -1551,6 +1650,11 @@ void func_821054A8(s8 *arg0) {
     }
 }
 
+/**
+ * Sets the event track of cue `cue_index` when the session is idle. Dugtrio's
+ * idle cue picks one of three consecutive tracks at random.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleAnim_SetModelEventTrackFromRow(ActivePokemon* pokemon, s32 cue_index) {
     s32 random_offset;
     s32 event_track;
@@ -1577,6 +1681,11 @@ void BattleAnim_SetModelEventTrackFromRow(ActivePokemon* pokemon, s32 cue_index)
 
 s32 func_82101FC4();
 
+/**
+ * Binds cue `cue_index`'s event track at its end frame and records
+ * `event_state`. Returns 1 when the cue has no track, otherwise 0.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 BattleAnim_TrySetModelEventTrackFromRow(ActivePokemon* active_pokemon, s32 cue_index, s32 event_state) {
     UNUSED s32 pad; // FAKE: stack padding
     s32 event_track;
@@ -1631,6 +1740,11 @@ s32 func_82105724(ActivePokemon* arg0, s32 arg1) {
     return func_8001101C(arg0, arg1);
 }
 
+/**
+ * Like BattleScene_IsRowWaitComplete, but waits the unkA60 cue's frame count
+ * when it is at least 11.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 BattleScene_IsRowWaitCompleteWithEventCount(ActivePokemon* active_pokemon, s32 frame_limit) {
     UNUSED u8 unused_value; // FAKE: stack padding
     BattleMon* party_pokemon = &active_pokemon->teamRoster->pokemonPicked[M2C_FIELD(active_pokemon, s32*, 0x9D0)];
@@ -1757,6 +1871,12 @@ s32 BattleScene_IsMoveKeyedRowWaitComplete(ActivePokemon* active_pokemon, s32 fr
     return ModelAnim_IsAnimationDone(&active_pokemon->displayObject);
 }
 
+/**
+ * Returns 1 when the hit cue animation is done or replaced, or after
+ * `frame_limit` frames while ACTIVE_FREEZE or ACTIVE_AIRBORNE (without
+ * ACTIVE_AIR_ACTION) is set.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 BattleScene_IsRowAnimWaitComplete(ActivePokemon* active_pokemon, s32 frame_limit) {
     MovePresentationCue* cue = (MovePresentationCue*)((u8*)sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon)] + 0x738);
 
@@ -1834,6 +1954,12 @@ s32 func_82105E4C(s8 *arg0, unsigned short arg1)
 void func_82105E64(ActivePokemon* active_pokemon) {
 }
 
+/**
+ * Moves participants with ACTIVE_AIR_SETTLE to y = 200 (setting
+ * ACTIVE_AIRBORNE), restarts the Dig cue for Dugtrio with ACTIVE_UNDERGROUND,
+ * then resets both participants' animation flags.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleScene_ResetBothParticipantsAnimationState(void) {
     ActivePokemonState* side1_pokemon_state;
     ActivePokemonState* side2_pokemon_state;
@@ -1909,6 +2035,11 @@ void func_82106144(ActivePokemon* active_pokemon) {
     }
 }
 
+/**
+ * Clears the opponent's ACTIVE_UNDERGROUND flag, showing its model and stopping category
+ * 4 particles.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleScene_CleanupOpponentSpecialAnimFlag(ActivePokemon* active_pokemon) {
     UNUSED s32 pad[2]; // FAKE: stack padding
     ActivePokemon* target = sActivePokemon[BattleScene_GetParticipantSideIndex(active_pokemon) == 0];
@@ -1934,6 +2065,11 @@ extern f32 D_FLT_82189354[];
 
 typedef struct { f32 v; f32 pad[3]; } RestHeightRow;
 
+/**
+ * Clears the opponent's ACTIVE_UNDERGROUND flag (as above) and its
+ * ACTIVE_RETURN_RESET flag.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleScene_CleanupOpponentAnimationFlags(ActivePokemon* active_pokemon) {
     ActivePokemon* target = sActivePokemon[BattleScene_GetParticipantSideIndex(active_pokemon) == 0];
     ActivePokemonState* target_state = &target->state;
@@ -1963,6 +2099,11 @@ void func_82106354(void) {
 }
 
 
+/**
+ * Undoes the model changes of the participant's current effect mode
+ * (scale, height, rotation and secondary models).
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleScene_CleanupParticipantEffectMode(ActivePokemon* active_pokemon) {
     switch (active_pokemon->modelTransformId) {
         case 14:
@@ -2192,6 +2333,11 @@ void BattleAnim_ResetFreezeStatusAndRestoreAnimation(ActivePokemon* arg0) {
 void func_8210568C(ActivePokemon* active_pokemon, s32 cue_index, s32 event_state);
 void func_82134EBC(ActivePokemon*, s32);
 
+/**
+ * Starts the sleeping event track, particles and sound for an asleep
+ * participant whose sleep animation is not running.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleAnim_TriggerStatusAfflictionCry(ActivePokemon* active_pokemon) {
     BattleMon* party_pokemon = &active_pokemon->teamRoster->pokemonPicked[M2C_FIELD(active_pokemon, s32*, 0x9D0)];
 
@@ -2202,6 +2348,10 @@ void BattleAnim_TriggerStatusAfflictionCry(ActivePokemon* active_pokemon) {
     }
 }
 
+/**
+ * Allocates and zeroes the ActivePokemon for `side_index`.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleScene_AllocateParticipantRecord(BattleSessionTeams* session_teams, s32 side_index) {
     ActivePokemon* active_pokemon = main_pool_alloc(0xA8C, 0);
 
@@ -2275,6 +2425,11 @@ void func_82108A88(ActivePokemon*, s32, s32);
 void func_8211F430(void);
 void func_8211F274(ActivePokemon*);
 
+/**
+ * Initializes controllers, all participant models, the camera mode for the
+ * session mode, message buffers and audio channel groups.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleScene_InitializePresentation(UNUSED BattleSessionTeams* session_teams) {
     BattleScene_InitializeParticipantController(sActivePokemon[0]);
     BattleScene_InitializeParticipantController(sActivePokemon[1]);
@@ -2317,6 +2472,10 @@ void BattleScene_InitializePresentation(UNUSED BattleSessionTeams* session_teams
     func_8211F274(sActivePokemon[1]);
 }
 
+/**
+ * Zeroes the sway state and sets the facing direction (1 or -1).
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleScene_ResetParticipantAuxTransform(UNUSED ActivePokemon* owner, ActivePokemon* active_pokemon, s32 facing_direction) {
     Vec3f_SetComponentsDuplicate(&active_pokemon->modelTransform, 0.0f, 0.0f, 0.0f);
     Vec3f_SetComponentsDuplicate(&active_pokemon->modelTransform.rotation, 0.0f, 0.0f, 0.0f);
@@ -2381,6 +2540,16 @@ s32 BattleScene_DispatchLifecycle(s32 lifecycle_stage, BattleSessionTeams* sessi
     return 0;
 }
 
+/**
+ * Cause the Pokemon's idle animation to play in the thumbnail.
+ * The thumbnails in battles are not loaded icons, they are a frozen model of the Pokemon's idle animation
+ * You can see this by disabling the check in Battle_RenderActivePokemonThumbnail in
+ * @src/fragments/battle_engine/battle_engine_main.c
+ *
+ * Speculation: Some models changed between Stadium 0 and Stadium 1 (most apparent with Nidoking)
+ * They could have choosen to render the thumbnails this way in case models changed mid-development.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleThumbnail_TriggerOwnerModelAnimation(ActivePokemon* active_pokemon) {
     ModelAnim_SetFrame(&active_pokemon->thumbnail.displayObject, active_pokemon->thumbnail.idleTimer);
     ModelAnim_SetAnimation(&active_pokemon->thumbnail.displayObject, active_pokemon->thumbnail.idleAnimation);
@@ -2425,6 +2594,10 @@ void BattleThumbnail_SetFlagToUpdatePokemonThumbnail(CameraNode* camera) {
     camera->node.flags |= 0x10;
 }
 
+/**
+ * Loads the camera framing constants for the owner's thumbnail.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleThumbnail_LoadOwnerCameraFramingConstants(ActivePokemon* active_pokemon) {
     s32 side;
 

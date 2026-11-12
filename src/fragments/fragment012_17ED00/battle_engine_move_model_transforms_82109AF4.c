@@ -112,6 +112,10 @@ void func_82109FA8(s32 arg0, s8 *arg1) {
     }
 }
 
+/**
+ * fly start
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleAnim_FlyStart(UNUSED ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     Vec3f_SetComponentsDuplicate(&animated_pokemon->modelTransform, 0.0f, 0.0f, 0.0f);
     Vec3f_SetComponentsDuplicate(&animated_pokemon->modelTransform.rotation, 0.0f, 0.0f, 0.0f);
@@ -120,6 +124,10 @@ void BattleAnim_FlyStart(UNUSED ActivePokemon* owner, ActivePokemon* animated_po
     animated_pokemon->modelTransformTimer++;
 }
 
+/**
+ * fly continue
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleAnim_FlyContinue(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     BattleAnim_UpdateTransform(owner, animated_pokemon, 7.0f, 0.1f, NINETY_DEGREES);
     BattleScene_UpdateSecondaryModelTrailPosition(animated_pokemon, 0);
@@ -144,6 +152,10 @@ void func_8210A120(s32 arg0, s8 *arg1) {
     }
 }
 
+/**
+ * waterfall init
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleAnim_WaterfallStart(UNUSED ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     Vec3f_SetComponentsDuplicate(&animated_pokemon->modelTransform, 0.0f, 0.0f, 0.0f);
     Vec3f_SetComponentsDuplicate(&animated_pokemon->modelTransform.rotation, 0.0f, 0.0f, 0.0f);
@@ -151,6 +163,10 @@ void BattleAnim_WaterfallStart(UNUSED ActivePokemon* owner, ActivePokemon* anima
     animated_pokemon->modelTransformTimer++;
 }
 
+/**
+ * waterfall continue
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleAnim_WaterfallContinue(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     BattleAnim_UpdateTransform(owner, animated_pokemon, 3.0f, 0.01f, NINETY_DEGREES);
     if (owner->displayObject.position.y - D_FLT_82189354[M2C_FIELD(owner, s16*, 0x1A)][0] >= 300.0f) {
@@ -162,6 +178,11 @@ void BattleAnim_WaterfallContinue(ActivePokemon* owner, ActivePokemon* animated_
 void BattleAnim_WaterfallEnd(UNUSED ActivePokemon* owner, UNUSED ActivePokemon* animated_pokemon) {
 }
 
+/**
+ * Waterfall's animation: climb a waterfall
+ * https://youtu.be/Dn5oyCQ3wUs?t=1360
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleAnim_Waterfall(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     switch (animated_pokemon->modelTransformTimer) {
         case 0:
@@ -407,6 +428,11 @@ void BattleAnim_DoubleTeamContinue(UNUSED ActivePokemon* owner, ActivePokemon* a
     }
 }
 
+/**
+ * Plays the animation where poke balls are thrown in the air at the stat of the battle
+ * Animation doesn't change model depending on what poke ball a pokemon was caught in
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleAnim_PokeBallThrow(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     switch (animated_pokemon->modelTransformTimer) {
         case 0:

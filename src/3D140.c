@@ -111,6 +111,10 @@ extern s16 D_80075D00[];
 Acmd* func_8003AECC(N_PVoice* filter, s16* inp, s16* outp, s32 outCount, Acmd* p);
 s16 func_8003B280(s16 arg0, s32 arg1, s16 arg2, u16 arg3);
 
+/**
+ * Envelope mixer pull: applies the voice envelope and pan, then mixes into the output buffers.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 Acmd* n_alEnvmixerPull(N_PVoice* filter, s32 sample_offset, Acmd* p) {
     Acmd* ptr = p;
     N_PVoice* e = (N_PVoice*)filter;

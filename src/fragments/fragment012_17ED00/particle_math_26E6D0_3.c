@@ -57,12 +57,20 @@ void BattleAnim_SetupIceBeamBlizzardHitHueChange(Particle* arg0);
 void ParticleGfx_RecolorPrim(Particle* arg0, u16 arg1);
 void ParticleGfx_RecolorEnv(Particle* arg0, u16 arg1);
 
+/**
+ * Copy the selected RGB palette entry or pair into the caller's color buffers.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_CopyPaletteRgb(u8* arg0, u16 arg1) {
     arg0[0] = gParticlePalette[arg1][0];
     arg0[1] = gParticlePalette[arg1][1];
     arg0[2] = gParticlePalette[arg1][2];
 }
 
+/**
+ * Copy the selected RGB palette entry or pair into the caller's color buffers.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_CopyPalettePairRgb(u8* arg0, u8* arg1, u16 arg2) {
     u8 sp1C = gParticlePalettePairs[arg2][0];
     u8 sp1E = gParticlePalettePairs[arg2][1];
@@ -83,6 +91,10 @@ void func_82143440(u8* arg0, u16 arg1) {
     arg0[0xBF] = gParticlePalette[arg1][2];
 }
 
+/**
+ * Set the particle's primitive and environment RGB channels from the selected palette pair, leaving alpha unchanged.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_RecolorPrimEnvFromPalettePair(Particle* arg0, u16 arg1) {
     u8 sp1C = gParticlePalettePairs[arg1][0];
     u8 sp1E = gParticlePalettePairs[arg1][1];
@@ -91,22 +103,43 @@ void ParticleGfx_RecolorPrimEnvFromPalettePair(Particle* arg0, u16 arg1) {
     ParticleGfx_RecolorEnv(arg0, sp1E);
 }
 
+/**
+ * Set the particle's primitive RGB channels from the selected palette-set index, leaving alpha unchanged.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_RecolorPrimFromPaletteSetA(Particle* arg0, s16 arg1) {
     ParticleGfx_RecolorPrim(arg0, gParticlePaletteSetA[arg1]);
 }
 
+/**
+ * Set the particle's environment RGB channels from the selected palette-set index, leaving alpha unchanged.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_RecolorEnvFromPaletteSetA(Particle* arg0, s16 arg1) {
     ParticleGfx_RecolorEnv(arg0, gParticlePaletteSetA[arg1]);
 }
 
+/**
+ * Set the particle's primitive RGB channels from the selected palette-set index, leaving alpha unchanged.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_RecolorPrimFromPaletteSetB(Particle* arg0, s16 arg1) {
     ParticleGfx_RecolorPrim(arg0, gParticlePaletteSetB[arg1]);
 }
 
+/**
+ * Set the particle's environment RGB channels from the selected palette-set index, leaving alpha unchanged.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_RecolorEnvFromPaletteSetB(Particle* arg0, s16 arg1) {
     ParticleGfx_RecolorEnv(arg0, gParticlePaletteSetB[arg1]);
 }
 
+/**
+ * Set the particle's primitive and environment RGB channels from the selected palette-set index, leaving alpha
+ * unchanged.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_RecolorPrimEnvFromPaletteSetA(Particle* arg0, s16 arg1) {
     u8 sp1F = gParticlePaletteSetA[arg1];
 
@@ -114,6 +147,11 @@ void ParticleGfx_RecolorPrimEnvFromPaletteSetA(Particle* arg0, s16 arg1) {
     ParticleGfx_RecolorEnv(arg0, sp1F);
 }
 
+/**
+ * Set the particle's primitive and environment RGB channels from the selected palette-set index, leaving alpha
+ * unchanged.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_RecolorPrimEnvFromPaletteSetB(Particle* arg0, s16 arg1) {
     u8 sp1F = gParticlePaletteSetB[arg1];
 
@@ -121,14 +159,27 @@ void ParticleGfx_RecolorPrimEnvFromPaletteSetB(Particle* arg0, s16 arg1) {
     ParticleGfx_RecolorEnv(arg0, sp1F);
 }
 
+/**
+ * Set the particle's primitive RGB channels from a randomly selected palette index, leaving alpha unchanged.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_RecolorPrimRandomPalette(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, gParticleRandomPaletteIndices[(ParticleMath_RandomRange(5) & 0xFF)]);
 }
 
+/**
+ * Set the particle's environment RGB channels from a randomly selected palette index, leaving alpha unchanged.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ParticleGfx_RecolorEnvRandomPalette(Particle* arg0) {
     ParticleGfx_RecolorEnv(arg0, gParticleRandomPaletteIndices[ParticleMath_RandomRange(5) & 0xFF]);
 }
 
+/**
+ * Approach each selected RGB channel toward its palette value; return 1 only when all channel helpers report
+ * completion.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 ParticleGfx_ApproachPrimPalette(Particle* arg0, u16 arg1, u8 arg2) {
     s32 sp2C = 0;
     s32 sp28;
@@ -148,6 +199,11 @@ s32 ParticleGfx_ApproachPrimPalette(Particle* arg0, u16 arg1, u8 arg2) {
     return sp2C;
 }
 
+/**
+ * Approach each selected RGB channel toward its palette value; return 1 only when all channel helpers report
+ * completion.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 ParticleGfx_ApproachEnvPalette(Particle* arg0, u16 arg1, u8 arg2) {
     s32 sp2C = 0;
     s32 sp28;
@@ -167,6 +223,11 @@ s32 ParticleGfx_ApproachEnvPalette(Particle* arg0, u16 arg1, u8 arg2) {
     return sp2C;
 }
 
+/**
+ * Approach each selected RGB channel toward its palette value; return 1 only when all channel helpers report
+ * completion.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 ParticleGfx_ApproachPrimEnvPalettePair(Particle* arg0, u16 arg1, u8 arg2) {
     s32 sp44 = 0;
     s32 sp40;

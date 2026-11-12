@@ -135,6 +135,10 @@ void func_81109764(s32 arg0)
   }
 }
 
+/**
+ * Like alHeapDBAlloc: carves a 16-byte aligned block and zeroes it. Returns 0 when the arena is full.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 u32 GbApu_AllocZeroed(unk_func_81206FA0* arg0, s32 arg1) {
   s32 temp_v0;
   u32 temp_a2;
@@ -154,6 +158,10 @@ u32 GbApu_AllocZeroed(unk_func_81206FA0* arg0, s32 arg1) {
   return temp_a2;
 }
 
+/**
+ * GbApu_AllocZeroed without the clear.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 GbApu_Alloc(unk_func_81206FA0* arg0, s32 arg1) {
   s32 temp_a2;
   u32 temp_v0;
@@ -169,6 +177,10 @@ s32 GbApu_Alloc(unk_func_81206FA0* arg0, s32 arg1) {
   return temp_a2;
 }
 
+/**
+ * Like alHeapInit.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void GbApu_InitAllocator(unk_func_81206FA0* arg0, s32 arg1, s32 arg2) {
   arg0->unk_00 = ALIGN16(arg1);
   arg0->unk_04 = ALIGN16(arg1);

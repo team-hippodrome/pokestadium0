@@ -264,6 +264,11 @@ u32 main_pool_push_state(u32 arg) {
     return main_pool_get_available();
 }
 
+/**
+ * Restore pool state from a previous call to main_pool_push_state. Return the
+ * amount of free space left in the pool.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 u32 main_pool_pop_state(u32 arg) {
     MainPoolBlock* argptr;
     MainPoolBlock* block;

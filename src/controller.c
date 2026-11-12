@@ -76,6 +76,11 @@ void Cont_AdjustAnalogStick(Controller* controller) {
 
 extern u8 D_800AAFFA;
 extern u8 D_800AAFF8;
+/**
+ * Initialize the gControllers structs. Clear each member, then set their cont
+ * id and set the status and pads pointers.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Cont_InitControllers(void) {
     s16 port;
     s16 cont;
@@ -108,6 +113,14 @@ extern u8 D_800AAFFA;
 extern u8 D_800AAFF8;
 s32 func_80053A90(OSMesgQueue*);
 
+/**
+ * Setup the controllers for initial use by initializing the EEPROM queue
+ * and SI Event queues. EEPROM probing was handled by game_init.c in Super
+ * Mario 64 which also handled the controllers in the same file. Since
+ * Nintendo EAD is also credited with co-developing Pokemon Stadium, this
+ * organization may be a holdover from that era.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 u8 Cont_SetupControllers(u8 arg0) {
     D_800AAFFA = arg0;
     osCreateMesgQueue(&gSIEventMesgQueue, gSIEventMesgBuf, 1);
@@ -158,11 +171,19 @@ u8 func_8000B2E8(void) {
     return D_800AAFF8;
 }
 
+/**
+ * Select the controller to poll and initialize its D-pad repeat delay.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Input_SetRepeatController(Controller* arg0) {
     D_800AB02C = 0xA;
     D_800AB030 = arg0;
 }
 
+/**
+ * Return one D-pad press, repeating held directions after 10 frames and then every 2 frames.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 Input_GetRepeatedDPad(void) {
     if (D_800AB030->buttonPressed & 0x800) {
         D_800AB02C = 0xA;
@@ -221,6 +242,11 @@ s32 Cont_IsEepromPresent(void) {
     return gEepromProbe != 0;
 }
 
+/**
+ * Attempt to read from EEPROM up to 4 times given a buffer and size and inaddr.
+ * A return of 0 indicates success while -1 is an EEPROM error.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 Cont_AttemptReadEeprom(u8* buffer, u32 size, s32 inaddr) {
     s32 result = 1;
     if (gEepromProbe) {

@@ -1349,6 +1349,13 @@ void func_8212E9C8(ActivePokemon* arg0) {
 }
 
 
+/**
+ * Phase 5. Faint presentation for the Pokemon on the non-acting side: waits for its animation, plays the
+ * faint cue, closes in with the camera, then continues to the next action, the end of the turn, or (steps 6-8)
+ * the winner camera shots that set scene->winner. Entered when a displayed HP reaches 0, e.g. from
+ * BattleScene_SwitchActiveSideAndSetPhase and BattleScene_ResolveDisplayedHpCompletion.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleScene_PhaseFaint(CameraNode* arg0) {
     func_821255EC(arg0);
 
@@ -1587,6 +1594,11 @@ void func_8212F16C(CameraNode* arg0) {
 }
 
 
+/**
+ * Phase 8 (moveEffectKind 8, or sBattleMoveFailed set). Move failed presentation: frames the non-acting
+ * Pokemon, enters row 12, calls BattleAnim_UpdateMoveFailedFlag, and holds 50 frames before the HP update.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleScene_PhaseMoveFailedMessage(CameraNode* arg0) {
     ActivePokemonState* sp1C = &D_8219A540->state;
 

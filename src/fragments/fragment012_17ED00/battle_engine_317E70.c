@@ -158,6 +158,10 @@ void Battle_ApplyTypeEffectAndSTAB(void) {
     }
 }
 
+/**
+ * Replace Counter damage with twice the eligible Normal/Fighting damage, or mark failure.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 Battle_Effect_Counter(void) {
     if (sBattleUser->usedMove != 0x44) {
         return 1;
@@ -762,6 +766,10 @@ void Battle_CheckAllBroughtFainted_Level(ActivePokemon* arg0) {
     }
 }
 
+/**
+ * Test whether staged poison/burn damage leaves the side without a surviving roster member.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 Battle_CheckSideDefeatAfterResidualStatus(ActivePokemon* arg0) {
     ActivePokemonState* ptr1 = &arg0->state;
     BattleMon* temp_v0;
@@ -794,6 +802,10 @@ s32 Battle_CheckSideDefeatAfterResidualStatus(ActivePokemon* arg0) {
     return 0;
 }
 
+/**
+ * Select the appropriate roster-HP defeat check for direct damage and residual checkpoints.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 Battle_CheckFaintAfterMove(void) {
     if (sBattleTarget->displayHp == 0) {
         Battle_CheckAllBroughtFainted_Level(sActivePokemon[!sBattleScene.scene->actingSide]);
@@ -891,6 +903,10 @@ void Battle_ResolveMonAction(void)
   Battle_CheckFaintAfterMove();
 }
 
+/**
+ * Initialize an entering participant's runtime and clear its transient battle state.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BeginBattleForEntity(ActivePokemon* arg0) {
     ActivePokemonState* sp24;
     ActivePokemonState* sp20;

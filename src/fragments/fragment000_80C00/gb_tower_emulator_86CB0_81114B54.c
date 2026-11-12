@@ -460,11 +460,19 @@ void func_811155A0(void) {
     func_8110FDF0();
 }
 
+/**
+ * Sets D_8120EA60 (JP: also sends command 0xF1000000 to the Japanese sound driver).
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void GbApu_SetActiveFlag(void) {
     func_8110FD6C(0xF1000000, 0);
     D_81138A70 = 1;
 }
 
+/**
+ * Clears D_8120EA60 (JP: also sends command 0xF2000000).
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void GbApu_ClearActiveFlag(void) {
     func_8110FD6C(0xF2000000, 0);
     D_81138A70 = 0;

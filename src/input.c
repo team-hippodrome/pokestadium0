@@ -9,6 +9,10 @@ extern Controller* D_800AB030;
 
 void Input_ResetRepeatState(void);
 
+/**
+ * Empty input-repeat initialization hook.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Input_ResetRepeatState(void) {
 }
 

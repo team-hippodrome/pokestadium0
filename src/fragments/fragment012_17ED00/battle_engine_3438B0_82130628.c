@@ -354,6 +354,11 @@ void func_821311A0(CameraNode* arg0) {
     }
 }
 
+/**
+ * Runs the per-frame battle presentation phase selected by scene->phase and phaseStep. Move-specific phases
+ * (7, 12-15, 17, 25, 27-31, 38) are entered through BattleScene_PhaseDispatchMoveEffect.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleScene_UpdatePhase(CameraNode* arg0) {
     func_82125FD0();
     switch (sBattleScene.scene->phase) {

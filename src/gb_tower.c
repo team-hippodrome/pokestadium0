@@ -34,6 +34,11 @@ void func_8000B340_jp(void);
 
 s32 GbPak_VerifyPattern(s32 arg0, void* arg1);
 
+/**
+ * Writes a 32-byte pattern to cartridge RAM 0xA000 through the MBC, reads it back
+ * and returns 1 if it matches and the pak status bit 2 is clear.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 GbPak_VerifyPattern(s32 arg0, void* arg1) {
     u8 sp47;
     u8 sp24[0x20];
@@ -47,6 +52,11 @@ s32 GbPak_VerifyPattern(s32 arg0, void* arg1) {
     return sp20;
 }
 
+/**
+ * Detects working cartridge RAM by verifying 0x55, 0xAA and then an osGetCount
+ * pattern; the last pattern is left in the pattern buffer for GbTower_VerifyPakStillInserted.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 GbPak_DetectRam(s32 arg0, u8* arg1) {
     s32 var_s0 = 0;
     u8 sp34[0x20];
@@ -68,6 +78,11 @@ s32 GbPak_DetectRam(s32 arg0, u8* arg1) {
     return var_s0;
 }
 
+/**
+ * Prepares the pak on a port once (gGbPakPortReady): reads the ID, enables
+ * cartridge RAM and runs GbPak_DetectRam. Shuts down with error 1 if the read fails.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 GbTower_ProbePak(s32 arg0, u8* arg1, u8* arg2) {
     u8 status;
     OSGbpakId gbpak_id;
@@ -113,6 +128,10 @@ s32 GbTower_IsPakInserted(s32 arg0, u8 arg1) {
     return temp_v1;
 }
 
+/**
+ * Powers off every pak that was initialized by GbTower_ScanPaks.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void GbTower_PowerOffAllPaks(void) {
     s32 i;
 
@@ -127,6 +146,11 @@ void GbTower_PowerOffAllPaks(void) {
 extern u8 D_800A82A6;
 extern u8 D_800AB1F6;
 
+/**
+ * Initializes every plugged-in Transfer Pak and checks its cartridge. Returns
+ * (gGbPakUsableMask << 16) | gGbPakInitMask.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 GbTower_ScanPaks(void) {
     s32 i;
     s32 temp_v0;
@@ -167,6 +191,10 @@ s32 GbTower_ScanPaks(void) {
     return (D_800AB1F5 << 0x10) | D_800AB1F4;
 }
 
+/**
+ * Returns 1 if the Transfer Pak reports no powered cartridge; shuts down on a pak error.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 GbPak_IsCartOff(s32 arg0) {
     u8 status;
     s32 ret = osGbpakGetStatus(&D_800AB050[arg0], &status);
@@ -180,6 +208,10 @@ s32 GbPak_IsCartOff(s32 arg0) {
     return !((status & OS_GBPAK_GBCART_ON) != 0);
 }
 
+/**
+ * Returns 1 if the Transfer Pak reports a powered cartridge; shuts down on a pak error.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 GbPak_IsCartOn(s32 arg0) {
     u8 status;
     s32 ret = osGbpakGetStatus(&D_800AB050[arg0], &status);
@@ -190,6 +222,10 @@ s32 GbPak_IsCartOn(s32 arg0) {
     return ((status & OS_GBPAK_GBCART_ON) != 0);
 }
 
+/**
+ * Re-initializes the pak on a port and enables cartridge RAM; returns 1 on success.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 GbTower_ReinitPak(s32 arg0) {
     UNUSED u8 filler[4];
     u8 status;
@@ -207,6 +243,11 @@ s32 GbTower_ReinitPak(s32 arg0) {
     return D_800AB1F0[arg0] == 1;
 }
 
+/**
+ * Returns 1 if the 32-byte pattern left by GbPak_DetectRam is still in
+ * cartridge RAM and the pak was not reset, i.e. the same cartridge is still inserted.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 GbTower_VerifyPakStillInserted(s32 arg0, void* arg1) {
     u8 status;
     u8 sp1C[0x20];
@@ -220,6 +261,10 @@ s32 GbTower_VerifyPakStillInserted(s32 arg0, void* arg1) {
     return sp18;
 }
 
+/**
+ * Reads cartridge memory through osGbmbcReadWrite if the port is usable.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 GbPak_MbcRead(s32 arg0, void* arg1, u16 arg2, u16 arg3) {
     s32 var_v1;
 
@@ -230,6 +275,10 @@ s32 GbPak_MbcRead(s32 arg0, void* arg1, u16 arg2, u16 arg3) {
     return var_v1;
 }
 
+/**
+ * Writes cartridge memory through osGbmbcReadWrite if the port is usable.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 GbPak_MbcWrite(s32 arg0, void* arg1, u16 arg2, u16 arg3) {
     s32 var_v1;
 
@@ -240,6 +289,10 @@ s32 GbPak_MbcWrite(s32 arg0, void* arg1, u16 arg2, u16 arg3) {
     return var_v1;
 }
 
+/**
+ * Reads raw Transfer Pak address space through osGbpakReadWrite if the port is usable.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 GbPak_RawRead(s32 arg0, u8* arg1, u16 arg2, u16 arg3) {
     s32 var_v1;
 
@@ -250,6 +303,10 @@ s32 GbPak_RawRead(s32 arg0, u8* arg1, u16 arg2, u16 arg3) {
     return var_v1;
 }
 
+/**
+ * Writes raw Transfer Pak address space through osGbpakReadWrite if the port is usable.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 GbPak_RawWrite(s32 arg0, u8* arg1, u16 arg2, u16 arg3) {
     s32 var_v1;
 
@@ -260,6 +317,11 @@ s32 GbPak_RawWrite(s32 arg0, u8* arg1, u16 arg2, u16 arg3) {
     return var_v1;
 }
 
+/**
+ * Selects a ROM bank by writing 0x5000, the upper bank bits to 0x4000 and the
+ * lower 5 bits to 0x2000.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 int GbPak_SelectRomBank(s32 arg0, s32 arg1) {
     u8 sp28[0x20];
     int i;
@@ -285,6 +347,11 @@ int GbPak_SelectRomBank(s32 arg0, s32 arg1) {
     return GbPak_RawWrite(arg0, sp28, 0x2000U, 0x20U);
 }
 
+/**
+ * Reads a linear range of cartridge ROM, aligned to 32 bytes, switching banks
+ * for addresses at or above 0x4000.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 GbPak_ReadRom(s32 arg0, u8* arg1, s32 arg2, s32 arg3) {
     s32 ret = 1;
     u32 temp_s1 = (arg2 & ~0x1F);
@@ -331,6 +398,10 @@ s32 GbPak_ReadRom(s32 arg0, u8* arg1, s32 arg2, s32 arg3) {
     return ret;
 }
 
+/**
+ * Sets the ports polled by GbTower_PollPakConnection; returns the old mask.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 u8 GbTower_SetPollMask(u8 arg0) {
     u8 temp_v0 = D_800AB1F7;
 

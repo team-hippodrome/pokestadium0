@@ -50,6 +50,10 @@ u8 Battle_Random(void);
 void ComputePokemonStat(s32 arg0, BattleMon* arg1);
 void Battle_IncrementMoveUsage(void);
 
+/**
+ * Invoke the stored-stat calculator for selectors 0 through 4, preserving its original range.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ComputeAllPokemonStats(BattleMon* arg0) {
     ComputePokemonStat(0, arg0);
     ComputePokemonStat(1, arg0);
@@ -63,6 +67,10 @@ extern u16 D_82199F58;
 extern u16 D_82199F56;
 extern u16 D_82199F52;
 extern u16 D_843C4DCC;
+/**
+ * Select damage power, offensive/defensive stats and level, including screens and critical hits.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void InitBattleParameters(void) {
     sBattleDamage = 0;
     D_82199F52 = sBattleUser->moveCache.power;
@@ -115,6 +123,10 @@ extern u16 D_82199F56;
 extern u16 D_82199F58;
 extern u16 D_82199F54;
 extern u16 D_82199F58;
+/**
+ * Calculate base damage, halving defense for boom moves and delegating OHKO success.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 Battle_CalcDamage(void) {
     s32 temp_v0 = sBattleUser->moveCache.effect;
 
@@ -263,6 +275,10 @@ void func_821102F0(void) {
     }
 }
 
+/**
+ * Spend PP unless the active continuation suppresses it; update stored PP outside Transform.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Battle_DecrementPP(s32 arg0) {
     BattleMonRuntime* temp_v0;
     ActivePokemonState* temp_a1;
@@ -374,6 +390,10 @@ void func_82110B44(ActivePokemon* arg0) {
     ptr->statusCondition = arg0->state.runtime.pendingStatusCondition;
 }
 
+/**
+ * Quarter modified Speed when paralyzed, retaining a minimum of one.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ApplyParalysisSpeedCut(ActivePokemon* arg0) {
     BattleMonRuntime* temp_v0 = &arg0->state.runtime;
 
@@ -385,6 +405,10 @@ void ApplyParalysisSpeedCut(ActivePokemon* arg0) {
     }
 }
 
+/**
+ * Halve modified Attack when burned, retaining a minimum of one.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ApplyBurnAttackCut(ActivePokemon* arg0) {
     BattleMonRuntime* temp_v0 = &arg0->state.runtime;
 
@@ -399,6 +423,10 @@ void ApplyBurnAttackCut(ActivePokemon* arg0) {
 void Battle_CheckMovesetLegality(ActivePokemon*);
 void func_80041940(s32, s32, s32);
 
+/**
+ * Populate runtime species, HP, types, moves, stats and neutral stages from the selected roster.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Battle_InitPokemonRuntimeState(ActivePokemon* arg0) {
     ActivePokemonState* sp28;
     BattleMonRuntime* sp24;
@@ -538,6 +566,10 @@ void Battle_LoadMoveCache(void) {
 }
 
 extern s32 D_8218C780;
+/**
+ * Temporarily make the damaged Rage user the effect user and apply its Attack boost.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Battle_ApplyRageContinuation(void) {
     BattleMonRuntime* sp1C;
 
@@ -704,6 +736,10 @@ void Battle_IncrementMoveUsage(void) {
     mon->pp[state->selectedMoveIndex]++;
 }
 
+/**
+ * Refund the selected slot's PP, choose a non-Metronome move and load its cache.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 Battle_Effect_Metronome(void) {
     s32 move_pulled;
 
@@ -718,6 +754,10 @@ s32 Battle_Effect_Metronome(void) {
     return 1;
 }
 
+/**
+ * Stage poison/burn HP loss, scaling it by the Toxic counter when active.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Battle_ApplyPoisonOrBurnDamage(void) {
     u16 var_a0;
 
@@ -799,6 +839,10 @@ extern s32 D_8218C70C;
 void Battle_ApplyLeechSeedDamage(void);
 void func_82111870(void);
 
+/**
+ * Queue and stage poison/burn and Leech Seed effects after the action.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 Battle_ApplyResidualEffects(void) {
     if (sBattleTarget->displayHp == 0) {
         return 0;

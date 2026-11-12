@@ -209,6 +209,12 @@ void _n_freePVoice(N_PVoice* pvoice) {
     alLink((ALLink*)pvoice, &n_syn->pLameList);
 }
 
+/**
+ * Add 0.5 to adjust the average affect of
+ * the truncation error produced by casting
+ * a float to an int.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 _n_timeToSamplesNoRound(s32 micros) {
     f32 tmp = ((f32)micros) * n_syn->outputRate / 1000000.0 + 0.5;
 

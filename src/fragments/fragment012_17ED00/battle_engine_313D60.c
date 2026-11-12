@@ -91,6 +91,10 @@ void ShowDamageMessage(s32 attacker, s32 defender) {
 
 extern u8 D_82199F3F;
 extern u8 D_82199F30;
+/**
+ * Clear the incoming participant's temporary effects and the opponent's trapping lock.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Battle_ResetTransientRuntimeState(s32 arg0, s32 arg1) {
     BattleMonRuntime* sp1C = &sActivePokemon[arg0]->state.runtime;
     BattleMonRuntime* sp18 = &sActivePokemon[arg1]->state.runtime;
@@ -162,6 +166,10 @@ void func_8210F8E8(void) {
     }
 }
 
+/**
+ * Return which participant acts first using Quick Attack, Counter, Speed and a random tie break.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 u16 Battle_DetermineMoveOrder(ActivePokemon* pokemon, ActivePokemon* other_pokemon) {
     BattleMonRuntime* runtime = &pokemon->state.runtime;
     BattleMonRuntime* other_runtime = &other_pokemon->state.runtime;
@@ -196,6 +204,10 @@ u16 Battle_DetermineMoveOrder(ActivePokemon* pokemon, ActivePokemon* other_pokem
     return 1;
 }
 
+/**
+ * Test membership in a byte array of the supplied length.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 IsByteInArray(u8 lookup, u8* array, s32 array_length) {
     while (array_length--) {
         if (lookup == *array) {
@@ -210,10 +222,18 @@ s32 IsByteInArray(u8 lookup, u8* array, s32 array_length) {
 void func_8210FA74(void) {
 }
 
+/**
+ * Select a move in the first scratch runtime using the current scratch move-slot index.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Battle_SetActiveMoveFromSlotIndex(void) {
     D_8219A3C8[0].usedMove = D_8219A3C8[0].moves[D_82199F4E];
 }
 
+/**
+ * Execute the cached effect and report whether it left the move-failed flag clear.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 Battle_CheckMoveSuccess(void) {
     BattleEffect_ExecuteMoveEffect();
 
@@ -223,6 +243,10 @@ s32 Battle_CheckMoveSuccess(void) {
     return 1;
 }
 
+/**
+ * Calculate the requested stored stat from the selected base-stat/experience entries and DVs.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ComputePokemonStat(s32 arg0, BattleMon* arg1) {
     u16 i;
     u16 spC;

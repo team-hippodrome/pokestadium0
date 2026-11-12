@@ -38,6 +38,12 @@ extern char D_82302A0C[];
 extern char D_82302A10[];
 extern char D_82302A20[];
 
+/**
+ * Draws the instructions for the L and R button at the bottom of the screen
+ * (L) Button to cancel
+ * (R) Button to check
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleMenu_DrawBottomActionButtons(void) {
     func_8001CC90(0, 0x1E0, 0xAB, 0x49, 0x66);
 
@@ -209,6 +215,10 @@ s32 BattleMenu_DrawSidebarRowTypeIcon(s32 arg0, s32 arg1, s8 arg2, s8 arg3) {
     return arg2;
 }
 
+/**
+ * Draws side 0's order sidebar and advances its selection icons.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleMenu_DrawTeamOrderSidebarTeam0(void) {
     unk_D_84803760* temp_v0 = &D_82302B20[0];
     s32 i;
@@ -244,6 +254,10 @@ void BattleMenu_DrawTeamOrderSidebarTeam0(void) {
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
+/**
+ * Draws side 1's order sidebar and advances its selection icons.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleMenu_DrawTeamOrderSidebarTeam1(void) {
     unk_D_84803760* temp_v0 = &D_82302B20[1];
     s32 i;
@@ -279,6 +293,10 @@ void BattleMenu_DrawTeamOrderSidebarTeam1(void) {
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
+/**
+ * Appends a growing selection icon owned by the given controller port.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleMenu_AppendOrderSlotIcon(s32 arg0, s32 arg1) {
     unk_D_84803760* temp_v0 = &D_82302B20[arg0];
 
@@ -287,6 +305,10 @@ void BattleMenu_AppendOrderSlotIcon(s32 arg0, s32 arg1) {
     temp_v0->unk_00++;
 }
 
+/**
+ * Starts shrinking all selection icons and clears the side's pick count.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleMenu_ResetOrderSlotIcons(s32 arg0) {
     unk_D_84803760* ptr = &D_82302B20[arg0];
     s32 i;
@@ -633,6 +655,10 @@ void func_823017EC(void) {
     }
 }
 
+/**
+ * Tests whether a roster slot already occurs in the panel's picked order.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 BattleMenu_IsSlotAlreadySelected(unk_D_848037A0* arg0, s8 arg1) {
     s32 i;
     s8 temp_v1;
@@ -754,6 +780,10 @@ void func_82301B2C(s8 *arg0) {
 
 void BattleMenu_SelectSlotOrShowSummary(unk_D_848037A0*, s8);
 
+/**
+ * Maps slot buttons to picking or checking Pokemon and handles L-cancel.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleMenu_HandleOrderSelectPanel_PartyInput(Controller* arg0, unk_D_848037A0* arg1) {
     if (BTN_IS_PRESSED(arg0, BTN_R)) {
         // clang-format off
@@ -784,6 +814,10 @@ void BattleMenu_HandleOrderSelectPanel_PartyInput(Controller* arg0, unk_D_848037
 }
 
 extern unk_D_848037A0 D_848037A0[4];
+/**
+ * Handles confirmation choices, accepting the order or restarting selection.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleMenu_HandleOrderSelectPanel_ConfirmInput(Controller* arg0, unk_D_848037A0* arg1) {
     unk_D_848037A0* temp_v0_2;
 
@@ -824,6 +858,10 @@ void BattleMenu_HandleOrderSelectPanel_ConfirmInput(Controller* arg0, unk_D_8480
     }
 }
 
+/**
+ * Dismisses the level-limit warning and clears this panel's picks.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleMenu_HandleOrderSelectPanel_LevelCapNoticeInput(Controller* arg0, unk_D_848037A0* arg1) {
     if (BTN_IS_PRESSED(arg0, BTN_A | BTN_B)) {
         arg1->unk_0005 = 0;
@@ -837,6 +875,10 @@ void BattleMenu_HandleOrderSelectPanel_LevelCapNoticeInput(Controller* arg0, unk
 
 extern Controller D_84816428;
 extern Controller D_82302BD8;
+/**
+ * Dispatches panel input while enabled and reports whether the panel is ready.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 BattleMenu_UpdateOrderSelectPanel(s32 arg0, unk_D_848037A0* arg1) {
     Controller* var_a0;
     s32 sp18 = 0;
@@ -879,6 +921,10 @@ void func_82300020(void);
 extern s32 D_82302B44;
 void func_8230016C(void);
 void func_8000A7FC(u16 color);
+/**
+ * @src/stage_loader.c
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 BattleMenu_UpdateOrderSelect(s32 arg0) {
     UNUSED s32 pad; // FAKE: stack padding
     s32 i;
@@ -981,6 +1027,11 @@ typedef struct OrderSelectSlot {
     /* 0x1C */ TeamRoster* unk_001C;
 } OrderSelectSlot; // size = 0x20
 
+/**
+ * Copies final orders into battle rosters and sets each tag team's lead trainer.
+ * COM rosters keep their original order rather than using the scripted panel picks.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleMenu_CommitOrderSelection(void) {
     s32 i;
     s32 var_s4;
@@ -1011,6 +1062,10 @@ void BattleMenu_CommitOrderSelection(void) {
 }
 
 
+/**
+ * Initializes one trainer's panel and loads its roster icons.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleMenu_AddOrderSelectPanel(s16 arg0, s16 arg1, TeamRoster* arg2, s32 arg3, s32 arg4) {
     s32 i;
     unk_D_848037A0* temp_v1;
@@ -1047,6 +1102,10 @@ extern s16 D_82302B42;
 extern s16 D_82302B40;
 extern s32 D_82302C00;
 extern Controller D_82302BD8;
+/**
+ * Resets selection state and creates controller-ordered panels for both sides.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleMenu_InitOrderSelectPanels(SessionContext* arg0) {
     BattleSessionTeams* temp_s0 = &arg0->battleSides[0];
 
@@ -1114,6 +1173,10 @@ void func_8001A194(s32, s32);
 void PokeIcon_OpenModelArchives(void);
 s32 func_82301EF4();
 
+/**
+ * Loads selection resources, runs the screen through its fades, and commits the orders.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 BattleMenu_RunOrderSelectScreen(s32 arg0, s32 arg1) {
     StageContext* sp24;
 

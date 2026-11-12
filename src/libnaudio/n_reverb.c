@@ -109,6 +109,12 @@ Acmd* n_alFxPull(s32 sample_offset, Acmd* p) {
     return ptr;
 }
 
+/**
+ * This routine gets called by alSynSetFXParam. No checking takes place to
+ * verify the validity of the paramID or the param value. input and output
+ * values must be 8 byte aligned, so round down any param passed.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 n_alFxParamHdl(void* filter, s32 paramID, void* param) {
     ALFx* f = (ALFx*)filter;
     s32 p = (paramID - 2) % 8;

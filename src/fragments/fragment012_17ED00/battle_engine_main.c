@@ -278,6 +278,11 @@ void Battle_FillActivePokemonThumbnail(GraphNode* thumbnail_root, DepthBuffer* t
     gDPSetTextureFilter(gDisplayListHead++, G_TF_BILERP);
 }
 
+/**
+ * Clear the faint-batch stamps for every picked Pokemon, including teammate rosters.
+ * BattleMon.unk_25 is written by Battle_UpdateFaintBatches when its current HP reaches zero.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Battle_ResetFaintBatches(void) {
     s32 side_index;
     s32 trainer_index;
@@ -295,6 +300,12 @@ void Battle_ResetFaintBatches(void) {
     }
 }
 
+/**
+ * called every frame: bug boy in GLC
+ * Stamp newly observed zero-HP Pokemon with the same batch number this frame.
+ * Increment once per nonempty batch, so simultaneous faints share a stamp.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Battle_UpdateFaintBatches(void) {
     s32 side_index;
     s32 trainer_index;
@@ -430,6 +441,13 @@ void Battle_UpdateCompletionGate(void) {
 extern SessionContext* D_82198D10;
 void func_8000A7FC(s32);
 
+/**
+ * triggers every frame: bug boy in GLC
+ * BgStage_WaitForCondition passes the current fade mode and starts the exit fade
+ * after a nonzero return. Latch 2 prevents repeating the audio shutdown request.
+ * @src/stage_loader.c
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 Battle_FrameCallback(s32 fade_mode) {
     s32 battle_result = 0;
 
@@ -494,6 +512,13 @@ extern u8 D_82189170[];
 extern u8 D_82189174[];
 void BattleAi_SelectTeam(TeamRoster*, TeamRoster*, s32, u8*, s32);
 
+/**
+ * triggers on battle start: bug boy in glc
+ * Ask the COM selection routine for the picked prefix, then copy the brought
+ * roster in that order. numberOfPokemonChosen keeps only the prefix length.
+ * @src/fragments/battle_engine/battle_engine_com_decision_logic.c
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Battle_SelectComRoster(void) {
     UNUSED s32 pad; // FAKE: stack padding
     u8 order_of_picked_pokemon[8];

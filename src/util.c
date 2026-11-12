@@ -131,12 +131,23 @@ void func_80002EC8(Gfx** dlist) {
     }
 }
 
+/**
+ * Clear memory address area.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Util_Memclear(u64* dest, u32 size) {
     while (size-- > 0) {
         *(dest++) = 0x1234567812345678;
     }
 }
 
+/**
+ * Unused function for checking some 64-bit range (possibly some display list?) for values
+ * cooresponding to 0x8040000080400000. This could have been for some memory test however
+ * the code for such a test is not present in this ROM, so we can only guess this function's
+ * intended usage.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 Util_CheckStubMemArea(u64* ptr) {
     s32 ret = 0;
 

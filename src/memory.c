@@ -80,6 +80,10 @@ void* mem_pool_alloc(MemoryPool* node, s32 size) {
     return addr;
 }
 
+/**
+ * Free a block that was allocated using mem_pool_alloc.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void mem_pool_free(MemoryPool* pool, void* addr) {
     struct MemoryBlock* block;
     struct MemoryBlock* freeList;

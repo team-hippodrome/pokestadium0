@@ -309,6 +309,10 @@ s32 func_82107F88(s8 *arg0)
   return ((*((s32 *) (((s8 *) ((*((s32 *) (((s8 *) arg0) + 0x85C))) + ((*((u8 *) (((s8 *) arg0) + 0x7B9))) * 4))) + 8))) + ((*((s32 *) (((s8 *) arg0) + 0x794))) * 0x50)) + (new_var = 0x4C); // FAKE: decomp slop, raw pointer casts stand in for struct fields
 }
 
+/**
+ * Creates the participant's owner (trainer) model.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleScene_InitializeParticipantOwnerModel(ActivePokemon* active_pokemon) {
     ThumbnailState* presentation = &active_pokemon->thumbnail;
     ModelNodeView* model_view;
@@ -332,6 +336,11 @@ void BattleScene_InitializeParticipantOwnerModel(ActivePokemon* active_pokemon) 
     Vec3f_SetComponentsDuplicate(&presentation->displayObject.position, 0.0f, 0.0f, 0.0f);
 }
 
+/**
+ * Creates the participant's two hidden secondary models.
+ * ^?????? this annotation seems like a hallucination
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleScene_InitializeParticipantSecondaryModels(ActivePokemon* pokemon, s32* secondary_models) {
     ModelNodeView* model_node;
     s16 object_type;
@@ -409,6 +418,10 @@ void BattleScene_InitializeParticipantModel(ActivePokemon* active_pokemon) {
     func_8000D41C(&M2C_FIELD(active_pokemon, Vec3f*, 0x5DC), active_pokemon->facingDirection * D_82199DF0[side][0], D_82199DF0[side][1], D_82199DF0[side][2]);
 }
 
+/**
+ * Creates the participant's hidden auxiliary model (model 154).
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleScene_InitializeParticipantAuxiliaryModel(ActivePokemon* active_pokemon) {
     DisplayObject* auxiliary_model = &active_pokemon->pokeBall;
     ModelNodeView* model_view = active_pokemon->sessionTeams->unk_18;

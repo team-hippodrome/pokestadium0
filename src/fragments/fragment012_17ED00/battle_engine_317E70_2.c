@@ -137,6 +137,10 @@ void Particle_ResetDefaults(Particle* arg0) {
     arg0->scale = 1.0f;
 }
 
+/**
+ * Search the 300-slot pool from the rolling index, initialize a free slot, or return (Particle*)-1.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 Particle* Particle_Alloc(void) {
     s32 i;
     s32 var_v0 = gParticlePoolIndex;
@@ -230,10 +234,18 @@ void BattleAnim_FreeEffectSlot(BattleAnimEffectSlot* arg0) {
     arg0->unk_0C = arg0->unk_0E;
 }
 
+/**
+ * Allocate one particle using the shared pool allocator.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 Particle* Particle_New(void) {
     return Particle_Alloc();
 }
 
+/**
+ * Allocate a linked chain, returning its first particle even if a later allocation fails.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 Particle* Particle_AllocChain(u8 arg0) {
     s32 i;
     Particle* sp28;
@@ -606,6 +618,10 @@ void func_8213A904(s8* arg0) {
 
 typedef void (*ParticleDrawFn2)(Particle*, s32);
 typedef void (*ParticleDrawFnCam)(Particle*, CameraNode*);
+/**
+ * For kind 1, optionally run per-particle setup then draw; kind 3 calls the direct render callback.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_DispatchDraw(Particle* arg0, CameraNode* arg1) {
     s8* desc = (s8*)arg0->descriptor;
     s8* sp18 = M2C_FIELD(desc, s8**, 4);
@@ -782,6 +798,10 @@ void BattleAnim_TickEffectSlots(void) {
     }
 }
 
+/**
+ * Count allocated pool slots, regardless of their lifecycle or rendering flags.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 Particle_CountActive(void) {
     s32 i;
     s32 var_v1 = 0;
@@ -796,6 +816,10 @@ s32 Particle_CountActive(void) {
     return var_v1;
 }
 
+/**
+ * Return the allocated-slot count through the shared counter.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 Particle_CountActiveAlias(void) {
     return Particle_CountActive();
 }
@@ -896,6 +920,10 @@ void BattleAnim_EnableEffectSpawning(void) {
     D_8219A830 = 0;
 }
 
+/**
+ * Advance the particle clock through the shared frame-counter updater.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_UpdateFrameCountersAlias(void) {
     Particle_UpdateFrameCounters();
 }

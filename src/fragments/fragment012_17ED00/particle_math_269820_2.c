@@ -98,6 +98,10 @@ s32 Particle_FieldA6_DecrementTo_0BCC4(Particle* arg0, s16 arg1, s16 arg2);
 s32 Particle_FieldA8_DecrementTo_0BE30(Particle* arg0, s16 arg1);
 s32 Particle_FieldAE_Approach_0BF60(Particle* arg0, s16 arg1, s16 arg2);
 
+/**
+ * Tick the delay timer and advance lifecycle when it expires.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 Particle_TickDelayAndAdvanceLifecycle(Particle* arg0, s16 arg1) {
     s32 sp1C = Particle_TickDelayTimer(arg0, arg1);
 
@@ -107,18 +111,34 @@ s32 Particle_TickDelayAndAdvanceLifecycle(Particle* arg0, s16 arg1) {
     return sp1C;
 }
 
+/**
+ * Set the selected particle flag bits.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_SetFlags(Particle* arg0, s32 arg1) {
     arg0->flags |= arg1;
 }
 
+/**
+ * Clear the selected particle flag bits.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_ClearFlags(Particle* arg0, s32 arg1) {
     arg0->flags &= ~arg1;
 }
 
+/**
+ * Toggle the selected particle flag bits.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_ToggleFlags(Particle* arg0, s32 arg1) {
     arg0->flags ^= arg1;
 }
 
+/**
+ * Return whether any selected flag bit is set.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 Particle_HasFlags(Particle* arg0, s32 arg1) {
     s32 var_v1 = 0;
 
@@ -128,6 +148,10 @@ s32 Particle_HasFlags(Particle* arg0, s32 arg1) {
     return var_v1;
 }
 
+/**
+ * Return whether all selected flag bits are clear.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 Particle_LacksFlags(Particle* arg0, s32 arg1) {
     s32 var_v1 = 0;
 
@@ -137,26 +161,50 @@ s32 Particle_LacksFlags(Particle* arg0, s32 arg1) {
     return var_v1;
 }
 
+/**
+ * Set flag 4, which gates drawing in both particle render passes.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_EnableRendering(Particle* arg0) {
     Particle_SetFlags(arg0, 4);
 }
 
+/**
+ * Clear flag 4 to suppress drawing without freeing the particle.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_DisableRendering(Particle* arg0) {
     Particle_ClearFlags(arg0, 4);
 }
 
+/**
+ * Test flag 4, the per-particle drawing gate.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 Particle_IsRenderingEnabled(Particle* arg0) {
     return Particle_HasFlags(arg0, 4);
 }
 
+/**
+ * Set flag 0x40; its effect-specific interpretation is unresolved.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_EnableFlag40(Particle* arg0) {
     Particle_SetFlags(arg0, 0x40);
 }
 
+/**
+ * Clear flag 0x40 without changing the other flags.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_DisableFlag40(Particle* arg0) {
     Particle_ClearFlags(arg0, 0x40);
 }
 
+/**
+ * Evaluate flag 0x40 and discard the result; the original void interface returns no test value.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_HasFlag40(Particle* arg0) {
     Particle_HasFlags(arg0, 0x40);
 }
@@ -258,6 +306,10 @@ s32 func_8213CE3C(Particle* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 ar
     return sp24;
 }
 
+/**
+ * Run ping-pong texture-frame animation with a frame timer and loop counter; return 1 on completion.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 Particle_AnimateFramesPingPong(Particle* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5) {
     s32 sp24 = 0;
 
@@ -302,6 +354,10 @@ s32 Particle_AnimateFramesPingPong(Particle* arg0, s16 arg1, s16 arg2, s16 arg3,
     return sp24;
 }
 
+/**
+ * Run the corresponding frame animation and advance lifecycle when it reports completion.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 Particle_AnimateFramesForwardAndAdvanceLifecycle(Particle* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5) {
     s32 sp24 = Particle_AnimateFramesPingPong(arg0, arg1, arg2, arg3, arg4, arg5);
 
@@ -312,6 +368,10 @@ s32 Particle_AnimateFramesForwardAndAdvanceLifecycle(Particle* arg0, s16 arg1, s
     return sp24;
 }
 
+/**
+ * Run reverse-first ping-pong texture-frame animation with a frame timer and loop counter; return 1 on completion.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 Particle_AnimateFramesReverseFirstPingPong(Particle* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5) {
     s32 sp24 = 0;
 
@@ -352,6 +412,10 @@ s32 Particle_AnimateFramesReverseFirstPingPong(Particle* arg0, s16 arg1, s16 arg
     return sp24;
 }
 
+/**
+ * Run the corresponding frame animation and advance lifecycle when it reports completion.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 Particle_AnimateFramesReverseAndAdvanceLifecycle(Particle* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5) {
     s32 sp24 = Particle_AnimateFramesReverseFirstPingPong(arg0, arg1, arg2, arg3, arg4, arg5);
 
@@ -361,11 +425,19 @@ s32 Particle_AnimateFramesReverseAndAdvanceLifecycle(Particle* arg0, s16 arg1, s
     return sp24;
 }
 
+/**
+ * Set phase to one and clear the phase-timer initialization bit.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_BeginPhase(Particle* arg0) {
     arg0->phase = 1;
     Particle_ClearFlags(arg0, 2);
 }
 
+/**
+ * Set phase to zero and clear the phase-timer initialization bit.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_ResetPhase(Particle* arg0) {
     arg0->phase = 0;
     Particle_ClearFlags(arg0, 2);
@@ -379,6 +451,10 @@ void Particle_IncrementPhase(s8 *arg0) {
     M2C_FIELD(arg0, s16 *, 0xB4) = (s16) (M2C_FIELD(arg0, s16 *, 0xB4) + 1);
 }
 
+/**
+ * Initialize under flag 2, decrement immediately, and finish only after the timer becomes negative.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 Particle_TickPhaseTimer(Particle* arg0, s16 arg1) {
     s32 sp1C = 0;
 
@@ -395,6 +471,10 @@ s32 Particle_TickPhaseTimer(Particle* arg0, s16 arg1) {
     return sp1C;
 }
 
+/**
+ * Sum origin and both offset terms; copy the resulting transform and alpha to an associated DisplayObject.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_UpdateWorldTransform(Particle* arg0) {
     arg0->worldPosition.x = arg0->origin.x + arg0->positionOffset.x + arg0->motionOffset.x;
     arg0->worldPosition.y = arg0->origin.y + arg0->positionOffset.y + arg0->motionOffset.y;
@@ -523,6 +603,10 @@ void Particle_Field38_AddXZFromField94Y_08ED0(Particle* arg0, f32 arg1) {
     arg0->positionOffset.z += arg1 * COSS(arg0->rotation.y) * gParticleRenderContext.scale.y;
 }
 
+/**
+ * Add to positionOffset.x, positionOffset.z with render-context Y scaling.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_Field38_AddXZFromField94YOffset180_08F38(Particle* arg0, f32 arg1) {
     arg0->positionOffset.x += arg1 * SINS(arg0->rotation.y + 0x8000) * gParticleRenderContext.scale.y;
     arg0->positionOffset.z += arg1 * COSS(arg0->rotation.y + 0x8000) * gParticleRenderContext.scale.y;
@@ -533,6 +617,10 @@ void Particle_Field38_AddXZFromField94YOffset90_08FAC(Particle* arg0, f32 arg1) 
     arg0->positionOffset.z += arg1 * COSS(arg0->rotation.y + 0x4000) * gParticleRenderContext.scale.y;
 }
 
+/**
+ * Add to positionOffset.x, positionOffset.z with render-context Y scaling.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_Field38_AddXZFromField94YOffsetMinus90_0901C(Particle* arg0, f32 arg1) {
     arg0->positionOffset.x += arg1 * SINS(arg0->rotation.y - 0x4000) * gParticleRenderContext.scale.y;
     arg0->positionOffset.z += arg1 * COSS(arg0->rotation.y - 0x4000) * gParticleRenderContext.scale.y;
@@ -547,6 +635,10 @@ void Particle_AddVelocityFromDirVector(Particle* arg0, f32 arg1) {
     arg0->positionOffset.z += sp1C.z * gParticleRenderContext.scale.y;
 }
 
+/**
+ * Set the base position offset using Particle_ComputeVectorFromRotationXYZAlt and context scaling.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_SetPositionFromRotationTemplate1(Particle* arg0, f32 arg1) {
     Vec3f sp1C;
 
@@ -554,6 +646,10 @@ void Particle_SetPositionFromRotationTemplate1(Particle* arg0, f32 arg1) {
     Particle_Field38_SetVecFromVec3fScaled_08C20(arg0, sp1C);
 }
 
+/**
+ * Set the base position offset using Particle_ComputeVectorFromRotationYZVariant and context scaling.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_SetPositionFromRotationTemplate2(Particle* arg0, f32 arg1) {
     Vec3f sp1C;
 
@@ -561,6 +657,10 @@ void Particle_SetPositionFromRotationTemplate2(Particle* arg0, f32 arg1) {
     Particle_Field38_SetVecFromVec3fScaled_08C20(arg0, sp1C);
 }
 
+/**
+ * Add Particle_ComputeVectorFromRotationXYZAlt's result to the base position offset with context scaling.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_AddPositionFromRotationTemplate1(Particle* arg0, f32 arg1) {
     Vec3f sp1C;
 
@@ -568,6 +668,10 @@ void Particle_AddPositionFromRotationTemplate1(Particle* arg0, f32 arg1) {
     Particle_Field38_AddVecScaledFromVec3f_08D78(arg0, sp1C);
 }
 
+/**
+ * Add Particle_ComputeVectorFromRotationYZVariant's result to the base position offset with context scaling.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_AddPositionFromRotationTemplate2(Particle* arg0, f32 arg1) {
     Vec3f sp1C;
 
@@ -893,6 +997,10 @@ void Particle_Field50_AddYFromField7C_09C6C(Particle* arg0) {
     arg0->motionOffset.z += arg0->motionStep.z;
 }
 
+/**
+ * Evaluate the explicit trigonometric component formula and store/add the resulting motion term.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_AddVelocityXYFromRotationZViaImpulse(Particle* arg0) {
     Particle_Field7C_SetXYFromField74AngleZ_0B23C(arg0);
     Particle_Field50_AddXYFromField7C_09C34(arg0);
@@ -982,6 +1090,10 @@ void Particle_AddVelocityXZFromRotationY(Particle* arg0) {
     Particle_Field50_AddXZFromField7C_09C10(arg0);
 }
 
+/**
+ * Evaluate the explicit trigonometric component formula and store/add the resulting motion term.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_AddVelocityXZFromRotationYPlusHalfTurn(Particle* arg0) {
     arg0->motionStep.x = arg0->stepMagnitude * SINS(arg0->rotation.y + 0x8000);
     arg0->motionStep.z = arg0->stepMagnitude * COSS(arg0->rotation.y + 0x8000);
@@ -989,6 +1101,10 @@ void Particle_AddVelocityXZFromRotationYPlusHalfTurn(Particle* arg0) {
     Particle_Field50_AddXZFromField7C_09C10(arg0);
 }
 
+/**
+ * Evaluate the explicit trigonometric component formula and store/add the resulting motion term.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_AddVelocityXZFromRotationYPlusHalfTurnFromArgument(Particle* arg0, f32 arg1) {
     arg0->motionStep.x = SINS(arg0->rotation.y + 0x8000) * arg1;
     arg0->motionStep.z = COSS(arg0->rotation.y + 0x8000) * arg1;
@@ -1003,6 +1119,10 @@ void func_8213E77C(s8 *arg0) {
     func_8213E488();
 }
 
+/**
+ * Apply the downward motion term and return whether the stored world-position Y is nonpositive.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 Particle_Field50_AddNegField74Y_CheckField2CYNonPositive_09F84(Particle* arg0) {
     s32 sp1C = 0;
 
@@ -1016,6 +1136,10 @@ s32 Particle_Field50_AddNegField74Y_CheckField2CYNonPositive_09F84(Particle* arg
 }
 
 
+/**
+ * Apply the downward motion term and return whether the stored world-position Y is nonpositive.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 Particle_Field74_AdvanceAndAddNegY_CheckField2CYNonPositive_09FD8(Particle* arg0) {
     s32 sp1C = 0;
 
@@ -1064,10 +1188,18 @@ s32 Particle_Field5C_ApproachY_0A0C4(Particle* arg0, f32 arg1, f32 arg2) {
     return ParticleMath_ApproachFloat(&arg0->motionTarget.y, arg1 * gParticleRenderContext.scale.y, arg2 * gParticleRenderContext.scale.y);
 }
 
+/**
+ * Return 40 percent of the supplied difference for proportional position approach.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 f32 ParticleMath_ScaleApproachStep(f32 arg0) {
     return arg0 * 0.4f;
 }
 
+/**
+ * Approach each base position-offset component by 40 percent of its difference when outside a +/-0.01 tolerance.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_ApproachPosition(Particle* arg0, Vec3f arg1) {
     f32 sp24;
     f32 sp20;
@@ -1213,6 +1345,10 @@ void Particle_SetRotationTargetY(s8 *arg0, s16 arg1) {
     M2C_FIELD(arg0, s16 *, 0x9E) = arg1;
 }
 
+/**
+ * Set the X/Y rotation targets, leaving Z unchanged.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_SetRotationTargetXY(Particle* arg0, s16 arg1, s16 arg2) {
     Particle_FieldA0_SetX_0A400(arg0, arg1);
     Particle_FieldA0_SetY_0A414(arg0, arg2);
@@ -1343,17 +1479,29 @@ void Particle_ApproachRotationZ(s8 *arg0) {
     func_82137940(arg0 + 0x94, M2C_FIELD(arg0, s16 *, 0xA0), M2C_FIELD(arg0, s16 *, 0x9A), arg0);
 }
 
+/**
+ * Approach the selected rotation components using the stored or supplied target and step.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_ApproachRotationTargetXY(Particle* arg0) {
     Particle_ApproachRotationTargetX(arg0);
     Particle_ApproachRotationTargetY(arg0);
 }
 
+/**
+ * Approach the selected rotation components using the stored or supplied target and step.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_ApproachRotationTargetXYZ(Particle* arg0) {
     Particle_ApproachRotationTargetX(arg0);
     Particle_ApproachRotationTargetY(arg0);
     Particle_ApproachRotationTargetZ(arg0);
 }
 
+/**
+ * Approach rotation.x using the stored or supplied target and step.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_ApproachRotationXTo(Particle* arg0, s16 arg1, s16 arg2) {
     ParticleMath_ApproachAngle(&arg0->rotation.x, arg1, arg2);
 }
@@ -1410,24 +1558,44 @@ s32 Particle_Field94_DecrementXTo_0A7DC(Particle* arg0, s32 arg1, s32 arg2) {
     return var_v1;
 }
 
+/**
+ * Add the indicated random binary-angle offsets, including any fixed half/quarter turn.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_AddRotationRandomSignedXY(Particle* arg0, s32 arg1, s32 arg2) {
     Particle_Field94_AddX_0A578(arg0, ParticleMath_RandomSigned(arg1));
     Particle_Field94_AddY_0A594(arg0, ParticleMath_RandomSigned(arg2));
 }
 
+/**
+ * Add the indicated random binary-angle offsets, including any fixed half/quarter turn.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_AddRotationRandomSignedXYWithXHalfTurn(Particle* arg0, s32 arg1, s32 arg2) {
     Particle_Field94_AddX_0A578(arg0, ParticleMath_RandomSignedOffset(arg1, 0x8000));
     Particle_Field94_AddY_0A594(arg0, ParticleMath_RandomSigned(arg2));
 }
 
+/**
+ * Add the indicated random binary-angle offsets, including any fixed half/quarter turn.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_AddRotationRandomSignedY(Particle* arg0, s32 arg1) {
     Particle_Field94_AddY_0A594(arg0, ParticleMath_RandomSigned(arg1));
 }
 
+/**
+ * Add the indicated random binary-angle offsets, including any fixed half/quarter turn.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_AddRotationRandomSignedYWithHalfTurn(Particle* arg0, s32 arg1) {
     Particle_Field94_AddY_0A594(arg0, ParticleMath_RandomSignedOffset(arg1, 0x8000));
 }
 
+/**
+ * Add the indicated random binary-angle offsets, including any fixed half/quarter turn.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_AddRotationRandomSignedXWithFixedYQuarterTurn(Particle* arg0) {
     Particle_Field94_AddX_0A578(arg0, ParticleMath_RandomSigned(0x10000));
     Particle_Field94_AddY_0A594(arg0, 0x4000);
@@ -1444,24 +1612,40 @@ s16 BattleAnim_GetParticleAngleYToTertiaryOwner(Particle* arg0) {
     return ret;
 }
 
+/**
+ * Write a direction vector using the indicated rotation components and the supplied magnitude.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_ComputeVectorFromRotationY(Particle* arg0, f32 arg1, Vec3f* arg2) {
     arg2->x = SINS(arg0->rotation.y) * arg1;
     arg2->y = 0.0f;
     arg2->z = COSS(arg0->rotation.y) * arg1;
 }
 
+/**
+ * Write a direction vector using the indicated rotation components and the supplied magnitude.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_ComputeVectorFromRotationXY(Particle* arg0, f32 arg1, Vec3f* arg2) {
     arg2->x = arg1 * COSS(arg0->rotation.x) * SINS(arg0->rotation.y);
     arg2->y = -arg1 * SINS(arg0->rotation.x);
     arg2->z = arg1 * COSS(arg0->rotation.x) * COSS(arg0->rotation.y);
 }
 
+/**
+ * Write a direction vector using the indicated rotation components and the supplied magnitude.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_ComputeVectorFromRotationXZ(Particle* arg0, f32 arg1, Vec3f* arg2) {
     arg2->x = arg1 * SINS(arg0->rotation.x) * SINS(arg0->rotation.z);
     arg2->y = -arg1 * SINS(arg0->rotation.x) * COSS(arg0->rotation.z);
     arg2->z = arg1 * COSS(arg0->rotation.x);
 }
 
+/**
+ * Write a direction vector using the indicated rotation components and the supplied magnitude.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_ComputeVectorFromRotationXYZAlt(Particle* arg0, f32 arg1, Vec3f* arg2) {
     arg2->x = arg1 * (SINS(arg0->rotation.x) * COSS(arg0->rotation.y) * SINS(arg0->rotation.z) +
                       COSS(arg0->rotation.x) * SINS(arg0->rotation.y));
@@ -1470,6 +1654,10 @@ void Particle_ComputeVectorFromRotationXYZAlt(Particle* arg0, f32 arg1, Vec3f* a
                       SINS(arg0->rotation.x) * SINS(arg0->rotation.y) * SINS(arg0->rotation.z));
 }
 
+/**
+ * Write a direction vector using the indicated rotation components and the supplied magnitude.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_ComputeVectorFromRotationYZVariant(Particle* arg0, f32 arg1, Vec3f* arg2) {
     arg2->x = arg1 * (SINS(arg0->rotation.y) * COSS(arg0->rotation.z) +
                       SINS(arg0->rotation.x) * COSS(arg0->rotation.y) * SINS(arg0->rotation.z));
@@ -1738,6 +1926,10 @@ void Particle_Field7C_SetVecFromField74AnglesYZAlt_0B638(Particle* arg0) {
                                      COSS(arg0->rotation.x) * COSS(arg0->rotation.y));
 }
 
+/**
+ * Evaluate the explicit trigonometric component formula and store/add the resulting motion term.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_Field7C_SetVecFromField74AnglesYZVariant_0B700(Particle* arg0) {
     arg0->motionStep.x = arg0->stepMagnitude * (SINS(arg0->rotation.y) * COSS(arg0->rotation.z) +
                                      SINS(arg0->rotation.x) * COSS(arg0->rotation.y) * SINS(arg0->rotation.z));
@@ -1787,6 +1979,10 @@ void Particle_Field1C_SetScaled_0B938(Particle* arg0, f32 arg1) {
     arg0->scale = arg1 * gParticleRenderContext.scale.y;
 }
 
+/**
+ * Set particle scale directly, without render-context scaling.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_SetScale(Particle* arg0, f32 arg1) {
     arg0->scale = arg1;
 }
@@ -1825,10 +2021,18 @@ s32 Particle_Field1C_ApproachField24AndStepState_0BA48(Particle* arg0) {
     return sp1C;
 }
 
+/**
+ * Approach unk_20 using the stored or supplied target and step.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 Particle_Field20_Approach_0BA84(Particle* arg0, f32 arg1, f32 arg2) {
     return ParticleMath_ApproachFloat(&arg0->unk_20, arg1 * gParticleRenderContext.scale.y, arg2 * gParticleRenderContext.scale.y);
 }
 
+/**
+ * Set primRed, primGreen, primBlue.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_SetPrimColor(Particle* arg0, u8 arg1, u8 arg2, u8 arg3) {
     arg0->prim_r = arg1;
     arg0->prim_g = arg2;
@@ -1947,6 +2151,10 @@ void Particle_ApproachPrimAlpha(s32 arg0, s32 arg1, s32 arg2) {
     func_82137804(arg0 + 0xC0, arg1 & 0xFF, arg2 & 0xFF);
 }
 
+/**
+ * Run the field-approach helper and advance lifecycle when it reports completion.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 Particle_PrimAlpha_ApproachAndStepState_0BC5C(Particle* arg0, u8 arg1, u8 arg2) {
     s32 sp1C = Particle_PrimAlpha_Approach_0BC2C(arg0, arg1, arg2);
 
@@ -1976,10 +2184,18 @@ s32 func_821405A8(s8 *arg0, s16 arg1, s16 arg2) {
     return var_v1;
 }
 
+/**
+ * Decrease the selected field toward its threshold and return the completion result.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 Particle_FieldA6_DecrementToZero_0BD08(Particle* arg0, s16 arg1) {
     return Particle_FieldA6_DecrementTo_0BCC4(arg0, 0, arg1);
 }
 
+/**
+ * Run the countdown helper and advance lifecycle when it reports completion.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 Particle_FieldA6_DecrementToZeroAndStepState_0BD34(Particle* arg0, s16 arg1) {
     s32 sp1C = Particle_FieldA6_DecrementTo_0BCC4(arg0, 0, arg1);
 
@@ -1989,14 +2205,26 @@ s32 Particle_FieldA6_DecrementToZeroAndStepState_0BD34(Particle* arg0, s16 arg1)
     return sp1C;
 }
 
+/**
+ * Decrease the selected field toward its threshold and return the completion result.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 Particle_FieldA6_DecrementToStep1_0BD80(Particle* arg0, s16 arg1) {
     return Particle_FieldA6_DecrementTo_0BCC4(arg0, arg1, 1);
 }
 
+/**
+ * Decrease the selected field toward its threshold and return the completion result.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 Particle_FieldA6_DecrementToZeroStep1_0BDAC(Particle* arg0) {
     return Particle_FieldA6_DecrementTo_0BCC4(arg0, 0, 1);
 }
 
+/**
+ * Run the countdown helper and advance lifecycle when it reports completion.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(Particle* arg0) {
     s32 sp1C = Particle_FieldA6_DecrementTo_0BCC4(arg0, 0, 1);
 
@@ -2026,10 +2254,18 @@ s32 func_8214070C(s8 *arg0, s16 arg1) {
     return var_v1;
 }
 
+/**
+ * Decrease the selected field toward its threshold and return the completion result.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 Particle_FieldA8_DecrementToZeroStep1_0BE6C(Particle* arg0) {
     return Particle_FieldA8_DecrementTo_0BE30(arg0, 0);
 }
 
+/**
+ * Run the countdown helper and advance lifecycle when it reports completion.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 Particle_FieldA8_DecrementToZeroStep1AndStepState_0BE8C(Particle* arg0) {
     s32 sp1C = Particle_FieldA8_DecrementTo_0BE30(arg0, 0);
 
@@ -2119,6 +2355,10 @@ void Particle_ApproachUnkAE(s32 arg0, s16 arg1, s16 arg2) {
     func_82137898(arg0 + 0xAA, arg1, arg2);
 }
 
+/**
+ * Run the field-approach helper and advance lifecycle when it reports completion.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 Particle_FieldAE_ApproachAndStepState_0BF98(Particle* arg0, s16 arg1, s16 arg2) {
     s32 sp1C = Particle_FieldAE_Approach_0BF60(arg0, arg1, arg2);
 

@@ -166,6 +166,10 @@ void BattleAnim_MarkParticleInactive(Particle* arg0) {
     Particle_MarkInactive(arg0);
 }
 
+/**
+ * Start lifecycle 1 with a no-op descriptor, null associations, phase zero, and rendering enabled.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_InitLifecycle(Particle* arg0) {
     arg0->lifecycle = 1;
     arg0->descriptor = &gDefaultParticleDescriptor;
@@ -216,11 +220,19 @@ s32 func_8213C9B0(s8 *arg0) {
     return var_v1;
 }
 
+/**
+ * Clear the frame-animation initialization bit and advance the lifecycle.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_AdvanceLifecycle(Particle* arg0) {
     Particle_ClearFlags(arg0, 1);
     arg0->lifecycle++;
 }
 
+/**
+ * Initialize once under flag 0x80, decrement immediately, and finish at zero while clearing that flag.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 Particle_TickDelayTimer(Particle* arg0, s16 arg1) {
     s32 sp1C = 0;
 

@@ -59,6 +59,11 @@ void func_81101FA0(void *arg0, s32 arg1, s32 arg2) {
     func_8005C670(M2C_FIELD(arg0, s32 *, 0x50), 1, arg1, &D_81156480, 0x20);
 }
 
+/**
+ * Puts the MBC1 into a known state: RAM enable (0x0A), RAM banking mode,
+ * bank 0, ROM banking mode, ROM bank 1. Caches pakRomBank/pakRamBank/pakMbcMode.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 GbPak_InitializeCartridgeMapper(unk_D_8122B2C0* arg0) {
   s32 ret;
 
@@ -191,6 +196,11 @@ s32 func_811021D4(u8 *arg0) {
     return ret;
 }
 
+/**
+ * Selects the MBC1 ROM bank for a 0x4000-0x7FFF read of a linear ROM address,
+ * switching to ROM banking mode and writing the upper bank bits when needed.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 GbPak_SelectRomAddress(unk_D_8122B2C0* arg0, s32 arg1) {
     s32 temp_a2;
     s32 var_v1;
@@ -221,6 +231,10 @@ s32 GbPak_SelectRomAddress(unk_D_8122B2C0* arg0, s32 arg1) {
     return var_v1;
 }
 
+/**
+ * Selects an 8 KB cartridge RAM bank (MBC1 RAM banking mode).
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 GbPak_SelectRamBank(unk_D_8122B2C0* arg0, s32 arg1) {
     s32 var_v1;
 
@@ -347,6 +361,11 @@ s32 func_811021D4(u8*);
 s32 func_81102344(u8*, s32);
 s32 func_811023DC(OSPfs*);
 
+/**
+ * Reads (is_write == 0) or writes (is_write != 0) transferSize bytes of banked cartridge
+ * RAM at gbAddress, selecting each 8 KB bank as it goes.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 GbPak_TransferBankedRam(u8* arg0, s32 arg1) {
     s32 temp_v0;
     s32 var_s0;

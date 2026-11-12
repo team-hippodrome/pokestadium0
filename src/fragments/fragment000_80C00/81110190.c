@@ -2,6 +2,12 @@
 
 #include "global.h"
 
+/**
+ * The fragment's private copy of libultra's osAiSetNextBuffer (same body, including the
+ * hdwrBugFlag 8 KB-boundary workaround). GbAudio_UpdateFrame and GbAudio_RampToSilence use it
+ * to hand the rendered GB audio buffers to the AI.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 osGbSetNextBuffer(void* buf_ptr, u32 size) {
   static u8 hdwr_bug_flag = FALSE;
   char* bptr;

@@ -43,30 +43,50 @@ void Particle_FieldA8_SetS16_0BE14(Particle* arg0, s16 arg1);
 void Particle_FieldAC_SetS16_0BED8(Particle* arg0, s16 arg1);
 void Particle_FieldCF_SetU8_0BEEC(Particle* arg0, u8 arg1);
 
+/**
+ * Store the parameter only when it differs from the field-specific sentinel.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_SetFieldOffsetACIfNotSentinel(Particle* arg0, s16 arg1) {
     if ((u32)arg0 != -1) {
         Particle_FieldAC_SetS16_0BED8(arg0, arg1);
     }
 }
 
+/**
+ * Store the parameter only when it differs from the field-specific sentinel.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_SetFieldOffsetCFIfNotSentinel(Particle* arg0, u8 arg1) {
     if ((u32)arg0 != -1) {
         Particle_FieldCF_SetU8_0BEEC(arg0, arg1);
     }
 }
 
+/**
+ * Store the parameter only when it differs from the field-specific sentinel.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_SetFieldOffsetA6IfNotSentinel(Particle* arg0, s16 arg1) {
     if ((u32)arg0 != -1) {
         Particle_FieldA6_SetS16_0BCA8(arg0, arg1);
     }
 }
 
+/**
+ * Store the parameter only when it differs from the field-specific sentinel.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_SetFieldOffsetA8IfNotSentinel(Particle* arg0, s16 arg1) {
     if ((u32)arg0 != -1) {
         Particle_FieldA8_SetS16_0BE14(arg0, arg1);
     }
 }
 
+/**
+ * Store the parameter only when it differs from the field-specific sentinel.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_SetFieldOffsetCEIfNotSentinel(Particle* arg0, u8 arg1) {
     if ((u32)arg0 != -1) {
         arg0->unk_CE = arg1;
@@ -89,12 +109,20 @@ void func_8213C3D4(s8 *arg0, s16 arg1) {
     }
 }
 
+/**
+ * Store the parameter only when it differs from the field-specific sentinel.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_SetPrimAlphaIfNotSentinel(Particle* arg0, u8 arg1) {
     if ((u32)arg0 != -1) {
         Particle_SetPrimAlpha(arg0, arg1);
     }
 }
 
+/**
+ * Store the parameter only when it differs from the field-specific sentinel.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Particle_SetFieldOffsetAAIfNotSentinel(Particle* arg0, s16 arg1) {
     if ((u32)arg0 != -1) {
         arg0->unk_AE = arg1;
@@ -123,6 +151,10 @@ u8 Particle_GetUnkCD(s8 *arg0) {
     return M2C_FIELD(arg0, u8 *, 0xC9);
 }
 
+/**
+ * Return the particle's unk_AA field.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s16 Particle_FieldAA_GetS16_0C068(Particle* arg0) {
     return arg0->unk_AE;
 }
@@ -143,6 +175,10 @@ s16 func_8213C484(s8 *arg0)
   return (s16) new_var;
 }
 
+/**
+ * Return the particle's unk_A6 field.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s16 Particle_FieldA6_GetS16_0BCBC(Particle* arg0) {
     return arg0->unk_AA;
 }
