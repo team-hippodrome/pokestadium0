@@ -635,7 +635,7 @@ void Battle_DrawGradientRectWrapper(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Colo
 void BattleHud_DrawTranslucentShadowRect(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 
 /**
- * Draws the battle message box at (x, y) with the revealed part of the text, in the colour of the
+ * Draws the battle message box at (x, y) with the revealed part of the text, in the color of the
  * given side.
  * @unverified Name from its caller.
  */

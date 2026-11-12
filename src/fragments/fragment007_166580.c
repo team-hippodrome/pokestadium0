@@ -438,7 +438,7 @@ extern char D_82009B90[];
 u32 func_800566BC(const char*);
 
 /**
- * Draws a move name in its type's color (D_80066AD8 by D_8006A9D4[move].type), centred if asked;
+ * Draws a move name in its type's color (D_80066AD8 by D_8006A9D4[move].type), centered if asked;
  * move -2 draws the no-move string.
  * Seen in play: the rental status window lists the four moves on the C buttons in type colors
  * (メガドレイン and ソーラービーム green, どくどく purple, ねむりごな green).

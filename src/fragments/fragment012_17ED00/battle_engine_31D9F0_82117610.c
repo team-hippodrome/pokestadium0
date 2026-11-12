@@ -418,7 +418,7 @@ void BattleMenu_DrawConfirmButton(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
 }
 
 /**
- * Draws a string centred on x, assuming 10 pixels per two-byte character.
+ * Draws a string centered on x, assuming 10 pixels per two-byte character.
  * @unverified Name from the code.
  */
 void BattleHud_DrawTextCentered(s32 arg0, s32 arg1, s32 arg2) {
