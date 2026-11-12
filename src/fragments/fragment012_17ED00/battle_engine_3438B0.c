@@ -1354,6 +1354,8 @@ void func_8212E9C8(ActivePokemon* arg0) {
  * faint cue, closes in with the camera, then continues to the next action, the end of the turn, or (steps 6-8)
  * the winner camera shots that set scene->winner. Entered when a displayed HP reaches 0, e.g. from
  * BattleScene_SwitchActiveSideAndSetPhase and BattleScene_ResolveDisplayedHpCompletion.
+ * Zero's BattleScene_UpdatePhase runs this for phase 20, not 5, and the body (message, state row 15, HP
+ * step-down) also fits Stadium 1's phase 20, a confused Pokemon hurting itself. Check in game.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_PhaseFaint(CameraNode* arg0) {

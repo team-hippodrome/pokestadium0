@@ -709,6 +709,7 @@ void BattleScene_AdvanceSendOutFollowupCamera(CameraNode* arg0) {
  * Phase 18. Replacement after a faint (REPLACEMENT_INVOLUNTARY_SWITCH, selected by
  * BattleScene_PrepareReplacementTransition): loads the chosen team member's model, opens its Poke Ball, and
  * sends it out. Unlike BattleScene_PhaseVoluntarySwitch, there is no withdraw step.
+ * Zero's BattleScene_UpdatePhase runs this for phase 5, not 18: Zero's phase numbers do not all match Stadium 1's.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_PhaseSendOutAfterFaint(CameraNode* arg0) {
