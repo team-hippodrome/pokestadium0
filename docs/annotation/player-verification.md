@@ -816,3 +816,22 @@ On the order screen of a COM free battle:
   clears the picks (`BattleMenu_UndoSelections`).
 * After six picks, 「これで いいですか？ はい / えらびなおす」 appears, and はい
   commits the order (`BattleMenu_CommitOrderSelection`).
+
+## Main menu choices
+
+Each main menu item was chosen and confirmed with はい, and the argument of
+`MainMenu_LoadSelectedFragment` was logged:
+
+| Choice | Item | Fragment base |
+|---|---|---|
+| 0 | せいとん | 0x89000000 |
+| 2 | いちらん | 0x89100000 |
+| 3 | ずかん | 0x8A100000 |
+| 4 | バトル | 0x82000000 |
+| 5 | てもち | 0x8A200000 |
+| 6 | GB | none (returns 0x8060) |
+| 7 | OFF | 0x88400000 |
+| 8 | とうろく | 0x88100000 |
+
+`MainMenu_Free` ran on the way out.
+

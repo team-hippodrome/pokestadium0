@@ -24,7 +24,9 @@ extern M2C_UNK D_00175570;
 
 /**
  * Loads the fragment for main menu choice `arg0`.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) by choosing each main menu item and answering はい: 0 せいとん
+ * (0x89000000), 2 いちらん (0x89100000), 3 ずかん (0x8A100000), 4 バトル (0x82000000), 5 てもち (0x8A200000),
+ * 6 GB (returns 0x8060 and loads nothing), 7 OFF (0x88400000), 8 とうろく (0x88100000).
  */
 s32 MainMenu_LoadSelectedFragment(u32 arg0) {
     s32 ret;
