@@ -659,7 +659,7 @@ func_813000F0,0x813000F0,src/fragments/fragment004_15F8F0/gb_tower_team_prep.c,G
 func_81300144,0x81300144,src/fragments/fragment004_15F8F0/gb_tower_team_prep.c,GbTower_BuildPartyResult,hand,,c
 func_81300228,0x81300228,src/fragments/fragment004_15F8F0/gb_tower_team_prep.c,GbTower_TeamPrep,hand,,c
 func_82300020,0x82300020,src/fragments/fragment005_15FCE0/battle_order_select.c,BattleMenu_DrawBottomActionButtons,hand,,c
-func_8230016C,0x8230016C,src/fragments/fragment005_15FCE0/battle_order_select.c,func_8230016C,hand,,c
+func_8230016C,0x8230016C,src/fragments/fragment005_15FCE0/battle_order_select.c,BattleMenu_DrawScrollingInstructionPanel,hand,,c
 func_823003B8,0x823003B8,src/fragments/fragment005_15FCE0/battle_order_select.c,func_823003B8,hand,,c
 func_82300488,0x82300488,src/fragments/fragment005_15FCE0/battle_order_select.c,BattleMenu_DrawSidebarLeadIcon,hand,,c
 func_823005B4,0x823005B4,src/fragments/fragment005_15FCE0/battle_order_select.c,BattleMenu_DrawSidebarRowTypeIcon,hand,,c
@@ -674,10 +674,10 @@ func_823012D0,0x823012D0,src/fragments/fragment005_15FCE0/battle_order_select.c,
 func_82301448,0x82301448,src/fragments/fragment005_15FCE0/battle_order_select.c,BattleMenu_DrawOrderSelectPanel_Ready,s1,,c
 func_82301658,0x82301658,src/fragments/fragment005_15FCE0/battle_order_select.c,BattleMenu_DrawConfirmButtonLabel,hand,,c
 func_823016FC,0x823016FC,src/fragments/fragment005_15FCE0/battle_order_select.c,BattleMenu_DrawOrderSelectPanel,s1,,c
-func_823017EC,0x823017EC,src/fragments/fragment005_15FCE0/battle_order_select.c,func_823017EC,hand,,c
+func_823017EC,0x823017EC,src/fragments/fragment005_15FCE0/battle_order_select.c,BattleMenu_FeedScriptedComOrderInput,hand,,c
 func_823018AC,0x823018AC,src/fragments/fragment005_15FCE0/battle_order_select.c,BattleMenu_IsSlotAlreadySelected,s1,stadium1:src/fragments/battle_order_select/battle_order_select.c,c
-func_823018F8,0x823018F8,src/fragments/fragment005_15FCE0/battle_order_select.c,func_823018F8,hand,,c
-func_823019AC,0x823019AC,src/fragments/fragment005_15FCE0/battle_order_select.c,func_823019AC,hand,,c
+func_823018F8,0x823018F8,src/fragments/fragment005_15FCE0/battle_order_select.c,BattleMenu_OrderExceedsLevelSumLimit,hand,,c
+func_823019AC,0x823019AC,src/fragments/fragment005_15FCE0/battle_order_select.c,BattleMenu_IsOrderComplete,hand,,c
 func_82301A2C,0x82301A2C,src/fragments/fragment005_15FCE0/battle_order_select.c,BattleMenu_SelectSlotOrShowSummary,hand,,c
 func_82301B2C,0x82301B2C,src/fragments/fragment005_15FCE0/battle_order_select.c,BattleMenu_UndoSelections,m2c,m2c,c
 func_82301BBC,0x82301BBC,src/fragments/fragment005_15FCE0/battle_order_select.c,BattleMenu_HandleOrderSelectPanel_PartyInput,hand,,c

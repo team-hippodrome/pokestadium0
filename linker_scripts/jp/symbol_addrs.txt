@@ -4810,3 +4810,7 @@ BattleAnim_InitializeQuickAttackHiJumpKickUse = 0x8215B558; // type:func
 BattleAnim_InitializeThunderWaveHit = 0x82153FD8; // type:func
 BattleAnim_InitializeConfusionHit = 0x8215E2C4; // type:func
 BattleAnim_InitializePsychicHit = 0x8215E1A8; // type:func
+BattleMenu_OrderExceedsLevelSumLimit = 0x823018F8; // type:func
+BattleMenu_IsOrderComplete = 0x823019AC; // type:func
+BattleMenu_FeedScriptedComOrderInput = 0x823017EC; // type:func
+BattleMenu_DrawScrollingInstructionPanel = 0x8230016C; // type:func

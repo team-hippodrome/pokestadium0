@@ -68,7 +68,12 @@ extern Color_RGB8 D_823028C8;
 extern SessionContext* D_82302BD0;
 extern s16* D_82302808[];
 extern s16 D_82302B42;
-void func_8230016C(void) {
+/**
+ * Draws the tall gradient panel on the right of the order screen and scrolls its vertical
+ * instruction text (「どのポケモンを えらぶかは…」) inside a scissor box.
+ * Seen in play: runs every frame while that text scrolls down the right edge.
+ */
+void BattleMenu_DrawScrollingInstructionPanel(void) {
     s32 i;
     s32 var_s2;
     s32 var_s4;
@@ -217,7 +222,7 @@ s32 BattleMenu_DrawSidebarRowTypeIcon(s32 arg0, s32 arg1, s8 arg2, s8 arg3) {
 
 /**
  * Draws side 0's order sidebar and advances its selection icons.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play: runs every frame on the order screen (the 1P column of ball icons on the left).
  */
 void BattleMenu_DrawTeamOrderSidebarTeam0(void) {
     unk_D_84803760* temp_v0 = &D_82302B20[0];
@@ -256,7 +261,7 @@ void BattleMenu_DrawTeamOrderSidebarTeam0(void) {
 
 /**
  * Draws side 1's order sidebar and advances its selection icons.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play: runs every frame on the order screen (the COM column of ball icons on the left).
  */
 void BattleMenu_DrawTeamOrderSidebarTeam1(void) {
     unk_D_84803760* temp_v0 = &D_82302B20[1];
@@ -295,7 +300,7 @@ void BattleMenu_DrawTeamOrderSidebarTeam1(void) {
 
 /**
  * Appends a growing selection icon owned by the given controller port.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play: runs on each pick (B, C buttons, A) on the order screen.
  */
 void BattleMenu_AppendOrderSlotIcon(s32 arg0, s32 arg1) {
     unk_D_84803760* temp_v0 = &D_82302B20[arg0];
@@ -307,7 +312,7 @@ void BattleMenu_AppendOrderSlotIcon(s32 arg0, s32 arg1) {
 
 /**
  * Starts shrinking all selection icons and clears the side's pick count.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play: runs when L cancels the picks on the order screen.
  */
 void BattleMenu_ResetOrderSlotIcons(s32 arg0) {
     unk_D_84803760* ptr = &D_82302B20[arg0];
@@ -340,7 +345,8 @@ extern char D_82302A34[];
 extern s32 D_82302BCC;
 /**
  * Battle order select: draws the brought Pokemon grid with their levels (L%d).
- * @unverified Name and comment guessed from the code.
+ * Seen in play: runs every frame on the order screen, which shows each side's six Pokemon with
+ * L20/L25.
  */
 void BattleMenu_DrawOrderSelectPartyGrid(s8* arg0) {
     s32 i;
@@ -412,7 +418,8 @@ void Ui_DrawPrimColorRect(s32, s32, s32, s32, s32, s32, s32, s32);
 void func_8001E6C0(s32, s32);
 /**
  * Battle order select: これで いいですか？ (Is this OK?) with はい (Yes) / えらびなおす (Choose again).
- * @unverified Name and comment guessed from the code.
+ * Seen in play: after the sixth pick, 「これで いいですか？ はい えらびなおす」 appears in 1P's panel as this starts
+ * running.
  */
 void BattleMenu_DrawOrderSelectConfirmPrompt(s8* arg0) {
     s32 x;
@@ -508,7 +515,7 @@ extern char D_82302AE4[];
 extern char D_82302AFC[];
 /**
  * Draws the ready message, pulsing its text alpha for tag-team panels.
- * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ * Seen in play: runs every frame while the COM panel shows 「じゅんび かんりょう！」.
  */
 void BattleMenu_DrawOrderSelectPanel_Ready(unk_D_848037A0* arg0) {
     s32 sp3C;
@@ -637,7 +644,14 @@ extern s32 D_82302BFC;
 extern s32 D_82302C00;
 extern unk_D_84803548* D_823028A8[];
 
-void func_823017EC(void) {
+/**
+ * When side 1 is locked (isHuman & 2, the COM), feeds it scripted button presses from D_823028A8,
+ * one entry per countdown, so the COM picks its order like a player.
+ * Seen in play: runs every frame on the order screen against the COM, whose panel shows 「じゅんび
+ * かんりょう！」.
+ * @unverified Name from the code.
+ */
+void BattleMenu_FeedScriptedComOrderInput(void) {
     s32 var_v0;
     unk_D_84803548* ptr;
 
@@ -685,7 +699,14 @@ s32 BattleMenu_IsSlotAlreadySelected(unk_D_848037A0* arg0, s8 arg1) {
     return 0;
 }
 
-s32 func_823018F8(unk_D_848037A0* arg0) {
+/**
+ * Returns 1 when the picks so far break the level-sum rule (ruleCategory 1 only, not for a locked
+ * side): two picks summing to 106 or more, or three summing to 156 or more. The caller then shows
+ * the 155 level-total notice.
+ * Seen in play: runs on every pick on the order screen (Free Battle, rule 0, so it never fires).
+ * @unverified The over-limit case was not triggered.
+ */
+s32 BattleMenu_OrderExceedsLevelSumLimit(unk_D_848037A0* arg0) {
     s32 sum;
     s32 i;
     s32 locked = (arg0->unk_001C->isHuman & 2) != 0;
@@ -705,7 +726,13 @@ s32 func_823018F8(unk_D_848037A0* arg0) {
     return 0;
 }
 
-s32 func_823019AC(unk_D_848037A0* arg0) {
+/**
+ * Returns whether the panel has picked enough Pokemon: 3 under cup rules, otherwise the party
+ * size (capped by the partner's for a locked side, and at 3 for a tag-team panel). When it does,
+ * the panel switches to the confirm prompt.
+ * Seen in play: runs on every pick; the sixth Free Battle pick opened 「これで いいですか？」.
+ */
+s32 BattleMenu_IsOrderComplete(unk_D_848037A0* arg0) {
     s32 var_v1;
 
     if (D_82302BD0->ruleCategory != 0) {
@@ -725,8 +752,8 @@ s32 func_823019AC(unk_D_848037A0* arg0) {
     return arg0->unk_000B >= var_v1;
 }
 
-s32 func_823018F8(unk_D_848037A0* arg0);
-s32 func_823019AC(unk_D_848037A0* arg0);
+s32 BattleMenu_OrderExceedsLevelSumLimit(unk_D_848037A0* arg0);
+s32 BattleMenu_IsOrderComplete(unk_D_848037A0* arg0);
 /**
  * Opens a slot's details or adds it to the picked order and checks the result.
  * @unverified Name and comment from Stadium 1, matched by code similarity.
@@ -750,7 +777,7 @@ void BattleMenu_SelectSlotOrShowSummary(unk_D_848037A0* arg0, s8 arg1) {
         arg0->unk_0006 = 2;
     }
 
-    if (func_823018F8(arg0) != 0) {
+    if (BattleMenu_OrderExceedsLevelSumLimit(arg0) != 0) {
         Audio_PlaySoundEffectById(SFX_MENU_ERROR);
         arg0->unk_0005 = 2;
         arg0->unk_0006 = 2;
@@ -758,7 +785,7 @@ void BattleMenu_SelectSlotOrShowSummary(unk_D_848037A0* arg0, s8 arg1) {
     }
 
     Audio_PlaySoundEffectById(SFX_MENU_CONFIRM);
-    if (func_823019AC(arg0) != 0) {
+    if (BattleMenu_IsOrderComplete(arg0) != 0) {
         arg0->unk_0005 = 1;
         arg0->unk_000A = 0;
         arg0->unk_0006 = 2;
@@ -798,7 +825,7 @@ void BattleMenu_SelectSlotOrShowSummary(unk_D_848037A0*, s8);
 
 /**
  * Maps slot buttons to picking or checking Pokemon and handles L-cancel.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play: runs every frame while 1P is still picking.
  */
 void BattleMenu_HandleOrderSelectPanel_PartyInput(Controller* arg0, unk_D_848037A0* arg1) {
     if (BTN_IS_PRESSED(arg0, BTN_R)) {
@@ -832,7 +859,7 @@ void BattleMenu_HandleOrderSelectPanel_PartyInput(Controller* arg0, unk_D_848037
 extern unk_D_848037A0 D_848037A0[4];
 /**
  * Handles confirmation choices, accepting the order or restarting selection.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play: starts running when the sixth pick opens the confirm prompt.
  */
 void BattleMenu_HandleOrderSelectPanel_ConfirmInput(Controller* arg0, unk_D_848037A0* arg1) {
     unk_D_848037A0* temp_v0_2;
@@ -931,11 +958,11 @@ extern s32 D_8480379C;
 extern s16 D_84803798;
 extern unk_D_848037A0 D_848037A0[4];
 extern s32 D_82302BCC;
-void func_823017EC(void);
+void BattleMenu_FeedScriptedComOrderInput(void);
 extern s16 D_82302B40;
 void func_82300020(void);
 extern s32 D_82302B44;
-void func_8230016C(void);
+void BattleMenu_DrawScrollingInstructionPanel(void);
 void func_8000A7FC(u16 color);
 /**
  * @src/stage_loader.c
@@ -953,7 +980,7 @@ s32 BattleMenu_UpdateOrderSelect(s32 arg0) {
     Cont_StartReadInputs();
     Cont_ReadInputs();
     Input_ResetRepeatState();
-    func_823017EC();
+    BattleMenu_FeedScriptedComOrderInput();
     GeoRender_AdvanceFrameCounter();
     i = PokeIcon_ProcessAllSlots((unk_func_8001A024*)D_82302BCC, 0);
     if (i != -1) {
@@ -972,7 +999,7 @@ s32 BattleMenu_UpdateOrderSelect(s32 arg0) {
 
     BattleMenu_DrawTeamOrderSidebarTeam0();
     BattleMenu_DrawTeamOrderSidebarTeam1();
-    func_8230016C();
+    BattleMenu_DrawScrollingInstructionPanel();
 
     if (arg0 == 0) {
         if (var_s2 == D_82302B44) {

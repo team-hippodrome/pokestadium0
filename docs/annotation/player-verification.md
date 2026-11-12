@@ -387,3 +387,32 @@ debugger missed some hits that it caught with two breakpoints set. For
 example, `BattleAnim_InitializeIceBeamHit` was missed with 21 breakpoints and
 caught with 2. So "only move X reached this" in the earlier per-function sweep
 can undercount the moves. The move that was seen did reach the function.
+
+## Battle opening and order select
+
+The opening was screenshotted 20 frames after each `BattleScene_RunOpeningSendOut`
+step began:
+
+1. The stadium lights overhead.
+2. The camera coming down.
+3. Side 0's and then side 1's Poke Ball trails.
+4. The field with the landing ball's shadow.
+5. The white flash.
+6. 「ゆけっ！イワイワ」, then 「ゆけっ！ニドのすけ」.
+
+All step names fit, and the tags are gone except for the 3-frame asset wait and
+the orbit, which a still frame can't tell apart.
+
+On the order select screen (`battle_order_select.c`, Free Battle against the
+COM), presses were matched to the functions they reached:
+
+* Each pick reaches `BattleMenu_AppendOrderSlotIcon`, the level-sum check and
+  the completeness check.
+* L reaches `BattleMenu_ResetOrderSlotIcons`.
+* The sixth pick opens 「これで いいですか？ はい えらびなおす」
+  (`BattleMenu_DrawOrderSelectConfirmPrompt`, `..._ConfirmInput`).
+
+The level-total notice needs cup rules and wasn't triggered.
+`BattleMenu_DrawBottomActionButtons` never ran on that screen, though the L/R
+hint is on screen. The hint may be drawn once when the screen opens, before
+the savestate, so that name keeps its tag.
