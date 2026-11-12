@@ -166,39 +166,53 @@ void func_8A201D3C(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     }
 }
 
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-void func_8A201EAC(s8 *arg0, s32 arg1)
+typedef struct unk_func_8A201EAC {
+    /* 0x00 */ s32 x;
+    /* 0x04 */ s32 y;
+    /* 0x08 */ s32 unk08;
+    /* 0x0C */ s32 unk0C;
+    /* 0x10 */ char unk10[0x18];
+    /* 0x28 */ s32 state;
+    /* 0x2C */ s32 unk2C;
+    /* 0x30 */ s32 unk30;
+    /* 0x34 */ s32 unk34;
+} unk_func_8A201EAC;
+
+/**
+ * Draws the panel's frame and contents for page arg1 (0 or not) unless state
+ * is 2 or func_8002AB84 reports the window still animating. In states 1 and 2
+ * it also starts sound 0x108D once (unk34) and runs func_8A201C08.
+ */
+void func_8A201EAC(unk_func_8A201EAC* arg0, s32 arg1)
 {
-  s32 temp_v0;
-  if (((*((s32 *) (((s8 *) arg0) + 0x28))) != 2) && (func_8002AB84() == 0))
+  if ((arg0->state != 2) && (func_8002AB84(arg0) == 0))
   {
     if (arg1 == 0)
     {
-      func_80029864((*((s32 *) (((s8 *) arg0) + 0))) + 0xF9, *((s32 *) (((s8 *) arg0) + 4)), *((s32 *) (((s8 *) arg0) + 0xC)), &D_8007356C);
-      func_80029658(*((s32 *) (((s8 *) arg0) + 0)), (*((s32 *) (((s8 *) arg0) + 4))) + 0xD7, 0x100, &D_8007356C);
-      func_80029658((*((s32 *) (((s8 *) arg0) + 0))) + 0xFA, (*((s32 *) (((s8 *) arg0) + 4))) + 0x95, 0x12E, &D_8007356C);
-      func_8A2009CC((*((s32 *) (((s8 *) arg0) + 0))) + 6, (*((s32 *) (((s8 *) arg0) + 4))) + 0xDE, *((s32 *) (((s8 *) arg0) + 0x2C)));
-      func_8A200B78((*((s32 *) (((s8 *) arg0) + 0))) + 0x100, (*((s32 *) (((s8 *) arg0) + 4))) + 6, *((s32 *) (((s8 *) arg0) + 0x2C)));
-      func_8A200DE0((*((s32 *) (((s8 *) arg0) + 0))) + 0x100, (*((s32 *) (((s8 *) arg0) + 4))) + 0x9C, *((s32 *) (((s8 *) arg0) + 0x2C)));
+      func_80029864(arg0->x + 249, arg0->y, arg0->unk0C, &D_8007356C);
+      func_80029658(arg0->x, arg0->y + 215, 0x100, &D_8007356C);
+      func_80029658(arg0->x + 250, arg0->y + 149, 302, &D_8007356C);
+      func_8A2009CC(arg0->x + 6, arg0->y + 222, arg0->unk2C);
+      func_8A200B78(arg0->x + 0x100, arg0->y + 6, arg0->unk2C);
+      func_8A200DE0(arg0->x + 0x100, arg0->y + 156, arg0->unk2C);
     }
     else
     {
-      func_80029658(*((s32 *) (((s8 *) arg0) + 0)), (*((s32 *) (((s8 *) arg0) + 4))) + 0xD7, *((s32 *) (((s8 *) arg0) + 8)), &D_8007356C);
-      func_80029864((*((s32 *) (((s8 *) arg0) + 0))) + 0xF9, *((s32 *) (((s8 *) arg0) + 4)), 0xDE, &D_8007356C);
-      func_8A201394((*((s32 *) (((s8 *) arg0) + 0))) + 0x100, (*((s32 *) (((s8 *) arg0) + 4))) + 6, *((s32 *) (((s8 *) arg0) + 0x2C)));
-      func_8A2010C8((*((s32 *) (((s8 *) arg0) + 0))) + 6, (*((s32 *) (((s8 *) arg0) + 4))) + 0xDE, *((s32 *) (((s8 *) arg0) + 0x2C)), *((s32 *) (((s8 *) arg0) + 0x30)));
-      func_8A2018E0((*((s32 *) (((s8 *) arg0) + 0))) + 0x100, (*((s32 *) (((s8 *) arg0) + 4))) + 0x54, *((s32 *) (((s8 *) arg0) + 0x2C)), *((s32 *) (((s8 *) arg0) + 0x30)));
+      func_80029658(arg0->x, arg0->y + 215, arg0->unk08, &D_8007356C);
+      func_80029864(arg0->x + 249, arg0->y, 222, &D_8007356C);
+      func_8A201394(arg0->x + 0x100, arg0->y + 6, arg0->unk2C);
+      func_8A2010C8(arg0->x + 6, arg0->y + 222, arg0->unk2C, arg0->unk30);
+      func_8A2018E0(arg0->x + 0x100, arg0->y + 84, arg0->unk2C, arg0->unk30);
     }
   }
-  temp_v0 = *((s32 *) (((s8 *) arg0) + 0x28));
-  if (((temp_v0 ^ 0) == 1) || (temp_v0 == 2))
+  if ((arg0->state == 1) || (arg0->state == 2))
   {
-    if ((*((s32 *) (((s8 *) arg0) + 0x34))) == 0)
+    if (arg0->unk34 == 0)
     {
-      *((s32 *) (((s8 *) arg0) + 0x34)) = 1;
-      func_80019008(D_8A21DA4C, *((s32 *) (((s8 *) arg0) + 0x2C)), 0x108D);
+      arg0->unk34 = 1;
+      func_80019008(D_8A21DA4C, arg0->unk2C, 0x108D);
     }
-    func_8A201C08(0x32, 0x5A, *((s32 *) (((s8 *) arg0) + 0x2C)));
+    func_8A201C08(50, 90, arg0->unk2C);
   }
 }
 

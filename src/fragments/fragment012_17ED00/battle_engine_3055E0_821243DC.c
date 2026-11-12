@@ -59,17 +59,15 @@ s32 func_82124810(CameraNode* arg0, ActivePokemon* arg1) {
     return LabPCList_CompareBySpeciesGroup((unk_func_8830867C_02C_0CC*)arg0, (unk_func_8830867C_02C_0CC*)arg1);
 }
 
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-void func_82124830(s8 *arg0, ActivePokemon* arg1)
-{
-  if (arg0)
-  {
-  }
-  func_82124054((CameraNode*)arg0, arg1);
-  if ((*((f32 *) (((s8 *) arg0) + 0xB8))) <= 20.0f)
-  {
-    *((f32 *) (((s8 *) arg0) + 0xB8)) = 20.0f;
-  }
+/**
+ * Runs func_82124054 for camera arg0 and then keeps its target height
+ * (view.targetPosition.y) above 20.
+ */
+void func_82124830(CameraNode* arg0, ActivePokemon* arg1) {
+    func_82124054(arg0, arg1);
+    if (arg0->view.targetPosition.y <= 20.0f) {
+        arg0->view.targetPosition.y = 20.0f;
+    }
 }
 
 void func_82124874(void) {

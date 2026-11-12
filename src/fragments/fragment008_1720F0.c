@@ -46,33 +46,25 @@ void func_88100078(s32 arg0, s32 arg1, s32 arg2, s32* arg3) {
 s32 func_80020B94(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s8 *, s32); /* extern */
 M2C_UNK func_80020C60(s32);                         /* extern */
 s32 func_80020DF0(s32, M2C_UNK, s32);               /* extern */
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-void func_88100100(s8 *arg0, M2C_UNK arg1)
-{
-  s32 temp_s3;
-  s32 var_s0;
-  s32 var_s1;
-  var_s1 = *((s32 *) (((s8 *) arg0) + 0x18));
-  if ((!arg0) && (!arg0))
-  {
-  }
-  temp_s3 = func_80020B94(0x10, 0, arg1, 0, arg0 + 8, *((s32 *) (((s8 *) arg0) + 4)));
-  var_s0 = 0;
-  if ((*((s32 *) (((s8 *) arg0) + 0x20))) > 0)
-  {
-    loop_1:
-    if (func_80020DF0(var_s1 + 4, 1, temp_s3) != 0)
-    {
-      var_s0 += 1;
-      var_s1 += 0x54;
-      if (var_s0 < (*((s32 *) (((s8 *) arg0) + 0x20))))
-      {
-        goto loop_1;
-      }
-    }
+/**
+ * Gets a handle from func_80020B94(0x10, 0, arg1, 0, arg0 + 8, word at
+ * arg0 + 4), then passes each 0x54-byte entry of the table at arg0 + 0x18
+ * (count at arg0 + 0x20) with the handle to func_80020DF0, stopping at the
+ * first one that returns 0. It ends with func_80020C60(handle). The entries
+ * are the Entry88100078 records that func_88100078 also walks.
+ */
+void func_88100100(s8* arg0, M2C_UNK arg1) {
+    Entry88100078* entry = M2C_FIELD(arg0, Entry88100078**, 0x18);
+    s32 handle;
+    s32 i;
 
-  }
-  func_80020C60(temp_s3);
+    handle = func_80020B94(0x10, 0, arg1, 0, arg0 + 8, M2C_FIELD(arg0, s32*, 4));
+    for (i = 0; i < M2C_FIELD(arg0, s32*, 0x20); i++, entry++) {
+        if (func_80020DF0((s32)entry->unk_04, 1, handle) == 0) {
+            break;
+        }
+    }
+    func_80020C60(handle);
 }
 
 /*
@@ -507,13 +499,20 @@ s32 func_80018DEC(s8*, s32);
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 void func_8002B940(s32, s32, s32, s32);
 void func_8001833C(void*, s32, void*, u16);
+/**
+ * Draws one icon-list entry at (x, y): the frame from D_88102D78[0] and, if
+ * `entry` is set, its name (entry + 0x30) in font 4, two sprites
+ * (func_8001BCB4 and func_8002B940 with entry[0x24]) and its icon. The icon
+ * texture is cached per `id` in `cache` and rebuilt with func_8001833C when its
+ * slot holds a different id.
+ */
 void func_8810112C(s32 x, s32 y, u8* entry, s32 id, s32 color, IconCache8810173C* cache) {
     UNUSED s32 pad[4]; // FAKE
     s32 slot;
     s32* p;
 
     gSPDisplayList(gDisplayListHead++, D_80060270);
-    func_80029028(x, y, 0x84, 0x32, D_88102D78[0]);
+    func_80029028(x, y, 132, 50, D_88102D78[0]);
     if (entry != NULL) {
         Font_BeginTranslucentTextRendering();
         func_80027F20(color);
@@ -521,17 +520,17 @@ void func_8810112C(s32 x, s32 y, u8* entry, s32 id, s32 color, IconCache8810173C
         Font_Printf(x + 4, y + 4, entry + 0x30);
         Font_EndTexturedTextRendering();
         gSPDisplayList(gDisplayListHead++, D_80073450);
-        func_8001BCB4(x + 0x2C, y + 0x19, 8, 0xA, D_04011A60, 8, 0);
-        func_8002B940(x + 0x38, y + 0x17, entry[0x24], 3);
+        func_8001BCB4(x + 44, y + 25, 8, 10, D_04011A60, 8, 0);
+        func_8002B940(x + 56, y + 23, entry[0x24], 3);
         slot = cache->base + id % cache->count;
         p = &cache->slots[slot];
         if (id != *p) {
             *p = id;
             func_8001833C(D_88103074, slot, entry, ((D_88102D78[0].c[1] << 3) & 0x7C0) | ((D_88102D78[0].c[2] >> 2) & 0x3E) | ((D_88102D78[0].c[0] << 8) & 0xF800) | 1);
         }
-        if (cache) {} // FAKE: keeps cache live through the block above so the colour table address takes t1
+        if (cache) {} // karodo
         gSPDisplayList(gDisplayListHead++, D_80073408);
-        func_8001B884(x + 0x56, y + 6, 0x28, 0x28, (u8*)func_80018DEC((s8*)D_88103074, slot), 0x28, 0x200000);
+        func_8001B884(x + 86, y + 6, 40, 40, (u8*)func_80018DEC((s8*)D_88103074, slot), 40, 0x200000);
         gSPDisplayList(gDisplayListHead++, D_80073438);
     }
 }
@@ -586,11 +585,18 @@ void func_88101670(s8 *arg0, s32 arg1) {
     M2C_FIELD(arg0, s32 *, 0) = (s32) (arg1 * 0xF);
 }
 
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-s32 func_88101690(s8 *arg0)
-{
- if (0) { }  // karodo
-  return (*((s32 *) (((s8 *) arg0) + 0))) >= ((*((s32 *) (((s8 *) arg0) + 4))) * (*((s32 *) (((s8 *) arg0) + 8))));
+typedef struct unk_func_88101690 {
+    /* 0x00 */ s32 count;
+    /* 0x04 */ s32 unk_04;
+    /* 0x08 */ s32 unk_08;
+} unk_func_88101690;
+
+/**
+ * Returns whether the counter at offset 0 has reached unk_08 * unk_04 (see
+ * func_881016BC, which counts it up to that limit).
+ */
+s32 func_88101690(unk_func_88101690* arg0) {
+    return arg0->count >= arg0->unk_08 * arg0->unk_04;
 }
 
 s32 func_881016B0(s32 *arg0) {

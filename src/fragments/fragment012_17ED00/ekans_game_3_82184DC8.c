@@ -498,18 +498,39 @@ void func_821853FC(void) {
 void JigglypuffGame_UpdateEffects(void) {
 }
 
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-s32 func_8218540C(s8 *arg0, s8 *arg1)
-{
-  if ((*((u8 *) (((s8 *) arg1) + 0x75))) & (*((u8 *) (((s8 *) arg0) + 0x76))))
-  {
-    return 1;
-  }
-  if (((s32) (*((u16 *) (((s8 *) arg1) + 0x3A)))) < ((s32) (*((u16 *) (((s8 *) arg0) + 0x3A)))))
-  {
-    return 1;
-  }
-  return 0;
+typedef struct Slot82186AF4 {
+    /* 0x00 */ void* owner;
+    /* 0x04 */ u8 unk04[8];
+    /* 0x0C */ u8 mon[0x0C];
+    /* 0x18 */ u16 hp;
+    /* 0x1A */ u8 unk1A[0x1A];
+    /* 0x34 */ u16 maxHp;
+    /* 0x36 */ u8 unk36[4];
+    /* 0x3A */ u16 unk3A;
+    /* 0x3C */ u8 unk3C[0x34];
+    /* 0x70 */ u16 hp2;
+    /* 0x72 */ u8 unk72[2];
+    /* 0x74 */ u8 species;
+    /* 0x75 */ u8 mask;
+    /* 0x76 */ u8 unk76;
+    /* 0x77 */ u8 unk77;
+    /* 0x78 */ u8 moveCount;
+    /* 0x79 */ u8 unk79;
+    /* 0x7A */ u8 unk7A[0x16];
+} Slot82186AF4; // size = 0x90
+
+/**
+ * Returns 1 if arg0's unk76 shares a bit with arg1's mask byte, or if arg1's
+ * unk3A is lower than arg0's; otherwise 0.
+ */
+s32 func_8218540C(Slot82186AF4* arg0, Slot82186AF4* arg1) {
+    if (arg0->unk76 & arg1->mask) {
+        return 1;
+    }
+    if (arg1->unk3A < arg0->unk3A) {
+        return 1;
+    }
+    return 0;
 }
 
 extern u8 D_8438B0C4[];
@@ -663,56 +684,48 @@ s32 func_821857CC(u8* arg0) {
 }
 
 extern u8* D_821CF29C;
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-s32 func_821858DC(u8 *arg0)
-{
-  s32 i;
-  if ((arg0[0x5A] & 1) || (((*((u16 *) (((s8 *) arg0) + 0x34))) / 2) < (*((u16 *) (((s8 *) arg0) + 0x72)))))
-  {
-    return -1;
-  }
-  switch (arg0[0x7C])
-  {
-    case 0x69:
+/**
+ * Looks for a healing move: returns the index (0-3) in the slot's move list
+ * at 0x2B of a move to use, or -1. Move numbers are Gen 1 (105 Recover,
+ * 135 Soft-Boiled, 156 Rest); 0x34 is the max HP in Slot82186AF4.
+ * It gives up when bit 0 at 0x5A is set, when the value at 0x72 is above half
+ * the max HP, when the move at 0x7C is one of the three, or when
+ * func_82183CE4(D_821CF29C) is 0x28 or more. Otherwise it returns the first
+ * move that func_82184BC8 accepts and that is Recover or Soft-Boiled, or Rest
+ * when neither byte at 0x7D nor 0x7E is Rest. It stops at an empty move.
+ */
+s32 func_821858DC(u8* arg0) {
+    s32 i;
 
-    case 0x87:
-
-    case 0x9C:
-      return -1;
-
-  }
-
-  if (func_82183CE4((s8 *) D_821CF29C) < 0x28)
-  {
-    for (i = 0; i < 4; i++)
-    {
-      if (arg0[0x2B + i] == 0)
-      {
+    if ((arg0[0x5A] & 1) || ((M2C_FIELD(arg0, u16*, 0x34) / 2) < M2C_FIELD(arg0, u16*, 0x72))) {
         return -1;
-      }
-      if (func_82184BC8((s8 *) arg0, arg0[0x2B + i]) != 0)
-      {
-        switch (arg0[0x2B + i])
-        {
-          case 0x69:
-
-          case 0x87:
-            return i;
-
-          case 0x9C:
-            if ((arg0[0x7E] != 0x9C) && (arg0[0x7D] != 0x9C))
-          {
-            return i;
-            break;
-          }
-
-        }
-
-      }
+    }
+    switch (arg0[0x7C]) {
+        case 105: // Recover
+        case 135: // Soft-Boiled
+        case 156: // Rest
+            return -1;
     }
 
-  }
-  return -1;
+    if (func_82183CE4((s8*)D_821CF29C) < 0x28) {
+        for (i = 0; i < 4; i++) {
+            if (arg0[0x2B + i] == 0) {
+                return -1;
+            }
+            if (func_82184BC8((s8*)arg0, arg0[0x2B + i]) != 0) {
+                switch (arg0[0x2B + i]) {
+                    case 105: // Recover
+                    case 135: // Soft-Boiled
+                        return i;
+                    case 156: // Rest
+                        if ((arg0[0x7E] != 156) && (arg0[0x7D] != 156)) {
+                            return i;
+                        }
+                }
+            }
+        }
+    }
+    return -1;
 }
 
 extern u8* D_821CF29C;
@@ -1254,40 +1267,44 @@ void func_821868E8(s8* arg0, s32 species, s32 level) {
 
 M2C_UNK func_80058410(s8 *, s8 *, M2C_UNK);     /* extern */
 extern s8 *D_821CF2A0;
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-void func_821869C4(s8 *arg0, s8 *arg1)
-{
-  long temp_v1;
-  u8 *new_var;
-  *((u16 *) (((s8 *) arg0) + 0x28)) = (u16) (*((u16 *) (((s8 *) arg1) + 0x28)));
-  *((u16 *) (((s8 *) arg0) + 0xC)) = (u16) (*((u16 *) (((s8 *) arg1) + 0xC)));
-  *((u8 *) (((s8 *) arg0) + 0x15)) = (u8) (*((u8 *) (((s8 *) arg1) + 0x15)));
-  func_80058410(arg1 + 0x44, arg0 + 0x44, 6);
-  *((u8 *) (((s8 *) arg0) + 0x4A)) = (u8) (*((u8 *) (((s8 *) arg1) + 0x4A)));
-  *((u8 *) (((s8 *) arg0) + 0x4B)) = (u8) (*((u8 *) (((s8 *) arg1) + 0x4B)));
-  *((u8 *) (((s8 *) arg0) + 0x4C)) = (u8) (*((u8 *) (((s8 *) arg1) + 0x4C)));
-  *((u8 *) (((s8 *) arg0) + 0x4D)) = (u8) (*((u8 *) (((s8 *) arg1) + 0x4D)));
-  *((u8 *) (((s8 *) arg0) + 0x4E)) = (u8) (*((u8 *) (((s8 *) arg1) + 0x4E)));
-  *((u16 *) (((s8 *) arg0) + 0x54)) = (u16) (*((u16 *) (((s8 *) arg1) + 0x54)));
-  *((u8 *) (((s8 *) arg0) + 0x56)) = (u8) (*(new_var = (u8 *) (((s8 *) arg1) + 0x56)));
-  *((u8 *) (((s8 *) arg0) + 0x57)) = (u8) (*((u8 *) (((s8 *) arg1) + 0x57)));
-  *((u8 *) (((s8 *) arg0) + 0x58)) = (u8) (*((u8 *) (((s8 *) arg1) + 0x58)));
-  *((u8 *) (((s8 *) arg0) + 0x59)) = (u8) (*((u8 *) (((s8 *) arg1) + 0x59)));
-  *((u8 *) (((s8 *) arg0) + 0x5A)) = (u8) (*((u8 *) (((s8 *) arg1) + 0x5A)));
-  *((u8 *) (((s8 *) arg0) + 0x5B)) = (u8) (*((u8 *) (((s8 *) arg1) + 0x5B)));
-  func_80058410(arg1 + 0x5C, arg0 + 0x5C, 8);
-  if ((*((u8 *) (((s8 *) arg1) + 0x4E))) & 8)
-  {
-    func_821867A8(arg1 + 0x1F, arg0 + 0x1F);
-    func_80058410(arg1 + 0x32, arg0 + 0x32, 4);
-    return;
-  }
-  temp_v1 = *((u8 *) (((s8 *) D_821CF2A0) + 0x78));
-  if (((s32) temp_v1) < 4)
-  {
-    *((u8 *) (((s8 *) (arg0 + temp_v1)) + 0x1F)) = (u8) (*((u8 *) (((s8 *) (arg1 + temp_v1)) + 0x1F)));
-    *((u8 *) (((s8 *) (arg0 + (*((u8 *) (((s8 *) D_821CF2A0) + 0x78))))) + 0x32)) = (u8) (*((u8 *) (((s8 *) D_821CF2A0) + 0x79)));
-  }
+/**
+ * Copies a slot's state from arg1 to arg0: the fields at 0x0C, 0x15, 0x28,
+ * 0x4A-0x4E, 0x54 and 0x56-0x5B, plus the 6 bytes at 0x44 and 8 bytes at
+ * 0x5C. If arg1's flag 0x08 at 0x4E is set it also copies the bytes at 0x1F
+ * (func_821867A8) and 0x32; otherwise, when D_821CF2A0's index at 0x78 is
+ * below 4, it copies that one byte at 0x1F and sets the byte at 0x32 + index
+ * to D_821CF2A0's byte at 0x79.
+ */
+void func_821869C4(s8* arg0, s8* arg1) {
+    s32 idx;
+
+    M2C_FIELD(arg0, u16*, 0x28) = M2C_FIELD(arg1, u16*, 0x28);
+    M2C_FIELD(arg0, u16*, 0xC) = M2C_FIELD(arg1, u16*, 0xC);
+    M2C_FIELD(arg0, u8*, 0x15) = M2C_FIELD(arg1, u8*, 0x15);
+    func_80058410(arg1 + 0x44, arg0 + 0x44, 6);
+    M2C_FIELD(arg0, u8*, 0x4A) = M2C_FIELD(arg1, u8*, 0x4A);
+    M2C_FIELD(arg0, u8*, 0x4B) = M2C_FIELD(arg1, u8*, 0x4B);
+    M2C_FIELD(arg0, u8*, 0x4C) = M2C_FIELD(arg1, u8*, 0x4C);
+    M2C_FIELD(arg0, u8*, 0x4D) = M2C_FIELD(arg1, u8*, 0x4D);
+    M2C_FIELD(arg0, u8*, 0x4E) = M2C_FIELD(arg1, u8*, 0x4E);
+    M2C_FIELD(arg0, u16*, 0x54) = M2C_FIELD(arg1, u16*, 0x54);
+    M2C_FIELD(arg0, u8*, 0x56) = M2C_FIELD(arg1, u8*, 0x56);
+    M2C_FIELD(arg0, u8*, 0x57) = M2C_FIELD(arg1, u8*, 0x57);
+    M2C_FIELD(arg0, u8*, 0x58) = M2C_FIELD(arg1, u8*, 0x58);
+    M2C_FIELD(arg0, u8*, 0x59) = M2C_FIELD(arg1, u8*, 0x59);
+    M2C_FIELD(arg0, u8*, 0x5A) = M2C_FIELD(arg1, u8*, 0x5A);
+    M2C_FIELD(arg0, u8*, 0x5B) = M2C_FIELD(arg1, u8*, 0x5B);
+    func_80058410(arg1 + 0x5C, arg0 + 0x5C, 8);
+    if (M2C_FIELD(arg1, u8*, 0x4E) & 8) {
+        func_821867A8(arg1 + 0x1F, arg0 + 0x1F);
+        func_80058410(arg1 + 0x32, arg0 + 0x32, 4);
+        return;
+    }
+    idx = M2C_FIELD(D_821CF2A0, u8*, 0x78);
+    if (idx < 4) {
+        M2C_FIELD(arg0 + idx, u8*, 0x1F) = M2C_FIELD(arg1 + idx, u8*, 0x1F);
+        M2C_FIELD(arg0 + M2C_FIELD(D_821CF2A0, u8*, 0x78), u8*, 0x32) = M2C_FIELD(D_821CF2A0, u8*, 0x79);
+    }
 }
 
 void func_8004FD20(void*, s32);
@@ -1311,22 +1328,6 @@ typedef struct Party82186AF4 {
     /* 0x1FC */ u8* info;
 } Party82186AF4;
 
-typedef struct Slot82186AF4 {
-    /* 0x00 */ void* owner;
-    /* 0x04 */ u8 unk04[8];
-    /* 0x0C */ u8 mon[0x0C];
-    /* 0x18 */ u16 hp;
-    /* 0x1A */ u8 unk1A[0x56];
-    /* 0x70 */ u16 hp2;
-    /* 0x72 */ u8 unk72[2];
-    /* 0x74 */ u8 species;
-    /* 0x75 */ u8 mask;
-    /* 0x76 */ u8 unk76[2];
-    /* 0x78 */ u8 moveCount;
-    /* 0x79 */ u8 unk79;
-    /* 0x7A */ u8 unk7A[0x16];
-} Slot82186AF4; // size = 0x90
-
 typedef struct Side82186AF4 {
     /* 0x000 */ Party82186AF4* party;
     /* 0x004 */ Slot82186AF4 slots[6];
@@ -1337,6 +1338,14 @@ typedef struct Side82186AF4 {
     /* 0x36B */ u8 unk36B;
 } Side82186AF4;
 
+/**
+ * Sets up one side from a party: clears the six slots with func_8004FD20 and
+ * gives each its mask (1 << i), owner and species. For each of the first
+ * info[2] Pokemon that has species, HP, max HP and level set, it builds the
+ * slot's battle data (copied with func_82186834 when party flag 2 is set,
+ * otherwise generated from species and level with func_821868E8) and counts its
+ * moves up to the first empty one or Mimic (102).
+ */
 void func_82186AF4(Side82186AF4 *arg0, Party82186AF4 *arg1, s32 arg2)
 {
   s32 i;
@@ -1366,7 +1375,6 @@ void func_82186AF4(Side82186AF4 *arg0, Party82186AF4 *arg1, s32 arg2)
         level = arg1->mons[i].level;
         if (level != 0)
         {
-          j = 0; // FAKE: permuter; early init of the move counter
           level = arg1->mons[i].level; // FAKE: permuter; redundant reload of level
           if (arg1->flags & 2)
           {
@@ -1379,7 +1387,7 @@ void func_82186AF4(Side82186AF4 *arg0, Party82186AF4 *arg1, s32 arg2)
           }
           for (j = 0; j < 4; j++)
           {
-            if ((arg1->mons[i].moves[j] == 0) || (arg1->mons[i].moves[j] == 0x66))
+            if ((arg1->mons[i].moves[j] == 0) || (arg1->mons[i].moves[j] == 102)) // Mimic
             {
               break;
             }

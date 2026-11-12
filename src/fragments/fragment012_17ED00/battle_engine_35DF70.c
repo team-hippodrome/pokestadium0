@@ -541,6 +541,14 @@ void func_82115DE0(void) {
 extern s32 D_8218C8F8;
 extern s32 D_8218C8FC;
 /* Transform: the user copies the target's species, moves, stats and stat stages. */
+/**
+ * Transform. Unless the user has bit 0x40 at unk_4C, it sets the scene's
+ * unk_48 to 15, calls func_8211EF74 with D_8218C8F8, sets the user's flag 0x08
+ * at unk_4E and copies onto the user the target's id (or the target's own
+ * unk_BE if the target is transformed too), roster bytes 6-7, moves (each copied
+ * move gets 5 PP), speed and the fields from unk_24 to unk_3E and unk_5C[0-7].
+ * Otherwise it calls func_8211EF74 with D_8218C8FC.
+ */
 void func_82115FCC(void) {
     s32 i;
     ActivePokemonState* user;
@@ -550,7 +558,7 @@ void func_82115FCC(void) {
     target = &sActivePokemon[!sBattleScene.scene->unk_2C]->state;
 
     if (!(sBattleUser->unk_4C & 0x40)) {
-        if (sBattleUser && sBattleUser) {} // FAKE
+        if (sBattleUser) {} // karodo
         sBattleScene.scene->unk_48 = 0xF;
         func_8211EF74(D_8219A520 + 0x148, -0x31, D_8218C8F8, func_82107F88(sActivePokemon[sBattleScene.scene->unk_2C]), func_82107F88(sActivePokemon[!sBattleScene.scene->unk_2C]));
         sBattleUser->unk_4E |= 8;

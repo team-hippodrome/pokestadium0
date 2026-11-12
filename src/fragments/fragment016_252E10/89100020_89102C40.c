@@ -225,16 +225,21 @@ typedef struct Ctx89102EC8 {
 } Ctx89102EC8;
 s32 func_89106C98(void*);
 M2C_UNK func_89101D94();
+/**
+ * Handles the result of func_89106C98 on the dialog at unk9830: -1 closes it
+ * (unk88 = 0). 1 orders the two values unk98D4/unk98E8 into unk9828/unk9829
+ * (unk982C and unk78 record which order) and calls func_89101D54 and
+ * func_89101D94. 2 sets unk9828 = 1 and unk9829 = 100 and calls
+ * func_89101D64 and func_89101D94. Returns 0.
+ */
 s32 func_89102EC8(s8 *arg)
 {
   Ctx89102EC8 *arg0 = (Ctx89102EC8 *) arg;
   s32 ret;
-  Ctx89102EC8 *new_var;
   ret = func_89106C98(arg0->unk9830);
   if (ret == (-1))
   {
-    new_var = arg0;
-    new_var->unk88 = 0;
+    arg0->unk88 = 0;
   }
   else
     if (ret == 1)
@@ -259,7 +264,14 @@ s32 func_89102EC8(s8 *arg)
   }
   else
   {
- do { if (ret == 2) { arg0->unk9828 = 1; arg0->unk9829 = 100; arg0->unk982C = 0; func_89101D64((s8 *) arg0, 1); func_89101D94((s8 *) arg0); arg0->unk88 = 0; } } while (0);  // FAKE
+    if (ret == 2)
+    {
+      arg0->unk9828 = 1; arg0->unk9829 = 100; // IDO: both stores must share one source line
+      arg0->unk982C = 0;
+      func_89101D64((s8 *) arg0, 1);
+      func_89101D94((s8 *) arg0);
+      arg0->unk88 = 0;
+    }
   }
   return 0;
 }

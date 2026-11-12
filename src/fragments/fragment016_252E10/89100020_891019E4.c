@@ -260,15 +260,15 @@ void func_89101D78(s8 *arg0) {
     M2C_FIELD(arg0, s32 *, 0x7C) = 0;
 }
 
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-s32 func_89101D80(s8 *arg0, s32 arg1)
-{
-  s32 temp_t7;
-  s32 new_var;
-  new_var = arg1;
-  temp_t7 = ((*((s32 *) (((s8 *) arg0) + 0x7C))) ^ new_var) & 0xFFFFFFFFFFFFFFFFu;
-  *((s32 *) (((s8 *) arg0) + 0x7C)) = temp_t7;
-  return temp_t7 & new_var;
+typedef struct unk_func_89101D80 {
+    /* 0x00 */ char unk00[0x7C];
+    /* 0x7C */ s32 flags;
+} unk_func_89101D80;
+
+/** Toggles the bits arg1 in the flags word at 0x7C and returns which of them are now set. */
+s32 func_89101D80(unk_func_89101D80* arg0, s32 arg1) {
+    arg0->flags ^= arg1;
+    return arg0->flags & arg1;
 }
 
 typedef struct Ctx89101D94 {
@@ -546,6 +546,14 @@ typedef struct Ctx891025D8 {
 } Ctx891025D8;
 s32 func_8002B390(s32*);
 
+/**
+ * Input handler for the menu at unkB54C. When func_8002B390 returns a button it
+ * returns 1: for 0x400 on entry 1 it calls func_8003F6AC(1), clears unk8C and
+ * sets unkB1A0 = 8 and unkB188 = 0x400; otherwise it sets unk8C to 2 (entry 0
+ * or 1) or 1. The 0x8000 button on D_800603C0 returns -1 on entry 0, and on the
+ * other entries calls func_891024A4 (entry 1) or func_89101F90 and returns 1.
+ * Returns 0 if nothing was pressed.
+ */
 s32 func_891025D8(Ctx891025D8* arg0) {
     s32 ret = 0;
     s32 button;
@@ -555,7 +563,7 @@ s32 func_891025D8(Ctx891025D8* arg0) {
         if ((button == 0x400) && (arg0->unkB550 == 1)) {
             func_8003F6AC(1);
             arg0->unk8C = 0;
-            arg0->unkB1A0 = 8; arg0->unkB188 = 0x400; // FAKE: both stores must share one source line (IDO schedules by line)
+            arg0->unkB1A0 = 8; arg0->unkB188 = 0x400; // IDO: both stores must share one source line
             ret = 1;
         } else {
             arg0->unk8C = (arg0->unkB550 < 2) ? 2 : 1;

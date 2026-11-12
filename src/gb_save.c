@@ -46,33 +46,28 @@ void func_8001AB2C(s32);
 void func_8001ABE8(void);
 void func_8001AAE4(u8, u8, u8, u8);
 void func_8001AC3C(void);
-extern s8 D_800734A8;
-extern s8 D_800734B0;
-extern s8 D_800734B8;
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-void func_80027F20(s32 arg0)
-{
-  s8 *new_var;
-  if (arg0 & 0x18)
-  {
-    new_var = &D_800734B8;
-  }
-  else
-    if (arg0 & 1)
-  {
-    new_var = &D_800734B0;
-    new_var = new_var;
-  }
-  else
-  {
-    new_var = &D_800734A8;
-  }
-  if (!(arg0 & 2))
-  {
-    new_var += 4;
-  }
-  new_var = (s8 *) new_var;
-  func_8001AA9C(*((u8 *) (new_var + 0)), *((u8 *) (new_var + 1)), *((u8 *) (new_var + 2)), *((u8 *) (((s8 *) new_var) + 3)));
+extern Color_RGBA8 D_800734A8[2];
+extern Color_RGBA8 D_800734B0[2];
+extern Color_RGBA8 D_800734B8[2];
+/**
+ * Sets the color for func_8001AA9C from a pair in D_800734B8 (any of bits 0x18),
+ * D_800734B0 (bit 0) or D_800734A8; the second color of the pair is used
+ * unless bit 1 is set.
+ */
+void func_80027F20(s32 arg0) {
+    Color_RGBA8* color;
+
+    if (arg0 & 0x18) {
+        color = D_800734B8;
+    } else if (arg0 & 1) {
+        color = D_800734B0;
+    } else {
+        color = D_800734A8;
+    }
+    if (!(arg0 & 2)) {
+        color++;
+    }
+    func_8001AA9C(color->r, color->g, color->b, color->a);
 }
 
 /*
@@ -485,16 +480,13 @@ void func_8002A550(s32 x, s32 y, s32 w, s32 h, Color_RGBA8 prim, Color_RGBA8 env
                         (64 << 10) / w, (64 << 10) / h);
 }
 
-// FAKE: decomp slop. Raw pointer-offset casts and the new_var alias stand in for struct fields.
-void func_8002A8C4(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4)
-{
-  s8 *new_var;
-  *((s32 *) (((s8 *) arg0) + 0)) = arg1;
-  *((s32 *) (((s8 *) arg0) + 4)) = arg2;
-  new_var = arg0;
-  *((s32 *) (((s8 *) arg0) + 8)) = arg3;
-  *((s32 *) (((s8 *) new_var) + 0xC)) = arg4;
-  *((s32 *) (((s8 *) arg0) + 0x10)) = 0;
+/** Sets the window's position and size (words 0-3) and clears word 4. */
+void func_8002A8C4(s32* arg0, s32 x, s32 y, s32 w, s32 h) {
+    arg0[0] = x;
+    arg0[1] = y;
+    arg0[2] = w;
+    arg0[3] = h;
+    arg0[4] = 0;
 }
 
 extern Gfx D_80073480[];
@@ -1241,6 +1233,12 @@ s32 func_8002BC14(s32);
 s32 func_8002DC04(void *, void *);
 extern s32 D_800603C0;
 
+/**
+ * Input handler for the prompt in arg0 (its state at +0x28 must be 1 or 2).
+ * When func_8002DC04 on the list at +0x2C returns 0, func_8002BC14 decides:
+ * -1 returns -1, and 1 returns 1, 2 or -1 for entry 0, 1 or 2 of +0x34 (each
+ * with a func_8003F6AC call). Returns 0 otherwise.
+ */
 s32 func_8002CD7C(s8 *arg0) {
     s32 ret = 0;
 
@@ -1268,7 +1266,7 @@ s32 func_8002CD7C(s8 *arg0) {
                     func_8003F6AC(3);
                     break;
             }
-            if (arg0) { // FAKE: no-op test; changes register allocation to match
+            if (arg0) { // karodo
             }
         }
     }

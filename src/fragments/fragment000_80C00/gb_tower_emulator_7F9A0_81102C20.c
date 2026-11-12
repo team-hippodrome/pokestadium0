@@ -356,6 +356,13 @@ extern volatile u8 D_81156474;
 s32 func_81102690(GbpakChannel811023DC*, s32);
 s32 func_81104CD4(s8*);
 
+/**
+ * Game Boy pak worker thread. Waits for a channel number on D_81156458 (0xFF
+ * stops the thread), re-initializes and checks the pak when the request has bit
+ * 0x80, then runs the request (low 7 bits: 1, 2, 3 or 5) on that channel.
+ * Failed steps retry while the retry counter (unkA1) lasts, then set error and
+ * clear the request.
+ */
 void func_811030F0(s32 arg0) {
     s32 pad0; // FAKE
     s32 chan;
@@ -364,7 +371,6 @@ void func_811030F0(s32 arg0) {
     u8 id[0x50];
     u8* idp;
     GbpakChannel811023DC* ch;
-    s32 pad2; // FAKE
 
     for (;;) {
         if (D_81156458.validCount == 0) {

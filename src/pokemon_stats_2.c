@@ -1154,18 +1154,20 @@ s32 GbSave_GetBoxCount(s32 arg0) {
     return phi_v1;
 }
 
-s32 func_8001FCC0(M2C_UNK, s32, M2C_UNK);           /* extern */
-extern s8 D_800AD210;
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-s32 func_80022D84(s32 arg0, M2C_UNK arg1)
-{
-  s8 *temp_v0;
-  temp_v0 = (arg0 * 0x48) + (&D_800AD210);
-  if (!((*((u16 *) (((s8 *) temp_v0) + 0))) & 1))
-  {
-    return 0;
-  }
-  return func_8001FCC0(arg1 & 0xFFFFFFFFFFFFFFFF, (*((s32 *) (((s8 *) temp_v0) + 0x40))) + 0x18, arg1);  // FAKE
+char* Text_UntranscodeFixedName(char* arg0, char* arg1);
+
+/**
+ * Converts the 6-byte Game Boy name at offset 0x18 of port arg0's save buffer
+ * into arg1 and returns arg1, or returns NULL if the port has no save loaded
+ * (unk_00 bit 0 clear).
+ */
+char* func_80022D84(s32 arg0, char* arg1) {
+    GbSavePortZero* port = &sGbSavePorts[arg0];
+
+    if (!(port->unk_00 & 1)) {
+        return NULL;
+    }
+    return Text_UntranscodeFixedName(arg1, (char*)port->unk_40 + 0x18);
 }
 
 s32 func_8001FBE4(s32);                             /* extern */
@@ -1180,18 +1182,17 @@ s32 func_80022DDC(s32 arg0) {
     return func_8001FBE4(M2C_FIELD(temp_v0, s32 *, 0x40) + 0x18);
 }
 
-s32 func_8001FCC0(M2C_UNK, s32, M2C_UNK);           /* extern */
-extern s8 D_800AD210;
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-s32 func_80022E30(s32 arg0, M2C_UNK arg1)
-{
-  s8 *temp_v0;
-  temp_v0 = (arg0 * 0x48) + (&D_800AD210);
-  if (!((*((u16 *) (((s8 *) temp_v0) + 0))) & 1))
-  {
-    return 0;
-  }
-  return func_8001FCC0(arg1 ^ 0, (*((s32 *) (((s8 *) temp_v0) + 0x40))) + 0x71, arg1);  // FAKE
+/**
+ * Like func_80022D84, for the 6-byte name at offset 0x71 of the port's save
+ * buffer.
+ */
+char* func_80022E30(s32 arg0, char* arg1) {
+    GbSavePortZero* port = &sGbSavePorts[arg0];
+
+    if (!(port->unk_00 & 1)) {
+        return NULL;
+    }
+    return Text_UntranscodeFixedName(arg1, (char*)port->unk_40 + 0x71);
 }
 
 s32 func_8001FBE4(s32);                             /* extern */

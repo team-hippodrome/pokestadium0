@@ -671,17 +671,20 @@ void Audio_PlayMusicIfChanged(s32);
 s32 Storage_GetDiskStatus(void);
 void Audio_SetDiskReadyPolling(s32);
 void Audio_WaitForIdle(s32);
-s32 func_82101324(s32* arg0); // FAKE: see definition
+/**
+ * Battle fragment entry. Stores the session context, sets D_82198D1C (0-3)
+ * from the mode and round, pushes the 'BATL' pool state, sets up display lists
+ * and a stage context, plays the mode's music, waits on Battle_FrameCallback
+ * with BgStage_WaitForCondition, then runs a mode-dependent number of extra
+ * frames and tears everything down. Returns 0.
+ */
 s32 func_82101874(s32 arg0, SessionContext *arg1)
 {
   StageContext *stage_context;
-  SessionContext *new_var2; // FAKE
   SessionContext *ctx;
-  int new_var; // FAKE
   ctx = (D_82198D10 = arg1);
-  sBattleSides = (BattleSessionTeams *) (((u8 *) arg1) + 0x1034);
+  sBattleSides = (BattleSessionTeams *) (((u8 *) ctx) + 0x1034);
   sCompletionGate = -2;
-  new_var2 = ctx; // FAKE
   if (ctx->mode == 0)
   {
     D_82198D1C = 0;
@@ -692,7 +695,7 @@ s32 func_82101874(s32 arg0, SessionContext *arg1)
     D_82198D1C = 1;
   }
   else
-    if (new_var2->roundOrDemoId == 7)
+    if (ctx->roundOrDemoId == 7)
   {
     D_82198D1C = 2;
   }
@@ -721,18 +724,17 @@ s32 func_82101874(s32 arg0, SessionContext *arg1)
       break;
 
     case 6:
-      Audio_PlayMusicIfChanged(0xB);
+      Audio_PlayMusicIfChanged(11);
       break;
 
     default:
-      Audio_PlayMusicIfChanged(0x32);
+      Audio_PlayMusicIfChanged(50);
       break;
 
   }
 
   StageContext_Activate(stage_context);
-  new_var = 1; // FAKE
-  StageLoader_RunFrames(new_var);
+  StageLoader_RunFrames(1);
   BgStage_WaitForCondition(Battle_FrameCallback, 0x20, 0x10);
   StageLoader_RunFrames(2);
   switch (D_82198D10->mode)
@@ -746,16 +748,16 @@ s32 func_82101874(s32 arg0, SessionContext *arg1)
       break;
 
     case 4:
-      StageLoader_RunFrames(0x1E);
+      StageLoader_RunFrames(30);
       break;
 
     case 5:
-      StageLoader_RunFrames(0xF);
+      StageLoader_RunFrames(15);
       Audio_WaitForIdle(1);
       break;
 
     case 6:
-      StageLoader_RunFrames(0x1E);
+      StageLoader_RunFrames(30);
       Audio_WaitForIdle(1);
       break;
 

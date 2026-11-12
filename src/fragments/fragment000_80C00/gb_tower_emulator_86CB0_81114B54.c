@@ -300,23 +300,19 @@ void func_811151C8(s32 arg0) {
     func_81110798();
 }
 
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-void func_81115254(s8 *arg0)
-{
-  s8 *new_var;
-  s32 temp_t8;
-  if ((*((s32 *) (((s8 *) arg0) + 0xD8))) > 0)
-  {
-    do
-    {
-      func_81114B54(arg0);
-      func_81111DC8(arg0);
-      new_var = (s8 *) arg0;
-      temp_t8 = (unsigned long long) ((*((s32 *) (new_var + 0xD8))) - 1);
-      *((s32 *) (((s8 *) arg0) + 0xD8)) = temp_t8;
+/**
+ * Runs the player's tick (func_81114B54, then func_81111DC8) once for each
+ * pending tick in the counter at +0xD8 (the skipTicks field in
+ * gb_tower_emulator_86CB0_81113A44.c), counting it down to zero.
+ */
+void func_81115254(s8* arg0) {
+    if (M2C_FIELD(arg0, s32*, 0xD8) > 0) {
+        do {
+            func_81114B54(arg0);
+            func_81111DC8(arg0);
+            M2C_FIELD(arg0, s32*, 0xD8)--;
+        } while (M2C_FIELD(arg0, s32*, 0xD8) > 0);
     }
-    while (temp_t8 > 0);
-  }
 }
 
 typedef struct Chan811152A4 {

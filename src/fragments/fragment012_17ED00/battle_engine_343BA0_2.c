@@ -226,34 +226,35 @@ void func_8213346C(CameraNode* arg0) {
 }
 
 typedef struct Arr82133534 { u8 b[7]; } Arr82133534;
-typedef struct Mon82133534 { u8 flags; u8 pad1; s16 move; } Mon82133534;
 extern Arr82133534 D_8218B350;
 s16 func_8000F1FC(s16, M2C_UNK, M2C_UNK, M2C_UNK);
 M2C_UNK func_80019B28(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32);
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-void func_82133534(CameraNode *arg0)
-{
-  s32 pad[2];
-  Arr82133534 sp28 = D_8218B350;
-  s32 v;
-  D_8219A594 = func_8000F1FC(D_8219A594, 0, 0x28, 0x28);
-  func_80019B28(D_8219A590, 0, 0, 0, 0xFF - D_8219A594);
-  if (func_821217DC(8) != 0)
-  {
-    D_8219A4F0[0xE]++;
-    v = sp28.b[D_8219A4F0[0xE]];
-    if (v == 0xFF)
-    {
-      *((s32 *) (((s8 *) D_8219A5A0) + 0x20)) = 6;
- if (1) { }  // karodo
+/**
+ * Moves D_8219A594 towards 0 with func_8000F1FC and passes 0xFF minus it to
+ * func_80019B28 for the Pokemon in D_8219A590. Each time func_821217DC(8) is
+ * non-zero, it steps through the 7-byte list
+ * D_8218B350: each entry becomes the session's displayModel (and sets status
+ * flag 0x80), and an 0xFF entry sets the state at D_8219A5A0 + 0x20 to 6.
+ */
+void func_82133534(CameraNode* arg0) {
+    s32 pad[2]; // FAKE
+    Arr82133534 sp28 = D_8218B350;
+    s32 v;
+
+    D_8219A594 = func_8000F1FC(D_8219A594, 0, 40, 40);
+    func_80019B28(D_8219A590, 0, 0, 0, 0xFF - D_8219A594);
+    if (func_821217DC(8) != 0) {
+        D_8219A4F0[14]++;
+        v = sp28.b[D_8219A4F0[14]];
+        if (v == 0xFF) {
+            M2C_FIELD(D_8219A5A0, s32*, 0x20) = 6;
+            if (1) {} // karodo
+        } else {
+            ((ActivePokemon*)D_8219A590)->sessionTeams->displayModel = v;
+            ((ActivePokemon*)D_8219A590)->sessionTeams->uniqueStatusFlags |= 0x80;
+            M2C_FIELD(D_8219A5A0, s32*, 0x20)++;
+        }
     }
-    else
-    {
-      (*((Mon82133534 **) (((s8 *) D_8219A590) + 0x85C)))->move = v;
-      (*((Mon82133534 **) (((s8 *) D_8219A590) + 0x85C)))->flags |= 0x80;
-      (*((s32 *) (((s8 *) D_8219A5A0) + 0x20)))++;
-    }
-  }
 }
 
 M2C_UNK func_80019B28(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32); /* extern */

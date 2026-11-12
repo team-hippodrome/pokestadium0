@@ -31,6 +31,11 @@ void ModelRenderer_ApplySlotScale(u8 index);
 void ModelRenderer_RebuildSlotMatrix(u8 index);
 void ModelRenderer_ClearSlotModels(s32 arg0);
 
+/**
+ * For side arg0 & 1 (when arg0 < 4) it walks the three model slots in
+ * D_800B0338. Only empty tests are left in the loop (karodo), so it has no
+ * effect.
+ */
 void func_80032840(u32 arg0) {
     s32 i;
     StadiumModelSlot* slot;
@@ -42,7 +47,7 @@ void func_80032840(u32 arg0) {
             if (slot) {  // karodo
             }
         }
-        if (slot) { // FAKE: no-op test; changes register allocation to match
+        if (slot) { // karodo
         }
     }
 }

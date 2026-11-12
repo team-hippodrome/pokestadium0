@@ -12,15 +12,20 @@ M2C_UNK func_80029A64(s32, s32, s32, s32, Color_RGBA8);
 
 M2C_UNK func_89109E5C(s32, s32, s32, s32);          /* extern */
 M2C_UNK func_89109FE0(s32);                         /* extern */
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-void func_89100020(s32 arg0)
-{
-  s32 var_s0;
-  s32 var_s1;
-  s8 *var_s2;
-  func_89109E5C(arg0 + 0x9E64, arg0 + 0x9EB8, arg0 + 0x9EE0, arg0 + 0x9F44);
-  var_s2 = arg0 + 0x8000;
- do { var_s0 = arg0; var_s1 = 0; do { if ((*((s32 *) (((s8 *) var_s2) + 0x1E68))) != 0) { func_89109FE0(var_s0 + 0x9E64); } var_s1 += 0x1C; var_s0 += 0x1C; var_s2 += 0x1C; } while (var_s1 != 0x54); } while (0);  // FAKE
+/**
+ * Calls func_89109E5C with the four blocks at +0x9E64, +0x9EB8, +0x9EE0 and
+ * +0x9F44, then func_89109FE0 on each of the three 0x1C-byte entries from
+ * +0x9E64 whose word at +4 is non-zero.
+ */
+void func_89100020(s8* arg0) {
+    s32 i;
+
+    func_89109E5C(arg0 + 0x9E64, arg0 + 0x9EB8, arg0 + 0x9EE0, arg0 + 0x9F44);
+    for (i = 0; i < 3; i++) {
+        if (M2C_FIELD(arg0 + i * 0x1C, s32*, 0x9E68) != 0) {
+            func_89109FE0(arg0 + i * 0x1C + 0x9E64);
+        }
+    }
 }
 
 M2C_UNK func_8910A03C(s32);                         /* extern */
@@ -173,20 +178,26 @@ typedef struct Big891003A4 {
     /* 0xB55C */ char unkB55C[0x38];
     /* 0xB594 */ s32 unkB594;
 } Big891003A4;
+/**
+ * Initializes the lab PC screen state in arg0: three windows with
+ * func_8002A8C4, two func_80027804 buffers, the list (func_89109B60,
+ * func_89109C6C, func_8002EC24), func_89100020 and func_89100294, stores arg3 in
+ * unkB594, and calls func_89105C54 at (120, 103).
+ */
 void func_891003A4(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     UNUSED s32 pad[1];
 
     func_89100140((Ctx89100140*)arg0);
-    func_8002A8C4(arg0, arg1, arg2, 0x234, 0x17E);
+    func_8002A8C4(arg0, arg1, arg2, 564, 382);
     M2C_FIELD(arg0, s32*, 0x24) = 0;
     M2C_FIELD(arg0, s32*, 0x20) = 0;
     M2C_FIELD(arg0, s32*, 0x28) = 0;
     M2C_FIELD(arg0, s32*, 0x14) = 1;
-    func_8002A8C4(arg0 + 0x4C, arg1 + 6, arg2 + 6, 0x228, 0x1E);
+    func_8002A8C4(arg0 + 0x4C, arg1 + 6, arg2 + 6, 552, 30);
     M2C_FIELD(arg0, s32*, 0x60) = 6;
     M2C_FIELD(arg0, Rgba891024A4*, 0x64) = *(Rgba891024A4*)D_8910A844;
     M2C_FIELD(arg0, Rgba891024A4*, 0x68) = *(Rgba891024A4*)D_8910A848;
-    func_8002A8C4(arg0 + 0x2C, arg1 + 6, arg2 + 0x3A, 0x228, 0x12E);
+    func_8002A8C4(arg0 + 0x2C, arg1 + 6, arg2 + 58, 552, 302);
     M2C_FIELD(arg0, s32*, 0x40) = 1;
     func_80027804(arg0 + 0x9648, arg0 + 0x87B8, 0x1D2, 0);
     func_80027804(arg0 + 0x6C, arg0 + 0x8F00, 0x1D2, 0);
@@ -197,10 +208,10 @@ void func_891003A4(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     M2C_FIELD(arg0, s32*, 0x78) = 0;
     func_80027D68((s32)(arg0 + 0x9648), D_8910D990[0]);
     M2C_FIELD(arg0, s32*, 0x8C) = 0;
-    func_89100020((s32)arg0);
+    func_89100020(arg0);
     M2C_FIELD(arg0, s32*, 0x80) = 0;
     ((Big891003A4*)arg0)->unkB15C = 0;
-    func_8002EC24(arg0 + 0xB160, arg0 + 0x9648, arg0 + 0xB1A4, 0xE, func_891012A8, 0x228, 0x14);
+    func_8002EC24(arg0 + 0xB160, arg0 + 0x9648, arg0 + 0xB1A4, 14, func_891012A8, 552, 20);
     ((Big891003A4*)arg0)->unkB180 &= ~0x100000;
     ((Big891003A4*)arg0)->unkB548 = D_8910A84C;
     func_89100294((Ctx89100294*)arg0);
@@ -208,7 +219,7 @@ void func_891003A4(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     ((Big891003A4*)arg0)->unkB594 = arg3;
     func_89100380((LabPCInitialStateFields*)arg0);
     M2C_FIELD(arg0, s32*, 0x88) = 1;
-    func_89105C54(arg0 + 0x230, 0x78, 0x67, arg0 + 0x420, D_8910A7F4);
+    func_89105C54(arg0 + 0x230, 120, 103, arg0 + 0x420, D_8910A7F4);
 }
 
 typedef struct Ctx89100688 {

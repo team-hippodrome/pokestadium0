@@ -86,12 +86,14 @@ u8 func_82107A30(s8 *arg0) {
     return M2C_FIELD(M2C_FIELD(arg0, s8 **, 0x860), u8 *, 2);
 }
 
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-u8 func_82107A3C(s8 *arg0)
-{
-  int new_var;
-  new_var = (*((u8 *) (((s8 *) arg0) + 0x7B7))) == 0;
-  return *((u8 *) (((s8 *) (*((s8 **) (((s8 *) ((*((s32 *) (((s8 *) arg0) + 0x85C))) + (new_var * 4))) + 8)))) + 2));
+/**
+ * Returns how many Pokemon the other member of arg0's tag team brought
+ * (teamMember[1] when arg0 is member 0, otherwise teamMember[0]).
+ */
+u8 func_82107A3C(ActivePokemon* arg0) {
+    s32 other = arg0->state.teamMemberIndex == 0;
+
+    return arg0->sessionTeams->teamMember[other]->numberOfPokemonBrought;
 }
 
 s32 BattleScene_GetParticipantSideIndex(ActivePokemon* active_pokemon) {
@@ -285,11 +287,12 @@ s32 func_82107F68(u8* arg0) {
     return D_8006A9CC[arg0[0x80A]].unk_00;
 }
 
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-s32 func_82107F88(s8 *arg0)
-{
-  unsigned int new_var;
-  return ((*((s32 *) (((s8 *) ((*((s32 *) (((s8 *) arg0) + 0x85C))) + ((*((u8 *) (((s8 *) arg0) + 0x7B9))) * 4))) + 8))) + ((*((s32 *) (((s8 *) arg0) + 0x794))) * 0x50)) + (new_var = 0x4C);
+/**
+ * Returns the unk_30 bytes (the 11-byte name buffer) of arg0's party Pokemon in
+ * the roster of tag-team member state.unk_2D_zero.
+ */
+u8* func_82107F88(ActivePokemon* arg0) {
+    return arg0->sessionTeams->teamMember[arg0->state.unk_2D_zero]->pokemonPicked[arg0->state.rosterIndex].unk_30;
 }
 
 void BattleScene_InitializeParticipantOwnerModel(ActivePokemon* active_pokemon) {

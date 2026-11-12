@@ -134,12 +134,11 @@ s16 func_8213C47C(s8 *arg0) {
     return M2C_FIELD(arg0, s16 *, 0xA8);
 }
 
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-s16 func_8213C484(s8 *arg0)
-{
-  u8 new_var;
-  new_var = *((u8 *) (((s8 *) arg0) + 0xCB));
-  return (s16) new_var;
+/** Returns the particle's unk_CF byte (offset 0xCB). */
+s16 func_8213C484(Particle* arg0) {
+    u8 value = arg0->unk_CF;
+
+    return value;
 }
 
 s16 Particle_FieldA6_GetS16_0BCBC(Particle* arg0) {

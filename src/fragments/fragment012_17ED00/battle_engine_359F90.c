@@ -493,15 +493,15 @@ void Battle_InitPokemonRuntimeState(ActivePokemon* arg0) {
     func_80041940(BattleScene_GetParticipantSideIndex(arg0), sp34->hp, sp34->unk_26);
 }
 
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-s32 func_82110EAC(s8 *arg0)
-{
-  int new_var;
-  if ((*((u16 *) (((s8 *) ((*((s32 *) (((s8 *) arg0) + 0x860))) + ((*((s32 *) (((s8 *) arg0) + 0x7A4))) * 0x50))) + (new_var = -0x32)))) != 0)
-  {
-    return 1;
-  }
-  return 0;
+/**
+ * Returns 1 if the party Pokemon before slot state.unk_18 (a 1-based slot)
+ * still has HP, otherwise 0.
+ */
+s32 func_82110EAC(ActivePokemon* arg0) {
+    if (arg0->teamRoster->pokemonPicked[arg0->state.unk_18 - 1].hp != 0) {
+        return 1;
+    }
+    return 0;
 }
 
 extern u8 D_82199F6A;

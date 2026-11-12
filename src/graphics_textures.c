@@ -43,13 +43,19 @@ void Gfx_SetViewportDimensions(Vp* viewport, s16 width, s16 height) {
 
 s32 func_80006B50(s32*, s32*, s32*, s32*);
 
+/**
+ * Draws a textured rectangle from (x1, y1) to (x2, y2) after clipping it with
+ * func_80006B50. The texture start is shifted by however much was clipped (when
+ * the step in that direction is non-zero), and unless mode is 0x200000 the
+ * bottom-right corner is moved out by one pixel.
+ */
 void func_8000A610(s32 x1, s32 y1, s32 x2, s32 y2, s32 stepX, s32 stepY, s32 mode) {
     s32 s = x1;
     s32 t = y1;
 
     if (func_80006B50(&x1, &y1, &x2, &y2) != 0) {
         if (mode != 0x200000) {
-            x2 += 1; y2 += 1; // FAKE: both increments must share one source line (IDO schedules by line)
+            x2 += 1; y2 += 1; // IDO: both increments must share one source line
         }
         if (stepX != 0) {
             s = x1 - s;

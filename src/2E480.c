@@ -51,8 +51,13 @@ typedef struct ScrollMenu8002F6C4 {
     /* 0x18 */ char unk18[0x8];
     /* 0x20 */ s32 options;
     /* 0x24 */ s32 rows;
-    /* 0x28 */ s32 unk28;
+    /* 0x28 */ u16 unk28;
+    /* 0x2A */ u16 unk2A;
     /* 0x2C */ s32 scroll;
+    /* 0x30 */ s32 unk30;
+    /* 0x34 */ s32 unk34;
+    /* 0x38 */ s32 unk38;
+    /* 0x3C */ s32 unk3C;
 } ScrollMenu8002F6C4;
 
 typedef struct GridMenu800310D8 {
@@ -164,6 +169,12 @@ void func_8002DAD8(Menu8002E230* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
 
 s32 func_8000B30C();
 s32 func_8003F6AC();
+/**
+ * Vertical list menu input: reads the input with func_8000B30C, moves the cursor
+ * up (0x800) or down (0x400) with wrap-around over the item count, calls
+ * func_8003F6AC(1) when the cursor changed, and returns the input. Returns 0 if
+ * the list is empty.
+ */
 s32 func_8002DC04(Menu8002E230* arg0) {
     s32 input;
     s32 old = arg0->cursor;
@@ -171,7 +182,7 @@ s32 func_8002DC04(Menu8002E230* arg0) {
     if (arg0->def->itemCount == 0) {
         return 0;
     }
-    if (arg0) { // FAKE: no-op test; changes register allocation to match
+    if (arg0) { // karodo
     }
     input = (u16)func_8000B30C();
     switch (input) {
@@ -530,106 +541,104 @@ void func_8002ED50(s8 *arg0) {
     }
 }
 
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-void func_8002ED70(s8 *arg0)
-{
-  s32 *new_var3;
-  s32 *new_var2;
-  int temp_v0;
-  s8 *new_var;
-  s32 *new_var4;
-  new_var = (s8 *) arg0;
-  new_var4 = (s32 *) (new_var + 0x34);
-  new_var3 = &(*new_var4);
-  temp_v0 = ((*(new_var2 = new_var3)) - ((*((s32 *) (((s8 *) arg0) + 0x24))) * (*((s32 *) (((s8 *) arg0) + 0x10))))) + 1;
-  if ((*((s32 *) (((s8 *) arg0) + 0x2C))) < temp_v0)
-  {
-    *((s32 *) (new_var + 0x2C)) = temp_v0;
-  }
+/**
+ * Raises the menu's scroll position (offset 0x2C) to at least
+ * unk34 - unk24 * unk10 + 1. func_8002ED50 clamps it from above.
+ */
+void func_8002ED70(s8 *arg0) {
+    s32 temp_v0;
+
+    temp_v0 = M2C_FIELD(arg0, s32 *, 0x34) - M2C_FIELD(arg0, s32 *, 0x24) * M2C_FIELD(arg0, s32 *, 0x10) + 1;
+    if (M2C_FIELD(arg0, s32 *, 0x2C) < temp_v0) {
+        M2C_FIELD(arg0, s32 *, 0x2C) = temp_v0;
+    }
 }
 
-// FAKE: permuter output. Raw offset casts stand in for menu fields 0x28-0x3C.
+/**
+ * Steps the scroll animations requested in unk2A. Bits 0x800 / 0x400 move
+ * unk34 toward the cursor row's first / last line by up to unk38 per call;
+ * bits 0x200 / 0x100 move scroll toward unk30 by up to unk3C. A direction set
+ * in unk28 is skipped this call, and unk28 is cleared at the end.
+ */
 void func_8002EDA8(ScrollMenu8002F6C4 *menu)
 {
   s32 t1;
   s32 t3;
   s32 t2;
-  s32 *new_var; // FAKE
   s32 speed;
   s32 cur;
-  if ((*((u16 *) (((s8 *) menu) + 0x2A))) & 0x800)
+  if (menu->unk2A & 0x800)
   {
-    if (!((*((u16 *) (((s8 *) menu) + 0x28))) & 0x800))
+    if (!(menu->unk28 & 0x800))
     {
-      speed = *((s32 *) (((s8 *) menu) + 0x38));
+      speed = menu->unk38;
       t1 = menu->cursor * menu->rowSpacing;
-      cur = *((s32 *) (((s8 *) menu) + 0x34));
-      *((s32 *) (((s8 *) menu) + 0x34)) = cur - (((cur - t1) < speed) ? (cur - t1) : (speed));
+      cur = menu->unk34;
+      menu->unk34 = cur - (((cur - t1) < speed) ? (cur - t1) : (speed));
       if (1) {} // karodo
       if (1) {} // karodo
       if (1) {} // karodo
       func_8002ED50((s8 *) menu);
-      if (t1 == (*((s32 *) (((s8 *) menu) + 0x34))))
+      if (t1 == menu->unk34)
       {
-        *((u16 *) (((s8 *) menu) + 0x2A)) &= ~0x800;
+        menu->unk2A &= ~0x800;
       }
     }
   }
   else
-    if ((*((u16 *) (((s8 *) menu) + 0x2A))) & 0x400)
+    if (menu->unk2A & 0x400)
   {
-    if (!((*((u16 *) (((s8 *) menu) + 0x28))) & 0x400))
+    if (!(menu->unk28 & 0x400))
     {
       t2 = ((menu->cursor + 1) * menu->rowSpacing) - 1;
-      speed = *((s32 *) (((s8 *) menu) + 0x38));
-      *((s32 *) (((s8 *) menu) + 0x34)) += ((t2 - (*((s32 *) (((s8 *) menu) + 0x34)))) < speed) ? (t2 - (*((s32 *) (((s8 *) menu) + 0x34)))) : (speed);
+      speed = menu->unk38;
+      menu->unk34 += ((t2 - menu->unk34) < speed) ? (t2 - menu->unk34) : (speed);
       func_8002ED70((s8 *) menu);
-      if (t2 == (*((s32 *) (((s8 *) menu) + 0x34))))
+      if (t2 == menu->unk34)
       {
-        *((u16 *) (((s8 *) menu) + 0x2A)) &= ~0x400;
-        new_var = (s32 *) (((s8 *) menu) + 0x34);
-        *new_var = ((*((s32 *) (((s8 *) menu) + 0x34))) - menu->rowSpacing) + 1;
+        menu->unk2A &= ~0x400;
+        menu->unk34 = (menu->unk34 - menu->rowSpacing) + 1;
       }
     }
   }
   else
   {
-    if ((*((u16 *) (((s8 *) menu) + 0x2A))) & 0x200)
+    if (menu->unk2A & 0x200)
     {
-      if (!((*((u16 *) (((s8 *) menu) + 0x28))) & 0x200))
+      if (!(menu->unk28 & 0x200))
       {
         t1 = menu->scroll;
-        t3 = *((s32 *) (((s8 *) menu) + 0x30));
-        t1 = ((t1 - t3) < (*((s32 *) (((s8 *) menu) + 0x3C)))) ? (t1 - t3) : (*((s32 *) (((s8 *) menu) + 0x3C)));
+        t3 = menu->unk30;
+        t1 = ((t1 - t3) < menu->unk3C) ? (t1 - t3) : menu->unk3C;
         menu->scroll -= t1;
         if (1) {} // karodo
-        *((s32 *) (((s8 *) menu) + 0x34)) -= t1;
-        menu->cursor = (*((s32 *) (((s8 *) menu) + 0x34))) / menu->rowSpacing;
+        menu->unk34 -= t1;
+        menu->cursor = menu->unk34 / menu->rowSpacing;
         if ((t3 & 0xFFFFFFFFu) == menu->scroll) // FAKE: no-op mask fixes bnel operand order
         {
-          *((u16 *) (((s8 *) menu) + 0x2A)) &= ~0x200;
+          menu->unk2A &= ~0x200;
         }
       }
     }
     else
-      if ((*((u16 *) (((s8 *) menu) + 0x2A))) & 0x100)
+      if (menu->unk2A & 0x100)
     {
-      if (!((*((u16 *) (((s8 *) menu) + 0x28))) & 0x100))
+      if (!(menu->unk28 & 0x100))
       {
-        t3 = *((s32 *) (((s8 *) menu) + 0x30));
-        t1 = ((t3 - menu->scroll) < (*((s32 *) (((s8 *) menu) + 0x3C)))) ? (t3 - menu->scroll) : (*((s32 *) (((s8 *) menu) + 0x3C)));
+        t3 = menu->unk30;
+        t1 = ((t3 - menu->scroll) < menu->unk3C) ? (t3 - menu->scroll) : menu->unk3C;
         menu->scroll += t1;
         if (1) {} // karodo
-        *((s32 *) (((s8 *) menu) + 0x34)) += t1;
-        menu->cursor = (*((s32 *) (((s8 *) menu) + 0x34))) / menu->rowSpacing;
+        menu->unk34 += t1;
+        menu->cursor = menu->unk34 / menu->rowSpacing;
         if ((t3 & 0xFFFFFFFFu) == menu->scroll) // FAKE: no-op mask fixes bnel operand order
         {
-          *((u16 *) (((s8 *) menu) + 0x2A)) &= ~0x100;
+          menu->unk2A &= ~0x100;
         }
       }
     }
   }
-  *((u16 *) (((s8 *) menu) + 0x28)) = 0;
+  menu->unk28 = 0;
 }
 
 extern u8 D_04003A50[];
@@ -1144,17 +1153,16 @@ void func_800309FC(s8 *arg0) {
     }
 }
 
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-void func_80030A1C(s8 *arg0)
-{
-  s32 temp_v0;
-  s8 *new_var;
-  temp_v0 = ((*((s32 *) (((s8 *) arg0) + 0x34))) - ((*((s32 *) (((s8 *) arg0) + 0x24))) * (*((s32 *) (((s8 *) arg0) + 0x10))))) + 1;
-  new_var = ((s8 *) arg0) + 0x2C;
-  if ((*((s32 *) (((s8 *) arg0) + 0x2C))) < temp_v0)
-  {
-    *((s32 *) new_var) = temp_v0;
-  }
+/**
+ * Raises the scroll position to at least unk34 - rowSpacing * rows + 1, like
+ * func_8002ED70.
+ */
+void func_80030A1C(ScrollMenu8002F6C4* menu) {
+    s32 min = menu->unk34 - menu->rowSpacing * menu->rows + 1;
+
+    if (menu->scroll < min) {
+        menu->scroll = min;
+    }
 }
 
 void func_80030A54(GridMenu80031004* menu) {
@@ -1336,6 +1344,14 @@ typedef struct GridMenu8003152C {
     /* 0x4C */ s32 scrollSpeedX;
 } GridMenu8003152C;
 
+/**
+ * Input handler for the grid menu. A new D-pad press (input[4], bits 0x800/0x400/
+ * 0x200/0x100) sets an 8-frame repeat delay; otherwise the held buttons
+ * (input[3]) repeat once the delay runs out. Up/down move scrollTarget by the
+ * scroll speed and left/right move scrollX, wrapping horizontally; the cursor is
+ * then recomputed from the cell size and column count. Calls func_8003F6AC(1)
+ * when the cursor changed and returns menu->flags.
+ */
 u16 func_8003152C(GridMenu8003152C *menu)
 {
   long new_var; // FAKE
@@ -1364,7 +1380,7 @@ u16 func_8003152C(GridMenu8003152C *menu)
   }
   else
   {
- do { menu->buttons = menu->input[3]; } while (0); // FAKE
+    menu->buttons = menu->input[3];
   }
   if ((menu->buttons & 0x800) && (!(menu->flags & (~0x800))))
   {
@@ -1412,7 +1428,7 @@ u16 func_8003152C(GridMenu8003152C *menu)
     menu->flags |= 0x100;
     lim = func_80031464((GridMenu80031004 *) menu);
     w = menu->cellWidth;
-    lim = w * lim; if (w) {} // FAKE: found by the traced-allocator lever sweep; keeps w live so the sum takes a2
+    lim = w * lim; if (w) {} // karodo
     if ((menu->scrollX + menu->scrollSpeedX) >= lim)
     {
       menu->scrollX -= lim;

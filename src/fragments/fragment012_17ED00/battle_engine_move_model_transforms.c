@@ -8,6 +8,12 @@ void BattleAnim_InitSwayOffset(ActivePokemon* pokemon, f32 y, s16 theta) {
     pokemon->rotationZ = D_FLT_82194900;
 }
 
+/**
+ * Same as BattleAnim_UpdateSwayPhysicsToTarget for a Pokemon: steps its y
+ * towards `height` by `delta_y`, updates the damped z/y rotation from
+ * delta_theta, zeroes the x rotation and moves the owner's display object by the
+ * offset at the owner's y rotation plus 90 degrees.
+ */
 void BattleAnim_UpdateTransform(ActivePokemon* owner, ActivePokemon* animated_pokemon, f32 height, f32 delta_y, s32 delta_theta) {
     f32 temp_attacker_rotation_z;
     f32 temp_attacker_y1;
@@ -26,7 +32,7 @@ void BattleAnim_UpdateTransform(ActivePokemon* owner, ActivePokemon* animated_po
 
     temp_attacker_y2 = animated_pokemon->y;
     if (height <= temp_attacker_y2) {
-        if (&animated_pokemon->modelTransform.rotation) {}  // FAKE
+        if (&animated_pokemon->modelTransform.rotation) {} // karodo
         temp_attacker_y2 = 0.0f;
     }
 
@@ -46,6 +52,12 @@ void BattleAnim_UpdateTransform(ActivePokemon* owner, ActivePokemon* animated_po
     Vec3f_AddInPlace(&owner->displayObject.position, &rotation);
 }
 
+/**
+ * Steps animated_object->y towards `target` by `delta`, then updates the model's
+ * z/y rotation as a damped sway driven by theta0 (the sway offset drops to 0 once
+ * the target is reached). Zeroes the x rotation and moves the Poke Ball position
+ * by the sway offset at angle theta1.
+ */
 void BattleAnim_UpdateSwayPhysicsToTarget(UNUSED ActivePokemon* owner, ActivePokemon* animated_object, f32 target, f32 delta, s32 theta0, s32 theta1) {
     f32 object_z;
     f32 object_y;
@@ -64,7 +76,7 @@ void BattleAnim_UpdateSwayPhysicsToTarget(UNUSED ActivePokemon* owner, ActivePok
 
     temp_object_y = animated_object->y;
     if (target <= temp_object_y) {
-        if (&animated_object->modelTransform.rotation) {}  // FAKE
+        if (&animated_object->modelTransform.rotation) {} // karodo
         temp_object_y = 0.0f;
     }
 

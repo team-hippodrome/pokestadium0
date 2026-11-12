@@ -939,21 +939,39 @@ void func_8110CB40(s32 arg0, s32 arg1) {
     }
 }
 
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-void func_8110CB70(s8 *arg0, s32 arg1, unsigned short arg2)
-{
-  s32 var_v0;
-  s8 *var_a2;
-  *((s16 *) (((s8 *) arg0) + 2)) = arg2;
-  *((s32 *) (((s8 *) arg0) + 4)) = arg1;
-  var_v0 = 0;
-  if ((*((s16 *) (((s8 *) arg0) + 0))) > 0)
-  {
- var_a2 = arg0; do { var_v0 += 1; if (((*((s32 *) (((s8 *) var_a2) + 0x14))) != 0) && ((*((s8 *) (((s8 *) var_a2) + 0x18))) == 2)) {
-        *((s32 *) (((s8 *) var_a2) + 0x10)) = (s32) ((*((s32 *) (((s8 *) var_a2) + 0x10))) + arg1);
-      }
-      var_a2 += 0x10;
- } while (var_v0 < (*((s16 *) (((s8 *) arg0) + 0)))); }
+typedef struct AudioTableEntry8110DCC0 {
+    /* 0x00 */ s32 romAddr;
+    /* 0x04 */ u32 size;
+    /* 0x08 */ s8 medium;
+    /* 0x09 */ s8 cachePolicy;
+    /* 0x0A */ s16 shortData1;
+    /* 0x0C */ s16 shortData2;
+    /* 0x0E */ s16 shortData3;
+} AudioTableEntry8110DCC0; // size = 0x10
+
+typedef struct AudioTable8110DCC0 {
+    /* 0x00 */ s16 numEntries;
+    /* 0x02 */ s16 unkMediumParam;
+    /* 0x04 */ s32 romAddr;
+    /* 0x08 */ char pad[0x8];
+    /* 0x10 */ AudioTableEntry8110DCC0 entries[1];
+} AudioTable8110DCC0;
+
+/**
+ * Sets up an audio table loaded from ROM: stores rom_addr and unk_medium_param
+ * in the header, then adds rom_addr to the romAddr of every non-empty entry
+ * whose medium is 2. The struct is the one in battle_engine_309ED0.c.
+ */
+void func_8110CB70(AudioTable8110DCC0* table, s32 rom_addr, u16 unk_medium_param) {
+    s32 i;
+
+    table->unkMediumParam = unk_medium_param;
+    table->romAddr = rom_addr;
+    for (i = 0; i < table->numEntries; i++) {
+        if ((table->entries[i].size != 0) && (table->entries[i].medium == 2)) {
+            table->entries[i].romAddr += rom_addr;
+        }
+    }
 }
 
 extern u8* D_811858A8;

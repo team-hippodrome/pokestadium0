@@ -90,8 +90,14 @@ void func_82107428(s32 arg0, s8 *arg1, s32 arg2, s8 *arg3) {
 s32 func_80032890(s32);
 void func_80032840(s32);
 
+/**
+ * Moves the owner's thumbnail camera by up to `delta` per call towards x = 23
+ * (side 1) or x = 259 (the other side). When the camera is still at its start
+ * position (-72 or 351) and the Pokemon has no Substitute (flag 0x2000), it
+ * triggers the owner model animation. When func_80032890(side) is non-zero and
+ * the thumbnail status is 0, it sets status 2 and calls func_80032840(side).
+ */
 void BattleThumbnail_TickOwnerSlideIn(ActivePokemon* active_pokemon, s32 delta) {
-    s16 var_a0; // FAKE
     CameraNode* camera_node;
 
     active_pokemon->thumbnail.camera->node.flags |= 1;
@@ -107,13 +113,13 @@ void BattleThumbnail_TickOwnerSlideIn(ActivePokemon* active_pokemon, s32 delta) 
             active_pokemon->thumbnail.status = 2;
             func_80032840(0);
         }
-        active_pokemon->thumbnail.camera->viewport.x = Math_StepToS32(active_pokemon->thumbnail.camera->viewport.x, 0x17, delta, delta);
+        active_pokemon->thumbnail.camera->viewport.x = Math_StepToS32(active_pokemon->thumbnail.camera->viewport.x, 23, delta, delta);
     } else {
         if ((active_pokemon->thumbnail.camera->viewport.x == 351) && !(active_pokemon->state.flags & 0x2000)) {
             BattleThumbnail_TriggerOwnerModelAnimation(active_pokemon);
         }
 
-        active_pokemon->thumbnail.camera->viewport.x = Math_StepToS32(active_pokemon->thumbnail.camera->viewport.x, 0x103, delta, delta);
+        active_pokemon->thumbnail.camera->viewport.x = Math_StepToS32(active_pokemon->thumbnail.camera->viewport.x, 259, delta, delta);
 
         if ((func_80032890(1) != 0) && (active_pokemon->thumbnail.status == 0)) {
             active_pokemon->thumbnail.status = 2;

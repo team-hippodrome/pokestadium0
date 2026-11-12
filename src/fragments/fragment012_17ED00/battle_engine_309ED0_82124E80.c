@@ -1315,5 +1315,5 @@ void func_82128848(CameraNode* arg0) {
             break;
     }
 
-    if (!arg0) {} // FAKE
+    if (!arg0) {} // karodo
 }

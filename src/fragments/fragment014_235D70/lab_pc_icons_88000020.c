@@ -22,10 +22,14 @@ extern M2C_UNK D_002B1360;
 extern M2C_UNK D_00162BE0;
 extern M2C_UNK D_00175570;
 
+/**
+ * Queues the fragment for lab menu choice arg0 with func_80025BA0 and returns
+ * the next state (0x8040, or 0x8060 for choice 6, which loads nothing).
+ */
 s32 func_88000020(u32 arg0) {
     s32 ret;
 
-    // FAKE: each "ret = ...; func_80025BA0(...);" pair has to share one line (as a macro
+    // Each "ret = ...; func_80025BA0(...);" pair has to share one line (as a macro
     // expansion would) for IDO to schedule it like the retail code.
     switch (arg0) {
         case 0:

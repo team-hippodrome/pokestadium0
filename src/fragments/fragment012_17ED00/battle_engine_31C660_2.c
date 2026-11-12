@@ -220,19 +220,19 @@ void BattleAnim_CallbackDescriptor25AlphaFadeInHoldOut(Particle* arg0) {
     }
 }
 
-s32 func_8213C484();                                /* extern */
+s16 func_8213C484(Particle* arg0);
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
-M2C_UNK func_8214050C(s8 *, u8);                  /* extern */
-M2C_UNK func_82143408(s8 *, s32);                 /* extern */
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-void func_821448D4(s8 *arg0)
-{
-  func_82143408(arg0, func_8213C484() & 0xFFFF);
-  if (arg0)
-  {
-  }
-  func_8214050C(arg0, *((u8 *) (((s8 *) arg0) + 0xC9)));
-  func_8213C9D0(arg0);
+void func_8214050C(Particle* arg0, u8 arg1);
+void func_82143408(Particle* arg0, u16 arg1);
+
+/**
+ * Passes the particle's unk_CF byte to func_82143408 and its unk_CD byte to
+ * func_8214050C, then calls func_8213C9D0.
+ */
+void func_821448D4(Particle* arg0) {
+    func_82143408(arg0, func_8213C484(arg0));
+    func_8214050C(arg0, arg0->unk_CD);
+    func_8213C9D0((s8*)arg0);
 }
 
 void BattleAnim_CallbackDescriptor25AlphaHoldFadeOut(Particle* arg0) {

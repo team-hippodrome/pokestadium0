@@ -149,32 +149,26 @@ void func_81109678(s32 arg0) {
     }
 }
 
-M2C_UNK func_81112E00(M2C_UNK *);                   /* extern */
-extern s8 D_81184668;
+typedef struct unk_D_81184668 {
+    /* 0x000 */ u32 enabled : 1;
+    /* 0x000 */ u32 unk_00_bits : 31;
+    /* 0x004 */ u8 seqId;
+    /* 0x005 */ char unk005[0x15C - 0x5];
+} unk_D_81184668; // size = 0x15C
+
+void func_81112E00(unk_D_81184668* seqPlayer);
+extern unk_D_81184668 D_81184668[];
 extern s16 D_811858CC;
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-void func_81109764(s32 arg0)
-{
-  s32 new_var2;
-  s8 *new_var;
-  s32 var_s1;
-  var_s1 = 0;
-  if (D_811858CC > 0)
-  {
-    new_var = &D_81184668;
-    new_var = new_var;
-    new_var2 = arg0;
-    do
-    {
-      if (((((u32) (*((u32 *) (((s8 *) new_var) + 0)))) >> 0x1F) != 0) && (new_var2 == (*((u8 *) (((s8 *) new_var) + 4)))))
-      {
-        func_81112E00(new_var);
-      }
-      var_s1 += 1;
-      new_var += 0x15C;
+
+/** Calls func_81112E00 on every enabled sequence player that is playing sequence arg0. */
+void func_81109764(s32 arg0) {
+    s32 i;
+
+    for (i = 0; i < D_811858CC; i++) {
+        if (D_81184668[i].enabled && D_81184668[i].seqId == arg0) {
+            func_81112E00(&D_81184668[i]);
+        }
     }
-    while (var_s1 < D_811858CC);
-  }
 }
 
 u32 GbApu_AllocZeroed(unk_func_81206FA0* arg0, s32 arg1) {
@@ -804,6 +798,14 @@ extern s32 D_8118465C;
 void func_8110AFF0(void);
 void func_8110BFB0(void);
 
+/**
+ * Steps the audio reset state machine in D_81184657 from 5 down to 0, waiting
+ * D_8118465C updates between steps (halved when D_811858B8.unk_00 is 2): state 5
+ * calls func_81112E00 on each sequence player, state 4 releases the enabled
+ * notes, state 2 calls func_8110AC14 and then func_8110BFB0, and state 1 calls
+ * func_8110AFF0 and clears the three output buffers. Returns 1 while the state
+ * is 3 or more, otherwise 0.
+ */
 s32 func_8110AC8C(void) {
     s32 i;
     s32 j;
@@ -818,7 +820,7 @@ s32 func_8110AC8C(void) {
     switch (D_81184657) {
         case 5:
             for (i = 0; i < D_811858B8.unk_14; i++) {
-                func_81112E00(&D_81184668 + i * 0x15C);
+                func_81112E00(&D_81184668[i]);
             }
             D_8118465C = 4 / sp24;
             D_81184657--;
@@ -856,14 +858,14 @@ s32 func_8110AC8C(void) {
                 D_81184657--;
                 func_8110BFB0();
             }
-            if (!D_811858B8.unk_00) {} // FAKE: empty test found by the permuter; keeps &D_811858B8 in a saved register
+            if (!D_811858B8.unk_00) {} // karodo
             break;
         case 1:
             func_8110AFF0();
             D_81184657 = 0;
             for (i = 0; i < 3; i++) {
                 D_811859C4[i] = D_811858B8.unk_08;
-                for (j = 0; j < 0x7E0; j++) {
+                for (j = 0; j < 2016; j++) {
                     D_811859B8[i][j] = 0;
                 }
             }
