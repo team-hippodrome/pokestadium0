@@ -376,62 +376,62 @@ void LabPCList_ApplyVitaminItem(u8** arg0, u8** arg1, Msg89103F04* arg2) {
     switch (**arg1) {
         case 0x23:
             arg2->text = D_8910DDFC;
-            arg2->oldValue = mon->unk_26;
+            arg2->oldValue = mon->maxHp;
             mon->unk_14 += 0xA00;
             if (mon->unk_14 > 0x6400) {
                 mon->unk_14 = 0x6400;
             }
-            mon->unk_26 = func_80020234(1, mon->unk_00.unk_00, mon->unk_14, mon->unk_24, mon->unk_1E);
-            arg2->newValue = mon->unk_26;
+            mon->maxHp = func_80020234(1, mon->species.id, mon->unk_14, mon->level, mon->unk_1E);
+            arg2->newValue = mon->maxHp;
             break;
         case 0x24:
             arg2->text = D_8910DE04;
-            arg2->oldValue = mon->unk_28;
+            arg2->oldValue = mon->attack;
             mon->unk_16 += 0xA00;
             if (mon->unk_16 > 0x6400) {
                 mon->unk_16 = 0x6400;
             }
-            mon->unk_28 = func_80020234(2, mon->unk_00.unk_00, mon->unk_16, mon->unk_24, mon->unk_1E);
-            arg2->newValue = mon->unk_28;
+            mon->attack = func_80020234(2, mon->species.id, mon->unk_16, mon->level, mon->unk_1E);
+            arg2->newValue = mon->attack;
             break;
         case 0x25:
             arg2->text = D_8910DE10;
-            arg2->oldValue = mon->unk_2A;
+            arg2->oldValue = mon->defense;
             mon->unk_18 += 0xA00;
             if (mon->unk_18 > 0x6400) {
                 mon->unk_18 = 0x6400;
             }
-            mon->unk_2A = func_80020234(3, mon->unk_00.unk_00, mon->unk_18, mon->unk_24, mon->unk_1E);
-            arg2->newValue = mon->unk_2A;
+            mon->defense = func_80020234(3, mon->species.id, mon->unk_18, mon->level, mon->unk_1E);
+            arg2->newValue = mon->defense;
             break;
         case 0x26:
             arg2->text = D_8910DE1C;
-            arg2->oldValue = mon->unk_2C;
+            arg2->oldValue = mon->speed;
             mon->unk_1A += 0xA00;
             if (mon->unk_1A > 0x6400) {
                 mon->unk_1A = 0x6400;
             }
-            mon->unk_2C = func_80020234(4, mon->unk_00.unk_00, mon->unk_1A, mon->unk_24, mon->unk_1E);
-            arg2->newValue = mon->unk_2C;
+            mon->speed = func_80020234(4, mon->species.id, mon->unk_1A, mon->level, mon->unk_1E);
+            arg2->newValue = mon->speed;
             break;
         case 0x27:
             arg2->text = D_8910DE28;
-            arg2->oldValue = mon->unk_2E;
+            arg2->oldValue = mon->special;
             mon->unk_1C += 0xA00;
             if (mon->unk_1C > 0x6400) {
                 mon->unk_1C = 0x6400;
             }
-            mon->unk_2E = func_80020234(5, mon->unk_00.unk_00, mon->unk_1C, mon->unk_24, mon->unk_1E);
-            arg2->newValue = mon->unk_2E;
+            mon->special = func_80020234(5, mon->species.id, mon->unk_1C, mon->level, mon->unk_1E);
+            arg2->newValue = mon->special;
             break;
         case 0x28:
             arg2->text = D_8910DE34;
-            arg2->oldValue = mon->unk_24;
-            oldMaxHp = mon->unk_26;
-            mon->unk_10 = func_8002057C(mon->unk_00.unk_00, mon->unk_24 + 1);
+            arg2->oldValue = mon->level;
+            oldMaxHp = mon->maxHp;
+            mon->unk_10 = func_8002057C(mon->species.id, mon->level + 1);
             func_800203FC(mon);
-            mon->hp += mon->unk_26 - oldMaxHp;
-            arg2->newValue = mon->unk_24;
+            mon->hp += mon->maxHp - oldMaxHp;
+            arg2->newValue = mon->level;
             break;
     }
     func_8910A764(arg1);
@@ -469,7 +469,7 @@ void func_891041D8(u8** arg0, s32 arg1, s32 arg2, Msg891041D8* arg3) {
     if (1) {} // karodo
     arg3->text = D_8910E3B8;
     arg3->unk04 = 0;
-    basePp = gMoveData[ptr[9] - 1].unk_05;
+    basePp = gMoveData[ptr[9] - 1].pp;
     step = basePp / 5;
     if (step >= 7) {
         step = 7;
@@ -496,7 +496,7 @@ void func_89104314(u8** arg0, u8** arg1, s32 arg2) {
 
     ptr = (u8*)arg0 + arg2 + 8;
     ptr[9] = Move_GetIdFromTableIndex(var_a0);
-    ptr[0x20] = gMoveData[ptr[9] - 1].unk_05;
+    ptr[0x20] = gMoveData[ptr[9] - 1].pp;
 
     if (*arg1[0] >= 0xC9) {
         LabPCList_ConsumeUsedTmItem(arg1);

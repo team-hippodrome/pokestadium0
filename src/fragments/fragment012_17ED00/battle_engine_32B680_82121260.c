@@ -56,18 +56,18 @@ void func_8210C6F8(void);
  * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
 void BattleScene_UpdateBRollCameraSequence(CameraNode* arg0) {
-    if (sBattleScene.scene->unk_1C == 1) {
-        if ((sBattleScene.scene->unk_30 == 0) && (sActivePokemon[0]->thumbnail.camera->viewport.x == 0x17) &&
+    if (sBattleScene.scene->mode == 1) {
+        if ((sBattleScene.scene->transitionStep == 0) && (sActivePokemon[0]->thumbnail.camera->viewport.x == 0x17) &&
             (sActivePokemon[1]->thumbnail.camera->viewport.x == 0x103)) {
             func_8210E924();
         } else {
             func_8210C6F8();
         }
     }
-    if (sBattleScene.scene->unk_1C == 5) {
+    if (sBattleScene.scene->mode == 5) {
         func_8210E924();
     }
-    switch (sBattleScene.scene->unk_20) {
+    switch (sBattleScene.scene->phaseStep) {
         case 1:
             func_82120A34(arg0);
             break;

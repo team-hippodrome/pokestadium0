@@ -153,7 +153,7 @@ void func_82132C14(UNUSED CameraNode* arg0) {
     if (func_821217DC(0xA) != 0) {
         st->rosterIndex++;
         mon = &((ActivePokemon*)D_8219A580)->teamRoster->pokemonPicked[st->rosterIndex];
-        ((ActivePokemon*)D_8219A580)->sessionTeams->displayModel = mon->unk_00.unk_00;
+        ((ActivePokemon*)D_8219A580)->sessionTeams->displayModel = mon->species.id;
         ((ActivePokemon*)D_8219A580)->sessionTeams->unk_04 = (TeamRoster*)&((ActivePokemon*)D_8219A580)->teamRoster->pokemonPicked[st->rosterIndex];
         ((ActivePokemon*)D_8219A580)->sessionTeams->uniqueStatusFlags |= 0x80;
         M2C_FIELD(D_8219A5A0, s32*, 0x20) = M2C_FIELD(D_8219A5A0, s32*, 0x20) + 1;
@@ -196,7 +196,7 @@ void func_82132C14(CameraNode* arg0);
 void func_82132CDC(CameraNode* arg0);
 
 void func_82132D60(CameraNode* arg0) {
-    switch (sBattleScene.scene->unk_20) {
+    switch (sBattleScene.scene->phaseStep) {
         case 0:
             func_821329F8((s32)arg0);
             break;

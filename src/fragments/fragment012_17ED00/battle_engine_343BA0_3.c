@@ -41,7 +41,7 @@ void BattleScene_FinalPresentationFrameActiveOwner(CameraNode* arg0) {
     BattleScene_SetCameraEyeFromAt(arg0, 0, BattleScene_GetParticipantFacingAngle(sActivePokemon[D_8219A760]), sp3C, 0.0f);
 
     if (sActivePokemon[0]) {}  // karodo
-    sBattleScene.scene->unk_20 += 1;
+    sBattleScene.scene->phaseStep += 1;
     if (D_8219A760) {}  // karodo
 }
 
@@ -57,9 +57,9 @@ void func_82131880(CameraNode* arg0);
 void func_821329F8(s32 arg0);
 void func_82132F88(CameraNode* arg0);
 void func_82134374(CameraNode* arg0, UNUSED s32 arg1, UNUSED s32 arg2) {
-    sBattleScene.scene->unk_40 = 0;
-    sBattleScene.scene->unk_60 = 30.0f;
-    switch (sBattleScene.scene->unk_1C) {
+    sBattleScene.scene->winner = 0;
+    sBattleScene.scene->verticalFieldOfView = 30.0f;
+    switch (sBattleScene.scene->mode) {
         case 0:
             BattleScene_FinalPresentationFrameActiveOwner(arg0);
             break;

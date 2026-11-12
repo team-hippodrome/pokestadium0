@@ -80,7 +80,7 @@ void func_8214E67C(s8 *arg0) {
 void BattleAnim_ApplyThunderThunderboltUseRadialOffset(Particle* arg0) {
     f32 sp1C = 0.0f;
 
-    switch (BattleAnim_GetOwnerSpecies(arg0->unk_10)) {
+    switch (BattleAnim_GetOwnerSpecies(arg0->pokemon)) {
         case 0x6:
             sp1C = 15.0f;
             break;

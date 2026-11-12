@@ -547,7 +547,7 @@ void BattleMenu_DrawConfirmButtonLabel(unk_D_848037A0* arg0) {
     BattleMenu_DrawPanelBorder(sp26, sp24, 0x76, 0x20, arg0->unk_0001);
     Font_BeginTranslucentTextRendering();
     Font_SetActive(8, 0);
-    Font_Printf(sp26 + 9, sp24 + 5, arg0->unk_001C->unk_008);
+    Font_Printf(sp26 + 9, sp24 + 5, arg0->unk_001C->trainerName);
     Font_EndTexturedTextRendering();
 }
 
@@ -607,7 +607,7 @@ void func_823017EC(void) {
     s32 var_v0;
     unk_D_84803548* ptr;
 
-    if (D_82302B48[1].unk_001C->unk_000 & 2) {
+    if (D_82302B48[1].unk_001C->isHuman & 2) {
         if (D_82302BD0->ruleCategory != 0) {
             var_v0 = 3;
         } else {
@@ -650,12 +650,12 @@ s32 BattleMenu_IsSlotAlreadySelected(unk_D_848037A0* arg0, s8 arg1) {
 s32 func_823018F8(unk_D_848037A0* arg0) {
     s32 sum;
     s32 i;
-    s32 locked = (arg0->unk_001C->unk_000 & 2) != 0;
+    s32 locked = (arg0->unk_001C->isHuman & 2) != 0;
 
     if ((D_82302BD0->ruleCategory == 1) && !locked) {
         sum = 0;
         for (i = 0; i < arg0->unk_000B; i++) {
-            sum += arg0->unk_0018[arg0->unk_000C[i]].unk_24;
+            sum += arg0->unk_0018[arg0->unk_000C[i]].level;
         }
         if ((arg0->unk_000B == 2) && (sum >= 0x6A)) {
             return 1;
@@ -672,7 +672,7 @@ s32 func_823019AC(unk_D_848037A0* arg0) {
 
     if (D_82302BD0->ruleCategory != 0) {
         var_v1 = 3;
-    } else if (arg0->unk_001C->unk_000 & 2) {
+    } else if (arg0->unk_001C->isHuman & 2) {
         var_v1 = arg0->unk_0016;
         if (D_82302B48[0].unk_0016 < var_v1) {
             var_v1 = D_82302B48[0].unk_0016;
@@ -761,7 +761,7 @@ void BattleMenu_HandleOrderSelectPanel_PartyInput(Controller* arg0, unk_D_848037
         // clang-format on
     }
 
-    if (arg0->unk_0A & 0x10) {
+    if (arg0->buttonReleased & 0x10) {
         arg1->unk_0009 = 0;
         arg1->unk_0006 = 2;
     }
@@ -791,7 +791,7 @@ void BattleMenu_HandleOrderSelectPanel_ConfirmInput(Controller* arg0, unk_D_8480
         arg1->unk_0009 = 1;
         arg1->unk_0006 = 2;
     }
-    if (arg0->unk_0A & 0x10) {
+    if (arg0->buttonReleased & 0x10) {
         arg1->unk_0009 = 0;
         arg1->unk_0006 = 2;
     }
@@ -841,7 +841,7 @@ s32 BattleMenu_UpdateOrderSelectPanel(s32 arg0, unk_D_848037A0* arg1) {
     Controller* var_a0;
     s32 sp18 = 0;
 
-    if (arg1->unk_001C->unk_000 & 2) {
+    if (arg1->unk_001C->isHuman & 2) {
         var_a0 = &D_82302BD8;
     } else {
         var_a0 = &gControllers[arg1->unk_0001];
@@ -992,9 +992,9 @@ void BattleMenu_CommitOrderSelection(void) {
 
     while (var_s4-- > 0) {
         temp_s1 = var_s2->unk_001C;
-        if (temp_s1->unk_000 & 2) {
+        if (temp_s1->isHuman & 2) {
             temp_s1->numberOfPokemonBrought = temp_s1->rosterInfo->numberOfPokemonCanBePicked;
-            _bcopy(temp_s1->rosterInfo->unk_028, temp_s1->pokemonPicked, sizeof(temp_s1->pokemonPicked));
+            _bcopy(temp_s1->rosterInfo->battleMon, temp_s1->pokemonPicked, sizeof(temp_s1->pokemonPicked));
         } else {
             BattleMenu_AppendUnpickedSlots(var_s2->unk_000C, var_s2->unk_000B);
             temp_s1->numberOfPokemonBrought = var_s2->unk_000B;
@@ -1031,12 +1031,12 @@ void BattleMenu_AddOrderSelectPanel(s16 arg0, s16 arg1, TeamRoster* arg2, s32 ar
     temp_v1->unk_0012 = arg0;
     temp_v1->unk_0014 = arg1;
     temp_v1->unk_0016 = arg2->rosterInfo->numberOfPokemonCanBePicked;
-    temp_v1->unk_0018 = arg2->rosterInfo->unk_028;
+    temp_v1->unk_0018 = arg2->rosterInfo->battleMon;
     temp_v1->unk_001C = arg2;
 
     for (i = 0; i < arg2->rosterInfo->numberOfPokemonCanBePicked; i++, j += 4) {
-        Pokemon_PrepareBattleMon(&arg2->rosterInfo->unk_028[i]);
-        func_8001833C((unk_func_8001A024*)D_82302BCC, j, &arg2->rosterInfo->unk_028[i], D_82302800[arg2->controllerPort]);
+        Pokemon_PrepareBattleMon(&arg2->rosterInfo->battleMon[i]);
+        func_8001833C((unk_func_8001A024*)D_82302BCC, j, &arg2->rosterInfo->battleMon[i], D_82302800[arg2->controllerPort]);
     }
 
     D_82302B44++;

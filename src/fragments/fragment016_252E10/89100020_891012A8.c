@@ -180,7 +180,7 @@ void func_891012A8(s32 x, s32 y, Entry891012A8 *entry, s32 row, s32 flags, Ctx89
     else
     {
       func_8001AB6C();
-      if (1 & D_80064C5C[entry->species - 1].unk_0C)
+      if (1 & D_80064C5C[entry->species - 1].cupEligibilityFlags)
       {
         func_8001AA9C(0xFF, 0xC8, 0xA0, 0xFF);
       }

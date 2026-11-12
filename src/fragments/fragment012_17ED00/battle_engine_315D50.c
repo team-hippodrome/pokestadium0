@@ -497,10 +497,10 @@ void func_82134FD0(ActivePokemon* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
     BattleMon* mon = &arg0->teamRoster->pokemonPicked[arg0->state.rosterIndex];
 
-    func_80041940(func_82107A5C(arg0), mon->hp, mon->unk_26);
+    func_80041940(func_82107A5C(arg0), mon->hp, mon->maxHp);
     if (arg0->displayObject.objectType != 0x98) {
         if ((mon->statusCondition & 7) || (mon->statusCondition & 0x20) ||
-            (sBattleScene.scene->unk_48 == 0x1F) || (sBattleScene.scene->unk_48 == 0x1B)) {
+            (sBattleScene.scene->moveEffectKind == 0x1F) || (sBattleScene.scene->moveEffectKind == 0x1B)) {
             func_80042508(func_82107A5C(arg0) | 0x10);
         } else {
             func_80042508(func_82107A5C(arg0));

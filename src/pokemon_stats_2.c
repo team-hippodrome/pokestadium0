@@ -799,7 +799,7 @@ void func_800224E8(BattleMon* arg0, s32 arg1, s32 arg2, s32 arg3) {
     GbSaveBoxZero* sp2C = (GbSaveBoxZero*)GbSave_GetBoxEntry(arg1, arg2);
 
     if (sp2C != NULL) {
-        arg0->unk_04 = arg0->unk_24;
+        arg0->unk_04 = arg0->level;
         Pokemon_ToGbRecord(arg0, &sp2C->unk_020[arg3]);
         Text_TranscodeName(sp2C->unk_4B2[arg3], (char*)arg0->unk_30);
         _bcopy((u8*)arg0 + 0x3D, sp2C->unk_3FE[arg3], 3);
@@ -926,12 +926,12 @@ void Deck_DeleteEntry(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
 
             case 34:
                 sp1C->unk_25C = arg3;
-                sp1C->unk_25D[arg3].unk_00 = 0xFF;
+                sp1C->unk_25D[arg3].id = 0xFF;
                 break;
 
             case 35:
                 sp1C->unk_044 = arg3;
-                sp1C->unk_045[arg3].unk_00 = 0xFF;
+                sp1C->unk_045[arg3].id = 0xFF;
                 break;
         }
     }
@@ -969,12 +969,12 @@ void Deck_AppendEntry(s32 arg0, s32 arg1, s32 arg2) {
 
             case 34:
                 sp1C->unk_25C = sp18;
-                sp1C->unk_25D[sp18].unk_00 = 0xFF;
+                sp1C->unk_25D[sp18].id = 0xFF;
                 break;
 
             case 35:
                 sp1C->unk_044 = sp18;
-                sp1C->unk_045[sp18].unk_00 = 0xFF;
+                sp1C->unk_045[sp18].id = 0xFF;
                 break;
         }
     }
@@ -1010,11 +1010,11 @@ s32 Deck_ReadEntry(s32 arg0, s32 arg1, s32 arg2, s32 arg3, BattleMon* arg4) {
                 break;
 
             case 35:
-                arg4->unk_00 = temp_v0->unk_045[arg3];
+                arg4->species = temp_v0->unk_045[arg3];
                 break;
 
             case 34:
-                arg4->unk_00 = temp_v0->unk_25D[arg3];
+                arg4->species = temp_v0->unk_25D[arg3];
                 break;
         }
         sp1C = 1;
@@ -1056,11 +1056,11 @@ s32 Deck_WriteEntry(s32 arg0, s32 arg1, s32 arg2, s32 arg3, unk_func_88205880_00
                 break;
 
             case 35:
-                ptr->unk_045[arg3] = arg4->unk_000[0].unk_00;
+                ptr->unk_045[arg3] = arg4->unk_000[0].species;
                 break;
 
             case 34:
-                ptr->unk_25D[arg3] = arg4->unk_000[0].unk_00;
+                ptr->unk_25D[arg3] = arg4->unk_000[0].species;
                 break;
         }
 

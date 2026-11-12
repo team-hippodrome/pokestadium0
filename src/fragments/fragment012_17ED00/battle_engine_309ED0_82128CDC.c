@@ -28,7 +28,7 @@ void func_82128CDC(CameraNode* arg0, s32 arg1) {
     func_82106374((s32)sActivePokemon[1]);
     if ((func_821250D4() == 0) && (func_82125F54() == 0)) {
         func_82105FCC(D_8219A544);
-        if (sBattleScene.scene->unk_48 == 0xC) {
+        if (sBattleScene.scene->moveEffectKind == 0xC) {
             arg1 = 0;
         }
         if (M2C_FIELD(sp1C, u16*, 0x36) & 0x400) {
@@ -64,20 +64,20 @@ void func_82128CDC(CameraNode* arg0, s32 arg1) {
 }
 
 void func_82128E34(s32 arg0) {
-    switch (sBattleScene.scene->unk_3C) {
+    switch (sBattleScene.scene->phaseSubstep) {
         case 0:
             func_82125580();
             break;
         case 1:
             if (func_82105724((ActivePokemon*)D_8219A544, 0x14) != 0) {
-                func_8211F034(D_8219A520 + 0xC8, sBattleScene.scene->unk_2C);
+                func_8211F034(D_8219A520 + 0xC8, sBattleScene.scene->actingSide);
                 func_8212188C();
-                if (sBattleScene.scene->unk_48 == 0x14) {
-                    func_82104C68(sActivePokemon[sBattleScene.scene->unk_2C], 0x16);
+                if (sBattleScene.scene->moveEffectKind == 0x14) {
+                    func_82104C68(sActivePokemon[sBattleScene.scene->actingSide], 0x16);
                 } else {
-                    func_82104C68(sActivePokemon[sBattleScene.scene->unk_2C], 3);
+                    func_82104C68(sActivePokemon[sBattleScene.scene->actingSide], 3);
                 }
-                sBattleScene.scene->unk_20++;
+                sBattleScene.scene->phaseStep++;
                 func_82125570();
             }
             break;
@@ -106,7 +106,7 @@ void func_82128F2C(CameraNode* arg0, s32 arg1) {
 }
 
 void func_82128FBC(CameraNode* arg0) {
-    switch (sBattleScene.scene->unk_3C) {
+    switch (sBattleScene.scene->phaseSubstep) {
         case 0:
             M2C_FIELD(sBattleScene.scene, s32*, 0x50) = 4;
             if (BattleScene_AdvanceCameraFrameCounter(0x14) != 0) {
@@ -127,14 +127,14 @@ void func_82128FBC(CameraNode* arg0) {
                 BattleScene_ResetCameraFrameCounter();
                 BattleScene_ClearPhaseFlag();
                 M2C_FIELD(sBattleScene.scene, s32*, 0x50) = 0;
-                sBattleScene.scene->unk_20++;
+                sBattleScene.scene->phaseStep++;
             }
             break;
     }
 }
 
 void func_821290CC(CameraNode* arg0) {
-    switch (sBattleScene.scene->unk_3C) {
+    switch (sBattleScene.scene->phaseSubstep) {
         case 0:
             M2C_FIELD(sBattleScene.scene, s32*, 0x50) = 4;
             if (BattleScene_AdvanceCameraFrameCounter(0x14) != 0) {
@@ -156,14 +156,14 @@ void func_821290CC(CameraNode* arg0) {
                 BattleScene_ResetCameraFrameCounter();
                 BattleScene_ClearPhaseFlag();
                 M2C_FIELD(sBattleScene.scene, s32*, 0x50) = 0;
-                sBattleScene.scene->unk_20++;
+                sBattleScene.scene->phaseStep++;
             }
             break;
     }
 }
 
 void func_821291E4(CameraNode* arg0) {
-    switch (sBattleScene.scene->unk_3C) {
+    switch (sBattleScene.scene->phaseSubstep) {
         case 0:
             M2C_FIELD(sBattleScene.scene, s32*, 0x50) = 4;
             if (BattleScene_AdvanceCameraFrameCounter(0x14) != 0) {
@@ -185,14 +185,14 @@ void func_821291E4(CameraNode* arg0) {
                 BattleScene_ResetCameraFrameCounter();
                 BattleScene_ClearPhaseFlag();
                 M2C_FIELD(sBattleScene.scene, s32*, 0x50) = 0;
-                sBattleScene.scene->unk_20++;
+                sBattleScene.scene->phaseStep++;
             }
             break;
     }
 }
 
 void func_821292FC(CameraNode* arg0) {
-    switch (sBattleScene.scene->unk_3C) {
+    switch (sBattleScene.scene->phaseSubstep) {
         case 0:
             M2C_FIELD(sBattleScene.scene, s32*, 0x50) = 4;
             if (BattleScene_AdvanceCameraFrameCounter(0x14) != 0) {
@@ -214,16 +214,16 @@ void func_821292FC(CameraNode* arg0) {
                 BattleScene_ResetCameraFrameCounter();
                 BattleScene_ClearPhaseFlag();
                 M2C_FIELD(sBattleScene.scene, s32*, 0x50) = 0;
-                sBattleScene.scene->unk_20++;
+                sBattleScene.scene->phaseStep++;
             }
             break;
     }
 }
 
 void func_82129414(CameraNode* arg0) {
-    switch (sBattleScene.scene->unk_3C) {
+    switch (sBattleScene.scene->phaseSubstep) {
         case 0:
-            sBattleScene.scene->unk_50 = 4;
+            sBattleScene.scene->cameraPresetId = 4;
             if (func_821217DC(0x14) != 0) {
                 func_821255B4((s8*)arg0);
                 func_82125580();
@@ -234,7 +234,7 @@ void func_82129414(CameraNode* arg0) {
             }
             break;
         case 1:
-            sBattleScene.scene->unk_50 = 4;
+            sBattleScene.scene->cameraPresetId = 4;
             func_821228B0(arg0, (ActivePokemon*)D_8219A544);
             if (func_82121798(0xF) != 0) {
                 func_8211EE8C();
@@ -243,8 +243,8 @@ void func_82129414(CameraNode* arg0) {
                 func_8211EE8C();
                 func_8212188C();
                 func_82125570();
-                sBattleScene.scene->unk_50 = 0;
-                sBattleScene.scene->unk_20++;
+                sBattleScene.scene->cameraPresetId = 0;
+                sBattleScene.scene->phaseStep++;
             }
             func_8210C1A8(&M2C_FIELD(arg0, f32*, 0x2C), 60.0f, 0.03f);
             break;
@@ -252,7 +252,7 @@ void func_82129414(CameraNode* arg0) {
 }
 
 void func_8212954C(CameraNode* arg0) {
-    if (sBattleScene.scene->unk_3C == 0) {
+    if (sBattleScene.scene->phaseSubstep == 0) {
         D_8219A568 = BattleAnim_RandomRange(3);
         if (D_8219A568 >= 4) {
             D_8219A568 = 0;
@@ -275,7 +275,7 @@ void func_8212954C(CameraNode* arg0) {
 }
 
 void func_8212960C(CameraNode* arg0) {
-    if (sBattleScene.scene->unk_3C == 0) {
+    if (sBattleScene.scene->phaseSubstep == 0) {
         D_8219A568 = BattleAnim_RandomRange(4);
         if (D_8219A568 >= 5) {
             D_8219A568 = 0;
@@ -301,7 +301,7 @@ void func_8212960C(CameraNode* arg0) {
 }
 
 void func_821296E4(CameraNode* arg0) {
-    if (sBattleScene.scene->unk_3C == 0) {
+    if (sBattleScene.scene->phaseSubstep == 0) {
         D_8219A568 = BattleAnim_RandomRange(4);
         if (D_8219A568 >= 5) {
             D_8219A568 = 0;
@@ -374,13 +374,13 @@ void func_821297BC(CameraNode* arg0) {
 }
 
 void func_821299B0(CameraNode* arg0) {
-    switch (sBattleScene.scene->unk_3C) {
+    switch (sBattleScene.scene->phaseSubstep) {
         case 0:
             if (BattleScene_AdvanceCameraFrameCounter(0x14) != 0) {
-                sBattleScene.scene->unk_50 = 4;
+                sBattleScene.scene->cameraPresetId = 4;
                 BattleScene_SetPhaseFlag();
                 Battle_ClearMessageCursor();
-                func_8211F034(D_8219A520 + 0x148, sBattleScene.scene->unk_2C);
+                func_8211F034(D_8219A520 + 0x148, sBattleScene.scene->actingSide);
                 func_82124984((ActivePokemon*)D_8219A544, arg0, 3);
                 func_8212239C((ActivePokemon*)D_8219A544, arg0);
                 BattleScene_ResetCameraSubstepCounter();
@@ -393,11 +393,11 @@ void func_821299B0(CameraNode* arg0) {
                 Battle_ClearMessageCursor();
             }
             if (func_82105724((ActivePokemon*)D_8219A544, 0x1E) != 0) {
-                sBattleScene.scene->unk_50 = 0;
+                sBattleScene.scene->cameraPresetId = 0;
                 Battle_ClearMessageCursor();
                 BattleScene_ResetCameraFrameCounter();
                 BattleScene_ClearPhaseFlag();
-                sBattleScene.scene->unk_20 += 1;
+                sBattleScene.scene->phaseStep += 1;
             }
             break;
     }
@@ -454,7 +454,7 @@ void func_82129AE8(CameraNode* arg0, s32 arg1) {
 
 void BattleScene_ActionSetupAnimationVariantB(CameraNode* arg0) {
     M2C_FIELD(sBattleScene.scene, s32*, 0x50) = 2;
-    switch (sBattleScene.scene->unk_3C) {
+    switch (sBattleScene.scene->phaseSubstep) {
         case 0:
             M2C_FIELD(sBattleScene.scene, s32*, 0x50) = 2;
             BattleAnim_CleanupEffects(1);
@@ -467,7 +467,7 @@ void BattleScene_ActionSetupAnimationVariantB(CameraNode* arg0) {
             func_821243DC((s32)arg0, D_8219A540, 0.0f);
             if (M2C_FIELD(sBattleScene.scene, f32*, 0x74) <= 1.0f) {
                 BattleScene_CleanupParticipantEffectMode((ActivePokemon*)D_8219A544);
-                sBattleScene.scene->unk_20++;
+                sBattleScene.scene->phaseStep++;
                 BattleScene_ResetCameraFrameCounter();
                 BattleScene_ClearPhaseFlag();
             }
@@ -477,7 +477,7 @@ void BattleScene_ActionSetupAnimationVariantB(CameraNode* arg0) {
 
 void func_82129D10(CameraNode* arg0) {
     M2C_FIELD(sBattleScene.scene, s32*, 0x50) = 2;
-    switch (sBattleScene.scene->unk_3C) {
+    switch (sBattleScene.scene->phaseSubstep) {
         case 0:
             BattleAnim_CleanupEffects(1);
             BattleScene_ClearCameraOffsetVectors();
@@ -489,7 +489,7 @@ void func_82129D10(CameraNode* arg0) {
                 func_821243DC((s32)arg0, D_8219A540, func_82107EC8(D_8219A540) * 2.0f);
                 if (M2C_FIELD(sBattleScene.scene, f32*, 0x74) <= 1.0f) {
                     BattleScene_CleanupParticipantEffectMode((ActivePokemon*)D_8219A544);
-                    sBattleScene.scene->unk_20++;
+                    sBattleScene.scene->phaseStep++;
                     BattleScene_ClearPhaseFlag();
                     BattleScene_ResetCameraFrameCounter();
                 }
@@ -571,7 +571,7 @@ void func_8212A074(s32 arg0) {
 }
 
 void func_8212A190(CameraNode* arg0) {
-    if (sBattleScene.scene->unk_3C == 0) {
+    if (sBattleScene.scene->phaseSubstep == 0) {
         D_8219A568 = BattleAnim_RandomRange(3);
         if (D_8219A568 >= 4) {
             D_8219A568 = 0;
@@ -594,7 +594,7 @@ void func_8212A190(CameraNode* arg0) {
 }
 
 void func_8212A250(CameraNode* arg0) {
-    if (sBattleScene.scene->unk_3C == 0) {
+    if (sBattleScene.scene->phaseSubstep == 0) {
         D_8219A568 = BattleAnim_RandomRange(4);
         if (D_8219A568 >= 5) {
             D_8219A568 = 0;

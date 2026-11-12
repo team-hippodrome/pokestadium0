@@ -110,7 +110,7 @@ u16 BattleAI_ApplyMoveEffectDamageOverride(BattleMonRuntime* arg0, BattleMonRunt
             break;
 
         case 40:
-            D_82199F50 = arg0->unk_0C / 2;
+            D_82199F50 = arg0->displayHp / 2;
             if (D_82199F50 == 0) {
                 D_82199F50 = 1;
             }
@@ -184,39 +184,39 @@ void func_8210EB28(u8* attacker, u8* defender) {
 void BattleAI_PrepareDamageCalcState(BattleMonRuntime* arg0, BattleMonRuntime* arg1, u8 arg2) {
     MoveData* temp_v0 = &gMoveData[arg2 - 1];
 
-    D_8219A494.unk_00 = temp_v0->unk_00;
-    D_8219A494.unk_01 = temp_v0->unk_01;
-    D_8219A494.unk_02 = temp_v0->unk_02;
-    D_8219A494.unk_03 = temp_v0->unk_03;
-    D_8219A494.unk_04 = temp_v0->unk_04;
-    D_8219A494.unk_05 = temp_v0->unk_05;
+    D_8219A494.unk_00 = temp_v0->moveId;
+    D_8219A494.unk_01 = temp_v0->effect;
+    D_8219A494.unk_02 = temp_v0->power;
+    D_8219A494.unk_03 = temp_v0->type;
+    D_8219A494.unk_04 = temp_v0->accuracy;
+    D_8219A494.unk_05 = temp_v0->pp;
 
     D_82199F50 = 0;
     D_82199F52 = D_8219A494.unk_02;
     if (D_82199F52) {
         if (D_8219A494.unk_03 < 0x14) {
-            D_82199F56 = arg1->unk_2C;
-            if (arg1->unk_4E & 4) {
+            D_82199F56 = arg1->modifiedDefense;
+            if (arg1->uniqueStatusFlags & 4) {
                 D_82199F56 *= 2;
             }
 
             if (D_82199F32 != 0) {
-                D_82199F56 = arg1->unk_3A;
-                D_82199F54 = arg0->unk_38;
+                D_82199F56 = arg1->unmodifiedDefense;
+                D_82199F54 = arg0->unmodifiedAttack;
             } else {
-                D_82199F54 = arg0->unk_2A;
+                D_82199F54 = arg0->modifiedAttack;
             }
         } else {
-            D_82199F56 = arg1->unk_30;
-            if (arg1->unk_4E & 2) {
+            D_82199F56 = arg1->modifiedSpecial;
+            if (arg1->uniqueStatusFlags & 2) {
                 D_82199F56 *= 2;
             }
 
             if (D_82199F32 != 0) {
-                D_82199F56 = arg1->unk_3E;
-                D_82199F54 = arg0->unk_3E;
+                D_82199F56 = arg1->unmodifiedSpecial;
+                D_82199F54 = arg0->unmodifiedSpecial;
             } else {
-                D_82199F54 = arg0->unk_30;
+                D_82199F54 = arg0->modifiedSpecial;
             }
         }
 
@@ -420,11 +420,11 @@ s32 func_8210F31C(ActivePokemon* arg0) {
     BattleMonRuntime* rt = &arg0->state.runtime;
     BattleMon* mon = &arg0->teamRoster->pokemonPicked[arg0->state.rosterIndex];
 
-    if (mon->hp == rt->unk_0C) {
+    if (mon->hp == rt->displayHp) {
         return 1;
     }
-    mon->hp = Math_StepToS32(mon->hp, rt->unk_0C, 1, 1);
-    if (mon->hp == rt->unk_0C) {
+    mon->hp = Math_StepToS32(mon->hp, rt->displayHp, 1, 1);
+    if (mon->hp == rt->displayHp) {
         if (arg0->displayObject.objectType == 0x98) {
             return 1;
         }

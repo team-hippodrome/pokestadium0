@@ -214,7 +214,7 @@ void func_80025830(void) {
     sp1C.modeSelection = gSessionContext.modeSelection;
     sp1C.round = gSessionContext.roundOrDemoId + 1;
     _bcopy(&D_800AF974, sp1C.opponentHistory, 8);
-    func_80025260(&sp1C, &D_800AF9A8, info->unk_028, info->numberOfPokemonCanBePicked);
+    func_80025260(&sp1C, &D_800AF9A8, info->battleMon, info->numberOfPokemonCanBePicked);
     Save_CommitTypedRecord(0x15, 0);
 }
 
@@ -645,7 +645,7 @@ void func_80026368(void)
         D_800AE8F0.unk_0000 = 4;
         info = roster->rosterInfo;
         roster->numberOfPokemonBrought = info->numberOfPokemonCanBePicked;
-        _bcopy(info->unk_028, roster->pokemonPicked, 0x1E0);
+        _bcopy(info->battleMon, roster->pokemonPicked, 0x1E0);
         func_80025B60((((u32) (((s32) (&D_82100000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0017ED00, &D_00232510_2, 0, (s32) &D_800AE8F0);
         if (prev == 1)
         {

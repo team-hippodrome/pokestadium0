@@ -8,7 +8,7 @@ void BattleAnim_NoopUpdateHook(void) {
 }
 
 void BattleScene_UpdateIntroSequence(CameraNode* arg0) {
-    switch (sBattleScene.scene->unk_20) {
+    switch (sBattleScene.scene->phaseStep) {
         case 0:
             func_82131880(arg0);
 
@@ -89,7 +89,7 @@ s32 func_821217DC(s32);
 void func_8000EEBC(Vec3f*, Vec3f*, f32, s32, s32);
 void func_82132628(CameraNode* arg0) {
     if (func_821217DC(0xF) != 0) {
-        sBattleScene.scene->unk_20++;
+        sBattleScene.scene->phaseStep++;
     }
     M2C_FIELD(sBattleScene.scene, s16*, 0x5A) += 0x2D8;
     func_8000EEBC(&arg0->view.targetPosition, &arg0->view.eyePosition, M2C_FIELD(sBattleScene.scene, f32*, 0x74), M2C_FIELD(sBattleScene.scene, s16*, 0x58), M2C_FIELD(sBattleScene.scene, s16*, 0x5A));

@@ -226,7 +226,7 @@ void BattleAnim_ApplySpeciesKeyedSpawnOffset(Particle* arg0) {
     f32 sp1C = 50.0f;
     f32 sp18 = 30.0f;
 
-    switch (BattleAnim_GetOwnerSpecies(arg0->unk_10)) {
+    switch (BattleAnim_GetOwnerSpecies(arg0->pokemon)) {
         case 3:
             sp1C = 40.0f;
             break;
@@ -644,7 +644,7 @@ void BattleAnim_CallbackDescriptor26BurstChild_InitParticle(Particle* arg0) {
 
     Particle_SetPrimColor(arg0, 0xDC, 0xFF, 0xFF);
     ParticleGfx_RecolorEnv(arg0, 0x33);
-    arg0->unk_1C = (sp26 * D_FLT_82197854) + 0.5f;
+    arg0->scale = (sp26 * D_FLT_82197854) + 0.5f;
     Particle_Field74_SetScaled_0AD8C(arg0, 2.0f);
     Particle_SetPrimAlpha(arg0, (0xFF - (sp26 << 5)) & 0xFF);
     Particle_FieldA6_SetS16_0BCA8(arg0, sp26 + 1);

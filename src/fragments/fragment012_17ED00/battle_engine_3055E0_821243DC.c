@@ -26,7 +26,7 @@ void func_82124664(s32 arg0, s32 arg1, s16 arg2) {
     f32 temp = 0.35f;
 
     M2C_FIELD(sBattleScene.scene, f32*, 0x8C) = func_8000F23C(M2C_FIELD(sBattleScene.scene, f32*, 0x98), 2.5f, temp, temp);
-    func_8210C1A8(&sBattleScene.scene->unk_74, sBattleScene.scene->unk_5C, M2C_FIELD(sBattleScene.scene, f32*, 0x8C));
+    func_8210C1A8(&sBattleScene.scene->unk_74, sBattleScene.scene->distance, M2C_FIELD(sBattleScene.scene, f32*, 0x8C));
     func_8212254C(arg1, arg0, sBattleScene.scene->unk_D0, 0, func_82107CC4(arg1), 0.0f, 0.0f);
     func_82122684(arg0, arg2, func_82107CC4(arg1), sBattleScene.scene->unk_74, 0.0f);
 }

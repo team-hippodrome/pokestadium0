@@ -29,7 +29,7 @@ void func_8A200020(s32 arg0, s32 arg1, BattleMon* arg2) {
 }
 
 void func_8A20009C(s32 arg0, s32 arg1, BattleMon* arg2, s32 arg3) {
-    BattleHud_DrawHpBarTexture(arg0 + 0x16D, arg1 + 9, 0x94, arg2->hp, arg2->unk_26);
+    BattleHud_DrawHpBarTexture(arg0 + 0x16D, arg1 + 9, 0x94, arg2->hp, arg2->maxHp);
     Font_BeginTranslucentTextRendering();
     func_80027F20(arg3);
     Font_SetActive(0x10, 0);
@@ -38,8 +38,8 @@ void func_8A20009C(s32 arg0, s32 arg1, BattleMon* arg2, s32 arg3) {
     Font_SetActive(4, 0);
     Font_Printf(arg0 + 0x13B, arg1 + 6, D_8A21D850);
     Font_SetActive(8, 0);
-    Font_Printf(arg0 + 0x11B, arg1 + 0x19, D_8A21D854, arg2->unk_24);
-    Font_Printf(arg0 + 0x175, arg1 + 0x19, D_8A21D858, arg2->hp, arg2->unk_26);
+    Font_Printf(arg0 + 0x11B, arg1 + 0x19, D_8A21D854, arg2->level);
+    Font_Printf(arg0 + 0x175, arg1 + 0x19, D_8A21D858, arg2->hp, arg2->maxHp);
     func_8A200020(arg0 + 0xD4, arg1 + 0x19, arg2);
     Font_EndTexturedTextRendering();
 }
@@ -247,10 +247,10 @@ void func_8A2009CC(s32 arg0, s32 arg1, BattleMon* arg2) {
     func_8001A944(arg0 + 0xE, arg1 + 0x47, D_8A21D8D4);
     func_8001A944(arg0 + 0xE, arg1 + 0x67, D_8A21D8E0);
     func_8001AA9C(((Color_RGBA8*)&D_800734A8)->r, ((Color_RGBA8*)&D_800734A8)->g, ((Color_RGBA8*)&D_800734A8)->b, ((Color_RGBA8*)&D_800734A8)->a);
-    func_8001A944(arg0 + 0x9E, arg1 + 7, D_8A21D8EC, arg2->unk_28);
-    func_8001A944(arg0 + 0x9E, arg1 + 0x27, D_8A21D8F0, arg2->unk_2A);
-    func_8001A944(arg0 + 0x9E, arg1 + 0x47, D_8A21D8F4, arg2->unk_2C);
-    func_8001A944(arg0 + 0x9E, arg1 + 0x67, D_8A21D8F8, arg2->unk_2E);
+    func_8001A944(arg0 + 0x9E, arg1 + 7, D_8A21D8EC, arg2->attack);
+    func_8001A944(arg0 + 0x9E, arg1 + 0x27, D_8A21D8F0, arg2->defense);
+    func_8001A944(arg0 + 0x9E, arg1 + 0x47, D_8A21D8F4, arg2->speed);
+    func_8001A944(arg0 + 0x9E, arg1 + 0x67, D_8A21D8F8, arg2->special);
     func_8001ABBC();
 }
 
@@ -271,15 +271,15 @@ void func_8A200B78(s32 arg0, s32 arg1, BattleMon* arg2) {
     Font_DisableTwoCycleTexturing();
     func_8001A384(8, 0);
     func_8001AA9C(((Color_RGBA8*)&D_800734A8)->r, ((Color_RGBA8*)&D_800734A8)->g, ((Color_RGBA8*)&D_800734A8)->b, ((Color_RGBA8*)&D_800734A8)->a);
-    func_8001A944(arg0 + 9, arg1 + 6, D_8A21D8FC, arg2->unk_00.unk_00);
-    func_8001A944(arg0 + 0xC9, arg1 + 0x21, D_8A21D904, arg2->unk_24);
+    func_8001A944(arg0 + 9, arg1 + 6, D_8A21D8FC, arg2->species.id);
+    func_8001A944(arg0 + 0xC9, arg1 + 0x21, D_8A21D904, arg2->level);
     func_8001A944(arg0 + 0x45, arg1 + 0x44, D_8A21D908);
-    func_8001A944(arg0 + 0x8D, arg1 + 0x58, D_8A21D90C, arg2->hp, arg2->unk_26);
+    func_8001A944(arg0 + 0x8D, arg1 + 0x58, D_8A21D90C, arg2->hp, arg2->maxHp);
     func_8001AA9C(0xFF, 0xC7, 0xC7, 0xFF);
     func_8001A944(arg0 + 0x23, arg1 + 0x74, D_8A21D914);
     func_8A200020(arg0 + 0xAF, arg1 + 0x74, arg2);
     func_8001ABBC();
-    BattleHud_DrawHpBarTexture(arg0 + 0x85, arg1 + 0x48, 0x94, arg2->hp, arg2->unk_26);
+    BattleHud_DrawHpBarTexture(arg0 + 0x85, arg1 + 0x48, 0x94, arg2->hp, arg2->maxHp);
 }
 
 void func_8A200D44(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
@@ -316,12 +316,12 @@ void func_8A200DE0(s32 arg0, s32 arg1, s32 arg2) {
     s32 nextLevel;
     s32 toNext;
 
-    if (((BattleMon*)arg2)->unk_24 == 100) {
+    if (((BattleMon*)arg2)->level == 100) {
         nextLevel = 100;
     } else {
-        nextLevel = ((BattleMon*)arg2)->unk_24 + 1;
+        nextLevel = ((BattleMon*)arg2)->level + 1;
     }
-    toNext = func_8A20219C(((BattleMon*)arg2)->unk_00.unk_00, nextLevel) - ((BattleMon*)arg2)->unk_10;
+    toNext = func_8A20219C(((BattleMon*)arg2)->species.id, nextLevel) - ((BattleMon*)arg2)->unk_10;
     func_8002A550(arg0, arg1, 0x122, 0xC8, D_8A203370, D_8A203374);
     func_8001AB6C();
     func_8001A384(8, 0);
@@ -421,11 +421,11 @@ void func_8A2010C8(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
         func_8001ABBC();
         if (move != -2) {
             cur = ((u8*)arg2)[i + 0x20];
-            step = gMoveData[move].unk_05 / 5;
+            step = gMoveData[move].pp / 5;
             if (step >= 7) {
                 step = 7;
             }
-            max = gMoveData[move].unk_05 + step * (cur >> 6);
+            max = gMoveData[move].pp + step * (cur >> 6);
             func_8001AB6C();
             func_8001A384(4, 0);
             func_80027F20(hl);
@@ -444,12 +444,12 @@ void func_8A201394(s32 arg0, s32 arg1, BattleMon* arg2) {
     func_8001ABE8();
     func_8001A384(0x10, 0);
     func_8001AAE4(0x5A, 0x6B, 0xFF, 0xFF);
-    func_8001A944(arg0 + 0x25, arg1 + 0x1E, *(char**)D_80064C44[arg2->unk_00.unk_00]);
+    func_8001A944(arg0 + 0x25, arg1 + 0x1E, *(char**)D_80064C44[arg2->species.id]);
     func_8001AC3C();
     func_8001A384(8, 0);
     func_8001AA9C(((Color_RGBA8*)&D_800734A8)->r, ((Color_RGBA8*)&D_800734A8)->g, ((Color_RGBA8*)&D_800734A8)->b, ((Color_RGBA8*)&D_800734A8)->a);
-    func_8001A944(arg0 + 9, arg1 + 6, "No.%03d", arg2->unk_00.unk_00);
-    func_8001A944(arg0 + 0xC9, arg1 + 0x21, "L%d", arg2->unk_24);
+    func_8001A944(arg0 + 9, arg1 + 6, "No.%03d", arg2->species.id);
+    func_8001A944(arg0 + 0xC9, arg1 + 0x21, "L%d", arg2->level);
     func_8001A384(4, 0);
     func_8001A944(arg0 + 9, arg1 + 0x3C, "タイプ");
     func_8001A944(arg0 + 0x4F, arg1 + 0x3C, "1/");

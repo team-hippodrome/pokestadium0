@@ -140,46 +140,46 @@ void func_82119CAC(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3) {
     gSPDisplayList(gDisplayListHead++, D_80060398);
 
     for (i = 0; i < 4; i++) {
-        if (runtime->unk_4E & 8) {
-            max_pp[i] = gMoveData[runtime->moves[i] - 1].unk_05 / 5;
+        if (runtime->uniqueStatusFlags & 8) {
+            max_pp[i] = gMoveData[runtime->moves[i] - 1].pp / 5;
             if (max_pp[i] >= 8) {
                 max_pp[i] = 7;
             }
-            max_pp[i] = gMoveData[runtime->moves[i] - 1].unk_05 + (((runtime->unk_32[i] & 0xC0) >> 6) * max_pp[i]);
+            max_pp[i] = gMoveData[runtime->moves[i] - 1].pp + (((runtime->pp[i] & 0xC0) >> 6) * max_pp[i]);
         } else {
-            max_pp[i] = gMoveData[party->unk_09[i] - 1].unk_05 / 5;
+            max_pp[i] = gMoveData[party->moves[i] - 1].pp / 5;
             if (max_pp[i] >= 8) {
                 max_pp[i] = 7;
             }
-            max_pp[i] = gMoveData[party->unk_09[i] - 1].unk_05 + (((party->unk_20[i] & 0xC0) >> 6) * max_pp[i]);
+            max_pp[i] = gMoveData[party->moves[i] - 1].pp + (((party->pp[i] & 0xC0) >> 6) * max_pp[i]);
         }
     }
 
-    if (runtime->unk_4E & 8) {
+    if (runtime->uniqueStatusFlags & 8) {
         if (runtime->moves[0] && (runtime->moves[0] < 0xA6)) {
-            move_pp.pp[0] = BattleHud_DrawMovePpTextRTL(arg1 + 0x52, arg2 + 0xF, runtime->unk_32[0], max_pp[0]);
+            move_pp.pp[0] = BattleHud_DrawMovePpTextRTL(arg1 + 0x52, arg2 + 0xF, runtime->pp[0], max_pp[0]);
         }
         if (runtime->moves[1] && (runtime->moves[1] < 0xA6)) {
-            move_pp.pp[1] = BattleHud_DrawMovePpTextLTR(arg1 + 0x7C, arg2 + 0x1C, runtime->unk_32[1], max_pp[1]);
+            move_pp.pp[1] = BattleHud_DrawMovePpTextLTR(arg1 + 0x7C, arg2 + 0x1C, runtime->pp[1], max_pp[1]);
         }
         if (runtime->moves[2] && (runtime->moves[2] < 0xA6)) {
-            move_pp.pp[2] = BattleHud_DrawMovePpTextLTR(arg1 + 0x70, arg2 + 0x30, runtime->unk_32[2], max_pp[2]);
+            move_pp.pp[2] = BattleHud_DrawMovePpTextLTR(arg1 + 0x70, arg2 + 0x30, runtime->pp[2], max_pp[2]);
         }
         if (runtime->moves[3] && (runtime->moves[3] < 0xA6)) {
-            move_pp.pp[3] = BattleHud_DrawMovePpTextRTL(arg1 + 0x44, arg2 + 0x23, runtime->unk_32[3], max_pp[3]);
+            move_pp.pp[3] = BattleHud_DrawMovePpTextRTL(arg1 + 0x44, arg2 + 0x23, runtime->pp[3], max_pp[3]);
         }
     } else {
-        if (party->unk_09[0] && (party->unk_09[0] < 0xA6)) {
-            move_pp.pp[0] = BattleHud_DrawMovePpTextRTL(arg1 + 0x52, arg2 + 0xF, party->unk_20[0], max_pp[0]);
+        if (party->moves[0] && (party->moves[0] < 0xA6)) {
+            move_pp.pp[0] = BattleHud_DrawMovePpTextRTL(arg1 + 0x52, arg2 + 0xF, party->pp[0], max_pp[0]);
         }
-        if (party->unk_09[1] && (party->unk_09[1] < 0xA6)) {
-            move_pp.pp[1] = BattleHud_DrawMovePpTextLTR(arg1 + 0x7C, arg2 + 0x1C, party->unk_20[1], max_pp[1]);
+        if (party->moves[1] && (party->moves[1] < 0xA6)) {
+            move_pp.pp[1] = BattleHud_DrawMovePpTextLTR(arg1 + 0x7C, arg2 + 0x1C, party->pp[1], max_pp[1]);
         }
-        if (party->unk_09[2] && (party->unk_09[2] < 0xA6)) {
-            move_pp.pp[2] = BattleHud_DrawMovePpTextLTR(arg1 + 0x70, arg2 + 0x30, party->unk_20[2], max_pp[2]);
+        if (party->moves[2] && (party->moves[2] < 0xA6)) {
+            move_pp.pp[2] = BattleHud_DrawMovePpTextLTR(arg1 + 0x70, arg2 + 0x30, party->pp[2], max_pp[2]);
         }
-        if (party->unk_09[3] && (party->unk_09[3] < 0xA6)) {
-            move_pp.pp[3] = BattleHud_DrawMovePpTextRTL(arg1 + 0x44, arg2 + 0x23, party->unk_20[3], max_pp[3]);
+        if (party->moves[3] && (party->moves[3] < 0xA6)) {
+            move_pp.pp[3] = BattleHud_DrawMovePpTextRTL(arg1 + 0x44, arg2 + 0x23, party->pp[3], max_pp[3]);
         }
     }
 
@@ -193,31 +193,31 @@ void func_82119CAC(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3) {
     gSPDisplayList(gDisplayListHead++, D_80060398);
     gSPDisplayList(gDisplayListHead++, D_800602C8);
 
-    if (runtime->unk_4E & 8) {
+    if (runtime->uniqueStatusFlags & 8) {
         if (runtime->moves[0] && (runtime->moves[0] < 0xA6)) {
-            func_8001B884(move_pp.pp[0] - 0x19, arg2 + 0xE, 0x20, 9, D_8218AF70[gMoveData[runtime->moves[0] - 1].unk_03], 0x20, 0);
+            func_8001B884(move_pp.pp[0] - 0x19, arg2 + 0xE, 0x20, 9, D_8218AF70[gMoveData[runtime->moves[0] - 1].type], 0x20, 0);
         }
         if (runtime->moves[1] && (runtime->moves[1] < 0xA6)) {
-            func_8001B884(move_pp.pp[1], arg2 + 0x1B, 0x20, 9, D_8218AF70[gMoveData[runtime->moves[1] - 1].unk_03], 0x20, 0);
+            func_8001B884(move_pp.pp[1], arg2 + 0x1B, 0x20, 9, D_8218AF70[gMoveData[runtime->moves[1] - 1].type], 0x20, 0);
         }
         if (runtime->moves[2] && (runtime->moves[2] < 0xA6)) {
-            func_8001B884(move_pp.pp[2], arg2 + 0x2F, 0x20, 9, D_8218AF70[gMoveData[runtime->moves[2] - 1].unk_03], 0x20, 0);
+            func_8001B884(move_pp.pp[2], arg2 + 0x2F, 0x20, 9, D_8218AF70[gMoveData[runtime->moves[2] - 1].type], 0x20, 0);
         }
         if (runtime->moves[3] && (runtime->moves[3] < 0xA6)) {
-            func_8001B884(move_pp.pp[3] - 0x18, arg2 + 0x22, 0x20, 9, D_8218AF70[gMoveData[runtime->moves[3] - 1].unk_03], 0x20, 0);
+            func_8001B884(move_pp.pp[3] - 0x18, arg2 + 0x22, 0x20, 9, D_8218AF70[gMoveData[runtime->moves[3] - 1].type], 0x20, 0);
         }
     } else {
         if (runtime->moves[0] && (runtime->moves[0] < 0xA6)) {
-            func_8001B884(move_pp.pp[0] - 0x19, arg2 + 0xE, 0x20, 9, D_8218AF70[gMoveData[runtime->moves[0] - 1].unk_03], 0x20, 0);
+            func_8001B884(move_pp.pp[0] - 0x19, arg2 + 0xE, 0x20, 9, D_8218AF70[gMoveData[runtime->moves[0] - 1].type], 0x20, 0);
         }
         if (runtime->moves[1] && (runtime->moves[1] < 0xA6)) {
-            func_8001B884(move_pp.pp[1], arg2 + 0x1B, 0x20, 9, D_8218AF70[gMoveData[runtime->moves[1] - 1].unk_03], 0x20, 0);
+            func_8001B884(move_pp.pp[1], arg2 + 0x1B, 0x20, 9, D_8218AF70[gMoveData[runtime->moves[1] - 1].type], 0x20, 0);
         }
         if (runtime->moves[2] && (runtime->moves[2] < 0xA6)) {
-            func_8001B884(move_pp.pp[2], arg2 + 0x2F, 0x20, 9, D_8218AF70[gMoveData[runtime->moves[2] - 1].unk_03], 0x20, 0);
+            func_8001B884(move_pp.pp[2], arg2 + 0x2F, 0x20, 9, D_8218AF70[gMoveData[runtime->moves[2] - 1].type], 0x20, 0);
         }
         if (runtime->moves[3] && (runtime->moves[3] < 0xA6)) {
-            func_8001B884(move_pp.pp[3] - 0x18, arg2 + 0x22, 0x20, 9, D_8218AF70[gMoveData[runtime->moves[3] - 1].unk_03], 0x20, 0);
+            func_8001B884(move_pp.pp[3] - 0x18, arg2 + 0x22, 0x20, 9, D_8218AF70[gMoveData[runtime->moves[3] - 1].type], 0x20, 0);
         }
     }
 
@@ -226,7 +226,7 @@ void func_82119CAC(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3) {
     func_8001AB6C();
     func_8001A384(1, 0);
 
-    if (runtime->unk_4E & 8) {
+    if (runtime->uniqueStatusFlags & 8) {
         if (runtime->moves[0] && (runtime->moves[0] < 0xA6)) { func_82119994(arg1 + 0x5A, arg2 + 4, D_8006A9D4[runtime->moves[0] - 1].name); }
         if (runtime->moves[1] && (runtime->moves[1] < 0xA6)) {
             func_8001A944(arg1 + 0x7C, arg2 + 0x11, D_8006A9D4[runtime->moves[1] - 1].name);
@@ -277,7 +277,7 @@ void func_8211AAC4(s16 arg0, s16 arg1, s16 arg2, s32 arg3) {
     s32 idx;
     s32 n;
 
-    if (Trainer_GetSlots()[arg2].unk_000 & 2) {
+    if (Trainer_GetSlots()[arg2].isHuman & 2) {
         idx = 4;
     } else {
         idx = arg2;
@@ -321,9 +321,9 @@ void BattleHud_DrawPlainText(s16 arg0, s16 arg1, char* arg2) {
 void func_8211AEA4(TeamRoster* arg0, BattleMon* arg1, s32 arg2, s32 arg3, s32 arg4) {
     s32 var_t0;
 
-    BattleHud_DrawLevelNumber(arg2 + 3, arg3 + 4, arg1->unk_24);
-    Widget_DrawMeterBar(arg2 + 0x1E, arg3 + 0xE, arg1->hp, arg1->unk_26);
-    BattleHud_DrawHpFractionText(arg2 + 0x26, arg3 + 0x14, arg1->hp, arg1->unk_26);
+    BattleHud_DrawLevelNumber(arg2 + 3, arg3 + 4, arg1->level);
+    Widget_DrawMeterBar(arg2 + 0x1E, arg3 + 0xE, arg1->hp, arg1->maxHp);
+    BattleHud_DrawHpFractionText(arg2 + 0x26, arg3 + 0x14, arg1->hp, arg1->maxHp);
 
     gSPDisplayList(gDisplayListHead++, D_80060308);
 
@@ -369,9 +369,9 @@ void func_8211AEA4(TeamRoster* arg0, BattleMon* arg1, s32 arg2, s32 arg3, s32 ar
 void func_8211B208(TeamRoster* arg0, BattleMon* arg1, s32 arg2, s32 arg3, s32 arg4) {
     s32 var_t0;
 
-    BattleHud_DrawLevelNumber(arg2 + 3, arg3 + 4, arg1->unk_24);
-    Widget_DrawMeterBar(arg2 + 0x1E, arg3 + 0xE, arg1->hp, arg1->unk_26);
-    BattleHud_DrawHpFractionText(arg2 + 0x26, arg3 + 0x14, arg1->hp, arg1->unk_26);
+    BattleHud_DrawLevelNumber(arg2 + 3, arg3 + 4, arg1->level);
+    Widget_DrawMeterBar(arg2 + 0x1E, arg3 + 0xE, arg1->hp, arg1->maxHp);
+    BattleHud_DrawHpFractionText(arg2 + 0x26, arg3 + 0x14, arg1->hp, arg1->maxHp);
 
     gSPDisplayList(gDisplayListHead++, D_80060308);
 
@@ -444,7 +444,7 @@ void func_8211B484(TeamRoster* arg0, s16 arg1, s16 arg2, s32 arg3) {
     func_82116CF4(arg1 + 1, arg2 + 0x10, 0x63, 0x1D, sp88[arg3] + 3, sp78[arg3] + 3);
     func_82116CF4(arg1 + 1, arg2 + 0x2D, 0x63, 0x1D, sp88[arg3] + 6, sp78[arg3] + 6);
     func_82116CF4(arg1 + 1, arg2 + 0x4A, 0x63, 0x1D, sp88[arg3] + 9, sp78[arg3] + 9);
-    BattleHud_DrawPlainText(arg1 + 0x2C, arg2 + 3, arg0->unk_008);
+    BattleHud_DrawPlainText(arg1 + 0x2C, arg2 + 3, arg0->trainerName);
     func_8211B208(arg0, mon0, arg1 + 1, arg2 + 0x10, 0);
     func_8211B208(arg0, mon1, arg1 + 1, arg2 + 0x2D, 1);
     func_8211B208(arg0, mon2, arg1 + 1, arg2 + 0x4A, 2);
@@ -528,7 +528,7 @@ void func_8211B900(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3) {
     func_82116CF4(arg1 + 1, arg2 + 0x10, 0xC8, 0x1D, a.p[arg3] + 3, b.p[arg3] + 3);
     func_82116CF4(arg1 + 1, arg2 + 0x2D, 0xC8, 0x1D, a.p[arg3] + 6, b.p[arg3] + 6);
     func_82116CF4(arg1 + 1, arg2 + 0x4A, 0xC8, 0x1D, a.p[arg3] + 9, b.p[arg3] + 9);
-    BattleHud_DrawPlainText(arg1 + 0x2C, arg2 + 3, roster->unk_008);
+    BattleHud_DrawPlainText(arg1 + 0x2C, arg2 + 3, roster->trainerName);
     gSPDisplayList(gDisplayListHead++, D_800602C8);
     Gfx_DrawTextureRgba16(arg1 + 1, arg2, 0x18, 0x10, D_8218AFF8[arg3], 0x18, 0);
     gSPDisplayList(gDisplayListHead++, D_80060398);
@@ -711,8 +711,8 @@ u8 func_8000F1FC(u8, s32, s32, s32);
 void func_8211C9FC(void) {
     u32 len;
     s8* name;
-    ActivePokemonState* state = &sActivePokemon[sBattleScene.scene->unk_2C]->state;
-    BattleMon* bm = &sActivePokemon[sBattleScene.scene->unk_2C]->sessionTeams->teamMember[0]->pokemonPicked[state->rosterIndex];
+    ActivePokemonState* state = &sActivePokemon[sBattleScene.scene->actingSide]->state;
+    BattleMon* bm = &sActivePokemon[sBattleScene.scene->actingSide]->sessionTeams->teamMember[0]->pokemonPicked[state->rosterIndex];
 
     D_8219A4F1 = func_8000F1FC(D_8219A4F1, 0xFF, 5, 5);
     func_8001AB6C();

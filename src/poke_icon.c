@@ -139,11 +139,11 @@ void func_8001833C(unk_func_8001A024* arg0, s32 arg1, BattleMon* arg2, u16 arg3)
     if (arg1 < arg0->unk_01) {
         buf = arg0->unk_08[arg1].unk_0C;
         func_8004FD20((s32)buf->img_p, buf->width * buf->height * 2, buf->width, buf->height);
-        if ((arg2->unk_00.unk_00 > 0) && (arg2->unk_00.unk_00 < 0x98)) {
+        if ((arg2->species.id > 0) && (arg2->species.id < 0x98)) {
             arg0->unk_08[arg1].unk_00 = 3;
             arg0->unk_08[arg1].unk_14.ptr = (u8*)arg2;
             arg0->unk_08[arg1].unk_02 = arg3 & 0xFFFE;
-            arg0->unk_08[arg1].unk_08 = *(s16*)&gSpeciesDataById[arg2->unk_00.unk_00 - 1][0x1A] / 100.0f;
+            arg0->unk_08[arg1].unk_08 = *(s16*)&gSpeciesDataById[arg2->species.id - 1][0x1A] / 100.0f;
             Model_ComputeNicknameColorVariant(&arg0->unk_08[arg1].unk_10);
         } else {
             arg0->unk_08[arg1].unk_00 = 1;

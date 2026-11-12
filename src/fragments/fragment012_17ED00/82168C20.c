@@ -35,7 +35,7 @@ void func_82168CC4(Particle* arg0) {
             break;
 
         case 2:
-            BattleAnim_GetOwnerBonePosition(arg0->unk_10, arg0->unk_CD, &D_8219A898);
+            BattleAnim_GetOwnerBonePosition(arg0->pokemon, arg0->unk_CD, &D_8219A898);
             Particle_ApproachPosition(arg0, D_8219A898);
             Particle_Field1C_Approach_0B98C(arg0, 0.2f, 0.053f);
             Particle_PrimAlpha_ApproachAndStepState_0BC5C(arg0, 0x10, 0x1A);
@@ -56,7 +56,7 @@ void func_82168CC4(Particle* arg0) {
         Particle_Field50_AddXFromField7C_09C58(arg0);
     }
 
-    if (BattleScene_IsParticipantModelVisible(arg0->unk_10)) {
+    if (BattleScene_IsParticipantModelVisible(arg0->pokemon)) {
         Particle_EnableRendering(arg0);
     } else {
         Particle_DisableRendering(arg0);

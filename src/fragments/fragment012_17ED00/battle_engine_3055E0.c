@@ -18,48 +18,48 @@ f32 BattleScene_ScaleCameraDistance(ActivePokemon* arg0, f32 arg1, f32 arg2) {
 }
 
 s32 BattleScene_AdvanceCameraSubstepCounter(s32 arg0) {
-    sBattleScene.scene->unk_10++;
-    if (sBattleScene.scene->unk_10 >= arg0) {
-        sBattleScene.scene->unk_10 = 0;
+    sBattleScene.scene->substepFrameCounter++;
+    if (sBattleScene.scene->substepFrameCounter >= arg0) {
+        sBattleScene.scene->substepFrameCounter = 0;
         return 1;
     }
     return 0;
 }
 
 s32 BattleScene_AdvanceCameraFrameCounter(s32 frame_limit) {
-    sBattleScene.scene->unk_14++;
-    if (sBattleScene.scene->unk_14 >= frame_limit) {
-        sBattleScene.scene->unk_14 = 0;
+    sBattleScene.scene->stepFrameTimer++;
+    if (sBattleScene.scene->stepFrameTimer >= frame_limit) {
+        sBattleScene.scene->stepFrameTimer = 0;
         return 1;
     }
     return 0;
 }
 
 s32 BattleScene_AdvanceCameraFrameCounterUntil(s32 arg0) {
-    if (sBattleScene.scene->unk_14 >= arg0) {
+    if (sBattleScene.scene->stepFrameTimer >= arg0) {
         return 1;
     }
-    sBattleScene.scene->unk_14++;
+    sBattleScene.scene->stepFrameTimer++;
     return 0;
 }
 
 s32 BattleScene_IsCameraFrameCounterAtLeast(s32 arg0) {
-    if (sBattleScene.scene->unk_14 >= arg0) {
+    if (sBattleScene.scene->stepFrameTimer >= arg0) {
         return 1;
     }
     return 0;
 }
 
 void BattleScene_SetActivePokemonIndex(s32 arg0) {
-    sBattleScene.scene->unk_2C = arg0;
+    sBattleScene.scene->actingSide = arg0;
 }
 
 void BattleScene_ResetCameraFrameCounter(void) {
-    sBattleScene.scene->unk_14 = 0;
+    sBattleScene.scene->stepFrameTimer = 0;
 }
 
 void BattleScene_ResetCameraSubstepCounter(void) {
-    sBattleScene.scene->unk_10 = 0;
+    sBattleScene.scene->substepFrameCounter = 0;
 }
 
 void BattleScene_SetCameraAtAndEyeFromAngles(CameraNode* camera, f32 x, f32 y, f32 z, f32 distance, s16 rotation_x, s16 rotation_y) {
@@ -160,7 +160,7 @@ u16 func_82121954(ActivePokemon*, CameraNode*, ActivePokemon*, s16, f32);
 void func_82121C3C(s32 arg0) {
     ActivePokemonState* first_state = &sActivePokemon[0]->state;
     ActivePokemonState* second_state = &sActivePokemon[1]->state;
-    s32 mode = sBattleScene.scene->unk_1C;
+    s32 mode = sBattleScene.scene->mode;
     if ((mode != 4) && (mode != 8) && (mode != 7) && (mode != 0xB) && (mode != 9) && (mode != 0xA)) {
         if (func_82121954(sActivePokemon[0], (CameraNode*)arg0, sActivePokemon[0], M2C_FIELD(first_state, s16*, 0x34), D_FLT_82196230) != 0) {
             M2C_FIELD(sActivePokemon[0], u8*, 1) |= 1;
@@ -176,8 +176,8 @@ void func_82121C3C(s32 arg0) {
 }
 
 void BattleScene_SetCameraModeAndStep(s32 camera_mode, s32 camera_step) {
-    sBattleScene.scene->unk_1C = camera_mode;
-    sBattleScene.scene->unk_20 = camera_step;
+    sBattleScene.scene->mode = camera_mode;
+    sBattleScene.scene->phaseStep = camera_step;
 }
 
 void BattleScene_SetCameraClipPlanes(CameraNode* camera_node, f32 near_plane, f32 far_plane) {
@@ -186,8 +186,8 @@ void BattleScene_SetCameraClipPlanes(CameraNode* camera_node, f32 near_plane, f3
 }
 
 void BattleScene_SetCameraSubstate(s32 arg0, u16 arg1) {
-    sBattleScene.scene->unk_30 = arg0;
-    sBattleScene.scene->unk_2E = arg1;
+    sBattleScene.scene->transitionStep = arg0;
+    sBattleScene.scene->transitionStyle = arg1;
 }
 
 void func_82121D5C(s32, s32);
@@ -203,26 +203,26 @@ void func_82121D5C(s32, s32);
  * stand for, and what func_82121D5C does with them, is not established here.
  */
 void func_82121DAC(void) {
-    if (sBattleScene.scene->unk_18 == 2) {
+    if (sBattleScene.scene->transitionStage == 2) {
         if (sBattleScene.scene->unk_44 == 1) {
             func_82121D5C(1, 0x32);
         }
         if (sBattleScene.scene->unk_44 == 2) {
-            sBattleScene.scene->unk_2C = sBattleScene.scene->unk_2A;
+            sBattleScene.scene->actingSide = sBattleScene.scene->sideCurrentlySwitching;
             func_82121D5C(2, 0);
         }
         if (sBattleScene.scene->unk_44 == 5) {
             func_82121D5C(5, 0x32);
         }
         if (sBattleScene.scene->unk_44 == 6) {
-            sBattleScene.scene->unk_2C = sBattleScene.scene->unk_2A;
+            sBattleScene.scene->actingSide = sBattleScene.scene->sideCurrentlySwitching;
             func_82121D5C(6, 0);
         }
         if (sBattleScene.scene->unk_44 == 9) {
             func_82121D5C(9, 0x32);
         }
         if (sBattleScene.scene->unk_44 == 0xA) {
-            sBattleScene.scene->unk_2C = sBattleScene.scene->unk_2A;
+            sBattleScene.scene->actingSide = sBattleScene.scene->sideCurrentlySwitching;
             func_82121D5C(0xA, 0);
         }
     }
@@ -231,14 +231,14 @@ void func_82121DAC(void) {
 void BattleScene_SetDamageShakeAmplitude(ActivePokemon* arg0) {
     BattleMon* ptr = &arg0->teamRoster->pokemonPicked[arg0->state.rosterIndex];
 
-    sBattleScene.scene->unk_68 = ((ptr->hp - M2C_FIELD(arg0, u16*, 0x7D2)) / 996.0f) * 450.0f;
+    sBattleScene.scene->shakeAmplitude = ((ptr->hp - M2C_FIELD(arg0, u16*, 0x7D2)) / 996.0f) * 450.0f;
 
-    if (sBattleScene.scene->unk_68 == 0.0f) {
-        sBattleScene.scene->unk_68 = 0.0f;
-    } else if (sBattleScene.scene->unk_68 <= 6.0f) {
-        sBattleScene.scene->unk_68 = 6.0f;
-    } else if (sBattleScene.scene->unk_68 >= 40.0f) {
-        sBattleScene.scene->unk_68 = 40.0f;
+    if (sBattleScene.scene->shakeAmplitude == 0.0f) {
+        sBattleScene.scene->shakeAmplitude = 0.0f;
+    } else if (sBattleScene.scene->shakeAmplitude <= 6.0f) {
+        sBattleScene.scene->shakeAmplitude = 6.0f;
+    } else if (sBattleScene.scene->shakeAmplitude >= 40.0f) {
+        sBattleScene.scene->shakeAmplitude = 40.0f;
     }
 
     M2C_FIELD(sBattleScene.scene, s16*, 0x6C) = 0;
@@ -373,12 +373,12 @@ void func_82122458(CameraNode* arg0) {
     s32 var_v0;
 
     func_82121D78(arg0, 20.0f, 4000.0f);
-    var_v0 = sBattleScene.scene->unk_1C;
+    var_v0 = sBattleScene.scene->mode;
     if ((var_v0 == 4) || (var_v0 == 8)) {
         func_82121D78(arg0, 20.0f, 32000.0f);
-        var_v0 = sBattleScene.scene->unk_1C;
+        var_v0 = sBattleScene.scene->mode;
     }
-    if ((var_v0 == 9) && (D_8219A4F4 == 5) && (sBattleScene.scene->unk_20 != 0x1D)) {
+    if ((var_v0 == 9) && (D_8219A4F4 == 5) && (sBattleScene.scene->phaseStep != 0x1D)) {
         func_82121D78(arg0, 60.0f, 32000.0f);
     }
 }

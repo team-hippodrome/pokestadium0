@@ -463,7 +463,7 @@ void func_82135108(ActivePokemon* arg0) {
     temp_a2 = arg0->displayObject.objectType - 1;
     temp_a1 = (s8*)((D_8218A2DC[temp_a2] & 0xFFFFFF) + (u32)&D_00434C00);
     sp18 = (s8*)((D_8218A544[temp_a2] & 0xFFFFFF) + (u32)&D_00434C00);
-    if (sBattleScene.scene->unk_1C == 9) {
+    if (sBattleScene.scene->mode == 9) {
         func_80003824(&D_FLT_8219A5B0, temp_a1, temp_a1 + 0x168, 0);
         return;
     }

@@ -37,16 +37,16 @@ typedef union ParticleDescriptorPayload {
 } ParticleDescriptorPayload;
 
 typedef struct ParticleDescriptor {
-    /* 0x00 */ s32 unk_00; /* unk_04: 1 = a, 3 = func */
-    /* 0x04 */ ParticleDescriptorPayload unk_04;
+    /* 0x00 */ s32 kind; /* unk_04: 1 = a, 3 = func */
+    /* 0x04 */ ParticleDescriptorPayload payload;
 } ParticleDescriptor; // size = 0x08
 
 typedef struct ParticleEmitter {
     /* 0x00 */ f32 unk_00;
-    /* 0x04 */ Vec3f unk_04;
-    /* 0x10 */ Vec3s unk_10;
-    /* 0x18 */ ParticleUpdateCallback unk_18;
-    /* 0x1C */ ParticleDescriptor* unk_1C;
+    /* 0x04 */ Vec3f origin;
+    /* 0x10 */ Vec3s rotation;
+    /* 0x18 */ ParticleUpdateCallback updateCallback;
+    /* 0x1C */ ParticleDescriptor* descriptor;
     /* 0x20 */ s32 unk_20;
     /* 0x24 */ u16 unk_24;
     /* 0x26 */ s16 unk_26;
@@ -62,12 +62,12 @@ typedef struct ParticleEmitter {
 typedef struct Particle {
     /* 0x00 */ struct Particle* next;
     /* 0x04 */ struct Particle* prev;
-    /* 0x08 */ ParticleUpdateCallback unk_08;
-    /* 0x0C */ ParticleDescriptor* unk_0C;
-    /* 0x10 */ struct ActivePokemon* unk_10;
-    /* 0x14 */ DisplayObject* unk_14;
-    /* 0x18 */ u32 unk_18;
-    /* 0x1C */ f32 unk_1C;
+    /* 0x08 */ ParticleUpdateCallback updateCallback;
+    /* 0x0C */ ParticleDescriptor* descriptor;
+    /* 0x10 */ struct ActivePokemon* pokemon;
+    /* 0x14 */ DisplayObject* displayObject;
+    /* 0x18 */ u32 flags;
+    /* 0x1C */ f32 scale;
     /* 0x20 */ f32 unk_20;
     /* 0x24 */ f32 unk_24;
     /* 0x28 */ Vec3f unk_2C;
@@ -77,7 +77,7 @@ typedef struct Particle {
     /* 0x58 */ Vec3f unk_5C;
     /* 0x64 */ Vec3f unk_68;
     /* 0x70 */ f32 unk_74;
-    /* 0x74 */ f32 unk_78;
+    /* 0x74 */ f32 stepMagnitude;
     /* 0x78 */ Vec3f unk_7C;
     /* 0x84 */ char unk88[0xC];
     /* 0x90 */ Vec3s unk_94;
@@ -91,10 +91,10 @@ typedef struct Particle {
     /* 0xAC */ s16 unk_B0;
     /* 0xAE */ s16 unk_B2;
     /* 0xB0 */ char unkB4[0x2];
-    /* 0xB2 */ s16 unk_B6;
+    /* 0xB2 */ s16 lifecycle;
     /* 0xB4 */ s16 unk_B8;
-    /* 0xB6 */ s16 unk_BA;
-    /* 0xB8 */ s16 unk_BC;
+    /* 0xB6 */ s16 frameTimer;
+    /* 0xB8 */ s16 phase;
     /* 0xBA */ u8 prim_r;
     /* 0xBB */ u8 prim_g;
     /* 0xBC */ u8 prim_b;
@@ -229,11 +229,11 @@ typedef struct arg1_func_81407874 {
 } arg1_func_81407874; // size >= 0x18
 
 typedef struct ParticleCameraState {
-    /* 0x00 */ MtxF unk_00;
-    /* 0x40 */ Vec3f unk_40;
-    /* 0x4C */ Vec3f unk_4C;
-    /* 0x58 */ Vec3f unk_58;
-    /* 0x64 */ Vec3f unk_64;
+    /* 0x00 */ MtxF viewMatrix;
+    /* 0x40 */ Vec3f eyePosition;
+    /* 0x4C */ Vec3f targetPosition;
+    /* 0x58 */ Vec3f lookDirection;
+    /* 0x64 */ Vec3f eyeDirection;
     /* 0x70 */ s16 unk_70;
     /* 0x72 */ s16 unk_72;
     /* 0x74 */ char unk74[0x2];
@@ -242,9 +242,9 @@ typedef struct ParticleCameraState {
 } ParticleCameraState; // size = 0x7C
 
 typedef struct ParticleRenderContext {
-    /* 0x00 */ Vec3f unk_00;
-    /* 0x0C */ CameraNode* unk_0C;
-    /* 0x10 */ ParticleCameraState unk_10;
+    /* 0x00 */ Vec3f scale;
+    /* 0x0C */ CameraNode* camera;
+    /* 0x10 */ ParticleCameraState cameraState;
 } ParticleRenderContext; // size = 0x8C
 
 typedef struct ParticleMatrixPool {

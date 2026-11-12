@@ -44,7 +44,7 @@ void func_82121434(CameraNode*);
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void Rental_TeamSlotsUpdate(CameraNode* arg0) {
-    switch (sBattleScene.scene->unk_20) {
+    switch (sBattleScene.scene->phaseStep) {
         case 1:
             func_82120A34(arg0);
             break;

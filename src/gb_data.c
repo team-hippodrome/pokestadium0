@@ -232,12 +232,12 @@ void func_8001FE84(s8 *arg0, s8 *arg1) {
 
 void Pokemon_FromGbRecordExt(BattleMon* arg0, GbPokemonRecordExt* arg1) {
     Pokemon_FromGbRecord(arg0, &arg1->unk_00);
-    arg0->unk_24 = arg1->unk_21;
-    arg0->unk_26 = GbData_ReadU16BE(arg1->unk_22);
-    arg0->unk_28 = GbData_ReadU16BE(arg1->unk_24);
-    arg0->unk_2A = GbData_ReadU16BE(arg1->unk_26);
-    arg0->unk_2C = GbData_ReadU16BE(arg1->unk_28);
-    arg0->unk_2E = GbData_ReadU16BE(arg1->unk_2A);
+    arg0->level = arg1->unk_21;
+    arg0->maxHp = GbData_ReadU16BE(arg1->unk_22);
+    arg0->attack = GbData_ReadU16BE(arg1->unk_24);
+    arg0->defense = GbData_ReadU16BE(arg1->unk_26);
+    arg0->speed = GbData_ReadU16BE(arg1->unk_28);
+    arg0->special = GbData_ReadU16BE(arg1->unk_2A);
 }
 
 M2C_UNK func_8001FAE8(s8 *, u16);                 /* extern */
@@ -266,12 +266,12 @@ void func_8001FFE8(s8 *arg0, s8 *arg1) {
 
 void Pokemon_ToGbRecordExt(unk_func_88205880_00D0* arg0, GbPokemonRecordExt* arg1) {
     Pokemon_ToGbRecord(arg0->unk_000, arg1);
-    arg1->unk_21 = arg0->unk_000[0].unk_24;
-    GbData_WriteU16BE(arg1->unk_22, arg0->unk_000[0].unk_26);
-    GbData_WriteU16BE(arg1->unk_24, arg0->unk_000[0].unk_28);
-    GbData_WriteU16BE(arg1->unk_26, arg0->unk_000[0].unk_2A);
-    GbData_WriteU16BE(arg1->unk_28, arg0->unk_000[0].unk_2C);
-    GbData_WriteU16BE(arg1->unk_2A, arg0->unk_000[0].unk_2E);
+    arg1->unk_21 = arg0->unk_000[0].level;
+    GbData_WriteU16BE(arg1->unk_22, arg0->unk_000[0].maxHp);
+    GbData_WriteU16BE(arg1->unk_24, arg0->unk_000[0].attack);
+    GbData_WriteU16BE(arg1->unk_26, arg0->unk_000[0].defense);
+    GbData_WriteU16BE(arg1->unk_28, arg0->unk_000[0].speed);
+    GbData_WriteU16BE(arg1->unk_2A, arg0->unk_000[0].special);
 }
 
 u16 StatExpSqrt(u16 square) {
@@ -364,12 +364,12 @@ u32 CalculateStatValue(s32 statId, s32 speciesId, u16 statModifier, u16 level, u
 }
 
 void Pokemon_RecalcStats(BattleMon* arg0) {
-    arg0->unk_24 = Pokemon_LevelFromExp(arg0->unk_00.unk_00, arg0->unk_10);
-    arg0->unk_26 = CalculateStatValue(1, arg0->unk_00.unk_00, arg0->unk_14, arg0->unk_24, arg0->unk_1E);
-    arg0->unk_28 = CalculateStatValue(2, arg0->unk_00.unk_00, arg0->unk_16, arg0->unk_24, arg0->unk_1E);
-    arg0->unk_2A = CalculateStatValue(3, arg0->unk_00.unk_00, arg0->unk_18, arg0->unk_24, arg0->unk_1E);
-    arg0->unk_2C = CalculateStatValue(4, arg0->unk_00.unk_00, arg0->unk_1A, arg0->unk_24, arg0->unk_1E);
-    arg0->unk_2E = CalculateStatValue(5, arg0->unk_00.unk_00, arg0->unk_1C, arg0->unk_24, arg0->unk_1E);
+    arg0->level = Pokemon_LevelFromExp(arg0->species.id, arg0->unk_10);
+    arg0->maxHp = CalculateStatValue(1, arg0->species.id, arg0->unk_14, arg0->level, arg0->unk_1E);
+    arg0->attack = CalculateStatValue(2, arg0->species.id, arg0->unk_16, arg0->level, arg0->unk_1E);
+    arg0->defense = CalculateStatValue(3, arg0->species.id, arg0->unk_18, arg0->level, arg0->unk_1E);
+    arg0->speed = CalculateStatValue(4, arg0->species.id, arg0->unk_1A, arg0->level, arg0->unk_1E);
+    arg0->special = CalculateStatValue(5, arg0->species.id, arg0->unk_1C, arg0->level, arg0->unk_1E);
 }
 
 u16 Pokemon_StatExpForTarget(s32 arg0, s32 arg1, u16 arg2, u16 arg3, u16 arg4) {
@@ -441,12 +441,12 @@ void Pokemon_PrepareBattleMon(BattleMon* arg0) {
 
     Pokemon_RecalcStats(arg0);
     arg0->statusCondition = 0;
-    arg0->hp = arg0->unk_26;
+    arg0->hp = arg0->maxHp;
 
     for (i = 0; i < 4; i++) {
-        if (arg0->unk_09[i] != 0) {
-            temp_a3 = (arg0->unk_20[i] >> 6) & 3;
-            var_v0 = gMoveData[arg0->unk_09[i] - 1].unk_05;
+        if (arg0->moves[i] != 0) {
+            temp_a3 = (arg0->pp[i] >> 6) & 3;
+            var_v0 = gMoveData[arg0->moves[i] - 1].pp;
 
             if (var_v0 >= 0x28) {
                 var_v0 = var_v0 + (temp_a3 * 7);
@@ -454,7 +454,7 @@ void Pokemon_PrepareBattleMon(BattleMon* arg0) {
                 var_v0 = var_v0 + ((var_v0 / 5) * temp_a3);
             }
 
-            arg0->unk_20[i] = (temp_a3 << 6) + var_v0;
+            arg0->pp[i] = (temp_a3 << 6) + var_v0;
         }
     }
 }

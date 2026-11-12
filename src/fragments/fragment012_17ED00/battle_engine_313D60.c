@@ -94,12 +94,12 @@ void ShowDamageMessage(s32 attacker, s32 defender) {
     BattleMonRuntime* runtime = &sActivePokemon[defender]->state.runtime;
     s32 pct;
 
-    if (runtime->unk_0C == 0) {
+    if (runtime->displayHp == 0) {
         func_8211EF74(D_8219A520 + 0x88, 0x21, D_8218C788, func_82107F88(*atk));
         return;
     }
-    state->unk_28 = runtime->unk_0C;
-    pct = (runtime->unk_0C * 0x19) / (runtime->unk_28 >> 2);
+    state->unk_28 = runtime->displayHp;
+    pct = (runtime->displayHp * 0x19) / (runtime->maxHp >> 2);
     if (pct >= 0x46) {
         func_8211EF74(D_8219A520 + 0x88, 0x21, D_8218C788, func_82107F88(*atk));
     } else if (pct >= 0x28) {
@@ -121,17 +121,17 @@ void Battle_ResetTransientRuntimeState(s32 arg0, s32 arg1) {
     D_82199F4E = 0;
     D_82199F3F = 0;
     sp1C->moveCache.lastMove = 0;
-    sp1C->unk_58 = 0;
-    sp18->unk_58 = 0;
+    sp1C->lastMove = 0;
+    sp18->lastMove = 0;
     sp1C->unk_4A = 0;
     sp1C->unk_4B = 0;
-    sp1C->unk_4C = 0;
-    sp1C->unk_4D = 0;
-    sp1C->unk_4E = 0;
-    sp1C->unk_52 = 0;
-    sp1C->unk_57 = 0;
+    sp1C->immobilizedReason = 0;
+    sp1C->volatileStatusFlags = 0;
+    sp1C->uniqueStatusFlags = 0;
+    sp1C->disabledMoveState = 0;
+    sp1C->disabledMove = 0;
     sp1C->scaleResize = 0;
-    sp18->unk_4C &= ~0x20;
+    sp18->immobilizedReason &= ~0x20;
     D_82199F30 = 1;
 }
 
@@ -150,9 +150,9 @@ void Battle_ResetEntityState(ActivePokemon* active_pokemon) {
     s32 var_v0;
 
     if (active_pokemon == sActivePokemon[0]) {
-        var_v0 = ((sp1C->unk_28 - temp_a2->unk_0C) * 0x19) / (temp_a2->unk_28 >> 2);
+        var_v0 = ((sp1C->unk_28 - temp_a2->displayHp) * 0x19) / (temp_a2->maxHp >> 2);
     } else {
-        var_v0 = ((sp18->unk_28 - temp_a1->unk_0C) * 0x19) / (temp_a1->unk_28 >> 2);
+        var_v0 = ((sp18->unk_28 - temp_a1->displayHp) * 0x19) / (temp_a1->maxHp >> 2);
     }
 
     if (var_v0 == 0) {
@@ -255,27 +255,27 @@ void ComputePokemonStat(s32 arg0, BattleMon* arg1) {
 
     switch (arg0) {
         case 1:
-            spA = gSpeciesData[arg1->unk_24].baseHitPoints;
+            spA = gSpeciesData[arg1->level].baseHitPoints;
             spC = arg1->unk_14;
             break;
 
         case 2:
-            spA = gSpeciesData[arg1->unk_24].baseAttack;
+            spA = gSpeciesData[arg1->level].baseAttack;
             spC = arg1->unk_16;
             break;
 
         case 3:
-            spA = gSpeciesData[arg1->unk_24].baseDefense;
+            spA = gSpeciesData[arg1->level].baseDefense;
             spC = arg1->unk_18;
             break;
 
         case 4:
-            spA = gSpeciesData[arg1->unk_24].baseSpeed;
+            spA = gSpeciesData[arg1->level].baseSpeed;
             spC = arg1->unk_1A;
             break;
 
         case 5:
-            spA = gSpeciesData[arg1->unk_24].baseSpecial;
+            spA = gSpeciesData[arg1->level].baseSpecial;
             spC = arg1->unk_1C;
             break;
     }
@@ -310,9 +310,9 @@ void ComputePokemonStat(s32 arg0, BattleMon* arg1) {
             break;
     }
 
-    temp_a0 = ((((spA + sp6) * 2) + (i >> 2)) * arg1->unk_24) / 100;
+    temp_a0 = ((((spA + sp6) * 2) + (i >> 2)) * arg1->level) / 100;
     if (arg0 == 1) {
-        temp_a0 += arg1->unk_24 + 0xA;
+        temp_a0 += arg1->level + 0xA;
     } else {
         temp_a0 += 5;
     }
@@ -323,23 +323,23 @@ void ComputePokemonStat(s32 arg0, BattleMon* arg1) {
 
     switch (arg0) {
         case 1:
-            arg1->unk_26 = temp_a0;
+            arg1->maxHp = temp_a0;
             break;
 
         case 2:
-            arg1->unk_28 = temp_a0;
+            arg1->attack = temp_a0;
             break;
 
         case 3:
-            arg1->unk_2A = temp_a0;
+            arg1->defense = temp_a0;
             break;
 
         case 4:
-            arg1->unk_2C = temp_a0;
+            arg1->speed = temp_a0;
             break;
 
         case 5:
-            arg1->unk_2E = temp_a0;
+            arg1->special = temp_a0;
             break;
     }
 }

@@ -135,9 +135,9 @@ void BattleHud_DrawSpeciesNameLabelAuto(ActivePokemon* arg0, TeamRoster* arg1, s
     }
 
     if (arg6 == 0) {
-        BattleHud_DrawSpeciesNameLabel(arg2, arg3, arg4, &arg1->unk_008, var_t0);
+        BattleHud_DrawSpeciesNameLabel(arg2, arg3, arg4, &arg1->trainerName, var_t0);
     } else {
-        BattleHud_DrawSpeciesNameLabelBlink(arg2, arg3, arg4, &arg1->unk_008, arg5, var_t0);
+        BattleHud_DrawSpeciesNameLabelBlink(arg2, arg3, arg4, &arg1->trainerName, arg5, var_t0);
     }
 }
 
@@ -153,9 +153,9 @@ void func_821172F0(ActivePokemon* arg0, BattleMon* arg1, unk_D_84385790* arg2, s
     } else {
         func_8001AC7C(arg3, arg4, arg5, arg6, arg7, arg8, arg9, argA);
     }
-    BattleHud_DrawLevelNumber(arg3 + 3, arg4 + 0x10, arg1->unk_24);
-    Widget_DrawMeterBar(arg3 + 2, arg4 + 0x19, arg1->hp, arg1->unk_26);
-    BattleHud_DrawHpFractionText(arg3 + 0xC, arg4 + 0x1F, arg1->hp, arg1->unk_26);
+    BattleHud_DrawLevelNumber(arg3 + 3, arg4 + 0x10, arg1->level);
+    Widget_DrawMeterBar(arg3 + 2, arg4 + 0x19, arg1->hp, arg1->maxHp);
+    BattleHud_DrawHpFractionText(arg3 + 0xC, arg4 + 0x1F, arg1->hp, arg1->maxHp);
     func_8001AB6C();
     func_8001A384(2, 0);
     half = func_800566BC((s32)arg1->unk_30) >> 1;

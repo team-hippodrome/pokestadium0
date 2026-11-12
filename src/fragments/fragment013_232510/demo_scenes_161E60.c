@@ -429,7 +429,7 @@ void func_82200858(unk_D_82203170* arg0, s32 arg1) {
 
     for (i = 0; i < 6; i++) {
         if (i < arg0->unk_40[0]->numberOfPokemonCanBePicked) {
-            func_8001833C((unk_func_8001A024*)D_82203264, slot, &arg0->unk_40[0]->unk_028[i], 1);
+            func_8001833C((unk_func_8001A024*)D_82203264, slot, &arg0->unk_40[0]->battleMon[i], 1);
         }
         arg0->unk_08[i] = PokeIcon_GetImage((unk_func_8001A024*)D_82203264, slot++);
     }
@@ -579,19 +579,19 @@ void func_82200E2C(void) {
         roster = state->players[0].unk_14[0];
         info = roster->rosterInfo;
         for (i = 0; i < info->numberOfPokemonCanBePicked; i++) {
-            if (info->unk_028[i].unk_00.unk_01 != 0) {
+            if (info->battleMon[i].species.unk_01 != 0) {
                 return;
             }
         }
 
         for (i = 0; i < roster->numberOfPokemonBrought; i++) {
             mon = &roster->pokemonPicked[i];
-            if ((mon->unk_00.unk_00 == 0x19) && (mon->unk_00.unk_01 == 0)) {
+            if ((mon->species.id == 0x19) && (mon->species.unk_01 == 0)) {
                 for (j = 0; j < 4; j++) {
-                    if (mon->unk_09[j] == 0) {
+                    if (mon->moves[j] == 0) {
                         break;
                     }
-                    if (mon->unk_09[j] == 0x39) {
+                    if (mon->moves[j] == 0x39) {
                         return;
                     }
                 }
@@ -676,10 +676,10 @@ void func_82201084(s32 arg0) {
             for (j = 0; j < 2; j++) {
                 mon = p->unk_38[j]->pokemonPicked;
                 for (k = 0; k < p->unk_38[j]->numberOfPokemonBrought; k++, mon++) {
-                    scaled = (mon->unk_26 * arg0) / 100;
+                    scaled = (mon->maxHp * arg0) / 100;
                     hp = (mon->hp >= scaled) ? mon->hp : scaled;
                     GfxImage_SetRenderTarget(&gDisplayListHead, D_82203210[i * 6 + j * 3 + k]);
-                    BattleHud_DrawHpBarTexture(0, 0, 104, hp, mon->unk_26);
+                    BattleHud_DrawHpBarTexture(0, 0, 104, hp, mon->maxHp);
                 }
             }
         } else {
@@ -689,10 +689,10 @@ void func_82201084(s32 arg0) {
 
             mon = p->unk_38[0]->pokemonPicked;
             for (k = 0; k < p->unk_38[0]->numberOfPokemonBrought; k++, mon++) {
-                scaled = (mon->unk_26 * arg0) / 100;
+                scaled = (mon->maxHp * arg0) / 100;
                 hp = (mon->hp >= scaled) ? mon->hp : scaled;
                 GfxImage_SetRenderTarget(&gDisplayListHead, D_82203210[i * 6 + k]);
-                BattleHud_DrawHpBarTexture(0, 0, 104, hp, mon->unk_26);
+                BattleHud_DrawHpBarTexture(0, 0, 104, hp, mon->maxHp);
             }
         }
     }
@@ -789,7 +789,7 @@ s32 func_822017F0(void) {
             for (j = 0; j < 2; j++) {
                 mon = p->unk_38[j]->pokemonPicked;
                 for (k = 0; k < p->unk_38[j]->numberOfPokemonBrought; k++, mon++) {
-                    if (mon->hp < mon->unk_26) {
+                    if (mon->hp < mon->maxHp) {
                         return 1;
                     }
                 }
@@ -797,7 +797,7 @@ s32 func_822017F0(void) {
         } else {
             mon = p->unk_38[0]->pokemonPicked;
             for (k = 0; k < p->unk_38[0]->numberOfPokemonBrought; k++, mon++) {
-                if (mon->hp < mon->unk_26) {
+                if (mon->hp < mon->maxHp) {
                     return 1;
                 }
             }

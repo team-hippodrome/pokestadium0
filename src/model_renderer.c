@@ -158,10 +158,10 @@ arg1_func_80010CA8* Model_ComputeNicknameColorVariant(arg1_func_80010CA8* arg0, 
     u8 var_a0;
     s8* var_v1;
 
-    sp30 = &D_80064C5C[arg1->unk_00.unk_00 - 1];
+    sp30 = &D_80064C5C[arg1->species.id - 1];
     sp34.raw = 0;
 
-    Text_CopySpeciesName(sp38, arg1->unk_00.unk_00);
+    Text_CopySpeciesName(sp38, arg1->species.id);
 
     if (HAL_Strcmp(arg1->unk_30, sp38) != 0) {
         var_a0 = ((arg1->unk_0E >> 8) & 0xFF) + (arg1->unk_0E & 0xFF);

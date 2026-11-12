@@ -145,8 +145,8 @@ Particle* BattleAnim_SpawnSecondaryOwnerParticle(Vec3f arg0, u8 arg1) {
     if ((u32)sp1C != -1) {
         ParticleMath_CopyVec3f(&sp1C->unk_68, &arg0);
         BattleAnim_InitStingerMoveParticle(sp1C, arg1);
-        sp1C->unk_10 = gBattleAnimSecondaryOwner;
-        sp1C->unk_14 = NULL;
+        sp1C->pokemon = gBattleAnimSecondaryOwner;
+        sp1C->displayObject = NULL;
         sp1C->unk_CD = 0xFF;
         sp1C->unk_CC = 0x15;
         sp1C->unk_CA = 0;
@@ -168,10 +168,10 @@ void BattleAnim_MarkParticleInactive(Particle* arg0) {
 
 void Particle_InitLifecycle(Particle* arg0) {
     arg0->unk_B2 = 1;
-    arg0->unk_0C = &gDefaultParticleDescriptor;
-    arg0->unk_08 = NULL;
-    arg0->unk_10 = 0;
-    arg0->unk_14 = 0;
+    arg0->descriptor = &gDefaultParticleDescriptor;
+    arg0->updateCallback = NULL;
+    arg0->pokemon = 0;
+    arg0->displayObject = 0;
     arg0->unk_B8 = 0;
     Particle_SetFlags(arg0, 4);
 }
@@ -191,7 +191,7 @@ void func_8213C938(s8 *arg0) {
 
 void BattleAnim_DestroyParticle(Particle* arg0) {
     BattleAnim_ReleaseParticleModel(arg0);
-    arg0->unk_18 = 0;
+    arg0->flags = 0;
     Particle_DisableAndDetach(arg0);
     Particle_Free(arg0);
 }
@@ -226,12 +226,12 @@ s32 Particle_TickDelayTimer(Particle* arg0, s16 arg1) {
 
     if (Particle_LacksFlags(arg0, 0x80) != 0) {
         Particle_SetFlags(arg0, 0x80);
-        arg0->unk_BC = arg1;
+        arg0->phase = arg1;
     }
 
-    arg0->unk_BC--;
-    if (arg0->unk_BC <= 0) {
-        arg0->unk_BC = 0;
+    arg0->phase--;
+    if (arg0->phase <= 0) {
+        arg0->phase = 0;
         Particle_ClearFlags(arg0, 0x80);
         sp1C = 1;
     }

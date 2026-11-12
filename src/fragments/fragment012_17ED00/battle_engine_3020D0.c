@@ -42,16 +42,16 @@ void func_82118FD8(ActivePokemon*, s32, s32, s32);
 void func_8211E890(ActivePokemon* arg0, ActivePokemonState* arg1) {
     TeamRoster* sp2C = arg0->sessionTeams->teamMember[M2C_FIELD(arg0, s32*, 0x9D4)];
 
-    if (arg1->unk_10 == 3) {
-        BattleHud_DrawMonStatusBoxPlayer(arg0, arg0->thumbnail.camera->viewport.x - 2, arg0->thumbnail.camera->viewport.y - 0x3A, arg1->unk_1E, 1);
+    if (arg1->selectedCommandOption == 3) {
+        BattleHud_DrawMonStatusBoxPlayer(arg0, arg0->thumbnail.camera->viewport.x - 2, arg0->thumbnail.camera->viewport.y - 0x3A, arg1->actionDelayTimer, 1);
     } else {
-        BattleHud_DrawMonStatusBoxPlayer(arg0, arg0->thumbnail.camera->viewport.x - 2, arg0->thumbnail.camera->viewport.y - 0x3A, arg1->unk_1E, 0);
+        BattleHud_DrawMonStatusBoxPlayer(arg0, arg0->thumbnail.camera->viewport.x - 2, arg0->thumbnail.camera->viewport.y - 0x3A, arg1->actionDelayTimer, 0);
     }
 
-    if ((arg1->unk_10 != 3) && (arg0->thumbnail.camera->viewport.x == 0x17)) {
-        switch (arg1->unk_10) {
+    if ((arg1->selectedCommandOption != 3) && (arg0->thumbnail.camera->viewport.x == 0x17)) {
+        switch (arg1->selectedCommandOption) {
             case 2:
-                if (arg1->unk_1C == 1) {
+                if (arg1->showingCommandOptions == 1) {
                     if ((arg0->sessionTeams->tagTeamSize == 2) && (arg0->teamRoster->numberOfPokemonBrought == 3)) {
                         func_8211B484(arg0->sessionTeams->teamMember[0], 0x60, 0xF, arg0->sessionTeams->teamMember[0]->controllerPort);
                         func_8211B484(arg0->sessionTeams->teamMember[1], 0xC6, 0xF, arg0->sessionTeams->teamMember[1]->controllerPort);
@@ -67,7 +67,7 @@ void func_8211E890(ActivePokemon* arg0, ActivePokemonState* arg1) {
                 }
                 break;
             case 1:
-                if (arg1->unk_1C == 1) {
+                if (arg1->showingCommandOptions == 1) {
                     func_82119CAC(arg0, 0x60, 0xF, sp2C->controllerPort);
                 } else {
                     func_82119364(arg0, 0x60, 0xF, sp2C->controllerPort);
@@ -87,16 +87,16 @@ void func_82118738(ActivePokemon*, s16, s16, u16, s32);
 void func_8211EB10(ActivePokemon* arg0, ActivePokemonState* arg1) {
     TeamRoster* sp2C = arg0->sessionTeams->teamMember[M2C_FIELD(arg0, s32*, 0x9D4)];
 
-    if (arg1->unk_10 == 3) {
-        func_82118738(arg0, arg0->thumbnail.camera->viewport.x - 0x20, arg0->thumbnail.camera->viewport.y - 2, arg1->unk_1E, 1);
+    if (arg1->selectedCommandOption == 3) {
+        func_82118738(arg0, arg0->thumbnail.camera->viewport.x - 0x20, arg0->thumbnail.camera->viewport.y - 2, arg1->actionDelayTimer, 1);
     } else {
-        func_82118738(arg0, arg0->thumbnail.camera->viewport.x - 0x20, arg0->thumbnail.camera->viewport.y - 2, arg1->unk_1E, 0);
+        func_82118738(arg0, arg0->thumbnail.camera->viewport.x - 0x20, arg0->thumbnail.camera->viewport.y - 2, arg1->actionDelayTimer, 0);
     }
 
-    if ((arg1->unk_10 != 3) && (arg0->thumbnail.camera->viewport.x == 0x103)) {
-        switch (arg1->unk_10) {
+    if ((arg1->selectedCommandOption != 3) && (arg0->thumbnail.camera->viewport.x == 0x103)) {
+        switch (arg1->selectedCommandOption) {
             case 2:
-                if (arg1->unk_1C == 1) {
+                if (arg1->showingCommandOptions == 1) {
                     if ((arg0->sessionTeams->tagTeamSize == 2) && (arg0->teamRoster->numberOfPokemonBrought == 3)) {
                         func_8211B484(arg0->sessionTeams->teamMember[0], 0x16, 0x79, arg0->sessionTeams->teamMember[0]->controllerPort);
                         func_8211B484(arg0->sessionTeams->teamMember[1], 0x7C, 0x79, arg0->sessionTeams->teamMember[1]->controllerPort);
@@ -112,7 +112,7 @@ void func_8211EB10(ActivePokemon* arg0, ActivePokemonState* arg1) {
                 }
                 break;
             case 1:
-                if (arg1->unk_1C == 1) {
+                if (arg1->showingCommandOptions == 1) {
                     func_82119CAC(arg0, 0x19, 0xA6, sp2C->controllerPort);
                 } else {
                     func_82119364(arg0, 0x62, 0xCE, sp2C->controllerPort);
@@ -288,7 +288,7 @@ void Battle_DrawCompactStatusBoxesIfVisible(void) {
     ActivePokemon* ptr1 = sActivePokemon[0];
     ActivePokemon* ptr2 = sActivePokemon[1];
 
-    if (sBattleScene.scene->unk_30 == 0) {
+    if (sBattleScene.scene->transitionStep == 0) {
         BattleHud_DrawCompactMonStatusBox(ptr1, 0x15, 0xF, ptr1->sessionTeams->teamMember[M2C_FIELD(ptr1, s32*, 0x9D4)]->controllerPort);
         BattleHud_DrawCompactMonStatusBox(ptr2, 0xE1, 0xF, ptr2->sessionTeams->teamMember[M2C_FIELD(ptr2, s32*, 0x9D4)]->controllerPort);
         func_8211F0DC();
@@ -314,8 +314,8 @@ void func_8211F274(s8 *arg0) {
  * why retail stores $a2/$a3 to their stack homes.
  */
 void func_8211F288(ActivePokemon* arg0, s8* arg1, ...) {
-    *(u8*)D_8219A520 = (*(u8***)((u8*)arg0 + 0x85C))[arg0->state.unk_2D_zero + 2][1];
-    arg0->captionState.unk_00 = 1;
+    *(u8*)D_8219A520 = (*(u8***)((u8*)arg0 + 0x85C))[arg0->state.replacementState + 2][1];
+    arg0->captionState.active = 1;
     func_8211EEC0(&arg0->captionState.unk_48, arg1);
 }
 
@@ -383,7 +383,7 @@ void Battle_RenderHud(void) {
     ActivePokemonState* s0 = &sActivePokemon[0]->state;
     ActivePokemonState* s1 = &sActivePokemon[1]->state;
 
-    switch (sBattleScene.scene->unk_1C) {
+    switch (sBattleScene.scene->mode) {
         case 11:
             break;
         case 1:

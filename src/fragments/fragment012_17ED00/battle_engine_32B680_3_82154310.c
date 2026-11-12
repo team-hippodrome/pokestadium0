@@ -7,7 +7,7 @@
 void BattleAnim_ApplyModelSpeciesOffset(Particle* arg0) {
     f32 offset = 0.0f;
 
-    switch (BattleAnim_GetOwnerSpecies(arg0->unk_10)) {
+    switch (BattleAnim_GetOwnerSpecies(arg0->pokemon)) {
         case 0xF:
             offset = -13.0f;
             break;

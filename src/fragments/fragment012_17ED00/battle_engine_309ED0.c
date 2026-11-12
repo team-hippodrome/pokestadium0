@@ -2,7 +2,7 @@
 #include "battle_engine_309ED0.h"
 
 void BattleScene_ResetAnimationStep(void) {
-    sBattleScene.scene->unk_24 = 0;
+    sBattleScene.scene->modelReloadStep = 0;
 }
 
 s32 func_82124A50(ActivePokemon* arg0) {
@@ -13,15 +13,15 @@ s32 func_82124A50(ActivePokemon* arg0) {
         return 0;
     }
 
-    if (sBattleScene.scene->unk_48 == 0x19) {
+    if (sBattleScene.scene->moveEffectKind == 0x19) {
         return 0;
     }
 
-    switch (sBattleScene.scene->unk_24) {
+    switch (sBattleScene.scene->modelReloadStep) {
         case 0:
             func_8210211C(arg0);
             sp1C = 1;
-            sBattleScene.scene->unk_24++;
+            sBattleScene.scene->modelReloadStep++;
             break;
 
         case 1:
@@ -29,7 +29,7 @@ s32 func_82124A50(ActivePokemon* arg0) {
             if (arg0->sessionTeams->uniqueStatusFlags & 0x10) {
                 arg0->sessionTeams->uniqueStatusFlags &= ~0x90;
                 func_82108A0C(arg0);
-                sBattleScene.scene->unk_24++;
+                sBattleScene.scene->modelReloadStep++;
             }
             break;
 
@@ -47,11 +47,11 @@ s32 BattleScene_AdvanceOwnerAnimation98(ActivePokemon* arg0) {
         return 0;
     }
 
-    switch (sBattleScene.scene->unk_24) {
+    switch (sBattleScene.scene->modelReloadStep) {
         case 0:
             func_821020FC(arg0);
             sp1C = 1;
-            sBattleScene.scene->unk_24++;
+            sBattleScene.scene->modelReloadStep++;
             break;
 
         case 1:
@@ -59,7 +59,7 @@ s32 BattleScene_AdvanceOwnerAnimation98(ActivePokemon* arg0) {
             if (arg0->sessionTeams->uniqueStatusFlags & 0x10) {
                 arg0->sessionTeams->uniqueStatusFlags &= ~0x90;
                 Battle_ReloadSubstituteDoll(arg0);
-                sBattleScene.scene->unk_24++;
+                sBattleScene.scene->modelReloadStep++;
             }
             break;
 
@@ -77,11 +77,11 @@ s32 func_82124BF8(ActivePokemon* arg0) {
         return 0;
     }
 
-    switch (sBattleScene.scene->unk_24) {
+    switch (sBattleScene.scene->modelReloadStep) {
         case 0:
             func_8210211C(arg0);
             sp1C = 1;
-            sBattleScene.scene->unk_24++;
+            sBattleScene.scene->modelReloadStep++;
             break;
 
         case 1:
@@ -90,7 +90,7 @@ s32 func_82124BF8(ActivePokemon* arg0) {
                 arg0->sessionTeams->uniqueStatusFlags &= ~0x90;
                 func_82108A0C(arg0);
                 func_82105E4C(arg0, 0x3800);
-                sBattleScene.scene->unk_24++;
+                sBattleScene.scene->modelReloadStep++;
             }
             break;
 
@@ -115,13 +115,13 @@ s32 BattleScene_AdvanceBothOwnerAnimations(void) {
         return 0;
     }
 
-    switch (sBattleScene.scene->unk_24) {
+    switch (sBattleScene.scene->modelReloadStep) {
         case 0:
             if (temp_a1->flags & 0x2000) {
                 func_821020FC(sActivePokemon[0]);
             }
             sp1C = 1;
-            sBattleScene.scene->unk_24 = sBattleScene.scene->unk_24 + 1;
+            sBattleScene.scene->modelReloadStep = sBattleScene.scene->modelReloadStep + 1;
             break;
 
         case 1:
@@ -130,10 +130,10 @@ s32 BattleScene_AdvanceBothOwnerAnimations(void) {
                 if (sActivePokemon[0]->sessionTeams->uniqueStatusFlags & 0x10) {
                     sActivePokemon[0]->sessionTeams->uniqueStatusFlags &= ~0x90;
                     func_821089D0(sActivePokemon[0]);
-                    sBattleScene.scene->unk_24 += 1;
+                    sBattleScene.scene->modelReloadStep += 1;
                 }
             } else {
-                sBattleScene.scene->unk_24 = sBattleScene.scene->unk_24 + 1;
+                sBattleScene.scene->modelReloadStep = sBattleScene.scene->modelReloadStep + 1;
             }
             break;
 
@@ -142,7 +142,7 @@ s32 BattleScene_AdvanceBothOwnerAnimations(void) {
                 func_821020FC(sActivePokemon[1]);
             }
             sp1C = 1;
-            sBattleScene.scene->unk_24 = sBattleScene.scene->unk_24 + 1;
+            sBattleScene.scene->modelReloadStep = sBattleScene.scene->modelReloadStep + 1;
             break;
 
         case 3:
@@ -151,10 +151,10 @@ s32 BattleScene_AdvanceBothOwnerAnimations(void) {
                 if (sActivePokemon[1]->sessionTeams->uniqueStatusFlags & 0x10) {
                     sActivePokemon[1]->sessionTeams->uniqueStatusFlags &= ~0x90;
                     func_821089D0(sActivePokemon[1]);
-                    sBattleScene.scene->unk_24 += 1;
+                    sBattleScene.scene->modelReloadStep += 1;
                 }
             } else {
-                sBattleScene.scene->unk_24 = sBattleScene.scene->unk_24 + 1;
+                sBattleScene.scene->modelReloadStep = sBattleScene.scene->modelReloadStep + 1;
             }
             break;
 

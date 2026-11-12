@@ -2,7 +2,7 @@
 #include "fragment1_89010.h"
 
 void func_821328DC(CameraNode* arg0) {
-    switch (sBattleScene.scene->unk_20) {
+    switch (sBattleScene.scene->phaseStep) {
         case 0:
             func_821324D8(arg0);
 

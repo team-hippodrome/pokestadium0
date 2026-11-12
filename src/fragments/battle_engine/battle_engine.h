@@ -31,20 +31,20 @@ typedef struct unk_D_84390010_168 {
 
 typedef struct ActivePokemonState {
     /* 0x00 */ char unk00[0x4];
-    /* 0x04 */ u32 unk_04;
+    /* 0x04 */ u32 selectedCommand;
     /* 0x08 */ s32 rosterIndex;
-    /* 0x0C */ s32 unk_0C;
-    /* 0x10 */ u32 unk_10;
-    /* 0x14 */ s32 unk_14;
-    /* 0x18 */ u32 unk_18;
-    /* 0x1C */ u8 unk_1C;
-    /* 0x1E */ u16 unk_1E;
+    /* 0x0C */ s32 selectedMoveIndex;
+    /* 0x10 */ u32 selectedCommandOption;
+    /* 0x14 */ s32 moveIndex;
+    /* 0x18 */ u32 actionChosen;
+    /* 0x1C */ u8 showingCommandOptions;
+    /* 0x1E */ u16 actionDelayTimer;
     /* 0x20 */ char unk20[0x8];
     /* 0x28 */ u16 unk_28;
-    /* 0x2A */ u8 unk_2A;
+    /* 0x2A */ u8 moveSelectionLocked;
     /* 0x2B */ u8 teamMemberIndex;
     /* 0x2C */ u8 ownerTeamMemberIndex;
-    /* 0x2D */ u8 unk_2D_zero;
+    /* 0x2D */ u8 replacementState;
     /* 0x2E */ u8 unk_2D;
     /* 0x2F */ u8 alpha;
     /* 0x30 */ u8 unk_2F;
@@ -82,7 +82,7 @@ typedef struct ThumbnailState {
 } ThumbnailState; // size = 0x1A0
 
 typedef struct MonCaptionState {
-    /* 0x00 */ s32 unk_00;
+    /* 0x00 */ s32 active;
     /* 0x04 */ s32 unk_04;
     /* 0x08 */ s8 unk_08[4];
     /* 0x0C */ char unk0C[0x3C];
@@ -147,7 +147,7 @@ typedef struct MovePresentationCue {
     /* 0x03 */ u8 alternateAnchor;
     /* 0x04 */ u8 animationDuration;
     /* 0x05 */ u8 flags1;
-    /* 0x06 */ u8 unk_06;
+    /* 0x06 */ u8 currentFrame;
     /* 0x07 */ u8 endFrame;
     /* 0x08 */ u8 unk_08;
     /* 0x09 */ u8 unk_09;
@@ -187,41 +187,41 @@ typedef struct unk_D_8438E7B0 {
 
 typedef struct BattleScene {
     /* 0x00 */ char unk00[0x8];
-    /* 0x08 */ s8 unk_08;
-    /* 0x0C */ s32 unk_0C;
-    /* 0x10 */ s32 unk_10;
-    /* 0x14 */ s32 unk_14;
-    /* 0x18 */ u16 unk_18;
-    /* 0x1A */ u8 unk_1A;
-    /* 0x1C */ s32 unk_1C;
-    /* 0x20 */ s32 unk_20;
-    /* 0x24 */ s32 unk_24;
+    /* 0x08 */ s8 visibilityPolicy;
+    /* 0x0C */ s32 bRollShotIndex;
+    /* 0x10 */ s32 substepFrameCounter;
+    /* 0x14 */ s32 stepFrameTimer;
+    /* 0x18 */ u16 transitionStage;
+    /* 0x1A */ u8 hitReactionKind;
+    /* 0x1C */ s32 mode;
+    /* 0x20 */ s32 phaseStep;
+    /* 0x24 */ s32 modelReloadStep;
     /* 0x28 */ char unk28[0x2];
-    /* 0x2A */ u16 unk_2A;
-    /* 0x2C */ u16 unk_2C;
-    /* 0x2E */ u16 unk_2E;
-    /* 0x30 */ s32 unk_30;
-    /* 0x34 */ s32 unk_34;
-    /* 0x38 */ s32 unk_38;
-    /* 0x3C */ s32 unk_3C;
-    /* 0x40 */ s32 unk_40;
+    /* 0x2A */ u16 sideCurrentlySwitching;
+    /* 0x2C */ u16 actingSide;
+    /* 0x2E */ u16 transitionStyle;
+    /* 0x30 */ s32 transitionStep;
+    /* 0x34 */ s32 actionPass;
+    /* 0x38 */ s32 phase;
+    /* 0x3C */ s32 phaseSubstep;
+    /* 0x40 */ s32 winner;
     /* 0x44 */ s32 unk_44;
-    /* 0x48 */ s32 unk_48;
-    /* 0x4C */ s32 unk_4C;
-    /* 0x50 */ s32 unk_50;
-    /* 0x54 */ u8 unk_54;
-    /* 0x56 */ s16 unk_56;
-    /* 0x58 */ s16 unk_58;
+    /* 0x48 */ s32 moveEffectKind;
+    /* 0x4C */ s32 rageFollowupPhase;
+    /* 0x50 */ s32 cameraPresetId;
+    /* 0x54 */ u8 heightShotSide;
+    /* 0x56 */ s16 rotationX;
+    /* 0x58 */ s16 rotationY;
     /* 0x5A */ char unk5A[0x2];
-    /* 0x5C */ f32 unk_5C;
-    /* 0x60 */ f32 unk_60;
+    /* 0x5C */ f32 distance;
+    /* 0x60 */ f32 verticalFieldOfView;
     /* 0x64 */ char unk64[0x4];
-    /* 0x68 */ f32 unk_68;
+    /* 0x68 */ f32 shakeAmplitude;
     /* 0x6C */ f32 unk_6C;
-    /* 0x70 */ f32 unk_70;
+    /* 0x70 */ f32 targetDistance;
     /* 0x74 */ f32 unk_74;
-    /* 0x78 */ u8 unk_78;
-    /* 0x7A */ s16 unk_7A;
+    /* 0x78 */ u8 nextPhase;
+    /* 0x7A */ s16 shakeAngle;
     /* 0x7C */ char unk7C[0x8];
     /* 0x84 */ Vec3f unk_94;
     /* 0x90 */ Vec3f unk_A0;
@@ -270,14 +270,14 @@ typedef struct TagTeamPartners {
 } TagTeamPartners; // size = 0x10
 
 typedef struct unk_D_84390178 {
-    /* 0x00 */ s32 unk_00;
+    /* 0x00 */ s32 timeLeft;
     /* 0x04 */ char unk04[0x14];
 } unk_D_84390178; // size >= 0x18
 
 typedef struct SpeciesModelTransform {
     /* 0x00 */ Vec3f coordinates;
-    /* 0x0C */ s16 unk_0C;
-    /* 0x0E */ s16 unk_0E;
+    /* 0x0C */ s16 rotationX;
+    /* 0x0E */ s16 rotationY;
     /* 0x10 */ s16 unk_10;
     /* 0x12 */ u16 idleTimer;
     /* 0x14 */ char unk14[0xC];
@@ -743,8 +743,8 @@ typedef struct unk_D_843C3508 {
 } unk_D_843C3508; // size = 0x374
 
 typedef struct StatStageMultiplier {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
+    /* 0x00 */ u8 multiplier;
+    /* 0x01 */ u8 divisor;
 } StatStageMultiplier; // size = 0x2
 
 typedef struct TypeEffectivenessEntry {

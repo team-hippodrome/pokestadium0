@@ -72,11 +72,11 @@ void func_82132F88(CameraNode* arg0) {
     D_8219A4F0[0xD] = 0;
     BattleScene_SetCameraClipPlanes(arg0, 20.0f, 4000.0f);
     BattleScene_ResetCameraFrameCounter();
-    sBattleScene.scene->unk_2C = 0;
-    D_8219A590 = (s8*)sActivePokemon[sBattleScene.scene->unk_2C];
+    sBattleScene.scene->actingSide = 0;
+    D_8219A590 = (s8*)sActivePokemon[sBattleScene.scene->actingSide];
     func_82124984(D_8219A590, arg0, 3);
     Battle_SetStageScale(0.0f);
-    sBattleScene.scene->unk_20++;
+    sBattleScene.scene->phaseStep++;
 }
 
 s32 func_8003F6AC(s32);
@@ -300,7 +300,7 @@ void func_8213346C(CameraNode* arg0);
 void func_82133534(CameraNode* arg0);
 
 void func_821336EC(CameraNode* arg0) {
-    switch (sBattleScene.scene->unk_20) {
+    switch (sBattleScene.scene->phaseStep) {
         case 0:
             func_82132F88(arg0);
             break;

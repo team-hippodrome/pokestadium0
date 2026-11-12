@@ -148,7 +148,7 @@ void BattleAnim_SelectParticleModelFrames(Particle* arg0, s32 arg1) {
             sp2A = 0x9D;
             sp28 = 0x9E;
 
-            switch (BattleAnim_GetOwnerSpecies(arg0->unk_10)) {
+            switch (BattleAnim_GetOwnerSpecies(arg0->pokemon)) {
                 case 0x5F:
                     Particle_Field38_AddXZFromField94YOffset180_08F38(arg0, 15.0f);
                     Particle_Field38_SetYScaled_08CA0(arg0, 15.0f);
@@ -320,20 +320,20 @@ void BattleAnim_SelectParticleModelFrames(Particle* arg0, s32 arg1) {
             break;
     }
 
-    arg0->unk_14 = BattleAnim_AllocOwnerDisplayContext(arg0);
-    if (arg0->unk_14 != NULL) {
+    arg0->displayObject = BattleAnim_AllocOwnerDisplayContext(arg0);
+    if (arg0->displayObject != NULL) {
         switch (arg1) {
             case 0:
-                BattleAnim_InitModelWithAnim(arg0->unk_14, sp2A, sp28);
+                BattleAnim_InitModelWithAnim(arg0->displayObject, sp2A, sp28);
                 break;
 
             case 1:
-                BattleAnim_InitModel(arg0->unk_14, sp2A);
-                BattleAnim_BindModelAnimReversed(arg0->unk_14, sp28);
+                BattleAnim_InitModel(arg0->displayObject, sp2A);
+                BattleAnim_BindModelAnimReversed(arg0->displayObject, sp28);
                 break;
 
             case 2:
-                BattleAnim_InitModel(arg0->unk_14, sp2A);
+                BattleAnim_InitModel(arg0->displayObject, sp2A);
                 break;
         }
         Particle_Field1C_SetScaled_0B938(arg0, sp2C);
@@ -351,7 +351,7 @@ void BattleAnim_CallbackInitModelAnimWait(Particle* arg0) {
             break;
 
         case 2:
-            if (ModelAnim_IsFinished(arg0->unk_14) != 0) {
+            if (ModelAnim_IsFinished(arg0->displayObject) != 0) {
                 Particle_MarkInactive(arg0);
             }
             break;
@@ -397,7 +397,7 @@ void BattleAnim_RunDreamEaterUseEffect(Particle* arg0) {
             break;
 
         case 2:
-            if (BattleAnim_IsModelAnimComplete(arg0->unk_14) != 0) {
+            if (BattleAnim_IsModelAnimComplete(arg0->displayObject) != 0) {
                 Particle_AdvanceLifecycle(arg0);
             }
             break;
@@ -675,7 +675,7 @@ void BattleAnim_ApplyEffect1SpeciesMotion(Particle* arg0) {
     f32 offset = 0.0f;
     f32 scale = 0.12f;
 
-    switch (BattleAnim_GetOwnerSpecies(arg0->unk_10)) {
+    switch (BattleAnim_GetOwnerSpecies(arg0->pokemon)) {
         case 0xF:
             offset = 5.0f;
             break;

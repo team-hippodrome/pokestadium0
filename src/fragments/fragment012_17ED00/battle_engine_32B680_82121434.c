@@ -55,19 +55,19 @@ void func_82108C0C(ActivePokemon*);
 
 void func_82121434(CameraNode* arg0) {
     if (D_8219A4F4 == 5) {
-        sBattleScene.scene->unk_20 = 0x18;
+        sBattleScene.scene->phaseStep = 0x18;
         func_8211F9C4(arg0);
         return;
     }
-    if (D_8218B2B8[D_8219A4F4][sBattleScene.scene->unk_0C] == 0xFF) {
-        sBattleScene.scene->unk_0C = 0;
+    if (D_8218B2B8[D_8219A4F4][sBattleScene.scene->bRollShotIndex] == 0xFF) {
+        sBattleScene.scene->bRollShotIndex = 0;
     }
-    sBattleScene.scene->unk_20 = D_8218B2B8[D_8219A4F4][sBattleScene.scene->unk_0C];
-    sBattleScene.scene->unk_0C++;
+    sBattleScene.scene->phaseStep = D_8218B2B8[D_8219A4F4][sBattleScene.scene->bRollShotIndex];
+    sBattleScene.scene->bRollShotIndex++;
     func_82108C0C(sActivePokemon[0]);
     func_82108C0C(sActivePokemon[1]);
     func_8212188C();
-    switch (sBattleScene.scene->unk_20) {
+    switch (sBattleScene.scene->phaseStep) {
         case 0:
             func_8211F6B8(arg0);
             break;

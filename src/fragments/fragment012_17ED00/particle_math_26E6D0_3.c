@@ -332,7 +332,7 @@ void BattleAnim_RunUserHueChange(Particle* arg0) {
     }
 
     if (Particle_IsRunning(arg0) != 0) {
-        Model_SetMaterialColor(&arg0->unk_10->displayObject, arg0->prim_r, arg0->prim_g, arg0->prim_b, arg0->unk_AE);
+        Model_SetMaterialColor(&arg0->pokemon->displayObject, arg0->prim_r, arg0->prim_g, arg0->prim_b, arg0->unk_AE);
     }
 }
 
@@ -479,7 +479,7 @@ void BattleAnim_RunIceBeamBlizzardHitHueChange(Particle* arg0) {
     }
 
     if (Particle_IsRunning(arg0) != 0) {
-        Model_SetMaterialColor(&arg0->unk_10->displayObject, arg0->prim_r, arg0->prim_g, arg0->prim_b, arg0->unk_AE);
+        Model_SetMaterialColor(&arg0->pokemon->displayObject, arg0->prim_r, arg0->prim_g, arg0->prim_b, arg0->unk_AE);
     }
 }
 

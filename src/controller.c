@@ -142,7 +142,7 @@ void func_8000B220(void) {
                 controller->rawStickY = controller->controllerData->stick_y;
                 controller->buttonPressed =
                     controller->controllerData->button & (controller->controllerData->button ^ controller->buttonDown);
-                controller->unk_0A = controller->buttonDown & (controller->controllerData->button ^ controller->buttonDown);
+                controller->buttonReleased = controller->buttonDown & (controller->controllerData->button ^ controller->buttonDown);
                 controller->buttonDown = controller->controllerData->button;
 
                 Cont_AdjustAnalogStick(controller);

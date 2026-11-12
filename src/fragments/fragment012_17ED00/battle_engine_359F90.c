@@ -87,31 +87,31 @@ extern u16 D_82199F52;
 extern u16 D_843C4DCC;
 void InitBattleParameters(void) {
     sBattleDamage = 0;
-    D_82199F52 = sBattleUser->moveCache.unk_02;
+    D_82199F52 = sBattleUser->moveCache.power;
     if (D_82199F52) {
-        if (sBattleUser->moveCache.unk_03 < 0x14) {
-            D_82199F56 = sBattleTarget->unk_2C;
-            if (sBattleTarget->unk_4E & 4) {
+        if (sBattleUser->moveCache.type < 0x14) {
+            D_82199F56 = sBattleTarget->modifiedDefense;
+            if (sBattleTarget->uniqueStatusFlags & 4) {
                 D_82199F56 *= 2;
             }
 
             if (sBattleCritFlag != 0) {
-                D_82199F56 = sBattleTarget->unk_3A;
-                D_82199F54 = sBattleUser->unk_38;
+                D_82199F56 = sBattleTarget->unmodifiedDefense;
+                D_82199F54 = sBattleUser->unmodifiedAttack;
             } else {
-                D_82199F54 = sBattleUser->unk_2A;
+                D_82199F54 = sBattleUser->modifiedAttack;
             }
         } else {
-            D_82199F56 = sBattleTarget->unk_30;
-            if (sBattleTarget->unk_4E & 2) {
+            D_82199F56 = sBattleTarget->modifiedSpecial;
+            if (sBattleTarget->uniqueStatusFlags & 2) {
                 D_82199F56 *= 2;
             }
 
             if (sBattleCritFlag != 0) {
-                D_82199F56 = sBattleTarget->unk_3E;
-                D_82199F54 = sBattleUser->unk_3E;
+                D_82199F56 = sBattleTarget->unmodifiedSpecial;
+                D_82199F54 = sBattleUser->unmodifiedSpecial;
             } else {
-                D_82199F54 = sBattleUser->unk_30;
+                D_82199F54 = sBattleUser->modifiedSpecial;
             }
         }
 
@@ -138,7 +138,7 @@ extern u16 D_82199F58;
 extern u16 D_82199F54;
 extern u16 D_82199F58;
 s32 Battle_CalcDamage(void) {
-    s32 temp_v0 = sBattleUser->moveCache.unk_01;
+    s32 temp_v0 = sBattleUser->moveCache.effect;
 
     if (temp_v0 == 7) {
         D_82199F56 >>= 1;
@@ -176,34 +176,34 @@ void func_82105E38(ActivePokemon*, s32);
 void Battle_ApplyDamage(void) {
     BattleMonRuntime* target = sBattleTarget;
 
-    if (target->unk_4D & 0x10) {
-        if (sBattleScene.scene->unk_48 == 0x14) {
-            func_8211EF74(D_8219A520 + 0x208, 0x2B, D_8218C7B0, func_82107F88(sActivePokemon[sBattleScene.scene->unk_2C]));
-            if (sBattleTarget->unk_59 < sBattleDamage) {
-                sBattleTarget->unk_4D &= 0xFFEF;
-                func_8211EF74(D_8219A520 + 0x208, 0x2C, D_8218C7B4, func_82107F88(sActivePokemon[sBattleScene.scene->unk_2C]));
-                sBattleUser->moveCache.unk_01 = 0;
-                func_82105E38(sActivePokemon[sBattleScene.scene->unk_2C], 0x1000);
+    if (target->volatileStatusFlags & 0x10) {
+        if (sBattleScene.scene->moveEffectKind == 0x14) {
+            func_8211EF74(D_8219A520 + 0x208, 0x2B, D_8218C7B0, func_82107F88(sActivePokemon[sBattleScene.scene->actingSide]));
+            if (sBattleTarget->substituteHp < sBattleDamage) {
+                sBattleTarget->volatileStatusFlags &= 0xFFEF;
+                func_8211EF74(D_8219A520 + 0x208, 0x2C, D_8218C7B4, func_82107F88(sActivePokemon[sBattleScene.scene->actingSide]));
+                sBattleUser->moveCache.effect = 0;
+                func_82105E38(sActivePokemon[sBattleScene.scene->actingSide], 0x1000);
             } else {
-                sBattleTarget->unk_59 -= sBattleDamage;
+                sBattleTarget->substituteHp -= sBattleDamage;
             }
         } else {
-            func_8211EF74(D_8219A520 + 0x208, 0x2B, D_8218C7B0, func_82107F88(sActivePokemon[!sBattleScene.scene->unk_2C]));
-            if (sBattleTarget->unk_59 < sBattleDamage) {
-                sBattleTarget->unk_4D &= 0xFFEF;
-                func_8211EF74(D_8219A520 + 0x208, 0x2C, D_8218C7B4, func_82107F88(sActivePokemon[!sBattleScene.scene->unk_2C]));
-                sBattleUser->moveCache.unk_01 = 0;
-                func_82105E38(sActivePokemon[!sBattleScene.scene->unk_2C], 0x1000);
+            func_8211EF74(D_8219A520 + 0x208, 0x2B, D_8218C7B0, func_82107F88(sActivePokemon[!sBattleScene.scene->actingSide]));
+            if (sBattleTarget->substituteHp < sBattleDamage) {
+                sBattleTarget->volatileStatusFlags &= 0xFFEF;
+                func_8211EF74(D_8219A520 + 0x208, 0x2C, D_8218C7B4, func_82107F88(sActivePokemon[!sBattleScene.scene->actingSide]));
+                sBattleUser->moveCache.effect = 0;
+                func_82105E38(sActivePokemon[!sBattleScene.scene->actingSide], 0x1000);
             } else {
-                sBattleTarget->unk_59 -= sBattleDamage;
+                sBattleTarget->substituteHp -= sBattleDamage;
             }
         }
     } else {
-        if (sBattleDamage < target->unk_0C) {
-            target->unk_0C -= sBattleDamage;
+        if (sBattleDamage < target->displayHp) {
+            target->displayHp -= sBattleDamage;
         } else {
-            sBattleDamage = target->unk_0C;
-            target->unk_0C = 0;
+            sBattleDamage = target->displayHp;
+            target->displayHp = 0;
         }
     }
 }
@@ -221,10 +221,10 @@ s32 func_8210FA2C(s32, u8*, s32);
 s32 func_82107F68(ActivePokemon*);
 
 void func_821102F0(void) {
-    BattleMonRuntime* runtime = &sActivePokemon[sBattleScene.scene->unk_2C]->state.runtime;
+    BattleMonRuntime* runtime = &sActivePokemon[sBattleScene.scene->actingSide]->state.runtime;
     s32 type;
 
-    runtime->unk_58 = sBattleUser->moveCache.lastMove;
+    runtime->lastMove = sBattleUser->moveCache.lastMove;
     if (func_8210FA2C(runtime->moveCache.lastMove, D_8218ABF0, 2) != 0) {
         type = 0;
     } else if (func_8210FA2C(runtime->moveCache.lastMove, D_8218ABF4, 5) != 0) {
@@ -239,47 +239,47 @@ void func_821102F0(void) {
     if (sBattleUser->moveCache.lastMove == 0x76 || sBattleUser->moveCache.lastMove == 0x77) {
         switch (type) {
             case 0:
-                func_8211EF74(D_8219A520 + 0x388, 0x14, D_8218C754, func_82107F88(sActivePokemon[sBattleScene.scene->unk_2C]),
-                              func_82107F68(sActivePokemon[sBattleScene.scene->unk_2C]));
+                func_8211EF74(D_8219A520 + 0x388, 0x14, D_8218C754, func_82107F88(sActivePokemon[sBattleScene.scene->actingSide]),
+                              func_82107F68(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
             case 1:
-                func_8211EF74(D_8219A520 + 0x388, 0x15, D_8218C758, func_82107F88(sActivePokemon[sBattleScene.scene->unk_2C]),
-                              func_82107F68(sActivePokemon[sBattleScene.scene->unk_2C]));
+                func_8211EF74(D_8219A520 + 0x388, 0x15, D_8218C758, func_82107F88(sActivePokemon[sBattleScene.scene->actingSide]),
+                              func_82107F68(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
             case 2:
-                func_8211EF74(D_8219A520 + 0x388, 0x16, D_8218C75C, func_82107F88(sActivePokemon[sBattleScene.scene->unk_2C]),
-                              func_82107F68(sActivePokemon[sBattleScene.scene->unk_2C]));
+                func_8211EF74(D_8219A520 + 0x388, 0x16, D_8218C75C, func_82107F88(sActivePokemon[sBattleScene.scene->actingSide]),
+                              func_82107F68(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
             case 3:
-                func_8211EF74(D_8219A520 + 0x388, 0x17, D_8218C760, func_82107F88(sActivePokemon[sBattleScene.scene->unk_2C]),
-                              func_82107F68(sActivePokemon[sBattleScene.scene->unk_2C]));
+                func_8211EF74(D_8219A520 + 0x388, 0x17, D_8218C760, func_82107F88(sActivePokemon[sBattleScene.scene->actingSide]),
+                              func_82107F68(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
             case 4:
-                func_8211EF74(D_8219A520 + 0x388, 0x18, D_8218C764, func_82107F88(sActivePokemon[sBattleScene.scene->unk_2C]),
-                              func_82107F68(sActivePokemon[sBattleScene.scene->unk_2C]));
+                func_8211EF74(D_8219A520 + 0x388, 0x18, D_8218C764, func_82107F88(sActivePokemon[sBattleScene.scene->actingSide]),
+                              func_82107F68(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
         }
     } else {
         switch (type) {
             case 0:
-                func_8211EF74(D_8219A520 + 0xC8, 0x14, D_8218C754, func_82107F88(sActivePokemon[sBattleScene.scene->unk_2C]),
-                              func_82107F68(sActivePokemon[sBattleScene.scene->unk_2C]));
+                func_8211EF74(D_8219A520 + 0xC8, 0x14, D_8218C754, func_82107F88(sActivePokemon[sBattleScene.scene->actingSide]),
+                              func_82107F68(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
             case 1:
-                func_8211EF74(D_8219A520 + 0xC8, 0x15, D_8218C758, func_82107F88(sActivePokemon[sBattleScene.scene->unk_2C]),
-                              func_82107F68(sActivePokemon[sBattleScene.scene->unk_2C]));
+                func_8211EF74(D_8219A520 + 0xC8, 0x15, D_8218C758, func_82107F88(sActivePokemon[sBattleScene.scene->actingSide]),
+                              func_82107F68(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
             case 2:
-                func_8211EF74(D_8219A520 + 0xC8, 0x16, D_8218C75C, func_82107F88(sActivePokemon[sBattleScene.scene->unk_2C]),
-                              func_82107F68(sActivePokemon[sBattleScene.scene->unk_2C]));
+                func_8211EF74(D_8219A520 + 0xC8, 0x16, D_8218C75C, func_82107F88(sActivePokemon[sBattleScene.scene->actingSide]),
+                              func_82107F68(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
             case 3:
-                func_8211EF74(D_8219A520 + 0xC8, 0x17, D_8218C760, func_82107F88(sActivePokemon[sBattleScene.scene->unk_2C]),
-                              func_82107F68(sActivePokemon[sBattleScene.scene->unk_2C]));
+                func_8211EF74(D_8219A520 + 0xC8, 0x17, D_8218C760, func_82107F88(sActivePokemon[sBattleScene.scene->actingSide]),
+                              func_82107F68(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
             case 4:
-                func_8211EF74(D_8219A520 + 0xC8, 0x18, D_8218C764, func_82107F88(sActivePokemon[sBattleScene.scene->unk_2C]),
-                              func_82107F68(sActivePokemon[sBattleScene.scene->unk_2C]));
+                func_8211EF74(D_8219A520 + 0xC8, 0x18, D_8218C764, func_82107F88(sActivePokemon[sBattleScene.scene->actingSide]),
+                              func_82107F68(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
         }
     }
@@ -294,10 +294,10 @@ void Battle_DecrementPP(s32 arg0) {
     temp_a1 = &sActivePokemon[arg0]->state;
     temp_a2 = &sActivePokemon[arg0]->teamRoster->pokemonPicked[temp_a1->rosterIndex];
 
-    if ((temp_v0->usedMove != 0xA5) && !(temp_v0->unk_4C & 7) && !(temp_v0->unk_4D & 0x40)) {
-        temp_v0->unk_32[temp_a1->unk_0C]--;
-        if (!(temp_v0->unk_4E & 8)) {
-            temp_a2->unk_20[temp_a1->unk_0C] -= 1;
+    if ((temp_v0->usedMove != 0xA5) && !(temp_v0->immobilizedReason & 7) && !(temp_v0->volatileStatusFlags & 0x40)) {
+        temp_v0->pp[temp_a1->selectedMoveIndex]--;
+        if (!(temp_v0->uniqueStatusFlags & 8)) {
+            temp_a2->pp[temp_a1->selectedMoveIndex] -= 1;
         }
     }
 }
@@ -393,13 +393,13 @@ void HandleMoveEffectFlags(void) {
 void func_82110B44(ActivePokemon* arg0) {
     BattleMon* ptr = &arg0->teamRoster->pokemonPicked[arg0->state.rosterIndex];
 
-    ptr->statusCondition = arg0->state.runtime.unk_15;
+    ptr->statusCondition = arg0->state.runtime.pendingStatusCondition;
 }
 
 void ApplyParalysisSpeedCut(ActivePokemon* arg0) {
     BattleMonRuntime* temp_v0 = &arg0->state.runtime;
 
-    if (arg0->state.runtime.unk_15 & 0x40) {
+    if (arg0->state.runtime.pendingStatusCondition & 0x40) {
         temp_v0->speed >>= 2;
         if (temp_v0->speed == 0) {
             temp_v0->speed = 1;
@@ -410,10 +410,10 @@ void ApplyParalysisSpeedCut(ActivePokemon* arg0) {
 void ApplyBurnAttackCut(ActivePokemon* arg0) {
     BattleMonRuntime* temp_v0 = &arg0->state.runtime;
 
-    if (arg0->state.runtime.unk_15 & 0x10) {
-        temp_v0->unk_2A >>= 1;
-        if (temp_v0->unk_2A == 0) {
-            temp_v0->unk_2A = 1;
+    if (arg0->state.runtime.pendingStatusCondition & 0x10) {
+        temp_v0->modifiedAttack >>= 1;
+        if (temp_v0->modifiedAttack == 0) {
+            temp_v0->modifiedAttack = 1;
         }
     }
 }
@@ -430,75 +430,75 @@ void Battle_InitPokemonRuntimeState(ActivePokemon* arg0) {
 
     sp28 = &arg0->state;
     sp24 = &arg0->state.runtime;
-    sp34 = &arg0->sessionTeams->teamMember[sp28->unk_2D_zero]->pokemonPicked[sp28->rosterIndex];
+    sp34 = &arg0->sessionTeams->teamMember[sp28->replacementState]->pokemonPicked[sp28->rosterIndex];
 
     sp24->unk_14 = sp28->rosterIndex;
-    sp24->id = sp34->unk_00.unk_00;
-    sp24->unk_0C = sp34->hp;
-    sp24->unk_15 = sp34->statusCondition;
-    sp24->roster[6] = sp34->unk_06;
-    sp24->roster[7] = sp34->unk_07;
+    sp24->id = sp34->species.id;
+    sp24->displayHp = sp34->hp;
+    sp24->pendingStatusCondition = sp34->statusCondition;
+    sp24->roster[6] = sp34->type1;
+    sp24->roster[7] = sp34->type2;
     sp24->roster[8] = sp34->unk_08;
 
-    sp24->moves[0] = sp34->unk_09[0];
-    sp24->moves[1] = sp34->unk_09[1];
-    sp24->moves[2] = sp34->unk_09[2];
-    sp24->moves[3] = sp34->unk_09[3];
+    sp24->moves[0] = sp34->moves[0];
+    sp24->moves[1] = sp34->moves[1];
+    sp24->moves[2] = sp34->moves[2];
+    sp24->moves[3] = sp34->moves[3];
     sp24->unk_24 = sp34->unk_1E;
 
-    sp24->unk_32[0] = sp34->unk_20[0];
-    sp24->unk_32[1] = sp34->unk_20[1];
-    sp24->unk_32[2] = sp34->unk_20[2];
-    sp24->unk_32[3] = sp34->unk_20[3];
+    sp24->pp[0] = sp34->pp[0];
+    sp24->pp[1] = sp34->pp[1];
+    sp24->pp[2] = sp34->pp[2];
+    sp24->pp[3] = sp34->pp[3];
 
-    if ((sp34->unk_09[0] == 0) || (sp34->unk_09[0] >= 0xA6)) {
-        sp24->unk_32[0] = 0;
+    if ((sp34->moves[0] == 0) || (sp34->moves[0] >= 0xA6)) {
+        sp24->pp[0] = 0;
     }
 
-    if ((sp34->unk_09[1] == 0) || (sp34->unk_09[1] >= 0xA6)) {
-        sp24->unk_32[1] = 0;
+    if ((sp34->moves[1] == 0) || (sp34->moves[1] >= 0xA6)) {
+        sp24->pp[1] = 0;
     }
 
-    if ((sp34->unk_09[2] == 0) || (sp34->unk_09[2] >= 0xA6)) {
-        sp24->unk_32[2] = 0;
+    if ((sp34->moves[2] == 0) || (sp34->moves[2] >= 0xA6)) {
+        sp24->pp[2] = 0;
     }
 
-    if ((sp34->unk_09[3] == 0) || (sp34->unk_09[3] >= 0xA6)) {
-        sp24->unk_32[3] = 0;
+    if ((sp34->moves[3] == 0) || (sp34->moves[3] >= 0xA6)) {
+        sp24->pp[3] = 0;
     }
 
     for (i = 0; i < 4; i++) {
-        if (sp34->unk_09[i] == 0) {
+        if (sp34->moves[i] == 0) {
             for (j = i; j < 4; j++) {
-                sp24->unk_32[j] = 0;
-                sp24->moves[j] = sp34->unk_09[j] = 0;
+                sp24->pp[j] = 0;
+                sp24->moves[j] = sp34->moves[j] = 0;
             }
             break;
         }
     }
 
-    sp24->unk_26 = sp34->unk_24;
-    sp24->unk_28 = sp34->unk_26;
-    sp24->unk_2A = sp34->unk_28;
-    sp24->unk_2C = sp34->unk_2A;
-    sp24->speed = sp34->unk_2C;
-    sp24->unk_30 = sp34->unk_2E;
+    sp24->unk_26 = sp34->level;
+    sp24->maxHp = sp34->maxHp;
+    sp24->modifiedAttack = sp34->attack;
+    sp24->modifiedDefense = sp34->defense;
+    sp24->speed = sp34->speed;
+    sp24->modifiedSpecial = sp34->special;
 
     ApplyParalysisSpeedCut(arg0);
     ApplyBurnAttackCut(arg0);
 
     sp24->unk_36 = gBaseStats[sp24->id].baseHP;
-    sp24->unk_38 = sp34->unk_28;
-    sp24->unk_3A = sp34->unk_2A;
-    sp24->unk_3C = sp34->unk_2C;
-    sp24->unk_3E = sp34->unk_2E;
+    sp24->unmodifiedAttack = sp34->attack;
+    sp24->unmodifiedDefense = sp34->defense;
+    sp24->unmodifiedSpeed = sp34->speed;
+    sp24->unmodifiedSpecial = sp34->special;
 
     // clang-format off
     for (i = 0; i < 8; i++) { sp24->unk_5C[i] = 7; }
     // clang-format on
 
     func_8210F24C(arg0);
-    func_80041940(BattleScene_GetParticipantSideIndex(arg0), sp34->hp, sp34->unk_26);
+    func_80041940(BattleScene_GetParticipantSideIndex(arg0), sp34->hp, sp34->maxHp);
 }
 
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
@@ -515,15 +515,15 @@ s32 func_82110EAC(s8 *arg0)
 extern u8 D_82199F6A;
 void func_82110EE4(void) {
     if (D_82199F6A & 1) {
-        D_8219A3C8[0].unk_2A += D_8219A3C8[0].unk_2A >> 3;
-        if (D_8219A3C8[0].unk_2A >= 0x3E8) {
-            D_8219A3C8[0].unk_2A = 0x3E7;
+        D_8219A3C8[0].modifiedAttack += D_8219A3C8[0].modifiedAttack >> 3;
+        if (D_8219A3C8[0].modifiedAttack >= 0x3E8) {
+            D_8219A3C8[0].modifiedAttack = 0x3E7;
         }
     }
     if (D_82199F6A & 2) {
-        D_8219A3C8[0].unk_2C += D_8219A3C8[0].unk_2C >> 3;
-        if (D_8219A3C8[0].unk_2C >= 0x3E8) {
-            D_8219A3C8[0].unk_2C = 0x3E7;
+        D_8219A3C8[0].modifiedDefense += D_8219A3C8[0].modifiedDefense >> 3;
+        if (D_8219A3C8[0].modifiedDefense >= 0x3E8) {
+            D_8219A3C8[0].modifiedDefense = 0x3E7;
         }
     }
     if (D_82199F6A & 4) {
@@ -533,9 +533,9 @@ void func_82110EE4(void) {
         }
     }
     if (D_82199F6A & 8) {
-        D_8219A3C8[0].unk_30 += D_8219A3C8[0].unk_30 >> 3;
-        if (D_8219A3C8[0].unk_30 >= 0x3E8) {
-            D_8219A3C8[0].unk_30 = 0x3E7;
+        D_8219A3C8[0].modifiedSpecial += D_8219A3C8[0].modifiedSpecial >> 3;
+        if (D_8219A3C8[0].modifiedSpecial >= 0x3E8) {
+            D_8219A3C8[0].modifiedSpecial = 0x3E7;
         }
     }
 }
@@ -551,30 +551,30 @@ void func_82110FB8(void) {
  * @unverified Name and comment from Stadium 1.
  */
 void Battle_LoadMoveCache(void) {
-    sBattleUser->moveCache.lastMove = gMoveData[sBattleUser->usedMove - 1].unk_00;
-    sBattleUser->moveCache.unk_01 = gMoveData[sBattleUser->usedMove - 1].unk_01;
-    sBattleUser->moveCache.unk_02 = gMoveData[sBattleUser->usedMove - 1].unk_02;
-    sBattleUser->moveCache.unk_03 = gMoveData[sBattleUser->usedMove - 1].unk_03;
-    sBattleUser->moveCache.unk_04 = gMoveData[sBattleUser->usedMove - 1].unk_04;
-    sBattleUser->moveCache.unk_05 = gMoveData[sBattleUser->usedMove - 1].unk_05;
+    sBattleUser->moveCache.lastMove = gMoveData[sBattleUser->usedMove - 1].moveId;
+    sBattleUser->moveCache.effect = gMoveData[sBattleUser->usedMove - 1].effect;
+    sBattleUser->moveCache.power = gMoveData[sBattleUser->usedMove - 1].power;
+    sBattleUser->moveCache.type = gMoveData[sBattleUser->usedMove - 1].type;
+    sBattleUser->moveCache.accuracy = gMoveData[sBattleUser->usedMove - 1].accuracy;
+    sBattleUser->moveCache.pp = gMoveData[sBattleUser->usedMove - 1].pp;
 }
 
 extern s32 D_8218C780;
 void Battle_ApplyRageContinuation(void) {
     BattleMonRuntime* sp1C;
 
-    if ((sBattleTarget->unk_4D & 0x40) && ((sBattleTarget->unk_5C[0]) != 0xD)) {
+    if ((sBattleTarget->volatileStatusFlags & 0x40) && ((sBattleTarget->unk_5C[0]) != 0xD)) {
         sp1C = sBattleUser;
 
         sBattleUser = sBattleTarget;
         sBattleUser->moveCache.lastMove = 0;
-        sBattleUser->moveCache.unk_01 = 10;
+        sBattleUser->moveCache.effect = 10;
 
-        func_8211EF74(D_8219A520 + 0x348, 0x1F, D_8218C780, func_82107F88(sActivePokemon[!sBattleScene.scene->unk_2C]));
+        func_8211EF74(D_8219A520 + 0x348, 0x1F, D_8218C780, func_82107F88(sActivePokemon[!sBattleScene.scene->actingSide]));
         BattleEffect_ApplyStatBoost();
 
         sBattleUser->moveCache.lastMove = RAGE;
-        sBattleUser->moveCache.unk_01 = 0;
+        sBattleUser->moveCache.effect = 0;
 
         sBattleUser = sp1C;
     }
@@ -601,16 +601,16 @@ extern s32 D_8218C77C;
 
 // Matches the ROM, but uses rodata data that is not placed in this file yet.
 void Battle_PlayMoveSound(void) {
-    BattleMonRuntime* sp1C = &sActivePokemon[!sBattleScene.scene->unk_2C]->state.runtime;
+    BattleMonRuntime* sp1C = &sActivePokemon[!sBattleScene.scene->actingSide]->state.runtime;
 
     switch (sBattleCritFlag) {
         case 1:
             func_8211EF74(D_8219A520 + 0x148, 0x1D, D_8218C778);
-            sBattleScene.scene->unk_1A = 2;
+            sBattleScene.scene->hitReactionKind = 2;
             break;
         case 2:
             func_8211EF74(D_8219A520 + 0x148, 0x1E, D_8218C77C);
-            sBattleScene.scene->unk_1A = 2;
+            sBattleScene.scene->hitReactionKind = 2;
             break;
     }
     sp1C->unk_5B = sBattleCritFlag;
@@ -685,31 +685,31 @@ void Battle_QueueMoveFailureAndApplyRecoil(void) {
 
     if (D_82199F3F & 0x7F) {
         if (sBattleCritFlag == 0xFF) {
-            func_8211EF74(D_8219A520 + 0x88, 0x19, D_8218C768, func_82107F88(sActivePokemon[!sBattleScene.scene->unk_2C]));
+            func_8211EF74(D_8219A520 + 0x88, 0x19, D_8218C768, func_82107F88(sActivePokemon[!sBattleScene.scene->actingSide]));
         } else {
-            func_8211EF74(D_8219A520 + 0x88, 0x1A, D_8218C76C, func_82107F88(sActivePokemon[sBattleScene.scene->unk_2C]));
+            func_8211EF74(D_8219A520 + 0x88, 0x1A, D_8218C76C, func_82107F88(sActivePokemon[sBattleScene.scene->actingSide]));
         }
     } else {
-        func_8211EF74(D_8219A520 + 0x88, 0x1B, D_8218C770, func_82107F88(sActivePokemon[!sBattleScene.scene->unk_2C]));
+        func_8211EF74(D_8219A520 + 0x88, 0x1B, D_8218C770, func_82107F88(sActivePokemon[!sBattleScene.scene->actingSide]));
     }
 
     sBattleCritFlag = 0;
 
-    if (sBattleUser->moveCache.unk_01 == 0x2D) {
-        sBattleScene.scene->unk_48 = 0x10;
+    if (sBattleUser->moveCache.effect == 0x2D) {
+        sBattleScene.scene->moveEffectKind = 0x10;
         sBattleDamage >>= 3;
         if (sBattleDamage == 0) {
             sBattleDamage++;
         }
 
-        func_8211EF74(D_8219A520 + 0x208, 0x1C, D_8218C774, func_82107F88(sActivePokemon[sBattleScene.scene->unk_2C]));
+        func_8211EF74(D_8219A520 + 0x208, 0x1C, D_8218C774, func_82107F88(sActivePokemon[sBattleScene.scene->actingSide]));
 
         sp1C = sBattleUser;
         sBattleUser = sBattleTarget;
         sBattleTarget = sp1C;
-        sBattleScene.scene->unk_2C = !sBattleScene.scene->unk_2C;
+        sBattleScene.scene->actingSide = !sBattleScene.scene->actingSide;
         Battle_ApplyDamage();
-        sBattleScene.scene->unk_2C = !sBattleScene.scene->unk_2C;
+        sBattleScene.scene->actingSide = !sBattleScene.scene->actingSide;
         sBattleTarget = sBattleUser;
         sBattleUser = sp1C;
     }
@@ -719,11 +719,11 @@ void Battle_IncrementMoveUsage(void) {
     ActivePokemonState* state;
     BattleMon* mon;
 
-    mon = &sActivePokemon[sBattleScene.scene->unk_2C]->teamRoster->pokemonPicked[sActivePokemon[sBattleScene.scene->unk_2C]->state.rosterIndex];
-    state = &sActivePokemon[sBattleScene.scene->unk_2C]->state;
+    mon = &sActivePokemon[sBattleScene.scene->actingSide]->teamRoster->pokemonPicked[sActivePokemon[sBattleScene.scene->actingSide]->state.rosterIndex];
+    state = &sActivePokemon[sBattleScene.scene->actingSide]->state;
 
-    sBattleUser->unk_32[state->unk_0C]++;
-    mon->unk_20[state->unk_0C]++;
+    sBattleUser->pp[state->selectedMoveIndex]++;
+    mon->pp[state->selectedMoveIndex]++;
 }
 
 s32 Battle_Effect_Metronome(void) {
@@ -743,20 +743,20 @@ s32 Battle_Effect_Metronome(void) {
 void Battle_ApplyPoisonOrBurnDamage(void) {
     u16 var_a0;
 
-    if (sBattleUser->unk_12 != 0xFFFF) {
-        sBattleUser->unk_0E = sBattleUser->unk_12;
+    if (sBattleUser->currentHp != 0xFFFF) {
+        sBattleUser->unk_0E = sBattleUser->currentHp;
     } else {
-        sBattleUser->unk_0E = sBattleUser->unk_0C;
+        sBattleUser->unk_0E = sBattleUser->displayHp;
     }
 
-    var_a0 = (sBattleUser->unk_28 >> 4) & 0xFFFF;
+    var_a0 = (sBattleUser->maxHp >> 4) & 0xFFFF;
     if (var_a0 == 0) {
         var_a0++;
     }
 
-    if (sBattleUser->unk_4E & 1) {
-        sBattleUser->unk_51++;
-        var_a0 *= sBattleUser->unk_51;
+    if (sBattleUser->uniqueStatusFlags & 1) {
+        sBattleUser->toxicCounter++;
+        var_a0 *= sBattleUser->toxicCounter;
     }
 
     if (sBattleUser->unk_0E < var_a0) {
@@ -776,23 +776,23 @@ void Battle_ApplyLeechSeedDamage(void) {
     s32 amount;
     s32 v;
 
-    if (!(sBattleUser->unk_15 & 0x18)) {
-        v = sBattleUser->unk_12;
+    if (!(sBattleUser->pendingStatusCondition & 0x18)) {
+        v = sBattleUser->currentHp;
         if (v != 0xFFFF) {
             sBattleUser->unk_10 = v;
         } else {
-            sBattleUser->unk_10 = sBattleUser->unk_0C;
+            sBattleUser->unk_10 = sBattleUser->displayHp;
         }
     }
-    v = (sBattleUser->unk_28 >> 4) & 0xFFFF;
+    v = (sBattleUser->maxHp >> 4) & 0xFFFF;
     amount = v;
     if (v == 0) {
         v = v + 1;
         amount = v & 0xFFFF;
     }
-    if (sBattleUser->unk_4E & 1) {
-        sBattleUser->unk_51 += 1;
-        v = (u32)amount * sBattleUser->unk_51;
+    if (sBattleUser->uniqueStatusFlags & 1) {
+        sBattleUser->toxicCounter += 1;
+        v = (u32)amount * sBattleUser->toxicCounter;
         amount = v & 0xFFFF;
     }
     v = sBattleUser->unk_10;
@@ -802,9 +802,9 @@ void Battle_ApplyLeechSeedDamage(void) {
     } else {
         sBattleUser->unk_10 = v - amount;
     }
-    sBattleTarget->unk_10 = sBattleTarget->unk_0C;
+    sBattleTarget->unk_10 = sBattleTarget->displayHp;
     sBattleTarget->unk_10 = sBattleTarget->unk_10 + amount;
-    v = sBattleTarget->unk_28;
+    v = sBattleTarget->maxHp;
     if (v < sBattleTarget->unk_10) {
         sBattleTarget->unk_10 = v;
     }
@@ -822,27 +822,27 @@ void Battle_ApplyLeechSeedDamage(void);
 void func_82111870(void);
 
 s32 Battle_ApplyResidualEffects(void) {
-    if (sBattleTarget->unk_0C == 0) {
+    if (sBattleTarget->displayHp == 0) {
         return 0;
     }
 
-    if (sBattleUser->unk_15 & 0x18) {
-        if (sBattleUser->unk_15 & 8) {
-            func_8211EF74(D_8219A520 + 0x248, 0, D_8218C704, func_82107F88(sActivePokemon[sBattleScene.scene->unk_2C]));
+    if (sBattleUser->pendingStatusCondition & 0x18) {
+        if (sBattleUser->pendingStatusCondition & 8) {
+            func_8211EF74(D_8219A520 + 0x248, 0, D_8218C704, func_82107F88(sActivePokemon[sBattleScene.scene->actingSide]));
         } else {
-            func_8211EF74(D_8219A520 + 0x248, 1, D_8218C708, func_82107F88(sActivePokemon[sBattleScene.scene->unk_2C]));
+            func_8211EF74(D_8219A520 + 0x248, 1, D_8218C708, func_82107F88(sActivePokemon[sBattleScene.scene->actingSide]));
         }
         Battle_ApplyPoisonOrBurnDamage();
-        sBattleTarget->unk_0E = sBattleTarget->unk_0C;
+        sBattleTarget->unk_0E = sBattleTarget->displayHp;
     }
 
-    if (sBattleUser->unk_4D & 0x80) {
+    if (sBattleUser->volatileStatusFlags & 0x80) {
         Battle_ApplyLeechSeedDamage();
         func_82111870();
-        func_8211EF74(D_8219A520 + 0x288, 2, D_8218C70C, func_82107F88(sActivePokemon[sBattleScene.scene->unk_2C]));
+        func_8211EF74(D_8219A520 + 0x288, 2, D_8218C70C, func_82107F88(sActivePokemon[sBattleScene.scene->actingSide]));
     }
 
-    if (sBattleUser->unk_0C != 0) {
+    if (sBattleUser->displayHp != 0) {
         return 0;
     }
     return 1;

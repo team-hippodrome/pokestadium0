@@ -477,9 +477,9 @@ typedef struct unk_D_800AA660 {
     /* 0x0000 */ OSThread thread;
     /* 0x01B0 */ char unk01B0[0x10];
     /* 0x01C0 */ OSMesgQueue queue1;
-    /* 0x01D8 */ struct unk_D_800AA660* unk_01D8;
+    /* 0x01D8 */ struct unk_D_800AA660* nextClient;
     /* 0x01DC */ s32 unk_01DC;
-    /* 0x01E0 */ char unk01E0[0x2000];
+    /* 0x01E0 */ char stack[0x2000];
     /* 0x21E0 */ OSMesg mesg;
     /* 0x21E4 */ OSMesgQueue queue2;
     /* 0x21FC */ u8* font1;

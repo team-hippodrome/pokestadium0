@@ -1447,7 +1447,7 @@ s32 func_8002D454(s32 arg0, s32 arg1) {
 s32 func_8001FA8C(s32);
 
 s32 func_8002D498(BattleMon* arg0, s32 arg1) {
-    s32 idx = arg0->unk_00.unk_00 - 1;
+    s32 idx = arg0->species.id - 1;
     s32 type;
 
     if (arg1 == 1) {

@@ -4,10 +4,10 @@
 void BattleAnim_InitModelAnimationSlot(Particle* arg0, s16 arg1) {
     Vec3f sp24;
 
-    arg0->unk_14 = BattleAnim_AllocOwnerDisplayContext(arg0);
+    arg0->displayObject = BattleAnim_AllocOwnerDisplayContext(arg0);
 
-    if (arg0->unk_14 != NULL) {
-        BattleAnim_InitModelWithAnim(arg0->unk_14, 0x21, 0x22);
+    if (arg0->displayObject != NULL) {
+        BattleAnim_InitModelWithAnim(arg0->displayObject, 0x21, 0x22);
         Particle_Field1C_SetScaled_0B938(arg0, 0.2f);
         BattleAnim_ApplyModelSpeciesOffset(arg0);
         Vec3f_SetComponentsDuplicate(&sp24, (arg1 * 5.0f * 2) + -10.0f, 5.0f, 10.0f);
@@ -50,7 +50,7 @@ void BattleAnim_CallbackStartEffects12And129DelayedModelAnimWait(Particle* arg0)
             break;
 
         case 3:
-            if (ModelAnim_IsFinished(arg0->unk_14) != 0) {
+            if (ModelAnim_IsFinished(arg0->displayObject) != 0) {
                 Particle_AdvanceLifecycle(arg0);
             }
             break;
@@ -202,7 +202,7 @@ void BattleAnim_ApplyEffect125ModelScaleOffset(Particle* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
     f32 scale = 1.2f;
 
-    switch (BattleAnim_GetOwnerSpecies(arg0->unk_10)) {
+    switch (BattleAnim_GetOwnerSpecies(arg0->pokemon)) {
         case 0x3:
             scale = 1.5f;
             break;
@@ -257,9 +257,9 @@ void BattleAnim_ApplyEffect125ModelScaleOffset(Particle* arg0) {
 }
 
 void BattleAnim_InitEffect125Model(Particle* arg0, UNUSED s16 arg1) {
-    arg0->unk_14 = BattleAnim_AllocOwnerDisplayContext(arg0);
-    if (arg0->unk_14 != NULL) {
-        BattleAnim_InitModelWithAnim(arg0->unk_14, 0x25, 0x26);
+    arg0->displayObject = BattleAnim_AllocOwnerDisplayContext(arg0);
+    if (arg0->displayObject != NULL) {
+        BattleAnim_InitModelWithAnim(arg0->displayObject, 0x25, 0x26);
         Particle_Field94_AddY_0A594(arg0, -0x8000);
         BattleAnim_ApplyEffect125ModelScaleOffset(arg0);
         Particle_FieldA6_SetS16_0BCA8(arg0, 0x20);
@@ -473,8 +473,8 @@ void BattleAnim_CallbackStartEffect8ModelBurstEmitter(Particle* arg0) {
 
         case 2:
             if (Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0) != 0) {
-                arg0->unk_14 = BattleAnim_AllocOwnerDisplayContext(arg0);
-                BattleAnim_InitModel(arg0->unk_14, 0x9F);
+                arg0->displayObject = BattleAnim_AllocOwnerDisplayContext(arg0);
+                BattleAnim_InitModel(arg0->displayObject, 0x9F);
                 Particle_EnableRendering(arg0);
                 Particle_FieldA6_SetS16_0BCA8(arg0, ParticleMath_RandomRange(3));
             }
@@ -504,9 +504,9 @@ void BattleAnim_CallbackStartEffect8ModelBurstEmitter(Particle* arg0) {
 }
 
 void BattleAnim_InitEffect31Model(Particle* arg0) {
-    arg0->unk_14 = BattleAnim_AllocOwnerDisplayContext(arg0);
-    if (arg0->unk_14 != NULL) {
-        BattleAnim_InitModelWithAnim(arg0->unk_14, 0x2B, 0x2C);
+    arg0->displayObject = BattleAnim_AllocOwnerDisplayContext(arg0);
+    if (arg0->displayObject != NULL) {
+        BattleAnim_InitModelWithAnim(arg0->displayObject, 0x2B, 0x2C);
         Particle_Field1C_SetScaled_0B938(arg0, 0.25f);
         Particle_Field94_SetY_0A2B8(arg0, ParticleMath_RandomRange(0x10000));
         Particle_AdvanceLifecycle(arg0);
@@ -594,9 +594,9 @@ void ParticleEffect_CreateSimpleDL(s32 arg0, arg1_func_84344CE8* arg1) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetupBlizzardHitSpark(Particle* arg0) {
-    arg0->unk_14 = BattleAnim_AllocParticleDisplayContext(arg0);
-    if (arg0->unk_14 != NULL) {
-        BattleAnim_InitModel(arg0->unk_14, 0x30);
+    arg0->displayObject = BattleAnim_AllocParticleDisplayContext(arg0);
+    if (arg0->displayObject != NULL) {
+        BattleAnim_InitModel(arg0->displayObject, 0x30);
         Particle_SetFlags(arg0, 0x200);
         Particle_SetScale(arg0, 5.3f);
         Particle_SetPrimAlpha(arg0, 0);
@@ -754,10 +754,10 @@ void BattleAnim_InitMove146Model(Particle* arg0) {
     s16 sp26 = Particle_FieldCF_GetS16_0C058(arg0);
     s16 sp24;
 
-    arg0->unk_14 = BattleAnim_AllocOwnerDisplayContext(arg0);
+    arg0->displayObject = BattleAnim_AllocOwnerDisplayContext(arg0);
 
-    if (arg0->unk_14 != NULL) {
-        BattleAnim_InitModelWithAnim(arg0->unk_14, 0x31, 0x32);
+    if (arg0->displayObject != NULL) {
+        BattleAnim_InitModelWithAnim(arg0->displayObject, 0x31, 0x32);
         Particle_Field1C_SetScaled_0B938(arg0, 0.25f);
         Particle_Field38_SetYScaled_08CA0(arg0, 5.0f);
         switch (sp26) {
@@ -791,7 +791,7 @@ void BattleAnim_RunDizzyPunchHitEffect(Particle* arg0) {
             break;
 
         case 2:
-            if (ModelAnim_IsFinished(arg0->unk_14) != 0) {
+            if (ModelAnim_IsFinished(arg0->displayObject) != 0) {
                 Particle_AdvanceLifecycle(arg0);
             }
             break;
@@ -831,13 +831,13 @@ void BattleAnim_InitEffect49Model(Particle* arg0) {
 
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, sp24);
 
-    arg0->unk_14 = BattleAnim_AllocOwnerDisplayContext(arg0);
-    if (arg0->unk_14 != NULL) {
-        BattleAnim_InitModel(arg0->unk_14, 0x33);
+    arg0->displayObject = BattleAnim_AllocOwnerDisplayContext(arg0);
+    if (arg0->displayObject != NULL) {
+        BattleAnim_InitModel(arg0->displayObject, 0x33);
         if (sp26 == 0) {
-            BattleAnim_BindModelAnim(arg0->unk_14, 0x34);
+            BattleAnim_BindModelAnim(arg0->displayObject, 0x34);
         } else {
-            BattleAnim_BindModelAnimReversed(arg0->unk_14, 0x34);
+            BattleAnim_BindModelAnimReversed(arg0->displayObject, 0x34);
         }
         Particle_Field1C_SetScaled_0B938(arg0, 1.0f);
         Particle_AdvanceLifecycle(arg0);
@@ -856,7 +856,7 @@ void BattleAnim_CallbackEndEffect49Model33Anim34WaitCleanup(Particle* arg0) {
             break;
 
         case 2:
-            if (func_82136E2C(arg0->unk_14) != 0) {
+            if (func_82136E2C(arg0->displayObject) != 0) {
                 Particle_AdvanceLifecycle(arg0);
             }
             break;
@@ -877,7 +877,7 @@ void BattleAnim_CallbackEndEffect21ModelAnimWait(Particle* arg0) {
             break;
 
         case 2:
-            if (ModelAnim_IsFinished(arg0->unk_14) != 0) {
+            if (ModelAnim_IsFinished(arg0->displayObject) != 0) {
                 Particle_AdvanceLifecycle(arg0);
             }
             break;
@@ -932,9 +932,9 @@ void ParticleEffect_RegisterModeSpecific(void) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetupFlyUpwardMovementEffect(Particle* arg0) {
-    arg0->unk_14 = BattleAnim_AllocOwnerDisplayContext(arg0);
-    if (arg0->unk_14 != NULL) {
-        BattleAnim_InitModel(arg0->unk_14, 0x35);
+    arg0->displayObject = BattleAnim_AllocOwnerDisplayContext(arg0);
+    if (arg0->displayObject != NULL) {
+        BattleAnim_InitModel(arg0->displayObject, 0x35);
         Particle_Field1C_SetScaled_0B938(arg0, 5.0f);
         Particle_Field38_AddYScaled_08E90(arg0, -100.0f);
         Particle_SetPrimAlpha(arg0, 0);
@@ -1028,13 +1028,13 @@ void BattleAnim_AllocateEffect75DisplayList(s32 arg0, arg1_func_84344CE8* arg1) 
 void BattleAnim_InitEffects63And75Model(Particle* arg0) {
     s16 sp26 = Particle_FieldCF_GetS16_0C058(arg0);
 
-    arg0->unk_14 = BattleAnim_AllocOwnerDisplayContext(arg0);
-    if (arg0->unk_14 != NULL) {
+    arg0->displayObject = BattleAnim_AllocOwnerDisplayContext(arg0);
+    if (arg0->displayObject != NULL) {
         if (sp26 == 0) {
-            BattleAnim_InitModelWithAnim(arg0->unk_14, 0x36, 0x37);
+            BattleAnim_InitModelWithAnim(arg0->displayObject, 0x36, 0x37);
             Particle_Field1C_SetScaled_0B938(arg0, 0.75f);
         } else {
-            BattleAnim_InitModelWithAnim(arg0->unk_14, 0x61, 0x62);
+            BattleAnim_InitModelWithAnim(arg0->displayObject, 0x61, 0x62);
             Particle_Field1C_SetScaled_0B938(arg0, 1.0f);
         }
         Particle_AdvanceLifecycle(arg0);
@@ -1053,7 +1053,7 @@ void BattleAnim_CallbackStartEffects63And75ModelAnimWait(Particle* arg0) {
             break;
 
         case 2:
-            if (ModelAnim_IsFinished(arg0->unk_14) != 0) {
+            if (ModelAnim_IsFinished(arg0->displayObject) != 0) {
                 Particle_AdvanceLifecycle(arg0);
             }
             break;
@@ -1067,9 +1067,9 @@ void BattleAnim_CallbackStartEffects63And75ModelAnimWait(Particle* arg0) {
 void BattleAnim_InitEffects10And50Model(Particle* arg0) {
     u16 sp26 = Particle_FieldCF_GetS16_0C058(arg0);
 
-    arg0->unk_14 = BattleAnim_AllocOwnerDisplayContext(arg0);
-    if (arg0->unk_14 != NULL) {
-        BattleAnim_InitModelWithAnim(arg0->unk_14, 0x39, 0x3A);
+    arg0->displayObject = BattleAnim_AllocOwnerDisplayContext(arg0);
+    if (arg0->displayObject != NULL) {
+        BattleAnim_InitModelWithAnim(arg0->displayObject, 0x39, 0x3A);
         Particle_Field1C_SetScaled_0B938(arg0, 0.5f);
 
         switch (sp26) {
@@ -1149,7 +1149,7 @@ void BattleAnim_ApplyEffects63And75SpeciesScaleOffset(Particle* arg0) {
     f32 sp1C = 0.6f;
     f32 sp18 = 0.0f;
 
-    switch (BattleAnim_GetOwnerSpecies(arg0->unk_10)) {
+    switch (BattleAnim_GetOwnerSpecies(arg0->pokemon)) {
         case 0x3:
             sp1C = 1.0f;
             sp18 = 5.0f;
@@ -1204,9 +1204,9 @@ void BattleAnim_ApplyEffects63And75SpeciesScaleOffset(Particle* arg0) {
 }
 
 void BattleAnim_InitEffects63And75Model38(Particle* arg0) {
-    arg0->unk_14 = BattleAnim_AllocOwnerDisplayContext(arg0);
-    if (arg0->unk_14 != NULL) {
-        BattleAnim_InitModel(arg0->unk_14, 0x38);
+    arg0->displayObject = BattleAnim_AllocOwnerDisplayContext(arg0);
+    if (arg0->displayObject != NULL) {
+        BattleAnim_InitModel(arg0->displayObject, 0x38);
         BattleAnim_ApplyEffects63And75SpeciesScaleOffset(arg0);
         Particle_SetPrimAlpha(arg0, 0);
         Particle_AdvanceLifecycle(arg0);
@@ -1355,9 +1355,9 @@ void BattleAnim_InitializeSoftBoiledUse(void) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetupStrongWinds(Particle* arg0) {
-    arg0->unk_14 = BattleAnim_AllocOwnerDisplayContext(arg0);
-    if (arg0->unk_14 != NULL) {
-        BattleAnim_InitModel(arg0->unk_14, 0x60);
+    arg0->displayObject = BattleAnim_AllocOwnerDisplayContext(arg0);
+    if (arg0->displayObject != NULL) {
+        BattleAnim_InitModel(arg0->displayObject, 0x60);
         Particle_FieldCA_SetU8_0BECC(arg0, 7);
         Particle_SetFlags(arg0, 0x200);
         Particle_SetScale(arg0, 3.3f);
@@ -1944,14 +1944,14 @@ void BattleAnim_TransformNop(UNUSED ActivePokemon* owner, UNUSED ActivePokemon* 
 void BattleAnim_SetupBitingEffect(Particle* arg0) {
     s16 sp26 = Particle_FieldCF_GetS16_0C058(arg0);
 
-    arg0->unk_14 = BattleAnim_AllocParticleDisplayContext(arg0);
-    if (arg0->unk_14 != NULL) {
+    arg0->displayObject = BattleAnim_AllocParticleDisplayContext(arg0);
+    if (arg0->displayObject != NULL) {
         if (sp26 == 0) {
-            BattleAnim_InitModel(arg0->unk_14, 0x55);
+            BattleAnim_InitModel(arg0->displayObject, 0x55);
         } else {
-            BattleAnim_InitModel(arg0->unk_14, 0x63);
+            BattleAnim_InitModel(arg0->displayObject, 0x63);
         }
-        BattleAnim_BindModelAnim(arg0->unk_14, 0x56);
+        BattleAnim_BindModelAnim(arg0->displayObject, 0x56);
         Particle_SetFlags(arg0, 0x200);
         Particle_FieldCA_SetU8_0BECC(arg0, 7);
         Particle_SetScale(arg0, 1.0f);
@@ -2105,7 +2105,7 @@ void BattleAnim_InitializeSwordsDanceUse(void) {
 f32 BattleAnim_GetSpeciesScaleAdjust(Particle* arg0) {
     f32 sp1C = 1.0f;
 
-    switch (BattleAnim_GetOwnerSpecies(arg0->unk_10)) {
+    switch (BattleAnim_GetOwnerSpecies(arg0->pokemon)) {
         case 0x3B:
             sp1C = 1.45f;
             break;
@@ -2186,9 +2186,9 @@ void BattleAnim_InitializeBonemerangUse(void) {
 
 void BattleAnim_CallbackStartEffect17ModelAnimFinish_InitParticle(Particle* arg0) {
     Particle_FieldCD_GetU8_0C048(arg0);
-    arg0->unk_14 = BattleAnim_AllocOwnerDisplayContext(arg0);
-    if (arg0->unk_14 != NULL) {
-        BattleAnim_InitModelWithAnim(arg0->unk_14, 0x71, 0x72);
+    arg0->displayObject = BattleAnim_AllocOwnerDisplayContext(arg0);
+    if (arg0->displayObject != NULL) {
+        BattleAnim_InitModelWithAnim(arg0->displayObject, 0x71, 0x72);
         Particle_Field1C_SetScaled_0B938(arg0, 1.0f);
         Particle_FieldA6_SetS16_0BCA8(arg0, 0x1E);
         Particle_AdvanceLifecycle(arg0);
@@ -2204,7 +2204,7 @@ void BattleAnim_CallbackStartEffect17ModelAnimFinish(Particle* arg0) {
             break;
 
         case 2:
-            if (ModelAnim_IsFinished(arg0->unk_14) != 0) {
+            if (ModelAnim_IsFinished(arg0->displayObject) != 0) {
                 Particle_MarkInactive(arg0);
             }
             break;
@@ -2217,8 +2217,8 @@ void BattleAnim_CallbackStartEffect17ModelAnimFinish(Particle* arg0) {
 void BattleAnim_SetupSlimePuddle(Particle* arg0) {
     s16 sp26 = Particle_FieldCD_GetU8_0C048(arg0);
 
-    arg0->unk_14 = BattleAnim_AllocOwnerDisplayContext(arg0);
-    if (arg0->unk_14 != NULL) {
+    arg0->displayObject = BattleAnim_AllocOwnerDisplayContext(arg0);
+    if (arg0->displayObject != NULL) {
         switch (sp26) {
             case 0:
                 Particle_SetPosition(arg0, 8.0f, 0.0f, -10.0f);
@@ -2237,7 +2237,7 @@ void BattleAnim_SetupSlimePuddle(Particle* arg0) {
                 break;
         }
 
-        BattleAnim_InitModelWithAnim(arg0->unk_14, 0x6E, 0x6F);
+        BattleAnim_InitModelWithAnim(arg0->displayObject, 0x6E, 0x6F);
         Particle_Field1C_SetScaled_0B938(arg0, 1.0f);
         Particle_FieldA6_SetS16_0BCA8(arg0, 0x1E);
         Particle_AdvanceLifecycle(arg0);
@@ -2510,7 +2510,7 @@ void ParticleEffect_PaletteMultiBurst(void) {
 f32 func_8215AEA4(Particle* arg0) {
     f32 sp1C = 0.5f;
 
-    switch (BattleAnim_GetOwnerSpecies(arg0->unk_10)) {
+    switch (BattleAnim_GetOwnerSpecies(arg0->pokemon)) {
         case 0x5F:
             sp1C = 0.3f;
             break;
@@ -2633,7 +2633,7 @@ void Gfx_PokemonPortraitCallback(Gfx* arg0, u8 arg1, UNUSED u16 arg2) {
     u8* var_a3;
     s32 idx = arg1 * 0xB48;
 
-    if (BattleScene_GetParticipantSideIndex(BattleAnim_GetOwnerContextParticle(D_8006049C)->unk_10) == 0) {
+    if (BattleScene_GetParticipantSideIndex(BattleAnim_GetOwnerContextParticle(D_8006049C)->pokemon) == 0) {
         var_a3 = sSide1PokemonThumbnailImage + idx;
     } else {
         var_a3 = sSide2PokemonThumbnailImage + idx;
@@ -2683,7 +2683,7 @@ f32 func_8215B6A4(Particle* arg0) {
     f32 a = 0.0f;
     f32 b = 1.0f;
 
-    switch (BattleAnim_GetOwnerSpecies(arg0->unk_10)) {
+    switch (BattleAnim_GetOwnerSpecies(arg0->pokemon)) {
         case 0x5F:
             Particle_Field38_AddXZFromField94YOffsetMinus90_0901C(arg0, 15.0f);
             a = 10.0f;
@@ -3095,9 +3095,9 @@ void BattleAnim_InitializeNightShadeHit(void) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetupConfuseRayUseSpotlight(Particle* arg0) {
-    arg0->unk_14 = BattleAnim_AllocOwnerDisplayContext(arg0);
-    if (arg0->unk_14 != NULL) {
-        BattleAnim_InitModelWithAnim(arg0->unk_14, 0x42, 0xC2);
+    arg0->displayObject = BattleAnim_AllocOwnerDisplayContext(arg0);
+    if (arg0->displayObject != NULL) {
+        BattleAnim_InitModelWithAnim(arg0->displayObject, 0x42, 0xC2);
         Particle_Field1C_SetScaled_0B938(arg0, 1.0f);
         ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0x23);
         Particle_SetPrimAlpha(arg0, 0);
@@ -3128,10 +3128,10 @@ void func_8215C984(s8 *arg0) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetupConfuseRayHitSpotlight(Particle* arg0) {
-    arg0->unk_14 = BattleAnim_AllocOwnerDisplayContext(arg0);
-    if (arg0->unk_14 != NULL) {
-        BattleAnim_InitModelWithAnim(arg0->unk_14, 0x42, 0xC2);
-        BattleAnim_SetModelAnimFrame(arg0->unk_14, 0x28);
+    arg0->displayObject = BattleAnim_AllocOwnerDisplayContext(arg0);
+    if (arg0->displayObject != NULL) {
+        BattleAnim_InitModelWithAnim(arg0->displayObject, 0x42, 0xC2);
+        BattleAnim_SetModelAnimFrame(arg0->displayObject, 0x28);
         Particle_Field1C_SetScaled_0B938(arg0, 1.0f);
         ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0x23);
         Particle_FieldAE_SetS16_0BF4C(arg0, 0xFF);
@@ -3336,8 +3336,8 @@ void BattleAnim_CallbackStartEffect101ModelBurstEmitter(Particle* arg0) {
 
         case 2:
             if (Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0) != 0) {
-                arg0->unk_14 = BattleAnim_AllocOwnerDisplayContext(arg0);
-                BattleAnim_InitModelWithAnim(arg0->unk_14, 0xA0, 0xA1);
+                arg0->displayObject = BattleAnim_AllocOwnerDisplayContext(arg0);
+                BattleAnim_InitModelWithAnim(arg0->displayObject, 0xA0, 0xA1);
                 Particle_EnableRendering(arg0);
             }
             break;
@@ -3385,8 +3385,8 @@ void BattleAnim_SetupBarrageHitEffect(Particle* arg0) {
     Particle_Field94_AddVec_0A52C(arg0, 0x800, -0x8000, 0);
     Particle_Field74_SetScaled_0AD8C(arg0, 8.0f);
     Particle_AdvanceLifecycle(arg0);
-    arg0->unk_14 = BattleAnim_AllocOwnerDisplayContext(arg0);
-    BattleAnim_InitModel(arg0->unk_14, 0xA0);
+    arg0->displayObject = BattleAnim_AllocOwnerDisplayContext(arg0);
+    BattleAnim_InitModel(arg0->displayObject, 0xA0);
 }
 
 void func_8215DAEC(s8 *arg0) {
@@ -3424,9 +3424,9 @@ void BattleAnim_InitializeBarrageHit(void) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetupPsywaveEffect(Particle* arg0) {
-    arg0->unk_14 = BattleAnim_AllocOwnerDisplayContext(arg0);
-    if (arg0->unk_14 != NULL) {
-        BattleAnim_InitModel(arg0->unk_14, 0xA2);
+    arg0->displayObject = BattleAnim_AllocOwnerDisplayContext(arg0);
+    if (arg0->displayObject != NULL) {
+        BattleAnim_InitModel(arg0->displayObject, 0xA2);
         Particle_Field1C_SetScaled_0B938(arg0, 1.0f);
         Particle_SetPrimAlpha(arg0, 0);
         Particle_AdvanceLifecycle(arg0);
@@ -3773,7 +3773,7 @@ void BattleAnim_CallbackEndEffect76DefaultDescriptorModelFade(Particle* arg0) {
                 Particle_PrimAlpha_Approach_0BC2C(arg0, 0, 0x20);
             }
 
-            if (ModelAnim_IsFinished(arg0->unk_14) != 0) {
+            if (ModelAnim_IsFinished(arg0->displayObject) != 0) {
                 Particle_MarkInactive(arg0);
             }
             break;
