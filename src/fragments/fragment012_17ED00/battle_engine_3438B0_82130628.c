@@ -573,7 +573,11 @@ void func_8213201C(s32 arg0) {
     }
 }
 
-void func_82132088(CameraNode* arg0) {
+/**
+ * Battle start: sends out side 0's Pokemon with ゆけっ！%s (Go! %s).
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleScene_SendOutSide0(CameraNode* arg0) {
     sActivePokemon[0]->displayObject.node.flags &= ~1;
     sActivePokemon[1]->displayObject.node.flags &= ~1;
     func_821365B0(3, (s8*)sActivePokemon[0], (s8*)sActivePokemon[0], 0xFF, 0xFF);
@@ -601,7 +605,11 @@ void func_821321A4(CameraNode* arg0) {
     }
 }
 
-void func_82132238(CameraNode* arg0) {
+/**
+ * Battle start: sends out side 1's Pokemon with ゆけっ！%s (Go! %s).
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleScene_SendOutSide1(CameraNode* arg0) {
     func_800407B0(2, 0, 0);
     BattleAnim_QueueEffectList3(3, sActivePokemon[1], sActivePokemon[1], 0xFF, 0xFF);
     func_8211EF74(D_8219A520 + 0x488, 0, (s32)D_8219665C, func_82107F88(sActivePokemon[1]));

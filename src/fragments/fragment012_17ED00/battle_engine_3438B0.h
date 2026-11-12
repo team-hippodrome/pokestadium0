@@ -261,13 +261,13 @@ void func_8213201C(s32 arg0);
 s32 func_82107F88(ActivePokemon*);
 s32 func_8211EF74(s32, s32, s32, ...);
 extern char D_82196650[];
-void func_82132088(CameraNode* arg0);
+void BattleScene_SendOutSide0(CameraNode* arg0);
 
 s32 func_821057D4(ActivePokemon*, s32);
 void func_821321A4(CameraNode* arg0);
 
 extern char D_8219665C[];
-void func_82132238(CameraNode* arg0);
+void BattleScene_SendOutSide1(CameraNode* arg0);
 
 M2C_UNK func_82125384();
 

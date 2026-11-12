@@ -311,7 +311,11 @@ extern u8 D_0300A440[];
 extern char D_821959C4[];
 extern char D_821959D0[];
 extern char D_821959DC[];
-void func_82118FD8(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
+/**
+ * Draws the battle command menu: たたかう (Fight), ポケモン (Pokemon), にげる (Run).
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleMenu_DrawCommandMenu(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
     s32 i;
     s32 pad; // FAKE
 
@@ -348,7 +352,11 @@ extern u8 D_030099C0[];
 extern u8 D_03009B40[];
 extern char D_821959E4[];
 extern char D_821959EC[];
-void func_82119364(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
+/**
+ * Draws the wide button bar with もどる (Back) and かくにん (Confirm).
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleMenu_DrawBackConfirmBar(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
     s32 i;
     s32 pad; // FAKE
 
@@ -380,7 +388,11 @@ void func_82119364(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
 extern u8 D_03009C00[];
 extern u8 D_03009D80[];
 extern char D_821959F8[];
-void func_821196A4(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
+/**
+ * Draws the small かくにん (Confirm) button.
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleMenu_DrawConfirmButton(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
     s32 i;
     s32 pad; // FAKE
 

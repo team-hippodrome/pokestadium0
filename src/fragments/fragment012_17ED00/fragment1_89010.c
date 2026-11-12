@@ -37,7 +37,7 @@ void BattleScene_UpdateIntroSequence(CameraNode* arg0) {
             break;
 
         case 7:
-            func_82132088(arg0);
+            BattleScene_SendOutSide0(arg0);
             break;
 
         case 8:
@@ -45,7 +45,7 @@ void BattleScene_UpdateIntroSequence(CameraNode* arg0) {
             break;
 
         case 9:
-            func_82132238(arg0);
+            BattleScene_SendOutSide1(arg0);
             break;
 
         case 10:

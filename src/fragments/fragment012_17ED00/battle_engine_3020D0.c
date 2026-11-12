@@ -34,11 +34,11 @@ void BattleScene_ResetMessageQueue(void);
 
 void func_8211B484(TeamRoster*, s32, s32, s32);
 void func_8211B900(ActivePokemon*, s32, s32, s32);
-void func_821196A4(ActivePokemon*, s32, s32, s32);
-void func_82119364(ActivePokemon*, s32, s32, s32);
-void func_82119CAC(ActivePokemon*, s32, s32, s32);
-void func_8211C6C0(ActivePokemon*, s32, s32, s32);
-void func_82118FD8(ActivePokemon*, s32, s32, s32);
+void BattleMenu_DrawConfirmButton(ActivePokemon*, s32, s32, s32);
+void BattleMenu_DrawBackConfirmBar(ActivePokemon*, s32, s32, s32);
+void BattleMenu_DrawMovePanel(ActivePokemon*, s32, s32, s32);
+void BattleMenu_DrawSurrenderPromptWithCursor(ActivePokemon*, s32, s32, s32);
+void BattleMenu_DrawCommandMenu(ActivePokemon*, s32, s32, s32);
 void func_8211E890(ActivePokemon* arg0, ActivePokemonState* arg1) {
     TeamRoster* sp2C = arg0->sessionTeams->teamMember[M2C_FIELD(arg0, s32*, 0x9D4)];
 
@@ -61,23 +61,23 @@ void func_8211E890(ActivePokemon* arg0, ActivePokemonState* arg1) {
                         func_8211B900(arg0, 0x60, 0xF, sp2C->controllerPort);
                     }
                 } else if (arg1->unk_2D == 0x10) {
-                    func_821196A4(arg0, 0x60, 0xF, sp2C->controllerPort);
+                    BattleMenu_DrawConfirmButton(arg0, 0x60, 0xF, sp2C->controllerPort);
                 } else {
-                    func_82119364(arg0, 0x60, 0xF, sp2C->controllerPort);
+                    BattleMenu_DrawBackConfirmBar(arg0, 0x60, 0xF, sp2C->controllerPort);
                 }
                 break;
             case 1:
                 if (arg1->showingCommandOptions == 1) {
-                    func_82119CAC(arg0, 0x60, 0xF, sp2C->controllerPort);
+                    BattleMenu_DrawMovePanel(arg0, 0x60, 0xF, sp2C->controllerPort);
                 } else {
-                    func_82119364(arg0, 0x60, 0xF, sp2C->controllerPort);
+                    BattleMenu_DrawBackConfirmBar(arg0, 0x60, 0xF, sp2C->controllerPort);
                 }
                 break;
             case 4:
-                func_8211C6C0(arg0, 0x5F, 0xE, sp2C->controllerPort);
+                BattleMenu_DrawSurrenderPromptWithCursor(arg0, 0x5F, 0xE, sp2C->controllerPort);
                 break;
             default:
-                func_82118FD8(arg0, 0x60, 0xF, sp2C->controllerPort);
+                BattleMenu_DrawCommandMenu(arg0, 0x60, 0xF, sp2C->controllerPort);
                 break;
         }
     }
@@ -106,23 +106,23 @@ void func_8211EB10(ActivePokemon* arg0, ActivePokemonState* arg1) {
                         func_8211B900(arg0, 0x18, 0x79, sp2C->controllerPort);
                     }
                 } else if (arg1->unk_2D == 0x10) {
-                    func_821196A4(arg0, 0x9A, 0xCE, sp2C->controllerPort);
+                    BattleMenu_DrawConfirmButton(arg0, 0x9A, 0xCE, sp2C->controllerPort);
                 } else {
-                    func_82119364(arg0, 0x62, 0xCE, sp2C->controllerPort);
+                    BattleMenu_DrawBackConfirmBar(arg0, 0x62, 0xCE, sp2C->controllerPort);
                 }
                 break;
             case 1:
                 if (arg1->showingCommandOptions == 1) {
-                    func_82119CAC(arg0, 0x19, 0xA6, sp2C->controllerPort);
+                    BattleMenu_DrawMovePanel(arg0, 0x19, 0xA6, sp2C->controllerPort);
                 } else {
-                    func_82119364(arg0, 0x62, 0xCE, sp2C->controllerPort);
+                    BattleMenu_DrawBackConfirmBar(arg0, 0x62, 0xCE, sp2C->controllerPort);
                 }
                 break;
             case 4:
-                func_8211C6C0(arg0, 0x17, 0xBB, sp2C->controllerPort);
+                BattleMenu_DrawSurrenderPromptWithCursor(arg0, 0x17, 0xBB, sp2C->controllerPort);
                 break;
             default:
-                func_82118FD8(arg0, 0x18, 0xCE, sp2C->controllerPort);
+                BattleMenu_DrawCommandMenu(arg0, 0x18, 0xCE, sp2C->controllerPort);
                 break;
         }
     }

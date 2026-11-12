@@ -108,7 +108,11 @@ extern char D_82195A38[];
 typedef struct MovePpInit {
     s32 pp[4];
 } MovePpInit;
-void func_82119CAC(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3) {
+/**
+ * Draws the move panel with names and PP. Moves not revealed yet show ？？？？？.
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleMenu_DrawMovePanel(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3) {
     s32 i;
     MovePpInit move_pp = { 0, 0, 0, 0 };
     u8 max_pp[4];
@@ -272,7 +276,11 @@ extern u8 D_0300A7A0[];
 extern char D_82195A44[];
 extern char D_82195A58[];
 extern char D_82195A60[];
-void func_8211AAC4(s16 arg0, s16 arg1, s16 arg2, s32 arg3) {
+/**
+ * Draws こうさんしますか? (Surrender?) with いいえ (No) and はい (Yes), tinted for the trainer slot.
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleMenu_DrawSurrenderPrompt(s16 arg0, s16 arg1, s16 arg2, s32 arg3) {
     s32 pad; // FAKE
     s32 idx;
     s32 n;
@@ -675,7 +683,11 @@ extern u8 D_0300A7A0[];
 extern char D_82195A68[];
 extern char D_82195A7C[];
 extern char D_82195A84[];
-void func_8211C6C0(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3) {
+/**
+ * Draws the こうさんしますか? (Surrender?) prompt with the No/Yes cursor at state.unk_2F.
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleMenu_DrawSurrenderPromptWithCursor(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3) {
     s32 pad[2]; // FAKE
     s32 n;
 
@@ -972,7 +984,11 @@ extern char D_82195B58[];
 extern char D_82195B60[];
 extern char D_82195B64[];
 extern char D_82195B68[];
-void func_8211D5F4(s16 arg0, s16 arg1) {
+/**
+ * Debug overlay: camera distance, X/Y offset, X/Y angle and animation frame.
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleDebug_DrawCameraParams(s16 arg0, s16 arg1) {
     char buf[16];
 
     Ui_DrawPrimColorRect(arg0, arg1, 0x82, 0x50, 0, 0, 0, 0x3C);
@@ -1051,7 +1067,11 @@ extern char D_82195C58[], D_82195C60[], D_82195C68[], D_82195C70[], D_82195C78[]
 extern char D_82195CA8[], D_82195CB0[], D_82195CB8[], D_82195CC0[], D_82195CC8[], D_82195CD8[], D_82195CE4[], D_82195CF0[];
 extern char D_82195CFC[], D_82195D04[], D_82195D0C[], D_82195D14[], D_82195D1C[], D_82195D28[], D_82195D34[];
 
-void func_8211D920(s16 arg0, s16 arg1) {
+/**
+ * Debug overlay: ステップ1 (Step 1) option lists, MODE, and しぬ/しなない (faint / don't faint).
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleDebug_DrawStepMenu(s16 arg0, s16 arg1) {
     char buf[16];
     char* labels[] = { D_82195BEC, D_82195BF8, D_82195C04, D_82195C10 };
     char* names0[] = { D_82195C1C, D_82195C24, D_82195C30, D_82195C38, D_82195C40, D_82195C4C };
@@ -1122,7 +1142,11 @@ extern char D_82195EA0[];
 extern char D_82195EA4[];
 extern s32 D_8219A75C;
 extern s32 D_8219A768;
-void func_8211DDC0(s16 arg0, s16 arg1) {
+/**
+ * Debug overlay for move effects: move name and number, turn, effect 1/2 start, end frame and current frame.
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleDebug_DrawMoveEffectViewer(s16 arg0, s16 arg1) {
     char buf[16];
     s32 val;
     UNUSED s32 pad[1]; // FAKE: stack padding
@@ -1184,7 +1208,11 @@ extern char D_82195F60[];
 extern char D_82195F64[];
 extern char D_82195F68[];
 extern char D_82195F6C[];
-void func_8211E164(s16 arg0, s16 arg1) {
+/**
+ * Debug overlay for move effects with the camera: move name and number, effect 1/2 start, current frame, camera and frame.
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleDebug_DrawMoveCameraViewer(s16 arg0, s16 arg1) {
     char buf[16];
     s32 val;
     UNUSED s32 pad[1]; // FAKE: stack padding
@@ -1230,7 +1258,11 @@ extern char D_82195FB4[];
 extern char D_82195FB8[];
 extern char D_82195FBC[];
 extern char D_82195FC0[];
-void func_8211E414(s16 arg0, s16 arg1) {
+/**
+ * Debug overlay: effect start, sound start, current frame and frame.
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleDebug_DrawEffectSoundTiming(s16 arg0, s16 arg1) {
     char buf[16];
     UNUSED s32 pad[1]; // FAKE: stack padding
     s32 val = M2C_FIELD(D_82199DE0, s32*, 0x620);
@@ -1260,7 +1292,11 @@ extern char D_82195FD8[];
 extern char D_82195FE4[];
 extern char D_82195FF0[];
 extern s32 D_8219A760;
-void func_8211E5F4(s16 arg0, s16 arg1) {
+/**
+ * Debug overlay: Pokemon, Poke Ball, number and player.
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleDebug_DrawPokeBallViewer(s16 arg0, s16 arg1) {
     char buf[16];
     u8* mon = (u8*)(((s32*)&D_82199DE0)[D_8219A760] + 0x7C6);
 
