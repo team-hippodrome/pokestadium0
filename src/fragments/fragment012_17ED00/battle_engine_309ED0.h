@@ -22,7 +22,7 @@ extern s32 sMultihitCountdown;
 #include "math_util.h"
 
 #include "m2c_macros.h"
-void func_821254B0(void);
+void BattleScene_StartSecondAction(void);
 
 void BattleScene_ResetAnimationStep(void);
 void func_82124EF4(void);

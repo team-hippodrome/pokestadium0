@@ -219,7 +219,11 @@ void BattleScene_TickQueueRowEffectList3AtAnimEnd(ActivePokemon* active_pokemon)
     }
 }
 
-void func_82101EC0(s8 *arg0) {
+/**
+ * Clears the Pokemon's cue frame counter at +0x620 (rows 1, 12, 16 and 18 enter with it).
+ * @unverified Name from the code.
+ */
+void ActivePokemon_ResetCueTimer(s8 *arg0) {
     M2C_FIELD(arg0, s32 *, 0x620) = 0;
 }
 
@@ -400,7 +404,12 @@ void BattleScene_TickRow10CleanupAndEnterState18(ActivePokemon* active_pokemon) 
 }
 
 void func_800414B0(u8, s32, s32, s32);
-void func_82102398(ActivePokemon* active_pokemon) {
+/**
+ * Enter callback of presentation row 3 (sBattleSceneStateRowTable): starts the user's body
+ * animation for its move (the move's cue) and its event track. In play row 3 was entered on the
+ * user once for every move used.
+ */
+void BattleScene_EnterMoveUseRow(ActivePokemon* active_pokemon) {
     BattleMonRuntime* runtime;
     ActivePokemonState* state;
     s32 id;
@@ -428,7 +437,12 @@ void func_82102398(ActivePokemon* active_pokemon) {
 }
 
 void func_82122104(ActivePokemon*);
-void func_821024C8(ActivePokemon* active_pokemon) {
+/**
+ * Row 3 tick: when the user's move cue ends, sets the model transform for the move (Agility,
+ * Surf, Meditate, Waterfall, Seismic Toss or the cue's own) and starts the move's effect script.
+ * @unverified Name from the code.
+ */
+void BattleScene_TickMoveUseStartEffect(ActivePokemon* active_pokemon) {
     UNUSED s32 pad; // FAKE: stack padding
     s16 species = active_pokemon->displayObject.objectType - 1;
     BattleMonRuntime* pokemon_runtime;
@@ -478,7 +492,12 @@ void func_821024C8(ActivePokemon* active_pokemon) {
 }
 
 extern s32 D_8219A574;
-void func_8210278C(ActivePokemon* active_pokemon) {
+/**
+ * Row 3 tick: when the user's move cue ends, plays the move's sound (variant 3 for the extra hits
+ * of a multi-hit move, 2 when the move failed).
+ * @unverified Name from the code.
+ */
+void BattleScene_TickMoveUsePlaySound(ActivePokemon* active_pokemon) {
     MovePresentationCue* cue;
     BattleMonRuntime* runtime;
 
@@ -535,7 +554,12 @@ void Battle_HandleStatBoostingMoveAnimation(ActivePokemon* active_pokemon) {
     }
 }
 
-void func_82102A34(ActivePokemon* active_pokemon) {
+/**
+ * Row 3 tick: waits until 0x1F frames past the cue's effect frame; for Defense Curl (0x6A) it
+ * also switches the model's texture mode.
+ * @unverified Name from the code.
+ */
+void BattleScene_TickMoveUseEnd(ActivePokemon* active_pokemon) {
     BattleMonRuntime* runtime;
     MovePresentationCue* cue;
 
@@ -575,7 +599,7 @@ void func_82102AEC(ActivePokemon* active_pokemon) {
  * State row 21 tick: when move cue 0 ends, plays the species sound.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
-void BattleScene_TickRow21PlaySpeciesSound(ActivePokemon* active_pokemon) {
+void BattleScene_TickRow22PlaySpeciesSound(ActivePokemon* active_pokemon) {
     s8* cue = (s8*)sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon)];
 
     if ((M2C_FIELD(cue, u8*, 4) + 1) == M2C_FIELD(active_pokemon, s32*, 0x620)) {
@@ -586,7 +610,11 @@ void BattleScene_TickRow21PlaySpeciesSound(ActivePokemon* active_pokemon) {
     }
 }
 
-void func_82102C3C(ActivePokemon* active_pokemon) {
+/**
+ * Enter callback of row 19: restarts the user's move cue from its repeat frame for the next hit
+ * of a multi-hit move. In play row 19 ran between the hits of Double Slap and Comet Punch.
+ */
+void BattleScene_EnterRepeatHitRow(ActivePokemon* active_pokemon) {
     ActivePokemonState* state;
     MovePresentationCue* cue;
     s32 side;
@@ -611,7 +639,12 @@ void func_82102C3C(ActivePokemon* active_pokemon) {
 }
 
 void func_82122104(ActivePokemon*);
-void func_82102D10(ActivePokemon* active_pokemon) {
+/**
+ * Row 19 tick: when the repeated cue ends, starts the move's effect script again and sets the
+ * model transform.
+ * @unverified Name from the code.
+ */
+void BattleScene_TickRepeatHitStartEffect(ActivePokemon* active_pokemon) {
     UNUSED s32 pad[2]; // FAKE: stack padding
     BattleMonRuntime* runtime;
     MovePresentationCue* cue;
@@ -641,7 +674,11 @@ void func_82102D10(ActivePokemon* active_pokemon) {
     }
 }
 
-void func_82102E94(ActivePokemon* active_pokemon) {
+/**
+ * Row 19 tick: plays the hit sound for the repeated hit, like BattleScene_TickMoveUsePlaySound.
+ * @unverified Name from the code.
+ */
+void BattleScene_TickRepeatHitPlaySound(ActivePokemon* active_pokemon) {
     MovePresentationCue* cue;
     BattleMonRuntime* runtime;
 
@@ -671,7 +708,13 @@ void func_82102E94(ActivePokemon* active_pokemon) {
 
 void ActivePokemon_SetModelTransform(ActivePokemon*, s32, s32);
 extern s32 D_82199F78;
-void func_82102FF4(ActivePokemon* active_pokemon) {
+/**
+ * Enter callback of row 4, entered on the user: plays the target's hurt animation (cue 0xA5, 0xAF
+ * for a sleeping Snorlax or Exeggutor, 0xB0 while flying), or its dodge track for a weak or
+ * failed hit. Stomp and Body Slam squash the target (transform 15). In play row 4 followed row 3
+ * for every damaging move that hit.
+ */
+void BattleScene_EnterHitReactionRow(ActivePokemon* active_pokemon) {
     UNUSED s32 pad0; // FAKE: stack padding
     s32 row = 0xA5;
     UNUSED s32 pad; // FAKE: stack padding
@@ -705,7 +748,12 @@ void func_82102FF4(ActivePokemon* active_pokemon) {
 void func_82101C24(ActivePokemon*, s32);
 void ActivePokemon_SetModelTransform(ActivePokemon*, s32, s32);
 M2C_UNK func_8213B31C(M2C_UNK);
-void func_82103178(ActivePokemon* active_pokemon) {
+/**
+ * Row 4 tick: at the end of the target's hurt cue, finishes the hit and starts the Bind, Wrap,
+ * String Shot and Constrict squeeze (transform 16) on the target.
+ * @unverified Name from the code.
+ */
+void BattleScene_TickHitReactionEnd(ActivePokemon* active_pokemon) {
     BattleMonRuntime* runtime;
     MovePresentationCue* cue;
     s32 side;
@@ -727,7 +775,11 @@ void func_82103178(ActivePokemon* active_pokemon) {
 }
 
 extern u8 D_82199FCC;
-void func_821032B0(ActivePokemon* active_pokemon) {
+/**
+ * Row 4 tick: at the end of the target's hurt cue, plays the move's hit sound (variant 1 or 5).
+ * @unverified Name from the code.
+ */
+void BattleScene_TickHitReactionPlaySound(ActivePokemon* active_pokemon) {
     BattleMonRuntime* runtime;
     MovePresentationCue* cue;
     s32 other;
@@ -758,7 +810,13 @@ void func_821033DC(ActivePokemon* active_pokemon) {
 }
 
 void func_800414B0(u8, s32, s32, s32);
-void func_8210343C(ActivePokemon* active_pokemon) {
+/**
+ * First enter callback of rows 1, 16 and 18: sets the idle animation (the sleeping, flying or
+ * normal idle cue, depending on status) unless the Pokemon is frozen or underground. In play row
+ * 1 ran at the end of each turn.
+ * @unverified Name from the code.
+ */
+void BattleScene_EnterIdleRow(ActivePokemon* active_pokemon) {
     s32 row_index = active_pokemon->animationState;
     s32 cue_index = sBattleSceneStateRowTable[row_index].unk_20;
     MovePresentationCue* cue;
@@ -915,7 +973,7 @@ void BattleScene_TickQueueRowEffectList3OnFirstFrame(ActivePokemon* active_pokem
  * loads the switch-in owner model, frames the camera and enters state row 18.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
-void BattleScene_TickRow20CleanupAndEnterState18(ActivePokemon* active_pokemon) {
+void BattleScene_TickRow21CleanupAndEnterState18(ActivePokemon* active_pokemon) {
     if (active_pokemon->animationTimer == 79) {
         active_pokemon->sessionTeams->uniqueStatusFlags |= 0x80;
     }
@@ -998,7 +1056,12 @@ void BattleScene_TickRow8PlayMoveEffectScriptB(ActivePokemon* active_pokemon) {
     }
 }
 
-void func_82103DA4(ActivePokemon* active_pokemon) {
+/**
+ * Enter callback of row 9: plays the hurt cue (0xA5, or the sleep cue 0xAF for Snorlax and
+ * Exeggutor) on a Pokemon that can't act. In play row 9 ran on COM's Pinsir while Bind held it
+ * (phase 17).
+ */
+void BattleScene_EnterCannotMoveRow(ActivePokemon* active_pokemon) {
     UNUSED s32 pad[2]; // FAKE: stack padding
     MovePresentationCue* entry;
     BattleMon* mon;
@@ -1040,13 +1103,11 @@ void BattleScene_EnterRow9QueueEffectList6(ActivePokemon* active_pokemon) {
 }
 
 /**
- * Move-animation tick callback (compare func_821032B0, which has an extra branch on
- * D_82199FCC). Looks up the used move's presentation cue for the opposing side; when the
- * opponent's animationTimer reaches cue->endFrame + 1 and BattleAnim_IsAssetLoadBusy reports nothing
- * blocking, plays move sound/effect Audio_PlayMoveSound(usedMove, objectType, 5) and replaces the
- * current tick-slot callback with the sentinel (unregisters itself).
+ * Second enter callback of row 12 (the miss, entered on the user from phase 8): plays the move's
+ * miss sound when the target's cue reaches its end frame. In play row 12 ran for every miss.
+ * @unverified Name from the code.
  */
-void func_82103EF4(ActivePokemon* active_pokemon) {
+void BattleScene_EnterMissRowPlaySound(ActivePokemon* active_pokemon) {
     BattleMonRuntime* runtime;
     MovePresentationCue* cue;
     s32 other;

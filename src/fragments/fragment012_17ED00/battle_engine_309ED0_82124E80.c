@@ -170,7 +170,14 @@ void func_82125384(void) {
 void func_82133868(ActivePokemonState*);
 
 // Stadium 1 counterpart: Battle_ActSecondAttacker (no phase/arg handling here).
-void func_821254B0(void) {
+/**
+ * Called when the first action's presentation ends: flips the acting side, resolves that side's
+ * action (a switch through BeginBattleForEntity, the scripted action in mode 10, otherwise
+ * Battle_ResolveMonAction) and marks the second pass. BattleScene_CompleteActionPhase then enters
+ * phase 3. In play phase 3 always followed phase 2 or 7 this way.
+ * @unverified Name from the code.
+ */
+void BattleScene_StartSecondAction(void) {
     ActivePokemonState* temp_a3;
 
     sBattleScene.scene->actingSide = !sBattleScene.scene->actingSide;
@@ -234,7 +241,7 @@ void func_8212562C(void) {
                 return;
             }
         }
-        func_821254B0();
+        BattleScene_StartSecondAction();
         sBattleScene.scene->phaseStep = 0;
         sBattleScene.scene->stepFrameTimer = 0;
         sBattleScene.scene->phase = 3;
@@ -255,7 +262,7 @@ s32 BattleScene_HandleFaintStatusCompletion(void) {
         BattleAnim_ClearRockThrowingMoveFlag(sActivePokemon[sBattleScene.scene->actingSide]);
         Audio_FadeAndClearStoredSounds();
         BattleScene_ResetAnimationStep();
-        func_821254B0();
+        BattleScene_StartSecondAction();
         sBattleScene.scene->phaseStep = 0;
         sBattleScene.scene->stepFrameTimer = 0;
         sBattleScene.scene->phase = 3;
@@ -269,7 +276,7 @@ void BattleScene_CompleteActionPhase(void) {
         BattleAnim_ClearRockThrowingMoveFlag(sActivePokemon[sBattleScene.scene->actingSide]);
         Audio_FadeAndClearStoredSounds();
         BattleScene_ResetAnimationStep();
-        func_821254B0();
+        BattleScene_StartSecondAction();
         sBattleScene.scene->phaseStep = 0;
         sBattleScene.scene->stepFrameTimer = 0;
         sBattleScene.scene->phase = 3;

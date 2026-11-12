@@ -64,7 +64,7 @@ extern Color_RGB8 D_84385860[];
 extern unk_D_84385790 D_84385790[];
 u32 func_8001FA30(s32);
 extern unk_D_84385790 D_80066AA0[];
-void func_821172F0(ActivePokemon* arg0, BattleMon* arg1, unk_D_84385790* arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9, s32 argA);
+void BattleHud_DrawMonInfoBox(ActivePokemon* arg0, BattleMon* arg1, unk_D_84385790* arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9, s32 argA);
 extern u8 D_030096C0[];
 extern u8 D_03009440[];
 extern u8 D_03009840[];
@@ -82,7 +82,7 @@ void BattleHud_DrawMonStatusBoxOpponent(ActivePokemon* arg0, s16 arg1, s16 arg2,
 M2C_UNK func_8001A944(s32, s32, s8*);              /* extern */
 u32 func_800566BC(s8*);                            /* extern */
 
-void func_82119994(s32 arg0, s32 arg1, s32 arg2);
+void BattleHud_DrawTextCentered(s32 arg0, s32 arg1, s32 arg2);
 
 s32 BattleHud_DrawMovePpTextLTR(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 

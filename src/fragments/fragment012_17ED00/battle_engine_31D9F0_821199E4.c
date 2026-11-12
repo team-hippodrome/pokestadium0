@@ -230,7 +230,7 @@ void BattleMenu_DrawMovePanel(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3)
     func_8001A384(1, 0);
 
     if (runtime->uniqueStatusFlags & 8) {
-        if (runtime->moves[0] && (runtime->moves[0] < 0xA6)) { func_82119994(arg1 + 0x5A, arg2 + 4, D_8006A9D4[runtime->moves[0] - 1].name); }
+        if (runtime->moves[0] && (runtime->moves[0] < 0xA6)) { BattleHud_DrawTextCentered(arg1 + 0x5A, arg2 + 4, D_8006A9D4[runtime->moves[0] - 1].name); }
         if (runtime->moves[1] && (runtime->moves[1] < 0xA6)) {
             func_8001A944(arg1 + 0x7C, arg2 + 0x11, D_8006A9D4[runtime->moves[1] - 1].name);
         }
@@ -238,10 +238,10 @@ void BattleMenu_DrawMovePanel(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3)
             func_8001A944(arg1 + 0x6E, arg2 + 0x25, D_8006A9D4[runtime->moves[2] - 1].name);
         }
         if (runtime->moves[3] && (runtime->moves[3] < 0xA6)) {
-            func_82119994(arg1 + 0x4C, arg2 + 0x18, D_8006A9D4[runtime->moves[3] - 1].name);
+            BattleHud_DrawTextCentered(arg1 + 0x4C, arg2 + 0x18, D_8006A9D4[runtime->moves[3] - 1].name);
         }
     } else {
-        if (runtime->moves[0] && (runtime->moves[0] < 0xA6)) { func_82119994(arg1 + 0x5A, arg2 + 4, D_8006A9D4[runtime->moves[0] - 1].name); }
+        if (runtime->moves[0] && (runtime->moves[0] < 0xA6)) { BattleHud_DrawTextCentered(arg1 + 0x5A, arg2 + 4, D_8006A9D4[runtime->moves[0] - 1].name); }
         if (runtime->moves[1] && (runtime->moves[1] < 0xA6)) {
             func_8001A944(arg1 + 0x7C, arg2 + 0x11, D_8006A9D4[runtime->moves[1] - 1].name);
         }
@@ -249,12 +249,12 @@ void BattleMenu_DrawMovePanel(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3)
             func_8001A944(arg1 + 0x6E, arg2 + 0x25, D_8006A9D4[runtime->moves[2] - 1].name);
         }
         if (runtime->moves[3] && (runtime->moves[3] < 0xA6)) {
-            func_82119994(arg1 + 0x4C, arg2 + 0x18, D_8006A9D4[runtime->moves[3] - 1].name);
+            BattleHud_DrawTextCentered(arg1 + 0x4C, arg2 + 0x18, D_8006A9D4[runtime->moves[3] - 1].name);
         }
     }
 
     if (runtime->moves[0] >= 0xA6) {
-        func_82119994(arg1 + 0x5A, arg2 + 4, D_82195A14);
+        BattleHud_DrawTextCentered(arg1 + 0x5A, arg2 + 4, D_82195A14);
     }
     if (runtime->moves[1] >= 0xA6) {
         func_8001A944(arg1 + 0x7C, arg2 + 0x11, D_82195A20);
@@ -263,7 +263,7 @@ void BattleMenu_DrawMovePanel(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3)
         func_8001A944(arg1 + 0x6E, arg2 + 0x25, D_82195A2C);
     }
     if (runtime->moves[3] >= 0xA6) {
-        func_82119994(arg1 + 0x4C, arg2 + 0x18, D_82195A38);
+        BattleHud_DrawTextCentered(arg1 + 0x4C, arg2 + 0x18, D_82195A38);
     }
 
     func_8001ABBC();
@@ -612,7 +612,7 @@ void BattleHud_DrawCompactMonStatusBox(ActivePokemon* arg0, s16 arg1, s16 arg2, 
     } else {
         color = (u8*)(&D_8218B020 + arg3 * 3);
     }
-    func_821172F0(arg0, mon, &D_80066AA0[status], arg1 + 1, arg2 + 1, 0x46, 0x28, color[0], color[1], color[2], 0xB2);
+    BattleHud_DrawMonInfoBox(arg0, mon, &D_80066AA0[status], arg1 + 1, arg2 + 1, 0x46, 0x28, color[0], color[1], color[2], 0xB2);
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
     BattleHud_DrawBorderTile(arg1, arg2, 8, 8, D_030096C0);
     BattleHud_DrawBorderTile(arg1, arg2 + 0x22, 8, 8, D_03009640);

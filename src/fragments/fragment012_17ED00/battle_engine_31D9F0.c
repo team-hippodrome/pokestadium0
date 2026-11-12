@@ -141,7 +141,13 @@ void BattleHud_DrawSpeciesNameLabelAuto(ActivePokemon* arg0, TeamRoster* arg1, s
     }
 }
 
-void func_821172F0(ActivePokemon* arg0, BattleMon* arg1, unk_D_84385790* arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9, s32 argA) {
+/**
+ * Draws a Pokemon's info box: background (clipped at the left edge), level, HP bar, HP fraction,
+ * the nickname centred on top and the status text in its colour. Called every frame from
+ * BattleHud_DrawMonStatusBoxPlayer.
+ * @unverified Name from the code.
+ */
+void BattleHud_DrawMonInfoBox(ActivePokemon* arg0, BattleMon* arg1, unk_D_84385790* arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9, s32 argA) {
     u32 half;
 
     if (arg3 < 0) {

@@ -253,3 +253,29 @@ the surrender prompt). Named from the code and what was on screen when each ran:
 `Battle_StartTurn`, `ActivePokemon_ShowCaption`, `ActivePokemon_TickCaptionTypewriter`,
 `BattleMessage_DrawBox` and `BattleHud_DrawCaptionBox` ran in the same
 scenarios, but what they draw wasn't isolated, so they keep `@unverified`.
+
+## Per-move sweep (rows and phases)
+
+`msweep2.py` (in the session's helper scripts, not committed) loads the
+command-menu savestate, puts move N in 1P's first slot, sets COM's speed to 1
+so 1P acts first, uses the move and runs 900 frames. It logs every
+`BattleScene_EnterStateRow` call (side, row), every write to the scene's phase
+and the first call of each unnamed fragment012 function. Results so far:
+
+| Moves | Phases after 1 → 2 | Rows on 1P |
+|---|---|---|
+| Pound, Karate Chop, Mega Punch, Fire/Ice/Thunder Punch, Scratch, Vice Grip, Gust, Wing Attack, Thunderbolt and most damaging moves | 3 | 3 (move use), 4 (hit reaction) |
+| Double Slap (3), Comet Punch (4), Double Kick (24) | 3 | 3, 19 (repeat hit), 4, 4 |
+| Guillotine (12), Whirlwind (18) | 8 (miss) | 3, 12 |
+| Razor Wind (13) | 14 (charge up) | 8 |
+| Swords Dance (14) | 7 (self effect) | 3 |
+| Fly (19) | 12 (fly up) | 8 |
+| Substitute (164) | 25 | (none) |
+| Struggle (165) | 9 (recoil) | 3, 4 |
+
+Bind (20) held COM's Pinsir: its turn ran phase 17 with row 9 on Pinsir.
+Row names given from this: row 3 `BattleScene_EnterMoveUseRow`, row 4
+`BattleScene_EnterHitReactionRow`, row 19 `BattleScene_EnterRepeatHitRow`,
+row 9 `BattleScene_EnterCannotMoveRow`. Two first-pass row names had the row
+number off by one and were fixed (`BattleScene_TickRow21CleanupAndEnterState18`,
+`BattleScene_TickRow22PlaySpeciesSound`).

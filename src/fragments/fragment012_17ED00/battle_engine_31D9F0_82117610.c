@@ -148,7 +148,7 @@ void BattleHud_DrawMonStatusBoxPlayer(ActivePokemon* arg0, s16 arg1, s16 arg2, u
     }
 
     temp_v0_2 = &((Color_RGB8*)&D_8218B008)[sp80->controllerPort];
-    func_821172F0(arg0, sp7C, &D_80066AA0[var_v1], arg1 + 1, arg2 + 0x12, 0x46, 0x28, temp_v0_2->r, temp_v0_2->g,
+    BattleHud_DrawMonInfoBox(arg0, sp7C, &D_80066AA0[var_v1], arg1 + 1, arg2 + 0x12, 0x46, 0x28, temp_v0_2->r, temp_v0_2->g,
                   temp_v0_2->b, 0xB2);
     BattleHud_DrawSpeciesNameLabelAuto(arg0, sp80, arg1 + 1, arg2 + 1, sp80->controllerPort, arg3, arg4);
 
@@ -236,7 +236,7 @@ void BattleHud_DrawMonStatusBoxOpponent(ActivePokemon* arg0, s16 arg1, s16 arg2,
     }
 
     temp_v0 = &((Color_RGB8*)&D_8218B008)[sp80->controllerPort];
-    func_821172F0(arg0, sp7C, &D_80066AA0[var_v1], arg1, arg2 + 0x28, 0x46, 0x28, temp_v0->r, temp_v0->g, temp_v0->b,
+    BattleHud_DrawMonInfoBox(arg0, sp7C, &D_80066AA0[var_v1], arg1, arg2 + 0x28, 0x46, 0x28, temp_v0->r, temp_v0->g, temp_v0->b,
                   0xB2);
     BattleHud_DrawSpeciesNameLabelAuto(arg0, sp80, arg1, arg2 + 0x50, sp80->controllerPort, arg3, arg4);
 
@@ -417,6 +417,10 @@ void BattleMenu_DrawConfirmButton(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
     BattleHud_DrawTranslucentShadowRect(arg1 - 2, arg2 - 2, 0x4A, 0x16, 0);
 }
 
-void func_82119994(s32 arg0, s32 arg1, s32 arg2) {
+/**
+ * Draws a string centred on x, assuming 10 pixels per two-byte character.
+ * @unverified Name from the code.
+ */
+void BattleHud_DrawTextCentered(s32 arg0, s32 arg1, s32 arg2) {
     func_8001A944(arg0 - ((func_800566BC(arg2) >> 1) * 0xA), arg1, arg2);
 }
