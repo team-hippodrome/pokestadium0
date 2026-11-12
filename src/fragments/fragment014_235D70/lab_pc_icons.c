@@ -61,7 +61,11 @@ extern Color_RGBA8 D_88001FD0;
 void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
 void Font_SetColorForFlags(s32);
 
-void func_8800023C(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4) {
+/**
+ * Draws one wide menu row label with the selection highlight.
+ * @unverified Name and comment guessed from the code.
+ */
+void MainMenu_DrawMenuRow(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4) {
     if (arg4 & 8) {
         Ui_FillRectHighlighted(arg0 + 3, arg1 + 3, 0x162, 0x1E, D_88001FD0);
     }
@@ -79,7 +83,11 @@ extern s8 D_88001FD4[];
 typedef struct Rgba880002D8 { u8 r, g, b, a; } Rgba880002D8;
 extern u8 D_88001FE0[];
 extern u8 D_88001FE4[];
-M2C_UNK func_880002D8(s32 arg0, s32 arg1, s32 arg2) {
+/**
+ * Sets up the prompt window (372x274) and its inner menu.
+ * @unverified Name and comment guessed from the code.
+ */
+M2C_UNK MainMenu_InitPromptWindow(s32 arg0, s32 arg1, s32 arg2) {
     s8 *obj = (s8 *)arg0;
     s32 pad; // FAKE: stack padding
 
@@ -93,7 +101,7 @@ M2C_UNK func_880002D8(s32 arg0, s32 arg1, s32 arg2) {
     M2C_FIELD(obj, Rgba880002D8 *, 0x44) = *(Rgba880002D8 *)D_88001FE0;
     M2C_FIELD(obj, Rgba880002D8 *, 0x48) = *(Rgba880002D8 *)D_88001FE4;
     func_80027804(obj + 0x70, D_88001FD4, 3, 3);
-    Menu_Init(obj + 0x4C, obj + 0x70, obj + 0x7C, func_8800023C, 0x168, 0x24);
+    Menu_Init(obj + 0x4C, obj + 0x70, obj + 0x7C, MainMenu_DrawMenuRow, 0x168, 0x24);
     M2C_FIELD(obj, s32 *, 0x6C) |= 0x10000;
 }
 
@@ -138,7 +146,11 @@ s32 Menu_UpdateCursor(s8*);
 s32 func_8002BC14(s32);
 extern s32 D_800603C0;
 
-s32 func_88000564(s8* arg0) {
+/**
+ * Moves the prompt cursor while the window is open. Returns the 1-based choice on confirm, otherwise 0.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 MainMenu_UpdatePromptCursor(s8* arg0) {
     s32 ret = 0;
 
     switch (M2C_FIELD(arg0, s32*, 0x28)) {
@@ -158,7 +170,11 @@ s32 func_88000564(s8* arg0) {
 
 extern Gfx D_80073450[];
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
-void func_880005E8(s32 x, s32 y, s32 w, s32 h, s32 stride, u8* pixels, s32 alpha) {
+/**
+ * Draws an IA image at (x, y) in strips with primitive alpha `alpha`.
+ * @unverified Name and comment guessed from the code.
+ */
+void MainMenu_DrawImageWithAlpha(s32 x, s32 y, s32 w, s32 h, s32 stride, u8* pixels, s32 alpha) {
     s32 rows;
     s32 n;
     s32 max_rows;
@@ -197,8 +213,9 @@ void Ui_DrawTexturedFrame(s32, s32, s32, s32, u8*);
  * G_CC_MODULATEIA_PRIM) and a white primitive colour with alpha arg5 to the current display
  * list, then forwards its first five arguments unchanged to Ui_DrawTexturedFrame (compare
  * Ui_DrawTexturedFrameDecal, which does the same with a decal combiner and no primitive colour).
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_88000764(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4, s32 arg5) {
+void MainMenu_DrawTexturedFrameWithAlpha(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4, s32 arg5) {
     gSPDisplayList(gDisplayListHead++, D_80073450);
     gDPSetCombineMode(gDisplayListHead++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
     gDPSetPrimColor(gDisplayListHead++, 0, 0, 255, 255, 255, arg5);
@@ -225,7 +242,11 @@ void func_8001ABBC(void);
 // D_88002034 is declared as raw bytes in this file; each 0x18 byte row is one unk_88002034.
 #define ICON(i) (((unk_88002034*)D_88002034)[i])
 
-void func_880007FC(s32 a0, s32 a1, s32 a2, s32 mode, s32 flags, f32* scale) {
+/**
+ * Draws one main menu item with its frame, fading it by `scale` (capped at 0.3 when disabled).
+ * @unverified Name and comment guessed from the code.
+ */
+void MainMenu_DrawItem(s32 a0, s32 a1, s32 a2, s32 mode, s32 flags, f32* scale) {
     Color_RGBA8 frame_color;
     Color_RGBA8 text_color;
     f32 fade;
@@ -243,7 +264,7 @@ void func_880007FC(s32 a0, s32 a1, s32 a2, s32 mode, s32 flags, f32* scale) {
         return;
     }
     alpha = (s32)(fade * 255.0f);
-    func_880005E8(D_8800210C[mode].x + ICON(mode).x, D_8800210C[mode].y + ICON(mode).y, ICON(mode).w, ICON(mode).h,
+    MainMenu_DrawImageWithAlpha(D_8800210C[mode].x + ICON(mode).x, D_8800210C[mode].y + ICON(mode).y, ICON(mode).w, ICON(mode).h,
                   ICON(mode).stride, ICON(mode).pixels, alpha);
     frame_color = D_88002010[mode];
     frame_color.a = alpha;
@@ -260,7 +281,7 @@ void func_880007FC(s32 a0, s32 a1, s32 a2, s32 mode, s32 flags, f32* scale) {
         Ui_FillRectPrimColor(D_8800210C[mode].x + 6, D_8800210C[mode].y + 14, 9, D_8800210C[mode].h - 28, frame_color);
         Ui_FillRectPrimColor(D_8800210C[mode].x + D_8800210C[mode].w - 15, D_8800210C[mode].y + 14, 9, D_8800210C[mode].h - 28, frame_color);
     }
-    func_88000764(D_8800210C[mode].x, D_8800210C[mode].y, D_8800210C[mode].w, D_8800210C[mode].h, D_80073554, alpha);
+    MainMenu_DrawTexturedFrameWithAlpha(D_8800210C[mode].x, D_8800210C[mode].y, D_8800210C[mode].w, D_8800210C[mode].h, D_80073554, alpha);
     if (D_8800219C[mode].h) {
         text_color = *(Color_RGBA8*)D_800734A8;
         text_color.a = alpha;
@@ -279,11 +300,15 @@ void func_80027410(void*, void*, s32, s32, s32);
 void func_8002DECC(void*, void*, void*, void*, s32, s32, s32);
 s32 func_800226BC(s32, s32, s32);
 s32 func_80025BD8();
-void func_880007FC();
-M2C_UNK func_88000C1C(u8* arg0, s32 arg1, s32 arg2) {
+void MainMenu_DrawItem();
+/**
+ * Sets up the main menu item list and enables the items for mode `arg2`.
+ * @unverified Name and comment guessed from the code.
+ */
+M2C_UNK MainMenu_InitItemList(u8* arg0, s32 arg1, s32 arg2) {
     M2C_FIELD(arg0, s32*, 4) = 0;
     func_80027410(arg0 + 0x1E0, arg0 + 0x30, 0x30, 9, 9);
-    func_8002DECC(arg0 + 8, arg0 + 0x1E0, arg0 + 0x1F0, func_880007FC, 3, 0, 0);
+    func_8002DECC(arg0 + 8, arg0 + 0x1E0, arg0 + 0x1F0, MainMenu_DrawItem, 3, 0, 0);
     M2C_FIELD(arg0, s32*, 0x10) = arg1;
     M2C_FIELD(arg0, u16**, 0xC)[1] |= 1;
     switch (arg2) {
@@ -317,7 +342,11 @@ M2C_UNK func_88000C1C(u8* arg0, s32 arg1, s32 arg2) {
     }
 }
 
-s32 func_88000E20(s8 *arg0) {
+/**
+ * Advances the item list fade timer and its state (fade in, shown, fade out, done).
+ * @unverified Name and comment guessed from the code.
+ */
+s32 MainMenu_StepItemFade(s8 *arg0) {
     s32 temp_v0;
     s32 var_v1;
 
@@ -348,13 +377,17 @@ s32 func_88000E20(s8 *arg0) {
 extern u8 D_05018868[];
 void func_8002E230(s8*, s32, s32, s32, f32*);
 
-s32 func_88000EAC(s8* arg0, s32 arg1) {
+/**
+ * Draws the main menu items with the current fade.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 MainMenu_DrawItemList(s8* arg0, s32 arg1) {
     f32 alpha;
     s32 ret = 1;
     s32 color = 0xFFED;
     s32 n;
 
-    func_88000E20(arg0);
+    MainMenu_StepItemFade(arg0);
     switch (M2C_FIELD(arg0, u32*, 0)) {
         case 4:
             return 1;
@@ -374,7 +407,7 @@ s32 func_88000EAC(s8* arg0, s32 arg1) {
             break;
     }
     func_8002E230(arg0 + 8, 0, 0, color, &alpha);
-    func_880005E8(0xE6, 0x56, 0xC8, 0x64, 0xC8, D_05018868, 255.0f * alpha);
+    MainMenu_DrawImageWithAlpha(0xE6, 0x56, 0xC8, 0x64, 0xC8, D_05018868, 255.0f * alpha);
     return ret;
 }
 
@@ -386,7 +419,11 @@ M2C_UNK func_8000B2F4(s32);
 extern u8 D_8800222C[];
 extern char D_880023C0[];
 extern char D_880023C8[];
-void func_88000FE8(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, Color_RGBA8 arg6, s32 arg7) {
+/**
+ * Sets up the message window (532x138) with its color and text.
+ * @unverified Name and comment guessed from the code.
+ */
+void MainMenu_InitMessageWindow(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, Color_RGBA8 arg6, s32 arg7) {
     Window_SetRect(arg0, arg1, arg2, 0x214, 0x8A);
     M2C_FIELD(arg0, s32 *, 0x24) = 0;
     M2C_FIELD(arg0, s32 *, 0x20) = 0;
@@ -413,8 +450,12 @@ extern u8 D_800734A8[4];
 extern u8 D_8007356C[];
 void Ui_DrawTexturedDivider(s32, s32, s32, u8 *);
 void Window_DrawLabeled(s8 *, s32);
-void func_880005E8(s32, s32, s32, s32, s32, u8*, s32);
-void func_88001128(s8 *arg0) {
+void MainMenu_DrawImageWithAlpha(s32, s32, s32, s32, s32, u8*, s32);
+/**
+ * Draws the message window: divider and text.
+ * @unverified Name and comment guessed from the code.
+ */
+void MainMenu_DrawMessageWindow(s8 *arg0) {
     s32* p;
 
     if (func_8002AE6C() == 0) {
@@ -429,7 +470,7 @@ void func_88001128(s8 *arg0) {
         Window_DrawLabeled(arg0 + 0x3C, (M2C_FIELD(arg0, s32 *, 0xB8) == 0) ? 2 : 0);
         Window_DrawLabeled(arg0 + 0x78, (M2C_FIELD(arg0, s32 *, 0xB8) == 1) ? 2 : 0);
         p = M2C_FIELD(arg0, s32 **, 0xC0);
-        func_880005E8(M2C_FIELD(arg0, s32 *, 0) + 0xA, M2C_FIELD(arg0, s32 *, 4) + 0xA, p[2], p[3], p[4], (u8*)p[5], 0xFF);
+        MainMenu_DrawImageWithAlpha(M2C_FIELD(arg0, s32 *, 0) + 0xA, M2C_FIELD(arg0, s32 *, 4) + 0xA, p[2], p[3], p[4], (u8*)p[5], 0xFF);
     }
 }
 
@@ -437,7 +478,11 @@ s32 func_8002B390(s8*);
 s32 func_8002BC14(s32);
 extern s32 D_800603C0;
 
-s32 func_8800125C(s8* arg0) {
+/**
+ * Handles input on the message window while it is open.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 MainMenu_UpdateMessageWindow(s8* arg0) {
     s32 ret = 0;
 
     switch (M2C_FIELD(arg0, s32*, 0x28)) {
@@ -472,8 +517,9 @@ void Window_SetRect(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
  * clears the words at 0x20, 0x24 and 0x28, sets the word at 0x14 to 0x2800,
  * copies the 4-byte colour D_88002230 to arg0 + 0x18, then stores arg3 at 0x20
  * (replacing the zero) and arg4 at 0x30.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_880012FC(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
+void MainMenu_InitTextWindow(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     Window_SetRect(arg0, arg1, arg2, 0x224, 0x60);
     M2C_FIELD(arg0, s32*, 0x24) = 0;
     M2C_FIELD(arg0, s32*, 0x20) = 0;
@@ -486,7 +532,11 @@ void func_880012FC(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
 
 s32 func_8002AE6C();
 extern u8 D_800734A8[4];
-void func_88001368(s8* arg0) {
+/**
+ * Draws the text window's text.
+ * @unverified Name and comment guessed from the code.
+ */
+void MainMenu_DrawTextWindow(s8* arg0) {
     if (func_8002AE6C() == 0) {
         Font_BeginTranslucentTextRendering();
         Gfx_SetEnvColor(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
@@ -497,42 +547,43 @@ void func_88001368(s8* arg0) {
     }
 }
 
-M2C_UNK func_880002D8(s32, M2C_UNK, M2C_UNK);       /* extern */
-M2C_UNK func_88000C1C(u8 *, s32, s32);            /* extern */
+M2C_UNK MainMenu_InitPromptWindow(s32, M2C_UNK, M2C_UNK);       /* extern */
+M2C_UNK MainMenu_InitItemList(u8 *, s32, s32);            /* extern */
 extern u8 D_800AF985;
 extern M2C_UNK D_88002240;
 
-/*
- * The caller func_8800187C passes a fourth argument, &D_88002B20, which this function
+/**
+ * The caller MainMenu_LoadGbSaveSummary passes a fourth argument, &D_88002B20, which this function
  * never reads. It is declared so that call compiles; the empty `if (arg3)` only stops
  * the compiler from spilling the unused argument, which the ROM does not do.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_880013EC(u8 *arg0, s32 arg1, s32 arg2, s32 *arg3) {
+void MainMenu_InitScreen(u8 *arg0, s32 arg1, s32 arg2, s32 *arg3) {
     s32 temp_v0;
 
     if (arg3) {  // karodo
     }
 
     if (D_800AF985 & 1) {
-        func_880002D8(arg0 + 0x32C, 0x82, 0x6E);
+        MainMenu_InitPromptWindow(arg0 + 0x32C, 0x82, 0x6E);
         M2C_FIELD(arg0, s32 *, 0) = 1;
     } else {
         M2C_FIELD(arg0, s32 *, 0) = 2;
     }
     M2C_FIELD(arg0, s32 *, 4) = 0;
-    func_88000C1C(arg0 + 0x2C, arg2, arg1);
+    MainMenu_InitItemList(arg0 + 0x2C, arg2, arg1);
     M2C_FIELD(arg0, s32 *, 0xC) = arg1;
     if (arg1 > 0) {
         temp_v0 = arg1 * 4;
-        func_880012FC(arg0 + 0x2F8, 0x2E, 0x53, *((M2C_UNK*)((u8*)&D_88002230 + temp_v0)), *((M2C_UNK*)((u8*)&D_88002240 + temp_v0))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+        MainMenu_InitTextWindow(arg0 + 0x2F8, 0x2E, 0x53, *((M2C_UNK*)((u8*)&D_88002230 + temp_v0)), *((M2C_UNK*)((u8*)&D_88002240 + temp_v0))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
     }
 }
 
 M2C_UNK func_800069CC();                            /* extern */
 M2C_UNK Ui_DrawTintedScreenBackground(M2C_UNK, M2C_UNK, u8, u8, s32); /* extern */
 void MainMenu_DrawContinueTournamentPrompt(s8 *);
-M2C_UNK func_88000EAC(s8 *, M2C_UNK);             /* extern */
-void func_88001128(s8 *);
+M2C_UNK MainMenu_DrawItemList(s8 *, M2C_UNK);             /* extern */
+void MainMenu_DrawMessageWindow(s8 *);
 extern M2C_UNK D_88002254;
 
 /**
@@ -547,19 +598,19 @@ void MainMenu_DrawScreen(s8 *arg0) {
     temp_v0 = M2C_FIELD(arg0, s32 *, 0);
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_88000EAC(arg0 + 0x2C, 0);
+        MainMenu_DrawItemList(arg0 + 0x2C, 0);
         MainMenu_DrawContinueTournamentPrompt(arg0 + 0x32C);
         return;
     case 2:
-        func_88000EAC(arg0 + 0x2C, 2);
+        MainMenu_DrawItemList(arg0 + 0x2C, 2);
         if (M2C_FIELD(arg0, s32 *, 0xC) > 0) {
-            func_88001368(arg0 + 0x2F8);
+            MainMenu_DrawTextWindow(arg0 + 0x2F8);
             return;
         }
         return;
     case 3:
-        func_88000EAC(arg0 + 0x2C, 2);
-        func_88001128(arg0 + 0x234);
+        MainMenu_DrawItemList(arg0 + 0x2C, 2);
+        MainMenu_DrawMessageWindow(arg0 + 0x234);
         break;
     }
 }
@@ -571,8 +622,12 @@ extern Color_RGBA8 D_88001FEC[];
 extern u8 D_88002034[][0x18];
 s32 func_8002E70C(s8*);
 void func_800245E0(s32, s32);
-s32 func_88000020(s32);
-s32 func_88001564(s8* arg0) {
+s32 MainMenu_LoadSelectedFragment(s32);
+/**
+ * Runs the main menu screen's state machine for one frame and returns the chosen item.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 MainMenu_UpdateScreen(s8* arg0) {
     s32 ret = 0;
     s32 idx;
     s32 dir;
@@ -585,7 +640,7 @@ s32 func_88001564(s8* arg0) {
                 M2C_FIELD(arg0, s32*, 0) = M2C_FIELD(arg0, s32*, 4);
                 M2C_FIELD(arg0, s32*, 4) = 0;
             } else {
-                switch (func_88000564(arg0 + 0x32C)) {
+                switch (MainMenu_UpdatePromptCursor(arg0 + 0x32C)) {
                     case 1:
                         func_8003F6AC(0x1E);
                         gSessionContext.sessionFlags |= 2;
@@ -619,7 +674,7 @@ s32 func_88001564(s8* arg0) {
                     func_8003F6AC(2);
                     M2C_FIELD(arg0, s32*, 0) = 3;
                     idx = M2C_FIELD(arg0, s32*, 0x3C);
-                    func_88000FE8(arg0 + 0x234, 0x36, 0x57, D_88002258[idx], D_8800227C[idx], D_880022A0[idx], D_88001FEC[idx], (s32)D_88002034[idx]);
+                    MainMenu_InitMessageWindow(arg0 + 0x234, 0x36, 0x57, D_88002258[idx], D_8800227C[idx], D_880022A0[idx], D_88001FEC[idx], (s32)D_88002034[idx]);
                 }
             }
             break;
@@ -630,7 +685,7 @@ s32 func_88001564(s8* arg0) {
                 M2C_FIELD(arg0, s32*, 0) = M2C_FIELD(arg0, s32*, 4);
                 M2C_FIELD(arg0, s32*, 4) = 0;
             } else {
-                dir = func_8800125C(arg0 + 0x234);
+                dir = MainMenu_UpdateMessageWindow(arg0 + 0x234);
                 if (dir == -1) {
                     func_8003F6AC(3);
                     M2C_FIELD(arg0, s32*, 0x258) = 7;
@@ -641,7 +696,7 @@ s32 func_88001564(s8* arg0) {
                     } else {
                         func_8003F6AC(0x1C);
                     }
-                    M2C_FIELD(arg0, s32*, 8) = func_88000020(M2C_FIELD(arg0, s32*, 0x3C));
+                    M2C_FIELD(arg0, s32*, 8) = MainMenu_LoadSelectedFragment(M2C_FIELD(arg0, s32*, 0x3C));
                     M2C_FIELD(arg0, s32*, 0x258) = 7;
                     M2C_FIELD(arg0, s32*, 4) = 4;
                     M2C_FIELD(arg0, s32*, 0x30) = 0xD;
@@ -667,18 +722,19 @@ extern s32 D_88002B20;
 
 /**
  * Allocates the 0x3B0-byte object stored in D_88002B20 and starts it with
- * func_880013EC. Steps:
+ * MainMenu_InitScreen. Steps:
  *  1. id = func_80025BD8(); D_88002B00 = id; if (D_88002B00 != -1) pass it with
  *     &D_88002B08 to func_80027FF8.
  *  2. Picks a mode from id: id == -1 -> 4; else func_80022B4C(id) != 0 -> 3;
  *     else func_80022F00(id) == 0 -> 2; else func_80022EDC(id) == 0 -> 1; else 0.
  *  3. D_88002B20 = func_80002D98(0x3B0), then
- *     func_880013EC(D_88002B20, mode, D_80073400 == 0 ? 4 : D_80073400 - 1, &D_88002B20)
+ *     MainMenu_InitScreen(D_88002B20, mode, D_80073400 == 0 ? 4 : D_80073400 - 1, &D_88002B20)
  *     and finally func_8000B2F4(D_800603C0).
  * pad1/pad2 are unused locals that reproduce the retail 0x30-byte frame. What the id,
  * the modes and D_80073400 mean is not established.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_8800187C(void) {
+void MainMenu_LoadGbSaveSummary(void) {
     s32 pad1; // FAKE: stack padding
     s32 pad2; // FAKE: stack padding
     s32 sp24;
@@ -700,11 +756,15 @@ void func_8800187C(void) {
         var_s0 = 1;
     }
     D_88002B20 = func_80002D98(0x3B0);
-    func_880013EC(D_88002B20, var_s0, (D_80073400 == 0) ? 4 : D_80073400 - 1, &D_88002B20);
+    MainMenu_InitScreen(D_88002B20, var_s0, (D_80073400 == 0) ? 4 : D_80073400 - 1, &D_88002B20);
     func_8000B2F4(D_800603C0);
 }
 
-Color_RGBA8 func_8800196C(Color_RGBA8 arg0, f32 arg1) {
+/**
+ * Returns `arg0` with its RGB scaled by `arg1` (alpha kept).
+ * @unverified Name and comment guessed from the code.
+ */
+Color_RGBA8 MainMenu_ScaleColor(Color_RGBA8 arg0, f32 arg1) {
     Color_RGBA8 color;
 
     color.r = (s32)(arg0.r * arg1);
@@ -716,7 +776,11 @@ Color_RGBA8 func_8800196C(Color_RGBA8 arg0, f32 arg1) {
 
 M2C_UNK func_80005B98(M2C_UNK);
 extern s32 D_880022C4;
-s32 func_88001A30(s32 arg0) {
+/**
+ * Draws the background, brightening it a little more each call.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 MainMenu_DrawFadeInBackground(s32 arg0) {
     Color_RGBA8 sp24;
 
     if (arg0 == 1) {
@@ -725,7 +789,7 @@ s32 func_88001A30(s32 arg0) {
         func_80005B98(1);
     }
     func_800069CC();
-    sp24 = func_8800196C(*(Color_RGBA8*)&D_88002254, D_880022C4 / 20.0);
+    sp24 = MainMenu_ScaleColor(*(Color_RGBA8*)&D_88002254, D_880022C4 / 20.0);
     Ui_DrawTintedScreenBackground(0, 0x1E0, sp24.r, sp24.g, sp24.b);
     D_880022C4++;
     return 0;
@@ -735,7 +799,11 @@ M2C_UNK func_800069CC();                            /* extern */
 M2C_UNK Ui_DrawTintedScreenBackground(M2C_UNK, M2C_UNK, u8, u8, s32); /* extern */
 extern M2C_UNK D_88002254;
 
-s32 func_88001AE0(s32 arg0) {
+/**
+ * Draws the tinted main menu background.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 MainMenu_DrawBackground(s32 arg0) {
     func_800069CC();
     Ui_DrawTintedScreenBackground(0, 0x1E0, M2C_FIELD(&D_88002254, u8 *, 0), M2C_FIELD(&D_88002254, u8 *, 1), (s32) M2C_FIELD(&D_88002254, u8 *, 2));
     return 0;
@@ -744,7 +812,11 @@ s32 func_88001AE0(s32 arg0) {
 M2C_UNK GbSave_DrawSummaryBar(M2C_UNK, M2C_UNK *, M2C_UNK *, s32); /* extern */
 extern M2C_UNK D_88002A8C;
 
-s32 func_88001B28(UNUSED s32 arg0) {
+/**
+ * Draws the GB save summary bar sliding in from the top.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 MainMenu_DrawSummaryBarSlideIn(UNUSED s32 arg0) {
     static s32 D_880022C8;
     s32 sp1C;
     M2C_UNK *var_a1;
@@ -767,7 +839,11 @@ extern M2C_UNK D_88002A9C;
 extern s32 D_88002B00;
 extern M2C_UNK D_88002B08;
 
-s32 func_88001BB4(s32 arg0) {
+/**
+ * Draws the GB save summary bar.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 MainMenu_DrawSummaryBar(s32 arg0) {
     M2C_UNK *var_a1;
 
     func_800069CC();
@@ -790,7 +866,11 @@ extern s32 D_88002B00;
 extern M2C_UNK D_88002B08;
 extern s32 D_88002B20;
 
-s32 func_88001C08(s32 arg0) {
+/**
+ * Draws the GB save summary bar over the background.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 MainMenu_DrawSummaryBarAndBackground(s32 arg0) {
     M2C_UNK *var_a1;
 
     if (arg0 == 1) {
@@ -804,17 +884,21 @@ s32 func_88001C08(s32 arg0) {
     }
     GbSave_DrawSummaryBar(0, var_a1, &D_88002AAC, D_88002B00);
     Ui_DrawTintedScreenBackground(0x38, 0x1E0, M2C_FIELD(&D_88002254, u8 *, 0), M2C_FIELD(&D_88002254, u8 *, 1), (s32) M2C_FIELD(&D_88002254, u8 *, 2));
-    func_88000EAC(D_88002B20 + 0x2C, 2);
+    MainMenu_DrawItemList(D_88002B20 + 0x2C, 2);
     return 0;
 }
 
 M2C_UNK func_8000B1FC();                            /* extern */
 M2C_UNK func_8000B220();                            /* extern */
 M2C_UNK func_8001B5F0();                            /* extern */
-s32 func_88001564(s8*);
+s32 MainMenu_UpdateScreen(s8*);
 extern s32 D_88002B20;
 
-s32 func_88001CA4(s32 arg0) {
+/**
+ * One frame: reads the controllers, draws the main menu and, when `arg0` is 0, updates it.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 MainMenu_RunFrame(s32 arg0) {
     s32 sp1C;
 
     sp1C = 0;
@@ -823,7 +907,7 @@ s32 func_88001CA4(s32 arg0) {
     func_8001B5F0();
     MainMenu_DrawScreen(D_88002B20);
     if (arg0 == 0) {
-        sp1C = func_88001564(D_88002B20);
+        sp1C = MainMenu_UpdateScreen(D_88002B20);
     }
     return sp1C;
 }
@@ -831,13 +915,21 @@ s32 func_88001CA4(s32 arg0) {
 M2C_UNK func_80002DC0(s32);                         /* extern */
 extern s32 D_88002B20;
 
-void func_88001D04(void) {
+/**
+ * Frees the main menu state.
+ * @unverified Name and comment guessed from the code.
+ */
+void MainMenu_Free(void) {
     func_80002DC0(D_88002B20);
 }
 
 extern s32 D_88002B20;
 
-s32 func_88001D28(s32 arg0) {
+/**
+ * Draws the main menu without updating it.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 MainMenu_DrawFrame(s32 arg0) {
     MainMenu_DrawScreen(D_88002B20);
     return 0;
 }
@@ -854,7 +946,7 @@ M2C_UNK func_8000A7B0(M2C_UNK);                     /* extern */
 M2C_UNK func_8000A7FC(M2C_UNK);                     /* extern */
 M2C_UNK func_8001A194(M2C_UNK, M2C_UNK);            /* extern */
 M2C_UNK func_8001A360();                            /* extern */
-void func_8800187C(void);                          /* extern */
+void MainMenu_LoadGbSaveSummary(void);                          /* extern */
 extern M2C_UNK D_002E0BE0;
 extern M2C_UNK D_002E2B90;
 extern M2C_UNK D_00400F70;
@@ -864,10 +956,14 @@ extern M2C_UNK D_01000000;
 extern M2C_UNK D_04000000;
 extern M2C_UNK D_05000000;
 extern s32 D_80073400;
-s32 func_88001A30(s32 arg0);
-s32 func_88001B28(s32 arg0);
+s32 MainMenu_DrawFadeInBackground(s32 arg0);
+s32 MainMenu_DrawSummaryBarSlideIn(s32 arg0);
 
-s32 func_88001D54(s32 arg0) {
+/**
+ * Entry point: pushes the 'COMP' pool state, loads the font and segments, and sets up the screen.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 MainMenu_Init(s32 arg0) {
     s32 sp1C;
     s32 temp_v0;
 
@@ -876,19 +972,19 @@ s32 func_88001D54(s32 arg0) {
     func_80003EB8((u32) ((s32) &D_01000000 & 0x0F000000) >> 0x18, &D_002E0BE0, &D_002E2B90, 0);
     func_80003EB8((u32) ((s32) &D_04000000 & 0x0F000000) >> 0x18, &D_00400F70, &D_004076E0, 0);
     func_80003EB8((u32) ((s32) &D_05000000 & 0x0F000000) >> 0x18, &D_004076E0, &D_004199E0, 0);
-    func_8800187C();
+    MainMenu_LoadGbSaveSummary();
     func_8000675C();
     if (arg0 == 1) {
         D_80073400 = 4;
-        func_80006828(0x14, &func_88001A30);
-        func_80006828(2, &func_88001AE0);
-        func_80006828(6, &func_88001B28);
-        func_80006828(2, &func_88001BB4);
+        func_80006828(0x14, &MainMenu_DrawFadeInBackground);
+        func_80006828(2, &MainMenu_DrawBackground);
+        func_80006828(6, &MainMenu_DrawSummaryBarSlideIn);
+        func_80006828(2, &MainMenu_DrawSummaryBar);
     } else {
-        func_80006828(0x11, &func_88001C08);
+        func_80006828(0x11, &MainMenu_DrawSummaryBarAndBackground);
     }
     func_8000A7B0(9);
-    temp_v0 = func_80006828(0, &func_88001CA4);
+    temp_v0 = func_80006828(0, &MainMenu_RunFrame);
     sp1C = temp_v0;
     D_80073400 = M2C_FIELD(D_88002B20, s32 *, 0x3C) + 1;
     if (temp_v0 != 0x8040) {
@@ -898,13 +994,13 @@ s32 func_88001D54(s32 arg0) {
             func_80006998(1);
         }
         func_80005B98(0xF);
-        func_80006828(0x11, &func_88001D28);
+        func_80006828(0x11, &MainMenu_DrawFrame);
         func_8000A7FC(0xF);
     } else {
         func_80006998(1);
     }
     func_80006724();
-    func_88001D04();
+    MainMenu_Free();
     func_8001A360();
     func_80002620(0x434F4D50);
     return sp1C;
@@ -916,14 +1012,18 @@ extern M2C_UNK D_82000000;
 extern M2C_UNK D_00166580;
 extern M2C_UNK D_001720F0;
 
-s32 func_88001F44(s32 arg0, s32 arg1) {
+/**
+ * Goes straight to the fragment at 0x82000000 when D_800AF986 bit 8 is set, otherwise starts the main menu.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 MainMenu_Enter(s32 arg0, s32 arg1) {
     s32 ret;
 
     if (D_800AF986 & 0x100) {
         ret = 0x8040;
         func_80025BA0(((u32)((s32)&D_82000000 & 0x0FF00000) >> 0x14) - 0x10, &D_00166580, &D_001720F0, 0, 0);
     } else {
-        ret = func_88001D54(arg0);
+        ret = MainMenu_Init(arg0);
     }
     return ret;
 }

@@ -1,4 +1,4 @@
-/* Fixed-layout split (func_88000020 only); original translation-unit boundaries remain unconfirmed. */
+/* Fixed-layout split (MainMenu_LoadSelectedFragment only); original translation-unit boundaries remain unconfirmed. */
 
 #include "global.h"
 #include "m2c_macros.h"
@@ -22,7 +22,11 @@ extern M2C_UNK D_002B1360;
 extern M2C_UNK D_00162BE0;
 extern M2C_UNK D_00175570;
 
-s32 func_88000020(u32 arg0) {
+/**
+ * Loads the fragment for main menu choice `arg0`.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 MainMenu_LoadSelectedFragment(u32 arg0) {
     s32 ret;
 
     // FAKE: each "ret = ...; func_80025BA0(...);" pair has to share one line (as a macro
