@@ -342,7 +342,7 @@ extern u8 D_0004EDA8[][0x20];
 extern u8 D_00050228[][0x10];
 extern f32 D_82199DF0[][4];
 /*
- * func_8210213C
+ * ActivePokemon_LoadSpeciesModelAssets
  *
  * Copies the participant's per-species records out of ROM with
  * func_80003824 (dest, rom start, rom end, 0). The ROM offsets are masked to
@@ -350,7 +350,12 @@ extern f32 D_82199DF0[][4];
  * record from the entry named by the record's halfword at 0x10, and keeps
  * that halfword across the copy.
  */
-void func_8210213C(ActivePokemon* arg0) {
+/**
+ * Loads the species' model, animation and texture data for the Pokemon's side into its slots. Ran
+ * in play when 1P switched and when 1P used Substitute (the doll model).
+ * @unverified Name from the code.
+ */
+void ActivePokemon_LoadSpeciesModelAssets(ActivePokemon* arg0) {
     s16 saved;
     UNUSED s32 pad[3]; // FAKE
     u32 base;
@@ -1276,7 +1281,13 @@ void BattleScene_TickQueueList3Selector2OrCFromB10(ActivePokemon* active_pokemon
     }
 }
 
-void func_821044C8(ActivePokemon* active_pokemon) {
+/**
+ * Enter callback of rows 11 and 14: the target's hurt or dodge cue like
+ * BattleScene_EnterHitReactionRow, keyed on D_82199FCC instead of the damage. In the per-move
+ * sweep of moves 1-33 only Sand Attack, which lowers accuracy, entered it.
+ * @unverified Name from the code.
+ */
+void BattleScene_EnterStatusHitRow(ActivePokemon* active_pokemon) {
     UNUSED s32 pad0; // FAKE: stack padding
     s32 row = 0xA5;
     UNUSED s32 pad; // FAKE: stack padding

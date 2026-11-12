@@ -395,7 +395,7 @@ void BattleScene_InitializeParticipantSecondaryModels(ActivePokemon* pokemon, s3
 
 extern f32 D_82199DF0[][4];
 void func_8000D41C(Vec3f*, f32, f32, f32);
-void func_8210213C(ActivePokemon*);
+void ActivePokemon_LoadSpeciesModelAssets(ActivePokemon*);
 /**
  * Creates and positions the participant's Pokemon model and loads its
  * presentation data.
@@ -419,7 +419,7 @@ void BattleScene_InitializeParticipantModel(ActivePokemon* active_pokemon) {
     }
 
     Model_InitDisplayObject(&active_pokemon->displayObject, 0, model_id, model_view);
-    func_8210213C(active_pokemon);
+    ActivePokemon_LoadSpeciesModelAssets(active_pokemon);
     ModelAnim_SetAnimation(&active_pokemon->displayObject, 0);
     ModelAnim_SetFrame(&active_pokemon->displayObject, 0);
 
@@ -480,7 +480,7 @@ void BattleScene_ReinitParticipantBodyModel(ActivePokemon* owner, ActivePokemon*
     }
 
     Model_InitDisplayObject(&pokemon->displayObject, 0, object_type, model_node);
-    func_8210213C(owner);
+    ActivePokemon_LoadSpeciesModelAssets(owner);
     ModelAnim_SetFrame(&pokemon->displayObject, 0);
     ModelAnim_SetAnimation(&pokemon->displayObject, 0);
 

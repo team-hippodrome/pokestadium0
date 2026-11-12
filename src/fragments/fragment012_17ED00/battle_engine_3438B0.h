@@ -81,14 +81,14 @@ void func_8212C454(s32 arg0);
 s32 func_8210C020(M2C_UNK, s32);                    /* extern */
 void func_8212C530(s32 arg0);
 
-void func_8212C60C(s32 arg0, s32 arg1);
+void BattleCamera_PlayUserShot(s32 arg0, s32 arg1);
 
 void BattleScene_CameraShotTargetHighThunk(void*, void*);
 s32 func_82124810(void*, void*);
 void func_82124830(void*, void*);
 void func_82124874(void*, void*);
 
-void func_8212C6E8(ActivePokemon* arg0, CameraNode* arg1, s32 arg2);
+void BattleCamera_PlayTargetShot(ActivePokemon* arg0, CameraNode* arg1, s32 arg2);
 
 typedef struct MoveAnimInfoZ {
     /* 0x00 */ u8 pad00[2];
@@ -98,7 +98,7 @@ typedef struct MoveAnimInfoZ {
     /* 0x08 */ u8 pad08[2];
 } MoveAnimInfoZ; // size = 0xA
 extern MoveAnimInfoZ D_80073D90[];
-void func_8212C60C(s32, s32);
+void BattleCamera_PlayUserShot(s32, s32);
 
 void func_8212C78C(s32 arg0);
 
@@ -110,7 +110,7 @@ void func_82105E64(ActivePokemon*);
 void func_82122B9C(CameraNode*, ActivePokemon*);
 void BattleScene_PhaseSelfEffect(CameraNode* arg0);
 
-void func_8212C6E8(ActivePokemon*, CameraNode*, s32);
+void BattleCamera_PlayTargetShot(ActivePokemon*, CameraNode*, s32);
 void func_82122A7C(CameraNode*, ActivePokemon*);
 void BattleScene_PhaseExplosion(CameraNode* arg0);
 

@@ -4734,3 +4734,7 @@ BattleScene_ReactionNormal = 0x8212A850; // type:func
 BattleScene_ReactionMultiHitEnd = 0x8212B270; // type:func
 BattleScene_ReactionCritical = 0x8212AD10; // type:func
 BattleScene_ReactionSideEffect = 0x8212BA28; // type:func
+BattleCamera_PlayTargetShot = 0x8212C6E8; // type:func
+BattleCamera_PlayUserShot = 0x8212C60C; // type:func
+BattleScene_EnterStatusHitRow = 0x821044C8; // type:func
+ActivePokemon_LoadSpeciesModelAssets = 0x8210213C; // type:func
