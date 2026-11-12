@@ -281,7 +281,7 @@ void BattleMessage_PrintUsedMove(void) {
 
 /**
  * Spend PP unless the active continuation suppresses it; update stored PP outside Transform.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12): 1P's Poison Sting went from 35 to 34 PP across this call.
  */
 void Battle_DecrementPP(s32 arg0) {
     BattleMonRuntime* temp_v0;
@@ -408,7 +408,8 @@ void ActivePokemon_CommitPendingStatus(ActivePokemon* arg0) {
 
 /**
  * Quarter modified Speed when paralyzed, retaining a minimum of one.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12): after 1P's Thunder Wave paralysed COM's Pinsir (status byte 0x40),
+ * it cut Pinsir's modified Speed from 50 to 12; an earlier call with status 0 left it at 50.
  */
 void ApplyParalysisSpeedCut(ActivePokemon* arg0) {
     BattleMonRuntime* temp_v0 = &arg0->state.runtime;
@@ -423,7 +424,8 @@ void ApplyParalysisSpeedCut(ActivePokemon* arg0) {
 
 /**
  * Halve modified Attack when burned, retaining a minimum of one.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12): with COM's Pinsir burned (status byte 0x10) it cut Pinsir's modified
+ * Attack from 71 to 35.
  */
 void ApplyBurnAttackCut(ActivePokemon* arg0) {
     BattleMonRuntime* temp_v0 = &arg0->state.runtime;

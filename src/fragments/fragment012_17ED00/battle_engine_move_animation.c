@@ -353,7 +353,8 @@ extern f32 D_82199DF0[][4];
 /**
  * Loads the species' model, animation and texture data for the Pokemon's side into its slots. Ran
  * in play when 1P switched and when 1P used Substitute (the doll model).
- * @unverified Name from the code.
+ * Seen in play (2026-11-12): ran when 1P switched Nidorino for Onix, and in the per-move sweep
+ * only for Substitute (the doll model) and Transform (the target's model).
  */
 void ActivePokemon_LoadSpeciesModelAssets(ActivePokemon* arg0) {
     s16 saved;
@@ -1944,7 +1945,9 @@ s32 func_821058E8(ActivePokemon* active_pokemon, s32 frame_limit) {
 
 /**
  * Battle_IsRowAnimationSettled for the charge cue mapped from the used move.
- * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for the charging moves Razor Wind, Skull Bash, Sky Attack and Solar Beam, and for Metronome
+ * (through the move it called).
  */
 s32 BattleScene_IsMoveKeyedRowWaitComplete(ActivePokemon* active_pokemon, s32 frame_limit) {
     MovePresentationCue* idle_cue;

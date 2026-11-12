@@ -209,7 +209,8 @@ u8 Battle_Random(void);
 /**
  * Gen 1 critical-hit roll from the species' base speed (halved, or doubled
  * without Focus Energy, capped at 255). Name from Stadium 1.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): with Battle_Random forced to 2 for this call only it returned 1, and
+ * the battle showed きゅうしょに あたった！ (A critical hit!) for Nidorino's Poison Sting.
  */
 s32 Battle_CheckCriticalHit(void) {
     UNUSED s32 pad; // FAKE: stack padding

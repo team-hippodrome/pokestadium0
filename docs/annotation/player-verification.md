@@ -628,3 +628,18 @@ and Disable does not use the lasso hit.
   when Pinsir was knocked out reads `hp`, so `_Level` is now `_Hp`. `_PP`
   reads `pendingHp` and is now `_PendingHp`, though it still has its tag
   because it never ran.
+
+## Battle mechanics checked in RAM
+
+These checks used breakpoints on entry and return, with the runtime fields read
+on both sides of the call.
+
+* Paralysis: Thunder Wave paralysed Pinsir (status 0x40), and
+  `ApplyParalysisSpeedCut` took its Speed from 50 to 12.
+* Burn: with Pinsir's status set to 0x10, `ApplyBurnAttackCut` took its
+  Attack from 71 to 35.
+* PP: Poison Sting went from 35 to 34 PP in `Battle_DecrementPP`.
+* Move order: `Battle_DetermineMoveOrder` returned 1 (COM first) at Speed 50,
+  and 0 once Pinsir's Speed was set to 1. The battle followed both results.
+* Critical hits: `Battle_CheckCriticalHit` returned 1 with the random roll
+  forced to 2 for that call, and the game showed きゅうしょに あたった！
