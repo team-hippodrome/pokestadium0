@@ -32,6 +32,9 @@ US_FONTS = 0x3BA190              # fonts_ROM_START in the Stadium 1 decompilatio
 US_ASCII_MAP = 0x8DE80           # 128-byte table whose A-Z and a-z entries increase
 MAP_BYTES = 0x80
 ADVANCES = 0x90
+ADV_ROM = 0x2C4000               # free ROM inside the stale part of the font archive span:
+                                 # six 0x90-byte advance tables, read through 0xB0000000
+ADV_VRAM = 0xB0000000 + ADV_ROM
 GLYPHS = 0x91
 CELLS = [(0x10, 0x0A), (0x10, 0x0C), (0x10, 0x10), (0x18, 0x14), (0x18, 0x18), (0x20, 0x20)]
 
@@ -135,7 +138,80 @@ def font_load_words(rom, shift=ADVANCES):
     return out + [NOP] * (len(r) - len(out))
 
 
+def advance_tables(us):
+    """The six per-set advance tables from Stadium 1's archive, one 0x90-byte table each."""
+    import crunch64                      # PERS-SZP payloads are Yay0; use the tested decoder
+
+    total, files = archive_files(us, US_FONTS)
+    tables = []
+    for off, size in files:
+        blob = us[US_FONTS + off:US_FONTS + off + size]
+        data = crunch64.yay0.decompress(blob[struct.unpack_from('>I', blob, 8)[0]:])
+        tables.append(data[:ADVANCES])
+    assert len(tables) == 6, len(tables)
+    assert tables[0][0] == 4 and tables[0][0x41] == 7, 'unexpected advance table: %r' % list(tables[0][:8])
+    return b''.join(tables)
+
+
 def font_map_words(rom, ctx=None):
+    """func_80019F70: printable ASCII through the Latin map, and that glyph's advance into the set.
+
+    The advance comes from the copy of Stadium 1's tables at ADV_VRAM, not from set->tex: the font
+    context block is never cleared, so an entry slot that was not loaded holds pool garbage, and
+    dereferencing it faults where retail simply draws nothing.
+    """
+    ctx = font_context_address(rom) if ctx is None else ctx
+    ascii_block = [
+        lui(T2, hi(0x8006081F)),             # ret = map[c]
+        addiu(T2, T2, lo(0x8006081F)),
+        addu(T2, T2, A0),
+        lbu(V0, 0, T2),
+    ]
+    store = [
+        lui(T3, hi(ctx)),                    # font_context
+        addiu(T3, T3, lo(ctx)),
+        lw(T3, 0, T3),
+        beq(T3, ZERO, 0),                    # no font context yet: skip the advance update
+        NOP,
+        lbu(T4, 0x38, T3),                   # the active set slot
+        sltiu(AT, T4, 6),                    # outside the six registered sets: skip
+        beq(AT, ZERO, 0),
+        NOP,
+        sll(T6, T4, 3),
+        addu(T6, T3, T6),                    # &entries[slot]
+        sll(T5, T4, 3),
+        addu(T5, T5, T4),                    # slot * 9
+        sll(T5, T5, 4),                      # slot * 0x90
+        addu(T5, T5, V0),                    # + glyph
+        lui(AT, hi(ADV_VRAM)),
+        addiu(AT, AT, lo(ADV_VRAM)),
+        addu(T5, T5, AT),
+        lbu(T5, 0, T5),
+        sb(T5, 0, T6),                       # set->advance = table[slot][glyph]
+    ]
+    tail = [jr(RA), NOP]
+    head = [
+        andi(A0, A0, 0xFFFF),                # the caller's u16 character code
+        addu(V0, ZERO, ZERO),                # everything but printable ASCII is glyph 0
+        sltiu(AT, A0, 0x7F),
+        beq(AT, ZERO, 0),                    # >= 0x7F: store
+        NOP,
+        sltiu(AT, A0, 0x21),
+        bne(AT, ZERO, 0),                    # < 0x21: store
+        NOP,
+    ]
+    base = len(head) + len(ascii_block)
+    head[3] = beq(AT, ZERO, base - 3 - 1)
+    head[6] = bne(AT, ZERO, base - 6 - 1)
+    store[3] = beq(T3, ZERO, len(store) - 3 - 1)
+    store[7] = beq(AT, ZERO, len(store) - 7 - 1)
+    words = head + ascii_block + store + tail
+    retail = words_at(rom, MAP_FUNC, 0x120 // 4)
+    assert len(words) <= len(retail), 'map function outgrew its retail span'
+    return words + [NOP] * (len(retail) - len(words))
+
+
+
     """func_80019F70: printable ASCII through the Latin map, and that glyph's advance into the set."""
     ctx = font_context_address(rom) if ctx is None else ctx
     ascii_block = [
@@ -278,6 +354,9 @@ def patch(rom, us, stage='full'):
         out[ZERO_FONTS + total:ZERO_FONTS_END] = bytes(ZERO_FONTS_END - ZERO_FONTS - total)
     if stage in ('full', 'data', 'map', 'data-keep'):
         out[ZERO_ASCII_MAP:ZERO_ASCII_MAP + MAP_BYTES] = table
+    tables = advance_tables(us)
+    if stage in ('full', 'data', 'map', 'code'):
+        out[ADV_ROM:ADV_ROM + len(tables)] = tables
     patches = []
     if stage in ('full', 'data', 'map', 'code'):
         patches.append((MAP_FUNC, font_map_words(rom)))
@@ -312,6 +391,9 @@ def check(rom, us, retail, stage='full', seed=None):
     if stage in ('full', 'data', 'map', 'data-keep'):
         if rom[ZERO_ASCII_MAP:ZERO_ASCII_MAP + MAP_BYTES] != us[US_ASCII_MAP:US_ASCII_MAP + MAP_BYTES]:
             raise SystemExit("ASCII glyph map differs from Stadium 1's")
+    if stage in ('full', 'data', 'map', 'code'):
+        if rom[ADV_ROM:ADV_ROM + 6 * ADVANCES] != advance_tables(us):
+            raise SystemExit("the advance tables are not in place")
     if stage == 'micro':
         rw = words_at(retail, LOAD_FUNC, 0x7C // 4)
         expected_loader = rw[:11] + [(rw[11] & ~((0x1F << 21) | (0x1F << 16))) | (3 << 21) | (15 << 16)] + rw[12:]
@@ -342,23 +424,21 @@ def _retail_stub(rom):
 
 
 # --- interpreter used by the self-test ---------------------------------------------------------
-def run_map_function(rom, code, ctx, set_vram, table_vram, advance_base, char):
-    """Runs the emitted mapping function and returns (glyph, the advance it stored in the set)."""
-    mem = {ctx: struct.pack('>I', set_vram),                 # font_context
-           set_vram + 0x00: b'\x00',                        # set->advance
-           set_vram + 0x38: b'\x00',                         # unk_50 = set 0
-           set_vram + 0x04: struct.pack('>I', advance_base + ADVANCES)}  # set->tex
-    for index in range(ADVANCES):
-        mem[advance_base + index] = bytes([advance[index]])
+def run_map_function(rom, code, ctx, set_base, tables, char, slot=0):
+    """Runs the emitted mapping function; returns (glyph, the advance it stored in entry[slot])."""
+    mem = {ctx: struct.pack('>I', set_base),               # font_context
+           set_base + 0x38: bytes([slot])}                 # unk_50 = the active slot
     regs = [0] * 32
     regs[A0] = char
     pc, steps = 0, 0
 
     def read(addr, size):
+        if ADV_VRAM <= addr < ADV_VRAM + len(tables):
+            return tables[addr - ADV_VRAM:][:size]
         if addr in mem:
             return mem[addr]
-        if table_vram <= addr < table_vram + MAP_BYTES:
-            return rom[ZERO_ASCII_MAP + addr - table_vram:][:size]
+        if ZERO_ASCII_MAP <= addr - ROM_BIAS < ZERO_ASCII_MAP + MAP_BYTES:
+            return rom[addr - ROM_BIAS:][:size]
         raise AssertionError('read of unmapped %#x' % addr)
 
     while steps < 200:
@@ -394,15 +474,12 @@ def run_map_function(rom, code, ctx, set_vram, table_vram, advance_base, char):
             elif fn == 0x00:
                 regs[rd] = (regs[rt] << ((w >> 6) & 0x1F)) & 0xFFFFFFFF
             elif fn == 0x08:
-                return regs[V0], mem.get(set_vram, b'\x00')[0]
+                return regs[V0], mem.get(set_base + slot * 8, b'\x00')[0]
             else:
                 raise AssertionError('unhandled funct %#x' % fn)
         else:
             raise AssertionError('unhandled opcode %#x' % op)
     raise AssertionError('the mapping function did not return')
-
-
-advance = bytearray(ADVANCES)
 
 
 def run_load_function(rom, code, ctx, sp, index, args, file_ptr):
@@ -462,14 +539,17 @@ def selftest():
     broken[0x50] = 0
     assert not map_is_latin(broken), 'a broken map was accepted'
 
+    tables = bytearray(6 * ADVANCES)
+    tables[0], tables[26], tables[69] = 4, 7, 5               # set 0: space, A, a
+    tables[5 * ADVANCES + 26] = 9                            # set 5 has its own advance for A
     rom = bytearray(ZERO_FONTS_END)
     rom[ZERO_ASCII_MAP:ZERO_ASCII_MAP + MAP_BYTES] = table
-    advance[26], advance[69], advance[0] = 7, 5, 4
-    code = struct.pack('>%dI' % len(font_map_words(rom, ctx=0x8006d200)),
-                       *font_map_words(rom, ctx=0x8006d200))
-    for char, expected in ((0x41, (26, 7)), (0x61, (69, 5)), (0x20, (0, 4)), (0x2421, (0, 4))):
-        got = run_map_function(rom, code, 0x8006d200, 0x80100000, 0x8006081F, 0x80200000, char)
-        assert got == expected, (hex(char), got, expected)
+    words = font_map_words(rom, ctx=0x8006d200)
+    code = struct.pack('>%dI' % len(words), *words)
+    for char, slot, expected in ((0x41, 0, (26, 7)), (0x61, 0, (69, 5)), (0x20, 0, (0, 4)),
+                                 (0x2421, 0, (0, 4)), (0x41, 5, (26, 9)), (0x41, 9, (26, 0))):
+        got = run_map_function(rom, code, 0x8006d200, 0x80100000, tables, char, slot)
+        assert got == expected, (hex(char), slot, got, expected)
     # The loader patch, interpreted: set 2 gets file+0x90, its three size bytes, and slot 2.
     rom2 = bytearray(0x2E0000)
     code2 = struct.pack('>%dI' % 31, *font_load_words(_retail_stub(rom2)))
