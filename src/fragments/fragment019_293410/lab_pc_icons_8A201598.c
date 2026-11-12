@@ -427,7 +427,7 @@ s32 func_8002BC14(s32);
 void func_8002CA34(s8*, s32, s32);
 void func_8002D900(s8*);
 s32 func_8002CD7C(s8*);
-void func_8002CC44(s8*);
+void Save_DrawReportingWindow(s8*);
 s32 func_8A20093C(s8*);
 void func_8A20080C(s8* arg0, s32 arg1, s32 arg2, u8* arg3);
 s32 func_8A202078(s8* arg0);
@@ -566,7 +566,7 @@ M2C_UNK func_8A20291C(M2C_UNK* ctx) {
             } else if (res > 0) {
                 switch (res) {
                     case 1:
-                        func_8002CC44(arg0 + 0x10C);
+                        Save_DrawReportingWindow(arg0 + 0x10C);
                         LabPC_WriteDeckBack((s32*)(arg0 + 0x180), (s32)arg0);
                         func_8A202904(arg0, 7, 0);
                         M2C_FIELD(arg0, s32*, 0x34) = 7;

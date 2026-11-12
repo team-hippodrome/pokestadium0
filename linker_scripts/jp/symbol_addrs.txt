@@ -4079,3 +4079,7 @@ MonSummary_DrawListRow = 0x8A200274; // type:func
 MonSummary_DrawPage = 0x8A201EAC; // type:func
 LabPCList_DrawListScreen = 0x891019E4; // type:func
 LabPCList_DrawScreen = 0x89104854; // type:func
+Save_DrawGbReportErrorScreen = 0x80025C0C; // type:func
+Save_DrawReportingScreen = 0x80025D8C; // type:func
+Save_DrawReportingWindow = 0x8002CC44; // type:func
+Save_DrawReportResultWindow = 0x8002D520; // type:func

@@ -1228,7 +1228,11 @@ void func_8002CAD0(s32* arg0) {
 extern Color_RGBA8 D_800736C4;
 extern Color_RGBA8 D_800736C8;
 extern u8 D_8007B940[];
-void func_8002CC44(s32* arg0) {
+/**
+ * Draws the レポートちゅう (Saving...) window for two frames.
+ * @unverified Name and comment guessed from the code.
+ */
+void Save_DrawReportingWindow(s32* arg0) {
     s32 i = 2;
     u8* str = D_8007B940;
     BgStage_AdvanceFrame();
@@ -1483,7 +1487,11 @@ extern u8 D_8007B97C[];
 extern u8 D_8007B9BC[];
 extern u8 D_8007B9D0[];
 
-void func_8002D520(s32 arg0) {
+/**
+ * Draws the save result window: レポートちゅう (Saving...) or, on failure, レポートできませんでした (Could not save) with "don't turn the power off".
+ * @unverified Name and comment guessed from the code.
+ */
+void Save_DrawReportResultWindow(s32 arg0) {
     func_800069CC();
     func_800295E8(0x6E, 0x72, 0x1A4, 0x114, D_80073554);
     gSPDisplayList(gDisplayListHead++, D_80060270);
@@ -1538,15 +1546,15 @@ void func_8002D520(s32 arg0) {
  * Polling loop on arg0.  First func_80006780 (BgStage_AdvanceFrame, per
  * symbol_addrs.txt) is called once.  Then, repeatedly:
  *
- *   - state starts at 2.  func_8002D520(state) is called and
+ *   - state starts at 2.  Save_DrawReportResultWindow(state) is called and
  *     GbSave_PollCartRemoval(arg0) (GbSave_PollCartRemoval, per symbol_addrs.txt) is
  *     polled; if the poll returns 1 or 3, state becomes 1 or 3 for the next
  *     round.  This repeats until the poll returns 2.
- *   - func_8002D520(0) is called twice.
+ *   - Save_DrawReportResultWindow(0) is called twice.
  *   - The whole sequence is repeated while func_8002207C(arg0)
  *     (GbSave_RebuildAndWriteSave) returns 0.
  *
- * What func_8002D520 does with its argument is not established, so the
+ * What Save_DrawReportResultWindow does with its argument is not established, so the
  * values 1, 2 and 3 are not given names in the code.
  *
  * Context from the Stadium 1 decomp (not proof for this ROM): the same
@@ -1555,13 +1563,13 @@ void func_8002D520(s32 arg0) {
  * while it waits for the cart to be put back, 2 once the pak is verified as
  * the same one, and 3 if a pak was reinitialised but is not the expected one; the loop
  * shows a saving-status message for the latest value.  Zero's loop differs in
- * detail (it never maps 2 to 0, and it calls func_8002D520(0) twice after the
+ * detail (it never maps 2 to 0, and it calls Save_DrawReportResultWindow(0) twice after the
  * inner loop instead of sending two null messages inside it).
  */
 M2C_UNK func_80006780();                            /* extern */
 s32 GbSave_PollCartRemoval(s32);                             /* extern */
 s32 func_8002207C(s32);                             /* extern */
-void func_8002D520(s32);
+void Save_DrawReportResultWindow(s32);
 
 void func_8002D7D4(s32 arg0) {
     s32 state;
@@ -1571,7 +1579,7 @@ void func_8002D7D4(s32 arg0) {
     do {
         state = 2;
         do {
-            func_8002D520(state);
+            Save_DrawReportResultWindow(state);
             result = GbSave_PollCartRemoval(arg0);
             if (result == 1) {
                 state = 1;
@@ -1579,7 +1587,7 @@ void func_8002D7D4(s32 arg0) {
                 state = 3;
             }
         } while (result != 2);
-        func_8002D520(0);
-        func_8002D520(0);
+        Save_DrawReportResultWindow(0);
+        Save_DrawReportResultWindow(0);
     } while (func_8002207C(arg0) == 0);
 }

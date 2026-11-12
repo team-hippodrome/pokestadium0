@@ -278,7 +278,7 @@ s32 func_89003A50(s32* arg0) {
 void func_8002CA34(s8*, s32, s32);
 void func_89000588(s8*, s32, s32, s8*, s8*);
 s32 func_8002CD7C(s8*);
-void func_8002CC44(s8*);
+void Save_DrawReportingWindow(s8*);
 s32 func_89000828(s8*);
 void func_89002C10(s8*, s32, s32, s8*);
 s32 func_89002DE4(s8*);
@@ -326,7 +326,7 @@ s32 func_89003A88(s8* arg0) {
                     case 2:
                         break;
                     case 1:
-                        func_8002CC44(arg0 + 0x4E8);
+                        Save_DrawReportingWindow(arg0 + 0x4E8);
                         func_89003880(arg0);
                         break;
                 }

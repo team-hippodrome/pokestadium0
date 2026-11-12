@@ -1326,7 +1326,7 @@ s32 func_8900A298(s8* arg0) {
 
 s32 func_890097E0(s8*);
 void func_8002CA34(s8*, s32, s32);
-void func_8002CC44(s8*);
+void Save_DrawReportingWindow(s8*);
 s32 func_8002CD7C(s8*);
 s32 func_8900A298(s8* arg0);
 void func_890070BC(s8* arg0);
@@ -1390,7 +1390,7 @@ s32 func_8900A324(s8* arg0) {
                 ret = 1;
                 switch (r) {
                     case 1:
-                        func_8002CC44(arg0 + 0x220);
+                        Save_DrawReportingWindow(arg0 + 0x220);
                         func_890070BC(arg0);
                         break;
                     case 2:

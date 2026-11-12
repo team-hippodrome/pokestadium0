@@ -1003,7 +1003,7 @@ s32 func_89006CDC(s8* arg0) {
 }
 
 void func_8002CA34(s8* arg0, s32 arg1, s32 arg2);
-void func_8002CC44(s8* arg0);
+void Save_DrawReportingWindow(s8* arg0);
 s32 func_8002CD7C(s8* arg0);
 void func_800407B0(s32, s32, s32);
 s32 func_8900609C(s8* arg0);
@@ -1052,7 +1052,7 @@ s32 func_89006D60(s8* arg0) {
                     case 2:
                         break;
                     case 1:
-                        func_8002CC44(sub);
+                        Save_DrawReportingWindow(sub);
                         func_89006B2C((Save89006B2C*)arg0);
                         break;
                 }

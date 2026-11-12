@@ -381,7 +381,11 @@ extern char D_8007B858[];
 extern char D_8007B874[];
 extern char D_8007B894[];
 
-void func_80025C0C(s32 arg0) {
+/**
+ * Full-screen Game Boy save error: remove the cartridge, clean the connector and insert it again without turning the power off; "could not save (report)"; "wrong cartridge or the data changed". `arg0` picks the message.
+ * @unverified Name and comment guessed from the code.
+ */
+void Save_DrawGbReportErrorScreen(s32 arg0) {
     Color_RGB8 sp2C = D_800733DC;
     Color_RGB8 sp28 = D_800733E0;
     UNUSED s32 pad[2]; // FAKE: stack padding
@@ -413,7 +417,11 @@ extern Color_RGB8 D_800733E4;
 extern Color_RGB8 D_800733E8;
 extern char D_8007B8B4[];
 
-void func_80025D8C(void) {
+/**
+ * Full-screen レポートちゅうです (Saving...) message.
+ * @unverified Name and comment guessed from the code.
+ */
+void Save_DrawReportingScreen(void) {
     Color_RGB8 sp2C = D_800733E4;
     Color_RGB8 sp28 = D_800733E8;
     UNUSED s32 pad[2]; // FAKE: stack padding
@@ -436,8 +444,8 @@ M2C_UNK func_8000675C();                            /* extern */
 M2C_UNK func_8001A194(M2C_UNK, M2C_UNK);            /* extern */
 M2C_UNK func_8001A360();                            /* extern */
 s32 GbSave_PollCartRemoval(s32);                             /* extern */
-void func_80025C0C(s32);
-void func_80025D8C(void);
+void Save_DrawGbReportErrorScreen(s32);
+void Save_DrawReportingScreen(void);
 extern M2C_UNK D_002E0BE0;
 extern M2C_UNK D_002E2B90;
 extern M2C_UNK D_01000000;
@@ -459,10 +467,10 @@ void func_80025E3C(s32 arg0) {
         if (temp_v0 == 3) {
             var_s0 = 3;
         }
-        func_80025C0C(var_s0);
+        Save_DrawGbReportErrorScreen(var_s0);
     } while (temp_v0 != 2);
-    func_80025D8C();
-    func_80025D8C();
+    Save_DrawReportingScreen();
+    Save_DrawReportingScreen();
     func_80006724();
     func_8001A360();
     func_80002620(0x47424552);

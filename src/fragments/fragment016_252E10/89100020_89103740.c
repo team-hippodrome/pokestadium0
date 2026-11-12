@@ -573,7 +573,7 @@ void func_891044F0(void* arg0) {
 }
 
 void func_8002CA34(s8*, s32, s32);
-void func_8002CC44(s8*);
+void Save_DrawReportingWindow(s8*);
 s32 func_8002CD7C(s8*);
 void func_89102A04(s8*);
 void func_891084B4(s8*, s32, s32, s8*, s8*, s32);
@@ -621,7 +621,7 @@ s32 func_8910452C(s8* arg0) {
             } else if (r > 0) {
                 switch (r) {
                     case 1:
-                        func_8002CC44(sub);
+                        Save_DrawReportingWindow(sub);
                         func_89102A04(arg0 + 4);
                         ret = 1;
                         break;
