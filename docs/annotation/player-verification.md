@@ -561,3 +561,16 @@ confirmed. The view and delete lists were not opened.
     000/020 and サトシのパソコン 000/050.
   * ボックスを いどうする opens `PcBox_*` (ボックスのそうさ). It shows GBのカートリッジ
     ボックス1-8 and 64のカセット ボックス1-4, with 「64へボックスをいどうする」.
+
+## Per-move sweep over the tagged battle functions
+
+Each of the 165 moves was used once from 1P, with breakpoints on all 1,061
+tagged fragment012 functions, and the moves each function ran for were
+recorded (757 of them ran). A move-named function lost its tag when every
+move in its name was among the moves it ran for, and it ran for at most 8
+moves; 226 names passed. A few descriptive names with tight move sets were
+also confirmed this way, for example `BattleEffect_OHKO` (Guillotine, Horn
+Drill, Fissure), the stinger trail (Poison Sting, Twineedle, Pin Missile) and
+the fire-breath flames (Flamethrower, Dragon Rage, Fire Spin, Fire Blast).
+`BattleAnim_InitializeCutSlashScratchEffect` ran only for Cut, so it is now
+`BattleAnim_InitializeCutEffect`.

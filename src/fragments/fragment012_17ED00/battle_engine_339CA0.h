@@ -601,7 +601,7 @@ void BattleAnim_InitializeScratchSlashUse(void);
 void BattleAnim_InitializeCutCrabhammerHit(void);
 void BattleAnim_InitializeScratchSlashHit(void);
 
-void BattleAnim_InitializeCutSlashScratchEffect(void);
+void BattleAnim_InitializeCutEffect(void);
 
 M2C_UNK func_8213B560(M2C_UNK, M2C_UNK *, M2C_UNK *, M2C_UNK, s32, s32, s32, s32, s32); /* extern */
 M2C_UNK func_8213B794(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32); /* extern */

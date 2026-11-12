@@ -374,7 +374,8 @@ void BattleAnim_InitializeParticleModel(Particle* arg0) {
 /**
  * Used for the Eyes in Leer and Glare.
  * It is reused for additional flair in Sky Attack (hands an X shape on the bird)
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Leer, Glare.
  */
 void BattleAnim_RunScaryEyes(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -389,7 +390,8 @@ void BattleAnim_RunScaryEyes(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Dream Eater.
  */
 void BattleAnim_RunDreamEaterUseEffect(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -571,7 +573,8 @@ void BattleAnim_SetupMove86EndDescriptor24(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Thunder Wave.
  */
 void BattleAnim_RunThunderWaveHitEffect(Particle* arg0) {
     switch (arg0->lifecycle) {

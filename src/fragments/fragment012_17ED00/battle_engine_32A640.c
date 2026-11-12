@@ -187,7 +187,8 @@ void func_82151A5C(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Petal Dance.
  */
 void BattleAnim_SetupPetalDanceLingeringHitEffect(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
@@ -213,7 +214,8 @@ s32 Particle_ApproachStepMagnitude(Particle* arg0, f32 arg1, f32 arg2);
 void Particle_ApplyRotationStepX(Particle* arg0);
 /**
  * Handles the floating pedals that linger when being hit by pedal dance
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Petal Dance.
  */
 void BattleAnim_RunPetalDanceLingeringHitEffect(Particle* arg0) {
     switch (arg0->lifecycle) {

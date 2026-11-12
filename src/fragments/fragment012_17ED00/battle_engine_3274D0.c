@@ -28,7 +28,8 @@ void BattleAnim_CallbackSharedDirectionalSprayFade(Particle* arg0);
 void BattleAnim_CallbackSharedDescriptor13DirectionalSprayScaledFade(Particle* arg0);
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Thunder Punch, Thunderbolt, Thunder.
  */
 void BattleAnim_SetupStrongElectricSpark(Particle* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
@@ -76,7 +77,8 @@ void func_8214E67C(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Thunderbolt, Thunder.
  */
 void BattleAnim_ApplyThunderThunderboltUseRadialOffset(Particle* arg0) {
     f32 sp1C = 0.0f;
@@ -116,7 +118,8 @@ void BattleAnim_ApplyThunderThunderboltUseRadialOffset(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Thunderbolt, Thunder.
  */
 void BattleAnim_SetupThunderThunderboltUseEffect(Particle* arg0) {
     Particle_Field1C_SetScaled_0B938(arg0, 0.1f);
@@ -127,7 +130,8 @@ void BattleAnim_SetupThunderThunderboltUseEffect(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Thunderbolt, Thunder.
  */
 void BattleAnim_RunThunderThunderboltUseEffect(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -343,7 +347,8 @@ void func_8214EEE0(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Thunder Shock.
  */
 void BattleAnim_SetupThunderShockOuterJolts(Particle* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
@@ -650,7 +655,8 @@ void BattleAnim_InitializeThunderPunchUse(void) {
 
 /**
  * initializes getting hit by hyper beam
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Hyper Beam.
  */
 void BattleAnim_InitializeHyperBeamHitSequence(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_CallbackSharedDescriptor13DirectionalSprayScaledFade, &gBattleAnimParticleDescriptors[0x13], 0x14, 4, 7, 0, 0x2C, 0);

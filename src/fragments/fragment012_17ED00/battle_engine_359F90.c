@@ -771,7 +771,8 @@ void Battle_IncrementMoveUsage(void) {
 
 /**
  * Refund the selected slot's PP, choose a non-Metronome move and load its cache.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Metronome.
  */
 s32 Battle_Effect_Metronome(void) {
     s32 move_pulled;
@@ -821,7 +822,8 @@ void Battle_ApplyPoisonOrBurnDamage(void) {
 
 /**
  * Stage Leech Seed HP transfer, including the Toxic-counter multiplier and healing cap.
- * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Leech Seed.
  */
 void Battle_ApplyLeechSeedDamage(void) {
     s32 amount;

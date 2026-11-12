@@ -121,7 +121,8 @@ void BattleAnim_StartEffect19Radial20_EmitVariantD(void) {
 /**
  * Moves: Bind (use), Constrict (use), Wrap (use)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Bind, Wrap, Constrict.
  */
 void BattleAnim_StartTrappingLassoMove_Init(void) {
     D_8219CB0E = 0;
@@ -133,7 +134,8 @@ void BattleAnim_StartTrappingLassoMove_Init(void) {
 /**
  * Moves: Bind (use), Constrict (use), Wrap (use)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Bind, Wrap, Constrict.
  */
 s32 BattleAnim_StartTrappingLassoMove_Update(void) {
     D_8219CB0E++;
@@ -150,7 +152,8 @@ s32 BattleAnim_StartTrappingLassoMove_Update(void) {
 /**
  * Moves: Bind (use), Constrict (use), Wrap (use)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Bind, Wrap, Constrict.
  */
 void BattleAnim_StartTrappingLassoMove_Draw(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -260,7 +263,8 @@ void BattleAnim_StartEffect33Radial20_EmitVariantC(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for String Shot.
  */
 void BattleAnim_SetupStringShotUseRadial(void) {
     D_8219CB12 = 0;
@@ -270,7 +274,8 @@ void BattleAnim_SetupStringShotUseRadial(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for String Shot.
  */
 s32 BattleAnim_RunStringShotUseRadial(void) {
     D_8219CB12++;
@@ -286,7 +291,8 @@ s32 BattleAnim_RunStringShotUseRadial(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for String Shot.
  */
 void BattleAnim_DrawStringShotUseRadial(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -310,14 +316,16 @@ void BattleAnim_InitializeStringShotUse(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for String Shot.
  */
 s32 BattleAnim_RunStringShotHitRadial(void) {
     return LassoHit_Update();
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for String Shot.
  */
 void BattleAnim_DrawStringShotHitRadial(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

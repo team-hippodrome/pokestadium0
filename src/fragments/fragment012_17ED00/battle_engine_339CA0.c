@@ -3,7 +3,8 @@
 #include "battle_engine_339CA0.h"
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Scratch, Cut, Vine Whip, Fury Swipes, Slash.
  */
 void BattleAnim_SetupSlashingMoveUse(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
@@ -151,7 +152,8 @@ void BattleAnim_RunRazorWindHitEffect(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Razor Leaf, Petal Dance.
  */
 void BattleAnim_SetupPetalDanceRazorLeafHitEffect(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
@@ -216,7 +218,8 @@ void BattleAnim_SetupPetalDanceRazorLeafHitEffect(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Razor Leaf, Petal Dance.
  */
 void BattleAnim_RunPetalDanceRazorLeafHitEffect(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -242,7 +245,8 @@ void BattleAnim_RunPetalDanceRazorLeafHitEffect(Particle* arg0) {
 
 /**
  * Particle setup for the full-screen flash of slashing moves.
- * @unverified Name from Stadium 1, where the same call sits in the same switch case.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Scratch, Cut, Vine Whip, Fury Swipes, Slash.
  */
 void BattleAnim_SetupSlashingMoveFullScreenFlash(Particle* arg0) {
     Particle_Field1C_SetScaled_0B938(arg0, 1.0f);
@@ -254,7 +258,8 @@ void BattleAnim_SetupSlashingMoveFullScreenFlash(Particle* arg0) {
 /**
  * Moves: Cut (use), Fury Swipes (use), Scratch (use), Slash (use), Vine Whip (use)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Scratch, Cut, Vine Whip, Fury Swipes, Slash.
  */
 void BattleAnim_RunSlashingMoveFullScreenFlash(s8 *arg0) {
     s16 sp26;
@@ -284,7 +289,8 @@ void BattleAnim_RunSlashingMoveFullScreenFlash(s8 *arg0) {
 
 /**
  * Particle setup for the white flash overlay of Slash.
- * @unverified Name from Stadium 1, where the same call sits in the same switch case.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Scratch, Cut, Vine Whip, Crabhammer, Fury Swipes, Slash.
  */
 void BattleAnim_SetupSlashMoveWhiteFlashOverlay(Particle* arg0) {
     Particle_Field1C_SetScaled_0B938(arg0, 1.0f);
@@ -297,7 +303,8 @@ void BattleAnim_SetupSlashMoveWhiteFlashOverlay(Particle* arg0) {
 /**
  * Moves: Crabhammer (hit), Cut (hit), Fury Swipes (hit), Scratch (hit), Slash (hit), Vine Whip (hit)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Scratch, Cut, Vine Whip, Crabhammer, Fury Swipes, Slash.
  */
 void BattleAnim_RunSlashMoveWhiteFlashOverlay(s8 *arg0) {
     s16 sp26;
@@ -410,7 +417,8 @@ void func_82160528(s8 *arg0) {
 
 /**
  * Particle setup for a small sand grain.
- * @unverified Name from Stadium 1, where the same call sits in the same switch case.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Sand Attack.
  */
 void BattleAnim_SetupSmallSand(s8 *arg0) {
     s16 sp26;
@@ -430,7 +438,8 @@ void BattleAnim_SetupSmallSand(s8 *arg0) {
 /**
  * Moves: Sand Attack (use)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Sand Attack.
  */
 void BattleAnim_RunSmallSand(s8 *arg0) {
     s16 temp_v0;
@@ -458,7 +467,8 @@ void BattleAnim_RunSmallSand(s8 *arg0) {
 
 /**
  * Particle setup for a large sand grain.
- * @unverified Name from Stadium 1, where the same call sits in the same switch case.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Sand Attack.
  */
 void BattleAnim_SetupLargeSand(s8 *arg0) {
     s16 sp26;
@@ -478,7 +488,8 @@ void BattleAnim_SetupLargeSand(s8 *arg0) {
 /**
  * Moves: Sand Attack (use)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Sand Attack.
  */
 void BattleAnim_RunLargeSand(s8 *arg0) {
     s16 temp_v0;
@@ -507,7 +518,8 @@ void BattleAnim_RunLargeSand(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Sand Attack.
  */
 void BattleAnim_SetupSandAttackUseEffect(Particle* arg0) {
     UNUSED s16 pad; // FAKE: stack padding
@@ -589,7 +601,8 @@ void func_82160CCC(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Sand Attack.
  */
 void BattleAnim_SetupSandAttackHitEffect(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
@@ -606,7 +619,8 @@ void BattleAnim_SetupSandAttackHitEffect(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Sand Attack.
  */
 void BattleAnim_RunSandAttackHitEffect(s8 *arg0) {
     s16 temp_v0;
@@ -685,7 +699,8 @@ void BattleAnim_CallbackSharedDescriptors3EAnd3FAnimatedRiseFade(Particle* arg0)
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Ice Punch, Ice Beam.
  */
 void BattleAnim_SetupIceBeamIcePunchEffect(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
@@ -1247,7 +1262,8 @@ void BattleAnim_RunSparkleHit(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Blizzard.
  */
 void BattleAnim_SetupBlizzardHitEffect(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
@@ -1267,7 +1283,8 @@ void BattleAnim_SetupBlizzardHitEffect(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Blizzard.
  */
 void BattleAnim_RunBlizzardHitEffect(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -1341,7 +1358,8 @@ void BattleAnim_IceBeamParticleUpdateB(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Thunder Punch.
  */
 void BattleAnim_SetupThunderPunchHitEffect(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
@@ -1356,7 +1374,8 @@ void BattleAnim_SetupThunderPunchHitEffect(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Thunder Punch.
  */
 void BattleAnim_RunThunderPunchHitEffect(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -1704,7 +1723,8 @@ s32 BattleAnim_RunPointyMoveHitSpark(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Fire Punch.
  */
 void BattleAnim_SetupFirePunchUseEffect1(Particle* arg0) {
     Particle_FieldAC_GetS16_0C038(arg0);
@@ -1716,7 +1736,8 @@ void BattleAnim_SetupFirePunchUseEffect1(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Fire Punch.
  */
 void BattleAnim_RunFirePunchUseEffect1(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -1737,7 +1758,8 @@ void BattleAnim_RunFirePunchUseEffect1(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Fire Punch.
  */
 void BattleAnim_SetupFirePunchUseEffect2(Particle* arg0) {
     s16 sp2E;
@@ -1811,7 +1833,8 @@ void BattleAnim_FirePunchParticleUpdate(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Thunder Punch.
  */
 void BattleAnim_SetupThunderPunchUseEffect(Particle* arg0) {
     s16 sp2E = Particle_FieldAC_GetS16_0C038(arg0);
@@ -2018,7 +2041,8 @@ void BattleAnim_AcidArmorParticleUpdateA(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Acid Armor.
  */
 void BattleAnim_SetupAcidArmorUseEffect2(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);

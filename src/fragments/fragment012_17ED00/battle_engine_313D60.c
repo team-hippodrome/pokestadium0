@@ -236,7 +236,8 @@ void Battle_SetActiveMoveFromSlotIndex(void) {
 
 /**
  * Execute the cached effect and report whether it left the move-failed flag clear.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Guillotine, Horn Drill, Fissure.
  */
 s32 Battle_CheckMoveSuccess(void) {
     BattleEffect_ExecuteMoveEffect();

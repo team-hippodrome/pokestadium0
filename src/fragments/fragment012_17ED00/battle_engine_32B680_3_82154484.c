@@ -360,7 +360,8 @@ void BattleAnim_InitEffect65Overlay(Particle* arg0) {
 /**
  * Moves: Poison Powder (use), Sleep Powder (use), Spore (use), Stun Spore (use)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Poison Powder, Stun Spore, Sleep Powder, Spore.
  */
 void BattleAnim_RunSporePowderMoveOverlay(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -445,7 +446,8 @@ void BattleAnim_InitializeMistUse(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Leech Seed.
  */
 void BattleAnim_SetupLeechSeedUseEffect1(Particle* arg0) {
     Particle_Field1C_SetScaled_0B938(arg0, 0.2f);
@@ -478,7 +480,8 @@ void BattleAnim_LeechSeedParticleUpdate(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Leech Seed.
  */
 void BattleAnim_SetupLeechSeedUseEffect2(Particle* arg0) {
     s16 sp2E = Particle_FieldAC_GetS16_0C038(arg0);
@@ -620,7 +623,8 @@ void ParticleEffect_CreateSimpleDL(s32 arg0, arg1_func_84344CE8* arg1) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Blizzard.
  */
 void BattleAnim_SetupBlizzardHitSpark(Particle* arg0) {
     arg0->displayObject = BattleAnim_AllocParticleDisplayContext(arg0);
@@ -657,7 +661,8 @@ void BattleAnim_BlizzardParticleUpdate(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Blizzard.
  */
 void BattleAnim_SetupBlizzard(Particle* arg0) {
     UNUSED s32 pad[2]; // FAKE: stack padding
@@ -683,7 +688,8 @@ void BattleAnim_SetupBlizzard(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Blizzard.
  */
 void BattleAnim_RunBlizzard(s8 *arg0) {
     s16 temp_v0;
@@ -817,7 +823,8 @@ void BattleAnim_InitMove146Model(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Dizzy Punch.
  */
 void BattleAnim_RunDizzyPunchHitEffect(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -970,7 +977,8 @@ void BattleAnim_InitializeDrainingMoveHit(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Fly, Teleport.
  */
 void BattleAnim_SetupFlyUpwardMovementEffect(Particle* arg0) {
     arg0->displayObject = BattleAnim_AllocOwnerDisplayContext(arg0);
@@ -987,7 +995,8 @@ void BattleAnim_SetupFlyUpwardMovementEffect(Particle* arg0) {
 
 /**
  * Handles the lines that give the impression of upward movement on the first turn of using fly.
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Fly, Teleport.
  */
 void BattleAnim_RunFlyUpwardMovementEffect(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -1404,7 +1413,8 @@ void BattleAnim_InitializeSoftBoiledUse(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Gust, Whirlwind.
  */
 void BattleAnim_SetupStrongWinds(Particle* arg0) {
     arg0->displayObject = BattleAnim_AllocOwnerDisplayContext(arg0);
@@ -2281,7 +2291,8 @@ void BattleAnim_CallbackStartEffect17ModelAnimFinish(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Acid, Toxic, Lick, Sludge.
  */
 void BattleAnim_SetupSlimePuddle(Particle* arg0) {
     s16 sp26 = Particle_FieldCD_GetU8_0C048(arg0);
@@ -2318,7 +2329,8 @@ void BattleAnim_SetupSlimePuddle(Particle* arg0) {
 /**
  * Moves: Acid (hit), Lick (hit), Sludge (hit), Toxic (hit)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Acid, Toxic, Lick, Sludge.
  */
 void BattleAnim_RunSlimePuddle(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -2641,7 +2653,8 @@ void BattleAnim_InitializeGlareLeerUse(void) {
 
 /**
  * initializes using hyper beam
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Hyper Beam.
  */
 void BattleAnim_InitializeHyperBeamUseSequence(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackInitModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 0xA, 0, 0x26, 0);
@@ -2734,7 +2747,8 @@ void Gfx_PokemonPortraitAllocCallback(s32 arg0, arg1_func_84344CE8* arg1) {
 /**
  * Moves: Double-Edge (use), Hi Jump Kick (use), Quick Attack (use), Skull Bash (use), Take Down (use)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Take Down, Double Edge, Quick Attack, Hi Jump Kick.
  */
 void BattleAnim_InitializeSpeedLines(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 8, 6, BattleAnim_CallbackInitModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 9, 0, 8, 0);
@@ -3185,7 +3199,8 @@ void BattleAnim_InitializeNightShadeHit(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Confuse Ray.
  */
 void BattleAnim_SetupConfuseRayUseSpotlight(Particle* arg0) {
     arg0->displayObject = BattleAnim_AllocOwnerDisplayContext(arg0);
@@ -3218,7 +3233,8 @@ void func_8215C984(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Confuse Ray.
  */
 void BattleAnim_SetupConfuseRayHitSpotlight(Particle* arg0) {
     arg0->displayObject = BattleAnim_AllocOwnerDisplayContext(arg0);
@@ -3403,7 +3419,8 @@ void BattleAnim_InitializeCrabhammerUse(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Barrage.
  */
 void BattleAnim_SetupBarrageEffect(Particle* arg0) {
     Particle_Field1C_SetScaled_0B938(arg0, 0.2f);
@@ -3432,7 +3449,8 @@ void func_8215D76C(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Barrage.
  */
 void BattleAnim_SetupBarrageUseEffect1(Particle* arg0) {
     Particle_FieldAC_GetS16_0C038(arg0);
@@ -3492,7 +3510,8 @@ void BattleAnim_InitializeBarrageUse(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Barrage.
  */
 void BattleAnim_SetupBarrageHitEffect(Particle* arg0) {
     Particle_FieldAC_GetS16_0C038(arg0);
@@ -3539,7 +3558,8 @@ void BattleAnim_InitializeBarrageHit(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Psywave.
  */
 void BattleAnim_SetupPsywaveEffect(Particle* arg0) {
     arg0->displayObject = BattleAnim_AllocOwnerDisplayContext(arg0);
@@ -3554,7 +3574,8 @@ void BattleAnim_SetupPsywaveEffect(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Psywave.
  */
 void BattleAnim_RunPsywaveEffect(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -3621,7 +3642,8 @@ void BattleAnim_InitializePsywaveHit(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Confusion, Psychic M.
  */
 void BattleAnim_RunConfusionPsychicHitEffect(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -3878,7 +3900,8 @@ void ParticleEffect_AllocateDisplayList(s32 arg0, arg1_func_84344CE8* arg1) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Thunder.
  */
 void BattleAnim_InitializeThunderHitSequence(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackInitModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 0xE, 5, 0x14, 0);
@@ -3965,7 +3988,8 @@ void BattleAnim_InitializeHornDrillHit(void) {
 
 /**
  * Used to create the spear projectile for fury attack, peck, and horn attack
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Horn Attack, Fury Attack, Peck.
  */
 void BattleAnim_RunWeakSpear(Particle* arg0) {
     s16 sp26 = Particle_FieldCE_GetS32_0C040(arg0);

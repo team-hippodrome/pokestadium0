@@ -290,9 +290,10 @@ void BattleAnim_InitializeScratchSlashHit(void) {
 /**
  * Moves: Cut (use), Scratch (use), Slash (use)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep it ran only for Cut, not for Slash or Scratch,
+ * so the old name BattleAnim_InitializeCutSlashScratchEffect was too broad.
  */
-void BattleAnim_InitializeCutSlashScratchEffect(void) {
+void BattleAnim_InitializeCutEffect(void) {
     UNUSED s32 pad; // FAKE: stack padding
 
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackSharedDescriptor29ScaleAnimFade, &gBattleAnimParticleDescriptors[0x29], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0xB, 0);
@@ -391,7 +392,8 @@ void BattleAnim_InitializePetalDanceUse(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Petal Dance.
  */
 void BattleAnim_InitializePetalDanceHitSequence(void) {
     BattleAnim_AddSpawnDelay(0x10);
@@ -565,7 +567,8 @@ void func_82168364(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Defense Curl, Sharpen.
  */
 void BattleAnim_InitializeDefenseCurlSharpenUseSequence(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackSharedAnimatedVerticalFade, &gBattleAnimParticleDescriptors[0x3D], 0, 8, 0xE, 0, 0x33, 2);
@@ -619,7 +622,8 @@ void BattleAnim_InitializeMimicConversionUse(void) {
 }
 
 /**
- * @unverified Name from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Solar Beam.
  */
 void BattleAnim_InitializeSolarBeamUseSequence(void) {
     func_8213B644(0, 8, 6);

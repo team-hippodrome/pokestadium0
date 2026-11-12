@@ -69,7 +69,8 @@ void BattleAnim_DefaultEndEffect_Init(void);
 void BattleAnim_RunFlamethrowerHitRotation(Particle* arg0, s32 arg1);
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Flamethrower, Dragon Rage, Fire Spin, Fire Blast.
  */
 void BattleAnim_SetupFireBreathFlameFading(Particle* arg0, s16 arg1) {
     UNUSED s32 pad[3]; // FAKE: stack padding
@@ -97,7 +98,8 @@ void BattleAnim_SetupFireBreathFlameFading(Particle* arg0, s16 arg1) {
 
 s32 Particle_DecreaseRotationXTo(Particle* arg0, s32 arg1, s32 arg2);
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Flamethrower, Dragon Rage, Fire Spin, Fire Blast.
  */
 void BattleAnim_ContinueFireBreathFlameFading(Particle* arg0) {
     switch (arg0->phase) {
@@ -122,7 +124,8 @@ void BattleAnim_ContinueFireBreathFlameFading(Particle* arg0) {
 
 /**
  * Handles the fading of flames when using Fire Blast, Fire Spin, Flamethrower, or Dragon Rage
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Flamethrower, Dragon Rage, Fire Spin, Fire Blast.
  */
 void BattleAnim_RunFireBreathFlameFading(Particle* arg0) {
     s16 sp2E = Particle_FieldCF_GetS16_0C058(arg0);
@@ -266,7 +269,8 @@ void BattleAnim_CallbackUnusedDescriptor4FColorCycleScaleFadeVariant(Particle* a
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Flamethrower, Dragon Rage, Fire Spin, Fire Blast.
  */
 void BattleAnim_SetupFireBreathFlameGeometry(Particle* arg0) {
     UNUSED s32 pad[3]; // FAKE: stack padding
@@ -296,7 +300,8 @@ void BattleAnim_SetupFireBreathFlameGeometry(Particle* arg0) {
 
 s32 Particle_DecreaseRotationXTo(Particle* arg0, s32 arg1, s32 arg2);
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Flamethrower, Dragon Rage, Fire Spin, Fire Blast.
  */
 void BattleAnim_ContinueFireBreathFlameGeometry(Particle* arg0) {
     switch (arg0->phase) {
@@ -359,7 +364,8 @@ void func_82145498(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Flamethrower, Dragon Rage, Fire Spin, Fire Blast.
  */
 void BattleAnim_SetupFireBreathFlameColoration(Particle* arg0, s16 arg1) {
     UNUSED s32 pad[3]; // FAKE: stack padding
@@ -386,7 +392,8 @@ void BattleAnim_SetupFireBreathFlameColoration(Particle* arg0, s16 arg1) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Flamethrower, Dragon Rage, Fire Spin, Fire Blast.
  */
 void BattleAnim_ContinueFireBreathFlameColoration(Particle* arg0) {
     switch (arg0->phase) {
@@ -522,7 +529,8 @@ void BattleAnim_RunExpandingHitSpark(Particle* arg0) {
 
 /**
  * handles the hit spark when being hit by psybeam
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Psybeam.
  */
 void BattleAnim_RunPsybeamHitSparkDrift(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -660,7 +668,8 @@ void BattleAnim_RunOscillatingFlameUnderneathPokemon(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Fire Spin.
  */
 void BattleAnim_SetupFireSpinFlame(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
@@ -753,7 +762,8 @@ void BattleAnim_CallbackUnusedVariant2(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Ember.
  */
 void BattleAnim_SetupEmberProjectileAfterimages(Particle* arg0) {
     Particle_Field1C_SetScaled_0B938(arg0, 0.4f);
@@ -792,7 +802,8 @@ void BattleAnim_EmberParticleUpdateB(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Ember.
  */
 void BattleAnim_SetupEmberProjectile(Particle* arg0) {
     Particle_Field1C_SetScaled_0B938(arg0, 0.4f);
@@ -815,7 +826,8 @@ extern M2C_UNK D_8218E7D0;
 
 /**
  * handles the projectile made when Ember is used
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Ember.
  */
 void BattleAnim_RunEmberProjectile(s8 *arg0) {
     s16 temp_v0;
@@ -844,7 +856,8 @@ void BattleAnim_RunEmberProjectile(s8 *arg0) {
 
 /**
  * Handles the white "origin" of the burst for ember
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Ember.
  */
 void BattleAnim_SetupEmberBurstEmitter(Particle* arg0) {
     Particle_FieldAC_GetS16_0C038(arg0);
@@ -891,7 +904,8 @@ void BattleAnim_EmberParticleUpdateA(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Ember.
  */
 void BattleAnim_SetupEmberUseEffect(Particle* arg0) {
     Vec3s sp28;
@@ -912,7 +926,8 @@ void BattleAnim_SetupEmberUseEffect(Particle* arg0) {
 
 s32 Particle_ApproachStepMagnitude(Particle* arg0, f32 arg1, f32 arg2);
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Ember.
  */
 void BattleAnim_RunEmberUseEffect(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -974,7 +989,8 @@ void func_82146674(void) {
 /**
  * Moves: Egg Bomb (hit), Ember (hit), Fire Punch (hit)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Fire Punch, Ember, Egg Bomb.
  */
 void BattleAnim_FirePunchEmberEggBombColorChange(Particle* arg0) {
     UNUSED u16 pad; // FAKE: stack padding
@@ -1156,7 +1172,8 @@ void BattleAnim_RunBoomSmallExplosion(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Egg Bomb.
  */
 void BattleAnim_SetupEggBombHitEffect(Particle* arg0) {
     Vec3s sp30;
@@ -1296,7 +1313,8 @@ void BattleAnim_RunSecondaryBombExplosion(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Ember.
  */
 void BattleAnim_SetupEmberHitFireball(Particle* arg0) {
     s16 sp36 = Particle_FieldAC_GetS16_0C038(arg0);
@@ -1359,7 +1377,8 @@ void BattleAnim_CallbackEndEffect56Descriptor46RisingScaleAlphaFade(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Ember.
  */
 void BattleAnim_SetupEmberHitSmoke(Particle* arg0) {
     s16 sp36 = Particle_FieldAC_GetS16_0C038(arg0);
@@ -1413,7 +1432,8 @@ void BattleAnim_CallbackEndEffect56Descriptor47SpreadScaleAlphaRise(Particle* ar
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Fire Punch, Ember.
  */
 void BattleAnim_SetupFirePunchLingeringHitSpark(Particle* arg0) {
     s16 sp36 = Particle_FieldAC_GetS16_0C038(arg0);
@@ -1453,7 +1473,8 @@ M2C_UNK func_821474CC(s8 *);                      /* extern */
 
 /**
  * Creates the lingering hit spark when hit by fire punch or ember
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Fire Punch, Ember.
  */
 void BattleAnim_RunFirePunchLingeringHitSpark(s8 *arg0) {
     s16 temp_v0;
@@ -1555,7 +1576,8 @@ void BattleAnim_RunAfterImpactSmoke(s8 *arg0) {
 
 /**
  * handles the small bursts of fire that appear when hit by fire punch
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Fire Punch.
  */
 void BattleAnim_SetupFirePunchHitEffect(Particle* arg0) {
     s16 temp_s1 = Particle_FieldAC_GetS16_0C038(arg0);
@@ -1595,7 +1617,8 @@ M2C_UNK func_8214795C(s8 *);                      /* extern */
 
 /**
  * handles the small bursts of fire that appear when hit by fire punch
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Fire Punch.
  */
 void BattleAnim_RunFirePunchHitEffect(s8 *arg0) {
     s16 temp_v0;
@@ -1629,7 +1652,8 @@ void BattleAnim_RunFirePunchHitEffect(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Flamethrower, Dragon Rage.
  */
 void BattleAnim_SetupFlamethrowerHitRotation(Particle* arg0, s16 arg1, s16 arg2) {
     UNUSED s32 pad[2]; // FAKE: stack padding
@@ -1670,7 +1694,8 @@ void BattleAnim_SetupFlamethrowerHitRotation(Particle* arg0, s16 arg1, s16 arg2)
 
 /**
  * Handles Positioning the flames from getting hit by flamethrower or dragon rage
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Flamethrower, Dragon Rage.
  */
 void BattleAnim_RunFlamethrowerHitRotation(Particle* arg0, s32 arg1) {
     s16 temp_v0 = Particle_FieldCF_GetS16_0C058(arg0);
@@ -1723,21 +1748,24 @@ void BattleAnim_RunFlamethrowerHitRotation(Particle* arg0, s32 arg1) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Flamethrower, Dragon Rage.
  */
 void BattleAnim_RunFlamethrowerHitRotationWeak(Particle* arg0) {
     BattleAnim_RunFlamethrowerHitRotation(arg0, 0);
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Flamethrower, Dragon Rage.
  */
 void BattleAnim_RunFlamethrowerHitRotationStrong(Particle* arg0) {
     BattleAnim_RunFlamethrowerHitRotation(arg0, 1);
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Flamethrower, Dragon Rage, Fire Blast.
  */
 void BattleAnim_SetupFireBlastHitFrontFlames(Particle* arg0) {
     s16 sp36 = Particle_FieldCF_GetS16_0C058(arg0);
@@ -1769,7 +1797,8 @@ void BattleAnim_SetupFireBlastHitFrontFlames(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Flamethrower, Dragon Rage, Fire Blast.
  */
 void BattleAnim_ContinueFireBlastHitFrontFlames(Particle* arg0) {
     switch (arg0->phase) {

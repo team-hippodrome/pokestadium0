@@ -36,7 +36,8 @@ void BattleEffect_Bide(void) {
 
 /**
  * Lock Thrash/Petal Dance into a two- or three-turn continuation.
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Thrash, Petal Dance.
  */
 void BattleEffect_Thrash(void) {
     sBattleUser->moveCache.effect = 0;
@@ -126,7 +127,8 @@ void Battle_Effect_Flinch(void) {
 
 /**
  * Reject a slower OHKO user, otherwise set the damage sentinel and OHKO result.
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Guillotine, Horn Drill, Fissure.
  */
 void BattleEffect_OHKO(void) {
     sBattleDamage = 0;
@@ -388,7 +390,8 @@ extern s32 D_8218C8C0;
 
 /**
  * Replace the selected move slot with a randomly chosen nonempty target move.
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Mimic.
  */
 void BattleEffect_Mimic(void) {
     ActivePokemonState* sp34 = &sActivePokemon[sBattleScene.scene->actingSide]->state;

@@ -3,7 +3,8 @@
 #include "battle_engine_339CA0.h"
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Acid Armor.
  */
 void BattleAnim_RunAcidArmorUseEffect2(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -375,7 +376,8 @@ void BattleAnim_RunDigHitRocks(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Barrage.
  */
 void BattleAnim_SetupBarrageUseEffect2(Particle* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
@@ -391,7 +393,8 @@ void BattleAnim_SetupBarrageUseEffect2(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Barrage.
  */
 void BattleAnim_RunBarrageUseEffect2(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -524,7 +527,8 @@ void func_8216547C(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Solar Beam.
  */
 void BattleAnim_SetupSolarBeamUseEffect(Particle* arg0) {
     s16 sp26 = Particle_FieldCF_GetS16_0C058(arg0);
@@ -537,7 +541,8 @@ void BattleAnim_SetupSolarBeamUseEffect(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Solar Beam.
  */
 void BattleAnim_RunSolarBeamUseEffect(Particle* arg0) {
     switch (arg0->lifecycle) {

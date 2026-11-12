@@ -76,7 +76,8 @@ void BattleAnim_UpdateSecondaryOwnerParticleBlueGrow(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Poison Sting, Twineedle, Pin Missile, Spike Cannon.
  */
 void BattleAnim_InitStingerMoveParticle(Particle* arg0, u8 arg1) {
     switch (arg1) {

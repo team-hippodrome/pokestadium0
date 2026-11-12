@@ -19,7 +19,8 @@ s32 SpikeCannonFourStream_IsComplete(void);
 Gfx* SpikeCannonFourStream_Draw(Gfx* arg0);
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Spike Cannon.
  */
 void SpikeCannonFourStream_Init(void) {
     s32 i;
@@ -94,7 +95,8 @@ void SpikeCannonFourStream_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Spike Cannon.
  */
 void SpikeCannonFourStream_Update(f32 arg0, Vec3f* arg1, f32 arg2) {
     UNUSED MtxF sp70;
@@ -106,7 +108,8 @@ void SpikeCannonFourStream_Update(f32 arg0, Vec3f* arg1, f32 arg2) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Spike Cannon.
  */
 void SpikeCannonFourStream_UpdateNodeChain(OwnerLinkedFourStream* arg0) {
     OwnerLinkedFourStreamNode* var_s0 = &arg0->unk_038[0];
@@ -176,7 +179,8 @@ void SpikeCannonFourStream_UpdateNodeChain(OwnerLinkedFourStream* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Spike Cannon.
  */
 s32 SpikeCannonFourStream_IsComplete(void) {
     s32 i;
@@ -197,7 +201,8 @@ s32 SpikeCannonFourStream_IsComplete(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Spike Cannon.
  */
 Gfx* SpikeCannonFourStream_Draw(Gfx* arg0) {
     s32 i;

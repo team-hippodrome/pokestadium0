@@ -502,7 +502,8 @@ void func_82143E30(s8 *arg0) {
 
 /**
  * Sets the hue coloration change of a pokemon hit by ice beam or blizzard
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Ice Beam, Blizzard.
  */
 void BattleAnim_SetupIceBeamBlizzardHitHueChange(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
@@ -512,7 +513,8 @@ void BattleAnim_SetupIceBeamBlizzardHitHueChange(Particle* arg0) {
 
 /**
  * Runs the hue coloration of a pokemon hit by ice beam or blizzard
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Ice Beam, Blizzard.
  */
 void BattleAnim_RunIceBeamBlizzardHitHueChange(Particle* arg0) {
     switch (arg0->lifecycle) {

@@ -2668,7 +2668,7 @@ void BattleAnim_StartEffect7GlobalTintFade(void);
 void BattleAnim_InitializeSwiftHit(void);
 void BattleAnim_StartEffect137Descriptor3FRisingFade(void);
 void ParticleEffect_TextureNodeSetup(void);
-void BattleAnim_InitializeCutSlashScratchEffect(void);
+void BattleAnim_InitializeCutEffect(void);
 void ParticleEffect_HandleCollisionSetup(void);
 void BattleAnim_StartEffect13SecondaryOwnerSpeciesBranch(void);
 void BattleAnim_InitializeScratchSlashHit(void);

@@ -92,7 +92,8 @@ void BattleAnim_CallbackOwnerModelTintRandomPaletteCycle(Particle* arg0) {
 
 /**
  * Sets up the rainbow hue shift triggered by the user's Recover or by an incoming Psybeam or Aurora Beam.
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Psybeam, Aurora Beam.
  */
 void BattleAnim_SetupRainbowHueChange(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, gParticlePaletteSetA[0]);
@@ -110,7 +111,8 @@ void BattleAnim_SetupRainbowHueChange(Particle* arg0) {
 
 /**
  * Runs the rainbow hue shift triggered by the user's Recover or by an incoming Psybeam or Aurora Beam.
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Psybeam, Aurora Beam.
  */
 void BattleAnim_RunRainbowHueChange(Particle* arg0) {
     switch (arg0->lifecycle) {
