@@ -199,6 +199,8 @@ def map_is_latin(table):
 
 
 def patch(rom, us, stage='full'):
+    """stage: full = archive + map + loader patch, data = archive + map, map = map only,
+    archive = archive only. The narrower stages exist to bisect a boot fault."""
     """Returns rom with Stadium 1's font archive and map, and both function patches."""
     total, _ = archive_files(us, US_FONTS)
     current, _ = archive_files(rom, ZERO_FONTS)
@@ -214,37 +216,45 @@ def patch(rom, us, stage='full'):
         raise SystemExit('no ASCII glyph map at %#x in that dump' % US_ASCII_MAP)
 
     out = bytearray(rom)
-    out[ZERO_FONTS:ZERO_FONTS + total] = us[US_FONTS:US_FONTS + total]
-    out[ZERO_FONTS + total:ZERO_FONTS_END] = bytes(ZERO_FONTS_END - ZERO_FONTS - total)
-    out[ZERO_ASCII_MAP:ZERO_ASCII_MAP + MAP_BYTES] = table
-    patches = [(MAP_FUNC, font_map_words(rom))]
-    if stage == 'full':
+    if stage in ('full', 'data', 'archive'):
+        out[ZERO_FONTS:ZERO_FONTS + total] = us[US_FONTS:US_FONTS + total]
+        out[ZERO_FONTS + total:ZERO_FONTS_END] = bytes(ZERO_FONTS_END - ZERO_FONTS - total)
+    if stage in ('full', 'data', 'map'):
+        out[ZERO_ASCII_MAP:ZERO_ASCII_MAP + MAP_BYTES] = table
+    patches = []
+    if stage in ('full', 'data', 'map', 'code'):
+        patches.append((MAP_FUNC, font_map_words(rom)))
+    if stage in ('full', 'code'):
         patches.insert(0, (LOAD_FUNC, font_load_words(rom)))
     for vram, words in patches:
         struct.pack_into('>%dI' % len(words), out, vram - ROM_BIAS, *words)
-    check(bytes(out), us, rom)
+    check(bytes(out), us, rom, stage)
     return bytes(out)
 
 
-def check(rom, us, retail):
+def check(rom, us, retail, stage='full'):
     """Raises unless rom carries the English archive, its map and both function patches.
 
     retail is the unpatched build, the source of the instruction words the patches reuse.
     """
     total, files = archive_files(rom, ZERO_FONTS)
-    if rom[ZERO_FONTS:ZERO_FONTS + total] != us[US_FONTS:US_FONTS + total]:
-        raise SystemExit("font archive differs from Stadium 1's")
-    if rom[ZERO_FONTS + total:ZERO_FONTS_END].count(0) != ZERO_FONTS_END - ZERO_FONTS - total:
-        raise SystemExit('font slot tail is not cleared')
-    if rom[ZERO_ASCII_MAP:ZERO_ASCII_MAP + MAP_BYTES] != us[US_ASCII_MAP:US_ASCII_MAP + MAP_BYTES]:
-        raise SystemExit("ASCII glyph map differs from Stadium 1's")
-    if words_at(rom, LOAD_FUNC, 0x7C // 4) != font_load_words(retail) and \
-            words_at(rom, LOAD_FUNC, 0x7C // 4) != words_at(retail, LOAD_FUNC, 0x7C // 4):
+    if stage in ('full', 'data', 'archive'):
+        if rom[ZERO_FONTS:ZERO_FONTS + total] != us[US_FONTS:US_FONTS + total]:
+            raise SystemExit("font archive differs from Stadium 1's")
+        if rom[ZERO_FONTS + total:ZERO_FONTS_END].count(0) != ZERO_FONTS_END - ZERO_FONTS - total:
+            raise SystemExit('font slot tail is not cleared')
+    if stage in ('full', 'data', 'map'):
+        if rom[ZERO_ASCII_MAP:ZERO_ASCII_MAP + MAP_BYTES] != us[US_ASCII_MAP:US_ASCII_MAP + MAP_BYTES]:
+            raise SystemExit("ASCII glyph map differs from Stadium 1's")
+    loader_patched = words_at(rom, LOAD_FUNC, 0x7C // 4) == font_load_words(retail)
+    loader_retail = words_at(rom, LOAD_FUNC, 0x7C // 4) == words_at(retail, LOAD_FUNC, 0x7C // 4)
+    if not (loader_patched or loader_retail):
         raise SystemExit('the font loader patch is neither applied nor retail')
-    if words_at(rom, MAP_FUNC, 0x120 // 4) != font_map_words(retail):
+    if stage in ('full', 'data', 'map', 'code') and words_at(rom, MAP_FUNC, 0x120 // 4) != font_map_words(retail):
         raise SystemExit('the glyph map patch is not in place')
-    print('font archive %#x bytes (files %s); ASCII map and both function patches in place'
-          % (total, [hex(size) for _, size in files]))
+    print('%s: font archive %#x bytes, glyph map %s, loader %s'
+          % (stage, total, 'patched' if stage in ('full', 'data', 'map', 'code') else 'retail',
+             'patched' if loader_patched else 'retail'))
 
 
 def _retail_stub(rom):
@@ -404,8 +414,9 @@ def main():
     ap.add_argument('--rom', default='build/pokestadium0-jp.z64')
     ap.add_argument('--us', help='Stadium 1 US baserom.z64, the source of the English font')
     ap.add_argument('--out')
-    ap.add_argument('--stage', choices=['data', 'full'], default='full',
-                    help='data: font archive and glyph map only; full: also the loader patch')
+    ap.add_argument('--stage', choices=['full', 'data', 'code', 'map', 'archive'], default='full',
+                    help='full: archive + map + loader; data: archive + map; code: map + loader; '
+                         'map/archive: one of them (bisecting a boot fault)')
     ap.add_argument('--base', default='build/pokestadium0-jp.z64',
                     help='the unpatched build, checked against the patch')
     args = ap.parse_args()
