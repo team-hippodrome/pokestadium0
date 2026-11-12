@@ -108,7 +108,7 @@ void func_8211AEA4(TeamRoster* arg0, BattleMon* arg1, s32 arg2, s32 arg3, s32 ar
 /*
  * func_8211D874
  *
- * Calls func_8001AC7C(arg0, arg1, 0x6E, 0x1E, 0, 0, 0, 0x3C), then
+ * Calls Ui_DrawPrimColorRect(arg0, arg1, 0x6E, 0x1E, 0, 0, 0, 0x3C), then
  * func_8001AB6C() and func_8001A384(1, 0), then func_8001A944 twice: with
  * (arg0 + 3, arg1 + 4, &D_82195BE4) and with (arg0 + 0x23, arg1 + 0x10,
  * D_8218B15C[D_8219A5A4]), and finally func_8001ABBC().  D_8219A5A4 selects
@@ -118,7 +118,7 @@ void func_8211AEA4(TeamRoster* arg0, BattleMon* arg1, s32 arg2, s32 arg3, s32 ar
  *
  * The roles of the func_8001A... helpers are not established here.
  */
-M2C_UNK func_8001AC7C(s32, s32, s32, s32, s32, s32, s32, s32);
+M2C_UNK Ui_DrawPrimColorRect(s32, s32, s32, s32, s32, s32, s32, s32);
 extern M2C_UNK D_82195BE4;
 extern s32 D_8218B15C[];
 extern s32 D_8219A5A4;

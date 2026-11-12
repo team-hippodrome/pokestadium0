@@ -261,7 +261,11 @@ s32 func_8000B4D4(u8* buffer, u32 size, s32 inaddr) {
     return result;
 }
 
-void func_8000B570(s32 ms) {
+/**
+ * Busy-waits for `ms` milliseconds using osGetTime.
+ * @unverified Name and comment guessed from the code.
+ */
+void Cont_BusyWaitMs(s32 ms) {
     u64 cycles = OS_USEC_TO_CYCLES(ms * 1000LL); // why not just do OS_NSEC_TO_CYCLES and not multiply by 1000LL?
 
     osSetTime(0);
@@ -269,7 +273,7 @@ void func_8000B570(s32 ms) {
 }
 
 extern u16 gCrashScreenUnlockInputs[];
-void func_8000B570(s32 ms);
+void Cont_BusyWaitMs(s32 ms);
 void crash_screen_wait_for_button_combo(void) {
     s32 breakloop = FALSE;
     s32 i = 0;
@@ -287,6 +291,6 @@ void crash_screen_wait_for_button_combo(void) {
                 i = 0;
             }
         }
-        func_8000B570(10);
+        Cont_BusyWaitMs(10);
     } while (breakloop == FALSE);
 }

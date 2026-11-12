@@ -511,7 +511,7 @@ s32 func_89102EC8(s8*);
 s32 func_891033A0(s8*);
 s32 func_89103C54();
 s32 func_89103DAC();
-s32 func_8002D138(void*);
+s32 Ui_CheckConfirmPressed(void*);
 s32 func_891043BC(s8* arg0) {
     s32 ret = 0;
 
@@ -554,7 +554,7 @@ s32 func_891043BC(s8* arg0) {
             break;
         case 11:
         case 12:
-            if (func_8002D138(arg0 + 0xB55C) == 1) {
+            if (Ui_CheckConfirmPressed(arg0 + 0xB55C) == 1) {
                 M2C_FIELD(arg0, u32*, 0x88) = 0;
             }
             break;

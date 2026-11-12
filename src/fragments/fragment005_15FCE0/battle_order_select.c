@@ -382,7 +382,7 @@ extern char D_82302A60[];
 extern char D_82302A74[];
 extern char D_82302A7C[];
 void func_82300BD0(s8*);
-void func_8001AC7C(s32, s32, s32, s32, s32, s32, s32, s32);
+void Ui_DrawPrimColorRect(s32, s32, s32, s32, s32, s32, s32, s32);
 void func_8001E6C0(s32, s32);
 void func_823010E8(s8* arg0) {
     s32 x;
@@ -413,7 +413,7 @@ void func_823010E8(s8* arg0) {
         x = M2C_FIELD(arg0, s16*, 0x12);
         y = M2C_FIELD(arg0, s16*, 0x14);
         func_82300BD0(arg0);
-        func_8001AC7C(x + 5, y + 5, 0x1CD, 0x54, 0, 0, 0, 0x80);
+        Ui_DrawPrimColorRect(x + 5, y + 5, 0x1CD, 0x54, 0, 0, 0, 0x80);
         if (arg0[0xA] == 0) {
             func_8001E6C0(x + 0x5C, y + 0x3C);
         } else {
@@ -459,7 +459,7 @@ void func_823012D0(s8* arg0) {
         x = M2C_FIELD(arg0, s16*, 0x12);
         y = M2C_FIELD(arg0, s16*, 0x14);
         func_82300BD0(arg0);
-        func_8001AC7C(x + 5, y + 5, 0x1CD, 0x54, 0, 0, 0, 0x80);
+        Ui_DrawPrimColorRect(x + 5, y + 5, 0x1CD, 0x54, 0, 0, 0, 0x80);
         Font_BeginTranslucentTextRendering();
         Font_SetActive(0x10, 0);
         Gfx_SetEnvColor(0xFF, 0x63, 0x63, 0xFF);
@@ -519,7 +519,7 @@ void BattleMenu_DrawOrderSelectPanel_Ready(unk_D_848037A0* arg0) {
         }
 
         func_82300BD0((s8*)arg0);
-        func_8001AC7C(sp3C + 5, sp38 + 5, 0x1CD, 0x54, 0, 0, 0, 0x80);
+        Ui_DrawPrimColorRect(sp3C + 5, sp38 + 5, 0x1CD, 0x54, 0, 0, 0, 0x80);
         Font_BeginTranslucentTextRendering();
         Font_SetActive(0x20, 0);
         Font_EnableTwoCycleTexturing();

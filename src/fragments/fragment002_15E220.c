@@ -83,14 +83,14 @@ extern char D_81200F80[];
 extern char D_81200F94[];
 extern char D_81200FB8[];
 extern char D_81200FDC[];
-void func_8001AC7C(s32, s32, s32, s32, s32, s32, s32, s32);
+void Ui_DrawPrimColorRect(s32, s32, s32, s32, s32, s32, s32, s32);
 
 void func_8120023C(s32 arg0) {
     s32 kind = (arg0 >> 8) & 0xFF;
     s32 pad[1]; // FAKE: stack padding
 
     if (kind != 0) {
-        func_8001AC7C(0x1E, 0x5F, 0x104, 0x5F, 0, 0, 0, 0x96);
+        Ui_DrawPrimColorRect(0x1E, 0x5F, 0x104, 0x5F, 0, 0, 0, 0x96);
         Font_BeginTranslucentTextRendering();
         Font_SetActive(2, -2);
         switch (kind) {

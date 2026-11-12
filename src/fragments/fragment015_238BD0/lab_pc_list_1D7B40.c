@@ -610,7 +610,7 @@ void func_89006054(s8 *arg0) {
 }
 
 void func_8002CEEC(s8*, s8*, s32, s32, s32);
-s32 func_8002D138(s8*);
+s32 Ui_CheckConfirmPressed(s8*);
 void func_8002D900(s8*);
 void func_8002DDFC(s8*);
 s32 func_8002E3F0(s8*);
@@ -775,22 +775,22 @@ s32 func_8900609C(s8* arg0) {
             }
             break;
         case 10:
-            if (func_8002D138(arg0 + 0x3C0) == 1) {
+            if (Ui_CheckConfirmPressed(arg0 + 0x3C0) == 1) {
                 M2C_FIELD(arg0, s32*, 0) = 2;
             }
             break;
         case 11:
-            if (func_8002D138(arg0 + 0x3C0) == 1) {
+            if (Ui_CheckConfirmPressed(arg0 + 0x3C0) == 1) {
                 M2C_FIELD(arg0, s32*, 0) = 3;
             }
             break;
         case 12:
-            if (func_8002D138(arg0 + 0x3C0) == 1) {
+            if (Ui_CheckConfirmPressed(arg0 + 0x3C0) == 1) {
                 M2C_FIELD(arg0, s32*, 0) = 4;
             }
             break;
         case 13:
-            if (func_8002D138(arg0 + 0x3C0) == 1) {
+            if (Ui_CheckConfirmPressed(arg0 + 0x3C0) == 1) {
                 M2C_FIELD(arg0, s32*, 0) = 7;
             }
             break;

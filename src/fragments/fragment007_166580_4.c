@@ -233,12 +233,12 @@ extern Gfx D_80073450[];
 extern u8 D_05000008[];
 extern char D_82009CC8[];
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
-void func_8001AC7C(s32, s32, s32, s32, s32, s32, s32, s32);
+void Ui_DrawPrimColorRect(s32, s32, s32, s32, s32, s32, s32, s32);
 
 /**
  * Emits the display list D_80073450 and the DECALRGBA combiner, then calls
  * func_8001B884 at (arg0, arg1) with D_05000008 as its texture argument (arg2
- * is passed straight through as the third argument), calls func_8001AC7C with
+ * is passed straight through as the third argument), calls Ui_DrawPrimColorRect with
  * (arg0 + 0xE, arg1, 0x84, 0x14, ...) and then
  * prints the string D_82009CC8 at (arg0 + 0x10, arg1 + 2) in the colour
  * stored at D_800734A8 using font 4.
@@ -248,7 +248,7 @@ void func_82002EE4(s32 arg0, s32 arg1, s32 arg2) {
     gSPDisplayList(gDisplayListHead++, D_80073450);
     gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
     func_8001B884(arg0, arg1, arg2, 0x14, D_05000008, 8, 0);
-    func_8001AC7C(arg0 + 0xE, arg1, 0x84, 0x14, 0, 0, 0, 0xFF);
+    Ui_DrawPrimColorRect(arg0 + 0xE, arg1, 0x84, 0x14, 0, 0, 0, 0xFF);
     func_8001AB6C();
     func_8001AA9C(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
     func_8001A384(4, 0);

@@ -210,7 +210,7 @@ extern unk_8800210C D_8800219C[];
 extern Gfx D_80073480[];
 extern Color_RGBA8 D_80073520;
 extern u8 D_80073554[];
-void func_800291F8(s32, s32, s32, s32, Color_RGBA8);
+void Ui_FillRectPrimColor(s32, s32, s32, s32, Color_RGBA8);
 void func_80029A64(s32, s32, s32, s32, Color_RGBA8);
 void func_8001AB6C(void);
 void func_8001AA9C(u8, u8, u8, u8);
@@ -245,16 +245,16 @@ void func_880007FC(s32 a0, s32 a1, s32 a2, s32 mode, s32 flags, f32* scale) {
     frameColor.a = alpha;
     if (D_8800219C[mode].h) {
         gSPDisplayList(gDisplayListHead++, D_80073480);
-        func_800291F8(D_8800210C[mode].x + 6, D_8800210C[mode].y + 6, D_8800210C[mode].w - 12, 4, frameColor);
-        func_800291F8(D_8800210C[mode].x + 6, D_8800210C[mode].y + 6, 4, D_8800219C[mode].y - 10, frameColor);
-        func_800291F8(D_8800210C[mode].x + D_8800210C[mode].w - 10, D_8800210C[mode].y + 6, 4, D_8800219C[mode].y - 10, frameColor);
-        func_800291F8(D_8800210C[mode].x + 6, D_8800210C[mode].y + D_8800219C[mode].y - 4, D_8800210C[mode].w - 12, 0x20, frameColor);
+        Ui_FillRectPrimColor(D_8800210C[mode].x + 6, D_8800210C[mode].y + 6, D_8800210C[mode].w - 12, 4, frameColor);
+        Ui_FillRectPrimColor(D_8800210C[mode].x + 6, D_8800210C[mode].y + 6, 4, D_8800219C[mode].y - 10, frameColor);
+        Ui_FillRectPrimColor(D_8800210C[mode].x + D_8800210C[mode].w - 10, D_8800210C[mode].y + 6, 4, D_8800219C[mode].y - 10, frameColor);
+        Ui_FillRectPrimColor(D_8800210C[mode].x + 6, D_8800210C[mode].y + D_8800219C[mode].y - 4, D_8800210C[mode].w - 12, 0x20, frameColor);
     } else {
         gSPDisplayList(gDisplayListHead++, D_80073480);
-        func_800291F8(D_8800210C[mode].x + 6, D_8800210C[mode].y + 6, D_8800210C[mode].w - 12, 8, frameColor);
-        func_800291F8(D_8800210C[mode].x + 6, D_8800210C[mode].y + D_8800210C[mode].h - 14, D_8800210C[mode].w - 12, 8, frameColor);
-        func_800291F8(D_8800210C[mode].x + 6, D_8800210C[mode].y + 14, 9, D_8800210C[mode].h - 28, frameColor);
-        func_800291F8(D_8800210C[mode].x + D_8800210C[mode].w - 15, D_8800210C[mode].y + 14, 9, D_8800210C[mode].h - 28, frameColor);
+        Ui_FillRectPrimColor(D_8800210C[mode].x + 6, D_8800210C[mode].y + 6, D_8800210C[mode].w - 12, 8, frameColor);
+        Ui_FillRectPrimColor(D_8800210C[mode].x + 6, D_8800210C[mode].y + D_8800210C[mode].h - 14, D_8800210C[mode].w - 12, 8, frameColor);
+        Ui_FillRectPrimColor(D_8800210C[mode].x + 6, D_8800210C[mode].y + 14, 9, D_8800210C[mode].h - 28, frameColor);
+        Ui_FillRectPrimColor(D_8800210C[mode].x + D_8800210C[mode].w - 15, D_8800210C[mode].y + 14, 9, D_8800210C[mode].h - 28, frameColor);
     }
     func_88000764(D_8800210C[mode].x, D_8800210C[mode].y, D_8800210C[mode].w, D_8800210C[mode].h, D_80073554, alpha);
     if (D_8800219C[mode].h) {

@@ -139,7 +139,7 @@ extern u8 D_0400DFB8[];
 extern u8 D_0400EB90[];
 extern u8 D_0400FB80[];
 extern u8 D_04010918[];
-void func_800290F0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 arg4);
+void Ui_FillRectRgba5551(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 arg4);
 s32 GbSave_GameToCategoryIndex(s32 arg0);
 void func_8001AA60(s32, s32, s32);
 void func_8002BAB8(s32 x, s32 y, s32 value, s32 digits);
@@ -148,10 +148,10 @@ u32 func_800566BC(s32);
 void func_80028060(s32 y, GbSaveSummary* summary, char* label, s32 arg3) {
     if (summary != NULL) {
         gSPDisplayList(gDisplayListHead++, D_80060270);
-        func_800290F0(0, y, 0x188, 0x36, D_800734C8[GbSave_GameToCategoryIndex(summary->game)]);
+        Ui_FillRectRgba5551(0, y, 0x188, 0x36, D_800734C8[GbSave_GameToCategoryIndex(summary->game)]);
     } else {
         gSPDisplayList(gDisplayListHead++, D_80060270);
-        func_800290F0(0, y, 0x188, 0x36, D_800734D8);
+        Ui_FillRectRgba5551(0, y, 0x188, 0x36, D_800734D8);
     }
 
     gDPPipeSync(gDisplayListHead++);
@@ -176,7 +176,7 @@ void func_80028060(s32 y, GbSaveSummary* summary, char* label, s32 arg3) {
     gSPScisTextureRectangle(gDisplayListHead++, 315 << 2, (y + 51) << 2, 391 << 2, (y + 54) << 2, G_TX_RENDERTILE, 0, 0,
                             1 << 10, 1 << 10);
     gSPDisplayList(gDisplayListHead++, D_80060270);
-    func_800290F0(0, y + 54, 0x280, 2, D_800734DC);
+    Ui_FillRectRgba5551(0, y + 54, 0x280, 2, D_800734DC);
 
     if (summary != NULL) {
         func_8001AB6C();
@@ -227,7 +227,11 @@ void Trade_DrawSolidFillRect(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGB8 
     gDPFillRectangle(gDisplayListHead++, arg0, arg1, (arg0 + arg2) - 1, (arg1 + arg3) - 1);
 }
 
-void func_800290F0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 arg4) {
+/**
+ * Fills a rectangle (x, y, w, h) with an RGBA5551 fill color made from arg4.
+ * @unverified Name and comment guessed from the code.
+ */
+void Ui_FillRectRgba5551(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 arg4) {
     s32 color = RGBA5551(arg4.r, arg4.g, arg4.b, 1);
 
     gDPPipeSync(gDisplayListHead++);
@@ -235,7 +239,11 @@ void func_800290F0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 arg4) {
     gDPScisFillRectangle(gDisplayListHead++, arg0, arg1, (arg0 + arg2) - 1, (arg1 + arg3) - 1);
 }
 
-void func_800291F8(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 color) {
+/**
+ * Fills a rectangle (x, y, w, h) using a primitive color.
+ * @unverified Name and comment guessed from the code.
+ */
+void Ui_FillRectPrimColor(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 color) {
     gDPPipeSync(gDisplayListHead++);
     gDPSetPrimColor(gDisplayListHead++, 0, 0, color.r, color.g, color.b, color.a);
     gDPFillRectangle(gDisplayListHead++, arg0, arg1, arg0 + arg2, arg1 + arg3);
@@ -540,7 +548,7 @@ void func_8002A8E0(s32* arg0) {
                 func_80029028(x2, y2, w2, h2, *(Color8002A354*)color);
             } else {
                 gSPDisplayList(gDisplayListHead++, D_80073480);
-                func_800291F8(x2, y2, w2, h2, *color);
+                Ui_FillRectPrimColor(x2, y2, w2, h2, *color);
             }
         }
     }
@@ -659,7 +667,7 @@ s32 func_8002AB84(s32* arg0) {
                 func_80029028(x, y, w, h, *(Color8002A354*)&arg0[6]);
             } else {
                 gSPDisplayList(gDisplayListHead++, D_80073480);
-                func_800291F8(x, y, w, h, *(Color_RGBA8*)&arg0[6]);
+                Ui_FillRectPrimColor(x, y, w, h, *(Color_RGBA8*)&arg0[6]);
             }
         }
     }
@@ -1343,7 +1351,11 @@ void func_8002D024(s32* arg0) {
     func_8001ABBC();
 }
 
-s32 func_8002D138(UNUSED s32 arg0) {
+/**
+ * Returns 1 and plays the confirm sound if player 1 pressed A or B this frame.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 Ui_CheckConfirmPressed(UNUSED s32 arg0) {
     s32 ret = 0;
 
     if (gPlayer1Controller->buttonPressed & (BTN_A | BTN_B)) {

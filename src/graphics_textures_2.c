@@ -313,7 +313,11 @@ void Font_DisableTwoCycleTexturing(void) {
 }
 
 extern Gfx D_80060A00[];
-void func_8001AC7C(s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b, s32 a) {
+/**
+ * Draws a textured rectangle tinted with the given RGBA primitive color.
+ * @unverified Name and comment guessed from the code.
+ */
+void Ui_DrawPrimColorRect(s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b, s32 a) {
     gSPDisplayList(gDisplayListHead++, D_80060A00);
     gDPSetPrimColor(gDisplayListHead++, 0, 0, r, g, b, a);
     gSPTextureRectangle(gDisplayListHead++, x << 2, y << 2, (x + w) << 2, (y + h) << 2, G_TX_RENDERTILE, 0, 0, 0x1000, 0x0400);
@@ -397,7 +401,12 @@ typedef struct Font8001B32C {
     s8 spacing;
 } Font8001B32C;
 
-s32 func_8001B32C(s32 x, s32 scale, const char* str) {
+/**
+ * Returns the x position at which `str` starts when centered on x, using the
+ * current font's glyph width, spacing and the scale (percent).
+ * @unverified Name and comment guessed from the code.
+ */
+s32 Font_GetCenteredStartX(s32 x, s32 scale, const char* str) {
     s32 width;
     Font8001B32C* font = (Font8001B32C*)D_800AD200;
 
@@ -429,7 +438,7 @@ Gfx* func_8001B3AC(s16 x, s16 y, s16 arg2, s16 arg3, Color_RGBA8_u32 color, cons
                 x = startX;
                 y -= ((u8)((FontEntry8001A118*)D_800AD200)[M2C_FIELD(D_800AD200, u8*, 0x38)].size_b * ((arg3 * 0xB) / 10)) / 100;
             } else if (chr == 9) {
-                x = func_8001B32C(x, arg2, (const char*)p);
+                x = Font_GetCenteredStartX(x, arg2, (const char*)p);
             } else {
                 if (chr >= 0x80) {
                     if (*p != 0) {

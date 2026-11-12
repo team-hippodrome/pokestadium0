@@ -934,7 +934,7 @@ extern u8 D_0300A500[];
 extern u8 D_0300A7A0[];
 extern Gfx D_80060398[];
 void func_8211D3D8(s16 arg0, s16 arg1) {
-    func_8001AC7C(arg0, arg1, 0x64, 0x7D, 0, 0, 0, 0x3C);
+    Ui_DrawPrimColorRect(arg0, arg1, 0x64, 0x7D, 0, 0, 0, 0x3C);
     func_8001AB6C();
     if (D_8219A730 == 0) {
         func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF);
@@ -975,7 +975,7 @@ extern char D_82195B68[];
 void func_8211D5F4(s16 arg0, s16 arg1) {
     char buf[16];
 
-    func_8001AC7C(arg0, arg1, 0x82, 0x50, 0, 0, 0, 0x3C);
+    Ui_DrawPrimColorRect(arg0, arg1, 0x82, 0x50, 0, 0, 0, 0x3C);
     func_8001AB6C();
     func_8001A384(1, 0);
     func_8001A944(arg0 + 3, arg1 + 4, (s32)D_82195B00);
@@ -1011,7 +1011,7 @@ extern char D_82195BD4[];
 s32 D_8218B15C[] = { (s32)D_82195B6C, (s32)D_82195B74, (s32)D_82195B80, (s32)D_82195B8C, (s32)D_82195B98, (s32)D_82195BA4, (s32)D_82195BB4, (s32)D_82195BC4, (s32)D_82195BD4 };
 
 void func_8211D874(s16 arg0, s16 arg1) {
-    func_8001AC7C(arg0, arg1, 0x6E, 0x1E, 0, 0, 0, 0x3C);
+    Ui_DrawPrimColorRect(arg0, arg1, 0x6E, 0x1E, 0, 0, 0, 0x3C);
     func_8001AB6C();
     func_8001A384(1, 0);
     func_8001A944(arg0 + 3, arg1 + 4, (s32)&D_82195BE4);
@@ -1059,7 +1059,7 @@ void func_8211D920(s16 arg0, s16 arg1) {
     char* names2[] = { D_82195CA8, D_82195CB0, D_82195CB8, D_82195CC0, D_82195CC8, D_82195CD8, D_82195CE4, D_82195CF0 };
     char* names3[] = { D_82195CFC, D_82195D04, D_82195D0C, D_82195D14, D_82195D1C, D_82195D28, D_82195D34 };
 
-    func_8001AC7C(arg0, arg1, 0x78, 0x82, 0, 0, 0, 0x3C);
+    Ui_DrawPrimColorRect(arg0, arg1, 0x78, 0x82, 0, 0, 0, 0x3C);
     func_8001AB6C();
     func_8001A384(1, 0);
     func_8001A944(arg0 + 3, arg1 + 2, (s32)D_82195D40);
@@ -1128,7 +1128,7 @@ void func_8211DDC0(s16 arg0, s16 arg1) {
     UNUSED s32 pad[1]; // FAKE: stack padding
 
     val = M2C_FIELD(D_82199DE0, s32*, 0x620);
-    func_8001AC7C(arg0, arg1, 0xAA, 0x70, 0, 0, 0, 0x3C);
+    Ui_DrawPrimColorRect(arg0, arg1, 0xAA, 0x70, 0, 0, 0, 0x3C);
     func_8001AB6C();
     func_8001A384(1, 0);
     func_8001A944(arg0 + 3, arg1 + 4, (s32)D_82195E04);
@@ -1190,7 +1190,7 @@ void func_8211E164(s16 arg0, s16 arg1) {
     UNUSED s32 pad[1]; // FAKE: stack padding
 
     val = M2C_FIELD(D_82199DE0, s32*, 0x620);
-    func_8001AC7C(arg0, arg1, 0xAA, 0x5A, 0, 0, 0, 0x3C);
+    Ui_DrawPrimColorRect(arg0, arg1, 0xAA, 0x5A, 0, 0, 0, 0x3C);
     func_8001AB6C();
     func_8001A384(1, 0);
     func_8001A944(arg0 + 3, arg1 + 4, (s32)D_82195EF0);
@@ -1235,7 +1235,7 @@ void func_8211E414(s16 arg0, s16 arg1) {
     UNUSED s32 pad[1]; // FAKE: stack padding
     s32 val = M2C_FIELD(D_82199DE0, s32*, 0x620);
 
-    func_8001AC7C(arg0, arg1, 0xAA, 0x36, 0, 0, 0, 0x3C);
+    Ui_DrawPrimColorRect(arg0, arg1, 0xAA, 0x36, 0, 0, 0, 0x3C);
     func_8001AB6C();
     func_8001A384(1, 0);
     func_8001A944(arg0 + 3, arg1 + 4, (s32)D_82195F70);
@@ -1264,7 +1264,7 @@ void func_8211E5F4(s16 arg0, s16 arg1) {
     char buf[16];
     u8* mon = (u8*)(((s32*)&D_82199DE0)[D_8219A760] + 0x7C6);
 
-    func_8001AC7C(arg0, arg1, 0x78, 0x3C, 0, 0, 0, 0x3C);
+    Ui_DrawPrimColorRect(arg0, arg1, 0x78, 0x3C, 0, 0, 0, 0x3C);
     func_8001AB6C();
     func_8001A384(1, 0);
     func_8001A944(arg0 + 3, arg1 + 4, (s32)D_82195FC4);
@@ -1287,7 +1287,7 @@ extern char D_82195FF8[];
 void func_8211E794(s16 arg0, s16 arg1) {
     char buf[16];
 
-    func_8001AC7C(arg0, arg1, 0x50, 0x1E, 0, 0, 0, 0x3C);
+    Ui_DrawPrimColorRect(arg0, arg1, 0x50, 0x1E, 0, 0, 0, 0x3C);
     func_800564D4(buf, D_82195FF4, M2C_FIELD(M2C_FIELD(D_8219A5A0, s8**, 0xCC), f32*, 0x34));
     func_82116480(buf, arg0 + 3, arg1 + 2);
     func_800564D4(buf, D_82195FF8, M2C_FIELD(M2C_FIELD(D_8219A5A0, s8**, 0xCC), f32*, 0x38));

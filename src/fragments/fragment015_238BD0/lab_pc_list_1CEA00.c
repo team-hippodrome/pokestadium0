@@ -452,7 +452,7 @@ void func_89000960(s8* arg0) {
 s32 func_8002B638(s8 *);                          /* extern */
 s32 func_8002BC14(s32);                             /* extern */
 M2C_UNK func_8002CEEC(s8 *, M2C_UNK *, M2C_UNK, M2C_UNK, s32); /* extern */
-s32 func_8002D138(s8 *);                          /* extern */
+s32 Ui_CheckConfirmPressed(s8 *);                          /* extern */
 M2C_UNK func_8003F6AC(M2C_UNK);                     /* extern */
 extern s32 D_800603C0;
 extern M2C_UNK D_89018474;
@@ -484,7 +484,7 @@ s32 func_89000BEC(s8 *arg0) {
         }
         break;
     case 1:
-        if (func_8002D138(arg0 + 0x48) == 1) {
+        if (Ui_CheckConfirmPressed(arg0 + 0x48) == 1) {
             M2C_FIELD(arg0, s32 *, 0) = 0;
             M2C_FIELD(arg0, s32 *, 0x34) = (s32) M2C_FIELD(arg0, s32 *, 0x30);
         }
@@ -1226,22 +1226,22 @@ s32 func_89002318(s8* arg0) {
             break;
 
         case 9:
-            if (func_8002D138(arg0 + 0x4AC) == 1) {
+            if (Ui_CheckConfirmPressed(arg0 + 0x4AC) == 1) {
                 *(s32*)arg0 = 2;
             }
             break;
         case 10:
-            if (func_8002D138(arg0 + 0x4AC) == 1) {
+            if (Ui_CheckConfirmPressed(arg0 + 0x4AC) == 1) {
                 *(s32*)arg0 = 3;
             }
             break;
         case 11:
-            if (func_8002D138(arg0 + 0x4AC) == 1) {
+            if (Ui_CheckConfirmPressed(arg0 + 0x4AC) == 1) {
                 *(s32*)arg0 = 4;
             }
             break;
         case 12:
-            if (func_8002D138(arg0 + 0x4AC) == 1) {
+            if (Ui_CheckConfirmPressed(arg0 + 0x4AC) == 1) {
                 *(s32*)arg0 = 6;
             }
             break;

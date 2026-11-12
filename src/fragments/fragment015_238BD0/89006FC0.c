@@ -968,7 +968,7 @@ s32 func_89009738(u8 *arg0, s32 arg1) {
 s32 func_8000B30C(void);
 s32 func_8002B2B0(s8*);
 void func_8002CEEC(s8*, void*, s32, s32, s32);
-s32 func_8002D138(s8*);
+s32 Ui_CheckConfirmPressed(s8*);
 void func_8002D900(s8*);
 extern void* D_8900A954[];
 extern u8 D_8900A96C[];
@@ -1159,7 +1159,7 @@ s32 func_890097E0(s8* arg0) {
             break;
 
         case 7:
-            if (func_8002D138(arg0 + 0x1E0) == 1) {
+            if (Ui_CheckConfirmPressed(arg0 + 0x1E0) == 1) {
                 M2C_FIELD(arg0, s32*, 0) = 1;
             }
             break;

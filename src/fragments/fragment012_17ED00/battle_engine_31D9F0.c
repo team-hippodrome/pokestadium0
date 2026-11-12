@@ -146,12 +146,12 @@ void func_821172F0(ActivePokemon* arg0, BattleMon* arg1, unk_D_84385790* arg2, s
 
     if (arg3 < 0) {
         if (arg5 + arg3 < 0) {
-            func_8001AC7C(0, arg4, 0, arg6, arg7, arg8, arg9, argA);
+            Ui_DrawPrimColorRect(0, arg4, 0, arg6, arg7, arg8, arg9, argA);
         } else {
-            func_8001AC7C(0, arg4, arg5 + arg3, arg6, arg7, arg8, arg9, argA);
+            Ui_DrawPrimColorRect(0, arg4, arg5 + arg3, arg6, arg7, arg8, arg9, argA);
         }
     } else {
-        func_8001AC7C(arg3, arg4, arg5, arg6, arg7, arg8, arg9, argA);
+        Ui_DrawPrimColorRect(arg3, arg4, arg5, arg6, arg7, arg8, arg9, argA);
     }
     BattleHud_DrawLevelNumber(arg3 + 3, arg4 + 0x10, arg1->level);
     Widget_DrawMeterBar(arg3 + 2, arg4 + 0x19, arg1->hp, arg1->maxHp);

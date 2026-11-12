@@ -1132,7 +1132,11 @@ void Geo_NodeClearDepth(UNUSED GraphNode* arg0) {
 void Geo_NodeType9Empty(UNUSED GraphNode* arg0) {
 }
 
-void func_80014164(GraphNode* arg0) {
+/**
+ * Geo node handler: enables fog with the node's fog range and color.
+ * @unverified Name and comment guessed from the code.
+ */
+void GeoRender_SetFog(GraphNode* arg0) {
     unk_D_86002F34_alt3* arg = (unk_D_86002F34_alt3*)arg0;
 
     D_80060490->unk_1D = 1;
