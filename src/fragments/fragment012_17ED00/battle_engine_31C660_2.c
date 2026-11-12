@@ -29,7 +29,7 @@ M2C_UNK func_80019B28(s32, u8, u8, u8, s32);        /* extern */
 M2C_UNK func_8213C930(s8 *);                      /* extern */
 s32 func_8213C9B0(s8 *);                          /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
-s32 func_8214083C(s8 *, s16, u8);                 /* extern */
+s32 Particle_ApproachUnkAE(s8 *, s16, u8);                 /* extern */
 s32 func_821436A0(s8 *, u8, u8);                  /* extern */
 M2C_UNK func_82144130(s8 *);                      /* extern */
 
@@ -42,7 +42,7 @@ void func_82144170(s8 *arg0) {
         func_82144130(arg0);
         break;
     case 2:
-        if (func_8214083C(arg0, M2C_FIELD(arg0, s16 *, 0xA2), M2C_FIELD(arg0, u8 *, 0xCA)) != 0) {
+        if (Particle_ApproachUnkAE(arg0, M2C_FIELD(arg0, s16 *, 0xA2), M2C_FIELD(arg0, u8 *, 0xCA)) != 0) {
             func_8213C9D0(arg0);
         }
         break;
@@ -157,7 +157,7 @@ M2C_UNK func_80019B6C(s32, u8);                     /* extern */
 M2C_UNK func_8213C930(s8 *);                      /* extern */
 s32 func_8213C9B0(s8 *);                          /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
-s32 func_82140518(s8 *, u8, u8);                  /* extern */
+s32 Particle_ApproachPrimAlpha(s8 *, u8, u8);                  /* extern */
 M2C_UNK func_82144644(s8 *);                      /* extern */
 
 void func_82144668(s8 *arg0) {
@@ -169,7 +169,7 @@ void func_82144668(s8 *arg0) {
         func_82144644(arg0);
         break;
     case 2:
-        if (func_82140518(arg0, M2C_FIELD(arg0, u8 *, 0xC9), M2C_FIELD(arg0, u8 *, 0xA7)) != 0) {
+        if (Particle_ApproachPrimAlpha(arg0, M2C_FIELD(arg0, u8 *, 0xC9), M2C_FIELD(arg0, u8 *, 0xA7)) != 0) {
             func_8213C9D0(arg0);
         }
         break;
@@ -201,10 +201,10 @@ void func_82144750(s8 *arg0) {
         func_82144710(arg0);
         break;
     case 2:
-        func_82140518(arg0, 0x80, 4);
+        Particle_ApproachPrimAlpha(arg0, 0x80, 4);
         break;
     case 3:
-        if (func_82140518(arg0, 0, 8) != 0) {
+        if (Particle_ApproachPrimAlpha(arg0, 0, 8) != 0) {
             func_8213C938(arg0);
         }
         break;

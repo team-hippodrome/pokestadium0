@@ -47,10 +47,10 @@ void BattleAnim_CallbackDescriptor26BurstChild(Particle* arg0) {
 void func_82165BC8(s32 arg0) {
     s16 sp26;
 
-    sp26 = func_8213C47C();
+    sp26 = Particle_GetUnkAC();
     func_821401D4(arg0, 0x3F000000);
     func_8213E14C(arg0, 0x42C80000);
-    func_82140594(arg0, (s16) (sp26 + 1));
+    Particle_SetUnkA6(arg0, (s16) (sp26 + 1));
     func_82143408(arg0, 8);
     func_82143440(arg0, 0x33);
     func_8213CB5C(arg0);

@@ -129,7 +129,7 @@ void func_82154704(s8* arg0) {
             func_8213D644(arg0, 5.0f);
             break;
     }
-    func_8213D604(arg0, var_f20);
+    Particle_AddPosOffsetYScaled(arg0, var_f20);
 }
 
 /**
@@ -444,7 +444,7 @@ void func_821555D4(s8 *arg0) {
         break;
     case 2:
         func_8213CCEC(arg0, 0, 7, 1, 2, 0);
-        func_82140518(arg0, 0x20, 0x18);
+        Particle_ApproachPrimAlpha(arg0, 0x20, 0x18);
         break;
     case 3:
         func_8213C938(arg0);
@@ -523,7 +523,7 @@ void func_821558F4(s8 *arg0) {
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_82140594(arg0, func_82137D74(0x18));
+        Particle_SetUnkA6(arg0, func_82137D74(0x18));
         func_8213C9D0(arg0);
         return;
     case 2:
@@ -665,7 +665,7 @@ void BattleAnim_RunBlizzard(s8 *arg0) {
     case 2:
         if (func_821406B4(arg0) != 0) {
             func_8213CB3C(arg0);
-            func_82140594(arg0, 4);
+            Particle_SetUnkA6(arg0, 4);
             return;
         }
         return;
@@ -673,7 +673,7 @@ void BattleAnim_RunBlizzard(s8 *arg0) {
         func_821402B8(arg0);
         func_8213CCEC(arg0, 1, 7, 1, 2, 0);
         func_8213E6BC(arg0);
-        func_82140518(arg0, 0x40, 8);
+        Particle_ApproachPrimAlpha(arg0, 0x40, 8);
         return;
     case 4:
         func_8213C930(arg0);
@@ -1134,8 +1134,8 @@ void BattleAnim_RunFallingRock(s8 *arg0) {
         func_8213CA80(arg0, 0xA);
         return;
     case 3:
-        func_82140380(arg0, 0, 0x10);
-        func_821403B0(arg0, 0, 0x20);
+        Particle_ApproachPrimRed(arg0, 0, 0x10);
+        Particle_ApproachPrimGreen(arg0, 0, 0x20);
         if (func_8001104C(M2C_FIELD(arg0, s32 *, 0x14)) != 0) {
             func_8213C9D0(arg0);
             return;
@@ -1379,7 +1379,7 @@ void func_82157E28(s8 *arg0) {
         func_82157DA0(arg0);
         break;
     case 2:
-        func_82140518(arg0, 0x9B, 8);
+        Particle_ApproachPrimAlpha(arg0, 0x9B, 8);
         break;
     case 3:
         func_8213C930(arg0);
@@ -1540,7 +1540,7 @@ void BattleAnim_RunBoomUseEffect3(s8 *arg0) {
         return;
     case 2:
         if (func_821406B4(arg0) != 0) {
-            func_82140594(arg0, 0xA);
+            Particle_SetUnkA6(arg0, 0xA);
             func_8213CB3C(arg0);
             return;
         }
@@ -1549,11 +1549,11 @@ void BattleAnim_RunBoomUseEffect3(s8 *arg0) {
         func_8213CCEC(arg0, 0, 7, 1, 2, 0);
         func_82140228(arg0, 0x40200000, 0x3E800000);
         func_8213E528(arg0);
-        func_8213D604(arg0, 0.5f);
+        Particle_AddPosOffsetYScaled(arg0, 0.5f);
         if (func_82140690(arg0) != 0) {
-            func_82140518(arg0, 0x20, 0x10);
-            func_821403B0(arg0, 0, 0x14);
-            func_8214047C(arg0, 0, 0x14);
+            Particle_ApproachPrimAlpha(arg0, 0x20, 0x10);
+            Particle_ApproachPrimGreen(arg0, 0, 0x14);
+            Particle_ApproachEnvRed(arg0, 0, 0x14);
             return;
         }
         break;
@@ -1597,7 +1597,7 @@ void BattleAnim_RunBoomUseEffect4(s8 *arg0) {
     case 2:
         if (func_821406B4(arg0) != 0) {
             func_8213CB3C(arg0);
-            func_82140594(arg0, 5);
+            Particle_SetUnkA6(arg0, 5);
             return;
         }
         return;
@@ -1605,9 +1605,9 @@ void BattleAnim_RunBoomUseEffect4(s8 *arg0) {
         func_8213CCEC(arg0, 0, 7, 1, 2, 0);
         func_8213E77C(arg0);
         if (func_82140690(arg0) != 0) {
-            func_821403B0(arg0, 0, 0x14);
-            func_8214047C(arg0, 0, 0x14);
-            func_82140518(arg0, 0x20, 4);
+            Particle_ApproachPrimGreen(arg0, 0, 0x14);
+            Particle_ApproachEnvRed(arg0, 0, 0x14);
+            Particle_ApproachPrimAlpha(arg0, 0x20, 4);
             return;
         }
         break;
@@ -1642,20 +1642,20 @@ void Particle_CreateDisplayList_CustomColors(s32 arg0, arg1_func_84344CE8* arg1)
 void func_821588C0(s8 *arg0) {
     s16 temp_v1;
 
-    func_8213C464();
+    Particle_GetUnkCE();
     temp_v1 = M2C_FIELD(arg0, s16 *, 0xAE);
     switch (temp_v1) {                              /* irregular */
     case 1:
         func_82152730(arg0, 2);
         func_821401D4(arg0, 0x3F000000);
-        func_821408C8(arg0, 0x64);
+        Particle_SetUnkB0(arg0, 0x64);
         func_82143478(arg0, 0x17);
-        func_82140594(arg0, 5);
+        Particle_SetUnkA6(arg0, 5);
         return;
     case 2:
         func_82140228(arg0, 0x40E00000, 0x3E800000);
         if (func_821406B4(arg0) != 0) {
-            func_82140594(arg0, 5);
+            Particle_SetUnkA6(arg0, 5);
             return;
         }
         return;
@@ -1663,7 +1663,7 @@ void func_821588C0(s8 *arg0) {
         func_82140228(arg0, 0x40E00000, 0x3E800000);
         func_821437E0(arg0, 0x1A, 0x19);
         if (func_82140690(arg0) != 0) {
-            func_821408DC(arg0, 0, 8);
+            Particle_ApproachUnkB0(arg0, 0, 8);
             func_82140548(arg0, 0, 0x10);
             return;
         }
@@ -1735,21 +1735,21 @@ void BattleAnim_RunBoomUseEffect6(Particle* arg0) {
 void BattleAnim_RunBoomHitEffect1(s8 *arg0) {
     s16 temp_v1;
 
-    func_8213C464();
+    Particle_GetUnkCE();
     temp_v1 = M2C_FIELD(arg0, s16 *, 0xAE);
     switch (temp_v1) {                              /* irregular */
     case 1:
         func_82152730(arg0, 2);
         func_821401D4(arg0, 0x3E800000);
-        func_821408C8(arg0, 0x64);
+        Particle_SetUnkB0(arg0, 0x64);
         func_82143478(arg0, 0x17);
-        func_82140594(arg0, 5);
+        Particle_SetUnkA6(arg0, 5);
         func_8213D644(arg0, 30.0f);
         return;
     case 2:
         func_82140228(arg0, 0x40A00000, 0x3E99999A);
         if (func_821406B4(arg0) != 0) {
-            func_82140594(arg0, 5);
+            Particle_SetUnkA6(arg0, 5);
             return;
         }
         return;
@@ -1757,7 +1757,7 @@ void BattleAnim_RunBoomHitEffect1(s8 *arg0) {
         func_82140228(arg0, 0x40A00000, 0x3E99999A);
         func_821437E0(arg0, 0x1A, 0x19);
         if (func_82140690(arg0) != 0) {
-            func_821408DC(arg0, 0, 8);
+            Particle_ApproachUnkB0(arg0, 0, 8);
             func_82140548(arg0, 0, 0x10);
             return;
         }
@@ -1807,7 +1807,7 @@ void BattleAnim_RunBoomHitEffect2(s8 *arg0) {
     case 2:
         if (func_821406B4(arg0) != 0) {
             func_8213CB3C(arg0);
-            func_82140594(arg0, 4);
+            Particle_SetUnkA6(arg0, 4);
             return;
         }
         return;
@@ -1815,8 +1815,8 @@ void BattleAnim_RunBoomHitEffect2(s8 *arg0) {
         func_821402B8(arg0);
         func_8213CCEC(arg0, 1, 7, 1, 2, 0);
         func_8213E6BC(arg0);
-        func_821403B0(arg0, 0, 0x20);
-        func_821404DC(arg0, 0, 0x20);
+        Particle_ApproachPrimGreen(arg0, 0, 0x20);
+        Particle_ApproachEnvGreen(arg0, 0, 0x20);
         if (func_82140690(arg0) != 0) {
             return;
         }
@@ -1868,7 +1868,7 @@ void BattleAnim_RunBoomHitEffect3(s8 *arg0) {
     case 2:
         if (func_821406B4(arg0) != 0) {
             func_8213CB3C(arg0);
-            func_82140594(arg0, 4);
+            Particle_SetUnkA6(arg0, 4);
         }
         break;
     case 3:
@@ -1977,16 +1977,16 @@ void func_82159898(s8 *arg0) {
         break;
     case 2:
         func_8213CA80(arg0, 0xE);
-        func_821403B0(arg0, 0xFF, 7);
-        func_821403E0(arg0, 0xFF, 0x13);
-        func_821404DC(arg0, 0xFF, 0x13);
-        func_82140518(arg0, 0xFF, 0x13);
+        Particle_ApproachPrimGreen(arg0, 0xFF, 7);
+        Particle_ApproachPrimBlue(arg0, 0xFF, 0x13);
+        Particle_ApproachEnvGreen(arg0, 0xFF, 0x13);
+        Particle_ApproachPrimAlpha(arg0, 0xFF, 0x13);
         break;
     case 3:
         func_8213CA80(arg0, 0x10);
-        func_821403E0(arg0, 0, 0x11);
-        func_821404DC(arg0, 0, 0x11);
-        func_82140518(arg0, 0, 0x11);
+        Particle_ApproachPrimBlue(arg0, 0, 0x11);
+        Particle_ApproachEnvGreen(arg0, 0, 0x11);
+        Particle_ApproachPrimAlpha(arg0, 0, 0x11);
         break;
     case 4:
         if (func_8001104C(M2C_FIELD(arg0, s32 *, 0x14)) != 0) {
@@ -2724,7 +2724,7 @@ void func_8215B83C(s8 *arg0) {
     s16 sp26;
     s32 temp_v0;
 
-    sp26 = func_8213C46C();
+    sp26 = Particle_GetUnkCD();
     temp_v0 = func_82136AC0(arg0);
     M2C_FIELD(arg0, s32 *, 0x14) = temp_v0;
     if (temp_v0 != 0) {
@@ -3119,11 +3119,11 @@ void func_8215C984(s8 *arg0) {
         func_8215C8FC(arg0);
         break;
     case 2:
-        func_82140518(arg0, 0xFF, 8);
-        func_8214083C(arg0, 0xC8, 6);
+        Particle_ApproachPrimAlpha(arg0, 0xFF, 8);
+        Particle_ApproachUnkAE(arg0, 0xC8, 6);
         break;
     }
-    func_8213EAD4(arg0, (s16) (func_821385C0() + 0x8000));
+    Particle_SetRotationY(arg0, (s16) (func_821385C0() + 0x8000));
 }
 
 /**
@@ -3147,7 +3147,7 @@ void func_8215CA9C(s8 *arg0) {
     if (M2C_FIELD(arg0, s16 *, 0xAE) == 1) {
         func_8215CA14();
     }
-    func_8213EAD4(arg0, (s16) (func_821385C0() + 0x8000));
+    Particle_SetRotationY(arg0, (s16) (func_821385C0() + 0x8000));
 }
 
 void Gfx_WaterAnimPrimEnvDL(Gfx* arg0, u8 arg1, UNUSED u16 arg2) {
@@ -3308,7 +3308,7 @@ void func_8215D76C(s8 *arg0) {
         break;
     case 2:
         func_8213CCEC(arg0, 0, 7, 1, 2, 0);
-        func_82140518(arg0, 0x20, 0x40);
+        Particle_ApproachPrimAlpha(arg0, 0x20, 0x40);
         break;
     case 3:
         func_8213C938(arg0);
@@ -3883,7 +3883,7 @@ void func_8215F1B0(s8 *arg0) {
         return;
     case 2:
         func_821437E0(arg0, 0x33, 0x24);
-        func_82140518(arg0, 0xFF, 0x1D);
+        Particle_ApproachPrimAlpha(arg0, 0xFF, 0x1D);
         if (func_8001104C(M2C_FIELD(arg0, s32 *, 0x14)) != 0) {
             func_8213C930(arg0);
         }
@@ -3945,7 +3945,7 @@ void func_8215F3EC(s8 *arg0) {
     case 2:
         if (func_821406B4(arg0) != 0) {
             func_8213CB3C(arg0);
-            func_82140594(arg0, 0xA);
+            Particle_SetUnkA6(arg0, 0xA);
             return;
         }
         return;

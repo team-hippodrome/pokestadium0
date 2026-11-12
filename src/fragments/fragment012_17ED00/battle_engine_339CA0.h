@@ -112,14 +112,14 @@ void func_8215FAA4(s8 *arg0);
 
 void func_8216008C(Particle* arg0);
 
-s16 func_8213C464();                                /* extern */
+s16 Particle_GetUnkCE();                                /* extern */
 M2C_UNK func_8213C938(s8 *);                      /* extern */
 M2C_UNK func_8213CA80(s8 *, M2C_UNK);             /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_821403B0(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_821403E0(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_821404AC(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_821404DC(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachPrimGreen(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachPrimBlue(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachEnvBlue(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachEnvGreen(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 
 void BattleAnim_RunSlashingMoveFullScreenFlash(s8 *arg0);
 
@@ -127,15 +127,15 @@ void Particle_SetPosition(Particle* arg0, f32 arg1, f32 arg2, f32 arg3);
 
 void func_821601C0(Particle* arg0);
 
-s16 func_8213C464();                                /* extern */
+s16 Particle_GetUnkCE();                                /* extern */
 M2C_UNK func_8213C930(s8 *);                      /* extern */
 M2C_UNK func_8213CA80(s8 *, M2C_UNK);             /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_821403B0(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_821403E0(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_821404AC(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_821404DC(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_82140518(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachPrimGreen(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachPrimBlue(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachEnvBlue(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachEnvGreen(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 
 void BattleAnim_RunSlashMoveWhiteFlashOverlay(s8 *arg0);
 
@@ -154,18 +154,18 @@ M2C_UNK func_8213C930(s8 *);                      /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
 M2C_UNK func_8213CCEC(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 M2C_UNK func_8213E6BC(s8 *);                      /* extern */
-M2C_UNK func_82140518(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_82160494(s8 *);                      /* extern */
 
 void func_82160528(s8 *arg0);
 
 f32 func_8000F150();                                /* extern */
-s16 func_8213C47C();                                /* extern */
+s16 Particle_GetUnkAC();                                /* extern */
 u16 func_8213C484(s8 *);                          /* extern */
 s32 func_8213C494(s8 *);                          /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
-M2C_UNK func_8213EDB0(s8 *, s16);                 /* extern */
-M2C_UNK func_8213F628(s8 *, f32);                 /* extern */
+M2C_UNK Particle_AddRotationY(s8 *, s16);                 /* extern */
+M2C_UNK Particle_SetStepMagnitudeScaled(s8 *, f32);                 /* extern */
 M2C_UNK func_821401D4(s8 *, M2C_UNK);             /* extern */
 M2C_UNK func_8214050C(s8 *, M2C_UNK);             /* extern */
 M2C_UNK func_82143478(s8 *, u16);                 /* extern */
@@ -183,12 +183,12 @@ M2C_UNK func_82140548(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 void BattleAnim_RunSmallSand(s8 *arg0);
 
 f32 func_8000F150();                                /* extern */
-s16 func_8213C47C();                                /* extern */
+s16 Particle_GetUnkAC();                                /* extern */
 u16 func_8213C484(s8 *);                          /* extern */
 s32 func_8213C494(s8 *);                          /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
-M2C_UNK func_8213EDB0(s8 *, s16);                 /* extern */
-M2C_UNK func_8213F628(s8 *, f32);                 /* extern */
+M2C_UNK Particle_AddRotationY(s8 *, s16);                 /* extern */
+M2C_UNK Particle_SetStepMagnitudeScaled(s8 *, f32);                 /* extern */
 M2C_UNK func_821401D4(s8 *, M2C_UNK);             /* extern */
 M2C_UNK func_8214050C(s8 *, M2C_UNK);             /* extern */
 M2C_UNK func_82143478(s8 *, u16);                 /* extern */
@@ -202,7 +202,7 @@ M2C_UNK func_8213E1FC(s8 *, s32);                 /* extern */
 M2C_UNK func_8213E4D8(s8 *);                      /* extern */
 M2C_UNK func_8213F658(s8 *, f32, f32);    /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-s32 func_82140518(s8 *, M2C_UNK, M2C_UNK);        /* extern */
+s32 Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);        /* extern */
 
 void BattleAnim_RunLargeSand(s8 *arg0);
 
@@ -213,18 +213,18 @@ M2C_UNK func_8213CCEC(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 M2C_UNK func_8213E1FC(s8 *, s32);                 /* extern */
 M2C_UNK func_8213E4D8(s8 *);                      /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_82140518(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_821609F0(s8 *);                      /* extern */
 
 void func_82160AF0(s8 *arg0);
 
 f32 func_8000F150();                                /* extern */
-s16 func_8213C47C();                                /* extern */
+s16 Particle_GetUnkAC();                                /* extern */
 s32 func_8213C494(s8 *);                          /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
 M2C_UNK func_8213DDB8(s8 *, M2C_UNK, M2C_UNK, M2C_UNK); /* extern */
-M2C_UNK func_8213EDB0(s8 *, s16);                 /* extern */
-M2C_UNK func_8213F628(s8 *, f32);                 /* extern */
+M2C_UNK Particle_AddRotationY(s8 *, s16);                 /* extern */
+M2C_UNK Particle_SetStepMagnitudeScaled(s8 *, f32);                 /* extern */
 M2C_UNK func_821401D4(s8 *, M2C_UNK);             /* extern */
 M2C_UNK func_8214050C(s8 *, M2C_UNK);             /* extern */
 
@@ -237,7 +237,7 @@ M2C_UNK func_8213E1FC(s8 *, s32);                 /* extern */
 M2C_UNK func_8213E4D8(s8 *);                      /* extern */
 M2C_UNK func_8213F658(s8 *, f32, f32);    /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-s32 func_82140518(s8 *, M2C_UNK, M2C_UNK);        /* extern */
+s32 Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);        /* extern */
 
 void func_82160CCC(s8 *arg0);
 
@@ -247,7 +247,7 @@ M2C_UNK func_8213CB3C(s8 *);                      /* extern */
 M2C_UNK func_8213CC10(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 s32 func_8213E7A0(s8 *);                          /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_82140518(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_82160DC4(s8 *);                      /* extern */
 
 void BattleAnim_RunSandAttackHitEffect(s8 *arg0);
@@ -282,7 +282,7 @@ M2C_UNK func_8213C930(s8 *);                      /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
 M2C_UNK func_8213CCEC(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 M2C_UNK func_8213E7A0(s8 *);                      /* extern */
-M2C_UNK func_82140518(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_82161190(s8 *);                      /* extern */
 
 void func_82161288(s8 *arg0);
@@ -292,11 +292,11 @@ s32 func_8213CA04(s8 *, M2C_UNK);                 /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
 M2C_UNK func_8213CCEC(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 M2C_UNK func_8213E6BC(s8 *);                      /* extern */
-M2C_UNK func_82140380(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_8214047C(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_821404AC(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_821404DC(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_82140518(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachPrimRed(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachEnvRed(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachEnvBlue(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachEnvGreen(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_82161358(s8 *);                      /* extern */
 
 void func_8216140C(s8 *arg0);
@@ -306,7 +306,7 @@ s32 func_8213C9B0(s8 *);                          /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
 M2C_UNK func_8213E528(s8 *);                      /* extern */
 M2C_UNK func_8213F658(s8 *, f32, f32);    /* extern */
-s32 func_82140518(s8 *, M2C_UNK, M2C_UNK);        /* extern */
+s32 Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);        /* extern */
 s32 func_82140690(s8 *);                          /* extern */
 M2C_UNK func_821615F8(s8 *);                      /* extern */
 
@@ -318,7 +318,7 @@ M2C_UNK func_8213C9D0(s8 *);                      /* extern */
 M2C_UNK func_8213E528(s8 *);                      /* extern */
 M2C_UNK func_8213F658(s8 *, f32, f32);    /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-s32 func_82140518(s8 *, M2C_UNK, M2C_UNK);        /* extern */
+s32 Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);        /* extern */
 s32 func_82140690(s8 *);                          /* extern */
 M2C_UNK func_8216177C(s8 *);                      /* extern */
 
@@ -344,10 +344,10 @@ M2C_UNK func_8213CCEC(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 M2C_UNK func_8213E4D8(s8 *);                      /* extern */
 M2C_UNK func_8213F658(s8 *, f32, f32);    /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_821403B0(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_821403E0(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_821404DC(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_82140518(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachPrimGreen(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachPrimBlue(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachEnvGreen(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_821635E4(s8 *);                      /* extern */
 
 void func_8216374C(s8 *arg0);
@@ -358,10 +358,10 @@ M2C_UNK func_8213CCEC(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 M2C_UNK func_8213E4D8(s8 *);                      /* extern */
 M2C_UNK func_8213F658(s8 *, f32, f32);    /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_821403B0(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_821403E0(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_821404DC(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_82140518(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachPrimGreen(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachPrimBlue(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachEnvGreen(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_82163884(s8 *);                      /* extern */
 
 void func_821639EC(s8 *arg0);
@@ -371,7 +371,7 @@ M2C_UNK func_8213CB3C(s8 *);                      /* extern */
 M2C_UNK func_8213CCEC(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 M2C_UNK func_8213E528(s8 *);                      /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_82140518(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_82163C28(s8 *);                      /* extern */
 
 void func_82163D7C(s8 *arg0);
@@ -398,7 +398,7 @@ void func_82163E60(Particle* arg0);
 M2C_UNK func_82137AB4(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_8213C930(s8 *);                      /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, s32);        /* extern */
-M2C_UNK func_821404DC(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachEnvGreen(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_82140548(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_821406B4(s8 *);                      /* extern */
 
@@ -447,14 +447,14 @@ M2C_UNK func_8213C930(s8 *);                      /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
 M2C_UNK func_8213CC10(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 M2C_UNK func_8213D238(s8 *);                      /* extern */
-M2C_UNK func_8213D284(s8 *);                      /* extern */
+M2C_UNK Particle_IncrementPhase(s8 *);                      /* extern */
 s32 func_8213D294(s8 *, M2C_UNK);                 /* extern */
 M2C_UNK func_8213E71C(s8 *, M2C_UNK);             /* extern */
 M2C_UNK func_8213E7F4(s8 *);                      /* extern */
-M2C_UNK func_8213F640(s8 *, M2C_UNK);             /* extern */
+M2C_UNK Particle_SetMagnitudeStepScaled(s8 *, M2C_UNK);             /* extern */
 M2C_UNK func_8213F6DC(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_82140518(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_82140594(s8 *, M2C_UNK);             /* extern */
+M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_SetUnkA6(s8 *, M2C_UNK);             /* extern */
 s32 func_821406B4(s8 *);                          /* extern */
 M2C_UNK func_82164B9C(s8 *);                      /* extern */
 
@@ -487,7 +487,7 @@ M2C_UNK func_8213CCEC(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 M2C_UNK func_8213E3F8(s8 *);                      /* extern */
 M2C_UNK func_8213F940(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_821402B8(s8 *);                      /* extern */
-M2C_UNK func_82140518(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 s32 func_82140690(s8 *);                          /* extern */
 M2C_UNK func_82165100(s8 *);                      /* extern */
 
@@ -504,7 +504,7 @@ M2C_UNK func_8213CCEC(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 M2C_UNK func_8213E3F8(s8 *);                      /* extern */
 M2C_UNK func_8213F940(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_821402B8(s8 *);                      /* extern */
-M2C_UNK func_82140518(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 s32 func_82140690(s8 *);                          /* extern */
 
 void func_8216547C(s8 *arg0);
@@ -530,7 +530,7 @@ extern Vec3f D_8219A880;
 
 void BattleAnim_CallbackDescriptor26BurstChild(Particle* arg0);
 
-s16 func_8213C47C();                                /* extern */
+s16 Particle_GetUnkAC();                                /* extern */
 M2C_UNK func_8213E14C(s32, M2C_UNK);                /* extern */
 M2C_UNK func_82143408(s32, M2C_UNK);                /* extern */
 

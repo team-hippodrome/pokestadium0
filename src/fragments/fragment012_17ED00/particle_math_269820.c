@@ -107,11 +107,19 @@ void func_8213C444(s8 *arg0, s16 arg1) {
     }
 }
 
-u8 func_8213C464(s8 *arg0) {
+/**
+ * Returns the particle's unk_CE.
+ * @unverified Name and comment guessed from the code.
+ */
+u8 Particle_GetUnkCE(s8 *arg0) {
     return M2C_FIELD(arg0, u8 *, 0xCA);
 }
 
-u8 func_8213C46C(s8 *arg0) {
+/**
+ * Returns the particle's unk_CD.
+ * @unverified Name and comment guessed from the code.
+ */
+u8 Particle_GetUnkCD(s8 *arg0) {
     return M2C_FIELD(arg0, u8 *, 0xC9);
 }
 
@@ -119,7 +127,11 @@ s16 Particle_FieldAA_GetS16_0C068(Particle* arg0) {
     return arg0->unk_AE;
 }
 
-s16 func_8213C47C(s8 *arg0) {
+/**
+ * Returns the particle's unk_AC.
+ * @unverified Name and comment guessed from the code.
+ */
+s16 Particle_GetUnkAC(s8 *arg0) {
     return M2C_FIELD(arg0, s16 *, 0xA8);
 }
 
@@ -135,11 +147,19 @@ s16 Particle_FieldA6_GetS16_0BCBC(Particle* arg0) {
     return arg0->unk_AA;
 }
 
-s16 func_8213C49C(s8 *arg0) {
+/**
+ * Returns the particle's unk_A6.
+ * @unverified Name and comment guessed from the code.
+ */
+s16 Particle_GetUnkA6(s8 *arg0) {
     return M2C_FIELD(arg0, s16 *, 0xA2);
 }
 
-s16 func_8213C4A4(s8 *arg0) {
+/**
+ * Returns the particle's unk_A8.
+ * @unverified Name and comment guessed from the code.
+ */
+s16 Particle_GetUnkA8(s8 *arg0) {
     return M2C_FIELD(arg0, s16 *, 0xA4);
 }
 

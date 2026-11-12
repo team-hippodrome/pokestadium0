@@ -213,7 +213,7 @@ void func_82164AD0(s8 *arg0) {
         return;
     case 3:
         func_8213CCEC(arg0, 0, 7, 1, (s32) M2C_FIELD(arg0, s16 *, 0xAC), 0);
-        func_82140518(arg0, 0x40, M2C_FIELD(arg0, u8 *, 0xAB));
+        Particle_ApproachPrimAlpha(arg0, 0x40, M2C_FIELD(arg0, u8 *, 0xAB));
         func_8213E77C(arg0);
         return;
     case 4:
@@ -282,12 +282,12 @@ void BattleAnim_RunSplashOfWater(s8 *arg0) {
         if (func_821406B4(arg0) != 0) {
             func_8213CB3C(arg0);
             func_8213D238(arg0);
-            func_82140594(arg0, 0x14);
+            Particle_SetUnkA6(arg0, 0x14);
         }
         break;
     case 3:                                         /* switch 1 */
         func_8213CC10(arg0, 0, 7, 1, 2, 0);
-        func_82140518(arg0, 0x40, 2);
+        Particle_ApproachPrimAlpha(arg0, 0x40, 2);
         func_8213E7F4(arg0);
         func_8213E71C(arg0, 0x41200000);
         func_821406B4(arg0);
@@ -301,8 +301,8 @@ void BattleAnim_RunSplashOfWater(s8 *arg0) {
     case 1:                                         /* switch 2 */
         func_8213F6DC(arg0, 0x3F800000, 0x3DCCCCCD);
         if (func_8213D294(arg0, 4) != 0) {
-            func_8213D284(arg0);
-            func_8213F640(arg0, 0x3E4CCCCD);
+            Particle_IncrementPhase(arg0);
+            Particle_SetMagnitudeStepScaled(arg0, 0x3E4CCCCD);
             return;
         }
         return;
@@ -332,7 +332,7 @@ void BattleAnim_RunDigHitDust(s8 *arg0) {
         break;
     case 3:
         func_8213CCEC(arg0, 0, 7, 1, (s32) M2C_FIELD(arg0, s16 *, 0xAC), 0);
-        func_82140518(arg0, 0x40, M2C_FIELD(arg0, u8 *, 0xAB));
+        Particle_ApproachPrimAlpha(arg0, 0x40, M2C_FIELD(arg0, u8 *, 0xAB));
         break;
     case 4:
         func_8213C930(arg0);
@@ -441,7 +441,7 @@ void func_82165224(s8 *arg0) {
     case 2:
         func_8213CCEC(arg0, 1, 7, 1, 2, 0);
         if (func_82140690(arg0) != 0) {
-            func_82140518(arg0, 0x64, 0x10);
+            Particle_ApproachPrimAlpha(arg0, 0x64, 0x10);
         }
         break;
     case 3:
@@ -509,7 +509,7 @@ void func_8216547C(s8 *arg0) {
     case 2:
         func_8213CCEC(arg0, 1, 7, 1, 2, 0);
         if (func_82140690(arg0) != 0) {
-            func_82140518(arg0, 0x64, 0x10);
+            Particle_ApproachPrimAlpha(arg0, 0x64, 0x10);
         }
         break;
     case 3:

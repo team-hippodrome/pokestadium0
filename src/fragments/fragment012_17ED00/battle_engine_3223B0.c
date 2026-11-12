@@ -71,7 +71,7 @@ M2C_UNK func_8213CCEC(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 M2C_UNK func_8213E488(s8 *);                      /* extern */
 M2C_UNK func_8213F658(s8 *, f32, f32);        /* extern */
 M2C_UNK func_82140064(s8 *, s32, s16);            /* extern */
-M2C_UNK func_82140594(s8 *, M2C_UNK);             /* extern */
+M2C_UNK Particle_SetUnkA6(s8 *, M2C_UNK);             /* extern */
 s32 func_82140690(s8 *);                          /* extern */
 s32 func_821406B4(s8 *);                          /* extern */
 M2C_UNK func_82149660(s8 *);                      /* extern */
@@ -91,7 +91,7 @@ void BattleAnim_RunSurfHitSpark(s8 *arg0) {
     case 2:
         if (func_821406B4(arg0) != 0) {
             func_8213CB3C(arg0);
-            func_82140594(arg0, 0xA);
+            Particle_SetUnkA6(arg0, 0xA);
         }
         break;
     case 3:
@@ -219,7 +219,7 @@ void BattleAnim_RunBubbleBeamBubblesSlow(s8 *arg0) {
         if (func_821406B4(arg0) != 0) {
             func_8213D238(arg0);
             func_8213CB3C(arg0);
-            func_82140594(arg0, (s16) (func_82137D74(0xA) + 8));
+            Particle_SetUnkA6(arg0, (s16) (func_82137D74(0xA) + 8));
         }
         break;
     case 3:
@@ -292,7 +292,7 @@ void BattleAnim_RunBubbleBeamBubblesFast(s8 *arg0) {
         return;
     case 2:
         if (func_821406B4(arg0) != 0) {
-            func_82140594(arg0, (s16) (func_82137D74(0x14) + 0xF));
+            Particle_SetUnkA6(arg0, (s16) (func_82137D74(0x14) + 0xF));
             func_8213CB3C(arg0);
             return;
         }
@@ -385,7 +385,7 @@ M2C_UNK func_8213C930(s8 *);                      /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
 s32 func_8213CB7C(s8 *);                          /* extern */
 M2C_UNK func_8213D238(s8 *);                      /* extern */
-M2C_UNK func_82140594(s8 *, M2C_UNK);             /* extern */
+M2C_UNK Particle_SetUnkA6(s8 *, M2C_UNK);             /* extern */
 s32 func_821406B4(s8 *);                          /* extern */
 M2C_UNK func_82149FD8(s8 *);                      /* extern */
 M2C_UNK func_8214A190(s8 *);                      /* extern */
@@ -402,7 +402,7 @@ void func_8214A220(s8 *arg0) {
         if (func_821406B4(arg0) != 0) {
             func_8213D238(arg0);
             func_8213CB3C(arg0);
-            func_82140594(arg0, 0x1E);
+            Particle_SetUnkA6(arg0, 0x1E);
         }
         break;
     case 3:
@@ -534,11 +534,11 @@ void BattleAnim_SetupHydroPumpBurstChild(Particle* arg0) {
 
 M2C_UNK func_8213C930(s8 *);                      /* extern */
 M2C_UNK func_8213CA80(s8 *, M2C_UNK);             /* extern */
-M2C_UNK func_8213D604(s8 *, M2C_UNK);             /* extern */
+M2C_UNK Particle_AddPosOffsetYScaled(s8 *, M2C_UNK);             /* extern */
 M2C_UNK func_8213E528(s8 *);                      /* extern */
 M2C_UNK func_8213F658(s8 *, f32, f32);    /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_82140518(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_8214A634(s8 *);                      /* extern */
 
 void func_8214A6B4(s8 *arg0) {
@@ -551,10 +551,10 @@ void func_8214A6B4(s8 *arg0) {
         return;
     case 2:
         func_82140228(arg0, 0x3E99999A, 0x3D4CCCCD);
-        func_82140518(arg0, 0x20, 0x10);
+        Particle_ApproachPrimAlpha(arg0, 0x20, 0x10);
         func_8213F658(arg0, 0.5f, 0.05f);
         func_8213E528(arg0);
-        func_8213D604(arg0, 0xBF800000);
+        Particle_AddPosOffsetYScaled(arg0, 0xBF800000);
         func_8213CA80(arg0, 0x10);
         return;
     case 3:
@@ -583,7 +583,7 @@ void BattleAnim_SetupHydroPumpMetadataBurstChild(Particle* arg0) {
 M2C_UNK func_8213C938(s8 *);                      /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-s32 func_82140518(s8 *, M2C_UNK, M2C_UNK);        /* extern */
+s32 Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);        /* extern */
 M2C_UNK func_8214A77C(s8 *);                      /* extern */
 
 void func_8214A7F4(s8 *arg0) {
@@ -595,7 +595,7 @@ void func_8214A7F4(s8 *arg0) {
         func_8214A77C(arg0);
         break;
     case 2:
-        if (func_82140518(arg0, 0x80, 0x20) != 0) {
+        if (Particle_ApproachPrimAlpha(arg0, 0x80, 0x20) != 0) {
             func_8213C9D0(arg0);
         }
         break;
@@ -658,10 +658,10 @@ void BattleAnim_SetupWaterGunProjectileChild(Particle* arg0) {
 
 M2C_UNK func_8213C930(s8 *);                      /* extern */
 M2C_UNK func_8213CA80(s8 *, M2C_UNK);             /* extern */
-M2C_UNK func_8213D604(s8 *, M2C_UNK);             /* extern */
+M2C_UNK Particle_AddPosOffsetYScaled(s8 *, M2C_UNK);             /* extern */
 M2C_UNK func_8213E528(s8 *);                      /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_82140518(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_8214A9DC(s8 *);                      /* extern */
 
 void func_8214AA60(s8 *arg0) {
@@ -674,9 +674,9 @@ void func_8214AA60(s8 *arg0) {
         return;
     case 2:
         func_82140228(arg0, 0x3DCCCCCD, 0x3CA3D70A);
-        func_82140518(arg0, 0x20, 0xC);
+        Particle_ApproachPrimAlpha(arg0, 0x20, 0xC);
         func_8213E528(arg0);
-        func_8213D604(arg0, 0xBF000000);
+        Particle_AddPosOffsetYScaled(arg0, 0xBF000000);
         func_8213CA80(arg0, 0x10);
         return;
     case 3:
@@ -711,7 +711,7 @@ void BattleAnim_SetupWaterGunProjectileMetadata(Particle* arg0) {
 M2C_UNK func_8213C938(s8 *);                      /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-s32 func_82140518(s8 *, M2C_UNK, M2C_UNK);        /* extern */
+s32 Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);        /* extern */
 M2C_UNK func_8214AB14(s8 *);                      /* extern */
 
 void func_8214ABAC(s8 *arg0) {
@@ -723,7 +723,7 @@ void func_8214ABAC(s8 *arg0) {
         func_8214AB14(arg0);
         break;
     case 2:
-        if (func_82140518(arg0, 0x80, 0x20) != 0) {
+        if (Particle_ApproachPrimAlpha(arg0, 0x80, 0x20) != 0) {
             func_8213C9D0(arg0);
         }
         break;
@@ -1125,7 +1125,7 @@ s32 func_8213C9B0(s8 *);                          /* extern */
 M2C_UNK func_8213CCEC(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 M2C_UNK func_8213E528(s8 *);                      /* extern */
 M2C_UNK func_8213F658(s8 *, f32, f32);    /* extern */
-M2C_UNK func_82140518(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_8214B84C(s8 *);                      /* extern */
 
 /**
@@ -1141,7 +1141,7 @@ void BattleAnim_RunStrongOutwardMovingLargeHitSpark(s8 *arg0) {
         func_8214B84C(arg0);
         break;
     case 2:
-        func_82140518(arg0, 0x20, 0x16);
+        Particle_ApproachPrimAlpha(arg0, 0x20, 0x16);
         func_8213CCEC(arg0, 0, 7, 1, 2, 0);
         break;
     case 3:
@@ -1172,7 +1172,7 @@ s32 func_8213C9B0(s8 *);                          /* extern */
 M2C_UNK func_8213CCEC(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 M2C_UNK func_8213E528(s8 *);                      /* extern */
 M2C_UNK func_8213F658(s8 *, f32, f32);    /* extern */
-M2C_UNK func_82140518(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_8214B9A8(s8 *);                      /* extern */
 
 /**
@@ -1188,7 +1188,7 @@ void BattleAnim_RunBlizzardHitUpwardColdAir(s8 *arg0) {
         func_8214B9A8(arg0);
         break;
     case 2:
-        func_82140518(arg0, 0x20, 0x16);
+        Particle_ApproachPrimAlpha(arg0, 0x20, 0x16);
         func_8213CCEC(arg0, 0, 7, 1, 2, 0);
         break;
     case 3:
@@ -1219,7 +1219,7 @@ s32 func_8213C9B0(s8 *);                          /* extern */
 M2C_UNK func_8213CCEC(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 M2C_UNK func_8213E528(s8 *);                      /* extern */
 M2C_UNK func_8213F658(s8 *, f32, f32);    /* extern */
-M2C_UNK func_82140518(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_8214BAFC(s8 *);                      /* extern */
 
 /**
@@ -1234,7 +1234,7 @@ void BattleAnim_RunWaterGunHitEffect(s8 *arg0) {
         func_8214BAFC(arg0);
         break;
     case 2:
-        func_82140518(arg0, 0x20, 0x16);
+        Particle_ApproachPrimAlpha(arg0, 0x20, 0x16);
         func_8213CCEC(arg0, 0, 7, 1, 2, 0);
         break;
     case 3:
@@ -1282,7 +1282,7 @@ s32 func_8213C9B0(s8 *);                          /* extern */
 M2C_UNK func_8213CCEC(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 M2C_UNK func_8213E528(s8 *);                      /* extern */
 M2C_UNK func_8213F658(s8 *, f32, f32);    /* extern */
-M2C_UNK func_82140518(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_821434FC(s8 *, s16);                 /* extern */
 M2C_UNK func_82143530(s8 *, s16);                 /* extern */
 M2C_UNK func_82143564(s8 *, s16);                 /* extern */
@@ -1305,7 +1305,7 @@ void BattleAnim_RunWeakBeamHitEffect(s8 *arg0) {
         func_8214BC58(arg0);
         break;
     case 2:                                         /* switch 1 */
-        func_82140518(arg0, 0x20, 0x16);
+        Particle_ApproachPrimAlpha(arg0, 0x20, 0x16);
         func_8213CCEC(arg0, 0, 7, 1, 2, 0);
         break;
     case 3:                                         /* switch 1 */
@@ -1372,14 +1372,14 @@ void BattleAnim_SetupTriAttackHitSpark(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-M2C_UNK func_8213C464();                            /* extern */
+M2C_UNK Particle_GetUnkCE();                            /* extern */
 M2C_UNK func_8213C930(s8 *);                      /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
 M2C_UNK func_8213CCEC(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 M2C_UNK func_8213E528(s8 *);                      /* extern */
 M2C_UNK func_8213F658(s8 *, f32, f32);    /* extern */
 M2C_UNK func_821402B8(s8 *);                      /* extern */
-M2C_UNK func_82140518(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 s32 func_821406B4(s8 *);                          /* extern */
 M2C_UNK func_8214BEE8(s8 *);                      /* extern */
 
@@ -1390,7 +1390,7 @@ M2C_UNK func_8214BEE8(s8 *);                      /* extern */
 void BattleAnim_RunTriAttackHitSpark(s8 *arg0) {
     s16 temp_v1;
 
-    func_8213C464();
+    Particle_GetUnkCE();
     temp_v1 = M2C_FIELD(arg0, s16 *, 0xAE);
     switch (temp_v1) {                              /* irregular */
     case 1:
@@ -1404,7 +1404,7 @@ void BattleAnim_RunTriAttackHitSpark(s8 *arg0) {
         return;
     case 3:
         func_821402B8(arg0);
-        func_82140518(arg0, 0x20, 0x16);
+        Particle_ApproachPrimAlpha(arg0, 0x20, 0x16);
         func_8213CCEC(arg0, 0, 7, 1, 2, 0);
         func_8213F658(arg0, 1.5f, 0.1f);
         func_8213E528(arg0);
@@ -1439,8 +1439,8 @@ M2C_UNK func_8213CB3C(s8 *);                      /* extern */
 M2C_UNK func_8213CCEC(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 M2C_UNK func_8213E528(s8 *);                      /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_82140518(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_82140594(s8 *, M2C_UNK);             /* extern */
+M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_SetUnkA6(s8 *, M2C_UNK);             /* extern */
 s32 func_82140690(s8 *);                          /* extern */
 M2C_UNK func_8214C134(s8 *);                      /* extern */
 
@@ -1454,7 +1454,7 @@ void func_8214C208(s8 *arg0) {
         return;
     case 2:
         if (func_8213CA80(arg0, M2C_FIELD(arg0, s16 *, 0xA2)) != 0) {
-            func_82140594(arg0, 2);
+            Particle_SetUnkA6(arg0, 2);
             func_8213CB3C(arg0);
             return;
         }
@@ -1464,7 +1464,7 @@ void func_8214C208(s8 *arg0) {
         func_82140228(arg0, 0x3F000000, 0x3DCCCCCD);
         func_8213E528(arg0);
         if (func_82140690(arg0) != 0) {
-            func_82140518(arg0, 0, 0x20);
+            Particle_ApproachPrimAlpha(arg0, 0, 0x20);
             return;
         }
         break;
@@ -1494,8 +1494,8 @@ M2C_UNK func_8213CB3C(s8 *);                      /* extern */
 M2C_UNK func_8213CCEC(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 M2C_UNK func_8213E528(s8 *);                      /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_82140518(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_82140594(s8 *, M2C_UNK);             /* extern */
+M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_SetUnkA6(s8 *, M2C_UNK);             /* extern */
 s32 func_82140690(s8 *);                          /* extern */
 M2C_UNK func_8214C300(s8 *);                      /* extern */
 
@@ -1509,7 +1509,7 @@ void func_8214C3C8(s8 *arg0) {
         return;
     case 2:
         if (func_8213CA80(arg0, M2C_FIELD(arg0, s16 *, 0xA2)) != 0) {
-            func_82140594(arg0, 2);
+            Particle_SetUnkA6(arg0, 2);
             func_8213CB3C(arg0);
             return;
         }
@@ -1519,7 +1519,7 @@ void func_8214C3C8(s8 *arg0) {
         func_82140228(arg0, 0x3ECCCCCD, 0x3DCCCCCD);
         func_8213E528(arg0);
         if (func_82140690(arg0) != 0) {
-            func_82140518(arg0, 0, 0x20);
+            Particle_ApproachPrimAlpha(arg0, 0, 0x20);
             return;
         }
         break;
@@ -1546,7 +1546,6 @@ void BattleAnim_SetupUnusedIndexedFadeVariantB(Particle* arg0) {
 
 M2C_UNK func_8213C930(s8 *);                      /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
-M2C_UNK func_8213CBFC(s8 *, M2C_UNK);             /* extern */
 M2C_UNK func_8213CCEC(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 M2C_UNK func_8213E528(s8 *);                      /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
@@ -1563,7 +1562,7 @@ void func_8214C598(s8 *arg0) {
     case 2:
         if (func_8213CA80(arg0, M2C_FIELD(arg0, s16 *, 0xA2)) != 0) {
             func_8213CB3C(arg0);
-            func_8213CBFC(arg0, 1);
+            Particle_SetTextureFrame(arg0, 1);
             return;
         }
         return;
@@ -1657,12 +1656,12 @@ void BattleAnim_SetupHydroPumpColorShiftFade(Particle* arg0) {
 M2C_UNK func_82137AB4(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_8213C930(s8 *);                      /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, s32);        /* extern */
-M2C_UNK func_82140380(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_821403B0(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_821403E0(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_8214047C(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_821404AC(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_821404DC(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachPrimRed(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachPrimGreen(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachPrimBlue(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachEnvRed(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachEnvBlue(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachEnvGreen(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_82140548(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_821406B4(s8 *);                      /* extern */
 M2C_UNK func_8214C8E0(s8 *);                      /* extern */
@@ -1681,18 +1680,18 @@ void BattleAnim_RunHydroPumpColorShiftFade(s8 *arg0) {
         return;
     case 2:
         func_82140228(arg0, 0x40000000, 0x3CA3D70A);
-        func_821404DC(arg0, 0xC8, 2);
+        Particle_ApproachEnvGreen(arg0, 0xC8, 2);
         func_821406B4(arg0);
         return;
     case 3:
         func_82137AB4(arg0 + 0x70, 0x3C03126F, 0x3A83126F);
         func_82140228(arg0, 0x40000000, M2C_FIELD(arg0, s32 *, 0x70));
-        func_82140380(arg0, 0x78, 8);
-        func_821403E0(arg0, 0x96, 8);
-        func_821403B0(arg0, 0x96, 8);
-        func_8214047C(arg0, 0x78, 8);
-        func_821404AC(arg0, 0x96, 8);
-        func_821404DC(arg0, 0x96, 8);
+        Particle_ApproachPrimRed(arg0, 0x78, 8);
+        Particle_ApproachPrimBlue(arg0, 0x96, 8);
+        Particle_ApproachPrimGreen(arg0, 0x96, 8);
+        Particle_ApproachEnvRed(arg0, 0x78, 8);
+        Particle_ApproachEnvBlue(arg0, 0x96, 8);
+        Particle_ApproachEnvGreen(arg0, 0x96, 8);
         func_82140548(arg0, 0, 0xC);
         return;
     case 4:
@@ -1734,12 +1733,12 @@ void BattleAnim_SetupWaterGunEmitterColoration(Particle* arg0) {
 
 M2C_UNK func_8213C930(s8 *);                      /* extern */
 M2C_UNK func_821402B8(s8 *);                      /* extern */
-M2C_UNK func_82140380(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_821403B0(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_821403E0(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_8214047C(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_821404AC(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_821404DC(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachPrimRed(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachPrimGreen(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachPrimBlue(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachEnvRed(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachEnvBlue(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachEnvGreen(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_82140548(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_821406B4(s8 *);                      /* extern */
 M2C_UNK func_8214CA90(s8 *);                      /* extern */
@@ -1757,16 +1756,16 @@ void BattleAnim_RunWaterGunEmitterColoration(s8 *arg0) {
         func_8214CA90(arg0);
         break;
     case 2:
-        func_821404DC(arg0, 0xC8, 2);
+        Particle_ApproachEnvGreen(arg0, 0xC8, 2);
         func_821406B4(arg0);
         break;
     case 3:
-        func_82140380(arg0, 0x78, 8);
-        func_821403E0(arg0, 0x96, 8);
-        func_821403B0(arg0, 0x96, 8);
-        func_8214047C(arg0, 0x78, 8);
-        func_821404AC(arg0, 0x96, 8);
-        func_821404DC(arg0, 0x96, 8);
+        Particle_ApproachPrimRed(arg0, 0x78, 8);
+        Particle_ApproachPrimBlue(arg0, 0x96, 8);
+        Particle_ApproachPrimGreen(arg0, 0x96, 8);
+        Particle_ApproachEnvRed(arg0, 0x78, 8);
+        Particle_ApproachEnvBlue(arg0, 0x96, 8);
+        Particle_ApproachEnvGreen(arg0, 0x96, 8);
         func_82140548(arg0, 0, 0xC);
         break;
     case 4:
@@ -1795,10 +1794,10 @@ void BattleAnim_SetupHydroPumpWaterGunProjectileHit(Particle* arg0) {
 
 M2C_UNK func_8213C930(s8 *);                      /* extern */
 M2C_UNK func_8213CA80(s8 *, M2C_UNK);             /* extern */
-M2C_UNK func_8213D604(s8 *, M2C_UNK);             /* extern */
+M2C_UNK Particle_AddPosOffsetYScaled(s8 *, M2C_UNK);             /* extern */
 M2C_UNK func_8213E528(s8 *);                      /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_82140518(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_8214CC90(s8 *);                      /* extern */
 
 /**
@@ -1815,9 +1814,9 @@ void BattleAnim_RunHydroPumpWaterGunProjectileHit(s8 *arg0) {
         break;
     case 2:
         func_82140228(arg0, 0x3E99999A, 0x3CA3D70A);
-        func_82140518(arg0, 0x20, 0xC);
+        Particle_ApproachPrimAlpha(arg0, 0x20, 0xC);
         func_8213E528(arg0);
-        func_8213D604(arg0, 0xBF800000);
+        Particle_AddPosOffsetYScaled(arg0, 0xBF800000);
         func_8213CA80(arg0, 0x10);
         break;
     case 3:

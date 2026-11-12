@@ -156,7 +156,7 @@ M2C_UNK func_8213CA80(s8 *, M2C_UNK);             /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
 s32 func_8213CB7C(s8 *);                          /* extern */
 M2C_UNK func_8213E528(s8 *);                      /* extern */
-M2C_UNK func_8213EDCC(s8 *, M2C_UNK);             /* extern */
+M2C_UNK Particle_AddRotationZ(s8 *, M2C_UNK);             /* extern */
 s32 func_821406B4(s8 *);                          /* extern */
 M2C_UNK func_821519AC(s8 *);                      /* extern */
 
@@ -182,7 +182,7 @@ void func_82151A5C(s8 *arg0) {
     }
     if (func_8213CB7C(arg0) != 0) {
         func_8213E528(arg0);
-        func_8213EDCC(arg0, 0x2000);
+        Particle_AddRotationZ(arg0, 0x2000);
     }
 }
 

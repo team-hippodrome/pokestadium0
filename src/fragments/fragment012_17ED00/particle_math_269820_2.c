@@ -161,7 +161,11 @@ void Particle_HasFlag40(Particle* arg0) {
     Particle_HasFlags(arg0, 0x40);
 }
 
-void func_8213CBFC(s8 *arg0, s16 arg1) {
+/**
+ * Sets the particle's textureFrame to arg1.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_SetTextureFrame(Particle* arg0, s16 arg1) {
     M2C_FIELD(arg0, s8 *, 0xC3) = (s8) arg1;
 }
 
@@ -367,7 +371,11 @@ void Particle_ResetPhase(Particle* arg0) {
     Particle_ClearFlags(arg0, 2);
 }
 
-void func_8213D284(s8 *arg0) {
+/**
+ * Increments the particle's phase.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_IncrementPhase(s8 *arg0) {
     M2C_FIELD(arg0, s16 *, 0xB4) = (s16) (M2C_FIELD(arg0, s16 *, 0xB4) + 1);
 }
 
@@ -434,19 +442,31 @@ void func_8213D484(s8 *arg0, f32 arg1, f32 arg2, f32 arg3) {
 
 extern f32 D_FLT_8219A824;
 
-void func_8213D4A4(s8 *arg0, f32 arg1) {
+/**
+ * Sets the particle's positionOffset.x to arg1 times the particle scale D_FLT_8219A824.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_SetPosOffsetXScaled(s8 *arg0, f32 arg1) {
     M2C_FIELD(arg0, f32 *, 0x34) = (f32) (arg1 * D_FLT_8219A824);
 }
 
 extern f32 D_FLT_8219A824;
 
-void func_8213D4BC(s8 *arg0, f32 arg1) {
+/**
+ * Sets the particle's positionOffset.y to arg1 times the particle scale D_FLT_8219A824.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_SetPosOffsetYScaled(s8 *arg0, f32 arg1) {
     M2C_FIELD(arg0, f32 *, 0x38) = (f32) (arg1 * D_FLT_8219A824);
 }
 
 extern f32 D_FLT_8219A824;
 
-void func_8213D4D4(s8 *arg0, f32 arg1) {
+/**
+ * Sets the particle's positionOffset.z to arg1 times the particle scale D_FLT_8219A824.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_SetPosOffsetZScaled(s8 *arg0, f32 arg1) {
     M2C_FIELD(arg0, f32 *, 0x3C) = (f32) (arg1 * D_FLT_8219A824);
 }
 
@@ -470,19 +490,31 @@ void Particle_Field38_AddVecScaled_08E18(Particle* arg0, f32 arg1, f32 arg2, f32
 
 extern f32 D_FLT_8219A824;
 
-void func_8213D5E4(s8 *arg0, f32 arg1) {
+/**
+ * Adds arg1 times the particle scale D_FLT_8219A824 to the particle's positionOffset.x.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_AddPosOffsetXScaled(s8 *arg0, f32 arg1) {
     M2C_FIELD(arg0, f32 *, 0x34) = (f32) (M2C_FIELD(arg0, f32 *, 0x34) + (arg1 * D_FLT_8219A824));
 }
 
 extern f32 D_FLT_8219A824;
 
-void func_8213D604(s8 *arg0, f32 arg1) {
+/**
+ * Adds arg1 times the particle scale D_FLT_8219A824 to the particle's positionOffset.y.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_AddPosOffsetYScaled(s8 *arg0, f32 arg1) {
     M2C_FIELD(arg0, f32 *, 0x38) = (f32) (M2C_FIELD(arg0, f32 *, 0x38) + (arg1 * D_FLT_8219A824));
 }
 
 extern f32 D_FLT_8219A824;
 
-void func_8213D624(s8 *arg0, f32 arg1) {
+/**
+ * Adds arg1 times the particle scale D_FLT_8219A824 to the particle's positionOffset.z.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_AddPosOffsetZScaled(s8 *arg0, f32 arg1) {
     M2C_FIELD(arg0, f32 *, 0x3C) = (f32) (M2C_FIELD(arg0, f32 *, 0x3C) + (arg1 * D_FLT_8219A824));
 }
 
@@ -553,42 +585,66 @@ void Particle_AddPositionRotatedVectorByYaw(Particle* arg0, Vec3f arg1) {
 s32 func_82137DF4(M2C_UNK);                         /* extern */
 extern f32 D_FLT_8219A824;
 
-void func_8213DA64(s8 *arg0, M2C_UNK arg1) {
+/**
+ * Sets the particle's positionOffset.x to a random value from func_82137DF4(arg1) times the particle scale D_FLT_8219A824.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_SetPosOffsetXRandomScaled(s8 *arg0, M2C_UNK arg1) {
     M2C_FIELD(arg0, f32 *, 0x34) = (f32) ((f32) func_82137DF4(arg1) * D_FLT_8219A824);
 }
 
 s32 func_82137DF4(M2C_UNK);                         /* extern */
 extern f32 D_FLT_8219A824;
 
-void func_8213DAA4(s8 *arg0, M2C_UNK arg1) {
+/**
+ * Sets the particle's positionOffset.y to a random value from func_82137DF4(arg1) times the particle scale D_FLT_8219A824.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_SetPosOffsetYRandomScaled(s8 *arg0, M2C_UNK arg1) {
     M2C_FIELD(arg0, f32 *, 0x38) = (f32) ((f32) func_82137DF4(arg1) * D_FLT_8219A824);
 }
 
 s32 func_82137DF4(M2C_UNK);                         /* extern */
 extern f32 D_FLT_8219A824;
 
-void func_8213DAE4(s8 *arg0, M2C_UNK arg1) {
+/**
+ * Sets the particle's positionOffset.z to a random value from func_82137DF4(arg1) times the particle scale D_FLT_8219A824.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_SetPosOffsetZRandomScaled(s8 *arg0, M2C_UNK arg1) {
     M2C_FIELD(arg0, f32 *, 0x3C) = (f32) ((f32) func_82137DF4(arg1) * D_FLT_8219A824);
 }
 
 s32 func_82137DF4(M2C_UNK);                         /* extern */
 extern f32 D_FLT_8219A824;
 
-void func_8213DB24(s8 *arg0, M2C_UNK arg1, s32 arg2) {
+/**
+ * Sets the particle's positionOffset.x to a random value from func_82137DF4(arg1) times the particle scale D_FLT_8219A824, plus arg2.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_SetPosOffsetXRandomScaledPlus(s8 *arg0, M2C_UNK arg1, s32 arg2) {
     M2C_FIELD(arg0, f32 *, 0x34) = (f32) (((f32) func_82137DF4(arg1) * D_FLT_8219A824) + (f32) arg2);
 }
 
 s32 func_82137DF4(M2C_UNK);                         /* extern */
 extern f32 D_FLT_8219A824;
 
-void func_8213DB78(s8 *arg0, M2C_UNK arg1, s32 arg2) {
+/**
+ * Sets the particle's positionOffset.y to a random value from func_82137DF4(arg1) times the particle scale D_FLT_8219A824, plus arg2.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_SetPosOffsetYRandomScaledPlus(s8 *arg0, M2C_UNK arg1, s32 arg2) {
     M2C_FIELD(arg0, f32 *, 0x38) = (f32) (((f32) func_82137DF4(arg1) * D_FLT_8219A824) + (f32) arg2);
 }
 
 s32 func_82137DF4(M2C_UNK);                         /* extern */
 extern f32 D_FLT_8219A824;
 
-void func_8213DBCC(s8 *arg0, M2C_UNK arg1, s32 arg2) {
+/**
+ * Sets the particle's positionOffset.z to a random value from func_82137DF4(arg1) times the particle scale D_FLT_8219A824, plus arg2.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_SetPosOffsetZRandomScaledPlus(s8 *arg0, M2C_UNK arg1, s32 arg2) {
     M2C_FIELD(arg0, f32 *, 0x3C) = (f32) (((f32) func_82137DF4(arg1) * D_FLT_8219A824) + (f32) arg2);
 }
 
@@ -706,7 +762,11 @@ void Particle_SetVelocity(Particle* arg0, f32 arg1, f32 arg2, f32 arg3) {
 
 extern f32 D_FLT_8219A824;
 
-void func_8213E104(s8 *arg0, f32 arg1) {
+/**
+ * Sets the particle's motionOffset.x to arg1 times the particle scale D_FLT_8219A824.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_SetMotionOffsetXScaled(s8 *arg0, f32 arg1) {
     M2C_FIELD(arg0, f32 *, 0x4C) = (f32) (arg1 * D_FLT_8219A824);
 }
 
@@ -730,7 +790,11 @@ void func_8213E184(Particle* arg0, f32 arg1, f32 arg2, f32 arg3) {
 
 extern f32 D_FLT_8219A824;
 
-void func_8213E1DC(s8 *arg0, f32 arg1) {
+/**
+ * Adds arg1 times the particle scale D_FLT_8219A824 to the particle's motionOffset.x.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_AddMotionOffsetXScaled(s8 *arg0, f32 arg1) {
     M2C_FIELD(arg0, f32 *, 0x4C) = (f32) (M2C_FIELD(arg0, f32 *, 0x4C) + (arg1 * D_FLT_8219A824));
 }
 
@@ -750,7 +814,11 @@ void Particle_Field50_SubVecScaled_09A20(Particle* arg0, f32 arg1, f32 arg2, f32
 
 extern f32 D_FLT_8219A824;
 
-void func_8213E294(s8 *arg0, f32 arg1) {
+/**
+ * Subtracts arg1 times the particle scale D_FLT_8219A824 from the particle's motionOffset.x.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_SubMotionOffsetXScaled(s8 *arg0, f32 arg1) {
     M2C_FIELD(arg0, f32 *, 0x4C) = (f32) (M2C_FIELD(arg0, f32 *, 0x4C) - (arg1 * D_FLT_8219A824));
 }
 
@@ -974,13 +1042,21 @@ void Particle_Field50_SetZScaled_09918(Particle* arg0, f32 arg1) {
 
 extern f32 D_FLT_8219A824;
 
-void func_8213E8B0(s8 *arg0, f32 arg1) {
+/**
+ * Sets the particle's motionTarget.y to arg1 times the particle scale D_FLT_8219A824.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_SetMotionTargetYScaled(s8 *arg0, f32 arg1) {
     M2C_FIELD(arg0, f32 *, 0x5C) = (f32) (arg1 * D_FLT_8219A824);
 }
 
 extern f32 D_FLT_8219A824;
 
-void func_8213E8C8(s8 *arg0, f32 arg1) {
+/**
+ * Sets the particle's motionTarget.z to arg1 times the particle scale D_FLT_8219A824.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_SetMotionTargetZScaled(s8 *arg0, f32 arg1) {
     M2C_FIELD(arg0, f32 *, 0x60) = (f32) (arg1 * D_FLT_8219A824);
 }
 
@@ -1026,15 +1102,27 @@ void func_8213EA8C(s8 *arg0, s16 arg1, s16 arg2, s16 arg3) {
     M2C_FIELD(arg0, s16 *, 0x94) = arg3;
 }
 
-void func_8213EAC0(s8 *arg0, s16 arg1) {
+/**
+ * Sets the particle's rotation.x to arg1.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_SetRotationX(s8 *arg0, s16 arg1) {
     M2C_FIELD(arg0, s16 *, 0x90) = arg1;
 }
 
-void func_8213EAD4(s8 *arg0, s16 arg1) {
+/**
+ * Sets the particle's rotation.y to arg1.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_SetRotationY(s8 *arg0, s16 arg1) {
     M2C_FIELD(arg0, s16 *, 0x92) = arg1;
 }
 
-void func_8213EAE8(s8 *arg0, s16 arg1) {
+/**
+ * Sets the particle's rotation.z to arg1.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_SetRotationZ(s8 *arg0, s16 arg1) {
     M2C_FIELD(arg0, s16 *, 0x94) = arg1;
 }
 
@@ -1044,15 +1132,27 @@ void func_8213EAFC(s8 *arg0) {
     M2C_FIELD(arg0, s16 *, 0x94) = (s16) (M2C_FIELD(arg0, s16 *, 0x94) + 0x8000);
 }
 
-void func_8213EB28(s8 *arg0) {
+/**
+ * Turns the particle's rotation.x by half a circle (+0x8000).
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_FlipRotationX(s8 *arg0) {
     M2C_FIELD(arg0, s16 *, 0x90) = (s16) (M2C_FIELD(arg0, s16 *, 0x90) + 0x8000);
 }
 
-void func_8213EB3C(s8 *arg0) {
+/**
+ * Turns the particle's rotation.y by half a circle (+0x8000).
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_FlipRotationY(s8 *arg0) {
     M2C_FIELD(arg0, s16 *, 0x92) = (s16) (M2C_FIELD(arg0, s16 *, 0x92) + 0x8000);
 }
 
-void func_8213EB50(s8 *arg0) {
+/**
+ * Turns the particle's rotation.z by half a circle (+0x8000).
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_FlipRotationZ(s8 *arg0) {
     M2C_FIELD(arg0, s16 *, 0x94) = (s16) (M2C_FIELD(arg0, s16 *, 0x94) + 0x8000);
 }
 
@@ -1073,23 +1173,43 @@ void func_8213EBBC(s8 *arg0, s16 arg1, s16 arg2) {
     M2C_FIELD(arg0, s16 *, 0x98) = arg2;
 }
 
-void func_8213EBE0(s8 *arg0, s16 arg1) {
+/**
+ * Sets the particle's rotationStep.x to arg1.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_SetRotationStepX(s8 *arg0, s16 arg1) {
     M2C_FIELD(arg0, s16 *, 0x96) = arg1;
 }
 
-void func_8213EBF4(s8 *arg0, s16 arg1) {
+/**
+ * Sets the particle's rotationStep.y to arg1.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_SetRotationStepY(s8 *arg0, s16 arg1) {
     M2C_FIELD(arg0, s16 *, 0x98) = arg1;
 }
 
-void func_8213EC08(s8 *arg0, s16 arg1) {
+/**
+ * Sets the particle's rotationStep.z to arg1.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_SetRotationStepZ(s8 *arg0, s16 arg1) {
     M2C_FIELD(arg0, s16 *, 0x9A) = arg1;
 }
 
-void func_8213EC1C(s8 *arg0, s16 arg1) {
+/**
+ * Sets the particle's rotationTarget.x to arg1.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_SetRotationTargetX(s8 *arg0, s16 arg1) {
     M2C_FIELD(arg0, s16 *, 0x9C) = arg1;
 }
 
-void func_8213EC30(s8 *arg0, s16 arg1) {
+/**
+ * Sets the particle's rotationTarget.y to arg1.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_SetRotationTargetY(s8 *arg0, s16 arg1) {
     M2C_FIELD(arg0, s16 *, 0x9E) = arg1;
 }
 
@@ -1138,15 +1258,27 @@ void func_8213ED48(s8 *arg0, s16 arg1, s16 arg2, s16 arg3) {
     M2C_FIELD(arg0, s16 *, 0x94) = (s16) (M2C_FIELD(arg0, s16 *, 0x94) + arg3);
 }
 
-void func_8213ED94(s8 *arg0, s16 arg1) {
+/**
+ * Adds arg1 to the particle's rotation.x.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_AddRotationX(s8 *arg0, s16 arg1) {
     M2C_FIELD(arg0, s16 *, 0x90) = (s16) (M2C_FIELD(arg0, s16 *, 0x90) + arg1);
 }
 
-void func_8213EDB0(s8 *arg0, s16 arg1) {
+/**
+ * Adds arg1 to the particle's rotation.y.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_AddRotationY(s8 *arg0, s16 arg1) {
     M2C_FIELD(arg0, s16 *, 0x92) = (s16) (M2C_FIELD(arg0, s16 *, 0x92) + arg1);
 }
 
-void func_8213EDCC(s8 *arg0, s16 arg1) {
+/**
+ * Adds arg1 to the particle's rotation.z.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_AddRotationZ(s8 *arg0, s16 arg1) {
     M2C_FIELD(arg0, s16 *, 0x94) = (s16) (M2C_FIELD(arg0, s16 *, 0x94) + arg1);
 }
 
@@ -1161,11 +1293,19 @@ void Particle_Field94_SubVecFromVec3s_0A600(Particle* arg0, Vec3s arg1) {
     arg0->rotation.z -= arg1.z;
 }
 
-void func_8213EE58(s8 *arg0, s16 arg1) {
+/**
+ * Subtracts arg1 from the particle's rotation.x.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_SubRotationX(s8 *arg0, s16 arg1) {
     M2C_FIELD(arg0, s16 *, 0x90) = (s16) (M2C_FIELD(arg0, s16 *, 0x90) - arg1);
 }
 
-void func_8213EE74(s8 *arg0, s16 arg1) {
+/**
+ * Subtracts arg1 from the particle's rotation.y.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_SubRotationY(s8 *arg0, s16 arg1) {
     M2C_FIELD(arg0, s16 *, 0x92) = (s16) (M2C_FIELD(arg0, s16 *, 0x92) - arg1);
 }
 
@@ -1175,19 +1315,31 @@ void Particle_Field94_SubX_0A63C(Particle* arg0, s16 arg1) {
 
 M2C_UNK func_82137940(s8 *, s16, s16, s8 *);    /* extern */
 
-void func_8213EEAC(s8 *arg0) {
+/**
+ * Steps the particle's rotation.x toward a target (helper of the approach family).
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_ApproachRotationX(s8 *arg0) {
     func_82137940(arg0 + 0x90, M2C_FIELD(arg0, s16 *, 0x9C), M2C_FIELD(arg0, s16 *, 0x96), arg0);
 }
 
 M2C_UNK func_82137940(s8 *, s16, s16, s8 *);    /* extern */
 
-void func_8213EED8(s8 *arg0) {
+/**
+ * Steps the particle's rotation.y toward a target (helper of the approach family).
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_ApproachRotationY(s8 *arg0) {
     func_82137940(arg0 + 0x92, M2C_FIELD(arg0, s16 *, 0x9E), M2C_FIELD(arg0, s16 *, 0x98), arg0);
 }
 
 M2C_UNK func_82137940(s8 *, s16, s16, s8 *);    /* extern */
 
-void func_8213EF04(s8 *arg0) {
+/**
+ * Steps the particle's rotation.z toward a target (helper of the approach family).
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_ApproachRotationZ(s8 *arg0) {
     func_82137940(arg0 + 0x94, M2C_FIELD(arg0, s16 *, 0xA0), M2C_FIELD(arg0, s16 *, 0x9A), arg0);
 }
 
@@ -1328,13 +1480,21 @@ void Particle_ComputeVectorFromRotationYZVariant(Particle* arg0, f32 arg1, Vec3f
 
 extern f32 D_FLT_8219A824;
 
-void func_8213F628(s8 *arg0, f32 arg1) {
+/**
+ * Sets the particle's stepMagnitude to arg1 times the particle scale D_FLT_8219A824.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_SetStepMagnitudeScaled(s8 *arg0, f32 arg1) {
     M2C_FIELD(arg0, f32 *, 0x70) = (f32) (arg1 * D_FLT_8219A824);
 }
 
 extern f32 D_FLT_8219A824;
 
-void func_8213F640(s8 *arg0, f32 arg1) {
+/**
+ * Sets the particle's magnitudeStep to arg1 times the particle scale D_FLT_8219A824.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_SetMagnitudeStepScaled(s8 *arg0, f32 arg1) {
     M2C_FIELD(arg0, f32 *, 0x74) = (f32) (arg1 * D_FLT_8219A824);
 }
 
@@ -1371,19 +1531,31 @@ void Particle_SetVelocityImpulse(Particle* arg0, f32 arg1, f32 arg2, f32 arg3) {
 
 extern f32 D_FLT_8219A824;
 
-void func_8213F7A8(s8 *arg0, f32 arg1) {
+/**
+ * Sets the particle's motionStep.x to arg1 times the particle scale D_FLT_8219A824.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_SetMotionStepXScaled(s8 *arg0, f32 arg1) {
     M2C_FIELD(arg0, f32 *, 0x78) = (f32) (arg1 * D_FLT_8219A824);
 }
 
 extern f32 D_FLT_8219A824;
 
-void func_8213F7C0(s8 *arg0, f32 arg1) {
+/**
+ * Sets the particle's motionStep.y to arg1 times the particle scale D_FLT_8219A824.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_SetMotionStepYScaled(s8 *arg0, f32 arg1) {
     M2C_FIELD(arg0, f32 *, 0x7C) = (f32) (arg1 * D_FLT_8219A824);
 }
 
 extern f32 D_FLT_8219A824;
 
-void func_8213F7D8(s8 *arg0, f32 arg1) {
+/**
+ * Sets the particle's motionStep.z to arg1 times the particle scale D_FLT_8219A824.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_SetMotionStepZScaled(s8 *arg0, f32 arg1) {
     M2C_FIELD(arg0, f32 *, 0x80) = (f32) (arg1 * D_FLT_8219A824);
 }
 
@@ -1665,19 +1837,31 @@ void Particle_SetPrimColor(Particle* arg0, u8 arg1, u8 arg2, u8 arg3) {
 
 M2C_UNK func_82137804(s32, s32, s32);               /* extern */
 
-void func_82140380(s32 arg0, s32 arg1, s32 arg2) {
+/**
+ * Steps the particle's primRed toward a target (helper of the approach family).
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_ApproachPrimRed(s32 arg0, s32 arg1, s32 arg2) {
     func_82137804(arg0 + 0xBA, arg1 & 0xFF, arg2 & 0xFF);
 }
 
 M2C_UNK func_82137804(s32, s32, s32);               /* extern */
 
-void func_821403B0(s32 arg0, s32 arg1, s32 arg2) {
+/**
+ * Steps the particle's primGreen toward a target (helper of the approach family).
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_ApproachPrimGreen(s32 arg0, s32 arg1, s32 arg2) {
     func_82137804(arg0 + 0xBB, arg1 & 0xFF, arg2 & 0xFF);
 }
 
 M2C_UNK func_82137804(s32, s32, s32);               /* extern */
 
-void func_821403E0(s32 arg0, s32 arg1, s32 arg2) {
+/**
+ * Steps the particle's primBlue toward a target (helper of the approach family).
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_ApproachPrimBlue(s32 arg0, s32 arg1, s32 arg2) {
     func_82137804(arg0 + 0xBC, arg1 & 0xFF, arg2 & 0xFF);
 }
 
@@ -1716,19 +1900,31 @@ void Particle_SetEnvColor(Particle* arg0, u8 arg1, u8 arg2, u8 arg3) {
 
 M2C_UNK func_82137804(s32, s32, s32);               /* extern */
 
-void func_8214047C(s32 arg0, s32 arg1, s32 arg2) {
+/**
+ * Steps the particle's envRed toward a target (helper of the approach family).
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_ApproachEnvRed(s32 arg0, s32 arg1, s32 arg2) {
     func_82137804(arg0 + 0xBD, arg1 & 0xFF, arg2 & 0xFF);
 }
 
 M2C_UNK func_82137804(s32, s32, s32);               /* extern */
 
-void func_821404AC(s32 arg0, s32 arg1, s32 arg2) {
+/**
+ * Steps the particle's envBlue toward a target (helper of the approach family).
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_ApproachEnvBlue(s32 arg0, s32 arg1, s32 arg2) {
     func_82137804(arg0 + 0xBF, arg1 & 0xFF, arg2 & 0xFF);
 }
 
 M2C_UNK func_82137804(s32, s32, s32);               /* extern */
 
-void func_821404DC(s32 arg0, s32 arg1, s32 arg2) {
+/**
+ * Steps the particle's envGreen toward a target (helper of the approach family).
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_ApproachEnvGreen(s32 arg0, s32 arg1, s32 arg2) {
     func_82137804(arg0 + 0xBE, arg1 & 0xFF, arg2 & 0xFF);
 }
 
@@ -1743,7 +1939,11 @@ void func_8214050C(s8 *arg0, char arg1)
 
 M2C_UNK func_82137804(s32, s32, s32);               /* extern */
 
-void func_82140518(s32 arg0, s32 arg1, s32 arg2) {
+/**
+ * Steps the particle's primAlpha toward a target (helper of the approach family).
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_ApproachPrimAlpha(s32 arg0, s32 arg1, s32 arg2) {
     func_82137804(arg0 + 0xC0, arg1 & 0xFF, arg2 & 0xFF);
 }
 
@@ -1756,7 +1956,11 @@ s32 Particle_PrimAlpha_ApproachAndStepState_0BC5C(Particle* arg0, u8 arg1, u8 ar
     return sp1C;
 }
 
-void func_82140594(s8 *arg0, s16 arg1) {
+/**
+ * Sets the particle's unk_A6 to arg1.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_SetUnkA6(s8 *arg0, s16 arg1) {
     M2C_FIELD(arg0, s16 *, 0xA2) = arg1;
 }
 
@@ -1802,7 +2006,11 @@ s32 Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(Particle* arg0) {
     return sp1C;
 }
 
-void func_821406F8(s8 *arg0, s16 arg1) {
+/**
+ * Sets the particle's unk_A8 to arg1.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_SetUnkA8(s8 *arg0, s16 arg1) {
     M2C_FIELD(arg0, s16 *, 0xA4) = arg1;
 }
 
@@ -1838,7 +2046,11 @@ void func_821407A8(s8 *arg0, int arg1)
   *((s8 *) (((s8 *) arg0) + 0xC6)) = *new_var;
 }
 
-void func_821407B4(s8 *arg0, s16 arg1) {
+/**
+ * Sets the particle's unk_AC to arg1.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_SetUnkAC(s8 *arg0, s16 arg1) {
     M2C_FIELD(arg0, s16 *, 0xA8) = arg1;
 }
 
@@ -1856,30 +2068,54 @@ void func_821407D4(s8 *arg0, unsigned char arg1)
   *((s8 *) new_var) = arg1;
 }
 
-void func_821407E0(s8 *arg0, unsigned short arg1)
+/**
+ * Sets the particle's unk_CC to arg1.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_SetUnkCC(s8 *arg0, unsigned short arg1)
 {
   *((s8 *) (((s8 *) arg0) + 0xC8)) = arg1;
 }
 
-void func_821407EC(s8 *arg0, s16 arg1) {
+/**
+ * Sets the particle's unk_AA to arg1.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_SetUnkAA(s8 *arg0, s16 arg1) {
     M2C_FIELD(arg0, s16 *, 0xA6) = arg1;
 }
 
-void func_82140800(s8 *arg0, s16 arg1) {
+/**
+ * Sets the particle's unk_CE to arg1.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_SetUnkCE(s8 *arg0, s16 arg1) {
     M2C_FIELD(arg0, s8 *, 0xCA) = (s8) arg1;
 }
 
-void func_82140814(s8 *arg0, s16 arg1) {
+/**
+ * Sets the particle's unk_CD to arg1.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_SetUnkCD(s8 *arg0, s16 arg1) {
     M2C_FIELD(arg0, s8 *, 0xC9) = (s8) arg1;
 }
 
-void func_82140828(s8 *arg0, s16 arg1) {
+/**
+ * Sets the particle's unk_AE to arg1.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_SetUnkAE(s8 *arg0, s16 arg1) {
     M2C_FIELD(arg0, s16 *, 0xAA) = arg1;
 }
 
 M2C_UNK func_82137898(s32, s16, s16);               /* extern */
 
-void func_8214083C(s32 arg0, s16 arg1, s16 arg2) {
+/**
+ * Steps the particle's unk_AE toward a target (helper of the approach family).
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_ApproachUnkAE(s32 arg0, s16 arg1, s16 arg2) {
     func_82137898(arg0 + 0xAA, arg1, arg2);
 }
 
@@ -1892,12 +2128,20 @@ s32 Particle_FieldAE_ApproachAndStepState_0BF98(Particle* arg0, s16 arg1, s16 ar
     return sp1C;
 }
 
-void func_821408C8(s8 *arg0, s16 arg1) {
+/**
+ * Sets the particle's unk_B0 to arg1.
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_SetUnkB0(s8 *arg0, s16 arg1) {
     M2C_FIELD(arg0, s16 *, 0xAC) = arg1;
 }
 
 M2C_UNK func_82137898(s32, s16, s16);               /* extern */
 
-void func_821408DC(s32 arg0, s16 arg1, s16 arg2) {
+/**
+ * Steps the particle's unk_B0 toward a target (helper of the approach family).
+ * @unverified Name and comment guessed from the code.
+ */
+void Particle_ApproachUnkB0(s32 arg0, s16 arg1, s16 arg2) {
     func_82137898(arg0 + 0xAC, arg1, arg2);
 }

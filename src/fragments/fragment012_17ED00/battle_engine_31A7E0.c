@@ -27,7 +27,7 @@ M2C_UNK func_8213C930(s8 *);                      /* extern */
 s32 func_8213C9B0(s8 *);                          /* extern */
 M2C_UNK func_8213CCEC(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_82140518(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_82140920(s8 *);                      /* extern */
 
 void func_8214098C(s8 *arg0) {
@@ -40,7 +40,7 @@ void func_8214098C(s8 *arg0) {
         break;
     case 2:
         func_8213CCEC(arg0, 0, 7, 1, 2, 0);
-        func_82140518(arg0, 0x20, 8);
+        Particle_ApproachPrimAlpha(arg0, 0x20, 8);
         break;
     case 3:
         func_8213C930(arg0);

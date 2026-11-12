@@ -160,7 +160,6 @@ void BattleAnim_CallbackStartEffect135Descriptor1CRisingScaleFade(Particle* arg0
 
 u16 func_8213C484();                                /* extern */
 M2C_UNK func_8213C9D0(s32);                         /* extern */
-M2C_UNK func_8213CBFC(s32, M2C_UNK);                /* extern */
 M2C_UNK func_821401D4(s32, M2C_UNK);                /* extern */
 M2C_UNK func_82143478(s32, u16);                    /* extern */
 void func_821501B4(s32 arg0)
@@ -172,7 +171,7 @@ void func_821501B4(s32 arg0)
   if (!arg0)
   {
   }
-  func_8213CBFC(arg0, 2);
+  Particle_SetTextureFrame(arg0, 2);
   func_8213C9D0(arg0);
 }
 
@@ -265,7 +264,7 @@ void BattleAnim_InitStartEffect139Descriptor22SpinFade(Particle* arg0) {
 M2C_UNK func_8213C938(s8 *);                      /* extern */
 M2C_UNK func_8213E528(s8 *);                      /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-M2C_UNK func_82140518(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_821406B4(s8 *);                      /* extern */
 M2C_UNK func_82150474(s8 *);                      /* extern */
 
@@ -279,7 +278,7 @@ void func_82150504(s8 *arg0) {
         return;
     case 2:
         func_82140228(arg0, 0x3DCCCCCD, 0x3C23D70A);
-        func_82140518(arg0, 0, 8);
+        Particle_ApproachPrimAlpha(arg0, 0, 8);
         func_8213E528(arg0);
         func_821406B4(arg0);
         return;
