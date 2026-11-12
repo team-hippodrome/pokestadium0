@@ -48,7 +48,7 @@ extern u8* D_800603C0;
 void Audio_FadeCategoriesAndStreams(s32 arg0);
 
 void Battle_ChooseActionsForMode(void);
-void BattleMenu_ResetTimeout(void);
+void BattleMenu_ResetCommandTimer(void);
 
 /**
  * Per-frame update while unk_1C is 1 (b-roll camera mode): runs the action selection phase and
@@ -61,7 +61,7 @@ void BattleScene_UpdateBRollCameraSequence(CameraNode* arg0) {
             (sActivePokemon[1]->thumbnail.camera->viewport.x == 0x103)) {
             Battle_ChooseActionsForMode();
         } else {
-            BattleMenu_ResetTimeout();
+            BattleMenu_ResetCommandTimer();
         }
     }
     if (sBattleScene.scene->mode == 5) {

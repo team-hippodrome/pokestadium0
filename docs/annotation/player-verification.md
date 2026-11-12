@@ -66,3 +66,27 @@ Related engine function: `Battle_DetermineMoveOrder` returned 1 when the COM
 `BattleMonRuntime.hp` (0x0C, was `displayHp`) is the Pokémon's real HP: the HUD, the
 COM AI and fainting all follow it. `pendingHp` (0x12, was `currentHp`) is 0xFFFF between turns
 and only holds an HP value while damage is being worked out.
+
+## Battle command phase (`8210C6B0.c`)
+
+Breakpoints on every function of the file while playing the command menu,
+the Fight menu, the Pokémon menu, a faint on each side, a sleeping COM and a
+battle with all PP at 0.
+
+| Function | Evidence | Result |
+|---|---|---|
+| `Battle_ChooseActionsForMode`, `Battle_ChooseActions` | Run every frame of the command phase in Free Battle (mode 1); `Battle_ChooseActions` calls `BattleScene_CollectPlayerAction` for 1P and `BattleScene_CollectCpuAction` for the COM | verified |
+| `BattleMenu_TickTimeout`, `BattleMenu_ResetTimeout` | Watched D_FLT_82199EB0: 0 when the phase opens, then 1, 2 … 150 and held; reset after both actions commit. The COM's pick is timed off it; nothing times out | renamed `BattleMenu_TickCommandTimer`, `BattleMenu_ResetCommandTimer` |
+| `func_8210CBD4` | Runs in the Fight menu after A; L backs out, holding R shows the move list | named `BattleMenu_UpdateMoveMenu` |
+| `BattleMenu_HandleMoveButtons` | C-Up used slot 0 (Poison Sting); the R list shows C-Up 0, C-Right 1, C-Down 2, C-Left 3 | verified |
+| `BattleMenu_CommitMoveSelection` | Called when both actions are in and 1P picked Fight | verified |
+| `func_8210D1B0` | Runs in the Pokémon menu after B | named `BattleMenu_UpdateSwitchMenu` |
+| `BattleMenu_MapButtonsToActionChoice` | In the Pokémon menu B sent out パルパル (Paras, party slot 2); the list maps C-Up 0, C-Left 1, B 2, C-Right 3, C-Down 4, A 5 | renamed `BattleMenu_HandleSwitchButtons` |
+| `func_8210CD58` | Called at commit when 1P picked a switch; copies actionChosen into rosterIndex | named `BattleMenu_CommitSwitchSelection` |
+| `BattleScene_HandlePlayerForcedActionState` | Took over when 1P's Nidoqueen fainted: forced Pokémon menu without L | renamed `BattleScene_HandlePlayerFaintedSwitch` |
+| `BattleScene_WaitForCpuChoice` | When the COM's Pinsir fainted it called the AI at frame 60, which returned 9; Gengar (slot 5) came out | renamed `BattleScene_HandleCpuFaintedSwitch` |
+| `BattleScene_CompleteCpuMoveAction` | Taken when the COM was asleep: it confirms Fight without a choice | renamed `BattleScene_AutoConfirmCpuMove` |
+| `BattleMenu_GetUsableMovePpMask` | Returned 1 (not a PP mask) for a COM with all PP at 0; the COM then used Struggle | renamed `BattleMenu_MustStruggle` |
+| `func_8210C8A0` | With all PP at 0, A showed 「ニドニドは だすことの できる わざが ない」 and a second A used Struggle | named `BattleMenu_HandleNoUsableMoves` |
+| `BattleMenu_TakeControlOnBPress`, `BattleMenu_TakeControlOnCButtonPress` | Run in 1P too (B at the command menu, the forced Pokémon menu), but the tag-team handover they describe needs a two-player team, which was not tested | still `@unverified` |
+| `BattleMenu_TryConfirmMove`, `BattleDemo_PlayScriptedInput`, `Battle_PrepareTurnInput`, `Battle_InitParticipantRuntime`, `Battle_InitBothParticipants` | Not reached by these tests (the demo functions belong to battle mode 5) | still `@unverified` |
