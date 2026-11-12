@@ -669,7 +669,7 @@ void func_82102E94(ActivePokemon* active_pokemon) {
     }
 }
 
-void func_82108A88(ActivePokemon*, s32, s32);
+void ActivePokemon_SetModelTransform(ActivePokemon*, s32, s32);
 extern s32 D_82199F78;
 void func_82102FF4(ActivePokemon* active_pokemon) {
     UNUSED s32 pad0; // FAKE: stack padding
@@ -697,13 +697,13 @@ void func_82102FF4(ActivePokemon* active_pokemon) {
         ModelAnim_SetFrame(&sActivePokemon[side]->displayObject, 0);
         ModelAnim_SetAnimation(&sActivePokemon[side]->displayObject, cue->id);
         if ((M2C_FIELD(active_pokemon, u8*, 0x80A) == 0x17) || (M2C_FIELD(active_pokemon, u8*, 0x80A) == 0x22) || (M2C_FIELD(active_pokemon, u8*, 0x80A) == 0x45)) {
-            func_82108A88(sActivePokemon[side], 0xF, 0);
+            ActivePokemon_SetModelTransform(sActivePokemon[side], 0xF, 0);
         }
     }
 }
 
 void func_82101C24(ActivePokemon*, s32);
-void func_82108A88(ActivePokemon*, s32, s32);
+void ActivePokemon_SetModelTransform(ActivePokemon*, s32, s32);
 M2C_UNK func_8213B31C(M2C_UNK);
 void func_82103178(ActivePokemon* active_pokemon) {
     BattleMonRuntime* runtime;
@@ -719,7 +719,7 @@ void func_82103178(ActivePokemon* active_pokemon) {
             func_82101C24(sActivePokemon[side == 0], runtime->usedMove);
             if ((runtime->moveCache.lastMove == 0x14) || (runtime->moveCache.lastMove == 0x23) ||
                 (runtime->moveCache.lastMove == 0x51) || (runtime->moveCache.lastMove == 0x84)) {
-                func_82108A88(sActivePokemon[side == 0], 0x10, 0);
+                ActivePokemon_SetModelTransform(sActivePokemon[side == 0], 0x10, 0);
             }
             sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
         }
@@ -1241,7 +1241,7 @@ void func_821044C8(ActivePokemon* active_pokemon) {
         ModelAnim_SetFrame(&sActivePokemon[side]->displayObject, 0);
         ModelAnim_SetAnimation(&sActivePokemon[side]->displayObject, cue->id);
         if ((M2C_FIELD(active_pokemon, u8*, 0x80A) == 0x17) || (M2C_FIELD(active_pokemon, u8*, 0x80A) == 0x22) || (M2C_FIELD(active_pokemon, u8*, 0x80A) == 0x45)) {
-            func_82108A88(sActivePokemon[side], 0xF, 0);
+            ActivePokemon_SetModelTransform(sActivePokemon[side], 0xF, 0);
         }
     }
 }
@@ -1551,7 +1551,7 @@ void func_821051B0(ActivePokemon* active_pokemon) {
 void func_82101BBC(ActivePokemon*, s32);
 void func_82101B54(ActivePokemon*, s32);
 extern s32 D_8219A75C;
-void func_82108A88(ActivePokemon*, s32, s32);
+void ActivePokemon_SetModelTransform(ActivePokemon*, s32, s32);
 void func_8210524C(ActivePokemon* active_pokemon) {
     UNUSED s32 pad; // FAKE: stack padding
     BattleMonRuntime* runtime;
@@ -1568,7 +1568,7 @@ void func_8210524C(ActivePokemon* active_pokemon) {
                 func_82101B54(active_pokemon, runtime->usedMove);
             }
             func_821054C4(active_pokemon, runtime->usedMove - 1);
-            func_82108A88(active_pokemon, cue->flags1, 0);
+            ActivePokemon_SetModelTransform(active_pokemon, cue->flags1, 0);
             sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
         }
     }
@@ -2389,10 +2389,10 @@ void BattleScene_AllocateParticipants(BattleSessionTeams* battle_teams) {
 }
 
 extern u8 D_800AAF50[];
-void func_82108DC8(ActivePokemon*, s32);
-void func_82108DE0(ActivePokemon*, s32);
-void func_82108DF0(ActivePokemon*, s32);
-void func_82108DE8(ActivePokemon*, u8*);
+void ActivePokemon_SelectTeamRoster(ActivePokemon*, s32);
+void ActivePokemon_SetTeamMemberIndex(ActivePokemon*, s32);
+void ActivePokemon_SetReplacementState(ActivePokemon*, s32);
+void ActivePokemon_SetController(ActivePokemon*, u8*);
 /**
  * Binds the first team member, side and controller to the participant.
  * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
@@ -2401,10 +2401,10 @@ void BattleScene_InitializeParticipantController(ActivePokemon* arg0) {
     u8* sp24 = &D_800AAF50[M2C_FIELD(M2C_FIELD(M2C_FIELD(arg0, s8**, 0x85C), s8**, 8), u8*, 1) * 0x24];
     ActivePokemonState* state = &arg0->state;
 
-    func_82108DC8(arg0, 0);
-    func_82108DE0(arg0, 0);
-    func_82108DF0(arg0, 0);
-    func_82108DE8(arg0, sp24);
+    ActivePokemon_SelectTeamRoster(arg0, 0);
+    ActivePokemon_SetTeamMemberIndex(arg0, 0);
+    ActivePokemon_SetReplacementState(arg0, 0);
+    ActivePokemon_SetController(arg0, sp24);
     M2C_FIELD(arg0, s32*, 0x9D0) = 0;
     M2C_FIELD(arg0, s32*, 0x9D4) = 0;
     state->replacementState = 0;
@@ -2421,7 +2421,7 @@ void func_82107FB8(ActivePokemon*);
 void func_82108090(ActivePokemon*, void*);
 void func_82108340(ActivePokemon*);
 void func_82121D5C(s32, s32);
-void func_82108A88(ActivePokemon*, s32, s32);
+void ActivePokemon_SetModelTransform(ActivePokemon*, s32, s32);
 void func_8211F430(void);
 void func_8211F274(ActivePokemon*);
 
@@ -2464,8 +2464,8 @@ void BattleScene_InitializePresentation(UNUSED BattleSessionTeams* session_teams
             break;
     }
 
-    func_82108A88(sActivePokemon[0], 0, 0);
-    func_82108A88(sActivePokemon[1], 0, 0);
+    ActivePokemon_SetModelTransform(sActivePokemon[0], 0, 0);
+    ActivePokemon_SetModelTransform(sActivePokemon[1], 0, 0);
     func_821079E8(0x1FFE);
     func_8211F430();
     func_8211F274(sActivePokemon[0]);

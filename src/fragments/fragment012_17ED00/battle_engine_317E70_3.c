@@ -111,10 +111,10 @@ f32 BattleAnim_GetOwnerModelScale(ActivePokemon* arg0) {
     return BattleAnim_GetSpeciesBaseScale(arg0);
 }
 
-M2C_UNK func_82107BC4();                            /* extern */
+M2C_UNK ActivePokemon_GetSizeRatio();                            /* extern */
 
 void func_8213C75C(void) {
-    func_82107BC4();
+    ActivePokemon_GetSizeRatio();
 }
 
 f32 BattleAnim_GetSecondaryOwnerModelScale(void) {

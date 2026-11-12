@@ -246,7 +246,7 @@ extern s32 D_82199DE0;
 void func_821319FC(s32 arg0);
 
 M2C_UNK func_800407B0(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
-M2C_UNK func_82108A88(s8 *, M2C_UNK, M2C_UNK);    /* extern */
+M2C_UNK ActivePokemon_SetModelTransform(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_821365B0(M2C_UNK, s8 *, s8 *, M2C_UNK, s32); /* extern */
 extern M2C_UNK D_82199DE0;
 

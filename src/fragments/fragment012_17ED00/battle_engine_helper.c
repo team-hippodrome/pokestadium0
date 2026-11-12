@@ -82,12 +82,21 @@ void BattleScene_SetParticipantModelScale(ActivePokemon* active_pokemon, f32 sca
     active_pokemon->displayObject.scale.z = scale;
 }
 
-u8 func_82107A30(s8 *arg0) {
+/**
+ * Returns how many Pokemon the active Pokemon's trainer brought (teamRoster+0x2).
+ * @unverified Name and comment guessed from the code.
+ */
+u8 ActivePokemon_GetBroughtCount(s8 *arg0) {
     return M2C_FIELD(M2C_FIELD(arg0, s8 **, 0x860), u8 *, 2);
 }
 
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-u8 func_82107A3C(s8 *arg0)
+/**
+ * Returns the brought count of the other team member's roster in the session
+ * (teamMember[teamMemberIndex == 0]).
+ * @unverified Name and comment guessed from the code.
+ */
+u8 ActivePokemon_GetPartnerBroughtCount(s8 *arg0)
 {
   int new_var; // FAKE: permuter temp
   new_var = (*((u8 *) (((s8 *) arg0) + 0x7B7))) == 0;
@@ -149,13 +158,11 @@ f32 BattleAnim_GetSpeciesBaseScale(ActivePokemon* active_pokemon) {
 
 extern f32 D_FLT_82189350[][4];
 
-/*
- * func_82107BC4
- *
- * Same as BattleAnim_GetSpeciesBaseScale without the final scale factor: the table width for the
- * participant's object type, doubled and divided by 50.
+/**
+ * Returns the model's first size entry from D_FLT_82189350, doubled and divided by 50.
+ * @unverified Name and comment guessed from the code.
  */
-f32 func_82107BC4(ActivePokemon* active_pokemon) {
+f32 ActivePokemon_GetSizeRatio(ActivePokemon* active_pokemon) {
     return (D_FLT_82189350[active_pokemon->displayObject.objectType][0] * 2) / 50.0f;
 }
 
@@ -251,7 +258,11 @@ void BattleScene_GetParticipantScreenAimPoint(ActivePokemon* active_pokemon, Vec
     }
 }
 
-void func_82107EA0(s8 *arg0, s8 *arg1) {
+/**
+ * Writes the Poke Ball's position, raised by 2.5 units, to `arg1`.
+ * @unverified Name and comment guessed from the code.
+ */
+void ActivePokemon_GetPokeBallAimPoint(s8 *arg0, s8 *arg1) {
     M2C_FIELD(arg1, f32 *, 0) = (f32) M2C_FIELD(arg0, f32 *, 0x648);
     M2C_FIELD(arg1, f32 *, 4) = (f32) (M2C_FIELD(arg0, f32 *, 0x64C) + 2.5f);
     M2C_FIELD(arg1, f32 *, 8) = (f32) M2C_FIELD(arg0, f32 *, 0x650);
@@ -287,7 +298,11 @@ ModelNodeView* Battle_GetLoadedModelNode(ActivePokemon* active_pokemon, s32 node
     return active_pokemon->sessionTeams->loadedModel->unk_00[2]->unk_00[node_index];
 }
 
-s16 func_82107F58(s8 *arg0, M2C_UNK arg1) {
+/**
+ * Returns the session's display model id (sessionTeams+0x2).
+ * @unverified Name and comment guessed from the code.
+ */
+s16 ActivePokemon_GetDisplayModel(s8 *arg0, M2C_UNK arg1) {
     return M2C_FIELD(M2C_FIELD(arg0, s8 **, 0x85C), s16 *, 2);
 }
 
@@ -347,7 +362,7 @@ void BattleScene_InitializeParticipantSecondaryModels(ActivePokemon* pokemon, s3
     s32 i;
     PokemonAfterimage* afterimage;
     model_node = Battle_GetLoadedModelNode(pokemon, 0);
-    object_type = func_82107F58((s8*)pokemon, 0);
+    object_type = ActivePokemon_GetDisplayModel((s8*)pokemon, 0);
     for (i = 0; i < 3; i++) {
         afterimage = &pokemon->afterimages[i];
         ModelRenderer_AttachDisplayObject(&afterimage->displayObject);
@@ -606,7 +621,11 @@ void Battle_ReloadDisplayModel(ActivePokemon* active_pokemon) {
     Battle_ResetEventTrack(active_pokemon);
 }
 
-void func_82108A88(s8 *arg0, s32 arg1, s32 arg2) {
+/**
+ * Sets the model transform id and its timer.
+ * @unverified Name and comment guessed from the code.
+ */
+void ActivePokemon_SetModelTransform(s8 *arg0, s32 arg1, s32 arg2) {
     M2C_FIELD(arg0, s32 *, 0x610) = arg1;
     M2C_FIELD(arg0, s32 *, 0x614) = arg2;
 }
@@ -683,19 +702,35 @@ void Battle_SetModelToHitAnim(ActivePokemon* active_pokemon) {
     }
 }
 
-void func_82108DC8(s8 *arg0, s32 arg1) {
+/**
+ * Points teamRoster at sessionTeams->teamMember[index].
+ * @unverified Name and comment guessed from the code.
+ */
+void ActivePokemon_SelectTeamRoster(s8 *arg0, s32 arg1) {
     M2C_FIELD(arg0, s32 *, 0x860) = (s32) M2C_FIELD((M2C_FIELD(arg0, s32 *, 0x85C) + (arg1 * 4)), s32 *, 8);
 }
 
-void func_82108DE0(void *arg0, s32 arg1) {
+/**
+ * Sets state.teamMemberIndex.
+ * @unverified Name and comment guessed from the code.
+ */
+void ActivePokemon_SetTeamMemberIndex(void *arg0, s32 arg1) {
     M2C_FIELD(arg0, s8 *, 0x7B7) = arg1;
 }
 
-void func_82108DE8(s8 *arg0, s32 arg1) {
+/**
+ * Sets state.controller, the controller that drives this Pokemon's menu.
+ * @unverified Name and comment guessed from the code.
+ */
+void ActivePokemon_SetController(s8 *arg0, s32 arg1) {
     M2C_FIELD(arg0, s32 *, 0x858) = arg1;
 }
 
-void func_82108DF0(void *arg0, s32 arg1) {
+/**
+ * Sets state.replacementState.
+ * @unverified Name and comment guessed from the code.
+ */
+void ActivePokemon_SetReplacementState(void *arg0, s32 arg1) {
     M2C_FIELD(arg0, s8 *, 0x7B9) = arg1;
 }
 

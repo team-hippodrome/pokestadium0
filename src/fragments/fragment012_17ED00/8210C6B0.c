@@ -337,8 +337,13 @@ s32 BattleScene_ValidateSelectedPartyMember(ActivePokemon* arg0) {
     return 0;
 }
 
-void func_82108DE8(ActivePokemon*, u8*);
-void func_8210CDEC(ActivePokemon* arg0, u8* arg1, u8* arg2, s32 arg3) {
+void ActivePokemon_SetController(ActivePokemon*, u8*);
+/**
+ * Tag team: when either teammate's controller presses B, that teammate's
+ * controller takes over this Pokemon's menu.
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleMenu_TakeControlOnBPress(ActivePokemon* arg0, u8* arg1, u8* arg2, s32 arg3) {
     ActivePokemonState* state = &arg0->state;
     u16 mask;
     s32 m; // FAKE
@@ -353,27 +358,32 @@ void func_8210CDEC(ActivePokemon* arg0, u8* arg1, u8* arg2, s32 arg3) {
         if (*(u16*)(arg1 + 8) & mask) {
             state->ownerTeamMemberIndex = state->replacementState;
             state->replacementState = 0;
-            func_82108DE8(arg0, arg1);
+            ActivePokemon_SetController(arg0, arg1);
         } else if (*(u16*)(arg2 + 8) & mask) {
             state->ownerTeamMemberIndex = state->replacementState;
             state->replacementState = 0;
-            func_82108DE8(arg0, arg2);
+            ActivePokemon_SetController(arg0, arg2);
         }
     } else {
         if (*(u16*)(arg1 + 8) & mask) {
             state->ownerTeamMemberIndex = state->replacementState;
             state->replacementState = 0;
-            func_82108DE8(arg0, arg1);
+            ActivePokemon_SetController(arg0, arg1);
         } else if (*(u16*)(arg2 + 8) & mask) {
             state->ownerTeamMemberIndex = state->replacementState;
             state->replacementState = 1;
-            func_82108DE8(arg0, arg2);
+            ActivePokemon_SetController(arg0, arg2);
         }
     }
 }
 
-void func_82108DE8(ActivePokemon*, u8*);
-void func_8210CEE8(ActivePokemon* arg0, u8* arg1, u8* arg2, s32 arg3) {
+void ActivePokemon_SetController(ActivePokemon*, u8*);
+/**
+ * Tag team: like BattleMenu_TakeControlOnBPress, but for the C buttons (the mask
+ * depends on how many Pokemon were brought).
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleMenu_TakeControlOnCButtonPress(ActivePokemon* arg0, u8* arg1, u8* arg2, s32 arg3) {
     ActivePokemonState* state = &arg0->state;
     u16 mask;
 
@@ -386,21 +396,21 @@ void func_8210CEE8(ActivePokemon* arg0, u8* arg1, u8* arg2, s32 arg3) {
         if (*(u16*)(arg1 + 8) & mask) {
             state->ownerTeamMemberIndex = state->replacementState;
             state->replacementState = 0;
-            func_82108DE8(arg0, arg1);
+            ActivePokemon_SetController(arg0, arg1);
         } else if (*(u16*)(arg2 + 8) & mask) {
             state->ownerTeamMemberIndex = state->replacementState;
             state->replacementState = 0;
-            func_82108DE8(arg0, arg2);
+            ActivePokemon_SetController(arg0, arg2);
         }
     } else {
         if (*(u16*)(arg1 + 8) & mask) {
             state->ownerTeamMemberIndex = state->replacementState;
             state->replacementState = 0;
-            func_82108DE8(arg0, arg1);
+            ActivePokemon_SetController(arg0, arg1);
         } else if (*(u16*)(arg2 + 8) & mask) {
             state->ownerTeamMemberIndex = state->replacementState;
             state->replacementState = 1;
-            func_82108DE8(arg0, arg2);
+            ActivePokemon_SetController(arg0, arg2);
         }
     }
 }
@@ -417,7 +427,12 @@ void func_8210CFE4(s32 arg0) {
 
 void func_82134D60(void);
 
-void func_8210D020(ActivePokemon* arg0, s8* arg1) {
+/**
+ * Sets state.actionChosen from the C buttons (and B when more than three Pokemon
+ * were brought). Returns without a choice when no mapped button is pressed.
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleMenu_MapButtonsToActionChoice(ActivePokemon* arg0, s8* arg1) {
     u8* team = *(u8**)(M2C_FIELD(arg0, u8*, 0x7B9) * 4 + M2C_FIELD(arg0, s8**, 0x85C) + 8);
     ActivePokemonState* state = &arg0->state;
 
@@ -505,13 +520,13 @@ void func_8210D1B0(ActivePokemon* arg0) {
             }
             sp18->showingCommandOptions = 1;
         }
-        func_8210D020(arg0, (s8*)sp18->controller);
+        BattleMenu_MapButtonsToActionChoice(arg0, (s8*)sp18->controller);
     }
 }
 
 extern u8 D_800AAF50[];
 void func_8210D1B0(ActivePokemon* active_pokemon);
-void func_8210CEE8(ActivePokemon*, u8*, u8*, s32);
+void BattleMenu_TakeControlOnCButtonPress(ActivePokemon*, u8*, u8*, s32);
 /**
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
@@ -544,7 +559,7 @@ s32 BattleScene_HandlePlayerForcedActionState(ActivePokemon* arg0, ActivePokemon
         state->selectedCommandOption = 2;
         other->selectedCommandOption = 3;
         other->selectedCommand = 1;
-        func_8210CEE8(arg0, c1, c2, M2C_FIELD(M2C_FIELD(arg0, s8**, 0x85C), u8*, 1));
+        BattleMenu_TakeControlOnCButtonPress(arg0, c1, c2, M2C_FIELD(M2C_FIELD(arg0, s8**, 0x85C), u8*, 1));
         func_8210D1B0(arg0);
         return 1;
     }
@@ -602,7 +617,7 @@ void func_8210D4B4(ActivePokemon* arg0) {
 }
 
 extern u8 D_800AAF50[];
-void func_8210CDEC(ActivePokemon*, u8*, u8*, s32);
+void BattleMenu_TakeControlOnBPress(ActivePokemon*, u8*, u8*, s32);
 void func_82134D60(void);
 
 void func_8210D6BC(ActivePokemon* arg0) {
@@ -629,7 +644,7 @@ void func_8210D6BC(ActivePokemon* arg0) {
         buttons = M2C_FIELD(c2, u16*, 8) | M2C_FIELD(c1, u16*, 8);
         if (buttons & 0x4000) {
             M2C_FIELD(state, s32*, 4) = 2;
-            func_8210CDEC(arg0, c1, c2, M2C_FIELD(M2C_FIELD(arg0, s8**, 0x85C), u8*, 1));
+            BattleMenu_TakeControlOnBPress(arg0, c1, c2, M2C_FIELD(M2C_FIELD(arg0, s8**, 0x85C), u8*, 1));
         } else if (buttons & 0x1000) {
             M2C_FIELD(state, s32*, 4) = 3;
         } else {

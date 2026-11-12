@@ -100,7 +100,7 @@ void func_82132628(CameraNode* arg0) {
 f32 func_8000F23C(f32, f32, f32, f32);
 void func_8210C1A8(f32*, f32, f32);
 void func_80041374(s32, s32);
-M2C_UNK func_82108A88(s8*, M2C_UNK, M2C_UNK);
+M2C_UNK ActivePokemon_SetModelTransform(s8*, M2C_UNK, M2C_UNK);
 M2C_UNK func_821365B0(M2C_UNK, s8*, s8*, M2C_UNK, s32);
 void func_821326E4(CameraNode* arg0) {
     s32 sp3C;
@@ -123,7 +123,7 @@ void func_821326E4(CameraNode* arg0) {
         func_800407B0(1, 0xFE, 0);
         func_8000D41C(&arg0->view.targetPosition, 0.0f, 75.0f, 0.0f);
         func_8000D41C(&arg0->view.eyePosition, -1.79f, 0.075f, 155.2f);
-        func_82108A88(*(s8**)&D_82199DE0, 1, 0);
+        ActivePokemon_SetModelTransform(*(s8**)&D_82199DE0, 1, 0);
         func_821365B0(8, *(s8**)&D_82199DE0, *(s8**)&D_82199DE0, 0xFF, 0xFF);
         M2C_FIELD(D_8219A5A0, s32*, 0x20)++;
     }

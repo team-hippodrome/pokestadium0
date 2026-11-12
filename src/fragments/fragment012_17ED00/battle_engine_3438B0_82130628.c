@@ -504,7 +504,7 @@ void func_82131A3C(CameraNode* arg0) {
         func_800407B0(1, 0xFE, 0);
         Vec3f_SetComponentsDuplicate((Vec3f*)((u8*)arg0 + 0xB4), 0.0f, 75.0f, 0.0f);
         Vec3f_SetComponentsDuplicate((Vec3f*)((u8*)arg0 + 0xA8), -1.79f, 0.075f, 155.2f);
-        func_82108A88((s8*)sActivePokemon[0], 1, 0);
+        ActivePokemon_SetModelTransform((s8*)sActivePokemon[0], 1, 0);
         func_821365B0(8, (s8*)sActivePokemon[0], (s8*)sActivePokemon[0], 0xFF, 0xFF);
         Battle_SetStageScale(1.0f);
         sBattleScene.scene->phaseStep += 1;
@@ -518,7 +518,7 @@ void func_82131C64(s32 arg0) {
     M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 4), u8 *, 1) = (u8) (M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 4), u8 *, 1) & 0xFFFE);
     if (M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 0), f32 *, 0x64C) == 0.0f) {
         func_800407B0(1, 1, 0);
-        func_82108A88(M2C_FIELD(&D_82199DE0, s8 **, 4), 1, 0);
+        ActivePokemon_SetModelTransform(M2C_FIELD(&D_82199DE0, s8 **, 4), 1, 0);
         func_821365B0(0xA, M2C_FIELD(&D_82199DE0, s8 **, 4), M2C_FIELD(&D_82199DE0, s8 **, 4), 0xFF, 0xFF);
         M2C_FIELD(D_8219A5A0, s32 *, 0x20) = (s32) (M2C_FIELD(D_8219A5A0, s32 *, 0x20) + 1);
     }
@@ -539,7 +539,7 @@ void func_82131D24(void* arg0) {
             M2C_FIELD(arg0, f32 *, 0x2C) = M2C_FIELD(D_8219A5A0, f32 *, 0x60);
         }
         func_8212254C(M2C_FIELD(&D_82199DE0, s8 **, 0), arg0, sp34, 0, 0, 0.0f, 0.0f);
-        func_82108A88(M2C_FIELD(&D_82199DE0, s8 **, 0), 2, 0);
+        ActivePokemon_SetModelTransform(M2C_FIELD(&D_82199DE0, s8 **, 0), 2, 0);
         func_821365B0(0xB, M2C_FIELD(&D_82199DE0, s8 **, 0), M2C_FIELD(&D_82199DE0, s8 **, 0), 0xFF, 0xFF);
         func_82122628(arg0, sp34, M2C_FIELD(D_8219A5A0, s16 *, 0x58) = 0x71C, 0x4000, M2C_FIELD(D_8219A5A0, f32 *, 0x74) = 250.0f, 0.0f);
         M2C_FIELD(D_8219A5A0, s32 *, 0x20) = (s32) (M2C_FIELD(D_8219A5A0, s32 *, 0x20) + 1);
