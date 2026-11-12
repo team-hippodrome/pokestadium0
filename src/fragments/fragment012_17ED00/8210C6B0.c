@@ -9,7 +9,11 @@ extern s32 D_82199EB8;
 
 extern f32 D_FLT_82199EB0;
 
-s32 func_8210C6B0(void) {
+/**
+ * Counts the command-menu timer up to 150 frames; returns 1 once it has run out.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 BattleMenu_TickTimeout(void) {
     if (D_FLT_82199EB0 >= 150.0f) {
         return 1;
     }
@@ -19,7 +23,11 @@ s32 func_8210C6B0(void) {
 
 extern f32 D_FLT_82199EB0;
 
-void func_8210C6F8(void) {
+/**
+ * Resets the command-menu timer.
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleMenu_ResetTimeout(void) {
     D_FLT_82199EB0 = 0.0f;
 }
 
@@ -67,7 +75,12 @@ s32 func_8210C778(ActivePokemon* arg0) {
     return 0;
 }
 
-void func_8210C82C(ActivePokemon* arg0) {
+/**
+ * Stores the chosen move slot as the selected move and, unless selection is
+ * locked, sets the move to use; handles slot 4 (no move chosen) separately.
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleMenu_CommitMoveSelection(ActivePokemon* arg0) {
     BattleMonRuntime* temp_v1 = &arg0->state.runtime;
     ActivePokemonState* temp_v0 = &arg0->state;
 
@@ -162,7 +175,12 @@ typedef struct BattleMoveCheck8210CA24 {
     /* 0x7F8 */ u8 moveFlags[1];
 } BattleMoveCheck8210CA24;
 
-s32 func_8210CA24(s8* arg0) {
+/**
+ * Checks the chosen move slot: shows a message and returns 1 if it has no PP or
+ * is disabled, otherwise confirms it.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 BattleMenu_TryConfirmMove(s8* arg0) {
     u8 flags;
     s8* state;
 
@@ -185,8 +203,12 @@ s32 func_8210CA24(s8* arg0) {
 }
 
 void func_82134D60(void);
-s32 func_8210CA24(s8*);
-void func_8210CACC(s8* arg0) {
+s32 BattleMenu_TryConfirmMove(s8*);
+/**
+ * Maps the C buttons to the four move slots and tries to confirm the pressed one.
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleMenu_HandleMoveButtons(s8* arg0) {
     s32 buttons;
     s8* ctrl;
 
@@ -196,19 +218,19 @@ void func_8210CACC(s8* arg0) {
     if ((buttons & 8) && (M2C_FIELD(arg0, u8*, 0x7E5) != 0) && (M2C_FIELD(arg0, u8*, 0x7E5) < 0xA6)) {
         func_82134D60();
         M2C_FIELD(arg0, s32*, 0x7A0) = 0;
-        func_8210CA24(arg0);
+        BattleMenu_TryConfirmMove(arg0);
     } else if ((buttons & 1) && (M2C_FIELD(arg0, u8*, 0x7E6) != 0) && (M2C_FIELD(arg0, u8*, 0x7E6) < 0xA6)) {
         func_82134D60();
         M2C_FIELD(arg0, s32*, 0x7A0) = 1;
-        func_8210CA24(arg0);
+        BattleMenu_TryConfirmMove(arg0);
     } else if ((buttons & 4) && (M2C_FIELD(arg0, u8*, 0x7E7) != 0) && (M2C_FIELD(arg0, u8*, 0x7E7) < 0xA6)) {
         func_82134D60();
         M2C_FIELD(arg0, s32*, 0x7A0) = 2;
-        func_8210CA24(arg0);
+        BattleMenu_TryConfirmMove(arg0);
     } else if ((buttons & 2) && (M2C_FIELD(arg0, u8*, 0x7E8) != 0) && (M2C_FIELD(arg0, u8*, 0x7E8) < 0xA6)) {
         func_82134D60();
         M2C_FIELD(arg0, s32*, 0x7A0) = 3;
-        func_8210CA24(arg0);
+        BattleMenu_TryConfirmMove(arg0);
     }
 }
 
@@ -230,7 +252,7 @@ void func_8211F274();
  *    at rec + 6 is clear, it clears sub[0x10], calls func_82134D80(arg0) and
  *    returns; else it clears the byte sub[0x1C], and, when bit 0x10 of rec + 6
  *    is set, calls func_82134D40(arg0) if bit 0x10 of rec + 8 is also set and
- *    sets the byte sub[0x1C] to 1; finally it calls func_8210CACC(arg0).
+ *    sets the byte sub[0x1C] to 1; finally it calls BattleMenu_HandleMoveButtons(arg0).
  *
  * What the fields and the callees mean is not established (rec[6] and rec[8]
  * look like button/state bit masks but that is a guess from the masks only).
@@ -268,7 +290,7 @@ void func_8210CBD4(s8 *arg0) {
                 }
                 M2C_FIELD(temp_v0, s8 *, 0x1C) = 1;
             }
-            func_8210CACC(arg0);
+            BattleMenu_HandleMoveButtons(arg0);
         }
     }
 }
@@ -688,7 +710,12 @@ void BattleScene_CollectPlayerAction(ActivePokemon* arg0, ActivePokemon* arg1) {
     }
 }
 
-s32 func_8210DA30(ActivePokemon* arg0) {
+/**
+ * Returns the OR of the PP of all non-disabled moves (0 means the Pokemon must
+ * Struggle).
+ * @unverified Name and comment guessed from the code.
+ */
+s32 BattleMenu_GetUsableMovePpMask(ActivePokemon* arg0) {
     u8* mon = (u8*)arg0 + 0x7C6;
     s32 pp = 0;
     s32 disabled;
@@ -802,7 +829,7 @@ void BattleScene_CompleteCpuMoveAction(ActivePokemon* arg0, ActivePokemon* arg1)
     }
 }
 
-s32 func_8210DA30(ActivePokemon* arg0);
+s32 BattleMenu_GetUsableMovePpMask(ActivePokemon* arg0);
 void BattleScene_ApplyCpuChoice(ActivePokemon* arg0, ActivePokemon* arg1) {
     ActivePokemonState* sp18;
     ActivePokemonState* sp14;
@@ -827,7 +854,7 @@ void BattleScene_ApplyCpuChoice(ActivePokemon* arg0, ActivePokemon* arg1) {
             BattleAnim_PlaySoundEffect2();
             sp18->selectedCommand = 1;
             sp18->selectedCommandOption = 3;
-            if (func_8210DA30(arg0) != 0) {
+            if (BattleMenu_GetUsableMovePpMask(arg0) != 0) {
                 sp18->moveIndex = 4;
                 sp18->selectedMoveIndex = 4;
             } else {
@@ -987,7 +1014,12 @@ extern DemoInput8210E3C0 D_8218ABB8[];
 extern Controller D_82199EC8[];
 extern s32 D_82199F10[];
 extern s32 D_82199F18[];
-void func_8210E3C0() {
+/**
+ * Feeds the scripted controller input for the current side (D_8218ABB8: frames,
+ * pressed, held), as used by the demo battles.
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleDemo_PlayScriptedInput() {
     s32 i = func_82107A5C();
     Controller* c = &D_82199EC8[i];
 
@@ -1003,12 +1035,17 @@ void func_8210E3C0() {
     }
 }
 
-void func_8210E3C0();
-void func_8210E484(ActivePokemon* arg0, ActivePokemon* arg1) {
+void BattleDemo_PlayScriptedInput();
+/**
+ * Runs the scripted input, then locks move selection when a volatile or trapping
+ * state forces the move.
+ * @unverified Name and comment guessed from the code.
+ */
+void Battle_PrepareTurnInput(ActivePokemon* arg0, ActivePokemon* arg1) {
     BattleMonRuntime* temp_v0 = &arg0->state.runtime;
     BattleMonRuntime* temp_v1 = &arg1->state.runtime;
 
-    func_8210E3C0(arg0, arg1);
+    BattleDemo_PlayScriptedInput(arg0, arg1);
     if (!(temp_v0->volatileStatusFlags & 0x60)) {
         temp_v0->immobilizedReason &= ~8;
         temp_v1->immobilizedReason &= ~8;
@@ -1040,8 +1077,8 @@ void func_8210E504(void) {
     s32 move;
     s32 three = 3; // FAKE
 
-    func_8210E484(sActivePokemon[0], sActivePokemon[1]);
-    func_8210E484(sActivePokemon[1], sActivePokemon[0]);
+    Battle_PrepareTurnInput(sActivePokemon[0], sActivePokemon[1]);
+    Battle_PrepareTurnInput(sActivePokemon[1], sActivePokemon[0]);
 
     if (cont->buttonPressed & 0x20) {
         func_8210E318();
@@ -1088,24 +1125,25 @@ void func_8210E504(void) {
     }
 }
 
-/*
- * func_8210E6D0
+/**
+ * Battle_InitParticipantRuntime
  *
  * Calls Battle_InitPokemonRuntimeState(arg0).  The two extra arguments are
  * accepted but not used; the retail code stores them to the stack, which is
  * why the signature declares them.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_8210E6D0(ActivePokemon* arg0, s32 arg1, s32 arg2) {
+void Battle_InitParticipantRuntime(ActivePokemon* arg0, s32 arg1, s32 arg2) {
     Battle_InitPokemonRuntimeState(arg0);
 }
 
 /*
- * func_8210E6F4
+ * Battle_InitBothParticipants
  *
  * Resets the battle-scene state for both sides:
- *   - runs func_8210E6D0 on the active-Pokemon pointers stored at D_82199DE0
+ *   - runs Battle_InitParticipantRuntime on the active-Pokemon pointers stored at D_82199DE0
  *     and D_82199DE4, passing (0, 1) for the first and (1, 0) for the second
- *     (func_8210E6D0 ignores those two arguments);
+ *     (Battle_InitParticipantRuntime ignores those two arguments);
  *   - calls func_8210F688(0, 1) and func_8210F688(1, 0);
  *   - clears the first two words of D_82199F10 and of D_82199F18;
  *   - clears bytes +0 and +4 of D_8219A4F0, sets byte +3 to 0xFF, and clears
@@ -1122,9 +1160,13 @@ extern s32 D_82199F18[];
 extern s16 D_8219A4F0[];
 void func_8210F688(s32 arg0, s32 arg1);
 
-void func_8210E6F4(void) {
-    func_8210E6D0(*(ActivePokemon**)&D_82199DE0, 0, 1);
-    func_8210E6D0(D_82199DE4, 1, 0);
+/**
+ * Initializes both participants and resets the demo input scripts and turn state.
+ * @unverified Name and comment guessed from the code.
+ */
+void Battle_InitBothParticipants(void) {
+    Battle_InitParticipantRuntime(*(ActivePokemon**)&D_82199DE0, 0, 1);
+    Battle_InitParticipantRuntime(D_82199DE4, 1, 0);
     func_8210F688(0, 1);
     func_8210F688(1, 0);
     D_82199F10[0] = 0;
@@ -1147,7 +1189,12 @@ void func_82124EFC(void);
 extern u16 D_82199F24;
 extern u16 D_82199F50;
 
-void func_8210E790(void) {
+/**
+ * Gets both sides' actions for the turn: the COM AI for a COM side (party flag
+ * bit 1), the player's command input otherwise.
+ * @unverified Name and comment guessed from the code.
+ */
+void Battle_ChooseActions(void) {
     ActivePokemonState* state0 = &sActivePokemon[0]->state;
     ActivePokemonState* state1 = &sActivePokemon[1]->state;
 
@@ -1169,12 +1216,12 @@ void func_8210E790(void) {
         if (state0->selectedCommand == 2) {
             func_8210CD58((s8*)sActivePokemon[0]);
         } else {
-            func_8210C82C(sActivePokemon[0]);
+            BattleMenu_CommitMoveSelection(sActivePokemon[0]);
         }
         if (state1->selectedCommand == 2) {
             func_8210CD58((s8*)sActivePokemon[1]);
         } else {
-            func_8210C82C(sActivePokemon[1]);
+            BattleMenu_CommitMoveSelection(sActivePokemon[1]);
         }
         if ((state0->selectedCommand == 2) || (state1->selectedCommand == 2)) {
             func_82125224();
@@ -1185,9 +1232,14 @@ void func_8210E790(void) {
 }
 
 void func_8210E504(void);
-void func_8210E790(void);
+void Battle_ChooseActions(void);
 
-void func_8210E924(void) {
+/**
+ * Clears unlocked move selections, then picks the action-choice routine for the
+ * battle mode.
+ * @unverified Name and comment guessed from the code.
+ */
+void Battle_ChooseActionsForMode(void) {
     ActivePokemonState* state0 = &sActivePokemon[0]->state;
     ActivePokemonState* state1 = &sActivePokemon[1]->state;
 
@@ -1199,11 +1251,11 @@ void func_8210E924(void) {
     }
     switch (sBattleScene.scene->mode) {
         case 1:
-            func_8210E790();
+            Battle_ChooseActions();
             break;
         case 5:
             func_8210E504();
             break;
     }
-    func_8210C6B0();
+    BattleMenu_TickTimeout();
 }

@@ -47,8 +47,8 @@ extern s8 *D_8219A5A0;
 extern u8* D_800603C0;
 void Audio_FadeCategoriesAndStreams(s32 arg0);
 
-void func_8210E924(void);
-void func_8210C6F8(void);
+void Battle_ChooseActionsForMode(void);
+void BattleMenu_ResetTimeout(void);
 
 /**
  * Per-frame update while unk_1C is 1 (b-roll camera mode): runs the action selection phase and
@@ -59,13 +59,13 @@ void BattleScene_UpdateBRollCameraSequence(CameraNode* arg0) {
     if (sBattleScene.scene->mode == 1) {
         if ((sBattleScene.scene->transitionStep == 0) && (sActivePokemon[0]->thumbnail.camera->viewport.x == 0x17) &&
             (sActivePokemon[1]->thumbnail.camera->viewport.x == 0x103)) {
-            func_8210E924();
+            Battle_ChooseActionsForMode();
         } else {
-            func_8210C6F8();
+            BattleMenu_ResetTimeout();
         }
     }
     if (sBattleScene.scene->mode == 5) {
-        func_8210E924();
+        Battle_ChooseActionsForMode();
     }
     switch (sBattleScene.scene->phaseStep) {
         case 1:

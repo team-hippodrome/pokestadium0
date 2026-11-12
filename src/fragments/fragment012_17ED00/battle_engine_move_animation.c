@@ -2324,7 +2324,7 @@ void BattleScene_ResetParticipantAuxTransform(UNUSED ActivePokemon* owner, Activ
 }
 
 extern Entry82199E14 D_82199E10[];
-void func_8210E6F4(void);
+void Battle_InitBothParticipants(void);
 /**
  * Loads battle string tables, clears tick slots and initializes facing,
  * presentation, runtime state and move illegality.
@@ -2339,7 +2339,7 @@ void BattleScene_InitializeRuntime(BattleSessionTeams* session_teams) {
     BattleScene_ResetParticipantAuxTransform(sActivePokemon[0], sActivePokemon[0], 1);
     BattleScene_ResetParticipantAuxTransform(sActivePokemon[1], sActivePokemon[1], -1);
     BattleScene_InitializePresentation(session_teams);
-    func_8210E6F4();
+    Battle_InitBothParticipants();
 }
 
 /**
