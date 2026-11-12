@@ -70,9 +70,9 @@ extern s16 D_811858EC;
 void func_81111340(void*, s32);
 void func_81113FA8(Channel81114B54*);
 
-void func_81114B54(SeqPlayer81114B54* seqPlayer) {
+void func_81114B54(SeqPlayer81114B54* seq_player) {
     u8 cmd;
-    u8 loBits;
+    u8 lo_bits;
     u16 temp;
     s32 value;
     s32 i;
@@ -80,74 +80,74 @@ void func_81114B54(SeqPlayer81114B54* seqPlayer) {
     ScriptState81114B54* state;
     UNUSED s32 pad[4]; // FAKE: stack pad of unknown origin; only reserves frame space
 
-    if (!seqPlayer->enabled) {
+    if (!seq_player->enabled) {
         return;
     }
-    if (!func_8110CA68(seqPlayer->seqId) || !func_8110CA2C(seqPlayer->defaultBank)) {
-        func_81112E00((u8*)seqPlayer);
+    if (!func_8110CA68(seq_player->seqId) || !func_8110CA2C(seq_player->defaultBank)) {
+        func_81112E00((u8*)seq_player);
         return;
     }
-    func_8110CB10(seqPlayer->seqId, 2);
-    func_8110CAE0(seqPlayer->defaultBank, 2);
+    func_8110CB10(seq_player->seqId, 2);
+    func_8110CAE0(seq_player->defaultBank, 2);
 
-    if (seqPlayer->muted && (seqPlayer->muteBehavior & 0x80)) {
-        return;
-    }
-
-    seqPlayer->scriptCounter++;
-    seqPlayer->tempoAcc += seqPlayer->tempo;
-    seqPlayer->tempoAcc += seqPlayer->tempoChange;
-    if (seqPlayer->tempoAcc < D_811858EC) {
-        return;
-    }
-    seqPlayer->tempoAcc -= (u16)D_811858EC;
-
-    if (seqPlayer->stopScript == 1) {
+    if (seq_player->muted && (seq_player->muteBehavior & 0x80)) {
         return;
     }
 
-    state = &seqPlayer->scriptState;
-    if (seqPlayer->delay > 1) {
-        seqPlayer->delay--;
+    seq_player->scriptCounter++;
+    seq_player->tempoAcc += seq_player->tempo;
+    seq_player->tempoAcc += seq_player->tempoChange;
+    if (seq_player->tempoAcc < D_811858EC) {
+        return;
+    }
+    seq_player->tempoAcc -= (u16)D_811858EC;
+
+    if (seq_player->stopScript == 1) {
+        return;
+    }
+
+    state = &seq_player->scriptState;
+    if (seq_player->delay > 1) {
+        seq_player->delay--;
     } else {
-        seqPlayer->recalculateVolume = 1;
+        seq_player->recalculateVolume = 1;
         while (1) {
             cmd = func_81112FB0(&state->pc);
             if (cmd >= 0xF2) {
-                value = func_811126B8(seqPlayer, state, cmd, func_81112650(&state->pc, cmd));
+                value = func_811126B8(seq_player, state, cmd, func_81112650(&state->pc, cmd));
                 if (value != 0) {
                     if (value == -1) {
-                        func_81112E00((u8*)seqPlayer);
+                        func_81112E00((u8*)seq_player);
                     } else {
-                        seqPlayer->delay = value;
+                        seq_player->delay = value;
                     }
                     break;
                 }
             } else if (cmd >= 0xC0) {
                 switch (cmd) {
                     case 0xF1:
-                        func_811111E0((s8*)&seqPlayer->notePool);
-                        func_81111340(&seqPlayer->notePool, func_81112FB0(&state->pc));
+                        func_811111E0((s8*)&seq_player->notePool);
+                        func_81111340(&seq_player->notePool, func_81112FB0(&state->pc));
                         break;
                     case 0xF0:
-                        func_811111E0((s8*)&seqPlayer->notePool);
+                        func_811111E0((s8*)&seq_player->notePool);
                         break;
                     case 0xDF:
-                        seqPlayer->transposition = 0;
+                        seq_player->transposition = 0;
                     case 0xDE:
-                        seqPlayer->transposition += (s8)func_81112FB0(&state->pc);
+                        seq_player->transposition += (s8)func_81112FB0(&state->pc);
                         break;
                     case 0xDD:
-                        seqPlayer->tempo = func_81112FB0(&state->pc) * 48;
-                        if (seqPlayer->tempo > D_811858EC) {
-                            seqPlayer->tempo = (u16)D_811858EC;
+                        seq_player->tempo = func_81112FB0(&state->pc) * 48;
+                        if (seq_player->tempo > D_811858EC) {
+                            seq_player->tempo = (u16)D_811858EC;
                         }
-                        if ((s16)seqPlayer->tempo <= 0) {
-                            seqPlayer->tempo = 1;
+                        if ((s16)seq_player->tempo <= 0) {
+                            seq_player->tempo = 1;
                         }
                         break;
                     case 0xDC:
-                        seqPlayer->tempoChange = (s8)func_81112FB0(&state->pc) * 48;
+                        seq_player->tempoChange = (s8)func_81112FB0(&state->pc) * 48;
                         break;
                     case 0xDA:
                         cmd = func_81112FB0(&state->pc);
@@ -155,30 +155,30 @@ void func_81114B54(SeqPlayer81114B54* seqPlayer) {
                         switch (cmd) {
                             case 0:
                             case 1:
-                                if (seqPlayer->state != 2) {
-                                    seqPlayer->storedFadeTimer = temp;
-                                    seqPlayer->state = cmd;
+                                if (seq_player->state != 2) {
+                                    seq_player->storedFadeTimer = temp;
+                                    seq_player->state = cmd;
                                 }
                                 break;
                             case 2:
-                                seqPlayer->fadeTimer = temp;
-                                seqPlayer->state = cmd;
-                                seqPlayer->fadeVelocity = (0.0f - seqPlayer->fadeVolume) / (s32)seqPlayer->fadeTimer;
+                                seq_player->fadeTimer = temp;
+                                seq_player->state = cmd;
+                                seq_player->fadeVelocity = (0.0f - seq_player->fadeVolume) / (s32)seq_player->fadeTimer;
                                 break;
                         }
                         break;
                     case 0xDB:
                         value = func_81112FB0(&state->pc);
-                        switch (seqPlayer->state) {
+                        switch (seq_player->state) {
                             case 1:
-                                seqPlayer->state = 0;
-                                seqPlayer->fadeVolume = 0.0f;
+                                seq_player->state = 0;
+                                seq_player->fadeVolume = 0.0f;
                             case 0:
-                                seqPlayer->fadeTimer = seqPlayer->storedFadeTimer;
-                                if (seqPlayer->storedFadeTimer != 0) {
-                                    seqPlayer->fadeVelocity = ((value / 127.0f) - seqPlayer->fadeVolume) / (s32)seqPlayer->fadeTimer;
+                                seq_player->fadeTimer = seq_player->storedFadeTimer;
+                                if (seq_player->storedFadeTimer != 0) {
+                                    seq_player->fadeVelocity = ((value / 127.0f) - seq_player->fadeVolume) / (s32)seq_player->fadeTimer;
                                 } else {
-                                    seqPlayer->fadeVolume = value / 127.0f;
+                                    seq_player->fadeVolume = value / 127.0f;
                                 }
                                 break;
                             case 2:
@@ -186,36 +186,36 @@ void func_81114B54(SeqPlayer81114B54* seqPlayer) {
                         }
                         break;
                     case 0xD9:
-                        seqPlayer->fadeVolumeScale = (s8)func_81112FB0(&state->pc) / 127.0f;
+                        seq_player->fadeVolumeScale = (s8)func_81112FB0(&state->pc) / 127.0f;
                         break;
                     case 0xD7:
                         temp = func_81112FC4(&state->pc);
-                        func_81112BF0((s8*)seqPlayer, temp);
+                        func_81112BF0((s8*)seq_player, temp);
                         break;
                     case 0xD6:
                         func_81112FC4(&state->pc);
                         break;
                     case 0xD5:
-                        seqPlayer->muteVolumeScale = (s8)func_81112FB0(&state->pc) / 127.0f;
+                        seq_player->muteVolumeScale = (s8)func_81112FB0(&state->pc) / 127.0f;
                         break;
                     case 0xD4:
-                        seqPlayer->muted = 1;
+                        seq_player->muted = 1;
                         break;
                     case 0xD3:
-                        seqPlayer->muteBehavior = func_81112FB0(&state->pc);
+                        seq_player->muteBehavior = func_81112FB0(&state->pc);
                         break;
                     case 0xD1:
                     case 0xD2:
                         temp = func_81112FC4(&state->pc);
-                        data = seqPlayer->seqData + temp;
+                        data = seq_player->seqData + temp;
                         if (cmd == 0xD2) {
-                            seqPlayer->shortNoteVelocityTable = data;
+                            seq_player->shortNoteVelocityTable = data;
                         } else {
-                            seqPlayer->shortNoteDurationTable = data;
+                            seq_player->shortNoteDurationTable = data;
                         }
                         break;
                     case 0xD0:
-                        seqPlayer->noteAllocPolicy = func_81112FB0(&state->pc);
+                        seq_player->noteAllocPolicy = func_81112FB0(&state->pc);
                         break;
                     case 0xCC:
                         state->value = func_81112FB0(&state->pc);
@@ -229,44 +229,44 @@ void func_81114B54(SeqPlayer81114B54* seqPlayer) {
                     case 0xC7:
                         cmd = func_81112FB0(&state->pc);
                         temp = func_81112FC4(&state->pc);
-                        data = seqPlayer->seqData + temp;
+                        data = seq_player->seqData + temp;
                         *data = (u8)state->value + cmd;
                         break;
                     case 0xC6:
-                        seqPlayer->stopScript = 1;
+                        seq_player->stopScript = 1;
                         return;
                     case 0xC5:
-                        seqPlayer->scriptCounter = (u16)func_81112FC4(&state->pc);
+                        seq_player->scriptCounter = (u16)func_81112FC4(&state->pc);
                         break;
                 }
             } else {
-                loBits = cmd & 0xF;
+                lo_bits = cmd & 0xF;
                 switch (cmd & 0xF0) {
                     case 0x00:
-                        state->value = seqPlayer->channels[loBits]->finished;
+                        state->value = seq_player->channels[lo_bits]->finished;
                         break;
                     case 0x10:
                         break;
                     case 0x20:
                         break;
                     case 0x50:
-                        state->value -= seqPlayer->soundScriptIO[loBits];
+                        state->value -= seq_player->soundScriptIO[lo_bits];
                         break;
                     case 0x70:
-                        seqPlayer->soundScriptIO[loBits] = state->value;
+                        seq_player->soundScriptIO[lo_bits] = state->value;
                         break;
                     case 0x80:
-                        state->value = seqPlayer->soundScriptIO[loBits];
-                        if (loBits < 2) {
-                            seqPlayer->soundScriptIO[loBits] = -1;
+                        state->value = seq_player->soundScriptIO[lo_bits];
+                        if (lo_bits < 2) {
+                            seq_player->soundScriptIO[lo_bits] = -1;
                         }
                         break;
                     case 0x40:
-                        func_81112B84((Item8111539C*)seqPlayer->channels[loBits]);
+                        func_81112B84((Item8111539C*)seq_player->channels[lo_bits]);
                         break;
                     case 0x90:
                         temp = func_81112FC4(&state->pc);
-                        func_81112D68((Particle2D68**)seqPlayer, loBits, (s32)(seqPlayer->seqData + temp));
+                        func_81112D68((Particle2D68**)seq_player, lo_bits, (s32)(seq_player->seqData + temp));
                         break;
                     case 0x60:
                     case 0xA0:
@@ -277,8 +277,8 @@ void func_81114B54(SeqPlayer81114B54* seqPlayer) {
     }
 
     for (i = 0; i < 16; i++) {
-        if (seqPlayer->channels[i]->enabled) {
-            func_81113FA8(seqPlayer->channels[i]);
+        if (seq_player->channels[i]->enabled) {
+            func_81113FA8(seq_player->channels[i]);
         }
     }
 }

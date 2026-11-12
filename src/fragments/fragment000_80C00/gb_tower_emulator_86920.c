@@ -319,148 +319,148 @@ extern u8 D_81184655[1];
 extern u8 D_81184656[1];
 void func_8110CAE0(s32, s32);
 
-void* func_81109C0C(s32 tableType, s32 size, s32 cache, s32 id) {
-    Cache81109C0C* loadedCache;
-    TemporaryCache81109C0C* tCache;
-    Pool81109C0C* tempPool;
-    void* persistentAddr;
-    void* tempAddr;
-    u8 loadStatusEntry0;
-    u8 loadStatusEntry1;
+void* func_81109C0C(s32 table_type, s32 size, s32 cache, s32 id) {
+    Cache81109C0C* loaded_cache;
+    TemporaryCache81109C0C* t_cache;
+    Pool81109C0C* temp_pool;
+    void* persistent_addr;
+    void* temp_addr;
+    u8 load_status_entry0;
+    u8 load_status_entry1;
     s32 i;
-    u8* loadStatus;
+    u8* load_status;
 
-    switch (tableType) {
+    switch (table_type) {
         case 0:
-            loadedCache = (Cache81109C0C*)&D_81184320;
-            loadStatus = D_81184656;
+            loaded_cache = (Cache81109C0C*)&D_81184320;
+            load_status = D_81184656;
             break;
         case 1:
-            loadedCache = (Cache81109C0C*)&D_81184380;
-            loadStatus = D_81184655;
+            loaded_cache = (Cache81109C0C*)&D_81184380;
+            load_status = D_81184655;
             break;
         case 2:
-            loadedCache = (Cache81109C0C*)&D_811843E0;
-            loadStatus = D_81184654;
+            loaded_cache = (Cache81109C0C*)&D_811843E0;
+            load_status = D_81184654;
             break;
     }
 
     if (cache == 0) {
-        tCache = &loadedCache->temporary;
-        tempPool = &tCache->pool;
+        t_cache = &loaded_cache->temporary;
+        temp_pool = &t_cache->pool;
 
-        if (tCache->entries[0].id == -1) {
-            loadStatusEntry0 = 0;
+        if (t_cache->entries[0].id == -1) {
+            load_status_entry0 = 0;
         } else {
-            loadStatusEntry0 = loadStatus[tCache->entries[0].id];
+            load_status_entry0 = load_status[t_cache->entries[0].id];
         }
 
-        if (tCache->entries[1].id == -1) {
-            loadStatusEntry1 = 0;
+        if (t_cache->entries[1].id == -1) {
+            load_status_entry1 = 0;
         } else {
-            loadStatusEntry1 = loadStatus[tCache->entries[1].id];
+            load_status_entry1 = load_status[t_cache->entries[1].id];
         }
 
-        if (tableType == 1) {
-            if (loadStatusEntry0 == 4) {
+        if (table_type == 1) {
+            if (load_status_entry0 == 4) {
                 for (i = 0; i < D_811858E8; i++) {
-                    if (D_81184664[i].unk_33 == tCache->entries[0].id && D_81184664[i].enabled) {
+                    if (D_81184664[i].unk_33 == t_cache->entries[0].id && D_81184664[i].enabled) {
                         break;
                     }
                 }
 
                 if (i == D_811858E8) {
-                    func_8110CAE0(tCache->entries[0].id, 3);
-                    loadStatusEntry0 = 3;
+                    func_8110CAE0(t_cache->entries[0].id, 3);
+                    load_status_entry0 = 3;
                 }
             }
 
-            if (loadStatusEntry1 == 4) {
+            if (load_status_entry1 == 4) {
                 for (i = 0; i < D_811858E8; i++) {
-                    if (D_81184664[i].unk_33 == tCache->entries[1].id && D_81184664[i].enabled) {
+                    if (D_81184664[i].unk_33 == t_cache->entries[1].id && D_81184664[i].enabled) {
                         break;
                     }
                 }
 
                 if (i == D_811858E8) {
-                    func_8110CAE0(tCache->entries[1].id, 3);
-                    loadStatusEntry1 = 3;
+                    func_8110CAE0(t_cache->entries[1].id, 3);
+                    load_status_entry1 = 3;
                 }
             }
         }
 
-        if (loadStatusEntry0 == 0) {
-            tCache->nextSide = 0;
-        } else if (loadStatusEntry1 == 0) {
-            tCache->nextSide = 1;
-        } else if (loadStatusEntry0 == 3 && loadStatusEntry1 == 3) {
+        if (load_status_entry0 == 0) {
+            t_cache->nextSide = 0;
+        } else if (load_status_entry1 == 0) {
+            t_cache->nextSide = 1;
+        } else if (load_status_entry0 == 3 && load_status_entry1 == 3) {
             // Use the opposite side from last time.
-        } else if (loadStatusEntry0 == 3) {
-            tCache->nextSide = 0;
-        } else if (loadStatusEntry1 == 3) {
-            tCache->nextSide = 1;
+        } else if (load_status_entry0 == 3) {
+            t_cache->nextSide = 0;
+        } else if (load_status_entry1 == 3) {
+            t_cache->nextSide = 1;
         } else {
-            if (tableType == 0) {
-                if (loadStatusEntry0 == 2) {
+            if (table_type == 0) {
+                if (load_status_entry0 == 2) {
                     for (i = 0; i < D_811858CC; i++) {
-                        if (((SeqPlayer81109C0C*)&D_81184668)[i].enabled && ((SeqPlayer81109C0C*)&D_81184668)[i].seqId == tCache->entries[0].id) {
+                        if (((SeqPlayer81109C0C*)&D_81184668)[i].enabled && ((SeqPlayer81109C0C*)&D_81184668)[i].seqId == t_cache->entries[0].id) {
                             break;
                         }
                     }
                     if (i == D_811858CC) {
-                        tCache->nextSide = 0;
+                        t_cache->nextSide = 0;
                         goto done;
                     }
                 }
-                if (loadStatusEntry1 == 2) {
+                if (load_status_entry1 == 2) {
                     for (i = 0; i < D_811858CC; i++) {
-                        if (((SeqPlayer81109C0C*)&D_81184668)[i].enabled && ((SeqPlayer81109C0C*)&D_81184668)[i].seqId == tCache->entries[1].id) {
+                        if (((SeqPlayer81109C0C*)&D_81184668)[i].enabled && ((SeqPlayer81109C0C*)&D_81184668)[i].seqId == t_cache->entries[1].id) {
                             break;
                         }
                     }
                     if (i == D_811858CC) {
-                        tCache->nextSide = 1;
+                        t_cache->nextSide = 1;
                         goto done;
                     }
                 }
-            } else if (tableType == 1) {
-                if (loadStatusEntry0 == 2) {
+            } else if (table_type == 1) {
+                if (load_status_entry0 == 2) {
                     for (i = 0; i < D_811858E8; i++) {
-                        if (D_81184664[i].unk_33 == tCache->entries[0].id && D_81184664[i].enabled) {
+                        if (D_81184664[i].unk_33 == t_cache->entries[0].id && D_81184664[i].enabled) {
                             break;
                         }
                     }
                     if (i == D_811858E8) {
-                        tCache->nextSide = 0;
+                        t_cache->nextSide = 0;
                         goto done;
                     }
                 }
-                if (loadStatusEntry1 == 2) {
+                if (load_status_entry1 == 2) {
                     for (i = 0; i < D_811858E8; i++) {
-                        if (D_81184664[i].unk_33 == tCache->entries[1].id && D_81184664[i].enabled) {
+                        if (D_81184664[i].unk_33 == t_cache->entries[1].id && D_81184664[i].enabled) {
                             break;
                         }
                     }
                     if (i == D_811858E8) {
-                        tCache->nextSide = 1;
+                        t_cache->nextSide = 1;
                         goto done;
                     }
                 }
             }
 
-            if (tCache->nextSide == 0) {
-                if (loadStatusEntry0 == 1) {
-                    if (loadStatusEntry1 == 1) {
+            if (t_cache->nextSide == 0) {
+                if (load_status_entry0 == 1) {
+                    if (load_status_entry1 == 1) {
                         goto fail;
                     }
-                    tCache->nextSide = 1;
+                    t_cache->nextSide = 1;
                 }
             } else {
-                if (loadStatusEntry1 == 1) {
-                    if (loadStatusEntry0 == 1) {
+                if (load_status_entry1 == 1) {
+                    if (load_status_entry0 == 1) {
                         goto fail;
                     }
-                    tCache->nextSide = 0;
+                    t_cache->nextSide = 0;
                 }
             }
 
@@ -471,80 +471,80 @@ void* func_81109C0C(s32 tableType, s32 size, s32 cache, s32 id) {
         }
 
     done:
-        if (tCache->entries[tCache->nextSide].id != -1) {
-            loadStatus[tCache->entries[tCache->nextSide].id] = 0;
-            if (tableType == 1) {
-                func_81109678(tCache->entries[tCache->nextSide].id);
+        if (t_cache->entries[t_cache->nextSide].id != -1) {
+            load_status[t_cache->entries[t_cache->nextSide].id] = 0;
+            if (table_type == 1) {
+                func_81109678(t_cache->entries[t_cache->nextSide].id);
             }
         }
 
-        switch (tCache->nextSide) {
+        switch (t_cache->nextSide) {
             case 0:
-                tCache->entries[0].ramAddr = tempPool->startRamAddr;
-                tCache->entries[0].id = id;
-                tCache->entries[0].size = size;
-                tempPool->curRamAddr = tempPool->startRamAddr + size;
+                t_cache->entries[0].ramAddr = temp_pool->startRamAddr;
+                t_cache->entries[0].id = id;
+                t_cache->entries[0].size = size;
+                temp_pool->curRamAddr = temp_pool->startRamAddr + size;
 
-                if (tCache->entries[1].id != -1 && tCache->entries[1].ramAddr < tempPool->curRamAddr) {
-                    loadStatus[tCache->entries[1].id] = 0;
-                    switch (tableType) {
+                if (t_cache->entries[1].id != -1 && t_cache->entries[1].ramAddr < temp_pool->curRamAddr) {
+                    load_status[t_cache->entries[1].id] = 0;
+                    switch (table_type) {
                         case 0:
-                            func_81109764(tCache->entries[1].id);
+                            func_81109764(t_cache->entries[1].id);
                             break;
                         case 1:
-                            func_81109678(tCache->entries[1].id);
+                            func_81109678(t_cache->entries[1].id);
                             break;
                     }
-                    tCache->entries[1].id = -1;
-                    tCache->entries[1].ramAddr = tempPool->startRamAddr + tempPool->size;
+                    t_cache->entries[1].id = -1;
+                    t_cache->entries[1].ramAddr = temp_pool->startRamAddr + temp_pool->size;
                 }
-                tempAddr = tCache->entries[0].ramAddr;
+                temp_addr = t_cache->entries[0].ramAddr;
                 break;
 
             case 1:
-                tCache->entries[1].ramAddr = (u8*)((u32)(tempPool->startRamAddr + tempPool->size - size) & ~0xF);
-                tCache->entries[1].id = id;
-                tCache->entries[1].size = size;
-                if (tCache->entries[0].id != -1 && tCache->entries[1].ramAddr < tempPool->curRamAddr) {
-                    loadStatus[tCache->entries[0].id] = 0;
-                    switch (tableType) {
+                t_cache->entries[1].ramAddr = (u8*)((u32)(temp_pool->startRamAddr + temp_pool->size - size) & ~0xF);
+                t_cache->entries[1].id = id;
+                t_cache->entries[1].size = size;
+                if (t_cache->entries[0].id != -1 && t_cache->entries[1].ramAddr < temp_pool->curRamAddr) {
+                    load_status[t_cache->entries[0].id] = 0;
+                    switch (table_type) {
                         case 0:
-                            func_81109764(tCache->entries[0].id);
+                            func_81109764(t_cache->entries[0].id);
                             break;
                         case 1:
-                            func_81109678(tCache->entries[0].id);
+                            func_81109678(t_cache->entries[0].id);
                             break;
                     }
-                    tCache->entries[0].id = -1;
-                    tempPool->curRamAddr = tempPool->startRamAddr;
+                    t_cache->entries[0].id = -1;
+                    temp_pool->curRamAddr = temp_pool->startRamAddr;
                 }
-                tempAddr = tCache->entries[1].ramAddr;
+                temp_addr = t_cache->entries[1].ramAddr;
                 break;
 
             default:
                 return NULL;
         }
 
-        tCache->nextSide ^= 1;
-        return tempAddr;
+        t_cache->nextSide ^= 1;
+        return temp_addr;
     }
 
-    persistentAddr = (void*)func_81109868((M2C_UNK*)&loadedCache->persistent.pool, size);
-    loadedCache->persistent.entries[loadedCache->persistent.numEntries].ramAddr = persistentAddr;
+    persistent_addr = (void*)func_81109868((M2C_UNK*)&loaded_cache->persistent.pool, size);
+    loaded_cache->persistent.entries[loaded_cache->persistent.numEntries].ramAddr = persistent_addr;
 
-    if (persistentAddr == NULL) {
+    if (persistent_addr == NULL) {
         switch (cache) {
             case 2:
-                return func_81109C0C(tableType, size, 0, id);
+                return func_81109C0C(table_type, size, 0, id);
             case 0:
             case 1:
                 return NULL;
         }
     }
 
-    loadedCache->persistent.entries[loadedCache->persistent.numEntries].id = id;
-    loadedCache->persistent.entries[loadedCache->persistent.numEntries].size = size;
-    return loadedCache->persistent.entries[loadedCache->persistent.numEntries++].ramAddr;
+    loaded_cache->persistent.entries[loaded_cache->persistent.numEntries].id = id;
+    loaded_cache->persistent.entries[loaded_cache->persistent.numEntries].size = size;
+    return loaded_cache->persistent.entries[loaded_cache->persistent.numEntries++].ramAddr;
 }
 
 /*
@@ -860,10 +860,10 @@ void func_81115480(void);
 
 void func_8110AFF0(void) {
     UNUSED s32 pad[5]; // FAKE: stack pad of unknown origin; only reserves frame space
-    s32 persistentMem;
-    s32 temporaryMem;
-    s32 totalMem;
-    s32 wantMisc;
+    s32 persistent_mem;
+    s32 temporary_mem;
+    s32 total_mem;
+    s32 want_misc;
     s32 j;
     s32 i;
     ReverbSettingsAFF0* settings;
@@ -900,15 +900,15 @@ void func_8110AFF0(void) {
         D_811858B8.unk_08 -= 0x10;
     }
     D_811858E4 = D_811858E8 * 0x14 * D_811858B8.unk_0C + spec->numReverbs * 0x20 + 0x1E0;
-    persistentMem = spec->persistentSeqMem + spec->persistentFontMem + spec->persistentSampleMem + spec->persistentSampleCacheSize + 0x10;
-    temporaryMem = spec->temporarySeqMem + spec->temporaryFontMem + spec->temporarySampleMem + spec->temporarySampleCacheSize + 0x10;
-    totalMem = persistentMem + temporaryMem;
-    wantMisc = D_81184298 - totalMem - 0x100;
-    D_81184620.miscPoolSize = wantMisc;
-    D_81184620.cachePoolSize = totalMem;
+    persistent_mem = spec->persistentSeqMem + spec->persistentFontMem + spec->persistentSampleMem + spec->persistentSampleCacheSize + 0x10;
+    temporary_mem = spec->temporarySeqMem + spec->temporaryFontMem + spec->temporarySampleMem + spec->temporarySampleCacheSize + 0x10;
+    total_mem = persistent_mem + temporary_mem;
+    want_misc = D_81184298 - total_mem - 0x100;
+    D_81184620.miscPoolSize = want_misc;
+    D_81184620.cachePoolSize = total_mem;
     func_8110999C((s8*)&D_81184620);
-    D_81184630.a = persistentMem;
-    D_81184630.b = temporaryMem;
+    D_81184630.a = persistent_mem;
+    D_81184630.b = temporary_mem;
     func_81109A18((s8*)&D_81184630);
     D_81184638.a = spec->persistentSeqMem;
     D_81184638.b = spec->persistentFontMem;

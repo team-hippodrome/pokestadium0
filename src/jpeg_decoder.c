@@ -14,37 +14,37 @@ s32 Jpeg_DecodeBlock(JpegHuffmanTable* hTable0, JpegHuffmanTable* hTable1, u16* 
 s32 Jpeg_DecodeHuffmanSymbol(JpegHuffmanTable* hTable, s16* outCoeff, s8* outZeroCount);
 u16 Jpeg_ReadBits(u8 len);
 
-s32 Jpeg_DecodeMcus(JpegDecoder* decoder, u16* mcuBuff, s32 count, u8 isFollowing, JpegDecoderState* state) {
+s32 Jpeg_DecodeMcus(JpegDecoder* decoder, u16* mcu_buff, s32 count, u8 is_following, JpegDecoderState* state) {
     s16 pad; // FAKE: stack padding
     s16 unk0;
     s16 unk1;
     s16 unk2;
     u32 idx;
     s32 inc;
-    u16 unkCount;
+    u16 unk_count;
 
-    JpegHuffmanTable* hTable0;
-    JpegHuffmanTable* hTable1;
-    JpegHuffmanTable* hTable2;
-    JpegHuffmanTable* hTable3;
+    JpegHuffmanTable* h_table0;
+    JpegHuffmanTable* h_table1;
+    JpegHuffmanTable* h_table2;
+    JpegHuffmanTable* h_table3;
 
     inc = 0;
     sJpegBitStreamPtr = decoder->imageData;
     if (decoder->mode == 0) {
-        unkCount = 2;
+        unk_count = 2;
     } else {
-        unkCount = 4;
+        unk_count = 4;
         if (decoder->unk_05 == 1) {
             inc = 8 * 8 * 2;
         }
     }
 
-    hTable0 = decoder->hTablePtrs[0];
-    hTable1 = decoder->hTablePtrs[1];
-    hTable2 = decoder->hTablePtrs[2];
-    hTable3 = decoder->hTablePtrs[3];
+    h_table0 = decoder->hTablePtrs[0];
+    h_table1 = decoder->hTablePtrs[1];
+    h_table2 = decoder->hTablePtrs[2];
+    h_table3 = decoder->hTablePtrs[3];
 
-    if (!isFollowing) {
+    if (!is_following) {
         sJpegBitStreamByteIdx = 0;
         sJpegBitStreamBitIdx = 32;
         sJpegBitStreamCurWord = 0;
@@ -63,25 +63,25 @@ s32 Jpeg_DecodeMcus(JpegDecoder* decoder, u16* mcuBuff, s32 count, u8 isFollowin
     }
 
     while (count != 0) {
-        for (idx = 0; idx < unkCount; idx++) {
-            if (Jpeg_DecodeBlock(hTable0, hTable1, mcuBuff, &unk0)) {
+        for (idx = 0; idx < unk_count; idx++) {
+            if (Jpeg_DecodeBlock(h_table0, h_table1, mcu_buff, &unk0)) {
                 return 2;
             }
-            mcuBuff += 8 * 8;
+            mcu_buff += 8 * 8;
         }
 
-        if (Jpeg_DecodeBlock(hTable2, hTable3, mcuBuff, &unk1)) {
+        if (Jpeg_DecodeBlock(h_table2, h_table3, mcu_buff, &unk1)) {
             return 2;
         }
-        mcuBuff += 8 * 8;
+        mcu_buff += 8 * 8;
 
-        if (Jpeg_DecodeBlock(hTable2, hTable3, mcuBuff, &unk2)) {
+        if (Jpeg_DecodeBlock(h_table2, h_table3, mcu_buff, &unk2)) {
             return 2;
         }
 
         count--;
-        mcuBuff += 8 * 8;
-        mcuBuff += inc;
+        mcu_buff += 8 * 8;
+        mcu_buff += inc;
     }
 
     state->byteIdx = sJpegBitStreamByteIdx;
@@ -94,25 +94,25 @@ s32 Jpeg_DecodeMcus(JpegDecoder* decoder, u16* mcuBuff, s32 count, u8 isFollowin
     return 0;
 }
 
-s32 Jpeg_DecodeBlock(JpegHuffmanTable* hTable0, JpegHuffmanTable* hTable1, u16* mcu, s16* unk) {
+s32 Jpeg_DecodeBlock(JpegHuffmanTable* h_table0, JpegHuffmanTable* h_table1, u16* mcu, s16* unk) {
     s8 i = 0;
-    s8 zeroCount;
+    s8 zero_count;
     s16 coeff;
 
-    if (Jpeg_DecodeHuffmanSymbol(hTable0, &coeff, &zeroCount)) {
+    if (Jpeg_DecodeHuffmanSymbol(h_table0, &coeff, &zero_count)) {
         return 1;
     }
 
     *unk += coeff;
     mcu[i++] = *unk;
     while (i < 8 * 8) {
-        if (Jpeg_DecodeHuffmanSymbol(hTable1, &coeff, &zeroCount) != 0) {
+        if (Jpeg_DecodeHuffmanSymbol(h_table1, &coeff, &zero_count) != 0) {
             return 1;
         }
 
         if (coeff == 0) {
-            if (zeroCount == 0xF) {
-                while (zeroCount-- >= 0) {
+            if (zero_count == 0xF) {
+                while (zero_count-- >= 0) {
                     mcu[i++] = 0;
                 }
             } else {
@@ -122,7 +122,7 @@ s32 Jpeg_DecodeBlock(JpegHuffmanTable* hTable0, JpegHuffmanTable* hTable1, u16* 
                 break;
             }
         } else {
-            while (0 < zeroCount--) {
+            while (0 < zero_count--) {
                 mcu[i++] = 0;
             }
             mcu[i++] = coeff;
@@ -132,37 +132,37 @@ s32 Jpeg_DecodeBlock(JpegHuffmanTable* hTable0, JpegHuffmanTable* hTable1, u16* 
     return 0;
 }
 
-s32 Jpeg_DecodeHuffmanSymbol(JpegHuffmanTable* hTable, s16* outCoeff, s8* outZeroCount) {
-    u8 codeIdx;
+s32 Jpeg_DecodeHuffmanSymbol(JpegHuffmanTable* h_table, s16* out_coeff, s8* out_zero_count) {
+    u8 code_idx;
     u8 sym;
-    u16 codeOff = 0;
+    u16 code_off = 0;
     u16 buff = Jpeg_ReadBits(16);
 
-    for (codeIdx = 0; codeIdx < 16; codeIdx++) {
-        if (hTable->codesB[codeIdx] == 0xFFFF) {
+    for (code_idx = 0; code_idx < 16; code_idx++) {
+        if (h_table->codesB[code_idx] == 0xFFFF) {
             continue;
         }
 
-        codeOff = buff >> (15 - codeIdx);
-        if (codeOff <= hTable->codesB[codeIdx]) {
+        code_off = buff >> (15 - code_idx);
+        if (code_off <= h_table->codesB[code_idx]) {
             break;
         }
     }
 
-    if (codeIdx >= 16) {
+    if (code_idx >= 16) {
         return 1;
     }
 
-    sym = hTable->symbols[hTable->codeOffs[codeIdx] + codeOff - hTable->codesA[codeIdx]];
-    *outZeroCount = sym >> 4;
+    sym = h_table->symbols[h_table->codeOffs[code_idx] + code_off - h_table->codesA[code_idx]];
+    *out_zero_count = sym >> 4;
     sym &= 0xF;
 
-    sJpegBitStreamBitIdx += codeIdx - 15;
-    *outCoeff = 0;
+    sJpegBitStreamBitIdx += code_idx - 15;
+    *out_coeff = 0;
     if (sym) {
-        *outCoeff = Jpeg_ReadBits(sym);
-        if (*outCoeff < (1 << (sym - 1))) {
-            *outCoeff += (-1U << sym) + 1;
+        *out_coeff = Jpeg_ReadBits(sym);
+        if (*out_coeff < (1 << (sym - 1))) {
+            *out_coeff += (-1U << sym) + 1;
         }
     }
 
@@ -170,12 +170,12 @@ s32 Jpeg_DecodeHuffmanSymbol(JpegHuffmanTable* hTable, s16* outCoeff, s8* outZer
 }
 
 u16 Jpeg_ReadBits(u8 len) {
-    u8 byteCount;
+    u8 byte_count;
     u8 data;
     s32 ret = 0;
     u32 temp;
 
-    for (byteCount = sJpegBitStreamBitIdx >> 3; byteCount > 0; byteCount--) {
+    for (byte_count = sJpegBitStreamBitIdx >> 3; byte_count > 0; byte_count--) {
         data = sJpegBitStreamPtr[sJpegBitStreamByteIdx++];
         if (sJpegBitStreamDontSkip) {
             if (data == 0) {

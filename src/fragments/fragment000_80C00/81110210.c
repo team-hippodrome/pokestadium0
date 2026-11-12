@@ -56,11 +56,11 @@ extern f32 D_81136AD8[];
 extern f32 D_81136CD8[];
 extern f32 D_81136ED8[];
 
-void func_81110210(s8* note, ReverbInfo81110210* reverbInfo) {
+void func_81110210(s8* note, ReverbInfo81110210* reverb_info) {
     NoteSub81110210* sub;
-    f32 volRight;
-    f32 volLeft;
-    s32 smallPanIndex;
+    f32 vol_right;
+    f32 vol_left;
+    s32 small_pan_index;
     UNUSED u32 pad; // FAKE: stack padding
     UNUSED u32 pad1; // FAKE: stack padding
     u8 strongRight;
@@ -70,33 +70,33 @@ void func_81110210(s8* note, ReverbInfo81110210* reverbInfo) {
     u8 reverbVol;
     ReverbBits81110210 reverbBits;
 
-    func_811105DC(note, reverbInfo->freqScale);
-    velocity = reverbInfo->velocity;
-    pan = reverbInfo->pan;
-    reverbVol = reverbInfo->reverbVol;
-    reverbBits = reverbInfo->reverbBits;
+    func_811105DC(note, reverb_info->freqScale);
+    velocity = reverb_info->velocity;
+    pan = reverb_info->pan;
+    reverbVol = reverb_info->reverbVol;
+    reverbBits = reverb_info->reverbBits;
     sub = (NoteSub81110210*)(note + 0xB4);
     pan &= 0x7F;
 
     if (sub->stereoHeadsetEffects && D_811858EE == 1) {
-        smallPanIndex = pan >> 1;
-        if (smallPanIndex > 0x3F) {
-            smallPanIndex = 0x3F;
+        small_pan_index = pan >> 1;
+        if (small_pan_index > 0x3F) {
+            small_pan_index = 0x3F;
         }
-        sub->headsetPanLeft = D_811369D8[smallPanIndex];
-        sub->headsetPanRight = D_811369D8[0x3F - smallPanIndex];
+        sub->headsetPanLeft = D_811369D8[small_pan_index];
+        sub->headsetPanRight = D_811369D8[0x3F - small_pan_index];
         sub->stereoStrongRight = 0;
         sub->stereoStrongLeft = 0;
         sub->usesHeadsetPanEffects = 1;
-        volLeft = D_81136AD8[pan];
-        volRight = D_81136AD8[0x7F - pan];
+        vol_left = D_81136AD8[pan];
+        vol_right = D_81136AD8[0x7F - pan];
     } else if (sub->stereoHeadsetEffects && D_811858EE == 0) {
         strongLeft = strongRight = 0;
         sub->headsetPanRight = 0;
         sub->headsetPanLeft = 0;
         sub->usesHeadsetPanEffects = 0;
-        volLeft = D_81136CD8[pan];
-        volRight = D_81136CD8[0x7F - pan];
+        vol_left = D_81136CD8[pan];
+        vol_right = D_81136CD8[0x7F - pan];
         if (pan < 0x20) {
             strongLeft = 1;
         } else if (pan > 0x60) {
@@ -121,11 +121,11 @@ void func_81110210(s8* note, ReverbInfo81110210* reverbInfo) {
                 break;
         }
     } else if (D_811858EE == 3) {
-        volLeft = 0.707f;
-        volRight = 0.707f;
+        vol_left = 0.707f;
+        vol_right = 0.707f;
     } else {
-        volLeft = D_81136ED8[pan];
-        volRight = D_81136ED8[0x7F - pan];
+        vol_left = D_81136ED8[pan];
+        vol_right = D_81136ED8[0x7F - pan];
     }
 
     if (velocity < 0.0f) {
@@ -135,10 +135,10 @@ void func_81110210(s8* note, ReverbInfo81110210* reverbInfo) {
         velocity = 1.0f;
     }
 
-    sub->targetVolLeft = (s32)(velocity * volLeft * 4095.999f);
-    sub->targetVolRight = (s32)(velocity * volRight * 4095.999f);
-    sub->bankId = reverbInfo->bankId;
-    sub->synthesisVolume = reverbInfo->synthesisVolume;
+    sub->targetVolLeft = (s32)(velocity * vol_left * 4095.999f);
+    sub->targetVolRight = (s32)(velocity * vol_right * 4095.999f);
+    sub->bankId = reverb_info->bankId;
+    sub->synthesisVolume = reverb_info->synthesisVolume;
 
     if (sub->reverbVol != reverbVol) {
         sub->reverbVol = reverbVol;
@@ -371,7 +371,7 @@ void func_81110798(void)
   NoteSubEu81110798 *noteSubEu;
   NoteAttributes81110798 *attrs;
   s32 pad[2]; // FAKE
-  ReverbInfo81110210 subAttrs;
+  ReverbInfo81110210 sub_attrs;
   u8 bookOffset;
   f32 scale;
   s32 i;
@@ -488,37 +488,37 @@ void func_81110798(void)
         func_8111220C(note);
         if ((playbackState->unk_04 == 1) || (playbackState->unk_04 == 2))
         {
-          subAttrs.freqScale = attrs->freqScale;
-          subAttrs.velocity = attrs->velocity;
-          subAttrs.pan = attrs->pan;
-          subAttrs.reverbVol = attrs->reverbVol;
-          subAttrs.reverbBits = attrs->reverbBits;
-          subAttrs.bankId = attrs->bankId;
-          subAttrs.synthesisVolume = attrs->unk0C;
+          sub_attrs.freqScale = attrs->freqScale;
+          sub_attrs.velocity = attrs->velocity;
+          sub_attrs.pan = attrs->pan;
+          sub_attrs.reverbVol = attrs->reverbVol;
+          sub_attrs.reverbBits = attrs->reverbBits;
+          sub_attrs.bankId = attrs->bankId;
+          sub_attrs.synthesisVolume = attrs->unk0C;
           bookOffset = noteSubEu->bookOffset;
         }
         else
         {
           Channel81110798 *channel = playbackState->parentLayer->channel;
           Layer81110798 *layer = playbackState->parentLayer;
-          subAttrs.freqScale = layer->noteFreqScale;
-          subAttrs.velocity = layer->noteVelocity;
-          subAttrs.pan = layer->notePan;
-          subAttrs.reverbBits = layer->stereo;
-          subAttrs.reverbVol = channel->reverb;
-          subAttrs.bankId = channel->gain;
-          subAttrs.synthesisVolume = channel->filter;
+          sub_attrs.freqScale = layer->noteFreqScale;
+          sub_attrs.velocity = layer->noteVelocity;
+          sub_attrs.pan = layer->notePan;
+          sub_attrs.reverbBits = layer->stereo;
+          sub_attrs.reverbVol = channel->reverb;
+          sub_attrs.bankId = channel->gain;
+          sub_attrs.synthesisVolume = channel->filter;
           bookOffset = channel->bookOffset & 7;
           if (channel->seqPlayer->muted && (channel->muteBehavior & 8))
           {
-            subAttrs.freqScale = 0.0f;
-            subAttrs.velocity = 0.0f;
+            sub_attrs.freqScale = 0.0f;
+            sub_attrs.velocity = 0.0f;
           }
         }
-        subAttrs.freqScale *= playbackState->vibratoFreqScale * playbackState->portamentoFreqScale;
-        subAttrs.freqScale *= D_811858D0;
-        subAttrs.velocity *= scale;
-        func_81110210((s8 *) note, &subAttrs);
+        sub_attrs.freqScale *= playbackState->vibratoFreqScale * playbackState->portamentoFreqScale;
+        sub_attrs.freqScale *= D_811858D0;
+        sub_attrs.velocity *= scale;
+        func_81110210((s8 *) note, &sub_attrs);
         noteSubEu->bookOffset = bookOffset;
       }
     }

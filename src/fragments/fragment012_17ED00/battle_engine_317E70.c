@@ -130,24 +130,24 @@ extern u8 D_82199F3F;
  */
 void Battle_ApplyTypeEffectAndSTAB(void) {
     TypeEffectivenessEntry* entry;
-    u8 userType1;
-    u8 userType2;
-    u8 targetType1;
-    u8 targetType2;
-    u8 moveType;
+    u8 user_type1;
+    u8 user_type2;
+    u8 target_type1;
+    u8 target_type2;
+    u8 move_type;
 
-    userType1 = sBattleUser->roster[6];
-    userType2 = sBattleUser->roster[7];
-    targetType1 = sBattleTarget->roster[6];
-    targetType2 = sBattleTarget->roster[7];
-    moveType = sBattleUser->moveCache.type;
-    if ((moveType == userType1) || (moveType == userType2)) {
+    user_type1 = sBattleUser->roster[6];
+    user_type2 = sBattleUser->roster[7];
+    target_type1 = sBattleTarget->roster[6];
+    target_type2 = sBattleTarget->roster[7];
+    move_type = sBattleUser->moveCache.type;
+    if ((move_type == user_type1) || (move_type == user_type2)) {
         sBattleDamage += sBattleDamage >> 1;
         D_82199F3F |= 0x80;
     }
     entry = D_8218AC50;
     while (entry->unk_00 != 0xFF) {
-        if ((entry->unk_00 == moveType) && ((entry->unk_01 == targetType1) || (entry->unk_01 == targetType2))) {
+        if ((entry->unk_00 == move_type) && ((entry->unk_01 == target_type1) || (entry->unk_01 == target_type2))) {
             D_82199F3F = (D_82199F3F & 0x80) + entry->unk_02;
             sBattleDamage = (sBattleDamage * entry->unk_02) / 10;
             if (sBattleDamage == 0) {

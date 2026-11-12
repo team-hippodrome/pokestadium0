@@ -29,7 +29,7 @@ Acmd* _n_filterBuffer(ALLowPass* lp, s32 buff, Acmd* p);
 /***********************************************************************
  * Reverb filter public interfaces
  ***********************************************************************/
-Acmd* n_alFxPull(s32 sampleOffset, Acmd* p) {
+Acmd* n_alFxPull(s32 sample_offset, Acmd* p) {
     Acmd* ptr = p;
     ALFx* r = (ALFx*)n_syn->auxBus->fx;
     s16 i, buff1, buff2, input, output;
@@ -40,7 +40,7 @@ Acmd* n_alFxPull(s32 sampleOffset, Acmd* p) {
     /*
      * pull channels going into this effect first
      */
-    ptr = n_alAuxBusPull(sampleOffset, p);
+    ptr = n_alAuxBusPull(sample_offset, p);
 
     input = N_AL_AUX_L_OUT;
     output = N_AL_AUX_R_OUT;

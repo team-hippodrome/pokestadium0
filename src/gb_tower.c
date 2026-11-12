@@ -70,7 +70,7 @@ s32 GbPak_DetectRam(s32 arg0, u8* arg1) {
 
 s32 GbTower_ProbePak(s32 arg0, u8* arg1, u8* arg2) {
     u8 status;
-    OSGbpakId gbpakId;
+    OSGbpakId gbpak_id;
     s32 sp28 = 0;
 
     if (arg1 != NULL) {
@@ -81,7 +81,7 @@ s32 GbTower_ProbePak(s32 arg0, u8* arg1, u8* arg2) {
         return 1;
     }
 
-    if (osGbpakReadId(&D_800AB050[arg0], &gbpakId, &status) != 0) {
+    if (osGbpakReadId(&D_800AB050[arg0], &gbpak_id, &status) != 0) {
         Game_ShutdownAndLoadFragment(arg0, 1);
     }
     if ((status & OS_GBPAK_RSTB_STATUS) && (osGbpakCheckConnector(&D_800AB050[arg0], &status) == 0)) {

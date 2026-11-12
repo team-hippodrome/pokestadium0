@@ -288,79 +288,79 @@ u16 StatExpSqrt(u16 square) {
 void func_80020188(void) {
 }
 
-u16 GetPokemonDV(s32 statId, u16 dvBits) { //GetPokemonDV
-    u16 dvValue;
+u16 GetPokemonDV(s32 stat_id, u16 dv_bits) { //GetPokemonDV
+    u16 dv_value;
 
-    switch (statId) {
+    switch (stat_id) {
         case STAT_HP: // HP DV (derived from the LSBs of other DVs)
-            dvValue = ((dvBits & 0x1000) >> 9)  // Special DV bit 0 → HP DV bit 0
-                    | ((dvBits & 0x0100) >> 6)  // Speed DV bit 0 → HP DV bit 1
-                    | ((dvBits & 0x0010) >> 3)  // Defense DV bit 0 → HP DV bit 2
-                    | (dvBits & 0x0001);        // Attack DV bit 0 → HP DV bit 3
+            dv_value = ((dv_bits & 0x1000) >> 9)  // Special DV bit 0 → HP DV bit 0
+                    | ((dv_bits & 0x0100) >> 6)  // Speed DV bit 0 → HP DV bit 1
+                    | ((dv_bits & 0x0010) >> 3)  // Defense DV bit 0 → HP DV bit 2
+                    | (dv_bits & 0x0001);        // Attack DV bit 0 → HP DV bit 3
             break;
 
         case STAT_SPECIAL: // Special DV
-            dvValue = (dvBits >> 12) & 0xF;
+            dv_value = (dv_bits >> 12) & 0xF;
             break;
 
         case STAT_SPEED: // Speed DV
-            dvValue = (dvBits >> 8) & 0xF;
+            dv_value = (dv_bits >> 8) & 0xF;
             break;
 
         case STAT_DEFENSE: // Defense DV
-            dvValue = (dvBits >> 4) & 0xF;
+            dv_value = (dv_bits >> 4) & 0xF;
             break;
 
         case STAT_ATTACK: // Attack DV
-            dvValue = dvBits & 0xF;
+            dv_value = dv_bits & 0xF;
             break;
     }
 
-    return dvValue;
+    return dv_value;
 }
 
-u32 CalculateStatValue(s32 statId, s32 speciesId, u16 statModifier, u16 level, u16 dvBits) {
-    u16 statValue;
-    u16 baseStat;
-    u16 dvValue;
+u32 CalculateStatValue(s32 stat_id, s32 species_id, u16 stat_modifier, u16 level, u16 dv_bits) {
+    u16 stat_value;
+    u16 base_stat;
+    u16 dv_value;
 
-    switch (statId) {
+    switch (stat_id) {
         case STAT_HP:
-            baseStat = gBaseStats[speciesId].baseHP;
+            base_stat = gBaseStats[species_id].baseHP;
             break;
         case STAT_SPECIAL:
-            baseStat = gBaseStats[speciesId].baseSpecial;
+            base_stat = gBaseStats[species_id].baseSpecial;
             break;
         case STAT_SPEED:
-            baseStat = gBaseStats[speciesId].baseSpeed;
+            base_stat = gBaseStats[species_id].baseSpeed;
             break;
         case STAT_DEFENSE:
-            baseStat = gBaseStats[speciesId].baseDefense;
+            base_stat = gBaseStats[species_id].baseDefense;
             break;
         case STAT_ATTACK:
-            baseStat = gBaseStats[speciesId].baseAttack;
+            base_stat = gBaseStats[species_id].baseAttack;
             break;
     }
 
     // Get the Pokémon's DV for the stat (or HP DV)
-    dvValue = GetPokemonDV(statId, dvBits);
+    dv_value = GetPokemonDV(stat_id, dv_bits);
 
     // Compute the preliminary stat value
-    statValue = (((StatExpSqrt(statModifier) / 4) + ((baseStat + dvValue) * 2)) * level) / 100;
+    stat_value = (((StatExpSqrt(stat_modifier) / 4) + ((base_stat + dv_value) * 2)) * level) / 100;
 
     // Add final adjustments
-    if (statId == STAT_HP) {
-        statValue += level + 10;
+    if (stat_id == STAT_HP) {
+        stat_value += level + 10;
     } else {
-        statValue += 5;
+        stat_value += 5;
     }
 
     // Cap at 999
-    if (statValue > 999) {
-        statValue = 999;
+    if (stat_value > 999) {
+        stat_value = 999;
     }
 
-    return statValue;
+    return stat_value;
 }
 
 void Pokemon_RecalcStats(BattleMon* arg0) {

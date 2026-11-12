@@ -265,7 +265,7 @@ extern u8 D_80065CF8[];
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_SpeciesHasLearnsetBit(species, bit) s32 species; s32 bit; {
-    s32 byteIndex;
+    s32 byte_index;
     s32 bits;
 
     if (species == 0) {
@@ -1559,7 +1559,7 @@ s32 BattleAi_PickNextPokemon(u8 *arg0, s32 arg1, s32 arg2, s32 arg3)
   s32 i;
   s32 j;
   s32 best;
-  s32 bestScore;
+  s32 best_score;
 
   for (i = 0; i < 6; i++)
   {
@@ -1596,15 +1596,15 @@ s32 BattleAi_PickNextPokemon(u8 *arg0, s32 arg1, s32 arg2, s32 arg3)
     }
   }
 
-  bestScore = -1;
+  best_score = -1;
   best = -1;
   for (i = 0; i < 6; i++)
   {
     if ((D_821CF294[i].hp != 0) && (((arg1 == 0) && (!(((u8 *) D_821CF294)[0x36C] & (1 << i)))) || ((arg1 != 0) && (((u8 *) D_821CF294)[0x36C] & (1 << i)))) && (BattleAi_IsPickAllowed(arg1, arg3, i) != 0))
     {
-      if (bestScore < D_821CF294[i].pickScore)
+      if (best_score < D_821CF294[i].pickScore)
       {
-        bestScore = D_821CF294[i].pickScore;
+        best_score = D_821CF294[i].pickScore;
         best = i;
       }
     }

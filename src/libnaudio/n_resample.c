@@ -14,9 +14,9 @@ s32 n_alResampleParam(N_PVoice* filter, s32 paramID, void* param);
 Acmd* n_alResamplePull(N_PVoice* e, s16* outp, Acmd* p) {
     Acmd* ptr = p;
     s16 inp;
-    s32 inCount;
+    s32 in_count;
     s32 incr;
-    f32 finCount;
+    f32 fin_count;
 
 
     inp = N_AL_DECODER_OUT;
@@ -47,15 +47,15 @@ Acmd* n_alResamplePull(N_PVoice* e, s16* outp, Acmd* p) {
         /*
          * determine how many samples to generate
          */
-        finCount = e->rs_delta + (e->rs_ratio * (f32)FIXED_SAMPLE);
-        inCount = (s32)finCount;
-        e->rs_delta = finCount - (f32)inCount;
+        fin_count = e->rs_delta + (e->rs_ratio * (f32)FIXED_SAMPLE);
+        in_count = (s32)fin_count;
+        e->rs_delta = fin_count - (f32)in_count;
 
         /*
          * ask all filters upstream from us to build their command
          * lists.
          */
-        ptr = n_alAdpcmPull(e, &inp, inCount, p);
+        ptr = n_alAdpcmPull(e, &inp, in_count, p);
 
         /*
          * construct our portion of the command list

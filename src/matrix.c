@@ -277,72 +277,72 @@ void MtxF_SetTranslation(MtxF* identity, Vec3f* translate) {
 }
 
 void MtxF_SetLookAt(MtxF* mtx, Vec3f* from, Vec3f* to, u16 roll) {
-    f32 invLength;
+    f32 inv_length;
     f32 dx;
     f32 dz;
-    f32 xColY;
-    f32 yColY;
-    f32 zColY;
-    f32 xColZ;
-    f32 yColZ;
-    f32 zColZ;
-    f32 xColX;
-    f32 yColX;
-    f32 zColX;
+    f32 x_col_y;
+    f32 y_col_y;
+    f32 z_col_y;
+    f32 x_col_z;
+    f32 y_col_z;
+    f32 z_col_z;
+    f32 x_col_x;
+    f32 y_col_x;
+    f32 z_col_x;
 
     dx = to->x - from->x;
     dz = to->z - from->z;
 
-    invLength = -1.0 / sqrtf(dx * dx + dz * dz);
-    dx *= invLength;
-    dz *= invLength;
+    inv_length = -1.0 / sqrtf(dx * dx + dz * dz);
+    dx *= inv_length;
+    dz *= inv_length;
 
-    yColY = COSS(roll);
-    xColY = SINS(roll) * dz;
-    zColY = -SINS(roll) * dx;
+    y_col_y = COSS(roll);
+    x_col_y = SINS(roll) * dz;
+    z_col_y = -SINS(roll) * dx;
 
-    xColZ = to->x - from->x;
-    yColZ = to->y - from->y;
-    zColZ = to->z - from->z;
+    x_col_z = to->x - from->x;
+    y_col_z = to->y - from->y;
+    z_col_z = to->z - from->z;
 
-    invLength = -1.0 / sqrtf(xColZ * xColZ + yColZ * yColZ + zColZ * zColZ);
-    xColZ *= invLength;
-    yColZ *= invLength;
-    zColZ *= invLength;
+    inv_length = -1.0 / sqrtf(x_col_z * x_col_z + y_col_z * y_col_z + z_col_z * z_col_z);
+    x_col_z *= inv_length;
+    y_col_z *= inv_length;
+    z_col_z *= inv_length;
 
-    xColX = yColY * zColZ - zColY * yColZ;
-    yColX = zColY * xColZ - xColY * zColZ;
-    zColX = xColY * yColZ - yColY * xColZ;
+    x_col_x = y_col_y * z_col_z - z_col_y * y_col_z;
+    y_col_x = z_col_y * x_col_z - x_col_y * z_col_z;
+    z_col_x = x_col_y * y_col_z - y_col_y * x_col_z;
 
-    invLength = 1.0 / sqrtf(xColX * xColX + yColX * yColX + zColX * zColX);
+    inv_length = 1.0 / sqrtf(x_col_x * x_col_x + y_col_x * y_col_x + z_col_x * z_col_x);
 
-    xColX *= invLength;
-    yColX *= invLength;
-    zColX *= invLength;
+    x_col_x *= inv_length;
+    y_col_x *= inv_length;
+    z_col_x *= inv_length;
 
-    xColY = yColZ * zColX - zColZ * yColX;
-    yColY = zColZ * xColX - xColZ * zColX;
-    zColY = xColZ * yColX - yColZ * xColX;
+    x_col_y = y_col_z * z_col_x - z_col_z * y_col_x;
+    y_col_y = z_col_z * x_col_x - x_col_z * z_col_x;
+    z_col_y = x_col_z * y_col_x - y_col_z * x_col_x;
 
-    invLength = 1.0 / sqrtf(xColY * xColY + yColY * yColY + zColY * zColY);
-    xColY *= invLength;
-    yColY *= invLength;
-    zColY *= invLength;
+    inv_length = 1.0 / sqrtf(x_col_y * x_col_y + y_col_y * y_col_y + z_col_y * z_col_y);
+    x_col_y *= inv_length;
+    y_col_y *= inv_length;
+    z_col_y *= inv_length;
 
-    mtx->mf[0][0] = xColX;
-    mtx->mf[1][0] = yColX;
-    mtx->mf[2][0] = zColX;
-    mtx->mf[3][0] = -(from->x * xColX + from->y * yColX + from->z * zColX);
+    mtx->mf[0][0] = x_col_x;
+    mtx->mf[1][0] = y_col_x;
+    mtx->mf[2][0] = z_col_x;
+    mtx->mf[3][0] = -(from->x * x_col_x + from->y * y_col_x + from->z * z_col_x);
 
-    mtx->mf[0][1] = xColY;
-    mtx->mf[1][1] = yColY;
-    mtx->mf[2][1] = zColY;
-    mtx->mf[3][1] = -(from->x * xColY + from->y * yColY + from->z * zColY);
+    mtx->mf[0][1] = x_col_y;
+    mtx->mf[1][1] = y_col_y;
+    mtx->mf[2][1] = z_col_y;
+    mtx->mf[3][1] = -(from->x * x_col_y + from->y * y_col_y + from->z * z_col_y);
 
-    mtx->mf[0][2] = xColZ;
-    mtx->mf[1][2] = yColZ;
-    mtx->mf[2][2] = zColZ;
-    mtx->mf[3][2] = -(from->x * xColZ + from->y * yColZ + from->z * zColZ);
+    mtx->mf[0][2] = x_col_z;
+    mtx->mf[1][2] = y_col_z;
+    mtx->mf[2][2] = z_col_z;
+    mtx->mf[3][2] = -(from->x * x_col_z + from->y * y_col_z + from->z * z_col_z);
 
     mtx->mf[0][3] = 0.0f;
     mtx->mf[1][3] = 0.0f;

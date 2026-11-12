@@ -24,7 +24,7 @@ Acmd* n_alAdpcmPull(N_PVoice* filter, s16* outp, s32 outCount, Acmd* p) {
     s32 nOver;
     s32 nSam;
     s32 op;
-    s32 nLeft;
+    s32 n_left;
     s32 bEnd;
     s32 decoded = 0;
     s32 looped = 0;
@@ -47,11 +47,11 @@ Acmd* n_alAdpcmPull(N_PVoice* filter, s16* outp, s32 outCount, Acmd* p) {
     }
 
     if (f->dc_lastsam) {
-        nLeft = ADPCMFSIZE - f->dc_lastsam;
+        n_left = ADPCMFSIZE - f->dc_lastsam;
     } else {
-        nLeft = 0;
+        n_left = 0;
     }
-    tsam = nSam - nLeft;
+    tsam = nSam - n_left;
     if (tsam < 0) {
         tsam = 0;
     }
@@ -141,8 +141,8 @@ Acmd* n_alAdpcmPull(N_PVoice* filter, s16* outp, s32 outCount, Acmd* p) {
         overFlow = 0;
     }
     nOver = (overFlow / ADPCMFBYTES) << LFSAMPLES;
-    if (nOver > nSam + nLeft) {
-        nOver = nSam + nLeft;
+    if (nOver > nSam + n_left) {
+        nOver = nSam + n_left;
     }
 
     nbytes -= overFlow;
@@ -170,7 +170,7 @@ Acmd* n_alAdpcmPull(N_PVoice* filter, s16* outp, s32 outCount, Acmd* p) {
     if (nOver) {
         f->dc_lastsam = 0;
         if (decoded) {
-            startZero = (nLeft + nSam - nOver) << 1;
+            startZero = (n_left + nSam - nOver) << 1;
         } else {
             startZero = 0;
         }

@@ -158,7 +158,7 @@ s32 BattleAi_ReplaceHyperBeam(s32 arg0) {
 s32 BattleAi_PickStrongestMove(s32 arg0) {
     s32 i;
     s32 best = -1;
-    s32 bestIdx = -1;
+    s32 best_idx = -1;
     s32 v;
 
     for (i = 0; i < 4; i++) {
@@ -169,13 +169,13 @@ s32 BattleAi_PickStrongestMove(s32 arg0) {
             v = BattleAi_EstimateDamage((s8*)D_821CF29C + 0xC, D_821CF2A0 + 0xC, (D_821CF29C + i)[0x2B]);
             if (best < v) {
                 best = v;
-                bestIdx = i;
+                best_idx = i;
             }
         }
     }
     best = best * 9 / 10;
     if ((M2C_FIELD(D_821CF2A0, u16 *, 0x18) != 0) && (arg0 < (best * 100) / M2C_FIELD(D_821CF2A0, u16 *, 0x18))) {
-        return bestIdx;
+        return best_idx;
     }
     return -1;
 }

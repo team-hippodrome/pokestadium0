@@ -56,20 +56,20 @@ void Model_AccumulateVertexOffset(MtxF* mtx, PosBlend* position, s16 (*target)[3
 }
 
 void Model_InitializeVertexPositions(ModelSegment* segment, MtxF* mtx, ModelVertex* mvtx) {
-    s16* indexTable;
+    s16* index_table;
     s32 i;
     Vtx* vtx;
     PosBlend* position;
     ModelVertex* tmp;
 
-    indexTable = Memmap_GetSegmentVaddr(segment->tableSegment);
+    index_table = Memmap_GetSegmentVaddr(segment->tableSegment);
     vtx = Memmap_GetSegmentVaddr(segment->vertexSegment);
     Memmap_GetSegmentVaddr(segment->remapSegment);
     tmp = mvtx;
     
     for(i = 0; i < segment->vertexCount; i++) {
         position = &tmp->position;
-        switch (Model_GetVertexClass(indexTable, i)) {
+        switch (Model_GetVertexClass(index_table, i)) {
             case 0:
             default:
                 Model_TransformPoint(mtx, &position->base, &vtx->v.ob);
@@ -78,7 +78,7 @@ void Model_InitializeVertexPositions(ModelSegment* segment, MtxF* mtx, ModelVert
                 position->offset.z = 0.0f;
                 break;
             case 4:
-                Model_TransformPoint(mtx + Model_GetVertexMatrixClass(indexTable, i), &position->base, &vtx->v.ob);
+                Model_TransformPoint(mtx + Model_GetVertexMatrixClass(index_table, i), &position->base, &vtx->v.ob);
                 position->offset.x = 0.0f;
                 position->offset.y = 0.0f;
                 position->offset.z = 0.0f;

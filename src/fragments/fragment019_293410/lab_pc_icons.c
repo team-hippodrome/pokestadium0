@@ -313,15 +313,15 @@ extern char D_8A21D97C[];
 void func_8002A550(s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
 s32 func_8A20219C(s32, s32);
 void func_8A200DE0(s32 arg0, s32 arg1, s32 arg2) {
-    s32 nextLevel;
-    s32 toNext;
+    s32 next_level;
+    s32 to_next;
 
     if (((BattleMon*)arg2)->level == 100) {
-        nextLevel = 100;
+        next_level = 100;
     } else {
-        nextLevel = ((BattleMon*)arg2)->level + 1;
+        next_level = ((BattleMon*)arg2)->level + 1;
     }
-    toNext = func_8A20219C(((BattleMon*)arg2)->species.id, nextLevel) - ((BattleMon*)arg2)->unk_10;
+    to_next = func_8A20219C(((BattleMon*)arg2)->species.id, next_level) - ((BattleMon*)arg2)->unk_10;
     func_8002A550(arg0, arg1, 0x122, 0xC8, D_8A203370, D_8A203374);
     func_8001AB6C();
     func_8001A384(8, 0);
@@ -344,8 +344,8 @@ void func_8A200DE0(s32 arg0, s32 arg1, s32 arg2) {
     func_8001A944(arg0 + 0xAF, arg1 + 0x4C, D_8A21D96C, ((BattleMon*)arg2)->unk_0E);
     func_8001A944(arg0 + 0xAF, arg1 + 0x68, (char*)arg2 + 0x40);
     func_8001A944(arg0 + 0x87, arg1 + 0x8C, D_8A21D974, ((BattleMon*)arg2)->unk_10);
-    func_8001A944(arg0 + 0x40, arg1 + 0xA8, D_8A21D978, toNext);
-    func_8001A944(arg0 + 0xD7, arg1 + 0xA8, D_8A21D97C, nextLevel);
+    func_8001A944(arg0 + 0x40, arg1 + 0xA8, D_8A21D978, to_next);
+    func_8001A944(arg0 + 0xD7, arg1 + 0xA8, D_8A21D97C, next_level);
     func_8001ABBC();
     func_8A200D44(arg0 + 0xAF, arg1 + 0xC, 8, arg2, 0);
     func_8A200D44(arg0 + 0xAF, arg1 + 0x28, 8, arg2, 1);

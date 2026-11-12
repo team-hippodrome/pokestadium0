@@ -149,12 +149,12 @@ void Math_ProjectPointOntoLine(
     f32 dy;
     f32 dz;
     f32 t;
-    f32 lenSq = SQ(bx - ax) + SQ(by - ay) + SQ(bz - az);
+    f32 len_sq = SQ(bx - ax) + SQ(by - ay) + SQ(bz - az);
     f32 dx2;
     f32 dy2;
     f32 dz2;
 
-    if (lenSq == 0.0) {
+    if (len_sq == 0.0) {
         *outX = ax;
         *outY = ay;
         *outZ = az;
@@ -169,7 +169,7 @@ void Math_ProjectPointOntoLine(
     dy2 = py - ay;
     dz2 = pz - az;
 
-    t = ((dx * dx2) + (dy * dy2) + (dz * dz2)) / lenSq;
+    t = ((dx * dx2) + (dy * dy2) + (dz * dz2)) / len_sq;
 
     *outX = ax + (t * dx);
     *outY = ay + (t * dy);

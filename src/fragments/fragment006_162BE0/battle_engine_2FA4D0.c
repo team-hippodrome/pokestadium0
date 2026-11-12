@@ -111,11 +111,11 @@ void func_88400168(s32, s32, s32, s32);
 void func_88400458(s32 port, s32 x, s32 y) {
     Color_RGB8 top = D_88402F7C;
     Color_RGB8 bottom = D_88402F80;
-    Color_RGB8 selTop = D_88402F84;
-    Color_RGB8 selBottom = D_88402F88;
+    Color_RGB8 sel_top = D_88402F84;
+    Color_RGB8 sel_bottom = D_88402F88;
 
     if (port == D_88403358) {
-        Ui_DrawGradientPanel(x, y, 0x80, 0x46, &selTop, &selBottom);
+        Ui_DrawGradientPanel(x, y, 0x80, 0x46, &sel_top, &sel_bottom);
     } else {
         Ui_DrawGradientPanel(x, y, 0x80, 0x46, &top, &bottom);
     }

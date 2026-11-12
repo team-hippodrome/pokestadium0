@@ -126,18 +126,18 @@ void func_891012A8(s32 x, s32 y, Entry891012A8 *entry, s32 row, s32 flags, Ctx89
   s32 col;
   s32 cx;
   Color_RGBA8 *colors;
-  Color_RGBA8 *loopColors;
+  Color_RGBA8 *loop_colors;
   Ctx891012A8 *c = ctx;
   gSPDisplayList(gDisplayListHead++, D_80060270);
   colors = D_8910A85C[row & 1];
-  loopColors = D_8910A86C[row & 1];
+  loop_colors = D_8910A86C[row & 1];
   func_80029028(x, y, 0x26, 0x14, colors[0]);
   func_80029028(x + 0x26, y, 0x50, 0x14, colors[1]);
   col = c->ranges[c->mode];
   cx = x + 0x78;
   for (; cx < c->right; col++)
   {
-    func_80029028(cx, y, c->widths[col], 0x14, loopColors[col & 1]);
+    func_80029028(cx, y, c->widths[col], 0x14, loop_colors[col & 1]);
     cx += c->widths[col];
   }
 

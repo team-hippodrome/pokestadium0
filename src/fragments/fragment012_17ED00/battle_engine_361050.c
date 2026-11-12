@@ -164,17 +164,17 @@ extern TypeMatchupZ D_8218AC50[];
  */
 void BattleCalc_ApplyTypeEffectAndStab(u8* attacker, u8* defender) {
     TypeMatchupZ* entry;
-    u8 attType1 = attacker[0x1C];
-    u8 attType2 = attacker[0x1D];
-    u8 defType1 = defender[0x1C];
-    u8 defType2 = defender[0x1D];
-    u8 moveType = D_8219A497;
+    u8 att_type1 = attacker[0x1C];
+    u8 att_type2 = attacker[0x1D];
+    u8 def_type1 = defender[0x1C];
+    u8 def_type2 = defender[0x1D];
+    u8 move_type = D_8219A497;
 
-    if ((moveType == attType1) || (moveType == attType2)) {
+    if ((move_type == att_type1) || (move_type == att_type2)) {
         D_82199F50 += D_82199F50 >> 1;
     }
     for (entry = D_8218AC50; entry->attackType != 0xFF; entry++) {
-        if ((entry->attackType == moveType) && ((entry->defendType == defType1) || (entry->defendType == defType2))) {
+        if ((entry->attackType == move_type) && ((entry->defendType == def_type1) || (entry->defendType == def_type2))) {
             D_82199F50 = (D_82199F50 * entry->multiplier) / 10;
         }
     }

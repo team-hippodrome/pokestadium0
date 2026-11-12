@@ -1508,7 +1508,7 @@ typedef struct GeoMaterialNode {
 #define GEO_TINT (*(Color_RGBA8_u32*)&D_800AB450)
 void func_80014FC4(GeoMaterialNode *arg0)
 {
-  u8 texIndex;
+  u8 tex_index;
 
   D_800AB448 = arg0->unk_22;
   if (arg0->unk_22 == 1)
@@ -1547,8 +1547,8 @@ void func_80014FC4(GeoMaterialNode *arg0)
     case 1:
     if ((arg0->eventIndex >= 0) && (arg0->eventIndex < D_800AC6A8.data->trackCount))
     {
-      texIndex = ((u8 *) D_800AC6A8.frameValues)[ModelAnim_ResolveEventIndex(D_800AC6A8.frame, (unk_func_80017540_arg1 *) D_800AC6A8.trackTable, arg0->eventIndex)];
-      D_800AB454 = (s32) (&D_800604A0->unk_18[texIndex]);
+      tex_index = ((u8 *) D_800AC6A8.frameValues)[ModelAnim_ResolveEventIndex(D_800AC6A8.frame, (unk_func_80017540_arg1 *) D_800AC6A8.trackTable, arg0->eventIndex)];
+      D_800AB454 = (s32) (&D_800604A0->unk_18[tex_index]);
     }
     break;
   }

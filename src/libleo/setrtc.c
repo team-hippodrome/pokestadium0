@@ -7,7 +7,7 @@
 s32 LeoSetRTC(LEOCmd* cmdBlock, LEODiskTime* RTCdata, OSMesgQueue* mq);
 s32 leoVerifyRTC(u8 yearhi, u8 yearlo);
 
-s32 LeoSetRTC(LEOCmd* cmdBlock, LEODiskTime* RTCdata, OSMesgQueue* mq) {
+s32 LeoSetRTC(LEOCmd* cmd_block, LEODiskTime* RTCdata, OSMesgQueue* mq) {
     if (!__leoActive) {
         return -1;
     }
@@ -15,16 +15,16 @@ s32 LeoSetRTC(LEOCmd* cmdBlock, LEODiskTime* RTCdata, OSMesgQueue* mq) {
         osSendMesg(mq, (void*)LEO_SENSE_ILLEGAL_TIMER_VALUE, 1);
         return 0;
     }
-    cmdBlock->header.command = LEO_COMMAND_SET_TIMER;
-    cmdBlock->header.reserve1 = 0;
-    cmdBlock->header.control = 0;
-    cmdBlock->header.reserve3 = 0;
-    _bcopy(RTCdata, &cmdBlock->data.time, 8);
+    cmd_block->header.command = LEO_COMMAND_SET_TIMER;
+    cmd_block->header.reserve1 = 0;
+    cmd_block->header.control = 0;
+    cmd_block->header.reserve3 = 0;
+    _bcopy(RTCdata, &cmd_block->data.time, 8);
     if (mq != NULL) {
-        cmdBlock->header.control |= LEO_CONTROL_POST;
-        cmdBlock->header.post = mq;
+        cmd_block->header.control |= LEO_CONTROL_POST;
+        cmd_block->header.post = mq;
     }
-    leoCommand(cmdBlock);
+    leoCommand(cmd_block);
     return 0;
 }
 

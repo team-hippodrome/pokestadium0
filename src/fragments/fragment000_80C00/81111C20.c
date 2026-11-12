@@ -240,7 +240,7 @@ typedef struct Note81112278 {
 f32 func_81112024(vib)
     Vibrato81112278* vib;
 {
-    s32 pitchChange;
+    s32 pitch_change;
     f32 extent;
     f32 result;
     Channel81112278* seqChannel = vib->seqChannel;
@@ -282,10 +282,10 @@ f32 func_81112024(vib)
         return 1.0f;
     }
 
-    pitchChange = func_81111FE0((PhaseTableCursor*)vib);
+    pitch_change = func_81111FE0((PhaseTableCursor*)vib);
     extent = (f32)vib->extent / 4096.0f;
 
-    result = 1.0f + extent * (D_FLT_81136178[pitchChange] - 1.0f);
+    result = 1.0f + extent * (D_FLT_81136178[pitch_change] - 1.0f);
     return result;
 }
 
@@ -312,7 +312,7 @@ extern s16* D_81135F68;
 void func_81112278(Note81112278* note) {
     Vibrato81112278* vib;
     Channel81112278* seqChannel;
-    PlaybackState81112278* seqPlayerState = (PlaybackState81112278*)&note->priority;
+    PlaybackState81112278* seq_player_state = (PlaybackState81112278*)&note->priority;
 
     note->vibratoFreqScale = 1.0f;
     note->portamentoFreqScale = 1.0f;
@@ -338,7 +338,7 @@ void func_81112278(Note81112278* note) {
     }
     vib->delay = seqChannel->vibratoDelay;
 
-    seqPlayerState->portamento = seqPlayerState->parentLayer->portamento;
+    seq_player_state->portamento = seq_player_state->parentLayer->portamento;
 }
 
 void func_8111235C(s8 *arg0, s32 arg1, M2C_UNK arg2) {

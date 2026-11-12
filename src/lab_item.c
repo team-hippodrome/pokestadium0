@@ -16,7 +16,7 @@ s32 LabItem_IsQuantitylessItemForOperation(s32 arg0);
 char* func_8002E160_jp(s32 item_id, char* dest) {
     // Indexed by item id (1 = Master Ball, 196-200 = HM01-05, 201-250 = TM01-50). Ids without an
     // item are NULL; 7 (Surfboard) and 9 (Pokedex) point to empty descriptions.
-    static char* sItemDescriptions[256] = {
+    static char* s_item_descriptions[256] = {
         NULL,
         "やせいのポケモンを　１００パーセント\nかくじつに　つかまえられる　ボール。",
         "スーパーボールよりも　ポケモンが\nつかまりやすくなる　ボール。",
@@ -275,12 +275,12 @@ char* func_8002E160_jp(s32 item_id, char* dest) {
         NULL,
     };
 
-    if ((item_id < 0) || (item_id >= 256) || (sItemDescriptions[item_id] == NULL)) {
+    if ((item_id < 0) || (item_id >= 256) || (s_item_descriptions[item_id] == NULL)) {
         // FAKE: copying the "" literal as a one-byte struct makes IDO load its address before the
         // lbu; a plain char assignment folds %lo into the lbu.
         *(OneByte*)dest = *(OneByte*)"";
     } else {
-        HAL_Strcpy(dest, sItemDescriptions[item_id]);
+        HAL_Strcpy(dest, s_item_descriptions[item_id]);
     }
     return dest;
 }

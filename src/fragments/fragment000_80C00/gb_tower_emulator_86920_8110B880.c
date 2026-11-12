@@ -281,8 +281,8 @@ extern s32 D_8118557C;
 void func_8110BD20(SampleCacheEntry8110BA8C*);
 
 SampleCacheEntry8110BA8C* func_8110BA8C(u32 size) {
-    u8* allocAfter;
-    u8* allocBefore;
+    u8* alloc_after;
+    u8* alloc_before;
     void* mem;
     s32 index;
     s32 i;
@@ -290,10 +290,10 @@ SampleCacheEntry8110BA8C* func_8110BA8C(u32 size) {
     Preload8110BA8C* preload;
     SampleCache8110BA8C* cache;
     u8* startRamAddr;
-    u8* endRamAddr;
+    u8* end_ram_addr;
 
     cache = &D_811845F8;
-    allocBefore = cache->curRamAddr;
+    alloc_before = cache->curRamAddr;
     mem = (void*)func_81109868((M2C_UNK*)cache, size);
     if (mem == NULL) {
         u8* old = cache->curRamAddr;
@@ -304,22 +304,22 @@ SampleCacheEntry8110BA8C* func_8110BA8C(u32 size) {
             cache->curRamAddr = old;
             return NULL;
         }
-        allocBefore = cache->startRamAddr;
+        alloc_before = cache->startRamAddr;
     }
 
-    allocAfter = cache->curRamAddr;
+    alloc_after = cache->curRamAddr;
 
     index = -1;
     for (i = 0; i < D_8118557C; i++) {
         preload = &D_81184B78[i];
         if (preload->isFree == 0) {
             startRamAddr = preload->ramAddr;
-            endRamAddr = preload->ramAddr + preload->sample->size - 1;
+            end_ram_addr = preload->ramAddr + preload->sample->size - 1;
 
-            if (endRamAddr < allocBefore && startRamAddr < allocBefore) {
+            if (end_ram_addr < alloc_before && startRamAddr < alloc_before) {
                 continue;
             }
-            if (endRamAddr >= allocAfter && startRamAddr >= allocAfter) {
+            if (end_ram_addr >= alloc_after && startRamAddr >= alloc_after) {
                 continue;
             }
 
@@ -333,12 +333,12 @@ SampleCacheEntry8110BA8C* func_8110BA8C(u32 size) {
         }
 
         startRamAddr = cache->entries[i].allocatedAddr;
-        endRamAddr = startRamAddr + cache->entries[i].size - 1;
+        end_ram_addr = startRamAddr + cache->entries[i].size - 1;
 
-        if (endRamAddr < allocBefore && startRamAddr < allocBefore) {
+        if (end_ram_addr < alloc_before && startRamAddr < alloc_before) {
             continue;
         }
-        if (endRamAddr >= allocAfter && startRamAddr >= allocAfter) {
+        if (end_ram_addr >= alloc_after && startRamAddr >= alloc_after) {
             continue;
         }
 
@@ -378,24 +378,24 @@ void func_8110BEE4(u8* arg0, Flags2Bit* arg1);
 
 void func_8110BD20(SampleCacheEntry8110BA8C* entry) {
     u8* inst;
-    s32 numFonts;
-    s32 fontId;
-    s32 sampleBankId1;
-    s32 sampleBankId2;
-    s32 instId;
+    s32 num_fonts;
+    s32 font_id;
+    s32 sample_bank_id1;
+    s32 sample_bank_id2;
+    s32 inst_id;
     u8* drum;
-    s32 drumId;
+    s32 drum_id;
 
-    numFonts = *(s16*)D_811858A0;
-    for (fontId = 0; fontId < numFonts; fontId++) {
-        sampleBankId1 = D_811858B0[fontId].unk02;
-        sampleBankId2 = D_811858B0[fontId].unk03;
-        if (((sampleBankId1 != 0xFF) && (entry->sampleBankId == sampleBankId1)) ||
-            ((sampleBankId2 != 0xFF) && (entry->sampleBankId == sampleBankId2)) || entry->sampleBankId == 0) {
-            if (func_8110A310(1, 2, fontId) != 0) {
-                if (func_8110CA2C(fontId) != 0) {
-                    for (instId = 0; instId < D_811858B0[fontId].unk00; instId++) {
-                        inst = func_81110CA8(fontId, instId);
+    num_fonts = *(s16*)D_811858A0;
+    for (font_id = 0; font_id < num_fonts; font_id++) {
+        sample_bank_id1 = D_811858B0[font_id].unk02;
+        sample_bank_id2 = D_811858B0[font_id].unk03;
+        if (((sample_bank_id1 != 0xFF) && (entry->sampleBankId == sample_bank_id1)) ||
+            ((sample_bank_id2 != 0xFF) && (entry->sampleBankId == sample_bank_id2)) || entry->sampleBankId == 0) {
+            if (func_8110A310(1, 2, font_id) != 0) {
+                if (func_8110CA2C(font_id) != 0) {
+                    for (inst_id = 0; inst_id < D_811858B0[font_id].unk00; inst_id++) {
+                        inst = func_81110CA8(font_id, inst_id);
                         if (inst != NULL) {
                             if (inst[1] != 0) {
                                 func_8110BEE4((u8*)entry, M2C_FIELD(inst, Flags2Bit**, 8));
@@ -408,8 +408,8 @@ void func_8110BD20(SampleCacheEntry8110BA8C* entry) {
                             func_8110BEE4((u8*)entry, M2C_FIELD(inst, Flags2Bit**, 0x10));
                         }
                     }
-                    for (drumId = 0; drumId < D_811858B0[fontId].unk01; drumId++) {
-                        drum = func_81110D6C(fontId, drumId);
+                    for (drum_id = 0; drum_id < D_811858B0[font_id].unk01; drum_id++) {
+                        drum = func_81110D6C(font_id, drum_id);
                         if (drum != NULL) {
                             func_8110BEE4((u8*)entry, M2C_FIELD(drum, Flags2Bit**, 4));
                         }
@@ -557,22 +557,22 @@ extern u8 D_81185618[];
 extern s8 D_81137ACC[];
 s32 func_8110DBA0();
 
-void* func_8110C2D8(u32 devAddr, u32 size, s32 arg2, u8* dmaIndexRef, s32 medium) {
+void* func_8110C2D8(u32 devAddr, u32 size, s32 arg2, u8* dma_index_ref, s32 medium) {
     UNUSED s32 pad1; // FAKE: stack padding
     Timer8110C1C0* dma;
-    s32 hasDma = FALSE;
-    u32 dmaDevAddr;
+    s32 has_dma = FALSE;
+    u32 dma_dev_addr;
     UNUSED u32 pad2; // FAKE: stack padding
-    u32 dmaIndex;
+    u32 dma_index;
     u32 transfer;
-    s32 bufferPos;
+    s32 buffer_pos;
     u32 i;
 
-    if (arg2 != 0 || *dmaIndexRef >= D_81185690) {
+    if (arg2 != 0 || *dma_index_ref >= D_81185690) {
         for (i = D_81185690; i < D_8118568C; i++) {
             dma = &D_81185688[i];
-            bufferPos = devAddr - dma->devAddr;
-            if (0 <= bufferPos && (u32)bufferPos <= (dma->size - size)) {
+            buffer_pos = devAddr - dma->devAddr;
+            if (0 <= buffer_pos && (u32)buffer_pos <= (dma->size - size)) {
                 if (dma->count == 0 && D_81185899 != D_8118589B) {
                     if (dma->slot != D_81185899) {
                         D_81185798[dma->slot] = D_81185798[D_81185899];
@@ -581,21 +581,21 @@ void* func_8110C2D8(u32 devAddr, u32 size, s32 arg2, u8* dmaIndexRef, s32 medium
                     D_81185899++;
                 }
                 dma->count = 32;
-                *dmaIndexRef = (u8)i;
+                *dma_index_ref = (u8)i;
                 return (dma->ramAddr + devAddr) - dma->devAddr;
             }
         }
 
         if (D_81185899 != D_8118589B && arg2 != 0) {
-            dmaIndex = D_81185798[D_81185899];
+            dma_index = D_81185798[D_81185899];
             D_81185899++;
-            dma = D_81185688 + dmaIndex;
-            hasDma = TRUE;
+            dma = D_81185688 + dma_index;
+            has_dma = TRUE;
         }
     } else {
-        dma = D_81185688 + *dmaIndexRef;
-        bufferPos = devAddr - dma->devAddr;
-        if (0 <= bufferPos && (u32)bufferPos <= dma->size - size) {
+        dma = D_81185688 + *dma_index_ref;
+        buffer_pos = devAddr - dma->devAddr;
+        if (0 <= buffer_pos && (u32)buffer_pos <= dma->size - size) {
             if (dma->count == 0) {
                 if (dma->slot != D_81185898) {
                     D_81185698[dma->slot] = D_81185698[D_81185898];
@@ -608,23 +608,23 @@ void* func_8110C2D8(u32 devAddr, u32 size, s32 arg2, u8* dmaIndexRef, s32 medium
         }
     }
 
-    if (!hasDma) {
+    if (!has_dma) {
         if (D_81185898 == D_8118589A) {
             return NULL;
         }
-        dmaIndex = D_81185698[D_81185898++];
-        dma = D_81185688 + dmaIndex;
-        hasDma = TRUE;
+        dma_index = D_81185698[D_81185898++];
+        dma = D_81185688 + dma_index;
+        has_dma = TRUE;
     }
 
     transfer = dma->size;
-    dmaDevAddr = devAddr & ~0xF;
+    dma_dev_addr = devAddr & ~0xF;
     dma->count = 3;
-    dma->devAddr = dmaDevAddr;
+    dma->devAddr = dma_dev_addr;
     dma->sizeUnused = transfer;
-    func_8110DBA0(&D_81185638[D_811858F4++ * 0x18], 0, 0, dmaDevAddr, dma->ramAddr, transfer, D_81185618, medium, D_81137ACC);
-    *dmaIndexRef = dmaIndex;
-    return (devAddr - dmaDevAddr) + dma->ramAddr;
+    func_8110DBA0(&D_81185638[D_811858F4++ * 0x18], 0, 0, dma_dev_addr, dma->ramAddr, transfer, D_81185618, medium, D_81137ACC);
+    *dma_index_ref = dma_index;
+    return (devAddr - dma_dev_addr) + dma->ramAddr;
 }
 
 extern s32 D_811858E0;
@@ -637,7 +637,7 @@ extern s32 D_811858E0;
  * structure as AudioLoad_InitSampleDmaBuffers in the Ocarina of Time audio
  * library.
  */
-void func_8110C618(s32 numNotes) {
+void func_8110C618(s32 num_notes) {
     s32 i;
 
     D_811858E0 = 0xA0;
@@ -1158,22 +1158,22 @@ s32 func_81109C0C(s32, s32, s32, s32);
  * was already cached). The table's load status is updated. Same structure as
  * AudioLoad_SyncLoad in the Ocarina of Time audio library.
  */
-s32 func_8110D5BC(s32 tableType, s32 id, s32* didAllocate) {
+s32 func_8110D5BC(s32 table_type, s32 id, s32* did_allocate) {
     u32 size;
     AudioTable8110D5BC* table;
-    s32 ramAddr;
+    s32 ram_addr;
     u32 medium;
     s32 status;
     u32 romAddr;
     s32 cachePolicy;
     UNUSED s32 pad; // FAKE: stack padding
 
-    ramAddr = func_8110D7EC(tableType, id);
-    if (ramAddr != 0) {
-        *didAllocate = 0;
+    ram_addr = func_8110D7EC(table_type, id);
+    if (ram_addr != 0) {
+        *did_allocate = 0;
         status = 2;
     } else {
-        table = (AudioTable8110D5BC*)func_8110D840(tableType);
+        table = (AudioTable8110D5BC*)func_8110D840(table_type);
         size = table->entries[id].size;
         size = ALIGN16(size);
         medium = table->entries[id].medium;
@@ -1181,43 +1181,43 @@ s32 func_8110D5BC(s32 tableType, s32 id, s32* didAllocate) {
         romAddr = table->entries[id].romAddr;
         switch (cachePolicy) {
             case 0:
-                ramAddr = func_8110B8D8(tableType, id, size);
-                if (ramAddr == 0) {
-                    return ramAddr;
+                ram_addr = func_8110B8D8(table_type, id, size);
+                if (ram_addr == 0) {
+                    return ram_addr;
                 }
                 break;
             case 1:
-                ramAddr = func_81109C0C(tableType, size, 1, id);
-                if (ramAddr == 0) {
-                    return ramAddr;
+                ram_addr = func_81109C0C(table_type, size, 1, id);
+                if (ram_addr == 0) {
+                    return ram_addr;
                 }
                 break;
             case 2:
-                ramAddr = func_81109C0C(tableType, size, 0, id);
-                if (ramAddr == 0) {
-                    return ramAddr;
+                ram_addr = func_81109C0C(table_type, size, 0, id);
+                if (ram_addr == 0) {
+                    return ram_addr;
                 }
                 break;
             case 3:
             case 4:
-                ramAddr = func_81109C0C(tableType, size, 2, id);
-                if (ramAddr == 0) {
-                    return ramAddr;
+                ram_addr = func_81109C0C(table_type, size, 2, id);
+                if (ram_addr == 0) {
+                    return ram_addr;
                 }
                 break;
         }
 
-        *didAllocate = 1;
+        *did_allocate = 1;
         if (medium == 1) {
-            func_8110DB8C(romAddr, ramAddr, size, table->unkMediumParam);
+            func_8110DB8C(romAddr, ram_addr, size, table->unkMediumParam);
         } else {
-            func_8110DA68(romAddr, ramAddr, size, medium);
+            func_8110DA68(romAddr, ram_addr, size, medium);
         }
 
         status = cachePolicy == 0 ? 5 : 2;
     }
 
-    switch (tableType) {
+    switch (table_type) {
         case 0:
             func_8110CB10(id, status);
             break;
@@ -1229,7 +1229,7 @@ s32 func_8110D5BC(s32 tableType, s32 id, s32* didAllocate) {
             break;
     }
 
-    return ramAddr;
+    return ram_addr;
 }
 
 u8* func_8110D840(s32);
@@ -1298,60 +1298,60 @@ void func_8110EE3C(void* sampleP, u32 fontDataAddr, void* relocInfo);
  * font's drum and instrument lists in D_811858B0. Same structure as
  * AudioLoad_RelocateFont in the Ocarina of Time audio library.
  */
-void func_8110D884(s32 fontId, u32 fontData, void* relocInfo) {
+void func_8110D884(s32 font_id, u32 font_data, void* reloc_info) {
     u32 reloc2;
     u32 reloc;
     s32 i;
     u8* drum;
-    u32* ptrs = (u32*)fontData;
-    s32 numDrums = D_811858B0[fontId].unk01;
+    u32* ptrs = (u32*)font_data;
+    s32 num_drums = D_811858B0[font_id].unk01;
     u8* inst;
-    s32 numInstruments = D_811858B0[fontId].unk00;
+    s32 num_instruments = D_811858B0[font_id].unk00;
 
     reloc2 = ptrs[0];
-    if ((reloc2 != 0) && (numDrums != 0)) {
-        ptrs[0] = reloc2 + fontData;
-        for (i = 0; i < numDrums; i++) {
+    if ((reloc2 != 0) && (num_drums != 0)) {
+        ptrs[0] = reloc2 + font_data;
+        for (i = 0; i < num_drums; i++) {
             reloc = ((u32*)ptrs[0])[i];
             if (reloc != 0) {
-                reloc += fontData;
+                reloc += font_data;
                 ((u32*)ptrs[0])[i] = reloc;
                 drum = (u8*)reloc;
                 if (drum[2] == 0) {
-                    func_8110EE3C(drum + 4, fontData, relocInfo);
+                    func_8110EE3C(drum + 4, font_data, reloc_info);
                     reloc = *(u32*)(drum + 0xC);
                     drum[2] = 1;
-                    *(u32*)(drum + 0xC) = reloc + fontData;
+                    *(u32*)(drum + 0xC) = reloc + font_data;
                 }
             }
         }
     }
 
-    if (numInstruments >= 0x80) {
-        numInstruments = 0x7F;
+    if (num_instruments >= 0x80) {
+        num_instruments = 0x7F;
     }
 
-    for (i = 1; i <= numInstruments; i++) {
+    for (i = 1; i <= num_instruments; i++) {
         if (ptrs[i] != 0) {
-            ptrs[i] += fontData;
+            ptrs[i] += font_data;
             inst = (u8*)ptrs[i];
             if (inst[0] == 0) {
                 if (inst[1] != 0) {
-                    func_8110EE3C(inst + 8, fontData, relocInfo);
+                    func_8110EE3C(inst + 8, font_data, reloc_info);
                 }
-                func_8110EE3C(inst + 0x10, fontData, relocInfo);
+                func_8110EE3C(inst + 0x10, font_data, reloc_info);
                 if (inst[2] != 0x7F) {
-                    func_8110EE3C(inst + 0x18, fontData, relocInfo);
+                    func_8110EE3C(inst + 0x18, font_data, reloc_info);
                 }
                 reloc = *(u32*)(inst + 4);
                 inst[0] = 1;
-                *(u32*)(inst + 4) = reloc + fontData;
+                *(u32*)(inst + 4) = reloc + font_data;
             }
         }
     }
 
-    D_811858B0[fontId].drums = (u8**)ptrs[0];
-    D_811858B0[fontId].instruments = (u8**)(ptrs + 1);
+    D_811858B0[font_id].drums = (u8**)ptrs[0];
+    D_811858B0[font_id].instruments = (u8**)(ptrs + 1);
 }
 
 extern s8 D_81137C1C[];

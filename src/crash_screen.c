@@ -140,16 +140,16 @@ void crash_screen_sleep(s32 ms) {
     while (osGetTime() < cycles) {}
 }
 
-void crash_screen_print_fpr(s32 x, s32 y, s32 regNum, void* addr) {
+void crash_screen_print_fpr(s32 x, s32 y, s32 reg_num, void* addr) {
     u32 bits;
     s32 exponent;
 
     bits = *(u32*)addr;
     exponent = ((bits & 0x7f800000U) >> 0x17) - 0x7f;
     if ((exponent >= -0x7e && exponent <= 0x7f) || bits == 0) {
-        crash_screen_printf(x, y, "F%02d:%+.3e", regNum, *(f32*)addr);
+        crash_screen_printf(x, y, "F%02d:%+.3e", reg_num, *(f32*)addr);
     } else {
-        crash_screen_printf(x, y, "F%02d:---------", regNum);
+        crash_screen_printf(x, y, "F%02d:---------", reg_num);
     }
 }
 
@@ -168,26 +168,26 @@ void crash_screen_print_fpcsr(u32 fpcsr) {
     }
 }
 
-void crash_screen_draw(OSThread* faultedThread) {
-    s16 causeIndex;
+void crash_screen_draw(OSThread* faulted_thread) {
+    s16 cause_index;
     __OSThreadContext* ctx;
     u32 ret;
 
-    ctx = &faultedThread->context;
-    causeIndex = ((faultedThread->context.cause >> 2) & 0x1F);
+    ctx = &faulted_thread->context;
+    cause_index = ((faulted_thread->context.cause >> 2) & 0x1F);
 
-    if (causeIndex == 23) {
-        causeIndex = 16;
+    if (cause_index == 23) {
+        cause_index = 16;
     }
 
-    if (causeIndex == 31) {
-        causeIndex = 17;
+    if (cause_index == 31) {
+        cause_index = 17;
     }
 
     osWritebackDCacheAll();
 
     crash_screen_draw_rect(25, 20, 270, 25);
-    crash_screen_printf(30, 25, "THREAD:%d  (%s)", faultedThread->id, gFaultCauses[causeIndex]);
+    crash_screen_printf(30, 25, "THREAD:%d  (%s)", faulted_thread->id, gFaultCauses[cause_index]);
     crash_screen_printf(30, 35, "PC:%08XH   SR:%08XH   VA:%08XH", ctx->pc, ctx->sr, ctx->badvaddr);
 
     crash_screen_sleep(2000);
@@ -267,7 +267,7 @@ OSThread* crash_screen_get_faulted_thread(void) {
  */
 void crash_screen_thread_entry(UNUSED void* unused) {
     OSMesg mesg;
-    OSThread* faultedThread;
+    OSThread* faulted_thread;
 
     osSetEventMesg(OS_EVENT_CPU_BREAK, &gCrashScreen.queue, (OSMesg)1);
     osSetEventMesg(OS_EVENT_FAULT, &gCrashScreen.queue, (OSMesg)2);
@@ -276,19 +276,19 @@ void crash_screen_thread_entry(UNUSED void* unused) {
         /* Block until the OS reports a break or a fault... */
         osRecvMesg(&gCrashScreen.queue, &mesg, 1);
         /* ...then see whether some thread really has faulted. */
-        faultedThread = crash_screen_get_faulted_thread();
-    } while (faultedThread == NULL);
+        faulted_thread = crash_screen_get_faulted_thread();
+    } while (faulted_thread == NULL);
 
-    osStopThread(faultedThread);
+    osStopThread(faulted_thread);
     crash_screen_wait_for_button_combo();
-    crash_screen_draw(faultedThread);
+    crash_screen_draw(faulted_thread);
 
     /* Nothing more to do; keep this thread alive on the crash screen. */
     while (TRUE) {}
 }
 
-void crash_screen_set_draw_info(u16* frameBufPtr, u16 width, u16 height) {
-    gCrashScreen.frameBuf = (u16*)((uintptr_t)frameBufPtr | 0xA0000000);
+void crash_screen_set_draw_info(u16* frame_buf_ptr, u16 width, u16 height) {
+    gCrashScreen.frameBuf = (u16*)((uintptr_t)frame_buf_ptr | 0xA0000000);
     gCrashScreen.width = width;
     gCrashScreen.height = height;
 }

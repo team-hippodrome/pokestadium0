@@ -51,30 +51,30 @@ MainPool* mem_pool_init(MainPool* pool, s32 size) {
  * Allocate from a memory pool. Return NULL if there is not enough space.
  */
 void* mem_pool_alloc(MemoryPool* node, s32 size) {
-    struct MemoryBlock* freeBlock;
+    struct MemoryBlock* free_block;
     void* addr;
 
     osRecvMesg(&node->queue, 0, 1);
 
     addr = NULL;
     size = ALIGN4(size) + sizeof(struct MemoryBlock);
-    freeBlock = &node->freeList;
+    free_block = &node->freeList;
 
-    while (freeBlock->next != NULL) {
-        if (freeBlock->next->size >= size) {
-            addr = (u8*)freeBlock->next + sizeof(struct MemoryBlock); // get data after header
-            if (freeBlock->next->size - size <= sizeof(struct MemoryBlock)) {
-                freeBlock->next = freeBlock->next->next;
+    while (free_block->next != NULL) {
+        if (free_block->next->size >= size) {
+            addr = (u8*)free_block->next + sizeof(struct MemoryBlock); // get data after header
+            if (free_block->next->size - size <= sizeof(struct MemoryBlock)) {
+                free_block->next = free_block->next->next;
             } else {
-                struct MemoryBlock* newBlock = (struct MemoryBlock*)((u8*)freeBlock->next + size);
-                newBlock->size = freeBlock->next->size - size; // set size
-                newBlock->next = freeBlock->next->next;
-                freeBlock->next->size = size; // set size
-                freeBlock->next = newBlock;
+                struct MemoryBlock* new_block = (struct MemoryBlock*)((u8*)free_block->next + size);
+                new_block->size = free_block->next->size - size; // set size
+                new_block->next = free_block->next->next;
+                free_block->next->size = size; // set size
+                free_block->next = new_block;
             }
             break;
         }
-        freeBlock = freeBlock->next;
+        free_block = free_block->next;
     }
     osSendMesg(&node->queue, 0, 0);
     return addr;

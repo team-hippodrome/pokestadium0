@@ -111,26 +111,26 @@ extern s16 D_80075D00[];
 Acmd* func_8003AECC(N_PVoice* filter, s16* inp, s16* outp, s32 outCount, Acmd* p);
 s16 func_8003B280(s16 arg0, s32 arg1, s16 arg2, u16 arg3);
 
-Acmd* n_alEnvmixerPull(N_PVoice* filter, s32 sampleOffset, Acmd* p) {
+Acmd* n_alEnvmixerPull(N_PVoice* filter, s32 sample_offset, Acmd* p) {
     Acmd* ptr = p;
     N_PVoice* e = (N_PVoice*)filter;
     s16 inp;
-    s32 lastOffset;
-    s32 thisOffset = sampleOffset;
+    s32 last_offset;
+    s32 this_offset = sample_offset;
     s32 samples;
     s16 loutp = 0;
-    s32 fVol;
-    ALParam* thisParam;
-    s32 outCount = FIXED_SAMPLE;
+    s32 f_vol;
+    ALParam* this_param;
+    s32 out_count = FIXED_SAMPLE;
 
     inp = N_AL_RESAMPLER_OUT;
 
     while (e->em_ctrlList != 0) {
-        lastOffset = thisOffset;
-        thisOffset = SAMPLE184(e->em_ctrlList->delta);
-        samples = thisOffset - lastOffset;
+        last_offset = this_offset;
+        this_offset = SAMPLE184(e->em_ctrlList->delta);
+        samples = this_offset - last_offset;
 
-        if (samples > outCount) {
+        if (samples > out_count) {
             break;
         }
 
@@ -196,9 +196,9 @@ Acmd* n_alEnvmixerPull(N_PVoice* filter, s32 sampleOffset, Acmd* p) {
 
                 if (e->em_ctrlList->type == AL_FILTER_SET_VOLUME) {
                     e->em_delta = 0;
-                    fVol = (e->em_ctrlList->data.i);
-                    fVol = (fVol * fVol) >> 15;
-                    e->em_volume = (s16)fVol;
+                    f_vol = (e->em_ctrlList->data.i);
+                    f_vol = (f_vol * f_vol) >> 15;
+                    e->em_volume = (s16)f_vol;
                     e->em_segEnd = SAMPLE184(e->em_ctrlList->moredata.i);
                 }
 
@@ -248,18 +248,18 @@ Acmd* n_alEnvmixerPull(N_PVoice* filter, s32 sampleOffset, Acmd* p) {
                 break;
         }
         loutp += (samples << 1);
-        outCount -= samples;
+        out_count -= samples;
 
-        thisParam = e->em_ctrlList;
+        this_param = e->em_ctrlList;
         e->em_ctrlList = e->em_ctrlList->next;
         if (e->em_ctrlList == 0) {
             e->em_ctrlTail = 0;
         }
 
-        _n_freeParam(thisParam);
+        _n_freeParam(this_param);
     }
 
-    ptr = func_8003AECC(e, &inp, &loutp, outCount, ptr);
+    ptr = func_8003AECC(e, &inp, &loutp, out_count, ptr);
 
     if (e->em_delta > e->em_segEnd) {
         e->em_delta = e->em_segEnd;
@@ -302,12 +302,12 @@ s32 n_alEnvmixerParam(N_PVoice* filter, s32 paramID, void* param) {
 s16 func_8003B0F8(f64 vol, f64 tgt, s32 count, u16* ratel);
 extern s16 D_80075D00[];
 
-Acmd* func_8003AECC(N_PVoice* filter, s16* inp, s16* outp, s32 outCount, Acmd* p) {
+Acmd* func_8003AECC(N_PVoice* filter, s16* inp, s16* outp, s32 out_count, Acmd* p) {
     Acmd* ptr = p;
     N_PVoice* e = filter;
     s16* inpp = N_AL_RESAMPLER_OUT;
 
-    if (e->em_motion != AL_PLAYING || !outCount)
+    if (e->em_motion != AL_PLAYING || !out_count)
         return ptr;
 
     ptr = n_alResamplePull(e, inp, p);
@@ -443,79 +443,79 @@ void func_8003B2E0(ALSynConfig* c, amConfig* amc, u32 num_dma_buffers, s32 arg3,
 }
 
 s32 __amDMA(s32 addr, s32 len, void* state) {
-    void* foundBuffer;
+    void* found_buffer;
     s32 delta;
     AMDMABuffer* sp34;
-    OSIoMesg* ioMesg;
-    AMDMABuffer* dmaPtr;
-    AMDMABuffer* lastDmaPtr;
+    OSIoMesg* io_mesg;
+    AMDMABuffer* dma_ptr;
+    AMDMABuffer* last_dma_ptr;
     OSPiHandle* sp2C;
-    s32 buffEnd;
+    s32 buff_end;
 
     if (D_80075C30 & 0x80000000) {
         return osVirtualToPhysical(addr);
     }
 
     sp2C = D_800B3FC0[0];
-    dmaPtr = dmaState.firstUsed;
-    lastDmaPtr = NULL;
-    while (dmaPtr) {
-        buffEnd = dmaPtr->startAddr + dmaBufferLen;
+    dma_ptr = dmaState.firstUsed;
+    last_dma_ptr = NULL;
+    while (dma_ptr) {
+        buff_end = dma_ptr->startAddr + dmaBufferLen;
 
-        if (dmaPtr->startAddr > addr) {
+        if (dma_ptr->startAddr > addr) {
             break;
         }
 
-        if (buffEnd >= (addr + len)) {
-            dmaPtr->lastFrame = audFrameCt;
-            return osVirtualToPhysical(dmaPtr->ptr + addr - dmaPtr->startAddr);
+        if (buff_end >= (addr + len)) {
+            dma_ptr->lastFrame = audFrameCt;
+            return osVirtualToPhysical(dma_ptr->ptr + addr - dma_ptr->startAddr);
         }
 
-        lastDmaPtr = dmaPtr;
-        dmaPtr = dmaPtr->node.next;
+        last_dma_ptr = dma_ptr;
+        dma_ptr = dma_ptr->node.next;
     }
 
-    dmaPtr = dmaState.firstFree;
-    if (!dmaPtr) {
+    dma_ptr = dmaState.firstFree;
+    if (!dma_ptr) {
         return osVirtualToPhysical(dmaState.firstUsed);
     }
 
-    dmaState.firstFree = dmaPtr->node.next;
-    alUnlink(&dmaPtr->node);
+    dmaState.firstFree = dma_ptr->node.next;
+    alUnlink(&dma_ptr->node);
 
-    if (lastDmaPtr != NULL) {
-        alLink(&dmaPtr->node, &lastDmaPtr->node);
+    if (last_dma_ptr != NULL) {
+        alLink(&dma_ptr->node, &last_dma_ptr->node);
     } else if (dmaState.firstUsed) {
-        lastDmaPtr = dmaState.firstUsed;
+        last_dma_ptr = dmaState.firstUsed;
 
-        dmaState.firstUsed = dmaPtr;
-        dmaPtr->node.next = lastDmaPtr;
-        dmaPtr->node.prev = NULL;
+        dmaState.firstUsed = dma_ptr;
+        dma_ptr->node.next = last_dma_ptr;
+        dma_ptr->node.prev = NULL;
 
-        lastDmaPtr->node.prev = &dmaPtr->node;
+        last_dma_ptr->node.prev = &dma_ptr->node;
     } else {
-        dmaState.firstUsed = dmaPtr;
-        dmaPtr->node.next = NULL;
-        dmaPtr->node.prev = NULL;
+        dmaState.firstUsed = dma_ptr;
+        dma_ptr->node.next = NULL;
+        dma_ptr->node.prev = NULL;
     }
 
-    foundBuffer = dmaPtr->ptr;
+    found_buffer = dma_ptr->ptr;
     delta = addr & 1;
     addr -= delta;
-    dmaPtr->startAddr = addr;
-    dmaPtr->lastFrame = audFrameCt;
+    dma_ptr->startAddr = addr;
+    dma_ptr->lastFrame = audFrameCt;
 
-    ioMesg = audDMAIOMesgBuf + nextDMA++;
-    ioMesg->hdr.pri = OS_MESG_PRI_HIGH;
-    ioMesg->hdr.retQueue = &audDMAMessageQ;
-    ioMesg->devAddr = addr;
-    ioMesg->dramAddr = foundBuffer;
-    ioMesg->size = dmaBufferLen;
+    io_mesg = audDMAIOMesgBuf + nextDMA++;
+    io_mesg->hdr.pri = OS_MESG_PRI_HIGH;
+    io_mesg->hdr.retQueue = &audDMAMessageQ;
+    io_mesg->devAddr = addr;
+    io_mesg->dramAddr = found_buffer;
+    io_mesg->size = dmaBufferLen;
 
-    osInvalDCache(foundBuffer, dmaBufferLen);
-    osEPiStartDma(sp2C, ioMesg, OS_READ);
+    osInvalDCache(found_buffer, dmaBufferLen);
+    osEPiStartDma(sp2C, io_mesg, OS_READ);
 
-    return osVirtualToPhysical(foundBuffer) + delta;
+    return osVirtualToPhysical(found_buffer) + delta;
 }
 
 extern u8 D_80075E0C;
@@ -525,23 +525,23 @@ extern long long int D_8005E120[];
 extern long long int D_8007FCF0[];
 void func_8003BDB0(void);
 OSTask* func_8003B868(OSTask* arg0) {
-    s16* audioPtr;
+    s16* audio_ptr;
     Acmd* cmdp;
-    s32 cmdLen;
-    s32 samplesLeft;
+    s32 cmd_len;
+    s32 samples_left;
     OSTask sp38;
     s32 pad[2]; // FAKE: stack padding
     AudioInfo* info;
 
     info = __am.audioInfo[audFrameCt % 3];
-    audioPtr = osVirtualToPhysical(info->data);
-    samplesLeft = HW_REG(AI_LEN_REG, u32) >> 2;
+    audio_ptr = osVirtualToPhysical(info->data);
+    samples_left = HW_REG(AI_LEN_REG, u32) >> 2;
 
     if ((D_80075E0C == 0) && (lastInfo != NULL)) {
         osAiSetNextBuffer(lastInfo->data, lastInfo->frameSamples << 2);
     }
 
-    if ((samplesLeft >= 0x1C9) && (min_only_one != 0)) {
+    if ((samples_left >= 0x1C9) && (min_only_one != 0)) {
         info->frameSamples = minFrameSize;
         min_only_one = 0;
     } else {
@@ -555,7 +555,7 @@ OSTask* func_8003B868(OSTask* arg0) {
         D_800B3CEC = LeoTestUnitReady(&D_800B3CE8);
     }
 
-    cmdp = alAudioFrame(__am.ACMDList[curAcmdList], &cmdLen, audioPtr, info->frameSamples);
+    cmdp = alAudioFrame(__am.ACMDList[curAcmdList], &cmd_len, audio_ptr, info->frameSamples);
     sp38.t.data_ptr = __am.ACMDList[curAcmdList];
     sp38.t.data_size = (cmdp - __am.ACMDList[curAcmdList]) * sizeof(Acmd);
 

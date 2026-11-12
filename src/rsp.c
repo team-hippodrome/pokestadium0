@@ -51,23 +51,23 @@ s32 Storage_InitializeLeoManager(void) {
 }
 
 OSPiHandle* Storage_GetSramHandle(void) {
-    static OSPiHandle sramHandle;
+    static OSPiHandle sram_handle;
 
-    void* baseAddr = OS_PHYSICAL_TO_K1(SRAM_START_ADDR);
-    if (baseAddr != (void*)(uintptr_t)sramHandle.baseAddress) {
-        sramHandle.type = DEVICE_TYPE_SRAM;
-        sramHandle.baseAddress = (uintptr_t)baseAddr;
-        sramHandle.latency = SRAM_latency;
-        sramHandle.pulse = SRAM_pulse;
-        sramHandle.pageSize = SRAM_pageSize;
-        sramHandle.relDuration = SRAM_relDuration;
+    void* base_addr = OS_PHYSICAL_TO_K1(SRAM_START_ADDR);
+    if (base_addr != (void*)(uintptr_t)sram_handle.baseAddress) {
+        sram_handle.type = DEVICE_TYPE_SRAM;
+        sram_handle.baseAddress = (uintptr_t)base_addr;
+        sram_handle.latency = SRAM_latency;
+        sram_handle.pulse = SRAM_pulse;
+        sram_handle.pageSize = SRAM_pageSize;
+        sram_handle.relDuration = SRAM_relDuration;
 
-        sramHandle.domain = PI_DOMAIN2;
-        sramHandle.speed = 0;
-        bzero(&sramHandle.transferInfo, sizeof(sramHandle.transferInfo));
-        osEPiLinkHandle(&sramHandle);
+        sram_handle.domain = PI_DOMAIN2;
+        sram_handle.speed = 0;
+        bzero(&sram_handle.transferInfo, sizeof(sram_handle.transferInfo));
+        osEPiLinkHandle(&sram_handle);
     }
-    return &sramHandle;
+    return &sram_handle;
 }
 
 s32 Storage_ReadSram(struct UnkStruct800006C4_2* arg0) {

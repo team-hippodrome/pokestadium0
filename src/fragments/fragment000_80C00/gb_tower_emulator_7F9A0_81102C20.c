@@ -579,7 +579,7 @@ void GbEmu_DrawTextCommands(u16* fb, u8* cmd) {
     s32 x;
     s32 dir;
     s32 trans;
-    s32 tileSize;
+    s32 tile_size;
     s32 row;
     s32 col;
     s32 n;
@@ -600,14 +600,14 @@ void GbEmu_DrawTextCommands(u16* fb, u8* cmd) {
         switch (ptr[3]) {
             case 0xC:
                 width = 0xC;
-                tileSize = 0xC;
+                tile_size = 0xC;
                 data = D_8115659C;
                 break;
             case 0xA:
             default:
                 data = D_81156598;
                 width = 0xA;
-                tileSize = 0xA;
+                tile_size = 0xA;
                 break;
         }
 
@@ -654,8 +654,8 @@ void GbEmu_DrawTextCommands(u16* fb, u8* cmd) {
         n = ptr[5];
         while (n != 0) {
             n--;
-            src = data + ((ptr[6] * tileSize) * 0x10);
-            for (row = 0; row != tileSize; row++) {
+            src = data + ((ptr[6] * tile_size) * 0x10);
+            for (row = 0; row != tile_size; row++) {
                 for (col = 0; col != width; col++) {
                     if (trans || (pal[*src & 0xF] != 0)) {
                         *dst = pal[*src & 0xF];
@@ -667,7 +667,7 @@ void GbEmu_DrawTextCommands(u16* fb, u8* cmd) {
                 src = (src - width) + 0x10;
             }
             ptr++;
-            dst -= ((tileSize * 0x140) - width) - dir;
+            dst -= ((tile_size * 0x140) - width) - dir;
         }
 
         flags = ptr[6];

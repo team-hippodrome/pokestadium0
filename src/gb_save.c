@@ -446,20 +446,20 @@ void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 void func_8002A3F8(Img8002A3F8 *arg0, s32 x, s32 y) {
     s32 stride;
     s32 rows;
-    s32 maxRows;
+    s32 max_rows;
     u8 *pixels;
     s32 n;
     s32 curY;
 
     gSPDisplayList(gDisplayListHead++, D_80073408);
     stride = arg0->stride;
-    maxRows = 0x1000 / (stride * 2);
+    max_rows = 0x1000 / (stride * 2);
     rows = arg0->height;
     pixels = arg0->pixels;
     curY = y;
     while (rows > 0) {
-        if (maxRows < rows) {
-            n = maxRows;
+        if (max_rows < rows) {
+            n = max_rows;
         } else {
             n = rows;
         }

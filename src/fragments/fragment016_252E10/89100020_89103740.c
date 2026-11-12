@@ -369,7 +369,7 @@ void func_8910A764();
  */
 void LabPCList_ApplyVitaminItem(u8** arg0, u8** arg1, Msg89103F04* arg2) {
     BattleMon* mon;
-    u16 oldMaxHp;
+    u16 old_max_hp;
 
     arg2->unk04 = 0;
     mon = (BattleMon*)((u8*)arg0 + 8);
@@ -427,10 +427,10 @@ void LabPCList_ApplyVitaminItem(u8** arg0, u8** arg1, Msg89103F04* arg2) {
         case 0x28:
             arg2->text = D_8910DE34;
             arg2->oldValue = mon->level;
-            oldMaxHp = mon->maxHp;
+            old_max_hp = mon->maxHp;
             mon->unk_10 = func_8002057C(mon->species.id, mon->level + 1);
             func_800203FC(mon);
-            mon->hp += mon->maxHp - oldMaxHp;
+            mon->hp += mon->maxHp - old_max_hp;
             arg2->newValue = mon->level;
             break;
     }
@@ -458,7 +458,7 @@ void func_8910A764(s32, u8*, s32, Msg891041D8*);
 
 void func_891041D8(u8** arg0, s32 arg1, s32 arg2, Msg891041D8* arg3) {
     u8* ptr;
-    s32 basePp;
+    s32 base_pp;
     s32 step;
     s8* end;
 
@@ -469,15 +469,15 @@ void func_891041D8(u8** arg0, s32 arg1, s32 arg2, Msg891041D8* arg3) {
     if (1) {} // karodo
     arg3->text = D_8910E3B8;
     arg3->unk04 = 0;
-    basePp = gMoveData[ptr[9] - 1].pp;
-    step = basePp / 5;
+    base_pp = gMoveData[ptr[9] - 1].pp;
+    step = base_pp / 5;
     if (step >= 7) {
         step = 7;
     }
-    arg3->oldPp = (ptr[0x20] >> 6) * step + basePp;
+    arg3->oldPp = (ptr[0x20] >> 6) * step + base_pp;
     arg3->newPp = arg3->oldPp + step;
     ptr[0x20] += step + 0x40;
-    func_8910A764(arg1, ptr, basePp, arg3);
+    func_8910A764(arg1, ptr, base_pp, arg3);
     *(s32*)(arg0[0] + 0x10) = 1;
 }
 

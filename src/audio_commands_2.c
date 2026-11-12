@@ -112,7 +112,7 @@ void func_80043CE8(s32, f32, s32);
 void func_80042508(u32 arg0) {
     s32 other;
     u32 pct;
-    u32 otherPct;
+    u32 other_pct;
 
     if (arg0 < 2) {
         D_80077550++;
@@ -135,7 +135,7 @@ void func_80042508(u32 arg0) {
             }
             other = arg0 ^ 1;
             pct = (u32)(D_800FD698[arg0] * 100) / (u32)D_800FD6A8[arg0];
-            otherPct = (u32)(D_800FD698[other] * 100) / (u32)D_800FD6A8[other];
+            other_pct = (u32)(D_800FD698[other] * 100) / (u32)D_800FD6A8[other];
 
             if (D_800FD6B0[arg0] != 0) {
                 D_8007756C = 1;
@@ -211,7 +211,7 @@ void func_80042508(u32 arg0) {
                 func_80043CE8(0x36, 0.0f, 0x80);
                 return;
             }
-            if ((D_800FD698[arg0] != 0) && (otherPct < 21)) {
+            if ((D_800FD698[arg0] != 0) && (other_pct < 21)) {
                 if (D_800FD6B4[other] < 3) {
                     func_80043CE8(0x40, 0.0f, 0x80);
                     return;
@@ -813,14 +813,14 @@ s32 func_8004D300(s32);
  * osSetIntMask) and restored afterwards.
  */
 void func_80043CE8(s32 arg0, f32 arg1, s32 arg2) {
-    s32 prevMask;
+    s32 prev_mask;
     QueuedEntry80043CE8* entry;
     u32 level;
     u32 idx;
     u32 count;
 
     if ((D_80077528 == 0) && (D_80077538 != 0) && (D_8007753C == 0)) {
-        prevMask = func_8004D300(1);
+        prev_mask = func_8004D300(1);
         count = D_80077558;
         if (count < 2) {
             idx = D_8007758C;
@@ -836,7 +836,7 @@ void func_80043CE8(s32 arg0, f32 arg1, s32 arg2) {
             D_80077558 = count + 1;
             D_8007758C %= 10;
         }
-        func_8004D300(prevMask);
+        func_8004D300(prev_mask);
     }
 }
 

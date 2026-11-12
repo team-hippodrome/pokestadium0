@@ -157,7 +157,7 @@ void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 void func_880005E8(s32 x, s32 y, s32 w, s32 h, s32 stride, u8* pixels, s32 alpha) {
     s32 rows;
     s32 n;
-    s32 maxRows;
+    s32 max_rows;
     s32 curY;
     u8* pix;
 
@@ -168,10 +168,10 @@ void func_880005E8(s32 x, s32 y, s32 w, s32 h, s32 stride, u8* pixels, s32 alpha
     pix = pixels;
     curY = y;
     if (rows > 0) {
-        maxRows = 0x1000 / (stride * 2);
+        max_rows = 0x1000 / (stride * 2);
         do {
-            if (maxRows < rows) {
-                n = maxRows;
+            if (max_rows < rows) {
+                n = max_rows;
             } else {
                 n = rows;
             }
@@ -222,8 +222,8 @@ void func_8001ABBC(void);
 #define ICON(i) (((unk_88002034*)D_88002034)[i])
 
 void func_880007FC(s32 a0, s32 a1, s32 a2, s32 mode, s32 flags, f32* scale) {
-    Color_RGBA8 frameColor;
-    Color_RGBA8 textColor;
+    Color_RGBA8 frame_color;
+    Color_RGBA8 text_color;
     f32 fade;
     f32 value;
     s32 alpha;
@@ -241,27 +241,27 @@ void func_880007FC(s32 a0, s32 a1, s32 a2, s32 mode, s32 flags, f32* scale) {
     alpha = (s32)(fade * 255.0f);
     func_880005E8(D_8800210C[mode].x + ICON(mode).x, D_8800210C[mode].y + ICON(mode).y, ICON(mode).w, ICON(mode).h,
                   ICON(mode).stride, ICON(mode).pixels, alpha);
-    frameColor = D_88002010[mode];
-    frameColor.a = alpha;
+    frame_color = D_88002010[mode];
+    frame_color.a = alpha;
     if (D_8800219C[mode].h) {
         gSPDisplayList(gDisplayListHead++, D_80073480);
-        Ui_FillRectPrimColor(D_8800210C[mode].x + 6, D_8800210C[mode].y + 6, D_8800210C[mode].w - 12, 4, frameColor);
-        Ui_FillRectPrimColor(D_8800210C[mode].x + 6, D_8800210C[mode].y + 6, 4, D_8800219C[mode].y - 10, frameColor);
-        Ui_FillRectPrimColor(D_8800210C[mode].x + D_8800210C[mode].w - 10, D_8800210C[mode].y + 6, 4, D_8800219C[mode].y - 10, frameColor);
-        Ui_FillRectPrimColor(D_8800210C[mode].x + 6, D_8800210C[mode].y + D_8800219C[mode].y - 4, D_8800210C[mode].w - 12, 0x20, frameColor);
+        Ui_FillRectPrimColor(D_8800210C[mode].x + 6, D_8800210C[mode].y + 6, D_8800210C[mode].w - 12, 4, frame_color);
+        Ui_FillRectPrimColor(D_8800210C[mode].x + 6, D_8800210C[mode].y + 6, 4, D_8800219C[mode].y - 10, frame_color);
+        Ui_FillRectPrimColor(D_8800210C[mode].x + D_8800210C[mode].w - 10, D_8800210C[mode].y + 6, 4, D_8800219C[mode].y - 10, frame_color);
+        Ui_FillRectPrimColor(D_8800210C[mode].x + 6, D_8800210C[mode].y + D_8800219C[mode].y - 4, D_8800210C[mode].w - 12, 0x20, frame_color);
     } else {
         gSPDisplayList(gDisplayListHead++, D_80073480);
-        Ui_FillRectPrimColor(D_8800210C[mode].x + 6, D_8800210C[mode].y + 6, D_8800210C[mode].w - 12, 8, frameColor);
-        Ui_FillRectPrimColor(D_8800210C[mode].x + 6, D_8800210C[mode].y + D_8800210C[mode].h - 14, D_8800210C[mode].w - 12, 8, frameColor);
-        Ui_FillRectPrimColor(D_8800210C[mode].x + 6, D_8800210C[mode].y + 14, 9, D_8800210C[mode].h - 28, frameColor);
-        Ui_FillRectPrimColor(D_8800210C[mode].x + D_8800210C[mode].w - 15, D_8800210C[mode].y + 14, 9, D_8800210C[mode].h - 28, frameColor);
+        Ui_FillRectPrimColor(D_8800210C[mode].x + 6, D_8800210C[mode].y + 6, D_8800210C[mode].w - 12, 8, frame_color);
+        Ui_FillRectPrimColor(D_8800210C[mode].x + 6, D_8800210C[mode].y + D_8800210C[mode].h - 14, D_8800210C[mode].w - 12, 8, frame_color);
+        Ui_FillRectPrimColor(D_8800210C[mode].x + 6, D_8800210C[mode].y + 14, 9, D_8800210C[mode].h - 28, frame_color);
+        Ui_FillRectPrimColor(D_8800210C[mode].x + D_8800210C[mode].w - 15, D_8800210C[mode].y + 14, 9, D_8800210C[mode].h - 28, frame_color);
     }
     func_88000764(D_8800210C[mode].x, D_8800210C[mode].y, D_8800210C[mode].w, D_8800210C[mode].h, D_80073554, alpha);
     if (D_8800219C[mode].h) {
-        textColor = *(Color_RGBA8*)D_800734A8;
-        textColor.a = alpha;
+        text_color = *(Color_RGBA8*)D_800734A8;
+        text_color.a = alpha;
         func_8001AB6C();
-        func_8001AA9C(textColor.r, textColor.g, textColor.b, textColor.a);
+        func_8001AA9C(text_color.r, text_color.g, text_color.b, text_color.a);
         func_8001A384(0x10, D_8800219C[mode].w);
         func_8001A944(D_8800210C[mode].x + D_8800219C[mode].x, D_8800210C[mode].y + D_8800219C[mode].y, D_8800219C[mode].h);
         func_8001ABBC();

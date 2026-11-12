@@ -602,7 +602,7 @@ void GbApu_WriteRegister(u16 reg, u8 value) {
  * channels per NR51 panning and NR50 master volume.
  * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
-void GbApu_RenderBuffer(s32 numSamples, s16* out) {
+void GbApu_RenderBuffer(s32 num_samples, s16* out) {
     s32 i;
     u32 sq1R;
     u32 sq1L;
@@ -625,45 +625,45 @@ void GbApu_RenderBuffer(s32 numSamples, s16* out) {
     f32 pos;
     s32 flush;
     s32 first;
-    s32 startTime;
-    u32 lastTime;
+    s32 start_time;
+    u32 last_time;
     s32 pad[3]; // FAKE: stack padding
 
     first = TRUE;
     count = 0;
     idx = 0;
-    lastTime = 0;
+    last_time = 0;
     while (TRUE) {
         if (osRecvMesg(&D_811824C0, (OSMesg*)&msg, OS_MESG_NOBLOCK) == -1) {
             break;
         }
         if (first) {
-            startTime = msg.time;
+            start_time = msg.time;
             first = FALSE;
         }
-        if (msg.time < lastTime) {
-            if (startTime < D_81138AD8) {
+        if (msg.time < last_time) {
+            if (start_time < D_81138AD8) {
                 osJamMesg(&D_811824C0, *(OSMesg*)&msg, OS_MESG_NOBLOCK);
                 break;
             }
-            startTime = 0;
+            start_time = 0;
             D_81180848[count++] = msg;
-            lastTime = msg.time;
+            last_time = msg.time;
         } else {
             D_81180848[count++] = msg;
-            lastTime = msg.time;
+            last_time = msg.time;
         }
     }
 
     pos = 0.0f;
-    step = 17784.0f / (f32)numSamples;
-    if (numSamples < count) {
+    step = 17784.0f / (f32)num_samples;
+    if (num_samples < count) {
         flush = TRUE;
     } else {
         flush = FALSE;
     }
 
-    for (i = 0; i < numSamples; i++) {
+    for (i = 0; i < num_samples; i++) {
         pos += step;
         if (flush) {
             while (TRUE) {
@@ -879,7 +879,7 @@ u8 GbMem_ReadIoRegister(u16 arg0) {
  * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
 s32 GbAudio_UpdateFrame(void) {
-    u32 aiLen;
+    u32 ai_len;
     s32 n;
     s32 idx;
     s32 status;
@@ -887,7 +887,7 @@ s32 GbAudio_UpdateFrame(void) {
     s16* buf;
     s32 pad[2]; // FAKE: stack padding
     s16* len;
-    s16** bufPtr;
+    s16** buf_ptr;
 
     D_811858F0++;
     osSendMesg(D_812896A0_jp, (OSMesg)D_811858F0, OS_MESG_NOBLOCK);
@@ -895,16 +895,16 @@ s32 GbAudio_UpdateFrame(void) {
     D_811858FC++;
     D_811858FC %= 3;
     idx = (D_811858FC + 2) % 3;
-    aiLen = osAiGetLength() >> 2;
+    ai_len = osAiGetLength() >> 2;
 
     if (D_811859D4 < 16) {
         len = &D_811859C4[idx];
         if (*len != 0) {
-            bufPtr = &D_811859B8[idx];
-            if (osGbSetNextBuffer(*bufPtr, *len * 4) == -1) {
+            buf_ptr = &D_811859B8[idx];
+            if (osGbSetNextBuffer(*buf_ptr, *len * 4) == -1) {
                 status = 0;
             } else {
-                queued = *bufPtr;
+                queued = *buf_ptr;
                 n = *len;
                 D_81180700 = queued[n * 2 - 2];
                 D_81180702 = queued[n * 2 - 1];
@@ -912,7 +912,7 @@ s32 GbAudio_UpdateFrame(void) {
             }
             // Discarded reads; they only steer IDO's register allocation.
             if (status) {}  // karodo
-            if (bufPtr) {}  // karodo
+            if (buf_ptr) {}  // karodo
         }
     }
 
@@ -924,10 +924,10 @@ s32 GbAudio_UpdateFrame(void) {
     }
 
     idx = D_811858FC;
-    bufPtr = &D_811859B8[idx];
+    buf_ptr = &D_811859B8[idx];
     len = &D_811859C4[idx];
-    buf = *bufPtr;
-    *len = ((D_811858B8.unk_06 - aiLen + 0x80) & 0xFFF0) + 0x10;
+    buf = *buf_ptr;
+    *len = ((D_811858B8.unk_06 - ai_len + 0x80) & 0xFFF0) + 0x10;
     if (*len < D_811858B8.unk_0A) {
         *len = D_811858B8.unk_0A;
     }

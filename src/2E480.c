@@ -398,7 +398,7 @@ s32 func_8002E70C(Menu8002E230* menu) {
     s32 button;
     s32 prev = menu->cursor;
     s32 found = 0;
-    s32 rowStart;
+    s32 row_start;
     s32 i;
     s32 end;
 
@@ -413,8 +413,8 @@ s32 func_8002E70C(Menu8002E230* menu) {
                 if (menu->cursor < 0) {
                     menu->cursor += ((menu->def->itemCount - 1) / menu->columns + 1) * menu->columns;
                 }
-                rowStart = menu->cursor - menu->cursor % menu->columns;
-                for (i = menu->cursor; i >= rowStart; i--) {
+                row_start = menu->cursor - menu->cursor % menu->columns;
+                for (i = menu->cursor; i >= row_start; i--) {
                     if (i <= menu->def->itemCount - 1 && !(menu->flags[i] & 1)) {
                         menu->cursor = i;
                         found = 1;
@@ -422,7 +422,7 @@ s32 func_8002E70C(Menu8002E230* menu) {
                     }
                 }
                 if (!found) {
-                    end = menu->columns + rowStart - 1;
+                    end = menu->columns + row_start - 1;
                     if (end >= menu->def->itemCount - 1) {
                         end = menu->def->itemCount - 1;
                     }
@@ -442,8 +442,8 @@ s32 func_8002E70C(Menu8002E230* menu) {
                 if ((menu->def->itemCount - 1) / menu->columns < menu->cursor / menu->columns) {
                     menu->cursor %= menu->columns;
                 }
-                rowStart = menu->cursor - menu->cursor % menu->columns;
-                for (i = menu->cursor; i >= rowStart; i--) {
+                row_start = menu->cursor - menu->cursor % menu->columns;
+                for (i = menu->cursor; i >= row_start; i--) {
                     if (i <= menu->def->itemCount - 1 && !(menu->flags[i] & 1)) {
                         menu->cursor = i;
                         found = 1;
@@ -451,7 +451,7 @@ s32 func_8002E70C(Menu8002E230* menu) {
                     }
                 }
                 if (!found) {
-                    end = menu->columns + rowStart - 1;
+                    end = menu->columns + row_start - 1;
                     if (end >= menu->def->itemCount - 1) {
                         end = menu->def->itemCount - 1;
                     }
@@ -839,7 +839,7 @@ typedef struct ScrollList8002FD8C {
 } ScrollList8002FD8C;
 
 u16 func_8002FD8C(ScrollList8002FD8C* menu) {
-    s32 prevTop;
+    s32 prev_top;
     s32 prev;
     s32 room;
     s32 total;
@@ -849,7 +849,7 @@ u16 func_8002FD8C(ScrollList8002FD8C* menu) {
     s32 end;
 
     prev = menu->cursor;
-    prevTop = menu->top;
+    prev_top = menu->top;
     if (menu->def->itemCount == 0) {
         return 0;
     }
@@ -905,7 +905,7 @@ u16 func_8002FD8C(ScrollList8002FD8C* menu) {
         if (menu->scroll < menu->top) {
             menu->top -= (page < menu->top) ? page : menu->top;
         }
-        if (prevTop != menu->top) {
+        if (prev_top != menu->top) {
             func_8003F6AC(1);
         }
     } else if ((menu->buttons & 0x100) && !(menu->flags & ~0x100)) {
@@ -927,7 +927,7 @@ u16 func_8002FD8C(ScrollList8002FD8C* menu) {
             room = total - page - menu->top;
             menu->top += (page < room) ? page : room;
         }
-        if (prevTop != menu->top) {
+        if (prev_top != menu->top) {
             func_8003F6AC(1);
         }
     }
@@ -935,7 +935,7 @@ u16 func_8002FD8C(ScrollList8002FD8C* menu) {
 }
 
 u16 func_80030230(ScrollList8002FD8C* menu) {
-    s32 prevTop;
+    s32 prev_top;
     s32 prev;
     s32 room;
     s32 total;
@@ -945,7 +945,7 @@ u16 func_80030230(ScrollList8002FD8C* menu) {
     s32 end;
 
     prev = menu->cursor;
-    prevTop = menu->top;
+    prev_top = menu->top;
     if (menu->def->itemCount == 0) {
         return 0;
     }
@@ -1001,7 +1001,7 @@ u16 func_80030230(ScrollList8002FD8C* menu) {
         if (menu->scroll < menu->top) {
             menu->top -= (page < menu->top) ? page : menu->top;
         }
-        if (prevTop != menu->top) {
+        if (prev_top != menu->top) {
             func_8003F6AC(1);
         }
     } else if ((menu->buttons & 0x100) && !(menu->flags & ~0x100)) {
@@ -1023,7 +1023,7 @@ u16 func_80030230(ScrollList8002FD8C* menu) {
             room = total - page - menu->top;
             menu->top += (page < room) ? page : room;
         }
-        if (prevTop != menu->top) {
+        if (prev_top != menu->top) {
             func_8003F6AC(1);
         }
     }
@@ -1306,12 +1306,12 @@ void func_800310D8(GridMenu800310D8* menu, s32 x, s32 y, s32 mask, s32 arg4) {
 }
 
 s32 func_80031464(GridMenu80031004* menu) {
-    s32 pageCount = (M2C_FIELD(menu, MenuDef8002E230**, 0x0)->itemCount + menu->columns - 1) / menu->columns;
+    s32 page_count = (M2C_FIELD(menu, MenuDef8002E230**, 0x0)->itemCount + menu->columns - 1) / menu->columns;
     s32 page = menu->scrollTarget / menu->cellHeight;
-    s32 nextPage = page + 1;
+    s32 next_page = page + 1;
     s32 remainder = M2C_FIELD(menu, MenuDef8002E230**, 0x0)->itemCount % menu->columns;
 
-    return ((pageCount == nextPage) && (remainder != 0)) ? remainder : menu->columns;
+    return ((page_count == next_page) && (remainder != 0)) ? remainder : menu->columns;
 }
 
 typedef struct GridMenu8003152C {

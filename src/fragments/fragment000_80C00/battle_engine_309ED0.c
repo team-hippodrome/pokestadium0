@@ -75,16 +75,16 @@ struct Entry8110EABC* func_8110E9A8(s32, s32, u32, s32, s32, OSMesgQueue*, u32);
  * is started. The table's load status is updated either way. Same structure as
  * AudioLoad_AsyncLoadInner in the Ocarina of Time audio library.
  */
-s32 func_8110DCC0(s32 tableType, s32 id, s32 nChunks, s32 retData, OSMesgQueue* retQueue) {
+s32 func_8110DCC0(s32 table_type, s32 id, s32 n_chunks, s32 ret_data, OSMesgQueue* ret_queue) {
     u32 size;
     AudioTable8110DCC0* table;
-    s32 ramAddr;
+    s32 ram_addr;
     s32 medium;
     s8 cachePolicy;
-    u32 devAddr;
-    s32 loadStatus;
+    u32 dev_addr;
+    s32 load_status;
 
-    switch (tableType) {
+    switch (table_type) {
         case 0:
             if (D_81184656[id] == 1) {
                 return 0;
@@ -102,65 +102,65 @@ s32 func_8110DCC0(s32 tableType, s32 id, s32 nChunks, s32 retData, OSMesgQueue* 
             break;
     }
 
-    ramAddr = func_8110D7EC(tableType, id);
-    if (ramAddr != 0) {
-        loadStatus = 2;
-        func_8004CFB0(retQueue, (OSMesg)(retData << 0x18), 0);
+    ram_addr = func_8110D7EC(table_type, id);
+    if (ram_addr != 0) {
+        load_status = 2;
+        func_8004CFB0(ret_queue, (OSMesg)(ret_data << 0x18), 0);
     } else {
-        table = (AudioTable8110DCC0*)func_8110D840(tableType);
+        table = (AudioTable8110DCC0*)func_8110D840(table_type);
         size = table->entries[id].size;
         size = ALIGN16(size);
         medium = table->entries[id].medium;
         cachePolicy = table->entries[id].cachePolicy;
-        devAddr = table->entries[id].romAddr;
-        loadStatus = 2;
+        dev_addr = table->entries[id].romAddr;
+        load_status = 2;
 
         switch (cachePolicy) {
             case 0:
-                ramAddr = func_8110B8D8(tableType, id, size);
-                if (ramAddr == 0) {
-                    return ramAddr;
+                ram_addr = func_8110B8D8(table_type, id, size);
+                if (ram_addr == 0) {
+                    return ram_addr;
                 }
-                loadStatus = 5;
+                load_status = 5;
                 break;
             case 1:
-                ramAddr = func_81109C0C(tableType, size, 1, id);
-                if (ramAddr == 0) {
-                    return ramAddr;
+                ram_addr = func_81109C0C(table_type, size, 1, id);
+                if (ram_addr == 0) {
+                    return ram_addr;
                 }
                 break;
             case 2:
-                ramAddr = func_81109C0C(tableType, size, 0, id);
-                if (ramAddr == 0) {
-                    return ramAddr;
+                ram_addr = func_81109C0C(table_type, size, 0, id);
+                if (ram_addr == 0) {
+                    return ram_addr;
                 }
                 break;
             case 3:
             case 4:
-                ramAddr = func_81109C0C(tableType, size, 2, id);
-                if (ramAddr == 0) {
-                    return ramAddr;
+                ram_addr = func_81109C0C(table_type, size, 2, id);
+                if (ram_addr == 0) {
+                    return ram_addr;
                 }
                 break;
         }
 
-        func_8110E9A8(devAddr, ramAddr, size, medium, nChunks, retQueue, (retData << 0x18) | (tableType << 0x10) | (id << 8) | loadStatus);
-        loadStatus = 1;
+        func_8110E9A8(dev_addr, ram_addr, size, medium, n_chunks, ret_queue, (ret_data << 0x18) | (table_type << 0x10) | (id << 8) | load_status);
+        load_status = 1;
     }
 
-    switch (tableType) {
+    switch (table_type) {
         case 0:
-            func_8110CB10(id, loadStatus);
+            func_8110CB10(id, load_status);
             break;
         case 1:
-            func_8110CAE0(id, loadStatus);
+            func_8110CAE0(id, load_status);
             break;
         case 2:
-            func_8110CB40(id, loadStatus);
+            func_8110CB40(id, load_status);
             break;
     }
 
-    return ramAddr;
+    return ram_addr;
 }
 
 s32 BattleScene_EndStatusAnimationsAndCommit(ActivePokemon* arg0) {
@@ -235,8 +235,8 @@ void func_8110CB70(AudioTable8110DCC0*, u8*, s32);
  * Ocarina of Time audio library.
  */
 void func_8110DF80(void) {
-    s32 numFonts;
-    void* ramAddr;
+    s32 num_fonts;
+    void* ram_addr;
     s32 i;
     s32 j;
     u64* ptr;
@@ -299,20 +299,20 @@ void func_8110DF80(void) {
     func_8110CB70(D_811858A0, D_0015A9B0, 0);
     func_8110CB70((AudioTable8110DCC0*)D_811858A4, D_0015AA60, 0);
 
-    numFonts = D_811858A0->numEntries;
-    D_811858B0 = func_81109868(D_811842B0, numFonts * sizeof(Entry811858B0));
-    for (i = 0; i < numFonts; i++) {
+    num_fonts = D_811858A0->numEntries;
+    D_811858B0 = func_81109868(D_811842B0, num_fonts * sizeof(Entry811858B0));
+    for (i = 0; i < num_fonts; i++) {
         D_811858B0[i].unk_02 = D_811858A0->entries[i].shortData1 >> 8 & 0xFF;
         D_811858B0[i].unk_03 = D_811858A0->entries[i].shortData1 & 0xFF;
         D_811858B0[i].unk_00[0] = D_811858A0->entries[i].shortData2 >> 8 & 0xFF;
         D_811858B0[i].unk_00[1] = D_811858A0->entries[i].shortData2 & 0xFF;
     }
 
-    ramAddr = func_81109868(D_811842B0, D_81152704);
-    if (ramAddr == NULL) {
+    ram_addr = func_81109868(D_811842B0, D_81152704);
+    if (ram_addr == NULL) {
         D_81152704 = 0;
     }
-    func_811098C0(&D_81184440, ramAddr, D_81152704);
+    func_811098C0(&D_81184440, ram_addr, D_81152704);
 }
 
 typedef struct SampleHeader8110E500 {
@@ -462,7 +462,7 @@ void func_8110E994(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3);
  * loads, copying at most 0x1000 bytes per call and finishing a load once nothing
  * is left.
  */
-void func_8110E784(s32 resetStatus) {
+void func_8110E784(s32 reset_status) {
     u8* table = D_811858A4;
     SampleLoad8110E500* load;
     s32 i;
@@ -472,7 +472,7 @@ void func_8110E784(s32 resetStatus) {
         switch (D_81180610.slots[i].state) {
             case 2:
                 func_8004D1C0((OSMesgQueue*)load->unk_2C, NULL, 1);
-                if (resetStatus != 0) {
+                if (reset_status != 0) {
                     load->state = 3;
                     break;
                 }
@@ -545,7 +545,7 @@ void func_800567E0(OSMesgQueue*, OSMesg*, s32);
  * is split into nChunks pieces rounded up to 0x100 (at least 0x100). retMsg is
  * sent to retQueue when the load finishes. Returns NULL when no slot is free.
  */
-Entry8110EABC* func_8110E9A8(s32 devAddr, s32 ramAddr, u32 size, s32 medium, s32 nChunks, OSMesgQueue* retQueue, u32 retMsg) {
+Entry8110EABC* func_8110E9A8(s32 dev_addr, s32 ramAddr, u32 size, s32 medium, s32 n_chunks, OSMesgQueue* ret_queue, u32 ret_msg) {
     Entry8110EABC* load;
     s32 i;
 
@@ -561,24 +561,24 @@ Entry8110EABC* func_8110E9A8(s32 devAddr, s32 ramAddr, u32 size, s32 medium, s32
     }
 
     load->active = 1;
-    load->romAddr = devAddr;
+    load->romAddr = dev_addr;
     load->ramAddr = ramAddr;
     load->curAddr = ramAddr;
     load->size = size;
 
-    if (nChunks == 0) {
+    if (n_chunks == 0) {
         load->chunkSize = 0x1000;
     } else {
-        load->chunkSize = ((s32)size / nChunks + 0xFF) & ~0xFF;
+        load->chunkSize = ((s32)size / n_chunks + 0xFF) & ~0xFF;
         if (load->chunkSize < 0x100) {
             load->chunkSize = 0x100;
         }
     }
 
-    load->doneQueue = retQueue;
+    load->doneQueue = ret_queue;
     load->state = 3;
     load->medium = medium;
-    load->info = (OSMesg)retMsg;
+    load->info = (OSMesg)ret_msg;
     func_800567E0(&load->queue, &load->msg, 1);
     return load;
 }
@@ -612,14 +612,14 @@ void func_8110ED98(s8* arg0, u32 arg1);
 void func_8110EE28(s32 arg0, M2C_UNK arg1, u32 arg2, M2C_UNK arg3);
 void func_8110EF7C(s32 size, s32 fontData, RelocInfo8110EF7C* relocInfo, s32 async);
 
-void func_8110EB40(Entry8110EABC* load, s32 resetStatus) {
+void func_8110EB40(Entry8110EABC* load, s32 reset_status) {
     u8* table = D_811858A4;
     u32 info;
-    s32 fontId;
+    s32 font_id;
     UNUSED s32 pad[2]; // FAKE
     u32 sampleBankId1;
     u32 sampleBankId2;
-    RelocInfo8110EF7C relocInfo;
+    RelocInfo8110EF7C reloc_info;
 
     if (load->state >= 2) {
         load->state--;
@@ -627,7 +627,7 @@ void func_8110EB40(Entry8110EABC* load, s32 resetStatus) {
     }
     if (load->state == 1) {
         load->state = 0;
-    } else if (resetStatus != 0) {
+    } else if (reset_status != 0) {
         func_8004D1C0(&load->queue, 0, 1);
         load->active = 0;
         return;
@@ -644,15 +644,15 @@ void func_8110EB40(Entry8110EABC* load, s32 resetStatus) {
                 func_8110CB40((u8)(info >> 8), (u8)info);
                 break;
             case 1:
-                fontId = (u8)(info >> 8);
-                func_8110CAE0(fontId, (u8)info);
-                sampleBankId1 = D_811858B0[fontId].unk_02;
-                sampleBankId2 = D_811858B0[fontId].unk_03;
-                relocInfo.sampleBankId1 = sampleBankId1;
-                relocInfo.sampleBankId2 = sampleBankId2;
-                relocInfo.baseAddr1 = (sampleBankId1 != 0xFF) ? func_8110D408(sampleBankId1, &relocInfo.medium1) : 0;
-                relocInfo.baseAddr2 = (sampleBankId2 != 0xFF) ? func_8110D408(sampleBankId2, &relocInfo.medium2) : 0;
-                func_8110EF7C(fontId, load->ramAddr, &relocInfo, 1);
+                font_id = (u8)(info >> 8);
+                func_8110CAE0(font_id, (u8)info);
+                sampleBankId1 = D_811858B0[font_id].unk_02;
+                sampleBankId2 = D_811858B0[font_id].unk_03;
+                reloc_info.sampleBankId1 = sampleBankId1;
+                reloc_info.sampleBankId2 = sampleBankId2;
+                reloc_info.baseAddr1 = (sampleBankId1 != 0xFF) ? func_8110D408(sampleBankId1, &reloc_info.medium1) : 0;
+                reloc_info.baseAddr2 = (sampleBankId2 != 0xFF) ? func_8110D408(sampleBankId2, &reloc_info.medium2) : 0;
+                func_8110EF7C(font_id, load->ramAddr, &reloc_info, 1);
                 break;
         }
         load->active = 0;
@@ -724,31 +724,31 @@ typedef struct Sample8110EE3C {
  * for preloading that are not in RAM are added to D_81184978. Same structure as
  * AudioLoad_RelocateSample in the Ocarina of Time audio library.
  */
-void func_8110EE3C(Sample8110EE3C** sampleP, s32 fontDataAddr, RelocInfo8110EF7C* relocInfo) {
+void func_8110EE3C(Sample8110EE3C** sampleP, s32 font_data_addr, RelocInfo8110EF7C* reloc_info) {
     Sample8110EE3C* sample;
     s32 reloc;
 
     if ((u32)*sampleP <= 0x80000000) {
-        reloc = (u32)*sampleP + fontDataAddr;
+        reloc = (u32)*sampleP + font_data_addr;
         *sampleP = (Sample8110EE3C*)reloc;
         sample = (Sample8110EE3C*)reloc;
 
         if ((sample->size != 0) && (sample->isRelocated != 1)) {
-            reloc = sample->loop + fontDataAddr;
+            reloc = sample->loop + font_data_addr;
             sample->loop = reloc;
-            reloc = sample->book + fontDataAddr;
+            reloc = sample->book + font_data_addr;
             sample->book = reloc;
 
             switch (sample->medium) {
                 case 0:
-                    reloc = sample->sampleAddr + relocInfo->baseAddr1;
+                    reloc = sample->sampleAddr + reloc_info->baseAddr1;
                     sample->sampleAddr = reloc;
-                    sample->medium = relocInfo->medium1;
+                    sample->medium = reloc_info->medium1;
                     break;
                 case 1:
-                    reloc = sample->sampleAddr + relocInfo->baseAddr2;
+                    reloc = sample->sampleAddr + reloc_info->baseAddr2;
                     sample->sampleAddr = reloc;
-                    sample->medium = relocInfo->medium2;
+                    sample->medium = reloc_info->medium2;
                     break;
                 case 2:
                 case 3:
@@ -792,24 +792,24 @@ void func_8110DA68(s32, s32, u32, s32);
 s32 func_8110B9A8(s32, s32, s32, s8);
 
 
-void func_8110EF7C(s32 fontId, s32 fontData, RelocInfo8110EF7C* relocInfo, s32 async) {
+void func_8110EF7C(s32 font_id, s32 font_data, RelocInfo8110EF7C* reloc_info, s32 async) {
     UNUSED s32 pad[2]; // FAKE: stack padding
-    s32 sampleRamAddr;
+    s32 sample_ram_addr;
     Sample8110EF7C* sample;
     s32 size;
-    s32 nChunks;
-    s32 preloadInProgress;
+    s32 n_chunks;
+    s32 preload_in_progress;
     s32 i;
 
-    preloadInProgress = 0;
+    preload_in_progress = 0;
     if (D_8118557C != 0) {
-        preloadInProgress = 1;
+        preload_in_progress = 1;
     } else {
         D_811806D8 = 0;
     }
 
     D_81185578 = 0;
-    func_8110D884(fontId, fontData, relocInfo);
+    func_8110D884(font_id, font_data, reloc_info);
 
     size = 0;
     for (i = 0; i < D_81185578; i++) {
@@ -824,43 +824,43 @@ void func_8110EF7C(s32 fontId, s32 fontData, RelocInfo8110EF7C* relocInfo, s32 a
         sample = (Sample8110EF7C*)D_81184978[i];
         switch (async) {
             case 0:
-                if (sample->medium == relocInfo->medium1) {
+                if (sample->medium == reloc_info->medium1) {
                     // Assigning size here keeps it live, which the ROM's register allocation needs.
-                    sampleRamAddr = func_8110B9A8(size = sample->size, relocInfo->sampleBankId1, sample->sampleAddr, sample->medium);
-                } else if (sample->medium == relocInfo->medium2) {
-                    sampleRamAddr = func_8110B9A8(sample->size, relocInfo->sampleBankId2, sample->sampleAddr, sample->medium);
+                    sample_ram_addr = func_8110B9A8(size = sample->size, reloc_info->sampleBankId1, sample->sampleAddr, sample->medium);
+                } else if (sample->medium == reloc_info->medium2) {
+                    sample_ram_addr = func_8110B9A8(sample->size, reloc_info->sampleBankId2, sample->sampleAddr, sample->medium);
                 }
                 break;
 
             case 1:
-                if (sample->medium == relocInfo->medium1) {
-                    sampleRamAddr = func_8110B958(sample->size, relocInfo->sampleBankId1, sample->sampleAddr, sample->medium);
-                } else if (sample->medium == relocInfo->medium2) {
-                    sampleRamAddr = func_8110B958(sample->size, relocInfo->sampleBankId2, sample->sampleAddr, sample->medium);
+                if (sample->medium == reloc_info->medium1) {
+                    sample_ram_addr = func_8110B958(sample->size, reloc_info->sampleBankId1, sample->sampleAddr, sample->medium);
+                } else if (sample->medium == reloc_info->medium2) {
+                    sample_ram_addr = func_8110B958(sample->size, reloc_info->sampleBankId2, sample->sampleAddr, sample->medium);
                 }
                 break;
         }
 
-        if (sampleRamAddr == 0) {
+        if (sample_ram_addr == 0) {
             continue;
         }
 
         switch (async) {
             case 0:
                 if (sample->medium == 1) {
-                    func_8110DB8C(sample->sampleAddr, sampleRamAddr, sample->size, *(s16*)(D_811858A4 + 2));
-                    sample->sampleAddr = sampleRamAddr;
+                    func_8110DB8C(sample->sampleAddr, sample_ram_addr, sample->size, *(s16*)(D_811858A4 + 2));
+                    sample->sampleAddr = sample_ram_addr;
                     sample->medium = 0;
                 } else {
-                    func_8110DA68(sample->sampleAddr, sampleRamAddr, sample->size, sample->medium);
-                    sample->sampleAddr = sampleRamAddr;
+                    func_8110DA68(sample->sampleAddr, sample_ram_addr, sample->size, sample->medium);
+                    sample->sampleAddr = sample_ram_addr;
                     sample->medium = 0;
                 }
                 break;
 
             case 1:
                 D_81184B78[D_8118557C].sample = sample;
-                D_81184B78[D_8118557C].ramAddr = sampleRamAddr;
+                D_81184B78[D_8118557C].ramAddr = sample_ram_addr;
                 D_81184B78[D_8118557C].encodedInfo = (D_8118557C << 24) | 0xFFFFFF;
                 D_81184B78[D_8118557C].isFree = 0;
                 D_81184B78[D_8118557C].endAndMediumKey = sample->sampleAddr + sample->size + sample->medium;
@@ -870,10 +870,10 @@ void func_8110EF7C(s32 fontId, s32 fontData, RelocInfo8110EF7C* relocInfo, s32 a
     }
     D_81185578 = 0;
 
-    if ((D_8118557C != 0) && !preloadInProgress) {
+    if ((D_8118557C != 0) && !preload_in_progress) {
         sample = D_81184B78[D_8118557C - 1].sample;
-        nChunks = (sample->size >> 12) + 1;
-        func_8110E9A8(sample->sampleAddr, D_81184B78[D_8118557C - 1].ramAddr, sample->size, sample->medium, nChunks, &D_811855F8, D_81184B78[D_8118557C - 1].encodedInfo);
+        n_chunks = (sample->size >> 12) + 1;
+        func_8110E9A8(sample->sampleAddr, D_81184B78[D_8118557C - 1].ramAddr, sample->size, sample->medium, n_chunks, &D_811855F8, D_81184B78[D_8118557C - 1].encodedInfo);
     }
 }
 
@@ -886,30 +886,30 @@ s32 func_8004D1C0(OSMesgQueue*, u32*, s32);
  */
 s32 func_8110F310(s32 arg0) {
     Sample8110EF7C* sample;
-    u32 preloadIndex;
+    u32 preload_index;
     u32 key;
-    u32 nChunks;
+    u32 n_chunks;
     s32 pad; // FAKE: stack padding
 
     if (D_8118557C > 0) {
         if (arg0 != 0) {
-            func_8004D1C0(&D_811855F8, &preloadIndex, 0);
+            func_8004D1C0(&D_811855F8, &preload_index, 0);
             D_8118557C = 0;
             return 0;
         }
-        if (func_8004D1C0(&D_811855F8, &preloadIndex, 0) == -1) {
+        if (func_8004D1C0(&D_811855F8, &preload_index, 0) == -1) {
             return 0;
         }
 
-        preloadIndex >>= 24;
-        if (D_81184B78[preloadIndex].isFree == 0) {
-            sample = D_81184B78[preloadIndex].sample;
+        preload_index >>= 24;
+        if (D_81184B78[preload_index].isFree == 0) {
+            sample = D_81184B78[preload_index].sample;
             key = sample->sampleAddr + sample->size + sample->medium;
-            if (key == D_81184B78[preloadIndex].endAndMediumKey) {
-                sample->sampleAddr = D_81184B78[preloadIndex].ramAddr;
+            if (key == D_81184B78[preload_index].endAndMediumKey) {
+                sample->sampleAddr = D_81184B78[preload_index].ramAddr;
                 sample->medium = 0;
             }
-            D_81184B78[preloadIndex].isFree = 1;
+            D_81184B78[preload_index].isFree = 1;
         }
 
         for (;;) {
@@ -922,13 +922,13 @@ s32 func_8110F310(s32 arg0) {
             }
 
             sample = D_81184B78[D_8118557C - 1].sample;
-            nChunks = (sample->size >> 12) + 1;
+            n_chunks = (sample->size >> 12) + 1;
             key = sample->sampleAddr + sample->size + sample->medium;
             if (key != D_81184B78[D_8118557C - 1].endAndMediumKey) {
                 D_81184B78[D_8118557C - 1].isFree = 1;
                 D_8118557C--;
             } else {
-                func_8110E9A8(sample->sampleAddr, D_81184B78[D_8118557C - 1].ramAddr, sample->size, sample->medium, nChunks, &D_811855F8, D_81184B78[D_8118557C - 1].encodedInfo);
+                func_8110E9A8(sample->sampleAddr, D_81184B78[D_8118557C - 1].ramAddr, sample->size, sample->medium, n_chunks, &D_811855F8, D_81184B78[D_8118557C - 1].encodedInfo);
                 break;
             }
         }
@@ -1027,33 +1027,33 @@ void func_8110F64C(PackedWordRec **arg0) {
  * used by a font's instruments and drums, then copies them into the sample
  * cache (async == 0) or queues them on the preload stack (async == 1).
  */
-void func_8110F6A4(s32 fontId, s32 async, RelocInfo8110EF7C* relocInfo) {
-    s32 numDrums;
-    s32 numInstruments;
+void func_8110F6A4(s32 font_id, s32 async, RelocInfo8110EF7C* reloc_info) {
+    s32 num_drums;
+    s32 num_instruments;
     s32 pad[2]; // FAKE
     u8* instrument;
     u8* drum;
-    s32 sampleRamAddr;
+    s32 sample_ram_addr;
     Sample8110EF7C* sample;
     s32 size;
-    s32 nChunks;
-    s32 preloadInProgress;
+    s32 n_chunks;
+    s32 preload_in_progress;
     s32 i;
 
-    preloadInProgress = 0;
+    preload_in_progress = 0;
     if (D_8118557C != 0) {
-        preloadInProgress = 1;
+        preload_in_progress = 1;
     }
     D_81185578 = 0;
-    numInstruments = D_811858B0[fontId].unk_00[0];
-    numDrums = D_811858B0[fontId].unk_00[1];
+    num_instruments = D_811858B0[font_id].unk_00[0];
+    num_drums = D_811858B0[font_id].unk_00[1];
 
-    for (i = 0; i < numInstruments; i++) {
-        instrument = (u8*)func_81110CA8(fontId, i);
+    for (i = 0; i < num_instruments; i++) {
+        instrument = (u8*)func_81110CA8(font_id, i);
         if (instrument != NULL) {
             if (instrument[1] != 0) {
                 func_8110F64C((PackedWordRec**)(instrument + 8));
-                if (!relocInfo->medium2) {} // FAKE
+                if (!reloc_info->medium2) {} // FAKE
             }
             if (instrument[2] != 0x7F) {
                 func_8110F64C((PackedWordRec**)(instrument + 0x18));
@@ -1062,8 +1062,8 @@ void func_8110F6A4(s32 fontId, s32 async, RelocInfo8110EF7C* relocInfo) {
         }
     }
 
-    for (i = 0; i < numDrums; i++) {
-        drum = (u8*)func_81110D6C(fontId, i);
+    for (i = 0; i < num_drums; i++) {
+        drum = (u8*)func_81110D6C(font_id, i);
         if (drum != NULL) {
             func_8110F64C((PackedWordRec**)(drum + 4));
         }
@@ -1087,42 +1087,42 @@ void func_8110F6A4(s32 fontId, s32 async, RelocInfo8110EF7C* relocInfo) {
         sample = (Sample8110EF7C*)D_81184978[i];
         switch (async) {
             case 0:
-                if (sample->medium == relocInfo->medium1) {
-                    sampleRamAddr = func_8110B9A8(sample->size, relocInfo->sampleBankId1, sample->sampleAddr, sample->medium);
-                } else if (sample->medium == relocInfo->medium2) {
-                    sampleRamAddr = func_8110B9A8(sample->size, relocInfo->sampleBankId2, sample->sampleAddr, sample->medium);
+                if (sample->medium == reloc_info->medium1) {
+                    sample_ram_addr = func_8110B9A8(sample->size, reloc_info->sampleBankId1, sample->sampleAddr, sample->medium);
+                } else if (sample->medium == reloc_info->medium2) {
+                    sample_ram_addr = func_8110B9A8(sample->size, reloc_info->sampleBankId2, sample->sampleAddr, sample->medium);
                 }
                 break;
 
             case 1:
-                if (sample->medium == relocInfo->medium1) {
-                    sampleRamAddr = func_8110B958(sample->size, relocInfo->sampleBankId1, sample->sampleAddr, sample->medium);
-                } else if (sample->medium == relocInfo->medium2) {
-                    sampleRamAddr = func_8110B958(sample->size, relocInfo->sampleBankId2, sample->sampleAddr, sample->medium);
+                if (sample->medium == reloc_info->medium1) {
+                    sample_ram_addr = func_8110B958(sample->size, reloc_info->sampleBankId1, sample->sampleAddr, sample->medium);
+                } else if (sample->medium == reloc_info->medium2) {
+                    sample_ram_addr = func_8110B958(sample->size, reloc_info->sampleBankId2, sample->sampleAddr, sample->medium);
                 }
                 break;
         }
 
-        if (sampleRamAddr == 0) {
+        if (sample_ram_addr == 0) {
             continue;
         }
 
         switch (async) {
             case 0:
                 if (sample->medium == 1) {
-                    func_8110DB8C(sample->sampleAddr, sampleRamAddr, sample->size, *(s16*)(D_811858A4 + 2));
-                    sample->sampleAddr = sampleRamAddr;
+                    func_8110DB8C(sample->sampleAddr, sample_ram_addr, sample->size, *(s16*)(D_811858A4 + 2));
+                    sample->sampleAddr = sample_ram_addr;
                     sample->medium = 0;
                 } else {
-                    func_8110DA68(sample->sampleAddr, sampleRamAddr, sample->size, sample->medium);
-                    sample->sampleAddr = sampleRamAddr;
+                    func_8110DA68(sample->sampleAddr, sample_ram_addr, sample->size, sample->medium);
+                    sample->sampleAddr = sample_ram_addr;
                     sample->medium = 0;
                 }
                 break;
 
             case 1:
                 D_81184B78[D_8118557C].sample = sample;
-                D_81184B78[D_8118557C].ramAddr = sampleRamAddr;
+                D_81184B78[D_8118557C].ramAddr = sample_ram_addr;
                 D_81184B78[D_8118557C].encodedInfo = (D_8118557C << 24) | 0xFFFFFF;
                 D_81184B78[D_8118557C].isFree = 0;
                 D_81184B78[D_8118557C].endAndMediumKey = sample->sampleAddr + sample->size + sample->medium;
@@ -1132,10 +1132,10 @@ void func_8110F6A4(s32 fontId, s32 async, RelocInfo8110EF7C* relocInfo) {
     }
     D_81185578 = 0;
 
-    if ((D_8118557C != 0) && !preloadInProgress) {
+    if ((D_8118557C != 0) && !preload_in_progress) {
         sample = D_81184B78[D_8118557C - 1].sample;
-        nChunks = (sample->size >> 12) + 1;
-        func_8110E9A8(sample->sampleAddr, D_81184B78[D_8118557C - 1].ramAddr, sample->size, sample->medium, nChunks, &D_811855F8, D_81184B78[D_8118557C - 1].encodedInfo);
+        n_chunks = (sample->size >> 12) + 1;
+        func_8110E9A8(sample->sampleAddr, D_81184B78[D_8118557C - 1].ramAddr, sample->size, sample->medium, n_chunks, &D_811855F8, D_81184B78[D_8118557C - 1].encodedInfo);
     }
 }
 

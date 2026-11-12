@@ -14,9 +14,9 @@ void __osTimerServicesInit(void);
 void func_80058980(void);
 void func_8005BF00(void*);
 void func_8005BD80(OSPri pri) {
-    u32 savedMask;
-    OSPri oldPri;
-    OSPri myPri;
+    u32 saved_mask;
+    OSPri old_pri;
+    OSPri my_pri;
 
     if (D_80079370.active) {
         return;
@@ -32,15 +32,15 @@ void func_8005BD80(OSPri pri) {
     D_801052F8.hdr.retQueue = NULL;
     osSetEventMesg(OS_EVENT_VI, &D_801052B0, &D_801052E0);
     osSetEventMesg(OS_EVENT_COUNTER, &D_801052B0, &D_801052F8);
-    oldPri = -1;
-    myPri = osGetThreadPri(NULL);
+    old_pri = -1;
+    my_pri = osGetThreadPri(NULL);
 
-    if (myPri < pri) {
-        oldPri = myPri;
+    if (my_pri < pri) {
+        old_pri = my_pri;
         osSetThreadPri(NULL, pri);
     }
 
-    savedMask = __osDisableInt();
+    saved_mask = __osDisableInt();
     D_80079370.active = TRUE;
     D_80079370.thread = &D_80104100;
     D_80079370.cmdQueue = &D_801052B0;
@@ -51,10 +51,10 @@ void func_8005BD80(OSPri pri) {
     osCreateThread(&D_80104100, 0, func_8005BF00, &D_80079370, &D_801042B0[0x1000], pri);
     func_80058980();
     osStartThread(&D_80104100);
-    __osRestoreInt(savedMask);
+    __osRestoreInt(saved_mask);
 
-    if (oldPri != -1) {
-        osSetThreadPri(NULL, oldPri);
+    if (old_pri != -1) {
+        osSetThreadPri(NULL, old_pri);
     }
 }
 

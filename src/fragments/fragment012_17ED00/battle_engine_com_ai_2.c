@@ -772,21 +772,21 @@ extern u8 D_8218AC50[];
  */
 s32 BattleAi_GetTypeMultiplier(s8* arg0, s8* arg1, s32 move) {
     s32 mult = 100;
-    u8 defType1;
-    u8 defType2;
+    u8 def_type1;
+    u8 def_type2;
     s32 type;
     u8* chart;
 
     if (move != 0) {
-        defType1 = M2C_FIELD(arg1, u8*, 0x28);
-        defType2 = M2C_FIELD(arg1, u8*, 0x29);
+        def_type1 = M2C_FIELD(arg1, u8*, 0x28);
+        def_type2 = M2C_FIELD(arg1, u8*, 0x29);
         if (D_8006B190[move - 1].power != 0) {
             type = D_8006B190[move - 1].type;
             if (type == M2C_FIELD(arg0, u8*, 0x28) || type == M2C_FIELD(arg0, u8*, 0x29)) {
                 mult = 150;
             }
             for (chart = D_8218AC50; chart[0] != 0xFF; chart += 3) {
-                if (chart[0] == type && (chart[1] == defType1 || chart[1] == defType2)) {
+                if (chart[0] == type && (chart[1] == def_type1 || chart[1] == def_type2)) {
                     mult = chart[2] * mult / 10;
                 }
             }

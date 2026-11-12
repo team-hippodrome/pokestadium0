@@ -88,11 +88,11 @@ s32 func_8A2018E0(s32 arg0, s32 arg1, s32 arg2, s32 arg3)
     func_80029028(arg0 + 0x11E, arg1 + 2, 4, 0x82, D_8A203424);
     move = func_8002D454(arg2, arg3);
     if (move != (-2)) {
-        s32 typeId;
+        s32 type_id;
         Entry80066AD8 *type;
         s32 pp;
-        typeId = func_8001FA8C(D_8006B190[move].type);
-        type = &D_80066AD8[typeId];
+        type_id = func_8001FA8C(D_8006B190[move].type);
+        type = &D_80066AD8[type_id];
         pp = ((((D_8006B190[move].unk04 * 100) / 255) + 2) / 5) * 5;
         func_8001AB6C();
         func_8001A384(4, 0);

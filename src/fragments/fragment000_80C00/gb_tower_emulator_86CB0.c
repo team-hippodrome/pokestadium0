@@ -89,7 +89,7 @@ typedef struct SeqPlayer811126B8 {
 
 u16 func_81112FFC(u8** arg0);
 
-s32 func_811126B8(SeqPlayer811126B8* seqPlayer, SeqScriptState811126B8* state, s32 cmd, s32 cmdArg) {
+s32 func_811126B8(SeqPlayer811126B8* seq_player, SeqScriptState811126B8* state, s32 cmd, s32 cmd_arg) {
     u8 depth;
 
     switch (cmd) {
@@ -107,11 +107,11 @@ s32 func_811126B8(SeqPlayer811126B8* seqPlayer, SeqScriptState811126B8* state, s
             depth = state->depth;
             state->stack[depth] = state->pc;
             state->depth++;
-            state->pc = seqPlayer->seqData + (u16)cmdArg;
+            state->pc = seq_player->seqData + (u16)cmd_arg;
             break;
         case 0xF8:
             depth = state->depth;
-            state->remLoopIters[depth] = cmdArg;
+            state->remLoopIters[depth] = cmd_arg;
             state->stack[state->depth++] = state->pc;
             break;
         case 0xF7:
@@ -138,7 +138,7 @@ s32 func_811126B8(SeqPlayer811126B8* seqPlayer, SeqScriptState811126B8* state, s
             if (cmd == 0xF5 && state->value < 0) {
                 break;
             }
-            state->pc = seqPlayer->seqData + (u16)cmdArg;
+            state->pc = seq_player->seqData + (u16)cmd_arg;
             break;
         case 0xF2:
         case 0xF3:
@@ -149,7 +149,7 @@ s32 func_811126B8(SeqPlayer811126B8* seqPlayer, SeqScriptState811126B8* state, s
             if (cmd == 0xF2 && state->value >= 0) {
                 break;
             }
-            state->pc += (s8)(cmdArg & 0xFF);
+            state->pc += (s8)(cmd_arg & 0xFF);
             break;
     }
     return 0;
@@ -352,7 +352,7 @@ void func_81112BF0(s8* arg0, u16 mask) {
 
 void func_81112B84(Item8111539C*);
 
-void func_81112CE8(u8* seqPlayer, s32 channelBits) {
+void func_81112CE8(u8* seqPlayer, s32 channel_bits) {
     Item8111539C* channel;
     s32 i;
 
@@ -570,7 +570,7 @@ typedef struct Note811131CC {
     /* 0x44 */ Layer811131CC* parentLayer;
 } Note811131CC;
 
-s32 func_811131CC(Layer811131CC* layer, u32 sameSound) {
+s32 func_811131CC(Layer811131CC* layer, u32 same_sound) {
     Note811131CC* note;
 
     if (!layer->stopSomething && layer->sound != NULL && layer->sound->sample->codec == 2 &&
@@ -583,9 +583,9 @@ s32 func_811131CC(Layer811131CC* layer, u32 sameSound) {
         return 0;
     }
 
-    if (layer->continuousNotes != 1 || layer->note == NULL || !layer->status || sameSound != 1 ||
+    if (layer->continuousNotes != 1 || layer->note == NULL || !layer->status || same_sound != 1 ||
         layer != layer->note->parentLayer) {
-        if (sameSound == 0) {
+        if (same_sound == 0) {
             func_81111090((Particle31FlagsA*)layer);
         }
         layer->note = (Note811131CC*)func_8111187C((s8*)layer);
@@ -662,8 +662,8 @@ s32 func_811132E4(Layer811132E4* layer) {
     ScriptState811132E4* state = &layer->scriptState;
     SeqPlayer811132E4* seqPlayer = channel->seqPlayer;
     u8 cmd;
-    u8 cmdArg8;
-    u16 cmdArg16;
+    u8 cmd_arg8;
+    u16 cmd_arg16;
     u16 velocity;
 
     while (1) {
@@ -672,8 +672,8 @@ s32 func_811132E4(Layer811132E4* layer) {
             return cmd;
         }
         if (cmd >= 0xF2) {
-            cmdArg16 = func_81112650(&state->pc, cmd);
-            if (func_811126B8(seqPlayer, state, cmd, cmdArg16) == 0) {
+            cmd_arg16 = func_81112650(&state->pc, cmd);
+            if (func_811126B8(seqPlayer, state, cmd, cmd_arg16) == 0) {
                 continue;
             }
             func_81112AF8((Particle31FlagsA*)layer);
@@ -683,20 +683,20 @@ s32 func_811132E4(Layer811132E4* layer) {
         switch (cmd) {
             case 0xC1:
             case 0xCA:
-                cmdArg8 = *(state->pc++);
+                cmd_arg8 = *(state->pc++);
                 if (cmd == 0xC1) {
-                    layer->velocitySquare = (f32)(cmdArg8 * cmdArg8) / 16129.0f;
+                    layer->velocitySquare = (f32)(cmd_arg8 * cmd_arg8) / 16129.0f;
                 } else {
-                    layer->pan = cmdArg8;
+                    layer->pan = cmd_arg8;
                 }
                 break;
             case 0xC9:
             case 0xC2:
-                cmdArg8 = *(state->pc++);
+                cmd_arg8 = *(state->pc++);
                 if (cmd == 0xC9) {
-                    layer->noteDuration = cmdArg8;
+                    layer->noteDuration = cmd_arg8;
                 } else {
-                    layer->transposition = cmdArg8;
+                    layer->transposition = cmd_arg8;
                 }
                 break;
             case 0xC4:
@@ -710,8 +710,8 @@ s32 func_811132E4(Layer811132E4* layer) {
                 func_81111090((Particle31FlagsA*)layer);
                 break;
             case 0xC3:
-                cmdArg16 = func_81112FFC(&state->pc);
-                layer->shortNoteDefaultDelay = cmdArg16;
+                cmd_arg16 = func_81112FFC(&state->pc);
+                layer->shortNoteDefaultDelay = cmd_arg16;
                 break;
             case 0xC6:
                 cmd = func_81112FB0(&state->pc);
@@ -745,15 +745,15 @@ s32 func_811132E4(Layer811132E4* layer) {
                     layer->portamentoTime = *(state->pc++);
                     break;
                 }
-                cmdArg16 = func_81112FFC(&state->pc);
-                layer->portamentoTime = cmdArg16;
+                cmd_arg16 = func_81112FFC(&state->pc);
+                layer->portamentoTime = cmd_arg16;
                 break;
             case 0xC8:
                 layer->portamentoMode = 0;
                 break;
             case 0xCB:
-                cmdArg16 = func_81112FC4(&state->pc);
-                layer->envelope = seqPlayer->seqData + cmdArg16;
+                cmd_arg16 = func_81112FC4(&state->pc);
+                layer->envelope = seqPlayer->seqData + cmd_arg16;
             case 0xCF:
                 layer->releaseRate = func_81112FB0(&state->pc);
                 break;
@@ -870,22 +870,22 @@ extern Reverb81113650 D_81184110[];
 u8* func_81110C6C(u8* arg0, s32 arg1);
 u8* func_81110D6C(s32 arg0, s32 arg1);
 
-s32 func_81113650(Layer81113650* layer, s32 cmdSemitone) {
-    s32 sameSound = 1;
+s32 func_81113650(Layer81113650* layer, s32 cmd_semitone) {
+    s32 same_sound = 1;
     s32 instOrWave;
     s32 vel;
     f32 temp_f14;
     f32 temp_f2;
     Portamento81113650* portamento;
     f32 freqScale;
-    f32 freqScale2;
+    f32 freq_scale2;
     Sound81113650* sound;
     u8* instrument;
     Drum81113650* drum;
     f32 tuning;
     Channel81113650* channel;
     SeqPlayer81113650* seqPlayer;
-    u8 semitone = cmdSemitone;
+    u8 semitone = cmd_semitone;
 
     instOrWave = layer->instOrWave;
     channel = layer->channel;
@@ -932,7 +932,7 @@ s32 func_81113650(Layer81113650* layer, s32 cmdSemitone) {
                 vel = (semitone > layer->portamentoTargetNote) ? semitone : layer->portamentoTargetNote;
                 if (instrument != NULL) {
                     sound = (Sound81113650*)func_81110C6C(instrument, vel);
-                    sameSound = (layer->sound == sound);
+                    same_sound = (layer->sound == sound);
                     layer->sound = sound;
                     tuning = sound->tuning;
                 } else {
@@ -949,20 +949,20 @@ s32 func_81113650(Layer81113650* layer, s32 cmdSemitone) {
                     case 1:
                     case 3:
                     case 5:
-                        freqScale2 = temp_f2;
+                        freq_scale2 = temp_f2;
                         freqScale = temp_f14;
                         break;
                     case 2:
                     case 4:
                         freqScale = temp_f2;
-                        freqScale2 = temp_f14;
+                        freq_scale2 = temp_f14;
                         break;
                     default:
                         freqScale = temp_f2;
-                        freqScale2 = temp_f2;
+                        freq_scale2 = temp_f2;
                         break;
                 }
-                portamento->extent = (freqScale2 / freqScale) - 1.0f;
+                portamento->extent = (freq_scale2 / freqScale) - 1.0f;
                 if (layer->portamento.mode & 0x80) {
                     portamento->speed = 32512.0f * (f32)(s32)seqPlayer->tempo /
                                         ((f32)layer->delay * (f32)D_811858EC * (f32)(s32)layer->portamentoTime);
@@ -978,7 +978,7 @@ s32 func_81113650(Layer81113650* layer, s32 cmdSemitone) {
             }
             if (instrument != NULL) {
                 sound = (Sound81113650*)func_81110C6C(instrument, semitone);
-                sameSound = (sound == layer->sound);
+                same_sound = (sound == layer->sound);
                 layer->sound = sound;
                 layer->freqScale = D_81136778[(s32)semitone] * sound->tuning; // FAKE: no-op cast
             } else {
@@ -992,5 +992,5 @@ s32 func_81113650(Layer81113650* layer, s32 cmdSemitone) {
     }
     layer->duration = layer->delay;
     layer->freqScale *= layer->bendPitch;
-    return sameSound;
+    return same_sound;
 }

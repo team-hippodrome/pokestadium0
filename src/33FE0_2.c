@@ -76,15 +76,15 @@ f32 func_80033360(
     f32 bx, f32 by, f32 bz
 ) {
     UNUSED s32 pad[4];
-    f32 lenSq;
+    f32 len_sq;
 
-    lenSq = ((bx - ax) * (bx - ax)) + ((by - ay) * (by - ay)) + ((bz - az) * (bz - az));
+    len_sq = ((bx - ax) * (bx - ax)) + ((by - ay) * (by - ay)) + ((bz - az) * (bz - az));
 
-    if (lenSq == 0.0f) {
+    if (len_sq == 0.0f) {
         return 0.0f;
     }
 
-    return (((bx - ax) * (px - ax)) + ((by - ay) * (py - ay)) + ((bz - az) * (pz - az))) / lenSq;
+    return (((bx - ax) * (px - ax)) + ((by - ay) * (py - ay)) + ((bz - az) * (pz - az))) / len_sq;
 }
 
 f32 func_80033408(
@@ -103,10 +103,10 @@ f32 func_80033408(
     f32 ez;
     f32 dx2;
     f32 pad[1];
-    f32 lenSq;
+    f32 len_sq;
 
-    lenSq = SQ(bx - ax) + SQ(by - ay) + SQ(bz - az);
-    if (lenSq == 0.0f) {
+    len_sq = SQ(bx - ax) + SQ(by - ay) + SQ(bz - az);
+    if (len_sq == 0.0f) {
         return -1.0f;
     }
     dx = bx - ax;
@@ -114,7 +114,7 @@ f32 func_80033408(
     dz = bz - az;
     dx2 = px - ax;
 
-    sp68 = t = ((dx * dx2) + (dy * (py - ay)) + (dz * (pz - az))) / lenSq;
+    sp68 = t = ((dx * dx2) + (dy * (py - ay)) + (dz * (pz - az))) / len_sq;
     if (t < -0.5f || t > 1.5f) {
         return -2.0f;
     }

@@ -84,7 +84,7 @@ void Model_BuildVertexRuntimeData(StadiumModel* model, MtxF* mtx) {
     ModelVertex* base;
     ModelVertex* mvtx;
     Vtx* vtx;
-    s16* indexTable;
+    s16* index_table;
     s16 temp_t0;
     s16 temp_v0_2;
     s16 var_a1;
@@ -138,11 +138,11 @@ void Model_BuildVertexRuntimeData(StadiumModel* model, MtxF* mtx) {
 
     mvtx = base;
     var_a1 = 0;
-    indexTable = Memmap_GetSegmentVaddr(segment->unk_0C);
+    index_table = Memmap_GetSegmentVaddr(segment->unk_0C);
     for (i = 0; i < segment->vertexCount; i++) {
         mvtx->childIndex = var_a1;
         do {
-            temp_v0_2 = *indexTable++;
+            temp_v0_2 = *index_table++;
             var_a1++;
         } while (temp_v0_2 != -1);
         mvtx++;
@@ -316,7 +316,7 @@ void func_80033BE4(StadiumModel* model, s16 maxDist, f32 radius, f32 ax, f32 ay,
 void func_800340F4(StadiumModel* model) {
     u32 pad[2]; // FAKE: stack padding
     ModelSegment* segment;
-    s16* indexTable;
+    s16* index_table;
     f32 var_fv0;
     s16 temp_v1;
     s32 j;
@@ -326,7 +326,7 @@ void func_800340F4(StadiumModel* model) {
     ModelBlendWeight* var_a0;
 
     segment = Memmap_GetSegmentVaddr(model->modelSegment);
-    indexTable = Memmap_GetSegmentVaddr(segment->remapSegment);
+    index_table = Memmap_GetSegmentVaddr(segment->remapSegment);
     temp_a1 = &model->mvtx;
     var_a2 = temp_a1;
     for(i = 0; i < segment->vertexCount; i++) {
@@ -335,7 +335,7 @@ void func_800340F4(StadiumModel* model) {
     }
     var_a2 = temp_a1;
     for (i = 0; i < segment->vertexCount; i++) {
-        temp_v1 = indexTable[i];
+        temp_v1 = index_table[i];
         if (temp_v1 == i) {
             var_fv0 = 10000.0f;
             for (j = 0; j < model->unk_02; j++) {
@@ -539,7 +539,7 @@ void Model_ApplyVertexTransforms(StadiumModel* model) {
     Model_ApplyTransformCommands(segment, mvtx, model, 1.0f);
 }
 
-void func_80034A74(u32 modelSegment, StadiumTransform* xf, s32 index, ModelVertex* vertices) {
+void func_80034A74(u32 model_segment, StadiumTransform* xf, s32 index, ModelVertex* vertices) {
     ModelBlendWeight* wt;
     ModelVertex* vtx;
     s32 pad0[3]; // FAKE: stack padding
@@ -591,7 +591,7 @@ void func_80034A74(u32 modelSegment, StadiumTransform* xf, s32 index, ModelVerte
     s32 i;
     PosBlend* temp_v0_2;
 
-    temp_v0 = Memmap_GetSegmentVaddr(modelSegment);
+    temp_v0 = Memmap_GetSegmentVaddr(model_segment);
     spCA = temp_v0->vertexCount;
     temp_s1 = Memmap_GetSegmentVaddr(temp_v0->remapSegment);
     spC0 = Memmap_GetSegmentVaddr(temp_v0->tableSegment);
