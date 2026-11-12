@@ -204,7 +204,7 @@ typedef struct Entry80066AD8 {
     Color890075E0 color;
 } Entry80066AD8;
 extern Entry80066AD8 D_80066AD8[];
-s32 func_8002D498(s32, s32);
+s32 Pokemon_GetTypeIndex(s32, s32);
 void func_8001AB6C(void);
 void func_8001A384(s32, s32);
 void func_8001ABBC(void);
@@ -246,7 +246,7 @@ void func_890074E0(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
 
 void func_890075E0(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     Color890075E0 c;
-    s32 idx = func_8002D498(arg2, arg3);
+    s32 idx = Pokemon_GetTypeIndex(arg2, arg3);
 
     if (idx != -1) {
         c = D_80066AD8[idx].color;
@@ -364,7 +364,7 @@ void PcBox_DrawMonStatusWindow(Screen89007678* arg0) {
         func_8001A944(x + 0xB2, y + 5, D_89018E88, arg0->mon->level);
         func_8001A944(x + 0x140, y + 5, D_89018E8C, arg0->mon->maxHp);
         func_8001A944(x + 0x88, y + 0x28, D_89018E90);
-        if (func_8002D498((s32)arg0->mon, 1) != -1) {
+        if (Pokemon_GetTypeIndex((s32)arg0->mon, 1) != -1) {
             func_8001A944(x + 0x88, y + 0x64, D_89018E9C);
         }
         func_8001A944(x + 0x102, y + 0x28, D_89018EA8);
@@ -703,7 +703,7 @@ void PcBox_DrawStorageLabel(s32 x, s32 y, s32 flags, s32 kind) {
 }
 
 void func_8002B018(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
-void func_8002D880(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5);
+void Menu_Init(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5);
 extern Rgba8900806C D_8900A91C;
 extern Rgba8900806C D_8900A920;
 extern Rgba8900806C D_8900A580[];
@@ -752,9 +752,9 @@ void func_89008AF4(s8* arg0, s32 x, s32 y, s8* arg3) {
     M2C_FIELD(arg0, s32*, 0x15C) = 0;
     M2C_FIELD(arg0, s32*, 0x158) = D_800603C0;
     func_8000B2F4(D_800603C0);
-    func_8002D880(arg0 + 0x170, (s32)arg3, (s32)(arg0 + 0x1B8), (s32)PcBox_DrawBoxName, 0xCE, 0x1C);
+    Menu_Init(arg0 + 0x170, (s32)arg3, (s32)(arg0 + 0x1B8), (s32)PcBox_DrawBoxName, 0xCE, 0x1C);
     M2C_FIELD(arg0, s32*, 0x190) |= 0x10000;
-    func_8002D880(arg0 + 0x194, (s32)(arg3 + 0x10), (s32)(arg0 + 0x1C8), (s32)PcBox_DrawBoxCount, 0x104, 0x38);
+    Menu_Init(arg0 + 0x194, (s32)(arg3 + 0x10), (s32)(arg0 + 0x1C8), (s32)PcBox_DrawBoxCount, 0x104, 0x38);
     M2C_FIELD(arg0, s32*, 0x1B4) |= 0x10000;
     M2C_FIELD(arg0, s32*, 0) = 1;
 }
@@ -911,7 +911,7 @@ typedef struct LabPCBoxList890094A8 {
     /* 0x4 */ s32 unk_04;
     /* 0x8 */ s32 count;
 } LabPCBoxList890094A8;
-s32 func_8002DDFC(s8 *);
+s32 Menu_SkipDisabledForward(s8 *);
 s32 func_890094A8(s8* arg0) {
     s32 i;
     LabPCBoxList890094A8* list = M2C_FIELD(arg0, LabPCBoxList890094A8**, 0);
@@ -924,7 +924,7 @@ s32 func_890094A8(s8* arg0) {
         }
     }
     M2C_FIELD(arg0, s32*, 8) = 0;
-    return func_8002DDFC(arg0);
+    return Menu_SkipDisabledForward(arg0);
 }
 
 typedef struct LabPCBoxList890095DC {
@@ -945,7 +945,7 @@ void func_890095DC(s8* arg0) {
         }
     }
     M2C_FIELD(arg0, s32*, 8) = 0;
-    func_8002DDFC(arg0);
+    Menu_SkipDisabledForward(arg0);
 }
 
 void func_89009710(s8 *arg0, s8 *arg1, s8 *arg2) {

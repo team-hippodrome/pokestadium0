@@ -177,7 +177,7 @@ extern M2C_UNK D_82009C98;
 void func_82001810();
 extern M2C_UNK func_820020EC;
 void Window_SetRect(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
-M2C_UNK func_8002EC24(s8*, s32, s8*, M2C_UNK, M2C_UNK*, s32, s32);
+M2C_UNK ScrollList_Init(s8*, s32, s8*, M2C_UNK, M2C_UNK*, s32, s32);
 M2C_UNK func_80030894(s8*, s8*, s8*, M2C_UNK, s32, M2C_UNK*, s32, s32);
 M2C_UNK func_80027410(s8*, s32, M2C_UNK, M2C_UNK, s32);
 void func_80018168(s8* arg0);
@@ -188,7 +188,7 @@ void func_82002C3C(s8*);
  * access as SlotMenu):
  *   - sets up the base window at +0x14 via Window_SetRect (arg1, arg2, size 0x220 x 0x158),
  *   - zeroes +0x00/+0x38/+0x3C, stores 0x801 at +0x28, &D_82009C98 at +0x34 and arg3 at +0xC4,
- *   - creates the sub-object at +0x40/+0x84 with func_8002EC24 (passing &func_820020EC),
+ *   - creates the sub-object at +0x40/+0x84 with ScrollList_Init (passing &func_820020EC),
  *   - sets bit 0x10000 at +0x60,
  *   - fills the first 0x28 words of D_8200AC58 with -1,
  *   - stores 1 at +0x738, arg4 at +0x73C and the mode arg5 at +0x740, and calls func_82002C3C,
@@ -207,7 +207,7 @@ void func_82002D5C(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
     M2C_FIELD(arg0, s32*, 0x28) = 0x801;
     M2C_FIELD(arg0, M2C_UNK**, 0x34) = &D_82009C98;
     M2C_FIELD(arg0, s32*, 0xC4) = arg3;
-    func_8002EC24(arg0 + 0x40, arg3, arg0 + 0x84, 3, &func_820020EC, 0x214, 0x64);
+    ScrollList_Init(arg0 + 0x40, arg3, arg0 + 0x84, 3, &func_820020EC, 0x214, 0x64);
     M2C_FIELD(arg0, s32*, 0x60) = M2C_FIELD(arg0, s32*, 0x60) | 0x10000;
     M2C_FIELD(arg0, s32*, 0) = 0;
     func_82000020(D_8200AC58, 0, 0x28);
@@ -579,7 +579,7 @@ s32 func_820038B0(s8 *arg0)
   switch (*((s32 *) (((s8 *) arg0) + 4)))
   {
     case 1:
-      if (func_8002FD8C(arg0 + 0x40) == 0)
+      if (ScrollList_UpdateCursor(arg0 + 0x40) == 0)
     {
       next = func_8002BC14(*((s32 *) (((s8 *) arg0) + 0x744)));
       if (next == (-1))

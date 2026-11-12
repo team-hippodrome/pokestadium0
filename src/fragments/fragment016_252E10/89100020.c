@@ -152,7 +152,7 @@ void func_80027804(s8*, s8*, s32, s32);
 void func_89109B60(s8*);
 M2C_UNK func_89109C6C(s32, s32);                    /* extern */
 void func_80027D68(s32, s32);
-void func_8002EC24(s8*, s8*, s8*, s32, void*, s32, s32);
+void ScrollList_Init(s8*, s8*, s8*, s32, void*, s32, s32);
 void func_891012A8();
 void func_89105C54(s8*, s32, s32, s8*, Rgba891024A4);
 extern s32 D_8910D990[];
@@ -200,7 +200,7 @@ void func_891003A4(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     func_89100020((s32)arg0);
     M2C_FIELD(arg0, s32*, 0x80) = 0;
     ((Big891003A4*)arg0)->unkB15C = 0;
-    func_8002EC24(arg0 + 0xB160, arg0 + 0x9648, arg0 + 0xB1A4, 0xE, func_891012A8, 0x228, 0x14);
+    ScrollList_Init(arg0 + 0xB160, arg0 + 0x9648, arg0 + 0xB1A4, 0xE, func_891012A8, 0x228, 0x14);
     ((Big891003A4*)arg0)->unkB180 &= ~0x100000;
     ((Big891003A4*)arg0)->unkB548 = D_8910A84C;
     func_89100294((Ctx89100294*)arg0);

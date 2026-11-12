@@ -206,7 +206,11 @@ void Battle_SimpleStringFormat(s8* arg0, s8* arg1, ...) {
     arg0[len] = 0;
 }
 
-void func_8211EF74(s8* arg0, s8 id, s8* arg1, ...) {
+/**
+ * Builds a battle message: byte 0 is the announcer clip id `id`, then `arg1` with each %s replaced by the next string argument.
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleMessage_Format(s8* arg0, s8 id, s8* arg1, ...) {
     va_list args;
     s8* src;
     s8* fmt;
@@ -242,7 +246,11 @@ void func_80042A6C(s32);
 void func_80042FF8(s32);
 extern void* D_8219A520;
 
-void func_8211F034(s8* arg0, s32 side) {
+/**
+ * Shows a message built by BattleMessage_Format in `side`'s trainer color and plays its announcer clip (bit 7 picks the second clip bank), then clears the id.
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleMessage_ShowForSide(s8* arg0, s32 side) {
     ActivePokemon* ap;
 
     func_8211EE8C();

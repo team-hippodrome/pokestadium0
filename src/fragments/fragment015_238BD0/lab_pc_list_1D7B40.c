@@ -125,7 +125,7 @@ void func_89004908(s32 x, s32 y, char* str, UNUSED s32 index, s32 flags) {
 }
 
 void Window_SetRect(s8*, s32, s32, s32, s32);
-void func_8002D880(s8*, s32, s32, s32, s32, s32);
+void Menu_Init(s8*, s32, s32, s32, s32, s32);
 M2C_UNK func_80027804();
 void func_89004AD4(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
     s32 pad[2]; // FAKE: stack padding
@@ -137,17 +137,17 @@ void func_89004AD4(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5)
     M2C_FIELD(arg0, s32 *, 0x14) = 0;
     M2C_FIELD(arg0, Rgba89004908 *, 0x18) = D_8900A5BC;
     func_80027804((s8 *)arg0 + 0x50, arg3, arg4, arg4);
-    func_8002D880((s8 *)arg0 + 0x2C, (s32)((s8 *)arg0 + 0x50), (s32)((s8 *)arg0 + 0x5C), (s32)func_89004908, 0xB0, 0x1C);
+    Menu_Init((s8 *)arg0 + 0x2C, (s32)((s8 *)arg0 + 0x50), (s32)((s8 *)arg0 + 0x5C), (s32)func_89004908, 0xB0, 0x1C);
     M2C_FIELD(arg0, s32 *, 0x34) = arg5;
     M2C_FIELD(arg0, s32 *, 0x4C) |= 0x10000;
 }
 
 s32 func_8002AE6C();                                /* extern */
-M2C_UNK func_8002D9B8(s8 *, s32, s32, M2C_UNK, s32); /* extern */
+M2C_UNK Menu_DrawItems(s8 *, s32, s32, M2C_UNK, s32); /* extern */
 
 void func_89004B98(s8 *arg0) {
     if (func_8002AE6C() == 0) {
-        func_8002D9B8(arg0 + 0x2C, M2C_FIELD(arg0, s32 *, 0) + 6, M2C_FIELD(arg0, s32 *, 4) + 0xA, 0xFFEF, 0);
+        Menu_DrawItems(arg0 + 0x2C, M2C_FIELD(arg0, s32 *, 0) + 6, M2C_FIELD(arg0, s32 *, 4) + 0xA, 0xFFEF, 0);
     }
 }
 
@@ -209,13 +209,13 @@ void func_89004E1C(s8* arg0, s32 arg1) {
     func_8002ED18(arg0, arg1, arg0 + 0x44);
 }
 
-void func_8002EC24(s8*, s32, s8*, s32, void*, s32, s32);
+void ScrollList_Init(s8*, s32, s8*, s32, void*, s32, s32);
 void PcSort_DrawMonRow(s32, s32, u8*, s32, s32);
 
 void func_89004E3C(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     M2C_FIELD(arg0, s32*, 0x80) = arg1;
     M2C_FIELD(arg0, s32*, 0x84) = arg2;
-    func_8002EC24(arg0, arg3, arg0 + 0x44, 6, PcSort_DrawMonRow, 0xCC, 0x1C);
+    ScrollList_Init(arg0, arg3, arg0 + 0x44, 6, PcSort_DrawMonRow, 0xCC, 0x1C);
     M2C_FIELD(arg0, s32*, 0x20) |= 0x10000;
 }
 
@@ -238,7 +238,7 @@ void func_89004EB0(s8 *arg0, s32 arg1) {
     func_8001BCB4(M2C_FIELD(arg0, s32 *, 0x80) + 0xAA, M2C_FIELD(arg0, s32 *, 0x84) + 0xBC, 8, 0xA, D_04011AB8, 8, 0);
 }
 
-s32 func_8002FD8C(void*);
+s32 ScrollList_UpdateCursor(void*);
 s32 func_80030230(void*);
 
 /* Navigate the selected menu mode, then report cancel or confirm input. */
@@ -250,7 +250,7 @@ s32 func_89004FE4(void* menu, u32 flags) {
     if (flags & 0x200) {
         moved = func_80030230(menu);
     } else {
-        moved = func_8002FD8C(menu);
+        moved = ScrollList_UpdateCursor(menu);
     }
     if (moved == 0) {
         action = func_8002BC14(D_800603C0);
@@ -620,7 +620,7 @@ void func_89006054(s8 *arg0) {
 void func_8002CEEC(s8*, s8*, s32, s32, s32);
 s32 Ui_CheckConfirmPressed(s8*);
 void func_8002D900(s8*);
-void func_8002DDFC(s8*);
+void Menu_SkipDisabledForward(s8*);
 s32 func_8002E3F0(s8*);
 extern s8* D_8900A84C[];
 extern s8 D_89018D8C[];
@@ -823,7 +823,7 @@ s32 func_8900609C(s8* arg0) {
                 }
                 func_890048EC(arg0 + 0x214, M2C_FIELD(arg0, s32*, 0x28C));
                 M2C_FIELD(arg0, s32*, 0x248) = 0;
-                func_8002DDFC(arg0 + 0x240);
+                Menu_SkipDisabledForward(arg0 + 0x240);
                 break;
         }
         M2C_FIELD(arg0, s32*, 0) = next;

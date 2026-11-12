@@ -90,7 +90,7 @@ void func_8A20034C(s8 *arg0, s32 arg1, s32 arg2, s32 arg3) {
     M2C_FIELD(arg0, s32 *, 0x20) = 0;
     M2C_FIELD(arg0, s32 *, 0x28) = 0;
     M2C_FIELD(arg0, s32 *, 0x14) = 0x1001;
-    func_8002D880(arg0 + 0x2C, arg3, arg0 + 0x50, (M2C_UNK *)MonSummary_DrawListRow, 0x215, 0x33);
+    Menu_Init(arg0 + 0x2C, arg3, arg0 + 0x50, (M2C_UNK *)MonSummary_DrawListRow, 0x215, 0x33);
 }
 
 extern s8 D_8007356C;
@@ -135,7 +135,7 @@ void func_8A2003C0(s8* arg0, s32 arg1) {
                 flags = 0xFFFD;
                 break;
         }
-        func_8002D9B8(arg0 + 0x2C, M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, flags, (s32)&arg1);
+        Menu_DrawItems(arg0 + 0x2C, M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, flags, (s32)&arg1);
     }
 
     if ((M2C_FIELD(arg0, s32*, 0x28) == 1) || (M2C_FIELD(arg0, s32*, 0x28) == 2)) {
@@ -184,7 +184,7 @@ void func_8A20080C(s8 *arg0, s32 arg1, s32 arg2, u8 *arg3)
   *((Color_RGBA8 *) (((s8 *) arg0) + 0x18)) = D_8A203304;
   sp2C = arg0 + 0x50;
   func_80027804(sp2C, D_8A203364, 3, 3);
-  func_8002D880(arg0 + 0x2C, sp2C, arg0 + 0x5C, (M2C_UNK *) func_8A200770, 0xA8, 0x24);
+  Menu_Init(arg0 + 0x2C, sp2C, arg0 + 0x5C, (M2C_UNK *) func_8A200770, 0xA8, 0x24);
   if ((!arg0) && (!arg0))
   {
   }
@@ -198,17 +198,17 @@ void func_8A20080C(s8 *arg0, s32 arg1, s32 arg2, u8 *arg3)
 
 void func_8A2008F4(s8 *arg0) {
     if (func_8002AB84() == 0) {
-        func_8002D9B8(arg0 + 0x2C, M2C_FIELD(arg0, s32 *, 0) + 6, M2C_FIELD(arg0, s32 *, 4) + 0xC, 0xFEF, 0);
+        Menu_DrawItems(arg0 + 0x2C, M2C_FIELD(arg0, s32 *, 0) + 6, M2C_FIELD(arg0, s32 *, 4) + 0xC, 0xFEF, 0);
     }
 }
 
 extern s8 *D_800603C0;
 M2C_UNK func_8003F6AC(M2C_UNK);
-s32 func_8002DC04(s8*);
+s32 Menu_UpdateCursor(s8*);
 s32 func_8002BC14(s32);
 /**
  * Menu-list input handler (same pattern as func_8200639C / func_8900408C). Does nothing and
- * returns 0 while func_8002DC04(arg0 + 0x2C) is non-zero. Otherwise reads the input result
+ * returns 0 while Menu_UpdateCursor(arg0 + 0x2C) is non-zero. Otherwise reads the input result
  * from func_8002BC14(D_800603C0): -1 returns -1; 1 looks at the entry for the cursor index
  * stored at arg0 + 0x34 in the halfword table pointed to by arg0 + 0x30 -- if bit 0 of that
  * entry is clear it returns index + 1, if set it plays sound effect func_8003F6AC(8) and
@@ -220,7 +220,7 @@ s32 func_8A20093C(s8* arg0) {
     s32 dir;
     s32 idx;
 
-    if (func_8002DC04(arg0 + 0x2C) == 0) {
+    if (Menu_UpdateCursor(arg0 + 0x2C) == 0) {
         dir = func_8002BC14((s32)D_800603C0);
         if (dir == -1) {
             sp1C = -1;
@@ -300,7 +300,7 @@ void MonSummary_DrawHeader(s32 arg0, s32 arg1, BattleMon* arg2) {
 
 void func_8A200D44(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     Color82000BC4 c;
-    s32 idx = func_8002D498(arg3, arg4);
+    s32 idx = Pokemon_GetTypeIndex(arg3, arg4);
 
     if (idx != -1) {
         c = D_80066AD8[idx].color;
@@ -347,7 +347,7 @@ void MonSummary_DrawTrainerInfo(s32 arg0, s32 arg1, s32 arg2) {
     func_8001A384(8, 0);
     func_8001AA9C(0xFF, 0xDA, 0xC7, 0xFF);
     func_8001A944(arg0 + 0x37, arg1 + 0xC, D_8A21D920);
-    if (func_8002D498(arg2, 1) != -1) {
+    if (Pokemon_GetTypeIndex(arg2, 1) != -1) {
         func_8001A944(arg0 + 0x37, arg1 + 0x28, D_8A21D92C);
     }
     func_8001AA9C(0xFF, 0xFF, 0xC7, 0xFF);
@@ -473,7 +473,7 @@ void func_8A201394(s32 arg0, s32 arg1, BattleMon* arg2) {
     func_8001A384(4, 0);
     func_8001A944(arg0 + 9, arg1 + 0x3C, "タイプ"); // "Type"
     func_8001A944(arg0 + 0x4F, arg1 + 0x3C, "1/");
-    if (func_8002D498((s32)arg2, 1) != -1) {
+    if (Pokemon_GetTypeIndex((s32)arg2, 1) != -1) {
         func_8001A944(arg0 + 0xB9, arg1 + 0x3C, "2/");
     }
     func_8A200D44(arg0 + 0x6F, arg1 + 0x3C, 4, (s32)arg2, 0);

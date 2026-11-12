@@ -37,7 +37,7 @@ void Window_SetRect(s8 *, s32, s32, s32, s32);
 void func_80027804(s8*, s8*, s32, s32);
 void func_89109B60(s8*);
 void func_80027D68(s32, s32);
-void func_8002EC24(s8*, s8*, s8*, s32, void*, s32, s32);
+void ScrollList_Init(s8*, s8*, s8*, s32, void*, s32, s32);
 void func_891012A8();
 void func_89105C54(s8*, s32, s32, s8*, Rgba891024A4);
 extern s32 D_8910D990[];
@@ -48,7 +48,7 @@ extern u8 D_8910A804[];
 extern u8 D_8910A84C[];
 s32 func_891005CC();
 extern Entry80066AD8 D_80066AD8[];
-s32 func_8002D498(u8*, s32);
+s32 Pokemon_GetTypeIndex(u8*, s32);
 M2C_UNK func_8001A384(M2C_UNK, M2C_UNK);
 M2C_UNK func_8001A944(s32, s32, M2C_UNK *, ...);
 M2C_UNK func_8001AA9C(u8, u8, u8, u8);
@@ -93,7 +93,7 @@ extern u8 D_8910DC50[];
 extern s8 D_8910E2D0[];
 extern s8 D_8910E312[];
 s32 func_8003F6AC();
-s32 func_8002FD8C(void*);
+s32 ScrollList_UpdateCursor(void*);
 void func_800306E0(void*, s32);
 void func_891020F8(s8*);
 void func_8000A460(s8 *, s8 *);
@@ -751,7 +751,7 @@ extern s32 D_8910A90C;
  */
 extern s32 D_8910A908_2;
 extern M2C_UNK D_8910DE44;
-M2C_UNK func_80028060(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
+M2C_UNK GbSave_DrawSummaryBar(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
 void func_8002C8D8(Col891049E8*, Col891049E8, f32);
 s32 func_891049E8(s32 arg0) {
     Col891049E8 sp2C;
@@ -772,7 +772,7 @@ s32 func_891049E8(s32 arg0) {
     } else {
         var_a1 = &D_8910E380;
     }
-    func_80028060(0, var_a1, &D_8910DE44, D_8910E37C);
+    GbSave_DrawSummaryBar(0, var_a1, &D_8910DE44, D_8910E37C);
     n = D_8910A908;
     func_8002C8D8(&sp2C, *(Col891049E8*)&D_8910A7F0, n / (f64)8.0f);
     Ui_DrawTintedScreenBackground(0x38, 0x1E0, sp2C.r, sp2C.g, sp2C.b);

@@ -58,7 +58,7 @@ typedef struct Str89104D14 { s8 c[4]; } Str89104D14;
 extern Str89104D14 D_8910A914;
 void func_80027804(s8 *, s32 *, s32, s32);
 void Window_SetRect(s8 *, s32, s32, s32, s32);
-void func_8002D880(s8 *, s8 *, s32, void *, s32, s32);
+void Menu_Init(s8 *, s8 *, s32, void *, s32, s32);
 u32 func_800566BC(s32);
 void func_89104C70();
 void func_89104D14(s8 *arg0, s32 arg1, s32 arg2, s32 *arg3, s32 arg4, s32 arg5) {
@@ -75,7 +75,7 @@ void func_89104D14(s8 *arg0, s32 arg1, s32 arg2, s32 *arg3, s32 arg4, s32 arg5) 
     }
     func_80027804(arg0 + 0x50, arg3, arg5, arg5);
     h = max * 0x14 + 0x10;
-    func_8002D880(arg0 + 0x2C, arg0 + 0x50, arg4, func_89104C70, h, 0x1C);
+    Menu_Init(arg0 + 0x2C, arg0 + 0x50, arg4, func_89104C70, h, 0x1C);
     M2C_FIELD(arg0, s32 *, 0x4C) |= 0x10000;
     Window_SetRect(arg0, arg1, arg2, h + 0xC, 0x84);
     M2C_FIELD(arg0, s32 *, 0x24) = 0;
@@ -86,7 +86,7 @@ void func_89104D14(s8 *arg0, s32 arg1, s32 arg2, s32 *arg3, s32 arg4, s32 arg5) 
 }
 
 s32 func_8002AE6C();
-M2C_UNK func_8002D9B8(s32, s32, s32, s32, s8*);
+M2C_UNK Menu_DrawItems(s32, s32, s32, s32, s8*);
 
 typedef struct Box89104E38 {
     s32 x;
@@ -104,17 +104,17 @@ void func_89104E38(Box89104E38* arg0) {
 
         sp2C[0] = arg0->w - 0xC;
         label = (s32)arg0->label;
-        func_8002D9B8(label, arg0->x + 6, arg0->y + 0xA, 0xFFEF, (s8*)sp2C);
+        Menu_DrawItems(label, arg0->x + 6, arg0->y + 0xA, 0xFFEF, (s8*)sp2C);
     }
     /* Empty test kept from the permuter: it keeps arg0 in $s0 as in the ROM. */
     if (arg0) {  // karodo
     }
 }
 
-M2C_UNK func_8002DC04(s32);                         /* extern */
+M2C_UNK Menu_UpdateCursor(s32);                         /* extern */
 
 void func_89104E94(s32 arg0) {
-    func_8002DC04(arg0 + 0x2C);
+    Menu_UpdateCursor(arg0 + 0x2C);
 }
 
 typedef struct Entry891078E0 {
@@ -178,7 +178,7 @@ void func_89104FC0(s8* arg0, s32 arg1, s32 arg2, u8* arg3) {
         M2C_FIELD(arg0, s32*, 0x60 + i * 4) = -1;
     }
     func_80027410(arg0 + 0x50, arg0 + 0x60, 4, 4, 4);
-    func_8002D880(arg0 + 0x2C, arg0 + 0x50, (s32)(arg0 + 0x70), func_89104EB4, 0x9C, 0x1C);
+    Menu_Init(arg0 + 0x2C, arg0 + 0x50, (s32)(arg0 + 0x70), func_89104EB4, 0x9C, 0x1C);
     M2C_FIELD(arg0, s32*, 0x4C) |= 0x10000;
     Window_SetRect(arg0, arg1, arg2, 0xA8, 0x84);
     M2C_FIELD(arg0, s32*, 0x24) = 0;
@@ -279,10 +279,10 @@ void func_89105340(s8 *arg0, s32 arg1, s32 arg2)
   *temp_v0 |= 0x300;
 }
 
-M2C_UNK func_8002DC04(s32);                         /* extern */
+M2C_UNK Menu_UpdateCursor(s32);                         /* extern */
 
 s32 func_89105390(s32 arg0) {
-    return func_8002DC04(arg0 + 0x2C);
+    return Menu_UpdateCursor(arg0 + 0x2C);
 }
 
 s32 func_891053B0(s8 *arg0) {
@@ -401,7 +401,7 @@ void func_8910576C(void* arg0, s32 arg1, s32 arg2, void* arg3, s32 arg4, Rgba891
     Window_SetRect((s8*)arg0, arg1, arg2, 0x9C, M2C_FIELD(arg3, s32*, 8) * 0x1C + 8);
     M2C_FIELD(arg0, s32*, 0x14) = 0;
     M2C_FIELD(arg0, Rgba8910576C*, 0x18) = arg5;
-    func_8002D880((s8*)arg0 + 0x20, arg3, arg4, PcSort_DrawBoxName, 0x9C, 0x1C);
+    Menu_Init((s8*)arg0 + 0x20, arg3, arg4, PcSort_DrawBoxName, 0x9C, 0x1C);
     func_891053E8(arg0);
 }
 
@@ -421,7 +421,7 @@ extern s32 D_800603C0;
 
 /**
  * List-menu input handler (same family as func_8A20093C). arg0 is the menu object (passed as
- * an integer address here, as elsewhere in this file). Calls func_8002DC04(arg0 + 0x20) and
+ * an integer address here, as elsewhere in this file). Calls Menu_UpdateCursor(arg0 + 0x20) and
  * acts on its result: 0x200 plays sound func_8003F6AC(1) and returns 2. 0 reads the button
  * halfword at D_800603C0 + 8: if bit 0x8000 is set it plays sound 2, toggles bit 3 of the
  * halfword table entry arg0->0x24[arg0->0x28] and returns 1; otherwise if bit 0x4000 is set it
@@ -434,7 +434,7 @@ s32 func_8910587C(s32 arg0) {
     s32 buttons;
     u16* entry;
 
-    res = func_8002DC04(arg0 + 0x20);
+    res = Menu_UpdateCursor(arg0 + 0x20);
     if (res == 0x200) {
         func_8003F6AC(1);
         ret = 2;
@@ -589,7 +589,7 @@ void func_89105C54(s8* arg0, s32 arg1, s32 arg2, s8* arg3, Rgba8910576C arg4) {
     list = *(s32*)arg3;
     func_8910576C(arg0 + 0xDC, M2C_FIELD(arg0, s32*, 0xC) + M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 0x54) + 0x1C, (void*)(list + 0x34), (s32)(arg0 + 0x16C), arg4);
     func_8910576C(arg0 + 0x120, M2C_FIELD(arg0, s32*, 0xC) + M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 0x54) + 0x38, (void*)(list + 0x58), (s32)(arg0 + 0x17C), arg4);
-    func_8002D880(arg0 + 0x70, arg3, (s32)(arg0 + 0x164), func_89105AD4, 0x128, 0x1C);
+    Menu_Init(arg0 + 0x70, arg3, (s32)(arg0 + 0x164), func_89105AD4, 0x128, 0x1C);
     func_891059FC((u8*)arg0);
     M2C_FIELD(arg0, s32*, 0xD8) = 4;
     M2C_FIELD(arg0, s32*, 0xD4) = 0;
@@ -755,7 +755,7 @@ void func_89106424(s8 *arg0, s32 *arg1, s32 arg2, s32 arg3, s32 arg4) {
     }
     func_80027804(arg0 + 0x64, arg1, arg3, arg3);
     h = max * 0x14 + 0x10;
-    func_8002D880(arg0 + 0x40, arg0 + 0x64, arg2, func_89106384, h, 0x1C);
+    Menu_Init(arg0 + 0x40, arg0 + 0x64, arg2, func_89106384, h, 0x1C);
     M2C_FIELD(arg0, s32 *, 0x60) |= 0x10000;
     Window_SetRect(arg0, 0, 0, h + 0xC, M2C_FIELD(arg0, s32 *, 0x6C) * 0x1C + 0x14);
     M2C_FIELD(arg0, s32 *, 0x24) = 0;
@@ -831,7 +831,7 @@ void func_89106570(Popup89106570* arg0) {
 }
 
 s32 func_8002AE6C();                                /* extern */
-M2C_UNK func_8002D9B8(s32, s32, s32, s32, s8 *);  /* extern */
+M2C_UNK Menu_DrawItems(s32, s32, s32, s32, s8 *);  /* extern */
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_8910666C(s8 *arg0, s32 arg1)
 {
@@ -842,17 +842,17 @@ void func_8910666C(s8 *arg0, s32 arg1)
     if ((arg0 && arg0) && arg0)
     {
     }
-    func_8002D9B8(arg0 + 0x40, (*((s32 *) (((s8 *) arg0) + 0))) + 6, (*((s32 *) (new_var + 4))) + 0xA, arg1 | 0xFFED, arg0); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+    Menu_DrawItems(arg0 + 0x40, (*((s32 *) (((s8 *) arg0) + 0))) + 6, (*((s32 *) (new_var + 4))) + 0xA, arg1 | 0xFFED, arg0); // FAKE: decomp slop, raw pointer casts stand in for struct fields
     if (arg1)
     {
     }
   }
 }
 
-M2C_UNK func_8002DC04(s32);                         /* extern */
+M2C_UNK Menu_UpdateCursor(s32);                         /* extern */
 
 s32 func_891066C0(s32 arg0) {
-    return func_8002DC04(arg0 + 0x40);
+    return Menu_UpdateCursor(arg0 + 0x40);
 }
 
 extern char D_8910E064[];
@@ -1149,7 +1149,7 @@ typedef struct Entry891071A4 {
     u8 color[4];
 } Entry891071A4;
 
-void func_8002EC24(s8*, s32, s32, s32, void*, s32, s32);
+void ScrollList_Init(s8*, s32, s32, s32, void*, s32, s32);
 void Window_InitLabeled(s8* arg0, s32 arg1, s32 arg2, s32 arg3, Rgba8910576C arg4, char* arg5);
 void func_8000B2F4(s32);
 extern Entry891071A4 D_80066AD8[];
@@ -1173,7 +1173,7 @@ void func_891071A4(Lab891071A4* arg0, s32 x, s32 y, s32* arg3) {
     for (i = 0; i < 0xF; i++) {
         arg0->names[i] = (s8*)&D_80066AD8[i + ((i < 6) ? 0 : 1)];
     }
-    func_8002EC24(arg0->list, (s32)arg0->unk1D0, (s32)arg0->unk1B0, 8, func_89106FD8, 0xAE, 0x1C);
+    ScrollList_Init(arg0->list, (s32)arg0->unk1D0, (s32)arg0->unk1B0, 8, func_89106FD8, 0xAE, 0x1C);
     arg0->unk150 |= 0x10000;
     for (i = 0; i < *arg3; i++) {
         M2C_FIELD(arg0, s32*, 0x68 + i * 0x40) = Move_NormalizeDisplayIndex(((u8*)arg3)[4 + i]);
@@ -1238,7 +1238,7 @@ void func_891074CC(Ctx891074CC* arg0) {
     }
 }
 
-s32 func_8002FD8C(s8*);
+s32 ScrollList_UpdateCursor(s8*);
 
 typedef struct Slot89107614 {
     s32 unk64;
@@ -1295,7 +1295,7 @@ s32 func_89107614(Lab89107614* arg0) {
             }
             break;
         case 1:
-            if (func_8002FD8C(arg0->unk130) == 0) {
+            if (ScrollList_UpdateCursor(arg0->unk130) == 0) {
                 buttons = ((u16*)D_800603C0)[4];
                 if (buttons & 0x4000) {
                     func_8003F6AC(3);
@@ -1386,7 +1386,7 @@ typedef struct Lab89107A60 {
     /* 0x34C */ s32 mode;
 } Lab89107A60;
 
-void func_8002EC24(s8*, s32, s32, s32, void*, s32, s32);
+void ScrollList_Init(s8*, s32, s32, s32, void*, s32, s32);
 void Window_InitLabeled(s8* arg0, s32 arg1, s32 arg2, s32 arg3, Rgba8910576C arg4, char* arg5);
 void func_8000B2F4(s32);
 extern u8 D_8910A978[];
@@ -1408,7 +1408,7 @@ void func_89107A60(Lab89107A60* arg0, s32 x, s32 y, u8* arg3) {
     arg0->color = D_8910AACC;
     arg0->unk20 = D_8910E0D0;
     func_80027410(arg0->unk33C, D_8910A978, 1, 0xA4, 0xA4);
-    func_8002EC24(arg0->list, (s32)arg0->unk33C, (s32)arg0->unk1F4, 8, func_891078E0, 0xD4, 0x1C);
+    ScrollList_Init(arg0->list, (s32)arg0->unk33C, (s32)arg0->unk1F4, 8, func_891078E0, 0xD4, 0x1C);
     arg0->unk1D0 |= 0x10000;
     for (i = 0; i < M2C_FIELD(arg3, s32*, 4); i++) {
         M2C_FIELD(arg0, s32*, 0x68 + i * 0x40) = D_8910AA1C[arg3[i] - 1];
@@ -1524,7 +1524,7 @@ s32 func_89107EC4(Lab89107EC4* arg0) {
             }
             break;
         case 1:
-            if (func_8002FD8C(arg0->unk1B0) == 0) {
+            if (ScrollList_UpdateCursor(arg0->unk1B0) == 0) {
                 buttons = ((u16*)D_800603C0)[4];
                 if (buttons & 0x4000) {
                     func_8003F6AC(3);
@@ -1672,7 +1672,7 @@ extern u8 D_8910E120[];
 extern u8 D_8910AAE0[];
 extern u8 D_8910AAE4[];
 void func_8000A460(s8*, s8*);
-void func_8002EC24(s8*, s32, s32, s32, void*, s32, s32);
+void ScrollList_Init(s8*, s32, s32, s32, void*, s32, s32);
 void PcSort_DrawItemRow();
 void func_891084B4(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, u8* arg5) {
     Window_SetRect(arg0, arg1, arg2, 0x184, 0x16E);
@@ -1687,7 +1687,7 @@ void func_891084B4(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, u8* arg5) {
     M2C_FIELD(arg0, s32*, 0x40) = 6;
     M2C_FIELD(arg0, Rgba891084B4*, 0x44) = *(Rgba891084B4*)D_8910AAE0;
     M2C_FIELD(arg0, Rgba891084B4*, 0x48) = *(Rgba891084B4*)D_8910AAE4;
-    func_8002EC24(arg0 + 0x4C, arg3, arg4, 8, PcSort_DrawItemRow, 0x178, 0x1C);
+    ScrollList_Init(arg0 + 0x4C, arg3, arg4, 8, PcSort_DrawItemRow, 0x178, 0x1C);
     M2C_FIELD(arg0, s32*, 0x6C) |= 0x10000;
     func_89108450((FlagScanOwner*)arg0);
     M2C_FIELD(arg0, u8**, 0x1AC) = arg5;
@@ -1764,7 +1764,7 @@ void PcSort_DrawUseItemPrompt(s8* arg0) {
 
 extern u8 D_8910AAE8[];
 extern Rgba891084B4 D_8910AAEC;
-s32 func_8002FD8C(s8 *);
+s32 ScrollList_UpdateCursor(s8 *);
 void func_89105144(s8 *);
 s32 func_80020974(s32);
 s32 func_891089BC(s8 *arg0)
@@ -1778,7 +1778,7 @@ s32 func_891089BC(s8 *arg0)
   switch (*((u32 *) (((s8 *) self) + 0x1B0)))
   {
     case 0:
-      if (func_8002FD8C(self + 0x4C) == 0)
+      if (ScrollList_UpdateCursor(self + 0x4C) == 0)
     {
       if (((u16 *) D_800603C0)[4] & 0x4000)
       {

@@ -422,7 +422,7 @@ void func_8A202904(s8 *arg0, s32 arg1, s32 arg2) {
 }
 
 typedef struct Ctx8A20291C { char pad[0x18C]; s32 ptrs[6]; } Ctx8A20291C;
-s32 func_8002DC04(s8*);
+s32 Menu_UpdateCursor(s8*);
 s32 func_8002BC14(s32);
 void func_8002CA34(s8*, s32, s32);
 void func_8002D900(s8*);
@@ -453,7 +453,7 @@ M2C_UNK func_8A20291C(M2C_UNK* ctx) {
 
     switch (M2C_FIELD(arg0, s32*, 0)) {
         case 1:
-            if (func_8002DC04(arg0 + 0x3C) != 0) {
+            if (Menu_UpdateCursor(arg0 + 0x3C) != 0) {
                 M2C_FIELD(arg0, s32*, 0x34) = (M2C_FIELD(arg0, s32*, 0x38) <= 0) ? M2C_FIELD(arg0, s32*, 0x34) : 4;
             } else {
                 res = func_8002BC14((s32)D_800603C0);
@@ -508,7 +508,7 @@ M2C_UNK func_8A20291C(M2C_UNK* ctx) {
             }
             break;
         case 3:
-            if (func_8002DC04(arg0 + 0x3C) != 0) {
+            if (Menu_UpdateCursor(arg0 + 0x3C) != 0) {
                 M2C_FIELD(arg0, s32*, 0x34) = (M2C_FIELD(arg0, s32*, 0x38) <= 0) ? M2C_FIELD(arg0, s32*, 0x34) : 4;
             } else {
                 res = func_8002BC14((s32)D_800603C0);
@@ -608,7 +608,7 @@ extern s32 D_8A20342C;
  */
 extern s32 D_8A203428_2;
 extern M2C_UNK D_8A21D9E4;
-M2C_UNK func_80028060(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
+M2C_UNK GbSave_DrawSummaryBar(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
 void func_8002C8D8(ColF50*, ColF50, f32);
 s32 func_8A202F50(u8 arg0) {
     ColF50 sp2C;
@@ -629,7 +629,7 @@ s32 func_8A202F50(u8 arg0) {
     } else {
         var_a1 = &D_8A21DE10;
     }
-    func_80028060(0, var_a1, &D_8A21D9E4, D_8A21DE08);
+    GbSave_DrawSummaryBar(0, var_a1, &D_8A21D9E4, D_8A21DE08);
     n = D_8A203428;
     func_8002C8D8(&sp2C, *(ColF50*)&D_8A203300, n / (f64)8.0f);
     Ui_DrawTintedScreenBackground(0x38, 0x1E0, sp2C.r, sp2C.g, sp2C.b);

@@ -4,7 +4,7 @@
 #include "m2c_macros.h"
 
 /* Unprototyped on purpose: different callers in this file pass one or two arguments. */
-s32 func_8002DC04();
+s32 Menu_UpdateCursor();
 M2C_UNK func_8002E3F0();
 s32 func_8002DCE0();
 void func_82004518(s32, s32, s32);
@@ -386,7 +386,7 @@ typedef struct Entry80066AD8 {
     Color82000BC4 color;
 } Entry80066AD8;
 extern Entry80066AD8 D_80066AD8[];
-s32 func_8002D498(s32, s32);
+s32 Pokemon_GetTypeIndex(s32, s32);
 void func_8001AB6C(void);
 void func_8001A384(s32, s32);
 void func_8001ABBC(void);
@@ -428,7 +428,7 @@ void func_82000AC4(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
 
 void func_82000BC4(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     Color82000BC4 c;
-    s32 idx = func_8002D498(arg2, arg3);
+    s32 idx = Pokemon_GetTypeIndex(arg2, arg3);
 
     if (idx != -1) {
         c = D_80066AD8[idx].color;
@@ -552,7 +552,7 @@ void FreeBattle_DrawMonStatusWindow(Screen82000C5C* arg0) {
         func_8001A944(x + 0xB2, y + 5, D_82009BA8, arg0->mon->level);
         func_8001A944(x + 0x140, y + 5, D_82009BAC, arg0->mon->maxHp);
         func_8001A944(x + 0x88, y + 0x28, D_82009BB0);
-        if (func_8002D498((s32)arg0->mon, 1) != -1) {
+        if (Pokemon_GetTypeIndex((s32)arg0->mon, 1) != -1) {
             func_8001A944(x + 0x88, y + 0x64, D_82009BBC);
         }
         func_8001A944(x + 0x102, y + 0x28, D_82009BC8);

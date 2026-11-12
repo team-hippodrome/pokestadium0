@@ -70,7 +70,7 @@ void func_82128E34(s32 arg0) {
             break;
         case 1:
             if (func_82105724((ActivePokemon*)D_8219A544, 0x14) != 0) {
-                func_8211F034(D_8219A520 + 0xC8, sBattleScene.scene->actingSide);
+                BattleMessage_ShowForSide(D_8219A520 + 0xC8, sBattleScene.scene->actingSide);
                 func_8212188C();
                 if (sBattleScene.scene->moveEffectKind == 0x14) {
                     func_82104C68(sActivePokemon[sBattleScene.scene->actingSide], 0x16);
@@ -380,7 +380,7 @@ void func_821299B0(CameraNode* arg0) {
                 sBattleScene.scene->cameraPresetId = 4;
                 BattleScene_SetPhaseFlag();
                 Battle_ClearMessageCursor();
-                func_8211F034(D_8219A520 + 0x148, sBattleScene.scene->actingSide);
+                BattleMessage_ShowForSide(D_8219A520 + 0x148, sBattleScene.scene->actingSide);
                 func_82124984((ActivePokemon*)D_8219A544, arg0, 3);
                 func_8212239C((ActivePokemon*)D_8219A544, arg0);
                 BattleScene_ResetCameraSubstepCounter();

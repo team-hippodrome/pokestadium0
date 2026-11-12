@@ -1936,7 +1936,11 @@ void func_82105D3C(s8* arg0) {
     }
 }
 
-s32 func_82105E38(s8 *arg0, unsigned short arg1)
+/**
+ * ORs `arg1` into state.flags.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 ActivePokemon_SetStateFlags(s8 *arg0, unsigned short arg1)
 {
   s8 *new_var; // FAKE: permuter temp
   new_var = (s8 *) arg0;
@@ -1975,13 +1979,13 @@ void BattleScene_ResetBothParticipantsAnimationState(void) {
 
     if (side1_pokemon_state->flags & ACTIVE_AIR_SETTLE) {
         sActivePokemon[0]->displayObject.position.y = 200.0f;
-        func_82105E38(sActivePokemon[0], ACTIVE_AIRBORNE);
+        ActivePokemon_SetStateFlags(sActivePokemon[0], ACTIVE_AIRBORNE);
         Battle_ClearRuntimeFlags(sActivePokemon[0], ACTIVE_AIR_SETTLE);
     }
 
     if (side2_pokemon_state->flags & ACTIVE_AIR_SETTLE) {
         sActivePokemon[1]->displayObject.position.y = 200.0f;
-        func_82105E38(sActivePokemon[1], ACTIVE_AIRBORNE);
+        ActivePokemon_SetStateFlags(sActivePokemon[1], ACTIVE_AIRBORNE);
         Battle_ClearRuntimeFlags(sActivePokemon[1], ACTIVE_AIR_SETTLE);
     }
 
@@ -2017,11 +2021,11 @@ void func_82105FCC(ActivePokemon* active_pokemon) {
     }
     if (other_state->flags & 4) {
         sActivePokemon[BattleScene_GetParticipantSideIndex(active_pokemon) == 0]->displayObject.position.y = 200.0f;
-        func_82105E38((s8*)sActivePokemon[BattleScene_GetParticipantSideIndex(active_pokemon) == 0], 0x200);
+        ActivePokemon_SetStateFlags((s8*)sActivePokemon[BattleScene_GetParticipantSideIndex(active_pokemon) == 0], 0x200);
         Battle_ClearRuntimeFlags(sActivePokemon[BattleScene_GetParticipantSideIndex(active_pokemon) == 0], 4);
     }
     if (state->flags & 0x200) {
-        func_82105E38((s8*)active_pokemon, 0x400);
+        ActivePokemon_SetStateFlags((s8*)active_pokemon, 0x400);
     }
 }
 
@@ -2056,7 +2060,7 @@ void func_821366B0(u8 category, ActivePokemon* owner);
 void func_82106220(ActivePokemon* active_pokemon) {
     if (M2C_FIELD(active_pokemon, u16*, 0x7C2) & 0x40) {
         func_82105E4C((s8*)active_pokemon, 0x40);
-        func_82105E38((s8*)active_pokemon, 0x80);
+        ActivePokemon_SetStateFlags((s8*)active_pokemon, 0x80);
         func_821366B0(2, active_pokemon);
     }
 }
@@ -2190,7 +2194,7 @@ void func_821065B4(ActivePokemon *arg0)
     {
       func_821366B0(1, arg0);
       arg0->displayObject.node.renderFlags &= ~0x20;
-      func_82105E38((s8 *) arg0, 2);
+      ActivePokemon_SetStateFlags((s8 *) arg0, 2);
       func_82134EBC(arg0, 0x13);
     }
     if ((state->flags & 2) && (!(mon->statusCondition & 0x20)))
@@ -2221,7 +2225,7 @@ void func_821065B4(ActivePokemon *arg0)
       func_8210568C(arg0, 0xAF, 2);
       func_821366B0(3, arg0);
       func_82134EBC(arg0, 0x32);
-      func_82105E38((s8 *) arg0, 1);
+      ActivePokemon_SetStateFlags((s8 *) arg0, 1);
     }
     if (((mon->statusCondition & 7) == 0) && (state->flags & 1))
     {
@@ -2313,7 +2317,7 @@ void func_82106AC0(ActivePokemon* arg0) {
     if (p[5] & 0x20) {
         func_821366B0(1, arg0);
         ((u8*)arg0)[2] &= ~0x20;
-        func_82105E38((s8*)arg0, 2);
+        ActivePokemon_SetStateFlags((s8*)arg0, 2);
     }
 }
 
@@ -2326,7 +2330,7 @@ void BattleAnim_ResetFreezeStatusAndRestoreAnimation(ActivePokemon* arg0) {
     if (!(M2C_FIELD(arg0, u16*, 0x7C2) & 2) && (ptr[5] & 0x20)) {
         func_821366B0(1, arg0);
         M2C_FIELD(arg0, u8*, 2) &= ~0x20;
-        func_82105E38((s8*)arg0, 2);
+        ActivePokemon_SetStateFlags((s8*)arg0, 2);
     }
 }
 

@@ -611,7 +611,7 @@ extern s32 D_820090D8;
  */
 extern s32 D_820090D4_2;
 extern M2C_UNK D_82009E10;
-M2C_UNK func_80028060(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
+M2C_UNK GbSave_DrawSummaryBar(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
 void func_800069CC(void);
 M2C_UNK Ui_DrawTintedScreenBackground(M2C_UNK, M2C_UNK, u8, u8, s32);
 void func_8002C8D8(Col8200579C*, Col8200579C, f32);
@@ -634,7 +634,7 @@ s32 func_8200579C(s32 arg0) {
     } else {
         var_a1 = &D_8200AD30;
     }
-    func_80028060(0, var_a1, &D_82009E10, D_8200AD2C);
+    GbSave_DrawSummaryBar(0, var_a1, &D_82009E10, D_8200AD2C);
     n = D_820090D4;
     func_8002C8D8(&sp2C, *(Col8200579C*)&D_82008F50, n / (f64)8.0f);
     Ui_DrawTintedScreenBackground(0x38, 0x1E0, sp2C.r, sp2C.g, sp2C.b);
@@ -659,7 +659,7 @@ void func_820058BC(s32 arg0) {
     func_82004E9C((s8*) D_8200AD28);
 }
 
-M2C_UNK func_80028060(M2C_UNK, M2C_UNK *, M2C_UNK *, s32); /* extern */
+M2C_UNK GbSave_DrawSummaryBar(M2C_UNK, M2C_UNK *, M2C_UNK *, s32); /* extern */
 M2C_UNK func_82004CE0(s32);                         /* extern */
 extern M2C_UNK D_82009E18;
 extern s32 D_8200AD28;
@@ -675,7 +675,7 @@ s32 func_820058FC(s32 arg0) {
     } else {
         var_a1 = &D_8200AD30;
     }
-    func_80028060(0, var_a1, &D_82009E18, D_8200AD2C);
+    GbSave_DrawSummaryBar(0, var_a1, &D_82009E18, D_8200AD2C);
     return 0;
 }
 

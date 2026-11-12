@@ -101,7 +101,7 @@ void BattleMenu_CommitMoveSelection(ActivePokemon* arg0) {
 }
 
 void func_8211F274();
-s32 func_82107F88(s32);
+s32 ActivePokemon_GetNickname(s32);
 M2C_UNK func_8211F288();
 extern s32 D_8218C6F0;
 s32 func_8210C8A0(arg0) ActivePokemon *arg0;
@@ -141,7 +141,7 @@ s32 func_8210C8A0(arg0) ActivePokemon *arg0;
         temp_v0->selectedCommandOption = 1;
       }
       func_8211F274(arg0);
-      func_8211F288(arg0, D_8218C6F0, func_82107F88((s32) arg0));
+      func_8211F288(arg0, D_8218C6F0, ActivePokemon_GetNickname((s32) arg0));
     }
     else
       if (cont->buttonPressed & 0x20)
@@ -415,14 +415,14 @@ void BattleMenu_TakeControlOnCButtonPress(ActivePokemon* arg0, u8* arg1, u8* arg
     }
 }
 
-s32 func_82107F88(s32);                             /* extern */
+s32 ActivePokemon_GetNickname(s32);                             /* extern */
 void func_8211F274();                            /* extern */
 M2C_UNK func_8211F288(s32, s32, s32);               /* extern */
 extern s32 D_8218C700;
 
 void func_8210CFE4(s32 arg0) {
     func_8211F274();
-    func_8211F288(arg0, D_8218C700, func_82107F88(arg0));
+    func_8211F288(arg0, D_8218C700, ActivePokemon_GetNickname(arg0));
 }
 
 void func_82134D60(void);

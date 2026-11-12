@@ -28,7 +28,7 @@ void BattleScene_PhaseResidualDamageWithoutMove(CameraNode* arg0) {
                 func_82124894(arg0, sActivePokemon[sBattleScene.scene->actingSide]);
                 func_82104C68(sActivePokemon[sBattleScene.scene->actingSide], 0xD);
                 if (sp2C[0x15] & 0x18) {
-                    func_8211F034(D_8219A520 + 0x248, sBattleScene.scene->actingSide);
+                    BattleMessage_ShowForSide(D_8219A520 + 0x248, sBattleScene.scene->actingSide);
                     M2C_FIELD(sp2C, u16*, 0xC) = M2C_FIELD(sp2C, u16*, 0xE);
                     M2C_FIELD(sp28, u16*, 0xC) = M2C_FIELD(sp28, u16*, 0xE);
                     if (sp2C[0x15] & 0x10) {
@@ -38,7 +38,7 @@ void BattleScene_PhaseResidualDamageWithoutMove(CameraNode* arg0) {
                     }
                     sBattleScene.scene->phaseStep++;
                 } else {
-                    func_8211F034(D_8219A520 + 0x288, sBattleScene.scene->actingSide);
+                    BattleMessage_ShowForSide(D_8219A520 + 0x288, sBattleScene.scene->actingSide);
                     M2C_FIELD(sp2C, u16*, 0xC) = M2C_FIELD(sp2C, u16*, 0x10);
                     M2C_FIELD(sp28, u16*, 0xC) = M2C_FIELD(sp28, u16*, 0x10);
                     func_821366B0(0xA, (ActivePokemon*)D_8219A544);
@@ -60,7 +60,7 @@ void BattleScene_PhaseResidualDamageWithoutMove(CameraNode* arg0) {
                     sBattleScene.scene->actingSide = !sBattleScene.scene->actingSide;
                 } else if (sp2C[0x4D] & 0x80) {
                     func_800407B0(0x22, 0, 0);
-                    func_8211F034(D_8219A520 + 0x288, sBattleScene.scene->actingSide);
+                    BattleMessage_ShowForSide(D_8219A520 + 0x288, sBattleScene.scene->actingSide);
                     M2C_FIELD(sp2C, u16*, 0xC) = M2C_FIELD(sp2C, u16*, 0x10);
                     M2C_FIELD(sp28, u16*, 0xC) = M2C_FIELD(sp28, u16*, 0x10);
                     func_821366B0(0xA, (ActivePokemon*)D_8219A544);
@@ -123,7 +123,7 @@ void BattleScene_PhaseResidualDamageFaintCheck(CameraNode* arg0) {
             BattleAnim_CleanupEffects(1);
             func_82124874(arg0, sActivePokemon[sBattleScene.scene->actingSide]);
             func_82104C68(sActivePokemon[sBattleScene.scene->actingSide], 0xD);
-            func_8211F034(D_8219A520 + 0x248, sBattleScene.scene->actingSide);
+            BattleMessage_ShowForSide(D_8219A520 + 0x248, sBattleScene.scene->actingSide);
             M2C_FIELD(sp1C, u16*, 0xC) = M2C_FIELD(sp1C, u16*, 0xE);
             M2C_FIELD(sp18, u16*, 0xC) = M2C_FIELD(sp18, u16*, 0xE);
             sBattleScene.scene->phaseStep += 1;
@@ -174,7 +174,7 @@ void BattleScene_PhaseWithdrawFainted(CameraNode* arg0) {
             func_821255EC(arg0);
             func_82124984((s32)temp_s0, (s32)arg0, 2);
             BattleScene_ResetCameraFrameCounter();
-            func_8211F034(D_8219A520 + 0x1C8, sBattleScene.scene->actingSide);
+            BattleMessage_ShowForSide(D_8219A520 + 0x1C8, sBattleScene.scene->actingSide);
             sBattleScene.scene->phaseStep++;
             break;
 
@@ -231,7 +231,7 @@ void BattleScene_PhaseWithdrawFainted(CameraNode* arg0) {
             func_82104C68(temp_s0, 0x12);
             func_82124984((s32)temp_s0, (s32)arg0, 3);
             func_8212239C(temp_s0, arg0);
-            func_8211F034(D_8219A520 + 0x88, sBattleScene.scene->actingSide);
+            BattleMessage_ShowForSide(D_8219A520 + 0x88, sBattleScene.scene->actingSide);
             BattleScene_ResetCameraFrameCounter();
             sBattleScene.scene->phaseStep++;
             break;
@@ -271,7 +271,7 @@ void func_821311A0(CameraNode* arg0) {
             Vec3f_SetComponentsDuplicate(&temp_s0->displayObject.position, temp_s0->facingDirection * -150.0f, 25.0f, 0.0f);
             BattleScene_ResetCameraFrameCounter();
             Battle_ClearMessageCursor();
-            func_8211F034(D_8219A520 + 0x88, sBattleScene.scene->actingSide);
+            BattleMessage_ShowForSide(D_8219A520 + 0x88, sBattleScene.scene->actingSide);
             BattleAnim_LoadModeResourceList(temp_s0->sessionTeams, 3);
             sBattleScene.scene->phaseStep += 1;
             break;
@@ -581,9 +581,9 @@ void BattleScene_SendOutSide0(CameraNode* arg0) {
     sActivePokemon[0]->displayObject.node.flags &= ~1;
     sActivePokemon[1]->displayObject.node.flags &= ~1;
     func_821365B0(3, (s8*)sActivePokemon[0], (s8*)sActivePokemon[0], 0xFF, 0xFF);
-    func_8211EF74(D_8219A520 + 0x448, 0, (s32)D_82196650, func_82107F88(sActivePokemon[0]));
+    BattleMessage_Format(D_8219A520 + 0x448, 0, (s32)D_82196650, ActivePokemon_GetNickname(sActivePokemon[0]));
     func_8211EE8C();
-    func_8211F034(D_8219A520 + 0x448, 0);
+    BattleMessage_ShowForSide(D_8219A520 + 0x448, 0);
     sActivePokemon[0]->displayObject.node.flags |= 1;
     sActivePokemon[0]->pokeBall.node.flags &= ~1;
     func_82124984((s32)sActivePokemon[0], (s32)arg0, 3);
@@ -612,9 +612,9 @@ void func_821321A4(CameraNode* arg0) {
 void BattleScene_SendOutSide1(CameraNode* arg0) {
     func_800407B0(2, 0, 0);
     BattleAnim_QueueEffectList3(3, sActivePokemon[1], sActivePokemon[1], 0xFF, 0xFF);
-    func_8211EF74(D_8219A520 + 0x488, 0, (s32)D_8219665C, func_82107F88(sActivePokemon[1]));
+    BattleMessage_Format(D_8219A520 + 0x488, 0, (s32)D_8219665C, ActivePokemon_GetNickname(sActivePokemon[1]));
     func_8211EE8C();
-    func_8211F034(D_8219A520 + 0x488, 1);
+    BattleMessage_ShowForSide(D_8219A520 + 0x488, 1);
     BattleScene_ResetCameraFrameCounter();
     M2C_FIELD(sActivePokemon[1], u8*, 0x1) |= 1;
     func_82124984((s32)sActivePokemon[1], (s32)arg0, 3);

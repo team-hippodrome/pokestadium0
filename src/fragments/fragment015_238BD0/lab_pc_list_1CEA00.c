@@ -562,7 +562,7 @@ void func_89000D50(s32 x, s32 y, char* str, UNUSED s32 index, s32 flags) {
 }
 
 void Window_SetRect(s8*, s32, s32, s32, s32);
-void func_8002D880(s8*, s32, s32, s32, s32, s32);
+void Menu_Init(s8*, s32, s32, s32, s32, s32);
 M2C_UNK func_80027804();
 void func_89000E98(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
     s32 pad[2]; // FAKE: stack padding
@@ -574,17 +574,17 @@ void func_89000E98(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5)
     M2C_FIELD(arg0, s32 *, 0x14) = 0;
     M2C_FIELD(arg0, Rgba89000D50 *, 0x18) = D_8900A5BC;
     func_80027804((s8 *)arg0 + 0x50, arg3, arg4, arg4);
-    func_8002D880((s8 *)arg0 + 0x2C, (s32)((s8 *)arg0 + 0x50), (s32)((s8 *)arg0 + 0x5C), (s32)func_89000D50, 0xD8, 0x1C);
+    Menu_Init((s8 *)arg0 + 0x2C, (s32)((s8 *)arg0 + 0x50), (s32)((s8 *)arg0 + 0x5C), (s32)func_89000D50, 0xD8, 0x1C);
     M2C_FIELD(arg0, s32 *, 0x34) = arg5;
     M2C_FIELD(arg0, s32 *, 0x4C) |= 0x10000;
 }
 
 s32 func_8002AE6C();                                /* extern */
-M2C_UNK func_8002D9B8(s8 *, s32, s32, M2C_UNK, s32); /* extern */
+M2C_UNK Menu_DrawItems(s8 *, s32, s32, M2C_UNK, s32); /* extern */
 
 void func_89000F5C(s8 *arg0) {
     if (func_8002AE6C() == 0) {
-        func_8002D9B8(arg0 + 0x2C, M2C_FIELD(arg0, s32 *, 0) + 6, M2C_FIELD(arg0, s32 *, 4) + 0xA, 0xFFEF, 0);
+        Menu_DrawItems(arg0 + 0x2C, M2C_FIELD(arg0, s32 *, 0) + 6, M2C_FIELD(arg0, s32 *, 4) + 0xA, 0xFFEF, 0);
     }
 }
 
@@ -652,13 +652,13 @@ void func_89001230(s8* arg0, s32 arg1) {
     func_8002ED18(arg0, arg1, arg0 + 0x44);
 }
 
-void func_8002EC24(s8*, s32, s8*, s32, void*, s32, s32);
+void ScrollList_Init(s8*, s32, s8*, s32, void*, s32, s32);
 void LabItem_DrawItemCountRow();
 
 void func_89001250(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     M2C_FIELD(arg0, s32*, 0x10C) = arg1;
     M2C_FIELD(arg0, s32*, 0x110) = arg2;
-    func_8002EC24(arg0, arg3, arg0 + 0x44, 8, LabItem_DrawItemCountRow, 0xEC, 0x1C);
+    ScrollList_Init(arg0, arg3, arg0 + 0x44, 8, LabItem_DrawItemCountRow, 0xEC, 0x1C);
     M2C_FIELD(arg0, s32*, 0x20) |= 0x10000;
 }
 
@@ -681,7 +681,7 @@ void func_890012C4(s8 *arg0, s32 arg1) {
     func_8001BCB4(M2C_FIELD(arg0, s32 *, 0x10C) + 0xC4, M2C_FIELD(arg0, s32 *, 0x110) + 0xF4, 8, 0xA, D_04011AB8, 8, 0);
 }
 
-s32 func_8002FD8C(void*);
+s32 ScrollList_UpdateCursor(void*);
 s32 func_80030230(void*);
 
 /* Navigate the selected menu mode, then report cancel or confirm input. */
@@ -693,7 +693,7 @@ s32 func_890013F8(void* menu, u32 flags) {
     if (flags & 0x200) {
         moved = func_80030230(menu);
     } else {
-        moved = func_8002FD8C(menu);
+        moved = ScrollList_UpdateCursor(menu);
     }
     if (moved == 0) {
         action = func_8002BC14(D_800603C0);
@@ -1015,7 +1015,7 @@ void func_890022D0(s8 *arg0) {
 
 s32 func_8002B2B0(void *);
 s32 func_89000258(u8, s32);
-s32 func_8002DDFC(s8*);
+s32 Menu_SkipDisabledForward(s8*);
 extern s32 D_8900A688[];
 extern s32 D_8900A694;
 extern s8 D_89018648[];
@@ -1266,7 +1266,7 @@ s32 func_89002318(s8* arg0) {
                 }
                 func_89000D34(arg0 + 0x170, *(s32*)(arg0 + 0x1D4));
                 *(s32*)(arg0 + 0x1A4) = 0;
-                func_8002DDFC(arg0 + 0x19C);
+                Menu_SkipDisabledForward(arg0 + 0x19C);
                 break;
         }
         *(s32*)arg0 = next;
@@ -1319,7 +1319,7 @@ extern Col89002C10 D_8900A6B0;
 extern char D_89018678[];
 void LabItem_DrawTrainerInfo();
 void Window_SetRect(s8*, s32, s32, s32, s32);
-void func_8002D880(s8*, s32, s32, s32, s32, s32);
+void Menu_Init(s8*, s32, s32, s32, s32, s32);
 void func_80027410(s8*, s8*, s32, s32, s32);
 void func_89002C10(s8* arg, s32 arg1, s32 arg2, s8* arg3) {
     Win89002C10* arg0 = (Win89002C10*)arg;
@@ -1334,7 +1334,7 @@ void func_89002C10(s8* arg, s32 arg1, s32 arg2, s8* arg3) {
     arg0->unk44 = D_8900A6AC;
     arg0->unk48 = D_8900A6B0;
     func_80027410((s8*)arg0->unk70, arg3, 0x14, 4, 4);
-    func_8002D880((s8*)arg0->unk4C, (s32)arg0->unk70, (s32)arg0->unk80, (s32)LabItem_DrawTrainerInfo, 0x13C, 0x3E);
+    Menu_Init((s8*)arg0->unk4C, (s32)arg0->unk70, (s32)arg0->unk80, (s32)LabItem_DrawTrainerInfo, 0x13C, 0x3E);
     arg0->unk6C |= 0x10000;
 }
 
@@ -1359,13 +1359,13 @@ void func_89002D14(s8* arg0, s32 arg1) {
     }
 }
 
-s32 func_8002DC04(void*);
+s32 Menu_UpdateCursor(void*);
 
 s32 func_89002DE4(unk_func_8820E99C_030* arg0) {
     s32 sp1C = 0;
     s32 dir;
 
-    if (func_8002DC04((u8*)arg0 + 0x4C) == 0) {
+    if (Menu_UpdateCursor((u8*)arg0 + 0x4C) == 0) {
         dir = Ui_GetSelectionDirection((unk_func_8002EBD8_arg0*)gPlayer1Controller);
         if (dir == -1) {
             Audio_PlaySoundEffectById(3);

@@ -137,16 +137,16 @@ void func_8A100104(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s32* arg5
  *
  *   - func_80027410 (TableView_Initialize in symbol_addrs.txt) is called on
  *     the area at arg0 + 0x70 with D_80064C5C, 0x1C, 0x97 and 0x97;
- *   - func_8002EC24 is called on the object at arg0 + 0x2C with that area,
+ *   - ScrollList_Init is called on the object at arg0 + 0x2C with that area,
  *     arg0 + 0x80, 8, the callback func_8A100104 and the constants 0x104
  *     and 0x24.
  *
  * Finally the word at +0x1B0 is cleared and bit 0x10000 is set in the word at
- * +0x4C.  What func_80027410 and func_8002EC24 do is not established yet,
+ * +0x4C.  What func_80027410 and ScrollList_Init do is not established yet,
  * so the roles of those arguments are not named.
  */
 M2C_UNK func_80027410(s8 *, M2C_UNK *, M2C_UNK, M2C_UNK, s32); /* extern */
-M2C_UNK func_8002EC24(s8 *, s8 *, s8 *, M2C_UNK, M2C_UNK *, s32, s32); /* extern */
+M2C_UNK ScrollList_Init(s8 *, s8 *, s8 *, M2C_UNK, M2C_UNK *, s32, s32); /* extern */
 extern M2C_UNK D_80064C5C;
 extern M2C_UNK D_8A12FC38;
 
@@ -157,7 +157,7 @@ void func_8A100318(void* arg0, s32 arg1, s32 arg2) {
     M2C_FIELD(arg0, s32 *, 0x14) = 0x801;
     M2C_FIELD(arg0, M2C_UNK **, 0x20) = &D_8A12FC38;
     func_80027410((s8 *)arg0 + 0x70, &D_80064C5C, 0x1C, 0x97, 0x97);
-    func_8002EC24((s8 *)arg0 + 0x2C, (s8 *)arg0 + 0x70, (s8 *)arg0 + 0x80, 8, &func_8A100104, 0x104, 0x24);
+    ScrollList_Init((s8 *)arg0 + 0x2C, (s8 *)arg0 + 0x70, (s8 *)arg0 + 0x80, 8, &func_8A100104, 0x104, 0x24);
     M2C_FIELD(arg0, s32 *, 0x1B0) = 0;
     M2C_FIELD(arg0, s32 *, 0x4C) = (s32) (M2C_FIELD(arg0, s32 *, 0x4C) | 0x10000);
 }
@@ -200,7 +200,7 @@ void Pokedex_DrawSortOrderMenu(s8* arg0, u32 arg1) {
 }
 
 extern s32 D_800603C0;
-s32 func_8002FD8C(unk_func_8820BE14_02C_038*);
+s32 ScrollList_UpdateCursor(unk_func_8820BE14_02C_038*);
 
 /* Navigate the list, toggle the view mode, or report cancel/confirm input. */
 s32 func_8A100588(u8* state) {
@@ -209,7 +209,7 @@ s32 func_8A100588(u8* state) {
     s32 value;
 
     menu = (unk_func_8820BE14_02C_038*)(state + 0x2C);
-    result = func_8002FD8C(menu);
+    result = ScrollList_UpdateCursor(menu);
     if (result == 0) {
         value = *(u16*)(D_800603C0 + 8);
         if (value & 1) {
@@ -304,27 +304,27 @@ void func_8A1008A4(void* arg0, s32 arg1, s32 arg2) {
     M2C_FIELD(arg0, s32*, 0x14) = 0x1000;
     M2C_FIELD(arg0, Color_RGBA8*, 0x18) = D_8A1057D4;
     func_80027804((s8 *)arg0 + 0x58, &D_8A1057E8, 4, 4);
-    func_8002D880((s8 *)arg0 + 0x2C, (s8 *)arg0 + 0x58, (s8 *)arg0 + 0x50, &func_8A100808, 0xA8, 0x24);
+    Menu_Init((s8 *)arg0 + 0x2C, (s8 *)arg0 + 0x58, (s8 *)arg0 + 0x50, &func_8A100808, 0xA8, 0x24);
     M2C_FIELD(arg0, s32 *, 0x4C) = (s32) (M2C_FIELD(arg0, s32 *, 0x4C) | 0x10000);
 }
 
 s32 func_8002AE6C();                                /* extern */
-M2C_UNK func_8002D9B8(s8 *, s32, s32, s32, s32);  /* extern */
+M2C_UNK Menu_DrawItems(s8 *, s32, s32, s32, s32);  /* extern */
 
 void func_8A100954(s8 *arg0, s32 arg1) {
     if (func_8002AE6C() == 0) {
-        func_8002D9B8(arg0 + 0x2C, M2C_FIELD(arg0, s32 *, 0) + 6, M2C_FIELD(arg0, s32 *, 4) + 0xC, arg1 | 0xFFED, 0);
+        Menu_DrawItems(arg0 + 0x2C, M2C_FIELD(arg0, s32 *, 0) + 6, M2C_FIELD(arg0, s32 *, 4) + 0xC, arg1 | 0xFFED, 0);
     }
 }
 
 s32 func_8002BC14(s32);                             /* extern */
-s32 func_8002DC04(s32);                             /* extern */
+s32 Menu_UpdateCursor(s32);                             /* extern */
 
 s32 func_8A1009A4(s32 arg0) {
     s32 temp_v0;
     s32 var_v1;
 
-    temp_v0 = func_8002DC04(arg0 + 0x2C);
+    temp_v0 = Menu_UpdateCursor(arg0 + 0x2C);
     var_v1 = temp_v0;
     if (temp_v0 == 0) {
         var_v1 = func_8002BC14(D_800603C0);
@@ -534,7 +534,7 @@ void func_8A101154(void* arg0) {
 }
 
 M2C_UNK func_800069CC();                            /* extern */
-M2C_UNK func_80028060(M2C_UNK, M2C_UNK *, M2C_UNK *, s32); /* extern */
+M2C_UNK GbSave_DrawSummaryBar(M2C_UNK, M2C_UNK *, M2C_UNK *, s32); /* extern */
 void Pokedex_DrawSortOrderMenu(s8*, u32);
 void Pokedex_DrawCounts(void*);
 extern M2C_UNK D_8A12FD2C;
@@ -558,7 +558,7 @@ s32 Pokedex_DrawIndexScreen(s32 arg0) {
     } else {
         var_a1 = &D_8A130238;
     }
-    func_80028060(0, var_a1, &D_8A12FD2C, D_8A130230);
+    GbSave_DrawSummaryBar(0, var_a1, &D_8A12FD2C, D_8A130230);
     Pokedex_DrawSortOrderMenu(&D_8A12FFC0, 0x10);
     Pokedex_DrawCounts(&D_8A130174);
     func_8A100954(&D_8A1301A0, 2);
@@ -943,7 +943,7 @@ extern s32 D_8A105804;
  */
 extern s32 D_8A105800_2;
 extern M2C_UNK D_8A12FD3C;
-M2C_UNK func_80028060(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
+M2C_UNK GbSave_DrawSummaryBar(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
 void func_8002C8D8(Col8A101B30*, Col8A101B30, f32);
 s32 func_8A101B30(u8 arg0) {
     Col8A101B30 sp2C;
@@ -964,7 +964,7 @@ s32 func_8A101B30(u8 arg0) {
     } else {
         var_a1 = &D_8A130238;
     }
-    func_80028060(0, var_a1, &D_8A12FD3C, D_8A130230);
+    GbSave_DrawSummaryBar(0, var_a1, &D_8A12FD3C, D_8A130230);
     n = D_8A105800;
     func_8002C8D8(&sp2C, *(Col8A101B30*)&D_8A1057D0, n / (f64)8.0f);
     Ui_DrawTintedScreenBackground(0x38, 0x1E0, sp2C.r, sp2C.g, sp2C.b);

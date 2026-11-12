@@ -183,7 +183,7 @@ void BattleScene_Phase2(CameraNode* arg0);
 void func_821272C0(s8 *arg0);
 
 M2C_UNK func_82125580();
-void func_8211F034(s32, s32);
+void BattleMessage_ShowForSide(s32, s32);
 s32 func_82105724(ActivePokemon*, s32);
 extern s32 D_8219A520;
 void func_82104C68(ActivePokemon*, s32);
@@ -326,7 +326,7 @@ void func_8212A67C(ActivePokemon* arg0, CameraNode* arg1);
 void func_8212A768(ActivePokemon* arg0, CameraNode* arg1, s32 arg2);
 
 void BattleScene_SetDamageShakeAmplitude(ActivePokemon*);
-void func_82110B44(ActivePokemon*);
+void ActivePokemon_CommitPendingStatus(ActivePokemon*);
 void func_82135098(ActivePokemon*);
 void func_821061A8(ActivePokemon*);
 s32 func_82122DFC(CameraNode*, ActivePokemon*);

@@ -21,7 +21,7 @@ typedef struct Entry80066AD8 {
     Color82000BC4 color;
 } Entry80066AD8;
 extern Entry80066AD8 D_80066AD8[];
-s32 func_8002D498(s32, s32);
+s32 Pokemon_GetTypeIndex(s32, s32);
 void func_8001AB6C(void);
 void func_8001A384(s32, s32);
 void func_8001ABBC(void);
@@ -95,7 +95,7 @@ extern s32 D_8200AD28;
 
 void func_820058BC(s32 arg0);
 
-M2C_UNK func_80028060(M2C_UNK, M2C_UNK *, M2C_UNK *, s32); /* extern */
+M2C_UNK GbSave_DrawSummaryBar(M2C_UNK, M2C_UNK *, M2C_UNK *, s32); /* extern */
 M2C_UNK func_82004CE0(s32);                         /* extern */
 extern M2C_UNK D_82009E18;
 extern s32 D_8200AD28;
@@ -205,7 +205,7 @@ void func_82005D90(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s32* arg5
  * Window_SetRect(arg0, arg1, arg2, arg3, arg4), clears the words at 0x28 and
  * 0x24, sets the word at 0x14 to 0x801 and the word at 0x20 to arg9. Calls
  * func_80027804 on the sub-object at arg0 + 0x50 with (arg5, arg6, arg6),
- * then func_8002D880 on the sub-objects at 0x2C, 0x50 and 0x5C with the
+ * then Menu_Init on the sub-objects at 0x2C, 0x50 and 0x5C with the
  * callback func_82005D90, the value arg3 - 0xC and 0x20. Finally sets bit
  * 0x10000 in the word at 0x4C and stores arg7 at 0x7C and arg8 at 0x80.
  *
@@ -216,7 +216,7 @@ void func_82005D90(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s32* arg5
  */
 void Window_SetRect(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 M2C_UNK func_80027804(s8 *, s32, s32, s32);         /* extern */
-M2C_UNK func_8002D880(s8 *, s8 *, s8 *, void (*)(s32, s32, char *, s32, s32, s32 *), s32, s32); /* extern */
+M2C_UNK Menu_Init(s8 *, s8 *, s8 *, void (*)(s32, s32, char *, s32, s32, s32 *), s32, s32); /* extern */
 void func_82005E34(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9) {
     Window_SetRect(arg0, arg1, arg2, arg3, arg4);
     M2C_FIELD(arg0, s32 *, 0x28) = 0;
@@ -224,14 +224,14 @@ void func_82005E34(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s
     M2C_FIELD(arg0, s32 *, 0x14) = 0x801;
     M2C_FIELD(arg0, s32 *, 0x20) = arg9;
     func_80027804(arg0 + 0x50, arg5, arg6, arg6);
-    func_8002D880(arg0 + 0x2C, arg0 + 0x50, arg0 + 0x5C, func_82005D90, arg3 - 0xC, 0x20);
+    Menu_Init(arg0 + 0x2C, arg0 + 0x50, arg0 + 0x5C, func_82005D90, arg3 - 0xC, 0x20);
     M2C_FIELD(arg0, s32 *, 0x4C) = (s32) (M2C_FIELD(arg0, s32 *, 0x4C) | 0x10000);
     M2C_FIELD(arg0, s32 *, 0x7C) = arg7;
     M2C_FIELD(arg0, s32 *, 0x80) = arg8;
 }
 
 s32 func_8002AE6C();
-void func_8002D9B8(s32, s32, s32, s32, s8 *);
+void Menu_DrawItems(s32, s32, s32, s32, s8 *);
 extern Color_RGBA8 D_82009104;
 extern Color_RGBA8 D_82009108;
 
@@ -241,7 +241,7 @@ extern Color_RGBA8 D_82009108;
  * number of rows; the panel height is temp_s1 = rows * 32 + 8. Draws the frame via
  * Ui_DrawTexturedDivider, a filled bar (colour D_82009100, height temp_s1) via func_80029028, a
  * highlight band via Ui_FillRectPrimEnvColor (colours D_82009104 / D_82009108, height = word at
- * +0x80 * 0x1C), the list via func_8002D9B8 (flags arg1 | 0xFFED, width passed by
+ * +0x80 * 0x1C), the list via Menu_DrawItems (flags arg1 | 0xFFED, width passed by
  * pointer in sp38), and the text pointer at index [+0x34] of the table in the word at
  * +0x7C, printed in the colour from D_800734A8 via func_8001A944.
  * What the constants mean is not established. `pad` places sp38 at sp+0x38 as in the ROM.
@@ -258,7 +258,7 @@ void func_82005EE4(s8* arg0, s32 arg1) {
         func_80029028(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) - 0xC, temp_s1, *(Color82001CCC*)&D_82009100);
         Ui_FillRectPrimEnvColor(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + temp_s1 + 0xC, M2C_FIELD(arg0, s32*, 8) - 0xC, M2C_FIELD(arg0, s32*, 0x80) * 0x1C, D_82009104, D_82009108);
         sp38 = M2C_FIELD(arg0, s32*, 8) - 0xC;
-        func_8002D9B8(arg0 + 0x2C, M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0xA, arg1 | 0xFFED, (s8*)&sp38);
+        Menu_DrawItems(arg0 + 0x2C, M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0xA, arg1 | 0xFFED, (s8*)&sp38);
         func_8001AB6C();
         func_8001AA9C(M2C_FIELD(&D_800734A8, u8*, 0), M2C_FIELD(&D_800734A8, u8*, 1), M2C_FIELD(&D_800734A8, u8*, 2), M2C_FIELD(&D_800734A8, u8*, 3));
         func_8001A384(8, 0);
@@ -274,7 +274,7 @@ extern s32 D_800603C0;
  * func_820060AC
  *
  * Returns 0 immediately unless the word at arg0 + 0x28 is 1 or 2. Otherwise,
- * if func_8002DC04(arg0 + 0x2C, arg0) returns 0, it reads func_8002BC14(D_800603C0):
+ * if Menu_UpdateCursor(arg0 + 0x2C, arg0) returns 0, it reads func_8002BC14(D_800603C0):
  * -1 calls func_8003F6AC(3) and returns -1; 1 calls func_8003F6AC(2) and
  * returns the word at arg0 + 0x34 plus 1; any other value returns 0.
  * (func_8200639C is the same pattern without the mode check.)
@@ -287,7 +287,7 @@ s32 func_820060AC(void* arg0) {
     if ((tmp != 1) && (tmp != 2)) {
         return 0;
     }
-    if (func_8002DC04((u8*)arg0 + 0x2C, arg0) == 0) {
+    if (Menu_UpdateCursor((u8*)arg0 + 0x2C, arg0) == 0) {
         tmp = func_8002BC14(D_800603C0);
         if (tmp == -1) {
             func_8003F6AC(3);
@@ -330,7 +330,7 @@ void func_820061F0(s8 *arg0, s32 arg1, s32 arg2, List820061F0 *arg3, s8 *arg4, C
     }
     func_80027804(arg0 + 0x50, (s32)arg3->items, arg3->count, arg3->count);
     h = max * 0x18 + 0x18;
-    func_8002D880(arg0 + 0x2C, arg0 + 0x50, arg4, (void (*)(s32, s32, char *, s32, s32, s32 *))func_82006154, h, 0x24);
+    Menu_Init(arg0 + 0x2C, arg0 + 0x50, arg4, (void (*)(s32, s32, char *, s32, s32, s32 *))func_82006154, h, 0x24);
     M2C_FIELD(arg0, s32 *, 0x4C) |= 0x10000;
     Window_SetRect(arg0, arg1, arg2, h + 0xC, arg3->count * 0x24 + 0x18);
     M2C_FIELD(arg0, s32 *, 0x24) = 0;
@@ -342,7 +342,7 @@ void func_820061F0(s8 *arg0, s32 arg1, s32 arg2, List820061F0 *arg3, s8 *arg4, C
 }
 
 s32 func_8002AE6C();                                /* extern */
-void func_8002D9B8(s32, s32, s32, s32, s8 *);  /* extern */
+void Menu_DrawItems(s32, s32, s32, s32, s8 *);  /* extern */
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_82006348(s8 *arg0, s32 arg1)
 {
@@ -352,7 +352,7 @@ void func_82006348(s8 *arg0, s32 arg1)
     if (arg0 && arg0)
     {
     }
-    func_8002D9B8(new_var = arg0 + 0x2C, (*((s32 *) (((s8 *) arg0) + 0))) + 6, (*((s32 *) (((s8 *) arg0) + 4))) + 0xC, arg1 | 0xFFED, arg0); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+    Menu_DrawItems(new_var = arg0 + 0x2C, (*((s32 *) (((s8 *) arg0) + 0))) + 6, (*((s32 *) (((s8 *) arg0) + 4))) + 0xC, arg1 | 0xFFED, arg0); // FAKE: decomp slop, raw pointer casts stand in for struct fields
   }
 }
 
@@ -363,7 +363,7 @@ s32 func_8200639C(s32 arg0) {
     s32 sp1C = 0;
     s32 dir;
 
-    if (func_8002DC04((u8*)arg0 + 0x2C) == 0) {
+    if (Menu_UpdateCursor((u8*)arg0 + 0x2C) == 0) {
         dir = func_8002BC14(D_800603C0);
         if (dir == -1) {
             func_8003F6AC(3);
@@ -434,7 +434,7 @@ void func_82006508(s32 x, s32 y, s32 present, s32 active, s32 markA, s32 markB) 
 
 void func_82006410(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4);
 void Window_SetRect(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
-M2C_UNK func_8002DDFC(s8 *, s32);                   /* extern */
+M2C_UNK Menu_SkipDisabledForward(s8 *, s32);                   /* extern */
 extern M2C_UNK D_8200917C;
 extern M2C_UNK D_82009F70;
 
@@ -445,14 +445,14 @@ extern M2C_UNK D_82009F70;
  * Window_SetRect(arg0, arg1, arg2, 0x192, 0x10F), clears the words at 0x24 and
  * 0x28, sets the word at 0x14 to 0x801 and the pointer at 0x20 to
  * &D_82009F70. Calls func_80027804 on the sub-object at arg0 + 0x2C with
- * (&D_8200917C, 4, 4), then func_8002D880 on the sub-objects at 0x38, 0x2C
+ * (&D_8200917C, 4, 4), then Menu_Init on the sub-objects at 0x38, 0x2C
  * and 0x5C with the callback func_82006410, 0x4C and 0x1C. Sets bit 0x10000
  * in the word at 0x58 and stores arg3 at 0x68.
  *
  * Then, with mask = ~arg3 (OR 0xE when arg4 == 1): for each of the bits 2, 4
  * and 8 that is set in mask, sets bit 0 of the halfword at offset 0, 2 or 4
  * of the record pointed to by the word at arg0 + 0x3C. Stores arg5 at 0x70
- * and calls func_8002DDFC(arg0 + 0x38, arg3).
+ * and calls Menu_SkipDisabledForward(arg0 + 0x38, arg3).
  *
  * Same family as func_82007474 and func_82005E34. What the object, the bits
  * and the values mean is not established. Matching notes: the sub-object
@@ -474,7 +474,7 @@ void func_820066E8(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
     sp2C = arg0 + 0x2C;
     func_80027804(sp2C, (s32)&D_8200917C, 4, 4);
     sp28 = arg0 + 0x38;
-    func_8002D880(sp28, sp2C, arg0 + 0x5C, (void (*)(s32, s32, char *, s32, s32, s32 *))func_82006410, 0x4C, 0x1C);
+    Menu_Init(sp28, sp2C, arg0 + 0x5C, (void (*)(s32, s32, char *, s32, s32, s32 *))func_82006410, 0x4C, 0x1C);
     M2C_FIELD(arg0, s32 *, 0x58) = (s32) (M2C_FIELD(arg0, s32 *, 0x58) | 0x10000);
     M2C_FIELD(arg0, s32 *, 0x68) = arg3;
     var_v1 = ~arg3;
@@ -491,7 +491,7 @@ void func_820066E8(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
         M2C_FIELD(M2C_FIELD(arg0, void **, 0x3C), u16 *, 4) |= 1;
     }
     M2C_FIELD(arg0, s32 *, 0x70) = arg5;
-    func_8002DDFC(sp28, arg3);
+    Menu_SkipDisabledForward(sp28, arg3);
 }
 
 void func_8002A3F8(void*, s32, s32);
@@ -504,10 +504,10 @@ extern char D_82009F84[];
  * func_8002AE6C() is zero: a frame via Ui_DrawTexturedDivider (at y + 0x92), a filled bar via
  * func_80029028 (colour D_82009100, height 0x70), the picture D_8200910C via func_8002A3F8,
  * the text D_82009F84 in the colour from D_800734A8, the sub-object at +0x38 via
- * func_8002D9B8, and finally func_82006508 with the words at +0x68 and +0x70, 1 and a
+ * Menu_DrawItems, and finally func_82006508 with the words at +0x68 and +0x70, 1 and a
  * value chosen from the word at +0x40 (0 -> 2, 1 -> 4, 2 -> 8, otherwise 0).
  * What the constants mean is not established.
- * Matching note: Ui_DrawTexturedDivider and func_8002D9B8 must be declared void; their
+ * Matching note: Ui_DrawTexturedDivider and Menu_DrawItems must be declared void; their
  * (unused) return value would otherwise shift the compiler's register choices.
  */
 void func_82006810(s8* arg0) {
@@ -524,7 +524,7 @@ void func_82006810(s8* arg0) {
         func_8001A384(8, 0);
         func_8001A944(M2C_FIELD(arg0, s32*, 0) + 0x36, M2C_FIELD(arg0, s32*, 4) + 0xC3, D_82009F84);
         func_8001ABBC();
-        func_8002D9B8(arg0 + 0x38, M2C_FIELD(arg0, s32*, 0) + 0x110, M2C_FIELD(arg0, s32*, 4) + 0x99, 0xFEF, 0);
+        Menu_DrawItems(arg0 + 0x38, M2C_FIELD(arg0, s32*, 0) + 0x110, M2C_FIELD(arg0, s32*, 4) + 0x99, 0xFEF, 0);
         switch (M2C_FIELD(arg0, s32*, 0x40)) {
             case 0:
                 sp2C = 2;
@@ -660,7 +660,7 @@ extern M2C_UNK D_82009FCC;
  * 0x192 x 0x163), the words at 0x28 and 0x2C are cleared, the word at 0x18 is set to
  * 0x801 and the pointer at 0x24 to &D_82009FCC. Calls func_80027804 on the
  * sub-objects at arg0 + 0x30 (&D_82009190, 4, 4) and arg0 + 0x3C (&D_820091A0, 7, 7),
- * and func_8002D880 on (0x48, 0x30, 0x90) and (0x6C, 0x3C, 0x98), both with the
+ * and Menu_Init on (0x48, 0x30, 0x90) and (0x6C, 0x3C, 0x98), both with the
  * callback func_82006AC0, 0x74 and 0x1C; sets bit 0x10000 in the words at 0x68 and
  * 0x8C and stores arg3 at 0xBC.
  *
@@ -688,11 +688,11 @@ void func_82006C74(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
     sp2C = arg0 + 0x30;
     func_80027804(sp2C, (s32)&D_82009190, 4, 4);
     sp28 = arg0 + 0x48;
-    func_8002D880(sp28, sp2C, arg0 + 0x90, (void (*)(s32, s32, char *, s32, s32, s32 *))func_82006AC0, 0x74, 0x1C);
+    Menu_Init(sp28, sp2C, arg0 + 0x90, (void (*)(s32, s32, char *, s32, s32, s32 *))func_82006AC0, 0x74, 0x1C);
     sp2C = arg0 + 0x3C;
     M2C_FIELD(arg0, s32 *, 0x68) = (s32) (M2C_FIELD(arg0, s32 *, 0x68) | 0x10000);
     func_80027804(sp2C, (s32)&D_820091A0, 7, 7);
-    func_8002D880(arg0 + 0x6C, sp2C, arg0 + 0x98, (void (*)(s32, s32, char *, s32, s32, s32 *))func_82006AC0, 0x74, 0x1C);
+    Menu_Init(arg0 + 0x6C, sp2C, arg0 + 0x98, (void (*)(s32, s32, char *, s32, s32, s32 *))func_82006AC0, 0x74, 0x1C);
     M2C_FIELD(arg0, s32 *, 0x8C) = (s32) (M2C_FIELD(arg0, s32 *, 0x8C) | 0x10000);
     M2C_FIELD(arg0, s32 *, 0xBC) = arg3;
     var_v1 = ~arg3;
@@ -733,8 +733,8 @@ void func_82006DF8(s8* arg0) {
             maskB = 0xFFD;
             maskA = 0xFEF;
         }
-        func_8002D9B8((s32)(arg0 + 0x48), M2C_FIELD(arg0, s32*, 4) + 0x22, M2C_FIELD(arg0, s32*, 8) + 0xD1, maskB, NULL);
-        func_8002D9B8((s32)(arg0 + 0x6C), M2C_FIELD(arg0, s32*, 4) + 0xFC, M2C_FIELD(arg0, s32*, 8) + 0x99, maskA, NULL);
+        Menu_DrawItems((s32)(arg0 + 0x48), M2C_FIELD(arg0, s32*, 4) + 0x22, M2C_FIELD(arg0, s32*, 8) + 0xD1, maskB, NULL);
+        Menu_DrawItems((s32)(arg0 + 0x6C), M2C_FIELD(arg0, s32*, 4) + 0xFC, M2C_FIELD(arg0, s32*, 8) + 0x99, maskA, NULL);
         switch (M2C_FIELD(arg0, s32*, 0x50)) {
             case 0:
                 markA = 1;
@@ -833,7 +833,7 @@ s32 func_82007030(void* arg0) {
                             break;
                     }
                     M2C_FIELD(arg0, u32*, 0x74) = 0;
-                    func_8002DDFC((s8*)arg0 + 0x6C, (s32)arg0);
+                    Menu_SkipDisabledForward((s8*)arg0 + 0x6C, (s32)arg0);
                 }
             }
             break;
@@ -1063,7 +1063,7 @@ void func_820078BC(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     M2C_FIELD(arg0, Color_RGBA8*, 0x18) = D_82009100;
     M2C_FIELD(arg0, u8**, 0x20) = D_8200A040;
     func_80027410(arg0 + 0x50, (s32)D_820091C4, 8, 4, 4);
-    func_8002D880(arg0 + 0x2C, arg0 + 0x50, arg0 + 0x60, (void (*)(s32, s32, char*, s32, s32, s32*))func_82007784, 0x150, 0x24);
+    Menu_Init(arg0 + 0x2C, arg0 + 0x50, arg0 + 0x60, (void (*)(s32, s32, char*, s32, s32, s32*))func_82007784, 0x150, 0x24);
     M2C_FIELD(arg0, s32*, 0x4C) |= 0x10000;
     M2C_FIELD(arg0, s32*, 0x34) = n - 1;
     for (i = 0; i < arg3; i++) {

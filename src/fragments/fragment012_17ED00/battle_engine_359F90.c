@@ -33,9 +33,9 @@ extern u8 sHighCritMoves[];
 
 #include "m2c_macros.h"
 
-s32 func_82107F88(ActivePokemon*);
+s32 ActivePokemon_GetNickname(ActivePokemon*);
 
-void func_8211EF74(s32, s32, s32, ...);
+void BattleMessage_Format(s32, s32, s32, ...);
 extern s32 D_8219A520;
 
 void ComputeAllPokemonStats(BattleMon* arg0);
@@ -158,7 +158,7 @@ s32 Battle_CalcDamage(void) {
 
 extern s32 D_8218C7B0;
 extern s32 D_8218C7B4;
-void func_82105E38(ActivePokemon*, s32);
+void ActivePokemon_SetStateFlags(ActivePokemon*, s32);
 /**
  * Subtract damage from Substitute or target HP and update the associated continuation state.
  * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
@@ -168,22 +168,22 @@ void Battle_ApplyDamage(void) {
 
     if (target->volatileStatusFlags & 0x10) {
         if (sBattleScene.scene->moveEffectKind == 0x14) {
-            func_8211EF74(D_8219A520 + 0x208, 0x2B, D_8218C7B0, func_82107F88(sActivePokemon[sBattleScene.scene->actingSide]));
+            BattleMessage_Format(D_8219A520 + 0x208, 0x2B, D_8218C7B0, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]));
             if (sBattleTarget->substituteHp < sBattleDamage) {
                 sBattleTarget->volatileStatusFlags &= 0xFFEF;
-                func_8211EF74(D_8219A520 + 0x208, 0x2C, D_8218C7B4, func_82107F88(sActivePokemon[sBattleScene.scene->actingSide]));
+                BattleMessage_Format(D_8219A520 + 0x208, 0x2C, D_8218C7B4, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]));
                 sBattleUser->moveCache.effect = 0;
-                func_82105E38(sActivePokemon[sBattleScene.scene->actingSide], 0x1000);
+                ActivePokemon_SetStateFlags(sActivePokemon[sBattleScene.scene->actingSide], 0x1000);
             } else {
                 sBattleTarget->substituteHp -= sBattleDamage;
             }
         } else {
-            func_8211EF74(D_8219A520 + 0x208, 0x2B, D_8218C7B0, func_82107F88(sActivePokemon[!sBattleScene.scene->actingSide]));
+            BattleMessage_Format(D_8219A520 + 0x208, 0x2B, D_8218C7B0, ActivePokemon_GetNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
             if (sBattleTarget->substituteHp < sBattleDamage) {
                 sBattleTarget->volatileStatusFlags &= 0xFFEF;
-                func_8211EF74(D_8219A520 + 0x208, 0x2C, D_8218C7B4, func_82107F88(sActivePokemon[!sBattleScene.scene->actingSide]));
+                BattleMessage_Format(D_8219A520 + 0x208, 0x2C, D_8218C7B4, ActivePokemon_GetNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
                 sBattleUser->moveCache.effect = 0;
-                func_82105E38(sActivePokemon[!sBattleScene.scene->actingSide], 0x1000);
+                ActivePokemon_SetStateFlags(sActivePokemon[!sBattleScene.scene->actingSide], 0x1000);
             } else {
                 sBattleTarget->substituteHp -= sBattleDamage;
             }
@@ -229,46 +229,46 @@ void func_821102F0(void) {
     if (sBattleUser->moveCache.lastMove == 0x76 || sBattleUser->moveCache.lastMove == 0x77) {
         switch (type) {
             case 0:
-                func_8211EF74(D_8219A520 + 0x388, 0x14, D_8218C754, func_82107F88(sActivePokemon[sBattleScene.scene->actingSide]),
+                BattleMessage_Format(D_8219A520 + 0x388, 0x14, D_8218C754, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]),
                               func_82107F68(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
             case 1:
-                func_8211EF74(D_8219A520 + 0x388, 0x15, D_8218C758, func_82107F88(sActivePokemon[sBattleScene.scene->actingSide]),
+                BattleMessage_Format(D_8219A520 + 0x388, 0x15, D_8218C758, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]),
                               func_82107F68(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
             case 2:
-                func_8211EF74(D_8219A520 + 0x388, 0x16, D_8218C75C, func_82107F88(sActivePokemon[sBattleScene.scene->actingSide]),
+                BattleMessage_Format(D_8219A520 + 0x388, 0x16, D_8218C75C, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]),
                               func_82107F68(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
             case 3:
-                func_8211EF74(D_8219A520 + 0x388, 0x17, D_8218C760, func_82107F88(sActivePokemon[sBattleScene.scene->actingSide]),
+                BattleMessage_Format(D_8219A520 + 0x388, 0x17, D_8218C760, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]),
                               func_82107F68(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
             case 4:
-                func_8211EF74(D_8219A520 + 0x388, 0x18, D_8218C764, func_82107F88(sActivePokemon[sBattleScene.scene->actingSide]),
+                BattleMessage_Format(D_8219A520 + 0x388, 0x18, D_8218C764, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]),
                               func_82107F68(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
         }
     } else {
         switch (type) {
             case 0:
-                func_8211EF74(D_8219A520 + 0xC8, 0x14, D_8218C754, func_82107F88(sActivePokemon[sBattleScene.scene->actingSide]),
+                BattleMessage_Format(D_8219A520 + 0xC8, 0x14, D_8218C754, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]),
                               func_82107F68(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
             case 1:
-                func_8211EF74(D_8219A520 + 0xC8, 0x15, D_8218C758, func_82107F88(sActivePokemon[sBattleScene.scene->actingSide]),
+                BattleMessage_Format(D_8219A520 + 0xC8, 0x15, D_8218C758, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]),
                               func_82107F68(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
             case 2:
-                func_8211EF74(D_8219A520 + 0xC8, 0x16, D_8218C75C, func_82107F88(sActivePokemon[sBattleScene.scene->actingSide]),
+                BattleMessage_Format(D_8219A520 + 0xC8, 0x16, D_8218C75C, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]),
                               func_82107F68(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
             case 3:
-                func_8211EF74(D_8219A520 + 0xC8, 0x17, D_8218C760, func_82107F88(sActivePokemon[sBattleScene.scene->actingSide]),
+                BattleMessage_Format(D_8219A520 + 0xC8, 0x17, D_8218C760, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]),
                               func_82107F68(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
             case 4:
-                func_8211EF74(D_8219A520 + 0xC8, 0x18, D_8218C764, func_82107F88(sActivePokemon[sBattleScene.scene->actingSide]),
+                BattleMessage_Format(D_8219A520 + 0xC8, 0x18, D_8218C764, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]),
                               func_82107F68(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
         }
@@ -384,7 +384,11 @@ void HandleMoveEffectFlags(void) {
     }
 }
 
-void func_82110B44(ActivePokemon* arg0) {
+/**
+ * Copies the runtime's pending status condition into the party Pokemon.
+ * @unverified Name and comment guessed from the code.
+ */
+void ActivePokemon_CommitPendingStatus(ActivePokemon* arg0) {
     BattleMon* ptr = &arg0->teamRoster->pokemonPicked[arg0->state.rosterIndex];
 
     ptr->statusCondition = arg0->state.runtime.pendingStatusCondition;
@@ -580,7 +584,7 @@ void Battle_ApplyRageContinuation(void) {
         sBattleUser->moveCache.lastMove = 0;
         sBattleUser->moveCache.effect = 10;
 
-        func_8211EF74(D_8219A520 + 0x348, 0x1F, D_8218C780, func_82107F88(sActivePokemon[!sBattleScene.scene->actingSide]));
+        BattleMessage_Format(D_8219A520 + 0x348, 0x1F, D_8218C780, ActivePokemon_GetNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
         BattleEffect_ApplyStatBoost();
 
         sBattleUser->moveCache.lastMove = RAGE;
@@ -600,9 +604,9 @@ extern s32 D_8218C7AC;
 void Battle_UpdateBattleLog(void) {
     sTypeEffectiveness = D_82199F3F & 0x7F;
     if (sTypeEffectiveness >= 0xB) {
-        func_8211EF74(D_8219A520 + 0x88, 0x29, D_8218C7A8);
+        BattleMessage_Format(D_8219A520 + 0x88, 0x29, D_8218C7A8);
     } else if (sTypeEffectiveness < 0xA) {
-        func_8211EF74(D_8219A520 + 0x88, 0x2A, D_8218C7AC);
+        BattleMessage_Format(D_8219A520 + 0x88, 0x2A, D_8218C7AC);
     }
 }
 
@@ -615,11 +619,11 @@ void Battle_PlayMoveSound(void) {
 
     switch (sBattleCritFlag) {
         case 1:
-            func_8211EF74(D_8219A520 + 0x148, 0x1D, D_8218C778);
+            BattleMessage_Format(D_8219A520 + 0x148, 0x1D, D_8218C778);
             sBattleScene.scene->hitReactionKind = 2;
             break;
         case 2:
-            func_8211EF74(D_8219A520 + 0x148, 0x1E, D_8218C77C);
+            BattleMessage_Format(D_8219A520 + 0x148, 0x1E, D_8218C77C);
             sBattleScene.scene->hitReactionKind = 2;
             break;
     }
@@ -695,12 +699,12 @@ void Battle_QueueMoveFailureAndApplyRecoil(void) {
 
     if (D_82199F3F & 0x7F) {
         if (sBattleCritFlag == 0xFF) {
-            func_8211EF74(D_8219A520 + 0x88, 0x19, D_8218C768, func_82107F88(sActivePokemon[!sBattleScene.scene->actingSide]));
+            BattleMessage_Format(D_8219A520 + 0x88, 0x19, D_8218C768, ActivePokemon_GetNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
         } else {
-            func_8211EF74(D_8219A520 + 0x88, 0x1A, D_8218C76C, func_82107F88(sActivePokemon[sBattleScene.scene->actingSide]));
+            BattleMessage_Format(D_8219A520 + 0x88, 0x1A, D_8218C76C, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]));
         }
     } else {
-        func_8211EF74(D_8219A520 + 0x88, 0x1B, D_8218C770, func_82107F88(sActivePokemon[!sBattleScene.scene->actingSide]));
+        BattleMessage_Format(D_8219A520 + 0x88, 0x1B, D_8218C770, ActivePokemon_GetNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
     }
 
     sBattleCritFlag = 0;
@@ -712,7 +716,7 @@ void Battle_QueueMoveFailureAndApplyRecoil(void) {
             sBattleDamage++;
         }
 
-        func_8211EF74(D_8219A520 + 0x208, 0x1C, D_8218C774, func_82107F88(sActivePokemon[sBattleScene.scene->actingSide]));
+        BattleMessage_Format(D_8219A520 + 0x208, 0x1C, D_8218C774, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]));
 
         sp1C = sBattleUser;
         sBattleUser = sBattleTarget;
@@ -850,9 +854,9 @@ s32 Battle_ApplyResidualEffects(void) {
 
     if (sBattleUser->pendingStatusCondition & 0x18) {
         if (sBattleUser->pendingStatusCondition & 8) {
-            func_8211EF74(D_8219A520 + 0x248, 0, D_8218C704, func_82107F88(sActivePokemon[sBattleScene.scene->actingSide]));
+            BattleMessage_Format(D_8219A520 + 0x248, 0, D_8218C704, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]));
         } else {
-            func_8211EF74(D_8219A520 + 0x248, 1, D_8218C708, func_82107F88(sActivePokemon[sBattleScene.scene->actingSide]));
+            BattleMessage_Format(D_8219A520 + 0x248, 1, D_8218C708, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]));
         }
         Battle_ApplyPoisonOrBurnDamage();
         sBattleTarget->unk_0E = sBattleTarget->displayHp;
@@ -861,7 +865,7 @@ s32 Battle_ApplyResidualEffects(void) {
     if (sBattleUser->volatileStatusFlags & 0x80) {
         Battle_ApplyLeechSeedDamage();
         func_82111870();
-        func_8211EF74(D_8219A520 + 0x288, 2, D_8218C70C, func_82107F88(sActivePokemon[sBattleScene.scene->actingSide]));
+        BattleMessage_Format(D_8219A520 + 0x288, 2, D_8218C70C, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]));
     }
 
     if (sBattleUser->displayHp != 0) {

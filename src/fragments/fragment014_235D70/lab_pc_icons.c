@@ -74,7 +74,7 @@ void func_8800023C(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4) {
 
 void Window_SetRect(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 M2C_UNK func_80027804();
-M2C_UNK func_8002D880();
+M2C_UNK Menu_Init();
 extern s8 D_88001FD4[];
 typedef struct Rgba880002D8 { u8 r, g, b, a; } Rgba880002D8;
 extern u8 D_88001FE0[];
@@ -93,7 +93,7 @@ M2C_UNK func_880002D8(s32 arg0, s32 arg1, s32 arg2) {
     M2C_FIELD(obj, Rgba880002D8 *, 0x44) = *(Rgba880002D8 *)D_88001FE0;
     M2C_FIELD(obj, Rgba880002D8 *, 0x48) = *(Rgba880002D8 *)D_88001FE4;
     func_80027804(obj + 0x70, D_88001FD4, 3, 3);
-    func_8002D880(obj + 0x4C, obj + 0x70, obj + 0x7C, func_8800023C, 0x168, 0x24);
+    Menu_Init(obj + 0x4C, obj + 0x70, obj + 0x7C, func_8800023C, 0x168, 0x24);
     M2C_FIELD(obj, s32 *, 0x6C) |= 0x10000;
 }
 
@@ -107,7 +107,7 @@ extern char D_88002328[];
 void Ui_DrawTexturedDivider(s32, s32, s32, u8 *);
 void func_80029028(s32, s32, s32, s32, Color_RGBA8);
 void func_8002A8E0(void*);
-void func_8002D9B8(s8 *, s32, s32, s32, s32);
+void Menu_DrawItems(s8 *, s32, s32, s32, s32);
 /**
  * Draws トーナメントのつづきをする？ (Continue the tournament?).
  * @unverified Name and comment guessed from the code.
@@ -130,11 +130,11 @@ void MainMenu_DrawContinueTournamentPrompt(s8* arg0) {
         Font_SetLineHeight(0x1C);
         Font_Printf(M2C_FIELD(arg0, s32 *, 0x2C) + 0x34, M2C_FIELD(arg0, s32 *, 0x30) + 0x30, D_88002328);
         Font_EndTexturedTextRendering();
-        func_8002D9B8(arg0 + 0x4C, M2C_FIELD(arg0, s32 *, 0) + 6, M2C_FIELD(arg0, s32 *, 4) + 0x9A, 0xFFEF, 0);
+        Menu_DrawItems(arg0 + 0x4C, M2C_FIELD(arg0, s32 *, 0) + 6, M2C_FIELD(arg0, s32 *, 4) + 0x9A, 0xFFEF, 0);
     }
 }
 
-s32 func_8002DC04(s8*);
+s32 Menu_UpdateCursor(s8*);
 s32 func_8002BC14(s32);
 extern s32 D_800603C0;
 
@@ -148,7 +148,7 @@ s32 func_88000564(s8* arg0) {
         default:
             return 0;
     }
-    if (func_8002DC04(arg0 + 0x4C) == 0) {
+    if (Menu_UpdateCursor(arg0 + 0x4C) == 0) {
         if (func_8002BC14(D_800603C0) == 1) {
             ret = M2C_FIELD(arg0, s32*, 0x54) + 1;
         }
@@ -741,7 +741,7 @@ s32 func_88001AE0(s32 arg0) {
     return 0;
 }
 
-M2C_UNK func_80028060(M2C_UNK, M2C_UNK *, M2C_UNK *, s32); /* extern */
+M2C_UNK GbSave_DrawSummaryBar(M2C_UNK, M2C_UNK *, M2C_UNK *, s32); /* extern */
 extern M2C_UNK D_88002A8C;
 
 s32 func_88001B28(UNUSED s32 arg0) {
@@ -756,13 +756,13 @@ s32 func_88001B28(UNUSED s32 arg0) {
     } else {
         var_a1 = &D_88002B08;
     }
-    func_80028060(sp1C, var_a1, &D_88002A8C, D_88002B00);
+    GbSave_DrawSummaryBar(sp1C, var_a1, &D_88002A8C, D_88002B00);
     D_880022C8++;
     return 0;
 }
 
 M2C_UNK func_800069CC();                            /* extern */
-M2C_UNK func_80028060(M2C_UNK, M2C_UNK *, M2C_UNK *, s32); /* extern */
+M2C_UNK GbSave_DrawSummaryBar(M2C_UNK, M2C_UNK *, M2C_UNK *, s32); /* extern */
 extern M2C_UNK D_88002A9C;
 extern s32 D_88002B00;
 extern M2C_UNK D_88002B08;
@@ -776,13 +776,13 @@ s32 func_88001BB4(s32 arg0) {
     } else {
         var_a1 = &D_88002B08;
     }
-    func_80028060(0, var_a1, &D_88002A9C, D_88002B00);
+    GbSave_DrawSummaryBar(0, var_a1, &D_88002A9C, D_88002B00);
     return 0;
 }
 
 M2C_UNK func_80005B98(M2C_UNK);                     /* extern */
 M2C_UNK func_800069CC();                            /* extern */
-M2C_UNK func_80028060(M2C_UNK, M2C_UNK *, M2C_UNK *, s32); /* extern */
+M2C_UNK GbSave_DrawSummaryBar(M2C_UNK, M2C_UNK *, M2C_UNK *, s32); /* extern */
 M2C_UNK Ui_DrawTintedScreenBackground(M2C_UNK, M2C_UNK, u8, u8, s32); /* extern */
 extern M2C_UNK D_88002254;
 extern M2C_UNK D_88002AAC;
@@ -802,7 +802,7 @@ s32 func_88001C08(s32 arg0) {
     } else {
         var_a1 = &D_88002B08;
     }
-    func_80028060(0, var_a1, &D_88002AAC, D_88002B00);
+    GbSave_DrawSummaryBar(0, var_a1, &D_88002AAC, D_88002B00);
     Ui_DrawTintedScreenBackground(0x38, 0x1E0, M2C_FIELD(&D_88002254, u8 *, 0), M2C_FIELD(&D_88002254, u8 *, 1), (s32) M2C_FIELD(&D_88002254, u8 *, 2));
     func_88000EAC(D_88002B20 + 0x2C, 2);
     return 0;

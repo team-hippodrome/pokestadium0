@@ -90,7 +90,7 @@ M2C_UNK func_8001AA9C(u8, u8, u8, u8);
 extern Rgba89000D50 D_8900A5D4[];
 extern M2C_UNK D_800734A8;
 void Window_SetRect(s8*, s32, s32, s32, s32);
-void func_8002D880(s8*, s32, s32, s32, s32, s32);
+void Menu_Init(s8*, s32, s32, s32, s32, s32);
 M2C_UNK func_80027804();
 s32 func_8002DCE0(void*);
 extern Gfx D_80060270[];
@@ -102,7 +102,7 @@ char* func_8001FDC8(u8, char*);
 s32 func_80031C24(u8);
 s32 func_80031CC8(u8);
 void Font_SetColorForFlags(s32);
-void func_8002EC24(s8*, s32, s8*, s32, void*, s32, s32);
+void ScrollList_Init(s8*, s32, s8*, s32, void*, s32, s32);
 void LabItem_DrawItemCountRow();
 void func_8002F9D8(void *, s32, s32, s32, s32);
 void func_8002F6C4(void *, s32, s32, s32, s32);
@@ -110,7 +110,7 @@ void func_8002BAB8(s32, s32, s32, s32);
 void func_8001BCB4(s32, s32, s32, s32, void *, s32, s32);
 extern Gfx D_80073450[];
 extern u8 D_04011AB8[];
-s32 func_8002FD8C(void*);
+s32 ScrollList_UpdateCursor(void*);
 s32 func_80030230(void*);
 extern ColorPair890017FC D_8900A608;
 extern ColorPair890017FC D_8900A610;
@@ -157,14 +157,14 @@ extern Col89002C10 D_8900A6B0;
 extern char D_89018678[];
 void LabItem_DrawTrainerInfo();
 void Window_SetRect(s8*, s32, s32, s32, s32);
-void func_8002D880(s8*, s32, s32, s32, s32, s32);
+void Menu_Init(s8*, s32, s32, s32, s32, s32);
 void func_80027410(s8*, s8*, s32, s32, s32);
 void Ui_DrawTexturedDivider(s32, s32, s32, void*);
 void func_8002A8E0(void*);
 void func_8002DAD8(void*, s32, s32, s32, s32);
 extern u8 D_8007356C[];
 extern u8 D_89018688[];
-s32 func_8002DC04(void*);
+s32 Menu_UpdateCursor(void*);
 void func_8002B018(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
 extern u8 D_8900A580[];
 extern u8 D_8900A584[];
@@ -407,7 +407,7 @@ void func_89003E2C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, char *arg5,
     M2C_FIELD(((s8 *)arg0), s32 *, 0x14) = 0x801;
     M2C_FIELD(((s8 *)arg0), char **, 0x20) = arg9;
     func_80027804(((s8 *)arg0) + 0x50, arg5, arg6, arg6);
-    func_8002D880(((s8 *)arg0) + 0x2C, (s32)(((s8 *)arg0) + 0x50), (s32)(((s8 *)arg0) + 0x5C), (s32)func_89003D40, arg3 - 0xC, 0x20);
+    Menu_Init(((s8 *)arg0) + 0x2C, (s32)(((s8 *)arg0) + 0x50), (s32)(((s8 *)arg0) + 0x5C), (s32)func_89003D40, arg3 - 0xC, 0x20);
     M2C_FIELD(((s8 *)arg0), char **, 0x7C) = arg7;
     M2C_FIELD(((s8 *)arg0), s32 *, 0x80) = arg8;
 }
@@ -426,7 +426,7 @@ void func_89003ECC(s8* arg0) {
         func_80029028(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) - 0xC, h, *(Color_RGBA8*)&D_8900A5BC);
         Ui_FillRectPrimEnvColor(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + h + 0xC, M2C_FIELD(arg0, s32*, 8) - 0xC, M2C_FIELD(arg0, s32*, 0x80) * 0x1C, D_8900A6FC, D_8900A700);
         sp38 = M2C_FIELD(arg0, s32*, 8) - 0xC;
-        func_8002D9B8(arg0 + 0x2C, M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0xA, 0xFFEF, (s32)&sp38);
+        Menu_DrawItems(arg0 + 0x2C, M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0xA, 0xFFEF, (s32)&sp38);
         Font_BeginTranslucentTextRendering();
         func_8001AA9C(M2C_FIELD(&D_800734A8, u8 *, 0), M2C_FIELD(&D_800734A8, u8 *, 1), M2C_FIELD(&D_800734A8, u8 *, 2), M2C_FIELD(&D_800734A8, u8 *, 3));
         Font_SetActive(8, 0);
@@ -447,7 +447,7 @@ s32 func_8900408C(s8* arg0) {
         default:
             return 0;
     }
-    if (func_8002DC04(arg0 + 0x2C) == 0) {
+    if (Menu_UpdateCursor(arg0 + 0x2C) == 0) {
         temp_v0 = func_8002BC14(D_800603C0);
         if (temp_v0 == -1) {
             ret = -1;
@@ -474,7 +474,7 @@ void func_89004120(s32 arg0) {
 }
 
 M2C_UNK func_800069CC();                            /* extern */
-M2C_UNK func_80028060(M2C_UNK, M2C_UNK *, M2C_UNK *, s32); /* extern */
+M2C_UNK GbSave_DrawSummaryBar(M2C_UNK, M2C_UNK *, M2C_UNK *, s32); /* extern */
 void func_89003ECC(s8*);
 extern M2C_UNK D_89018900;
 extern s32 D_89019108;
@@ -489,7 +489,7 @@ void func_89004184(s32 arg0) {
     } else {
         var_a1 = &D_89019110;
     }
-    func_80028060(0, var_a1, &D_89018900, D_89019108);
+    GbSave_DrawSummaryBar(0, var_a1, &D_89018900, D_89019108);
     func_8900054C();
     func_89003ECC(arg0);
 }
@@ -546,7 +546,7 @@ extern s32 D_8900A720;
  */
 extern s32 D_8900A71C_2;
 extern M2C_UNK D_8901890C;
-M2C_UNK func_80028060(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
+M2C_UNK GbSave_DrawSummaryBar(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
 void func_8002C8D8(Col8900429C*, Col8900429C, f32);
 s32 func_8900429C(s32 arg0) {
     Col8900429C sp2C;
@@ -567,7 +567,7 @@ s32 func_8900429C(s32 arg0) {
     } else {
         var_a1 = &D_89019110;
     }
-    func_80028060(0, var_a1, &D_8901890C, D_89019108);
+    GbSave_DrawSummaryBar(0, var_a1, &D_8901890C, D_89019108);
     n = D_8900A71C;
     func_8002C8D8(&sp2C, *(Col8900429C*)&D_8900A5B8, n / (f64)8.0f);
     Ui_DrawTintedScreenBackground(0x38, 0x1E0, sp2C.r, sp2C.g, sp2C.b);

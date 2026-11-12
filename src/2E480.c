@@ -81,7 +81,11 @@ void func_8002D8D8(s8* arg0, s32 arg1, s32 arg2);
 extern s32 D_800603C0;
 M2C_UNK func_8000B2F4(s32);
 
-void func_8002D880(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
+/**
+ * Initializes a menu: stores its layout arguments, sets the position through func_8002D8D8, the 0xC00 repeat delay and the controller.
+ * @unverified Name and comment guessed from the code.
+ */
+void Menu_Init(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
     M2C_FIELD(arg0, s32*, 0xC) = arg4;
     M2C_FIELD(arg0, s32*, 0x10) = arg5;
     M2C_FIELD(arg0, s32*, 0x14) = arg3;
@@ -121,7 +125,11 @@ void func_8002D948(GridMenu80031004* arg0, s32 arg1, s32 arg2) {
     Ui_DrawRoundedFrame(arg1 + 2, y, arg0->cellWidth - 4, arg0->cellHeight - 4, *(Color_RGBA8*)D_80073520);
 }
 
-void func_8002D9B8(Menu8002E230* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
+/**
+ * Draws a menu's items from its definition, one row per item.
+ * @unverified Name and comment guessed from the code.
+ */
+void Menu_DrawItems(Menu8002E230* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     s32 i;
     s32 y = arg2;
     s32 count = arg0->def->itemCount;
@@ -164,7 +172,11 @@ void func_8002DAD8(Menu8002E230* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
 
 s32 func_8000B30C();
 s32 func_8003F6AC();
-s32 func_8002DC04(Menu8002E230* arg0) {
+/**
+ * Moves a menu's cursor from controller input. Returns 0 when the menu has no items.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 Menu_UpdateCursor(Menu8002E230* arg0) {
     s32 input;
     s32 old = arg0->cursor;
 
@@ -227,7 +239,11 @@ s32 func_8002DCE0(Menu8002E230* arg0) {
     return input;
 }
 
-s32 func_8002DDFC(Menu8002E230* arg0) {
+/**
+ * Moves the cursor forward past disabled items (flag 1).
+ * @unverified Name and comment guessed from the code.
+ */
+s32 Menu_SkipDisabledForward(Menu8002E230* arg0) {
     s32 i;
 
     for (i = arg0->cursor; i < arg0->def->itemCount && (arg0->flags[i] & 1); i++) {
@@ -491,7 +507,11 @@ s32 func_8002E70C(Menu8002E230* menu) {
 
 void func_8002ED18(s8* arg0, s32 arg1, s32 arg2);
 extern s32 D_800603C0;
-void func_8002EC24(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6) {
+/**
+ * Initializes a scrolling list: stores its layout arguments, the position, the 0xC00 repeat delay, the controller and the scroll bar geometry.
+ * @unverified Name and comment guessed from the code.
+ */
+void ScrollList_Init(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6) {
     M2C_FIELD(arg0, s32*, 0x24) = arg3;
     M2C_FIELD(arg0, s32*, 0x0C) = arg5;
     M2C_FIELD(arg0, s32*, 0x10) = arg6;
@@ -838,7 +858,11 @@ typedef struct ScrollList8002FD8C {
     /* 0x40 */ s32 repeatTimer;
 } ScrollList8002FD8C;
 
-u16 func_8002FD8C(ScrollList8002FD8C* menu) {
+/**
+ * Moves a scrolling list's cursor and scroll position from controller input.
+ * @unverified Name and comment guessed from the code.
+ */
+u16 ScrollList_UpdateCursor(ScrollList8002FD8C* menu) {
     s32 prev_top;
     s32 prev;
     s32 room;
@@ -1463,6 +1487,6 @@ void func_80031AB0(GridMenu80031AB0* arg0, s32 arg1) {
 void func_80031AB0();                 /* extern */
 
 void func_80031B88(s8 *arg0) {
-    func_8002DDFC((Menu8002E230*)arg0);
+    Menu_SkipDisabledForward((Menu8002E230*)arg0);
     func_80031AB0(arg0, M2C_FIELD(arg0, s32 *, 8));
 }

@@ -183,7 +183,7 @@ void func_88100428(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s32* arg5
 void Window_SetRect(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 s32 func_800226BC(s32, s32, s32);
 void func_80027804(s8*, s8*, s32, s32);
-M2C_UNK func_8002D880(s8 *, s8 *, s8 *, M2C_UNK *, s32, s32);
+M2C_UNK Menu_Init(s8 *, s8 *, s8 *, M2C_UNK *, s32, s32);
 extern s32 D_88103078;
 
 void func_881004CC(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, M2C_UNK* arg5, s32 arg6, M2C_UNK* arg7, s32 arg8, M2C_UNK* arg9) {
@@ -195,7 +195,7 @@ void func_881004CC(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, M2C_UNK* ar
     M2C_FIELD(arg0, s32 *, 0x14) = 0x801;
     M2C_FIELD(arg0, s32 *, 0x20) = (s32)arg9;
     func_80027804(arg0 + 0x50, (s8*)arg5, arg6, arg6);
-    func_8002D880(arg0 + 0x2C, arg0 + 0x50, arg0 + 0x5C, (M2C_UNK*)func_88100428, arg3 - 0xC, 0x20);
+    Menu_Init(arg0 + 0x2C, arg0 + 0x50, arg0 + 0x5C, (M2C_UNK*)func_88100428, arg3 - 0xC, 0x20);
     M2C_FIELD(arg0, s32 *, 0x4C) = (s32) (M2C_FIELD(arg0, s32 *, 0x4C) | 0x10000);
     M2C_FIELD(arg0, s32 *, 0x7C) = (s32)arg7;
     M2C_FIELD(arg0, s32 *, 0x80) = arg8;
@@ -216,7 +216,7 @@ s32 func_8002AE6C();
 void Ui_DrawTexturedDivider(s32, s32, s32, void*);
 void func_80029028(s32, s32, s32, s32, Color88100D9C);
 void Ui_FillRectPrimEnvColor(s32, s32, s32, s32, Color88100D9C, Color88100D9C);
-void func_8002D9B8(s8*, s32, s32, s32, s32);
+void Menu_DrawItems(s8*, s32, s32, s32, s32);
 extern u8 D_8007356C[];
 extern u8 D_800734A8[4];
 extern Gfx D_80060270[];
@@ -234,7 +234,7 @@ void func_881005E4(s8* arg0, s32 arg1) {
         func_80029028(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) - 0xC, h, *(Color88100D9C*)&D_88102D74);
         Ui_FillRectPrimEnvColor(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + h + 0xC, M2C_FIELD(arg0, s32*, 8) - 0xC, M2C_FIELD(arg0, s32*, 0x80) * 0x1C, D_88102D9C, D_88102DA0);
         sp38 = M2C_FIELD(arg0, s32*, 8) - 0xC;
-        func_8002D9B8(arg0 + 0x2C, M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0xA, arg1 | 0xFFED, (s32)&sp38);
+        Menu_DrawItems(arg0 + 0x2C, M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0xA, arg1 | 0xFFED, (s32)&sp38);
         Font_BeginTranslucentTextRendering();
         Gfx_SetEnvColor(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
         Font_SetActive(8, 0);
@@ -244,14 +244,14 @@ void func_881005E4(s8* arg0, s32 arg1) {
     }
 }
 
-s32 func_8002DC04(s8*);
+s32 Menu_UpdateCursor(s8*);
 M2C_UNK func_8002BC14(s32);
 M2C_UNK func_8003F6AC(M2C_UNK);
 extern s32 D_800603C0;
 
 /**
  * Menu-list input handler (same pattern as func_8A20093C and func_8200639C). Returns 0
- * immediately unless the word at arg0 + 0x28 is 1 or 2. Then, while func_8002DC04(arg0 + 0x2C)
+ * immediately unless the word at arg0 + 0x28 is 1 or 2. Then, while Menu_UpdateCursor(arg0 + 0x2C)
  * is zero, reads the input result from func_8002BC14(D_800603C0): -1 plays sound
  * func_8003F6AC(3) and returns -1; 1 checks the halfword table at arg0 + 0x30 indexed by the
  * cursor word at arg0 + 0x34 -- if bit 0 of the entry is clear it plays sound 2 and returns
@@ -269,7 +269,7 @@ s32 func_881007AC(void* arg0) {
         default:
             return 0;
     }
-    if (func_8002DC04((s8*)arg0 + 0x2C) == 0) {
+    if (Menu_UpdateCursor((s8*)arg0 + 0x2C) == 0) {
         dir = func_8002BC14(D_800603C0);
         if (dir == -1) {
             func_8003F6AC(3);
@@ -725,7 +725,7 @@ void func_88101DB4(s8 *arg0, s32 arg1) {
 extern M2C_UNK D_88102D84;
 extern s32 D_88103098[];
 void func_8810173C(s32, s32, s32, s32, s32, s32);
-M2C_UNK func_8002EC24();
+M2C_UNK ScrollList_Init();
 void func_88101DF8(s8 *arg0, s32 arg1, s32 arg2, s8 *arg3, s32 arg4) {
     Window_SetRect(arg0 + 8, arg1, arg2, 0x220, 0x158);
     M2C_FIELD(arg0, s32 *, 0x2C) = 0;
@@ -735,7 +735,7 @@ void func_88101DF8(s8 *arg0, s32 arg1, s32 arg2, s8 *arg3, s32 arg4) {
     func_88101DB4(arg0, arg4);
     M2C_FIELD(arg0, s32 *, 0x28) = ((s32 *)&D_88102D84)[M2C_FIELD(arg0, s32 *, 0xBC)];
     M2C_FIELD(arg0, s8 **, 0xB8) = arg3;
-    func_8002EC24(arg0 + 0x54, arg3, arg0 + 0x98, 3, func_8810173C, 0x214, 0x64);
+    ScrollList_Init(arg0 + 0x54, arg3, arg0 + 0x98, 3, func_8810173C, 0x214, 0x64);
     M2C_FIELD(arg0, s32 *, 0x74) |= 0x10000;
     M2C_FIELD(arg0, s32 *, 0) = 0;
     func_88101D7C(D_88103098, 0, 0x18);
@@ -830,7 +830,7 @@ extern char D_88102F34[];
 extern char D_88102F54[];
 extern char D_88102F6C[];
 extern char D_88102FC8[];
-s32 func_8002FD8C(s8*);
+s32 ScrollList_UpdateCursor(s8*);
 void func_8003FE58(s32, s32, s32);
 void func_80027868(s32, s32);
 
@@ -841,7 +841,7 @@ s32 func_88102184(s8* arg0) {
 
     switch (M2C_FIELD(arg0, u32*, 4)) {
         case 0:
-            if (func_8002FD8C(arg0 + 0x54) == 0) {
+            if (ScrollList_UpdateCursor(arg0 + 0x54) == 0) {
                 res = func_8002BC14(D_800603C0);
                 if (res == -1) {
                     func_8003F6AC(3);
@@ -857,13 +857,13 @@ s32 func_88102184(s8* arg0) {
             }
             break;
         case 1:
-            if ((func_8002FD8C(arg0 + 0x54) == 0) && (func_8002BC14(D_800603C0) == -1)) {
+            if ((ScrollList_UpdateCursor(arg0 + 0x54) == 0) && (func_8002BC14(D_800603C0) == -1)) {
                 func_8003F6AC(3);
                 ret = -1;
             }
             break;
         case 2:
-            if (func_8002FD8C(arg0 + 0x54) == 0) {
+            if (ScrollList_UpdateCursor(arg0 + 0x54) == 0) {
                 res = func_8002BC14(D_800603C0);
                 if (res == -1) {
                     func_8003F6AC(3);
@@ -1152,7 +1152,7 @@ extern s32 D_88102DD0;
 extern s32 D_88102DCC_2;
 extern M2C_UNK D_88103018;
 void func_800189C0(s32, s32);
-M2C_UNK func_80028060(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
+M2C_UNK GbSave_DrawSummaryBar(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
 void func_8002C8D8(Col88102A2C*, Col88102A2C, f32);
 s32 func_88102A2C(s32 arg0) {
     Col88102A2C sp2C;
@@ -1174,7 +1174,7 @@ s32 func_88102A2C(s32 arg0) {
     } else {
         var_a1 = &D_88103080;
     }
-    func_80028060(0, var_a1, &D_88103018, D_88103078);
+    GbSave_DrawSummaryBar(0, var_a1, &D_88103018, D_88103078);
     n = D_88102DCC;
     func_8002C8D8(&sp2C, *(Col88102A2C*)D_88102D70, n / (f64)8.0f);
     Ui_DrawTintedScreenBackground(0x38, 0x1E0, sp2C.r, sp2C.g, sp2C.b);

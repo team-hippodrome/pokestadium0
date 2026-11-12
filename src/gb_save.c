@@ -150,7 +150,11 @@ void func_8001AA60(s32, s32, s32);
 void func_8002BAB8(s32 x, s32 y, s32 value, s32 digits);
 u32 func_800566BC(s32);
 
-void func_80028060(s32 y, GbSaveSummary* summary, char* label, s32 arg3) {
+/**
+ * Draws a save summary bar at `y`, colored by the summary's game, with `label`.
+ * @unverified Name and comment guessed from the code.
+ */
+void GbSave_DrawSummaryBar(s32 y, GbSaveSummary* summary, char* label, s32 arg3) {
     if (summary != NULL) {
         gSPDisplayList(gDisplayListHead++, D_80060270);
         Ui_FillRectRgba5551(0, y, 0x188, 0x36, D_800734C8[GbSave_GameToCategoryIndex(summary->game)]);
@@ -1202,14 +1206,14 @@ void BattleInfoWidget_DrawLabel(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 ar
  * set by Window_SetRect to (arg1, arg2, 0xF8, 0xAE, 0), the words at +0x20,
  * +0x24 and +0x28 cleared and +0x14 set to 0x1001.  It then sets up two
  * sub-objects: func_80027804 is called on the area at arg0 + 0x50 with
- * D_800736AC, 3 and 3, and func_8002D880 on the object at arg0 + 0x2C with
+ * D_800736AC, 3 and 3, and Menu_Init on the object at arg0 + 0x2C with
  * that area, arg0 + 0x5C, the callback func_8002C998 and the constants 0xEC
  * and 0x1C.  Finally bit 0x10000 is set in the word at +0x4C.
- * What func_80027804 and func_8002D880 do is not established yet, so the
+ * What func_80027804 and Menu_Init do is not established yet, so the
  * roles of those arguments are not named.
  */
 M2C_UNK func_80027804(s8 *, M2C_UNK *, M2C_UNK, M2C_UNK); /* extern */
-M2C_UNK func_8002D880(s8 *, s8 *, s8 *, M2C_UNK *, s32, s32); /* extern */
+M2C_UNK Menu_Init(s8 *, s8 *, s8 *, M2C_UNK *, s32, s32); /* extern */
 extern M2C_UNK D_800736AC;
 extern M2C_UNK func_8002C998;
 
@@ -1225,13 +1229,13 @@ void func_8002CA34(s8 *arg0, s32 arg1, s32 arg2) {
     temp_a0 = arg0 + 0x50;
     sp2C = temp_a0;
     func_80027804(temp_a0, &D_800736AC, 3, 3);
-    func_8002D880(arg0 + 0x2C, sp2C, arg0 + 0x5C, &func_8002C998, 0xEC, 0x1C);
+    Menu_Init(arg0 + 0x2C, sp2C, arg0 + 0x5C, &func_8002C998, 0xEC, 0x1C);
     M2C_FIELD(arg0, s32 *, 0x4C) = (s32) (M2C_FIELD(arg0, s32 *, 0x4C) | 0x10000);
 }
 
 s32 func_8002AE6C();
 void Ui_DrawTexturedDivider(s32, s32, s32, u8*);
-void func_8002D9B8(s8*, s32, s32, s32, s32);
+void Menu_DrawItems(s8*, s32, s32, s32, s32);
 extern u8 D_8007356C[];
 extern Color_RGBA8 D_800736B8;
 extern Color_RGBA8 D_800736BC;
@@ -1246,7 +1250,7 @@ void func_8002CAD0(s32* arg0) {
     Ui_FillRectPrimEnvColor(arg0[0] + 6, arg0[1] + 6, arg0[2] - 0xC, 0x40, D_800736B8, D_800736BC);
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(arg0[0] + 6, arg0[1] + 0x4C, arg0[2] - 0xC, 0x5C, D_800736C0);
-    func_8002D9B8((s8*)arg0 + 0x2C, arg0[0] + 6, arg0[1] + 0x50, 0xFFEF, 0);
+    Menu_DrawItems((s8*)arg0 + 0x2C, arg0[0] + 6, arg0[1] + 0x50, 0xFFEF, 0);
     func_8001AB6C();
     func_8001AA9C(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
     func_8001A384(8, 0);
@@ -1283,7 +1287,7 @@ void Save_DrawReportingWindow(s32* arg0) {
 }
 
 s32 func_8002BC14(s32);
-s32 func_8002DC04(void *, void *);
+s32 Menu_UpdateCursor(void *, void *);
 extern s32 D_800603C0;
 
 s32 func_8002CD7C(s8 *arg0) {
@@ -1292,7 +1296,7 @@ s32 func_8002CD7C(s8 *arg0) {
     if ((M2C_FIELD(arg0, s32 *, 0x28) != 1) && (M2C_FIELD(arg0, s32 *, 0x28) != 2)) {
         return 0;
     }
-    if (func_8002DC04(arg0 + 0x2C, arg0) == 0) {
+    if (Menu_UpdateCursor(arg0 + 0x2C, arg0) == 0) {
         s32 res = func_8002BC14(D_800603C0);
 
         if (res == -1) {
@@ -1492,7 +1496,11 @@ s32 func_8002D454(s32 arg0, s32 arg1) {
 
 s32 func_8001FA8C(s32);
 
-s32 func_8002D498(BattleMon* arg0, s32 arg1) {
+/**
+ * Returns the display index of the species' type 1 (`arg1` 0) or type 2 (`arg1` 1); -1 for type 2 of a single-type species.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 Pokemon_GetTypeIndex(BattleMon* arg0, s32 arg1) {
     s32 idx = arg0->species.id - 1;
     s32 type;
 

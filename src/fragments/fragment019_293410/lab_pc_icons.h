@@ -56,12 +56,12 @@ void UI_DrawTextureRgba16(s32 arg0, s32 arg1, s32 arg2);
  * Initialises a record like func_8A1009E0 does: Window_SetRect fills the first
  * five words with (arg1, arg2, 0x221, 0x168, 0), the words at +0x20, +0x24
  * and +0x28 are cleared and +0x14 is set to 0x1001.  It then calls
- * func_8002D880 on the sub-object at arg0 + 0x2C with arg3, the area at
+ * Menu_Init on the sub-object at arg0 + 0x2C with arg3, the area at
  * arg0 + 0x50, the callback MonSummary_DrawListRow and the constants 0x215 and 0x33.
- * What func_8002D880 does is not established yet, so the roles of those
+ * What Menu_Init does is not established yet, so the roles of those
  * arguments are not named.
  */
-M2C_UNK func_8002D880(s8 *, s32, s8 *, M2C_UNK *, s32, s32); /* extern */
+M2C_UNK Menu_Init(s8 *, s32, s8 *, M2C_UNK *, s32, s32); /* extern */
 /* MonSummary_DrawListRow is defined in lab_pc_icons.c. */
 
 void func_8A20034C(s8 *arg0, s32 arg1, s32 arg2, s32 arg3);
@@ -72,7 +72,7 @@ void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
 void func_8A200770(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4);
 
 s32 func_8002AB84();                                /* extern */
-M2C_UNK func_8002D9B8(s8 *, s32, s32, M2C_UNK, s32); /* extern */
+M2C_UNK Menu_DrawItems(s8 *, s32, s32, M2C_UNK, s32); /* extern */
 
 void func_8A2008F4(s8 *arg0);
 
@@ -84,7 +84,7 @@ typedef struct Entry80066AD8 {
     Color82000BC4 color;
 } Entry80066AD8;
 extern Entry80066AD8 D_80066AD8[];
-s32 func_8002D498(s32, s32);
+s32 Pokemon_GetTypeIndex(s32, s32);
 void func_8001AB6C(void);
 void func_8001A384(s32, s32);
 void func_8001ABBC(void);

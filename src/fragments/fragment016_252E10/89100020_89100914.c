@@ -167,7 +167,7 @@ typedef struct Entry80066AD8 {
     Color82000BC4 color;
 } Entry80066AD8;
 extern Entry80066AD8 D_80066AD8[];
-s32 func_8002D498(u8*, s32);
+s32 Pokemon_GetTypeIndex(u8*, s32);
 M2C_UNK func_8001A384(M2C_UNK, M2C_UNK);
 M2C_UNK func_8001A944(s32, s32, M2C_UNK *, ...);
 M2C_UNK func_8001AA9C(u8, u8, u8, u8);
@@ -178,7 +178,7 @@ void func_89100F1C(s32 arg0, s32 arg1, u8* arg2, s32 arg3) {
     Color82000BC4 c;
     s32 idx;
 
-    if ((*arg2 > 0) && (*arg2 < 0x98) && ((idx = func_8002D498(arg2, arg3)) != -1)) {
+    if ((*arg2 > 0) && (*arg2 < 0x98) && ((idx = Pokemon_GetTypeIndex(arg2, arg3)) != -1)) {
         c = D_80066AD8[idx].color;
         func_8001AB6C();
         func_8001A384(4, 0);

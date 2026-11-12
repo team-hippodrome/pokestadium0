@@ -318,7 +318,11 @@ s32 func_82107F68(u8* arg0) {
 }
 
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-s32 func_82107F88(s8 *arg0)
+/**
+ * Returns the nickname (+0x30 in BattleMon) of this Pokemon in the roster of the teammate named by state.replacementState.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 ActivePokemon_GetNickname(s8 *arg0)
 {
   unsigned int new_var; // FAKE: permuter temp
   return ((*((s32 *) (((s8 *) ((*((s32 *) (((s8 *) arg0) + 0x85C))) + ((*((u8 *) (((s8 *) arg0) + 0x7B9))) * 4))) + 8))) + ((*((s32 *) (((s8 *) arg0) + 0x794))) * 0x50)) + (new_var = 0x4C); // FAKE: decomp slop, raw pointer casts stand in for struct fields

@@ -9,7 +9,7 @@
 
 #include "m2c_macros.h"
 
-void func_8211F034(s32, s32);
+void BattleMessage_ShowForSide(s32, s32);
 extern s32 D_8219A520;
 
 void BattleAnim_RenderNop1(void);
@@ -38,7 +38,7 @@ void func_82124E80(void);
 void func_82135098(ActivePokemon*);
 void func_8212239C(ActivePokemon*, CameraNode*);
 s32 func_82122DFC(CameraNode*, ActivePokemon*);
-void func_82110B44(ActivePokemon*);
+void ActivePokemon_CommitPendingStatus(ActivePokemon*);
 void func_8212A4A4(s32);
 void func_821061A8(ActivePokemon*);
 void Audio_FadeAndClearStoredSounds(void);
@@ -133,7 +133,7 @@ void func_821020FC(s8*);
 void func_8212D820(CameraNode* arg0);
 
 void func_821224F4();
-void func_82105E38(ActivePokemon*, s32);
+void ActivePokemon_SetStateFlags(ActivePokemon*, s32);
 void func_8212311C(CameraNode*, ActivePokemon*, f32);
 s32 func_82121820(s32);
 void func_8213C4B8(void);
@@ -258,8 +258,8 @@ s32 func_8001101C(s8 *, M2C_UNK *);               /* extern */
 
 void func_8213201C(s32 arg0);
 
-s32 func_82107F88(ActivePokemon*);
-s32 func_8211EF74(s32, s32, s32, ...);
+s32 ActivePokemon_GetNickname(ActivePokemon*);
+s32 BattleMessage_Format(s32, s32, s32, ...);
 extern char D_82196650[];
 void BattleScene_SendOutSide0(CameraNode* arg0);
 

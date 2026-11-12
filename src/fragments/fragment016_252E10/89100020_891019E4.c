@@ -60,7 +60,7 @@ void func_80027804(s8*, s8*, s32, s32);
 void func_89109B60(s8*);
 M2C_UNK func_89109C6C(s32, s32);                    /* extern */
 void func_80027D68(s32, s32);
-void func_8002EC24(s8*, s8*, s8*, s32, void*, s32, s32);
+void ScrollList_Init(s8*, s8*, s8*, s32, void*, s32, s32);
 void func_891012A8();
 void func_89105C54(s8*, s32, s32, s8*, Rgba891024A4);
 extern s32 D_8910D990[];
@@ -444,7 +444,7 @@ typedef struct Ctx89102344 {
 } Ctx89102344;
 
 s32 func_8003F6AC();
-s32 func_8002FD8C(void*);
+s32 ScrollList_UpdateCursor(void*);
 void func_800306E0(void*, s32);
 void func_891020F8(s8*);
 
@@ -458,7 +458,7 @@ s32 func_89102344(Ctx89102344* arg0) {
         func_800306E0(&arg0->list, arg0->unkB18C / arg0->unkB170);
         return 1;
     }
-    ret = func_8002FD8C(&arg0->list) != 0;
+    ret = ScrollList_UpdateCursor(&arg0->list) != 0;
     if ((ret == 0) && (*(u16*)(D_800603C0 + 8) & 0x8000)) {
         if ((arg0->list->count > 0) && (arg0->list->items[arg0->cursor][8] > 0) && (arg0->list->items[arg0->cursor][8] < 0x98)) {
             func_8003F6AC(2);
