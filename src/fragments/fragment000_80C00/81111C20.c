@@ -377,8 +377,9 @@ extern f32 D_811858DC;
  * jump and restart; other points fade toward their target over their delay.
  * Same structure as AudioEffects_UpdateAdsr in the Ocarina of Time audio
  * library.
+ * @unverified Name guessed from the code; comment kept.
  */
-f32 func_81112380(Adsr81112380* adsr) {
+f32 AudioEffects_UpdateAdsr(Adsr81112380* adsr) {
     u8 action = adsr->action;
     u8 state = adsr->state;
 

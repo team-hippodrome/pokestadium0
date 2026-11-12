@@ -74,8 +74,9 @@ struct Entry8110EABC* func_8110E9A8(s32, s32, u32, s32, s32, OSMesgQueue*, u32);
  * otherwise memory is allocated by the entry's cache policy and a chunked DMA
  * is started. The table's load status is updated either way. Same structure as
  * AudioLoad_AsyncLoadInner in the Ocarina of Time audio library.
+ * @unverified Name guessed from the code; comment kept.
  */
-s32 func_8110DCC0(s32 table_type, s32 id, s32 n_chunks, s32 ret_data, OSMesgQueue* ret_queue) {
+s32 AudioLoad_AsyncLoadInner(s32 table_type, s32 id, s32 n_chunks, s32 ret_data, OSMesgQueue* ret_queue) {
     u32 size;
     AudioTable8110DCC0* table;
     s32 ram_addr;
@@ -233,8 +234,9 @@ void func_8110CB70(AudioTable8110DCC0*, u8*, s32);
  * and sample tables at their ROM copies and fills in each font's sample bank
  * ids and instrument and drum counts. Same structure as AudioLoad_Init in the
  * Ocarina of Time audio library.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_8110DF80(void) {
+void AudioLoad_Init(void) {
     s32 num_fonts;
     void* ram_addr;
     s32 i;
@@ -461,8 +463,9 @@ void func_8110E994(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3);
  * Zero's version of OoT's AudioLoad_ProcessSlowLoads: steps the two slow sample
  * loads, copying at most 0x1000 bytes per call and finishing a load once nothing
  * is left.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_8110E784(s32 reset_status) {
+void AudioLoad_ProcessSlowLoads(s32 reset_status) {
     u8* table = D_811858A4;
     SampleLoad8110E500* load;
     s32 i;
@@ -723,8 +726,9 @@ typedef struct Sample8110EE3C {
  * data address against the sample bank chosen by its medium. Samples flagged
  * for preloading that are not in RAM are added to D_81184978. Same structure as
  * AudioLoad_RelocateSample in the Ocarina of Time audio library.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_8110EE3C(Sample8110EE3C** sampleP, s32 font_data_addr, RelocInfo8110EF7C* reloc_info) {
+void AudioLoad_RelocateSample(Sample8110EE3C** sampleP, s32 font_data_addr, RelocInfo8110EF7C* reloc_info) {
     Sample8110EE3C* sample;
     s32 reloc;
 
@@ -1007,7 +1011,7 @@ s32 func_8110F518(s32 arg0, Item8110F4D0** arg1) {
  * non-zero, the record pointer is appended to the pointer array D_81184978
  * and the count D_81185578 is incremented. There is no bounds check on the
  * count. This is Zero's version of OoT's AudioLoad_AddUsedSample: the caller
- * func_8110F6A4 collects a font's used samples here and then preloads them.
+ * AudioLoad_PreloadSamplesForFont collects a font's used samples here and then preloads them.
  * Matching note: the bit-field reads are what produce the ROM's shift
  * sequence; the equivalent masks and shifts on a plain word differ in
  * temporary register numbering.
@@ -1026,8 +1030,9 @@ void func_8110F64C(PackedWordRec **arg0) {
  * Zero's version of OoT's AudioLoad_PreloadSamplesForFont: gathers the samples
  * used by a font's instruments and drums, then copies them into the sample
  * cache (async == 0) or queues them on the preload stack (async == 1).
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_8110F6A4(s32 font_id, s32 async, RelocInfo8110EF7C* reloc_info) {
+void AudioLoad_PreloadSamplesForFont(s32 font_id, s32 async, RelocInfo8110EF7C* reloc_info) {
     s32 num_drums;
     s32 num_instruments;
     s32 pad[2]; // FAKE
@@ -1163,7 +1168,7 @@ typedef struct Table8110D840 {
 } Table8110D840;
 Table8110D840* AudioLoad_GetLoadTable(s32);
 s32 AudioLoad_GetRealTableIndex(s32, s32);
-void func_8110F6A4(s32, s32, RelocInfo8110EF7C*);
+void AudioLoad_PreloadSamplesForFont(s32, s32, RelocInfo8110EF7C*);
 void func_8110FAF4(void) {
     Table8110D840* base = AudioLoad_GetLoadTable(2);
     s32 i;
@@ -1181,7 +1186,7 @@ void func_8110FAF4(void) {
             buf[4] = base->entries[buf[0]].unk_08;
             idx = buf[1];
             buf[5] = base->entries[idx].unk_08;
-            func_8110F6A4(id, 0, buf);
+            AudioLoad_PreloadSamplesForFont(id, 0, buf);
         }
     }
 }

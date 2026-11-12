@@ -938,10 +938,10 @@ s32 func_8110CDF0(s32 arg0, s32 arg1, s32 arg2) {
 
 M2C_UNK func_8004CFB0(s32, M2C_UNK, M2C_UNK);       /* extern */
 s32 AudioLoad_GetRealTableIndex(M2C_UNK, s32);                    /* extern */
-s32 func_8110DCC0(M2C_UNK, s32, s32, s32, s32);     /* extern */
+s32 AudioLoad_AsyncLoadInner(M2C_UNK, s32, s32, s32, s32);     /* extern */
 
 void func_8110CEC0(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
-    if (func_8110DCC0(2, AudioLoad_GetRealTableIndex(2, arg0), arg1, arg2, arg3) == 0) {
+    if (AudioLoad_AsyncLoadInner(2, AudioLoad_GetRealTableIndex(2, arg0), arg1, arg2, arg3) == 0) {
         func_8004CFB0(arg3, 0, 0);
     }
 }
@@ -955,7 +955,7 @@ void func_8110CF24(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     count = *(off + D_811858A8);
     off++;
     while (count > 0) {
-        func_8110DCC0(1, AudioLoad_GetRealTableIndex(1, D_811858A8[off++]), arg1, arg2, arg3);
+        AudioLoad_AsyncLoadInner(1, AudioLoad_GetRealTableIndex(1, D_811858A8[off++]), arg1, arg2, arg3);
         count--;
     }
 }
@@ -1350,7 +1350,7 @@ u8* AudioLoad_GetLoadTable(s32 arg0) {
     return ret;
 }
 
-void func_8110EE3C(void* sampleP, u32 fontDataAddr, void* relocInfo);
+void AudioLoad_RelocateSample(void* sampleP, u32 fontDataAddr, void* relocInfo);
 
 /**
  * Relocates a sound font loaded at fontData: the drum and instrument pointer
@@ -1379,7 +1379,7 @@ void AudioLoad_RelocateFont(s32 font_id, u32 font_data, void* reloc_info) {
                 ((u32*)ptrs[0])[i] = reloc;
                 drum = (u8*)reloc;
                 if (drum[2] == 0) {
-                    func_8110EE3C(drum + 4, font_data, reloc_info);
+                    AudioLoad_RelocateSample(drum + 4, font_data, reloc_info);
                     reloc = *(u32*)(drum + 0xC);
                     drum[2] = 1;
                     *(u32*)(drum + 0xC) = reloc + font_data;
@@ -1398,11 +1398,11 @@ void AudioLoad_RelocateFont(s32 font_id, u32 font_data, void* reloc_info) {
             inst = (u8*)ptrs[i];
             if (inst[0] == 0) {
                 if (inst[1] != 0) {
-                    func_8110EE3C(inst + 8, font_data, reloc_info);
+                    AudioLoad_RelocateSample(inst + 8, font_data, reloc_info);
                 }
-                func_8110EE3C(inst + 0x10, font_data, reloc_info);
+                AudioLoad_RelocateSample(inst + 0x10, font_data, reloc_info);
                 if (inst[2] != 0x7F) {
-                    func_8110EE3C(inst + 0x18, font_data, reloc_info);
+                    AudioLoad_RelocateSample(inst + 0x18, font_data, reloc_info);
                 }
                 reloc = *(u32*)(inst + 4);
                 inst[0] = 1;

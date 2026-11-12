@@ -361,7 +361,7 @@ s32 func_81112EAC(s8*, struct Rec81111130*);
 void func_81111568(s8* arg0, s8* arg1);
 void func_81112B84(Channel81110798*);
 void func_81112278(Note81110798*);
-f32 func_81112380(u8*);
+f32 AudioEffects_UpdateAdsr(u8*);
 void func_8111220C(Note81110798*);
 
 void func_81110798(void)
@@ -484,7 +484,7 @@ void func_81110798(void)
         process:
         attrs = &playbackState->attributes;
 
-        scale = func_81112380((u8 *) (&playbackState->adsr));
+        scale = AudioEffects_UpdateAdsr((u8 *) (&playbackState->adsr));
         func_8111220C(note);
         if ((playbackState->unk_04 == 1) || (playbackState->unk_04 == 2))
         {

@@ -1,4 +1,4 @@
-/* Fixed-layout split at func_811056CC so its jump table lands at 0x81154258. */
+/* Fixed-layout split at GbEmu_UpdateFrame so its jump table lands at 0x81154258. */
 /* Stadium Zero fragment000_80C00. */
 /* C ported from the Stadium 1 decomp: src/fragments/gb_tower_emulator/gb_tower_emulator_7F9A0.c. */
 
@@ -166,8 +166,9 @@ void func_811177D0(s32);
  * cycles the graphics set copied in for the screen frame. Returns 1 when only
  * C-Up is held, a negative value on a Transfer Pak error, -100 when the core
  * stopped, otherwise 0.
+ * @unverified Name guessed from the code; comment kept.
  */
-s32 func_811056CC(void) {
+s32 GbEmu_UpdateFrame(void) {
     s32 i;
     s32 err;
     s32 status;

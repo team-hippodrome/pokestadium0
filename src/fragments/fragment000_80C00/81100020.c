@@ -282,7 +282,7 @@ void func_800567E0(u8*, u8*, s32);
 void func_80058FB0(s32);
 void func_811035B4(s32, s32, u8*);
 s32 func_81104DD0(s32, s32, s32, s32, s8*);
-void func_8110DF80(void);
+void AudioLoad_Init(void);
 void func_811171DC(void);
 void func_81117288(s32);
 void func_811008DC(s8* arg0) {
@@ -296,7 +296,7 @@ void func_811008DC(s8* arg0) {
         return;
     }
     D_81154C3C = 0;
-    func_8110DF80();
+    AudioLoad_Init();
     func_80003824(D_81154C38, D_000DA9B0, D_0015A9B0, 0);
     func_81117288(D_81154C38);
     D_81154C38 = (D_81154C38 + (u32) D_0015A9B0) - (u32) D_000DA9B0;
@@ -351,7 +351,7 @@ extern u8 D_811565A1;
 extern u8 D_8111E4D0[];
 extern u8 D_8111E4E4[];
 extern u8 D_8111E540[];
-s32 func_811056CC(void);
+s32 GbEmu_UpdateFrame(void);
 void func_811173F4(void);
 void GbAudio_RampToSilence(void);
 s32 func_81106700(void);
@@ -392,7 +392,7 @@ void func_81100C84(s8* arg0) {
         goto shutdown;
     }
     if (D_81154C40 == 0) {
-        D_81154C40 = func_811056CC();
+        D_81154C40 = GbEmu_UpdateFrame();
     }
     func_811173F4();
     bcopy(D_81154BF0, D_81154B20[D_81154C3C].task, 0x40);
