@@ -81,19 +81,23 @@ s32 Deck_GetEntrySize(s32 arg0);
 s32 Deck_GetCount(s32 arg0, s32 arg1, s32 arg2);
 void Deck_DeleteEntry(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 
+/** Reads a big-endian 16-bit value from a byte buffer. */
 u16 GbData_ReadU16BE(u8* arg0) {
     return (arg0[0] << 8) | arg0[1];
 }
 
+/** Reads a big-endian 24-bit value from a byte buffer. */
 u32 GbData_ReadU24BE(u8* arg0) {
     return (arg0[0] << 16) | (arg0[1] << 8) | arg0[2];
 }
 
+/** Writes a 16-bit value to a byte buffer in big-endian order. */
 void GbData_WriteU16BE(u8* arg0, s32 arg1) {
     arg0[0] = (arg1 >> 8) & 0xFF;
     arg0[1] = arg1 & 0xFF;
 }
 
+/** Writes a 24-bit value to a byte buffer in big-endian order. */
 void GbData_WriteU24BE(u8* arg0, s32 arg1) {
     arg0[0] = (arg1 >> 16) & 0xFF;
     arg0[1] = (arg1 >> 8) & 0xFF;
@@ -160,6 +164,7 @@ char* Text_TranscodeName(char* arg0, char* arg1) {
     return sp1C;
 }
 
+/** Converts a fixed-length Game Boy name to the game's text encoding. */
 char* Text_UntranscodeFixedName(char* arg0, char* arg1) {
     char sp18[6];
 
@@ -194,11 +199,13 @@ s8* Text_CopyString(s8* arg0, s8* arg1) {
     return ret;
 }
 
+/** Copies a species' name string into a buffer. */
 char* Text_CopySpeciesName(char* arg0, s32 arg1) {
     Text_CopyString(arg0, (char*)*(u32*)D_80064C44[arg1]);
     return arg0;
 }
 
+/** Builds the name of a TM or HM into a buffer. */
 char* Text_GetTmHmName(s32 arg0, char* arg1) {
     // "ひでんマシン%02d"
     static const char D_0007CCA0[] = { 164, 210, 164, 199, 164, 243, 165, 222, 165, 183,
@@ -245,6 +252,7 @@ void func_8001FE84(s8 *arg0, s8 *arg1) {
     func_80056690(arg0 + 0x20, arg1 + 0x1D, 4);
 }
 
+/** Converts an extended Game Boy Pokemon record to a battle Pokemon. */
 void Pokemon_FromGbRecordExt(BattleMon* arg0, GbPokemonRecordExt* arg1) {
     Pokemon_FromGbRecord(arg0, &arg1->unk_00);
     arg0->level = arg1->unk_21;
@@ -259,6 +267,7 @@ M2C_UNK func_8001FAE8(s8 *, u16);                 /* extern */
 M2C_UNK func_8001FAF8(s8 *, s32);                 /* extern */
 M2C_UNK func_80056690(s8 *, s8 *, M2C_UNK);     /* extern */
 
+/** Converts a battle Pokemon to a Game Boy Pokemon record. */
 void Pokemon_ToGbRecord(s8 *arg0, s8 *arg1) {
     M2C_FIELD(arg1, s8 *, 0) = func_80020984(M2C_FIELD(arg0, u8 *, 0));
     func_8001FAE8(arg1 + 1, M2C_FIELD(arg0, u16 *, 2));
@@ -279,6 +288,7 @@ void Pokemon_ToGbRecord(s8 *arg0, s8 *arg1) {
     func_80056690(arg1 + 0x1D, arg0 + 0x20, 4);
 }
 
+/** Converts a battle Pokemon to an extended Game Boy Pokemon record. */
 void Pokemon_ToGbRecordExt(unk_func_88205880_00D0* arg0, GbPokemonRecordExt* arg1) {
     Pokemon_ToGbRecord(arg0->unk_000, arg1);
     arg1->unk_21 = arg0->unk_000[0].level;
@@ -289,6 +299,7 @@ void Pokemon_ToGbRecordExt(unk_func_88205880_00D0* arg0, GbPokemonRecordExt* arg
     GbData_WriteU16BE(arg1->unk_2A, arg0->unk_000[0].special);
 }
 
+/** Returns the integer square root used for stat experience, found by search. */
 u16 StatExpSqrt(u16 square) {
     u16 i;
 
@@ -334,6 +345,7 @@ u16 GetPokemonDV(s32 stat_id, u16 dv_bits) { //GetPokemonDV
     return dv_value;
 }
 
+/** Calculates a stat from the base stat, DVs, stat experience and level. */
 u32 CalculateStatValue(s32 stat_id, s32 species_id, u16 stat_modifier, u16 level, u16 dv_bits) {
     u16 stat_value;
     u16 base_stat;
@@ -378,6 +390,7 @@ u32 CalculateStatValue(s32 stat_id, s32 species_id, u16 stat_modifier, u16 level
     return stat_value;
 }
 
+/** Recalculates a Pokemon's level and all of its stats. */
 void Pokemon_RecalcStats(BattleMon* arg0) {
     arg0->level = Pokemon_LevelFromExp(arg0->species.id, arg0->unk_10);
     arg0->maxHp = CalculateStatValue(1, arg0->species.id, arg0->unk_14, arg0->level, arg0->unk_1E);
@@ -387,6 +400,7 @@ void Pokemon_RecalcStats(BattleMon* arg0) {
     arg0->special = CalculateStatValue(5, arg0->species.id, arg0->unk_1C, arg0->level, arg0->unk_1E);
 }
 
+/** Searches for the stat experience that produces a target stat value. */
 u16 Pokemon_StatExpForTarget(s32 arg0, s32 arg1, u16 arg2, u16 arg3, u16 arg4) {
     s32 i;
     s32 tmp;
@@ -401,6 +415,10 @@ u16 Pokemon_StatExpForTarget(s32 arg0, s32 arg1, u16 arg2, u16 arg3, u16 arg4) {
     return i;
 }
 
+/**
+ * Returns the experience points needed to reach a level for the species'
+ * growth rate.
+ */
 u32 Pokemon_ExpForLevel(s32 arg0, u16 arg1) {
     u32 sp4;
 
@@ -436,6 +454,7 @@ u32 Pokemon_ExpForLevel(s32 arg0, u16 arg1) {
 // The Japanese build compiles the functions from here through Deck_WriteEntries into the
 // gb_data object (gb_data.c includes this file with POKEMON_STATS_HEAD_ONLY defined); the
 // Japanese pokemon_stats object starts at GbSave_HasPlayerNameMarker.
+/** Returns the level for an experience total. */
 u16 Pokemon_LevelFromExp(s32 arg0, u32 arg1) {
     s32 i;
 
@@ -448,6 +467,7 @@ u16 Pokemon_LevelFromExp(s32 arg0, u32 arg1) {
     return i;
 }
 
+/** Fills in a battle Pokemon's derived data before battle. */
 void Pokemon_PrepareBattleMon(BattleMon* arg0) {
     s32 i;
     s32 temp_a3;
@@ -474,6 +494,7 @@ void Pokemon_PrepareBattleMon(BattleMon* arg0) {
     }
 }
 
+/** Returns the move id for a TM or HM table index. */
 u8 Move_GetIdFromTableIndex(s32 tm_hm_index) {
     extern u8 D_8006B8C4[];
 
@@ -486,6 +507,7 @@ u8 func_80020984(s32 arg0) {
     return D_8006B8FB[arg0];
 }
 
+/** Converts a Game Boy internal species index to the species id. */
 u8 Species_FromInternalIndex(s32 arg0) {
     extern u8 D_8006B993[];
 
@@ -502,6 +524,7 @@ u8 func_800209B4(s32 arg0) {
     return *(&D_8006BAEB + arg0);
 }
 
+/** Initializes a deck that is stored in the save data. */
 void Deck_InitializeSaveBackend(DeckHandle* arg0) {
     if (arg0->unk_00 == 1) {
         arg0->unk_04 |= 1;
@@ -519,6 +542,7 @@ void Deck_InitializeSaveBackend(DeckHandle* arg0) {
     }
 }
 
+/** Initializes a deck that is stored in a box. */
 void Deck_InitializeBoxBackend(DeckHandle* arg0) {
     if (arg0->unk_00 == 1) {
         arg0->unk_04 |= 1;
@@ -536,6 +560,7 @@ void Deck_InitializeBoxBackend(DeckHandle* arg0) {
     }
 }
 
+/** Opens a deck handle for a save slot. */
 DeckHandle* Deck_Open(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     DeckHandle* sp1C;
 
@@ -561,6 +586,7 @@ DeckHandle* Deck_Open(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     return sp1C;
 }
 
+/** Opens a deck handle and sets its name. */
 DeckHandle* Deck_OpenAndSetName(s32 arg0, s32 arg1, s32 arg2, s32 arg3, char* arg4, u16 arg5) {
     DeckHandle* sp24;
     DeckHandle* temp_v0;
@@ -573,6 +599,7 @@ DeckHandle* Deck_OpenAndSetName(s32 arg0, s32 arg1, s32 arg2, s32 arg3, char* ar
     return sp24;
 }
 
+/** Closes a deck handle, writing back a modified box. */
 s32 Deck_CloseAndFlushBox(DeckHandle* arg0) {
     s32 sp1C = 0;
 

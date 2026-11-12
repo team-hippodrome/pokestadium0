@@ -68,6 +68,7 @@ void func_80016D40(unk_D_86002F34* arg0, arg1_func_80010CA8 arg1) {
     }
 }
 
+/** Allocates a fragment and decodes a JPEG image into it. */
 Fragment* Jpeg_AllocAndDecodeFragment(MemoryBlock* arg0, PRESJPEG* arg1, PRESJPEG* arg2) {
     Fragment* sp1C;
     s32 sp18;
@@ -88,6 +89,7 @@ Fragment* Jpeg_AllocAndDecodeFragment(MemoryBlock* arg0, PRESJPEG* arg1, PRESJPE
     return sp1C;
 }
 
+/** Allocates a fragment and decompresses a Yay0 asset into it. */
 Fragment* Yay0_AllocAndDecompressFragment(MainPoolState* arg0, PERSSZP* arg1, PERSSZP* arg2) {
     u8* sp1C = MainPool_AllocAligned(arg0, arg2->decompressed_size2, 0x10);
 
@@ -97,6 +99,7 @@ Fragment* Yay0_AllocAndDecompressFragment(MainPoolState* arg0, PERSSZP* arg1, PE
     return sp1C;
 }
 
+/** Allocates a fragment and copies an uncompressed asset into it. */
 Fragment* Asset_AllocAndCopyFragment(MainPoolState* arg0, PERSSZP* arg1, s32 arg2, u32 arg3) {
     u32* sp1C;
 
@@ -107,6 +110,7 @@ Fragment* Asset_AllocAndCopyFragment(MainPoolState* arg0, PERSSZP* arg1, s32 arg
     return sp1C;
 }
 
+/** Loads a fragment from a ROM range into a pool, decompressing it as needed. */
 Fragment* Fragment_LoadFromRomRange(MainPoolState* arg0, s32 start, s32 end, PERSSZP* arg3, s32 arg4) {
     UNUSED s32 pad; // FAKE: stack padding
     u32 size = ALIGN16(end - start);
@@ -127,6 +131,10 @@ Fragment* Fragment_LoadFromRomRange(MainPoolState* arg0, s32 start, s32 end, PER
     return var_v1;
 }
 
+/**
+ * Loads a fragment from a block-address range into a pool, decompressing it as
+ * needed.
+ */
 Fragment* Fragment_LoadFromLbaRange(MainPoolState* arg0, unk_func_800041C0* arg1, PERSSZP* arg2, u32 arg3) {
     s32 sp3C;
     Fragment* sp38;
@@ -153,17 +161,20 @@ Fragment* Fragment_LoadFromLbaRange(MainPoolState* arg0, unk_func_800041C0* arg1
     return sp38;
 }
 
+/** Relocates a fragment's pointers and commits it to its pool. */
 void Fragment_RelocateAndCommit(MainPoolState* arg0, u32 arg1, Fragment* arg2) {
     Memmap_RelocateFragment(arg1, arg2);
     MainPool_ResetStateToOffset(arg0, ((u32)arg2 + arg2->sizeInRam) - (u32)arg0->listHeadR);
 }
 
+/** Loads an archive file into a pool from a ROM range. */
 Fragment* BinArchive_LoadFileFromRomRange(MainPoolState* arg0, BinArchive* arg1, BinArchiveFile* arg2, u32 arg3, s32 arg4) {
     s32 temp_a1 = arg1->unk_04 + arg2->offset;
 
     return Fragment_LoadFromRomRange(arg0, temp_a1, arg2->size + temp_a1, arg3, arg4);
 }
 
+/** Loads an archive file into a pool from a block-address range. */
 Fragment* BinArchive_LoadFileFromLbaRange(MainPoolState* arg0, BinArchive* arg1, BinArchiveFile* arg2, u32 arg3, s32 arg4) {
     unk_func_800041C0 sp1C;
 
@@ -171,6 +182,7 @@ Fragment* BinArchive_LoadFileFromLbaRange(MainPoolState* arg0, BinArchive* arg1,
     return Fragment_LoadFromLbaRange(arg0, &sp1C, arg3, arg4);
 }
 
+/** Loads an archive file into a pool, choosing the ROM or block-address path. */
 Fragment* BinArchive_LoadFileToPool(MainPoolState* arg0, BinArchive* arg1, s32 arg2, u32 arg3, s32 arg4) {
     s32 pad[4]; // FAKE: stack padding
     Fragment* var_s0 = NULL;
@@ -200,6 +212,7 @@ Fragment* BinArchive_LoadFileToPool(MainPoolState* arg0, BinArchive* arg1, s32 a
     return var_s0;
 }
 
+/** Builds the graph node tree for a fragment's geo layout. */
 s32 Fragment_ProcessGeoLayout(MemoryBlock* arg0, Fragment* arg1, arg1_func_80010CA8 arg2) {
     s32 i;
     unk_D_86002F34* temp_v0_2;
@@ -224,6 +237,7 @@ s32 Fragment_ProcessGeoLayout(MemoryBlock* arg0, Fragment* arg1, arg1_func_80010
     return temp_v0;
 }
 
+/** Builds graph node trees for every geo layout in a list. */
 void Fragment_ProcessGeoLayoutList(MemoryBlock* arg0, arg1_func_80019420* arg1) {
     while (arg1->unk_00) {
         if (arg1->unk_00 == 3) {
@@ -234,6 +248,7 @@ void Fragment_ProcessGeoLayoutList(MemoryBlock* arg0, arg1_func_80019420* arg1) 
     }
 }
 
+/** Loads a Pokemon icon model archive on the loader thread. */
 void PokeIcon_LoadModelArchive(unk_func_80019600* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
     MemoryBlock* sp28;
@@ -251,6 +266,7 @@ void PokeIcon_LoadModelArchive(unk_func_80019600* arg0) {
     arg0->size = sp28->size + 0x10;
 }
 
+/** Loads several Pokemon icon models on the loader thread. */
 void PokeIcon_LoadMultipleModels(unk_func_80019600* arg0) {
     Fragment* temp_v0;
     MainPoolState* temp_s3;
@@ -279,6 +295,7 @@ void PokeIcon_LoadMultipleModels(unk_func_80019600* arg0) {
     arg0->size = temp_s3->listHeadL + 1;
 }
 
+/** Main loop of the thread that loads Pokemon icon models on request. */
 void PokeIcon_ThreadMain(UNUSED void* arg0) {
     unk_func_80019600* sp34;
 
@@ -303,6 +320,7 @@ void PokeIcon_ThreadMain(UNUSED void* arg0) {
     }
 }
 
+/** Creates the message queues and starts the icon loader thread. */
 void PokeIcon_StartThread(void) {
     osCreateMesgQueue(&D_800AC7A0.unk_9D0, &D_800AC7A0.unk_9B0, 8);
     osCreateMesgQueue(&D_800AC7A0.unk_9EC, &D_800AC7A0.unk_9E8, 1);
@@ -313,6 +331,7 @@ void PokeIcon_StartThread(void) {
 s8 *func_800023C4(M2C_UNK, M2C_UNK);              /* extern */
 M2C_UNK func_800567E0(s8 *, s8 *, M2C_UNK);     /* extern */
 
+/** Allocates the framebuffers used by the icon loader. */
 s8 *PokeIcon_AllocFramebuffers(s32 arg0) {
     s8 *temp_v0;
 
@@ -353,6 +372,7 @@ void PokeIcon_OpenModelArchives(void) {
     D_800AD1AC = func_800023C4(0x28000, 1);
 }
 
+/** Sends a model load request to the icon loader thread. */
 s32 PokeIcon_RequestFrameLoad(ModelLoadContext* arg0, u16 arg1, arg1_func_80010CA8 arg2) {
     s32 sp1C;
     sp18_func_800198E4* sp18;
@@ -390,6 +410,7 @@ s32 PokeIcon_RequestFrameLoad(ModelLoadContext* arg0, u16 arg1, arg1_func_80010C
     return sp1C;
 }
 
+/** Sends a background model load request to the icon loader thread. */
 s32 PokeIcon_RequestBackgroundLoad(ModelLoadContext* arg0, s32 arg1, s32 arg2) {
     s32 sp1C = 0;
     sp18_func_800198E4* temp_v0;
@@ -415,6 +436,7 @@ s32 PokeIcon_RequestBackgroundLoad(ModelLoadContext* arg0, s32 arg1, s32 arg2) {
     return sp1C;
 }
 
+/** Applies a load result received from the icon loader thread. */
 s32 PokeIcon_ApplyLoadResult(ModelLoadContext* arg0, sp18_func_800198E4* arg1) {
     s32 sp1C = 0;
 
@@ -444,6 +466,7 @@ s32 PokeIcon_ApplyLoadResult(ModelLoadContext* arg0, sp18_func_800198E4* arg1) {
     return sp1C;
 }
 
+/** Checks whether the icon loader has finished a requested model. */
 s32 PokeIcon_PollFrameLoad(ModelLoadContext* arg0) {
     sp18_func_800198E4* sp1C;
     s32 sp18 = 0;
@@ -482,6 +505,7 @@ void func_80017D00(s32 arg0) {
 M2C_UNK func_80017BA0(s32, s32);                    /* extern */
 M2C_UNK func_8004D1C0(s32, s32 *, M2C_UNK);         /* extern */
 
+/** Blocks until the icon loader finishes a background load. */
 void PokeIcon_WaitBackgroundLoad(s32 arg0) {
     s32 sp1C;
 
@@ -489,6 +513,7 @@ void PokeIcon_WaitBackgroundLoad(s32 arg0) {
     func_80017BA0(arg0, sp1C);
 }
 
+/** Loads a model by its archive index. */
 unk_D_86002F30* Model_LoadByArchiveIndex(s32 arg0) {
     Fragment* sp2C;
     arg1_func_80010CA8 sp28;
@@ -506,6 +531,7 @@ unk_D_86002F30* Model_LoadByArchiveIndex(s32 arg0) {
     return sp24;
 }
 
+/** Loads the model for a Pokemon. */
 unk_D_86002F30* Model_LoadForPokemon(BattleMon* arg0) {
     Fragment* sp2C;
     arg1_func_80010CA8 sp28;
@@ -522,6 +548,7 @@ unk_D_86002F30* Model_LoadForPokemon(BattleMon* arg0) {
     return sp24;
 }
 
+/** Loads a battle animation resource table. */
 arg1_func_80019420* BattleAnim_LoadResourceTable(s32 arg0) {
     Fragment* sp24;
     arg1_func_80019420* sp20;
@@ -538,6 +565,7 @@ arg1_func_80019420* BattleAnim_LoadResourceTable(s32 arg0) {
     return sp20;
 }
 
+/** Loads a fragment from a ROM range and relocates it. */
 Fragment* Fragment_LoadAndRelocateFromRomRange(MainPoolState* arg0, u32 arg1, s32 arg2, s32 arg3, PERSSZP* arg4, s32 arg5) {
     Fragment* sp24 = Fragment_LoadFromRomRange(arg0, arg2, arg3, arg4, arg5);
 

@@ -82,6 +82,7 @@ void Ui_Draw20x20Icon(s32 arg0, s32 arg1, s32 arg2);
 
 s32 Ui_DrawTexturedRect8x8(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4);
 
+/** Draws a rectangle tiled with an 8x8 texture. */
 s32 Ui_DrawTexturedRect8x8(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
     UNUSED s32 pad[4]; // FAKE: stack padding
     s32 sp2C;
@@ -103,6 +104,7 @@ s32 Ui_DrawTexturedRect8x8(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
     Gfx_DrawTexturedRect(arg0, arg1, (arg0 + arg2) - 1, (arg1 + arg3) - 1, sp2C, sp28, 0);
 }
 
+/** Draws a border in style A from 8x8 corner and edge textures. */
 void Ui_DrawBorderStyleA(s32 x1, s32 y1, s32 width, s32 height) {
     Ui_DrawTexturedRect8x8(x1, y1, 8, 8, D_10027D0);
     Ui_DrawTexturedRect8x8(x1, (y1 + height) - 8, 8, 8, D_1002850);
@@ -120,6 +122,7 @@ void Ui_DrawBorderStyleA(s32 x1, s32 y1, s32 width, s32 height) {
     }
 }
 
+/** Draws a border in style B from 8x8 corner and edge textures. */
 void Ui_DrawBorderStyleB(s32 x1, s32 y1, s32 width, s32 height) {
     Ui_DrawTexturedRect8x8(x1, y1, 8, 8, D_1002BD0);
     Ui_DrawTexturedRect8x8(x1, (y1 + height) - 8, 8, 8, D_1002C50);
@@ -137,6 +140,7 @@ void Ui_DrawBorderStyleB(s32 x1, s32 y1, s32 width, s32 height) {
     }
 }
 
+/** Draws a border in style C from 8x8 corner and edge textures. */
 void Ui_DrawBorderStyleC(s32 x1, s32 y1, s32 width, s32 height) {
     Ui_DrawTexturedRect8x8(x1, y1, 8, 8, D_1002FD0);
     Ui_DrawTexturedRect8x8(x1, (y1 + height) - 8, 8, 8, D_1003050);
@@ -154,6 +158,7 @@ void Ui_DrawBorderStyleC(s32 x1, s32 y1, s32 width, s32 height) {
     }
 }
 
+/** Fills an inset rectangle in style A with a color. */
 void Ui_FillInsetRectangleA(s32 x1, s32 y1, s32 width, s32 height, u16 color) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
     gDPSetFillColor(gDisplayListHead++, (color << 0x10) | color);
@@ -165,6 +170,7 @@ void Ui_FillInsetRectangleA(s32 x1, s32 y1, s32 width, s32 height, u16 color) {
     }
 }
 
+/** Fills an inset rectangle in style B with a color. */
 void Ui_FillInsetRectangleB(s32 x1, s32 y1, s32 width, s32 height, u16 color) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
     gDPSetFillColor(gDisplayListHead++, (color << 0x10) | color);
@@ -176,6 +182,7 @@ void Ui_FillInsetRectangleB(s32 x1, s32 y1, s32 width, s32 height, u16 color) {
     }
 }
 
+/** Draws a rectangle shaded from one color to another. */
 void BattleHud_DrawGradientRect(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGB8* arg4, Color_RGB8* arg5) {
     Vtx* temp_s2;
     DepthBuffer* temp_s1;
@@ -208,6 +215,7 @@ void BattleHud_DrawGradientRect(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RG
     gSP2Triangles(gDisplayListHead++, 0, 2, 3, 0, 0, 3, 1, 0);
 }
 
+/** Draws a bordered panel filled with a color. */
 void Ui_DrawBorderedPanel(s32 x1, s32 y1, s32 width, s32 height, u16 color) {
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
@@ -224,6 +232,7 @@ void Ui_DrawBorderedPanel(s32 x1, s32 y1, s32 width, s32 height, u16 color) {
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
+/** Draws a bordered panel shaded from a top color to a bottom color. */
 void Ui_DrawGradientPanel(s32 x1, s32 y1, s32 width, s32 height, Color_RGB8* top_color, Color_RGB8* bottom_color) {
     if ((width >= 0xF) && (height >= 0xF)) {
         if (StageContext_IsHighResolution() != 0) {
@@ -244,6 +253,7 @@ void Ui_DrawGradientPanel(s32 x1, s32 y1, s32 width, s32 height, Color_RGB8* top
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
+/** Draws a bordered panel in style B filled with a color. */
 void Ui_DrawBorderedPanelStyleB(s32 x1, s32 y1, s32 width, s32 height, u16 color) {
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
@@ -313,6 +323,7 @@ void func_8001E24C(s32 x, s32 y, u8* image) {
     gSPDisplayList(gDisplayListHead++, D_80060398);
 }
 
+/** Draws a bordered panel without a fill. */
 void Ui_DrawBorderedPanelNoFill(s32 x1, s32 y1, s32 width, s32 height) {
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
@@ -330,6 +341,7 @@ extern u8 D_10031C0[];
 extern u8 D_1003740[];
 extern u8 D_1003880[];
 
+/** Draws a small texture marker at a position. */
 void Ui_DrawTextureMarker(s32 x, s32 y) {
     if (StageContext_IsHighResolution() != 0) {
         gSPDisplayList(gDisplayListHead++, D_80060290);
@@ -342,6 +354,7 @@ void Ui_DrawTextureMarker(s32 x, s32 y) {
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
+/** Draws a 20x20 icon at a position. */
 void Ui_Draw20x20Icon(s32 arg0, s32 arg1, s32 arg2) {
     u8* var_t4;
 
@@ -406,6 +419,7 @@ extern u8 D_010067D0[];
 extern u8 D_01006890[];
 extern u8 D_01006950[];
 
+/** Draws the textured fill of an HP bar. */
 void BattleHud_DrawHpBarTexture(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     u8* spDC;                 /* chosen fill texture */
     s32 spD8 = arg2 - 4;      /* usable width of the bar */

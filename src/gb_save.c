@@ -113,6 +113,10 @@ void func_80027F8C(s32 arg0) {
     func_8001AA9C(entry[0], entry[1], entry[2], entry[3]);
 }
 
+/**
+ * Builds the display summary of a port's Game Boy save, or clears it when no
+ * save is present.
+ */
 void GbSave_BuildPortSummary(unk_func_8002D860* arg0, s32 arg1) {
     if (GbSave_GetSaveState(arg1) != 0) {
         arg0->unk_00 = 1;
@@ -236,6 +240,7 @@ void Gfx_LoadTextureBlock16b(s32 width, s32 height, void* texture, s32 fmt) {
     gDPLoadTextureBlock(gDisplayListHead++, texture, fmt, G_IM_SIZ_16b, width, height, 0, G_TX_CLAMP, G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 }
 
+/** Draws a solid-colored rectangle. */
 void Trade_DrawSolidFillRect(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGB8 arg4) {
     s32 color = RGBA5551(arg4.r, arg4.g, arg4.b, 1);
 
@@ -619,6 +624,7 @@ void Window_DrawFrame(s32* arg0) {
  */
 M2C_UNK func_8003F6AC();
 
+/** Sets a particle's x and z components from its angle about the y axis. */
 s32 Particle_Field7C_SetXZFromField74AngleY_0B278(void *arg0) {
     s32 var_v1;
     s32 var_v0;
@@ -656,6 +662,7 @@ extern u8 D_80073554[];
 void func_8002C1B4(s32, s32, s32, s32);
 void func_8002C5A4(); // no prototype: callers pass a fourth argument the definition ignores
 
+/** Sets a particle's x and z components from another vector in the particle. */
 s32 Particle_Field50_SetXZFromField7C_09BB4(s32* arg0) {
     UNUSED s32 pad1; // FAKE: unused locals that only pad the stack frame
     UNUSED s32 pad2; // FAKE
@@ -722,6 +729,7 @@ s32 Particle_Field50_SetXZFromField7C_09BB4(s32* arg0) {
     return ret;
 }
 
+/** Sets a particle's x and z velocity from its rotation about the y axis. */
 void Particle_SetVelocityXZFromRotationY(Particle* arg0) {
     Particle_Field7C_SetXZFromField74AngleY_0B278(arg0);
     Particle_Field50_SetXZFromField7C_09BB4(arg0);
@@ -803,6 +811,7 @@ void func_8002B054(s8* arg0, s32 arg1) {
     Gfx_DrawTextureIa16(M2C_FIELD(arg0, s32*, 0) + 3, M2C_FIELD(arg0, s32*, 4) + 3, M2C_FIELD(arg0, s32*, 8) - 6, M2C_FIELD(arg0, s32*, 0xC) - 6, M2C_FIELD(arg0, u8**, 0x28), M2C_FIELD(arg0, s32*, 0x24), 0);
 }
 
+/** Moves a vertical menu selection according to a d-pad direction. */
 s32 Ui_AdjustVerticalSelection(unk_func_8002DCB8_arg0* arg0, s32 arg1) {
     s32 ret = 0;
 
@@ -829,6 +838,7 @@ s32 Ui_AdjustVerticalSelection(unk_func_8002DCB8_arg0* arg0, s32 arg1) {
     return ret;
 }
 
+/** Reads the repeated d-pad input and moves a vertical menu selection. */
 s32 Ui_HandleVerticalSelectionInput(s32 arg0) {
     s32 sp1C = Input_GetRepeatedDPad() & 0xFFFF;
 
@@ -836,6 +846,7 @@ s32 Ui_HandleVerticalSelectionInput(s32 arg0) {
     return sp1C;
 }
 
+/** Moves a horizontal menu selection according to a d-pad direction. */
 s32 Ui_AdjustHorizontalSelection(unk_func_8002DD98_arg0* arg0, s32 arg1) {
     s32 ret = 0;
 
@@ -862,6 +873,7 @@ s32 Ui_AdjustHorizontalSelection(unk_func_8002DD98_arg0* arg0, s32 arg1) {
     return ret;
 }
 
+/** Reads the repeated d-pad input and moves a horizontal menu selection. */
 s32 Ui_HandleHorizontalSelectionInput(unk_func_8002DD98_arg0* arg0) {
     s32 sp1C = Input_GetRepeatedDPad() & 0xFFFF;
 
@@ -869,6 +881,7 @@ s32 Ui_HandleHorizontalSelectionInput(unk_func_8002DD98_arg0* arg0) {
     return sp1C;
 }
 
+/** Scrolls a selection in steps according to the repeated d-pad input. */
 void Ui_AdjustSteppedScrollSelection(unk_func_8002DE78_arg0* arg0) {
     s32 temp_v0 = Input_GetRepeatedDPad();
     s32 sp18 = arg0->unk_0C;
@@ -898,6 +911,7 @@ void Ui_AdjustSteppedScrollSelection(unk_func_8002DE78_arg0* arg0) {
     }
 }
 
+/** Changes a numeric selection according to a d-pad direction. */
 s32 Ui_AdjustNumericSelection(unk_func_8830867C_044_038_030* arg0, s32 arg1) {
     s32 var_t1;
     s32 var_a2;
@@ -958,6 +972,7 @@ s32 Ui_AdjustNumericSelection(unk_func_8830867C_044_038_030* arg0, s32 arg1) {
     return var_t1;
 }
 
+/** Reads the repeated d-pad input and changes a numeric selection. */
 s32 Ui_HandleNumericSelectionInput(unk_func_8820E99C_030_030* arg0) {
     s32 sp1C = Input_GetRepeatedDPad() & 0xFFFF;
 
@@ -965,6 +980,10 @@ s32 Ui_HandleNumericSelectionInput(unk_func_8820E99C_030_030* arg0) {
     return sp1C;
 }
 
+/**
+ * Changes a selection over a stepped range according to the repeated d-pad
+ * input.
+ */
 s32 Ui_AdjustSteppedRangeSelection(unk_func_8002E128_arg0* arg0) {
     s32 sp1C = Input_GetRepeatedDPad() & 0xFFFF;
     s32 sp18 = arg0->unk_0C;
@@ -1072,6 +1091,7 @@ void Ui_DrawNumberZeroPadded(s32 x, s32 y, s32 value, s32 digits) {
     }
 }
 
+/** Returns the direction chosen by the d-pad bits in a menu state. */
 s32 Ui_GetSelectionDirection(unk_func_8002EBD8_arg0* arg0) {
     s32 var_v1 = 0;
 
@@ -1095,6 +1115,7 @@ s32 Ui_GetSelectionDirection(unk_func_8002EBD8_arg0* arg0) {
  * arg0 is not range-checked.
  */
 extern s32 D_80073644[];
+/** Maps a Game Boy game id to its category index. */
 s32 GbSave_GameToCategoryIndex(s32 arg0) {
     return D_80073644[arg0];
 }
@@ -1199,6 +1220,7 @@ void func_8002C5A4(s32 x, s32 y, s32 w) {
     gSPTextureRectangle(gDisplayListHead++, (x + w) << 2, y << 2, (x + w + 32) << 2, (y + 16) << 2, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
 }
 
+/** Interpolates a color between gray and the given color. */
 Color_RGBA8 Color_InterpolateFromGray(Color_RGBA8 arg0, f32 arg1) {
     static Color_RGBA8 D_80075940 = { 0xC8, 0xC8, 0xC8, 0xFF };
 
@@ -1215,6 +1237,7 @@ Color_RGBA8 Color_InterpolateFromGray(Color_RGBA8 arg0, f32 arg1) {
 extern Color_RGBA8 D_800736A8;
 void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
 
+/** Draws a label in a battle info widget. */
 void BattleInfoWidget_DrawLabel(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4) {
     if (arg4 & 0x18) {
         Ui_FillRectHighlighted(arg0 + 3, arg1 + 3, 0xE6, 0x16, D_800736A8);
@@ -1509,6 +1532,10 @@ void BlinkingTextBox_Draw(s32* arg0) {
     func_8001ABBC();
 }
 
+/**
+ * Returns the number of moves a Pokemon knows (the count of nonzero move
+ * slots).
+ */
 s32 BattleMon_CountMoves(u8* arg0) {
     s32 i;
 
