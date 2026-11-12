@@ -1009,7 +1009,7 @@ s32 func_80037D4C(s32 handle, f32 offset) {
  * clamped to 1..0x100 (values <= 0 become 1, values above 0x100 become 0x100). For each
  * matching channel it stores the clamped value in `temscale` (offset 0xA4) and sets
  * `channel_tempo` (offset 0xA8) to (u16 at offset 0xB4 * tempo) >> 7. Returns the
- * number of channels changed; returns 0 for handle 0. Unlike its neighbours it does
+ * number of channels changed; returns 0 for handle 0. Unlike its neighbors it does
  * not mask interrupts. The field at 0xB4 is unnamed in player.h.
  */
 s32 func_80037DF4(s32 handle, s32 tempo) {
@@ -1156,7 +1156,7 @@ s32 func_800380D0(void) {
 }
 
 /**
- * Initialises channel `cp` as a new sound: calls func_8003A2B8(cp) to reset it, then
+ * Initializes channel `cp` as a new sound: calls func_8003A2B8(cp) to reset it, then
  * stores arg0 at offsets 0x88 and 0x140, arg1 at 0x13C, arg3 + 0x100 at 0xB2 (the
  * type word that Audio_IsSoundPlaying and func_8003798C test), arg4 at 0xAA, arg5 at 0xBC and
  * arg6 at 0x60 (`priority`). With interrupts masked (func_8004D300(1) is osSetIntMask),
@@ -2257,7 +2257,7 @@ void Audio_RelocatePointerArray(u8* arg0, u32 arg1, u32 arg2) {
 }
 
 /**
- * Initialises channel `cp` as a new sound (a sibling of func_8003815C): calls
+ * Initializes channel `cp` as a new sound (a sibling of func_8003815C): calls
  * func_8003A2B8(cp) to reset it, then stores D_800B3668 at offset 0x88, arg1 at the
  * s16 at 0xB2 (the type word), arg2 at 0xAA, arg3 at 0xBC and arg4 at 0x60 (`priority`).
  * It then raises the interrupt mask with func_8004D300, takes the next handle

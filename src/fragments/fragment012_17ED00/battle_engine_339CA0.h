@@ -433,7 +433,7 @@ void BattleAnim_InitSharedVerticalFadeParticle(Particle* arg0);
  * file's .rodata, which is not placed yet (see the note above the function).
  */
 
-/* Initialises one particle of the shared "vertical fade" battle effect. */
+/* Initializes one particle of the shared "vertical fade" battle effect. */
 
 void Particle_MarkInactive(s8 *arg0);                      /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
