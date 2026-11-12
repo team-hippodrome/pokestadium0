@@ -244,8 +244,12 @@ void func_82134D40(s8 *);
 M2C_UNK func_82134D80(s8 *);                        /* extern */
 void func_8211F274();
 
-/*
- * BattleMenu_UpdateMoveMenu
+/**
+ * Fight menu, every frame: L goes back to the command menu, holding R shows the
+ * move list (sub[0x1C]), and the C buttons go to BattleMenu_HandleMoveButtons.
+ * Callers reach the same address as BattleScene_HandlePlayerMoveSelection
+ * (Stadium 1's name); merging the two names changes the prototype in
+ * battle_engine.h, so both stay for now.
  *
  * Does nothing unless the word at arg0 + 0x790 is 1 and BattleMenu_HandleNoUsableMoves()
  * returns 0. Then, with `rec` = the pointer at arg0 + 0x858 and `sub` =
