@@ -23,7 +23,12 @@ void func_82113660(void) {
 extern s32 D_8218C7BC;
 extern s32 D_8218C7C0;
 extern s32 D_8218C7C4;
-void func_82113668(void) {
+/**
+ * Move effects 0x01 and 0x20 (Gen 1 SleepEffect): puts the target to sleep for 1-3 turns unless
+ * it already has a status, the move misses or Sleep Clause applies. Sets moveEffectKind 0x16.
+ * @unverified Name from its slots in sMoveEffectHandlers, which follow the Gen 1 effect table.
+ */
+void Battle_Effect_Sleep(void) {
     s32 sp24;
     s32 var_v1;
 
@@ -162,7 +167,12 @@ extern s32 D_8218C7E0;
 extern s32 D_8218C7E4;
 extern s32 D_8218C7E8;
 extern s32 D_8218C7EC;
-void func_82113CD0(void) {
+/**
+ * Move effects 0x04-0x06 and 0x22-0x24 (Gen 1 FreezeBurnParalyzeEffect): the 10% or 30% side
+ * effect that burns, freezes or paralyzes the target. A Fire move thaws a frozen target.
+ * @unverified Name from its slots in sMoveEffectHandlers, which follow the Gen 1 effect table.
+ */
+void Battle_Effect_FreezeBurnParalyze(void) {
     if (sBattleTarget->volatileStatusFlags & 0x10) {
         return;
     }
@@ -295,7 +305,12 @@ void BattleEffect_ApplyStatBoost(void) {
 }
 
 extern u8 sStatCanBeChangedFurther;
-void func_821142B8(void) {
+/**
+ * Move effects 0x0A-0x0F and 0x32-0x37 (Gen 1 StatModifierUpEffect): raises one of the user's
+ * stat stages by 1 or 2 and recomputes the stat. Sets moveEffectKind 7.
+ * @unverified Name from its slots in sMoveEffectHandlers, which follow the Gen 1 effect table.
+ */
+void Battle_Effect_StatUp(void) {
     s32 sp24;
     s32 var_a3;
     u16* sp1C;
