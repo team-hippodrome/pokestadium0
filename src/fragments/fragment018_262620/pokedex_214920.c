@@ -47,7 +47,7 @@ void Pokedex_RunEntryFlow(void);
 s32 Pokedex_GetHighestSeenSpeciesIndex(void);
 void Pokedex_InitFramebuffers(void);
 
-s32 func_8A10122C(void);
+s32 Pokedex_RunIndexScreen(void);
 s32 Pokedex_ShowEntryMenu(void);
 s32 Pokedex_ShowEntry(void);
 s32 Pokedex_PlayCry(void);
@@ -544,7 +544,11 @@ extern M2C_UNK D_8A1301A0;
 extern s32 D_8A130230;
 extern M2C_UNK D_8A130238;
 
-s32 func_8A1011A4(s32 arg0) {
+/**
+ * Draws the Pokedex index: sort order menu, seen/caught/owned counts and the list.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 Pokedex_DrawIndexScreen(s32 arg0) {
     M2C_UNK *var_a1;
 
     func_800069CC();
@@ -569,7 +573,11 @@ M2C_UNK func_8000B2F4(s32);
 M2C_UNK func_800158C0();
 void func_8001B5F0(void);
 M2C_UNK func_80006780();
-s32 func_8A10122C(void) {
+/**
+ * Main loop of the Pokedex index screen.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 Pokedex_RunIndexScreen(void) {
     s32 temp_s0;
     s32 var_s4;
 
@@ -884,7 +892,7 @@ extern M2C_UNK Pokedex_DrawHabitatPage;
  */
 void Pokedex_EnterAreaMapScreen(void) {
     func_80005B98(8);
-    func_80006828(8, &func_8A1011A4);
+    func_80006828(8, &Pokedex_DrawIndexScreen);
     func_800067BC(2);
     func_8000661C(D_8A12FFA0);
     func_800067BC(2);
@@ -974,7 +982,7 @@ void Pokedex_RunEntryFlow(void) {
     while (var_v0 != 0) {
         switch (var_v0) {
             case 1:
-                var_v0 = func_8A10122C();
+                var_v0 = Pokedex_RunIndexScreen();
                 break;
 
             case 2:

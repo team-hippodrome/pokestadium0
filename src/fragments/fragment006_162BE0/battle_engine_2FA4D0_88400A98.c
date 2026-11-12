@@ -340,7 +340,11 @@ void Options_DrawClearSavePrompt(s32 arg0, s32 arg1) {
     Font_EndTexturedTextRendering();
 }
 
-s32 func_88401970(s32 arg0, s32 arg1, u8 arg2) {
+/**
+ * Loop for the clear-save prompt: Left/Right toggles the choice, A confirms, B cancels (returns No).
+ * @unverified Name and comment guessed from the code.
+ */
+s32 Options_RunClearSavePrompt(s32 arg0, s32 arg1, u8 arg2) {
     s32 loop = 1;
     s32 sel = 1;
     s32 buttons;
@@ -397,7 +401,11 @@ void Save_InitializeBank3(void) {
 s32 func_80025214(void);
 void func_80025224(u8);
 void Save_CommitTypedRecord(s32, s32);
-void func_88401B40(void) {
+/**
+ * Loop for the options menu: Up/Down move the cursor through four entries and the chosen settings are saved.
+ * @unverified Name and comment guessed from the code.
+ */
+void Options_RunMenu(void) {
     s32 done = 0;
     s32 sel = 0;
     u8 flags = func_80025214();
@@ -428,7 +436,7 @@ void func_88401B40(void) {
                     break;
                 case 2:
                     func_8003F6AC(2);
-                    if (func_88401970(0, sel, flags) != 0 && func_88401970(1, sel, flags) != 0) {
+                    if (Options_RunClearSavePrompt(0, sel, flags) != 0 && Options_RunClearSavePrompt(1, sel, flags) != 0) {
                         flags = 0;
                         Save_InitializeBank3();
                     }
@@ -469,7 +477,11 @@ void func_88401B40(void) {
     }
 }
 
-s32 func_88401D54(void) {
+/**
+ * Loop for the options title screen: A returns 1, B returns 2, C-right opens Options_RunMenu.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 Options_RunTitle(void) {
     s32 var_s0;
 
     var_s0 = 0;
@@ -485,7 +497,7 @@ s32 func_88401D54(void) {
             var_s0 = 2;
         } else if (M2C_FIELD(D_800603C0, u16 *, 8) & 1) {
             func_8003F6AC(2);
-            func_88401B40();
+            Options_RunMenu();
         }
     } while (var_s0 == 0);
     if ((var_s0 == 1) && (D_88403358 >= 0)) {
@@ -624,7 +636,7 @@ s32 func_88402334(void) {
     func_8000D520(sp18 + 0xA8, &D_88402DB4 + 2);
     func_80006828(5, &func_88400108);
     func_88401040();
-    temp_v0 = func_88401D54();
+    temp_v0 = Options_RunTitle();
     sp1C = temp_v0;
     if (temp_v0 == 1) {
         func_884022AC();
@@ -665,7 +677,7 @@ s32 func_8840248C(void) {
     func_8000D520(sp18 + 0xA8, &D_88402E94 + 2);
     func_88402174();
     func_88402038();
-    temp_v0 = func_88401D54();
+    temp_v0 = Options_RunTitle();
     sp1C = temp_v0;
     if (temp_v0 == 1) {
         func_884022AC();

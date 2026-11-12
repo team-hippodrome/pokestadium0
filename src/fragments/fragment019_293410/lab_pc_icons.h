@@ -57,12 +57,12 @@ void UI_DrawTextureRgba16(s32 arg0, s32 arg1, s32 arg2);
  * five words with (arg1, arg2, 0x221, 0x168, 0), the words at +0x20, +0x24
  * and +0x28 are cleared and +0x14 is set to 0x1001.  It then calls
  * func_8002D880 on the sub-object at arg0 + 0x2C with arg3, the area at
- * arg0 + 0x50, the callback func_8A200274 and the constants 0x215 and 0x33.
+ * arg0 + 0x50, the callback MonSummary_DrawListRow and the constants 0x215 and 0x33.
  * What func_8002D880 does is not established yet, so the roles of those
  * arguments are not named.
  */
 M2C_UNK func_8002D880(s8 *, s32, s8 *, M2C_UNK *, s32, s32); /* extern */
-/* func_8A200274 is defined in lab_pc_icons.c. */
+/* MonSummary_DrawListRow is defined in lab_pc_icons.c. */
 
 void func_8A20034C(s8 *arg0, s32 arg1, s32 arg2, s32 arg3);
 
@@ -118,7 +118,7 @@ void func_8A201394();
 s32 MonSummary_DrawMoveInfo(s32, s32, s32, s32);
 void func_8A201C08(s32, s32, s32);
 extern s8 D_8007356C;
-void func_8A201EAC(s8 *arg0, s32 arg1);
+void MonSummary_DrawPage(s8 *arg0, s32 arg1);
 
 s32 func_80022B40();                                /* extern */
 s32 func_8002D454();                /* extern */

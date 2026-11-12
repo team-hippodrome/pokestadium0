@@ -44,7 +44,7 @@ void func_80022188(s32);
 void func_800230C4(s32);
 void func_800243B8(void);
 void func_8002D7D4(s32);
-void func_8900A1CC(s8* arg0);
+void PcBox_DrawScreen(s8* arg0);
 
 void func_890070BC(s8* arg0) {
     s32 any;
@@ -79,7 +79,7 @@ void func_890070BC(s8* arg0) {
         func_800230C4(D_89019108);
         if (func_8002207C(D_89019108) == 0) {
             func_8002D7D4(D_89019108);
-            func_8900A1CC(arg0);
+            PcBox_DrawScreen(arg0);
         }
         func_80022188(D_89019108);
     }
@@ -1278,7 +1278,11 @@ extern u8 D_8900A5B8[];
 void func_89008F4C(s8*);
 void func_8002CAD0(s8*);
 void PcBox_DrawMonStatusWindow(Screen89007678*);
-void func_8900A1CC(s8* arg0) {
+/**
+ * Draws the PC box screen for its current state, including the storage label and status window.
+ * @unverified Name and comment guessed from the code.
+ */
+void PcBox_DrawScreen(s8* arg0) {
     func_800069CC();
     func_8002C064(0x38, 0x1E0, D_8900A5B8[0], D_8900A5B8[1], D_8900A5B8[2]);
     switch (*(s32*)arg0) {

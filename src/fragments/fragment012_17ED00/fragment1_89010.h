@@ -58,6 +58,6 @@ void func_821324D8(CameraNode* arg0);
 void func_82132628(CameraNode* arg0);
 void func_821326E4(CameraNode* arg0);
 
-void func_821328DC(CameraNode* arg0);
+void BattleScene_RunOpeningSendOut(CameraNode* arg0);
 
 #endif

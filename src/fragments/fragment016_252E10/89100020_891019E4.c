@@ -141,7 +141,11 @@ void func_8910179C(s8*, s32, s32);
 void LabPCList_DrawPageHint(s8*);
 void func_89100688(s8*);
 void func_89100870(s8*);
-void func_891019E4(s8* arg0) {
+/**
+ * Draws the lab PC list screen: page hint, column headers and rows.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabPCList_DrawListScreen(s8* arg0) {
     s32 sel;
     s32 y;
     s32 flags[2]; // FAKE (only [0] is used; has to live on the stack)
@@ -675,7 +679,7 @@ M2C_UNK func_80022188(s32);                         /* extern */
 M2C_UNK func_800230C4(s32);                         /* extern */
 M2C_UNK func_800243B8();                            /* extern */
 M2C_UNK func_8002D7D4(s32);                         /* extern */
-void func_891019E4(s8*);
+void LabPCList_DrawListScreen(s8*);
 s32 func_89102930();                                /* extern */
 M2C_UNK func_89109D14(s32);                         /* extern */
 extern s32 D_8910E37C;
@@ -697,7 +701,7 @@ void func_89102A04(s32 arg0) {
         }
         if (func_8002207C(D_8910E37C) == 0) {
             func_8002D7D4(D_8910E37C);
-            func_891019E4((s8*)arg0);
+            LabPCList_DrawListScreen((s8*)arg0);
         }
         func_80022188(D_8910E37C);
     }

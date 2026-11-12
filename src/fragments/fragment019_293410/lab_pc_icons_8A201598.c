@@ -170,7 +170,11 @@ void func_8A201D3C(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
 }
 
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-void func_8A201EAC(s8 *arg0, s32 arg1)
+/**
+ * Draws the summary page: header, stats, trainer info and moves.
+ * @unverified Name and comment guessed from the code.
+ */
+void MonSummary_DrawPage(s8 *arg0, s32 arg1)
 {
   s32 temp_v0;
   if (((*((s32 *) (((s8 *) arg0) + 0x28))) != 2) && (func_8002AB84() == 0))
@@ -382,13 +386,13 @@ void func_8A20261C(void* arg0) {
             if (func_8002AAC4(CTX->unk0D4) != 0) {
                 func_8A202160();
             }
-            func_8A201EAC(CTX->unk0D4, 0);
+            MonSummary_DrawPage(CTX->unk0D4, 0);
             break;
         case 5:
             if (func_8002AAC4(CTX->unk0D4) != 0) {
                 func_8A202160();
             }
-            func_8A201EAC(CTX->unk0D4, 1);
+            MonSummary_DrawPage(CTX->unk0D4, 1);
             break;
         case 6:
             if (CTX->mode == 7) {

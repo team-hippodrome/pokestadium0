@@ -39,7 +39,11 @@ void BattleMenu_DrawBackConfirmBar(ActivePokemon*, s32, s32, s32);
 void BattleMenu_DrawMovePanel(ActivePokemon*, s32, s32, s32);
 void BattleMenu_DrawSurrenderPromptWithCursor(ActivePokemon*, s32, s32, s32);
 void BattleMenu_DrawCommandMenu(ActivePokemon*, s32, s32, s32);
-void func_8211E890(ActivePokemon* arg0, ActivePokemonState* arg1) {
+/**
+ * Draws side 0's status box and whichever battle menu its state has open (command, move, confirm, surrender).
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleMenu_DrawSide0Menus(ActivePokemon* arg0, ActivePokemonState* arg1) {
     TeamRoster* sp2C = arg0->sessionTeams->teamMember[M2C_FIELD(arg0, s32*, 0x9D4)];
 
     if (arg1->selectedCommandOption == 3) {
@@ -84,7 +88,11 @@ void func_8211E890(ActivePokemon* arg0, ActivePokemonState* arg1) {
 }
 
 void func_82118738(ActivePokemon*, s16, s16, u16, s32);
-void func_8211EB10(ActivePokemon* arg0, ActivePokemonState* arg1) {
+/**
+ * Draws side 1's status box and whichever battle menu its state has open (command, move, confirm, surrender).
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleMenu_DrawSide1Menus(ActivePokemon* arg0, ActivePokemonState* arg1) {
     TeamRoster* sp2C = arg0->sessionTeams->teamMember[M2C_FIELD(arg0, s32*, 0x9D4)];
 
     if (arg1->selectedCommandOption == 3) {
@@ -387,8 +395,8 @@ void Battle_RenderHud(void) {
         case 11:
             break;
         case 1:
-            func_8211E890(sActivePokemon[0], s0);
-            func_8211EB10(sActivePokemon[1], s1);
+            BattleMenu_DrawSide0Menus(sActivePokemon[0], s0);
+            BattleMenu_DrawSide1Menus(sActivePokemon[1], s1);
             func_8211F2E0(sActivePokemon[0]);
             func_8211F2E0(sActivePokemon[1]);
             func_8211D3A8();

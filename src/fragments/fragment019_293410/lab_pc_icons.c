@@ -61,7 +61,11 @@ extern Color_RGBA8 D_8A203348;
 extern Color_RGBA8 D_80073520;
 void func_8002A0AC(s32, s32, s32, s32, Color_RGBA8);
 M2C_UNK func_80029A64(s32, s32, s32, s32, Color_RGBA8);
-void func_8A200274(s32 arg0, s32 arg1, BattleMon *arg2, s32 arg3, s32 arg4, s32 *arg5) {
+/**
+ * Draws a Pokemon list row with its HP and level; highlights it for the selection flags.
+ * @unverified Name and comment guessed from the code.
+ */
+void MonSummary_DrawListRow(s32 arg0, s32 arg1, BattleMon *arg2, s32 arg3, s32 arg4, s32 *arg5) {
     s32 pad[3]; // FAKE: stack padding
     s32 kind = *arg5;
     Color_RGBA8 *color;
@@ -86,7 +90,7 @@ void func_8A20034C(s8 *arg0, s32 arg1, s32 arg2, s32 arg3) {
     M2C_FIELD(arg0, s32 *, 0x20) = 0;
     M2C_FIELD(arg0, s32 *, 0x28) = 0;
     M2C_FIELD(arg0, s32 *, 0x14) = 0x1001;
-    func_8002D880(arg0 + 0x2C, arg3, arg0 + 0x50, (M2C_UNK *)func_8A200274, 0x215, 0x33);
+    func_8002D880(arg0 + 0x2C, arg3, arg0 + 0x50, (M2C_UNK *)MonSummary_DrawListRow, 0x215, 0x33);
 }
 
 extern s8 D_8007356C;

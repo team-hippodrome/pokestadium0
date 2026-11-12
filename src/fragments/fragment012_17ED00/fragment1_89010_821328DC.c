@@ -1,7 +1,11 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
 #include "fragment1_89010.h"
 
-void func_821328DC(CameraNode* arg0) {
+/**
+ * Battle opening phase: steps through the intro camera shots and both send-outs.
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleScene_RunOpeningSendOut(CameraNode* arg0) {
     switch (sBattleScene.scene->phaseStep) {
         case 0:
             func_821324D8(arg0);

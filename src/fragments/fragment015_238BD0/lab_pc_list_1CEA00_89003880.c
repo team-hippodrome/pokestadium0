@@ -585,11 +585,11 @@ void func_89003650(s8*);
 void func_8900379C(void*);
 M2C_UNK func_890067B0(M2C_UNK *, M2C_UNK *);        /* extern */
 M2C_UNK func_890069C0(M2C_UNK *);                   /* extern */
-M2C_UNK func_890069E8(M2C_UNK *);                   /* extern */
+M2C_UNK PcSort_DrawScreen(M2C_UNK *);                   /* extern */
 s32 func_89006D60(M2C_UNK *);                       /* extern */
 M2C_UNK func_8900A014(M2C_UNK *);                   /* extern */
 M2C_UNK func_8900A1A4(M2C_UNK *);                   /* extern */
-M2C_UNK func_8900A1CC(M2C_UNK *);                   /* extern */
+M2C_UNK PcBox_DrawScreen(M2C_UNK *);                   /* extern */
 s32 func_8900A324(M2C_UNK *);                       /* extern */
 extern M2C_UNK D_89018918;
 extern M2C_UNK D_89019128;
@@ -633,14 +633,14 @@ s32 func_890043BC(s32 arg0) {
         }
         break;
     case 2:                                         /* switch 1 */
-        func_890069E8(&D_89019B98);
+        PcSort_DrawScreen(&D_89019B98);
         if (func_89006D60(&D_89019B98) != 0) {
             D_890289D4 = 1;
             func_890069C0(&D_89019B98);
         }
         break;
     case 4:                                         /* switch 1 */
-        func_8900A1CC(&D_89021428);
+        PcBox_DrawScreen(&D_89021428);
         if (func_8900A324(&D_89021428) != 0) {
             D_890289D4 = 1;
             func_8900A1A4(&D_89021428);

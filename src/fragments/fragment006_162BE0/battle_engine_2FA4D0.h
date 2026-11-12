@@ -144,7 +144,7 @@ void Options_DrawClearSavePrompt(s32 arg0, s32 arg1);
 
 void Options_DrawMenu(s32, u8);
 void Options_DrawClearSavePrompt(s32, s32);
-s32 func_88401970(s32 arg0, s32 arg1, u8 arg2);
+s32 Options_RunClearSavePrompt(s32 arg0, s32 arg1, u8 arg2);
 
 void func_800245E0(s32 arg0, s32 arg1);
 void Save_InitializeBank3(void);

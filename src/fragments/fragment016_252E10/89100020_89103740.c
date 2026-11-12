@@ -685,20 +685,24 @@ void func_8002CAD0(void*);
 void PcSort_DrawUseItemPrompt(void*);
 void func_89108F94(void*);
 
-M2C_UNK func_89104854(M2C_UNK* arg0) {
+/**
+ * Draws the lab PC list for its current state.
+ * @unverified Name and comment guessed from the code.
+ */
+M2C_UNK LabPCList_DrawScreen(M2C_UNK* arg0) {
     func_800069CC();
     switch (*arg0) {
         case 0:
             if (func_8002AAC4(arg0 + 1) != 0) {
                 func_89104818();
             }
-            func_891019E4(arg0 + 1);
+            LabPCList_DrawListScreen(arg0 + 1);
             break;
         case 1:
             if (func_8002AAC4(arg0 + 1) != 0) {
                 func_89104818();
             }
-            func_891019E4(arg0 + 1);
+            LabPCList_DrawListScreen(arg0 + 1);
             func_8002CAD0((s8*)arg0 + 0xB59C);
             break;
         case 2:
@@ -706,7 +710,7 @@ M2C_UNK func_89104854(M2C_UNK* arg0) {
                 func_89104818();
             }
             if (func_8002AAC4((s8*)arg0 + 0xB600) != 0) {
-                func_891019E4(arg0 + 1);
+                LabPCList_DrawListScreen(arg0 + 1);
             }
             PcSort_DrawUseItemPrompt((s8*)arg0 + 0xB600);
             break;
@@ -714,7 +718,7 @@ M2C_UNK func_89104854(M2C_UNK* arg0) {
             if (func_8002AAC4(arg0 + 1) != 0) {
                 func_89104818();
             }
-            func_891019E4(arg0 + 1);
+            LabPCList_DrawListScreen(arg0 + 1);
             func_89108F94((s8*)arg0 + 0xB7B4);
             break;
     }
@@ -783,13 +787,13 @@ s32 func_891049E8(s32 arg0) {
 M2C_UNK func_8000B1FC();                            /* extern */
 M2C_UNK func_8000B220();                            /* extern */
 s32 func_8910452C(s8*);
-M2C_UNK func_89104854(M2C_UNK *);                   /* extern */
+M2C_UNK LabPCList_DrawScreen(M2C_UNK *);                   /* extern */
 extern M2C_UNK D_8910E3D0;
 
 void func_89104B08(s32 arg0) {
     func_8000B1FC();
     func_8000B220();
-    func_89104854(&D_8910E3D0);
+    LabPCList_DrawScreen(&D_8910E3D0);
     func_8910452C(&D_8910E3D0);
 }
 

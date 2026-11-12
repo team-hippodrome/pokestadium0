@@ -244,7 +244,7 @@ void func_82007D94(s8*, s32);
 void func_82006810(s8*);
 void func_82006DF8(s8*);
 void func_82007AF4(s8*, s32);
-void func_8200339C(s8*);
+void FreeBattle_DrawRentalScreen(s8*);
 void func_8002D2BC(s8*);
 M2C_UNK func_82004CE0(s32 arg0) {
     s8* base = (s8*)arg0;
@@ -294,10 +294,10 @@ M2C_UNK func_82004CE0(s32 arg0) {
             func_82007AF4(base + 0x44EC, 2);
             break;
         case 10:
-            func_8200339C(base + 0x4690);
+            FreeBattle_DrawRentalScreen(base + 0x4690);
             break;
         case 11:
-            func_8200339C(base + 0x4690);
+            FreeBattle_DrawRentalScreen(base + 0x4690);
             func_8002D2BC(base + 0x4E1C);
             break;
     }

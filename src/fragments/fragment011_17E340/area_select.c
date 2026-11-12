@@ -341,7 +341,11 @@ M2C_UNK func_800407B0(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
 void AreaSelect_DrawCupClearList(s32 frames, s32 blink);
 void func_81800320(void);
 
-void func_81800514(void) {
+/**
+ * Plays the cup-cleared sequence: music cue, then the cup list with blinking クリアー！ marks.
+ * @unverified Name and comment guessed from the code.
+ */
+void AreaSelect_PlayCupClearSequence(void) {
     func_800067BC(2);
     func_80005B98(0x1E);
     func_81800320();
@@ -402,7 +406,7 @@ extern M2C_UNK D_8EA00000;
  * arg1 is 4. Then it calls func_8000256C(0x54435550), func_80005040(0x10000, 0),
  * func_8000645C(1, 1, 2, 1, 2, 1) (result kept in a local), func_8001A194(0x10, 0),
  * func_80003EB8 and func_800040B4 with the segment-derived arguments below,
- * func_81800594(), func_80006680(result of func_8000645C), func_81800514(),
+ * func_81800594(), func_80006680(result of func_8000645C), AreaSelect_PlayCupClearSequence(),
  * func_800066C8(), func_8001A360(), func_800050AC() and finally
  * func_80002620(0x54435550). Returns 0. arg0 is not used.
  *
@@ -432,7 +436,7 @@ s32 func_81800634(s32 arg0, s32 arg1) {
     func_800040B4(((u32)((s32)&D_8EA00000 & 0x0FF00000) >> 0x14) - 0x10, &D_0042CC80, &D_00434C00);
     func_81800594();
     func_80006680(sp20);
-    func_81800514();
+    AreaSelect_PlayCupClearSequence();
     func_800066C8();
     func_8001A360();
     func_800050AC();

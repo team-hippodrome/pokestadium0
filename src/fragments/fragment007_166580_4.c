@@ -304,8 +304,9 @@ void func_800310D8(void*, s32, s32, s32, TableArgs*);
  * func_800310D8 on the sub-object at arg0 + 0x6E4 at (+8, +0xAC) with a mode
  * word of 0xFED, or 0xFEF when arg1 is 1, or 0xFFD when arg1 is 2.
  * What the mode word's bits mean is not yet established.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_82003118(s8* arg0, s32 arg1) {
+void FreeBattle_DrawRentalTitleWindow(s8* arg0, s32 arg1) {
     s32 sp44;
     TableArgs sp34;
 
@@ -344,7 +345,7 @@ s32 func_8002AE6C(s8*);
 void func_800189C0(s32, s32);
 void func_800069CC(void);
 void func_8002F3C4(s8*, s32, s32, s32, s32);
-void func_8200288C(s8*, s32);
+void FreeBattle_DrawRentalListWindow(s8*, s32);
 void func_8200813C(s8*);
 void func_820082EC(s8*);
 void func_82008640(s8*);
@@ -352,7 +353,11 @@ void FreeBattle_DrawEntryConfirm(s8*);
 void FreeBattle_DrawMonStatusWindow(s8*);
 void func_8002D024(s8*);
 extern s32 D_8200AC50;
-void func_8200339C(s8* arg0) {
+/**
+ * Draws the rental selection screen for its current state (choosing label, list, entry confirm, status window).
+ * @unverified Name and comment guessed from the code.
+ */
+void FreeBattle_DrawRentalScreen(s8* arg0) {
     if (func_8002AE6C(arg0 + 0x14) != 0) {
         return;
     }
@@ -366,7 +371,7 @@ void func_8200339C(s8* arg0) {
         case 2:
             func_800189C0(D_8200AC50, 0);
             func_800069CC();
-            func_8200288C(arg0, 1);
+            FreeBattle_DrawRentalListWindow(arg0, 1);
             func_82003234(arg0);
             func_8200813C(arg0 + 0x320);
             break;
@@ -374,47 +379,47 @@ void func_8200339C(s8* arg0) {
         case 8:
             func_800189C0(D_8200AC50, 0);
             func_800069CC();
-            func_8200288C(arg0, (M2C_FIELD(arg0, s32*, 4) == 6) ? 1 : 2);
-            func_82003118(arg0, (M2C_FIELD(arg0, s32*, 4) == 6) ? 0 : 1);
+            FreeBattle_DrawRentalListWindow(arg0, (M2C_FIELD(arg0, s32*, 4) == 6) ? 1 : 2);
+            FreeBattle_DrawRentalTitleWindow(arg0, (M2C_FIELD(arg0, s32*, 4) == 6) ? 0 : 1);
             func_820032E8(arg0);
             break;
         case 10:
             func_800189C0(D_8200AC50, 0);
             func_800069CC();
-            func_8200288C(arg0, 0);
+            FreeBattle_DrawRentalListWindow(arg0, 0);
             func_82003234(arg0);
             FreeBattle_DrawEntryConfirm(arg0 + 0x4DC);
             break;
         case 4:
             func_800189C0(D_8200AC50, 0);
             func_800069CC();
-            func_8200288C(arg0, 0);
+            FreeBattle_DrawRentalListWindow(arg0, 0);
             func_82003234(arg0);
             func_820082EC(arg0 + 0x370);
             break;
         case 5:
             func_800189C0(D_8200AC50, 0);
             func_800069CC();
-            func_8200288C(arg0, 0);
+            FreeBattle_DrawRentalListWindow(arg0, 0);
             func_82003234(arg0);
             func_82008640(arg0 + 0x428);
             break;
         case 7:
         case 9:
-            func_8200288C(arg0, 2);
-            func_82003118(arg0, (M2C_FIELD(arg0, s32*, 4) == 7) ? 0 : 2);
+            FreeBattle_DrawRentalListWindow(arg0, 2);
+            FreeBattle_DrawRentalTitleWindow(arg0, (M2C_FIELD(arg0, s32*, 4) == 7) ? 0 : 2);
             func_820032E8(arg0);
             FreeBattle_DrawMonStatusWindow(arg0 + 0x5CC);
             break;
         case 3:
-            func_8200288C(arg0, 2);
+            FreeBattle_DrawRentalListWindow(arg0, 2);
             func_82003234(arg0);
             FreeBattle_DrawMonStatusWindow(arg0 + 0x5CC);
             break;
         case 11:
             func_800189C0(D_8200AC50, 0);
             func_800069CC();
-            func_8200288C(arg0, 0);
+            FreeBattle_DrawRentalListWindow(arg0, 0);
             func_82003234(arg0);
             break;
         case 12:

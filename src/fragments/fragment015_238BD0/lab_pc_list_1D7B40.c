@@ -886,7 +886,11 @@ void func_8002CAD0(void*);
 void PcBox_DrawMonStatusWindow(void*);
 extern Color_RGB8 D_8900A5B8;
 
-void func_890069E8(s32* arg0) {
+/**
+ * Draws the Pokemon sorting screen for its current state, including the status window.
+ * @unverified Name and comment guessed from the code.
+ */
+void PcSort_DrawScreen(s32* arg0) {
     BgStage_DrawFrame();
     func_8002C064(0x38, 0x1E0, D_8900A5B8.r, D_8900A5B8.g, D_8900A5B8.b);
     switch (*arg0) {
@@ -978,7 +982,7 @@ void func_89006B2C(Save89006B2C* arg0) {
         func_800230C4(D_89019108);
         if (func_8002207C(D_89019108) == 0) {
             func_8002D7D4(D_89019108);
-            func_890069E8((s32*)arg0);
+            PcSort_DrawScreen((s32*)arg0);
         }
         func_80022188(D_89019108);
     }

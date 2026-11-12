@@ -535,7 +535,11 @@ M2C_UNK func_88000EAC(s8 *, M2C_UNK);             /* extern */
 void func_88001128(s8 *);
 extern M2C_UNK D_88002254;
 
-void func_8800149C(s8 *arg0) {
+/**
+ * Draws the main menu for its current state, including the continue-tournament prompt.
+ * @unverified Name and comment guessed from the code.
+ */
+void MainMenu_DrawScreen(s8 *arg0) {
     s32 temp_v0;
 
     func_800069CC();
@@ -817,7 +821,7 @@ s32 func_88001CA4(s32 arg0) {
     func_8000B1FC();
     func_8000B220();
     func_8001B5F0();
-    func_8800149C(D_88002B20);
+    MainMenu_DrawScreen(D_88002B20);
     if (arg0 == 0) {
         sp1C = func_88001564(D_88002B20);
     }
@@ -834,7 +838,7 @@ void func_88001D04(void) {
 extern s32 D_88002B20;
 
 s32 func_88001D28(s32 arg0) {
-    func_8800149C(D_88002B20);
+    MainMenu_DrawScreen(D_88002B20);
     return 0;
 }
 

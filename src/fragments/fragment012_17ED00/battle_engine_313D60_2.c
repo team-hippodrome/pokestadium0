@@ -200,7 +200,7 @@ void BattleScene_TickCameraSubstate(CameraNode* arg0) {
 }
 
 void func_82121DAC(void);
-void func_821328DC(CameraNode*);
+void BattleScene_RunOpeningSendOut(CameraNode*);
 void Rental_TeamSlotsUpdate(CameraNode*);
 void func_82132D60(CameraNode*);
 void func_821336EC(CameraNode*);
@@ -232,7 +232,7 @@ void BattleScene_Update(CameraNode* arg0) {
             BattleScene_UpdateIntroSequence(arg0);
             break;
         case 8:
-            func_821328DC(arg0);
+            BattleScene_RunOpeningSendOut(arg0);
             break;
         case 5:
             BattleScene_UpdateBRollCameraSequence(arg0);

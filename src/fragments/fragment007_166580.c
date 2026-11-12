@@ -1170,7 +1170,11 @@ extern s32 D_8200AC58[];
 extern Color82001CCC D_82008F60;
 void func_8002E230(void*, s32, s32, s32, MenuDef8200288C*);
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-void func_8200288C(s8 *arg0, s32 arg1)
+/**
+ * Draws the rental Pokemon list window; `arg1` picks the cursor style.
+ * @unverified Name and comment guessed from the code.
+ */
+void FreeBattle_DrawRentalListWindow(s8 *arg0, s32 arg1)
 {
   s32 x;
   s32 y;
