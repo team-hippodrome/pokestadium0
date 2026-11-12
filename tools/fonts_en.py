@@ -144,14 +144,16 @@ def font_map_words(rom, ctx=None):
         addu(T2, T2, A0),
         lbu(V0, 0, T2),
     ]
-    store_head = [
+    store = [
         lui(T3, hi(ctx)),                    # font_context
         addiu(T3, T3, lo(ctx)),
         lw(T3, 0, T3),
-        beq(T3, ZERO, 0),                    # no font context yet: leave the advance alone
+        beq(T3, ZERO, 0),                    # no font context yet: skip the advance update
         NOP,
-        lbu(T4, 0x38, T3),                   # the active set (0..5, masked in case it is stale)
-        andi(T4, T4, 7),
+        lbu(T4, 0x38, T3),                   # the active set slot
+        sltiu(AT, T4, 6),                    # outside the six registered sets: skip
+        beq(AT, ZERO, 0),
+        NOP,
         sll(T4, T4, 3),
         addu(T3, T3, T4),
         lw(T5, 0x4, T3),                     # set->tex is the glyph base
@@ -162,23 +164,26 @@ def font_map_words(rom, ctx=None):
         lbu(T5, 0, T5),
         sb(T5, 0, T3),                       # set->advance = table[glyph]
     ]
-    store_tail = [jr(RA), NOP]
+    tail = [jr(RA), NOP]
     head = [
         andi(A0, A0, 0xFFFF),                # the caller's u16 character code
-        sltiu(AT, A0, 0x7F),                 # below 0x7F?
-        beq(AT, ZERO, 0),                    # no: every other code is glyph 0
-        addu(V0, ZERO, ZERO),                # delay slot: ret = 0
-        sltiu(AT, A0, 0x21),                 # below 0x21?
-        bne(AT, ZERO, 0),
+        addu(V0, ZERO, ZERO),                # everything but printable ASCII is glyph 0
+        sltiu(AT, A0, 0x7F),
+        beq(AT, ZERO, 0),                    # >= 0x7F: store
+        NOP,
+        sltiu(AT, A0, 0x21),
+        bne(AT, ZERO, 0),                    # < 0x21: store
         NOP,
     ]
-    target = len(head) + len(ascii_block)                     # where the store block starts
-    head[2] = beq(AT, ZERO, target - 3)
-    head[5] = bne(AT, ZERO, target - 6)
-    store_head[3] = beq(T3, ZERO, len(store_head) - 4)        # -> store_tail
-    store_head[10] = beq(T5, ZERO, len(store_head) - 11)      # -> store_tail
-    words = head + ascii_block + store_head + store_tail
+    base = len(head) + len(ascii_block)
+    head[3] = beq(AT, ZERO, base - 3 - 1)
+    head[6] = bne(AT, ZERO, base - 6 - 1)
+    store[3] = beq(T3, ZERO, len(store) - 3 - 1)
+    store[7] = beq(AT, ZERO, len(store) - 7 - 1)
+    store[12] = beq(T5, ZERO, len(store) - 12 - 1)
+    words = head + ascii_block + store + tail
     retail = words_at(rom, MAP_FUNC, 0x120 // 4)
+    assert len(words) <= len(retail), 'map function outgrew its retail span'
     return words + [NOP] * (len(retail) - len(words))
 
 
