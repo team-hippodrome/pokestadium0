@@ -531,3 +531,15 @@ The ずかん item opens ずかんもくじ (fragment018). The list shows 001 �
 text. なきごえ plays the cry. ぶんぷをみる flies over a 3D Kanto map titled
 「フシギダネのすみか」, marked 「せいそくちふめい」 because starters aren't wild.
 28 `Pokedex_*` names were confirmed this way.
+
+## とうろく (registration)
+
+The とうろく item opens fragment008. The menu has ポケモンを とうろくする,
+とうろくした ポケモンをみる and とうろくした ポケモンをけす. Its description reads
+「GBカートリッジの てもちポケモンの「データ」だけを きろくする。ポケモンそのものは
+いどうしない。」. Registering listed the 1P cartridge's party (サトシ,
+IDNo/12345, ハナ, ヒノコ and カメ at L5) and asked 「このポケモンをとうろくする？」.
+After はい the party went into slot 01, shown with Ditto placeholders until the
+copy finished. Then came 「メタモンのへんしんがおわりました。ポケモンは
+GBカートリッジに そのまま のこっています。」. 32 `Registration_*` names were
+confirmed. The view and delete lists were not opened.
