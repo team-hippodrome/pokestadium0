@@ -382,7 +382,11 @@ s32 func_8002057C(u8, u16);
 void func_800203FC(BattleMon*);
 void func_8910A764();
 /**
- * @unverified Name from Stadium 1, matched by code similarity.
+ * Uses a vitamin (HP Up, Protein, Iron, Carbos, Calcium; 0x23-0x27) or a Rare Candy (0x28) on the
+ * Pokemon and fills in the old and new values for the result message.
+ * Seen in play (2026-11-12) in いちらん: マックスアップ (HP Up) on フシギダネ showed HP 19 -> 20, and
+ * ふしぎなアメ showed レベル 5 -> 6 with the stats recomputed. After レポートしてやめる the Game Boy save
+ * had HP stat exp +0xA00, max HP 20 and one HP Up fewer.
  */
 void LabPCList_ApplyVitaminItem(u8** arg0, u8** arg1, Msg89103F04* arg2) {
     BattleMon* mon;
@@ -475,7 +479,7 @@ void func_8910A764(s32, u8*, s32, Msg891041D8*);
 
 /**
  * Uses a PP Up on move `arg2` of the Pokemon and writes the result message.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: ポイントアップ on フシギダネ, move slot 0, showed 「たいあたりのPP」 35 -> 42.
  */
 void LabPCList_ApplyPpUpItem(u8** arg0, s32 arg1, s32 arg2, Msg891041D8* arg3) {
     u8* ptr;
@@ -507,7 +511,8 @@ void LabPCList_ConsumeUsedTmItem(u8** arg0);
 
 /**
  * Teaches the TM or HM move `arg1` in move slot `arg2` (item ids from 0xC9 are TMs, below are HMs).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: わざマシン06 on フシギダネ ran this with slot 2, and どくどく (Toxic) then
+ * appeared as わざ3.
  */
 void LabPCList_TeachTmHmMove(u8** arg0, u8** arg1, s32 arg2) {
     u8* ptr;

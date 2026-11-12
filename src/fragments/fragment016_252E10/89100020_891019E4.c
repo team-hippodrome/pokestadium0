@@ -744,7 +744,8 @@ extern s32 D_8910E37C;
 
 /**
  * Writes the changed boxes back to the save.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: ran on レポートしてやめる (B after an item was used, 「ないようが
+ * へんこうされています」), and the Game Boy save on the Transfer Pak then held the changed party and bag.
  */
 void LabPCList_SaveChanges(s32 arg0) {
     s32 sp1C;

@@ -1763,7 +1763,8 @@ void ScrollList_Init(s8*, s32, s32, s32, void*, s32, s32);
 void PcSort_DrawItemRow();
 /**
  * Sets up the window that uses an item on the selected Pokemon.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: どうぐをつかう on フシギダネ opened 「フシギダネがつかえるどうぐ」, listing the bag
+ * items from the Game Boy save (マックスアップ ×5, タウリン ×5, ふしぎなアメ ×5, ポイントアップ ×3, わざマシン06, ひでんマシン01).
  */
 void LabPCList_InitItemWindow(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, u8* arg5) {
     Window_SetRect(arg0, arg1, arg2, 0x184, 0x16E);
@@ -2060,7 +2061,8 @@ extern u8 D_8910AAF8[];
 
 /**
  * Sets up the result message window.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: opened the result window after an item was used (「HP 19 ->
+ * 20」).
  */
 void LabPCList_InitMessageWindow(void* arg0, s32 arg1, s32 arg2, s32 arg3) {
     Window_SetRect((s8*)arg0, arg1, arg2, 0x114, 0x60);
@@ -2086,7 +2088,7 @@ extern char D_8910E1B0[];
 
 /**
  * Draws the result message window.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: drew the item result window every frame while it was open.
  */
 void LabPCList_DrawMessageWindow(s8* arg0) {
     Entry89108F94* entry;
@@ -2119,7 +2121,8 @@ M2C_UNK func_8003F6AC(M2C_UNK);                     /* extern */
 
 /**
  * Returns 1 once the message has been confirmed.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: returned 0 while the item result window was up and 1 after
+ * A.
  */
 s32 LabPCList_UpdateMessageWindow(s32 arg0) {
     s32 var_v1;

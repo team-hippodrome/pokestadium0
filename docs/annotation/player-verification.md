@@ -723,6 +723,16 @@ Opened on the party list (フシギダネ, ヒトカゲ and ゼニガメ):
   すべてのせんたくをやめる ran `LabPCList_ResetFilterState` and
   `LabPCList_ClearFilterFlags`, which took the flags from 0x20 to 0 and restored
   the list.
+* どうぐをつかう, using a local Green save with six bag items added (never
+  committed). The window 「フシギダネがつかえるどうぐ」 listed マックスアップ,
+  タウリン, ふしぎなアメ, ポイントアップ, わざマシン06 and ひでんマシン01.
+  * HP Up gave HP 19 → 20 and Rare Candy gave レベル 5 → 6. Both go through
+    `LabPCList_ApplyVitaminItem`.
+  * PP Up on たいあたり gave PP 35 → 42 (`LabPCList_ApplyPpUpItem`).
+  * TM06 put どくどく into slot 2 (`LabPCList_TeachTmHmMove`).
+  * B then asked 「ないようが へんこうされています」. レポートしてやめる ran
+    `LabPCList_SaveChanges`, and the .sav on the Transfer Pak was rewritten
+    with the new HP stat exp, max HP, bag count and checksum.
 
 ## せいとん, ポケモンを いどうする
 
