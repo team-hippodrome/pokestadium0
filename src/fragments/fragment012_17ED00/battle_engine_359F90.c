@@ -125,7 +125,9 @@ extern u16 D_82199F54;
 extern u16 D_82199F58;
 /**
  * Calculate base damage, halving defense for boom moves and delegating OHKO success.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12): for Nidorino's Poison Sting (level 20, Attack 43, power 15) against
+ * Pinsir (Defense 62) it set sBattleDamage to 4, which is the Gen 1 base damage
+ * ((20*2/5+2)*15*43/62)/50+2.
  */
 s32 Battle_CalcDamage(void) {
     s32 temp_v0 = sBattleUser->moveCache.effect;
@@ -161,7 +163,7 @@ extern s32 D_8218C7B4;
 void ActivePokemon_SetStateFlags(ActivePokemon*, s32);
 /**
  * Subtract damage from Substitute or target HP and update the associated continuation state.
- * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ * Seen in play (2026-11-12): took Pinsir from 75 to 65 HP with sBattleDamage 10.
  */
 void Battle_ApplyDamage(void) {
     BattleMonRuntime* target = sBattleTarget;
@@ -573,7 +575,8 @@ void func_82110FB8(void) {
 
 /**
  * Load all six cached move-data bytes for usedMove; no animation is executed here.
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): for 1P's Poison Sting it filled the cache with 28 02 0F 03 FF 23:
+ * move 40, effect 2 (may poison), power 15, type 3 (Poison), accuracy 255, 35 PP.
  */
 void Battle_LoadMoveCache(void) {
     sBattleUser->moveCache.lastMove = gMoveData[sBattleUser->usedMove - 1].moveId;

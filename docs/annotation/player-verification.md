@@ -643,3 +643,10 @@ on both sides of the call.
   and 0 once Pinsir's Speed was set to 1. The battle followed both results.
 * Critical hits: `Battle_CheckCriticalHit` returned 1 with the random roll
   forced to 2 for that call, and the game showed きゅうしょに あたった！
+* Damage: Nidorino's Poison Sting on Pinsir went through `Battle_CalcDamage`
+  (base 4, the Gen 1 formula), `Battle_ApplyTypeEffectAndSTAB` (6 for the
+  same-type bonus, then 12 for Poison against Bug), the random roll (10), and
+  `Battle_ApplyDamage` (75 to 65 HP). `Battle_LoadMoveCache` had loaded
+  Poison Sting's six data bytes (28 02 0F 03 FF 23).
+* Messages: `BattleMessage_Format` built 「ニドニドのどくばり!」 with id 0x18,
+  and 「こうかは ばつぐんだ！」 with id 0x29.

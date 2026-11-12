@@ -206,7 +206,8 @@ void Battle_SimpleStringFormat(s8* arg0, s8* arg1, ...) {
 
 /**
  * Builds a battle message: byte 0 is the announcer clip id `id`, then `arg1` with each %s replaced by the next string argument.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): built 18 + 「ニドニドのどくばり!」 (id 0x18, %s = the nickname ニドニド) and 29 +
+ * 「こうかは ばつぐんだ！」 for the super-effective message, both then shown in the battle.
  */
 void BattleMessage_Format(s8* arg0, s8 id, s8* arg1, ...) {
     va_list args;

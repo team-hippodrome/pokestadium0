@@ -132,7 +132,8 @@ extern u8 D_82199F3F;
  * retail code. BattleCalc_ApplyTypeEffectAndStab walks the same table. Stadium 1's equivalent is
  * Battle_ApplyTypeEffectAndSTAB, which has extra Struggle and effectiveness
  * counting logic that this version does not.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-12): took the Poison Sting damage from 4 to 12: same-type bonus to 6
+ * (flag 0x80), then 20/10 for Poison against Bug (flags 0x94); the game then showed こうかは ばつぐんだ！
  */
 void Battle_ApplyTypeEffectAndSTAB(void) {
     TypeEffectivenessEntry* entry;
