@@ -325,7 +325,12 @@ void BattleHud_DrawPlainText(s16 arg0, s16 arg1, char* arg2) {
     Font_EndTexturedTextRendering();
 }
 
-void func_8211AEA4(TeamRoster* arg0, BattleMon* arg1, s32 arg2, s32 arg3, s32 arg4) {
+/**
+ * Draws one row of the switch panel: level, HP bar, HP fraction and the button icon for the slot
+ * (C-Up, C-Left, B, C-Right, C-Down, A for slots 0-5). Ran in play while the Pokemon menu was
+ * open.
+ */
+void BattleMenu_DrawSwitchPanelEntry(TeamRoster* arg0, BattleMon* arg1, s32 arg2, s32 arg3, s32 arg4) {
     s32 var_t0;
 
     BattleHud_DrawLevelNumber(arg2 + 3, arg3 + 4, arg1->level);
@@ -486,7 +491,12 @@ extern u8* D_8218AFF8[];
 extern Gfx D_800602C8[];
 extern Gfx D_80060398[];
 
-void func_8211B900(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3) {
+/**
+ * Draws the Pokemon (switch) menu panel: the trainer name and one row per Pokemon brought,
+ * through BattleMenu_DrawSwitchPanelEntry. Ran in play every frame while 1P's Pokemon menu (B)
+ * was open.
+ */
+void BattleMenu_DrawSwitchPanel(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3) {
     UNUSED s32 pad[3]; // FAKE
     Colors8211B900 a = D_8218B104;
     Colors8211B900 b = D_8218B114;
@@ -540,22 +550,22 @@ void func_8211B900(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3) {
     Gfx_DrawTextureRgba16(arg1 + 1, arg2, 0x18, 0x10, D_8218AFF8[arg3], 0x18, 0);
     gSPDisplayList(gDisplayListHead++, D_80060398);
     if (roster->numberOfPokemonBrought > 0) {
-        func_8211AEA4(roster, m0, arg1 + 1, arg2 + 0x10, 0);
+        BattleMenu_DrawSwitchPanelEntry(roster, m0, arg1 + 1, arg2 + 0x10, 0);
     }
     if (roster->numberOfPokemonBrought >= 2) {
-        func_8211AEA4(roster, m1, arg1 + 1, arg2 + 0x2D, 1);
+        BattleMenu_DrawSwitchPanelEntry(roster, m1, arg1 + 1, arg2 + 0x2D, 1);
     }
     if (roster->numberOfPokemonBrought >= 3) {
-        func_8211AEA4(roster, m2, arg1 + 1, arg2 + 0x4A, 2);
+        BattleMenu_DrawSwitchPanelEntry(roster, m2, arg1 + 1, arg2 + 0x4A, 2);
     }
     if (roster->numberOfPokemonBrought >= 4) {
-        func_8211AEA4(roster, m3, arg1 + 0x66, arg2 + 0x10, 3);
+        BattleMenu_DrawSwitchPanelEntry(roster, m3, arg1 + 0x66, arg2 + 0x10, 3);
     }
     if (roster->numberOfPokemonBrought >= 5) {
-        func_8211AEA4(roster, m4, arg1 + 0x66, arg2 + 0x2D, 4);
+        BattleMenu_DrawSwitchPanelEntry(roster, m4, arg1 + 0x66, arg2 + 0x2D, 4);
     }
     if (roster->numberOfPokemonBrought >= 6) {
-        func_8211AEA4(roster, m5, arg1 + 0x66, arg2 + 0x4A, 5);
+        BattleMenu_DrawSwitchPanelEntry(roster, m5, arg1 + 0x66, arg2 + 0x4A, 5);
     }
     gSPDisplayList(gDisplayListHead++, D_800602C8);
     BattleHud_DrawBorderTile(arg1, arg2 - 1, 8, 8, D_030096C0);
@@ -624,7 +634,12 @@ void Font_SetLineHeight(s32 arg0);
 void Battle_DrawGradientRectWrapper(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGB8* arg4, Color_RGB8* arg5);
 void BattleHud_DrawTranslucentShadowRect(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 
-void func_8211C1B8(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
+/**
+ * Draws the battle message box at (x, y) with the revealed part of the text, in the colour of the
+ * given side.
+ * @unverified Name from its caller.
+ */
+void BattleMessage_DrawBox(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
     s32 i;
     s32 n;
 
@@ -651,7 +666,11 @@ void func_8211C1B8(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
     BattleHud_DrawTranslucentShadowRect(arg1 - 2, arg2 - 1, 0xF4, 0x29, 0);
 }
 
-void func_8211C43C(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
+/**
+ * Draws a side's caption box with the revealed part of the caption text.
+ * @unverified Name from its caller.
+ */
+void BattleHud_DrawCaptionBox(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
     s32 n;
 
     Battle_DrawGradientRectWrapper(arg1 + 1, arg2 + 1, 0xC8, 0x24, (Color_RGB8*)(&D_8218B008 + arg0 * 3), (Color_RGB8*)(&D_8218B014 + arg0 * 3));

@@ -410,7 +410,7 @@ extern u8 D_8006B18F[];
 
 /**
  * Learns the opponent's chosen move once both sides have picked their actions
- * (called from func_82124EFC, before the moves run): the move goes into the
+ * (called from Battle_StartTurn, before the moves run): the move goes into the
  * first empty move slot of the AI's opponent record with its maximum PP minus
  * one, or one PP is taken off a move already recorded. arg2 is 0 when the COM
  * acts first, 1 when it acts second and 2 for a move used later in the turn.

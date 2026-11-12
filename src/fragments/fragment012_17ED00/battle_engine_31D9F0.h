@@ -103,7 +103,7 @@ extern Gfx D_80060308[];
 extern u8* D_8218AFDC[];
 void Widget_DrawMeterBar(s32, s32, s32, s32);
 s32 LabPC_StatusToIconIndex(s32);
-void func_8211AEA4(TeamRoster* arg0, BattleMon* arg1, s32 arg2, s32 arg3, s32 arg4);
+void BattleMenu_DrawSwitchPanelEntry(TeamRoster* arg0, BattleMon* arg1, s32 arg2, s32 arg3, s32 arg4);
 
 /*
  * BattleDebug_DrawCameraLabel

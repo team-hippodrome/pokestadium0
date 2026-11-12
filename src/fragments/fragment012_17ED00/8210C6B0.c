@@ -103,7 +103,7 @@ void BattleMenu_CommitMoveSelection(ActivePokemon* arg0) {
 
 void func_8211F274();
 s32 ActivePokemon_GetNickname(s32);
-M2C_UNK func_8211F288();
+M2C_UNK ActivePokemon_ShowCaption();
 extern s32 D_8218C6F0;
 /**
  * Fight menu check for a Pokemon with no usable PP: shows 「…は だすことの
@@ -147,7 +147,7 @@ s32 BattleMenu_HandleNoUsableMoves(arg0) ActivePokemon *arg0;
         temp_v0->selectedCommandOption = 1;
       }
       func_8211F274(arg0);
-      func_8211F288(arg0, D_8218C6F0, ActivePokemon_GetNickname((s32) arg0));
+      ActivePokemon_ShowCaption(arg0, D_8218C6F0, ActivePokemon_GetNickname((s32) arg0));
     }
     else
       if (cont->buttonPressed & 0x20)
@@ -170,7 +170,7 @@ s32 BattleMenu_HandleNoUsableMoves(arg0) ActivePokemon *arg0;
 }
 
 void func_8211F274();
-M2C_UNK func_8211F288();
+M2C_UNK ActivePokemon_ShowCaption();
 extern s32 D_8218C6F4;
 extern s32 D_8218C6F8;
 
@@ -192,14 +192,14 @@ s32 BattleMenu_TryConfirmMove(s8* arg0) {
 
     if (!(((BattleMoveCheck8210CA24*)arg0)->moveFlags[((BattleMoveCheck8210CA24*)arg0)->slot] & 0x3F)) {
         func_8211F274(arg0);
-        func_8211F288(arg0, D_8218C6F4);
+        ActivePokemon_ShowCaption(arg0, D_8218C6F4);
         return 1;
     }
     flags = M2C_FIELD(arg0, u8*, 0x818);
     state = arg0 + 0x78C;
     if ((flags & 0xF) && ((flags >> 4) == M2C_FIELD(state, s32*, 0x14))) {
         func_8211F274(arg0);
-        func_8211F288(arg0, D_8218C6F8);
+        ActivePokemon_ShowCaption(arg0, D_8218C6F8);
         return 1;
     }
     M2C_FIELD(state, s16*, 0x1E) = 0;
@@ -337,7 +337,7 @@ void BattleMenu_CommitSwitchSelection(s8 *arg0) {
 }
 
 void func_8211F274();
-M2C_UNK func_8211F288();
+M2C_UNK ActivePokemon_ShowCaption();
 extern s32 D_8218C6FC;
 
 s32 BattleScene_ValidateSelectedPartyMember(ActivePokemon* arg0) {
@@ -346,7 +346,7 @@ s32 BattleScene_ValidateSelectedPartyMember(ActivePokemon* arg0) {
     }
 
     func_8211F274(arg0);
-    func_8211F288(arg0, D_8218C6FC);
+    ActivePokemon_ShowCaption(arg0, D_8218C6FC);
     return 0;
 }
 
@@ -430,12 +430,12 @@ void BattleMenu_TakeControlOnCButtonPress(ActivePokemon* arg0, u8* arg1, u8* arg
 
 s32 ActivePokemon_GetNickname(s32);                             /* extern */
 void func_8211F274();                            /* extern */
-M2C_UNK func_8211F288(s32, s32, s32);               /* extern */
+M2C_UNK ActivePokemon_ShowCaption(s32, s32, s32);               /* extern */
 extern s32 D_8218C700;
 
 void func_8210CFE4(s32 arg0) {
     func_8211F274();
-    func_8211F288(arg0, D_8218C700, ActivePokemon_GetNickname(arg0));
+    ActivePokemon_ShowCaption(arg0, D_8218C700, ActivePokemon_GetNickname(arg0));
 }
 
 void func_82134D60(void);
@@ -590,7 +590,12 @@ s32 BattleScene_HandlePlayerFaintedSwitch(ActivePokemon* arg0, ActivePokemon* ar
  * Stadium 0 counterpart of Stadium 1's BattleScene_ForfeitPrompt, with the two
  * controller pointers kept in locals instead of globals.
  */
-void func_8210D4B4(ActivePokemon* arg0) {
+/**
+ * Surrender prompt (こうさんしますか？ いいえ はい, opened with Start): the D-pad moves the cursor and A on はい
+ * makes the other side the winner, A on いいえ closes it. Closes when the other side has the prompt
+ * open. Ran in play when 1P pressed Start.
+ */
+void BattleMenu_UpdateSurrenderPrompt(ActivePokemon* arg0) {
     ActivePokemonState* sp18 = &arg0->state;
     ActivePokemonState* temp_a0 = &sActivePokemon[BattleScene_GetParticipantSideIndex(arg0) == 0]->state;
     Controller* c1;
@@ -681,7 +686,7 @@ s32 func_8210C778(ActivePokemon*);
 
 void func_8210D6BC(ActivePokemon* active_pokemon);
 void BattleMenu_UpdateSwitchMenu(ActivePokemon* active_pokemon);
-void func_8210D4B4(ActivePokemon* active_pokemon);
+void BattleMenu_UpdateSurrenderPrompt(ActivePokemon* active_pokemon);
 s32 BattleScene_HandlePlayerActionInput(ActivePokemon* arg0) {
     ActivePokemonState* opponent_state = &sActivePokemon[BattleScene_GetParticipantSideIndex(arg0) == 0]->state;
 
@@ -701,7 +706,7 @@ s32 BattleScene_HandlePlayerActionInput(ActivePokemon* arg0) {
             return 1;
 
         case 3:
-            func_8210D4B4(arg0);
+            BattleMenu_UpdateSurrenderPrompt(arg0);
             return 1;
 
         case 1:
@@ -1102,7 +1107,7 @@ extern u8 D_82199DFC[];
 extern u8 D_82199E0C[];
 extern s32 D_82199F10[2];
 extern s32 D_82199F18[2];
-void func_82124EFC(void);
+void Battle_StartTurn(void);
 extern Controller D_82199EC8[];
 /*
  * Stadium 0 counterpart of Stadium 1's BattleScene_TickAttractModeInput
@@ -1149,7 +1154,7 @@ void func_8210E504(void) {
         sp20->selectedCommandOption = three;
 
         if ((sp24->selectedCommandOption == three) && (sp20->selectedCommandOption == three)) {
-            func_82124EFC();
+            Battle_StartTurn();
         }
     }
 
@@ -1225,7 +1230,7 @@ void Battle_InitBothParticipants(void) {
 void func_8210E118(ActivePokemon*, ActivePokemon*);
 void func_8210D90C(ActivePokemon*, ActivePokemon*);
 void func_82125224(void);
-void func_82124EFC(void);
+void Battle_StartTurn(void);
 extern u16 D_82199F24;
 extern u16 D_82199F50;
 
@@ -1266,7 +1271,7 @@ void Battle_ChooseActions(void) {
             func_82125224();
             return;
         }
-        func_82124EFC();
+        Battle_StartTurn();
     }
 }
 

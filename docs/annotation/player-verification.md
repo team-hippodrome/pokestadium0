@@ -235,3 +235,21 @@ menu, 1P move slot 0 patched to Thunderbolt):
 
 `Battle_CheckExplosionVsSubstitute` (was `func_82111A78`) runs after every
 move, but its body does nothing in Zero, so it keeps `@unverified`.
+
+## Menus and messages seen in the scenario sweep
+
+One-shot breakpoints on the unnamed fragment012 functions while playing
+scripted scenarios (a normal turn, a switch from the Pokémon menu, Struggle,
+the surrender prompt). Named from the code and what was on screen when each ran:
+
+| Function | Seen |
+|---|---|
+| `BattleMenu_UpdateSurrenderPrompt` (was `func_8210D4B4`) | Every frame of 「こうさんしますか？ いいえ はい」 after Start. |
+| `BattleMenu_DrawSwitchPanel`, `BattleMenu_DrawSwitchPanelEntry` (were `func_8211B900`, `func_8211AEA4`) | Every frame while the Pokémon menu (B) was open, called from `BattleMenu_DrawSide0Menus`. |
+| `BattleMessage_TickTypewriter` (was `func_8211F0DC`) | Every frame from `Battle_RenderHud`; the box filled one character a frame. |
+| `BattleScene_PhaseWithdraw` (was `BattleScene_PhaseWithdrawFainted`) | Ran for a voluntary switch, so it is not only for fainted Pokémon. |
+| `BattleScene_PhaseSubstitute` (was `func_8212D820`) | Phase 25 in the per-move sweep for Substitute (164) only. |
+
+`Battle_StartTurn`, `ActivePokemon_ShowCaption`, `ActivePokemon_TickCaptionTypewriter`,
+`BattleMessage_DrawBox` and `BattleHud_DrawCaptionBox` ran in the same
+scenarios, but what they draw wasn't isolated, so they keep `@unverified`.

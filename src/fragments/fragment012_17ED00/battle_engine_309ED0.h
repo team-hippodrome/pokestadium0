@@ -68,7 +68,7 @@ extern s32 D_8219A540;
 
 void func_82124EB4(void);
 
-void func_82124EFC(void);
+void Battle_StartTurn(void);
 
 void BattleScene_InitializeSwitchActions(void);
 

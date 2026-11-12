@@ -33,7 +33,7 @@ void func_8211F3EC(void);
 void BattleScene_ResetMessageQueue(void);
 
 void func_8211B484(TeamRoster*, s32, s32, s32);
-void func_8211B900(ActivePokemon*, s32, s32, s32);
+void BattleMenu_DrawSwitchPanel(ActivePokemon*, s32, s32, s32);
 void BattleMenu_DrawConfirmButton(ActivePokemon*, s32, s32, s32);
 void BattleMenu_DrawBackConfirmBar(ActivePokemon*, s32, s32, s32);
 void BattleMenu_DrawMovePanel(ActivePokemon*, s32, s32, s32);
@@ -61,7 +61,7 @@ void BattleMenu_DrawSide0Menus(ActivePokemon* arg0, ActivePokemonState* arg1) {
                     } else if (arg0->teamRoster->numberOfPokemonBrought == 3) {
                         func_8211B484(arg0->sessionTeams->teamMember[0], 0x60, 0xF, sp2C->controllerPort);
                     } else {
-                        func_8211B900(arg0, 0x60, 0xF, sp2C->controllerPort);
+                        BattleMenu_DrawSwitchPanel(arg0, 0x60, 0xF, sp2C->controllerPort);
                     }
                 } else if (arg1->unk_2D == 0x10) {
                     BattleMenu_DrawConfirmButton(arg0, 0x60, 0xF, sp2C->controllerPort);
@@ -109,7 +109,7 @@ void BattleMenu_DrawSide1Menus(ActivePokemon* arg0, ActivePokemonState* arg1) {
                     } else if (arg0->teamRoster->numberOfPokemonBrought == 3) {
                         func_8211B484(arg0->sessionTeams->teamMember[0], 0x7C, 0x79, sp2C->controllerPort);
                     } else {
-                        func_8211B900(arg0, 0x18, 0x79, sp2C->controllerPort);
+                        BattleMenu_DrawSwitchPanel(arg0, 0x18, 0x79, sp2C->controllerPort);
                     }
                 } else if (arg1->unk_2D == 0x10) {
                     BattleMenu_DrawConfirmButton(arg0, 0x9A, 0xCE, sp2C->controllerPort);
@@ -265,8 +265,13 @@ void BattleMessage_ShowForSide(s8* arg0, s32 side) {
 
 typedef struct Msg8211F0DC { u8 id; s32 pos; s8 out[0x40]; s8 in[0x40]; } Msg8211F0DC;
 #define MSG ((Msg8211F0DC*)D_8219A520)
-void func_8211C1B8();
-void func_8211F0DC(void)
+void BattleMessage_DrawBox();
+/**
+ * Reveals the battle message one character per frame (one byte for ASCII and spaces, two for EUC-
+ * JP) and draws the box with BattleMessage_DrawBox. Called every frame from Battle_RenderHud; in
+ * play the box filled in a character at a time (「カイのすけはかげぶん」 → 「カイのすけはかげぶんしんした！」).
+ */
+void BattleMessage_TickTypewriter(void)
 {
   s8 c = MSG->in[MSG->pos];
   if (c != 0)
@@ -292,12 +297,12 @@ void func_8211F0DC(void)
   MSG->out[MSG->pos] = 0;
   if (MSG->in[0] != 0)
   {
-    func_8211C1B8(MSG->id, 0x29, 0xBB, MSG->out);
+    BattleMessage_DrawBox(MSG->id, 0x29, 0xBB, MSG->out);
   }
 }
 #undef MSG
 
-void func_8211F0DC(void);
+void BattleMessage_TickTypewriter(void);
 void Battle_DrawCompactStatusBoxesIfVisible(void) {
     ActivePokemon* ptr1 = sActivePokemon[0];
     ActivePokemon* ptr2 = sActivePokemon[1];
@@ -305,7 +310,7 @@ void Battle_DrawCompactStatusBoxesIfVisible(void) {
     if (sBattleScene.scene->transitionStep == 0) {
         BattleHud_DrawCompactMonStatusBox(ptr1, 0x15, 0xF, ptr1->sessionTeams->teamMember[M2C_FIELD(ptr1, s32*, 0x9D4)]->controllerPort);
         BattleHud_DrawCompactMonStatusBox(ptr2, 0xE1, 0xF, ptr2->sessionTeams->teamMember[M2C_FIELD(ptr2, s32*, 0x9D4)]->controllerPort);
-        func_8211F0DC();
+        BattleMessage_TickTypewriter();
     }
 }
 
@@ -317,7 +322,7 @@ void func_8211F274(s8 *arg0) {
 }
 
 /*
- * func_8211F288
+ * ActivePokemon_ShowCaption
  *
  * Starts a caption for the participant: stores the byte at index 1 of the
  * session entry selected by state.unk_2D_zero (+0x7B9) + 2 (from the table at
@@ -327,15 +332,26 @@ void func_8211F274(s8 *arg0) {
  * function is variadic: the extra arguments are the format's values, which is
  * why retail stores $a2/$a3 to their stack homes.
  */
-void func_8211F288(ActivePokemon* arg0, s8* arg1, ...) {
+/**
+ * Shows a caption for the Pokemon from its caption text table and formats the given string into
+ * it. Ran in play for the Struggle prompt.
+ * @unverified Name from the code.
+ */
+void ActivePokemon_ShowCaption(ActivePokemon* arg0, s8* arg1, ...) {
     *(u8*)D_8219A520 = (*(u8***)((u8*)arg0 + 0x85C))[arg0->state.replacementState + 2][1];
     arg0->captionState.active = 1;
     func_8211EEC0(&arg0->captionState.unk_48, arg1);
 }
 
-void func_8211C43C(u8, s32, s32, s8*);
+void BattleHud_DrawCaptionBox(u8, s32, s32, s8*);
 extern ActivePokemon* sSide1ActivePokemon;
-void func_8211F2E0(ActivePokemon* arg0) {
+/**
+ * Same one-character-per-frame reveal as BattleMessage_TickTypewriter for the Pokemon's caption
+ * (ActivePokemon_ShowCaption), drawn near that side's HUD. Called every frame from
+ * Battle_RenderHud.
+ * @unverified Name from the code.
+ */
+void ActivePokemon_TickCaptionTypewriter(ActivePokemon* arg0) {
     TeamRoster* roster = arg0->teamRoster;
     s8 c = arg0->captionState.unk_48[arg0->captionState.unk_04];
 
@@ -357,9 +373,9 @@ void func_8211F2E0(ActivePokemon* arg0) {
     arg0->captionState.unk_08[arg0->captionState.unk_04] = 0;
     if (arg0->captionState.unk_48[0] != 0) {
         if (arg0 == sSide1ActivePokemon) {
-            func_8211C43C(roster->controllerPort, 0x5F, 0xE, arg0->captionState.unk_08);
+            BattleHud_DrawCaptionBox(roster->controllerPort, 0x5F, 0xE, arg0->captionState.unk_08);
         } else {
-            func_8211C43C(roster->controllerPort, 0x17, 0xBB, arg0->captionState.unk_08);
+            BattleHud_DrawCaptionBox(roster->controllerPort, 0x17, 0xBB, arg0->captionState.unk_08);
         }
     }
 }
@@ -400,8 +416,8 @@ void Battle_RenderHud(void) {
         case 1:
             BattleMenu_DrawSide0Menus(sActivePokemon[0], s0);
             BattleMenu_DrawSide1Menus(sActivePokemon[1], s1);
-            func_8211F2E0(sActivePokemon[0]);
-            func_8211F2E0(sActivePokemon[1]);
+            ActivePokemon_TickCaptionTypewriter(sActivePokemon[0]);
+            ActivePokemon_TickCaptionTypewriter(sActivePokemon[1]);
             func_8211D3A8();
             break;
         case 2:
@@ -410,7 +426,7 @@ void Battle_RenderHud(void) {
             break;
         case 4:
         case 8:
-            func_8211F0DC();
+            BattleMessage_TickTypewriter();
             func_8211D3A8();
             break;
         case 5:

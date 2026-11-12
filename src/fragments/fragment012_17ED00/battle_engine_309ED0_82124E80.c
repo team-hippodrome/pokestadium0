@@ -18,7 +18,13 @@ void func_82124EB4(void) {
 void func_82124EF4(void) {
 }
 
-void func_82124EFC(void) {
+/**
+ * Called once both actions are committed: sets the acting side from Battle_DetermineMoveOrder
+ * (skipping a side with no move), records the order for the COM AI, enters phase 0 and resolves
+ * the first action with Battle_ResolveMonAction. Ran every turn in play.
+ * @unverified Name from the code.
+ */
+void Battle_StartTurn(void) {
     s32 sp24;
     ActivePokemonState* temp_s0;
     ActivePokemonState* temp_s1;
