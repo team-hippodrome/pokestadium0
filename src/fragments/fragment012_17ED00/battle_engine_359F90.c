@@ -617,7 +617,7 @@ extern s32 D_8218C7AC;
 /**
  * Gen 1 DisplayEffectiveness: queues the super effective message when the type multiplier is
  * above 10, or the not very effective message when it is below 10.
- * @unverified Name and comment from the code (matches the Gen 1 engine).
+ * In play Ember on Pinsir (Fire on Bug) showed 「こうかは ばつぐんだ！」.
  */
 void Battle_DisplayEffectiveness(void) {
     sTypeEffectiveness = D_82199F3F & 0x7F;
@@ -635,7 +635,7 @@ extern s32 D_8218C77C;
 /**
  * Gen 1 PrintCriticalOHKOText: queues the critical hit (sBattleCritFlag 1) or one-hit KO (2)
  * message, sets hitReactionKind 2 and stores the flag on the target.
- * @unverified Name and comment from the code (matches the Gen 1 engine).
+ * In play, with sBattleCritFlag set to 1 on entry, Ember showed 「きゅうしょに あたった！」.
  */
 void Battle_PrintCriticalOHKOText(void) {
     BattleMonRuntime* sp1C = &sActivePokemon[!sBattleScene.scene->actingSide]->state.runtime;
@@ -659,7 +659,7 @@ void Battle_PrintCriticalOHKOText(void) {
  * target's HP), Seismic Toss and Night Shade (user level), Sonic Boom (20), Dragon Rage (40) and
  * Psywave (random 1 to 1.5x level), then applies the damage. Moves with no power and no special
  * damage do nothing.
- * @unverified Name and comment from the code (matches the Gen 1 engine).
+ * In play Sonic Boom took Pinsir from 75 to 55 HP, the fixed 20.
  */
 void Battle_ApplyAttackToTarget(void) {
     s32 n;
@@ -721,7 +721,7 @@ extern s32 D_8218C774;
  * Gen 1 PrintMoveFailureText: queues the doesn't affect / missed / failed message for a move that
  * failed. A Jump Kick or Hi Jump Kick miss (effect 0x2D) then deals the user 1/8 of the damage as
  * crash damage (moveEffectKind 0x10).
- * @unverified Name and comment from the code (matches the Gen 1 engine).
+ * In play a forced Jump Kick miss ran it: 「しかし ニドニドの こうげきは はずれた！」 then the crash text.
  */
 void Battle_PrintMoveFailureText(void) {
     BattleMonRuntime* sp1C;

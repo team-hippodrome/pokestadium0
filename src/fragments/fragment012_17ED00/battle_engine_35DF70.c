@@ -108,7 +108,7 @@ u8 Battle_Random(void);
 /**
  * Move effects 0x1F and 0x25 (Gen 1 FlinchSideEffect): the 10% or 30% chance to make the target
  * flinch.
- * @unverified Name from its slots in sMoveEffectHandlers, which follow the Gen 1 effect table.
+ * In the per-move sweep only Stomp (23) and Rolling Kick (27) of moves 1-27 ran it.
  */
 void Battle_Effect_Flinch(void) {
     if (!(sBattleTarget->volatileStatusFlags & 0x10)) {
@@ -150,7 +150,7 @@ extern s32 D_8218C88C;
  * Move effects 0x27 and 0x2B (Gen 1 ChargeEffect): the first turn of Razor Wind, Solar Beam,
  * Skull Bash, Sky Attack, Fly and Dig. Sets moveEffectKind 0x0C for Fly, 0x0D for Dig and 0x0E
  * otherwise.
- * @unverified Name from its slots in sMoveEffectHandlers, which follow the Gen 1 effect table.
+ * In the per-move sweep Razor Wind (13) ran it and went on to phase 14.
  */
 void Battle_Effect_Charge(void) {
     sBattleScene.scene->moveEffectKind = 0xE;
@@ -195,7 +195,8 @@ u8 Battle_Random(void);
 /**
  * Move effect 0x2A (Gen 1 TrappingEffect): Wrap, Bind, Fire Spin and Clamp hold the target for
  * 2-5 turns.
- * @unverified Name from its slot in sMoveEffectHandlers, which follows the Gen 1 effect table.
+ * In the per-move sweep only Bind (20) of moves 1-27 ran it, and COM's Pinsir then couldn't move
+ * (phase 17).
  */
 void Battle_Effect_Trapping(void) {
     s32 v;
@@ -487,7 +488,7 @@ extern s32 D_8219A520;
 
 /**
  * Move effect 0x10 (Gen 1 PayDayEffect).
- * @unverified Name from its slot in sMoveEffectHandlers, which follows the Gen 1 effect table.
+ * In the per-move sweep only Pay Day (6) ran it.
  */
 void Battle_Effect_PayDay(void) {
     BattleMessage_Format(D_8219A520 + 0x88, -0x39, D_8218C8D8);

@@ -279,3 +279,19 @@ Row names given from this: row 3 `BattleScene_EnterMoveUseRow`, row 4
 row 9 `BattleScene_EnterCannotMoveRow`. Two first-pass row names had the row
 number off by one and were fixed (`BattleScene_TickRow21CleanupAndEnterState18`,
 `BattleScene_TickRow22PlaySpeciesSound`).
+
+## Damage and failure messages
+
+From the command-menu savestate with COM's speed set to 1, 1P's first move
+patched, and Battle_Random patched just before the move was entered:
+
+| Check | Result | Confirms |
+|---|---|---|
+| Ember on Pinsir, `sBattleCritFlag` set to 1 when `Battle_PrintCriticalOHKOText` was entered | 「きゅうしょに あたった！」, then 「こうかは ばつぐんだ！」, Pinsir 75 → 54 | `Battle_PrintCriticalOHKOText`, `Battle_DisplayEffectiveness` |
+| Sonic Boom | Pinsir 75 → 55 | `Battle_ApplyAttackToTarget` (fixed 20 damage) |
+| Jump Kick with Battle_Random = 255 | 「しかし ニドニドの こうげきは はずれた！」「いきおい あまって ニドニドは じめんに ぶつかった！」, Nidorino 69 → 68, phases 2 → 16 → 3 | `Battle_PrintMoveFailureText`, `BattleScene_PhaseCrashDamage` |
+
+Battle_Random has to be patched before the move is entered: the turn's
+first action is resolved when both actions are committed (`Battle_StartTurn`),
+not when its presentation plays. A constant 0 or 1 also hangs the game,
+because `Battle_RandomizeDamage` and some effects loop until the roll is in range.

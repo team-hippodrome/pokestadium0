@@ -1167,7 +1167,7 @@ void BattleScene_PhaseHaze(CameraNode* arg0) {
 
 /**
  * Phase 12 (moveEffectKind 0x0C, set by Battle_Effect_Charge for Fly): the first turn of Fly.
- * @unverified Name from the moveEffectKind that leads here.
+ * In the per-move sweep Fly (19) went 2 -> 12.
  */
 void BattleScene_PhaseFlyUp(CameraNode* arg0) {
     switch (sBattleScene.scene->phaseStep) {
@@ -1286,7 +1286,7 @@ void func_82124A40(void);
 /**
  * Phase 14 (moveEffectKind 0x0E, set by Battle_Effect_Charge): the first turn of Razor Wind,
  * Solar Beam, Skull Bash and Sky Attack.
- * @unverified Name from the moveEffectKind that leads here.
+ * In the per-move sweep Razor Wind (13) went 2 -> 14.
  */
 void BattleScene_PhaseChargeUp(CameraNode* arg0) {
     sBattleScene.scene->cameraPresetId = 4;
@@ -1322,7 +1322,7 @@ void BattleScene_PhaseChargeUp(CameraNode* arg0) {
  * Phase 17 (moveEffectKind 0x11, set by Battle_CheckMonCanAct): the user can't act because it is
  * asleep or frozen, the target holds it with a trapping move, it must recharge, or its move is
  * disabled.
- * @unverified Name from the moveEffectKind setters.
+ * In play COM's Pinsir, held by Bind, spent its turn in phase 17 (row 9).
  */
 void BattleScene_PhaseCannotMove(CameraNode* arg0) {
     sBattleScene.scene->cameraPresetId = 4;
@@ -1564,7 +1564,8 @@ void BattleScene_PhaseEndTurn(s32 arg0) {
 /**
  * Phase 16 (moveEffectKind 0x10, set by Battle_PrintMoveFailureText): Jump Kick and Hi Jump Kick
  * missed and the user takes crash damage.
- * @unverified Name from the moveEffectKind that leads here.
+ * In play a forced Jump Kick miss went 2 -> 16, showed 「いきおい あまって ニドニドは じめんに ぶつかった！」 and took
+ * Nidorino from 69 to 68 HP.
  */
 void BattleScene_PhaseCrashDamage(CameraNode* arg0) {
     UNUSED s32 pad; // FAKE: stack padding

@@ -170,7 +170,7 @@ extern s32 D_8218C7EC;
 /**
  * Move effects 0x04-0x06 and 0x22-0x24 (Gen 1 FreezeBurnParalyzeEffect): the 10% or 30% side
  * effect that burns, freezes or paralyzes the target. A Fire move thaws a frozen target.
- * @unverified Name from its slots in sMoveEffectHandlers, which follow the Gen 1 effect table.
+ * In the per-move sweep only Fire Punch, Ice Punch and Thunder Punch (7-9) of moves 1-27 ran it.
  */
 void Battle_Effect_FreezeBurnParalyze(void) {
     if (sBattleTarget->volatileStatusFlags & 0x10) {
@@ -308,7 +308,7 @@ extern u8 sStatCanBeChangedFurther;
 /**
  * Move effects 0x0A-0x0F and 0x32-0x37 (Gen 1 StatModifierUpEffect): raises one of the user's
  * stat stages by 1 or 2 and recomputes the stat. Sets moveEffectKind 7.
- * @unverified Name from its slots in sMoveEffectHandlers, which follow the Gen 1 effect table.
+ * Ran in play for Swords Dance and COM's Double Team (「かいひりつが あがった！」).
  */
 void Battle_Effect_StatUp(void) {
     s32 sp24;
