@@ -48,7 +48,7 @@ void BattleAnim_EffectEndNop(void);
 s32 Battle_CheckForDisobedience(void);
 s32 Battle_CheckFaintAfterMove(void);
 
-void Battle_CheckDefeatAtStatusHp(ActivePokemon* arg0);
+void Battle_CheckAllBroughtFainted_PoisonBurn(ActivePokemon* arg0);
 void Battle_CheckAllBroughtFainted_Status(ActivePokemon* arg0);
 void Battle_CheckAllBroughtFainted_PP(ActivePokemon* arg0);
 void Battle_CheckAllBroughtFainted_Level(ActivePokemon* arg0);
@@ -645,10 +645,14 @@ void Battle_HandleFaint(ActivePokemon* arg0) {
 }
 
 /**
- * Test remaining roster HP using the active Pokemon's staged HP value for this checkpoint.
- * @unverified Name and comment from Stadium 1.
+ * Runs when the acting Pokemon's poison or burn damage this turn leaves it at 0 HP
+ * (hpAfterPoisonBurn). Sums the side's remaining HP with that value for the active
+ * Pokemon: 0 ends the battle (state 0x12), otherwise the faint is handled.
+ * Seen in play (2026-11-12): COM's poisoned Gengar at 3/ 72 HP ran this at turn commit
+ * with hpAfterPoisonBurn 0; then 「ゲンのすけは どく」, it fainted, and COM sent out Pikachu.
+ * Renamed from Battle_CheckDefeatAtStatusHp.
  */
-void Battle_CheckDefeatAtStatusHp(ActivePokemon* arg0) {
+void Battle_CheckAllBroughtFainted_PoisonBurn(ActivePokemon* arg0) {
     ActivePokemonState* ptr1 = &arg0->state;
     BattleMon* temp_v0;
     s32 i;
@@ -656,7 +660,7 @@ void Battle_CheckDefeatAtStatusHp(ActivePokemon* arg0) {
 
     for (i = 0; i < BattleScene_GetTeamMemberTeamSize(arg0); i++) {
         if (i == ptr1->rosterIndex) {
-            var_s2 += arg0->state.runtime.unk_0E;
+            var_s2 += arg0->state.runtime.hpAfterPoisonBurn;
         } else {
             temp_v0 = &arg0->teamRoster->pokemonPicked[i];
             var_s2 += temp_v0->hp;
@@ -789,7 +793,7 @@ s32 Battle_CheckSideDefeatAfterResidualStatus(ActivePokemon* arg0) {
 
     if (arg0->state.runtime.pendingStatusCondition & 0x18) {
         var_s2 = 0;
-        if (arg0->state.runtime.unk_0E == 0) {
+        if (arg0->state.runtime.hpAfterPoisonBurn == 0) {
             for (i = 0; i < BattleScene_GetTeamMemberTeamSize(arg0); i++) {
                 temp_v0 = &arg0->teamRoster->pokemonPicked[i];
                 var_s2 += temp_v0->hp;
@@ -830,8 +834,8 @@ s32 Battle_CheckFaintAfterMove(void) {
         Battle_CheckAllBroughtFainted_PP(sActivePokemon[sBattleScene.scene->actingSide]);
         return 0;
     } else if ((sBattleUser->hp != 0) && (sBattleTarget->hp != 0) && (sBattleUser->pendingStatusCondition & 0x18) &&
-               (sBattleUser->unk_0E == 0)) {
-        Battle_CheckDefeatAtStatusHp(sActivePokemon[sBattleScene.scene->actingSide]);
+               (sBattleUser->hpAfterPoisonBurn == 0)) {
+        Battle_CheckAllBroughtFainted_PoisonBurn(sActivePokemon[sBattleScene.scene->actingSide]);
         return 0;
     } else if ((sBattleUser->hp != 0) && (sBattleTarget->hp != 0) && (sBattleUser->volatileStatusFlags & 0x80) &&
                (sBattleUser->unk_10 == 0)) {
@@ -876,8 +880,8 @@ void Battle_ResolveMonAction(void)
     ProcessBattleTurn();
     sBattleUser->hp = 0x384;
     sBattleTarget->hp = 0x384;
-    sBattleUser->unk_0E = 0x384;
-    sBattleTarget->unk_0E = 0x384;
+    sBattleUser->hpAfterPoisonBurn = 0x384;
+    sBattleTarget->hpAfterPoisonBurn = 0x384;
     sBattleUser->unk_10 = 0x384;
     sBattleTarget->unk_10 = 0x384;
     func_8210F2F4(sActivePokemon[0]);
@@ -893,8 +897,8 @@ void Battle_ResolveMonAction(void)
     }
     ((BattleMonRuntime *) D_8219A3C0)->hp = 0x384; // FAKE: alias of sBattleUser via s8* symbol
     ((BattleMonRuntime *) D_8219A3C4)->hp = 0x384; // FAKE: alias of sBattleTarget
-    ((BattleMonRuntime *) D_8219A3C0)->unk_0E = 0x384; // FAKE
-    ((BattleMonRuntime *) D_8219A3C4)->unk_0E = 0x384; // FAKE
+    ((BattleMonRuntime *) D_8219A3C0)->hpAfterPoisonBurn = 0x384; // FAKE
+    ((BattleMonRuntime *) D_8219A3C4)->hpAfterPoisonBurn = 0x384; // FAKE
     ((BattleMonRuntime *) D_8219A3C0)->unk_10 = 0x384; // FAKE
     ((BattleMonRuntime *) D_8219A3C4)->unk_10 = 0x384; // FAKE
     func_8210F2F4(sActivePokemon[0]);

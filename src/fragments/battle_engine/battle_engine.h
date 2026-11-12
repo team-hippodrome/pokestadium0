@@ -3033,7 +3033,7 @@ s32 Battle_CheckCriticalHit(void);
 s32 Battle_CheckMonCanAct(void);
 void ProcessBattleTurn(void);
 void Battle_HandleFaint(ActivePokemon* active_pokemon);
-void Battle_CheckDefeatAtStatusHp(ActivePokemon* active_pokemon);
+void Battle_CheckAllBroughtFainted_PoisonBurn(ActivePokemon* active_pokemon);
 void Battle_CheckAllBroughtFainted_Status(ActivePokemon* active_pokemon);
 void Battle_CheckAllBroughtFainted_PP(ActivePokemon* active_pokemon);
 void Battle_CheckAllBroughtFainted_Level(ActivePokemon* active_pokemon);

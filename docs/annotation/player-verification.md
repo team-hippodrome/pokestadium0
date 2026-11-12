@@ -594,3 +594,12 @@ These scenarios start from a COM free battle (1P ガール team, COM むしと�
   `BattleAi_PickHealingMove` returned 3 and Gengar used じこさいせい (HP 56/ 72),
   but only after offset 0x72 of the AI record was cleared. That offset held 52
   although Gengar had not been hit, so it is not "damage taken last turn".
+* Poison: writing 0x08 to the runtime status byte (+0x15) put どく on COM
+  Gengar's HUD and it lost 4/ 72 HP at the end of its turn. With Gengar at
+  3/ 72 HP the poison knocked it out (「ゲンのすけは どく」, ひんし) and COM sent
+  out Pikachu. At commit, `BattleMonRuntime` +0x0E was 0 while HP was still 3:
+  `Battle_ApplyPoisonOrBurnDamage` stages the HP left after the poison or burn
+  damage there, so the field is now `hpAfterPoisonBurn`. The check that ran
+  is now `Battle_CheckAllBroughtFainted_PoisonBurn` (was
+  `Battle_CheckDefeatAtStatusHp`). `BattleScene_PhaseResidualDamageFaintCheck`
+  did not run for this knockout, so it keeps its tag.

@@ -1268,7 +1268,7 @@ func_82111DC4,0x82111DC4,src/fragments/fragment012_17ED00/battle_engine_317E70.c
 func_82111DCC,0x82111DCC,src/fragments/fragment012_17ED00/battle_engine_317E70.c,Battle_CheckMonCanAct,hand,,c
 func_821125C0,0x821125C0,src/fragments/fragment012_17ED00/battle_engine_317E70.c,ProcessBattleTurn,hand,,c
 func_821129E4,0x821129E4,src/fragments/fragment012_17ED00/battle_engine_317E70.c,Battle_HandleFaint,hand,,c
-func_82112ADC,0x82112ADC,src/fragments/fragment012_17ED00/battle_engine_317E70.c,Battle_CheckDefeatAtStatusHp,s1,stadium1:src/fragments/battle_engine/battle_engine_359F90.c,c
+func_82112ADC,0x82112ADC,src/fragments/fragment012_17ED00/battle_engine_317E70.c,Battle_CheckAllBroughtFainted_PoisonBurn,s1,stadium1:src/fragments/battle_engine/battle_engine_359F90.c,c
 func_82112C1C,0x82112C1C,src/fragments/fragment012_17ED00/battle_engine_317E70.c,Battle_CheckAllBroughtFainted_Status,hand,,c
 func_82112D5C,0x82112D5C,src/fragments/fragment012_17ED00/battle_engine_317E70.c,Battle_CheckAllBroughtFainted_PP,hand,,c
 func_82112E9C,0x82112E9C,src/fragments/fragment012_17ED00/battle_engine_317E70.c,Battle_CheckAllBroughtFainted_Level,hand,,c

@@ -798,9 +798,9 @@ void Battle_ApplyPoisonOrBurnDamage(void) {
     u16 var_a0;
 
     if (sBattleUser->pendingHp != 0xFFFF) {
-        sBattleUser->unk_0E = sBattleUser->pendingHp;
+        sBattleUser->hpAfterPoisonBurn = sBattleUser->pendingHp;
     } else {
-        sBattleUser->unk_0E = sBattleUser->hp;
+        sBattleUser->hpAfterPoisonBurn = sBattleUser->hp;
     }
 
     var_a0 = (sBattleUser->maxHp >> 4) & 0xFFFF;
@@ -813,13 +813,13 @@ void Battle_ApplyPoisonOrBurnDamage(void) {
         var_a0 *= sBattleUser->toxicCounter;
     }
 
-    if (sBattleUser->unk_0E < var_a0) {
-        sBattleUser->unk_0E = 0;
+    if (sBattleUser->hpAfterPoisonBurn < var_a0) {
+        sBattleUser->hpAfterPoisonBurn = 0;
     } else {
-        sBattleUser->unk_0E -= var_a0;
+        sBattleUser->hpAfterPoisonBurn -= var_a0;
     }
 
-    sBattleUser->unk_10 = sBattleUser->unk_0E;
+    sBattleUser->unk_10 = sBattleUser->hpAfterPoisonBurn;
 }
 
 /**
@@ -892,7 +892,7 @@ s32 Battle_ApplyResidualEffects(void) {
             BattleMessage_Format(D_8219A520 + 0x248, 1, D_8218C708, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]));
         }
         Battle_ApplyPoisonOrBurnDamage();
-        sBattleTarget->unk_0E = sBattleTarget->hp;
+        sBattleTarget->hpAfterPoisonBurn = sBattleTarget->hp;
     }
 
     if (sBattleUser->volatileStatusFlags & 0x80) {
