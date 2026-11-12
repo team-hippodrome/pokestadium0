@@ -725,3 +725,8 @@ Nidorino) played in the GB Tower:
   せつめい・コンフィグ). This calls `GbAudio_SetMenuSoundMode(1)` and
   `GbAudio_PlayMenuSound(1)`. Its text is drawn by `GbEmu_DrawTextCommands`
   from a command list whose headers and glyph counts match each line.
+* Shared menus: the main menu with no GB cartridge enables only バトル and OFF,
+  and the grid cursor skips the disabled cells
+  (`GridMenu_UpdateCursorSkipDisabled`). In いちらん, the list cursor moves
+  through `ScrollList_UpdateCursor`. Row numbers and IDs are drawn by
+  `Ui_DrawNumberZeroPadded` (1 in 4 digits as 0001, ID 12345 in 5 digits).

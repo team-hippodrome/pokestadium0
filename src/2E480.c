@@ -451,7 +451,9 @@ s32 GridMenu_UpdateCursor(Menu8002E230* arg0) {
 
 /**
  * Moves the grid cursor with the D-Pad, skipping disabled cells (flag 1).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): on the main menu with no GB cartridge (only バトル and OFF enabled),
+ * D-Down moved the cursor from バトル to OFF, D-Left left it on OFF (G B, to its left, is disabled),
+ * and D-Up moved it back to バトル.
  */
 s32 GridMenu_UpdateCursorSkipDisabled(Menu8002E230* menu) {
     s32 button;
@@ -929,7 +931,8 @@ typedef struct ScrollList8002FD8C {
 
 /**
  * Moves a scrolling list's cursor and scroll position from controller input.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: while it ran, D-Down moved the row cursor from フシギダネ to
+ * ヒトカゲ, then to ゼニガメ, where it stayed on the last row.
  */
 u16 ScrollList_UpdateCursor(ScrollList8002FD8C* menu) {
     s32 prev_top;
