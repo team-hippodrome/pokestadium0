@@ -103,7 +103,8 @@ void Registration_WriteTeam(s8 *arg0, M2C_UNK arg1)
 s32 func_800245E0(M2C_UNK, s32);
 /**
  * Writes every listed team back to its slot and clears the registered slots after them.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in とうろく: ran after はい on 「このポケモンをけす？」 (「へんしん していた メタモンが もとの すがたに
+ * もどった。」). With no team left, the view and delete entries were then greyed out.
  */
 void Registration_WriteAllTeams(void *arg0) {
     s32 i;
@@ -812,7 +813,8 @@ void Registration_DrawTeamRowWithTrainer(s32 arg0, s32 arg1, s8* arg2, s32 arg3,
  * index arg1 (indices arg1 .. arg1 + arg2 - 1). Does nothing when
  * arg1 + arg2 <= arg1, i.e. when arg2 is not positive. The compare is signed.
  * What the -1 entries mean is not established from this function.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-12) in とうろく: ran with count 0x18 when the registration screen was set up,
+ * before the team lists were built.
  */
 void Registration_ClearIndices(s32* arg0, s32 arg1, s32 arg2) {
     s32 end;
@@ -1111,7 +1113,8 @@ void Registration_BuildTeamPointers(s32* arg0, s32* arg1);
 
 /**
  * Loads the registered teams and opens the list in view mode.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in とうろく: とうろくした ポケモンをみる ran this and showed the registered team (slot
+ * 01: ハナ, ヒノコ, カメ).
  */
 void Registration_OpenViewList(s32* arg0) {
     func_80027410((s8*)arg0 + 0x2698, (s8*)arg0 + 0x458, 0x220, 0x10, 0);
@@ -1129,7 +1132,8 @@ void Registration_BuildTeamPointers(s32* arg0, s32* arg1);
 
 /**
  * Loads the registered teams and opens the list in delete mode.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in とうろく: とうろくした ポケモンをけす ran this and showed the same list with
+ * 「このポケモンをけす？」 on A.
  */
 void Registration_OpenDeleteList(s32* arg0) {
     func_80027410((s8*)arg0 + 0x2698, (s8*)arg0 + 0x458, 0x220, 0x10, 0);

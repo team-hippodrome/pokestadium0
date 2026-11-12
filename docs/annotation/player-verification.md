@@ -846,3 +846,13 @@ returned 1. レポートしてやめる ran `PcSort_SaveChanges`, which called
 `PcSort_WriteDeck` for decks 0x20 (party) and 0x21 (GB box 1). The .sav then
 held party count 2 and current-box count 1.
 
+## とうろく, view and delete
+
+The menu has three entries: ポケモンを とうろくする, とうろくした ポケモンをみる and
+とうろくした ポケモンをけす. Registering the party ended with
+「メタモンのへんしんがおわりました」, and the team was stored as slot 02. みる ran
+`Registration_OpenViewList` and けす ran `Registration_OpenDeleteList`.
+Confirming はい on 「このポケモンをけす？」 ran `Registration_WriteAllTeams`, and
+the game said 「へんしん していた メタモンが もとの すがたに もどった。」. With no
+team left, the みる and けす entries were greyed out.
+
