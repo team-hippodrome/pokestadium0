@@ -347,7 +347,7 @@ typedef struct SampleLoads8110E500 {
 } SampleLoads8110E500;
 
 extern SampleLoads8110E500 D_81180610;
-s32 func_8110B958(s32, s32, s32, s8);
+s32 AudioHeap_AllocTemporarySampleCache(s32, s32, s32, s8);
 s32 func_8110E6B0(s32 arg0, s32 arg1);
 
 s32 func_8110E500(s32 arg0, u8 arg1, s8* status) {
@@ -368,7 +368,7 @@ s32 func_8110E500(s32 arg0, u8 arg1, s8* status) {
     }
     load->header = *header;
     load->status = status;
-    load->ramAddr = func_8110B958(header->size, arg0, header->devAddr, header->medium);
+    load->ramAddr = AudioHeap_AllocTemporarySampleCache(header->size, arg0, header->devAddr, header->medium);
     if (load->ramAddr == 0) {
         if ((header->medium == 1) || (header->codec == 2)) {
             *status = 0;
@@ -793,7 +793,7 @@ void AudioLoad_RelocateFont(s32, s32, RelocInfo8110EF7C*);
 void func_8110DB8C(s32, s32, u32, s16);
 void AudioLoad_SyncDma(s32, s32, u32, s32);
 
-s32 func_8110B9A8(s32, s32, s32, s8);
+s32 AudioHeap_AllocPersistentSampleCache(s32, s32, s32, s8);
 
 
 void func_8110EF7C(s32 font_id, s32 font_data, RelocInfo8110EF7C* reloc_info, s32 async) {
@@ -830,17 +830,17 @@ void func_8110EF7C(s32 font_id, s32 font_data, RelocInfo8110EF7C* reloc_info, s3
             case 0:
                 if (sample->medium == reloc_info->medium1) {
                     // Assigning size here keeps it live, which the ROM's register allocation needs.
-                    sample_ram_addr = func_8110B9A8(size = sample->size, reloc_info->sampleBankId1, sample->sampleAddr, sample->medium);
+                    sample_ram_addr = AudioHeap_AllocPersistentSampleCache(size = sample->size, reloc_info->sampleBankId1, sample->sampleAddr, sample->medium);
                 } else if (sample->medium == reloc_info->medium2) {
-                    sample_ram_addr = func_8110B9A8(sample->size, reloc_info->sampleBankId2, sample->sampleAddr, sample->medium);
+                    sample_ram_addr = AudioHeap_AllocPersistentSampleCache(sample->size, reloc_info->sampleBankId2, sample->sampleAddr, sample->medium);
                 }
                 break;
 
             case 1:
                 if (sample->medium == reloc_info->medium1) {
-                    sample_ram_addr = func_8110B958(sample->size, reloc_info->sampleBankId1, sample->sampleAddr, sample->medium);
+                    sample_ram_addr = AudioHeap_AllocTemporarySampleCache(sample->size, reloc_info->sampleBankId1, sample->sampleAddr, sample->medium);
                 } else if (sample->medium == reloc_info->medium2) {
-                    sample_ram_addr = func_8110B958(sample->size, reloc_info->sampleBankId2, sample->sampleAddr, sample->medium);
+                    sample_ram_addr = AudioHeap_AllocTemporarySampleCache(sample->size, reloc_info->sampleBankId2, sample->sampleAddr, sample->medium);
                 }
                 break;
         }
@@ -1093,17 +1093,17 @@ void AudioLoad_PreloadSamplesForFont(s32 font_id, s32 async, RelocInfo8110EF7C* 
         switch (async) {
             case 0:
                 if (sample->medium == reloc_info->medium1) {
-                    sample_ram_addr = func_8110B9A8(sample->size, reloc_info->sampleBankId1, sample->sampleAddr, sample->medium);
+                    sample_ram_addr = AudioHeap_AllocPersistentSampleCache(sample->size, reloc_info->sampleBankId1, sample->sampleAddr, sample->medium);
                 } else if (sample->medium == reloc_info->medium2) {
-                    sample_ram_addr = func_8110B9A8(sample->size, reloc_info->sampleBankId2, sample->sampleAddr, sample->medium);
+                    sample_ram_addr = AudioHeap_AllocPersistentSampleCache(sample->size, reloc_info->sampleBankId2, sample->sampleAddr, sample->medium);
                 }
                 break;
 
             case 1:
                 if (sample->medium == reloc_info->medium1) {
-                    sample_ram_addr = func_8110B958(sample->size, reloc_info->sampleBankId1, sample->sampleAddr, sample->medium);
+                    sample_ram_addr = AudioHeap_AllocTemporarySampleCache(sample->size, reloc_info->sampleBankId1, sample->sampleAddr, sample->medium);
                 } else if (sample->medium == reloc_info->medium2) {
-                    sample_ram_addr = func_8110B958(sample->size, reloc_info->sampleBankId2, sample->sampleAddr, sample->medium);
+                    sample_ram_addr = AudioHeap_AllocTemporarySampleCache(sample->size, reloc_info->sampleBankId2, sample->sampleAddr, sample->medium);
                 }
                 break;
         }

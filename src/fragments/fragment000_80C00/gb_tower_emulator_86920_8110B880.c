@@ -195,9 +195,13 @@ s32 AudioHeap_AllocPermanent(s32 x, s32 y, s32 size) {
     // No return here; the original falls off the end with the allocation still in v0.
 }
 
-struct SampleCacheEntry8110BA8C* func_8110BA8C(u32);
-s32 func_8110B958(s32 arg0, s32 arg1, s32 arg2, s8 arg3) {
-    s8* p = (s8*)func_8110BA8C(arg0);
+struct SampleCacheEntry8110BA8C* AudioHeap_AllocTemporarySampleCacheEntry(u32);
+/**
+ * Allocates a temporary sample cache entry of `arg0` bytes for font `arg1`. Zelda 64 audio driver (heap.c).
+ * @unverified Name and comment guessed from the code.
+ */
+s32 AudioHeap_AllocTemporarySampleCache(s32 arg0, s32 arg1, s32 arg2, s8 arg3) {
+    s8* p = (s8*)AudioHeap_AllocTemporarySampleCacheEntry(arg0);
 
     if (p != NULL) {
         M2C_FIELD(p, u8*, 2) = arg1;
@@ -208,9 +212,13 @@ s32 func_8110B958(s32 arg0, s32 arg1, s32 arg2, s8 arg3) {
     return 0;
 }
 
-s8* func_8110BF28(s32 arg0);
-s32 func_8110B9A8(s32 arg0, s32 arg1, s32 arg2, s8 arg3) {
-    s8* p = func_8110BF28(arg0);
+s8* AudioHeap_AllocPersistentSampleCacheEntry(s32 arg0);
+/**
+ * Allocates a persistent sample cache entry of `arg0` bytes for font `arg1`. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 AudioHeap_AllocPersistentSampleCache(s32 arg0, s32 arg1, s32 arg2, s8 arg3) {
+    s8* p = AudioHeap_AllocPersistentSampleCacheEntry(arg0);
 
     if (p != NULL) {
         M2C_FIELD(p, u8*, 2) = arg1;
@@ -264,7 +272,11 @@ extern SampleCache8110BA8C D_811845F8;
 extern s32 D_81184600;
 extern s32 D_8118461C;
 
-void func_8110B9F8(s32 arg0, s32 arg1) {
+/**
+ * Sets up the persistent and temporary sample caches from the misc pool. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioHeap_InitSampleCaches(s32 arg0, s32 arg1) {
     s32 temp_v0;
     s32 temp_v0_2;
 
@@ -286,9 +298,13 @@ void func_8110B9F8(s32 arg0, s32 arg1) {
 
 extern Preload8110BA8C D_81184B78[];
 extern s32 D_8118557C;
-void func_8110BD20(SampleCacheEntry8110BA8C*);
+void AudioHeap_DiscardSampleCacheEntry(SampleCacheEntry8110BA8C*);
 
-SampleCacheEntry8110BA8C* func_8110BA8C(u32 size) {
+/**
+ * Takes `size` bytes from the temporary sample cache, discarding the entries it overwrites. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+SampleCacheEntry8110BA8C* AudioHeap_AllocTemporarySampleCacheEntry(u32 size) {
     u8* alloc_after;
     u8* alloc_before;
     void* mem;
@@ -350,7 +366,7 @@ SampleCacheEntry8110BA8C* func_8110BA8C(u32 size) {
             continue;
         }
 
-        func_8110BD20(&cache->entries[i]);
+        AudioHeap_DiscardSampleCacheEntry(&cache->entries[i]);
         if (index == -1) {
             index = i;
         }
@@ -368,7 +384,7 @@ SampleCacheEntry8110BA8C* func_8110BA8C(u32 size) {
     return entry;
 }
 
-/* One-byte flags field; only the 2-bit value at bits 2-3 is touched by func_8110BEE4. */
+/* One-byte flags field; only the 2-bit value at bits 2-3 is touched by AudioHeap_UnapplySampleCache. */
 typedef struct {
     u8 pad0 : 4;
     u8 field : 2;
@@ -382,9 +398,13 @@ s32 AudioLoad_IsFontLoadComplete(s32 arg0);
 u8* AudioPlayback_GetInstrumentInner(s32, s32);
 u8* AudioPlayback_GetDrum(s32, s32);
 
-void func_8110BEE4(u8* arg0, Flags2Bit* arg1);
+void AudioHeap_UnapplySampleCache(u8* arg0, Flags2Bit* arg1);
 
-void func_8110BD20(SampleCacheEntry8110BA8C* entry) {
+/**
+ * Points every font that used a cached sample back at the original sample. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioHeap_DiscardSampleCacheEntry(SampleCacheEntry8110BA8C* entry) {
     u8* inst;
     s32 num_fonts;
     s32 font_id;
@@ -406,20 +426,20 @@ void func_8110BD20(SampleCacheEntry8110BA8C* entry) {
                         inst = AudioPlayback_GetInstrumentInner(font_id, inst_id);
                         if (inst != NULL) {
                             if (inst[1] != 0) {
-                                func_8110BEE4((u8*)entry, M2C_FIELD(inst, Flags2Bit**, 8));
+                                AudioHeap_UnapplySampleCache((u8*)entry, M2C_FIELD(inst, Flags2Bit**, 8));
                             }
                             if (inst[2] != 0x7F) {
                                 if (1) {
-                                    func_8110BEE4((u8*)entry, M2C_FIELD(inst, Flags2Bit**, 0x18));
+                                    AudioHeap_UnapplySampleCache((u8*)entry, M2C_FIELD(inst, Flags2Bit**, 0x18));
                                 }
                             }
-                            func_8110BEE4((u8*)entry, M2C_FIELD(inst, Flags2Bit**, 0x10));
+                            AudioHeap_UnapplySampleCache((u8*)entry, M2C_FIELD(inst, Flags2Bit**, 0x10));
                         }
                     }
                     for (drum_id = 0; drum_id < D_811858B0[font_id].unk01; drum_id++) {
                         drum = AudioPlayback_GetDrum(font_id, drum_id);
                         if (drum != NULL) {
-                            func_8110BEE4((u8*)entry, M2C_FIELD(drum, Flags2Bit**, 4));
+                            AudioHeap_UnapplySampleCache((u8*)entry, M2C_FIELD(drum, Flags2Bit**, 4));
                         }
                     }
                 }
@@ -428,15 +448,16 @@ void func_8110BD20(SampleCacheEntry8110BA8C* entry) {
     }
 }
 
-/*
- * func_8110BEE4
+/**
+ * AudioHeap_UnapplySampleCache
  *
  * If arg1 is non-NULL and the word at arg0 + 0x08 equals the word at
  * arg1 + 0x04, copies the word at arg0 + 0x0C into arg1 + 0x04 and stores the
  * low two bits of the signed byte at arg0 + 0x01 into bits 2-3 of the byte at
  * arg1 + 0x00 (a bit-field write: the retail code masks with 0xFFF3 / 0x0C).
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_8110BEE4(u8* arg0, Flags2Bit* arg1) {
+void AudioHeap_UnapplySampleCache(u8* arg0, Flags2Bit* arg1) {
     if ((arg1 != NULL) && (M2C_FIELD(arg0, s32*, 8) == M2C_FIELD(arg1, s32*, 4))) {
         M2C_FIELD(arg1, s32*, 4) = M2C_FIELD(arg0, s32*, 0xC);
         arg1->field = M2C_FIELD(arg0, s8*, 1);
@@ -444,7 +465,11 @@ void func_8110BEE4(u8* arg0, Flags2Bit* arg1) {
 }
 
 s32 func_81109868(M2C_UNK *, s32);                  /* extern */
-s8 *func_8110BF28(s32 arg0)
+/**
+ * Takes `arg0` bytes from the persistent sample cache. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+s8 *AudioHeap_AllocPersistentSampleCacheEntry(s32 arg0)
 {
   s32 temp_v0_2;
   s8 *temp_v0;
@@ -464,7 +489,11 @@ s8 *func_8110BF28(s32 arg0)
 }
 
 
-void func_8110BFB0(void) {
+/**
+ * Discards the sample cache entries of fonts that are no longer loaded. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioHeap_DiscardSampleCaches(void) {
     UNUSED s32 pad2[1]; // FAKE: stack padding
     s32 j;
     s32 count;
@@ -495,18 +524,18 @@ void func_8110BFB0(void) {
                             p = AudioPlayback_GetInstrumentInner(i, k);
                             if (p != NULL) {
                                 if (p[1] != 0) {
-                                    func_8110BEE4(slot + 0x10, M2C_FIELD(p, Flags2Bit**, 8));
+                                    AudioHeap_UnapplySampleCache(slot + 0x10, M2C_FIELD(p, Flags2Bit**, 8));
                                 }
                                 if (p[2] != 0x7F) {
-                                    func_8110BEE4(slot + 0x10, M2C_FIELD(p, Flags2Bit**, 0x18));
+                                    AudioHeap_UnapplySampleCache(slot + 0x10, M2C_FIELD(p, Flags2Bit**, 0x18));
                                 }
-                                func_8110BEE4(slot + 0x10, M2C_FIELD(p, Flags2Bit**, 0x10));
+                                AudioHeap_UnapplySampleCache(slot + 0x10, M2C_FIELD(p, Flags2Bit**, 0x10));
                             }
                         }
                         for (m = 0; m < D_811858B0[i].unk01; m++) {
                             p = AudioPlayback_GetDrum(i, m);
                             if (p != NULL) {
-                                func_8110BEE4(slot + 0x10, M2C_FIELD(p, Flags2Bit**, 4));
+                                AudioHeap_UnapplySampleCache(slot + 0x10, M2C_FIELD(p, Flags2Bit**, 4));
                             }
                         }
                     }
@@ -894,7 +923,7 @@ s32 func_8110CD0C(Stream8110CD0C* arg0, s32 arg1) {
 
     if (arg0->enabled == 1) {
         if (arg0->mode != 0) {
-            ret = func_8110B9A8(arg0->addr, arg1, arg0->unk04, arg0->mode);
+            ret = AudioHeap_AllocPersistentSampleCache(arg0->addr, arg1, arg0->unk04, arg0->mode);
             if (ret == 0) {
                 return -1;
             }
@@ -940,7 +969,11 @@ M2C_UNK func_8004CFB0(s32, M2C_UNK, M2C_UNK);       /* extern */
 s32 AudioLoad_GetRealTableIndex(M2C_UNK, s32);                    /* extern */
 s32 AudioLoad_AsyncLoadInner(M2C_UNK, s32, s32, s32, s32);     /* extern */
 
-void func_8110CEC0(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
+/**
+ * Starts an async load of sample bank `arg0`, or sends an empty message to `arg3` when nothing needs loading. Zelda 64 audio driver (load.c).
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioLoad_AsyncLoadSampleBank(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     if (AudioLoad_AsyncLoadInner(2, AudioLoad_GetRealTableIndex(2, arg0), arg1, arg2, arg3) == 0) {
         func_8004CFB0(arg3, 0, 0);
     }

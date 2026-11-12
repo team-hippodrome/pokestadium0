@@ -810,7 +810,7 @@ void AudioHeap_ClearCurrentAiBuffer(void) {
 extern volatile u8 D_81184657;
 extern s32 D_8118465C;
 void AudioHeap_Init(void);
-void func_8110BFB0(void);
+void AudioHeap_DiscardSampleCaches(void);
 
 /**
  * Runs one step of the audio reset: fade out, stop notes, clear buffers, reinitialize. Zelda 64 audio driver.
@@ -866,7 +866,7 @@ s32 AudioHeap_ResetStep(void) {
                 D_8118465C--;
             } else {
                 D_81184657--;
-                func_8110BFB0();
+                AudioHeap_DiscardSampleCaches();
             }
             if (!D_811858B8.unk_00) {} // FAKE: empty test found by the permuter; keeps &D_811858B8 in a saved register
             break;
@@ -919,10 +919,10 @@ extern s32 D_811859B4;
 extern f32 D_811859B0;
 extern u32 D_8118568C;
 extern s32 D_8118557C;
-// func_8110B9F8 is defined as void in the next file, but this file calls it as
+// AudioHeap_InitSampleCaches is defined as void in the next file, but this file calls it as
 // if it returned a value (as with an implicit declaration); the call only
 // matches that way.
-s32 func_8110B9F8(s32, s32);
+s32 AudioHeap_InitSampleCaches(s32, s32);
 void AudioLoad_InitSampleDmaBuffers(s32);
 void func_811152A4(s32);
 s32 func_80058100(s32);
@@ -1001,7 +1001,7 @@ void AudioHeap_Init(void) {
     D_81184648.b = spec->temporaryFontMem;
     D_81184648.c = spec->temporarySampleMem;
     AudioHeap_InitTemporaryCache((s8*)&D_81184648);
-    func_8110B9F8(spec->persistentSampleCacheSize, spec->temporarySampleCacheSize);
+    AudioHeap_InitSampleCaches(spec->persistentSampleCacheSize, spec->temporarySampleCacheSize);
     if (EXTERNAL_POOL_AFF0.start != NULL) {
         EXTERNAL_POOL_AFF0.cur = EXTERNAL_POOL_AFF0.start;
     }
