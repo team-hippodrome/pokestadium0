@@ -732,9 +732,9 @@ void func_81106CC8(u16* dst, u8 (*arg1)[0xC80], s32 arg2, s32 arg3) {
         }
     }
 
-    D_811565D0 = (u16*)func_81104B18(0x2580, 0);
+    D_811565D0 = (u16*)GbEmu_AllocAligned64(0x2580, 0);
     _bcopy(dst + 0x10540, D_811565D0, 0x2580);
-    D_811565D4 = (u16*)func_81104B18(0x2580, 0);
+    D_811565D4 = (u16*)GbEmu_AllocAligned64(0x2580, 0);
     bzero(D_811565D4, 0x2580);
     GbEmu_DrawTextCommands(D_811565D4, D_8112A938);
 

@@ -92,7 +92,7 @@ s32 func_80051110(s32, s8 *, s8 *);             /* extern */
 s32 func_81102168(s8 *arg0);
 
 s32 func_81101FE8(s8 *);                            /* extern */
-s32 func_81102F7C(s32, s32, s32);                     /* extern */
+s32 GbPak_WriteVerifiedSramBlock(s32, s32, s32);                     /* extern */
 
 /*
  * GbPak_ProbeCartridge
@@ -101,7 +101,7 @@ s32 func_81102F7C(s32, s32, s32);                     /* extern */
  * Otherwise runs func_81102168(arg0), then func_81101FE8(arg0) while the
  * result is 0, then, if bit 0 of the byte at 0x9B is (now) set and the byte
  * at 0x98 is non-zero, func_811020A8(arg0), then
- * func_81102F7C(byte 0x9C, word 0x94, byte 0x98), stopping at the first
+ * GbPak_WriteVerifiedSramBlock(byte 0x9C, word 0x94, byte 0x98), stopping at the first
  * non-zero result. If the result is non-zero, clears bit 0 of the byte at
  * 0x9B. Returns the result.
  *
@@ -187,7 +187,12 @@ s32 func_8004CFB0(OSMesgQueue*, s32, s32);
 
 s32 func_81102AC8(s32 arg0);
 
-s32 func_81102C20(s32 arg0) {
+/**
+ * Reads each clean 0x100-byte block of cartridge RAM back and compares it with the cached copy; a
+ * mismatch rewrites the block and restarts the pass, up to 20 times. Returns -1 on failure.
+ * @unverified Name and comment from the code; no Transfer Pak was emulated.
+ */
+s32 GbPak_VerifyRamBlocks(s32 arg0) {
     GbpakChannel811023DC* ch2;
     GbpakChannel811023DC* ch;
     s32 retries;
@@ -291,7 +296,12 @@ void GbPak_PrepareProbeBlock(u32* arg0, s32 arg1) {
 
 void func_81102EB0(u8*, s32);
 
-s32 func_81102F7C(s32 arg0, s32 arg1, s32 arg2) {
+/**
+ * Selects the SRAM bank for the address, then writes a 0x20-byte block at 0xA000 + offset and
+ * reads it back until three writes in a row compare equal.
+ * @unverified Name and comment from the code; no Transfer Pak was emulated.
+ */
+s32 GbPak_WriteVerifiedSramBlock(s32 arg0, s32 arg1, s32 arg2) {
     GbpakChannel811023DC* ch = &D_811561C8[arg0];
     s32 ret;
     s32 n;
@@ -329,9 +339,14 @@ extern u8 D_81155E18[];
 extern u8 D_81155F18[];
 extern volatile u8 D_81156474;
 s32 func_81102690(GbpakChannel811023DC*, s32);
-s32 func_81104CD4(s8*);
+s32 GbPak_CheckGen1SaveChecksum(s8*);
 
-void func_811030F0(s32 arg0) {
+/**
+ * Game Boy Pak I/O thread: takes a channel number from the queue and serves that channel's
+ * request (init and read the cartridge ID, read or write cartridge RAM). 0xFF ends the thread.
+ * @unverified Name and comment from the code; no Transfer Pak was emulated.
+ */
+void GbPak_IoThreadMain(s32 arg0) {
     s32 pad0; // FAKE
     s32 chan;
     OSPfs* pfs;
@@ -457,7 +472,7 @@ void func_811030F0(s32 arg0) {
                 if (func_81102690(ch, 0) != 0) {
                     goto error;
                 }
-                if (func_81104CD4((s8*)ch) != 0 && ch->unkA3[0] < 3) {
+                if (GbPak_CheckGen1SaveChecksum((s8*)ch) != 0 && ch->unkA3[0] < 3) {
                     ch->unkA3[0]++;
                     goto loop7;
                 }
@@ -496,8 +511,13 @@ void func_800567E0(OSMesgQueue*, OSMesg*, s32);
 void func_80051B20(OSThread*, s32, void (*)(), s32, u8*, s32);
 void func_8005C130(OSThread*);
 void func_8004FD20(s32, s32);
-void func_811030F0();
-void func_811035B4(s32 arg0, s32 arg1, s32 arg2) {
+void GbPak_IoThreadMain();
+/**
+ * Clears the four Transfer Pak channel records, gives each its OSPfs and starts the Game Boy Pak
+ * I/O thread (GbPak_IoThreadMain) on the given message queue.
+ * @unverified Name and comment from the code; no Transfer Pak was emulated.
+ */
+void GbPak_StartIoThread(s32 arg0, s32 arg1, s32 arg2) {
     s32 i;
 
     D_81156470 = arg2;
@@ -515,7 +535,7 @@ void func_811035B4(s32 arg0, s32 arg1, s32 arg2) {
         D_811561C8[i].pfs = &D_81156018[i];
     }
     func_800567E0(&D_81156458, D_811561B8, 4);
-    func_80051B20(&D_81154C68, arg0, func_811030F0, 0, D_81155E18, arg1);
+    func_80051B20(&D_81154C68, arg0, GbPak_IoThreadMain, 0, D_81155E18, arg1);
     func_8005C130(&D_81154C68);
 }
 
@@ -529,7 +549,12 @@ extern s32 D_81156470;
 extern OSMesgQueue D_81156458;
 void func_800515B0(s32, s32);
 s32 func_8004CFB0(OSMesgQueue *, s32, s32);
-void func_81103728(s32 arg0) {
+/**
+ * Waits for the I/O thread to go idle, sends it the 0xFF quit message and waits until it has
+ * exited.
+ * @unverified Name and comment from the code; no Transfer Pak was emulated.
+ */
+void GbPak_StopIoThread(s32 arg0) {
     s32 i;
 
     while (D_81156475 != 0) {
@@ -800,7 +825,12 @@ extern u16 D_811205F8[];
 extern u16 D_811206F8[];
 extern u16 D_811207F8[];
 
-void func_8110445C(u8* arg0, s32 arg1, s32 arg2) {
+/**
+ * Draws a horizontal bar into a 16-bit framebuffer from tinted 8x16 tiles: left cap, repeated
+ * middle, right cap.
+ * @unverified Name and comment from the code.
+ */
+void GbEmu_DrawTintedBar(u8* arg0, s32 arg1, s32 arg2) {
     s32 i;
 
     for (i = 8; i < arg2 - 8; i += 8) {
@@ -895,7 +925,7 @@ void func_811047A0(s32 arg0) {
     pos = D_81156590;
     func_8004FD20(pos, 0x2800);
     pos += 0xAE;
-    func_8110445C((u8*)pos, D_811223E0[D_81156594], 0x70);
+    GbEmu_DrawTintedBar((u8*)pos, D_811223E0[D_81156594], 0x70);
     i = 0;
     dst = pos + 0x788;
     if (arg0 != 0) {
@@ -955,14 +985,14 @@ void func_81104930(void) {
         case 1:
 
             pos = D_81156540.framebuffer + 0xA4;
-            func_8110445C((u8*)pos, D_811223E0[D_81156540.colorIndex], 0x7C);
+            GbEmu_DrawTintedBar((u8*)pos, D_811223E0[D_81156540.colorIndex], 0x7C);
             func_81104618(D_81156540.framebuffer);
             pos += 0x2DE;
             break;
         case 2:
 
             pos = D_81156540.framebuffer + 0x94;
-            func_8110445C((u8*)pos, D_811223E0[D_81156540.colorIndex], 0x84);
+            GbEmu_DrawTintedBar((u8*)pos, D_811223E0[D_81156540.colorIndex], 0x84);
             func_81104618(D_81156540.framebuffer);
             pos += 0x2EE;
             break;
@@ -970,7 +1000,7 @@ void func_81104930(void) {
         default:
 
             pos = D_81156540.framebuffer + 0xCE;
-            func_8110445C((u8*)pos, D_811223E0[D_81156540.colorIndex], 0x50);
+            GbEmu_DrawTintedBar((u8*)pos, D_811223E0[D_81156540.colorIndex], 0x50);
             pos += 0x288;
             break;
     }
@@ -993,7 +1023,12 @@ void func_81104AE4(void) {
 
 extern u32 D_811565AC;
 extern u32 D_811565B0;
-s32 func_81104B18(s32 arg0, M2C_UNK arg1)
+/**
+ * Bump allocator: aligns the heap pointer to 64 bytes, reserves the size and hangs when the heap
+ * runs out.
+ * @unverified Name and comment from the code.
+ */
+s32 GbEmu_AllocAligned64(s32 arg0, M2C_UNK arg1)
 {
   s32 new_var; // FAKE: permuter temp
   s32 temp_v1;
@@ -1034,7 +1069,12 @@ void GbEmu_Delay(OSTime arg0) {
 void func_80058410(void*, void*, s32);
 extern u8 D_81122854[];
 
-s32 func_81104C30(u8* arg0) {
+/**
+ * Compares the cartridge header title and version bytes with the four known cartridges in
+ * D_81122854 and returns 4..1 for a match, 0 for none.
+ * @unverified Name and comment from the code; no Transfer Pak was emulated.
+ */
+s32 GbPak_IdentifyCartridge(u8* arg0) {
     u8 buf[8];
     u8* entry = D_81122854;
     s32 i;
@@ -1049,7 +1089,13 @@ s32 func_81104C30(u8* arg0) {
     return i;
 }
 
-s32 func_81104CD4(s8* arg0) {
+/**
+ * For a cartridge with RAM bank 1 loaded, checks the Gen 1 main save: the player name at 0x598
+ * must end in 0x50 within 6 bytes (else 11), and the byte after 0x598-0x1593 must be the inverted
+ * sum (else 10). Returns 0 when the save is valid.
+ * @unverified Name and comment from the code; no Transfer Pak was emulated.
+ */
+s32 GbPak_CheckGen1SaveChecksum(s8* arg0) {
     s32 i;
     s32 sum;
 
@@ -1075,7 +1121,12 @@ s32 func_81104CD4(s8* arg0) {
 
 extern s32 D_81154C48;
 
-s32 func_81104D84(s32 arg0) {
+/**
+ * Blacks out the screen, resets the VI X scale, stores the error code in D_81154C48 and returns
+ * -1.
+ * @unverified Name and comment from the code.
+ */
+s32 GbEmu_BlackScreenAndFail(s32 arg0) {
     osViBlack(1);
     GbEmu_Delay(20);
     osViSetXScale(1.0f);
@@ -1126,15 +1177,15 @@ s32 func_81104DD0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
     D_811565A0 = arg3;
     D_81156598 = M2C_FIELD(arg4, u8**, 0x21CC);
     D_8115659C = M2C_FIELD(arg4, u8**, 0x21D0);
-    D_81156540.unk_10 = (u8*)func_81104B18(0x27F80, 0);
-    D_81156540.unk_1C = (u8*)func_81104B18(0x100000, 0);
+    D_81156540.unk_10 = (u8*)GbEmu_AllocAligned64(0x27F80, 0);
+    D_81156540.unk_1C = (u8*)GbEmu_AllocAligned64(0x100000, 0);
     D_81156540.unk_40 = 0x8000;
-    D_81156540.unk_20 = (u8*)func_81104B18(D_81156540.unk_40, 0);
-    D_81156540.unk_44 = (u8*)func_81104B18(0xF000, 0);
-    D_81156540.unk_48 = (u8*)func_81104B18(0xF000, 0);
-    D_81154C00 = D_81156540.framebuffer = func_81104B18(0x2800, 0);
-    D_81156540.unk_50 = (u8*)func_81104B18(0x2800, 0);
-    D_811565A8 = (u8*)func_81104B18(0x102, 0);
+    D_81156540.unk_20 = (u8*)GbEmu_AllocAligned64(D_81156540.unk_40, 0);
+    D_81156540.unk_44 = (u8*)GbEmu_AllocAligned64(0xF000, 0);
+    D_81156540.unk_48 = (u8*)GbEmu_AllocAligned64(0xF000, 0);
+    D_81154C00 = D_81156540.framebuffer = GbEmu_AllocAligned64(0x2800, 0);
+    D_81156540.unk_50 = (u8*)GbEmu_AllocAligned64(0x2800, 0);
+    D_811565A8 = (u8*)GbEmu_AllocAligned64(0x102, 0);
     D_811565A3 = 0;
     D_81156477 = 1;
     D_811565A1 = 0;
@@ -1154,7 +1205,7 @@ s32 func_81104DD0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
     while (D_81156475 != 0) {
     }
 
-    buf = (u8*)func_81104B18(0x200, 0);
+    buf = (u8*)GbEmu_AllocAligned64(0x200, 0);
     for (i = 0; i < 4; i++) {
         slot = &D_811561C8[i];
         slot->bankState = D_81156540.unk_10 + 0x16B20;
@@ -1168,23 +1219,23 @@ s32 func_81104DD0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
             slot->blockDirty[j] = 0xFF;
             slot->blockState[j] = 0xFF;
         }
-        slot->unkA0 = func_81104C30((u8*)slot);
+        slot->unkA0 = GbPak_IdentifyCartridge((u8*)slot);
         slot->romBuf = D_81156540.unk_1C;
         slot->sramBuf = D_81156540.unk_20;
     }
     cur = &D_811561C8[D_811565A0];
     if (cur->error != 0) {
-        func_81104D84(1);
+        GbEmu_BlackScreenAndFail(1);
         return (cur->unkA2 != 0) ? 2 : 1;
     }
     if (cur->unkA0 == 0) {
-        return func_81104D84(1);
+        return GbEmu_BlackScreenAndFail(1);
     }
     D_81156540.colorIndex = cur->unkA0 - 1;
     while (D_81156475 != 0) {
     }
-    if (func_81102F7C(D_811565A0, 0, 0xFF) != 0) {
-        func_81104D84(1);
+    if (GbPak_WriteVerifiedSramBlock(D_811565A0, 0, 0xFF) != 0) {
+        GbEmu_BlackScreenAndFail(1);
         return (cur->unkA2 != 0) ? 2 : 1;
     }
     D_81156540.unk_38 = 0xE;
@@ -1221,7 +1272,7 @@ s32 func_81104DD0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
             }
             if (cur->error) goto fail; /* one line: gives the ROM's beqz/b pair */
             if (D_800AA148 != 0) {
-                func_81104D84(0);
+                GbEmu_BlackScreenAndFail(0);
             }
         }
         for (i = 0; i < (D_81156540.unk_3C >> 13); i++) {
@@ -1238,7 +1289,7 @@ s32 func_81104DD0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
             }
             if (cur->error) goto fail; /* one line: gives the ROM's beqz/b pair */
             if (D_800AA148 != 0) {
-                func_81104D84(0);
+                GbEmu_BlackScreenAndFail(0);
             }
         }
         for (i = 0; i < (D_81156540.unk_3C >> 14); i++) {
@@ -1258,11 +1309,11 @@ s32 func_81104DD0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
             func_811027A8(cur);
             if (cur->error != 0) {
             fail:
-                func_81104D84(1);
+                GbEmu_BlackScreenAndFail(1);
                 return (cur->unkA2 != 0) ? 2 : 1;
             }
             if (D_800AA148 != 0) {
-                func_81104D84(0);
+                GbEmu_BlackScreenAndFail(0);
             }
         }
         D_811565A4 = 1;

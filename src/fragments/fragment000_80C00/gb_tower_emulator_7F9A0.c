@@ -150,7 +150,7 @@ s32 func_81102168(s8 *arg0) {
 }
 
 s32 func_81101FE8(s8 *);                            /* extern */
-s32 func_81102F7C(s32, s32, s32);                     /* extern */
+s32 GbPak_WriteVerifiedSramBlock(s32, s32, s32);                     /* extern */
 
 /**
  * Before each transfer: checks the connector, resets the mapper, re-reads the
@@ -171,7 +171,7 @@ s32 GbPak_ProbeCartridge(u8 *arg0) {
             if ((ret == 0) && (M2C_FIELD(arg0, u8 *, 0x9B) & 1) && (M2C_FIELD(arg0, u8 *, 0x98) != 0)) {
                 ret = func_811020A8(arg0);
                 if (ret == 0) {
-                    ret = func_81102F7C(M2C_FIELD(arg0, u8 *, 0x9C), M2C_FIELD(arg0, s32 *, 0x94), M2C_FIELD(arg0, u8 *, 0x98));
+                    ret = GbPak_WriteVerifiedSramBlock(M2C_FIELD(arg0, u8 *, 0x9C), M2C_FIELD(arg0, s32 *, 0x94), M2C_FIELD(arg0, u8 *, 0x98));
                 }
             }
         }
