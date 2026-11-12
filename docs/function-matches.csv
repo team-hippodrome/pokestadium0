@@ -3764,7 +3764,7 @@ func_8910666C,0x8910666C,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,L
 func_891066C0,0x891066C0,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,LabPCList_UpdatePopupMenu,m2c,m2c,c
 func_891066E0,0x891066E0,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,LabPCList_InitLevelInputWindow,hand,,c
 func_89106864,0x89106864,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,LabPCList_DrawLevelInput,hand,,c
-func_89106B54,0x89106B54,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,PcSort_DrawEmptyLabel,hand,,c
+func_89106B54,0x89106B54,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,LabPCList_DrawLevelInputWindow,hand,,c
 func_89106C98,0x89106C98,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,LabPCList_UpdateLevelInput,m2c,m2c,c
 func_89106E34,0x89106E34,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_89106E34,m2c,m2c,c
 func_89106E64,0x89106E64,src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c,func_89106E64,hand,,c

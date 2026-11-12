@@ -882,7 +882,8 @@ extern char D_8910E07C[];
 extern char D_8910E088[];
 /**
  * Sets up the レベルのにゅうりょく (level input) window.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: レベルをきめてあつめる (page 3/3, A on the レベル header) ran this once
+ * and opened 「001 から 100」; かいじょ is greyed out when no level filter is active.
  */
 void LabPCList_InitLevelInputWindow(s8* arg0, s32 arg1, s32 arg2, Rgba8910576C arg3, s32 arg4, s32 arg5, s32 arg6) {
     Window_SetRect(arg0, arg1, arg2, 0x13C, 0x50);
@@ -927,7 +928,8 @@ M2C_UNK func_8001AA60(s32, s32, s32);
 
 /**
  * Draws the level input digits and the up/down arrows.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: drew the three digits of each bound with a yellow frame on
+ * the selected digit.
  */
 void LabPCList_DrawLevelInput(s8* arg0, s32 x, s32 y, s32 flags) {
     s32 hl = flags & 2;
@@ -970,10 +972,12 @@ void Window_DrawLabeled(s8 *, s32);
 void LabPCList_DrawLevelInput(s8 *, s32, s32, s32);
 extern char D_8910E094[];
 /**
- * Draws から (Empty).
- * @unverified Name and comment guessed from the code.
+ * Draws the レベルのにゅうりょく (level input) window: the lower and upper level digits with から
+ * between them, and the あつめる and かいじょ buttons.
+ * Seen in play (2026-11-12) in いちらん: ran every frame while the window showed 「001 から 100」.
+ * D_8910E094 is から ("from"), not "Empty".
  */
-void PcSort_DrawEmptyLabel(s8 *arg0) {
+void LabPCList_DrawLevelInputWindow(s8 *arg0) {
     if (func_8002AE6C() == 0) {
         func_8001AB6C();
         func_8001A384(4, 0);
@@ -997,7 +1001,8 @@ extern s32 D_800603C0;
 
 /**
  * Handles the level input digits.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: D-Up raised the selected digit (001 to 006), D-Right moved
+ * across the six digits to あつめる/かいじょ, and A on those returned 1 or 2.
  */
 s32 LabPCList_UpdateLevelInput(s8 *arg0) {
     s32 sp1C;

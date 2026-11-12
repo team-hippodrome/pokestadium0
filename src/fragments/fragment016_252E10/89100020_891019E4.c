@@ -130,7 +130,7 @@ void ScrollList_DrawItems(s8*, s32, s32, s32, s8*);
 void LabPCList_DrawDetailColumns(s8*, s32, s32, s32);
 void func_89105E70(s8*, s32);
 void LabPCList_DrawPopupMenu(s8*, s32);
-void PcSort_DrawEmptyLabel(s8*);
+void LabPCList_DrawLevelInputWindow(s8*);
 void LabPCList_DrawTypeFilter(s8*);
 void LabPCList_DrawMoveFilter(s8*);
 void TextBox_Draw(s8*);
@@ -195,7 +195,7 @@ void LabPCList_DrawListScreen(s8* arg0) {
             LabPCList_DrawPopupMenu(arg0 + 0x9654, 2);
             break;
         case 4:
-            PcSort_DrawEmptyLabel(arg0 + 0x9830);
+            LabPCList_DrawLevelInputWindow(arg0 + 0x9830);
             break;
         case 5:
             LabPCList_DrawTypeFilter(arg0 + 0x9920);
@@ -229,7 +229,8 @@ void LabPCList_DrawListScreen(s8* arg0) {
 
 /**
  * Returns whether any of filter flags `arg1` is active.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: opening レベルをきめてあつめる called this with 1; it returned 0 with
+ * no level filter, and 1 once 006から100 had been applied (かいじょ is then usable).
  */
 s32 LabPCList_HasFilterFlag(s8 *arg0, s32 arg1) {
     return (M2C_FIELD(arg0, s32 *, 0x7C) & arg1) != 0;

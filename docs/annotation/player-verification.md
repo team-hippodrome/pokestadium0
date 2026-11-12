@@ -708,6 +708,15 @@ Opened on the party list (フシギダネ, ヒトカゲ and ゼニガメ):
   127). With ひっかく chosen, あつめる ran `LabPCList_CommitMoveFilter` and set
   flag 4, and only ヒトカゲ was left. With ひっさつまえば chosen, it wrote move
   0x9E and count 1, and the list was empty. かいじょ cleared flag 4.
+* Level filter: on page 3/3, A on the レベル header opens たかいじゅんにならべる,
+  ひくいじゅんにならべる and レベルをきめてあつめる. The last opens
+  「レベルのにゅうりょく」, showing 001 から 100. Its draw function was named
+  `PcSort_DrawEmptyLabel` because から was read as "Empty". Here it means
+  "from", so the function is now `LabPCList_DrawLevelInputWindow`. Raising the
+  lower bound to 006 and pressing あつめる set flag 1 and stored 6/100, which
+  emptied the Lv 5 party. Reopening the window then made
+  `LabPCList_HasFilterFlag(1)` return 1, and かいじょ was enabled. かいじょ
+  cleared flag 1.
 
 ## せいとん, ポケモンを いどうする
 

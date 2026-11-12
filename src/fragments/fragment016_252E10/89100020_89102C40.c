@@ -227,7 +227,8 @@ s32 LabPCList_UpdateLevelInput(void*);
 M2C_UNK LabPCList_ApplyFiltersAndSort();
 /**
  * Runs the レベルのにゅうりょく (level input) window and applies the level range filter.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: あつめる with 006から100 stored 6 and 100 at +0x9828/+0x9829, set
+ * flag 1, and the Lv 5 party disappeared; かいじょ reset the range to 1-100 and cleared flag 1.
  */
 s32 LabPCList_RunLevelFilter(s8 *arg)
 {
