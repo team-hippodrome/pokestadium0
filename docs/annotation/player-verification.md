@@ -91,3 +91,33 @@ battle with all PP at 0.
 | `BattleScene_UpdateBRollCameraSequence` | Runs every frame of the command phase (it calls `Battle_ChooseActionsForMode`) while the camera cuts between idle shots of both Pokémon, as seen on screen | verified |
 | `BattleMenu_TakeControlOnBPress`, `BattleMenu_TakeControlOnCButtonPress` | Run in 1P too (B at the command menu, the forced Pokémon menu), but the tag-team handover they describe needs a two-player team, which was not tested | still `@unverified` |
 | `BattleMenu_TryConfirmMove`, `BattleDemo_PlayScriptedInput`, `Battle_PrepareTurnInput`, `Battle_InitParticipantRuntime`, `Battle_InitBothParticipants` | Not reached by these tests (the demo functions belong to battle mode 5) | still `@unverified` |
+
+## Model transform table (`battle_engine_move_model_transforms_82109AF4.c`)
+
+Each move was put into 1P's slot 0 at the command menu and used; the
+transform id at ActivePokemon +0x610 (`modelTransformId`) was sampled every
+other frame on both sides, and breakpoints on every function of the file
+showed which handler ran.
+
+| Case | Seen for | Handler | Result |
+|---|---|---|---|
+| 2 | 12 frames on 1P's side during a recall (「もういい！ もどれ！」); nothing during the next send-out | `BattleAnim_PokeBallLand` | still `@unverified`, doc comment notes it |
+| 3 | Fly | `BattleAnim_Fly` (+ Start, Continue) | verified |
+| 4 | Submission | `BattleAnim_Submission` (+ Start, Continue) | verified |
+| 5 | Dig | `BattleAnim_Dig` (+ Start, Continue) | verified |
+| 6 | Agility | `BattleAnim_Agility` (+ Start) | verified |
+| 7 | Double Team (the COM's Pinsir, every run) | `BattleAnim_DoubleTeam` (+ Start) | verified |
+| 8 | Seismic Toss | `BattleAnim_SeismicToss` (+ Start) | verified |
+| 9 | Minimize | `BattleAnim_Minimize` (+ Start, Continue) | verified |
+| 10 | Surf | `BattleAnim_Surf` (+ Start, Continue) | verified |
+| 12 | Withdraw | `BattleAnim_Withdraw` (+ Start) | verified |
+| 13 | Meditate | `BattleAnim_Meditate` | verified |
+| 14 | Waterfall (user's side) | `BattleAnim_Waterfall` (+ Start, Continue) | verified |
+| 15 | Body Slam, Stomp (target's side) | `BattleAnim_SquishHitReaction` | verified |
+| 16 | Bind, Wrap, Constrict (target's side) | `BattleAnim_LassoMoveHitReaction` | renamed `BattleAnim_BindHitReaction` (+ Start, Continue) |
+
+No transform for: Vice Grip, Crabhammer, Hyper Beam, Splash, Teleport,
+Barrier, Harden, Defense Curl, Growth, Rest, Whirlwind, Roar, Rolling Kick,
+Jump Kick, Hi Jump Kick, Earthquake, Fissure, Thrash, Petal Dance, Transform,
+Substitute, Mimic, Rage, Disable, Reflect, Light Screen, Mist. Case 1
+(`BattleAnim_PokeBallThrow`) and case 11 (`func_8210A3DC`) were not seen.
