@@ -75,7 +75,7 @@ void func_8002F030(ScrollMenu8002F6C4*, s32, s32, s32, s32);
 void func_8002F32C(GridMenu80031004*, s32, s32);
 
 extern u8 D_80073520[];
-M2C_UNK func_80029A64(s32, s32, s32, s32, Color_RGBA8);
+M2C_UNK Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
 
 void func_8002D8D8(s8* arg0, s32 arg1, s32 arg2);
 extern s32 D_800603C0;
@@ -109,7 +109,7 @@ void func_8002D900(u8* arg0) {
 }
 
 /**
- * Draws the cursor rectangle (via func_80029A64) for a list menu with one cell per row:
+ * Draws the cursor rectangle (via Ui_DrawRoundedFrame) for a list menu with one cell per row:
  * x = arg1 + 2, y = cursor * cellHeight + arg2 + 2, size = (cellWidth - 4) x (cellHeight - 4),
  * colour read from D_80073520. Compare func_8002F32C and func_80031004. The separate `y`
  * local only fixes the order in which the fields are loaded.
@@ -118,7 +118,7 @@ void func_8002D948(GridMenu80031004* arg0, s32 arg1, s32 arg2) {
     s32 y;
 
     y = arg0->cursor * arg0->cellHeight + arg2 + 2;
-    func_80029A64(arg1 + 2, y, arg0->cellWidth - 4, arg0->cellHeight - 4, *(Color_RGBA8*)D_80073520);
+    Ui_DrawRoundedFrame(arg1 + 2, y, arg0->cellWidth - 4, arg0->cellHeight - 4, *(Color_RGBA8*)D_80073520);
 }
 
 void func_8002D9B8(Menu8002E230* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
@@ -285,7 +285,7 @@ void func_8002DF54(u8* arg0) {
 }
 
 /**
- * Draws the cursor rectangle (via func_80029A64) for a multi-column menu: the cursor cell is
+ * Draws the cursor rectangle (via Ui_DrawRoundedFrame) for a multi-column menu: the cursor cell is
  * at column cursor % columns, row cursor / columns, so x = column * colSpacing + arg_x + 2 and
  * y = row * rowSpacing + arg_y + 2; the size is (colSpacing - 4) x (rowSpacing - 4) and the
  * colour is read from D_80073520. Compare func_80031004. The `px`/`py` locals only fix the
@@ -297,7 +297,7 @@ void func_8002DF9C(Menu8002E230* menu, s32 x, s32 y) {
 
     px = (menu->cursor % menu->columns) * menu->colSpacing + x + 2;
     py = (menu->cursor / menu->columns) * menu->rowSpacing + y + 2;
-    func_80029A64(px, py, menu->colSpacing - 4, menu->rowSpacing - 4, *(Color_RGBA8*)D_80073520);
+    Ui_DrawRoundedFrame(px, py, menu->colSpacing - 4, menu->rowSpacing - 4, *(Color_RGBA8*)D_80073520);
 }
 
 void func_8002E078(Menu8002E230* menu, s32 x, s32 y, s32 mask, s32 arg4) {
@@ -669,7 +669,7 @@ void func_8002F030(ScrollMenu8002F6C4* menu, s32 x, s32 topY, s32 bottomY, s32 w
 }
 
 /**
- * Draws the cursor rectangle (via func_80029A64) for a scrolling list menu. Same shape as
+ * Draws the cursor rectangle (via Ui_DrawRoundedFrame) for a scrolling list menu. Same shape as
  * func_80031004 but with x = arg1 + 2 (no column calculation) and the rectangle size taken from
  * cellWidth/cellHeight minus 4: y = scrollTarget + arg2 - scroll + 2, and when flag 0x400 is
  * set, (cellHeight - 1) is subtracted from it. The colour argument is read from D_80073520.
@@ -682,7 +682,7 @@ void func_8002F32C(GridMenu80031004* arg0, s32 arg1, s32 arg2) {
     if (arg0->flags & 0x400) {
         sp2C = sp2C - arg0->cellHeight + 1;
     }
-    func_80029A64(arg1 + 2, sp2C, arg0->cellWidth - 4, arg0->cellHeight - 4, *(Color_RGBA8*)D_80073520);
+    Ui_DrawRoundedFrame(arg1 + 2, sp2C, arg0->cellWidth - 4, arg0->cellHeight - 4, *(Color_RGBA8*)D_80073520);
 }
 
 /**
@@ -1237,7 +1237,7 @@ void func_80030D3C(GridMenu800310D8* menu, s32 x, s32 y) {
 
 
 /**
- * Draws a rectangle (via func_80029A64) for the cursor of a paged grid menu.
+ * Draws a rectangle (via Ui_DrawRoundedFrame) for the cursor of a paged grid menu.
  * The column is cursor % columns, so x = column * cellWidth + arg1. y is
  * scrollTarget + arg2 - scroll + 2; when flag 0x400 is set, (cellHeight - 1)
  * is subtracted from it. The rectangle size is the cell size minus 4 in each
@@ -1252,7 +1252,7 @@ void func_80031004(GridMenu80031004* arg0, s32 arg1, s32 arg2) {
     if (arg0->flags & 0x400) {
         sp2C = sp2C - arg0->cellHeight + 1;
     }
-    func_80029A64(sp28, sp2C, arg0->cellWidth - 4, arg0->cellHeight - 4, *(Color_RGBA8*)D_80073520);
+    Ui_DrawRoundedFrame(sp28, sp2C, arg0->cellWidth - 4, arg0->cellHeight - 4, *(Color_RGBA8*)D_80073520);
 }
 
 void func_80030D3C(GridMenu800310D8*, s32, s32);

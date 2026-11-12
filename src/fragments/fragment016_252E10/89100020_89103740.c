@@ -27,13 +27,13 @@ typedef struct Label89100FC4 {
 #include "fragments/fragment016_252E10/89100020_89102C40_types.h"
 
 extern u8 D_80073520[];
-M2C_UNK func_80029A64(s32, s32, s32, s32, Color_RGBA8);
+M2C_UNK Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
 extern s32 D_8910A7F8[3];
 void func_80027410(void*, void*, s32, s32, s32);
 void func_89109990(void*, void*, void*, s32);
 extern s32 D_800603C0;
 void func_8000B2F4(s32);
-void func_8002A8C4(s8 *, s32, s32, s32, s32);
+void Window_SetRect(s8 *, s32, s32, s32, s32);
 void func_80027804(s8*, s8*, s32, s32);
 void func_89109B60(s8*);
 void func_80027D68(s32, s32);
@@ -100,7 +100,7 @@ void func_8000A460(s8 *, s8 *);
 u32 func_800566BC(s8*);
 void func_89106424(s8 *, void *, s8 *, s32, s32);
 void func_89106570(s8 *);
-void func_8002A8C4(s8 *, s32, s32, s32, s32);
+void Window_SetRect(s8 *, s32, s32, s32, s32);
 extern Rgba891024A4 D_8910A7F4;
 extern s8 *D_8910A8A8[];
 extern s8 D_8910A8B0[];
@@ -244,7 +244,7 @@ s32 func_89103858(Ctx89103858* arg0) {
                 case 1:
                     func_8003F6AC(2);
                     func_89106424(arg0->unk974C, D_8910A8E8, arg0->unk9808, 8, 0);
-                    func_8002A8C4(arg0->unk9778, arg0->x + 0xE, arg0->y + 0x1C, 0xE4, 0x1C);
+                    Window_SetRect(arg0->unk9778, arg0->x + 0xE, arg0->y + 0x1C, 0xE4, 0x1C);
                     arg0->unk9760 |= 0x01000000;
                     arg0->unk97C0 = arg0->unk2C + arg0->unk34;
                     arg0->unk97C4 = arg0->unk30 + arg0->unk38;
@@ -256,7 +256,7 @@ s32 func_89103858(Ctx89103858* arg0) {
                 case 2:
                     func_8003F6AC(2);
                     func_89106424(arg0->unk974C, D_8910A8E8, arg0->unk9808, 4, 0);
-                    func_8002A8C4(arg0->unk9778, arg0->x + 0xE, arg0->y + 0x38, 0xE4, 0x1C);
+                    Window_SetRect(arg0->unk9778, arg0->x + 0xE, arg0->y + 0x38, 0xE4, 0x1C);
                     arg0->unk9760 |= 0x01000000;
                     arg0->unk97C0 = arg0->unk2C + arg0->unk34;
                     arg0->unk97C4 = arg0->unk30 + arg0->unk38;
@@ -672,11 +672,11 @@ s32 func_8910452C(s8* arg0) {
     return ret;
 }
 
-M2C_UNK func_8002C064(M2C_UNK, M2C_UNK, u8, u8, s32); /* extern */
+M2C_UNK Ui_DrawTintedScreenBackground(M2C_UNK, M2C_UNK, u8, u8, s32); /* extern */
 extern M2C_UNK D_8910A7F0;
 
 void func_89104818(void) {
-    func_8002C064(0x38, 0x1E0, M2C_FIELD(&D_8910A7F0, u8 *, 0), M2C_FIELD(&D_8910A7F0, u8 *, 1), (s32) M2C_FIELD(&D_8910A7F0, u8 *, 2));
+    Ui_DrawTintedScreenBackground(0x38, 0x1E0, M2C_FIELD(&D_8910A7F0, u8 *, 0), M2C_FIELD(&D_8910A7F0, u8 *, 1), (s32) M2C_FIELD(&D_8910A7F0, u8 *, 2));
 }
 
 void func_800069CC(void);
@@ -775,7 +775,7 @@ s32 func_891049E8(s32 arg0) {
     func_80028060(0, var_a1, &D_8910DE44, D_8910E37C);
     n = D_8910A908;
     func_8002C8D8(&sp2C, *(Col891049E8*)&D_8910A7F0, n / (f64)8.0f);
-    func_8002C064(0x38, 0x1E0, sp2C.r, sp2C.g, sp2C.b);
+    Ui_DrawTintedScreenBackground(0x38, 0x1E0, sp2C.r, sp2C.g, sp2C.b);
     if (D_8910A90C == 0) {
         n = D_8910A908;
         n++;

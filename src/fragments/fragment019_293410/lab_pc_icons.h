@@ -43,7 +43,7 @@ extern M2C_UNK D_800734A8;
 extern char D_8A21D850[];
 extern char D_8A21D854[];
 extern char D_8A21D858[];
-void func_80027F20(s32);
+void Font_SetColorForFlags(s32);
 void func_8A200020(s32, s32, BattleMon*);
 void MonSummary_DrawHpLevel(s32 arg0, s32 arg1, BattleMon* arg2, s32 arg3);
 
@@ -53,7 +53,7 @@ void UI_DrawTextureRgba16(s32 arg0, s32 arg1, s32 arg2);
 /*
  * func_8A20034C
  *
- * Initialises a record like func_8A1009E0 does: func_8002A8C4 fills the first
+ * Initialises a record like func_8A1009E0 does: Window_SetRect fills the first
  * five words with (arg1, arg2, 0x221, 0x168, 0), the words at +0x20, +0x24
  * and +0x28 are cleared and +0x14 is set to 0x1001.  It then calls
  * func_8002D880 on the sub-object at arg0 + 0x2C with arg3, the area at
@@ -67,7 +67,7 @@ M2C_UNK func_8002D880(s8 *, s32, s8 *, M2C_UNK *, s32, s32); /* extern */
 void func_8A20034C(s8 *arg0, s32 arg1, s32 arg2, s32 arg3);
 
 extern Color_RGBA8 D_8A203304;
-void func_8002A0AC(s32, s32, s32, s32, Color_RGBA8);
+void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
 
 void func_8A200770(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4);
 
@@ -107,7 +107,7 @@ extern s32 D_8A21DA4C;
 void func_8A201C08(s32 arg0, s32 arg1, s32 arg2);
 
 M2C_UNK func_80019008(s32, s32, M2C_UNK);           /* extern */
-M2C_UNK func_80029658(s32, s32, s32, M2C_UNK *);    /* extern */
+M2C_UNK Ui_DrawTexturedDivider(s32, s32, s32, M2C_UNK *);    /* extern */
 M2C_UNK func_80029864(s32, s32, s32, M2C_UNK *);    /* extern */
 s32 func_8002AB84();                                /* extern */
 void MonSummary_DrawStats(s32, s32, BattleMon*);
@@ -127,7 +127,7 @@ extern s8 *D_800603C0;
 
 s32 func_8A202078(s8 *arg0);
 
-M2C_UNK func_8002C064(M2C_UNK, M2C_UNK, u8, u8, s32); /* extern */
+M2C_UNK Ui_DrawTintedScreenBackground(M2C_UNK, M2C_UNK, u8, u8, s32); /* extern */
 extern M2C_UNK D_8A203300;
 
 void func_8A202160(void);

@@ -8,7 +8,7 @@
 #include "m2c_macros.h"
 
 extern u8 D_80073520[];
-M2C_UNK func_80029A64(s32, s32, s32, s32, Color_RGBA8);
+M2C_UNK Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
 
 typedef struct Ctx89100914 {
     /* 0x0000 */ char unk0000[0x30];
@@ -48,8 +48,8 @@ extern char D_8910DB94[];
 extern char D_8910DBA0[];
 s32 func_891005CC(Ctx89100914* arg0);
 void func_80029028(s32, s32, s32, s32, Color_RGBA8);
-void func_8002A0AC(s32, s32, s32, s32, Color_RGBA8);
-void func_80027F20(s32);
+void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
+void Font_SetColorForFlags(s32);
 void Gfx_DrawTextureIa8(s32 x1, s32 y1, s32 draw_width, s32 height, u8* texture, s32 load_width, s32 texture_spread_x_mode);
 void Font_BeginTranslucentTextRendering(void);
 void Font_EndTexturedTextRendering(void);
@@ -74,7 +74,7 @@ void LabPCList_DrawDetailColumns(Ctx89100914* arg0, s32 arg1, s32 arg2, s32 arg3
         x += arg0->widths[i];
     }
     if (arg3 & 0x10) {
-        func_8002A0AC(func_891005CC(arg0) + 1, arg2 + 1, arg0->widths[arg0->ranges[arg0->mode] + arg0->cursor - 2] - 2, 0x12, *(Color_RGBA8*)D_8910A860);
+        Ui_FillRectHighlighted(func_891005CC(arg0) + 1, arg2 + 1, arg0->widths[arg0->ranges[arg0->mode] + arg0->cursor - 2] - 2, 0x12, *(Color_RGBA8*)D_8910A860);
     }
     gSPDisplayList(gDisplayListHead++, D_80073450);
     gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
@@ -87,7 +87,7 @@ void LabPCList_DrawDetailColumns(Ctx89100914* arg0, s32 arg1, s32 arg2, s32 arg3
     Font_BeginTranslucentTextRendering();
     for (x = arg1 + 0x78, i = arg0->ranges[arg0->mode]; x < arg0->xEnd; i++) {
         hl = (i + 2 == arg0->ranges[arg0->mode] + arg0->cursor) ? 0x12 : 0;
-        func_80027F20(hl & arg3);
+        Font_SetColorForFlags(hl & arg3);
         switch (i) {
             case 0:
                 Font_SetActive(4, -1);

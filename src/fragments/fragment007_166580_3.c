@@ -178,21 +178,21 @@ extern s8 D_88000000;
 s32 func_82005CCC(s32 arg0, M2C_UNK arg1);
 
 extern Color_RGBA8 D_82009100;
-void func_8002A0AC(s32, s32, s32, s32, Color_RGBA8);
-void func_80029658(s32, s32, s32, void*);
-void func_8002A550(s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
+void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
+void Ui_DrawTexturedDivider(s32, s32, s32, void*);
+void Ui_FillRectPrimEnvColor(s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
 void func_8002AF04(s8*, s32);
 extern u8 D_8007356C;
-void func_80027F20(s32);
+void Font_SetColorForFlags(s32);
 
 void func_82005D90(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s32* arg5) {
     s32 temp_v0 = *arg5;
 
     if (arg4 & 0x10) {
-        func_8002A0AC(arg0 + 3, arg1 + 3, temp_v0 - 6, 0x1A, D_82009100);
+        Ui_FillRectHighlighted(arg0 + 3, arg1 + 3, temp_v0 - 6, 0x1A, D_82009100);
     }
     Font_BeginTranslucentTextRendering();
-    func_80027F20(arg4);
+    Font_SetColorForFlags(arg4);
     Font_SetActive(0x10, 0);
     Font_Printf(arg0 + 8, arg1 + 4, arg2);
     Font_EndTexturedTextRendering();
@@ -202,7 +202,7 @@ void func_82005D90(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s32* arg5
  * func_82005E34
  *
  * Initialises the object arg0 (layout not established): calls
- * func_8002A8C4(arg0, arg1, arg2, arg3, arg4), clears the words at 0x28 and
+ * Window_SetRect(arg0, arg1, arg2, arg3, arg4), clears the words at 0x28 and
  * 0x24, sets the word at 0x14 to 0x801 and the word at 0x20 to arg9. Calls
  * func_80027804 on the sub-object at arg0 + 0x50 with (arg5, arg6, arg6),
  * then func_8002D880 on the sub-objects at 0x2C, 0x50 and 0x5C with the
@@ -214,11 +214,11 @@ void func_82005D90(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s32* arg5
  * twice rather than cached in a local, which moves the compiler's stack
  * spill and changes the frame size.
  */
-void func_8002A8C4(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+void Window_SetRect(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 M2C_UNK func_80027804(s8 *, s32, s32, s32);         /* extern */
 M2C_UNK func_8002D880(s8 *, s8 *, s8 *, void (*)(s32, s32, char *, s32, s32, s32 *), s32, s32); /* extern */
 void func_82005E34(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9) {
-    func_8002A8C4(arg0, arg1, arg2, arg3, arg4);
+    Window_SetRect(arg0, arg1, arg2, arg3, arg4);
     M2C_FIELD(arg0, s32 *, 0x28) = 0;
     M2C_FIELD(arg0, s32 *, 0x24) = 0;
     M2C_FIELD(arg0, s32 *, 0x14) = 0x801;
@@ -239,8 +239,8 @@ extern Color_RGBA8 D_82009108;
  * Draws the object arg0 (layout not established; x at +0, y at +4, width at +8) while
  * func_8002AE6C() is zero. The sub-object at +0x2C is a list whose word at +8 is the
  * number of rows; the panel height is temp_s1 = rows * 32 + 8. Draws the frame via
- * func_80029658, a filled bar (colour D_82009100, height temp_s1) via func_80029028, a
- * highlight band via func_8002A550 (colours D_82009104 / D_82009108, height = word at
+ * Ui_DrawTexturedDivider, a filled bar (colour D_82009100, height temp_s1) via func_80029028, a
+ * highlight band via Ui_FillRectPrimEnvColor (colours D_82009104 / D_82009108, height = word at
  * +0x80 * 0x1C), the list via func_8002D9B8 (flags arg1 | 0xFFED, width passed by
  * pointer in sp38), and the text pointer at index [+0x34] of the table in the word at
  * +0x7C, printed in the colour from D_800734A8 via func_8001A944.
@@ -253,10 +253,10 @@ void func_82005EE4(s8* arg0, s32 arg1) {
 
     if (func_8002AE6C() == 0) {
         temp_s1 = (M2C_FIELD(M2C_FIELD(arg0, s8**, 0x2C), s32*, 8) << 5) + 8;
-        func_80029658(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + temp_s1 + 5, M2C_FIELD(arg0, s32*, 8), &D_8007356C);
+        Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + temp_s1 + 5, M2C_FIELD(arg0, s32*, 8), &D_8007356C);
         gSPDisplayList(gDisplayListHead++, D_80060270);
         func_80029028(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) - 0xC, temp_s1, *(Color82001CCC*)&D_82009100);
-        func_8002A550(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + temp_s1 + 0xC, M2C_FIELD(arg0, s32*, 8) - 0xC, M2C_FIELD(arg0, s32*, 0x80) * 0x1C, D_82009104, D_82009108);
+        Ui_FillRectPrimEnvColor(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + temp_s1 + 0xC, M2C_FIELD(arg0, s32*, 8) - 0xC, M2C_FIELD(arg0, s32*, 0x80) * 0x1C, D_82009104, D_82009108);
         sp38 = M2C_FIELD(arg0, s32*, 8) - 0xC;
         func_8002D9B8(arg0 + 0x2C, M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0xA, arg1 | 0xFFED, (s8*)&sp38);
         func_8001AB6C();
@@ -302,10 +302,10 @@ s32 func_820060AC(void* arg0) {
 
 void func_82006154(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s8* arg5) {
     if (arg4 & 0x18) {
-        func_8002A0AC(arg0 + 3, arg1 + 3, M2C_FIELD(arg5, s32*, 8) - 0x12, 0x1E, M2C_FIELD(arg5, Color_RGBA8*, 0x18));
+        Ui_FillRectHighlighted(arg0 + 3, arg1 + 3, M2C_FIELD(arg5, s32*, 8) - 0x12, 0x1E, M2C_FIELD(arg5, Color_RGBA8*, 0x18));
     }
     Font_BeginTranslucentTextRendering();
-    func_80027F20(arg4);
+    Font_SetColorForFlags(arg4);
     Font_SetActive(0x10, 0);
     Font_Printf(arg0 + 0xC, arg1 + 6, arg2);
     Font_EndTexturedTextRendering();
@@ -332,7 +332,7 @@ void func_820061F0(s8 *arg0, s32 arg1, s32 arg2, List820061F0 *arg3, s8 *arg4, C
     h = max * 0x18 + 0x18;
     func_8002D880(arg0 + 0x2C, arg0 + 0x50, arg4, (void (*)(s32, s32, char *, s32, s32, s32 *))func_82006154, h, 0x24);
     M2C_FIELD(arg0, s32 *, 0x4C) |= 0x10000;
-    func_8002A8C4(arg0, arg1, arg2, h + 0xC, arg3->count * 0x24 + 0x18);
+    Window_SetRect(arg0, arg1, arg2, h + 0xC, arg3->count * 0x24 + 0x18);
     M2C_FIELD(arg0, s32 *, 0x24) = 0;
     M2C_FIELD(arg0, s32 *, 0x20) = 0;
     M2C_FIELD(arg0, s32 *, 0x28) = 0;
@@ -381,7 +381,7 @@ void func_82006410(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4) {
     Color_RGBA8 c;
 
     if (arg4 & 0x10) {
-        func_8002A0AC(arg0 + 3, arg1 + 3, 0x46, 0x16, D_82009100);
+        Ui_FillRectHighlighted(arg0 + 3, arg1 + 3, 0x46, 0x16, D_82009100);
     }
     Font_BeginTranslucentTextRendering();
     c = ((Color_RGBA8*)&D_800734A8)[(arg4 & 2) ? 0 : 1];
@@ -408,12 +408,12 @@ extern Color_RGBA8 D_82009154;
 extern Color_RGBA8 D_82009158;
 extern Offset82006508 D_8200915C[];
 void func_8002A3F8(void*, s32, s32);
-void func_80029A64(s32, s32, s32, s32, Color_RGBA8);
+void Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
 
 void func_82006508(s32 x, s32 y, s32 present, s32 active, s32 markA, s32 markB) {
     s32 i;
 
-    func_8002A550(x, y, 0x186, 0x8D, D_8200914C, D_82009150);
+    Ui_FillRectPrimEnvColor(x, y, 0x186, 0x8D, D_8200914C, D_82009150);
     func_8002A3F8(D_8200911C, x + 0x88, y + 5);
     for (i = 0; i != 4; i++) {
         if ((present >> i) & 1) {
@@ -424,16 +424,16 @@ void func_82006508(s32 x, s32 y, s32 present, s32 active, s32 markA, s32 markB) 
             }
         }
         if ((markA >> i) & 1) {
-            func_80029A64(D_8200915C[i].x + x, D_8200915C[i].y + y, 0x3A, 0x43, D_82009154);
+            Ui_DrawRoundedFrame(D_8200915C[i].x + x, D_8200915C[i].y + y, 0x3A, 0x43, D_82009154);
         }
         if ((markB >> i) & 1) {
-            func_80029A64(D_8200915C[i].x + x, D_8200915C[i].y + y, 0x3A, 0x43, D_82009158);
+            Ui_DrawRoundedFrame(D_8200915C[i].x + x, D_8200915C[i].y + y, 0x3A, 0x43, D_82009158);
         }
     }
 }
 
 void func_82006410(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4);
-void func_8002A8C4(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+void Window_SetRect(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 M2C_UNK func_8002DDFC(s8 *, s32);                   /* extern */
 extern M2C_UNK D_8200917C;
 extern M2C_UNK D_82009F70;
@@ -442,7 +442,7 @@ extern M2C_UNK D_82009F70;
  * func_820066E8
  *
  * Initialises the object arg0 (layout not established): calls
- * func_8002A8C4(arg0, arg1, arg2, 0x192, 0x10F), clears the words at 0x24 and
+ * Window_SetRect(arg0, arg1, arg2, 0x192, 0x10F), clears the words at 0x24 and
  * 0x28, sets the word at 0x14 to 0x801 and the pointer at 0x20 to
  * &D_82009F70. Calls func_80027804 on the sub-object at arg0 + 0x2C with
  * (&D_8200917C, 4, 4), then func_8002D880 on the sub-objects at 0x38, 0x2C
@@ -466,7 +466,7 @@ void func_820066E8(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
     s8 *sp28;
     s32 var_v1;
 
-    func_8002A8C4(arg0, arg1, arg2, 0x192, 0x10F);
+    Window_SetRect(arg0, arg1, arg2, 0x192, 0x10F);
     M2C_FIELD(arg0, s32 *, 0x24) = 0;
     M2C_FIELD(arg0, s32 *, 0x28) = 0;
     M2C_FIELD(arg0, s32 *, 0x14) = 0x801;
@@ -501,13 +501,13 @@ extern char D_82009F84[];
 
 /**
  * Draws the object arg0 (layout not established; x at +0, y at +4, width at +8) while
- * func_8002AE6C() is zero: a frame via func_80029658 (at y + 0x92), a filled bar via
+ * func_8002AE6C() is zero: a frame via Ui_DrawTexturedDivider (at y + 0x92), a filled bar via
  * func_80029028 (colour D_82009100, height 0x70), the picture D_8200910C via func_8002A3F8,
  * the text D_82009F84 in the colour from D_800734A8, the sub-object at +0x38 via
  * func_8002D9B8, and finally func_82006508 with the words at +0x68 and +0x70, 1 and a
  * value chosen from the word at +0x40 (0 -> 2, 1 -> 4, 2 -> 8, otherwise 0).
  * What the constants mean is not established.
- * Matching note: func_80029658 and func_8002D9B8 must be declared void; their
+ * Matching note: Ui_DrawTexturedDivider and func_8002D9B8 must be declared void; their
  * (unused) return value would otherwise shift the compiler's register choices.
  */
 void func_82006810(s8* arg0) {
@@ -515,7 +515,7 @@ void func_82006810(s8* arg0) {
 
     sp2C = 0;
     if (func_8002AE6C() == 0) {
-        func_80029658(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0x92, M2C_FIELD(arg0, s32*, 8), &D_8007356C);
+        Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0x92, M2C_FIELD(arg0, s32*, 8), &D_8007356C);
         gSPDisplayList(gDisplayListHead++, D_80060270);
         func_80029028(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0x99, M2C_FIELD(arg0, s32*, 8) - 0xC, 0x70, *(Color82001CCC*)&D_82009100);
         func_8002A3F8(D_8200910C, M2C_FIELD(arg0, s32*, 0) + 0xA9, M2C_FIELD(arg0, s32*, 4) + 0xC1);
@@ -588,7 +588,7 @@ void func_82006AC0(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4) {
     Color_RGBA8 c;
 
     if (arg4 & 0x10) {
-        func_8002A0AC(arg0 + 3, arg1 + 3, 0x6E, 0x16, D_82009100);
+        Ui_FillRectHighlighted(arg0 + 3, arg1 + 3, 0x6E, 0x16, D_82009100);
     }
     Font_BeginTranslucentTextRendering();
     c = ((Color_RGBA8*)&D_800734A8)[(arg4 & 2) ? 0 : 1];
@@ -656,7 +656,7 @@ extern M2C_UNK D_82009FCC;
  * func_82006C74
  *
  * Initialises the object arg0 (layout not established): the same shape as
- * func_820066E8, but the embedded window starts at arg0 + 4 (func_8002A8C4 with
+ * func_820066E8, but the embedded window starts at arg0 + 4 (Window_SetRect with
  * 0x192 x 0x163), the words at 0x28 and 0x2C are cleared, the word at 0x18 is set to
  * 0x801 and the pointer at 0x24 to &D_82009FCC. Calls func_80027804 on the
  * sub-objects at arg0 + 0x30 (&D_82009190, 4, 4) and arg0 + 0x3C (&D_820091A0, 7, 7),
@@ -680,7 +680,7 @@ void func_82006C74(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
     s8 *sp28;
     s32 var_v1;
 
-    func_8002A8C4(arg0 + 4, arg1, arg2, 0x192, 0x163);
+    Window_SetRect(arg0 + 4, arg1, arg2, 0x192, 0x163);
     M2C_FIELD(arg0, s32 *, 0x28) = 0;
     M2C_FIELD(arg0, s32 *, 0x2C) = 0;
     M2C_FIELD(arg0, s32 *, 0x18) = 0x801;
@@ -721,7 +721,7 @@ void func_82006DF8(s8* arg0) {
     s32 markB = 0;
 
     if (func_8002AE6C(arg0 + 4) == 0) {
-        func_80029658(M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 8) + 0x92, M2C_FIELD(arg0, s32*, 0xC), &D_8007356C);
+        Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 8) + 0x92, M2C_FIELD(arg0, s32*, 0xC), &D_8007356C);
         gSPDisplayList(gDisplayListHead++, D_80060270);
         func_80029028(M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) + 0x99, M2C_FIELD(arg0, s32*, 0xC) - 0xC, 0xC4, *(Color82001CCC*)&D_82009100);
         func_8002A3F8(D_8200910C, M2C_FIELD(arg0, s32*, 4) + 0xA9, M2C_FIELD(arg0, s32*, 8) + 0xF9);
@@ -890,13 +890,13 @@ void func_82007398(s32 arg0, s32 arg1, s32* arg2, s32 arg3, s32 arg4) {
     Box82007398 sp24;
 
     if (arg4 & 0x10) {
-        func_8002A0AC(arg0 + 3, arg1 + 3, 0xB2, 0xC2, D_82009100);
+        Ui_FillRectHighlighted(arg0 + 3, arg1 + 3, 0xB2, 0xC2, D_82009100);
     }
     sp24.unk_08 = sp24.unk_04 = sp24.unk_00 = 0x98;
     sp24.unk_0C = arg2[2];
     func_8002A3F8((void*)&sp24, arg0 + 0x10, arg1 + 8);
     Font_BeginTranslucentTextRendering();
-    func_80027F20(arg4);
+    Font_SetColorForFlags(arg4);
     Font_SetActive(0x10, 0);
     Font_Printf(arg0 + 0x16, arg1 + 0xAA, (char*)arg2[0]);
     Font_EndTexturedTextRendering();
@@ -906,7 +906,7 @@ void func_82007398(s32 arg0, s32 arg1, s32* arg2, s32 arg3, s32 arg4) {
  * func_82007474
  *
  * Initialises the object arg0 (size and layout not established): calls
- * func_8002A8C4(arg0, arg1, arg2, 0x190, 0x12E), clears the words at 0x24
+ * Window_SetRect(arg0, arg1, arg2, 0x190, 0x12E), clears the words at 0x24
  * and 0x28, sets the word at 0x14 to 0x801 and the word at 0x20 to arg4.
  * Calls func_80027410 on the sub-object at arg0 + 0x54 with (arg3, 0xC, 2, 2),
  * then func_8002DECC on the sub-objects at 0x2C, 0x54 and 0x64 with
@@ -917,12 +917,12 @@ void func_82007398(s32 arg0, s32 arg1, s32* arg2, s32 arg3, s32 arg4) {
  * address arg0 + 0x54 is written out twice instead of being kept in a local:
  * a local moves the compiler's spill of it from sp+0x34 to sp+0x30.
  */
-void func_8002A8C4(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+void Window_SetRect(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 M2C_UNK func_80027410(s8 *, s32, M2C_UNK, M2C_UNK, s32); /* extern */
 M2C_UNK func_8002DECC(s8 *, s8 *, s8 *, M2C_UNK *, s32, s32, s32); /* extern */
 
 void func_82007474(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
-    func_8002A8C4(arg0, arg1, arg2, 0x190, 0x12E);
+    Window_SetRect(arg0, arg1, arg2, 0x190, 0x12E);
     M2C_FIELD(arg0, s32 *, 0x24) = 0;
     M2C_FIELD(arg0, s32 *, 0x28) = 0;
     M2C_FIELD(arg0, s32 *, 0x14) = 0x801;
@@ -945,22 +945,22 @@ M2C_UNK func_8002E230(s8*, s32, s32, s32, s32);
 
 /**
  * Draws the object arg0 (layout not established; x at +0, y at +4, width at +8)
- * while func_8002AE6C() is zero: a box via func_800295E8 (D_800735C4), the frame via
- * func_80029658, a filled bar via func_80029028 (colour D_82009100, height 0xDC), a second
- * panel via func_8002A550 (colours D_820091BC / D_820091C0), the sub-object at +0x2C via
+ * while func_8002AE6C() is zero: a box via Ui_DrawTexturedFrameDecal (D_800735C4), the frame via
+ * Ui_DrawTexturedDivider, a filled bar via func_80029028 (colour D_82009100, height 0xDC), a second
+ * panel via Ui_FillRectPrimEnvColor (colours D_820091BC / D_820091C0), the sub-object at +0x2C via
  * func_8002E230, and the text pointer stored at index [+0x34] of the table of 12-byte
  * records pointed to by the word at +0x68 (the pointer is the second word of a record),
  * printed in the colour from D_800734A8 via func_8001A944.
  * What the constants mean is not established.
- * Matching note: func_80029658 must be declared void (see func_82006810).
+ * Matching note: Ui_DrawTexturedDivider must be declared void (see func_82006810).
  */
 void func_8200752C(s8* arg0) {
     if (func_8002AE6C() == 0) {
-        func_800295E8(M2C_FIELD(arg0, s32*, 0) + 0xE, M2C_FIELD(arg0, s32*, 4) + 0xE, 0x174, 0xCC, D_800735C4);
-        func_80029658(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0xE1, M2C_FIELD(arg0, s32*, 8), &D_8007356C);
+        Ui_DrawTexturedFrameDecal(M2C_FIELD(arg0, s32*, 0) + 0xE, M2C_FIELD(arg0, s32*, 4) + 0xE, 0x174, 0xCC, D_800735C4);
+        Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0xE1, M2C_FIELD(arg0, s32*, 8), &D_8007356C);
         gSPDisplayList(gDisplayListHead++, D_80060270);
         func_80029028(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) - 0xC, 0xDC, *(Color82001CCC*)&D_82009100);
-        func_8002A550(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0xE8, M2C_FIELD(arg0, s32*, 8) - 0xC, 0x40, D_820091BC, D_820091C0);
+        Ui_FillRectPrimEnvColor(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0xE8, M2C_FIELD(arg0, s32*, 8) - 0xC, 0x40, D_820091BC, D_820091C0);
         func_8002E230(arg0 + 0x2C, M2C_FIELD(arg0, s32*, 0) + 0x10, M2C_FIELD(arg0, s32*, 4) + 0x10, 0xFFEF, 0);
         func_8001AB6C();
         func_8001AA9C(M2C_FIELD(&D_800734A8, u8*, 0), M2C_FIELD(&D_800734A8, u8*, 1), M2C_FIELD(&D_800734A8, u8*, 2), M2C_FIELD(&D_800734A8, u8*, 3));
@@ -1015,7 +1015,7 @@ void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 
 /**
  * Draws one entry of a list at (arg0, arg1). arg2 points to {text, icon}.
- * When bit 0x10 of arg4 is set it first calls func_8002A0AC(arg0 + 3,
+ * When bit 0x10 of arg4 is set it first calls Ui_FillRectHighlighted(arg0 + 3,
  * arg1 + 3, 0x14A, 0x1E, D_82009100). When bit 0x100 is set it emits the
  * display list D_80060290, draws the 0x18 by 0x18 image arg2->icon at
  * (arg0 + 0x12C, arg1 + 6) with func_8001B884 and emits D_80060398. It then
@@ -1028,7 +1028,7 @@ void func_82007784(s32 arg0, s32 arg1, IconPanel* arg2, s32 arg3, s32 arg4) {
     s32 sp28;
 
     if (arg4 & 0x10) {
-        func_8002A0AC(arg0 + 3, arg1 + 3, 0x14A, 0x1E, D_82009100);
+        Ui_FillRectHighlighted(arg0 + 3, arg1 + 3, 0x14A, 0x1E, D_82009100);
     }
     if (arg4 & 0x100) {
         gSPDisplayList(gDisplayListHead++, D_80060290);
@@ -1055,7 +1055,7 @@ void func_820078BC(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     } else {
         n = arg3 + 1;
     }
-    func_8002A8C4(arg0, arg1, arg2, 0x15C, 0xA8);
+    Window_SetRect(arg0, arg1, arg2, 0x15C, 0xA8);
     M2C_FIELD(arg0, s32*, 0x24) = 0;
     M2C_FIELD(arg0, u8**, 0x20) = NULL;
     M2C_FIELD(arg0, s32*, 0x28) = 0;
@@ -1130,7 +1130,7 @@ M2C_UNK func_80018234(s8*, s32, u8, u16);
  * Initialises the object arg0 (size and layout not established) and fills in a
  * per-entry table. Stores arg4 and arg5 in the second word of the two entries of
  * the 12-byte table D_820091EC, selects entry 1 when arg3 == 2 (otherwise entry 0),
- * calls func_8002A8C4(arg0, arg1, arg2, 0x235, 0x174), clears the words at 0x20, 0x24
+ * calls Window_SetRect(arg0, arg1, arg2, 0x235, 0x174), clears the words at 0x20, 0x24
  * and 0x28 and sets the word at 0x14 to 0x801. Copies the selected entry's first word to
  * 0x20 and builds the sub-object at arg0 + 0xCC with func_80027410 from the entry's
  * second and third words (stride 0x50, width 0x50). Calls func_80018168(arg6), stores
@@ -1155,7 +1155,7 @@ void func_82007C30(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s
     }
     D_820091EC[0].unk4 = arg4;
     D_820091EC[1].unk4 = arg5;
-    func_8002A8C4(arg0, arg1, arg2, 0x235, 0x174);
+    Window_SetRect(arg0, arg1, arg2, 0x235, 0x174);
     M2C_FIELD(arg0, s32*, 0x24) = 0;
     M2C_FIELD(arg0, s32*, 0x20) = 0;
     M2C_FIELD(arg0, s32*, 0x28) = 0;
@@ -1242,12 +1242,12 @@ s32 func_82008044(void* arg0) {
 typedef struct Str4_820080B8 {
     char c[4];
 } Str4_820080B8;
-void func_8002A8C4(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+void Window_SetRect(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 extern Str4_820080B8 D_8200920C;
 extern Str4_820080B8 D_82009210;
 extern u8 D_8200A0A0[];
 void func_820080B8(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
-    func_8002A8C4(arg0, arg1, arg2, 0x148, 0x68);
+    Window_SetRect(arg0, arg1, arg2, 0x148, 0x68);
     M2C_FIELD(arg0, s32*, 0x24) = 0;
     M2C_FIELD(arg0, s32*, 0x20) = 0;
     M2C_FIELD(arg0, s32*, 0x28) = 0;
@@ -1278,7 +1278,7 @@ void func_8200813C(s8* arg0) {
     }
 }
 
-void func_8002AE94(s8*, s32, s32, s32, Color_RGBA8, char*);
+void Window_InitLabeled(s8*, s32, s32, s32, Color_RGBA8, char*);
 void func_8000B2F4(s32);
 extern Color_RGBA8 D_82009218;
 extern char D_8200A104[];
@@ -1289,24 +1289,24 @@ extern char D_8200A11C[];
  * Initialises the object arg0 (size and layout not established); the same
  * setup as func_82008524 with different strings (D_8200A104, D_8200A114 and
  * D_8200A11C) and colour (D_82009218), and one more argument. Calls
- * func_8002A8C4(arg0, arg1, arg2, 0x134, 0x92), clears the words at 0x24 and
+ * Window_SetRect(arg0, arg1, arg2, 0x134, 0x92), clears the words at 0x24 and
  * 0x28, sets the word at 0x14 to 0x2801 and the pointer at 0x20 to D_8200A104.
- * Calls func_8002AE94 on the sub-objects at arg0 + 0x2C and arg0 + 0x68, sets
+ * Calls Window_InitLabeled on the sub-objects at arg0 + 0x2C and arg0 + 0x68, sets
  * the words at 0x58, 0x60, 0xAC and 0xA8 to 0xA, 0xC, 2 and 0, stores
  * D_800603C0 and then arg3 in the word at 0xA4 (calling func_8000B2F4 with
  * each), and finally stores arg3 at 0xB4 and arg4 at 0xB0.
  * What the object is and what the constants mean is not established.
  */
 void func_820081C8(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
-    func_8002A8C4(arg0, arg1, arg2, 0x134, 0x92);
+    Window_SetRect(arg0, arg1, arg2, 0x134, 0x92);
     M2C_FIELD(arg0, s32*, 0x24) = 0;
     M2C_FIELD(arg0, s32*, 0x28) = 0;
     M2C_FIELD(arg0, s32*, 0x14) = 0x2801;
     M2C_FIELD(arg0, char**, 0x20) = D_8200A104;
-    func_8002AE94(arg0 + 0x2C, M2C_FIELD(arg0, s32*, 0) + 0x2E, M2C_FIELD(arg0, s32*, 4) + 0x6E, 0x48, D_82009218, D_8200A114);
+    Window_InitLabeled(arg0 + 0x2C, M2C_FIELD(arg0, s32*, 0) + 0x2E, M2C_FIELD(arg0, s32*, 4) + 0x6E, 0x48, D_82009218, D_8200A114);
     M2C_FIELD(arg0, s32*, 0x58) = 0xA;
     M2C_FIELD(arg0, s32*, 0x60) = 0xC;
-    func_8002AE94(arg0 + 0x68, M2C_FIELD(arg0, s32*, 0) + 0xBE, M2C_FIELD(arg0, s32*, 4) + 0x6E, 0x48, D_82009218, D_8200A11C);
+    Window_InitLabeled(arg0 + 0x68, M2C_FIELD(arg0, s32*, 0) + 0xBE, M2C_FIELD(arg0, s32*, 4) + 0x6E, 0x48, D_82009218, D_8200A11C);
     M2C_FIELD(arg0, s32*, 0xAC) = 2;
     M2C_FIELD(arg0, s32*, 0xA8) = 0;
     M2C_FIELD(arg0, s32*, 0xA4) = D_800603C0;
@@ -1332,8 +1332,8 @@ extern char D_8200A124[];
  */
 void func_820082EC(s8* arg0) {
     if (func_8002AE6C() == 0) {
-        func_80029658(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0x61, M2C_FIELD(arg0, s32*, 8), &D_8007356C);
-        func_8002A550(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, 0x128, 0x5C, D_8200921C, D_82009220);
+        Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0x61, M2C_FIELD(arg0, s32*, 8), &D_8007356C);
+        Ui_FillRectPrimEnvColor(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, 0x128, 0x5C, D_8200921C, D_82009220);
         gSPDisplayList(gDisplayListHead++, D_80060270);
         func_80029028(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0x68, M2C_FIELD(arg0, s32*, 8) - 0xC, 0x24, *(Color82001CCC*)&D_82009100);
         func_8001AB6C();
@@ -1379,14 +1379,14 @@ extern Color_RGBA8 D_82009228;
 extern char D_8200A178[];
 extern char D_8200A188[];
 extern char D_8200A190[];
-void func_8002AE94(s8*, s32, s32, s32, Color_RGBA8, char*);
+void Window_InitLabeled(s8*, s32, s32, s32, Color_RGBA8, char*);
 void func_8000B2F4(s32);
 
 /**
  * Initialises the object arg0 (size and layout not established): calls
- * func_8002A8C4(arg0, arg1, arg2, 0x134, 0x92), clears the words at 0x24 and
+ * Window_SetRect(arg0, arg1, arg2, 0x134, 0x92), clears the words at 0x24 and
  * 0x28, sets the word at 0x14 to 0x2801 and the pointer at 0x20 to
- * D_8200A178. Calls func_8002AE94 twice, on the sub-objects at arg0 + 0x2C
+ * D_8200A178. Calls Window_InitLabeled twice, on the sub-objects at arg0 + 0x2C
  * (string D_8200A188) and arg0 + 0x68 (string D_8200A190), both with width
  * 0x48 and colour D_82009228 and positions derived from the words at 0 and 4.
  * Then sets the words at 0x58, 0x60, 0xAC and 0xA8 to 0xA, 0xC, 2 and 0, and
@@ -1395,15 +1395,15 @@ void func_8000B2F4(s32);
  * What the object is and what the constants mean is not established.
  */
 void func_82008524(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
-    func_8002A8C4(arg0, arg1, arg2, 0x134, 0x92);
+    Window_SetRect(arg0, arg1, arg2, 0x134, 0x92);
     M2C_FIELD(arg0, s32*, 0x24) = 0;
     M2C_FIELD(arg0, s32*, 0x28) = 0;
     M2C_FIELD(arg0, s32*, 0x14) = 0x2801;
     M2C_FIELD(arg0, char**, 0x20) = D_8200A178;
-    func_8002AE94(arg0 + 0x2C, M2C_FIELD(arg0, s32*, 0) + 0x2E, M2C_FIELD(arg0, s32*, 4) + 0x6E, 0x48, D_82009228, D_8200A188);
+    Window_InitLabeled(arg0 + 0x2C, M2C_FIELD(arg0, s32*, 0) + 0x2E, M2C_FIELD(arg0, s32*, 4) + 0x6E, 0x48, D_82009228, D_8200A188);
     M2C_FIELD(arg0, s32*, 0x58) = 0xA;
     M2C_FIELD(arg0, s32*, 0x60) = 0xC;
-    func_8002AE94(arg0 + 0x68, M2C_FIELD(arg0, s32*, 0) + 0xBE, M2C_FIELD(arg0, s32*, 4) + 0x6E, 0x48, D_82009228, D_8200A190);
+    Window_InitLabeled(arg0 + 0x68, M2C_FIELD(arg0, s32*, 0) + 0xBE, M2C_FIELD(arg0, s32*, 4) + 0x6E, 0x48, D_82009228, D_8200A190);
     M2C_FIELD(arg0, s32*, 0xAC) = 2;
     M2C_FIELD(arg0, s32*, 0xA8) = 0;
     M2C_FIELD(arg0, s32*, 0xA4) = D_800603C0;
@@ -1422,7 +1422,7 @@ extern char D_8200A198[];
  * func_82008524 / func_82008870 initialise: x at +0, y at +4, width at +8, a
  * selection index at +0xA8 and two sub-objects at +0x2C and +0x68). Does nothing
  * while func_8002AE6C() is non-zero. Otherwise it draws the frame with
- * func_80029658 and func_8002A550, emits D_80060270 and fills a bar with
+ * Ui_DrawTexturedDivider and Ui_FillRectPrimEnvColor, emits D_80060270 and fills a bar with
  * func_80029028 (colour D_82009100), then prints the string D_8200A198 with the
  * font colour from D_800734A8 via func_8001A944, and finally calls func_8002AF04
  * on the two sub-objects with 2 for the one whose index (0 for +0x2C, 1 for +0x68)
@@ -1431,8 +1431,8 @@ extern char D_8200A198[];
  */
 void func_82008640(s8* arg0) {
     if (func_8002AE6C() == 0) {
-        func_80029658(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0x61, M2C_FIELD(arg0, s32*, 8), &D_8007356C);
-        func_8002A550(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, 0x128, 0x5C, D_8200922C, D_82009230);
+        Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0x61, M2C_FIELD(arg0, s32*, 8), &D_8007356C);
+        Ui_FillRectPrimEnvColor(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, 0x128, 0x5C, D_8200922C, D_82009230);
         gSPDisplayList(gDisplayListHead++, D_80060270);
         func_80029028(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0x68, M2C_FIELD(arg0, s32*, 8) - 0xC, 0x24, *(Color82001CCC*)&D_82009100);
         func_8001AB6C();
@@ -1481,8 +1481,8 @@ extern char D_8200A1FC[];
 
 /**
  * Initialises the object arg0 (size and layout not established); a sibling of
- * func_820009A4. Calls func_8002A8C4(arg0, arg1, arg2, 0x18C, 0x66), clears the words at
- * 0x20, 0x24 and 0x28 and sets the word at 0x14 to 0x1001. Calls func_8002AE94 three times,
+ * func_820009A4. Calls Window_SetRect(arg0, arg1, arg2, 0x18C, 0x66), clears the words at
+ * 0x20, 0x24 and 0x28 and sets the word at 0x14 to 0x1001. Calls Window_InitLabeled three times,
  * on the sub-objects at arg0 + 0x2C (string D_8200A1EC), + 0x68 (D_8200A1F4) and + 0xA4
  * (D_8200A1FC, width 0x5C; the other two use width 0x48), all with colour D_82009234 and
  * positions derived from the words at 0 and 4; the words at 0x58 and 0x60 are set to 0xA
@@ -1492,16 +1492,16 @@ extern char D_8200A1FC[];
  * What the object is and what the constants mean is not established.
  */
 void func_82008870(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
-    func_8002A8C4(arg0, arg1, arg2, 0x18C, 0x66);
+    Window_SetRect(arg0, arg1, arg2, 0x18C, 0x66);
     M2C_FIELD(arg0, s32*, 0x24) = 0;
     M2C_FIELD(arg0, s32*, 0x20) = 0;
     M2C_FIELD(arg0, s32*, 0x28) = 0;
     M2C_FIELD(arg0, s32*, 0x14) = 0x1001;
-    func_8002AE94(arg0 + 0x2C, M2C_FIELD(arg0, s32*, 0) + 0x76, M2C_FIELD(arg0, s32*, 4) + 0x42, 0x48, D_82009234, D_8200A1EC);
+    Window_InitLabeled(arg0 + 0x2C, M2C_FIELD(arg0, s32*, 0) + 0x76, M2C_FIELD(arg0, s32*, 4) + 0x42, 0x48, D_82009234, D_8200A1EC);
     M2C_FIELD(arg0, s32*, 0x58) = 0xA;
     M2C_FIELD(arg0, s32*, 0x60) = 0xC;
-    func_8002AE94(arg0 + 0x68, M2C_FIELD(arg0, s32*, 0) + 0xC6, M2C_FIELD(arg0, s32*, 4) + 0x42, 0x48, D_82009234, D_8200A1F4);
-    func_8002AE94(arg0 + 0xA4, M2C_FIELD(arg0, s32*, 0) + 0x122, M2C_FIELD(arg0, s32*, 4) + 0x42, 0x5C, D_82009234, D_8200A1FC);
+    Window_InitLabeled(arg0 + 0x68, M2C_FIELD(arg0, s32*, 0) + 0xC6, M2C_FIELD(arg0, s32*, 4) + 0x42, 0x48, D_82009234, D_8200A1F4);
+    Window_InitLabeled(arg0 + 0xA4, M2C_FIELD(arg0, s32*, 0) + 0x122, M2C_FIELD(arg0, s32*, 4) + 0x42, 0x5C, D_82009234, D_8200A1FC);
     M2C_FIELD(arg0, s32*, 0xE4) = 0;
     M2C_FIELD(arg0, s32*, 0xEC) = arg3;
     if (arg3 != 0) {
@@ -1531,8 +1531,8 @@ extern char D_8200A208[];
  */
 void FreeBattle_DrawEntryConfirm(s8* arg0) {
     if (func_8002AE6C() == 0) {
-        func_80029658(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0x35, M2C_FIELD(arg0, s32*, 8), &D_8007356C);
-        func_8002A550(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) - 0xC, 0x30, D_82009238, D_8200923C);
+        Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0x35, M2C_FIELD(arg0, s32*, 8), &D_8007356C);
+        Ui_FillRectPrimEnvColor(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) - 0xC, 0x30, D_82009238, D_8200923C);
         gSPDisplayList(gDisplayListHead++, D_80060270);
         func_80029028(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0x3C, M2C_FIELD(arg0, s32*, 8) - 0xC, 0x24, *(Color82001CCC*)&D_82009100);
         func_8001AB6C();

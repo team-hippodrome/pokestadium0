@@ -176,7 +176,7 @@ extern s32 D_8200AC58[];
 extern M2C_UNK D_82009C98;
 void func_82001810();
 extern M2C_UNK func_820020EC;
-void func_8002A8C4(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+void Window_SetRect(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 M2C_UNK func_8002EC24(s8*, s32, s8*, M2C_UNK, M2C_UNK*, s32, s32);
 M2C_UNK func_80030894(s8*, s8*, s8*, M2C_UNK, s32, M2C_UNK*, s32, s32);
 M2C_UNK func_80027410(s8*, s32, M2C_UNK, M2C_UNK, s32);
@@ -186,7 +186,7 @@ void func_82002C3C(s8*);
 /**
  * Initializes the slot-menu object at arg0 (the layout other functions in this file
  * access as SlotMenu):
- *   - sets up the base window at +0x14 via func_8002A8C4 (arg1, arg2, size 0x220 x 0x158),
+ *   - sets up the base window at +0x14 via Window_SetRect (arg1, arg2, size 0x220 x 0x158),
  *   - zeroes +0x00/+0x38/+0x3C, stores 0x801 at +0x28, &D_82009C98 at +0x34 and arg3 at +0xC4,
  *   - creates the sub-object at +0x40/+0x84 with func_8002EC24 (passing &func_820020EC),
  *   - sets bit 0x10000 at +0x60,
@@ -201,7 +201,7 @@ void func_82002C3C(s8*);
 void func_82002D5C(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
     s8* var_s1;
 
-    func_8002A8C4(arg0 + 0x14, arg1, arg2, 0x220, 0x158);
+    Window_SetRect(arg0 + 0x14, arg1, arg2, 0x220, 0x158);
     M2C_FIELD(arg0, s32*, 0x38) = 0;
     M2C_FIELD(arg0, s32*, 0x3C) = 0;
     M2C_FIELD(arg0, s32*, 0x28) = 0x801;
@@ -261,12 +261,12 @@ extern char D_800735C4[];
 extern Color82001CCC D_82009098[];
 extern s32 D_820090A8[];
 extern char D_82009CF0[];
-void func_800295E8(s32, s32, s32, s32, char*);
+void Ui_DrawTexturedFrameDecal(s32, s32, s32, s32, char*);
 
 /**
  * Draws a labelled box using the menu object arg0 (layout not established; it
  * reads the words at 0x14, 0x18 and the mode index at 0x738). Calls
- * func_800295E8 at (word 0x14 + 0x127, word 0x18 - 0x12) with size 0xA6 by 0x14
+ * Ui_DrawTexturedFrameDecal at (word 0x14 + 0x127, word 0x18 - 0x12) with size 0xA6 by 0x14
  * and D_800735C4, emits D_80060270 and fills a 0xA2 by 0x10 rectangle at
  * (+0x129, -0x10) with the colour D_82009098[mode - 1]. Then prints the string
  * D_82009CF0 at (+0x12A, -0x10) in the colour D_800734A8, font 4, passing
@@ -274,7 +274,7 @@ void func_800295E8(s32, s32, s32, s32, char*);
  * @unverified Name guessed from the code; comment kept.
  */
 void FreeBattle_DrawChoosingLabel(s8* arg0) {
-    func_800295E8(M2C_FIELD(arg0, s32*, 0x14) + 0x127, M2C_FIELD(arg0, s32*, 0x18) - 0x12, 0xA6, 0x14, D_800735C4);
+    Ui_DrawTexturedFrameDecal(M2C_FIELD(arg0, s32*, 0x14) + 0x127, M2C_FIELD(arg0, s32*, 0x18) - 0x12, 0xA6, 0x14, D_800735C4);
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(M2C_FIELD(arg0, s32*, 0x14) + 0x129, M2C_FIELD(arg0, s32*, 0x18) - 0x10, 0xA2, 0x10, D_82009098[M2C_FIELD(arg0, s32*, 0x738) - 1]);
     func_8001AB6C();

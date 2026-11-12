@@ -160,23 +160,23 @@ s32 LabPC_AllBoxesEmpty(s8* arg0) {
     return 1;
 }
 
-void func_8002A8C4(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
-void func_8002AE94(s8* arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 arg4, char* arg5);
+void Window_SetRect(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+void Window_InitLabeled(s8* arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 arg4, char* arg5);
 M2C_UNK func_8000B2F4(s32);
 extern s32 D_800603C0;
 extern u8 D_8900A870[];
 extern char D_89018E60[];
 extern char D_89018E68[];
 void func_89007374(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, u16 *arg6) {
-    func_8002A8C4(arg0, arg1, arg2, 0x1AE, 0x124);
+    Window_SetRect(arg0, arg1, arg2, 0x1AE, 0x124);
     M2C_FIELD(arg0, s32 *, 0x24) = 0;
     M2C_FIELD(arg0, s32 *, 0x20) = 0;
     M2C_FIELD(arg0, s32 *, 0x28) = 0;
     M2C_FIELD(arg0, s32 *, 0x14) = 0x1001;
-    func_8002AE94(arg0 + 0x2C, M2C_FIELD(arg0, s32 *, 0) + 0x10A, M2C_FIELD(arg0, s32 *, 4) + 0x100, 0x48, *(Color_RGBA8 *)D_8900A870, D_89018E60);
+    Window_InitLabeled(arg0 + 0x2C, M2C_FIELD(arg0, s32 *, 0) + 0x10A, M2C_FIELD(arg0, s32 *, 4) + 0x100, 0x48, *(Color_RGBA8 *)D_8900A870, D_89018E60);
     M2C_FIELD(arg0, s32 *, 0x58) = 0xA;
     M2C_FIELD(arg0, s32 *, 0x60) = 0xC;
-    func_8002AE94(arg0 + 0x68, M2C_FIELD(arg0, s32 *, 0) + 0x15A, M2C_FIELD(arg0, s32 *, 4) + 0x100, 0x48, *(Color_RGBA8 *)D_8900A870, D_89018E68);
+    Window_InitLabeled(arg0 + 0x68, M2C_FIELD(arg0, s32 *, 0) + 0x15A, M2C_FIELD(arg0, s32 *, 4) + 0x100, 0x48, *(Color_RGBA8 *)D_8900A870, D_89018E68);
     M2C_FIELD(arg0, s32 *, 0xAC) = 2;
     M2C_FIELD(arg0, s32 *, 0xA8) = 0;
     M2C_FIELD(arg0, s32 *, 0xA4) = D_800603C0;
@@ -323,8 +323,8 @@ void func_8001ABE8(void);
 void func_8001AC3C(void);
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 void func_80029028(s32, s32, s32, s32, Color_RGBA8);
-void func_80029658(s32, s32, s32, u8*);
-void func_8002A550(s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
+void Ui_DrawTexturedDivider(s32, s32, s32, u8*);
+void Ui_FillRectPrimEnvColor(s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
 s32 func_8002AE6C();
 void func_8002AF04(char*, s32);
 s32 func_8002D3D0(Mon89007678*);
@@ -343,12 +343,12 @@ void PcBox_DrawMonStatusWindow(Screen89007678* arg0) {
     u8* tex;
 
     if (func_8002AE6C(arg0) == 0) {
-        func_80029658(arg0->x, arg0->y + 0xF3, arg0->w, D_8007356C);
+        Ui_DrawTexturedDivider(arg0->x, arg0->y + 0xF3, arg0->w, D_8007356C);
         gSPDisplayList(gDisplayListHead++, D_80060270);
         func_80029028(x, y, arg0->w - 0xC, 0x20, D_8900A874);
         func_80029028(x + 0x78, y + 0x20, arg0->w - 0x84, 0x78, D_8900A878);
         func_80029028(x, y + 0xF4, arg0->w - 0xC, 0x24, *(Color_RGBA8*)&D_8900A5BC);
-        func_8002A550(x, y + 0x98, arg0->w - 0xC, 0x56, D_8900A87C, D_8900A880);
+        Ui_FillRectPrimEnvColor(x, y + 0x98, arg0->w - 0xC, 0x56, D_8900A87C, D_8900A880);
         func_8001AB6C();
         func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF);
         func_8001A384(8, 0);
@@ -447,10 +447,10 @@ extern Gfx D_80073438[];
 extern Gfx D_80073450[];
 extern u8 D_04011A60[];
 void func_80029028(s32, s32, s32, s32, Color_RGBA8);
-void func_8002A0AC(s32, s32, s32, s32, Color_RGBA8);
+void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
 void func_8001BCB4(s32, s32, s32, s32, u8*, s32, s32);
 void Trade_DrawDigitStrip(s32, s32, u8);
-void func_80027F20(s32);
+void Font_SetColorForFlags(s32);
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 u8* func_80018DEC(s32, s32);
 void func_89007D54(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4, s32 arg5) {
@@ -465,15 +465,15 @@ void func_89007D54(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4, s32 arg5) {
     func_80029028(arg0 + 0x59, arg1 + 1, 1, 0x40, D_8900A8D8);
     if (arg2 != NULL) {
         if (arg4 & 0x10) {
-            func_8002A0AC(arg0 + 3, arg1 + 3, 0x54, 0x2C, *(Color_RGBA8*)&D_8900A5BC);
-            func_8002A0AC(arg0 + 3, arg1 + 0x2F, 0x54, 0x10, D_8900A8D4);
+            Ui_FillRectHighlighted(arg0 + 3, arg1 + 3, 0x54, 0x2C, *(Color_RGBA8*)&D_8900A5BC);
+            Ui_FillRectHighlighted(arg0 + 3, arg1 + 0x2F, 0x54, 0x10, D_8900A8D4);
         }
         gSPDisplayList(gDisplayListHead++, D_80073450);
         gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
         func_8001BCB4(arg0 + 4, arg1 + 0x24, 8, 0xA, D_04011A60, 8, 0);
         Trade_DrawDigitStrip(arg0 + 0xE, arg1 + 0x22, arg2[0x24]);
         func_8001AB6C();
-        func_80027F20(arg4);
+        Font_SetColorForFlags(arg4);
         func_8001A384(4, 0);
         func_8001A944(arg0 + 5, arg1 + 0x30, arg2 + 0x30);
         func_8001ABBC();
@@ -501,7 +501,7 @@ void func_8900806C(s8* arg0, s32 arg1, s32 arg2, u8* arg3, s32 arg4, s32 arg5, s
     func_8000A460((char*)D_890289E0, (arg5 == 0) ? D_89018EE8 : D_89018EF0);
     *(Str8900806C*)(func_800566BC((char*)D_890289E0) + D_890289E0) = *(Str8900806C*)D_89018EF8;
     D_890289E0[func_800566BC((char*)D_890289E0) - 1] += arg6 + 1;
-    func_8002A8C4(arg0, arg1, arg2, 0x228, 0x156);
+    Window_SetRect(arg0, arg1, arg2, 0x228, 0x156);
     M2C_FIELD(arg0, s32*, 0x24) = 0;
     M2C_FIELD(arg0, s32*, 0x28) = 0;
     M2C_FIELD(arg0, s32*, 0x14) = 0x801;
@@ -555,7 +555,7 @@ s32 func_890082FC(s32 arg0) {
 
 extern Gfx D_80060270[];
 void func_80029028(s32, s32, s32, s32, Color_RGBA8);
-void func_8002A0AC(s32, s32, s32, s32, Color_RGBA8);
+void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
 void func_8002A3F8(void*, s32, s32);
 extern Color_RGBA8 D_8900A8F8;
 extern Color_RGBA8 D_8900A900;
@@ -582,7 +582,7 @@ void PcBox_DrawBoxName(s32 arg0, s32 arg1, u8** arg2, s32 arg3, s32 arg4) {
     func_80029028(arg0, arg1, 0xCE, 1, D_8900A8F0);
     func_80029028(arg0, arg1 + 0x1B, 0xCE, 1, D_8900A8F0);
     if (arg4 & 0x18) {
-        func_8002A0AC(arg0 + 3, arg1 + 3, 0xC8, 0x16, *(Color_RGBA8*)&D_8900A5BC);
+        Ui_FillRectHighlighted(arg0 + 3, arg1 + 3, 0xC8, 0x16, *(Color_RGBA8*)&D_8900A5BC);
     }
     func_8001AB6C();
     func_8001A384(8, 0);
@@ -624,7 +624,7 @@ void PcBox_DrawBoxCount(s32 arg0, s32 arg1, u8** arg2, s32 arg3, s32 arg4) {
     func_80029028(arg0, arg1, 0x104, 1, D_8900A900);
     func_80029028(arg0, arg1 + 0x37, 0x104, 1, D_8900A900);
     if (arg4 & 0x18) {
-        func_8002A0AC(arg0 + 3, arg1 + 3, 0xFE, 0x32, *(Color_RGBA8*)&D_8900A5BC);
+        Ui_FillRectHighlighted(arg0 + 3, arg1 + 3, 0xFE, 0x32, *(Color_RGBA8*)&D_8900A5BC);
     }
     func_8001AB6C();
     func_8001A384(0x10, 0);
@@ -661,10 +661,10 @@ extern char D_89018F3C[];
 extern s32 D_89019114;
 extern Gfx D_80073408[];
 extern Gfx D_80073438[];
-void func_8002A550(s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
+void Ui_FillRectPrimEnvColor(s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 s32 func_8002BC44(s32);
-void func_80027F20(s32);
+void Font_SetColorForFlags(s32);
 /**
  * Draws ＧＢのカートリッジ (GB cartridge) or ６４のカセット (N64 cassette) for `kind`.
  * @unverified Name and comment guessed from the code.
@@ -677,7 +677,7 @@ void PcBox_DrawStorageLabel(s32 x, s32 y, s32 flags, s32 kind) {
     } else {
         c = &D_8900A90C;
     }
-    func_8002A550(x, y, D_8900A914[kind], 0x2C, c->prim, c->env);
+    Ui_FillRectPrimEnvColor(x, y, D_8900A914[kind], 0x2C, c->prim, c->env);
     gSPDisplayList(gDisplayListHead++, D_80073408);
     switch (kind) {
         case 0:
@@ -689,7 +689,7 @@ void PcBox_DrawStorageLabel(s32 x, s32 y, s32 flags, s32 kind) {
     }
     gSPDisplayList(gDisplayListHead++, D_80073438);
     Font_BeginTranslucentTextRendering();
-    func_80027F20(flags);
+    Font_SetColorForFlags(flags);
     Font_SetActive(8, 0);
     switch (kind) {
         case 0:
@@ -715,12 +715,12 @@ extern u8 D_8900F5E0[];
 extern u8 D_89010368[];
 extern char D_89018F4C[];
 void func_89008AF4(s8* arg0, s32 x, s32 y, s8* arg3) {
-    func_8002A8C4(arg0 + 4, x, y, 0x234, 0x172);
+    Window_SetRect(arg0 + 4, x, y, 0x234, 0x172);
     M2C_FIELD(arg0, s32*, 0x28) = 0;
     M2C_FIELD(arg0, s32*, 0x2C) = 0;
     M2C_FIELD(arg0, s32*, 0x18) = 0x801;
     M2C_FIELD(arg0, char**, 0x24) = D_89018F4C;
-    func_8002A8C4(arg0 + 0x30, M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) + 0x12C, M2C_FIELD(arg0, s32*, 0xC) - 0xC, 0x40);
+    Window_SetRect(arg0 + 0x30, M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) + 0x12C, M2C_FIELD(arg0, s32*, 0xC) - 0xC, 0x40);
     M2C_FIELD(arg0, s32*, 0x44) = 6;
     M2C_FIELD(arg0, Rgba8900806C*, 0x48) = D_8900A91C;
     M2C_FIELD(arg0, Rgba8900806C*, 0x4C) = D_8900A920;
@@ -770,8 +770,8 @@ void func_89008EF0(s8* arg0) {
 }
 
 void func_8002A8E0(s8*);
-void func_80029658(s32, s32, s32, u8*);
-void func_800295E8(s32, s32, s32, s32, u8*);
+void Ui_DrawTexturedDivider(s32, s32, s32, u8*);
+void Ui_DrawTexturedFrameDecal(s32, s32, s32, s32, u8*);
 void func_8002B054(s8*, s32);
 void func_8002DAD8(s8*, s32, s32, s32, s32);
 void func_8002D024(s8*);
@@ -794,9 +794,9 @@ void func_89008F4C(s8* arg0) {
     func_80029028(M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) + 0x10, 0xA, 0x10C, *(Color_RGBA8*)&D_8900A5BC);
     func_80029028(M2C_FIELD(arg0, s32*, 0xC) + M2C_FIELD(arg0, s32*, 4) - 0x10, M2C_FIELD(arg0, s32*, 8) + 0x10, 0xA, 0x10C, *(Color_RGBA8*)&D_8900A5BC);
     func_80029028(M2C_FIELD(arg0, s32*, 4) + 0xDE, M2C_FIELD(arg0, s32*, 8) + 0x10, 0x42, 0x10C, *(Color_RGBA8*)&D_8900A5BC);
-    func_80029658(M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 8) + 0x125, M2C_FIELD(arg0, s32*, 0xC), D_8007356C);
-    func_800295E8(M2C_FIELD(arg0, s32*, 4) + 0xE, M2C_FIELD(arg0, s32*, 8) + 0xE, 0xD2, 0x110, D_800735C4);
-    func_800295E8(M2C_FIELD(arg0, s32*, 4) + 0x11E, M2C_FIELD(arg0, s32*, 8) + 0xE, 0x108, 0x110, D_800735C4);
+    Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 8) + 0x125, M2C_FIELD(arg0, s32*, 0xC), D_8007356C);
+    Ui_DrawTexturedFrameDecal(M2C_FIELD(arg0, s32*, 4) + 0xE, M2C_FIELD(arg0, s32*, 8) + 0xE, 0xD2, 0x110, D_800735C4);
+    Ui_DrawTexturedFrameDecal(M2C_FIELD(arg0, s32*, 4) + 0x11E, M2C_FIELD(arg0, s32*, 8) + 0xE, 0x108, 0x110, D_800735C4);
     flags[1] = flags[0] = 0xFFED;
     switch (M2C_FIELD(arg0, s32*, 0)) {
         case 1:
@@ -1273,7 +1273,7 @@ void func_8900A1A4(s32 arg0) {
     func_80002620(0x50424F58);
 }
 
-void func_8002C064(s32, s32, s32, s32, s32);
+void Ui_DrawTintedScreenBackground(s32, s32, s32, s32, s32);
 extern u8 D_8900A5B8[];
 void func_89008F4C(s8*);
 void func_8002CAD0(s8*);
@@ -1284,7 +1284,7 @@ void PcBox_DrawMonStatusWindow(Screen89007678*);
  */
 void PcBox_DrawScreen(s8* arg0) {
     func_800069CC();
-    func_8002C064(0x38, 0x1E0, D_8900A5B8[0], D_8900A5B8[1], D_8900A5B8[2]);
+    Ui_DrawTintedScreenBackground(0x38, 0x1E0, D_8900A5B8[0], D_8900A5B8[1], D_8900A5B8[2]);
     switch (*(s32*)arg0) {
         case 1:
             func_89008F4C(arg0 + 4);

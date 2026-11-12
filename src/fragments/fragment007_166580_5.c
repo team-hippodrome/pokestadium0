@@ -235,7 +235,7 @@ void func_82004BC0(s8 *arg0)
 }
 
 void func_800069CC(void);
-M2C_UNK func_8002C064(M2C_UNK, M2C_UNK, u8, u8, s32);
+M2C_UNK Ui_DrawTintedScreenBackground(M2C_UNK, M2C_UNK, u8, u8, s32);
 extern u8 D_82008F50[];
 void func_8200752C(s8*);
 void func_82005EE4(s8*, s32);
@@ -250,7 +250,7 @@ M2C_UNK func_82004CE0(s32 arg0) {
     s8* base = (s8*)arg0;
 
     func_800069CC();
-    func_8002C064(0x38, 0x1E0, D_82008F50[0], D_82008F50[1], D_82008F50[2]);
+    Ui_DrawTintedScreenBackground(0x38, 0x1E0, D_82008F50[0], D_82008F50[1], D_82008F50[2]);
     switch (*(s32*)base) {
         case 1:
             func_8200752C(base + 0x4378);
@@ -613,7 +613,7 @@ extern s32 D_820090D4_2;
 extern M2C_UNK D_82009E10;
 M2C_UNK func_80028060(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
 void func_800069CC(void);
-M2C_UNK func_8002C064(M2C_UNK, M2C_UNK, u8, u8, s32);
+M2C_UNK Ui_DrawTintedScreenBackground(M2C_UNK, M2C_UNK, u8, u8, s32);
 void func_8002C8D8(Col8200579C*, Col8200579C, f32);
 s32 func_8200579C(s32 arg0) {
     Col8200579C sp2C;
@@ -637,7 +637,7 @@ s32 func_8200579C(s32 arg0) {
     func_80028060(0, var_a1, &D_82009E10, D_8200AD2C);
     n = D_820090D4;
     func_8002C8D8(&sp2C, *(Col8200579C*)&D_82008F50, n / (f64)8.0f);
-    func_8002C064(0x38, 0x1E0, sp2C.r, sp2C.g, sp2C.b);
+    Ui_DrawTintedScreenBackground(0x38, 0x1E0, sp2C.r, sp2C.g, sp2C.b);
     if (D_820090D8 == 0) {
         n = D_820090D4;
         n++;

@@ -85,8 +85,8 @@ extern Color_RGBA8 D_8A1057D4;
 extern Color_RGBA8 D_8A1057D8;
 extern char D_8A12FC30[];
 void func_80029028(s32, s32, s32, s32, Color_RGBA8);
-void func_8002A0AC(s32, s32, s32, s32, Color_RGBA8);
-void func_80027F20(s32);
+void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
+void Font_SetColorForFlags(s32);
 s32 func_800231C8(s32, s32);
 void func_8001A944(s32, s32, const char*, ...);
 void func_8A100104(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s32* arg5) {
@@ -107,7 +107,7 @@ void func_8A100104(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s32* arg5
     func_80029028(arg0, arg1 + 0x23, 0x104, 1, D_8A1057D8);
     func_80029028(arg0, arg1 + 1, 0x104, 0x22, D_8A1057D4);
     if (arg4 & 0x10) {
-        func_8002A0AC(arg0 + 3, arg1 + 3, 0xFE, 0x1E, D_8A1057D4);
+        Ui_FillRectHighlighted(arg0 + 3, arg1 + 3, 0xFE, 0x1E, D_8A1057D4);
     }
     if (progress == 2) {
         func_8A100020(arg0 + 0x58, arg1 + 8, 0);
@@ -116,7 +116,7 @@ void func_8A100104(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s32* arg5
         func_8A100020(arg0 + 0x58, arg1 + 8, 1);
     }
     func_8001AB6C();
-    func_80027F20(arg4);
+    Font_SetColorForFlags(arg4);
     func_8001A384(8, 0);
     func_8001A944(arg0 + 0x10, arg1 + 8, D_8A12FC30, idx + 1);
     if (progress != 0) {
@@ -130,7 +130,7 @@ void func_8A100104(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s32* arg5
  * func_8A100318
  *
  * Initialises a record in the same way as func_8A1009E0, func_8A20034C and
- * func_8002CA34: func_8002A8C4 fills the first five words with
+ * func_8002CA34: Window_SetRect fills the first five words with
  * (arg1, arg2, 0x110, 0x16E, 0), the words at +0x24 and +0x28 are cleared,
  * +0x14 is set to 0x801 and +0x20 to the address of D_8A12FC38.  It then
  * sets up two sub-objects:
@@ -151,7 +151,7 @@ extern M2C_UNK D_80064C5C;
 extern M2C_UNK D_8A12FC38;
 
 void func_8A100318(void* arg0, s32 arg1, s32 arg2) {
-    func_8002A8C4((s8 *)arg0, arg1, arg2, 0x110, 0x16E);
+    Window_SetRect((s8 *)arg0, arg1, arg2, 0x110, 0x16E);
     M2C_FIELD(arg0, s32 *, 0x24) = 0;
     M2C_FIELD(arg0, s32 *, 0x28) = 0;
     M2C_FIELD(arg0, s32 *, 0x14) = 0x801;
@@ -163,7 +163,7 @@ void func_8A100318(void* arg0, s32 arg1, s32 arg2) {
 }
 
 s32 func_8002AE6C();
-s32 func_80029658(s32, s32, s32, void*);
+s32 Ui_DrawTexturedDivider(s32, s32, s32, void*);
 void func_80029028(s32, s32, s32, s32, Color_RGBA8);
 void func_8002F6C4(void*, s32, s32, s32, s32);
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
@@ -184,7 +184,7 @@ void Pokedex_DrawSortOrderMenu(s8* arg0, u32 arg1) {
     char* str;
 
     if (func_8002AE6C() == 0) {
-        func_80029658(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0x145, M2C_FIELD(arg0, s32*, 8), &D_8007356C);
+        Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0x145, M2C_FIELD(arg0, s32*, 8), &D_8007356C);
         func_8002F6C4(arg0 + 0x2C, M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0x16, arg1 | 0xFFED, (s32)(arg0 + 0x1B0));
         gSPDisplayList(gDisplayListHead++, D_80060270);
         func_80029028(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0x14C, M2C_FIELD(arg0, s32*, 8) - 0xC, 0x1C, D_8A1057DC);
@@ -235,7 +235,7 @@ extern Rgba8A100620 D_8A1057E0;
 extern Rgba8A100620 D_8A1057E4;
 
 void func_8A100620(void* arg0, s32 arg1, s32 arg2) {
-    func_8002A8C4((s8*)arg0, arg1, arg2, 0xF8, 0x68);
+    Window_SetRect((s8*)arg0, arg1, arg2, 0xF8, 0x68);
     M2C_FIELD(arg0, s32*, 0x24) = 0;
     M2C_FIELD(arg0, s32*, 0x20) = 0;
     M2C_FIELD(arg0, s32*, 0x28) = 0;
@@ -278,15 +278,15 @@ void Pokedex_DrawCounts(void* arg0) {
 }
 
 extern Color_RGBA8 D_8A1057D4;
-void func_8002A0AC(s32, s32, s32, s32, Color_RGBA8);
-void func_80027F20(s32);
+void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
+void Font_SetColorForFlags(s32);
 
 void func_8A100808(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4) {
     if (arg4 & 0x10) {
-        func_8002A0AC(arg0 + 3, arg1 + 3, 0xA2, 0x1E, D_8A1057D4);
+        Ui_FillRectHighlighted(arg0 + 3, arg1 + 3, 0xA2, 0x1E, D_8A1057D4);
     }
     Font_BeginTranslucentTextRendering();
-    func_80027F20(arg4);
+    Font_SetColorForFlags(arg4);
     Font_SetActive(0x10, 0);
     Font_Printf(arg0 + 0xC, arg1 + 6, arg2);
     Font_EndTexturedTextRendering();
@@ -297,7 +297,7 @@ M2C_UNK func_80027804();
 void func_8A1008A4(void* arg0, s32 arg1, s32 arg2) {
     s32 pad; // FAKE: stack padding
 
-    func_8002A8C4((s8*)arg0, arg1, arg2, 0xB4, 0xA8);
+    Window_SetRect((s8*)arg0, arg1, arg2, 0xB4, 0xA8);
     M2C_FIELD(arg0, s32*, 0x24) = 0;
     M2C_FIELD(arg0, s32*, 0x20) = 0;
     M2C_FIELD(arg0, s32*, 0x28) = 0;
@@ -336,13 +336,13 @@ s32 func_8A1009A4(s32 arg0) {
  * func_8A1009E0
  *
  * Initialises a record in the same way as func_8A20034C and func_8002CA34:
- * func_8002A8C4 fills the first five words with (arg1, arg2, 0x228, 0x15C, 0)
+ * Window_SetRect fills the first five words with (arg1, arg2, 0x228, 0x15C, 0)
  * (the last two constants look like a width and a height, not confirmed),
  * the words at +0x20, +0x24 and +0x28 are cleared, and +0x14 is set to
  * 0x1001.
  */
 void func_8A1009E0(s8 *arg0, s32 arg1, s32 arg2) {
-    func_8002A8C4(arg0, arg1, arg2, 0x228, 0x15C);
+    Window_SetRect(arg0, arg1, arg2, 0x228, 0x15C);
     M2C_FIELD(arg0, s32 *, 0x24) = 0;
     M2C_FIELD(arg0, s32 *, 0x20) = 0;
     M2C_FIELD(arg0, s32 *, 0x28) = 0;
@@ -399,7 +399,7 @@ extern char D_8A12FD18[];
 extern u8 D_800735C4[];
 extern s32 D_8A12FFB8;
 s32 func_800231C8(s32, s32);
-void func_800295E8(s32, s32, s32, s32, u8*);
+void Ui_DrawTexturedFrameDecal(s32, s32, s32, s32, u8*);
 
 /**
  * Draws an entry's category (%sポケモン), No., たかさ (height) and おもさ (weight, kg).
@@ -410,7 +410,7 @@ void Pokedex_DrawEntryInfo(s32 arg0, s32 arg1) {
 
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(arg0, arg1, 0x122, 0xD2, D_8A1057D4);
-    func_800295E8(arg0 + 8, arg1 + 8, 0x112, 0x5A, D_800735C4);
+    Ui_DrawTexturedFrameDecal(arg0 + 8, arg1 + 8, 0x112, 0x5A, D_800735C4);
     Font_BeginTranslucentTextRendering();
     Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
     Font_EnableTwoCycleTexturing();
@@ -441,7 +441,7 @@ void Pokedex_DrawEntryInfo(s32 arg0, s32 arg1) {
 }
 
 typedef struct Rgba8A100F20 { u8 r, g, b, a; } Rgba8A100F20;
-void func_8002A550(s32, s32, s32, s32, Rgba8A100F20, Rgba8A100F20);
+void Ui_FillRectPrimEnvColor(s32, s32, s32, s32, Rgba8A100F20, Rgba8A100F20);
 void func_8001A944(s32, s32, const char*, ...);
 s32 func_800231C8(s32, s32);
 extern u8 D_8A1057F8[];
@@ -451,7 +451,7 @@ extern s32 D_8A12FFB8;
 void func_8A100F20(s32 arg0, s32 arg1) {
     u8 *entry = (u8 *)&D_80064C5C + D_8A12FFB8 * 0x1C;
 
-    func_8002A550(arg0, arg1, 0x21C, 0x78, *(Rgba8A100F20 *)D_8A1057F8, *(Rgba8A100F20 *)D_8A1057FC);
+    Ui_FillRectPrimEnvColor(arg0, arg1, 0x21C, 0x78, *(Rgba8A100F20 *)D_8A1057F8, *(Rgba8A100F20 *)D_8A1057FC);
     func_8001AB6C();
     func_8001A384(0x10, 0);
     func_8001AB2C(0x24);
@@ -463,7 +463,7 @@ void func_8A100F20(s32 arg0, s32 arg1) {
     func_8001ABBC();
 }
 
-s32 func_80029658(s32, s32, s32, void*);
+s32 Ui_DrawTexturedDivider(s32, s32, s32, void*);
 s32 func_80029864(s32, s32, s32, void*);
 s32 func_8002A3F8(void*, s32, s32);
 s32 func_8002AB84();
@@ -481,8 +481,8 @@ extern u8 D_8A11FC18;
  * that function's second argument. `arg0` is a layout record: words at
  * offsets 0 and 4 act as an x/y origin that the draw calls below offset
  * (x + 0xF9, y + 0xD7 and so on), the word at offset 8 is passed to
- * func_80029658, and the word at offset 0x28 is a mode value. When the mode
- * is not 2 and func_8002AB84() returns 0, it runs func_80029658,
+ * Ui_DrawTexturedDivider, and the word at offset 0x28 is a mode value. When the mode
+ * is not 2 and func_8002AB84() returns 0, it runs Ui_DrawTexturedDivider,
  * func_80029864, Pokedex_DrawEntryInfo and func_8A100F20 at those offsets. When the
  * mode is 1 or 2 it also calls func_8002A3F8 on D_8A11FC18 with (0x32, 0x5A)
  * and then func_8A100A24(0x32, 0x5A, v, arg1), where v is 0xFF if arg2 >= 2
@@ -493,7 +493,7 @@ void func_8A101020(void* arg0, s32 arg1, s32 arg2) {
     s32 temp_v0;
 
     if ((M2C_FIELD(arg0, s32*, 0x28) != 2) && (func_8002AB84() == 0)) {
-        func_80029658(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0xD7, M2C_FIELD(arg0, s32*, 8), &D_8007356C);
+        Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0xD7, M2C_FIELD(arg0, s32*, 8), &D_8007356C);
         func_80029864(M2C_FIELD(arg0, s32*, 0) + 0xF9, M2C_FIELD(arg0, s32*, 4), 0xDE, &D_8007356C);
         Pokedex_DrawEntryInfo(M2C_FIELD(arg0, s32*, 0) + 0x100, M2C_FIELD(arg0, s32*, 4) + 6);
         func_8A100F20(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0xDE);
@@ -505,11 +505,11 @@ void func_8A101020(void* arg0, s32 arg1, s32 arg2) {
     }
 }
 
-M2C_UNK func_8002C064(M2C_UNK, M2C_UNK, u8, u8, s32); /* extern */
+M2C_UNK Ui_DrawTintedScreenBackground(M2C_UNK, M2C_UNK, u8, u8, s32); /* extern */
 extern M2C_UNK D_8A1057D0;
 
 void func_8A101118(void) {
-    func_8002C064(0x38, 0x1E0, M2C_FIELD(&D_8A1057D0, u8 *, 0), M2C_FIELD(&D_8A1057D0, u8 *, 1), (s32) M2C_FIELD(&D_8A1057D0, u8 *, 2));
+    Ui_DrawTintedScreenBackground(0x38, 0x1E0, M2C_FIELD(&D_8A1057D0, u8 *, 0), M2C_FIELD(&D_8A1057D0, u8 *, 1), (s32) M2C_FIELD(&D_8A1057D0, u8 *, 2));
 }
 
 /*
@@ -967,7 +967,7 @@ s32 func_8A101B30(u8 arg0) {
     func_80028060(0, var_a1, &D_8A12FD3C, D_8A130230);
     n = D_8A105800;
     func_8002C8D8(&sp2C, *(Col8A101B30*)&D_8A1057D0, n / (f64)8.0f);
-    func_8002C064(0x38, 0x1E0, sp2C.r, sp2C.g, sp2C.b);
+    Ui_DrawTintedScreenBackground(0x38, 0x1E0, sp2C.r, sp2C.g, sp2C.b);
     if (D_8A105804 == 0) {
         n = D_8A105800;
         n++;

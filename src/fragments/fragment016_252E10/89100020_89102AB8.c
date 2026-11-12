@@ -32,13 +32,13 @@ typedef struct Label89100FC4 {
 } Label89100FC4;
 
 extern u8 D_80073520[];
-M2C_UNK func_80029A64(s32, s32, s32, s32, Color_RGBA8);
+M2C_UNK Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
 extern s32 D_8910A7F8[3];
 void func_80027410(void*, void*, s32, s32, s32);
 void func_89109990(void*, void*, void*, s32);
 extern s32 D_800603C0;
 void func_8000B2F4(s32);
-void func_8002A8C4(s8 *, s32, s32, s32, s32);
+void Window_SetRect(s8 *, s32, s32, s32, s32);
 void func_80027804(s8*, s8*, s32, s32);
 void func_89109B60(s8*);
 void func_80027D68(s32, s32);
@@ -105,7 +105,7 @@ void func_8000A460(s8 *, s8 *);
 u32 func_800566BC(s8*);
 void func_89106424(s8 *, void *, s8 *, s32, s32);
 void func_89106570(s8 *);
-void func_8002A8C4(s8 *, s32, s32, s32, s32);
+void Window_SetRect(s8 *, s32, s32, s32, s32);
 extern Rgba891024A4 D_8910A7F4;
 extern s8 *D_8910A8A8[];
 extern s8 D_8910A8B0[];

@@ -8,7 +8,7 @@
 #include "m2c_macros.h"
 
 extern u8 D_80073520[];
-M2C_UNK func_80029A64(s32, s32, s32, s32, Color_RGBA8);
+M2C_UNK Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
 
 M2C_UNK func_89109E5C(s32, s32, s32, s32);
 M2C_UNK func_89109FE0(s32);
@@ -55,7 +55,7 @@ typedef struct LabPCInitialStateFields {
     s32 unk_9B04;
 } LabPCInitialStateFields;
 typedef struct Rgba891024A4 { u8 r, g, b, a; } Rgba891024A4;
-void func_8002A8C4(s8 *, s32, s32, s32, s32);
+void Window_SetRect(s8 *, s32, s32, s32, s32);
 void func_80027804(s8*, s8*, s32, s32);
 void func_89109B60(s8*);
 M2C_UNK func_89109C6C(s32, s32);                    /* extern */
@@ -116,15 +116,15 @@ extern char D_8910DBE4[];
 extern char D_8910DBE8[];
 extern char D_8910DBEC[];
 void func_80029028(s32, s32, s32, s32, Color_RGBA8);
-void func_8002A0AC(s32, s32, s32, s32, Color_RGBA8);
+void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
 void func_8002BAB8(s32, s32, s32, s32);
-void func_80027F20(s32);
+void Font_SetColorForFlags(s32);
 void func_89101238(s32, s32, s8*, s32, s32);
 
 s32 func_8002AB84(void);
 void func_8002C5A4(s32, s32, s32);
 void func_8002A8E0(s8*);
-void func_80029658(s32, s32, s32, u8*);
+void Ui_DrawTexturedDivider(s32, s32, s32, u8*);
 void func_8002F030(s8*, s32, s32, s32, s32);
 void func_8002F3C4(s8*, s32, s32, s32, s8*);
 void LabPCList_DrawDetailColumns(s8*, s32, s32, s32);
@@ -155,7 +155,7 @@ void LabPCList_DrawListScreen(s8* arg0) {
     }
     func_8002C5A4(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) - 0xA, 0x1F4);
     func_8002A8E0(arg0 + 0x4C);
-    func_80029658(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0x23, M2C_FIELD(arg0, s32*, 8), D_8007356C);
+    Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0x23, M2C_FIELD(arg0, s32*, 8), D_8007356C);
     LabPCList_DrawPageHint(arg0);
     func_8002F030(arg0 + 0xB160, M2C_FIELD(arg0, s32*, 0x2C), M2C_FIELD(arg0, s32*, 0x30) - 0x10,
                   M2C_FIELD(arg0, s32*, 0x38) + M2C_FIELD(arg0, s32*, 0x30), M2C_FIELD(arg0, s32*, 0x34));
@@ -362,7 +362,7 @@ void func_89101F90(Ctx89101F90* arg0) {
         case 15:
             arg0->state = 3;
             func_89106424(arg0->unk9654, D_8910D910[sel].a, arg0->unk97C8, D_8910D910[sel].b, 0);
-            func_8002A8C4(arg0->unk9680, func_891005CC(arg0), arg0->y, 0, 0x16);
+            Window_SetRect(arg0->unk9680, func_891005CC(arg0), arg0->y, 0, 0x16);
             arg0->posX = arg0->x + arg0->dx;
             arg0->posY = arg0->y + arg0->dy;
             func_89106570(arg0->unk9654);
@@ -406,7 +406,7 @@ void func_891020F8(s8* arg0) {
     *(Str891020F8*)D_8910E312 = *(Str891020F8*)D_8910DC50;
     func_8000A460(D_8910E2D0 + (func_800566BC(D_8910E312) + 0x42), D_8910A890[(M2C_FIELD(arg0, s32*, 0x7C) & 0x10) ? 1 : 0]);
     func_89106424(arg0 + 0x9654, D_8910A898, arg0 + 0x97C8, 4, 0);
-    func_8002A8C4(arg0 + 0x9680, M2C_FIELD(arg0, s32*, 0x2C) + 0x26,
+    Window_SetRect(arg0 + 0x9680, M2C_FIELD(arg0, s32*, 0x2C) + 0x26,
                   M2C_FIELD(arg0, s32*, 0x30) + M2C_FIELD(arg0, s32*, 0xB194) - M2C_FIELD(arg0, s32*, 0xB18C) + 0x16, 0, 0x14);
     ((Big891020F8*)arg0)->right = M2C_FIELD(arg0, s32*, 0x34) + M2C_FIELD(arg0, s32*, 0x2C);
     ((Big891020F8*)arg0)->bottom = M2C_FIELD(arg0, s32*, 0x38) + M2C_FIELD(arg0, s32*, 0x30);
@@ -495,7 +495,7 @@ void func_8000A460(s8 *, s8 *);
 u32 func_800566BC(s8*);
 void func_89106424(s8 *, void *, s8 *, s32, s32);
 void func_89106570(s8 *);
-void func_8002A8C4(s8 *, s32, s32, s32, s32);
+void Window_SetRect(s8 *, s32, s32, s32, s32);
 extern Rgba891024A4 D_8910A7F4;
 extern s8 *D_8910A8A8[];
 extern s8 D_8910A8B0[];
@@ -505,7 +505,7 @@ void func_891024A4(Screen891024A4 *arg0) {
     func_8000A460(D_8910E358, D_8910A8B0);
     func_8000A460(D_8910E358 + func_800566BC(D_8910E358), D_8910A8A8[(arg0->mode & 0x20) ? 1 : 0]);
     func_89106424(arg0->menu, D_8910A8C8, arg0->items, 5, 0);
-    func_8002A8C4(arg0->box, arg0->x + 0x26, arg0->y, 0, 0x16);
+    Window_SetRect(arg0->box, arg0->x + 0x26, arg0->y, 0, 0x16);
     arg0->right = arg0->x + arg0->w;
     arg0->bottom = arg0->y + arg0->h;
     func_89106570(arg0->menu);

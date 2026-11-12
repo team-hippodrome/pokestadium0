@@ -337,19 +337,19 @@ void func_82000900(SlotList* arg0, s32 arg1) {
 }
 
 extern s32 D_800603C0;
-void func_8002A8C4(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+void Window_SetRect(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 extern Color_RGBA8 D_8200902C;
 extern char D_82009B80[];
 extern char D_82009B88[];
 extern s32 D_8200AC4C;
-void func_8002AE94(s8*, s32, s32, s32, Color_RGBA8, char*);
+void Window_InitLabeled(s8*, s32, s32, s32, Color_RGBA8, char*);
 void func_8000B2F4(s32);
 
 /**
  * Initialises the object arg0 (size and layout not established); a sibling of
- * func_82008524. Calls func_8002A8C4(arg0, arg1, arg2, 0x1AE, 0x124), clears the
+ * func_82008524. Calls Window_SetRect(arg0, arg1, arg2, 0x1AE, 0x124), clears the
  * words at 0x20, 0x24 and 0x28 and sets the word at 0x14 to 0x1001. Calls
- * func_8002AE94 twice, on the sub-objects at arg0 + 0x2C (string D_82009B80)
+ * Window_InitLabeled twice, on the sub-objects at arg0 + 0x2C (string D_82009B80)
  * and arg0 + 0x68 (string D_82009B88), both with width 0x48 and colour
  * D_8200902C and positions derived from the words at 0 and 4. Then sets the
  * words at 0x58, 0x60, 0xAC and 0xA8 to 0xA, 0xC, 2 and 0, stores D_800603C0
@@ -358,15 +358,15 @@ void func_8000B2F4(s32);
  * What the object is and what the constants mean is not established.
  */
 void func_820009A4(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
-    func_8002A8C4(arg0, arg1, arg2, 0x1AE, 0x124);
+    Window_SetRect(arg0, arg1, arg2, 0x1AE, 0x124);
     M2C_FIELD(arg0, s32*, 0x24) = 0;
     M2C_FIELD(arg0, s32*, 0x20) = 0;
     M2C_FIELD(arg0, s32*, 0x28) = 0;
     M2C_FIELD(arg0, s32*, 0x14) = 0x1001;
-    func_8002AE94(arg0 + 0x2C, M2C_FIELD(arg0, s32*, 0) + 0x10A, M2C_FIELD(arg0, s32*, 4) + 0x100, 0x48, D_8200902C, D_82009B80);
+    Window_InitLabeled(arg0 + 0x2C, M2C_FIELD(arg0, s32*, 0) + 0x10A, M2C_FIELD(arg0, s32*, 4) + 0x100, 0x48, D_8200902C, D_82009B80);
     M2C_FIELD(arg0, s32*, 0x58) = 0xA;
     M2C_FIELD(arg0, s32*, 0x60) = 0xC;
-    func_8002AE94(arg0 + 0x68, M2C_FIELD(arg0, s32*, 0) + 0x15A, M2C_FIELD(arg0, s32*, 4) + 0x100, 0x48, D_8200902C, D_82009B88);
+    Window_InitLabeled(arg0 + 0x68, M2C_FIELD(arg0, s32*, 0) + 0x15A, M2C_FIELD(arg0, s32*, 4) + 0x100, 0x48, D_8200902C, D_82009B88);
     M2C_FIELD(arg0, s32*, 0xAC) = 2;
     M2C_FIELD(arg0, s32*, 0xA8) = 0;
     M2C_FIELD(arg0, s32*, 0xA4) = D_800603C0;
@@ -506,8 +506,8 @@ void func_8001ABE8(void);
 void func_8001AC3C(void);
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 void func_80029028(s32, s32, s32, s32, Color82001CCC);
-void func_80029658(s32, s32, s32, u8*);
-void func_8002A550(s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
+void Ui_DrawTexturedDivider(s32, s32, s32, u8*);
+void Ui_FillRectPrimEnvColor(s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
 s32 func_8002AE6C(Screen82000C5C*);
 void func_8002AF04(char*, s32);
 s32 func_8002D3D0(Mon82000C5C*);
@@ -526,12 +526,12 @@ void FreeBattle_DrawMonStatusWindow(Screen82000C5C* arg0) {
     u8* tex;
 
     if (func_8002AE6C(arg0) == 0) {
-        func_80029658(arg0->x, arg0->y + 0xF3, arg0->w, D_8007356C);
+        Ui_DrawTexturedDivider(arg0->x, arg0->y + 0xF3, arg0->w, D_8007356C);
         gSPDisplayList(gDisplayListHead++, D_80060270);
         func_80029028(x, y, arg0->w - 0xC, 0x20, D_82009030);
         func_80029028(x + 0x78, y + 0x20, arg0->w - 0x84, 0x78, D_82009034);
         func_80029028(x, y + 0xF4, arg0->w - 0xC, 0x24, D_82008F54);
-        func_8002A550(x, y + 0x98, arg0->w - 0xC, 0x56, D_82009038, D_8200903C);
+        Ui_FillRectPrimEnvColor(x, y + 0x98, arg0->w - 0xC, 0x56, D_82009038, D_8200903C);
         func_8001AB6C();
         func_8001AA9C(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
         func_8001A384(8, 0);
@@ -807,8 +807,8 @@ extern u8 D_05000478[];
 void func_8001AB6C(void);
 void func_8001ABBC(void);
 void func_8001A384(s32, s32);
-void func_80027F20(s32);
-void func_8002A0AC(s32, s32, s32, s32, Color82001CCC);
+void Font_SetColorForFlags(s32);
+void Ui_FillRectHighlighted(s32, s32, s32, s32, Color82001CCC);
 void func_8001BCB4(s32, s32, s32, s32, void*, s32, s32);
 void Trade_DrawDigitStrip(s32, s32, u8);
 void func_8001833C(s32, s32, s32*, u16);
@@ -824,11 +824,11 @@ void func_82001810(s32 x, s32 y, s32* entry, s32 frame, s32 flags, s32 arg5) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(x, y, 0x84, 0x32, D_82008F58);
     if (flags & 0x10) {
-        func_8002A0AC(x + 3, y + 3, 0x7E, 0x2C, D_82008F58);
+        Ui_FillRectHighlighted(x + 3, y + 3, 0x7E, 0x2C, D_82008F58);
     }
     if (entry != NULL) {
         func_8001AB6C();
-        func_80027F20(flags);
+        Font_SetColorForFlags(flags);
         func_8001A384(4, 0);
         func_8001A944(x + 4, y + 4, (char*)entry + 0x30);
         func_8001ABBC();
@@ -945,7 +945,7 @@ extern char D_82009C48[];
 extern u8 D_04010918[];
 extern Gfx D_80073450[];
 u8 func_80022BAC(s32);
-void func_80027F20(s32);
+void Font_SetColorForFlags(s32);
 void func_8002A3F8(Img82001E20*, s32, s32);
 void func_8002BAB8(s32, s32, s32, s32);
 void func_8002BC58(s32, s32, s32, s32);
@@ -965,7 +965,7 @@ void FreeBattle_DrawRentalNameList(s32 arg0, s32 arg1, s32 arg2, Slot82001E20* a
         } else if (arg3->kind == 0x10) {
             func_8002A3F8(&D_82008F64, arg0 + 4, arg1 + 4);
             func_8001AB6C();
-            func_80027F20(arg2);
+            Font_SetColorForFlags(arg2);
             func_8001A384(8, 0);
             func_8001A944(arg0 + 0x1B, arg1 + 0x1A, D_82009C2C, arg3->index + 1);
             func_8001ABBC();
@@ -977,7 +977,7 @@ void FreeBattle_DrawRentalNameList(s32 arg0, s32 arg1, s32 arg2, Slot82001E20* a
     }
     if (arg3->flags & 2) {
         func_8001AB6C();
-        func_80027F20(arg2);
+        Font_SetColorForFlags(arg2);
         func_8001A384(4, 0);
         func_8001A944(arg0 + 4, arg1 + 0x41, D_82009C34);
         func_8001ABBC();
@@ -987,7 +987,7 @@ void FreeBattle_DrawRentalNameList(s32 arg0, s32 arg1, s32 arg2, Slot82001E20* a
     func_8001AA9C(0xFF, 0xC8, 0xC8, 0xFF);
     func_8001A384(4, -1);
     func_8001A944(arg0 + 4, arg1 + 0x41, D_82009C48);
-    func_80027F20(arg2);
+    Font_SetColorForFlags(arg2);
     func_8001A384(4, 0);
     func_8001A944(arg0 + 0x38, arg1 + 0x41, arg3->name);
     func_8001ABBC();

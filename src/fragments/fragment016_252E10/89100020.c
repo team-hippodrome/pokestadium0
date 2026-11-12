@@ -8,7 +8,7 @@
 #include "m2c_macros.h"
 
 extern u8 D_80073520[];
-M2C_UNK func_80029A64(s32, s32, s32, s32, Color_RGBA8);
+M2C_UNK Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
 
 M2C_UNK func_89109E5C(s32, s32, s32, s32);          /* extern */
 M2C_UNK func_89109FE0(s32);                         /* extern */
@@ -147,7 +147,7 @@ void func_89100380(LabPCInitialStateFields* state) {
 }
 
 #include "fragments/fragment016_252E10/89100020_types_3.h"
-void func_8002A8C4(s8 *, s32, s32, s32, s32);
+void Window_SetRect(s8 *, s32, s32, s32, s32);
 void func_80027804(s8*, s8*, s32, s32);
 void func_89109B60(s8*);
 M2C_UNK func_89109C6C(s32, s32);                    /* extern */
@@ -177,16 +177,16 @@ void func_891003A4(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     UNUSED s32 pad[1]; // FAKE: stack padding
 
     func_89100140((Ctx89100140*)arg0);
-    func_8002A8C4(arg0, arg1, arg2, 0x234, 0x17E);
+    Window_SetRect(arg0, arg1, arg2, 0x234, 0x17E);
     M2C_FIELD(arg0, s32*, 0x24) = 0;
     M2C_FIELD(arg0, s32*, 0x20) = 0;
     M2C_FIELD(arg0, s32*, 0x28) = 0;
     M2C_FIELD(arg0, s32*, 0x14) = 1;
-    func_8002A8C4(arg0 + 0x4C, arg1 + 6, arg2 + 6, 0x228, 0x1E);
+    Window_SetRect(arg0 + 0x4C, arg1 + 6, arg2 + 6, 0x228, 0x1E);
     M2C_FIELD(arg0, s32*, 0x60) = 6;
     M2C_FIELD(arg0, Rgba891024A4*, 0x64) = *(Rgba891024A4*)D_8910A844;
     M2C_FIELD(arg0, Rgba891024A4*, 0x68) = *(Rgba891024A4*)D_8910A848;
-    func_8002A8C4(arg0 + 0x2C, arg1 + 6, arg2 + 0x3A, 0x228, 0x12E);
+    Window_SetRect(arg0 + 0x2C, arg1 + 6, arg2 + 0x3A, 0x228, 0x12E);
     M2C_FIELD(arg0, s32*, 0x40) = 1;
     func_80027804(arg0 + 0x9648, arg0 + 0x87B8, 0x1D2, 0);
     func_80027804(arg0 + 0x6C, arg0 + 0x8F00, 0x1D2, 0);
@@ -251,7 +251,7 @@ void func_89100688(Ctx89100688* arg0) {
             } else {
                 w = arg0->widths[i];
             }
-            func_80029A64(func_891005CC(arg0), arg0->y, w, 0x14, *(Color_RGBA8*)D_80073520);
+            Ui_DrawRoundedFrame(func_891005CC(arg0), arg0->y, w, 0x14, *(Color_RGBA8*)D_80073520);
             break;
         case 1:
             w = 0;
@@ -261,16 +261,16 @@ void func_89100688(Ctx89100688* arg0) {
             for (; i < end; i++) {
                 w += arg0->widths[i];
             }
-            func_80029A64(func_891005CC(arg0), arg0->y, w, 0x14, *(Color_RGBA8*)D_80073520);
+            Ui_DrawRoundedFrame(func_891005CC(arg0), arg0->y, w, 0x14, *(Color_RGBA8*)D_80073520);
             break;
         case 2:
-            func_80029A64(func_891005CC(arg0), arg0->y, arg0->widths[arg0->ranges[arg0->mode] + arg0->cursor - 2], 0x14, *(Color_RGBA8*)D_80073520);
+            Ui_DrawRoundedFrame(func_891005CC(arg0), arg0->y, arg0->widths[arg0->ranges[arg0->mode] + arg0->cursor - 2], 0x14, *(Color_RGBA8*)D_80073520);
             break;
     }
 }
 
 /**
- * Draws a highlight rectangle (via func_80029A64) for the screen object arg0, positioned from
+ * Draws a highlight rectangle (via Ui_DrawRoundedFrame) for the screen object arg0, positioned from
  * the two words at arg0 + 0x2C / 0x30 (what they mean is not established). The word at
  * arg0 + 0xB550 selects the shape: 0 draws a 0x26 x 0x14 rectangle at the origin, 1 a
  * 0x50 x 0x14 rectangle offset 0x26 to the right; other values draw nothing. The colour is
@@ -279,10 +279,10 @@ void func_89100688(Ctx89100688* arg0) {
 void func_89100870(s8* arg0) {
     switch (M2C_FIELD(arg0, s32*, 0xB550)) {
         case 0:
-            func_80029A64(M2C_FIELD(arg0, s32*, 0x2C), M2C_FIELD(arg0, s32*, 0x30), 0x26, 0x14, *(Color_RGBA8*)D_80073520);
+            Ui_DrawRoundedFrame(M2C_FIELD(arg0, s32*, 0x2C), M2C_FIELD(arg0, s32*, 0x30), 0x26, 0x14, *(Color_RGBA8*)D_80073520);
             return;
         case 1:
-            func_80029A64(M2C_FIELD(arg0, s32*, 0x2C) + 0x26, M2C_FIELD(arg0, s32*, 0x30), 0x50, 0x14, *(Color_RGBA8*)D_80073520);
+            Ui_DrawRoundedFrame(M2C_FIELD(arg0, s32*, 0x2C) + 0x26, M2C_FIELD(arg0, s32*, 0x30), 0x50, 0x14, *(Color_RGBA8*)D_80073520);
             return;
     }
 }

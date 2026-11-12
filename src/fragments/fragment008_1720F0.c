@@ -164,23 +164,23 @@ void func_88100348(s8* arg0) {
 }
 
 extern Color_RGBA8 D_88102D74;
-void func_8002A0AC(s32, s32, s32, s32, Color_RGBA8);
-void func_80027F20(s32);
+void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
+void Font_SetColorForFlags(s32);
 
 void func_88100428(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s32* arg5) {
     s32 temp_v0 = *arg5;
 
     if (arg4 & 0x10) {
-        func_8002A0AC(arg0 + 3, arg1 + 3, temp_v0 - 6, 0x1A, D_88102D74);
+        Ui_FillRectHighlighted(arg0 + 3, arg1 + 3, temp_v0 - 6, 0x1A, D_88102D74);
     }
     Font_BeginTranslucentTextRendering();
-    func_80027F20(arg4);
+    Font_SetColorForFlags(arg4);
     Font_SetActive(0x10, 0);
     Font_Printf(arg0 + 8, arg1 + 4, arg2);
     Font_EndTexturedTextRendering();
 }
 
-void func_8002A8C4(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+void Window_SetRect(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 s32 func_800226BC(s32, s32, s32);
 void func_80027804(s8*, s8*, s32, s32);
 M2C_UNK func_8002D880(s8 *, s8 *, s8 *, M2C_UNK *, s32, s32);
@@ -189,7 +189,7 @@ extern s32 D_88103078;
 void func_881004CC(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, M2C_UNK* arg5, s32 arg6, M2C_UNK* arg7, s32 arg8, M2C_UNK* arg9) {
     s32 sp2C;
 
-    func_8002A8C4(arg0, arg1, arg2, arg3, arg4);
+    Window_SetRect(arg0, arg1, arg2, arg3, arg4);
     M2C_FIELD(arg0, s32 *, 0x28) = 0;
     M2C_FIELD(arg0, s32 *, 0x24) = 0;
     M2C_FIELD(arg0, s32 *, 0x14) = 0x801;
@@ -213,9 +213,9 @@ typedef struct Color88100D9C {
     u8 c[4];
 } Color88100D9C;
 s32 func_8002AE6C();
-void func_80029658(s32, s32, s32, void*);
+void Ui_DrawTexturedDivider(s32, s32, s32, void*);
 void func_80029028(s32, s32, s32, s32, Color88100D9C);
-void func_8002A550(s32, s32, s32, s32, Color88100D9C, Color88100D9C);
+void Ui_FillRectPrimEnvColor(s32, s32, s32, s32, Color88100D9C, Color88100D9C);
 void func_8002D9B8(s8*, s32, s32, s32, s32);
 extern u8 D_8007356C[];
 extern u8 D_800734A8[4];
@@ -229,10 +229,10 @@ void func_881005E4(s8* arg0, s32 arg1) {
 
     if (func_8002AE6C() == 0) {
         h = (M2C_FIELD(M2C_FIELD(arg0, s8**, 0x2C), s32*, 8) << 5) + 8;
-        func_80029658(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + h + 5, M2C_FIELD(arg0, s32*, 8), D_8007356C);
+        Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + h + 5, M2C_FIELD(arg0, s32*, 8), D_8007356C);
         gSPDisplayList(gDisplayListHead++, D_80060270);
         func_80029028(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) - 0xC, h, *(Color88100D9C*)&D_88102D74);
-        func_8002A550(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + h + 0xC, M2C_FIELD(arg0, s32*, 8) - 0xC, M2C_FIELD(arg0, s32*, 0x80) * 0x1C, D_88102D9C, D_88102DA0);
+        Ui_FillRectPrimEnvColor(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + h + 0xC, M2C_FIELD(arg0, s32*, 8) - 0xC, M2C_FIELD(arg0, s32*, 0x80) * 0x1C, D_88102D9C, D_88102DA0);
         sp38 = M2C_FIELD(arg0, s32*, 8) - 0xC;
         func_8002D9B8(arg0 + 0x2C, M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0xA, arg1 | 0xFFED, (s32)&sp38);
         Font_BeginTranslucentTextRendering();
@@ -286,7 +286,7 @@ s32 func_881007AC(void* arg0) {
     return ret;
 }
 
-void func_8002A8C4(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+void Window_SetRect(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 extern s32 D_800603C0;
 typedef struct Win88100898 {
     s32 x; s32 y; s32 w; s32 h; s32 unk10; s32 unk14; s32 unk18; s32 unk1C;
@@ -299,19 +299,19 @@ typedef struct Win88100898 {
 extern Color_RGBA8 D_88102DA4;
 extern char D_88102F14[];
 extern char D_88102F1C[];
-void func_8002AE94(s8*, s32, s32, s32, Color_RGBA8, char*);
+void Window_InitLabeled(s8*, s32, s32, s32, Color_RGBA8, char*);
 M2C_UNK func_8000B2F4(s32);
 void func_88100898(s8* arg, s32 arg1, s32 arg2, s32 arg3) {
     Win88100898* arg0 = (Win88100898*)arg;
-    func_8002A8C4(arg, arg1, arg2, 0x174, 0x66);
+    Window_SetRect(arg, arg1, arg2, 0x174, 0x66);
     arg0->unk24 = 0;
     arg0->unk20 = 0;
     arg0->unk28 = 0;
     arg0->unk14 = 0x1001;
-    func_8002AE94((s8*)arg0->unk2C, arg0->x + 0x62, arg0->y + 0x42, 0x48, D_88102DA4, D_88102F14);
+    Window_InitLabeled((s8*)arg0->unk2C, arg0->x + 0x62, arg0->y + 0x42, 0x48, D_88102DA4, D_88102F14);
     arg0->unk58 = 0xA;
     arg0->unk60 = 0xC;
-    func_8002AE94((s8*)arg0->unk68, arg0->x + 0xCA, arg0->y + 0x42, 0x48, D_88102DA4, D_88102F1C);
+    Window_InitLabeled((s8*)arg0->unk68, arg0->x + 0xCA, arg0->y + 0x42, 0x48, D_88102DA4, D_88102F1C);
     arg0->unkAC = 2;
     arg0->unkA8 = 0;
     arg0->unkA4 = D_800603C0;
@@ -327,14 +327,14 @@ extern u8 D_800734A8[4];
 extern u8 D_8007356C[];
 extern Color88100D9C D_88102DA8;
 extern Color88100D9C D_88102DAC;
-void func_80029658(s32, s32, s32, void*);
-void func_8002A550(s32, s32, s32, s32, Color88100D9C, Color88100D9C);
+void Ui_DrawTexturedDivider(s32, s32, s32, void*);
+void Ui_FillRectPrimEnvColor(s32, s32, s32, s32, Color88100D9C, Color88100D9C);
 void func_8002AF04(s8*, s32);
 
 void func_881009A0(s8* arg0) {
     if (func_8002AE6C() == 0) {
-        func_80029658(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0x35, M2C_FIELD(arg0, s32*, 8), D_8007356C);
-        func_8002A550(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) - 0xC, 0x30, D_88102DA8, D_88102DAC);
+        Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0x35, M2C_FIELD(arg0, s32*, 8), D_8007356C);
+        Ui_FillRectPrimEnvColor(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) - 0xC, 0x30, D_88102DA8, D_88102DAC);
         gSPDisplayList(gDisplayListHead++, D_80060270);
         func_80029028(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0x3C, M2C_FIELD(arg0, s32*, 8) - 0xC, 0x24, *(Color88100D9C*)&D_88102D74);
         Font_BeginTranslucentTextRendering();
@@ -375,10 +375,10 @@ typedef struct Rgba88100BA4 {
 
 extern u8 D_88102DB0[];
 extern u8 D_88102DB4[];
-void func_8002A8C4(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+void Window_SetRect(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 
 void func_88100BA4(void* arg0, s32 arg1, s32 arg2, s32 arg3) {
-    func_8002A8C4((s8*)arg0, arg1, arg2, 0x170, 0x68);
+    Window_SetRect((s8*)arg0, arg1, arg2, 0x170, 0x68);
     M2C_FIELD(arg0, s32*, 0x24) = 0;
     M2C_FIELD(arg0, s32*, 0x20) = 0;
     M2C_FIELD(arg0, s32*, 0x28) = 0;
@@ -462,7 +462,7 @@ void func_88100E34(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
         } else if (arg3[1] == 0x10) {
             func_8002A3F8(D_88102DB8, arg0 + 4, arg1 + 4);
             Font_BeginTranslucentTextRendering();
-            func_80027F20(arg2);
+            Font_SetColorForFlags(arg2);
             Font_SetActive(8, 0);
             Font_Printf(arg0 + 0x1B, arg1 + 0x1A, D_88102F24, arg3[3] + 1);
             Font_EndTexturedTextRendering();
@@ -472,7 +472,7 @@ void func_88100E34(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
     Gfx_SetEnvColor(0xFF, 0xC8, 0xC8, 0xFF);
     Font_SetActive(4, -1);
     Font_Printf(arg0 + 4, arg1 + 0x41, D_88102F2C);
-    func_80027F20(arg2);
+    Font_SetColorForFlags(arg2);
     Font_SetActive(4, 0);
     Font_Printf(arg0 + 0x38, arg1 + 0x41, (char*)(arg3 + 8));
     Font_EndTexturedTextRendering();
@@ -516,7 +516,7 @@ void func_8810112C(s32 x, s32 y, u8* entry, s32 id, s32 color, IconCache8810173C
     func_80029028(x, y, 0x84, 0x32, D_88102D78[0]);
     if (entry != NULL) {
         Font_BeginTranslucentTextRendering();
-        func_80027F20(color);
+        Font_SetColorForFlags(color);
         Font_SetActive(4, 0);
         Font_Printf(x + 4, y + 4, entry + 0x30);
         Font_EndTexturedTextRendering();
@@ -560,7 +560,7 @@ void func_88101478(s32 x, s32 y, u8* entry, s32 frame, s32 color, s32* anim) {
     func_80029028(x, y, 0x84, 0x32, D_88102D78[0]);
     if (entry != NULL) {
         Font_BeginTranslucentTextRendering();
-        func_80027F20(color);
+        Font_SetColorForFlags(color);
         Font_SetActive(4, 0);
         Font_Printf(x + 4, y + 4, entry + 0x30);
         Font_EndTexturedTextRendering();
@@ -727,7 +727,7 @@ extern s32 D_88103098[];
 void func_8810173C(s32, s32, s32, s32, s32, s32);
 M2C_UNK func_8002EC24();
 void func_88101DF8(s8 *arg0, s32 arg1, s32 arg2, s8 *arg3, s32 arg4) {
-    func_8002A8C4(arg0 + 8, arg1, arg2, 0x220, 0x158);
+    Window_SetRect(arg0 + 8, arg1, arg2, 0x220, 0x158);
     M2C_FIELD(arg0, s32 *, 0x2C) = 0;
     M2C_FIELD(arg0, s32 *, 0x28) = 0;
     M2C_FIELD(arg0, s32 *, 0x30) = 0;
@@ -1038,14 +1038,14 @@ void func_88102794(s32 arg0) {
 }
 
 void func_800069CC(void);
-void func_8002C064(s32, s32, s32, s32, s32);
+void Ui_DrawTintedScreenBackground(s32, s32, s32, s32, s32);
 extern u8 D_88102D70[];
 void func_881005E4(s8*, s32);
 void func_88101F1C(s8*);
 M2C_UNK func_88102834(s32 a) {
     s32* arg0 = (s32*)a;
     func_800069CC();
-    func_8002C064(0x38, 0x1E0, D_88102D70[0], D_88102D70[1], D_88102D70[2]);
+    Ui_DrawTintedScreenBackground(0x38, 0x1E0, D_88102D70[0], D_88102D70[1], D_88102D70[2]);
     switch (arg0[0]) {
         case 0:
             func_881005E4(arg0 + 1, 2);
@@ -1177,7 +1177,7 @@ s32 func_88102A2C(s32 arg0) {
     func_80028060(0, var_a1, &D_88103018, D_88103078);
     n = D_88102DCC;
     func_8002C8D8(&sp2C, *(Col88102A2C*)D_88102D70, n / (f64)8.0f);
-    func_8002C064(0x38, 0x1E0, sp2C.r, sp2C.g, sp2C.b);
+    Ui_DrawTintedScreenBackground(0x38, 0x1E0, sp2C.r, sp2C.g, sp2C.b);
     if (D_88102DD0 == 0) {
         n = D_88102DCC;
         n++;

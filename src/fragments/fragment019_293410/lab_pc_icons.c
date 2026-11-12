@@ -35,7 +35,7 @@ void func_8A200020(s32 arg0, s32 arg1, BattleMon* arg2) {
 void MonSummary_DrawHpLevel(s32 arg0, s32 arg1, BattleMon* arg2, s32 arg3) {
     BattleHud_DrawHpBarTexture(arg0 + 0x16D, arg1 + 9, 0x94, arg2->hp, arg2->maxHp);
     Font_BeginTranslucentTextRendering();
-    func_80027F20(arg3);
+    Font_SetColorForFlags(arg3);
     Font_SetActive(0x10, 0);
     Font_Printf(arg0 + 0x4C, arg1 + 0xD, arg2->unk_30);
     Gfx_SetEnvColor(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
@@ -59,8 +59,8 @@ void UI_DrawTextureRgba16(s32 arg0, s32 arg1, s32 arg2) {
 extern Color_RGBA8 D_8A203304;
 extern Color_RGBA8 D_8A203348;
 extern Color_RGBA8 D_80073520;
-void func_8002A0AC(s32, s32, s32, s32, Color_RGBA8);
-M2C_UNK func_80029A64(s32, s32, s32, s32, Color_RGBA8);
+void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
+M2C_UNK Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
 /**
  * Draws a Pokemon list row with its HP and level; highlights it for the selection flags.
  * @unverified Name and comment guessed from the code.
@@ -71,7 +71,7 @@ void MonSummary_DrawListRow(s32 arg0, s32 arg1, BattleMon *arg2, s32 arg3, s32 a
     Color_RGBA8 *color;
 
     if (arg4 & 0x18) {
-        func_8002A0AC(arg0 + 3, arg1 + 3, 0x20F, 0x2D, D_8A203304);
+        Ui_FillRectHighlighted(arg0 + 3, arg1 + 3, 0x20F, 0x2D, D_8A203304);
     }
     MonSummary_DrawHpLevel(arg0, arg1, arg2, arg4);
     if (arg4 & 0x12) {
@@ -80,12 +80,12 @@ void MonSummary_DrawListRow(s32 arg0, s32 arg1, BattleMon *arg2, s32 arg3, s32 a
         } else {
             color = &D_80073520;
         }
-        func_80029A64(arg0 + 2, arg1 + 2, 0x211, 0x2F, *color);
+        Ui_DrawRoundedFrame(arg0 + 2, arg1 + 2, 0x211, 0x2F, *color);
     }
 }
 
 void func_8A20034C(s8 *arg0, s32 arg1, s32 arg2, s32 arg3) {
-    func_8002A8C4(arg0, arg1, arg2, 0x221, 0x168);
+    Window_SetRect(arg0, arg1, arg2, 0x221, 0x168);
     M2C_FIELD(arg0, s32 *, 0x24) = 0;
     M2C_FIELD(arg0, s32 *, 0x20) = 0;
     M2C_FIELD(arg0, s32 *, 0x28) = 0;
@@ -99,7 +99,7 @@ extern Color_RGBA8 D_8A203350;
 extern Color_RGBA8 D_8A203354;
 extern char* D_8A203358;
 extern char* D_8A20335C;
-void func_8002A550(s32 x, s32 y, s32 w, s32 h, Color_RGBA8 prim, Color_RGBA8 env);
+void Ui_FillRectPrimEnvColor(s32 x, s32 y, s32 w, s32 h, Color_RGBA8 prim, Color_RGBA8 env);
 void func_800189C0(s8*, s32);
 void func_800069CC(void);
 void func_8A2003C0(s8* arg0, s32 arg1) {
@@ -109,8 +109,8 @@ void func_8A2003C0(s8* arg0, s32 arg1) {
     s32 y;
 
     if ((M2C_FIELD(arg0, s32*, 0x28) != 2) && (func_8002AB84() == 0)) {
-        func_80029658(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0x137, M2C_FIELD(arg0, s32*, 8), &D_8007356C);
-        func_8002A550(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0x13E, M2C_FIELD(arg0, s32*, 8) - 0xC, 0x24, D_8A203350, D_8A203354);
+        Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0x137, M2C_FIELD(arg0, s32*, 8), &D_8007356C);
+        Ui_FillRectPrimEnvColor(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0x13E, M2C_FIELD(arg0, s32*, 8) - 0xC, 0x24, D_8A203350, D_8A203354);
         func_8001AB6C();
         func_8001A384(0x10, 0);
         func_8001A944(M2C_FIELD(arg0, s32*, 0) + 0x36, M2C_FIELD(arg0, s32*, 4) + 0x144, (arg1 == 2) ? D_8A20335C : D_8A203358);
@@ -146,7 +146,7 @@ void func_8A2003C0(s8* arg0, s32 arg1) {
         for (i = 0; i < M2C_FIELD(M2C_FIELD(arg0, s8**, 0x2C), s32*, 8); i++) {
             if (((arg1 == 1) && (i == M2C_FIELD(arg0, s32*, 0x34))) ||
                 ((arg1 == 2) && (M2C_FIELD(arg0, u16**, 0x30)[i] & 8))) {
-                func_8002A0AC(x + 0x14, y + 5, 0x28, 0x28, D_8A203304);
+                Ui_FillRectHighlighted(x + 0x14, y + 5, 0x28, 0x28, D_8A203304);
             } else {
                 gSPDisplayList(gDisplayListHead++, D_80060270);
                 func_80029028(x + 0x14, y + 5, 0x28, 0x28, D_8A203304);
@@ -159,10 +159,10 @@ void func_8A2003C0(s8* arg0, s32 arg1) {
 
 void func_8A200770(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4) {
     if (arg4 & 0x10) {
-        func_8002A0AC(arg0 + 3, arg1 + 3, 0xA2, 0x1E, D_8A203304);
+        Ui_FillRectHighlighted(arg0 + 3, arg1 + 3, 0xA2, 0x1E, D_8A203304);
     }
     Font_BeginTranslucentTextRendering();
-    func_80027F20(arg4);
+    Font_SetColorForFlags(arg4);
     Font_SetActive(0x10, 0);
     Font_Printf(arg0 + 0xC, arg1 + 6, arg2);
     Font_EndTexturedTextRendering();
@@ -175,7 +175,7 @@ void func_8A20080C(s8 *arg0, s32 arg1, s32 arg2, u8 *arg3)
 {
   s8 *new_var; // FAKE: permuter temp
   s8 *sp2C;
-  func_8002A8C4(arg0, arg1, arg2, 0xB4, 0x84);
+  Window_SetRect(arg0, arg1, arg2, 0xB4, 0x84);
   *((s32 *) (((s8 *) arg0) + 0x24)) = 0;
   new_var = ((s8 *) arg0) + 0x28;
   *((s32 *) (((s8 *) arg0) + 0x20)) = 0;
@@ -326,7 +326,7 @@ extern char D_8A21D96C[];
 extern char D_8A21D974[];
 extern char D_8A21D978[];
 extern char D_8A21D97C[];
-void func_8002A550(s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
+void Ui_FillRectPrimEnvColor(s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
 s32 func_8A20219C(s32, s32);
 /**
  * Draws Type 1/2, ID No., おやのなまえ (OT name), けいけんち (Exp) and the Exp to the next level.
@@ -342,7 +342,7 @@ void MonSummary_DrawTrainerInfo(s32 arg0, s32 arg1, s32 arg2) {
         next_level = ((BattleMon*)arg2)->level + 1;
     }
     to_next = func_8A20219C(((BattleMon*)arg2)->species.id, next_level) - ((BattleMon*)arg2)->unk_10;
-    func_8002A550(arg0, arg1, 0x122, 0xC8, D_8A203370, D_8A203374);
+    Ui_FillRectPrimEnvColor(arg0, arg1, 0x122, 0xC8, D_8A203370, D_8A203374);
     func_8001AB6C();
     func_8001A384(8, 0);
     func_8001AA9C(0xFF, 0xDA, 0xC7, 0xFF);
@@ -413,12 +413,12 @@ void func_8A2010C8(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 cur;
     s32 max;
 
-    func_8002A550(arg0, arg1, 0x21C, 0x86, D_8A203378, D_8A20337C);
+    Ui_FillRectPrimEnvColor(arg0, arg1, 0x21C, 0x86, D_8A203378, D_8A20337C);
     count = func_8002D3D0((u8*)arg2);
     for (i = 0; i < count; i++) {
         hl = 0;
         if (arg3 == i) {
-            func_80029A64(D_8A203384[i].boxX + arg0, D_8A203384[i].boxY + arg1, 0xD0, 0x30, D_80073520);
+            Ui_DrawRoundedFrame(D_8A203384[i].boxX + arg0, D_8A203384[i].boxY + arg1, 0xD0, 0x30, D_80073520);
             hl = 2;
         }
         func_8002A3F8(D_8A203384[i].icon, D_8A203384[i].iconX + arg0, D_8A203384[i].iconY + arg1);
@@ -448,7 +448,7 @@ void func_8A2010C8(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
             max = gMoveData[move].pp + step * (cur >> 6);
             func_8001AB6C();
             func_8001A384(4, 0);
-            func_80027F20(hl);
+            Font_SetColorForFlags(hl);
             func_8001A944(D_8A203384[i].ppX + arg0, D_8A203384[i].ppY + arg1, D_8A21D990, cur & 0x3F, max);
             func_8001ABBC();
         }

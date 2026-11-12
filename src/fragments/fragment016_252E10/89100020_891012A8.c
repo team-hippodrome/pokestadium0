@@ -8,7 +8,7 @@
 #include "m2c_macros.h"
 
 extern u8 D_80073520[];
-M2C_UNK func_80029A64(s32, s32, s32, s32, Color_RGBA8);
+M2C_UNK Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
 
 M2C_UNK func_89109E5C(s32, s32, s32, s32);
 M2C_UNK func_89109FE0(s32);
@@ -55,7 +55,7 @@ typedef struct LabPCInitialStateFields {
     s32 unk_9B04;
 } LabPCInitialStateFields;
 typedef struct Rgba891024A4 { u8 r, g, b, a; } Rgba891024A4;
-void func_8002A8C4(s8 *, s32, s32, s32, s32);
+void Window_SetRect(s8 *, s32, s32, s32, s32);
 void func_80027804(s8*, s8*, s32, s32);
 void func_89109B60(s8*);
 M2C_UNK func_89109C6C(s32, s32);                    /* extern */
@@ -116,9 +116,9 @@ extern char D_8910DBE4[];
 extern char D_8910DBE8[];
 extern char D_8910DBEC[];
 void func_80029028(s32, s32, s32, s32, Color_RGBA8);
-void func_8002A0AC(s32, s32, s32, s32, Color_RGBA8);
+void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
 void func_8002BAB8(s32, s32, s32, s32);
-void func_80027F20(s32);
+void Font_SetColorForFlags(s32);
 void func_89101238(s32, s32, s8*, s32, s32);
 
 void func_891012A8(s32 x, s32 y, Entry891012A8 *entry, s32 row, s32 flags, Ctx891012A8 *ctx)
@@ -145,13 +145,13 @@ void func_891012A8(s32 x, s32 y, Entry891012A8 *entry, s32 row, s32 flags, Ctx89
   {
     if (flags & 0x10)
     {
-      func_8002A0AC(x + 0x27, y + 1, 0x4E, 0x12, D_8910A860);
+      Ui_FillRectHighlighted(x + 0x27, y + 1, 0x4E, 0x12, D_8910A860);
     }
     func_8002BAB8(x + 1, y + 4, row + 1, 4);
     if ((entry->species <= 0) || (entry->species >= 0x98))
     {
       func_8001AB6C();
-      func_80027F20(flags);
+      Font_SetColorForFlags(flags);
       func_8001A384(4, -1);
       func_8001A944(x + 0x28, y + 2, (M2C_UNK *) D_8910DBCC);
       func_8001ABBC();
@@ -165,7 +165,7 @@ void func_891012A8(s32 x, s32 y, Entry891012A8 *entry, s32 row, s32 flags, Ctx89
       }
       else
       {
-        func_80027F20(flags);
+        Font_SetColorForFlags(flags);
       }
       func_8001A384(4, -1);
       func_8001A944(x + 0x28, y + 2, (M2C_UNK *) D_80064C5C[entry->species - 1].name);
@@ -255,7 +255,7 @@ typedef struct ListMenu8910179C {
 } ListMenu8910179C;
 
 /**
- * Draws a fixed-size (0x50 x 0x14) cursor rectangle via func_80029A64 for a scrolling list
+ * Draws a fixed-size (0x50 x 0x14) cursor rectangle via Ui_DrawRoundedFrame for a scrolling list
  * menu: x = arg1 + 0x26, y = scrollTarget + arg2 - scroll, minus (cellHeight - 1) when flag
  * 0x400 is set; colour read from D_80073520. Compare func_80031004 and func_8002F32C.
  */
@@ -266,7 +266,7 @@ void func_8910179C(ListMenu8910179C* arg0, s32 arg1, s32 arg2) {
     if (arg0->flags & 0x400) {
         y = y - arg0->cellHeight + 1;
     }
-    func_80029A64(arg1 + 0x26, y, 0x50, 0x14, *(Color_RGBA8*)D_80073520);
+    Ui_DrawRoundedFrame(arg1 + 0x26, y, 0x50, 0x14, *(Color_RGBA8*)D_80073520);
 }
 
 extern u8 D_04006170[];

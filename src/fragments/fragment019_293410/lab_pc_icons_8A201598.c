@@ -152,7 +152,7 @@ void func_8A201D3C(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 handle;
     s32 move;
 
-    func_8002A8C4(arg0, arg1, arg2, 0x228, 0x16A);
+    Window_SetRect(arg0, arg1, arg2, 0x228, 0x16A);
     M2C_FIELD(arg0, s32*, 0x28) = 0;
     M2C_FIELD(arg0, s32*, 0x20) = 0;
     M2C_FIELD(arg0, s32*, 0x24) = 0;
@@ -182,15 +182,15 @@ void MonSummary_DrawPage(s8 *arg0, s32 arg1)
     if (arg1 == 0)
     {
       func_80029864((*((s32 *) (((s8 *) arg0) + 0))) + 0xF9, *((s32 *) (((s8 *) arg0) + 4)), *((s32 *) (((s8 *) arg0) + 0xC)), &D_8007356C); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-      func_80029658(*((s32 *) (((s8 *) arg0) + 0)), (*((s32 *) (((s8 *) arg0) + 4))) + 0xD7, 0x100, &D_8007356C); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-      func_80029658((*((s32 *) (((s8 *) arg0) + 0))) + 0xFA, (*((s32 *) (((s8 *) arg0) + 4))) + 0x95, 0x12E, &D_8007356C); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+      Ui_DrawTexturedDivider(*((s32 *) (((s8 *) arg0) + 0)), (*((s32 *) (((s8 *) arg0) + 4))) + 0xD7, 0x100, &D_8007356C); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+      Ui_DrawTexturedDivider((*((s32 *) (((s8 *) arg0) + 0))) + 0xFA, (*((s32 *) (((s8 *) arg0) + 4))) + 0x95, 0x12E, &D_8007356C); // FAKE: decomp slop, raw pointer casts stand in for struct fields
       MonSummary_DrawStats((*((s32 *) (((s8 *) arg0) + 0))) + 6, (*((s32 *) (((s8 *) arg0) + 4))) + 0xDE, *((s32 *) (((s8 *) arg0) + 0x2C))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
       MonSummary_DrawHeader((*((s32 *) (((s8 *) arg0) + 0))) + 0x100, (*((s32 *) (((s8 *) arg0) + 4))) + 6, *((s32 *) (((s8 *) arg0) + 0x2C))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
       MonSummary_DrawTrainerInfo((*((s32 *) (((s8 *) arg0) + 0))) + 0x100, (*((s32 *) (((s8 *) arg0) + 4))) + 0x9C, *((s32 *) (((s8 *) arg0) + 0x2C))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
     }
     else
     {
-      func_80029658(*((s32 *) (((s8 *) arg0) + 0)), (*((s32 *) (((s8 *) arg0) + 4))) + 0xD7, *((s32 *) (((s8 *) arg0) + 8)), &D_8007356C); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+      Ui_DrawTexturedDivider(*((s32 *) (((s8 *) arg0) + 0)), (*((s32 *) (((s8 *) arg0) + 4))) + 0xD7, *((s32 *) (((s8 *) arg0) + 8)), &D_8007356C); // FAKE: decomp slop, raw pointer casts stand in for struct fields
       func_80029864((*((s32 *) (((s8 *) arg0) + 0))) + 0xF9, *((s32 *) (((s8 *) arg0) + 4)), 0xDE, &D_8007356C); // FAKE: decomp slop, raw pointer casts stand in for struct fields
       func_8A201394((*((s32 *) (((s8 *) arg0) + 0))) + 0x100, (*((s32 *) (((s8 *) arg0) + 4))) + 6, *((s32 *) (((s8 *) arg0) + 0x2C))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
       func_8A2010C8((*((s32 *) (((s8 *) arg0) + 0))) + 6, (*((s32 *) (((s8 *) arg0) + 4))) + 0xDE, *((s32 *) (((s8 *) arg0) + 0x2C)), *((s32 *) (((s8 *) arg0) + 0x30))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
@@ -243,7 +243,7 @@ s32 func_8A202078(s8 *arg0) {
 }
 
 void func_8A202160(void) {
-    func_8002C064(0x38, 0x1E0, M2C_FIELD(&D_8A203300, u8 *, 0), M2C_FIELD(&D_8A203300, u8 *, 1), (s32) M2C_FIELD(&D_8A203300, u8 *, 2));
+    Ui_DrawTintedScreenBackground(0x38, 0x1E0, M2C_FIELD(&D_8A203300, u8 *, 0), M2C_FIELD(&D_8A203300, u8 *, 1), (s32) M2C_FIELD(&D_8A203300, u8 *, 2));
 }
 
 s32 LabPC_ComputeExpForLevel(s32 arg0, s32 arg1) {
@@ -632,7 +632,7 @@ s32 func_8A202F50(u8 arg0) {
     func_80028060(0, var_a1, &D_8A21D9E4, D_8A21DE08);
     n = D_8A203428;
     func_8002C8D8(&sp2C, *(ColF50*)&D_8A203300, n / (f64)8.0f);
-    func_8002C064(0x38, 0x1E0, sp2C.r, sp2C.g, sp2C.b);
+    Ui_DrawTintedScreenBackground(0x38, 0x1E0, sp2C.r, sp2C.g, sp2C.b);
     if (D_8A20342C == 0) {
         n = D_8A203428;
         n++;
