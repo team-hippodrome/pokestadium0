@@ -387,7 +387,8 @@ extern u8 D_04009F70[];
  * y8 is taken before the clamps and x2/y2 after them: that keeps the first basic
  * block at the size the target has. The right and bottom edges are written out as
  * x + w and y + h where the target evaluates them again.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-12) in いちらん: drew the yellow row cursor at (0x52, 0x98), size 0x50 x
+ * 0x14, for LabPCList_DrawRowCursor.
  */
 void Ui_DrawRoundedFrame(s32 x, s32 y, s32 w, s32 h, Color_RGBA8 color) {
     s32 x2;
@@ -1059,7 +1060,8 @@ extern Gfx D_80073450[];
 extern u8 *D_80073584[];
 /**
  * Draws `value` in `digits` digit images, with leading zeros.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: called with (0x2D, 0x9C, 1, 4) for the 0001 number of the
+ * first row and (0x104, 0x9C, 12345, 5) for its ID 12345, both drawn with leading zeros as shown.
  */
 void Ui_DrawNumberZeroPadded(s32 x, s32 y, s32 value, s32 digits) {
 
