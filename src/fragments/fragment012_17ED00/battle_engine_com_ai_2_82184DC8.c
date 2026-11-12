@@ -173,7 +173,7 @@ u16 BattleCalc_EstimateDamage(s8*, s8*, u8);
  * Flying and the OHKO moves against Ghost.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_EstimateDamage(s8* arg0, s8* arg1, u8 move) {
+s32 BattleAi_EstimateDamage(s8* arg0, s8* arg1, u8 move) {
     s32 score;
     s32 power;
 
@@ -202,7 +202,7 @@ s32 BattleAI_EstimateDamage(s8* arg0, s8* arg1, u8 move) {
             return 0;
     }
     if ((power >= 6) && (M2C_FIELD(arg1, u8*, 0x61) >= 8)) {
-        if (BattleAI_RandomPercent() >= (-M2C_FIELD(arg1, u8*, 0x61) * 10) + 0x8C) {
+        if (BattleAi_RandomPercent() >= (-M2C_FIELD(arg1, u8*, 0x61) * 10) + 0x8C) {
             return 1;
         }
     }
@@ -234,9 +234,9 @@ s32 BattleAI_EstimateDamage(s8* arg0, s8* arg1, u8 move) {
         case SKULL_BASH:
         case SKY_ATTACK:
             if ((M2C_FIELD(arg0, u16*, 0x2E) < M2C_FIELD(arg1, u16*, 0x2E)) ||
-                (BattleAI_FindByte((u8*)arg1 + 0x1F, 1, 4, FLY) != 0) ||
-                (BattleAI_FindByte((u8*)arg1 + 0x1F, 1, 4, DIG) != 0)) {
-                score = 0xA;
+                (BattleAi_FindByte((u8*)arg1 + 0x1F, 1, 4, FLY) != 0) ||
+                (BattleAi_FindByte((u8*)arg1 + 0x1F, 1, 4, DIG) != 0)) {
+                score = 10;
             }
             break;
         case SUPER_FANG:
@@ -264,7 +264,7 @@ extern u8 D_80065CF8[];
  * D_80065CF8), with a few species patched in by hand.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_SpeciesHasLearnsetBit(species, bit) s32 species; s32 bit; {
+s32 BattleAi_SpeciesHasLearnsetBit(species, bit) s32 species; s32 bit; {
     s32 byteIndex;
     s32 bits;
 
@@ -304,13 +304,13 @@ extern u32 D_821945C4[];
  * D_821944CF maps a move to its learnset bit index.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_SpeciesCanLearnMove(u8 *arg0, s32 arg1) {
+s32 BattleAi_SpeciesCanLearnMove(u8 *arg0, s32 arg1) {
     s32 v = 0;
 
     if (arg1 != 0) {
         v = D_821944CF[arg1];
         if ((v != 0) && (v < 0x38)) {
-            if (BattleAI_SpeciesHasLearnsetBit(arg0[0x17], v - 1, v, arg1) != 0) {
+            if (BattleAi_SpeciesHasLearnsetBit(arg0[0x17], v - 1, v, arg1) != 0) {
                 v = arg1;
             } else {
                 v = 0;
@@ -326,14 +326,14 @@ s32 BattleAI_SpeciesCanLearnMove(u8 *arg0, s32 arg1) {
     return v;
 }
 
-s32 BattleAI_SpeciesCanLearnMove(u8*, s32);
+s32 BattleAi_SpeciesCanLearnMove(u8*, s32);
 
 /**
  * Returns the move if the battler is known to have it with PP left, or if its
  * species could learn it.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_MayKnowMove(u8* arg0, s32 arg1) {
+s32 BattleAi_MayKnowMove(u8* arg0, s32 arg1) {
     s32 i;
     u8* slot;
 
@@ -345,20 +345,20 @@ s32 BattleAI_MayKnowMove(u8* arg0, s32 arg1) {
             return arg1;
         }
     }
-    return BattleAI_SpeciesCanLearnMove(arg0, arg1);
+    return BattleAi_SpeciesCanLearnMove(arg0, arg1);
 }
 
-s32 BattleAI_MayKnowMove(u8 *arg0, s32 arg1);
-s32 BattleAI_EstimateDamage(s8 *, s8 *, u8);
+s32 BattleAi_MayKnowMove(u8 *arg0, s32 arg1);
+s32 BattleAi_EstimateDamage(s8 *, s8 *, u8);
 extern u8 D_82194578[];
 /**
- * Highest BattleAI_EstimateDamage that attacker arg0 can do to arg1. Uses the
+ * Highest BattleAi_EstimateDamage that attacker arg0 can do to arg1. Uses the
  * attacker's moves when they are known (the party flag bit 2, or a full move
  * list); otherwise it considers every move in the D_82194578 list the species
  * could learn, with Self-Destruct and Explosion only when arg2 > 0.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_GetBestDamage(u8 *arg0, u8 *arg1, s32 arg2)
+s32 BattleAi_GetBestDamage(u8 *arg0, u8 *arg1, s32 arg2)
 {
   s32 best = 0;
   s32 i;
@@ -375,9 +375,9 @@ s32 BattleAI_GetBestDamage(u8 *arg0, u8 *arg1, s32 arg2)
     {
       break;
     }
-    if (BattleAI_CanUseMove((s8 *) arg0, arg0[0x2B + i]) != 0)
+    if (BattleAi_CanUseMove((s8 *) arg0, arg0[0x2B + i]) != 0)
     {
-      d = BattleAI_EstimateDamage(((s8 *) arg0) + 0xC, ((s8 *) arg1) + 0xC, arg0[0x2B + i]);
+      d = BattleAi_EstimateDamage(((s8 *) arg0) + 0xC, ((s8 *) arg1) + 0xC, arg0[0x2B + i]);
       if (best < d)
       {
         best = d;
@@ -396,9 +396,9 @@ s32 BattleAI_GetBestDamage(u8 *arg0, u8 *arg1, s32 arg2)
   for (i = 0; i < 0x4E; i++)
   {
     move = D_82194578[i];
-    if (((move != 0) && (((move != SELFDESTRUCT) && (move != EXPLOSION)) || (arg2 > 0))) && (BattleAI_MayKnowMove(arg0, move) != 0))
+    if (((move != 0) && (((move != SELFDESTRUCT) && (move != EXPLOSION)) || (arg2 > 0))) && (BattleAi_MayKnowMove(arg0, move) != 0))
     {
-      d = BattleAI_EstimateDamage(((s8 *) arg0) + 0xC, ((s8 *) arg1) + 0xC, move);
+      d = BattleAi_EstimateDamage(((s8 *) arg0) + 0xC, ((s8 *) arg1) + 0xC, move);
       if (best < d)
       {
         best = d;
@@ -417,7 +417,7 @@ s32 BattleAI_GetBestDamage(u8 *arg0, u8 *arg1, s32 arg2)
  * layout) and resets all eight stat stages to 7 (neutral).
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-void BattleAI_ResetBattleStats(s8 *arg0, s8 *arg1)
+void BattleAi_ResetBattleStats(s8 *arg0, s8 *arg1)
 {
   s32 var_v0;
   s8 *var_v1;
@@ -467,7 +467,7 @@ void func_82185404(void) {
  * speed is higher.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_MovesFirst(s8 *arg0, s8 *arg1)
+s32 BattleAi_MovesFirst(s8 *arg0, s8 *arg1)
 {
   if ((*((u8 *) (((s8 *) arg1) + 0x75))) & (*((u8 *) (((s8 *) arg0) + 0x76)))) // FAKE: decomp slop, raw pointer casts stand in for struct fields
   {
@@ -486,8 +486,8 @@ extern u8 D_8438B0C4[];
  * arg0 moves first, so arg1 cannot act this turn.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_OpponentCannotAct(s8* arg0, s8* arg1) {
-    if ((M2C_FIELD(arg1, u8*, 0x58) & 0x40) && (BattleAI_MovesFirst(arg0, arg1) != 0)) {
+s32 BattleAi_OpponentCannotAct(s8* arg0, s8* arg1) {
+    if ((M2C_FIELD(arg1, u8*, 0x58) & 0x40) && (BattleAi_MovesFirst(arg0, arg1) != 0)) {
         return 1;
     }
     return 0;
@@ -505,7 +505,7 @@ s32 func_82185494(void) {
  * Substitute above half HP. Returns the move slot or -1.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_PickSetupMove(u8* arg0) {
+s32 BattleAi_PickSetupMove(u8* arg0) {
     s32 i;
     s32 t;
 
@@ -513,7 +513,7 @@ s32 BattleAI_PickSetupMove(u8* arg0) {
         if (arg0[0x2B + i] == 0) {
             return -1;
         }
-        if (BattleAI_CanUseMove((s8*)arg0, arg0[0x2B + i]) != 0) {
+        if (BattleAi_CanUseMove((s8*)arg0, arg0[0x2B + i]) != 0) {
             switch (arg0[0x2B + i]) {
                 case SWORDS_DANCE:
                 case GROWTH:
@@ -539,7 +539,7 @@ s32 BattleAI_PickSetupMove(u8* arg0) {
                 case SPLASH:
                     return i;
                 case SUBSTITUTE:
-                    if (func_82185494() != 0 && BattleAI_GetHpPercent((s8*)arg0) >= 0x33) {
+                    if (func_82185494() != 0 && BattleAi_GetHpPercent((s8*)arg0) >= 0x33) {
                         return i;
                     }
                     break;
@@ -557,7 +557,7 @@ extern s32 D_821CF288;
  * Returns 1 when another sleep move may be used.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_SleepClauseAllows(BattleSlotZ *arg0)
+s32 BattleAi_SleepClauseAllows(BattleSlotZ *arg0)
 {
   s32 i;
   BattleSlotZ *p;
@@ -589,14 +589,14 @@ extern u8 D_82194840[];
  * sleep move (D_82194824, and D_82194840 from level 50).
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_MayHaveSleepMove(u8 *arg0) {
+s32 BattleAi_MayHaveSleepMove(u8 *arg0) {
     s32 i;
 
     for (i = 0; i < 4; i++) {
         if (arg0[0x2B + i] == 0) {
             goto check;
         }
-        if (BattleAI_CanUseMove((s8*)arg0, arg0[0x2B + i]) != 0) {
+        if (BattleAi_CanUseMove((s8*)arg0, arg0[0x2B + i]) != 0) {
             switch (arg0[0x2B + i]) {
                 case 0:
                     goto check;
@@ -611,10 +611,10 @@ s32 BattleAI_MayHaveSleepMove(u8 *arg0) {
     }
     return 0;
 check:
-    if (BattleAI_FindByte(D_82194824, 1, 0x19, arg0[0x74]) != 0) {
+    if (BattleAi_FindByte(D_82194824, 1, 0x19, arg0[0x74]) != 0) {
         return 1;
     }
-    if ((arg0[0x32] >= 0x32) && (BattleAI_FindByte(D_82194840, 1, 8, arg0[0x74]) != 0)) {
+    if ((arg0[0x32] >= 50) && (BattleAi_FindByte(D_82194840, 1, 8, arg0[0x74]) != 0)) {
         return 1;
     }
     return 0;
@@ -625,7 +625,7 @@ check:
  * slot or -1.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_PickStatBoostMove(u8* arg0) {
+s32 BattleAi_PickStatBoostMove(u8* arg0) {
     s32 i;
     s32 t;
 
@@ -633,7 +633,7 @@ s32 BattleAI_PickStatBoostMove(u8* arg0) {
         if (arg0[0x2B + i] == 0) {
             return -1;
         }
-        if (BattleAI_CanUseMove((s8*)arg0, arg0[0x2B + i]) != 0) {
+        if (BattleAi_CanUseMove((s8*)arg0, arg0[0x2B + i]) != 0) {
             switch (arg0[0x2B + i]) {
                 case SWORDS_DANCE:
                 case GROWTH:
@@ -649,7 +649,7 @@ s32 BattleAI_PickStatBoostMove(u8* arg0) {
                 case ACID_ARMOR:
                 case SHARPEN:
                     t = (D_8006B190[arg0[0x2B + i] - 1].unk01 - 10) & 7;
-                    if ((arg0 + 0x68)[t] < 0xD) {
+                    if ((arg0 + 0x68)[t] < 13) {
                         return i;
                     }
                     break;
@@ -666,7 +666,7 @@ extern u8* D_821CF29C;
  * when the COM is below 40% HP. Returns the move slot or -1.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_PickHealingMove(u8 *arg0)
+s32 BattleAi_PickHealingMove(u8 *arg0)
 {
   s32 i;
   if ((arg0[0x5A] & 1) || (((*((u16 *) (((s8 *) arg0) + 0x34))) / 2) < (*((u16 *) (((s8 *) arg0) + 0x72))))) // FAKE: decomp slop, raw pointer casts stand in for struct fields
@@ -684,7 +684,7 @@ s32 BattleAI_PickHealingMove(u8 *arg0)
 
   }
 
-  if (BattleAI_GetHpPercent((s8 *) D_821CF29C) < 0x28)
+  if (BattleAi_GetHpPercent((s8 *) D_821CF29C) < 0x28)
   {
     for (i = 0; i < 4; i++)
     {
@@ -692,7 +692,7 @@ s32 BattleAI_PickHealingMove(u8 *arg0)
       {
         return -1;
       }
-      if (BattleAI_CanUseMove((s8 *) arg0, arg0[0x2B + i]) != 0)
+      if (BattleAi_CanUseMove((s8 *) arg0, arg0[0x2B + i]) != 0)
       {
         switch (arg0[0x2B + i])
         {
@@ -718,13 +718,13 @@ s32 BattleAI_PickHealingMove(u8 *arg0)
 }
 
 extern u8* D_821CF29C;
-s32 BattleAI_PickStrongestMove(s32);
+s32 BattleAi_PickStrongestMove(s32);
 /**
  * Picks Toxic against a healthy non-Poison opponent, or Leech Seed against a
  * poisoned non-Grass opponent that is not seeded yet. Returns the move slot or -1.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_PickToxicOrLeechSeed(u8 *arg0) {
+s32 BattleAi_PickToxicOrLeechSeed(u8 *arg0) {
     s32 i;
     s32 r;
 
@@ -734,16 +734,16 @@ s32 BattleAI_PickToxicOrLeechSeed(u8 *arg0) {
     if (D_821CF29C[0x7C] == TOXIC) {
         return -1;
     }
-    r = BattleAI_PickStrongestMove((BattleAI_GetHpPercent(D_821CF2A0) * 5) / 4);
+    r = BattleAi_PickStrongestMove((BattleAi_GetHpPercent(D_821CF2A0) * 5) / 4);
     if (r >= 0) {
         return r;
     }
-    if ((((u8 *)D_821CF2A0)[0x21] == 0) && (BattleAI_HasType(D_821CF2A0, TYPE_POISON) == 0)) {
+    if ((((u8 *)D_821CF2A0)[0x21] == 0) && (BattleAi_HasType(D_821CF2A0, TYPE_POISON) == 0)) {
         for (i = 0; i < 4; i++) {
             if (arg0[0x2B + i] == 0) {
                 break;
             }
-            if ((BattleAI_CanUseMove((s8 *)arg0, arg0[0x2B + i]) != 0) && (arg0[0x2B + i] == TOXIC)) {
+            if ((BattleAi_CanUseMove((s8 *)arg0, arg0[0x2B + i]) != 0) && (arg0[0x2B + i] == TOXIC)) {
                 return i;
             }
         }
@@ -751,7 +751,7 @@ s32 BattleAI_PickToxicOrLeechSeed(u8 *arg0) {
     if (!(((u8 *)D_821CF2A0)[0x21] & 8)) {
         return -1;
     }
-    if ((((u8 *)D_821CF2A0)[0x75] & D_821CF29C[0x77]) || (BattleAI_HasType(D_821CF2A0, TYPE_GRASS) != 0)) {
+    if ((((u8 *)D_821CF2A0)[0x75] & D_821CF29C[0x77]) || (BattleAi_HasType(D_821CF2A0, TYPE_GRASS) != 0)) {
         return -1;
     }
     {
@@ -759,7 +759,7 @@ s32 BattleAI_PickToxicOrLeechSeed(u8 *arg0) {
             if (arg0[0x2B + i] == 0) {
                 break;
             }
-            if ((BattleAI_CanUseMove((s8 *)arg0, arg0[0x2B + i]) != 0) && (arg0[0x2B + i] == LEECH_SEED)) {
+            if ((BattleAi_CanUseMove((s8 *)arg0, arg0[0x2B + i]) != 0) && (arg0[0x2B + i] == LEECH_SEED)) {
                 return i;
             }
         }
@@ -774,7 +774,7 @@ extern u8 D_8006B18B[];
  * is at least -1 and it was not the last move used. Returns the move slot or -1.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_PickStatLowerMove(u8 *arg0, s32 arg1) {
+s32 BattleAi_PickStatLowerMove(u8 *arg0, s32 arg1) {
     s32 i;
     s32 t;
     s32 pad; // FAKE: stack padding
@@ -786,7 +786,7 @@ s32 BattleAI_PickStatLowerMove(u8 *arg0, s32 arg1) {
         if (!(((u8 *)D_821CF2A0)[0x59] & 2)) {
         loop:
             if (p[0x2B] == 0) goto end;
-            if (BattleAI_CanUseMove((s8 *)arg0, p[0x2B]) != 0) {
+            if (BattleAi_CanUseMove((s8 *)arg0, p[0x2B]) != 0) {
                 switch (p[0x2B]) {
                     case SAND_ATTACK:
                     case TAIL_WHIP:
@@ -828,12 +828,12 @@ end:
  * with nothing to reset, and similar checks keyed on the move's effect id.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_IsMoveUseful(s32 move) {
+s32 BattleAi_IsMoveUseful(s32 move) {
     s32 v1;
     s32 i;
 
     if (D_8006B190[move - 1].power != 0) {
-        if (BattleAI_GetTypeMultiplier((s8 *)D_821CF29C, D_821CF2A0, move) == 0) {
+        if (BattleAi_GetTypeMultiplier((s8 *)D_821CF29C, D_821CF2A0, move) == 0) {
             fail:
             return 0;
         }
@@ -845,13 +845,13 @@ s32 BattleAI_IsMoveUseful(s32 move) {
             if (func_82185494() == 0) {
                 goto fail;
             }
-            if (BattleAI_HasType(D_821CF2A0, TYPE_POISON) != 0) {
+            if (BattleAi_HasType(D_821CF2A0, TYPE_POISON) != 0) {
                 goto fail;
             }
             if (((u8 *)D_821CF2A0)[0x21] != 0) {
                 goto fail;
             }
-            if (BattleAI_OpponentCannotAct((s8 *)D_821CF29C, D_821CF2A0) == 0) {
+            if (BattleAi_OpponentCannotAct((s8 *)D_821CF29C, D_821CF2A0) == 0) {
                 break;
             }
             return 0;
@@ -859,14 +859,14 @@ s32 BattleAI_IsMoveUseful(s32 move) {
             if (func_82185494() == 0) {
                 goto fail;
             }
-            if (BattleAI_OpponentCannotAct((s8 *)D_821CF29C, D_821CF2A0) != 0) {
+            if (BattleAi_OpponentCannotAct((s8 *)D_821CF29C, D_821CF2A0) != 0) {
                 goto fail;
             }
             /* fallthrough */
         case 7:
         case 24:
         case 82:
-            if (BattleAI_OpponentCannotAct((s8 *)D_821CF29C, D_821CF2A0) == 0) {
+            if (BattleAi_OpponentCannotAct((s8 *)D_821CF29C, D_821CF2A0) == 0) {
                 break;
             }
             return 0;
@@ -882,7 +882,7 @@ s32 BattleAI_IsMoveUseful(s32 move) {
             if (((u8 *)D_821CF2A0)[0x21] != 0) {
                 goto fail;
             }
-            if (BattleAI_HasType(D_821CF2A0, D_8006B190[move - 1].type) == 0) {
+            if (BattleAi_HasType(D_821CF2A0, D_8006B190[move - 1].type) == 0) {
                 break;
             }
             return 0;
@@ -893,7 +893,7 @@ s32 BattleAI_IsMoveUseful(s32 move) {
             if (func_82185494() == 0) {
                 goto fail;
             }
-            if (BattleAI_OpponentCannotAct((s8 *)D_821CF29C, D_821CF2A0) == 0) {
+            if (BattleAi_OpponentCannotAct((s8 *)D_821CF29C, D_821CF2A0) == 0) {
                 break;
             }
             return 0;
@@ -901,7 +901,7 @@ s32 BattleAI_IsMoveUseful(s32 move) {
         case 50: case 51: case 52: case 53: case 54: case 55:
             v1 = D_8006B190[move - 1].unk01 - 10;
             v1 &= 7;
-            if (((u8 *)D_821CF2A0)[v1 + 0x68] != 0xD) {
+            if (((u8 *)D_821CF2A0)[v1 + 0x68] != 13) {
                 break;
             }
             return 0;
@@ -917,7 +917,7 @@ s32 BattleAI_IsMoveUseful(s32 move) {
             if (v1 >= 0x44) {
                 v1 -= 0x44;
             } else {
-                if (BattleAI_OpponentCannotAct((s8 *)D_821CF29C, D_821CF2A0) != 0) {
+                if (BattleAi_OpponentCannotAct((s8 *)D_821CF29C, D_821CF2A0) != 0) {
                     goto fail;
                 }
                 v1 -= 0x12;
@@ -966,15 +966,15 @@ s32 BattleAI_IsMoveUseful(s32 move) {
             if (((u8 *)D_821CF2A0)[0x21] != 0) {
                 goto fail;
             }
-            if (BattleAI_OpponentCannotAct((s8 *)D_821CF29C, D_821CF2A0) != 0) {
+            if (BattleAi_OpponentCannotAct((s8 *)D_821CF29C, D_821CF2A0) != 0) {
                 goto fail;
             }
-            if (BattleAI_SleepClauseAllows(D_821CF298) != 0) {
+            if (BattleAi_SleepClauseAllows(D_821CF298) != 0) {
                 break;
             }
             return 0;
         case 38:
-            if (BattleAI_MovesFirst((s8 *)D_821CF29C, D_821CF2A0) != 0) {
+            if (BattleAi_MovesFirst((s8 *)D_821CF29C, D_821CF2A0) != 0) {
                 break;
             }
             return 0;
@@ -1000,7 +1000,7 @@ s32 BattleAI_IsMoveUseful(s32 move) {
             if (((u8 *)D_821CF2A0)[0x58] & 0x80) {
                 goto fail;
             }
-            if (BattleAI_OpponentCannotAct((s8 *)D_821CF29C, D_821CF2A0) == 0) {
+            if (BattleAi_OpponentCannotAct((s8 *)D_821CF29C, D_821CF2A0) == 0) {
                 break;
             }
             return 0;
@@ -1010,7 +1010,7 @@ s32 BattleAI_IsMoveUseful(s32 move) {
             }
             return 0;
         case 57:
-            if (BattleAI_OpponentCannotAct((s8 *)D_821CF29C, D_821CF2A0) != 0) {
+            if (BattleAi_OpponentCannotAct((s8 *)D_821CF29C, D_821CF2A0) != 0) {
                 goto fail;
             }
             if (func_82185494() != 0) {
@@ -1032,11 +1032,11 @@ s32 BattleAI_IsMoveUseful(s32 move) {
                 goto fail;
             }
             if (D_8006B190[move - 1].type == 0x17) {
-                if (BattleAI_HasType(D_821CF2A0, TYPE_GROUND) != 0) {
+                if (BattleAi_HasType(D_821CF2A0, TYPE_GROUND) != 0) {
                     goto fail;
                 }
             }
-            if (BattleAI_OpponentCannotAct((s8 *)D_821CF29C, D_821CF2A0) == 0) {
+            if (BattleAi_OpponentCannotAct((s8 *)D_821CF29C, D_821CF2A0) == 0) {
                 break;
             }
             return 0;
@@ -1049,10 +1049,10 @@ s32 BattleAI_IsMoveUseful(s32 move) {
             }
             return 0;
         case 84:
-            if (BattleAI_OpponentCannotAct((s8 *)D_821CF29C, D_821CF2A0) != 0) {
+            if (BattleAi_OpponentCannotAct((s8 *)D_821CF29C, D_821CF2A0) != 0) {
                 goto fail;
             }
-            if (BattleAI_HasType(D_821CF2A0, TYPE_GRASS) != 0) {
+            if (BattleAi_HasType(D_821CF2A0, TYPE_GRASS) != 0) {
                 goto fail;
             }
             if (!(((u8 *)D_821CF2A0)[0x59] & 0x80)) {
@@ -1060,7 +1060,7 @@ s32 BattleAI_IsMoveUseful(s32 move) {
             }
             return 0;
         case 86:
-            if (BattleAI_OpponentCannotAct((s8 *)D_821CF29C, D_821CF2A0) != 0) {
+            if (BattleAi_OpponentCannotAct((s8 *)D_821CF29C, D_821CF2A0) != 0) {
                 goto fail;
             }
             if (((u8 *)D_821CF2A0)[0x5E] != 0) {
@@ -1081,21 +1081,21 @@ extern u8* D_821CF29C;
  * healthy opponent while both sides are above 30% HP. Returns the move slot or -1.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_PickParalysisMove(u8 *arg0, u8 *arg1) {
+s32 BattleAi_PickParalysisMove(u8 *arg0, u8 *arg1) {
     s32 i;
 
-    if ((arg1[0x21] != 0) || (BattleAI_OpponentCannotAct(D_821CF29C, D_821CF2A0) != 0) || (BattleAI_GetHpPercent(D_821CF2A0) < 0x1E) ||
-        (BattleAI_GetHpPercent((s8*)D_821CF29C) < 0x1E)) {
+    if ((arg1[0x21] != 0) || (BattleAi_OpponentCannotAct(D_821CF29C, D_821CF2A0) != 0) || (BattleAi_GetHpPercent(D_821CF2A0) < 30) ||
+        (BattleAi_GetHpPercent((s8*)D_821CF29C) < 0x1E)) {
         return -1;
     }
     for (i = 0; i < 4; i++) {
         if (arg0[0x2B + i] == 0) {
             return -1;
         }
-        if (BattleAI_CanUseMove((s8*)arg0, arg0[0x2B + i]) != 0) {
+        if (BattleAi_CanUseMove((s8*)arg0, arg0[0x2B + i]) != 0) {
             switch (arg0[0x2B + i]) {
                 case THUNDER_WAVE:
-                    if (BattleAI_HasType((s8*)arg1, TYPE_GROUND) != 0) {
+                    if (BattleAi_HasType((s8*)arg1, TYPE_GROUND) != 0) {
                         return -1;
                     }
                 case STUN_SPORE:
@@ -1107,17 +1107,17 @@ s32 BattleAI_PickParalysisMove(u8 *arg0, u8 *arg1) {
     return -1;
 }
 
-s32 BattleAI_SleepClauseAllows();
+s32 BattleAi_SleepClauseAllows();
 /**
  * Picks a sleep move against a healthy opponent when Sleep Clause allows it and
  * the last move was not already a sleep move. Returns the move slot or -1.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_PickSleepMove(u8 *arg0, u8 *arg1) {
+s32 BattleAi_PickSleepMove(u8 *arg0, u8 *arg1) {
     s32 i;
 
-    if ((arg1[0x21] != 0) || (BattleAI_OpponentCannotAct(D_821CF29C, D_821CF2A0) != 0) || (BattleAI_SleepClauseAllows(D_821CF298) == 0) ||
-        (BattleAI_GetHpPercent(D_821CF2A0) < 0x1E) || (BattleAI_GetHpPercent((s8*)D_821CF29C) < 0x1E)) {
+    if ((arg1[0x21] != 0) || (BattleAi_OpponentCannotAct(D_821CF29C, D_821CF2A0) != 0) || (BattleAi_SleepClauseAllows(D_821CF298) == 0) ||
+        (BattleAi_GetHpPercent(D_821CF2A0) < 30) || (BattleAi_GetHpPercent((s8*)D_821CF29C) < 0x1E)) {
         return -1;
     }
     switch (arg0[0x7C]) {
@@ -1132,7 +1132,7 @@ s32 BattleAI_PickSleepMove(u8 *arg0, u8 *arg1) {
         if (arg0[0x2B + i] == 0) {
             return -1;
         }
-        if (BattleAI_CanUseMove((s8*)arg0, arg0[0x2B + i]) != 0) {
+        if (BattleAi_CanUseMove((s8*)arg0, arg0[0x2B + i]) != 0) {
             switch (arg0[0x2B + i]) {
                 case SING:
                 case SLEEP_POWDER:
@@ -1151,21 +1151,21 @@ s32 BattleAI_PickSleepMove(u8 *arg0, u8 *arg1) {
 }
 
 /**
- * Picks Self-Destruct or Explosion unless the opponent cannot act.
+ * Picks a boom move (Self-Destruct or Explosion) unless the opponent cannot act.
  * Returns the move slot or -1.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_PickSelfDestructMove(u8 *arg0, u8 *arg1) {
+s32 BattleAi_PickBoomMove(u8 *arg0, u8 *arg1) {
     s32 i;
 
-    if (BattleAI_OpponentCannotAct(arg0, arg1) != 0) {
+    if (BattleAi_OpponentCannotAct(arg0, arg1) != 0) {
         return -1;
     }
     for (i = 0; i < 4; i++) {
         if (arg0[0x2B + i] == 0) {
             break;
         }
-        if (BattleAI_CanUseMove((s8*)arg0, arg0[0x2B + i]) != 0) {
+        if (BattleAi_CanUseMove((s8*)arg0, arg0[0x2B + i]) != 0) {
             switch (arg0[0x2B + i]) {
                 case SELFDESTRUCT:
                 case EXPLOSION:
@@ -1191,7 +1191,7 @@ extern u8 D_821CF281;
  * D_821CF281) is one of the three; 0 otherwise.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_NoVenusaurChanseyJynxPicked(s32 arg0) {
+s32 BattleAi_NoVenusaurChanseyJynxPicked(s32 arg0) {
     switch (arg0) {
         case 2:
             if ((D_821CF294[D_821CF281].species == VENUSAUR) || (D_821CF294[D_821CF281].species == CHANSEY) || (D_821CF294[D_821CF281].species == JYNX)) {
@@ -1202,7 +1202,7 @@ s32 BattleAI_NoVenusaurChanseyJynxPicked(s32 arg0) {
                 return 0;
             }
         case 0:
-            return 0x2710;
+            return 10000;
         default:
             return 0;
     }
@@ -1213,7 +1213,7 @@ s32 BattleAI_NoVenusaurChanseyJynxPicked(s32 arg0) {
  * padding with zeros.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-void BattleAI_CopyMoveList(u8* arg0, u8* arg1) {
+void BattleAi_CopyMoveList(u8* arg0, u8* arg1) {
     s32 i;
     u8 c;
 
@@ -1238,14 +1238,14 @@ M2C_UNK func_80058410(s8*, s8*, M2C_UNK);
  * stats and PP.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-void BattleAI_LoadBattlerFromPartyMon(s8* arg0, s8* arg1) {
+void BattleAi_LoadBattlerFromPartyMon(s8* arg0, s8* arg1) {
     M2C_FIELD(arg0, u8*, 0xB) = M2C_FIELD(arg1, u8*, 0);
     M2C_FIELD(arg0, u16*, 0xC) = M2C_FIELD(arg1, u16*, 2);
     M2C_FIELD(arg0, u8*, 0x14) = M2C_FIELD(arg1, u8*, 4);
     M2C_FIELD(arg0, u8*, 0x15) = M2C_FIELD(arg1, u8*, 5);
     M2C_FIELD(arg0, u8*, 0x1C) = M2C_FIELD(arg1, u8*, 6);
     M2C_FIELD(arg0, u8*, 0x1D) = M2C_FIELD(arg1, u8*, 7);
-    BattleAI_CopyMoveList(arg1 + 9, arg0 + 0x1F);
+    BattleAi_CopyMoveList(arg1 + 9, arg0 + 0x1F);
     M2C_FIELD(arg0, u16*, 0x24) = M2C_FIELD(arg1, u16*, 0x1E);
     M2C_FIELD(arg0, u8*, 0x26) = M2C_FIELD(arg1, u8*, 0x24);
     M2C_FIELD(arg0, u16*, 0x28) = M2C_FIELD(arg1, u16*, 0x26);
@@ -1258,30 +1258,30 @@ void BattleAI_LoadBattlerFromPartyMon(s8* arg0, s8* arg1) {
 
 typedef struct BaseStats821868E8 { u8 species; u8 hp; u8 atk; u8 def; u8 spd; u8 spc; u8 type1; u8 type2; char unk08[0xF]; } BaseStats821868E8;
 extern u8 D_80065D00[];
-s32 BattleAI_CalcDefense(s32, s32);
-s32 BattleAI_CalcSpeed(s32, s32);
-s32 BattleAI_CalcSpecial(s32, s32);
+s32 BattleAi_CalcDefense(s32, s32);
+s32 BattleAi_CalcSpeed(s32, s32);
+s32 BattleAi_CalcSpecial(s32, s32);
 /**
  * Fills a battle Pokemon record from base stats when the real party data is
  * hidden: species, HP and max HP, types, DVs 0x7777, level and stats computed with
- * BattleAI_CalcStat.
+ * BattleAi_CalcStat.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-void BattleAI_LoadBattlerFromSpecies(s8* arg0, s32 species, s32 level) {
+void BattleAi_LoadBattlerFromSpecies(s8* arg0, s32 species, s32 level) {
     BaseStats821868E8* stats;
 
     if (species != 0 && species < 0x98) {
         M2C_FIELD(arg0, u8*, 0xB) = species;
         stats = &((BaseStats821868E8*)D_80065D00)[species - 1];
-        M2C_FIELD(arg0, s16*, 0xC) = M2C_FIELD(arg0, s16*, 0x28) = BattleAI_CalcMaxHp(stats->hp, level);
+        M2C_FIELD(arg0, s16*, 0xC) = M2C_FIELD(arg0, s16*, 0x28) = BattleAi_CalcMaxHp(stats->hp, level);
         M2C_FIELD(arg0, u8*, 0x1C) = stats->type1;
         M2C_FIELD(arg0, u8*, 0x1D) = stats->type2;
         M2C_FIELD(arg0, s16*, 0x24) = 0x7777;
         M2C_FIELD(arg0, u8*, 0x26) = level;
-        M2C_FIELD(arg0, s16*, 0x2A) = BattleAI_CalcAttack(stats->atk, level);
-        M2C_FIELD(arg0, s16*, 0x2C) = BattleAI_CalcDefense(stats->def, level);
-        M2C_FIELD(arg0, s16*, 0x2E) = BattleAI_CalcSpeed(stats->spd, level);
-        M2C_FIELD(arg0, s16*, 0x30) = BattleAI_CalcSpecial(stats->spc, level);
+        M2C_FIELD(arg0, s16*, 0x2A) = BattleAi_CalcAttack(stats->atk, level);
+        M2C_FIELD(arg0, s16*, 0x2C) = BattleAi_CalcDefense(stats->def, level);
+        M2C_FIELD(arg0, s16*, 0x2E) = BattleAi_CalcSpeed(stats->spd, level);
+        M2C_FIELD(arg0, s16*, 0x30) = BattleAi_CalcSpecial(stats->spc, level);
     }
 }
 
@@ -1295,7 +1295,7 @@ extern s8 *D_821CF2A0;
  * only the move just used is recorded.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-void BattleAI_CopyVisibleBattleState(s8 *arg0, s8 *arg1)
+void BattleAi_CopyVisibleBattleState(s8 *arg0, s8 *arg1)
 {
   long temp_v1;
   u8 *new_var; // FAKE: permuter temp
@@ -1318,7 +1318,7 @@ void BattleAI_CopyVisibleBattleState(s8 *arg0, s8 *arg1)
   func_80058410(arg1 + 0x5C, arg0 + 0x5C, 8);
   if ((*((u8 *) (((s8 *) arg1) + 0x4E))) & 8)
   {
-    BattleAI_CopyMoveList(arg1 + 0x1F, arg0 + 0x1F);
+    BattleAi_CopyMoveList(arg1 + 0x1F, arg0 + 0x1F);
     func_80058410(arg1 + 0x32, arg0 + 0x32, 4);
     return;
   }
@@ -1384,7 +1384,7 @@ typedef struct Side82186AF4 {
  * mode byte; mode 2 and up raises the switch threshold to 10.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-void BattleAI_InitSide(Side82186AF4 *arg0, Party82186AF4 *arg1, s32 arg2)
+void BattleAi_InitSide(Side82186AF4 *arg0, Party82186AF4 *arg1, s32 arg2)
 {
   s32 i;
   s32 j;
@@ -1417,12 +1417,12 @@ void BattleAI_InitSide(Side82186AF4 *arg0, Party82186AF4 *arg1, s32 arg2)
           level = arg1->mons[i].level; // FAKE: permuter; redundant reload of level
           if (arg1->flags & 2)
           {
-            BattleAI_LoadBattlerFromPartyMon((s8 *) arg0->slots[i].mon, (s8 *) (&arg1->mons[i]));
+            BattleAi_LoadBattlerFromPartyMon((s8 *) arg0->slots[i].mon, (s8 *) (&arg1->mons[i]));
             arg0->slots[i].hp2 = arg0->slots[i].hp;
           }
           else
           {
-            BattleAI_LoadBattlerFromSpecies((s8 *) arg0->slots[i].mon, arg1->mons[i].species, level);
+            BattleAi_LoadBattlerFromSpecies((s8 *) arg0->slots[i].mon, arg1->mons[i].species, level);
           }
           for (j = 0; j < 4; j++)
           {
@@ -1449,7 +1449,7 @@ extern u8 D_82194848[];
  * damaging moves.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-void BattleAI_AddMatchupPickScore(u8 *arg0, u8 *arg1) {
+void BattleAi_AddMatchupPickScore(u8 *arg0, u8 *arg1) {
     s32 score;
     s32 i;
     s32 acc;
@@ -1466,33 +1466,33 @@ void BattleAI_AddMatchupPickScore(u8 *arg0, u8 *arg1) {
             break;
     }
     if (*(u16 *)(arg0 + 0x18) != 0) {
-        score = 0x8000;
+        score = 32768;
     }
     if (!(arg0[0x21] & 0x20)) {
-        score += 0x4000;
+        score += 16384;
     }
     if (!(arg0[0x5A] & 1) || (arg0[0x7A] < 3)) {
-        score += 0x2000;
+        score += 8192;
     }
     if (!(arg0[0x21] & 7)) {
-        score += 0x1000;
+        score += 4096;
     }
-    if (BattleAI_FindUsableHealingMove(arg0) != 0) {
-        score += 0x200;
+    if (BattleAi_FindUsableHealingMove(arg0) != 0) {
+        score += 512;
     }
-    if ((BattleAI_HasType((s8 *)arg0, TYPE_ICE) != 0) || (BattleAI_HasType((s8 *)arg0, TYPE_POISON) != 0)) {
-        score += 0x200;
+    if ((BattleAi_HasType((s8 *)arg0, TYPE_ICE) != 0) || (BattleAi_HasType((s8 *)arg0, TYPE_POISON) != 0)) {
+        score += 512;
     }
     if (*(u16 *)(arg1 + 0x3A) < *(u16 *)(arg0 + 0x3A)) {
-        score += 0x300;
+        score += 768;
     }
     for (i = 0; i < 4; i++) {
         if (arg0[0x2B + i] == 0) {
             break;
         }
-        if ((BattleAI_CanUseMove((s8 *)arg0, arg0[0x2B + i]) != 0) && (BattleAI_FindByte(D_82194848, 1, 0x2B, arg0[0x2B + i]) != 0)) {
+        if ((BattleAi_CanUseMove((s8 *)arg0, arg0[0x2B + i]) != 0) && (BattleAi_FindByte(D_82194848, 1, 0x2B, arg0[0x2B + i]) != 0)) {
             acc = (D_8006B190[arg0[0x2B + i]].unk04 * D_8006B190[arg0[0x2B + i]].unk04) / 650;
-            score += (((BattleAI_GetTypeMultiplier((s8 *)arg0, (s8 *)arg1, arg0[0x2B + i]) * 8) / 100) * acc) / 100;
+            score += (((BattleAi_GetTypeMultiplier((s8 *)arg0, (s8 *)arg1, arg0[0x2B + i]) * 8) / 100) * acc) / 100;
         }
     }
     *(s32 *)(arg0 + 4) += score;
@@ -1503,7 +1503,7 @@ void BattleAI_AddMatchupPickScore(u8 *arg0, u8 *arg1) {
  * 150..155 (Nintendo Cup '97 rules). arg0 is the pick round.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_LevelSumAllowed(s32 arg0, s32 arg1) {
+s32 BattleAi_LevelSumAllowed(s32 arg0, s32 arg1) {
     s32 i;
     s32 sum;
 
@@ -1514,7 +1514,7 @@ s32 BattleAI_LevelSumAllowed(s32 arg0, s32 arg1) {
         for (i = 0; i < 6; i++) {
             if ((i != D_821CF280[0]) && (i != arg1)) {
                 sum = D_821CF294[D_821CF280[0]].level + D_821CF294[i].level + D_821CF294[arg1].level;
-                if ((sum >= 0x96) && (sum < 0x9C)) {
+                if ((sum >= 150) && (sum < 156)) {
                     return 1;
                 }
             }
@@ -1522,24 +1522,24 @@ s32 BattleAI_LevelSumAllowed(s32 arg0, s32 arg1) {
         return 0;
     }
     sum = D_821CF294[D_821CF280[0]].level + D_821CF294[D_821CF280[1]].level + D_821CF294[arg1].level;
-    if ((sum >= 0x96) && (sum < 0x9C)) {
+    if ((sum >= 150) && (sum < 156)) {
         return 1;
     }
     return 0;
 }
 
 extern BattleSlotZ* D_821CF294;
-s32 BattleAI_LevelSumAllowed(s32, s32);
+s32 BattleAi_LevelSumAllowed(s32, s32);
 
 /**
  * Returns 1 if picking party slot arg2 in round arg1 keeps the team legal.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_IsPickAllowed(s32 arg0, s32 arg1, s32 arg2) {
+s32 BattleAi_IsPickAllowed(s32 arg0, s32 arg1, s32 arg2) {
     if ((M2C_FIELD(D_821CF294, u8*, 0x368) != 0) || (arg0 != 0)) {
         return 1;
     }
-    if (BattleAI_LevelSumAllowed(arg1, arg2) == 0) {
+    if (BattleAi_LevelSumAllowed(arg1, arg2) == 0) {
         return 0;
     } else {
         return 1;
@@ -1547,14 +1547,14 @@ s32 BattleAI_IsPickAllowed(s32 arg0, s32 arg1, s32 arg2) {
     return 1;
 }
 
-void BattleAI_AddTrainerPickScore(u8 *, s32);
+void BattleAi_AddTrainerPickScore(u8 *, s32);
 /**
  * Scores every unfainted, unpicked (arg1 == 0) or picked (arg1 != 0) Pokemon of
  * the COM side and returns the best legal one, marking it as picked. arg0 is the
  * opponent battler to score against, or NULL for the whole opposing team.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_PickNextPokemon(u8 *arg0, s32 arg1, s32 arg2, s32 arg3)
+s32 BattleAi_PickNextPokemon(u8 *arg0, s32 arg1, s32 arg2, s32 arg3)
 {
   s32 i;
   s32 j;
@@ -1572,27 +1572,27 @@ s32 BattleAI_PickNextPokemon(u8 *arg0, s32 arg1, s32 arg2, s32 arg3)
         {
           if ((D_821CF298[j].hp != 0) && (D_821CF298[j].species != 0) && (D_821CF298[j].level != 0))
           {
-            BattleAI_AddMatchupPickScore(D_821CF294[i].pad04, D_821CF298[j].pad04);
+            BattleAi_AddMatchupPickScore(D_821CF294[i].pad04, D_821CF298[j].pad04);
           }
         }
       }
       else
       {
-        BattleAI_AddMatchupPickScore(D_821CF294[i].pad04, arg0);
+        BattleAi_AddMatchupPickScore(D_821CF294[i].pad04, arg0);
       }
-      if ((arg2 != 0) && (BattleAI_RandomPercent() < 0x28))
+      if ((arg2 != 0) && (BattleAi_RandomPercent() < 40))
       {
-        BattleAI_AddRandomPickScore((s8 *) D_821CF294[i].pad04);
+        BattleAi_AddRandomPickScore((s8 *) D_821CF294[i].pad04);
       }
       if (((u8 *) D_821CF294)[0x368] >= 2)
       {
-        D_821CF294[i].pickScore += BattleAI_RandomPercent() * 1000;
+        D_821CF294[i].pickScore += BattleAi_RandomPercent() * 1000;
       }
       else if (((u8 *) D_821CF294)[0x368] == 1)
       {
-        BattleAI_AddRandomPickScore((s8 *) D_821CF294[i].pad04);
+        BattleAi_AddRandomPickScore((s8 *) D_821CF294[i].pad04);
       }
-      BattleAI_AddTrainerPickScore(D_821CF294[i].pad04, arg3);
+      BattleAi_AddTrainerPickScore(D_821CF294[i].pad04, arg3);
     }
   }
 
@@ -1600,7 +1600,7 @@ s32 BattleAI_PickNextPokemon(u8 *arg0, s32 arg1, s32 arg2, s32 arg3)
   best = -1;
   for (i = 0; i < 6; i++)
   {
-    if ((D_821CF294[i].hp != 0) && (((arg1 == 0) && (!(((u8 *) D_821CF294)[0x36C] & (1 << i)))) || ((arg1 != 0) && (((u8 *) D_821CF294)[0x36C] & (1 << i)))) && (BattleAI_IsPickAllowed(arg1, arg3, i) != 0))
+    if ((D_821CF294[i].hp != 0) && (((arg1 == 0) && (!(((u8 *) D_821CF294)[0x36C] & (1 << i)))) || ((arg1 != 0) && (((u8 *) D_821CF294)[0x36C] & (1 << i)))) && (BattleAi_IsPickAllowed(arg1, arg3, i) != 0))
     {
       if (bestScore < D_821CF294[i].pickScore)
       {
@@ -1618,14 +1618,14 @@ s32 BattleAI_PickNextPokemon(u8 *arg0, s32 arg1, s32 arg2, s32 arg3)
   return best;
 }
 
-s32 BattleAI_PickNextPokemon(u8 *, s32, s32, s32);
+s32 BattleAi_PickNextPokemon(u8 *, s32, s32, s32);
 extern u8 D_821CF2B8[];
 /**
  * Picks arg0 Pokemon for the COM team, then sometimes moves the one with the best
  * damage ratio against the opponent's team into the lead.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_PickTeam(s32 arg0)
+s32 BattleAi_PickTeam(s32 arg0)
 {
   s32 best;
   s32 i;
@@ -1637,7 +1637,7 @@ s32 BattleAI_PickTeam(s32 arg0)
   D_821CF288 = arg0;
   for (i = 0; i < D_821CF288; i++)
   {
-    r = BattleAI_PickNextPokemon(0, 0, 1, i);
+    r = BattleAi_PickNextPokemon(0, 0, 1, i);
     if (r < 0)
     {
       return -1;
@@ -1652,14 +1652,14 @@ s32 BattleAI_PickTeam(s32 arg0)
     {
       if (D_821CF298[j].hp != 0)
       {
-        r = BattleAI_GetBestDamage(D_821CF298[j].pad04, D_821CF294[D_821CF280[i]].pad04, 0);
+        r = BattleAi_GetBestDamage(D_821CF298[j].pad04, D_821CF294[D_821CF280[i]].pad04, 0);
         if (r == 0)
         {
           scores[i] += 2.0f;
         }
         else
         {
-          scores[i] += ((f32) BattleAI_GetBestDamage(D_821CF294[D_821CF280[i]].pad04, D_821CF298[j].pad04, 0)) / ((f32) r);
+          scores[i] += ((f32) BattleAi_GetBestDamage(D_821CF294[D_821CF280[i]].pad04, D_821CF298[j].pad04, 0)) / ((f32) r);
         }
       }
     }
@@ -1676,7 +1676,7 @@ s32 BattleAI_PickTeam(s32 arg0)
     }
   }
 
-  if ((best != 0) && (BattleAI_RandomPercent() < 0x32))
+  if ((best != 0) && (BattleAi_RandomPercent() < 50))
   {
     i = D_821CF280[best]; // FAKE: i reused as swap temp
     D_821CF280[best] = D_821CF280[0];
@@ -1702,8 +1702,8 @@ extern BattleSlotZ D_821CF618[6];
 extern BattleSlotZ D_821CF998[6];
 extern s32 D_821CF2A4;
 void func_8004FD20(void*, s32);
-void BattleAI_InitSide(); /* real types are declared with the definition below */
-s32 BattleAI_PickTeam(s32);
+void BattleAi_InitSide(); /* real types are declared with the definition below */
+s32 BattleAi_PickTeam(s32);
 
 /**
  * Team-selection entry point. Seeds the AI random source, builds both sides from
@@ -1711,14 +1711,14 @@ s32 BattleAI_PickTeam(s32);
  * to arg3. Returns 0, or nonzero when the picks fell back to the first slots.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_SelectTeam(u8* arg0, u8* arg1, s32 arg2, s8* arg3, s32 arg4) {
+s32 BattleAi_SelectTeam(u8* arg0, u8* arg1, s32 arg2, s8* arg3, s32 arg4) {
     s32 j;
     s32 i;
     s32 ret;
 
     D_821CF2B0 = 0x3039;
     D_821CF2B4 = 0x1A85;
-    BattleAI_StirRandom();
+    BattleAi_StirRandom();
     func_8004FD20(D_821CF618, 0x700);
     D_821CF2A4 = 0xFEDC;
     if (*arg0 & 2) {
@@ -1728,8 +1728,8 @@ s32 BattleAI_SelectTeam(u8* arg0, u8* arg1, s32 arg2, s8* arg3, s32 arg4) {
         D_821CF294 = D_821CF998;
         D_821CF298 = D_821CF618;
     }
-    BattleAI_InitSide(D_821CF294, arg0, arg2);
-    BattleAI_InitSide(D_821CF298, arg1, arg2);
+    BattleAi_InitSide(D_821CF294, arg0, arg2);
+    BattleAi_InitSide(D_821CF298, arg1, arg2);
     D_821CF294 = D_821CF618;
     D_821CF298 = D_821CF998;
     D_821CF29C = (u8*)D_821CF294 + 4;
@@ -1739,7 +1739,7 @@ s32 BattleAI_SelectTeam(u8* arg0, u8* arg1, s32 arg2, s8* arg3, s32 arg4) {
         D_821CF294[i].unk_7F = 0;
         D_821CF298[i].unk_7F = 0;
     }
-    ret = BattleAI_PickTeam(arg4);
+    ret = BattleAi_PickTeam(arg4);
     if (ret == 0) {
         for (j = 0; j < arg4; j++) {
             arg3[j] = D_821CF280[j];
@@ -1759,7 +1759,7 @@ s32 BattleAI_SelectTeam(u8* arg0, u8* arg1, s32 arg2, s8* arg3, s32 arg4) {
  * relax the required damage ratio.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_ChooseSwitch(void) {
+s32 BattleAi_ChooseSwitch(void) {
     s32 flag;
     s32 r;
     f32 fa[6];
@@ -1780,10 +1780,10 @@ s32 BattleAI_ChooseSwitch(void) {
         ((u8*)D_821CF294)[0x36C] &= ~D_821CF29C[0x75];
     }
     for (i = 0; i < D_821CF288; i++) {
-        if ((r = BattleAI_GetBestDamage((u8*)D_821CF2A0, D_821CF294[i].pad04, 0)) == 0) {
+        if ((r = BattleAi_GetBestDamage((u8*)D_821CF2A0, D_821CF294[i].pad04, 0)) == 0) {
             fa[i] = 255.0f;
         } else {
-            fa[i] = (f32)BattleAI_GetBestDamage(D_821CF294[i].pad04, (u8*)D_821CF2A0, 0) / (f32)r;
+            fa[i] = (f32)BattleAi_GetBestDamage(D_821CF294[i].pad04, (u8*)D_821CF2A0, 0) / (f32)r;
         }
         // FAKE: the dead store to r is needed for the operand order
         if (D_821CF29C[0x75] == (r = 1 << i)) {
@@ -1799,7 +1799,7 @@ s32 BattleAI_ChooseSwitch(void) {
             switch (k) {
             case 0:
                 if (fa[i] - f20 < *(f32*)((u8*)D_821CF294 + 0x364)) break;
-                if (BattleAI_GetHpPercent((s8*)D_821CF294[i].pad04) < 0x28) break;
+                if (BattleAi_GetHpPercent((s8*)D_821CF294[i].pad04) < 0x28) break;
             case 1:
             case 2:
                 if (fa[i] < f20) break;
@@ -1808,11 +1808,11 @@ s32 BattleAI_ChooseSwitch(void) {
             case 4:
                 if (D_821CF294[i].unk_5E & 1) break;
             case 5:
-                if (flag && BattleAI_PickSelfDestructMove(D_821CF294[i].pad04, (u8*)D_821CF2A0) < 0) break;
+                if (flag && BattleAi_PickBoomMove(D_821CF294[i].pad04, (u8*)D_821CF2A0) < 0) break;
             case 6:
-                if (flag && BattleAI_MovesFirst((s8*)D_821CF294[i].pad04, D_821CF2A0) == 0) break;
+                if (flag && BattleAi_MovesFirst((s8*)D_821CF294[i].pad04, D_821CF2A0) == 0) break;
             case 7:
-                if (BattleAI_GetHpPercent((s8*)D_821CF294[i].pad04) < 0x37) break;
+                if (BattleAi_GetHpPercent((s8*)D_821CF294[i].pad04) < 0x37) break;
             case 8:
                 if (D_821CF294[i].status & 0x20) break;
             default:
@@ -1828,8 +1828,8 @@ s32 BattleAI_ChooseSwitch(void) {
         }
     } while (flag && best < 0);
     if (!flag) {
-        if (BattleAI_RandomPercent() < 0x46) {
-            if (BattleAI_SleepClauseAllows(D_821CF294) != 0 && BattleAI_MayHaveSleepMove(D_821CF2A0) != 0) {
+        if (BattleAi_RandomPercent() < 70) {
+            if (BattleAi_SleepClauseAllows(D_821CF294) != 0 && BattleAi_MayHaveSleepMove(D_821CF2A0) != 0) {
                 return -1;
             }
         }

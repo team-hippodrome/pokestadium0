@@ -492,7 +492,7 @@ void Battle_CompleteRosterOrder(u8* roster_order, s32 number_of_pokemon_picked) 
 
 extern u8 D_82189170[];
 extern u8 D_82189174[];
-void BattleAI_SelectTeam(TeamRoster*, TeamRoster*, s32, u8*, s32);
+void BattleAi_SelectTeam(TeamRoster*, TeamRoster*, s32, u8*, s32);
 
 void Battle_SelectComRoster(void) {
     UNUSED s32 pad; // FAKE: stack padding
@@ -523,7 +523,7 @@ void Battle_SelectComRoster(void) {
         if (player_roster->numberOfPokemonBrought < number_of_pokemon_picked) {
             number_of_pokemon_picked = player_roster->numberOfPokemonBrought;
         }
-        BattleAI_SelectTeam(player_roster, com_roster, difficulty, order_of_picked_pokemon, number_of_pokemon_picked);
+        BattleAi_SelectTeam(player_roster, com_roster, difficulty, order_of_picked_pokemon, number_of_pokemon_picked);
         Battle_CompleteRosterOrder(order_of_picked_pokemon, number_of_pokemon_picked);
         com_roster->numberOfPokemonBrought = number_of_pokemon_picked;
 

@@ -7,10 +7,10 @@
 
 extern u8* D_821CF29C;
 extern s8* D_821CF2A0;
-s32 BattleAI_GetBestDamage(u8 *arg0, u8 *arg1, s32 arg2);
-s32 BattleAI_MovesFirst(s8 *arg0, s8 *arg1);
-s32 BattleAI_CanUseMove(s8 *arg0, s32 arg1);
-s32 BattleAI_EstimateDamage(s8 *, s8 *, u8);
+s32 BattleAi_GetBestDamage(u8 *arg0, u8 *arg1, s32 arg2);
+s32 BattleAi_MovesFirst(s8 *arg0, s8 *arg1);
+s32 BattleAi_CanUseMove(s8 *arg0, s32 arg1);
+s32 BattleAi_EstimateDamage(s8 *, s8 *, u8);
 
 /**
  * If the chosen move is Hyper Beam but it would not knock the opponent out, looks
@@ -18,7 +18,7 @@ s32 BattleAI_EstimateDamage(s8 *, s8 *, u8);
  * rounds. Returns the move slot to use.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_ReplaceHyperBeam(s32 arg0) {
+s32 BattleAi_ReplaceHyperBeam(s32 arg0) {
     s32 i;
     s32 tier;
     s32 best;
@@ -26,8 +26,8 @@ s32 BattleAI_ReplaceHyperBeam(s32 arg0) {
     s32 v;
     u8 move;
 
-    if (arg0 >= 0 && arg0 < 4 && BattleAI_GetBestDamage((u8*)D_821CF2A0, D_821CF29C, 0) < M2C_FIELD(D_821CF29C, u16*, 0x18) && (D_821CF29C + arg0)[0x2B] == HYPER_BEAM) {
-        threshold = M2C_FIELD(D_821CF2A0, u16*, 0x18) - BattleAI_EstimateDamage((s8*)D_821CF29C + 0xC, D_821CF2A0 + 0xC, 0x3F) * 9 / 10;
+    if (arg0 >= 0 && arg0 < 4 && BattleAi_GetBestDamage((u8*)D_821CF2A0, D_821CF29C, 0) < M2C_FIELD(D_821CF29C, u16*, 0x18) && (D_821CF29C + arg0)[0x2B] == HYPER_BEAM) {
+        threshold = M2C_FIELD(D_821CF2A0, u16*, 0x18) - BattleAi_EstimateDamage((s8*)D_821CF29C + 0xC, D_821CF2A0 + 0xC, 0x3F) * 9 / 10;
         best = -1;
         if (threshold > 0) {
             for (tier = 0; tier < 4; tier++) {
@@ -35,7 +35,7 @@ s32 BattleAI_ReplaceHyperBeam(s32 arg0) {
                     if ((D_821CF29C + i)[0x2B] == 0) {
                         break;
                     }
-                    if (BattleAI_MovesFirst((s8*)D_821CF29C, D_821CF2A0) != 0 || (D_821CF29C + i)[0x2B] == QUICK_ATTACK) {
+                    if (BattleAi_MovesFirst((s8*)D_821CF29C, D_821CF2A0) != 0 || (D_821CF29C + i)[0x2B] == QUICK_ATTACK) {
                         move = (D_821CF29C + i)[0x2B];
                         switch (move) {
                             case BIND:
@@ -135,7 +135,7 @@ s32 BattleAI_ReplaceHyperBeam(s32 arg0) {
                             case DIZZY_PUNCH:
                             case TRI_ATTACK:
                             case SLASH:
-                                v = BattleAI_EstimateDamage((s8*)D_821CF29C + 0xC, D_821CF2A0 + 0xC, move) * 9 / 10;
+                                v = BattleAi_EstimateDamage((s8*)D_821CF29C + 0xC, D_821CF2A0 + 0xC, move) * 9 / 10;
                                 if (best < v && threshold < v) {
                                     best = v;
                                     arg0 = i;
@@ -155,7 +155,7 @@ s32 BattleAI_ReplaceHyperBeam(s32 arg0) {
  * damage is more than arg0 percent of the opponent's HP, otherwise -1.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_PickStrongestMove(s32 arg0) {
+s32 BattleAi_PickStrongestMove(s32 arg0) {
     s32 i;
     s32 best = -1;
     s32 bestIdx = -1;
@@ -165,8 +165,8 @@ s32 BattleAI_PickStrongestMove(s32 arg0) {
         if ((D_821CF29C + i)[0x2B] == 0) {
             break;
         }
-        if (BattleAI_CanUseMove((s8*)D_821CF29C, (D_821CF29C + i)[0x2B]) != 0) {
-            v = BattleAI_EstimateDamage((s8*)D_821CF29C + 0xC, D_821CF2A0 + 0xC, (D_821CF29C + i)[0x2B]);
+        if (BattleAi_CanUseMove((s8*)D_821CF29C, (D_821CF29C + i)[0x2B]) != 0) {
+            v = BattleAi_EstimateDamage((s8*)D_821CF29C + 0xC, D_821CF2A0 + 0xC, (D_821CF29C + i)[0x2B]);
             if (best < v) {
                 best = v;
                 bestIdx = i;
@@ -181,81 +181,81 @@ s32 BattleAI_PickStrongestMove(s32 arg0) {
 }
 
 extern void *D_821CF294;
-s32 BattleAI_GetHpPercent(s8 *);
-s32 BattleAI_CountUnfainted(void *);
-s32 BattleAI_FindUsableHealingMove(s8 *);
-s32 BattleAI_OpponentCannotAct(s8 *, s8 *);
-s32 BattleAI_PickSetupMove(s8 *);
-s32 BattleAI_PickStatBoostMove(s8 *);
-s32 BattleAI_PickHealingMove(s8 *);
-s32 BattleAI_PickToxicOrLeechSeed(s8 *);
-s32 BattleAI_PickStatLowerMove(s8 *, s8 *);
-s32 BattleAI_IsMoveUseful(u8);
-s32 BattleAI_PickParalysisMove(s8 *, s8 *);
-s32 BattleAI_PickSleepMove(s8 *, s8 *);
-s32 BattleAI_PickSelfDestructMove(s8 *, s8 *);
+s32 BattleAi_GetHpPercent(s8 *);
+s32 BattleAi_CountUnfainted(void *);
+s32 BattleAi_FindUsableHealingMove(s8 *);
+s32 BattleAi_OpponentCannotAct(s8 *, s8 *);
+s32 BattleAi_PickSetupMove(s8 *);
+s32 BattleAi_PickStatBoostMove(s8 *);
+s32 BattleAi_PickHealingMove(s8 *);
+s32 BattleAi_PickToxicOrLeechSeed(s8 *);
+s32 BattleAi_PickStatLowerMove(s8 *, s8 *);
+s32 BattleAi_IsMoveUseful(u8);
+s32 BattleAi_PickParalysisMove(s8 *, s8 *);
+s32 BattleAi_PickSleepMove(s8 *, s8 *);
+s32 BattleAi_PickBoomMove(s8 *, s8 *);
 /**
  * Normal move choice. In order: heal, set up when the opponent cannot act
- * (BattleAI_OpponentCannotAct), status the opponent, lower its stats, finish it with a strong move, boost,
+ * (BattleAi_OpponentCannotAct), status the opponent, lower its stats, finish it with a strong move, boost,
  * explode when about to faint, or take the strongest move; then
- * BattleAI_ReplaceHyperBeam, and finally the first move that is useful.
+ * BattleAi_ReplaceHyperBeam, and finally the first move that is useful.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_ChooseMove(void)
+s32 BattleAi_ChooseMove(void)
 {
   s32 r;
   s32 i;
   s32 j;
 
-  BattleAI_MovesFirst((s8 *) D_821CF29C, D_821CF2A0);
+  BattleAi_MovesFirst((s8 *) D_821CF29C, D_821CF2A0);
   r = -1;
-  if ((BattleAI_MovesFirst((s8 *) D_821CF29C, D_821CF2A0) != 0) && (BattleAI_OpponentCannotAct((s8 *) D_821CF29C, D_821CF2A0) == 0) && (!(((u8 *) D_821CF2A0)[0x21] & 0x27)) && (BattleAI_PickStrongestMove(BattleAI_GetHpPercent(D_821CF2A0)) != 0))
+  if ((BattleAi_MovesFirst((s8 *) D_821CF29C, D_821CF2A0) != 0) && (BattleAi_OpponentCannotAct((s8 *) D_821CF29C, D_821CF2A0) == 0) && (!(((u8 *) D_821CF2A0)[0x21] & 0x27)) && (BattleAi_PickStrongestMove(BattleAi_GetHpPercent(D_821CF2A0)) != 0))
   {
-    r = BattleAI_PickHealingMove((s8 *) D_821CF29C);
+    r = BattleAi_PickHealingMove((s8 *) D_821CF29C);
   }
   if (r < 0)
   {
-    if (BattleAI_OpponentCannotAct((s8 *) D_821CF29C, D_821CF2A0) != 0)
+    if (BattleAi_OpponentCannotAct((s8 *) D_821CF29C, D_821CF2A0) != 0)
     {
-      r = BattleAI_PickSetupMove((s8 *) D_821CF29C);
+      r = BattleAi_PickSetupMove((s8 *) D_821CF29C);
     }
     else
     {
-      r = BattleAI_PickToxicOrLeechSeed((s8 *) D_821CF29C);
+      r = BattleAi_PickToxicOrLeechSeed((s8 *) D_821CF29C);
       if (r < 0)
       {
-        r = BattleAI_PickParalysisMove((s8 *) D_821CF29C, D_821CF2A0);
+        r = BattleAi_PickParalysisMove((s8 *) D_821CF29C, D_821CF2A0);
       }
       if (r < 0)
       {
-        r = BattleAI_PickSleepMove((s8 *) D_821CF29C, D_821CF2A0);
+        r = BattleAi_PickSleepMove((s8 *) D_821CF29C, D_821CF2A0);
       }
-      if ((r < 0) && ((BattleAI_FindUsableHealingMove(D_821CF2A0) != 0) || (BattleAI_GetHpPercent(D_821CF2A0) >= 0x15)))
+      if ((r < 0) && ((BattleAi_FindUsableHealingMove(D_821CF2A0) != 0) || (BattleAi_GetHpPercent(D_821CF2A0) >= 21)))
       {
-        r = BattleAI_PickStatLowerMove((s8 *) D_821CF29C, D_821CF2A0);
+        r = BattleAi_PickStatLowerMove((s8 *) D_821CF29C, D_821CF2A0);
       }
     }
   }
   if (r < 0)
   {
-    r = BattleAI_PickStrongestMove(0x32);
-    if ((r < 0) && ((BattleAI_PickStrongestMove(0x1E) != 0) || (BattleAI_FindUsableHealingMove(D_821CF2A0) != 0)) && ((BattleAI_GetHpPercent(D_821CF2A0) >= 0x33) || (BattleAI_GetHpPercent((s8 *) D_821CF29C) >= 0x51)))
+    r = BattleAi_PickStrongestMove(50);
+    if ((r < 0) && ((BattleAi_PickStrongestMove(30) != 0) || (BattleAi_FindUsableHealingMove(D_821CF2A0) != 0)) && ((BattleAi_GetHpPercent(D_821CF2A0) >= 51) || (BattleAi_GetHpPercent((s8 *) D_821CF29C) >= 0x51)))
     {
-      r = BattleAI_PickStatBoostMove((s8 *) D_821CF29C);
+      r = BattleAi_PickStatBoostMove((s8 *) D_821CF29C);
     }
   }
   if (r < 0)
   {
-    if ((((BattleAI_MovesFirst((s8 *) D_821CF29C, D_821CF2A0) != 0) && (BattleAI_GetHpPercent((s8 *) D_821CF29C) < 0x14)) || ((BattleAI_MovesFirst((s8 *) D_821CF29C, D_821CF2A0) == 0) && ((M2C_FIELD(D_821CF29C, u16 *, 0x18) / 2) < ((BattleAI_GetBestDamage((u8 *) D_821CF2A0, D_821CF29C, 0) * 0x5A) / 100))) || ((BattleAI_FindUsableHealingMove((s8 *) D_821CF29C) == 0) && (BattleAI_GetHpPercent((s8 *) D_821CF29C) < 0x28))) && (BattleAI_CountUnfainted(D_821CF294) >= 2))
+    if ((((BattleAi_MovesFirst((s8 *) D_821CF29C, D_821CF2A0) != 0) && (BattleAi_GetHpPercent((s8 *) D_821CF29C) < 0x14)) || ((BattleAi_MovesFirst((s8 *) D_821CF29C, D_821CF2A0) == 0) && ((M2C_FIELD(D_821CF29C, u16 *, 0x18) / 2) < ((BattleAi_GetBestDamage((u8 *) D_821CF2A0, D_821CF29C, 0) * 0x5A) / 100))) || ((BattleAi_FindUsableHealingMove((s8 *) D_821CF29C) == 0) && (BattleAi_GetHpPercent((s8 *) D_821CF29C) < 0x28))) && (BattleAi_CountUnfainted(D_821CF294) >= 2))
     {
-      r = BattleAI_PickSelfDestructMove((s8 *) D_821CF29C, D_821CF2A0);
+      r = BattleAi_PickBoomMove((s8 *) D_821CF29C, D_821CF2A0);
     }
     if (r < 0)
     {
-      r = BattleAI_PickStrongestMove(0);
+      r = BattleAi_PickStrongestMove(0);
     }
   }
-  r = BattleAI_ReplaceHyperBeam(r);
+  r = BattleAi_ReplaceHyperBeam(r);
   if (r < 0)
   {
     for (j = 0; (j < 10) && (r < 0); j++)
@@ -266,7 +266,7 @@ s32 BattleAI_ChooseMove(void)
         {
           break;
         }
-        if ((BattleAI_CanUseMove((s8 *) D_821CF29C, (D_821CF29C + i)[0x2B]) != 0) && ((j != 0) || (BattleAI_IsMoveUseful((D_821CF29C + i)[0x2B]) != 0)))
+        if ((BattleAi_CanUseMove((s8 *) D_821CF29C, (D_821CF29C + i)[0x2B]) != 0) && ((j != 0) || (BattleAi_IsMoveUseful((D_821CF29C + i)[0x2B]) != 0)))
         {
           r = i;
           break;
@@ -287,7 +287,7 @@ s32 BattleAI_ChooseMove(void)
  * with PP; otherwise arg0.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_FindSlotWithPp(s32 arg0) {
+s32 BattleAi_FindSlotWithPp(s32 arg0) {
     s32 i;
     u8* base;
     u8* cur;
@@ -324,17 +324,17 @@ extern Slot90 D_821CF998[6];
 extern Slot90 *D_821CF298;
 extern s32 D_821CF288;
 void func_80058410(u8 *, u8 *, s32);
-void BattleAI_CopyVisibleBattleState(s8 *, u8 *);
-void BattleAI_ResetBattleStats(u8 *, u8 *);
-s32 BattleAI_ChooseSwitch(void);
-s32 BattleAI_ChooseRandomMove(void);
+void BattleAi_CopyVisibleBattleState(s8 *, u8 *);
+void BattleAi_ResetBattleStats(u8 *, u8 *);
+s32 BattleAi_ChooseSwitch(void);
+s32 BattleAi_ChooseRandomMove(void);
 /**
  * Per-turn COM entry point. Copies both active Pokemon (arg0 own, arg1 opponent's
  * visible state) into the AI's model, updates its turn bookkeeping, then returns
  * a move slot (0..3) or 4 + a party slot to switch, also stored in D_821CF2A4.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_ChooseTurnAction(u8* arg0, u8* arg1, s32 arg2, s32 arg3) {
+s32 BattleAi_ChooseTurnAction(u8* arg0, u8* arg1, s32 arg2, s32 arg3) {
     s32 move;
     s32 r;
     s32 one; // FAKE
@@ -354,7 +354,7 @@ s32 BattleAI_ChooseTurnAction(u8* arg0, u8* arg1, s32 arg2, s32 arg3) {
         }
         M2C_FIELD(D_821CF29C, u16*, 0x70) = M2C_FIELD(D_821CF29C, u16*, 0x18);
     }
-    BattleAI_CopyVisibleBattleState(D_821CF2A0 + 0xC, arg1);
+    BattleAi_CopyVisibleBattleState(D_821CF2A0 + 0xC, arg1);
     if (D_821CF29C[0x5A] & 1) {
         D_821CF29C[0x7A]++;
     } else {
@@ -366,7 +366,7 @@ s32 BattleAI_ChooseTurnAction(u8* arg0, u8* arg1, s32 arg2, s32 arg3) {
     if (arg3 != ((u8*)D_821CF294)[0x369]) {
         move = ((u8*)D_821CF294)[0x369];
         if (move < D_821CF288) {
-            BattleAI_ResetBattleStats(D_821CF298[((u8*)D_821CF294)[0x369]].data + 0xC, D_821CF298->roster + move * 0x50 + 0x1C);
+            BattleAi_ResetBattleStats(D_821CF298[((u8*)D_821CF294)[0x369]].data + 0xC, D_821CF298->roster + move * 0x50 + 0x1C);
         }
         ((u8*)D_821CF294)[0x369] = arg3;
         ((u8*)D_821CF294)[0x36A] = 0;
@@ -378,24 +378,24 @@ s32 BattleAI_ChooseTurnAction(u8* arg0, u8* arg1, s32 arg2, s32 arg3) {
         D_821CF298[move].data[0x7B] = arg1[move + 0x16];
     }
 
-    move = BattleAI_ChooseSwitch();
+    move = BattleAi_ChooseSwitch();
     if ((move >= 0) && (D_821CF29C[0x75] != ((one = 1) << move))) { // FAKE: one
         r = -1;
-        if ((M2C_FIELD(D_821CF29C, u16*, 0x18) != 0) && (BattleAI_GetHpPercent((s8*)D_821CF29C) < 0x23) &&
-            (BattleAI_CountUnfainted(D_821CF294) >= 2) && (BattleAI_PickSelfDestructMove((s8*)D_821CF29C, D_821CF2A0) >= 0)) {
-            r = BattleAI_PickSelfDestructMove((s8*)D_821CF29C, D_821CF2A0);
+        if ((M2C_FIELD(D_821CF29C, u16*, 0x18) != 0) && (BattleAi_GetHpPercent((s8*)D_821CF29C) < 0x23) &&
+            (BattleAi_CountUnfainted(D_821CF294) >= 2) && (BattleAi_PickBoomMove((s8*)D_821CF29C, D_821CF2A0) >= 0)) {
+            r = BattleAi_PickBoomMove((s8*)D_821CF29C, D_821CF2A0);
         }
         if (r < 0) {
-            BattleAI_ResetBattleStats(D_821CF29C + 0xC, *(u8**)D_821CF294 + move * 0x50 + 0x1C);
+            BattleAi_ResetBattleStats(D_821CF29C + 0xC, *(u8**)D_821CF294 + move * 0x50 + 0x1C);
             r = move + 4;
         }
-    } else if ((((u8*)D_821CF294)[0x368] == 3) && (BattleAI_GetHpPercent(D_821CF2A0) >= 0x1F)) {
-        r = BattleAI_ChooseRandomMove();
+    } else if ((((u8*)D_821CF294)[0x368] == 3) && (BattleAi_GetHpPercent(D_821CF2A0) >= 31)) {
+        r = BattleAi_ChooseRandomMove();
     } else {
-        r = BattleAI_ChooseMove();
+        r = BattleAi_ChooseMove();
     }
     if ((r >= 0) && (r < 4) && (r < 4)) { // FAKE: repeated r < 4
-        r = BattleAI_FindSlotWithPp(r);
+        r = BattleAi_FindSlotWithPp(r);
     }
     D_821CF2A4 = r;
     return r;
@@ -409,7 +409,7 @@ extern u8 D_8006B18F[];
 /**
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
-void BattleAI_RecordUsedMove(s32 arg0, s32 arg1, s32 arg2) {
+void BattleAi_RecordUsedMove(s32 arg0, s32 arg1, s32 arg2) {
     s32 i;
     s32 pp;
     s32 bonus;

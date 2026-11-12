@@ -90,13 +90,13 @@ extern char** sBattleControllerDisconnectedMessage;
 #include "util.h"
 #include "m2c_macros.h"
 
-u16 BattleAI_ApplyMoveEffectDamageOverride(BattleMonRuntime* arg0, BattleMonRuntime* arg1);
-void BattleAI_ClampDamageRatio(void);
-void BattleAI_PrepareDamageCalcState(BattleMonRuntime* arg0, BattleMonRuntime* arg1, u8 arg2);
+u16 BattleAi_ApplyMoveEffectDamageOverride(BattleMonRuntime* arg0, BattleMonRuntime* arg1);
+void BattleAi_ClampDamageRatio(void);
+void BattleAi_PrepareDamageCalcState(BattleMonRuntime* arg0, BattleMonRuntime* arg1, u8 arg2);
 s32 BattleScene_FindU16InByteArray(u16 lookup_value, u8* array, s32 array_length);
 void BattleScene_IntroInitNop(void);
 
-u16 BattleAI_ApplyMoveEffectDamageOverride(BattleMonRuntime* arg0, BattleMonRuntime* arg1) {
+u16 BattleAi_ApplyMoveEffectDamageOverride(BattleMonRuntime* arg0, BattleMonRuntime* arg1) {
     s32 var_v0;
 
     switch (D_8219A494.unk_01) {
@@ -143,7 +143,7 @@ u16 BattleAI_ApplyMoveEffectDamageOverride(BattleMonRuntime* arg0, BattleMonRunt
     return D_82199F50;
 }
 
-void BattleAI_ClampDamageRatio(void) {
+void BattleAi_ClampDamageRatio(void) {
     if (D_82199F50 >= 2) {
         D_82199F50 = (D_82199F50 * 0xFF) / 255;
     }
@@ -180,7 +180,7 @@ void BattleCalc_ApplyTypeEffectAndStab(u8* attacker, u8* defender) {
     }
 }
 
-void BattleAI_PrepareDamageCalcState(BattleMonRuntime* arg0, BattleMonRuntime* arg1, u8 arg2) {
+void BattleAi_PrepareDamageCalcState(BattleMonRuntime* arg0, BattleMonRuntime* arg1, u8 arg2) {
     MoveData* temp_v0 = &gMoveData[arg2 - 1];
 
     D_8219A494.unk_00 = temp_v0->moveId;

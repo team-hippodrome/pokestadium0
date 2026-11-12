@@ -208,12 +208,12 @@ extern s32 D_821CF2B0;
 extern u32 D_821CF2B4;
 /**
  * The COM AI's own random source: an LCG (x * 0x41C64E6D + 0x3039) mixed with a
- * 17-bit shift register, reduced to 0..99. Seeded by BattleAI_SelectTeam.
+ * 17-bit shift register, reduced to 0..99. Seeded by BattleAi_SelectTeam.
  * Stadium 1 has the same generator in its audio code, which is where the old
  * name came from.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_RandomPercent(void) {
+s32 BattleAi_RandomPercent(void) {
     D_821CF2B0 = (D_821CF2B0 * 0x41C64E6D) + 0x3039;
 
     if (D_821CF2B4 & 1) {
@@ -228,16 +228,16 @@ s32 BattleAI_RandomPercent(void) {
 s32 func_80053A80();                                /* extern */
 
 /**
- * Advances BattleAI_RandomPercent 0..31 times, using bits 4..8 of func_80053A80.
+ * Advances BattleAi_RandomPercent 0..31 times, using bits 4..8 of func_80053A80.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-void BattleAI_StirRandom(void) {
+void BattleAi_StirRandom(void) {
     u32 var_s0;
 
     var_s0 = (u32) (func_80053A80() & 0x1F0) >> 4;
     if (var_s0 != 0) {
         do {
-            BattleAI_RandomPercent();
+            BattleAi_RandomPercent();
             var_s0 -= 1;
         } while (var_s0 != 0);
     }
@@ -253,48 +253,48 @@ f32 func_80055340(f32);                             /* extern */
  * The callers pass statExp 0xFFFF (maximum stat experience).
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_CalcStat(s32 arg0, s32 arg1, s32 arg2) {
+s32 BattleAi_CalcStat(s32 arg0, s32 arg1, s32 arg2) {
     return ((s32) ((((s32) func_80055340((f32) arg1) / 4) + (arg0 * 2)) * arg2) / 100) + 5;
 }
 
 /**
- * Max HP from base HP and level: BattleAI_CalcStat(base, 0xFFFF, level) + level + 5.
+ * Max HP from base HP and level: BattleAi_CalcStat(base, 0xFFFF, level) + level + 5.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_CalcMaxHp(s32 arg0, s32 arg1) {
-    return BattleAI_CalcStat(arg0, 0xFFFF, arg1) + arg1 + 5;
+s32 BattleAi_CalcMaxHp(s32 arg0, s32 arg1) {
+    return BattleAi_CalcStat(arg0, 0xFFFF, arg1) + arg1 + 5;
 }
 
 /**
  * Attack from base stat and level (max stat experience).
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_CalcAttack(s32 arg0, s32 arg1) {
-    return BattleAI_CalcStat(arg0, 0xFFFF, arg1);
+s32 BattleAi_CalcAttack(s32 arg0, s32 arg1) {
+    return BattleAi_CalcStat(arg0, 0xFFFF, arg1);
 }
 
 /**
  * Defense from base stat and level (max stat experience).
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_CalcDefense(s32 arg0, s32 arg1) {
-    return BattleAI_CalcStat(arg0, 0xFFFF, arg1);
+s32 BattleAi_CalcDefense(s32 arg0, s32 arg1) {
+    return BattleAi_CalcStat(arg0, 0xFFFF, arg1);
 }
 
 /**
  * Speed from base stat and level (max stat experience).
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_CalcSpeed(s32 arg0, s32 arg1) {
-    return BattleAI_CalcStat(arg0, 0xFFFF, arg1);
+s32 BattleAi_CalcSpeed(s32 arg0, s32 arg1) {
+    return BattleAi_CalcStat(arg0, 0xFFFF, arg1);
 }
 
 /**
  * Special from base stat and level (max stat experience).
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_CalcSpecial(s32 arg0, s32 arg1) {
-    return BattleAI_CalcStat(arg0, 0xFFFF, arg1);
+s32 BattleAi_CalcSpecial(s32 arg0, s32 arg1) {
+    return BattleAi_CalcStat(arg0, 0xFFFF, arg1);
 }
 
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
@@ -303,7 +303,7 @@ s32 BattleAI_CalcSpecial(s32 arg0, s32 arg1) {
  * while the Pokemon has any HP left, 0 when fainted.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_GetHpPercent(s8 *arg0)
+s32 BattleAi_GetHpPercent(s8 *arg0)
 {
   s32 var_v1;
   u16 temp_v0;
@@ -327,7 +327,7 @@ s32 BattleAI_GetHpPercent(s8 *arg0)
  * `arg0 + n * 0x90` recomputed in its condition, as in the ROM.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_CountUnfainted(u8 *arg0) {
+s32 BattleAi_CountUnfainted(u8 *arg0) {
     s32 count;
     u8 *p;
     s32 n;
@@ -368,9 +368,9 @@ void func_82183DC4(void) {
  * Adds a random 0..15 * 400 to a battler's team-pick score (word at offset 4).
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-void BattleAI_AddRandomPickScore(s8* arg0) {
-    BattleAI_StirRandom();
-    M2C_FIELD(arg0, s32*, 4) += (BattleAI_RandomPercent() & 0xF) * 400;
+void BattleAi_AddRandomPickScore(s8* arg0) {
+    BattleAi_StirRandom();
+    M2C_FIELD(arg0, s32*, 4) += (BattleAi_RandomPercent() & 0xF) * 400;
 }
 
 void func_82183E1C(void) {
@@ -384,7 +384,7 @@ extern BattleSlotZ* D_821CF298;
  * team (D_821CF298), otherwise 0.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_OpponentHasSpecies(s32 arg0) {
+s32 BattleAi_OpponentHasSpecies(s32 arg0) {
     s32 i;
 
     for (i = 0; i < D_821CF298->roster->rosterInfo->numberOfPokemonCanBePicked; i++) {
@@ -399,7 +399,7 @@ s32 BattleAI_OpponentHasSpecies(s32 arg0) {
  * Counts opponent Pokemon that are Water or Flying type.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_CountOpponentWaterOrFlying(void) {
+s32 BattleAi_CountOpponentWaterOrFlying(void) {
     s32 count;
     s32 i;
 
@@ -416,7 +416,7 @@ s32 BattleAI_CountOpponentWaterOrFlying(void) {
  * Counts opponent Pokemon that are Ground type.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_CountOpponentGround(void) {
+s32 BattleAi_CountOpponentGround(void) {
     s32 count;
     s32 i;
 
@@ -433,7 +433,7 @@ s32 BattleAI_CountOpponentGround(void) {
  * Counts opponent Pokemon that are Fighting type.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_CountOpponentFighting(void) {
+s32 BattleAi_CountOpponentFighting(void) {
     s32 count;
     s32 i;
 
@@ -450,11 +450,11 @@ s32 BattleAI_CountOpponentFighting(void) {
  * Returns 1 if the opponent brought a level 55 Tauros.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_OpponentHasLevel55Tauros(void) {
+s32 BattleAi_OpponentHasLevel55Tauros(void) {
     s32 i;
 
     for (i = 0; i < D_821CF298->roster->rosterInfo->numberOfPokemonCanBePicked; i++) {
-        if ((D_821CF298[i].species == TAUROS) && (D_821CF298[i].level == 0x37)) {
+        if ((D_821CF298[i].species == TAUROS) && (D_821CF298[i].level == 55)) {
             return 1;
         }
     }
@@ -465,7 +465,7 @@ s32 BattleAI_OpponentHasLevel55Tauros(void) {
  * Counts opponent Pokemon that are Electric or Poison type.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_CountOpponentElectricOrPoison(void) {
+s32 BattleAi_CountOpponentElectricOrPoison(void) {
     s32 count;
     s32 i;
 
@@ -482,7 +482,7 @@ s32 BattleAI_CountOpponentElectricOrPoison(void) {
  * Counts opponent Pokemon that are Rock or Water type.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_CountOpponentRockOrWater(void) {
+s32 BattleAi_CountOpponentRockOrWater(void) {
     s32 count;
     s32 i;
 
@@ -499,7 +499,7 @@ s32 BattleAI_CountOpponentRockOrWater(void) {
  * Counts opponent Pokemon that are Electric type.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_CountOpponentElectric(void) {
+s32 BattleAi_CountOpponentElectric(void) {
     s32 count;
     s32 i;
 
@@ -513,7 +513,7 @@ s32 BattleAI_CountOpponentElectric(void) {
 }
 
 extern BattleSlotZ* D_821CF294;
-s32 BattleAI_NoVenusaurChanseyJynxPicked(s32);
+s32 BattleAi_NoVenusaurChanseyJynxPicked(s32);
 
 /**
  * Hand-written team-selection preferences. The COM trainer is identified by the
@@ -523,222 +523,222 @@ s32 BattleAI_NoVenusaurChanseyJynxPicked(s32);
  * side's mode byte (0x368) is set. arg1 is the pick round (0 = lead).
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-void BattleAI_AddTrainerPickScore(u8* arg0, s32 arg1) {
+void BattleAi_AddTrainerPickScore(u8* arg0, s32 arg1) {
     s32 score = 0;
     s32 id = D_821CF294->roster->unk_018;
 
     switch (arg0[0x17]) {
         case GENGAR:
-            if ((id == 0x6974) && BattleAI_OpponentHasSpecies(TAUROS)) {
-                score = 0x7530;
+            if ((id == 0x6974) && BattleAi_OpponentHasSpecies(TAUROS)) {
+                score = 30000;
             }
             break;
         case ALAKAZAM:
-            if ((id == 0x6974) && BattleAI_OpponentHasSpecies(GENGAR)) {
-                score = 0x2710;
+            if ((id == 0x6974) && BattleAi_OpponentHasSpecies(GENGAR)) {
+                score = 10000;
             }
             if (id == 0x3C5E) {
-                score = 0x3E8;
+                score = 1000;
             }
             if (id == 0xBBBD) {
-                score = 0x1388;
+                score = 5000;
             }
             if (id == 0x95EC) {
-                if (BattleAI_OpponentHasSpecies(GENGAR)) {
-                    score = 0x1388;
+                if (BattleAi_OpponentHasSpecies(GENGAR)) {
+                    score = 5000;
                 }
-                if (BattleAI_OpponentHasSpecies(CHANSEY) || BattleAI_OpponentHasSpecies(EXEGGUTOR) || BattleAI_OpponentHasSpecies(JYNX)) {
+                if (BattleAi_OpponentHasSpecies(CHANSEY) || BattleAi_OpponentHasSpecies(EXEGGUTOR) || BattleAi_OpponentHasSpecies(JYNX)) {
                     break;
                 }
-                score += 0x1388;
+                score += 5000;
             }
             break;
         case DITTO:
             if (((u8*)D_821CF294)[0x368] != 0) {
-                score = 0x3E8;
+                score = 1000;
             }
             break;
         case JYNX:
             if (id == 0x6974) {
-                score = 0x2710;
+                score = 10000;
             }
             if (id == 0x6299) {
-                score = BattleAI_NoVenusaurChanseyJynxPicked(arg1);
+                score = BattleAi_NoVenusaurChanseyJynxPicked(arg1);
             }
             break;
         case JOLTEON:
             if (id == 0x6974) {
-                score = 0x2710;
+                score = 10000;
             }
-            if ((id == 0xC0FC) && (BattleAI_OpponentHasSpecies(LAPRAS) || BattleAI_OpponentHasSpecies(DEWGONG) || BattleAI_OpponentHasSpecies(CLOYSTER))) {
-                score = 0x2710;
+            if ((id == 0xC0FC) && (BattleAi_OpponentHasSpecies(LAPRAS) || BattleAi_OpponentHasSpecies(DEWGONG) || BattleAi_OpponentHasSpecies(CLOYSTER))) {
+                score = 10000;
             }
-            if ((id == 0x6299) && (BattleAI_CountOpponentWaterOrFlying() >= 2)) {
-                score = 0x2710;
+            if ((id == 0x6299) && (BattleAi_CountOpponentWaterOrFlying() >= 2)) {
+                score = 10000;
             }
             if (id == 0x3C5E) {
-                score = 0x2710;
+                score = 10000;
             }
             if (id == 0x813A) {
-                if (BattleAI_OpponentHasSpecies(EXEGGUTOR) || BattleAI_OpponentHasSpecies(SNORLAX)) {
+                if (BattleAi_OpponentHasSpecies(EXEGGUTOR) || BattleAi_OpponentHasSpecies(SNORLAX)) {
                     break;
                 }
-                score = 0x2710;
+                score = 10000;
             }
-            if (((id == 0x77CB) || (id == 0xBBBD) || (id == 0x940F)) && BattleAI_CountOpponentWaterOrFlying()) {
-                score = 0x1388;
+            if (((id == 0x77CB) || (id == 0xBBBD) || (id == 0x940F)) && BattleAi_CountOpponentWaterOrFlying()) {
+                score = 5000;
             }
-            if ((id == 0xD870) && !BattleAI_CountOpponentGround()) {
-                score = 0x2710;
+            if ((id == 0xD870) && !BattleAi_CountOpponentGround()) {
+                score = 10000;
             }
-            if ((id == 0x940F) && BattleAI_OpponentHasSpecies(EXEGGUTOR)) {
-                score += 0x1388;
+            if ((id == 0x940F) && BattleAi_OpponentHasSpecies(EXEGGUTOR)) {
+                score += 5000;
             }
             if (id == 0x95EC) {
-                if (BattleAI_OpponentHasSpecies(STARMIE) || BattleAI_OpponentHasSpecies(ZAPDOS) || BattleAI_OpponentHasSpecies(GYARADOS)) {
-                    score = 0x1388;
+                if (BattleAi_OpponentHasSpecies(STARMIE) || BattleAi_OpponentHasSpecies(ZAPDOS) || BattleAi_OpponentHasSpecies(GYARADOS)) {
+                    score = 5000;
                 }
-                if (BattleAI_OpponentHasSpecies(CHANSEY) || BattleAI_OpponentHasSpecies(EXEGGUTOR) || BattleAI_CountOpponentGround()) {
+                if (BattleAi_OpponentHasSpecies(CHANSEY) || BattleAi_OpponentHasSpecies(EXEGGUTOR) || BattleAi_CountOpponentGround()) {
                     break;
                 }
-                score += 0x1388;
+                score += 5000;
             }
             break;
         case STARMIE:
             if (id == 0x6974) {
-                score = 0x2710;
+                score = 10000;
             }
             if (id == 0xCD7E) {
-                score = 0x2710;
+                score = 10000;
             }
-            if ((id == 0xC0FC) && BattleAI_CountOpponentGround()) {
-                score = 0x1388;
+            if ((id == 0xC0FC) && BattleAi_CountOpponentGround()) {
+                score = 5000;
             }
             if (id == 0x3C5E) {
-                score = 0x1388;
+                score = 5000;
             }
             if (id == 0x95EC) {
-                score = 0x1388;
-                if (BattleAI_OpponentHasSpecies(GENGAR) || BattleAI_OpponentHasSpecies(DRAGONITE)) {
-                    score = 0x2710;
+                score = 5000;
+                if (BattleAi_OpponentHasSpecies(GENGAR) || BattleAi_OpponentHasSpecies(DRAGONITE)) {
+                    score = 10000;
                 }
-                if (BattleAI_OpponentHasSpecies(JYNX)) {
+                if (BattleAi_OpponentHasSpecies(JYNX)) {
                     break;
                 }
-                score += 0x1388;
+                score += 5000;
             }
-            if ((id == 0x813A) && (BattleAI_OpponentHasSpecies(EXEGGUTOR) || BattleAI_OpponentHasSpecies(SNORLAX))) {
-                score = 0x2710;
+            if ((id == 0x813A) && (BattleAi_OpponentHasSpecies(EXEGGUTOR) || BattleAi_OpponentHasSpecies(SNORLAX))) {
+                score = 10000;
             }
             break;
         case TAUROS:
             if (id == 0x4FC7) {
-                score = 0x1388;
+                score = 5000;
             }
-            if ((id == 0x6299) && !BattleAI_CountOpponentFighting()) {
-                score = 0x2710;
+            if ((id == 0x6299) && !BattleAi_CountOpponentFighting()) {
+                score = 10000;
             }
             if (id == 0x813A) {
-                if (BattleAI_OpponentHasSpecies(EXEGGUTOR) || BattleAI_OpponentHasSpecies(SNORLAX)) {
+                if (BattleAi_OpponentHasSpecies(EXEGGUTOR) || BattleAi_OpponentHasSpecies(SNORLAX)) {
                     break;
                 }
-                score = 0x2710;
+                score = 10000;
             }
             if ((id == 0xBBBD) || (id == 0xD870) || (id == 0x940F)) {
-                score = 0x2710;
+                score = 10000;
             }
             if (id == 0x95EC) {
-                if (BattleAI_OpponentHasSpecies(JYNX) || BattleAI_OpponentHasSpecies(CHANSEY) || BattleAI_OpponentHasSpecies(DUGTRIO) || BattleAI_OpponentHasSpecies(GENGAR) ||
-                    BattleAI_OpponentHasSpecies(DRAGONITE)) {
-                    score = 0x1388;
+                if (BattleAi_OpponentHasSpecies(JYNX) || BattleAi_OpponentHasSpecies(CHANSEY) || BattleAi_OpponentHasSpecies(DUGTRIO) || BattleAi_OpponentHasSpecies(GENGAR) ||
+                    BattleAi_OpponentHasSpecies(DRAGONITE)) {
+                    score = 5000;
                 }
-                if (BattleAI_OpponentHasSpecies(LAPRAS) || BattleAI_OpponentHasSpecies(ARTICUNO)) {
+                if (BattleAi_OpponentHasSpecies(LAPRAS) || BattleAi_OpponentHasSpecies(ARTICUNO)) {
                     break;
                 }
-                score += 0x1388;
+                score += 5000;
             }
             break;
         case ELECTRODE:
             if (id == 0x4FC7) {
-                score = 0x2710;
+                score = 10000;
             }
             break;
         case KANGASKHAN:
-            if ((id == 0x4FC7) && BattleAI_OpponentHasSpecies(ARTICUNO)) {
-                score = 0x1388;
+            if ((id == 0x4FC7) && BattleAi_OpponentHasSpecies(ARTICUNO)) {
+                score = 5000;
             }
             break;
         case EXEGGUTOR:
             if (((u8*)D_821CF294)[0x368] != 0) {
-                score = 0x3E8;
+                score = 1000;
                 break;
             }
-            if ((id == 0xC0FC) && BattleAI_CountOpponentGround()) {
-                score = 0x1388;
+            if ((id == 0xC0FC) && BattleAi_CountOpponentGround()) {
+                score = 5000;
             }
-            if ((id == 0xD870) && BattleAI_OpponentHasLevel55Tauros()) {
-                score = 0x2710;
+            if ((id == 0xD870) && BattleAi_OpponentHasLevel55Tauros()) {
+                score = 10000;
             }
             if (id == 0x95EC) {
-                if (BattleAI_OpponentHasSpecies(JOLTEON) || BattleAI_OpponentHasSpecies(ALAKAZAM)) {
-                    score = 0x1388;
+                if (BattleAi_OpponentHasSpecies(JOLTEON) || BattleAi_OpponentHasSpecies(ALAKAZAM)) {
+                    score = 5000;
                 }
-                if (BattleAI_OpponentHasSpecies(JYNX)) {
+                if (BattleAi_OpponentHasSpecies(JYNX)) {
                     break;
                 }
-                score += 0x1388;
+                score += 5000;
             }
             break;
         case LAPRAS:
             if (id == 0x813A) {
-                if (BattleAI_OpponentHasSpecies(EXEGGUTOR) || BattleAI_OpponentHasSpecies(SNORLAX)) {
+                if (BattleAi_OpponentHasSpecies(EXEGGUTOR) || BattleAi_OpponentHasSpecies(SNORLAX)) {
                     break;
                 }
-                score = 0x2710;
+                score = 10000;
             }
             if (id == 0xBBBD) {
-                score = 0x3E8;
+                score = 1000;
             }
-            if ((id == 0x95EC) && (BattleAI_OpponentHasSpecies(ARTICUNO) || BattleAI_OpponentHasSpecies(TAUROS) || BattleAI_OpponentHasSpecies(CLOYSTER) ||
-                                   BattleAI_OpponentHasSpecies(DEWGONG) || BattleAI_OpponentHasSpecies(LAPRAS) || BattleAI_OpponentHasSpecies(EXEGGUTOR) ||
-                                   BattleAI_OpponentHasSpecies(STARMIE) || BattleAI_OpponentHasSpecies(DRAGONITE))) {
-                score = 0x1388;
+            if ((id == 0x95EC) && (BattleAi_OpponentHasSpecies(ARTICUNO) || BattleAi_OpponentHasSpecies(TAUROS) || BattleAi_OpponentHasSpecies(CLOYSTER) ||
+                                   BattleAi_OpponentHasSpecies(DEWGONG) || BattleAi_OpponentHasSpecies(LAPRAS) || BattleAi_OpponentHasSpecies(EXEGGUTOR) ||
+                                   BattleAi_OpponentHasSpecies(STARMIE) || BattleAi_OpponentHasSpecies(DRAGONITE))) {
+                score = 5000;
             }
             break;
         case DUGTRIO:
-            if (BattleAI_CountOpponentElectricOrPoison()) {
-                score = 0x1388;
+            if (BattleAi_CountOpponentElectricOrPoison()) {
+                score = 5000;
             }
             break;
         case GOLEM:
         case ARTICUNO:
-            if ((id == 0x813A) && (BattleAI_OpponentHasSpecies(EXEGGUTOR) || BattleAI_OpponentHasSpecies(SNORLAX))) {
-                score = 0x2710;
+            if ((id == 0x813A) && (BattleAi_OpponentHasSpecies(EXEGGUTOR) || BattleAi_OpponentHasSpecies(SNORLAX))) {
+                score = 10000;
             }
             break;
         case VENUSAUR:
-            if ((id == 0x6299) && BattleAI_NoVenusaurChanseyJynxPicked(arg1) && (BattleAI_CountOpponentRockOrWater() >= 2)) {
-                score = 0x2710;
+            if ((id == 0x6299) && BattleAi_NoVenusaurChanseyJynxPicked(arg1) && (BattleAi_CountOpponentRockOrWater() >= 2)) {
+                score = 10000;
             }
             break;
         case CHANSEY:
-            if ((id == 0x6299) && BattleAI_NoVenusaurChanseyJynxPicked(arg1) && !BattleAI_CountOpponentFighting()) {
-                score = 0x2710;
+            if ((id == 0x6299) && BattleAi_NoVenusaurChanseyJynxPicked(arg1) && !BattleAi_CountOpponentFighting()) {
+                score = 10000;
             }
             break;
         case GYARADOS:
-            if ((id == 0x6299) && (BattleAI_CountOpponentElectric() < 2)) {
-                score = 0x2710;
+            if ((id == 0x6299) && (BattleAi_CountOpponentElectric() < 2)) {
+                score = 10000;
             }
             break;
         case PINSIR:
             if (((u8*)D_821CF294)[0x368] != 0) {
-                score = 0x3E8;
+                score = 1000;
             }
             break;
     }
     if ((((u8*)D_821CF294)[0x368] == 0) && (arg0[0x17] != DITTO)) {
-        score += 0xC350;
+        score += 50000;
     }
     M2C_FIELD(arg0, s32*, 4) += score;
 }
@@ -748,7 +748,7 @@ void BattleAI_AddTrainerPickScore(u8* arg0, s32 arg1) {
  * bytes read every arg1 bytes, or NULL.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-u8* BattleAI_FindByte(u8* arg0, s32 arg1, s32 arg2, s32 arg3) {
+u8* BattleAi_FindByte(u8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     u8* p;
 
     for (p = arg0; arg2 != 0; p += arg1) {
@@ -770,7 +770,7 @@ extern u8 D_8218AC50[];
  * Status moves (power 0) return 100.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_GetTypeMultiplier(s8* arg0, s8* arg1, s32 move) {
+s32 BattleAi_GetTypeMultiplier(s8* arg0, s8* arg1, s32 move) {
     s32 mult = 100;
     u8 defType1;
     u8 defType2;
@@ -800,7 +800,7 @@ s32 BattleAI_GetTypeMultiplier(s8* arg0, s8* arg1, s32 move) {
  * disabled move (byte 0x63); otherwise 0.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_CanUseMove(s8 *arg0, s32 arg1) {
+s32 BattleAi_CanUseMove(s8 *arg0, s32 arg1) {
     s32 i;
     u8 *p = (u8 *)arg0;
 
@@ -821,7 +821,7 @@ s32 BattleAI_CanUseMove(s8 *arg0, s32 arg1) {
  * Returns Recover, Softboiled or Rest if the battler can use one, otherwise 0.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-u8 BattleAI_FindUsableHealingMove(u8 *arg0) {
+u8 BattleAi_FindUsableHealingMove(u8 *arg0) {
     s32 i;
 
     for (i = 0; i < 4; i++) {
@@ -832,7 +832,7 @@ u8 BattleAI_FindUsableHealingMove(u8 *arg0) {
             case RECOVER:
             case SOFTBOILED:
             case REST:
-                if (BattleAI_CanUseMove((s8*)arg0, arg0[0x2B + i]) != 0) {
+                if (BattleAi_CanUseMove((s8*)arg0, arg0[0x2B + i]) != 0) {
                     return arg0[0x2B + i];
                 }
                 break;
@@ -845,7 +845,7 @@ u8 BattleAI_FindUsableHealingMove(u8 *arg0) {
  * Returns 1 if either of the battler's types is arg1.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_HasType(s8 *arg0, s32 arg1) {
+s32 BattleAi_HasType(s8 *arg0, s32 arg1) {
     if ((arg1 == M2C_FIELD(arg0, u8 *, 0x28)) || (arg1 == M2C_FIELD(arg0, u8 *, 0x29))) {
         return 1;
     }

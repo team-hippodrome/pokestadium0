@@ -173,7 +173,7 @@ s32 Diorama_ScaleRotateCallbackB(s32 arg0, GraphNode* arg1);
 s32 Diorama_GroupStateCallback(s32 arg0, GraphNode* arg1);
 void Diorama_ClearModelSlots(void);
 void Diorama_FreeModelSlots(unk_D_86B0E5F0* arg0);
-void BattleAI_CalcAttack(void);
+void BattleAi_CalcAttack(void);
 void Diorama_InitModelSlot(unk_D_86B0E5F0* arg0, unk_D_86B0C4C8* arg1);
 void Diorama_SetModelSlotPosition(unk_D_86B0E5F0* arg0, unk_D_86B0C4C8* arg1);
 void Diorama_SetGlowFromGroup(s32 arg0);

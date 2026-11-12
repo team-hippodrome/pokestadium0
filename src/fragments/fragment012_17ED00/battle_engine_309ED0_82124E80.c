@@ -38,15 +38,15 @@ void func_82124EFC(void) {
 
     if (sActivePokemon[0]->teamRoster->isHuman & 2) {
         if (sBattleScene.scene->actingSide == 0) {
-            BattleAI_RecordUsedMove(temp_s0->rosterIndex, temp_s1->rosterIndex, 0);
+            BattleAi_RecordUsedMove(temp_s0->rosterIndex, temp_s1->rosterIndex, 0);
         } else {
-            BattleAI_RecordUsedMove(temp_s0->rosterIndex, temp_s1->rosterIndex, 1);
+            BattleAi_RecordUsedMove(temp_s0->rosterIndex, temp_s1->rosterIndex, 1);
         }
     } else if (sActivePokemon[1]->teamRoster->isHuman & 2) {
         if (sBattleScene.scene->actingSide == 1) {
-            BattleAI_RecordUsedMove(temp_s1->rosterIndex, temp_s0->rosterIndex, 0);
+            BattleAi_RecordUsedMove(temp_s1->rosterIndex, temp_s0->rosterIndex, 0);
         } else {
-            BattleAI_RecordUsedMove(temp_s1->rosterIndex, temp_s0->rosterIndex, 1);
+            BattleAi_RecordUsedMove(temp_s1->rosterIndex, temp_s0->rosterIndex, 1);
         }
     }
 
@@ -63,7 +63,7 @@ void func_82124EFC(void) {
     sBattleScene.scene->actingSide = sp24;
 }
 
-void BattleAI_RecordUsedMove(s32, s32, s32);
+void BattleAi_RecordUsedMove(s32, s32, s32);
 s32 func_821250D4(void) {
     s8* sp24;
     s8* sp20;
@@ -75,7 +75,7 @@ s32 func_821250D4(void) {
     func_821079E8(0x1FFE);
     if ((M2C_FIELD(sp24, u8*, 0x2E) == 0xF) || (M2C_FIELD(sp24, u8*, 0x2E) == 0x10)) {
         if (*M2C_FIELD(sActivePokemon[sBattleScene.scene->actingSide], u8**, 0x860) & 2) {
-            BattleAI_RecordUsedMove(M2C_FIELD(sp20, s32*, 8), M2C_FIELD(sp1C, s32*, 8), 2);
+            BattleAi_RecordUsedMove(M2C_FIELD(sp20, s32*, 8), M2C_FIELD(sp1C, s32*, 8), 2);
         }
         func_82105E4C(sActivePokemon[sBattleScene.scene->actingSide], 0x3800);
         sBattleScene.scene->phaseStep = 0;
@@ -103,7 +103,7 @@ void BattleScene_InitializeSwitchActions(void) {
 
     if ((sp28->unk_2D == 0xF) || (sp28->unk_2D == 0x10)) {
         if (sActivePokemon[0]->teamRoster->isHuman & 2) {
-            BattleAI_RecordUsedMove(sp28->rosterIndex, sp24->rosterIndex, 2);
+            BattleAi_RecordUsedMove(sp28->rosterIndex, sp24->rosterIndex, 2);
         }
         sBattleScene.scene->actingSide = 0;
         sBattleScene.scene->sideCurrentlySwitching = 0;
@@ -113,7 +113,7 @@ void BattleScene_InitializeSwitchActions(void) {
         sBattleScene.scene->actingSide = sp2C;
     } else {
         if (sActivePokemon[0]->teamRoster->isHuman & 2) {
-            BattleAI_RecordUsedMove(sp24->rosterIndex, sp28->rosterIndex, 2);
+            BattleAi_RecordUsedMove(sp24->rosterIndex, sp28->rosterIndex, 2);
         }
         sBattleScene.scene->actingSide = 1;
         sBattleScene.scene->sideCurrentlySwitching = 1;

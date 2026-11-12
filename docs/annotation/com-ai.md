@@ -8,13 +8,13 @@ player agent or human has checked it in game yet. Function names are in
 
 | Function | When it runs | Result |
 |---|---|---|
-| `BattleAI_SelectTeam` | team selection | writes the chosen party indices; seeds the AI's random source |
-| `BattleAI_ChooseTurnAction` | every COM turn | 0..3 = move slot, 4 + n = switch to party slot n (also stored in `D_821CF2A4`) |
-| `BattleAI_RecordUsedMove` | after both sides act | learns the opponent's moves and PP, and who moved first |
+| `BattleAi_SelectTeam` | team selection | writes the chosen party indices; seeds the AI's random source |
+| `BattleAi_ChooseTurnAction` | every COM turn | 0..3 = move slot, 4 + n = switch to party slot n (also stored in `D_821CF2A4`) |
+| `BattleAi_RecordUsedMove` | after both sides act | learns the opponent's moves and PP, and who moved first |
 
-`BattleAI_ChooseTurnAction` tries `BattleAI_ChooseSwitch` first. If it doesn't
-switch, it calls `BattleAI_ChooseRandomMove` (mode 3) or `BattleAI_ChooseMove`.
-Then `BattleAI_FindSlotWithPp` runs on the result.
+`BattleAi_ChooseTurnAction` tries `BattleAi_ChooseSwitch` first. If it doesn't
+switch, it calls `BattleAi_ChooseRandomMove` (mode 3) or `BattleAi_ChooseMove`.
+Then `BattleAi_FindSlotWithPp` runs on the result.
 
 ## Model
 
@@ -61,14 +61,14 @@ through raw `u8 *` offsets today.
 
 ## Rules the AI encodes
 
-- **Damage estimate** (`BattleAI_EstimateDamage`):
+- **Damage estimate** (`BattleAi_EstimateDamage`):
   - Starts from the engine's damage function (`func_8210EED8`).
   - Multi-hit moves count double, and high-critical-hit moves get +75%.
   - Never counts status moves, healing moves, Self-Destruct or Explosion as damage.
-- **Hidden information**: when the opponent's moves are not revealed, `BattleAI_GetBestDamage` assumes any move its species can learn from the `D_82194578` list.
-- **Sleep Clause**: `BattleAI_SleepClauseAllows`.
-- **Team levels**: three picks must sum to 150..155 (`BattleAI_LevelSumAllowed`, Nintendo Cup '97 rules).
-- **Per-trainer picks** (`BattleAI_AddTrainerPickScore`):
+- **Hidden information**: when the opponent's moves are not revealed, `BattleAi_GetBestDamage` assumes any move its species can learn from the `D_82194578` list.
+- **Sleep Clause**: `BattleAi_SleepClauseAllows`.
+- **Team levels**: three picks must sum to 150..155 (`BattleAi_LevelSumAllowed`, Nintendo Cup '97 rules).
+- **Per-trainer picks** (`BattleAi_AddTrainerPickScore`):
   - Hand-written preferences keyed by the COM trainer's id word (0x6974, 0x95EC, 0x6299, 0xC0FC, 0x3C5E, 0x813A, 0x77CB, 0xBBBD, 0x940F, 0xD870, 0xCD7E, 0x4FC7).
   - Which trainer each id belongs to is not established yet.
-- **Random source**: `BattleAI_RandomPercent` is separate from the battle engine's RNG (`Battle_Random`). Seeding it to fixed values makes the COM deterministic for a given battle.
+- **Random source**: `BattleAi_RandomPercent` is separate from the battle engine's RNG (`Battle_Random`). Seeding it to fixed values makes the COM deterministic for a given battle.

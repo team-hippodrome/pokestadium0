@@ -3,7 +3,7 @@
 
 extern s32 D_8219A570;
 extern s32 D_8219A574;
-void BattleAI_RecordUsedMove(s32, s32, s32);
+void BattleAi_RecordUsedMove(s32, s32, s32);
 extern s32 D_82199DE0;
 M2C_UNK func_800419F8();
 void func_82121D8C(s32, s32, s8 *);

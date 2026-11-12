@@ -20,7 +20,7 @@ void Audio_StopCategory6SoundCommand(UNUSED s32 arg0, UNUSED s32 arg1, UNUSED s3
 s32 Audio_PlayCategory7SoundCommand(s32 arg0, s32 arg1, UNUSED s32 arg2);
 void Audio_StopCategory7SoundCommand(UNUSED s32 arg0, UNUSED s32 arg1, UNUSED s32 arg2);
 void Audio_SeedRandom(s32 arg0, u32 arg1);
-s32 BattleAI_RandomPercent(void);
+s32 BattleAi_RandomPercent(void);
 f32 Audio_RandomFloat(void);
 s32 Audio_PlayCategory8SoundCommand(s32 arg0, s32 arg1, s32 arg2);
 void Audio_StopCategory8SoundCommand(s32 arg0, s32 arg1, UNUSED s32 arg2);

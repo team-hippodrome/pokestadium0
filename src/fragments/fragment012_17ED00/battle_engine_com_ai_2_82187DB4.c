@@ -19,7 +19,7 @@ extern s8* D_821CF2A0;
  * when they make little sense.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAI_ChooseRandomMove(void) {
+s32 BattleAi_ChooseRandomMove(void) {
     s32 byte;
     s32 i;
     s32 acc;
@@ -46,19 +46,19 @@ s32 BattleAI_ChooseRandomMove(void) {
         return 0;
     }
     cnt = 0;
-    i = BattleAI_RandomPercent() % 4;
+    i = BattleAi_RandomPercent() % 4;
     while (cnt != 100) {
         if (slots[i] != 0) {
             switch (slots[i]) {
                 case SELFDESTRUCT:
                 case EXPLOSION:
-                    if ((cnt < 0xA) && (BattleAI_GetHpPercent((s8 *) D_821CF29C) >= 0x33)) {
+                    if ((cnt < 10) && (BattleAi_GetHpPercent((s8 *) D_821CF29C) >= 0x33)) {
                         break;
                     }
-                    if ((cnt < 0x32) && (BattleAI_RandomPercent() < 0x5F)) {
+                    if ((cnt < 50) && (BattleAi_RandomPercent() < 95)) {
                         break;
                     }
-                    if ((cnt < 0x50) && (BattleAI_CountUnfainted((u8 *) D_821CF294) == 1)) {
+                    if ((cnt < 80) && (BattleAi_CountUnfainted((u8 *) D_821CF294) == 1)) {
                         break;
                     }
                     return i;
@@ -67,22 +67,22 @@ s32 BattleAI_ChooseRandomMove(void) {
                 case HYPNOSIS:
                 case LOVELY_KISS:
                 case SPORE:
-                    if ((cnt < 0x1E) && (BattleAI_SleepClauseAllows(D_821CF298) == 0)) {
+                    if ((cnt < 30) && (BattleAi_SleepClauseAllows(D_821CF298) == 0)) {
                         break;
                     }
                     return i;
                 case RECOVER:
                 case SOFTBOILED:
                 case REST:
-                    if ((cnt < 0x32) && (BattleAI_GetHpPercent((s8 *) D_821CF29C) >= 0x5B)) {
+                    if ((cnt < 50) && (BattleAi_GetHpPercent((s8 *) D_821CF29C) >= 0x5B)) {
                         break;
                     }
                     return i;
                 case DREAM_EATER:
-                    if ((cnt < 0x32) && ((((u8 *) D_821CF2A0)[0x21] & 7) == 0)) {
+                    if ((cnt < 50) && ((((u8 *) D_821CF2A0)[0x21] & 7) == 0)) {
                         break;
                     }
-                    if ((cnt < 0x32) && ((((u8 *) D_821CF2A0)[0x21] & 7) != 0) && (BattleAI_RandomPercent() < 0x50) && (BattleAI_CountUnfainted((u8 *) D_821CF298) != 1)) {
+                    if ((cnt < 50) && ((((u8 *) D_821CF2A0)[0x21] & 7) != 0) && (BattleAi_RandomPercent() < 80) && (BattleAi_CountUnfainted((u8 *) D_821CF298) != 1)) {
                         break;
                     }
                     return i;

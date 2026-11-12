@@ -9,7 +9,7 @@ Each row is one function address that the source still reaches under more than o
 | `Audio_PlaySoundEffectById` | `func_8003F6AC` |
 | `Audio_QueueSetMonoOutputCommand` | `func_80037B7C` |
 | `Audio_SetChannelVolume` | `func_80046170` |
-| `BattleAI_CalcDamage` | `func_8210EDBC` |
+| `BattleAi_CalcDamage` | `func_8210EDBC` |
 | `BattleAnim_CallbackDescriptor25AlphaHoldDetach` | `func_82144A9C` |
 | `BattleAnim_CallbackDescriptor26BurstEmitter_InitParticle` | `func_82165BC8` |
 | `BattleAnim_CallbackDescriptor50BurstChild` | `func_82165224` |
