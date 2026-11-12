@@ -832,7 +832,8 @@ void BattleScene_PhaseMoveFailedMessage(CameraNode* arg0) {
  * Phase 21 (moveEffectKind 0x15, set by Battle_Effect_Heal): Recover, Soft-Boiled and Rest.
  * Not reached in the sweep: 1P's Nidorino was at full HP, so heal moves failed to phase 28
  * instead.
- * @unverified Name from the moveEffectKind that leads here.
+ * Seen in play (2026-11-12): Recover with Nidorino at 20/69 HP ran this phase, and the HUD then
+ * showed 54/69 (half its max HP restored).
  */
 void BattleScene_PhaseHeal(CameraNode* arg0) {
 

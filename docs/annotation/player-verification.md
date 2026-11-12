@@ -332,7 +332,8 @@ Bite, Low Kick, Bone Club, Hyper Fang), so their tags are gone.
 Phase 21 (`BattleScene_PhaseHeal`) wasn't seen in the sweep because Nidorino
 was at full HP. With its HP set to 30, Recover healed it (「ニドニドは
 たいりょくを かいふくした！」), but the phase watch missed the transition, so
-that name keeps `@unverified`.
+that name kept `@unverified`. A later run with a breakpoint on it caught
+the phase (Recover at 20/69 HP, then 54/69), so the tag is gone.
 
 ## Move-specific animation callbacks and presentation rows
 
