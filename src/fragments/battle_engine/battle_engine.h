@@ -3181,7 +3181,7 @@ s32 BattleAI_ResolveTiedActionChoice(s32 arg0);
 s32 BattleAI_MatchesLastMoveCategory(u8 arg0, u8 arg1);
 s32 BattleAI_IsDiscouragedRepeatCategory(u8 arg0, u8 arg1);
 s32 BattleAI_IsBannedRandomMove(u8 arg0);
-s32 BattleAI_IsRestrictedRandomMove(s32 arg0, s8* arg1);
+s32 BattleAI_OpponentCannotAct(s8* arg0, s8* arg1);
 s32 BattleAI_IsMoveExcludedForSpecies(BattleMonRuntime* arg0, s32 arg1, u8 arg2, u8 arg3);
 s32 BattleAI_IsMoveIneffective(BattleMonRuntime* arg0, BattleMonRuntime* arg1, u8 arg2);
 void BattleAI_SyncTeamStateFromRuntime(void);

@@ -1,15 +1,24 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
 #include "global.h"
+#include "moves.h"
+#include "pokemon.h"
+#include "pokemon_types.h"
 #include "m2c_macros.h"
 
 extern u8* D_821CF29C;
 extern s8* D_821CF2A0;
-s32 func_82185220(u8 *arg0, u8 *arg1, s32 arg2);
-s32 func_8218540C(s8 *arg0, s8 *arg1);
-s32 func_82184BC8(s8 *arg0, s32 arg1);
-s32 func_82184DC8(s8 *, s8 *, u8);
+s32 BattleAI_GetBestDamage(u8 *arg0, u8 *arg1, s32 arg2);
+s32 BattleAI_MovesFirst(s8 *arg0, s8 *arg1);
+s32 BattleAI_CanUseMove(s8 *arg0, s32 arg1);
+s32 BattleAI_EstimateDamage(s8 *, s8 *, u8);
 
-s32 func_82188050(s32 arg0) {
+/**
+ * If the chosen move is Hyper Beam but it would not knock the opponent out, looks
+ * for another damaging move that would, trying stronger move groups only in later
+ * rounds. Returns the move slot to use.
+ * @unverified Name and comment guessed from the code (COM AI pass).
+ */
+s32 BattleAI_ReplaceHyperBeam(s32 arg0) {
     s32 i;
     s32 tier;
     s32 best;
@@ -17,8 +26,8 @@ s32 func_82188050(s32 arg0) {
     s32 v;
     u8 move;
 
-    if (arg0 >= 0 && arg0 < 4 && func_82185220((u8*)D_821CF2A0, D_821CF29C, 0) < M2C_FIELD(D_821CF29C, u16*, 0x18) && (D_821CF29C + arg0)[0x2B] == 0x3F) {
-        threshold = M2C_FIELD(D_821CF2A0, u16*, 0x18) - func_82184DC8((s8*)D_821CF29C + 0xC, D_821CF2A0 + 0xC, 0x3F) * 9 / 10;
+    if (arg0 >= 0 && arg0 < 4 && BattleAI_GetBestDamage((u8*)D_821CF2A0, D_821CF29C, 0) < M2C_FIELD(D_821CF29C, u16*, 0x18) && (D_821CF29C + arg0)[0x2B] == HYPER_BEAM) {
+        threshold = M2C_FIELD(D_821CF2A0, u16*, 0x18) - BattleAI_EstimateDamage((s8*)D_821CF29C + 0xC, D_821CF2A0 + 0xC, 0x3F) * 9 / 10;
         best = -1;
         if (threshold > 0) {
             for (tier = 0; tier < 4; tier++) {
@@ -26,107 +35,107 @@ s32 func_82188050(s32 arg0) {
                     if ((D_821CF29C + i)[0x2B] == 0) {
                         break;
                     }
-                    if (func_8218540C((s8*)D_821CF29C, D_821CF2A0) != 0 || (D_821CF29C + i)[0x2B] == 0x62) {
+                    if (BattleAI_MovesFirst((s8*)D_821CF29C, D_821CF2A0) != 0 || (D_821CF29C + i)[0x2B] == QUICK_ATTACK) {
                         move = (D_821CF29C + i)[0x2B];
                         switch (move) {
-                            case 0x14:
-                            case 0x15:
-                            case 0x19:
-                            case 0x38:
-                            case 0x42:
-                            case 0x79:
-                            case 0x80:
-                            case 0x9A:
+                            case BIND:
+                            case SLAM:
+                            case MEGA_KICK:
+                            case HYDRO_PUMP:
+                            case SUBMISSION:
+                            case EGG_BOMB:
+                            case CLAMP:
+                            case FURY_SWIPES:
                                 if (tier < 3) {
                                     break;
                                 }
-                            case 0x03:
-                            case 0x04:
-                            case 0x05:
-                            case 0x1B:
-                            case 0x1F:
-                            case 0x23:
-                            case 0x24:
-                            case 0x2A:
-                            case 0x31:
-                            case 0x3B:
-                            case 0x43:
-                            case 0x7D:
-                            case 0x7E:
-                            case 0x88:
-                            case 0x8C:
-                            case 0x98:
-                            case 0x9B:
-                            case 0x9D:
-                            case 0x9E:
-                            case 0xA2:
+                            case DOUBLESLAP:
+                            case COMET_PUNCH:
+                            case MEGA_PUNCH:
+                            case ROLLING_KICK:
+                            case FURY_ATTACK:
+                            case WRAP:
+                            case TAKE_DOWN:
+                            case PIN_MISSILE:
+                            case SONICBOOM:
+                            case BLIZZARD:
+                            case LOW_KICK:
+                            case BONE_CLUB:
+                            case FIRE_BLAST:
+                            case HI_JUMP_KICK:
+                            case BARRAGE:
+                            case CRABHAMMER:
+                            case BONEMERANG:
+                            case ROCK_SLIDE:
+                            case HYPER_FANG:
+                            case SUPER_FANG:
                                 if (tier < 2) {
                                     break;
                                 }
-                            case 0x0F:
-                            case 0x13:
-                            case 0x1A:
-                            case 0x21:
-                            case 0x4B:
+                            case CUT:
+                            case FLY:
+                            case JUMP_KICK:
+                            case TACKLE:
+                            case RAZOR_LEAF:
                                 if (tier < 1) {
                                     break;
                                 }
-                            case 0x01:
-                            case 0x02:
-                            case 0x06:
-                            case 0x07:
-                            case 0x08:
-                            case 0x09:
-                            case 0x0A:
-                            case 0x0B:
-                            case 0x10:
-                            case 0x11:
-                            case 0x16:
-                            case 0x17:
-                            case 0x18:
-                            case 0x1D:
-                            case 0x1E:
-                            case 0x22:
-                            case 0x26:
-                            case 0x28:
-                            case 0x29:
-                            case 0x2C:
-                            case 0x33:
-                            case 0x34:
-                            case 0x35:
-                            case 0x37:
-                            case 0x39:
-                            case 0x3A:
-                            case 0x3C:
-                            case 0x3D:
-                            case 0x3E:
-                            case 0x40:
-                            case 0x41:
-                            case 0x45:
-                            case 0x46:
-                            case 0x47:
-                            case 0x48:
-                            case 0x52:
-                            case 0x54:
-                            case 0x55:
-                            case 0x59:
-                            case 0x5B:
-                            case 0x5D:
-                            case 0x5E:
-                            case 0x62:
-                            case 0x65:
-                            case 0x7A:
-                            case 0x7C:
-                            case 0x7F:
-                            case 0x81:
-                            case 0x83:
-                            case 0x84:
-                            case 0x8D:
-                            case 0x91:
-                            case 0x92:
-                            case 0xA1:
-                            case 0xA3:
-                                v = func_82184DC8((s8*)D_821CF29C + 0xC, D_821CF2A0 + 0xC, move) * 9 / 10;
+                            case POUND:
+                            case KARATE_CHOP:
+                            case PAY_DAY:
+                            case FIRE_PUNCH:
+                            case ICE_PUNCH:
+                            case THUNDERPUNCH:
+                            case SCRATCH:
+                            case VICEGRIP:
+                            case GUST:
+                            case WING_ATTACK:
+                            case VINE_WHIP:
+                            case STOMP:
+                            case DOUBLE_KICK:
+                            case HEADBUTT:
+                            case HORN_ATTACK:
+                            case BODY_SLAM:
+                            case DOUBLE_EDGE:
+                            case POISON_STING:
+                            case TWINEEDLE:
+                            case BITE:
+                            case ACID:
+                            case EMBER:
+                            case FLAMETHROWER:
+                            case WATER_GUN:
+                            case SURF:
+                            case ICE_BEAM:
+                            case PSYBEAM:
+                            case BUBBLEBEAM:
+                            case AURORA_BEAM:
+                            case PECK:
+                            case DRILL_PECK:
+                            case SEISMIC_TOSS:
+                            case STRENGTH:
+                            case ABSORB:
+                            case MEGA_DRAIN:
+                            case DRAGON_RAGE:
+                            case THUNDERSHOCK:
+                            case THUNDERBOLT:
+                            case EARTHQUAKE:
+                            case DIG:
+                            case CONFUSION:
+                            case PSYCHIC_M:
+                            case QUICK_ATTACK:
+                            case NIGHT_SHADE:
+                            case LICK:
+                            case SLUDGE:
+                            case WATERFALL:
+                            case SWIFT:
+                            case SPIKE_CANNON:
+                            case CONSTRICT:
+                            case LEECH_LIFE:
+                            case BUBBLE:
+                            case DIZZY_PUNCH:
+                            case TRI_ATTACK:
+                            case SLASH:
+                                v = BattleAI_EstimateDamage((s8*)D_821CF29C + 0xC, D_821CF2A0 + 0xC, move) * 9 / 10;
                                 if (best < v && threshold < v) {
                                     best = v;
                                     arg0 = i;
@@ -141,7 +150,12 @@ s32 func_82188050(s32 arg0) {
     return arg0;
 }
 
-s32 func_8218824C(s32 arg0) {
+/**
+ * Returns the slot of the usable move with the highest estimated damage if that
+ * damage is more than arg0 percent of the opponent's HP, otherwise -1.
+ * @unverified Name and comment guessed from the code (COM AI pass).
+ */
+s32 BattleAI_PickStrongestMove(s32 arg0) {
     s32 i;
     s32 best = -1;
     s32 bestIdx = -1;
@@ -151,8 +165,8 @@ s32 func_8218824C(s32 arg0) {
         if ((D_821CF29C + i)[0x2B] == 0) {
             break;
         }
-        if (func_82184BC8((s8*)D_821CF29C, (D_821CF29C + i)[0x2B]) != 0) {
-            v = func_82184DC8((s8*)D_821CF29C + 0xC, D_821CF2A0 + 0xC, (D_821CF29C + i)[0x2B]);
+        if (BattleAI_CanUseMove((s8*)D_821CF29C, (D_821CF29C + i)[0x2B]) != 0) {
+            v = BattleAI_EstimateDamage((s8*)D_821CF29C + 0xC, D_821CF2A0 + 0xC, (D_821CF29C + i)[0x2B]);
             if (best < v) {
                 best = v;
                 bestIdx = i;
@@ -167,74 +181,81 @@ s32 func_8218824C(s32 arg0) {
 }
 
 extern void *D_821CF294;
-s32 func_82183CE4(s8 *);
-s32 func_82183D50(void *);
-s32 func_82184CE0(s8 *);
-s32 func_82185450(s8 *, s8 *);
-s32 func_821854AC(s8 *);
-s32 func_821857CC(s8 *);
-s32 func_821858DC(s8 *);
-s32 func_82185A30(s8 *);
-s32 func_82185BE0(s8 *, s8 *);
-s32 func_82185D44(u8);
-s32 func_82186394(s8 *, s8 *);
-s32 func_821864D4(s8 *, s8 *);
-s32 func_8218663C(s8 *, s8 *);
-s32 func_82188394(void)
+s32 BattleAI_GetHpPercent(s8 *);
+s32 BattleAI_CountUnfainted(void *);
+s32 BattleAI_FindUsableHealingMove(s8 *);
+s32 BattleAI_OpponentCannotAct(s8 *, s8 *);
+s32 BattleAI_PickSetupMove(s8 *);
+s32 BattleAI_PickStatBoostMove(s8 *);
+s32 BattleAI_PickHealingMove(s8 *);
+s32 BattleAI_PickToxicOrLeechSeed(s8 *);
+s32 BattleAI_PickStatLowerMove(s8 *, s8 *);
+s32 BattleAI_IsMoveUseful(u8);
+s32 BattleAI_PickParalysisMove(s8 *, s8 *);
+s32 BattleAI_PickSleepMove(s8 *, s8 *);
+s32 BattleAI_PickSelfDestructMove(s8 *, s8 *);
+/**
+ * Normal move choice. In order: heal, set up when the opponent cannot act
+ * (BattleAI_OpponentCannotAct), status the opponent, lower its stats, finish it with a strong move, boost,
+ * explode when about to faint, or take the strongest move; then
+ * BattleAI_ReplaceHyperBeam, and finally the first move that is useful.
+ * @unverified Name and comment guessed from the code (COM AI pass).
+ */
+s32 BattleAI_ChooseMove(void)
 {
   s32 r;
   s32 i;
   s32 j;
 
-  func_8218540C((s8 *) D_821CF29C, D_821CF2A0);
+  BattleAI_MovesFirst((s8 *) D_821CF29C, D_821CF2A0);
   r = -1;
-  if ((func_8218540C((s8 *) D_821CF29C, D_821CF2A0) != 0) && (func_82185450((s8 *) D_821CF29C, D_821CF2A0) == 0) && (!(((u8 *) D_821CF2A0)[0x21] & 0x27)) && (func_8218824C(func_82183CE4(D_821CF2A0)) != 0))
+  if ((BattleAI_MovesFirst((s8 *) D_821CF29C, D_821CF2A0) != 0) && (BattleAI_OpponentCannotAct((s8 *) D_821CF29C, D_821CF2A0) == 0) && (!(((u8 *) D_821CF2A0)[0x21] & 0x27)) && (BattleAI_PickStrongestMove(BattleAI_GetHpPercent(D_821CF2A0)) != 0))
   {
-    r = func_821858DC((s8 *) D_821CF29C);
+    r = BattleAI_PickHealingMove((s8 *) D_821CF29C);
   }
   if (r < 0)
   {
-    if (func_82185450((s8 *) D_821CF29C, D_821CF2A0) != 0)
+    if (BattleAI_OpponentCannotAct((s8 *) D_821CF29C, D_821CF2A0) != 0)
     {
-      r = func_821854AC((s8 *) D_821CF29C);
+      r = BattleAI_PickSetupMove((s8 *) D_821CF29C);
     }
     else
     {
-      r = func_82185A30((s8 *) D_821CF29C);
+      r = BattleAI_PickToxicOrLeechSeed((s8 *) D_821CF29C);
       if (r < 0)
       {
-        r = func_82186394((s8 *) D_821CF29C, D_821CF2A0);
+        r = BattleAI_PickParalysisMove((s8 *) D_821CF29C, D_821CF2A0);
       }
       if (r < 0)
       {
-        r = func_821864D4((s8 *) D_821CF29C, D_821CF2A0);
+        r = BattleAI_PickSleepMove((s8 *) D_821CF29C, D_821CF2A0);
       }
-      if ((r < 0) && ((func_82184CE0(D_821CF2A0) != 0) || (func_82183CE4(D_821CF2A0) >= 0x15)))
+      if ((r < 0) && ((BattleAI_FindUsableHealingMove(D_821CF2A0) != 0) || (BattleAI_GetHpPercent(D_821CF2A0) >= 0x15)))
       {
-        r = func_82185BE0((s8 *) D_821CF29C, D_821CF2A0);
+        r = BattleAI_PickStatLowerMove((s8 *) D_821CF29C, D_821CF2A0);
       }
     }
   }
   if (r < 0)
   {
-    r = func_8218824C(0x32);
-    if ((r < 0) && ((func_8218824C(0x1E) != 0) || (func_82184CE0(D_821CF2A0) != 0)) && ((func_82183CE4(D_821CF2A0) >= 0x33) || (func_82183CE4((s8 *) D_821CF29C) >= 0x51)))
+    r = BattleAI_PickStrongestMove(0x32);
+    if ((r < 0) && ((BattleAI_PickStrongestMove(0x1E) != 0) || (BattleAI_FindUsableHealingMove(D_821CF2A0) != 0)) && ((BattleAI_GetHpPercent(D_821CF2A0) >= 0x33) || (BattleAI_GetHpPercent((s8 *) D_821CF29C) >= 0x51)))
     {
-      r = func_821857CC((s8 *) D_821CF29C);
+      r = BattleAI_PickStatBoostMove((s8 *) D_821CF29C);
     }
   }
   if (r < 0)
   {
-    if ((((func_8218540C((s8 *) D_821CF29C, D_821CF2A0) != 0) && (func_82183CE4((s8 *) D_821CF29C) < 0x14)) || ((func_8218540C((s8 *) D_821CF29C, D_821CF2A0) == 0) && ((M2C_FIELD(D_821CF29C, u16 *, 0x18) / 2) < ((func_82185220((u8 *) D_821CF2A0, D_821CF29C, 0) * 0x5A) / 100))) || ((func_82184CE0((s8 *) D_821CF29C) == 0) && (func_82183CE4((s8 *) D_821CF29C) < 0x28))) && (func_82183D50(D_821CF294) >= 2))
+    if ((((BattleAI_MovesFirst((s8 *) D_821CF29C, D_821CF2A0) != 0) && (BattleAI_GetHpPercent((s8 *) D_821CF29C) < 0x14)) || ((BattleAI_MovesFirst((s8 *) D_821CF29C, D_821CF2A0) == 0) && ((M2C_FIELD(D_821CF29C, u16 *, 0x18) / 2) < ((BattleAI_GetBestDamage((u8 *) D_821CF2A0, D_821CF29C, 0) * 0x5A) / 100))) || ((BattleAI_FindUsableHealingMove((s8 *) D_821CF29C) == 0) && (BattleAI_GetHpPercent((s8 *) D_821CF29C) < 0x28))) && (BattleAI_CountUnfainted(D_821CF294) >= 2))
     {
-      r = func_8218663C((s8 *) D_821CF29C, D_821CF2A0);
+      r = BattleAI_PickSelfDestructMove((s8 *) D_821CF29C, D_821CF2A0);
     }
     if (r < 0)
     {
-      r = func_8218824C(0);
+      r = BattleAI_PickStrongestMove(0);
     }
   }
-  r = func_82188050(r);
+  r = BattleAI_ReplaceHyperBeam(r);
   if (r < 0)
   {
     for (j = 0; (j < 10) && (r < 0); j++)
@@ -245,7 +266,7 @@ s32 func_82188394(void)
         {
           break;
         }
-        if ((func_82184BC8((s8 *) D_821CF29C, (D_821CF29C + i)[0x2B]) != 0) && ((j != 0) || (func_82185D44((D_821CF29C + i)[0x2B]) != 0)))
+        if ((BattleAI_CanUseMove((s8 *) D_821CF29C, (D_821CF29C + i)[0x2B]) != 0) && ((j != 0) || (BattleAI_IsMoveUseful((D_821CF29C + i)[0x2B]) != 0)))
         {
           r = i;
           break;
@@ -262,15 +283,11 @@ s32 func_82188394(void)
 
 
 /**
- * Searches for another entry that matches entry arg0 in the per-entry byte tables
- * addressed through D_821CF29C (the byte at +0x2B + index and the byte at +0x3E + index,
- * index 0..3). If the +0x3E byte of arg0 has any of the bits 0x3F set, returns arg0.
- * Otherwise scans indices 0..3 in order: stops and returns arg0 at the first index
- * whose +0x2B byte is zero; skips index arg0; and returns the first other index whose
- * +0x2B byte equals that of arg0 and whose +0x3E byte has any of bits 0x3F set.
- * Returns arg0 when no such index is found. What the tables mean is not established.
+ * If move slot arg0 has no PP left, returns another slot holding the same move
+ * with PP; otherwise arg0.
+ * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 func_821886F0(s32 arg0) {
+s32 BattleAI_FindSlotWithPp(s32 arg0) {
     s32 i;
     u8* base;
     u8* cur;
@@ -307,16 +324,17 @@ extern Slot90 D_821CF998[6];
 extern Slot90 *D_821CF298;
 extern s32 D_821CF288;
 void func_80058410(u8 *, u8 *, s32);
-void func_821869C4(s8 *, u8 *);
-void func_82185378(u8 *, u8 *);
-s32 func_821879A4(void);
-s32 func_82187DB4(void);
+void BattleAI_CopyVisibleBattleState(s8 *, u8 *);
+void BattleAI_ResetBattleStats(u8 *, u8 *);
+s32 BattleAI_ChooseSwitch(void);
+s32 BattleAI_ChooseRandomMove(void);
 /**
- * AI action choice: sets up the current/opponent slot pointers,
- * updates per-turn bookkeeping, then picks an action (a move index 0-3, or
- * 4 + party slot to switch) and stores it in D_821CF2A4.
+ * Per-turn COM entry point. Copies both active Pokemon (arg0 own, arg1 opponent's
+ * visible state) into the AI's model, updates its turn bookkeeping, then returns
+ * a move slot (0..3) or 4 + a party slot to switch, also stored in D_821CF2A4.
+ * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 func_82188770(u8* arg0, u8* arg1, s32 arg2, s32 arg3) {
+s32 BattleAI_ChooseTurnAction(u8* arg0, u8* arg1, s32 arg2, s32 arg3) {
     s32 move;
     s32 r;
     s32 one; // FAKE
@@ -336,7 +354,7 @@ s32 func_82188770(u8* arg0, u8* arg1, s32 arg2, s32 arg3) {
         }
         M2C_FIELD(D_821CF29C, u16*, 0x70) = M2C_FIELD(D_821CF29C, u16*, 0x18);
     }
-    func_821869C4(D_821CF2A0 + 0xC, arg1);
+    BattleAI_CopyVisibleBattleState(D_821CF2A0 + 0xC, arg1);
     if (D_821CF29C[0x5A] & 1) {
         D_821CF29C[0x7A]++;
     } else {
@@ -348,7 +366,7 @@ s32 func_82188770(u8* arg0, u8* arg1, s32 arg2, s32 arg3) {
     if (arg3 != ((u8*)D_821CF294)[0x369]) {
         move = ((u8*)D_821CF294)[0x369];
         if (move < D_821CF288) {
-            func_82185378(D_821CF298[((u8*)D_821CF294)[0x369]].data + 0xC, D_821CF298->roster + move * 0x50 + 0x1C);
+            BattleAI_ResetBattleStats(D_821CF298[((u8*)D_821CF294)[0x369]].data + 0xC, D_821CF298->roster + move * 0x50 + 0x1C);
         }
         ((u8*)D_821CF294)[0x369] = arg3;
         ((u8*)D_821CF294)[0x36A] = 0;
@@ -360,24 +378,24 @@ s32 func_82188770(u8* arg0, u8* arg1, s32 arg2, s32 arg3) {
         D_821CF298[move].data[0x7B] = arg1[move + 0x16];
     }
 
-    move = func_821879A4();
+    move = BattleAI_ChooseSwitch();
     if ((move >= 0) && (D_821CF29C[0x75] != ((one = 1) << move))) { // FAKE: one
         r = -1;
-        if ((M2C_FIELD(D_821CF29C, u16*, 0x18) != 0) && (func_82183CE4((s8*)D_821CF29C) < 0x23) &&
-            (func_82183D50(D_821CF294) >= 2) && (func_8218663C((s8*)D_821CF29C, D_821CF2A0) >= 0)) {
-            r = func_8218663C((s8*)D_821CF29C, D_821CF2A0);
+        if ((M2C_FIELD(D_821CF29C, u16*, 0x18) != 0) && (BattleAI_GetHpPercent((s8*)D_821CF29C) < 0x23) &&
+            (BattleAI_CountUnfainted(D_821CF294) >= 2) && (BattleAI_PickSelfDestructMove((s8*)D_821CF29C, D_821CF2A0) >= 0)) {
+            r = BattleAI_PickSelfDestructMove((s8*)D_821CF29C, D_821CF2A0);
         }
         if (r < 0) {
-            func_82185378(D_821CF29C + 0xC, *(u8**)D_821CF294 + move * 0x50 + 0x1C);
+            BattleAI_ResetBattleStats(D_821CF29C + 0xC, *(u8**)D_821CF294 + move * 0x50 + 0x1C);
             r = move + 4;
         }
-    } else if ((((u8*)D_821CF294)[0x368] == 3) && (func_82183CE4(D_821CF2A0) >= 0x1F)) {
-        r = func_82187DB4();
+    } else if ((((u8*)D_821CF294)[0x368] == 3) && (BattleAI_GetHpPercent(D_821CF2A0) >= 0x1F)) {
+        r = BattleAI_ChooseRandomMove();
     } else {
-        r = func_82188394();
+        r = BattleAI_ChooseMove();
     }
     if ((r >= 0) && (r < 4) && (r < 4)) { // FAKE: repeated r < 4
-        r = func_821886F0(r);
+        r = BattleAI_FindSlotWithPp(r);
     }
     D_821CF2A4 = r;
     return r;
@@ -417,7 +435,7 @@ void BattleAI_RecordUsedMove(s32 arg0, s32 arg1, s32 arg2) {
             }
         }
     }
-    if ((arg2 < 2) && (D_821CF2A4 < 4) && ((D_821CF29C + D_821CF2A4)[0x2B] == 0x49)) {
+    if ((arg2 < 2) && (D_821CF2A4 < 4) && ((D_821CF29C + D_821CF2A4)[0x2B] == LEECH_SEED)) {
         D_821CF29C[0x77] |= ((u8*)D_821CF2A0)[0x75];
     }
     if (arg2 < 2) {
@@ -427,11 +445,11 @@ void BattleAI_RecordUsedMove(s32 arg0, s32 arg1, s32 arg2) {
     }
     if (!(D_821CF2AC[0x4E] & 8)) {
         if (arg2 == 0) {
-            if (((D_821CF2A8[0x5A] != 0x62) || (D_821CF2AC[0x5A] == 0x62)) && ((D_821CF2A8[0x5A] == 0x44) || (D_821CF2AC[0x5A] != 0x44))) {
+            if (((D_821CF2A8[0x5A] != QUICK_ATTACK) || (D_821CF2AC[0x5A] == QUICK_ATTACK)) && ((D_821CF2A8[0x5A] == COUNTER) || (D_821CF2AC[0x5A] != COUNTER))) {
                 D_821CF29C[0x76] |= ((u8*)D_821CF2A0)[0x75];
             }
         } else if (arg2 == 1) {
-            if (((D_821CF2AC[0x5A] != 0x62) || (D_821CF2A8[0x5A] == 0x62)) && ((D_821CF2AC[0x5A] == 0x44) || (D_821CF2A8[0x5A] != 0x44))) {
+            if (((D_821CF2AC[0x5A] != QUICK_ATTACK) || (D_821CF2A8[0x5A] == QUICK_ATTACK)) && ((D_821CF2AC[0x5A] == COUNTER) || (D_821CF2A8[0x5A] != COUNTER))) {
                 D_821CF29C[0x76] &= ~((u8*)D_821CF2A0)[0x75];
             }
         }

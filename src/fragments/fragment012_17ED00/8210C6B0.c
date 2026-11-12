@@ -719,7 +719,7 @@ s32 func_8210DA30(ActivePokemon* arg0) {
     return 0;
 }
 
-s32 func_82188770(s32, s32, s32, s32, s8*);
+s32 BattleAI_ChooseTurnAction(s32, s32, s32, s32, s8*);
 /**
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
@@ -737,7 +737,7 @@ s32 BattleScene_WaitForCpuChoice(ActivePokemon* arg0, ActivePokemon* arg1) {
         state->selectedCommandOption = 2;
         if (D_FLT_82199EB0 == 60.0f) {
             func_82134D60();
-            D_82199EB8 = func_82188770((s32)&arg0->state.runtime, (s32)&arg1->state.runtime, state->rosterIndex, other->rosterIndex, M2C_FIELD(arg1, s8**, 0x860));
+            D_82199EB8 = BattleAI_ChooseTurnAction((s32)&arg0->state.runtime, (s32)&arg1->state.runtime, state->rosterIndex, other->rosterIndex, M2C_FIELD(arg1, s8**, 0x860));
             state->showingCommandOptions = 0;
             state->actionChosen = D_82199EB8 - 4;
             state->actionDelayTimer = 0;
@@ -753,7 +753,7 @@ s32 BattleScene_WaitForCpuChoice(ActivePokemon* arg0, ActivePokemon* arg1) {
         other->selectedCommand = 1;
         if (D_FLT_82199EB0 == 60.0f) {
             func_82134D60();
-            D_82199EB8 = func_82188770((s32)&arg0->state.runtime, (s32)&arg1->state.runtime, state->rosterIndex, other->rosterIndex, M2C_FIELD(arg1, s8**, 0x860));
+            D_82199EB8 = BattleAI_ChooseTurnAction((s32)&arg0->state.runtime, (s32)&arg1->state.runtime, state->rosterIndex, other->rosterIndex, M2C_FIELD(arg1, s8**, 0x860));
             state->showingCommandOptions = 0;
             state->actionChosen = D_82199EB8 - 4;
             state->actionDelayTimer = 0;
@@ -875,12 +875,12 @@ extern f32 D_84390120;
 extern s32 D_8439013C;
 extern s32 D_84390138;
 extern s32 D_82199EBC;
-s32 func_82188770(s32, s32, s32, s32, s8*);
+s32 BattleAI_ChooseTurnAction(s32, s32, s32, s32, s8*);
 void BattleScene_TriggerCpuChoice(s32 arg0, s32 arg1, s8* arg2, s8* arg3, ActivePokemon* arg4) {
     if (D_FLT_82199EB0 == 1.0f) {
         if (D_82199EBC == 0) {
             D_82199EBC = 1;
-            D_82199EB8 = func_82188770(arg0, arg1, M2C_FIELD(arg2, s32*, 8), M2C_FIELD(arg3, s32*, 8), M2C_FIELD(arg4, s8**, 0x860));
+            D_82199EB8 = BattleAI_ChooseTurnAction(arg0, arg1, M2C_FIELD(arg2, s32*, 8), M2C_FIELD(arg3, s32*, 8), M2C_FIELD(arg4, s8**, 0x860));
         }
     }
 }
