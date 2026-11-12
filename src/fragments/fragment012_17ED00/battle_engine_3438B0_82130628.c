@@ -593,7 +593,8 @@ void BattleScene_OpeningStepWaitSide0Ball(s32 arg0) {
 
 /**
  * Battle start: sends out side 0's Pokemon with ゆけっ！%s (Go! %s).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): at the start of a COM free battle it first ran as 1P's Poké Ball
+ * burst open, before COM's send-out.
  */
 void BattleScene_SendOutSide0(CameraNode* arg0) {
     sActivePokemon[0]->displayObject.node.flags &= ~1;
@@ -630,7 +631,8 @@ void BattleScene_OpeningStepWaitSide0SendOut(CameraNode* arg0) {
 
 /**
  * Battle start: sends out side 1's Pokemon with ゆけっ！%s (Go! %s).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): at the start of the same battle it first ran right after 1P's Onix
+ * had come out, for COM's send-out.
  */
 void BattleScene_SendOutSide1(CameraNode* arg0) {
     Audio_PlayCommand(2, 0, 0);

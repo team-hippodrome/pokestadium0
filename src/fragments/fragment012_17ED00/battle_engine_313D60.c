@@ -211,7 +211,8 @@ u16 Battle_DetermineMoveOrder(ActivePokemon* pokemon, ActivePokemon* other_pokem
 
 /**
  * Test membership in a byte array of the supplied length.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12): returned 0 for 0x28 (Poison Sting) in the two-byte list 0E 4A and in
+ * the five-byte list 60 69 75 78 85.
  */
 s32 IsByteInArray(u8 lookup, u8* array, s32 array_length) {
     while (array_length--) {

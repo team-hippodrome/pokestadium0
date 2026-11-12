@@ -650,3 +650,6 @@ on both sides of the call.
   Poison Sting's six data bytes (28 02 0F 03 FF 23).
 * Messages: `BattleMessage_Format` built 「ニドニドのどくばり!」 with id 0x18,
   and 「こうかは ばつぐんだ！」 with id 0x29.
+* Battle start: `BattleScene_SendOutSide0` ran as 1P's Poké Ball burst open,
+  and `BattleScene_SendOutSide1` ran just after 1P's Onix was out.
+  `ActivePokemon_GetNickname` returned ニドニド for 1P's Nidorino.
