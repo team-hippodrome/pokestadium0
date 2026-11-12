@@ -6,7 +6,11 @@
 
 s32 func_800246A8(M2C_UNK, s32);                    /* extern */
 
-s32 func_88100020(void) {
+/**
+ * Returns the first empty slot of the 16 registered team slots, or -1 when all are used.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 Registration_FindFreeSlot(void) {
     s32 var_s0;
 
     var_s0 = 0;
@@ -28,7 +32,11 @@ typedef struct Entry88100078 {
 s32 func_80020AFC(s32, s32, s32, s32);
 s32 func_80020CE4(void*, s32, s32);
 M2C_UNK func_80020C60(s32);
-void func_88100078(s32 arg0, s32 arg1, s32 arg2, s32* arg3) {
+/**
+ * Reads up to six Pokemon from deck (`arg0`, `arg1`, `arg2`) into team `arg3` and stores the count.
+ * @unverified Name and comment guessed from the code.
+ */
+void Registration_ReadTeam(s32 arg0, s32 arg1, s32 arg2, s32* arg3) {
     Entry88100078* entry = (Entry88100078*)arg3[0];
     s32 handle = func_80020AFC(arg0, arg1, arg2, 0);
     s32 i;
@@ -47,7 +55,11 @@ s32 func_80020B94(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s8 *, s32); /* extern */
 M2C_UNK func_80020C60(s32);                         /* extern */
 s32 func_80020DF0(s32, M2C_UNK, s32);               /* extern */
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-void func_88100100(s8 *arg0, M2C_UNK arg1)
+/**
+ * Writes team `arg0` into registered slot `arg1`.
+ * @unverified Name and comment guessed from the code.
+ */
+void Registration_WriteTeam(s8 *arg0, M2C_UNK arg1)
 {
   s32 temp_s3;
   s32 var_s0;
@@ -76,11 +88,11 @@ void func_88100100(s8 *arg0, M2C_UNK arg1)
 }
 
 /*
- * func_881001A8
+ * Registration_WriteAllTeams
  *
  * arg0 points to a record whose first word is a pointer to an array of
  * pointers, with two counts at offsets 4 and 8. For each index i below the
- * count at offset 8, calls func_88100100(entries[i], i). Then, for the
+ * count at offset 8, calls Registration_WriteTeam(entries[i], i). Then, for the
  * remaining indices i up to the count at offset 4, calls
  * func_800245E0(0x10, i) when func_800246A8(0x10, i) is non-zero.
  *
@@ -89,7 +101,11 @@ void func_88100100(s8 *arg0, M2C_UNK arg1)
  * pointer is loaded before the first count is tested).
  */
 s32 func_800245E0(M2C_UNK, s32);
-void func_881001A8(void *arg0) {
+/**
+ * Writes every listed team back to its slot and clears the registered slots after them.
+ * @unverified Name and comment guessed from the code.
+ */
+void Registration_WriteAllTeams(void *arg0) {
     s32 i;
     s8 **p;
     s8 **base;
@@ -99,7 +115,7 @@ void func_881001A8(void *arg0) {
     if (M2C_FIELD(arg0, s32 *, 8) > 0) {
         p = base;
         do {
-            func_88100100(*p, i);
+            Registration_WriteTeam(*p, i);
             i++;
             p++;
         } while (i < M2C_FIELD(arg0, s32 *, 8));
@@ -115,7 +131,11 @@ s32 func_80024ADC(s32, s32);
 void func_80027410(s8*, s8*, s32, s32, s32);
 s32 Deck_GetSaveEntryTrainerId(s32, s32);
 void func_8002479C(s32, s32, u8*);
-void func_8810024C(s8* arg0) {
+/**
+ * Reads every used registered slot (deck 0x10) with its trainer id and name.
+ * @unverified Name and comment guessed from the code.
+ */
+void Registration_LoadRegisteredTeams(s8* arg0) {
     u8* p = M2C_FIELD(arg0, u8**, 0);
     s32 i;
 
@@ -131,7 +151,7 @@ void func_8810024C(s8* arg0) {
         p[2] = 0;
         p[3] = i;
         func_80027410((s8*)p + 0x18, (s8*)p + 0x28, 0x54, 6, 0);
-        func_88100078(p[1], p[2], p[3], (s32*)(p + 0x18));
+        Registration_ReadTeam(p[1], p[2], p[3], (s32*)(p + 0x18));
         M2C_FIELD(p, s32*, 4) = Deck_GetSaveEntryTrainerId(p[1], p[3]);
         func_8002479C(p[1], p[3], p + 8);
         p += 0x220;
@@ -142,7 +162,11 @@ void func_8810024C(s8* arg0) {
 s32 func_80021894(s32);
 s32 func_80022C70(s32);
 void func_80022D84(s32, u8*);
-void func_88100348(s8* arg0) {
+/**
+ * Reads the party of each Game Boy cartridge in the four Transfer Paks (deck 0x20).
+ * @unverified Name and comment guessed from the code.
+ */
+void Registration_LoadGbTeams(s8* arg0) {
     u8* p = M2C_FIELD(arg0, u8**, 0);
     s32 i;
 
@@ -155,7 +179,7 @@ void func_88100348(s8* arg0) {
         p[2] = i;
         p[3] = 0;
         func_80027410((s8*)p + 0x18, (s8*)p + 0x28, 0x54, 6, 0);
-        func_88100078(p[1], p[2], p[3], (s32*)(p + 0x18));
+        Registration_ReadTeam(p[1], p[2], p[3], (s32*)(p + 0x18));
         M2C_FIELD(p, s32*, 4) = func_80022C70(p[2]);
         func_80022D84(p[2], p + 8);
         p += 0x220;
@@ -167,7 +191,11 @@ extern Color_RGBA8 D_88102D74;
 void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
 void Font_SetColorForFlags(s32);
 
-void func_88100428(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s32* arg5) {
+/**
+ * Draws one menu row label with the selection highlight.
+ * @unverified Name and comment guessed from the code.
+ */
+void Registration_DrawMenuRow(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s32* arg5) {
     s32 temp_v0 = *arg5;
 
     if (arg4 & 0x10) {
@@ -186,7 +214,11 @@ void func_80027804(s8*, s8*, s32, s32);
 M2C_UNK Menu_Init(s8 *, s8 *, s8 *, M2C_UNK *, s32, s32);
 extern s32 D_88103078;
 
-void func_881004CC(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, M2C_UNK* arg5, s32 arg6, M2C_UNK* arg7, s32 arg8, M2C_UNK* arg9) {
+/**
+ * Sets up the registration menu: ポケモンをとうろくする (register), とうろくしたポケモンをみる (view), とうろくしたポケモンをけす (delete).
+ * @unverified Name and comment guessed from the code.
+ */
+void Registration_InitMainMenu(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, M2C_UNK* arg5, s32 arg6, M2C_UNK* arg7, s32 arg8, M2C_UNK* arg9) {
     s32 sp2C;
 
     Window_SetRect(arg0, arg1, arg2, arg3, arg4);
@@ -195,11 +227,11 @@ void func_881004CC(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, M2C_UNK* ar
     M2C_FIELD(arg0, s32 *, 0x14) = 0x801;
     M2C_FIELD(arg0, s32 *, 0x20) = (s32)arg9;
     func_80027804(arg0 + 0x50, (s8*)arg5, arg6, arg6);
-    Menu_Init(arg0 + 0x2C, arg0 + 0x50, arg0 + 0x5C, (M2C_UNK*)func_88100428, arg3 - 0xC, 0x20);
+    Menu_Init(arg0 + 0x2C, arg0 + 0x50, arg0 + 0x5C, (M2C_UNK*)Registration_DrawMenuRow, arg3 - 0xC, 0x20);
     M2C_FIELD(arg0, s32 *, 0x4C) = (s32) (M2C_FIELD(arg0, s32 *, 0x4C) | 0x10000);
     M2C_FIELD(arg0, s32 *, 0x7C) = (s32)arg7;
     M2C_FIELD(arg0, s32 *, 0x80) = arg8;
-    sp2C = func_88100020();
+    sp2C = Registration_FindFreeSlot();
     if ((func_800226BC(0x20, D_88103078, 0) == 0) || (sp2C == -1)) {
         M2C_FIELD(M2C_FIELD(arg0, s8 **, 0x30), u16 *, 0) |= 1;
     }
@@ -222,7 +254,11 @@ extern u8 D_800734A8[4];
 extern Gfx D_80060270[];
 extern Color88100D9C D_88102D9C;
 extern Color88100D9C D_88102DA0;
-void func_881005E4(s8* arg0, s32 arg1) {
+/**
+ * Draws the registration menu and the description of the selected item.
+ * @unverified Name and comment guessed from the code.
+ */
+void Registration_DrawMainMenu(s8* arg0, s32 arg1) {
     UNUSED s32 pad; // FAKE: stack padding
     s32 sp38;
     s32 h;
@@ -257,8 +293,9 @@ extern s32 D_800603C0;
  * cursor word at arg0 + 0x34 -- if bit 0 of the entry is clear it plays sound 2 and returns
  * cursor + 1, otherwise it plays sound 8 and returns 0. Every other case returns 0.
  * (The meaning of the table bit is inferred from the sound choice only.)
+ * @unverified Name guessed from the code; comment kept.
  */
-s32 func_881007AC(void* arg0) {
+s32 Registration_UpdateMainMenu(void* arg0) {
     s32 ret = 0;
     s32 dir;
 
@@ -301,7 +338,11 @@ extern char D_88102F14[];
 extern char D_88102F1C[];
 void Window_InitLabeled(s8*, s32, s32, s32, Color_RGBA8, char*);
 M2C_UNK func_8000B2F4(s32);
-void func_88100898(s8* arg, s32 arg1, s32 arg2, s32 arg3) {
+/**
+ * Sets up the yes/no confirm window (372x102).
+ * @unverified Name and comment guessed from the code.
+ */
+void Registration_InitConfirmWindow(s8* arg, s32 arg1, s32 arg2, s32 arg3) {
     Win88100898* arg0 = (Win88100898*)arg;
     Window_SetRect(arg, arg1, arg2, 0x174, 0x66);
     arg0->unk24 = 0;
@@ -331,7 +372,11 @@ void Ui_DrawTexturedDivider(s32, s32, s32, void*);
 void Ui_FillRectPrimEnvColor(s32, s32, s32, s32, Color88100D9C, Color88100D9C);
 void Window_DrawLabeled(s8*, s32);
 
-void func_881009A0(s8* arg0) {
+/**
+ * Draws the confirm window with its message and buttons.
+ * @unverified Name and comment guessed from the code.
+ */
+void Registration_DrawConfirmWindow(s8* arg0) {
     if (func_8002AE6C() == 0) {
         Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0x35, M2C_FIELD(arg0, s32*, 8), D_8007356C);
         Ui_FillRectPrimEnvColor(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) - 0xC, 0x30, D_88102DA8, D_88102DAC);
@@ -350,7 +395,11 @@ void func_881009A0(s8* arg0) {
 s32 func_8002B390(void*);
 M2C_UNK func_8002BC14(s32);
 extern s32 D_800603C0;
-s32 func_88100B2C(s32 arg0) {
+/**
+ * Handles the confirm window. Returns 1 for yes, -1 for no or cancel.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 Registration_UpdateConfirmWindow(s32 arg0) {
     s32 sp1C = 0;
 
     if (func_8002B390((u8*)arg0 + 0xA4) == 0) {
@@ -377,7 +426,11 @@ extern u8 D_88102DB0[];
 extern u8 D_88102DB4[];
 void Window_SetRect(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 
-void func_88100BA4(void* arg0, s32 arg1, s32 arg2, s32 arg3) {
+/**
+ * Sets up the message window (368x104).
+ * @unverified Name and comment guessed from the code.
+ */
+void Registration_InitMessageWindow(void* arg0, s32 arg1, s32 arg2, s32 arg3) {
     Window_SetRect((s8*)arg0, arg1, arg2, 0x170, 0x68);
     M2C_FIELD(arg0, s32*, 0x24) = 0;
     M2C_FIELD(arg0, s32*, 0x20) = 0;
@@ -390,7 +443,11 @@ void func_88100BA4(void* arg0, s32 arg1, s32 arg2, s32 arg3) {
 
 s32 func_8002AE6C();
 extern u8 D_800734A8[4];
-void func_88100C24(s8* arg0) {
+/**
+ * Draws the message window text.
+ * @unverified Name and comment guessed from the code.
+ */
+void Registration_DrawMessageWindow(s8* arg0) {
     u8* c;
 
     if (func_8002AE6C() == 0) {
@@ -407,7 +464,11 @@ void func_88100C24(s8* arg0) {
 M2C_UNK func_8002BC14(s32);                         /* extern */
 extern s32 D_800603C0;
 
-s32 func_88100CA8(s32 arg0) {
+/**
+ * Returns the confirm/cancel input while the message window is open.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 Registration_UpdateMessageWindow(s32 arg0) {
     return func_8002BC14(D_800603C0);
 }
 
@@ -417,8 +478,9 @@ s32 func_88100CA8(s32 arg0) {
  * then calls func_80029028(arg0, arg1, 0x88, 0x64, arg2). arg0 and arg1 are
  * passed straight through (the retail code never touches $a0/$a1); arg2 is a
  * 4-byte colour passed by value.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_88100CD0(s32 arg0, s32 arg1, Color88100D9C arg2) {
+void Registration_FillTrainerPanel(s32 arg0, s32 arg1, Color88100D9C arg2) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(arg0, arg1, 0x88, 0x64, arg2);
 }
@@ -428,13 +490,18 @@ void func_88100CD0(s32 arg0, s32 arg1, Color88100D9C arg2) {
  * then calls func_80029028(arg0 + 0x88, arg1, 0x18C, 0x64, arg2). arg1 is
  * passed straight through (the retail code never touches $a1); arg2 is a
  * 4-byte colour passed by value.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_88100D30(s32 arg0, s32 arg1, Color88100D9C arg2) {
+void Registration_FillTeamPanel(s32 arg0, s32 arg1, Color88100D9C arg2) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(arg0 + 0x88, arg1, 0x18C, 0x64, arg2);
 }
 
-void func_88100D9C(s32 arg0, s32 arg1, Color88100D9C arg2) {
+/**
+ * Draws the top and bottom border lines of a team row.
+ * @unverified Name and comment guessed from the code.
+ */
+void Registration_DrawRowBorders(s32 arg0, s32 arg1, Color88100D9C arg2) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(arg0, arg1, 0x214, 1, arg2);
     func_80029028(arg0, arg1 + 0x63, 0x214, 1, arg2);
@@ -451,7 +518,11 @@ s32 func_80022BAC(u8);
 void func_8002BC58(s32, s32, u8, s32);
 void Ui_DrawImageInStrips(u8*, s32, s32);
 void func_8002BAB8(s32, s32, s32, s32);
-void func_88100E34(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
+/**
+ * Draws the team source (GB cartridge port or registered slot number), なまえ (name) and trainer id.
+ * @unverified Name and comment guessed from the code.
+ */
+void Registration_DrawTrainerPanel(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
     UNUSED s32 pad[3]; // FAKE: stack padding
 
     gSPDisplayList(gDisplayListHead++, D_80060270);
@@ -485,7 +556,11 @@ void func_88100E34(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
 }
 
 extern Color88100D9C D_88102D78[2];
-void func_8810105C(s32 x, s32 y, s32 height) {
+/**
+ * Fills both panels of a team row.
+ * @unverified Name and comment guessed from the code.
+ */
+void Registration_FillRowBackground(s32 x, s32 y, s32 height) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(x, y, 0x88, height, D_88102D78[1]);
     gSPDisplayList(gDisplayListHead++, D_80060270);
@@ -507,7 +582,11 @@ s32 func_80018DEC(s8*, s32);
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 void func_8002B940(s32, s32, s32, s32);
 void func_8001833C(void*, s32, void*, u16);
-void func_8810112C(s32 x, s32 y, u8* entry, s32 id, s32 color, IconCache8810173C* cache) {
+/**
+ * Draws one Pokemon cell of a team row: nickname, level and icon.
+ * @unverified Name and comment guessed from the code.
+ */
+void Registration_DrawMonCell(s32 x, s32 y, u8* entry, s32 id, s32 color, IconCache8810173C* cache) {
     UNUSED s32 pad[4]; // FAKE
     s32 slot;
     s32* p;
@@ -541,7 +620,11 @@ extern Gfx D_80073408[];
 extern Gfx D_80073438[];
 s32 func_80018DEC(s8*, s32);
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
-void func_8810137C(s32 arg0, s32 arg1) {
+/**
+ * Draws an empty Pokemon cell with the placeholder icon.
+ * @unverified Name and comment guessed from the code.
+ */
+void Registration_DrawEmptyMonCell(s32 arg0, s32 arg1) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(arg0, arg1, 0x84, 0x32, D_88102D78[0]);
     gSPDisplayList(gDisplayListHead++, D_80073408);
@@ -574,51 +657,79 @@ void func_88101478(s32 x, s32 y, u8* entry, s32 frame, s32 color, s32* anim) {
     }
 }
 
-void func_8810165C(s8 *arg0, s32 arg1) {
+/**
+ * Starts a timer at 0 that counts to `arg1` x 15.
+ * @unverified Name and comment guessed from the code.
+ */
+void Registration_InitTimer(s8 *arg0, s32 arg1) {
     M2C_FIELD(arg0, s32 *, 0) = 0;
     M2C_FIELD(arg0, s32 *, 4) = arg1;
     M2C_FIELD(arg0, s32 *, 8) = 0xF;
 }
 
-void func_88101670(s8 *arg0, s32 arg1) {
+/**
+ * Starts a timer already at its end, `arg1` x 15.
+ * @unverified Name and comment guessed from the code.
+ */
+void Registration_InitTimerFull(s8 *arg0, s32 arg1) {
     M2C_FIELD(arg0, s32 *, 4) = arg1;
     M2C_FIELD(arg0, s32 *, 8) = 0xF;
     M2C_FIELD(arg0, s32 *, 0) = (s32) (arg1 * 0xF);
 }
 
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-s32 func_88101690(s8 *arg0)
+/**
+ * Returns whether the timer has reached its end.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 Registration_IsTimerDone(s8 *arg0)
 {
  if (0) { }  // karodo
   return (*((s32 *) (((s8 *) arg0) + 0))) >= ((*((s32 *) (((s8 *) arg0) + 4))) * (*((s32 *) (((s8 *) arg0) + 8)))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
 }
 
-s32 func_881016B0(s32 *arg0) {
+/**
+ * Returns whether the timer is at 0.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 Registration_IsTimerAtStart(s32 *arg0) {
     return *arg0 == 0;
 }
 
-s32 func_881016BC(s8* arg0) {
+/**
+ * Advances the timer by one and returns whether it is done.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 Registration_StepTimer(s8* arg0) {
     if (M2C_FIELD(arg0, s32*, 0) < M2C_FIELD(arg0, s32*, 4) * M2C_FIELD(arg0, s32*, 8)) {
         M2C_FIELD(arg0, s32*, 0) += 1;
     }
-    return func_88101690(arg0);
+    return Registration_IsTimerDone(arg0);
 }
 
 s32 Audio_QueueSoundAvoidingRecent(s32* arg0) {
     if (*arg0 > 0) {
         *arg0 -= 1;
     }
-    return func_881016B0(arg0);
+    return Registration_IsTimerAtStart(arg0);
 }
 
-s32 func_88101734(s32 *arg0) {
+/**
+ * Returns the timer's current value.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 Registration_GetTimer(s32 *arg0) {
     return *arg0;
 }
 
 extern Color88100D9C D_88102D80;
 extern s32 D_88103098[];
-void func_8810112C(s32, s32, u8*, s32, s32, IconCache8810173C*);
-void func_8810173C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
+void Registration_DrawMonCell(s32, s32, u8*, s32, s32, IconCache8810173C*);
+/**
+ * Draws the six Pokemon cells of a team row.
+ * @unverified Name and comment guessed from the code.
+ */
+void Registration_DrawTeamRow(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
     u8* box = (u8*)arg2;
     s32 pad[2]; // FAKE
     IconCache8810173C cache;
@@ -628,7 +739,7 @@ void func_8810173C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
     s32 color;
 
     if (box != NULL) {
-        func_88100E34(arg0, arg1, arg4, box);
+        Registration_DrawTrainerPanel(arg0, arg1, arg4, box);
         cache.slots = D_88103098;
         cache.base = 0;
         cache.count = 0x18;
@@ -639,23 +750,27 @@ void func_8810173C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
             if (arg4 & 2) {
                 color = 0x10000;
             }
-            func_8810112C(arg0 + 0x88 + (i % 3) * 0x84, (i / 3) * 0x32 + arg1, entry + 4, arg3 * 6 + i, color, &cache);
+            Registration_DrawMonCell(arg0 + 0x88 + (i % 3) * 0x84, (i / 3) * 0x32 + arg1, entry + 4, arg3 * 6 + i, color, &cache);
         }
         for (; i < 6; i++) {
             color = 0;
             if (arg4 & 2) {
                 color = 0x10000;
             }
-            func_8810112C(arg0 + 0x88 + (i % 3) * 0x84, (i / 3) * 0x32 + arg1, NULL, arg3 * 6 + i, color, &cache);
+            Registration_DrawMonCell(arg0 + 0x88 + (i % 3) * 0x84, (i / 3) * 0x32 + arg1, NULL, arg3 * 6 + i, color, &cache);
         }
     } else {
-        func_88100CD0(arg0, arg1, D_88102D7C);
-        func_88100D30(arg0, arg1, D_88102D78[0]);
+        Registration_FillTrainerPanel(arg0, arg1, D_88102D7C);
+        Registration_FillTeamPanel(arg0, arg1, D_88102D78[0]);
     }
-    func_88100D9C(arg0, arg1, D_88102D80);
+    Registration_DrawRowBorders(arg0, arg1, D_88102D80);
 }
 
-void func_88101A38(s32 arg0, s32 arg1, s8* arg2, s32 arg3, s32 arg4) {
+/**
+ * Draws a full team row: trainer panel and six Pokemon cells.
+ * @unverified Name and comment guessed from the code.
+ */
+void Registration_DrawTeamRowWithTrainer(s32 arg0, s32 arg1, s8* arg2, s32 arg3, s32 arg4) {
     s32 pad[2]; // FAKE
     IconCache8810173C cache;
     s32 i;
@@ -663,7 +778,7 @@ void func_88101A38(s32 arg0, s32 arg1, s8* arg2, s32 arg3, s32 arg4) {
     u8* entry;
 
     entry = M2C_FIELD(arg2, u8**, 0x18);
-    func_88100E34(arg0, arg1, 0, (u8*)arg2);
+    Registration_DrawTrainerPanel(arg0, arg1, 0, (u8*)arg2);
     cache.slots = D_88103098;
     cache.base = 0;
     cache.count = 0x18;
@@ -682,23 +797,24 @@ void func_88101A38(s32 arg0, s32 arg1, s8* arg2, s32 arg3, s32 arg4) {
         func_88101478(arg0 + 0x88 + (i % 3) * 0x84, (i / 3) * 0x32 + arg1, entry + 4, arg3 * 6 + i, 0, (s32*)&cache);
     }
     for (; i < M2C_FIELD(arg2, s32*, 0x20); i++) {
-        func_8810137C(arg0 + 0x88 + (i % 3) * 0x84, (i / 3) * 0x32 + arg1);
+        Registration_DrawEmptyMonCell(arg0 + 0x88 + (i % 3) * 0x84, (i / 3) * 0x32 + arg1);
     }
     for (; i < 6; i++) {
-        func_8810112C(arg0 + 0x88 + (i % 3) * 0x84, (i / 3) * 0x32 + arg1, NULL, i, 0, NULL);
+        Registration_DrawMonCell(arg0 + 0x88 + (i % 3) * 0x84, (i / 3) * 0x32 + arg1, NULL, i, 0, NULL);
     }
-    func_88100D9C(arg0, arg1, D_88102D80);
+    Registration_DrawRowBorders(arg0, arg1, D_88102D80);
 }
 
-/*
- * func_88101D7C
+/**
+ * Registration_ClearIndices
  *
  * Stores -1 into arg2 consecutive words of the s32 array arg0, starting at
  * index arg1 (indices arg1 .. arg1 + arg2 - 1). Does nothing when
  * arg1 + arg2 <= arg1, i.e. when arg2 is not positive. The compare is signed.
  * What the -1 entries mean is not established from this function.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_88101D7C(s32* arg0, s32 arg1, s32 arg2) {
+void Registration_ClearIndices(s32* arg0, s32 arg1, s32 arg2) {
     s32 end;
 
     end = arg1 + arg2;
@@ -707,7 +823,11 @@ void func_88101D7C(s32* arg0, s32 arg1, s32 arg2) {
     }
 }
 
-void func_88101DB4(s8 *arg0, s32 arg1) {
+/**
+ * Sets the team list mode: 0 register, 1 view, 2 delete.
+ * @unverified Name and comment guessed from the code.
+ */
+void Registration_SetListMode(s8 *arg0, s32 arg1) {
     M2C_FIELD(arg0, s32 *, 0xBC) = arg1;
     switch (arg1) {                                 /* irregular */
     case 0:
@@ -724,21 +844,25 @@ void func_88101DB4(s8 *arg0, s32 arg1) {
 
 extern M2C_UNK D_88102D84;
 extern s32 D_88103098[];
-void func_8810173C(s32, s32, s32, s32, s32, s32);
+void Registration_DrawTeamRow(s32, s32, s32, s32, s32, s32);
 M2C_UNK ScrollList_Init();
-void func_88101DF8(s8 *arg0, s32 arg1, s32 arg2, s8 *arg3, s32 arg4) {
+/**
+ * Sets up the team list window (544x344) in mode `arg4`.
+ * @unverified Name and comment guessed from the code.
+ */
+void Registration_InitTeamList(s8 *arg0, s32 arg1, s32 arg2, s8 *arg3, s32 arg4) {
     Window_SetRect(arg0 + 8, arg1, arg2, 0x220, 0x158);
     M2C_FIELD(arg0, s32 *, 0x2C) = 0;
     M2C_FIELD(arg0, s32 *, 0x28) = 0;
     M2C_FIELD(arg0, s32 *, 0x30) = 0;
     M2C_FIELD(arg0, s32 *, 0x1C) = 0x801;
-    func_88101DB4(arg0, arg4);
+    Registration_SetListMode(arg0, arg4);
     M2C_FIELD(arg0, s32 *, 0x28) = ((s32 *)&D_88102D84)[M2C_FIELD(arg0, s32 *, 0xBC)];
     M2C_FIELD(arg0, s8 **, 0xB8) = arg3;
-    ScrollList_Init(arg0 + 0x54, arg3, arg0 + 0x98, 3, func_8810173C, 0x214, 0x64);
+    ScrollList_Init(arg0 + 0x54, arg3, arg0 + 0x98, 3, Registration_DrawTeamRow, 0x214, 0x64);
     M2C_FIELD(arg0, s32 *, 0x74) |= 0x10000;
     M2C_FIELD(arg0, s32 *, 0) = 0;
-    func_88101D7C(D_88103098, 0, 0x18);
+    Registration_ClearIndices(D_88103098, 0, 0x18);
 }
 
 typedef struct {
@@ -751,28 +875,33 @@ typedef struct {
     /* 0x5C */ s32 index;
 } IndexedDrawer;
 
-void func_8810173C(s32, s32, s32, s32, s32, s32);
+void Registration_DrawTeamRow(s32, s32, s32, s32, s32, s32);
 
-/*
- * func_88101EC8
+/**
+ * Registration_DrawTeamListRow
  *
- * Calls func_8810173C with the fields at +0x08 and +0x0C each increased by 6,
+ * Calls Registration_DrawTeamRow with the fields at +0x08 and +0x0C each increased by 6,
  * the entry at the current index (+0x5C) in the first table of arg0->tables,
  * that index, and two zero arguments.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_88101EC8(IndexedDrawer* arg0) {
+void Registration_DrawTeamListRow(IndexedDrawer* arg0) {
     s32 index = arg0->index;
     s32* entry = &(*arg0->tables)[index];
 
-    func_8810173C(arg0->unk_08 + 6, arg0->unk_0C + 6, *entry, index, 0, 0);
+    Registration_DrawTeamRow(arg0->unk_08 + 6, arg0->unk_0C + 6, *entry, index, 0, 0);
 }
 
 void func_800189C0(s32, s32);
 void func_800069CC(void);
 void func_8002F3C4(s8*, s32, s32, s32, s32);
-void func_88101A38(s32, s32, s8*, s32, s32);
-void func_88100C24(s8*);
-void func_88101F1C(s8* arg0) {
+void Registration_DrawTeamRowWithTrainer(s32, s32, s8*, s32, s32);
+void Registration_DrawMessageWindow(s8*);
+/**
+ * Draws the team list window for its current state.
+ * @unverified Name and comment guessed from the code.
+ */
+void Registration_DrawTeamList(s8* arg0) {
     func_800189C0(D_88103074, 0);
     func_800069CC();
     if (func_8002AE6C(arg0 + 8) == 0) {
@@ -783,41 +912,41 @@ void func_88101F1C(s8* arg0) {
                 func_8002F3C4(arg0 + 0x54, M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) + 0x16, 0xFFFF, 0);
                 break;
             case 3:
-                func_88101EC8((IndexedDrawer*)arg0);
-                func_8810105C(M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) + 0x6A, 0x84);
-                func_88101A38(M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) + 0xEE, arg0 + 0xC0,
+                Registration_DrawTeamListRow((IndexedDrawer*)arg0);
+                Registration_FillRowBackground(M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) + 0x6A, 0x84);
+                Registration_DrawTeamRowWithTrainer(M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) + 0xEE, arg0 + 0xC0,
                               M2C_FIELD(arg0, s32*, 0x5C), 0);
-                func_881009A0(arg0 + 0x310);
+                Registration_DrawConfirmWindow(arg0 + 0x310);
                 break;
             case 4:
-                func_88101EC8((IndexedDrawer*)arg0);
-                func_8810105C(M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) + 0x6A, 0x84);
-                func_88101A38(M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) + 0xEE, arg0 + 0xC0,
-                              M2C_FIELD(arg0, s32*, 0x5C), func_88101734((s32*)(arg0 + 0x3C4)) + 0x10);
+                Registration_DrawTeamListRow((IndexedDrawer*)arg0);
+                Registration_FillRowBackground(M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) + 0x6A, 0x84);
+                Registration_DrawTeamRowWithTrainer(M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) + 0xEE, arg0 + 0xC0,
+                              M2C_FIELD(arg0, s32*, 0x5C), Registration_GetTimer((s32*)(arg0 + 0x3C4)) + 0x10);
                 break;
             case 5:
-                func_88101EC8((IndexedDrawer*)arg0);
-                func_8810105C(M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) + 0x6A, 0x84);
-                func_88101A38(M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) + 0xEE, arg0 + 0xC0,
+                Registration_DrawTeamListRow((IndexedDrawer*)arg0);
+                Registration_FillRowBackground(M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) + 0x6A, 0x84);
+                Registration_DrawTeamRowWithTrainer(M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) + 0xEE, arg0 + 0xC0,
                               M2C_FIELD(arg0, s32*, 0x5C), 1);
-                func_88100C24(arg0 + 0x2E0);
+                Registration_DrawMessageWindow(arg0 + 0x2E0);
                 break;
             case 6:
-                func_88101A38(M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) + 6, arg0 + 0xC0,
+                Registration_DrawTeamRowWithTrainer(M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) + 6, arg0 + 0xC0,
                               M2C_FIELD(arg0, s32*, 0x5C), 1);
-                func_8810105C(M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) + 0x6A, 0xE8);
-                func_881009A0(arg0 + 0x310);
+                Registration_FillRowBackground(M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) + 0x6A, 0xE8);
+                Registration_DrawConfirmWindow(arg0 + 0x310);
                 break;
             case 7:
-                func_88101A38(M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) + 6, arg0 + 0xC0,
-                              M2C_FIELD(arg0, s32*, 0x5C), func_88101734((s32*)(arg0 + 0x3C4)) + 2);
-                func_8810105C(M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) + 0x6A, 0xE8);
+                Registration_DrawTeamRowWithTrainer(M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) + 6, arg0 + 0xC0,
+                              M2C_FIELD(arg0, s32*, 0x5C), Registration_GetTimer((s32*)(arg0 + 0x3C4)) + 2);
+                Registration_FillRowBackground(M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) + 0x6A, 0xE8);
                 break;
             case 8:
-                func_88101A38(M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) + 6, arg0 + 0xC0,
+                Registration_DrawTeamRowWithTrainer(M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) + 6, arg0 + 0xC0,
                               M2C_FIELD(arg0, s32*, 0x5C), 0);
-                func_8810105C(M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) + 0x6A, 0xE8);
-                func_88100C24(arg0 + 0x2E0);
+                Registration_FillRowBackground(M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) + 0x6A, 0xE8);
+                Registration_DrawMessageWindow(arg0 + 0x2E0);
                 break;
         }
     }
@@ -834,7 +963,11 @@ s32 ScrollList_UpdateCursor(s8*);
 void Audio_PlayMoveSound(s32, s32, s32);
 void func_80027868(s32, s32);
 
-s32 func_88102184(s8* arg0) {
+/**
+ * Runs the team list's state machine: pick, confirm, register or delete, messages.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 Registration_UpdateTeamList(s8* arg0) {
     s32 ret = 0;
     s32 res;
     Rec88102184* src;
@@ -849,10 +982,10 @@ s32 func_88102184(s8* arg0) {
                 } else if (res == 1) {
                     func_8003F6AC(2);
                     M2C_FIELD(arg0, u32*, 4) = 3;
-                    func_88100898(arg0 + 0x310, M2C_FIELD(arg0, s32*, 8) + 0x56, M2C_FIELD(arg0, s32*, 0xC) + 0x79, (s32)D_88102F34);
+                    Registration_InitConfirmWindow(arg0 + 0x310, M2C_FIELD(arg0, s32*, 8) + 0x56, M2C_FIELD(arg0, s32*, 0xC) + 0x79, (s32)D_88102F34);
                     *(Rec88102184*)(arg0 + 0xC0) = *(*M2C_FIELD(arg0, Rec88102184****, 0x54))[M2C_FIELD(arg0, s32*, 0x5C)];
                     M2C_FIELD(arg0, s8*, 0xC1) = 0x10;
-                    M2C_FIELD(arg0, s8*, 0xC3) = func_88100020();
+                    M2C_FIELD(arg0, s8*, 0xC3) = Registration_FindFreeSlot();
                 }
             }
             break;
@@ -868,25 +1001,25 @@ s32 func_88102184(s8* arg0) {
                 if (res == -1) {
                     func_8003F6AC(3);
                     ret = -1;
-                    func_881001A8(M2C_FIELD(arg0, void**, 0xB8));
+                    Registration_WriteAllTeams(M2C_FIELD(arg0, void**, 0xB8));
                 } else if (res == 1) {
                     func_8003F6AC(2);
                     *(Rec88102184*)(arg0 + 0xC0) = *(*M2C_FIELD(arg0, Rec88102184****, 0x54))[M2C_FIELD(arg0, s32*, 0x5C)];
-                    func_88100898(arg0 + 0x310, M2C_FIELD(arg0, s32*, 8) + 0x56, M2C_FIELD(arg0, s32*, 0xC) + 0x79, (s32)D_88102F54);
+                    Registration_InitConfirmWindow(arg0 + 0x310, M2C_FIELD(arg0, s32*, 8) + 0x56, M2C_FIELD(arg0, s32*, 0xC) + 0x79, (s32)D_88102F54);
                     M2C_FIELD(arg0, s32*, 0x3B8) = 1;
                     M2C_FIELD(arg0, u32*, 4) = 6;
                 }
             }
             break;
         case 3:
-            res = func_88100B2C((s32)(arg0 + 0x310));
+            res = Registration_UpdateConfirmWindow((s32)(arg0 + 0x310));
             if (res == -1) {
                 func_8003F6AC(3);
                 M2C_FIELD(arg0, u32*, 4) = 0;
             } else if (res == 1) {
                 func_8003F6AC(2);
-                func_88100100((*M2C_FIELD(arg0, s8****, 0x54))[M2C_FIELD(arg0, s32*, 0x5C)], func_88100020());
-                func_8810165C(arg0 + 0x3C4, M2C_FIELD(arg0, s32*, 0xE0));
+                Registration_WriteTeam((*M2C_FIELD(arg0, s8****, 0x54))[M2C_FIELD(arg0, s32*, 0x5C)], Registration_FindFreeSlot());
+                Registration_InitTimer(arg0 + 0x3C4, M2C_FIELD(arg0, s32*, 0xE0));
                 M2C_FIELD(arg0, u32*, 4) = 4;
             }
             break;
@@ -894,27 +1027,27 @@ s32 func_88102184(s8* arg0) {
             if (M2C_FIELD(arg0, s32*, 0x3C4) % 15 == 0) {
                 Audio_PlayMoveSound(0x90, 1, 0);
             }
-            if (func_881016BC(arg0 + 0x3C4) != 0) {
+            if (Registration_StepTimer(arg0 + 0x3C4) != 0) {
                 func_8003F6AC(0x1E);
-                func_88100BA4(arg0 + 0x2E0, M2C_FIELD(arg0, s32*, 8) + 0x58, M2C_FIELD(arg0, s32*, 0xC) + 0x78, (s32)D_88102F6C);
+                Registration_InitMessageWindow(arg0 + 0x2E0, M2C_FIELD(arg0, s32*, 8) + 0x58, M2C_FIELD(arg0, s32*, 0xC) + 0x78, (s32)D_88102F6C);
                 M2C_FIELD(arg0, u32*, 4) = 5;
             }
             break;
         case 5:
-            res = func_88100CA8((s32)(arg0 + 0x2E0));
+            res = Registration_UpdateMessageWindow((s32)(arg0 + 0x2E0));
             if ((res == -1) || (res == 1)) {
                 func_8003F6AC(2);
                 ret = -1;
             }
             break;
         case 6:
-            res = func_88100B2C((s32)(arg0 + 0x310));
+            res = Registration_UpdateConfirmWindow((s32)(arg0 + 0x310));
             if (res == -1) {
                 func_8003F6AC(3);
                 M2C_FIELD(arg0, u32*, 4) = 2;
             } else if (res == 1) {
                 func_8003F6AC(2);
-                func_88101670(arg0 + 0x3C4, M2C_FIELD(arg0, s32*, 0xE0));
+                Registration_InitTimerFull(arg0 + 0x3C4, M2C_FIELD(arg0, s32*, 0xE0));
                 M2C_FIELD(arg0, u32*, 4) = 7;
             }
             break;
@@ -925,13 +1058,13 @@ s32 func_88102184(s8* arg0) {
             if (Audio_QueueSoundAvoidingRecent((s32*)(arg0 + 0x3C4)) != 0) {
                 func_8003F6AC(0x1F);
                 func_80027868(M2C_FIELD(arg0, s32*, 0xB8), M2C_FIELD(arg0, s32*, 0x5C));
-                func_881001A8(M2C_FIELD(arg0, void**, 0xB8));
-                func_88100BA4(arg0 + 0x2E0, M2C_FIELD(arg0, s32*, 8) + 0x58, M2C_FIELD(arg0, s32*, 0xC) + 0x78, (s32)D_88102FC8);
+                Registration_WriteAllTeams(M2C_FIELD(arg0, void**, 0xB8));
+                Registration_InitMessageWindow(arg0 + 0x2E0, M2C_FIELD(arg0, s32*, 8) + 0x58, M2C_FIELD(arg0, s32*, 0xC) + 0x78, (s32)D_88102FC8);
                 M2C_FIELD(arg0, u32*, 4) = 8;
             }
             break;
         case 8:
-            res = func_88100CA8((s32)(arg0 + 0x2E0));
+            res = Registration_UpdateMessageWindow((s32)(arg0 + 0x2E0));
             if ((res == -1) || (res == 1)) {
                 func_8003F6AC(2);
                 ret = -1;
@@ -941,8 +1074,8 @@ s32 func_88102184(s8* arg0) {
     return ret;
 }
 
-/*
- * func_881025C8
+/**
+ * Registration_BuildTeamPointers
  *
  * Builds a table of pointers into a block of equally sized records.
  * arg1 holds the address of the first record at +0x00 and the record count
@@ -952,8 +1085,9 @@ s32 func_88102184(s8* arg0) {
  * known from the code alone.
  *
  * func_820008C8 is the same routine with a record size of 0x214.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_881025C8(s32* arg0, s32* arg1) {
+void Registration_BuildTeamPointers(s32* arg0, s32* arg1) {
     s32 value = arg1[0];
     s32* out = (s32*)arg0[0];
     s32 i = 0;
@@ -971,48 +1105,60 @@ void func_881025C8(s32* arg0, s32* arg1) {
 
 void func_80027410(s8*, s8*, s32, s32, s32);
 void func_80027804(s8*, s8*, s32, s32);
-void func_8810024C(s8*);
-void func_88101DF8(s8*, s32, s32, s8*, s32);
-void func_881025C8(s32* arg0, s32* arg1);
+void Registration_LoadRegisteredTeams(s8*);
+void Registration_InitTeamList(s8*, s32, s32, s8*, s32);
+void Registration_BuildTeamPointers(s32* arg0, s32* arg1);
 
-void func_88102600(s32* arg0) {
+/**
+ * Loads the registered teams and opens the list in view mode.
+ * @unverified Name and comment guessed from the code.
+ */
+void Registration_OpenViewList(s32* arg0) {
     func_80027410((s8*)arg0 + 0x2698, (s8*)arg0 + 0x458, 0x220, 0x10, 0);
-    func_8810024C((s8*)arg0 + 0x2698);
+    Registration_LoadRegisteredTeams((s8*)arg0 + 0x2698);
     func_80027804((s8*)arg0 + 0x26A8, (s8*)arg0 + 0x2658, 0x10, 0);
-    func_881025C8((s32*)((s8*)arg0 + 0x26A8), (s32*)((s8*)arg0 + 0x2698));
-    func_88101DF8((s8*)arg0 + 0x88, 0x30, 0x5C, (s8*)arg0 + 0x26A8, 1);
+    Registration_BuildTeamPointers((s32*)((s8*)arg0 + 0x26A8), (s32*)((s8*)arg0 + 0x2698));
+    Registration_InitTeamList((s8*)arg0 + 0x88, 0x30, 0x5C, (s8*)arg0 + 0x26A8, 1);
 }
 
 void func_80027410(s8*, s8*, s32, s32, s32);
 void func_80027804(s8*, s8*, s32, s32);
-void func_8810024C(s8*);
-void func_88101DF8(s8*, s32, s32, s8*, s32);
-void func_881025C8(s32* arg0, s32* arg1);
+void Registration_LoadRegisteredTeams(s8*);
+void Registration_InitTeamList(s8*, s32, s32, s8*, s32);
+void Registration_BuildTeamPointers(s32* arg0, s32* arg1);
 
-void func_88102688(s32* arg0) {
+/**
+ * Loads the registered teams and opens the list in delete mode.
+ * @unverified Name and comment guessed from the code.
+ */
+void Registration_OpenDeleteList(s32* arg0) {
     func_80027410((s8*)arg0 + 0x2698, (s8*)arg0 + 0x458, 0x220, 0x10, 0);
-    func_8810024C((s8*)arg0 + 0x2698);
+    Registration_LoadRegisteredTeams((s8*)arg0 + 0x2698);
     func_80027804((s8*)arg0 + 0x26A8, (s8*)arg0 + 0x2658, 0x10, 0);
-    func_881025C8((s32*)((s8*)arg0 + 0x26A8), (s32*)((s8*)arg0 + 0x2698));
-    func_88101DF8((s8*)arg0 + 0x88, 0x30, 0x5C, (s8*)arg0 + 0x26A8, 2);
+    Registration_BuildTeamPointers((s32*)((s8*)arg0 + 0x26A8), (s32*)((s8*)arg0 + 0x2698));
+    Registration_InitTeamList((s8*)arg0 + 0x88, 0x30, 0x5C, (s8*)arg0 + 0x26A8, 2);
 }
 
 void func_80027410(s8*, s8*, s32, s32, s32);
 void func_80027804(s8*, s8*, s32, s32);
-void func_88100348(s8*);
-void func_88101DF8(s8*, s32, s32, s8*, s32);
+void Registration_LoadGbTeams(s8*);
+void Registration_InitTeamList(s8*, s32, s32, s8*, s32);
 
-void func_88102710(s32* arg0) {
+/**
+ * Loads the Game Boy teams and opens the list in register mode.
+ * @unverified Name and comment guessed from the code.
+ */
+void Registration_OpenRegisterList(s32* arg0) {
     func_80027410((s8*)arg0 + 0x2698, (s8*)arg0 + 0x458, 0x220, 4, 0);
-    func_88100348((s8*)arg0 + 0x2698);
+    Registration_LoadGbTeams((s8*)arg0 + 0x2698);
     func_80027804((s8*)arg0 + 0x26A8, (s8*)arg0 + 0x2658, 4, 0);
-    func_881025C8((s32*)((s8*)arg0 + 0x26A8), (s32*)((s8*)arg0 + 0x2698));
-    func_88101DF8((s8*)arg0 + 0x88, 0x30, 0x5C, (s8*)arg0 + 0x26A8, 0);
+    Registration_BuildTeamPointers((s32*)((s8*)arg0 + 0x26A8), (s32*)((s8*)arg0 + 0x2698));
+    Registration_InitTeamList((s8*)arg0 + 0x88, 0x30, 0x5C, (s8*)arg0 + 0x26A8, 0);
 }
 
 s32 func_80025BD8();
 M2C_UNK func_80027FF8(M2C_UNK *, s32);
-void func_881004CC(s8*, s32, s32, s32, s32, M2C_UNK*, s32, M2C_UNK*, s32, M2C_UNK*);
+void Registration_InitMainMenu(s8*, s32, s32, s32, s32, M2C_UNK*, s32, M2C_UNK*, s32, M2C_UNK*);
 extern M2C_UNK D_88102D84;
 extern M2C_UNK D_88102D90;
 extern M2C_UNK D_88103000;
@@ -1023,53 +1169,58 @@ extern M2C_UNK D_88103080;
  * Stores the result of func_80025BD8() in D_88103078. If it is not -1, passes it with
  * &D_88103080 to func_80027FF8 (the value is re-read from D_88103078 after the store,
  * as the retail register allocation requires). Then restarts the sub-object at
- * arg0 + 4 with func_881004CC(arg0 + 4, 0x40, 0x74, 0x1AC, 0xCE, &D_88102D84, 3,
+ * arg0 + 4 with Registration_InitMainMenu(arg0 + 4, 0x40, 0x74, 0x1AC, 0xCE, &D_88102D84, 3,
  * &D_88102D90, 3, &D_88103000) and sets the state word *arg0 to 0.
- * arg0 is declared s32 to agree with the existing func_88102794(s32) prototype; it is
+ * arg0 is declared s32 to agree with the existing Registration_InitScreen(s32) prototype; it is
  * used as a byte-addressed pointer. What the object and the value mean is not established.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_88102794(s32 arg0) {
+void Registration_InitScreen(s32 arg0) {
     D_88103078 = func_80025BD8();
     if (D_88103078 != -1) {
         func_80027FF8(&D_88103080, D_88103078);
     }
-    func_881004CC((s8 *)arg0 + 4, 0x40, 0x74, 0x1AC, 0xCE, &D_88102D84, 3, &D_88102D90, 3, &D_88103000);
+    Registration_InitMainMenu((s8 *)arg0 + 4, 0x40, 0x74, 0x1AC, 0xCE, &D_88102D84, 3, &D_88102D90, 3, &D_88103000);
     *(s32 *)arg0 = 0;
 }
 
 void func_800069CC(void);
 void Ui_DrawTintedScreenBackground(s32, s32, s32, s32, s32);
 extern u8 D_88102D70[];
-void func_881005E4(s8*, s32);
-void func_88101F1C(s8*);
-M2C_UNK func_88102834(s32 a) {
+void Registration_DrawMainMenu(s8*, s32);
+void Registration_DrawTeamList(s8*);
+/**
+ * Draws the registration screen for its current state.
+ * @unverified Name and comment guessed from the code.
+ */
+M2C_UNK Registration_DrawScreen(s32 a) {
     s32* arg0 = (s32*)a;
     func_800069CC();
     Ui_DrawTintedScreenBackground(0x38, 0x1E0, D_88102D70[0], D_88102D70[1], D_88102D70[2]);
     switch (arg0[0]) {
         case 0:
-            func_881005E4(arg0 + 1, 2);
+            Registration_DrawMainMenu(arg0 + 1, 2);
             break;
         case 1:
-            func_88101F1C((s8*)(arg0 + 0x22));
+            Registration_DrawTeamList((s8*)(arg0 + 0x22));
             break;
     }
 }
 
 /*
- * func_881028B8
+ * Registration_UpdateScreen
  *
  * One step of a two-state routine on the object at address `arg0` (passed
  * as an integer); the first word of the object is the state.  Returns 1 when
  * finished, otherwise 0.
  *
- *   state 0: r = func_881007AC(arg0 + 4)
+ *   state 0: r = Registration_UpdateMainMenu(arg0 + 4)
  *            r == -1: return 1
- *            r == 1:  func_88102710(arg0), state = 1
- *            r == 2:  func_88102600(arg0), state = 1
- *            r == 3:  func_88102688(arg0), state = 1
- *   state 1: if func_88102184(arg0 + 0x88) == -1, restart the sub-object
- *            with func_881004CC(arg0 + 4, 0x40, 0x74, 0x1AC, 0xCE,
+ *            r == 1:  Registration_OpenRegisterList(arg0), state = 1
+ *            r == 2:  Registration_OpenViewList(arg0), state = 1
+ *            r == 3:  Registration_OpenDeleteList(arg0), state = 1
+ *   state 1: if Registration_UpdateTeamList(arg0 + 0x88) == -1, restart the sub-object
+ *            with Registration_InitMainMenu(arg0 + 4, 0x40, 0x74, 0x1AC, 0xCE,
  *            &D_88102D84, 3, &D_88102D90, 3, &D_8810300C) and set state 0.
  *
  * Offsets are byte offsets: `arg0 + 4` is the address four bytes in (the
@@ -1077,17 +1228,21 @@ M2C_UNK func_88102834(s32 a) {
  * not match).  What the states and helpers do is not established; the
  * helpers are still assembly.
  */
-void func_881004CC(s8*, s32, s32, s32, s32, M2C_UNK*, s32, M2C_UNK*, s32, M2C_UNK*);
-s32 func_881007AC(void *);
-s32 func_88102184(s8*);
-void func_88102600(s32 *);
-void func_88102688(s32 *);
-void func_88102710(s32 *);
+void Registration_InitMainMenu(s8*, s32, s32, s32, s32, M2C_UNK*, s32, M2C_UNK*, s32, M2C_UNK*);
+s32 Registration_UpdateMainMenu(void *);
+s32 Registration_UpdateTeamList(s8*);
+void Registration_OpenViewList(s32 *);
+void Registration_OpenDeleteList(s32 *);
+void Registration_OpenRegisterList(s32 *);
 extern M2C_UNK D_88102D84;
 extern M2C_UNK D_88102D90;
 extern M2C_UNK D_8810300C;
 
-s32 func_881028B8(s32 arg0) {
+/**
+ * Runs the registration screen's state machine for one frame.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 Registration_UpdateScreen(s32 arg0) {
     s32 sp3C;
     s32 temp_v0;
     s32 temp_v0_2;
@@ -1096,23 +1251,23 @@ s32 func_881028B8(s32 arg0) {
     temp_v0 = *(s32 *)arg0;
     switch (temp_v0) {
     case 0:
-        temp_v0_2 = func_881007AC((s8 *)arg0 + 4);
+        temp_v0_2 = Registration_UpdateMainMenu((s8 *)arg0 + 4);
         if (temp_v0_2 == -1) {
             sp3C = 1;
         } else if (temp_v0_2 == 1) {
-            func_88102710((s32 *)arg0);
+            Registration_OpenRegisterList((s32 *)arg0);
             *(s32 *)arg0 = 1;
         } else if (temp_v0_2 == 2) {
-            func_88102600((s32 *)arg0);
+            Registration_OpenViewList((s32 *)arg0);
             *(s32 *)arg0 = 1;
         } else if (temp_v0_2 == 3) {
-            func_88102688((s32 *)arg0);
+            Registration_OpenDeleteList((s32 *)arg0);
             *(s32 *)arg0 = 1;
         }
         break;
     case 1:
-        if (func_88102184((s8 *)arg0 + 0x88) == -1) {
-            func_881004CC((s8 *)arg0 + 4, 0x40, 0x74, 0x1AC, 0xCE, &D_88102D84, 3, &D_88102D90, 3, &D_8810300C);
+        if (Registration_UpdateTeamList((s8 *)arg0 + 0x88) == -1) {
+            Registration_InitMainMenu((s8 *)arg0 + 4, 0x40, 0x74, 0x1AC, 0xCE, &D_88102D84, 3, &D_88102D90, 3, &D_8810300C);
             *(s32 *)arg0 = 0;
         }
         break;
@@ -1122,26 +1277,27 @@ s32 func_881028B8(s32 arg0) {
 
 s32 func_80002D98(s32);
 void func_80018234(s32, s32, s32, s32);
-void func_88102794(s32);
+void Registration_InitScreen(s32);
 extern s32 D_88103074;
 extern s32 D_881030F8;
 
-/*
- * func_881029E0
+/**
+ * Registration_AllocScreen
  *
  * Setup step for this fragment: calls func_80002D98(0x26B4) (the symbol file
  * names that address Util_Malloc), keeps the result in D_881030F8, passes it
- * to func_88102794, then calls func_80018234(D_88103074, 0x18, 0x84, 0xF800).
- * What the 0x26B4-byte block holds and what func_88102794 does with it are
- * not established here (D_881030F8 is later passed to func_88102834 and
- * func_881028B8 by func_88102B58).
+ * to Registration_InitScreen, then calls func_80018234(D_88103074, 0x18, 0x84, 0xF800).
+ * What the 0x26B4-byte block holds and what Registration_InitScreen does with it are
+ * not established here (D_881030F8 is later passed to Registration_DrawScreen and
+ * Registration_UpdateScreen by Registration_RunFrame).
  * Matching note: the call result is stored straight into D_881030F8 and the
  * global is read back for the next call; going through a local gives a
  * different store sequence.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_881029E0(void) {
+void Registration_AllocScreen(void) {
     D_881030F8 = func_80002D98(0x26B4);
-    func_88102794(D_881030F8);
+    Registration_InitScreen(D_881030F8);
     func_80018234(D_88103074, 0x18, 0x84, 0xF800);
 }
 
@@ -1154,7 +1310,11 @@ extern M2C_UNK D_88103018;
 void func_800189C0(s32, s32);
 M2C_UNK GbSave_DrawSummaryBar(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
 void func_8002C8D8(Col88102A2C*, Col88102A2C, f32);
-s32 func_88102A2C(s32 arg0) {
+/**
+ * Steps the screen fade; returns once eight frames have passed.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 Registration_UpdateFade(s32 arg0) {
     Col88102A2C sp2C;
     M2C_UNK *var_a1;
     s32 n;
@@ -1188,21 +1348,29 @@ s32 func_88102A2C(s32 arg0) {
 
 M2C_UNK func_8000B1FC();                            /* extern */
 M2C_UNK func_8000B220();                            /* extern */
-M2C_UNK func_88102834(s32);                         /* extern */
-s32 func_881028B8(s32);
+M2C_UNK Registration_DrawScreen(s32);                         /* extern */
+s32 Registration_UpdateScreen(s32);
 extern s32 D_881030F8;
 
-void func_88102B58(s32 arg0) {
+/**
+ * One frame of the registration screen.
+ * @unverified Name and comment guessed from the code.
+ */
+void Registration_RunFrame(s32 arg0) {
     func_8000B1FC();
     func_8000B220();
-    func_88102834(D_881030F8);
-    func_881028B8(D_881030F8);
+    Registration_DrawScreen(D_881030F8);
+    Registration_UpdateScreen(D_881030F8);
 }
 
 M2C_UNK func_80002DC0(s32);                         /* extern */
 extern s32 D_881030F8;
 
-void func_88102B98(void) {
+/**
+ * Frees the registration screen state.
+ * @unverified Name and comment guessed from the code.
+ */
+void Registration_FreeScreen(void) {
     func_80002DC0(D_881030F8);
 }
 
@@ -1235,7 +1403,11 @@ extern M2C_UNK D_81000000;
 extern M2C_UNK D_88000000;
 extern s32 D_88103070;
 extern s32 D_88103074;
-s32 func_88102BBC(s32 arg0, s32 arg1) {
+/**
+ * Entry point: pushes the 'REGS' pool state, loads the icons and segments, and runs the registration screen.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 Registration_Init(s32 arg0, s32 arg1) {
     func_8000256C(0x52454753);
     func_8001A194(0x3C, 0);
     D_88103070 = func_80017860(1);
@@ -1245,13 +1417,13 @@ s32 func_88102BBC(s32 arg0, s32 arg1) {
     func_80003EB8((u32)((s32)&D_01000000 & 0x0F000000) >> 0x18, &D_002E0BE0, &D_002E2B90, 0);
     func_80003EB8((u32)((s32)&D_04000000 & 0x0F000000) >> 0x18, &D_00400F70, &D_004076E0, 0);
     func_80003EB8((u32)((s32)&D_05000000 & 0x0F000000) >> 0x18, &D_004199E0, &D_0042C4A0, 0);
-    func_881029E0();
+    Registration_AllocScreen();
     func_8000675C();
-    func_80006828(8, func_88102A2C);
-    func_80006828(0, func_88102B58);
-    func_80006828(8, func_88102A2C);
+    func_80006828(8, Registration_UpdateFade);
+    func_80006828(0, Registration_RunFrame);
+    func_80006828(8, Registration_UpdateFade);
     func_80006724();
-    func_88102B98();
+    Registration_FreeScreen();
     func_80002620(0x52454753);
     func_80025BA0(((u32)((s32)&D_88000000 & 0x0FF00000) >> 0x14) - 0x10, &D_00235D70, &D_00238BD0, 0, 0);
     return 0x8040;

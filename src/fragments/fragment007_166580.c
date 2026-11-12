@@ -290,7 +290,7 @@ void func_82000594(List82000594* arg0) {
  * The count is then copied to arg0 + 0x08.  What the records are is not
  * known from the code alone.
  *
- * func_881025C8 is the same routine with a record size of 0x220.
+ * Registration_BuildTeamPointers is the same routine with a record size of 0x220.
  */
 void func_820008C8(s32* arg0, s32* arg1) {
     s32 value = arg1[0];

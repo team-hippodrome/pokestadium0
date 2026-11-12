@@ -112,7 +112,7 @@ s32 func_81102F7C(s32, s32, s32);                     /* extern */
  * found with decomp-permuter and is the only form tried that makes the
  * compiler copy arg0 to s0 before the first load, as the ROM does; the
  * triple test is needed (one or two do not match). The same kind of empty
- * test already exists in func_88100100.
+ * test already exists in Registration_WriteTeam.
  */
 s32 GbPak_ProbeCartridge(u8 *arg0);
 
