@@ -37,35 +37,41 @@ Read from the decompilation, not assumed:
   to ROM as `rom = vram - 0x7FFFF400` (`tools/map_rom.py:310`, `tools/place_sections.py:55`), so
   every one of those strings is addressable and rewritable in place.
 
-## Workstream 1: English font
+## Workstream 1: English font — done
 
-Zero's font archive is a Japanese glyph sheet: square cells, monospace advance, ASCII mapped into
-the sheet's Latin slots. Stadium 1's is a Latin sheet: wide cells, per-glyph advance.
+Zero's font archive (ROM `0x2B2C80..0x2E0BE0`) holds six PERS-SZP files, one per set, each 257 glyph
+cells: 144 Latin slots, the two-cycle gradient glyph and 112 kana glyphs. The cells are 16x10, 16x12,
+16x16, 24x20, 24x24, 32x32 — the **same geometry Stadium 1 uses** (`fonts_ROM_START` `0x3BA190` in
+that game's dump), so its archive drops into the same slot. Its Japanese glyphs are square and every
+glyph in a set advances by one value (10, 12, 16, 20, 24, 32 px), which is why Zero's Latin letters
+are full-width. Stadium 1's set files instead start with a **0x90-byte advance table** followed by
+0x91 Latin glyphs, so each glyph advances by its own width (space 4, `A` 7, `i` 3 in the 16x10 set).
 
-1. Dump both archives (Zero `0x2B2C80`, Stadium 1 `fonts_ROM_START` at US `0x3BA190` in
-   `~/pokestadium-complete/include/sections.h`) with the existing BinArchive reader.
-2. Compare the six sets: glyph count, cell geometry, ASCII map (`D_8006081F` vs the US map in
-   `gUiRestoreTextureDL`), advance tables.
-3. Decide per set, not globally. The sets actually loaded per stage decide the work: `Font_Init`'s
-   mask argument at each call site is the audit (`grep -rn "Font_Init(" src`), e.g. the lab uses
-   `0x1C`, the fatal error screen `6`.
-4. Two forms, cheapest first:
-   - **Repack** (the fallback): write the US Latin glyph bitmaps into Zero's existing square cells,
-     centered, and keep monospace advance. No code change; looks like a fixed-pitch Latin font.
-   - **Port** (the target): adopt the US per-glyph advance table and the US cell geometry for the
-     sets that are Latin-only in practice. This is a source change to `Font_Init`/`Font_DrawChar`
-     (`src/graphics_textures_2.c`), and the US code in `~/pokestadium-complete/src/graphics_textures.c`
-     is the reference implementation of both the advance table and the 4-bit packing.
-5. Keep the Japanese sheet reachable. Untranslated strings must keep drawing until the last one is
-   translated; the Stadium 1 fork solved the mirror-image problem (kana in a Latin build) with a
-   second archive and a glyph base (`FONT_KANA_GLYPH_BASE`, `Font_MapJisGlyph`,
-   `tools/extract_font_kana.py`). Reuse that shape in reverse rather than inventing a new one.
-6. `é` is the known gap: Zero's map covers `0x21..0x7E` only, so "POKéMON" cannot be spelled. Either
-   extend the map with the US `0xA0..0xFF` table (`D_8006F608` in the fork) or spell it "POKeMON".
+`tools/fonts_en.py` builds the English ROM from the verified retail build:
 
-Verification: a headless render of every glyph in the sheet to a PNG sheet per set (the fork's
-`tools/png_rgba16.py` and `tools/font_i4.py` already convert font data), plus an in-game screenshot
-of one menu per stage.
+1. Copies Stadium 1's font archive into Zero's slot (`0x10FA0` bytes in a `0x2DF60` slot, nothing is
+   relocated) and Stadium 1's ASCII glyph map (its dump's 128-byte table at `0x8DE80`) over
+   `D_8006081F`. Both are retail Yay0 streams for the same loader, so there is no recompression.
+2. Rewrites two functions **in place at their retail size**: `func_8001A118` stores `file + 0x90` as
+   the set's glyph base, and `func_80019F70` maps printable ASCII through the Latin map, maps every
+   other code to glyph 0, and copies the glyph's advance from the table into the set's advance byte,
+   which both glyph drawers already read once per character. No other function changes.
+
+The build pins each source file's span, not its functions, so a recompiled file whose functions
+change size shifts the rest of the file while the calls other files make by address keep pointing at
+the old offsets — a build that still passes `make rom` but is broken. That is why the font path is a
+binary patch and not `#ifdef` code; keep it that way, or add per-function placement to
+`tools/production.py` first.
+
+`make en` runs it (`EN_FONT_ROM=baseroms/us/baserom.z64`, the Stadium 1 dump) and writes
+`build/pokestadium0-en.z64`. The patch asserts the retail instruction words it reuses, and its
+self-test interprets the emitted mapping function: ASCII returns its glyph and advance, other codes
+return glyph 0 with the space advance.
+
+Known limits: kana has no glyph in the Latin sheets, so an untranslated Japanese string draws blank
+cells with the space advance (the intended signal for what is left to translate); the two-cycle
+gradient glyph sits at a cell index the Latin sheets do not have, and nothing in Zero enables
+two-cycle text; `é` is not in the map, so "POKéMON" is written "POKeMON".
 
 ## Workstream 2: announcer subtitles
 

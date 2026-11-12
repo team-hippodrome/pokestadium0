@@ -1,0 +1,334 @@
+#!/usr/bin/env python3
+"""Put Stadium 1's English font into a Stadium Zero ROM, and teach the font code to use it.
+
+Zero's font archive (ROM 0x2B2C80, six PERS-SZP files) holds square Japanese glyphs, 257 cells per
+set, with one advance for every glyph: its Latin letters are full-width. Stadium 1's archive has the
+same cell geometry (16x10, 16x12, 16x16, 24x20, 24x24, 32x32) but starts each set file with a
+0x90-byte advance table, then 0x91 Latin glyphs, so it fits Zero's slot without relocation.
+
+Two functions are rewritten in place at exactly their retail size. The build pins each source file's
+span, not its functions, so a recompiled file whose functions change size would shift the rest of the
+file and break the calls other files make by address:
+
+  func_8001A118 (font set registration)  stores file + 0x90 as the set's glyph base.
+  func_80019F70 (glyph code mapping)  maps printable ASCII through D_8006081F, maps every other code
+      to glyph 0, and copies the glyph's advance out of the table into the set's advance field, which
+      the two glyph drawers already read once per character.
+
+usage: fonts_en.py patch --rom build/pokestadium0-jp.z64 --us <us baserom.z64> [--out PATH]
+       fonts_en.py check --rom build/pokestadium0-en.z64 --us <us baserom.z64>
+       fonts_en.py selftest
+"""
+
+import argparse
+import struct
+import sys
+from pathlib import Path
+
+ZERO_FONTS = 0x2B2C80            # the BinArchive range func_8001A194 opens
+ZERO_FONTS_END = 0x2E0BE0
+ZERO_ASCII_MAP = 0x8006081F - 0x7FFFF400  # D_8006081F, read by func_80019F70
+US_FONTS = 0x3BA190              # fonts_ROM_START in the Stadium 1 decompilation
+US_ASCII_MAP = 0x8DE80           # 128-byte table whose A-Z and a-z entries increase
+MAP_BYTES = 0x80
+ADVANCES = 0x90
+GLYPHS = 0x91
+CELLS = [(0x10, 0x0A), (0x10, 0x0C), (0x10, 0x10), (0x18, 0x14), (0x18, 0x18), (0x20, 0x20)]
+
+ROM_BIAS = 0x7FFFF400            # rom = vram - ROM_BIAS for the resident image
+MAP_FUNC = 0x80019F70            # glyph code mapping, 0x120 bytes
+LOAD_FUNC = 0x8001A118           # font set registration, 0x7C bytes
+
+ZERO, AT, V0, A0, T2, T3, T4, T5, T6, T8, T9, RA = 0, 1, 2, 4, 10, 11, 12, 13, 14, 24, 25, 31
+
+
+# --- instruction encoding (only the forms the patches use) -------------------------------------
+def lui(rt, imm):
+    return 0x3C000000 | (rt << 16) | (imm & 0xFFFF)
+
+
+def addiu(rt, rs, imm):
+    return 0x24000000 | (rs << 21) | (rt << 16) | (imm & 0xFFFF)
+
+
+def addu(rd, rs, rt):
+    return (rs << 21) | (rt << 16) | (rd << 11) | 0x21
+
+
+def sll(rd, rt, sa):
+    return (rt << 16) | (rd << 11) | (sa << 6)
+
+
+def sltiu(rt, rs, imm):
+    return 0x2C000000 | (rs << 21) | (rt << 16) | (imm & 0xFFFF)
+
+
+def lw(rt, off, rs):
+    return 0x8C000000 | (rs << 21) | (rt << 16) | (off & 0xFFFF)
+
+
+def lbu(rt, off, rs):
+    return 0x90000000 | (rs << 21) | (rt << 16) | (off & 0xFFFF)
+
+
+def sb(rt, off, rs):
+    return 0xA0000000 | (rs << 21) | (rt << 16) | (off & 0xFFFF)
+
+
+def beq(rs, rt, words):
+    return 0x10000000 | (rs << 21) | (rt << 16) | (words & 0xFFFF)
+
+
+def bne(rs, rt, words):
+    return 0x14000000 | (rs << 21) | (rt << 16) | (words & 0xFFFF)
+
+
+def jr(rs):
+    return (rs << 21) | 0x08
+
+
+NOP = 0
+
+
+def hi(address):
+    return ((address + 0x8000) >> 16) & 0xFFFF
+
+
+def lo(address):
+    return address & 0xFFFF
+
+
+# --- the two patched functions ----------------------------------------------------------------
+def words_at(rom, vram, count):
+    return list(struct.unpack_from('>%dI' % count, rom, vram - ROM_BIAS))
+
+
+def font_context_address(rom):
+    """Address of the font_context global, taken from func_8001A118's own lui/addiu pair."""
+    w = words_at(rom, LOAD_FUNC, 8)
+    if (w[6] >> 26) != 0x0F or (w[7] >> 26) != 0x09:
+        raise SystemExit('func_8001A118 does not load font_context first: unexpected build')
+    low = struct.unpack('>h', struct.pack('>H', w[7] & 0xFFFF))[0]
+    return ((w[6] & 0xFFFF) << 16) + low
+
+
+def font_load_words(rom):
+    """func_8001A118 with the glyph base moved past the 0x90-byte advance table."""
+    r = words_at(rom, LOAD_FUNC, 0x7C // 4)
+    if (r[9] >> 26) != 0x23 or (r[9] & 0xFFFF) != 0x28:
+        raise SystemExit('the arg4 spill in func_8001A118 moved: unexpected build')
+    if (r[12] >> 26) != 0x2B:
+        raise SystemExit('the set pointer store in func_8001A118 moved: unexpected build')
+    out = r[0:12] + [addiu(T6, T6, ADVANCES), r[12]]           # set->tex = file + 0x90
+    out += [r[14], sb(T9, 0, T8), r[18], sb(T2, 1, T8), r[22], sb(T5, 2, T8)]
+    out += [r[25], r[26], r[27], r[28], r[29], r[30]]
+    return out + [NOP] * (len(r) - len(out))
+
+
+def font_map_words(rom, ctx=None):
+    """func_80019F70: printable ASCII through the Latin map, and the glyph's advance into the set."""
+    ctx = font_context_address(rom) if ctx is None else ctx
+    ascii_block = [
+        lui(T2, hi(0x8006081F)),             # ret = map[c]
+        addiu(T2, T2, lo(0x8006081F)),
+        addu(T2, T2, A0),
+        lbu(V0, 0, T2),
+    ]
+    head = [
+        sltiu(AT, A0, 0x7F),                 # below 0x7F?
+        beq(AT, ZERO, 0),                    # no: every other code is glyph 0
+        addu(V0, ZERO, ZERO),                # delay slot: ret = 0
+        sltiu(AT, A0, 0x21),                 # below 0x21?
+        bne(AT, ZERO, 0),
+        NOP,
+    ]
+    target = len(head) + len(ascii_block)
+    head[1] = beq(AT, ZERO, target - 2)
+    head[4] = bne(AT, ZERO, target - 5)
+    words = head + ascii_block + [
+        lui(T3, hi(ctx)),                    # set = font_context->unk_00[unk_50]
+        addiu(T3, T3, lo(ctx)),
+        lw(T3, 0, T3),
+        lbu(T4, 0x38, T3),
+        sll(T4, T4, 3),
+        addu(T3, T3, T4),
+        lw(T5, 0x4, T3),                     # set->tex is the glyph base
+        addiu(T5, T5, -ADVANCES),            # the advance table sits 0x90 bytes before it
+        addu(T5, T5, V0),
+        lbu(T5, 0, T5),
+        sb(T5, 0, T3),                       # set->advance = table[glyph]
+        jr(RA),
+        NOP,
+    ]
+    retail = words_at(rom, MAP_FUNC, 0x120 // 4)
+    return words + [NOP] * (len(retail) - len(words))
+
+
+# --- patch and check ---------------------------------------------------------------------------
+def archive_files(rom, offset):
+    total, count = struct.unpack_from('>4I', rom, offset)[2:]
+    if count != len(CELLS):
+        raise SystemExit('%#x: archive has %d files, expected %d' % (offset, count, len(CELLS)))
+    return total, [struct.unpack_from('>4I', rom, offset + 0x10 + i * 0x10)[:2] for i in range(count)]
+
+
+def map_is_latin(table):
+    """Whether table[c] is a glyph index in the Latin range for A-Z and a-z, increasing."""
+    upper, lower = table[0x41:0x5B], table[0x61:0x7B]
+    return (all(upper[i] < upper[i + 1] for i in range(25))
+            and all(lower[i] < lower[i + 1] for i in range(25))
+            and max(upper) < GLYPHS and max(lower) < GLYPHS)
+
+
+def patch(rom, us):
+    """Returns rom with Stadium 1's font archive and map, and both function patches."""
+    total, _ = archive_files(us, US_FONTS)
+    current, _ = archive_files(rom, ZERO_FONTS)
+    if current == total:
+        raise SystemExit("the font slot already holds Stadium 1's archive: already patched?")
+    if current != ZERO_FONTS_END - ZERO_FONTS:
+        raise SystemExit('font slot (%#x bytes) is not this build\'s archive' % current)
+    if total > ZERO_FONTS_END - ZERO_FONTS:
+        raise SystemExit("Stadium 1's archive (%#x) does not fit Zero's slot (%#x)"
+                         % (total, ZERO_FONTS_END - ZERO_FONTS))
+    table = us[US_ASCII_MAP:US_ASCII_MAP + MAP_BYTES]
+    if not map_is_latin(table):
+        raise SystemExit('no ASCII glyph map at %#x in that dump' % US_ASCII_MAP)
+
+    out = bytearray(rom)
+    out[ZERO_FONTS:ZERO_FONTS + total] = us[US_FONTS:US_FONTS + total]
+    out[ZERO_FONTS + total:ZERO_FONTS_END] = bytes(ZERO_FONTS_END - ZERO_FONTS - total)
+    out[ZERO_ASCII_MAP:ZERO_ASCII_MAP + MAP_BYTES] = table
+    for vram, words in ((LOAD_FUNC, font_load_words(rom)), (MAP_FUNC, font_map_words(rom))):
+        struct.pack_into('>%dI' % len(words), out, vram - ROM_BIAS, *words)
+    check(bytes(out), us, rom)
+    return bytes(out)
+
+
+def check(rom, us, retail):
+    """Raises unless rom carries the English archive, its map and both function patches.
+
+    retail is the unpatched build, the source of the instruction words the patches reuse.
+    """
+    total, files = archive_files(rom, ZERO_FONTS)
+    if rom[ZERO_FONTS:ZERO_FONTS + total] != us[US_FONTS:US_FONTS + total]:
+        raise SystemExit("font archive differs from Stadium 1's")
+    if rom[ZERO_FONTS + total:ZERO_FONTS_END].count(0) != ZERO_FONTS_END - ZERO_FONTS - total:
+        raise SystemExit('font slot tail is not cleared')
+    if rom[ZERO_ASCII_MAP:ZERO_ASCII_MAP + MAP_BYTES] != us[US_ASCII_MAP:US_ASCII_MAP + MAP_BYTES]:
+        raise SystemExit("ASCII glyph map differs from Stadium 1's")
+    if words_at(rom, LOAD_FUNC, 0x7C // 4) != font_load_words(retail):
+        raise SystemExit('the font loader patch is not in place')
+    if words_at(rom, MAP_FUNC, 0x120 // 4) != font_map_words(retail):
+        raise SystemExit('the glyph map patch is not in place')
+    print('font archive %#x bytes (files %s); ASCII map and both function patches in place'
+          % (total, [hex(size) for _, size in files]))
+
+
+# --- interpreter used by the self-test ---------------------------------------------------------
+def run_map_function(rom, code, ctx, set_vram, table_vram, advance_base, char):
+    """Runs the emitted mapping function and returns (glyph, the advance it stored in the set)."""
+    mem = {ctx: struct.pack('>I', set_vram),                 # font_context
+           set_vram + 0x38: b'\x00',                         # unk_50 = set 0
+           set_vram + 0x04: struct.pack('>I', advance_base + ADVANCES)}  # set->tex
+    for index in range(ADVANCES):
+        mem[advance_base + index] = bytes([advance[index]])
+    regs = [0] * 32
+    regs[A0] = char
+    pc, steps = 0, 0
+
+    def read(addr, size):
+        if addr in mem:
+            return mem[addr]
+        if table_vram <= addr < table_vram + MAP_BYTES:
+            return rom[ZERO_ASCII_MAP + addr - table_vram:][:size]
+        raise AssertionError('read of unmapped %#x' % addr)
+
+    while steps < 200:
+        steps += 1
+        w = struct.unpack_from('>I', code, pc)[0]
+        op, rs, rt, rd = w >> 26, (w >> 21) & 0x1F, (w >> 16) & 0x1F, (w >> 11) & 0x1F
+        imm = struct.unpack('>h', struct.pack('>H', w & 0xFFFF))[0]
+        pc += 4
+        if w == 0:
+            continue
+        if op == 0x0F:
+            regs[rt] = (w & 0xFFFF) << 16
+        elif op == 0x09:
+            regs[rt] = (regs[rs] + imm) & 0xFFFFFFFF
+        elif op == 0x0B:
+            regs[rt] = 1 if regs[rs] < (w & 0xFFFF) else 0
+        elif op == 0x04:
+            pc += imm * 4 if regs[rs] == regs[rt] else 0
+        elif op == 0x05:
+            pc += imm * 4 if regs[rs] != regs[rt] else 0
+        elif op == 0x23:
+            regs[rt] = struct.unpack('>I', read(regs[rs] + imm, 4))[0]
+        elif op == 0x24:
+            regs[rt] = read(regs[rs] + imm, 1)[0]
+        elif op == 0x28:
+            mem[regs[rs] + imm] = bytes([regs[rt] & 0xFF])
+        elif op == 0x00:
+            fn = w & 0x3F
+            if fn == 0x21:
+                regs[rd] = (regs[rs] + regs[rt]) & 0xFFFFFFFF
+            elif fn == 0x00:
+                regs[rd] = (regs[rt] << ((w >> 6) & 0x1F)) & 0xFFFFFFFF
+            elif fn == 0x08:
+                return regs[V0], mem[set_vram][0]
+            else:
+                raise AssertionError('unhandled funct %#x' % fn)
+        else:
+            raise AssertionError('unhandled opcode %#x' % op)
+    raise AssertionError('the mapping function did not return')
+
+
+advance = bytearray(ADVANCES)
+
+
+def selftest():
+    table = bytearray(MAP_BYTES)
+    for i in range(26):
+        table[0x41 + i] = 26 + i
+        table[0x61 + i] = 69 + i
+    assert map_is_latin(table)
+    broken = bytearray(table)
+    broken[0x50] = 0
+    assert not map_is_latin(broken), 'a broken map was accepted'
+
+    rom = bytearray(ZERO_FONTS_END)
+    rom[ZERO_ASCII_MAP:ZERO_ASCII_MAP + MAP_BYTES] = table
+    advance[26], advance[69], advance[0] = 7, 5, 4
+    code = struct.pack('>%dI' % len(font_map_words(rom, ctx=0x8006d200)),
+                       *font_map_words(rom, ctx=0x8006d200))
+    for char, expected in ((0x41, (26, 7)), (0x61, (69, 5)), (0x20, (0, 4)), (0x2421, (0, 4))):
+        got = run_map_function(rom, code, 0x8006d200, 0x80100000, 0x8006081F, 0x80200000, char)
+        assert got == expected, (hex(char), got, expected)
+    print('selftest ok')
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument('command', choices=['patch', 'check', 'selftest'])
+    ap.add_argument('--rom', default='build/pokestadium0-jp.z64')
+    ap.add_argument('--us', help='Stadium 1 US baserom.z64, the source of the English font')
+    ap.add_argument('--out')
+    ap.add_argument('--base', default='build/pokestadium0-jp.z64',
+                    help='the unpatched build, checked against the patch')
+    args = ap.parse_args()
+    if args.command == 'selftest':
+        selftest()
+        return
+    if not args.us:
+        raise SystemExit('--us is required: the English glyphs come from the Stadium 1 dump')
+    rom, us = Path(args.rom).read_bytes(), Path(args.us).read_bytes()
+    if args.command == 'patch':
+        out = Path(args.out or 'build/pokestadium0-en.z64')
+        out.write_bytes(patch(rom, us))
+        print('patched %s' % out)
+    else:
+        check(rom, us, Path(args.base).read_bytes())
+
+
+if __name__ == '__main__':
+    main()

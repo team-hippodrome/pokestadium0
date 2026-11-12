@@ -40,6 +40,12 @@ rom:
 	@test -f assets/production/manifest.json || { echo 'Run make init first'; exit 1; }
 	$(PYTHON) tools/production.py build --cc $(IDO_CC) --cc71 $(IDO71_CC) --prefix $(MIPS_BINUTILS_PREFIX) --compare $(COMPARE) --jobs $(JOBS) $(if $(filter 1,$(ASM_ONLY)),--asm-only,)
 
+# English font build: the verified retail ROM plus Stadium 1's font archive, ASCII map and the two
+# in-place function patches (tools/fonts_en.py). Needs the Stadium 1 US dump for the Latin glyphs.
+EN_FONT_ROM ?= baseroms/us/baserom.z64
+en: rom
+	$(PYTHON) tools/fonts_en.py patch --rom build/pokestadium0-jp.z64 --us $(EN_FONT_ROM)
+
 diff-init: rom
 	@echo 'Per-image ELF objects, generated linker scripts and maps: build/production/'
 
