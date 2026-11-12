@@ -57,6 +57,10 @@
       "size": "0x1AC"
     }
   },
+  "src/fragments/fragment000_80C00/81100020.c": {
+    ".bss": "0x81154C50",
+    ".rodata": "0x81154180"
+  },
   "src/fragments/fragment000_80C00/81110190.c": {
     ".data": "0x81138350"
   },
@@ -77,6 +81,12 @@
     ".rodata": {
       "address": "0x81154204",
       "size": "0x50"
+    }
+  },
+  "src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0_811056CC.c": {
+    ".rodata": {
+      "address": "0x81154258",
+      "size": "0x1C"
     }
   },
   "src/fragments/fragment000_80C00/gb_tower_emulator_86920.c": {
@@ -217,6 +227,12 @@
       "size": "0x18"
     }
   },
+  "src/fragments/fragment012_17ED00/battle_engine_317E70.c": {
+    ".rodata": {
+      "address": "0x821957E4",
+      "size": "0x14"
+    }
+  },
   "src/fragments/fragment012_17ED00/battle_engine_317E70_2.c": {
     ".rodata": "0x82196860"
   },
@@ -234,13 +250,16 @@
       "address": "0x82195980",
       "size": "0x44"
     },
-    ".data": "0x8218B0C8"
+    ".data": {
+      "address": "0x8218B0C8",
+      "size": "0xC"
+    }
   },
   "src/fragments/fragment012_17ED00/battle_engine_31D9F0_821199E4.c": {
     ".rodata": "0x82195A04",
     ".data": {
-      "address": "0x8218B0E4",
-      "size": "0x120"
+      "address": "0x8218B0D4",
+      "size": "0x130"
     }
   },
   "src/fragments/fragment012_17ED00/battle_engine_3223B0.c": {
@@ -688,8 +707,8 @@
   },
   "src/libnumus/player.c": {
     ".rodata": {
-      "address": "0x8007DC58",
-      "size": "0x78"
+      "address": "0x8007DC50",
+      "size": "0x80"
     }
   },
   "src/libultra/audio/drvrnew.c": {

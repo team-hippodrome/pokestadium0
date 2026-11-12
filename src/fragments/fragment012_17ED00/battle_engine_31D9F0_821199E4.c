@@ -91,7 +91,181 @@ s32 BattleHud_DrawMovePpTextRTL(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
 }
 
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_82119CAC.s")
+typedef struct Entry8006A9D4 {
+    /* 0x00 */ u8 unk_00;
+    /* 0x01 */ u8 type;
+    /* 0x04 */ char* name;
+    /* 0x08 */ s32 unk_08;
+} Entry8006A9D4; // size = 0xC
+extern Entry8006A9D4 D_8006A9D4[];
+extern u8* D_8218AF70[];
+extern Gfx D_800602C8[];
+extern Gfx D_80060398[];
+extern char D_82195A14[];
+extern char D_82195A20[];
+extern char D_82195A2C[];
+extern char D_82195A38[];
+typedef struct MovePpInit {
+    s32 pp[4];
+} MovePpInit;
+void func_82119CAC(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3) {
+    s32 i;
+    MovePpInit move_pp = { 0, 0, 0, 0 };
+    u8 max_pp[4];
+    BattleMon* party;
+    BattleMonRuntime* runtime;
+
+    party = &arg0->sessionTeams->teamMember[M2C_FIELD(arg0, s32*, 0x9D4)]->pokemonPicked[M2C_FIELD(arg0, s32*, 0x9D0)];
+    runtime = &arg0->state.runtime;
+
+    func_82116CF4(arg1 + 1, arg2 + 1, 0xC7, 0x38, &D_8218B008 + arg3 * 3, &D_8218B014 + arg3 * 3);
+    if (arg1) {} // FAKE
+    gSPDisplayList(gDisplayListHead++, D_800602C8);
+    BattleHud_DrawBorderTile(arg1, arg2 - 1, 8, 8, D_030096C0);
+    BattleHud_DrawBorderTile(arg1, arg2 + 5, 8, 8, D_030095C0);
+    for (i = 1; i < 7; i++) {
+        BattleHud_DrawBorderTile(arg1, arg2 + i * 8, 8, 8, D_030095C0);
+    }
+    BattleHud_DrawBorderTile(arg1, arg2 + 0x33, 8, 8, D_03009640);
+    BattleHud_DrawBorderTile(arg1 + 0xC0, arg2 - 1, 8, 8, D_03009840);
+    BattleHud_DrawBorderTile(arg1 + 0xC0, arg2 + 5, 8, 8, D_03009740);
+    for (i = 1; i < 7; i++) {
+        BattleHud_DrawBorderTile(arg1 + 0xC0, arg2 + i * 8, 8, 8, D_03009740);
+    }
+    BattleHud_DrawBorderTile(arg1 + 0xC0, arg2 + 0x33, 8, 8, D_030097C0);
+    for (i = 1; i < 0x18; i++) {
+        BattleHud_DrawBorderTile(arg1 + i * 8, arg2 - 1, 8, 8, D_03009940);
+        BattleHud_DrawBorderTile(arg1 + i * 8, arg2 + 0x33, 8, 8, D_030098C0);
+    }
+    gSPDisplayList(gDisplayListHead++, D_80060398);
+
+    for (i = 0; i < 4; i++) {
+        if (runtime->unk_4E & 8) {
+            max_pp[i] = gMoveData[runtime->moves[i] - 1].unk_05 / 5;
+            if (max_pp[i] >= 8) {
+                max_pp[i] = 7;
+            }
+            max_pp[i] = gMoveData[runtime->moves[i] - 1].unk_05 + (((runtime->unk_32[i] & 0xC0) >> 6) * max_pp[i]);
+        } else {
+            max_pp[i] = gMoveData[party->unk_09[i] - 1].unk_05 / 5;
+            if (max_pp[i] >= 8) {
+                max_pp[i] = 7;
+            }
+            max_pp[i] = gMoveData[party->unk_09[i] - 1].unk_05 + (((party->unk_20[i] & 0xC0) >> 6) * max_pp[i]);
+        }
+    }
+
+    if (runtime->unk_4E & 8) {
+        if (runtime->moves[0] && (runtime->moves[0] < 0xA6)) {
+            move_pp.pp[0] = BattleHud_DrawMovePpTextRTL(arg1 + 0x52, arg2 + 0xF, runtime->unk_32[0], max_pp[0]);
+        }
+        if (runtime->moves[1] && (runtime->moves[1] < 0xA6)) {
+            move_pp.pp[1] = BattleHud_DrawMovePpTextLTR(arg1 + 0x7C, arg2 + 0x1C, runtime->unk_32[1], max_pp[1]);
+        }
+        if (runtime->moves[2] && (runtime->moves[2] < 0xA6)) {
+            move_pp.pp[2] = BattleHud_DrawMovePpTextLTR(arg1 + 0x70, arg2 + 0x30, runtime->unk_32[2], max_pp[2]);
+        }
+        if (runtime->moves[3] && (runtime->moves[3] < 0xA6)) {
+            move_pp.pp[3] = BattleHud_DrawMovePpTextRTL(arg1 + 0x44, arg2 + 0x23, runtime->unk_32[3], max_pp[3]);
+        }
+    } else {
+        if (party->unk_09[0] && (party->unk_09[0] < 0xA6)) {
+            move_pp.pp[0] = BattleHud_DrawMovePpTextRTL(arg1 + 0x52, arg2 + 0xF, party->unk_20[0], max_pp[0]);
+        }
+        if (party->unk_09[1] && (party->unk_09[1] < 0xA6)) {
+            move_pp.pp[1] = BattleHud_DrawMovePpTextLTR(arg1 + 0x7C, arg2 + 0x1C, party->unk_20[1], max_pp[1]);
+        }
+        if (party->unk_09[2] && (party->unk_09[2] < 0xA6)) {
+            move_pp.pp[2] = BattleHud_DrawMovePpTextLTR(arg1 + 0x70, arg2 + 0x30, party->unk_20[2], max_pp[2]);
+        }
+        if (party->unk_09[3] && (party->unk_09[3] < 0xA6)) {
+            move_pp.pp[3] = BattleHud_DrawMovePpTextRTL(arg1 + 0x44, arg2 + 0x23, party->unk_20[3], max_pp[3]);
+        }
+    }
+
+    gSPDisplayList(gDisplayListHead++, D_80060308);
+
+    Gfx_DrawTextureRgba16Ia8(arg1 + 0x5D, arg2 + 6, 0x10, 0xE, D_030078C0, D_03007A80, 0x10, 0x100000);
+    Gfx_DrawTextureRgba16Ia8(arg1 + 0x6C, arg2 + 0x16, 0x10, 0xE, D_030070E0, D_030072A0, 0x10, 0x100000);
+    Gfx_DrawTextureRgba16Ia8(arg1 + 0x5D, arg2 + 0x26, 0x10, 0xE, D_03007380, D_03007540, 0x10, 0x100000);
+    Gfx_DrawTextureRgba16Ia8(arg1 + 0x4E, arg2 + 0x16, 0x10, 0xE, D_3007620, D_030077E0, 0x10, 0x100000);
+
+    gSPDisplayList(gDisplayListHead++, D_80060398);
+    gSPDisplayList(gDisplayListHead++, D_800602C8);
+
+    if (runtime->unk_4E & 8) {
+        if (runtime->moves[0] && (runtime->moves[0] < 0xA6)) {
+            func_8001B884(move_pp.pp[0] - 0x19, arg2 + 0xE, 0x20, 9, D_8218AF70[gMoveData[runtime->moves[0] - 1].unk_03], 0x20, 0);
+        }
+        if (runtime->moves[1] && (runtime->moves[1] < 0xA6)) {
+            func_8001B884(move_pp.pp[1], arg2 + 0x1B, 0x20, 9, D_8218AF70[gMoveData[runtime->moves[1] - 1].unk_03], 0x20, 0);
+        }
+        if (runtime->moves[2] && (runtime->moves[2] < 0xA6)) {
+            func_8001B884(move_pp.pp[2], arg2 + 0x2F, 0x20, 9, D_8218AF70[gMoveData[runtime->moves[2] - 1].unk_03], 0x20, 0);
+        }
+        if (runtime->moves[3] && (runtime->moves[3] < 0xA6)) {
+            func_8001B884(move_pp.pp[3] - 0x18, arg2 + 0x22, 0x20, 9, D_8218AF70[gMoveData[runtime->moves[3] - 1].unk_03], 0x20, 0);
+        }
+    } else {
+        if (runtime->moves[0] && (runtime->moves[0] < 0xA6)) {
+            func_8001B884(move_pp.pp[0] - 0x19, arg2 + 0xE, 0x20, 9, D_8218AF70[gMoveData[runtime->moves[0] - 1].unk_03], 0x20, 0);
+        }
+        if (runtime->moves[1] && (runtime->moves[1] < 0xA6)) {
+            func_8001B884(move_pp.pp[1], arg2 + 0x1B, 0x20, 9, D_8218AF70[gMoveData[runtime->moves[1] - 1].unk_03], 0x20, 0);
+        }
+        if (runtime->moves[2] && (runtime->moves[2] < 0xA6)) {
+            func_8001B884(move_pp.pp[2], arg2 + 0x2F, 0x20, 9, D_8218AF70[gMoveData[runtime->moves[2] - 1].unk_03], 0x20, 0);
+        }
+        if (runtime->moves[3] && (runtime->moves[3] < 0xA6)) {
+            func_8001B884(move_pp.pp[3] - 0x18, arg2 + 0x22, 0x20, 9, D_8218AF70[gMoveData[runtime->moves[3] - 1].unk_03], 0x20, 0);
+        }
+    }
+
+    gSPDisplayList(gDisplayListHead++, D_80060398);
+
+    func_8001AB6C();
+    func_8001A384(1, 0);
+
+    if (runtime->unk_4E & 8) {
+        if (runtime->moves[0] && (runtime->moves[0] < 0xA6)) { func_82119994(arg1 + 0x5A, arg2 + 4, D_8006A9D4[runtime->moves[0] - 1].name); }
+        if (runtime->moves[1] && (runtime->moves[1] < 0xA6)) {
+            func_8001A944(arg1 + 0x7C, arg2 + 0x11, D_8006A9D4[runtime->moves[1] - 1].name);
+        }
+        if (runtime->moves[2] && (runtime->moves[2] < 0xA6)) {
+            func_8001A944(arg1 + 0x6E, arg2 + 0x25, D_8006A9D4[runtime->moves[2] - 1].name);
+        }
+        if (runtime->moves[3] && (runtime->moves[3] < 0xA6)) {
+            func_82119994(arg1 + 0x4C, arg2 + 0x18, D_8006A9D4[runtime->moves[3] - 1].name);
+        }
+    } else {
+        if (runtime->moves[0] && (runtime->moves[0] < 0xA6)) { func_82119994(arg1 + 0x5A, arg2 + 4, D_8006A9D4[runtime->moves[0] - 1].name); }
+        if (runtime->moves[1] && (runtime->moves[1] < 0xA6)) {
+            func_8001A944(arg1 + 0x7C, arg2 + 0x11, D_8006A9D4[runtime->moves[1] - 1].name);
+        }
+        if (runtime->moves[2] && (runtime->moves[2] < 0xA6)) {
+            func_8001A944(arg1 + 0x6E, arg2 + 0x25, D_8006A9D4[runtime->moves[2] - 1].name);
+        }
+        if (runtime->moves[3] && (runtime->moves[3] < 0xA6)) {
+            func_82119994(arg1 + 0x4C, arg2 + 0x18, D_8006A9D4[runtime->moves[3] - 1].name);
+        }
+    }
+
+    if (runtime->moves[0] >= 0xA6) {
+        func_82119994(arg1 + 0x5A, arg2 + 4, D_82195A14);
+    }
+    if (runtime->moves[1] >= 0xA6) {
+        func_8001A944(arg1 + 0x7C, arg2 + 0x11, D_82195A20);
+    }
+    if (runtime->moves[2] >= 0xA6) {
+        func_8001A944(arg1 + 0x6E, arg2 + 0x25, D_82195A2C);
+    }
+    if (runtime->moves[3] >= 0xA6) {
+        func_82119994(arg1 + 0x4C, arg2 + 0x18, D_82195A38);
+    }
+
+    func_8001ABBC();
+    BattleHud_DrawTranslucentShadowRect(arg1 - 2, arg2 - 2, 0xCD, 0x3E, 0);
+}
 
 extern u8 D_0300A500[];
 extern u8 D_0300A7A0[];
@@ -597,7 +771,102 @@ found:
 
 u8 D_8218B124[] = { 0xFF, 0xFF, 0xFF, 0x00, 0x6E, 0xFF, 0xFF, 0xFF, 0xFF, 0x64, 0xFF, 0x00, 0x00, 0xFF, 0x00, 0x00, 0x64, 0x00, 0x00, 0x64, 0xFF, 0x00, 0x00, 0xFF };
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_8211CC8C.s")
+typedef struct TextLine8211CC8C {
+    /* 0x00 */ s8* str;
+    /* 0x04 */ u8 color;
+    /* 0x05 */ char unk05[3];
+} TextLine8211CC8C; // size = 0x8
+typedef struct Rgb8211CC8C {
+    u8 r, g, b;
+} Rgb8211CC8C;
+extern TextLine8211CC8C D_82189D8C[];
+extern u8 D_8219A4F0[];
+extern char D_82195A8C[];
+extern char D_82195A94[];
+extern char D_82195A9C[];
+s32 func_8000A4E8(s8*, char*);
+
+void func_8211CC8C(void) {
+    UNUSED s32 pad[4]; // FAKE
+    s16 x = *(s16*)&D_8219A4F0[0x16]; // FAKE: the text box is read as raw bytes; a struct pointer gets folded
+    s16 y = *(s16*)&D_8219A4F0[0x18]; // FAKE
+    s32 n = 0;
+    s32 i = 0;
+    Rgb8211CC8C* c;
+    s32 ty;
+    s32 len;
+
+    if (D_8219A4F0[3] == 0xFF) {
+        return;
+    }
+    if (D_8219A4F0[0] & 8) {
+        D_8219A4F0[2] = func_8000F1FC(D_8219A4F0[2], 0xFF, 0xA, 0xA);
+    } else {
+        D_8219A4F0[2] = func_8000F1FC(D_8219A4F0[2], 0, 0xA, 0xA);
+    }
+    for (;;) {
+        if (D_8219A4F0[3] == 0) {
+            break;
+        }
+        if (func_8000A4E8(D_82189D8C[i].str, D_82195A8C) == 0) {
+            n++;
+            i++;
+            if (n == D_8219A4F0[3]) {
+                break;
+            }
+        }
+        i++;
+    }
+    n = 0;
+    for (;;) {
+        if (func_8000A4E8(D_82189D8C[i + n].str, D_82195A94) == 0) {
+            break;
+        }
+        n++;
+    }
+    if (y == 0xB4) {
+        if (n >= 7) {
+            y = y - n * 0xB - (n / 2) * 0xF + 0x43;
+        } else {
+            y = y - (n / 2) * 0xF - 0xA;
+        }
+    } else if (n >= 7) {
+        y = y + n * 0xB - (n / 2) * 0xF - 0x43;
+    } else {
+        y = y - (n / 2) * 0xF + 0xA;
+    }
+    n = 0;
+    for (;;) {
+        if (func_8000A4E8(D_82189D8C[i].str, D_82195A9C) == 0) {
+            break;
+        }
+        ty = y + n * 0xF;
+        func_8001AB6C();
+        func_8001ABE8();
+        // FAKE: base first, then += index, so D_8218B124 is allocated before the 3 multiplier
+        c = (Rgb8211CC8C*)D_8218B124;
+        c += D_82189D8C[i].color << 1;
+        func_8001AA9C(c->r, c->g, c->b, D_8219A4F0[2]);
+        c = (Rgb8211CC8C*)D_8218B124;
+        c += (D_82189D8C[i].color << 1) + 1;
+        func_8001AAE4(c->r, c->g, c->b, D_8219A4F0[2]);
+        if ((func_8211CBCC(D_82189D8C[i].str) == 0) || (D_82189D8C[i].color == 1)) {
+            len = func_800566BC(D_82189D8C[i].str) >> 1;
+            func_8001A384(2, -1);
+            func_8001A944(x - len * 6 - 6, ty, D_82189D8C[i].str);
+        } else {
+            len = func_800566BC(D_8219A4A0) >> 1;
+            func_8001A384(2, -1);
+            func_8001A944(x - len * 0xC - 0xC, ty, D_8219A4A0);
+            func_8001A384(2, -1);
+            func_8001A944(x - 6, ty, D_8219A4C8);
+        }
+        func_8001AC3C();
+        func_8001ABBC();
+        i++;
+        n++;
+    }
+}
 
 extern u8 D_8219A4F0[];
 extern u8 D_03003540[];

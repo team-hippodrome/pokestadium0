@@ -152,7 +152,11 @@ s32 GbPak_SelectRomAddress(unk_D_8122B2C0* arg0, s32 arg1);
 s32 GbPak_SelectRamBank(unk_D_8122B2C0* arg0, s32 arg1);
 
 typedef struct GbpakChannel811023DC {
-    /* 0x00 */ char unk00[0x4E];
+    /* 0x00 */ char unk00[0x48];
+    /* 0x48 */ u8 cartType;
+    /* 0x49 */ char unk49[0x3];
+    /* 0x4C */ u8 unk4C;
+    /* 0x4D */ char unk4D[0x1];
     /* 0x4E */ u8 checksum[2];
     /* 0x50 */ OSPfs* pfs;
     /* 0x54 */ u8* buf;
@@ -177,7 +181,8 @@ typedef struct GbpakChannel811023DC {
     /* 0x9A */ volatile u8 error;
     /* 0x9B */ u8 status;
     /* 0x9C */ u8 channel;
-    /* 0x9D */ char unk9D[0x4];
+    /* 0x9D */ char unk9D[0x3];
+    /* 0xA0 */ u8 unkA0;
     /* 0xA1 */ u8 unkA1;
     /* 0xA2 */ u8 unkA2;
     /* 0xA3 */ char unkA3[0x1];
@@ -515,7 +520,7 @@ extern u8 D_81155E18[];
 void func_800567E0(OSMesgQueue*, OSMesg*, s32);
 void func_80051B20(OSThread*, s32, void (*)(), s32, u8*, s32);
 void func_8005C130(OSThread*);
-M2C_UNK func_8004FD20(s32, M2C_UNK);
+void func_8004FD20(s32, s32);
 void func_811030F0();
 void func_811035B4(s32 arg0, s32 arg1, s32 arg2) {
     s32 i;
@@ -739,7 +744,7 @@ void GbEmu_BlitWithPixelOp(u16* dst, u16* src, s32 mode, s32 width, s32 height) 
   }
 }
 
-M2C_UNK func_8004FD20(s32, M2C_UNK);                /* extern */
+void func_8004FD20(s32, s32);                /* extern */
 M2C_UNK func_8005C0A0();                            /* extern */
 extern s32 D_8115658C;
 
@@ -902,9 +907,24 @@ void func_811047A0(s32 arg0) {
 }
 
 typedef struct Screen81104930 {
-    /* 0x00 */ u8 unk_00[0x4C];
+    /* 0x00 */ u8 unk_00[6];
+    /* 0x06 */ s8 unk_06;
+    /* 0x07 */ s8 unk_07;
+    /* 0x08 */ u8 unk_08[4];
+    /* 0x0C */ s16 unk_0C;
+    /* 0x0E */ u8 unk_0E[2];
+    /* 0x10 */ u8* unk_10;
+    /* 0x14 */ u8 unk_14[8];
+    /* 0x1C */ u8* unk_1C;
+    /* 0x20 */ u8* unk_20;
+    /* 0x24 */ u8 unk_24[0x14];
+    /* 0x38 */ s32 unk_38;
+    /* 0x3C */ u32 unk_3C;
+    /* 0x40 */ u32 unk_40;
+    /* 0x44 */ u8* unk_44;
+    /* 0x48 */ u8* unk_48;
     /* 0x4C */ s32 framebuffer;
-    /* 0x50 */ u8 unk_50[4];
+    /* 0x50 */ u8* unk_50;
     /* 0x54 */ s32 colorIndex;
 } Screen81104930;
 
@@ -955,7 +975,7 @@ void func_81104930(void) {
     D_81154C00 = D_81156540.framebuffer;
 }
 
-M2C_UNK func_8004FD20(s32, M2C_UNK);                /* extern */
+void func_8004FD20(s32, s32);                /* extern */
 extern s32 D_81156550;
 
 void func_81104AE4(void) {
@@ -1050,389 +1070,199 @@ s32 func_81104D84(s32 arg0) {
     return -1;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_81104DD0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_81104DD0.s")
-#endif
-
-#ifdef NON_MATCHING
-/* TODO: decompile func_811056CC; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment000_80C00/func_811056CC.s")
-#endif
-
-extern OSMesgQueue D_81156458;
-extern u8 D_811565A0;
-
-s32 func_811064DC(void) {
-    volatile u8* chan = (volatile u8*)&D_811561C8[D_811565A0];
-
-    while (chan[0x99] != 0) {
-    }
-    if (chan[0x9A] != 0) {
-        return -1;
-    }
-    chan[0x99] = 8;
-    osSendMesg(&D_81156458, (OSMesg)(u32)D_811565A0, OS_MESG_BLOCK);
-    while (chan[0x99] != 0) {
-    }
-    if (chan[0x9A] != 0) {
-        return -1;
-    }
-    return 0;
-}
-
-extern u8 D_811565A0;
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-s32 func_8110659C(void)
-{
-  GbpakChannel811023DC *ch = &D_811561C8[D_811565A0];
-  ch->unk00[0x99] = 0x80;
-  ch->unk00[0x9A] = 0;
-  func_8004CFB0(&D_81156458, D_811565A0, 1);
-  while (D_81156475 != 0)
-  {
-  }
-
-  if (((u8) (*((s8 *) (((s8 *) ch) + 0x9A)))) != 0)
-  {
-    return *((u8 *) (((s8 *) ch) + 0x9A));
-  }
-  if (ch->unk00[0x98] != 0)
-  {
-    return func_811020A8(ch);
-  }
-  return 0;
-}
-
-s32 func_8110665C(void) {
-    u8 idx = D_811565A0;
-    volatile GbpakChannel811023DC* ch = &D_811561C8[idx];
-
-    ch->status = 0;
-    ch->request = 8;
-    func_8004CFB0(&D_81156458, idx, 1);
-    while (D_81156475 != 0) {
-    }
-    return D_811561C8[D_811565A0].status & 0x80;
-}
-
-extern M2C_UNK D_8115623C;
+void func_8110724C(void);
+void func_800093E0(void*, void*);
+s32 func_80025BD8(void);
+void func_80052DC0(s32);
+void func_8005C280(f32);
+void func_81100020(void);
+void func_811027A8(GbpakChannel811023DC*);
+void func_81106CC8(u16*, u8 (*)[0xC80], s32, s32);
+void func_81117B20(Screen81104930*);
+extern u8 D_8111E570[];
 extern u8 D_811565A1;
+extern s16 D_800AA148;
+extern u8 D_811565A3;
+extern u8 D_811565A4;
+extern u8 D_811565A5;
+extern u8* D_811565A8;
+extern s32 D_811565B4;
+extern u8 D_8112AF3C[];
+extern u8 D_81130024[];
+extern u8 D_811645F0[];
+extern u8 D_811725F0[];
+extern u8 D_811223F4[];
+extern u8 D_811224D4[];
+extern u8 D_811225B4[];
+extern u8 D_81122694[];
+extern u8 D_81122774[];
+extern f32 D_FLT_81154254;
 
-s32 func_81106700(void) {
-    s32 var_v0;
-    u8 *var_v1;
+s32 func_81104DD0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
+    GbpakChannel811023DC* cur;
+    GbpakChannel811023DC* slot;
+    u8* buf;
+    s32 i;
+    u32 j;
+    u8* p;
+    s32 pad[2]; // FAKE
 
-    var_v0 = 0;
-    if (D_811565A1 != 0) {
-        return 1;
+    D_811565B4 = 0;
+    D_811565AC = arg1;
+    D_811565B0 = arg1 + arg2;
+    D_811565A0 = arg3;
+    D_81156598 = M2C_FIELD(arg4, u8**, 0x21CC);
+    D_8115659C = M2C_FIELD(arg4, u8**, 0x21D0);
+    D_81156540.unk_10 = (u8*)func_81104B18(0x27F80, 0);
+    D_81156540.unk_1C = (u8*)func_81104B18(0x100000, 0);
+    D_81156540.unk_40 = 0x8000;
+    D_81156540.unk_20 = (u8*)func_81104B18(D_81156540.unk_40, 0);
+    D_81156540.unk_44 = (u8*)func_81104B18(0xF000, 0);
+    D_81156540.unk_48 = (u8*)func_81104B18(0xF000, 0);
+    D_81154C00 = D_81156540.framebuffer = func_81104B18(0x2800, 0);
+    D_81156540.unk_50 = (u8*)func_81104B18(0x2800, 0);
+    D_811565A8 = (u8*)func_81104B18(0x102, 0);
+    D_811565A3 = 0;
+    D_81156477 = 1;
+    D_811565A1 = 0;
+    D_811565A5 = 0x20;
+    D_811565A4 = 0;
+    func_8004FD20((s32)D_81156540.unk_10, 0xFF80);
+    for (i = 0, p = D_81156540.unk_10 + 0x16B20; i < 0x40; i++) {
+        *p++ = 1;
     }
-    var_v1 = *((M2C_UNK*)((u8*)&D_8115623C + (D_811565A0 * 0xA4)));
-loop_3:
-    var_v0 += 4;
-    if (M2C_FIELD(var_v1, u8 *, 0) == 0) {
-        return 1;
+    for (i = 0, p = D_81156540.unk_10 + 0x16B60; i < 0x20; i++) {
+        *p++ = 1;
     }
-    if (M2C_FIELD(var_v1, u8 *, 1) == 0) {
-        return 1;
-    }
-    if (M2C_FIELD(var_v1, u8 *, 2) == 0) {
-        return 1;
-    }
-    if (M2C_FIELD(var_v1, u8 *, 3) == 0) {
-        return 1;
-    }
-    var_v1 += 4;
-    if (var_v0 == 0x80) {
-        return 0;
-    }
-    goto loop_3;
-}
-
-extern u8 D_81156261[];
-extern OSMesgQueue D_81156458;
-extern volatile u8 D_81156475;
-
-void func_811067B0(void) {
-    D_81156261[D_811565A0 * 0xA4] = 4;
-    osSendMesg(&D_81156458, (OSMesg)(u32)D_811565A0, OS_MESG_BLOCK);
+    func_81103D30();
+    i = func_80025BD8();
+    D_811561C8[i].request = 0x80;
+    func_8004CFB0(&D_81156458, i, 1);
     while (D_81156475 != 0) {
     }
-}
 
-extern s8 D_81156546;
-
-void func_81106820(void) {
-    D_81156546 = 1;
-}
-
-extern s16 D_82608542;
-extern s16 D_82608544;
-extern s16 D_8260854C;
-extern s16 D_8260854E;
-extern s16 D_800AA148;
-extern s32 D_81156550;
-void func_811174D8(void);
-void osViBlack(u8);
-void VictoryPalace_ResetPillarGlow(UNUSED s32 arg0) {
-    if ((*(u8*)&D_81156546 == 0) && (D_800AA148 == 0)) {
-        func_811174D8();
-        ((u8*)D_81156550)[0xFF26] = GbMem_ReadIoRegister(0xFF26);
-    }
-    if (D_800AA148 != 0) {
-        osViBlack(1);
-    }
-}
-
-extern u16 D_811248C0[];
-extern u16 D_81124940[];
-extern u16 D_811249C0[];
-extern u16 D_81124A40[];
-extern u16 D_81124AC0[];
-extern u16 D_81124B40[];
-extern u16 D_81124BC0[];
-extern u16 D_81124C40[];
-void func_811068A0(u16* arg0) {
-    s32 i;
-    s32 j;
-
-    for (i = 1; i != 5; i++) {
-        GbEmu_BlitWithPixelOp(&arg0[i * 8], D_81124940, 0xFFFF, 8, 8);
-        GbEmu_BlitWithPixelOp(&arg0[38 * 320 + i * 8], D_81124BC0, 0xFFFF, 8, 8);
-        GbEmu_BlitWithPixelOp(&arg0[i * 8 * 320], D_81124A40, 0xFFFF, 8, 8);
-        GbEmu_BlitWithPixelOp(&arg0[i * 8 * 320 + 38], D_81124AC0, 0xFFFF, 8, 8);
-    }
-    GbEmu_BlitWithPixelOp(arg0, D_811248C0, 0, 8, 8);
-    GbEmu_BlitWithPixelOp(&arg0[38], D_811249C0, 0, 8, 8);
-    GbEmu_BlitWithPixelOp(&arg0[38 * 320], D_81124B40, 0, 8, 8);
-    GbEmu_BlitWithPixelOp(&arg0[38 * 320 + 38], D_81124C40, 0, 8, 8);
-
-    for (j = 0; j < 30; j++) {
-        for (i = 0; i < 30; i++) {
-            arg0[(j + 8) * 320 + i + 8] = 0xC14;
+    buf = (u8*)func_81104B18(0x200, 0);
+    for (i = 0; i < 4; i++) {
+        slot = &D_811561C8[i];
+        slot->bankState = D_81156540.unk_10 + 0x16B20;
+        slot->sramState = D_81156540.unk_10 + 0x16B60;
+        slot->ramBuf = D_81156540.unk_20;
+        slot->blockState = D_81156540.unk_10 + 0x16B80;
+        slot->verifyBuf = buf;
+        slot->blockDirty = buf + 0x100;
+        slot->ramSize = D_81156540.unk_40;
+        for (j = 0; j < (D_81156540.unk_40 >> 8); j++) {
+            slot->blockDirty[j] = 0xFF;
+            slot->blockState[j] = 0xFF;
         }
+        slot->unkA0 = func_81104C30((u8*)slot);
+        slot->romBuf = D_81156540.unk_1C;
+        slot->sramBuf = D_81156540.unk_20;
     }
-}
-
-extern u16 D_81129AB8[];
-extern u16 D_8112A138[];
-extern u16 D_81129238[];
-extern u16 D_811296B8[];
-extern u16 D_81129D38[];
-extern u16 D_8112A538[];
-extern u16 D_81129638[];
-extern u8 D_811565E1;
-
-void func_81106AA0(s32 addr, s32 frame) {
-    s32 i;
-
-    for (i = 0; i < 6; i++) {
-        func_81103C40(addr, (u8*)&D_81129AB8[frame * 0x28], 0, 8, 5);
-        addr += 0x10;
+    cur = &D_811561C8[D_811565A0];
+    if (cur->error != 0) {
+        func_81104D84(1);
+        return (cur->unkA2 != 0) ? 2 : 1;
     }
-    func_81103C40(addr, (u8*)&D_8112A138[frame * 0x40], 0, 8, 8);
-    addr += 0x1406;
-    for (i = 0; i < 5; i++) {
-        func_81103C40(addr, (u8*)&D_81129238[frame * 0x40], 0, 8, 8);
-        addr += 0x1400;
+    if (cur->unkA0 == 0) {
+        return func_81104D84(1);
     }
-    func_81103C40(addr, (u8*)&D_811296B8[frame * 0x40], 0, 8, 8);
-    addr += 0x10;
-    switch (D_811565E1) {
-        case 1:
-            i = 7;
-            break;
-        case 2:
-            i = 0xA;
-            break;
-        case 3:
-            i = 0xB;
-            break;
-        default:
-            i = 6;
-            break;
+    D_81156540.colorIndex = cur->unkA0 - 1;
+    while (D_81156475 != 0) {
     }
-    for (; i > 0; i--) {
-        func_81103C40(addr + 0x780, (u8*)&D_81129AB8[frame * 0x28], 0, 8, 5);
-        addr += 0x10;
+    if (func_81102F7C(D_811565A0, 0, 0xFF) != 0) {
+        func_81104D84(1);
+        return (cur->unkA2 != 0) ? 2 : 1;
     }
-    func_81103C40(addr, (u8*)&D_81129D38[frame * 0x40], 0, 8, 8);
-    addr -= 0x13FA;
-    func_81103C40(addr, (u8*)&D_8112A538[frame * 0x40], 0, 8, 8);
-    addr -= 0x1400;
-    func_81103C40(addr, (u8*)&D_8112A538[frame * 0x40], 0, 8, 8);
-    addr -= 0x1400;
-    func_81103C40(addr, (u8*)D_81129638, 0, 8, 8);
-}
-
-extern s32 D_811565C0;
-extern s32 D_811565C4;
-extern u32 D_811565C8;
-extern u32 D_811565CC;
-extern u16* D_811565D0;
-extern u16* D_811565D4;
-extern u32 D_811565D8;
-extern u8 D_811565E0;
-extern u8 D_811565E1;
-extern u16 D_811228C0[];
-extern u16 D_81124CC0[];
-extern u16 D_81124D40[];
-extern u16 D_81124DC0[];
-extern u16 D_811270E8[];
-extern u16 D_81127390[];
-extern u16 D_81127638[];
-extern u16 D_811278E0[];
-extern u16 D_81127B88[];
-extern u8 D_8112A938[];
-void func_81103850(u16*, u8*);
-void func_811068A0(u16* arg0);
-u32 func_80053A80(void);
-M2C_UNK func_8005C0A0();
-void func_81106CC8(u16* dst, u8 (*arg1)[0xC80], s32 arg2, s32 arg3) {
-    s32 y;
-    s32 x;
-    u16* row;
-    s32 j;
-    s32 step;
-    s32 i;
-
-    D_811565C0 = (s32)dst;
-    step = 0x5000;
-    for (y = 0; y < 0x14000; y += step) {
-        row = dst + y;
-        for (j = 0; j != 320u; j += 64) {
-            GbEmu_BlitWithPixelOp(row, D_811228C0, 0xFFFF, 64, (y == 0xF000) ? 48 : 64);
-            row += 64;
-        }
+    D_81156540.unk_38 = 0xE;
+    if (cur->cartType == 4) {
+        D_81156540.unk_3C = 0x80000;
+    } else {
+        D_81156540.unk_3C = 0x100000;
     }
+    D_81156540.unk_07 = 0;
+    D_81156540.unk_06 = 1;
+    func_81117B20(&D_81156540);
+    func_81103D30();
 
-    D_811565D0 = (u16*)func_81104B18(0x2580, 0);
-    _bcopy(dst + 0x10540, D_811565D0, 0x2580);
-    D_811565D4 = (u16*)func_81104B18(0x2580, 0);
-    bzero(D_811565D4, 0x2580);
-    func_81103850(D_811565D4, D_8112A938);
+    /* FAKE: the unsigned `1U` compares stop the constant 1 from sharing a register with unk_06 = 1. */
+    cur->bankList = (cur->unkA0 == 4)   ? NULL
+                    : (cur->unkA0 == 3) ? ((cur->unk4C == 0) ? D_81122774 : NULL)
+                    : (cur->unkA0 == 2) ? ((cur->unk4C == 1U) ? D_81122694 : (cur->unk4C == 0) ? D_811225B4 : NULL)
+                                        : ((cur->unk4C == 1U) ? D_811224D4 : (cur->unk4C == 0) ? D_811223F4 : NULL);
+    cur->sum = 0;
 
-    for (i = 0; i < 6; i++) {
-        func_811068A0(dst + 0xB916 + i * 46);
-        osInvalDCache(arg1[i], sizeof(arg1[i]));
-        GbEmu_BlitWithPixelOp(dst + 0xBCD9 + i * 46, (u16*)arg1[i], 0, 40, 40);
-    }
-
-    for (j = 0; j < 6; j++) {
-        for (i = 0; i < 320; i++) {
-            dst[(j + 27) * 320 + i] = 0x25A;
-            dst[(j + 121) * 320 + i] = 0x25A;
-        }
-    }
-
-    for (i = 0; i < 320; i += 8) {
-        GbEmu_BlitWithPixelOp(dst + 33 * 320 + i, D_81124CC0, 0xFFFF, 8, 8);
-        GbEmu_BlitWithPixelOp(dst + 113 * 320 + i, D_81124D40, 0xFFFF, 8, 8);
-    }
-
-    for (j = 0; j < 72; j++) {
-        for (i = 0; i < 320; i++) {
-            dst[(j + 41) * 320 + i] = 0x2BA4;
-        }
-    }
-
-    switch (arg2) {
-        case 1:
-            D_811565C4 = (s32)((u8*)dst + 2);
-            break;
-        case 2:
-            D_811565C4 = (s32)((u8*)dst + 4);
-            break;
-        case 3:
-            D_811565C4 = (s32)((u8*)dst + 6);
-            break;
-        default:
-            D_811565C4 = (s32)dst;
-            break;
-    }
-
-    GbEmu_BlitWithPixelOp(dst + 0x4E38, D_81127B88, 0, 0x56, 0x21);
-    GbEmu_BlitWithPixelOp((u16*)(D_811565C4 + 0x61E0), D_81124DC0, 0, 0x3C, 0x4B);
-
-    switch (arg3) {
-        case 0:
-            GbEmu_BlitWithPixelOp((u16*)(D_811565C4 + 0x7608), D_811270E8, 0, 0x13, 0x11);
-            break;
-        case 1:
-            GbEmu_BlitWithPixelOp((u16*)(D_811565C4 + 0x7608), D_81127390, 0, 0x13, 0x11);
-            break;
-        case 2:
-            GbEmu_BlitWithPixelOp((u16*)(D_811565C4 + 0x7608), D_81127638, 0, 0x13, 0x11);
-            break;
-        case 3:
-            GbEmu_BlitWithPixelOp((u16*)(D_811565C4 + 0x7608), D_811278E0, 0, 0x13, 0x11);
-            break;
-    }
-
-    D_811565E1 = arg2;
-    func_81106AA0(D_811565C4 + 0x87BA, 0);
-    func_8005C0A0();
-    D_811565E0 = 0;
-    D_811565D8 = 0x800000;
-    D_811565C8 = func_80053A80();
-    D_811565CC = 0;
-}
-
-void func_81107128(u16* arg0, u16* arg1, s16* arg2, s32 arg3, s32 arg4) {
-    s32 i;
-    s32 j;
-    s32 var_v1;
-    s32 var_t4;
-
-    for (j = 0; j < arg3; j++) {
-        for (i = 0; i < 320; i++) {
-            var_v1 = (arg0[(j * 320) + ((arg4 + i) % 320)] & 0xF800) + (arg1[(j * 320) + i] & 0xF800);
-            if (var_v1 > 0xF800) {
-                var_v1 = 0xF800;
-            }
-            var_t4 = var_v1;
-            var_v1 = (arg0[(j * 320) + ((arg4 + i) % 320)] & 0x7C0) + (arg1[(j * 320) + i] & 0x7C0);
-            if (var_v1 > 0x7C0) {
-                var_v1 = 0x7C0;
-            }
-            var_t4 |= var_v1;
-            var_v1 = (arg0[(j * 320) + ((arg4 + i) % 320)] & 0x3E) + (arg1[(j * 320) + i] & 0x3E);
-            if (var_v1 > 0x3E) {
-                var_v1 = 0x3E;
-            }
-            arg2[(j * 320) + i] = var_t4 | var_v1;
-        }
-    }
-}
-
-extern u32 D_811565DC;
-extern u32 D_811565D8;
-extern u8 D_811565E0;
-extern s32 D_811565C4;
-extern u32 D_811565C8;
-extern u32 D_811565CC;
-extern s32 D_811565C0;
-extern u16* D_811565D4;
-extern u16* D_811565D0;
-void func_81106AA0(s32, s32);
-void func_8110724C(void) {
-    if ((osGetCount() - D_811565DC) > D_811565D8) {
-        D_811565DC = osGetCount();
-        D_811565E0 = (D_811565E0 + 1) & 7;
-        func_81106AA0(D_811565C4 + 0x87BA, D_811565E0);
-        if (D_811565D8 > 0x80000) {
-            D_811565D8 -= D_811565D8 >> 8;
-        }
-    }
-    if ((osGetCount() - D_811565C8) >= 0x200000) {
-        D_811565C8 = osGetCount();
-        D_811565CC++;
-        if (D_811565CC >= 0x140) {
-            D_811565CC = 0;
-        }
-        func_81107128(D_811565D4, D_811565D0, (s16*)(D_811565C0 + 0x20A80), 0xF, D_811565CC);
+    if (cur->bankList == NULL) {
+        func_81106CC8((u16*)arg0, M2C_FIELD(arg4, u8 (**)[0xC80], 0x2204), func_80025BD8(), D_81156540.colorIndex);
+        func_81104930();
         func_8005C0A0();
+        func_80052DC0(0);
+        for (i = 0; i < 4; i++) {
+            cur->request = 2;
+            cur->addr = i * 0x2000;
+            cur->buf = i * 0x2000 + D_81156540.unk_20;
+            cur->size = 0x2000;
+            func_8004CFB0(&D_81156458, D_811565A0, 1);
+            while (D_81156475 != 0) {
+                func_8110724C();
+            }
+            if (cur->error) goto fail; /* one line: gives the ROM's beqz/b pair */
+            if (D_800AA148 != 0) {
+                func_81104D84(0);
+            }
+        }
+        for (i = 0; i < (D_81156540.unk_3C >> 13); i++) {
+            cur->request = 1;
+            if (1) {} // karodo
+            if (1) {} // karodo
+            if (1) {} // karodo
+            cur->addr = i * 0x2000;
+            cur->buf = i * 0x2000 + D_81156540.unk_1C;
+            cur->size = 0x2000;
+            func_8004CFB0(&D_81156458, D_811565A0, 1);
+            while (D_81156475 != 0) {
+                func_8110724C();
+            }
+            if (cur->error) goto fail; /* one line: gives the ROM's beqz/b pair */
+            if (D_800AA148 != 0) {
+                func_81104D84(0);
+            }
+        }
+        for (i = 0; i < (D_81156540.unk_3C >> 14); i++) {
+            cur->bankState[i] = 0;
+        }
+        for (i = 0; i < (D_81156540.unk_40 >> 13); i++) {
+            cur->sramState[i] = 0;
+        }
+        func_800093E0(D_8112AF3C, D_811645F0);
+        func_800093E0(D_81130024, D_811725F0);
+    } else {
+        func_811047A0(0);
+        func_8005C0A0();
+        D_81156476 = 1;
+        func_81102970(D_811565A0, 0);
+        while (*cur->bankState != 0) {
+            func_811027A8(cur);
+            if (cur->error != 0) {
+            fail:
+                func_81104D84(1);
+                return (cur->unkA2 != 0) ? 2 : 1;
+            }
+            if (D_800AA148 != 0) {
+                func_81104D84(0);
+            }
+        }
+        D_811565A4 = 1;
+        for (i = 0; i < 0x102; i++) {
+            D_811565A8[i] = D_81156540.unk_1C[i];
+            D_81156540.unk_1C[i] = D_8111E570[i];
+        }
+        D_81156540.unk_0C = 0;
+        D_81156540.unk_10[0xFF42] = 0x64;
     }
+    D_81156540.unk_06 = 0;
+    func_81100020();
+    func_8005C280(D_FLT_81154254);
+    func_80052DC0(0);
+    return 0;
 }

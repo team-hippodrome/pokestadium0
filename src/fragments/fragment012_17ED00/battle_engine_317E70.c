@@ -431,11 +431,164 @@ s32 func_82111DCC(void) {
     return 2;
 }
 
-#ifdef NON_MATCHING
-/* TODO: decompile func_821125C0; signature not recovered. */
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/fragment012_17ED00/func_821125C0.s")
-#endif
+extern u8 D_82199F41;
+extern u8 D_82199F36;
+extern u8 D_82199F43;
+extern u8 D_8218AD4C[];
+extern u8 D_8218AD5C[];
+extern u8 D_8218AD60[];
+extern u8 D_8218AD64[];
+extern u8 D_8218AD80[];
+extern u8 D_8218AD8C[];
+extern s32 D_8218C714;
+/* "%d". It sits in the middle of this TU's debug strings, away from the jump
+   table that is this file's placed .rodata, so it is referenced by address. */
+extern char D_8219574C[];
+void func_82105E38(ActivePokemon*, s32);
+void func_821102F0(void);
+void func_8210F8E8(void);
+
+/* Resolve the current action: move selection, hit and damage checks, then effect dispatch.
+   Stadium 1 calls it ProcessBattleTurn. */
+void func_821125C0(void) {
+    s8 sp2C[12];
+    u8 effect;
+    BattleMonRuntime* user;
+
+    if (sBattleUser->usedMove != 0xFF) {
+        sBattleMoveFailed = 0;
+        D_82199F41 = 0;
+        D_82199F36 = 0;
+        D_82199F3F = 0xA;
+
+        switch (func_82111DCC()) {
+            case 2:
+                Battle_ExecuteMoveAnimation();
+                if (sBattleUser->unk_4C & 0x10) {
+                    sBattleUser->unk_4C &= ~(0x40 | 0x10);
+                    func_82105E38(sActivePokemon[sBattleScene.scene->unk_2C], 8);
+                } else {
+                    if (func_82111DC4() == 0) {
+                        user = sBattleUser;
+                        goto block_29a;
+                    }
+                block_5:
+                    switch (sBattleUser->moveCache.unk_01) {
+                        case 0x27:
+                        case 0x2B:
+                            Battle_ExecuteMoveEffect();
+                            return;
+                    }
+                }
+            case 3:
+                func_821102F0();
+                Battle_DecrementPP(sBattleScene.scene->unk_2C);
+                if (IsByteInArray(sBattleUser->moveCache.unk_01, D_8218AD4C, 0x10) != 0) {
+                    Battle_ExecuteMoveEffect();
+                    return;
+                }
+                if (IsByteInArray(sBattleUser->moveCache.unk_01, D_8218AD5C, 2) != 0) {
+                    Battle_ExecuteMoveEffect();
+                }
+            case 4:
+                if (IsByteInArray(sBattleUser->moveCache.unk_01, D_8218AD60, 2) == 0) {
+                    func_82111CD4();
+                    if (Battle_Effect_Counter() != 0) {
+                        InitBattleParameters();
+                        if (Battle_CalcDamage() == 0) {
+                            effect = sBattleUser->moveCache.unk_01;
+                            goto block_29;
+                        }
+                        func_82111AC4();
+                        func_8210F8E8();
+                    } else {
+                        goto block_24;
+                    }
+                }
+                HandleMoveEffectFlags();
+            case 5:
+            block_24:
+                if (sBattleMoveFailed != 0) {
+                    user = sBattleUser;
+                    effect = user->moveCache.unk_01;
+                    switch (effect) {
+                        case 7: // Explosion / Self-Destruct
+                            goto block_28;
+                        default:
+                            goto block_29;
+                    }
+                }
+            case 6:
+                // FAKE: the self-assignment leaves a no-code statement on the case 6
+                // entry, which keeps the case 7 branch above (b to the next instruction).
+                user = sBattleUser;
+                user = user;
+            block_28:
+                func_82111A78();
+                user = sBattleUser;
+            block_29a:
+                effect = user->moveCache.unk_01;
+            block_29:
+                switch (effect) {
+                    case 9: // Mirror Move
+                        if (func_821119F8() == 0) {
+                            break;
+                        }
+                        D_82199F41 = 0;
+                        goto block_5;
+                    case 0x53: // Metronome
+                        Battle_Effect_Metronome();
+                        goto block_5;
+                    default:
+                        if (IsByteInArray(effect, D_8218AD64, 0x1B) != 0) {
+                            Battle_ExecuteMoveEffect();
+                            return;
+                        }
+                        if (sBattleMoveFailed != 0) {
+                            Battle_QueueMoveFailureAndApplyRecoil();
+                            if (sBattleUser->moveCache.unk_01 != 7) {
+                                break;
+                            }
+                        } else {
+                            Battle_ApplyDamageAnimation();
+                            Battle_PlayMoveSound();
+                            Battle_UpdateBattleLog();
+                            D_82199F36 = 1;
+                        }
+                        if (IsByteInArray(sBattleUser->moveCache.unk_01, D_8218AD80, 0xA) != 0) {
+                            Battle_ExecuteMoveEffect();
+                        }
+                        if (sBattleTarget->unk_0C == 0) {
+                            return;
+                        }
+                        Battle_ApplyRageContinuation();
+                        if (sBattleUser->unk_4C & 4) {
+                            sBattleUser->unk_4F--;
+                            if (sBattleUser->unk_4F != 0) {
+                                goto block_28;
+                            }
+                            sBattleUser->unk_4C &= ~4;
+                            sprintf(sp2C, D_8219574C, sBattleUser->unk_54);
+                            func_8211EF74(D_8219A520 + 0x3C8, 4, D_8218C714, sp2C);
+                            sBattleScene.scene->unk_1A = 1;
+                            sBattleUser->unk_54 = 0;
+                        }
+                        if (sBattleUser->moveCache.unk_01 == 0) {
+                            break;
+                        }
+                        if (IsByteInArray(sBattleUser->moveCache.unk_01, D_8218AD8C, 0x10) != 0) {
+                            break;
+                        }
+                        Battle_ExecuteMoveEffect();
+                        break;
+                }
+                break;
+            default:
+                break;
+        }
+    }
+    D_82199F43 = 0;
+}
 
 s32 func_82107A5C(ActivePokemon*);
 s32 func_82107F88(ActivePokemon*);
