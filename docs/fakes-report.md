@@ -37,7 +37,7 @@ Rank weighs how much the fake obscures meaning and how likely a clean rewrite ex
 | 14 | `func_8A201EAC` | `fragments/fragment019_293410/lab_pc_icons_8A201598.c` | `temp_v0 ^ 0` plus 17 raw casts. | Struct work. |
 | 15 | `func_82134DEC`, `BattleAnim_CallbackEndEffect56...InitParticle` | `battle_engine_315D50.c`, `battle_engine_31D9F0_2.c` | `arg0 * 1` / `sp36 * 1`. | Try a cast to the callee's parameter type instead. |
 | 16 | `Trail40Variant_ApplyRippleAtPoint`, `func_89008EF0`, `func_81104930` | three files | Comma expressions `(0, x)`. | Usually a missing temp or a differently typed field. |
-| 17 | `func_82185D44`, `func_81100C84`, `func_811030F0` | ekans_game_3, 81100020, gb_tower_emulator_7F9A0 | 24–28 m2c `goto`s each in 150–450-line state machines. | Rebuild as `switch`/loops; no register trick involved, just unstructured output. |
+| 17 | `func_82185D44`, `func_81100C84`, `func_811030F0` | battle_engine_com_ai_2_82184DC8, 81100020, gb_tower_emulator_7F9A0 | 24–28 m2c `goto`s each in 150–450-line state machines. | Rebuild as `switch`/loops; no register trick involved, just unstructured output. |
 
 ## Fakes that are probably not worth chasing
 
