@@ -44,8 +44,8 @@ extern u8 D_81184656[1];
 
 /* Declarations copied from gb_tower_emulator_86920.c. */
 s32 func_8110A310(s32, M2C_UNK, s32);
-s32 func_8111073C(Rec81109678*);
-s32 func_811114BC(Rec81109678*);
+s32 AudioPlayback_NoteDisable(Rec81109678*);
+s32 AudioPlayback_AudioListRemove(Rec81109678*);
 s32 func_81112EAC(s8*, Rec81109678*);
 extern Rec81109678* D_81184664;
 extern s8 D_81184938;
@@ -140,8 +140,8 @@ void func_811152A4(s32);
 s32 func_80058100(s32);
 void func_8005C0A0(void);
 void func_8110FAF4(void);
-void func_81111130(void);
-void func_81111AF4(void);
+void AudioPlayback_InitNoteFreeList(void);
+void AudioPlayback_NoteInitAll(void);
 void func_8111539C(s32);
 void func_81115480(void);
 #define EXTERNAL_POOL_AFF0 (*(PoolAFF0*)&D_811842A0)
@@ -379,8 +379,8 @@ typedef struct Entry8110D4E0 { u8 unk00; u8 unk01; u8 unk02; u8 unk03; u8** inst
 extern Entry8110D4E0* D_811858B0;
 extern u8* D_811858A0;
 s32 AudioLoad_IsFontLoadComplete(s32 arg0);
-u8* func_81110CA8(s32, s32);
-u8* func_81110D6C(s32, s32);
+u8* AudioPlayback_GetInstrumentInner(s32, s32);
+u8* AudioPlayback_GetDrum(s32, s32);
 
 void func_8110BEE4(u8* arg0, Flags2Bit* arg1);
 
@@ -403,7 +403,7 @@ void func_8110BD20(SampleCacheEntry8110BA8C* entry) {
             if (func_8110A310(1, 2, font_id) != 0) {
                 if (AudioLoad_IsFontLoadComplete(font_id) != 0) {
                     for (inst_id = 0; inst_id < D_811858B0[font_id].unk00; inst_id++) {
-                        inst = func_81110CA8(font_id, inst_id);
+                        inst = AudioPlayback_GetInstrumentInner(font_id, inst_id);
                         if (inst != NULL) {
                             if (inst[1] != 0) {
                                 func_8110BEE4((u8*)entry, M2C_FIELD(inst, Flags2Bit**, 8));
@@ -417,7 +417,7 @@ void func_8110BD20(SampleCacheEntry8110BA8C* entry) {
                         }
                     }
                     for (drum_id = 0; drum_id < D_811858B0[font_id].unk01; drum_id++) {
-                        drum = func_81110D6C(font_id, drum_id);
+                        drum = AudioPlayback_GetDrum(font_id, drum_id);
                         if (drum != NULL) {
                             func_8110BEE4((u8*)entry, M2C_FIELD(drum, Flags2Bit**, 4));
                         }
@@ -492,7 +492,7 @@ void func_8110BFB0(void) {
                     }
                     {
                         for (k = 0; k < D_811858B0[i].unk00; k++) {
-                            p = func_81110CA8(i, k);
+                            p = AudioPlayback_GetInstrumentInner(i, k);
                             if (p != NULL) {
                                 if (p[1] != 0) {
                                     func_8110BEE4(slot + 0x10, M2C_FIELD(p, Flags2Bit**, 8));
@@ -504,7 +504,7 @@ void func_8110BFB0(void) {
                             }
                         }
                         for (m = 0; m < D_811858B0[i].unk01; m++) {
-                            p = func_81110D6C(i, m);
+                            p = AudioPlayback_GetDrum(i, m);
                             if (p != NULL) {
                                 func_8110BEE4(slot + 0x10, M2C_FIELD(p, Flags2Bit**, 4));
                             }
@@ -909,13 +909,13 @@ s32 func_8110CD0C(Stream8110CD0C* arg0, s32 arg1) {
     }
 }
 
-u8* func_81110CA8(s32, s32);
-u8* func_81110D6C(s32, s32);
+u8* AudioPlayback_GetInstrumentInner(s32, s32);
+u8* AudioPlayback_GetDrum(s32, s32);
 s32 func_8110CDF0(s32 arg0, s32 arg1, s32 arg2) {
     u8 *p;
 
     if (arg1 < 0x7F) {
-        p = func_81110CA8(arg0, arg1);
+        p = AudioPlayback_GetInstrumentInner(arg0, arg1);
         if (p == NULL) {
             return -1;
         }
@@ -927,7 +927,7 @@ s32 func_8110CDF0(s32 arg0, s32 arg1, s32 arg2) {
             func_8110CD0C(M2C_FIELD(p, Stream8110CD0C **, 0x18), arg0);
         }
     } else if (arg1 == 0x7F) {
-        p = func_81110D6C(arg0, arg2);
+        p = AudioPlayback_GetDrum(arg0, arg2);
         if (p == NULL) {
             return -1;
         }

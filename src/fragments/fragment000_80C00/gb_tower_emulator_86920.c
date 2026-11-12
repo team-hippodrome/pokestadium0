@@ -64,8 +64,8 @@ void func_811095E0(void) {
 /* One 0xCC-byte record; only the fields func_81109678 touches are named. */
 
 
-s32 func_8111073C(Rec81109678*);
-s32 func_811114BC(Rec81109678*);
+s32 AudioPlayback_NoteDisable(Rec81109678*);
+s32 AudioPlayback_AudioListRemove(Rec81109678*);
 s32 func_81112EAC(s8*, Rec81109678*);
 extern Rec81109678* D_81184664;
 extern s8 D_81184938;
@@ -79,7 +79,7 @@ extern s32 D_811858E8;
  * byte at 0x33 equals arg0: if the bytes at 0x34 and 0x30 are 0 and non-zero
  * respectively, it clears bit 7 and then sets bit 6 of the byte that the
  * pointer at 0x44 points to. In every matching record it then calls
- * func_8111073C(rec), func_811114BC(rec) and func_81112EAC(&D_81184938, rec).
+ * AudioPlayback_NoteDisable(rec), AudioPlayback_AudioListRemove(rec) and func_81112EAC(&D_81184938, rec).
  * Records whose byte at 0x33 differs are skipped. What the record and the
  * flag bits mean is not established from this function.
  *
@@ -100,8 +100,8 @@ void func_81109678(s32 arg0) {
                 p->unk_44->bit7 = 0;
                 p->unk_44->bit6 = 1;
             }
-            func_8111073C(p);
-            func_811114BC(p);
+            AudioPlayback_NoteDisable(p);
+            AudioPlayback_AudioListRemove(p);
             func_81112EAC(&D_81184938, p);
         }
     }
@@ -861,8 +861,8 @@ void func_811152A4(s32);
 s32 func_80058100(s32);
 void func_8005C0A0(void);
 void func_8110FAF4(void);
-void func_81111130(void);
-void func_81111AF4(void);
+void AudioPlayback_InitNoteFreeList(void);
+void AudioPlayback_NoteInitAll(void);
 void func_8111539C(s32);
 void func_81115480(void);
 
@@ -936,8 +936,8 @@ void func_8110AFF0(void) {
     }
     func_811095E0();
     D_81184664 = (Rec81109678*)GbApu_AllocZeroed((unk_func_81206FA0*)&D_811842C0, D_811858E8 * 0xCC);
-    func_81111AF4();
-    func_81111130();
+    AudioPlayback_NoteInitAll();
+    AudioPlayback_InitNoteFreeList();
     D_81184288 = (void*)GbApu_AllocZeroed((unk_func_81206FA0*)&D_811842C0, D_811858B8.unk_0C * D_811858E8 * 0x18);
     for (i = 0; i != 2; i++) {
         D_81185900[i] = (void*)GbApu_AllocZeroed((unk_func_81206FA0*)&D_811842C0, D_811858E4 * 8);

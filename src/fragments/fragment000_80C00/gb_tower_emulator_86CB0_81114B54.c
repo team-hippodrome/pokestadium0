@@ -67,7 +67,7 @@ typedef struct SeqPlayer81114B54 {
 } SeqPlayer81114B54;
 
 extern s16 D_811858EC;
-void func_81111340(void*, s32);
+void AudioPlayback_NotePoolFill(void*, s32);
 void func_81113FA8(Channel81114B54*);
 
 void func_81114B54(SeqPlayer81114B54* seq_player) {
@@ -126,11 +126,11 @@ void func_81114B54(SeqPlayer81114B54* seq_player) {
             } else if (cmd >= 0xC0) {
                 switch (cmd) {
                     case 0xF1:
-                        func_811111E0((s8*)&seq_player->notePool);
-                        func_81111340(&seq_player->notePool, func_81112FB0(&state->pc));
+                        AudioPlayback_NotePoolClear((s8*)&seq_player->notePool);
+                        AudioPlayback_NotePoolFill(&seq_player->notePool, func_81112FB0(&state->pc));
                         break;
                     case 0xF0:
-                        func_811111E0((s8*)&seq_player->notePool);
+                        AudioPlayback_NotePoolClear((s8*)&seq_player->notePool);
                         break;
                     case 0xDF:
                         seq_player->transposition = 0;
@@ -292,7 +292,7 @@ void func_811151C8(s32 arg0) {
             func_81111DC8((s8*)&D_81184668[i]);
         }
     }
-    func_81110798();
+    AudioPlayback_ProcessNotes();
 }
 
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
@@ -429,7 +429,7 @@ typedef struct Rec81115480 {
     s8 unk154;
     char pad155[7];
 } Rec81115480; // size = 0x15C
-void func_811110E0(void*);
+void AudioPlayback_InitNoteLists(void*);
 void func_81115480(void) {
     s32 i;
     s32 j;
@@ -451,7 +451,7 @@ void func_81115480(void) {
         rec->b20 = 0;
         rec->b08 = 0;
         rec->b10 = 0;
-        func_811110E0(rec->unk98);
+        AudioPlayback_InitNoteLists(rec->unk98);
         func_811152A4(i);
     }
 }

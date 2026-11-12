@@ -4,9 +4,9 @@
 #include "fragments/particle_math/particle_math.h"
 #include "m2c_macros.h"
 struct LayerE3C;
-void func_81110E3C(struct LayerE3C*, s32);
+void AudioPlayback_SeqLayerDecayRelease(struct LayerE3C*, s32);
 
-void func_811105DC(s8* arg0, f32 arg1);
+void AudioPlayback_NoteSetResamplingRate(s8* arg0, f32 arg1);
 
 typedef struct ReverbBits81110210 {
     /* 0x0 */ u8 bit0 : 1;
@@ -56,7 +56,11 @@ extern f32 D_81136AD8[];
 extern f32 D_81136CD8[];
 extern f32 D_81136ED8[];
 
-void func_81110210(s8* note, ReverbInfo81110210* reverb_info) {
+/**
+ * Sets a note's left and right volume, pan and reverb from its attributes. Zelda 64 audio driver (playback.c), same position and shape.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioPlayback_InitSampleState(s8* note, ReverbInfo81110210* reverb_info) {
     NoteSub81110210* sub;
     f32 vol_right;
     f32 vol_left;
@@ -70,7 +74,7 @@ void func_81110210(s8* note, ReverbInfo81110210* reverb_info) {
     u8 reverbVol;
     ReverbBits81110210 reverbBits;
 
-    func_811105DC(note, reverb_info->freqScale);
+    AudioPlayback_NoteSetResamplingRate(note, reverb_info->freqScale);
     velocity = reverb_info->velocity;
     pan = reverb_info->pan;
     reverbVol = reverb_info->reverbVol;
@@ -156,7 +160,11 @@ typedef struct StereoFlags811105DC {
     /* 0x1 */ u8 wide : 1;
 } StereoFlags811105DC;
 
-void func_811105DC(s8* arg0, f32 arg1) {
+/**
+ * Sets a note's resampling rate, marking it as wide (half rate) when the rate is 2.0 or more. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioPlayback_NoteSetResamplingRate(s8* arg0, f32 arg1) {
     StereoFlags811105DC* flags = (StereoFlags811105DC*)(arg0 + 0xB4);
     f32 pan;
 
@@ -207,7 +215,11 @@ typedef struct Obj0694 {
 extern Copy18 D_811369C0;
 void func_8111235C(u8*, s32, char*);
 
-void func_81110694(Obj0694* arg0) {
+/**
+ * Starts a note's envelope from its instrument or the layer's own envelope. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioPlayback_NoteInit(Obj0694* arg0) {
     Def0694* def = arg0->unk_44;
 
     if (def->unk_18 == 0) {
@@ -247,7 +259,11 @@ typedef struct Note8111073C {
     /* 0xB4 */ Flags8111073C noteSubEu;
 } Note8111073C;
 
-void func_8111073C(Note8111073C* note) {
+/**
+ * Turns a note off and clears its playback state. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioPlayback_NoteDisable(Note8111073C* note) {
     if (note->noteSubEu.needsInit == 1) {
         note->noteSubEu.needsInit = 0;
     }
@@ -354,17 +370,21 @@ extern struct Rec81111130* D_81184664;
 extern s32 D_811858E8;
 extern f32 D_811858D0;
 extern f32 D_811858D4;
-void func_811110B0(Particle* arg0);
-void func_811114BC(s8*);
-void func_8111147C(M2C_UNK* arg0, M2C_UNK* arg1);
+void AudioPlayback_SeqLayerNoteRelease(Particle* arg0);
+void AudioPlayback_AudioListRemove(s8*);
+void AudioPlayback_AudioListPushFront(M2C_UNK* arg0, M2C_UNK* arg1);
 s32 func_81112EAC(s8*, struct Rec81111130*);
-void func_81111568(s8* arg0, s8* arg1);
+void AudioPlayback_NoteInitForLayer(s8* arg0, s8* arg1);
 void func_81112B84(Channel81110798*);
 void func_81112278(Note81110798*);
 f32 AudioEffects_UpdateAdsr(u8*);
 void func_8111220C(Note81110798*);
 
-void func_81110798(void)
+/**
+ * Updates every note once per audio frame: envelopes, releases, pitch, volume and pan. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioPlayback_ProcessNotes(void)
 {
   Note81110798 *note;
   PlaybackState81110798 *playbackState;
@@ -413,9 +433,9 @@ void func_81110798(void)
       {
         goto d;
       }
-      func_811110B0((Particle *) playbackState->parentLayer);
-      func_811114BC((s8 *) note);
-      func_8111147C((M2C_UNK *) (note->pool + 0x10), (M2C_UNK *) note);
+      AudioPlayback_SeqLayerNoteRelease((Particle *) playbackState->parentLayer);
+      AudioPlayback_AudioListRemove((s8 *) note);
+      AudioPlayback_AudioListPushFront((M2C_UNK *) (note->pool + 0x10), (M2C_UNK *) note);
       playbackState->priority = 1;
       playbackState->unk_04 = 2;
     }
@@ -437,18 +457,18 @@ void func_81110798(void)
         {
           if (playbackState->wantedParentLayer != ((Layer81110798 *) (-1)))
           {
-            func_8111073C((Note8111073C *) note);
+            AudioPlayback_NoteDisable((Note8111073C *) note);
             if (playbackState->wantedParentLayer->channel != 0)
             {
-              func_81111568((s8 *) note, (s8 *) playbackState->wantedParentLayer);
+              AudioPlayback_NoteInitForLayer((s8 *) note, (s8 *) playbackState->wantedParentLayer);
               func_81112278(note);
-              func_811114BC((s8 *) note);
+              AudioPlayback_AudioListRemove((s8 *) note);
               func_81112EAC(note->pool + 0x30, (struct Rec81111130 *) note);
               playbackState->wantedParentLayer = (Layer81110798 *) (-1);
               goto process;
             }
-            func_8111073C((Note8111073C *) note);
-            func_811114BC((s8 *) note);
+            AudioPlayback_NoteDisable((Note8111073C *) note);
+            AudioPlayback_AudioListRemove((s8 *) note);
             func_81112EAC(note->pool, (struct Rec81111130 *) note);
             playbackState->wantedParentLayer = (Layer81110798 *) (-1);
           }
@@ -458,8 +478,8 @@ void func_81110798(void)
             {
               playbackState->parentLayer->bit1 = 1;
             }
-            func_8111073C((Note8111073C *) note);
-            func_811114BC((s8 *) note);
+            AudioPlayback_NoteDisable((Note8111073C *) note);
+            AudioPlayback_AudioListRemove((s8 *) note);
             func_81112EAC(note->pool, (struct Rec81111130 *) note);
           }
         }
@@ -475,8 +495,8 @@ void func_81110798(void)
         {
           playbackState->parentLayer->bit1 = 1;
         }
-        func_8111073C((Note8111073C *) note);
-        func_811114BC((s8 *) note);
+        AudioPlayback_NoteDisable((Note8111073C *) note);
+        AudioPlayback_AudioListRemove((s8 *) note);
         func_81112EAC(note->pool, (struct Rec81111130 *) note);
       }
       else
@@ -518,7 +538,7 @@ void func_81110798(void)
         sub_attrs.freqScale *= playbackState->vibratoFreqScale * playbackState->portamentoFreqScale;
         sub_attrs.freqScale *= D_811858D0;
         sub_attrs.velocity *= scale;
-        func_81110210((s8 *) note, &sub_attrs);
+        AudioPlayback_InitSampleState((s8 *) note, &sub_attrs);
         noteSubEu->bookOffset = bookOffset;
       }
     }
@@ -527,7 +547,11 @@ void func_81110798(void)
 
 }
 
-u8* func_81110C6C(u8* arg0, s32 arg1) {
+/**
+ * Returns the low, normal or high sample of instrument `arg0` for semitone `arg1`. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+u8* AudioPlayback_GetInstrumentTunedSample(u8* arg0, s32 arg1) {
     u8* ret;
 
     if (arg1 < arg0[1]) {
@@ -551,7 +575,11 @@ s32 AudioLoad_IsFontLoadComplete(s32 arg0);
 extern ParticleBank81110CA8* D_811858B0;
 extern s32 D_811859D0;
 
-u8* func_81110CA8(s32 arg0, s32 arg1) {
+/**
+ * Returns instrument `arg1` of font `arg0`, or NULL when the font is not loaded or the id is out of range. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+u8* AudioPlayback_GetInstrumentInner(s32 arg0, s32 arg1) {
     ParticleBank81110CA8* bank;
     u8* ret;
 
@@ -572,7 +600,11 @@ u8* func_81110CA8(s32 arg0, s32 arg1) {
     return ret;
 }
 
-u8* func_81110D6C(s32 arg0, s32 arg1) {
+/**
+ * Returns drum `arg1` of font `arg0`, or NULL when the font is not loaded or the id is out of range. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+u8* AudioPlayback_GetDrum(s32 arg0, s32 arg1) {
     ParticleBank81110CA8* bank;
     u8* ret;
 
@@ -693,10 +725,14 @@ typedef struct NoteE3C {
 
 extern f32 D_811858D4;
 extern f32 D_811858D8;
-void func_811114BC(s8*);
-void func_8111147C(M2C_UNK* arg0, M2C_UNK* arg1);
+void AudioPlayback_AudioListRemove(s8*);
+void AudioPlayback_AudioListPushFront(M2C_UNK* arg0, M2C_UNK* arg1);
 
-void func_81110E3C(LayerE3C* layer, s32 target) {
+/**
+ * Starts the decay (6) or release (7) of the note a sequence layer is playing. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioPlayback_SeqLayerDecayRelease(LayerE3C* layer, s32 target) {
     NoteE3C* note;
     NoteAttributesE3C* attrs;
 
@@ -762,41 +798,54 @@ void func_81110E3C(LayerE3C* layer, s32 target) {
     }
 
     if (target == 6) {
-        func_811114BC((s8*)note);
-        func_8111147C((M2C_UNK*)(note->pool + 0x10), (M2C_UNK*)note);
+        AudioPlayback_AudioListRemove((s8*)note);
+        AudioPlayback_AudioListPushFront((M2C_UNK*)(note->pool + 0x10), (M2C_UNK*)note);
     }
 }
 
-void func_81111090(Particle* arg0) {
-    func_81110E3C((struct LayerE3C*)arg0, 6);
+/**
+ * Starts the decay of the layer's note. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioPlayback_SeqLayerNoteDecay(Particle* arg0) {
+    AudioPlayback_SeqLayerDecayRelease((struct LayerE3C*)arg0, 6);
 }
 
-void func_811110B0(Particle* arg0) {
-    func_81110E3C((struct LayerE3C*)arg0, 7);
+/**
+ * Starts the release of the layer's note. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioPlayback_SeqLayerNoteRelease(Particle* arg0) {
+    AudioPlayback_SeqLayerDecayRelease((struct LayerE3C*)arg0, 7);
 }
 
-void func_811110D0(s8 *arg0) {
+/**
+ * Makes an empty circular note list. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioPlayback_InitNoteList(s8 *arg0) {
     M2C_FIELD(arg0, s8 **, 0) = arg0;
     M2C_FIELD(arg0, s8 **, 4) = arg0;
     M2C_FIELD(arg0, s32 *, 8) = 0;
 }
 
-/*
- * func_811110E0
+/**
+ * AudioPlayback_InitNoteLists
  *
- * Calls func_811110D0 on four 16-byte blocks at arg0 + 0x00, 0x10, 0x20 and
- * 0x30.  func_811110D0 stores the block's own address in its first two words
+ * Calls AudioPlayback_InitNoteList on four 16-byte blocks at arg0 + 0x00, 0x10, 0x20 and
+ * 0x30.  AudioPlayback_InitNoteList stores the block's own address in its first two words
  * and clears the third, giving an empty circular list head {next, prev,
- * count, owner}: func_8111147C and func_81112EAC, which insert into such a
+ * count, owner}: AudioPlayback_AudioListPushFront and func_81112EAC, which insert into such a
  * list, link through the first two words, increment the third and copy the
  * fourth into the inserted node.  Afterwards arg0 itself is stored in the
  * fourth word (offset 0xC) of each block.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_811110E0(s8 *arg0) {
-    func_811110D0(arg0);
-    func_811110D0(arg0 + 0x10);
-    func_811110D0(arg0 + 0x20);
-    func_811110D0(arg0 + 0x30);
+void AudioPlayback_InitNoteLists(s8 *arg0) {
+    AudioPlayback_InitNoteList(arg0);
+    AudioPlayback_InitNoteList(arg0 + 0x10);
+    AudioPlayback_InitNoteList(arg0 + 0x20);
+    AudioPlayback_InitNoteList(arg0 + 0x30);
     M2C_FIELD(arg0, s8 **, 0xC) = arg0;
     M2C_FIELD(arg0, s8 **, 0x1C) = arg0;
     M2C_FIELD(arg0, s8 **, 0x2C) = arg0;
@@ -816,20 +865,21 @@ extern Rec81111130* D_81184664;
 extern s8 D_81184938;
 extern s32 D_811858E8;
 
-/*
- * func_81111130
+/**
+ * AudioPlayback_InitNoteFreeList
  *
- * Calls func_811110E0(&D_81184938), then for each of the D_811858E8 records of
+ * Calls AudioPlayback_InitNoteLists(&D_81184938), then for each of the D_811858E8 records of
  * the array at D_81184664 (0xCC bytes each, indexed directly each time):
  * stores the record's own address at offset 8, clears the word at offset 0,
  * and calls func_81112EAC(&D_81184938, record). func_81109678, which walks the
  * same array, passes the same list argument to the same function. What the
  * records are is not established from this function.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_81111130(void) {
+void AudioPlayback_InitNoteFreeList(void) {
     s32 i;
 
-    func_811110E0(&D_81184938);
+    AudioPlayback_InitNoteLists(&D_81184938);
     for (i = 0; i < D_811858E8; i++) {
         D_81184664[i].unk_08 = &D_81184664[i];
         D_81184664[i].unk_00 = 0;
@@ -854,14 +904,15 @@ typedef struct NotePool811111E0 {
 extern s8 D_81184948;
 extern s8 D_81184958;
 extern s8 D_81184968;
-void func_811114BC(s8*);
+void AudioPlayback_AudioListRemove(s8*);
 
 /**
  * Moves every note in the four lists of a note pool back to the matching
  * global free list (D_81184938, D_81184948, D_81184958, D_81184968). Same
  * structure as note_pool_clear in the Super Mario 64 audio library.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_811111E0(NotePool811111E0* pool) {
+void AudioPlayback_NotePoolClear(NotePool811111E0* pool) {
     s32 i;
     ListItem811111E0* source;
     ListItem811111E0* cur;
@@ -898,14 +949,18 @@ void func_811111E0(NotePool811111E0* pool) {
             if (cur == NULL) {
                 break;
             }
-            func_811114BC((s8*)cur);
+            AudioPlayback_AudioListRemove((s8*)cur);
             func_81112EAC(dest, (Rec81111130*)cur);
         }
     }
 }
 
 s32 func_81112EEC(s8 *);
-void func_81111340(s8* arg0, s32 arg1) {
+/**
+ * Takes `arg1` notes from the global free lists into a pool. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioPlayback_NotePoolFill(s8* arg0, s32 arg1) {
     s32 pad[3]; /* places src/dst at sp+0x48/0x44 and the frame at 0x58 as in the ROM */
     s8* src;
     s8* dst;
@@ -913,7 +968,7 @@ void func_81111340(s8* arg0, s32 arg1) {
     s32 pass;
     s32 r;
 
-    func_811111E0((NotePool811111E0*)arg0);
+    AudioPlayback_NotePoolClear((NotePool811111E0*)arg0);
     for (pass = 0, n = 0; n < arg1; pass++) {
         if (pass == 4) {
             return;
@@ -947,7 +1002,11 @@ void func_81111340(s8* arg0, s32 arg1) {
     }
 }
 
-void func_8111147C(M2C_UNK *arg0, M2C_UNK *arg1) {
+/**
+ * Pushes list item `arg1` onto the front of list `arg0` if it is on no list. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioPlayback_AudioListPushFront(M2C_UNK *arg0, M2C_UNK *arg1) {
     if (M2C_FIELD(arg1, M2C_UNK **, 0) == NULL) {
         M2C_FIELD(arg1, M2C_UNK **, 0) = arg0;
         M2C_FIELD(arg1, M2C_UNK **, 4) = (M2C_UNK *) M2C_FIELD(arg0, M2C_UNK **, 4);
@@ -958,7 +1017,11 @@ void func_8111147C(M2C_UNK *arg0, M2C_UNK *arg1) {
     }
 }
 
-void func_811114BC(s8 *arg0) {
+/**
+ * Unlinks a list item from its list. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioPlayback_AudioListRemove(s8 *arg0) {
     s8 *temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s8 **, 0);
@@ -969,7 +1032,11 @@ void func_811114BC(s8 *arg0) {
     }
 }
 
-s8 *func_811114E8(s8 *arg0, s32 arg1) {
+/**
+ * Returns the note in list `arg0` with the lowest priority below `arg1`, or NULL. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+s8 *AudioPlayback_FindNodeWithPrioLessThan(s8 *arg0, s32 arg1) {
     s8 *temp_a0;
     s8 *var_v0;
     s8 *var_v1;
@@ -1014,7 +1081,11 @@ typedef struct Src81111568 {
     /* 0x0 */ u32 rest : 26;
 } Src81111568;
 typedef struct Bit81111568 { u8 pad : 5; u8 b : 1; u8 rest : 2; } Bit81111568;
-void func_81111568(s8* arg0, s8* arg1) {
+/**
+ * Gives note `arg0` to layer `arg1` and sets it up from the layer's instrument. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioPlayback_NoteInitForLayer(s8* arg0, s8* arg1) {
     Flags81111568* flags;
     s32 v;
 
@@ -1027,7 +1098,7 @@ void func_81111568(s8* arg0, s8* arg1) {
     M2C_FIELD(M2C_FIELD(arg1, s8**, 0x54), s8**, 0x40) = arg0;
     M2C_FIELD(M2C_FIELD(arg1, s8**, 0x54), s8**, 0x44) = arg1;
     M2C_FIELD(arg1, f32*, 0x34) = 0.0f;
-    func_81110694((Obj0694*)arg0);
+    AudioPlayback_NoteInit((Obj0694*)arg0);
     v = M2C_FIELD(arg1, u8*, 2);
     flags = (Flags81111568*)(arg0 + 0xB4);
     if (v == 0xFF) {
@@ -1045,13 +1116,21 @@ void func_81111568(s8* arg0, s8* arg1) {
 }
 
 
-void func_81111688(s8 *arg0, s32 arg1) {
-    func_811110B0(M2C_FIELD(arg0, s32 *, 0x44));
+/**
+ * Releases the note's current layer and queues layer `arg1` to take it over. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioPlayback_NoteReleaseOwnerAndQueueLayer(s8 *arg0, s32 arg1) {
+    AudioPlayback_SeqLayerNoteRelease(M2C_FIELD(arg0, s32 *, 0x44));
     M2C_FIELD(arg0, s32 *, 0x48) = arg1;
 }
 
 extern f32 D_FLT_811858D4;
-void func_811116BC(s8 *arg0, s8 *arg1)
+/**
+ * Starts releasing the note and hands it to layer `arg1` with the layer's priority. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioPlayback_NoteReleaseAndTakeOwnership(s8 *arg0, s8 *arg1)
 {
   *((s8 **) (((s8 *) arg0) + 0x48)) = arg1;
   *((u8 *) (((s8 *) arg0) + 0x30)) = (u8) (*((u8 *) (((s8 *) (*((s8 **) (((s8 *) arg1) + 0x54)))) + 5))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
@@ -1060,43 +1139,47 @@ void func_811116BC(s8 *arg0, s8 *arg1)
 }
 
 /*
- * func_811116E8
+ * AudioPlayback_AllocNoteFromDisabled
  *
  * Moves one entry from the list headed at arg0 to the list headed at
  * arg0 + 0x30.  The list heads are 16-byte blocks laid out as
- * {next, prev, count, owner}, as set up by func_811110D0 and func_811110E0.
+ * {next, prev, count, owner}, as set up by AudioPlayback_InitNoteList and AudioPlayback_InitNoteLists.
  *
  *   1. func_81112EEC(arg0) unlinks the first node of the list at arg0 and
  *      returns the word stored at offset 8 of that node (0 if the list is
  *      empty).  That value is the entry used below and the return value.
- *   2. If it is not 0, func_81111568(entry, arg1) is called on it, and
- *      func_8111147C then appends the entry to the list at arg0 + 0x30
+ *   2. If it is not 0, AudioPlayback_NoteInitForLayer(entry, arg1) is called on it, and
+ *      AudioPlayback_AudioListPushFront then appends the entry to the list at arg0 + 0x30
  *      (it does nothing if the entry's first word is already non-zero).
  *
- * Returns the entry, or 0 if there was none.  What func_81111568 does with
+ * Returns the entry, or 0 if there was none.  What AudioPlayback_NoteInitForLayer does with
  * arg1 is not established (it is still assembly).
  */
 s32 func_81112EEC(s8 *);
-void func_81111568(s8*, s8*);
+void AudioPlayback_NoteInitForLayer(s8*, s8*);
 
-s32 func_811116E8(s8 *arg0, s32 arg1) {
+/**
+ * Allocates a note for a layer from a pool's disabled list. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 AudioPlayback_AllocNoteFromDisabled(s8 *arg0, s32 arg1) {
     s32 ret;
 
     ret = func_81112EEC(arg0);
     if (ret != 0) {
-        func_81111568((s8*)ret, (s8*)arg1);
-        func_8111147C((M2C_UNK *) (arg0 + 0x30), (M2C_UNK *) ret);
+        AudioPlayback_NoteInitForLayer((s8*)ret, (s8*)arg1);
+        AudioPlayback_AudioListPushFront((M2C_UNK *) (arg0 + 0x30), (M2C_UNK *) ret);
     }
     return ret;
 }
 
 /*
- * func_81111734
+ * AudioPlayback_AllocNoteFromDecaying
  *
- * Like func_811116E8, but it takes the entry from the list headed at
- * arg0 + 0x10, initialises it with func_811116BC(entry, arg1), and inserts
+ * Like AudioPlayback_AllocNoteFromDisabled, but it takes the entry from the list headed at
+ * arg0 + 0x10, initialises it with AudioPlayback_NoteReleaseAndTakeOwnership(entry, arg1), and inserts
  * it at the front of the list headed at arg0 + 0x20 with func_81112EAC.
- * List heads are {next, prev, count, owner} blocks (see func_811110D0).
+ * List heads are {next, prev, count, owner} blocks (see AudioPlayback_InitNoteList).
  *
  * func_81112EEC unlinks the first node of the list at arg0 + 0x10 and
  * returns the word at offset 8 of that node, or 0 if the list is empty.
@@ -1104,31 +1187,39 @@ s32 func_811116E8(s8 *arg0, s32 arg1) {
  */
 s32 func_81112EEC(s8 *);
 
-s32 func_81111734(s8 *arg0, s8 *arg1) {
+/**
+ * Takes over a decaying note for a layer. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 AudioPlayback_AllocNoteFromDecaying(s8 *arg0, s8 *arg1) {
     s32 ret;
 
     ret = func_81112EEC(arg0 + 0x10);
     if (ret != 0) {
-        func_811116BC((s8 *) ret, arg1);
+        AudioPlayback_NoteReleaseAndTakeOwnership((s8 *) ret, arg1);
         func_81112EAC(arg0 + 0x20, (s8 *) ret);
     }
     return ret;
 }
 
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-s8 *func_81111784(s8 *arg0, s8 *arg1)
+/**
+ * Steals the lowest-priority active note for a layer. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+s8 *AudioPlayback_AllocNoteFromActive(s8 *arg0, s8 *arg1)
 {
   s8 *a;
   s8 *b;
   s32 prioA;
   s32 prioB;
   prioA = (prioB = 0x10);
-  a = func_811114E8(arg0 + 0x20, *((u8 *) (((s8 *) (*((u8 **) (((s8 *) arg1) + 0x54)))) + 5))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+  a = AudioPlayback_FindNodeWithPrioLessThan(arg0 + 0x20, *((u8 *) (((s8 *) (*((u8 **) (((s8 *) arg1) + 0x54)))) + 5))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
   if (a != 0)
   {
     prioA = *((u8 *) (((s8 *) a) + 0x30));
   }
-  b = func_811114E8(arg0 + 0x30, *((u8 *) (((s8 *) (*((u8 **) (((s8 *) arg1) + 0x54)))) + 5))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+  b = AudioPlayback_FindNodeWithPrioLessThan(arg0 + 0x30, *((u8 *) (((s8 *) (*((u8 **) (((s8 *) arg1) + 0x54)))) + 5))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
   if (b != 0)
   {
     prioB = *((u8 *) (((s8 *) b) + 0x30));
@@ -1139,8 +1230,8 @@ s8 *func_81111784(s8 *arg0, s8 *arg1)
   }
   if (prioB < (prioA ^ 0)) // FAKE: no-op ^ 0
   {
-    func_811114BC(b);
-    func_81111688(b, (s32) arg1);
+    AudioPlayback_AudioListRemove(b);
+    AudioPlayback_NoteReleaseOwnerAndQueueLayer(b, (s32) arg1);
     func_81112EAC(arg0 + 0x20, (Rec81111130 *) b);
     *((u8 *) (((s8 *) b) + 0x30)) = *((u8 *) (((s8 *) (*((u8 **) (((s8 *) arg1) + 0x54)))) + 5)); // FAKE: decomp slop, raw pointer casts stand in for struct fields
     return b;
@@ -1150,47 +1241,51 @@ s8 *func_81111784(s8 *arg0, s8 *arg1)
   return a;
 }
 
-s8* func_8111187C(s8* arg0) {
+/**
+ * Allocates a note for a layer by its channel's note-stealing policy. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+s8* AudioPlayback_AllocNote(s8* arg0) {
     s8* voice;
     s32 flags = M2C_FIELD(arg0, u8**, 0x54)[2];
 
     if (flags & 1) {
         voice = M2C_FIELD(arg0, s8**, 0x48);
         if ((voice != NULL) && (arg0 == M2C_FIELD(voice, s8**, 0x40)) && (M2C_FIELD(voice, s32*, 0x48) == -1)) {
-            func_811116BC(voice, arg0);
-            func_811114BC(voice);
+            AudioPlayback_NoteReleaseAndTakeOwnership(voice, arg0);
+            AudioPlayback_AudioListRemove(voice);
             func_81112EAC(M2C_FIELD(voice, s8**, 0xC) + 0x20, (Rec81111130*)voice);
             return voice;
         }
     }
     if (flags & 2) {
-        if (((voice = (s8*)func_811116E8(M2C_FIELD(arg0, s8**, 0x54) + 0x84, (s32)arg0)) != NULL) ||
-            ((voice = (s8*)func_81111734(M2C_FIELD(arg0, s8**, 0x54) + 0x84, arg0)) != NULL) ||
-            ((voice = func_81111784(M2C_FIELD(arg0, s8**, 0x54) + 0x84, arg0)) != NULL)) {
+        if (((voice = (s8*)AudioPlayback_AllocNoteFromDisabled(M2C_FIELD(arg0, s8**, 0x54) + 0x84, (s32)arg0)) != NULL) ||
+            ((voice = (s8*)AudioPlayback_AllocNoteFromDecaying(M2C_FIELD(arg0, s8**, 0x54) + 0x84, arg0)) != NULL) ||
+            ((voice = AudioPlayback_AllocNoteFromActive(M2C_FIELD(arg0, s8**, 0x54) + 0x84, arg0)) != NULL)) {
             return voice;
         }
     } else if (flags & 4) {
-        if (((voice = (s8*)func_811116E8(M2C_FIELD(arg0, s8**, 0x54) + 0x84, (s32)arg0)) != NULL) ||
-            ((voice = (s8*)func_811116E8(M2C_FIELD(M2C_FIELD(arg0, s8**, 0x54), s8**, 0x4C) + 0x98, (s32)arg0)) != NULL) ||
-            ((voice = (s8*)func_81111734(M2C_FIELD(arg0, s8**, 0x54) + 0x84, arg0)) != NULL) ||
-            ((voice = (s8*)func_81111734(M2C_FIELD(M2C_FIELD(arg0, s8**, 0x54), s8**, 0x4C) + 0x98, arg0)) != NULL) ||
-            ((voice = func_81111784(M2C_FIELD(arg0, s8**, 0x54) + 0x84, arg0)) != NULL) ||
-            ((voice = func_81111784(M2C_FIELD(M2C_FIELD(arg0, s8**, 0x54), s8**, 0x4C) + 0x98, arg0)) != NULL)) {
+        if (((voice = (s8*)AudioPlayback_AllocNoteFromDisabled(M2C_FIELD(arg0, s8**, 0x54) + 0x84, (s32)arg0)) != NULL) ||
+            ((voice = (s8*)AudioPlayback_AllocNoteFromDisabled(M2C_FIELD(M2C_FIELD(arg0, s8**, 0x54), s8**, 0x4C) + 0x98, (s32)arg0)) != NULL) ||
+            ((voice = (s8*)AudioPlayback_AllocNoteFromDecaying(M2C_FIELD(arg0, s8**, 0x54) + 0x84, arg0)) != NULL) ||
+            ((voice = (s8*)AudioPlayback_AllocNoteFromDecaying(M2C_FIELD(M2C_FIELD(arg0, s8**, 0x54), s8**, 0x4C) + 0x98, arg0)) != NULL) ||
+            ((voice = AudioPlayback_AllocNoteFromActive(M2C_FIELD(arg0, s8**, 0x54) + 0x84, arg0)) != NULL) ||
+            ((voice = AudioPlayback_AllocNoteFromActive(M2C_FIELD(M2C_FIELD(arg0, s8**, 0x54), s8**, 0x4C) + 0x98, arg0)) != NULL)) {
             return voice;
         }
     } else if (flags & 8) {
-        if (((voice = (s8*)func_811116E8(&D_81184938, (s32)arg0)) != NULL) ||
-            ((voice = (s8*)func_81111734(&D_81184938, arg0)) != NULL) ||
-            ((voice = func_81111784(&D_81184938, arg0)) != NULL)) {
+        if (((voice = (s8*)AudioPlayback_AllocNoteFromDisabled(&D_81184938, (s32)arg0)) != NULL) ||
+            ((voice = (s8*)AudioPlayback_AllocNoteFromDecaying(&D_81184938, arg0)) != NULL) ||
+            ((voice = AudioPlayback_AllocNoteFromActive(&D_81184938, arg0)) != NULL)) {
             return voice;
         }
     } else {
-        if (((voice = (s8*)func_811116E8(M2C_FIELD(arg0, s8**, 0x54) + 0x84, (s32)arg0)) != NULL) ||
-            ((voice = (s8*)func_811116E8(&D_81184938, (s32)arg0)) != NULL) ||
-            ((voice = (s8*)func_81111734(M2C_FIELD(arg0, s8**, 0x54) + 0x84, arg0)) != NULL) ||
-            ((voice = (s8*)func_81111734(&D_81184938, arg0)) != NULL) ||
-            ((voice = func_81111784(M2C_FIELD(arg0, s8**, 0x54) + 0x84, arg0)) != NULL) ||
-            ((voice = func_81111784(&D_81184938, arg0)) != NULL)) {
+        if (((voice = (s8*)AudioPlayback_AllocNoteFromDisabled(M2C_FIELD(arg0, s8**, 0x54) + 0x84, (s32)arg0)) != NULL) ||
+            ((voice = (s8*)AudioPlayback_AllocNoteFromDisabled(&D_81184938, (s32)arg0)) != NULL) ||
+            ((voice = (s8*)AudioPlayback_AllocNoteFromDecaying(M2C_FIELD(arg0, s8**, 0x54) + 0x84, arg0)) != NULL) ||
+            ((voice = (s8*)AudioPlayback_AllocNoteFromDecaying(&D_81184938, arg0)) != NULL) ||
+            ((voice = AudioPlayback_AllocNoteFromActive(M2C_FIELD(arg0, s8**, 0x54) + 0x84, arg0)) != NULL) ||
+            ((voice = AudioPlayback_AllocNoteFromActive(&D_81184938, arg0)) != NULL)) {
             return voice;
         }
     }
@@ -1229,7 +1324,11 @@ typedef struct Rec81111AF4 {
 extern Copy18 D_811369A8;
 extern s8 D_811842C0;
 s32 func_81109868(s8 *, s32);
-void func_81111AF4(void) {
+/**
+ * Resets every note's state and sample buffers. Zelda 64 audio driver.
+ * @unverified Name and comment guessed from the code.
+ */
+void AudioPlayback_NoteInitAll(void) {
     s32 i;
     Rec81111AF4* rec;
 

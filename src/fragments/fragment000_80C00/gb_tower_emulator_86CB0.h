@@ -247,7 +247,7 @@ typedef struct Particle31FlagsA {
     u8 b40 : 1;
 } Particle31FlagsA;
 
-void func_81111090(Particle31FlagsA*);
+void AudioPlayback_SeqLayerNoteDecay(Particle31FlagsA*);
 void func_81112AF8(Particle31FlagsA* arg0);
 
 extern struct GbEmuListZ D_81184928;
@@ -259,7 +259,7 @@ typedef struct Particle31Flags {
     u8 b40 : 1;
 } Particle31Flags;
 
-void func_811111E0(s8*);
+void AudioPlayback_NotePoolClear(s8*);
 
 void func_81112B34();
 void Particle31_ResetAllSlots(DisplayObject* arg0);
@@ -340,7 +340,7 @@ typedef struct Entry811151C8 {
 } Entry811151C8;
 extern s16 D_811858CC;
 extern Entry811151C8 D_81184668[];
-void func_81110798(void);
+void AudioPlayback_ProcessNotes(void);
 void func_811151C8(s32 arg0);
 
 M2C_UNK func_81111DC8(s8 *);                      /* extern */

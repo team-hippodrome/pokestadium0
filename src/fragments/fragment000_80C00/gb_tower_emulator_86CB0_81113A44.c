@@ -175,7 +175,7 @@ void func_81113E54(u8* arg0, u8 arg1) {
 }
 
 u8 func_81113E84(u8* arg0, u8 arg1, u8** arg2, u8* arg3) {
-    u8* p = func_81110CA8(arg0[7], arg1);
+    u8* p = AudioPlayback_GetInstrumentInner(arg0[7], arg1);
 
     if (p == NULL) {
         *arg2 = NULL;
@@ -308,7 +308,7 @@ extern f32 D_81136378[];
 s32 func_8110A310(s32, s32, s32);
 void func_8110A924(s16*, s32, s32);
 s32 func_8110E500(s32, u8, s8*);
-void func_81111340(void*, s32);
+void AudioPlayback_NotePoolFill(void*, s32);
 void func_81112B84(void*);
 s32 func_811129E0(void*, s32);
 void func_8111303C(void*);
@@ -372,12 +372,12 @@ void func_81113FA8(Channel81113FA8* channel) {
                         channel->stopScript = 1;
                         goto exit_loop;
                     case 0xF1:
-                        func_811111E0((s8*)&channel->notePool);
+                        AudioPlayback_NotePoolClear((s8*)&channel->notePool);
                         command = (u8)parameters[0];
-                        func_81111340(&channel->notePool, command);
+                        AudioPlayback_NotePoolFill(&channel->notePool, command);
                         break;
                     case 0xF0:
-                        func_811111E0((s8*)&channel->notePool);
+                        AudioPlayback_NotePoolClear((s8*)&channel->notePool);
                         break;
                     case 0xC2:
                         offset = (u16)parameters[0];

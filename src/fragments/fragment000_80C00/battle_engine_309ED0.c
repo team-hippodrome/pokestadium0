@@ -388,20 +388,20 @@ s32 func_8110E500(s32 arg0, u8 arg1, s8* status) {
     return 0;
 }
 
-s32* func_81110CA8(s32, s32);
-s32* func_81110D6C(s32, s32);
+s32* AudioPlayback_GetInstrumentInner(s32, s32);
+s32* AudioPlayback_GetDrum(s32, s32);
 s32 func_8110E6B0(s32 arg0, s32 arg1) {
     s32* p;
     s32 v;
 
     if (arg1 < 0x80) {
-        p = func_81110CA8(arg0, arg1);
+        p = AudioPlayback_GetInstrumentInner(arg0, arg1);
         if (p == NULL) {
             return 0;
         }
         v = p[4];
     } else {
-        p = func_81110D6C(arg0, arg1 - 0x80);
+        p = AudioPlayback_GetDrum(arg0, arg1 - 0x80);
         if (p == NULL) {
             return 0;
         }
@@ -979,7 +979,7 @@ s32 func_8110F518(s32 arg0, Item8110F4D0** arg1) {
     u8* q;
 
     for (i = 0; i < n1; i++) {
-        p = func_81110D6C(arg0, i);
+        p = AudioPlayback_GetDrum(arg0, i);
         if (p != 0) {
             // FAKE: do-while(0) wrapper only changes register allocation; needed to match
             do {  // FAKE
@@ -988,7 +988,7 @@ s32 func_8110F518(s32 arg0, Item8110F4D0** arg1) {
         }
     }
     for (i = 0; i < n0; i++) {
-        q = (u8*)func_81110CA8(arg0, i);
+        q = (u8*)AudioPlayback_GetInstrumentInner(arg0, i);
         if (q != 0) {
             if (q[1] != 0) {
                 count = func_8110F4D0(*(Item8110F4D0**)(q + 8), count, arg1);
@@ -1054,7 +1054,7 @@ void AudioLoad_PreloadSamplesForFont(s32 font_id, s32 async, RelocInfo8110EF7C* 
     num_drums = D_811858B0[font_id].unk_00[1];
 
     for (i = 0; i < num_instruments; i++) {
-        instrument = (u8*)func_81110CA8(font_id, i);
+        instrument = (u8*)AudioPlayback_GetInstrumentInner(font_id, i);
         if (instrument != NULL) {
             if (instrument[1] != 0) {
                 func_8110F64C((PackedWordRec**)(instrument + 8));
@@ -1068,7 +1068,7 @@ void AudioLoad_PreloadSamplesForFont(s32 font_id, s32 async, RelocInfo8110EF7C* 
     }
 
     for (i = 0; i < num_drums; i++) {
-        drum = (u8*)func_81110D6C(font_id, i);
+        drum = (u8*)AudioPlayback_GetDrum(font_id, i);
         if (drum != NULL) {
             func_8110F64C((PackedWordRec**)(drum + 4));
         }

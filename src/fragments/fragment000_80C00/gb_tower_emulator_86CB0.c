@@ -8,7 +8,7 @@ s32 AudioLoad_IsSeqLoadComplete(s32);
 void AudioLoad_SetFontLoadStatus(s32, s32);
 void AudioLoad_SetSeqLoadStatus(s32, s32);
 extern M2C_UNK D_81184380;
-u8* func_81110CA8(s32, s32);
+u8* AudioPlayback_GetInstrumentInner(s32, s32);
 typedef struct TradeFlags81112E00 {
     u8 bit7 : 1;
     u8 bit6 : 1;
@@ -158,7 +158,7 @@ s32 func_811126B8(SeqPlayer811126B8* seq_player, SeqScriptState811126B8* state, 
 #include "fragments/fragment000_80C00/gb_tower_emulator_86CB0_types_2.h"
 extern Item8111539C D_81184850;
 
-void func_811110E0(void*);
+void AudioPlayback_InitNoteLists(void*);
 typedef struct Bits81112894 {
     u8 b80 : 1;
     u8 b40 : 1;
@@ -217,7 +217,7 @@ void func_81112894(void* obj) {
             M2C_FIELD(arg0, s8*, 0xC4 + i) = -1;
         }
         ((Bits81112894*)arg0)->b01 = 0;
-        func_811110E0(arg0 + 0x84);
+        AudioPlayback_InitNoteLists(arg0 + 0x84);
     }
 }
 
@@ -264,7 +264,7 @@ typedef struct Owner811129E0 {
     Pair811129E0 unk7C;
 } Owner811129E0;
 s32 func_81112EEC(s8*);
-void func_81111090();
+void AudioPlayback_SeqLayerNoteDecay();
 s32 func_811129E0(Owner811129E0* arg0, s32 arg1) {
     Part811129E0* p;
     s32 pad; // FAKE: stack padding
@@ -275,7 +275,7 @@ s32 func_811129E0(Owner811129E0* arg0, s32 arg1) {
             return -1;
         }
     } else {
-        func_81111090(arg0->slots[arg1]);
+        AudioPlayback_SeqLayerNoteDecay(arg0->slots[arg1]);
     }
     p = arg0->slots[arg1];
     p->owner = arg0;
@@ -308,7 +308,7 @@ s32 func_811129E0(Owner811129E0* arg0, s32 arg1) {
 
 void func_81112AF8(Particle31FlagsA* arg0) {
     if (arg0 != NULL) {
-        func_81111090(arg0);
+        AudioPlayback_SeqLayerNoteDecay(arg0);
         arg0->b80 = 0;
         arg0->b40 = 1;
     }
@@ -330,7 +330,7 @@ void Particle31_ResetAllSlots(DisplayObject* arg0) {
     for (i = 0; i < 4; i++) {
         func_81112B34(arg0, i);
     }
-    func_811111E0((s8*)arg0 + 0x84);
+    AudioPlayback_NotePoolClear((s8*)arg0 + 0x84);
     ((Particle31Flags*)arg0)->b80 = 0;
     ((Particle31Flags*)arg0)->b40 = 1;
 }
@@ -382,7 +382,7 @@ void func_81112D68(Particle2D68** arg0, u8 arg1, s32 arg2) {
 
 void func_81112E00(u8* arg0) {
     func_81112CE8(arg0, 0xFFFF);
-    func_811111E0((s8*)arg0 + 0x98);
+    AudioPlayback_NotePoolClear((s8*)arg0 + 0x98);
     ((TradeFlags81112E00*)arg0)->bit6 = 1;
     ((TradeFlags81112E00*)arg0)->bit7 = 0;
     if (AudioLoad_IsSeqLoadComplete(arg0[4]) != 0) {
@@ -498,7 +498,7 @@ void func_8111303C(Particle303C* arg0) {
         if (arg0->unk40 >= 2) {
             arg0->unk40--;
             if (!arg0->b20 && arg0->unk42 >= arg0->unk40) {
-                func_81111090((Particle31FlagsA*)arg0);
+                AudioPlayback_SeqLayerNoteDecay((Particle31FlagsA*)arg0);
                 arg0->b20 = 1;
             }
         } else {
@@ -513,7 +513,7 @@ void func_8111303C(Particle303C* arg0) {
                     func_811131CC(arg0, ret);
                 }
                 if (arg0->b20 == 1 && (arg0->unk48 != 0 || arg0->b10)) {
-                    func_81111090((Particle31FlagsA*)arg0);
+                    AudioPlayback_SeqLayerNoteDecay((Particle31FlagsA*)arg0);
                 }
             }
         }
@@ -522,9 +522,9 @@ void func_8111303C(Particle303C* arg0) {
 
 void func_81113140(Particle3140* arg0) {
     if (!arg0->b10) {
-        func_81111090((Particle31FlagsA*)arg0);
+        AudioPlayback_SeqLayerNoteDecay((Particle31FlagsA*)arg0);
     } else if (arg0->unk_48 != NULL && arg0 == arg0->unk_48->unk_48) {
-        func_81111090((Particle31FlagsA*)arg0);
+        AudioPlayback_SeqLayerNoteDecay((Particle31FlagsA*)arg0);
     }
     switch (arg0->unk_08 & ~0x80) {
         case 1:
@@ -535,7 +535,7 @@ void func_81113140(Particle3140* arg0) {
     arg0->b04 = 1;
 }
 
-s8* func_8111187C(s8*);
+s8* AudioPlayback_AllocNote(s8*);
 void func_81112278(void*);
 
 typedef struct Sample811131CC {
@@ -586,9 +586,9 @@ s32 func_811131CC(Layer811131CC* layer, u32 same_sound) {
     if (layer->continuousNotes != 1 || layer->note == NULL || !layer->status || same_sound != 1 ||
         layer != layer->note->parentLayer) {
         if (same_sound == 0) {
-            func_81111090((Particle31FlagsA*)layer);
+            AudioPlayback_SeqLayerNoteDecay((Particle31FlagsA*)layer);
         }
-        layer->note = (Note811131CC*)func_8111187C((s8*)layer);
+        layer->note = (Note811131CC*)AudioPlayback_AllocNote((s8*)layer);
     }
     if (layer->note != NULL && layer->note->parentLayer == layer) {
         note = layer->note;
@@ -707,7 +707,7 @@ s32 func_811132E4(Layer811132E4* layer) {
                     layer->continuousNotes = 0;
                 }
                 layer->bit1 = 0;
-                func_81111090((Particle31FlagsA*)layer);
+                AudioPlayback_SeqLayerNoteDecay((Particle31FlagsA*)layer);
                 break;
             case 0xC3:
                 cmd_arg16 = func_81112FFC(&state->pc);
@@ -867,8 +867,8 @@ typedef struct Reverb81113650 {
 } Reverb81113650; // size = 0x158
 
 extern Reverb81113650 D_81184110[];
-u8* func_81110C6C(u8* arg0, s32 arg1);
-u8* func_81110D6C(s32 arg0, s32 arg1);
+u8* AudioPlayback_GetInstrumentTunedSample(u8* arg0, s32 arg1);
+u8* AudioPlayback_GetDrum(s32 arg0, s32 arg1);
 
 s32 func_81113650(Layer81113650* layer, s32 cmd_semitone) {
     s32 same_sound = 1;
@@ -901,7 +901,7 @@ s32 func_81113650(Layer81113650* layer, s32 cmd_semitone) {
     switch (instOrWave) {
         case 0:
             semitone += channel->transposition + layer->transposition;
-            drum = (Drum81113650*)func_81110D6C(channel->bankId, semitone);
+            drum = (Drum81113650*)AudioPlayback_GetDrum(channel->bankId, semitone);
             if (drum == NULL) {
                 layer->stopSomething = 1;
                 layer->duration = layer->delay;
@@ -931,7 +931,7 @@ s32 func_81113650(Layer81113650* layer, s32 cmd_semitone) {
             if (layer->portamento.mode != 0) {
                 vel = (semitone > layer->portamentoTargetNote) ? semitone : layer->portamentoTargetNote;
                 if (instrument != NULL) {
-                    sound = (Sound81113650*)func_81110C6C(instrument, vel);
+                    sound = (Sound81113650*)AudioPlayback_GetInstrumentTunedSample(instrument, vel);
                     same_sound = (layer->sound == sound);
                     layer->sound = sound;
                     tuning = sound->tuning;
@@ -977,7 +977,7 @@ s32 func_81113650(Layer81113650* layer, s32 cmd_semitone) {
                 break;
             }
             if (instrument != NULL) {
-                sound = (Sound81113650*)func_81110C6C(instrument, semitone);
+                sound = (Sound81113650*)AudioPlayback_GetInstrumentTunedSample(instrument, semitone);
                 same_sound = (sound == layer->sound);
                 layer->sound = sound;
                 layer->freqScale = D_81136778[(s32)semitone] * sound->tuning; // FAKE: no-op cast
