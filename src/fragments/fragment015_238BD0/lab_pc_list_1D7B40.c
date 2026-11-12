@@ -291,7 +291,8 @@ s32 func_80030230(void*);
 
 /**
  * Navigate the selected menu mode, then report cancel or confirm input.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-12) in せいとん: handled the てもち list with the cursor on ハナ after the source
+ * and destination were chosen.
  */
 s32 PcSort_UpdateMonList(void* menu, u32 flags) {
     s32 result = 0;
@@ -472,7 +473,8 @@ extern Gfx D_80060398[];
 
 /**
  * Draws Attack, Defense, Speed, Special and HP:%3d (？？？？？ when unknown).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in せいとん: drew ハナ's stats under the lists: こうげき 9, ぼうぎょ 9, すばやさ 9,
+ * とくしゅ 11 and HP: 19.
  */
 void PcSort_DrawMonStats(s32 x, s32 y, u8* mon) {
     s32 count;
@@ -695,7 +697,8 @@ void PcSort_ReleaseSelectedMon(s8* arg0) {
 
 /**
  * Shows the selected box's Pokemon in the destination list.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in せいとん: after GBのボックス2 was chosen under 「どこへいどうする？」, it ran and that
+ * box appeared as the destination list (00/30).
  */
 void PcSort_OpenBox(s8 *arg0) {
     s32 temp_v0;

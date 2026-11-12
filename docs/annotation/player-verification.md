@@ -694,3 +694,13 @@ Opened on the party list (フシギダネ, ヒトカゲ and ゼニガメ):
   unloaded and other code runs at the same addresses. Hits after the fade-out
   (the filter-flag helpers, `LabPCList_TeachTmHmMove` and others) were false,
   and those names keep their tags.
+
+## せいとん, ポケモンを いどうする
+
+Entering せいとん ran `LabTerminal_Init` and set up the three-entry menu
+(`LabTerminal_InitMainMenu`). ポケモンを いどうする asks 「どこからいどうする？」,
+then 「どこへいどうする？」 (てもち is greyed out as a destination). Choosing
+GBのボックス2 opened it on the right (`PcSort_OpenBox`). With ハナ (フシギダネ)
+selected, the panel showed HP: 19, こうげき 9, ぼうぎょ 9, すばやさ 9, とくしゅ 11
+(`PcSort_DrawMonStats`) and the moves たいあたり and なきごえ
+(`PcBox_DrawMoveName`).
