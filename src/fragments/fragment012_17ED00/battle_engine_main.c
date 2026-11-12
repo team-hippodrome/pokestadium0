@@ -115,10 +115,14 @@ s32 Battle_StageMaterialTintCallback(s32 event, DisplayObject* object) {
 extern u8 D_8007838C[4];
 extern u8 D_82198D28[];
 
-void func_82100118(u8 arg0, u8 arg1, u8 arg2) {
-    D_82198D28[0] = arg0;
-    D_82198D28[1] = arg1;
-    D_82198D28[2] = arg2;
+/**
+ * Stores the RGB tint applied to the battle stage.
+ * @unverified Name from the header prototype; comment guessed from the code.
+ */
+void Battle_SetStageTintColor(u8 r, u8 g, u8 b) {
+    D_82198D28[0] = r;
+    D_82198D28[1] = g;
+    D_82198D28[2] = b;
 }
 
 // Called at the start of battles
@@ -631,7 +635,7 @@ s32 func_82101324(s32* arg0) { // FAKE: s32 return (value unused) fixes caller r
     MemoryBlock* block;
     unk_D_86002F30* model;
 
-    func_82100118(0xFF, 0xFF, 0xFF);
+    Battle_SetStageTintColor(0xFF, 0xFF, 0xFF);
     Battle_SetStageScale(1.0f);
     if (D_82198D10->mode == 4) {
         func_8001A194(4, 0);
