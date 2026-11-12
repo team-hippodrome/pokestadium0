@@ -857,7 +857,10 @@ extern u8 D_800B3CC8;
 s32 func_80037B7C(s32);
 s32 func_800383DC(s32, s32, s32, s32, s32, s32, s32);
 
-void func_80043DD0(void) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Audio_UpdateBattleAudioFrame(void) {
     s32 ret;
 
     if ((D_80077538 != 0) && (D_8007753C == 0) && (func_80037B7C(D_80077590) == 0) && (D_80077588 != D_8007758C) &&
@@ -910,7 +913,10 @@ extern u8* D_800B419C;
 s32 func_80037F68(u8*, u8*);
 void func_80037C04(s32, u32);
 
-s32 func_80044158(u8* arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+s32 Audio_LoadWaveTablesAndMusic(u8* arg0) {
     UNUSED s32 pad[2]; // FAKE: stack padding
     u8* sp1C;
 

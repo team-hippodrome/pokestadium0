@@ -173,9 +173,9 @@ typedef struct unk_D_81287B08_jp {
 } unk_D_81287B08_jp;
 extern unk_D_81287B08_jp D_81287B08_jp[];
 extern OSMesgQueue* D_812896A0_jp;
-void func_8121036C_jp(s32 cmd, s32 arg1);
-void func_81210390_jp(s32 cmd, s8 arg1);
-void func_812103F0_jp(void);
+void func_8110FD6C(s32 cmd, s32 arg1);
+void func_8110FD90(s32 cmd, s8 arg1);
+void func_8110FDF0(void);
 extern s32 D_81138A70;
 extern u8 D_81138A80[0x10];
 extern u8 sGbApuRegs[0x40];

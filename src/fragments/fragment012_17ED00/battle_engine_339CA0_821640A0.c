@@ -35,7 +35,10 @@ void BattleAnim_RunAcidArmorUseEffect2(Particle* arg0) {
 }
 
 
-void func_82164198(Particle* arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void BattleAnim_InitSharedVerticalFadeParticle(Particle* arg0) {
     Vec3s sp30;  /* scratch rotation vector used by the later cases */
     /* values the effect descriptor stored on the particle */
     s16 sp2E = Particle_FieldAC_GetS16_0C038(arg0);
@@ -199,7 +202,7 @@ void func_82164AD0(s8 *arg0) {
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_82164198(arg0);
+        BattleAnim_InitSharedVerticalFadeParticle(arg0);
         return;
     case 2:
         if (func_821406B4(arg0) != 0) {
@@ -271,7 +274,7 @@ void BattleAnim_RunSplashOfWater(s8 *arg0) {
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
     switch (temp_v0) {                              /* switch 1; irregular */
     case 1:                                         /* switch 1 */
-        func_82164198(arg0);
+        BattleAnim_InitSharedVerticalFadeParticle(arg0);
         func_82164B9C(arg0);
         break;
     case 2:                                         /* switch 1 */
@@ -319,7 +322,7 @@ void BattleAnim_RunDigHitDust(s8 *arg0) {
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_82164198(arg0);
+        BattleAnim_InitSharedVerticalFadeParticle(arg0);
         break;
     case 2:
         if (func_821406B4(arg0) != 0) {
@@ -351,7 +354,7 @@ void BattleAnim_RunDigHitRocks(s8 *arg0) {
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_82164198(arg0);
+        BattleAnim_InitSharedVerticalFadeParticle(arg0);
         break;
     case 2:
         if (func_821406B4(arg0) != 0) {
@@ -500,7 +503,7 @@ void func_8216547C(s8 *arg0) {
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_82164198(arg0);
+        BattleAnim_InitSharedVerticalFadeParticle(arg0);
         break;
     case 2:
         func_8213CCEC(arg0, 1, 7, 1, 2, 0);
@@ -601,7 +604,7 @@ void BattleAnim_RunQiChargeChild(Particle* arg0) {
     }
 
     if (Particle_IsRenderingEnabled(arg0) != 0) {
-        Particle_Field74_ApproachUsingField78_0AE00(arg0, 0.0f);
+        Particle_StepMagnitude_ApproachUsingMagnitudeStep(arg0, 0.0f);
         Particle_Field94_AddYFromField9A_0A4C8(arg0);
         func_8213E4B0(arg0);
         func_8213E334(arg0, 0.0f);
@@ -621,7 +624,10 @@ void BattleAnim_SetupQiCharge(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void func_821658DC(Particle* arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void BattleAnim_CallbackStartEffects29And60And104And110DefaultDescriptorBurstEmitter(Particle* arg0) {
     switch (arg0->unk_B2) {
         case 1:
             func_82165854(arg0);

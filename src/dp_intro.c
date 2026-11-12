@@ -218,7 +218,10 @@ void func_800012AC(s8* arg0);
 void func_80001328(void);
 void func_80001558(void);
 
-void func_800016C4(UNUSED void* arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void DisplayWorker_ThreadMain(UNUSED void* arg0) {
     OSMesg msg;
 
     func_800594D0(0x01000F00);
@@ -244,10 +247,10 @@ void func_800016C4(UNUSED void* arg0) {
     }
 }
 
-void func_800016C4(void*);
+void DisplayWorker_ThreadMain(void*);
 
 void DisplayWorker_Initialize(void) {
-    osCreateThread((OSThread*)&D_800870D0, 5, func_800016C4, NULL, &M2C_FIELD(&D_800870D0, s32*, 0x9B0), 0x28);
+    osCreateThread((OSThread*)&D_800870D0, 5, DisplayWorker_ThreadMain, NULL, &M2C_FIELD(&D_800870D0, s32*, 0x9B0), 0x28);
     osStartThread((OSThread*)&D_800870D0);
     osCreateMesgQueue(&M2C_FIELD(&D_800870D0, OSMesgQueue*, 0x9BC), &M2C_FIELD(&D_800870D0, OSMesg*, 0x9B4), 1);
     osCreateMesgQueue(&M2C_FIELD(&D_800870D0, OSMesgQueue*, 0x9D4), &M2C_FIELD(&D_800870D0, OSMesg*, 0x9B8), 1);
@@ -315,13 +318,19 @@ u32 Audio_GetSpecialSequenceState(void) {
 M2C_UNK func_80001234(s8, s8);                      /* extern */
 extern M2C_UNK D_800870D0;
 
-void func_80001A78(void) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Display_ApplyPendingVideoMode(void) {
     func_80001234(M2C_FIELD(&D_800870D0, s8 *, 0xAA5), M2C_FIELD(&D_800870D0, s8 *, 0xAA6));
 }
 
 extern M2C_UNK D_800870D0;
 
-s32 func_80001AA4(void) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+s32 Display_IsFrameReady(void) {
     s32 var_v1;
 
     var_v1 = 1;

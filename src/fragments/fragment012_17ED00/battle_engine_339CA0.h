@@ -123,7 +123,7 @@ M2C_UNK func_821404DC(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 
 void BattleAnim_RunSlashingMoveFullScreenFlash(s8 *arg0);
 
-void func_8213D3FC(Particle* arg0, f32 arg1, f32 arg2, f32 arg3);
+void Particle_SetPosition(Particle* arg0, f32 arg1, f32 arg2, f32 arg3);
 
 void func_821601C0(Particle* arg0);
 
@@ -253,7 +253,7 @@ M2C_UNK func_82160DC4(s8 *);                      /* extern */
 void BattleAnim_RunSandAttackHitEffect(s8 *arg0);
 
 /*
- * func_82161074
+ * BattleAnim_CallbackSharedDescriptors3EAnd3FAnimatedRiseFade
  *
  * Per-frame callback of the "animated rise and fade" particle used by
  * descriptors 0x3E and 0x3F.  It switches on the particle's lifecycle state
@@ -276,7 +276,7 @@ void BattleAnim_RunSandAttackHitEffect(s8 *arg0);
  * with 1.0f twice the compiler reuses one register and emits three extra
  * instructions.
  */
-void func_82161074(Particle* arg0);
+void BattleAnim_CallbackSharedDescriptors3EAnd3FAnimatedRiseFade(Particle* arg0);
 
 M2C_UNK func_8213C930(s8 *);                      /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
@@ -408,9 +408,9 @@ extern const f32 D_FLT_82197734;
 
 void BattleAnim_RunAcidArmorUseEffect2(Particle* arg0);
 
-void func_82164198(Particle* arg0);
+void BattleAnim_InitSharedVerticalFadeParticle(Particle* arg0);
 /*
- * func_82164198  (src/fragments/fragment012_17ED00/battle_engine_339CA0.c)  -- 589 words
+ * BattleAnim_InitSharedVerticalFadeParticle  (src/fragments/fragment012_17ED00/battle_engine_339CA0.c)  -- 589 words
  *
  * Init callback for a battle-animation particle of the shared "vertical fade"
  * effect: it reads three values stored on the particle, then, per variant
@@ -521,14 +521,14 @@ void func_8213E11C(Particle* arg0, f32 arg1);
 void BattleAnim_SetupQiCharge(Particle* arg0);
 
 void func_82165854(Particle* arg0);
-void func_821658DC(Particle* arg0);
+void BattleAnim_CallbackStartEffects29And60And104And110DefaultDescriptorBurstEmitter(Particle* arg0);
 
 extern const f32 D_FLT_82197854;
 void BattleAnim_CallbackDescriptor26BurstChild_InitParticle(Particle* arg0);
 
 extern Vec3f D_8219A880;
 
-void func_821659FC(Particle* arg0);
+void BattleAnim_CallbackDescriptor26BurstChild(Particle* arg0);
 
 s16 func_8213C47C();                                /* extern */
 M2C_UNK func_8213E14C(s32, M2C_UNK);                /* extern */

@@ -184,7 +184,7 @@ s32 func_80021894(s32);
 s32 func_80022C70(s32);
 s32 func_80022D84(s32, void*);
 s32 func_800246A8(s32, s32);
-s32 func_800246C8(s32, s32);
+s32 Deck_GetSaveEntryTrainerId(s32, s32);
 s32 func_8002479C(s32, s32, void*);
 
 void func_820003D4(RecordList* arg0) {
@@ -216,7 +216,7 @@ void func_820003D4(RecordList* arg0) {
         rec->unk_03 = i;
         func_82000140(rec->slots, func_82000058(rec->unk_01, rec->unk_02, rec->unk_03, (Entry82000058*)rec->slots));
         rec->slotCount = 6;
-        rec->unk_04 = func_800246C8(rec->unk_01, rec->unk_03);
+        rec->unk_04 = Deck_GetSaveEntryTrainerId(rec->unk_01, rec->unk_03);
         func_8002479C(rec->unk_01, rec->unk_03, rec->unk08);
         rec++;
     }
@@ -810,7 +810,7 @@ void func_8001A384(s32, s32);
 void func_80027F20(s32);
 void func_8002A0AC(s32, s32, s32, s32, Color82001CCC);
 void func_8001BCB4(s32, s32, s32, s32, void*, s32, s32);
-void func_8002B788(s32, s32, u8);
+void Trade_DrawDigitStrip(s32, s32, u8);
 void func_8001833C(s32, s32, s32*, u16);
 u8* func_80018DEC(s32, s32);
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
@@ -835,7 +835,7 @@ void func_82001810(s32 x, s32 y, s32* entry, s32 frame, s32 flags, s32 arg5) {
         gSPDisplayList(gDisplayListHead++, D_80073450);
         gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
         func_8001BCB4(x + 0x2C, y + 0x19, 8, 0xA, D_04011A60, 8, 0);
-        func_8002B788(x + 0x38, y + 0x17, ((u8*)entry)[0x24]);
+        Trade_DrawDigitStrip(x + 0x38, y + 0x17, ((u8*)entry)[0x24]);
         key = cache->start + frame;
         idx = cache->base + key % cache->count;
         if (key != cache->slots[idx]) {

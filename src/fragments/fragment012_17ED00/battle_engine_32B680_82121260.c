@@ -28,13 +28,13 @@ void func_8212239C(ActivePokemon*, CameraNode*);
 void func_8212054C(CameraNode*);
 extern const f64 D_DBL_821960A0;
 extern f32 D_FLT_82189358[][4];
-void func_821206F4(CameraNode*);
-void func_821206F4(CameraNode*);
+void BattleScene_SelectNextIntroCameraShot(CameraNode*);
+void BattleScene_SelectNextIntroCameraShot(CameraNode*);
 void func_82122FD8(CameraNode*, ActivePokemon*);
 s32 func_821217DC(M2C_UNK);
 extern f32 D_FLT_82189358[][4];
-void func_821206F4(CameraNode*);
-void func_821206F4(CameraNode*);
+void BattleScene_SelectNextIntroCameraShot(CameraNode*);
+void BattleScene_SelectNextIntroCameraShot(CameraNode*);
 s32 func_82135734(CameraNode*, ActivePokemon*);
 s32 func_821217DC(M2C_UNK);
 void func_82122628(s32, Vec3f, s32, s32, f32, f32);
@@ -45,7 +45,7 @@ s32 func_82135734(CameraNode*, ActivePokemon*);
 void func_8212188C(void);
 extern s8 *D_8219A5A0;
 extern u8* D_800603C0;
-void func_800387BC(s32 arg0);
+void Audio_FadeCategoriesAndStreams(s32 arg0);
 
 void func_8210E924(void);
 void func_8210C6F8(void);
@@ -102,10 +102,10 @@ void BattleScene_UpdateBRollCameraSequence(CameraNode* arg0) {
             func_82120FB0(arg0);
             break;
         case 23:
-            func_821210E4(arg0);
+            BattleScene_IntroCameraPresetHoldStep(arg0);
             break;
         case 50:
-            func_821206F4(arg0);
+            BattleScene_SelectNextIntroCameraShot(arg0);
             break;
     }
 }

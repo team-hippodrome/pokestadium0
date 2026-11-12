@@ -154,7 +154,10 @@ s16 func_8213C4A4(s8 *arg0) {
     return M2C_FIELD(arg0, s16 *, 0xA4);
 }
 
-void func_8213C4AC(s32 arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void BattleAnim_SetEffectStateFlag(s32 arg0) {
     (*(s32 *)&D_8219A82C) = arg0;
 }
 

@@ -388,7 +388,10 @@ extern u8* D_821CF2A8;
 extern u8* D_821CF2AC;
 extern u8 D_8006B18F[];
 
-void func_82188B8C(s32 arg0, s32 arg1, s32 arg2) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void BattleAI_RecordUsedMove(s32 arg0, s32 arg1, s32 arg2) {
     s32 i;
     s32 pp;
     s32 bonus;

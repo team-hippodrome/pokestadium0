@@ -80,7 +80,7 @@ void* mem_pool_alloc(MemoryPool* node, s32 size) {
     return addr;
 }
 
-void func_800029D0(MemoryPool* pool, void* addr) {
+void mem_pool_free(MemoryPool* pool, void* addr) {
     struct MemoryBlock* block;
     struct MemoryBlock* freeList;
 

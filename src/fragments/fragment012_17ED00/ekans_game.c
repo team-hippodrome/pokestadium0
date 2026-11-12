@@ -140,7 +140,10 @@ void func_8216E0C0(void) {
 
 void BattleAnim_CalcVectorAtToDm(f32* arg0, f32* arg1, f32* arg2, f32* arg3, f32* arg4, f32* arg5);
 void func_82175440(f32, f32, f32, f32, f32, f32, s16, u8, u8, u8, u8, f32, f32, f32, s16);
-void func_8216E0C8(void) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void BattleAnim_StartEffect19Radial20_EmitVariantD(void) {
     f32 sp64;
     f32 sp60;
     f32 sp5C;
@@ -214,7 +217,7 @@ void BattleAnim_EndEffect9Radial20_Init(void) {
 }
 
 s32 BattleAnim_EndEffect9Radial20_Update(void) {
-    return Radial20_Update();
+    return LassoHit_Update();
 }
 
 void BattleAnim_EndEffect9Radial20_Draw(void) {
@@ -223,7 +226,10 @@ void BattleAnim_EndEffect9Radial20_Draw(void) {
     gDisplayListHead = Strip400_Draw(gDisplayListHead);
 }
 
-void func_8216E428(void) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void BattleAnim_StartEffect7TexturedRibbonSheet_Emit(void) {
     Vec3f pos;
     f32 x;
     f32 y;
@@ -348,7 +354,7 @@ void func_8216E930(void) {
  * @unverified Name from Stadium 1.
  */
 s32 BattleAnim_RunStringShotHitRadial(void) {
-    return Radial20_Update();
+    return LassoHit_Update();
 }
 
 /**
@@ -378,7 +384,7 @@ void BattleAnim_SetupStringShotHitRadial(void) {
  * @unverified Name from Stadium 1.
  */
 s32 BattleAnim_RunDisableHitRadial(void) {
-    return Radial20_Update();
+    return LassoHit_Update();
 }
 
 /**
@@ -390,7 +396,10 @@ void BattleAnim_DrawDisableHitRadial(void) {
     gDisplayListHead = Strip400_Draw(gDisplayListHead);
 }
 
-void func_8216EB10(void) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void BattleAnim_StartEffect98Radial20_EmitVariantD(void) {
     f32 sp64;
     f32 sp60;
     f32 sp5C;

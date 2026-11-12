@@ -279,7 +279,7 @@ void BattleAnim_RunSlashingMoveFullScreenFlash(s8 *arg0) {
 
 void func_821601C0(Particle* arg0) {
     Particle_Field1C_SetScaled_0B938(arg0, 1.0f);
-    func_8213D3FC(arg0, 320.0f, 0.0f, 0.0f);
+    Particle_SetPosition(arg0, 320.0f, 0.0f, 0.0f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
     Particle_Field94_AddZ_0A5B0(arg0, -0x2800);
     Particle_AdvanceLifecycle(arg0);
@@ -629,7 +629,10 @@ void BattleAnim_CallbackSharedDescriptors3EAnd3FAnimatedRiseFade_InitParticle(Pa
     Particle_AdvanceLifecycle(arg0);
 }
 
-void func_82161074(Particle* arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void BattleAnim_CallbackSharedDescriptors3EAnd3FAnimatedRiseFade(Particle* arg0) {
     switch (arg0->unk_B2) {
         case 1:
             BattleAnim_CallbackSharedDescriptors3EAnd3FAnimatedRiseFade_InitParticle(arg0);
@@ -799,7 +802,7 @@ void BattleAnim_SetupUnusedGlitterVariant(Particle* arg0) {
     sp28.x = MathUtil_Random16();
     sp28.y = MathUtil_Random16();
     sp28.z = 0;
-    Particle_Field94_SetVecFromVec3s_0A24C(arg0, sp28);
+    Particle_Field9A_SetVecFromVec3s_0A37C(arg0, sp28);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0x15);
     Particle_SetPrimAlpha(arg0, 0xFF);
     Particle_FieldA6_SetS16_0BCA8(arg0, ParticleMath_RandomRange(5) + 8);
@@ -1016,7 +1019,7 @@ void BattleAnim_CallbackEndEffect52Descriptor42BurstChild_InitParticle(Particle*
     sp28.x = ParticleMath_RandomRange(0x10000);
     sp28.y = ParticleMath_RandomRange(0x10000);
     sp28.z = 0;
-    Particle_Field94_SetVecFromVec3s_0A24C(arg0, sp28);
+    Particle_Field9A_SetVecFromVec3s_0A37C(arg0, sp28);
     Particle_Field9A_SetZ_0A3EC(arg0, ParticleMath_RandomSignedOffsetBySign(0x400, 0x400));
     Particle_Field74_SetScaled_0AD8C(arg0, 8.0f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0x17);
@@ -1056,7 +1059,7 @@ void BattleAnim_CallbackEndEffect52Descriptor42BurstChild(Particle* arg0) {
     }
 
     if (Particle_IsRenderingEnabled(arg0) != 0) {
-        Particle_Field94_AddZFromField9A_0A4DC(arg0);
+        Particle_Field94_AddXFromField9A_0A4B4(arg0);
         Particle_Field7C_SetVecFromField74AnglesXY_0B2B4(arg0);
         func_8213E3F8(arg0);
     }
@@ -1095,7 +1098,7 @@ void BattleAnim_SetupSharedScalePulseFallSetup(Particle* arg0) {
     sp24.y = ParticleMath_RandomRange(0x10000);
     sp24.z = 0;
 
-    Particle_Field94_SetVecFromVec3s_0A24C(arg0, sp24);
+    Particle_Field9A_SetVecFromVec3s_0A37C(arg0, sp24);
     Particle_Field74_SetScaled_0AD8C(arg0, 0.0f);
     Particle_Field78_SetScaled_0ADA4(arg0, 0.0f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, sp2A);
@@ -1724,7 +1727,7 @@ void BattleAnim_SetupFirePunchUseEffect2(Particle* arg0) {
     sp24.x = MathUtil_Random16();
     sp24.y = MathUtil_Random16();
     sp24.z = 0;
-    Particle_Field94_SetVecFromVec3s_0A24C(arg0, sp24);
+    Particle_Field9A_SetVecFromVec3s_0A37C(arg0, sp24);
 
     switch (sp2C) {
         case 0:
@@ -1792,7 +1795,7 @@ void BattleAnim_SetupThunderPunchUseEffect(Particle* arg0) {
     sp24.x = MathUtil_Random16();
     sp24.y = MathUtil_Random16();
     sp24.z = 0;
-    Particle_Field94_SetVecFromVec3s_0A24C(arg0, sp24);
+    Particle_Field9A_SetVecFromVec3s_0A37C(arg0, sp24);
 
     switch (sp2C) {
         case 0:
@@ -1893,7 +1896,7 @@ void BattleAnim_CallbackStartEffects28And53And65And76Descriptor47AnimatedScaleMo
     sp28.x = MathUtil_Random16();
     sp28.y = MathUtil_Random16();
     sp28.z = 0;
-    Particle_Field94_SetVecFromVec3s_0A24C(arg0, sp28);
+    Particle_Field9A_SetVecFromVec3s_0A37C(arg0, sp28);
 
     switch (sp24) {
         case 0:

@@ -638,7 +638,10 @@ void func_82200F08(void) {
     }
 }
 
-void func_8001EBDC(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4); //@src/ui_graphics.c
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void BattleHud_DrawHpBarTexture(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4); //@src/ui_graphics.c
 
 /**
  * Draws the HP bar of every Pokemon both teams brought, each into its own slot
@@ -675,7 +678,7 @@ void func_82201084(s32 arg0) {
                     scaled = (mon->unk_26 * arg0) / 100;
                     hp = (mon->hp >= scaled) ? mon->hp : scaled;
                     GfxImage_SetRenderTarget(&gDisplayListHead, D_82203210[i * 6 + j * 3 + k]);
-                    func_8001EBDC(0, 0, 104, hp, mon->unk_26);
+                    BattleHud_DrawHpBarTexture(0, 0, 104, hp, mon->unk_26);
                 }
             }
         } else {
@@ -688,7 +691,7 @@ void func_82201084(s32 arg0) {
                 scaled = (mon->unk_26 * arg0) / 100;
                 hp = (mon->hp >= scaled) ? mon->hp : scaled;
                 GfxImage_SetRenderTarget(&gDisplayListHead, D_82203210[i * 6 + k]);
-                func_8001EBDC(0, 0, 104, hp, mon->unk_26);
+                BattleHud_DrawHpBarTexture(0, 0, 104, hp, mon->unk_26);
             }
         }
     }

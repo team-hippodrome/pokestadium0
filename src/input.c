@@ -43,15 +43,15 @@ void Gfx_DrawTextureRgba16(s32 x1, s32 y1, s32 draw_width, s32 height, u8* textu
     func_8001B5F8(x1, y1, draw_width, height, texture_spread_x_mode);
 }
 
-void func_8000A610(s32, s32, s32, s32, s32, s32, s32);
+void Gfx_DrawTexturedRect(s32, s32, s32, s32, s32, s32, s32);
 void func_8001BA54(s32 x1, s32 y1, s32 draw_width, s32 height, u8* texture, s32 load_width, s32 mode) {
     gDPLoadTextureBlock(gDisplayListHead++, texture, G_IM_FMT_RGBA, G_IM_SIZ_16b, load_width, height, 0,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                         G_TX_NOLOD);
     if (mode == G_CYC_COPY) {
-        func_8000A610(x1, y1, x1 + draw_width - 1, y1 + height - 1, 0x1000, 0x400, mode);
+        Gfx_DrawTexturedRect(x1, y1, x1 + draw_width - 1, y1 + height - 1, 0x1000, 0x400, mode);
     } else {
-        func_8000A610(x1, y1, x1 + draw_width - 1, y1 + height - 1, 0x400, 0x400, mode);
+        Gfx_DrawTexturedRect(x1, y1, x1 + draw_width - 1, y1 + height - 1, 0x400, 0x400, mode);
     }
 }
 

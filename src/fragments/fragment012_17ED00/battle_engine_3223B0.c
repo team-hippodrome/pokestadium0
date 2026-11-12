@@ -1104,7 +1104,7 @@ void BattleAnim_RunAuroraBeamHitSpark(Particle* arg0) {
             break;
     }
 
-    Particle_Field94_AddZFromField9A_0A4DC(arg0);
+    Particle_Field94_AddXFromField9A_0A4B4(arg0);
 }
 
 /**

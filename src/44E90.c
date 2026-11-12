@@ -3,7 +3,7 @@
 #include "global.h"
 
 /*
- * func_80044290: initialises the record `arg0` from the descriptor `arg1` and
+ * n_alSynAllocVoice: initialises the record `arg0` from the descriptor `arg1` and
  * tries to attach a second object to it.
  *
  * `arg1` holds a s16 at +0 (copied to arg0+0x16 and used as the lookup key), a s16 at
@@ -26,7 +26,7 @@ s32 _allocatePVoice(void **, s16);
 void *func_800448F8();
 extern void *D_80075E44;
 
-s32 func_80044290(void *arg0, void *arg1) {
+s32 n_alSynAllocVoice(void *arg0, void *arg1) {
     void *obj;
     s32 found;
     void *msg_a;

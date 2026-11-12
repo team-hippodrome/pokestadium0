@@ -178,7 +178,10 @@ void PokeIcon_AdjustImageColors(u8* arg0, arg1_func_80010CA8 arg1) {
 }
 
 extern unk_D_8006FF00 D_80064C5C[];
-void func_80018550(unk_func_8001A024* arg0, s32 arg1) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void PokeIcon_RenderSlot(unk_func_8001A024* arg0, s32 arg1) {
     Vec3s sp38;
     unk_func_8001A024_008* temp_s1;
     ModelNodeView* sp30;
@@ -209,7 +212,7 @@ void func_80018550(unk_func_8001A024* arg0, s32 arg1) {
     arg0->unk_10->node.renderFlags &= ~0x40;
     arg0->unk_10->node.renderFlags |= 0x80;
     Vec3f_SetComponentsDuplicate(&arg0->unk_10->scale, temp_s1->unk_08, temp_s1->unk_08, temp_s1->unk_08);
-    func_8000533C(&gDisplayListHead, arg0->unk_08[arg1].unk_0C);
+    GfxImage_SetRenderTarget(&gDisplayListHead, arg0->unk_08[arg1].unk_0C);
     GeoRender_AdvanceFrameCounter();
     GeoRender_SetMode(3);
     Geo_RenderRootNode(arg0->unk_0C);
@@ -282,7 +285,7 @@ s32 PokeIcon_ProcessAllSlots(unk_func_8001A024* arg0, s32 arg1) {
         temp_s0 = &arg0->unk_08[arg0->unk_03];
         if (temp_s0->unk_00 & 4) {
             while (Display_IsFrameReady() == 0) {}
-            PokeIcon_AdjustImageColorBuffer(temp_s0->unk_0C, temp_s0->unk_10);
+            PokeIcon_AdjustImageColors(temp_s0->unk_0C, temp_s0->unk_10);
             temp_s0->unk_00 &= ~4;
         }
     }

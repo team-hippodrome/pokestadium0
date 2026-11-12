@@ -711,9 +711,15 @@ void PikachuReward_ShowSaveStatusScreen(s32 arg0) {
 
 s32 func_80020AFC(M2C_UNK, s32, M2C_UNK, M2C_UNK);  /* extern */
 M2C_UNK func_80020C60(s32);                         /* extern */
-M2C_UNK func_80020DF0(M2C_UNK *, s32, s32);         /* extern */
-s32 func_80021B30(s32);                             /* extern */
-s32 func_80021FF4(s32);                             /* extern */
+/**
+ * M2C_UNK func_80020DF0(M2C_UNK *, s32, s32);         /* extern
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+/**
+ * s32 GbSave_PollCartRemoval(s32);                             /* extern
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+s32 GbSave_CommitMainData(s32);                             /* extern */
 M2C_UNK func_80022118(s32);                         /* extern */
 M2C_UNK func_80022188(s32);                         /* extern */
 M2C_UNK func_817012C0(M2C_UNK);                     /* extern */
@@ -731,11 +737,11 @@ void func_817014A4(s32 arg0) {
     func_817012C0(0);
     func_817012C0(0);
     func_80022118(arg0);
-    if (func_80021FF4(arg0) == 0) {
+    if (GbSave_CommitMainData(arg0) == 0) {
         do {
             var_s0 = 2;
 loop_3:
-            temp_v0_2 = func_80021B30(arg0);
+            temp_v0_2 = GbSave_PollCartRemoval(arg0);
             if (temp_v0_2 == 1) {
                 var_s0 = 1;
             }
@@ -748,7 +754,7 @@ loop_3:
             }
             func_817012C0(0);
             func_817012C0(0);
-        } while (func_80021FF4(arg0) == 0);
+        } while (GbSave_CommitMainData(arg0) == 0);
     }
     func_80022188(arg0);
 }

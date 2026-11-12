@@ -38,7 +38,10 @@ extern M2C_UNK D_80060404;
 extern M2C_UNK D_80084D11;
 extern M2C_UNK D_80084D28;
 
-s32 func_8000C7B0(void) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+s32 Leo_ValidateBootDiskId(void) {
     if ((u32) D_80000318 < 0x800000U) {
         return 2;
     }

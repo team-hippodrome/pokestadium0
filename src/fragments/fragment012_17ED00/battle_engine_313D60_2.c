@@ -201,7 +201,7 @@ void BattleScene_TickCameraSubstate(CameraNode* arg0) {
 
 void func_82121DAC(void);
 void func_821328DC(CameraNode*);
-void func_82121604(CameraNode*);
+void Rental_TeamSlotsUpdate(CameraNode*);
 void func_82132D60(CameraNode*);
 void func_821336EC(CameraNode*);
 void func_82121C3C(CameraNode*);
@@ -220,7 +220,7 @@ void BattleScene_Update(CameraNode* arg0) {
             BattleScene_UpdateCameraDefaultModeNoop(arg0);
             break;
         case 1:
-            BattleScene_UpdateIntroCameraSequence(arg0);
+            BattleScene_UpdateBRollCameraSequence(arg0);
             break;
         case 2:
             BattleScene_UpdatePhase(arg0);
@@ -235,13 +235,13 @@ void BattleScene_Update(CameraNode* arg0) {
             func_821328DC(arg0);
             break;
         case 5:
-            BattleScene_UpdateIntroCameraSequence(arg0);
+            BattleScene_UpdateBRollCameraSequence(arg0);
             break;
         case 6:
             BattleScene_UpdatePhase(arg0);
             break;
         case 9:
-            func_82121604(arg0);
+            Rental_TeamSlotsUpdate(arg0);
             break;
         case 10:
             BattleScene_UpdatePhase(arg0);

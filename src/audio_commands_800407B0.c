@@ -230,13 +230,13 @@ s32 func_800407B0(u32 arg0, s32 arg1, s32 arg2) {
                     if (D_80077540 == 8) {
                         ret = func_8003834C(D_800B4188, D_800B41A4, 0x2A, 0x80, 0x80, 0, -1);
                     } else {
-                        func_8003EECC(0x14);
+                        Audio_StartMusicTrack(0x14);
                         ret = func_8003834C(D_800B4188, D_800B41A4, 0x20, 0x80, 0x80, 0, -1);
                     }
                     break;
                 case 4:
                     if (D_80077540 == 0) {
-                        func_8003EECC(0x14);
+                        Audio_StartMusicTrack(0x14);
                         ret = func_8003834C(D_800B4188, D_800B41A4, 0x2B, 0x80, 0x80, 0, -1);
                     } else {
                         ret = func_8003834C(D_800B4188, D_800B41A4, 0x21, 0x80, 0x80, 0, -1);
@@ -251,7 +251,7 @@ s32 func_800407B0(u32 arg0, s32 arg1, s32 arg2) {
             ret = func_8003834C(D_800B418C, D_800B41A8, D_80077540, 0xFF, 0x60, 0, -1);
             func_8003834C(D_800B418C, D_800B41A8, D_80077540, 0xFF, 0xA0, 0, -1);
             if (D_80077530 == 0) {
-                D_800FD608 = func_8003EECC(0xE);
+                D_800FD608 = Audio_StartMusicTrack(0xE);
             }
             break;
 

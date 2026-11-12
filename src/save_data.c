@@ -118,7 +118,7 @@ void func_80023890(s32 arg0, s32 arg1, s32 arg2) {
  * 1.  What func_80003774 does with them (the offset and doubled size suggest
  * a write of both copies out to the save medium) is not established here.
  *
- * Callers such as func_8002404C pass a third argument that this function
+ * Callers such as Save_CommitTypedRecord pass a third argument that this function
  * ignores, so the prototype is left unspecified at the call sites and the
  * definition is written in K&R style.  The unused pad[2] only reproduces the
  * retail stack frame.
@@ -149,7 +149,7 @@ void func_800238D8(arg0, arg1)
  * func_80003774 is called with the record address, its offset from the start
  * of the buffer at D_800AE8E0, twice the size and 1.  Unlike func_800238D8
  * the flag bit is left set.  `arg0` is the record address and `arg1` its size.
- * A third argument passed by func_80024170 is ignored; the definition is K&R
+ * A third argument passed by Save_InvalidateTypedRecord is ignored; the definition is K&R
  * style for that reason, and the unused pad[2] reproduces the retail stack
  * frame.
  */
@@ -340,7 +340,10 @@ void func_80023DB8(s32 arg0, s32 arg1) {
     func_80058410(arg0 + 0x4D, arg1 + 0x2A, 3);
 }
 
-s32 func_80023E28(arg0, arg1, arg2)
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+s32 Save_IsTypedRecordFlagSet(arg0, arg1, arg2)
     s32 arg0;
     s32 arg1;
     s16 arg2;
@@ -400,7 +403,10 @@ void func_80024044(void) {
 }
 
 void func_800238D8(); // Called with two or three arguments.
-void func_8002404C(s32 arg0, s32 arg1) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Save_CommitTypedRecord(s32 arg0, s32 arg1) {
     switch (arg0) {
     case 16:
         func_800238D8((*(s32 *)&D_800AE8E0) + (arg1 * 0x250), 0x128, arg1);
@@ -426,7 +432,10 @@ void func_8002404C(s32 arg0, s32 arg1) {
 }
 
 void func_80023954(); // Called with three arguments; the third is ignored.
-void func_80024170(s32 arg0, s32 arg1) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Save_InvalidateTypedRecord(s32 arg0, s32 arg1) {
     switch (arg0) {
     case 16:
         func_80023954((*(s32 *)&D_800AE8E0) + (arg1 * 0x250), 0x128, arg1);
@@ -489,7 +498,10 @@ void func_800243B8(void) {
     func_800238D8(*(s32*)&D_800AE8E0 + 0x5700, 0x11A0);
 }
 
-void func_80024470(s32 arg0, s32 arg1) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Save_ClearTypedRecord(s32 arg0, s32 arg1) {
     switch (arg0) {
     case 16: {
         SaveRecA80023F38* rec = &(*(Save80023F38**)&D_800AE8E0)->a[arg1];
@@ -534,7 +546,10 @@ void Save_ResetAndCommitTypedRecord(s32 arg0, s32 arg1) {
     Save_CommitTypedRecord(arg0, arg1);
 }
 
-s32 func_80024610(s32 arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+s32 Deck_GetSaveRecordCapacity(s32 arg0) {
     s32 ret = 0;
 
     switch (arg0) {
@@ -558,7 +573,10 @@ s32 func_80024610(s32 arg0) {
     return ret;
 }
 
-s32 func_8002465C(s32 arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+s32 Deck_GetSaveRecordSize(s32 arg0) {
     s32 ret = 0;
 
     switch (arg0) {
@@ -583,7 +601,10 @@ s32 Deck_IsSaveEntryPresent(s32 arg0, s32 arg1) {
 }
 
 s32 func_800246A8(s32, s32);
-s32 func_800246C8(s32 arg0, s32 arg1) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+s32 Deck_GetSaveEntryTrainerId(s32 arg0, s32 arg1) {
     s32 ret = -1;
 
     if (func_800246A8(arg0, arg1) != 0) {
@@ -719,7 +740,10 @@ s32 func_80024ADC(arg0, arg1) s32 arg0; s32 arg1; {
 M2C_UNK func_80023F38(s32, s32, M2C_UNK);           /* extern */
 s32 func_80024ADC();                                /* extern */
 
-void func_80024B90(s32 arg0, s32 arg1, s32 arg2) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Deck_SetSaveEntryCount(s32 arg0, s32 arg1, s32 arg2) {
     if (arg2 < func_80024ADC()) {
         switch (arg0) {                             /* irregular */
         case 16:
@@ -740,14 +764,14 @@ void func_80024B90(s32 arg0, s32 arg1, s32 arg2) {
 }
 
 M2C_UNK func_80023F38(s32, s32, M2C_UNK);           /* extern */
-s32 func_80024610(s32);                             /* extern */
+s32 Deck_GetSaveRecordCapacity(s32);                             /* extern */
 s32 func_80024ADC();                                /* extern */
 
 void func_80024C80(s32 arg0, s32 arg1) {
     s32 sp1C;
 
     sp1C = func_80024ADC();
-    if (sp1C < func_80024610(arg0)) {
+    if (sp1C < Deck_GetSaveRecordCapacity(arg0)) {
         switch (arg0) {                             /* irregular */
         case 16:
             M2C_FIELD((D_800AE8E0 + (arg1 * 0x250)), s16 *, 0x12) = (s16) (sp1C + 1);
@@ -792,7 +816,7 @@ s32 func_80024D88(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
 
 s32 func_80024F14(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
     s32 ret = 0;
-    s32 max = func_80024610(arg0);
+    s32 max = Deck_GetSaveRecordCapacity(arg0);
     s32 count = func_80024ADC(arg0, arg1);
 
     if ((arg2 < count) || ((arg2 == count) && (arg2 < max))) {

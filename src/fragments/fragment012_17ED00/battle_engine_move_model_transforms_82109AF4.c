@@ -391,7 +391,7 @@ void func_8210ABC4(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
 }
 
 void func_8210AC30(s32 arg0, s8 *arg1) {
-    func_821094C0(arg1);
+    BattleScene_ShowSecondaryModelsAtMainTransform(arg1);
     M2C_FIELD(arg1, s32 *, 0x608) = 0;
     func_82107790(arg1);
     func_8000D700(arg0 + 0x1E, 0, (s16) (M2C_FIELD(arg1, s32 *, 0x60C) << 0xE), 0);
@@ -413,7 +413,7 @@ void BattleAnim_PokeBallThrow(ActivePokemon* owner, ActivePokemon* animated_poke
             BattleAnim_PokeBallThrowStart(owner, animated_pokemon);
 
         case 1:
-            BattleAnim_PokeBallThrowContinue(owner, animated_pokemon);
+            BattleAnim_DoubleTeamContinue(owner, animated_pokemon);
             break;
     }
 }

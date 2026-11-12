@@ -376,7 +376,10 @@ void func_8211D06C(void);
 void func_8211CB0C(ActivePokemon*, ActivePokemonState*, ActivePokemonState*);
 void func_8211C9FC(ActivePokemon*, ActivePokemonState*, ActivePokemonState*);
 
-void func_8211F46C(void) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Battle_RenderHud(void) {
     ActivePokemonState* s0 = &sActivePokemon[0]->state;
     ActivePokemonState* s1 = &sActivePokemon[1]->state;
 

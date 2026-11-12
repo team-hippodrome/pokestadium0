@@ -8,7 +8,10 @@ extern OSPiHandle* D_80100188;
 void Rom_DmaRead(u32 dev_addr, u32 dram_addr, u32 size);
 
 extern OSMesg D_8010018C;
-void func_80046040(s32 arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Rom_InitDevice(s32 arg0) {
     if (arg0 == 1) {
         D_80100188 = osDriveRomInit();
     } else {

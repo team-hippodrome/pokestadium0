@@ -41,7 +41,7 @@ void BattleAnim_UpdateSwayPhysicsToTarget(UNUSED ActivePokemon* owner, ActivePok
 void BattleScene_HideParticipantSecondaryModels(ActivePokemon* active_pokemon);
 
 /*
- * func_821094C0
+ * BattleScene_ShowSecondaryModelsAtMainTransform
  *
  * Resets the three trailing afterimage models of a Pokemon so that they show
  * at the main model's transform: for afterimages 0..2 it clears the field at
@@ -57,7 +57,7 @@ void BattleScene_HideParticipantSecondaryModels(ActivePokemon* active_pokemon);
  * 1 decomp, except that Zero loops over three afterimages where the donor
  * loops over two.
  */
-void func_821094C0(ActivePokemon* pokemon);
+void BattleScene_ShowSecondaryModelsAtMainTransform(ActivePokemon* pokemon);
 
 void BattleScene_UpdateSecondaryModelOrbit(ActivePokemon* pokemon);
 
@@ -149,7 +149,7 @@ void func_8210ABC4(ActivePokemon* owner, ActivePokemon* animated_pokemon);
 
 M2C_UNK func_8000D700(s32, M2C_UNK, s16, M2C_UNK);  /* extern */
 M2C_UNK func_82107790(s8 *);                      /* extern */
-void func_821094C0(ActivePokemon*);
+void BattleScene_ShowSecondaryModelsAtMainTransform(ActivePokemon*);
 
 void func_8210AC30(s32 arg0, s8 *arg1);
 

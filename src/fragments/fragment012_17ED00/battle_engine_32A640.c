@@ -281,7 +281,7 @@ void BattleAnim_RunPetalDanceLingeringHitEffect(Particle* arg0) {
     if (Particle_IsRenderingEnabled(arg0) != 0) {
         func_8213ECD0(arg0);
         Particle_Field94_AddY_0A594(arg0, arg0->unk_B0);
-        Particle_Field94_AddZFromField9A_0A4DC(arg0);
+        Particle_Field94_AddXFromField9A_0A4B4(arg0);
         if (arg0->unk_2C.y < 0.0f) {
             Particle_MarkInactive(arg0);
         }
@@ -374,7 +374,7 @@ void BattleAnim_RunSlowFallingHitEffect(Particle* arg0) {
     if (Particle_IsRenderingEnabled(arg0) != 0) {
         func_8213ECD0(arg0);
         Particle_Field94_AddYFromField9A_0A4C8(arg0);
-        Particle_Field94_AddZFromField9A_0A4DC(arg0);
+        Particle_Field94_AddXFromField9A_0A4B4(arg0);
         if (arg0->unk_2C.y < 0.0f) {
             Particle_MarkInactive(arg0);
         }

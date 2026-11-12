@@ -501,7 +501,10 @@ s32 func_891033A0(s8* arg0) {
     return ret;
 }
 
-void func_891035E4(u8* arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void LabPCList_ReindexBoxSlots(u8* arg0) {
     s32 i;
     s32** ptr = M2C_FIELD(arg0, s32***, 0x14);
 

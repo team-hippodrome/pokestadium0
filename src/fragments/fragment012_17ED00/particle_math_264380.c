@@ -259,7 +259,11 @@ void ParticleGfx_SetPartiallyAnimatedAuxTileSize(Gfx* gfx, s32 arg1, s32 arg2, s
                    (((-arg2 * gParticleFrameCounter) + arg4) - 1) << 2);
 }
 
-s32 func_82169AE4(s32 arg0) {
+/**
+ * Count successive halvings until size reaches one; callers must supply a size of at least two.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ */
+s32 ParticleGfx_TextureSizeLog2(s32 arg0) {
     s32 temp_a1;
     s32 var_v0;
     s32 var_v1;

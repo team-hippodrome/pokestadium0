@@ -78,7 +78,11 @@ s16 BattleAnim_Atan2sFromPoints(f32 arg0, f32 arg1, f32 arg2, f32 arg3) {
     return MathUtil_Atan2s(arg2 - arg0, arg3 - arg1);
 }
 
-f32 func_8210BF24(Vec3f a, Vec3f b) {
+/**
+ * Returns the Euclidean distance between points `a` and `b`, passed by value.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ */
+f32 BattleAnim_Vec3fDistance(Vec3f a, Vec3f b) {
     static f32 x2;
     static f32 y2;
     static f32 z2;

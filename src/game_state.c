@@ -436,7 +436,7 @@ M2C_UNK func_80006724();                            /* extern */
 M2C_UNK func_8000675C();                            /* extern */
 M2C_UNK func_8001A194(M2C_UNK, M2C_UNK);            /* extern */
 M2C_UNK func_8001A360();                            /* extern */
-s32 func_80021B30(s32);                             /* extern */
+s32 GbSave_PollCartRemoval(s32);                             /* extern */
 void func_80025C0C(s32);
 void func_80025D8C(void);
 extern M2C_UNK D_002E0BE0;
@@ -453,7 +453,7 @@ void func_80025E3C(s32 arg0) {
     func_80003EB8((u32) ((s32) &D_01000000 & 0x0F000000) >> 0x18, &D_002E0BE0, &D_002E2B90, 0);
     func_8000675C();
     do {
-        temp_v0 = func_80021B30(arg0);
+        temp_v0 = GbSave_PollCartRemoval(arg0);
         if (temp_v0 == 1) {
             var_s0 = 1;
         }
@@ -678,14 +678,14 @@ extern s32 D_800733CC;
 void func_8000A838(s32);
 void func_8000A8DC(void);
 void func_8000A904(void);
-void func_8000AC78(UnkInputStruct8000D738*);
+void GbTower_Start(UnkInputStruct8000D738*);
 s32 func_8000ADE8(void);
 void func_8000AE1C(UnkInputStruct8000D738*);
 void func_800268E4(s32, s32);
-void func_80021C6C(s32);
+void GbSave_ForceReloadPort(s32);
 void func_80023C30(void);
 void func_80025130(s32);
-void func_8002404C(s32, s32);
+void Save_CommitTypedRecord(s32, s32);
 
 void State_GbTower(void) {
     s32 sp2C;
@@ -699,7 +699,7 @@ void State_GbTower(void) {
     sp24.unk_04 = main_pool_alloc(sizeof(*sp24.unk_04), 0);
 
     func_80025B60(((u32) ((s32) &D_81300000 & 0x0FF00000) >> 0x14) - 0x10, &D_0015F8F0, &D_0015FCE0, D_800733D4, (s32) &sp24);
-    func_8000AC78(&sp24);
+    GbTower_Start(&sp24);
 
     sp2C = func_8000ADE8();
 
@@ -711,10 +711,10 @@ void State_GbTower(void) {
         func_800268E4(D_800733D4, sp2C);
     }
 
-    func_80021C6C(D_800733D4);
+    GbSave_ForceReloadPort(D_800733D4);
     func_80023C30();
     func_80025130(sp24.unk_00);
-    func_8002404C(0x14, 0);
+    Save_CommitTypedRecord(0x14, 0);
     D_800733C8 = D_800733CC;
     D_800AF988 = 1;
     main_pool_pop_state('EMU0');

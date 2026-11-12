@@ -462,16 +462,16 @@ void func_81115480(void) {
 }
 
 void func_811155A0(void) {
-    func_812103F0_jp();
+    func_8110FDF0();
 }
 
 void GbApu_SetActiveFlag(void) {
-    func_8121036C_jp(0xF1000000, 0);
+    func_8110FD6C(0xF1000000, 0);
     D_81138A70 = 1;
 }
 
 void GbApu_ClearActiveFlag(void) {
-    func_8121036C_jp(0xF2000000, 0);
+    func_8110FD6C(0xF2000000, 0);
     D_81138A70 = 0;
 }
 
@@ -508,23 +508,23 @@ void func_81115704(void) {
 }
 
 void func_81215D0C_jp(s32 arg0, s32 arg1, s32 arg2) {
-    func_81210390_jp(((arg0 & 0xFF) << 16) | 0x08000000 | ((arg1 & 0xFF) << 8), arg2);
+    func_8110FD90(((arg0 & 0xFF) << 16) | 0x08000000 | ((arg1 & 0xFF) << 8), arg2);
 }
 
 void func_81215D50_jp(void) {
-    func_8121036C_jp(0x82020100, 0);
-    func_812103F0_jp();
-    func_8121036C_jp(0xF8000000, 0);
+    func_8110FD6C(0x82020100, 0);
+    func_8110FDF0();
+    func_8110FD6C(0xF8000000, 0);
 }
 
 void func_81215D8C_jp(s32 arg0, s32 arg1, s32 arg2) {
-    func_81210390_jp(0x06020002, arg1);
-    func_81210390_jp(0x06020001, arg0);
-    func_81210390_jp(0x06020000, arg2);
+    func_8110FD90(0x06020002, arg1);
+    func_8110FD90(0x06020001, arg0);
+    func_8110FD90(0x06020000, arg2);
 }
 
 void func_81215DDC_jp(void) {
-    func_81210390_jp(0x06020004, -1);
+    func_8110FD90(0x06020004, -1);
 }
 
 /**

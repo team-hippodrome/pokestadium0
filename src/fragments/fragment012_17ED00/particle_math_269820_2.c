@@ -76,8 +76,8 @@ s32 Particle_FieldAE_ApproachAndStepState_0BF98(Particle* arg0, s16 arg1, s16 ar
 
 void Particle_AdvanceLifecycle(Particle* arg0);
 s32 Particle_TickDelayTimer(Particle* arg0, s16 arg1);
-s32 Particle_AnimateFramesForward(Particle* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5);
-s32 Particle_AnimateFramesReverse(Particle* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5);
+s32 Particle_AnimateFramesPingPong(Particle* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5);
+s32 Particle_AnimateFramesReverseFirstPingPong(Particle* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5);
 void Particle_Field38_SetVecFromVec3fScaled_08C20(Particle* arg0, Vec3f arg1);
 void Particle_Field38_AddVecScaledFromVec3f_08D78(Particle* arg0, Vec3f arg1);
 void Particle_Field50_AddVecFromField7C_09BDC(Particle* arg0);
@@ -299,7 +299,7 @@ s32 Particle_AnimateFramesPingPong(Particle* arg0, s16 arg1, s16 arg2, s16 arg3,
 }
 
 s32 Particle_AnimateFramesForwardAndAdvanceLifecycle(Particle* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5) {
-    s32 sp24 = Particle_AnimateFramesForward(arg0, arg1, arg2, arg3, arg4, arg5);
+    s32 sp24 = Particle_AnimateFramesPingPong(arg0, arg1, arg2, arg3, arg4, arg5);
 
     if (sp24 != 0) {
         Particle_AdvanceLifecycle(arg0);
@@ -349,7 +349,7 @@ s32 Particle_AnimateFramesReverseFirstPingPong(Particle* arg0, s16 arg1, s16 arg
 }
 
 s32 Particle_AnimateFramesReverseAndAdvanceLifecycle(Particle* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5) {
-    s32 sp24 = Particle_AnimateFramesReverse(arg0, arg1, arg2, arg3, arg4, arg5);
+    s32 sp24 = Particle_AnimateFramesReverseFirstPingPong(arg0, arg1, arg2, arg3, arg4, arg5);
 
     if (sp24 != 0) {
         Particle_AdvanceLifecycle(arg0);
@@ -410,7 +410,11 @@ void Particle_UpdateWorldTransform(Particle* arg0) {
     }
 }
 
-void func_8213D3FC(Particle* arg0, f32 arg1, f32 arg2, f32 arg3) {
+/**
+ * Set the base position offset after multiplying each input by the render context's Y scale.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ */
+void Particle_SetPosition(Particle* arg0, f32 arg1, f32 arg2, f32 arg3) {
     M2C_FIELD(arg0, f32*, 0x34) = arg1 * gParticleRenderContext.unk_00.y;
     M2C_FIELD(arg0, f32*, 0x34 + 4) = arg2 * gParticleRenderContext.unk_00.y;
     M2C_FIELD(arg0, f32*, 0x34 + 8) = arg3 * gParticleRenderContext.unk_00.y;
@@ -691,7 +695,10 @@ void func_8213E0A4(s8 *arg0, f32 arg1, f32 arg2, f32 arg3) {
     M2C_FIELD(arg0, f32 *, 0x6C) = arg3;
 }
 
-void func_8213E0C4(Particle* arg0, f32 arg1, f32 arg2, f32 arg3) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Particle_SetVelocity(Particle* arg0, f32 arg1, f32 arg2, f32 arg3) {
     M2C_FIELD(arg0, f32*, 0x4C) = arg1 * gParticleRenderContext.unk_00.y;
     M2C_FIELD(arg0, f32*, 0x4C + 4) = arg2 * gParticleRenderContext.unk_00.y;
     M2C_FIELD(arg0, f32*, 0x4C + 8) = arg3 * gParticleRenderContext.unk_00.y;
@@ -789,12 +796,18 @@ M2C_UNK func_8213E3F8(s32 arg0) {
     ((Particle*)arg0)->unk_50.z += ((Particle*)arg0)->unk_7C.z;
 }
 
-void func_8213E42C(Particle* arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Particle_Field50_AddXZFromField7C_09C10(Particle* arg0) {
     M2C_FIELD(arg0, f32*, 0x4C) += M2C_FIELD(arg0, f32*, 0x78);
     M2C_FIELD(arg0, f32*, 0x54) += M2C_FIELD(arg0, f32*, 0x80);
 }
 
-void func_8213E450(Particle* arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Particle_Field50_AddVecFromField7C_09BDC(Particle* arg0) {
     arg0->unk_50.x += arg0->unk_7C.x;
     arg0->unk_50.y += arg0->unk_7C.y;
 }
@@ -821,7 +834,7 @@ M2C_UNK func_8213FB14();                            /* extern */
 
 void func_8213E4D8(s32 arg0) {
     func_8213FB14();
-    func_8213E42C(arg0);
+    Particle_Field50_AddXZFromField7C_09C10(arg0);
 }
 
 void Particle_AddVelocityFromRotationTemplate2(Particle* arg0) {
@@ -1347,7 +1360,10 @@ void func_8213F720(Particle* arg0, Vec3f arg1) {
     M2C_FIELD(arg0, f32*, 0x80) = arg1.z * gParticleRenderContext.unk_00.y;
 }
 
-void func_8213F768(Particle* arg0, f32 arg1, f32 arg2, f32 arg3) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Particle_SetVelocityImpulse(Particle* arg0, f32 arg1, f32 arg2, f32 arg3) {
     M2C_FIELD(arg0, f32*, 0x78) = arg1 * gParticleRenderContext.unk_00.y;
     M2C_FIELD(arg0, f32*, 0x78 + 4) = arg2 * gParticleRenderContext.unk_00.y;
     M2C_FIELD(arg0, f32*, 0x78 + 8) = arg3 * gParticleRenderContext.unk_00.y;
@@ -1465,7 +1481,10 @@ void func_8213F9E8(s8 *arg0, f32 arg1) {
     M2C_FIELD(arg0, f32 *, 0x80) = (f32) (M2C_FIELD(arg0, f32 *, 0x80) * arg1);
 }
 
-s32 func_8213FA1C(Particle* arg0, f32 arg1, f32 arg2) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+s32 Particle_Field7C_ApproachY_0B180(Particle* arg0, f32 arg1, f32 arg2) {
     return ParticleMath_ApproachFloat(&arg0->unk_7C.y, arg1 * gParticleRenderContext.unk_00.y, arg2 * gParticleRenderContext.unk_00.y);
 }
 
@@ -1481,7 +1500,10 @@ void Particle_Field7C_SetYFromField74AngleX_0B1C4(Particle* arg0) {
     M2C_FIELD(arg0, f32*, 0x80) = COSS(M2C_FIELD(arg0, u16*, 0x92)) * arg0->unk_74;
 }
 
-void func_8213FAD8(Particle* arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Particle_Field7C_SetVecFromField74AnglesXZ_0B330(Particle* arg0) {
     M2C_FIELD(arg0, f32*, 0x78) = M2C_FIELD(arg0, f32*, 0x70) * COSS(M2C_FIELD(arg0, u16*, 0x94));
     M2C_FIELD(arg0, f32*, 0x7C) = M2C_FIELD(arg0, f32*, 0x70) * SINS(M2C_FIELD(arg0, u16*, 0x94));
 }
@@ -1673,13 +1695,20 @@ extern s16 D_8219A8B2;
 extern s16 D_8219A8B4;
 extern s16 D_8219A8B6;
 
-void func_82140438(s8 *arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void BattleAnim_LoadGlobalTintToParticle(s8 *arg0) {
     M2C_FIELD(arg0, s8 *, 0xBA) = (s8) D_8219A8B2;
     M2C_FIELD(arg0, s8 *, 0xBB) = (s8) D_8219A8B4;
     M2C_FIELD(arg0, s8 *, 0xBC) = (s8) D_8219A8B6;
 }
 
-void func_82140460(Particle* arg0, u8 arg1, u8 arg2, u8 arg3) {
+/**
+ * Set envRed, envGreen, envBlue.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ */
+void Particle_SetEnvColor(Particle* arg0, u8 arg1, u8 arg2, u8 arg3) {
     M2C_FIELD(arg0, u8*, 0xBD) = arg1;
     M2C_FIELD(arg0, u8*, 0xBE) = arg2;
     M2C_FIELD(arg0, u8*, 0xBF) = arg3;

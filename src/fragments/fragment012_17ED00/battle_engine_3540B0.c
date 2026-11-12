@@ -19,7 +19,10 @@ typedef struct OwnerLinkedFourStreamZero {
 
 extern OwnerLinkedFourStreamZero D_821B6F00[4];
 
-void func_8217DC80(void) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void OwnerAnchoredFourStream_Init(void) {
     s32 i;
     s32 j;
     OwnerLinkedFourStreamZero* var_a2 = &D_821B6F00[0];
@@ -54,7 +57,10 @@ typedef struct OwnerAnchoredFourStreamZero {
     /* 0x01C */ OwnerAnchoredFourStreamNode unk_01C[15];
 } OwnerAnchoredFourStreamZero; // size = 0x418
 
-void func_8217DDD4(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9,
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void OwnerAnchoredFourStream_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9,
                    f32 argA, f32 argB, f32 argC, s16 argD) {
     s32 i;
     s32 j;
@@ -161,8 +167,11 @@ void OwnerAnchoredFourStream_UpdateNodeChain(OwnerAnchoredFourStream* arg0) {
     }
 }
 
-M2C_UNK func_8217E0C0(M2C_UNK *);                   /* extern */
-s32 func_8217E34C(void)
+/**
+ * M2C_UNK func_8217E0C0(M2C_UNK *);                   /* extern
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+s32 OwnerAnchoredFourStream_IsComplete(void)
 {
   s8 *new_var; // FAKE: permuter temp
   s32 var_s1;
@@ -192,7 +201,10 @@ s32 func_8217E34C(void)
 }
 
 extern Gfx D_82193270[];
-Gfx* func_8217E3E0(Gfx* arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+Gfx* OwnerAnchoredFourStream_Draw(Gfx* arg0) {
     s32 i;
     s32 j;
     s32 k;

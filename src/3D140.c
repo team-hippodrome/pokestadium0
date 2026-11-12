@@ -125,7 +125,7 @@ extern s16 D_80075D00[];
 Acmd* func_8003AECC(N_PVoice* filter, s16* inp, s16* outp, s32 outCount, Acmd* p);
 s16 func_8003B280(s16 arg0, s32 arg1, s16 arg2, u16 arg3);
 
-Acmd* func_8003A890(N_PVoice* filter, s32 sampleOffset, Acmd* p) {
+Acmd* n_alEnvmixerPull(N_PVoice* filter, s32 sampleOffset, Acmd* p) {
     Acmd* ptr = p;
     N_PVoice* e = (N_PVoice*)filter;
     s16 inp;
@@ -746,16 +746,22 @@ s32 Cry_IsPlaying(void) {
     return D_80075E04[0];
 }
 
-s32 func_800384D8();                                /* extern */
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+s32 Audio_GetActivityScore();                                /* extern */
 M2C_UNK func_80058100(s32);                         /* extern */
 extern u8 D_80075E0C;
 extern s32 D_80075E30;
 extern s8 D_800B3F78;
 extern s32 D_800B3F94;
 
-s32 func_8003BED8(s32 arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+s32 Audio_SetEnabled(s32 arg0) {
     if (arg0 == 0) {
-        if (func_800384D8() != 0) {
+        if (Audio_GetActivityScore() != 0) {
             return 0;
         }
         D_80075E0C = 1;

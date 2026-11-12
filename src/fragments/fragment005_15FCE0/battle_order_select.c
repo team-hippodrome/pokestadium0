@@ -472,7 +472,11 @@ void func_823012D0(s8* arg0) {
 extern char** D_84803790;
 extern char D_82302AE4[];
 extern char D_82302AFC[];
-void func_82301448(unk_D_848037A0* arg0) {
+/**
+ * Draws the ready message, pulsing its text alpha for tag-team panels.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ */
+void BattleMenu_DrawOrderSelectPanel_Ready(unk_D_848037A0* arg0) {
     s32 sp3C;
     s32 sp38;
     s32 sp34;
@@ -549,8 +553,12 @@ void BattleMenu_DrawConfirmButtonLabel(unk_D_848037A0* arg0) {
 
 extern s16 D_82302B40;
 void func_823010E8(s8*);
-void func_82301448(unk_D_848037A0*);
-void func_823016FC(unk_D_848037A0* arg0) {
+void BattleMenu_DrawOrderSelectPanel_Ready(unk_D_848037A0*);
+/**
+ * Draws the current panel mode when needed and updates its redraw countdown.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ */
+void BattleMenu_DrawOrderSelectPanel(unk_D_848037A0* arg0) {
     if ((D_82302B40 != 0) || (arg0->unk_0006 != 0)) {
         if ((D_82302B40 != 0) && (arg0->unk_0002 == -1)) {
             BattleMenu_DrawConfirmButtonLabel(arg0);
@@ -570,7 +578,7 @@ void func_823016FC(unk_D_848037A0* arg0) {
                 break;
 
             case 3:
-                func_82301448(arg0);
+                BattleMenu_DrawOrderSelectPanel_Ready(arg0);
                 break;
         }
 
@@ -578,7 +586,7 @@ void func_823016FC(unk_D_848037A0* arg0) {
             arg0->unk_0006--;
         }
     } else if (arg0->unk_0005 == 3) {
-        func_82301448(arg0);
+        BattleMenu_DrawOrderSelectPanel_Ready(arg0);
     }
 }
 
@@ -1103,7 +1111,7 @@ extern u8 D_003DCB60[];
 s8* func_80017860(s32);
 s32 func_80017FDC(s8*, s32, s32, s32);
 void func_8001A194(s32, s32);
-void func_80017934(void);
+void PokeIcon_OpenModelArchives(void);
 s32 func_82301EF4();
 
 s32 BattleMenu_RunOrderSelectScreen(s32 arg0, s32 arg1) {
@@ -1116,7 +1124,7 @@ s32 BattleMenu_RunOrderSelectScreen(s32 arg0, s32 arg1) {
     D_82302BC8 = func_80017860(1);
     D_82302BCC = func_80017FDC(D_82302BC8, 0x18, 0x28, 0x28);
     func_8001A194(0x3C, 0);
-    func_80017934();
+    PokeIcon_OpenModelArchives();
 
     Fragment_Load(((((u32)D_81000000) & 0x0FF00000) >> 0x14) - 0x10, D_0015B1A0, D_0015E220);
     Asset_LoadToSegment(((u32)D_01000000 & 0x0F000000) >> 0x18, D_002E0BE0, D_002E2B90, 0);

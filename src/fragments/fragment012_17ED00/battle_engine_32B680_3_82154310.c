@@ -1,7 +1,10 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
 #include "battle_engine_32B680_3.h"
 
-void func_82154310(Particle* arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void BattleAnim_ApplyModelSpeciesOffset(Particle* arg0) {
     f32 offset = 0.0f;
 
     switch (BattleAnim_GetOwnerSpecies(arg0->unk_10)) {

@@ -594,7 +594,11 @@ s32 func_82107A5C(ActivePokemon*);
 s32 func_82107F88(ActivePokemon*);
 void func_8210F730(ActivePokemon*);
 extern s32 D_8218C710;
-void func_821129E4(ActivePokemon* arg0) {
+/**
+ * Mark fainting, clear continuation state and remove temporary effects from the opponent.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ */
+void Battle_HandleFaint(ActivePokemon* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
     s32 sp1C = func_82107A5C(arg0);
     ActivePokemonState* temp_a10;
@@ -661,7 +665,10 @@ void Battle_CheckDefeatAtStatusHp(ActivePokemon* arg0) {
     }
 }
 
-void func_82112C1C(ActivePokemon* arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Battle_CheckAllBroughtFainted_Status(ActivePokemon* arg0) {
     ActivePokemonState* ptr1 = &arg0->state;
     BattleMon* temp_v0;
     s32 i;
@@ -691,7 +698,10 @@ void func_82112C1C(ActivePokemon* arg0) {
     }
 }
 
-void func_82112D5C(ActivePokemon* arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Battle_CheckAllBroughtFainted_PP(ActivePokemon* arg0) {
     ActivePokemonState* ptr1 = &arg0->state;
     BattleMon* temp_v0;
     s32 i;
@@ -721,7 +731,10 @@ void func_82112D5C(ActivePokemon* arg0) {
     }
 }
 
-void func_82112E9C(ActivePokemon* arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Battle_CheckAllBroughtFainted_Level(ActivePokemon* arg0) {
     ActivePokemonState* ptr1 = &arg0->state;
     BattleMon* temp_v0;
     s32 i;
@@ -809,7 +822,11 @@ s32 Battle_CheckFaintAfterMove(void) {
 void func_82110B44(ActivePokemon*);
 void func_8210F2F4(ActivePokemon*);
 void func_821125C0(void);
-void func_821132C8(void)
+/**
+ * Initialize one action's shared state, resolve its turn and residuals, then check defeat.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ */
+void Battle_ResolveMonAction(void)
 {
   BattleMonRuntime *sp1C = &sActivePokemon[sBattleScene.scene->unk_2C]->state.runtime;
   BattleMonRuntime *sp18 = &sActivePokemon[!sBattleScene.scene->unk_2C]->state.runtime;

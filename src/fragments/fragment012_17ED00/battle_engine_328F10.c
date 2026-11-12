@@ -49,7 +49,7 @@ s32 Gallery_SetSceneModelNode();
 s32 Gallery_SetSceneRenderState();
 s32 Gallery_SetSceneGraphNode();
 s32 func_800303C8();
-void Gallery_ClearActiveScene(void);
+void func_82150D1C(void);
 void func_82183DA4(void);
 typedef union unk_func_80026268_arg0_000_raw {
     struct {
@@ -109,7 +109,7 @@ void Gallery_ResetActiveScene(void);
 void func_82150EB0(void);
 void BattleAnim_StartEffect122GlobalAndOwnerTintFade(void);
 
-void Gallery_ClearActiveScene(void);
+void func_82150D1C(void);
 
 void BattleAnim_InitStartEffect135Descriptor1CRisingScale(Particle* arg0) {
     Vec3s sp28;
@@ -499,7 +499,7 @@ void func_82150D1C(void) {
 }
 
 void Gallery_ResetActiveScene(void) {
-    Gallery_ClearActiveScene();
+    func_82150D1C();
 }
 
 extern M2C_UNK D_8218E668;

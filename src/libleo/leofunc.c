@@ -66,7 +66,7 @@ void func_800483E0(s32 arg0, s32 arg1, M2C_UNK *arg2, M2C_UNK arg3) {
 }
 
 /*
- * func_80048530 (leoCommand in the Stadium 1 decomp): submits a 64DD command block.
+ * leoCommand (leoCommand in the Stadium 1 decomp): submits a 64DD command block.
  *
  * Takes the block-queue (D_80100E58) lock, marks the block busy (status 8, sense 0)
  * and then dispatches on the command byte:
@@ -82,7 +82,7 @@ void func_800483E0(s32 arg0, s32 arg1, M2C_UNK *arg2, M2C_UNK arg3) {
  *
  * Unlike the Stadium 1 version there is no __leoResetCalled check at the start.
  */
-void func_80048530(void* cmd_blk_addr) {
+void leoCommand(void* cmd_blk_addr) {
     osRecvMesg((OSMesgQueue*)&D_80100E58, NULL, 1);
     ((LEOCmd*)cmd_blk_addr)->header.status = LEO_STATUS_BUSY;
     ((LEOCmd*)cmd_blk_addr)->header.sense = LEO_SENSE_NO_ADDITIONAL_SENSE_INFOMATION;

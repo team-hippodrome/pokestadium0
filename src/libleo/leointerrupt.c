@@ -17,7 +17,7 @@ void __osLeoAbnormalResume(void);
 void __osLeoResume(void);
 
 #include "lib/ultralib/src/io/piint.h"
-s32 func_8004FDC0() {
+s32 __osLeoInterrupt() {
     u32 stat = 0;
     volatile u32 pi_stat;
     u32 bm_stat;

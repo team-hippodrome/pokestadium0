@@ -668,7 +668,10 @@ void func_82153FD8(void) {
 }
 
 
-void func_82154050(Particle* arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void BattleAnim_ApplyEffect1SpeciesMotion(Particle* arg0) {
     f32 offset = 0.0f;
     f32 scale = 0.12f;
 

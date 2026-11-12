@@ -133,16 +133,17 @@ s16 func_82107B54(ActivePokemon* active_pokemon) {
 
 extern f32 D_FLT_82189350[][4];
 
-/*
- * func_82107B88
+/**
+ * BattleAnim_GetSpeciesBaseScale
  *
  * Returns the participant's scaled model width: the table entry for its object
  * type (first float of each 0x10-byte entry of D_FLT_82189350, the same table
  * whose second float func_82107790 reads as a resting height), doubled, divided
  * by 50, times the display object's Y scale. Zero-side relative of the width
  * term used by BattleScene_GetParticipantModelWidth in Stadium 1.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
-f32 func_82107B88(ActivePokemon* active_pokemon) {
+f32 BattleAnim_GetSpeciesBaseScale(ActivePokemon* active_pokemon) {
     return ((D_FLT_82189350[active_pokemon->displayObject.objectType][0] * 2) / 50.0f) * active_pokemon->displayObject.scale.y;
 }
 
@@ -151,7 +152,7 @@ extern f32 D_FLT_82189350[][4];
 /*
  * func_82107BC4
  *
- * Same as func_82107B88 without the final scale factor: the table width for the
+ * Same as BattleAnim_GetSpeciesBaseScale without the final scale factor: the table width for the
  * participant's object type, doubled and divided by 50.
  */
 f32 func_82107BC4(ActivePokemon* active_pokemon) {
@@ -164,7 +165,10 @@ u8 func_82107BF4(s8 *arg0) {
 
 extern f32 D_FLT_8218935C[][4];
 
-void func_82107BFC(s8* arg0, Vec3f* out) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Trade_UpdateBoxSlotBob(s8* arg0, Vec3f* out) {
     out->x = M2C_FIELD(arg0, f32*, 0x30) * (D_FLT_8218935C[M2C_FIELD(arg0, s16*, 0x1A) - 1][0] * 2 / 50.0f);
     out->y = M2C_FIELD(arg0, f32*, 0x34) * (D_FLT_8218935C[M2C_FIELD(arg0, s16*, 0x1A) - 1][1] * 2 / 50.0f);
     out->z = M2C_FIELD(arg0, f32*, 0x30) * (D_FLT_8218935C[M2C_FIELD(arg0, s16*, 0x1A) - 1][0] * 2 / 50.0f);
@@ -262,7 +266,10 @@ f32 func_82107EC8(ActivePokemon* active_pokemon) {
 }
 
 extern f32 D_FLT_8218934C[][4];
-f32 func_82107F18(ActivePokemon* active_pokemon) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+f32 BattleScene_GetParticipantModelRadiusScaled(ActivePokemon* active_pokemon) {
     return D_FLT_8218934C[active_pokemon->displayObject.objectType][0] * active_pokemon->displayObject.scale.y;
 }
 
@@ -348,7 +355,12 @@ void BattleScene_InitializeParticipantSecondaryModels(ActivePokemon* pokemon, s3
 extern f32 D_82199DF0[][4];
 void func_8000D41C(Vec3f*, f32, f32, f32);
 void func_8210213C(ActivePokemon*);
-void func_821081D0(ActivePokemon* active_pokemon) {
+/**
+ * Creates and positions the participant's Pokemon model and loads its
+ * presentation data.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ */
+void BattleScene_InitializeParticipantModel(ActivePokemon* active_pokemon) {
     s32 side;
     UNUSED s32 pad; // FAKE: stack padding
     ModelNodeView* model_view;

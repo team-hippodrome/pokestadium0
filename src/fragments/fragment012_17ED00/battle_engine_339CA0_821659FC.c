@@ -1,7 +1,10 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
 #include "battle_engine_339CA0.h"
 
-void func_821659FC(Particle* arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void BattleAnim_CallbackDescriptor26BurstChild(Particle* arg0) {
     switch (arg0->unk_B2) {
         case 1:
             BattleAnim_CallbackDescriptor26BurstChild_InitParticle(arg0);

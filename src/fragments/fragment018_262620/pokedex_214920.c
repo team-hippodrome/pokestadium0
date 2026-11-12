@@ -244,9 +244,9 @@ void func_8A100620(void* arg0, s32 arg1, s32 arg2) {
 }
 
 s32 func_8002AE6C();
-s32 func_800233AC(s32);
-s32 func_800234EC(s32);
-s32 func_8002362C(s32);
+s32 GbSave_CountSpeciesProgressField036(s32);
+s32 GbSave_CountSpeciesProgressField023(s32);
+s32 GbSave_CountSpeciesProgressField06(s32);
 extern u8 D_800734A8[4];
 extern char D_8A12FC6C[];
 extern char D_8A12FC7C[];
@@ -265,9 +265,9 @@ void func_8A10068C(void* arg0) {
         Gfx_SetEnvColor(0xCC, 0x98, 0x98, 0xFF);
         Font_Printf(M2C_FIELD(arg0, s32*, 0) + 0xE, M2C_FIELD(arg0, s32*, 4) + 0x46, D_8A12FC8C);
         Gfx_SetEnvColor(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
-        Font_Printf(M2C_FIELD(arg0, s32*, 0) + 0xAE, M2C_FIELD(arg0, s32*, 4) + 0xE, D_8A12FC9C, func_800233AC(D_8A12FFB0));
-        Font_Printf(M2C_FIELD(arg0, s32*, 0) + 0xAE, M2C_FIELD(arg0, s32*, 4) + 0x2A, D_8A12FCA0, func_800234EC(D_8A12FFB0));
-        Font_Printf(M2C_FIELD(arg0, s32*, 0) + 0xAE, M2C_FIELD(arg0, s32*, 4) + 0x46, D_8A12FCA4, func_8002362C(D_8A12FFB0));
+        Font_Printf(M2C_FIELD(arg0, s32*, 0) + 0xAE, M2C_FIELD(arg0, s32*, 4) + 0xE, D_8A12FC9C, GbSave_CountSpeciesProgressField036(D_8A12FFB0));
+        Font_Printf(M2C_FIELD(arg0, s32*, 0) + 0xAE, M2C_FIELD(arg0, s32*, 4) + 0x2A, D_8A12FCA0, GbSave_CountSpeciesProgressField023(D_8A12FFB0));
+        Font_Printf(M2C_FIELD(arg0, s32*, 0) + 0xAE, M2C_FIELD(arg0, s32*, 4) + 0x46, D_8A12FCA4, GbSave_CountSpeciesProgressField06(D_8A12FFB0));
         Font_EndTexturedTextRendering();
     }
 }
@@ -645,7 +645,7 @@ s32 func_8A1013C0(s32 arg0, s32 *arg1) {
 }
 
 /*
- * func_8A1014EC
+ * Pokedex_ShowEntryMenu
  *
  * Frame loop of a screen in this file (the meaning of the screen is not
  * established).  Starts with func_8000B2F4(D_800603C0) and a result `var_s3`
@@ -675,7 +675,10 @@ void func_8001B5F0(void);
 M2C_UNK func_80006780();
 s32 func_8A1013C0(s32, s32 *);
 
-s32 func_8A1014EC(void) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+s32 Pokedex_ShowEntryMenu(void) {
     UNUSED s32 pad; // FAKE: stack padding
     s32 sp50;
     s32 temp_v0;
@@ -760,7 +763,7 @@ extern u8 D_8A105818;
  * preview with PokeIcon_CreateModelPreview(arg0, 0x100, 0xD2, 0, 0, 0xF4,
  * 0xD2, &D_8A105818), stores the result in D_8A12FF98, and passes it to
  * PokeIcon_SetPreviewSpecies together with arg1 and 0x108D. Only called by
- * func_8A10180C, which passes D_8A12FFA4 and D_8A12FFB8 + 1; the meaning of
+ * Pokedex_ShowEntry, which passes D_8A12FFA4 and D_8A12FFB8 + 1; the meaning of
  * arg1 and of D_8A105818 is not established here.
  * Matching note: the call result is stored straight into D_8A12FF98 and
  * D_8A12FF98 is read back for the second call, which the compiler folds into
@@ -782,7 +785,7 @@ void func_8A1017DC(void) {
 }
 
 /*
- * func_8A10180C
+ * Pokedex_ShowEntry
  *
  * Frame loop of a screen in this file (the meaning of the screen is not
  * established).  Calls func_8A101760(D_8A12FFA4, D_8A12FFB8 + 1) once, then
@@ -809,7 +812,10 @@ void func_8A101760(s32, s32);
 s32 func_800231C8(s32, s32);
 extern s32 D_8A12FFB8;
 
-s32 func_8A10180C(void) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+s32 Pokedex_ShowEntry(void) {
     s32 temp_s1;
 
     func_8A101760((s32)D_8A12FFA4, D_8A12FFB8 + 1);
@@ -839,7 +845,10 @@ s32 func_8003BECC();                                /* extern */
 extern s32 D_8A12FFB8;
 extern M2C_UNK D_8A1301A0;
 
-s32 func_8A10193C(void) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+s32 Pokedex_PlayCry(void) {
     func_8003BD3C(D_8A12FFB8 + 1);
     if (func_8003BECC() != 0) {
         do {
@@ -861,7 +870,10 @@ extern s32 D_8A12FFAC;
 extern s32 D_8A12FFB8;
 extern M2C_UNK func_8A104B00;
 
-void func_8A1019AC(void) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Pokedex_EnterAreaMapScreen(void) {
     func_80005B98(8);
     func_80006828(8, &func_8A1011A4);
     func_800067BC(2);

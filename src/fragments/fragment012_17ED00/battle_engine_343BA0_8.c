@@ -411,7 +411,7 @@ void BattleAnim_EmitTriAttackUseRadial(void) {
     sp50 *= 6.0f;
     sp4C *= 6.0f;
     sp48 *= 6.0f;
-    Radial20_VariantA(sp5C, sp58, sp54, sp50, sp4C, sp48, 9, 0xFF, 0xFF, 0xFF, 0xB4, D_FLT_82197958, 2.0f, 20.0f, 0x3C);
+    TriAttackRadial_EmitVariantA(sp5C, sp58, sp54, sp50, sp4C, sp48, 9, 0xFF, 0xFF, 0xFF, 0xB4, D_FLT_82197958, 2.0f, 20.0f, 0x3C);
 }
 
 /**

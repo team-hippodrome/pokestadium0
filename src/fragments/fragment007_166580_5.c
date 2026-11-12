@@ -704,7 +704,7 @@ s32 func_80017860(s32);
 u16* func_80018F2C(s32, s32, s32, s32, s32, s32, s32, s32);
 s32 func_80017FDC(s32, s32, s32, s32);
 s32 func_80004154(u8*, u8*, s32, s32);
-void func_80017934(void);
+void PokeIcon_OpenModelArchives(void);
 void func_800040B4(s32, u8*, u8*);
 void func_80003EB8(s32, u8*, u8*, s32);
 s32 func_80001B10(u8*);
@@ -754,7 +754,7 @@ M2C_UNK func_820059EC(void) {
     D_8200AC4C = 0;
     D_8200AC50 = func_80017FDC(D_8200AC44, 0x28, 0x28, 0x28);
     D_8200AC40 = func_80004154(D_002F5940, D_003139C0, 1, 1);
-    func_80017934();
+    PokeIcon_OpenModelArchives();
 
     func_800040B4(((((u32)D_81000000) & 0x0FF00000) >> 0x14) - 0x10, D_0015B1A0, D_0015E220);
     func_80003EB8(((u32)D_01000000 & 0x0F000000) >> 0x18, D_002E0BE0, D_002E2B90, 0);

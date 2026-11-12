@@ -195,7 +195,10 @@ void BattleAnim_AllocateReflectiveTextureDisplayList(s32 arg0, arg1_func_84344CE
     }
 }
 
-void func_82154C9C(Particle* arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void BattleAnim_ApplyEffect125ModelScaleOffset(Particle* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
     f32 scale = 1.2f;
 
@@ -367,7 +370,10 @@ void BattleAnim_RunSporePowderMoveOverlay(Particle* arg0) {
     }
 }
 
-void func_82155238(void) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void ParticleEffect_RegisterParticleNodes(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_RunSporePowderMoveOverlay, &gBattleAnimParticleDescriptors[0x32], 0, 1, 0x18, 0, 0, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_RunSporePowderMoveOverlay, &gBattleAnimParticleDescriptors[0x31], 0, 1, 0x18, 0, 0, 0);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 3, 0x14, BattleAnim_CallbackStartEffects28And53And65And76Descriptor47AnimatedScaleMotion, &gBattleAnimParticleDescriptors[0x46], 0, 1, 0x10, 0x64, 0, 0);
@@ -840,7 +846,10 @@ void BattleAnim_InitEffect49Model(Particle* arg0) {
     }
 }
 
-void func_8215673C(Particle* arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void BattleAnim_CallbackEndEffect49Model33Anim34WaitCleanup(Particle* arg0) {
     switch (arg0->unk_B2) {
         case 1:
             func_82156654(arg0);
@@ -858,7 +867,10 @@ void func_8215673C(Particle* arg0) {
     }
 }
 
-void func_821567BC(Particle* arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void BattleAnim_CallbackEndEffect21ModelAnimWait(Particle* arg0) {
     switch (arg0->unk_B2) {
         case 1:
             func_82156654(arg0);
@@ -968,7 +980,7 @@ void BattleAnim_InitializeFlyUse(void) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_InitializeTeleportUse(void) {
-    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffect86ModelFadeCycle, &gDefaultParticleDescriptor, 0x40, 1, 0xA, 0, 0, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunFlyUpwardMovementEffect, &gDefaultParticleDescriptor, 0x40, 1, 0xA, 0, 0, 0);
     BattleAnim_SpawnInvisibility(0, 0xFF, 0, 0x10);
     BattleAnim_SpawnInvisibility(0x2D, 0, 0xFF, 0x20);
 }
@@ -1031,7 +1043,10 @@ void BattleAnim_InitEffects63And75Model(Particle* arg0) {
     }
 }
 
-void func_82156EF0(Particle* arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void BattleAnim_CallbackStartEffects63And75ModelAnimWait(Particle* arg0) {
     switch (arg0->unk_B2) {
         case 1:
             func_82156E54(arg0);
@@ -1200,7 +1215,10 @@ void BattleAnim_InitEffects63And75Model38(Particle* arg0) {
     }
 }
 
-void func_821573BC(Particle* arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void BattleAnim_CallbackStartEffects63And75Model38FadeIn(Particle* arg0) {
     switch (arg0->unk_B2) {
         case 1:
             func_82157354(arg0);
@@ -1443,7 +1461,10 @@ void BattleAnim_RunBoomUseEffect1(Particle* arg0) {
     }
 }
 
-void func_82158224(Particle* arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void BattleAnim_CallbackStartEffects50And82ScalePulse_InitParticle(Particle* arg0) {
     Particle_Field1C_SetScaled_0B938(arg0, 2.0f);
     Particle_Field38_AddXZFromField94YOffset180_08F38(arg0, 10.0f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
@@ -3595,7 +3616,7 @@ void BattleAnim_InitializeSkyAttackUse2(void) {
 void BattleAnim_InitializeSkyAttackHit(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackInitModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 9, 0, 0x13, 0);
     BattleAnim_SetSpawnDelay(4);
-    BattleAnim_EndEffect25Descriptor13DelegateSequence();
+    BattleAnim_EndEffect71PaletteApproachWithExpandingScaleFades();
 }
 
 void ParticleEffect_DrawQuad(Gfx* arg0, arg1_func_8434E21C* arg1, UNUSED u16 arg2) {

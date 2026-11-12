@@ -136,7 +136,7 @@ extern u8 D_8007753C;
 s32 func_80058100(s32);
 void func_80056610(void*, void*, s32);
 void* func_8005C0D0(s32, s32, void*, s32, s32);
-void func_80046040(s32);
+void Rom_InitDevice(s32);
 void func_8004609C(u32, u8*, s32);
 void func_80047FB0(u8*, s32, s32);
 void func_80037F48(s32, s32);
@@ -157,7 +157,7 @@ s32 func_8003E1F8(void) {
     D_80075C30 = 0;
     func_80056610(D_800B41F8, D_800B4208, 300000);
     D_800B41F0 = func_8005C0D0(0, 0, D_800B41F8, 1, 0x55F0);
-    func_80046040(0);
+    Rom_InitDevice(0);
 
     D_800B4160 = func_8005C0D0(0, 0, D_800B41F8, 10, 4);
     func_8004609C((u32)D_00B98000, (u8*)D_800B4160, 0x28);
@@ -322,7 +322,7 @@ s32 func_8003E1F8(void) {
     return ret;
 }
 
-void func_80038588(void);
+void Audio_StopAllSoundEffects(void);
 s32 func_80037F68(s32, s32);
 void func_80043CE8(s32, f32, s32);
 void func_8004609C(u32, u8*, s32);
@@ -348,7 +348,10 @@ s32 func_80037B7C(s32);
 void func_80037C04(s32, u32);
 void func_800419F8(u32);
 
-s32 func_8003EECC(u32 track_id) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+s32 Audio_StartMusicTrack(u32 track_id) {
     u32 file_index[1]; // FAKE
     s32 pad; // FAKE
     s32 volume_scale[1]; // FAKE
@@ -359,7 +362,7 @@ s32 func_8003EECC(u32 track_id) {
         return 0;
     }
     if (func_80037B7C(D_800FD608) != 0) {
-        func_80038588();
+        Audio_StopAllSoundEffects();
         D_800FD608 = 0;
     }
     if (D_8007754C != 0) {
@@ -621,7 +624,10 @@ extern u8 D_8007752C;
 s32 func_80037AC4(s32, s32);
 void func_800419F8(u32);
 
-s32 func_8003F654(s32 arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+s32 Audio_FadeOutAll(s32 arg0) {
     s32 ret;
 
     if (arg0 == 0) {

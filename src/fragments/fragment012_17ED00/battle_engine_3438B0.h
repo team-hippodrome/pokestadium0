@@ -112,7 +112,7 @@ void func_8212C874(CameraNode* arg0);
 
 void func_8212C6E8(ActivePokemon*, CameraNode*, s32);
 void func_82122A7C(CameraNode*, ActivePokemon*);
-void func_8212CB58(CameraNode* arg0);
+void BattleScene_Phase30(CameraNode* arg0);
 
 M2C_UNK func_8211EE8C();
 void func_8212CF90(CameraNode* arg0);
@@ -211,7 +211,7 @@ Vec3f* Vec3f_SetComponentsDuplicate(Vec3f* dest, f32 x, f32 y, f32 z);
 s32 ModelAnim_IsAnimationDone(DisplayObject* display_object);
 void func_82130D48(ActivePokemon*);
 void func_8212562C(void);
-void func_82130DAC(CameraNode* arg0);
+void BattleScene_PhaseWithdrawFainted(CameraNode* arg0);
 
 void func_8212239C(ActivePokemon* arg0, CameraNode* arg1);
 void func_82122A7C(CameraNode* arg0, ActivePokemon* arg1);
@@ -222,10 +222,10 @@ void func_8212601C(CameraNode* arg0);
 void func_82126C74(CameraNode* arg0);
 void func_82126E34(CameraNode* arg0);
 void func_82127250(CameraNode* arg0);
-void func_8212DB28(CameraNode* arg0);
+void BattleScene_Phase38(CameraNode* arg0);
 void func_8212DE30(CameraNode* arg0);
-void func_8212E350(CameraNode* arg0);
-void func_8212E634(CameraNode* arg0);
+void BattleScene_Phase13(CameraNode* arg0);
+void BattleScene_Phase14(CameraNode* arg0);
 void func_8212EA84(CameraNode* arg0);
 void func_8212F440(CameraNode* arg0);
 void BattleScene_PhaseRecoilDamage(CameraNode* arg0);

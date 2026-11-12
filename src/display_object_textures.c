@@ -344,7 +344,10 @@ extern s32 D_800AD1A4;
 extern s32 D_800AD1A8;
 extern s32 D_800AD1AC;
 
-void func_80017934(void) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void PokeIcon_OpenModelArchives(void) {
     D_800AD1A4 = func_80004154(0x500000, 0, 1, 1);
     D_800AD1A8 = func_80004154(0x4A8000, 0, 1, 1);
     D_800AD1AC = func_800023C4(0x28000, 1);
@@ -452,7 +455,10 @@ s32 PokeIcon_PollFrameLoad(ModelLoadContext* arg0) {
     return sp18;
 }
 
-s32 func_80017CB0(ModelLoadContext* arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+s32 PokeIcon_PollBackgroundLoad(ModelLoadContext* arg0) {
     sp18_func_800198E4* sp1C;
     s32 sp18 = 0;
 

@@ -490,7 +490,10 @@ void func_8210D1B0(ActivePokemon* arg0) {
 extern u8 D_800AAF50[];
 void func_8210D1B0(ActivePokemon* active_pokemon);
 void func_8210CEE8(ActivePokemon*, u8*, u8*, s32);
-s32 func_8210D378(ActivePokemon* arg0, ActivePokemon* arg1) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+s32 BattleScene_HandlePlayerForcedActionState(ActivePokemon* arg0, ActivePokemon* arg1) {
     u8* c1;
     u8* c2;
     s8* team;
@@ -717,7 +720,10 @@ s32 func_8210DA30(ActivePokemon* arg0) {
 }
 
 s32 func_82188770(s32, s32, s32, s32, s8*);
-s32 func_8210DAEC(ActivePokemon* arg0, ActivePokemon* arg1) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+s32 BattleScene_WaitForCpuChoice(ActivePokemon* arg0, ActivePokemon* arg1) {
     ActivePokemonState* state = &arg0->state;
     ActivePokemonState* other = &arg1->state;
     s32 pad[2]; // FAKE
@@ -769,7 +775,10 @@ void BattleScene_CompleteCpuForcedAction(ActivePokemon* arg0, UNUSED ActivePokem
     ptr->unk_10 = 3;
 }
 
-void func_8210DCE4(ActivePokemon* arg0, ActivePokemon* arg1) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void BattleScene_CompleteCpuMoveAction(ActivePokemon* arg0, ActivePokemon* arg1) {
     ActivePokemonState* sp20 = &arg1->state;
     ActivePokemonState* sp1C = &arg0->state;
 

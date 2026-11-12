@@ -568,7 +568,10 @@ void func_8211B900(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3) {
 }
 
 extern s8 D_8218B020;
-void func_8211BEA8(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void BattleHud_DrawCompactMonStatusBox(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3) {
     BattleMon* mon;
     u32 status;
     u8* color;

@@ -103,7 +103,7 @@ void BattleAnim_EmitTriAttackUseRadial(void);
  * fixed shape parameters 2.0, 13.0 and 0x28.  From frame 2 on it returns
  * whether the trail has completed (FourStreamTrail_IsComplete), else 0.
  *
- * Same code as BattleAnim_StartEffect45FourStreamTrail_Update in the Stadium
+ * Same code as BattleAnim_RunSonicBoomUseFourStream in the Stadium
  * 1 decomp.  pi (D_FLT_82197934), pi/6 as a double (D_DBL_82197938) and 0.3
  * (D_DBL_82197940) are read from the retail rodata because this file's own
  * rodata is not placed; the names of the values are inferred from their use

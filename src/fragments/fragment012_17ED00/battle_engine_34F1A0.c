@@ -281,7 +281,10 @@ s8* func_8213C80C(void);
 void func_80031F14(f32*, f32*, f32*);
 void func_800320A8(s32, f32, f32, f32, f32, f32, f32);
 extern s32 D_821A8B80;
-void func_821798E4(void) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Trail40Variant_SetupCameraTransform(void) {
     s8* temp_v0;
     f32 tmp1;
     f32 tmp2;

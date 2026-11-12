@@ -113,7 +113,7 @@ void func_881001A8(void *arg0) {
 
 s32 func_80024ADC(s32, s32);
 void func_80027410(s8*, s8*, s32, s32, s32);
-s32 func_800246C8(s32, s32);
+s32 Deck_GetSaveEntryTrainerId(s32, s32);
 void func_8002479C(s32, s32, u8*);
 void func_8810024C(s8* arg0) {
     u8* p = M2C_FIELD(arg0, u8**, 0);
@@ -132,7 +132,7 @@ void func_8810024C(s8* arg0) {
         p[3] = i;
         func_80027410((s8*)p + 0x18, (s8*)p + 0x28, 0x54, 6, 0);
         func_88100078(p[1], p[2], p[3], (s32*)(p + 0x18));
-        M2C_FIELD(p, s32*, 4) = func_800246C8(p[1], p[3]);
+        M2C_FIELD(p, s32*, 4) = Deck_GetSaveEntryTrainerId(p[1], p[3]);
         func_8002479C(p[1], p[3], p + 8);
         p += 0x220;
     }
@@ -1214,7 +1214,7 @@ M2C_UNK func_80006724();
 M2C_UNK func_8000675C();
 M2C_UNK func_80006828(M2C_UNK, void*);
 s32 func_80017860(M2C_UNK);
-M2C_UNK func_80017934();
+M2C_UNK PokeIcon_OpenModelArchives();
 s32 func_80017FDC(s32, M2C_UNK, M2C_UNK, M2C_UNK);
 M2C_UNK func_8001A194(M2C_UNK, M2C_UNK);
 M2C_UNK func_80025BA0(s32, M2C_UNK *, M2C_UNK *, M2C_UNK, s32);
@@ -1240,7 +1240,7 @@ s32 func_88102BBC(s32 arg0, s32 arg1) {
     func_8001A194(0x3C, 0);
     D_88103070 = func_80017860(1);
     D_88103074 = func_80017FDC(D_88103070, 0x19, 0x28, 0x28);
-    func_80017934();
+    PokeIcon_OpenModelArchives();
     func_800040B4(((u32)((s32)&D_81000000 & 0x0FF00000) >> 0x14) - 0x10, &D_0015B1A0, &D_0015E220);
     func_80003EB8((u32)((s32)&D_01000000 & 0x0F000000) >> 0x18, &D_002E0BE0, &D_002E2B90, 0);
     func_80003EB8((u32)((s32)&D_04000000 & 0x0F000000) >> 0x18, &D_00400F70, &D_004076E0, 0);

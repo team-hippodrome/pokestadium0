@@ -124,7 +124,7 @@ s32 func_80017860(s32);
 u16* func_80018F2C(s32, s32, s32, s32, s32, s32, s32, s32);
 s32 func_80017FDC(s32, s32, s32, s32);
 s32 func_80004154(u8*, u8*, s32, s32);
-void func_80017934(void);
+void PokeIcon_OpenModelArchives(void);
 void func_800040B4(s32, u8*, u8*);
 void func_80003EB8(s32, u8*, u8*, s32);
 s32 func_80001B10(u8*);

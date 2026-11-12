@@ -169,7 +169,11 @@ s32 Battle_CalcDamage(void) {
 extern s32 D_8218C7B0;
 extern s32 D_8218C7B4;
 void func_82105E38(ActivePokemon*, s32);
-void func_8211009C(void) {
+/**
+ * Subtract damage from Substitute or target HP and update the associated continuation state.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ */
+void Battle_ApplyDamage(void) {
     BattleMonRuntime* target = sBattleTarget;
 
     if (target->unk_4D & 0x10) {
@@ -348,7 +352,11 @@ void func_82110984(void) {
 
 void func_82110984(void);
 s32 func_8210F3F0(void);
-void func_82110A10(void) {
+/**
+ * Check recharge, Dream Eater, Substitute, semi-invulnerability, Mist and accuracy.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ */
+void HandleMoveEffectFlags(void) {
     s8* p = D_8219A3C0;
     u8 effect = M2C_FIELD(p, u8*, 0x45);
 
@@ -563,7 +571,7 @@ void Battle_ApplyRageContinuation(void) {
         sBattleUser->moveCache.unk_01 = 10;
 
         func_8211EF74(D_8219A520 + 0x348, 0x1F, D_8218C780, func_82107F88(sActivePokemon[!sBattleScene.scene->unk_2C]));
-        Battle_ApplyRageStatBoost();
+        BattleEffect_ApplyStatBoost();
 
         sBattleUser->moveCache.lastMove = RAGE;
         sBattleUser->moveCache.unk_01 = 0;
@@ -609,7 +617,10 @@ void Battle_PlayMoveSound(void) {
     sBattleCritFlag = 0;
 }
 
-void func_821112AC(void) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Battle_ApplyDamageAnimation(void) {
     s32 n;
 
     switch (((u8*)D_8219A3C0)[0x45]) {
@@ -656,7 +667,7 @@ void func_821112AC(void) {
             break;
     }
     if ((u16)D_82199F50 != 0) {
-        func_8211009C();
+        Battle_ApplyDamage();
     }
 }
 
@@ -665,8 +676,11 @@ extern s32 D_8218C768;
 extern s32 D_8218C76C;
 extern s32 D_8218C770;
 extern s32 D_8218C774;
-/* Stadium 0 counterpart of Stadium 1's Battle_QueueMoveFailureAndApplyRecoil. */
-void func_821113E8(void) {
+/**
+ * Queue move failure and apply Jump Kick crash damage by temporarily swapping user and target.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ */
+void Battle_QueueMoveFailureAndApplyRecoil(void) {
     BattleMonRuntime* sp1C;
 
     if (D_82199F3F & 0x7F) {
@@ -694,7 +708,7 @@ void func_821113E8(void) {
         sBattleUser = sBattleTarget;
         sBattleTarget = sp1C;
         sBattleScene.scene->unk_2C = !sBattleScene.scene->unk_2C;
-        func_8211009C();
+        Battle_ApplyDamage();
         sBattleScene.scene->unk_2C = !sBattleScene.scene->unk_2C;
         sBattleTarget = sBattleUser;
         sBattleUser = sp1C;
@@ -754,33 +768,11 @@ void Battle_ApplyPoisonOrBurnDamage(void) {
     sBattleUser->unk_10 = sBattleUser->unk_0E;
 }
 
-/*
- * func_8211176C
- *
- * Works on two BattleMonRuntime records: sBattleUser (D_8219A3C0, "A" below)
- * and sBattleTarget (D_8219A3C4, "B" below). Both pointers are re-read on every
- * access, as in the retail code.
- *
- *  1. If bits 0x18 of A->unk_15 are clear, A->unk_10 = A->unk_12, or A->unk_0C
- *     when unk_12 is 0xFFFF.
- *  2. amount = (A->unk_28 >> 4) & 0xFFFF, raised to 1 if that is 0.
- *  3. If A->unk_4E & 1, A->unk_51 is incremented and amount becomes
- *     (amount * A->unk_51) & 0xFFFF (unsigned multiply).
- *  4. If A->unk_10 < amount, A->unk_10 = 0 and amount = A->unk_10 (so 0);
- *     otherwise A->unk_10 -= amount.
- *  5. B->unk_10 = B->unk_0C, then B->unk_10 += amount, then B->unk_10 is
- *     replaced by B->unk_28 if B->unk_28 < B->unk_10 (compared as ints).
- *
- * What the fields mean (current/maximum values, the unk_4E bit and the unk_51
- * counter) is not established from this function.
- *
- * Matching notes: reusing the single temporary `v` for the intermediate values
- * matters; with a separate local for each use the compiler picked a2 instead of
- * a1 for the address register. The two-step `v = ...; amount = v & 0xFFFF`
- * forms and the (u32) cast on the multiply (which fixes the operand order of
- * the multu) are matching choices, not meaning.
+/**
+ * Stage Leech Seed HP transfer, including the Toxic-counter multiplier and healing cap.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
  */
-void func_8211176C(void) {
+void Battle_ApplyLeechSeedDamage(void) {
     s32 amount;
     s32 v;
 
@@ -826,7 +818,7 @@ extern s32 D_8218C708;
 extern s32 D_8218C70C;
 
 // Matches the ROM, but uses rodata data that is not placed in this file yet.
-void func_8211176C(void);
+void Battle_ApplyLeechSeedDamage(void);
 void func_82111870(void);
 
 s32 Battle_ApplyResidualEffects(void) {
@@ -845,7 +837,7 @@ s32 Battle_ApplyResidualEffects(void) {
     }
 
     if (sBattleUser->unk_4D & 0x80) {
-        func_8211176C();
+        Battle_ApplyLeechSeedDamage();
         func_82111870();
         func_8211EF74(D_8219A520 + 0x288, 2, D_8218C70C, func_82107F88(sActivePokemon[sBattleScene.scene->unk_2C]));
     }

@@ -158,7 +158,7 @@ s32 func_82126220(ActivePokemon* active_pokemon);
 
 void func_8212239C(ActivePokemon* arg0, CameraNode* arg1);
 s32 func_82126220(ActivePokemon*);
-void func_82126380(CameraNode* arg0);
+void BattleScene_AdvanceSendOutPreparation(CameraNode* arg0);
 
 void func_821229AC(CameraNode* arg0, ActivePokemon* arg1);
 
@@ -167,7 +167,7 @@ s32 func_80041374(s32, u32);
 s32 func_821217DC(s32);
 void func_80041940(s32, s32, s32, s32);
 void func_80043A10(void);
-void func_8212684C(UNUSED CameraNode* arg0);
+void BattleScene_CompleteSendOutFollowup(UNUSED CameraNode* arg0);
 
 void func_82126D20(UNUSED CameraNode* arg0);
 

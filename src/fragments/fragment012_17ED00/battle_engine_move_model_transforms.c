@@ -94,7 +94,10 @@ void BattleScene_HideParticipantSecondaryModels(ActivePokemon* active_pokemon) {
 }
 
 
-void func_821094C0(ActivePokemon* pokemon) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void BattleScene_ShowSecondaryModelsAtMainTransform(ActivePokemon* pokemon) {
     s32 i;
     s16 sp64[] = { 0x0, 0xE38, 0xF1C8 }; // D_821891A8
 

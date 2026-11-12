@@ -2171,9 +2171,9 @@ void ParticleEffect_InitCombinedSet(void) {
     BattleAnim_SpawnDrainFlameHueChange(0xA, 9, 0xE, 8, 0xC8, 0x10);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(4, 8, 0x14, BattleAnim_CallbackEndEffects15And22And59Descriptor3DRotatingAlphaScaleFade, &D_8218E580[0x3E], 0, 2, 0xE, 0, 0, 0);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(4, 8, 0x14, BattleAnim_CallbackEndEffect59Descriptor4FColorScaleFade, &D_8218E580[0x4F], 0, 2, 9, 0, 0, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 6, 0x28, BattleAnim_CallbackEndEffect59Descriptor4FRotatingColorScaleFade, &D_8218E580[0x4F], 0, 1, 9, 0, 0, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 0x3C, BattleAnim_CallbackEndEffect59Descriptor4FRotatingColorScaleFade, &D_8218E580[0x4F], 0, 1, 9, 0, 1, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 0x3C, BattleAnim_CallbackEndEffect59Descriptor4FRotatingColorScaleFade, &D_8218E580[0x4F], 0, 1, 9, 0, 2, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 3, 0x50, BattleAnim_CallbackEndEffect59Descriptor4FRotatingColorScaleFade, &D_8218E580[0x4F], 0, 1, 9, 0, 3, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 3, 0x50, BattleAnim_CallbackEndEffect59Descriptor4FRotatingColorScaleFade, &D_8218E580[0x4F], 0, 1, 9, 0, 4, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 6, 0x28, BattleAnim_RunDaimonji, &D_8218E580[0x4F], 0, 1, 9, 0, 0, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 0x3C, BattleAnim_RunDaimonji, &D_8218E580[0x4F], 0, 1, 9, 0, 1, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 0x3C, BattleAnim_RunDaimonji, &D_8218E580[0x4F], 0, 1, 9, 0, 2, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 3, 0x50, BattleAnim_RunDaimonji, &D_8218E580[0x4F], 0, 1, 9, 0, 3, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 3, 0x50, BattleAnim_RunDaimonji, &D_8218E580[0x4F], 0, 1, 9, 0, 4, 0);
 }

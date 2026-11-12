@@ -1610,7 +1610,10 @@ void func_800152AC(GraphNode* arg0) {
 
 extern Gfx D_01002480[];
 extern Gfx D_01002500[];
-void func_80015330(GraphNode* arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Geo_NodeShadow(GraphNode* arg0) {
     Vec3f sp9C;
     Vec3f sp90;
     Vec3f sp84;

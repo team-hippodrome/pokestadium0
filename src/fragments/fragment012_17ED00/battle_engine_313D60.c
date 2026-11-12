@@ -84,7 +84,11 @@ extern s32 D_8218C788;
 extern s32 D_8218C78C;
 extern s32 D_8218C790;
 extern s32 D_8218C794;
-void func_8210F4E8(s32 attacker, s32 defender) {
+/**
+ * Save the target's current HP and queue an HP-band message for the acting participant.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ */
+void ShowDamageMessage(s32 attacker, s32 defender) {
     ActivePokemon** atk = &sActivePokemon[attacker];
     ActivePokemonState* state = &(*atk)->state;
     BattleMonRuntime* runtime = &sActivePokemon[defender]->state.runtime;

@@ -247,7 +247,7 @@ void ParticleEffect_DrawNode(Gfx* arg0, s32 arg1, u16 arg2);
 void BattleAnim_RunDizzyPunchHitEffect(Particle* arg0);
 void BattleAnim_CallbackEndEffect49Model33Anim34WaitCleanup(Particle* arg0);
 void BattleAnim_BuildEffect49DisplayList(Gfx* arg0, UNUSED s32 arg1, UNUSED u16 arg2);
-void BattleAnim_CallbackStartEffect86ModelFadeCycle(Particle* arg0);
+void BattleAnim_RunFlyUpwardMovementEffect(Particle* arg0);
 void BattleAnim_BuildEffect63DisplayList(Gfx* arg0, s32 arg1, u16 arg2);
 void BattleAnim_BuildEffect75DisplayList(Gfx* arg0, UNUSED s32 arg1, UNUSED u16 arg2);
 void BattleAnim_CallbackStartEffects63And75ModelAnimWait(Particle* arg0);
@@ -314,7 +314,7 @@ void func_82153FD8(void);
 
 extern const f32 D_FLT_82196EC8;
 extern const f32 D_FLT_82196ECC;
-void func_82154050(Particle* arg0);
+void BattleAnim_ApplyEffect1SpeciesMotion(Particle* arg0);
 
 void BattleAnim_CallbackStartEffect1Descriptor2FPhaseFadeOut(Particle* arg0);
 
@@ -324,7 +324,7 @@ extern M2C_UNK func_82154248;
 
 void func_821542BC(void);
 
-void func_82154310(Particle* arg0);
+void BattleAnim_ApplyModelSpeciesOffset(Particle* arg0);
 
 s32 func_8213646C();                                /* extern */
 M2C_UNK func_8213B464(M2C_UNK);                     /* extern */
@@ -340,7 +340,7 @@ extern M2C_UNK func_821624FC;
 
 void BattleAnim_InitializeScreenMove(void);
 
-void func_82154C9C(Particle* arg0);
+void BattleAnim_ApplyEffect125ModelScaleOffset(Particle* arg0);
 
 void BattleAnim_InitEffect125Model(Particle* arg0, UNUSED s16 arg1);
 
@@ -357,7 +357,7 @@ void BattleAnim_InitEffect65Overlay(Particle* arg0);
 void BattleAnim_RunSporePowderMoveOverlay(Particle* arg0);
 
 /*
- * func_82155238
+ * ParticleEffect_RegisterParticleNodes
  *
  * Starts the three particle effect slots of effect 65 for the current
  * battle-animation owner: two one-shot slots (type 8) that fade in using
@@ -370,7 +370,7 @@ void BattleAnim_RunSporePowderMoveOverlay(Particle* arg0);
  * address (D_8218E7B8) is index 0x46 of gBattleAnimParticleDescriptors
  * (8-byte stride from 0x8218E588), so the table differs by one entry.
  */
-void func_82155238(void);
+void ParticleEffect_RegisterParticleNodes(void);
 
 void BattleAnim_RunGasAttack(Particle* arg0);
 
@@ -459,9 +459,9 @@ void BattleAnim_InitMove146Model(Particle* arg0);
 
 void func_82156654(Particle* arg0);
 s32 func_82136E2C(DisplayObject* arg0);
-void func_8215673C(Particle* arg0);
+void BattleAnim_CallbackEndEffect49Model33Anim34WaitCleanup(Particle* arg0);
 
-void func_821567BC(Particle* arg0);
+void BattleAnim_CallbackEndEffect21ModelAnimWait(Particle* arg0);
 
 void ParticleEffect_RegisterModeSpecific(void);
 
@@ -473,7 +473,7 @@ extern M2C_UNK func_82156B0C;
 void BattleAnim_InitializeFlyUse(void);
 
 void func_82156E54(Particle* arg0);
-void func_82156EF0(Particle* arg0);
+void BattleAnim_CallbackStartEffects63And75ModelAnimWait(Particle* arg0);
 
 s32 func_8001104C(s32);                             /* extern */
 M2C_UNK func_8213C938(s8 *);                      /* extern */
@@ -486,7 +486,7 @@ M2C_UNK func_82156F70(s8 *);                      /* extern */
 void BattleAnim_RunFallingRock(s8 *arg0);
 
 void func_82157354(Particle* arg0);
-void func_821573BC(Particle* arg0);
+void BattleAnim_CallbackStartEffects63And75Model38FadeIn(Particle* arg0);
 
 void BattleAnim_InitializeSoftBoiledUse(void);
 
@@ -500,7 +500,7 @@ void func_82157E28(s8 *arg0);
 
 void BattleAnim_RunBoomUseEffect1(Particle* arg0);
 
-void func_82158224(Particle* arg0);
+void BattleAnim_CallbackStartEffects50And82ScalePulse_InitParticle(Particle* arg0);
 
 void BattleAnim_RunBoomUseEffect2(Particle* arg0);
 

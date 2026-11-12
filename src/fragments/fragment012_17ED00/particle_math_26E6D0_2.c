@@ -73,7 +73,11 @@ void ParticleGfx_DrawBillboardTextureAlphaRotatedQuad(Particle* arg0, CameraNode
 
 extern Vtx D_82190E90[];
 
-void func_82141220(Particle* arg0, CameraNode* arg1) {
+/**
+ * Draw the particle using its world position, scale, color/angle parameters, and the selected vertex template.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ */
+void ParticleGfx_DrawBillboardDefaultQuad(Particle* arg0, CameraNode* arg1) {
     ParticleGfx_DrawModelQuad(arg1, arg0->unk_2C, arg0->unk_1C, D_82190E90);
 }
 

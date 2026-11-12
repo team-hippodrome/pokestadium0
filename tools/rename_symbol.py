@@ -36,6 +36,8 @@ def main():
     ap.add_argument("old", nargs="?")
     ap.add_argument("new", nargs="?")
     ap.add_argument("--map")
+    ap.add_argument("--merge", action="store_true",
+                    help="allow NEW to exist already (merging aliases of one address)")
     args = ap.parse_args()
     pairs = []
     if args.map:
@@ -56,10 +58,10 @@ def main():
     for t in texts.values():
         words.update(re.findall(r"\b[A-Za-z_]\w*\b", t))
     news = set(mapping.values())
-    if len(news) != len(mapping):
+    if len(news) != len(mapping) and not args.merge:
         sys.exit("two OLD names map to the same NEW name")
     clash = sorted(n for n in news if n in words and n not in mapping)
-    if clash:
+    if clash and not args.merge:
         sys.exit("NEW names already in use: " + ", ".join(clash[:20]))
     rx = re.compile(r"\b(" + "|".join(re.escape(k) for k in sorted(mapping, key=len, reverse=True)) + r")\b")
     changed = 0
@@ -80,8 +82,19 @@ def main():
                 fh.write(n)
             changed += 1
     # A func_XXXXXXXX name implies its address; a real name needs a symbol_addrs entry.
+    # After a merge, drop the duplicate symbol_addrs lines the rename produced.
     sym = os.path.join(ROOT, "linker_scripts/jp/symbol_addrs.txt")
-    have = set(re.findall(r"^(\w+)\s*=", open(sym).read(), re.M))
+    seen, keep = set(), []
+    for line in open(sym).read().split("\n"):
+        m = re.match(r"^(\w+)\s*=", line)
+        if m and (m.group(1) in seen or (re.fullmatch(r"func_[0-9A-F]{8}", m.group(1)) and m.group(1) in news)):
+            continue
+        if m:
+            seen.add(m.group(1))
+        keep.append(line)
+    with open(sym, "w") as fh:
+        fh.write("\n".join(keep))
+    have = seen
     add = [f"{new} = 0x{old[5:]}; // type:func" for old, new in pairs
            if re.fullmatch(r"func_[0-9A-F]{8}", old) and new not in have]
     if add:

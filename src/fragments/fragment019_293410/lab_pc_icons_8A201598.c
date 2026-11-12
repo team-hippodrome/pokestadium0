@@ -4,7 +4,7 @@
 extern s32 D_8A21DE08;
 extern M2C_UNK D_8A21DE10;
 
-s32 func_80001AA4(void);
+s32 Display_IsFrameReady(void);
 s32 func_80002BA4(void*, s32);
 s32 func_80017304(s32, BinArchive*, s32, void*, s32);
 s32 func_8001FA8C(s32);
@@ -157,7 +157,7 @@ void func_8A201D3C(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     M2C_FIELD(arg0, s32*, 0x34) = 0;
     M2C_FIELD(arg0, s32*, 0x2C) = arg3;
     count = func_8002D3D0((u8*)arg3);
-    while (func_80001AA4() == 0) {
+    while (Display_IsFrameReady() == 0) {
     }
     for (i = 0; i < count; i++) {
         handle = func_80002BA4(D_8A21DA60[i], 0x14800);
@@ -282,7 +282,10 @@ void func_8A202390(s8 *arg0) {
     func_80020C60(sp18);
 }
 
-void func_8A2023F4(s32* arg0, s32 arg1) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void LabPC_WriteDeckBack(s32* arg0, s32 arg1) {
     s32* sp2C;
     s32 i;
     s32 temp_s3;
@@ -421,7 +424,7 @@ void func_8002CC44(s8*);
 s32 func_8A20093C(s8*);
 void func_8A20080C(s8* arg0, s32 arg1, s32 arg2, u8* arg3);
 s32 func_8A202078(s8* arg0);
-void func_8A2023F4(s32* arg0, s32 arg1);
+void LabPC_WriteDeckBack(s32* arg0, s32 arg1);
 M2C_UNK func_8A20291C(M2C_UNK* ctx) {
     s32 ret = 0;
     s8* arg0 = (s8*)ctx;
@@ -557,7 +560,7 @@ M2C_UNK func_8A20291C(M2C_UNK* ctx) {
                 switch (res) {
                     case 1:
                         func_8002CC44(arg0 + 0x10C);
-                        func_8A2023F4((s32*)(arg0 + 0x180), (s32)arg0);
+                        LabPC_WriteDeckBack((s32*)(arg0 + 0x180), (s32)arg0);
                         func_8A202904(arg0, 7, 0);
                         M2C_FIELD(arg0, s32*, 0x34) = 7;
                         break;
@@ -575,7 +578,10 @@ M2C_UNK func_8A20291C(M2C_UNK* ctx) {
     return ret;
 }
 
-void func_8A202EF4(void) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void BattlePrep_RenderFrame(void) {
     D_8A21DA40 = func_80025BD8();
     D_8A21DE08 = D_8A21DA40;
     if (D_8A21DE08 != -1) {
@@ -657,7 +663,7 @@ s32 func_8A2030C0(UNUSED s32 arg0, UNUSED s32 arg1, UNUSED s32 arg2) {
         D_8A21DA60[i] = main_pool_alloc(0x14800, 0);
     }
 
-    func_8A202EF4();
+    BattlePrep_RenderFrame();
     StageLoader_UpdateSegments();
     BgStage_RunUntilCondition(8, func_8A202F50);
     BgStage_RunUntilCondition(0, (s32 (*)(u8))func_8A203070);

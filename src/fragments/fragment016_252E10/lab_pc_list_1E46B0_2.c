@@ -262,7 +262,7 @@ s32 func_80025BD8(void);
 void func_80027410(void*, void*, s32, s32, s32);
 void func_80027FF8(void*, s32);
 s32 func_800246A8(s32, s32);
-s32 func_800246C8(s32, s32);
+s32 Deck_GetSaveEntryTrainerId(s32, s32);
 s32 func_8002479C(s32, s32, u8*);
 s32 func_80024ADC(s32, s32);
 s32 func_8000A4E8(char*, char*);
@@ -294,7 +294,7 @@ void func_89109E5C(unk_func_8830867C_02C_154* arg0, void* arg1, void* arg2, void
 
     for (i = 0; i < 4; i++) {
         if ((func_800246A8(0x12, i) != 0) && (func_80024ADC(0x12, i) > 0)) {
-            temp_s1 = func_800246C8(0x12, i);
+            temp_s1 = Deck_GetSaveEntryTrainerId(0x12, i);
             func_8002479C(0x12, i, sp38);
             if ((sp48.unk_08 == temp_s1) && (func_8000A4E8(sp54, sp38) == 0)) {
                 break;

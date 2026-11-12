@@ -384,7 +384,7 @@ void Save_InitializeBank3(void) {
 
 s32 func_80025214(void);
 void func_80025224(u8);
-void func_8002404C(s32, s32);
+void Save_CommitTypedRecord(s32, s32);
 void func_88401B40(void) {
     s32 done = 0;
     s32 sel = 0;
@@ -452,7 +452,7 @@ void func_88401B40(void) {
                 }
             }
             func_80025224(flags);
-            func_8002404C(0x14, 0);
+            Save_CommitTypedRecord(0x14, 0);
         }
     }
 }

@@ -209,14 +209,14 @@ void _n_freePVoice(N_PVoice* pvoice) {
     alLink((ALLink*)pvoice, &n_syn->pLameList);
 }
 
-s32 func_800449E0(s32 micros) {
+s32 _n_timeToSamplesNoRound(s32 micros) {
     f32 tmp = ((f32)micros) * n_syn->outputRate / 1000000.0 + 0.5;
 
     return (s32)tmp;
 }
 
-s32 func_800449E0(s32 micros);
+s32 _n_timeToSamplesNoRound(s32 micros);
 
-s32 func_80044A34(s32 micros) {
-    return func_800449E0(micros) & ~0xF;
+s32 _n_timeToSamples(s32 micros) {
+    return _n_timeToSamplesNoRound(micros) & ~0xF;
 }

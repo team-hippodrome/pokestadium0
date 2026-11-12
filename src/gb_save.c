@@ -952,7 +952,10 @@ s32 Ui_AdjustSteppedRangeSelection(unk_func_8002E128_arg0* arg0) {
 
 extern Gfx D_80073450[];
 extern u8 *D_80073584[];
-void func_8002B788(s32 arg0, s32 arg1, s32 arg2) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Trade_DrawDigitStrip(s32 arg0, s32 arg1, s32 arg2) {
     s32 i;
     s32 var_s0;
     s32 var_s4;
@@ -1524,7 +1527,7 @@ void func_8002D520(s32 arg0) {
  * symbol_addrs.txt) is called once.  Then, repeatedly:
  *
  *   - state starts at 2.  func_8002D520(state) is called and
- *     func_80021B30(arg0) (GbSave_PollCartRemoval, per symbol_addrs.txt) is
+ *     GbSave_PollCartRemoval(arg0) (GbSave_PollCartRemoval, per symbol_addrs.txt) is
  *     polled; if the poll returns 1 or 3, state becomes 1 or 3 for the next
  *     round.  This repeats until the poll returns 2.
  *   - func_8002D520(0) is called twice.
@@ -1544,7 +1547,7 @@ void func_8002D520(s32 arg0) {
  * inner loop instead of sending two null messages inside it).
  */
 M2C_UNK func_80006780();                            /* extern */
-s32 func_80021B30(s32);                             /* extern */
+s32 GbSave_PollCartRemoval(s32);                             /* extern */
 s32 func_8002207C(s32);                             /* extern */
 void func_8002D520(s32);
 
@@ -1557,7 +1560,7 @@ void func_8002D7D4(s32 arg0) {
         state = 2;
         do {
             func_8002D520(state);
-            result = func_80021B30(arg0);
+            result = GbSave_PollCartRemoval(arg0);
             if (result == 1) {
                 state = 1;
             } else if (result == 3) {

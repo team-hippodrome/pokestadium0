@@ -159,7 +159,10 @@ void func_82130D48(ActivePokemon* active_pokemon) {
 }
 
 
-void func_82130DAC(CameraNode* arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void BattleScene_PhaseWithdrawFainted(CameraNode* arg0) {
     u8* sp2C = (u8*)sActivePokemon[sBattleScene.scene->unk_2C] + 0x78C;
     ActivePokemon* temp_s0 = sActivePokemon[sBattleScene.scene->unk_2C];
 
@@ -374,7 +377,7 @@ void BattleScene_UpdatePhase(CameraNode* arg0) {
         func_8212C874(arg0);
         break;
     case 30:
-        func_8212CB58(arg0);
+        BattleScene_Phase30(arg0);
         break;
     case 29:
         func_8212DE30(arg0);
@@ -389,16 +392,16 @@ void BattleScene_UpdatePhase(CameraNode* arg0) {
         func_8212D194(arg0);
         break;
     case 27:
-        func_8212DB28(arg0);
+        BattleScene_Phase38(arg0);
         break;
     case 12:
         func_8212E0B0(arg0);
         break;
     case 13:
-        func_8212E350(arg0);
+        BattleScene_Phase13(arg0);
         break;
     case 14:
-        func_8212E634(arg0);
+        BattleScene_Phase14(arg0);
         break;
     case 15:
         func_8212D504(arg0);
@@ -443,7 +446,7 @@ void BattleScene_UpdatePhase(CameraNode* arg0) {
         func_8212F16C(arg0);
         break;
     case 11:
-        func_82130DAC(arg0);
+        BattleScene_PhaseWithdrawFainted(arg0);
         break;
     case 18:
         func_821311A0(arg0);

@@ -889,7 +889,12 @@ void BattleScene_EnterRow8StartMappedMoveAnim(ActivePokemon* active_pokemon) {
     BattleAnim_SetModelEventTrackFromRow(active_pokemon, charge_move_cue);
 }
 
-void func_82103C64(ActivePokemon* active_pokemon) {
+/**
+ * State row 8 tick: when the charge cue ends, queues the alternate effect
+ * script, applies Fly/Dig model flags and plays the reaction sound.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ */
+void BattleScene_TickRow8PlayMoveEffectScriptB(ActivePokemon* active_pokemon) {
     BattleMonRuntime* runtime;
     s16 species_ob1;
     s16 move;
@@ -1699,7 +1704,11 @@ s32 func_821058E8(ActivePokemon* active_pokemon, s32 frame_limit) {
     return ModelAnim_IsAnimationDone(&active_pokemon->displayObject);
 }
 
-s32 func_82105AB0(ActivePokemon* active_pokemon, s32 frame_limit) {
+/**
+ * Battle_IsRowAnimationSettled for the charge cue mapped from the used move.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ */
+s32 BattleScene_IsMoveKeyedRowWaitComplete(ActivePokemon* active_pokemon, s32 frame_limit) {
     MovePresentationCue* idle_cue;
     BattleMon* party_pokemon;
     UNUSED s32 pad; // FAKE: stack padding
@@ -2211,7 +2220,10 @@ void BattleScene_AllocateParticipantRecord(BattleSessionTeams* session_teams, s3
 
 M2C_UNK func_8211F3F4();                            /* extern */
 
-void func_82106D18(void) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Battle_InitMessageQueues(void) {
     func_8211F3F4();
 }
 
@@ -2231,7 +2243,11 @@ void func_82108DC8(ActivePokemon*, s32);
 void func_82108DE0(ActivePokemon*, s32);
 void func_82108DF0(ActivePokemon*, s32);
 void func_82108DE8(ActivePokemon*, u8*);
-void func_82106D90(ActivePokemon* arg0) {
+/**
+ * Binds the first team member, side and controller to the participant.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ */
+void BattleScene_InitializeParticipantController(ActivePokemon* arg0) {
     u8* sp24 = &D_800AAF50[M2C_FIELD(M2C_FIELD(M2C_FIELD(arg0, s8**, 0x85C), s8**, 8), u8*, 1) * 0x24];
     ActivePokemonState* state = &arg0->state;
 
@@ -2249,7 +2265,7 @@ extern s32 D_84390174;
 extern unk_D_84390178 D_84390178;
 void func_821079E8(s32);
 
-void func_821081D0(ActivePokemon*);
+void BattleScene_InitializeParticipantModel(ActivePokemon*);
 
 void func_82107FB8(ActivePokemon*);
 void func_82108090(ActivePokemon*, void*);
@@ -2262,8 +2278,8 @@ void func_8211F274(ActivePokemon*);
 void BattleScene_InitializePresentation(UNUSED BattleSessionTeams* session_teams) {
     BattleScene_InitializeParticipantController(sActivePokemon[0]);
     BattleScene_InitializeParticipantController(sActivePokemon[1]);
-    func_821081D0(sActivePokemon[0]);
-    func_821081D0(sActivePokemon[1]);
+    BattleScene_InitializeParticipantModel(sActivePokemon[0]);
+    BattleScene_InitializeParticipantModel(sActivePokemon[1]);
     func_82107FB8(sActivePokemon[0]);
     func_82107FB8(sActivePokemon[1]);
     func_82108090(sActivePokemon[0], &sActivePokemon[0]->afterimages);
@@ -2309,7 +2325,12 @@ void BattleScene_ResetParticipantAuxTransform(UNUSED ActivePokemon* owner, Activ
 
 extern Entry82199E14 D_82199E10[];
 void func_8210E6F4(void);
-void func_82106FE0(BattleSessionTeams* session_teams) {
+/**
+ * Loads battle string tables, clears tick slots and initializes facing,
+ * presentation, runtime state and move illegality.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ */
+void BattleScene_InitializeRuntime(BattleSessionTeams* session_teams) {
     s32 i;
 
     for (i = 0; i < 7; i++) {
@@ -2376,14 +2397,22 @@ void func_821071B4(s8 *arg0) {
 
 extern M2C_UNK D_82199DE0;
 
-void func_821071C0(void) {
+/**
+ * Updates upon the entering the move phase for both pokemon
+ * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ */
+void BattleThumbnail_ClearBothOwnerIdleFlags(void) {
     M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 0), s32 *, 0x9D8) = 0;
     M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 4), s32 *, 0x9D8) = 0;
 }
 
 extern M2C_UNK D_82199DE0;
 
-void func_821071DC(void) {
+/**
+ * Updates upon the exiting the move phase for both pokemon
+ * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ */
+void BattleThumbnail_SetBothOwnerIdleFlags(void) {
     M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 0), s32 *, 0x9D8) = 1;
     M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 4), s32 *, 0x9D8) = 1;
 }

@@ -128,7 +128,10 @@ typedef struct LabPCBoxEntry {
     /* 0x4 */ s32 unk_04;
 } LabPCBoxEntry; // size = 0x8
 
-s32 func_890072E4(s8* arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+s32 LabPC_NoEmptyBoxAvailable(s8* arg0) {
     s32 i;
     LabPCBoxEntry* var_a0 = M2C_FIELD(arg0, LabPCBoxEntry**, 0);
 
@@ -141,7 +144,10 @@ s32 func_890072E4(s8* arg0) {
     return 1;
 }
 
-s32 func_8900732C(s8* arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+s32 LabPC_AllBoxesEmpty(s8* arg0) {
     s32 i;
     LabPCBoxEntry* var_a0 = M2C_FIELD(arg0, LabPCBoxEntry**, 0);
 
@@ -439,7 +445,7 @@ extern u8 D_04011A60[];
 void func_80029028(s32, s32, s32, s32, Color_RGBA8);
 void func_8002A0AC(s32, s32, s32, s32, Color_RGBA8);
 void func_8001BCB4(s32, s32, s32, s32, u8*, s32, s32);
-void func_8002B788(s32, s32, u8);
+void Trade_DrawDigitStrip(s32, s32, u8);
 void func_80027F20(s32);
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 u8* func_80018DEC(s32, s32);
@@ -461,7 +467,7 @@ void func_89007D54(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4, s32 arg5) {
         gSPDisplayList(gDisplayListHead++, D_80073450);
         gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
         func_8001BCB4(arg0 + 4, arg1 + 0x24, 8, 0xA, D_04011A60, 8, 0);
-        func_8002B788(arg0 + 0xE, arg1 + 0x22, arg2[0x24]);
+        Trade_DrawDigitStrip(arg0 + 0xE, arg1 + 0x22, arg2[0x24]);
         func_8001AB6C();
         func_80027F20(arg4);
         func_8001A384(4, 0);
@@ -991,11 +997,11 @@ s32 func_890097E0(s8* arg0) {
                             ret = -1;
                             break;
                         case 0:
-                            if (func_8900732C(M2C_FIELD(arg0, s8**, 0x170)) != 0) {
+                            if (LabPC_AllBoxesEmpty(M2C_FIELD(arg0, s8**, 0x170)) != 0) {
                                 func_8003F6AC(8);
                                 M2C_FIELD(arg0, s32*, 0) = 7;
                                 func_8002CEEC(arg0 + 0x1E0, D_8900A954[M2C_FIELD(arg0, u32*, 0x15C)], 0, 1, 0);
-                            } else if (func_890072E4(M2C_FIELD(arg0, s8**, 0x194)) != 0) {
+                            } else if (LabPC_NoEmptyBoxAvailable(M2C_FIELD(arg0, s8**, 0x194)) != 0) {
                                 func_8003F6AC(8);
                                 M2C_FIELD(arg0, s32*, 0) = 7;
                                 func_8002CEEC(arg0 + 0x1E0, D_8900A96C, 0, 1, 0);
@@ -1006,11 +1012,11 @@ s32 func_890097E0(s8* arg0) {
                             }
                             break;
                         case 1:
-                            if (func_8900732C(M2C_FIELD(arg0, s8**, 0x194)) != 0) {
+                            if (LabPC_AllBoxesEmpty(M2C_FIELD(arg0, s8**, 0x194)) != 0) {
                                 func_8003F6AC(8);
                                 M2C_FIELD(arg0, s32*, 0) = 7;
                                 func_8002CEEC(arg0 + 0x1E0, D_8900A954[M2C_FIELD(arg0, u32*, 0x15C)], 0, 1, 0);
-                            } else if (func_890072E4(M2C_FIELD(arg0, s8**, 0x170)) != 0) {
+                            } else if (LabPC_NoEmptyBoxAvailable(M2C_FIELD(arg0, s8**, 0x170)) != 0) {
                                 func_8003F6AC(8);
                                 M2C_FIELD(arg0, s32*, 0) = 7;
                                 func_8002CEEC(arg0 + 0x1E0, D_8900A96C, 0, 1, 0);
@@ -1021,7 +1027,7 @@ s32 func_890097E0(s8* arg0) {
                             }
                             break;
                         case 2:
-                            if (func_8900732C(M2C_FIELD(arg0, s8**, 0x170)) != 0) {
+                            if (LabPC_AllBoxesEmpty(M2C_FIELD(arg0, s8**, 0x170)) != 0) {
                                 func_8003F6AC(8);
                                 M2C_FIELD(arg0, s32*, 0) = 7;
                                 func_8002CEEC(arg0 + 0x1E0, D_8900A954[M2C_FIELD(arg0, u32*, 0x15C)], 0, 1, 0);
@@ -1032,8 +1038,8 @@ s32 func_890097E0(s8* arg0) {
                             }
                             break;
                         case 3:
-                            if ((func_8900732C(M2C_FIELD(arg0, s8**, 0x170)) != 0) ||
-                                (func_8900732C(M2C_FIELD(arg0, s8**, 0x194)) != 0)) {
+                            if ((LabPC_AllBoxesEmpty(M2C_FIELD(arg0, s8**, 0x170)) != 0) ||
+                                (LabPC_AllBoxesEmpty(M2C_FIELD(arg0, s8**, 0x194)) != 0)) {
                                 func_8003F6AC(8);
                                 M2C_FIELD(arg0, s32*, 0) = 7;
                                 func_8002CEEC(arg0 + 0x1E0, D_8900A954[M2C_FIELD(arg0, u32*, 0x15C)], 0, 1, 0);
@@ -1044,8 +1050,8 @@ s32 func_890097E0(s8* arg0) {
                             }
                             break;
                         case 4:
-                            if ((func_8900732C(M2C_FIELD(arg0, s8**, 0x170)) != 0) &&
-                                (func_8900732C(M2C_FIELD(arg0, s8**, 0x194)) != 0)) {
+                            if ((LabPC_AllBoxesEmpty(M2C_FIELD(arg0, s8**, 0x170)) != 0) &&
+                                (LabPC_AllBoxesEmpty(M2C_FIELD(arg0, s8**, 0x194)) != 0)) {
                                 func_8003F6AC(8);
                                 M2C_FIELD(arg0, s32*, 0) = 7;
                                 func_8002CEEC(arg0 + 0x1E0, D_8900A954[M2C_FIELD(arg0, u32*, 0x15C)], 0, 1, 0);
@@ -1091,8 +1097,8 @@ s32 func_890097E0(s8* arg0) {
                 } else {
                     func_8003F6AC(0x18);
                     func_89009414(arg0);
-                    if ((func_8900732C(M2C_FIELD(M2C_FIELD(arg0, s8**, 0x1D8), s8**, 0)) != 0) ||
-                        (func_890072E4(M2C_FIELD(M2C_FIELD(arg0, s8**, 0x1DC), s8**, 0)) != 0)) {
+                    if ((LabPC_AllBoxesEmpty(M2C_FIELD(M2C_FIELD(arg0, s8**, 0x1D8), s8**, 0)) != 0) ||
+                        (LabPC_NoEmptyBoxAvailable(M2C_FIELD(M2C_FIELD(arg0, s8**, 0x1DC), s8**, 0)) != 0)) {
                         back = 1;
                     } else {
                         next = 2;
@@ -1212,7 +1218,7 @@ s32 func_890097E0(s8* arg0) {
 typedef struct Ent8900A014 { s32 unk0; s32 unk4; } Ent8900A014;
 s8* func_80017860(s32);
 s32 func_80017FDC(s8*, s32, s32, s32);
-void func_80017934(void);
+void PokeIcon_OpenModelArchives(void);
 s32 func_80018F2C(s8*, s32, s32, s32, s32, s32, s32, s32);
 void func_80027410(s8*, s8*, s32, s32, s32);
 void func_89008AF4(s8*, s32, s32, s8*);
@@ -1227,7 +1233,7 @@ void func_8900A014(s8* arg0) {
     M2C_FIELD(arg0, s8**, 0x7518) = func_80017860(1);
     M2C_FIELD(arg0, s32*, 0x751C) = func_80018F2C(M2C_FIELD(arg0, s8**, 0x7518), 0x80, 0x78, 0, 0, 0x78, 0x78, 0);
     M2C_FIELD(arg0, s32*, 0x7520) = func_80017FDC(M2C_FIELD(arg0, s8**, 0x7518), 0x1E, 0x28, 0x28);
-    func_80017934();
+    PokeIcon_OpenModelArchives();
     Fragment_Load(((((u32)D_81000000) & 0x0FF00000) >> 0x14) - 0x10, D_0015B1A0, D_0015E220);
     func_89007264(arg0 + 0x3E8, 0x21, D_89019108, 8);
     func_89007264(arg0 + 0x4F08, 0x11, 0, 4);

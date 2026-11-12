@@ -151,7 +151,7 @@ void func_89103740(Ctx89103740* arg0, Ref89103740* arg1, s32 arg2, s32 arg3, Msg
     func_89103620(D_8910E3A8, arg2, arg3);
     arg4->unk0C = D_8910E3A8;
     func_80027868(old->unk14, arg1->unk04);
-    func_891035E4((u8*)old);
+    LabPCList_ReindexBoxSlots((u8*)old);
     arg1->sub = sub;
     arg1->unk04 = sub->count;
     func_80027814(sub->unk14, arg1, sub->count);
@@ -725,7 +725,10 @@ void func_891044F0(void*);
 extern M2C_UNK D_8910E380;
 extern M2C_UNK D_8910E3D0;
 
-void func_89104998(void) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void BattlePrep_UpdateSingleBattleIntroFrame(void) {
     D_8910E37C = func_80025BD8();
     if (D_8910E37C != -1) {
         func_80027FF8(&D_8910E380, D_8910E37C);
@@ -815,7 +818,7 @@ s32 func_891049E8(s32);
  *      D_002E0BE0..D_002E2B90 into segment 1 and D_00400F70..D_004076E0 into
  *      segment 4.  The segment number is bits 24-27 of the address of
  *      D_01000000 / D_04000000.
- *   4. func_89104998() and StageLoader_UpdateSegments() are called.
+ *   4. BattlePrep_UpdateSingleBattleIntroFrame() and StageLoader_UpdateSegments() are called.
  *   5. BgStage_RunUntilCondition is run three times, with timer values 8, 0
  *      and 8: the first and third with callback func_891049E8, the second
  *      with func_89104B08.  What those callbacks do is not established
@@ -832,7 +835,7 @@ s32 func_89104B48(s32 arg0, s32 arg1) {
     func_8001A194(0x3C, 0);
     Asset_LoadToSegment(((u32)D_01000000 & 0x0F000000) >> 0x18, D_002E0BE0, D_002E2B90, 0);
     Asset_LoadToSegment(((u32)D_04000000 & 0x0F000000) >> 0x18, D_00400F70, D_004076E0, 0);
-    func_89104998();
+    BattlePrep_UpdateSingleBattleIntroFrame();
     StageLoader_UpdateSegments();
     BgStage_RunUntilCondition(8, func_891049E8);
     BgStage_RunUntilCondition(0, func_89104B08);

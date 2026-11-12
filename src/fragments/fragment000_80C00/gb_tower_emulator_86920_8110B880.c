@@ -1083,7 +1083,10 @@ void func_8110CF24(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     }
 }
 
-u8* func_8110CFEC(s32 arg0, s32* arg1) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+u8* Audio_CountActiveSoundsByCategory(s32 arg0, s32* arg1) {
     s32 off;
 
     off = ((u16*)D_811858A8)[func_8110D7B0(0, arg0)];

@@ -229,7 +229,10 @@ s32 DoubleTextureTrail_UpdateAll(void) {
     return 0;
 }
 
-Gfx* func_82180AF4(Gfx* arg0, DoubleTextureTrail* arg1, s16 arg2, s16 arg3) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+Gfx* WaterParticle_DrawPass(Gfx* arg0, DoubleTextureTrail* arg1, s16 arg2, s16 arg3) {
     s32 i;
     s32 j;
     Vtx* sp44;

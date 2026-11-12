@@ -454,7 +454,10 @@ extern Gfx D_8A12EBB8[];
 extern Gfx D_8A12EBF0[];
 extern Gfx D_8A12F128[];
 extern Gfx D_8A12F150[];
-void func_8A104290(void) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Pokedex_BuildMapLabelsDisplayList(void) {
     s16 sp46;
     s16 sp44;
     s16 sp42;

@@ -63,7 +63,7 @@ void func_82124EFC(void) {
     sBattleScene.scene->unk_2C = sp24;
 }
 
-void func_82188B8C(s32, s32, s32);
+void BattleAI_RecordUsedMove(s32, s32, s32);
 s32 func_821250D4(void) {
     s8* sp24;
     s8* sp20;
@@ -75,7 +75,7 @@ s32 func_821250D4(void) {
     func_821079E8(0x1FFE);
     if ((M2C_FIELD(sp24, u8*, 0x2E) == 0xF) || (M2C_FIELD(sp24, u8*, 0x2E) == 0x10)) {
         if (*M2C_FIELD(sActivePokemon[sBattleScene.scene->unk_2C], u8**, 0x860) & 2) {
-            func_82188B8C(M2C_FIELD(sp20, s32*, 8), M2C_FIELD(sp1C, s32*, 8), 2);
+            BattleAI_RecordUsedMove(M2C_FIELD(sp20, s32*, 8), M2C_FIELD(sp1C, s32*, 8), 2);
         }
         func_82105E4C(sActivePokemon[sBattleScene.scene->unk_2C], 0x3800);
         sBattleScene.scene->unk_20 = 0;
@@ -515,7 +515,10 @@ s32 func_82126220(ActivePokemon* active_pokemon) {
     return 0;
 }
 
-void func_82126380(CameraNode* arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void BattleScene_AdvanceSendOutPreparation(CameraNode* arg0) {
     if (func_82124A50(sActivePokemon[!sBattleScene.scene->unk_2C]) == 0) {
         Battle_ClearRuntimeFlags(sActivePokemon[!sBattleScene.scene->unk_2C], 0x3800);
         func_821261A0(sActivePokemon[!sBattleScene.scene->unk_2C], arg0, 3);
@@ -540,7 +543,10 @@ void func_821235E0(CameraNode*, ActivePokemon*);
 void func_8211EE8C(void);
 void func_82105E38(ActivePokemon*, s32);
 u16 func_8210C020(s32); // BattleAnim_RandomRange
-void func_821264E4(CameraNode* arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void BattleScene_AdvanceSendOutCamera(CameraNode* arg0) {
     UNUSED s32 pad[2]; // FAKE: stack padding
     ActivePokemonState* state = &sActivePokemon[!sBattleScene.scene->unk_2C]->state;
     u8* rec = D_82189180[!sBattleScene.scene->unk_2C] + 0x72D;
@@ -607,7 +613,10 @@ void BattleScene_FinishSendOutCameraClose(CameraNode* arg0) {
     }
 }
 
-void func_8212684C(UNUSED CameraNode* arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void BattleScene_CompleteSendOutFollowup(UNUSED CameraNode* arg0) {
     ActivePokemonState* other;
     ActivePokemonState* self;
     s32 side;
@@ -656,7 +665,10 @@ void func_8212684C(UNUSED CameraNode* arg0) {
 void func_82126A1C(UNUSED CameraNode* arg0) {
 }
 
-void func_82126A24(CameraNode* arg0) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void BattleScene_AdvanceSendOutFollowupCamera(CameraNode* arg0) {
     UNUSED s32 pad[2]; // FAKE: stack padding
     ActivePokemonState* state = &sActivePokemon[!sBattleScene.scene->unk_2C]->state;
     u8* rec = D_82189180[!sBattleScene.scene->unk_2C] + 0x79B;

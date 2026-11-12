@@ -146,7 +146,7 @@ void func_8002D7D4(s32);
 void func_80022188(s32);
 void func_8A20261C(void*);
 
-void func_8A2023F4(s32* arg0, s32 arg1);
+void LabPC_WriteDeckBack(s32* arg0, s32 arg1);
 
 void func_8A202904(s8 *arg0, s32 arg1, s32 arg2);
 
@@ -179,7 +179,7 @@ extern ModelLoadContext* D_8A21DA48;
 extern BinArchive* D_8A21DA54;
 extern void* D_8A21DA58;
 extern void* D_8A21DA60[4];
-void func_8A202EF4(void);
+void BattlePrep_RenderFrame(void);
 s32 func_8A202F50(u8);
 s32 func_8A2030C0(UNUSED s32 arg0, UNUSED s32 arg1, UNUSED s32 arg2);
 

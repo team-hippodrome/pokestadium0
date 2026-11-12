@@ -218,12 +218,12 @@ s32 func_81200970(s32 arg0)
   return var_v1_2;
 }
 
-s32 func_800384D8(void);
+s32 Audio_GetActivityScore(void);
 
 s32 func_812009C4(s32 arg0) {
     s32 var_v1 = 0;
 
-    if ((D_81201018 >= 0x259) && (func_800384D8() == 0) && (func_81200970(arg0) != 0)) {
+    if ((D_81201018 >= 0x259) && (Audio_GetActivityScore() == 0) && (func_81200970(arg0) != 0)) {
         var_v1 = 1;
     }
     return var_v1;
@@ -241,7 +241,7 @@ s32 func_812009C4(s32 arg0) {
  * increments the frame counter D_81201018.  When `arg0` is 0 it reads the
  * input word func_8000D0DC(D_81201014); the upper halfword of that word is
  * the value tested and passed on below:
- *   - upper halfword == 0xA: func_800387BC(0x10), result 0xF000;
+ *   - upper halfword == 0xA: Audio_FadeCategoriesAndStreams(0x10), result 0xF000;
  *   - otherwise, if bit 0x1000 or 0x8000 is set in the halfword at offset 8
  *     of the structure D_800603C0 points to (read here as controller
  *     buttons, not confirmed) and func_81200970(upper halfword) != 0:
@@ -264,7 +264,7 @@ s32 func_8000B2E8();
 M2C_UNK func_800069CC();
 M2C_UNK func_80006998(M2C_UNK);
 s32 func_8000D0DC(s32);
-M2C_UNK func_800387BC(M2C_UNK);
+M2C_UNK Audio_FadeCategoriesAndStreams(M2C_UNK);
 M2C_UNK func_8003F6AC(M2C_UNK);
 void func_81200020(void);
 void func_8120023C(s32);
@@ -288,7 +288,7 @@ s32 func_81200A20(s32 arg0) {
         temp_v0 = func_8000D0DC(D_81201014);
         sp18 = temp_v0;
         if (((temp_v0 >> 0x10) & 0xFFFF) == 0xA) {
-            func_800387BC(0x10);
+            Audio_FadeCategoriesAndStreams(0x10);
             sp1C = 0xF000;
         } else if (M2C_FIELD(D_800603C0, u16 *, 8) & 0x9000) {
             if (func_81200970((sp18 >> 0x10) & 0xFFFF) != 0) {
@@ -331,7 +331,7 @@ M2C_UNK func_8000A838(M2C_UNK);                     /* extern */
 M2C_UNK func_8000D280();                            /* extern */
 M2C_UNK func_8001A194(M2C_UNK, M2C_UNK);            /* extern */
 M2C_UNK func_800407B0(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
-M2C_UNK func_80044158(s32);                         /* extern */
+M2C_UNK Audio_LoadWaveTablesAndMusic(s32);                         /* extern */
 M2C_UNK func_80044268();                            /* extern */
 extern M2C_UNK D_002E0BE0;
 extern M2C_UNK D_002E2B90;
@@ -361,7 +361,7 @@ s32 func_81200B80(s32 arg0, M2C_UNK arg1) {
     D_81201010 = func_80003EB8(0U, &D_002E2B90, &D_002EBCB0, 0);
     D_81201018 = 0;
     D_81201020 = 0;
-    func_80044158(D_8120101C);
+    Audio_LoadWaveTablesAndMusic(D_8120101C);
     func_80006680(sp20);
     sp24 = func_800068DC(&func_81200A20, 0x10, 0x10);
     func_800066C8();

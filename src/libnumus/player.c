@@ -84,7 +84,10 @@ s32 func_800366BC(s8 *arg0, s32 arg1) {
     return arg1;
 }
 
-u8* func_800366C8(channel_t* cp, u8* ptr) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+u8* Audio_SetVoiceVolumeEnvelope(channel_t* cp, u8* ptr) {
     u8 value;
 
     value = *ptr++;
@@ -835,8 +838,9 @@ void func_8003798C(s32 flags, s32 duration) {
  * offset 0xB2 is nonzero, MUSFLAG_SONGS those where it is 0). Does not mask interrupts.
  * Written with the offset-0xB2 field read through M2C_FIELD: player.h places the
  * equivalent `IsFX` at 0xBA, which does not match this build's data.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
-s32 func_80037A48(s32 flags) {
+s32 Audio_IsSoundPlaying(s32 flags) {
     channel_t* cp;
     s32 i;
     s32 count;
@@ -1149,7 +1153,7 @@ s32 func_800380D0(void) {
 /**
  * Initialises channel `cp` as a new sound: calls func_8003A2B8(cp) to reset it, then
  * stores arg0 at offsets 0x88 and 0x140, arg1 at 0x13C, arg3 + 0x100 at 0xB2 (the
- * type word that func_80037A48 and func_8003798C test), arg4 at 0xAA, arg5 at 0xBC and
+ * type word that Audio_IsSoundPlaying and func_8003798C test), arg4 at 0xAA, arg5 at 0xBC and
  * arg6 at 0x60 (`priority`). With interrupts masked (func_8004D300(1) is osSetIntMask),
  * it assigns the next handle D_800B365C++ to offset 0x5C and loads
  * ((s32*)arg1[+0xC])[arg3] into offsets 0x8C and 0x30 (`pbase` / `pdata`).
@@ -1285,9 +1289,9 @@ s32 func_800383DC(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, UNUSED s32 a
 }
 
 /*
- * func_800384D8
+ * Audio_GetActivityScore
  *
- * Returns 1 if func_80037A48(3) is non-zero. Otherwise scans the byte at
+ * Returns 1 if Audio_IsSoundPlaying(3) is non-zero. Otherwise scans the byte at
  * offset 0x1E of each of the 45 entries of the 0x24-byte table at
  * D_800B3670 (the same table func_800380D0 scans, which starts one entry
  * later at D_800B3694 and reads the first entry's byte as D_800B368E) and
@@ -1299,12 +1303,12 @@ s32 func_800383DC(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, UNUSED s32 a
  * D_800B3670; reading the first byte separately as D_800B368E followed by a
  * loop over D_800B3694 gives different register allocation.
  */
-s32 func_80037A48(M2C_UNK);                         /* extern */
+s32 Audio_IsSoundPlaying(M2C_UNK);                         /* extern */
 extern PlayerChannelZero_1E D_800B3670[45];
-s32 func_800384D8(void) {
+s32 Audio_GetActivityScore(void) {
     s32 i;
 
-    if (func_80037A48(3) != 0) {
+    if (Audio_IsSoundPlaying(3) != 0) {
         return 1;
     }
     for (i = 0; i < 45; i++) {
@@ -1317,12 +1321,11 @@ s32 func_800384D8(void) {
 
 /* osSetIntMask, declared with an int mask: the constant 1 is then shared with the int stores below. */
 s32 func_8004D300(s32);
-/*
- * Stadium 1's Audio_StopAllSoundEffects with the D_800B3CC8 busy flag set
- * around it (each write under its own interrupt mask) and without the
- * voice re-queue call.
+/**
+ * Stop all active songs (not FX), fade them out
+ * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
  */
-void func_80038588(void) {
+void Audio_StopAllSoundEffects(void) {
     UNUSED s32 pad[4]; // FAKE: stack padding
     s32 mask;
     u32 i;
@@ -1419,7 +1422,7 @@ s32 func_8004D300(s32);
  * Matching note: the value is kept in `arg0` itself; a separate local makes the frame
  * 8 bytes larger.
  */
-void func_800387BC(s32 arg0) {
+void Audio_FadeCategoriesAndStreams(s32 arg0) {
     s32 mask;
     s32 hi;
     s32 i;
@@ -1451,7 +1454,10 @@ s32 func_8004D300(s32);                             /* extern */
 extern s8 D_8007754C;
 extern s32 D_800B3CD0;
 
-void func_80038880(void) {
+/**
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Audio_FadeCategoriesAndStreamsDefault(void) {
     s32 temp_v0;
 
     temp_v0 = func_8004D300(1);
@@ -1713,7 +1719,7 @@ void func_80039010(channel_t* arg0) {
             if (M2C_FIELD(arg0, u8**, 0x90) != NULL) {
                 M2C_FIELD(arg0, u16*, 0xBA) = M2C_FIELD(arg0, u8**, 0x90)[tmp * 4];
                 M2C_FIELD(arg0, u8*, 0xCB) = M2C_FIELD(arg0, u8**, 0x90)[tmp * 4 + 2] / 2;
-                func_800366C8(arg0, (u8*)&M2C_FIELD(arg0, song_t**, 0x84)->env_table[M2C_FIELD(arg0, u8**, 0x90)[tmp * 4 + 1]]);
+                Audio_SetVoiceVolumeEnvelope(arg0, (u8*)&M2C_FIELD(arg0, song_t**, 0x84)->env_table[M2C_FIELD(arg0, u8**, 0x90)[tmp * 4 + 1]]);
                 tmp = M2C_FIELD(arg0, u8**, 0x90)[tmp * 4 + 3];
             }
             Audio_UpdateVoicePlaybackEnd(arg0);
