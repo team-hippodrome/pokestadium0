@@ -1249,7 +1249,8 @@ extern M2C_UNK func_8002C998;
 
 /**
  * Sets up the save-before-leaving window (248x174) with its menu.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: B after using an item opened 「ないようが へんこうされています」 with
+ * レポートしてやめる, レポートしないでやめる and キャンセル.
  */
 void SavePrompt_Init(s8 *arg0, s32 arg1, s32 arg2) {
     s8 *sp2C;
@@ -1278,7 +1279,7 @@ extern u8 D_8007B920[];
 
 /**
  * Draws the save-before-leaving window.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: drew that window every frame while it was open.
  */
 void SavePrompt_Draw(s32* arg0) {
     if (func_8002AE6C() != 0) {
@@ -1302,7 +1303,8 @@ extern Color_RGBA8 D_800736C8;
 extern u8 D_8007B940[];
 /**
  * Draws the レポートちゅう (Saving...) window for two frames.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: after レポートしてやめる it drew 「レポートちゅう」 over the prompt, just
+ * before LabPCList_SaveChanges ran.
  */
 void Save_DrawReportingWindow(s32* arg0) {
     s32 i = 2;
@@ -1330,7 +1332,8 @@ extern s32 D_800603C0;
 
 /**
  * Handles the save-before-leaving window. Returns -1 on cancel, 1 to save, 2 to leave without saving.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: returned 1 for レポートしてやめる, 2 for レポートしないでやめる, and -1 for
+ * キャンセル or B.
  */
 s32 SavePrompt_Update(s8 *arg0) {
     s32 ret = 0;
@@ -1525,7 +1528,8 @@ s32 BattleMon_CountMoves(u8* arg0) {
 /**
  * Returns the zero-based move id in move slot `arg1` of BattleMon `arg0` (moves start at 0x09):
  * -1 for an empty slot, -2 for an id past the 165 Gen 1 moves.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-12) in いちらん page 2/3: フシギダネ's たいあたり (0x21) gave 0x20 and なきごえ (0x2D)
+ * 0x2C; ヒトカゲ's ひっかく (0x0A) gave 9.
  */
 s32 BattleMon_GetMoveIndex(s32 arg0, s32 arg1) {
     u8* p = (u8*)(arg0 + arg1);
@@ -1545,7 +1549,8 @@ s32 BattleMon_GetMoveIndex(s32, s32);                        /* extern */
 
 /**
  * Returns -1 for a slot past the filled moves, otherwise BattleMon_GetMoveIndex.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん page 2/3: slots 0-1 returned the move index and the empty
+ * slots 2-3 returned -1.
  */
 s32 BattleMon_GetMoveIndexChecked(s32 arg0, s32 arg1) {
     if (arg1 >= BattleMon_CountMoves((u8*)arg0)) {
@@ -1558,7 +1563,8 @@ s32 func_8001FA8C(s32);
 
 /**
  * Returns the display index of the species' type 1 (`arg1` 0) or type 2 (`arg1` 1); -1 for type 2 of a single-type species.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: it drives the タイプ1/タイプ2 columns. フシギダネ gave 0xB and 3 (くさ,
+ * どく), ヒトカゲ 9 and -1, and ゼニガメ 0xA and -1. どく = 3 matches its 4th place in タイプであつめる.
  */
 s32 Pokemon_GetTypeIndex(BattleMon* arg0, s32 arg1) {
     s32 idx = arg0->species.id - 1;

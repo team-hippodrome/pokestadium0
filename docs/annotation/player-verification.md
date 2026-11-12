@@ -738,6 +738,13 @@ Opened on the party list (フシギダネ, ヒトカゲ and ゼニガメ):
   box 0. The message read 「いどう てもち → GB 1」 (or 64 1), with the names coming
   from `LabPCList_FormatLocationName`. `LabPCList_ReindexBoxSlots` renumbered
   the two Pokémon left in the party from slots 1, 2 to 0, 1.
+* Save-before-leaving prompt: `SavePrompt_Update` returned 1 for
+  レポートしてやめる (after which `Save_DrawReportingWindow` drew レポートちゅう),
+  2 for レポートしないでやめる, and -1 for キャンセル or B.
+* Column helpers: `Pokemon_GetTypeIndex` gave くさ 0xB, どく 3, ほのお 9 and みず
+  0xA, and -1 for a missing second type. `BattleMon_GetMoveIndex` gave the
+  zero-based move id (たいあたり 0x21 → 0x20). `BattleMon_GetMoveIndexChecked`
+  gave -1 for empty slots.
 
 ## せいとん, ポケモンを いどうする
 
