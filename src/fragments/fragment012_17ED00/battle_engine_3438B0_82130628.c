@@ -373,16 +373,16 @@ void BattleScene_UpdatePhase(CameraNode* arg0) {
         BattleScene_PhaseCommand(arg0);
         break;
     case 2:
-        BattleScene_PhaseActionsCommitted(arg0);
+        BattleScene_PhaseFirstAction(arg0);
         break;
     case 3:
-        BattleScene_PhaseSecondMoverAction(arg0);
+        BattleScene_PhaseSecondAction(arg0);
         break;
     case 4:
         BattleScene_PhaseEndTurn((s32)arg0);
         break;
     case 7:
-        BattleScene_PhaseFirstMoverAction(arg0);
+        BattleScene_PhaseSelfEffect(arg0);
         break;
     case 30:
         BattleScene_Phase30(arg0);
@@ -424,7 +424,7 @@ void BattleScene_UpdatePhase(CameraNode* arg0) {
         BattleScene_PhaseConfusionSelfHit(arg0);
         break;
     case 8:
-        BattleScene_PhaseMoveDamage(arg0);
+        BattleScene_PhaseMoveMissed(arg0);
         break;
     case 22:
         BattleScene_PhaseConfuseRay(arg0);

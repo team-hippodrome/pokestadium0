@@ -1681,7 +1681,7 @@ void BattleScene_Phase31(CameraNode* arg0);
 void func_8210186C(void);
 void BattleScene_Phase4(UNUSED CameraNode* arg0);
 void BattleScene_Phase16(CameraNode* arg0);
-void BattleScene_PhaseMoveDamage(CameraNode* arg0);
+void BattleScene_PhaseMoveMissed(CameraNode* arg0);
 void BattleScene_PhaseResidualDamageWithoutMove(CameraNode* arg0);
 void BattleScene_PhaseDrainDamage(CameraNode* arg0);
 void BattleScene_Phase10(CameraNode* arg0);

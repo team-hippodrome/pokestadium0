@@ -333,9 +333,12 @@ void func_8212BF28(CameraNode* arg0, void* arg1) {
 
 
 /**
- * Phase 2: runs once both trainers have committed their actions, before the first mover acts.
+ * Phase 2: the first action of the turn. Steps 0-4 run the move's presentation script (user
+ * intro, hit count, launch, travel, target reaction) from the per-move table at D_80073D84, and
+ * may hand over to an effect phase such as 7 or 8. In play, 1P's Thunderbolt ran here when 1P
+ * moved first; when COM moved first this phase handed straight over to 7 for its Double Team.
  */
-void BattleScene_PhaseActionsCommitted(CameraNode* arg0) {
+void BattleScene_PhaseFirstAction(CameraNode* arg0) {
     s32 n = 10;
     u8* sp = (u8*)sActivePokemon[sBattleScene.scene->actingSide] + 0x7C6;
 
@@ -380,9 +383,10 @@ void BattleScene_PhaseActionsCommitted(CameraNode* arg0) {
 
 
 /**
- * Phase 3: the second mover acts.
+ * Phase 3: the second action of the turn, with the same steps as BattleScene_PhaseFirstAction.
+ * In play, 1P's Thunderbolt ran here when COM moved first.
  */
-void BattleScene_PhaseSecondMoverAction(CameraNode* arg0) {
+void BattleScene_PhaseSecondAction(CameraNode* arg0) {
     s32 n = 10;
     u8* sp = (u8*)sActivePokemon[sBattleScene.scene->actingSide] + 0x7C6;
 
@@ -588,9 +592,12 @@ void func_8212C78C(s32 arg0) {
 }
 
 /**
- * Phase 7: the first mover acts. In play this showed its move, or こんらんしている！ (is confused) for a confused Pokemon.
+ * Phase 7: presentation for moves that act on the user (moveEffectKind 7, set by
+ * Battle_Effect_StatUp, Focus Energy, Mist, Reflect/Light Screen, Conversion, Mimic and Splash).
+ * Shows the used-move message, then the effect message. In play COM's Double Team ran here
+ * whether it moved first or second.
  */
-void BattleScene_PhaseFirstMoverAction(CameraNode* arg0) {
+void BattleScene_PhaseSelfEffect(CameraNode* arg0) {
     sBattleScene.scene->cameraPresetId = 4;
     switch (sBattleScene.scene->phaseStep) {
         case 0:
@@ -1000,7 +1007,7 @@ void func_8212D820(CameraNode* arg0) {
 void func_80042A6C(s32);
 
 /**
- * Camera state machine (sibling of BattleScene_PhaseFirstMoverAction). Sets scene->unk_50 = 4 and switches on
+ * Camera state machine (sibling of BattleScene_PhaseSelfEffect). Sets scene->unk_50 = 4 and switches on
  * scene->unk_20:
  * 0: once func_82105724(D_8219A544, 0x1E) succeeds, runs the shared camera setup
  * (func_821255B4, func_8212C78C, BattleMessage_ShowForSide, ...), plays sound 0x2E, resets the
@@ -1271,7 +1278,7 @@ void func_82124A40(void);
  * indices unk_2C and !unk_2C), and when BattleScene_IsMoveKeyedRowWaitComplete(.., 0x1E) -- the
  * same kind of cue check -- reports true calls func_82124A40 and
  * func_82125C80.
- * Same shape as BattleScene_PhaseFirstMoverAction and func_8212E7B0.
+ * Same shape as BattleScene_PhaseSelfEffect and func_8212E7B0.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleScene_Phase14(CameraNode* arg0) {
@@ -1610,9 +1617,12 @@ void func_8212F16C(CameraNode* arg0) {
 
 
 /**
- * Phase 8: presents a damaging move's effect. In play it ran for Poison Sting, Double-Edge, Absorb and Double Slap. Stadium 1 used this number for the move-failed message.
+ * Phase 8: the move missed. The target dodges to a random side (row 12 on the user) and the
+ * miss message shows. Entered from step 3 when Battle_MoveMissed ran or moveEffectKind is 8.
+ * In play a forced miss (Battle_Random = 255) ran 2 -> 8 and showed
+ * 「しかし ニドニドの こうげきは はずれた！」.
  */
-void BattleScene_PhaseMoveDamage(CameraNode* arg0) {
+void BattleScene_PhaseMoveMissed(CameraNode* arg0) {
     ActivePokemonState* sp1C = &D_8219A540->state;
 
     func_821255EC(arg0);

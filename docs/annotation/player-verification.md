@@ -133,10 +133,10 @@ handlers from this log (78fed92), and these lost their tags:
 |---|---|---|
 | 0 | start of every turn | `BattleScene_InitTurnPresentation` |
 | 1 | command menu open | `BattleScene_PhaseCommand` |
-| 2 | both actions committed | `BattleScene_PhaseActionsCommitted` |
-| 7 | first mover acts (or 「こんらんしている！」) | `BattleScene_PhaseFirstMoverAction` |
-| 3 | second mover acts | `BattleScene_PhaseSecondMoverAction` |
-| 8 | damage from Poison Sting, Double-Edge, Absorb, Double Slap | `BattleScene_PhaseMoveDamage` |
+| 2 | first action of the turn (see the correction below) | `BattleScene_PhaseFirstAction` |
+| 7 | a move that acts on the user, such as COM's Double Team | `BattleScene_PhaseSelfEffect` |
+| 3 | second action of the turn | `BattleScene_PhaseSecondAction` |
+| 8 | the move missed | `BattleScene_PhaseMoveMissed` |
 | 6 | poison damage right after the poisoned COM moved | `BattleScene_PhaseResidualDamageAfterMove` |
 | 29 | Haze | `BattleScene_PhaseHaze` |
 | 22 | Confuse Ray | `BattleScene_PhaseConfuseRay` |
@@ -145,7 +145,24 @@ handlers from this log (78fed92), and these lost their tags:
 | 5 | Pinsir drops to 0 and shows ひんし | `BattleScene_PhaseFaint` |
 | 18 | Gengar sent out after the faint | `BattleScene_PhaseSendOutAfterFaint` |
 
-Phases 9 and 11 never came up (Double-Edge's recoil stayed inside phase 8).
+Phases 9 and 11 never came up.
+
+**Correction (later the same day).** The first version of this table called
+2 "both actions committed", 7 "first mover acts", 3 "second mover acts" and 8
+"move damage", and those names were confirmed too early. In those turns COM
+always moved first with Double Team, which also raised its evasion, so the
+1P moves listed for 8 were misses. Turns with COM's speed patched to 1 so that
+1P moved first, and a forced miss, showed what the phases really are:
+
+- 1P first: 1 → 2 (1P's move: rows 3 and 4) → 3 (short) → 7 (COM's Double Team).
+- COM first: 1 → 2 (short) → 7 (COM's Double Team) → 3 (1P's move).
+- Battle_Random forced to 255: 2 → 8, row 12 on the user, 「しかし ニドニドの こうげきは はずれた！」.
+
+So 2 and 3 are the first and second action, each running the per-move
+presentation steps, 7 is the presentation for moves that act on the user
+(moveEffectKind 7), and 8 is the miss. Renamed to `BattleScene_PhaseFirstAction`,
+`BattleScene_PhaseSecondAction`, `BattleScene_PhaseSelfEffect` and
+`BattleScene_PhaseMoveMissed`.
 
 ## Particle helpers (`particle_math_269820_2.c`)
 
