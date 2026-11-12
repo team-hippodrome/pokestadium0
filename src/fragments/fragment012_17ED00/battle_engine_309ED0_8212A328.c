@@ -92,7 +92,7 @@ void func_8212A5AC(ActivePokemon* arg0, CameraNode* arg1) {
     }
     switch (D_8219A568) {
         case 0:
-            func_821247F0(arg1, arg0);
+            BattleScene_CameraShotTargetHighThunk(arg1, arg0);
             break;
         case 1:
             func_82124810(arg1, arg0);
@@ -115,7 +115,7 @@ void func_8212A67C(ActivePokemon* arg0, CameraNode* arg1) {
     }
     switch (D_8219A568) {
         case 0:
-            func_821247F0(arg1, arg0);
+            BattleScene_CameraShotTargetHighThunk(arg1, arg0);
             break;
         case 1:
             func_82124810(arg1, arg0);
@@ -143,7 +143,7 @@ void func_8212A768(ActivePokemon* arg0, CameraNode* arg1, s32 arg2) {
         }
         switch (arg2) {
             case 0:
-                func_821247F0(arg1, arg0);
+                BattleScene_CameraShotTargetHighThunk(arg1, arg0);
                 break;
             case 1:
                 func_82124810(arg1, arg0);

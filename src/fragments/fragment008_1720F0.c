@@ -390,7 +390,7 @@ void func_88100BA4(void* arg0, s32 arg1, s32 arg2, s32 arg3) {
 
 s32 func_8002AE6C();
 extern u8 D_800734A8[4];
-void Gallery_AlbumDrawStatusText(s8* arg0) {
+void func_88100C24(s8* arg0) {
     u8* c;
 
     if (func_8002AE6C() == 0) {

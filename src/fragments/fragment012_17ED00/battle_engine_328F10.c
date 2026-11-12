@@ -105,7 +105,7 @@ void BattleAnim_InitStartEffect139Descriptor42FallingScale(Particle* arg0);
 void BattleAnim_InitStartEffect139Descriptor22SpinFade(Particle* arg0);
 void BattleAnim_InitStartEffects133And134And143Descriptor44ModeOrbit(Particle* arg0);
 void BattleAnim_InitStartEffects133And134And143Descriptor38MetadataBurst(Particle* arg0);
-void Gallery_ResetActiveScene(void);
+void func_82150DCC(void);
 void func_82150EB0(void);
 void BattleAnim_StartEffect122GlobalAndOwnerTintFade(void);
 
@@ -498,7 +498,7 @@ void func_82150D1C(void) {
     func_8213B5D8(0, 1, 0x1E, &func_8215036C, &D_8218E798, 0x10, 2, 0x1E, 0, 0x3B, 0);
 }
 
-void Gallery_ResetActiveScene(void) {
+void func_82150DCC(void) {
     func_82150D1C();
 }
 

@@ -588,7 +588,13 @@ extern s16 D_800AA148;
 extern s32 D_81156550;
 void GbAudio_UpdateFrame(void);
 void osViBlack(u8);
-void VictoryPalace_ResetPillarGlow(UNUSED s32 arg0) {
+/**
+ * Per-frame tail of the GB Tower emulator: unless emulation is paused (D_81156546) or
+ * the screen is being blanked (D_800AA148), runs the GB audio frame and mirrors the
+ * emulated NR52 (0xFF26) register into GB memory; while D_800AA148 is set it blanks video.
+ * @unverified Name guessed from the code.
+ */
+void GbEmu_UpdateAudioOrBlankVideo(UNUSED s32 arg0) {
     if ((*(u8*)&D_81156546 == 0) && (D_800AA148 == 0)) {
         GbAudio_UpdateFrame();
         ((u8*)D_81156550)[0xFF26] = GbMem_ReadIoRegister(0xFF26);

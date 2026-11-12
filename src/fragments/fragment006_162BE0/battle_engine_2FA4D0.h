@@ -239,6 +239,6 @@ void func_884026A4(s32);
 s32 func_88402334(void);
 s32 func_8840248C(void);
 
-s32 ClefairyGame_Main(s32 arg0, s32 arg1);
+s32 Fragment006_Main(s32 arg0, s32 arg1);
 
 #endif

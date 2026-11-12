@@ -83,7 +83,7 @@ void func_8212C530(s32 arg0);
 
 void func_8212C60C(s32 arg0, s32 arg1);
 
-void func_821247F0(void*, void*);
+void BattleScene_CameraShotTargetHighThunk(void*, void*);
 s32 func_82124810(void*, void*);
 void func_82124830(void*, void*);
 void func_82124874(void*, void*);

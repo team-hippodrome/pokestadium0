@@ -24,7 +24,10 @@
 #include "math_util.h"
 #include "memory.h"
 #include "stage_loader.h"
-#include "fragments/minigame_actor_framework/minigame_actor_framework.h"
+#include "global.h"
+#include "fragments/particle_math/particle_math.h"
+#include "jpeg_stream.h"
+#include "controller.h"
 #include "gb_save.h"
 #include "m2c_macros.h"
 extern u8 D_30074E0[];
@@ -155,7 +158,6 @@ typedef struct unk_D_86B0EBE0 {
 } unk_D_86B0EBE0;
 extern s32 pad_D_86B0C4BC[3];
 
-#include "fragments/jigglypuff_doodle/jigglypuff_doodle.h"
 #include "math.h"
 #include "geo_render.h"
 #include "model_animation_events.h"
@@ -172,7 +174,6 @@ extern s32 pad_D_86B0C4BC[3];
 #include "matrix.h"
 #include "controller.h"
 #include "fragments/widget_toolkit/widget_toolkit.h"
-#include "fragments/minigame_shared_graphics/minigame_shared_graphics.h"
 #include "memory.h"
 #include "stage_loader.h"
 typedef struct unk_D_86301730 {

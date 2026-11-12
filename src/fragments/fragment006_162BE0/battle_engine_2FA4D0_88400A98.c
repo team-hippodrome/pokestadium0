@@ -764,7 +764,15 @@ void func_884029FC(void) {
     func_800052E8(M2C_FIELD(D_8840336C, s32 *, 0x1C), sp2C);
 }
 
-s32 ClefairyGame_Main(s32 arg0, s32 arg1) {
+/**
+ * Entry point of fragment006 (pool tag 'BCMP'). Loads its segments and the fragments
+ * at 0x8F400000/0x8E800000/0x8E900000, polls the Game Boy saves, runs one of three
+ * loops depending on arg0 and D_800AF986, and on success queues fragment014
+ * (0x88000000) and returns 0x8040; otherwise returns 0x8010. Which game mode this is
+ * has not been identified.
+ * @unverified Name says only which fragment this is.
+ */
+s32 Fragment006_Main(s32 arg0, s32 arg1) {
     s32 result;
     s32 ret;
 

@@ -34,7 +34,10 @@ typedef struct unk_func_8437F85C_sp74 {
 #include "memmap.h"
 #include "memory.h"
 
-#include "fragments/clefairy_game/clefairy_game.h"
+#include "global.h"
+#include "fragments/particle_math/particle_math.h"
+#include "jpeg_stream.h"
+#include "controller.h"
 #include "geo_render.h"
 #include "model_animation.h"
 #include "model_animation_events.h"
@@ -52,7 +55,6 @@ typedef struct unk_func_8437F85C_sp74 {
 #include "gfx_rect.h"
 #include "controller.h"
 #include "fragments/widget_toolkit/widget_toolkit.h"
-#include "fragments/minigame_shared_graphics/minigame_shared_graphics.h"
 #include "memory.h"
 #include "stage_loader.h"
 typedef struct unk_D_861054C0 {

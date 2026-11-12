@@ -31,32 +31,58 @@ void func_82124664(s32 arg0, s32 arg1, s16 arg2) {
     func_82122684(arg0, arg2, func_82107CC4(arg1), sBattleScene.scene->unk_74, 0.0f);
 }
 
-void BattleAnim_GetOwnerModelBoundsScaled(ActivePokemon* arg0, Vec3f* arg1) {
-    BattleScene_GetParticipantModelBoundsScaled(arg0, arg1);
+/**
+ * Forwards both arguments to BattleScene_SetCameraPresetClose; camera shot table entry.
+ * @unverified Name describes the forwarding only.
+ */
+void BattleScene_SetCameraPresetCloseThunk(CameraNode* arg0, ActivePokemon* arg1) {
+    BattleScene_SetCameraPresetClose(arg0, arg1);
 }
 
-void BattleAnim_StartEffect140StartEffect139Alias(void) {
-    BattleAnim_StartEffect139DualRepeatingSparks();
+/**
+ * Forwards both arguments to BattleScene_SetCameraFollowPresetNear; camera shot table entry.
+ * @unverified Name describes the forwarding only.
+ */
+void BattleScene_SetCameraFollowPresetNearThunk(CameraNode* arg0, ActivePokemon* arg1) {
+    BattleScene_SetCameraFollowPresetNear(arg0, arg1);
 }
 
-void BattleAnim_StartEffect142StartEffect141Alias(void) {
-    BattleAnim_StartEffect141GridRiseAndFallingBurst();
+/**
+ * Forwards both arguments to BattleScene_SetCameraPresetLowClose; camera shot table entry.
+ * @unverified Name describes the forwarding only.
+ */
+void BattleScene_SetCameraPresetLowCloseThunk(CameraNode* arg0, ActivePokemon* arg1) {
+    BattleScene_SetCameraPresetLowClose(arg0, arg1);
 }
 
-void ClefairyGame_HidePatternIcons(void) {
-    ClefairyGame_DespawnPatternIcons();
+/**
+ * Forwards both arguments to BattleScene_CameraShotTargetClose; camera shot table entry.
+ * @unverified Name describes the forwarding only.
+ */
+void BattleScene_CameraShotTargetCloseThunk(CameraNode* arg0, ActivePokemon* arg1) {
+    BattleScene_CameraShotTargetClose(arg0, arg1);
 }
 
-void ClefairyGame_ShowPatternIcons(void) {
-    ClefairyGame_SpawnPatternIcons();
+/**
+ * Forwards both arguments to func_82123D4C.
+ */
+void func_821247D0(CameraNode* arg0, ActivePokemon* arg1) {
+    func_82123D4C(arg0, arg1);
 }
 
-void func_821247F0(void) {
-    Diorama_RenderFrame();
+/**
+ * Forwards both arguments to BattleScene_CameraShotTargetHigh; camera shot table entry.
+ * @unverified Name describes the forwarding only.
+ */
+void BattleScene_CameraShotTargetHighThunk(CameraNode* arg0, ActivePokemon* arg1) {
+    BattleScene_CameraShotTargetHigh(arg0, arg1);
 }
 
-s32 func_82124810(CameraNode* arg0, ActivePokemon* arg1) {
-    return LabPCList_CompareBySpeciesGroup((unk_func_8830867C_02C_0CC*)arg0, (unk_func_8830867C_02C_0CC*)arg1);
+/**
+ * Forwards both arguments to func_82123F44.
+ */
+void func_82124810(CameraNode* arg0, ActivePokemon* arg1) {
+    func_82123F44(arg0, arg1);
 }
 
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.

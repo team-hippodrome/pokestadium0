@@ -1,5 +1,8 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
-#include "fragments/ekans_game/ekans_game.h"
+#include "global.h"
+#include "fragments/particle_math/particle_math.h"
+#include "jpeg_stream.h"
+#include "controller.h"
 
 struct BattleSlotZ;
 extern struct BattleSlotZ* D_821CF294;

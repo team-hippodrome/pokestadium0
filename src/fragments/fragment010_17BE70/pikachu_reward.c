@@ -45,7 +45,6 @@ extern u32 D_81701B4C[];
 #include "DDC0.h"
 #include "session.h"
 #include "save_data.h"
-#include "minigame_dispatch.h"
 #include "gb_save.h"
 #include "gb_tower_audio.h"
 #include "leo.h"

@@ -143,7 +143,7 @@ extern f32 D_FLT_821962A4;
 
 void func_8212601C(s32 arg0);
 
-void func_821247F0(void*, void*);
+void BattleScene_CameraShotTargetHighThunk(void*, void*);
 s32 func_82124810(void*, void*);
 void func_82124830(void*, void*);
 void func_82124874(void*, void*);

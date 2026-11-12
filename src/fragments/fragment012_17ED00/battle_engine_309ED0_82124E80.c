@@ -468,7 +468,7 @@ void func_8212601C(s32 arg0) {
 void func_821261A0(void* arg0, void* arg1, s32 arg2) {
     switch (arg2) {
         case 0:
-            func_821247F0(arg1, arg0);
+            BattleScene_CameraShotTargetHighThunk(arg1, arg0);
             break;
         case 1:
             func_82124810(arg1, arg0);

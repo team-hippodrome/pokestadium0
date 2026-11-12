@@ -134,7 +134,7 @@ typedef struct unk_D_83407B38 {
 
 
 void Gallery_Dispatch(void);
-void Gallery_ResetActiveScene(void);
+void func_82150DCC(void);
 void Gallery_ClearPhotoRenderTarget(void);
 void Gallery_CopyPhotoMonFromBattleMon(unk_D_83402EE0_070*, BattleMon*);
 void Gallery_CopyBattleMonFromPhotoMon(BattleMon*, unk_D_83407AC8*);
