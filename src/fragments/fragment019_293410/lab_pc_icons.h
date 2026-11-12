@@ -45,7 +45,7 @@ extern char D_8A21D854[];
 extern char D_8A21D858[];
 void func_80027F20(s32);
 void func_8A200020(s32, s32, BattleMon*);
-void func_8A20009C(s32 arg0, s32 arg1, BattleMon* arg2, s32 arg3);
+void MonSummary_DrawHpLevel(s32 arg0, s32 arg1, BattleMon* arg2, s32 arg3);
 
 extern s8* D_8A21DA50;
 void UI_DrawTextureRgba16(s32 arg0, s32 arg1, s32 arg2);
@@ -110,12 +110,12 @@ M2C_UNK func_80019008(s32, s32, M2C_UNK);           /* extern */
 M2C_UNK func_80029658(s32, s32, s32, M2C_UNK *);    /* extern */
 M2C_UNK func_80029864(s32, s32, s32, M2C_UNK *);    /* extern */
 s32 func_8002AB84();                                /* extern */
-void func_8A2009CC(s32, s32, BattleMon*);
-void func_8A200B78();
-void func_8A200DE0(s32, s32, s32);
+void MonSummary_DrawStats(s32, s32, BattleMon*);
+void MonSummary_DrawHeader();
+void MonSummary_DrawTrainerInfo(s32, s32, s32);
 void func_8A2010C8(s32, s32, s32, s32);
 void func_8A201394();
-s32 func_8A2018E0(s32, s32, s32, s32);
+s32 MonSummary_DrawMoveInfo(s32, s32, s32, s32);
 void func_8A201C08(s32, s32, s32);
 extern s8 D_8007356C;
 void func_8A201EAC(s8 *arg0, s32 arg1);

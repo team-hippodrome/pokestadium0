@@ -140,10 +140,10 @@ extern char D_884032CC[];
 extern char D_884032E0[];
 extern char D_884032FC[];
 extern char D_88403304[];
-void func_8840173C(s32 arg0, s32 arg1);
+void Options_DrawClearSavePrompt(s32 arg0, s32 arg1);
 
-void func_884014B4(s32, u8);
-void func_8840173C(s32, s32);
+void Options_DrawMenu(s32, u8);
+void Options_DrawClearSavePrompt(s32, s32);
 s32 func_88401970(s32 arg0, s32 arg1, u8 arg2);
 
 void func_800245E0(s32 arg0, s32 arg1);

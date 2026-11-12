@@ -614,7 +614,11 @@ char* func_8001FDC8(u8, char*);
 s32 func_80031C24(u8);
 s32 func_80031CC8(u8);
 void func_80027F20(s32);
-void func_89001018(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4) {
+/**
+ * Draws an item row with its ×%02d count.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabItem_DrawItemCountRow(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4) {
     char buf[0x30];
 
     gSPDisplayList(gDisplayListHead++, D_80060270);
@@ -649,12 +653,12 @@ void func_89001230(s8* arg0, s32 arg1) {
 }
 
 void func_8002EC24(s8*, s32, s8*, s32, void*, s32, s32);
-void func_89001018();
+void LabItem_DrawItemCountRow();
 
 void func_89001250(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     M2C_FIELD(arg0, s32*, 0x10C) = arg1;
     M2C_FIELD(arg0, s32*, 0x110) = arg2;
-    func_8002EC24(arg0, arg3, arg0 + 0x44, 8, func_89001018, 0xEC, 0x1C);
+    func_8002EC24(arg0, arg3, arg0 + 0x44, 8, LabItem_DrawItemCountRow, 0xEC, 0x1C);
     M2C_FIELD(arg0, s32*, 0x20) |= 0x10000;
 }
 
@@ -1276,7 +1280,11 @@ extern char D_89018660[];
 extern char D_8901866C[];
 void func_8002A3F8(void*, s32, s32);
 void func_80027F20(s32);
-void func_89002A80(s32 arg0, s32 arg1, s8* arg2, s32 arg3, s32 arg4) {
+/**
+ * Draws なまえ/%s (Name) and ID No/%05d.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabItem_DrawTrainerInfo(s32 arg0, s32 arg1, s8* arg2, s32 arg3, s32 arg4) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(arg0, arg1 + 1, 0x13C, 0x3C, *(Color_RGBA8*)&D_8900A5BC);
     func_80029028(arg0, arg1, 0x13C, 1, D_8900A698);
@@ -1309,7 +1317,7 @@ typedef struct Win89002C10 {
 extern Col89002C10 D_8900A6AC;
 extern Col89002C10 D_8900A6B0;
 extern char D_89018678[];
-void func_89002A80();
+void LabItem_DrawTrainerInfo();
 void func_8002A8C4(s8*, s32, s32, s32, s32);
 void func_8002D880(s8*, s32, s32, s32, s32, s32);
 void func_80027410(s8*, s8*, s32, s32, s32);
@@ -1326,7 +1334,7 @@ void func_89002C10(s8* arg, s32 arg1, s32 arg2, s8* arg3) {
     arg0->unk44 = D_8900A6AC;
     arg0->unk48 = D_8900A6B0;
     func_80027410((s8*)arg0->unk70, arg3, 0x14, 4, 4);
-    func_8002D880((s8*)arg0->unk4C, (s32)arg0->unk70, (s32)arg0->unk80, (s32)func_89002A80, 0x13C, 0x3E);
+    func_8002D880((s8*)arg0->unk4C, (s32)arg0->unk70, (s32)arg0->unk80, (s32)LabItem_DrawTrainerInfo, 0x13C, 0x3E);
     arg0->unk6C |= 0x10000;
 }
 

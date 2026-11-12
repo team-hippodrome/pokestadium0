@@ -108,7 +108,11 @@ void func_80029658(s32, s32, s32, u8 *);
 void func_80029028(s32, s32, s32, s32, Color_RGBA8);
 void func_8002A8E0(void*);
 void func_8002D9B8(s8 *, s32, s32, s32, s32);
-void func_880003D4(s8* arg0) {
+/**
+ * Draws トーナメントのつづきをする？ (Continue the tournament?).
+ * @unverified Name and comment guessed from the code.
+ */
+void MainMenu_DrawContinueTournamentPrompt(s8* arg0) {
     if (func_8002AE6C() == 0) {
         func_8002A8E0(arg0 + 0x2C);
         func_80029658(M2C_FIELD(arg0, s32 *, 0), M2C_FIELD(arg0, s32 *, 4) + 0x8D, M2C_FIELD(arg0, s32 *, 8), D_8007356C);
@@ -526,7 +530,7 @@ void func_880013EC(u8 *arg0, s32 arg1, s32 arg2, s32 *arg3) {
 
 M2C_UNK func_800069CC();                            /* extern */
 M2C_UNK func_8002C064(M2C_UNK, M2C_UNK, u8, u8, s32); /* extern */
-void func_880003D4(s8 *);
+void MainMenu_DrawContinueTournamentPrompt(s8 *);
 M2C_UNK func_88000EAC(s8 *, M2C_UNK);             /* extern */
 void func_88001128(s8 *);
 extern M2C_UNK D_88002254;
@@ -540,7 +544,7 @@ void func_8800149C(s8 *arg0) {
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_88000EAC(arg0 + 0x2C, 0);
-        func_880003D4(arg0 + 0x32C);
+        MainMenu_DrawContinueTournamentPrompt(arg0 + 0x32C);
         return;
     case 2:
         func_88000EAC(arg0 + 0x2C, 2);

@@ -1026,7 +1026,11 @@ extern char D_82195BC4[];
 extern char D_82195BD4[];
 s32 D_8218B15C[] = { (s32)D_82195B6C, (s32)D_82195B74, (s32)D_82195B80, (s32)D_82195B8C, (s32)D_82195B98, (s32)D_82195BA4, (s32)D_82195BB4, (s32)D_82195BC4, (s32)D_82195BD4 };
 
-void func_8211D874(s16 arg0, s16 arg1) {
+/**
+ * Debug overlay: カメラ (Camera) label.
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleDebug_DrawCameraLabel(s16 arg0, s16 arg1) {
     Ui_DrawPrimColorRect(arg0, arg1, 0x6E, 0x1E, 0, 0, 0, 0x3C);
     func_8001AB6C();
     func_8001A384(1, 0);

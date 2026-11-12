@@ -85,7 +85,11 @@ extern char D_81200FB8[];
 extern char D_81200FDC[];
 void Ui_DrawPrimColorRect(s32, s32, s32, s32, s32, s32, s32, s32);
 
-void func_8120023C(s32 arg0) {
+/**
+ * 64DD error screen: エラー：%2d (Error: %2d), "read the instruction manual", and a warning not to remove the disk while the access lamp blinks.
+ * @unverified Name and comment guessed from the code.
+ */
+void Leo_DrawErrorScreen(s32 arg0) {
     s32 kind = (arg0 >> 8) & 0xFF;
     s32 pad[1]; // FAKE: stack padding
 
@@ -250,7 +254,7 @@ s32 func_812009C4(s32 arg0) {
  *     func_812009C4(upper halfword) != 0: func_81200190(), result 0x8010.
  * It then calls func_800069CC, func_8120047C and, when the low bit of
  * func_8000B2E8() is set, func_812007B0(0x74, 0xC0); then func_81200020
- * and func_8120023C(lower halfword of the input word).  A non-zero result
+ * and Leo_DrawErrorScreen(lower halfword of the input word).  A non-zero result
  * is reported with func_80006998 (0xFFFF for 0x8020, otherwise 1).
  *
  * Note for matching: the empty `if (!sp1C) {}` after func_8000B220 does
@@ -267,7 +271,7 @@ s32 func_8000D0DC(s32);
 M2C_UNK Audio_FadeCategoriesAndStreams(M2C_UNK);
 M2C_UNK func_8003F6AC(M2C_UNK);
 void func_81200020(void);
-void func_8120023C(s32);
+void Leo_DrawErrorScreen(s32);
 void func_812007B0(s16, s16);
 extern void *D_800603C0;
 extern s32 D_81201014;
@@ -306,7 +310,7 @@ s32 func_81200A20(s32 arg0) {
         func_812007B0(0x74, 0xC0);
     }
     func_81200020();
-    func_8120023C(sp18 & 0xFFFF);
+    Leo_DrawErrorScreen(sp18 & 0xFFFF);
     if (sp1C != 0) {
         if (sp1C == 0x8020) {
             func_80006998(0xFFFF);

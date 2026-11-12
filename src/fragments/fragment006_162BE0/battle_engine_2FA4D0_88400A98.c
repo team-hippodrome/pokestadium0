@@ -203,9 +203,13 @@ extern char D_88403228[];
 extern u8 D_8F4B2B30[];
 extern Gfx D_80060398[];
 s32 func_8840079C(s32);
-void func_88400458(s32, s32, s32);
+void TransferPak_DrawStatusScreen(s32, s32, s32);
 
-void func_88401290(void) {
+/**
+ * Draws the オプション (Options) title.
+ * @unverified Name and comment guessed from the code.
+ */
+void Options_DrawTitle(void) {
     Color_RGB8 top = D_88402F94;
     Color_RGB8 bottom = D_88402F98;
 
@@ -217,10 +221,10 @@ void func_88401290(void) {
         Font_SetLineHeight(0x10);
         Font_Printf(0x23, 0x24, D_88402D80);
         Font_EndTexturedTextRendering();
-        func_88400458(0, 0x1E, 0x38);
-        func_88400458(1, 0xA2, 0x38);
-        func_88400458(2, 0x1E, 0x80);
-        func_88400458(3, 0xA2, 0x80);
+        TransferPak_DrawStatusScreen(0, 0x1E, 0x38);
+        TransferPak_DrawStatusScreen(1, 0xA2, 0x38);
+        TransferPak_DrawStatusScreen(2, 0x1E, 0x80);
+        TransferPak_DrawStatusScreen(3, 0xA2, 0x80);
     } else {
         Ui_DrawGradientPanel(0x1E, 0x1E, 0x104, 0x4A, &top, &bottom);
         Font_BeginTranslucentTextRendering();
@@ -249,7 +253,11 @@ extern char D_8840327C[];
 extern char D_88403290[];
 extern char D_884032A0[];
 extern u8 D_8F4B2EB0[];
-void func_884014B4(s32 arg0, u8 arg1) {
+/**
+ * Draws the options: ステレオ/モノラル (Stereo/Mono), あり/なし (On/Off), バックアップ (Backup), おわり (End).
+ * @unverified Name and comment guessed from the code.
+ */
+void Options_DrawMenu(s32 arg0, u8 arg1) {
     Color_RGB8 sp44 = {0x00, 0x00, 0x32};
     Color_RGB8 sp40 = {0x00, 0x00, 0xC8};
     static char *D_88402FA4[] = {D_88403234, D_88403240};
@@ -279,7 +287,11 @@ void func_884014B4(s32 arg0, u8 arg1) {
     Font_EndTexturedTextRendering();
 }
 
-void func_8840173C(s32 arg0, s32 arg1) {
+/**
+ * ６４のセーブデータをクリアします よろしいですか？ / ほんとうにいいんですね？ (Clear the N64 save data, OK? / Really?) with はい/いいえ.
+ * @unverified Name and comment guessed from the code.
+ */
+void Options_DrawClearSavePrompt(s32 arg0, s32 arg1) {
     Color_RGB8 sp4C = { 0x00, 0x00, 0x32 };
     Color_RGB8 sp48 = { 0x00, 0x00, 0xC8 };
     UNUSED s32 pad; // FAKE: stack padding
@@ -335,7 +347,7 @@ s32 func_88401970(s32 arg0, s32 arg1, u8 arg2) {
 
     do {
         func_88400108(0);
-        func_884014B4(arg1, arg2);
+        Options_DrawMenu(arg1, arg2);
         buttons = M2C_FIELD(D_800603C0, u16 *, 8);
         if (buttons & 0x300) {
             func_8003F6AC(1);
@@ -346,7 +358,7 @@ s32 func_88401970(s32 arg0, s32 arg1, u8 arg2) {
             sel = 1;
             loop = 0;
         }
-        func_8840173C(arg0, sel);
+        Options_DrawClearSavePrompt(arg0, sel);
         func_80006780();
     } while (loop);
 
@@ -431,7 +443,7 @@ void func_88401B40(void) {
             func_8003F6AC(3);
         }
         func_88400108(0);
-        func_884014B4(sel, flags);
+        Options_DrawMenu(sel, flags);
         func_80006780();
     } while (done == 0);
     if (done == 1) {
@@ -463,7 +475,7 @@ s32 func_88401D54(void) {
     var_s0 = 0;
     do {
         func_88400108(0);
-        func_88401290();
+        Options_DrawTitle();
         func_80006780();
         if (M2C_FIELD(D_800603C0, u16 *, 8) & 0x8000) {
             var_s0 = 1;

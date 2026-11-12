@@ -176,7 +176,11 @@ extern u8 D_04005890[];
 extern Color_RGBA8 D_8A1057DC;
 extern char D_8A12FC48[];
 extern char D_8A12FC5C[];
-void func_8A1003D0(s8* arg0, u32 arg1) {
+/**
+ * Draws アイウエオじゅん (kana order) and ばんごうじゅん (number order).
+ * @unverified Name and comment guessed from the code.
+ */
+void Pokedex_DrawSortOrderMenu(s8* arg0, u32 arg1) {
     char* str;
 
     if (func_8002AE6C() == 0) {
@@ -251,7 +255,11 @@ extern char D_8A12FC8C[];
 extern char D_8A12FC9C[];
 extern char D_8A12FCA0[];
 extern char D_8A12FCA4[];
-void func_8A10068C(void* arg0) {
+/**
+ * Draws みつけたかず (seen), つかまえたかず (caught) and もっているかず (owned).
+ * @unverified Name and comment guessed from the code.
+ */
+void Pokedex_DrawCounts(void* arg0) {
     if (func_8002AE6C() == 0) {
         Font_BeginTranslucentTextRendering();
         Font_SetActive(8, 0);
@@ -393,7 +401,11 @@ extern s32 D_8A12FFB8;
 s32 func_800231C8(s32, s32);
 void func_800295E8(s32, s32, s32, s32, u8*);
 
-void func_8A100C50(s32 arg0, s32 arg1) {
+/**
+ * Draws an entry's category (%sポケモン), No., たかさ (height) and おもさ (weight, kg).
+ * @unverified Name and comment guessed from the code.
+ */
+void Pokedex_DrawEntryInfo(s32 arg0, s32 arg1) {
     u8* entry = (u8*)&D_80064C5C + D_8A12FFB8 * 0x1C;
 
     gSPDisplayList(gDisplayListHead++, D_80060270);
@@ -456,7 +468,7 @@ s32 func_80029864(s32, s32, s32, void*);
 s32 func_8002A3F8(void*, s32, s32);
 s32 func_8002AB84();
 void func_8A100A24(s32, s32, s32, u8*);
-void func_8A100C50(s32, s32);
+void Pokedex_DrawEntryInfo(s32, s32);
 void func_8A100F20(s32, s32);
 extern u8 D_8007356C;
 extern u8 D_8A11FC18;
@@ -471,7 +483,7 @@ extern u8 D_8A11FC18;
  * (x + 0xF9, y + 0xD7 and so on), the word at offset 8 is passed to
  * func_80029658, and the word at offset 0x28 is a mode value. When the mode
  * is not 2 and func_8002AB84() returns 0, it runs func_80029658,
- * func_80029864, func_8A100C50 and func_8A100F20 at those offsets. When the
+ * func_80029864, Pokedex_DrawEntryInfo and func_8A100F20 at those offsets. When the
  * mode is 1 or 2 it also calls func_8002A3F8 on D_8A11FC18 with (0x32, 0x5A)
  * and then func_8A100A24(0x32, 0x5A, v, arg1), where v is 0xFF if arg2 >= 2
  * and 0x64 otherwise. What the individual calls draw is not established here;
@@ -483,7 +495,7 @@ void func_8A101020(void* arg0, s32 arg1, s32 arg2) {
     if ((M2C_FIELD(arg0, s32*, 0x28) != 2) && (func_8002AB84() == 0)) {
         func_80029658(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0xD7, M2C_FIELD(arg0, s32*, 8), &D_8007356C);
         func_80029864(M2C_FIELD(arg0, s32*, 0) + 0xF9, M2C_FIELD(arg0, s32*, 4), 0xDE, &D_8007356C);
-        func_8A100C50(M2C_FIELD(arg0, s32*, 0) + 0x100, M2C_FIELD(arg0, s32*, 4) + 6);
+        Pokedex_DrawEntryInfo(M2C_FIELD(arg0, s32*, 0) + 0x100, M2C_FIELD(arg0, s32*, 4) + 6);
         func_8A100F20(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0xDE);
     }
     temp_v0 = M2C_FIELD(arg0, s32*, 0x28);
@@ -523,8 +535,8 @@ void func_8A101154(void* arg0) {
 
 M2C_UNK func_800069CC();                            /* extern */
 M2C_UNK func_80028060(M2C_UNK, M2C_UNK *, M2C_UNK *, s32); /* extern */
-void func_8A1003D0(s8*, u32);
-void func_8A10068C(void*);
+void Pokedex_DrawSortOrderMenu(s8*, u32);
+void Pokedex_DrawCounts(void*);
 extern M2C_UNK D_8A12FD2C;
 extern M2C_UNK D_8A12FFC0;
 extern M2C_UNK D_8A130174;
@@ -543,14 +555,14 @@ s32 func_8A1011A4(s32 arg0) {
         var_a1 = &D_8A130238;
     }
     func_80028060(0, var_a1, &D_8A12FD2C, D_8A130230);
-    func_8A1003D0(&D_8A12FFC0, 0x10);
-    func_8A10068C(&D_8A130174);
+    Pokedex_DrawSortOrderMenu(&D_8A12FFC0, 0x10);
+    Pokedex_DrawCounts(&D_8A130174);
     func_8A100954(&D_8A1301A0, 2);
     return 0;
 }
 
 M2C_UNK func_8003F6AC(M2C_UNK);
-void func_8A1003D0(s8*, u32);
+void Pokedex_DrawSortOrderMenu(s8*, u32);
 void func_8000B1FC(void);
 M2C_UNK func_8000B220();
 M2C_UNK func_8000B2F4(s32);
@@ -588,8 +600,8 @@ s32 func_8A10122C(void) {
         func_800158C0();
         func_800069CC();
         func_8A101118();
-        func_8A1003D0(&D_8A12FFC0, 2);
-        func_8A10068C(&D_8A130174);
+        Pokedex_DrawSortOrderMenu(&D_8A12FFC0, 2);
+        Pokedex_DrawCounts(&D_8A130174);
         func_8A100954((s8*)&D_8A1301A0, 0);
         func_80006780();
         if (M2C_FIELD(&D_8A12FFC0, s32 *, 0x28) == 4) {
@@ -654,8 +666,8 @@ s32 func_8A1013C0(s32 arg0, s32 *arg1) {
  *     func_8A1013C0(value, &sp50).  A return of 1 sets the result to the
  *     value func_8A1013C0 stored in sp50; a return of 2 sets the words at
  *     D_8A12FFC0 + 0x24, + 0x1D8 and + 0x204 to 7;
- *   - runs func_800158C0, func_800069CC, func_8A101118, func_8A1003D0
- *     (D_8A12FFC0, 0x10), func_8A10068C(&D_8A130174), func_8A100954
+ *   - runs func_800158C0, func_800069CC, func_8A101118, Pokedex_DrawSortOrderMenu
+ *     (D_8A12FFC0, 0x10), Pokedex_DrawCounts(&D_8A130174), func_8A100954
  *     (&D_8A1301A0, 2) and func_80006780;
  *   - if the word at D_8A12FFC0 + 0x28 is 4, the result becomes sp50.
  *
@@ -705,8 +717,8 @@ s32 Pokedex_ShowEntryMenu(void) {
         func_800158C0();
         func_800069CC();
         func_8A101118();
-        func_8A1003D0(&D_8A12FFC0, 0x10);
-        func_8A10068C(&D_8A130174);
+        Pokedex_DrawSortOrderMenu(&D_8A12FFC0, 0x10);
+        Pokedex_DrawCounts(&D_8A130174);
         func_8A100954(&D_8A1301A0, 2);
         func_80006780();
         if (M2C_FIELD(&D_8A12FFC0, s32 *, 0x28) == 4) {
@@ -865,7 +877,7 @@ M2C_UNK func_8A1053E8(s32, s32, M2C_UNK, s32, s32); /* extern */
 extern s32 D_8A12FFA8;
 extern s32 D_8A12FFAC;
 extern s32 D_8A12FFB8;
-extern M2C_UNK func_8A104B00;
+extern M2C_UNK Pokedex_DrawHabitatPage;
 
 /**
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
@@ -878,7 +890,7 @@ void Pokedex_EnterAreaMapScreen(void) {
     func_800067BC(2);
     func_8A1053E8(D_8A12FFB8 + 1, D_8A12FFA8, 0x70800, D_8A12FFAC, 0x4B000);
     func_80005B98(8);
-    func_80006828(0xA, &func_8A104B00);
+    func_80006828(0xA, &Pokedex_DrawHabitatPage);
 }
 
 void Pokedex_ExitAreaMapScreen(void) {

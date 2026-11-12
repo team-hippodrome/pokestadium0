@@ -681,7 +681,11 @@ extern s16 D_8A130432;
 extern char D_8A1302E8[];
 extern s16 D_8A130446;
 void func_800069CC(void);
-s32 func_8A104B00(s32 arg0)
+/**
+ * Draws the habitat page: のすみか (habitat), せいそくちふめい (habitat unknown), level, rate, and the button hint to show or hide the GB map.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 Pokedex_DrawHabitatPage(s32 arg0)
 {
   char *name = D_8A12F2A4[D_8A1302D6];
   unk_D_88826CF0_004 *temp_s2;

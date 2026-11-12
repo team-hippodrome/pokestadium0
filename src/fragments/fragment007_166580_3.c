@@ -1527,8 +1527,9 @@ extern char D_8200A208[];
  * and, only when the word at +0xEC is non-zero, +0xA4 is passed 2 by func_8002AF04
  * (index 0, 1 or 2 respectively); the others get 0.
  * What the constants mean is not established.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_820089D4(s8* arg0) {
+void FreeBattle_DrawEntryConfirm(s8* arg0) {
     if (func_8002AE6C() == 0) {
         func_80029658(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0x35, M2C_FIELD(arg0, s32*, 8), &D_8007356C);
         func_8002A550(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) - 0xC, 0x30, D_82009238, D_8200923C);

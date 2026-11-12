@@ -76,9 +76,12 @@ extern char D_8A21D9D8[];
 extern char D_8A21D9DC[];
 typedef struct Entry8006A9DC { char* str; s32 unk4; s32 unk8; } Entry8006A9DC;
 extern Entry8006A9DC D_8006A9DC[];
-/* Declared s32 with no return statement: only then does IDO stop reading the
- * move id from v0 after the -2 check. */
-s32 func_8A2018E0(s32 arg0, s32 arg1, s32 arg2, s32 arg3)
+/**
+ * Declared s32 with no return statement: only then does IDO stop reading the
+ * move id from v0 after the -2 check.
+ * @unverified Name guessed from the code; comment kept.
+ */
+s32 MonSummary_DrawMoveInfo(s32 arg0, s32 arg1, s32 arg2, s32 arg3)
 {
     s32 move;
     func_8A201598(arg0 + 4, arg1 + 2, (u8*)D_8A21DA70[arg3]);
@@ -177,9 +180,9 @@ void func_8A201EAC(s8 *arg0, s32 arg1)
       func_80029864((*((s32 *) (((s8 *) arg0) + 0))) + 0xF9, *((s32 *) (((s8 *) arg0) + 4)), *((s32 *) (((s8 *) arg0) + 0xC)), &D_8007356C); // FAKE: decomp slop, raw pointer casts stand in for struct fields
       func_80029658(*((s32 *) (((s8 *) arg0) + 0)), (*((s32 *) (((s8 *) arg0) + 4))) + 0xD7, 0x100, &D_8007356C); // FAKE: decomp slop, raw pointer casts stand in for struct fields
       func_80029658((*((s32 *) (((s8 *) arg0) + 0))) + 0xFA, (*((s32 *) (((s8 *) arg0) + 4))) + 0x95, 0x12E, &D_8007356C); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-      func_8A2009CC((*((s32 *) (((s8 *) arg0) + 0))) + 6, (*((s32 *) (((s8 *) arg0) + 4))) + 0xDE, *((s32 *) (((s8 *) arg0) + 0x2C))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-      func_8A200B78((*((s32 *) (((s8 *) arg0) + 0))) + 0x100, (*((s32 *) (((s8 *) arg0) + 4))) + 6, *((s32 *) (((s8 *) arg0) + 0x2C))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-      func_8A200DE0((*((s32 *) (((s8 *) arg0) + 0))) + 0x100, (*((s32 *) (((s8 *) arg0) + 4))) + 0x9C, *((s32 *) (((s8 *) arg0) + 0x2C))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+      MonSummary_DrawStats((*((s32 *) (((s8 *) arg0) + 0))) + 6, (*((s32 *) (((s8 *) arg0) + 4))) + 0xDE, *((s32 *) (((s8 *) arg0) + 0x2C))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+      MonSummary_DrawHeader((*((s32 *) (((s8 *) arg0) + 0))) + 0x100, (*((s32 *) (((s8 *) arg0) + 4))) + 6, *((s32 *) (((s8 *) arg0) + 0x2C))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+      MonSummary_DrawTrainerInfo((*((s32 *) (((s8 *) arg0) + 0))) + 0x100, (*((s32 *) (((s8 *) arg0) + 4))) + 0x9C, *((s32 *) (((s8 *) arg0) + 0x2C))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
     }
     else
     {
@@ -187,7 +190,7 @@ void func_8A201EAC(s8 *arg0, s32 arg1)
       func_80029864((*((s32 *) (((s8 *) arg0) + 0))) + 0xF9, *((s32 *) (((s8 *) arg0) + 4)), 0xDE, &D_8007356C); // FAKE: decomp slop, raw pointer casts stand in for struct fields
       func_8A201394((*((s32 *) (((s8 *) arg0) + 0))) + 0x100, (*((s32 *) (((s8 *) arg0) + 4))) + 6, *((s32 *) (((s8 *) arg0) + 0x2C))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
       func_8A2010C8((*((s32 *) (((s8 *) arg0) + 0))) + 6, (*((s32 *) (((s8 *) arg0) + 4))) + 0xDE, *((s32 *) (((s8 *) arg0) + 0x2C)), *((s32 *) (((s8 *) arg0) + 0x30))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-      func_8A2018E0((*((s32 *) (((s8 *) arg0) + 0))) + 0x100, (*((s32 *) (((s8 *) arg0) + 4))) + 0x54, *((s32 *) (((s8 *) arg0) + 0x2C)), *((s32 *) (((s8 *) arg0) + 0x30))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+      MonSummary_DrawMoveInfo((*((s32 *) (((s8 *) arg0) + 0))) + 0x100, (*((s32 *) (((s8 *) arg0) + 4))) + 0x54, *((s32 *) (((s8 *) arg0) + 0x2C)), *((s32 *) (((s8 *) arg0) + 0x30))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
     }
   }
   temp_v0 = *((s32 *) (((s8 *) arg0) + 0x28));

@@ -682,7 +682,7 @@ void func_89104818(void) {
 void func_800069CC(void);
 s32 func_8002AAC4(void*);
 void func_8002CAD0(void*);
-void func_89108650(void*);
+void PcSort_DrawUseItemPrompt(void*);
 void func_89108F94(void*);
 
 M2C_UNK func_89104854(M2C_UNK* arg0) {
@@ -708,7 +708,7 @@ M2C_UNK func_89104854(M2C_UNK* arg0) {
             if (func_8002AAC4((s8*)arg0 + 0xB600) != 0) {
                 func_891019E4(arg0 + 1);
             }
-            func_89108650((s8*)arg0 + 0xB600);
+            PcSort_DrawUseItemPrompt((s8*)arg0 + 0xB600);
             break;
         case 3:
             if (func_8002AAC4(arg0 + 1) != 0) {

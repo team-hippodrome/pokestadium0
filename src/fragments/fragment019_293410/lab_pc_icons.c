@@ -28,7 +28,11 @@ void func_8A200020(s32 arg0, s32 arg1, BattleMon* arg2) {
     Font_Printf(arg0, arg1, e->str);
 }
 
-void func_8A20009C(s32 arg0, s32 arg1, BattleMon* arg2, s32 arg3) {
+/**
+ * Draws HP:, L%d and %3d/%3d.
+ * @unverified Name and comment guessed from the code.
+ */
+void MonSummary_DrawHpLevel(s32 arg0, s32 arg1, BattleMon* arg2, s32 arg3) {
     BattleHud_DrawHpBarTexture(arg0 + 0x16D, arg1 + 9, 0x94, arg2->hp, arg2->maxHp);
     Font_BeginTranslucentTextRendering();
     func_80027F20(arg3);
@@ -65,7 +69,7 @@ void func_8A200274(s32 arg0, s32 arg1, BattleMon *arg2, s32 arg3, s32 arg4, s32 
     if (arg4 & 0x18) {
         func_8002A0AC(arg0 + 3, arg1 + 3, 0x20F, 0x2D, D_8A203304);
     }
-    func_8A20009C(arg0, arg1, arg2, arg4);
+    MonSummary_DrawHpLevel(arg0, arg1, arg2, arg4);
     if (arg4 & 0x12) {
         if (kind == 2) {
             color = &D_8A203348;
@@ -236,7 +240,11 @@ extern char D_8A21D8EC[];
 extern char D_8A21D8F0[];
 extern char D_8A21D8F4[];
 extern char D_8A21D8F8[];
-void func_8A2009CC(s32 arg0, s32 arg1, BattleMon* arg2) {
+/**
+ * Draws Attack, Defense, Speed and Special.
+ * @unverified Name and comment guessed from the code.
+ */
+void MonSummary_DrawStats(s32 arg0, s32 arg1, BattleMon* arg2) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(arg0, arg1, 0xF4, 0x86, D_8A203304);
     func_8001AB6C();
@@ -259,7 +267,11 @@ extern char D_8A21D904[];
 extern char D_8A21D908[];
 extern char D_8A21D90C[];
 extern char D_8A21D914[];
-void func_8A200B78(s32 arg0, s32 arg1, BattleMon* arg2) {
+/**
+ * Draws No.%03d, L%d, HP %3d/%3d and じょうたい/ (status).
+ * @unverified Name and comment guessed from the code.
+ */
+void MonSummary_DrawHeader(s32 arg0, s32 arg1, BattleMon* arg2) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(arg0, arg1, 0x122, 0x90, D_8A203304);
     func_8001AB6C();
@@ -312,7 +324,11 @@ extern char D_8A21D978[];
 extern char D_8A21D97C[];
 void func_8002A550(s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
 s32 func_8A20219C(s32, s32);
-void func_8A200DE0(s32 arg0, s32 arg1, s32 arg2) {
+/**
+ * Draws Type 1/2, ID No., おやのなまえ (OT name), けいけんち (Exp) and the Exp to the next level.
+ * @unverified Name and comment guessed from the code.
+ */
+void MonSummary_DrawTrainerInfo(s32 arg0, s32 arg1, s32 arg2) {
     s32 next_level;
     s32 to_next;
 

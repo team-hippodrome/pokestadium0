@@ -189,7 +189,7 @@ void func_891012A8(s32 x, s32 y, Entry891012A8 *entry, s32 row, s32 flags, Ctx89
           break;
 
         case 3:
-          func_891010AC(cx + 4, y + 2, (s8 ***) entry);
+          LabPCList_DrawLocationTabs(cx + 4, y + 2, (s8 ***) entry);
           break;
 
         case 4:
@@ -280,7 +280,11 @@ extern char D_8910DBF0[];
 extern char D_8910DC04[];
 void Gfx_DrawTextureRgba16(s32, s32, s32, s32, u8*, s32, s32);
 
-void func_89101818(s8* arg0) {
+/**
+ * Draws タテ／ヨコきりかえ (switch vertical/horizontal) and ページおくり%d/3 (page %d/3).
+ * @unverified Name and comment guessed from the code.
+ */
+void LabPCList_DrawPageHint(s8* arg0) {
     func_8001AB6C();
     func_8001AA9C(M2C_FIELD(&D_800734A8, u8*, 0), M2C_FIELD(&D_800734A8, u8*, 1), M2C_FIELD(&D_800734A8, u8*, 2), M2C_FIELD(&D_800734A8, u8*, 3));
     func_8001A384(8, 0);

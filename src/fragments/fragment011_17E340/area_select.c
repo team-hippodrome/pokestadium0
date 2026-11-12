@@ -218,7 +218,11 @@ extern char D_8180086C[];
 extern char D_8180087C[];
 extern char D_81800888[];
 
-void func_8180014C(s32 frames, s32 blink) {
+/**
+ * Draws the cup list (Poke Ball, Great Ball, Ultra Ball and Master Ball Cups, Tournament) with blinking クリアー！ (Cleared!) marks.
+ * @unverified Name and comment guessed from the code.
+ */
+void AreaSelect_DrawCupClearList(s32 frames, s32 blink) {
     s32 i;
 
     for (i = 0; i < frames; i++) {
@@ -334,7 +338,7 @@ M2C_UNK func_800067BC(M2C_UNK);                     /* extern */
 M2C_UNK func_80006998(M2C_UNK);                     /* extern */
 M2C_UNK func_8000A7FC(M2C_UNK);                     /* extern */
 M2C_UNK func_800407B0(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
-void func_8180014C(s32 frames, s32 blink);
+void AreaSelect_DrawCupClearList(s32 frames, s32 blink);
 void func_81800320(void);
 
 void func_81800514(void) {
@@ -344,10 +348,10 @@ void func_81800514(void) {
     func_8180042C();
     func_800407B0(0x51, 0, 0);
     func_8000A7FC(0x1F4);
-    func_8180014C(0x64, 1);
+    AreaSelect_DrawCupClearList(0x64, 1);
     func_80006998(1);
     func_80005B98(0x1E);
-    func_8180014C(0x28, 0);
+    AreaSelect_DrawCupClearList(0x28, 0);
     func_800067BC(2);
 }
 

@@ -512,7 +512,11 @@ s32 func_8002AE6C(Screen82000C5C*);
 void func_8002AF04(char*, s32);
 s32 func_8002D3D0(Mon82000C5C*);
 s32 func_8002D430(Mon82000C5C*, s32);
-void func_82000C5C(Screen82000C5C* arg0) {
+/**
+ * Draws a Pokemon's status window: LV, HP, Type 1/2, Attack, Defense, Speed, Special.
+ * @unverified Name and comment guessed from the code.
+ */
+void FreeBattle_DrawMonStatusWindow(Screen82000C5C* arg0) {
     s32 y = arg0->y + 6;
     s32 x = arg0->x + 6;
     s32 count = func_8002D3D0(arg0->mon);
@@ -946,7 +950,11 @@ void func_8002A3F8(Img82001E20*, s32, s32);
 void func_8002BAB8(s32, s32, s32, s32);
 void func_8002BC58(s32, s32, s32, s32);
 void func_8001BCB4(s32, s32, s32, s32, void*, s32, s32);
-void func_82001E20(s32 arg0, s32 arg1, s32 arg2, Slot82001E20* arg3) {
+/**
+ * Draws the レンタルポケモン (Rental Pokemon) list with its なまえ (Name) header.
+ * @unverified Name and comment guessed from the code.
+ */
+void FreeBattle_DrawRentalNameList(s32 arg0, s32 arg1, s32 arg2, Slot82001E20* arg3) {
     s32 pad[3]; // FAKE
     Img82001E20 img;
 
@@ -1014,7 +1022,7 @@ void func_820020EC(s32 arg0, s32 arg1, SlotList *arg2, s32 arg3, s32 arg4, SlotL
   SlotList *list = arg2; // FAKE: alias kept in s6 for loop bound
   if (arg2 != 0)
   {
-    func_82001E20(arg0, arg1, arg4, (Slot82001E20 *) arg2);
+    FreeBattle_DrawRentalNameList(arg0, arg1, arg4, (Slot82001E20 *) arg2);
     new_var = arg5;
     if (arg2->unk_00 & 2)
     {
@@ -1171,7 +1179,7 @@ void func_8200288C(s8 *arg0, s32 arg1)
   s32 mode;
  x = (*((s32 *) (((s8 *) arg0) + 0x14))) + 6; y = (*((s32 *) (((s8 *) arg0) + 0x18))) + 6; // FAKE: decomp slop, raw pointer casts stand in for struct fields
   mode = 0xFFED;
-  func_82001E20(x, y, 2, arg0 + 0xC8);
+  FreeBattle_DrawRentalNameList(x, y, 2, arg0 + 0xC8);
   def.items = D_8200AC58;
   def.count = 0;
   def.itemCount = 0x18;

@@ -56,7 +56,11 @@ void Font_EndTexturedTextRendering(void);
 void Gfx_SetEnvColor(s32 r, s32 g, s32 b, s32 a);
 void Font_SetActive(s32 mask, s32 arg1);
 void Font_Printf(s32 x, s32 y, const char* fmt, ...);
-void func_89100914(Ctx89100914* arg0, s32 arg1, s32 arg2, s32 arg3) {
+/**
+ * Draws the list column headers: Pokemon, nickname, ID, OT, location, Type 1/2, level, HP, Attack...
+ * @unverified Name and comment guessed from the code.
+ */
+void LabPCList_DrawDetailColumns(Ctx89100914* arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 x;
     s32 i;
     s32 hl;
@@ -227,7 +231,11 @@ extern M2C_UNK D_8910DBBC;
 extern M2C_UNK D_8910DBC0;
 extern M2C_UNK D_8910DBC4;
 
-void func_891010AC(s32 arg0, s32 arg1, s8 ***arg2) {
+/**
+ * Draws the location tabs てもち (Party), GB and パーク.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabPCList_DrawLocationTabs(s32 arg0, s32 arg1, s8 ***arg2) {
     s32 temp_v0;
 
     func_8001AB6C();

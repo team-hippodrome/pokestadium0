@@ -108,7 +108,11 @@ extern char D_884031F4[];
 extern char D_88403210[];
 void func_88400168(s32, s32, s32, s32);
 
-void func_88400458(s32 port, s32 x, s32 y) {
+/**
+ * Shows the Transfer Pak cartridge details (ID, No., trainer) for `port`, or an error: not a Pokemon cartridge, or no 64GB Pak inserted.
+ * @unverified Name and comment guessed from the code.
+ */
+void TransferPak_DrawStatusScreen(s32 port, s32 x, s32 y) {
     Color_RGB8 top = D_88402F7C;
     Color_RGB8 bottom = D_88402F80;
     Color_RGB8 sel_top = D_88402F84;

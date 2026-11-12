@@ -357,7 +357,11 @@ extern Gfx D_80060290[];
 extern Gfx D_80060398[];
 extern u8 D_8910CF80[];
 extern char D_8910E018[];
-void func_89105560(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
+/**
+ * Draws ボックス%d (Box %d).
+ * @unverified Name and comment guessed from the code.
+ */
+void PcSort_DrawBoxName(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     Color_RGBA8 color;
     s32 pad[6]; // FAKE: stack padding
     s32 sel;
@@ -390,14 +394,14 @@ typedef struct Rgba8910576C {
     u8 r, g, b, a;
 } Rgba8910576C;
 
-void func_89105560();
+void PcSort_DrawBoxName();
 void func_891053E8(void* arg0);
 
 void func_8910576C(void* arg0, s32 arg1, s32 arg2, void* arg3, s32 arg4, Rgba8910576C arg5) {
     func_8002A8C4((s8*)arg0, arg1, arg2, 0x9C, M2C_FIELD(arg3, s32*, 8) * 0x1C + 8);
     M2C_FIELD(arg0, s32*, 0x14) = 0;
     M2C_FIELD(arg0, Rgba8910576C*, 0x18) = arg5;
-    func_8002D880((s8*)arg0 + 0x20, arg3, arg4, func_89105560, 0x9C, 0x1C);
+    func_8002D880((s8*)arg0 + 0x20, arg3, arg4, PcSort_DrawBoxName, 0x9C, 0x1C);
     func_891053E8(arg0);
 }
 
@@ -936,7 +940,11 @@ void func_89106864(s8* arg0, s32 x, s32 y, s32 flags) {
 void func_8002AF04(s8 *, s32);
 void func_89106864(s8 *, s32, s32, s32);
 extern char D_8910E094[];
-void func_89106B54(s8 *arg0) {
+/**
+ * Draws から (Empty).
+ * @unverified Name and comment guessed from the code.
+ */
+void PcSort_DrawEmptyLabel(s8 *arg0) {
     if (func_8002AE6C() == 0) {
         func_8001AB6C();
         func_8001A384(4, 0);
@@ -1570,7 +1578,11 @@ extern Gfx D_80060270[];
 void func_80029028(s32, s32, s32, s32, Color_RGBA8);
 char* func_8001FDC8(u8, char*);
 s32 func_80031CC8(u8);
-void func_891081A8(s32 x, s32 y, u8** item, UNUSED s32 index, s32 flags) {
+/**
+ * Draws an item row with パソコン (PC) / てもち (Party) and ×%02d.
+ * @unverified Name and comment guessed from the code.
+ */
+void PcSort_DrawItemRow(s32 x, s32 y, u8** item, UNUSED s32 index, s32 flags) {
     char buf[0x38];
 
     gSPDisplayList(gDisplayListHead++, D_80060270);
@@ -1661,7 +1673,7 @@ extern u8 D_8910AAE0[];
 extern u8 D_8910AAE4[];
 void func_8000A460(s8*, s8*);
 void func_8002EC24(s8*, s32, s32, s32, void*, s32, s32);
-void func_891081A8();
+void PcSort_DrawItemRow();
 void func_891084B4(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, u8* arg5) {
     func_8002A8C4(arg0, arg1, arg2, 0x184, 0x16E);
     M2C_FIELD(arg0, s32*, 0x24) = 0;
@@ -1675,7 +1687,7 @@ void func_891084B4(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, u8* arg5) {
     M2C_FIELD(arg0, s32*, 0x40) = 6;
     M2C_FIELD(arg0, Rgba891084B4*, 0x44) = *(Rgba891084B4*)D_8910AAE0;
     M2C_FIELD(arg0, Rgba891084B4*, 0x48) = *(Rgba891084B4*)D_8910AAE4;
-    func_8002EC24(arg0 + 0x4C, arg3, arg4, 8, func_891081A8, 0x178, 0x1C);
+    func_8002EC24(arg0 + 0x4C, arg3, arg4, 8, PcSort_DrawItemRow, 0x178, 0x1C);
     M2C_FIELD(arg0, s32*, 0x6C) |= 0x10000;
     func_89108450((FlagScanOwner*)arg0);
     M2C_FIELD(arg0, u8**, 0x1AC) = arg5;
@@ -1687,7 +1699,11 @@ extern char D_8910E134[];
 extern char D_8910E150[];
 extern char D_8910E16C[];
 char* func_80031BC0(u8, char*);
-void func_89108650(s8* arg0) {
+/**
+ * Draws このどうぐをつかいますか？ (Use this item?), どの わざに つかいますか？ (On which move?) or どの わざを わすれさせたい？ (Which move should it forget?).
+ * @unverified Name and comment guessed from the code.
+ */
+void PcSort_DrawUseItemPrompt(s8* arg0) {
     s32 flags;
     s32 x;
     s32 y;

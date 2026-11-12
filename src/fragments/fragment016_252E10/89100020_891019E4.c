@@ -127,10 +127,10 @@ void func_8002A8E0(s8*);
 void func_80029658(s32, s32, s32, u8*);
 void func_8002F030(s8*, s32, s32, s32, s32);
 void func_8002F3C4(s8*, s32, s32, s32, s8*);
-void func_89100914(s8*, s32, s32, s32);
+void LabPCList_DrawDetailColumns(s8*, s32, s32, s32);
 void func_89105E70(s8*, s32);
 void func_8910666C(s8*, s32);
-void func_89106B54(s8*);
+void PcSort_DrawEmptyLabel(s8*);
 void func_891074CC(s8*);
 void func_89107D7C(s8*);
 void func_8002D024(s8*);
@@ -138,7 +138,7 @@ extern u8 D_8007356C[];
 extern Gfx D_80060270[];
 extern Color_RGBA8 D_8910A88C;
 void func_8910179C(s8*, s32, s32);
-void func_89101818(s8*);
+void LabPCList_DrawPageHint(s8*);
 void func_89100688(s8*);
 void func_89100870(s8*);
 void func_891019E4(s8* arg0) {
@@ -152,7 +152,7 @@ void func_891019E4(s8* arg0) {
     func_8002C5A4(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) - 0xA, 0x1F4);
     func_8002A8E0(arg0 + 0x4C);
     func_80029658(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0x23, M2C_FIELD(arg0, s32*, 8), D_8007356C);
-    func_89101818(arg0);
+    LabPCList_DrawPageHint(arg0);
     func_8002F030(arg0 + 0xB160, M2C_FIELD(arg0, s32*, 0x2C), M2C_FIELD(arg0, s32*, 0x30) - 0x10,
                   M2C_FIELD(arg0, s32*, 0x38) + M2C_FIELD(arg0, s32*, 0x30), M2C_FIELD(arg0, s32*, 0x34));
     y = M2C_FIELD(arg0, s32*, 0x30) + 0x16;
@@ -163,7 +163,7 @@ void func_891019E4(s8* arg0) {
     }
     func_8002F3C4(arg0 + 0xB160, M2C_FIELD(arg0, s32*, 0x2C), y, flags[0] | 0xFFED, arg0);
     sel = (M2C_FIELD(arg0, s32*, 0x8C) == 1) ? (((M2C_FIELD(arg0, u32*, 0x88) != 0) ? 0x10 : 0) | 2) : 0;
-    func_89100914(arg0, M2C_FIELD(arg0, s32*, 0x2C), M2C_FIELD(arg0, s32*, 0x30), sel);
+    LabPCList_DrawDetailColumns(arg0, M2C_FIELD(arg0, s32*, 0x2C), M2C_FIELD(arg0, s32*, 0x30), sel);
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(M2C_FIELD(arg0, s32*, 0x2C), M2C_FIELD(arg0, s32*, 0x30) + 0x14, M2C_FIELD(arg0, s32*, 0x34), 2, D_8910A88C);
     func_80029028(M2C_FIELD(arg0, s32*, 0x2C) + 0x76, M2C_FIELD(arg0, s32*, 0x30), 2, M2C_FIELD(arg0, s32*, 0x38), D_8910A88C);
@@ -191,7 +191,7 @@ void func_891019E4(s8* arg0) {
             func_8910666C(arg0 + 0x9654, 2);
             break;
         case 4:
-            func_89106B54(arg0 + 0x9830);
+            PcSort_DrawEmptyLabel(arg0 + 0x9830);
             break;
         case 5:
             func_891074CC(arg0 + 0x9920);

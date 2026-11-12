@@ -338,7 +338,11 @@ void func_8001D148(s32 x, s32 y, s32 width, s32 height, s32 r, s32 g, s32 b);
 s32 func_80018DEC(s8* arg0, s32 arg1);
 extern char D_82302A34[];
 extern s32 D_82302BCC;
-void func_82300BD0(s8* arg0) {
+/**
+ * Battle order select: draws the brought Pokemon grid with their levels (L%d).
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleMenu_DrawOrderSelectPartyGrid(s8* arg0) {
     s32 i;
     s16 x;
     s16 y;
@@ -403,10 +407,14 @@ extern char D_82302A4C[];
 extern char D_82302A60[];
 extern char D_82302A74[];
 extern char D_82302A7C[];
-void func_82300BD0(s8*);
+void BattleMenu_DrawOrderSelectPartyGrid(s8*);
 void Ui_DrawPrimColorRect(s32, s32, s32, s32, s32, s32, s32, s32);
 void func_8001E6C0(s32, s32);
-void func_823010E8(s8* arg0) {
+/**
+ * Battle order select: これで いいですか？ (Is this OK?) with はい (Yes) / えらびなおす (Choose again).
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleMenu_DrawOrderSelectConfirmPrompt(s8* arg0) {
     s32 x;
     s32 y;
 
@@ -418,7 +426,7 @@ void func_823010E8(s8* arg0) {
             x = 0x50;
             y = 0xF0;
         }
-        func_82300BD0(arg0);
+        BattleMenu_DrawOrderSelectPartyGrid(arg0);
         BattleMenu_DrawPanelBorder(x, y, 0x15F, 0x53, arg0[1]);
         if (arg0[0xA] == 0) {
             func_8001E6C0(x + 0x26, y + 0x30);
@@ -434,7 +442,7 @@ void func_823010E8(s8* arg0) {
     } else {
         x = M2C_FIELD(arg0, s16*, 0x12);
         y = M2C_FIELD(arg0, s16*, 0x14);
-        func_82300BD0(arg0);
+        BattleMenu_DrawOrderSelectPartyGrid(arg0);
         Ui_DrawPrimColorRect(x + 5, y + 5, 0x1CD, 0x54, 0, 0, 0, 0x80);
         if (arg0[0xA] == 0) {
             func_8001E6C0(x + 0x5C, y + 0x3C);
@@ -457,7 +465,11 @@ extern char D_82302AB8[];
 extern char D_82302ACC[];
 
 
-void func_823012D0(s8* arg0) {
+/**
+ * Battle order select: レベルの ごうけいが 155を こえてしまいます (The level total goes over 155).
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleMenu_DrawLevelSumOverNotice(s8* arg0) {
     s32 x;
     s32 y;
 
@@ -480,7 +492,7 @@ void func_823012D0(s8* arg0) {
     } else {
         x = M2C_FIELD(arg0, s16*, 0x12);
         y = M2C_FIELD(arg0, s16*, 0x14);
-        func_82300BD0(arg0);
+        BattleMenu_DrawOrderSelectPartyGrid(arg0);
         Ui_DrawPrimColorRect(x + 5, y + 5, 0x1CD, 0x54, 0, 0, 0, 0x80);
         Font_BeginTranslucentTextRendering();
         Font_SetActive(0x10, 0);
@@ -512,7 +524,7 @@ void BattleMenu_DrawOrderSelectPanel_Ready(unk_D_848037A0* arg0) {
         }
         // clang-format on
         arg0->unk_0007 = 0;
-        func_82300BD0((s8*)arg0);
+        BattleMenu_DrawOrderSelectPartyGrid((s8*)arg0);
         BattleMenu_DrawPanelBorder(sp3C, sp38, 0x15F, 0x53, arg0->unk_0001);
         Font_BeginTranslucentTextRendering();
         Font_SetActive(0x20, -4);
@@ -540,7 +552,7 @@ void BattleMenu_DrawOrderSelectPanel_Ready(unk_D_848037A0* arg0) {
             arg0->unk_0008 = 0;
         }
 
-        func_82300BD0((s8*)arg0);
+        BattleMenu_DrawOrderSelectPartyGrid((s8*)arg0);
         Ui_DrawPrimColorRect(sp3C + 5, sp38 + 5, 0x1CD, 0x54, 0, 0, 0, 0x80);
         Font_BeginTranslucentTextRendering();
         Font_SetActive(0x20, 0);
@@ -574,7 +586,7 @@ void BattleMenu_DrawConfirmButtonLabel(unk_D_848037A0* arg0) {
 }
 
 extern s16 D_82302B40;
-void func_823010E8(s8*);
+void BattleMenu_DrawOrderSelectConfirmPrompt(s8*);
 void BattleMenu_DrawOrderSelectPanel_Ready(unk_D_848037A0*);
 /**
  * Draws the current panel mode when needed and updates its redraw countdown.
@@ -588,15 +600,15 @@ void BattleMenu_DrawOrderSelectPanel(unk_D_848037A0* arg0) {
 
         switch (arg0->unk_0005) {
             case 0:
-                func_82300BD0((s8*)arg0);
+                BattleMenu_DrawOrderSelectPartyGrid((s8*)arg0);
                 break;
 
             case 1:
-                func_823010E8((s8*)arg0);
+                BattleMenu_DrawOrderSelectConfirmPrompt((s8*)arg0);
                 break;
 
             case 2:
-                func_823012D0((s8*)arg0);
+                BattleMenu_DrawLevelSumOverNotice((s8*)arg0);
                 break;
 
             case 3:

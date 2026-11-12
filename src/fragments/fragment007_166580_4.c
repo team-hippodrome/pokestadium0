@@ -243,8 +243,9 @@ void Ui_DrawPrimColorRect(s32, s32, s32, s32, s32, s32, s32, s32);
  * prints the string D_82009CC8 at (arg0 + 0x10, arg1 + 2) in the colour
  * stored at D_800734A8 using font 4.
  * What this draws is not yet established.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_82002EE4(s32 arg0, s32 arg1, s32 arg2) {
+void FreeBattle_DrawRentalTitle(s32 arg0, s32 arg1, s32 arg2) {
     gSPDisplayList(gDisplayListHead++, D_80073450);
     gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
     func_8001B884(arg0, arg1, arg2, 0x14, D_05000008, 8, 0);
@@ -270,8 +271,9 @@ void func_800295E8(s32, s32, s32, s32, char*);
  * (+0x129, -0x10) with the colour D_82009098[mode - 1]. Then prints the string
  * D_82009CF0 at (+0x12A, -0x10) in the colour D_800734A8, font 4, passing
  * D_820090A8[mode] as the extra argument.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_82002FF8(s8* arg0) {
+void FreeBattle_DrawChoosingLabel(s8* arg0) {
     func_800295E8(M2C_FIELD(arg0, s32*, 0x14) + 0x127, M2C_FIELD(arg0, s32*, 0x18) - 0x12, 0xA6, 0x14, D_800735C4);
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(M2C_FIELD(arg0, s32*, 0x14) + 0x129, M2C_FIELD(arg0, s32*, 0x18) - 0x10, 0xA2, 0x10, D_82009098[M2C_FIELD(arg0, s32*, 0x738) - 1]);
@@ -295,7 +297,7 @@ void func_800310D8(void*, s32, s32, s32, TableArgs*);
 
 /**
  * Draws using the menu object arg0 (layout not established; it reads the words
- * at 0x14, 0x18 and 0x1C as position/size values): calls func_82002EE4 at
+ * at 0x14, 0x18 and 0x1C as position/size values): calls FreeBattle_DrawRentalTitle at
  * (+6, +0x88) with the third argument being word 0x1C minus 0xC, emits the
  * display list D_80060270 and fills a 2 by 0xB6 rectangle with colour D_820090C0
  * at (+6, +0x9C). Then builds a TableArgs {D_8200AC58, 0x18, 0x10, 0} and calls
@@ -308,7 +310,7 @@ void func_82003118(s8* arg0, s32 arg1) {
     TableArgs sp34;
 
     sp44 = 0xFED;
-    func_82002EE4(M2C_FIELD(arg0, s32*, 0x14) + 6, M2C_FIELD(arg0, s32*, 0x18) + 0x88, M2C_FIELD(arg0, s32*, 0x1C) - 0xC);
+    FreeBattle_DrawRentalTitle(M2C_FIELD(arg0, s32*, 0x14) + 6, M2C_FIELD(arg0, s32*, 0x18) + 0x88, M2C_FIELD(arg0, s32*, 0x1C) - 0xC);
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(M2C_FIELD(arg0, s32*, 0x14) + 6, M2C_FIELD(arg0, s32*, 0x18) + 0x9C, 2, 0xB6, D_820090C0);
     sp34.table = D_8200AC58;
@@ -346,15 +348,15 @@ void func_8200288C(s8*, s32);
 void func_8200813C(s8*);
 void func_820082EC(s8*);
 void func_82008640(s8*);
-void func_820089D4(s8*);
-void func_82000C5C(s8*);
+void FreeBattle_DrawEntryConfirm(s8*);
+void FreeBattle_DrawMonStatusWindow(s8*);
 void func_8002D024(s8*);
 extern s32 D_8200AC50;
 void func_8200339C(s8* arg0) {
     if (func_8002AE6C(arg0 + 0x14) != 0) {
         return;
     }
-    func_82002FF8(arg0);
+    FreeBattle_DrawChoosingLabel(arg0);
     switch (M2C_FIELD(arg0, s32*, 4)) {
         case 1:
             func_800189C0(D_8200AC50, 0);
@@ -381,7 +383,7 @@ void func_8200339C(s8* arg0) {
             func_800069CC();
             func_8200288C(arg0, 0);
             func_82003234(arg0);
-            func_820089D4(arg0 + 0x4DC);
+            FreeBattle_DrawEntryConfirm(arg0 + 0x4DC);
             break;
         case 4:
             func_800189C0(D_8200AC50, 0);
@@ -402,12 +404,12 @@ void func_8200339C(s8* arg0) {
             func_8200288C(arg0, 2);
             func_82003118(arg0, (M2C_FIELD(arg0, s32*, 4) == 7) ? 0 : 2);
             func_820032E8(arg0);
-            func_82000C5C(arg0 + 0x5CC);
+            FreeBattle_DrawMonStatusWindow(arg0 + 0x5CC);
             break;
         case 3:
             func_8200288C(arg0, 2);
             func_82003234(arg0);
-            func_82000C5C(arg0 + 0x5CC);
+            FreeBattle_DrawMonStatusWindow(arg0 + 0x5CC);
             break;
         case 11:
             func_800189C0(D_8200AC50, 0);

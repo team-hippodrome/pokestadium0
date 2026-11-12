@@ -329,7 +329,11 @@ s32 func_8002AE6C();
 void func_8002AF04(char*, s32);
 s32 func_8002D3D0(Mon89007678*);
 s32 func_8002D430(Mon89007678*, s32);
-void func_89007678(Screen89007678* arg0) {
+/**
+ * Draws a Pokemon's status window: LV, HP, Type 1/2, Attack, Defense, Speed, Special.
+ * @unverified Name and comment guessed from the code.
+ */
+void PcBox_DrawMonStatusWindow(Screen89007678* arg0) {
     s32 y = arg0->y + 6;
     s32 x = arg0->x + 6;
     s32 count = func_8002D3D0(arg0->mon);
@@ -565,7 +569,11 @@ extern u8 D_04011AB8[];
 extern Gfx D_80073450[];
 void func_8002B940(s32, s32, s32, s32);
 void func_8001BCB4(s32, s32, s32, s32, u8*, s32, s32);
-void func_89008370(s32 arg0, s32 arg1, u8** arg2, s32 arg3, s32 arg4) {
+/**
+ * Draws ボックス%d (Box %d).
+ * @unverified Name and comment guessed from the code.
+ */
+void PcBox_DrawBoxName(s32 arg0, s32 arg1, u8** arg2, s32 arg3, s32 arg4) {
     Color_RGBA8 color;
     s32 pad[2]; // FAKE
 
@@ -603,7 +611,11 @@ extern char D_89018F14[];
 extern char D_89018F20[];
 extern u8 D_80073634[];
 
-void func_8900865C(s32 arg0, s32 arg1, u8** arg2, s32 arg3, s32 arg4) {
+/**
+ * Draws ボックス%d (Box %d) and its %2d/%2d fill count.
+ * @unverified Name and comment guessed from the code.
+ */
+void PcBox_DrawBoxCount(s32 arg0, s32 arg1, u8** arg2, s32 arg3, s32 arg4) {
     Color_RGBA8 color;
     s32 pad[11]; // FAKE
 
@@ -653,7 +665,11 @@ void func_8002A550(s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 s32 func_8002BC44(s32);
 void func_80027F20(s32);
-void func_890088F8(s32 x, s32 y, s32 flags, s32 kind) {
+/**
+ * Draws ＧＢのカートリッジ (GB cartridge) or ６４のカセット (N64 cassette) for `kind`.
+ * @unverified Name and comment guessed from the code.
+ */
+void PcBox_DrawStorageLabel(s32 x, s32 y, s32 flags, s32 kind) {
     ColorPair890088F8* c;
 
     if (flags & 2) {
@@ -736,9 +752,9 @@ void func_89008AF4(s8* arg0, s32 x, s32 y, s8* arg3) {
     M2C_FIELD(arg0, s32*, 0x15C) = 0;
     M2C_FIELD(arg0, s32*, 0x158) = D_800603C0;
     func_8000B2F4(D_800603C0);
-    func_8002D880(arg0 + 0x170, (s32)arg3, (s32)(arg0 + 0x1B8), (s32)func_89008370, 0xCE, 0x1C);
+    func_8002D880(arg0 + 0x170, (s32)arg3, (s32)(arg0 + 0x1B8), (s32)PcBox_DrawBoxName, 0xCE, 0x1C);
     M2C_FIELD(arg0, s32*, 0x190) |= 0x10000;
-    func_8002D880(arg0 + 0x194, (s32)(arg3 + 0x10), (s32)(arg0 + 0x1C8), (s32)func_8900865C, 0x104, 0x38);
+    func_8002D880(arg0 + 0x194, (s32)(arg3 + 0x10), (s32)(arg0 + 0x1C8), (s32)PcBox_DrawBoxCount, 0x104, 0x38);
     M2C_FIELD(arg0, s32*, 0x1B4) |= 0x10000;
     M2C_FIELD(arg0, s32*, 0) = 1;
 }
@@ -814,8 +830,8 @@ void func_89008F4C(s8* arg0) {
     func_8002B054(arg0 + 0xD4, (M2C_FIELD(arg0, s32*, 0x15C) == 2) ? sel : 0);
     func_8002B054(arg0 + 0x100, (M2C_FIELD(arg0, s32*, 0x15C) == 3) ? sel : 0);
     func_8002B054(arg0 + 0x12C, (M2C_FIELD(arg0, s32*, 0x15C) == 4) ? sel : 0);
-    func_890088F8(M2C_FIELD(arg0, s32*, 4) + 0x10, M2C_FIELD(arg0, s32*, 8) + 0x10, 2, 0);
-    func_890088F8(M2C_FIELD(arg0, s32*, 4) + 0x120, M2C_FIELD(arg0, s32*, 8) + 0x10, 2, 1);
+    PcBox_DrawStorageLabel(M2C_FIELD(arg0, s32*, 4) + 0x10, M2C_FIELD(arg0, s32*, 8) + 0x10, 2, 0);
+    PcBox_DrawStorageLabel(M2C_FIELD(arg0, s32*, 4) + 0x120, M2C_FIELD(arg0, s32*, 8) + 0x10, 2, 1);
     func_8002DAD8(arg0 + 0x170, M2C_FIELD(arg0, s32*, 4) + 0x10, M2C_FIELD(arg0, s32*, 8) + 0x3C, flags[0], 0);
     func_8002DAD8(arg0 + 0x194, M2C_FIELD(arg0, s32*, 4) + 0x120, M2C_FIELD(arg0, s32*, 8) + 0x3C, flags[1], 0);
     func_89008EF0(arg0);
@@ -1261,7 +1277,7 @@ void func_8002C064(s32, s32, s32, s32, s32);
 extern u8 D_8900A5B8[];
 void func_89008F4C(s8*);
 void func_8002CAD0(s8*);
-void func_89007678(Screen89007678*);
+void PcBox_DrawMonStatusWindow(Screen89007678*);
 void func_8900A1CC(s8* arg0) {
     func_800069CC();
     func_8002C064(0x38, 0x1E0, D_8900A5B8[0], D_8900A5B8[1], D_8900A5B8[2]);
@@ -1278,7 +1294,7 @@ void func_8900A1CC(s8* arg0) {
             break;
         case 3:
             func_89008284(arg0 + 0x284, 0x10);
-            func_89007678((Screen89007678*)(arg0 + 0x328));
+            PcBox_DrawMonStatusWindow((Screen89007678*)(arg0 + 0x328));
             break;
     }
 }

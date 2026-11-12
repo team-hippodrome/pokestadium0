@@ -106,7 +106,7 @@ s32 LabPC_StatusToIconIndex(s32);
 void func_8211AEA4(TeamRoster* arg0, BattleMon* arg1, s32 arg2, s32 arg3, s32 arg4);
 
 /*
- * func_8211D874
+ * BattleDebug_DrawCameraLabel
  *
  * Calls Ui_DrawPrimColorRect(arg0, arg1, 0x6E, 0x1E, 0, 0, 0, 0x3C), then
  * func_8001AB6C() and func_8001A384(1, 0), then func_8001A944 twice: with
@@ -123,6 +123,6 @@ extern M2C_UNK D_82195BE4;
 extern s32 D_8218B15C[];
 extern s32 D_8219A5A4;
 
-void func_8211D874(s16 arg0, s16 arg1);
+void BattleDebug_DrawCameraLabel(s16 arg0, s16 arg1);
 
 #endif

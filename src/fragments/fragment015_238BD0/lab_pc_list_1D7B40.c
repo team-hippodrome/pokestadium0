@@ -177,7 +177,11 @@ extern Rgba89004908 D_8900A744;
 extern char D_890189B0[];
 void func_80029028(s32, s32, s32, s32, Rgba89004908);
 void func_80027F20(s32);
-void func_89004C54(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4) {
+/**
+ * Draws a Pokemon list row with its level (Ｌ%d).
+ * @unverified Name and comment guessed from the code.
+ */
+void PcSort_DrawMonRow(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4) {
     u8* mon = arg2;
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(arg0, arg1 + 1, 0xCC, 0x1A, D_8900A73C);
@@ -206,12 +210,12 @@ void func_89004E1C(s8* arg0, s32 arg1) {
 }
 
 void func_8002EC24(s8*, s32, s8*, s32, void*, s32, s32);
-void func_89004C54(s32, s32, u8*, s32, s32);
+void PcSort_DrawMonRow(s32, s32, u8*, s32, s32);
 
 void func_89004E3C(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     M2C_FIELD(arg0, s32*, 0x80) = arg1;
     M2C_FIELD(arg0, s32*, 0x84) = arg2;
-    func_8002EC24(arg0, arg3, arg0 + 0x44, 6, func_89004C54, 0xCC, 0x1C);
+    func_8002EC24(arg0, arg3, arg0 + 0x44, 6, PcSort_DrawMonRow, 0xCC, 0x1C);
     M2C_FIELD(arg0, s32*, 0x20) |= 0x10000;
 }
 
@@ -407,7 +411,11 @@ extern char D_89018B14[];
 extern Gfx D_80060290[];
 extern Gfx D_80060398[];
 
-void func_890056A4(s32 x, s32 y, u8* mon) {
+/**
+ * Draws Attack, Defense, Speed, Special and HP:%3d (？？？？？ when unknown).
+ * @unverified Name and comment guessed from the code.
+ */
+void PcSort_DrawMonStats(s32 x, s32 y, u8* mon) {
     s32 count;
     s32 i;
     char* name;
@@ -466,7 +474,7 @@ extern s32 D_8900A804[];
 extern s32 D_8900A81C[];
 extern s32 D_8900A834[];
 void func_890019C8(s32, s32, s32, s32);
-void func_890056A4();
+void PcSort_DrawMonStats();
 
 void func_890059D0(s32* arg0) {
     s32 idx = arg0[0x170 / 4];
@@ -490,7 +498,7 @@ void func_890059D0(s32* arg0) {
             } else {
                 list = (s32**)&arg0[0x294 / 4];
             }
-            func_890056A4(arg0[0x30 / 4], arg0[0x34 / 4], ((s32*)list)[2] * 0x50 + *list[0]);
+            PcSort_DrawMonStats(arg0[0x30 / 4], arg0[0x34 / 4], ((s32*)list)[2] * 0x50 + *list[0]);
             break;
     }
 }
@@ -875,7 +883,7 @@ void func_890069C0(s32 arg0) {
 void func_8002C064(s32, s32, s32, s32, s32);
 void func_89005AE0();
 void func_8002CAD0(void*);
-void func_89007678(void*);
+void PcBox_DrawMonStatusWindow(void*);
 extern Color_RGB8 D_8900A5B8;
 
 void func_890069E8(s32* arg0) {
@@ -891,11 +899,11 @@ void func_890069E8(s32* arg0) {
             break;
         case 3:
             func_89005AE0(arg0 + 4);
-            func_89007678((u8*)arg0 + 0x46C);
+            PcBox_DrawMonStatusWindow((u8*)arg0 + 0x46C);
             break;
         case 4:
             func_89005AE0(arg0 + 4);
-            func_89007678((u8*)arg0 + 0x46C);
+            PcBox_DrawMonStatusWindow((u8*)arg0 + 0x46C);
             break;
     }
 }

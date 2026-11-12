@@ -883,7 +883,11 @@ extern u8 D_8F625F00[];
 extern Gfx D_80060290[];
 void func_80025830(void);
 
-s32 func_82201AC4(void) {
+/**
+ * Asks トーナメントをつづけますか？ (Continue the tournament?) with つづける (Continue) / ちゅうだんする (Quit), plus the GB cartridge warning.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 Tournament_RunContinuePrompt(void) {
     Color_RGB8 top = D_8220308C;
     Color_RGB8 bottom = D_82203090;
     s32 sel = 0;
@@ -937,7 +941,7 @@ s32 func_82201AC4(void) {
 }
 
 void func_82200F08(void);
-s32 func_82201AC4(void);
+s32 Tournament_RunContinuePrompt(void);
 
 s32 func_82201DF8(void) {
     s32 sp24 = 0;
@@ -960,7 +964,7 @@ s32 func_82201DF8(void) {
             BgStage_RunUntilCondition(0x55, func_822005A8);
             func_800407B0(0x51, 0, 0);
             BgStage_RunUntilCondition(0xF, func_822005A8);
-            sp24 = func_82201AC4();
+            sp24 = Tournament_RunContinuePrompt();
         }
     }
     return sp24;
