@@ -338,7 +338,14 @@ void func_821296E4(CameraNode* arg0) {
 }
 
 extern s32 D_8219A56C;
-void func_821297BC(CameraNode* arg0) {
+/**
+ * Use-move step variant 10 (BattleScene_ActionStepUseMove): the multi-hit loop. Each hit replays
+ * the camera shot, enters the repeat-hit row (0x13) on the target and counts D_8219A570 down; it
+ * stops early when the target faints (D_82199F31).
+ * Player sweep: reached only by the ten multi-hit moves (Double Slap, Comet Punch, Double Kick,
+ * Fury Attack, Twineedle, Pin Missile, Spike Cannon, Barrage, Fury Swipes, Bonemerang).
+ */
+void BattleScene_UseMoveStepMultiHit(CameraNode* arg0) {
     switch (M2C_FIELD(D_8219A5A0, s32*, 0x3C)) {
         case 0:
             M2C_FIELD(D_8219A5A0, s32*, 0x50) = 4;
@@ -463,7 +470,7 @@ void BattleScene_ActionStepUseMove(CameraNode* arg0, s32 arg1) {
             func_821296E4(arg0);
             break;
         case 10:
-            func_821297BC(arg0);
+            BattleScene_UseMoveStepMultiHit(arg0);
             break;
         case 11:
             BattleScene_UseMoveStepShowConfused(arg0);

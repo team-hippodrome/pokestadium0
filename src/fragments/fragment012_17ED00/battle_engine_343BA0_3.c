@@ -52,7 +52,7 @@ void BattleScene_SelectNextIntroCameraShot(CameraNode* arg0);
 void func_82121434(CameraNode* arg0);
 void BattleScene_InitTurnPresentation(s32 arg0);
 void BattleScene_SetPhase(CameraNode* arg0, s32 arg1);
-void func_821324D8(CameraNode* arg0);
+void BattleScene_OpeningStepInitCamera(CameraNode* arg0);
 void func_82131880(CameraNode* arg0);
 void func_821329F8(s32 arg0);
 void func_82132F88(CameraNode* arg0);
@@ -81,7 +81,7 @@ void func_82134374(CameraNode* arg0, UNUSED s32 arg1, UNUSED s32 arg2) {
             BattleScene_SetPhase(arg0, 5);
             break;
         case 8:
-            func_821324D8(arg0);
+            BattleScene_OpeningStepInitCamera(arg0);
             break;
         case 4:
             func_82131880(arg0);

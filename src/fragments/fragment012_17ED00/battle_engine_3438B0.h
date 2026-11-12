@@ -250,13 +250,13 @@ M2C_UNK ActivePokemon_SetModelTransform(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_821365B0(M2C_UNK, s8 *, s8 *, M2C_UNK, s32); /* extern */
 extern M2C_UNK D_82199DE0;
 
-void func_82131C64(s32 arg0);
+void BattleScene_OpeningStepThrowSide1(s32 arg0);
 
 void BattleScene_IntroPanCamera(CameraNode* arg0);
 
 s32 func_8001101C(s8 *, M2C_UNK *);               /* extern */
 
-void func_8213201C(s32 arg0);
+void BattleScene_OpeningStepWaitSide0Ball(s32 arg0);
 
 s32 ActivePokemon_GetNickname(ActivePokemon*);
 s32 BattleMessage_Format(s32, s32, s32, ...);
@@ -264,13 +264,13 @@ extern char D_82196650[];
 void BattleScene_SendOutSide0(CameraNode* arg0);
 
 s32 func_821057D4(ActivePokemon*, s32);
-void func_821321A4(CameraNode* arg0);
+void BattleScene_OpeningStepWaitSide0SendOut(CameraNode* arg0);
 
 extern char D_8219665C[];
 void BattleScene_SendOutSide1(CameraNode* arg0);
 
 M2C_UNK func_82125384();
 
-void func_8213233C(CameraNode* arg0);
+void BattleScene_OpeningStepWaitSide1SendOut(CameraNode* arg0);
 
 #endif

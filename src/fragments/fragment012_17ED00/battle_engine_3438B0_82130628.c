@@ -517,7 +517,12 @@ void func_82131A3C(CameraNode* arg0) {
     }
 }
 
-void func_82131C64(s32 arg0) {
+/**
+ * Battle opening, step 4: once side 0's throw has finished, starts side 1's Poke Ball throw
+ * (model transform 1, effect list 10).
+ * @unverified Name from the code; not yet checked on screen.
+ */
+void BattleScene_OpeningStepThrowSide1(s32 arg0) {
     M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 0), u8 *, 1) = (u8) (M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 0), u8 *, 1) & 0xFFFE);
     M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 4), u8 *, 1) = (u8) (M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 4), u8 *, 1) & 0xFFFE);
     if (M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 0), f32 *, 0x64C) == 0.0f) {
@@ -530,7 +535,12 @@ void func_82131C64(s32 arg0) {
 
 void func_8212254C(s8*, void*, Vec3f, s32, s32, f32, f32);
 void func_82122628(void*, Vec3f, s32, s32, f32, f32);
-void func_82131D24(void* arg0) {
+/**
+ * Battle opening, step 5: once side 1's throw has finished, frames side 0 and starts its Poke
+ * Ball landing (model transform 2, effect list 11).
+ * @unverified Name from the code; not yet checked on screen.
+ */
+void BattleScene_OpeningStepLandSide0Ball(void* arg0) {
     Vec3f sp34;
 
     sp34.y = 0.0f;
@@ -569,7 +579,11 @@ void BattleScene_IntroPanCamera(CameraNode* arg0) {
     }
 }
 
-void func_8213201C(s32 arg0) {
+/**
+ * Battle opening, step 7: waits for side 0's Poke Ball animation to end.
+ * @unverified Name from the code; not yet checked on screen.
+ */
+void BattleScene_OpeningStepWaitSide0Ball(s32 arg0) {
     M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 0), u8 *, 1) = (u8) (M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 0), u8 *, 1) & 0xFFFE);
     M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 4), u8 *, 1) = (u8) (M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 4), u8 *, 1) & 0xFFFE);
     if (func_8001101C(M2C_FIELD(&D_82199DE0, s8 **, 0) + 0x624, &D_82199DE0) == 1) {
@@ -597,7 +611,12 @@ void BattleScene_SendOutSide0(CameraNode* arg0) {
     sBattleScene.scene->phaseStep++;
 }
 
-void func_821321A4(CameraNode* arg0) {
+/**
+ * Battle opening, step 9: holds the camera on side 0's Pokemon after BattleScene_SendOutSide0
+ * until its send-out row finishes.
+ * @unverified Name from the code; not yet checked on screen.
+ */
+void BattleScene_OpeningStepWaitSide0SendOut(CameraNode* arg0) {
     M2C_FIELD(sActivePokemon[1], u8*, 1) &= ~1;
     func_82122A7C(arg0, sActivePokemon[0]);
     sBattleScene.scene->substepFrameCounter++;
@@ -628,7 +647,12 @@ void BattleScene_SendOutSide1(CameraNode* arg0) {
     sBattleScene.scene->substepFrameCounter = 0;
 }
 
-void func_8213233C(CameraNode* arg0) {
+/**
+ * Battle opening, step 11: holds the camera on side 1's Pokemon after BattleScene_SendOutSide1,
+ * then ends the opening.
+ * @unverified Name from the code; not yet checked on screen.
+ */
+void BattleScene_OpeningStepWaitSide1SendOut(CameraNode* arg0) {
     M2C_FIELD(sActivePokemon[0], u8*, 1) &= ~1;
     func_82122A7C(arg0, sActivePokemon[1]);
     sBattleScene.scene->substepFrameCounter++;
