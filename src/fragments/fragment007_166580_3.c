@@ -312,7 +312,7 @@ s32 FreeBattle_UpdateMenuWindow(void* arg0) {
 
 /**
  * Draws one popup menu row with the selection highlight.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: draws each numbered row of the ルールをみる rules list.
  */
 void FreeBattle_DrawPopupRow(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s8* arg5) {
     if (arg4 & 0x18) {
@@ -332,7 +332,8 @@ typedef struct List820061F0 {
 } List820061F0;
 /**
  * Sets up a popup menu sized to its widest string.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: ルールをみる opens the rules list (「1) 6ぴきの ポケモンを エントリー」 … 「5) エントリーできるポケモン 33しゅるい」) as
+ * this popup.
  */
 void FreeBattle_InitPopupMenu(s8 *arg0, s32 arg1, s32 arg2, List820061F0 *arg3, s8 *arg4, Color_RGBA8 arg5) {
     s32 i;
@@ -364,7 +365,7 @@ void Menu_DrawItems(s32, s32, s32, s32, s8 *);  /* extern */
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 /**
  * Draws a popup menu's items.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: draws the ルールをみる rules list window.
  */
 void FreeBattle_DrawPopupMenu(s8 *arg0, s32 arg1)
 {
@@ -383,7 +384,7 @@ M2C_UNK func_8003F6AC(M2C_UNK);
 extern s32 D_800603C0;
 /**
  * Moves a popup menu's cursor. Returns -1 on cancel, the 1-based row on confirm.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: runs while the rules list is open; D-Down moves the highlight down the rules.
  */
 s32 FreeBattle_UpdatePopupMenu(s32 arg0) {
     s32 sp1C = 0;
