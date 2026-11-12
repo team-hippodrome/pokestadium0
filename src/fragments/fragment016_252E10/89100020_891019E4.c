@@ -237,7 +237,8 @@ s32 LabPCList_HasFilterFlag(s8 *arg0, s32 arg1) {
 
 /**
  * Turns on filter flags `arg1`.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: choosing どく in タイプであつめる and pressing あつめる called this with
+ * 2, the flag word at +0x7C went 0 -> 2, and the list then showed only フシギダネ.
  */
 void LabPCList_SetFilterFlag(s8 *arg0, s32 arg1) {
     M2C_FIELD(arg0, s32 *, 0x7C) = (s32) (M2C_FIELD(arg0, s32 *, 0x7C) | arg1);
@@ -245,7 +246,8 @@ void LabPCList_SetFilterFlag(s8 *arg0, s32 arg1) {
 
 /**
  * Turns off filter flags `arg1`.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: pressing かいじょ in タイプであつめる called this with 2, the flag word
+ * at +0x7C went 2 -> 0, and all three party Pokémon came back.
  */
 void LabPCList_ClearFilterFlag(s8 *arg0, M2C_UNK arg1) {
     M2C_FIELD(arg0, s32 *, 0x7C) = (s32) (M2C_FIELD(arg0, s32 *, 0x7C) & ~arg1);

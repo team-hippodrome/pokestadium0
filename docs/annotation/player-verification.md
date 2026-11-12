@@ -694,6 +694,14 @@ Opened on the party list (フシギダネ, ヒトカゲ and ゼニガメ):
   unloaded and other code runs at the same addresses. Hits after the fade-out
   (the filter-flag helpers, `LabPCList_TeachTmHmMove` and others) were false,
   and those names keep their tags.
+* Type filter, checked again with the fragment-aware breakpoints (pj64
+  a7fc7bc), so every hit came from いちらん itself. In タイプであつめる, どく
+  went into the first slot. あつめる then ran `LabPCList_CommitTypeFilter`,
+  which wrote count 1 and type 0x03 (Poison). Next `LabPCList_SetFilterFlag(2)`
+  changed the flag word at +0x7C from 0 to 2, and `LabPCList_ApplyFiltersAndSort`
+  ran. After that only フシギダネ was listed. かいじょ ran
+  `LabPCList_ClearFilterFlag(2)`, the flag word went back to 0, and all three
+  Pokémon returned.
 
 ## せいとん, ポケモンを いどうする
 

@@ -1379,7 +1379,8 @@ s32 LabPCList_UpdateTypeFilter(Lab89107614* arg0) {
 
 /**
  * Copies the chosen types into the list's filter state.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: after choosing どく and pressing あつめる, it wrote count 1 and
+ * type byte 0x03 (Poison) into the filter state at +0x9918.
  */
 void LabPCList_CommitTypeFilter(s8* arg0, s32* arg1) {
     s32 count = 0;
