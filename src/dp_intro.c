@@ -59,6 +59,7 @@ void Display_SetBufferConfig(struct UnkArray4* arg0, u8 arg1, u8 arg2, u8 arg3, 
 u32 Audio_GetSpecialSequenceState(void);
 u8 Cont_GetControllerBits(void);
 
+/** Initializes a graphics task. */
 void DisplayTask_Initialize(UnkStruct80001380* arg0) {
     arg0->task.t.type = M_GFXTASK;
     arg0->task.t.flags = 0;
@@ -77,6 +78,7 @@ void DisplayTask_Initialize(UnkStruct80001380* arg0) {
     osCreateMesgQueue(&arg0->queue, &arg0->mesg, 1);
 }
 
+/** Fills in a graphics task from a display list buffer and submits it. */
 void DisplayTask_Submit(UnkStruct80001380* arg0, struct UnkArray4* arg1, s32 arg2) {
     arg0->task.t.data_ptr = (void*)(uintptr_t)arg1->unk_04;
     arg0->task.t.data_size = arg1->unk_08;
@@ -125,6 +127,10 @@ M2C_UNK DpIntro_SetViMode(s8, s8);
 
 #define DW(type, off) M2C_FIELD(&D_800870D0, type*, off)
 
+/**
+ * Processes one frame in the display worker: builds and submits its graphics
+ * task.
+ */
 void DisplayWorker_ProcessFrame(void) {
     s32 i;
     s32 sp20 = 0;
@@ -254,6 +260,7 @@ void DisplayWorker_ThreadMain(UNUSED void* arg0) {
 
 void DisplayWorker_ThreadMain(void*);
 
+/** Creates the display worker thread. */
 void DisplayWorker_Initialize(void) {
     osCreateThread((OSThread*)&D_800870D0, 5, DisplayWorker_ThreadMain, NULL, &M2C_FIELD(&D_800870D0, s32*, 0x9B0), 0x28);
     osStartThread((OSThread*)&D_800870D0);
@@ -286,19 +293,23 @@ void Display_ClearFramebufferLine(u16 color) {
     }
 }
 
+/** Returns the color the framebuffer is cleared to. */
 u16 Display_GetFramebufferClearColor(void) {
     u16* ptr = (u16*)D_800870A0.unk_9E0->img_p;
     return *ptr;
 }
 
+/** Blocks until the queued frame has finished. */
 void Display_WaitForCompletion(void) {
     osRecvMesg(&D_800870A0.unk_A04, NULL, 1);
 }
 
+/** Queues a frame request for the display worker. */
 void Display_QueueFramebufferRequest(void* arg0) {
     osSendMesg(&D_800870A0.unk_9EC, arg0, 0);
 }
 
+/** Waits for the given number of frames. */
 void Display_WaitForFrames(s32 arg0) {
     while (arg0-- > 0) {
         Display_QueueFramebufferRequest(0);
@@ -306,6 +317,7 @@ void Display_WaitForFrames(s32 arg0) {
     }
 }
 
+/** Sets the configuration of a display buffer entry. */
 void Display_SetBufferConfig(struct UnkArray4* arg0, u8 arg1, u8 arg2, u8 arg3, u8 arg4, s32 arg5, s32 arg6, s32 arg7) {
     arg0->unk_01 = arg1;
     arg0->unk_02 = arg2;
@@ -316,6 +328,7 @@ void Display_SetBufferConfig(struct UnkArray4* arg0, u8 arg1, u8 arg2, u8 arg3, 
     arg0->unk_0C = (struct unk_D_80068BB0*)(uintptr_t)arg7;
 }
 
+/** Returns the state of the special audio sequence. */
 u32 Audio_GetSpecialSequenceState(void) {
     return D_80087B80;
 }

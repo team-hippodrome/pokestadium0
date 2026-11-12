@@ -162,12 +162,14 @@ s32 func_81800020(s32 arg0, s8 *arg1) {
     return 0;
 }
 
+/** Starts and finishes a controller read for the area select screen. */
 void AreaSelect_PollInput(void) {
     Cont_StartReadInputs();
     Cont_ReadInputs();
     Input_ResetRepeatState();
 }
 
+/** Camera preset hook that does nothing. */
 void BattleScene_CameraPresetNop(UNUSED CameraNode* arg0) {
     if (arg0) {}  // karodo
 }
@@ -363,6 +365,7 @@ extern u32 D_81800760[];
 extern u32 D_8EA1B414[];
 extern ModelNodeView* D_818008A4;
 extern s16 D_818008D0;
+/** Sets up the scene for the Transfer Pak screen. */
 void TransferPak_InitScene(void) {
     UNUSED s32 pad; // FAKE: stack padding
     MemoryBlock* sp18;

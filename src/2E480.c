@@ -1172,6 +1172,7 @@ void ScrollList_SetCursorKeepOffset(s32* arg0, s32 arg1) {
     arg0[12] = var_v1;
 }
 
+/** Sets the selected cell of a paged grid widget, applying a page offset. */
 void WidgetTree_SetPagedGridSelectionWithOffset(s8* arg0, s32 arg1, s32 arg2) {
     s32 temp_a2;
     s32 temp_a2_2;

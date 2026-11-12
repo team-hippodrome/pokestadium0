@@ -382,6 +382,7 @@ s32 Options_RunClearSavePrompt(s32 arg0, s32 arg1, u8 arg2) {
     return loop;
 }
 
+/** Initializes save bank 3. */
 void Save_InitializeBank3(void) {
     s32 i;
 

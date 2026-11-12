@@ -98,6 +98,7 @@ void func_800350E8(ModelSegment* segment, MtxF* mtx, ModelVertex* mvtx) {
     }
 }
 
+/** Returns the distance between two points after applying a per-axis scale. */
 f32 Model_ComputeScaledDistance(Vec3f* a, Vec3f* b, Vec3f* scale) {
     f32 dx;
     f32 dy;
@@ -119,6 +120,7 @@ f32 Model_ComputeScaledDistance(Vec3f* a, Vec3f* b, Vec3f* scale) {
     return sqrtf((dx * dx) + (dy * dy) + (dz * dz));
 }
 
+/** Returns the distance between two short-vector points. */
 f32 Model_ComputeDistance(s16 (*a)[3], s16 (*b)[3]) {
     f32 dx;
     f32 dy;
@@ -130,6 +132,10 @@ f32 Model_ComputeDistance(s16 (*a)[3], s16 (*b)[3]) {
     return sqrtf((dx * dx) + (dy * dy) + (dz * dz));
 }
 
+/**
+ * Extrapolates a vertex position from two positions given the current time and
+ * time step.
+ */
 void Model_ExtrapolateVertexPosition(Vec3f* from, Vec3f* to, f32 current_time, f32 delta_time, f32 scale) {
     s32 pad; // FAKE: stack padding
     f32 temp_fv0;

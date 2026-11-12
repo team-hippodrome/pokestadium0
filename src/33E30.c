@@ -55,6 +55,10 @@ void Debug_PrintMtxF(f32* arg0) {
     rmonPrintf(D_8007DBC0);
 }
 
+/**
+ * Draws a triangle marker at a position with the given color and scale,
+ * returning the advanced display list pointer.
+ */
 Gfx* Gfx_DrawTriangleMarker(Gfx* arg0, Vec3f* arg1, u8 arg2, u8 arg3, u8 arg4, u8 arg5, f32 arg6) {
     f32 sp144;
     f32 sp140;

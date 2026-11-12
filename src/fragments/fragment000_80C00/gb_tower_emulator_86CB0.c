@@ -348,6 +348,7 @@ void AudioSeq_SeqLayerFree(s8** arg0, s32 arg1) {
     }
 }
 
+/** Resets all particle slots of a display object. */
 void Particle31_ResetAllSlots(DisplayObject* arg0) {
     s32 i;
 

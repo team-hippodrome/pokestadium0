@@ -185,6 +185,7 @@ u32 func_8110FE98(s32 *arg0) {
     return sp1C >> 0x18;
 }
 
+/** Returns the number of sounds active in an audio category. */
 s32 Audio_CountCategorySounds(s32 arg0) {
     return Audio_CountActiveSoundsByCategory(arg0);
 }
@@ -312,13 +313,16 @@ void func_81110128(s32 arg0, M2C_UNK arg1) {
     func_811098C0(&D_811842A0, arg0, arg1);
 }
 
+/** Clears the battle effect state flag. */
 void BattleAnim_ClearEffectStateFlag(void) {
     D_811842A0 = 0;
 }
 
+/** Effect start hook that does nothing. */
 void BattleAnim_EffectStartNop(void) {
 }
 
+/** Alias that disables battle effect spawning. */
 void BattleAnim_DisableEffectSpawningAlias(void) {
     BattleAnim_DisableEffectSpawning();
 }

@@ -272,6 +272,7 @@ Acmd* n_alEnvmixerPull(N_PVoice* filter, s32 sample_offset, Acmd* p) {
     return ptr;
 }
 
+/** Sets a parameter on an envelope mixer voice. */
 s32 n_alEnvmixerParam(N_PVoice* filter, s32 paramID, void* param) {
     N_PVoice* e = filter;
 
@@ -394,6 +395,7 @@ s16 _getVol(s16 arg0, s32 arg1, s16 arg2, u16 arg3) {
 
 extern s32 D_80075E00;
 extern s32 D_800B3F94;
+/** Creates the audio manager: the synthesizer, DMA buffers and audio thread. */
 void amCreateAudioMgr(ALSynConfig* c, amConfig* amc, u32 num_dma_buffers, s32 arg3, s32 arg4) {
     u32 i;
     f32 fsize;
@@ -454,6 +456,10 @@ void amCreateAudioMgr(ALSynConfig* c, amConfig* amc, u32 num_dma_buffers, s32 ar
     D_800B3CE0 = 0;
 }
 
+/**
+ * Audio DMA callback: returns a buffer holding the requested audio data,
+ * starting a DMA if needed.
+ */
 s32 __amDMA(s32 addr, s32 len, void* state) {
     void* found_buffer;
     s32 delta;
@@ -616,6 +622,7 @@ OSTask* func_8003B868(OSTask* arg0) {
     return arg0;
 }
 
+/** Creates the audio DMA callback state. */
 ALDMAproc __amDmaNew(AMDMAState** state) {
     if (!dmaState.initialized) {
         dmaState.firstUsed = NULL;
@@ -628,6 +635,7 @@ ALDMAproc __amDmaNew(AMDMAState** state) {
     return __amDMA;
 }
 
+/** Releases audio DMA buffers that have been idle for too long. */
 void __clearAudioDMA(void) {
     s32 i;
     void* sp40;
@@ -683,6 +691,7 @@ void func_8003BC9C(s32 arg0) {
     }
 }
 
+/** Enables or disables Pokemon cries. */
 void Cry_SetEnabled(s32 arg0) {
     const f32 D_8007C7C0 = 0.8000000119f;
     if (arg0 != 0) {
@@ -694,6 +703,7 @@ void Cry_SetEnabled(s32 arg0) {
     D_80075E04[0] = 0;
 }
 
+/** Plays a Pokemon's cry from the Pokedex. */
 void Cry_PlayFromPokedex(s32 arg0) {
     if (D_80075E04[0] == 0) {
         func_80044BA8(0x7D00, 0x78, 0x320);
@@ -740,6 +750,7 @@ void func_8003BDB0(void) {
     }
 }
 
+/** Returns whether a cry is playing. */
 s32 Cry_IsPlaying(void) {
     return D_80075E04[0];
 }
@@ -773,6 +784,7 @@ block_5:
     return 1;
 }
 
+/** Returns the disk-ready polling status through an output byte. */
 s32 Audio_GetDiskReadyStatus(u8* arg0) {
     if (D_80075E20 == 0) {
         *arg0 = 7;
@@ -782,6 +794,7 @@ s32 Audio_GetDiskReadyStatus(u8* arg0) {
     return D_800B3CEC;
 }
 
+/** Turns disk-ready polling on or off. */
 void Audio_SetDiskReadyPolling(s32 arg0) {
     if (arg0 == 1) {
         D_80075E20 = 1;

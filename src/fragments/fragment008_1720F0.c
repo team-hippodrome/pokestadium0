@@ -707,6 +707,7 @@ s32 Registration_StepTimer(s8* arg0) {
     return Registration_IsTimerDone(arg0);
 }
 
+/** Queues a sound unless one played recently, counting down a cooldown. */
 s32 Audio_QueueSoundAvoidingRecent(s32* arg0) {
     if (*arg0 > 0) {
         *arg0 -= 1;

@@ -205,6 +205,7 @@ void VsScene_SetupCamera(s32 arg0, CameraNode* arg1) {
     }
 }
 
+/** Callback that sets the light angle of a node. */
 s32 Completion_LightAngleCallbackA(s32 arg0, GraphNode* arg1) {
     unk_D_86002F34_alt18* ptr = (unk_D_86002F34_alt18*)arg1;
     f32 sp28;

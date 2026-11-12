@@ -17,6 +17,7 @@ s32 Storage_QueueRtcWrite(void* arg0, s32 arg1, s32 arg2);
 s16 Storage_GetDiskStatus(void);
 s32 Storage_QueueRtcRead(void* arg0, s32 arg1, s32 arg2);
 
+/** Queues a ROM read request for the storage thread. */
 s32 Storage_QueueRomRead(s32 arg0, void* arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
     struct UnkStruct80000E80* temp_v0;
 
@@ -36,6 +37,7 @@ s32 Storage_QueueRomRead(s32 arg0, void* arg1, s32 arg2, s32 arg3, s32 arg4, s32
     return temp_v0 == NULL;
 }
 
+/** Queues an SRAM read or write request for the storage thread. */
 s32 Storage_QueueSramTransfer(s32 arg0, void* arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
     struct UnkStruct80000E80* temp_v0;
 
@@ -55,6 +57,7 @@ s32 Storage_QueueSramTransfer(s32 arg0, void* arg1, s32 arg2, s32 arg3, s32 arg4
     return temp_v0 == NULL;
 }
 
+/** Queues a 64DD disk read or write request for the storage thread. */
 s32 Storage_QueueDiskTransfer(s32 arg0, void* arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
     struct UnkStruct80000E80* temp_v0;
 
@@ -74,6 +77,7 @@ s32 Storage_QueueDiskTransfer(s32 arg0, void* arg1, s32 arg2, s32 arg3, s32 arg4
     return temp_v0 == NULL;
 }
 
+/** Queues a 64DD disk ID read request. */
 s32 Storage_QueueDiskIdRead(s32 arg0, s32 arg1) {
     struct UnkStruct80000E80* temp_v0;
 
@@ -87,6 +91,7 @@ s32 Storage_QueueDiskIdRead(s32 arg0, s32 arg1) {
     return temp_v0 == NULL;
 }
 
+/** Queues a 64DD seek request. */
 s32 Storage_QueueDiskSeek(s32 arg0, s32 arg1, s32 arg2) {
     struct UnkStruct80000E80* temp_v0;
 
@@ -100,6 +105,7 @@ s32 Storage_QueueDiskSeek(s32 arg0, s32 arg1, s32 arg2) {
     return temp_v0 == NULL;
 }
 
+/** Queues a request to stop the 64DD spindle motor. */
 s32 Storage_QueueDiskMotorOff(s32 arg0, s32 arg1) {
     struct UnkStruct80000E80* temp_v0;
 
@@ -113,6 +119,7 @@ s32 Storage_QueueDiskMotorOff(s32 arg0, s32 arg1) {
     return temp_v0 == NULL;
 }
 
+/** Queues a 64DD reset request. */
 s32 Storage_QueueDiskReset(s32 arg0, s32 arg1) {
     struct UnkStruct80000E80* temp_v0;
 
@@ -126,6 +133,7 @@ s32 Storage_QueueDiskReset(s32 arg0, s32 arg1) {
     return temp_v0 == NULL;
 }
 
+/** Queues a request to set the 64DD real-time clock. */
 s32 Storage_QueueRtcWrite(void* arg0, s32 arg1, s32 arg2) {
     struct UnkStruct80000E80* temp_v0;
 
@@ -139,10 +147,12 @@ s32 Storage_QueueRtcWrite(void* arg0, s32 arg1, s32 arg2) {
     return temp_v0 == NULL;
 }
 
+/** Returns the 64DD drive status. */
 s16 Storage_GetDiskStatus(void) {
     return D_8008704C;
 }
 
+/** Queues a request to read the 64DD real-time clock. */
 s32 Storage_QueueRtcRead(void* arg0, s32 arg1, s32 arg2) {
     struct UnkStruct80000E80* temp_v0;
 

@@ -39,6 +39,10 @@ void Audio_RelocateOffsets(u32* arg0, u32 arg1, s32 arg2);
 void Audio_CreateFrameTaskWrapper(void* arg0);
 void Audio_ClearWaveDataLoaded(void);
 
+/**
+ * Converts offsets in an audio data table to pointers relative to a base
+ * address.
+ */
 void Audio_RelocateOffsets(u32* arg0, u32 arg1, s32 arg2) {
     u32 i;
 
@@ -1137,6 +1141,7 @@ skip:
     return ret;
 }
 
+/** Wrapper that creates the audio task for the frame. */
 void Audio_CreateFrameTaskWrapper(void* arg0) {
     Audio_CreateFrameTask(arg0);
 }
@@ -1146,6 +1151,7 @@ extern u8 D_80077524;
 extern s32 D_800FD64C;
 extern s32 D_800FD650;
 
+/** Fades out and clears the stored sound state. */
 void Audio_FadeAndClearStoredSounds(void) {
     if (D_80077524 != 0) {
         func_80037AC4(D_800FD64C, 0x32);

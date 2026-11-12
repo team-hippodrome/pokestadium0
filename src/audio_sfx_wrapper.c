@@ -6,6 +6,7 @@
 
 void Audio_PlaySoundEffectByIdWrapper(s32 arg0);
 
+/** Wrapper that plays a sound effect by id. */
 void Audio_PlaySoundEffectByIdWrapper(s32 arg0) {
     Audio_PlaySoundEffectById(arg0);
 }

@@ -83,6 +83,7 @@ void Audio_QueueSequenceIdWrapper(u32 arg0);
 
 void Audio_QueueSequenceId(u32 arg0);
 
+/** Wrapper that queues a music sequence by id. */
 void Audio_QueueSequenceIdWrapper(u32 arg0) {
     Audio_QueueSequenceId(arg0);
 }

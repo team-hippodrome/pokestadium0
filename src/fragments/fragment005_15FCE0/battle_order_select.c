@@ -162,6 +162,7 @@ extern u8* D_823028CC[];
 extern u8* D_823028D8[];
 extern u8* D_823028E0[];
 extern u8* D_823028E4[][3];
+/** Draws the lead Pokemon icon in the battle order sidebar. */
 void BattleMenu_DrawSidebarLeadIcon(s32 arg0, s32 arg1, unk_D_84803760* arg2) {
     u8* sp2C;
 
@@ -191,6 +192,7 @@ void BattleMenu_DrawSidebarLeadIcon(s32 arg0, s32 arg1, unk_D_84803760* arg2) {
 
 extern u8* D_823028E4[][3];
 
+/** Draws a row's type icon in the battle order sidebar. */
 s32 BattleMenu_DrawSidebarRowTypeIcon(s32 arg0, s32 arg1, s8 arg2, s8 arg3) {
     s32 sp34;
     s32 sp30;
@@ -573,6 +575,7 @@ void BattleMenu_DrawOrderSelectPanel_Ready(unk_D_848037A0* arg0) {
     }
 }
 
+/** Draws the label of the confirm button. */
 void BattleMenu_DrawConfirmButtonLabel(unk_D_848037A0* arg0) {
     s16 sp26;
     s16 sp24;

@@ -932,6 +932,7 @@ s32 Audio_LoadWaveTablesAndMusic(u8* arg0) {
     return D_800FD608;
 }
 
+/** Clears the flag that marks wave data as loaded. */
 void Audio_ClearWaveDataLoaded(void) {
     D_80075C30 &= ~0x80000000;
 }

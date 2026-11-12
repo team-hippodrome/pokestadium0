@@ -134,11 +134,16 @@ u8 Cont_SetupControllers(u8 arg0) {
 M2C_UNK func_80051C70(M2C_UNK *);                   /* extern */
 extern M2C_UNK D_800AAFE0;
 
+/** Requests a read of the controller inputs. */
 void Cont_StartReadInputs(void) {
     func_80051C70(&D_800AAFE0);
 }
 
 void GbTower_PollPakConnection(void);
+/**
+ * Reads the controller inputs requested by Cont_StartReadInputs and updates
+ * the button state.
+ */
 void Cont_ReadInputs(void) {
     OSMesg msg;
     s32 i;
@@ -300,6 +305,7 @@ void Cont_BusyWaitMs(s32 ms) {
 
 extern u16 gCrashScreenUnlockInputs[];
 void Cont_BusyWaitMs(s32 ms);
+/** Waits for the button combination that continues from the crash screen. */
 void crash_screen_wait_for_button_combo(void) {
     s32 breakloop = FALSE;
     s32 i = 0;

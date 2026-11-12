@@ -164,6 +164,7 @@ s32 AudioLoad_AsyncLoadInner(s32 table_type, s32 id, s32 n_chunks, s32 ret_data,
     return ram_addr;
 }
 
+/** Ends a Pokemon's status animations and commits the result. */
 s32 BattleScene_EndStatusAnimationsAndCommit(ActivePokemon* arg0) {
     BattleAnim_ClearFreezeStatusAnimation(arg0);
     BattleAnim_EndSleepStatusAnimation(arg0);
@@ -588,6 +589,7 @@ Entry8110EABC* func_8110E9A8(s32 dev_addr, s32 ramAddr, u32 size, s32 medium, s3
 
 extern volatile s32 D_811859D4;
 void func_8110EB40(Entry8110EABC*, s32);
+/** Applies animation state effects for every Pokemon. */
 void Battle_ApplyAnimStateEffects(s32 arg0) {
     s32 i;
 
