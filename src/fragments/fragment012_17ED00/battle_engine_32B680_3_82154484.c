@@ -1404,7 +1404,8 @@ void BattleAnim_InitializeEggBombUse(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): Soft-Boiled used with 1P's HP lowered to 20 ran this as start effect
+ * 0x42.
  */
 void BattleAnim_InitializeSoftBoiledUse(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackInitModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 0xA, 0, 0x24, 0);
@@ -2235,14 +2236,15 @@ void BattleAnim_InitializeDigBurrowUse(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): Dig's second turn, the attack out of the ground, ran this as start
+ * effect 0x34. The first turn uses 0x45 (BattleAnim_InitializeDigBurrowUse).
  */
 void BattleAnim_InitializeDigUse(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_InitializeParticleModel, &gDefaultParticleDescriptor, 0, 1, 0xA, 0, 0x16, 0);
 }
 
 /**
- * @unverified Name from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): Dig's second turn ran this as end effect 0x4E.
  */
 void BattleAnim_InitializeDigHit(void) {
     func_8213B560(0, &func_82152FB0, &D_8218E580, 0, 1, 0xA, 0, 0x1D, 0);
@@ -3144,7 +3146,7 @@ void BattleAnim_InitializeDreamEaterUse(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): Dream Eater on a sleeping COM Pinsir ran this as end effect 0x3E.
  */
 void BattleAnim_InitializeDreamEaterHit(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunPsychedelicOverlay, &gDefaultParticleDescriptor, 0, 1, 0xC, 1, 0, 0);
@@ -3775,7 +3777,8 @@ void BattleAnim_InitializeSkyAttackUse1(void) {
 }
 
 /**
- * @unverified Name from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): Sky Attack's second turn ran this as start effect 0x67. The charge
+ * turn uses 0x68.
  */
 void BattleAnim_InitializeSkyAttackUse2(void) {
     func_8213B644(0, 0x20, 6);
@@ -3786,7 +3789,7 @@ void BattleAnim_InitializeSkyAttackUse2(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): Sky Attack's second turn ran this as end effect 0x19.
  */
 void BattleAnim_InitializeSkyAttackHit(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackInitModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 9, 0, 0x13, 0);

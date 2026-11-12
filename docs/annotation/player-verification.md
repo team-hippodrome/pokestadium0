@@ -916,3 +916,17 @@ Render flag: with `Particle_EnableRendering` patched to return at once,
 Flamethrower ran on the same frames but its flames were never drawn. Flag 4
 is the render flag, so the enable, disable and test helpers lost their tags.
 
+## Move inits the 700-frame sweep missed
+
+Run again with longer windows or a matching setup:
+
+* Dig's second turn ran start 0x34 (`BattleAnim_InitializeDigUse`) and end
+  0x4E (`BattleAnim_InitializeDigHit`).
+* Sky Attack's second turn ran start 0x67 (`..._SkyAttackUse2`) and end 0x19
+  (`..._SkyAttackHit`).
+* Soft-Boiled at 20 HP ran start 0x42.
+* Dream Eater on a sleeping target ran end 0x3E.
+
+Guillotine and Horn Drill still miss Pinsir, which is level 25 against
+Nidorino's 20, so their hit inits keep their tags.
+
