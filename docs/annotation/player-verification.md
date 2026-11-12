@@ -519,3 +519,15 @@ with ID 12345. Zero showed exactly these on the cartridge screen and in
   0x3A, 0x40, 0x44, 0x51, 0x59, 0x85, 0x8D, 0x9A, 0xAB, 0xAE, 0xB6). Without it
   the menu warns 「ポケモンセンターにいない」. With it the menu gains せいとん and
   いちらん and shows the Pokémon Stadium logo.
+
+## ずかん (Pokédex)
+
+The ずかん item opens ずかんもくじ (fragment018). The list shows 001 フシギダネ,
+004 ヒトカゲ and 007 ゼニガメ with caught icons. The counts window shows
+みつけたかず / つかまえたかず / もっているかず 3 / 3 / 3. The menu has
+データをみる / なきごえ / ぶんぷをみる / やめる, and the sort bar shows
+ばんごうじゅん.
+データをみる shows the 3D model, No.001, たねポケモン, 0.7m, 6.9kg and the dex
+text. なきごえ plays the cry. ぶんぷをみる flies over a 3D Kanto map titled
+「フシギダネのすみか」, marked 「せいそくちふめい」 because starters aren't wild.
+28 `Pokedex_*` names were confirmed this way.
