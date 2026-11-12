@@ -42,7 +42,8 @@ extern char D_82302A20[];
  * Draws the instructions for the L and R button at the bottom of the screen
  * (L) Button to cancel
  * (R) Button to check
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play: runs every frame on the order screen of a モンスターボールカップ round, which shows 「＊L
+ * ボタンでもどる ＊R ボタンでかくにん」 along the bottom.
  */
 void BattleMenu_DrawBottomActionButtons(void) {
     func_8001CC90(0, 0x1E0, 0xAB, 0x49, 0x66);

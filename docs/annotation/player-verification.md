@@ -413,9 +413,10 @@ COM), presses were matched to the functions they reached:
   (`BattleMenu_DrawOrderSelectConfirmPrompt`, `..._ConfirmInput`).
 
 The level-total notice needs cup rules and wasn't triggered.
-`BattleMenu_DrawBottomActionButtons` never ran on that screen, though the L/R
-hint is on screen. The hint may be drawn once when the screen opens, before
-the savestate, so that name keeps its tag.
+`BattleMenu_DrawBottomActionButtons` didn't run from the mid-screen
+savestate. It does run when the order screen is entered fresh (seen before a
+モンスターボールカップ round, with 「＊L ボタンでもどる ＊R ボタンでかくにん」
+along the bottom), so it is confirmed.
 
 ## Re-check after the debugger fix
 
