@@ -867,13 +867,13 @@ void Battle_ResolveMonAction(void)
   sBattleTarget = sp18;
   if ((sBattleScene.scene->mode == 6) || (sBattleScene.scene->mode == 5))
   {
-    sBattleUser->hp = 0x384;
-    sBattleTarget->hp = 0x384;
+    sBattleUser->hp = 900;
+    sBattleTarget->hp = 900;
     func_8210F2F4(sActivePokemon[0]);
     func_8210F2F4(sActivePokemon[1]);
     ProcessBattleTurn();
-    sBattleUser->hp = 0x384;
-    sBattleTarget->hp = 0x384;
+    sBattleUser->hp = 900;
+    sBattleTarget->hp = 900;
     sBattleUser->unk_0E = 0x384;
     sBattleTarget->unk_0E = 0x384;
     sBattleUser->unk_10 = 0x384;

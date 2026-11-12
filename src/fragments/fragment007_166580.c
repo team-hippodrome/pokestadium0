@@ -157,7 +157,7 @@ s32 FreeBattle_AllTriosOverLevelLimit(Mon82000258* mons) {
         for (j = i + 1; j < 5; j++) {
             sum += mons[j].level;
             for (k = j + 1; k < 6; k++) {
-                if (mons[k].level + sum < 0x9C) {
+                if (mons[k].level + sum < 156) {
                     return 0;
                 }
             }
@@ -773,11 +773,11 @@ void FreeBattle_MarkIneligibleMons(TeamList8200140C *arg0, s32 arg1) {
             if ((mon->species <= 0) || (mon->species >= 0x98)) {
                 mon->flags |= 0x20;
             } else if (arg1 == 1) {
-                if (!(D_80064C5C[mon->species - 1].flags & 1) || (mon->level < 0x32) || (mon->level >= 0x38)) {
+                if (!(D_80064C5C[mon->species - 1].flags & 1) || (mon->level < 50) || (mon->level >= 56)) {
                     mon->flags |= 2;
                 }
             } else if (arg1 == 2) {
-                if (!(D_80064C5C[mon->species - 1].flags & 2) || (mon->level <= 0) || (mon->level >= 0x1F)) {
+                if (!(D_80064C5C[mon->species - 1].flags & 2) || (mon->level <= 0) || (mon->level >= 31)) {
                     mon->flags |= 4;
                 }
             } else if (!(D_80064C5C[mon->species - 1].flags & 1)) {

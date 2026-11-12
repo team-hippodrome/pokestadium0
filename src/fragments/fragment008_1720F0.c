@@ -743,7 +743,7 @@ void Registration_DrawTeamRow(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, 
         Registration_DrawTrainerPanel(arg0, arg1, arg4, box);
         cache.slots = D_88103098;
         cache.base = 0;
-        cache.count = 0x18;
+        cache.count = 24;
         cache.start = arg3 * 6;
         entry = M2C_FIELD(box, u8**, 0x18);
         for (i = 0; i < M2C_FIELD(box, s32*, 0x20); i++, entry += 0x54) {
@@ -782,7 +782,7 @@ void Registration_DrawTeamRowWithTrainer(s32 arg0, s32 arg1, s8* arg2, s32 arg3,
     Registration_DrawTrainerPanel(arg0, arg1, 0, (u8*)arg2);
     cache.slots = D_88103098;
     cache.base = 0;
-    cache.count = 0x18;
+    cache.count = 24;
     cache.start = arg3 * 6;
     if (arg4 == 0) {
         n = 0;
