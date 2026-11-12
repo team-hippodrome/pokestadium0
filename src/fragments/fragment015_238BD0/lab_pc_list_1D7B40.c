@@ -396,7 +396,7 @@ typedef struct Slot890056A4 {
 } Slot890056A4;
 s32 func_8002D3D0(u8*);
 s32 func_8002D430(s32, s32);
-void func_890074E0(s32, s32, s32, s32);
+void PcBox_DrawMoveName(s32, s32, s32, s32);
 extern Slot890056A4 D_8900A79C[];
 extern char D_89018AC4[];
 extern char D_89018AD0[];
@@ -442,7 +442,7 @@ void PcSort_DrawMonStats(s32 x, s32 y, u8* mon) {
     Font_Printf(x + 0x15C, y + 0x54, D_89018B10, *(u16*)(mon + 0x2C));
     Font_Printf(x + 0x1E7, y + 0x54, D_89018B14, *(u16*)(mon + 0x2E));
     for (i = 0; i < count; i++) {
-        func_890074E0(D_8900A79C[i].x + x, D_8900A79C[i].y + y, func_8002D430((s32)mon, i), D_8900A79C[i].type);
+        PcBox_DrawMoveName(D_8900A79C[i].x + x, D_8900A79C[i].y + y, func_8002D430((s32)mon, i), D_8900A79C[i].type);
     }
     Font_EndTexturedTextRendering();
     gSPDisplayList(gDisplayListHead++, D_80060290);
@@ -1007,8 +1007,8 @@ void Save_DrawReportingWindow(s8* arg0);
 s32 func_8002CD7C(s8* arg0);
 void func_800407B0(s32, s32, s32);
 s32 func_8900609C(s8* arg0);
-void func_89007374(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, u16* arg6);
-s32 func_89007CD8(s8* arg0);
+void PcBox_InitConfirmWindow(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, u16* arg6);
+s32 PcBox_UpdateConfirmCursor(s8* arg0);
 extern u8 D_89018DBC[];
 
 s32 func_89006D60(s8* arg0) {
@@ -1030,12 +1030,12 @@ s32 func_89006D60(s8* arg0) {
             } else if (res == 2) {
                 mon = M2C_FIELD(arg0, s32*, 0x2AC) * 0x50 + M2C_FIELD(arg0, u8***, 0x2A4)[0];
                 M2C_FIELD(arg0, s32*, 0) = 3;
-                func_89007374(arg0 + 0x46C, 0x69, 0x7D, (s32)mon, 0,
+                PcBox_InitConfirmWindow(arg0 + 0x46C, 0x69, 0x7D, (s32)mon, 0,
                               D_800603C0, M2C_FIELD(arg0, u16**, 8));
             } else if (res == 3) {
                 mon = M2C_FIELD(arg0, s32*, 0x2AC) * 0x50 + M2C_FIELD(arg0, u8***, 0x2A4)[0];
                 M2C_FIELD(arg0, s32*, 0) = 4;
-                func_89007374(arg0 + 0x46C, 0x69, 0x7D, (s32)mon,
+                PcBox_InitConfirmWindow(arg0 + 0x46C, 0x69, 0x7D, (s32)mon,
                               (s32)D_89018DBC, D_800603C0, M2C_FIELD(arg0, u16**, 8));
                 M2C_FIELD(arg0, s32*, 0x514) = 1;
             }
@@ -1066,7 +1066,7 @@ s32 func_89006D60(s8* arg0) {
             }
             break;
         case 4:
-            res = func_89007CD8(arg0 + 0x46C);
+            res = PcBox_UpdateConfirmCursor(arg0 + 0x46C);
             if (res == -1) {
                 func_8003F6AC(3);
                 M2C_FIELD(arg0, s32*, 0) = 1;
