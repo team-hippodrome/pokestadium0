@@ -184,7 +184,9 @@ typedef struct BattleMoveCheck8210CA24 {
 /**
  * Checks the chosen move slot: shows a message and returns 1 if it has no PP or
  * is disabled, otherwise confirms it.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): with Poison Sting's PP set to 0, choosing it (C-Up) made this return
+ * 1 and the game showed わざの のこりポイントが ない！ (No PP left for this move!) instead of starting the
+ * turn.
  */
 s32 BattleMenu_TryConfirmMove(s8* arg0) {
     u8 flags;
