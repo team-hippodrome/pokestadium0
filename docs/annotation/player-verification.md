@@ -884,3 +884,12 @@ helpers ran.
   * graphics helpers such as texture loads and the billboard matrix, where the
     bytes at `a0` say nothing.
 
+## Menu and scroll-list widgets
+
+The いちらん sort popup is a `Menu_*` list. `Menu_ClearItemFlags` ran over its
+5 items, and the cursor moved one row per D-Down, stopping on the disabled
+すべてのせんたくをやめる too. The タイプであつめる list is a `ScrollList_*` with
+15 items (the Gen 1 types). Paging it with D-Right ran
+`ScrollList_ScrollDownToCursor`. The main table is drawn with
+`ScrollList_DrawItems` and `ScrollList_DrawScrollArrows`.
+

@@ -83,7 +83,8 @@ M2C_UNK func_8000B2F4(s32);
 
 /**
  * Initializes a menu: stores its layout arguments, sets the position through Menu_SetItems, the 0xC00 repeat delay and the controller.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: R, then A on the ポケモン header, set up the five-row sort menu
+ * through this (アイウエオじゅんにならべる ... いちらんするポケモンをえらぶ).
  */
 void Menu_Init(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
     M2C_FIELD(arg0, s32*, 0xC) = arg4;
@@ -99,7 +100,7 @@ void Menu_ClearItemFlags(u8* arg0);
 
 /**
  * Points the menu at item table `arg1` with flags `arg2`, puts the cursor on the first item and clears the item flags.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: called from Menu_Init for the five-row sort menu.
  */
 void Menu_SetItems(s8 *arg0, s32 arg1, s32 arg2) {
     M2C_FIELD(arg0, s32 *, 0) = arg1;
@@ -110,7 +111,8 @@ void Menu_SetItems(s8 *arg0, s32 arg1, s32 arg2) {
 
 /**
  * Clears the flags of every item.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: ran over 5 items for the sort menu and 15 for the タイプであつめる
+ * type list (the 15 Gen 1 types).
  */
 void Menu_ClearItemFlags(u8* arg0) {
     s32 i;
@@ -125,7 +127,7 @@ void Menu_ClearItemFlags(u8* arg0) {
  * x = arg1 + 2, y = cursor * cellHeight + arg2 + 2, size = (cellWidth - 4) x (cellHeight - 4),
  * colour read from D_80073520. Compare ScrollList_DrawCursor and ScrollGrid_DrawCursor. The separate `y`
  * local only fixes the order in which the fields are loaded.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-12) in いちらん: drew the yellow cursor frame on the selected sort menu row.
  */
 void Menu_DrawCursor(GridMenu80031004* arg0, s32 arg1, s32 arg2) {
     s32 y;
@@ -136,7 +138,7 @@ void Menu_DrawCursor(GridMenu80031004* arg0, s32 arg1, s32 arg2) {
 
 /**
  * Draws a menu's items from its definition, one row per item.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: drew the sort menu rows every frame while it was open.
  */
 void Menu_DrawItems(Menu8002E230* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     s32 i;
@@ -187,7 +189,8 @@ s32 func_8000B30C();
 s32 func_8003F6AC();
 /**
  * Moves a menu's cursor from controller input. Returns 0 when the menu has no items.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: D-Down moved the sort menu cursor one row per press. It also
+ * stops on a disabled row (すべてのせんたくをやめる).
  */
 s32 Menu_UpdateCursor(Menu8002E230* arg0) {
     s32 input;
@@ -554,7 +557,7 @@ void ScrollList_SetItems(s8* arg0, s32 arg1, s32 arg2);
 extern s32 D_800603C0;
 /**
  * Initializes a scrolling list: stores its layout arguments, the position, the 0xC00 repeat delay, the controller and the scroll bar geometry.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: set up the scrolling type list of タイプであつめる (8 rows visible).
  */
 void ScrollList_Init(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6) {
     M2C_FIELD(arg0, s32*, 0x24) = arg3;
@@ -577,7 +580,7 @@ void Menu_ClearItemFlags(u8* arg0);
 
 /**
  * Points the list at item table `arg1` with flags `arg2` and resets the cursor and scroll.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: called from ScrollList_Init with the 15-type item table.
  */
 void ScrollList_SetItems(s8 *arg0, s32 arg1, s32 arg2) {
     M2C_FIELD(arg0, s32 *, 0) = arg1;
@@ -606,7 +609,8 @@ void ScrollList_ScrollUpToCursor(s8 *arg0) {
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 /**
  * Scrolls down when the cursor row is below the visible area.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: paging the type list with D-Right moved the cursor below the
+ * visible rows, and this scrolled down to it.
  */
 void ScrollList_ScrollDownToCursor(s8 *arg0)
 {
@@ -728,7 +732,8 @@ void func_8001C22C(s32, s32, s32, s32, u8*, s32, s32);
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 /**
  * Draws the up and down arrows when there are rows above or below the visible area.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: ran each frame for the main list and drew the up and down
+ * arrows above and below it.
  */
 void ScrollList_DrawScrollArrows(ScrollMenu8002F6C4* menu, s32 x, s32 topY, s32 bottomY, s32 width) {
     s32 height = menu->rowSpacing * menu->rows;
@@ -759,7 +764,7 @@ void ScrollList_DrawScrollArrows(ScrollMenu8002F6C4* menu, s32 x, s32 topY, s32 
  * cellWidth/cellHeight minus 4: y = scrollTarget + arg2 - scroll + 2, and when flag 0x400 is
  * set, (cellHeight - 1) is subtracted from it. The colour argument is read from D_80073520.
  * Matching note: the redundant (s32) cast on arg2 only fixes the operand order of the addu.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-12) in いちらん: drew the cursor frame on the selected row of the type list.
  */
 void ScrollList_DrawCursor(GridMenu80031004* arg0, s32 arg1, s32 arg2) {
     s32 sp2C;
@@ -782,7 +787,7 @@ void ScrollList_DrawCursor(GridMenu80031004* arg0, s32 arg1, s32 arg2) {
  * is restored to the full 640x480 screen, ScrollList_DrawScrollArrows draws when option bit 0x100000 is set
  * and ScrollList_DrawCursor (cursor box) draws when mask bit 2, option bit 0x10000 and a non-empty
  * list agree.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-12) in いちらん: drew the main list's rows (フシギダネ, ヒトカゲ, ゼニガメ) every frame.
  */
 void ScrollList_DrawItems(ScrollMenu8002F6C4* menu, s32 x, s32 y, s32 mask, s32 arg4) {
     s32 height = menu->rowSpacing * menu->rows;
