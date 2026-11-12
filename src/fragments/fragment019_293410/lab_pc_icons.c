@@ -52,6 +52,7 @@ void PartyScreen_DrawHpLevel(s32 arg0, s32 arg1, BattleMon* arg2, s32 arg3) {
     Font_EndTexturedTextRendering();
 }
 
+/** Draws an RGBA16 texture at a position. */
 void UI_DrawTextureRgba16(s32 arg0, s32 arg1, s32 arg2) {
     gSPDisplayList(gDisplayListHead++, D_80060290);
 

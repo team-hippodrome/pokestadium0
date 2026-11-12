@@ -187,6 +187,7 @@ void LabItem_DecreaseSelectedCount(LabItemCursor* arg0, s32 arg1) {
 void func_8900020C(void) {
 }
 
+/** Returns how many more items a box can hold. */
 s32 LabItem_ComputeRemainingCapacity(s32 arg0, unk_func_8820BE14_06C* arg1) {
     s32 i;
     s32 var_v1 = 0;
@@ -201,6 +202,7 @@ s32 LabItem_ComputeRemainingCapacity(s32 arg0, unk_func_8820BE14_06C* arg1) {
     return var_v1;
 }
 
+/** Returns the largest quantity of an item that can be transferred. */
 s32 LabItem_ComputeMaxTransferQuantity(s32 arg0, unk_func_8820BE14_06C* arg1) {
     s32 var_v1;
 
@@ -218,6 +220,7 @@ s32 LabItem_ComputeMaxTransferQuantity(s32 arg0, unk_func_8820BE14_06C* arg1) {
     return var_v1;
 }
 
+/** Finds the item box slot for a Game Pak box, allocating one if needed. */
 s32 LabItem_FindOrAllocateGamePakBoxSlot(unk_func_8821421C_07C* arg0, s32 arg1, char* arg2) {
     s32 i;
 
@@ -236,6 +239,7 @@ s32 LabItem_FindOrAllocateGamePakBoxSlot(unk_func_8821421C_07C* arg0, s32 arg1, 
     return -1;
 }
 
+/** Loads the item box slots for the Game Pak boxes. */
 void LabItem_LoadGamePakBoxSlots(unk_func_8821421C_07C* arg0) {
     s32 i;
 
@@ -248,6 +252,7 @@ void LabItem_LoadGamePakBoxSlots(unk_func_8821421C_07C* arg0) {
     }
 }
 
+/** Reads item entries from a deck. */
 void LabItem_ReadDeckEntries(s32 arg0, s32 arg1, s32 arg2, unk_func_8820BE14_06C* arg3) {
     DeckHandle* sp1C = Deck_Open(arg0, arg1, arg2, 0);
 
@@ -255,6 +260,7 @@ void LabItem_ReadDeckEntries(s32 arg0, s32 arg1, s32 arg2, unk_func_8820BE14_06C
     Deck_CloseAndFlush(sp1C);
 }
 
+/** Writes item entries back to a deck. */
 void LabItem_WriteDeckBack(s32 arg0, s32 arg1, s32 arg2, unk_func_8820BE14_06C* arg3, s32 arg4, char* arg5, s32 arg6) {
     DeckHandle* sp2C;
 

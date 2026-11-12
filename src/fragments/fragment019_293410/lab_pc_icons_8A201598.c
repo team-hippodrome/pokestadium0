@@ -264,6 +264,7 @@ void PartyScreen_DrawBackground(void) {
     Ui_DrawTintedScreenBackground(0x38, 0x1E0, M2C_FIELD(&D_8A203300, u8 *, 0), M2C_FIELD(&D_8A203300, u8 *, 1), (s32) M2C_FIELD(&D_8A203300, u8 *, 2));
 }
 
+/** Returns the experience points needed to reach a level. */
 s32 LabPC_ComputeExpForLevel(s32 arg0, s32 arg1) {
     s32 sp4;
 

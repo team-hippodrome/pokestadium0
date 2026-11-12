@@ -118,6 +118,7 @@ void Pokedex_ExitAreaMapPool(void);
 
 void Pokedex_BuildMapLabelsDisplayList(void);
 
+/** Finds the next area on the map after the current one. */
 s32 Pokedex_FindNextMapArea(s32 arg0) {
     s32 i;
     s32 idx;
@@ -132,6 +133,7 @@ s32 Pokedex_FindNextMapArea(s32 arg0) {
     return a0;
 }
 
+/** Finds the previous area on the map before the current one. */
 s32 Pokedex_FindPrevMapArea(s32 arg0) {
     s32 i;
     s32 idx;
@@ -146,6 +148,7 @@ s32 Pokedex_FindPrevMapArea(s32 arg0) {
     return a0;
 }
 
+/** Builds the display list that draws one map marker. */
 void Pokedex_BuildMapMarkerDisplayList(void) {
     Gfx* temp_v0 = Gfx_AllocDisplayList(sizeof(Gfx) * 5);
 
@@ -157,6 +160,7 @@ void Pokedex_BuildMapMarkerDisplayList(void) {
     gSPEndDisplayList(temp_v0++);
 }
 
+/** Builds the display list that draws the map markers. */
 void Pokedex_BuildMapMarkersDisplayList(void) {
     s32 i;
     Mtx sp1A8;
@@ -245,6 +249,7 @@ void Pokedex_BuildMapMarkersDisplayList(void) {
     gSPEndDisplayList(temp_v0++);
 }
 
+/** Builds the display list that draws the overview map markers. */
 void Pokedex_BuildOverviewMarkersDisplayList(void) {
     s32 i;
     s32 temp_a0;
@@ -296,6 +301,7 @@ void Pokedex_BuildOverviewMarkersDisplayList(void) {
     gSPEndDisplayList(temp_v0++);
 }
 
+/** Draws a map pin icon at a position. */
 Gfx* Pokedex_DrawMapPinIcon(Gfx* arg0, s16 arg1, s16 arg2) {
     gSPDisplayList(arg0++, D_8A12EC18);
     gDPSetPrimColor(arg0++, 0xFF, 0xFF, 255, 255, 255, 255); // #FFFFFFFF
@@ -531,11 +537,13 @@ void Pokedex_BuildMapLabelsDisplayList(void) {
     gSPEndDisplayList(temp_v0++);
 }
 
+/** Resets the camera easing state. */
 void Pokedex_ResetCameraEase(void) {
     D_8A13044C = 8.0f;
     D_8A130450 = 0;
 }
 
+/** Slows the camera easing speed each frame. */
 void Pokedex_UpdateCameraEaseSpeed(void) {
     D_8A13044C -= 0.5f;
     if (D_8A13044C < 1.0f) {
@@ -544,6 +552,7 @@ void Pokedex_UpdateCameraEaseSpeed(void) {
     }
 }
 
+/** Moves a vector toward a target by the current easing speed. */
 void Pokedex_EaseVec3Toward(Vec3f* arg0, Vec3f* arg1) {
     f32 sp2C;
     f32 sp28;
@@ -584,6 +593,7 @@ void Pokedex_EaseVec3Toward(Vec3f* arg0, Vec3f* arg1) {
     }
 }
 
+/** Updates the area map camera for the frame. */
 void Pokedex_UpdateAreaMapFrame(void) {
     UNUSED s32 pad; // FAKE: stack padding
     CameraNode* node = D_8A1302CC->children;
@@ -619,6 +629,7 @@ void Pokedex_UpdateAreaMapFrame(void) {
     Pokedex_BuildMapLabelsDisplayList();
 }
 
+/** Returns the tier for a count of species. */
 s32 Pokedex_GetCountTier(s32 arg0) {
     s32 ret;
 
@@ -836,6 +847,7 @@ s32 Pokedex_DrawHabitatPage(s32 arg0)
   return 0;
 }
 
+/** Returns -1 when the player presses the button that leaves the area map. */
 s32 Pokedex_CheckAreaMapExit(void) {
     if ((gPlayer1Controller->buttonPressed & 0x4000) && (D_8A1302DA == 0)) {
         return -1;
@@ -1005,6 +1017,7 @@ void func_8A1053E8(s32 arg0, MainPoolState* arg1, UNUSED s32 arg2, PERSSZP* arg3
     ptr->view.eyePosition = D_8A12F844;
 }
 
+/** Pops the memory pool state used by the area map. */
 void Pokedex_ExitAreaMapPool(void) {
     main_pool_pop_state('MAPV');
 }

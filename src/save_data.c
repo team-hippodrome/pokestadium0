@@ -43,6 +43,7 @@ s32 Save_IsTypedRecordFlagSet(s32 arg0, s32 arg1, s16 arg2);
 void Save_CommitTypedRecord(s32 arg0, s32 arg1);
 void Save_ClearTypedRecord(s32 arg0, s32 arg1);
 
+/** Computes the checksum of a save record. */
 u16 Save_Checksum(u8* arg0, s32 arg1) {
     u16 var_v1 = 0;
 
@@ -52,6 +53,7 @@ u16 Save_Checksum(u8* arg0, s32 arg1) {
     return var_v1;
 }
 
+/** Returns whether a save record's checksum is valid. */
 s32 Save_RecordIsValid(u8* arg0, s32 arg1) {
     u16* temp_v1 = arg1 + arg0;
 
@@ -72,6 +74,7 @@ s32 Save_RecordIsValid(u8* arg0, s32 arg1) {
     return 1;
 }
 
+/** Writes the footer of a save record. */
 void Save_WriteFooter(u8* arg0, s32 arg1, s32 arg2) {
     u16* temp_v1;
 
@@ -306,6 +309,7 @@ s32 func_80023C30(void)
   return *((s32 *) (&D_8006BBA0));
 }
 
+/** Returns the number of free voices. */
 s32 Audio_GetFreeVoiceCount(void) {
     return mus_free_voices_count;
 }
@@ -542,6 +546,7 @@ void Save_ClearTypedRecord(s32 arg0, s32 arg1) {
     }
 }
 
+/** Clears a typed save record and commits it. */
 void Save_ResetAndCommitTypedRecord(s32 arg0, s32 arg1) {
     Save_ClearTypedRecord(arg0, arg1);
     Save_CommitTypedRecord(arg0, arg1);
@@ -597,6 +602,7 @@ s32 Deck_GetSaveRecordSize(s32 arg0) {
     return ret;
 }
 
+/** Returns whether a deck entry exists in the save data. */
 s32 Deck_IsSaveEntryPresent(s32 arg0, s32 arg1) {
     return Save_IsTypedRecordFlagSet(arg0, arg1, 1);
 }
@@ -625,6 +631,7 @@ s32 Deck_GetSaveEntryTrainerId(s32 arg0, s32 arg1) {
 }
 
 s32 func_800246A8(s32, s32);
+/** Copies the name of a deck entry from the save data. */
 s32 Deck_GetSaveEntryName(s32 arg0, s32 arg1, u8* arg2) {
     s32 ret = 0;
     s32 src;
@@ -673,6 +680,7 @@ s32 func_8002488C(s32 arg0, s32 arg1, u8* arg2) {
     return ret;
 }
 
+/** Sets the trainer ID and name of a deck entry in the save data. */
 void Deck_SetSaveEntryTrainerIdAndName(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4) {
     switch (arg0) {
         case 16: {
@@ -792,6 +800,7 @@ void func_80024C80(s32 arg0, s32 arg1) {
 }
 
 typedef struct { u8 a; u8 b; } Pair80024D88;
+/** Reads a deck entry from the save data. */
 s32 Deck_ReadSaveEntry(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
     s32 ret = 0;
 
@@ -815,6 +824,7 @@ s32 Deck_ReadSaveEntry(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
     return ret;
 }
 
+/** Writes a typed record to the save data, up to its capacity. */
 s32 Save_WriteTypedRecord(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
     s32 ret = 0;
     s32 max = Deck_GetSaveRecordCapacity(arg0);

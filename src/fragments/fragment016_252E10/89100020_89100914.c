@@ -271,6 +271,7 @@ void LabPCList_DrawLocation(s32 arg0, s32 arg1, s8 ***arg2) {
     func_8001ABBC();
 }
 
+/** Draws a line of plain text in a Lab PC list. */
 void LabPCList_DrawPlainText(s32 arg0, s32 arg1, s8* arg2, s32 arg3, s32 arg4) {
     Font_BeginTranslucentTextRendering();
     Gfx_SetEnvColor(((Color_RGBA8*)&D_800734A8)->r, ((Color_RGBA8*)&D_800734A8)->g, ((Color_RGBA8*)&D_800734A8)->b, ((Color_RGBA8*)&D_800734A8)->a);

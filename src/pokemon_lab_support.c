@@ -7,6 +7,7 @@
 
 s32 LabPC_StatusToIconIndex(s32 arg0);
 
+/** Converts a status condition bit mask to a status icon index. */
 s32 LabPC_StatusToIconIndex(s32 arg0) {
     s32 v1;
     if (arg0 & 7) {

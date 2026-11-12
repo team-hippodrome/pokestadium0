@@ -23,6 +23,7 @@ void clear_profiler_data(void);
 u32 set_get_time_diff(enum SetGetTimeDiff state);
 
 // log the current osTime to the appropriate idx for current thread5 processes.
+/** Logs a time stamp for thread 5 events. */
 void profiler_log_thread5_time(enum ProfilerGameEvent eventID) {
     if (eventID == THREAD5_START) {
         gProfiler.profiler_data[gProfiler.frameIdx1].gameTimes[eventID] = D_800A9710.time;
@@ -43,6 +44,7 @@ void profiler_log_thread5_time(enum ProfilerGameEvent eventID) {
 }
 
 // log the audio system before and after osTimes in pairs to the soundTimes array.
+/** Logs a time stamp for thread 4. */
 void profiler_log_thread4_time(void) {
     struct ProfilerFrameData* profiler = &gProfiler.profiler_data[gProfiler.frameIdx1];
 
@@ -52,6 +54,7 @@ void profiler_log_thread4_time(void) {
 }
 
 // log the times for gfxTimes: RSP completes, and RDP completes.
+/** Logs a time stamp for a graphics event. */
 void profiler_log_gfx_time(enum ProfilerGfxEvent eventID) {
     if (eventID == TASKS_QUEUED) {
         if (gProfiler.frameIdx2 == 2) {
@@ -65,6 +68,7 @@ void profiler_log_gfx_time(enum ProfilerGfxEvent eventID) {
 }
 
 // log the times between vblank started and ended.
+/** Logs a time stamp for the vertical blank. */
 void profiler_log_vblank_time(void) {
     struct ProfilerFrameData* profiler = &gProfiler.profiler_data[gProfiler.frameIdx2];
 
@@ -93,6 +97,7 @@ void draw_profiler_rect(s32 ulx, s32 lrx, s32 uly_in, u16 color) {
 }
 
 // Draw the CPU bar.
+/** Draws one CPU profiler bar from a start and end time. */
 void draw_profiler_bar_cpu(OSTime clock_base, OSTime clock_start, OSTime clock_end, s16 posY, u16 color) {
     s64 durationStart, durationEnd;
     s32 rect_x1, rect_x2;
@@ -166,6 +171,7 @@ void draw_profiler_bar_cpu_keep_max(OSTime start, OSTime end, s16 posY, s16* las
     }
 }
 
+/** Draws the reference maximum bars under the profiler bars. */
 void draw_reference_profiler_bars(void) {
     // Draws the reference "max" bars underneath the real thing.
     draw_profiler_rect(30, 79, 220, GPACK_RGBA5551(40, 80, 255, 1));    // Blue
@@ -307,6 +313,7 @@ void draw_profiler_mode_0(void) {
 }
 
 // Draw the Profiler per frame.
+/** Draws the profiler display. */
 void draw_profiler(s32 profiler_mode) {
     s32 ulx;
     s32 uly;
@@ -359,6 +366,7 @@ void print_profiler_metrics(void) {
 }
 
 // reset the profiler data to uninitialized 0s.
+/** Clears the profiler data. */
 void clear_profiler_data(void) {
     bzero(&gProfiler.profiler_data[0], sizeof(struct ProfilerFrameData));
     gProfiler.frameIdx1 = 1;
@@ -367,6 +375,7 @@ void clear_profiler_data(void) {
 
 // unused. seems to be intended to set a static OSTime and then get the last difference (in usec)
 // since the last set.
+/** Starts or stops a timer and returns the elapsed time. */
 u32 set_get_time_diff(enum SetGetTimeDiff state) {
     u32 ret = 0;
     static OSTime sBackupTime = 0ULL;

@@ -413,6 +413,7 @@ u8 GbTower_SetPollMask(u8 arg0) {
 // osGbpakGetStatus failure on a port enabled by GbTower_SetPollMask latches
 // D_800AB1F8 and calls Game_ShutdownAndLoadFragment(port, 1); the per-port
 // failure counter D_800A82AC is not used.
+/** Polls the Transfer Pak connection state. */
 void GbTower_PollPakConnection(void) {
     u8 sp1F;
     static s32 D_800697D0 = 0; // .data

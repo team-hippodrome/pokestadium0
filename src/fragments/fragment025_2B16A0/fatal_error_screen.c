@@ -46,6 +46,7 @@ void TransferPakError_DrawBackgroundPattern(s32 arg0, s32 arg1, s32 arg2) {
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
+/** Draws the icon of the fatal error screen. */
 void FatalError_DrawIcon(s32 arg0, s32 arg1) {
     gDPPipeSync(gDisplayListHead++);
     gDPSetCycleType(gDisplayListHead++, G_CYC_COPY);
@@ -61,6 +62,7 @@ void FatalError_DrawIcon(s32 arg0, s32 arg1) {
 extern char** D_81100938;
 extern char* D_816008DC[];
 
+/** Draws the message panel of the fatal error screen. */
 void FatalError_DrawMessagePanel(s32 arg0) {
     Ui_DrawBorderedPanel(0x16, 0x10, 0x114, 0x76, 0x11C5);
     FatalError_DrawIcon(0x27, 0x22);
@@ -71,6 +73,7 @@ void FatalError_DrawMessagePanel(s32 arg0) {
     Font_EndTexturedTextRendering();
 }
 
+/** Draws the controller port diagram of the fatal error screen. */
 void FatalError_DrawPortDiagram(s32 arg0) {
     u16 sp80[] = {
         0x00BC,

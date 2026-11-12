@@ -17,6 +17,7 @@ extern FontContext* font_context;
 void Gfx_SetVertexAttributes(Vtx* vertex, s16 x, s16 y, s16 z, s16 texture_x, s16 texture_y, u8 r, u8 g, u8 b, u8 alpha);
 void Gfx_SetViewportDimensions(Vp* viewport, s16 width, s16 height);
 
+/** Sets a vertex's position, texture coordinates and color. */
 void Gfx_SetVertexAttributes(Vtx* vertex, s16 x, s16 y, s16 z, s16 texture_x, s16 texture_y, u8 r, u8 g, u8 b, u8 alpha) {
     vertex->v.ob[0] = x;
     vertex->v.ob[1] = y;
@@ -30,6 +31,7 @@ void Gfx_SetVertexAttributes(Vtx* vertex, s16 x, s16 y, s16 z, s16 texture_x, s1
     vertex->v.cn[3] = alpha;
 }
 
+/** Sets a viewport's scale and translation from its width and height. */
 void Gfx_SetViewportDimensions(Vp* viewport, s16 width, s16 height) {
     viewport->vp.vtrans[0] = width * 2;
     viewport->vp.vtrans[1] = height * 2;

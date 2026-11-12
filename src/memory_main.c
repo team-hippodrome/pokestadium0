@@ -172,6 +172,7 @@ M2C_UNK func_8004CFB0(M2C_UNK *, M2C_UNK, M2C_UNK); /* extern */
 M2C_UNK func_8004D1C0(M2C_UNK *, M2C_UNK, M2C_UNK); /* extern */
 extern M2C_UNK D_800A94A4;
 
+/** Waits on the pool lock and frees a block if it is valid. */
 void main_pool_try_free(s32 arg0) {
     func_8004D1C0(&D_800A94A4, 0, 1);
     func_80002230(arg0, 1);
@@ -211,6 +212,7 @@ void* main_pool_realloc(void* addr, size_t size) {
 
 extern s32 D_800A94BC;
 
+/** Returns the free space left in the main pool. */
 s32 main_pool_get_available(void) {
     return D_800A94BC - 0x10;
 }

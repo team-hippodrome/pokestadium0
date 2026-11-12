@@ -189,6 +189,7 @@ void func_89104FC0(s8* arg0, s32 arg1, s32 arg2, u8* arg3) {
 }
 
 extern s32 D_8910A920[5];
+/** Disables the move list entries that are restricted for the current cup. */
 void BattleMoveListWidget_DisableRestrictedMoves(unk_func_8830867C_04C_078* arg0) {
     s32 j;
     s32 i;
@@ -301,6 +302,7 @@ s32 func_891053B0(s8 *arg0) {
 void func_891053E0(void) {
 }
 
+/** Updates the flags of every entry in the info widget. */
 void BattleInfoWidget_UpdateEntryFlags(unk_func_8830867C_034* arg0) {
     s32 i;
     s8** sub = &M2C_FIELD(arg0, s8**, 0x20);
@@ -517,6 +519,7 @@ void func_891059FC(u8* widget) {
     }
 }
 
+/** Applies the selection state to an info widget entry. */
 void BattleInfoWidget_ApplyEntrySelection(unk_func_8830867C_034* arg0, s32 arg1) {
     s8* ptr = M2C_FIELD(M2C_FIELD(arg0, s8**, 0x70), s8**, 0) + arg1 * 0x24;
     s8* ptr2 = M2C_FIELD(ptr, s8**, 0x10);
@@ -1141,6 +1144,7 @@ void LabPCList_DrawTypeFilterRow(s32 arg0, s32 arg1, char **arg2, s32 arg3, s32 
     Font_EndTexturedTextRendering();
 }
 
+/** Converts a move table index to its display index by skipping unused slots. */
 s32 Move_NormalizeDisplayIndex(s32 a) {
     return a >= 20 ? a - 12 : (a >= 7 ? a - 1 : a);
 }

@@ -344,6 +344,7 @@ s32 func_80025A64(void) {
     return ret;
 }
 
+/** Loads a fragment from a ROM range and calls its entry point. */
 s32 Fragment_LoadAndCall(s32 arg0, u8* romStart, u8* romEnd, u32 arg3, u32 arg4) {
     s32 result;
     FragmentEntry func;
@@ -357,6 +358,7 @@ s32 Fragment_LoadAndCall(s32 arg0, u8* romStart, u8* romEnd, u32 arg3, u32 arg4)
     return result;
 }
 
+/** Queues a fragment to be loaded and called by the game state loop. */
 void Fragment_QueueCall(s32 arg0, u8* arg1, u8* arg2, s32 arg3, s32 arg4) {
     D_800AF990.unk_00 = 1;
     D_800AF990.fragment_id = arg0;
@@ -366,14 +368,17 @@ void Fragment_QueueCall(s32 arg0, u8* arg1, u8* arg2, s32 arg3, s32 arg4) {
     D_800AF990.arg1 = arg4;
 }
 
+/** Returns the trainer slots of the session context. */
 TeamRoster* Trainer_GetSlots(void) {
     return gSessionContext.trainerSlots;
 }
 
+/** Returns the controller port of the active Game Boy save. */
 s32 GbSave_GetActivePort(void) {
     return D_800733D4;
 }
 
+/** Sets the active Game Boy save port when it is in range. */
 void GbSave_SetActivePort(s32 arg0) {
     if ((arg0 >= 0) && (arg0 < 4)) {
         D_800733D4 = arg0;
@@ -513,6 +518,7 @@ extern M2C_UNK D_81200000;
 extern M2C_UNK D_0015E220;
 extern s32 D_800AF988;
 
+/** Game state: shows the N64 logo quickly. */
 void State_FastN64Logo(void) {
     D_800733C8 = func_80025B60(((u32) ((s32) &D_81200000 & 0x0FF00000) >> 0x14) - 0x10, &D_0015E220, &D_0015F390, 0, 0);
     M2C_FIELD(&D_800AE8F0, u8*, 2) = 0;
@@ -710,6 +716,7 @@ void func_80023C30(void);
 void func_80025130(s32);
 void Save_CommitTypedRecord(s32, s32);
 
+/** Game state: runs Game Boy Tower. */
 void State_GbTower(void) {
     s32 sp2C;
     UnkInputStruct8000D738 sp24;
@@ -749,6 +756,7 @@ void func_80026898(void) {
     D_800733C8 = 0x8010;
 }
 
+/** Game state: unused 64DD boot sequence. */
 void State_N64ddBootUnused(void) {
     Audio_WaitForIdle(1);
     Display_WaitForFrames(2);
@@ -758,6 +766,7 @@ void State_N64ddBootUnused(void) {
 void func_800268DC(void) {
 }
 
+/** Powers off the paks, blanks the screen and loads a fragment. */
 void Game_ShutdownAndLoadFragment(s32 arg0, s32 arg1) {
     osViBlack(1);
     GbTower_PowerOffAllPaks();
@@ -772,6 +781,7 @@ void Game_ShutdownAndLoadFragment(s32 arg0, s32 arg1) {
     FRAGMENT_LOAD_AND_CALL(FRAGMENT_FATAL_ERROR_SCREEN, arg0, arg1);
 }
 
+/** Resets the storage device. */
 void Game_ResetStorageDevice(void) {
     Storage_ResetDisk();
 }
@@ -914,6 +924,7 @@ s32 func_800270B4(s16 arg0, s16 arg1, s16 arg2, s32 arg3, s16 arg4, s16 arg5) {
     return sp2C;
 }
 
+/** Turns off the screen blackout flag. */
 void Display_DisableBlackout(void) {
     D_800733F0 = 0;
 }

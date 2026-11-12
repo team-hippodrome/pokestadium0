@@ -815,6 +815,7 @@ s32 Pokedex_DrawEntryScreen(s32 arg0, s32 arg1) {
     return 0;
 }
 
+/** Loads a Pokemon icon for the Pokedex. */
 void Pokedex_LoadIcon(u8* arg0, s32 arg1) {
     unk_func_8001A024* sp1C;
     void* sp18;
@@ -965,6 +966,7 @@ void Pokedex_EnterAreaMapScreen(void) {
     func_80006828(0xA, &Pokedex_DrawHabitatPage);
 }
 
+/** Fades out and leaves the Pokedex area map screen. */
 void Pokedex_ExitAreaMapScreen(void) {
     StageFade_Start(8);
     BgStage_RunUntilCondition(8, Pokedex_DrawAreaMapFrame);
@@ -975,6 +977,7 @@ void Pokedex_ExitAreaMapScreen(void) {
     BgStage_RunUntilCondition(0xA, Pokedex_RedrawAreaMapTransition);
 }
 
+/** Runs the Pokedex area map screen. */
 s32 Pokedex_ShowAreaMapScreen(void) {
     s32 var_s0 = 3;
 
@@ -1040,6 +1043,7 @@ s32 func_8A101B30(u8 arg0) {
     return 0;
 }
 
+/** Runs the Pokedex entry flow. */
 void Pokedex_RunEntryFlow(void) {
     s32 var_v0 = 1;
 
@@ -1068,6 +1072,7 @@ void Pokedex_RunEntryFlow(void) {
     }
 }
 
+/** Returns the highest species index that has been seen. */
 s32 Pokedex_GetHighestSeenSpeciesIndex(void) {
     s32 i;
 
@@ -1080,6 +1085,7 @@ s32 Pokedex_GetHighestSeenSpeciesIndex(void) {
     return i;
 }
 
+/** Allocates and initializes the framebuffers for the Pokedex. */
 void Pokedex_InitFramebuffers(void) {
     u32 sp34;
     u32 sp30;

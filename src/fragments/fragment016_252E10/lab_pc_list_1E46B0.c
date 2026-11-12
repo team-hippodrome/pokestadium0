@@ -62,6 +62,7 @@ s32 func_891091C0(unk_func_8830867C_02C_0CC* arg0, unk_func_8830867C_02C_0CC* ar
     return var_v1;
 }
 
+/** List comparison: level, ascending. */
 s32 LabPCList_CompareByLevelAsc(unk_func_88316128* arg0, unk_func_88316128* arg1) {
     s32 var_v0 = arg0->unk_2C - arg1->unk_2C;
     s32 ret;
@@ -74,6 +75,7 @@ s32 LabPCList_CompareByLevelAsc(unk_func_88316128* arg0, unk_func_88316128* arg1
     return ret;
 }
 
+/** List comparison: level, descending. */
 s32 LabPCList_CompareByLevelDesc(unk_func_88316128* arg0, unk_func_88316128* arg1) {
     s32 var_v0 = arg1->unk_2C - arg0->unk_2C;
     s32 ret;
@@ -86,6 +88,7 @@ s32 LabPCList_CompareByLevelDesc(unk_func_88316128* arg0, unk_func_88316128* arg
     return ret;
 }
 
+/** List comparison: HP, ascending. */
 s32 LabPCList_CompareByHpAsc(unk_func_88316128* arg0, unk_func_88316128* arg1) {
     s32 var_v0 = arg0->unk_2E - arg1->unk_2E;
     s32 ret;
@@ -98,6 +101,7 @@ s32 LabPCList_CompareByHpAsc(unk_func_88316128* arg0, unk_func_88316128* arg1) {
     return ret;
 }
 
+/** List comparison: HP, descending. */
 s32 LabPCList_CompareByHpDesc(unk_func_88316128* arg0, unk_func_88316128* arg1) {
     s32 var_v0 = arg1->unk_2E - arg0->unk_2E;
     s32 ret;
@@ -110,6 +114,7 @@ s32 LabPCList_CompareByHpDesc(unk_func_88316128* arg0, unk_func_88316128* arg1) 
     return ret;
 }
 
+/** List comparison: Attack, ascending. */
 s32 LabPCList_CompareByAttackAsc(unk_func_88316128* arg0, unk_func_88316128* arg1) {
     s32 var_v0 = arg0->unk_30 - arg1->unk_30;
     s32 ret;
@@ -122,6 +127,7 @@ s32 LabPCList_CompareByAttackAsc(unk_func_88316128* arg0, unk_func_88316128* arg
     return ret;
 }
 
+/** List comparison: Attack, descending. */
 s32 LabPCList_CompareByAttackDesc(unk_func_88316128* arg0, unk_func_88316128* arg1) {
     s32 var_v0 = arg1->unk_30 - arg0->unk_30;
     s32 ret;
@@ -134,6 +140,7 @@ s32 LabPCList_CompareByAttackDesc(unk_func_88316128* arg0, unk_func_88316128* ar
     return ret;
 }
 
+/** List comparison: Defense, ascending. */
 s32 LabPCList_CompareByDefenseAsc(unk_func_88316128* arg0, unk_func_88316128* arg1) {
     s32 var_v0 = arg0->unk_32 - arg1->unk_32;
     s32 ret;
@@ -146,6 +153,7 @@ s32 LabPCList_CompareByDefenseAsc(unk_func_88316128* arg0, unk_func_88316128* ar
     return ret;
 }
 
+/** List comparison: Defense, descending. */
 s32 LabPCList_CompareByDefenseDesc(unk_func_88316128* arg0, unk_func_88316128* arg1) {
     s32 var_v0 = arg1->unk_32 - arg0->unk_32;
     s32 ret;
@@ -158,6 +166,7 @@ s32 LabPCList_CompareByDefenseDesc(unk_func_88316128* arg0, unk_func_88316128* a
     return ret;
 }
 
+/** List comparison: Speed, ascending. */
 s32 LabPCList_CompareBySpeedAsc(unk_func_88316128* arg0, unk_func_88316128* arg1) {
     s32 var_v0 = arg0->unk_34 - arg1->unk_34;
     s32 ret;
@@ -170,6 +179,7 @@ s32 LabPCList_CompareBySpeedAsc(unk_func_88316128* arg0, unk_func_88316128* arg1
     return ret;
 }
 
+/** List comparison: Speed, descending. */
 s32 LabPCList_CompareBySpeedDesc(unk_func_88316128* arg0, unk_func_88316128* arg1) {
     s32 var_v0 = arg1->unk_34 - arg0->unk_34;
     s32 ret;
@@ -182,6 +192,7 @@ s32 LabPCList_CompareBySpeedDesc(unk_func_88316128* arg0, unk_func_88316128* arg
     return ret;
 }
 
+/** List comparison: Special, ascending. */
 s32 LabPCList_CompareBySpecialAsc(unk_func_88316128* arg0, unk_func_88316128* arg1) {
     s32 var_v0 = arg0->unk_36 - arg1->unk_36;
     s32 ret;
@@ -194,6 +205,7 @@ s32 LabPCList_CompareBySpecialAsc(unk_func_88316128* arg0, unk_func_88316128* ar
     return ret;
 }
 
+/** List comparison: Special, descending. */
 s32 LabPCList_CompareBySpecialDesc(unk_func_88316128* arg0, unk_func_88316128* arg1) {
     s32 var_v0 = arg1->unk_36 - arg0->unk_36;
     s32 ret;
@@ -206,6 +218,7 @@ s32 LabPCList_CompareBySpecialDesc(unk_func_88316128* arg0, unk_func_88316128* a
     return ret;
 }
 
+/** List comparison: by ID. */
 s32 LabPCList_CompareById(unk_func_88316128* arg0, unk_func_88316128* arg1) {
     s32 var_v0 = arg0->unk_16 - arg1->unk_16;
     s32 ret;
@@ -239,6 +252,7 @@ s32 LabPCList_CompareByOtName(unk_func_88316128* arg0, unk_func_88316128* arg1) 
     return ret;
 }
 
+/** List comparison: by nickname. */
 s32 LabPCList_CompareByNickname(unk_func_88316128* arg0, unk_func_88316128* arg1) {
     s32 var_v0;
     s32 ret;
@@ -273,6 +287,7 @@ s32 func_89109638(u8* arg0, u8* arg1) {
     return var_v1;
 }
 
+/** List comparison: by raw species ID. */
 s32 LabPCList_CompareBySpeciesRawId(unk_func_8830867C_02C_0CC* arg0, unk_func_8830867C_02C_0CC* arg1) {
     s32 var_v0 = *(u8*)&arg0->unk_08 - *(u8*)&arg1->unk_08;
     s32 ret;
@@ -285,11 +300,13 @@ s32 LabPCList_CompareBySpeciesRawId(unk_func_8830867C_02C_0CC* arg0, unk_func_88
     return ret;
 }
 
+/** List filter: keeps entries whose level is in a range. */
 int LabPCList_FilterByLevelRange(unk_func_8830867C_02C_0CC* a0, u8* arg1) {
     unk_func_88316214* arg0 = a0;
     return (arg0->unk_2C >= arg1[0]) && (arg1[1] >= arg0->unk_2C);
 }
 
+/** List filter: keeps entries with any of the given types. */
 s32 LabPCList_FilterByAnyType(unk_func_8830867C_02C_0CC* arg0, unk_func_8830867C_02C_C54_01C* a1) {
     UNUSED s32 pad; // FAKE: stack padding
     s32 i;
@@ -323,6 +340,7 @@ s32 LabPCList_FilterByAnyType(unk_func_8830867C_02C_0CC* arg0, unk_func_8830867C
     return 1;
 }
 
+/** List filter: keeps entries that know any of the given moves. */
 s32 LabPCList_FilterByAnyMove(unk_func_8830867C_02C_0CC* a0, unk_func_8830867C_02C_C54_024* a1) {
     unk_func_88316304* arg0 = a0;
     unk_func_8830867C_02C_C54_024* arg1 = a1;
@@ -345,10 +363,12 @@ s32 LabPCList_FilterByAnyMove(unk_func_8830867C_02C_0CC* a0, unk_func_8830867C_0
     return 1;
 }
 
+/** List filter: keeps entries of the given species. */
 s32 LabPCList_FilterBySpeciesId(unk_func_8830867C_02C_0CC* arg0, s32* arg1) {
     return *(u8*)&arg0->unk_08 == *arg1;
 }
 
+/** List filter: keeps entries with exactly the given pair of types. */
 s32 LabPCList_FilterByExactTypePair(unk_func_8830867C_02C_0CC* arg0, unk_func_8830867C_02C_C54_014* a1) {
     UNUSED s32 pad; // FAKE: stack padding
     s32 i;

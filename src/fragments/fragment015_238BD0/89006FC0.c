@@ -22,6 +22,7 @@ void func_89006FC0(u8 *arg0) {
     }
 }
 
+/** Writes entries to a box of the Lab PC through a deck handle. */
 void LabPC_WriteBoxEntries(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
     DeckHandle* sp1C = Deck_Open(arg0, arg1, arg2, 1);
 

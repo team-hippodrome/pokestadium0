@@ -22,6 +22,7 @@ s32 PokeIcon_CaptureGeoNode(s32, GraphNode*);
 
 s32 PokeIcon_CaptureGeoNode(s32 arg0, GraphNode* arg1);
 
+/** Stores a geo node so the icon renderer can find it. */
 s32 PokeIcon_CaptureGeoNode(s32 arg0, GraphNode* arg1) {
     if (arg0 == 0) {
         D_800AC7A0.unk_A04.unk_0C = arg1;
@@ -49,6 +50,7 @@ void func_80017F54(s8 *arg0, s16 arg1, s16 arg2) {
     func_80010B3C(M2C_FIELD(M2C_FIELD(arg0, s8 **, 0xC), s32 *, 0xC), 0, 0, arg1, (s32) arg2);
 }
 
+/** Creates the render list for a Pokemon icon. */
 unk_func_8001A024* PokeIcon_CreateRenderList(ModelLoadContext* arg0, s16 arg1, s16 arg2, s16 arg3) {
     s32 var_s0;
     DepthBuffer* temp_a1;
@@ -155,6 +157,7 @@ void func_8001833C(unk_func_8001A024* arg0, s32 arg1, BattleMon* arg2, u16 arg3)
     }
 }
 
+/** Adjusts the colors of a rendered icon image. */
 void PokeIcon_AdjustImageColors(u8* arg0, arg1_func_80010CA8 arg1) {
     s32 cond;
     u16* pixels = M2C_FIELD(arg0, u16**, 8);
@@ -221,6 +224,7 @@ void PokeIcon_RenderSlot(unk_func_8001A024* arg0, s32 arg1) {
     Geo_RenderRootNode(arg0->unk_0C);
 }
 
+/** Processes the next pending icon slot. */
 s32 PokeIcon_ProcessNextSlot(unk_func_8001A024* arg0, s32 arg1) {
     s32 i;
     s32 var_v0;
@@ -270,6 +274,7 @@ s32 PokeIcon_ProcessNextSlot(unk_func_8001A024* arg0, s32 arg1) {
     return sp24;
 }
 
+/** Processes every pending icon slot. */
 s32 PokeIcon_ProcessAllSlots(unk_func_8001A024* arg0, s32 arg1) {
     UNUSED s32 pad; // FAKE: stack padding
     arg1_func_80010CA8 sp48;
@@ -328,6 +333,7 @@ s32 PokeIcon_ProcessAllSlots(unk_func_8001A024* arg0, s32 arg1) {
     return sp44;
 }
 
+/** Renders the next icon slot and waits for it to finish. */
 s32 PokeIcon_RenderNextSlotBlocking(unk_func_8001A024* arg0, s32 arg1) {
     s32 i;
     s32 var_a2;
@@ -370,6 +376,7 @@ s32 PokeIcon_RenderNextSlotBlocking(unk_func_8001A024* arg0, s32 arg1) {
     return var_a2;
 }
 
+/** Redraws an icon slot. */
 void PokeIcon_RedrawSlot(unk_func_8001A024* arg0, s32 arg1) {
     s32 i;
 
@@ -390,6 +397,7 @@ void PokeIcon_RedrawSlot(unk_func_8001A024* arg0, s32 arg1) {
     }
 }
 
+/** Returns the rendered image of an icon slot. */
 s32 PokeIcon_GetImage(s8 *arg0, s32 arg1) {
     s32 var_v1;
 
@@ -400,6 +408,7 @@ s32 PokeIcon_GetImage(s8 *arg0, s32 arg1) {
     return var_v1;
 }
 
+/** Returns whether every icon slot is idle. */
 s32 PokeIcon_AreSlotsIdle(unk_func_8001A024* arg0) {
     s32 i;
 

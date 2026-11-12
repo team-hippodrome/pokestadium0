@@ -21,6 +21,7 @@ void Rom_InitDevice(s32 arg0) {
     osCreateMesgQueue(&D_80100170, &D_8010018C, 1);
 }
 
+/** Reads from a device address into memory with DMA and waits for completion. */
 void Rom_DmaRead(u32 dev_addr, u32 dram_addr, u32 size) {
     OSIoMesg msg;
     u32 dev = dev_addr;
@@ -52,6 +53,7 @@ void Rom_DmaRead(u32 dev_addr, u32 dram_addr, u32 size) {
 
 void func_800374E0(s32, s32);
 
+/** Sets the volume of an audio channel. */
 void Audio_SetChannelVolume(s32 arg0, u32 arg1) {
     s32 var_a1;
 
