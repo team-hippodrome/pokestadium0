@@ -333,3 +333,25 @@ Phase 21 (`BattleScene_PhaseHeal`) wasn't seen in the sweep because Nidorino
 was at full HP. With its HP set to 30, Recover healed it (「ニドニドは
 たいりょくを かいふくした！」), but the phase watch missed the transition, so
 that name keeps `@unverified`.
+
+## Move-specific animation callbacks and presentation rows
+
+The same 165-move sweep recorded which unnamed functions each move reached.
+42 functions were reached by only one or two moves, and they are named after
+those moves (`BattleAnim_Initialize<Move>Use` for the effect inits,
+`BattleAnim_<Move>Particle{Update,Draw}` for particle callbacks). Each doc
+lists the moves. Where a move already had an init with that name, the new one
+waits for the claim check below (Thunder Wave, Dig, Confusion, Psychic).
+
+From `sBattleSceneStateRowTable` and the rows each move entered:
+
+| Row | Entered by | Seen with | Names |
+|---|---|---|---|
+| 0 | `BattleScene_FaintStepStart` | Self-Destruct, Explosion | `BattleScene_TickFaintRowPlayLandingSound`, `BattleScene_TickFaintRowQueueCollapseEffect` |
+| 15 | `BattleScene_PhaseConfusionSelfHit` | Supersonic, Confuse Ray (COM hurt itself) | `BattleScene_EnterConfusionSelfHitRow` |
+| 18 | `BattleScene_PhaseSendOutAfterFaint`, rows 10 and 21 | Transform | `BattleScene_TickSendOutRowPlayCry` |
+| 22 | a confused Pokemon's turn | Supersonic, Confuse Ray | `BattleScene_EnterConfusedRow` (`@unverified`) |
+
+`BattleScene_UseMoveStepMultiHit` (use-move variant 10) ran for exactly the
+ten multi-hit moves. Sounds can't be heard in the headless run, so the
+landing-sound names keep `@unverified`.
