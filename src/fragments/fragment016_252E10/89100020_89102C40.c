@@ -302,7 +302,8 @@ s32 LabPCList_UpdateMoveFilter(s8*);
 void LabPCList_CommitMoveFilter(s8*, s8*);
 /**
  * Runs the move filter window and turns filter flag 4 on or off.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: あつめる with ひっかく set filter flag 4 and left only ヒトカゲ (ひっさつまえば
+ * left the list empty); かいじょ cleared flag 4 and all three party Pokémon returned.
  */
 s32 LabPCList_RunMoveFilter(s8* arg0) {
     s8* sp24 = arg0 + 0x9B08;

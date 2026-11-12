@@ -702,6 +702,12 @@ Opened on the party list (フシギダネ, ヒトカゲ and ゼニガメ):
   ran. After that only フシギダネ was listed. かいじょ ran
   `LabPCList_ClearFilterFlag(2)`, the flag word went back to 0, and all three
   Pokémon returned.
+* Move filter: on detail page 2/3, R then A on the わざ header opens
+  わざであつめる (`LabPCList_InitMoveFilter`). It has four slots and a move
+  list in kana order, where D-Right pages by 8 (ひっかく is 126, ひっさつまえば
+  127). With ひっかく chosen, あつめる ran `LabPCList_CommitMoveFilter` and set
+  flag 4, and only ヒトカゲ was left. With ひっさつまえば chosen, it wrote move
+  0x9E and count 1, and the list was empty. かいじょ cleared flag 4.
 
 ## せいとん, ポケモンを いどうする
 

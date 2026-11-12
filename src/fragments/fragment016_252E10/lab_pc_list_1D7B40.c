@@ -1399,7 +1399,8 @@ extern u8 D_8910AAC0[];
 extern u8 D_8910AAC8[];
 /**
  * Draws one numbered row of the move filter list.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: drew the numbered move rows of わざであつめる (row index 0 = 1
+ * 10まんボルト, 1 = 2 あくまのキッス).
  */
 void LabPCList_DrawMoveFilterRow(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4) {
     s32 idx;
@@ -1461,7 +1462,8 @@ extern char D_8910E0F4[];
 
 /**
  * Sets up the move filter window.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: A on the わざ header (detail page 2/3) ran this once and
+ * opened わざであつめる, with four empty slots and the move list starting at 1 10まんボルト.
  */
 void LabPCList_InitMoveFilter(Lab89107A60* arg0, s32 x, s32 y, u8* arg3) {
     s32 i;
@@ -1518,7 +1520,7 @@ void ScrollList_DrawInlineItems(s8*, s32, s32, s32, s32);
 
 /**
  * Draws the move filter window.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: ran every frame while わざであつめる was open.
  */
 void LabPCList_DrawMoveFilter(Ctx89107D7C* arg0) {
     s32 i;
@@ -1559,7 +1561,8 @@ typedef struct Lab89107EC4 {
 
 /**
  * Handles the move filter window. Returns -1 on cancel, 1 on confirm, 2 on clear.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: handled わざであつめる. あつめる led to the commit path (1) and かいじょ to
+ * the clear path (2).
  */
 s32 LabPCList_UpdateMoveFilter(Lab89107EC4* arg0) {
     s32 ret = 0;
@@ -1631,7 +1634,8 @@ extern u8 D_8910A978[];
 
 /**
  * Copies the chosen moves into the list's filter state.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: after choosing ひっさつまえば and pressing あつめる, it wrote move 0x9E
+ * (Hyper Fang) and count 1 into the filter state at +0x9B00.
  */
 void LabPCList_CommitMoveFilter(s8* arg0, s8* arg1) {
     s32 count = 0;
