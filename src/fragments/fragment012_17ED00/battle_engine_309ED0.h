@@ -80,7 +80,7 @@ M2C_UNK func_821079E8(M2C_UNK);                     /* extern */
 
 void func_821255EC(s8 *arg0);
 
-void func_80040738(void);
+void Audio_FadeAndClearStoredSounds(void);
 void func_8212562C(void);
 
 s32 BattleScene_HandleFaintStatusCompletion(void);

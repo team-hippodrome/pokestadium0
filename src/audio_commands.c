@@ -1138,7 +1138,7 @@ extern u8 D_80077524;
 extern s32 D_800FD64C;
 extern s32 D_800FD650;
 
-void func_80040738(void) {
+void Audio_FadeAndClearStoredSounds(void) {
     if (D_80077524 != 0) {
         func_80037AC4(D_800FD64C, 0x32);
         func_80037AC4(D_800FD650, 0x32);

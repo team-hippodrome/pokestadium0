@@ -352,7 +352,7 @@ void func_821297BC(CameraNode* arg0) {
                     } while (0);
                 } else {
                     func_82104C68(((ActivePokemon**)&D_82199DE0)[M2C_FIELD(D_8219A5A0, u16*, 0x2C)], 0x13);
-                    func_80040738();
+                    Audio_FadeAndClearStoredSounds();
                     func_8213B31C(1);
                     M2C_FIELD(D_8219A5A0, s32*, 0x3C) = 1;
                 }
@@ -366,7 +366,7 @@ void func_821297BC(CameraNode* arg0) {
                 func_8212188C();
                 func_82125570();
                 M2C_FIELD(D_8219A5A0, s32*, 0x48) = 0;
-                func_80040738();
+                Audio_FadeAndClearStoredSounds();
                 M2C_FIELD(D_8219A5A0, s32*, 0x20)++;
             }
             break;

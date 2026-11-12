@@ -209,7 +209,7 @@ void func_8212562C(void) {
 
     if (sBattleScene.scene->actionPass == 0) {
         BattleAnim_ClearRockThrowingMoveFlag(sActivePokemon[sBattleScene.scene->actingSide]);
-        func_80040738();
+        Audio_FadeAndClearStoredSounds();
         BattleScene_ResetAnimationStep();
         runtime = &sActivePokemon[sBattleScene.scene->actingSide]->state.runtime;
         other = sBattleScene.scene->actingSide == 0;
@@ -229,7 +229,7 @@ void func_8212562C(void) {
         sBattleScene.scene->phase = 3;
     } else {
         BattleAnim_ClearRockThrowingMoveFlag(sActivePokemon[sBattleScene.scene->actingSide]);
-        func_80040738();
+        Audio_FadeAndClearStoredSounds();
         BattleScene_ResetAnimationStep();
         sBattleScene.scene->phaseStep = 0;
         sBattleScene.scene->stepFrameTimer = 0;
@@ -242,7 +242,7 @@ s32 BattleScene_HandleFaintStatusCompletion(void) {
 
     if (((M2C_FIELD(temp_v0, u8*, 0x4D) & 0x80) || (M2C_FIELD(temp_v0, u8*, 0x15) & 0x18)) && (M2C_FIELD(temp_v0, u8*, 0x5A) == 0xFF)) {
         BattleAnim_ClearRockThrowingMoveFlag(sActivePokemon[sBattleScene.scene->actingSide]);
-        func_80040738();
+        Audio_FadeAndClearStoredSounds();
         BattleScene_ResetAnimationStep();
         func_821254B0();
         sBattleScene.scene->phaseStep = 0;
@@ -522,7 +522,7 @@ void BattleScene_AdvanceSendOutPreparation(CameraNode* arg0) {
     if (func_82124A50(sActivePokemon[!sBattleScene.scene->actingSide]) == 0) {
         Battle_ClearRuntimeFlags(sActivePokemon[!sBattleScene.scene->actingSide], 0x3800);
         func_821261A0(sActivePokemon[!sBattleScene.scene->actingSide], arg0, 3);
-        func_80040738();
+        Audio_FadeAndClearStoredSounds();
         BattleAnim_CleanupEffects(2);
         BattleScene_ResetCameraFrameCounter();
         Battle_ClearMessageCursor();
@@ -587,7 +587,7 @@ void BattleScene_AdvanceSendOutCameraClose(CameraNode* arg0) {
     func_821229AC(arg0, sActivePokemon[!sBattleScene.scene->actingSide]);
     if (BattleScene_AdvanceCameraFrameCounter(0x19) != 0) {
         func_8211EE8C();
-        func_80040738();
+        Audio_FadeAndClearStoredSounds();
         sBattleScene.scene->phaseStep++;
     }
 }
@@ -658,7 +658,7 @@ void BattleScene_CompleteSendOutFollowup(UNUSED CameraNode* arg0) {
             sBattleScene.scene->winner = sBattleScene.scene->actingSide + 1;
             func_80043A10();
         }
-        func_80040738();
+        Audio_FadeAndClearStoredSounds();
     }
 }
 
@@ -762,7 +762,7 @@ void func_82126D20(UNUSED CameraNode* arg0) {
             sBattleScene.scene->winner = sBattleScene.scene->actingSide + 1;
             func_80043A10();
         }
-        func_80040738();
+        Audio_FadeAndClearStoredSounds();
     }
 }
 

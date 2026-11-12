@@ -189,7 +189,7 @@ void func_8213334C(CameraNode* arg0) {
  *     D_8219A590 points to is 0x26, calls func_8003FE58(0x38, 9, 0); and if
  *     func_821217DC(0x37) returns non-zero, sets the word at offset 0x40
  *     of the object D_8219A5A0 points to to 3, calls func_80006998(0xFFFF),
- *     func_80005C4C(4) and func_80040738(), and sets the word at offset
+ *     func_80005C4C(4) and Audio_FadeAndClearStoredSounds(), and sets the word at offset
  *     0x20 of that object to 6;
  *   - otherwise adds 1 to that word at offset 0x20.
  *
@@ -200,7 +200,7 @@ void func_8213334C(CameraNode* arg0) {
 M2C_UNK func_80005C4C(M2C_UNK);
 M2C_UNK func_80006998(M2C_UNK);
 M2C_UNK func_8003FE58(M2C_UNK, M2C_UNK, M2C_UNK);
-M2C_UNK func_80040738();
+M2C_UNK Audio_FadeAndClearStoredSounds();
 s32 func_821217DC(M2C_UNK);
 M2C_UNK func_82135E80(CameraNode*, s8*);
 extern s16 D_8219A50C;
@@ -217,7 +217,7 @@ void func_8213346C(CameraNode* arg0) {
             M2C_FIELD(D_8219A5A0, s32 *, 0x40) = 3;
             func_80006998(0xFFFF);
             func_80005C4C(4);
-            func_80040738();
+            Audio_FadeAndClearStoredSounds();
             M2C_FIELD(D_8219A5A0, s32 *, 0x20) = 6;
         }
     } else {

@@ -23,7 +23,7 @@ void BattleScene_PhaseResidualDamageWithoutMove(CameraNode* arg0) {
             func_82106354(cur);
             if (func_82124A50(sActivePokemon[sBattleScene.scene->actingSide]) == 0) {
                 func_82108C0C((ActivePokemon*)D_8219A544);
-                func_80040738();
+                Audio_FadeAndClearStoredSounds();
                 BattleAnim_CleanupEffects(1);
                 func_82124894(arg0, sActivePokemon[sBattleScene.scene->actingSide]);
                 func_82104C68(sActivePokemon[sBattleScene.scene->actingSide], 0xD);
@@ -119,7 +119,7 @@ void BattleScene_PhaseResidualDamageFaintCheck(CameraNode* arg0) {
 
         case 1:
             func_82108C0C((ActivePokemon*)D_8219A544);
-            func_80040738();
+            Audio_FadeAndClearStoredSounds();
             BattleAnim_CleanupEffects(1);
             func_82124874(arg0, sActivePokemon[sBattleScene.scene->actingSide]);
             func_82104C68(sActivePokemon[sBattleScene.scene->actingSide], 0xD);
@@ -242,7 +242,7 @@ void BattleScene_PhaseWithdrawFainted(CameraNode* arg0) {
                 Battle_ClearMessageCursor();
             }
             if (BattleScene_IsRowWaitCompleteWithEventCount(temp_s0, 0x64) != 0) {
-                func_80040738();
+                Audio_FadeAndClearStoredSounds();
                 BattleAnim_CleanupEffects(2);
                 Battle_ClearMessageCursor();
                 BattleScene_ResetCameraFrameCounter();
@@ -338,7 +338,7 @@ void func_821311A0(CameraNode* arg0) {
         case 7:
             func_82122A7C(arg0, temp_s0);
             if (BattleScene_IsRowWaitCompleteWithEventCount(temp_s0, 0x32) != 0) {
-                func_80040738();
+                Audio_FadeAndClearStoredSounds();
                 BattleAnim_CleanupEffects(2);
                 Battle_ClearMessageCursor();
                 BattleScene_ResetCameraFrameCounter();

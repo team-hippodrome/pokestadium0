@@ -41,7 +41,7 @@ s32 func_82122DFC(CameraNode*, ActivePokemon*);
 void func_82110B44(ActivePokemon*);
 void func_8212A4A4(s32);
 void func_821061A8(ActivePokemon*);
-void func_80040738(void);
+void Audio_FadeAndClearStoredSounds(void);
 s32 func_8210F31C(ActivePokemon*);
 s32 func_82105C8C(ActivePokemon*, s32);
 s32 func_82124BF8(ActivePokemon*);
