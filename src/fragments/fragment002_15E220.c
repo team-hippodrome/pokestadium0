@@ -45,7 +45,7 @@ void func_81200020(void) {
 
 u32 osGetCount(void);
 f32 MathUtil_Random_ZeroOne(void);
-void func_80025758(s32, s32, s32);
+void Session_InitTwoTrainers(s32, s32, s32);
 extern u8 D_81200DAC[];
 
 void func_81200190(void) {
@@ -62,7 +62,7 @@ void func_81200190(void) {
         sp38 = MathUtil_Random_ZeroOne() * 40.0f;
     } while (temp_s0 == sp38);
 
-    func_80025758(3, D_81200DAC[temp_s0], D_81200DAC[sp38]);
+    Session_InitTwoTrainers(3, D_81200DAC[temp_s0], D_81200DAC[sp38]);
 }
 
 extern char D_81200DE0[];

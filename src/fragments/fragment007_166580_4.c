@@ -908,7 +908,7 @@ void func_82004240(s8 *arg0) {
 }
 
 extern s8* D_8200ACF8;
-void func_800257F0(u8);
+void Session_LoadPortSnapshot(u8);
 
 void func_82004268(s32* arg0, s32* arg1, Src82004020** arg2, s32 arg3, s32 arg4, s32 arg5) {
     Src82004020* src;
@@ -926,7 +926,7 @@ void func_82004268(s32* arg0, s32* arg1, Src82004020** arg2, s32 arg3, s32 arg4,
             } else {
                 M2C_FIELD(D_8200ACF8, s8*, 0x1094) = -1;
             }
-            func_800257F0(M2C_FIELD(D_8200ACF8, u8*, 0x1094));
+            Session_LoadPortSnapshot(M2C_FIELD(D_8200ACF8, u8*, 0x1094));
         }
     }
     M2C_FIELD(D_8200ACF8, u32*, 0x108C) = -1;

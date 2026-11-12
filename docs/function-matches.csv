@@ -4137,10 +4137,10 @@ func_8FF00020_256,0x8FF00020,src/fragments/fragment256_B83840.c,func_8FF00020_25
 func_8FF00020_257,0x8FF00020,src/fragments/fragment257_B8BFE0.c,func_8FF00020_257,m2c,m2c,c
 func_8FF00020_258,0x8FF00020,src/fragments/fragment258_B91160.c,func_8FF00020_258,m2c,m2c,c
 func_80025540,0x80025540,src/game_state.c,func_80025540,hand,,c
-func_80025640,0x80025640,src/game_state.c,func_80025640,hand,,c
+func_80025640,0x80025640,src/game_state.c,Session_InitHumanTrainer,hand,,c
 func_8002572C,0x8002572C,src/game_state.c,func_8002572C,m2c,m2c,c
-func_80025758,0x80025758,src/game_state.c,func_80025758,hand,,c
-func_800257F0,0x800257F0,src/game_state.c,func_800257F0,hand,,c
+func_80025758,0x80025758,src/game_state.c,Session_InitTwoTrainers,hand,,c
+func_800257F0,0x800257F0,src/game_state.c,Session_LoadPortSnapshot,hand,,c
 func_80025830,0x80025830,src/game_state.c,func_80025830,hand,,c
 func_800258B4,0x800258B4,src/game_state.c,func_800258B4,m2c,m2c,c
 func_80025910,0x80025910,src/game_state.c,func_80025910,hand,,c
@@ -4152,7 +4152,7 @@ func_80025BD8,0x80025BD8,src/game_state.c,GbSave_GetActivePort,s1,stadium1:src/g
 func_80025BE4,0x80025BE4,src/game_state.c,GbSave_SetActivePort,s1,stadium1:src/game_state.c,c
 func_80025C0C,0x80025C0C,src/game_state.c,Save_DrawGbReportErrorScreen,hand,,c
 func_80025D8C,0x80025D8C,src/game_state.c,Save_DrawReportingScreen,hand,,c
-func_80025E3C,0x80025E3C,src/game_state.c,func_80025E3C,m2c,m2c,c
+func_80025E3C,0x80025E3C,src/game_state.c,Save_RunGbReportErrorScreen,m2c,m2c,c
 func_80025F3C,0x80025F3C,src/game_state.c,func_80025F3C,m2c,m2c,c
 func_80025FDC,0x80025FDC,src/game_state.c,State_FastN64Logo,hand,,c
 func_800260C4,0x800260C4,src/game_state.c,func_800260C4,hand,,c
@@ -4163,7 +4163,7 @@ func_800268A8,0x800268A8,src/game_state.c,State_N64ddBootUnused,s1,stadium1:src/
 func_800268DC,0x800268DC,src/game_state.c,func_800268DC,s1,stadium1:src/game_state.c,c
 func_800268E4,0x800268E4,src/game_state.c,Game_ShutdownAndLoadFragment,s1,stadium1:src/game_state.c,c
 func_80026980,0x80026980,src/game_state.c,Game_ResetStorageDevice,s1,stadium1:src/game_state.c,c
-func_800269A0,0x800269A0,src/game_state.c,func_800269A0,hand,,c
+func_800269A0,0x800269A0,src/game_state.c,Game_RunStateLoop,hand,,c
 func_80026B50,0x80026B50,src/game_state.c,func_80026B50,hand,,c
 func_800270B4,0x800270B4,src/game_state.c,func_800270B4,hand,,c
 func_80027134,0x80027134,src/game_state.c,Display_DisableBlackout,s1,stadium1:src/dp_intro.c,c

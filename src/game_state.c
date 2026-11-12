@@ -128,7 +128,11 @@ typedef struct { s32 w[0x14]; } Unk50Bytes;
 extern u8 D_800AAF50[];
 extern M2C_UNK D_8007B7B8;
 
-M2C_UNK func_80025640(M2C_UNK arg0, M2C_UNK *arg1, M2C_UNK *arg2, s32 arg3) {
+/**
+ * Sets up trainer slot `arg1` as a human player on controller port `arg0` with roster info `arg2`.
+ * @unverified Name and comment guessed from the code.
+ */
+M2C_UNK Session_InitHumanTrainer(M2C_UNK arg0, M2C_UNK *arg1, M2C_UNK *arg2, s32 arg3) {
 
     M2C_FIELD(arg1, s8 *, 0) = 1;
     M2C_FIELD(arg1, s8 *, 1) = arg0;
@@ -158,7 +162,7 @@ void func_8002572C(s8 *arg0, s32 arg1) {
     M2C_FIELD(arg0, s32 *, 0x20) = 0;
 }
 
-M2C_UNK func_80025640(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
+M2C_UNK Session_InitHumanTrainer(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
 extern M2C_UNK D_800AE8F4;
 extern M2C_UNK D_800AEAF8;
 typedef struct { s16 unk_00; u8 unk_02; u8 unk_03; } Unk800AF104;
@@ -167,18 +171,22 @@ extern M2C_UNK D_800AF30C;
 extern M2C_UNK D_800AF924;
 extern M2C_UNK D_800AF94C;
 
-M2C_UNK func_80025758(M2C_UNK arg0, M2C_UNK arg1, M2C_UNK arg2) {
+/**
+ * Sets the session mode to `arg0` and sets up both trainer slots and battle sides.
+ * @unverified Name and comment guessed from the code.
+ */
+M2C_UNK Session_InitTwoTrainers(M2C_UNK arg0, M2C_UNK arg1, M2C_UNK arg2) {
     D_800AE8F0.unk_0000 = arg0;
     D_800AE8F0.unk_0001 = 1;
     D_800AE8F0.unk_0003 = 1;
-    func_80025640(0, &D_800AE8F4, (M2C_UNK *)&D_800AF104, arg1);
-    func_80025640(1, &D_800AEAF8, &D_800AF30C, arg2);
+    Session_InitHumanTrainer(0, &D_800AE8F4, (M2C_UNK *)&D_800AF104, arg1);
+    Session_InitHumanTrainer(1, &D_800AEAF8, &D_800AF30C, arg2);
     func_8002572C((s8 *)&D_800AF924, (s32)&D_800AE8F4);
     func_8002572C((s8 *)&D_800AF94C, (s32)&D_800AEAF8);
 }
 
 /*
- * func_800257F0
+ * Session_LoadPortSnapshot
  *
  * If arg0 is a valid controller-port index (0 to 3), copies that port's
  * save snapshot into the buffer at D_800AF9A8 with GbSave_CopyPortSnapshot
@@ -188,7 +196,11 @@ M2C_UNK func_80025758(M2C_UNK arg0, M2C_UNK arg1, M2C_UNK arg2) {
  */
 extern GbSavePortSnapshot D_800AF9A8;
 
-void func_800257F0(s32 arg0) {
+/**
+ * Copies the GB save snapshot of port `arg0` into the session; clears it for an invalid port.
+ * @unverified Name and comment guessed from the code.
+ */
+void Session_LoadPortSnapshot(s32 arg0) {
     if ((arg0 >= 0) && (arg0 < 4)) {
         GbSave_CopyPortSnapshot(arg0, &D_800AF9A8);
         return;
@@ -289,13 +301,13 @@ extern M2C_UNK D_800AE910;
  * stored to the byte D_800AE8F6 and:
  *  - if buf[0] == 0: calls func_80025910(buf[0]), sets bit 0 of the byte at
  *    D_800AE8F0 + 0x1095, sets the byte at + 0x1094 to 0xFF, calls
- *    func_800257F0(-1) and returns 1;
+ *    Session_LoadPortSnapshot(-1) and returns 1;
  *  - otherwise, if D_800733D4 is in 0..3, GbSave_CopyPortSnapshot(D_800733D4,
  *    &D_800AF9A8) is non-zero and func_80057910(buf, &D_800AF9A8, 0x162)
  *    returns 0 (func_80057910 is libultra bcmp, so: the 0x162 bytes of buf
  *    equal the snapshot just copied): calls func_80025910(buf[0]), sets
  *    bit 0 of + 0x1095, stores D_800733D4 at + 0x1094, calls
- *    func_800257F0(D_800733D4) and returns 1;
+ *    Session_LoadPortSnapshot(D_800733D4) and returns 1;
  *  - in every other case returns 0.
  *
  * What the buffer, D_800AE8F0's fields and the two helpers do is not
@@ -319,13 +331,13 @@ s32 func_80025A64(void) {
             func_80025910(buf[0]);
             D_800AE8F0.unk_1095 = (u8) (D_800AE8F0.unk_1095 | 1);
             D_800AE8F0.unk_1094 = 0xFF;
-            func_800257F0(-1);
+            Session_LoadPortSnapshot(-1);
             ret = 1;
         } else if ((D_800733D4 >= 0) && (D_800733D4 < 4) && (GbSave_CopyPortSnapshot(D_800733D4, &D_800AF9A8) != 0) && (func_80057910(buf, &D_800AF9A8, 0x162) == 0)) {
             func_80025910(buf[0]);
             D_800AE8F0.unk_1095 = (u8) (D_800AE8F0.unk_1095 | 1);
             M2C_FIELD(&D_800AE8F0, s8 *, 0x1094) = (s8) D_800733D4;
-            func_800257F0((s32) D_800733D4);
+            Session_LoadPortSnapshot((s32) D_800733D4);
             ret = 1;
         }
     }
@@ -450,7 +462,11 @@ extern M2C_UNK D_002E0BE0;
 extern M2C_UNK D_002E2B90;
 extern M2C_UNK D_01000000;
 
-void func_80025E3C(s32 arg0) {
+/**
+ * Pushes the 'GBER' pool state and shows the GB report error screen until the cartridge check passes.
+ * @unverified Name and comment guessed from the code.
+ */
+void Save_RunGbReportErrorScreen(s32 arg0) {
     M2C_UNK var_s0;
     s32 temp_v0;
 
@@ -476,7 +492,7 @@ void func_80025E3C(s32 arg0) {
     func_80002620(0x47424552);
 }
 
-M2C_UNK func_80025758(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
+M2C_UNK Session_InitTwoTrainers(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
 M2C_UNK func_80025B60(s32, M2C_UNK *, M2C_UNK *, M2C_UNK, s32); /* extern */
 extern M2C_UNK D_0015F390;
 extern M2C_UNK D_0015F8F0;
@@ -488,7 +504,7 @@ extern M2C_UNK D_82100000;
 
 void func_80025F3C(void) {
     func_80025B60(((u32) ((s32) &D_81500000 & 0x0FF00000) >> 0x14) - 0x10, &D_0015F390, &D_0015F8F0, 0, 0);
-    func_80025758(5, 3, 3);
+    Session_InitTwoTrainers(5, 3, 3);
     func_80025B60(((u32) ((s32) &D_82100000 & 0x0FF00000) >> 0x14) - 0x10, &D_0017ED00, &D_00232510, 0, (s32) &D_800AE8F0);
     D_800733C8 = 0x8010;
 }
@@ -532,7 +548,7 @@ void GbSave_RequirePakPresent(s32);
 s32 func_80022B4C(s32);
 s32 GbSave_GetBoxCount(s32);
 void func_80023C30(void);
-void func_80025E3C(s32);
+void Save_RunGbReportErrorScreen(s32);
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_800260C4(void)
 {
@@ -577,7 +593,7 @@ void func_800260C4(void)
           GbSave_ValidateBeforeWrite(D_800733D4);
           while (func_80021E64(D_800733D4) == 0)
           {
-            func_80025E3C(D_800733D4);
+            Save_RunGbReportErrorScreen(D_800733D4);
           }
 
           GbSave_RequirePakPresent(D_800733D4);
@@ -666,7 +682,7 @@ void func_80026368(void)
       }
       if (D_800AE8F0.unk_1096 & 4)
       {
-        func_80025758(6, 0xA, 0xD);
+        Session_InitTwoTrainers(6, 0xA, 0xD);
         D_800AE8F0.unk_0003 = 8;
         func_80025B60((((u32) (((s32) (&D_82100000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0017ED00, &D_00232510_2, 0, (s32) &D_800AE8F0);
       }
@@ -769,7 +785,11 @@ void func_80026368(void);
 void func_8002677C(void);
 void func_800268A8(void);
 
-void func_800269A0(s32 arg0) {
+/**
+ * Pushes the 'GAME' pool state and runs the top-level state machine (0x8001, 0x8010, 0x8040, 0x8050, 0x8060, 0x8080, 0xF000) forever.
+ * @unverified Name and comment guessed from the code.
+ */
+void Game_RunStateLoop(s32 arg0) {
     s32 state;
 
     func_800594D0(0x01000F00);
