@@ -119,5 +119,5 @@ showed which handler ran.
 No transform for: Vice Grip, Crabhammer, Hyper Beam, Splash, Teleport,
 Barrier, Harden, Defense Curl, Growth, Rest, Whirlwind, Roar, Rolling Kick,
 Jump Kick, Hi Jump Kick, Earthquake, Fissure, Thrash, Petal Dance, Transform,
-Substitute, Mimic, Rage, Disable, Reflect, Light Screen, Mist. Case 1
+Substitute, Mimic, Metronome, Rage, Reflect, Light Screen, Mist. Case 1
 (`BattleAnim_PokeBallThrow`) and case 11 (`func_8210A3DC`) were not seen.
