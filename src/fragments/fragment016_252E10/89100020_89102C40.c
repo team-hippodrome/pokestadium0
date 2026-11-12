@@ -272,7 +272,7 @@ s32 LabPCList_UpdateTypeFilter(s8*);
 void LabPCList_CommitTypeFilter(s8*, s8*);
 /**
  * Runs the type filter window and turns filter flag 2 on or off.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: ran while the タイプであつめる window was open.
  */
 s32 LabPCList_RunTypeFilter(s8* arg0) {
     s8* sp24 = arg0 + 0x9920;

@@ -1127,7 +1127,8 @@ void func_80029028(s32, s32, s32, s32, Color_RGBA8);
 void Ui_DrawNumber(s32, s32, s32, s32);
 /**
  * Draws one numbered row of the type filter list.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: drew the numbered rows of the type list (1 ノーマル, 2 かくとう, 3
+ * ひこう, ...).
  */
 void LabPCList_DrawTypeFilterRow(s32 arg0, s32 arg1, char **arg2, s32 arg3, s32 arg4) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
@@ -1198,7 +1199,9 @@ extern char D_8910E0C4[];
 
 /**
  * Sets up the type filter window.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: A on the タイプ1 header opened the タイプであつめる (gather by type)
+ * window, with two empty type slots, the numbered type list (1 ノーマル, 2 かくとう, ... 8 ゴースト) and あつめる
+ * / かいじょ buttons.
  */
 void LabPCList_InitTypeFilter(Lab891071A4* arg0, s32 x, s32 y, s32* arg3) {
     s32 i;
@@ -1259,7 +1262,7 @@ void ScrollList_DrawItems(s8*, s32, s32, s32, s32);
 
 /**
  * Draws the type filter window.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: drew the タイプであつめる window.
  */
 void LabPCList_DrawTypeFilter(Ctx891074CC* arg0) {
     s32 i;
@@ -1307,7 +1310,8 @@ typedef struct Lab89107614 {
 
 /**
  * Handles the type filter window. Returns -1 on cancel, 1 on confirm, 2 on clear.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: handled the タイプであつめる window; A moved the cursor into the
+ * type list (1 ノーマル).
  */
 s32 LabPCList_UpdateTypeFilter(Lab89107614* arg0) {
     s32 ret = 0;

@@ -682,5 +682,15 @@ Opened on the party list (フシギダネ, ヒトカゲ and ゼニガメ):
   おなじタイプをあつめる, いどうする and どうぐをつかう.
 * いどうする opened 「どこへ？」 with てもちのポケモン, ゲームボーイのボックス and
   64カセットのボックス (`LabPCList_UpdateDestinationMenu`).
-* どうぐをつかう said つかえるどうぐがありません, because the test save holds no
-  items.
+* どうぐをつかう said つかえるどうぐがありません, because no item in the test save
+  could be used on フシギダネ.
+* Sort and filter: R moves the focus to the column headers. A on ポケモン
+  opens the sort menu (`LabPCList_InitSortMenu`), with アイウエオじゅんにならべる,
+  ポケモンばんごうでならべる, バトルようのポケモンをあつめる, すべてのせんたくをやめる
+  and いちらんするポケモンをえらぶ. Both sorts reordered the party as
+  expected. A on おや sorted through `LabPCList_CompareByOtName`. A on
+  タイプ1 opens タイプであつめる (`LabPCList_InitTypeFilter`).
+* Caution for breakpoint evidence: once the screen is left, the fragment is
+  unloaded and other code runs at the same addresses. Hits after the fade-out
+  (the filter-flag helpers, `LabPCList_TeachTmHmMove` and others) were false,
+  and those names keep their tags.

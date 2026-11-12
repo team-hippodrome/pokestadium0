@@ -125,7 +125,8 @@ extern s32 D_8910D9D4;
 
 /**
  * Handles the sort menu: sort by name or number, gather battle Pokemon, clear selections, or choose the boxes to list.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: handled that menu: ポケモンばんごうでならべる sorted the party as フシギダネ,
+ * ヒトカゲ, ゼニガメ, and アイウエオじゅんにならべる as ゼニガメ, ヒトカゲ, フシギダネ.
  */
 s32 LabPCList_UpdateSortMenu(s8* arg0) {
     s32 buttons;

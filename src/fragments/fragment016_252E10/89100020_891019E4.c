@@ -537,7 +537,8 @@ extern u8 D_8910A8C8[];
 extern s8 D_8910E358[];
 /**
  * Sets up the sort menu: by name, by number, gather battle Pokemon, clear selections, choose what to list.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: A on the ポケモン header opened the menu アイウエオじゅんにならべる,
+ * ポケモンばんごうでならべる, バトルようのポケモンをあつめる, すべてのせんたくをやめる, いちらんするポケモンをえらぶ.
  */
 void LabPCList_InitSortMenu(Screen891024A4 *arg0) {
     func_8000A460(D_8910E358, D_8910A8B0);
@@ -569,7 +570,8 @@ s32 func_8002B390(s32*);
 
 /**
  * Handles input while the cursor is on the header buttons.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: R moved the focus to the column headers, and D-Left/D-Right
+ * moved the highlight between ニックネーム, ID, おや and ばしょ while this ran.
  */
 s32 LabPCList_UpdateHeaderCursor(Ctx891025D8* arg0) {
     s32 ret = 0;
