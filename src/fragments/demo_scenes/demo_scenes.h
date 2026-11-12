@@ -320,7 +320,6 @@ void MewtwoIntro_DrawOverlay(void);
 void MewtwoIntro_InitCamera(void);
 void MewtwoIntro_ReadControllerInput(void);
 void MewtwoIntro_DrawBackgroundTiles(u8* arg0);
-void MewtwoIntro_RenderFrame(void);
 s32 MewtwoIntro_UpdateFade(void);
 void MewtwoIntro_RunLoop(void);
 void MewtwoIntro_InitScene(void);

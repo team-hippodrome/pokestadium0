@@ -247,7 +247,7 @@ s32 VsScene_BeginFrame(void) {
 
 /**
  * Pushes the 'ICON' pool state and decides, per side, whether its team is shown.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: runs as the VS scene opens before a tournament battle.
  */
 void VsScene_PrepareTeams(void) {
     unk_D_82203170* team;
@@ -284,7 +284,13 @@ extern u8 D_8F908980[];
 extern u8 D_8FA08900[];
 extern u8 D_8FB08900[];
 extern Gfx D_80060398[];
-void func_82200278(void) {
+/**
+ * Draws the VS scene's backdrop: one of three full-screen stadium images (D_822036A8 1 to 3),
+ * otherwise a plain fill.
+ * Seen in play: runs every frame of the VS scene.
+ * @unverified Which image is which not checked.
+ */
+void VsScene_DrawBackground(void) {
     uintptr_t img;
 
     if (D_822036A8 > 0) {
@@ -315,7 +321,7 @@ void func_82200278(void) {
 
 extern u8* D_86B10828;
 extern GraphNode* D_86B106B4;
-void func_82200278(void);
+void VsScene_DrawBackground(void);
 
 /**
  * Draws one frame of the scene into the offscreen image.
@@ -330,14 +336,14 @@ s32 VsScene_DrawFrameToImage(s32 arg0) {
     GfxImage_ClearDepthRectangle(&gDisplayListHead, 0, 0, 0x140, 0xF0);
     Geo_RenderRootNode(D_82203244);
     BgStage_DrawFrame();
-    func_82200278();
+    VsScene_DrawBackground();
     Geo_RenderRootNode(D_82203240);
     return sp24;
 }
 
 /**
  * Draws one frame of the scene over the background stage.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: draws the VS scene's frames while the 「バトル」 title and VS panels play.
  */
 s32 VsScene_DrawFrame(s32 arg0) {
     s32 sp24 = VsScene_BeginFrame();
@@ -354,7 +360,7 @@ M2C_UNK func_80006780();                            /* extern */
 s32 func_80027214(s8 *, s32);                       /* extern */
 
 /*
- * func_82200618
+ * VsScene_ZoomIntoScreen
  *
  * Reads the word at offset 0xC of D_82203240 (the `children` pointer of
  * that GraphNode; call it `rec`), fills two
@@ -373,7 +379,13 @@ s32 func_80027214(s8 *, s32);                       /* extern */
  * meaning of its own: decomp-permuter found it as the only change that
  * swaps the registers of the two buffer addresses (s3/s4) to the ROM's.
  */
-void func_82200618(void) {
+/**
+ * Moves the camera along its path from the stadium view into the big screen, drawing a frame each
+ * step until the path ends or VsScene_DrawFrameToImage reports done.
+ * Seen in play: the camera flies from the stadium (seen from the field) into the big screen's
+ * flames.
+ */
+void VsScene_ZoomIntoScreen(void) {
     s8 sp7C[0x3C];
     s8 sp40[0x3C];
     s32 sp3C;
@@ -445,7 +457,8 @@ void func_82200850(void) {
 
 /**
  * Requests the icon of each Pokemon a side can pick and stores the images.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: runs as the VS scene opens; the trainer portraits (1P's cap, the むしとり しょうねん)
+ * appear in its panels.
  */
 void VsScene_LoadTeamIcons(unk_D_82203170* arg0, s32 arg1) {
     s32 i;
@@ -464,7 +477,14 @@ extern u8 D_8ED0FACC[];
 extern u8 D_8EE0FDE0[];
 extern u8 D_8F5054AC[];
 extern u8 D_8F5054C8[];
-void func_8220091C(void) {
+/**
+ * Plays the title over the flames: an audio cue chosen by mode and round (command 0x3C), then the
+ * title model's animation (special curves for models 7 and 8), then the closing animation, 100 or
+ * 160 frames.
+ * Seen in play: the flaming 「バトル」 title letters appear one by one, then 「VS」 with both trainers.
+ * @unverified The round-dependent cues were not compared.
+ */
+void VsScene_PlayBattleTitle(void) {
     s32 track;
     s32 pad; // FAKE
     DisplayObject* obj = (DisplayObject*)((GraphNode*)D_82203244->children)->children;
@@ -533,11 +553,18 @@ void func_8220091C(void) {
 extern u8 D_82400000[];
 extern u8 D_00175570[];
 extern u8 D_0017BE70[];
-void func_82200618(void);
-void func_8220091C(void);
+void VsScene_ZoomIntoScreen(void);
+void VsScene_PlayBattleTitle(void);
 void func_82200714(void);
 
-void func_82200C04(void) {
+/**
+ * Runs the VS scene before a tournament battle: loads both teams and their icons, places the
+ * camera (two layouts by mode), fades in with the scene music (0x12 or 6), zooms into the stadium
+ * screen, plays the flaming battle title and then the trainer panels.
+ * Seen in play: before the first モンスターボールカップ round, the stadium, the flaming 「バトル」 title on its
+ * big screen, and 「トレーナー 1P VS トレーナー むしとり しょうねん」.
+ */
+void VsScene_Play(void) {
     CameraNode* camera = D_82203240->children;
 
     Fragment_LoadAndCall((((u32)D_82400000 & 0x0FF00000) >> 0x14) - 0x10, D_00175570, D_0017BE70, 0,
@@ -560,8 +587,8 @@ void func_82200C04(void) {
         Audio_PlayMusicIfChanged(6);
     }
     BgStage_RunUntilCondition(0x40, VsScene_DrawFrameToImage);
-    func_82200618();
-    func_8220091C();
+    VsScene_ZoomIntoScreen();
+    VsScene_PlayBattleTitle();
     func_82200714();
     ModelRenderer_ClearDisplayObject(&D_82203268);
     if (((DemoState*)D_822036A4)->unk_1095 & 2) {
@@ -1024,7 +1051,7 @@ void func_82201F90(void) {
     StageFade_Start(0x20);
     Audio_PlayMusicIfChanged(0xD);
     func_82201084(0x64);
-    func_82200618();
+    VsScene_ZoomIntoScreen();
     func_822018EC();
     func_82201A3C();
     func_80041374(0x3D, 0);
@@ -1037,7 +1064,7 @@ extern u8 D_82400000[];
 extern u8 D_00175570[];
 extern u8 D_0017BE70[];
 void VsScene_PrepareTeams(void);
-void func_8220091C(void);
+void VsScene_PlayBattleTitle(void);
 
 void func_822020FC(void) {
     DemoState* state = (DemoState*)D_822036A4;
@@ -1055,7 +1082,7 @@ void func_822020FC(void) {
             D_822033E8 = ((DemoState*)D_822036A4)->unk_0003;
             D_82203550 = ((DemoState*)D_822036A4)->unk_0003;
             Audio_PlayMusicIfChanged(0xF);
-            func_8220091C();
+            VsScene_PlayBattleTitle();
         } else {
             BgStage_RunUntilCondition(0x20, VsScene_DrawFrame);
             ((DemoState*)D_822036A4)->unk_1096 |= 1;
@@ -1088,7 +1115,7 @@ void func_82202228(void) {
         Audio_PlayMusicIfChanged(0x10);
     }
     func_82201084(0x64);
-    func_82200618();
+    VsScene_ZoomIntoScreen();
     func_822018EC();
     func_82201A3C();
     if (func_82201DF8() != 0) {
@@ -1300,7 +1327,7 @@ s32 VsScene_Run(s32 arg0, s8* arg1) {
 
     switch (arg0) {
         case 0:
-            func_82200C04();
+            VsScene_Play();
             break;
 
         case 1:
