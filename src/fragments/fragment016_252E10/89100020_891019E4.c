@@ -256,7 +256,7 @@ void LabPCList_ClearFilterFlag(s8 *arg0, M2C_UNK arg1) {
 
 /**
  * Turns off every filter flag.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: すべてのせんたくをやめる took the flag word from 0x20 to 0.
  */
 void LabPCList_ClearFilterFlags(s8 *arg0) {
     M2C_FIELD(arg0, s32 *, 0x7C) = 0;
@@ -265,7 +265,8 @@ void LabPCList_ClearFilterFlags(s8 *arg0) {
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 /**
  * Toggles filter flags `arg1` and returns whether they are now on.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: バトルようのポケモンをあつめる called this with 0x20; the flag word went 0
+ * -> 0x20 and it returned 0x20 (on). The menu entry then read バトルようのポケモンをかいじょする.
  */
 s32 LabPCList_ToggleFilterFlag(s8 *arg0, s32 arg1)
 {

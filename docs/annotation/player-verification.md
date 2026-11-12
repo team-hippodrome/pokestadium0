@@ -717,6 +717,12 @@ Opened on the party list (フシギダネ, ヒトカゲ and ゼニガメ):
   emptied the Lv 5 party. Reopening the window then made
   `LabPCList_HasFilterFlag(1)` return 1, and かいじょ was enabled. かいじょ
   cleared flag 1.
+* Sort menu: バトルようのポケモンをあつめる toggled flag 0x20, which keeps only
+  Pokémon registered for battle. The test party has none, so the list went
+  empty, and the entry became バトルようのポケモンをかいじょする.
+  すべてのせんたくをやめる ran `LabPCList_ResetFilterState` and
+  `LabPCList_ClearFilterFlags`, which took the flags from 0x20 to 0 and restored
+  the list.
 
 ## せいとん, ポケモンを いどうする
 
