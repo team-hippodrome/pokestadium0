@@ -62,7 +62,7 @@ s32 GbSave_VerifyWriteback(u8* arg0, s32 arg1);
 s8 GbCart_IdentifyGame(s32 arg0);
 s32 GbSave_CheckMainDataUnchanged(s32 arg0);
 s32 GbSave_ReadMainData(s32 arg0);
-s32 GbSave_InvalidateMainDataChecksum(s32 arg0);
+s32 GbSave_WriteMainDataChecksum(s32 arg0);
 s32 GbSave_ReadBoxBank(s32 arg0, s32 arg1);
 s32 GbSave_WriteBoxBank(s32 arg0, s32 arg1);
 void GbSave_ReleasePortBuffers(s32 arg0, u32 arg1);

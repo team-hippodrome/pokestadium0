@@ -250,7 +250,7 @@ loop_1:
 }
 
 /**
- * GbSave_InvalidateMainDataChecksum
+ * GbSave_WriteMainDataChecksum
  *
  * Recomputes the checksum of the main save data of Game Boy port arg0 and
  * writes it back to the cartridge.  The checksum over bytes 0x18.. is stored
@@ -261,9 +261,11 @@ loop_1:
  *
  * Same structure as GbSave_InvalidateMainDataChecksum in the Stadium 1
  * decomp (its VERSION_JP branch uses the same 0x1000/0x1014/0x3580 values).
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Seen in play (2026-11-12): during a せいとん save it ran once, before the box banks were written. The .sav then had a
+ * valid checksum at 0x3594 (0x55, matching the sum of 0x2598..0x3593), so it writes a correct checksum and does not
+ * invalidate one. It was named GbSave_InvalidateMainDataChecksum, after Stadium 1.
  */
-s32 GbSave_InvalidateMainDataChecksum(s32 arg0) {
+s32 GbSave_WriteMainDataChecksum(s32 arg0) {
     u8* temp_s3 = sGbSavePorts[arg0].unk_40;
     s32 i;
 
@@ -299,7 +301,8 @@ s32 GbSave_ReadBoxBank(s32 arg0, s32 arg1) {
  *
  * Same structure as GbSave_WriteBoxBank in the Stadium 1 decomp (its
  * VERSION_JP branch also uses 0x15A0).
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Seen in play (2026-11-12) in a せいとん save: ran for bank 0 and bank 1 after the main data
+ * checksum was written.
  */
 s32 GbSave_WriteBoxBank(s32 arg0, s32 arg1) {
     s32 var_v0;
@@ -364,7 +367,8 @@ void GbSave_CheckSavedAtPokemonCenter(s32 arg0) {
 }
 
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Seen in play (2026-11-12): ran at boot from GbSave_ScanAllPorts for port 0 (the Green
+ * cartridge) and again when せいとん opened; returned 1.
  */
 s32 GbSave_OpenMainData(s32 arg0) {
     u8 sp2F;
@@ -412,7 +416,7 @@ s32 GbSave_EnsureMainDataLoaded(s32 arg0) {
 }
 
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Seen in play (2026-11-12): ran for port 0 when せいとん opened; returned 1.
  */
 s32 GbSave_OpenBoxData(s32 arg0) {
     u8 sp37;
@@ -573,7 +577,8 @@ void GbSave_ForceReloadPort(s32 arg0) {
 
 s32 GbSave_OpenMainData(s32);
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Seen in play (2026-11-12): ran once at boot after Start on the title screen; it opened port 0's
+ * main data and returned 1.
  */
 s32 GbSave_ScanAllPorts(void) {
     s32 i;
@@ -686,7 +691,7 @@ s32 GbSave_RebuildAndWriteSave(s32 arg0) {
         Game_ShutdownAndLoadFragment(arg0, 2);
     }
 
-    sp28 = GbSave_InvalidateMainDataChecksum(arg0);
+    sp28 = GbSave_WriteMainDataChecksum(arg0);
 
     if (sp28 != 0) {
         sp28 = GbSave_WriteBoxBanks(arg0);
@@ -735,7 +740,8 @@ GbSaveBoxEntry* GbSave_GetBoxEntry(s32 arg0, s32 arg1) {
 
 /**
  * The raw 6-byte Game Boy trainer name is kept in the 3-byte tails at 0x3D and 0x4D.
- * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ * Seen in play (2026-11-12): called by Deck_ReadEntry for party slots 0-2 when せいとん listed ハナ,
+ * ヒノコ and カメ.
  */
 void GbSave_LoadMainPokemon(BattleMon* arg0, s32 arg1, s32 arg2) {
     GbSavePartyZero* ptr2 = (GbSavePartyZero*)(sGbSavePorts[arg1].unk_40 + 0x955);
@@ -759,7 +765,7 @@ void GbSave_LoadMainPokemon(BattleMon* arg0, s32 arg1, s32 arg2) {
  * species list.
  *
  * Same structure as GbSave_SaveMainPokemon in the Stadium 1 decomp.
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Seen in play (2026-11-12) in a せいとん save: called by Deck_WriteEntry for party slots 0 and 1.
  */
 void GbSave_SaveMainPokemon(unk_func_88205880_00D0* arg0, s32 arg1, s32 arg2) {
     GbSavePartyZero* sp24 = (GbSavePartyZero*)(sGbSavePorts[arg1].unk_40 + 0x955);
@@ -914,7 +920,8 @@ s32 Deck_GetCount(s32 arg0, s32 arg1, s32 arg2) {
  *
  * Same structure as Deck_DeleteEntry in the Stadium 1 decomp, using its
  * VERSION_JP offsets.
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Seen in play (2026-11-12) in a せいとん save: truncated deck 0x20 (party; it returned 3, the old
+ * count) and deck 0x21 (GB box) before they were rewritten.
  */
 void Deck_DeleteEntry(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     GbSaveMainZero* sp1C = (GbSaveMainZero*)sGbSavePorts[arg1].unk_40;
@@ -954,7 +961,8 @@ void Deck_DeleteEntry(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
  *
  * Same structure as Deck_AppendEntry in the Stadium 1 decomp, using its
  * VERSION_JP offsets.
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Seen in play (2026-11-12) in a せいとん save: called by Deck_WriteEntry for each written entry (two
+ * party, one box).
  */
 void Deck_AppendEntry(s32 arg0, s32 arg1, s32 arg2) {
     GbSaveMainZero* sp1C = (GbSaveMainZero*)sGbSavePorts[arg1].unk_40;
@@ -998,7 +1006,8 @@ void Deck_AppendEntry(s32 arg0, s32 arg1, s32 arg2) {
  *
  * Same structure as Deck_ReadEntry in the Stadium 1 decomp, using its
  * VERSION_JP offsets.
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Seen in play (2026-11-12): opening ポケモンのせいり read deck 0x20 (party) entries 0, 1 and 2 through
+ * GbSave_LoadMainPokemon, one per party Pokémon.
  */
 s32 Deck_ReadEntry(s32 arg0, s32 arg1, s32 arg2, s32 arg3, BattleMon* arg4) {
     s32 sp1C = 0;
@@ -1042,7 +1051,9 @@ s32 Deck_ReadEntry(s32 arg0, s32 arg1, s32 arg2, s32 arg3, BattleMon* arg4) {
  *
  * Same structure as Deck_WriteEntry in the Stadium 1 decomp, using its
  * VERSION_JP offsets.
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Seen in play (2026-11-12) in a せいとん save: wrote the two remaining party Pokémon to deck 0x20
+ * (entries 0 and 1) and the moved one to deck 0x21 entry 0. The .sav then had party count 2 and
+ * box count 1.
  */
 s32 Deck_WriteEntry(s32 arg0, s32 arg1, s32 arg2, s32 arg3, unk_func_88205880_00D0* arg4) {
     s32 sp2C = 0;

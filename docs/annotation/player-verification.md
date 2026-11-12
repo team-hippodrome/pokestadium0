@@ -893,3 +893,24 @@ The いちらん sort popup is a `Menu_*` list. `Menu_ClearItemFlags` ran over i
 `ScrollList_ScrollDownToCursor`. The main table is drawn with
 `ScrollList_DrawItems` and `ScrollList_DrawScrollArrows`.
 
+## Game Boy save path, boot to せいとん save
+
+Traced from a fresh boot with the Green save, through a せいとん move of one
+Pokémon into GBのボックス1, to レポートしてやめる:
+
+1. At boot, `GbSave_ScanAllPorts` runs `GbSave_OpenMainData` for port 0 (with
+   `GbTower_ProbePak`).
+2. Opening せいとん runs `GbSave_OpenMainData` and `GbSave_OpenBoxData`. Then
+   `Deck_ReadEntry` runs for deck 0x20 entries 0-2, through
+   `GbSave_LoadMainPokemon`.
+3. Saving truncates deck 0x20 (`Deck_DeleteEntry`, old count 3) and writes
+   entries 0-1 (`Deck_WriteEntry` → `GbSave_SaveMainPokemon` →
+   `Deck_AppendEntry`). Deck 0x21 is then truncated and gets the moved
+   Pokémon.
+4. Finally the main-data checksum is written, followed by
+   `GbSave_WriteBoxBank` 0 and 1.
+
+The checksum writer was `GbSave_InvalidateMainDataChecksum`, a name taken from
+Stadium 1. The .sav it left behind had a valid checksum (0x55 at 0x3594), so it
+is now `GbSave_WriteMainDataChecksum`.
+
