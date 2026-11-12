@@ -623,7 +623,7 @@ extern s32 D_880022A0[];
 extern Color_RGBA8 D_88001FEC[];
 extern u8 D_88002034[][0x18];
 s32 GridMenu_UpdateCursorSkipDisabled(s8*);
-void func_800245E0(s32, s32);
+void Save_ResetAndCommitTypedRecord(s32, s32);
 s32 MainMenu_LoadSelectedFragment(s32);
 /**
  * Runs the main menu screen's state machine for one frame and returns the chosen item.
@@ -659,7 +659,7 @@ s32 MainMenu_UpdateScreen(s8* arg0) {
                         break;
                     case 3:
                         func_8003F6AC(0x1F);
-                        func_800245E0(0x15, 0);
+                        Save_ResetAndCommitTypedRecord(0x15, 0);
                         gSessionContext.sessionFlags &= ~1;
                         M2C_FIELD(arg0, s32*, 0x350) = 7;
                         M2C_FIELD(arg0, s32*, 4) = 2;

@@ -208,8 +208,8 @@ void func_80022118(s32);
 void func_80022188(s32);
 s32 func_8002207C(s32);
 void func_8002D7D4(s32);
-void func_800243B8(void);
-void func_800245E0(s32, s32);
+void Save_CommitPokemonRecords(void);
+void Save_ResetAndCommitTypedRecord(s32, s32);
 void func_89000494(s32, s32, s32, s8*, s32, void*, s32);
 void LabItem_DrawScreen(void*);
 typedef struct Slot89003880 {
@@ -245,7 +245,7 @@ void LabItem_SaveChanges(s8* arg0) {
             if (M2C_FIELD(arg0, s32*, 0xA18) != 0) {
                 flush = 1;
                 if (M2C_FIELD(arg0, s32*, 0xA08) == 0) {
-                    func_800245E0(0x12, M2C_FIELD(arg0, s32*, 0xA1C));
+                    Save_ResetAndCommitTypedRecord(0x12, M2C_FIELD(arg0, s32*, 0xA1C));
                 } else {
                     func_89000494(0x12, 0, M2C_FIELD(arg0, s32*, 0xA1C), arg0 + 0xA00, 0, NULL, -1);
                 }
@@ -263,7 +263,7 @@ void LabItem_SaveChanges(s8* arg0) {
         func_80022188(D_89019108);
     }
     if (flush) {
-        func_800243B8();
+        Save_CommitPokemonRecords();
     }
 }
 

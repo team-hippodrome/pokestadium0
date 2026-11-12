@@ -42,8 +42,8 @@ s32 GbTower_TeamPrepFrameCallback(u8 arg0) {
     return 0;
 }
 
-s32 func_80023C30(void);
-s32 func_80025100(s8*, s32*);
+s32 Save_LoadSram(void);
+s32 Save_GetGbTowerSettings(s8*, s32*);
 
 void GbTower_BuildPartyResult(UnkInputStruct8000D738* arg0) {
     s32 i;
@@ -51,7 +51,7 @@ void GbTower_BuildPartyResult(UnkInputStruct8000D738* arg0) {
     s32 field;
     u16(*var_s1)[0x640] = arg0->unk_04[0];
 
-    func_80025100(&tier, &field);
+    Save_GetGbTowerSettings(&tier, &field);
     arg0->unk_02 = tier;
     arg0->unk_00 = field;
     arg0->unk_03 = D_81300370;
@@ -81,7 +81,7 @@ s32 GbTower_TeamPrep(s32 arg0, UnkInputStruct8000D738* arg1) {
     D_81300384 = PokeIcon_CreateRenderList(D_81300380, 6, 0x28, 0x28);
     PokeIcon_OpenModelArchives();
     GbTower_LoadPartyFromDeck(arg0);
-    func_80023C30();
+    Save_LoadSram();
     StageContext_Activate(sp24);
     BgStage_RunUntilCondition(8, GbTower_TeamPrepFrameCallback);
     StageContext_Deactivate();

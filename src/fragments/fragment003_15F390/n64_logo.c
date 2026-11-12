@@ -96,8 +96,8 @@ void N64Logo_ScanTransferPaks(void) {
     main_pool_pop_state('GPAK');
 }
 
-void func_80023C30(void);
-u8 func_80025214(void);
+void Save_LoadSram(void);
+u8 Save_GetOptionFlags(void);
 void func_8003BC9C(s32);
 void func_800418F0(s32);
 
@@ -122,11 +122,11 @@ s32 N64Logo_Main(UNUSED s32 arg0, UNUSED s32 arg1) {
     ASSET_LOAD(D_1000000, common_menu1_ui, 0);
     ASSET_LOAD(D_2000000, n64_logo_texture, 0);
 
-    func_80023C30();
+    Save_LoadSram();
     StageContext_Activate(sp24);
     StageFade_Start(1);
     BgStage_RunUntilCondition(3, N64Logo_DrawFrame);
-    sp37 = func_80025214();
+    sp37 = Save_GetOptionFlags();
 
     if (sp37 & 1) {
         func_8003BC9C(0);

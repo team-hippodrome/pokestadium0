@@ -191,7 +191,7 @@ M2C_UNK Session_InitTwoTrainers(M2C_UNK arg0, M2C_UNK arg1, M2C_UNK arg2) {
  * If arg0 is a valid controller-port index (0 to 3), copies that port's
  * save snapshot into the buffer at D_800AF9A8 with GbSave_CopyPortSnapshot
  * (its return value is ignored).  Otherwise the first byte of the buffer is
- * cleared.  The buffer is the destination that func_80025830 later passes on
+ * cleared.  The buffer is the destination that Tournament_SaveContinueData later passes on
  * as its second argument to Save_WriteContinueData.
  */
 extern GbSavePortSnapshot D_800AF9A8;
@@ -218,7 +218,11 @@ typedef struct ContinueDataZ {
 extern M2C_UNK D_800AF974;
 void Save_WriteContinueData(ContinueDataZ* arg0, void* arg1, BattleMon* arg2, s32 arg3);
 
-void func_80025830(void) {
+/**
+ * Saves the current tournament (mode, cup, next round, opponents, team, GB snapshot) to the continue record and commits it.
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): ran on ちゅうだんする at トーナメントをつづけますか？
+ */
+void Tournament_SaveContinueData(void) {
     ContinueDataZ sp1C;
     ExtendedRosterInfo* info = (*(TeamRoster**)((u8*)&gSessionContext + 0x103C))->rosterInfo;
 
@@ -292,31 +296,13 @@ s32 func_80057910(s8 *, M2C_UNK *, M2C_UNK);        /* extern */
 extern s8 D_800AE8F6;
 extern M2C_UNK D_800AE910;
 
-/*
- * func_80025A64
- *
- * Clears the byte at D_800AE8F0 + 0x1095, then calls
- * Save_ReadContinueData(&D_800AFB10, buf, &D_800AE910) with a 0x162-byte local
- * buffer. If it returns -1 the function returns 0. Otherwise the result is
- * stored to the byte D_800AE8F6 and:
- *  - if buf[0] == 0: calls func_80025910(buf[0]), sets bit 0 of the byte at
- *    D_800AE8F0 + 0x1095, sets the byte at + 0x1094 to 0xFF, calls
- *    Session_LoadPortSnapshot(-1) and returns 1;
- *  - otherwise, if D_800733D4 is in 0..3, GbSave_CopyPortSnapshot(D_800733D4,
- *    &D_800AF9A8) is non-zero and func_80057910(buf, &D_800AF9A8, 0x162)
- *    returns 0 (func_80057910 is libultra bcmp, so: the 0x162 bytes of buf
- *    equal the snapshot just copied): calls func_80025910(buf[0]), sets
- *    bit 0 of + 0x1095, stores D_800733D4 at + 0x1094, calls
- *    Session_LoadPortSnapshot(D_800733D4) and returns 1;
- *  - in every other case returns 0.
- *
- * What the buffer, D_800AE8F0's fields and the two helpers do is not
- * established. Matching notes: the unused `pad` local sits between the
- * buffer and `ret` as in the ROM's frame (buffer at sp+0x34, ret at sp+0x2C),
- * and the bit-0 update is written before the store of 0xFF to match the
- * ROM's register order.
+/**
+ * Loads the continue record. A rental team is always accepted; a GB team only if the cartridge's 0x162-byte snapshot is unchanged.
+ * Returns 1 and flags the session when the tournament can be resumed. Matching: the unused pad local sits between the buffer
+ * and ret as in the ROM's frame, and the bit-0 update comes before the 0xFF store to match the register order.
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): the main menu asked トーナメントのつづきをする？ after a saved round.
  */
-s32 func_80025A64(void) {
+s32 Tournament_LoadContinueData(void) {
     s8 buf[0x162];
     UNUSED s32 pad; // FAKE: stack padding
     s32 ret;
@@ -547,14 +533,14 @@ void GbSave_ValidateBeforeWrite(s32);
 void GbSave_RequirePakPresent(s32);
 u8 GbSave_GetSaveState(s32 arg0);
 s32 GbSave_GetBoxCount(s32);
-void func_80023C30(void);
+void Save_LoadSram(void);
 void Save_RunGbReportErrorScreen(s32);
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_800260C4(void)
 {
   s32 pushed = 0;
   main_pool_push_state('OVLY');
-  func_80023C30();
+  Save_LoadSram();
   Gfx_InitDisplayListBuffers(0x10000, 0);
   D_800AF9A4 = StageContext_Allocate(1, 1, 2, 0, 2, 1);
   StageContext_Activate(D_800AF9A4);
@@ -573,7 +559,7 @@ void func_800260C4(void)
   {
     Fragment_QueueCall((((u32) (((s32) (&D_88400000)) & 0x0FF00000)) >> 0x14) - 0x10, D_00162BE0, D_00166580, 0, (s32) (&D_800AE8F0));
   }
-  func_80025A64();
+  Tournament_LoadContinueData();
   while ((D_800733C8 == 0x8040) && (D_800AF990.unk_00 != 0))
   {
     if (D_800733D8 != 0)
@@ -598,7 +584,7 @@ void func_800260C4(void)
 
           GbSave_RequirePakPresent(D_800733D4);
         }
-        func_80025A64();
+        Tournament_LoadContinueData();
       }
     }
     D_800AF990.unk_00 = 0;
@@ -706,8 +692,8 @@ s32 func_8000ADE8(void);
 void func_8000AE1C(UnkInputStruct8000D738*);
 void func_800268E4(s32, s32);
 void GbSave_ForceReloadPort(s32);
-void func_80023C30(void);
-void func_80025130(s32);
+void Save_LoadSram(void);
+void Save_SetGbTowerButtonConfig(s32);
 void Save_CommitTypedRecord(s32, s32);
 
 void State_GbTower(void) {
@@ -735,8 +721,8 @@ void State_GbTower(void) {
     }
 
     GbSave_ForceReloadPort(D_800733D4);
-    func_80023C30();
-    func_80025130(sp24.unk_00);
+    Save_LoadSram();
+    Save_SetGbTowerButtonConfig(sp24.unk_00);
     Save_CommitTypedRecord(0x14, 0);
     D_800733C8 = D_800733CC;
     D_800AF988 = 1;

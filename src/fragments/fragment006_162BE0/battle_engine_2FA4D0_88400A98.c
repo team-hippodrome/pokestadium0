@@ -382,27 +382,31 @@ s32 Options_RunClearSavePrompt(s32 arg0, s32 arg1, u8 arg2) {
     return loop;
 }
 
-void Save_InitializeBank3(void) {
+/**
+ * Resets and commits every save record and turns stereo sound and commentary back on (オプション > バックアップ).
+ * @unverified Read from the code; the clear-save prompt was not accepted in play.
+ */
+void Save_ResetAll(void) {
     s32 i;
 
     for (i = 0; i < 16; i++) {
-        func_800245E0(16, i);
+        Save_ResetAndCommitTypedRecord(16, i);
     }
     for (i = 0; i < 4; i++) {
-        func_800245E0(17, i);
+        Save_ResetAndCommitTypedRecord(17, i);
     }
     for (i = 0; i < 4; i++) {
-        func_800245E0(18, i);
+        Save_ResetAndCommitTypedRecord(18, i);
     }
-    func_800245E0(19, 0);
-    func_800245E0(20, 0);
-    func_800245E0(21, 0);
+    Save_ResetAndCommitTypedRecord(19, 0);
+    Save_ResetAndCommitTypedRecord(20, 0);
+    Save_ResetAndCommitTypedRecord(21, 0);
     func_8003BC9C(1);
     func_800418F0(1);
 }
 
-s32 func_80025214(void);
-void func_80025224(u8);
+s32 Save_GetOptionFlags(void);
+void Save_SetOptionFlags(u8);
 void Save_CommitTypedRecord(s32, s32);
 /**
  * Loop for the options menu: Up/Down move the cursor through four entries and the chosen settings are saved.
@@ -412,7 +416,7 @@ void Save_CommitTypedRecord(s32, s32);
 void Options_RunMenu(void) {
     s32 done = 0;
     s32 sel = 0;
-    u8 flags = func_80025214();
+    u8 flags = Save_GetOptionFlags();
     u8 diff;
 
     do {
@@ -442,7 +446,7 @@ void Options_RunMenu(void) {
                     func_8003F6AC(2);
                     if (Options_RunClearSavePrompt(0, sel, flags) != 0 && Options_RunClearSavePrompt(1, sel, flags) != 0) {
                         flags = 0;
-                        Save_InitializeBank3();
+                        Save_ResetAll();
                     }
                     break;
                 case 3:
@@ -459,7 +463,7 @@ void Options_RunMenu(void) {
         func_80006780();
     } while (done == 0);
     if (done == 1) {
-        diff = func_80025214() ^ flags;
+        diff = Save_GetOptionFlags() ^ flags;
         if (diff != 0) {
             if (diff & 1) {
                 if (flags & 1) {
@@ -475,7 +479,7 @@ void Options_RunMenu(void) {
                     func_800418F0(1);
                 }
             }
-            func_80025224(flags);
+            Save_SetOptionFlags(flags);
             Save_CommitTypedRecord(0x14, 0);
         }
     }
@@ -539,7 +543,7 @@ void func_88401E24(void) {
 void func_88401F38(void) {
     s8 sp1F;
 
-    func_80025100(&sp1F, 0);
+    Save_GetGbTowerSettings(&sp1F, 0);
     func_8001107C(&D_88403648, 1, &D_8F4889B8);
     func_80010F14(&D_88403648, 1, &D_8F4014CC, 0x10000);
     func_80010F9C(&D_88403648, 0x2E);
@@ -790,7 +794,7 @@ void func_884026A4(s32 arg0) {
     func_80010F9C(&D_88403648, 0x4A);
     M2C_FIELD(&D_88403648, u8 *, 2) &= ~0x20;
     if (D_88403358 >= 0) {
-        func_80025100(&sp27, 0);
+        Save_GetGbTowerSettings(&sp27, 0);
         Model_InitDisplayObject(&D_88403378, 0, 0, *((M2C_UNK*)((u8*)&D_884037B0 + (sp27 * 4))));
         func_80010F14(&D_88403378, 1, *((M2C_UNK**)((u8*)&D_88402D74 + (sp27 * 4))), 0xFFFF0000);
         func_80010F9C(&D_88403378, 0x4A);

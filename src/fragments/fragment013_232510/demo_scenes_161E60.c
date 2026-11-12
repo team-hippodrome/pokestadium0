@@ -597,20 +597,24 @@ void VsScene_Play(void) {
     }
 }
 
-M2C_UNK func_80025100(s8 *, M2C_UNK);               /* extern */
-M2C_UNK func_80025168(s8);                          /* extern */
+M2C_UNK Save_GetGbTowerSettings(s8 *, M2C_UNK);               /* extern */
+M2C_UNK Save_SetGbTowerSpeedTier(s8);                          /* extern */
 
-void func_82200DA4(void) {
+/**
+ * Raises the GB Tower speed tier by one (up to 2) and flags the unlock message.
+ * @unverified Read from the code; no cup was cleared in play.
+ */
+void Tournament_UnlockGbTowerSpeedTier(void) {
     s8 sp1F;
 
-    func_80025100(&sp1F, 0);
+    Save_GetGbTowerSettings(&sp1F, 0);
     switch (sp1F) {                                 /* irregular */
     case 0:
-        func_80025168((s8) (sp1F + 1));
+        Save_SetGbTowerSpeedTier((s8) (sp1F + 1));
         M2C_FIELD(D_822036A4, u16 *, 0x1096) = (u16) (M2C_FIELD(D_822036A4, u16 *, 0x1096) | 8);
         return;
     case 1:
-        func_80025168((s8) (sp1F + 1));
+        Save_SetGbTowerSpeedTier((s8) (sp1F + 1));
         M2C_FIELD(D_822036A4, u16 *, 0x1096) = (u16) (M2C_FIELD(D_822036A4, u16 *, 0x1096) | 0x10);
         return;
     }
@@ -656,7 +660,12 @@ void func_82200E2C(void) {
 s32 Save_GetProgressFlags(void);
 void Save_SetProgressFlags(u16 arg0);
 
-void func_82200F08(void) {
+/**
+ * Updates the progress flags after a tournament win: mode 1 (L50～55) sets bit 0 of the high byte at the final; mode 2 (L1～30)
+ * raises the cups-cleared count and sets bit 1 after マスターボールカップ. First clears unlock a GB Tower speed tier.
+ * @unverified Read from the code; no cup was cleared in play.
+ */
+void Tournament_RecordCupClear(void) {
     u16 lo = Save_GetProgressFlags() & 0xFF;
     u16 hi = (Save_GetProgressFlags() >> 8) & 0xFF;
 
@@ -668,7 +677,7 @@ void func_82200F08(void) {
         if (!(hi & 1)) {
             hi |= 1;
             Save_SetProgressFlags((hi << 8) | lo);
-            func_82200DA4();
+            Tournament_UnlockGbTowerSpeedTier();
             Save_CommitTypedRecord(0x14, 0);
         }
     } else if (((DemoState*)D_822036A4)->unk_0000 == 2) {
@@ -683,7 +692,7 @@ void func_82200F08(void) {
             if (!(hi & 2)) {
                 hi |= 2;
                 Save_SetProgressFlags((hi << 8) | lo);
-                func_82200DA4();
+                Tournament_UnlockGbTowerSpeedTier();
                 Save_CommitTypedRecord(0x14, 0);
             }
         }
@@ -936,7 +945,7 @@ extern char D_82203128[];
 extern char D_8220314C[];
 extern u8 D_8F625F00[];
 extern Gfx D_80060290[];
-void func_80025830(void);
+void Tournament_SaveContinueData(void);
 
 /**
  * Asks トーナメントをつづけますか？ (Continue the tournament?) with つづける (Continue) / ちゅうだんする (Quit), plus the GB cartridge warning.
@@ -976,7 +985,7 @@ s32 Tournament_RunContinuePrompt(void) {
     } while (!(gPlayer1Controller->buttonPressed & BTN_A));
     if (sel == 1) {
         Audio_PlaySoundEffectById(0x1D);
-        func_80025830();
+        Tournament_SaveContinueData();
         do {
             VsScene_DrawFrame(0);
             Ui_DrawGradientPanel(0x1E, 0xAA, 0x104, 0x32, &top, &bottom);
@@ -995,7 +1004,7 @@ s32 Tournament_RunContinuePrompt(void) {
     return sel;
 }
 
-void func_82200F08(void);
+void Tournament_RecordCupClear(void);
 s32 Tournament_RunContinuePrompt(void);
 
 s32 func_82201DF8(void) {
@@ -1014,7 +1023,7 @@ s32 func_82201DF8(void) {
             BgStage_RunUntilCondition(0x19, VsScene_DrawFrame);
             Audio_PlayCommand(0x52, 0, 0);
             BgStage_RunUntilCondition(0x37, VsScene_DrawFrame);
-            func_82200F08();
+            Tournament_RecordCupClear();
         } else {
             BgStage_RunUntilCondition(0x55, VsScene_DrawFrame);
             Audio_PlayCommand(0x51, 0, 0);
@@ -1241,7 +1250,7 @@ extern u8 D_0037B090[];
 extern u8 D_00380D60[];
 extern u8 D_00385D60[];
 extern u8 D_0038A540[];
-s32 func_80023C30(void);
+s32 Save_LoadSram(void);
 s32 Font_Init(s32 load_size, s32 side);
 
 #define DEMO_FRAGMENT_ID(vram) ((((u32)(vram) & 0x0FF00000) >> 0x14) - 0x10)
@@ -1279,7 +1288,7 @@ s32 VsScene_Run(s32 arg0, s8* arg1) {
     sp24 = round;
 
     main_pool_push_state('BTLS');
-    func_80023C30();
+    Save_LoadSram();
     Gfx_InitDisplayListBuffers(0x10000, 0);
     D_82203204 = StageContext_Allocate(0, 1, 3, 1, 2, 1);
     D_82203208 = GfxImage_Allocate(0, 2, 0x140, 0xF0, 1);

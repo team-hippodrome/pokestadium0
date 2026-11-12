@@ -155,10 +155,10 @@ u16 Save_Checksum(u8* arg0, s32 arg1);
 s32 Save_RecordIsValid(u8* arg0, s32 arg1);
 void Save_WriteFooter(u8* arg0, s32 arg1, s32 arg2);
 void Save_WriteRecord(u8* arg0, u8* arg1, s32 arg2, s32 arg3);
-void Save_CommitRecord(u8* arg0, s32 arg1, s32 arg2);
-void Save_InvalidateRecord(u8* arg0, s32 arg1, s32 arg2);
+void Save_CommitRecord(); // Called with two or three arguments; the third is ignored.
+void Save_InvalidateRecord(); // Called with two or three arguments; the third is ignored.
 void Save_RestoreRecord(u8* arg0, s32 arg1, s32 arg2);
-void Save_ClearRecord(u8* arg0, s32 arg1, s32 arg2);
+void Save_ClearRecord(); // Called with one or two arguments; the second is ignored.
 void Save_LoadWithRepair(s32 arg0, s32 arg1);
 void GbSave_LoadBattleMonRecord(BattleMon* arg0, GbPokemonNamedRecord* arg1);
 void GbSave_SaveBattleMonRecord(BattleMon* arg0, GbPokemonNamedRecord* arg1);
@@ -179,7 +179,7 @@ s32 Deck_GetSaveEntryTrainerId(s32 arg0, s32 arg1);
 s32 Deck_GetSaveEntryName(s32 arg0, s32 arg1, u8* arg2);
 void Deck_GetSaveEntryNameWrapper(s32 arg0, s32 arg1, char* arg2);
 void Deck_SetSaveEntryTrainerIdAndName(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4);
-s16 Deck_GetSaveEntryCount(s32 arg0, s32 arg1);
+s32 Deck_GetSaveEntryCount(); // Some callers pass no arguments and reuse their own a0/a1.
 void Deck_SetSaveEntryCount(s32 arg0, s32 arg1, s32 arg2);
 void Deck_IncrementSaveEntryCount(s32 arg0, s32 arg1);
 s32 Deck_ReadSaveEntry(s32 arg0, s32 arg1, s32 arg2, u8* arg3);
@@ -205,7 +205,7 @@ s32 Save_AllocateBank(s16 arg0, u32 arg1);
 void Save_InitializeBank0(void);
 void Save_InitializeBank1(void);
 void Save_InitializeBank2(void);
-void Save_InitializeBank3(void);
+void Save_ResetAll(void);
 s32 Save_EnsureBankLoaded(s16 arg0);
 void Save_EnsureAllBanksLoaded(void);
 void Save_EnsureBank3Loaded(void);

@@ -4,7 +4,7 @@
 #include "m2c_macros.h"
 #include "graphics_textures.h"
 
-s32 func_800246A8(M2C_UNK, s32);                    /* extern */
+s32 Deck_IsSaveEntryPresent(M2C_UNK, s32);                    /* extern */
 
 /**
  * Returns the first empty slot of the 16 registered team slots, or -1 when all are used.
@@ -15,7 +15,7 @@ s32 Registration_FindFreeSlot(void) {
 
     var_s0 = 0;
 loop_1:
-    if (func_800246A8(0x10, var_s0) == 0) {
+    if (Deck_IsSaveEntryPresent(0x10, var_s0) == 0) {
         return var_s0;
     }
     var_s0 += 1;
@@ -94,13 +94,13 @@ void Registration_WriteTeam(s8 *arg0, M2C_UNK arg1)
  * pointers, with two counts at offsets 4 and 8. For each index i below the
  * count at offset 8, calls Registration_WriteTeam(entries[i], i). Then, for the
  * remaining indices i up to the count at offset 4, calls
- * func_800245E0(0x10, i) when func_800246A8(0x10, i) is non-zero.
+ * Save_ResetAndCommitTypedRecord(0x10, i) when Deck_IsSaveEntryPresent(0x10, i) is non-zero.
  *
  * What the record fields and the 0x10 argument mean is not established.
  * The separate `base` local reproduces the ROM's register copy (the array
  * pointer is loaded before the first count is tested).
  */
-s32 func_800245E0(M2C_UNK, s32);
+s32 Save_ResetAndCommitTypedRecord(M2C_UNK, s32);
 /**
  * Writes every listed team back to its slot and clears the registered slots after them.
  * @unverified Name and comment guessed from the code.
@@ -121,13 +121,13 @@ void Registration_WriteAllTeams(void *arg0) {
         } while (i < M2C_FIELD(arg0, s32 *, 8));
     }
     for (; i < M2C_FIELD(arg0, s32 *, 4); i++) {
-        if (func_800246A8(0x10, i) != 0) {
-            func_800245E0(0x10, i);
+        if (Deck_IsSaveEntryPresent(0x10, i) != 0) {
+            Save_ResetAndCommitTypedRecord(0x10, i);
         }
     }
 }
 
-s32 func_80024ADC(s32, s32);
+s32 Deck_GetSaveEntryCount(s32, s32);
 void func_80027410(s8*, s8*, s32, s32, s32);
 s32 Deck_GetSaveEntryTrainerId(s32, s32);
 s32 Deck_GetSaveEntryName(s32 arg0, s32 arg1, u8* arg2);
@@ -140,10 +140,10 @@ void Registration_LoadRegisteredTeams(s8* arg0) {
     s32 i;
 
     for (i = 0; i < 0x10; i++) {
-        if (func_800246A8(0x10, i) == 0) {
+        if (Deck_IsSaveEntryPresent(0x10, i) == 0) {
             continue;
         }
-        if (func_80024ADC(0x10, i) == 0) {
+        if (Deck_GetSaveEntryCount(0x10, i) == 0) {
             continue;
         }
         p[0] = 0;

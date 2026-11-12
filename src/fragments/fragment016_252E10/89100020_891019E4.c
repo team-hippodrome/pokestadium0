@@ -726,7 +726,7 @@ s32 func_8002207C(s32);                             /* extern */
 M2C_UNK func_80022118(s32);                         /* extern */
 M2C_UNK func_80022188(s32);                         /* extern */
 M2C_UNK func_800230C4(s32);                         /* extern */
-M2C_UNK func_800243B8();                            /* extern */
+M2C_UNK Save_CommitPokemonRecords();                            /* extern */
 M2C_UNK func_8002D7D4(s32);                         /* extern */
 void LabPCList_DrawListScreen(s8*);
 s32 func_89102930();                                /* extern */
@@ -759,6 +759,6 @@ void LabPCList_SaveChanges(s32 arg0) {
         func_80022188(D_8910E37C);
     }
     if (sp1C & 0x30) {
-        func_800243B8();
+        Save_CommitPokemonRecords();
     }
 }

@@ -146,8 +146,8 @@ void Options_DrawMenu(s32, u8);
 void Options_DrawClearSavePrompt(s32, s32);
 s32 Options_RunClearSavePrompt(s32 arg0, s32 arg1, u8 arg2);
 
-void func_800245E0(s32 arg0, s32 arg1);
-void Save_InitializeBank3(void);
+void Save_ResetAndCommitTypedRecord(s32 arg0, s32 arg1);
+void Save_ResetAll(void);
 
 void func_800273E8(s8* arg0, s32 arg1);
 s32 func_80027214(s8*, s32);
@@ -167,7 +167,7 @@ M2C_UNK func_80006828(M2C_UNK, M2C_UNK *);
 M2C_UNK func_80010F14(M2C_UNK *, M2C_UNK, M2C_UNK *, M2C_UNK); /* extern */
 M2C_UNK func_8001107C(M2C_UNK *, M2C_UNK, M2C_UNK *); /* extern */
 void Model_InitDisplayObject(DisplayObject* display_object, s16 root_id, s16 object_type, ModelNodeView* child); /* extern */
-M2C_UNK func_80025100(s8 *, M2C_UNK);               /* extern */
+M2C_UNK Save_GetGbTowerSettings(s8 *, M2C_UNK);               /* extern */
 extern M2C_UNK D_88402D74;
 extern M2C_UNK D_884037B0;
 extern M2C_UNK D_8F4014CC;

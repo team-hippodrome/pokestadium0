@@ -33,7 +33,6 @@ extern audio_voice_t* mus_releasing_voice_3;
 extern audio_voice_t* mus_releasing_voice_4;
 extern ALHeap* audio_heap;
 extern u32 mus_num_vvoices;
-extern s32 mus_free_voices_count;
 extern s32 mus_releasing_voices_count;
 
 #include "m2c_macros.h"

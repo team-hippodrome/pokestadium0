@@ -1050,7 +1050,7 @@ void func_80022118(s32);
 void func_800230C4(s32);
 s32 func_8002207C(s32);
 void func_80022188(s32);
-void func_800243B8(void);
+void Save_CommitPokemonRecords(void);
 void func_8002D7D4(s32);
 /**
  * Writes the changed boxes back to the save and flushes it.
@@ -1098,7 +1098,7 @@ void PcSort_SaveChanges(Save89006B2C* arg0) {
         func_80022188(D_89019108);
     }
     if (saved != 0) {
-        func_800243B8();
+        Save_CommitPokemonRecords();
     }
 }
 

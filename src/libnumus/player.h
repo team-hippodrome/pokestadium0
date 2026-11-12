@@ -184,7 +184,6 @@ typedef struct bank_remap_descriptor_t {
 
 extern ALHeap* audio_heap;
 extern u32 mus_num_vvoices;
-extern s32 mus_free_voices_count;
 extern s32 mus_releasing_voices_count;
 
 u8* Audio_ClearVoicePlaybackState(channel_t*, UNUSED u8*);
