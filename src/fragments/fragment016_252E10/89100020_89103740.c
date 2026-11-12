@@ -38,7 +38,7 @@ void func_80027804(s8*, s8*, s32, s32);
 void func_89109B60(s8*);
 void func_80027D68(s32, s32);
 void ScrollList_Init(s8*, s8*, s8*, s32, void*, s32, s32);
-void func_891012A8();
+void LabPCList_DrawMonRow();
 void func_89105C54(s8*, s32, s32, s8*, Rgba891024A4);
 extern s32 D_8910D990[];
 extern Rgba891024A4 D_8910A7F4;
@@ -46,7 +46,7 @@ extern u8 D_8910A844[];
 extern u8 D_8910A848[];
 extern u8 D_8910A804[];
 extern u8 D_8910A84C[];
-s32 func_891005CC();
+s32 LabPCList_GetColumnCursorX();
 extern Entry80066AD8 D_80066AD8[];
 s32 Pokemon_GetTypeIndex(u8*, s32);
 M2C_UNK func_8001A384(M2C_UNK, M2C_UNK);
@@ -84,8 +84,8 @@ s32 func_89109898();
 s32 func_89109960();
 void func_8000A460(s8*, s8*);
 u32 func_800566BC(s8*);
-void func_89106424(s8*, void*, s8*, s32, s32);
-void func_89106570(s8*);
+void LabPCList_InitPopupMenu(s8*, void*, s8*, s32, s32);
+void LabPCList_PlacePopup(s8*);
 void func_8910A21C(s8*, s8*, s8*, s32);
 extern s8* D_8910A890[];
 extern u8 D_8910A898[];
@@ -95,32 +95,32 @@ extern s8 D_8910E312[];
 s32 func_8003F6AC();
 s32 ScrollList_UpdateCursor(void*);
 void func_800306E0(void*, s32);
-void func_891020F8(s8*);
+void LabPCList_FormatGatherPrompt(s8*);
 void func_8000A460(s8 *, s8 *);
 u32 func_800566BC(s8*);
-void func_89106424(s8 *, void *, s8 *, s32, s32);
-void func_89106570(s8 *);
+void LabPCList_InitPopupMenu(s8 *, void *, s8 *, s32, s32);
+void LabPCList_PlacePopup(s8 *);
 void Window_SetRect(s8 *, s32, s32, s32, s32);
 extern Rgba891024A4 D_8910A7F4;
 extern s8 *D_8910A8A8[];
 extern s8 D_8910A8B0[];
 extern u8 D_8910A8C8[];
 extern s8 D_8910E358[];
-s32 func_891025D8(void*);
-M2C_UNK func_89101D94();
+s32 LabPCList_UpdateHeaderCursor(void*);
+M2C_UNK LabPCList_ApplyFiltersAndSort();
 extern s32 D_8910E37C;
-s32 func_891066C0(s8*);
+s32 LabPCList_UpdatePopupMenu(s8*);
 void func_80027D68(s32, s32);
 void func_89105C54(s8*, s32, s32, s8*, Rgba891024A4);
-M2C_UNK func_89101D94();
+M2C_UNK LabPCList_ApplyFiltersAndSort();
 extern s32 D_8910D9D0;
 extern s32 D_8910D9D4;
-s32 func_89106C98(void*);
-M2C_UNK func_89101D94();
-s32 func_89107614(s8*);
-void func_89107850(s8*, s8*);
-s32 func_89107EC4(s8*);
-void func_89108108(s8*, s8*);
+s32 LabPCList_UpdateLevelInput(void*);
+M2C_UNK LabPCList_ApplyFiltersAndSort();
+s32 LabPCList_UpdateTypeFilter(s8*);
+void LabPCList_CommitTypeFilter(s8*, s8*);
+s32 LabPCList_UpdateMoveFilter(s8*);
+void LabPCList_CommitMoveFilter(s8*, s8*);
 extern u8 D_8910A8DC[];
 extern s32 D_8910DD34[];
 void func_8002CEEC(s8* arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4);
@@ -140,15 +140,19 @@ extern char D_8910E398[];
 extern char D_8910E3A8[];
 void func_80027868(s8*, s32);
 void func_80027814(s8*, Ref89103740*, s32);
-void func_89103740(Ctx89103740* arg0, Ref89103740* arg1, s32 arg2, s32 arg3, Msg89103740* arg4) {
+/**
+ * Moves the selected Pokemon to location kind `arg2`, box `arg3`, and shows the いどう (moved) message.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabPCList_MoveMonTo(Ctx89103740* arg0, Ref89103740* arg1, s32 arg2, s32 arg3, Msg89103740* arg4) {
     Item89103740* items = M2C_FIELD(arg0, Item89103740**, 0x420);
     Sub89103740* sub = &items[arg2].subs[arg3];
     Sub89103740* old = arg1->sub;
     arg4->unk00 = D_8910DD94;
     arg4->unk04 = 1;
-    func_89103620(D_8910E398, arg1->sub->head->unkC, arg1->sub->unk04);
+    LabPCList_FormatLocationName(D_8910E398, arg1->sub->head->unkC, arg1->sub->unk04);
     arg4->unk08 = D_8910E398;
-    func_89103620(D_8910E3A8, arg2, arg3);
+    LabPCList_FormatLocationName(D_8910E3A8, arg2, arg3);
     arg4->unk0C = D_8910E3A8;
     func_80027868(old->unk14, arg1->unk04);
     LabPCList_ReindexBoxSlots((u8*)old);
@@ -207,12 +211,16 @@ typedef struct Ctx89103858 {
 
 extern u8 D_8910A8E8[];
 void func_89103144(s8*, Ref89103740*, s32);
-s32 func_89103858(Ctx89103858* arg0) {
+/**
+ * Handles the どこへ？ (where to?) menu: party, GB box, Stadium box, or a box list.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 LabPCList_UpdateDestinationMenu(Ctx89103858* arg0) {
     s32 ret = 0;
     s32 cursor;
     s32 top;
 
-    func_891066C0((s8*)&arg0->x);
+    LabPCList_UpdatePopupMenu((s8*)&arg0->x);
     if (*(u16*)(D_800603C0 + 8) & 0x4000) {
         func_8003F6AC(3);
         arg0->unk88 = 7;
@@ -223,9 +231,9 @@ s32 func_89103858(Ctx89103858* arg0) {
                     func_8003F6AC(0x18);
                     cursor = arg0->cursor;
                     top = arg0->cursor - arg0->unkB18C / arg0->unkB170;
-                    func_89103740((Ctx89103740*)arg0, arg0->list->items[arg0->cursor], 0, 0, arg0->msg);
+                    LabPCList_MoveMonTo((Ctx89103740*)arg0, arg0->list->items[arg0->cursor], 0, 0, arg0->msg);
                     func_89109C6C(arg0->unk9648, (s8*)&arg0->unk420);
-                    func_89101D94(arg0);
+                    LabPCList_ApplyFiltersAndSort(arg0);
                     func_800307D4(&arg0->list, cursor, top);
                     arg0->unk88 = 0;
                     ret = 3;
@@ -234,33 +242,33 @@ s32 func_89103858(Ctx89103858* arg0) {
                     func_8003F6AC(0x18);
                     cursor = arg0->cursor;
                     top = arg0->cursor - arg0->unkB18C / arg0->unkB170;
-                    func_89103740((Ctx89103740*)arg0, arg0->list->items[arg0->cursor], 3, 0, arg0->msg);
+                    LabPCList_MoveMonTo((Ctx89103740*)arg0, arg0->list->items[arg0->cursor], 3, 0, arg0->msg);
                     func_89109C6C(arg0->unk9648, (s8*)&arg0->unk420);
-                    func_89101D94(arg0);
+                    LabPCList_ApplyFiltersAndSort(arg0);
                     func_800307D4(&arg0->list, cursor, top);
                     arg0->unk88 = 0;
                     ret = 3;
                     break;
                 case 1:
                     func_8003F6AC(2);
-                    func_89106424(arg0->unk974C, D_8910A8E8, arg0->unk9808, 8, 0);
+                    LabPCList_InitPopupMenu(arg0->unk974C, D_8910A8E8, arg0->unk9808, 8, 0);
                     Window_SetRect(arg0->unk9778, arg0->x + 0xE, arg0->y + 0x1C, 0xE4, 0x1C);
                     arg0->unk9760 |= 0x01000000;
                     arg0->unk97C0 = arg0->unk2C + arg0->unk34;
                     arg0->unk97C4 = arg0->unk30 + arg0->unk38;
-                    func_89106570(arg0->unk974C);
+                    LabPCList_PlacePopup(arg0->unk974C);
                     arg0->unk9764 = D_8910A7F4;
                     func_89103144(arg0->unk978C, arg0->list->items[arg0->cursor], arg0->unk420 + 0x24);
                     arg0->unk88 = 9;
                     break;
                 case 2:
                     func_8003F6AC(2);
-                    func_89106424(arg0->unk974C, D_8910A8E8, arg0->unk9808, 4, 0);
+                    LabPCList_InitPopupMenu(arg0->unk974C, D_8910A8E8, arg0->unk9808, 4, 0);
                     Window_SetRect(arg0->unk9778, arg0->x + 0xE, arg0->y + 0x38, 0xE4, 0x1C);
                     arg0->unk9760 |= 0x01000000;
                     arg0->unk97C0 = arg0->unk2C + arg0->unk34;
                     arg0->unk97C4 = arg0->unk30 + arg0->unk38;
-                    func_89106570(arg0->unk974C);
+                    LabPCList_PlacePopup(arg0->unk974C);
                     arg0->unk9764 = D_8910A7F4;
                     func_89103144(arg0->unk978C, arg0->list->items[arg0->cursor], arg0->unk420 + 0x48);
                     arg0->unk88 = 0xA;
@@ -294,12 +302,16 @@ typedef struct Ctx89103C54 {
     /* 0xB594 */ Msg89103740* msg;
 } Ctx89103C54;
 
-s32 func_89103C54(Ctx89103C54* arg0) {
+/**
+ * Moves the Pokemon to the chosen Game Boy box.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 LabPCList_UpdateGbBoxMenu(Ctx89103C54* arg0) {
     s32 ret = 0;
     s32 cursor;
     s32 top;
 
-    func_891066C0(arg0->unk974C);
+    LabPCList_UpdatePopupMenu(arg0->unk974C);
     if (*(u16*)(D_800603C0 + 8) & 0x4000) {
         func_8003F6AC(3);
         arg0->unk88 = 8;
@@ -308,9 +320,9 @@ s32 func_89103C54(Ctx89103C54* arg0) {
             cursor = arg0->cursor;
             top = arg0->cursor - arg0->unkB18C / arg0->unkB170;
             func_8003F6AC(0x18);
-            func_89103740((Ctx89103740*)arg0, arg0->list->items[arg0->cursor], 1, arg0->index, arg0->msg);
+            LabPCList_MoveMonTo((Ctx89103740*)arg0, arg0->list->items[arg0->cursor], 1, arg0->index, arg0->msg);
             func_89109C6C(arg0->unk9648, arg0->unk0420);
-            func_89101D94(arg0);
+            LabPCList_ApplyFiltersAndSort(arg0);
             func_800307D4(&arg0->list, cursor, top);
             arg0->unk88 = 0;
             ret = 3;
@@ -321,12 +333,16 @@ s32 func_89103C54(Ctx89103C54* arg0) {
     return ret;
 }
 
-s32 func_89103DAC(Ctx89103C54* arg0) {
+/**
+ * Moves the Pokemon to the chosen Stadium (64 cartridge) box.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 LabPCList_UpdateStadiumBoxMenu(Ctx89103C54* arg0) {
     s32 ret = 0;
     s32 cursor;
     s32 top;
 
-    func_891066C0(arg0->unk974C);
+    LabPCList_UpdatePopupMenu(arg0->unk974C);
     if (*(u16*)(D_800603C0 + 8) & 0x4000) {
         func_8003F6AC(3);
         arg0->unk88 = 8;
@@ -335,9 +351,9 @@ s32 func_89103DAC(Ctx89103C54* arg0) {
             cursor = arg0->cursor;
             top = arg0->cursor - arg0->unkB18C / arg0->unkB170;
             func_8003F6AC(0x18);
-            func_89103740((Ctx89103740*)arg0, arg0->list->items[arg0->cursor], 2, arg0->index, arg0->msg);
+            LabPCList_MoveMonTo((Ctx89103740*)arg0, arg0->list->items[arg0->cursor], 2, arg0->index, arg0->msg);
             func_89109C6C(arg0->unk9648, arg0->unk0420);
-            func_89101D94(arg0);
+            LabPCList_ApplyFiltersAndSort(arg0);
             func_800307D4(&arg0->list, cursor, top);
             arg0->unk88 = 0;
             ret = 3;
@@ -456,7 +472,11 @@ extern char D_8910DE3C[];
 extern s8 D_8910E3B8[];
 void func_8910A764(s32, u8*, s32, Msg891041D8*);
 
-void func_891041D8(u8** arg0, s32 arg1, s32 arg2, Msg891041D8* arg3) {
+/**
+ * Uses a PP Up on move `arg2` of the Pokemon and writes the result message.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabPCList_ApplyPpUpItem(u8** arg0, s32 arg1, s32 arg2, Msg891041D8* arg3) {
     u8* ptr;
     s32 base_pp;
     s32 step;
@@ -484,7 +504,11 @@ void func_891041D8(u8** arg0, s32 arg1, s32 arg2, Msg891041D8* arg3) {
 u8 Move_GetIdFromTableIndex(s32 arg0);
 void LabPCList_ConsumeUsedTmItem(u8** arg0);
 
-void func_89104314(u8** arg0, u8** arg1, s32 arg2) {
+/**
+ * Teaches the TM or HM move `arg1` in move slot `arg2` (item ids from 0xC9 are TMs, below are HMs).
+ * @unverified Name and comment guessed from the code.
+ */
+void LabPCList_TeachTmHmMove(u8** arg0, u8** arg1, s32 arg2) {
     u8* ptr;
     s32 var_a0;
 
@@ -504,15 +528,19 @@ void func_89104314(u8** arg0, u8** arg1, s32 arg2) {
     *(s32*)(arg0[0] + 0x10) = 1;
 }
 
-s32 func_89102700();
-s32 func_89102AB8(s8*);
+s32 LabPCList_UpdateBrowse();
+s32 LabPCList_UpdateSortMenu(s8*);
 s32 func_89102C40(s8*);
-s32 func_89102EC8(s8*);
-s32 func_891033A0(s8*);
-s32 func_89103C54();
-s32 func_89103DAC();
+s32 LabPCList_RunLevelFilter(s8*);
+s32 LabPCList_UpdateMonMenu(s8*);
+s32 LabPCList_UpdateGbBoxMenu();
+s32 LabPCList_UpdateStadiumBoxMenu();
 s32 Ui_CheckConfirmPressed(void*);
-s32 func_891043BC(s8* arg0) {
+/**
+ * Runs the list window's state machine (browse, sort menu, filters, moves).
+ * @unverified Name and comment guessed from the code.
+ */
+s32 LabPCList_UpdateList(s8* arg0) {
     s32 ret = 0;
 
     if (M2C_FIELD(arg0, s32*, 0x28) == 0) {
@@ -520,37 +548,37 @@ s32 func_891043BC(s8* arg0) {
     }
     switch (M2C_FIELD(arg0, u32*, 0x88)) {
         case 0:
-            ret = func_89102700(arg0);
+            ret = LabPCList_UpdateBrowse(arg0);
             break;
         case 1:
-            ret = func_891028CC(arg0);
+            ret = LabPCList_UpdateSourceSelect(arg0);
             break;
         case 2:
-            ret = func_89102AB8(arg0);
+            ret = LabPCList_UpdateSortMenu(arg0);
             break;
         case 3:
             ret = func_89102C40(arg0);
             break;
         case 4:
-            ret = func_89102EC8(arg0);
+            ret = LabPCList_RunLevelFilter(arg0);
             break;
         case 5:
-            ret = func_89102FBC(arg0);
+            ret = LabPCList_RunTypeFilter(arg0);
             break;
         case 6:
-            ret = func_89103080(arg0);
+            ret = LabPCList_RunMoveFilter(arg0);
             break;
         case 7:
-            ret = func_891033A0(arg0);
+            ret = LabPCList_UpdateMonMenu(arg0);
             break;
         case 8:
-            ret = func_89103858((Ctx89103858*)arg0);
+            ret = LabPCList_UpdateDestinationMenu((Ctx89103858*)arg0);
             break;
         case 9:
-            ret = func_89103C54(arg0);
+            ret = LabPCList_UpdateGbBoxMenu(arg0);
             break;
         case 10:
-            ret = func_89103DAC(arg0);
+            ret = LabPCList_UpdateStadiumBoxMenu(arg0);
             break;
         case 11:
         case 12:
@@ -564,30 +592,32 @@ s32 func_891043BC(s8* arg0) {
 
 /**
  * Clears the first word of arg0 and initialises the sub-objects at offsets 4
- * and 0xB7E4 with func_891003A4(arg0 + 4, 0x26, 0x48, arg0 + 0xB7E4). What the
+ * and 0xB7E4 with LabPCList_InitListWindow(arg0 + 4, 0x26, 0x48, arg0 + 0xB7E4). What the
  * object is is not established.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_891044F0(void* arg0) {
+void LabPCList_InitScreen(void* arg0) {
     M2C_FIELD(arg0, s32*, 0) = 0;
-    func_891003A4((s8*)arg0 + 4, 0x26, 0x48, (s8*)arg0 + 0xB7E4);
+    LabPCList_InitListWindow((s8*)arg0 + 4, 0x26, 0x48, (s8*)arg0 + 0xB7E4);
 }
 
 void func_8002CA34(s8*, s32, s32);
 void Save_DrawReportingWindow(s8*);
 s32 func_8002CD7C(s8*);
-void func_89102A04(s8*);
-void func_891084B4(s8*, s32, s32, s8*, s8*, s32);
-s32 func_891089BC(s8*);
-void func_89108F14(s8*, s32, s32, s8*);
-s32 func_89109174(s8*);
+void LabPCList_SaveChanges(s8*);
+void LabPCList_InitItemWindow(s8*, s32, s32, s8*, s8*, s32);
+s32 LabPCList_UpdateItemWindow(s8*);
+void LabPCList_InitMessageWindow(s8*, s32, s32, s8*);
+s32 LabPCList_UpdateMessageWindow(s8*);
 void func_8910A4C8(s8*, s32);
-/*
+/**
  * Per-frame update for a four-state object at arg0 (state word at offset 0).
  * Returns 1 when the caller should leave this screen. The sub-objects at
- * 4, 0xB59C, 0xB600 and 0xB7B4 are driven by the func_891043BC,
- * func_8002CD7C, func_891089BC and func_89109174 updates.
+ * 4, 0xB59C, 0xB600 and 0xB7B4 are driven by the LabPCList_UpdateList,
+ * func_8002CD7C, LabPCList_UpdateItemWindow and LabPCList_UpdateMessageWindow updates.
+ * @unverified Name guessed from the code; comment kept.
  */
-s32 func_8910452C(s8* arg0) {
+s32 LabPCList_UpdateScreen(s8* arg0) {
     s32 ret = 0;
     s32 r;
     s8* sub;
@@ -595,7 +625,7 @@ s32 func_8910452C(s8* arg0) {
     switch (M2C_FIELD(arg0, s32*, 0)) {
         case 0:
             sub = arg0 + 4;
-            r = func_891043BC(sub);
+            r = LabPCList_UpdateList(sub);
             if (r == 1) {
                 if (M2C_FIELD(arg0, s32*, 0xB55C) != 0) {
                     func_8002CA34(arg0 + 0xB59C, 0xCA, 0xAD);
@@ -605,11 +635,11 @@ s32 func_8910452C(s8* arg0) {
                 }
             } else if (r == 2) {
                 func_8910A4C8(arg0 + 0xB000, (*M2C_FIELD(arg0, s32***, 0xB164))[M2C_FIELD(arg0, s32*, 0xB16C)] + 8);
-                func_891084B4(arg0 + 0xB600, M2C_FIELD(sub, s32*, 0) + 0xAB, M2C_FIELD(sub, s32*, 4) + 0xD, sub + 0xAFFC,
+                LabPCList_InitItemWindow(arg0 + 0xB600, M2C_FIELD(sub, s32*, 0) + 0xAB, M2C_FIELD(sub, s32*, 4) + 0xD, sub + 0xAFFC,
                               sub + 0xB008, (*M2C_FIELD(sub, s32***, 0xB160))[M2C_FIELD(sub, s32*, 0xB168)]);
                 M2C_FIELD(arg0, s32*, 0) = 2;
             } else if (r == 3) {
-                func_89108F14(arg0 + 0xB7B4, 0xB6, 0xEA, arg0 + 0xB7E4);
+                LabPCList_InitMessageWindow(arg0 + 0xB7B4, 0xB6, 0xEA, arg0 + 0xB7E4);
                 M2C_FIELD(arg0, s32*, 0) = 3;
             }
             break;
@@ -622,7 +652,7 @@ s32 func_8910452C(s8* arg0) {
                 switch (r) {
                     case 1:
                         Save_DrawReportingWindow(sub);
-                        func_89102A04(arg0 + 4);
+                        LabPCList_SaveChanges(arg0 + 4);
                         ret = 1;
                         break;
                     case 2:
@@ -632,7 +662,7 @@ s32 func_8910452C(s8* arg0) {
             }
             break;
         case 2:
-            r = func_891089BC(arg0 + 0xB600);
+            r = LabPCList_UpdateItemWindow(arg0 + 0xB600);
             if (r == -1) {
                 M2C_FIELD(arg0, s32*, 0) = 0;
             } else {
@@ -647,24 +677,24 @@ s32 func_8910452C(s8* arg0) {
                             LabPCList_ApplyVitaminItem((u8**)a0, (u8**)a1, (Msg89103F04*)(arg0 + 0xB7E4));
                             break;
                         case 2:
-                            func_891041D8((u8**)a0, a1, M2C_FIELD(arg0, s32*, 0xB744), (Msg891041D8*)(arg0 + 0xB7E4));
+                            LabPCList_ApplyPpUpItem((u8**)a0, a1, M2C_FIELD(arg0, s32*, 0xB744), (Msg891041D8*)(arg0 + 0xB7E4));
                             break;
                         case 3:
-                            func_89104314((u8**)a0, (u8**)a1, M2C_FIELD(arg0, s32*, 0xB744));
+                            LabPCList_TeachTmHmMove((u8**)a0, (u8**)a1, M2C_FIELD(arg0, s32*, 0xB744));
                             break;
                     }
                     M2C_FIELD(arg0, s32*, off) = 1;
                     if (r == 3) {
                         M2C_FIELD(arg0, s32*, 0) = 0;
                     } else {
-                        func_89108F14(arg0 + 0xB7B4, 0xB6, 0xEA, arg0 + 0xB7E4);
+                        LabPCList_InitMessageWindow(arg0 + 0xB7B4, 0xB6, 0xEA, arg0 + 0xB7E4);
                         M2C_FIELD(arg0, s32*, 0) = 3;
                     }
                 }
             }
             break;
         case 3:
-            if (func_89109174(arg0 + 0xB7B4) == 1) {
+            if (LabPCList_UpdateMessageWindow(arg0 + 0xB7B4) == 1) {
                 M2C_FIELD(arg0, s32*, 0) = 0;
             }
             break;
@@ -675,7 +705,11 @@ s32 func_8910452C(s8* arg0) {
 M2C_UNK Ui_DrawTintedScreenBackground(M2C_UNK, M2C_UNK, u8, u8, s32); /* extern */
 extern M2C_UNK D_8910A7F0;
 
-void func_89104818(void) {
+/**
+ * Draws the tinted terminal screen background.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabPCList_DrawBackground(void) {
     Ui_DrawTintedScreenBackground(0x38, 0x1E0, M2C_FIELD(&D_8910A7F0, u8 *, 0), M2C_FIELD(&D_8910A7F0, u8 *, 1), (s32) M2C_FIELD(&D_8910A7F0, u8 *, 2));
 }
 
@@ -683,7 +717,7 @@ void func_800069CC(void);
 s32 func_8002AAC4(void*);
 void func_8002CAD0(void*);
 void PcSort_DrawUseItemPrompt(void*);
-void func_89108F94(void*);
+void LabPCList_DrawMessageWindow(void*);
 
 /**
  * Draws the lab PC list for its current state.
@@ -694,20 +728,20 @@ M2C_UNK LabPCList_DrawScreen(M2C_UNK* arg0) {
     switch (*arg0) {
         case 0:
             if (func_8002AAC4(arg0 + 1) != 0) {
-                func_89104818();
+                LabPCList_DrawBackground();
             }
             LabPCList_DrawListScreen(arg0 + 1);
             break;
         case 1:
             if (func_8002AAC4(arg0 + 1) != 0) {
-                func_89104818();
+                LabPCList_DrawBackground();
             }
             LabPCList_DrawListScreen(arg0 + 1);
             func_8002CAD0((s8*)arg0 + 0xB59C);
             break;
         case 2:
             if (func_8002AAC4(arg0 + 1) != 0) {
-                func_89104818();
+                LabPCList_DrawBackground();
             }
             if (func_8002AAC4((s8*)arg0 + 0xB600) != 0) {
                 LabPCList_DrawListScreen(arg0 + 1);
@@ -716,16 +750,16 @@ M2C_UNK LabPCList_DrawScreen(M2C_UNK* arg0) {
             break;
         case 3:
             if (func_8002AAC4(arg0 + 1) != 0) {
-                func_89104818();
+                LabPCList_DrawBackground();
             }
             LabPCList_DrawListScreen(arg0 + 1);
-            func_89108F94((s8*)arg0 + 0xB7B4);
+            LabPCList_DrawMessageWindow((s8*)arg0 + 0xB7B4);
             break;
     }
 }
 
 void func_80027FF8(void*, s32);
-void func_891044F0(void*);
+void LabPCList_InitScreen(void*);
 extern M2C_UNK D_8910E380;
 extern M2C_UNK D_8910E3D0;
 
@@ -737,7 +771,7 @@ void BattlePrep_UpdateSingleBattleIntroFrame(void) {
     if (D_8910E37C != -1) {
         func_80027FF8(&D_8910E380, D_8910E37C);
     }
-    func_891044F0(&D_8910E3D0);
+    LabPCList_InitScreen(&D_8910E3D0);
 }
 
 typedef struct Col891049E8 { u8 r, g, b, a; } Col891049E8;
@@ -745,7 +779,7 @@ extern s32 D_8910A908;
 extern s32 D_8910A90C;
 /*
  * Second name for D_8910A908. The fade-out store in this function family
- * (also func_8200579C, func_8900429C, func_891049E8, func_8A101B30) does not
+ * (also func_8200579C, func_8900429C, LabPCList_UpdateFade, func_8A101B30) does not
  * share the counter's address with the load before it, which only happens
  * when the two accesses name different symbols.
  */
@@ -753,7 +787,11 @@ extern s32 D_8910A908_2;
 extern M2C_UNK D_8910DE44;
 M2C_UNK GbSave_DrawSummaryBar(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
 void func_8002C8D8(Col891049E8*, Col891049E8, f32);
-s32 func_891049E8(s32 arg0) {
+/**
+ * Steps the screen fade; returns once eight frames have passed.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 LabPCList_UpdateFade(s32 arg0) {
     Col891049E8 sp2C;
     M2C_UNK *var_a1;
     s32 n;
@@ -786,15 +824,19 @@ s32 func_891049E8(s32 arg0) {
 
 M2C_UNK func_8000B1FC();                            /* extern */
 M2C_UNK func_8000B220();                            /* extern */
-s32 func_8910452C(s8*);
+s32 LabPCList_UpdateScreen(s8*);
 M2C_UNK LabPCList_DrawScreen(M2C_UNK *);                   /* extern */
 extern M2C_UNK D_8910E3D0;
 
-void func_89104B08(s32 arg0) {
+/**
+ * One frame of the Pokemon list screen.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabPCList_RunFrame(s32 arg0) {
     func_8000B1FC();
     func_8000B220();
     LabPCList_DrawScreen(&D_8910E3D0);
-    func_8910452C(&D_8910E3D0);
+    LabPCList_UpdateScreen(&D_8910E3D0);
 }
 
 extern u8 D_01000000[];
@@ -806,10 +848,10 @@ extern u8 D_004076E0[];
 extern u8 D_88000000[];
 extern u8 D_00235D70[];
 extern u8 D_00238BD0[];
-s32 func_891049E8(s32);
+s32 LabPCList_UpdateFade(s32);
 
-/*
- * func_89104B48
+/**
+ * LabPCList_Init
  *
  * Fragment entry point.  It has the same steps as LabTerminal_Init (and the Pokedex
  * entry function Pokedex_Init), differing only in the functions it calls in
@@ -824,26 +866,27 @@ s32 func_891049E8(s32);
  *      D_01000000 / D_04000000.
  *   4. BattlePrep_UpdateSingleBattleIntroFrame() and StageLoader_UpdateSegments() are called.
  *   5. BgStage_RunUntilCondition is run three times, with timer values 8, 0
- *      and 8: the first and third with callback func_891049E8, the second
- *      with func_89104B08.  What those callbacks do is not established
- *      (func_891049E8 is still assembly).
+ *      and 8: the first and third with callback LabPCList_UpdateFade, the second
+ *      with LabPCList_RunFrame.  What those callbacks do is not established
+ *      (LabPCList_UpdateFade is still assembly).
  *   6. StageLoader_WaitForRetrace() and main_pool_pop_state('TERM').
  *   7. Fragment_QueueCall queues a call to the fragment whose id comes from
  *      the address D_88000000 (bits 20-27, minus 0x10), with the ROM range
  *      D_00235D70..D_00238BD0.
  *
  * Returns 0x8040.
+ * @unverified Name guessed from the code; comment kept.
  */
-s32 func_89104B48(s32 arg0, s32 arg1) {
+s32 LabPCList_Init(s32 arg0, s32 arg1) {
     main_pool_push_state('TERM');
     func_8001A194(0x3C, 0);
     Asset_LoadToSegment(((u32)D_01000000 & 0x0F000000) >> 0x18, D_002E0BE0, D_002E2B90, 0);
     Asset_LoadToSegment(((u32)D_04000000 & 0x0F000000) >> 0x18, D_00400F70, D_004076E0, 0);
     BattlePrep_UpdateSingleBattleIntroFrame();
     StageLoader_UpdateSegments();
-    BgStage_RunUntilCondition(8, func_891049E8);
-    BgStage_RunUntilCondition(0, func_89104B08);
-    BgStage_RunUntilCondition(8, func_891049E8);
+    BgStage_RunUntilCondition(8, LabPCList_UpdateFade);
+    BgStage_RunUntilCondition(0, LabPCList_RunFrame);
+    BgStage_RunUntilCondition(8, LabPCList_UpdateFade);
     StageLoader_WaitForRetrace();
     main_pool_pop_state('TERM');
     Fragment_QueueCall(((((u32)D_88000000) & 0x0FF00000) >> 0x14) - 0x10, D_00235D70, D_00238BD0, 0, 0);

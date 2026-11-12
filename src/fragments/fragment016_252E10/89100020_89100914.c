@@ -46,7 +46,7 @@ extern char D_8910DB7C[];
 extern char D_8910DB88[];
 extern char D_8910DB94[];
 extern char D_8910DBA0[];
-s32 func_891005CC(Ctx89100914* arg0);
+s32 LabPCList_GetColumnCursorX(Ctx89100914* arg0);
 void func_80029028(s32, s32, s32, s32, Color_RGBA8);
 void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
 void Font_SetColorForFlags(s32);
@@ -74,7 +74,7 @@ void LabPCList_DrawDetailColumns(Ctx89100914* arg0, s32 arg1, s32 arg2, s32 arg3
         x += arg0->widths[i];
     }
     if (arg3 & 0x10) {
-        Ui_FillRectHighlighted(func_891005CC(arg0) + 1, arg2 + 1, arg0->widths[arg0->ranges[arg0->mode] + arg0->cursor - 2] - 2, 0x12, *(Color_RGBA8*)D_8910A860);
+        Ui_FillRectHighlighted(LabPCList_GetColumnCursorX(arg0) + 1, arg2 + 1, arg0->widths[arg0->ranges[arg0->mode] + arg0->cursor - 2] - 2, 0x12, *(Color_RGBA8*)D_8910A860);
     }
     gSPDisplayList(gDisplayListHead++, D_80073450);
     gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
@@ -174,7 +174,11 @@ M2C_UNK func_8001AA9C(u8, u8, u8, u8);
 M2C_UNK func_8001AB6C();
 M2C_UNK func_8001ABBC();
 
-void func_89100F1C(s32 arg0, s32 arg1, u8* arg2, s32 arg3) {
+/**
+ * Draws the colored type icon for type slot `arg3` of Pokemon `arg2`.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabPCList_DrawTypeIcon(s32 arg0, s32 arg1, u8* arg2, s32 arg3) {
     Color82000BC4 c;
     s32 idx;
 

@@ -61,7 +61,7 @@ void func_89109B60(s8*);
 M2C_UNK func_89109C6C(s32, s32);                    /* extern */
 void func_80027D68(s32, s32);
 void ScrollList_Init(s8*, s8*, s8*, s32, void*, s32, s32);
-void func_891012A8();
+void LabPCList_DrawMonRow();
 void func_89105C54(s8*, s32, s32, s8*, Rgba891024A4);
 extern s32 D_8910D990[];
 extern Rgba891024A4 D_8910A7F4;
@@ -96,7 +96,7 @@ typedef struct Ctx89100688 {
 } Ctx89100688;
 void func_891000BC(s32 arg0);
 void func_89100294(Ctx89100294* arg0);
-s32 func_891005CC(Ctx89100688* arg0);
+s32 LabPCList_GetColumnCursorX(Ctx89100688* arg0);
 extern M2C_UNK D_800734A8;
 
 
@@ -121,7 +121,11 @@ void func_8002BAB8(s32, s32, s32, s32);
 void Font_SetColorForFlags(s32);
 void func_89101238(s32, s32, s8*, s32, s32);
 
-void func_891012A8(s32 x, s32 y, Entry891012A8 *entry, s32 row, s32 flags, Ctx891012A8 *ctx)
+/**
+ * Draws one Pokemon row of the list with the columns of the current detail page.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabPCList_DrawMonRow(s32 x, s32 y, Entry891012A8 *entry, s32 row, s32 flags, Ctx891012A8 *ctx)
 {
   s32 col;
   s32 cx;
@@ -195,7 +199,7 @@ void func_891012A8(s32 x, s32 y, Entry891012A8 *entry, s32 row, s32 flags, Ctx89
         case 4:
 
         case 5:
-          func_89100F1C(cx + 4, y + 2, &entry->species, col - 4);
+          LabPCList_DrawTypeIcon(cx + 4, y + 2, &entry->species, col - 4);
           break;
 
         case 6:
@@ -241,7 +245,7 @@ void func_891012A8(s32 x, s32 y, Entry891012A8 *entry, s32 row, s32 flags, Ctx89
 }
 
 /**
- * Fields of the scrolling list menu used by func_8910179C (same layout as GridMenu80031004
+ * Fields of the scrolling list menu used by LabPCList_DrawRowCursor (same layout as GridMenu80031004
  * in src/2E480.c; offsets not listed are unknown/unused here).
  */
 typedef struct ListMenu8910179C {
@@ -258,8 +262,9 @@ typedef struct ListMenu8910179C {
  * Draws a fixed-size (0x50 x 0x14) cursor rectangle via Ui_DrawRoundedFrame for a scrolling list
  * menu: x = arg1 + 0x26, y = scrollTarget + arg2 - scroll, minus (cellHeight - 1) when flag
  * 0x400 is set; colour read from D_80073520. Compare func_80031004 and func_8002F32C.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_8910179C(ListMenu8910179C* arg0, s32 arg1, s32 arg2) {
+void LabPCList_DrawRowCursor(ListMenu8910179C* arg0, s32 arg1, s32 arg2) {
     s32 y;
 
     y = arg0->scrollTarget + arg2 - arg0->scroll;

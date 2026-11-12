@@ -605,7 +605,7 @@ extern s32 D_820090D4;
 extern s32 D_820090D8;
 /*
  * Second name for D_820090D4. The fade-out store in this function family
- * (also func_8200579C, func_8900429C, func_891049E8, func_8A101B30) does not
+ * (also func_8200579C, func_8900429C, LabPCList_UpdateFade, func_8A101B30) does not
  * share the counter's address with the load before it, which only happens
  * when the two accesses name different symbols.
  */

@@ -727,7 +727,11 @@ s32 func_89106254(s8 *arg0) {
     return ret;
 }
 
-void func_89106384(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s8* arg5) {
+/**
+ * Draws one popup menu row with the selection highlight.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabPCList_DrawPopupRow(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s8* arg5) {
     s32 temp_v0 = M2C_FIELD(arg5, s32*, 8) - 0xC;
 
     if (arg4 & 0x10) {
@@ -740,7 +744,11 @@ void func_89106384(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s8* arg5)
     Font_EndTexturedTextRendering();
 }
 
-void func_89106424(s8 *arg0, s32 *arg1, s32 arg2, s32 arg3, s32 arg4) {
+/**
+ * Sets up a popup menu sized to its widest string.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabPCList_InitPopupMenu(s8 *arg0, s32 *arg1, s32 arg2, s32 arg3, s32 arg4) {
     s32 i;
     s32 w;
     s32 max = 0;
@@ -755,7 +763,7 @@ void func_89106424(s8 *arg0, s32 *arg1, s32 arg2, s32 arg3, s32 arg4) {
     }
     func_80027804(arg0 + 0x64, arg1, arg3, arg3);
     h = max * 0x14 + 0x10;
-    Menu_Init(arg0 + 0x40, arg0 + 0x64, arg2, func_89106384, h, 0x1C);
+    Menu_Init(arg0 + 0x40, arg0 + 0x64, arg2, LabPCList_DrawPopupRow, h, 0x1C);
     M2C_FIELD(arg0, s32 *, 0x60) |= 0x10000;
     Window_SetRect(arg0, 0, 0, h + 0xC, M2C_FIELD(arg0, s32 *, 0x6C) * 0x1C + 0x14);
     M2C_FIELD(arg0, s32 *, 0x24) = 0;
@@ -790,16 +798,17 @@ typedef struct Popup89106570 {
     /* 0x78 */ s32 limitY;
 } Popup89106570;
 
-/*
- * func_89106570
+/**
+ * LabPCList_PlacePopup
  *
  * Places a popup next to its anchor rectangle while keeping it inside the
  * limits at +0x74/+0x78.  With flag 0x01000000 it goes to the right of the
  * anchor (or to its left when that would overflow) and is pushed up by the
  * overflow, at least 8; otherwise it goes below the anchor (or above it) and
  * is pushed left the same way.  Field names describe that geometry only.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_89106570(Popup89106570* arg0) {
+void LabPCList_PlacePopup(Popup89106570* arg0) {
     s32 over;
 
     if (arg0->flags & 0x01000000) {
@@ -833,7 +842,11 @@ void func_89106570(Popup89106570* arg0) {
 s32 func_8002AE6C();                                /* extern */
 M2C_UNK Menu_DrawItems(s32, s32, s32, s32, s8 *);  /* extern */
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-void func_8910666C(s8 *arg0, s32 arg1)
+/**
+ * Draws a popup menu's items.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabPCList_DrawPopupMenu(s8 *arg0, s32 arg1)
 {
   s8 *new_var; // FAKE: permuter temp
   if (func_8002AE6C() == 0)
@@ -851,7 +864,11 @@ void func_8910666C(s8 *arg0, s32 arg1)
 
 M2C_UNK Menu_UpdateCursor(s32);                         /* extern */
 
-s32 func_891066C0(s32 arg0) {
+/**
+ * Moves a popup menu's cursor.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 LabPCList_UpdatePopupMenu(s32 arg0) {
     return Menu_UpdateCursor(arg0 + 0x40);
 }
 
@@ -859,7 +876,11 @@ extern char D_8910E064[];
 extern Rgba8910576C D_8910A94C;
 extern char D_8910E07C[];
 extern char D_8910E088[];
-void func_891066E0(s8* arg0, s32 arg1, s32 arg2, Rgba8910576C arg3, s32 arg4, s32 arg5, s32 arg6) {
+/**
+ * Sets up the レベルのにゅうりょく (level input) window.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabPCList_InitLevelInputWindow(s8* arg0, s32 arg1, s32 arg2, Rgba8910576C arg3, s32 arg4, s32 arg5, s32 arg6) {
     Window_SetRect(arg0, arg1, arg2, 0x13C, 0x50);
     M2C_FIELD(arg0, s32*, 0x24) = 0;
     M2C_FIELD(arg0, s32*, 0x28) = 0;
@@ -900,7 +921,11 @@ void Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
 extern Color_RGBA8 D_80073520;
 M2C_UNK func_8001AA60(s32, s32, s32);
 
-void func_89106864(s8* arg0, s32 x, s32 y, s32 flags) {
+/**
+ * Draws the level input digits and the up/down arrows.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabPCList_DrawLevelInput(s8* arg0, s32 x, s32 y, s32 flags) {
     s32 hl = flags & 2;
     s32 bx;
     s32 v;
@@ -938,7 +963,7 @@ void func_89106864(s8* arg0, s32 x, s32 y, s32 flags) {
 }
 
 void Window_DrawLabeled(s8 *, s32);
-void func_89106864(s8 *, s32, s32, s32);
+void LabPCList_DrawLevelInput(s8 *, s32, s32, s32);
 extern char D_8910E094[];
 /**
  * Draws から (Empty).
@@ -951,8 +976,8 @@ void PcSort_DrawEmptyLabel(s8 *arg0) {
         func_8001AA9C(0xC8, 0xC8, 0xFF, 0xFF);
         func_8001A944(M2C_FIELD(arg0, s32 *, 0) + 0x54, M2C_FIELD(arg0, s32 *, 4) + 0x13, D_8910E094);
         func_8001ABBC();
-        func_89106864(arg0 + 0xA4, M2C_FIELD(arg0, s32 *, 0) + 0xE, M2C_FIELD(arg0, s32 *, 4) + 0x10, (M2C_FIELD(arg0, s32 *, 0xE4) == 0) ? 2 : 0);
-        func_89106864(arg0 + 0xB8, M2C_FIELD(arg0, s32 *, 0) + 0x7A, M2C_FIELD(arg0, s32 *, 4) + 0x10, (M2C_FIELD(arg0, s32 *, 0xE4) == 1) ? 2 : 0);
+        LabPCList_DrawLevelInput(arg0 + 0xA4, M2C_FIELD(arg0, s32 *, 0) + 0xE, M2C_FIELD(arg0, s32 *, 4) + 0x10, (M2C_FIELD(arg0, s32 *, 0xE4) == 0) ? 2 : 0);
+        LabPCList_DrawLevelInput(arg0 + 0xB8, M2C_FIELD(arg0, s32 *, 0) + 0x7A, M2C_FIELD(arg0, s32 *, 4) + 0x10, (M2C_FIELD(arg0, s32 *, 0xE4) == 1) ? 2 : 0);
         Window_DrawLabeled(arg0 + 0x68, (M2C_FIELD(arg0, s32 *, 0xE4) == 2 && M2C_FIELD(arg0, s32 *, 0xD0) == 0) ? 2 : 0);
         Window_DrawLabeled(arg0 + 0x2C, (M2C_FIELD(arg0, s32 *, 0xE4) == 2 && M2C_FIELD(arg0, s32 *, 0xD0) == 1) ? 2 : 0);
     }
@@ -966,7 +991,11 @@ s32 func_8002BC14(s32, s32, s8 *);                /* extern */
 M2C_UNK func_8003F6AC(M2C_UNK);                     /* extern */
 extern s32 D_800603C0;
 
-s32 func_89106C98(s8 *arg0) {
+/**
+ * Handles the level input digits.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 LabPCList_UpdateLevelInput(s8 *arg0) {
     s32 sp1C;
     s32 temp_v0;
     s32 temp_v0_2;
@@ -1092,7 +1121,11 @@ extern u8 D_8910A968[];
 extern u8 D_8910A970[];
 void func_80029028(s32, s32, s32, s32, Color_RGBA8);
 void func_8002B940(s32, s32, s32, s32);
-void func_89106FD8(s32 arg0, s32 arg1, char **arg2, s32 arg3, s32 arg4) {
+/**
+ * Draws one numbered row of the type filter list.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabPCList_DrawTypeFilterRow(s32 arg0, s32 arg1, char **arg2, s32 arg3, s32 arg4) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(arg0, arg1 + 1, 0xAE, 0x1A, *(Color_RGBA8 *)D_8910A968);
     func_80029028(arg0, arg1, 0xAE, 1, *(Color_RGBA8 *)D_8910A970);
@@ -1159,7 +1192,11 @@ extern char D_8910E0B0[];
 extern char D_8910E0B8[];
 extern char D_8910E0C4[];
 
-void func_891071A4(Lab891071A4* arg0, s32 x, s32 y, s32* arg3) {
+/**
+ * Sets up the type filter window.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabPCList_InitTypeFilter(Lab891071A4* arg0, s32 x, s32 y, s32* arg3) {
     s32 i;
 
     Window_SetRect((s8*)arg0, x, y, 0x156, 0x120);
@@ -1173,7 +1210,7 @@ void func_891071A4(Lab891071A4* arg0, s32 x, s32 y, s32* arg3) {
     for (i = 0; i < 0xF; i++) {
         arg0->names[i] = (s8*)&D_80066AD8[i + ((i < 6) ? 0 : 1)];
     }
-    ScrollList_Init(arg0->list, (s32)arg0->unk1D0, (s32)arg0->unk1B0, 8, func_89106FD8, 0xAE, 0x1C);
+    ScrollList_Init(arg0->list, (s32)arg0->unk1D0, (s32)arg0->unk1B0, 8, LabPCList_DrawTypeFilterRow, 0xAE, 0x1C);
     arg0->unk150 |= 0x10000;
     for (i = 0; i < *arg3; i++) {
         M2C_FIELD(arg0, s32*, 0x68 + i * 0x40) = Move_NormalizeDisplayIndex(((u8*)arg3)[4 + i]);
@@ -1216,7 +1253,11 @@ typedef struct Ctx891074CC {
 extern u8 D_800735C4[];
 void func_8002F3C4(s8*, s32, s32, s32, s32);
 
-void func_891074CC(Ctx891074CC* arg0) {
+/**
+ * Draws the type filter window.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabPCList_DrawTypeFilter(Ctx891074CC* arg0) {
     s32 i;
     s32 hl;
     s32 mask;
@@ -1260,7 +1301,11 @@ typedef struct Lab89107614 {
     s32 unk1DC;
 } Lab89107614;
 
-s32 func_89107614(Lab89107614* arg0) {
+/**
+ * Handles the type filter window. Returns -1 on cancel, 1 on confirm, 2 on clear.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 LabPCList_UpdateTypeFilter(Lab89107614* arg0) {
     s32 ret = 0;
     u16 buttons;
 
@@ -1324,7 +1369,11 @@ s32 func_89107614(Lab89107614* arg0) {
     return ret;
 }
 
-void func_89107850(s8* arg0, s32* arg1) {
+/**
+ * Copies the chosen types into the list's filter state.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabPCList_CommitTypeFilter(s8* arg0, s32* arg1) {
     s32 count = 0;
     s32 i;
 
@@ -1339,7 +1388,11 @@ void func_89107850(s8* arg0, s32* arg1) {
 
 extern u8 D_8910AAC0[];
 extern u8 D_8910AAC8[];
-void func_891078E0(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4) {
+/**
+ * Draws one numbered row of the move filter list.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabPCList_DrawMoveFilterRow(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4) {
     s32 idx;
 
     idx = *arg2;
@@ -1397,7 +1450,11 @@ extern char D_8910E0E0[];
 extern char D_8910E0E8[];
 extern char D_8910E0F4[];
 
-void func_89107A60(Lab89107A60* arg0, s32 x, s32 y, u8* arg3) {
+/**
+ * Sets up the move filter window.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabPCList_InitMoveFilter(Lab89107A60* arg0, s32 x, s32 y, u8* arg3) {
     s32 i;
 
     Window_SetRect((s8*)arg0, x, y, 0x194, 0x120);
@@ -1408,7 +1465,7 @@ void func_89107A60(Lab89107A60* arg0, s32 x, s32 y, u8* arg3) {
     arg0->color = D_8910AACC;
     arg0->unk20 = D_8910E0D0;
     func_80027410(arg0->unk33C, D_8910A978, 1, 0xA4, 0xA4);
-    ScrollList_Init(arg0->list, (s32)arg0->unk33C, (s32)arg0->unk1F4, 8, func_891078E0, 0xD4, 0x1C);
+    ScrollList_Init(arg0->list, (s32)arg0->unk33C, (s32)arg0->unk1F4, 8, LabPCList_DrawMoveFilterRow, 0xD4, 0x1C);
     arg0->unk1D0 |= 0x10000;
     for (i = 0; i < M2C_FIELD(arg3, s32*, 4); i++) {
         M2C_FIELD(arg0, s32*, 0x68 + i * 0x40) = D_8910AA1C[arg3[i] - 1];
@@ -1450,7 +1507,11 @@ typedef struct Ctx89107D7C {
 } Ctx89107D7C;
 void func_8002F6C4(s8*, s32, s32, s32, s32);
 
-void func_89107D7C(Ctx89107D7C* arg0) {
+/**
+ * Draws the move filter window.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabPCList_DrawMoveFilter(Ctx89107D7C* arg0) {
     s32 i;
     s32 hl;
     s32 mask;
@@ -1487,7 +1548,11 @@ typedef struct Lab89107EC4 {
     /* 0x34C */ s32 mode;
 } Lab89107EC4;
 
-s32 func_89107EC4(Lab89107EC4* arg0) {
+/**
+ * Handles the move filter window. Returns -1 on cancel, 1 on confirm, 2 on clear.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 LabPCList_UpdateMoveFilter(Lab89107EC4* arg0) {
     s32 ret = 0;
     u16 buttons;
 
@@ -1555,7 +1620,11 @@ s32 func_89107EC4(Lab89107EC4* arg0) {
 
 extern u8 D_8910A978[];
 
-void func_89108108(s8* arg0, s8* arg1) {
+/**
+ * Copies the chosen moves into the list's filter state.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabPCList_CommitMoveFilter(s8* arg0, s8* arg1) {
     s32 count = 0;
     s32 i;
 
@@ -1674,7 +1743,11 @@ extern u8 D_8910AAE4[];
 void func_8000A460(s8*, s8*);
 void ScrollList_Init(s8*, s32, s32, s32, void*, s32, s32);
 void PcSort_DrawItemRow();
-void func_891084B4(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, u8* arg5) {
+/**
+ * Sets up the window that uses an item on the selected Pokemon.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabPCList_InitItemWindow(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, u8* arg5) {
     Window_SetRect(arg0, arg1, arg2, 0x184, 0x16E);
     M2C_FIELD(arg0, s32*, 0x24) = 0;
     M2C_FIELD(arg0, s32*, 0x20) = 0;
@@ -1748,7 +1821,7 @@ void PcSort_DrawUseItemPrompt(s8* arg0) {
             Font_EndTexturedTextRendering();
             switch (M2C_FIELD(arg0, s32*, 0x1B0)) {
                 case 1:
-                    func_8910666C(arg0 + 0x94, 2);
+                    LabPCList_DrawPopupMenu(arg0 + 0x94, 2);
                     break;
                 case 2:
                 case 3:
@@ -1767,7 +1840,11 @@ extern Rgba891084B4 D_8910AAEC;
 s32 ScrollList_UpdateCursor(s8 *);
 void func_89105144(s8 *);
 s32 func_80020974(s32);
-s32 func_891089BC(s8 *arg0)
+/**
+ * Handles the item window. Returns 1 for a vitamin, 2 for PP Up, 3 for a TM or HM.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 LabPCList_UpdateItemWindow(s8 *arg0)
 {
   s32 ret = 0;
   s8 *self = arg0;
@@ -1791,11 +1868,11 @@ s32 func_891089BC(s8 *arg0)
         if (!((*((u16 **) (((s8 *) self) + 0x50)))[*((s32 *) (((s8 *) self) + 0x54))] & 1)) // FAKE: decomp slop, raw pointer casts stand in for struct fields
         {
           func_8003F6AC(2);
-          func_89106424(self + 0x94, (s32 *) D_8910AAE8, (s32) (self + 0x90), 1, 0);
+          LabPCList_InitPopupMenu(self + 0x94, (s32 *) D_8910AAE8, (s32) (self + 0x90), 1, 0);
           Window_SetRect(self + 0xC0, (*((s32 *) (((s8 *) self) + 0))) + 6, (((*((s32 *) (((s8 *) self) + 4))) + (*((s32 *) (((s8 *) self) + 0x80)))) - (*((s32 *) (((s8 *) self) + 0x78)))) + 0x16, (*((s32 *) (((s8 *) self) + 8))) - 0xC, 0x1C); // FAKE: decomp slop, raw pointer casts stand in for struct fields
           *((s32 *) (((s8 *) self) + 0x108)) = ((*((s32 *) (((s8 *) self) + 8))) + (*((s32 *) (((s8 *) self) + 0)))) - 6; // FAKE: decomp slop, raw pointer casts stand in for struct fields
           *((s32 *) (((s8 *) self) + 0x10C)) = (*((s32 *) (((s8 *) self) + 4))) + 0xF6; // FAKE: decomp slop, raw pointer casts stand in for struct fields
-          func_89106570((Popup89106570 *) (self + 0x94));
+          LabPCList_PlacePopup((Popup89106570 *) (self + 0x94));
           *((Rgba891084B4 *) (((s8 *) self) + 0xAC)) = D_8910AAEC;
           *((u32 *) (((s8 *) self) + 0x1B0)) = 1;
         }
@@ -1808,7 +1885,7 @@ s32 func_891089BC(s8 *arg0)
       break;
 
     case 1:
-      if (func_891066C0((s32) (self + 0x94)) == 0)
+      if (LabPCList_UpdatePopupMenu((s32) (self + 0x94)) == 0)
     {
       if (((u16 *) D_800603C0)[4] & 0x4000)
       {
@@ -1963,7 +2040,11 @@ typedef struct Rgba89108F14 {
 extern u8 D_8910AAF4[];
 extern u8 D_8910AAF8[];
 
-void func_89108F14(void* arg0, s32 arg1, s32 arg2, s32 arg3) {
+/**
+ * Sets up the result message window.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabPCList_InitMessageWindow(void* arg0, s32 arg1, s32 arg2, s32 arg3) {
     Window_SetRect((s8*)arg0, arg1, arg2, 0x114, 0x60);
     M2C_FIELD(arg0, s32*, 0x24) = 0;
     M2C_FIELD(arg0, s32*, 0x20) = 0;
@@ -1985,7 +2066,11 @@ extern u8 D_8910D2F0[];
 extern char D_8910E1AC[];
 extern char D_8910E1B0[];
 
-void func_89108F94(s8* arg0) {
+/**
+ * Draws the result message window.
+ * @unverified Name and comment guessed from the code.
+ */
+void LabPCList_DrawMessageWindow(s8* arg0) {
     Entry89108F94* entry;
 
     if (func_8002AE6C() == 0) {
@@ -2014,7 +2099,11 @@ void func_89108F94(s8* arg0) {
 
 M2C_UNK func_8003F6AC(M2C_UNK);                     /* extern */
 
-s32 func_89109174(s32 arg0) {
+/**
+ * Returns 1 once the message has been confirmed.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 LabPCList_UpdateMessageWindow(s32 arg0) {
     s32 var_v1;
 
     var_v1 = 0;
