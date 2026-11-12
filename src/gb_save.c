@@ -1222,7 +1222,7 @@ void func_8002C5A4(s32 x, s32 y, s32 w) {
 
 /** Interpolates a color between gray and the given color. */
 Color_RGBA8 Color_InterpolateFromGray(Color_RGBA8 arg0, f32 arg1) {
-    static Color_RGBA8 D_80075940 = { 0xC8, 0xC8, 0xC8, 0xFF };
+    static Color_RGBA8 D_80075940 = { 0xC8, 0xC8, 0xC8, 0xFF }; // #C8C8C8FF
 
     Color_RGBA8 sp4;
 

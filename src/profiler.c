@@ -167,7 +167,7 @@ void draw_profiler_bar_cpu_keep_max(OSTime start, OSTime end, s16 posY, s16* las
     }
 
     if (ulx < lrx) {
-        draw_profiler_rect(ulx, lrx, posY, GPACK_RGBA5551(160, 200, 248, 1));
+        draw_profiler_rect(ulx, lrx, posY, GPACK_RGBA5551(160, 200, 248, 1)); // #A0C8F8
     }
 }
 
@@ -199,11 +199,11 @@ void draw_profiler_mode_1(void) {
 
     // (yellow)
     draw_profiler_bar_cpu(clockBase, profiler->gameTimes[0], profiler->gameTimes[1], 212,
-                          GPACK_RGBA5551(255, 255, 40, 1));
+                          GPACK_RGBA5551(255, 255, 40, 1)); // #FFFF28
 
     // (orange)
     draw_profiler_bar_cpu(clockBase, profiler->gameTimes[1], profiler->gameTimes[2], 212,
-                          GPACK_RGBA5551(255, 120, 40, 1));
+                          GPACK_RGBA5551(255, 120, 40, 1)); // #FF7828
 
     // we need to get the amount of finished numSoundTimes pairs, so get rid of the odd bit to get the
     // limit of finished pairs.
@@ -212,7 +212,7 @@ void draw_profiler_mode_1(void) {
     // draw the sound update times. (red)
     for (i = 0; i < profiler->numSoundTimes; i += 2) {
         draw_profiler_bar_cpu(clockBase, profiler->soundTimes[i], profiler->soundTimes[i + 1], 212,
-                              GPACK_RGBA5551(255, 40, 40, 1));
+                              GPACK_RGBA5551(255, 40, 40, 1)); // #FF2828
     }
 
     //! RSP and RDP run in parallel, so while they are not absolutely guaranteed to return in order,
@@ -220,9 +220,9 @@ void draw_profiler_mode_1(void) {
     //  Thus, this is not really a bug in practice, but should still be noted that the C doesn't check
     //  this.
     draw_profiler_bar_cpu(clockBase, profiler_2->gfxTimes[0], profiler_2->gfxTimes[1], 216,
-                          GPACK_RGBA5551(255, 255, 40, 1));
+                          GPACK_RGBA5551(255, 255, 40, 1)); // #FFFF28
     draw_profiler_bar_cpu(clockBase, profiler_2->gfxTimes[1], profiler_2->gfxTimes[2], 216,
-                          GPACK_RGBA5551(255, 120, 40, 1));
+                          GPACK_RGBA5551(255, 120, 40, 1)); // #FF7828
 
     // like earlier, toss the odd bit.
     profiler_2->numVblankTimes &= 0xFFFE;
@@ -230,7 +230,7 @@ void draw_profiler_mode_1(void) {
     // render the vblank time pairs. (red)
     for (i = 0; i < profiler_2->numVblankTimes; i += 2) {
         draw_profiler_bar_cpu(clockBase, profiler_2->vblankTimes[i], profiler_2->vblankTimes[i + 1], 216,
-                              GPACK_RGBA5551(255, 40, 40, 1));
+                              GPACK_RGBA5551(255, 40, 40, 1)); // #FF2828
     }
 
     draw_reference_profiler_bars();
@@ -286,26 +286,26 @@ void draw_profiler_mode_0(void) {
 
     // draw sound duration as the first bar. (red)
     clock_start = 0;
-    draw_profiler_bar_cpu(0, clock_start, clock_start + task_start, 212, GPACK_RGBA5551(255, 40, 40, 1));
+    draw_profiler_bar_cpu(0, clock_start, clock_start + task_start, 212, GPACK_RGBA5551(255, 40, 40, 1)); // #FF2828
 
     // draw game execution duration. (yellow)
     clock_start += task_start;
-    draw_profiler_bar_cpu(0, clock_start, clock_start + gameDuration, 212, GPACK_RGBA5551(255, 255, 40, 1));
+    draw_profiler_bar_cpu(0, clock_start, clock_start + gameDuration, 212, GPACK_RGBA5551(255, 255, 40, 1)); // #FFFF28
 
     // draw render duration. (orange)
     clock_start += gameDuration;
-    draw_profiler_bar_cpu(0, clock_start, clock_start + renderDuration, 212, GPACK_RGBA5551(255, 120, 40, 1));
+    draw_profiler_bar_cpu(0, clock_start, clock_start + renderDuration, 212, GPACK_RGBA5551(255, 120, 40, 1)); // #FF7828
 
     draw_profiler_bar_cpu_keep_max(0, clock_start + renderDuration, 212, &s_render_last_max, &s_render_reset_ctr);
 
     // Draw bottom profilers.
 
     // rdp duration (orange)
-    draw_profiler_bar_cpu(0, 0, rdp_duration, 216, GPACK_RGBA5551(255, 120, 40, 1));
+    draw_profiler_bar_cpu(0, 0, rdp_duration, 216, GPACK_RGBA5551(255, 120, 40, 1)); // #FF7828
     // rsp duration (yellow)
-    draw_profiler_bar_cpu(0, 0, rsp_duration, 216, GPACK_RGBA5551(255, 255, 40, 1));
+    draw_profiler_bar_cpu(0, 0, rsp_duration, 216, GPACK_RGBA5551(255, 255, 40, 1)); // #FFFF28
     // vblank duration (red)
-    draw_profiler_bar_cpu(0, 0, vblank, 216, GPACK_RGBA5551(255, 40, 40, 1));
+    draw_profiler_bar_cpu(0, 0, vblank, 216, GPACK_RGBA5551(255, 40, 40, 1)); // #FF2828
 
     draw_profiler_bar_cpu_keep_max(0, rdp_duration, 216, &sRDPLastMax, &sRDPResetCtr);
 

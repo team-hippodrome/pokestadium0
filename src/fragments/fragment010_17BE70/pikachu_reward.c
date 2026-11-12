@@ -250,8 +250,8 @@ void PikachuReward_DrawBlinkingStarIcon(s16 arg0, s16 arg1) {
 
 /** Draws the panel behind the text box. */
 void PikachuReward_DrawTextBoxPanel(s16 arg0, s16 arg1, s16 arg2, s16 arg3) {
-    Color_RGB8 sp24 = { 0x00, 0x00, 0x32 };
-    Color_RGB8 sp20 = { 0x00, 0x00, 0xC8 };
+    Color_RGB8 sp24 = { 0x00, 0x00, 0x32 }; // #000032
+    Color_RGB8 sp20 = { 0x00, 0x00, 0xC8 }; // #0000C8
 
     Ui_DrawGradientPanel(arg0, arg1, arg2, arg3, &sp24, &sp20);
 }

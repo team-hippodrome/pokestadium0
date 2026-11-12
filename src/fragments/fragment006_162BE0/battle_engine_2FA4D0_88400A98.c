@@ -261,8 +261,8 @@ extern u8 D_8F4B2EB0[];
  * Seen in play: draws 「オプション」 with サウンド/じっきょう/バックアップ/おわり; the cursor moves with D-Down.
  */
 void Options_DrawMenu(s32 arg0, u8 arg1) {
-    Color_RGB8 sp44 = {0x00, 0x00, 0x32};
-    Color_RGB8 sp40 = {0x00, 0x00, 0xC8};
+    Color_RGB8 sp44 = {0x00, 0x00, 0x32}; // #000032
+    Color_RGB8 sp40 = {0x00, 0x00, 0xC8}; // #0000C8
     static char *D_88402FA4[] = {D_88403234, D_88403240};
     static char *D_88402FAC[] = {D_8840324C, D_88403254};
     s32 row;
@@ -295,8 +295,8 @@ void Options_DrawMenu(s32 arg0, u8 arg1) {
  * Seen in play: draws 「64のセーブデータをクリアします よろしいですか？」 with はい / いいえ.
  */
 void Options_DrawClearSavePrompt(s32 arg0, s32 arg1) {
-    Color_RGB8 sp4C = { 0x00, 0x00, 0x32 };
-    Color_RGB8 sp48 = { 0x00, 0x00, 0xC8 };
+    Color_RGB8 sp4C = { 0x00, 0x00, 0x32 }; // #000032
+    Color_RGB8 sp48 = { 0x00, 0x00, 0xC8 }; // #0000C8
     UNUSED s32 pad; // FAKE: stack padding
     s16 pos[2];
     s32 temp;

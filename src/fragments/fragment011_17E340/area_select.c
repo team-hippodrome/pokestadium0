@@ -200,8 +200,8 @@ s32 func_81800074(s32 arg0) {
  * bottom color is a brighter blue (R0 G0 B200).
  */
 void func_818000D0(s16 arg0, s16 arg1, s16 arg2, s16 arg3) {
-    Color_RGB8 sp24 = { 0x00, 0x00, 0x32 }; /* top color    */
-    Color_RGB8 sp20 = { 0x00, 0x00, 0xC8 }; /* bottom color */
+    Color_RGB8 sp24 = { 0x00, 0x00, 0x32 }; /* top color    */ // #000032
+    Color_RGB8 sp20 = { 0x00, 0x00, 0xC8 }; /* bottom color */ // #0000C8
 
     Ui_DrawGradientPanel(arg0, arg1, arg2, arg3, &sp24, &sp20);
 }
