@@ -286,7 +286,7 @@ M2C_UNK func_8003F6AC(M2C_UNK);
 extern s32 D_800603C0;
 
 /**
- * Menu-list input handler (same pattern as MonSummary_UpdateMenuCursor and func_8200639C). Returns 0
+ * Menu-list input handler (same pattern as MonSummary_UpdateMenuCursor and FreeBattle_UpdatePopupMenu). Returns 0
  * immediately unless the word at arg0 + 0x28 is 1 or 2. Then, while Menu_UpdateCursor(arg0 + 0x2C)
  * is zero, reads the input result from func_8002BC14(D_800603C0): -1 plays sound
  * func_8003F6AC(3) and returns -1; 1 checks the halfword table at arg0 + 0x30 indexed by the
@@ -1084,7 +1084,7 @@ s32 Registration_UpdateTeamList(s8* arg0) {
  * The count is then copied to arg0 + 0x08.  What the records are is not
  * known from the code alone.
  *
- * func_820008C8 is the same routine with a record size of 0x214.
+ * FreeBattle_BuildTeamPointers is the same routine with a record size of 0x214.
  * @unverified Name guessed from the code; comment kept.
  */
 void Registration_BuildTeamPointers(s32* arg0, s32* arg1) {

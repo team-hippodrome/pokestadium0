@@ -30,7 +30,7 @@ typedef struct {
 } SlotFlags;
 
 M2C_UNK func_8002E3F0();
-void func_82004518(s8*, s32, s32);
+void FreeBattle_SetScreenState(s8*, s32, s32);
 extern s32 D_8200AC58[];
 void func_8001AB6C(void);
 void func_8001A384(s32, s32);
@@ -47,8 +47,8 @@ extern Color82001CCC D_82008F58;
 extern s32 D_82009C50;
 extern s32 D_82009C6C;
 extern s32 D_82009C84;
-void func_82008524(s8* arg0, s32 arg1, s32 arg2, s32 arg3);
-void func_82008870(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+void FreeBattle_InitLevelSumWarning(s8* arg0, s32 arg1, s32 arg2, s32 arg3);
+void FreeBattle_InitRentalConfirm(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 void func_80031B88(FlagOwner*);
 
 void func_82002980(arg0)
@@ -60,7 +60,7 @@ void func_82002980(arg0)
     switch (M2C_FIELD(arg0, s32*, 4)) {
         case 1:
             if (!(M2C_FIELD(arg0, s32*, 0x788) & 2) && M2C_FIELD(arg0, s32*, 0x734) != 0) {
-                func_82000020(D_8200AC58, (M2C_FIELD(arg0, s32*, 0x48) * 6) % 24, 6);
+                FreeBattle_ClearIndices(D_8200AC58, (M2C_FIELD(arg0, s32*, 0x48) * 6) % 24, 6);
                 M2C_FIELD(arg0, s32*, 0x734) = 0;
             }
             panel = arg0 + 0x14;
@@ -70,7 +70,7 @@ void func_82002980(arg0)
             break;
         case 5:
             if (!(M2C_FIELD(arg0, s32*, 0x788) & 2)) {
-                func_82008524(arg0 + 0x428, 0xA6, 0x105, M2C_FIELD(arg0, s32*, 0x744));
+                FreeBattle_InitLevelSumWarning(arg0 + 0x428, 0xA6, 0x105, M2C_FIELD(arg0, s32*, 0x744));
             }
             panel = arg0 + 0x428;
             break;
@@ -94,19 +94,19 @@ void func_82002980(arg0)
             panel = arg0 + 0x14;
             break;
         case 3:
-            func_820009A4(arg0 + 0x5CC, 0x69, 0x7D, (s32)((Slot54*)(arg0 + 0xE4))[M2C_FIELD(arg0, s32*, 0x300)].unk04, (s32)&D_82009C50, M2C_FIELD(arg0, s32*, 0x744));
+            FreeBattle_InitConfirmWindow(arg0 + 0x5CC, 0x69, 0x7D, (s32)((Slot54*)(arg0 + 0xE4))[M2C_FIELD(arg0, s32*, 0x300)].unk04, (s32)&D_82009C50, M2C_FIELD(arg0, s32*, 0x744));
             panel = arg0 + 0x5CC;
             break;
         case 7:
-            func_820009A4(arg0 + 0x5CC, 0x69, 0x7D, (s32)((Slot54*)(arg0 + 0xE4))[M2C_FIELD(arg0, s32*, 0x300)].unk04, (s32)&D_82009C6C, M2C_FIELD(arg0, s32*, 0x744));
+            FreeBattle_InitConfirmWindow(arg0 + 0x5CC, 0x69, 0x7D, (s32)((Slot54*)(arg0 + 0xE4))[M2C_FIELD(arg0, s32*, 0x300)].unk04, (s32)&D_82009C6C, M2C_FIELD(arg0, s32*, 0x744));
             panel = arg0 + 0x5CC;
             break;
         case 9:
-            func_820009A4(arg0 + 0x5CC, 0x69, 0x7D, M2C_FIELD(arg0, s32*, 0x6EC) * 0x50 + *M2C_FIELD(arg0, s32**, 0x6E4), (s32)&D_82009C84, M2C_FIELD(arg0, s32*, 0x744));
+            FreeBattle_InitConfirmWindow(arg0 + 0x5CC, 0x69, 0x7D, M2C_FIELD(arg0, s32*, 0x6EC) * 0x50 + *M2C_FIELD(arg0, s32**, 0x6E4), (s32)&D_82009C84, M2C_FIELD(arg0, s32*, 0x744));
             panel = arg0 + 0x5CC;
             break;
         case 10:
-            func_82008870(arg0 + 0x4DC, 0x7A, 0x10B, M2C_FIELD(arg0, s32*, 0x740) != 0, M2C_FIELD(arg0, s32*, 0x744));
+            FreeBattle_InitRentalConfirm(arg0 + 0x4DC, 0x7A, 0x10B, M2C_FIELD(arg0, s32*, 0x740) != 0, M2C_FIELD(arg0, s32*, 0x744));
             panel = arg0 + 0x4DC;
             break;
         case 12:
@@ -174,8 +174,8 @@ extern s32 D_8200ACFC;
 extern s32 D_8200AD00;
 extern s32 D_8200AC58[];
 extern M2C_UNK D_82009C98;
-void func_82001810();
-extern M2C_UNK func_820020EC;
+void FreeBattle_DrawMonCell();
+extern M2C_UNK FreeBattle_DrawTeamRow;
 void Window_SetRect(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 M2C_UNK ScrollList_Init(s8*, s32, s8*, M2C_UNK, M2C_UNK*, s32, s32);
 M2C_UNK func_80030894(s8*, s8*, s8*, M2C_UNK, s32, M2C_UNK*, s32, s32);
@@ -188,17 +188,18 @@ void func_82002C3C(s8*);
  * access as SlotMenu):
  *   - sets up the base window at +0x14 via Window_SetRect (arg1, arg2, size 0x220 x 0x158),
  *   - zeroes +0x00/+0x38/+0x3C, stores 0x801 at +0x28, &D_82009C98 at +0x34 and arg3 at +0xC4,
- *   - creates the sub-object at +0x40/+0x84 with ScrollList_Init (passing &func_820020EC),
+ *   - creates the sub-object at +0x40/+0x84 with ScrollList_Init (passing &FreeBattle_DrawTeamRow),
  *   - sets bit 0x10000 at +0x60,
  *   - fills the first 0x28 words of D_8200AC58 with -1,
  *   - stores 1 at +0x738, arg4 at +0x73C and the mode arg5 at +0x740, and calls func_82002C3C,
  *   - when arg5 != 0, builds the record view at +0x684 (source D_8200ACFC if arg5 == 1,
  *     otherwise D_8200AD00, with different dimensions), links it through func_80030894
- *     at +0x6E4/+0x694 (passing &func_82001810) and sets bit 0x10000 at +0x704,
+ *     at +0x6E4/+0x694 (passing &FreeBattle_DrawMonCell) and sets bit 0x10000 at +0x704,
  *   - finally calls func_80018168 on D_8200AC50.
  * The meaning of arg1..arg5 beyond what is stored above is not established.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_82002D5C(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
+void FreeBattle_InitEntrySelect(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
     s8* var_s1;
 
     Window_SetRect(arg0 + 0x14, arg1, arg2, 0x220, 0x158);
@@ -207,10 +208,10 @@ void func_82002D5C(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
     M2C_FIELD(arg0, s32*, 0x28) = 0x801;
     M2C_FIELD(arg0, M2C_UNK**, 0x34) = &D_82009C98;
     M2C_FIELD(arg0, s32*, 0xC4) = arg3;
-    ScrollList_Init(arg0 + 0x40, arg3, arg0 + 0x84, 3, &func_820020EC, 0x214, 0x64);
+    ScrollList_Init(arg0 + 0x40, arg3, arg0 + 0x84, 3, &FreeBattle_DrawTeamRow, 0x214, 0x64);
     M2C_FIELD(arg0, s32*, 0x60) = M2C_FIELD(arg0, s32*, 0x60) | 0x10000;
     M2C_FIELD(arg0, s32*, 0) = 0;
-    func_82000020(D_8200AC58, 0, 0x28);
+    FreeBattle_ClearIndices(D_8200AC58, 0, 0x28);
     M2C_FIELD(arg0, s32*, 0x738) = 1;
     M2C_FIELD(arg0, s32*, 0x73C) = arg4;
     M2C_FIELD(arg0, s32*, 0x740) = arg5;
@@ -223,7 +224,7 @@ void func_82002D5C(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
             var_s1 = arg0 + 0x684;
             func_80027410(var_s1, D_8200AD00, 0x50, 0x21, 0x21);
         }
-        func_80030894(arg0 + 0x6E4, var_s1, arg0 + 0x694, 4, 3, &func_82001810, 0x84, 0x32);
+        func_80030894(arg0 + 0x6E4, var_s1, arg0 + 0x694, 4, 3, &FreeBattle_DrawMonCell, 0x84, 0x32);
         M2C_FIELD(arg0, s32*, 0x704) = M2C_FIELD(arg0, s32*, 0x704) | 0x10000;
     }
     func_80018168((s8*)D_8200AC50);
@@ -346,9 +347,9 @@ void func_800189C0(s32, s32);
 void func_800069CC(void);
 void func_8002F3C4(s8*, s32, s32, s32, s32);
 void FreeBattle_DrawRentalListWindow(s8*, s32);
-void func_8200813C(s8*);
-void func_820082EC(s8*);
-void func_82008640(s8*);
+void FreeBattle_DrawDuplicateWarning(s8*);
+void FreeBattle_DrawShortageWarning(s8*);
+void FreeBattle_DrawLevelSumWarning(s8*);
 void FreeBattle_DrawEntryConfirm(s8*);
 void FreeBattle_DrawMonStatusWindow(s8*);
 void func_8002D024(s8*);
@@ -373,7 +374,7 @@ void FreeBattle_DrawRentalScreen(s8* arg0) {
             func_800069CC();
             FreeBattle_DrawRentalListWindow(arg0, 1);
             func_82003234(arg0);
-            func_8200813C(arg0 + 0x320);
+            FreeBattle_DrawDuplicateWarning(arg0 + 0x320);
             break;
         case 6:
         case 8:
@@ -395,14 +396,14 @@ void FreeBattle_DrawRentalScreen(s8* arg0) {
             func_800069CC();
             FreeBattle_DrawRentalListWindow(arg0, 0);
             func_82003234(arg0);
-            func_820082EC(arg0 + 0x370);
+            FreeBattle_DrawShortageWarning(arg0 + 0x370);
             break;
         case 5:
             func_800189C0(D_8200AC50, 0);
             func_800069CC();
             FreeBattle_DrawRentalListWindow(arg0, 0);
             func_82003234(arg0);
-            func_82008640(arg0 + 0x428);
+            FreeBattle_DrawLevelSumWarning(arg0 + 0x428);
             break;
         case 7:
         case 9:
@@ -459,27 +460,28 @@ typedef struct {
     /* 0x784 */ s32 unk_784;
 } SlotMenu;
 
-void func_820080B8(s8*, s32, s32, s32);
-void func_820081C8(s8*, s32, s32, s32, s32);
-s32 func_82001558(void*, s32*);
-s32 func_82000258(Mon82000258*);
+void FreeBattle_InitDuplicateWarning(s8*, s32, s32, s32);
+void FreeBattle_InitShortageWarning(s8*, s32, s32, s32, s32);
+s32 FreeBattle_CountDuplicateSpecies(void*, s32*);
+s32 FreeBattle_AllTriosOverLevelLimit(Mon82000258*);
 
 /**
  * Decides the next state of the six-slot menu. Clears `picked`, then, if `mode`
  * is non-zero, inspects the slots in this order and returns the first result
  * that applies:
- *   1. func_82001558 reports a positive count: call func_820080B8 on the struct at +0x320,
- *      store the reported slot index in `cur`, call func_82002668 on +0x2F8,
+ *   1. FreeBattle_CountDuplicateSpecies reports a positive count: call FreeBattle_InitDuplicateWarning on the struct at +0x320,
+ *      store the reported slot index in `cur`, call FreeBattle_DisableUnpickedRows on +0x2F8,
  *      return 2.
  *   2. func_820001B8 finds a flagged slot: set `picked`, store its index in
  *      `cur`, then return 8 if bit 0 of unk_784 is set, otherwise call
- *      func_820081C8 on the struct at +0x370 and return 4.
- *   3. `mode` is 1 and func_82000258 is non-zero: return 6 if bit 1 of unk_784
+ *      FreeBattle_InitShortageWarning on the struct at +0x370 and return 4.
+ *   3. `mode` is 1 and FreeBattle_AllTriosOverLevelLimit is non-zero: return 6 if bit 1 of unk_784
  *      is set, otherwise 5.
  * Otherwise (including when `mode` is 0) returns 0xA.
  * What the individual return values mean is not established from this function.
+ * @unverified Name guessed from the code; comment kept.
  */
-s32 func_820036A8(SlotMenu* arg0) {
+s32 FreeBattle_CheckEntryRules(SlotMenu* arg0) {
     Slot54* found;
     s32 sp38;
     s32 sp34;
@@ -490,11 +492,11 @@ s32 func_820036A8(SlotMenu* arg0) {
         ret = 0xA;
     } else {
 
-        sp38 = func_82001558(arg0->slots, &sp34);
+        sp38 = FreeBattle_CountDuplicateSpecies(arg0->slots, &sp34);
         if (sp38 > 0) {
-            func_820080B8((s8*)arg0 + 0x320, 0x9C, 0x105, sp38);
+            FreeBattle_InitDuplicateWarning((s8*)arg0 + 0x320, 0x9C, 0x105, sp38);
             arg0->cur = sp34;
-            func_82002668((SlotFlags*)((s8*)arg0 + 0x2F8));
+            FreeBattle_DisableUnpickedRows((SlotFlags*)((s8*)arg0 + 0x2F8));
             ret = 2;
         } else {
             found = func_820001B8(arg0->slots, &sp38);
@@ -504,10 +506,10 @@ s32 func_820036A8(SlotMenu* arg0) {
                 if (arg0->unk_784 & 1) {
                     ret = 8;
                 } else {
-                    func_820081C8((s8*)arg0 + 0x370, 0xA6, 0x105, arg0->unk_744, sp38);
+                    FreeBattle_InitShortageWarning((s8*)arg0 + 0x370, 0xA6, 0x105, arg0->unk_744, sp38);
                     ret = 4;
                 }
-            } else if ((arg0->mode == 1) && (func_82000258(arg0->slots) != 0)) {
+            } else if ((arg0->mode == 1) && (FreeBattle_AllTriosOverLevelLimit(arg0->slots) != 0)) {
                 if (arg0->unk_784 & 2) {
                     ret = 6;
                 } else {
@@ -544,9 +546,13 @@ typedef struct Blk820038B0 {
     s32 w[0x85];
 } Blk820038B0;
 extern u8 D_82009D04[];
-void func_82001BB4();
+void FreeBattle_DrawSlotCell();
 
-s32 func_820038B0(s8 *arg0)
+/**
+ * Runs the entry Pokemon list: pick, rental, confirm and warnings.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 FreeBattle_UpdateEntrySelect(s8 *arg0)
 {
   s32 ret = 0;
   s32 next;
@@ -604,7 +610,7 @@ s32 func_820038B0(s8 *arg0)
           *((s32 *) (((s8 *) arg0) + 0x784)) = 0;
           if (rec[0] & 2)
           {
-            func_82000900(arg0 + 0xC8, *((s32 *) (((s8 *) arg0) + 0x738)));
+            FreeBattle_InitNamedTeam(arg0 + 0xC8, *((s32 *) (((s8 *) arg0) + 0x738)));
             *((s32 *) (((s8 *) arg0) + 0x784)) |= 1;
           }
           else
@@ -612,11 +618,11 @@ s32 func_820038B0(s8 *arg0)
             *((Blk820038B0 *) (arg0 + 0xC8)) = *((Blk820038B0 *) rec);
           }
           func_80027410(arg0 + 0x2DC, (s32) (arg0 + 0xE4), 0x54, 6, 6);
-          func_8002DECC(arg0 + 0x2F8, arg0 + 0x2DC, arg0 + 0x2EC, func_82001BB4, 3, 0x84, 0x32);
+          func_8002DECC(arg0 + 0x2F8, arg0 + 0x2DC, arg0 + 0x2EC, FreeBattle_DrawSlotCell, 3, 0x84, 0x32);
           *((s32 *) (((s8 *) arg0) + 0x6EC)) = 0;
           *((s32 *) (((s8 *) arg0) + 0x318)) |= 0x10000;
           func_820023E8(arg0 + 0x2F8);
-          func_82002BF8(arg0, func_820036A8(arg0), 0);
+          func_82002BF8(arg0, FreeBattle_CheckEntryRules(arg0), 0);
           *((s32 *) (((s8 *) arg0) + 0x310)) = *((s32 *) (((s8 *) arg0) + 0x744)); // FAKE: decomp slop, raw pointer casts stand in for struct fields
           func_8000B2F4(*((s32 *) (((s8 *) arg0) + 0x744)));
         }
@@ -659,15 +665,15 @@ s32 func_820038B0(s8 *arg0)
       if (next == 1)
     {
       func_8003F6AC(2);
-      func_82002778(arg0 + 0x2F8);
+      FreeBattle_EnableUnpickedRows(arg0 + 0x2F8);
       func_82001708(arg0 + 0xE4, *((s32 *) (((s8 *) arg0) + 0x300)));
       func_82002528(arg0 + 0x2F8);
-      func_82002BF8(arg0, func_820036A8(arg0), 1);
+      func_82002BF8(arg0, FreeBattle_CheckEntryRules(arg0), 1);
     }
       break;
 
     case 4:
-      next = func_82008488(arg0 + 0x370);
+      next = FreeBattle_UpdateShortageWarning(arg0 + 0x370);
       if (next == (-1))
     {
       func_82002BF8(arg0, 1, 1);
@@ -681,7 +687,7 @@ s32 func_820038B0(s8 *arg0)
       break;
 
     case 5:
-      next = func_820087D4(arg0 + 0x428);
+      next = FreeBattle_UpdateLevelSumWarning(arg0 + 0x428);
       if (next == (-1))
     {
       func_82002BF8(arg0, 1, 1);
@@ -786,12 +792,12 @@ s32 func_820038B0(s8 *arg0)
     {
       func_8003F6AC(0x22);
       func_820037D0(arg0);
-      func_82002BF8(arg0, func_820036A8(arg0), 1);
+      func_82002BF8(arg0, FreeBattle_CheckEntryRules(arg0), 1);
     }
       break;
 
     case 10:
-      next = func_82008B94(arg0 + 0x4DC);
+      next = FreeBattle_UpdateRentalConfirm(arg0 + 0x4DC);
       if (next == (-1))
     {
       func_82002BF8(arg0, 1, 1);

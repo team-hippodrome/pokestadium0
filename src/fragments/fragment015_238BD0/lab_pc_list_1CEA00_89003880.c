@@ -530,7 +530,7 @@ void LabTerminal_DrawMainScreen(s32 arg0) {
 /**
  * Wrapper around LabTerminal_UpdateMenuWindow(arg0): -1 calls func_8003F6AC(3) and returns -1;
  * a positive result calls func_8003F6AC(2) and returns the word at arg0 + 0x34
- * plus 1; any other result returns 0. (Same pattern as func_820076DC.)
+ * plus 1; any other result returns 0. (Same pattern as FreeBattle_UpdateBattleModeWindow.)
  * @unverified Name guessed from the code; comment kept.
  */
 s32 LabTerminal_UpdateMainMenu(s8* arg0) {

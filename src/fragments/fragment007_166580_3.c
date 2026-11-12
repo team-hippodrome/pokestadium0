@@ -11,7 +11,7 @@ void func_80020C60(s32);
 void func_800207F8(u8*);
 extern u8 D_80065D00[];
 
-s32 func_82000058(s32 arg0, s32 arg1, s32 arg2, Entry82000058* entry);
+s32 FreeBattle_ReadTeam(s32 arg0, s32 arg1, s32 arg2, Entry82000058* entry);
 
 typedef struct Color82000BC4 {
     u8 r, g, b, a;
@@ -42,7 +42,7 @@ u32 func_800566BC(const char*);
 
 void func_82000AC4(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 
-void func_82000BC4(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
+void FreeBattle_DrawTypeIcon(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 
 s32 func_8002B390(s32);
 s32 func_8002BC14(s32);
@@ -55,7 +55,7 @@ typedef struct Color82001CCC {
 } Color82001CCC;
 extern Gfx D_80060270[];
 void func_80029028(s32, s32, s32, s32, Color82001CCC);
-void func_82001CCC(s32 arg0, s32 arg1, Color82001CCC arg2);
+void FreeBattle_DrawRowBorders(s32 arg0, s32 arg1, Color82001CCC arg2);
 
 M2C_UNK func_82002980();                            /* extern */
 
@@ -84,25 +84,25 @@ extern M2C_UNK D_8200AD30;
 s32 func_80025BD8(void);
 void func_80027FF8(void*, s32);
 s32 func_80002D98(s32);
-void func_82004B0C(s32);
+void FreeBattle_InitBattleModeScreen(s32);
 void func_8200573C(void);
 
 M2C_UNK func_8000B1FC();                            /* extern */
 M2C_UNK func_8000B220();                            /* extern */
-M2C_UNK func_82004CE0(s32);                         /* extern */
-M2C_UNK func_82004E9C(s32);                         /* extern */
+M2C_UNK FreeBattle_DrawScreen(s32);                         /* extern */
+M2C_UNK FreeBattle_UpdateScreen(s32);                         /* extern */
 extern s32 D_8200AD28;
 
-void func_820058BC(s32 arg0);
+void FreeBattle_RunFrame(s32 arg0);
 
 M2C_UNK GbSave_DrawSummaryBar(M2C_UNK, M2C_UNK *, M2C_UNK *, s32); /* extern */
-M2C_UNK func_82004CE0(s32);                         /* extern */
+M2C_UNK FreeBattle_DrawScreen(s32);                         /* extern */
 extern M2C_UNK D_82009E18;
 extern s32 D_8200AD28;
 extern s32 D_8200AD2C;
 extern M2C_UNK D_8200AD30;
 
-s32 func_820058FC(s32 arg0);
+s32 FreeBattle_DrawScreenWithSummary(s32 arg0);
 
 M2C_UNK func_80002DC0(s32);                         /* extern */
 extern s32 D_8200AD28;
@@ -125,7 +125,7 @@ void PokeIcon_OpenModelArchives(void);
 void func_800040B4(s32, u8*, u8*);
 void func_80003EB8(s32, u8*, u8*, s32);
 s32 func_80001B10(u8*);
-void func_8200569C(s32);
+void FreeBattle_RestoreMenuState(s32);
 void func_80005B98(s32);
 void func_80006828(s32, void*);
 void func_8000A7B0(s32);
@@ -185,7 +185,11 @@ void Window_DrawLabeled(s8*, s32);
 extern u8 D_8007356C;
 void Font_SetColorForFlags(s32);
 
-void func_82005D90(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s32* arg5) {
+/**
+ * Draws one menu row label with the selection highlight.
+ * @unverified Name and comment guessed from the code.
+ */
+void FreeBattle_DrawMenuRow(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s32* arg5) {
     s32 temp_v0 = *arg5;
 
     if (arg4 & 0x10) {
@@ -199,17 +203,17 @@ void func_82005D90(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s32* arg5
 }
 
 /*
- * func_82005E34
+ * FreeBattle_InitMenuWindow
  *
  * Initialises the object arg0 (layout not established): calls
  * Window_SetRect(arg0, arg1, arg2, arg3, arg4), clears the words at 0x28 and
  * 0x24, sets the word at 0x14 to 0x801 and the word at 0x20 to arg9. Calls
  * func_80027804 on the sub-object at arg0 + 0x50 with (arg5, arg6, arg6),
  * then Menu_Init on the sub-objects at 0x2C, 0x50 and 0x5C with the
- * callback func_82005D90, the value arg3 - 0xC and 0x20. Finally sets bit
+ * callback FreeBattle_DrawMenuRow, the value arg3 - 0xC and 0x20. Finally sets bit
  * 0x10000 in the word at 0x4C and stores arg7 at 0x7C and arg8 at 0x80.
  *
- * Same shape as func_82007474. What the object is and what the values mean
+ * Same shape as FreeBattle_InitBattleModeWindow. What the object is and what the values mean
  * is not established. As there, the address arg0 + 0x50 is written out
  * twice rather than cached in a local, which moves the compiler's stack
  * spill and changes the frame size.
@@ -217,14 +221,18 @@ void func_82005D90(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s32* arg5
 void Window_SetRect(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 M2C_UNK func_80027804(s8 *, s32, s32, s32);         /* extern */
 M2C_UNK Menu_Init(s8 *, s8 *, s8 *, void (*)(s32, s32, char *, s32, s32, s32 *), s32, s32); /* extern */
-void func_82005E34(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9) {
+/**
+ * Sets up a titled menu window with item and description tables.
+ * @unverified Name and comment guessed from the code.
+ */
+void FreeBattle_InitMenuWindow(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9) {
     Window_SetRect(arg0, arg1, arg2, arg3, arg4);
     M2C_FIELD(arg0, s32 *, 0x28) = 0;
     M2C_FIELD(arg0, s32 *, 0x24) = 0;
     M2C_FIELD(arg0, s32 *, 0x14) = 0x801;
     M2C_FIELD(arg0, s32 *, 0x20) = arg9;
     func_80027804(arg0 + 0x50, arg5, arg6, arg6);
-    Menu_Init(arg0 + 0x2C, arg0 + 0x50, arg0 + 0x5C, func_82005D90, arg3 - 0xC, 0x20);
+    Menu_Init(arg0 + 0x2C, arg0 + 0x50, arg0 + 0x5C, FreeBattle_DrawMenuRow, arg3 - 0xC, 0x20);
     M2C_FIELD(arg0, s32 *, 0x4C) = (s32) (M2C_FIELD(arg0, s32 *, 0x4C) | 0x10000);
     M2C_FIELD(arg0, s32 *, 0x7C) = arg7;
     M2C_FIELD(arg0, s32 *, 0x80) = arg8;
@@ -245,8 +253,9 @@ extern Color_RGBA8 D_82009108;
  * pointer in sp38), and the text pointer at index [+0x34] of the table in the word at
  * +0x7C, printed in the colour from D_800734A8 via func_8001A944.
  * What the constants mean is not established. `pad` places sp38 at sp+0x38 as in the ROM.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_82005EE4(s8* arg0, s32 arg1) {
+void FreeBattle_DrawMenuWindow(s8* arg0, s32 arg1) {
     s32 pad; // FAKE: stack padding
     s32 sp38;
     s32 temp_s1;
@@ -270,16 +279,17 @@ void func_82005EE4(s8* arg0, s32 arg1) {
 
 extern s32 D_800603C0;
 
-/*
- * func_820060AC
+/**
+ * FreeBattle_UpdateMenuWindow
  *
  * Returns 0 immediately unless the word at arg0 + 0x28 is 1 or 2. Otherwise,
  * if Menu_UpdateCursor(arg0 + 0x2C, arg0) returns 0, it reads func_8002BC14(D_800603C0):
  * -1 calls func_8003F6AC(3) and returns -1; 1 calls func_8003F6AC(2) and
  * returns the word at arg0 + 0x34 plus 1; any other value returns 0.
- * (func_8200639C is the same pattern without the mode check.)
+ * (FreeBattle_UpdatePopupMenu is the same pattern without the mode check.)
+ * @unverified Name guessed from the code; comment kept.
  */
-s32 func_820060AC(void* arg0) {
+s32 FreeBattle_UpdateMenuWindow(void* arg0) {
     s32 result = 0;
     s32 tmp;
 
@@ -300,7 +310,11 @@ s32 func_820060AC(void* arg0) {
     return result;
 }
 
-void func_82006154(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s8* arg5) {
+/**
+ * Draws one popup menu row with the selection highlight.
+ * @unverified Name and comment guessed from the code.
+ */
+void FreeBattle_DrawPopupRow(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s8* arg5) {
     if (arg4 & 0x18) {
         Ui_FillRectHighlighted(arg0 + 3, arg1 + 3, M2C_FIELD(arg5, s32*, 8) - 0x12, 0x1E, M2C_FIELD(arg5, Color_RGBA8*, 0x18));
     }
@@ -316,7 +330,11 @@ typedef struct List820061F0 {
     /* 0x04 */ s8 count;
     /* 0x08 */ s32 unk8;
 } List820061F0;
-void func_820061F0(s8 *arg0, s32 arg1, s32 arg2, List820061F0 *arg3, s8 *arg4, Color_RGBA8 arg5) {
+/**
+ * Sets up a popup menu sized to its widest string.
+ * @unverified Name and comment guessed from the code.
+ */
+void FreeBattle_InitPopupMenu(s8 *arg0, s32 arg1, s32 arg2, List820061F0 *arg3, s8 *arg4, Color_RGBA8 arg5) {
     s32 i;
     s32 w;
     s32 max = 0;
@@ -330,7 +348,7 @@ void func_820061F0(s8 *arg0, s32 arg1, s32 arg2, List820061F0 *arg3, s8 *arg4, C
     }
     func_80027804(arg0 + 0x50, (s32)arg3->items, arg3->count, arg3->count);
     h = max * 0x18 + 0x18;
-    Menu_Init(arg0 + 0x2C, arg0 + 0x50, arg4, (void (*)(s32, s32, char *, s32, s32, s32 *))func_82006154, h, 0x24);
+    Menu_Init(arg0 + 0x2C, arg0 + 0x50, arg4, (void (*)(s32, s32, char *, s32, s32, s32 *))FreeBattle_DrawPopupRow, h, 0x24);
     M2C_FIELD(arg0, s32 *, 0x4C) |= 0x10000;
     Window_SetRect(arg0, arg1, arg2, h + 0xC, arg3->count * 0x24 + 0x18);
     M2C_FIELD(arg0, s32 *, 0x24) = 0;
@@ -344,7 +362,11 @@ void func_820061F0(s8 *arg0, s32 arg1, s32 arg2, List820061F0 *arg3, s8 *arg4, C
 s32 func_8002AE6C();                                /* extern */
 void Menu_DrawItems(s32, s32, s32, s32, s8 *);  /* extern */
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-void func_82006348(s8 *arg0, s32 arg1)
+/**
+ * Draws a popup menu's items.
+ * @unverified Name and comment guessed from the code.
+ */
+void FreeBattle_DrawPopupMenu(s8 *arg0, s32 arg1)
 {
   s8 *new_var; // FAKE: permuter temp
   if (func_8002AE6C() == 0)
@@ -359,7 +381,11 @@ void func_82006348(s8 *arg0, s32 arg1)
 s32 func_8002BC14(s32);
 M2C_UNK func_8003F6AC(M2C_UNK);
 extern s32 D_800603C0;
-s32 func_8200639C(s32 arg0) {
+/**
+ * Moves a popup menu's cursor. Returns -1 on cancel, the 1-based row on confirm.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 FreeBattle_UpdatePopupMenu(s32 arg0) {
     s32 sp1C = 0;
     s32 dir;
 
@@ -410,7 +436,11 @@ extern Offset82006508 D_8200915C[];
 void Ui_DrawImageInStrips(void*, s32, s32);
 void Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
 
-void func_82006508(s32 x, s32 y, s32 present, s32 active, s32 markA, s32 markB) {
+/**
+ * Draws the four controller ports, marking the connected and active ones.
+ * @unverified Name and comment guessed from the code.
+ */
+void FreeBattle_DrawControllerPanel(s32 x, s32 y, s32 present, s32 active, s32 markA, s32 markB) {
     s32 i;
 
     Ui_FillRectPrimEnvColor(x, y, 0x186, 0x8D, D_8200914C, D_82009150);
@@ -438,8 +468,8 @@ M2C_UNK Menu_SkipDisabledForward(s8 *, s32);                   /* extern */
 extern M2C_UNK D_8200917C;
 extern M2C_UNK D_82009F70;
 
-/*
- * func_820066E8
+/**
+ * FreeBattle_InitOpponentSelect
  *
  * Initialises the object arg0 (layout not established): calls
  * Window_SetRect(arg0, arg1, arg2, 0x192, 0x10F), clears the words at 0x24 and
@@ -454,13 +484,14 @@ extern M2C_UNK D_82009F70;
  * of the record pointed to by the word at arg0 + 0x3C. Stores arg5 at 0x70
  * and calls Menu_SkipDisabledForward(arg0 + 0x38, arg3).
  *
- * Same family as func_82007474 and func_82005E34. What the object, the bits
+ * Same family as FreeBattle_InitBattleModeWindow and FreeBattle_InitMenuWindow. What the object, the bits
  * and the values mean is not established. Matching notes: the sub-object
  * addresses are held in the locals sp2C and sp28 (the ROM spills them), and
  * the unused leading `pad` local places those spill slots at sp+0x2C and
  * sp+0x28.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_820066E8(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
+void FreeBattle_InitOpponentSelect(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
     s32 pad; // FAKE: stack padding
     s8 *sp2C;
     s8 *sp28;
@@ -495,7 +526,7 @@ void func_820066E8(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
 }
 
 void Ui_DrawImageInStrips(void*, s32, s32);
-void func_82006508(s32, s32, s32, s32, s32, s32);
+void FreeBattle_DrawControllerPanel(s32, s32, s32, s32, s32, s32);
 extern u8 D_8200910C[];
 extern char D_82009F84[];
 
@@ -504,13 +535,14 @@ extern char D_82009F84[];
  * func_8002AE6C() is zero: a frame via Ui_DrawTexturedDivider (at y + 0x92), a filled bar via
  * func_80029028 (colour D_82009100, height 0x70), the picture D_8200910C via Ui_DrawImageInStrips,
  * the text D_82009F84 in the colour from D_800734A8, the sub-object at +0x38 via
- * Menu_DrawItems, and finally func_82006508 with the words at +0x68 and +0x70, 1 and a
+ * Menu_DrawItems, and finally FreeBattle_DrawControllerPanel with the words at +0x68 and +0x70, 1 and a
  * value chosen from the word at +0x40 (0 -> 2, 1 -> 4, 2 -> 8, otherwise 0).
  * What the constants mean is not established.
  * Matching note: Ui_DrawTexturedDivider and Menu_DrawItems must be declared void; their
  * (unused) return value would otherwise shift the compiler's register choices.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_82006810(s8* arg0) {
+void FreeBattle_DrawOpponentSelect(s8* arg0) {
     s32 sp2C;
 
     sp2C = 0;
@@ -536,19 +568,20 @@ void func_82006810(s8* arg0) {
                 sp2C = 8;
                 break;
         }
-        func_82006508(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 0x68), M2C_FIELD(arg0, s32*, 0x70), 1, sp2C);
+        FreeBattle_DrawControllerPanel(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 0x68), M2C_FIELD(arg0, s32*, 0x70), 1, sp2C);
     }
 }
 
 /**
- * Variant of func_820076DC whose sub-object is at arg0 + 0x38. Returns 0
+ * Variant of FreeBattle_UpdateBattleModeWindow whose sub-object is at arg0 + 0x38. Returns 0
  * immediately unless the word at arg0 + 0x28 is 1 or 2. Otherwise, if
  * func_8002DCE0(arg0 + 0x38, arg0) returns 0, it reads
  * func_8002BC14(D_800603C0): -1 calls func_8003F6AC(3) and returns -1; 1 calls
  * func_8003F6AC(2), returns 1 and maps the word at arg0 + 0x40 (0..3) to the
  * value 2..5 stored in the word at arg0 + 0x64. Any other value returns 0.
+ * @unverified Name guessed from the code; comment kept.
  */
-s32 func_820069B8(void* arg0) {
+s32 FreeBattle_UpdateOpponentSelect(void* arg0) {
     s32 result = 0;
     s32 tmp;
 
@@ -656,7 +689,7 @@ extern M2C_UNK D_82009FCC;
  * func_82006C74
  *
  * Initialises the object arg0 (layout not established): the same shape as
- * func_820066E8, but the embedded window starts at arg0 + 4 (Window_SetRect with
+ * FreeBattle_InitOpponentSelect, but the embedded window starts at arg0 + 4 (Window_SetRect with
  * 0x192 x 0x163), the words at 0x28 and 0x2C are cleared, the word at 0x18 is set to
  * 0x801 and the pointer at 0x24 to &D_82009FCC. Calls func_80027804 on the
  * sub-objects at arg0 + 0x30 (&D_82009190, 4, 4) and arg0 + 0x3C (&D_820091A0, 7, 7),
@@ -771,7 +804,7 @@ void func_82006DF8(s8* arg0) {
                     break;
             }
         }
-        func_82006508(M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xBC), M2C_FIELD(arg0, s32*, 0xC4), markA, markB);
+        FreeBattle_DrawControllerPanel(M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xBC), M2C_FIELD(arg0, s32*, 0xC4), markA, markB);
     }
 }
 
@@ -903,7 +936,7 @@ void func_82007398(s32 arg0, s32 arg1, s32* arg2, s32 arg3, s32 arg4) {
 }
 
 /*
- * func_82007474
+ * FreeBattle_InitBattleModeWindow
  *
  * Initialises the object arg0 (size and layout not established): calls
  * Window_SetRect(arg0, arg1, arg2, 0x190, 0x12E), clears the words at 0x24
@@ -921,7 +954,11 @@ void Window_SetRect(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 M2C_UNK func_80027410(s8 *, s32, M2C_UNK, M2C_UNK, s32); /* extern */
 M2C_UNK func_8002DECC(s8 *, s8 *, s8 *, M2C_UNK *, s32, s32, s32); /* extern */
 
-void func_82007474(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
+/**
+ * Sets up the バトルモード (battle mode) window.
+ * @unverified Name and comment guessed from the code.
+ */
+void FreeBattle_InitBattleModeWindow(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     Window_SetRect(arg0, arg1, arg2, 0x190, 0x12E);
     M2C_FIELD(arg0, s32 *, 0x24) = 0;
     M2C_FIELD(arg0, s32 *, 0x28) = 0;
@@ -952,9 +989,10 @@ M2C_UNK func_8002E230(s8*, s32, s32, s32, s32);
  * records pointed to by the word at +0x68 (the pointer is the second word of a record),
  * printed in the colour from D_800734A8 via func_8001A944.
  * What the constants mean is not established.
- * Matching note: Ui_DrawTexturedDivider must be declared void (see func_82006810).
+ * Matching note: Ui_DrawTexturedDivider must be declared void (see FreeBattle_DrawOpponentSelect).
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_8200752C(s8* arg0) {
+void FreeBattle_DrawBattleModeWindow(s8* arg0) {
     if (func_8002AE6C() == 0) {
         Ui_DrawTexturedFrameDecal(M2C_FIELD(arg0, s32*, 0) + 0xE, M2C_FIELD(arg0, s32*, 4) + 0xE, 0x174, 0xCC, D_800735C4);
         Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0xE1, M2C_FIELD(arg0, s32*, 8), &D_8007356C);
@@ -973,16 +1011,17 @@ void func_8200752C(s8* arg0) {
 
 extern s32 D_800603C0;
 
-/*
- * func_820076DC
+/**
+ * FreeBattle_UpdateBattleModeWindow
  *
  * Returns 0 immediately unless the word at arg0 + 0x28 is 1 or 2. Otherwise,
  * if func_8002E3F0(arg0 + 0x2C, arg0) returns 0, it reads func_8002BC14(D_800603C0):
  * -1 calls func_8003F6AC(3) and returns -1; 1 calls func_8003F6AC(2) and
  * returns the word at arg0 + 0x34 plus 1; any other value returns 0.
- * (func_8200639C is the same pattern without the mode check.)
+ * (FreeBattle_UpdatePopupMenu is the same pattern without the mode check.)
+ * @unverified Name guessed from the code; comment kept.
  */
-s32 func_820076DC(void* arg0) {
+s32 FreeBattle_UpdateBattleModeWindow(void* arg0) {
     s32 result = 0;
     s32 tmp;
 
@@ -1045,7 +1084,11 @@ void func_82007784(s32 arg0, s32 arg1, IconPanel* arg2, s32 arg3, s32 arg4) {
 
 extern u8 D_8200A040[];
 extern u8 D_820091C4[];
-void func_820078BC(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
+/**
+ * Sets up the カップせんたく (choose cup) window with up to four cups.
+ * @unverified Name and comment guessed from the code.
+ */
+void FreeBattle_InitCupSelect(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     UNUSED s32 pad[2]; // FAKE: stack padding
     s32 n;
     s32 i;
@@ -1077,22 +1120,27 @@ void func_820078BC(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
 s32 func_8002AE6C();                                /* extern */
 M2C_UNK func_8002DAD8(s8 *, s32, s32, s32, s32);  /* extern */
 
-void func_82007AF4(s8 *arg0, s32 arg1) {
+/**
+ * Draws the choose cup window.
+ * @unverified Name and comment guessed from the code.
+ */
+void FreeBattle_DrawCupSelect(s8 *arg0, s32 arg1) {
     if (func_8002AE6C() == 0) {
         func_8002DAD8(arg0 + 0x2C, M2C_FIELD(arg0, s32 *, 0) + 6, M2C_FIELD(arg0, s32 *, 4) + 0xC, arg1 | 0xFFED, 0);
     }
 }
 
 /**
- * Variant of func_820076DC with an extra check. Returns 0 immediately unless the
+ * Variant of FreeBattle_UpdateBattleModeWindow with an extra check. Returns 0 immediately unless the
  * word at arg0 + 0x28 is 1 or 2. Otherwise, if func_8002DCE0(arg0 + 0x2C, arg0)
  * returns 0, it reads func_8002BC14(D_800603C0): -1 calls func_8003F6AC(3) and
  * returns -1; 1 looks at bit 0 of the u16 at index arg0->unk_34 of the array
  * pointed to by the word at arg0 + 0x30. If that bit is clear it calls
  * func_8003F6AC(2) and returns unk_34 + 1; if it is set it calls
  * func_8003F6AC(8) and returns 0. Any other value returns 0.
+ * @unverified Name guessed from the code; comment kept.
  */
-s32 func_82007B44(void* arg0) {
+s32 FreeBattle_UpdateCupSelect(void* arg0) {
     s32 result = 0;
     s32 tmp;
 
@@ -1246,7 +1294,11 @@ void Window_SetRect(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 extern Str4_820080B8 D_8200920C;
 extern Str4_820080B8 D_82009210;
 extern u8 D_8200A0A0[];
-void func_820080B8(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
+/**
+ * Sets up the ちゅうい！！ (warning) window for duplicate species.
+ * @unverified Name and comment guessed from the code.
+ */
+void FreeBattle_InitDuplicateWarning(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     Window_SetRect(arg0, arg1, arg2, 0x148, 0x68);
     M2C_FIELD(arg0, s32*, 0x24) = 0;
     M2C_FIELD(arg0, s32*, 0x20) = 0;
@@ -1267,7 +1319,11 @@ void func_8001ABBC(void);
 extern M2C_UNK D_800734A8;
 extern char D_8200A0B0[];
 
-void func_8200813C(s8* arg0) {
+/**
+ * Draws おなじポケモンが %dたいいます (there are %d of the same Pokemon).
+ * @unverified Name and comment guessed from the code.
+ */
+void FreeBattle_DrawDuplicateWarning(s8* arg0) {
     if (func_8002AE6C() == 0) {
         func_8001AB6C();
         func_8001AA9C(M2C_FIELD(&D_800734A8, u8*, 0), M2C_FIELD(&D_800734A8, u8*, 1), M2C_FIELD(&D_800734A8, u8*, 2), M2C_FIELD(&D_800734A8, u8*, 3));
@@ -1287,7 +1343,7 @@ extern char D_8200A11C[];
 
 /**
  * Initialises the object arg0 (size and layout not established); the same
- * setup as func_82008524 with different strings (D_8200A104, D_8200A114 and
+ * setup as FreeBattle_InitLevelSumWarning with different strings (D_8200A104, D_8200A114 and
  * D_8200A11C) and colour (D_82009218), and one more argument. Calls
  * Window_SetRect(arg0, arg1, arg2, 0x134, 0x92), clears the words at 0x24 and
  * 0x28, sets the word at 0x14 to 0x2801 and the pointer at 0x20 to D_8200A104.
@@ -1296,8 +1352,9 @@ extern char D_8200A11C[];
  * D_800603C0 and then arg3 in the word at 0xA4 (calling func_8000B2F4 with
  * each), and finally stores arg3 at 0xB4 and arg4 at 0xB0.
  * What the object is and what the constants mean is not established.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_820081C8(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
+void FreeBattle_InitShortageWarning(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     Window_SetRect(arg0, arg1, arg2, 0x134, 0x92);
     M2C_FIELD(arg0, s32*, 0x24) = 0;
     M2C_FIELD(arg0, s32*, 0x28) = 0;
@@ -1323,14 +1380,15 @@ extern char D_8200A124[];
 
 /**
  * Draws the object arg0 (layout not established): the same drawing code as
- * func_82008640 with different colours (D_8200921C / D_82009220) and text
+ * FreeBattle_DrawLevelSumWarning with different colours (D_8200921C / D_82009220) and text
  * (D_8200A124), which is printed with the word at +0xB0 passed twice as extra
- * arguments to func_8001A944. See func_82008640 for the sequence of calls; the
+ * arguments to func_8001A944. See FreeBattle_DrawLevelSumWarning for the sequence of calls; the
  * selection index at +0xA8 again decides which of the two sub-objects (+0x2C,
  * +0x68) gets 2 from Window_DrawLabeled and which gets 0.
  * What the constants mean is not established.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_820082EC(s8* arg0) {
+void FreeBattle_DrawShortageWarning(s8* arg0) {
     if (func_8002AE6C() == 0) {
         Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0x61, M2C_FIELD(arg0, s32*, 8), &D_8007356C);
         Ui_FillRectPrimEnvColor(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, 0x128, 0x5C, D_8200921C, D_82009220);
@@ -1351,7 +1409,11 @@ s32 func_8002B390(s32);
 s32 func_8002BC14(s32);
 M2C_UNK func_8003F6AC(M2C_UNK);
 
-s32 func_82008488(s8* arg0) {
+/**
+ * Handles the too few usable Pokemon warning.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 FreeBattle_UpdateShortageWarning(s8* arg0) {
     s32 ret = 0;
     s32 temp_v0;
 
@@ -1393,8 +1455,9 @@ void func_8000B2F4(s32);
  * stores D_800603C0 and then arg3 in the word at 0xA4, calling func_8000B2F4
  * with each value in turn. Finally stores arg3 at 0xB0.
  * What the object is and what the constants mean is not established.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_82008524(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
+void FreeBattle_InitLevelSumWarning(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     Window_SetRect(arg0, arg1, arg2, 0x134, 0x92);
     M2C_FIELD(arg0, s32*, 0x24) = 0;
     M2C_FIELD(arg0, s32*, 0x28) = 0;
@@ -1419,7 +1482,7 @@ extern char D_8200A198[];
 
 /**
  * Draws the object arg0 (layout not established; the same kind of object that
- * func_82008524 / func_82008870 initialise: x at +0, y at +4, width at +8, a
+ * FreeBattle_InitLevelSumWarning / FreeBattle_InitRentalConfirm initialise: x at +0, y at +4, width at +8, a
  * selection index at +0xA8 and two sub-objects at +0x2C and +0x68). Does nothing
  * while func_8002AE6C() is non-zero. Otherwise it draws the frame with
  * Ui_DrawTexturedDivider and Ui_FillRectPrimEnvColor, emits D_80060270 and fills a bar with
@@ -1428,8 +1491,9 @@ extern char D_8200A198[];
  * on the two sub-objects with 2 for the one whose index (0 for +0x2C, 1 for +0x68)
  * equals the selection at +0xA8 and 0 for the other.
  * What the constants mean is not established.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_82008640(s8* arg0) {
+void FreeBattle_DrawLevelSumWarning(s8* arg0) {
     if (func_8002AE6C() == 0) {
         Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0x61, M2C_FIELD(arg0, s32*, 8), &D_8007356C);
         Ui_FillRectPrimEnvColor(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, 0x128, 0x5C, D_8200922C, D_82009230);
@@ -1450,7 +1514,11 @@ s32 func_8002B390(s32);
 s32 func_8002BC14(s32);
 M2C_UNK func_8003F6AC(M2C_UNK);
 
-s32 func_820087D4(s8* arg0) {
+/**
+ * Handles the level sum warning.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 FreeBattle_UpdateLevelSumWarning(s8* arg0) {
     s32 ret = 0;
     s32 temp_v0;
 
@@ -1481,7 +1549,7 @@ extern char D_8200A1FC[];
 
 /**
  * Initialises the object arg0 (size and layout not established); a sibling of
- * func_820009A4. Calls Window_SetRect(arg0, arg1, arg2, 0x18C, 0x66), clears the words at
+ * FreeBattle_InitConfirmWindow. Calls Window_SetRect(arg0, arg1, arg2, 0x18C, 0x66), clears the words at
  * 0x20, 0x24 and 0x28 and sets the word at 0x14 to 0x1001. Calls Window_InitLabeled three times,
  * on the sub-objects at arg0 + 0x2C (string D_8200A1EC), + 0x68 (D_8200A1F4) and + 0xA4
  * (D_8200A1FC, width 0x5C; the other two use width 0x48), all with colour D_82009234 and
@@ -1490,8 +1558,9 @@ extern char D_8200A1FC[];
  * and 3 (arg3 != 0) or 2 (arg3 == 0) at 0xE8, and stores D_800603C0 and then arg4 in the
  * word at 0xE0 (calling func_8000B2F4 with each).
  * What the object is and what the constants mean is not established.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_82008870(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
+void FreeBattle_InitRentalConfirm(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     Window_SetRect(arg0, arg1, arg2, 0x18C, 0x66);
     M2C_FIELD(arg0, s32*, 0x24) = 0;
     M2C_FIELD(arg0, s32*, 0x20) = 0;
@@ -1520,8 +1589,8 @@ extern Color_RGBA8 D_8200923C;
 extern char D_8200A208[];
 
 /**
- * Draws the object arg0 (layout not established): a variant of func_82008640 /
- * func_820082EC with a shorter frame (height 0x30) and colours D_82009238 /
+ * Draws the object arg0 (layout not established): a variant of FreeBattle_DrawLevelSumWarning /
+ * FreeBattle_DrawShortageWarning with a shorter frame (height 0x30) and colours D_82009238 /
  * D_8200923C, text D_8200A208 in a larger font size (0x10), and a selection index
  * at +0xE4 (rather than +0xA8) that decides which of the sub-objects at +0x2C, +0x68
  * and, only when the word at +0xEC is non-zero, +0xA4 is passed 2 by Window_DrawLabeled
@@ -1552,7 +1621,11 @@ s32 func_8002B390(s32);                             /* extern */
 s32 func_8002BC14(s32);                             /* extern */
 M2C_UNK func_8003F6AC(M2C_UNK);                     /* extern */
 
-s32 func_82008B94(s8 *arg0) {
+/**
+ * Handles the rental confirm window.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 FreeBattle_UpdateRentalConfirm(s8 *arg0) {
     s32 temp_v0;
     s32 temp_v0_2;
     s32 var_s0;

@@ -231,7 +231,7 @@ M2C_UNK func_8003F6AC(M2C_UNK);
 s32 Menu_UpdateCursor(s8*);
 s32 func_8002BC14(s32);
 /**
- * Menu-list input handler (same pattern as func_8200639C / LabTerminal_UpdateMenuWindow). Does nothing and
+ * Menu-list input handler (same pattern as FreeBattle_UpdatePopupMenu / LabTerminal_UpdateMenuWindow). Does nothing and
  * returns 0 while Menu_UpdateCursor(arg0 + 0x2C) is non-zero. Otherwise reads the input result
  * from func_8002BC14(D_800603C0): -1 returns -1; 1 looks at the entry for the cursor index
  * stored at arg0 + 0x34 in the halfword table pointed to by arg0 + 0x30 -- if bit 0 of that

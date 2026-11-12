@@ -1,10 +1,10 @@
-/* Fixed-layout split (from func_82004CE0); original translation-unit boundaries remain unconfirmed. */
+/* Fixed-layout split (from FreeBattle_DrawScreen); original translation-unit boundaries remain unconfirmed. */
 
 #include "global.h"
 #include "m2c_macros.h"
 
 
-void func_82004518(s8*, s32, s32);
+void FreeBattle_SetScreenState(s8*, s32, s32);
 extern s32 D_8200ACFC;
 extern s32 D_8200AD00;
 extern s32 D_8200AC50;
@@ -14,12 +14,12 @@ typedef struct List82004518 {
     /* 0x04 */ s8 count;
     /* 0x08 */ s32 unk8;
 } List82004518;
-void func_82007474(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
-void func_82005E34(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9);
-void func_820078BC(s8* arg0, s32 arg1, s32 arg2, s32 arg3);
-void func_820066E8(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5);
-void func_82004BC0(s8* arg0);
-void func_820061F0(s8* arg0, s32 arg1, s32 arg2, List82004518* arg3, s8* arg4, Color_RGBA8 arg5);
+void FreeBattle_InitBattleModeWindow(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+void FreeBattle_InitMenuWindow(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9);
+void FreeBattle_InitCupSelect(s8* arg0, s32 arg1, s32 arg2, s32 arg3);
+void FreeBattle_InitOpponentSelect(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5);
+void FreeBattle_InitEntryScreen(s8* arg0);
+void FreeBattle_InitPopupMenu(s8* arg0, s32 arg1, s32 arg2, List82004518* arg3, s8* arg4, Color_RGBA8 arg5);
 void func_82007C30(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s8* arg6);
 void func_8002D188(s8* arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4);
 s32 func_800251A8(void);
@@ -49,25 +49,29 @@ extern List82004518* D_820093E0[];
 extern u8 D_82008F54[];
 extern u8 D_82009DFC[];
 
-void func_82004518(s8* arg0, s32 arg1, s32 arg2) {
+/**
+ * Opens the window for screen state `arg1`: battle mode, rules, tournaments, cup, opponent, entry and popups.
+ * @unverified Name and comment guessed from the code.
+ */
+void FreeBattle_SetScreenState(s8* arg0, s32 arg1, s32 arg2) {
     s8* view;
 
     switch (arg1) {
         case 1:
             if (!(arg2 & 2)) {
-                func_82007474(arg0 + 0x4378, 0x78, 0x63, (s32)D_82009014, (s32)D_82009004);
+                FreeBattle_InitBattleModeWindow(arg0 + 0x4378, 0x78, 0x63, (s32)D_82009014, (s32)D_82009004);
             }
             view = arg0 + 0x4378;
             break;
         case 2:
             if (!(arg2 & 2)) {
-                func_82005E34(arg0 + 0x43E4, 0x40, 0x74, 0x198, 0xCE, (s32)D_82008FCC, 3, (s32)D_82008FD8, 3, (s32)D_82009D4C);
+                FreeBattle_InitMenuWindow(arg0 + 0x43E4, 0x40, 0x74, 0x198, 0xCE, (s32)D_82008FCC, 3, (s32)D_82008FD8, 3, (s32)D_82009D4C);
             }
             view = arg0 + 0x43E4;
             break;
         case 3:
             if (!(arg2 & 2)) {
-                func_82005E34(arg0 + 0x43E4, 0x40, 0x74, 0x1C0, 0x11E, (s32)D_82008F9C, 2, (s32)D_82008FA4, 7, (s32)D_82009D64);
+                FreeBattle_InitMenuWindow(arg0 + 0x43E4, 0x40, 0x74, 0x1C0, 0x11E, (s32)D_82008F9C, 2, (s32)D_82008FA4, 7, (s32)D_82009D64);
             }
             view = arg0 + 0x43E4;
             break;
@@ -84,7 +88,7 @@ void func_82004518(s8* arg0, s32 arg1, s32 arg2) {
                 M2C_FIELD(arg0, s32*, 0x4330) = 0;
                 M2C_FIELD(arg0, s32*, 0x4370) = 1;
                 M2C_FIELD(arg0, s32*, 0x4374) = 1;
-                func_82005E34(arg0 + 0x4468, 0x50, 0x8C, 0x1C0, 0xAE, (s32)D_82008FBC, 2, (s32)D_82008FC4, 3, (s32)D_82009D7C);
+                FreeBattle_InitMenuWindow(arg0 + 0x4468, 0x50, 0x8C, 0x1C0, 0xAE, (s32)D_82008FBC, 2, (s32)D_82008FC4, 3, (s32)D_82009D7C);
             }
             view = arg0 + 0x4468;
             break;
@@ -101,13 +105,13 @@ void func_82004518(s8* arg0, s32 arg1, s32 arg2) {
                 M2C_FIELD(arg0, s32*, 0x4330) = 0;
                 M2C_FIELD(arg0, s32*, 0x4370) = 2;
                 M2C_FIELD(arg0, s32*, 0x4374) = 2;
-                func_82005E34(arg0 + 0x4468, 0x50, 0x8C, 0x1C0, 0xAE, (s32)D_82008FAC, 2, (s32)D_82008FB4, 3, (s32)D_82009D9C);
+                FreeBattle_InitMenuWindow(arg0 + 0x4468, 0x50, 0x8C, 0x1C0, 0xAE, (s32)D_82008FAC, 2, (s32)D_82008FB4, 3, (s32)D_82009D9C);
             }
             view = arg0 + 0x4468;
             break;
         case 9:
             if (!(arg2 & 2)) {
-                func_820078BC(arg0 + 0x44EC, 0x60, 0xA4, func_800251A8() & 0xFF);
+                FreeBattle_InitCupSelect(arg0 + 0x44EC, 0x60, 0xA4, func_800251A8() & 0xFF);
             }
             view = arg0 + 0x44EC;
             break;
@@ -116,13 +120,13 @@ void func_82004518(s8* arg0, s32 arg1, s32 arg2) {
                 M2C_FIELD(arg0, s32*, 0x4370) = 0;
                 switch (M2C_FIELD(arg0, s32*, 0x4374)) {
                     case 0:
-                        func_82005E34(arg0 + 0x4468, 0x50, 0x8C, 0x1AC, 0x92, (s32)D_82008FE4, 2, (s32)D_82008FEC, 2, (s32)D_82009DBC);
+                        FreeBattle_InitMenuWindow(arg0 + 0x4468, 0x50, 0x8C, 0x1AC, 0x92, (s32)D_82008FE4, 2, (s32)D_82008FEC, 2, (s32)D_82009DBC);
                         break;
                     case 1:
-                        func_82005E34(arg0 + 0x4468, 0x50, 0x8C, 0x1AC, 0x92, (s32)D_82008FE4, 2, (s32)D_82008FFC, 2, (s32)D_82009DCC);
+                        FreeBattle_InitMenuWindow(arg0 + 0x4468, 0x50, 0x8C, 0x1AC, 0x92, (s32)D_82008FE4, 2, (s32)D_82008FFC, 2, (s32)D_82009DCC);
                         break;
                     case 2:
-                        func_82005E34(arg0 + 0x4468, 0x50, 0x8C, 0x1AC, 0x92, (s32)D_82008FE4, 2, (s32)D_82008FF4, 2, (s32)D_82009DE4);
+                        FreeBattle_InitMenuWindow(arg0 + 0x4468, 0x50, 0x8C, 0x1AC, 0x92, (s32)D_82008FE4, 2, (s32)D_82008FF4, 2, (s32)D_82009DE4);
                         break;
                 }
             }
@@ -130,25 +134,25 @@ void func_82004518(s8* arg0, s32 arg1, s32 arg2) {
             break;
         case 5:
             if (!(arg2 & 2)) {
-                func_820066E8(arg0 + 0x4554, 0xB0, 0x54, M2C_FIELD(arg0, s32*, 0x5010), M2C_FIELD(arg0, s32*, 0x5014), M2C_FIELD(arg0, s32*, 0x5018));
+                FreeBattle_InitOpponentSelect(arg0 + 0x4554, 0xB0, 0x54, M2C_FIELD(arg0, s32*, 0x5010), M2C_FIELD(arg0, s32*, 0x5014), M2C_FIELD(arg0, s32*, 0x5018));
             }
             view = arg0 + 0x4554;
             break;
         case 10:
             if (!(arg2 & 2)) {
-                func_82004BC0(arg0);
+                FreeBattle_InitEntryScreen(arg0);
             }
             view = arg0 + 0x46A4;
             break;
         case 12:
             if (!(arg2 & 2)) {
-                func_820061F0(arg0 + 0x4E50, 0x26, 0x5A, &D_82009278[M2C_FIELD(arg0, s32*, 0x4374)], arg0 + 0x4F08, *(Color_RGBA8*)D_82008F54);
+                FreeBattle_InitPopupMenu(arg0 + 0x4E50, 0x26, 0x5A, &D_82009278[M2C_FIELD(arg0, s32*, 0x4374)], arg0 + 0x4F08, *(Color_RGBA8*)D_82008F54);
             }
             view = arg0 + 0x4E50;
             break;
         case 13:
             if (!(arg2 & 2)) {
-                func_820061F0(arg0 + 0x4EAC, 0x36, 0x72, M2C_FIELD(arg0, s32*, 0x4E84) + D_820093E0[M2C_FIELD(arg0, s32*, 0x4374)], arg0 + 0x4F1C, *(Color_RGBA8*)D_82008F54);
+                FreeBattle_InitPopupMenu(arg0 + 0x4EAC, 0x36, 0x72, M2C_FIELD(arg0, s32*, 0x4E84) + D_820093E0[M2C_FIELD(arg0, s32*, 0x4374)], arg0 + 0x4F1C, *(Color_RGBA8*)D_82008F54);
             }
             view = arg0 + 0x4EAC;
             break;
@@ -178,16 +182,17 @@ void func_82004518(s8* arg0, s32 arg1, s32 arg2) {
 u8 func_80022B4C(s32);
 u8 func_8000B2E8(void);
 
-/*
- * func_82004B0C
+/**
+ * FreeBattle_InitBattleModeScreen
  *
  * Recomputes two masks in the object at arg0 and then calls
- * func_82004518(arg0, 1, 0). Word +0x5018 gets bit i set for each i in 0..3
+ * FreeBattle_SetScreenState(arg0, 1, 0). Word +0x5018 gets bit i set for each i in 0..3
  * where func_80022B4C(i) returns 0. Word +0x5010 is set to func_8000B2E8()
  * and word +0x5014 to the number of bits among bits 0..3 of that value that
  * are set.
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_82004B0C(s32 arg0) {
+void FreeBattle_InitBattleModeScreen(s32 arg0) {
     s32 i;
 
     M2C_FIELD(arg0, s32*, 0x5018) = 0;
@@ -203,95 +208,103 @@ void func_82004B0C(s32 arg0) {
             M2C_FIELD(arg0, s32*, 0x5014) += 1;
         }
     }
-    func_82004518((s8*)arg0, 1, 0);
+    FreeBattle_SetScreenState((s8*)arg0, 1, 0);
 }
 
 void func_82000594(void*);
-void func_820003D4(void*);
+void FreeBattle_LoadGbTeams(void*);
 void func_80027804(void*, void*, s32, s32);
-void func_82004BC0(s8 *arg0)
+/**
+ * Builds the team list from the GB cartridges and rentals and opens the entry list.
+ * @unverified Name and comment guessed from the code.
+ */
+void FreeBattle_InitEntryScreen(s8 *arg0)
 {
   s32 i;
   M2C_FIELD(arg0, s32*, 0x4368) = (!((M2C_FIELD(arg0, s32*, 0x4370)) == 0)) || (!((M2C_FIELD(arg0, s32*, 0x4374)) == 0));
   M2C_FIELD(arg0, s32*, 0x436C) = ((M2C_FIELD(arg0, s32*, 0x4370)) == 0) && ((M2C_FIELD(arg0, s32*, 0x4374)) == 0);
   func_80027410(arg0 + 0x4310, (s32) (arg0 + 0x10), 0x214, 0x20, 0);
-  func_820003D4(arg0 + 0x4310);
+  FreeBattle_LoadGbTeams(arg0 + 0x4310);
   if (M2C_FIELD(arg0, s32*, 0x4368))
   {
-    func_8200053C((void *) (arg0 + 0x4310));
+    FreeBattle_AddRentalEntry((void *) (arg0 + 0x4310));
   }
   if (M2C_FIELD(arg0, s32*, 0x436C))
   {
     func_82000594(arg0 + 0x4310);
   }
   func_80027804(arg0 + 0x4320, arg0 + 0x4290, 0x20, 0);
-  func_820008C8((void *) (arg0 + 0x4320), (void *) (arg0 + 0x4310));
+  FreeBattle_BuildTeamPointers((void *) (arg0 + 0x4320), (void *) (arg0 + 0x4310));
   func_8200140C((void *) (arg0 + 0x4310), M2C_FIELD(arg0, s32*, 0x4374));
   M2C_FIELD(arg0, s32*, 0x4354) = 0;
     for (i = 0; i < 5; i++) { M2C_FIELD(arg0, s32*, (0x4340 + (i * 4))) = 0;
   }
 
-  func_82002D5C(arg0 + 0x4690, 0x30, 0x5C, (s32) (arg0 + 0x4320), (s32) (arg0 + 0x4340), M2C_FIELD(arg0, s32*, 0x4374));
+  FreeBattle_InitEntrySelect(arg0 + 0x4690, 0x30, 0x5C, (s32) (arg0 + 0x4320), (s32) (arg0 + 0x4340), M2C_FIELD(arg0, s32*, 0x4374));
 }
 
 void func_800069CC(void);
 M2C_UNK Ui_DrawTintedScreenBackground(M2C_UNK, M2C_UNK, u8, u8, s32);
 extern u8 D_82008F50[];
-void func_8200752C(s8*);
-void func_82005EE4(s8*, s32);
-void func_82006348(s8*, s32);
+void FreeBattle_DrawBattleModeWindow(s8*);
+void FreeBattle_DrawMenuWindow(s8*, s32);
+void FreeBattle_DrawPopupMenu(s8*, s32);
 void func_82007D94(s8*, s32);
-void func_82006810(s8*);
+void FreeBattle_DrawOpponentSelect(s8*);
 void func_82006DF8(s8*);
-void func_82007AF4(s8*, s32);
+void FreeBattle_DrawCupSelect(s8*, s32);
 void FreeBattle_DrawRentalScreen(s8*);
 void func_8002D2BC(s8*);
-M2C_UNK func_82004CE0(s32 arg0) {
+/**
+ * Draws the battle setup screen for its current state.
+ * @unverified Name and comment guessed from the code.
+ */
+M2C_UNK FreeBattle_DrawScreen(s32 arg0) {
     s8* base = (s8*)arg0;
 
     func_800069CC();
     Ui_DrawTintedScreenBackground(0x38, 0x1E0, D_82008F50[0], D_82008F50[1], D_82008F50[2]);
     switch (*(s32*)base) {
         case 1:
-            func_8200752C(base + 0x4378);
+            FreeBattle_DrawBattleModeWindow(base + 0x4378);
             break;
         case 2:
         case 3:
-            func_82005EE4(base + 0x43E4, 2);
+            FreeBattle_DrawMenuWindow(base + 0x43E4, 2);
             break;
         case 4:
-            func_82005EE4(base + 0x43E4, 0x10);
-            func_82005EE4(base + 0x4468, 2);
+            FreeBattle_DrawMenuWindow(base + 0x43E4, 0x10);
+            FreeBattle_DrawMenuWindow(base + 0x4468, 2);
             break;
         case 12:
-            func_82006348(base + 0x4E50, 2);
+            FreeBattle_DrawPopupMenu(base + 0x4E50, 2);
             break;
         case 13:
-            func_82006348(base + 0x4E50, 0x10);
-            func_82006348(base + 0x4EAC, 0);
+            FreeBattle_DrawPopupMenu(base + 0x4E50, 0x10);
+            FreeBattle_DrawPopupMenu(base + 0x4EAC, 0);
             break;
         case 14:
             func_82007D94(base + 0x4F30, 0);
             break;
         case 5:
-            func_82005EE4(base + 0x43E4, 0x10);
-            func_82005EE4(base + 0x4468, 0x10);
-            func_82006810(base + 0x4554);
+            FreeBattle_DrawMenuWindow(base + 0x43E4, 0x10);
+            FreeBattle_DrawMenuWindow(base + 0x4468, 0x10);
+            FreeBattle_DrawOpponentSelect(base + 0x4554);
             break;
         case 6:
-            func_82005EE4(base + 0x43E4, 0x10);
-            func_82005EE4(base + 0x4468, 0x10);
+            FreeBattle_DrawMenuWindow(base + 0x43E4, 0x10);
+            FreeBattle_DrawMenuWindow(base + 0x4468, 0x10);
             func_82006DF8(base + 0x45C8);
             break;
         case 7:
         case 8:
-            func_82005EE4(base + 0x43E4, 0x10);
-            func_82005EE4(base + 0x4468, 2);
+            FreeBattle_DrawMenuWindow(base + 0x43E4, 0x10);
+            FreeBattle_DrawMenuWindow(base + 0x4468, 2);
             break;
         case 9:
-            func_82005EE4(base + 0x43E4, 0x10);
-            func_82005EE4(base + 0x4468, 0x10);
-            func_82007AF4(base + 0x44EC, 2);
+            FreeBattle_DrawMenuWindow(base + 0x43E4, 0x10);
+            FreeBattle_DrawMenuWindow(base + 0x4468, 0x10);
+            FreeBattle_DrawCupSelect(base + 0x44EC, 2);
             break;
         case 10:
             FreeBattle_DrawRentalScreen(base + 0x4690);
@@ -315,21 +328,25 @@ void func_80027814(s8*, s8*, s32);
 s32 func_8002BC14(s32);
 void func_8003F6AC(s32);
 void func_800407B0(s32, s32, s32);
-void func_82000020(void*, s32, s32);
+void FreeBattle_ClearIndices(void*, s32, s32);
 void func_82002C3C(s8*);
-s32 func_820038B0(s8*);
+s32 FreeBattle_UpdateEntrySelect(s8*);
 void func_820044D0(s8*);
-s32 func_820060AC(s8*);
-s32 func_8200639C(s8*);
-s32 func_820069B8(s8*);
-s32 func_820076DC(s8*);
-s32 func_82007B44(s8*);
+s32 FreeBattle_UpdateMenuWindow(s8*);
+s32 FreeBattle_UpdatePopupMenu(s8*);
+s32 FreeBattle_UpdateOpponentSelect(s8*);
+s32 FreeBattle_UpdateBattleModeWindow(s8*);
+s32 FreeBattle_UpdateCupSelect(s8*);
 s32 func_82008044(s8*);
 extern s32 D_800603C0;
 extern s32 D_82008F84;
 extern u8 D_8200AC58[];
 
-s32 func_82004E9C(s8* arg0) {
+/**
+ * Runs the battle setup screen's state machine for one frame.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 FreeBattle_UpdateScreen(s8* arg0) {
     s32 ret;
     s32 res;
     s32 pad; // FAKE: unused stack word
@@ -355,63 +372,63 @@ s32 func_82004E9C(s8* arg0) {
     }
     switch (M2C_FIELD(arg0, s32*, 0)) {
         case 1:
-            res = func_820076DC(arg0 + 0x4378);
+            res = FreeBattle_UpdateBattleModeWindow(arg0 + 0x4378);
             if (res == -1) {
-                func_82004518(arg0, 0xF, 1);
+                FreeBattle_SetScreenState(arg0, 0xF, 1);
                 D_82008F84 = 0x8040;
             } else if (res == 1) {
-                func_82004518(arg0, 2, 1);
+                FreeBattle_SetScreenState(arg0, 2, 1);
             } else if (res == 2) {
-                func_82004518(arg0, 3, 1);
+                FreeBattle_SetScreenState(arg0, 3, 1);
             }
             break;
         case 3:
-            res = func_820060AC(arg0 + 0x43E4);
+            res = FreeBattle_UpdateMenuWindow(arg0 + 0x43E4);
             if (res == -1) {
-                func_82004518(arg0, 1, 1);
+                FreeBattle_SetScreenState(arg0, 1, 1);
             } else if (res == 1) {
-                func_82004518(arg0, 8, 0);
+                FreeBattle_SetScreenState(arg0, 8, 0);
             } else if (res == 2) {
-                func_82004518(arg0, 7, 0);
+                FreeBattle_SetScreenState(arg0, 7, 0);
             }
             break;
         case 2:
-            res = func_820060AC(arg0 + 0x43E4);
+            res = FreeBattle_UpdateMenuWindow(arg0 + 0x43E4);
             if (res == -1) {
-                func_82004518(arg0, 1, 1);
+                FreeBattle_SetScreenState(arg0, 1, 1);
             } else if (res == 1) {
                 M2C_FIELD(arg0, s32*, 0x4374) = 0;
-                func_82004518(arg0, 4, 0);
+                FreeBattle_SetScreenState(arg0, 4, 0);
             } else if (res == 2) {
                 M2C_FIELD(arg0, s32*, 0x4374) = 2;
-                func_82004518(arg0, 4, 0);
+                FreeBattle_SetScreenState(arg0, 4, 0);
             } else if (res == 3) {
                 M2C_FIELD(arg0, s32*, 0x4374) = 1;
-                func_82004518(arg0, 4, 0);
+                FreeBattle_SetScreenState(arg0, 4, 0);
             }
             break;
         case 4:
-            res = func_820060AC(arg0 + 0x4468);
+            res = FreeBattle_UpdateMenuWindow(arg0 + 0x4468);
             if (res == -1) {
-                func_82004518(arg0, 2, 3);
+                FreeBattle_SetScreenState(arg0, 2, 3);
             } else if (res == 1) {
-                func_82004518(arg0, 5, 0);
+                FreeBattle_SetScreenState(arg0, 5, 0);
             } else if (res == 2) {
                 M2C_FIELD(arg0, s32*, 0x4408) = 7;
-                func_82004518(arg0, 0xC, 1);
+                FreeBattle_SetScreenState(arg0, 0xC, 1);
             }
             break;
         case 12:
-            res = func_8200639C(arg0 + 0x4E50);
+            res = FreeBattle_UpdatePopupMenu(arg0 + 0x4E50);
             if (res == -1) {
                 sel = (M2C_FIELD(arg0, s32*, 0x4370) == 0) ? 2 : 3;
-                func_82004518(arg0, sel, 1);
+                FreeBattle_SetScreenState(arg0, sel, 1);
             } else if (res > 0) {
                 func_8003F6AC(2);
                 if (res == D_82009278[M2C_FIELD(arg0, s32*, 0x4374)].count) {
-                    func_82004518(arg0, 0xE, 1);
+                    FreeBattle_SetScreenState(arg0, 0xE, 1);
                 } else {
-                    func_82004518(arg0, 0xD, 0);
+                    FreeBattle_SetScreenState(arg0, 0xD, 0);
                 }
             }
             break;
@@ -419,18 +436,18 @@ s32 func_82004E9C(s8* arg0) {
             res = func_8002BC14(D_800603C0);
             if ((res == -1) || (res == 1)) {
                 func_8003F6AC(3);
-                func_82004518(arg0, 0xC, 3);
+                FreeBattle_SetScreenState(arg0, 0xC, 3);
             }
             break;
         case 14:
             if (func_82008044(arg0 + 0x4F30) == -1) {
-                func_82004518(arg0, 0xC, 1);
+                FreeBattle_SetScreenState(arg0, 0xC, 1);
             }
             break;
         case 5:
-            res = func_820069B8(arg0 + 0x4554);
+            res = FreeBattle_UpdateOpponentSelect(arg0 + 0x4554);
             if (res == -1) {
-                func_82004518(arg0, 4, 3);
+                FreeBattle_SetScreenState(arg0, 4, 3);
             } else if (res == 1) {
                 M2C_FIELD(arg0, s32*, 0x4358) = 1;
                 M2C_FIELD(arg0, s32*, 0x435C) = 0;
@@ -444,51 +461,51 @@ s32 func_82004E9C(s8* arg0) {
                 M2C_FIELD(arg0, s32*, 0x4328 + M2C_FIELD(arg0, s32*, 0x45B8) * 4) = 1;
                 M2C_FIELD(arg0, s32*, 0x448C) = 7;
                 M2C_FIELD(arg0, s32*, 0x4408) = 7;
-                func_82004518(arg0, 0xA, 1);
+                FreeBattle_SetScreenState(arg0, 0xA, 1);
             }
             break;
         case 7:
-            res = func_820060AC(arg0 + 0x4468);
+            res = FreeBattle_UpdateMenuWindow(arg0 + 0x4468);
             if (res == -1) {
-                func_82004518(arg0, 3, 3);
+                FreeBattle_SetScreenState(arg0, 3, 3);
             } else if (res == 1) {
                 M2C_FIELD(arg0, s32*, 0x501C) = 0;
                 M2C_FIELD(arg0, s32*, 0x4408) = 7;
-                func_82004518(arg0, 0xA, 1);
+                FreeBattle_SetScreenState(arg0, 0xA, 1);
             } else if (res == 2) {
                 M2C_FIELD(arg0, s32*, 0x4408) = 7;
-                func_82004518(arg0, 0xC, 1);
+                FreeBattle_SetScreenState(arg0, 0xC, 1);
             }
             break;
         case 8:
-            res = func_820060AC(arg0 + 0x4468);
+            res = FreeBattle_UpdateMenuWindow(arg0 + 0x4468);
             if (res == -1) {
-                func_82004518(arg0, 3, 3);
+                FreeBattle_SetScreenState(arg0, 3, 3);
             } else if (res == 1) {
-                func_82004518(arg0, 9, 0);
+                FreeBattle_SetScreenState(arg0, 9, 0);
             } else if (res == 2) {
                 M2C_FIELD(arg0, s32*, 0x4408) = 7;
-                func_82004518(arg0, 0xC, 1);
+                FreeBattle_SetScreenState(arg0, 0xC, 1);
             }
             break;
         case 9:
-            res = func_82007B44(arg0 + 0x44EC);
+            res = FreeBattle_UpdateCupSelect(arg0 + 0x44EC);
             if (res == -1) {
-                func_82004518(arg0, 8, 3);
+                FreeBattle_SetScreenState(arg0, 8, 3);
             } else if (res > 0) {
                 M2C_FIELD(arg0, s32*, 0x4408) = 7;
                 M2C_FIELD(arg0, s32*, 0x448C) = 7;
                 M2C_FIELD(arg0, s32*, 0x501C) = M2C_FIELD(arg0, s32*, 0x4520);
-                func_82004518(arg0, 0xA, 1);
+                FreeBattle_SetScreenState(arg0, 0xA, 1);
             }
             break;
         case 10:
-            res = func_820038B0(arg0 + 0x4690);
+            res = FreeBattle_UpdateEntrySelect(arg0 + 0x4690);
             if (res == -1) {
                 if (M2C_FIELD(arg0, s32*, 0x43AC) == 0) {
-                    func_82004518(arg0, 2, 1);
+                    FreeBattle_SetScreenState(arg0, 2, 1);
                 } else {
-                    func_82004518(arg0, 3, 1);
+                    FreeBattle_SetScreenState(arg0, 3, 1);
                 }
             } else if (res == 1) {
                 if (M2C_FIELD(arg0, s32*, 0x4DC4) != 0) {
@@ -514,11 +531,11 @@ s32 func_82004E9C(s8* arg0) {
                 if (M2C_FIELD(arg0, s32*, 0x4354) >= 5) {
                     func_820044D0(arg0);
                     func_800407B0(0x53, 0, 0);
-                    func_82004518(arg0, 0xB, 0);
+                    FreeBattle_SetScreenState(arg0, 0xB, 0);
                 } else {
                     M2C_FIELD(arg0, s32*, 0x4DC8) = M2C_FIELD(arg0, s32*, 0x4354) + 1;
                     if (M2C_FIELD(arg0, s32*, 0x4DC4) != 0) {
-                        func_82000020(D_8200AC58, (M2C_FIELD(arg0, s32*, 0x46D8) * 6) % 24, 6);
+                        FreeBattle_ClearIndices(D_8200AC58, (M2C_FIELD(arg0, s32*, 0x46D8) * 6) % 24, 6);
                     }
                     func_82002C3C(arg0 + 0x4690);
                 }
@@ -536,29 +553,33 @@ s32 func_82004E9C(s8* arg0) {
 }
 
 /*
- * func_8200569C
+ * FreeBattle_RestoreMenuState
  *
  * Writes two words in the structure `arg0` points to, derived from the
  * bytes D_800AE8F0[0] and D_800AE8F0[1] of the session context, and then
- * calls func_82004518(arg0, 2, 0) or func_82004518(arg0, 3, 0).
+ * calls FreeBattle_SetScreenState(arg0, 2, 0) or FreeBattle_SetScreenState(arg0, 3, 0).
  *
  *   D_800AE8F0[0] == 0:
  *     arg0->0x43AC = 0
  *     arg0->0x4418 = 0 if D_800AE8F0[1] == 0, else 1 if it is 2, else 2
- *     func_82004518(arg0, 2, 0)
+ *     FreeBattle_SetScreenState(arg0, 2, 0)
  *   otherwise:
  *     arg0->0x43AC = 1
  *     arg0->0x4418 = 0 if D_800AE8F0[0] == 2, else 1
- *     func_82004518(arg0, 3, 0)
+ *     FreeBattle_SetScreenState(arg0, 3, 0)
  *
- * func_82004518 is still assembly, so what the 2 / 3 select is not
+ * FreeBattle_SetScreenState is still assembly, so what the 2 / 3 select is not
  * established.  The first argument of every call is `arg0` itself; the ROM
  * never writes $a0 before the call, so it is the caller's argument passed
  * through.
  */
 extern s8 D_800AE8F0;
 
-void func_8200569C(s32 arg0) {
+/**
+ * Reopens the rule menu with the choice saved from the previous visit.
+ * @unverified Name and comment guessed from the code.
+ */
+void FreeBattle_RestoreMenuState(s32 arg0) {
     s32 var_v0;
 
     if (D_800AE8F0 == 0) {
@@ -573,7 +594,7 @@ void func_8200569C(s32 arg0) {
             }
             M2C_FIELD((void*)arg0, s32 *, 0x4418) = var_v0;
         }
-        func_82004518((s8*)arg0, 2, 0);
+        FreeBattle_SetScreenState((s8*)arg0, 2, 0);
         return;
     }
     M2C_FIELD((void*)arg0, s32 *, 0x43AC) = 1;
@@ -582,7 +603,7 @@ void func_8200569C(s32 arg0) {
     } else {
         M2C_FIELD((void*)arg0, s32 *, 0x4418) = 1;
     }
-    func_82004518((s8*)arg0, 3, 0);
+    FreeBattle_SetScreenState((s8*)arg0, 3, 0);
 }
 
 extern s32 D_8200AD28;
@@ -597,7 +618,7 @@ void func_8200573C(void) {
         func_80027FF8(&D_8200AD30, D_8200AD2C);
     }
     D_8200AD28 = func_80002D98(0x5020);
-    func_82004B0C(D_8200AD28);
+    FreeBattle_InitBattleModeScreen(D_8200AD28);
 }
 
 typedef struct Col8200579C { u8 r, g, b, a; } Col8200579C;
@@ -648,28 +669,36 @@ s32 func_8200579C(s32 arg0) {
 
 M2C_UNK func_8000B1FC();                            /* extern */
 M2C_UNK func_8000B220();                            /* extern */
-M2C_UNK func_82004CE0(s32);                         /* extern */
-s32 func_82004E9C(s8*);
+M2C_UNK FreeBattle_DrawScreen(s32);                         /* extern */
+s32 FreeBattle_UpdateScreen(s8*);
 extern s32 D_8200AD28;
 
-void func_820058BC(s32 arg0) {
+/**
+ * One frame of the battle setup screen.
+ * @unverified Name and comment guessed from the code.
+ */
+void FreeBattle_RunFrame(s32 arg0) {
     func_8000B1FC();
     func_8000B220();
-    func_82004CE0(D_8200AD28);
-    func_82004E9C((s8*) D_8200AD28);
+    FreeBattle_DrawScreen(D_8200AD28);
+    FreeBattle_UpdateScreen((s8*) D_8200AD28);
 }
 
 M2C_UNK GbSave_DrawSummaryBar(M2C_UNK, M2C_UNK *, M2C_UNK *, s32); /* extern */
-M2C_UNK func_82004CE0(s32);                         /* extern */
+M2C_UNK FreeBattle_DrawScreen(s32);                         /* extern */
 extern M2C_UNK D_82009E18;
 extern s32 D_8200AD28;
 extern s32 D_8200AD2C;
 extern M2C_UNK D_8200AD30;
 
-s32 func_820058FC(s32 arg0) {
+/**
+ * Draws the setup screen and the GB save summary bar.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 FreeBattle_DrawScreenWithSummary(s32 arg0) {
     M2C_UNK *var_a1;
 
-    func_82004CE0(D_8200AD28);
+    FreeBattle_DrawScreen(D_8200AD28);
     if (D_8200AD2C == -1) {
         var_a1 = NULL;
     } else {
@@ -708,7 +737,7 @@ void PokeIcon_OpenModelArchives(void);
 void func_800040B4(s32, u8*, u8*);
 void func_80003EB8(s32, u8*, u8*, s32);
 s32 func_80001B10(u8*);
-void func_8200569C(s32);
+void FreeBattle_RestoreMenuState(s32);
 void func_80005B98(s32);
 void func_80006828(s32, void*);
 void func_8000A7B0(s32);
@@ -771,19 +800,19 @@ M2C_UNK func_820059EC(void) {
 
     if (M2C_FIELD(&D_800AE8F0, u16*, 0x1096) & 0x100) {
         M2C_FIELD(&D_800AE8F0, u16*, 0x1096) &= ~0x100;
-        func_8200569C(D_8200AD28);
+        FreeBattle_RestoreMenuState(D_8200AD28);
         func_80005B98(0xF);
-        func_80006828(0x11, func_820058FC);
+        func_80006828(0x11, FreeBattle_DrawScreenWithSummary);
         func_8000A7B0(9);
     } else {
         func_80006828(8, func_8200579C);
     }
-    func_80006828(0, func_820058BC);
+    func_80006828(0, FreeBattle_RunFrame);
 
     if (D_82008F84 == 0x8050) {
         func_80006998(0xFFFF);
         func_80005B98(0xF);
-        func_80006828(0x11, func_820058FC);
+        func_80006828(0x11, FreeBattle_DrawScreenWithSummary);
         func_8000A7FC(0xF);
     } else {
         func_80006828(8, func_8200579C);
