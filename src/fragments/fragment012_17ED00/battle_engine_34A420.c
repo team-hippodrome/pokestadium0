@@ -44,7 +44,8 @@ void Radial20_RotateVertexOffset(f32 arg0, UNUSED Vec3f* arg1, Vec3f* arg2, f32 
 /**
  * Moves: Bind (hit), Constrict (hit), Disable (hit), String Shot (hit), Wrap (hit)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Bind, Constrict, String Shot and Wrap. Disable did not use it.
  */
 void LassoHit_Init(f32 arg0, f32 arg1, f32 arg2, f32 arg3, u8 arg4, u8 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9) {
     Strip400State* ptr1 = &sTrailState;
@@ -101,7 +102,8 @@ f32 Strip400_GetTailFadeRatio(void) {
 /**
  * Moves: Bind (hit), Constrict (hit), Disable (hit), String Shot (hit), Wrap (hit)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Bind, Constrict, String Shot and Wrap. Disable did not use it.
  */
 s32 LassoHit_Update(void) {
     s32 i;

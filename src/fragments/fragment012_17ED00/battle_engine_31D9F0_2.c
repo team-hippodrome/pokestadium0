@@ -497,7 +497,9 @@ void BattleAnim_SetupExpandingHitSpark(Particle* arg0) {
 /**
  * handles expanding hit spark for Hydro Pump, Ice Beam, Bubble Beam, Hyper Beam, Solar Beam, Egg Bomb, Waterfall, and
  * Sky Attack
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Bubblebeam, Egg Bomb, Hydro Pump, Hyper Beam, Ice Beam and Waterfall (the sweep used only
+ * the charge turn of Solar Beam and Sky Attack).
  */
 void BattleAnim_RunExpandingHitSpark(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -632,7 +634,9 @@ M2C_UNK func_82145C28(s8 *);                      /* extern */
  * - charging Sky Attack
  * - Using Rage or Bide
  * - Being hit by Fire Spin
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Fire Spin, Rage, Sky Attack and Metronome (through the move it called). Bide did not use
+ * it.
  */
 void BattleAnim_RunOscillatingFlameUnderneathPokemon(s8 *arg0) {
     s16 temp_v0;
@@ -955,7 +959,9 @@ void BattleAnim_RunEmberUseEffect(Particle* arg0) {
 
 /**
  * Handles config for explosion effects when using Fire Punch, Ember, and Egg bomb
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Egg Bomb, Ember and Fire Punch, the three moves the comment names; Explosion and
+ * Selfdestruct did not use it.
  */
 void BattleAnim_GetExplosionParticleColor(Particle* arg0, u8 arg1) {
     u16 sp1E;
@@ -1023,7 +1029,8 @@ void BattleAnim_FirePunchEmberEggBombColorChange(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep it ran only for Egg Bomb (not for Explosion or
+ * Selfdestruct).
  */
 void BattleAnim_SetupBackgroundBombExplosion(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
@@ -1074,7 +1081,8 @@ void BattleAnim_SetupBackgroundBombExplosion(Particle* arg0) {
 
 /**
  * Handles the large background explosion when being hit by egg bomb
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep it ran only for Egg Bomb (not for Explosion or
+ * Selfdestruct).
  */
 void BattleAnim_RunBackgroundBombExplosion(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -1103,7 +1111,8 @@ void BattleAnim_RunBackgroundBombExplosion(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Explosion and Selfdestruct.
  */
 void BattleAnim_SetupBoomSmallExplosion(Particle* arg0) {
     Vec3f sp2C;
@@ -1137,7 +1146,8 @@ M2C_UNK func_821469BC(s8 *);                      /* extern */
 
 /**
  * Handles the smaller explosions being hit by Explosion and Self-destruct (Boom)
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Explosion and Selfdestruct.
  */
 void BattleAnim_RunBoomSmallExplosion(s8 *arg0) {
     s16 temp_v1;
@@ -1237,7 +1247,8 @@ void BattleAnim_CallbackEndEffect40Descriptor48SpreadScaleAlphaFade(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep it ran only for Egg Bomb (not for Explosion or
+ * Selfdestruct).
  */
 void BattleAnim_SetupSecondaryBombExplosion(Particle* arg0) {
     s16 sp36 = Particle_FieldAC_GetS16_0C038(arg0);
@@ -1277,7 +1288,8 @@ M2C_UNK func_82146E1C(s8 *);                      /* extern */
 
 /**
  * Handles secondary explosion from being hit by egg bomb
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep it ran only for Egg Bomb (not for Explosion or
+ * Selfdestruct).
  */
 void BattleAnim_RunSecondaryBombExplosion(s8 *arg0) {
     s16 temp_v0;
@@ -1510,7 +1522,8 @@ void BattleAnim_RunFirePunchLingeringHitSpark(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Egg Bomb and Fire Punch.
  */
 void BattleAnim_SetupAfterImpactSmoke(Particle* arg0) {
     s16 sp36;
@@ -1547,7 +1560,8 @@ M2C_UNK func_82147710(s8 *);                      /* extern */
 
 /**
  * Handles the dissipating and spreading smoke from being hit by fire punch and egg bomb
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Egg Bomb and Fire Punch.
  */
 void BattleAnim_RunAfterImpactSmoke(s8 *arg0) {
     s16 temp_v0;

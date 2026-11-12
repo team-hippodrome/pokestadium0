@@ -267,7 +267,8 @@ void BattleAnim_ApplySpeciesKeyedSpawnOffset(Particle* arg0) {
 /**
  * Moves: Surf (hit)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Surf.
  */
 void BattleAnim_RunSplashOfWater(s8 *arg0) {
     s16 temp_v0;

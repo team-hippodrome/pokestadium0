@@ -2502,7 +2502,8 @@ void Gfx_ParticlePaletteColorOnlyCallback(s32 arg0, arg1_func_84344CE8* arg1) {
 /**
  * Moves: Acid (use/hit), Lick (hit), Sludge (use/hit), Toxic (use/hit)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Acid, Lick, Sludge and Toxic.
  */
 s16 BattleAnim_GetSlimeVariantIndex(void) {
     s16 sp1E;

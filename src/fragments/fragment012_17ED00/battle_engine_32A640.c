@@ -291,7 +291,8 @@ void BattleAnim_RunPetalDanceLingeringHitEffect(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Vine Whip and Wing Attack.
  */
 void BattleAnim_SetupSlowFallingHitEffect(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
@@ -333,7 +334,8 @@ void func_8213E1FC(Particle* arg0, f32 arg1);
 void Particle_ApplyRotationStepX(Particle* arg0);
 /**
  * Handles the leaves that spawn when being hit by vine whip and the feathers that spawn when being hit by wing attack
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Vine Whip and Wing Attack.
  */
 void BattleAnim_RunSlowFallingHitEffect(Particle* arg0) {
     s16 sp26 = Particle_FieldCE_GetS32_0C040(arg0);

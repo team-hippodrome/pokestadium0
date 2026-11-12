@@ -148,7 +148,9 @@ void BattleAnim_RunRainbowHueChange(Particle* arg0) {
  * Set up Fading the user's model to invisible for Teleport, defense curl, sky attack, acid armor and sharpen.
  * These moves do not replace the user's model like transform or substitute and do not have unique animation varients
  * like withdrawal; which are not covered by this function.
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Acid Armor, Defense Curl, Explosion, Selfdestruct, Sharpen and Teleport. Sky Attack's
+ * charge turn did not use it, and Explosion and Selfdestruct did.
  */
 void BattleAnim_SetupInvisibility(Particle* arg0) {
     arg0->prim_a = arg0->unk_A6;
@@ -307,7 +309,8 @@ void BattleAnim_SetupDescriptor25AlphaFadeInHold(Particle* arg0) {
 
 /**
  * Used to change the Pokemon and screen hue at the same time for Blizzard, Boom, Confuse Ray, and Flash
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Blizzard, Confuse Ray, Explosion, Flash and Selfdestruct.
  */
 void BattleAnim_RunPokemonAndFullScreenHueChange(Particle* arg0) {
     switch (arg0->lifecycle) {

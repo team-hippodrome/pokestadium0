@@ -352,14 +352,16 @@ void BattleAnim_SetupStringShotHitRadial(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Disable.
  */
 s32 BattleAnim_RunDisableHitRadial(void) {
     return LassoHit_Update();
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Disable.
  */
 void BattleAnim_DrawDisableHitRadial(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

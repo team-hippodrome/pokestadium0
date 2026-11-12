@@ -610,3 +610,16 @@ These scenarios start from a COM free battle (1P ガール team, COM むしと�
 * COM's view of 1P: after Nidorino had used Poison Sting and Tail Whip, the
   AI record of Nidorino listed only those two moves and HP 44 (HUD 44/ 69),
   which confirms `BattleAi_CopyVisibleBattleState`.
+
+## Sweep cross-check against move lists in comments
+
+Several effect functions name their moves in the comment, not the function
+name. Where the per-move sweep ran the function for exactly those moves, the
+tag came off (31 names: the Egg Bomb blasts, the Boom small explosions, the
+after-impact smoke, the falling leaves and feathers, the lightest mist, the
+hue change, the hit sparks, the slime variants, Surf's splash, the lasso hit,
+the stinger trail colors, the Disable radial, and the single-move trail
+starters for Petal Dance, Razor Leaf, Spike Cannon, Swift, and the Hyper Beam
+and Ice Beam trail). Where the sweep and the comment disagree, the evidence
+line says how. For example, Bide does not use the flame under the Pokémon,
+and Disable does not use the lasso hit.

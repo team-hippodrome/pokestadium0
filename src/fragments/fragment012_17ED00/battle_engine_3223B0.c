@@ -1145,7 +1145,8 @@ void BattleAnim_RunAuroraBeamHitSpark(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Hydro Pump, Hyper Beam, Ice Beam and Waterfall.
  */
 void BattleAnim_SetupStrongOutwardMovingLargeHitSpark(Particle* arg0) {
     Particle_FieldAC_GetS16_0C038(arg0);
@@ -1167,7 +1168,9 @@ M2C_UNK func_8214B84C(s8 *);                      /* extern */
 
 /**
  * Handles hit effect shared by Hydro Pump, Ice Beam, Hyper Beam, Solar Beam, Waterfall, and Sky Attack
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Hydro Pump, Hyper Beam, Ice Beam and Waterfall (the sweep used only the charge turn of
+ * Solar Beam and Sky Attack).
  */
 void BattleAnim_RunStrongOutwardMovingLargeHitSpark(s8 *arg0) {
     s16 temp_v0;

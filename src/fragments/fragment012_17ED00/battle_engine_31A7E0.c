@@ -13,7 +13,8 @@ void BattleAnim_UpdateSecondaryOwnerParticleBlueFadeGrow(s8 *arg0);
 void BattleAnim_UpdateSecondaryOwnerParticleBlueGrow(s8 *arg0);
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Pin Missile, Poison Sting, Spike Cannon and Twineedle.
  */
 void BattleAnim_InitStingerTrailColor(Particle* arg0) {
     Particle_Field1C_SetScaled_0B938(arg0, 0.1f);
@@ -52,7 +53,8 @@ void BattleAnim_UpdateSecondaryOwnerParticleBlueFadeGrow(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Pin Missile, Poison Sting, Spike Cannon and Twineedle.
  */
 void BattleAnim_InitStingerTrailColorDuplicate(Particle* arg0) {
     Particle_Field1C_SetScaled_0B938(arg0, 0.1f);
