@@ -185,3 +185,12 @@ operand swap in the loader (0x1AD44, below 1 MB) hangs.
 Zero is CIC-NUS-6103; its seed is 0xA3886759 and the final mix is `(a3^t2)+t3`, `(s0^a2)+t4`.
 `tools/fonts_en.py` ports Project64's `CalculateRomCrc` (`rom_crc`, `detect_seed`, `fix_checksum`),
 re-stamps the header after patching, and the checker refuses a ROM whose stamp is stale.
+
+## Font archive tail (2026-11-12)
+
+Zero's font archive spans 0x2B2C80..0x2E0BE0 (0x2DF60 bytes, six PERS-SZP files). Stadium 1's
+archive is only 0x10FA0 bytes, so the first patch cleared the remaining 0x1CFC0 bytes —
+116,287 of which are nonzero. Those are Zero's own glyph sheets for the big sets (glyph data
+for 24x20/24x24/32x32 starts at 0x2BE3D0), and clearing them broke any screen that loads
+those sets. The archive header defines every file's extent, so clearing the tail is not
+needed: `full` now leaves it alone and only the archive's own bytes change.

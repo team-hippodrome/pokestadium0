@@ -270,10 +270,13 @@ def patch(rom, us, stage='full'):
 
     seed = detect_seed(rom)
     out = bytearray(rom)
-    if stage in ('full', 'data', 'archive'):
+    if stage in ('full', 'data', 'archive', 'data-keep'):
         out[ZERO_FONTS:ZERO_FONTS + total] = us[US_FONTS:US_FONTS + total]
+    if stage in ('data', 'archive'):
+        # Bisect-only: clearing Zero's stale glyph data is not required (the archive header
+        # defines every file's extent) and it is 0x1CFC0 bytes of real ROM, so 'full' keeps it.
         out[ZERO_FONTS + total:ZERO_FONTS_END] = bytes(ZERO_FONTS_END - ZERO_FONTS - total)
-    if stage in ('full', 'data', 'map'):
+    if stage in ('full', 'data', 'map', 'data-keep'):
         out[ZERO_ASCII_MAP:ZERO_ASCII_MAP + MAP_BYTES] = table
     patches = []
     if stage in ('full', 'data', 'map', 'code'):
@@ -300,12 +303,13 @@ def check(rom, us, retail, stage='full', seed=None):
     retail is the unpatched build, the source of the instruction words the patches reuse.
     """
     total, files = archive_files(rom, ZERO_FONTS)
-    if stage in ('full', 'data', 'archive'):
+    if stage in ('full', 'data', 'archive', 'data-keep'):
         if rom[ZERO_FONTS:ZERO_FONTS + total] != us[US_FONTS:US_FONTS + total]:
             raise SystemExit("font archive differs from Stadium 1's")
+    if stage in ('data', 'archive'):
         if rom[ZERO_FONTS + total:ZERO_FONTS_END].count(0) != ZERO_FONTS_END - ZERO_FONTS - total:
             raise SystemExit('font slot tail is not cleared')
-    if stage in ('full', 'data', 'map'):
+    if stage in ('full', 'data', 'map', 'data-keep'):
         if rom[ZERO_ASCII_MAP:ZERO_ASCII_MAP + MAP_BYTES] != us[US_ASCII_MAP:US_ASCII_MAP + MAP_BYTES]:
             raise SystemExit("ASCII glyph map differs from Stadium 1's")
     if stage == 'micro':
@@ -481,7 +485,7 @@ def main():
     ap.add_argument('--rom', default='build/pokestadium0-jp.z64')
     ap.add_argument('--us', help='Stadium 1 US baserom.z64, the source of the English font')
     ap.add_argument('--out')
-    ap.add_argument('--stage', choices=['full', 'data', 'code', 'map', 'archive', 'loader', 'loader0', 'micro'], default='full',
+    ap.add_argument('--stage', choices=['full', 'data', 'data-keep', 'code', 'map', 'archive', 'loader', 'loader0', 'micro'], default='full',
                     help='full: archive + map + loader; data: archive + map; code: map + loader; '
                          'map/archive: one of them (bisecting a boot fault)')
     ap.add_argument('--base', default='build/pokestadium0-jp.z64',
