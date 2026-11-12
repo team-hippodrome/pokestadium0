@@ -817,7 +817,7 @@ func_82007398,0x82007398,src/fragments/fragment007_166580_3.c,FreeBattle_DrawBat
 func_82007474,0x82007474,src/fragments/fragment007_166580_3.c,FreeBattle_InitBattleModeWindow,hand,,c
 func_8200752C,0x8200752C,src/fragments/fragment007_166580_3.c,FreeBattle_DrawBattleModeWindow,hand,,c
 func_820076DC,0x820076DC,src/fragments/fragment007_166580_3.c,FreeBattle_UpdateBattleModeWindow,hand,,c
-func_82007784,0x82007784,src/fragments/fragment007_166580_3.c,func_82007784,hand,,c
+func_82007784,0x82007784,src/fragments/fragment007_166580_3.c,FreeBattle_DrawCupRow,hand,,c
 func_820078BC,0x820078BC,src/fragments/fragment007_166580_3.c,FreeBattle_InitCupSelect,hand,,c
 func_82007AF4,0x82007AF4,src/fragments/fragment007_166580_3.c,FreeBattle_DrawCupSelect,m2c,m2c,c
 func_82007B44,0x82007B44,src/fragments/fragment007_166580_3.c,FreeBattle_UpdateCupSelect,hand,,c

@@ -4837,3 +4837,4 @@ FreeBattle_DrawRentalTeamPanels = 0x820032E8; // type:func
 FreeBattle_UpdateRentalConfirmChoice = 0x820012B4; // type:func
 FreeBattle_DrawMoveName = 0x82000AC4; // type:func
 FreeBattle_RentSelectedMon = 0x820037D0; // type:func
+FreeBattle_DrawCupRow = 0x82007784; // type:func

@@ -1066,16 +1066,12 @@ void func_80027F8C(s32);
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 
 /**
- * Draws one entry of a list at (arg0, arg1). arg2 points to {text, icon}.
- * When bit 0x10 of arg4 is set it first calls Ui_FillRectHighlighted(arg0 + 3,
- * arg1 + 3, 0x14A, 0x1E, D_82009100). When bit 0x100 is set it emits the
- * display list D_80060290, draws the 0x18 by 0x18 image arg2->icon at
- * (arg0 + 0x12C, arg1 + 6) with func_8001B884 and emits D_80060398. It then
- * prints arg2->text at (arg0 + 0xC, arg1 + 6) in font 0x10 after
- * func_80027F8C(arg4). arg3 is unused. The unused pad[5] reproduces the
- * retail stack frame.
+ * Draws one row of 「カップせんたく」: highlight box when selected (flag 0x10), a cleared-cup icon at the
+ * right when flag 0x100 is set, and the cup name dimmed when locked.
+ * Seen in play: draws モンスターボールカップ (boxed) and the greyed スーパーボール, ハイパーボール and マスターボールカップ.
+ * @unverified The cleared icon (flag 0x100) was not seen.
  */
-void func_82007784(s32 arg0, s32 arg1, IconPanel* arg2, s32 arg3, s32 arg4) {
+void FreeBattle_DrawCupRow(s32 arg0, s32 arg1, IconPanel* arg2, s32 arg3, s32 arg4) {
     UNUSED s32 pad[5]; // FAKE: stack padding
     s32 sp28;
 
@@ -1099,7 +1095,8 @@ extern u8 D_8200A040[];
 extern u8 D_820091C4[];
 /**
  * Sets up the カップせんたく (choose cup) window with up to four cups.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: トーナメントにでる opens 「カップせんたく」 (モンスターボールカップ, スーパーボールカップ, ハイパーボールカップ, マスターボールカップ) and
+ * runs this.
  */
 void FreeBattle_InitCupSelect(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     UNUSED s32 pad[2]; // FAKE: stack padding
@@ -1119,7 +1116,7 @@ void FreeBattle_InitCupSelect(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     M2C_FIELD(arg0, Color_RGBA8*, 0x18) = D_82009100;
     M2C_FIELD(arg0, u8**, 0x20) = D_8200A040;
     func_80027410(arg0 + 0x50, (s32)D_820091C4, 8, 4, 4);
-    Menu_Init(arg0 + 0x2C, arg0 + 0x50, arg0 + 0x60, (void (*)(s32, s32, char*, s32, s32, s32*))func_82007784, 0x150, 0x24);
+    Menu_Init(arg0 + 0x2C, arg0 + 0x50, arg0 + 0x60, (void (*)(s32, s32, char*, s32, s32, s32*))FreeBattle_DrawCupRow, 0x150, 0x24);
     M2C_FIELD(arg0, s32*, 0x4C) |= 0x10000;
     M2C_FIELD(arg0, s32*, 0x34) = n - 1;
     for (i = 0; i < arg3; i++) {
@@ -1135,7 +1132,7 @@ M2C_UNK Menu_DrawInlineItems(s8 *, s32, s32, s32, s32);  /* extern */
 
 /**
  * Draws the choose cup window.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: draws the 「カップせんたく」 window; only モンスターボールカップ is open on a new save.
  */
 void FreeBattle_DrawCupSelect(s8 *arg0, s32 arg1) {
     if (func_8002AE6C() == 0) {
@@ -1151,7 +1148,7 @@ void FreeBattle_DrawCupSelect(s8 *arg0, s32 arg1) {
  * pointed to by the word at arg0 + 0x30. If that bit is clear it calls
  * func_8003F6AC(2) and returns unk_34 + 1; if it is set it calls
  * func_8003F6AC(8) and returns 0. Any other value returns 0.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play: runs while 「カップせんたく」 is open.
  */
 s32 FreeBattle_UpdateCupSelect(void* arg0) {
     s32 result = 0;
