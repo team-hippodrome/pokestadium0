@@ -125,7 +125,11 @@ void ParticleGfx_DrawBillboardPrimEnvRotatedQuad(Particle* arg0, CameraNode* arg
     ParticleGfx_DrawModelQuadRotated(arg1, arg0->worldPosition, arg0->scale, D_82190E50, arg0->rotation.z);
 }
 
-void func_8214139C(Particle* arg0, CameraNode* arg1) {
+/**
+ * Particle callback of the Fire Spin animation. Player sweep (all 165 moves used in battle): only
+ * Fire Spin reached this function.
+ */
+void BattleAnim_FireSpinParticleDraw(Particle* arg0, CameraNode* arg1) {
     ParticleGfx_SetPrimEnvColorCombine(arg0->prim_r, arg0->prim_g, arg0->prim_b, arg0->env_r, arg0->env_g, arg0->env_b, arg0->prim_a);
     ParticleGfx_DrawModelQuad(arg1, arg0->worldPosition, arg0->scale, D_82191000);
 }
@@ -145,7 +149,11 @@ void func_82141540(Particle* arg0, CameraNode* arg1) {
     ParticleGfx_DrawModelQuad(arg1, arg0->worldPosition, arg0->scale, D_82191440);
 }
 
-s32 func_821415CC(Particle* arg0, UNUSED CameraNode* arg1) {
+/**
+ * Particle callback of the Thunder Wave animation. Player sweep (all 165 moves used in battle):
+ * only Thunder Wave reached this function.
+ */
+s32 BattleAnim_ThunderWaveParticleDraw(Particle* arg0, UNUSED CameraNode* arg1) {
     gSPClearGeometryMode(gDisplayListHead++, G_CULL_BACK);
 
     ParticleGfx_SetPrimEnvColorCombine(arg0->prim_r, arg0->prim_g, arg0->prim_b, arg0->env_r, arg0->env_g, arg0->env_b, arg0->prim_a);

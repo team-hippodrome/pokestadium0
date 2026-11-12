@@ -216,7 +216,7 @@ M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_821609F0(s8 *);                      /* extern */
 
-void func_82160AF0(s8 *arg0);
+void BattleAnim_SandAttackParticleUpdate(s8 *arg0);
 
 f32 func_8000F150();                                /* extern */
 s16 Particle_GetUnkAC();                                /* extern */
@@ -332,7 +332,7 @@ void BattleAnim_SetupSharedScalePulseFallSetup(Particle* arg0);
 
 void BattleAnim_RunBlizzardHitEffect(Particle* arg0);
 
-void func_821627C0(Particle* arg0);
+void BattleAnim_IceBeamParticleUpdateB(Particle* arg0);
 
 void BattleAnim_RunThunderPunchHitEffect(Particle* arg0);
 
@@ -350,7 +350,7 @@ M2C_UNK Particle_ApproachEnvGreen(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_821635E4(s8 *);                      /* extern */
 
-void func_8216374C(s8 *arg0);
+void BattleAnim_FirePunchParticleUpdate(s8 *arg0);
 
 void Particle_MarkInactive(s8 *arg0);                      /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
@@ -377,7 +377,7 @@ M2C_UNK func_82163C28(s8 *);                      /* extern */
 void func_82163D7C(s8 *arg0);
 
 /*
- * func_82163E60
+ * BattleAnim_AcidArmorParticleUpdateB
  *
  * Particle initialiser: sets the particle's scale to 0.2, recolours its
  * primitive/environment colours from its descriptor's palette pair, sets
@@ -393,7 +393,7 @@ void func_82163D7C(s8 *arg0);
  */
 extern f32 D_FLT_82197730;
 
-void func_82163E60(Particle* arg0);
+void BattleAnim_AcidArmorParticleUpdateB(Particle* arg0);
 
 M2C_UNK func_82137AB4(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 void Particle_MarkInactive(s8 *arg0);                      /* extern */
@@ -402,7 +402,7 @@ M2C_UNK Particle_ApproachEnvGreen(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_82140548(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_821406B4(s8 *);                      /* extern */
 
-void func_82163ED0(s8 *arg0);
+void BattleAnim_AcidArmorParticleUpdateA(s8 *arg0);
 
 extern const f32 D_FLT_82197734;
 
@@ -564,7 +564,7 @@ void BattleAnim_InitializeThunderPunchHit(void);
 
 M2C_UNK func_8213B644(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
 
-void func_82166B88(void);
+void BattleAnim_InitializeSwiftUse(void);
 
 M2C_UNK func_8213B5D8(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK *, M2C_UNK *, s32, s32, s32, s32, s32, s32); /* extern */
 extern s16 D_8219A80A;
@@ -598,7 +598,7 @@ extern s32 D_8219A814;
 
 void BattleAnim_InitializeScratchSlashUse(void);
 
-void func_82167274(void);
+void BattleAnim_InitializeCutCrabhammerUse(void);
 void ParticleEffect_DynamicCollisionSetup(void);
 
 void BattleAnim_InitializeCutSlashScratchEffect(void);
@@ -617,17 +617,17 @@ M2C_UNK func_8213B5D8(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK *, M2C_UNK *, s32, s32,
 extern M2C_UNK D_8218E7B0;
 extern M2C_UNK func_82163540;
 
-void func_821675EC(void);
+void BattleAnim_InitializeFirePunchUse(void);
 
 M2C_UNK func_8213B644(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
 
-void func_821676E4(void);
+void BattleAnim_InitializeRazorLeafUse(void);
 
 void BattleAnim_InitializeRazorLeafHit(void);
 
 M2C_UNK func_8213B644(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
 
-void func_821677AC(void);
+void BattleAnim_InitializePetalDanceUse(void);
 
 s32 func_8213646C();                                /* extern */
 M2C_UNK func_8213B560(M2C_UNK, M2C_UNK *, M2C_UNK *, M2C_UNK, s32, s32, s32, s32, s32); /* extern */
@@ -639,7 +639,7 @@ void BattleAnim_InitializePowderSporeGasMoveHit(void);
 M2C_UNK func_8213B5D8(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK *, M2C_UNK *, s32, s32, s32, s32, s32, s32); /* extern */
 extern M2C_UNK D_8218E7C8;
 
-void func_82167A8C(void);
+void BattleAnim_InitializeSandAttackUse(void);
 
 void BattleAnim_InitializeSandAttackHit(void);
 
@@ -701,7 +701,7 @@ void BattleAnim_InitializeSolarBeamUseSequence(void);
 
 M2C_UNK func_8213BC7C(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 
-void func_82168ACC(void);
+void BattleAnim_InitializeGrowthUse(void);
 
 M2C_UNK func_8213B5D8(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK *, M2C_UNK *, s32, s32, s32, s32, s32, s32); /* extern */
 M2C_UNK func_8213BC00(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32); /* extern */

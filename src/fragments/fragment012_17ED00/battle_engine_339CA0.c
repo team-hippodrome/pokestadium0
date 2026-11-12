@@ -522,7 +522,11 @@ void BattleAnim_SetupSandAttackUseEffect(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void func_82160AF0(s8 *arg0) {
+/**
+ * Particle callback of the Sand Attack animation. Player sweep (all 165 moves used in battle):
+ * only Sand Attack reached this function.
+ */
+void BattleAnim_SandAttackParticleUpdate(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -1297,7 +1301,11 @@ void BattleAnim_RunBlizzardHitEffect(Particle* arg0) {
     }
 }
 
-void func_821627C0(Particle* arg0) {
+/**
+ * Particle callback of the Ice Beam animation. Player sweep (all 165 moves used in battle): only
+ * Ice Beam reached this function.
+ */
+void BattleAnim_IceBeamParticleUpdateB(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupSharedScalePulseFallSetup(arg0);
@@ -1766,7 +1774,11 @@ void BattleAnim_SetupFirePunchUseEffect2(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void func_8216374C(s8 *arg0) {
+/**
+ * Particle callback of the Fire Punch animation. Player sweep (all 165 moves used in battle):
+ * only Fire Punch reached this function.
+ */
+void BattleAnim_FirePunchParticleUpdate(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -1963,7 +1975,11 @@ void func_82163D7C(s8 *arg0) {
     }
 }
 
-void func_82163E60(Particle* arg0) {
+/**
+ * Particle callback of the Acid Armor animation. Player sweep (all 165 moves used in battle):
+ * only Acid Armor reached this function.
+ */
+void BattleAnim_AcidArmorParticleUpdateB(Particle* arg0) {
     Particle_Field1C_SetScaled_0B938(arg0, 0.2f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
     Particle_SetPrimAlpha(arg0, 0xC8);
@@ -1972,13 +1988,17 @@ void func_82163E60(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void func_82163ED0(s8 *arg0) {
+/**
+ * Particle callback of the Acid Armor animation. Player sweep (all 165 moves used in battle):
+ * only Acid Armor reached this function.
+ */
+void BattleAnim_AcidArmorParticleUpdateA(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_82163E60(arg0);
+        BattleAnim_AcidArmorParticleUpdateB(arg0);
         return;
     case 2:
         func_82140228(arg0, 0x40000000, 0x3CA3D70A);

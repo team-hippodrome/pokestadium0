@@ -683,7 +683,11 @@ M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 s32 func_821406B4(s8 *);                          /* extern */
 M2C_UNK func_82145E04(s8 *);                      /* extern */
 
-void func_82145EC0(s8 *arg0) {
+/**
+ * Particle callback of the Fire Spin animation. Player sweep (all 165 moves used in battle): only
+ * Fire Spin reached this function.
+ */
+void BattleAnim_FireSpinParticleUpdate(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -764,7 +768,11 @@ M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_821460C8(s8 *);                      /* extern */
 
-void func_82146110(s8 *arg0) {
+/**
+ * Particle callback of the Ember animation. Player sweep (all 165 moves used in battle): only
+ * Ember reached this function.
+ */
+void BattleAnim_EmberParticleUpdateB(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -830,7 +838,7 @@ void BattleAnim_RunEmberProjectile(s8 *arg0) {
     if (func_8213CB7C(arg0) != 0) {
         func_821437E0(arg0, 0x2A, 0x1C);
         Particle_AddVelocityFromRotationTemplate1(arg0);
-        func_82139E5C(arg0, &func_82146110, &D_8218E7D0, 1);
+        func_82139E5C(arg0, &BattleAnim_EmberParticleUpdateB, &D_8218E7D0, 1);
     }
 }
 
@@ -855,7 +863,11 @@ M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_821437E0(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_82146314(s8 *);                      /* extern */
 
-void func_82146378(s8 *arg0) {
+/**
+ * Particle callback of the Ember animation. Player sweep (all 165 moves used in battle): only
+ * Ember reached this function.
+ */
+void BattleAnim_EmberParticleUpdateA(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -2015,9 +2027,13 @@ extern M2C_UNK D_8218E7B0;
 extern s16 D_8219A80A;
 extern M2C_UNK func_82146504;
 
-void func_821486FC(void) {
+/**
+ * Effect init that spawns the Ember animation. Player sweep (all 165 moves used in battle): only
+ * Ember reached this function.
+ */
+void BattleAnim_InitializeEmberUse(void) {
     func_8213B794(0, 0, 0x40, 8, 0xC8);
-    func_8213B560(1, &func_82146378, &D_8218E728, 0, 1, 0x10, (s32) D_8219A80A, 0, 0);
+    func_8213B560(1, &BattleAnim_EmberParticleUpdateA, &D_8218E728, 0, 1, 0x10, (s32) D_8219A80A, 0, 0);
     func_8213B560(2, &func_82146504, &D_8218E770, 0, 3, 0x11, (s32) D_8219A80A, 0, 0);
     func_8213B560(4, &BattleAnim_RunEmberProjectile, &D_8218E7B0, 0, 1, 0x11, (s32) D_8219A80A, 0, 0);
 }
@@ -2093,7 +2109,11 @@ extern s16 D_8219A80A;
 extern M2C_UNK func_82144E24;
 extern M2C_UNK func_82145718;
 
-void func_82148D30(void) {
+/**
+ * Effect init that spawns the Dragon Rage animation. Player sweep (all 165 moves used in battle):
+ * only Dragon Rage reached this function.
+ */
+void BattleAnim_InitializeDragonRageUse(void) {
     func_8213B644(0, 8, 6);
     func_8213B5D8(0, 2, 0x3C, &func_82144E24, &D_8218E7F8, 0, 1, 0x11, (s32) D_8219A80A, 1, 0);
     func_8213B5D8(0, 4, 0x1E, &func_82145498, &D_8218E770, 0, 1, 0x11, (s32) D_8219A80A, 1, 0);
@@ -2119,7 +2139,11 @@ extern s16 D_8219A80A;
 extern M2C_UNK func_82144E24;
 extern M2C_UNK func_82145718;
 
-void func_82149014(void) {
+/**
+ * Effect init that spawns the Fire Spin animation. Player sweep (all 165 moves used in battle):
+ * only Fire Spin reached this function.
+ */
+void BattleAnim_InitializeFireSpinUse(void) {
     func_8213B644(0, 8, 6);
     func_8213B5D8(0, 2, 0x50, &func_82144E24, &D_8218E7F8, 0, 1, 0x11, (s32) D_8219A80A, 0, 0);
     func_8213B5D8(0, 4, 0x28, &func_82145498, &D_8218E770, 0, 1, 0x11, (s32) D_8219A80A, 0, 0);
@@ -2136,7 +2160,7 @@ extern M2C_UNK D_8218E7F8;
  * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
 void BattleAnim_InitializeFireSpinHitFlames(void) {
-    func_8213B560(0, &func_82145EC0, &D_8218E598, 0, 0x12, 0xE, 0, 0, 0);
+    func_8213B560(0, &BattleAnim_FireSpinParticleUpdate, &D_8218E598, 0, 0x12, 0xE, 0, 0, 0);
     func_8213B560(8, &BattleAnim_RunOscillatingFlameUnderneathPokemon, &D_8218E7F8, 0, 0x20, 7, 0, 0, 0);
     func_8213BF70(8, 9, 0xE, 8, 0xC8, 0x10);
 }

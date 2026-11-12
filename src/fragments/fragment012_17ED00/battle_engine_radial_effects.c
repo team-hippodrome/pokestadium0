@@ -50,7 +50,7 @@ extern s16 D_8219CB18;
 extern s16 D_8219CB1A;
 extern const char D_821978C8[];
 
-void func_8216E0B0(void);
+void BattleAnim_InitializeSurfUse(void);
 s32 BattleAnim_SurfCompleteImmediately(void);
 void func_8216E0C0(void);
 void BattleAnim_StartTrappingLassoMove_Init(void);
@@ -74,7 +74,11 @@ void BattleAnim_StartEffect19Radial20_EmitVariantD(void);
 void BattleAnim_StartEffect7TexturedRibbonSheet_Emit(void);
 void BattleAnim_StartEffect33Radial20_EmitVariantC(void);
 
-void func_8216E0B0(void) {
+/**
+ * Effect init that spawns the Surf animation. Player sweep (all 165 moves used in battle): only
+ * Surf reached this function.
+ */
+void BattleAnim_InitializeSurfUse(void) {
 }
 
 /**
@@ -290,7 +294,11 @@ void BattleAnim_DrawStringShotUseRadial(void) {
     gDisplayListHead = Radial20_Draw(gDisplayListHead);
 }
 
-void func_8216E930(void) {
+/**
+ * Effect init that spawns the String Shot animation. Player sweep (all 165 moves used in battle):
+ * only String Shot reached this function.
+ */
+void BattleAnim_InitializeStringShotUse(void) {
     Vec3f sp34;
     f32 sp30;
 

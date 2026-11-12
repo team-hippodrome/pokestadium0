@@ -248,7 +248,11 @@ void BattleAnim_DrawAsset1CRgba16Quad(Particle* arg0, UNUSED CameraNode* arg1) {
     gSPSetGeometryMode(gDisplayListHead++, G_CULL_BACK);
 }
 
-void func_82142348(Particle* arg0, UNUSED CameraNode* arg1) {
+/**
+ * Particle callback of the Petal Dance animation. Player sweep (all 165 moves used in battle):
+ * only Petal Dance reached this function.
+ */
+void BattleAnim_PetalDanceParticleDraw(Particle* arg0, UNUSED CameraNode* arg1) {
     gSPDisplayList(gDisplayListHead++, D_821903D0);
     gSPClearGeometryMode(gDisplayListHead++, G_CULL_BACK);
 
@@ -258,7 +262,11 @@ void func_82142348(Particle* arg0, UNUSED CameraNode* arg1) {
     gSPSetGeometryMode(gDisplayListHead++, G_CULL_BACK);
 }
 
-void func_8214243C(Particle* arg0, UNUSED CameraNode* arg1) {
+/**
+ * Particle callback of the Wing Attack animation. Player sweep (all 165 moves used in battle):
+ * only Wing Attack reached this function.
+ */
+void BattleAnim_WingAttackParticleDraw(Particle* arg0, UNUSED CameraNode* arg1) {
     gSPDisplayList(gDisplayListHead++, D_821903D0);
     gSPClearGeometryMode(gDisplayListHead++, G_CULL_BACK);
 
@@ -359,7 +367,11 @@ void func_82142B60(Particle* arg0, CameraNode* arg1) {
 
 extern Vtx D_82191180[];
 
-void func_82142C8C(Particle* arg0, CameraNode* arg1) {
+/**
+ * Particle callback of the Thundershock animation. Player sweep (all 165 moves used in battle):
+ * only Thundershock reached this function.
+ */
+void BattleAnim_ThunderShockParticleDraw(Particle* arg0, CameraNode* arg1) {
     gSPDisplayList(gDisplayListHead++, D_82190548);
     gSPClearGeometryMode(gDisplayListHead++, G_CULL_BACK);
 

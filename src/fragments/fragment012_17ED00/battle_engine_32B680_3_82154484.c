@@ -414,12 +414,20 @@ void func_821553D0(void) {
     func_8213B560(0, &func_82163D7C, &D_8218E7B8, 0, 0xF, 0x11, (s32) D_8219A80A, 0, 0);
 }
 
-void func_82155464(void) {
+/**
+ * Effect init that spawns the Smog animation. Player sweep (all 165 moves used in battle): only
+ * Smog reached this function.
+ */
+void BattleAnim_InitializeSmogUse(void) {
     func_8213B560(8, &func_82155380, &D_8218E720, 0, 1, 0x18, 0, 0x1E, 0);
     func_8213B560(0, &func_82163D7C, &D_8218E7B8, 0, 0xF, 0x11, (s32) D_8219A80A, 0, 0);
 }
 
-void func_821554F8(void) {
+/**
+ * Effect init that spawns the Mist animation. Player sweep (all 165 moves used in battle): only
+ * Mist reached this function.
+ */
+void BattleAnim_InitializeMistUse(void) {
     func_8213B560(8, &func_82155380, &D_8218E720, 0, 1, 0x18, 0, 0x1D, 0);
     func_8213B560(0, &func_82163D7C, &D_8218E7B8, 0, 0xF, 0x11, (s32) D_8219A80A, 0, 0);
 }
@@ -434,7 +442,11 @@ void BattleAnim_SetupLeechSeedUseEffect1(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void func_821555D4(s8 *arg0) {
+/**
+ * Particle callback of the Leech Seed animation. Player sweep (all 165 moves used in battle):
+ * only Leech Seed reached this function.
+ */
+void BattleAnim_LeechSeedParticleUpdate(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -501,7 +513,7 @@ void BattleAnim_CallbackStartEffect8ModelBurstEmitter(Particle* arg0) {
         Particle_ApproachRotationXTo(arg0, 0x1800, 0x400);
         Particle_AddVelocityFromRotationTemplate1(arg0);
         Particle_Field94_AddZ_0A5B0(arg0, 0x2000);
-        BattleAnim_EmitParticleBurst(arg0, func_821555D4, &D_8218E7D0, 1);
+        BattleAnim_EmitParticleBurst(arg0, BattleAnim_LeechSeedParticleUpdate, &D_8218E7D0, 1);
     }
 }
 
@@ -608,7 +620,11 @@ void BattleAnim_SetupBlizzardHitSpark(Particle* arg0) {
     }
 }
 
-void func_82155D3C(s8 *arg0) {
+/**
+ * Particle callback of the Blizzard animation. Player sweep (all 165 moves used in battle): only
+ * Blizzard reached this function.
+ */
+void BattleAnim_BlizzardParticleUpdate(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -688,7 +704,7 @@ void BattleAnim_RunBlizzard(s8 *arg0) {
 void BattleAnim_InitializeBlizzardUse(void) {
     func_8213B644(0, 0x10, 0x33);
     func_8213B8EC(0, 0xFF, 0x10, 8, 0x96);
-    func_8213B560(0, &func_82155D3C, &D_8218E580, 0x1E, 1, 0x14, 0, 0, 0);
+    func_8213B560(0, &BattleAnim_BlizzardParticleUpdate, &D_8218E580, 0x1E, 1, 0x14, 0, 0, 0);
 }
 
 /**
@@ -2675,7 +2691,11 @@ void BattleAnim_InitializeWithdrawUse(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_InitializeParticleModel, &gDefaultParticleDescriptor, 0, 1, 0xE, 0, 9, 0);
 }
 
-void func_8215B63C(void) {
+/**
+ * Effect init that spawns the Lick animation. Player sweep (all 165 moves used in battle): only
+ * Lick reached this function.
+ */
+void BattleAnim_InitializeLickUse(void) {
     if (func_8213C4D0(0x5E) == 0) {
         func_8213B560(0, &func_82152F44, &D_8218E580, 0, 1, 0x10, (s32) D_8219A80A, 0xA, 0);
     }
@@ -3143,7 +3163,11 @@ void BattleAnim_SetupConfuseRayHitSpotlight(Particle* arg0) {
     }
 }
 
-void func_8215CA9C(s8 *arg0) {
+/**
+ * Particle callback of the Confuse Ray animation. Player sweep (all 165 moves used in battle):
+ * only Confuse Ray reached this function.
+ */
+void BattleAnim_ConfuseRayParticleUpdate(s8 *arg0) {
     if (M2C_FIELD(arg0, s16 *, 0xAE) == 1) {
         func_8215CA14();
     }
@@ -3208,7 +3232,7 @@ void BattleAnim_InitializeConfuseRayUse(void) {
  * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
 void BattleAnim_InitializeConfuseRayHit(void) {
-    func_8213B560(0, &func_8215CA9C, &D_8218E580, 0, 1, 0xA, 0, 0, 0);
+    func_8213B560(0, &BattleAnim_ConfuseRayParticleUpdate, &D_8218E580, 0, 1, 0xA, 0, 0, 0);
     func_8213B720(0, 0, 0x10, 8);
     func_8213B644(0, 0x20, 3);
     func_8213BC00(8, 8, 0, 0xFF, 0x40);
@@ -3252,9 +3276,13 @@ void ParticleEffect_BasicMultiBurst(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 8, 5, BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E5D8, 0, 2, 0xE, 0, 0xC, 4);
 }
 
-void func_8215D31C(void) {
+/**
+ * Effect init that spawns the Waterfall animation. Player sweep (all 165 moves used in battle):
+ * only Waterfall reached this function.
+ */
+void BattleAnim_InitializeWaterfallUseA(void) {
     func_8213B560(0, &func_821530F4, &D_8218E580, 0xFF, 1, 0xC, 0, 0xF, 0x40);
-    func_8214DA90();
+    BattleAnim_InitializeWaterfallUseB();
     func_8213B464(0x10);
     func_8213B5D8(0, 4, 5, &func_82164AD0, &D_8218E5D8, 0, 1, 0xE, 0, 0xC, 4);
 }
@@ -3900,7 +3928,11 @@ void BattleAnim_InitializeVerticalLandingHitSpark(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackEndEffect79DefaultDescriptorPaletteFade, &gDefaultParticleDescriptor, 0, 1, 0xA, 0, 0x1F, 0);
 }
 
-void func_8215F290(void) {
+/**
+ * Effect init that spawns the Sonicboom animation. Player sweep (all 165 moves used in battle):
+ * only Sonicboom reached this function.
+ */
+void BattleAnim_InitializeSonicBoomUse(void) {
     func_8213B644(0, 8, 0x20);
 }
 

@@ -195,7 +195,11 @@ void BattleAnim_InitializeBitingMoveEndEffect(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunStrongPurpleHitSmoke, &gBattleAnimParticleDescriptors[0x34], 0, 7, 0xA, 0, 0xB, 0);
 }
 
-void func_82166B88(void) {
+/**
+ * Effect init that spawns the Metronome and Swift animation. Player sweep (all 165 moves used in
+ * battle): only Metronome and Swift reached this function.
+ */
+void BattleAnim_InitializeSwiftUse(void) {
     func_8213B644(0, 8, 0x20);
 }
 
@@ -243,7 +247,7 @@ void ParticleEffect_DynamicCollisionSetup(void) {
     UNUSED s32 pad; // FAKE: stack padding
 
     if (BattleAnim_GetOwnerSpecies(gBattleAnimSecondaryOwner) == 0x7B) {
-        func_82167274();
+        BattleAnim_InitializeCutCrabhammerUse();
         return;
     }
 
@@ -269,7 +273,11 @@ void BattleAnim_InitializeCutSlashScratchEffect(void) {
     BattleAnim_SpawnDescriptor25AlphaHoldFadeOutFullAlpha(0x23, 0, 0x10, 0x12);
 }
 
-void func_82167274(void) {
+/**
+ * Effect init that spawns the Cut and Crabhammer animation. Player sweep (all 165 moves used in
+ * battle): only Cut and Crabhammer reached this function.
+ */
+void BattleAnim_InitializeCutCrabhammerUse(void) {
     func_8213B794(0, 2, 0x10, 0x12, 0xFF);
     func_8213B560(3, &func_821603C8, &D_8218E6D8, 0, 1, 0x10, (s32) D_8219A80A, 0x10, 2);
     func_8213B560(3, &BattleAnim_RunSlashMoveWhiteFlashOverlay, &D_8218E790, 0, 1, 0x18, 0, 0xF, 0);
@@ -302,8 +310,12 @@ void BattleAnim_InitializeVineWhipHit(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 2, 0xF, BattleAnim_RunSlowFallingHitEffect, &gBattleAnimParticleDescriptors[0x2B], 0, 1, 0xE, 0, 0, 0);
 }
 
-void func_821675EC(void) {
-    func_8213B5D8(0, 1, 0x24, &func_8216374C, &D_8218E7B0, 0, 1, 0x11, (s32) D_8219A80A, 0, 0);
+/**
+ * Effect init that spawns the Fire Punch animation. Player sweep (all 165 moves used in battle):
+ * only Fire Punch reached this function.
+ */
+void BattleAnim_InitializeFirePunchUse(void) {
+    func_8213B5D8(0, 1, 0x24, &BattleAnim_FirePunchParticleUpdate, &D_8218E7B0, 0, 1, 0x11, (s32) D_8219A80A, 0, 0);
     func_8213B560(0, &func_82163540, &D_8218E788, 0, 1, 0x10, (s32) D_8219A80A, 0, 0);
 }
 
@@ -314,7 +326,11 @@ void BattleAnim_InitializeRazorWindHit(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunRazorWindHitEffect, &gBattleAnimParticleDescriptors[0x29], 0, 6, 0x10, 0x64, 0, 0);
 }
 
-void func_821676E4(void) {
+/**
+ * Effect init that spawns the Razor Leaf animation. Player sweep (all 165 moves used in battle):
+ * only Razor Leaf reached this function.
+ */
+void BattleAnim_InitializeRazorLeafUse(void) {
     func_8213B644(0, 8, 0x26);
 }
 
@@ -327,7 +343,11 @@ void BattleAnim_InitializeRazorLeafHit(void) {
     BattleAnim_SpawnGlobalTintColorFadeDetach(0x46, 4, 0x8);
 }
 
-void func_821677AC(void) {
+/**
+ * Effect init that spawns the Petal Dance animation. Player sweep (all 165 moves used in battle):
+ * only Petal Dance reached this function.
+ */
+void BattleAnim_InitializePetalDanceUse(void) {
     func_8213B644(0, 8, 0x15);
 }
 
@@ -374,8 +394,12 @@ void BattleAnim_InitializePowderSporeGasMoveHit(void) {
     func_8213B560(0, &func_82163D7C, &D_8218E7B8, 0, 7, 0x10, 0x64, 1, 0);
 }
 
-void func_82167A8C(void) {
-    func_8213B5D8(0, 2, 3, &func_82160AF0, &D_8218E7C8, 0, 8, 0x11, (s32) D_8219A80A, 0, 0);
+/**
+ * Effect init that spawns the Sand Attack animation. Player sweep (all 165 moves used in battle):
+ * only Sand Attack reached this function.
+ */
+void BattleAnim_InitializeSandAttackUse(void) {
+    func_8213B5D8(0, 2, 3, &BattleAnim_SandAttackParticleUpdate, &D_8218E7C8, 0, 8, 0x11, (s32) D_8219A80A, 0, 0);
     func_8213B5D8(0, 3, 2, &BattleAnim_RunSmallSand, &D_8218E7B8, 0, 6, 0x11, (s32) D_8219A80A, 0x31, 0);
     func_8213B5D8(0, 4, 2, &BattleAnim_RunLargeSand, &D_8218E7B8, 0, 4, 0x11, (s32) D_8219A80A, 0x31, 0);
 }
@@ -397,7 +421,7 @@ void BattleAnim_InitializeAcidArmorUse(void) {
     func_8213C0D8(0x24, 0, 0, 0xFF);
     func_8213BC00(0, 0x21, 0, 0xFF, 8);
     func_8213B464(6);
-    func_8213B560(2, &func_82163ED0, &D_8218E7D8, 0, 1, 0xA, 0, 0x2F, 0);
+    func_8213B560(2, &BattleAnim_AcidArmorParticleUpdateA, &D_8218E7D8, 0, 1, 0xA, 0, 0x2F, 0);
     func_8213B5D8(0, 8, 4, &func_821640A0, &D_8218E770, 0, 3, 9, 0, 0x30, 0);
 }
 
@@ -552,7 +576,11 @@ void BattleAnim_InitializeSolarBeamUseSequence(void) {
     func_8213B644(0x64, 0x20, 8);
 }
 
-void func_82168ACC(void) {
+/**
+ * Effect init that spawns the Growth animation. Player sweep (all 165 moves used in battle): only
+ * Growth reached this function.
+ */
+void BattleAnim_InitializeGrowthUse(void) {
     func_8213BC7C(0xA, 1, 8, 0, 0xFF, 0x20);
 }
 

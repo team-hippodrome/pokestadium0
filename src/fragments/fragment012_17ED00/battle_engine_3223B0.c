@@ -813,7 +813,11 @@ s32 func_821406B4(s8 *);                          /* extern */
 M2C_UNK func_8214ADB8(s8 *);                      /* extern */
 M2C_UNK func_8214AF08(s8 *);                      /* extern */
 
-void func_8214AF58(s8 *arg0) {
+/**
+ * Particle callback of the Ice Beam animation. Player sweep (all 165 moves used in battle): only
+ * Ice Beam reached this function.
+ */
+void BattleAnim_IceBeamParticleUpdateA(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -1841,7 +1845,11 @@ extern M2C_UNK D_8218E5C8;
 extern s16 D_8219A80A;
 extern M2C_UNK func_8214B0FC;
 
-void func_8214CE58(void) {
+/**
+ * Effect init that spawns the Mega Kick animation. Player sweep (all 165 moves used in battle):
+ * only Mega Kick reached this function.
+ */
+void BattleAnim_InitializeMegaKickUse(void) {
     func_8213B560(0, &func_8214B0FC, &D_8218E5C8, 0, 4, 0x11, (s32) D_8219A80A, 0, 0);
 }
 
@@ -1850,7 +1858,11 @@ extern M2C_UNK D_8218E7A8;
 extern s16 D_8219A80A;
 extern M2C_UNK func_821499D4;
 
-void func_8214CEB0(void) {
+/**
+ * Effect init that spawns the Bubble animation. Player sweep (all 165 moves used in battle): only
+ * Bubble reached this function.
+ */
+void BattleAnim_InitializeBubbleUse(void) {
     func_8213B5D8(0, 1, 0x3C, &func_821499D4, &D_8218E7A8, 0, 1, 0x11, (s32) D_8219A80A, 0, 0);
 }
 
@@ -1935,7 +1947,7 @@ void BattleAnim_InitializeIceBeamUse(void) {
     func_8213B644(0, 8, 0x33);
     func_8213B560(0, &func_8214B1F8, &D_8218E818, 0, 1, 0x10, (s32) D_8219A80A, 0x40, 0);
     func_8213B560(6, &BattleAnim_RunPulsingBeamEmanator, &D_8218E818, 0x6E, 1, 0x10, (s32) D_8219A80A, 0x40, 1);
-    func_8213B5D8(0, 3, 0x1E, &func_8214AF58, &D_8218E7D0, 0, 1, 0x11, (s32) D_8219A80A, 0x13, 0);
+    func_8213B5D8(0, 3, 0x1E, &BattleAnim_IceBeamParticleUpdateA, &D_8218E7D0, 0, 1, 0x11, (s32) D_8219A80A, 0x13, 0);
 }
 
 M2C_UNK func_8213B560(M2C_UNK, M2C_UNK *, M2C_UNK *, M2C_UNK, s32, s32, s32, s32, s32); /* extern */
@@ -1945,7 +1957,11 @@ extern M2C_UNK D_8218E818;
 extern s16 D_8219A80A;
 extern M2C_UNK func_8214B1F8;
 
-void func_8214D5E4(void) {
+/**
+ * Effect init that spawns the Psybeam animation. Player sweep (all 165 moves used in battle):
+ * only Psybeam reached this function.
+ */
+void BattleAnim_InitializePsybeamUse(void) {
     func_8213B6AC(0, 0, 0x20, 8, 0xA0);
     func_8213B644(0, 8, 6);
     func_8213B560(0, &func_8214B1F8, &D_8218E818, 0, 1, 0x10, (s32) D_8219A80A, 0xD, 0);
@@ -1957,7 +1973,11 @@ M2C_UNK func_8213B644(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
 extern M2C_UNK D_8218E7A8;
 extern s16 D_8219A80A;
 
-void func_8214D6B4(void) {
+/**
+ * Effect init that spawns the Bubblebeam animation. Player sweep (all 165 moves used in battle):
+ * only Bubblebeam reached this function.
+ */
+void BattleAnim_InitializeBubbleBeamUse(void) {
     func_8213B644(0, 8, 6);
     func_8213B5D8(0, 1, 0x3C, &BattleAnim_RunBubbleBeamBubblesFast, &D_8218E7A8, 0, 4, 0x11, (s32) D_8219A80A, 0, 0);
     func_8213B5D8(0, 1, 0x3C, &BattleAnim_RunBubbleBeamBubblesSlow, &D_8218E7A8, 0, 1, 0x11, (s32) D_8219A80A, 0, 0);
@@ -1970,7 +1990,11 @@ extern M2C_UNK D_8218E818;
 extern s16 D_8219A80A;
 extern M2C_UNK func_8214B1F8;
 
-void func_8214D774(void) {
+/**
+ * Effect init that spawns the Aurora Beam animation. Player sweep (all 165 moves used in battle):
+ * only Aurora Beam reached this function.
+ */
+void BattleAnim_InitializeAuroraBeamUse(void) {
     func_8213B6AC(0, 0, 0x20, 8, 0xA0);
     func_8213B644(0, 8, 6);
     func_8213B560(0, &func_8214B1F8, &D_8218E818, 0, 1, 0x10, (s32) D_8219A80A, 0x41, 0);
@@ -1986,7 +2010,11 @@ extern M2C_UNK D_8218E818;
 extern s16 D_8219A80A;
 extern M2C_UNK func_8214B1F8;
 
-void func_8214D844(void) {
+/**
+ * Effect init that spawns the Hyper Beam animation. Player sweep (all 165 moves used in battle):
+ * only Hyper Beam reached this function.
+ */
+void BattleAnim_InitializeHyperBeamUse(void) {
     func_8213B6AC(0, 0, 0x20, 8, 0xA0);
     func_8213BC00(0, 8, 0xFF, 0, 0x10);
     func_8213B644(0, 0x20, 0xE);
@@ -2016,7 +2044,11 @@ extern M2C_UNK D_8218E818;
 extern s16 D_8219A80A;
 extern M2C_UNK func_8214B1F8;
 
-void func_8214DA08(void) {
+/**
+ * Effect init that spawns the Tri Attack animation. Player sweep (all 165 moves used in battle):
+ * only Tri Attack reached this function.
+ */
+void BattleAnim_InitializeTriAttackUse(void) {
     func_8213B6AC(0, 0, 0x20, 8, 0xA0);
     func_8213B644(0, 8, 0x20);
     func_8213B560(0, &func_8214B1F8, &D_8218E818, 0, 1, 0x10, (s32) D_8219A80A, 0x17, 0);
@@ -2030,7 +2062,11 @@ extern M2C_UNK D_8218E650;
 extern s16 D_8219A80A;
 extern M2C_UNK func_82145998;
 
-void func_8214DA90(void) {
+/**
+ * Effect init that spawns the Waterfall animation. Player sweep (all 165 moves used in battle):
+ * only Waterfall reached this function.
+ */
+void BattleAnim_InitializeWaterfallUseB(void) {
     func_8213BD78(4, 8, 0x33, 0xC, 0xFF);
     func_8213B560(0, &func_82145998, &D_8218E5A8, 0, 1, 0x10, (s32) D_8219A80A, 0x33, 0);
     func_8213B5D8(0, 5, 3, &BattleAnim_RunStrongOutwardMovingLargeHitSpark, &D_8218E650, 0, 8, 0x10, (s32) D_8219A80A, 0x26, 0);
@@ -2050,7 +2086,7 @@ extern s16 D_8219A80A;
 extern M2C_UNK func_82145998;
 extern M2C_UNK func_8214B468;
 extern M2C_UNK func_82161288;
-extern M2C_UNK func_821627C0;
+extern M2C_UNK BattleAnim_IceBeamParticleUpdateB;
 
 /**
  * sets being hit by ice beam
@@ -2063,7 +2099,7 @@ void BattleAnim_InitializeIceBeamHit(void) {
     func_8213B5D8(4, 4, 2, &func_8214B468, &D_8218E820, 0, 1, 0x10, (s32) D_8219A80A, 0x33, 0);
     func_8213B5D8(0xC, 1, 3, &func_8214C208, &D_8218E650, 0, 8, 0x11, (s32) D_8219A80A, 0x26, 0);
     func_8213B5D8(0xE, 4, 2, &func_82161288, &D_8218E770, 0, 6, 0x10, 0x64, 0, 0);
-    func_8213B5D8(0, 2, 6, &func_821627C0, &D_8218E798, 0, 8, 0x11, 9, 0x18, 0xB);
+    func_8213B5D8(0, 2, 6, &BattleAnim_IceBeamParticleUpdateB, &D_8218E798, 0, 8, 0x11, 9, 0x18, 0xB);
     func_8213B644(0x30, 0x20, 8);
 }
 
