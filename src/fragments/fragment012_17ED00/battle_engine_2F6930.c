@@ -76,7 +76,8 @@ void BattleAnim_Vec3fSetPolarXZ(Vec3f* dest_vector, f32 magnitude, s16 theta) {
 
 /**
  * Copies all three components of `src` into `dest` and returns `dest`.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12) in move animations: wrote three floats to dest (e.g. -91.2, 39.0) and
+ * returned dest.
  */
 Vec3f* BattleAnim_Vec3fCopy(Vec3f* dest, Vec3f* src) {
     dest->x = src->x;
@@ -165,7 +166,9 @@ u16 BattleAnim_RandomRange(s32 range) {
  * Moves *dest toward `finish` by at most |rate| and returns 0 if *dest now
  * equals `finish`, otherwise 1. The difference is computed in s16, so for
  * angle values it takes the shorter way around the 16-bit circle.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12) in the battle camera during Flamethrower: with finish 0xE38, the s16
+ * at dest went 0 -> 0xC -> 0x2D -> 0x5F -> 0x9F, each step equal to that call's rate (0xC, 0x21,
+ * 0x32, 0x40), and it returned 1 while short of the target.
  */
 s32 BattleAnim_StepToS16(s16* dest, s16 finish, s16 rate) {
     s16 delta_to_finish = finish - *dest;
