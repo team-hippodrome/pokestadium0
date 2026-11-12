@@ -90,7 +90,7 @@ void func_890070BC(s8* arg0) {
 
 /**
  * Opens deck (`arg0`, `arg1`, `arg2`), reads `arg4` entries into `arg3`, closes it and returns the read count.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): read the GB and 64 boxes for ボックスのそうさ.
  */
 s32 PcBox_ReadDeck(s32 arg0, s32 arg1, s32 arg2, s8* arg3, s32 arg4) {
     s32 sp1C;
@@ -599,7 +599,7 @@ void Ui_DrawNumber(s32, s32, s32, s32);
 void func_8001BCB4(s32, s32, s32, s32, u8*, s32, s32);
 /**
  * Draws ボックス%d (Box %d).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): ボックス1 ... ボックス4 on the 64 side.
  */
 void PcBox_DrawBoxName(s32 arg0, s32 arg1, u8** arg2, s32 arg3, s32 arg4) {
     Color_RGBA8 color;
@@ -641,7 +641,7 @@ extern u8 D_80073634[];
 
 /**
  * Draws ボックス%d (Box %d) and its %2d/%2d fill count.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): ボックス1 0/30 ... ボックス8 0/30.
  */
 void PcBox_DrawBoxCount(s32 arg0, s32 arg1, u8** arg2, s32 arg3, s32 arg4) {
     Color_RGBA8 color;
@@ -695,7 +695,7 @@ s32 func_8002BC44(s32);
 void Font_SetColorForFlags(s32);
 /**
  * Draws ＧＢのカートリッジ (GB cartridge) or ６４のカセット (N64 cassette) for `kind`.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): GBのカートリッジ and 64のカセット.
  */
 void PcBox_DrawStorageLabel(s32 x, s32 y, s32 flags, s32 kind) {
     ColorPair890088F8* c;
@@ -744,7 +744,7 @@ extern u8 D_89010368[];
 extern char D_89018F4C[];
 /**
  * Sets up the ボックスのそうさ (box operation) window and its parts.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): opened ボックスのそうさ.
  */
 void PcBox_InitOperationWindow(s8* arg0, s32 x, s32 y, s8* arg3) {
     Window_SetRect(arg0 + 4, x, y, 0x234, 0x172);
@@ -811,7 +811,7 @@ extern u8 D_8007356C[];
 extern u8 D_800735C4[];
 /**
  * Draws the box operation window: frame, storage label and the two box lists.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): the ボックスのそうさ window with 「64へボックスをいどうする」.
  */
 void PcBox_DrawOperationWindow(s8* arg0) {
     s32 sel = 0x10;
@@ -1048,7 +1048,7 @@ extern u8 D_8900A96C[];
 
 /**
  * Runs the box operation window's state machine (pick, move, swap, warnings such as ボックスのあきがありません "no free space in the box").
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): ran ボックスのそうさ.
  */
 s32 PcBox_UpdateOperationWindow(s8* arg0) {
     s32 ret = 0;
@@ -1305,7 +1305,7 @@ extern u8 D_0015E220[];
 
 /**
  * Entry point: pushes the 'PBOX' pool state and creates the icon renderers.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): ボックスを いどうする opened the screen.
  */
 void PcBox_Init(s8* arg0) {
     s32 i;
@@ -1336,7 +1336,7 @@ M2C_UNK func_80002620(M2C_UNK);                     /* extern */
 
 /**
  * Pops the 'PBOX' pool state.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): B left it.
  */
 void PcBox_Free(s32 arg0) {
     func_80002620(0x50424F58);
@@ -1349,7 +1349,7 @@ void SavePrompt_Draw(s8*);
 void PcBox_DrawMonStatusWindow(Screen89007678*);
 /**
  * Draws the PC box screen for its current state, including the storage label and status window.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): drew ボックスのそうさ.
  */
 void PcBox_DrawScreen(s8* arg0) {
     BgStage_DrawFrame();
@@ -1433,7 +1433,7 @@ typedef struct Obj8900A324 {
 #define OBJ ((Obj8900A324*)arg0)
 /**
  * Runs the PC box screen's state machine for one frame.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): ran ボックスのそうさ.
  */
 s32 PcBox_UpdateScreen(s8* arg0) {
     s32 ret = 0;

@@ -279,7 +279,7 @@ extern M2C_UNK D_8900A5B8;
 
 /**
  * Draws the tinted terminal screen background.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): the せいとん background.
  */
 void LabItem_DrawBackground(void) {
     Ui_DrawTintedScreenBackground(0x38, 0x1E0, M2C_FIELD(&D_8900A5B8, u8 *, 0), M2C_FIELD(&D_8900A5B8, u8 *, 1), (s32) M2C_FIELD(&D_8900A5B8, u8 *, 2));
@@ -669,7 +669,7 @@ s32 func_80031CC8(u8);
 void Font_SetColorForFlags(s32);
 /**
  * Draws an item row with its ×%02d count.
- * @unverified Name and comment guessed from the code.
+ * @unverified Name and comment guessed from the code; ran in play on empty item lists only.
  */
 void LabItem_DrawItemCountRow(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4) {
     char buf[0x30];
@@ -710,7 +710,7 @@ void LabItem_DrawItemCountRow();
 
 /**
  * Sets up the scrolling item list at (`arg1`, `arg2`) with LabItem_DrawItemCountRow rows.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): set up the てもちの どうぐ and サトシのパソコン lists.
  */
 void LabItem_InitItemList(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     M2C_FIELD(arg0, s32*, 0x10C) = arg1;
@@ -727,7 +727,7 @@ extern Gfx D_80073450[];
 extern u8 D_04011AB8[];
 /**
  * Draws the scrolling item list and its scroll bar.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): those lists with 000/020 and 000/050.
  */
 void LabItem_DrawItemList(s8 *arg0, s32 arg1) {
     if (arg1 & 0x200) {
@@ -788,7 +788,7 @@ extern s32 D_8901911C;
 extern u8 D_8900A5F4[];
 /**
  * Sets up the どうぐのせいり (organize items) window for %sのパソコン (%s's PC).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): opened どうぐのせいり with サトシのパソコン.
  */
 void LabItem_InitOrganizeWindow(s8* arg0, s32 x, s32 y, s8* arg3, s32* arg4, s32* arg5) {
     Window_SetRect(arg0 + 4, x, y, 0x234, 0x174);
@@ -887,7 +887,7 @@ u32 func_800566BC(s32);                             /* extern */
 
 /**
  * Draws title text with the two-color (prim/env) font style from `arg3`.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): the ポケモンのせいり / どうぐのせいり titles.
  */
 void LabItem_DrawTitleText(s32 arg0, s32 arg1, s32 arg2, s8 *arg3) {
     func_8001AB6C();
@@ -947,7 +947,7 @@ extern s8* D_8900A678[];
 s32 func_80031BC0(u8, char *);
 /**
  * Draws the help line for the organize window's current state.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): 「どうぐをいどうする」.
  */
 void LabItem_DrawHelpText(s32* arg0) {
     char sp2C[0x54];
@@ -984,7 +984,7 @@ void func_890017FC(s8* arg0, s32 x, s32 y, s32 flags, s32 icon);
 void LabItem_DrawItemList(s8* arg0, s32 arg1);
 /**
  * Draws the organize items window: frame, lists and help line.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): the どうぐのせいり window.
  */
 void LabItem_DrawOrganizeWindow(s8 *arg0)
 {
@@ -1113,7 +1113,7 @@ typedef struct Ent89002318 { char unk0[0x10]; } Ent89002318;
 
 /**
  * Runs the organize items window's state machine (move, toss, deposit, withdraw).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): ran どうぐのせいり.
  */
 s32 LabItem_UpdateOrganizeWindow(s8* arg0) {
     s32 ret = 0;

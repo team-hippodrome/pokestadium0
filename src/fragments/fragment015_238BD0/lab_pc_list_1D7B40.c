@@ -100,7 +100,7 @@ void PcSort_DisableFullBoxes(s8* arg0, s8* arg1) {
 
 /**
  * Sets the disabled flag (1) on menu row `arg1`.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): greyed out てもち, the source, in the 「どこへいどうする？」 list.
  */
 void PcSort_DisableRow(s8 *arg0, s32 arg1) {
     u16 *temp_v0;
@@ -120,7 +120,7 @@ extern Rgba89004908 D_800734B0[];
 extern M2C_UNK D_800734A8;
 /**
  * Draws one menu row label with the selection highlight (dimmed when disabled).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): rows てもち, GBのボックス1-8, 64のボックス1-4 (dimmed when disabled).
  */
 void PcSort_DrawMenuRow(s32 x, s32 y, char* str, UNUSED s32 index, s32 flags) {
     Rgba89004908 color;
@@ -153,7 +153,7 @@ void Menu_Init(s8*, s32, s32, s32, s32, s32);
 M2C_UNK func_80027804();
 /**
  * Sets up a menu window whose height fits `arg4` rows.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): opened the 13-row 「どこからいどうする？」 box list.
  */
 void PcSort_InitMenuWindow(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
     s32 pad[2]; // FAKE: stack padding
@@ -175,7 +175,7 @@ M2C_UNK Menu_DrawItems(s8 *, s32, s32, M2C_UNK, s32); /* extern */
 
 /**
  * Draws the menu window's items.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): drew that box list.
  */
 void PcSort_DrawMenu(s8 *arg0) {
     if (func_8002AE6C() == 0) {
@@ -189,7 +189,7 @@ M2C_UNK func_8003F6AC(M2C_UNK);
 extern s32 D_800603C0;
 /**
  * Moves the menu cursor. Returns -1 on cancel, the 1-based row on confirm, otherwise 0.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): picked GBのボックス1 as the destination.
  */
 s32 PcSort_UpdateMenuCursor(s32 arg0) {
     s32 sp1C = 0;
@@ -215,7 +215,7 @@ void func_80029028(s32, s32, s32, s32, Rgba89004908);
 void Font_SetColorForFlags(s32);
 /**
  * Draws a Pokemon list row with its level (Ｌ%d).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): ハナ L5, ヒノコ L5, カメ L5.
  */
 void PcSort_DrawMonRow(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4) {
     u8* mon = arg2;
@@ -243,7 +243,7 @@ void PcSort_DrawMonRow(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4) {
 
 /**
  * Points the Pokemon list at a new set of entries.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): switched the right-hand list to the picked box.
  */
 void PcSort_SetMonList(s8* arg0, s32 arg1) {
     ScrollList_SetItems(arg0, arg1, arg0 + 0x44);
@@ -254,7 +254,7 @@ void PcSort_DrawMonRow(s32, s32, u8*, s32, s32);
 
 /**
  * Sets up the scrolling Pokemon list at (`arg1`, `arg2`) with PcSort_DrawMonRow rows.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): set up the てもち and GBのボックス1 lists.
  */
 void PcSort_InitMonList(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     M2C_FIELD(arg0, s32*, 0x80) = arg1;
@@ -271,7 +271,7 @@ extern Gfx D_80073450[];
 extern u8 D_04011AB8[];
 /**
  * Draws the scrolling Pokemon list (paged when 0x200 is set) and its scroll bar.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): the two lists with 03/06 and 00/30.
  */
 void PcSort_DrawMonList(s8 *arg0, s32 arg1) {
     if (arg1 & 0x200) {
@@ -337,7 +337,7 @@ extern char D_890189B8[];
 
 /**
  * Sets up the ポケモンのせいり (organize Pokemon) window and its lists.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): opened ポケモンのせいり.
  */
 void PcSort_InitOrganizeWindow(s8* arg0, s32 x, s32 y, s8* arg3, s8* arg4) {
 
@@ -405,7 +405,7 @@ extern s32 D_89019114;
 
 /**
  * Draws a box tab with its name, highlighted when selected.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): the てもち and GBのボックス1 tabs.
  */
 void PcSort_DrawBoxTab(s32 arg0, s32 x, s32 y, s32 flags, u32 idx) {
     Color_RGBA8* col;
@@ -521,7 +521,7 @@ extern M2C_UNK D_800734A8;
 
 /**
  * Draws `arg2` in the small font.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): the small 03/06 and 00/30 counts.
  */
 void PcSort_DrawSmallText(s32 arg0, s32 arg1, s32 arg2) {
     func_8001AB6C();
@@ -541,7 +541,7 @@ void PcSort_DrawMonStats();
 
 /**
  * Draws the help line for the organize window's current state.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): 「ポケモンをいどうする」, 「どこからいどうする？」 and 「どこへいどうする？」.
  */
 void PcSort_DrawHelpText(s32* arg0) {
     s32 idx = arg0[0x170 / 4];
@@ -580,7 +580,7 @@ extern u8 D_800735C4[];
 
 /**
  * Draws the organize Pokemon window: frame, lists and help line.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): the ポケモンのせいり window.
  */
 void PcSort_DrawOrganizeWindow(s8* arg0) {
     s32 pad[1]; // FAKE: stack padding
@@ -724,7 +724,7 @@ typedef struct Mon8900609C {
 
 /**
  * Runs the organize Pokemon window's state machine (move, swap, release).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): ran the source and destination picks.
  */
 s32 PcSort_UpdateOrganizeWindow(s8* arg0) {
     s32 ret;
@@ -938,7 +938,7 @@ extern u8 D_0015E220[];
 extern s32 D_89019108;
 /**
  * Pushes the 'OTPC' pool state, opens the icon archives, and reads the boxes.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): ポケモンを いどうする opened the screen.
  */
 void PcSort_Init(s8* arg0, s32 arg1) {
     s32 i;
@@ -977,7 +977,7 @@ M2C_UNK func_80002620(M2C_UNK);                     /* extern */
 
 /**
  * Pops the 'OTPC' pool state.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): B left it for the せいとん menu.
  */
 void PcSort_Free(s32 arg0) {
     func_80002620(0x4F545043);
@@ -991,7 +991,7 @@ extern Color_RGB8 D_8900A5B8;
 
 /**
  * Draws the Pokemon sorting screen for its current state, including the status window.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): drew ポケモンのせいり.
  */
 void PcSort_DrawScreen(s32* arg0) {
     BgStage_DrawFrame();
@@ -1128,7 +1128,7 @@ extern u8 D_89018DBC[];
 
 /**
  * Runs the Pokemon organizer's state machine for one frame.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): ran ポケモンのせいり.
  */
 s32 PcSort_UpdateScreen(s8* arg0) {
     s32 ret = 0;

@@ -543,3 +543,21 @@ After はい the party went into slot 01, shown with Ditto placeholders until th
 copy finished. Then came 「メタモンのへんしんがおわりました。ポケモンは
 GBカートリッジに そのまま のこっています。」. 32 `Registration_*` names were
 confirmed. The view and delete lists were not opened.
+
+## いちらん and せいとん
+
+* いちらん (fragment016, `LabPCList_*`) opens on the window 「どこのポケモンを
+  いちらん するか えらんでください。」, which offers てもち, ゲームボーイのボックス
+  and 64カセットのボックス (boxes 1-4). The table lists ポケモン, ニックネーム,
+  ID, おや, ばしょ and タイプ1/2 under 「Lタテ／ヨコきりかえR」 and
+  「ページおくり1／3」. The Stadium 1 name at 0x89104998
+  (BattlePrep_UpdateSingleBattleIntroFrame) is this screen's setup:
+  `LabPCList_Setup`.
+* せいとん (fragment015) opens a menu with three entries:
+  * ポケモンを いどうする opens `PcSort_*` (ポケモンのせいり). It shows てもち
+    03/06 and GBのボックス1 00/30, and asks 「どこからいどうする？」 and
+    「どこへいどうする？」 over てもち, GBのボックス1-8 and 64のボックス1-4.
+  * どうぐを いどうする opens `LabItem_*` (どうぐのせいり). It shows てもちの どうぐ
+    000/020 and サトシのパソコン 000/050.
+  * ボックスを いどうする opens `PcBox_*` (ボックスのそうさ). It shows GBのカートリッジ
+    ボックス1-8 and 64のカセット ボックス1-4, with 「64へボックスをいどうする」.

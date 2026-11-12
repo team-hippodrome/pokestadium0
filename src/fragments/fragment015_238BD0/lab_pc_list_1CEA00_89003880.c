@@ -302,7 +302,7 @@ extern s8 D_8901876C[];
 
 /**
  * Runs the item organizer's state machine for one frame.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): ran どうぐのせいり.
  */
 s32 LabItem_UpdateScreen(s8* arg0) {
     s32 ret = 0;
@@ -397,7 +397,7 @@ void Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
 void Font_SetColorForFlags(s32);
 /**
  * Draws one terminal menu row with its highlight or frame.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): rows ポケモンを いどうする / どうぐを いどうする / ボックスを いどうする.
  */
 void LabTerminal_DrawMenuRow(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s32* arg5) {
     s32 temp_v0 = *arg5;
@@ -436,7 +436,7 @@ extern Color_RGBA8 D_8900A6FC;
 extern Color_RGBA8 D_8900A700;
 /**
  * Draws a terminal menu window.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): the せいとん menu with its description.
  */
 void LabTerminal_DrawMenuWindow(s8* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
@@ -462,7 +462,7 @@ void LabTerminal_DrawMenuWindow(s8* arg0) {
 
 /**
  * Handles input on a terminal menu window while it is open.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): moved over the せいとん menu.
  */
 s32 LabTerminal_UpdateMenuWindow(s8* arg0) {
     s32 ret = 0;
@@ -511,7 +511,7 @@ extern M2C_UNK D_89019110;
 
 /**
  * Draws the GB save summary bar and the background.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): the せいとん screen with the 1P サトシ IDNo/12345 bar.
  */
 void LabTerminal_DrawMainScreen(s32 arg0) {
     M2C_UNK *var_a1;
@@ -531,7 +531,7 @@ void LabTerminal_DrawMainScreen(s32 arg0) {
  * Wrapper around LabTerminal_UpdateMenuWindow(arg0): -1 calls func_8003F6AC(3) and returns -1;
  * a positive result calls func_8003F6AC(2) and returns the word at arg0 + 0x34
  * plus 1; any other result returns 0. (Same pattern as FreeBattle_UpdateBattleModeWindow.)
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-12): returned the せいとん menu pick.
  */
 s32 LabTerminal_UpdateMainMenu(s8* arg0) {
     s32 result = 0;
@@ -635,7 +635,7 @@ extern s32 D_890289D4;
 
 /**
  * One frame of the lab terminal.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): ran every frame of せいとん.
  */
 s32 LabTerminal_RunFrame(s32 arg0) {
     s32 sp1C;
