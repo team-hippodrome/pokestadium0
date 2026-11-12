@@ -1,4 +1,4 @@
-/* Fixed-layout split (from func_82002980); original translation-unit boundaries remain unconfirmed. */
+/* Fixed-layout split (from FreeBattle_EnterEntryScreenState); original translation-unit boundaries remain unconfirmed. */
 
 #include "global.h"
 #include "m2c_macros.h"
@@ -51,7 +51,13 @@ void FreeBattle_InitLevelSumWarning(s8* arg0, s32 arg1, s32 arg2, s32 arg3);
 void FreeBattle_InitRentalConfirm(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 void ScrollGrid_SyncCursor(FlagOwner*);
 
-void func_82002980(arg0)
+/**
+ * Enters an entry screen state and picks its panel: 1 the team list, 2, 4, 5 the level-sum
+ * warning, 8 a team's Pokemon grid.
+ * Seen in play: runs when 「エントリーポケモンのせんたく」 opens in state 1 (the team list).
+ * @unverified States other than 1 not seen.
+ */
+void FreeBattle_EnterEntryScreenState(arg0)
     s8* arg0;
 {
     s8* panel = NULL;
@@ -117,7 +123,13 @@ void func_82002980(arg0)
 }
 
 
-void func_82002BF8(s8 *arg0, s32 arg1, s32 arg2) {
+/**
+ * Sets the entry screen's state (and flags); without flag 1 it switches at once through
+ * FreeBattle_EnterEntryScreenState, otherwise it defers the switch.
+ * Seen in play: runs when 「エントリーポケモンのせんたく」 opens.
+ * @unverified Name from the code.
+ */
+void FreeBattle_SetEntryScreenState(s8 *arg0, s32 arg1, s32 arg2) {
     M2C_FIELD(arg0, s32 *, 0x788) = arg2;
     if (arg2 & 1) {
         M2C_FIELD(M2C_FIELD(arg0, s8 **, 0xC), s32 *, 0x24) = 7;
@@ -126,7 +138,7 @@ void func_82002BF8(s8 *arg0, s32 arg1, s32 arg2) {
     }
     M2C_FIELD(arg0, s32 *, 4) = arg1;
     M2C_FIELD(arg0, s32 *, 8) = 0;
-    func_82002980();
+    FreeBattle_EnterEntryScreenState();
 }
 
 void ScrollList_SetCursor(s8*, s32);
@@ -137,7 +149,13 @@ typedef struct List82002C3C {
     s32 count;
 } List82002C3C;
 
-void func_82002C3C(s8* arg0) {
+/**
+ * Puts the entry list cursor on the row for the current entry mode, picks that mode's pick buffer
+ * (D_800AAF50) and enters entry state 1.
+ * Seen in play: runs when 「エントリーポケモンのせんたく」 opens.
+ * @unverified Name from the code.
+ */
+void FreeBattle_InitEntryListCursor(s8* arg0) {
     s32 sel = M2C_FIELD(arg0, s32*, 0x48);
     s32 mode = M2C_FIELD(arg0, s32*, 0x738);
     s32 i;
@@ -166,7 +184,7 @@ void func_82002C3C(s8* arg0) {
     M2C_FIELD(arg0, s32*, 0x734) = 0;
     M2C_FIELD(arg0, u8**, 0x58) = M2C_FIELD(arg0, u8**, 0x744);
     M2C_FIELD(arg0, u8**, 0x6FC) = M2C_FIELD(arg0, u8**, 0x744);
-    func_82002BF8(arg0, 1, 0);
+    FreeBattle_SetEntryScreenState(arg0, 1, 0);
 }
 
 extern s32 D_8200AC50;
@@ -181,7 +199,7 @@ M2C_UNK ScrollList_Init(s8*, s32, s8*, M2C_UNK, M2C_UNK*, s32, s32);
 M2C_UNK ScrollGrid_Init(s8*, s8*, s8*, M2C_UNK, s32, M2C_UNK*, s32, s32);
 M2C_UNK func_80027410(s8*, s32, M2C_UNK, M2C_UNK, s32);
 void func_80018168(s8* arg0);
-void func_82002C3C(s8*);
+void FreeBattle_InitEntryListCursor(s8*);
 
 /**
  * Initializes the slot-menu object at arg0 (the layout other functions in this file
@@ -191,13 +209,13 @@ void func_82002C3C(s8*);
  *   - creates the sub-object at +0x40/+0x84 with ScrollList_Init (passing &FreeBattle_DrawTeamRow),
  *   - sets bit 0x10000 at +0x60,
  *   - fills the first 0x28 words of D_8200AC58 with -1,
- *   - stores 1 at +0x738, arg4 at +0x73C and the mode arg5 at +0x740, and calls func_82002C3C,
+ *   - stores 1 at +0x738, arg4 at +0x73C and the mode arg5 at +0x740, and calls FreeBattle_InitEntryListCursor,
  *   - when arg5 != 0, builds the record view at +0x684 (source D_8200ACFC if arg5 == 1,
  *     otherwise D_8200AD00, with different dimensions), links it through ScrollGrid_Init
  *     at +0x6E4/+0x694 (passing &FreeBattle_DrawMonCell) and sets bit 0x10000 at +0x704,
  *   - finally calls func_80018168 on D_8200AC50.
  * The meaning of arg1..arg5 beyond what is stored above is not established.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play: runs as 「エントリーポケモンのせんたく 1Pせんたくちゅう」 opens.
  */
 void FreeBattle_InitEntrySelect(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
     s8* var_s1;
@@ -215,7 +233,7 @@ void FreeBattle_InitEntrySelect(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4
     M2C_FIELD(arg0, s32*, 0x738) = 1;
     M2C_FIELD(arg0, s32*, 0x73C) = arg4;
     M2C_FIELD(arg0, s32*, 0x740) = arg5;
-    func_82002C3C(arg0);
+    FreeBattle_InitEntryListCursor(arg0);
     if (arg5 != 0) {
         if (arg5 == 1) {
             var_s1 = arg0 + 0x684;
@@ -272,7 +290,7 @@ void Ui_DrawTexturedFrameDecal(s32, s32, s32, s32, char*);
  * (+0x129, -0x10) with the colour D_82009098[mode - 1]. Then prints the string
  * D_82009CF0 at (+0x12A, -0x10) in the colour D_800734A8, font 4, passing
  * D_820090A8[mode] as the extra argument.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play: draws 「1Pせんたくちゅう」 next to the entry screen title.
  */
 void FreeBattle_DrawChoosingLabel(s8* arg0) {
     Ui_DrawTexturedFrameDecal(M2C_FIELD(arg0, s32*, 0x14) + 0x127, M2C_FIELD(arg0, s32*, 0x18) - 0x12, 0xA6, 0x14, D_800735C4);
@@ -356,7 +374,7 @@ void TextBox_Draw(s8*);
 extern s32 D_8200AC50;
 /**
  * Draws the rental selection screen for its current state (choosing label, list, entry confirm, status window).
- * @unverified Name and comment guessed from the code.
+ * Seen in play: runs every frame on 「エントリーポケモンのせんたく」 (Free Battle's team list).
  */
 void FreeBattle_DrawRentalScreen(s8* arg0) {
     if (func_8002AE6C(arg0 + 0x14) != 0) {
@@ -550,7 +568,7 @@ void FreeBattle_DrawSlotCell();
 
 /**
  * Runs the entry Pokemon list: pick, rental, confirm and warnings.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: runs while 1P picks a team on 「エントリーポケモンのせんたく」.
  */
 s32 FreeBattle_UpdateEntrySelect(s8 *arg0)
 {
@@ -572,7 +590,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *arg0)
       }
       else
       {
-        func_82002980(arg0);
+        FreeBattle_EnterEntryScreenState(arg0);
         *((s32 *) (((s8 *) arg0) + 8)) = 0;
       }
       return ret;
@@ -602,7 +620,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *arg0)
         {
           func_8003F6AC(8);
           TextBox_Init(arg0 + 0x74C, D_82009D04, 1, 2, 9);
-          func_82002BF8(arg0, 0xC, 0);
+          FreeBattle_SetEntryScreenState(arg0, 0xC, 0);
         }
         else
         {
@@ -622,7 +640,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *arg0)
           *((s32 *) (((s8 *) arg0) + 0x6EC)) = 0;
           *((s32 *) (((s8 *) arg0) + 0x318)) |= 0x10000;
           func_820023E8(arg0 + 0x2F8);
-          func_82002BF8(arg0, FreeBattle_CheckEntryRules(arg0), 0);
+          FreeBattle_SetEntryScreenState(arg0, FreeBattle_CheckEntryRules(arg0), 0);
           *((s32 *) (((s8 *) arg0) + 0x310)) = *((s32 *) (((s8 *) arg0) + 0x744)); // FAKE: decomp slop, raw pointer casts stand in for struct fields
           func_8000B2F4(*((s32 *) (((s8 *) arg0) + 0x744)));
         }
@@ -637,7 +655,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *arg0)
       if (next == (-1))
       {
         func_8003F6AC(3);
-        func_82002BF8(arg0, 1, 1);
+        FreeBattle_SetEntryScreenState(arg0, 1, 1);
       }
       else
         if (next == 1)
@@ -645,7 +663,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *arg0)
         if (((Slot54 *) (arg0 + 0xE4))[*((s32 *) (((s8 *) arg0) + 0x300))].flag & 0x40) // FAKE: decomp slop, raw pointer casts stand in for struct fields
         {
           func_8003F6AC(2);
-          func_82002BF8(arg0, 3, 0);
+          FreeBattle_SetEntryScreenState(arg0, 3, 0);
         }
         else
         {
@@ -659,7 +677,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *arg0)
       next = func_820012B4(arg0 + 0x5CC);
       if (next == (-1))
     {
-      func_82002BF8(arg0, 2, 3);
+      FreeBattle_SetEntryScreenState(arg0, 2, 3);
     }
     else
       if (next == 1)
@@ -668,7 +686,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *arg0)
       FreeBattle_EnableUnpickedRows(arg0 + 0x2F8);
       func_82001708(arg0 + 0xE4, *((s32 *) (((s8 *) arg0) + 0x300)));
       func_82002528(arg0 + 0x2F8);
-      func_82002BF8(arg0, FreeBattle_CheckEntryRules(arg0), 1);
+      FreeBattle_SetEntryScreenState(arg0, FreeBattle_CheckEntryRules(arg0), 1);
     }
       break;
 
@@ -676,13 +694,13 @@ s32 FreeBattle_UpdateEntrySelect(s8 *arg0)
       next = FreeBattle_UpdateShortageWarning(arg0 + 0x370);
       if (next == (-1))
     {
-      func_82002BF8(arg0, 1, 1);
+      FreeBattle_SetEntryScreenState(arg0, 1, 1);
     }
     else
       if (next == 1)
     {
       func_8003F6AC(2);
-      func_82002BF8(arg0, 8, 1);
+      FreeBattle_SetEntryScreenState(arg0, 8, 1);
     }
       break;
 
@@ -690,7 +708,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *arg0)
       next = FreeBattle_UpdateLevelSumWarning(arg0 + 0x428);
       if (next == (-1))
     {
-      func_82002BF8(arg0, 1, 1);
+      FreeBattle_SetEntryScreenState(arg0, 1, 1);
     }
     else
       if (next == 1)
@@ -699,7 +717,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *arg0)
       {
       }
       *((s32 *) (((s8 *) arg0) + 0x784)) |= 2;
-      func_82002BF8(arg0, 6, 1);
+      FreeBattle_SetEntryScreenState(arg0, 6, 1);
     }
       break;
 
@@ -712,11 +730,11 @@ s32 FreeBattle_UpdateEntrySelect(s8 *arg0)
         func_8003F6AC(3);
         if ((*((s32 *) (((s8 *) arg0) + 0x784))) & 2)
         {
-          func_82002BF8(arg0, 1, 0);
+          FreeBattle_SetEntryScreenState(arg0, 1, 0);
         }
         else
         {
-          func_82002BF8(arg0, 0xA, 0);
+          FreeBattle_SetEntryScreenState(arg0, 0xA, 0);
         }
       }
       else
@@ -725,11 +743,11 @@ s32 FreeBattle_UpdateEntrySelect(s8 *arg0)
         func_8003F6AC(2);
         if (((Slot54 *) (arg0 + 0xE4))[*((s32 *) (((s8 *) arg0) + 0x300))].flag & 1) // FAKE: decomp slop, raw pointer casts stand in for struct fields
         {
-          func_82002BF8(arg0, 8, 0);
+          FreeBattle_SetEntryScreenState(arg0, 8, 0);
         }
         else
         {
-          func_82002BF8(arg0, 7, 0);
+          FreeBattle_SetEntryScreenState(arg0, 7, 0);
         }
       }
     }
@@ -744,11 +762,11 @@ s32 FreeBattle_UpdateEntrySelect(s8 *arg0)
         func_8003F6AC(3);
         if ((*((s32 *) (((s8 *) arg0) + 0x748))) != 0)
         {
-          func_82002BF8(arg0, 1, 0);
+          FreeBattle_SetEntryScreenState(arg0, 1, 0);
         }
         else
         {
-          func_82002BF8(arg0, 6, 0);
+          FreeBattle_SetEntryScreenState(arg0, 6, 0);
         }
       }
       else
@@ -757,7 +775,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *arg0)
         if (!((*((u16 **) (((s8 *) arg0) + 0x6E8)))[*((s32 *) (((s8 *) arg0) + 0x6EC))] & 1)) // FAKE: decomp slop, raw pointer casts stand in for struct fields
         {
           func_8003F6AC(2);
-          func_82002BF8(arg0, 9, 0);
+          FreeBattle_SetEntryScreenState(arg0, 9, 0);
         }
         else
         {
@@ -771,13 +789,13 @@ s32 FreeBattle_UpdateEntrySelect(s8 *arg0)
       next = func_820012B4(arg0 + 0x5CC);
       if (next == (-1))
     {
-      func_82002BF8(arg0, 6, 3);
+      FreeBattle_SetEntryScreenState(arg0, 6, 3);
     }
     else
       if (next == 1)
     {
       func_8003F6AC(2);
-      func_82002BF8(arg0, 8, 1);
+      FreeBattle_SetEntryScreenState(arg0, 8, 1);
     }
       break;
 
@@ -785,14 +803,14 @@ s32 FreeBattle_UpdateEntrySelect(s8 *arg0)
       next = func_820012B4(arg0 + 0x5CC);
       if (next == (-1))
     {
-      func_82002BF8(arg0, 8, 3);
+      FreeBattle_SetEntryScreenState(arg0, 8, 3);
     }
     else
       if (next == 1)
     {
       func_8003F6AC(0x22);
       func_820037D0(arg0);
-      func_82002BF8(arg0, FreeBattle_CheckEntryRules(arg0), 1);
+      FreeBattle_SetEntryScreenState(arg0, FreeBattle_CheckEntryRules(arg0), 1);
     }
       break;
 
@@ -800,7 +818,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *arg0)
       next = FreeBattle_UpdateRentalConfirm(arg0 + 0x4DC);
       if (next == (-1))
     {
-      func_82002BF8(arg0, 1, 1);
+      FreeBattle_SetEntryScreenState(arg0, 1, 1);
     }
     else
       if (next == 2)
@@ -808,13 +826,13 @@ s32 FreeBattle_UpdateEntrySelect(s8 *arg0)
       func_8003F6AC(2);
       *((s32 *) (((s8 *) arg0) + 0x300)) = 0;
       *((s32 *) (((s8 *) arg0) + 0x6EC)) = 0;
-      func_82002BF8(arg0, 6, 1);
+      FreeBattle_SetEntryScreenState(arg0, 6, 1);
     }
     else
       if (next == 1)
     {
       func_8003F6AC(0x20);
-      func_82002BF8(arg0, 0xB, 1);
+      FreeBattle_SetEntryScreenState(arg0, 0xB, 1);
     }
       break;
 
@@ -826,7 +844,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *arg0)
       if ((*((u16 *) (((s8 *) (*((u16 **) (((s8 *) arg0) + 0x744)))) + 8))) & 0xC000) // FAKE: decomp slop, raw pointer casts stand in for struct fields
     {
       func_8003F6AC(2);
-      func_82002BF8(arg0, 1, 1);
+      FreeBattle_SetEntryScreenState(arg0, 1, 1);
     }
       break;
 

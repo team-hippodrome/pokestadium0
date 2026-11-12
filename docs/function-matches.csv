@@ -738,7 +738,7 @@ func_820001B8,0x820001B8,src/fragments/fragment007_166580.c,func_820001B8,hand,,
 func_82000258,0x82000258,src/fragments/fragment007_166580.c,FreeBattle_AllTriosOverLevelLimit,hand,,c
 func_820003D4,0x820003D4,src/fragments/fragment007_166580.c,FreeBattle_LoadGbTeams,hand,,c
 func_8200053C,0x8200053C,src/fragments/fragment007_166580.c,FreeBattle_AddRentalEntry,hand,,c
-func_82000594,0x82000594,src/fragments/fragment007_166580.c,func_82000594,hand,,c
+func_82000594,0x82000594,src/fragments/fragment007_166580.c,FreeBattle_AddPresetTeams,hand,,c
 func_820008C8,0x820008C8,src/fragments/fragment007_166580.c,FreeBattle_BuildTeamPointers,hand,,c
 func_82000900,0x82000900,src/fragments/fragment007_166580.c,FreeBattle_InitNamedTeam,hand,,c
 func_820009A4,0x820009A4,src/fragments/fragment007_166580.c,FreeBattle_InitConfirmWindow,hand,,c
@@ -747,7 +747,7 @@ func_82000BC4,0x82000BC4,src/fragments/fragment007_166580.c,FreeBattle_DrawTypeI
 func_82000C5C,0x82000C5C,src/fragments/fragment007_166580.c,FreeBattle_DrawMonStatusWindow,hand,,c
 func_820012B4,0x820012B4,src/fragments/fragment007_166580.c,func_820012B4,hand,,c
 func_82001340,0x82001340,src/fragments/fragment007_166580.c,func_82001340,hand,,c
-func_8200140C,0x8200140C,src/fragments/fragment007_166580.c,func_8200140C,hand,,c
+func_8200140C,0x8200140C,src/fragments/fragment007_166580.c,FreeBattle_MarkIneligibleMons,hand,,c
 func_82001558,0x82001558,src/fragments/fragment007_166580.c,FreeBattle_CountDuplicateSpecies,hand,,c
 func_82001708,0x82001708,src/fragments/fragment007_166580.c,func_82001708,hand,,c
 func_82001810,0x82001810,src/fragments/fragment007_166580.c,FreeBattle_DrawMonCell,hand,,c
@@ -763,9 +763,9 @@ func_82002528,0x82002528,src/fragments/fragment007_166580.c,func_82002528,hand,,
 func_82002668,0x82002668,src/fragments/fragment007_166580.c,FreeBattle_DisableUnpickedRows,hand,,c
 func_82002778,0x82002778,src/fragments/fragment007_166580.c,FreeBattle_EnableUnpickedRows,hand,,c
 func_8200288C,0x8200288C,src/fragments/fragment007_166580.c,FreeBattle_DrawRentalListWindow,perm,,c
-func_82002980,0x82002980,src/fragments/fragment007_166580_4.c,func_82002980,hand,,c
-func_82002BF8,0x82002BF8,src/fragments/fragment007_166580_4.c,func_82002BF8,m2c,m2c,c
-func_82002C3C,0x82002C3C,src/fragments/fragment007_166580_4.c,func_82002C3C,hand,,c
+func_82002980,0x82002980,src/fragments/fragment007_166580_4.c,FreeBattle_EnterEntryScreenState,hand,,c
+func_82002BF8,0x82002BF8,src/fragments/fragment007_166580_4.c,FreeBattle_SetEntryScreenState,m2c,m2c,c
+func_82002C3C,0x82002C3C,src/fragments/fragment007_166580_4.c,FreeBattle_InitEntryListCursor,hand,,c
 func_82002D5C,0x82002D5C,src/fragments/fragment007_166580_4.c,FreeBattle_InitEntrySelect,hand,,c
 func_82002EE4,0x82002EE4,src/fragments/fragment007_166580_4.c,FreeBattle_DrawRentalTitle,hand,,c
 func_82002FF8,0x82002FF8,src/fragments/fragment007_166580_4.c,FreeBattle_DrawChoosingLabel,hand,,c
@@ -803,7 +803,7 @@ func_82006154,0x82006154,src/fragments/fragment007_166580_3.c,FreeBattle_DrawPop
 func_820061F0,0x820061F0,src/fragments/fragment007_166580_3.c,FreeBattle_InitPopupMenu,hand,,c
 func_82006348,0x82006348,src/fragments/fragment007_166580_3.c,FreeBattle_DrawPopupMenu,m2c,m2c+permuter,c
 func_8200639C,0x8200639C,src/fragments/fragment007_166580_3.c,FreeBattle_UpdatePopupMenu,hand,,c
-func_82006410,0x82006410,src/fragments/fragment007_166580_3.c,func_82006410,hand,,c
+func_82006410,0x82006410,src/fragments/fragment007_166580_3.c,FreeBattle_DrawOpponentOption,hand,,c
 func_82006508,0x82006508,src/fragments/fragment007_166580_3.c,FreeBattle_DrawControllerPanel,hand,,c
 func_820066E8,0x820066E8,src/fragments/fragment007_166580_3.c,FreeBattle_InitOpponentSelect,hand,,c
 func_82006810,0x82006810,src/fragments/fragment007_166580_3.c,FreeBattle_DrawOpponentSelect,hand,,c
@@ -813,7 +813,7 @@ func_82006BB8,0x82006BB8,src/fragments/fragment007_166580_3.c,func_82006BB8,hand
 func_82006C74,0x82006C74,src/fragments/fragment007_166580_3.c,func_82006C74,hand,,c
 func_82006DF8,0x82006DF8,src/fragments/fragment007_166580_3.c,func_82006DF8,hand,,c
 func_82007030,0x82007030,src/fragments/fragment007_166580_3.c,func_82007030,hand,,c
-func_82007398,0x82007398,src/fragments/fragment007_166580_3.c,func_82007398,hand,,c
+func_82007398,0x82007398,src/fragments/fragment007_166580_3.c,FreeBattle_DrawBattleModeCard,hand,,c
 func_82007474,0x82007474,src/fragments/fragment007_166580_3.c,FreeBattle_InitBattleModeWindow,hand,,c
 func_8200752C,0x8200752C,src/fragments/fragment007_166580_3.c,FreeBattle_DrawBattleModeWindow,hand,,c
 func_820076DC,0x820076DC,src/fragments/fragment007_166580_3.c,FreeBattle_UpdateBattleModeWindow,hand,,c

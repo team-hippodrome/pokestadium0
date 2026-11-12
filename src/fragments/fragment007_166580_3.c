@@ -57,9 +57,9 @@ extern Gfx D_80060270[];
 void func_80029028(s32, s32, s32, s32, Color82001CCC);
 void FreeBattle_DrawRowBorders(s32 arg0, s32 arg1, Color82001CCC arg2);
 
-M2C_UNK func_82002980();                            /* extern */
+M2C_UNK FreeBattle_EnterEntryScreenState();                            /* extern */
 
-void func_82002BF8(s8 *arg0, s32 arg1, s32 arg2);
+void FreeBattle_SetEntryScreenState(s8 *arg0, s32 arg1, s32 arg2);
 
 extern Color82001CCC D_82008F5C;
 extern Color82001CCC D_82008F58;
@@ -187,7 +187,7 @@ void Font_SetColorForFlags(s32);
 
 /**
  * Draws one menu row label with the selection highlight.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: draws each row of the 「たいせんルールせんたく」 list.
  */
 void FreeBattle_DrawMenuRow(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s32* arg5) {
     s32 temp_v0 = *arg5;
@@ -223,7 +223,7 @@ M2C_UNK func_80027804(s8 *, s32, s32, s32);         /* extern */
 M2C_UNK Menu_Init(s8 *, s8 *, s8 *, void (*)(s32, s32, char *, s32, s32, s32 *), s32, s32); /* extern */
 /**
  * Sets up a titled menu window with item and description tables.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: A on フリーバトル opens 「たいせんルールせんたく」 (フリーバトル, L 1～30 バトル, L50～55 バトル) and runs this.
  */
 void FreeBattle_InitMenuWindow(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9) {
     Window_SetRect(arg0, arg1, arg2, arg3, arg4);
@@ -253,7 +253,7 @@ extern Color_RGBA8 D_82009108;
  * pointer in sp38), and the text pointer at index [+0x34] of the table in the word at
  * +0x7C, printed in the colour from D_800734A8 via func_8001A944.
  * What the constants mean is not established. `pad` places sp38 at sp+0x38 as in the ROM.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play: draws the 「たいせんルールせんたく」 list window with its description box.
  */
 void FreeBattle_DrawMenuWindow(s8* arg0, s32 arg1) {
     s32 pad; // FAKE: stack padding
@@ -287,7 +287,7 @@ extern s32 D_800603C0;
  * -1 calls func_8003F6AC(3) and returns -1; 1 calls func_8003F6AC(2) and
  * returns the word at arg0 + 0x34 plus 1; any other value returns 0.
  * (FreeBattle_UpdatePopupMenu is the same pattern without the mode check.)
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play: runs while the 「たいせんルールせんたく」 list is open.
  */
 s32 FreeBattle_UpdateMenuWindow(void* arg0) {
     s32 result = 0;
@@ -402,7 +402,12 @@ s32 FreeBattle_UpdatePopupMenu(s32 arg0) {
 }
 
 extern M2C_UNK D_800734A8;
-void func_82006410(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4) {
+/**
+ * Draws one opponent choice in 「あいてをせんたく」 (2P, 3P, 4P, COM): highlight box when selected (flag
+ * 0x10), dimmed when unavailable (flag 1).
+ * Seen in play: with one controller, 2P to 4P were dimmed and COM was boxed.
+ */
+void FreeBattle_DrawOpponentOption(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4) {
     UNUSED s32 pad[4]; // FAKE: stack padding
     Color_RGBA8 c;
 
@@ -438,7 +443,7 @@ void Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
 
 /**
  * Draws the four controller ports, marking the connected and active ones.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: draws the controller pictures in 「あいてをせんたく」.
  */
 void FreeBattle_DrawControllerPanel(s32 x, s32 y, s32 present, s32 active, s32 markA, s32 markB) {
     s32 i;
@@ -462,7 +467,7 @@ void FreeBattle_DrawControllerPanel(s32 x, s32 y, s32 present, s32 active, s32 m
     }
 }
 
-void func_82006410(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4);
+void FreeBattle_DrawOpponentOption(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4);
 void Window_SetRect(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 M2C_UNK Menu_SkipDisabledForward(s8 *, s32);                   /* extern */
 extern M2C_UNK D_8200917C;
@@ -476,7 +481,7 @@ extern M2C_UNK D_82009F70;
  * 0x28, sets the word at 0x14 to 0x801 and the pointer at 0x20 to
  * &D_82009F70. Calls func_80027804 on the sub-object at arg0 + 0x2C with
  * (&D_8200917C, 4, 4), then Menu_Init on the sub-objects at 0x38, 0x2C
- * and 0x5C with the callback func_82006410, 0x4C and 0x1C. Sets bit 0x10000
+ * and 0x5C with the callback FreeBattle_DrawOpponentOption, 0x4C and 0x1C. Sets bit 0x10000
  * in the word at 0x58 and stores arg3 at 0x68.
  *
  * Then, with mask = ~arg3 (OR 0xE when arg4 == 1): for each of the bits 2, 4
@@ -489,7 +494,7 @@ extern M2C_UNK D_82009F70;
  * addresses are held in the locals sp2C and sp28 (the ROM spills them), and
  * the unused leading `pad` local places those spill slots at sp+0x2C and
  * sp+0x28.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play: たいせんする opens 「あいてをせんたく」 (1P VS, 2P 3P 4P COM) and runs this.
  */
 void FreeBattle_InitOpponentSelect(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
     s32 pad; // FAKE: stack padding
@@ -505,7 +510,7 @@ void FreeBattle_InitOpponentSelect(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 a
     sp2C = arg0 + 0x2C;
     func_80027804(sp2C, (s32)&D_8200917C, 4, 4);
     sp28 = arg0 + 0x38;
-    Menu_Init(sp28, sp2C, arg0 + 0x5C, (void (*)(s32, s32, char *, s32, s32, s32 *))func_82006410, 0x4C, 0x1C);
+    Menu_Init(sp28, sp2C, arg0 + 0x5C, (void (*)(s32, s32, char *, s32, s32, s32 *))FreeBattle_DrawOpponentOption, 0x4C, 0x1C);
     M2C_FIELD(arg0, s32 *, 0x58) = (s32) (M2C_FIELD(arg0, s32 *, 0x58) | 0x10000);
     M2C_FIELD(arg0, s32 *, 0x68) = arg3;
     var_v1 = ~arg3;
@@ -540,7 +545,7 @@ extern char D_82009F84[];
  * What the constants mean is not established.
  * Matching note: Ui_DrawTexturedDivider and Menu_DrawItems must be declared void; their
  * (unused) return value would otherwise shift the compiler's register choices.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play: draws 「あいてをせんたく」 with the N64 and controller pictures and 1P VS COM.
  */
 void FreeBattle_DrawOpponentSelect(s8* arg0) {
     s32 sp2C;
@@ -579,7 +584,7 @@ void FreeBattle_DrawOpponentSelect(s8* arg0) {
  * func_8002BC14(D_800603C0): -1 calls func_8003F6AC(3) and returns -1; 1 calls
  * func_8003F6AC(2), returns 1 and maps the word at arg0 + 0x40 (0..3) to the
  * value 2..5 stored in the word at arg0 + 0x64. Any other value returns 0.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play: runs while 「あいてをせんたく」 is open.
  */
 s32 FreeBattle_UpdateOpponentSelect(void* arg0) {
     s32 result = 0;
@@ -918,7 +923,12 @@ typedef struct Box82007398 {
     s32 unk_0C;
 } Box82007398;
 
-void func_82007398(s32 arg0, s32 arg1, s32* arg2, s32 arg3, s32 arg4) {
+/**
+ * Draws one card of the 「バトルモード」 window: the stadium picture and its label (フリーバトル or トーナメント),
+ * with a highlight box when flag 0x10 marks it selected.
+ * Seen in play: runs every frame on that window; the yellow box follows D-Left/D-Right.
+ */
+void FreeBattle_DrawBattleModeCard(s32 arg0, s32 arg1, s32* arg2, s32 arg3, s32 arg4) {
     UNUSED s32 pad[3]; // FAKE: stack padding
     Box82007398 sp24;
 
@@ -943,7 +953,7 @@ void func_82007398(s32 arg0, s32 arg1, s32* arg2, s32 arg3, s32 arg4) {
  * and 0x28, sets the word at 0x14 to 0x801 and the word at 0x20 to arg4.
  * Calls func_80027410 on the sub-object at arg0 + 0x54 with (arg3, 0xC, 2, 2),
  * then GridMenu_Init on the sub-objects at 0x2C, 0x54 and 0x64 with
- * func_82007398 as a callback and the values 2, 0xB8 and 0xC8. Finally sets
+ * FreeBattle_DrawBattleModeCard as a callback and the values 2, 0xB8 and 0xC8. Finally sets
  * bit 0x10000 in the word at 0x4C and stores arg3 at 0x68.
  *
  * What the object is and what the constants mean is not established. The
@@ -956,7 +966,7 @@ M2C_UNK GridMenu_Init(s8 *, s8 *, s8 *, M2C_UNK *, s32, s32, s32); /* extern */
 
 /**
  * Sets up the バトルモード (battle mode) window.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: runs when B backs out of the rule list to the バトルモード window.
  */
 void FreeBattle_InitBattleModeWindow(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     Window_SetRect(arg0, arg1, arg2, 0x190, 0x12E);
@@ -965,7 +975,7 @@ void FreeBattle_InitBattleModeWindow(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32
     M2C_FIELD(arg0, s32 *, 0x14) = 0x801;
     M2C_FIELD(arg0, s32 *, 0x20) = arg4;
     func_80027410(arg0 + 0x54, arg3, 0xC, 2, 2);
-    GridMenu_Init(arg0 + 0x2C, arg0 + 0x54, arg0 + 0x64, (M2C_UNK*)func_82007398, 2, 0xB8, 0xC8);
+    GridMenu_Init(arg0 + 0x2C, arg0 + 0x54, arg0 + 0x64, (M2C_UNK*)FreeBattle_DrawBattleModeCard, 2, 0xB8, 0xC8);
     M2C_FIELD(arg0, s32 *, 0x4C) = (s32)(M2C_FIELD(arg0, s32 *, 0x4C) | 0x10000);
     M2C_FIELD(arg0, s32 *, 0x68) = arg3;
 }
@@ -990,7 +1000,8 @@ M2C_UNK GridMenu_DrawInlineItems(s8*, s32, s32, s32, s32);
  * printed in the colour from D_800734A8 via func_8001A944.
  * What the constants mean is not established.
  * Matching note: Ui_DrawTexturedDivider must be declared void (see FreeBattle_DrawOpponentSelect).
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play: draws the 「バトルモード」 window (フリーバトル / トーナメント pictures and the description below)
+ * every frame.
  */
 void FreeBattle_DrawBattleModeWindow(s8* arg0) {
     if (func_8002AE6C() == 0) {
@@ -1019,7 +1030,8 @@ extern s32 D_800603C0;
  * -1 calls func_8003F6AC(3) and returns -1; 1 calls func_8003F6AC(2) and
  * returns the word at arg0 + 0x34 plus 1; any other value returns 0.
  * (FreeBattle_UpdatePopupMenu is the same pattern without the mode check.)
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play: runs while the バトルモード window is up; D-Right moves the highlight to トーナメント and
+ * changes the description.
  */
 s32 FreeBattle_UpdateBattleModeWindow(void* arg0) {
     s32 result = 0;

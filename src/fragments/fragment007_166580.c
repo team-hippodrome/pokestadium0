@@ -195,7 +195,8 @@ s32 Deck_GetSaveEntryName(s32 arg0, s32 arg1, u8* arg2);
 
 /**
  * Reads the party of each Game Boy cartridge in the four Transfer Paks into the team list.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: runs when the entry screen opens (no Transfer Pak, so no Game Boy teams were
+ * added).
  */
 void FreeBattle_LoadGbTeams(RecordList* arg0) {
     SlotList* rec = (SlotList*)arg0->records;
@@ -272,7 +273,14 @@ typedef struct List82000594 { Rec82000594* records; s32 unk04; s32 count; } List
 extern Src82000594* D_8200AD04;
 void func_8000A460(char*, void*);
 void* func_80001B10(s32);
-void func_82000594(List82000594* arg0) {
+/**
+ * Appends the 8 preset teams in D_8200AD04 (type 4, six Pokemon each, named via func_80001B10) to
+ * the entry list.
+ * Seen in play: runs when the 「エントリーポケモンのせんたく」 screen opens; the list shows the preset trainers
+ * (なまえ ガール, むしとり, リかけい, …).
+ * @unverified The count of 8 is from the code; only three rows fit on screen.
+ */
+void FreeBattle_AddPresetTeams(List82000594* arg0) {
     s32 i;
     s32 j;
     Rec82000594* rec;
@@ -726,7 +734,14 @@ typedef struct Species8200140C {
     /* 0x0D */ char unk0D[0xF];
 } Species8200140C; // size = 0x1C
 extern Species8200140C D_80064C5C[];
-void func_8200140C(TeamList8200140C *arg0, s32 arg1) {
+/**
+ * Flags Pokemon the chosen rule forbids: 0x20 for an invalid species, 2 when L50～55 rules fail
+ * (not allowed or level outside 50 to 55) or Free Battle's 40 usable species exclude it, 4 when
+ * L1～30 rules fail.
+ * Seen in play: runs when the entry screen opens after picking フリーバトル (「つかえるポケモンは 40しゅるい」).
+ * @unverified Rule details from the code.
+ */
+void FreeBattle_MarkIneligibleMons(TeamList8200140C *arg0, s32 arg1) {
     s32 i;
     s32 j;
     Team8200140C* team = arg0->teams;
@@ -842,7 +857,7 @@ s32 PokeIcon_GetImage(s8 *arg0, s32 arg1);
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 /**
  * Draws one Pokemon cell of a team row: nickname, level and icon.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: draws each Pokemon cell of a team row (icon, nickname, L20).
  */
 void FreeBattle_DrawMonCell(s32 x, s32 y, s32* entry, s32 frame, s32 flags, s32 arg5) {
     IconCache82001810* cache = (IconCache82001810*)arg5;
@@ -905,7 +920,7 @@ void FreeBattle_DrawSlotCell(s32 arg0, s32 arg1, s32* arg2, s32 arg3, s32 arg4, 
  * Emits the display list D_80060270, then fills a 0x88 by 0x64 rectangle at
  * (arg0, arg1) with the colour in arg2 using func_80029028
  * (Trade_DrawSolidFillRect).
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play: fills each team row's trainer panel (portrait, 「なまえ ガール」, IDNo/15235).
  */
 void FreeBattle_FillTrainerPanel(s32 arg0, s32 arg1, Color82001CCC arg2) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
@@ -1054,7 +1069,7 @@ extern Gfx D_80073438[];
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 /**
  * Draws a full team row: trainer panel and six Pokemon cells.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: draws each team row on 「エントリーポケモンのせんたく」.
  */
 void FreeBattle_DrawTeamRow(s32 arg0, s32 arg1, SlotList *arg2, s32 arg3, s32 arg4, SlotList **arg5)
 {

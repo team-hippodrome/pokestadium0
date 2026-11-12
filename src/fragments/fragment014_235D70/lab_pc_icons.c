@@ -244,7 +244,7 @@ void func_8001ABBC(void);
 
 /**
  * Draws one main menu item with its frame, fading it by `scale` (capped at 0.3 when disabled).
- * @unverified Name and comment guessed from the code.
+ * Seen in play: runs every frame for the main menu's item panels.
  */
 void MainMenu_DrawItem(s32 a0, s32 a1, s32 a2, s32 mode, s32 flags, f32* scale) {
     Color_RGBA8 frame_color;
@@ -379,7 +379,8 @@ void GridMenu_DrawInlineItems(s8*, s32, s32, s32, f32*);
 
 /**
  * Draws the main menu items with the current fade.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: runs every frame while the main menu's item panels (ずかん, バトル, てもち, GB, とうろく, OFF)
+ * are drawn.
  */
 s32 MainMenu_DrawItemList(s8* arg0, s32 arg1) {
     f32 alpha;
@@ -421,7 +422,8 @@ extern char D_880023C0[];
 extern char D_880023C8[];
 /**
  * Sets up the message window (532x138) with its color and text.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: A on バトル opens its window (「コンピュータや ともだちと たいせん する。 はいりますか？ はい いいえ」) and runs
+ * this.
  */
 void MainMenu_InitMessageWindow(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, Color_RGBA8 arg6, s32 arg7) {
     Window_SetRect(arg0, arg1, arg2, 0x214, 0x8A);
@@ -453,7 +455,7 @@ void Window_DrawLabeled(s8 *, s32);
 void MainMenu_DrawImageWithAlpha(s32, s32, s32, s32, s32, u8*, s32);
 /**
  * Draws the message window: divider and text.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: draws the item window opened by A (「…はいりますか？ はい いいえ」).
  */
 void MainMenu_DrawMessageWindow(s8 *arg0) {
     s32* p;
@@ -480,7 +482,7 @@ extern s32 D_800603C0;
 
 /**
  * Handles input on the message window while it is open.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: runs while that window is open; D-Right moves the cursor between はい and いいえ.
  */
 s32 MainMenu_UpdateMessageWindow(s8* arg0) {
     s32 ret = 0;
@@ -534,7 +536,7 @@ s32 func_8002AE6C();
 extern u8 D_800734A8[4];
 /**
  * Draws the text window's text.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: runs while the main menu shows the 「GBのカートリッジがない」 warning window at the top.
  */
 void MainMenu_DrawTextWindow(s8* arg0) {
     if (func_8002AE6C() == 0) {
@@ -588,7 +590,7 @@ extern M2C_UNK D_88002254;
 
 /**
  * Draws the main menu for its current state, including the continue-tournament prompt.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: runs every frame on the メインメニュー screen.
  */
 void MainMenu_DrawScreen(s8 *arg0) {
     s32 temp_v0;
@@ -896,7 +898,7 @@ extern s32 D_88002B20;
 
 /**
  * One frame: reads the controllers, draws the main menu and, when `arg0` is 0, updates it.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: runs every frame on the メインメニュー screen (ずかん, バトル, てもち, GB, とうろく, OFF).
  */
 s32 MainMenu_RunFrame(s32 arg0) {
     s32 sp1C;

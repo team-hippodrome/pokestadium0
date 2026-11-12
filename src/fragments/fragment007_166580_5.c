@@ -211,12 +211,12 @@ void FreeBattle_InitBattleModeScreen(s32 arg0) {
     FreeBattle_SetScreenState((s8*)arg0, 1, 0);
 }
 
-void func_82000594(void*);
+void FreeBattle_AddPresetTeams(void*);
 void FreeBattle_LoadGbTeams(void*);
 void func_80027804(void*, void*, s32, s32);
 /**
  * Builds the team list from the GB cartridges and rentals and opens the entry list.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: A on COM opens 「エントリーポケモンのせんたく」 and runs this.
  */
 void FreeBattle_InitEntryScreen(s8 *arg0)
 {
@@ -231,11 +231,11 @@ void FreeBattle_InitEntryScreen(s8 *arg0)
   }
   if (M2C_FIELD(arg0, s32*, 0x436C))
   {
-    func_82000594(arg0 + 0x4310);
+    FreeBattle_AddPresetTeams(arg0 + 0x4310);
   }
   func_80027804(arg0 + 0x4320, arg0 + 0x4290, 0x20, 0);
   FreeBattle_BuildTeamPointers((void *) (arg0 + 0x4320), (void *) (arg0 + 0x4310));
-  func_8200140C((void *) (arg0 + 0x4310), M2C_FIELD(arg0, s32*, 0x4374));
+  FreeBattle_MarkIneligibleMons((void *) (arg0 + 0x4310), M2C_FIELD(arg0, s32*, 0x4374));
   M2C_FIELD(arg0, s32*, 0x4354) = 0;
     for (i = 0; i < 5; i++) { M2C_FIELD(arg0, s32*, (0x4340 + (i * 4))) = 0;
   }
@@ -257,7 +257,7 @@ void FreeBattle_DrawRentalScreen(s8*);
 void BlinkingTextBox_Draw(s8*);
 /**
  * Draws the battle setup screen for its current state.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: runs every frame on the battle menu screens.
  */
 M2C_UNK FreeBattle_DrawScreen(s32 arg0) {
     s8* base = (s8*)arg0;
@@ -329,7 +329,7 @@ s32 func_8002BC14(s32);
 void func_8003F6AC(s32);
 s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2);
 void FreeBattle_ClearIndices(void*, s32, s32);
-void func_82002C3C(s8*);
+void FreeBattle_InitEntryListCursor(s8*);
 s32 FreeBattle_UpdateEntrySelect(s8*);
 void func_820044D0(s8*);
 s32 FreeBattle_UpdateMenuWindow(s8*);
@@ -537,7 +537,7 @@ s32 FreeBattle_UpdateScreen(s8* arg0) {
                     if (M2C_FIELD(arg0, s32*, 0x4DC4) != 0) {
                         FreeBattle_ClearIndices(D_8200AC58, (M2C_FIELD(arg0, s32*, 0x46D8) * 6) % 24, 6);
                     }
-                    func_82002C3C(arg0 + 0x4690);
+                    FreeBattle_InitEntryListCursor(arg0 + 0x4690);
                 }
             }
             break;
@@ -675,7 +675,7 @@ extern s32 D_8200AD28;
 
 /**
  * One frame of the battle setup screen.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: runs every frame on the battle menu screens (バトルモード, たいせんルールせんたく).
  */
 void FreeBattle_RunFrame(s32 arg0) {
     Cont_StartReadInputs();
