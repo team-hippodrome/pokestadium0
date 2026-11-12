@@ -305,8 +305,8 @@ extern u8 D_81138690[];
 extern u32 D_811859CC;
 extern f32 D_81135F78[];
 extern f32 D_81136378[];
-s32 func_8110A310(s32, s32, s32);
-void func_8110A924(s16*, s32, s32);
+s32 AudioHeap_SearchCaches(s32, s32, s32);
+void AudioHeap_LoadFilter(s16*, s32, s32);
 s32 func_8110E500(s32, u8, s8*);
 void AudioPlayback_NotePoolFill(void*, s32);
 void func_81112B84(void*);
@@ -395,7 +395,7 @@ void func_81113FA8(Channel81113FA8* channel) {
                         offset = ((u16*)D_811858A8)[seqPlayer->seqId];
                         low_bits = D_811858A8[offset];
                         command = D_811858A8[offset + low_bits - command];
-                        if (func_8110A310(1, 2, command)) {
+                        if (AudioHeap_SearchCaches(1, 2, command)) {
                             channel->bankId = command;
                         }
                         parameters[0] = parameters[1];
@@ -499,7 +499,7 @@ void func_81113FA8(Channel81113FA8* channel) {
                         offset = ((u16*)D_811858A8)[seqPlayer->seqId];
                         low_bits = D_811858A8[offset];
                         command = D_811858A8[offset + low_bits - command];
-                        if (func_8110A310(1, 2, command)) {
+                        if (AudioHeap_SearchCaches(1, 2, command)) {
                             channel->bankId = command;
                         }
                         break;
@@ -638,7 +638,7 @@ void func_81113FA8(Channel81113FA8* channel) {
                         if (channel->filter != NULL) {
                             low_bits = (command >> 4) & 0xF;
                             command &= 0xF;
-                            func_8110A924(channel->filter, low_bits, command);
+                            AudioHeap_LoadFilter(channel->filter, low_bits, command);
                         }
                         break;
                     case 0xB2:

@@ -59,7 +59,7 @@ extern u8 D_81184656[];
 s32 AudioLoad_SearchCaches(s32, s32);
 struct Table8110D840* AudioLoad_GetLoadTable(s32);
 s32 AudioHeap_AllocPermanent(s32, s32, s32);
-s32 func_81109C0C(s32, s32, s32, s32);
+s32 AudioHeap_AllocCached(s32, s32, s32, s32);
 s32 func_8004CFB0(OSMesgQueue*, OSMesg, s32);
 void AudioLoad_SetFontLoadStatus(s32, s32);
 void AudioLoad_SetSeqLoadStatus(s32, s32);
@@ -125,20 +125,20 @@ s32 AudioLoad_AsyncLoadInner(s32 table_type, s32 id, s32 n_chunks, s32 ret_data,
                 load_status = 5;
                 break;
             case 1:
-                ram_addr = func_81109C0C(table_type, size, 1, id);
+                ram_addr = AudioHeap_AllocCached(table_type, size, 1, id);
                 if (ram_addr == 0) {
                     return ram_addr;
                 }
                 break;
             case 2:
-                ram_addr = func_81109C0C(table_type, size, 0, id);
+                ram_addr = AudioHeap_AllocCached(table_type, size, 0, id);
                 if (ram_addr == 0) {
                     return ram_addr;
                 }
                 break;
             case 3:
             case 4:
-                ram_addr = func_81109C0C(table_type, size, 2, id);
+                ram_addr = AudioHeap_AllocCached(table_type, size, 2, id);
                 if (ram_addr == 0) {
                     return ram_addr;
                 }
@@ -222,10 +222,10 @@ extern u8 D_0015AE60[];
 extern u8 D_0015A9B0[];
 extern u8 D_0015AA60[];
 void func_8111016C(void);
-void func_8110993C(s32);
+void AudioHeap_InitMainPools(s32);
 void* func_81109868(void*, s32);
 void func_811098C0(void*, void*, s32);
-s32 func_8110AC8C(void);
+s32 AudioHeap_ResetStep(void);
 void func_8110CB70(AudioTable8110DCC0*, u8*, s32);
 
 /**
@@ -278,7 +278,7 @@ void AudioLoad_Init(void) {
     osCreateMesgQueue(&D_811855F8, D_81185610, 1);
     D_811858F4 = 0;
     D_8118568C = 0;
-    func_8110993C(D_81152700);
+    AudioHeap_InitMainPools(D_81152700);
 
     for (i = 0; i < 3; i++) {
         buf = D_811859B8[i] = func_81109868(D_811842B0, 0xFC0);
@@ -289,7 +289,7 @@ void AudioLoad_Init(void) {
 
     D_81184658 = 0;
     D_81184657 = 1;
-    func_8110AC8C();
+    AudioHeap_ResetStep();
 
     D_8118589C = &D_81152760;
     D_811858A0 = &D_81152720;

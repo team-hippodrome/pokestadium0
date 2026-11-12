@@ -43,7 +43,7 @@ extern u8 D_81184656[1];
 
 
 /* Declarations copied from gb_tower_emulator_86920.c. */
-s32 func_8110A310(s32, M2C_UNK, s32);
+s32 AudioHeap_SearchCaches(s32, M2C_UNK, s32);
 s32 AudioPlayback_NoteDisable(Rec81109678*);
 s32 AudioPlayback_AudioListRemove(Rec81109678*);
 s32 func_81112EAC(s8*, Rec81109678*);
@@ -105,7 +105,7 @@ extern u8 D_81184654[1];
 extern u8 D_81184655[1];
 extern u8 D_81184656[1];
 void AudioLoad_SetFontLoadStatus(s32, s32);
-s32 func_8110A368(s32 arg0, s32 arg1, s32 arg2);
+s32 AudioHeap_SearchRegularCaches(s32 arg0, s32 arg1, s32 arg2);
 s32 AudioHeap_SearchPermanentCache(s32 arg0, s32 arg1);
 extern s16 D_811371D8[];
 extern s16 D_811373C8[];
@@ -400,7 +400,7 @@ void func_8110BD20(SampleCacheEntry8110BA8C* entry) {
         sample_bank_id2 = D_811858B0[font_id].unk03;
         if (((sample_bank_id1 != 0xFF) && (entry->sampleBankId == sample_bank_id1)) ||
             ((sample_bank_id2 != 0xFF) && (entry->sampleBankId == sample_bank_id2)) || entry->sampleBankId == 0) {
-            if (func_8110A310(1, 2, font_id) != 0) {
+            if (AudioHeap_SearchCaches(1, 2, font_id) != 0) {
                 if (AudioLoad_IsFontLoadComplete(font_id) != 0) {
                     for (inst_id = 0; inst_id < D_811858B0[font_id].unk00; inst_id++) {
                         inst = AudioPlayback_GetInstrumentInner(font_id, inst_id);
@@ -484,7 +484,7 @@ void func_8110BFB0(void) {
         b = D_811858B0[i].unk03;
         if ((a != 0xFF) || (b != 0xFFU)) {
             off = 0x12;
-            if ((func_8110A310(1, 3, i) != 0) && (AudioLoad_IsFontLoadComplete(i) != 0)) {
+            if ((AudioHeap_SearchCaches(1, 3, i) != 0) && (AudioLoad_IsFontLoadComplete(i) != 0)) {
                 slot = (s8*)&D_811845D0;
                 for (j = 0; j < D_811845F4; j++, slot += 0x14) {
                     if ((a != slot[off]) && (b != slot[0x12]) && (slot[0x12] != 0)) {
@@ -1015,7 +1015,7 @@ void func_8110D110(s32 arg0) {
             tbl2->entries[i].key = none;
         }
     }
-    func_81109678(arg0);
+    AudioHeap_DiscardFont(arg0);
 }
 
 typedef struct Slot8110D214 {
@@ -1199,7 +1199,7 @@ typedef struct AudioTable8110D5BC {
     /* 0x10 */ AudioTableEntry8110D5BC entries[1];
 } AudioTable8110D5BC;
 
-s32 func_81109C0C(s32, s32, s32, s32);
+s32 AudioHeap_AllocCached(s32, s32, s32, s32);
 
 /**
  * Loads entry id of audio table tableType (0 sequences, 1 sound fonts, 2 sample
@@ -1238,20 +1238,20 @@ s32 AudioLoad_SyncLoad(s32 table_type, s32 id, s32* did_allocate) {
                 }
                 break;
             case 1:
-                ram_addr = func_81109C0C(table_type, size, 1, id);
+                ram_addr = AudioHeap_AllocCached(table_type, size, 1, id);
                 if (ram_addr == 0) {
                     return ram_addr;
                 }
                 break;
             case 2:
-                ram_addr = func_81109C0C(table_type, size, 0, id);
+                ram_addr = AudioHeap_AllocCached(table_type, size, 0, id);
                 if (ram_addr == 0) {
                     return ram_addr;
                 }
                 break;
             case 3:
             case 4:
-                ram_addr = func_81109C0C(table_type, size, 2, id);
+                ram_addr = AudioHeap_AllocCached(table_type, size, 2, id);
                 if (ram_addr == 0) {
                     return ram_addr;
                 }
@@ -1297,7 +1297,7 @@ s32 AudioLoad_GetRealTableIndex(s32 arg0, s32 arg1) {
     return arg1;
 }
 
-s32 func_8110A310(s32, M2C_UNK, s32);               /* extern */
+s32 AudioHeap_SearchCaches(s32, M2C_UNK, s32);               /* extern */
 
 /**
  * Looks entry `arg1` of table `arg0` up in the permanent cache, then the other caches. Name follows the Zelda 64 audio driver, whose loader this matches.
@@ -1311,7 +1311,7 @@ s32 AudioLoad_SearchCaches(s32 arg0, s32 arg1) {
     if (temp_v0_2 != 0) {
         return temp_v0_2;
     }
-    temp_v0 = func_8110A310(arg0, 2, arg1);
+    temp_v0 = AudioHeap_SearchCaches(arg0, 2, arg1);
     if (temp_v0 != 0) {
         return temp_v0;
     }

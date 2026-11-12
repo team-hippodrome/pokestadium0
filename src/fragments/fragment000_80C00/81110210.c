@@ -852,7 +852,7 @@ void AudioPlayback_InitNoteLists(s8 *arg0) {
     M2C_FIELD(arg0, s8 **, 0x3C) = arg0;
 }
 
-/* Same 0xCC-byte record array as func_81109678 (gb_tower_emulator_86920.c); only the fields used here are named. */
+/* Same 0xCC-byte record array as AudioHeap_DiscardFont (gb_tower_emulator_86920.c); only the fields used here are named. */
 typedef struct Rec81111130 {
     /* 0x00 */ s32 unk_00;
     /* 0x04 */ u8 pad04[4];
@@ -871,7 +871,7 @@ extern s32 D_811858E8;
  * Calls AudioPlayback_InitNoteLists(&D_81184938), then for each of the D_811858E8 records of
  * the array at D_81184664 (0xCC bytes each, indexed directly each time):
  * stores the record's own address at offset 8, clears the word at offset 0,
- * and calls func_81112EAC(&D_81184938, record). func_81109678, which walks the
+ * and calls func_81112EAC(&D_81184938, record). AudioHeap_DiscardFont, which walks the
  * same array, passes the same list argument to the same function. What the
  * records are is not established from this function.
  * @unverified Name guessed from the code; comment kept.
