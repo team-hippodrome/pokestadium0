@@ -220,3 +220,12 @@ the `IDNo.` stamp. Zero's UI code indexes those sheets, so the archive is now pa
 
 Only bytes 0x2B2CFE..0x2E0BD3 -- the payloads -- differ, plus the map table, the two functions and
 the header CRC.
+
+### Sets must decompress to Zero's size (2026-11-12)
+
+Stadium 1's sets hold 145 glyphs, Zero's 257, and Zero's UI indexes glyphs up to 256. A set
+that decompresses smaller than Zero's makes those reads leave the pool block, which is an address
+error mid-frame: the picture freezes while the audio thread keeps playing. Each English set is
+therefore padded to Zero's exact decompressed length with blank cells (0xF0, the value of Zero's
+own empty glyph) and recompressed; the payload still fits its slot with room to spare (set 5:
+#67AD in a #F3F0 slot).

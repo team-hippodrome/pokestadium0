@@ -141,6 +141,36 @@ def font_load_words(rom, shift=ADVANCES):
     return out + [NOP] * (len(r) - len(out))
 
 
+def english_payload(us, index, target_len):
+    """One English font file, sized to decompress to exactly Zero's own set (target_len bytes).
+
+    Zero's UI indexes glyphs up to 256, and its sets hold 257 cells; Stadium 1's hold 145. A set
+    that decompresses smaller than Zero's makes those reads land outside the pool block - an address
+    error mid-frame, which looks like a hang with the music still playing. So the English glyphs are
+    followed by blank cells (0xF0, the value of Zero's own empty glyph) up to Zero's count.
+    """
+    import crunch64
+
+    _, ufiles = archive_files(us, US_FONTS)
+    off, size = ufiles[index]
+    blob = us[US_FONTS + off:US_FONTS + off + size]
+    data = crunch64.yay0.decompress(blob[struct.unpack_from('>I', blob, 8)[0]:])
+    width, height = CELLS[index]
+    cells = (len(data) - ADVANCES) // (width * height)
+    out = data + b'\xF0' * (target_len - len(data))
+    if len(out) != target_len:
+        raise SystemExit('set %d is larger than Zero\'s (%#x > %#x)' % (index, len(data), target_len))
+    body = crunch64.yay0.compress(out)
+    return b'PERS-SZP' + struct.pack('>4I', 0x18, len(out), len(out), 0) + body, cells
+
+
+def zero_set_len(rom, offset, size):
+    """Decompressed length of one of Zero's own font files."""
+    import crunch64
+    blob = rom[offset:offset + size]
+    return len(crunch64.yay0.decompress(blob[struct.unpack_from('>I', blob, 8)[0]:]))
+
+
 def font_map_words(rom, ctx=None):
     """func_80019F70: printable ASCII through the Latin map, and that glyph's advance into the set.
 
@@ -339,12 +369,12 @@ def patch(rom, us, stage='full'):
         # Write Stadium 1's payloads into Zero's own slots: the archive header (and so every file
         # offset, size and glyph count the UI code indexes) stays byte-identical to retail.
         _, zfiles = archive_files(rom, ZERO_FONTS)
-        _, ufiles = archive_files(us, US_FONTS)
-        for (zoff, zsize), (uoff, usize) in zip(zfiles, ufiles):
-            blob = us[US_FONTS + uoff:US_FONTS + uoff + usize]
-            if len(blob) > zsize:
-                raise SystemExit('Stadium 1 file %d does not fit Zero slot %#x' % (len(blob), zsize))
-            out[ZERO_FONTS + zoff:ZERO_FONTS + zoff + zsize] = blob + bytes(zsize - len(blob))
+        for index, (zoff, zsize) in enumerate(zfiles):
+            payload, _ = english_payload(us, index, zero_set_len(rom, ZERO_FONTS + zoff, zsize))
+            if len(payload) > zsize:
+                raise SystemExit('English set %d does not fit Zero slot %#x (%#x)'
+                                 % (index, zsize, len(payload)))
+            out[ZERO_FONTS + zoff:ZERO_FONTS + zoff + zsize] = payload + bytes(zsize - len(payload))
     elif stage in ARCHIVE_STAGES:
         out[ZERO_FONTS:ZERO_FONTS + total] = us[US_FONTS:US_FONTS + total]
     if stage in ('data', 'archive'):
@@ -380,11 +410,10 @@ def check(rom, us, retail, stage='full', seed=None):
     total, files = archive_files(rom, ZERO_FONTS)
     if stage in INPLACE_STAGES:
         zfiles = archive_files(retail, ZERO_FONTS)[1]
-        _, ufiles = archive_files(us, US_FONTS)
-        for (zoff, zsize), (uoff, usize) in zip(zfiles, ufiles):
-            blob = us[US_FONTS + uoff:US_FONTS + uoff + usize]
-            if rom[ZERO_FONTS + zoff:ZERO_FONTS + zoff + zsize] != blob + bytes(zsize - len(blob)):
-                raise SystemExit('font payload %#x is not Stadium 1\'s' % zoff)
+        for index, (zoff, zsize) in enumerate(zfiles):
+            payload, _ = english_payload(us, index, zero_set_len(retail, ZERO_FONTS + zoff, zsize))
+            if rom[ZERO_FONTS + zoff:ZERO_FONTS + zoff + zsize] != payload + bytes(zsize - len(payload)):
+                raise SystemExit('font payload %#x is not the English set' % zoff)
         if rom[ZERO_FONTS:ZERO_FONTS + 0x70] != retail[ZERO_FONTS:ZERO_FONTS + 0x70]:
             raise SystemExit("the font archive header changed")
     elif stage in ARCHIVE_STAGES:
