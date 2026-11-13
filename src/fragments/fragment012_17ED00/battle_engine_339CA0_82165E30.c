@@ -208,6 +208,7 @@ void BattleAnim_InitializeSubmissionHit(void) {
 
 /**
  * Moves: Bite (hit), Clamp (hit), Guillotine (hit), Hyper Fang (hit), Super Fang (hit), Vice Grip (hit)
+ * TODO: Human contributor add screenshot
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Vise Grip, Bite, Clamp, Hyper Fang, Super Fang.
  */
@@ -289,6 +290,7 @@ void BattleAnim_InitializeScratchSlashHit(void) {
 
 /**
  * Moves: Cut (use), Scratch (use), Slash (use)
+ * TODO: Human contributor add screenshot
  * Seen in play (2026-11-12): in the per-move sweep it ran only for Cut, not for Slash or Scratch,
  * so the old name BattleAnim_InitializeCutSlashScratchEffect was too broad.
  */
@@ -596,6 +598,7 @@ void BattleAnim_InitializeSubstituteTransformUse(void) {
 
 /**
  * Moves: Conversion (use), Mimic (use), Recover (use), Sky Attack (use), Solar Beam (use)
+ * TODO: Human contributor add screenshot
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Solar Beam, Mimic, Metronome, Sky Attack, Conversion.
  */
