@@ -648,8 +648,8 @@ void BattleAnim_InitializeGrowthUse(void) {
 }
 
 /**
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * Seen in play (2026-11-13) ran when 1P used Recover with its HP set to 5 (at full HP the move
+ * fails and the sweep never saw the animation).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_InitializeRecoverUse(void) {
