@@ -7,6 +7,10 @@ void func_82116D20(void) {
 void func_82116D28(void) {
 }
 
+/**
+ * Draws a level number at (arg0, arg1) on the battle HUD from the digit font.
+ * @unverified Name from Stadium 1.
+ */
 void BattleHud_DrawLevelNumber(s32 arg0, s32 arg1, s32 arg2) {
     UNUSED s32 pad[2]; // FAKE: stack padding
     s8* var_s2;
@@ -39,6 +43,10 @@ void BattleHud_DrawLevelNumber(s32 arg0, s32 arg1, s32 arg2) {
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
+/**
+ * Draws HP as "current/max" text at (arg0, arg1) on the battle HUD.
+ * @unverified Name from Stadium 1.
+ */
 void BattleHud_DrawHpFractionText(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     UNUSED s32 pad[2]; // FAKE: stack padding
     s8 sp70[7];
@@ -190,6 +198,10 @@ void BattleHud_DrawMonInfoBox(ActivePokemon* arg0, BattleMon* arg1, unk_D_843857
     func_8001ABBC();
 }
 
+/**
+ * Draws an arg2 x arg3 border tile of the battle HUD from texture arg4 at (arg0, arg1).
+ * @unverified Name from Stadium 1.
+ */
 s32 BattleHud_DrawBorderTile(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
     UNUSED s32 pad[4]; // FAKE: stack padding
     s32 sp2C;
@@ -211,5 +223,9 @@ s32 BattleHud_DrawBorderTile(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
     Gfx_DrawTexturedRect(arg0, arg1, (arg0 + arg2) - 1, (arg1 + arg3) - 1, sp2C, sp28, 0);
 }
 
+/**
+ * Init hook that does nothing.
+ * @unverified Name from Stadium 1.
+ */
 void ParticleEffect_InitNoop(void) {
 }
