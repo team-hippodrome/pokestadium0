@@ -400,6 +400,10 @@ void BattleMenu_DrawSwitchPanelEntry(TeamRoster* arg0, BattleMon* arg1, s32 arg2
     }
 }
 
+/**
+ * Draws a Pokemon's HUD details at (arg2, arg3): level, HP bar and HP fraction, a gender or
+ * marker icon chosen by arg4, and a status icon when it has one.
+ */
 void func_8211B208(TeamRoster* arg0, BattleMon* arg1, s32 arg2, s32 arg3, s32 arg4) {
     s32 var_t0;
 
@@ -448,6 +452,10 @@ extern u8 D_8218B050[];
 extern u8 D_8218B068[];
 extern u8 D_8218B080[];
 extern u8* D_8218AFF8[];
+/**
+ * Draws a three-Pokemon roster panel at (arg1, arg2) for team arg0: each member's details
+ * and name, then a drop shadow around the panel.
+ */
 void func_8211B484(TeamRoster* arg0, s16 arg1, s16 arg2, s32 arg3) {
     UNUSED s32 pad; // FAKE
     s8* sp88[] = {D_8218B02C, D_8218B044, D_8218B05C, D_8218B074};
@@ -765,6 +773,10 @@ void BattleMenu_DrawSurrenderPromptWithCursor(ActivePokemon* arg0, s16 arg1, s16
 
 extern u8 D_8219A4F1;
 u8 func_8000F1FC(u8, s32, s32, s32);
+/**
+ * Draws the acting Pokemon's nickname centered near the bottom of the screen, fading it in
+ * by 5 a frame.
+ */
 void func_8211C9FC(void) {
     u32 len;
     s8* name;
@@ -789,6 +801,9 @@ extern Gfx D_80060398[];
 extern u8 D_03003EC0[];
 extern u8 D_03006C40[];
 
+/**
+ * Draws a 104-pixel wide RGBA32 image line by line from y = 23, starting at D_03003EC0.
+ */
 void func_8211CB0C(void) {
     s32 i;
     u8* tex;
@@ -805,6 +820,10 @@ void func_8211CB0C(void) {
 
 extern s8 D_8219A4A0[];
 extern s8 D_8219A4C8[];
+/**
+ * Splits str at its first space: the first word goes to D_8219A4A0 and the rest to
+ * D_8219A4C8. Returns 1 if there was a space, 0 otherwise.
+ */
 s32 func_8211CBCC(s8* str) {
     s8 i = 0;
     s8 j = 0;
@@ -846,6 +865,10 @@ extern char D_82195A94[];
 extern char D_82195A9C[];
 s32 func_8000A4E8(s8*, char*);
 
+/**
+ * Draws the battle text box at its stored position, fading it in (or out) by 10 a frame and
+ * drawing its lines.
+ */
 void func_8211CC8C(void) {
     UNUSED s32 pad[4]; // FAKE
     s16 x = *(s16*)&D_8219A4F0[0x16]; // FAKE: the text box is read as raw bytes; a struct pointer gets folded
@@ -931,6 +954,10 @@ void func_8211CC8C(void) {
 extern u8 D_8219A4F0[];
 extern u8 D_03003540[];
 extern u8 D_03001DA0[];
+/**
+ * Fades the text box frame in or out by 5 a frame (flag 0x80), and when flag 0x40 is set
+ * draws it with the env color as a translucent textured box.
+ */
 void func_8211D06C(void) {
     s32 i;
     u8* tex;
@@ -995,6 +1022,10 @@ extern s8 D_8219A732;
 extern u8 D_0300A500[];
 extern u8 D_0300A7A0[];
 extern Gfx D_80060398[];
+/**
+ * Draws a list panel at (arg0, arg1): a translucent black box, the entries from D_8218B13C
+ * (dimmed when D_8219A730 is set) and the cursor next to entry D_8219A732.
+ */
 void func_8211D3D8(s16 arg0, s16 arg1) {
     Ui_DrawPrimColorRect(arg0, arg1, 0x64, 0x7D, 0, 0, 0, 0x3C);
     func_8001AB6C();
@@ -1388,6 +1419,10 @@ void BattleDebug_DrawPokeBallViewer(s16 arg0, s16 arg1) {
 extern s8* D_8219A5A0;
 extern char D_82195FF4[];
 extern char D_82195FF8[];
+/**
+ * Draws a small translucent panel at (arg0, arg1) with two formatted values from the
+ * scene's +0xCC object (its fields 0x34 and 0x38).
+ */
 void func_8211E794(s16 arg0, s16 arg1) {
     char buf[16];
 

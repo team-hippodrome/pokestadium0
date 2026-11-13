@@ -47,6 +47,10 @@ void BattleAnim_SetupSlashingMoveUse(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
+/**
+ * Particle callback (lifecycle at 0xAE): init, loop frames 0-7 once, fade alpha out by 64,
+ * then mark inactive. Scale moves toward 3.5 by 0.25 every frame.
+ */
 void func_8215FAA4(s8 *arg0) {
     s16 temp_v0;
 
@@ -363,6 +367,10 @@ void BattleAnim_SlashGrowFade_InitParticle(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
+/**
+ * Particle callback: init, an 8-frame countdown, a fade-out by 32, then inactive. Loops
+ * frames 0-7 and moves scale toward 5 by 0.4 every frame.
+ */
 void func_821603C8(s8 *arg0) {
     s16 temp_v0;
 
@@ -404,6 +412,10 @@ void BattleAnim_HeavyHitBurstChild_InitParticle(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
+/**
+ * Particle callback: init, wait the delay in field A2, then the later stages of
+ * func_82160494's effect before it is marked inactive.
+ */
 void func_82160528(s8 *arg0) {
     s16 temp_v0;
 
@@ -573,6 +585,10 @@ void BattleAnim_SandAttackParticleUpdate(s8 *arg0) {
     }
 }
 
+/**
+ * Init step for a spreading particle: scale 0.4, a random rise speed (0.25-0.75), a heading
+ * fanned out by spawn index, a random step magnitude (1-2), palette 10 and alpha 100.
+ */
 void func_82160BB8(s8 *arg0) {
     s16 sp26;
 
@@ -587,6 +603,10 @@ void func_82160BB8(s8 *arg0) {
     func_8213C9D0(arg0);
 }
 
+/**
+ * Particle callback for the spreading particle of func_82160BB8: loops frames 0-7 while it
+ * shrinks toward 0.75, slows its step to 0.5 and rises, then fades and is marked inactive.
+ */
 void func_82160CCC(s8 *arg0) {
     s16 temp_v0;
 
@@ -751,6 +771,10 @@ void BattleAnim_SetupIceBeamIcePunchEffect(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
+/**
+ * Particle callback: init, wait the delay in field A2, run the effect stages, then mark
+ * inactive.
+ */
 void func_82161288(s8 *arg0) {
     s16 temp_v0;
 
@@ -797,6 +821,9 @@ void BattleAnim_CallbackOrphanDescriptor34ColorFadeDetach_InitParticle(Particle*
     Particle_AdvanceLifecycle(arg0);
 }
 
+/**
+ * Particle callback: init, wait the delay in field A2, run the effect stages, then detach.
+ */
 void func_8216140C(s8 *arg0) {
     s16 temp_v0;
 
@@ -886,6 +913,10 @@ void BattleAnim_SetupUnusedGlitterVariant(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
+/**
+ * Particle callback: init, then speeds up toward step magnitude 2 and fades out once the
+ * spawn step reports done. Moves along its rotation while running.
+ */
 void func_821616BC(s8 *arg0) {
     s16 temp_v0;
 
@@ -1945,6 +1976,10 @@ void BattleAnim_SetupThunderPunchUseEffect(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
+/**
+ * Particle callback: init, wait the delay in field A2, run the effect stages, then mark
+ * inactive.
+ */
 void func_821639EC(s8 *arg0) {
     s16 temp_v0;
 
@@ -2058,6 +2093,10 @@ void BattleAnim_PowderCloudScaleMotion_InitParticle(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
+/**
+ * Particle callback: init, wait the delay in field A2, run the effect stages, then mark
+ * inactive.
+ */
 void func_82163D7C(s8 *arg0) {
     s16 temp_v0;
 
