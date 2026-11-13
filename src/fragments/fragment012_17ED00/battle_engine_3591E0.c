@@ -47,6 +47,7 @@ s32 AuxEffect_GetId(s32 arg0);
 
 /**
  * Marks both auxiliary effect pools free.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
  * @unverified Name from Stadium 1.
  */
 void AuxiliaryEffect_Init(void) {
@@ -60,6 +61,7 @@ void AuxiliaryEffect_Init(void) {
 /**
  * Claims a free auxiliary effect pool (of 2), clears its 20 nodes and returns its index,
  * or -1 if both are in use.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (20 of the moves).
  * @unverified Name from Stadium 1.
  */
 s16 AuxiliaryEffect_Alloc(void) {
@@ -89,6 +91,7 @@ s16 AuxiliaryEffect_Alloc(void) {
 /**
  * Starts a node in auxiliary effect pool arg0 at (arg1, arg2, arg3) with parameters arg4
  * and arg5, if the pool is active and a node is free.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (16 of the moves).
  * @unverified Name from Stadium 1.
  */
 void AuxiliaryEffect_Spawn(s16 arg0, f32 arg1, f32 arg2, f32 arg3, s16 arg4, f32 arg5) {
@@ -115,6 +118,7 @@ void AuxiliaryEffect_Spawn(s16 arg0, f32 arg1, f32 arg2, f32 arg3, s16 arg4, f32
 
 /**
  * Advances every running node in auxiliary effect pool arg0.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (20 of the moves).
  * @unverified Name from Stadium 1.
  */
 void AuxiliaryEffect_Update(s16 arg0) {
@@ -139,6 +143,7 @@ void AuxiliaryEffect_Update(s16 arg0) {
 /**
  * Adds the display list for one auxiliary effect node, transformed by arg2, and returns
  * the new end of the list.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (16 of the moves).
  * @unverified Name from Stadium 1.
  */
 Gfx* AuxiliaryEffect_DrawOne(Gfx* arg0, AuxiliaryEffectNode* arg1, MtxF* arg2) {
@@ -173,6 +178,7 @@ Gfx* AuxiliaryEffect_DrawOne(Gfx* arg0, AuxiliaryEffectNode* arg1, MtxF* arg2) {
 /**
  * Adds the display lists for every running node in auxiliary effect pool arg0 and returns
  * the new end of the list.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (28 of the moves).
  * @unverified Name from Stadium 1.
  */
 Gfx* AuxiliaryEffect_Draw(s16 arg0, Gfx* arg1) {
@@ -208,6 +214,8 @@ void func_821832FC(void) {
 
 /**
  * Returns its argument.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
 s32 AuxEffect_GetId(s32 arg0) {

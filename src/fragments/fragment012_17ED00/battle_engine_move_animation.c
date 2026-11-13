@@ -102,6 +102,8 @@ void BattleScene_InitializeRuntime(BattleSessionTeams* session_teams);
 // called on any fade in battle
 /**
  * Resets the 7 battle scene state tick slots to the sentinel callback.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleScene_ClearStateTickCallbacks(void) {
@@ -120,6 +122,7 @@ void BattleScene_ClearStateTickCallbacks(void) {
 /**
  * Queues effect list 3 entry effect_entry with the actor's model as user and target and
  * no anchors.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleScene_QueueRowEffectList3(ActivePokemon* actor, s32 effect_entry) {
@@ -134,6 +137,7 @@ void BattleScene_QueueRowEffectList3(ActivePokemon* actor, s32 effect_entry) {
 /**
  * Queues the main animation of move_id from user at the other side's Pokémon, with the
  * move's camera anchors.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (159 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_PlayMoveEffectScript(ActivePokemon* user, s32 move_id) {
@@ -157,6 +161,7 @@ void BattleAnim_PlayMoveEffectScript(ActivePokemon* user, s32 move_id) {
 /**
  * Queues the charging animation of move_id from user at the other side's Pokémon, with
  * the move's camera anchors.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (6 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_PlayChargingMoveEffectScript(ActivePokemon* user, s32 move_id) {
@@ -177,6 +182,7 @@ void BattleAnim_PlayChargingMoveEffectScript(ActivePokemon* user, s32 move_id) {
 /**
  * Queues the end (hit) animation of move_id on the other side's Pokémon, with the hit
  * cue's camera anchors.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (126 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_PlayMoveEffectEnd(ActivePokemon* user, s32 move_id) {
@@ -290,6 +296,7 @@ void BattleAnim_SetFlagForRockThrowingMoves(ActivePokemon* active_pokemon) {
 // triggers at the end of move animations and at the end of damage animation of using a rock throwing move
 /**
  * Clears render flag 2 on both active Pokémon models. The argument is unused.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (162 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_ClearRockThrowingMoveFlag(ActivePokemon* active_pokemon) {
@@ -299,6 +306,7 @@ void BattleAnim_ClearRockThrowingMoveFlag(ActivePokemon* active_pokemon) {
 
 /**
  * Returns nonzero while the Pokémon's session is loading animation assets (flags 0xD0).
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
  * @unverified Name from Stadium 1.
  */
 s32 BattleAnim_IsAssetLoadBusy(s8 *arg0) {
@@ -2548,6 +2556,8 @@ void BattleAnim_QueueEffectList(u8 arg0, s32 arg1);
 /**
  * If the Pokémon is frozen but the freeze presentation is not showing yet, queues the
  * freeze effect, clears the frozen bit in the state and starts the freeze presentation.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_ResetFreezeStatusAndRestoreAnimation(ActivePokemon* arg0) {

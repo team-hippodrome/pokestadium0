@@ -18,6 +18,7 @@ void Trail40GridAlt_Reset(void);
 
 /**
  * Clears the trail grid and sets its alpha to arg0.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
  * @unverified Name from Stadium 1.
  */
 void Trail40GridAlt_Init(s16 arg0) {
@@ -56,6 +57,7 @@ void Trail40GridAlt_Init(s16 arg0) {
 /**
  * Starts node arg1 of trail row arg0 from the effect owners' positions with random
  * motion.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
  * @unverified Name from Stadium 1.
  */
 void Trail40GridAlt_Start(s32 arg0, s32 arg1) {
@@ -168,6 +170,7 @@ void Trail40GridAlt_Start(s32 arg0, s32 arg1) {
 /**
  * Writes a trail node's position and color (scaled to 120) into vertex arg1, with the
  * grid's alpha.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
  * @unverified Name from Stadium 1.
  */
 void Trail40GridAlt_FillVertex(Trail40Node* arg0, Vtx* arg1) {
@@ -194,6 +197,7 @@ void Trail40GridAlt_FillVertex(Trail40Node* arg0, Vtx* arg1) {
 
 /**
  * Advances every trail node. Always returns 0.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
  * @unverified Name from Stadium 1.
  */
 s32 Trail40GridAlt_IsComplete(void) {
@@ -293,6 +297,7 @@ void Trail40GridAlt_Reset(void) {
 
 /**
  * Adds the display list that draws the trail grid and returns the new end of the list.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
  * @unverified Name from Stadium 1.
  */
 Gfx* Trail40GridAlt_Draw(Gfx* arg0) {

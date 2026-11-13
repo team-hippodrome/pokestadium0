@@ -42,54 +42,67 @@ void ParticleGfx_SetPartiallyAnimatedTileSize(Gfx* gfx, s32 arg1, s32 arg2, s32 
 void ParticleGfx_SetPartiallyAnimatedAuxTileSize(Gfx* gfx, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 /**
  * Append a 32-bit texture block load with caller-supplied format and addressing.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_LoadTextureBlock32(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
                    s32 shiftt);
 /**
  * Append a 32-bit texture tile load with caller-supplied format and addressing.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_LoadTextureTile32(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
                    s32 shiftt);
 /**
  * Append a 16-bit texture block load with caller-supplied format and addressing.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (5 of the moves).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_LoadTextureBlock16(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
                    s32 shiftt);
 /**
  * Append a 16-bit texture tile load with caller-supplied format and addressing.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_LoadTextureTile16(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
                    s32 shiftt);
 /**
  * Append a 8-bit texture block load with caller-supplied format and addressing.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (92 of the moves).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_LoadTextureBlock8(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
                    s32 shiftt);
 /**
  * Append a 8-bit texture tile load with caller-supplied format and addressing.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_LoadTextureTile8(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
                    s32 shiftt);
 /**
  * Append a 4-bit texture block load with caller-supplied format and addressing.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (110 of the moves).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_LoadTextureBlock4(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
                    s32 shiftt);
 /**
  * Append a 4-bit texture tile load with caller-supplied format and addressing.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (10 of the moves).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_LoadTextureTile4(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
                    s32 shiftt);
 /**
  * Load textures into the explicitly selected TMEM regions/tiles for multi-texture rendering.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (17 of the moves).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_LoadTextureMultiBlock4(u8* texture, s32 tmem, s32 rtile, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks,

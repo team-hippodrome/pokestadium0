@@ -85,6 +85,7 @@ void LassoHit_Init(f32 arg0, f32 arg1, f32 arg2, f32 arg3, u8 arg4, u8 arg5, u8 
 /**
  * Returns how far the trail strip's tail has faded, from 1.0 (not started) down toward 0,
  * based on the strip's current point count.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (4 of the moves).
  * @unverified Name from Stadium 1.
  */
 f32 Strip400_GetTailFadeRatio(void) {
@@ -276,6 +277,7 @@ Gfx* Strip400_Draw(Gfx* arg0) {
 extern Radial20 D_821A3490[10];
 /**
  * Clears the 10 radial effects and their nodes.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (5 of the moves).
  * @unverified Name from Stadium 1.
  */
 void Radial20_ResetPool(void) {
@@ -375,6 +377,8 @@ extern Radial20 D_821A3490[10];
 /**
  * Starts a free radial effect from (arg0, arg1, arg2) toward (arg3, arg4, arg5) with
  * node count arg6, color arg7..argA and spread, speed and length parameters.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
 void Radial20_VariantB(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s16 arg6, u8 arg7, u8 arg8, u8 arg9,
@@ -565,6 +569,8 @@ void func_82175440(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s
 extern Radial20 D_821A3490[10];
 /**
  * Like Radial20_VariantB with a different node layout.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
 void Radial20_VariantE(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s16 arg6, u8 arg7, u8 arg8, u8 arg9,
@@ -632,6 +638,7 @@ void Radial20_VariantE(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg
 
 /**
  * Writes the point arg3 units along Z rotated arg0 radians about X to arg2.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (5 of the moves).
  * @unverified Name from Stadium 1.
  */
 void Radial20_RotateVertexOffset(f32 arg0, UNUSED Vec3f* arg1, Vec3f* arg2, f32 arg3, UNUSED f32 arg4, UNUSED f32 arg5,
@@ -800,6 +807,7 @@ void Radial20_UpdateNode(Radial20* arg0) {
 extern Radial20 D_821A3490[10];
 /**
  * Advances every active radial effect. Returns -1 once none are left running, else 0.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (5 of the moves).
  * @unverified Name from Stadium 1.
  */
 s32 Radial20_IsComplete(void) {

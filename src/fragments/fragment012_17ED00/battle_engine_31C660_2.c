@@ -65,6 +65,8 @@ void BattleAnim_CallbackOwnerModelTintPaletteFade(s8 *arg0) {
 /**
  * Lifecycle init for the random tint cycle: picks random start and target colors from
  * palette set A and a step timer of 255 / speed.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetupOwnerModelTintRandomPaletteCycle(Particle* arg0) {
@@ -83,6 +85,8 @@ void BattleAnim_SetupOwnerModelTintRandomPaletteCycle(Particle* arg0) {
 /**
  * Particle callback: moves the tint toward the target color, picks a new random target
  * when the timer runs out, and applies the tint to the owner model.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_CallbackOwnerModelTintRandomPaletteCycle(Particle* arg0) {
@@ -200,6 +204,8 @@ void BattleAnim_CallbackOwnerModelAlphaFade(s8 *arg0) {
 
 /**
  * Lifecycle init: palette color from the CF parameter, fully transparent.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetupParticleRecolorTransparent(Particle* arg0) {
@@ -326,6 +332,7 @@ void BattleAnim_RunFullScreenHueChange(Particle* arg0) {
 /**
  * Lifecycle init for a fade-in overlay: palette color from the CF parameter, fully
  * transparent.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (5 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetupDescriptor25AlphaFadeInHold(Particle* arg0) {
@@ -385,6 +392,8 @@ void BattleAnim_CallbackDescriptor25AlphaHoldDetach(s8 *arg0) {
 /**
  * Lifecycle init for a fade-out overlay: palette color from the CF parameter, fully
  * opaque.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetupDescriptor25PaletteFadeOut(Particle* arg0) {
@@ -396,6 +405,8 @@ void BattleAnim_SetupDescriptor25PaletteFadeOut(Particle* arg0) {
 /**
  * Particle callback for the fade-out overlay: holds for its timer, then fades out and
  * detaches.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_CallbackDescriptor25PaletteFadeOut(Particle* arg0) {
@@ -420,6 +431,8 @@ void BattleAnim_CallbackDescriptor25PaletteFadeOut(Particle* arg0) {
 /**
  * Lifecycle init for a fade-in overlay: palette color from the CF parameter, fully
  * transparent.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetupDescriptor25PaletteFadeIn(Particle* arg0) {
@@ -431,6 +444,8 @@ void BattleAnim_SetupDescriptor25PaletteFadeIn(Particle* arg0) {
 /**
  * Particle callback for the fade-in overlay: moves toward the target palette color while
  * fading in, then holds and detaches.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_CallbackDescriptor25PaletteFadeIn(Particle* arg0) {

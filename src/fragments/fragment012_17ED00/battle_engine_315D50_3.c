@@ -389,6 +389,8 @@ void BattleAnim_Reset(void);
 
 /**
  * Initializes the particle system and resets the battle animation state.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_Initialize(void) {
@@ -422,6 +424,8 @@ extern s32 D_8219A8EC;
  * update/draw callbacks, sets the prim, env and saved stage tint colors to white, clears
  * the fog color and the anchor vectors, resets the asset table and display contexts, and
  * enables effect spawning again.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_Reset(void) {

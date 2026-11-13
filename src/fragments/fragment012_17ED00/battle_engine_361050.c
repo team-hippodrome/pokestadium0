@@ -101,6 +101,7 @@ void BattleScene_IntroInitNop(void);
  * COM AI damage estimate for fixed-damage moves: Super Fang (effect 40) takes half the
  * HP; Seismic Toss and Night Shade deal the level, SonicBoom 20, Dragon Rage 40, and
  * Psywave is estimated at 3/4 of the level. Returns the estimate.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (11 of the moves).
  * @unverified Name guessed from the code.
  */
 u16 BattleAi_ApplyMoveEffectDamageOverride(BattleMonRuntime* arg0, BattleMonRuntime* arg1) {
@@ -152,6 +153,7 @@ u16 BattleAi_ApplyMoveEffectDamageOverride(BattleMonRuntime* arg0, BattleMonRunt
 
 /**
  * Scales the damage estimate by 255/255, which leaves it unchanged.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (11 of the moves).
  * @unverified Name guessed from the code.
  */
 void BattleAi_ClampDamageRatio(void) {
@@ -198,6 +200,7 @@ void BattleCalc_ApplyTypeEffectAndStab(u8* attacker, u8* defender) {
  * defense stats (physical or special by type, doubled by Reflect or Light Screen, unmodified
  * on a critical hit), scaling both down if both are over 255, and the level (doubled on a
  * critical hit).
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (11 of the moves).
  * @unverified Name guessed from the code.
  */
 void BattleAi_PrepareDamageCalcState(BattleMonRuntime* arg0, BattleMonRuntime* arg1, u8 arg2) {
@@ -489,6 +492,8 @@ s32 Battle_StepPartyHpToDisplay(ActivePokemon* arg0) {
 
 /**
  * Intro init hook that does nothing.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
 void BattleScene_IntroInitNop(void) {

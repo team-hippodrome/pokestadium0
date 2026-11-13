@@ -47,6 +47,7 @@ void func_8211778C(s16 x, s16 y) {
 /**
  * Draws the row of party balls under a status box: one icon per Pokemon brought, chosen by
  * fainted, has a status condition or healthy. Draws both trainers' rows in tag battles.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleHud_DrawPartyBallRow(ActivePokemon* arg0, s16 arg1, s16 arg2) {
@@ -139,6 +140,7 @@ void BattleHud_DrawPartyBallRow(ActivePokemon* arg0, s16 arg1, s16 arg2) {
 /**
  * Draws side 0's status box: the info box tinted with the controller color, the trainer name
  * label, the border tiles, the drop shadows and the party ball row below.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleHud_DrawMonStatusBoxPlayer(ActivePokemon* arg0, s16 arg1, s16 arg2, u16 arg3, s32 arg4) {
@@ -232,6 +234,7 @@ void BattleHud_DrawMonStatusBoxPlayer(ActivePokemon* arg0, s16 arg1, s16 arg2, u
 /**
  * Draws side 1's status box: the same parts as BattleHud_DrawMonStatusBoxPlayer, laid out
  * with the name label below the box and the party ball row above it.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleHud_DrawMonStatusBoxOpponent(ActivePokemon* arg0, s16 arg1, s16 arg2, u16 arg3, s32 arg4) {

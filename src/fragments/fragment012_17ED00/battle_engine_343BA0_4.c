@@ -866,6 +866,7 @@ void func_82136018(void) {
 
 /**
  * Runs start effect arg0's init hook, and again with the alternate anchor if there is one.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (139 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_RunEffectInitStart(s16 arg0) {
@@ -880,6 +881,7 @@ extern func_D_84390320 D_8218EA6C[];
 
 /**
  * Runs end effect arg0's init hook.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (136 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_RunEffectInitEnd(s16 arg0) {
@@ -889,6 +891,7 @@ void BattleAnim_RunEffectInitEnd(s16 arg0) {
 /**
  * Registers an effect update and draw callback pair in the next of the 8 callback slots,
  * wrapping around.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (157 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_RegisterEffectSlot(func_D_84390300 arg0, func_D_84390320 arg1) {
@@ -919,6 +922,7 @@ void func_8213608C(s16 arg0);
 /**
  * Runs effect list arg1 of move (or resource list) arg0: starts the list's effects in
  * order and registers their callbacks.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (159 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_RunEffectList(s32 arg0, s32 arg1, s32 arg2) {
@@ -981,6 +985,7 @@ extern s16 D_8219A80C;
 /**
  * Runs whatever effect lists were queued this frame (the move's list, the alternate list
  * and the resource list) and clears the queue.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_ProcessQueuedEffects(void) {
@@ -1009,6 +1014,7 @@ void BattleAnim_ProcessQueuedEffects(void) {
 
 /**
  * Sets which effect list of the queued move will run.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (159 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetQueuedEffectList(u8 effect_list_index) {

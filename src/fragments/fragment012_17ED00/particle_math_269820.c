@@ -251,6 +251,8 @@ void BattleAnim_ClearEffectState(void) {
 
 /**
  * Returns the battle animation effect state word D_8219A82C.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code.
  */
 s32 BattleAnim_GetEffectState(void) {

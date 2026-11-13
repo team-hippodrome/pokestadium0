@@ -62,6 +62,8 @@ void func_82165BC8(s32 arg0) {
 /**
  * Particle callback: after its delay, plays frames 0-15 and then emits a burst of five
  * descriptor 0x26 child particles, then detaches.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_CallbackDescriptor26BurstEmitter(Particle* arg0) {
@@ -92,6 +94,8 @@ void BattleAnim_CallbackDescriptor26BurstEmitter(Particle* arg0) {
  * Init step for the growing spark: scales size, scale target and step by the spawn index
  * (arg AC), raises it by 10, sets frame 15, colors and full alpha, and delays the start by
  * eight frames per index.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetupUnusedGrowingSparkVariant(Particle* arg0) {

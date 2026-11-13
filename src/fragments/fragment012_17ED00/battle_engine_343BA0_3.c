@@ -32,6 +32,8 @@ void func_821079E8(s32);
 /**
  * Camera frame on the Pokemon of side D_8219A760: aims at its default anchor from the
  * front, at a distance scaled by its size, then advances the phase step.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name guessed from the code.
  */
 void BattleScene_FinalPresentationFrameActiveOwner(CameraNode* arg0) {
@@ -103,6 +105,8 @@ void func_82134374(CameraNode* arg0, UNUSED s32 arg1, UNUSED s32 arg2) {
 
 /**
  * Allocates the battle scene from the main pool and zeroes it.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleScene_AllocateMemory(void) {

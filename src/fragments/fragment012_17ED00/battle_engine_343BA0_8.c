@@ -651,6 +651,8 @@ void BattleAnim_DrawPsybeamUseDoubleTextureTrail(void) {
 /**
  * Starts the two double-texture trails of start effect 77 from the owner toward the
  * target.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_StartEffect77DoubleTextureTrail_Seed(void) {
@@ -681,6 +683,8 @@ void BattleAnim_StartEffect77DoubleTextureTrail_Seed(void) {
 /**
  * Init hook for start effect 77: resets the shared matrix and the trail pool, then starts
  * the trails.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_StartEffect77DoubleTextureTrail_Init(void) {
@@ -691,6 +695,8 @@ void BattleAnim_StartEffect77DoubleTextureTrail_Init(void) {
 
 /**
  * Update hook for start effect 77: advances the trails.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 s32 BattleAnim_StartEffect77DoubleTextureTrail_Update(void) {
@@ -699,6 +705,8 @@ s32 BattleAnim_StartEffect77DoubleTextureTrail_Update(void) {
 
 /**
  * Draw hook for start effect 77: loads the shared matrix and draws the trails.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_StartEffect77DoubleTextureTrail_Draw(void) {

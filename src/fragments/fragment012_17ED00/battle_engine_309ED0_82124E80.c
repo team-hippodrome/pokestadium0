@@ -108,6 +108,8 @@ s32 BattleScene_TryStartSwitchAction(void) {
 /**
  * Starts the switch-in for any side whose action is a switch (actions 0xF and 0x10),
  * human sides first, then restores the acting side.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleScene_InitializeSwitchActions(void) {
@@ -207,6 +209,7 @@ void BattleScene_StartSecondAction(void) {
 
 /**
  * Clears the scene's phase substep.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
  * @unverified Name guessed from the code.
  */
 void BattleScene_ClearPhaseFlag(void) {
@@ -215,6 +218,7 @@ void BattleScene_ClearPhaseFlag(void) {
 
 /**
  * Sets the scene's phase substep to 1.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
  * @unverified Name guessed from the code.
  */
 void BattleScene_SetPhaseFlag(void) {
@@ -223,6 +227,7 @@ void BattleScene_SetPhaseFlag(void) {
 
 /**
  * Switches the battle scene to phase arg1 at step 0.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleScene_SetPhase(UNUSED CameraNode* arg0, s32 arg1) {
@@ -280,6 +285,7 @@ void func_8212562C(void) {
 /**
  * If the target is seeded or badly poisoned and has used no move (0xFF), ends the action
  * and moves on to the second mover's phase (3). Returns 1 if it did.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (12 of the moves).
  * @unverified Name from Stadium 1.
  */
 s32 BattleScene_HandleFaintStatusCompletion(void) {
@@ -301,6 +307,7 @@ s32 BattleScene_HandleFaintStatusCompletion(void) {
 /**
  * Ends the current action: after the first mover's action, goes on to the second mover
  * (phase 3) unless the target has no move; otherwise goes to the end-of-turn phase (4).
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (162 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleScene_CompleteActionPhase(void) {
@@ -325,6 +332,7 @@ void BattleScene_CompleteActionPhase(void) {
 /**
  * Switches to phase arg0, clearing the substep, frame timers, move effect kind and Rage
  * follow-up. Returns 1.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (75 of the moves).
  * @unverified Name guessed from the code.
  */
 s32 BattleScene_TransitionToPhaseFull(s32 arg0) {
@@ -340,6 +348,8 @@ s32 BattleScene_TransitionToPhaseFull(s32 arg0) {
 
 /**
  * Like BattleScene_TransitionToPhaseFull but keeps the move effect kind.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name guessed from the code.
  */
 s32 BattleScene_TransitionToPhase(s32 arg0) {
@@ -355,6 +365,7 @@ s32 BattleScene_TransitionToPhase(s32 arg0) {
 /**
  * Once both HP bars have finished moving, goes to the faint phase (5) for a side that
  * fainted, or on to the next step if neither did.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleScene_ResolveDisplayedHpCompletion(CameraNode* arg0) {
@@ -376,6 +387,7 @@ void BattleScene_ResolveDisplayedHpCompletion(CameraNode* arg0) {
 /**
  * Updates the HP displays and goes to the faint phase for the acting Pokémon if it has 0
  * HP, or the next step if the other Pokémon fainted or neither did.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (162 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleScene_UpdateDisplayedHpAndTransition(CameraNode* arg0) {
@@ -508,6 +520,7 @@ s32 BattleScene_TryEnterEffectPhaseBeforeImpact(void) {
 /**
  * If the acting Pokémon is seeded or poisoned/burned (status 0x18) and used no move,
  * switches to the residual damage phase (35) and returns 1.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
  * @unverified Name from Stadium 1.
  */
 s32 BattleScene_PrepareResidualStatusPresentation(void) {
@@ -523,6 +536,7 @@ s32 BattleScene_PrepareResidualStatusPresentation(void) {
 /**
  * Points D_8219A544 at the acting Pokémon and D_8219A540 at the other one, and clears
  * the camera preset.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleScene_UpdateActiveOwnerPointers(void) {

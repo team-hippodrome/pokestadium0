@@ -4,6 +4,8 @@
 /**
  * Particle callback for the growing spark: waits its delay, shows for 12 frames, fades out
  * and detaches. While visible it grows toward its scale target and fades env green and blue.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_CallbackUnusedGrowingSparkVariant(Particle* arg0) {
@@ -253,6 +255,7 @@ void BattleAnim_InitializeSwiftHit(void) {
 /**
  * Starts effect 137: queues two descriptor 0x3F rising, fading particles on the current
  * owner, three frames apart.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_StartEffect137Descriptor3FRisingFade(void) {

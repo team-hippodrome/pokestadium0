@@ -53,6 +53,7 @@ extern s32 D_8218C874;
 /**
  * Move effect for Whirlwind, Roar and Teleport. It only shows a message (Teleport's own,
  * or the one naming the target) and does not switch or end the battle.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
  * @unverified Name guessed from the code.
  */
 void Battle_Effect_ForceSwitchOrFlee(void) {
@@ -230,6 +231,7 @@ extern s32 D_8218C894;
 /**
  * Mist: protects the user's stats (volatile flag 0x02) and shows the message, or the
  * failure message if Mist is already up.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
  * @unverified Name guessed from the code.
  */
 void Battle_Effect_Mist(void) {
@@ -249,6 +251,7 @@ extern s32 D_8218C89C;
 /**
  * Focus Energy: sets the user's volatile flag 0x04 and shows the message, or the failure
  * message if it is already set.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
  * @unverified Name guessed from the code.
  */
 void Battle_Effect_FocusEnergy(void) {
@@ -266,6 +269,7 @@ extern s32 D_8218C8A0;
 /**
  * Recoil: the user loses 1/4 of the damage dealt (1/2 for Struggle), at least 1 HP,
  * and the recoil message is shown.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (9 of the moves).
  * @unverified Name guessed from the code.
  */
 void Battle_Effect_Recoil(void) {
@@ -299,6 +303,7 @@ extern s32 D_8218C8A4;
 /**
  * Side effect with a 26/256 chance to confuse the target for 2 to 5 turns, unless it
  * is already confused.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
  * @unverified Name guessed from the code.
  */
 void Battle_Effect_ConfuseChance(void) {
@@ -320,6 +325,7 @@ extern u8 D_82199F36;
 /**
  * Confusion moves: if the target is not behind a Substitute and the move hits, confuses
  * it for 2 to 5 turns. Otherwise shows the failure message.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
  * @unverified Name guessed from the code.
  */
 void Battle_Effect_Confuse(void) {
@@ -350,6 +356,7 @@ extern s32 D_8218C8B8;
 /**
  * Paralysis moves: paralyzes a target with no status and cuts its Speed. Electric moves
  * do not affect Ground-type targets. Shows the matching message in each case.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
  * @unverified Name guessed from the code.
  */
 void Battle_Effect_Paralyze(void) {
@@ -382,6 +389,7 @@ void ActivePokemon_SetStateFlags(ActivePokemon*, s32);
 /**
  * Substitute: if the user has no Substitute and at least 1/4 of its max HP, pays that HP
  * and makes one (volatile flag 0x10). Otherwise shows why it failed.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
  * @unverified Name guessed from the code.
  */
 void Battle_Effect_Substitute(void) {
@@ -473,6 +481,7 @@ extern s32 D_8218C8C8;
 /**
  * Leech Seed: seeds a target that is not Grass type and not already seeded (volatile
  * flag 0x80) if the move hits. Otherwise shows the miss message.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
  * @unverified Name guessed from the code.
  */
 void Battle_Effect_LeechSeed(void) {
@@ -555,6 +564,7 @@ extern s32 D_8218C8E0;
 /**
  * Conversion: the user takes on the target's two types, unless the target is out of
  * reach in the middle of Fly or Dig (immobilized flag 0x40).
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
  * @unverified Name guessed from the code.
  */
 void Battle_Effect_Conversion(void) {
@@ -574,6 +584,7 @@ extern s32 D_8218C8E4;
  * Haze: resets all stat stages and stats of both Pokémon, cures the target's status
  * (canceling its move if it was asleep or frozen), ends Disable and confusion on both,
  * and clears most volatile and side flags.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
  * @unverified Name guessed from the code.
  */
 void Battle_Effect_Haze(void) {
@@ -737,6 +748,7 @@ extern s32 D_8218C90C;
 /**
  * Light Screen (effect 0x40) or Reflect: sets the user's side flag (0x02 or 0x04) and
  * shows the message, or the failure message if it is already up.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
  * @unverified Name guessed from the code.
  */
 void Battle_Effect_ReflectLightScreen(void) {

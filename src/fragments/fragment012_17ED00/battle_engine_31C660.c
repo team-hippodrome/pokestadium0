@@ -79,6 +79,7 @@ extern s32 D_8218C7D4;
  * effect; any other effect runs a hit test first (failing with a message). Toxic also sets
  * the badly poisoned bit and resets the Toxic counter. When the target can't be poisoned,
  * effect 0x42 fails the move.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (7 of the moves).
  * @unverified Name guessed from the code.
  */
 void Battle_Effect_Poison(void) {
@@ -144,6 +145,7 @@ extern s32 D_8218C7DC;
 /**
  * Drain move effect: heals the user by half the damage dealt (at least 1, capped at max HP)
  * and queues the message. Effect 8 (Dream Eater) uses its own message.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
  * @unverified Name guessed from the code.
  */
 void Battle_Effect_DrainHP(void) {
@@ -415,6 +417,7 @@ extern s32 D_8218C858;
  * side effects of damaging moves. Lowers the target's stage (minimum stage 1), recomputes
  * the stat from the stage table, queues the message and reapplies the paralysis and burn
  * stat cuts. Fails with a message behind a Substitute, on a miss or at the minimum stage.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (14 of the moves).
  * @unverified Name guessed from the code.
  */
 void Battle_Effect_LowerStat(void) {

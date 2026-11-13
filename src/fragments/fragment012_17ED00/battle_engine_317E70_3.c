@@ -49,6 +49,7 @@ void BattleScene_GetParticipantModelSizeScaled(unk_D_82F20A88* arg0);
 
 /**
  * Returns 1 if the current animation owner's model shows species arg0.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
  * @unverified Name from Stadium 1.
  */
 s32 BattleAnim_IsCurrentOwnerSpecies(s32 arg0) {
@@ -66,6 +67,7 @@ void BattleAnim_GetOwnerBonePosition(ActivePokemon* arg0, s16 arg1, Vec3f* arg2)
  * Writes the position of anchor bone arg1 of the Pokémon's model to arg2, falling back to
  * bone 0x64 and then to the origin. Onix, Magneton and Kangaskhan use bone 9 instead of
  * bone 0x64 (Magneton also for bone 9).
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (156 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_GetOwnerBonePosition(ActivePokemon *arg0, s16 arg1, Vec3f *arg2) {
@@ -92,6 +94,7 @@ void BattleAnim_GetOwnerBonePosition(ActivePokemon *arg0, s16 arg1, Vec3f *arg2)
 
 /**
  * Writes the position of bone 0x64 of the current animation owner.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (4 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_GetCurrentOwnerBonePosition(Vec3f* arg0) {
@@ -100,6 +103,7 @@ void BattleAnim_GetCurrentOwnerBonePosition(Vec3f* arg0) {
 
 /**
  * Writes the position of bone 0x64 of the secondary animation owner.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (28 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_GetSecondaryOwnerBonePosition(Vec3f* arg0) {
@@ -108,6 +112,7 @@ void BattleAnim_GetSecondaryOwnerBonePosition(Vec3f* arg0) {
 
 /**
  * Writes the position of bone 0x64 of the tertiary animation owner.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (13 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_GetTertiaryOwnerBonePosition(Vec3f* arg0) {
@@ -117,6 +122,7 @@ void BattleAnim_GetTertiaryOwnerBonePosition(Vec3f* arg0) {
 /**
  * Writes the secondary owner's default anchor position, or the position of the current
  * anchor bone if a default anchor is set.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (24 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_GetSecondaryOwnerAnchorPosition(Vec3f* arg0) {
@@ -129,6 +135,7 @@ void BattleAnim_GetSecondaryOwnerAnchorPosition(Vec3f* arg0) {
 
 /**
  * Writes the position of bone 9 of the tertiary animation owner.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (4 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_GetTertiaryOwnerBone9Position(Vec3f* arg0) {
@@ -137,6 +144,8 @@ void BattleAnim_GetTertiaryOwnerBone9Position(Vec3f* arg0) {
 
 /**
  * Calls BattleScene_GetParticipantModelSizeScaled with arg0.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code.
  */
 void BattleAnim_GetOwnerModelSizeScaled(unk_D_82F20A88* arg0) {
@@ -145,6 +154,7 @@ void BattleAnim_GetOwnerModelSizeScaled(unk_D_82F20A88* arg0) {
 
 /**
  * Returns the base model scale of the Pokémon's species.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (32 of the moves).
  * @unverified Name from Stadium 1.
  */
 f32 BattleAnim_GetOwnerModelScale(ActivePokemon* arg0) {
@@ -159,6 +169,7 @@ void func_8213C75C(void) {
 
 /**
  * Returns the base model scale of the secondary animation owner.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (20 of the moves).
  * @unverified Name from Stadium 1.
  */
 f32 BattleAnim_GetSecondaryOwnerModelScale(void) {
@@ -167,6 +178,8 @@ f32 BattleAnim_GetSecondaryOwnerModelScale(void) {
 
 /**
  * Looks up the secondary owner's species base scale and discards it.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_GetSecondaryOwnerSpeciesBaseScale(void) {
@@ -175,6 +188,7 @@ void BattleAnim_GetSecondaryOwnerSpeciesBaseScale(void) {
 
 /**
  * Returns the base model scale of the tertiary animation owner.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (12 of the moves).
  * @unverified Name from Stadium 1.
  */
 f32 BattleAnim_GetTertiaryOwnerModelScale(void) {
@@ -183,6 +197,8 @@ f32 BattleAnim_GetTertiaryOwnerModelScale(void) {
 
 /**
  * Looks up the tertiary owner's species base scale and discards it.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_GetTertiaryOwnerSpeciesBaseScale(void) {
@@ -193,6 +209,7 @@ extern s32 D_8219A878;
 
 /**
  * Returns D_8219A878.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (24 of the moves).
  * @unverified Name from Stadium 1.
  */
 s32 BattleAnim_GetCameraContext(void) {
@@ -202,6 +219,7 @@ s32 BattleAnim_GetCameraContext(void) {
 /**
  * Allocates a stinger-move particle of kind arg1 at arg0, owned by the secondary owner,
  * with anchor kind 0x15. Returns -1 if the pool is full.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (4 of the moves).
  * @unverified Name from Stadium 1.
  */
 Particle* BattleAnim_SpawnSecondaryOwnerParticle(Vec3f arg0, u8 arg1) {
@@ -221,6 +239,7 @@ Particle* BattleAnim_SpawnSecondaryOwnerParticle(Vec3f arg0, u8 arg1) {
 
 /**
  * Sets a particle's origin, unless the particle pointer is -1 (allocation failed).
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (4 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetParticlePosition(Particle* arg0, Vec3f arg1) {
@@ -233,6 +252,8 @@ void BattleAnim_SetParticlePosition(Particle* arg0, Vec3f arg1) {
 
 /**
  * Calls Particle_MarkInactive.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_MarkParticleInactive(Particle* arg0) {
@@ -256,6 +277,7 @@ void Particle_InitLifecycle(Particle* arg0) {
 
 /**
  * Sets the particle's lifecycle (s16 at 0xAE) to 0, so it is destroyed on its next update.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (130 of the moves).
  * @unverified Name from Stadium 1.
  */
 void Particle_MarkInactive(s8 *arg0) {
@@ -273,6 +295,7 @@ void Particle_DisableAndDetach(s8 *arg0) {
 
 /**
  * Releases the particle's model, clears its flags, detaches it and returns it to the pool.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (157 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_DestroyParticle(Particle* arg0) {
@@ -284,6 +307,7 @@ void BattleAnim_DestroyParticle(Particle* arg0) {
 
 /**
  * Returns 1 if the particle's lifecycle is 0.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (157 of the moves).
  * @unverified Name from Stadium 1.
  */
 s32 Particle_IsInactive(s8 *arg0) {
@@ -298,6 +322,7 @@ s32 Particle_IsInactive(s8 *arg0) {
 
 /**
  * Returns 1 if the particle's lifecycle is 2 or more (past its init step).
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (110 of the moves).
  * @unverified Name from Stadium 1.
  */
 s32 Particle_IsRunning(s8 *arg0) {

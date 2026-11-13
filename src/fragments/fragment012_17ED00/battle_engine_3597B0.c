@@ -20,6 +20,7 @@ void BattleScene_DrawStripWipe(void);
 /**
  * Sets the strip wipe state (0 off, 1 covered, 2 opening, 3 closing) and its speed. The
  * wipe position starts at 320 (screen width) for states 0 and 3, otherwise at 0.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleScene_SetStripWipeState(s32 arg0, s32 arg1) {
@@ -35,6 +36,7 @@ void BattleScene_SetStripWipeState(s32 arg0, s32 arg1) {
 
 /**
  * Returns the strip wipe state.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
  * @unverified Name from Stadium 1.
  */
 s32 BattleScene_GetStripWipeState(void) {
@@ -44,6 +46,7 @@ s32 BattleScene_GetStripWipeState(void) {
 /**
  * Moves the strip wipe by its speed: opening runs to the screen width (320) and turns the
  * wipe off, closing runs to 0 and leaves the screen covered.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleScene_UpdateStripWipe(void) {
@@ -75,6 +78,7 @@ void BattleScene_UpdateStripWipe(void) {
 /**
  * Adds the display list that draws the strip wipe at its current position; arg1 picks the
  * strip direction. Returns the new end of the list.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
  * @unverified Name from Stadium 1.
  */
 Gfx* BattleScene_BuildStripWipeDisplayList(Gfx* arg0, s32 arg1) {
@@ -119,6 +123,7 @@ Gfx* BattleScene_BuildStripWipeDisplayList(Gfx* arg0, s32 arg1) {
 
 /**
  * Draws the strip wipe if it is on.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleScene_DrawStripWipe(void) {

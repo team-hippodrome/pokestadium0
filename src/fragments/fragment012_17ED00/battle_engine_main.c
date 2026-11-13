@@ -82,6 +82,7 @@ void Battle_UpdateFaintBatches(void);
 /**
  * Stage graph node callback: on event 2, runs the stage camera's battle animation
  * presentation step 5.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
  * @unverified Name from Stadium 1.
  */
 s32 Battle_StageGeoDispatchCallback(s32 event, GraphNode* node) {
@@ -96,6 +97,7 @@ s32 Battle_StageGeoDispatchCallback(s32 event, GraphNode* node) {
 /**
  * Stage light callback: on event 2, points the light 45 degrees off the camera's view
  * direction about both axes.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
  * @unverified Name from Stadium 1.
  */
 s32 Battle_StageLightAngleCallbackA(s32 event, unk_D_86002F34_alt18* light) {
@@ -116,6 +118,7 @@ s32 Battle_StageLightAngleCallbackA(s32 event, unk_D_86002F34_alt18* light) {
 // Apply presentation effects to each of the three stage-layout containers.
 /**
  * Stage model callback: on event 2, applies the stage scale and tint color.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
  * @unverified Name from Stadium 1.
  */
 s32 Battle_StageMaterialTintCallback(s32 event, DisplayObject* object) {
@@ -145,6 +148,8 @@ void Battle_SetStageTintColor(u8 r, u8 g, u8 b) {
 // Uniform scale consumed by the stage material callbacks, not the Pokemon models.
 /**
  * Sets the scale applied to the stage models.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void Battle_SetStageScale(f32 scale) {
@@ -217,6 +222,7 @@ void Battle_DrawStageBackdrop(void) {
 /**
  * If the thumbnail camera is enabled, renders its scene into the 76x76 thumbnail image,
  * then restores the camera's viewport.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
  * @unverified Name from Stadium 1.
  */
 void Battle_RenderActivePokemonThumbnail(GraphNode* thumbnail_root, DepthBuffer* thumbnail) {
@@ -266,6 +272,7 @@ void Battle_DrawClippedTextureRect(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
 // Load full-width source rows and draw at half size using the clipped rectangle helper.
 /**
  * Loads a band of an RGBA16 texture and draws it as a clipped rectangle at (x1, y1).
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
  * @unverified Name from Stadium 1.
  */
 void Battle_DrawTexturedRectSegment(s32 x1, s32 y1, s32 draw_width, s32 height, u8* texture, s32 load_width) {
@@ -282,6 +289,7 @@ void Battle_DrawTexturedRectSegment(s32 x1, s32 y1, s32 draw_width, s32 height, 
 // Blit the captured side image as four strips, producing a 37 x 37 thumbnail.
 /**
  * Draws the Pokémon thumbnail image to the screen at its camera's viewport.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
  * @unverified Name from Stadium 1.
  */
 void Battle_FillActivePokemonThumbnail(GraphNode* thumbnail_root, DepthBuffer* thumbnail) {
@@ -389,6 +397,7 @@ void func_82100CC0(void) {
 /**
  * Runs one battle frame: advances animations, updates both sides, the thumbnails and the
  * battle scene, then draws the stage, models, HUD and fade. Returns the battle result.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
  * @unverified Name from Stadium 1.
  */
 s32 BattleScene_UpdateFrame(s32 fade_mode) {
@@ -431,6 +440,8 @@ s32 BattleScene_UpdateFrame(s32 fade_mode) {
 /**
  * Frame while the battle is paused: redraws without advancing, runs one frame each time A
  * is pressed (frame step), and unpauses when Start is pressed.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 s32 BattleScene_UpdatePausedFrame(s32 fade_mode) {
@@ -552,6 +563,8 @@ s32 Battle_FrameCallback(s32 fade_mode) {
 // This completes the copy order; it does not choose additional battle participants.
 /**
  * Appends the roster slots (0 to 5) that were not picked to the end of the picked order.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void Battle_CompleteRosterOrder(u8* roster_order, s32 number_of_pokemon_picked) {
@@ -628,6 +641,8 @@ void Battle_SelectComRoster(void) {
 /**
  * Sets up a side's model and display state from its first trainer's lead Pokémon and
  * requests its icon.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleScene_InitializeParticipantPresentation(BattleSessionTeams* side, unk_D_86002F30* model) {

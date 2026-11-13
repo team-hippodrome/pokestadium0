@@ -323,6 +323,8 @@ void BattleAnim_RunBubbleBeamBubblesFast(s8 *arg0) {
 /**
  * Lifecycle init for a rotating spark: tiny, aimed from the owner toward the target with
  * a mode-dependent spread (CE parameter), delayed 2 frames per burst index.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetupUnusedRotatingSparkVariant(Particle* arg0) {
@@ -379,6 +381,8 @@ void BattleAnim_SetupUnusedRotatingSparkVariant(Particle* arg0) {
 /**
  * Motion steps for the rotating spark: after 2 frames turns it about X by unk_AE, then
  * keeps turning it about Z by unk_B0 while it moves.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_MotionUnusedRotatingSparkVariant(Particle* arg0) {
@@ -439,6 +443,8 @@ void func_8214A220(s8 *arg0) {
 /**
  * Lifecycle init for an aimed spark: tiny, pointed from the secondary owner's anchor at
  * the tertiary owner's bone 9, palette color from the CF parameter.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetupUnusedAimedSparkVariant(Particle* arg0) {
@@ -474,6 +480,8 @@ void BattleAnim_SetupUnusedAimedSparkVariant(Particle* arg0) {
 /**
  * Particle callback for the aimed spark: fades it in, holds, then fades it out, while
  * growing it toward 50 times its size.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_CallbackUnusedAimedSparkVariant(Particle* arg0) {
@@ -1547,6 +1555,8 @@ void func_8214C208(s8 *arg0) {
 /**
  * Lifecycle init: random offset, quarter scale, random tilt, random palette color at
  * alpha 200, delayed 4 frames per burst index.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetupUnusedIndexedFadeVariantA(Particle* arg0) {
@@ -1607,6 +1617,8 @@ void func_8214C3C8(s8 *arg0) {
 /**
  * Like BattleAnim_SetupUnusedIndexedFadeVariantA but larger, white with a random
  * environment color.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetupUnusedIndexedFadeVariantB(Particle* arg0) {
@@ -1684,6 +1696,7 @@ void BattleAnim_SetupBubbleBubbleBeamSharedEffect(Particle* arg0) {
 /**
  * Particle callback for end effects 34 and 53 (the Bubble/BubbleBeam hit): bubbles grow,
  * slow and turn toward their target, then bounce and fade.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
  * @unverified Name guessed from the code.
  */
 void BattleAnim_CallbackEndEffects34And53Descriptor45RotatingBounceFade(Particle* arg0) {
@@ -2305,6 +2318,8 @@ extern ParticleDescriptor D_8218E588[86];
 /**
  * Starts end effect 71: a hue change, strong beam hits, an expanding hit spark, waves of
  * fading particles, and a global tint fade at frame 22.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name guessed from the code.
  */
 void BattleAnim_EndEffect71PaletteApproachWithExpandingScaleFades(void) {
