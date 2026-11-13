@@ -39,7 +39,6 @@ from production import (ULTRALIB_FLAGS, ULTRALIB_ASM_FLAGS, sdk_assembly_source,
 
 ROOT = Path(__file__).resolve().parents[1]
 ADDR_NAME = re.compile(r"^(?:func|D|D_FLT|D_DBL|jtbl|B|sub|RO|L)_([0-9A-Fa-f]{8})(?:_\d+)?$")
-FRAGMENT_PATH = re.compile(r"^src/fragments/fragment(\d{3})_[0-9A-F]+(?:/|(?:_\d+)?\.c$)")
 CFLAGS = ["-c", "-G", "0", "-non_shared", "-Xcpluscomm", "-nostdinc", "-Wab,-r4300_mul",
           "-EB", "-w", "-D_MIPS_SZLONG=32", "-DNDEBUG", "-D_FINALROM", "-DN_MICRO",
           "-DF3DEX_GBI_2", "-DBUILD_VERSION=VERSION_I_P", "-DLANGUAGE_C", "-D_LANGUAGE_C",
@@ -221,9 +220,31 @@ def compare(text, functions, relocations, name, vram, expected, symbols, learned
     return None
 
 
+_SEGMENTS = None
+
+
 def segment_of(path):
-    match = FRAGMENT_PATH.match(path)
-    return int(match.group(1)) if match else None
+    """Image index (None for the resident image) of the owners a source file builds.
+
+    File names no longer encode the fragment, so this reads it from
+    docs/function-matches.csv (owner per source) and the pragma inventory
+    (image per owner). Every owner of one file must lie in one image.
+    """
+    global _SEGMENTS
+    if _SEGMENTS is None:
+        import csv
+        inventory = json.loads((ROOT / "docs/pragma-inventory.json").read_text())
+        image = {row["name"]: row["image_index"] for row in inventory["owners"]}
+        found = {}
+        with (ROOT / "docs/function-matches.csv").open() as handle:
+            for row in csv.DictReader(handle):
+                found.setdefault(row["source"], set()).add(image[row["owner"]])
+        _SEGMENTS = {}
+        for source, images in found.items():
+            if len(images) != 1:
+                raise ValueError(f"{source} has owners in several images: {sorted(map(str, images))}")
+            _SEGMENTS[source] = images.pop()
+    return _SEGMENTS.get(path)
 
 
 def compile_source(path, cc_dir, overrides):
