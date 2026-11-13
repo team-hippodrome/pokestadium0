@@ -39,6 +39,10 @@ void func_8216D978(void);
 void func_8216D980(void);
 void func_8216D988(void);
 
+/**
+ * Empty end callback for effect 16.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_EndEffect16_NoOpDraw(void) {
 }
 

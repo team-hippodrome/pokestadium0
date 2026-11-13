@@ -8,6 +8,10 @@
 
 void BattleAnim_DrawFullScreenColorOverlay(u8 arg0, u8 arg1, u8 arg2, u8 arg3);
 
+/**
+ * Fills the whole screen with the color (arg0, arg1, arg2) at alpha arg3.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_DrawFullScreenColorOverlay(u8 arg0, u8 arg1, u8 arg2, u8 arg3) {
     gSPDisplayList(gDisplayListHead++, gDL_BeginColorFill);
 
@@ -37,6 +41,12 @@ extern s16 D_8219A8C4;
 extern s16 D_8219A8C2;
 extern s16 D_8219A8D8;
 extern s16 D_8219A8D6;
+/**
+ * Draws the frame's battle effects: runs the effect draw callbacks, allocates the particle
+ * matrix pool, sets the prim, fog, env and blend colors and the stage tint, draws the 3D
+ * effects, then sets a 320x240 orthographic projection and draws the 2D overlays.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_RenderEffectsFrame(CameraNode* arg0) {
     BattleAnim_DrawEffectCallbacks(arg0);
     gParticleMatrixPool = Gfx_AllocDisplayList(sizeof(ParticleMatrixPool));

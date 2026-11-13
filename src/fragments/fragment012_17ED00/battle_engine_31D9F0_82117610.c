@@ -44,6 +44,11 @@ void func_8211778C(s16 x, s16 y) {
 }
 
 
+/**
+ * Draws the row of party balls under a status box: one icon per Pokemon brought, chosen by
+ * fainted, has a status condition or healthy. Draws both trainers' rows in tag battles.
+ * @unverified Name from Stadium 1.
+ */
 void BattleHud_DrawPartyBallRow(ActivePokemon* arg0, s16 arg1, s16 arg2) {
     u8* sp74[] = { D_03006C40, D_03006CA0, D_03006D00 };
     UNUSED s32 pad; // FAKE: stack padding
@@ -131,6 +136,11 @@ void BattleHud_DrawPartyBallRow(ActivePokemon* arg0, s16 arg1, s16 arg2) {
 }
 
 
+/**
+ * Draws side 0's status box: the info box tinted with the controller color, the trainer name
+ * label, the border tiles, the drop shadows and the party ball row below.
+ * @unverified Name from Stadium 1.
+ */
 void BattleHud_DrawMonStatusBoxPlayer(ActivePokemon* arg0, s16 arg1, s16 arg2, u16 arg3, s32 arg4) {
     UNUSED s32 pad[2]; // FAKE: stack padding
     TeamRoster* sp80;
@@ -219,6 +229,11 @@ void BattleHud_DrawMonStatusBoxPlayer(ActivePokemon* arg0, s16 arg1, s16 arg2, u
     BattleHud_DrawPartyBallRow(arg0, arg1, arg2 + 0x62);
 }
 
+/**
+ * Draws side 1's status box: the same parts as BattleHud_DrawMonStatusBoxPlayer, laid out
+ * with the name label below the box and the party ball row above it.
+ * @unverified Name from Stadium 1.
+ */
 void BattleHud_DrawMonStatusBoxOpponent(ActivePokemon* arg0, s16 arg1, s16 arg2, u16 arg3, s32 arg4) {
     UNUSED s32 pad[2]; // FAKE: stack padding
     TeamRoster* sp80;

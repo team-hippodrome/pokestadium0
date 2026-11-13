@@ -59,6 +59,11 @@ void func_82165BC8(s32 arg0) {
     func_8213C9D0(arg0);
 }
 
+/**
+ * Particle callback: after its delay, plays frames 0-15 and then emits a burst of five
+ * descriptor 0x26 child particles, then detaches.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_CallbackDescriptor26BurstEmitter(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -83,6 +88,12 @@ void BattleAnim_CallbackDescriptor26BurstEmitter(Particle* arg0) {
     }
 }
 
+/**
+ * Init step for the growing spark: scales size, scale target and step by the spawn index
+ * (arg AC), raises it by 10, sets frame 15, colors and full alpha, and delays the start by
+ * eight frames per index.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_SetupUnusedGrowingSparkVariant(Particle* arg0) {
     f32 sp24;
     s16 sp22 = Particle_FieldAC_GetS16_0C038(arg0);

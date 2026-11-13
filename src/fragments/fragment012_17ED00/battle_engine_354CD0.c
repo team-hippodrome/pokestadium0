@@ -51,6 +51,12 @@ void PetalDanceTrail_Init(void) {
     }
 }
 
+/**
+ * Starts a petal trail in the first free of 50 slots: from 80 times half the secondary
+ * owner's model scale above (arg0, arg1, arg2) toward (arg3, arg4, arg5), colored (arg6,
+ * arg7, arg8), falling slowly, with lifetime argD.
+ * @unverified Name from Stadium 1.
+ */
 void PetalDanceTrail_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9,
                    f32 argA, f32 argB, f32 argC, s16 argD) {
     Trail50Effect* var_v1;
