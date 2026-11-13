@@ -55,6 +55,9 @@ void BattleScene_ActionStepTravel(CameraNode* arg0, s32 arg1) {
 }
 
 
+/**
+ * Sets D_8219A578 to whether byte 1 of arg0 is nonzero.
+ */
 void func_8212A4A4(s8 *arg0) {
     D_8219A578 = 0;
     if (M2C_FIELD(arg0, s8 *, 1) != 0) {
@@ -62,6 +65,10 @@ void func_8212A4A4(s8 *arg0) {
     }
 }
 
+/**
+ * When both HP displays have caught up (*arg1 and *arg2 are 1) and 30 frames have passed,
+ * ends the user's effect mode, clears the camera and message state and runs the HP bar step.
+ */
 void func_8212A4CC(s32 arg0, s32 *arg1, s32 *arg2) {
     if ((*arg1 == 1) && (*arg2 == 1) && (func_82121820(0x1E) != 0)) {
         func_82108C0C(D_8219A544);
@@ -76,6 +83,10 @@ void func_8212A4CC(s32 arg0, s32 *arg1, s32 *arg2) {
 }
 
 s32 func_8210C020(s32);
+/**
+ * Stores the camera shot index: 4 picks one at random (func_8210C020(3)), 5 keeps the last
+ * one, any other value is stored as is.
+ */
 void func_8212A554(s32 arg0) {
     s32 temp_v0;
 
@@ -90,6 +101,9 @@ void func_8212A554(s32 arg0) {
     }
 }
 
+/**
+ * Target framing chooser: picks one of three framings at random on substep 0 and runs it.
+ */
 void func_8212A5AC(ActivePokemon* arg0, CameraNode* arg1) {
     if (sBattleScene.scene->phaseSubstep == 0) {
         D_8219A568 = BattleAnim_RandomRange(3);
@@ -113,6 +127,9 @@ void func_8212A5AC(ActivePokemon* arg0, CameraNode* arg1) {
     }
 }
 
+/**
+ * Target framing chooser: picks one of four framings at random on substep 0 and runs it.
+ */
 void func_8212A67C(ActivePokemon* arg0, CameraNode* arg1) {
     if (sBattleScene.scene->phaseSubstep == 0) {
         D_8219A568 = BattleAnim_RandomRange(4);
@@ -139,6 +156,10 @@ void func_8212A67C(ActivePokemon* arg0, CameraNode* arg1) {
     }
 }
 
+/**
+ * Runs target framing arg2: 4 and 6 choose at random (3 or 4 choices), 5 reuses the last
+ * one, 0-3 run that framing.
+ */
 void func_8212A768(ActivePokemon* arg0, CameraNode* arg1, s32 arg2) {
     if (arg2 == 4) {
         func_8212A5AC(arg0, arg1);
