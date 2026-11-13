@@ -169,7 +169,7 @@ void func_82124874();
 void BattleScene_SetCameraAnglesAndDistance(s16 arg0, s16 arg1, f32 arg2);
 void BattleScene_SetCameraAtFromAnchor(ActivePokemon* arg0, CameraNode* arg1, Vec3f arg2, s16 arg3, s16 arg4, f32 arg5, f32 arg6);
 
-void Trade_UpdateWaitForBoxConfirm(ActivePokemon* arg0, Vec3f* arg1);
+void BattleScene_GetParticipantCameraAnchor(ActivePokemon* arg0, Vec3f* arg1);
 
 void BattleScene_SetDamageShakeAmplitude(ActivePokemon* arg0);
 

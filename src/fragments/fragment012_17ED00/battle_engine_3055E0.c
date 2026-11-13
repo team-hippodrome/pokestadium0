@@ -68,9 +68,12 @@ void BattleScene_SetCameraAtAndEyeFromAngles(CameraNode* camera, f32 x, f32 y, f
 }
 
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Writes the participant's camera anchor point to arg1: anchor 9 for species 0x52 and 0x5F,
+ * otherwise anchor 0x64 (GeoRender_FindAnchorPosition). Was misnamed Trade_UpdateWaitForBoxConfirm,
+ * a Stadium 1 trade-machine name; this is battle camera code.
+ * @unverified Named from the code; the sweep hit it during move animations but did not check the point.
  */
-void Trade_UpdateWaitForBoxConfirm(ActivePokemon* arg0, Vec3f* arg1) {
+void BattleScene_GetParticipantCameraAnchor(ActivePokemon* arg0, Vec3f* arg1) {
     if ((M2C_FIELD(arg0, s16*, 0x1A) == 0x52) || (M2C_FIELD(arg0, s16*, 0x1A) == 0x5F)) {
         GeoRender_FindAnchorPosition((DisplayObject*)arg0, 9, arg1);
     } else {
@@ -130,7 +133,7 @@ u16 func_82121954(ActivePokemon* arg0, CameraNode* arg1, ActivePokemon* a2, s16 
     }
 
     if ((M2C_FIELD(D_8219A5A0, s32*, 0x1C) == 2) || (M2C_FIELD(D_8219A5A0, s32*, 0x1C) == 6)) {
-        Trade_UpdateWaitForBoxConfirm(arg0, &sp60);
+        BattleScene_GetParticipantCameraAnchor(arg0, &sp60);
         sp60.y = a2->displayObject.position.y;
         radius = BattleScene_GetParticipantModelRadiusScaled(arg0);
         if (BattleAnim_Vec3fDistance(arg1->view.eyePosition, sp60) <= (radius * 1.5f)) {
@@ -475,7 +478,7 @@ void func_821228B0(CameraNode* arg0, ActivePokemon* arg1) {
     s16 sp30;
     Vec3f* sp28;
 
-    Trade_UpdateWaitForBoxConfirm(arg1, &sp50);
+    BattleScene_GetParticipantCameraAnchor(arg1, &sp50);
     BattleAnim_CalculateDistanceAngles(&sp50, &M2C_FIELD(arg1, Vec3f*, 0x5D0), &sp34, &sp32, &sp30);
     sp28 = &arg0->view.targetPosition;
     BattleAnim_Vec3fCopy(&sp38, sp28);
@@ -497,7 +500,7 @@ void BattleScene_ApproachCameraTarget(CameraNode* arg0, ActivePokemon* arg1) {
     s16 sp30;
     UNUSED s32 pad; // FAKE: stack padding
 
-    Trade_UpdateWaitForBoxConfirm(arg1, &sp50);
+    BattleScene_GetParticipantCameraAnchor(arg1, &sp50);
     BattleAnim_CalculateDistanceAngles(&sp50, &M2C_FIELD(arg1, Vec3f*, 0x5D0), &sp34, &sp32, &sp30);
     BattleAnim_Vec3fCopy(&sp38, &arg0->view.targetPosition);
     Camera_ComputeEyeFromAngles(&sp50, &sp44, M2C_FIELD(ptr, f32*, 0x38), M2C_FIELD(ptr, s16*, 0x30), M2C_FIELD(ptr, s16*, 0x32));
@@ -512,7 +515,7 @@ extern f32 D_FLT_82196240;
  * func_82122A7C
  *
  * Moves the camera's target point towards the participant. Works out the
- * participant's camera anchor (Trade_UpdateWaitForBoxConfirm) and its distance/angles to the
+ * participant's camera anchor (BattleScene_GetParticipantCameraAnchor) and its distance/angles to the
  * point stored at +0x5D0, then eases camera->view.targetPosition: if that
  * distance is at least the object type's table width (D_FLT_82189350[type][0])
  * the new goal is the anchor offset by the model transform's own distance and
@@ -530,7 +533,7 @@ void func_82122A7C(CameraNode* arg0, ActivePokemon* arg1) {
     s16 sp30;
     Vec3f* sp28;
 
-    Trade_UpdateWaitForBoxConfirm(arg1, &sp50);
+    BattleScene_GetParticipantCameraAnchor(arg1, &sp50);
     BattleAnim_CalculateDistanceAngles(&sp50, &M2C_FIELD(arg1, Vec3f*, 0x5D0), &sp34, &sp32, &sp30);
     sp28 = &arg0->view.targetPosition;
     BattleAnim_Vec3fCopy(&sp38, sp28);
@@ -566,7 +569,7 @@ void func_82122B9C(CameraNode* arg0, ActivePokemon* arg1) {
     Vec3f* sp30;
 
     if ((arg1->modelTransformId != 6) && (arg1->modelTransformId != 4)) {
-        Trade_UpdateWaitForBoxConfirm(arg1, &sp58);
+        BattleScene_GetParticipantCameraAnchor(arg1, &sp58);
         BattleAnim_CalculateDistanceAngles(&sp58, &M2C_FIELD(arg1, Vec3f*, 0x5D0), &sp3C, &sp3A, &sp38);
         sp30 = &arg0->view.targetPosition;
         BattleAnim_Vec3fCopy(&sp40, sp30);
@@ -602,7 +605,7 @@ void func_82122CCC(CameraNode* arg0, ActivePokemon* arg1) {
     s16 sp30;
     Vec3f* sp28;
 
-    Trade_UpdateWaitForBoxConfirm(arg1, &sp50);
+    BattleScene_GetParticipantCameraAnchor(arg1, &sp50);
     BattleAnim_CalculateDistanceAngles(&sp50, &M2C_FIELD(arg1, Vec3f*, 0x5D0), &sp34, &sp32, &sp30);
     sp28 = &arg0->view.targetPosition;
     BattleAnim_Vec3fCopy(&sp38, sp28);
@@ -691,7 +694,7 @@ void func_82122FD8(CameraNode* arg0, ActivePokemon* arg1) {
     s16 sp2C;
 
     BattleAnim_Vec3fCopy(&arg0->view.eyePosition, &sBattleScene.scene->unk_C4);
-    Trade_UpdateWaitForBoxConfirm(arg1, &sp58);
+    BattleScene_GetParticipantCameraAnchor(arg1, &sp58);
     BattleAnim_CalculateDistanceAngles(&sp58, &M2C_FIELD(arg1, Vec3f*, 0x5D0), &sp30, &sp2E, &sp2C);
     BattleAnim_Vec3fCopy(&sp34, &arg0->view.targetPosition);
     if ((D_FLT_82189350[arg1->displayObject.objectType][0] * D_FLT_82196250) <= sp30) {
@@ -741,7 +744,7 @@ void func_82123314(CameraNode* arg0, ActivePokemon* arg1) {
     s16 sp26;
     s16 sp24;
 
-    Trade_UpdateWaitForBoxConfirm(arg1, &sp50);
+    BattleScene_GetParticipantCameraAnchor(arg1, &sp50);
     BattleAnim_Vec3fCopy(&sp38, &arg0->view.targetPosition);
     Camera_ComputeEyeFromAngles(&sp50, &sp44, M2C_FIELD(ptr, f32*, 0x38), M2C_FIELD(ptr, s16*, 0x30), M2C_FIELD(ptr, s16*, 0x32));
     BattleAnim_CalculateDistanceAngles(&sp38, &sp44, &sp28, &sp26, &sp24);

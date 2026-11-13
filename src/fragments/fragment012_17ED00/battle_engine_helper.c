@@ -173,9 +173,12 @@ u8 func_82107BF4(s8 *arg0) {
 extern f32 D_FLT_8218935C[][4];
 
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Writes the participant's model size to out: DisplayObject scale (0x30/0x34) times the species
+ * size table (D_FLT_8218935C) times 2/50, the same table BattleScene_GetParticipantModelRadiusScaled
+ * reads. Was misnamed Trade_UpdateBoxSlotBob, a Stadium 1 trade-machine name.
+ * @unverified Named from the code; the sweep hit it but did not check the values.
  */
-void Trade_UpdateBoxSlotBob(s8* arg0, Vec3f* out) {
+void BattleScene_GetParticipantModelSizeScaled(s8* arg0, Vec3f* out) {
     out->x = M2C_FIELD(arg0, f32*, 0x30) * (D_FLT_8218935C[M2C_FIELD(arg0, s16*, 0x1A) - 1][0] * 2 / 50.0f);
     out->y = M2C_FIELD(arg0, f32*, 0x34) * (D_FLT_8218935C[M2C_FIELD(arg0, s16*, 0x1A) - 1][1] * 2 / 50.0f);
     out->z = M2C_FIELD(arg0, f32*, 0x30) * (D_FLT_8218935C[M2C_FIELD(arg0, s16*, 0x1A) - 1][0] * 2 / 50.0f);

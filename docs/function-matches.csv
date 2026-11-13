@@ -1038,7 +1038,7 @@ func_8212187C,0x8212187C,src/fragments/fragment012_17ED00/battle_engine_3055E0.c
 func_8212188C,0x8212188C,src/fragments/fragment012_17ED00/battle_engine_3055E0.c,BattleScene_ResetCameraFrameCounter,s1,stadium1:src/fragments/battle_engine/battle_engine_3055E0.c,c
 func_8212189C,0x8212189C,src/fragments/fragment012_17ED00/battle_engine_3055E0.c,BattleScene_ResetCameraSubstepCounter,s1,stadium1:src/fragments/battle_engine/battle_engine_3055E0.c,c
 func_821218AC,0x821218AC,src/fragments/fragment012_17ED00/battle_engine_3055E0.c,BattleScene_SetCameraAtAndEyeFromAngles,s1,stadium1:src/fragments/battle_engine/battle_engine_3055E0.c,c
-func_82121908,0x82121908,src/fragments/fragment012_17ED00/battle_engine_3055E0.c,Trade_UpdateWaitForBoxConfirm,hand,,c
+func_82121908,0x82121908,src/fragments/fragment012_17ED00/battle_engine_3055E0.c,BattleScene_GetParticipantCameraAnchor,hand,,c
 func_82121954,0x82121954,src/fragments/fragment012_17ED00/battle_engine_3055E0.c,func_82121954,hand,,c
 func_82121C3C,0x82121C3C,src/fragments/fragment012_17ED00/battle_engine_3055E0.c,func_82121C3C,hand,,c
 func_82121D5C,0x82121D5C,src/fragments/fragment012_17ED00/battle_engine_3055E0.c,BattleScene_SetCameraModeAndStep,s1,stadium1:src/fragments/battle_engine/battle_engine_3055E0.c,c
@@ -1357,7 +1357,7 @@ func_8213C640,0x8213C640,src/fragments/fragment012_17ED00/battle_engine_317E70_3
 func_8213C66C,0x8213C66C,src/fragments/fragment012_17ED00/battle_engine_317E70_3.c,BattleAnim_GetTertiaryOwnerBonePosition,s1,stadium1:src/fragments/battle_engine/battle_engine_317E70.c,c
 func_8213C698,0x8213C698,src/fragments/fragment012_17ED00/battle_engine_317E70_3.c,BattleAnim_GetSecondaryOwnerAnchorPosition,s1,stadium1:src/fragments/battle_engine/battle_engine_317E70.c,c
 func_8213C6F0,0x8213C6F0,src/fragments/fragment012_17ED00/battle_engine_317E70_3.c,BattleAnim_GetTertiaryOwnerBone9Position,s1,stadium1:src/fragments/battle_engine/battle_engine_317E70.c,c
-func_8213C71C,0x8213C71C,src/fragments/fragment012_17ED00/battle_engine_317E70_3.c,Trade_UpdateBoxSlotBobIdle,s1,stadium1:src/fragments/trade_machine/trade_machine_28ED00.c,c
+func_8213C71C,0x8213C71C,src/fragments/fragment012_17ED00/battle_engine_317E70_3.c,BattleAnim_GetOwnerModelSizeScaled,s1,stadium1:src/fragments/trade_machine/trade_machine_28ED00.c,c
 func_8213C73C,0x8213C73C,src/fragments/fragment012_17ED00/battle_engine_317E70_3.c,BattleAnim_GetOwnerModelScale,s1,stadium1:src/fragments/battle_engine/battle_engine_317E70.c,c
 func_8213C75C,0x8213C75C,src/fragments/fragment012_17ED00/battle_engine_317E70_3.c,func_8213C75C,m2c,m2c,c
 func_8213C77C,0x8213C77C,src/fragments/fragment012_17ED00/battle_engine_317E70_3.c,BattleAnim_GetSecondaryOwnerModelScale,s1,stadium1:src/fragments/battle_engine/battle_engine_317E70.c,c
@@ -2587,7 +2587,7 @@ func_82107B54,0x82107B54,src/fragments/fragment012_17ED00/battle_engine_helper.c
 func_82107B88,0x82107B88,src/fragments/fragment012_17ED00/battle_engine_helper.c,BattleAnim_GetSpeciesBaseScale,hand,,c
 func_82107BC4,0x82107BC4,src/fragments/fragment012_17ED00/battle_engine_helper.c,ActivePokemon_GetSizeRatio,hand,,c
 func_82107BF4,0x82107BF4,src/fragments/fragment012_17ED00/battle_engine_helper.c,func_82107BF4,m2c,m2c,c
-func_82107BFC,0x82107BFC,src/fragments/fragment012_17ED00/battle_engine_helper.c,Trade_UpdateBoxSlotBob,hand,,c
+func_82107BFC,0x82107BFC,src/fragments/fragment012_17ED00/battle_engine_helper.c,BattleScene_GetParticipantModelSizeScaled,hand,,c
 func_82107C84,0x82107C84,src/fragments/fragment012_17ED00/battle_engine_helper.c,BattleScene_GetParticipantModelRotation,s1,stadium1:src/fragments/battle_engine/battle_engine_helper.c,c
 func_82107CA0,0x82107CA0,src/fragments/fragment012_17ED00/battle_engine_helper.c,Battle_GetActiveMonHp,s1,stadium1:src/fragments/battle_engine/battle_engine_helper.c,c
 func_82107CC4,0x82107CC4,src/fragments/fragment012_17ED00/battle_engine_helper.c,BattleScene_GetParticipantFacingAngle,m2c,m2c,c

@@ -31,7 +31,7 @@ void BattleAnim_GetSecondaryOwnerBonePosition(Vec3f* arg0);
 void BattleAnim_GetTertiaryOwnerBonePosition(Vec3f* arg0);
 void BattleAnim_GetSecondaryOwnerAnchorPosition(Vec3f* arg0);
 void BattleAnim_GetTertiaryOwnerBone9Position(Vec3f* arg0);
-void Trade_UpdateBoxSlotBobIdle(unk_D_82F20A88* arg0);
+void BattleAnim_GetOwnerModelSizeScaled(unk_D_82F20A88* arg0);
 f32 BattleAnim_GetOwnerModelScale(ActivePokemon* arg0);
 f32 BattleAnim_GetSecondaryOwnerModelScale(void);
 void BattleAnim_GetSecondaryOwnerSpeciesBaseScale(void);
@@ -44,7 +44,7 @@ void BattleAnim_ReleaseParticleModel(Particle* arg0);
 void BattleAnim_GetOwnerBonePosition(ActivePokemon* arg0, s16 arg1, Vec3f* arg2);
 f32 BattleAnim_GetSpeciesBaseScale(ActivePokemon* arg0);
 void BattleAnim_GetOwnerSpeciesBaseScaleAlias(ActivePokemon* arg0);
-void Trade_UpdateBoxSlotBob(unk_D_82F20A88* arg0);
+void BattleScene_GetParticipantModelSizeScaled(unk_D_82F20A88* arg0);
 
 s32 BattleAnim_IsCurrentOwnerSpecies(s32 arg0) {
     s32 sp1C = 0;
@@ -103,8 +103,8 @@ void BattleAnim_GetTertiaryOwnerBone9Position(Vec3f* arg0) {
     BattleAnim_GetOwnerBonePosition(gBattleAnimTertiaryOwner, 9, arg0);
 }
 
-void Trade_UpdateBoxSlotBobIdle(unk_D_82F20A88* arg0) {
-    Trade_UpdateBoxSlotBob(arg0);
+void BattleAnim_GetOwnerModelSizeScaled(unk_D_82F20A88* arg0) {
+    BattleScene_GetParticipantModelSizeScaled(arg0);
 }
 
 f32 BattleAnim_GetOwnerModelScale(ActivePokemon* arg0) {

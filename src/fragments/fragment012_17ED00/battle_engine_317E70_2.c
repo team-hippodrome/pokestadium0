@@ -360,7 +360,7 @@ Particle* BattleAnim_CreateProceduralParticle(s16 arg0, s16 arg1, s32 arg2, f32 
 }
 
 void func_80015908(ActivePokemon*, s32, Vec3f*);
-void Trade_UpdateBoxSlotBob(ActivePokemon* arg0, Vec3f* arg1);
+void BattleScene_GetParticipantModelSizeScaled(ActivePokemon* arg0, Vec3f* arg1);
 void BattleAnim_InitializeParticleAnchor(Particle* arg0) {
     Vec3f sp3C;
     Vec3f sp30;
@@ -392,7 +392,7 @@ void BattleAnim_InitializeParticleAnchor(Particle* arg0) {
         case 11:
             BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
             BattleScene_GetParticipantModelRotation(arg0->pokemon, &sp28);
-            Trade_UpdateBoxSlotBob(arg0->pokemon, &sp30);
+            BattleScene_GetParticipantModelSizeScaled(arg0->pokemon, &sp30);
             ParticleMath_MakeXZVectorFromAngle(&sp3C, sp30.x * 25.0f, sp28.y);
             ParticleMath_AddVec3f(&arg0->origin, &sp3C);
             break;
@@ -400,20 +400,20 @@ void BattleAnim_InitializeParticleAnchor(Particle* arg0) {
         case 12:
             BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
             BattleScene_GetParticipantModelRotation(arg0->pokemon, &sp28);
-            Trade_UpdateBoxSlotBob(arg0->pokemon, &sp30);
+            BattleScene_GetParticipantModelSizeScaled(arg0->pokemon, &sp30);
             ParticleMath_MakeXZVectorFromAngle(&sp3C, sp30.x * 25.0f, sp28.y + 0x8000);
             ParticleMath_AddVec3f(&arg0->origin, &sp3C);
             break;
 
         case 13:
             BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
-            Trade_UpdateBoxSlotBob(arg0->pokemon, &sp30);
+            BattleScene_GetParticipantModelSizeScaled(arg0->pokemon, &sp30);
             arg0->origin.y += sp30.y * 25.0f;
             break;
 
         case 14:
             BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
-            Trade_UpdateBoxSlotBob(arg0->pokemon, &sp30);
+            BattleScene_GetParticipantModelSizeScaled(arg0->pokemon, &sp30);
             arg0->origin.y -= sp30.y * 25.0f;
             if (arg0->origin.y <= 0.0f) {
                 arg0->origin.y = 0.0f;
@@ -423,7 +423,7 @@ void BattleAnim_InitializeParticleAnchor(Particle* arg0) {
         case 15:
             BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
             BattleScene_GetParticipantModelRotation(arg0->pokemon, &sp28);
-            Trade_UpdateBoxSlotBob(arg0->pokemon, &sp30);
+            BattleScene_GetParticipantModelSizeScaled(arg0->pokemon, &sp30);
             ParticleMath_MakeXZVectorFromAngle(&sp3C, sp30.x * 25.0f, sp28.y);
             ParticleMath_AddVec3f(&arg0->origin, &sp3C);
             arg0->origin.y = 0.0f;
@@ -437,7 +437,7 @@ void BattleAnim_InitializeParticleAnchor(Particle* arg0) {
         case 19:
             func_80015908(arg0->pokemon, arg0->unk_CD, &arg0->origin);
             BattleScene_GetParticipantModelRotation(arg0->pokemon, &sp28);
-            Trade_UpdateBoxSlotBob(arg0->pokemon, &sp30);
+            BattleScene_GetParticipantModelSizeScaled(arg0->pokemon, &sp30);
             ParticleMath_MakeXZVectorFromAngle(&sp3C, sp30.x * 25.0f, sp28.y);
             ParticleMath_AddVec3f(&arg0->origin, &sp3C);
             break;
@@ -448,7 +448,7 @@ void BattleAnim_InitializeParticleAnchor(Particle* arg0) {
     }
 }
 
-void Trade_UpdateBoxSlotBob(ActivePokemon* arg0, Vec3f* arg1);
+void BattleScene_GetParticipantModelSizeScaled(ActivePokemon* arg0, Vec3f* arg1);
 void BattleAnim_UpdateParticleAnchor(Particle* arg0) {
     Vec3f sp3C;
     Vec3f sp30;
@@ -467,7 +467,7 @@ void BattleAnim_UpdateParticleAnchor(Particle* arg0) {
         case 4:
             BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
             BattleScene_GetParticipantModelRotation(arg0->pokemon, &sp28);
-            Trade_UpdateBoxSlotBob(arg0->pokemon, &sp30);
+            BattleScene_GetParticipantModelSizeScaled(arg0->pokemon, &sp30);
             ParticleMath_MakeXZVectorFromAngle(&sp3C, sp30.x * 25.0f, sp28.y);
             ParticleMath_AddVec3f(&arg0->origin, &sp3C);
             break;
@@ -475,20 +475,20 @@ void BattleAnim_UpdateParticleAnchor(Particle* arg0) {
         case 5:
             BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
             BattleScene_GetParticipantModelRotation(arg0->pokemon, &sp28);
-            Trade_UpdateBoxSlotBob(arg0->pokemon, &sp30);
+            BattleScene_GetParticipantModelSizeScaled(arg0->pokemon, &sp30);
             ParticleMath_MakeXZVectorFromAngle(&sp3C, sp30.x * 25.0f, sp28.y + 0x8000);
             ParticleMath_AddVec3f(&arg0->origin, &sp3C);
             break;
 
         case 6:
             BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
-            Trade_UpdateBoxSlotBob(arg0->pokemon, &sp30);
+            BattleScene_GetParticipantModelSizeScaled(arg0->pokemon, &sp30);
             arg0->origin.y += sp30.y * 25.0f;
             break;
 
         case 7:
             BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
-            Trade_UpdateBoxSlotBob(arg0->pokemon, &sp30);
+            BattleScene_GetParticipantModelSizeScaled(arg0->pokemon, &sp30);
             arg0->origin.y -= sp30.y * 25.0f;
             if (arg0->origin.y <= 0.0f) {
                 arg0->origin.y = 0.0f;
@@ -498,7 +498,7 @@ void BattleAnim_UpdateParticleAnchor(Particle* arg0) {
         case 8:
             BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
             BattleScene_GetParticipantModelRotation(arg0->pokemon, &sp28);
-            Trade_UpdateBoxSlotBob(arg0->pokemon, &sp30);
+            BattleScene_GetParticipantModelSizeScaled(arg0->pokemon, &sp30);
             ParticleMath_MakeXZVectorFromAngle(&sp3C, sp30.x * 25.0f, sp28.y);
             ParticleMath_AddVec3f(&arg0->origin, &sp3C);
             arg0->origin.y = 0.0f;
