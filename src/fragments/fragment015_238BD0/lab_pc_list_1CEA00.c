@@ -174,9 +174,8 @@ void func_890000A4(s32* arg0, s32 arg1, s32 arg2) {
 
 /**
  * Takes `arg1` from the selected item's count, removing the entry when nothing is left.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) in せいとん > どうぐをいどうする, moving all five ほのおのいし to サトシのパソコン removed the bag
+ * row (006/020 to 005/020, PC 000/050 to 001/050).
  */
 void LabItem_DecreaseSelectedCount(LabItemCursor* arg0, s32 arg1) {
     u8* temp_v1 = &arg0->unk_00->unk_00[arg0->unk_00->unk_0C * arg0->unk_08];
@@ -409,9 +408,8 @@ extern Rgba89000D50 D_8900A5BC;
 
 /**
  * Sets up the item count selector (84x52).
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) in せいとん > どうぐをいどうする, the ×count selector opened when ほのおのいし ×05 was
+ * picked to move from てもちのどうぐ to サトシのパソコン.
  */
 void LabItem_InitCountSelector(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     Window_SetRect(arg0 + 4, arg1, arg2, 0x54, 0x34);
@@ -446,9 +444,8 @@ extern char D_89018470[];
 
 /**
  * Draws the count selector with its ×count and the up/down arrows.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) in せいとん > どうぐをいどうする, drew the ×count selector (×01, ×02 ... ×05) for
+ * ほのおのいし.
  */
 void LabItem_DrawCountSelector(s8* arg0) {
     UNUSED s32 pad[1]; // FAKE: stack padding
@@ -508,9 +505,8 @@ extern M2C_UNK D_89018474;
 
 /**
  * Handles the count selector input; shows どうぐがいっぱいです (the items are full) when needed.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) in せいとん > どうぐをいどうする, the D-pad changed the ほのおのいし count and A moved
+ * that many to サトシのパソコン.
  */
 s32 LabItem_UpdateCountSelector(s8 *arg0) {
     s32 sp2C;
@@ -573,9 +569,8 @@ void func_89000CF0(s8 *arg0, s8 *arg1)
 
 /**
  * Sets the disabled flag (1) on menu row `arg1`.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran when the てもちのどうぐ / サトシのパソコン / 64のカセット list menu opened in せいとん >
+ * どうぐをいどうする; the list already chosen as the source was greyed out as a destination.
  */
 void LabItem_DisableRow(s8 *arg0, s32 arg1) {
     u16 *temp_v0;
@@ -776,8 +771,8 @@ s32 func_80030230(void*);
 
 /**
  * Navigate the selected menu mode, then report cancel or confirm input.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) ran while picking an item and a list in せいとん > どうぐをいどうする and in its
+ * swap command (どこのどうぐをいれかえる？).
  * @unverified Name guessed from the code; comment kept.
  */
 s32 LabItem_UpdateItemList(void* menu, u32 flags) {
@@ -956,8 +951,8 @@ extern M2C_UNK D_800734A8;
 
 /**
  * Draws `arg2` in the small font.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) ran while picking an item and a list in せいとん > どうぐをいどうする and in its
+ * swap command (どこのどうぐをいれかえる？).
  * @unverified Name and comment guessed from the code.
  */
 void LabItem_DrawSmallText(s32 arg0, s32 arg1, s32 arg2) {
