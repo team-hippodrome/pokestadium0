@@ -1215,7 +1215,7 @@ void Particle_ApplyMotionStepZ(Particle* arg0) {
 /**
  * Sets motionStep.x and .z from stepMagnitude along rotation.y, then adds them to motionOffset.x
  * and .z. Same result as Particle_AddVelocityXZFromRotationY, built from the two helpers. Renamed
- * from Particle_AddVelocityXZFromRotationYViaHelpers: it reads rotation.y and writes x and z.
+ * from Particle_AddVelocityXYFromRotationZViaImpulse: it reads rotation.y and writes x and z.
  * Evaluate the explicit trigonometric component formula and store/add the resulting motion term.
  * Seen in play (2026-11-13) in the 165-move sweep (Petal Dance): it changed motionOffset.x and .z
  * (0x4C, 0x54) only.
