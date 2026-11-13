@@ -207,8 +207,8 @@ s32 LassoHit_Update(void) {
 
 extern Gfx D_82192AB0[];
 /**
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
+ * turns): ran.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 Gfx* Strip400_Draw(Gfx* arg0) {
@@ -623,8 +623,8 @@ void Radial20_RotateVertexOffset(f32 arg0, UNUSED Vec3f* arg1, Vec3f* arg2, f32 
 }
 
 /**
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
+ * turns): ran.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void Radial20_UpdateNode(Radial20* arg0) {
@@ -807,8 +807,8 @@ extern u8 D_82192B54[];
 extern u8 D_82192B58[];
 extern f32 D_82192B5C[];
 /**
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
+ * turns): ran.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 Gfx* Radial20_Draw(Gfx* arg0) {

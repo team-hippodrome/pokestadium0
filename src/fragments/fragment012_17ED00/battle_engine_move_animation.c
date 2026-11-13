@@ -635,8 +635,8 @@ void BattleScene_EnterConfusedRow(ActivePokemon* active_pokemon) {
 
 /**
  * State row 21 tick: when move cue 0 ends, plays the species sound.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
+ * turns): ran.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_TickRow22PlaySpeciesSound(ActivePokemon* active_pokemon) {
@@ -1053,8 +1053,8 @@ void BattleScene_TickRow21CleanupAndEnterState18(ActivePokemon* active_pokemon) 
 /**
  * Once a requested model reload completes, resets the owner model to the
  * neutral placeholder.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
+ * turns): ran.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_ResetOwnerModelIfLoaded(ActivePokemon* active_pokemon) {
