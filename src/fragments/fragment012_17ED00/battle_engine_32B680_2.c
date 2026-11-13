@@ -89,9 +89,19 @@ void func_82142678(UNUSED ActivePokemon* active_pokemon, UNUSED s32 unused);
 
 void BattleAnim_DrawAsset76Ia8FrameWithAsset77I4Overlay(Particle* arg0, CameraNode* arg1);
 
+/**
+ * Effect hook that does nothing.
+ * @unverified Name from Stadium 1.
+ */
 void ParticleEffect_Noop(UNUSED s32 arg0, UNUSED s32 arg1) {
 }
 
+/**
+ * Draws the particle as a camera-facing quad: frame textureFrame of the 32x64 IA8 strip in
+ * asset 0x76, blended with the scrolling 64x64 I4 texture in asset 0x77 by the particle's
+ * colors.
+ * @unverified Name guessed from the code.
+ */
 void BattleAnim_DrawAsset76Ia8FrameWithAsset77I4Overlay(Particle* arg0, CameraNode* arg1) {
     ParticleGfx_LoadTextureIa8(sBattleAnimAssetPointers[0x76] + (arg0->textureFrame << 0xB), 0x20, 0x40);
     ParticleGfx_LoadTextureI4MultiBlockWrapSTWithShift(sBattleAnimAssetPointers[0x77], 0x40, 0x40, 2, 1);
@@ -158,6 +168,11 @@ s32 BattleAnim_DrawDigRocks(Particle* arg0, UNUSED CameraNode* arg1) {
 
 extern Vtx D_82191880[];
 
+/**
+ * Draws the particle as a 2D screen quad of the 64x64 I4 textures in assets 0x27 and
+ * 0x28 scrolling over each other, colored by the particle.
+ * @unverified Name guessed from the code.
+ */
 void BattleAnim_DrawAssets27And28LayeredI4QuadVariantA(Particle* arg0, UNUSED CameraNode* arg1) {
     ParticleGfx_Push2DTransform(arg0->worldPosition.x, arg0->worldPosition.y, arg0->rotation.z, arg0->scale);
 
@@ -173,6 +188,11 @@ void BattleAnim_DrawAssets27And28LayeredI4QuadVariantA(Particle* arg0, UNUSED Ca
 
 extern Vtx D_821918C0[];
 
+/**
+ * Same as BattleAnim_DrawAssets27And28LayeredI4QuadVariantA with different scroll
+ * speeds and vertices.
+ * @unverified Name guessed from the code.
+ */
 void BattleAnim_DrawAssets27And28LayeredI4QuadVariantB(Particle* arg0, UNUSED CameraNode* arg1) {
     ParticleGfx_Push2DTransform(arg0->worldPosition.x, arg0->worldPosition.y, arg0->rotation.z, arg0->scale);
 
@@ -204,6 +224,11 @@ void BattleAnim_DrawMistLightest(Particle* arg0, UNUSED CameraNode* arg1) {
     ParticleGfx_DrawQuadVertices(gFullscreenQuadVtx);
 }
 
+/**
+ * Draws the particle as a full-screen 2D quad of the scrolling 32x32 I4 texture in asset
+ * 0x87, colored by the particle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_DrawAsset87AnimatedI4Quad(Particle* arg0, UNUSED CameraNode* arg1) {
     ParticleGfx_Push2DTransform(arg0->worldPosition.x, arg0->worldPosition.y, arg0->rotation.z, arg0->scale);
 
@@ -236,6 +261,11 @@ void func_82142048(Particle* arg0, u8* arg1) {
 extern Vtx D_8140E018[];
 extern Vtx D_84385CC0[];
 extern Vtx D_84385D00[];
+/**
+ * Draws frame textureFrame of the 32x32 I4 strip in asset 0x1A as a two-sided quad at
+ * the particle's transform.
+ * @unverified Name guessed from the code.
+ */
 void BattleAnim_DrawAsset1AFrameI4Quad(Particle* arg0, UNUSED CameraNode* arg1) {
     gSPDisplayList(gDisplayListHead++, D_82190548);
     gSPClearGeometryMode(gDisplayListHead++, G_CULL_BACK);
@@ -247,6 +277,11 @@ void BattleAnim_DrawAsset1AFrameI4Quad(Particle* arg0, UNUSED CameraNode* arg1) 
     gSPSetGeometryMode(gDisplayListHead++, G_CULL_BACK);
 }
 
+/**
+ * Draws the 32x32 RGBA16 texture in asset 0x1C as a two-sided quad at the particle's
+ * transform.
+ * @unverified Name guessed from the code.
+ */
 void BattleAnim_DrawAsset1CRgba16Quad(Particle* arg0, UNUSED CameraNode* arg1) {
     gSPDisplayList(gDisplayListHead++, D_821903D0);
     gSPClearGeometryMode(gDisplayListHead++, G_CULL_BACK);
@@ -286,6 +321,11 @@ void BattleAnim_WingAttackParticleDraw(Particle* arg0, UNUSED CameraNode* arg1) 
 }
 
 extern Vtx D_82190E50[];
+/**
+ * Draws the 32x32 I4 texture in asset 0x1D as a two-sided quad, turned a quarter turn
+ * about X and Y from the particle's rotation.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_DrawAsset1DRotatedI4Quad(Particle* arg0, UNUSED CameraNode* arg1) {
     Vec3s sp40;
 
@@ -310,6 +350,11 @@ void func_82142678(UNUSED ActivePokemon* active_pokemon, UNUSED s32 unused) {
 
 extern Vtx D_82191100[];
 
+/**
+ * Draws the current frame (of 8) of the 32x96 I4 strip in asset 0x13 as a two-sided quad
+ * scaled in Y.
+ * @unverified Name guessed from the code.
+ */
 void BattleAnim_DrawAsset13FrameI4YScaledQuadA(Particle* arg0, UNUSED CameraNode* arg1) {
     gSPDisplayList(gDisplayListHead++, D_82190548);
 
@@ -325,6 +370,10 @@ void BattleAnim_DrawAsset13FrameI4YScaledQuadA(Particle* arg0, UNUSED CameraNode
 
 extern Vtx D_82191140[];
 
+/**
+ * Same as BattleAnim_DrawAsset13FrameI4YScaledQuadA with a different vertex set.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_DrawAsset13FrameI4YScaledQuadB(Particle* arg0, UNUSED CameraNode* arg1) {
     gSPDisplayList(gDisplayListHead++, D_82190548);
     gSPClearGeometryMode(gDisplayListHead++, G_CULL_BACK);
@@ -350,6 +399,11 @@ void func_821428F8(Particle* arg0, UNUSED CameraNode* arg1) {
 
 extern Vtx D_82191100[];
 
+/**
+ * Draws the current frame (of 8) of asset 0x13 as a camera-facing quad scaled in Y and
+ * rotated about Z by the particle.
+ * @unverified Name guessed from the code.
+ */
 void BattleAnim_DrawAsset13FrameI4ModelQuadA(Particle* arg0, CameraNode* arg1) {
     gSPDisplayList(gDisplayListHead++, D_82190548);
     gSPClearGeometryMode(gDisplayListHead++, G_CULL_BACK);
@@ -391,6 +445,11 @@ void BattleAnim_ThunderShockParticleDraw(Particle* arg0, CameraNode* arg1) {
     gSPSetGeometryMode(gDisplayListHead++, G_CULL_BACK);
 }
 
+/**
+ * Draws the 16x256 I4 texture in asset 0x1B on a small two-sided triangle, white blended
+ * with the particle's color.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_DrawAsset1BI4TriangleA(Particle* arg0, UNUSED CameraNode* arg1) {
     gSPDisplayList(gDisplayListHead++, D_821904C8);
     gSPClearGeometryMode(gDisplayListHead++, G_CULL_BACK);
@@ -414,6 +473,10 @@ void func_82142EDC(Particle* arg0, UNUSED CameraNode* arg1) {
     gSPSetGeometryMode(gDisplayListHead++, G_CULL_BACK);
 }
 
+/**
+ * Draws asset 0x13's frames at half speed as a two-sided quad in fixed white and blue.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_DrawAsset13FrameDiv2I4Quad(Particle* arg0, UNUSED CameraNode* arg1) {
     gSPDisplayList(gDisplayListHead++, D_821904C8);
     gSPClearGeometryMode(gDisplayListHead++, G_CULL_BACK);
@@ -425,6 +488,11 @@ void BattleAnim_DrawAsset13FrameDiv2I4Quad(Particle* arg0, UNUSED CameraNode* ar
     gSPSetGeometryMode(gDisplayListHead++, G_CULL_BACK);
 }
 
+/**
+ * Draws frame textureFrame of the 32x32 I4 strip in asset 0x18 as a camera-facing quad
+ * rotated about Z by the particle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_DrawAsset18FrameI4ModelQuad(Particle* arg0, CameraNode* arg1) {
     gSPDisplayList(gDisplayListHead++, D_82190548);
 
@@ -433,6 +501,11 @@ void BattleAnim_DrawAsset18FrameI4ModelQuad(Particle* arg0, CameraNode* arg1) {
     ParticleGfx_DrawModelQuadRotated(arg1, arg0->worldPosition, arg0->scale, D_82190E50, arg0->rotation.z);
 }
 
+/**
+ * Draws the 32x32 I4 texture in asset 0xA9 as a two-sided vertical quad, scaled by the
+ * particle's scale and unk_20.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_DrawAssetA9I4XYScaledQuad(Particle* arg0, UNUSED CameraNode* arg1) {
     gSPDisplayList(gDisplayListHead++, D_82190548);
     gSPClearGeometryMode(gDisplayListHead++, G_CULL_BACK);
