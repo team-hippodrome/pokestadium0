@@ -265,7 +265,7 @@ void ActivePokemon_ResetCueTimer(s8 *arg0) {
 }
 
 /**
- * trigger on up on the dialogue box disappearing after move use
+ * trigger on up on the dialog box disappearing after move use
  * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
  * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.

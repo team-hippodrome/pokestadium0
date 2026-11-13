@@ -35,7 +35,7 @@ void StatRibbon_Configure(RibbonMesh* arg0, s32 arg1, s32 arg2, s32 arg3, s32 ar
 
 
 /**
- * Spawns one stat-change ribbon in a free slot of the 4-entry pool, centred on (arg0, arg1, arg2)
+ * Spawns one stat-change ribbon in a free slot of the 4-entry pool, centered on (arg0, arg1, arg2)
  * with radius arg3 and scale arg4. arg5 picks the direction: 0 is the rising ribbon used when a
  * stat goes up, 1 the falling curtain used when a stat goes down (Haze spawns both).
  * Seen in play (2026-11-13) in the per-move sweep it ran for 23 moves: every stat-raising and stat-
