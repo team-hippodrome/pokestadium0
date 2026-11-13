@@ -75,7 +75,8 @@ void PcSort_DisableEmptyBoxes(s8* arg0, s8* arg1) {
 
 /**
  * Sets the 0x200 flag on the first row when the list holds exactly one Pokemon.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran once when A on the Pokémon sort screen's source (てもち) opened the
+ * party list of three (フシ, ヒト, カメ); with three Pokémon the first row stayed selectable.
  */
 void PcSort_DisableIfSingleMon(s8 *arg0, s8 *arg1) {
     u16 *temp_v0;
@@ -88,7 +89,8 @@ void PcSort_DisableIfSingleMon(s8 *arg0, s8 *arg1) {
 
 /**
  * Sets the 0x400 flag on each of the 13 box rows whose box is full.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran once when the Pokémon sort screen opened its target box list (てもち,
+ * GBのボックス1 to 12, 64のボックス); no box was full, and no row was greyed out.
  */
 void PcSort_DisableFullBoxes(s8* arg0, s8* arg1) {
     s32 i;

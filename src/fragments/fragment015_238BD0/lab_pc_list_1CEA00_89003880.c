@@ -269,7 +269,8 @@ void LabItem_SaveChanges(s8* arg0) {
 
 /**
  * Returns 1 when any of the three item lists changed.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran once when B left the item sort screen after nothing had been moved;
+ * the screen closed without asking to save.
  */
 s32 LabItem_HasUnsavedChanges(s32* arg0) {
     s32 i;

@@ -584,7 +584,8 @@ extern Rgba89000D50 D_8900A5D4[];
 extern M2C_UNK D_800734A8;
 /**
  * Draws one menu row label with the selection highlight (dimmed when disabled).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) drew the rows of the item sort screen's source window (てもちの どうぐ, サトシの
+ * パソコン, 64の カセット).
  */
 void LabItem_DrawMenuRow(s32 x, s32 y, char* str, UNUSED s32 index, s32 flags) {
     Rgba89000D50 color;
@@ -613,7 +614,8 @@ void Menu_Init(s8*, s32, s32, s32, s32, s32);
 M2C_UNK func_80027804();
 /**
  * Sets up a menu window whose height fits `arg4` rows.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) in せいとん > どうぐを いどうする, A opened the three-row source window (てもちの どうぐ,
+ * サトシの パソコン, 64の カセット) and this ran once as it appeared.
  */
 void LabItem_InitMenuWindow(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
     s32 pad[2]; // FAKE: stack padding
@@ -635,7 +637,8 @@ M2C_UNK Menu_DrawItems(s8 *, s32, s32, M2C_UNK, s32); /* extern */
 
 /**
  * Draws the menu window's items.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) drew the three-row source window (てもちの どうぐ, サトシの パソコン, 64の カセット) on the
+ * item sort screen.
  */
 void LabItem_DrawMenu(s8 *arg0) {
     if (func_8002AE6C() == 0) {
@@ -646,7 +649,8 @@ void LabItem_DrawMenu(s8 *arg0) {
 s32 Menu_UpdateCursorSkipDisabled(void*);
 /**
  * Moves the menu cursor. Returns -1 on cancel, the 1-based row on confirm, otherwise 0.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran every frame while the item sort screen's source window (てもちの どうぐ,
+ * サトシの パソコン, 64の カセット) had the cursor.
  */
 s32 LabItem_UpdateMenuCursor(s32 arg0) {
     s32 sp1C = 0;
@@ -910,7 +914,8 @@ extern M2C_UNK D_800734A8;
 
 /**
  * Draws `arg2` centered in the 376-pixel help area.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran when the item sort screen's help line changed to 「どこから いどうする?」,
+ * which sits centered in the bottom help area.
  */
 void LabItem_DrawCenteredText(s32 arg0, s32 arg1, char* arg2) {
     Font_BeginTranslucentTextRendering();

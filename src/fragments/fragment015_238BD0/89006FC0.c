@@ -150,7 +150,8 @@ s32 LabPC_NoEmptyBoxAvailable(s8* arg0) {
 }
 
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Seen in play (2026-11-13) in せいとん > ボックスを いどうする, pressing A with every GB and 64 box at 0/30 ran
+ * it once, and the screen showed 「いどうする ボックスが ありません」.
  */
 s32 LabPC_AllBoxesEmpty(s8* arg0) {
     s32 i;
@@ -1380,7 +1381,8 @@ typedef struct Ent8900A298 {
 
 /**
  * Returns 1 when any box or party list is dirty.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran once when B left the box sort screen after nothing had been moved;
+ * the screen closed without asking to save.
  */
 s32 PcBox_HasUnsavedChanges(s8* arg0) {
     s32 i;
