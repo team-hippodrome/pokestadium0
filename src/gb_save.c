@@ -1028,9 +1028,13 @@ s32 Ui_AdjustSteppedRangeSelection(unk_func_8002E128_arg0* arg0) {
 extern Gfx D_80073450[];
 extern u8 *D_80073584[];
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Draws `arg2` (up to nine digits) at (arg0, arg1) in 8x12 digit images, 9 pixels apart, without
+ * leading zeros.
+ * Seen in play (2026-11-13) the Free Battle entry screen called it after each L icon, and the rows
+ * showed the levels without padding (L10, L20, L25). The Lab PC list calls it the same way. Was
+ * Trade_DrawDigitStrip, a Stadium 1 Trade name for a general number drawer.
  */
-void Trade_DrawDigitStrip(s32 arg0, s32 arg1, s32 arg2) {
+void Ui_DrawNumberUnpadded(s32 arg0, s32 arg1, s32 arg2) {
     s32 i;
     s32 var_s0;
     s32 var_s4;
@@ -1420,7 +1424,8 @@ extern u8 D_800736E8[];
 extern u8 D_800736EC[];
 /**
  * Sets up a text box sized to string `arg1`.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran once when A was pressed on a Free Battle entry row whose Pokémon
+ * were all ineligible; a text box sized to 「エントリーできる ポケモンが いません」 then appeared.
  */
 void TextBox_Init(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4) {
     u32 len;
@@ -1453,7 +1458,8 @@ void TextBox_Init(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4) {
 extern Rgba8002D188 D_800736F0[];
 /**
  * Draws a text box and its text.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) drew the 「エントリーできる ポケモンが いません」 box on the Free Battle entry screen,
+ * every frame while it was up.
  */
 void TextBox_Draw(s32* arg0) {
     if (func_8002AE6C(arg0) != 0) {

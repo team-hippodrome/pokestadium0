@@ -261,7 +261,8 @@ s32 Menu_UpdateCursorSkipDisabled(Menu8002E230* arg0) {
 
 /**
  * Moves the cursor forward past disabled items (flag 1).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran once when the Free Battle opponent picker (1P VS 2P, 3P, 4P, COM)
+ * opened with only one controller: the cursor came up on COM, past the greyed-out 2P to 4P rows.
  */
 s32 Menu_SkipDisabledForward(Menu8002E230* arg0) {
     s32 i;

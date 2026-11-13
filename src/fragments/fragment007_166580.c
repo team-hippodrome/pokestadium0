@@ -39,7 +39,8 @@ extern u8 D_80065D00[];
 
 /**
  * Reads up to six Pokemon from deck (`arg0`, `arg1`, `arg2`) into `entry` and returns the count.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran once as the entry screen opened, which then listed the GB party
+ * (フシ, ヒト, カメ at L10).
  */
 s32 FreeBattle_ReadTeam(s32 arg0, s32 arg1, s32 arg2, Entry82000058* entry) {
     s32 handle = func_80020AFC(arg0, arg1, arg2, 0);
@@ -869,7 +870,7 @@ void func_8001A384(s32, s32);
 void Font_SetColorForFlags(s32);
 void Ui_FillRectHighlighted(s32, s32, s32, s32, Color82001CCC);
 void func_8001BCB4(s32, s32, s32, s32, void*, s32, s32);
-void Trade_DrawDigitStrip(s32, s32, u8);
+void Ui_DrawNumberUnpadded(s32, s32, u8);
 void func_8001833C(s32, s32, s32*, u16);
 s32 PokeIcon_GetImage(s8 *arg0, s32 arg1);
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
@@ -898,7 +899,7 @@ void FreeBattle_DrawMonCell(s32 x, s32 y, s32* entry, s32 frame, s32 flags, s32 
         gSPDisplayList(gDisplayListHead++, D_80073450);
         gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
         func_8001BCB4(x + 0x2C, y + 0x19, 8, 0xA, D_04011A60, 8, 0);
-        Trade_DrawDigitStrip(x + 0x38, y + 0x17, ((u8*)entry)[0x24]);
+        Ui_DrawNumberUnpadded(x + 0x38, y + 0x17, ((u8*)entry)[0x24]);
         key = cache->start + frame;
         idx = cache->base + key % cache->count;
         if (key != cache->slots[idx]) {
@@ -1026,7 +1027,8 @@ void func_8002BC58(s32, s32, s32, s32);
 void func_8001BCB4(s32, s32, s32, s32, void*, s32, s32);
 /**
  * Draws the レンタルポケモン (Rental Pokemon) list with its なまえ (Name) header.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran while the entry screen showed the rental teams (ガール and むしとり rows
+ * with なまえ headers).
  */
 void FreeBattle_DrawRentalNameList(s32 arg0, s32 arg1, s32 arg2, Slot82001E20* arg3) {
     s32 pad[3]; // FAKE

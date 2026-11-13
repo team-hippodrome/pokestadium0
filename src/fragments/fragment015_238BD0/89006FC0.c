@@ -470,7 +470,7 @@ extern u8 D_04011A60[];
 void func_80029028(s32, s32, s32, s32, Color_RGBA8);
 void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
 void func_8001BCB4(s32, s32, s32, s32, u8*, s32, s32);
-void Trade_DrawDigitStrip(s32, s32, u8);
+void Ui_DrawNumberUnpadded(s32, s32, u8);
 void Font_SetColorForFlags(s32);
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 s32 PokeIcon_GetImage(s8 *arg0, s32 arg1);
@@ -492,7 +492,7 @@ void func_89007D54(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4, s32 arg5) {
         gSPDisplayList(gDisplayListHead++, D_80073450);
         gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
         func_8001BCB4(arg0 + 4, arg1 + 0x24, 8, 0xA, D_04011A60, 8, 0);
-        Trade_DrawDigitStrip(arg0 + 0xE, arg1 + 0x22, arg2[0x24]);
+        Ui_DrawNumberUnpadded(arg0 + 0xE, arg1 + 0x22, arg2[0x24]);
         func_8001AB6C();
         Font_SetColorForFlags(arg4);
         func_8001A384(4, 0);

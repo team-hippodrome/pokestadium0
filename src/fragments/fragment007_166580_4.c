@@ -127,7 +127,8 @@ void FreeBattle_EnterEntryScreenState(arg0)
  * Sets the entry screen's state (and flags); without flag 1 it switches at once through
  * FreeBattle_EnterEntryScreenState, otherwise it defers the switch.
  * Seen in play: runs when 「エントリーポケモンのせんたく」 opens.
- * @unverified Name from the code.
+ * Seen in play (2026-11-13) ran when the エントリーポケモンのせんたく screen opened and when its rows were
+ * picked.
  */
 void FreeBattle_SetEntryScreenState(s8 *arg0, s32 arg1, s32 arg2) {
     M2C_FIELD(arg0, s32 *, 0x788) = arg2;

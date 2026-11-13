@@ -51,7 +51,8 @@ extern u8 D_82009DFC[];
 
 /**
  * Opens the window for screen state `arg1`: battle mode, rules, tournaments, cup, opponent, entry and popups.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran as each Free Battle window opened in turn: battle mode, rules
+ * (フリーバトル), たいせんする, the opponent picker (1P VS COM) and the entry list.
  */
 void FreeBattle_SetScreenState(s8* arg0, s32 arg1, s32 arg2) {
     s8* view;
@@ -190,7 +191,8 @@ u8 func_8000B2E8(void);
  * where GbSave_GetSaveState(i) returns 0. Word +0x5010 is set to func_8000B2E8()
  * and word +0x5014 to the number of bits among bits 0..3 of that value that
  * are set.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-13) ran once as the バトルモード window (フリーバトル / トーナメント) opened from the main
+ * menu.
  */
 void FreeBattle_InitBattleModeScreen(s32 arg0) {
     s32 i;
@@ -344,7 +346,7 @@ extern u8 D_8200AC58[];
 
 /**
  * Runs the battle setup screen's state machine for one frame.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran every frame from the battle mode window through the entry list.
  */
 s32 FreeBattle_UpdateScreen(s8* arg0) {
     s32 ret;
