@@ -954,7 +954,9 @@ void BattleAnim_RunPointyMoveHitSparkChild(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-13) for Pound the hit showed a yellow burst
+ * (BattleAnim_SetupDefaultHitSpark) and then a magenta smoke cloud drifting off the target; with
+ * this function patched to return at once the burst stayed and the magenta smoke was gone.
  */
 void BattleAnim_SetupPhysicalHitPurpleSmoke(Particle* arg0) {
     Vec3s sp28;
@@ -1026,8 +1028,8 @@ void BattleAnim_SetupPhysicalHitPurpleSmoke(Particle* arg0) {
  * Jump Kick (hit), Karate Chop (hit), Low Kick (hit), Mega Kick (hit), Mega Punch (hit), Night Shade (hit),
  * Pay Day (hit), Pound (hit), Quick Attack (hit), Rage (hit), Rolling Kick (hit), Skull Bash (hit), Sonic Boom
  * (hit), Struggle (hit), Tackle (hit), Take Down (hit), Wing Attack (hit)
- * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-13) runs the particle that BattleAnim_SetupPhysicalHitPurpleSmoke sets up:
+ * the magenta smoke cloud after a Pound hit.
  */
 void BattleAnim_RunPhysicalHitPurpleSmoke(Particle* arg0) {
     s16 sp2E = Particle_FieldCF_GetS16_0C058(arg0);
@@ -1538,9 +1540,14 @@ void BattleAnim_RunDefaultHitSpark(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-13) for Body Slam the hit showed red-and-yellow sparks on the target and at
+ * the ground, then a magenta haze; with this function patched to return at once both the sparks and
+ * the magenta haze were gone (the dust ring and ground dust stayed). Was
+ * BattleAnim_SetupStrongPurpleHitSmoke. In the sweep it ran for 18 heavy hits (ViceGrip, Razor
+ * Wind, Slam, Stomp, Body Slam, Thrash, Double-Edge, Bite, Submission, Counter, Seismic Toss,
+ * SolarBeam, Clamp, Skull Bash, Sky Attack, Crabhammer, Hyper Fang, Super Fang).
  */
-void BattleAnim_SetupStrongPurpleHitSmoke(Particle* arg0) {
+void BattleAnim_SetupHeavyHitSparksAndSmoke(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
 
     switch (Particle_FieldCF_GetS16_0C058(arg0)) {
@@ -1632,13 +1639,14 @@ void BattleAnim_SetupStrongPurpleHitSmoke(Particle* arg0) {
  * Moves: Bite (hit), Body Slam (hit), Clamp (hit), Crabhammer (hit), Double-Edge (hit), Fly (hit), Guillotine
  * (hit), Hyper Fang (hit), Seismic Toss (hit), Slam (hit), Stomp (hit), Submission (hit), Super Fang (hit),
  * Thrash (hit), Vice Grip (hit)
- * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-13) runs the particles BattleAnim_SetupHeavyHitSparksAndSmoke sets up: the
+ * red-and-yellow sparks and magenta haze of a Body Slam hit. Was
+ * BattleAnim_RunStrongPurpleHitSmoke.
  */
-void BattleAnim_RunStrongPurpleHitSmoke(Particle* arg0) {
+void BattleAnim_RunHeavyHitSparksAndSmoke(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_SetupStrongPurpleHitSmoke(arg0);
+            BattleAnim_SetupHeavyHitSparksAndSmoke(arg0);
             break;
 
         case 2:
