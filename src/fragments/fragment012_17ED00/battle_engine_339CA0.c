@@ -776,6 +776,11 @@ void func_82161288(s8 *arg0) {
     }
 }
 
+/**
+ * Lifecycle init: random offset, full scale, white with an orange environment color,
+ * delayed 4 frames per burst index.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_CallbackOrphanDescriptor34ColorFadeDetach_InitParticle(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
 
@@ -856,6 +861,11 @@ void BattleAnim_RunGroundedCircularHitSpark(Particle* arg0) {
     }
 }
 
+/**
+ * Lifecycle init for a glitter particle: tiny, random direction, palette color 0x15, a
+ * timer of 8 to 12 frames.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_SetupUnusedGlitterVariant(Particle* arg0) {
     Vec3s sp28;
 
@@ -1160,6 +1170,11 @@ void BattleAnim_RunSwiftHitEffect2(Particle* arg0) {
     }
 }
 
+/**
+ * Lifecycle init shared by several effects: random direction, no speed, then the CE
+ * parameter picks scale, timers and colors.
+ * @unverified Name guessed from the code.
+ */
 void BattleAnim_SetupSharedScalePulseFallSetup(Particle* arg0) {
     s16 sp2E = Particle_FieldAC_GetS16_0C038(arg0);
     s16 sp2C = Particle_FieldCE_GetS32_0C040(arg0);
@@ -1951,6 +1966,10 @@ void func_821639EC(s8 *arg0) {
     }
 }
 
+/**
+ * Picks the particle's palette pair from the queued move (the powder moves and others).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_RecolorParticleByQueuedMoveId(Particle* arg0) {
     s16 sp1E;
 
