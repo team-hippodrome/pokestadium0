@@ -329,7 +329,8 @@ extern Gfx D_80060A00[];
 /**
  * Draws a textured rectangle tinted with the given RGBA primitive color.
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
- * in battle, running from battle and a Pound turn.
+ * in battle, running from battle and a Pound turn. Stubbed on the battle command menu, the COM
+ * info box lost its colored background fill.
  * @unverified Name and comment guessed from the code.
  */
 void Ui_DrawPrimColorRect(s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b, s32 a) {

@@ -506,9 +506,10 @@ extern u8 D_01006CF0[];
 extern u8 D_01006D18[];
 
 /**
+ * Draws a meter bar, such as the HP bar in the battle info boxes.
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
- * in battle, running from battle and a Pound turn.
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * in battle, running from battle and a Pound turn. Stubbed on the battle command menu, the HP bars
+ * of both info boxes disappeared and everything else stayed.
  */
 void Widget_DrawMeterBar(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     u8* spCC;  /* chosen fill texture */
