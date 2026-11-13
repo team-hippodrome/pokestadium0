@@ -1044,6 +1044,10 @@ void Particle_SetMotionOffsetYScaled(Particle* arg0, f32 arg1) {
     arg0->motionOffset.y = arg1 * gParticleRenderContext.scale.y;
 }
 
+/**
+ * Sets motionOffset.z to arg1 times the global particle scale.
+ * @unverified Name guessed from the code.
+ */
 void Particle_SetMotionOffsetZScaled(Particle* arg0, f32 arg1) {
     arg0->motionOffset.z = arg1 * gParticleRenderContext.scale.y;
 }
@@ -1081,14 +1085,26 @@ void Particle_AddMotionOffsetXScaled(s8 *arg0, f32 arg1) {
     M2C_FIELD(arg0, f32 *, 0x4C) = (f32) (M2C_FIELD(arg0, f32 *, 0x4C) + (arg1 * D_FLT_8219A824));
 }
 
+/**
+ * Adds arg1 times the global particle scale to motionOffset.y.
+ * @unverified Name guessed from the code.
+ */
 void Particle_AddMotionOffsetYScaled(Particle* arg0, f32 arg1) {
     arg0->motionOffset.y += arg1 * gParticleRenderContext.scale.y;
 }
 
+/**
+ * Adds arg1 times the global particle scale to motionOffset.z.
+ * @unverified Name guessed from the code.
+ */
 void Particle_AddMotionOffsetZScaled(Particle* arg0, f32 arg1) {
     arg0->motionOffset.z += arg1 * gParticleRenderContext.scale.y;
 }
 
+/**
+ * Subtracts (arg1, arg2, arg3) times the global particle scale from motionOffset.
+ * @unverified Name guessed from the code.
+ */
 void Particle_SubMotionOffsetScaled(Particle* arg0, f32 arg1, f32 arg2, f32 arg3) {
     arg0->motionOffset.x -= arg1 * gParticleRenderContext.scale.y;
     arg0->motionOffset.y -= arg2 * gParticleRenderContext.scale.y;
@@ -1107,10 +1123,18 @@ void Particle_SubMotionOffsetXScaled(s8 *arg0, f32 arg1) {
     M2C_FIELD(arg0, f32 *, 0x4C) = (f32) (M2C_FIELD(arg0, f32 *, 0x4C) - (arg1 * D_FLT_8219A824));
 }
 
+/**
+ * Subtracts arg1 times the global particle scale from motionOffset.y.
+ * @unverified Name guessed from the code.
+ */
 void Particle_SubMotionOffsetYScaled(Particle* arg0, f32 arg1) {
     arg0->motionOffset.y -= arg1 * gParticleRenderContext.scale.y;
 }
 
+/**
+ * Subtracts arg1 times the global particle scale from motionOffset.z.
+ * @unverified Name guessed from the code.
+ */
 void Particle_SubMotionOffsetZScaled(Particle* arg0, f32 arg1) {
     arg0->motionOffset.z -= arg1 * gParticleRenderContext.scale.y;
 }
@@ -1133,6 +1157,11 @@ s32 Particle_ApproachMotionOffsetY(Particle* arg0, f32 arg1) {
     return ParticleMath_ApproachFloat(&arg0->motionOffset.y, arg1 * gParticleRenderContext.scale.y, arg0->motionTarget.y);
 }
 
+/**
+ * Steps motionOffset.z toward arg1 (scaled) by motionTarget.z. Returns nonzero once it
+ * arrives.
+ * @unverified Name guessed from the code.
+ */
 s32 Particle_ApproachMotionOffsetZ(Particle* arg0, f32 arg1) {
     return ParticleMath_ApproachFloat(&arg0->motionOffset.z, arg1 * gParticleRenderContext.scale.y, arg0->motionTarget.z);
 }
@@ -1204,10 +1233,18 @@ void func_8213E474(s8 *arg0)
   *((f32 *) (((s8 *) arg0) + 0x4C)) = (f32) ((*((f32 *) (((s8 *) arg0) + 0x78))) + (*((f32 *) (((s8 *) arg0) + 0x4C)))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
 }
 
+/**
+ * Adds motionStep.y to motionOffset.y.
+ * @unverified Name guessed from the code.
+ */
 void Particle_ApplyMotionStepY(Particle* arg0) {
     arg0->motionOffset.y += arg0->motionStep.y;
 }
 
+/**
+ * Adds motionStep.z to motionOffset.z.
+ * @unverified Name guessed from the code.
+ */
 void Particle_ApplyMotionStepZ(Particle* arg0) {
     arg0->motionOffset.z += arg0->motionStep.z;
 }
@@ -1401,6 +1438,10 @@ void Particle_SetVelocityTarget(Particle* arg0, f32 arg1, f32 arg2, f32 arg3) {
     arg0->motionTarget.z = arg3 * gParticleRenderContext.scale.y;
 }
 
+/**
+ * Sets motionTarget.x to arg1 times the global particle scale.
+ * @unverified Name guessed from the code.
+ */
 void Particle_SetMotionTargetXScaled(Particle* arg0, f32 arg1) {
     arg0->motionTarget.x = arg1 * gParticleRenderContext.scale.y;
 }

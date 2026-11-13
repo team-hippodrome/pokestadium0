@@ -2572,7 +2572,7 @@ void BattleAnim_SludgeModelAnimFinish_InitParticle(Particle* arg0) {
     if (arg0->displayObject != NULL) {
         BattleAnim_InitModelWithAnim(arg0->displayObject, 0x71, 0x72);
         Particle_SetScaleScaled(arg0, 1.0f);
-        Particle_FieldA6_SetS16_0BCA8(arg0, 0x1E);
+        Particle_FieldA6_SetS16_0BCA8(arg0, 30);
         Particle_AdvanceLifecycle(arg0);
     } else {
         Particle_DisableAndDetach(arg0);
@@ -2626,7 +2626,7 @@ void BattleAnim_SetupSlimePuddle(Particle* arg0) {
 
         BattleAnim_InitModelWithAnim(arg0->displayObject, 0x6E, 0x6F);
         Particle_SetScaleScaled(arg0, 1.0f);
-        Particle_FieldA6_SetS16_0BCA8(arg0, 0x1E);
+        Particle_FieldA6_SetS16_0BCA8(arg0, 30);
         Particle_AdvanceLifecycle(arg0);
     } else {
         Particle_DisableAndDetach(arg0);
