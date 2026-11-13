@@ -61,7 +61,7 @@ M2C_UNK func_8005C0A0();
 extern s32 D_81156550;
 extern u8 D_8111E308;
 void func_81103C40(s32, u8*, s32, s32, s32);
-extern s8 D_811565A2;
+extern u8 D_811565A2;
 typedef struct Screen81104930 {
     /* 0x00 */ u8 unk_00[0x4C];
     /* 0x4C */ s32 framebuffer;
@@ -108,7 +108,10 @@ typedef struct GbEmuTask {
     /* 0x15 */ u8 unk_15;
     /* 0x16 */ u8 unk_16[2];
     /* 0x18 */ u8* unk_18;
-    /* 0x1C */ s32 unk_1C;
+    /* 0x1C */ union {
+        s32 word;
+        u8 bytes[4];
+    } unk_1C;
     /* 0x20 */ s32 unk_20;
     /* 0x24 */ u8 unk_24[0xC];
     /* 0x30 */ s32 unk_30;
@@ -155,7 +158,7 @@ void func_811027A8(GbpakChannel811023DC*);
 void func_8000B1FC(void);
 void func_8000B220(void);
 u8 func_81118018(void*, s32);
-void func_80056730(void*, s32, void*);
+void func_80056730(void*, s32);
 void func_811177D0(s32);
 
 /**
@@ -172,6 +175,9 @@ s32 func_811056CC(void) {
     s32 err;
     s32 status;
     u8* src;
+    // FAKE: state and timer only exist so that IDO addresses D_811228B8, D_811565B8 and D_811565B9 with a
+    // fresh lui on every access, as in retail. Function-scope statics give the same code and are the likely
+    // original, but would move these bytes into this file's own data/bss sections.
     u8* state;
     u8* timer;
     s32 j;
@@ -179,14 +185,11 @@ s32 func_811056CC(void) {
     s32 cycles;
     u8 steps;
     s32 btn;
-    u16 val;
-    s32 z1; // FAKE
-    s32 z2; // FAKE
-    s32 z3; // FAKE
+    u8 val;
+    s32 remap_a;
+    s32 remap_b;
+    s32 pad; // FAKE: unused, only reserves the stack slot the retail frame has
     u8* dst;
-    u32 mode;
-    s32 k;
-    u16 h;
 
     status = 0;
     if (D_81156476 != 0) {
@@ -218,7 +221,7 @@ s32 func_811056CC(void) {
             D_811561C8[D_811565A0].blockDirty[i] = 0xFF;
             D_811561C8[D_811565A0].blockState[i] = D_811561C8[D_811565A0].blockDirty[i];
         }
-        timer = &D_811565B8;
+        timer = &D_811565B8; // FAKE: frame counter here, reused below for the D_811565B9 timer
         err = func_81102AC8(D_811565A0);
         if (err == 0) {
             func_8000B1FC();
@@ -227,28 +230,28 @@ s32 func_811056CC(void) {
                 D_811561C8[D_811565A0].request = 8;
                 func_8004CFB0(&D_81156458, D_811565A0, 1);
             }
-            k = ((*(u16*)(D_800603C0 + 6) & D_8111E30C) ? 0x1000 : 0);
-            mode = ((*(u16*)(D_800603C0 + 6) & D_8111E310) ? 0x2000U : 0);
-            GB_RUN->buttons = (*(u16*)(D_800603C0 + 6) & ~0x3000) | k | mode;
+            remap_a = (gPlayer1Controller->buttonDown & D_8111E30C) ? 0x1000 : 0;
+            remap_b = (gPlayer1Controller->buttonDown & D_8111E310) ? 0x2000 : 0;
+            GB_RUN->buttons = (gPlayer1Controller->buttonDown & ~0x3000) | remap_a | remap_b;
             if (D_8111E308 != 0) {
-                btn = GB_MEM[0x101B9];
-                h = *(u16*)(D_800603C0 + 8);
-                if (h & 1) {
-                    *(u16*)(D_800603C0 + 8) = h & 0xFFFE;
-                    switch ((u32)btn) { // FAKE
+                j = GB_MEM[0x101B9];
+                btn = gPlayer1Controller->buttonPressed;
+                if (btn & 1) {
+                    gPlayer1Controller->buttonPressed = btn & 0xFFFE;
+                    switch (j) {
                         case 1:
-                            btn = 2;
+                            j = 2;
                             break;
                         case 2:
                             if (D_8111E308 >= 2) {
-                                btn = 4;
+                                j = 4;
                                 break;
                             }
                         default:
-                            btn = 1;
+                            j = 1;
                             break;
                     }
-                    GB_MEM[0x101B9] = btn;
+                    GB_MEM[0x101B9] = j;
                     func_81104618(GB_RUN->unk_4C);
                 }
             }
@@ -265,17 +268,18 @@ s32 func_811056CC(void) {
         }
     }
 
-    if (D_811565A1) {
-        if (!err) {
-            D_811565A1--;
+    if (D_811565A1 != 0) {
+        //!bug err is only set on the D_81156476 == 0 path; with a pak present this reads an uninitialized local
+        if (err == 0) {
+            D_811565A1 = D_811565A1 - 1;
         }
-        if (!D_811565A1) {
+        if (D_811565A1 == 0) {
             func_81104930();
         } else {
-            if (++*(u8*)&D_811565A2 >= 11) { // FAKE
-                *(u8*)&D_811565A2 = 0; // FAKE
+            if (++D_811565A2 >= 11) {
+                D_811565A2 = 0;
             }
-            func_81104540((u16*)(GB_RUN->unk_50 + 0xB0), 1, *(u8*)&D_811565A2); // FAKE
+            func_81104540((u16*)(GB_RUN->unk_50 + 0xB0), 1, D_811565A2);
         }
         GB_RUN->buttons = 0;
     }
@@ -326,7 +330,6 @@ s32 func_811056CC(void) {
             i = func_81118018(&D_81156540, 0);
             if ((i != 0) || (GB_MEM[0x1017D] != 0) || (cycles += 17248, GB_MEM[0x10181] != 0) ||
                 (GB_MEM[0x1018D] != 0)) {
-                if ((s32)src * 0) {} // FAKE
                 break;
             }
             count--;
@@ -387,6 +390,8 @@ s32 func_811056CC(void) {
                 GB_MEM[0x101D5] = 0;
             }
         }
+        if (1) { // karodo
+        }
     } else {
         i = 0;
     }
@@ -398,7 +403,7 @@ s32 func_811056CC(void) {
         status = (D_811561C8[D_811565A0].unkA2 != 0) ? -3 : -1;
     }
 
-    if ((GB_MEM[0x1017D] != 0) || (GB_MEM[0x10181] != 0) || (GB_MEM[0x1018D] != 0)) {
+    if (GB_MEM[0x1017D] || GB_MEM[0x10181] || GB_MEM[0x1018D]) {
         if (GB_MEM[0x10181]) {
             if (GB_MEM[0x10181] != GB_MEM[0x10185]) {
                 GB_MEM[0x10185] = GB_MEM[0x10181];
@@ -406,7 +411,7 @@ s32 func_811056CC(void) {
             } else {
                 GB_MEM[0x1018D]--;
                 if (GB_MEM[0x1018D] == 0) {
-                    func_80056730(GB_MEM + 0x12F00, 0x1000, GB_MEM);
+                    func_80056730(GB_MEM + 0x12F00, 0x1000);
                     GB_MEM[0x10181] = 0;
                     GB_MEM[0x10185] = GB_MEM[0x10181];
                 }
@@ -417,42 +422,48 @@ s32 func_811056CC(void) {
         D_81154BF0.ucode = D_8111F470;
         D_81154BF0.ucodeSize = 0xE38;
         D_81154BF0.unk_18 = GB_MEM + 0xFE00;
-        D_81154BF0.unk_1C = 0x0E300100;
+        D_81154BF0.unk_1C.word = 0x0E300100;
         D_81154BF0.unk_30 = *(s32*)(GB_MEM + 0x10140);
         D_81154BF0.unk_38 = *(s32*)(GB_MEM + 0x10190);
         D_81154BF0.unk_20 = GB_RUN->unk_44;
         D_81154BF0.unk_14 = 0x10;
         D_81154BF0.unk_15 = 0xD1 - (D_811565A5 / 2);
-        ((u8*)&D_81154BF0)[0x1F] = GB_MEM[0x101A1];
+        D_81154BF0.unk_1C.bytes[3] = GB_MEM[0x101A1];
     } else {
         D_81154BF0.type = 2;
         D_81154BF0.flags = 0;
         D_81154BF0.ucode = D_8111E678;
         D_81154BF0.ucodeSize = 0xDF8;
         D_81154BF0.unk_18 = GB_MEM + 0xFE00;
-        D_81154BF0.unk_1C = 0x0E300100;
+        D_81154BF0.unk_1C.word = 0x0E300100;
         D_81154BF0.unk_30 = *(s32*)(GB_MEM + 0x10140);
         D_81154BF0.unk_38 = *(s32*)(GB_MEM + 0x10190);
         D_81154BF0.unk_20 = GB_RUN->unk_44;
         D_81154BF0.unk_14 = 0x10;
         D_81154BF0.unk_15 = 0xD1 - (D_811565A5 / 2);
-        ((u8*)&D_81154BF0)[0x1F] = GB_MEM[0x101A1];
+        D_81154BF0.unk_1C.bytes[3] = GB_MEM[0x101A1];
         if ((D_81156475 == 0) && (status == 0)) {
             if ((GB_RUN->buttons == 8) && (D_81154C0F == 0)) {
                 return 1;
             }
-            val = *(u16*)(D_800603C0 + 8);
-            if ((val & 0x2000) && (D_81154C0F == 0) && (D_8111E308 != 0)) {
-                *(u16*)(D_800603C0 + 8) = val & 0xDFFF;
+            btn = gPlayer1Controller->buttonPressed;
+            if ((btn & 0x2000) && (D_81154C0F == 0) && (D_8111E308 != 0)) {
+                gPlayer1Controller->buttonPressed = btn & 0xDFFF;
                 if (((GB_MEM[0x1019A] | GB_MEM[0x1019B] | GB_MEM[0x1019D]) == 0) && (GB_MEM[0x101C9] != 0)) {
-                    btn = ++D_81154C4F;
-                    if (btn > D_8111E308) {
-                        btn = D_81154C4F = 0;
+                    if (++D_81154C4F > D_8111E308) {
+                        D_81154C4F = 0;
                     }
-                    switch ((u32)btn) { // FAKE
-                        case 1: src = D_811645F0; dst = D_81135378; break;
-                        case 2: src = D_811725F0; dst = D_8113556C; break;
-                        default: src = D_811565F0; dst = D_81135178; break;
+                    // Each case keeps both assignments on one line; IDO only schedules these blocks like retail that way.
+                    switch (D_81154C4F) {
+                        case 1:
+                            src = D_811645F0; dst = D_81135378;
+                            break;
+                        case 2:
+                            src = D_811725F0; dst = D_8113556C;
+                            break;
+                        default:
+                            src = D_811565F0; dst = D_81135178;
+                            break;
                     }
                     func_80058410(src, GB_RUN->unk_48 + 0x800, 0xE000);
                     func_80058410(dst, GB_MEM + 0x27D80, 0x200);
@@ -462,8 +473,8 @@ s32 func_811056CC(void) {
         }
     }
 
-    if ((D_811565A5) && (D_811565A5 != 0x20)) {
-        D_811565A5--;
+    if ((D_811565A5 != 0) && (D_811565A5 != 0x20)) {
+        D_811565A5 = D_811565A5 - 1;
     }
     if (status != 0) {
         return status;
@@ -496,26 +507,28 @@ s32 func_811064DC(void) {
 }
 
 extern u8 D_811565A0;
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-s32 func_8110659C(void)
-{
-  GbpakChannel811023DC *ch = &D_811561C8[D_811565A0];
-  ch->unk00[0x99] = 0x80;
-  ch->unk00[0x9A] = 0;
-  func_8004CFB0(&D_81156458, D_811565A0, 1);
-  while (D_81156475 != 0)
-  {
-  }
+//@unverified
+/**
+ * Sends request 0x80 to the current pak channel (D_811565A0) and waits for the
+ * pak thread to finish. Returns the channel's error code if one was set,
+ * otherwise func_811020A8(ch) when unk98 is set, otherwise 0.
+ */
+s32 func_8110659C(void) {
+    GbpakChannel811023DC* ch = &D_811561C8[D_811565A0];
 
-  if (((u8) (*((s8 *) (((s8 *) ch) + 0x9A)))) != 0)
-  {
-    return *((u8 *) (((s8 *) ch) + 0x9A));
-  }
-  if (ch->unk00[0x98] != 0)
-  {
-    return func_811020A8(ch);
-  }
-  return 0;
+    ch->request = 0x80;
+    ch->error = 0;
+    func_8004CFB0(&D_81156458, D_811565A0, 1);
+    while (D_81156475 != 0) {
+    }
+
+    if (ch->error != 0) {
+        return ch->error;
+    }
+    if (ch->unk98 != 0) {
+        return func_811020A8(ch);
+    }
+    return 0;
 }
 
 s32 func_8110665C(void) {

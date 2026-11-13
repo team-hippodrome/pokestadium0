@@ -158,12 +158,20 @@ typedef struct FontGlyphSet8001A3E4 {
 } FontGlyphSet8001A3E4; // size = 0x8
 s32 func_80019F70(u16);
 
-// FAKE: gDP* macros are expanded by hand and several are joined on one line; IDO schedules by source line and only this layout matches
+//@unverified
+/**
+ * Draws character `chr` at (x, y) with the current font set. It loads the
+ * set's palette while line_break_flag has bit 0 set and bit 1 clear (then sets
+ * bit 1), loads the glyph texture when it differs from unk_4C, and emits a
+ * texture rectangle. Returns x + advance + font_context->unk_51.
+ */
+// The gDP* macros are expanded by hand and several share one line; IDO schedules by source line, so only this layout matches.
 s32 func_8001A3E4(s16 x, s16 y, s16 chr)
 {
   FontGlyphSet8001A3E4 *set = &((FontGlyphSet8001A3E4 *) font_context)[font_context->unk_50];
   s32 offset = (func_80019F70(chr) * set->width) * set->height;
-  UNUSED s32 pad; // FAKE
+  s16 ulx = x * 4;
+  s16 uly = y * 4;
   s16 lrx = (x + set->advance) * 4;
   s16 lry = (y + set->height) * 4;
   if ((font_context->line_break_flag & 1) && (!(font_context->line_break_flag & 2)))
@@ -196,8 +204,7 @@ s32 func_8001A3E4(s16 x, s16 y, s16 chr)
   {
     Gfx *_g = (Gfx *) (gDisplayListHead++);
     _g->words.w0 = (((unsigned int) ((((unsigned int) 0xe4) & ((0x01 << 8) - 1)) << 24)) | ((unsigned int) ((((unsigned int) lrx) & ((0x01 << 12) - 1)) << 12))) | ((unsigned int) ((((unsigned int) lry) & ((0x01 << 12) - 1)) << 0));
-// FAKE: s16 casts on (x << 2) / (y << 2) in the texrect w1 word; they make IDO emit the matching sll/andi order
-    _g->words.w1 = (((unsigned int) ((((unsigned int) 0) & ((0x01 << 3) - 1)) << 24)) | ((unsigned int) ((((unsigned int) ((s16) (x << 2))) & ((0x01 << 12) - 1)) << 12))) | ((unsigned int) ((((unsigned int) ((s16) (y << 2))) & ((0x01 << 12) - 1)) << 0));
+    _g->words.w1 = (((unsigned int) ((((unsigned int) 0) & ((0x01 << 3) - 1)) << 24)) | ((unsigned int) ((((unsigned int) ulx) & ((0x01 << 12) - 1)) << 12))) | ((unsigned int) ((((unsigned int) uly) & ((0x01 << 12) - 1)) << 0));
     { Gfx *_g = (Gfx *) (gDisplayListHead++); _g->words.w0 = (unsigned int) ((((unsigned int) 0xe1) & ((0x01 << 8) - 1)) << 24); _g->words.w1 = (unsigned int) (((unsigned int) ((((unsigned int) 0) & ((0x01 << 16) - 1)) << 16)) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 16) - 1)) << 0))); }
     ;
     {

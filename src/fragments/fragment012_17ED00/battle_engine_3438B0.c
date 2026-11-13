@@ -420,11 +420,17 @@ void func_8212C1C4(CameraNode* arg0) {
 }
 
 
+//@unverified
+/**
+ * Picks a variant with func_8210C020(3, arg0), stores it in D_8219A568 (values
+ * of 4 and up become 0) and calls func_82124984(D_8219A544, arg0, variant) with
+ * variant 0, 1 or 2.
+ */
 void func_8212C398(s32 arg0)
 {
   s32 temp_v0;
   s32 var_v1;
- temp_v0 = func_8210C020(3, arg0); D_8219A568 = temp_v0; var_v1 = temp_v0; if (temp_v0 >= 4) { D_8219A568 = 0 ^ 0; var_v1 = 0; } switch (var_v1) { case 0:
+ temp_v0 = func_8210C020(3, arg0); D_8219A568 = temp_v0; var_v1 = temp_v0; if (temp_v0 >= 4) { D_8219A568 = 0; var_v1 = 0; } switch (var_v1) { case 0:
       func_82124984(D_8219A544, arg0, 0);
       return;
 
@@ -481,11 +487,16 @@ void func_8212C454(s32 arg0)
 
 }
 
+//@unverified
+/**
+ * Same as func_8212C398 with func_8210C020(4, arg0): values of 5 and up become 0,
+ * and variant 3 passes 4 to func_82124984.
+ */
 void func_8212C530(s32 arg0)
 {
   s32 temp_v0;
   s32 var_v1;
- do { temp_v0 = func_8210C020(4, arg0); D_8219A568 = temp_v0; var_v1 = temp_v0 & 0xFFFFFFFFFFFFFFFF; } while (0);  // FAKE
+  temp_v0 = func_8210C020(4, arg0); D_8219A568 = temp_v0; var_v1 = temp_v0; // IDO: these statements must share one source line
   if (temp_v0 >= 5)
   {
     D_8219A568 = 0;

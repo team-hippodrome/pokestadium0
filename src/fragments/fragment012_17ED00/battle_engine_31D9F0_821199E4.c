@@ -108,6 +108,15 @@ extern char D_82195A38[];
 typedef struct MovePpInit {
     s32 pp[4];
 } MovePpInit;
+//@unverified
+/**
+ * Draws the move panel for arg0 at (arg1, arg2): the frame and border tiles,
+ * then for each of the four moves its current and max PP (the max includes the
+ * PP Ups in the top two bits), an icon from D_8218AF70 picked by the move's
+ * unk_03, and its name. A transformed Pokemon (flag 0x08 at unk_4E) uses its
+ * battle copy of the moves; moves 166 and up get the names D_82195A14 to
+ * D_82195A38 instead.
+ */
 void func_82119CAC(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3) {
     s32 i;
     MovePpInit move_pp = { 0, 0, 0, 0 };
@@ -118,24 +127,24 @@ void func_82119CAC(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3) {
     party = &arg0->sessionTeams->teamMember[M2C_FIELD(arg0, s32*, 0x9D4)]->pokemonPicked[M2C_FIELD(arg0, s32*, 0x9D0)];
     runtime = &arg0->state.runtime;
 
-    func_82116CF4(arg1 + 1, arg2 + 1, 0xC7, 0x38, &D_8218B008 + arg3 * 3, &D_8218B014 + arg3 * 3);
-    if (arg1) {} // FAKE
+    func_82116CF4(arg1 + 1, arg2 + 1, 199, 56, &D_8218B008 + arg3 * 3, &D_8218B014 + arg3 * 3);
+    if (arg1) {} // karodo
     gSPDisplayList(gDisplayListHead++, D_800602C8);
     BattleHud_DrawBorderTile(arg1, arg2 - 1, 8, 8, D_030096C0);
     BattleHud_DrawBorderTile(arg1, arg2 + 5, 8, 8, D_030095C0);
     for (i = 1; i < 7; i++) {
         BattleHud_DrawBorderTile(arg1, arg2 + i * 8, 8, 8, D_030095C0);
     }
-    BattleHud_DrawBorderTile(arg1, arg2 + 0x33, 8, 8, D_03009640);
-    BattleHud_DrawBorderTile(arg1 + 0xC0, arg2 - 1, 8, 8, D_03009840);
-    BattleHud_DrawBorderTile(arg1 + 0xC0, arg2 + 5, 8, 8, D_03009740);
+    BattleHud_DrawBorderTile(arg1, arg2 + 51, 8, 8, D_03009640);
+    BattleHud_DrawBorderTile(arg1 + 192, arg2 - 1, 8, 8, D_03009840);
+    BattleHud_DrawBorderTile(arg1 + 192, arg2 + 5, 8, 8, D_03009740);
     for (i = 1; i < 7; i++) {
-        BattleHud_DrawBorderTile(arg1 + 0xC0, arg2 + i * 8, 8, 8, D_03009740);
+        BattleHud_DrawBorderTile(arg1 + 192, arg2 + i * 8, 8, 8, D_03009740);
     }
-    BattleHud_DrawBorderTile(arg1 + 0xC0, arg2 + 0x33, 8, 8, D_030097C0);
-    for (i = 1; i < 0x18; i++) {
+    BattleHud_DrawBorderTile(arg1 + 192, arg2 + 51, 8, 8, D_030097C0);
+    for (i = 1; i < 24; i++) {
         BattleHud_DrawBorderTile(arg1 + i * 8, arg2 - 1, 8, 8, D_03009940);
-        BattleHud_DrawBorderTile(arg1 + i * 8, arg2 + 0x33, 8, 8, D_030098C0);
+        BattleHud_DrawBorderTile(arg1 + i * 8, arg2 + 51, 8, 8, D_030098C0);
     }
     gSPDisplayList(gDisplayListHead++, D_80060398);
 
@@ -156,68 +165,68 @@ void func_82119CAC(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3) {
     }
 
     if (runtime->unk_4E & 8) {
-        if (runtime->moves[0] && (runtime->moves[0] < 0xA6)) {
-            move_pp.pp[0] = BattleHud_DrawMovePpTextRTL(arg1 + 0x52, arg2 + 0xF, runtime->unk_32[0], max_pp[0]);
+        if (runtime->moves[0] && (runtime->moves[0] < 166)) {
+            move_pp.pp[0] = BattleHud_DrawMovePpTextRTL(arg1 + 82, arg2 + 15, runtime->unk_32[0], max_pp[0]);
         }
-        if (runtime->moves[1] && (runtime->moves[1] < 0xA6)) {
-            move_pp.pp[1] = BattleHud_DrawMovePpTextLTR(arg1 + 0x7C, arg2 + 0x1C, runtime->unk_32[1], max_pp[1]);
+        if (runtime->moves[1] && (runtime->moves[1] < 166)) {
+            move_pp.pp[1] = BattleHud_DrawMovePpTextLTR(arg1 + 124, arg2 + 28, runtime->unk_32[1], max_pp[1]);
         }
-        if (runtime->moves[2] && (runtime->moves[2] < 0xA6)) {
-            move_pp.pp[2] = BattleHud_DrawMovePpTextLTR(arg1 + 0x70, arg2 + 0x30, runtime->unk_32[2], max_pp[2]);
+        if (runtime->moves[2] && (runtime->moves[2] < 166)) {
+            move_pp.pp[2] = BattleHud_DrawMovePpTextLTR(arg1 + 112, arg2 + 48, runtime->unk_32[2], max_pp[2]);
         }
-        if (runtime->moves[3] && (runtime->moves[3] < 0xA6)) {
-            move_pp.pp[3] = BattleHud_DrawMovePpTextRTL(arg1 + 0x44, arg2 + 0x23, runtime->unk_32[3], max_pp[3]);
+        if (runtime->moves[3] && (runtime->moves[3] < 166)) {
+            move_pp.pp[3] = BattleHud_DrawMovePpTextRTL(arg1 + 68, arg2 + 35, runtime->unk_32[3], max_pp[3]);
         }
     } else {
-        if (party->unk_09[0] && (party->unk_09[0] < 0xA6)) {
-            move_pp.pp[0] = BattleHud_DrawMovePpTextRTL(arg1 + 0x52, arg2 + 0xF, party->unk_20[0], max_pp[0]);
+        if (party->unk_09[0] && (party->unk_09[0] < 166)) {
+            move_pp.pp[0] = BattleHud_DrawMovePpTextRTL(arg1 + 82, arg2 + 15, party->unk_20[0], max_pp[0]);
         }
-        if (party->unk_09[1] && (party->unk_09[1] < 0xA6)) {
-            move_pp.pp[1] = BattleHud_DrawMovePpTextLTR(arg1 + 0x7C, arg2 + 0x1C, party->unk_20[1], max_pp[1]);
+        if (party->unk_09[1] && (party->unk_09[1] < 166)) {
+            move_pp.pp[1] = BattleHud_DrawMovePpTextLTR(arg1 + 124, arg2 + 28, party->unk_20[1], max_pp[1]);
         }
-        if (party->unk_09[2] && (party->unk_09[2] < 0xA6)) {
-            move_pp.pp[2] = BattleHud_DrawMovePpTextLTR(arg1 + 0x70, arg2 + 0x30, party->unk_20[2], max_pp[2]);
+        if (party->unk_09[2] && (party->unk_09[2] < 166)) {
+            move_pp.pp[2] = BattleHud_DrawMovePpTextLTR(arg1 + 112, arg2 + 48, party->unk_20[2], max_pp[2]);
         }
-        if (party->unk_09[3] && (party->unk_09[3] < 0xA6)) {
-            move_pp.pp[3] = BattleHud_DrawMovePpTextRTL(arg1 + 0x44, arg2 + 0x23, party->unk_20[3], max_pp[3]);
+        if (party->unk_09[3] && (party->unk_09[3] < 166)) {
+            move_pp.pp[3] = BattleHud_DrawMovePpTextRTL(arg1 + 68, arg2 + 35, party->unk_20[3], max_pp[3]);
         }
     }
 
     gSPDisplayList(gDisplayListHead++, D_80060308);
 
-    Gfx_DrawTextureRgba16Ia8(arg1 + 0x5D, arg2 + 6, 0x10, 0xE, D_030078C0, D_03007A80, 0x10, 0x100000);
-    Gfx_DrawTextureRgba16Ia8(arg1 + 0x6C, arg2 + 0x16, 0x10, 0xE, D_030070E0, D_030072A0, 0x10, 0x100000);
-    Gfx_DrawTextureRgba16Ia8(arg1 + 0x5D, arg2 + 0x26, 0x10, 0xE, D_03007380, D_03007540, 0x10, 0x100000);
-    Gfx_DrawTextureRgba16Ia8(arg1 + 0x4E, arg2 + 0x16, 0x10, 0xE, D_3007620, D_030077E0, 0x10, 0x100000);
+    Gfx_DrawTextureRgba16Ia8(arg1 + 93, arg2 + 6, 16, 14, D_030078C0, D_03007A80, 16, 0x100000);
+    Gfx_DrawTextureRgba16Ia8(arg1 + 108, arg2 + 22, 16, 14, D_030070E0, D_030072A0, 16, 0x100000);
+    Gfx_DrawTextureRgba16Ia8(arg1 + 93, arg2 + 38, 16, 14, D_03007380, D_03007540, 16, 0x100000);
+    Gfx_DrawTextureRgba16Ia8(arg1 + 78, arg2 + 22, 16, 14, D_3007620, D_030077E0, 16, 0x100000);
 
     gSPDisplayList(gDisplayListHead++, D_80060398);
     gSPDisplayList(gDisplayListHead++, D_800602C8);
 
     if (runtime->unk_4E & 8) {
-        if (runtime->moves[0] && (runtime->moves[0] < 0xA6)) {
-            func_8001B884(move_pp.pp[0] - 0x19, arg2 + 0xE, 0x20, 9, D_8218AF70[gMoveData[runtime->moves[0] - 1].unk_03], 0x20, 0);
+        if (runtime->moves[0] && (runtime->moves[0] < 166)) {
+            func_8001B884(move_pp.pp[0] - 25, arg2 + 14, 32, 9, D_8218AF70[gMoveData[runtime->moves[0] - 1].unk_03], 32, 0);
         }
-        if (runtime->moves[1] && (runtime->moves[1] < 0xA6)) {
-            func_8001B884(move_pp.pp[1], arg2 + 0x1B, 0x20, 9, D_8218AF70[gMoveData[runtime->moves[1] - 1].unk_03], 0x20, 0);
+        if (runtime->moves[1] && (runtime->moves[1] < 166)) {
+            func_8001B884(move_pp.pp[1], arg2 + 27, 32, 9, D_8218AF70[gMoveData[runtime->moves[1] - 1].unk_03], 32, 0);
         }
-        if (runtime->moves[2] && (runtime->moves[2] < 0xA6)) {
-            func_8001B884(move_pp.pp[2], arg2 + 0x2F, 0x20, 9, D_8218AF70[gMoveData[runtime->moves[2] - 1].unk_03], 0x20, 0);
+        if (runtime->moves[2] && (runtime->moves[2] < 166)) {
+            func_8001B884(move_pp.pp[2], arg2 + 47, 32, 9, D_8218AF70[gMoveData[runtime->moves[2] - 1].unk_03], 32, 0);
         }
-        if (runtime->moves[3] && (runtime->moves[3] < 0xA6)) {
-            func_8001B884(move_pp.pp[3] - 0x18, arg2 + 0x22, 0x20, 9, D_8218AF70[gMoveData[runtime->moves[3] - 1].unk_03], 0x20, 0);
+        if (runtime->moves[3] && (runtime->moves[3] < 166)) {
+            func_8001B884(move_pp.pp[3] - 24, arg2 + 34, 32, 9, D_8218AF70[gMoveData[runtime->moves[3] - 1].unk_03], 32, 0);
         }
     } else {
-        if (runtime->moves[0] && (runtime->moves[0] < 0xA6)) {
-            func_8001B884(move_pp.pp[0] - 0x19, arg2 + 0xE, 0x20, 9, D_8218AF70[gMoveData[runtime->moves[0] - 1].unk_03], 0x20, 0);
+        if (runtime->moves[0] && (runtime->moves[0] < 166)) {
+            func_8001B884(move_pp.pp[0] - 25, arg2 + 14, 32, 9, D_8218AF70[gMoveData[runtime->moves[0] - 1].unk_03], 32, 0);
         }
-        if (runtime->moves[1] && (runtime->moves[1] < 0xA6)) {
-            func_8001B884(move_pp.pp[1], arg2 + 0x1B, 0x20, 9, D_8218AF70[gMoveData[runtime->moves[1] - 1].unk_03], 0x20, 0);
+        if (runtime->moves[1] && (runtime->moves[1] < 166)) {
+            func_8001B884(move_pp.pp[1], arg2 + 27, 32, 9, D_8218AF70[gMoveData[runtime->moves[1] - 1].unk_03], 32, 0);
         }
-        if (runtime->moves[2] && (runtime->moves[2] < 0xA6)) {
-            func_8001B884(move_pp.pp[2], arg2 + 0x2F, 0x20, 9, D_8218AF70[gMoveData[runtime->moves[2] - 1].unk_03], 0x20, 0);
+        if (runtime->moves[2] && (runtime->moves[2] < 166)) {
+            func_8001B884(move_pp.pp[2], arg2 + 47, 32, 9, D_8218AF70[gMoveData[runtime->moves[2] - 1].unk_03], 32, 0);
         }
-        if (runtime->moves[3] && (runtime->moves[3] < 0xA6)) {
-            func_8001B884(move_pp.pp[3] - 0x18, arg2 + 0x22, 0x20, 9, D_8218AF70[gMoveData[runtime->moves[3] - 1].unk_03], 0x20, 0);
+        if (runtime->moves[3] && (runtime->moves[3] < 166)) {
+            func_8001B884(move_pp.pp[3] - 24, arg2 + 34, 32, 9, D_8218AF70[gMoveData[runtime->moves[3] - 1].unk_03], 32, 0);
         }
     }
 
@@ -227,44 +236,44 @@ void func_82119CAC(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3) {
     func_8001A384(1, 0);
 
     if (runtime->unk_4E & 8) {
-        if (runtime->moves[0] && (runtime->moves[0] < 0xA6)) { func_82119994(arg1 + 0x5A, arg2 + 4, D_8006A9D4[runtime->moves[0] - 1].name); }
-        if (runtime->moves[1] && (runtime->moves[1] < 0xA6)) {
-            func_8001A944(arg1 + 0x7C, arg2 + 0x11, D_8006A9D4[runtime->moves[1] - 1].name);
+        if (runtime->moves[0] && (runtime->moves[0] < 166)) { func_82119994(arg1 + 90, arg2 + 4, D_8006A9D4[runtime->moves[0] - 1].name); }
+        if (runtime->moves[1] && (runtime->moves[1] < 166)) {
+            func_8001A944(arg1 + 124, arg2 + 17, D_8006A9D4[runtime->moves[1] - 1].name);
         }
-        if (runtime->moves[2] && (runtime->moves[2] < 0xA6)) {
-            func_8001A944(arg1 + 0x6E, arg2 + 0x25, D_8006A9D4[runtime->moves[2] - 1].name);
+        if (runtime->moves[2] && (runtime->moves[2] < 166)) {
+            func_8001A944(arg1 + 110, arg2 + 37, D_8006A9D4[runtime->moves[2] - 1].name);
         }
-        if (runtime->moves[3] && (runtime->moves[3] < 0xA6)) {
-            func_82119994(arg1 + 0x4C, arg2 + 0x18, D_8006A9D4[runtime->moves[3] - 1].name);
+        if (runtime->moves[3] && (runtime->moves[3] < 166)) {
+            func_82119994(arg1 + 76, arg2 + 24, D_8006A9D4[runtime->moves[3] - 1].name);
         }
     } else {
-        if (runtime->moves[0] && (runtime->moves[0] < 0xA6)) { func_82119994(arg1 + 0x5A, arg2 + 4, D_8006A9D4[runtime->moves[0] - 1].name); }
-        if (runtime->moves[1] && (runtime->moves[1] < 0xA6)) {
-            func_8001A944(arg1 + 0x7C, arg2 + 0x11, D_8006A9D4[runtime->moves[1] - 1].name);
+        if (runtime->moves[0] && (runtime->moves[0] < 166)) { func_82119994(arg1 + 90, arg2 + 4, D_8006A9D4[runtime->moves[0] - 1].name); }
+        if (runtime->moves[1] && (runtime->moves[1] < 166)) {
+            func_8001A944(arg1 + 124, arg2 + 17, D_8006A9D4[runtime->moves[1] - 1].name);
         }
-        if (runtime->moves[2] && (runtime->moves[2] < 0xA6)) {
-            func_8001A944(arg1 + 0x6E, arg2 + 0x25, D_8006A9D4[runtime->moves[2] - 1].name);
+        if (runtime->moves[2] && (runtime->moves[2] < 166)) {
+            func_8001A944(arg1 + 110, arg2 + 37, D_8006A9D4[runtime->moves[2] - 1].name);
         }
-        if (runtime->moves[3] && (runtime->moves[3] < 0xA6)) {
-            func_82119994(arg1 + 0x4C, arg2 + 0x18, D_8006A9D4[runtime->moves[3] - 1].name);
+        if (runtime->moves[3] && (runtime->moves[3] < 166)) {
+            func_82119994(arg1 + 76, arg2 + 24, D_8006A9D4[runtime->moves[3] - 1].name);
         }
     }
 
-    if (runtime->moves[0] >= 0xA6) {
-        func_82119994(arg1 + 0x5A, arg2 + 4, D_82195A14);
+    if (runtime->moves[0] >= 166) {
+        func_82119994(arg1 + 90, arg2 + 4, D_82195A14);
     }
-    if (runtime->moves[1] >= 0xA6) {
-        func_8001A944(arg1 + 0x7C, arg2 + 0x11, D_82195A20);
+    if (runtime->moves[1] >= 166) {
+        func_8001A944(arg1 + 124, arg2 + 17, D_82195A20);
     }
-    if (runtime->moves[2] >= 0xA6) {
-        func_8001A944(arg1 + 0x6E, arg2 + 0x25, D_82195A2C);
+    if (runtime->moves[2] >= 166) {
+        func_8001A944(arg1 + 110, arg2 + 37, D_82195A2C);
     }
-    if (runtime->moves[3] >= 0xA6) {
-        func_82119994(arg1 + 0x4C, arg2 + 0x18, D_82195A38);
+    if (runtime->moves[3] >= 166) {
+        func_82119994(arg1 + 76, arg2 + 24, D_82195A38);
     }
 
     func_8001ABBC();
-    BattleHud_DrawTranslucentShadowRect(arg1 - 2, arg2 - 2, 0xCD, 0x3E, 0);
+    BattleHud_DrawTranslucentShadowRect(arg1 - 2, arg2 - 2, 205, 62, 0);
 }
 
 extern u8 D_0300A500[];

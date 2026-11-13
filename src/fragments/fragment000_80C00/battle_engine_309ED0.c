@@ -1053,7 +1053,7 @@ void func_8110F6A4(s32 fontId, s32 async, RelocInfo8110EF7C* relocInfo) {
         if (instrument != NULL) {
             if (instrument[1] != 0) {
                 func_8110F64C((PackedWordRec**)(instrument + 8));
-                if (!relocInfo->medium2) {} // FAKE
+                if (!relocInfo->medium2) {} // karodo
             }
             if (instrument[2] != 0x7F) {
                 func_8110F64C((PackedWordRec**)(instrument + 0x18));

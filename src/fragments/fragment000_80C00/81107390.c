@@ -376,10 +376,18 @@ struct ZNoteSubEu;
 struct ZNoteSynthesisState;
 AudioCmd* func_81108750(s32 noteIndex, struct ZNoteSubEu* noteSubEu, struct ZNoteSynthesisState* synthesisState, s16* aiBuf, s32 bufLen, AudioCmd* cmd, s32 updateIndex);
 
+//@unverified
+/**
+ * One synthesis update for the GB tower audio driver: collects the indices of
+ * the enabled note sub-entries for this update (grouped by reverb index when
+ * reverbs exist, then those with a reverb index out of range), emits each
+ * reverb's commands and each note's commands (func_81108750) into cmd, and ends
+ * with two output commands. The structure follows synthesis_do_one_audio_update
+ * in the SM64 / Zelda 64 audio decomps.
+ */
 AudioCmd* func_8110814C(s32* aiBuf, s32 aiBufLen, AudioCmd* cmd, s32 updateIndex) {
-    u8 sp94[0x3C];
+    u8 sp94[60];
     Sub8110814C* noteSubEu;
-    UNUSED Sub8110814C* noteSubEu2; // FAKE: unused, keeps the frame size
     s16 count;
     s16 reverbIndex;
     s32 i;
@@ -396,7 +404,7 @@ AudioCmd* func_8110814C(s32* aiBuf, s32 aiBufLen, AudioCmd* cmd, s32 updateIndex
             for (i = 0; i < D_811858E8; i++) {
                 noteSubEu = (D_811858E8 * updateIndex + i) + (Sub8110814C*)D_81184288;
                 if (count && count && count) {} // FAKE: block boundary that stops as1 propagating the noteSubEu copy
-                if (cmd && cmd && cmd) {} // FAKE: same barrier, also balances register priority
+                if (cmd) {} // karodo
                 if (noteSubEu->enabled && noteSubEu->reverbIndex == reverbIndex) {
                     sp94[count++] = i;
                 }
@@ -418,7 +426,7 @@ AudioCmd* func_8110814C(s32* aiBuf, s32 aiBufLen, AudioCmd* cmd, s32 updateIndex
         D_8118427A = ((Reverb8110814C*)&D_81184110[reverbIndex])->useReverb;
         if (D_8118427A) {
             cmd = func_81107AEC(cmd, aiBufLen, reverbIndex, updateIndex);
-            if (reverbIndex) {} // FAKE: register priority
+            if (reverbIndex) {} // karodo
         }
         while (i < count) {
             if (((Sub8110814C*)D_81184288)[sp94[i] + updateIndex * D_811858E8].reverbIndex == reverbIndex) {
@@ -922,6 +930,14 @@ typedef struct State8110938C {
     /* 0x12 */ u16 right;
 } State8110938C;
 
+//@unverified
+/**
+ * Emits the volume and reverb ramp commands for one note: steps the left/right
+ * volume from the synthesis state towards the note's (shifted left by 4) over
+ * aiBufLen / 8 steps, ramps the reverb volume when it changed, stores the new
+ * values in the state and appends three audio commands. Returns the new command
+ * pointer.
+ */
 AudioCmd* func_8110938C(AudioCmd* cmd, ZNoteSubEu* noteSubEu, ZNoteSynthesisState* synthesisState, s32 aiBufLen, u16 inBuf, s32 headsetPanSettings, s32 flags) {
     s32 reverbVol;
     u16 curVolLeft;
@@ -953,9 +969,8 @@ AudioCmd* func_8110938C(AudioCmd* cmd, ZNoteSubEu* noteSubEu, ZNoteSynthesisStat
     }
 
     sourceReverbVol = ((State8110938C*)synthesisState)->vol;
-    // FAKE: dead assignment, reverbVol is overwritten before any use
     reverbVol = ((Src8110938C*)noteSubEu)->vol;
-    if (((Src8110938C*)noteSubEu)->vol != sourceReverbVol) {
+    if (reverbVol != sourceReverbVol) {
         reverbVol = ((((Src8110938C*)noteSubEu)->vol & 0x7F) - (sourceReverbVol & 0x7F)) << 9;
         rampReverb = reverbVol / (aiBufLen >> 3);
         ((State8110938C*)synthesisState)->vol = ((Src8110938C*)noteSubEu)->vol;

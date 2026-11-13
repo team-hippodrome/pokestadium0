@@ -765,45 +765,48 @@ void BattleScene_TickRow1PlayOwnerCry(ActivePokemon* active_pokemon) {
     }
 }
 
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-void func_821036F4(ActivePokemon *active_pokemon)
-{
-  s32 species;
-  ActivePokemonState *state = &active_pokemon->state;
-  BattleMon *party_pokemon_ptr = &active_pokemon->teamRoster->pokemonPicked[*((s32 *) (((s8 *) active_pokemon) + 0x9D0))];
-  if (((state->flags & 0x4000) || (state->flags & 0x0002)) || (party_pokemon_ptr->statusCondition & 0x07))
-  {
-    sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
-  }
-  else
-    if (active_pokemon->animationTimer == 1)
-  {
-    if (BattleAnim_IsAssetLoadBusy(active_pokemon) == 0)
-    {
-      species = active_pokemon->displayObject.objectType;
-      if (species >= 152)
-      {
-        func_8003F96C(state->model, 3);
-      }
-      else
-      {
-        func_8003F96C(species ^ 0, 3);
-      }
-      if (state->flags & 0x200)
-      {
-        func_800414B0(BattleScene_GetParticipantSideIndex(active_pokemon), 0, active_pokemon->displayObject.objectType, 0x1B);
-      }
-      else
-      {
-        func_800414B0(BattleScene_GetParticipantSideIndex(active_pokemon), 0, active_pokemon->displayObject.objectType, 0xB);
-      }
-      sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
+s32 func_8003F96C(u32 arg0, u32 arg1); //@src/audio_commands.c
+
+//@unverified
+/**
+ * Row tick: once the Pokemon's assets have loaded (animationTimer == 1), calls
+ * func_8003F96C(species, 3) and then func_800414B0 with 0x1B (flag 0x200 set)
+ * or 0xB, and ends the tick. Species 152 and up pass state->model instead;
+ * Stadium 1 names that threshold SUBSTITUTE_DOLL. It ends straight away if
+ * the Pokemon has flag 0x4000 or 2 or status bits 7.
+ */
+void func_821036F4(ActivePokemon* active_pokemon) {
+    s16 species;
+    ActivePokemonState* state = &active_pokemon->state;
+    BattleMon* party_pokemon_ptr = &active_pokemon->teamRoster->pokemonPicked[M2C_FIELD(active_pokemon, s32*, 0x9D0)];
+
+    if ((state->flags & 0x4000) || (state->flags & 2) || (party_pokemon_ptr->statusCondition & 7)) {
+        sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
+    } else if (active_pokemon->animationTimer == 1) {
+        if (BattleAnim_IsAssetLoadBusy(active_pokemon) == 0) {
+            species = active_pokemon->displayObject.objectType;
+            if (species >= 152) {
+                func_8003F96C(state->model, 3);
+            } else {
+                func_8003F96C(species, 3);
+            }
+            if (state->flags & 0x200) {
+                func_800414B0(BattleScene_GetParticipantSideIndex(active_pokemon), 0, active_pokemon->displayObject.objectType, 0x1B);
+            } else {
+                func_800414B0(BattleScene_GetParticipantSideIndex(active_pokemon), 0, active_pokemon->displayObject.objectType, 0xB);
+            }
+            sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
+        }
     }
-  }
 }
 
+//@unverified
+/**
+ * Same as func_821036F4, but it passes 4 to func_8003F96C, and it ends straight
+ * away on status bit 0x20 instead of flag 2.
+ */
 void func_8210384C(ActivePokemon* active_pokemon) {
-    s32 species;
+    s16 species;
     ActivePokemonState* state = &active_pokemon->state;
     BattleMon* party_pokemon_ptr = &active_pokemon->teamRoster->pokemonPicked[M2C_FIELD(active_pokemon, s32*, 0x9D0)];
 
@@ -815,7 +818,7 @@ void func_8210384C(ActivePokemon* active_pokemon) {
             if (species >= 152) {
                 func_8003F96C(state->model, 4);
             } else {
-                func_8003F96C(species ^ 0, 4); // FAKE
+                func_8003F96C(species, 4);
             }
             if (state->flags & 0x200) {
                 func_800414B0(BattleScene_GetParticipantSideIndex(active_pokemon), 0, active_pokemon->displayObject.objectType, 0x1B);

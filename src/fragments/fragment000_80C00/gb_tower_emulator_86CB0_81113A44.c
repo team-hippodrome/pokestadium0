@@ -318,6 +318,15 @@ s32 func_811129E0(void*, s32);
 void func_8111303C(void*);
 s32 func_811126B8(void*, void*, s32, s32);
 
+//@unverified
+/**
+ * Runs one tick of a sequence channel's script. It returns early if the
+ * channel is stopped, if its player is muted and mute behavior bit 0x80 is set,
+ * or if a delay is still counting down. Otherwise it reads commands with
+ * func_81112FB0; commands 0xB0 and up take arguments described by the byte in
+ * D_81138690. Follows the SequenceChannelProcessScript code in the Zelda 64
+ * audio decomps.
+ */
 void func_81113FA8(Channel81113FA8* channel) {
     s32 i;
     u8* data;
@@ -343,7 +352,6 @@ void func_81113FA8(Channel81113FA8* channel) {
 
     while (1) {
         ScriptState81113FA8* scriptState = &channel->scriptState;
-        UNUSED s16 pad1; // FAKE: stack pad; only reserves frame space
         u16 offset;
         u32 parameters[3];
         s32 result;

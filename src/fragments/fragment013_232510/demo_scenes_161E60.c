@@ -439,6 +439,15 @@ extern u8 D_8ED0FACC[];
 extern u8 D_8EE0FDE0[];
 extern u8 D_8F5054AC[];
 extern u8 D_8F5054C8[];
+//@unverified
+/**
+ * Picks the demo track (1-6) from the demo state and passes it to
+ * func_800407B0(0x3C, ...). When unk_0000 is set it first shows model unk_0003
+ * on D_82203248 with a transform curve (one per model 7, 8 or other) for 110
+ * or 100 frames. It then shows the model on D_8220324C with a second curve for
+ * 100 frames (when either D_82203170 entry has unk_00 == 2) or 160 frames. Each
+ * wait also ends when func_822005A8 says so.
+ */
 void func_8220091C(void) {
     s32 track;
     s32 pad; // FAKE
@@ -447,7 +456,7 @@ void func_8220091C(void) {
 
     switch (((DemoState*)D_822036A4)->unk_0001) {
         case 0:
-            if (!D_82203244->children) { // FAKE: karodo, empty if needed for regalloc
+            if (!D_82203244->children) { // karodo
             }
             track = 6;
             break;
@@ -481,27 +490,27 @@ void func_8220091C(void) {
         if (((DemoState*)D_822036A4)->unk_0003 == 7) {
             Model_InitDisplayObject(&D_82203268, ((DemoState*)D_822036A4)->unk_0003, 0, (ModelNodeView*)D_82203248);
             ModelAnim_BindTransformCurve(&D_82203268, 1, D_8ED0FACC, 0x10000);
-            BgStage_RunUntilCondition(0x6E, (s32(*)(u8))func_822005A8);
+            BgStage_RunUntilCondition(110, (s32(*)(u8))func_822005A8);
             ModelRenderer_ClearDisplayObject(&D_82203268);
         } else if (((DemoState*)D_822036A4)->unk_0003 == 8) {
             Model_InitDisplayObject(&D_82203268, ((DemoState*)D_822036A4)->unk_0003, 0, (ModelNodeView*)D_82203248);
             ModelAnim_BindTransformCurve(&D_82203268, 1, D_8EE0FDE0, 0x10000);
-            BgStage_RunUntilCondition(0x6E, (s32(*)(u8))func_822005A8);
+            BgStage_RunUntilCondition(110, (s32(*)(u8))func_822005A8);
             ModelRenderer_ClearDisplayObject(&D_82203268);
         } else {
             Model_InitDisplayObject(&D_82203268, ((DemoState*)D_822036A4)->unk_0003, 0, (ModelNodeView*)D_82203248);
             ModelAnim_BindTransformCurve(&D_82203268, 1, D_8EC145CC, 0x10000);
-            BgStage_RunUntilCondition(0x64, (s32(*)(u8))func_822005A8);
+            BgStage_RunUntilCondition(100, (s32(*)(u8))func_822005A8);
             ModelRenderer_ClearDisplayObject(&D_82203268);
         }
     }
     Model_InitDisplayObject(&D_82203268, ((DemoState*)D_822036A4)->unk_0003, 0, (ModelNodeView*)D_8220324C);
     if ((D_82203170[0].unk_00 == 2) || (D_82203170[1].unk_00 == 2)) {
         ModelAnim_BindTransformCurve(&D_82203268, 1, D_8F5054C8, 0x10000);
-        BgStage_RunUntilCondition(0x64, (s32(*)(u8))func_822005A8);
+        BgStage_RunUntilCondition(100, (s32(*)(u8))func_822005A8);
     } else {
         ModelAnim_BindTransformCurve(&D_82203268, 1, D_8F5054AC, 0x10000);
-        BgStage_RunUntilCondition(0xA0, (s32(*)(u8))func_822005A8);
+        BgStage_RunUntilCondition(160, (s32(*)(u8))func_822005A8);
     }
 }
 
@@ -736,9 +745,14 @@ void func_82201444(unk_D_82203170* arg0, s32 arg1) {
     }
 }
 
+//@unverified
+/**
+ * For both players, finds each brought Pokemon whose unk_25 equals arg0 (both
+ * teams in a tag battle), passes its slot's DepthBuffer from D_82203264 to
+ * func_82201348 and calls func_800407B0(0x3D, 2, slot + 1).
+ */
 void func_82201600(s32 arg0) {
     s32 idx;
-    UNUSED s32 pad[2];
     TeamRoster* team;
     s32 k;
     s32 j;
@@ -746,11 +760,12 @@ void func_82201600(s32 arg0) {
 
     for (i = 0; i != 2; i++) {
         if (((DemoState*)D_822036A4)->players[i].unk_0D == 2) {
+            // The tag branch has its own team/idx, as in func_82201084.
+            TeamRoster* team;
+            s32 idx;
+
             for (j = 0; j != 2; j++) {
                 team = ((DemoState*)D_822036A4)->players[i].unk_14[j];
-                // Fake match: an empty check found by the permuter fixes register allocation.
-                if (team == NULL && team == NULL && team == NULL) {  // FAKE
-                }
                 for (k = 0; k < team->numberOfPokemonBrought; k++) {
                     if (arg0 == team->pokemonPicked[k].unk_25) {
                         idx = i * 6 + j * 3 + k;

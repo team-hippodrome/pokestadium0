@@ -4,6 +4,7 @@
 #include "fragments/lab_pc_list/lab_pc_list.h"
 #include "graphics_textures.h"
 #include "input.h"
+#include "controller.h"
 #include "gb_data.h"
 #include "game_state.h"
 #include "table_view.h"
@@ -220,12 +221,19 @@ void func_891051A4(Box89104E38* arg0) {
     }
 }
 
+// The menu embedded at Box89105200.label (drawn with func_8002DAD8); flags points to one halfword per row.
+typedef struct unk_func_89105340 {
+    /* 0x00 */ void* def;
+    /* 0x04 */ u16* flags;
+    /* 0x08 */ char unk08[0x2C];
+} unk_func_89105340; // size = 0x34
+
 typedef struct Box89105200 {
     /* 0x00 */ s32 x;
     /* 0x04 */ s32 y;
     /* 0x08 */ s32 w;
     /* 0x0C */ char padC[0x20];
-    /* 0x2C */ s8 label[0x34];
+    /* 0x2C */ unk_func_89105340 label;
     /* 0x60 */ s32 unk60[6];
     /* 0x78 */ s32 timer;
     /* 0x7C */ s32 unk7C;
@@ -234,6 +242,14 @@ typedef struct Box89105200 {
 
 M2C_UNK func_8003F6AC(M2C_UNK);
 
+//@unverified
+/**
+ * Counts the box label timer down and draws the label with func_8002DAD8. While
+ * the timer is 30 or more the alpha falls to 0 (flags 0xFDED); below 30 it
+ * rises back (flags 0xFEED). At 29 it writes unk80 into unk60[unk7C] and calls
+ * func_8003F6AC(0x22). Returns 1 when the timer is 0, and 0 straight away
+ * while func_8002AE6C() is non-zero.
+ */
 s32 func_89105200(Box89105200* arg0) {
     s32 color;
     s32 params[4]; // only params[0] (alpha) is set here, as in func_891051A4
@@ -255,28 +271,25 @@ s32 func_89105200(Box89105200* arg0) {
         color = 0xFEED;
         params[0] = ((30 - arg0->timer) * 0xFF) / 30;
     }
-    func_8002DAD8(arg0->label, arg0->x + 6, arg0->y + 0xA, color, (s8*)params);
+    func_8002DAD8((s8*)&arg0->label, arg0->x + 6, arg0->y + 10, color, (s8*)params);
     return arg0->timer == 0;
 }
 
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-void func_89105340(s8 *arg0, s32 arg1, s32 arg2)
-{
-  u16 *temp_v0;
-  int new_var;
-  *((s32 *) (((s8 *) arg0) + 0x7C)) = arg1;
-  new_var = arg1 * 4;
-  *((s32 *) (((s8 *) arg0) + 0x80)) = (s32) (arg2 - 1);
-  if ((*((s32 *) (((s8 *) (arg0 + new_var)) + 0x60))) == (-1))
-  {
-    *((s32 *) (((s8 *) arg0) + 0x78)) = 0x3C;
-  }
-  else
-  {
-    *((s32 *) (((s8 *) arg0) + 0x78)) = 0x3C;
-  }
-  temp_v0 = (*((s32 *) (((s8 *) arg0) + 0x30))) + (arg1 * 2);
-  *temp_v0 |= 0x300;
+//@unverified
+/**
+ * Starts the box's change animation for row arg1: remembers the row and the
+ * new value arg2 - 1 (func_89105200 stores it at frame 29), sets the 60-frame
+ * timer and sets bits 0x300 in the row's menu flags.
+ */
+void func_89105340(Box89105200* arg0, s32 arg1, s32 arg2) {
+    arg0->unk7C = arg1;
+    arg0->unk80 = arg2 - 1;
+    if (arg0->unk60[arg1] == -1) {
+        arg0->timer = 60;
+    } else {
+        arg0->timer = 60;
+    }
+    arg0->label.flags[arg1] |= 0x300;
 }
 
 M2C_UNK func_8002DC04(s32);                         /* extern */
@@ -465,6 +478,12 @@ s32 func_89105924(List89105924* arg0) {
     return flags;
 }
 
+//@unverified
+/**
+ * Sets flag 8 on the current item of arg0 (u16 array at +0x74, index at +0x78)
+ * if any item of arg1's list (+0x24, count at +0x20 -> +8) has flag 8, and
+ * clears it otherwise.
+ */
 void func_8910597C(s8* arg0, s8* arg1) {
     s32 flag = 0;
     s32 i = 0;
@@ -472,7 +491,7 @@ void func_8910597C(s8* arg0, s8* arg1) {
     u16* items;
 
     if (count > 0) {
-        if (!arg0) {} // fake, keeps arg0 live in a saved register
+        if (!arg0) {} // karodo
         items = M2C_FIELD(arg1, u16**, 0x24);
         do {
             i++;
@@ -828,21 +847,16 @@ void func_89106570(Popup89106570* arg0) {
 
 s32 func_8002AE6C();                                /* extern */
 M2C_UNK func_8002D9B8(s32, s32, s32, s32, s8 *);  /* extern */
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-void func_8910666C(s8 *arg0, s32 arg1)
-{
-  s8 *new_var;
-  if (func_8002AE6C() == 0)
-  {
-    new_var = (s8 *) arg0;
-    if ((arg0 && arg0) && arg0)
-    {
+//@unverified
+/**
+ * If func_8002AE6C() is zero, calls func_8002D9B8 on the menu at +0x40, at
+ * the panel's position (x + 6, y + 0xA) with flags arg1 | 0xFFED.
+ */
+void func_8910666C(s8* arg0, s32 arg1) {
+    if (func_8002AE6C() == 0) {
+        if (arg0) {} // karodo
+        func_8002D9B8(arg0 + 0x40, M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 10, arg1 | 0xFFED, arg0);
     }
-    func_8002D9B8(arg0 + 0x40, (*((s32 *) (((s8 *) arg0) + 0))) + 6, (*((s32 *) (new_var + 4))) + 0xA, arg1 | 0xFFED, arg0);
-    if (arg1)
-    {
-    }
-  }
 }
 
 M2C_UNK func_8002DC04(s32);                         /* extern */
@@ -855,8 +869,15 @@ extern char D_8910E064[];
 extern Rgba8910576C D_8910A94C;
 extern char D_8910E07C[];
 extern char D_8910E088[];
+//@unverified
+/**
+ * Initializes a 316x80 window in arg0 at (arg1, arg2) with the color arg3,
+ * fills in its fields (arg4 at +0xA4, arg5 at +0xB8, the pairs at +0xA8/+0xAC
+ * and +0xBC/+0xC0 set to 1 and 100), and sets up two func_8002AE94 items at
+ * x + 210 with labels D_8910E07C and D_8910E088. arg6 == 0 sets bit 0 at +0x3C.
+ */
 void func_891066E0(s8* arg0, s32 arg1, s32 arg2, Rgba8910576C arg3, s32 arg4, s32 arg5, s32 arg6) {
-    func_8002A8C4(arg0, arg1, arg2, 0x13C, 0x50);
+    func_8002A8C4(arg0, arg1, arg2, 316, 80);
     M2C_FIELD(arg0, s32*, 0x24) = 0;
     M2C_FIELD(arg0, s32*, 0x28) = 0;
     M2C_FIELD(arg0, s32*, 0x14) = 0x800;
@@ -864,15 +885,15 @@ void func_891066E0(s8* arg0, s32 arg1, s32 arg2, Rgba8910576C arg3, s32 arg4, s3
     M2C_FIELD(arg0, Rgba8910576C*, 0x18) = arg3;
     M2C_FIELD(arg0, s32*, 0xB0) = 3;
     M2C_FIELD(arg0, s32*, 0xA4) = arg4;
-    M2C_FIELD(arg0, s32*, 0xA8) = 1; M2C_FIELD(arg0, s32*, 0xAC) = 0x64; // FAKE: same line
+    M2C_FIELD(arg0, s32*, 0xA8) = 1; M2C_FIELD(arg0, s32*, 0xAC) = 100; // IDO: same line
     M2C_FIELD(arg0, s32*, 0xB4) = 0;
     M2C_FIELD(arg0, s32*, 0xC4) = 3;
     M2C_FIELD(arg0, s32*, 0xB8) = arg5;
     M2C_FIELD(arg0, s32*, 0xC8) = 0;
-    M2C_FIELD(arg0, s32*, 0xC0) = 0x64;
+    M2C_FIELD(arg0, s32*, 0xC0) = 100;
     M2C_FIELD(arg0, s32*, 0xBC) = 1;
-    func_8002AE94(arg0 + 0x68, M2C_FIELD(arg0, s32*, 0) + 0xD2, M2C_FIELD(arg0, s32*, 4) + 0xE, 0x5C, D_8910A94C, D_8910E07C);
-    func_8002AE94(arg0 + 0x2C, M2C_FIELD(arg0, s32*, 0) + 0xD2, M2C_FIELD(arg0, s32*, 4) + 0x2A, 0x5C, D_8910A94C, D_8910E088);
+    func_8002AE94(arg0 + 0x68, M2C_FIELD(arg0, s32*, 0) + 210, M2C_FIELD(arg0, s32*, 4) + 14, 92, D_8910A94C, D_8910E07C);
+    func_8002AE94(arg0 + 0x2C, M2C_FIELD(arg0, s32*, 0) + 210, M2C_FIELD(arg0, s32*, 4) + 42, 92, D_8910A94C, D_8910E088);
     if (arg6 == 0) {
         M2C_FIELD(arg0, s32*, 0x3C) |= 1;
     }
@@ -880,7 +901,7 @@ void func_891066E0(s8* arg0, s32 arg1, s32 arg2, Rgba8910576C arg3, s32 arg4, s3
     M2C_FIELD(arg0, s32*, 0xD4) = 2;
     M2C_FIELD(arg0, s32*, 0xCC) = D_800603C0;
     func_8000B2F4(D_800603C0);
-    M2C_FIELD(arg0, s32*, 0xDC) = 2; M2C_FIELD(arg0, s32*, 0xE0) = 7; // FAKE: same line
+    M2C_FIELD(arg0, s32*, 0xDC) = 2; M2C_FIELD(arg0, s32*, 0xE0) = 7; // IDO: same line
     M2C_FIELD(arg0, s32*, 0xD8) = D_800603C0;
     func_8000B2F4(D_800603C0);
     M2C_FIELD(arg0, s32*, 0xE4) = 0;
@@ -1052,31 +1073,32 @@ void func_89106E64(Win89106E64* arg0) {
     gSPDisplayList(gDisplayListHead++, D_80073438);
 }
 
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-s32 func_89106F74(s8 *arg0)
-{
-  s32 temp_v0;
-  s32 var_v1;
-  u16 temp_a1;
-  temp_v0 = *((s32 *) (((s8 *) arg0) + 0x10));
-  var_v1 = 0;
-  if (temp_v0 & 1)
-  {
-    return 0;
-  }
-  temp_a1 = *((u16 *) (((s8 *) (*((s8 **) (&D_800603C0)))) + 8));
-  if ((*((u16 *) (((s8 *) (*((s8 **) (&D_800603C0)))) + 8))) & 0x200)
-  {
-    *((s32 *) (((s8 *) arg0) + 0x10)) = (s32) (temp_v0 | 8);
-    var_v1 = 0x200;
-  }
-  else
-    if ((*((u16 *) (((s8 *) (*((s8 **) (&D_800603C0)))) + 8))) & 0x100)
-  {
-    *((s32 *) (((s8 *) arg0) + 0x10)) = (s32) (temp_v0 & (~8));
-    var_v1 = 0x100;
-  }
-  return var_v1;
+typedef struct unk_func_89106F74 {
+    /* 0x00 */ char unk00[0x10];
+    /* 0x10 */ s32 flags;
+} unk_func_89106F74;
+
+//@unverified
+/**
+ * Unless flags bit 0 is set, sets flags bit 3 on button 0x200 and clears it on
+ * button 0x100 (newly pressed on controller 1). Returns the button that acted,
+ * or 0.
+ */
+s32 func_89106F74(unk_func_89106F74* arg0) {
+    s32 flags = arg0->flags;
+    s32 ret = 0;
+
+    if (flags & 1) {
+        return 0;
+    }
+    if (gPlayer1Controller->buttonPressed & 0x200) {
+        arg0->flags = flags | 8;
+        ret = 0x200;
+    } else if (gPlayer1Controller->buttonPressed & 0x100) {
+        arg0->flags = flags & ~8;
+        ret = 0x100;
+    }
+    return ret;
 }
 
 extern Gfx D_80060270[];

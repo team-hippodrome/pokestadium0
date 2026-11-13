@@ -526,7 +526,16 @@ s32 func_80022B4C(s32);
 s32 GbSave_GetBoxCount(s32);
 void func_80023C30(void);
 void func_80025E3C(s32);
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
+//@unverified
+/**
+ * Pushes an 'OVLY' pool state, sets up the display lists and a stage context,
+ * then queues the fragment at 0x88000000 (if D_800AF988 or session flag 0x100
+ * is set; flag 0x100 is set first when flag 1 is on and flag 2 is off) or the
+ * one at 0x88400000. It then runs queued fragment calls while D_800733C8 is
+ * 0x8040. When D_800733D8 is set and func_80022B4C(port) returns 0, it calls
+ * func_80021A8C(port) inside a fresh 'BUDT' pool state (and, if the port has
+ * no boxes, validates it and retries func_80021E64 until it succeeds).
+ */
 void func_800260C4(void)
 {
   s32 pushed = 0;
@@ -535,12 +544,12 @@ void func_800260C4(void)
   Gfx_InitDisplayListBuffers(0x10000, 0);
   D_800AF9A4 = StageContext_Allocate(1, 1, 2, 0, 2, 1);
   StageContext_Activate(D_800AF9A4);
-  if (((*((u16 *) (((s8 *) (&D_800AE8F0)) + 0x1096))) & 1) && (!((*((u16 *) (((s8 *) (&D_800AE8F0)) + 0x1096))) & 2)))
+  if ((D_800AE8F0.unk_1096 & 1) && (!(D_800AE8F0.unk_1096 & 2)))
   {
-    *((u16 *) (((s8 *) (&D_800AE8F0)) + 0x1096)) |= 0x100;
+    D_800AE8F0.unk_1096 |= 0x100;
   }
   D_800733D8 = 0;
-  if ((D_800AF988 != 0) || ((*((u16 *) (((s8 *) (&D_800AE8F0)) + 0x1096))) & 0x100))
+  if ((D_800AF988 != 0) || (D_800AE8F0.unk_1096 & 0x100))
   {
     D_800AF988 = 0;
     GbSave_SetActivePort(D_800733D4);
@@ -582,7 +591,8 @@ void func_800260C4(void)
     D_800733C8 = Fragment_LoadAndCall(D_800AF990.fragment_id, D_800AF990.rom_start, D_800AF990.rom_end, D_800AF990.arg0, D_800AF990.arg1);
   }
 
-  D_800AF986 = (!((*((u16 *) (((s8 *) (&D_800AE8F0)) + 0x1096))) & 2)) * 0;
+  if (!(D_800AE8F0.unk_1096 & 2)) {} // karodo
+  D_800AF986 = 0;
   StageContext_Deactivate();
   Gfx_FreeDisplayListBuffers();
   main_pool_pop_state('OVLY');

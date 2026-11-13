@@ -324,7 +324,7 @@ s32 func_80011774(TransformAnimRaw* arg0) {
 s16 ModelAnim_AdvanceEventFrame(EventTrackState* arg0);
 
 typedef struct EventTrackRender {
-    /* 0x0 */ s8 active;
+    /* 0x0 */ u8 active;
     /* 0x2 */ s16 frame;
     /* 0x4 */ EventTrackData* data;
     /* 0x8 */ s32 trackTable;
@@ -1235,17 +1235,17 @@ void Geo_NodeShadowContext(GraphNode* arg0) {
 }
 
 M2C_UNK func_8001380C();                            /* extern */
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-void func_8001473C(s8 *arg0)
-{
-  unsigned char temp_f6;
- goto dummy_label_201075; dummy_label_201075: ;  // FAKE
- do { } while (0);  // karodo
-  ;
-  if ((((s16) ((s32) (*((f32 *) (((s8 *) ((&(*((s8 *) (&D_800AB460)))) + ((*((s32 *) (((s8 *) (&(*((s8 *) (&D_800AB460))))) + 0x10A0))) << 6))) + 0x38))))) >= (*((s16 *) (((s8 *) arg0) + 0x18)))) && (((s16) ((s32) (*((f32 *) (((s8 *) ((&(*((s8 *) (&D_800AB460)))) + ((*((s32 *) (((s8 *) (&(*((s8 *) (&D_800AB460))))) + 0x10A0))) << 6))) + 0x38))))) < (*((s16 *) (((s8 *) arg0) + 0x1A)))))
-  {
-    func_8001380C();
-  }
+//@unverified
+/**
+ * Cull-distance node: traverses the children (func_8001380C) only when the
+ * current matrix's depth (m[3][2], truncated to s16) is in [unk_18, unk_1A).
+ */
+void func_8001473C(unk_D_86002F34_alt20* arg0) {
+    s16 depth = D_800AB460.unk_0000[D_800AB460.unk_10A0].mf[3][2];
+
+    if (depth >= arg0->unk_18 && depth < arg0->unk_1A) {
+        func_8001380C(arg0);
+    }
 }
 
 void Geo_NodeSwitchCase(GraphNode* arg0) {
@@ -1475,21 +1475,20 @@ void func_80014EDC(s8 *arg0) {
 }
 
 M2C_UNK func_8001380C(s8 *);                      /* extern */
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-void func_80014F78(s8 *arg0)
-{
-  s32 new_var;
-  s32 temp_a1;
-  temp_a1 = *((s32 *) (((s8 *) arg0) + 0x18));
-  new_var = temp_a1;
-  if (new_var != 0)
-  {
-    if ((!arg0) && (!arg0))
-    {
+//@unverified
+/**
+ * Display-list node: submits unk_18 on the node's render layer (func_800135FC,
+ * with renderFlags bit 2 as the last argument) when it is set, then processes
+ * the children.
+ */
+void func_80014F78(unk_D_86002F34_alt7* arg0) {
+    Gfx* dl = arg0->unk_18;
+
+    if (dl != NULL) {
+        if (arg0) {} // karodo
+        func_800135FC(arg0->node.renderLayer, (s32)dl, 0, arg0->node.renderFlags & 4);
     }
-    func_800135FC(*((u8 *) (((s8 *) arg0) + 3)), new_var, 0, (*((u8 *) (((s8 *) arg0) + 2))) & 4);
-  }
-  func_8001380C((0, arg0));  // FAKE
+    func_8001380C(arg0);
 }
 
 typedef struct GeoMaterialNode {
@@ -1502,6 +1501,14 @@ typedef struct GeoMaterialNode {
     /* 0x24 */ u32 color;
 } GeoMaterialNode;
 #define GEO_TINT (*(Color_RGBA8_u32*)&D_800AB450)
+//@unverified
+/**
+ * Material node: sets D_800AB448 from unk_22 and the current color (white when
+ * unk_22 is 1, otherwise the node's color, multiplied by D_8006049C's
+ * textureTint when there is one), then the two texture pointers from
+ * D_800604A0 (or NULL). The active texture animation in D_800AC6A8 can replace
+ * the first texture. Then processes the children.
+ */
 void func_80014FC4(GeoMaterialNode *arg0)
 {
   u8 texIndex;
@@ -1538,7 +1545,7 @@ void func_80014FC4(GeoMaterialNode *arg0)
     (*((Color_RGBA8_u32 *) (&D_800AB450))).g = ((*((Color_RGBA8_u32 *) (&D_800AB450))).g * D_8006049C->textureTint.g) / 255;
     (*((Color_RGBA8_u32 *) (&D_800AB450))).b = ((*((Color_RGBA8_u32 *) (&D_800AB450))).b * D_8006049C->textureTint.b) / 255;
   }
-  switch ((*((u8 *) (&D_800AC6A8.active)))) // FAKE: reads the s8 `active` field as u8
+  switch (D_800AC6A8.active)
   {
     case 1:
     if ((arg0->eventIndex >= 0) && (arg0->eventIndex < D_800AC6A8.data->trackCount))
