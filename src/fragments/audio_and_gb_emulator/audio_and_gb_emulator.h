@@ -53,12 +53,13 @@ typedef struct unk_D_8120D7F3 {
  * src/fragments/fragment000_80C00/gb_tower_emulator_86920_8110B880.c
  */
 
-typedef struct unk_func_81206FA0 {
-  /* 0x00 */ s32 unk_00;
-  /* 0x04 */ s32 unk_04;
-  /* 0x08 */ s32 unk_08;
-  /* 0x0C */ s32 unk_0C;
-} unk_func_81206FA0;
+/* A bump allocator over one region of the audio heap. */
+typedef struct AudioAllocPool {
+  /* 0x00 */ u8* startRamAddr; // @unverified: same offset/use as OoT's AudioAllocPool.startRamAddr (AudioHeap_InitPool)
+  /* 0x04 */ u8* curRamAddr; // @unverified: same offset/use as OoT's AudioAllocPool.curRamAddr (bumped by each alloc)
+  /* 0x08 */ s32 size; // @unverified: same offset/use as OoT's AudioAllocPool.size
+  /* 0x0C */ s32 numEntries; // @unverified: same offset/use as OoT's AudioAllocPool.numEntries (counts allocations)
+} AudioAllocPool; // size = 0x10
 
 typedef struct unk_D_812346E0 {
     /* 0x00 */ s16 unk_00;
@@ -109,12 +110,6 @@ typedef struct CacheEntry81109C0C {
     /* 0x0A */ s16 id;
 } CacheEntry81109C0C; // size = 0xC
 
-typedef struct Pool81109C0C {
-    /* 0x00 */ u8* startRamAddr;
-    /* 0x04 */ u8* curRamAddr;
-    /* 0x08 */ s32 size;
-    /* 0x0C */ s32 numEntries;
-} Pool81109C0C; // size = 0x10
 
 typedef struct SeqPlayer81109C0C {
     /* 0x000 */ u32 enabled : 1;
@@ -231,12 +226,6 @@ typedef struct SessionSplitAFF0 {
     /* 0x0C */ s32 cachePoolSize;
 } SessionSplitAFF0;
 
-typedef struct PoolAFF0 {
-    /* 0x00 */ u8* start;
-    /* 0x04 */ u8* cur;
-    /* 0x08 */ s32 size;
-    /* 0x0C */ s32 count;
-} PoolAFF0;
 
 typedef struct GbApuChannelState {
   /* 0x00 */ u8 unk_00;

@@ -15,9 +15,9 @@ extern volatile s32 D_811859D4;
 
 #include "m2c_macros.h"
 
-u32 GbApu_AllocZeroed(unk_func_81206FA0* arg0, s32 arg1);
-s32 GbApu_Alloc(unk_func_81206FA0* arg0, s32 arg1);
-void GbApu_InitAllocator(unk_func_81206FA0* arg0, s32 arg1, s32 arg2);
+u32 GbApu_AllocZeroed(AudioAllocPool* arg0, s32 arg1);
+s32 GbApu_Alloc(AudioAllocPool* arg0, s32 arg1);
+void GbApu_InitAllocator(AudioAllocPool* arg0, s32 arg1, s32 arg2);
 
 extern u8 D_81184654[1];
 extern u8 D_81184655[1];
@@ -70,12 +70,12 @@ extern M2C_UNK D_81184400;
 extern M2C_UNK D_81184404;
 typedef struct PersistentCache81109C0C {
     /* 0x00 */ s32 numEntries;
-    /* 0x04 */ Pool81109C0C pool;
+    /* 0x04 */ AudioAllocPool pool;
     /* 0x14 */ CacheEntry81109C0C entries[1];
 } PersistentCache81109C0C; // size = 0x20
 typedef struct TemporaryCache81109C0C {
     /* 0x00 */ s32 nextSide;
-    /* 0x04 */ Pool81109C0C pool;
+    /* 0x04 */ AudioAllocPool pool;
     /* 0x14 */ CacheEntry81109C0C entries[2];
 } TemporaryCache81109C0C; // size = 0x2C
 typedef struct Cache81109C0C {
@@ -125,7 +125,7 @@ void AudioPlayback_InitNoteFreeList(void);
 void AudioPlayback_NoteInitAll(void);
 void func_8111539C(s32);
 void func_81115480(void);
-#define EXTERNAL_POOL_AFF0 (*(PoolAFF0*)&D_811842A0)
+#define EXTERNAL_POOL_AFF0 (*(AudioAllocPool*)&D_811842A0)
 #define REVERBS_AFF0 ((SynthesisReverbAFF0*)D_81184110)
 
 typedef struct unk_D_81184450 {
