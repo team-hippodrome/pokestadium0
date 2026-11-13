@@ -356,8 +356,8 @@ void ActivePokemon_SetController(ActivePokemon*, u8*);
 /**
  * Tag team: when either teammate's controller presses B, that teammate's
  * controller takes over this Pokemon's menu.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * Seen in play (2026-11-13) in a Free Battle switch (1P switched to its second Pokémon) it ran when
+ * B opened the Pokémon menu.
  * @unverified Name and comment guessed from the code.
  */
 void BattleMenu_TakeControlOnBPress(ActivePokemon* arg0, u8* arg1, u8* arg2, s32 arg3) {

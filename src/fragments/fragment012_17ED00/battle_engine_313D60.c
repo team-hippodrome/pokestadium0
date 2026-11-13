@@ -64,8 +64,8 @@ extern s32 D_8218C790;
 extern s32 D_8218C794;
 /**
  * Save the target's current HP and queue an HP-band message for the acting participant.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * Seen in play (2026-11-13) in a Free Battle switch (1P switched to its second Pokémon) it ran when
+ * C-Left picked the Pokémon to switch in.
  * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
  */
 void ShowDamageMessage(s32 attacker, s32 defender) {

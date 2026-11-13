@@ -331,8 +331,8 @@ u8 Move_GetIdFromTableIndex(s32);
 /**
  * Clears a move slot's illegal flag when the species can have that move (start
  * moves, level-up moves or TM/HM).
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * Seen in play (2026-11-13) in a Free Battle switch (1P switched to its second Pokémon) it ran when
+ * C-Left picked the Pokémon to switch in.
  * @unverified Name and comment guessed from the code.
  */
 void Battle_MarkLegalMovesForSpecies(S0LearnMon* pokemon, u16 pokemon_id) {
@@ -398,8 +398,8 @@ extern u8 D_8218C930[][2];
 /**
  * Marks all four moves illegal, then clears the flags for moves the species or
  * its pre-evolutions (D_8218C930) can learn.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * Seen in play (2026-11-13) in a Free Battle switch (1P switched to its second Pokémon) it ran when
+ * C-Left picked the Pokémon to switch in.
  * @unverified Name and comment guessed from the code.
  */
 void Battle_CheckMovesetLegality(s8* arg0) {

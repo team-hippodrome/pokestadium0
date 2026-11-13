@@ -1024,8 +1024,8 @@ void ParticleGfx_DrawTransformedQuadXYScaled(Vec3f arg0, Vec3s arg1, f32 arg2, f
 
 /**
  * Load the supplied position/rotation/scale transform, then draw the selected vertices.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * Seen in play (2026-11-13) in a Free Battle switch (1P switched to its second Pokémon) it ran
+ * while the new Pokémon was sent out.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_DrawTransformedTriangle(Vec3f arg0, Vec3s arg1, f32 arg2, Vtx* arg3) {

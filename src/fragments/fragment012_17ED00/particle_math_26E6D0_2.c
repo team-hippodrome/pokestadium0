@@ -22,8 +22,8 @@ void ParticleGfx_LoadTextureCallbackIa8WrapST_64x64(UNUSED Particle* arg0, u8* t
 
 /**
  * Load a texture frame selected by the shared particle clock using ParticleGfx_LoadTextureI4Alias.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * Seen in play (2026-11-13) in a Free Battle switch (1P switched to its second Pokémon) it ran
+ * while the new Pokémon was sent out.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_LoadTextureCallbackI4FrameDiv2Mod8_64x64(UNUSED Particle* arg0, u8* texture) {
