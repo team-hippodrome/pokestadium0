@@ -501,8 +501,8 @@ s32 func_82185494(void) {
  * Picks a move to use while the opponent cannot act: a stat boost
  * while that stat stage is below +2, Counter, Bide, Mirror Move or Splash, or
  * Substitute above half HP. Returns the move slot or -1.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * Seen in play (2026-11-13) (unattended all-Metronome Free Battle with randomized teams, battle 1
+ * turn 25): ran once on the COM side. Which condition led to it was not logged.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_PickSetupMove(u8* arg0) {

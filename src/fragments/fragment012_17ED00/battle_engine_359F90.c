@@ -732,9 +732,15 @@ extern s32 D_8218C770;
 extern s32 D_8218C774;
 /**
  * Gen 1 PrintMoveFailureText: queues the doesn't affect / missed / failed message for a move that
- * failed. A Jump Kick or Hi Jump Kick miss (effect 0x2D) then deals the user 1/8 of the damage as
- * crash damage (moveEffectKind 0x10).
+ * failed. A Jump Kick or Hi Jump Kick miss (effect 0x2D) then deals the user crash damage
+ * (moveEffectKind 0x10): sBattleDamage / 8, at least 1. sBattleDamage is 0 when this runs, so the
+ * crash is always 1 HP, as on the Game Boy carts.
  * In play a forced Jump Kick miss ran it: 「しかし ニドニドの こうげきは はずれた！」 then the crash text.
+ * Seen in play (2026-11-13) (Metronome pinned to Hi Jump Kick; Zero has no Hitmonlee, so Metronome
+ * is the only legal way to use it): a forced miss showed 「しかし イワイワの こうげきは はずれた！」
+ * then 「いきおい あまって イワイワは じめんに ぶつかった！」, Onix 49 → 48 HP. Against a target typed
+ * Ghost/Poison it showed 「カイのすけには こうかが ないみたいだ」 and the same crash, 49 → 48 HP.
+ * sBattleDamage read 0 at entry both times.
  */
 void Battle_PrintMoveFailureText(void) {
     BattleMonRuntime* sp1C;

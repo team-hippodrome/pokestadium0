@@ -291,8 +291,9 @@ void Battle_FillActivePokemonThumbnail(GraphNode* thumbnail_root, DepthBuffer* t
 /**
  * Clear the faint-batch stamps for every picked Pokemon, including teammate rosters.
  * BattleMon.unk_25 is written by Battle_UpdateFaintBatches when its current HP reaches zero.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * Seen in play (2026-11-13) (title-screen demo battle, left idle after boot): ran once as each of
+ * the two demo battles started (frames 9674 and 16663), called from BattleScene_Init. The Free
+ * Battle sweeps start from savestates taken mid-battle, so they never see BattleScene_Init.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Battle_ResetFaintBatches(void) {

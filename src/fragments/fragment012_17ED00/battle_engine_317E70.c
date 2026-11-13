@@ -735,9 +735,10 @@ void Battle_CheckAllBroughtFainted_LeechSeed(ActivePokemon* arg0) {
  * Like Battle_CheckAllBroughtFainted_Hp, but sums the active Pokemon's pendingHp (runtime
  * +0x12). Battle_CheckFaintAfterMove calls it when both HP values are nonzero but the
  * user's pendingHp is 0. Renamed from Battle_CheckAllBroughtFainted_PP: it reads HP, not PP.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
- * @unverified Renamed from the code; never ran in play.
+ * Seen in play (2026-11-13) (Free Battle, 1P Onix at 2 HP and faster, Metronome pinned to
+ * Double-Edge): ran when the move resolved. Onix dealt Pinsir 9, then 「イワイワは こうげきの はんどうを うけた！」 and 「イワイワは
+ * たおれた！」: recoil took the user to 0 while the target survived, so pendingHp is the user's HP after
+ * recoil.
  */
 void Battle_CheckAllBroughtFainted_PendingHp(ActivePokemon* arg0) {
     ActivePokemonState* ptr1 = &arg0->state;

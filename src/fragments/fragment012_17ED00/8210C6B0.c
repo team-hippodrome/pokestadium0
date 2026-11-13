@@ -1068,9 +1068,9 @@ extern s32 D_82199F18[];
 /**
  * Feeds the scripted controller input for the current side (D_8218ABB8: frames,
  * pressed, held), as used by the demo battles.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) (title-screen demo battle, left idle after boot: Lapras vs Zapdos, then
+ * Ditto and Jynx): ran for both sides on the demo's first turn, returning 0 for side 0 and 1 for
+ * side 1. It did not run in the 165-move or Metronome Free Battle sweeps.
  */
 void BattleDemo_PlayScriptedInput() {
     s32 i = func_82107A5C();
@@ -1092,8 +1092,9 @@ void BattleDemo_PlayScriptedInput();
 /**
  * Runs the scripted input, then locks move selection when a volatile or trapping
  * state forces the move.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * Seen in play (2026-11-13) (title-screen demo battle, left idle after boot): ran for both sides on
+ * the demo's first turn, each time just before BattleDemo_PlayScriptedInput. It did not run in
+ * 165-move or Metronome Free Battles.
  * @unverified Name and comment guessed from the code.
  */
 void Battle_PrepareTurnInput(ActivePokemon* arg0, ActivePokemon* arg1) {
