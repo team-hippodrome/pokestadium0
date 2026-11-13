@@ -17,7 +17,9 @@ void BattleAnim_SetupDescriptor25PaletteFadeIn(Particle* arg0);
  * Sets up the hue change upon being hit by
  * - A Draining move (absorb, mega drain, leech life)
  * - A flame-emitting move (Flamethrower, Fire blast, fire spin, dragon rage)
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep it ran only for Flamethrower, Absorb, Mega Drain,
+ * Dragon Rage, Fire Spin and Fire Blast: it recolored prim from the particle's palette index (e.g.
+ * prim 00FF00 or 64C8FF) and advanced the lifecycle.
  */
 void BattleAnim_SetupDrainFlameHueChange(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
@@ -221,7 +223,9 @@ void func_82144750(s8 *arg0) {
  * Blizzard's effect is more subtle and doesn't change the user completely white like the other listed moves.
  * It is used in blizzard to make the user's hue match that of the arena.
  * Also used for the poke ball's hue change.
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Ice Beam, Psybeam, Aurora Beam, Hyper Beam,
+ * Confusion, Psychic, Light Screen, Reflect): it kept prim white (FFFFFF), set prim alpha to 0 and
+ * advanced the lifecycle.
  */
 void BattleAnim_SetupWhiteHueChange(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
@@ -234,7 +238,9 @@ void BattleAnim_SetupWhiteHueChange(Particle* arg0) {
  * Blizzard's effect is more subtle and doesn't change the user completely white like the other listed moves.
  * It is used in blizzard to make the user's hue match that of the arena.
  * Also used for the poke ball's hue change.
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Ice Beam, Psybeam, Aurora Beam, Hyper Beam,
+ * Confusion, Psychic, Light Screen, Reflect): after setup the white overlay's prim alpha rose by
+ * 0x20 per frame (0, 0x20, 0x40, ...).
  */
 void BattleAnim_RunWhiteHueChange(Particle* arg0) {
     switch (arg0->lifecycle) {
