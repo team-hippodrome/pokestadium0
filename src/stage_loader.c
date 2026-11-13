@@ -128,6 +128,7 @@ s32 func_80005B98(s32 arg0) {
     return var_v1;
 }
 
+/** Starts a fade in from fully opaque if the stage is in that fade mode. */
 s32 StageFade_StartFromOpaque(s32 arg0) {
     s32 ret = 0;
 
@@ -138,6 +139,7 @@ s32 StageFade_StartFromOpaque(s32 arg0) {
     return ret;
 }
 
+/** Starts a fade from fully transparent if the stage is in that fade mode. */
 s32 StageFade_StartFromTransparent(s32 arg0) {
     s32 ret = 0;
 
@@ -148,6 +150,7 @@ s32 StageFade_StartFromTransparent(s32 arg0) {
     return ret;
 }
 
+/** Selects which CPU and RDP profiler displays are shown. */
 void Profiler_SetDisplayModes(u32 arg0, u32 arg1) {
     if (arg0 < 3) {
         gShowCPUProfiler = arg0;
@@ -158,6 +161,7 @@ void Profiler_SetDisplayModes(u32 arg0, u32 arg1) {
     }
 }
 
+/** Emits display list commands that set the default RDP render state. */
 void Gfx_SetDefaultRenderState(void) {
     gDPPipeSync(gDisplayListHead++);
     gDPPipelineMode(gDisplayListHead++, G_PM_1PRIMITIVE);
@@ -177,6 +181,7 @@ void Gfx_SetDefaultRenderState(void) {
     gDPPipeSync(gDisplayListHead++);
 }
 
+/** Emits display list commands that set the default RSP geometry state. */
 void Gfx_SetDefaultGeometryState(void) {
     gSPClearGeometryMode(gDisplayListHead++, G_SHADE | G_CULL_BOTH | G_FOG | G_LIGHTING | G_TEXTURE_GEN |
                                                  G_TEXTURE_GEN_LINEAR | G_LOD | G_SHADING_SMOOTH);
@@ -184,6 +189,7 @@ void Gfx_SetDefaultGeometryState(void) {
     gSPTexture(gDisplayListHead++, 0, 0, 0, G_TX_RENDERTILE, G_OFF);
 }
 
+/** Resets the graphics state and segment map for a new frame. */
 void StageLoader_ResetGraphicsState(void) {
     GfxImage_ResetCurrent();
     Memmap_SetSegmentMap(0, 0x80000000, osMemSize);
@@ -199,6 +205,7 @@ extern Vp D_8005F6D8;
 void func_80005980(void);
 void func_80002EC8(Gfx**);
 
+/** Sets the render target and viewport for the frame. */
 void StageLoader_SetupFrame(void) {
     GfxImage_SetRenderTarget(&gDisplayListHead, stage->renderTargets[stage->renderTargetIndex]);
     guOrtho(&D_800AA188, 0.0f, 320.0f, 0.0f, 240.0f, -2.0f, 2.0f, 1.0f);
@@ -239,11 +246,13 @@ void StageLoader_SetupFrame(void) {
     Gfx_AllocDisplayList(0);
 }
 
+/** Swaps the display list buffer and resets graphics state. */
 void StageLoader_SwapDisplayListAndReset(void) {
     Gfx_SwapDisplayListBuffer();
     StageLoader_ResetGraphicsState();
 }
 
+/** Begins a frame: sets up the render target and the frame parameters. */
 void StageLoader_BeginFrame(void) {
     StageLoader_SetupFrame();
     D_800AA170.unk_00 = stage->unk_10;
@@ -258,6 +267,7 @@ void StageLoader_BeginFrame(void) {
     }
 }
 
+/** Draws the stage background over the frame. */
 void StageLoader_FillFrame(void) {
     BgStage_DrawFrame();
 
@@ -271,6 +281,10 @@ void StageLoader_FillFrame(void) {
     gDPSetCycleType(gDisplayListHead++, G_CYC_1CYCLE);
 }
 
+/**
+ * Allocates a stage context with the given zoom, render targets and depth
+ * buffer.
+ */
 StageContext* StageContext_Allocate(s8 zoom, s8 arg1, s8 render_target_count, s8 has_depth_buffer, s8 arg4, s32 allocate_render_targets) {
     StageContext* temp_v0 = main_pool_alloc(sizeof(StageContext), 0);
 
@@ -320,10 +334,15 @@ StageContext* StageContext_Allocate(s8 zoom, s8 arg1, s8 render_target_count, s8
     return temp_v0;
 }
 
+/** Returns the current stage context. */
 StageContext* StageContext_GetCurrent(void) {
     return stage;
 }
 
+/**
+ * Copies the current stage's fade state into another context and makes it
+ * current.
+ */
 void StageContext_SaveAndSwitch(StageContext* arg0) {
     arg0->fadeMode = stage->fadeMode;
     arg0->fadeDuration = stage->fadeDuration;
@@ -339,6 +358,7 @@ void StageContext_SaveAndSwitch(StageContext* arg0) {
     stage = arg0;
 }
 
+/** Makes a stage context current, after waiting for the pending frame. */
 void StageContext_Activate(StageContext* arg0) {
     stage = arg0;
     Display_QueueFramebufferRequest(NULL);
@@ -347,6 +367,7 @@ void StageContext_Activate(StageContext* arg0) {
     StageLoader_SwapDisplayListAndReset();
 }
 
+/** Draws a final frame and deactivates the current stage context. */
 void StageContext_Deactivate(void) {
     if (stage != NULL) {
         StageLoader_FillFrame();
@@ -358,14 +379,17 @@ void StageContext_Deactivate(void) {
     }
 }
 
+/** Waits until the next frame is ready. */
 void StageLoader_WaitForRetrace(void) {
     while (Display_IsFrameReady() == 0) {}
 }
 
+/** Emits the segment base commands for the current segment map. */
 void StageLoader_UpdateSegments(void) {
     Memmap_SetSegments(&gDisplayListHead);
 }
 
+/** Draws one frame and waits for it to complete. */
 s32 BgStage_AdvanceFrame(void) {
     StageLoader_BeginFrame();
     Display_QueueFramebufferRequest(&D_800AA170);
@@ -373,6 +397,7 @@ s32 BgStage_AdvanceFrame(void) {
     StageLoader_SwapDisplayListAndReset();
 }
 
+/** Runs the given number of frames. */
 void StageLoader_RunFrames(s32 timer) {
     while (timer-- > 0) {
         StageLoader_FillFrame();
@@ -383,6 +408,9 @@ void StageLoader_RunFrames(s32 timer) {
     }
 }
 
+/**
+ * Runs frames until a condition function returns nonzero or the timer expires.
+ */
 s32 BgStage_RunUntilCondition(u32 timer, s32 (*f)(u8)) {
     s32 var_s1 = 0;
 
@@ -403,6 +431,7 @@ s32 BgStage_RunUntilCondition(u32 timer, s32 (*f)(u8)) {
     return var_s1;
 }
 
+/** Waits for a condition function to hold, with a timeout. */
 s32 BgStage_WaitForCondition(s32 (*arg0)(u8), s32 arg1, s32 arg2) {
     s32 temp_v0;
     s32 var_s0;
@@ -428,6 +457,7 @@ s32 BgStage_WaitForCondition(s32 (*arg0)(u8), s32 arg1, s32 arg2) {
     return var_s2;
 }
 
+/** Sets the stage's clear color and clears the framebuffer to it. */
 void StageContext_SetClearColor(u16 color) {
     if (stage != NULL) {
         stage->clearColor = color;
@@ -435,6 +465,7 @@ void StageContext_SetClearColor(u16 color) {
     }
 }
 
+/** Draws the stage background into the current render target. */
 void BgStage_DrawFrame(void) {
     if (stage != NULL) {
         GfxImage_SetRenderTarget(&gDisplayListHead, stage->renderTargets[stage->renderTargetIndex]);
@@ -443,6 +474,10 @@ void BgStage_DrawFrame(void) {
     }
 }
 
+/**
+ * Returns the current stage's depth buffer image, or NULL when there is no
+ * stage.
+ */
 DepthBuffer* StageContext_GetCurrentImage(void) {
     DepthBuffer* ret = NULL;
 
@@ -453,6 +488,7 @@ DepthBuffer* StageContext_GetCurrentImage(void) {
     return ret;
 }
 
+/** Returns whether the current stage uses the high-resolution mode. */
 s32 StageContext_IsHighResolution(void) {
     s32 ret = 0;
 

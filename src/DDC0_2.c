@@ -71,6 +71,7 @@ void func_80035E48(ModelSegment* segment, ModelVertex* vertices);
 void func_80033750(void) {
 }
 
+/** Returns the height class of a vertex from a packed index table. */
 s16 Model_GetVertexHeightClass(s16* arg0, s32 arg1) {
     s16 temp_v1;
     s16 temp_a2;
@@ -79,6 +80,7 @@ s16 Model_GetVertexHeightClass(s16* arg0, s32 arg1) {
     return temp_a2;
 }
 
+/** Builds the per-vertex runtime data of a model from a matrix. */
 void Model_BuildVertexRuntimeData(StadiumModel* model, MtxF* mtx) {
     ModelSegment* segment;
     ModelVertex* base;
@@ -521,6 +523,7 @@ void func_800346C4(ModelSegment* segment, StadiumTransform* xf, s32 index, Model
     }
 }
 
+/** Applies the vertex transforms of every segment of a model. */
 void Model_ApplyVertexTransforms(StadiumModel* model) {
     ModelSegment* segment;
     s32 count;
@@ -639,6 +642,7 @@ void func_80034A74(u32 model_segment, StadiumTransform* xf, s32 index, ModelVert
     }
 }
 
+/** Transforms a short-vector point by a matrix. */
 void Model_TransformPoint(MtxF* mtx, Vec3f* out, s16 (*in)[3]) {
     f32 sp34;
     f32 sp30;

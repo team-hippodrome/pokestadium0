@@ -46,13 +46,14 @@ void BattleAnim_RunMegaKickAndPunchProjectile(Particle* arg0);
 void BattleAnim_CallbackEndEffect86Descriptor19ModePositionedAnimFade(Particle* arg0);
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Surf.
  */
 void BattleAnim_SetupSurfHitSpark(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
     s16 sp24 = Particle_FieldCF_GetS16_0C058(arg0);
 
-    Particle_Field1C_SetScaled_0B938(arg0, (ParticleMath_RandomRange(0xA) * 0.01f) + 0.05f);
+    Particle_SetScaleScaled(arg0, (ParticleMath_RandomRange(0xA) * 0.01f) + 0.05f);
     Particle_Field7C_SetYScaled_0AF24(arg0, (ParticleMath_RandomRange(0x1E) * 0.1f) + 1.0f);
     Particle_Field9A_SetY_0A3D8(arg0, ParticleMath_RandomRange(0x10000));
     Particle_Field74_SetScaled_0AD8C(arg0, 5.0f);
@@ -78,7 +79,8 @@ M2C_UNK func_82149660(s8 *);                      /* extern */
 
 /**
  * Handles the hit spark from being hit by Surf
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Surf.
  */
 void BattleAnim_RunSurfHitSpark(s8 *arg0) {
     s16 temp_v0;
@@ -111,13 +113,14 @@ void BattleAnim_RunSurfHitSpark(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Bubble.
  */
 void BattleAnim_SetupBubbleBubbles(Particle* arg0, s16 arg1) {
     s16 sp2E = Particle_FieldAC_GetS16_0C038(arg0);
 
     Particle_FieldCA_SetU8_0BECC(arg0, 7);
-    Particle_Field1C_SetScaled_0B938(arg0, 0.1f);
+    Particle_SetScaleScaled(arg0, 0.1f);
     Particle_Field94_AddVec_0A52C(arg0, ParticleMath_RandomSigned(0xC00), ParticleMath_RandomSigned(0x1000), 0);
     ParticleGfx_RecolorEnvRandomPalette(arg0);
     Particle_Field74_SetScaled_0AD8C(arg0, (ParticleMath_RandomRange(6) * 0.5f) + 4.0f);
@@ -128,7 +131,8 @@ void BattleAnim_SetupBubbleBubbles(Particle* arg0, s16 arg1) {
 
 /**
  * Spawns Bubbles for Bubble
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Bubble.
  */
 void BattleAnim_RunBubbleBubbles(Particle* arg0) {
     s16 temp_a1 = Particle_FieldCF_GetS16_0C058(arg0);
@@ -139,16 +143,16 @@ void BattleAnim_RunBubbleBubbles(Particle* arg0) {
             break;
 
         case 2:
-            if (Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
                 Particle_FieldA6_SetS16_0BCA8(arg0, ParticleMath_RandomRange(0xA) + 0x19);
                 Particle_EnableRendering(arg0);
             }
             break;
 
         case 3:
-            Particle_Field1C_Approach_0B98C(arg0, 0.15f, 0.01f);
+            Particle_ApproachScale(arg0, 0.15f, 0.01f);
             Particle_AddVelocityFromRotationTemplate1(arg0);
-            if ((Particle_FieldA6_DecrementToZeroStep1_0BDAC(arg0) != 0) && (Particle_PrimAlpha_Approach_0BC2C(arg0, 0x20, 0x20) != 0)) {
+            if ((Particle_DecrementUnkA6ToZero(arg0) != 0) && (Particle_PrimAlpha_Approach_0BC2C(arg0, 0x20, 0x20) != 0)) {
                 Particle_AdvanceLifecycle(arg0);
             }
             break;
@@ -160,14 +164,15 @@ void BattleAnim_RunBubbleBubbles(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Bubble Beam.
  */
 void BattleAnim_SetupBubbleBeamBubblesSlow(Particle* arg0) {
     UNUSED s32 pad[3]; // FAKE: stack padding
     s16 sp22 = Particle_FieldAC_GetS16_0C038(arg0);
 
     Particle_FieldCF_GetS16_0C058(arg0);
-    Particle_Field1C_SetScaled_0B938(arg0, 0.05f);
+    Particle_SetScaleScaled(arg0, 0.05f);
     Particle_SetRandomVelocityXYZ(arg0, 4, 2, 2);
     Particle_Field94_AddX_0A578(arg0, ParticleMath_RandomSignedOffset(0x200, 0xE00));
     Particle_Field9A_SetX_0A3C4(arg0, ParticleMath_RandomRange(0x1000) + 0x100);
@@ -182,7 +187,8 @@ void BattleAnim_SetupBubbleBeamBubblesSlow(Particle* arg0) {
 
 s32 Particle_DecreaseRotationXTo(Particle* arg0, s32 arg1, s32 arg2);
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Bubble Beam.
  */
 void BattleAnim_ContinueBubbleBeamBubblesSlow(Particle* arg0) {
     if (arg0->phase == 1) {
@@ -205,7 +211,8 @@ M2C_UNK func_82149C20(s8 *);                      /* extern */
 
 /**
  * handles the slower additional bubbles that appear when using bubble beam as opposed to bubble
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Bubble Beam.
  */
 void BattleAnim_RunBubbleBeamBubblesSlow(s8 *arg0) {
     s16 temp_v0;
@@ -238,7 +245,8 @@ void BattleAnim_RunBubbleBeamBubblesSlow(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Bubble Beam.
  */
 void BattleAnim_SetupBubbleBeamBubblesFast(Particle* arg0) {
     s16 sp56 = Particle_FieldAC_GetS16_0C038(arg0);
@@ -249,9 +257,9 @@ void BattleAnim_SetupBubbleBeamBubblesFast(Particle* arg0) {
     s16 sp2E;
 
     Particle_FieldCA_SetU8_0BECC(arg0, 7);
-    Particle_Field1C_SetScaled_0B938(arg0, 0.1f);
-    Particle_SetScaleSpeed(arg0, 0.2f);
-    Particle_SetScaleTarget(arg0, 0.02f);
+    Particle_SetScaleScaled(arg0, 0.1f);
+    Particle_SetScaleTarget(arg0, 0.2f);
+    Particle_SetScaleStep(arg0, 0.02f);
     BattleAnim_GetSecondaryOwnerAnchorPosition(&sp3C);
     BattleAnim_GetTertiaryOwnerBone9Position(&sp30);
     var_fa0 = sp30.x - sp3C.x;
@@ -280,7 +288,8 @@ M2C_UNK func_82149D74(s8 *);                      /* extern */
 
 /**
  * handles the faster additional bubbles that appear when using bubble beam as opposed to bubble
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Bubble Beam.
  */
 void BattleAnim_RunBubbleBeamBubblesFast(s8 *arg0) {
     s16 temp_v0;
@@ -321,7 +330,7 @@ void BattleAnim_SetupUnusedRotatingSparkVariant(Particle* arg0) {
     s16 sp2E = Particle_FieldCE_GetS32_0C040(arg0);
 
     Particle_FieldCA_SetU8_0BECC(arg0, 7);
-    Particle_Field1C_SetScaled_0B938(arg0, 0.1f);
+    Particle_SetScaleScaled(arg0, 0.1f);
     BattleAnim_GetSecondaryOwnerAnchorPosition(&sp40);
     BattleAnim_GetTertiaryOwnerBone9Position(&sp34);
 
@@ -424,8 +433,8 @@ void BattleAnim_SetupUnusedAimedSparkVariant(Particle* arg0) {
     s16 temp_v1;
 
     Particle_FieldCA_SetU8_0BECC(arg0, 7);
-    Particle_Field1C_SetScaled_0B938(arg0, 0.1f);
-    Particle_SetScaleSpeed(arg0, 0.1f);
+    Particle_SetScaleScaled(arg0, 0.1f);
+    Particle_SetScaleTarget(arg0, 0.1f);
     BattleAnim_GetSecondaryOwnerAnchorPosition(&sp40);
     BattleAnim_GetTertiaryOwnerBone9Position(&sp34);
 
@@ -454,7 +463,7 @@ void BattleAnim_CallbackUnusedAimedSparkVariant(Particle* arg0) {
             break;
 
         case 2:
-            Particle_PrimAlpha_ApproachAndStepState_0BC5C(arg0, 0xFF, 4);
+            Particle_ApproachPrimAlphaThenAdvance(arg0, 0xFF, 4);
             break;
 
         case 3:
@@ -462,7 +471,7 @@ void BattleAnim_CallbackUnusedAimedSparkVariant(Particle* arg0) {
             break;
 
         case 4:
-            Particle_PrimAlpha_ApproachAndStepState_0BC5C(arg0, 0, 0x10);
+            Particle_ApproachPrimAlphaThenAdvance(arg0, 0, 0x10);
             break;
 
         case 5:
@@ -470,25 +479,26 @@ void BattleAnim_CallbackUnusedAimedSparkVariant(Particle* arg0) {
             break;
     }
 
-    Particle_Field1C_Approach_0B98C(arg0, 50.0f, 0.2f);
-    Particle_Field20_Approach_0BA84(arg0, 1.0f, 0.1f);
+    Particle_ApproachScale(arg0, 50.0f, 0.2f);
+    Particle_StepScaleTarget(arg0, 1.0f, 0.1f);
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Water Gun, Hydro Pump.
  */
 void BattleAnim_SetupWaterGunAndHydroPumpEmitterFade(Particle* arg0) {
     switch (Particle_FieldCE_GetS32_0C040(arg0)) {
         case 0:
-            Particle_Field1C_SetScaled_0B938(arg0, 0.5f);
-            Particle_SetScaleSpeed(arg0, 1.2f);
-            Particle_SetScaleTarget(arg0, 0.1f);
+            Particle_SetScaleScaled(arg0, 0.5f);
+            Particle_SetScaleTarget(arg0, 1.2f);
+            Particle_SetScaleStep(arg0, 0.1f);
             break;
 
         case 1:
-            Particle_Field1C_SetScaled_0B938(arg0, 0.3f);
-            Particle_SetScaleSpeed(arg0, 0.8f);
-            Particle_SetScaleTarget(arg0, 0.05f);
+            Particle_SetScaleScaled(arg0, 0.3f);
+            Particle_SetScaleTarget(arg0, 0.8f);
+            Particle_SetScaleStep(arg0, 0.05f);
             break;
     }
 
@@ -498,7 +508,8 @@ void BattleAnim_SetupWaterGunAndHydroPumpEmitterFade(Particle* arg0) {
 
 /**
  * Handles the fading of the burst emitters for Water Gun and Hydro Pump
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Water Gun, Hydro Pump.
  */
 void BattleAnim_RunWaterGunAndHydroPumpEmitterFade(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -507,7 +518,7 @@ void BattleAnim_RunWaterGunAndHydroPumpEmitterFade(Particle* arg0) {
             break;
 
         case 2:
-            Particle_Field1C_ApproachField24ByField20_0BA1C(arg0);
+            Particle_ApproachScaleTarget(arg0);
             Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 2, 0);
             Particle_PrimAlpha_Approach_0BC2C(arg0, 0x20, 8);
             break;
@@ -519,13 +530,14 @@ void BattleAnim_RunWaterGunAndHydroPumpEmitterFade(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Hydro Pump.
  */
 void BattleAnim_SetupHydroPumpBurstChild(Particle* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
 
     Particle_FieldAC_GetS16_0C038(arg0);
-    Particle_Field1C_SetScaled_0B938(arg0, 0.5f);
+    Particle_SetScaleScaled(arg0, 0.5f);
     Particle_Field94_AddVec_0A52C(arg0, ParticleMath_RandomRange(0x10000), ParticleMath_RandomRange(0x10000), 0);
     Particle_Field74_SetScaled_0AD8C(arg0, 1.0f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0x27);
@@ -564,15 +576,16 @@ void func_8214A6B4(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Hydro Pump.
  */
 void BattleAnim_SetupHydroPumpMetadataBurstChild(Particle* arg0) {
     s16 sp26 = Particle_FieldCE_GetS32_0C040(arg0);
 
-    Particle_Field1C_SetScaled_0B938(arg0, 0.6f);
+    Particle_SetScaleScaled(arg0, 0.6f);
 
     if (sp26 == 1) {
-        Particle_Field38_AddXZFromField94YOffset180_08F38(arg0, 6.0f);
+        Particle_AddPositionOffsetAlongRotationYPlus180(arg0, 6.0f);
     }
 
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0x28);
@@ -607,10 +620,11 @@ void func_8214A7F4(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Hydro Pump.
  */
 void BattleAnim_SetupHydroPumpBurstEmitter(Particle* arg0) {
-    Particle_Field1C_SetScaled_0B938(arg0, 0.7f);
+    Particle_SetScaleScaled(arg0, 0.7f);
     Particle_Field74_SetScaled_0AD8C(arg0, 12.0f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0x28);
     Particle_SetPrimAlpha(arg0, 0xFF);
@@ -619,7 +633,8 @@ void BattleAnim_SetupHydroPumpBurstEmitter(Particle* arg0) {
 
 /**
  * Emits metadata-controlled particles and child projectiles for Hydro Pump
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Hydro Pump.
  */
 void BattleAnim_RunHydroPumpBurstEmitter(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -643,13 +658,14 @@ void BattleAnim_RunHydroPumpBurstEmitter(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Water Gun.
  */
 void BattleAnim_SetupWaterGunProjectileChild(Particle* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
 
     Particle_FieldAC_GetS16_0C038(arg0);
-    Particle_Field1C_SetScaled_0B938(arg0, 0.2f);
+    Particle_SetScaleScaled(arg0, 0.2f);
     Particle_Field94_AddVec_0A52C(arg0, ParticleMath_RandomRange(0x10000), ParticleMath_RandomRange(0x10000), 0);
     Particle_Field74_SetScaled_0AD8C(arg0, 0.5f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0x27);
@@ -686,20 +702,21 @@ void func_8214AA60(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Water Gun.
  */
 void BattleAnim_SetupWaterGunProjectileMetadata(Particle* arg0) {
     s16 sp26 = Particle_FieldCE_GetS32_0C040(arg0);
 
-    Particle_Field1C_SetScaled_0B938(arg0, 0.2f);
+    Particle_SetScaleScaled(arg0, 0.2f);
 
     switch (sp26) {
         case 1:
-            Particle_Field38_AddXZFromField94YOffset180_08F38(arg0, 3.0f);
+            Particle_AddPositionOffsetAlongRotationYPlus180(arg0, 3.0f);
             break;
 
         case 2:
-            Particle_Field38_AddXZFromField94YOffset180_08F38(arg0, 6.0f);
+            Particle_AddPositionOffsetAlongRotationYPlus180(arg0, 6.0f);
             break;
     }
 
@@ -735,10 +752,11 @@ void func_8214ABAC(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Water Gun.
  */
 void BattleAnim_SetupWaterGunProjectile(Particle* arg0) {
-    Particle_Field1C_SetScaled_0B938(arg0, 0.2f);
+    Particle_SetScaleScaled(arg0, 0.2f);
     Particle_Field74_SetScaled_0AD8C(arg0, 10.0f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0x28);
     Particle_SetPrimAlpha(arg0, 0xFF);
@@ -747,7 +765,8 @@ void BattleAnim_SetupWaterGunProjectile(Particle* arg0) {
 
 /**
  * Handles the parent projectile for Water gun
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Water Gun.
  */
 void BattleAnim_RunWaterGunProjectile(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -771,14 +790,15 @@ void BattleAnim_RunWaterGunProjectile(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Ice Beam.
  */
 void BattleAnim_SetupIceBeamColdBreath(Particle* arg0) {
     UNUSED s32 pad[3]; // FAKE: stack padding
     s16 sp22 = Particle_FieldAC_GetS16_0C038(arg0);
     s16 sp20 = Particle_FieldCF_GetS16_0C058(arg0);
 
-    Particle_Field1C_SetScaled_0B938(arg0, 0.25f);
+    Particle_SetScaleScaled(arg0, 0.25f);
     Particle_SetRandomVelocityXYZ(arg0, 4, 2, 2);
     Particle_Field94_AddX_0A578(arg0, ParticleMath_RandomSignedOffset(0x200, -0xE00));
     Particle_Field9A_SetX_0A3C4(arg0, ParticleMath_RandomRange(0x400) + 0x100);
@@ -793,7 +813,8 @@ void BattleAnim_SetupIceBeamColdBreath(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Ice Beam.
  */
 void BattleAnim_ContinueIceBeamColdBreath(Particle* arg0) {
     if (arg0->phase == 1) {
@@ -813,7 +834,11 @@ s32 func_821406B4(s8 *);                          /* extern */
 M2C_UNK func_8214ADB8(s8 *);                      /* extern */
 M2C_UNK func_8214AF08(s8 *);                      /* extern */
 
-void func_8214AF58(s8 *arg0) {
+/**
+ * Particle callback of the Ice Beam animation. Player sweep (all 165 moves used in battle): only
+ * Ice Beam reached this function.
+ */
+void BattleAnim_IceBeamParticleUpdateA(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -841,12 +866,13 @@ void func_8214AF58(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Mega Punch, Mega Kick.
  */
 void BattleAnim_SetupMegaKickAndPunchProjectile(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
 
-    Particle_Field1C_SetScaled_0B938(arg0, 0.75f - (sp26 * 0.1f));
+    Particle_SetScaleScaled(arg0, 0.75f - (sp26 * 0.1f));
     Particle_Field74_SetScaled_0AD8C(arg0, 10.0f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0x28);
     Particle_SetPrimAlpha(arg0, (0xFF - (sp26 << 5)) & 0xFF);
@@ -857,7 +883,8 @@ void BattleAnim_SetupMegaKickAndPunchProjectile(Particle* arg0) {
 
 /**
  * handles projectile for Mega kick and mega punch
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Mega Punch, Mega Kick.
  */
 void BattleAnim_RunMegaKickAndPunchProjectile(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -866,7 +893,7 @@ void BattleAnim_RunMegaKickAndPunchProjectile(Particle* arg0) {
             break;
 
         case 2:
-            if (Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
                 Particle_EnableRendering(arg0);
             }
             break;
@@ -883,12 +910,13 @@ void BattleAnim_RunMegaKickAndPunchProjectile(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Ice Beam, Psybeam, Aurora Beam, Hyper Beam, Tri Attack.
  */
 void BattleAnim_SetupInitialBeamEmanator(Particle* arg0) {
-    Particle_Field1C_SetScaled_0B938(arg0, 1.0f);
-    Particle_SetScaleSpeed(arg0, 2.0f);
-    Particle_SetScaleTarget(arg0, 0.75f);
+    Particle_SetScaleScaled(arg0, 1.0f);
+    Particle_SetScaleTarget(arg0, 2.0f);
+    Particle_SetScaleStep(arg0, 0.75f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
     Particle_AdvanceLifecycle(arg0);
 }
@@ -896,7 +924,8 @@ void BattleAnim_SetupInitialBeamEmanator(Particle* arg0) {
 /**
  * Runs the first emanator that shows up in Ice Beam, Psybeam, Aurora Beam, Hyper Beam, Solar Beam, and Tri Attack.
  * Most Beam mosts switch to the Pulsing emanator after a few frames
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Ice Beam, Psybeam, Aurora Beam, Hyper Beam, Tri Attack.
  */
 void BattleAnim_RunInitialBeamEmanator(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -906,7 +935,7 @@ void BattleAnim_RunInitialBeamEmanator(Particle* arg0) {
 
         case 2:
             Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 3, 1, 1, 0);
-            Particle_Field1C_ApproachField24ByField20_0BA1C(arg0);
+            Particle_ApproachScaleTarget(arg0);
             break;
 
         case 3:
@@ -916,12 +945,13 @@ void BattleAnim_RunInitialBeamEmanator(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Ice Beam, Psybeam, Aurora Beam, Hyper Beam.
  */
 void BattleAnim_SetupPulsingBeamEmanator(Particle* arg0) {
-    Particle_Field1C_SetScaled_0B938(arg0, 0.4f);
-    Particle_SetScaleSpeed(arg0, 0.7f);
-    Particle_SetScaleTarget(arg0, 0.1f);
+    Particle_SetScaleScaled(arg0, 0.4f);
+    Particle_SetScaleTarget(arg0, 0.7f);
+    Particle_SetScaleStep(arg0, 0.1f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
     Particle_SetTextureFrame(arg0, 1);
     Particle_Field94_SetZ_0A2CC(arg0, ParticleMath_RandomRange(0x10000));
@@ -937,7 +967,8 @@ M2C_UNK func_8214B280(s8 *);                      /* extern */
 
 /**
  * handles the pulsing beam emanator for Ice Beam, Psybeam, Aurora Beam, Hyper Beam, and Solar Beam
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Ice Beam, Psybeam, Aurora Beam, Hyper Beam.
  */
 void BattleAnim_RunPulsingBeamEmanator(s8 *arg0) {
     s16 temp_v0;
@@ -967,11 +998,12 @@ void BattleAnim_RunPulsingBeamEmanator(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Ice Beam, Hyper Beam.
  */
 void BattleAnim_SetupStrongBeamHitEffect(Particle* arg0) {
-    Particle_Field1C_SetScaled_0B938(arg0, 2.0f);
-    Particle_Field38_AddXZFromField94YOffset180_08F38(arg0, 10.0f);
+    Particle_SetScaleScaled(arg0, 2.0f);
+    Particle_AddPositionOffsetAlongRotationYPlus180(arg0, 10.0f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
     Particle_SetPrimAlpha(arg0, 0xFF);
     Particle_SetTextureFrame(arg0, 1);
@@ -981,7 +1013,8 @@ void BattleAnim_SetupStrongBeamHitEffect(Particle* arg0) {
 
 /**
  * Handles the hit effect from being hit by Ice beam, Hyper Beam, Solarbeam, or Sky attack
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Ice Beam, Hyper Beam.
  */
 void BattleAnim_RunStrongBeamHitEffect(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -990,11 +1023,11 @@ void BattleAnim_RunStrongBeamHitEffect(Particle* arg0) {
             break;
 
         case 2:
-            Particle_Field1C_ApproachAndStepState_0B9D0(arg0, 5.0f, 1.0f);
+            Particle_ApproachScaleThenAdvance(arg0, 5.0f, 1.0f);
             break;
 
         case 3:
-            Particle_Field1C_ApproachAndStepState_0B9D0(arg0, 0.0f, 1.0f);
+            Particle_ApproachScaleThenAdvance(arg0, 0.0f, 1.0f);
             Particle_PrimAlpha_Approach_0BC2C(arg0, 0x40, 0x20);
             break;
 
@@ -1005,12 +1038,13 @@ void BattleAnim_RunStrongBeamHitEffect(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Psybeam.
  */
 void BattleAnim_SetupPsybeamHitSparkFlicker(Particle* arg0) {
     Particle_FieldCF_GetS16_0C058(arg0);
-    Particle_Field1C_SetScaled_0B938(arg0, 2.0f);
-    Particle_Field38_AddXZFromField94YOffset180_08F38(arg0, 10.0f);
+    Particle_SetScaleScaled(arg0, 2.0f);
+    Particle_AddPositionOffsetAlongRotationYPlus180(arg0, 10.0f);
     ParticleGfx_RecolorPrimFromPaletteSetB(arg0, ParticleMath_RandomRange(6));
     ParticleGfx_RecolorEnvFromPaletteSetB(arg0, ParticleMath_RandomRange(6));
     Particle_SetTextureFrame(arg0, 1);
@@ -1020,7 +1054,8 @@ void BattleAnim_SetupPsybeamHitSparkFlicker(Particle* arg0) {
 
 /**
  * handles the hit spark when being hit by psybeam
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Psybeam.
  */
 void BattleAnim_RunPsybeamHitSparkFlicker(Particle* arg0) {
     Particle_FieldCF_GetS16_0C058(arg0);
@@ -1031,11 +1066,11 @@ void BattleAnim_RunPsybeamHitSparkFlicker(Particle* arg0) {
             break;
 
         case 2:
-            Particle_Field1C_ApproachAndStepState_0B9D0(arg0, 5.0f, 1.0f);
+            Particle_ApproachScaleThenAdvance(arg0, 5.0f, 1.0f);
             break;
 
         case 3:
-            Particle_Field1C_ApproachAndStepState_0B9D0(arg0, 0.0f, 1.0f);
+            Particle_ApproachScaleThenAdvance(arg0, 0.0f, 1.0f);
             Particle_PrimAlpha_Approach_0BC2C(arg0, 0x40, 0x20);
             break;
 
@@ -1051,7 +1086,8 @@ void BattleAnim_RunPsybeamHitSparkFlicker(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Aurora Beam.
  */
 void BattleAnim_SetupAuroraBeamHitSpark(Particle* arg0) {
     UNUSED s16 pad; // FAKE: stack padding
@@ -1059,8 +1095,8 @@ void BattleAnim_SetupAuroraBeamHitSpark(Particle* arg0) {
 
     Particle_FieldCF_GetS16_0C058(arg0);
     sp24 = Particle_FieldAC_GetS16_0C038(arg0);
-    Particle_Field1C_SetScaled_0B938(arg0, 2.0f);
-    Particle_Field38_AddXZFromField94YOffset180_08F38(arg0, 10.0f);
+    Particle_SetScaleScaled(arg0, 2.0f);
+    Particle_AddPositionOffsetAlongRotationYPlus180(arg0, 10.0f);
     ParticleGfx_RecolorPrim(arg0, 0x8);
     ParticleGfx_RecolorEnvFromPaletteSetA(arg0, sp24 % 6);
     Particle_SetTextureFrame(arg0, 1);
@@ -1073,7 +1109,8 @@ void BattleAnim_SetupAuroraBeamHitSpark(Particle* arg0) {
 
 /**
  * Handles the hit spark when being hit by aurora beam
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Aurora Beam.
  */
 void BattleAnim_RunAuroraBeamHitSpark(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -1082,13 +1119,13 @@ void BattleAnim_RunAuroraBeamHitSpark(Particle* arg0) {
             break;
 
         case 2:
-            if (Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
                 Particle_EnableRendering(arg0);
             }
             break;
 
         case 3:
-            Particle_Field1C_ApproachAndStepState_0B9D0(arg0, 4.0f, 1.0f);
+            Particle_ApproachScaleThenAdvance(arg0, 4.0f, 1.0f);
             break;
 
         case 4:
@@ -1096,7 +1133,7 @@ void BattleAnim_RunAuroraBeamHitSpark(Particle* arg0) {
             break;
 
         case 5:
-            Particle_Field1C_ApproachAndStepState_0B9D0(arg0, 0.0f, 1.0f);
+            Particle_ApproachScaleThenAdvance(arg0, 0.0f, 1.0f);
             break;
 
         case 6:
@@ -1108,13 +1145,14 @@ void BattleAnim_RunAuroraBeamHitSpark(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Hydro Pump, Hyper Beam, Ice Beam and Waterfall.
  */
 void BattleAnim_SetupStrongOutwardMovingLargeHitSpark(Particle* arg0) {
     Particle_FieldAC_GetS16_0C038(arg0);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
-    Particle_Field1C_SetScaled_0B938(arg0, 1.35f);
-    Particle_Field38_AddXZFromField94Y_08ED0(arg0, 5.0f);
+    Particle_SetScaleScaled(arg0, 1.35f);
+    Particle_AddPositionOffsetAlongRotationY(arg0, 5.0f);
     Particle_Field74_SetScaled_0AD8C(arg0, 5.5f);
     Particle_Field94_AddVec_0A52C(arg0, ParticleMath_RandomRange(0x10000), ParticleMath_RandomRange(0x10000), 0);
     Particle_AdvanceLifecycle(arg0);
@@ -1130,7 +1168,9 @@ M2C_UNK func_8214B84C(s8 *);                      /* extern */
 
 /**
  * Handles hit effect shared by Hydro Pump, Ice Beam, Hyper Beam, Solar Beam, Waterfall, and Sky Attack
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Hydro Pump, Hyper Beam, Ice Beam and Waterfall (the sweep used only the charge turn of
+ * Solar Beam and Sky Attack).
  */
 void BattleAnim_RunStrongOutwardMovingLargeHitSpark(s8 *arg0) {
     s16 temp_v0;
@@ -1155,13 +1195,14 @@ void BattleAnim_RunStrongOutwardMovingLargeHitSpark(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Blizzard.
  */
 void BattleAnim_SetupBlizzardHitUpwardColdAir(Particle* arg0) {
     Particle_FieldAC_GetS16_0C038(arg0);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
-    Particle_Field1C_SetScaled_0B938(arg0, 1.0f);
-    Particle_Field38_AddXZFromField94Y_08ED0(arg0, 5.0f);
+    Particle_SetScaleScaled(arg0, 1.0f);
+    Particle_AddPositionOffsetAlongRotationY(arg0, 5.0f);
     Particle_Field74_SetScaled_0AD8C(arg0, 4.0f);
     Particle_Field94_AddVec_0A52C(arg0, ParticleMath_RandomRange(0x10000), ParticleMath_RandomRange(0x10000), 0);
     Particle_AdvanceLifecycle(arg0);
@@ -1177,7 +1218,8 @@ M2C_UNK func_8214B9A8(s8 *);                      /* extern */
 
 /**
  * Handles the cold air that emanates upward from pokemon hit by blizzard
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Blizzard.
  */
 void BattleAnim_RunBlizzardHitUpwardColdAir(s8 *arg0) {
     s16 temp_v0;
@@ -1202,13 +1244,14 @@ void BattleAnim_RunBlizzardHitUpwardColdAir(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Water Gun.
  */
 void BattleAnim_SetupWaterGunHitEffect(Particle* arg0) {
     Particle_FieldAC_GetS16_0C038(arg0);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
-    Particle_Field1C_SetScaled_0B938(arg0, 0.6f);
-    Particle_Field38_AddXZFromField94Y_08ED0(arg0, 5.0f);
+    Particle_SetScaleScaled(arg0, 0.6f);
+    Particle_AddPositionOffsetAlongRotationY(arg0, 5.0f);
     Particle_Field74_SetScaled_0AD8C(arg0, 3.0f);
     Particle_Field94_AddVec_0A52C(arg0, ParticleMath_RandomRange(0x10000), ParticleMath_RandomRange(0x10000), 0);
     Particle_AdvanceLifecycle(arg0);
@@ -1223,7 +1266,8 @@ M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_8214BAFC(s8 *);                      /* extern */
 
 /**
- * @unverified Name from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Water Gun.
  */
 void BattleAnim_RunWaterGunHitEffect(s8 *arg0) {
     s16 temp_v0;
@@ -1248,7 +1292,8 @@ void BattleAnim_RunWaterGunHitEffect(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Psybeam, Bubble Beam, Aurora Beam.
  */
 void BattleAnim_SetupWeakBeamHitEffect(Particle* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
@@ -1269,8 +1314,8 @@ void BattleAnim_SetupWeakBeamHitEffect(Particle* arg0) {
             break;
     }
 
-    Particle_Field1C_SetScaled_0B938(arg0, 0.8f);
-    Particle_Field38_AddXZFromField94Y_08ED0(arg0, 5.0f);
+    Particle_SetScaleScaled(arg0, 0.8f);
+    Particle_AddPositionOffsetAlongRotationY(arg0, 5.0f);
     Particle_Field74_SetScaled_0AD8C(arg0, 3.0f);
     Particle_Field94_AddVec_0A52C(arg0, ParticleMath_RandomRange(0x10000), ParticleMath_RandomRange(0x10000), 0);
     Particle_AdvanceLifecycle(arg0);
@@ -1292,7 +1337,8 @@ extern s32 D_8219A790;
 
 /**
  * handles shared effect being hit by Psybeam, bubble beam, and aurora beam
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Psybeam, Bubble Beam, Aurora Beam.
  */
 void BattleAnim_RunWeakBeamHitEffect(s8 *arg0) {
     s16 sp2E;
@@ -1334,7 +1380,8 @@ void BattleAnim_RunWeakBeamHitEffect(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Tri Attack.
  */
 void BattleAnim_SetupTriAttackHitSpark(Particle* arg0) {
     s16 sp2E;
@@ -1346,9 +1393,9 @@ void BattleAnim_SetupTriAttackHitSpark(Particle* arg0) {
     sp2A = Particle_FieldCE_GetS32_0C040(arg0);
 
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, sp2C);
-    Particle_Field1C_SetScaled_0B938(arg0, 0.6f);
-    Particle_SetScaleSpeed(arg0, 1.2f);
-    Particle_SetScaleTarget(arg0, 0.2f);
+    Particle_SetScaleScaled(arg0, 0.6f);
+    Particle_SetScaleTarget(arg0, 1.2f);
+    Particle_SetScaleStep(arg0, 0.2f);
 
     switch (sp2A) {
         case 0:
@@ -1364,7 +1411,7 @@ void BattleAnim_SetupTriAttackHitSpark(Particle* arg0) {
             break;
     }
 
-    Particle_Field38_AddXZFromField94Y_08ED0(arg0, 5.0f);
+    Particle_AddPositionOffsetAlongRotationY(arg0, 5.0f);
     Particle_Field74_SetScaled_0AD8C(arg0, 1.0f);
     Particle_Field94_AddVec_0A52C(arg0, ParticleMath_RandomRange(0x10000), ParticleMath_RandomRange(0x10000), 0);
     Particle_FieldA6_SetS16_0BCA8(arg0, sp2E);
@@ -1385,7 +1432,8 @@ M2C_UNK func_8214BEE8(s8 *);                      /* extern */
 
 /**
  * Handles the Tri Attack hit spark
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Tri Attack.
  */
 void BattleAnim_RunTriAttackHitSpark(s8 *arg0) {
     s16 temp_v1;
@@ -1417,6 +1465,8 @@ void BattleAnim_RunTriAttackHitSpark(s8 *arg0) {
 
 /**
  * Handles hit effect shared by Hydro Pump, Ice Beam, Hyper Beam, Solar Beam, Waterfall, and Sky Attack
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_SetupStrongOutwardMovingSmallHitSpark(Particle* arg0) {
@@ -1425,7 +1475,7 @@ void BattleAnim_SetupStrongOutwardMovingSmallHitSpark(Particle* arg0) {
 
     Particle_SetRandomVelocityXYZ(arg0, 0, 0xF, 0x14);
     Particle_Field38_AddYScaled_08E90(arg0, 5.0f);
-    Particle_Field1C_SetScaled_0B938(arg0, 0.2f);
+    Particle_SetScaleScaled(arg0, 0.2f);
     Particle_Field74_SetScaled_0AD8C(arg0, 2.5f);
     Particle_Field94_AddVec_0A52C(arg0, ParticleMath_RandomSigned(0x2000), ParticleMath_RandomSigned(0x2000), 0);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, sp2C);
@@ -1479,7 +1529,7 @@ void BattleAnim_SetupUnusedIndexedFadeVariantA(Particle* arg0) {
 
     Particle_FieldCF_GetS16_0C058(arg0);
     Particle_SetRandomVelocityXYZ(arg0, 0xA, 0x14, 0x14);
-    Particle_Field1C_SetScaled_0B938(arg0, 0.25f);
+    Particle_SetScaleScaled(arg0, 0.25f);
     Particle_Field74_SetScaled_0AD8C(arg0, 2.5f);
     Particle_Field94_AddVec_0A52C(arg0, ParticleMath_RandomSigned(0x2000), ParticleMath_RandomSigned(0x2000), 0);
     ParticleGfx_RecolorPrimRandomPalette(arg0);
@@ -1534,7 +1584,7 @@ void BattleAnim_SetupUnusedIndexedFadeVariantB(Particle* arg0) {
 
     Particle_FieldCF_GetS16_0C058(arg0);
     Particle_SetRandomVelocityXYZ(arg0, 0xA, 0x14, 0x14);
-    Particle_Field1C_SetScaled_0B938(arg0, 0.4f);
+    Particle_SetScaleScaled(arg0, 0.4f);
     Particle_Field74_SetScaled_0AD8C(arg0, 2.5f);
     Particle_Field94_AddVec_0A52C(arg0, ParticleMath_RandomSigned(0x2000), ParticleMath_RandomSigned(0x2000), 0);
     Particle_SetPrimColor(arg0, 0xFF, 0xFF, 0xFF);
@@ -1578,7 +1628,8 @@ void func_8214C598(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Bubble Beam, Bubble.
  */
 void BattleAnim_SetupBubbleBubbleBeamSharedEffect(Particle* arg0) {
     Vec3s sp28;
@@ -1587,7 +1638,7 @@ void BattleAnim_SetupBubbleBubbleBeamSharedEffect(Particle* arg0) {
 
     Particle_FieldCF_GetS16_0C058(arg0);
     sp24 = Particle_FieldAC_GetS16_0C038(arg0);
-    Particle_Field1C_SetScaled_0B938(arg0, 0.05f);
+    Particle_SetScaleScaled(arg0, 0.05f);
     Particle_SetRotationTargetXY(arg0, arg0->rotation.x, arg0->rotation.y + 0x8000);
     Particle_Field9A_SetXY_0A3A0(arg0, 0x800, 0x300);
     sp28.x = sp24 << 0xC;
@@ -1607,10 +1658,10 @@ void BattleAnim_CallbackEndEffects34And53Descriptor45RotatingBounceFade(Particle
             break;
 
         case 2:
-            Particle_Field1C_Approach_0B98C(arg0, 0.15f, 0.01f);
+            Particle_ApproachScale(arg0, 0.15f, 0.01f);
             Particle_ApproachStepMagnitude(arg0, 1.0f, 0.7f);
             Particle_ApproachRotationTargetY(arg0);
-            if (Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
                 Particle_FieldA6_SetS16_0BCA8(arg0, ParticleMath_RandomRangeOffset(0xC, 0x20));
                 if (arg0->rotation.y >= arg0->rotationTarget.y) {
                     Particle_FieldA0_SetX_0A400(arg0, -0x4000);
@@ -1623,7 +1674,7 @@ void BattleAnim_CallbackEndEffects34And53Descriptor45RotatingBounceFade(Particle
         case 3:
             Particle_ApproachRotationTargetX(arg0);
             Particle_ApproachStepMagnitude(arg0, 0.5f, 0.2f);
-            Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0);
+            Particle_DecrementUnkA6ToZeroThenAdvance(arg0);
             break;
 
         case 4:
@@ -1642,10 +1693,11 @@ void BattleAnim_CallbackEndEffects34And53Descriptor45RotatingBounceFade(Particle
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Hydro Pump.
  */
 void BattleAnim_SetupHydroPumpColorShiftFade(Particle* arg0) {
-    Particle_Field1C_SetScaled_0B938(arg0, 0.2f);
+    Particle_SetScaleScaled(arg0, 0.2f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
     Particle_SetPrimAlpha(arg0, 0xC8);
     Particle_FieldA6_SetS16_0BCA8(arg0, 0x18);
@@ -1668,7 +1720,8 @@ M2C_UNK func_8214C8E0(s8 *);                      /* extern */
 
 /**
  * Handles the growth, color shift, and fade of a Hydro Pump particle
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Hydro Pump.
  */
 void BattleAnim_RunHydroPumpColorShiftFade(s8 *arg0) {
     s16 temp_v0;
@@ -1701,14 +1754,15 @@ void BattleAnim_RunHydroPumpColorShiftFade(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Water Gun.
  */
 void BattleAnim_SetupWaterGunEmitterColoration(Particle* arg0) {
     s16 sp26 = Particle_FieldCE_GetS32_0C040(arg0);
 
-    Particle_Field1C_SetScaled_0B938(arg0, 0.05f);
-    Particle_SetScaleSpeed(arg0, 0.3f);
-    Particle_SetScaleTarget(arg0, 0.005f);
+    Particle_SetScaleScaled(arg0, 0.05f);
+    Particle_SetScaleTarget(arg0, 0.3f);
+    Particle_SetScaleStep(arg0, 0.005f);
 
     switch (sp26) {
         case 0:
@@ -1745,7 +1799,8 @@ M2C_UNK func_8214CA90(s8 *);                      /* extern */
 
 /**
  * Handles the coloring of the burst emitter for Water gun
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Water Gun.
  */
 void BattleAnim_RunWaterGunEmitterColoration(s8 *arg0) {
     s16 temp_v0;
@@ -1776,7 +1831,8 @@ void BattleAnim_RunWaterGunEmitterColoration(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Water Gun, Hydro Pump.
  */
 void BattleAnim_SetupHydroPumpWaterGunProjectileHit(Particle* arg0) {
     UNUSED s16 pad; // FAKE: stack padding
@@ -1784,9 +1840,9 @@ void BattleAnim_SetupHydroPumpWaterGunProjectileHit(Particle* arg0) {
 
     Particle_FieldAC_GetS16_0C038(arg0);
     sp2C = Particle_FieldCF_GetS16_0C058(arg0);
-    Particle_Field1C_SetScaled_0B938(arg0, 0.5f);
+    Particle_SetScaleScaled(arg0, 0.5f);
     Particle_Field94_AddVec_0A52C(arg0, ParticleMath_RandomRange(0x10000), ParticleMath_RandomRange(0x10000), 0);
-    Particle_Field38_AddXZFromField94Y_08ED0(arg0, 5.0f);
+    Particle_AddPositionOffsetAlongRotationY(arg0, 5.0f);
     Particle_Field74_SetScaled_0AD8C(arg0, 1.0f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, sp2C);
     Particle_AdvanceLifecycle(arg0);
@@ -1802,7 +1858,8 @@ M2C_UNK func_8214CC90(s8 *);                      /* extern */
 
 /**
  * Handles the projectile shared by being hit by water gun and hydro pump
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Water Gun, Hydro Pump.
  */
 void BattleAnim_RunHydroPumpWaterGunProjectileHit(s8 *arg0) {
     s16 temp_v0;
@@ -1830,7 +1887,8 @@ void BattleAnim_RunHydroPumpWaterGunProjectileHit(s8 *arg0) {
 
 /**
  * Starts the effect for Mega Punch
- * @unverified Name and comment from Stadium 1.
+ * Effect start init 15 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Mega Punch.
  */
 void BattleAnim_StartMegaPunchEffect(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(4, BattleAnim_RunMegaKickAndPunchProjectile, &gBattleAnimParticleDescriptors[8], 0, 4, 0x11, gBattleAnimCurrentAnchor, 0, 0);
@@ -1841,7 +1899,13 @@ extern M2C_UNK D_8218E5C8;
 extern s16 D_8219A80A;
 extern M2C_UNK func_8214B0FC;
 
-void func_8214CE58(void) {
+/**
+ * Effect init that spawns the Mega Kick animation. Player sweep (all 165 moves used in battle):
+ * only Mega Kick reached this function.
+ * Effect start init 2 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Mega Kick.
+ */
+void BattleAnim_InitializeMegaKickUse(void) {
     func_8213B560(0, &func_8214B0FC, &D_8218E5C8, 0, 4, 0x11, (s32) D_8219A80A, 0, 0);
 }
 
@@ -1850,13 +1914,24 @@ extern M2C_UNK D_8218E7A8;
 extern s16 D_8219A80A;
 extern M2C_UNK func_821499D4;
 
-void func_8214CEB0(void) {
+/**
+ * Effect init that spawns the Bubble animation. Player sweep (all 165 moves used in battle): only
+ * Bubble reached this function.
+ * Effect start init 48 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Bubble.
+ */
+void BattleAnim_InitializeBubbleUse(void) {
     func_8213B5D8(0, 1, 0x3C, &func_821499D4, &D_8218E7A8, 0, 1, 0x11, (s32) D_8219A80A, 0, 0);
 }
 
 extern ParticleDescriptor D_8218E580[86];
 extern M2C_UNK D_8218E728;
-void InitParticleEffectGroup_Basic(void) {
+/**
+ * Effect init for the end (impact) of the Bubble animation.
+ * Effect end init 34 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Bubble.
+ */
+void BattleAnim_InitializeBubbleHit(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunDefaultHitSpark, &D_8218E728, 0, 1, 0x11, 9, 3, 5);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackEndEffects34And53Descriptor45RotatingBounceFade, &D_8218E7A8, 0, 0x10, 0x11, 9, 0, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_CallbackEndEffects34And53Descriptor45RotatingBounceFade, &D_8218E7A8, 0, 0x10, 0x11, 9, 0, 0);
@@ -1864,7 +1939,8 @@ void InitParticleEffectGroup_Basic(void) {
 
 /**
  * initializes water gun
- * @unverified Name and comment from Stadium 1.
+ * Effect start init 6 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Water Gun.
  */
 void BattleAnim_InitializeWaterGunUse(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(3, BattleAnim_RunWaterGunAndHydroPumpEmitterFade, &gBattleAnimParticleDescriptors[0xE], 0, 1, 0x11, gBattleAnimCurrentAnchor, 0, 1);
@@ -1875,7 +1951,12 @@ void BattleAnim_InitializeWaterGunUse(void) {
 extern M2C_UNK D_8218E650;
 extern M2C_UNK D_8218E7D8;
 extern M2C_UNK D_8218E5D8;
-void InitComplexParticleSequence(void) {
+/**
+ * Effect init for the end (impact) of the Water Gun animation.
+ * Effect end init 2 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Water Gun.
+ */
+void BattleAnim_InitializeWaterGunHit(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 1, 0xF, BattleAnim_CallbackEndEffect2Descriptor19AnimatedAlphaFade, &D_8218E650, 0, 1, 0x10, gBattleAnimCurrentAnchor, 0x26, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(0xC, BattleAnim_CallbackEndEffect2Descriptor4BModeColorShiftFade, &D_8218E7D8, 0, 1, 0xA, 0, 0x4C, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(0xC, BattleAnim_CallbackEndEffect2Descriptor4BModeColorShiftFade, &D_8218E7D8, 0, 1, 0xA, 0, 0x4C, 1);
@@ -1885,7 +1966,8 @@ void InitComplexParticleSequence(void) {
 
 /**
  * initializes hydro pump
- * @unverified Name and comment from Stadium 1.
+ * Effect start init 58 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Hydro Pump.
  */
 void BattleAnim_InitializeHydroPumpUse(void) {
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0x40, 6);
@@ -1906,7 +1988,8 @@ extern M2C_UNK func_82145998;
 
 /**
  * initializes hydro pump
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Effect end init 27 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Hydro Pump.
  */
 void BattleAnim_InitializeHydroPumpHit(void) {
     func_8213BD78(4, 8, 0x33, 0x10, 0xFF);
@@ -1928,14 +2011,15 @@ extern M2C_UNK func_8214B1F8;
 
 /**
  * initializes ice beam
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Effect start init 47 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Ice Beam.
  */
 void BattleAnim_InitializeIceBeamUse(void) {
     func_8213B6AC(0, 0, 0x20, 8, 0xA0);
     func_8213B644(0, 8, 0x33);
     func_8213B560(0, &func_8214B1F8, &D_8218E818, 0, 1, 0x10, (s32) D_8219A80A, 0x40, 0);
     func_8213B560(6, &BattleAnim_RunPulsingBeamEmanator, &D_8218E818, 0x6E, 1, 0x10, (s32) D_8219A80A, 0x40, 1);
-    func_8213B5D8(0, 3, 0x1E, &func_8214AF58, &D_8218E7D0, 0, 1, 0x11, (s32) D_8219A80A, 0x13, 0);
+    func_8213B5D8(0, 3, 0x1E, &BattleAnim_IceBeamParticleUpdateA, &D_8218E7D0, 0, 1, 0x11, (s32) D_8219A80A, 0x13, 0);
 }
 
 M2C_UNK func_8213B560(M2C_UNK, M2C_UNK *, M2C_UNK *, M2C_UNK, s32, s32, s32, s32, s32); /* extern */
@@ -1945,7 +2029,13 @@ extern M2C_UNK D_8218E818;
 extern s16 D_8219A80A;
 extern M2C_UNK func_8214B1F8;
 
-void func_8214D5E4(void) {
+/**
+ * Effect init that spawns the Psybeam animation. Player sweep (all 165 moves used in battle):
+ * only Psybeam reached this function.
+ * Effect start init 4 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Psybeam.
+ */
+void BattleAnim_InitializePsybeamUse(void) {
     func_8213B6AC(0, 0, 0x20, 8, 0xA0);
     func_8213B644(0, 8, 6);
     func_8213B560(0, &func_8214B1F8, &D_8218E818, 0, 1, 0x10, (s32) D_8219A80A, 0xD, 0);
@@ -1957,7 +2047,13 @@ M2C_UNK func_8213B644(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
 extern M2C_UNK D_8218E7A8;
 extern s16 D_8219A80A;
 
-void func_8214D6B4(void) {
+/**
+ * Effect init that spawns the Bubblebeam animation. Player sweep (all 165 moves used in battle):
+ * only Bubblebeam reached this function.
+ * Effect start init 77, start init 120 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all
+ * 165 moves used: it ran for exactly Bubble Beam.
+ */
+void BattleAnim_InitializeBubbleBeamUse(void) {
     func_8213B644(0, 8, 6);
     func_8213B5D8(0, 1, 0x3C, &BattleAnim_RunBubbleBeamBubblesFast, &D_8218E7A8, 0, 4, 0x11, (s32) D_8219A80A, 0, 0);
     func_8213B5D8(0, 1, 0x3C, &BattleAnim_RunBubbleBeamBubblesSlow, &D_8218E7A8, 0, 1, 0x11, (s32) D_8219A80A, 0, 0);
@@ -1970,7 +2066,13 @@ extern M2C_UNK D_8218E818;
 extern s16 D_8219A80A;
 extern M2C_UNK func_8214B1F8;
 
-void func_8214D774(void) {
+/**
+ * Effect init that spawns the Aurora Beam animation. Player sweep (all 165 moves used in battle):
+ * only Aurora Beam reached this function.
+ * Effect start init 26 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Aurora Beam.
+ */
+void BattleAnim_InitializeAuroraBeamUse(void) {
     func_8213B6AC(0, 0, 0x20, 8, 0xA0);
     func_8213B644(0, 8, 6);
     func_8213B560(0, &func_8214B1F8, &D_8218E818, 0, 1, 0x10, (s32) D_8219A80A, 0x41, 0);
@@ -1986,7 +2088,13 @@ extern M2C_UNK D_8218E818;
 extern s16 D_8219A80A;
 extern M2C_UNK func_8214B1F8;
 
-void func_8214D844(void) {
+/**
+ * Effect init that spawns the Hyper Beam animation. Player sweep (all 165 moves used in battle):
+ * only Hyper Beam reached this function.
+ * Effect start init 39 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Hyper Beam.
+ */
+void BattleAnim_InitializeHyperBeamUse(void) {
     func_8213B6AC(0, 0, 0x20, 8, 0xA0);
     func_8213BC00(0, 8, 0xFF, 0, 0x10);
     func_8213B644(0, 0x20, 0xE);
@@ -2016,7 +2124,13 @@ extern M2C_UNK D_8218E818;
 extern s16 D_8219A80A;
 extern M2C_UNK func_8214B1F8;
 
-void func_8214DA08(void) {
+/**
+ * Effect init that spawns the Tri Attack animation. Player sweep (all 165 moves used in battle):
+ * only Tri Attack reached this function.
+ * Effect start init 78 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Tri Attack.
+ */
+void BattleAnim_InitializeTriAttackUse(void) {
     func_8213B6AC(0, 0, 0x20, 8, 0xA0);
     func_8213B644(0, 8, 0x20);
     func_8213B560(0, &func_8214B1F8, &D_8218E818, 0, 1, 0x10, (s32) D_8219A80A, 0x17, 0);
@@ -2030,7 +2144,11 @@ extern M2C_UNK D_8218E650;
 extern s16 D_8219A80A;
 extern M2C_UNK func_82145998;
 
-void func_8214DA90(void) {
+/**
+ * Effect init that spawns the Waterfall animation. Player sweep (all 165 moves used in battle):
+ * only Waterfall reached this function.
+ */
+void BattleAnim_InitializeWaterfallUseB(void) {
     func_8213BD78(4, 8, 0x33, 0xC, 0xFF);
     func_8213B560(0, &func_82145998, &D_8218E5A8, 0, 1, 0x10, (s32) D_8219A80A, 0x33, 0);
     func_8213B5D8(0, 5, 3, &BattleAnim_RunStrongOutwardMovingLargeHitSpark, &D_8218E650, 0, 8, 0x10, (s32) D_8219A80A, 0x26, 0);
@@ -2050,11 +2168,12 @@ extern s16 D_8219A80A;
 extern M2C_UNK func_82145998;
 extern M2C_UNK func_8214B468;
 extern M2C_UNK func_82161288;
-extern M2C_UNK func_821627C0;
+extern M2C_UNK BattleAnim_IceBeamParticleUpdateB;
 
 /**
  * sets being hit by ice beam
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Effect end init 67 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Ice Beam.
  */
 void BattleAnim_InitializeIceBeamHit(void) {
     func_8213BE70(0, 8, 0x33, 0x10, 0xDC, 0x20);
@@ -2063,7 +2182,7 @@ void BattleAnim_InitializeIceBeamHit(void) {
     func_8213B5D8(4, 4, 2, &func_8214B468, &D_8218E820, 0, 1, 0x10, (s32) D_8219A80A, 0x33, 0);
     func_8213B5D8(0xC, 1, 3, &func_8214C208, &D_8218E650, 0, 8, 0x11, (s32) D_8219A80A, 0x26, 0);
     func_8213B5D8(0xE, 4, 2, &func_82161288, &D_8218E770, 0, 6, 0x10, 0x64, 0, 0);
-    func_8213B5D8(0, 2, 6, &func_821627C0, &D_8218E798, 0, 8, 0x11, 9, 0x18, 0xB);
+    func_8213B5D8(0, 2, 6, &BattleAnim_IceBeamParticleUpdateB, &D_8218E798, 0, 8, 0x11, 9, 0x18, 0xB);
     func_8213B644(0x30, 0x20, 8);
 }
 
@@ -2080,7 +2199,8 @@ extern M2C_UNK func_8214B5A0;
 
 /**
  * initializes being hit by psybeam
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Effect end init 68 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Psybeam.
  */
 void BattleAnim_InitializePsybeamHit(void) {
     func_8213C060(4, 0x32, 0x20, 0xA0);
@@ -2091,7 +2211,12 @@ void BattleAnim_InitializePsybeamHit(void) {
 }
 
 extern ParticleDescriptor D_8218E588[86];
-void InitParticleEffectSet_WithCustomCallback(void) {
+/**
+ * Effect init for the end (impact) of the Bubble Beam animation.
+ * Effect end init 53 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Bubble Beam.
+ */
+void BattleAnim_InitializeBubbleBeamHit(void) {
     BattleAnim_SpawnBeamBoomWaterfallHueChange(4, 0x8, 0x21, 0x10, 0xFF);
     BattleAnim_CreateEffectSlotForCurrentOwner(3, BattleAnim_RunExpandingHitSpark, &D_8218E5A8, 0, 1, 0x10, gBattleAnimCurrentAnchor, 0x33, 0);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(3, 5, 3, BattleAnim_CallbackSharedDescriptor19RecolorAnimatedFade, &D_8218E650, 0, 8, 0x10, gBattleAnimCurrentAnchor, 0, 0);
@@ -2111,7 +2236,8 @@ extern M2C_UNK func_8214B77C;
 
 /**
  * initialize being hit by aurora beam
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Effect end init 69 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Aurora Beam.
  */
 void BattleAnim_InitializeAuroraBeamHit(void) {
     func_8213C060(4, 0x32, 0x20, 0xA0);
@@ -2123,7 +2249,12 @@ void BattleAnim_InitializeAuroraBeamHit(void) {
 
 extern ParticleDescriptor D_8218E588[86];
 extern ParticleDescriptor D_8218E588[86];
-void InitParticleEffectSet_WithComplex(void) {
+/**
+ * Effect init for the end (impact) of the Hyper Beam animation.
+ * Effect end init 70 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Hyper Beam.
+ */
+void BattleAnim_InitializeHyperBeamHit(void) {
     UNUSED s32 pad; // FAKE: stack padding
 
     BattleAnim_SpawnOwnerModelTintRampDetach(0, 0x17, 0xFF, 0, 8);
@@ -2150,7 +2281,8 @@ void BattleAnim_EndEffect71PaletteApproachWithExpandingScaleFades(void) {
 
 /**
  * initializes being hit by tri attack
- * @unverified Name and comment from Stadium 1.
+ * Effect end init 86 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Tri Attack.
  */
 void BattleAnim_InitializeTriAttackHit(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 2, 8, BattleAnim_CallbackEndEffect86Descriptor19ModePositionedAnimFade, &gBattleAnimParticleDescriptors[0x19], 0, 1, 0x11, gBattleAnimCurrentAnchor, 0x49, 0);

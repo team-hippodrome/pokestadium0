@@ -28,11 +28,13 @@ void Model_SetMaterialAlpha(DisplayObject* arg0, u8 arg1);
 void Model_SetMaterialTextureMode(DisplayObject* display_object, u8 texture_mode);
 ModelAnimationBank* ModelAnim_GetAnimationRecord(DisplayObject* arg0, s32 arg1);
 
+/** Creates the root graph nodes that display objects attach to. */
 void ModelRenderer_InitDisplayRoots(void) {
     GeoNode_CreateContainer(0, &D_800AD1D0);
     GeoNode_CreateContainer(0, &D_800AD1E8);
 }
 
+/** Attaches a display object to the primary display root. */
 void ModelRenderer_AttachDisplayObject(DisplayObject* display_object) {
     GeoNode_CreateModelPart(NULL, display_object, 0, &D_80060450, &D_8006045C, &D_80060464);
     GraphNode_AppendChild(&D_800AD1D0, &display_object->node);
@@ -40,6 +42,7 @@ void ModelRenderer_AttachDisplayObject(DisplayObject* display_object) {
     display_object->node.flags &= ~1;
 }
 
+/** Attaches a display object to the secondary display root. */
 void ModelRenderer_AttachSecondaryDisplayObject(DisplayObject* arg0) {
     GeoNode_CreateModelPart(NULL, arg0, 0, &D_80060450, &D_8006045C, &D_80060464);
     GraphNode_AppendChild(&D_800AD1E8, &arg0->node);
@@ -50,6 +53,7 @@ void ModelRenderer_AttachSecondaryDisplayObject(DisplayObject* arg0) {
 // passes object_type as a second argument (a1) in the ROM.
 void func_800325B0(u32 arg0, u32 arg1);
 
+/** Initializes a display object for a root and object type. */
 void Model_InitDisplayObject(DisplayObject* display_object, s16 root_id, s16 object_type, ModelNodeView* child) {
     DisplayObject* obj; // FAKE
 
@@ -77,11 +81,13 @@ void Model_InitDisplayObject(DisplayObject* display_object, s16 root_id, s16 obj
     }
 }
 
+/** Detaches a display object from its children. */
 void ModelRenderer_ClearDisplayObject(DisplayObject* arg0) {
     arg0->node.children = NULL;
     arg0->node.flags &= ~1;
 }
 
+/** Binds the animation with the given id from the object's model asset. */
 s32 ModelAnim_SetAnimation(DisplayObject* display_object, s32 id) {
     ModelAssetNode* asset_node = display_object->node.children;
     ModelAnimationBank* animation_bank = asset_node->getAnimationBank(0, 0);
@@ -96,6 +102,7 @@ s32 ModelAnim_SetAnimation(DisplayObject* display_object, s32 id) {
     return 0;
 }
 
+/** Binds the event track with the given id from the object's model asset. */
 s32 ModelAnim_SetEventTrack(DisplayObject* display_object, s32 track_id) {
     ModelAssetNode* asset_node = display_object->node.children;
     ModelAnimationBank* animation_bank = asset_node->getAnimationBank(0, 0);
@@ -110,10 +117,12 @@ s32 ModelAnim_SetEventTrack(DisplayObject* display_object, s32 track_id) {
     return 0;
 }
 
+/** Sets the material color of a display object. */
 void Model_SetMaterialColor(DisplayObject* display_object, u8 r, u8 g, u8 b, u8 alpha) {
     Color_SetRGBA(&display_object->fogColor, r, g, b, alpha);
 }
 
+/** Sets the material alpha (LOD fraction) of a display object. */
 void Model_SetMaterialAlpha(DisplayObject* arg0, u8 arg1) {
     arg0->lodFraction = arg1;
 }
@@ -127,6 +136,9 @@ void Model_SetMaterialTextureMode(DisplayObject* display_object, u8 texture_mode
     display_object->textureMode = texture_mode;
 }
 
+/**
+ * Returns the animation bank record with the given index for a display object.
+ */
 ModelAnimationBank* ModelAnim_GetAnimationRecord(DisplayObject* arg0, s32 arg1) {
     ModelAnimationBank* var_v1 = NULL;
 
@@ -147,6 +159,8 @@ extern unk_D_8006FF00 D_80064C5C[];
 
 /**
  * Derive the material color variant from a non-default nickname, OT id, and OT name.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the party screen,
+ * registration, Free Battle setup and a switch in battle.
  * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
 arg1_func_80010CA8* Model_ComputeNicknameColorVariant(arg1_func_80010CA8* arg0, BattleMon* arg1) {
@@ -226,6 +240,7 @@ void func_80019D08(Obj80019D08* arg0) {
     }
 }
 
+/** Polls the icon loader for a display object's frame load. */
 void PokeIcon_PollFrameLoadForObject(unk_func_8001C248* arg0) {
     if (PokeIcon_PollFrameLoad(arg0->node.callback)) {
         arg0->node.callbackArg = arg0->node.callback->loadedModel;
@@ -234,6 +249,7 @@ void PokeIcon_PollFrameLoadForObject(unk_func_8001C248* arg0) {
     }
 }
 
+/** Waits for the icon loader to finish a display object's frame load. */
 void PokeIcon_WaitFrameLoadForObject(unk_func_8001C248* arg0) {
     if (arg0->node.type & 0x40 && PokeIcon_WaitFrameLoad(arg0->node.callback) != 0) {
         arg0->node.callbackArg = arg0->node.callback->loadedModel;
@@ -242,6 +258,7 @@ void PokeIcon_WaitFrameLoadForObject(unk_func_8001C248* arg0) {
     }
 }
 
+/** Requests a background load for a display object. */
 void PokeIcon_RequestBackgroundForObject(unk_func_8001C248* arg0) {
     if (!(arg0->unk_01D & 0x40) && (arg0->unk_01D & 0x80)) {
         PokeIcon_RequestBackgroundLoad(arg0->node.callback, arg0->unk_020, arg0->unk_024);
@@ -255,6 +272,7 @@ void PokeIcon_RequestBackgroundForObject(unk_func_8001C248* arg0) {
     }
 }
 
+/** Polls the icon loader for a display object's background load. */
 void PokeIcon_PollBackgroundForObject(unk_func_8001C248* arg0) {
     if (PokeIcon_PollBackgroundLoad(arg0->node.callback) != 0) {
         arg0->unk_024 = arg0->node.callback->loadedBackground;

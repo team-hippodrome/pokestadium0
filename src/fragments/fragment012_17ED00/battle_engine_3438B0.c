@@ -25,7 +25,12 @@ void BattleAnim_RenderNop2(void) {
 }
 
 
-void func_8212B270(CameraNode* arg0, void* arg1) {
+/**
+ * Step 4 reaction after the last hit of a multi-hit move, when the hit count message shows
+ * (hitReactionKind 1, set in ProcessBattleTurn).
+ * In the per-move sweep (moves 1-33) only Double Slap, Comet Punch and Double Kick ran it.
+ */
+void BattleScene_ReactionMultiHitEnd(CameraNode* arg0, void* arg1) {
     u8* sp24 = (u8*)D_8219A544 + 0x7C6;
     Cue8212B270* temp_v1 = (sp24[0x5A] - 1) + (Cue8212B270*)D_82189180[func_82107A5C(D_8219A540)];
     volatile s32 sp1C;
@@ -197,7 +202,14 @@ void func_8212B270(CameraNode* arg0, void* arg1) {
 }
 
 
-void func_8212BA28(CameraNode* arg0, void* arg1) {
+/**
+ * Step 4 reaction when the hit also lowered a stat or confused the target (hitReactionKind 3, set
+ * by Battle_Effect_LowerStat and Battle_Effect_ConfuseChance).
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
+ * @unverified Name from BattleScene_ActionStepReaction's dispatch.
+ */
+void BattleScene_ReactionSideEffect(CameraNode* arg0, void* arg1) {
 
     u8* sp1C = (u8*)D_8219A540 + 0x7C6;
 
@@ -313,7 +325,14 @@ void func_8212BA28(CameraNode* arg0, void* arg1) {
 }
 
 
-void func_8212BF28(CameraNode* arg0, void* arg1) {
+/**
+ * Step 4 of an action phase: commits the target's pending status and runs the target reaction for
+ * hitReactionKind (0 normal, 1 last hit of a multi-hit move, 2 critical hit or OHKO, 3 side
+ * effect).
+ * Seen in play (2026-11-12): in a turn where 1P's Poison Sting went first, it ran at phase 2,
+ * step 4, with hitReactionKind 0, and called BattleScene_ReactionNormal.
+ */
+void BattleScene_ActionStepReaction(CameraNode* arg0, void* arg1) {
     s32 other;
 
     func_821255EC(arg0);
@@ -321,59 +340,61 @@ void func_8212BF28(CameraNode* arg0, void* arg1) {
     other = sBattleScene.scene->actingSide == 0;
     ActivePokemon_CommitPendingStatus(sActivePokemon[other]);
     if (sBattleScene.scene->hitReactionKind == 3) {
-        func_8212BA28(arg0, arg1);
+        BattleScene_ReactionSideEffect(arg0, arg1);
     } else if (sBattleScene.scene->hitReactionKind == 1) {
-        func_8212B270(arg0, arg1);
+        BattleScene_ReactionMultiHitEnd(arg0, arg1);
     } else if (sBattleScene.scene->hitReactionKind == 2) {
-        func_8212AD10(arg0, arg1);
+        BattleScene_ReactionCritical(arg0, arg1);
     } else {
-        func_8212A850(arg0, arg1);
+        BattleScene_ReactionNormal(arg0, arg1);
     }
 }
 
 
 /**
- * Phase 2: runs once both trainers have committed their actions, before the first mover acts.
- * @unverified Phase number seen in play (player agent); handler body only skimmed.
+ * Phase 2: the first action of the turn. Steps 0-4 run the move's presentation script (user
+ * intro, hit count, launch, travel, target reaction) from the per-move table at D_80073D84, and
+ * may hand over to an effect phase such as 7 or 8. In play, 1P's Thunderbolt ran here when 1P
+ * moved first; when COM moved first this phase handed straight over to 7 for its Double Team.
  */
-void BattleScene_PhaseActionsCommitted(CameraNode* arg0) {
+void BattleScene_PhaseFirstAction(CameraNode* arg0) {
     s32 n = 10;
     u8* sp = (u8*)sActivePokemon[sBattleScene.scene->actingSide] + 0x7C6;
 
     if (sBattleScene.scene->mode == n) {
         switch (sBattleScene.scene->phaseStep) {
             case 0:
-                func_82128CDC(arg0, D_8218B2F4[D_8219A4F4][0]);
+                BattleScene_ActionStepIntro(arg0, D_8218B2F4[D_8219A4F4][0]);
                 break;
             case 1:
-                func_82128F2C(arg0, 0);
+                BattleScene_ActionStepSetHitCount(arg0, 0);
                 break;
             case 2:
-                func_82129AE8(arg0, D_8218B2F4[D_8219A4F4][1]);
+                BattleScene_ActionStepUseMove(arg0, D_8218B2F4[D_8219A4F4][1]);
                 break;
             case 3:
-                func_8212A328(arg0, D_8218B2F4[D_8219A4F4][2]);
+                BattleScene_ActionStepTravel(arg0, D_8218B2F4[D_8219A4F4][2]);
                 break;
             case 4:
-                func_8212BF28(arg0, (void*)D_8218B2F4[D_8219A4F4][3]);
+                BattleScene_ActionStepReaction(arg0, (void*)D_8218B2F4[D_8219A4F4][3]);
                 break;
         }
     } else {
         switch (sBattleScene.scene->phaseStep) {
             case 0:
-                func_82128CDC(arg0, *(u16*)(D_80073D84 + 2 + sp[0x5A] * n));
+                BattleScene_ActionStepIntro(arg0, *(u16*)(D_80073D84 + 2 + sp[0x5A] * n));
                 break;
             case 1:
-                func_82128F2C(arg0, 0);
+                BattleScene_ActionStepSetHitCount(arg0, 0);
                 break;
             case 2:
-                func_82129AE8(arg0, *(u16*)(D_80073D84 + 4 + sp[0x5A] * n));
+                BattleScene_ActionStepUseMove(arg0, *(u16*)(D_80073D84 + 4 + sp[0x5A] * n));
                 break;
             case 3:
-                func_8212A328(arg0, *(u16*)(D_80073D84 + 6 + sp[0x5A] * n));
+                BattleScene_ActionStepTravel(arg0, *(u16*)(D_80073D84 + 6 + sp[0x5A] * n));
                 break;
             case 4:
-                func_8212BF28(arg0, (void*)*(u16*)(D_80073D84 + 8 + sp[0x5A] * n));
+                BattleScene_ActionStepReaction(arg0, (void*)*(u16*)(D_80073D84 + 8 + sp[0x5A] * n));
                 break;
         }
     }
@@ -381,47 +402,47 @@ void BattleScene_PhaseActionsCommitted(CameraNode* arg0) {
 
 
 /**
- * Phase 3: the second mover acts.
- * @unverified Phase number seen in play (player agent); handler body only skimmed.
+ * Phase 3: the second action of the turn, with the same steps as BattleScene_PhaseFirstAction.
+ * In play, 1P's Thunderbolt ran here when COM moved first.
  */
-void BattleScene_PhaseSecondMoverAction(CameraNode* arg0) {
+void BattleScene_PhaseSecondAction(CameraNode* arg0) {
     s32 n = 10;
     u8* sp = (u8*)sActivePokemon[sBattleScene.scene->actingSide] + 0x7C6;
 
     if (sBattleScene.scene->mode == n) {
         switch (sBattleScene.scene->phaseStep) {
             case 0:
-                func_82128CDC(arg0, D_8218B320[D_8219A4F4][0]);
+                BattleScene_ActionStepIntro(arg0, D_8218B320[D_8219A4F4][0]);
                 break;
             case 1:
-                func_82128F2C(arg0, 0);
+                BattleScene_ActionStepSetHitCount(arg0, 0);
                 break;
             case 2:
-                func_82129AE8(arg0, D_8218B320[D_8219A4F4][1]);
+                BattleScene_ActionStepUseMove(arg0, D_8218B320[D_8219A4F4][1]);
                 break;
             case 3:
-                func_8212A328(arg0, D_8218B320[D_8219A4F4][2]);
+                BattleScene_ActionStepTravel(arg0, D_8218B320[D_8219A4F4][2]);
                 break;
             case 4:
-                func_8212BF28(arg0, (void*)D_8218B320[D_8219A4F4][3]);
+                BattleScene_ActionStepReaction(arg0, (void*)D_8218B320[D_8219A4F4][3]);
                 break;
         }
     } else {
         switch (sBattleScene.scene->phaseStep) {
             case 0:
-                func_82128CDC(arg0, *(u16*)(D_80073D84 + 2 + sp[0x5A] * n));
+                BattleScene_ActionStepIntro(arg0, *(u16*)(D_80073D84 + 2 + sp[0x5A] * n));
                 break;
             case 1:
-                func_82128F2C(arg0, 0);
+                BattleScene_ActionStepSetHitCount(arg0, 0);
                 break;
             case 2:
-                func_82129AE8(arg0, *(u16*)(D_80073D84 + 4 + sp[0x5A] * n));
+                BattleScene_ActionStepUseMove(arg0, *(u16*)(D_80073D84 + 4 + sp[0x5A] * n));
                 break;
             case 3:
-                func_8212A328(arg0, *(u16*)(D_80073D84 + 6 + sp[0x5A] * n));
+                BattleScene_ActionStepTravel(arg0, *(u16*)(D_80073D84 + 6 + sp[0x5A] * n));
                 break;
             case 4:
-                func_8212BF28(arg0, (void*)*(u16*)(D_80073D84 + 8 + sp[0x5A] * n));
+                BattleScene_ActionStepReaction(arg0, (void*)*(u16*)(D_80073D84 + 8 + sp[0x5A] * n));
                 break;
         }
     }
@@ -526,7 +547,13 @@ void func_8212C530(s32 arg0)
 }
 
 
-void func_8212C60C(s32 arg0, s32 arg1) {
+/**
+ * Plays BattleCamera_PlayShot variant 0-4 on the acting Pokemon.
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
+ * @unverified Name from the code.
+ */
+void BattleCamera_PlayUserShot(s32 arg0, s32 arg1) {
     switch (arg1) {
         case 0:
             BattleCamera_PlayShot(D_8219A544, arg0, 0);
@@ -550,7 +577,13 @@ void func_8212C60C(s32 arg0, s32 arg1) {
 }
 
 
-void func_8212C6E8(ActivePokemon* arg0, CameraNode* arg1, s32 arg2) {
+/**
+ * Plays one of four camera shots on the target (variant 0-3, from the move table or random).
+ * Phase 8 uses it with a random variant for the dodge.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle.
+ * @unverified Name from the code.
+ */
+void BattleCamera_PlayTargetShot(ActivePokemon* arg0, CameraNode* arg1, s32 arg2) {
     switch (arg2) {
         case 0:
             BattleScene_CameraShotTargetHighThunk(arg1, arg0);
@@ -583,17 +616,19 @@ void func_8212C78C(s32 arg0) {
         func_8212C530(arg0);
     } else if (D_80073D90[runtime->usedMove - 1].unk_02 == 4) {
         M2C_FIELD(sBattleScene.scene, s32*, 0x54) = 1;
-        func_8212C60C(arg0, D_80073D90[runtime->usedMove - 1].unk_02);
+        BattleCamera_PlayUserShot(arg0, D_80073D90[runtime->usedMove - 1].unk_02);
     } else {
-        func_8212C60C(arg0, D_80073D90[runtime->usedMove - 1].unk_02);
+        BattleCamera_PlayUserShot(arg0, D_80073D90[runtime->usedMove - 1].unk_02);
     }
 }
 
 /**
- * Phase 7: the first mover acts. In play this showed its move, or こんらんしている！ (is confused) for a confused Pokemon.
- * @unverified Phase number seen in play (player agent); handler body only skimmed.
+ * Phase 7: presentation for moves that act on the user (moveEffectKind 7, set by
+ * Battle_Effect_StatUp, Focus Energy, Mist, Reflect/Light Screen, Conversion, Mimic and Splash).
+ * Shows the used-move message, then the effect message. In play COM's Double Team ran here
+ * whether it moved first or second.
  */
-void BattleScene_PhaseFirstMoverAction(CameraNode* arg0) {
+void BattleScene_PhaseSelfEffect(CameraNode* arg0) {
     sBattleScene.scene->cameraPresetId = 4;
     switch (sBattleScene.scene->phaseStep) {
         case 0:
@@ -655,9 +690,10 @@ void BattleScene_PhaseFirstMoverAction(CameraNode* arg0) {
 
 
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Phase 30 (moveEffectKind 0x1E, set by BattleEffect_Explosion): Self-Destruct and Explosion.
+ * In the per-move sweep only Self-Destruct and Explosion entered phase 30 (then 5, the faint).
  */
-void BattleScene_Phase30(CameraNode* arg0) {
+void BattleScene_PhaseExplosion(CameraNode* arg0) {
     u8* sp1C = (u8*)D_8219A540 + 0x7C6;
 
     switch (sBattleScene.scene->phaseStep) {
@@ -685,7 +721,7 @@ void BattleScene_Phase30(CameraNode* arg0) {
                 BattleAnim_CleanupEffects(1);
                 Audio_FadeAndClearStoredSounds();
                 BattleMessage_ShowForSide(D_8219A520 + 0x148, !sBattleScene.scene->actingSide);
-                func_8212C6E8(D_8219A540, arg0, BattleAnim_RandomRange(2));
+                BattleCamera_PlayTargetShot(D_8219A540, arg0, BattleAnim_RandomRange(2));
                 BattleCamera_CaptureModelOrbit(D_8219A540, arg0);
                 func_82104C68((ActivePokemon*)D_8219A544, 4);
                 sBattleScene.scene->phaseStep++;
@@ -743,7 +779,14 @@ void BattleScene_Phase30(CameraNode* arg0) {
 }
 
 
-void func_8212CF90(CameraNode* arg0) {
+/**
+ * Phase 28 (moveEffectKind 0x1C): the user's move does nothing and only messages show. Set when
+ * the user flinched, when Recover or Rest fails at full HP and when Mirror Move has nothing to
+ * copy.
+ * In the per-move sweep Recover, Soft-Boiled and Rest at full HP and Mirror Move with nothing to
+ * copy entered phase 28.
+ */
+void BattleScene_PhaseMoveFailedMessage(CameraNode* arg0) {
     sBattleScene.scene->cameraPresetId = 4;
 
     switch (sBattleScene.scene->phaseStep) {
@@ -790,7 +833,14 @@ void func_8212CF90(CameraNode* arg0) {
 }
 
 
-void func_8212D194(CameraNode* arg0) {
+/**
+ * Phase 21 (moveEffectKind 0x15, set by Battle_Effect_Heal): Recover, Soft-Boiled and Rest.
+ * Not reached in the sweep: 1P's Nidoqueen was at full HP, so heal moves failed to phase 28
+ * instead.
+ * Seen in play (2026-11-12): Recover with Nidoqueen at 20/69 HP ran this phase, and the HUD then
+ * showed 54/69 (half its max HP restored).
+ */
+void BattleScene_PhaseHeal(CameraNode* arg0) {
 
     u8* sp24 = (u8*)D_8219A544 + 0x78C;
 
@@ -867,7 +917,11 @@ void func_8212D194(CameraNode* arg0) {
 }
 
 
-void func_8212D504(CameraNode* arg0) {
+/**
+ * Phase 15 (moveEffectKind 0x0F, set by Battle_Effect_Transform).
+ * In the per-move sweep only Transform entered phase 15.
+ */
+void BattleScene_PhaseTransform(CameraNode* arg0) {
     UNUSED s32 pad[3]; // FAKE: stack padding
     u8* sp30 = (u8*)D_8219A544 + 0x7C6;
     u8* sp2C = (u8*)D_8219A540 + 0x7C6;
@@ -938,7 +992,10 @@ void func_8212D504(CameraNode* arg0) {
 }
 
 
-void func_8212D820(CameraNode* arg0) {
+/**
+ * Phase 25 (moveEffectKind 0x19, set by Battle_Effect_Substitute).
+ */
+void BattleScene_PhaseSubstitute(CameraNode* arg0) {
     BattleMonRuntime* sp1C = &sActivePokemon[sBattleScene.scene->actingSide]->state.runtime;
     ActivePokemonState* sp18 = &sActivePokemon[sBattleScene.scene->actingSide]->state;
 
@@ -1003,19 +1060,10 @@ void func_8212D820(CameraNode* arg0) {
 void func_80042A6C(s32);
 
 /**
- * Camera state machine (sibling of BattleScene_PhaseFirstMoverAction). Sets scene->unk_50 = 4 and switches on
- * scene->unk_20:
- * 0: once func_82105724(D_8219A544, 0x1E) succeeds, runs the shared camera setup
- * (func_821255B4, func_8212C78C, BattleMessage_ShowForSide, ...), plays sound 0x2E, resets the
- * camera frame counter and advances to state 1.
- * 1: while scene->unk_54 == 1, eases the camera field at +0x2C towards 60.0f; when the frame
- * counter reaches 0x32, clears the message cursor and advances to state 2.
- * 2: same easing, caches Battle_StepPartyHpToDisplay for both active Pokemon in D_8219A560/D_8219A564,
- * sets scene->unk_34 = 3 if byte 0x820 of D_8219A540 is 0xFF, resets the frame counter
- * and animation step and finishes through func_82125C80.
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Phase 27 (moveEffectKind 0x1B): Bide, when it starts and while it stores energy.
+ * In the per-move sweep only Bide entered phase 27.
  */
-void BattleScene_Phase38(CameraNode* arg0) {
+void BattleScene_PhaseBide(CameraNode* arg0) {
     sBattleScene.scene->cameraPresetId = 4;
     switch (sBattleScene.scene->phaseStep) {
         case 0:
@@ -1089,7 +1137,6 @@ s32 func_82105724(ActivePokemon*, s32);
 void func_82105E64(ActivePokemon*);
 /**
  * Phase 29: presents Haze (seen in play).
- * @unverified Phase number seen in play (player agent); handler body only skimmed.
  */
 void BattleScene_PhaseHaze(CameraNode* arg0) {
     switch (sBattleScene.scene->phaseStep) {
@@ -1147,7 +1194,11 @@ void BattleScene_PhaseHaze(CameraNode* arg0) {
     }
 }
 
-void func_8212E0B0(CameraNode* arg0) {
+/**
+ * Phase 12 (moveEffectKind 0x0C, set by Battle_Effect_Charge for Fly): the first turn of Fly.
+ * In the per-move sweep Fly (19) went 2 -> 12.
+ */
+void BattleScene_PhaseFlyUp(CameraNode* arg0) {
     switch (sBattleScene.scene->phaseStep) {
         case 0:
             if (func_82105724((ActivePokemon*)D_8219A544, 0x1E) != 0) {
@@ -1197,9 +1248,10 @@ void func_8212E0B0(CameraNode* arg0) {
 void func_82123314(CameraNode*, ActivePokemon*);
 f32 BattleScene_GetParticipantHeight(ActivePokemon*);
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Phase 13 (moveEffectKind 0x0D, set by Battle_Effect_Charge for Dig): the first turn of Dig.
+ * In the per-move sweep only Dig entered phase 13.
  */
-void BattleScene_Phase13(CameraNode* arg0) {
+void BattleScene_PhaseDigUnder(CameraNode* arg0) {
     switch (sBattleScene.scene->phaseStep) {
         case 0:
             if (func_82105724((ActivePokemon*)D_8219A544, 0x1E) != 0) {
@@ -1261,24 +1313,11 @@ void func_8212189C(void);
 s32 BattleScene_IsMoveKeyedRowWaitComplete(ActivePokemon*, s32);
 void func_82124A40(void);
 /**
- * BattleScene_Phase14: two-step camera/animation state for a battle move effect.
- * Sets the scene's unk_50 to 4, then switches on the scene state counter
- * (unk_20):
- * 0: calls BattleCamera_PlayShot for the active Pokemon (D_8219A544) and waits on
- * func_82105724(.., 0x1E), a "move cue reached" check that falls back to
- * a 0x1E-frame wait when the Pokemon is frozen, asleep, airborne or
- * underground.  Once it reports true the effect is set up
- * (func_821255B4, BattleMessage_ShowForSide, func_8212188C/func_8212189C,
- * func_82104C68 with 8, ActivePokemon_CommitPendingStatus) and the state counter advances.
- * 1: calls func_8211EE8C when func_82121798(0x28) fires, refreshes
- * D_8219A560/D_8219A564 from the two entries of sActivePokemon (the
- * indices unk_2C and !unk_2C), and when BattleScene_IsMoveKeyedRowWaitComplete(.., 0x1E) -- the
- * same kind of cue check -- reports true calls func_82124A40 and
- * func_82125C80.
- * Same shape as BattleScene_PhaseFirstMoverAction and func_8212E7B0.
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Phase 14 (moveEffectKind 0x0E, set by Battle_Effect_Charge): the first turn of Razor Wind,
+ * Solar Beam, Skull Bash and Sky Attack.
+ * In the per-move sweep Razor Wind (13) went 2 -> 14.
  */
-void BattleScene_Phase14(CameraNode* arg0) {
+void BattleScene_PhaseChargeUp(CameraNode* arg0) {
     sBattleScene.scene->cameraPresetId = 4;
     switch (sBattleScene.scene->phaseStep) {
         case 0:
@@ -1308,7 +1347,13 @@ void BattleScene_Phase14(CameraNode* arg0) {
     }
 }
 
-void func_8212E7B0(CameraNode* arg0) {
+/**
+ * Phase 17 (moveEffectKind 0x11, set by Battle_CheckMonCanAct): the user can't act because it is
+ * asleep or frozen, the target holds it with a trapping move, it must recharge, or its move is
+ * disabled.
+ * In play COM's Pinsir, held by Bind, spent its turn in phase 17 (row 9).
+ */
+void BattleScene_PhaseCannotMove(CameraNode* arg0) {
     sBattleScene.scene->cameraPresetId = 4;
     switch (sBattleScene.scene->phaseStep) {
         case 0:
@@ -1367,7 +1412,6 @@ void func_8212E9C8(ActivePokemon* arg0) {
 
 /**
  * Phase 20: a confused Pokemon hurts itself (seen in play: 75 to 63 HP). Shows the message, enters state row 15, and steps the HP down.
- * @unverified Phase number seen in play (player agent); handler body only skimmed.
  */
 void BattleScene_PhaseConfusionSelfHit(CameraNode* arg0) {
     func_821255EC(arg0);
@@ -1384,7 +1428,7 @@ void BattleScene_PhaseConfusionSelfHit(CameraNode* arg0) {
         case 1:
             BattleScene_ResetAnimationStep();
             BattleScene_EnterStateRow((ActivePokemon*)D_8219A544, 0xF);
-            func_8212C6E8((ActivePokemon*)D_8219A544, arg0, D_8219A568 = BattleAnim_RandomRange(4));
+            BattleCamera_PlayTargetShot((ActivePokemon*)D_8219A544, arg0, D_8219A568 = BattleAnim_RandomRange(4));
             BattleCamera_CaptureModelOrbit((ActivePokemon*)D_8219A544, arg0);
             BattleScene_SetDamageShakeAmplitude((ActivePokemon*)D_8219A544);
             BattleAnim_QueueEffectList(8, (ActivePokemon*)D_8219A544);
@@ -1420,7 +1464,6 @@ void BattleScene_PhaseConfusionSelfHit(CameraNode* arg0) {
 
 /**
  * Phase 31: からだが しびれて うごけない (is fully paralyzed), seen in play.
- * @unverified Phase number seen in play (player agent); handler body only skimmed.
  */
 void BattleScene_PhaseFullParalysis(CameraNode* arg0) {
     sBattleScene.scene->cameraPresetId = 4;
@@ -1518,19 +1561,20 @@ void func_8212F044(CameraNode* arg0) {
     BattleMonRuntime* runtime = &opp->state.runtime;
 
     if (D_80073D90[runtime->usedMove - 1].unk_06 == 5) {
-        func_8212C6E8(opp, arg0, D_8219A568);
+        BattleCamera_PlayTargetShot(opp, arg0, D_8219A568);
     } else if (D_80073D90[runtime->usedMove - 1].unk_06 == 4) {
         func_8212EEC0(opp, arg0);
     } else if (D_80073D90[runtime->usedMove - 1].unk_06 == 6) {
         func_8212EF74(opp, arg0);
     } else {
-        func_8212C6E8(opp, arg0, D_80073D90[runtime->usedMove - 1].unk_06);
+        BattleCamera_PlayTargetShot(opp, arg0, D_80073D90[runtime->usedMove - 1].unk_06);
     }
 }
 
 /**
  * Phase 4: ends the turn and returns to phase 0.
- * @unverified Phase number seen in play (player agent); handler body only skimmed.
+ * Seen in play (2026-11-12): in a turn where 1P's Poison Sting went first, it ran at phase 4
+ * after both actions, and the battle went back to the command menu.
  */
 void BattleScene_PhaseEndTurn(s32 arg0) {
     s32 temp_v0;
@@ -1547,7 +1591,13 @@ void BattleScene_PhaseEndTurn(s32 arg0) {
 }
 
 
-void func_8212F16C(CameraNode* arg0) {
+/**
+ * Phase 16 (moveEffectKind 0x10, set by Battle_PrintMoveFailureText): Jump Kick and Hi Jump Kick
+ * missed and the user takes crash damage.
+ * In play a forced Jump Kick miss went 2 -> 16, showed 「いきおい あまって ニドニドは じめんに ぶつかった！」 and took
+ * Nidoqueen from 69 to 68 HP.
+ */
+void BattleScene_PhaseCrashDamage(CameraNode* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
     s32 side = sBattleScene.scene->actingSide;
     u8* sp1C = D_82189180[side] + 0x738;
@@ -1566,7 +1616,7 @@ void func_8212F16C(CameraNode* arg0) {
                 func_82108C0C((ActivePokemon*)D_8219A544);
                 func_8213B31C(1);
                 BattleMessage_ShowForSide(D_8219A520 + 0x88, sBattleScene.scene->actingSide);
-                func_8212C6E8((ActivePokemon*)D_8219A544, arg0, 3);
+                BattleCamera_PlayTargetShot((ActivePokemon*)D_8219A544, arg0, 3);
                 BattleCamera_CaptureModelOrbit((ActivePokemon*)D_8219A544, arg0);
                 func_82121EB0((ActivePokemon*)D_8219A544);
                 BattleScene_ResetAnimationStep();
@@ -1577,7 +1627,7 @@ void func_8212F16C(CameraNode* arg0) {
 
         case 2:
             sBattleScene.scene->cameraPresetId = 1;
-            func_8212C6E8((ActivePokemon*)D_8219A544, arg0, 3);
+            BattleCamera_PlayTargetShot((ActivePokemon*)D_8219A544, arg0, 3);
             if (BattleScene_AdvanceCameraFrameCounter(0x28) != 0) {
                 Battle_ClearMessageCursor();
                 BattleMessage_ShowForSide(D_8219A520 + 0x208, sBattleScene.scene->actingSide);
@@ -1587,7 +1637,7 @@ void func_8212F16C(CameraNode* arg0) {
 
         case 3:
             sBattleScene.scene->cameraPresetId = 1;
-            func_8212C6E8((ActivePokemon*)D_8219A544, arg0, 3);
+            BattleCamera_PlayTargetShot((ActivePokemon*)D_8219A544, arg0, 3);
             if (BattleScene_AdvanceCameraFrameCounter(0x28) != 0) {
                 Battle_ClearMessageCursor();
                 sBattleScene.scene->phaseStep++;
@@ -1605,7 +1655,7 @@ void func_8212F16C(CameraNode* arg0) {
             sBattleScene.scene->cameraPresetId = 1;
             D_8219A560 = Battle_StepPartyHpToDisplay(sActivePokemon[sBattleScene.scene->actingSide]);
             D_8219A564 = Battle_StepPartyHpToDisplay(sActivePokemon[!sBattleScene.scene->actingSide]);
-            func_8212C6E8((ActivePokemon*)D_8219A544, arg0, 3);
+            BattleCamera_PlayTargetShot((ActivePokemon*)D_8219A544, arg0, 3);
             if ((D_8219A560 != 0) && (D_8219A564 != 0)) {
                 BattleScene_ResetAnimationStep();
                 func_82125C34(arg0);
@@ -1616,10 +1666,12 @@ void func_8212F16C(CameraNode* arg0) {
 
 
 /**
- * Phase 8: presents a damaging move's effect. In play it ran for Poison Sting, Double-Edge, Absorb and Double Slap. Stadium 1 used this number for the move-failed message.
- * @unverified Phase number seen in play (player agent); handler body only skimmed.
+ * Phase 8: the move missed. The target dodges to a random side (row 12 on the user) and the
+ * miss message shows. Entered from step 3 when Battle_MoveMissed ran or moveEffectKind is 8.
+ * In play a forced miss (Battle_Random = 255) ran 2 -> 8 and showed
+ * 「しかし ニドニドの こうげきは はずれた！」.
  */
-void BattleScene_PhaseMoveDamage(CameraNode* arg0) {
+void BattleScene_PhaseMoveMissed(CameraNode* arg0) {
     ActivePokemonState* sp1C = &D_8219A540->state;
 
     func_821255EC(arg0);
@@ -1629,9 +1681,9 @@ void BattleScene_PhaseMoveDamage(CameraNode* arg0) {
         case 0:
             BattleAnim_CleanupEffects(1);
             if (sp1C->flags & 0x200) {
-                func_8212C6E8(D_8219A540, arg0, D_8219A568 = 2);
+                BattleCamera_PlayTargetShot(D_8219A540, arg0, D_8219A568 = 2);
             } else {
-                func_8212C6E8(D_8219A540, arg0, D_8219A568 = BattleAnim_RandomRange(2));
+                BattleCamera_PlayTargetShot(D_8219A540, arg0, D_8219A568 = BattleAnim_RandomRange(2));
             }
             BattleScene_EnterStateRow((ActivePokemon*)D_8219A544, 0xC);
             BattleMessage_ShowForSide(D_8219A520 + 0x88, sBattleScene.scene->actingSide);
@@ -1655,10 +1707,11 @@ void BattleScene_PhaseMoveDamage(CameraNode* arg0) {
 }
 
 /**
- * Phase 22: seen in play for Confuse Ray. Other moves that confuse may share it.
- * @unverified Phase number seen in play (player agent); handler body only skimmed.
+ * Phase 22 (moveEffectKind 0x16): a status move hits the target. Set by Battle_Effect_Sleep,
+ * Battle_Effect_Poison, Battle_Effect_Paralyze and Battle_Effect_Confuse. Seen in play for
+ * Confuse Ray.
  */
-void BattleScene_PhaseConfuseRay(CameraNode* arg0) {
+void BattleScene_PhaseInflictStatus(CameraNode* arg0) {
     sBattleScene.scene->cameraPresetId = 2;
     func_821255EC(arg0);
 
@@ -1689,7 +1742,12 @@ void BattleScene_PhaseConfuseRay(CameraNode* arg0) {
     }
 }
 
-void func_8212F6E4(CameraNode* arg0) {
+/**
+ * Phase 26 (moveEffectKind 0x1A, set by Battle_Effect_LowerStat): a move that lowers the target's
+ * stat.
+ * In the per-move sweep (moves 1-33) only Sand Attack ran it.
+ */
+void BattleScene_PhaseLowerStat(CameraNode* arg0) {
     sBattleScene.scene->cameraPresetId = 2;
     func_821255EC(arg0);
 
@@ -1730,7 +1788,11 @@ void func_8212F6E4(CameraNode* arg0) {
     }
 }
 
-void func_8212F894(CameraNode* arg0) {
+/**
+ * Phase 32 (moveEffectKind 0x20, set by Battle_Effect_Disable).
+ * In the per-move sweep only Disable entered phase 32.
+ */
+void BattleScene_PhaseDisable(CameraNode* arg0) {
     BattleMonRuntime* runtime = &((ActivePokemon*)D_8219A544)->state.runtime;
 
     sBattleScene.scene->cameraPresetId = 2;
@@ -1739,7 +1801,7 @@ void func_8212F894(CameraNode* arg0) {
     switch (sBattleScene.scene->phaseStep) {
         case 0:
             BattleAnim_CleanupEffects(1);
-            func_8212C6E8(D_8219A540, arg0, D_8219A568 = BattleAnim_RandomRange(4));
+            BattleCamera_PlayTargetShot(D_8219A540, arg0, D_8219A568 = BattleAnim_RandomRange(4));
             BattleMessage_ShowForSide(D_8219A520 + 0x88, sBattleScene.scene->actingSide);
             BattleScene_ResetCameraFrameCounter();
             BattleAnim_QueueMoveEffectEnd(runtime->usedMove, (ActivePokemon*)D_8219A544, D_8219A540, BattleScene_GetHitCueDefaultAnchor(D_8219A540), func_82107B54(D_8219A540));
@@ -1769,7 +1831,7 @@ void func_8212F9FC(CameraNode* arg0) {
             func_8213B31C(1);
             sBattleScene.scene->cameraPresetId = 2;
             func_82104C68((ActivePokemon*)D_8219A544, 4);
-            func_8212C6E8(D_8219A540, arg0, D_8219A568 = BattleAnim_RandomRange(4));
+            BattleCamera_PlayTargetShot(D_8219A540, arg0, D_8219A568 = BattleAnim_RandomRange(4));
             BattleMessage_ShowForSide(D_8219A520 + 0x88, sBattleScene.scene->actingSide);
             BattleScene_ResetCameraFrameCounter();
             func_82121EB0(D_8219A540);
@@ -1783,7 +1845,7 @@ void func_8212F9FC(CameraNode* arg0) {
                 Battle_ClearMessageCursor();
             }
             if ((D_8219A564 == 1) && (BattleScene_AdvanceCameraFrameCounter(0x96) != 0)) {
-                func_8212C6E8((ActivePokemon*)D_8219A544, arg0, D_8219A568 = BattleAnim_RandomRange(4));
+                BattleCamera_PlayTargetShot((ActivePokemon*)D_8219A544, arg0, D_8219A568 = BattleAnim_RandomRange(4));
                 Audio_FadeAndClearStoredSounds();
                 func_8213B31C(1);
                 func_821365E8(4, (ActivePokemon*)D_8219A544);
@@ -1819,7 +1881,6 @@ void func_8212F9FC(CameraNode* arg0) {
  * when the acting Pokemon has unk_15 bits 0x18 or unk_4D bit 0x80 set. Plays effect list 5 or 6 (unk_15 bits)
  * and effect list 10 (unk_4D bit 0x80), then flips the acting side and enters BattleScene_PhaseConfusionSelfHit if the
  * acting Pokemon reaches 0 HP.
- * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
 void BattleScene_PhaseResidualDamageAfterMove(CameraNode* arg0) {
     u8* sp2C = (u8*)sActivePokemon[sBattleScene.scene->actingSide] + 0x7C6;
@@ -1930,8 +1991,8 @@ void func_82134EBC(ActivePokemon*, s32);
 s32 func_82124BF8(ActivePokemon*);
 /**
  * Phase 9 (moveEffectKind 9). The acting Pokemon takes damage from its own move: plays effect list 9, the
- * hit cue animation, and the damage shake while displayHp moves toward unk_12, then updates HP.
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * hit cue animation and the damage shake, then commits pendingHp to hp.
+ * In the per-move sweep exactly Take Down, Double-Edge, Submission and Struggle entered phase 9.
  */
 void BattleScene_PhaseRecoilDamage(CameraNode* arg0) {
     BattleMonRuntime* self = &sActivePokemon[sBattleScene.scene->actingSide]->state.runtime;
@@ -1955,8 +2016,8 @@ void BattleScene_PhaseRecoilDamage(CameraNode* arg0) {
                 BattleScene_ResetCameraFrameCounter();
                 func_821237B0(arg0, sActivePokemon[sBattleScene.scene->actingSide]);
                 BattleMessage_ShowForSide(D_8219A520 + 0x408, sBattleScene.scene->actingSide);
-                self->displayHp = self->currentHp;
-                other->displayHp = other->currentHp;
+                self->hp = self->pendingHp;
+                other->hp = other->pendingHp;
                 sBattleScene.scene->phaseStep++;
             }
             break;
@@ -2012,7 +2073,7 @@ void BattleScene_Phase10(CameraNode* arg0) {
                 BattleMessage_ShowForSide(D_8219A520 + 0x2C8, !sBattleScene.scene->actingSide);
                 sBattleScene.scene->phaseStep += 1;
             }
-
+            /* fallthrough */
         case 2:
             if (BattleScene_AdvanceCameraFrameCounter(0x3C) != 0) {
                 func_8211EE8C();

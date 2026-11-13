@@ -57,7 +57,7 @@ void BattleAnim_CallbackUnusedGenericFadeApproach(Particle* arg0) {
             break;
 
         case 2:
-            Particle_Field1C_Approach_0B98C(arg0, 3.0f, 0.025f);
+            Particle_ApproachScale(arg0, 3.0f, 0.025f);
             Particle_TickDelayAndAdvanceLifecycle(arg0, 0x12C);
             break;
 
@@ -78,7 +78,7 @@ void BattleAnim_CallbackUnusedGenericFadeApproach(Particle* arg0) {
 void BattleAnim_SetupOrphanDescriptor2BSpinFade(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
 
-    Particle_Field1C_SetScaled_0B938(arg0, 0.2f);
+    Particle_SetScaleScaled(arg0, 0.2f);
     Particle_Field7C_SetYScaled_0AF24(arg0, 1.0f);
     Particle_Field94_SetX_0A2A4(arg0, ParticleMath_RandomRange(0x10000));
     Particle_Field94_SetZ_0A2CC(arg0, ParticleMath_RandomRange(0x10000));
@@ -98,7 +98,7 @@ void BattleAnim_CallbackOrphanDescriptor2BSpinFade(Particle* arg0) {
             break;
 
         case 2:
-            if (Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
                 Particle_EnableRendering(arg0);
                 Particle_BeginPhase(arg0);
             }
@@ -141,7 +141,7 @@ void BattleAnim_CallbackOrphanDescriptor2BSpinFade(Particle* arg0) {
 void BattleAnim_SetupOrphanDescriptor2EScatterFade(Particle* arg0) {
     s16 sp2E = Particle_FieldAC_GetS16_0C038(arg0);
 
-    Particle_Field1C_SetScaled_0B938(arg0, 0.5f);
+    Particle_SetScaleScaled(arg0, 0.5f);
     Particle_Field74_SetScaled_0AD8C(arg0, 10.0f);
     Particle_Field94_AddVec_0A52C(arg0, ParticleMath_RandomSigned(0x1000), ParticleMath_RandomSigned(0x1000), 0);
     Particle_FieldA6_SetS16_0BCA8(arg0, sp2E * 4);
@@ -187,12 +187,13 @@ void func_82151A5C(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Petal Dance.
  */
 void BattleAnim_SetupPetalDanceLingeringHitEffect(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
 
-    Particle_Field1C_SetScaled_0B938(arg0, 0.12f);
+    Particle_SetScaleScaled(arg0, 0.12f);
     Particle_Field7C_SetYScaled_0AF24(arg0, (ParticleMath_RandomRange(0x14) * 0.02f) + 0.25f);
     Particle_Field94_SetX_0A2A4(arg0, ParticleMath_RandomRange(0x10000));
     Particle_Field94_SetZ_0A2CC(arg0, ParticleMath_RandomRange(0x10000));
@@ -213,7 +214,8 @@ s32 Particle_ApproachStepMagnitude(Particle* arg0, f32 arg1, f32 arg2);
 void Particle_ApplyRotationStepX(Particle* arg0);
 /**
  * Handles the floating pedals that linger when being hit by pedal dance
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Petal Dance.
  */
 void BattleAnim_RunPetalDanceLingeringHitEffect(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -222,7 +224,7 @@ void BattleAnim_RunPetalDanceLingeringHitEffect(Particle* arg0) {
             break;
 
         case 2:
-            if (Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
                 Particle_EnableRendering(arg0);
                 Particle_BeginPhase(arg0);
                 Particle_FieldA6_SetS16_0BCA8(arg0, ParticleMath_RandomRange(0xA) + 0x1E);
@@ -230,14 +232,14 @@ void BattleAnim_RunPetalDanceLingeringHitEffect(Particle* arg0) {
             break;
 
         case 3:
-            if (Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
                 Particle_FieldA6_SetS16_0BCA8(arg0, 8);
                 Particle_AdvancePhase(arg0);
             }
             break;
 
         case 4:
-            if (Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
                 Particle_Field9A_SetX_0A3C4(arg0, ParticleMath_RandomSignedOffsetBySign(0x1000, 0x600));
                 Particle_FieldB0_SetS16_0BFEC(arg0, ParticleMath_RandomSignedOffsetBySign(0x400, 0x400));
                 Particle_Field9A_SetZ_0A3EC(arg0, ParticleMath_RandomSignedOffsetBySign(0x1000, 0x600));
@@ -289,7 +291,8 @@ void BattleAnim_RunPetalDanceLingeringHitEffect(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Vine Whip and Wing Attack.
  */
 void BattleAnim_SetupSlowFallingHitEffect(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
@@ -299,7 +302,7 @@ void BattleAnim_SetupSlowFallingHitEffect(Particle* arg0) {
 
     switch (sp24) {
         case 0:
-            Particle_Field1C_SetScaled_0B938(arg0, 0.12f);
+            Particle_SetScaleScaled(arg0, 0.12f);
             arg0->motionTarget.y = -((ParticleMath_RandomRange(0xA) * 0.1f) + 0.5f);
             Particle_Field38_AddYScaled_08E90(arg0, ParticleMath_RandomRange(0x28) + 0x1E);
             Particle_SetRandomVelocityXSymmetric(arg0, 0x1E, 0);
@@ -307,7 +310,7 @@ void BattleAnim_SetupSlowFallingHitEffect(Particle* arg0) {
             break;
 
         case 1:
-            Particle_Field1C_SetScaled_0B938(arg0, 0.2f);
+            Particle_SetScaleScaled(arg0, 0.2f);
             arg0->motionTarget.y = -((ParticleMath_RandomRange(4) * 0.1f) + 0.2f);
             Particle_Field38_AddYScaled_08E90(arg0, ParticleMath_RandomSigned(0x14) + 0x1E);
             Particle_SetRandomVelocityXSymmetric(arg0, 0xF, 5);
@@ -331,7 +334,8 @@ void func_8213E1FC(Particle* arg0, f32 arg1);
 void Particle_ApplyRotationStepX(Particle* arg0);
 /**
  * Handles the leaves that spawn when being hit by vine whip and the feathers that spawn when being hit by wing attack
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Vine Whip and Wing Attack.
  */
 void BattleAnim_RunSlowFallingHitEffect(Particle* arg0) {
     s16 sp26 = Particle_FieldCE_GetS32_0C040(arg0);
@@ -342,7 +346,7 @@ void BattleAnim_RunSlowFallingHitEffect(Particle* arg0) {
             break;
 
         case 2:
-            if (Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
                 Particle_EnableRendering(arg0);
                 Particle_BeginPhase(arg0);
                 switch (sp26) {
@@ -358,7 +362,7 @@ void BattleAnim_RunSlowFallingHitEffect(Particle* arg0) {
             break;
 
         case 3:
-            Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0);
+            Particle_DecrementUnkA6ToZeroThenAdvance(arg0);
             break;
 
         case 4:
@@ -399,7 +403,8 @@ void BattleAnim_OrphanDescriptor2BAnd2EEmitterSequence(void) {
 
 /**
  * initializes being hit by pedal dance
- * @unverified Name and comment from Stadium 1.
+ * Effect end init 26 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Petal Dance.
  */
 void BattleAnim_InitializePetalDanceHit(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 2, 0x14, BattleAnim_RunPetalDanceLingeringHitEffect, &gBattleAnimParticleDescriptors[0x2C], 0, 4, 0xE, 0, 0, 0);
@@ -408,7 +413,8 @@ void BattleAnim_InitializePetalDanceHit(void) {
 
 /**
  * initializes being hit by wing attack
- * @unverified Name and comment from Stadium 1.
+ * Effect end init 87 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Wing Attack.
  */
 void BattleAnim_InitializeWingAttackHit(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 2, 5, BattleAnim_RunSlowFallingHitEffect, &gBattleAnimParticleDescriptors[0x2D], 0, 1, 0xE, 0, 0, 1);

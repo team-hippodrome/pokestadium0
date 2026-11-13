@@ -123,7 +123,7 @@ void func_89101238(s32, s32, s8*, s32, s32);
 
 /**
  * Draws one Pokemon row of the list with the columns of the current detail page.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): the rows 0001 フシギダネ ハナ 12345 サトシ てもち くさ どく, 0002 ヒトカゲ, 0003 ゼニガメ.
  */
 void LabPCList_DrawMonRow(s32 x, s32 y, Entry891012A8 *entry, s32 row, s32 flags, Ctx891012A8 *ctx)
 {
@@ -193,7 +193,7 @@ void LabPCList_DrawMonRow(s32 x, s32 y, Entry891012A8 *entry, s32 row, s32 flags
           break;
 
         case 3:
-          LabPCList_DrawLocationTabs(cx + 4, y + 2, (s8 ***) entry);
+          LabPCList_DrawLocation(cx + 4, y + 2, (s8 ***) entry);
           break;
 
         case 4:
@@ -261,8 +261,9 @@ typedef struct ListMenu8910179C {
 /**
  * Draws a fixed-size (0x50 x 0x14) cursor rectangle via Ui_DrawRoundedFrame for a scrolling list
  * menu: x = arg1 + 0x26, y = scrollTarget + arg2 - scroll, minus (cellHeight - 1) when flag
- * 0x400 is set; colour read from D_80073520. Compare ScrollGrid_DrawCursor and ScrollList_DrawCursor.
- * @unverified Name guessed from the code; comment kept.
+ * 0x400 is set; color read from D_80073520. Compare ScrollGrid_DrawCursor and ScrollList_DrawCursor.
+ * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): drew the cursor on the フシギダネ
+ * row.
  */
 void LabPCList_DrawRowCursor(ListMenu8910179C* arg0, s32 arg1, s32 arg2) {
     s32 y;
@@ -287,7 +288,7 @@ void Gfx_DrawTextureRgba16(s32, s32, s32, s32, u8*, s32, s32);
 
 /**
  * Draws タテ／ヨコきりかえ (switch vertical/horizontal) and ページおくり%d/3 (page %d/3).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): Lタテ／ヨコきりかえR and ページおくり1／3.
  */
 void LabPCList_DrawPageHint(s8* arg0) {
     func_8001AB6C();

@@ -51,7 +51,8 @@ extern u8 D_82009DFC[];
 
 /**
  * Opens the window for screen state `arg1`: battle mode, rules, tournaments, cup, opponent, entry and popups.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran as each Free Battle window opened in turn: battle mode, rules
+ * (フリーバトル), たいせんする, the opponent picker (1P VS COM) and the entry list.
  */
 void FreeBattle_SetScreenState(s8* arg0, s32 arg1, s32 arg2) {
     s8* view;
@@ -190,7 +191,8 @@ u8 func_8000B2E8(void);
  * where GbSave_GetSaveState(i) returns 0. Word +0x5010 is set to func_8000B2E8()
  * and word +0x5014 to the number of bits among bits 0..3 of that value that
  * are set.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-13) ran once as the バトルモード window (フリーバトル / トーナメント) opened from the main
+ * menu.
  */
 void FreeBattle_InitBattleModeScreen(s32 arg0) {
     s32 i;
@@ -211,12 +213,12 @@ void FreeBattle_InitBattleModeScreen(s32 arg0) {
     FreeBattle_SetScreenState((s8*)arg0, 1, 0);
 }
 
-void func_82000594(void*);
+void FreeBattle_AddPresetTeams(void*);
 void FreeBattle_LoadGbTeams(void*);
 void func_80027804(void*, void*, s32, s32);
 /**
  * Builds the team list from the GB cartridges and rentals and opens the entry list.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: A on COM opens 「エントリーポケモンのせんたく」 and runs this.
  */
 void FreeBattle_InitEntryScreen(s8 *arg0)
 {
@@ -231,11 +233,11 @@ void FreeBattle_InitEntryScreen(s8 *arg0)
   }
   if (M2C_FIELD(arg0, s32*, 0x436C))
   {
-    func_82000594(arg0 + 0x4310);
+    FreeBattle_AddPresetTeams(arg0 + 0x4310);
   }
   func_80027804(arg0 + 0x4320, arg0 + 0x4290, 0x20, 0);
   FreeBattle_BuildTeamPointers((void *) (arg0 + 0x4320), (void *) (arg0 + 0x4310));
-  func_8200140C((void *) (arg0 + 0x4310), M2C_FIELD(arg0, s32*, 0x4374));
+  FreeBattle_MarkIneligibleMons((void *) (arg0 + 0x4310), M2C_FIELD(arg0, s32*, 0x4374));
   M2C_FIELD(arg0, s32*, 0x4354) = 0;
     for (i = 0; i < 5; i++) { M2C_FIELD(arg0, s32*, (0x4340 + (i * 4))) = 0;
   }
@@ -257,7 +259,7 @@ void FreeBattle_DrawRentalScreen(s8*);
 void BlinkingTextBox_Draw(s8*);
 /**
  * Draws the battle setup screen for its current state.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: runs every frame on the battle menu screens.
  */
 M2C_UNK FreeBattle_DrawScreen(s32 arg0) {
     s8* base = (s8*)arg0;
@@ -329,9 +331,9 @@ s32 func_8002BC14(s32);
 void func_8003F6AC(s32);
 s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2);
 void FreeBattle_ClearIndices(void*, s32, s32);
-void func_82002C3C(s8*);
+void FreeBattle_InitEntryListCursor(s8*);
 s32 FreeBattle_UpdateEntrySelect(s8*);
-void func_820044D0(s8*);
+void FreeBattle_CommitEntries(s8*);
 s32 FreeBattle_UpdateMenuWindow(s8*);
 s32 FreeBattle_UpdatePopupMenu(s8*);
 s32 FreeBattle_UpdateOpponentSelect(s8*);
@@ -344,7 +346,7 @@ extern u8 D_8200AC58[];
 
 /**
  * Runs the battle setup screen's state machine for one frame.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran every frame from the battle mode window through the entry list.
  */
 s32 FreeBattle_UpdateScreen(s8* arg0) {
     s32 ret;
@@ -529,7 +531,7 @@ s32 FreeBattle_UpdateScreen(s8* arg0) {
                     }
                 }
                 if (M2C_FIELD(arg0, s32*, 0x4354) >= 5) {
-                    func_820044D0(arg0);
+                    FreeBattle_CommitEntries(arg0);
                     Audio_PlayCommand(0x53, 0, 0);
                     FreeBattle_SetScreenState(arg0, 0xB, 0);
                 } else {
@@ -537,7 +539,7 @@ s32 FreeBattle_UpdateScreen(s8* arg0) {
                     if (M2C_FIELD(arg0, s32*, 0x4DC4) != 0) {
                         FreeBattle_ClearIndices(D_8200AC58, (M2C_FIELD(arg0, s32*, 0x46D8) * 6) % 24, 6);
                     }
-                    func_82002C3C(arg0 + 0x4690);
+                    FreeBattle_InitEntryListCursor(arg0 + 0x4690);
                 }
             }
             break;
@@ -577,6 +579,8 @@ extern s8 D_800AE8F0;
 
 /**
  * Reopens the rule menu with the choice saved from the previous visit.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void FreeBattle_RestoreMenuState(s32 arg0) {
@@ -675,7 +679,7 @@ extern s32 D_8200AD28;
 
 /**
  * One frame of the battle setup screen.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: runs every frame on the battle menu screens (バトルモード, たいせんルールせんたく).
  */
 void FreeBattle_RunFrame(s32 arg0) {
     Cont_StartReadInputs();
@@ -693,7 +697,7 @@ extern M2C_UNK D_8200AD30;
 
 /**
  * Draws the setup screen and the GB save summary bar.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: runs as 「エントリーけってい」 fades out after both teams are entered.
  */
 s32 FreeBattle_DrawScreenWithSummary(s32 arg0) {
     M2C_UNK *var_a1;

@@ -14,6 +14,7 @@ s32 Jpeg_DecodeBlock(JpegHuffmanTable* hTable0, JpegHuffmanTable* hTable1, u16* 
 s32 Jpeg_DecodeHuffmanSymbol(JpegHuffmanTable* hTable, s16* outCoeff, s8* outZeroCount);
 u16 Jpeg_ReadBits(u8 len);
 
+/** Decodes a run of JPEG minimum coded units. */
 s32 Jpeg_DecodeMcus(JpegDecoder* decoder, u16* mcu_buff, s32 count, u8 is_following, JpegDecoderState* state) {
     s16 pad; // FAKE: stack padding
     s16 unk0;
@@ -94,6 +95,7 @@ s32 Jpeg_DecodeMcus(JpegDecoder* decoder, u16* mcu_buff, s32 count, u8 is_follow
     return 0;
 }
 
+/** Decodes one 8x8 JPEG block from the bit stream. */
 s32 Jpeg_DecodeBlock(JpegHuffmanTable* h_table0, JpegHuffmanTable* h_table1, u16* mcu, s16* unk) {
     s8 i = 0;
     s8 zero_count;
@@ -132,6 +134,7 @@ s32 Jpeg_DecodeBlock(JpegHuffmanTable* h_table0, JpegHuffmanTable* h_table1, u16
     return 0;
 }
 
+/** Decodes one Huffman symbol from the bit stream. */
 s32 Jpeg_DecodeHuffmanSymbol(JpegHuffmanTable* h_table, s16* out_coeff, s8* out_zero_count) {
     u8 code_idx;
     u8 sym;
@@ -169,6 +172,7 @@ s32 Jpeg_DecodeHuffmanSymbol(JpegHuffmanTable* h_table, s16* out_coeff, s8* out_
     return 0;
 }
 
+/** Reads a number of bits from the bit stream. */
 u16 Jpeg_ReadBits(u8 len) {
     u8 byte_count;
     u8 data;

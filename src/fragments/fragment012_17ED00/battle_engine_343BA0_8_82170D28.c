@@ -2,7 +2,8 @@
 #include "battle_engine_343BA0_8.h"
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Hyper Beam.
  */
 void BattleAnim_SeedHyperBeamUseSixSlotTrail(void) {
     static unk_D_843C2C00_024 D_84388240 = {
@@ -34,7 +35,8 @@ void BattleAnim_SeedHyperBeamUseSixSlotTrail(void) {
 
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Hyper Beam.
  */
 void BattleAnim_SetupHyperBeamUseCombinedTrail(void) {
     BattleAnim_ResetSharedEffectMatrix();
@@ -45,7 +47,8 @@ void BattleAnim_SetupHyperBeamUseCombinedTrail(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Hyper Beam.
  */
 s32 BattleAnim_RunHyperBeamUseCombinedTrail(void) {
     D_8219CB14++;
@@ -57,7 +60,8 @@ s32 BattleAnim_RunHyperBeamUseCombinedTrail(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Hyper Beam.
  */
 void BattleAnim_DrawHyperBeamUseCombinedTrail(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

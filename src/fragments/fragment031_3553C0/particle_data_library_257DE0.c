@@ -72,6 +72,7 @@ Gfx* func_8F2003EC(Gfx* gfx) {
     return gfx;
 }
 
+/** Initializes a display list segment holding a rotation matrix. */
 void DisplayList_InitRotationMatrixSegment(s32 arg0, DisplayListState* state) {
     Gfx* gfx;
 

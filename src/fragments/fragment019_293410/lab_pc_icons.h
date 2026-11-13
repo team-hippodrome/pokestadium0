@@ -45,36 +45,36 @@ extern char D_8A21D854[];
 extern char D_8A21D858[];
 void Font_SetColorForFlags(s32);
 void MonSummary_DrawStatusCondition(s32, s32, BattleMon*);
-void MonSummary_DrawHpLevel(s32 arg0, s32 arg1, BattleMon* arg2, s32 arg3);
+void PartyScreen_DrawHpLevel(s32 arg0, s32 arg1, BattleMon* arg2, s32 arg3);
 
 extern s8* D_8A21DA50;
 void UI_DrawTextureRgba16(s32 arg0, s32 arg1, s32 arg2);
 
 /*
- * MonSummary_InitListWindow
+ * PartyScreen_InitList
  *
  * Initialises a record like Pokedex_InitEntryWindow does: Window_SetRect fills the first
  * five words with (arg1, arg2, 0x221, 0x168, 0), the words at +0x20, +0x24
  * and +0x28 are cleared and +0x14 is set to 0x1001.  It then calls
  * Menu_Init on the sub-object at arg0 + 0x2C with arg3, the area at
- * arg0 + 0x50, the callback MonSummary_DrawListRow and the constants 0x215 and 0x33.
+ * arg0 + 0x50, the callback PartyScreen_DrawListRow and the constants 0x215 and 0x33.
  * What Menu_Init does is not established yet, so the roles of those
  * arguments are not named.
  */
 M2C_UNK Menu_Init(s8 *, s32, s8 *, M2C_UNK *, s32, s32); /* extern */
-/* MonSummary_DrawListRow is defined in lab_pc_icons.c. */
+/* PartyScreen_DrawListRow is defined in lab_pc_icons.c. */
 
-void MonSummary_InitListWindow(s8 *arg0, s32 arg1, s32 arg2, s32 arg3);
+void PartyScreen_InitList(s8 *arg0, s32 arg1, s32 arg2, s32 arg3);
 
 extern Color_RGBA8 D_8A203304;
 void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
 
-void MonSummary_DrawMenuRow(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4);
+void PartyScreen_DrawActionMenuRow(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4);
 
 s32 Particle_Field50_SetXZFromField7C_09BB4();                                /* extern */
 M2C_UNK Menu_DrawItems(s8 *, s32, s32, M2C_UNK, s32); /* extern */
 
-void MonSummary_DrawMenu(s8 *arg0);
+void PartyScreen_DrawActionMenu(s8 *arg0);
 
 typedef struct Color82000BC4 {
     u8 r, g, b, a;
@@ -130,7 +130,7 @@ s32 MonSummary_GetCButtonPage(s8 *arg0);
 M2C_UNK Ui_DrawTintedScreenBackground(M2C_UNK, M2C_UNK, u8, u8, s32); /* extern */
 extern M2C_UNK D_8A203300;
 
-void MonSummary_DrawBackground(void);
+void PartyScreen_DrawBackground(void);
 
 s32 func_80020AFC(M2C_UNK, s32, M2C_UNK, M2C_UNK);  /* extern */
 M2C_UNK func_80020C60(s32);                         /* extern */
@@ -144,7 +144,7 @@ void func_80020DF0(s32, s32, s32);
 s32 func_8002207C(s32);
 void func_8002D7D4(s32);
 void func_80022188(s32);
-void MonSummary_DrawScreen(void*);
+void PartyScreen_Draw(void*);
 
 void LabPC_WriteDeckBack(s32* arg0, s32 arg1);
 
@@ -154,11 +154,11 @@ void Cont_StartReadInputs(void);                            /* extern */
 void Cont_ReadInputs(void);                            /* extern */
 M2C_UNK func_800158C0();                            /* extern */
 M2C_UNK func_8001B5F0();                            /* extern */
-void MonSummary_DrawScreen(void*);
-M2C_UNK MonSummary_UpdateScreen(M2C_UNK *);                   /* extern */
+void PartyScreen_Draw(void*);
+M2C_UNK PartyScreen_Update(M2C_UNK *);                   /* extern */
 extern M2C_UNK D_8A21DA80;
 
-void MonSummary_RunFrame(s32 arg0);
+void PartyScreen_RunFrame(s32 arg0);
 
 extern u8 D_81000000[];
 extern u8 D_0015B1A0[];

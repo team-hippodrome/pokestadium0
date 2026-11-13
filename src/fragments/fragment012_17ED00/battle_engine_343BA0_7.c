@@ -31,12 +31,12 @@ void BattleAnim_EffectSecondaryOwnerBonePosition(Vec3f* arg0);
 f32 BattleAnim_EffectTertiaryOwnerModelScale(void);
 f32 BattleAnim_EffectSecondaryOwnerModelScale(void);
 void BattleAnim_ResetSharedEffectMatrix(void);
-void BattleAnim_SetupMistUseRibbonMesh(void);
-s32 BattleAnim_RunMistUseRibbonMesh(void);
-void BattleAnim_DrawMistUseRibbonMesh(void);
-void BattleAnim_EndEffect1RibbonMesh_Init(void);
-s32 BattleAnim_EndEffect1RibbonMesh_Update(void);
-void BattleAnim_EndEffect1RibbonMesh_Draw(void);
+void BattleAnim_SetupStatRaiseRibbon(void);
+s32 BattleAnim_RunStatRaiseRibbon(void);
+void BattleAnim_DrawStatRaiseRibbon(void);
+void BattleAnim_SetupStatLowerRibbon(void);
+s32 BattleAnim_RunStatLowerRibbon(void);
+void BattleAnim_DrawStatLowerRibbon(void);
 void BattleAnim_EndEffect19RibbonMesh_Init(void);
 s32 BattleAnim_EndEffect19RibbonMesh_Update(void);
 void BattleAnim_EndEffect19RibbonMesh_Draw(void);
@@ -113,60 +113,71 @@ void BattleAnim_ResetSharedEffectMatrix(void) {
 }
 
 /**
- * Moves: Mist (use)
- * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Resets the shared effect matrix and spawns a rising stat ribbon (direction 0) at the effect
+ * owner's bone, scaled by its model.
+ * Seen in play (2026-11-13) ran for Swords Dance, Mist, Growth, Meditate, Agility, Double Team,
+ * Harden, Minimize, Withdraw, Defense Curl, Barrier, Amnesia, Acid Armor and Sharpen (every self
+ * stat raise, plus Mist). For Swords Dance the ribbon rose around the user.
  */
-void BattleAnim_SetupMistUseRibbonMesh(void) {
+void BattleAnim_SetupStatRaiseRibbon(void) {
     Vec3f sp24;
     f32 sp20;
 
     BattleAnim_ResetSharedEffectMatrix();
     BattleAnim_EffectSecondaryOwnerBonePosition(&sp24);
     sp20 = BattleAnim_EffectSecondaryOwnerModelScale();
-    MistHaze_Init();
-    MistHaze_Spawn(sp24.x, sp24.y, sp24.z, 40.0f, sp20, 0);
+    StatRibbon_Init();
+    StatRibbon_Spawn(sp24.x, sp24.y, sp24.z, 40.0f, sp20, 0);
 }
 
 /**
- * Moves: Mist (use)
- * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Part of the stat-raise ribbon (see BattleAnim_SetupStatRaiseRibbon).
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
+ * @unverified Named after the ribbon seen in play; this function itself was not traced.
  */
-s32 BattleAnim_RunMistUseRibbonMesh(void) {
-    return MistHaze_UpdatePool();
+s32 BattleAnim_RunStatRaiseRibbon(void) {
+    return StatRibbon_UpdatePool();
 }
 
 /**
- * Moves: Mist (use)
- * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Part of the stat-raise ribbon (see BattleAnim_SetupStatRaiseRibbon).
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
+ * @unverified Named after the ribbon seen in play; this function itself was not traced.
  */
-void BattleAnim_DrawMistUseRibbonMesh(void) {
+void BattleAnim_DrawStatRaiseRibbon(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gDisplayListHead = MistHaze_DrawPool(gDisplayListHead);
+    gDisplayListHead = StatRibbon_DrawPool(gDisplayListHead);
 }
 
-void BattleAnim_EndEffect1RibbonMesh_Init(void) {
+/**
+ * Resets the shared effect matrix and spawns a falling stat ribbon (direction 1) at the effect
+ * owner's bone, scaled by the tertiary owner's model.
+ * Seen in play (2026-11-13) ran for Sand Attack, Tail Whip, Leer, Growl, Screech, Smokescreen,
+ * Kinesis and Flash (every move that lowers the target's stat). For Growl the curtain came down in
+ * front of the target.
+ */
+void BattleAnim_SetupStatLowerRibbon(void) {
     Vec3f sp24;
     f32 sp20;
 
     BattleAnim_ResetSharedEffectMatrix();
     BattleAnim_EffectSecondaryOwnerBonePosition(&sp24);
     sp20 = BattleAnim_EffectTertiaryOwnerModelScale();
-    MistHaze_Init();
-    MistHaze_Spawn(sp24.x, sp24.y, sp24.z, 40.0f, sp20, 1);
+    StatRibbon_Init();
+    StatRibbon_Spawn(sp24.x, sp24.y, sp24.z, 40.0f, sp20, 1);
 }
 
-s32 BattleAnim_EndEffect1RibbonMesh_Update(void) {
-    return MistHaze_UpdatePool();
+s32 BattleAnim_RunStatLowerRibbon(void) {
+    return StatRibbon_UpdatePool();
 }
 
-void BattleAnim_EndEffect1RibbonMesh_Draw(void) {
+void BattleAnim_DrawStatLowerRibbon(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gDisplayListHead = MistHaze_DrawPool(gDisplayListHead);
+    gDisplayListHead = StatRibbon_DrawPool(gDisplayListHead);
 }
 
 void BattleAnim_EndEffect19RibbonMesh_Init(void) {
@@ -176,23 +187,24 @@ void BattleAnim_EndEffect19RibbonMesh_Init(void) {
     BattleAnim_ResetSharedEffectMatrix();
     BattleAnim_EffectSecondaryOwnerBonePosition(&sp24);
     sp20 = BattleAnim_EffectTertiaryOwnerModelScale();
-    MistHaze_Init();
-    MistHaze_Spawn(sp24.x, sp24.y, sp24.z, 40.0f, sp20, 0);
-    MistHaze_Spawn(sp24.x, sp24.y, sp24.z, 38.0f, sp20, 1);
+    StatRibbon_Init();
+    StatRibbon_Spawn(sp24.x, sp24.y, sp24.z, 40.0f, sp20, 0);
+    StatRibbon_Spawn(sp24.x, sp24.y, sp24.z, 38.0f, sp20, 1);
 }
 
 s32 BattleAnim_EndEffect19RibbonMesh_Update(void) {
-    return MistHaze_UpdatePool();
+    return StatRibbon_UpdatePool();
 }
 
 void BattleAnim_EndEffect19RibbonMesh_Draw(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gDisplayListHead = MistHaze_DrawPool(gDisplayListHead);
+    gDisplayListHead = StatRibbon_DrawPool(gDisplayListHead);
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Haze.
  */
 void BattleAnim_SetupHazeUseRibbonMesh(void) {
     Vec3f sp24;
@@ -201,29 +213,32 @@ void BattleAnim_SetupHazeUseRibbonMesh(void) {
     BattleAnim_ResetSharedEffectMatrix();
     BattleAnim_EffectSecondaryOwnerBonePosition(&sp24);
     sp20 = BattleAnim_EffectSecondaryOwnerModelScale();
-    MistHaze_Init();
-    MistHaze_Spawn(sp24.x, sp24.y, sp24.z, 40.0f, sp20, 0);
-    MistHaze_Spawn(sp24.x, sp24.y, sp24.z, 38.0f, sp20, 1);
+    StatRibbon_Init();
+    StatRibbon_Spawn(sp24.x, sp24.y, sp24.z, 40.0f, sp20, 0);
+    StatRibbon_Spawn(sp24.x, sp24.y, sp24.z, 38.0f, sp20, 1);
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Haze.
  */
 s32 BattleAnim_RunHazeUseRibbonMesh(void) {
-    return MistHaze_UpdatePool();
+    return StatRibbon_UpdatePool();
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Haze.
  */
 void BattleAnim_DrawHazeUseRibbonMesh(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gDisplayListHead = MistHaze_DrawPool(gDisplayListHead);
+    gDisplayListHead = StatRibbon_DrawPool(gDisplayListHead);
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Surf.
  */
 void BattleAnim_SetupSurfUseTerrainGrid(void) {
     Vec3f sp1C;
@@ -239,14 +254,16 @@ void BattleAnim_SetupSurfUseTerrainGrid(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Surf.
  */
 s32 BattleAnim_RunSurfUseTerrainGrid(void) {
     return SurfTerrainGrid_Update();
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Surf.
  */
 void BattleAnim_DrawSurfUseTerrainGrid(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

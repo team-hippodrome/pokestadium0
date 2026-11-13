@@ -85,6 +85,10 @@ void ModelAnim_ClearEventTrack(DisplayObject* arg0);
 s16 ModelAnim_BindEventTrack(DisplayObject* arg0, s16 arg1, s32 arg2);
 void ModelAnim_SetEventFrame(DisplayObject* display_object, s16 frame_number);
 
+/**
+ * Initializes the common header of a graph node with its type and default
+ * flags.
+ */
 void GeoNode_Init(GraphNode* arg0, u8 arg1) {
     if (arg0 != NULL) {
         arg0->type = arg1;
@@ -99,6 +103,10 @@ void GeoNode_Init(GraphNode* arg0, u8 arg1) {
     }
 }
 
+/**
+ * Sets the callback and its argument on a graph node, converting the callback
+ * address to a virtual address.
+ */
 void GeoNode_SetCallback(GraphNode* arg0, GraphNodeCallback arg1, void* arg2) {
     if (arg1 != NULL) {
         arg1 = Util_ConvertAddrToVirtAddr(arg1);
@@ -113,6 +121,7 @@ void GeoNode_SetCallback(GraphNode* arg0, GraphNodeCallback arg1, void* arg2) {
     }
 }
 
+/** Allocates a container graph node, or initializes the given storage. */
 GraphNode* GeoNode_CreateContainer(MainPoolState* arg0, GraphNode* arg1) {
     if (arg0 != NULL) {
         arg1 = MainPool_AllocAligned(arg0, sizeof(struct GraphNode), 4);
@@ -125,6 +134,7 @@ GraphNode* GeoNode_CreateContainer(MainPoolState* arg0, GraphNode* arg1) {
     return arg1;
 }
 
+/** Allocates a graph node that references another graph node. */
 unk_D_86002F34_alt2* GeoNode_CreateWithReference(MainPoolState* arg0, unk_D_86002F34_alt2* arg1, GraphNode* arg2) {
     if (arg0 != NULL) {
         arg1 = MainPool_AllocAligned(arg0, sizeof(unk_D_86002F34_alt2), 4);
@@ -138,6 +148,7 @@ unk_D_86002F34_alt2* GeoNode_CreateWithReference(MainPoolState* arg0, unk_D_8600
     return arg1;
 }
 
+/** Allocates a camera graph node with the given viewport. */
 CameraNode* GeoNode_CreateCamera(MemoryBlock* arg0, CameraNode* arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5) {
     if (arg0 != NULL) {
         arg1 = MainPool_AllocAligned(arg0, sizeof(CameraNode), 4);
@@ -153,6 +164,7 @@ CameraNode* GeoNode_CreateCamera(MemoryBlock* arg0, CameraNode* arg1, s16 arg2, 
     return arg1;
 }
 
+/** Allocates a type 3 graph node. */
 unk_D_86002F34_alt13* GeoNode_CreateType3(MemoryBlock* arg0, unk_D_86002F34_alt13* arg1, s16 arg2) {
     if (arg0 != NULL) {
         arg1 = MainPool_AllocAligned(arg0, sizeof(unk_D_86002F34_alt13), 4);
@@ -166,6 +178,7 @@ unk_D_86002F34_alt13* GeoNode_CreateType3(MemoryBlock* arg0, unk_D_86002F34_alt1
     return arg1;
 }
 
+/** Allocates a type 4 (model root) graph node. */
 unk_D_86002F34_alt1* GeoNode_CreateType4(MemoryBlock* arg0, unk_D_86002F34_alt1* arg1, s16 arg2) {
     if (arg0 != NULL) {
         arg1 = MainPool_AllocAligned(arg0, 0x24, 4);
@@ -180,6 +193,7 @@ unk_D_86002F34_alt1* GeoNode_CreateType4(MemoryBlock* arg0, unk_D_86002F34_alt1*
     return arg1;
 }
 
+/** Allocates an orthographic projection graph node. */
 unk_D_86002F34_alt14* GeoNode_CreateOrtho(MainPoolState* arg0, unk_D_86002F34_alt14* arg1, s16 arg2) {
     if (arg0 != NULL) {
         arg1 = MainPool_AllocAligned(arg0, 0x60, 4);
@@ -193,6 +207,7 @@ unk_D_86002F34_alt14* GeoNode_CreateOrtho(MainPoolState* arg0, unk_D_86002F34_al
     return arg1;
 }
 
+/** Allocates a perspective projection graph node. */
 unk_D_86002F34_alt15* GeoNode_CreatePerspective(MainPoolState* arg0, unk_D_86002F34_alt15* arg1, s16 arg2) {
     if (arg0 != NULL) {
         arg1 = MainPool_AllocAligned(arg0, 0x60 /* sizeof(unk_D_86002F34_alt15) */, 4);
@@ -206,6 +221,7 @@ unk_D_86002F34_alt15* GeoNode_CreatePerspective(MainPoolState* arg0, unk_D_86002
     return arg1;
 }
 
+/** Allocates a background graph node with the given fill color. */
 unk_D_86002F34_alt16* GeoNode_CreateBackground(MainPoolState* arg0, unk_D_86002F34_alt16* arg1, u8 arg2, u8 arg3, u8 arg4) {
     u32 temp_v0;
 
@@ -221,6 +237,7 @@ unk_D_86002F34_alt16* GeoNode_CreateBackground(MainPoolState* arg0, unk_D_86002F
     return arg1;
 }
 
+/** Allocates a graph node that clears the depth buffer. */
 unk_D_86002F34_alt17* GeoNode_CreateClearDepth(MainPoolState* arg0, unk_D_86002F34_alt17* arg1) {
     if (arg0 != NULL) {
         arg1 = MainPool_AllocAligned(arg0, sizeof(unk_D_86002F34_alt17), 4);
@@ -233,6 +250,7 @@ unk_D_86002F34_alt17* GeoNode_CreateClearDepth(MainPoolState* arg0, unk_D_86002F
     return arg1;
 }
 
+/** Allocates a fog graph node with a fog range and color. */
 unk_D_8690A610* GeoNode_CreateFog(s32 arg0, unk_D_8690A610* arg1, s16 arg2, s16 arg3, u8 r, u8 g, u8 b, u8 a) {
     if (arg0 != 0) {
         arg1 = MainPool_AllocAligned(arg0, sizeof(unk_D_8690A610), 4);
@@ -267,6 +285,7 @@ unk_D_86002F34_alt18* GeoNode_CreateLight(MainPoolState* arg0, unk_D_86002F34_al
     return arg1;
 }
 
+/** Allocates an ambient light graph node with the given color. */
 unk_D_86002F34_alt19* GeoNode_CreateAmbientLight(MainPoolState* arg0, unk_D_86002F34_alt19* arg1, u8 r, u8 g, u8 b) {
     if (arg0 != NULL) {
         arg1 = MainPool_AllocAligned(arg0, sizeof(unk_D_86002F34_alt19), 4);
@@ -319,6 +338,7 @@ unk_D_86002F34_alt12* GeoNode_CreateShadow(MainPoolState* arg0, unk_D_86002F34_a
     return arg1;
 }
 
+/** Allocates a graph node that culls its children beyond a distance range. */
 unk_D_86002F34_alt20* GeoNode_CreateCullDistance(MainPoolState* arg0, unk_D_86002F34_alt20* arg1, s16 arg2, s16 arg3) {
     if (arg0 != NULL) {
         arg1 = MainPool_AllocAligned(arg0, sizeof(unk_D_86002F34_alt20), 4);
@@ -333,6 +353,9 @@ unk_D_86002F34_alt20* GeoNode_CreateCullDistance(MainPoolState* arg0, unk_D_8600
     return arg1;
 }
 
+/**
+ * Allocates a switch-case graph node that processes one child chosen by index.
+ */
 unk_D_86002F34_alt21* GeoNode_CreateSwitchCase(MainPoolState* arg0, unk_D_86002F34_alt21* arg1, s16 arg2, s16 arg3) {
     if (arg0 != NULL) {
         arg1 = MainPool_AllocAligned(arg0, sizeof(unk_D_86002F34_alt21), 4);
@@ -347,6 +370,7 @@ unk_D_86002F34_alt21* GeoNode_CreateSwitchCase(MainPoolState* arg0, unk_D_86002F
     return arg1;
 }
 
+/** Allocates a graph node with a translation and a rotation. */
 unk_D_86002F34_alt5* GeoNode_CreateTranslateRotate(MainPoolState* arg0, unk_D_86002F34_alt5* arg1, Vec3f* arg2, Vec3s* arg3) {
     if (arg0 != NULL) {
         arg1 = MainPool_AllocAligned(arg0, sizeof(unk_D_86002F34_alt5), 4);
@@ -361,6 +385,7 @@ unk_D_86002F34_alt5* GeoNode_CreateTranslateRotate(MainPoolState* arg0, unk_D_86
     return arg1;
 }
 
+/** Allocates a graph node with a translation. */
 unk_D_86002F34_alt22* GeoNode_CreateTranslate(MainPoolState* arg0, unk_D_86002F34_alt22* arg1, Vec3f* arg2) {
     if (arg0 != NULL) {
         arg1 = MainPool_AllocAligned(arg0, sizeof(unk_D_86002F34_alt22), 4);
@@ -393,6 +418,7 @@ unk_D_86002F34_alt6* GeoNode_CreateAnimatedPart(MainPoolState* arg0, unk_D_86002
     return arg1;
 }
 
+/** Allocates a graph node that draws a display list as a model part. */
 unk_D_86002F34_alt7* GeoNode_CreateDisplayListPart(MainPoolState* arg0, unk_D_86002F34_alt7* arg1, s32 arg2, Gfx* arg3, s16 arg4) {
     if (arg0 != NULL) {
         arg1 = MainPool_AllocAligned(arg0, sizeof(unk_D_86002F34_alt7), 4);
@@ -441,6 +467,7 @@ DisplayObject* GeoNode_CreateModelPart(MainPoolState* arg0, DisplayObject* arg1,
     return arg1;
 }
 
+/** Allocates a graph node that draws a display list with its own matrix. */
 unk_D_86002F34_alt8* GeoNode_CreateDisplayListMatrix(MainPoolState* arg0, unk_D_86002F34_alt8* arg1, s32 arg2, Gfx* arg3, MtxF* arg4) {
     if (arg0 != NULL) {
         arg1 = MainPool_AllocAligned(arg0, sizeof(unk_D_86002F34_alt8), 4);
@@ -485,6 +512,7 @@ unk_D_86002F34_alt9* GeoNode_CreateScale(MainPoolState* arg0, unk_D_86002F34_alt
     return arg1;
 }
 
+/** Allocates a graph node that draws a display list. */
 unk_func_80011B94* GeoNode_CreateDisplayList(MainPoolState* arg0, unk_func_80011B94* arg1, s32 arg2, Gfx* arg3) {
     if (arg0 != NULL) {
         arg1 = MainPool_AllocAligned(arg0, sizeof(unk_func_80011B94), 4);
@@ -518,6 +546,10 @@ unk_D_86002F34_alt10* GeoNode_CreateShadowTexture(MainPoolState* arg0, unk_D_860
     return arg1;
 }
 
+/**
+ * Allocates an anchor graph node that records a position for attaching other
+ * objects.
+ */
 unk_D_86002F34_alt23* GeoNode_CreateAnchor(MainPoolState* arg0, unk_D_86002F34_alt23* arg1, s16 arg2) {
     if (arg0 != NULL) {
         arg1 = MainPool_AllocAligned(arg0, sizeof(unk_D_86002F34_alt23), 4);
@@ -553,6 +585,7 @@ unk_D_86002F34_alt24* GeoNode_CreateGroup(MainPoolState* arg0, unk_D_86002F34_al
     return arg1;
 }
 
+/** Sets the viewport rectangle of a camera node. */
 void GeoCamera_SetViewport(CameraNode* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4) {
     arg0->viewport.x = arg1;
     arg0->viewport.y = arg2;
@@ -568,6 +601,10 @@ void GeoCamera_SetViewport(CameraNode* arg0, s16 arg1, s16 arg2, s16 arg3, s16 a
     arg0->orthographic.unk_1C = 1.0f;
 }
 
+/**
+ * Sets the field of view and clip planes of a camera node, deriving the aspect
+ * ratio from its viewport.
+ */
 void GeoCamera_SetPerspective(CameraNode* arg0, f32 arg1, f32 arg2, f32 arg3) {
     arg0->perspective.unk_0C = (f32)arg0->viewport.width / arg0->viewport.height;
     arg0->perspective.verticalFieldOfView = arg1;
@@ -576,6 +613,7 @@ void GeoCamera_SetPerspective(CameraNode* arg0, f32 arg1, f32 arg2, f32 arg3) {
     arg0->perspective.unk_18 = 1.0f;
 }
 
+/** Sets the eye position, look-at point and up vector of a camera node. */
 void GeoCamera_SetEyeAtUp(CameraNode* arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, s32 arg7) {
     CameraView* sp1C = &arg0->view;
     f32 sp28 = arg4 - arg1;
@@ -590,6 +628,7 @@ void GeoCamera_SetEyeAtUp(CameraNode* arg0, f32 arg1, f32 arg2, f32 arg3, f32 ar
     Vec3f_SetComponentsDuplicate(&sp1C->upDirection, SINS(arg7) * sp24, COSS(arg7), -SINS(arg7) * sp28);
 }
 
+/** Sets the fill color overlay of a camera node. */
 void GeoCamera_SetBackground(CameraNode* arg0, s16 arg1, s16 arg2, u8 arg3, u8 arg4, u8 arg5) {
     CameraOverlay* ptr = &arg0->overlay;
 
@@ -609,6 +648,7 @@ void GeoCamera_SetBackground(CameraNode* arg0, s16 arg1, s16 arg2, u8 arg3, u8 a
     }
 }
 
+/** Sets the background texture overlay of a camera node. */
 void GeoCamera_SetBackgroundTexture(CameraNode* arg0, s16 arg1, s16 arg2, s32 arg3, u32 arg4) {
     CameraOverlay* ptr = &arg0->overlay;
     ptr->unk_0C = arg1;
@@ -623,6 +663,7 @@ void GeoCamera_SetBackgroundTexture(CameraNode* arg0, s16 arg1, s16 arg2, s32 ar
     ptr->unk_1C = D_1000800;
 }
 
+/** Appends a node to the end of a parent graph node's child list. */
 void GraphNode_AppendChild(GraphNode* arg0, GraphNode* arg1) {
     GraphNode* temp_v0;
     GraphNode* temp_v1;
@@ -643,6 +684,7 @@ void GraphNode_AppendChild(GraphNode* arg0, GraphNode* arg1) {
     }
 }
 
+/** Unlinks a node from its sibling list. */
 void GraphNode_RemoveChild(GraphNode* arg0, GraphNode* arg1) {
     arg1->prevSibling->nextSibling = arg1->nextSibling;
     arg1->nextSibling->prevSibling = arg1->prevSibling;
@@ -655,6 +697,7 @@ void GraphNode_RemoveChild(GraphNode* arg0, GraphNode* arg1) {
     }
 }
 
+/** Returns the child of a graph node at the given index. */
 GraphNode* GraphNode_GetChildAtIndex(GraphNode* arg0, s32 arg1) {
     GraphNode* var_v1;
     s32 i;
@@ -667,11 +710,16 @@ GraphNode* GraphNode_GetChildAtIndex(GraphNode* arg0, s32 arg1) {
     return var_v1;
 }
 
+/** Detaches the transform animation from a display object. */
 void ModelAnim_ClearTransformChannel(DisplayObject* display_object) {
     display_object->transformAnim.animationId = -1;
     display_object->transformAnim.data = NULL;
 }
 
+/**
+ * Attaches a transform animation curve to a display object and sets its
+ * playback speed.
+ */
 s32 ModelAnim_BindTransformCurve(DisplayObject* display_object, s16 animation_id, void* address, s32 speed) {
     TransformAnimData* transform_addr = Util_ConvertAddrToVirtAddr(address);
     TransformAnimState* transform_anim = &display_object->transformAnim;
@@ -686,15 +734,21 @@ s32 ModelAnim_BindTransformCurve(DisplayObject* display_object, s16 animation_id
     return transform_anim->frameFixed >> 16;
 }
 
+/** Sets the playback speed of a display object's transform animation. */
 s32 ModelAnim_SetSpeed(DisplayObject* display_object, s32 speed) {
     display_object->transformAnim.speedFixed = speed;
     return display_object->transformAnim.frameFixed >> 0x10;
 }
 
+/** Sets the current frame of a display object's transform animation. */
 void ModelAnim_SetFrame(DisplayObject* display_object, s16 animation_timer) {
     display_object->transformAnim.frameFixed = (animation_timer << 0x10) - display_object->transformAnim.speedFixed;
 }
 
+/**
+ * Returns whether the transform animation has reached or passed the given
+ * frame.
+ */
 s32 ModelAnim_HasCrossedFrame(DisplayObject* arg0, s16 arg1) {
     TransformAnimState* ptr = &arg0->transformAnim;
     s32 temp_v0 = ptr->frameFixed + ptr->speedFixed;
@@ -717,19 +771,23 @@ s32 ModelAnim_HasCrossedFrame(DisplayObject* arg0, s16 arg1) {
     return var_a2;
 }
 
+/** Returns whether the transform animation has reached its final frame. */
 s32 ModelAnim_IsAnimationDone(DisplayObject* display_object) {
     return ModelAnim_HasCrossedFrame(display_object, display_object->transformAnim.data->endFrame - 1);
 }
 
+/** Returns whether the transform animation is on or past its last frame. */
 s32 ModelAnim_IsFinished(DisplayObject* arg0) {
     return arg0->transformAnim.frameFixed >= ((arg0->transformAnim.data->endFrame - 1) << 0x10);
 }
 
+/** Detaches the event track from a display object. */
 void ModelAnim_ClearEventTrack(DisplayObject* arg0) {
     arg0->eventTrack.trackId = -1;
     arg0->eventTrack.data = 0;
 }
 
+/** Attaches an event track to a display object. */
 s16 ModelAnim_BindEventTrack(DisplayObject* arg0, s16 arg1, s32 arg2) {
     EventTrackData* temp_v0 = Util_ConvertAddrToVirtAddr(arg2);
     EventTrackState* ptr = &arg0->eventTrack;
@@ -743,6 +801,7 @@ s16 ModelAnim_BindEventTrack(DisplayObject* arg0, s16 arg1, s32 arg2) {
     return ptr->frame;
 }
 
+/** Sets the current frame of a display object's event track. */
 void ModelAnim_SetEventFrame(DisplayObject* display_object, s16 frame_number) {
     display_object->eventTrack.frame = frame_number - 1;
 }

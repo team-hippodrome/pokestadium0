@@ -43,6 +43,7 @@ s32 Save_IsTypedRecordFlagSet(s32 arg0, s32 arg1, s16 arg2);
 void Save_CommitTypedRecord(s32 arg0, s32 arg1);
 void Save_ClearTypedRecord(s32 arg0, s32 arg1);
 
+/** Computes the checksum of a save record. */
 u16 Save_Checksum(u8* arg0, s32 arg1) {
     u16 var_v1 = 0;
 
@@ -52,6 +53,7 @@ u16 Save_Checksum(u8* arg0, s32 arg1) {
     return var_v1;
 }
 
+/** Returns whether a save record's checksum is valid. */
 s32 Save_RecordIsValid(u8* arg0, s32 arg1) {
     u16* temp_v1 = arg1 + arg0;
 
@@ -72,6 +74,7 @@ s32 Save_RecordIsValid(u8* arg0, s32 arg1) {
     return 1;
 }
 
+/** Writes the footer of a save record. */
 void Save_WriteFooter(u8* arg0, s32 arg1, s32 arg2) {
     u16* temp_v1;
 
@@ -306,6 +309,7 @@ s32 func_80023C30(void)
   return *((s32 *) (&D_8006BBA0));
 }
 
+/** Returns the number of free voices. */
 s32 Audio_GetFreeVoiceCount(void) {
     return mus_free_voices_count;
 }
@@ -331,6 +335,8 @@ void func_80023D3C(s32 arg0, s32 arg1) {
 
 /**
  * Packs a BattleMon into a GB-format save record with its transcoded name and trainer data.
+ * Seen in play (2026-11-13) ran when the party was registered into slot 01 and again into slot 02
+ * (とうろく > ポケモンをとうろくする, はい).
  * @unverified Name and comment guessed from the code.
  */
 void BattleMon_ToGbSaveRecord(s32 arg0, s32 arg1) {
@@ -342,6 +348,8 @@ void BattleMon_ToGbSaveRecord(s32 arg0, s32 arg1) {
 }
 
 /**
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the Lab list, registration,
+ * the Lab PC and Free Battle setup.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 s32 Save_IsTypedRecordFlagSet(arg0, arg1, arg2)
@@ -405,6 +413,8 @@ void func_80024044(void) {
 
 void func_800238D8(); // Called with two or three arguments.
 /**
+ * Seen in play (2026-11-13) ran when quitting the GB player (C-Up menu, Quit game, Yes) back to the
+ * main menu.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void Save_CommitTypedRecord(s32 arg0, s32 arg1) {
@@ -434,6 +444,8 @@ void Save_CommitTypedRecord(s32 arg0, s32 arg1) {
 
 void func_80023954(); // Called with three arguments; the third is ignored.
 /**
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void Save_InvalidateTypedRecord(s32 arg0, s32 arg1) {
@@ -500,6 +512,8 @@ void func_800243B8(void) {
 }
 
 /**
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void Save_ClearTypedRecord(s32 arg0, s32 arg1) {
@@ -542,12 +556,15 @@ void Save_ClearTypedRecord(s32 arg0, s32 arg1) {
     }
 }
 
+/** Clears a typed save record and commits it. */
 void Save_ResetAndCommitTypedRecord(s32 arg0, s32 arg1) {
     Save_ClearTypedRecord(arg0, arg1);
     Save_CommitTypedRecord(arg0, arg1);
 }
 
 /**
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the Lab list, Lab sort and the
+ * Lab PC.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 s32 Deck_GetSaveRecordCapacity(s32 arg0) {
@@ -575,6 +592,8 @@ s32 Deck_GetSaveRecordCapacity(s32 arg0) {
 }
 
 /**
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the Lab list, Lab sort and the
+ * Lab PC.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 s32 Deck_GetSaveRecordSize(s32 arg0) {
@@ -597,12 +616,15 @@ s32 Deck_GetSaveRecordSize(s32 arg0) {
     return ret;
 }
 
+/** Returns whether a deck entry exists in the save data. */
 s32 Deck_IsSaveEntryPresent(s32 arg0, s32 arg1) {
     return Save_IsTypedRecordFlagSet(arg0, arg1, 1);
 }
 
 s32 func_800246A8(s32, s32);
 /**
+ * Seen in play (2026-11-13) ran when slot 01 was picked in とうろく > とうろくしたポケモンをけす, before the
+ * このポケモンをけす？ prompt.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 s32 Deck_GetSaveEntryTrainerId(s32 arg0, s32 arg1) {
@@ -625,6 +647,7 @@ s32 Deck_GetSaveEntryTrainerId(s32 arg0, s32 arg1) {
 }
 
 s32 func_800246A8(s32, s32);
+/** Copies the name of a deck entry from the save data. */
 s32 Deck_GetSaveEntryName(s32 arg0, s32 arg1, u8* arg2) {
     s32 ret = 0;
     s32 src;
@@ -673,6 +696,7 @@ s32 func_8002488C(s32 arg0, s32 arg1, u8* arg2) {
     return ret;
 }
 
+/** Sets the trainer ID and name of a deck entry in the save data. */
 void Deck_SetSaveEntryTrainerIdAndName(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4) {
     switch (arg0) {
         case 16: {
@@ -742,6 +766,8 @@ M2C_UNK func_80023F38(s32, s32, M2C_UNK);           /* extern */
 s32 func_80024ADC();                                /* extern */
 
 /**
+ * Seen in play (2026-11-13) ran when the party was registered into slot 01 and again into slot 02
+ * (とうろく > ポケモンをとうろくする, はい).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void Deck_SetSaveEntryCount(s32 arg0, s32 arg1, s32 arg2) {
@@ -792,6 +818,7 @@ void func_80024C80(s32 arg0, s32 arg1) {
 }
 
 typedef struct { u8 a; u8 b; } Pair80024D88;
+/** Reads a deck entry from the save data. */
 s32 Deck_ReadSaveEntry(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
     s32 ret = 0;
 
@@ -815,6 +842,7 @@ s32 Deck_ReadSaveEntry(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
     return ret;
 }
 
+/** Writes a typed record to the save data, up to its capacity. */
 s32 Save_WriteTypedRecord(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
     s32 ret = 0;
     s32 max = Deck_GetSaveRecordCapacity(arg0);
@@ -874,6 +902,8 @@ s32 func_80025168(s8 arg0) {
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 /**
  * Returns the 16-bit progress flags at save offset 0x7A48.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 Save_GetProgressFlags(void)
@@ -883,6 +913,8 @@ s32 Save_GetProgressFlags(void)
 
 /**
  * Sets the progress flags at save offset 0x7A48 and writes the block.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void Save_SetProgressFlags(u16 arg0) {
@@ -915,6 +947,8 @@ typedef struct SaveF80025260 {
 } SaveF80025260;
 /**
  * Fills the continue block at save offset 0x7A60 with the name, session and Pokemon data.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void Save_WriteContinueData(SaveName80025260* arg0, SaveBlob80025260* arg1, SaveMon80025260* arg2, s32 arg3) {
@@ -952,6 +986,8 @@ typedef struct { u8 unk_00; u8 unk_01; u8 pad[0x4E]; } Mon50;
 
 /**
  * Reads the continue block at save offset 0x7A60 back; returns -1 when it is empty.
+ * Seen in play (2026-11-13) ran on Start at the title screen and again at the main menu (console
+ * reset, then N64 logo, opening, title and main menu).
  * @unverified Name and comment guessed from the code.
  */
 s16 Save_ReadContinueData(Unk12Bytes* arg0, Unk162Bytes* arg1, Mon50* arg2) {

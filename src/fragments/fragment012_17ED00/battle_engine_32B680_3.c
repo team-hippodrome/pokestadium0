@@ -87,7 +87,7 @@ void BattleAnim_SelectParticleModelFrames(Particle* arg0, s32 arg1) {
         case 42:
             sp2A = 0x81;
             sp28 = 0x82;
-            Particle_Field38_AddXZFromField94YOffset180_08F38(arg0, 300.0f);
+            Particle_AddPositionOffsetAlongRotationYPlus180(arg0, 300.0f);
             sp2C = 5.0f;
             ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0xC);
             Particle_SetPrimAlpha(arg0, 0x64);
@@ -151,12 +151,12 @@ void BattleAnim_SelectParticleModelFrames(Particle* arg0, s32 arg1) {
 
             switch (BattleAnim_GetOwnerSpecies(arg0->pokemon)) {
                 case ONIX:
-                    Particle_Field38_AddXZFromField94YOffset180_08F38(arg0, 15.0f);
+                    Particle_AddPositionOffsetAlongRotationYPlus180(arg0, 15.0f);
                     Particle_Field38_SetYScaled_08CA0(arg0, 15.0f);
                     break;
 
                 case GYARADOS:
-                    Particle_Field38_AddXZFromField94YOffset180_08F38(arg0, 15.0f);
+                    Particle_AddPositionOffsetAlongRotationYPlus180(arg0, 15.0f);
                     break;
             }
             break;
@@ -337,7 +337,7 @@ void BattleAnim_SelectParticleModelFrames(Particle* arg0, s32 arg1) {
                 BattleAnim_InitModel(arg0->displayObject, sp2A);
                 break;
         }
-        Particle_Field1C_SetScaled_0B938(arg0, sp2C);
+        Particle_SetScaleScaled(arg0, sp2C);
         Particle_AdvanceLifecycle(arg0);
     } else {
         Particle_DisableAndDetach(arg0);
@@ -363,6 +363,8 @@ void BattleAnim_CallbackInitModelAnimWait(Particle* arg0) {
  * Moves: Barrier (use), Defense Curl (use), Dig (use/hit), Earthquake (hit), Fissure (hit), Light Screen
  * (use), Pay Day (hit), Reflect (use), Sharpen (use), Withdraw (use)
  * TODO: Human contributor add screenshot
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_InitializeParticleModel(Particle* arg0) {
@@ -374,7 +376,8 @@ void BattleAnim_InitializeParticleModel(Particle* arg0) {
 /**
  * Used for the Eyes in Leer and Glare.
  * It is reused for additional flair in Sky Attack (hands an X shape on the bird)
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Leer, Glare.
  */
 void BattleAnim_RunScaryEyes(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -383,13 +386,14 @@ void BattleAnim_RunScaryEyes(Particle* arg0) {
             break;
 
         case 2:
-            Particle_PrimAlpha_ApproachAndStepState_0BC5C(arg0, arg0->unk_A6, Particle_FieldCE_GetS32_0C040(arg0));
+            Particle_ApproachPrimAlphaThenAdvance(arg0, arg0->unk_A6, Particle_FieldCE_GetS32_0C040(arg0));
             break;
     }
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Dream Eater.
  */
 void BattleAnim_RunDreamEaterUseEffect(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -419,6 +423,8 @@ void BattleAnim_CallbackInitModelAnimMode2(Particle* arg0) {
  * Moves: Absorb (use), Bide (use), Confusion (use), Focus Energy (use), Leech Life (use), Mega Drain (use),
  * Psychic (use), Rage (use), Solar Beam (use), Waterfall (use/hit)
  * TODO: Human contributor add screenshot
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_RunFillScreenOverlay(Particle* arg0) {
@@ -428,7 +434,7 @@ void BattleAnim_RunFillScreenOverlay(Particle* arg0) {
             break;
 
         case 2:
-            Particle_PrimAlpha_ApproachAndStepState_0BC5C(arg0, arg0->unk_A6, Particle_FieldCE_GetS32_0C040(arg0));
+            Particle_ApproachPrimAlphaThenAdvance(arg0, arg0->unk_A6, Particle_FieldCE_GetS32_0C040(arg0));
             break;
     }
 }
@@ -561,9 +567,9 @@ void ParticleEffect_AllocateGfxAndDraw(s32 arg0, arg1_func_84344CE8* arg1) {
 }
 
 void BattleAnim_SetupMove86EndDescriptor24(Particle* arg0) {
-    Particle_Field1C_SetScaled_0B938(arg0, 3.0f);
+    Particle_SetScaleScaled(arg0, 3.0f);
     Particle_Field38_AddYScaled_08E90(arg0, 10.0f);
-    Particle_Field38_AddXZFromField94Y_08ED0(arg0, 15.0f);
+    Particle_AddPositionOffsetAlongRotationY(arg0, 15.0f);
     Particle_Field74_SetScaled_0AD8C(arg0, -5.0f);
     ParticleGfx_RecolorPrim(arg0, 8);
     ParticleGfx_RecolorEnv(arg0, 0x17);
@@ -571,7 +577,8 @@ void BattleAnim_SetupMove86EndDescriptor24(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Thunder Wave.
  */
 void BattleAnim_RunThunderWaveHitEffect(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -580,11 +587,11 @@ void BattleAnim_RunThunderWaveHitEffect(Particle* arg0) {
             break;
 
         case 2:
-            Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0);
+            Particle_DecrementUnkA6ToZeroThenAdvance(arg0);
             break;
 
         case 3:
-            Particle_PrimAlpha_ApproachAndStepState_0BC5C(arg0, 0, 0x40);
+            Particle_ApproachPrimAlphaThenAdvance(arg0, 0, 0x40);
             break;
 
         case 4:
@@ -592,7 +599,7 @@ void BattleAnim_RunThunderWaveHitEffect(Particle* arg0) {
             break;
     }
 
-    Particle_Field1C_Approach_0B98C(arg0, 0.0f, 0.1f);
+    Particle_ApproachScale(arg0, 0.0f, 0.1f);
     Particle_AddVelocityXZFromRotationYViaImpulse(arg0);
 }
 
@@ -601,7 +608,7 @@ void BattleAnim_SetupMove86StartDescriptor24(Particle* arg0) {
     UNUSED s32 pad[2]; // FAKE: stack padding
     s16 sp2A = Particle_FieldCD_GetU8_0C048(arg0);
 
-    Particle_Field1C_SetScaled_0B938(arg0, 0.05f);
+    Particle_SetScaleScaled(arg0, 0.05f);
 
     switch (sp2A) {
         case 0:
@@ -654,7 +661,8 @@ void func_82153E28(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Effect start init 38 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Thunder Wave.
  */
 void BattleAnim_InitializeThunderWaveUse(void) {
     BattleAnim_SpawnCategory17MarkerSlot(0x55, 1);
@@ -663,13 +671,20 @@ void BattleAnim_InitializeThunderWaveUse(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 8, 0xC, BattleAnim_CallbackMove86StartDescriptor24, &gBattleAnimParticleDescriptors[0x24], 0xA, 1, 4, 2, 0, 0);
 }
 
-void func_82153FD8(void) {
+/**
+ * Effect init for the end (impact) of the Thunder Wave animation.
+ * Effect end init 17 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Thunder Wave.
+ */
+void BattleAnim_InitializeThunderWaveHit(void) {
     func_8213B644(0x30, 0x20, 8);
     func_8213B5D8(0, 0xC, 0xA, &func_82153C50, &D_8218E6A8, 0x14, 1, 4, (s32) D_8219A80A, 0, 0);
 }
 
 
 /**
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleAnim_ApplyEffect1SpeciesMotion(Particle* arg0) {
@@ -737,24 +752,32 @@ void BattleAnim_ApplyEffect1SpeciesMotion(Particle* arg0) {
             offset = 3.0f;
             break;
     }
-    Particle_Field38_AddXZFromField94Y_08ED0(arg0, offset + 5.0f);
-    Particle_Field1C_SetScaled_0B938(arg0, scale);
+    Particle_AddPositionOffsetAlongRotationY(arg0, offset + 5.0f);
+    Particle_SetScaleScaled(arg0, scale);
 }
 
 
-void BattleAnim_SetupEffect1Descriptor2F(Particle* arg0) {
+/**
+ * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
+ * only for Sing, Sleep Powder, Hypnosis, Lovely Kiss and Spore.
+ */
+void BattleAnim_SetupSleepMovePhaseFadeOut(Particle* arg0) {
     BattleAnim_ApplyEffect1SpeciesMotion(arg0);
     Particle_AdvanceLifecycle(arg0);
 }
 
-void BattleAnim_CallbackStartEffect1Descriptor2FPhaseFadeOut(Particle* arg0) {
+/**
+ * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
+ * only for Sing, Sleep Powder, Hypnosis, Lovely Kiss and Spore.
+ */
+void BattleAnim_SleepMovePhaseFadeOut(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_SetupEffect1Descriptor2F(arg0);
+            BattleAnim_SetupSleepMovePhaseFadeOut(arg0);
             break;
 
         case 3:
-            Particle_PrimAlpha_ApproachAndStepState_0BC5C(arg0, 0, 0x20);
+            Particle_ApproachPrimAlphaThenAdvance(arg0, 0, 0x20);
             break;
 
         case 4:
@@ -765,6 +788,10 @@ void BattleAnim_CallbackStartEffect1Descriptor2FPhaseFadeOut(Particle* arg0) {
     }
 }
 
+/**
+ * Effect start init 1 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Hypnosis, Lovely Kiss, Sing, Sleep Powder, Spore.
+ */
 void func_821542BC(void) {
     func_8213B560(0, &func_82154248, &D_8218E700, 0, 1, 0x10, 7, 0, 0);
 }

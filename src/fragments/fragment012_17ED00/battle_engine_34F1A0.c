@@ -18,7 +18,8 @@ Gfx* SingTrail_BuildGfx(Gfx* arg0);
 void Trail40Variant_SetupCameraTransform(void);
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Sing.
  */
 void SingTrail_ApplyRippleAtPoint(s16 arg0, s16 arg1) {
     Trail40VariantNode* var_s0 = &D_821A8B70.unk_0014[0][0];
@@ -42,7 +43,8 @@ void SingTrail_ApplyRippleAtPoint(s16 arg0, s16 arg1) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Sing.
  */
 void SingTrail_InitPool(s16 arg0) {
     s32 i;
@@ -95,7 +97,8 @@ void SingTrail_InitPool(s16 arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Sing.
  */
 void SingTrail_UpdateNodes(s32 arg0, s32 arg1) {
     f32 sp84;
@@ -205,7 +208,8 @@ void SingTrail_UpdateNodes(s32 arg0, s32 arg1) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Sing.
  */
 void SingTrail_WriteVertex(Trail40VariantNode* arg0, Vtx* arg1) {
     f32 r;
@@ -230,7 +234,8 @@ void SingTrail_WriteVertex(Trail40VariantNode* arg0, Vtx* arg1) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Sing.
  */
 s32 SingTrail_AdvanceTimer(void) {
     Trail40VariantNode* var_s1;
@@ -282,6 +287,8 @@ void func_80031F14(f32*, f32*, f32*);
 void func_800320A8(s32, f32, f32, f32, f32, f32, f32);
 extern s32 D_821A8B80;
 /**
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void Trail40Variant_SetupCameraTransform(void) {
@@ -323,7 +330,8 @@ void Trail40Variant_SetupCameraTransform(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Sing.
  */
 Gfx* SingTrail_BuildGfx(Gfx* arg0) {
     s32 i;

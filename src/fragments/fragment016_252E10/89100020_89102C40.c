@@ -227,7 +227,8 @@ s32 LabPCList_UpdateLevelInput(void*);
 M2C_UNK LabPCList_ApplyFiltersAndSort();
 /**
  * Runs the レベルのにゅうりょく (level input) window and applies the level range filter.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: あつめる with 006から100 stored 6 and 100 at +0x9828/+0x9829, set
+ * flag 1, and the Lv 5 party disappeared; かいじょ reset the range to 1-100 and cleared flag 1.
  */
 s32 LabPCList_RunLevelFilter(s8 *arg)
 {
@@ -272,7 +273,7 @@ s32 LabPCList_UpdateTypeFilter(s8*);
 void LabPCList_CommitTypeFilter(s8*, s8*);
 /**
  * Runs the type filter window and turns filter flag 2 on or off.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: ran while the タイプであつめる window was open.
  */
 s32 LabPCList_RunTypeFilter(s8* arg0) {
     s8* sp24 = arg0 + 0x9920;
@@ -302,7 +303,8 @@ s32 LabPCList_UpdateMoveFilter(s8*);
 void LabPCList_CommitMoveFilter(s8*, s8*);
 /**
  * Runs the move filter window and turns filter flag 4 on or off.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: あつめる with ひっかく set filter flag 4 and left only ヒトカゲ (ひっさつまえば
+ * left the list empty); かいじょ cleared flag 4 and all three party Pokémon returned.
  */
 s32 LabPCList_RunMoveFilter(s8* arg0) {
     s8* sp24 = arg0 + 0x9B08;
@@ -453,7 +455,8 @@ typedef struct Big891033A0 {
 } Big891033A0;
 /**
  * Handles the menu opened on a selected Pokemon.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): was handling the popup
+ * opened with A on フシギダネ.
  */
 s32 LabPCList_UpdateMonMenu(s8* arg0) {
     s32 ret = 0;
@@ -518,7 +521,9 @@ s32 LabPCList_UpdateMonMenu(s8* arg0) {
 }
 
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Renumbers the slot index (entry[1]) of every Pokemon left in a box after one is taken out. Seen
+ * in play (2026-11-12) in いちらん: after フシギダネ left the party, the two remaining entries went from
+ * slots 1, 2 to 0, 1.
  */
 void LabPCList_ReindexBoxSlots(u8* arg0) {
     s32 i;

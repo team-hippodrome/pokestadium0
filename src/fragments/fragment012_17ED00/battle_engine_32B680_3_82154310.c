@@ -3,6 +3,8 @@
 #include "battle_engine_32B680_3.h"
 
 /**
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
+ * turns): ran.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleAnim_ApplyModelSpeciesOffset(Particle* arg0) {
@@ -35,7 +37,7 @@ void BattleAnim_ApplyModelSpeciesOffset(Particle* arg0) {
             break;
         case EXEGGUTOR:
             offset = 5.0f;
-            Particle_Field38_AddXZFromField94Y_08ED0(arg0, 10.0f);
+            Particle_AddPositionOffsetAlongRotationY(arg0, 10.0f);
             break;
         case STARMIE:
             offset = -8.0f;
@@ -48,11 +50,11 @@ void BattleAnim_ApplyModelSpeciesOffset(Particle* arg0) {
             break;
         case GYARADOS:
             offset = -10.0f;
-            Particle_Field1C_SetScaled_0B938(arg0, 0.15f);
+            Particle_SetScaleScaled(arg0, 0.15f);
             break;
         case VAPOREON:
             offset = -5.0f;
-            Particle_Field38_AddXZFromField94YOffsetMinus90_0901C(arg0, 5.0f);
+            Particle_AddPositionOffsetAlongRotationYMinus90(arg0, 5.0f);
             break;
         case JOLTEON:
             offset = -15.0f;

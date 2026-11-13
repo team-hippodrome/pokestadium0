@@ -41,6 +41,7 @@ s32 func_8003834C(s32, s32, s32, s32, s32, s32, s32);
 s32 func_80047260(s32);
 void func_80043B00(s32, s32);
 
+/** Plays an audio command with the given parameters. */
 s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2) {
     s32 pad[3]; // FAKE
     s32 ret;

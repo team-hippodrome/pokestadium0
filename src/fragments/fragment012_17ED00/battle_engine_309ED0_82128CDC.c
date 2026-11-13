@@ -20,13 +20,20 @@ s32 func_82101FD4(ActivePokemon*);
 s32 func_82125F54(void);
 void func_82105FCC(s32);
 
-void func_82128CDC(CameraNode* arg0, s32 arg1) {
+/**
+ * Step 0 of an action phase (2 or 3). Starts a switch instead when the action is one
+ * (BattleScene_TryStartSwitchAction), otherwise runs the user's intro camera variant from the
+ * per-move table at D_80073D84 (every move uses variant 5 outside mode 10).
+ * Seen in play (2026-11-12): in a turn where 1P's Poison Sting went first, it ran at phase 2,
+ * step 0, and called BattleScene_TryStartSwitchAction.
+ */
+void BattleScene_ActionStepIntro(CameraNode* arg0, s32 arg1) {
     s8* sp1C = (s8*)D_8219A544 + 0x78C;
 
     func_821079E8(0x1FFE);
     func_82106374((s32)sActivePokemon[0]);
     func_82106374((s32)sActivePokemon[1]);
-    if ((func_821250D4() == 0) && (func_82125F54() == 0)) {
+    if ((BattleScene_TryStartSwitchAction() == 0) && (func_82125F54() == 0)) {
         func_82105FCC(D_8219A544);
         if (sBattleScene.scene->moveEffectKind == 0xC) {
             arg1 = 0;
@@ -84,7 +91,13 @@ void func_82128E34(s32 arg0) {
     }
 }
 
-void func_82128F2C(CameraNode* arg0, s32 arg1) {
+/**
+ * Step 1 of an action phase: copies sMultihitCount into the hit counters, then enters the effect
+ * phase for moves that skip the attack animation (BattleScene_TryEnterEffectPhaseBeforeLaunch).
+ * Seen in play (2026-11-12): in a turn where 1P's Poison Sting went first, it ran at phase 2,
+ * step 1.
+ */
+void BattleScene_ActionStepSetHitCount(CameraNode* arg0, s32 arg1) {
     BattleScene* scene;
     u8 temp_v1;
     int off;
@@ -100,7 +113,7 @@ void func_82128F2C(CameraNode* arg0, s32 arg1) {
     if (1) {  // karodo
     }
     D_8219A574 = D_8219A570 = sMultihitCount;
-    if (func_82125CC8() == 0) {
+    if (BattleScene_TryEnterEffectPhaseBeforeLaunch() == 0) {
         func_82128E34((s32)arg0);
     }
 }
@@ -327,7 +340,14 @@ void func_821296E4(CameraNode* arg0) {
 }
 
 extern s32 D_8219A56C;
-void func_821297BC(CameraNode* arg0) {
+/**
+ * Use-move step variant 10 (BattleScene_ActionStepUseMove): the multi-hit loop. Each hit replays
+ * the camera shot, enters the repeat-hit row (0x13) on the target and counts D_8219A570 down; it
+ * stops early when the target faints (D_82199F31).
+ * Player sweep: reached only by the ten multi-hit moves (Double Slap, Comet Punch, Double Kick,
+ * Fury Attack, Twineedle, Pin Missile, Spike Cannon, Barrage, Fury Swipes, Bonemerang).
+ */
+void BattleScene_UseMoveStepMultiHit(CameraNode* arg0) {
     switch (M2C_FIELD(D_8219A5A0, s32*, 0x3C)) {
         case 0:
             M2C_FIELD(D_8219A5A0, s32*, 0x50) = 4;
@@ -373,7 +393,15 @@ void func_821297BC(CameraNode* arg0) {
     }
 }
 
-void func_821299B0(CameraNode* arg0) {
+/**
+ * Use-move step variant 11 (BattleScene_ActionStepUseMove), the confusion self-hit: shows message
+ * +0x148 for the acting side, plays camera shot 3 and queues effect list 7 on the actor, then
+ * waits for its cue.
+ * Seen in play: with the COM's Pinsir (カイのすけ) confused, it showed 「わけも わからず じぶんを こうげきした！」 with
+ * the red ?! marks over its head. It also ran in the sweeps after Supersonic, Confuse Ray and
+ * Psybeam's confusion side effect.
+ */
+void BattleScene_UseMoveStepConfusionSelfHit(CameraNode* arg0) {
     switch (sBattleScene.scene->phaseSubstep) {
         case 0:
             if (BattleScene_AdvanceCameraFrameCounter(0x14) != 0) {
@@ -405,7 +433,13 @@ void func_821299B0(CameraNode* arg0) {
 
 extern s32 D_8219A568;
 
-void func_82129AE8(CameraNode* arg0, s32 arg1) {
+/**
+ * Step 2 of an action phase: runs the move-use camera variant (table column 2 of D_80073D84; 10
+ * for multi-hit moves, 11 for the confusion self-hit).
+ * Seen in play (2026-11-12): in a turn where 1P's Poison Sting went first, it ran at phase 2,
+ * step 2, as the move-use shot began.
+ */
+void BattleScene_ActionStepUseMove(CameraNode* arg0, s32 arg1) {
     s32 temp = M2C_FIELD(D_8219A5A0, s32*, 0x48);
 
     if (temp == 0x18) {
@@ -441,10 +475,10 @@ void func_82129AE8(CameraNode* arg0, s32 arg1) {
             func_821296E4(arg0);
             break;
         case 10:
-            func_821297BC(arg0);
+            BattleScene_UseMoveStepMultiHit(arg0);
             break;
         case 11:
-            func_821299B0(arg0);
+            BattleScene_UseMoveStepConfusionSelfHit(arg0);
             break;
         default:
             func_82128FBC(arg0);

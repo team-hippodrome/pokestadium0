@@ -2,11 +2,12 @@
 #include "battle_engine_347330.h"
 
 /**
- * Moves: Haze (use), Mist (use)
- * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Part of the stat-change ribbon (see StatRibbon_Spawn).
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
+ * @unverified Named after the ribbon seen in play; this function itself was not traced.
  */
-void MistHaze_UpdateEnvAlpha(RibbonMesh* arg0) {
+void StatRibbon_UpdateEnvAlpha(RibbonMesh* arg0) {
     s32 var_v0;
 
     if (arg0->unk_01C >= 0) {
@@ -27,11 +28,12 @@ void MistHaze_UpdateEnvAlpha(RibbonMesh* arg0) {
 }
 
 /**
- * Moves: Haze (use), Mist (use)
- * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Part of the stat-change ribbon (see StatRibbon_Spawn).
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
+ * @unverified Named after the ribbon seen in play; this function itself was not traced.
  */
-s32 MistHaze_Update(RibbonMesh* arg0) {
+s32 StatRibbon_Update(RibbonMesh* arg0) {
     RibbonMeshVertexState* temp_s0;
     RibbonMeshVertexState* temp_s1;
     RibbonMeshVertexState* ptr;
@@ -66,7 +68,7 @@ s32 MistHaze_Update(RibbonMesh* arg0) {
     sp84 = arg0->unk_020 * tmp;
 
     var_s2 = &arg0->unk_050[0];
-    MistHaze_UpdateEnvAlpha(arg0);
+    StatRibbon_UpdateEnvAlpha(arg0);
 
     var_s5 = 0;
     sp94 = 0.0f;
@@ -184,11 +186,12 @@ s32 MistHaze_Update(RibbonMesh* arg0) {
 }
 
 /**
- * Moves: Haze (use), Mist (use)
- * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Part of the stat-change ribbon (see StatRibbon_Spawn).
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
+ * @unverified Named after the ribbon seen in play; this function itself was not traced.
  */
-s32 MistHaze_UpdatePool(void) {
+s32 StatRibbon_UpdatePool(void) {
     s32 i;
     s32 var_s2;
     RibbonMesh* ptr = &D_8219CB20[0];
@@ -199,7 +202,7 @@ s32 MistHaze_UpdatePool(void) {
 
     for (i = 0; i < 4; i++, ptr++) {
         if (ptr->unk_000 == 1) {
-            if (MistHaze_Update(ptr) == 0) {
+            if (StatRibbon_Update(ptr) == 0) {
                 var_s2 = 0;
             } else {
                 ptr->unk_000 = 0;
@@ -211,11 +214,12 @@ s32 MistHaze_UpdatePool(void) {
 }
 
 /**
- * Moves: Haze (use), Mist (use)
- * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Part of the stat-change ribbon (see StatRibbon_Spawn).
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
+ * @unverified Named after the ribbon seen in play; this function itself was not traced.
  */
-Gfx* MistHaze_Draw(Gfx* arg0, RibbonMesh* arg1) {
+Gfx* StatRibbon_Draw(Gfx* arg0, RibbonMesh* arg1) {
     s32 i;
     Vtx* temp_v0 = Gfx_AllocDisplayList(sizeof(Vtx) * 62);
     Vtx* vtx = temp_v0;
@@ -238,11 +242,12 @@ Gfx* MistHaze_Draw(Gfx* arg0, RibbonMesh* arg1) {
 
 
 /**
- * Moves: Haze (use), Mist (use)
- * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Part of the stat-change ribbon (see StatRibbon_Spawn).
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
+ * @unverified Named after the ribbon seen in play; this function itself was not traced.
  */
-Gfx* MistHaze_DrawPool(Gfx* arg0) {
+Gfx* StatRibbon_DrawPool(Gfx* arg0) {
     static Gfx D_84388E88[] = {
         gsDPPipeSync(),
         gsDPSetCycleType(G_CYC_2CYCLE),
@@ -305,12 +310,12 @@ Gfx* MistHaze_DrawPool(Gfx* arg0) {
             gSPClearGeometryMode(arg0++, G_CULL_BACK);
             gSPSetGeometryMode(arg0++, G_CULL_FRONT);
 
-            arg0 = MistHaze_Draw(arg0, ptr);
+            arg0 = StatRibbon_Draw(arg0, ptr);
 
             gSPClearGeometryMode(arg0++, G_CULL_FRONT);
             gSPSetGeometryMode(arg0++, G_CULL_BACK);
 
-            arg0 = MistHaze_Draw(arg0, ptr);
+            arg0 = StatRibbon_Draw(arg0, ptr);
         }
     }
 
@@ -326,7 +331,8 @@ Gfx* MistHaze_DrawPool(Gfx* arg0) {
 
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Surf.
  */
 void SurfTerrainGrid_BuildCameraBounds(unk_D_843975E8* arg0, f32 arg1) {
     CameraNode* spB4 = BattleAnim_GetCameraContext();
@@ -427,7 +433,8 @@ void SurfTerrainGrid_BuildCameraBounds(unk_D_843975E8* arg0, f32 arg1) {
  * quad corners against the water surface.
  * //@src/fragments/battle_engine/battle_engine_2F3CB0.c
  * //@src/fragments/battle_engine/battle_engine_ribbon_mesh_and_surf_grid.c SurfTerrainGrid_UpdateWaves
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Surf.
  */
 f32 SurfTerrainGrid_SampleHeightAndSlope(f32 x, f32 z, f32* rotation_x) {
     UNUSED s32 pad1[2]; // FAKE: stack padding
@@ -558,7 +565,8 @@ f32 SurfTerrainGrid_SampleHeightAndSlope(f32 x, f32 z, f32* rotation_x) {
 
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Surf.
  */
 s32 SurfTerrainGrid_UpdateWaves(void) {
     s32 i;
@@ -653,7 +661,8 @@ s32 SurfTerrainGrid_UpdateWaves(void) {
 
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Surf.
  */
 void SurfTerrainGrid_Init(s32 arg0, s16 arg1, s16 arg2) {
     s32 i;
@@ -703,7 +712,8 @@ void SurfTerrainGrid_Init(s32 arg0, s16 arg1, s16 arg2) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Surf.
  */
 s32 SurfTerrainGrid_Update(void) {
     UNUSED s32 pad[2]; // FAKE: stack padding

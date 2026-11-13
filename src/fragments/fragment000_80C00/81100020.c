@@ -163,7 +163,7 @@ void func_81100390(s32 arg0, s32 arg1, s32 arg2) {
     func_81103C40(fb + 0x138AE, &D_8111CDA8, 0, 0x10, 0xC);
     fb += 0xBB80;
     func_81103C40(fb, &D_8111C6A8, 0, 8, 8);
-    for (i = 0; i < 0x12; i++) {
+    for (i = 0; i < 18; i++) {
         r = fb; // FAKE
         if (i == 1) {
             i = 8;
@@ -280,8 +280,8 @@ s32 func_80025BD8(void);
 void func_800535A0(u8*);
 void func_800567E0(u8*, u8*, s32);
 void func_80058FB0(s32);
-void func_811035B4(s32, s32, u8*);
-s32 func_81104DD0(s32, s32, s32, s32, s8*);
+void GbPak_StartIoThread(s32, s32, u8*);
+s32 GbEmu_LoadCartridge(s32, s32, s32, s32, s8*);
 void AudioLoad_Init(void);
 void func_811171DC(void);
 void func_81117288(s32);
@@ -308,13 +308,13 @@ void func_811008DC(s8* arg0) {
     func_80058FB0(0x80);
     func_81100020();
     func_800093E0(D_8112A960, D_811565F0);
-    func_811035B4(0xC, 0x12, D_800AAFE0);
+    GbPak_StartIoThread(0xC, 0x12, D_800AAFE0);
     D_8111E308 = *(u8*)(arg0 + 0x2202);
     if (D_8111E308 >= 3) {
         D_8111E308 = 0;
     }
     D_81154C4F = D_8111E308;
-    switch (func_81104DD0(*(s32*)(D_81154C30[D_81154C3C] + 8), D_81154C38, 0x158000, func_80025BD8(), arg0)) {
+    switch (GbEmu_LoadCartridge(*(s32*)(D_81154C30[D_81154C3C] + 8), D_81154C38, 0x158000, func_80025BD8(), arg0)) {
         case 1:
         default:
             D_81154C4E = 1;
@@ -355,7 +355,7 @@ s32 GbEmu_UpdateFrame(void);
 void func_811173F4(void);
 void GbAudio_RampToSilence(void);
 s32 func_81106700(void);
-void func_81104D84(s32);
+void GbEmu_BlackScreenAndFail(s32);
 void func_80004F34(void*, s32);
 void func_81103D30(void);
 void func_811177DC(s32);
@@ -367,8 +367,8 @@ void func_81104AE4(void);
 void func_811067B0(void);
 s32 func_8110665C(void);
 s32 func_8110659C(void);
-s32 func_81102C20(u8);
-void func_81103728(s32);
+s32 GbPak_VerifyRamBlocks(u8);
+void GbPak_StopIoThread(s32);
 
 void func_81100C84(s8* arg0) {
     s32 sel;
@@ -406,14 +406,14 @@ void func_81100C84(s8* arg0) {
             D_81154C4D = 20;
         } else {
         error:
-            func_81104D84(1);
+            GbEmu_BlackScreenAndFail(1);
             goto shutdown;
         }
     } else if (D_81154C40 == -3) {
-        func_81104D84(2);
+        GbEmu_BlackScreenAndFail(2);
         goto shutdown;
     } else if (D_81154C40 == -100) {
-        func_81104D84(3);
+        GbEmu_BlackScreenAndFail(3);
         goto shutdown;
     }
 
@@ -542,7 +542,7 @@ void func_81100C84(s8* arg0) {
                 break;
             }
         shutdown:
-        func_81103728(1 << D_811565A0);
+        GbPak_StopIoThread(1 << D_811565A0);
         osViBlack(1);
         GbAudio_RampToSilence();
         func_81104B88(20);
@@ -786,7 +786,7 @@ void func_81100C84(s8* arg0) {
         case 24:
             fade[3] = 0xFF;
             GbEmu_DrawTextCommands(*(s8**)(D_81154C30[D_81154C3C] + 8), D_8111E4E4);
-            if (func_81102C20(D_811565A0) == 0) {
+            if (GbPak_VerifyRamBlocks(D_811565A0) == 0) {
                 func_811177D0(0);
                 D_81154C40 = 0;
                 D_81154C4D = 2;

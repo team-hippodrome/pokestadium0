@@ -44,12 +44,12 @@ u32 func_800566BC(s8*);                            /* extern */
 M2C_UNK func_82116CF4(s32, s32, M2C_UNK, M2C_UNK, s8 *, s8 *); /* extern */
 extern s8 D_8218B008;
 extern s8 D_8218B014;
-void BattleHud_DrawSpeciesNameLabel(s16 arg0, s16 arg1, s32 arg2, s32 arg3, s32 arg4);
+void BattleHud_DrawTrainerNameLabel(s16 arg0, s16 arg1, s32 arg2, s32 arg3, s32 arg4);
 
 extern s8 D_8219597C;
-void BattleHud_DrawSpeciesNameLabelBlink(s16 arg0, s16 arg1, s32 arg2, s32 arg3, u16 arg4, s32 arg5);
+void BattleHud_DrawTrainerNameLabelBlink(s16 arg0, s16 arg1, s32 arg2, s32 arg3, u16 arg4, s32 arg5);
 
-void BattleHud_DrawSpeciesNameLabelAuto(ActivePokemon* arg0, TeamRoster* arg1, s16 arg2, s16 arg3, s32 arg4, u16 arg5, s32 arg6);
+void BattleHud_DrawTrainerNameLabelAuto(ActivePokemon* arg0, TeamRoster* arg1, s16 arg2, s16 arg3, s32 arg4, u16 arg5, s32 arg6);
 
 extern f32 D_FLT_82199EB0;
 void func_82116480(s8* arg0, s16 arg1, s16 arg2);
@@ -64,7 +64,7 @@ extern Color_RGB8 D_84385860[];
 extern unk_D_84385790 D_84385790[];
 u32 func_8001FA30(s32);
 extern unk_D_84385790 D_80066AA0[];
-void func_821172F0(ActivePokemon* arg0, BattleMon* arg1, unk_D_84385790* arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9, s32 argA);
+void BattleHud_DrawMonInfoBox(ActivePokemon* arg0, BattleMon* arg1, unk_D_84385790* arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9, s32 argA);
 extern u8 D_030096C0[];
 extern u8 D_03009440[];
 extern u8 D_03009840[];
@@ -82,7 +82,7 @@ void BattleHud_DrawMonStatusBoxOpponent(ActivePokemon* arg0, s16 arg1, s16 arg2,
 M2C_UNK func_8001A944(s32, s32, s8*);              /* extern */
 u32 func_800566BC(s8*);                            /* extern */
 
-void func_82119994(s32 arg0, s32 arg1, s32 arg2);
+void BattleHud_DrawTextCentered(s32 arg0, s32 arg1, s32 arg2);
 
 s32 BattleHud_DrawMovePpTextLTR(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 
@@ -103,7 +103,7 @@ extern Gfx D_80060308[];
 extern u8* D_8218AFDC[];
 void Widget_DrawMeterBar(s32, s32, s32, s32);
 s32 LabPC_StatusToIconIndex(s32);
-void func_8211AEA4(TeamRoster* arg0, BattleMon* arg1, s32 arg2, s32 arg3, s32 arg4);
+void BattleMenu_DrawSwitchPanelEntry(TeamRoster* arg0, BattleMon* arg1, s32 arg2, s32 arg3, s32 arg4);
 
 /*
  * BattleDebug_DrawCameraLabel

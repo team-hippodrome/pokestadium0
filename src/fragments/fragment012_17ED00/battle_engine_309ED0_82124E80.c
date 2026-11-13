@@ -18,7 +18,15 @@ void func_82124EB4(void) {
 void func_82124EF4(void) {
 }
 
-void func_82124EFC(void) {
+/**
+ * Called once both actions are committed: sets the acting side from Battle_DetermineMoveOrder
+ * (skipping a side with no move), records the order for the COM AI, enters phase 0 and resolves
+ * the first action with Battle_ResolveMonAction. Ran in play from Battle_ChooseActions on a Struggle turn and
+ * on the second turn of Razor Wind and Fly.
+ * Seen in play (2026-11-12): in a turn where 1P's Poison Sting went first, it ran once both
+ * actions were committed, just before the presentation entered phase 2.
+ */
+void Battle_StartTurn(void) {
     s32 sp24;
     ActivePokemonState* temp_s0;
     ActivePokemonState* temp_s1;
@@ -64,7 +72,14 @@ void func_82124EFC(void) {
 }
 
 void BattleAi_RecordUsedMove(s32, s32, s32);
-s32 func_821250D4(void) {
+/**
+ * When the acting side's action is a switch (0x0F) or a send-out (0x10), records it for the COM
+ * AI and enters phase 11 or 18. Returns 1 if it did.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle and a Pound
+ * turn.
+ * @unverified Name and comment from the code.
+ */
+s32 BattleScene_TryStartSwitchAction(void) {
     s8* sp24;
     s8* sp20;
     s8* sp1C;
@@ -159,7 +174,15 @@ void func_82125384(void) {
 void func_82133868(ActivePokemonState*);
 
 // Stadium 1 counterpart: Battle_ActSecondAttacker (no phase/arg handling here).
-void func_821254B0(void) {
+/**
+ * Called when the first action's presentation ends: flips the acting side, resolves that side's
+ * action (a switch through BeginBattleForEntity, the scripted action in mode 10, otherwise
+ * Battle_ResolveMonAction) and marks the second pass. BattleScene_CompleteActionPhase then enters
+ * phase 3. In play phase 3 always followed phase 2 or 7 this way.
+ * Seen in play (2026-11-12): in a turn where 1P's Poison Sting went first, it ran when that
+ * action's presentation ended, before COM's Pinsir acted.
+ */
+void BattleScene_StartSecondAction(void) {
     ActivePokemonState* temp_a3;
 
     sBattleScene.scene->actingSide = !sBattleScene.scene->actingSide;
@@ -223,7 +246,7 @@ void func_8212562C(void) {
                 return;
             }
         }
-        func_821254B0();
+        BattleScene_StartSecondAction();
         sBattleScene.scene->phaseStep = 0;
         sBattleScene.scene->stepFrameTimer = 0;
         sBattleScene.scene->phase = 3;
@@ -244,7 +267,7 @@ s32 BattleScene_HandleFaintStatusCompletion(void) {
         BattleAnim_ClearRockThrowingMoveFlag(sActivePokemon[sBattleScene.scene->actingSide]);
         Audio_FadeAndClearStoredSounds();
         BattleScene_ResetAnimationStep();
-        func_821254B0();
+        BattleScene_StartSecondAction();
         sBattleScene.scene->phaseStep = 0;
         sBattleScene.scene->stepFrameTimer = 0;
         sBattleScene.scene->phase = 3;
@@ -258,7 +281,7 @@ void BattleScene_CompleteActionPhase(void) {
         BattleAnim_ClearRockThrowingMoveFlag(sActivePokemon[sBattleScene.scene->actingSide]);
         Audio_FadeAndClearStoredSounds();
         BattleScene_ResetAnimationStep();
-        func_821254B0();
+        BattleScene_StartSecondAction();
         sBattleScene.scene->phaseStep = 0;
         sBattleScene.scene->stepFrameTimer = 0;
         sBattleScene.scene->phase = 3;
@@ -346,7 +369,15 @@ void func_82125C80(s32 arg0) {
     }
 }
 
-s32 func_82125CC8(void) {
+/**
+ * Enters the effect phase for moves whose presentation replaces the attack animation
+ * (moveEffectKind 7, 12-15, 17, 21, 25, 27-31), via BattleScene_TransitionToPhaseFull. Returns 1
+ * if it did.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle and a Pound
+ * turn.
+ * @unverified Name and comment from the code; kind 7 to phase 7 seen in play with Double Team.
+ */
+s32 BattleScene_TryEnterEffectPhaseBeforeLaunch(void) {
     s32 temp_v0;
 
     temp_v0 = M2C_FIELD(D_8219A5A0, s32 *, 0x48);
@@ -392,7 +423,15 @@ s32 func_82125CC8(void) {
     return 0;
 }
 
-s32 func_82125E5C(void) {
+/**
+ * Enters the effect phase that follows the launch: the miss (8, also when Battle_MoveMissed
+ * flagged it), status (22), confusion self-hit (20), Disable (32), stat lowering (26), crash (16)
+ * and 23. Returns 1 if it did.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle and a Pound
+ * turn.
+ * @unverified Name and comment from the code; the miss path seen in play.
+ */
+s32 BattleScene_TryEnterEffectPhaseBeforeImpact(void) {
     s32 temp_v0;
 
     temp_v0 = M2C_FIELD(D_8219A5A0, s32 *, 0x48);
@@ -441,7 +480,6 @@ void BattleScene_UpdateActiveOwnerPointers(void) {
 
 /**
  * Phase 0 of BattleScene_UpdatePhase: sets up the scene for a new turn, then the turn moves on to phase 1.
- * @unverified Phase number seen in play (player agent); handler body only skimmed.
  */
 void BattleScene_InitTurnPresentation(s32 arg0) {
     s8 *sp34;
@@ -469,7 +507,14 @@ void BattleScene_InitTurnPresentation(s32 arg0) {
     M2C_FIELD(D_8219A5A0, s32 *, 0x20) = (s32) (M2C_FIELD(D_8219A5A0, s32 *, 0x20) + 1);
 }
 
-void func_821261A0(void* arg0, void* arg1, s32 arg2) {
+/**
+ * Plays one of four target-camera shots for a faint: 3 at the faint start, a random 0 to 2 during
+ * the collapse (BattleScene_FaintStepStart, BattleScene_FaintStepCollapse).
+ * Player sweep: reached only by Self-Destruct and Explosion.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Self-Destruct, Explosion.
+ */
+void BattleCamera_PlayFaintShot(void* arg0, void* arg1, s32 arg2) {
     switch (arg2) {
         case 0:
             BattleScene_CameraShotTargetHighThunk(arg1, arg0);
@@ -486,7 +531,15 @@ void func_821261A0(void* arg0, void* arg1, s32 arg2) {
     }
 }
 
-s32 func_82126220(ActivePokemon* active_pokemon) {
+/**
+ * Called by BattleScene_FaintStepStart. Returns 1 (after clearing flags 0x60C) when state flag
+ * 0x200 is set, so the faint uses row 17. Otherwise clears the Fly/Dig flags (0x4008) and puts
+ * the model back on the ground, clears sleep, restores full alpha, and returns 0 (row 0).
+ * Player sweep: reached only by Self-Destruct and Explosion.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Self-Destruct, Explosion.
+ */
+s32 BattleScene_ResetFaintingMonState(ActivePokemon* active_pokemon) {
     UNUSED s32 pad; // FAKE: stack padding
     BattleMon* party_pokemon = &active_pokemon->teamRoster->pokemonPicked[active_pokemon->state.rosterIndex];
     ActivePokemonState* state = &active_pokemon->state;
@@ -520,18 +573,19 @@ s32 func_82126220(ActivePokemon* active_pokemon) {
 }
 
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Faint, step 0: sets up the faint presentation (a frame or two before the message).
+ * Seen in play (Pinsir fainting to Poison Sting); Stadium 1 used these steps for a send-out.
  */
-void BattleScene_AdvanceSendOutPreparation(CameraNode* arg0) {
+void BattleScene_FaintStepStart(CameraNode* arg0) {
     if (func_82124A50(sActivePokemon[!sBattleScene.scene->actingSide]) == 0) {
         Battle_ClearRuntimeFlags(sActivePokemon[!sBattleScene.scene->actingSide], 0x3800);
-        func_821261A0(sActivePokemon[!sBattleScene.scene->actingSide], arg0, 3);
+        BattleCamera_PlayFaintShot(sActivePokemon[!sBattleScene.scene->actingSide], arg0, 3);
         Audio_FadeAndClearStoredSounds();
         BattleAnim_CleanupEffects(2);
         BattleScene_ResetCameraFrameCounter();
         Battle_ClearMessageCursor();
         BattleCamera_CaptureModelOrbit(sActivePokemon[!sBattleScene.scene->actingSide], arg0);
-        if (func_82126220(sActivePokemon[!sBattleScene.scene->actingSide]) != 0) {
+        if (BattleScene_ResetFaintingMonState(sActivePokemon[!sBattleScene.scene->actingSide]) != 0) {
             BattleScene_EnterStateRow(sActivePokemon[!sBattleScene.scene->actingSide], 0x11);
             sBattleScene.scene->phaseStep = 0xA;
         } else {
@@ -548,9 +602,10 @@ void func_8211EE8C(void);
 void ActivePokemon_SetStateFlags(ActivePokemon*, s32);
 u16 func_8210C020(s32); // BattleAnim_RandomRange
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Faint, step 1: 「…は たおれた！」 and the fainting animation with sparkles (about 60 frames in play).
+ * Seen in play (Pinsir fainting to Poison Sting); Stadium 1 used these steps for a send-out.
  */
-void BattleScene_AdvanceSendOutCamera(CameraNode* arg0) {
+void BattleScene_FaintStepCollapse(CameraNode* arg0) {
     UNUSED s32 pad[2]; // FAKE: stack padding
     ActivePokemonState* state = &sActivePokemon[!sBattleScene.scene->actingSide]->state;
     u8* rec = D_82189180[!sBattleScene.scene->actingSide] + 0x72D;
@@ -564,7 +619,7 @@ void BattleScene_AdvanceSendOutCamera(CameraNode* arg0) {
                     break;
                 }
             }
-            func_821261A0(sActivePokemon[!sBattleScene.scene->actingSide], arg0, sel);
+            BattleCamera_PlayFaintShot(sActivePokemon[!sBattleScene.scene->actingSide], arg0, sel);
         }
         if (func_82121820(0x1E) != 0) {
             func_821235E0(arg0, sActivePokemon[!sBattleScene.scene->actingSide]);
@@ -587,7 +642,11 @@ void BattleScene_AdvanceSendOutCamera(CameraNode* arg0) {
     }
 }
 
-void BattleScene_AdvanceSendOutCameraClose(CameraNode* arg0) {
+/**
+ * Faint, step 2: the fainted Pokemon turns into a ball of light and disappears.
+ * Seen in play (Pinsir fainting to Poison Sting); Stadium 1 used these steps for a send-out.
+ */
+void BattleScene_FaintStepVanish(CameraNode* arg0) {
     func_821229AC(arg0, sActivePokemon[!sBattleScene.scene->actingSide]);
     if (BattleScene_AdvanceCameraFrameCounter(0x19) != 0) {
         func_8211EE8C();
@@ -596,7 +655,11 @@ void BattleScene_AdvanceSendOutCameraClose(CameraNode* arg0) {
     }
 }
 
-void BattleScene_FinishSendOutCameraClose(CameraNode* arg0) {
+/**
+ * Faint, step 3: waits 5 camera frames, then marks the Pokemon fainted (state 0x10).
+ * Seen in play (Pinsir fainting to Poison Sting); Stadium 1 used these steps for a send-out.
+ */
+void BattleScene_FaintStepFinishVanish(CameraNode* arg0) {
     ActivePokemonState* temp_s0 = &sActivePokemon[!sBattleScene.scene->actingSide]->state;
 
     func_821229AC(arg0, sActivePokemon[!sBattleScene.scene->actingSide]);
@@ -618,9 +681,10 @@ void BattleScene_FinishSendOutCameraClose(CameraNode* arg0) {
 }
 
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Faint, step 4: refreshes the HUD, then goes to the end of the turn (phase 4), to the other side's faint (phase 5) or sets the winner when that side has nothing left.
+ * Seen in play (Pinsir fainting to Poison Sting); Stadium 1 used these steps for a send-out.
  */
-void BattleScene_CompleteSendOutFollowup(UNUSED CameraNode* arg0) {
+void BattleScene_FaintStepEnd(UNUSED CameraNode* arg0) {
     ActivePokemonState* other;
     ActivePokemonState* self;
     s32 side;
@@ -670,6 +734,8 @@ void func_82126A1C(UNUSED CameraNode* arg0) {
 }
 
 /**
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleScene_AdvanceSendOutFollowupCamera(CameraNode* arg0) {
@@ -686,7 +752,7 @@ void BattleScene_AdvanceSendOutFollowupCamera(CameraNode* arg0) {
                     break;
                 }
             }
-            func_821261A0(sActivePokemon[!sBattleScene.scene->actingSide], arg0, sel);
+            BattleCamera_PlayFaintShot(sActivePokemon[!sBattleScene.scene->actingSide], arg0, sel);
         }
         if (func_82121820(0x1E) != 0) {
             func_821235E0(arg0, sActivePokemon[!sBattleScene.scene->actingSide]);
@@ -711,28 +777,27 @@ void BattleScene_AdvanceSendOutFollowupCamera(CameraNode* arg0) {
 
 /**
  * Phase 5: a Pokemon faints (seen in play: ひんし shown during this phase, then phase 4). The step helpers it calls still carry Stadium 1 send-out names, which may be wrong.
- * @unverified Phase number seen in play (player agent); handler body only skimmed.
  */
 void BattleScene_PhaseFaint(CameraNode* arg0) {
     switch (sBattleScene.scene->phaseStep) {
         case 0:
-            BattleScene_AdvanceSendOutPreparation(arg0);
+            BattleScene_FaintStepStart(arg0);
             break;
 
         case 1:
-            BattleScene_AdvanceSendOutCamera(arg0);
+            BattleScene_FaintStepCollapse(arg0);
             break;
 
         case 2:
-            BattleScene_AdvanceSendOutCameraClose(arg0);
+            BattleScene_FaintStepVanish(arg0);
             break;
 
         case 3:
-            BattleScene_FinishSendOutCameraClose(arg0);
+            BattleScene_FaintStepFinishVanish(arg0);
             break;
 
         case 4:
-            BattleScene_CompleteSendOutFollowup(arg0);
+            BattleScene_FaintStepEnd(arg0);
             break;
 
         case 5:
@@ -777,19 +842,19 @@ void func_82126D20(UNUSED CameraNode* arg0) {
 void func_82126E34(CameraNode* arg0) {
     switch (sBattleScene.scene->phaseStep) {
         case 0:
-            BattleScene_AdvanceSendOutPreparation(arg0);
+            BattleScene_FaintStepStart(arg0);
             break;
 
         case 1:
-            BattleScene_AdvanceSendOutCamera(arg0);
+            BattleScene_FaintStepCollapse(arg0);
             break;
 
         case 2:
-            BattleScene_AdvanceSendOutCameraClose(arg0);
+            BattleScene_FaintStepVanish(arg0);
             break;
 
         case 3:
-            BattleScene_FinishSendOutCameraClose(arg0);
+            BattleScene_FaintStepFinishVanish(arg0);
             break;
 
         case 4:
@@ -858,7 +923,6 @@ void func_82126F70(CameraNode* arg0) {
 
 /**
  * Phase 1: the command phase, while the menus are open. In play, every turn passes through it.
- * @unverified Phase number seen in play (player agent); handler body only skimmed.
  */
 void BattleScene_PhaseCommand(CameraNode* arg0) {
     switch (sBattleScene.scene->phaseStep) {

@@ -37,7 +37,8 @@ void func_89004710(void);
 
 /**
  * Writes the list `arg3` to deck (`arg0`, `arg1`, `arg2`) and closes it, flushing box decks 0x10..0x13.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in せいとん: during PcSort_SaveChanges it ran for deck 0x20 (the party)
+ * and 0x21 (GB box 1), the two lists the move changed.
  */
 void PcSort_WriteDeck(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
     DeckHandle* sp1C = Deck_Open(arg0, arg1, arg2, 1);
@@ -59,7 +60,8 @@ void func_89004710(void) {
 
 /**
  * Sets the 0x100 flag on each of the 13 box rows whose box is empty.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran once when the せいとん (sort) screen opened its list of 13 target boxes
+ * (てもち, GBのボックス1 to 12).
  */
 void PcSort_DisableEmptyBoxes(s8* arg0, s8* arg1) {
     s32 i;
@@ -73,7 +75,8 @@ void PcSort_DisableEmptyBoxes(s8* arg0, s8* arg1) {
 
 /**
  * Sets the 0x200 flag on the first row when the list holds exactly one Pokemon.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran once when A on the Pokémon sort screen's source (てもち) opened the
+ * party list of three (フシ, ヒト, カメ); with three Pokémon the first row stayed selectable.
  */
 void PcSort_DisableIfSingleMon(s8 *arg0, s8 *arg1) {
     u16 *temp_v0;
@@ -86,7 +89,8 @@ void PcSort_DisableIfSingleMon(s8 *arg0, s8 *arg1) {
 
 /**
  * Sets the 0x400 flag on each of the 13 box rows whose box is full.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran once when the Pokémon sort screen opened its target box list (てもち,
+ * GBのボックス1 to 12, 64のボックス); no box was full, and no row was greyed out.
  */
 void PcSort_DisableFullBoxes(s8* arg0, s8* arg1) {
     s32 i;
@@ -100,7 +104,7 @@ void PcSort_DisableFullBoxes(s8* arg0, s8* arg1) {
 
 /**
  * Sets the disabled flag (1) on menu row `arg1`.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): greyed out てもち, the source, in the 「どこへいどうする？」 list.
  */
 void PcSort_DisableRow(s8 *arg0, s32 arg1) {
     u16 *temp_v0;
@@ -120,7 +124,7 @@ extern Rgba89004908 D_800734B0[];
 extern M2C_UNK D_800734A8;
 /**
  * Draws one menu row label with the selection highlight (dimmed when disabled).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): rows てもち, GBのボックス1-8, 64のボックス1-4 (dimmed when disabled).
  */
 void PcSort_DrawMenuRow(s32 x, s32 y, char* str, UNUSED s32 index, s32 flags) {
     Rgba89004908 color;
@@ -153,7 +157,7 @@ void Menu_Init(s8*, s32, s32, s32, s32, s32);
 M2C_UNK func_80027804();
 /**
  * Sets up a menu window whose height fits `arg4` rows.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): opened the 13-row 「どこからいどうする？」 box list.
  */
 void PcSort_InitMenuWindow(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
     s32 pad[2]; // FAKE: stack padding
@@ -175,7 +179,7 @@ M2C_UNK Menu_DrawItems(s8 *, s32, s32, M2C_UNK, s32); /* extern */
 
 /**
  * Draws the menu window's items.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): drew that box list.
  */
 void PcSort_DrawMenu(s8 *arg0) {
     if (func_8002AE6C() == 0) {
@@ -189,7 +193,7 @@ M2C_UNK func_8003F6AC(M2C_UNK);
 extern s32 D_800603C0;
 /**
  * Moves the menu cursor. Returns -1 on cancel, the 1-based row on confirm, otherwise 0.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): picked GBのボックス1 as the destination.
  */
 s32 PcSort_UpdateMenuCursor(s32 arg0) {
     s32 sp1C = 0;
@@ -215,7 +219,7 @@ void func_80029028(s32, s32, s32, s32, Rgba89004908);
 void Font_SetColorForFlags(s32);
 /**
  * Draws a Pokemon list row with its level (Ｌ%d).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): ハナ L5, ヒノコ L5, カメ L5.
  */
 void PcSort_DrawMonRow(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4) {
     u8* mon = arg2;
@@ -243,7 +247,7 @@ void PcSort_DrawMonRow(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4) {
 
 /**
  * Points the Pokemon list at a new set of entries.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): switched the right-hand list to the picked box.
  */
 void PcSort_SetMonList(s8* arg0, s32 arg1) {
     ScrollList_SetItems(arg0, arg1, arg0 + 0x44);
@@ -254,7 +258,7 @@ void PcSort_DrawMonRow(s32, s32, u8*, s32, s32);
 
 /**
  * Sets up the scrolling Pokemon list at (`arg1`, `arg2`) with PcSort_DrawMonRow rows.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): set up the てもち and GBのボックス1 lists.
  */
 void PcSort_InitMonList(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     M2C_FIELD(arg0, s32*, 0x80) = arg1;
@@ -271,7 +275,7 @@ extern Gfx D_80073450[];
 extern u8 D_04011AB8[];
 /**
  * Draws the scrolling Pokemon list (paged when 0x200 is set) and its scroll bar.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): the two lists with 03/06 and 00/30.
  */
 void PcSort_DrawMonList(s8 *arg0, s32 arg1) {
     if (arg1 & 0x200) {
@@ -291,7 +295,8 @@ s32 func_80030230(void*);
 
 /**
  * Navigate the selected menu mode, then report cancel or confirm input.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-12) in せいとん: handled the てもち list with the cursor on ハナ after the source
+ * and destination were chosen.
  */
 s32 PcSort_UpdateMonList(void* menu, u32 flags) {
     s32 result = 0;
@@ -337,7 +342,7 @@ extern char D_890189B8[];
 
 /**
  * Sets up the ポケモンのせいり (organize Pokemon) window and its lists.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): opened ポケモンのせいり.
  */
 void PcSort_InitOrganizeWindow(s8* arg0, s32 x, s32 y, s8* arg3, s8* arg4) {
 
@@ -405,7 +410,7 @@ extern s32 D_89019114;
 
 /**
  * Draws a box tab with its name, highlighted when selected.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): the てもち and GBのボックス1 tabs.
  */
 void PcSort_DrawBoxTab(s32 arg0, s32 x, s32 y, s32 flags, u32 idx) {
     Color_RGBA8* col;
@@ -472,7 +477,8 @@ extern Gfx D_80060398[];
 
 /**
  * Draws Attack, Defense, Speed, Special and HP:%3d (？？？？？ when unknown).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in せいとん: drew ハナ's stats under the lists: こうげき 9, ぼうぎょ 9, すばやさ 9,
+ * とくしゅ 11 and HP: 19.
  */
 void PcSort_DrawMonStats(s32 x, s32 y, u8* mon) {
     s32 count;
@@ -521,7 +527,7 @@ extern M2C_UNK D_800734A8;
 
 /**
  * Draws `arg2` in the small font.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): the small 03/06 and 00/30 counts.
  */
 void PcSort_DrawSmallText(s32 arg0, s32 arg1, s32 arg2) {
     func_8001AB6C();
@@ -541,7 +547,7 @@ void PcSort_DrawMonStats();
 
 /**
  * Draws the help line for the organize window's current state.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): 「ポケモンをいどうする」, 「どこからいどうする？」 and 「どこへいどうする？」.
  */
 void PcSort_DrawHelpText(s32* arg0) {
     s32 idx = arg0[0x170 / 4];
@@ -580,7 +586,7 @@ extern u8 D_800735C4[];
 
 /**
  * Draws the organize Pokemon window: frame, lists and help line.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): the ポケモンのせいり window.
  */
 void PcSort_DrawOrganizeWindow(s8* arg0) {
     s32 pad[1]; // FAKE: stack padding
@@ -633,17 +639,18 @@ void PcSort_DrawOrganizeWindow(s8* arg0) {
 }
 
 void func_89000020(void* arg0, void* arg1);
-void LabItem_RemoveSelectedEntry(void*);
+void LabList_RemoveSelectedEntry(void*);
 
 /**
  * Moves the selected Pokemon into the destination box and marks both boxes changed.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in せいとん > ポケモンをいどうする: moving ハナ (フシギダネ) from てもち into GBのボックス1
+ * changed the counts from 03/06 and 00/30 to 02/06 and 01/30.
  */
 void PcSort_MoveSelectedMon(s8* arg0) {
     M2C_FIELD(arg0, s32**, 0x3AC)[M2C_FIELD(arg0, s32*, 0x248)] = 1;
     M2C_FIELD(arg0, s32**, 0x3AC)[M2C_FIELD(arg0, s32*, 0x1D0)] = M2C_FIELD(arg0, s32**, 0x3AC)[M2C_FIELD(arg0, s32*, 0x248)];
     func_89000020(arg0 + 0x31C, (void*)(M2C_FIELD(arg0, s32**, 0x294)[3] * M2C_FIELD(arg0, s32*, 0x29C) + M2C_FIELD(arg0, s32**, 0x294)[0]));
-    LabItem_RemoveSelectedEntry(arg0 + 0x294);
+    LabList_RemoveSelectedEntry(arg0 + 0x294);
 }
 
 void func_80027654(s32* matrix, u8* out, s32 row);
@@ -651,6 +658,8 @@ void func_80027700(s32* matrix, u8* in, s32 row);
 
 /**
  * Swaps two entries of the source list.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void PcSort_SwapWithinList(s8* arg0) {
@@ -666,6 +675,8 @@ void PcSort_SwapWithinList(s8* arg0) {
 
 /**
  * Swaps the selected entries of the source and destination lists.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void PcSort_SwapBetweenLists(s8* arg0) {
@@ -680,14 +691,14 @@ void PcSort_SwapBetweenLists(s8* arg0) {
     M2C_FIELD(arg0, s32**, 0x3AC)[M2C_FIELD(arg0, s32*, 0x28C)] = M2C_FIELD(arg0, s32**, 0x3AC)[M2C_FIELD(arg0, s32*, 0x290)];
 }
 
-void LabItem_RemoveSelectedEntry(void*);
+void LabList_RemoveSelectedEntry(void*);
 
 /**
  * Removes the selected Pokemon from its box and marks the box changed.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) released フシギダネ in せいとん > ポケモンをにがす: てもち went from 03/06 to 02/06.
  */
 void PcSort_ReleaseSelectedMon(s8* arg0) {
-    LabItem_RemoveSelectedEntry(arg0 + 0x294);
+    LabList_RemoveSelectedEntry(arg0 + 0x294);
     M2C_FIELD(arg0, s32**, 0x3AC)[M2C_FIELD(arg0, s32*, 0x28C)] = 1;
     M2C_FIELD(arg0, s32*, 0) = (((M2C_FIELD(arg0, s32*, 0x28C) == 0) ? 1 : 0) == M2C_FIELD(M2C_FIELD(arg0, s8**, 0x294), s32*, 8)) ? 1 : 4;
 }
@@ -695,7 +706,8 @@ void PcSort_ReleaseSelectedMon(s8* arg0) {
 
 /**
  * Shows the selected box's Pokemon in the destination list.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in せいとん: after GBのボックス2 was chosen under 「どこへいどうする？」, it ran and that
+ * box appeared as the destination list (00/30).
  */
 void PcSort_OpenBox(s8 *arg0) {
     s32 temp_v0;
@@ -724,7 +736,7 @@ typedef struct Mon8900609C {
 
 /**
  * Runs the organize Pokemon window's state machine (move, swap, release).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): ran the source and destination picks.
  */
 s32 PcSort_UpdateOrganizeWindow(s8* arg0) {
     s32 ret;
@@ -938,7 +950,7 @@ extern u8 D_0015E220[];
 extern s32 D_89019108;
 /**
  * Pushes the 'OTPC' pool state, opens the icon archives, and reads the boxes.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): ポケモンを いどうする opened the screen.
  */
 void PcSort_Init(s8* arg0, s32 arg1) {
     s32 i;
@@ -977,7 +989,7 @@ M2C_UNK func_80002620(M2C_UNK);                     /* extern */
 
 /**
  * Pops the 'OTPC' pool state.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): B left it for the せいとん menu.
  */
 void PcSort_Free(s32 arg0) {
     func_80002620(0x4F545043);
@@ -991,7 +1003,7 @@ extern Color_RGB8 D_8900A5B8;
 
 /**
  * Draws the Pokemon sorting screen for its current state, including the status window.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): drew ポケモンのせいり.
  */
 void PcSort_DrawScreen(s32* arg0) {
     BgStage_DrawFrame();
@@ -1020,6 +1032,8 @@ extern s32 D_89019108;
 
 /**
  * Requests the icon of each species in list `arg0`.
+ * Seen in play (2026-11-13) ran when leaving せいとん with レポートしてやめる after moving フシギダネ and ヒトカゲ into
+ * GBのボックス1.
  * @unverified Name and comment guessed from the code.
  */
 void PcSort_LoadMonIcons(s8 *arg0) {
@@ -1054,7 +1068,8 @@ void func_800243B8(void);
 void func_8002D7D4(s32);
 /**
  * Writes the changed boxes back to the save and flushes it.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in せいとん: レポートしてやめる after the move ran this, which wrote decks 0x20
+ * and 0x21, and the Game Boy .sav then had party count 2 and current-box count 1.
  */
 void PcSort_SaveChanges(Save89006B2C* arg0) {
     s32 dirty = 0;
@@ -1104,7 +1119,8 @@ void PcSort_SaveChanges(Save89006B2C* arg0) {
 
 /**
  * Returns 1 when any of the 13 boxes changed.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in せいとん: returned 1 after that move, when leaving opened 「ないようが
+ * へんこうされています」.
  */
 s32 PcSort_HasUnsavedChanges(s8* arg0) {
     s32 i;
@@ -1128,7 +1144,7 @@ extern u8 D_89018DBC[];
 
 /**
  * Runs the Pokemon organizer's state machine for one frame.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): ran ポケモンのせいり.
  */
 s32 PcSort_UpdateScreen(s8* arg0) {
     s32 ret = 0;

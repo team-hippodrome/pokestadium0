@@ -172,6 +172,7 @@ M2C_UNK func_8004CFB0(M2C_UNK *, M2C_UNK, M2C_UNK); /* extern */
 M2C_UNK func_8004D1C0(M2C_UNK *, M2C_UNK, M2C_UNK); /* extern */
 extern M2C_UNK D_800A94A4;
 
+/** Waits on the pool lock and frees a block if it is valid. */
 void main_pool_try_free(s32 arg0) {
     func_8004D1C0(&D_800A94A4, 0, 1);
     func_80002230(arg0, 1);
@@ -211,6 +212,7 @@ void* main_pool_realloc(void* addr, size_t size) {
 
 extern s32 D_800A94BC;
 
+/** Returns the free space left in the main pool. */
 s32 main_pool_get_available(void) {
     return D_800A94BC - 0x10;
 }
@@ -267,6 +269,8 @@ u32 main_pool_push_state(u32 arg) {
 /**
  * Restore pool state from a previous call to main_pool_push_state. Return the
  * amount of free space left in the pool.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the Pokédex, the party screen,
+ * the Lab list, Lab sort, registration, the Lab PC and Free Battle setup.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 u32 main_pool_pop_state(u32 arg) {

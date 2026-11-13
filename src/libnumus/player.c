@@ -85,6 +85,9 @@ s32 func_800366BC(s8 *arg0, s32 arg1) {
 }
 
 /**
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the main menu, the Pokédex,
+ * the party screen, the Lab list, Lab sort, registration, the Lab PC, Free Battle setup, the battle
+ * opening, a switch in battle, running from battle and a Pound turn.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 u8* Audio_SetVoiceVolumeEnvelope(channel_t* cp, u8* ptr) {
@@ -838,6 +841,8 @@ void func_8003798C(s32 flags, s32 duration) {
  * offset 0xB2 is nonzero, MUSFLAG_SONGS those where it is 0). Does not mask interrupts.
  * Written with the offset-0xB2 field read through M2C_FIELD: player.h places the
  * equivalent `IsFX` at 0xBA, which does not match this build's data.
+ * Seen in play (2026-11-13) ran when Start was pressed at the title screen (console reset, then N64
+ * logo, opening, title and main menu).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 s32 Audio_IsSoundPlaying(s32 flags) {
@@ -1305,6 +1310,10 @@ s32 func_800383DC(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, UNUSED s32 a
  */
 s32 Audio_IsSoundPlaying(M2C_UNK);                         /* extern */
 extern PlayerChannelZero_1E D_800B3670[45];
+/**
+ * Seen in play (2026-11-13) ran when Start was pressed at the title screen (console reset, then N64
+ * logo, opening, title and main menu).
+ */
 s32 Audio_GetActivityScore(void) {
     s32 i;
 
@@ -1323,6 +1332,8 @@ s32 Audio_GetActivityScore(void) {
 s32 func_8004D300(s32);
 /**
  * Stop all active songs (not FX), fade them out
+ * Seen in play (2026-11-13) ran when つづける was picked at トーナメントをつづけますか？ after winning tournament
+ * round 1.
  * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
  */
 void Audio_StopAllSoundEffects(void) {
@@ -1421,6 +1432,8 @@ s32 func_8004D300(s32);
  * established.
  * Matching note: the value is kept in `arg0` itself; a separate local makes the frame
  * 8 bytes larger.
+ * Seen in play (2026-11-13) ran when Start was pressed at the title screen (console reset, then N64
+ * logo, opening, title and main menu).
  */
 void Audio_FadeCategoriesAndStreams(s32 arg0) {
     s32 mask;
@@ -1455,6 +1468,8 @@ extern s8 D_8007754C;
 extern s32 D_800B3CD0;
 
 /**
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void Audio_FadeCategoriesAndStreamsDefault(void) {

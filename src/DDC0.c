@@ -26,10 +26,12 @@ void Audio_FadeOutForShutdown(void);
 void Audio_Disable(void);
 void Audio_Enable(void);
 
+/** Marks that no music is current. */
 void Audio_ResetCurrentMusic(void) {
     D_800AAF3C = -1;
 }
 
+/** Starts a music track unless it is already the current one. */
 void Audio_PlayMusicIfChanged(s32 arg0) {
     if (arg0 != D_800AAF3C) {
         if (D_800AAF3C >= 0) {
@@ -40,6 +42,7 @@ void Audio_PlayMusicIfChanged(s32 arg0) {
     }
 }
 
+/** Fades out the current music over the given time. */
 void Audio_StopMusic(s32 arg0) {
     if (D_800AAF3C >= 0) {
         Audio_FadeOutAll(arg0);
@@ -47,6 +50,7 @@ void Audio_StopMusic(s32 arg0) {
     }
 }
 
+/** Waits for the audio system to become idle, returning nonzero on timeout. */
 s32 Audio_WaitForIdle(s32 arg0) {
     s32 retvar = 0;
 
@@ -64,15 +68,18 @@ s32 Audio_WaitForIdle(s32 arg0) {
     return retvar;
 }
 
+/** Fades out all audio categories ahead of a shutdown. */
 void Audio_FadeOutForShutdown(void) {
     Audio_FadeCategoriesAndStreamsWithDuration(0x10);
 }
 
+/** Disables audio output. */
 void Audio_Disable(void) {
     D_800AAE30 = 0;
     Audio_SetEnabled(0);
 }
 
+/** Enables audio output. */
 void Audio_Enable(void) {
     Audio_SetEnabled(1);
     D_800AAE30 = 1;

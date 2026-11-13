@@ -22,6 +22,7 @@ void func_89006FC0(u8 *arg0) {
     }
 }
 
+/** Writes entries to a box of the Lab PC through a deck handle. */
 void LabPC_WriteBoxEntries(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
     DeckHandle* sp1C = Deck_Open(arg0, arg1, arg2, 1);
 
@@ -90,7 +91,7 @@ void func_890070BC(s8* arg0) {
 
 /**
  * Opens deck (`arg0`, `arg1`, `arg2`), reads `arg4` entries into `arg3`, closes it and returns the read count.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): read the GB and 64 boxes for ボックスのそうさ.
  */
 s32 PcBox_ReadDeck(s32 arg0, s32 arg1, s32 arg2, s8* arg3, s32 arg4) {
     s32 sp1C;
@@ -133,6 +134,8 @@ typedef struct LabPCBoxEntry {
 } LabPCBoxEntry; // size = 0x8
 
 /**
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 s32 LabPC_NoEmptyBoxAvailable(s8* arg0) {
@@ -149,7 +152,8 @@ s32 LabPC_NoEmptyBoxAvailable(s8* arg0) {
 }
 
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Seen in play (2026-11-13) in せいとん > ボックスを いどうする, pressing A with every GB and 64 box at 0/30 ran
+ * it once, and the screen showed 「いどうする ボックスが ありません」.
  */
 s32 LabPC_AllBoxesEmpty(s8* arg0) {
     s32 i;
@@ -173,7 +177,7 @@ extern char D_89018E60[];
 extern char D_89018E68[];
 /**
  * Sets up the confirm window (430x292) with its labeled Yes/No buttons.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) set up the ほんとうにいいの？ はい/いいえ window in せいとん > ポケモンをにがす.
  */
 void PcBox_InitConfirmWindow(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, u16 *arg6) {
     Window_SetRect(arg0, arg1, arg2, 0x1AE, 0x124);
@@ -232,7 +236,7 @@ u32 func_800566BC(const char*);
 
 /**
  * Draws a move name in its type color, or the empty label for -2.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in せいとん: drew ハナ's moves たいあたり and なきごえ beside its stats in ポケモンのせいり.
  */
 void PcBox_DrawMoveName(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     Entry8006A9D4* entry;
@@ -258,7 +262,8 @@ void PcBox_DrawMoveName(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
 
 /**
  * Draws the name of the species' type 1 or 2 in its type color; nothing for a missing type 2.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) in the せいとん > ポケモンをにがす confirm it drew くさ and どく for フシギダネ, and ほのお
+ * with no type 2 for ヒトカゲ.
  */
 void PcBox_DrawTypeName(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     Color890075E0 c;
@@ -347,7 +352,8 @@ s32 BattleMon_CountMoves(u8* arg0);
 s32 BattleMon_GetMoveIndex(Mon89007678*, s32);
 /**
  * Draws a Pokemon's status window: LV, HP, Type 1/2, Attack, Defense, Speed, Special.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) in the せいとん > ポケモンをにがす confirm it drew フシギダネ's window (LV 10, HP 30,
+ * Type 1 くさ, Type 2 どく, the four stats), and ヒトカゲ's.
  */
 void PcBox_DrawMonStatusWindow(Screen89007678* arg0) {
     s32 y = arg0->y + 6;
@@ -437,7 +443,8 @@ s32 Ui_GetSelectionDirection(void* arg0);
 
 /**
  * Moves the Yes/No cursor. Returns -1 on cancel or No, 1 on Yes.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) in the せいとん > ポケモンをにがす confirm, D-Left moved the cursor from いいえ to はい;
+ * A on いいえ cancelled and A on はい released.
  */
 s32 PcBox_UpdateConfirmCursor(u8* arg0) {
     s32 sp1C = 0;
@@ -469,7 +476,7 @@ extern u8 D_04011A60[];
 void func_80029028(s32, s32, s32, s32, Color_RGBA8);
 void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
 void func_8001BCB4(s32, s32, s32, s32, u8*, s32, s32);
-void Trade_DrawDigitStrip(s32, s32, u8);
+void Ui_DrawNumberUnpadded(s32, s32, u8);
 void Font_SetColorForFlags(s32);
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 s32 PokeIcon_GetImage(s8 *arg0, s32 arg1);
@@ -491,7 +498,7 @@ void func_89007D54(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4, s32 arg5) {
         gSPDisplayList(gDisplayListHead++, D_80073450);
         gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
         func_8001BCB4(arg0 + 4, arg1 + 0x24, 8, 0xA, D_04011A60, 8, 0);
-        Trade_DrawDigitStrip(arg0 + 0xE, arg1 + 0x22, arg2[0x24]);
+        Ui_DrawNumberUnpadded(arg0 + 0xE, arg1 + 0x22, arg2[0x24]);
         func_8001AB6C();
         Font_SetColorForFlags(arg4);
         func_8001A384(4, 0);
@@ -545,6 +552,8 @@ M2C_UNK GridMenu_DrawInlineItems(s8 *, s32, s32, s32, s32);  /* extern */
 
 /**
  * Draws the list window's rows (refreshing the icons unless flag 0x10 is set).
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void PcBox_DrawList(s8 *arg0, s32 arg1) {
@@ -563,6 +572,8 @@ M2C_UNK func_8003F6AC(M2C_UNK);
 extern s32 D_800603C0;
 /**
  * Moves the list cursor. Returns -1 on cancel, the 1-based row on confirm, otherwise 0.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 PcBox_UpdateListCursor(s32 arg0) {
@@ -599,7 +610,7 @@ void Ui_DrawNumber(s32, s32, s32, s32);
 void func_8001BCB4(s32, s32, s32, s32, u8*, s32, s32);
 /**
  * Draws ボックス%d (Box %d).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): ボックス1 ... ボックス4 on the 64 side.
  */
 void PcBox_DrawBoxName(s32 arg0, s32 arg1, u8** arg2, s32 arg3, s32 arg4) {
     Color_RGBA8 color;
@@ -641,7 +652,7 @@ extern u8 D_80073634[];
 
 /**
  * Draws ボックス%d (Box %d) and its %2d/%2d fill count.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): ボックス1 0/30 ... ボックス8 0/30.
  */
 void PcBox_DrawBoxCount(s32 arg0, s32 arg1, u8** arg2, s32 arg3, s32 arg4) {
     Color_RGBA8 color;
@@ -695,7 +706,7 @@ s32 func_8002BC44(s32);
 void Font_SetColorForFlags(s32);
 /**
  * Draws ＧＢのカートリッジ (GB cartridge) or ６４のカセット (N64 cassette) for `kind`.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): GBのカートリッジ and 64のカセット.
  */
 void PcBox_DrawStorageLabel(s32 x, s32 y, s32 flags, s32 kind) {
     ColorPair890088F8* c;
@@ -744,7 +755,7 @@ extern u8 D_89010368[];
 extern char D_89018F4C[];
 /**
  * Sets up the ボックスのそうさ (box operation) window and its parts.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): opened ボックスのそうさ.
  */
 void PcBox_InitOperationWindow(s8* arg0, s32 x, s32 y, s8* arg3) {
     Window_SetRect(arg0 + 4, x, y, 0x234, 0x172);
@@ -811,7 +822,7 @@ extern u8 D_8007356C[];
 extern u8 D_800735C4[];
 /**
  * Draws the box operation window: frame, storage label and the two box lists.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): the ボックスのそうさ window with 「64へボックスをいどうする」.
  */
 void PcBox_DrawOperationWindow(s8* arg0) {
     s32 sel = 0x10;
@@ -880,6 +891,8 @@ s32 Menu_UpdateCursorSkipDisabled(void* arg0);
 
 /**
  * Moves a menu cursor. Returns -1 on cancel, 1 on confirm, otherwise 0.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 PcBox_UpdateSimpleCursor(void* arg0) {
@@ -916,6 +929,8 @@ typedef struct {
  * the entry is `(*entries)[index]` with 8-byte entries. The operands of the
  * pointer addition are written `index + *entries` because that order gives the
  * retail temp numbering.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name guessed from the code; comment kept.
  */
 void PcBox_SwapSelectedEntries(void* arg0) {
@@ -938,6 +953,8 @@ typedef struct Entry89009464 {
 } Entry89009464;
 /**
  * Swaps two entries of the same box list and marks both dirty.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void PcBox_SwapEntriesInList(s32 arg0) {
@@ -959,6 +976,8 @@ typedef struct LabPCBoxList890094A8 {
 s32 Menu_SkipDisabledForward(s8 *);
 /**
  * Disables the list rows of boxes that hold no Pokemon.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 PcBox_DisableEmptyBoxes(s8* arg0) {
@@ -984,6 +1003,8 @@ typedef struct LabPCBoxList890095DC {
 
 /**
  * Disables the list rows of boxes that already hold Pokemon.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void PcBox_DisableNonEmptyBoxes(s8* arg0) {
@@ -1003,6 +1024,8 @@ void PcBox_DisableNonEmptyBoxes(s8* arg0) {
 
 /**
  * Sets the left and right box lists (either may be NULL) and resets their cursors.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void PcBox_SetActiveLists(s8 *arg0, s8 *arg1, s8 *arg2) {
@@ -1048,7 +1071,7 @@ extern u8 D_8900A96C[];
 
 /**
  * Runs the box operation window's state machine (pick, move, swap, warnings such as ボックスのあきがありません "no free space in the box").
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): ran ボックスのそうさ.
  */
 s32 PcBox_UpdateOperationWindow(s8* arg0) {
     s32 ret = 0;
@@ -1305,7 +1328,7 @@ extern u8 D_0015E220[];
 
 /**
  * Entry point: pushes the 'PBOX' pool state and creates the icon renderers.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): ボックスを いどうする opened the screen.
  */
 void PcBox_Init(s8* arg0) {
     s32 i;
@@ -1336,7 +1359,7 @@ M2C_UNK func_80002620(M2C_UNK);                     /* extern */
 
 /**
  * Pops the 'PBOX' pool state.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): B left it.
  */
 void PcBox_Free(s32 arg0) {
     func_80002620(0x50424F58);
@@ -1349,7 +1372,7 @@ void SavePrompt_Draw(s8*);
 void PcBox_DrawMonStatusWindow(Screen89007678*);
 /**
  * Draws the PC box screen for its current state, including the storage label and status window.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): drew ボックスのそうさ.
  */
 void PcBox_DrawScreen(s8* arg0) {
     BgStage_DrawFrame();
@@ -1379,7 +1402,8 @@ typedef struct Ent8900A298 {
 
 /**
  * Returns 1 when any box or party list is dirty.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran once when B left the box sort screen after nothing had been moved;
+ * the screen closed without asking to save.
  */
 s32 PcBox_HasUnsavedChanges(s8* arg0) {
     s32 i;
@@ -1433,7 +1457,7 @@ typedef struct Obj8900A324 {
 #define OBJ ((Obj8900A324*)arg0)
 /**
  * Runs the PC box screen's state machine for one frame.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): ran ボックスのそうさ.
  */
 s32 PcBox_UpdateScreen(s8* arg0) {
     s32 ret = 0;

@@ -11,6 +11,7 @@ void func_88400020(s32 arg0, s8 *arg1) {
     }
 }
 
+/** Battle HUD hook that does nothing. */
 void BattleHud_Noop(void) {
 }
 
@@ -110,7 +111,9 @@ void func_88400168(s32, s32, s32, s32);
 
 /**
  * Shows the Transfer Pak cartridge details (ID, No., trainer) for `port`, or an error: not a Pokemon cartridge, or no 64GB Pak inserted.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran on the "choose a Game Boy cartridge" screen after the title
+ * (console reset, then N64 logo, opening, title and main menu), drawing port 1 (ID 12345, trainer
+ * サトシ) and "64GB Pak not inserted" for ports 2-4.
  */
 void TransferPak_DrawStatusScreen(s32 port, s32 x, s32 y) {
     Color_RGB8 top = D_88402F7C;
@@ -167,7 +170,15 @@ void TransferPak_DrawStatusScreen(s32 port, s32 x, s32 y) {
 
 // Moves the cursor around a 2x2 grid of slots on D-pad presses, skipping
 // to the diagonal slot when the adjacent one is empty.
-s32 func_8840079C(s32 cursor) {
+/**
+ * Moves the cartridge cursor between the four controller ports on D-pad up/down/left/right,
+ * skipping ports without a Game Boy cartridge (D_88403310[port].game).
+ * Seen in play (2026-11-13) ran on the "choose a Game Boy cartridge" screen after the title
+ * (console reset, then N64 logo, opening, title and main menu), drawing port 1 (ID 12345, trainer
+ * サトシ) and "64GB Pak not inserted" for ports 2-4.
+ * @unverified Needs a Transfer Pak to see; name from the code.
+ */
+s32 TransferPak_MoveCartridgeCursor(s32 cursor) {
     if ((M2C_FIELD(D_800603C0, u16*, 8) & 0x800) && (cursor >= 2)) {
         if (D_88403310[cursor ^ 2].game != 0) {
             func_8003F6AC(0x25);
@@ -208,9 +219,10 @@ s32 func_8840079C(s32 cursor) {
 }
 
 
+/** Draws the backdrop of the save sequence message box. */
 void Trade_DrawSaveSeqMessageBackdrop(s16 arg0, s16 arg1, s16 arg2, s16 arg3) {
-    Color_RGB8 sp24 = { 0x00, 0x00, 0x32 };
-    Color_RGB8 sp20 = { 0x00, 0x00, 0xC8 };
+    Color_RGB8 sp24 = { 0x00, 0x00, 0x32 }; // #000032
+    Color_RGB8 sp20 = { 0x00, 0x00, 0xC8 }; // #0000C8
 
     Ui_DrawGradientPanel(arg0, arg1, arg2, arg3, &sp24, &sp20);
 }

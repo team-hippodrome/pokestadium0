@@ -39,6 +39,8 @@ extern M2C_UNK D_80084D11;
 extern M2C_UNK D_80084D28;
 
 /**
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 s32 Leo_ValidateBootDiskId(void) {
@@ -64,6 +66,7 @@ s32 Leo_ValidateBootDiskId(void) {
     return 0;
 }
 
+/** Returns whether a disk's boot descriptor identifies a Pokemon disk. */
 s32 Leo_AcceptPokemonDiskDescriptor(unk_D_800AA680* arg0) {
     s32 var_v1 = 0;
 
@@ -75,18 +78,21 @@ s32 Leo_AcceptPokemonDiskDescriptor(unk_D_800AA680* arg0) {
     return var_v1;
 }
 
+/** Queues a read of the disk ID and advances the boot state. */
 s32 Leo_QueueDiskIdRead(void) {
     Storage_QueueDiskIdRead(&D_800AB218, 0);
     D_800AB210.unk_00 = 3;
     return 0;
 }
 
+/** Queues a disk reset and advances the boot state. */
 s32 Leo_QueueDiskReset(void) {
     Storage_QueueDiskReset(&D_800AB218, 0);
     D_800AB210.unk_00 = 5;
     return 0;
 }
 
+/** Queues a read of the disk boot block. */
 s32 Leo_QueueBootBlockRead(unk_D_800AA680* arg0) {
     Storage_QueueDiskTransfer(0, arg0, 0x230, 1, &D_800AB218, 1);
     D_800AB210.unk_04 = 0;
@@ -95,6 +101,7 @@ s32 Leo_QueueBootBlockRead(unk_D_800AA680* arg0) {
     return 0;
 }
 
+/** Queues a read of the disk payload. */
 s32 Leo_QueueDiskPayloadRead(void) {
     Storage_QueueDiskTransfer(0, D_800AB200.unk_08, D_800AB200.unk_04, D_800AB200.unk_06, &D_800AB218, 1);
     D_800AB210.unk_04 = 0;
@@ -103,6 +110,7 @@ s32 Leo_QueueDiskPayloadRead(void) {
     return 0;
 }
 
+/** Handles completion of the disk ID read. */
 s32 Leo_HandleDiskIdCompletion(void) {
     s32 sp1C;
 
@@ -183,6 +191,7 @@ s32 Leo_HandleDiskIdCompletion(void) {
     return 0;
 }
 
+/** Handles completion of the disk reset. */
 s32 Leo_HandleResetCompletion(void) {
     s32 sp1C;
 
@@ -230,6 +239,7 @@ s32 Leo_HandleResetCompletion(void) {
     return 0;
 }
 
+/** Handles completion of the boot block read and validates the disk. */
 s32 Leo_HandleBootBlockCompletion(unk_D_800AA680* arg0) {
     s32 sp24;
     UNUSED s32 pad; // FAKE: stack padding
@@ -287,6 +297,7 @@ s32 Leo_HandleBootBlockCompletion(unk_D_800AA680* arg0) {
     return 0;
 }
 
+/** Handles completion of the payload read. */
 s32 Leo_HandlePayloadCompletion(void) {
     s32 sp1C;
 
@@ -338,6 +349,7 @@ s32 Leo_HandlePayloadCompletion(void) {
     return 0;
 }
 
+/** Polls whether the disk drive is ready. */
 s32 Leo_PollDiskReady(void) {
     UNUSED s32 pad; // FAKE: stack padding
     u8 sp23;
@@ -372,6 +384,7 @@ s32 Leo_PollDiskReady(void) {
 void func_8000D0D4(void) {
 }
 
+/** Advances the disk boot state machine by one step. */
 s32 Leo_RunBootStateMachine(unk_D_800AA680* arg0) {
     s32 sp24 = 1;
 
@@ -428,6 +441,7 @@ s32 Leo_RunBootStateMachine(unk_D_800AA680* arg0) {
     return (D_800AB210.unk_00 << 0x10) | (D_800AB210.unk_02 << 8) | D_800AB210.unk_04;
 }
 
+/** Sets the initial disk boot state from the drive status. */
 s32 Leo_InitializeBootState(void) {
     s32 sp1C = Storage_GetDiskStatus();
 
@@ -445,6 +459,7 @@ s32 Leo_InitializeBootState(void) {
     return sp1C;
 }
 
+/** Cancels the boot request that is in flight. */
 void Leo_AbortPendingBootRequest(void) {
     s32 tmp = D_800AB210.unk_00;
 
@@ -463,6 +478,7 @@ void Leo_AbortPendingBootRequest(void) {
     }
 }
 
+/** Resets the boot state when the drive is ready. */
 void Leo_ResetBootStateIfReady(void) {
     if (Storage_GetDiskStatus() != 0) {
         D_800AB210.unk_00 = 2;

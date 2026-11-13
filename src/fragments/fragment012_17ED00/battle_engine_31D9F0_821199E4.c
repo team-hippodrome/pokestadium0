@@ -110,7 +110,6 @@ typedef struct MovePpInit {
 } MovePpInit;
 /**
  * Draws the move panel with names and PP. Moves not revealed yet show ？？？？？.
- * @unverified Name and comment guessed from the code.
  */
 void BattleMenu_DrawMovePanel(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3) {
     s32 i;
@@ -137,7 +136,7 @@ void BattleMenu_DrawMovePanel(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3)
         BattleHud_DrawBorderTile(arg1 + 0xC0, arg2 + i * 8, 8, 8, D_03009740);
     }
     BattleHud_DrawBorderTile(arg1 + 0xC0, arg2 + 0x33, 8, 8, D_030097C0);
-    for (i = 1; i < 0x18; i++) {
+    for (i = 1; i < 24; i++) {
         BattleHud_DrawBorderTile(arg1 + i * 8, arg2 - 1, 8, 8, D_03009940);
         BattleHud_DrawBorderTile(arg1 + i * 8, arg2 + 0x33, 8, 8, D_030098C0);
     }
@@ -231,7 +230,7 @@ void BattleMenu_DrawMovePanel(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3)
     func_8001A384(1, 0);
 
     if (runtime->uniqueStatusFlags & 8) {
-        if (runtime->moves[0] && (runtime->moves[0] < 0xA6)) { func_82119994(arg1 + 0x5A, arg2 + 4, D_8006A9D4[runtime->moves[0] - 1].name); }
+        if (runtime->moves[0] && (runtime->moves[0] < 0xA6)) { BattleHud_DrawTextCentered(arg1 + 0x5A, arg2 + 4, D_8006A9D4[runtime->moves[0] - 1].name); }
         if (runtime->moves[1] && (runtime->moves[1] < 0xA6)) {
             func_8001A944(arg1 + 0x7C, arg2 + 0x11, D_8006A9D4[runtime->moves[1] - 1].name);
         }
@@ -239,10 +238,10 @@ void BattleMenu_DrawMovePanel(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3)
             func_8001A944(arg1 + 0x6E, arg2 + 0x25, D_8006A9D4[runtime->moves[2] - 1].name);
         }
         if (runtime->moves[3] && (runtime->moves[3] < 0xA6)) {
-            func_82119994(arg1 + 0x4C, arg2 + 0x18, D_8006A9D4[runtime->moves[3] - 1].name);
+            BattleHud_DrawTextCentered(arg1 + 0x4C, arg2 + 0x18, D_8006A9D4[runtime->moves[3] - 1].name);
         }
     } else {
-        if (runtime->moves[0] && (runtime->moves[0] < 0xA6)) { func_82119994(arg1 + 0x5A, arg2 + 4, D_8006A9D4[runtime->moves[0] - 1].name); }
+        if (runtime->moves[0] && (runtime->moves[0] < 0xA6)) { BattleHud_DrawTextCentered(arg1 + 0x5A, arg2 + 4, D_8006A9D4[runtime->moves[0] - 1].name); }
         if (runtime->moves[1] && (runtime->moves[1] < 0xA6)) {
             func_8001A944(arg1 + 0x7C, arg2 + 0x11, D_8006A9D4[runtime->moves[1] - 1].name);
         }
@@ -250,12 +249,12 @@ void BattleMenu_DrawMovePanel(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3)
             func_8001A944(arg1 + 0x6E, arg2 + 0x25, D_8006A9D4[runtime->moves[2] - 1].name);
         }
         if (runtime->moves[3] && (runtime->moves[3] < 0xA6)) {
-            func_82119994(arg1 + 0x4C, arg2 + 0x18, D_8006A9D4[runtime->moves[3] - 1].name);
+            BattleHud_DrawTextCentered(arg1 + 0x4C, arg2 + 0x18, D_8006A9D4[runtime->moves[3] - 1].name);
         }
     }
 
     if (runtime->moves[0] >= 0xA6) {
-        func_82119994(arg1 + 0x5A, arg2 + 4, D_82195A14);
+        BattleHud_DrawTextCentered(arg1 + 0x5A, arg2 + 4, D_82195A14);
     }
     if (runtime->moves[1] >= 0xA6) {
         func_8001A944(arg1 + 0x7C, arg2 + 0x11, D_82195A20);
@@ -264,7 +263,7 @@ void BattleMenu_DrawMovePanel(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3)
         func_8001A944(arg1 + 0x6E, arg2 + 0x25, D_82195A2C);
     }
     if (runtime->moves[3] >= 0xA6) {
-        func_82119994(arg1 + 0x4C, arg2 + 0x18, D_82195A38);
+        BattleHud_DrawTextCentered(arg1 + 0x4C, arg2 + 0x18, D_82195A38);
     }
 
     func_8001ABBC();
@@ -278,6 +277,8 @@ extern char D_82195A58[];
 extern char D_82195A60[];
 /**
  * Draws こうさんしますか? (Surrender?) with いいえ (No) and はい (Yes), tinted for the trainer slot.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
 void BattleMenu_DrawSurrenderPrompt(s16 arg0, s16 arg1, s16 arg2, s32 arg3) {
@@ -326,7 +327,12 @@ void BattleHud_DrawPlainText(s16 arg0, s16 arg1, char* arg2) {
     Font_EndTexturedTextRendering();
 }
 
-void func_8211AEA4(TeamRoster* arg0, BattleMon* arg1, s32 arg2, s32 arg3, s32 arg4) {
+/**
+ * Draws one row of the switch panel: level, HP bar, HP fraction and the button icon for the slot
+ * (C-Up, C-Left, B, C-Right, C-Down, A for slots 0-5). Ran in play while the Pokemon menu was
+ * open.
+ */
+void BattleMenu_DrawSwitchPanelEntry(TeamRoster* arg0, BattleMon* arg1, s32 arg2, s32 arg3, s32 arg4) {
     s32 var_t0;
 
     BattleHud_DrawLevelNumber(arg2 + 3, arg3 + 4, arg1->level);
@@ -487,7 +493,12 @@ extern u8* D_8218AFF8[];
 extern Gfx D_800602C8[];
 extern Gfx D_80060398[];
 
-void func_8211B900(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3) {
+/**
+ * Draws the Pokemon (switch) menu panel: the trainer name and one row per Pokemon brought,
+ * through BattleMenu_DrawSwitchPanelEntry. Ran in play every frame while 1P's Pokemon menu (B)
+ * was open.
+ */
+void BattleMenu_DrawSwitchPanel(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3) {
     UNUSED s32 pad[3]; // FAKE
     Colors8211B900 a = D_8218B104;
     Colors8211B900 b = D_8218B114;
@@ -541,22 +552,22 @@ void func_8211B900(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3) {
     Gfx_DrawTextureRgba16(arg1 + 1, arg2, 0x18, 0x10, D_8218AFF8[arg3], 0x18, 0);
     gSPDisplayList(gDisplayListHead++, D_80060398);
     if (roster->numberOfPokemonBrought > 0) {
-        func_8211AEA4(roster, m0, arg1 + 1, arg2 + 0x10, 0);
+        BattleMenu_DrawSwitchPanelEntry(roster, m0, arg1 + 1, arg2 + 0x10, 0);
     }
     if (roster->numberOfPokemonBrought >= 2) {
-        func_8211AEA4(roster, m1, arg1 + 1, arg2 + 0x2D, 1);
+        BattleMenu_DrawSwitchPanelEntry(roster, m1, arg1 + 1, arg2 + 0x2D, 1);
     }
     if (roster->numberOfPokemonBrought >= 3) {
-        func_8211AEA4(roster, m2, arg1 + 1, arg2 + 0x4A, 2);
+        BattleMenu_DrawSwitchPanelEntry(roster, m2, arg1 + 1, arg2 + 0x4A, 2);
     }
     if (roster->numberOfPokemonBrought >= 4) {
-        func_8211AEA4(roster, m3, arg1 + 0x66, arg2 + 0x10, 3);
+        BattleMenu_DrawSwitchPanelEntry(roster, m3, arg1 + 0x66, arg2 + 0x10, 3);
     }
     if (roster->numberOfPokemonBrought >= 5) {
-        func_8211AEA4(roster, m4, arg1 + 0x66, arg2 + 0x2D, 4);
+        BattleMenu_DrawSwitchPanelEntry(roster, m4, arg1 + 0x66, arg2 + 0x2D, 4);
     }
     if (roster->numberOfPokemonBrought >= 6) {
-        func_8211AEA4(roster, m5, arg1 + 0x66, arg2 + 0x4A, 5);
+        BattleMenu_DrawSwitchPanelEntry(roster, m5, arg1 + 0x66, arg2 + 0x4A, 5);
     }
     gSPDisplayList(gDisplayListHead++, D_800602C8);
     BattleHud_DrawBorderTile(arg1, arg2 - 1, 8, 8, D_030096C0);
@@ -577,6 +588,8 @@ void func_8211B900(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3) {
 
 extern s8 D_8218B020;
 /**
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle and a Pound
+ * turn.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleHud_DrawCompactMonStatusBox(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3) {
@@ -603,7 +616,7 @@ void BattleHud_DrawCompactMonStatusBox(ActivePokemon* arg0, s16 arg1, s16 arg2, 
     } else {
         color = (u8*)(&D_8218B020 + arg3 * 3);
     }
-    func_821172F0(arg0, mon, &D_80066AA0[status], arg1 + 1, arg2 + 1, 0x46, 0x28, color[0], color[1], color[2], 0xB2);
+    BattleHud_DrawMonInfoBox(arg0, mon, &D_80066AA0[status], arg1 + 1, arg2 + 1, 0x46, 0x28, color[0], color[1], color[2], 0xB2);
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
     BattleHud_DrawBorderTile(arg1, arg2, 8, 8, D_030096C0);
     BattleHud_DrawBorderTile(arg1, arg2 + 0x22, 8, 8, D_03009640);
@@ -625,7 +638,14 @@ void Font_SetLineHeight(s32 arg0);
 void Battle_DrawGradientRectWrapper(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGB8* arg4, Color_RGB8* arg5);
 void BattleHud_DrawTranslucentShadowRect(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 
-void func_8211C1B8(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
+/**
+ * Draws the battle message box at (x, y) with the revealed part of the text, in the color of the
+ * given side.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle and a Pound turn.
+ * @unverified Name from its caller.
+ */
+void BattleMessage_DrawBox(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
     s32 i;
     s32 n;
 
@@ -652,7 +672,13 @@ void func_8211C1B8(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
     BattleHud_DrawTranslucentShadowRect(arg1 - 2, arg2 - 1, 0xF4, 0x29, 0);
 }
 
-void func_8211C43C(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
+/**
+ * Draws a side's caption box with the revealed part of the caption text.
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
+ * @unverified Name from its caller.
+ */
+void BattleHud_DrawCaptionBox(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
     s32 n;
 
     Battle_DrawGradientRectWrapper(arg1 + 1, arg2 + 1, 0xC8, 0x24, (Color_RGB8*)(&D_8218B008 + arg0 * 3), (Color_RGB8*)(&D_8218B014 + arg0 * 3));
@@ -685,7 +711,6 @@ extern char D_82195A7C[];
 extern char D_82195A84[];
 /**
  * Draws the こうさんしますか? (Surrender?) prompt with the No/Yes cursor at state.unk_2F.
- * @unverified Name and comment guessed from the code.
  */
 void BattleMenu_DrawSurrenderPromptWithCursor(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3) {
     s32 pad[2]; // FAKE
@@ -915,7 +940,7 @@ void func_8211D06C(void) {
         gDPSetRenderMode(gDisplayListHead++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
         gDPSetTexturePersp(gDisplayListHead++, G_TP_NONE);
         gDPSetEnvColor(gDisplayListHead++, 0xFF, 0xFF, 0xFF, D_8219A4F0[1]);
-        for (i = 0, tex = D_03001DA0; i != 0x2A; i++, tex += 0x90) {
+        for (i = 0, tex = D_03001DA0; i != 42; i++, tex += 0x90) {
             func_8001BCB4(0x58, i + 0x63, 0x90, 1, tex, 0x90, 0);
         }
         gDPPipeSync(gDisplayListHead++);
@@ -986,6 +1011,8 @@ extern char D_82195B64[];
 extern char D_82195B68[];
 /**
  * Debug overlay: camera distance, X/Y offset, X/Y angle and animation frame.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
 void BattleDebug_DrawCameraParams(s16 arg0, s16 arg1) {
@@ -1028,6 +1055,8 @@ s32 D_8218B15C[] = { (s32)D_82195B6C, (s32)D_82195B74, (s32)D_82195B80, (s32)D_8
 
 /**
  * Debug overlay: カメラ (Camera) label.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
 void BattleDebug_DrawCameraLabel(s16 arg0, s16 arg1) {
@@ -1073,6 +1102,8 @@ extern char D_82195CFC[], D_82195D04[], D_82195D0C[], D_82195D14[], D_82195D1C[]
 
 /**
  * Debug overlay: ステップ1 (Step 1) option lists, MODE, and しぬ/しなない (faint / don't faint).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
 void BattleDebug_DrawStepMenu(s16 arg0, s16 arg1) {
@@ -1148,6 +1179,8 @@ extern s32 D_8219A75C;
 extern s32 D_8219A768;
 /**
  * Debug overlay for move effects: move name and number, turn, effect 1/2 start, end frame and current frame.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
 void BattleDebug_DrawMoveEffectViewer(s16 arg0, s16 arg1) {
@@ -1214,6 +1247,8 @@ extern char D_82195F68[];
 extern char D_82195F6C[];
 /**
  * Debug overlay for move effects with the camera: move name and number, effect 1/2 start, current frame, camera and frame.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
 void BattleDebug_DrawMoveCameraViewer(s16 arg0, s16 arg1) {
@@ -1264,6 +1299,8 @@ extern char D_82195FBC[];
 extern char D_82195FC0[];
 /**
  * Debug overlay: effect start, sound start, current frame and frame.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
 void BattleDebug_DrawEffectSoundTiming(s16 arg0, s16 arg1) {
@@ -1298,6 +1335,8 @@ extern char D_82195FF0[];
 extern s32 D_8219A760;
 /**
  * Debug overlay: Pokemon, Poke Ball, number and player.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
 void BattleDebug_DrawPokeBallViewer(s16 arg0, s16 arg1) {

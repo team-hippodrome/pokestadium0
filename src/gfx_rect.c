@@ -15,6 +15,7 @@ void GfxImage_FillRectangle(Gfx** gfx_p, s32 arg1, s32 arg2, s32 arg3, s32 arg4,
 void GfxImage_ClearDepthRectangle(Gfx** gfx_p, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 void GfxImage_FillCurrent(Gfx** gfx_p, u16 fill_color);
 
+/** Initializes an image with a format, size and dimensions. */
 void GfxImage_Initialize(DepthBuffer* arg0, s32 fmt, s32 size, s32 width, s32 height, u32 img_p) {
     arg0->fmt = fmt;
     arg0->size = size;
@@ -24,6 +25,7 @@ void GfxImage_Initialize(DepthBuffer* arg0, s32 fmt, s32 size, s32 width, s32 he
     arg0->depth_p = NULL;
 }
 
+/** Allocates an image of the given format and size. */
 DepthBuffer* GfxImage_Allocate(s32 fmt, s32 size, s32 width, s32 height, s32 side) {
     DepthBuffer* sp34;
     s32 size_bytes;
@@ -55,6 +57,7 @@ DepthBuffer* GfxImage_Allocate(s32 fmt, s32 size, s32 width, s32 height, s32 sid
     return sp34;
 }
 
+/** Attaches a depth buffer to an image. */
 void GfxImage_AttachDepthBuffer(DepthBuffer* img, DepthBuffer* depth) {
     if ((depth->size == IMAGE_SIZE_BITS_16b) && (img->width == depth->width) && (img->height == depth->height)) {
         img->depth_p = depth;
@@ -62,18 +65,24 @@ void GfxImage_AttachDepthBuffer(DepthBuffer* img, DepthBuffer* depth) {
 }
 
 /**
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the main menu, the Pokédex,
+ * the party screen, the Lab list, Lab sort, registration, the Lab PC, Free Battle setup, the battle
+ * opening, a switch in battle, running from battle and a Pound turn.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void GfxImage_ResetCurrent(void) {
     D_8005F670 = 0;
 }
 
+/** Returns the current render target image. */
 DepthBuffer* GfxImage_GetCurrent(void) {
     return D_8005F670;
 }
 
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Seen in play (2026-11-13) in the 165-move sweep: it emitted G_RDPPIPESYNC, a G_SETOTHERMODE_L,
+ * G_SETZIMG (FE000000, depth buffer 0x00225180) and G_SETCIMG (FF...), and advanced the passed
+ * display-list pointer.
  */
 void GfxImage_SetRenderTarget(Gfx** gfx_p, DepthBuffer* arg1) {
     Gfx* gfx = *gfx_p;
@@ -92,7 +101,8 @@ void GfxImage_SetRenderTarget(Gfx** gfx_p, DepthBuffer* arg1) {
 }
 
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Seen in play (2026-11-13) in the 165-move sweep: it emitted G_RDPPIPESYNC and G_SETSCISSOR
+ * ED000000 005003C0, the full 320x240 screen.
  */
 void Gfx_ApplyScissorRect(Gfx** gfx_p) {
     Gfx* gfx = *gfx_p;
@@ -102,6 +112,7 @@ void Gfx_ApplyScissorRect(Gfx** gfx_p) {
     *gfx_p = gfx;
 }
 
+/** Emits commands that fill a rectangle of the current image with a color. */
 void GfxImage_FillRectangle(Gfx** gfx_p, s32 arg1, s32 arg2, s32 arg3, s32 arg4, u16 fill_color) {
     if (D_8005F670 != NULL) {
         Gfx* gfx = *gfx_p;
@@ -129,6 +140,7 @@ void GfxImage_FillRectangle(Gfx** gfx_p, s32 arg1, s32 arg2, s32 arg3, s32 arg4,
     }
 }
 
+/** Emits commands that clear a rectangle of the current depth buffer. */
 void GfxImage_ClearDepthRectangle(Gfx** gfx_p, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     if (D_8005F670 != NULL && D_8005F670->depth_p != NULL) {
         Gfx* gfx = *gfx_p;
@@ -150,6 +162,7 @@ void GfxImage_ClearDepthRectangle(Gfx** gfx_p, s32 arg1, s32 arg2, s32 arg3, s32
     }
 }
 
+/** Emits commands that fill the whole current image with a color. */
 void GfxImage_FillCurrent(Gfx** gfx_p, u16 fill_color) {
     GfxImage_FillRectangle(gfx_p, 0, 0, D_8005F670->width, D_8005F670->height, (fill_color << 0x10) | fill_color);
 }

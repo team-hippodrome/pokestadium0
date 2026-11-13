@@ -44,7 +44,8 @@ void Radial20_RotateVertexOffset(f32 arg0, UNUSED Vec3f* arg1, Vec3f* arg2, f32 
 /**
  * Moves: Bind (hit), Constrict (hit), Disable (hit), String Shot (hit), Wrap (hit)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Bind, Constrict, String Shot and Wrap. Disable did not use it.
  */
 void LassoHit_Init(f32 arg0, f32 arg1, f32 arg2, f32 arg3, u8 arg4, u8 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9) {
     Strip400State* ptr1 = &sTrailState;
@@ -101,7 +102,8 @@ f32 Strip400_GetTailFadeRatio(void) {
 /**
  * Moves: Bind (hit), Constrict (hit), Disable (hit), String Shot (hit), Wrap (hit)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Bind, Constrict, String Shot and Wrap. Disable did not use it.
  */
 s32 LassoHit_Update(void) {
     s32 i;
@@ -205,6 +207,8 @@ s32 LassoHit_Update(void) {
 
 extern Gfx D_82192AB0[];
 /**
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
+ * turns): ran.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 Gfx* Strip400_Draw(Gfx* arg0) {
@@ -302,7 +306,8 @@ void Radial20_ResetPool(void) {
 extern Radial20 D_84398F50[10];
 extern Radial20 D_821A3490[10];
 /**
- * @unverified Name from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Tri Attack.
  */
 void TriAttackRadial_EmitVariantA(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s16 arg6, u8 arg7, u8 arg8, u8 arg9,
                    u8 argA, f32 argB, f32 argC, f32 argD, s16 argE) {
@@ -404,6 +409,8 @@ void Radial20_VariantB(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg
 
 extern Radial20 D_821A3490[10];
 /**
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome):
+ * ran.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void Radial20_VariantC(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s16 arg6, u8 arg7, u8 arg8, u8 arg9,
@@ -616,6 +623,8 @@ void Radial20_RotateVertexOffset(f32 arg0, UNUSED Vec3f* arg1, Vec3f* arg2, f32 
 }
 
 /**
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
+ * turns): ran.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void Radial20_UpdateNode(Radial20* arg0) {
@@ -798,6 +807,8 @@ extern u8 D_82192B54[];
 extern u8 D_82192B58[];
 extern f32 D_82192B5C[];
 /**
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
+ * turns): ran.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 Gfx* Radial20_Draw(Gfx* arg0) {

@@ -9,7 +9,8 @@ extern Gfx D_82193460[];
 
 void RazorLeafTrail_Init(void);
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Razor Leaf.
  */
 void RazorLeafTrail_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9,
                    f32 argA, f32 argB, f32 argC, s16 argD);
@@ -19,7 +20,8 @@ s32 RazorLeafTrail_IsComplete(void);
 Gfx* RazorLeafTrail_Draw(Gfx* arg0);
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Razor Leaf.
  */
 void RazorLeafTrail_Init(void) {
     Trail50Effect* var_v0 = &D_821C2820[0];
@@ -111,7 +113,8 @@ void RazorLeafTrail_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Razor Leaf.
  */
 void RazorLeafTrail_Update(f32 arg0, Vec3f* arg1, f32 arg2) {
     MtxF sp30;
@@ -122,7 +125,8 @@ void RazorLeafTrail_Update(f32 arg0, Vec3f* arg1, f32 arg2) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Razor Leaf.
  */
 void RazorLeafTrail_AdvanceNodes(Trail50Effect* arg0) {
     s32 i;
@@ -189,7 +193,8 @@ void RazorLeafTrail_AdvanceNodes(Trail50Effect* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Razor Leaf.
  */
 s32 RazorLeafTrail_IsComplete(void) {
     s32 i;
@@ -209,7 +214,8 @@ s32 RazorLeafTrail_IsComplete(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Razor Leaf.
  */
 Gfx* RazorLeafTrail_Draw(Gfx* arg0) {
     s32 i;

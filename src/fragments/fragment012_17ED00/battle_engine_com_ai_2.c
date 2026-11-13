@@ -211,7 +211,6 @@ extern u32 D_821CF2B4;
  * 17-bit shift register, reduced to 0..99. Seeded by BattleAi_SelectTeam.
  * Stadium 1 has the same generator in its audio code, which is where the old
  * name came from.
- * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_RandomPercent(void) {
     D_821CF2B0 = (D_821CF2B0 * 0x41C64E6D) + 0x3039;
@@ -229,7 +228,6 @@ s32 func_80053A80();                                /* extern */
 
 /**
  * Advances BattleAi_RandomPercent 0..31 times, using bits 4..8 of func_80053A80.
- * @unverified Name and comment guessed from the code (COM AI pass).
  */
 void BattleAi_StirRandom(void) {
     u32 var_s0;
@@ -251,7 +249,6 @@ f32 func_80055340(f32);                             /* extern */
 /**
  * Gen 1 stat formula without DVs: ((sqrt(statExp) / 4 + base * 2) * level) / 100 + 5.
  * The callers pass statExp 0xFFFF (maximum stat experience).
- * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_CalcStat(s32 arg0, s32 arg1, s32 arg2) {
     return ((s32) ((((s32) func_80055340((f32) arg1) / 4) + (arg0 * 2)) * arg2) / 100) + 5;
@@ -259,7 +256,6 @@ s32 BattleAi_CalcStat(s32 arg0, s32 arg1, s32 arg2) {
 
 /**
  * Max HP from base HP and level: BattleAi_CalcStat(base, 0xFFFF, level) + level + 5.
- * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_CalcMaxHp(s32 arg0, s32 arg1) {
     return BattleAi_CalcStat(arg0, 0xFFFF, arg1) + arg1 + 5;
@@ -267,7 +263,6 @@ s32 BattleAi_CalcMaxHp(s32 arg0, s32 arg1) {
 
 /**
  * Attack from base stat and level (max stat experience).
- * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_CalcAttack(s32 arg0, s32 arg1) {
     return BattleAi_CalcStat(arg0, 0xFFFF, arg1);
@@ -275,7 +270,6 @@ s32 BattleAi_CalcAttack(s32 arg0, s32 arg1) {
 
 /**
  * Defense from base stat and level (max stat experience).
- * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_CalcDefense(s32 arg0, s32 arg1) {
     return BattleAi_CalcStat(arg0, 0xFFFF, arg1);
@@ -283,7 +277,6 @@ s32 BattleAi_CalcDefense(s32 arg0, s32 arg1) {
 
 /**
  * Speed from base stat and level (max stat experience).
- * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_CalcSpeed(s32 arg0, s32 arg1) {
     return BattleAi_CalcStat(arg0, 0xFFFF, arg1);
@@ -291,7 +284,6 @@ s32 BattleAi_CalcSpeed(s32 arg0, s32 arg1) {
 
 /**
  * Special from base stat and level (max stat experience).
- * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_CalcSpecial(s32 arg0, s32 arg1) {
     return BattleAi_CalcStat(arg0, 0xFFFF, arg1);
@@ -301,7 +293,6 @@ s32 BattleAi_CalcSpecial(s32 arg0, s32 arg1) {
 /**
  * Current HP as a percentage of max HP (battler bytes 0x18 / 0x34), at least 1
  * while the Pokemon has any HP left, 0 when fainted.
- * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_GetHpPercent(s8 *arg0)
 {
@@ -325,6 +316,8 @@ s32 BattleAi_GetHpPercent(s8 *arg0)
  * party, whose info byte at offset 2 is the number of Pokemon in play.
  * Matching note: the loop is a do/while over a byte pointer with the end address
  * `arg0 + n * 0x90` recomputed in its condition, as in the ROM.
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_CountUnfainted(u8 *arg0) {
@@ -366,6 +359,8 @@ void func_82183DC4(void) {
 
 /**
  * Adds a random 0..15 * 400 to a battler's team-pick score (word at offset 4).
+ * Seen in play (2026-11-13) (Free Battle, COM team selection): called from BattleAi_PickNextPokemon
+ * for some candidates (the 40% roll), with the candidate battler as the argument.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 void BattleAi_AddRandomPickScore(s8* arg0) {
@@ -382,6 +377,8 @@ extern BattleSlotZ* D_821CF298;
 /**
  * Returns 1 if an unfainted Pokemon of the given species is in the opponent's
  * team (D_821CF298), otherwise 0.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_OpponentHasSpecies(s32 arg0) {
@@ -397,6 +394,8 @@ s32 BattleAi_OpponentHasSpecies(s32 arg0) {
 
 /**
  * Counts opponent Pokemon that are Water or Flying type.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_CountOpponentWaterOrFlying(void) {
@@ -414,6 +413,8 @@ s32 BattleAi_CountOpponentWaterOrFlying(void) {
 
 /**
  * Counts opponent Pokemon that are Ground type.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_CountOpponentGround(void) {
@@ -431,6 +432,8 @@ s32 BattleAi_CountOpponentGround(void) {
 
 /**
  * Counts opponent Pokemon that are Fighting type.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_CountOpponentFighting(void) {
@@ -448,6 +451,8 @@ s32 BattleAi_CountOpponentFighting(void) {
 
 /**
  * Returns 1 if the opponent brought a level 55 Tauros.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_OpponentHasLevel55Tauros(void) {
@@ -463,6 +468,8 @@ s32 BattleAi_OpponentHasLevel55Tauros(void) {
 
 /**
  * Counts opponent Pokemon that are Electric or Poison type.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_CountOpponentElectricOrPoison(void) {
@@ -480,6 +487,8 @@ s32 BattleAi_CountOpponentElectricOrPoison(void) {
 
 /**
  * Counts opponent Pokemon that are Rock or Water type.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_CountOpponentRockOrWater(void) {
@@ -497,6 +506,8 @@ s32 BattleAi_CountOpponentRockOrWater(void) {
 
 /**
  * Counts opponent Pokemon that are Electric type.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_CountOpponentElectric(void) {
@@ -521,6 +532,9 @@ s32 BattleAi_NoVenusaurChanseyJynxPicked(s32);
  * bonus when the opponent brought a species it counters (for example Gengar when
  * the opponent has Tauros). Every pick except Ditto also gets +50000 unless the
  * side's mode byte (0x368) is set. arg1 is the pick round (0 = lead).
+ * Seen in play (2026-11-13) (Free Battle against the むしとり roster, COM team selection): called from
+ * BattleAi_PickNextPokemon for each candidate with round 0. That roster's trainer id matched none
+ * of the hand-written cases, so none of the opponent checks it calls ran.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 void BattleAi_AddTrainerPickScore(u8* arg0, s32 arg1) {
@@ -746,6 +760,8 @@ void BattleAi_AddTrainerPickScore(u8* arg0, s32 arg1) {
 /**
  * Strided byte search: returns the first byte equal to arg3 in a table of arg2
  * bytes read every arg1 bytes, or NULL.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
+ * switch in battle.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 u8* BattleAi_FindByte(u8* arg0, s32 arg1, s32 arg2, s32 arg3) {
@@ -768,6 +784,8 @@ extern u8 D_8218AC50[];
  * 150 for same-type attack bonus, then each matching type-chart row
  * (D_8218AC50: attacking type, defending type, multiplier * 10) is applied.
  * Status moves (power 0) return 100.
+ * Seen in play (2026-11-13) (Free Battle, COM team selection): called from
+ * BattleAi_AddMatchupPickScore and returned 100 for neutral matchups.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_GetTypeMultiplier(s8* arg0, s8* arg1, s32 move) {
@@ -798,7 +816,9 @@ s32 BattleAi_GetTypeMultiplier(s8* arg0, s8* arg1, s32 move) {
 /**
  * Returns the move if the battler knows it, has PP left for it and it is not the
  * disabled move (byte 0x63); otherwise 0.
- * @unverified Name and comment guessed from the code (COM AI pass).
+ * Seen in play (2026-11-12): during a COM decision it returned each move it was asked about
+ * (0x0B, 0x42, 0x68, 0x75) for COM's Pinsir, whose AI record holds exactly those four moves
+ * with 30, 25, 15 and 10 PP.
  */
 s32 BattleAi_CanUseMove(s8 *arg0, s32 arg1) {
     s32 i;
@@ -819,7 +839,8 @@ s32 BattleAi_CanUseMove(s8 *arg0, s32 arg1) {
 
 /**
  * Returns Recover, Softboiled or Rest if the battler can use one, otherwise 0.
- * @unverified Name and comment guessed from the code (COM AI pass).
+ * Seen in play (2026-11-12): returned 0x69 (Recover) for COM's Gengar after Recover was put in
+ * its move slot 3, and 0 for 1P's Nidoqueen, which has no healing move.
  */
 u8 BattleAi_FindUsableHealingMove(u8 *arg0) {
     s32 i;
@@ -843,7 +864,6 @@ u8 BattleAi_FindUsableHealingMove(u8 *arg0) {
 
 /**
  * Returns 1 if either of the battler's types is arg1.
- * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_HasType(s8 *arg0, s32 arg1) {
     if ((arg1 == M2C_FIELD(arg0, u8 *, 0x28)) || (arg1 == M2C_FIELD(arg0, u8 *, 0x29))) {

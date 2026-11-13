@@ -24,7 +24,8 @@ void BattleEffect_RunMoveEffect(void);
 
 /**
  * Start Bide with a cleared damage accumulator and a two- or three-turn duration.
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Bide.
  */
 void BattleEffect_Bide(void) {
     sBattleScene.scene->moveEffectKind = 0x1B;
@@ -36,7 +37,8 @@ void BattleEffect_Bide(void) {
 
 /**
  * Lock Thrash/Petal Dance into a two- or three-turn continuation.
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Thrash, Petal Dance.
  */
 void BattleEffect_Thrash(void) {
     sBattleUser->moveCache.effect = 0;
@@ -59,7 +61,9 @@ void Battle_Effect_ForceSwitchOrFlee(void) {
 
 /**
  * Initialize total/remaining hits; Twineedle then uses the secondary poison effect.
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Double Slap, Comet Punch, Double Kick, Fury Attack, Twineedle, Pin Missile, Spike Cannon,
+ * Barrage, Fury Swipes, Bonemerang.
  */
 void BattleEffect_MultiHit(void) {
     s32 var_v1;
@@ -93,7 +97,7 @@ void BattleEffect_MultiHit(void) {
 u8 Battle_Random(void);
 
 /*
- * func_82114C20
+ * Battle_Effect_Flinch
  *
  * Does nothing if bit 0x10 of sBattleTarget->unk_4D is set. Otherwise it clears
  * bit 0x20 of sBattleTarget->unk_4D, calls Battle_Random(), and sets bit 0x08
@@ -105,7 +109,12 @@ u8 Battle_Random(void);
  * The return type is void: the early `return`s compile to a jump to the
  * epilogue with no value in v0, as in the retail code.
  */
-void func_82114C20(void) {
+/**
+ * Move effects 0x1F and 0x25 (Gen 1 FlinchSideEffect): the 10% or 30% chance to make the target
+ * flinch.
+ * In the per-move sweep only Stomp (23) and Rolling Kick (27) of moves 1-27 ran it.
+ */
+void Battle_Effect_Flinch(void) {
     if (!(sBattleTarget->volatileStatusFlags & 0x10)) {
         sBattleTarget->volatileStatusFlags &= 0xFFDF;
         if (sBattleUser->moveCache.effect == 0x1F) {
@@ -121,7 +130,8 @@ void func_82114C20(void) {
 
 /**
  * Reject a slower OHKO user, otherwise set the damage sentinel and OHKO result.
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Guillotine, Horn Drill, Fissure.
  */
 void BattleEffect_OHKO(void) {
     sBattleDamage = 0;
@@ -141,7 +151,13 @@ extern s32 D_8218C884;
 extern s32 D_8218C888;
 extern s32 D_8218C88C;
 
-void func_82114D10(void) {
+/**
+ * Move effects 0x27 and 0x2B (Gen 1 ChargeEffect): the first turn of Razor Wind, Solar Beam,
+ * Skull Bash, Sky Attack, Fly and Dig. Sets moveEffectKind 0x0C for Fly, 0x0D for Dig and 0x0E
+ * otherwise.
+ * In the per-move sweep Razor Wind (13) ran it and went on to phase 14.
+ */
+void Battle_Effect_Charge(void) {
     sBattleScene.scene->moveEffectKind = 0xE;
     sBattleUser->immobilizedReason |= 0x10;
 
@@ -181,7 +197,13 @@ void func_82114D10(void) {
 extern u8* D_8219A3C0;
 extern u8* D_8219A3C4;
 u8 Battle_Random(void);
-void func_82114F9C(void) {
+/**
+ * Move effect 0x2A (Gen 1 TrappingEffect): Wrap, Bind, Fire Spin and Clamp hold the target for
+ * 2-5 turns.
+ * In the per-move sweep only Bind (20) of moves 1-27 ran it, and COM's Pinsir then couldn't move
+ * (phase 17).
+ */
+void Battle_Effect_Trapping(void) {
     s32 v;
 
     if (!(D_8219A3C0[0x4C] & 0x20)) {
@@ -228,7 +250,7 @@ extern s32 D_8218C8A0;
 void Battle_Effect_Recoil(void) {
     s32 var_v1;
 
-    sBattleUser->currentHp = sBattleUser->displayHp;
+    sBattleUser->pendingHp = sBattleUser->hp;
 
     if (sBattleUser->moveCache.lastMove == STRUGGLE) {
         var_v1 = sBattleDamage >> 1;
@@ -240,13 +262,13 @@ void Battle_Effect_Recoil(void) {
         var_v1 += 1;
     }
 
-    if (sBattleUser->currentHp < var_v1) {
-        sBattleUser->currentHp = 0;
+    if (sBattleUser->pendingHp < var_v1) {
+        sBattleUser->pendingHp = 0;
     } else {
-        sBattleUser->currentHp -= var_v1;
+        sBattleUser->pendingHp -= var_v1;
     }
 
-    sBattleTarget->currentHp = sBattleTarget->displayHp;
+    sBattleTarget->pendingHp = sBattleTarget->hp;
     BattleMessage_Format(D_8219A520 + 0x408, -0x47, D_8218C8A0, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]));
     sBattleScene.scene->moveEffectKind = 9;
 }
@@ -274,7 +296,7 @@ void Battle_Effect_Confuse(void) {
     sConfused = 0;
 
     if (!(sBattleTarget->volatileStatusFlags & 0x10)) {
-        HandleMoveEffectFlags();
+        Battle_MoveHitTest();
         if ((sBattleMoveFailed == 0) && !(sBattleTarget->immobilizedReason & 0x80)) {
             sConfused = 1;
             sBattleTarget->immobilizedReason |= 0x80;
@@ -298,7 +320,7 @@ void Battle_Effect_Paralyze(void) {
     sBattleScene.scene->moveEffectKind = 0x16;
     if (sBattleTarget->pendingStatusCondition == 0) {
         if ((sBattleUser->moveCache.type != 0x17) || ((sBattleTarget->roster[6] != 4) && (sBattleTarget->roster[7] != 4))) {
-            HandleMoveEffectFlags();
+            Battle_MoveHitTest();
             if (sBattleMoveFailed == 0) {
                 sBattleTarget->pendingStatusCondition |= 0x40;
                 ApplyParalysisSpeedCut(sActivePokemon[!sBattleScene.scene->actingSide]);
@@ -331,21 +353,22 @@ void Battle_Effect_Substitute(void) {
     }
 
     temp_v1 = sBattleUser->maxHp >> 2;
-    if (sBattleUser->displayHp < temp_v1) {
+    if (sBattleUser->hp < temp_v1) {
         BattleMessage_Format(D_8219A520 + 0x88, -0x2A, D_8218C914);
         return;
     }
 
     ActivePokemon_SetStateFlags(sActivePokemon[sBattleScene.scene->actingSide], 0x2800);
     sBattleUser->substituteHp = temp_v1;
-    sBattleUser->displayHp -= temp_v1;
+    sBattleUser->hp -= temp_v1;
     sBattleUser->volatileStatusFlags |= 0x10;
     BattleMessage_Format(D_8219A520 + 0x88, -0x29, D_8218C918, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]));
 }
 
 /**
  * Mark the user as needing a recharge turn; Battle_CheckMonCanAct consumes the flag.
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Hyper Beam.
  */
 void BattleEffect_Recharge(void) {
     sBattleUser->volatileStatusFlags |= 0x20;
@@ -353,7 +376,8 @@ void BattleEffect_Recharge(void) {
 
 /**
  * Enable Rage's move lock and subsequent Attack boosts.
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Rage.
  */
 void BattleEffect_Rage(void) {
     sBattleUser->volatileStatusFlags |= 0x40;
@@ -371,7 +395,8 @@ extern s32 D_8218C8C0;
 
 /**
  * Replace the selected move slot with a randomly chosen nonempty target move.
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Mimic.
  */
 void BattleEffect_Mimic(void) {
     ActivePokemonState* sp34 = &sActivePokemon[sBattleScene.scene->actingSide]->state;
@@ -380,7 +405,7 @@ void BattleEffect_Mimic(void) {
     u8 temp_v0;
 
     sBattleScene.scene->moveEffectKind = 7;
-    HandleMoveEffectFlags();
+    Battle_MoveHitTest();
 
     if ((sBattleMoveFailed == 0) && !(sBattleTarget->immobilizedReason & 0x40)) {
         D_82199F37 = 1;
@@ -405,7 +430,7 @@ extern s32 D_8218C8C8;
 
 // Matches the ROM, but uses rodata data that is not placed in this file yet.
 void Battle_Effect_LeechSeed(void) {
-    HandleMoveEffectFlags();
+    Battle_MoveHitTest();
 
     if ((sBattleMoveFailed == 0) && (sBattleTarget->roster[6] != 0x16) && (sBattleTarget->roster[7] != 0x16)) {
         if (!(sBattleTarget->volatileStatusFlags & 0x80)) {
@@ -424,19 +449,28 @@ extern s32 D_8218C8CC;
 extern s32 D_8219A520;
 extern s8 *D_8219A5A0;
 
-void func_821159D0(void) {
+/**
+ * Move effect 0x55 (Gen 1 SplashEffect).
+ * In the per-move sweep only Splash ran it.
+ */
+void Battle_Effect_Splash(void) {
     M2C_FIELD(D_8219A5A0, s32 *, 0x48) = 7;
     BattleMessage_Format(D_8219A520 + 0x88, -0x3C, D_8218C8CC);
 }
 
 extern s32 D_8218C8D0;
 extern s32 D_8218C8D4;
-void func_82115A14(void) {
+/**
+ * Move effect 0x56 (Gen 1 DisableEffect): disables a random move of the target for 1-8 turns.
+ * Sets moveEffectKind 0x20, or 8 when it fails.
+ * In the per-move sweep only Disable ran it.
+ */
+void Battle_Effect_Disable(void) {
     s32 slot;
     s32 turns;
     s32 name;
 
-    HandleMoveEffectFlags();
+    Battle_MoveHitTest();
     if (sBattleMoveFailed == 0) {
         sBattleScene.scene->moveEffectKind = 0x20;
         if (sBattleTarget->disabledMoveState == 0) {
@@ -460,7 +494,11 @@ s32 BattleMessage_Format(s32, s32, s32, ...);
 extern s32 D_8218C8D8;
 extern s32 D_8219A520;
 
-void func_82115B64(void) {
+/**
+ * Move effect 0x10 (Gen 1 PayDayEffect).
+ * In the per-move sweep only Pay Day (6) ran it.
+ */
+void Battle_Effect_PayDay(void) {
     BattleMessage_Format(D_8219A520 + 0x88, -0x39, D_8218C8D8);
 }
 
@@ -527,7 +565,14 @@ extern s32 D_8218C8EC;
 extern s32 D_8218C8F0;
 extern s32 D_8218C8F4;
 
-void func_82115DE0(void) {
+/**
+ * Move effect 0x38 (Gen 1 HealEffect): Recover and Soft-Boiled restore half the max HP, Rest
+ * restores it all and puts the user to sleep. Fails at full HP (moveEffectKind 0x1C), otherwise
+ * sets moveEffectKind 0x15.
+ * In the per-move sweep exactly Recover, Soft-Boiled and Rest ran it (at full HP, so all three
+ * took the failed path to phase 28).
+ */
+void Battle_Effect_Heal(void) {
     u8 temp_v0;
     ActivePokemonState* temp_a1;
     BattleMonRuntime* temp_a2;
@@ -536,7 +581,7 @@ void func_82115DE0(void) {
     temp_a2 = &sActivePokemon[sBattleScene.scene->actingSide]->state.runtime;
 
     sBattleScene.scene->moveEffectKind = 0x15;
-    if (sBattleUser->displayHp != sBattleUser->maxHp) {
+    if (sBattleUser->hp != sBattleUser->maxHp) {
         if (sBattleUser->moveCache.lastMove == REST) {
             temp_v0 = sBattleUser->pendingStatusCondition;
 
@@ -548,13 +593,13 @@ void func_82115DE0(void) {
             } else {
                 BattleMessage_Format(D_8219A520 + 0x88, -0x34, D_8218C8EC, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]));
             }
-            sBattleUser->displayHp += sBattleUser->maxHp;
+            sBattleUser->hp += sBattleUser->maxHp;
         } else {
-            sBattleUser->displayHp += sBattleUser->maxHp / 2;
+            sBattleUser->hp += sBattleUser->maxHp / 2;
         }
 
-        if (sBattleUser->maxHp < sBattleUser->displayHp) {
-            sBattleUser->displayHp = sBattleUser->maxHp;
+        if (sBattleUser->maxHp < sBattleUser->hp) {
+            sBattleUser->hp = sBattleUser->maxHp;
         }
 
         BattleMessage_Format(D_8219A520 + 0x148, -0x33, D_8218C8F0, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]));
@@ -569,7 +614,12 @@ void func_82115DE0(void) {
 extern s32 D_8218C8F8;
 extern s32 D_8218C8FC;
 /* Transform: the user copies the target's species, moves, stats and stat stages. */
-void func_82115FCC(void) {
+/**
+ * Move effect 0x39 (Gen 1 TransformEffect): copies the target's species, types, moves (5 PP
+ * each), stats and stat stages. Sets moveEffectKind 0x0F.
+ * In the per-move sweep only Transform ran it.
+ */
+void Battle_Effect_Transform(void) {
     s32 i;
     ActivePokemonState* user;
     ActivePokemonState* target;
@@ -646,7 +696,8 @@ void Battle_Effect_ReflectLightScreen(void) {
 
 /**
  * Dispatch the cached effect through its 1-based handler slot; NULL slots do nothing.
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in a turn where 1P's Poison Sting went first, it ran with effect 2,
+ * the effect byte of Poison Sting's move cache.
  */
 void BattleEffect_RunMoveEffect(void) {
     BattleMonRuntime* ptr = &sActivePokemon[sBattleScene.scene->actingSide]->state.runtime;
@@ -659,7 +710,8 @@ void BattleEffect_RunMoveEffect(void) {
 
 /**
  * Entry point used by the turn engine to invoke the cached move-effect handler.
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in a turn where 1P's Poison Sting went first, it ran at commit with
+ * effect 2, the effect byte of Poison Sting's move cache, and called BattleEffect_RunMoveEffect.
  */
 void BattleEffect_ExecuteMoveEffect(void) {
     BattleEffect_RunMoveEffect();

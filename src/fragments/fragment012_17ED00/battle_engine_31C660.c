@@ -23,7 +23,12 @@ void func_82113660(void) {
 extern s32 D_8218C7BC;
 extern s32 D_8218C7C0;
 extern s32 D_8218C7C4;
-void func_82113668(void) {
+/**
+ * Move effects 0x01 and 0x20 (Gen 1 SleepEffect): puts the target to sleep for 1-3 turns unless
+ * it already has a status, the move misses or Sleep Clause applies. Sets moveEffectKind 0x16.
+ * In the per-move sweep exactly Sing, Sleep Powder, Hypnosis, Lovely Kiss and Spore ran it.
+ */
+void Battle_Effect_Sleep(void) {
     s32 sp24;
     s32 var_v1;
 
@@ -39,7 +44,7 @@ void func_82113668(void) {
         }
 
         if (sBattleTarget->pendingStatusCondition == 0) {
-            HandleMoveEffectFlags();
+            Battle_MoveHitTest();
             if ((sBattleMoveFailed == 0) && (Battle_SleepClauseInEffect(sActivePokemon[!sBattleScene.scene->actingSide]) == 0)) {
                 goto block_9;
             }
@@ -98,7 +103,7 @@ void Battle_Effect_Poison(void) {
             default:
                 sBattleScene.scene->moveEffectKind = 0x16;
                 sTypeEffectiveness = 0xA;
-                HandleMoveEffectFlags();
+                Battle_MoveHitTest();
                 if (sBattleMoveFailed != 0) {
                     BattleMessage_Format(sp1C, -0x7D, D_8218C7C8, ActivePokemon_GetNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
                     return;
@@ -134,10 +139,10 @@ void Battle_Effect_DrainHP(void) {
         sBattleDamage = 1;
     }
 
-    if (sBattleUser->maxHp < sBattleUser->displayHp + sBattleDamage) {
-        sBattleUser->displayHp = sBattleUser->maxHp;
+    if (sBattleUser->maxHp < sBattleUser->hp + sBattleDamage) {
+        sBattleUser->hp = sBattleUser->maxHp;
     } else {
-        sBattleUser->displayHp += sBattleDamage;
+        sBattleUser->hp += sBattleDamage;
     }
 
     if (sBattleUser->moveCache.effect == 8) {
@@ -149,11 +154,12 @@ void Battle_Effect_DrainHP(void) {
 
 /**
  * Faint the user of Explosion/Self-Destruct and clear its major status and Leech Seed.
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Self-Destruct, Explosion.
  */
 void BattleEffect_Explosion(void) {
     sBattleScene.scene->moveEffectKind = 0x1E;
-    sBattleUser->displayHp = 0;
+    sBattleUser->hp = 0;
     sBattleUser->pendingStatusCondition = 0;
     sBattleUser->volatileStatusFlags &= ~0x80;
 }
@@ -162,7 +168,12 @@ extern s32 D_8218C7E0;
 extern s32 D_8218C7E4;
 extern s32 D_8218C7E8;
 extern s32 D_8218C7EC;
-void func_82113CD0(void) {
+/**
+ * Move effects 0x04-0x06 and 0x22-0x24 (Gen 1 FreezeBurnParalyzeEffect): the 10% or 30% side
+ * effect that burns, freezes or paralyzes the target. A Fire move thaws a frozen target.
+ * In the per-move sweep only Fire Punch, Ice Punch and Thunder Punch (7-9) of moves 1-27 ran it.
+ */
+void Battle_Effect_FreezeBurnParalyze(void) {
     if (sBattleTarget->volatileStatusFlags & 0x10) {
         return;
     }
@@ -218,6 +229,8 @@ extern s32 D_8218C808;
 extern s32 D_8218C820;
 /**
  * Apply the Rage follow-up stat boost, using its separate message queue.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
 void BattleEffect_ApplyStatBoost(void) {
@@ -295,7 +308,12 @@ void BattleEffect_ApplyStatBoost(void) {
 }
 
 extern u8 sStatCanBeChangedFurther;
-void func_821142B8(void) {
+/**
+ * Move effects 0x0A-0x0F and 0x32-0x37 (Gen 1 StatModifierUpEffect): raises one of the user's
+ * stat stages by 1 or 2 and recomputes the stat. Sets moveEffectKind 7.
+ * Ran in play for Swords Dance and COM's Double Team (「かいひりつが あがった！」).
+ */
+void Battle_Effect_StatUp(void) {
     s32 sp24;
     s32 var_a3;
     u16* sp1C;
@@ -403,7 +421,7 @@ void Battle_Effect_LowerStat(void) {
             goto block_14;
         }
     } else {
-        HandleMoveEffectFlags();
+        Battle_MoveHitTest();
 
         if (sBattleMoveFailed != 0) {
             goto end;

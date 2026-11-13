@@ -10,10 +10,10 @@
 void BattleAnim_SetupStrongElectricSpark(Particle* arg0);
 void BattleAnim_ApplyThunderThunderboltUseRadialOffset(Particle* arg0);
 void BattleAnim_SetupThunderThunderboltUseEffect(Particle* arg0);
-void BattleAnim_SetupSharedDescriptor0FDelayedRisingColumnFade(Particle* arg0);
-void BattleAnim_SetupSharedDescriptor0FDelayedRisingColumnRandomScale(Particle* arg0);
+void BattleAnim_SetupDelayedRisingColumnFade(Particle* arg0);
+void BattleAnim_SetupDelayedRisingColumnRandomScale(Particle* arg0);
 void BattleAnim_SetupSharedDirectionalSprayFade(Particle* arg0);
-void BattleAnim_SetupSharedDescriptor13DirectionalSprayScaledFade(Particle* arg0);
+void BattleAnim_SetupDirectionalSprayScaledFade(Particle* arg0);
 void BattleAnim_SetupThunderShockOuterJolts(Particle* arg0);
 void BattleAnim_SetupUnregisteredStraightDirectionalStreamFade(Particle* arg0);
 void BattleAnim_SetupEndEffect28Descriptor10UpwardBurstFade(Particle* arg0);
@@ -28,14 +28,15 @@ void BattleAnim_CallbackSharedDirectionalSprayFade(Particle* arg0);
 void BattleAnim_CallbackSharedDescriptor13DirectionalSprayScaledFade(Particle* arg0);
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Thunder Punch, Thunderbolt, Thunder.
  */
 void BattleAnim_SetupStrongElectricSpark(Particle* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
     Vec3s sp2C;
 
     Particle_FieldAC_GetS16_0C038(arg0);
-    Particle_Field1C_SetScaled_0B938(arg0, 0.05f);
+    Particle_SetScaleScaled(arg0, 0.05f);
     sp2C.x = ParticleMath_RandomRange(0x8000) - 0x4000;
     sp2C.y = ParticleMath_RandomRange(0x10000);
     sp2C.z = ParticleMath_RandomRange(0x800) - 0x400;
@@ -76,7 +77,8 @@ void func_8214E67C(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Thunderbolt, Thunder.
  */
 void BattleAnim_ApplyThunderThunderboltUseRadialOffset(Particle* arg0) {
     f32 sp1C = 0.0f;
@@ -111,15 +113,16 @@ void BattleAnim_ApplyThunderThunderboltUseRadialOffset(Particle* arg0) {
             break;
     }
 
-    Particle_Field38_AddXZFromField94YOffset180_08F38(arg0, sp1C);
-    Particle_Field38_AddXZFromField94YOffset90_08FAC(arg0, 5.0f);
+    Particle_AddPositionOffsetAlongRotationYPlus180(arg0, sp1C);
+    Particle_AddPositionOffsetAlongRotationYPlus90(arg0, 5.0f);
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Thunderbolt, Thunder.
  */
 void BattleAnim_SetupThunderThunderboltUseEffect(Particle* arg0) {
-    Particle_Field1C_SetScaled_0B938(arg0, 0.1f);
+    Particle_SetScaleScaled(arg0, 0.1f);
     Particle_Field74_SetScaled_0AD8C(arg0, 0.0f);
     BattleAnim_ApplyThunderThunderboltUseRadialOffset(arg0);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0x17);
@@ -127,7 +130,8 @@ void BattleAnim_SetupThunderThunderboltUseEffect(Particle* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Thunderbolt, Thunder.
  */
 void BattleAnim_RunThunderThunderboltUseEffect(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -136,13 +140,13 @@ void BattleAnim_RunThunderThunderboltUseEffect(Particle* arg0) {
             break;
 
         case 2:
-            Particle_Field1C_Approach_0B98C(arg0, 4.0f, 0.5f);
-            Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0);
+            Particle_ApproachScale(arg0, 4.0f, 0.5f);
+            Particle_DecrementUnkA6ToZeroThenAdvance(arg0);
             break;
 
         case 3:
-            Particle_Field1C_Approach_0B98C(arg0, 0.1f, 0.5f);
-            Particle_PrimAlpha_ApproachAndStepState_0BC5C(arg0, 0, 0x20);
+            Particle_ApproachScale(arg0, 0.1f, 0.5f);
+            Particle_ApproachPrimAlphaThenAdvance(arg0, 0, 0x20);
             break;
 
         case 4:
@@ -151,12 +155,16 @@ void BattleAnim_RunThunderThunderboltUseEffect(Particle* arg0) {
     }
 }
 
-void BattleAnim_SetupSharedDescriptor0FDelayedRisingColumnFade(Particle* arg0) {
+/**
+ * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
+ * only for Hyper Beam, ThunderShock, Thunderbolt and Thunder.
+ */
+void BattleAnim_SetupDelayedRisingColumnFade(Particle* arg0) {
     s16 sp2E = Particle_FieldAC_GetS16_0C038(arg0);
     Vec3s sp28;
 
     Particle_Field38_SetYScaled_08CA0(arg0, 15.0f);
-    Particle_Field1C_SetScaled_0B938(arg0, 0.1f);
+    Particle_SetScaleScaled(arg0, 0.1f);
     Particle_Field74_SetScaled_0AD8C(arg0, 0.0f);
     sp28.x = 0x4000 - ParticleMath_RandomRange(0x8000);
     sp28.y = sp2E << 0xD;
@@ -170,12 +178,13 @@ void BattleAnim_SetupSharedDescriptor0FDelayedRisingColumnFade(Particle* arg0) {
 /**
  * Moves: Hyper Beam (hit), Thunder (use/hit), Thunder Shock (use/hit), Thunderbolt (use/hit)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Hyper Beam, Thunder Shock, Thunderbolt, Thunder.
  */
 void BattleAnim_RunDeterministicRotatingBoltOfLightning(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_SetupSharedDescriptor0FDelayedRisingColumnFade(arg0);
+            BattleAnim_SetupDelayedRisingColumnFade(arg0);
             break;
 
         case 2:
@@ -185,12 +194,12 @@ void BattleAnim_RunDeterministicRotatingBoltOfLightning(Particle* arg0) {
             break;
 
         case 3:
-            Particle_Field1C_Approach_0B98C(arg0, 3.0f, 0.1f);
-            Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0);
+            Particle_ApproachScale(arg0, 3.0f, 0.1f);
+            Particle_DecrementUnkA6ToZeroThenAdvance(arg0);
             break;
 
         case 4:
-            Particle_PrimAlpha_ApproachAndStepState_0BC5C(arg0, 0, 0x40);
+            Particle_ApproachPrimAlphaThenAdvance(arg0, 0, 0x40);
             break;
 
         case 5:
@@ -202,12 +211,16 @@ void BattleAnim_RunDeterministicRotatingBoltOfLightning(Particle* arg0) {
     Particle_AddVelocityFromRotationTemplate1(arg0);
 }
 
-void BattleAnim_SetupSharedDescriptor0FDelayedRisingColumnRandomScale(Particle* arg0) {
+/**
+ * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
+ * only for Hyper Beam, ThunderShock, Thunderbolt and Thunder.
+ */
+void BattleAnim_SetupDelayedRisingColumnRandomScale(Particle* arg0) {
     s16 sp2E = Particle_FieldAC_GetS16_0C038(arg0);
     Vec3s sp28;
 
     Particle_Field38_SetYScaled_08CA0(arg0, 15.0f);
-    Particle_Field1C_SetScaled_0B938(arg0, 0.1f);
+    Particle_SetScaleScaled(arg0, 0.1f);
     Particle_Field74_SetScaled_0AD8C(arg0, MathUtil_Random_ZeroOne());
     sp28.x = 0x3000 - ParticleMath_RandomRange(0x6000);
     sp28.y = sp2E << 0xD;
@@ -221,12 +234,13 @@ void BattleAnim_SetupSharedDescriptor0FDelayedRisingColumnRandomScale(Particle* 
 /**
  * Moves: Hyper Beam (hit), Thunder (use/hit), Thunder Shock (use/hit), Thunderbolt (use/hit)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Hyper Beam, Thunder Shock, Thunderbolt, Thunder.
  */
 void BattleAnim_RunRandomRotatingBoltOfLightning(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_SetupSharedDescriptor0FDelayedRisingColumnRandomScale(arg0);
+            BattleAnim_SetupDelayedRisingColumnRandomScale(arg0);
             break;
 
         case 2:
@@ -236,12 +250,12 @@ void BattleAnim_RunRandomRotatingBoltOfLightning(Particle* arg0) {
             break;
 
         case 3:
-            Particle_Field1C_Approach_0B98C(arg0, 3.5f, 0.1f);
-            Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0);
+            Particle_ApproachScale(arg0, 3.5f, 0.1f);
+            Particle_DecrementUnkA6ToZeroThenAdvance(arg0);
             break;
 
         case 4:
-            Particle_PrimAlpha_ApproachAndStepState_0BC5C(arg0, 0, 0x40);
+            Particle_ApproachPrimAlphaThenAdvance(arg0, 0, 0x40);
             break;
 
         case 5:
@@ -257,7 +271,7 @@ void BattleAnim_SetupSharedDirectionalSprayFade(Particle* arg0) {
     Vec3s sp28;
 
     Particle_FieldAC_GetS16_0C038(arg0);
-    Particle_Field1C_SetScaled_0B938(arg0, 0.5f);
+    Particle_SetScaleScaled(arg0, 0.5f);
     Particle_Field74_SetScaled_0AD8C(arg0, 0.0f);
     sp28.x = -0x4000;
     sp28.y = 0;
@@ -296,14 +310,18 @@ void func_8214ED30(s8 *arg0) {
     func_8213E5C8(arg0);
 }
 
-void BattleAnim_SetupSharedDescriptor13DirectionalSprayScaledFade(Particle* arg0) {
+/**
+ * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
+ * only for Hyper Beam, ThunderShock, Thunderbolt and Thunder.
+ */
+void BattleAnim_SetupDirectionalSprayScaledFade(Particle* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
     Vec3s sp2C;
 
     Particle_FieldAC_GetS16_0C038(arg0);
-    Particle_Field1C_SetScaled_0B938(arg0, 0.5f);
-    Particle_SetScaleSpeed(arg0, (MathUtil_Random_ZeroOne() * 5.0f) + 1.0f);
-    Particle_SetScaleTarget(arg0, 0.2f);
+    Particle_SetScaleScaled(arg0, 0.5f);
+    Particle_SetScaleTarget(arg0, (MathUtil_Random_ZeroOne() * 5.0f) + 1.0f);
+    Particle_SetScaleStep(arg0, 0.2f);
     Particle_Field74_SetScaled_0AD8C(arg0, MathUtil_Random_ZeroOne() * 4.0f);
     sp2C.x = -0x4000;
     sp2C.y = 0;
@@ -343,7 +361,8 @@ void func_8214EEE0(s8 *arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Thunder Shock.
  */
 void BattleAnim_SetupThunderShockOuterJolts(Particle* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
@@ -351,9 +370,9 @@ void BattleAnim_SetupThunderShockOuterJolts(Particle* arg0) {
     UNUSED s32 pad2[2]; // FAKE: stack padding
 
     Particle_FieldAC_GetS16_0C038(arg0);
-    Particle_Field1C_SetScaled_0B938(arg0, 0.1f);
-    Particle_SetScaleSpeed(arg0, 1.4f);
-    Particle_SetScaleTarget(arg0, 0.1f);
+    Particle_SetScaleScaled(arg0, 0.1f);
+    Particle_SetScaleTarget(arg0, 1.4f);
+    Particle_SetScaleStep(arg0, 0.1f);
     MathUtil_Random_ZeroOne();
     Particle_Field74_SetScaled_0AD8C(arg0, 0.0f);
     sp2C.x = -0x4000;
@@ -401,9 +420,9 @@ void BattleAnim_SetupUnregisteredStraightDirectionalStreamFade(Particle* arg0) {
     UNUSED s32 pad2[2]; // FAKE: stack padding
 
     Particle_FieldAC_GetS16_0C038(arg0);
-    Particle_Field1C_SetScaled_0B938(arg0, 0.1f);
-    Particle_SetScaleSpeed(arg0, 1.4f);
-    Particle_SetScaleTarget(arg0, 0.1f);
+    Particle_SetScaleScaled(arg0, 0.1f);
+    Particle_SetScaleTarget(arg0, 1.4f);
+    Particle_SetScaleStep(arg0, 0.1f);
     MathUtil_Random_ZeroOne();
     Particle_Field74_SetScaled_0AD8C(arg0, 0.0f);
     sp2C.x = -0x4000;
@@ -451,9 +470,9 @@ void BattleAnim_SetupEndEffect28Descriptor10UpwardBurstFade(Particle* arg0) {
     Vec3s sp28;
 
     Particle_FieldAC_GetS16_0C038(arg0);
-    Particle_Field1C_SetScaled_0B938(arg0, 0.1f);
-    Particle_SetScaleSpeed(arg0, 2.0f);
-    Particle_SetScaleTarget(arg0, 0.1f);
+    Particle_SetScaleScaled(arg0, 0.1f);
+    Particle_SetScaleTarget(arg0, 2.0f);
+    Particle_SetScaleStep(arg0, 0.1f);
     sp28.x = 0;
     sp28.y = 0;
     sp28.z = -0x8000;
@@ -500,9 +519,9 @@ void BattleAnim_SetupEndEffect28Descriptor10WideScatterBurstFade(Particle* arg0)
     Vec3s sp28;
 
     Particle_FieldAC_GetS16_0C038(arg0);
-    Particle_Field1C_SetScaled_0B938(arg0, 0.1f);
-    Particle_SetScaleSpeed(arg0, 2.0f);
-    Particle_SetScaleTarget(arg0, 0.1f);
+    Particle_SetScaleScaled(arg0, 0.1f);
+    Particle_SetScaleTarget(arg0, 2.0f);
+    Particle_SetScaleStep(arg0, 0.1f);
     sp28.x = -0x1000 - ParticleMath_RandomRange(0x6000);
     sp28.y = ParticleMath_RandomRange(0x10000);
     sp28.z = ParticleMath_RandomRange(0x800) - 0x400;
@@ -544,7 +563,8 @@ void func_8214F55C(s8 *arg0) {
 
 /**
  * initializes using thunderbolt or thunder
- * @unverified Name and comment from Stadium 1.
+ * Effect start init 18 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Thunder, Thunderbolt.
  */
 void BattleAnim_InitializeThunderThunderboltUse(void) {
     BattleAnim_SpawnCategory17MarkerSlot(0x64, 1);
@@ -570,7 +590,8 @@ extern M2C_UNK func_8214EBA4;
 
 /**
  * initializes being hit by thunder shock or thunderbolt
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Effect end init 8 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Thunder Shock, Thunderbolt.
  */
 void BattleAnim_InitializeThunderShockThunderboltHit(void) {
     func_8213B794(0x2C, 4, 0x10, 8, 0xFF);
@@ -591,7 +612,8 @@ extern M2C_UNK func_8214EBA4;
 
 /**
  * initializes getting hit by thunder
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Effect end init 72 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Thunder.
  */
 void BattleAnim_InitializeThunderHit(void) {
     func_8213B794(0, 4, 8, 8, 0xC8);
@@ -604,7 +626,8 @@ void BattleAnim_InitializeThunderHit(void) {
 
 /**
  * initializes using thunder shock
- * @unverified Name and comment from Stadium 1.
+ * Effect start init 59 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Thunder Shock.
  */
 void BattleAnim_InitializeThunderShockUse(void) {
     BattleAnim_SpawnCategory17MarkerSlot(0x64, 1);
@@ -636,7 +659,8 @@ void func_8214FCBC(void) {
 
 /**
  * initializes using thunder punch
- * @unverified Name and comment from Stadium 1.
+ * Effect start init 73 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
+ * it ran for exactly Thunder Punch.
  */
 void BattleAnim_InitializeThunderPunchUse(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 5, BattleAnim_CallbackStartEffects18And73Descriptor11ScatterRiseFade, &gBattleAnimParticleDescriptors[0x11], 8, 4, 0x10, gBattleAnimCurrentAnchor, 0x25, 0);
@@ -645,7 +669,8 @@ void BattleAnim_InitializeThunderPunchUse(void) {
 
 /**
  * initializes getting hit by hyper beam
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Hyper Beam.
  */
 void BattleAnim_InitializeHyperBeamHitSequence(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_CallbackSharedDescriptor13DirectionalSprayScaledFade, &gBattleAnimParticleDescriptors[0x13], 0x14, 4, 7, 0, 0x2C, 0);

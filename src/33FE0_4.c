@@ -146,6 +146,10 @@ void func_80035694(StadiumModel* model) {
     mvtx->cmd.blendWeight = -1.0f;
 }
 
+/**
+ * Applies a model segment's transform commands to its vertices over a time
+ * step.
+ */
 void Model_ApplyTransformCommands(ModelSegment* segment, ModelVertex* vertices, StadiumModel* model, f32 delta_time) {
     f32 temp_fs0;
     f32 temp_fv0;
@@ -238,6 +242,7 @@ void func_800359C0(ModelSegment* segment, ModelVertex* vertices, StadiumModel* m
     }
 }
 
+/** Offsets the heights of a segment's vertices by a y offset. */
 void Model_OffsetVertexHeights(ModelSegment* segment, ModelVertex* vertices, f32 y_offset) {
     s16* index_table;
     s16* remap;
@@ -443,6 +448,10 @@ void func_80036064(StadiumModel* model, MtxF* mtx) {
     }
 }
 
+/**
+ * Writes a model's computed vertex positions into a display list vertex
+ * buffer.
+ */
 void Model_WriteVtxBuffer(StadiumModel* model, Vtx* vtx_buf) {
     ModelSegment* segment;
     ModelVertex* mvtx;
@@ -470,6 +479,10 @@ void Model_WriteVtxBuffer(StadiumModel* model, Vtx* vtx_buf) {
     }
 }
 
+/**
+ * Draws a model's segments using a vertex buffer and returns the advanced
+ * display list pointer.
+ */
 Gfx* Model_Draw(Gfx* gfx, StadiumModel* model, Vtx* vtxBuf) {
     ModelSegment* segment;
 

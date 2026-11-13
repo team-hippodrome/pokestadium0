@@ -87,6 +87,8 @@ void Ui_DrawPrimColorRect(s32, s32, s32, s32, s32, s32, s32, s32);
 
 /**
  * 64DD error screen: エラー：%2d (Error: %2d), "read the instruction manual", and a warning not to remove the disk while the access lamp blinks.
+ * Seen in play (2026-11-13) called every frame of the title screen with 0, which draws nothing
+ * (console reset, then N64 logo, opening, title and main menu). The error box itself was not shown.
  * @unverified Name and comment guessed from the code.
  */
 void Leo_DrawErrorScreen(s32 arg0) {

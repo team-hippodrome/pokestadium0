@@ -32,6 +32,7 @@ MemoryPool* mem_pool_try_init(u32 size, s32 side) {
 // TODO: This function is strange, it cant be using MemoryPool, as it allocates
 // more variables than the MemoryPool struct, and it doesnt line up. Whats going
 // on with these structs?
+/** Initializes a memory pool of the given size. */
 MainPool* mem_pool_init(MainPool* pool, s32 size) {
     s32 aligned_size =
         ALIGN4(size - 3) - 0x28; // whats the deal with 0x28? this size doesnt match any known pool struct.
@@ -82,6 +83,9 @@ void* mem_pool_alloc(MemoryPool* node, s32 size) {
 
 /**
  * Free a block that was allocated using mem_pool_alloc.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the Pokédex, the party screen,
+ * the Lab list, Lab sort, registration, the Lab PC, Free Battle setup, the battle opening, a switch
+ * in battle and a Pound turn.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void mem_pool_free(MemoryPool* pool, void* addr) {

@@ -140,7 +140,8 @@ typedef struct LabPCInitialStateFields {
 
 /**
  * Resets the list filters: level range 1..100, and no type or move filter.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: すべてのせんたくをやめる ran this, then LabPCList_ClearFilterFlags, and
+ * the full party list came back.
  */
 void LabPCList_ResetFilterState(LabPCInitialStateFields* state) {
     /* IDO schedules these byte stores together when they share a source line. */
@@ -179,7 +180,8 @@ typedef struct Big891003A4 {
 } Big891003A4;
 /**
  * Sets up the Pokemon list window (564x382) and its widgets.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): ran on entry as the list
+ * window appeared.
  */
 void LabPCList_InitListWindow(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     UNUSED s32 pad[1]; // FAKE: stack padding
@@ -235,6 +237,8 @@ typedef struct Ctx89100688 {
 
 /**
  * Returns the x position of the header cursor for the current detail page.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 LabPCList_GetColumnCursorX(Ctx89100688* arg0) {
@@ -285,8 +289,10 @@ void func_89100688(Ctx89100688* arg0) {
  * Draws a highlight rectangle (via Ui_DrawRoundedFrame) for the screen object arg0, positioned from
  * the two words at arg0 + 0x2C / 0x30 (what they mean is not established). The word at
  * arg0 + 0xB550 selects the shape: 0 draws a 0x26 x 0x14 rectangle at the origin, 1 a
- * 0x50 x 0x14 rectangle offset 0x26 to the right; other values draw nothing. The colour is
+ * 0x50 x 0x14 rectangle offset 0x26 to the right; other values draw nothing. The color is
  * read from D_80073520. (Compare LabPCList_DrawRowCursor.)
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name guessed from the code; comment kept.
  */
 void LabPCList_DrawHeaderCursor(s8* arg0) {

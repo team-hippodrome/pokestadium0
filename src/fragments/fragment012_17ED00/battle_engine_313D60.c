@@ -64,6 +64,10 @@ extern s32 D_8218C790;
 extern s32 D_8218C794;
 /**
  * Save the target's current HP and queue an HP-band message for the acting participant.
+ * Seen in play (2026-11-13) in a Free Battle switch (1P switched to its second Pokémon) it ran when
+ * C-Left picked the Pokémon to switch in.
+ * Seen in play (2026-11-13) it also ran when COM sent out its next Pokémon (ゆけっ！ゲンのすけ) after its
+ * first one fainted.
  * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
  */
 void ShowDamageMessage(s32 attacker, s32 defender) {
@@ -72,12 +76,12 @@ void ShowDamageMessage(s32 attacker, s32 defender) {
     BattleMonRuntime* runtime = &sActivePokemon[defender]->state.runtime;
     s32 pct;
 
-    if (runtime->displayHp == 0) {
+    if (runtime->hp == 0) {
         BattleMessage_Format(D_8219A520 + 0x88, 0x21, D_8218C788, ActivePokemon_GetNickname(*atk));
         return;
     }
-    state->unk_28 = runtime->displayHp;
-    pct = (runtime->displayHp * 0x19) / (runtime->maxHp >> 2);
+    state->unk_28 = runtime->hp;
+    pct = (runtime->hp * 0x19) / (runtime->maxHp >> 2);
     if (pct >= 0x46) {
         BattleMessage_Format(D_8219A520 + 0x88, 0x21, D_8218C788, ActivePokemon_GetNickname(*atk));
     } else if (pct >= 0x28) {
@@ -93,7 +97,7 @@ extern u8 D_82199F3F;
 extern u8 D_82199F30;
 /**
  * Clear the incoming participant's temporary effects and the opponent's trapping lock.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12): ran on the same switch-in.
  */
 void Battle_ResetTransientRuntimeState(s32 arg0, s32 arg1) {
     BattleMonRuntime* sp1C = &sActivePokemon[arg0]->state.runtime;
@@ -124,7 +128,15 @@ extern s32 D_8218C79C;
 extern s32 D_8218C7A0;
 extern s32 D_8218C7A4;
 extern char D_8219544C[];
-void Battle_ResetEntityState(ActivePokemon* active_pokemon) {
+/**
+ * Formats the comment on the hit that just landed from the share of the target's max HP lost
+ * (unk_28, the HP before the hit, minus hp, as a percentage): message 0x25 for 0%, 0x26 under 30%,
+ * 0x27 under 70% and 0x28 for 70% or more. Adds message 0 when state.unk_2D is 0x10.
+ * Was misnamed Battle_ResetEntityState.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle.
+ * @unverified Named from the code; not checked in play.
+ */
+void Battle_FormatDamageComment(ActivePokemon* active_pokemon) {
     ActivePokemonState* sp1C = &sActivePokemon[0]->state;
     ActivePokemonState* sp18 = &sActivePokemon[1]->state;
     BattleMonRuntime* temp_a1 = &sActivePokemon[0]->state.runtime;
@@ -132,9 +144,9 @@ void Battle_ResetEntityState(ActivePokemon* active_pokemon) {
     s32 var_v0;
 
     if (active_pokemon == sActivePokemon[0]) {
-        var_v0 = ((sp1C->unk_28 - temp_a2->displayHp) * 0x19) / (temp_a2->maxHp >> 2);
+        var_v0 = ((sp1C->unk_28 - temp_a2->hp) * 0x19) / (temp_a2->maxHp >> 2);
     } else {
-        var_v0 = ((sp18->unk_28 - temp_a1->displayHp) * 0x19) / (temp_a1->maxHp >> 2);
+        var_v0 = ((sp18->unk_28 - temp_a1->hp) * 0x19) / (temp_a1->maxHp >> 2);
     }
 
     if (var_v0 == 0) {
@@ -155,7 +167,11 @@ void Battle_ResetEntityState(ActivePokemon* active_pokemon) {
 u8 Battle_Random(void);                                /* extern */
 extern u16 D_82199F50;
 
-void func_8210F8E8(void) {
+/**
+ * Gen 1 RandomizeDamage: when the damage is at least 2, multiplies it by a random 217-255 and
+ * divides by 255.
+ */
+void Battle_RandomizeDamage(void) {
     s32 temp_v0;
 
     if ((s32) D_82199F50 >= 2) {
@@ -168,7 +184,8 @@ void func_8210F8E8(void) {
 
 /**
  * Return which participant acts first using Quick Attack, Counter, Speed and a random tie break.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12): returned 1 (COM first) with Pinsir at Speed 50 against Nidoqueen, and
+ * Pinsir moved first; with Pinsir's Speed set to 1 it returned 0 and 1P moved first.
  */
 u16 Battle_DetermineMoveOrder(ActivePokemon* pokemon, ActivePokemon* other_pokemon) {
     BattleMonRuntime* runtime = &pokemon->state.runtime;
@@ -206,7 +223,8 @@ u16 Battle_DetermineMoveOrder(ActivePokemon* pokemon, ActivePokemon* other_pokem
 
 /**
  * Test membership in a byte array of the supplied length.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12): returned 0 for 0x28 (Poison Sting) in the two-byte list 0E 4A and in
+ * the five-byte list 60 69 75 78 85.
  */
 s32 IsByteInArray(u8 lookup, u8* array, s32 array_length) {
     while (array_length--) {
@@ -224,6 +242,8 @@ void func_8210FA74(void) {
 
 /**
  * Select a move in the first scratch runtime using the current scratch move-slot index.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Battle_SetActiveMoveFromSlotIndex(void) {
@@ -232,7 +252,8 @@ void Battle_SetActiveMoveFromSlotIndex(void) {
 
 /**
  * Execute the cached effect and report whether it left the move-failed flag clear.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Guillotine, Horn Drill, Fissure.
  */
 s32 Battle_CheckMoveSuccess(void) {
     BattleEffect_ExecuteMoveEffect();
@@ -245,6 +266,8 @@ s32 Battle_CheckMoveSuccess(void) {
 
 /**
  * Calculate the requested stored stat from the selected base-stat/experience entries and DVs.
+ * No caller in play (2026-11-13): it is only called from ComputeAllPokemonStats, which has no
+ * caller in the ROM itself.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ComputePokemonStat(s32 arg0, BattleMon* arg1) {

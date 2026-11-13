@@ -20,6 +20,7 @@ void Math_ProjectPointOntoLine(
 void MtxF_ExtractScale(MtxF* arg0, MtxF* arg1);
 void MtxF_GetScaleVector(MtxF* arg0, Vec3f* arg1);
 
+/** Builds a rotation matrix that points toward a direction. */
 void Mtx_BuildDirectionRotation(Mtx* mtx, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6) {
     f32 sp144;
     f32 sp140;
@@ -41,6 +42,7 @@ void Mtx_BuildDirectionRotation(Mtx* mtx, f32 arg1, f32 arg2, f32 arg3, f32 arg4
     *mtx = spF0;
 }
 
+/** Returns the absolute value of a float. */
 f32 Math_AbsF32(f32 arg0) {
     if (arg0 < 0.0) {
         arg0 = -arg0;
@@ -48,12 +50,14 @@ f32 Math_AbsF32(f32 arg0) {
     return arg0;
 }
 
+/** Computes a cross product of two vectors given as components. */
 void Vec3f_CrossProductComponents(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32* arg6, f32* arg7, f32* arg8) {
     *arg6 = (arg1 * arg5) - (arg2 * arg4);
     *arg7 = (arg2 * arg3) - (arg0 * arg5);
     *arg8 = (arg0 * arg4) - (arg1 * arg3);
 }
 
+/** Normalizes a vector given as three float pointers. */
 void Vec3f_NormalizeComponents(f32* arg0, f32* arg1, f32* arg2) {
     f32 temp_fv1;
     f32 temp_fa1;
@@ -74,6 +78,7 @@ void Vec3f_NormalizeComponents(f32* arg0, f32* arg1, f32* arg2) {
     *arg2 = temp_ft4;
 }
 
+/** Computes the cross product of two float arrays. */
 void Vec3f_CrossProductArrays(const f32* a, const f32* b, f32* out) {
     f32 ax = a[0];
     f32 ay = a[1];
@@ -91,6 +96,7 @@ void Vec3f_CrossProductArrays(const f32* a, const f32* b, f32* out) {
 extern char D_8007DB30[];
 void func_8005666C(char*, ...);
 
+/** Normalizes a vector, leaving it unchanged when its length is zero. */
 void Vec3f_NormalizeSafe(Vec3f* vec) {
     f32 x;
     f32 y;
@@ -116,6 +122,9 @@ void Vec3f_NormalizeSafe(Vec3f* vec) {
     vec->z = z;
 }
 
+/**
+ * Builds a rotation matrix that points toward a direction, with a translation.
+ */
 void Mtx_BuildTranslatedDirectionRotation(Mtx* mtx, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6) {
     f32 sp10C;
     f32 sp108;
@@ -176,6 +185,7 @@ void Math_ProjectPointOntoLine(
     *outZ = az + (t * dz);
 }
 
+/** Extracts the per-axis scale of a matrix into a vector. */
 void MtxF_ExtractScale(MtxF* arg0, MtxF* arg1) {
     f32 sp24 = sqrtf(SQ(arg1->mf[0][0]) + SQ(arg1->mf[0][1]) + SQ(arg1->mf[0][2]));
     f32 sp20 = sqrtf(SQ(arg1->mf[1][0]) + SQ(arg1->mf[1][1]) + SQ(arg1->mf[1][2]));
@@ -202,6 +212,7 @@ void MtxF_ExtractScale(MtxF* arg0, MtxF* arg1) {
     arg0->mf[3][3] = 1.0f;
 }
 
+/** Extracts the per-axis scale of a matrix into a vector. */
 void MtxF_GetScaleVector(MtxF* arg0, Vec3f* arg1) {
     f32 temp_fa1;
     f32 temp_fv0;

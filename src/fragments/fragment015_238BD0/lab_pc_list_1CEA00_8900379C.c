@@ -202,7 +202,7 @@ s32 LabItem_UpdateItemList(void *, u32);
 void BgStage_DrawFrame(void);
 /**
  * Draws the item organizer for its current state.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): drew the どうぐのせいり screen.
  */
 void LabItem_DrawScreen(void* arg) {
     s8* arg0 = arg;

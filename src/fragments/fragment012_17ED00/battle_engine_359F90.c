@@ -48,10 +48,12 @@ void func_82111870(void);
 
 u8 Battle_Random(void);
 void ComputePokemonStat(s32 arg0, BattleMon* arg1);
-void Battle_IncrementMoveUsage(void);
+void Battle_RefundSelectedMovePp(void);
 
 /**
  * Invoke the stored-stat calculator for selectors 0 through 4, preserving its original range.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ComputeAllPokemonStats(BattleMon* arg0) {
@@ -69,6 +71,8 @@ extern u16 D_82199F52;
 extern u16 D_843C4DCC;
 /**
  * Select damage power, offensive/defensive stats and level, including screens and critical hits.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle and a Pound
+ * turn.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void InitBattleParameters(void) {
@@ -125,7 +129,9 @@ extern u16 D_82199F54;
 extern u16 D_82199F58;
 /**
  * Calculate base damage, halving defense for boom moves and delegating OHKO success.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12): for Nidoqueen's Poison Sting (level 20, Attack 43, power 15) against
+ * Pinsir (Defense 62) it set sBattleDamage to 4, which is the Gen 1 base damage
+ * ((20*2/5+2)*15*43/62)/50+2.
  */
 s32 Battle_CalcDamage(void) {
     s32 temp_v0 = sBattleUser->moveCache.effect;
@@ -161,7 +167,7 @@ extern s32 D_8218C7B4;
 void ActivePokemon_SetStateFlags(ActivePokemon*, s32);
 /**
  * Subtract damage from Substitute or target HP and update the associated continuation state.
- * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ * Seen in play (2026-11-12): took Pinsir from 75 to 65 HP with sBattleDamage 10.
  */
 void Battle_ApplyDamage(void) {
     BattleMonRuntime* target = sBattleTarget;
@@ -189,11 +195,11 @@ void Battle_ApplyDamage(void) {
             }
         }
     } else {
-        if (sBattleDamage < target->displayHp) {
-            target->displayHp -= sBattleDamage;
+        if (sBattleDamage < target->hp) {
+            target->hp -= sBattleDamage;
         } else {
-            sBattleDamage = target->displayHp;
-            target->displayHp = 0;
+            sBattleDamage = target->hp;
+            target->hp = 0;
         }
     }
 }
@@ -208,9 +214,13 @@ extern s32 D_8218C75C;
 extern s32 D_8218C760;
 extern s32 D_8218C764;
 s32 func_8210FA2C(s32, u8*, s32);
-s32 func_82107F68(ActivePokemon*);
+s32 ActivePokemon_GetMoveName(ActivePokemon*);
 
-void func_821102F0(void) {
+/**
+ * Queues the "<nickname> used <move>" message, picking one of the five Gen 1 endings by move set;
+ * Metronome and Mirror Move use a second message slot.
+ */
+void BattleMessage_PrintUsedMove(void) {
     BattleMonRuntime* runtime = &sActivePokemon[sBattleScene.scene->actingSide]->state.runtime;
     s32 type;
 
@@ -230,46 +240,46 @@ void func_821102F0(void) {
         switch (type) {
             case 0:
                 BattleMessage_Format(D_8219A520 + 0x388, 0x14, D_8218C754, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]),
-                              func_82107F68(sActivePokemon[sBattleScene.scene->actingSide]));
+                              ActivePokemon_GetMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
             case 1:
                 BattleMessage_Format(D_8219A520 + 0x388, 0x15, D_8218C758, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]),
-                              func_82107F68(sActivePokemon[sBattleScene.scene->actingSide]));
+                              ActivePokemon_GetMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
             case 2:
                 BattleMessage_Format(D_8219A520 + 0x388, 0x16, D_8218C75C, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]),
-                              func_82107F68(sActivePokemon[sBattleScene.scene->actingSide]));
+                              ActivePokemon_GetMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
             case 3:
                 BattleMessage_Format(D_8219A520 + 0x388, 0x17, D_8218C760, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]),
-                              func_82107F68(sActivePokemon[sBattleScene.scene->actingSide]));
+                              ActivePokemon_GetMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
             case 4:
                 BattleMessage_Format(D_8219A520 + 0x388, 0x18, D_8218C764, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]),
-                              func_82107F68(sActivePokemon[sBattleScene.scene->actingSide]));
+                              ActivePokemon_GetMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
         }
     } else {
         switch (type) {
             case 0:
                 BattleMessage_Format(D_8219A520 + 0xC8, 0x14, D_8218C754, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]),
-                              func_82107F68(sActivePokemon[sBattleScene.scene->actingSide]));
+                              ActivePokemon_GetMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
             case 1:
                 BattleMessage_Format(D_8219A520 + 0xC8, 0x15, D_8218C758, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]),
-                              func_82107F68(sActivePokemon[sBattleScene.scene->actingSide]));
+                              ActivePokemon_GetMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
             case 2:
                 BattleMessage_Format(D_8219A520 + 0xC8, 0x16, D_8218C75C, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]),
-                              func_82107F68(sActivePokemon[sBattleScene.scene->actingSide]));
+                              ActivePokemon_GetMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
             case 3:
                 BattleMessage_Format(D_8219A520 + 0xC8, 0x17, D_8218C760, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]),
-                              func_82107F68(sActivePokemon[sBattleScene.scene->actingSide]));
+                              ActivePokemon_GetMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
             case 4:
                 BattleMessage_Format(D_8219A520 + 0xC8, 0x18, D_8218C764, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]),
-                              func_82107F68(sActivePokemon[sBattleScene.scene->actingSide]));
+                              ActivePokemon_GetMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
         }
     }
@@ -277,7 +287,7 @@ void func_821102F0(void) {
 
 /**
  * Spend PP unless the active continuation suppresses it; update stored PP outside Transform.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12): 1P's Poison Sting went from 35 to 34 PP across this call.
  */
 void Battle_DecrementPP(s32 arg0) {
     BattleMonRuntime* temp_v0;
@@ -299,7 +309,11 @@ void Battle_DecrementPP(s32 arg0) {
 extern s8 *D_8219A3C0;
 extern s8 *D_8219A3C4;
 extern u8 D_8218AC34[][2];
-void func_82110890(void) {
+/**
+ * Gen 1 CalcHitChance: scales the move's accuracy by the user's accuracy stage and the target's
+ * evasion stage, clamped to 1-255.
+ */
+void Battle_CalcHitChance(void) {
 
     s32 idx = ((u8*)D_8219A3C0)[0x60];
     s32 i;
@@ -327,7 +341,11 @@ extern s8 *D_8219A3C0;
 extern s8 *D_8219A3C4;
 extern s8 *D_8219A5A0;
 
-void func_82110984(void) {
+/**
+ * Marks the move as missed: clears the damage, sets the missed flag and clears the user's
+ * thrashing bit (0x20 of byte 0x4C).
+ */
+void Battle_MoveMissed(void) {
     s32 temp_v0;
 
     D_82199F50 = 0;
@@ -344,18 +362,18 @@ void func_82110984(void) {
     M2C_FIELD(D_8219A3C0, u8 *, 0x4C) = (u8) (M2C_FIELD(D_8219A3C0, u8 *, 0x4C) & 0xFFDF);
 }
 
-void func_82110984(void);
+void Battle_MoveMissed(void);
 u8 Battle_Random(void);
 /**
- * Check recharge, Dream Eater, Substitute, semi-invulnerability, Mist and accuracy.
- * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ * Gen 1 MoveHitTest: Dream Eater on a target that isn't asleep, Swift, moves into Fly or Dig,
+ * Substitute, Mist and the accuracy roll each end in Battle_MoveMissed.
  */
-void HandleMoveEffectFlags(void) {
+void Battle_MoveHitTest(void) {
     s8* p = D_8219A3C0;
     u8 effect = M2C_FIELD(p, u8*, 0x45);
 
     if ((effect == 8) && !(M2C_FIELD(D_8219A3C4, u8*, 0x15) & 7)) {
-        func_82110984();
+        Battle_MoveMissed();
         return;
     }
     if (M2C_FIELD(D_8219A3C4, u8*, 0x4D) & 0x10) {
@@ -363,29 +381,31 @@ void HandleMoveEffectFlags(void) {
             return;
         }
         if ((effect == 3) || (effect == 8)) {
-            func_82110984();
+            Battle_MoveMissed();
             return;
         }
     }
     if (M2C_FIELD(D_8219A3C4, u8*, 0x4C) & 0x40) {
-        func_82110984();
+        Battle_MoveMissed();
         return;
     }
     if ((((effect >= 0x12) && (effect < 0x1A)) || ((effect >= 0x3A) && (effect < 0x42))) && (M2C_FIELD(D_8219A3C4, u8*, 0x4D) & 2)) {
-        func_82110984();
+        Battle_MoveMissed();
         return;
     }
     if (M2C_FIELD(p, u8*, 0x4D) & 1) {
         return;
     }
-    func_82110890();
+    Battle_CalcHitChance();
     if (Battle_Random() >= M2C_FIELD(D_8219A3C0, u8*, 0x48)) {
-        func_82110984();
+        Battle_MoveMissed();
     }
 }
 
 /**
  * Copies the runtime's pending status condition into the party Pokemon.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle and a Pound
+ * turn.
  * @unverified Name and comment guessed from the code.
  */
 void ActivePokemon_CommitPendingStatus(ActivePokemon* arg0) {
@@ -396,7 +416,8 @@ void ActivePokemon_CommitPendingStatus(ActivePokemon* arg0) {
 
 /**
  * Quarter modified Speed when paralyzed, retaining a minimum of one.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12): after 1P's Thunder Wave paralysed COM's Pinsir (status byte 0x40),
+ * it cut Pinsir's modified Speed from 50 to 12; an earlier call with status 0 left it at 50.
  */
 void ApplyParalysisSpeedCut(ActivePokemon* arg0) {
     BattleMonRuntime* temp_v0 = &arg0->state.runtime;
@@ -411,7 +432,8 @@ void ApplyParalysisSpeedCut(ActivePokemon* arg0) {
 
 /**
  * Halve modified Attack when burned, retaining a minimum of one.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12): with COM's Pinsir burned (status byte 0x10) it cut Pinsir's modified
+ * Attack from 71 to 35.
  */
 void ApplyBurnAttackCut(ActivePokemon* arg0) {
     BattleMonRuntime* temp_v0 = &arg0->state.runtime;
@@ -429,7 +451,8 @@ void func_80041940(s32, s32, s32);
 
 /**
  * Populate runtime species, HP, types, moves, stats and neutral stages from the selected roster.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12): filled Onix's runtime state on the switch-in; the HUD then showed
+ * イワワ L20 ふつう 49/ 49.
  */
 void Battle_InitPokemonRuntimeState(ActivePokemon* arg0) {
     ActivePokemonState* sp28;
@@ -444,7 +467,7 @@ void Battle_InitPokemonRuntimeState(ActivePokemon* arg0) {
 
     sp24->unk_14 = sp28->rosterIndex;
     sp24->id = sp34->species.id;
-    sp24->displayHp = sp34->hp;
+    sp24->hp = sp34->hp;
     sp24->pendingStatusCondition = sp34->statusCondition;
     sp24->roster[6] = sp34->type1;
     sp24->roster[7] = sp34->type2;
@@ -558,7 +581,8 @@ void func_82110FB8(void) {
 
 /**
  * Load all six cached move-data bytes for usedMove; no animation is executed here.
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): for 1P's Poison Sting it filled the cache with 28 02 0F 03 FF 23:
+ * move 40, effect 2 (may poison), power 15, type 3 (Poison), accuracy 255, 35 PP.
  */
 void Battle_LoadMoveCache(void) {
     sBattleUser->moveCache.lastMove = gMoveData[sBattleUser->usedMove - 1].moveId;
@@ -571,10 +595,12 @@ void Battle_LoadMoveCache(void) {
 
 extern s32 D_8218C780;
 /**
- * Temporarily make the damaged Rage user the effect user and apply its Attack boost.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Gen 1 HandleBuildingRage: when the target is using Rage and its Attack stage isn't maxed,
+ * queues the rage message and raises its Attack through BattleEffect_ApplyStatBoost.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a Pound turn.
+ * @unverified Name and comment from the code (matches the Gen 1 engine).
  */
-void Battle_ApplyRageContinuation(void) {
+void Battle_HandleBuildingRage(void) {
     BattleMonRuntime* sp1C;
 
     if ((sBattleTarget->volatileStatusFlags & 0x40) && ((sBattleTarget->unk_5C[0]) != 0xD)) {
@@ -601,7 +627,12 @@ extern s32 D_8218C7A8;
 extern s32 D_8218C7AC;
 
 // Matches the ROM, but uses rodata data that is not placed in this file yet.
-void Battle_UpdateBattleLog(void) {
+/**
+ * Gen 1 DisplayEffectiveness: queues the super effective message when the type multiplier is
+ * above 10, or the not very effective message when it is below 10.
+ * In play Ember on Pinsir (Fire on Bug) showed 「こうかは ばつぐんだ！」.
+ */
+void Battle_DisplayEffectiveness(void) {
     sTypeEffectiveness = D_82199F3F & 0x7F;
     if (sTypeEffectiveness >= 0xB) {
         BattleMessage_Format(D_8219A520 + 0x88, 0x29, D_8218C7A8);
@@ -614,7 +645,12 @@ extern s32 D_8218C778;
 extern s32 D_8218C77C;
 
 // Matches the ROM, but uses rodata data that is not placed in this file yet.
-void Battle_PlayMoveSound(void) {
+/**
+ * Gen 1 PrintCriticalOHKOText: queues the critical hit (sBattleCritFlag 1) or one-hit KO (2)
+ * message, sets hitReactionKind 2 and stores the flag on the target.
+ * In play, with sBattleCritFlag set to 1 on entry, Ember showed 「きゅうしょに あたった！」.
+ */
+void Battle_PrintCriticalOHKOText(void) {
     BattleMonRuntime* sp1C = &sActivePokemon[!sBattleScene.scene->actingSide]->state.runtime;
 
     switch (sBattleCritFlag) {
@@ -632,9 +668,13 @@ void Battle_PlayMoveSound(void) {
 }
 
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Gen 1 ApplyAttackToEnemyPokemon: sets the fixed damage of OHKO moves, Super Fang (half the
+ * target's HP), Seismic Toss and Night Shade (user level), Sonic Boom (20), Dragon Rage (40) and
+ * Psywave (random 1 to 1.5x level), then applies the damage. Moves with no power and no special
+ * damage do nothing.
+ * In play Sonic Boom took Pinsir from 75 to 55 HP, the fixed 20.
  */
-void Battle_ApplyDamageAnimation(void) {
+void Battle_ApplyAttackToTarget(void) {
     s32 n;
 
     switch (((u8*)D_8219A3C0)[0x45]) {
@@ -691,10 +731,12 @@ extern s32 D_8218C76C;
 extern s32 D_8218C770;
 extern s32 D_8218C774;
 /**
- * Queue move failure and apply Jump Kick crash damage by temporarily swapping user and target.
- * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ * Gen 1 PrintMoveFailureText: queues the doesn't affect / missed / failed message for a move that
+ * failed. A Jump Kick or Hi Jump Kick miss (effect 0x2D) then deals the user 1/8 of the damage as
+ * crash damage (moveEffectKind 0x10).
+ * In play a forced Jump Kick miss ran it: 「しかし ニドニドの こうげきは はずれた！」 then the crash text.
  */
-void Battle_QueueMoveFailureAndApplyRecoil(void) {
+void Battle_PrintMoveFailureText(void) {
     BattleMonRuntime* sp1C;
 
     if (D_82199F3F & 0x7F) {
@@ -729,7 +771,15 @@ void Battle_QueueMoveFailureAndApplyRecoil(void) {
     }
 }
 
-void Battle_IncrementMoveUsage(void) {
+/**
+ * Gives back one PP of the selected move, on both the battle copy (sBattleUser) and the roster
+ * copy. Metronome calls it so that only the move it pulls costs PP. Was misnamed
+ * Battle_IncrementMoveUsage.
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
+ * @unverified Named from the code; the sweep saw it run for Metronome but did not read the PP.
+ */
+void Battle_RefundSelectedMovePp(void) {
     ActivePokemonState* state;
     BattleMon* mon;
 
@@ -742,12 +792,13 @@ void Battle_IncrementMoveUsage(void) {
 
 /**
  * Refund the selected slot's PP, choose a non-Metronome move and load its cache.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Metronome.
  */
 s32 Battle_Effect_Metronome(void) {
     s32 move_pulled;
 
-    Battle_IncrementMoveUsage();
+    Battle_RefundSelectedMovePp();
     do {
         do {
             move_pulled = Battle_Random();
@@ -760,15 +811,16 @@ s32 Battle_Effect_Metronome(void) {
 
 /**
  * Stage poison/burn HP loss, scaling it by the Toxic counter when active.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Fire Punch, Poison Sting, Twineedle, Flamethrower, Poison Powder, Toxic, Smog, Fire Blast.
  */
 void Battle_ApplyPoisonOrBurnDamage(void) {
     u16 var_a0;
 
-    if (sBattleUser->currentHp != 0xFFFF) {
-        sBattleUser->unk_0E = sBattleUser->currentHp;
+    if (sBattleUser->pendingHp != 0xFFFF) {
+        sBattleUser->hpAfterPoisonBurn = sBattleUser->pendingHp;
     } else {
-        sBattleUser->unk_0E = sBattleUser->displayHp;
+        sBattleUser->hpAfterPoisonBurn = sBattleUser->hp;
     }
 
     var_a0 = (sBattleUser->maxHp >> 4) & 0xFFFF;
@@ -781,29 +833,30 @@ void Battle_ApplyPoisonOrBurnDamage(void) {
         var_a0 *= sBattleUser->toxicCounter;
     }
 
-    if (sBattleUser->unk_0E < var_a0) {
-        sBattleUser->unk_0E = 0;
+    if (sBattleUser->hpAfterPoisonBurn < var_a0) {
+        sBattleUser->hpAfterPoisonBurn = 0;
     } else {
-        sBattleUser->unk_0E -= var_a0;
+        sBattleUser->hpAfterPoisonBurn -= var_a0;
     }
 
-    sBattleUser->unk_10 = sBattleUser->unk_0E;
+    sBattleUser->unk_10 = sBattleUser->hpAfterPoisonBurn;
 }
 
 /**
  * Stage Leech Seed HP transfer, including the Toxic-counter multiplier and healing cap.
- * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Leech Seed.
  */
 void Battle_ApplyLeechSeedDamage(void) {
     s32 amount;
     s32 v;
 
     if (!(sBattleUser->pendingStatusCondition & 0x18)) {
-        v = sBattleUser->currentHp;
+        v = sBattleUser->pendingHp;
         if (v != 0xFFFF) {
             sBattleUser->unk_10 = v;
         } else {
-            sBattleUser->unk_10 = sBattleUser->displayHp;
+            sBattleUser->unk_10 = sBattleUser->hp;
         }
     }
     v = (sBattleUser->maxHp >> 4) & 0xFFFF;
@@ -824,7 +877,7 @@ void Battle_ApplyLeechSeedDamage(void) {
     } else {
         sBattleUser->unk_10 = v - amount;
     }
-    sBattleTarget->unk_10 = sBattleTarget->displayHp;
+    sBattleTarget->unk_10 = sBattleTarget->hp;
     sBattleTarget->unk_10 = sBattleTarget->unk_10 + amount;
     v = sBattleTarget->maxHp;
     if (v < sBattleTarget->unk_10) {
@@ -845,10 +898,12 @@ void func_82111870(void);
 
 /**
  * Queue and stage poison/burn and Leech Seed effects after the action.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle and a Pound
+ * turn.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 Battle_ApplyResidualEffects(void) {
-    if (sBattleTarget->displayHp == 0) {
+    if (sBattleTarget->hp == 0) {
         return 0;
     }
 
@@ -859,7 +914,7 @@ s32 Battle_ApplyResidualEffects(void) {
             BattleMessage_Format(D_8219A520 + 0x248, 1, D_8218C708, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]));
         }
         Battle_ApplyPoisonOrBurnDamage();
-        sBattleTarget->unk_0E = sBattleTarget->displayHp;
+        sBattleTarget->hpAfterPoisonBurn = sBattleTarget->hp;
     }
 
     if (sBattleUser->volatileStatusFlags & 0x80) {
@@ -868,7 +923,7 @@ s32 Battle_ApplyResidualEffects(void) {
         BattleMessage_Format(D_8219A520 + 0x288, 2, D_8218C70C, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]));
     }
 
-    if (sBattleUser->displayHp != 0) {
+    if (sBattleUser->hp != 0) {
         return 0;
     }
     return 1;

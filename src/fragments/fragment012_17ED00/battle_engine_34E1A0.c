@@ -17,7 +17,8 @@ Gfx* HypnosisScreechTrail_Draw(Gfx* arg0);
 void Trail40_Reset(void);
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Hypnosis, Screech.
  */
 void HypnosisScreechTrail_Init(s16 arg0) {
     s32 i;
@@ -51,7 +52,8 @@ void HypnosisScreechTrail_Init(s16 arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Hypnosis, Screech.
  */
 void HypnosisScreechTrail_Start(s32 arg0, s32 arg1) {
     f32 sp84;
@@ -161,7 +163,8 @@ void HypnosisScreechTrail_Start(s32 arg0, s32 arg1) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Hypnosis, Screech.
  */
 void HypnosisScreechTrailNode_FillVertex(Trail40Node* arg0, Vtx* arg1) {
     f32 r;
@@ -186,7 +189,8 @@ void HypnosisScreechTrailNode_FillVertex(Trail40Node* arg0, Vtx* arg1) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Hypnosis, Screech.
  */
 s32 HypnosisScreechTrail_IsComplete(void) {
     Trail40Node* var_s1;
@@ -241,6 +245,8 @@ void func_80031F14(f32*, f32*, f32*);
 void func_800320A8(s32, f32, f32, f32, f32, f32, f32);
 extern s32 D_821A6F60;
 /**
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void Trail40_Reset(void) {
@@ -282,7 +288,8 @@ void Trail40_Reset(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Hypnosis, Screech.
  */
 Gfx* HypnosisScreechTrail_Draw(Gfx* arg0) {
     s32 i;

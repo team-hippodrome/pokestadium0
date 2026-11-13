@@ -462,6 +462,8 @@ void func_811155A0(void) {
 
 /**
  * Sets D_8120EA60 (JP: also sends command 0xF1000000 to the Japanese sound driver).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void GbApu_SetActiveFlag(void) {
@@ -471,6 +473,8 @@ void GbApu_SetActiveFlag(void) {
 
 /**
  * Clears D_8120EA60 (JP: also sends command 0xF2000000).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void GbApu_ClearActiveFlag(void) {
@@ -532,6 +536,8 @@ void func_81215DDC_jp(void) {
 
 /**
  * No callers.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name and comment from Stadium 1.
  */
 void GbApu_SetNoiseLoopBounds(s32 arg0, s32 arg1) {

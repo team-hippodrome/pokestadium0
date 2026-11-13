@@ -55,7 +55,7 @@ extern volatile u8 D_81156475;
 extern volatile u8 D_81156476;
 extern OSMesgQueue D_81156458;
 s32 func_8004CFB0(OSMesgQueue*, s32, s32);
-s32 func_81102AC8(s32 arg0);
+s32 GbPak_WriteBackDirtySramBlock(s32 arg0);
 u32 func_80053A80(void);
 M2C_UNK func_8005C0A0();
 extern s32 D_81156550;
@@ -83,11 +83,11 @@ typedef struct GbEmuRunState {
     /* 0x00 */ u8 unk_00[6];
     /* 0x06 */ u8 unk_06;
     /* 0x07 */ u8 unk_07[5];
-    /* 0x0C */ u16 unk_0C;
+    /* 0x0C */ u16 gbPc; // GB program counter saved when the core stops (seen in play)
     /* 0x0E */ u8 unk_0E[2];
     /* 0x10 */ u8* mem;
     /* 0x14 */ u8 unk_14[8];
-    /* 0x1C */ u8* palette;
+    /* 0x1C */ u8* rom; // cartridge ROM buffer (seen in play)
     /* 0x20 */ u8 unk_20[4];
     /* 0x24 */ u32 buttons;
     /* 0x28 */ u8 unk_28[0x1C];
@@ -151,7 +151,7 @@ extern u8 D_8113556C[];
 extern u8 D_8111F470[];
 extern u8 D_8111E678[];
 void func_800093E0(void*, void*);
-void func_811027A8(GbpakChannel811023DC*);
+void GbPak_QueueNextBankLoad(GbpakChannel811023DC*);
 void Cont_StartReadInputs(void);
 void Cont_ReadInputs(void);
 u8 func_81118018(void*, s32);
@@ -166,7 +166,8 @@ void func_811177D0(s32);
  * cycles the graphics set copied in for the screen frame. Returns 1 when only
  * C-Up is held, a negative value on a Transfer Pak error, -100 when the core
  * stopped, otherwise 0.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-12): runs Green frame by frame and, while banks load, restores the header
+ * bytes once the GB PC (gbPc) reaches 0x100.
  */
 s32 GbEmu_UpdateFrame(void) {
     s32 i;
@@ -191,16 +192,18 @@ s32 GbEmu_UpdateFrame(void) {
 
     status = 0;
     if (D_81156476 != 0) {
-        if (D_811565A4 != 0 && GB_RUN->unk_0C == 0x100) {
+        // While banks stream in, the GB runs a boot stub that ends in `jr $` at 0x100 (see
+        // GbEmu_LoadCartridge). Once it gets there, put the real header bytes back.
+        if (D_811565A4 != 0 && GB_RUN->gbPc == 0x100) {
             if (--D_811565A4 == 0) {
                 func_800093E0(D_8112AF3C, D_811645F0);
                 func_800093E0(D_81130024, D_811725F0);
                 for (j = 0; j < 258; j++) {
-                    GB_RUN->palette[j] = D_811565A8[j];
+                    GB_RUN->rom[j] = D_811565A8[j];
                 }
             }
         }
-        func_811027A8(&D_811561C8[D_811565A0]);
+        GbPak_QueueNextBankLoad(&D_811561C8[D_811565A0]);
         if (D_81156476 != 0) {
             if (D_811561C8[D_811565A0].error != 0) {
                 status = (D_811561C8[D_811565A0].unkA2 != 0) ? -3 : -1;
@@ -220,7 +223,7 @@ s32 GbEmu_UpdateFrame(void) {
             D_811561C8[D_811565A0].blockState[i] = D_811561C8[D_811565A0].blockDirty[i];
         }
         timer = &D_811565B8;
-        err = func_81102AC8(D_811565A0);
+        err = GbPak_WriteBackDirtySramBlock(D_811565A0);
         if (err == 0) {
             Cont_StartReadInputs();
             Cont_ReadInputs();
@@ -593,7 +596,7 @@ void osViBlack(u8);
  * Per-frame tail of the GB Tower emulator: unless emulation is paused (D_81156546) or
  * the screen is being blanked (D_800AA148), runs the GB audio frame and mirrors the
  * emulated NR52 (0xFF26) register into GB memory; while D_800AA148 is set it blanks video.
- * @unverified Name guessed from the code.
+ * Seen in play (2026-11-13) ran every frame from the moment JP Green booted in the N64 GB player.
  */
 void GbEmu_UpdateAudioOrBlankVideo(UNUSED s32 arg0) {
     if ((*(u8*)&D_81156546 == 0) && (D_800AA148 == 0)) {
@@ -616,6 +619,8 @@ extern u16 D_81124C40[];
 /**
  * Draws a 46x46 framed panel (8x8 edge and corner tiles from sUiGraphics) with a
  * solid interior, used behind each party icon on the loading screen.
+ * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * in a tour of the menus and a COM battle.
  * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
 void GbEmu_DrawFramedPanel(u16* arg0) {
@@ -732,9 +737,9 @@ void func_81106CC8(u16* dst, u8 (*arg1)[0xC80], s32 arg2, s32 arg3) {
         }
     }
 
-    D_811565D0 = (u16*)func_81104B18(0x2580, 0);
+    D_811565D0 = (u16*)GbEmu_AllocAligned64(0x2580, 0);
     _bcopy(dst + 0x10540, D_811565D0, 0x2580);
-    D_811565D4 = (u16*)func_81104B18(0x2580, 0);
+    D_811565D4 = (u16*)GbEmu_AllocAligned64(0x2580, 0);
     bzero(D_811565D4, 0x2580);
     GbEmu_DrawTextCommands(D_811565D4, D_8112A938);
 
@@ -806,6 +811,8 @@ void func_81106CC8(u16* dst, u8 (*arg1)[0xC80], s32 arg2, s32 arg3) {
 
 /**
  * Adds a scrolling image layer to the destination with per-channel saturation.
+ * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * in a tour of the menus and a COM battle.
  * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
 void GbEmu_BlendScrollingLayer(u16* arg0, u16* arg1, s16* arg2, s32 arg3, s32 arg4) {

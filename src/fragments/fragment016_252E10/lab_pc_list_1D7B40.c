@@ -189,6 +189,7 @@ void func_89104FC0(s8* arg0, s32 arg1, s32 arg2, u8* arg3) {
 }
 
 extern s32 D_8910A920[5];
+/** Disables the move list entries that are restricted for the current cup. */
 void BattleMoveListWidget_DisableRestrictedMoves(unk_func_8830867C_04C_078* arg0) {
     s32 j;
     s32 i;
@@ -301,6 +302,7 @@ s32 func_891053B0(s8 *arg0) {
 void func_891053E0(void) {
 }
 
+/** Updates the flags of every entry in the info widget. */
 void BattleInfoWidget_UpdateEntryFlags(unk_func_8830867C_034* arg0) {
     s32 i;
     s8** sub = &M2C_FIELD(arg0, s8**, 0x20);
@@ -359,7 +361,7 @@ extern u8 D_8910CF80[];
 extern char D_8910E018[];
 /**
  * Draws ボックス%d (Box %d).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): ボックス1 ... ボックス4 in the 64カセットのボックス submenu.
  */
 void PcSort_DrawBoxName(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     Color_RGBA8 color;
@@ -420,7 +422,7 @@ M2C_UNK func_8003F6AC(M2C_UNK);
 extern s32 D_800603C0;
 
 /**
- * List-menu input handler (same family as MonSummary_UpdateMenuCursor). arg0 is the menu object (passed as
+ * List-menu input handler (same family as PartyScreen_UpdateActionMenu). arg0 is the menu object (passed as
  * an integer address here, as elsewhere in this file). Calls Menu_UpdateCursor(arg0 + 0x20) and
  * acts on its result: 0x200 plays sound func_8003F6AC(1) and returns 2. 0 reads the button
  * halfword at D_800603C0 + 8: if bit 0x8000 is set it plays sound 2, toggles bit 3 of the
@@ -517,6 +519,7 @@ void func_891059FC(u8* widget) {
     }
 }
 
+/** Applies the selection state to an info widget entry. */
 void BattleInfoWidget_ApplyEntrySelection(unk_func_8830867C_034* arg0, s32 arg1) {
     s8* ptr = M2C_FIELD(M2C_FIELD(arg0, s8**, 0x70), s8**, 0) + arg1 * 0x24;
     s8* ptr2 = M2C_FIELD(ptr, s8**, 0x10);
@@ -729,7 +732,8 @@ s32 func_89106254(s8 *arg0) {
 
 /**
  * Draws one popup menu row with the selection highlight.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): drew the popup rows, with
+ * the highlight on the selected one.
  */
 void LabPCList_DrawPopupRow(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s8* arg5) {
     s32 temp_v0 = M2C_FIELD(arg5, s32*, 8) - 0xC;
@@ -746,7 +750,8 @@ void LabPCList_DrawPopupRow(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, 
 
 /**
  * Sets up a popup menu sized to its widest string.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): A on フシギダネ set up the popup
+ * (フシギダネをあつめる, おなじタイプをあつめる, いどうする, どうぐをつかう).
  */
 void LabPCList_InitPopupMenu(s8 *arg0, s32 *arg1, s32 arg2, s32 arg3, s32 arg4) {
     s32 i;
@@ -806,7 +811,8 @@ typedef struct Popup89106570 {
  * anchor (or to its left when that would overflow) and is pushed up by the
  * overflow, at least 8; otherwise it goes below the anchor (or above it) and
  * is pushed left the same way.  Field names describe that geometry only.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): placed that popup over the
+ * list next to the selected row.
  */
 void LabPCList_PlacePopup(Popup89106570* arg0) {
     s32 over;
@@ -844,7 +850,7 @@ M2C_UNK Menu_DrawItems(s32, s32, s32, s32, s8 *);  /* extern */
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 /**
  * Draws a popup menu's items.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): drew that popup's four rows.
  */
 void LabPCList_DrawPopupMenu(s8 *arg0, s32 arg1)
 {
@@ -866,7 +872,8 @@ M2C_UNK Menu_UpdateCursor(s32);                         /* extern */
 
 /**
  * Moves a popup menu's cursor.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): D-Down twice moved the popup
+ * cursor from フシギダネをあつめる to いどうする.
  */
 s32 LabPCList_UpdatePopupMenu(s32 arg0) {
     return Menu_UpdateCursor(arg0 + 0x40);
@@ -878,7 +885,8 @@ extern char D_8910E07C[];
 extern char D_8910E088[];
 /**
  * Sets up the レベルのにゅうりょく (level input) window.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: レベルをきめてあつめる (page 3/3, A on the レベル header) ran this once
+ * and opened 「001 から 100」; かいじょ is greyed out when no level filter is active.
  */
 void LabPCList_InitLevelInputWindow(s8* arg0, s32 arg1, s32 arg2, Rgba8910576C arg3, s32 arg4, s32 arg5, s32 arg6) {
     Window_SetRect(arg0, arg1, arg2, 0x13C, 0x50);
@@ -923,7 +931,8 @@ M2C_UNK func_8001AA60(s32, s32, s32);
 
 /**
  * Draws the level input digits and the up/down arrows.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: drew the three digits of each bound with a yellow frame on
+ * the selected digit.
  */
 void LabPCList_DrawLevelInput(s8* arg0, s32 x, s32 y, s32 flags) {
     s32 hl = flags & 2;
@@ -966,10 +975,12 @@ void Window_DrawLabeled(s8 *, s32);
 void LabPCList_DrawLevelInput(s8 *, s32, s32, s32);
 extern char D_8910E094[];
 /**
- * Draws から (Empty).
- * @unverified Name and comment guessed from the code.
+ * Draws the レベルのにゅうりょく (level input) window: the lower and upper level digits with から
+ * between them, and the あつめる and かいじょ buttons.
+ * Seen in play (2026-11-12) in いちらん: ran every frame while the window showed 「001 から 100」.
+ * D_8910E094 is から ("from"), not "Empty".
  */
-void PcSort_DrawEmptyLabel(s8 *arg0) {
+void LabPCList_DrawLevelInputWindow(s8 *arg0) {
     if (func_8002AE6C() == 0) {
         func_8001AB6C();
         func_8001A384(4, 0);
@@ -993,7 +1004,8 @@ extern s32 D_800603C0;
 
 /**
  * Handles the level input digits.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: D-Up raised the selected digit (001 to 006), D-Right moved
+ * across the six digits to あつめる/かいじょ, and A on those returned 1 or 2.
  */
 s32 LabPCList_UpdateLevelInput(s8 *arg0) {
     s32 sp1C;
@@ -1123,7 +1135,8 @@ void func_80029028(s32, s32, s32, s32, Color_RGBA8);
 void Ui_DrawNumber(s32, s32, s32, s32);
 /**
  * Draws one numbered row of the type filter list.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: drew the numbered rows of the type list (1 ノーマル, 2 かくとう, 3
+ * ひこう, ...).
  */
 void LabPCList_DrawTypeFilterRow(s32 arg0, s32 arg1, char **arg2, s32 arg3, s32 arg4) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
@@ -1141,6 +1154,7 @@ void LabPCList_DrawTypeFilterRow(s32 arg0, s32 arg1, char **arg2, s32 arg3, s32 
     Font_EndTexturedTextRendering();
 }
 
+/** Converts a move table index to its display index by skipping unused slots. */
 s32 Move_NormalizeDisplayIndex(s32 a) {
     return a >= 20 ? a - 12 : (a >= 7 ? a - 1 : a);
 }
@@ -1194,7 +1208,9 @@ extern char D_8910E0C4[];
 
 /**
  * Sets up the type filter window.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: A on the タイプ1 header opened the タイプであつめる (gather by type)
+ * window, with two empty type slots, the numbered type list (1 ノーマル, 2 かくとう, ... 8 ゴースト) and あつめる
+ * / かいじょ buttons.
  */
 void LabPCList_InitTypeFilter(Lab891071A4* arg0, s32 x, s32 y, s32* arg3) {
     s32 i;
@@ -1255,7 +1271,7 @@ void ScrollList_DrawItems(s8*, s32, s32, s32, s32);
 
 /**
  * Draws the type filter window.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: drew the タイプであつめる window.
  */
 void LabPCList_DrawTypeFilter(Ctx891074CC* arg0) {
     s32 i;
@@ -1303,7 +1319,8 @@ typedef struct Lab89107614 {
 
 /**
  * Handles the type filter window. Returns -1 on cancel, 1 on confirm, 2 on clear.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: handled the タイプであつめる window; A moved the cursor into the
+ * type list (1 ノーマル).
  */
 s32 LabPCList_UpdateTypeFilter(Lab89107614* arg0) {
     s32 ret = 0;
@@ -1371,7 +1388,8 @@ s32 LabPCList_UpdateTypeFilter(Lab89107614* arg0) {
 
 /**
  * Copies the chosen types into the list's filter state.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: after choosing どく and pressing あつめる, it wrote count 1 and
+ * type byte 0x03 (Poison) into the filter state at +0x9918.
  */
 void LabPCList_CommitTypeFilter(s8* arg0, s32* arg1) {
     s32 count = 0;
@@ -1390,7 +1408,8 @@ extern u8 D_8910AAC0[];
 extern u8 D_8910AAC8[];
 /**
  * Draws one numbered row of the move filter list.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: drew the numbered move rows of わざであつめる (row index 0 = 1
+ * 10まんボルト, 1 = 2 あくまのキッス).
  */
 void LabPCList_DrawMoveFilterRow(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4) {
     s32 idx;
@@ -1452,7 +1471,8 @@ extern char D_8910E0F4[];
 
 /**
  * Sets up the move filter window.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: A on the わざ header (detail page 2/3) ran this once and
+ * opened わざであつめる, with four empty slots and the move list starting at 1 10まんボルト.
  */
 void LabPCList_InitMoveFilter(Lab89107A60* arg0, s32 x, s32 y, u8* arg3) {
     s32 i;
@@ -1509,7 +1529,7 @@ void ScrollList_DrawInlineItems(s8*, s32, s32, s32, s32);
 
 /**
  * Draws the move filter window.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: ran every frame while わざであつめる was open.
  */
 void LabPCList_DrawMoveFilter(Ctx89107D7C* arg0) {
     s32 i;
@@ -1550,7 +1570,8 @@ typedef struct Lab89107EC4 {
 
 /**
  * Handles the move filter window. Returns -1 on cancel, 1 on confirm, 2 on clear.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: handled わざであつめる. あつめる led to the commit path (1) and かいじょ to
+ * the clear path (2).
  */
 s32 LabPCList_UpdateMoveFilter(Lab89107EC4* arg0) {
     s32 ret = 0;
@@ -1622,7 +1643,8 @@ extern u8 D_8910A978[];
 
 /**
  * Copies the chosen moves into the list's filter state.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: after choosing ひっさつまえば and pressing あつめる, it wrote move 0x9E
+ * (Hyper Fang) and count 1 into the filter state at +0x9B00.
  */
 void LabPCList_CommitMoveFilter(s8* arg0, s8* arg1) {
     s32 count = 0;
@@ -1649,6 +1671,8 @@ char* func_8001FDC8(u8, char*);
 s32 func_80031CC8(u8);
 /**
  * Draws an item row with パソコン (PC) / てもち (Party) and ×%02d.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void PcSort_DrawItemRow(s32 x, s32 y, u8** item, UNUSED s32 index, s32 flags) {
@@ -1745,7 +1769,8 @@ void ScrollList_Init(s8*, s32, s32, s32, void*, s32, s32);
 void PcSort_DrawItemRow();
 /**
  * Sets up the window that uses an item on the selected Pokemon.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: どうぐをつかう on フシギダネ opened 「フシギダネがつかえるどうぐ」, listing the bag
+ * items from the Game Boy save (マックスアップ ×5, タウリン ×5, ふしぎなアメ ×5, ポイントアップ ×3, わざマシン06, ひでんマシン01).
  */
 void LabPCList_InitItemWindow(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, u8* arg5) {
     Window_SetRect(arg0, arg1, arg2, 0x184, 0x16E);
@@ -1774,6 +1799,8 @@ extern char D_8910E16C[];
 char* func_80031BC0(u8, char*);
 /**
  * Draws このどうぐをつかいますか？ (Use this item?), どの わざに つかいますか？ (On which move?) or どの わざを わすれさせたい？ (Which move should it forget?).
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void PcSort_DrawUseItemPrompt(s8* arg0) {
@@ -1842,6 +1869,8 @@ void func_89105144(s8 *);
 s32 func_80020974(s32);
 /**
  * Handles the item window. Returns 1 for a vitamin, 2 for PP Up, 3 for a TM or HM.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 LabPCList_UpdateItemWindow(s8 *arg0)
@@ -2042,7 +2071,8 @@ extern u8 D_8910AAF8[];
 
 /**
  * Sets up the result message window.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: opened the result window after an item was used (「HP 19 ->
+ * 20」).
  */
 void LabPCList_InitMessageWindow(void* arg0, s32 arg1, s32 arg2, s32 arg3) {
     Window_SetRect((s8*)arg0, arg1, arg2, 0x114, 0x60);
@@ -2068,7 +2098,7 @@ extern char D_8910E1B0[];
 
 /**
  * Draws the result message window.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: drew the item result window every frame while it was open.
  */
 void LabPCList_DrawMessageWindow(s8* arg0) {
     Entry89108F94* entry;
@@ -2101,7 +2131,8 @@ M2C_UNK func_8003F6AC(M2C_UNK);                     /* extern */
 
 /**
  * Returns 1 once the message has been confirmed.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: returned 0 while the item result window was up and 1 after
+ * A.
  */
 s32 LabPCList_UpdateMessageWindow(s32 arg0) {
     s32 var_v1;

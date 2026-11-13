@@ -20,10 +20,10 @@ typedef struct BattleMonRuntime {
     /* 0x05 */ u8 unk_05;
     /* 0x06 */ char unk06[0x5];
     /* 0x0B */ u8 id;
-    /* 0x0C */ u16 displayHp;
-    /* 0x0E */ u16 unk_0E;
+    /* 0x0C */ u16 hp; // the HP the HUD, the COM AI and fainting follow
+    /* 0x0E */ u16 hpAfterPoisonBurn; // HP once this turn's poison or burn damage is taken
     /* 0x10 */ u16 unk_10;
-    /* 0x12 */ u16 currentHp;
+    /* 0x12 */ u16 pendingHp; // HP while damage is worked out; 0xFFFF between turns
     /* 0x14 */ u8 unk_14;
     /* 0x15 */ u8 pendingStatusCondition;
     /* 0x16 */ u8 roster[9];

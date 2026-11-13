@@ -50,7 +50,7 @@ extern s16 D_8219CB18;
 extern s16 D_8219CB1A;
 extern const char D_821978C8[];
 
-void func_8216E0B0(void);
+void BattleAnim_InitializeSurfUse(void);
 s32 BattleAnim_SurfCompleteImmediately(void);
 void func_8216E0C0(void);
 void BattleAnim_StartTrappingLassoMove_Init(void);
@@ -74,13 +74,18 @@ void BattleAnim_StartEffect19Radial20_EmitVariantD(void);
 void BattleAnim_StartEffect7TexturedRibbonSheet_Emit(void);
 void BattleAnim_StartEffect33Radial20_EmitVariantC(void);
 
-void func_8216E0B0(void) {
+/**
+ * Effect init that spawns the Surf animation. Player sweep (all 165 moves used in battle): only
+ * Surf reached this function.
+ */
+void BattleAnim_InitializeSurfUse(void) {
 }
 
 /**
  * Moves: Surf (hit)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Surf.
  */
 s32 BattleAnim_SurfCompleteImmediately(void) {
     return -1;
@@ -92,6 +97,8 @@ void func_8216E0C0(void) {
 void BattleAnim_CalcVectorAtToDm(f32* arg0, f32* arg1, f32* arg2, f32* arg3, f32* arg4, f32* arg5);
 void func_82175440(f32, f32, f32, f32, f32, f32, s16, u8, u8, u8, u8, f32, f32, f32, s16);
 /**
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
+ * turns): ran.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleAnim_StartEffect19Radial20_EmitVariantD(void) {
@@ -117,7 +124,8 @@ void BattleAnim_StartEffect19Radial20_EmitVariantD(void) {
 /**
  * Moves: Bind (use), Constrict (use), Wrap (use)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Bind, Wrap, Constrict.
  */
 void BattleAnim_StartTrappingLassoMove_Init(void) {
     D_8219CB0E = 0;
@@ -129,7 +137,8 @@ void BattleAnim_StartTrappingLassoMove_Init(void) {
 /**
  * Moves: Bind (use), Constrict (use), Wrap (use)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Bind, Wrap, Constrict.
  */
 s32 BattleAnim_StartTrappingLassoMove_Update(void) {
     D_8219CB0E++;
@@ -146,7 +155,8 @@ s32 BattleAnim_StartTrappingLassoMove_Update(void) {
 /**
  * Moves: Bind (use), Constrict (use), Wrap (use)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Bind, Wrap, Constrict.
  */
 void BattleAnim_StartTrappingLassoMove_Draw(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -178,6 +188,8 @@ void BattleAnim_EndEffect9Radial20_Draw(void) {
 }
 
 /**
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleAnim_StartEffect7TexturedRibbonSheet_Emit(void) {
@@ -204,7 +216,8 @@ void BattleAnim_StartEffect7TexturedRibbonSheet_Emit(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Swift.
  */
 void BattleAnim_SetupSwiftUseRibbonSheet(void) {
     D_8219CB10 = 0;
@@ -214,7 +227,8 @@ void BattleAnim_SetupSwiftUseRibbonSheet(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Swift.
  */
 s32 BattleAnim_RunSwiftUseRibbonSheet(void) {
     D_8219CB10++;
@@ -230,7 +244,8 @@ s32 BattleAnim_RunSwiftUseRibbonSheet(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Swift.
  */
 void BattleAnim_DrawSwiftUseRibbonSheet(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -256,7 +271,8 @@ void BattleAnim_StartEffect33Radial20_EmitVariantC(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for String Shot.
  */
 void BattleAnim_SetupStringShotUseRadial(void) {
     D_8219CB12 = 0;
@@ -266,7 +282,8 @@ void BattleAnim_SetupStringShotUseRadial(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for String Shot.
  */
 s32 BattleAnim_RunStringShotUseRadial(void) {
     D_8219CB12++;
@@ -282,7 +299,8 @@ s32 BattleAnim_RunStringShotUseRadial(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for String Shot.
  */
 void BattleAnim_DrawStringShotUseRadial(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -290,7 +308,11 @@ void BattleAnim_DrawStringShotUseRadial(void) {
     gDisplayListHead = Radial20_Draw(gDisplayListHead);
 }
 
-void func_8216E930(void) {
+/**
+ * Effect init that spawns the String Shot animation. Player sweep (all 165 moves used in battle):
+ * only String Shot reached this function.
+ */
+void BattleAnim_InitializeStringShotUse(void) {
     Vec3f sp34;
     f32 sp30;
 
@@ -302,14 +324,16 @@ void func_8216E930(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for String Shot.
  */
 s32 BattleAnim_RunStringShotHitRadial(void) {
     return LassoHit_Update();
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for String Shot.
  */
 void BattleAnim_DrawStringShotHitRadial(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -318,6 +342,8 @@ void BattleAnim_DrawStringShotHitRadial(void) {
 }
 
 /**
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetupStringShotHitRadial(void) {
@@ -332,14 +358,16 @@ void BattleAnim_SetupStringShotHitRadial(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Disable.
  */
 s32 BattleAnim_RunDisableHitRadial(void) {
     return LassoHit_Update();
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Disable.
  */
 void BattleAnim_DrawDisableHitRadial(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -348,6 +376,8 @@ void BattleAnim_DrawDisableHitRadial(void) {
 }
 
 /**
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleAnim_StartEffect98Radial20_EmitVariantD(void) {

@@ -104,7 +104,7 @@ u16 BattleAi_ApplyMoveEffectDamageOverride(BattleMonRuntime* arg0, BattleMonRunt
             break;
 
         case 40:
-            D_82199F50 = arg0->displayHp / 2;
+            D_82199F50 = arg0->hp / 2;
             if (D_82199F50 == 0) {
                 D_82199F50 = 1;
             }
@@ -160,6 +160,8 @@ extern TypeMatchupZ D_8218AC50[];
 /**
  * Damage-estimate version of Battle_ApplyTypeEffectAndSTAB for any attacker and
  * defender (battle Pokemon records), working on D_82199F50.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
+ * switch in battle.
  * @unverified Name and comment guessed from the code.
  */
 void BattleCalc_ApplyTypeEffectAndStab(u8* attacker, u8* defender) {
@@ -239,6 +241,8 @@ void BattleAi_PrepareDamageCalcState(BattleMonRuntime* arg0, BattleMonRuntime* a
 /**
  * Gen 1 base damage ((level * 2 / 5 + 2) * power * attack / defense) / 50 + 2,
  * capped at 997, added to D_82199F50.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
+ * switch in battle.
  * @unverified Name and comment guessed from the code.
  */
 void BattleCalc_AddBaseDamage(UNUSED u8* arg0, UNUSED u8* arg1) {
@@ -277,6 +281,8 @@ void BattleCalc_AddBaseDamage(u8*, u8*);
  * (arg0, arg1). The flag D_82199F32 is saved into D_82199F33 and cleared
  * for the first four steps, and restored before the last one. arg2 is only
  * handed on to func_8210EC0C.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
+ * switch in battle.
  * @unverified Name guessed from the code; comment kept.
  */
 void BattleCalc_EstimateDamage(u8* arg0, u8* arg1, u8 arg2) {
@@ -331,6 +337,10 @@ u8 Move_GetIdFromTableIndex(s32);
 /**
  * Clears a move slot's illegal flag when the species can have that move (start
  * moves, level-up moves or TM/HM).
+ * Seen in play (2026-11-13) in a Free Battle switch (1P switched to its second Pokémon) it ran when
+ * C-Left picked the Pokémon to switch in.
+ * Seen in play (2026-11-13) it also ran when COM sent out its next Pokémon (ゆけっ！ゲンのすけ) after its
+ * first one fainted.
  * @unverified Name and comment guessed from the code.
  */
 void Battle_MarkLegalMovesForSpecies(S0LearnMon* pokemon, u16 pokemon_id) {
@@ -396,6 +406,10 @@ extern u8 D_8218C930[][2];
 /**
  * Marks all four moves illegal, then clears the flags for moves the species or
  * its pre-evolutions (D_8218C930) can learn.
+ * Seen in play (2026-11-13) in a Free Battle switch (1P switched to its second Pokémon) it ran when
+ * C-Left picked the Pokémon to switch in.
+ * Seen in play (2026-11-13) it also ran when COM sent out its next Pokémon (ゆけっ！ゲンのすけ) after its
+ * first one fainted.
  * @unverified Name and comment guessed from the code.
  */
 void Battle_CheckMovesetLegality(s8* arg0) {
@@ -433,17 +447,19 @@ void func_80043860(s32);
 /**
  * Steps the party Pokemon's HP one point toward the battle display HP. Returns 1
  * once they are equal.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle and a Pound
+ * turn.
  * @unverified Name and comment guessed from the code.
  */
 s32 Battle_StepPartyHpToDisplay(ActivePokemon* arg0) {
     BattleMonRuntime* rt = &arg0->state.runtime;
     BattleMon* mon = &arg0->teamRoster->pokemonPicked[arg0->state.rosterIndex];
 
-    if (mon->hp == rt->displayHp) {
+    if (mon->hp == rt->hp) {
         return 1;
     }
-    mon->hp = Math_StepToS32(mon->hp, rt->displayHp, 1, 1);
-    if (mon->hp == rt->displayHp) {
+    mon->hp = Math_StepToS32(mon->hp, rt->hp, 1, 1);
+    if (mon->hp == rt->hp) {
         if (arg0->displayObject.objectType == 0x98) {
             return 1;
         }

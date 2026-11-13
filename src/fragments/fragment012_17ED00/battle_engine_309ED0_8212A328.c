@@ -1,7 +1,14 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
 #include "battle_engine_309ED0.h"
 
-void func_8212A328(CameraNode* arg0, s32 arg1) {
+/**
+ * Step 3 of an action phase: waits for the user's animation, enters the miss or status phase when
+ * one is pending (BattleScene_TryEnterEffectPhaseBeforeImpact), otherwise runs the travel camera
+ * variant (table column 3 of D_80073D84).
+ * Seen in play (2026-11-12): in a turn where 1P's Poison Sting went first, it ran at phase 2,
+ * step 3.
+ */
+void BattleScene_ActionStepTravel(CameraNode* arg0, s32 arg1) {
     UNUSED s32 pad; // FAKE: stack padding
     BattleMonRuntime* runtime = &((ActivePokemon*)D_8219A540)->state.runtime;
 
@@ -15,7 +22,7 @@ void func_8212A328(CameraNode* arg0, s32 arg1) {
     if ((arg1 != 5) && (arg1 != 6) && (arg1 != 7)) {
         D_8219A568 = arg1;
     }
-    if (func_82125E5C() != 0) {
+    if (BattleScene_TryEnterEffectPhaseBeforeImpact() != 0) {
         return;
     }
     func_821255EC(arg0);
@@ -162,7 +169,13 @@ void func_8212A768(ActivePokemon* arg0, CameraNode* arg1, s32 arg2) {
 }
 
 
-void func_8212A850(CameraNode* arg0, s32 arg1) {
+/**
+ * Step 4 reaction for an ordinary hit (hitReactionKind 0). Ran in play for every damaging move
+ * that hit.
+ * Seen in play (2026-11-12): in a turn where 1P's Poison Sting went first, it ran from step 4
+ * with hitReactionKind 0 for the ordinary hit on Pinsir.
+ */
+void BattleScene_ReactionNormal(CameraNode* arg0, s32 arg1) {
     BattleMonRuntime* sp1C = &((ActivePokemon*)D_8219A540)->state.runtime;
 
     switch (sBattleScene.scene->phaseSubstep) {
@@ -200,7 +213,7 @@ void func_8212A850(CameraNode* arg0, s32 arg1) {
         case 2:
             D_8219A560 = Battle_StepPartyHpToDisplay((s32)(ActivePokemon*)D_8219A540);
             D_8219A564 = Battle_StepPartyHpToDisplay(D_8219A544);
-            if (sp1C->displayHp != 0) {
+            if (sp1C->hp != 0) {
                 if (BattleScene_IsRowAnimWaitComplete((ActivePokemon*)D_8219A540, 0xF) != 0) {
                     sBattleScene.scene->phaseSubstep++;
                 }
@@ -269,7 +282,13 @@ void func_8212A850(CameraNode* arg0, s32 arg1) {
 }
 
 
-void func_8212AD10(CameraNode* arg0, s32 arg1) {
+/**
+ * Step 4 reaction for a critical hit or one-hit KO (hitReactionKind 2, set by
+ * Battle_PrintCriticalOHKOText).
+ * In the per-move sweep (moves 1-33) only Karate Chop and Slash ran it, the two high critical-hit
+ * moves.
+ */
+void BattleScene_ReactionCritical(CameraNode* arg0, s32 arg1) {
     BattleMonRuntime* sp1C = &((ActivePokemon*)D_8219A540)->state.runtime;
 
     switch (sBattleScene.scene->phaseSubstep) {
@@ -318,7 +337,7 @@ void func_8212AD10(CameraNode* arg0, s32 arg1) {
         case 3:
             D_8219A560 = Battle_StepPartyHpToDisplay((s32)(ActivePokemon*)D_8219A540);
             D_8219A564 = Battle_StepPartyHpToDisplay(D_8219A544);
-            if (sp1C->displayHp != 0) {
+            if (sp1C->hp != 0) {
                 if (BattleScene_IsRowAnimWaitComplete((ActivePokemon*)D_8219A540, 0xF) != 0) {
                     sBattleScene.scene->phaseSubstep++;
                 }

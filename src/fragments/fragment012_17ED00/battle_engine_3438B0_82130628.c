@@ -4,6 +4,8 @@
 /**
  * Phase 35. Same residual damage presentation as BattleScene_PhaseResidualDamageAfterMove for a Pokemon that
  * has no move this turn (usedMove high nibble 0xF); entered by BattleScene_PrepareResidualStatusPresentation.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
 void BattleScene_PhaseResidualDamageWithoutMove(CameraNode* arg0) {
@@ -103,6 +105,8 @@ void BattleScene_PhaseResidualDamageWithoutMove(CameraNode* arg0) {
  * Phase 33. Shows residual damage on the acting Pokemon only (the other HP bar is treated as settled). If
  * it reaches 0 HP, flips the acting side and enters BattleScene_PhaseFaintAfterResidualDamage; otherwise
  * continues with BattleScene_CleanupActionAndAdvance.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
 void BattleScene_PhaseResidualDamageFaintCheck(CameraNode* arg0) {
@@ -160,9 +164,10 @@ void func_82130D48(ActivePokemon* active_pokemon) {
 
 
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Phase 11: the acting side withdraws its Pokemon for a switch (action 0x0F, through
+ * BattleScene_TryStartSwitchAction). Ran in play when 1P switched from the Pokemon menu.
  */
-void BattleScene_PhaseWithdrawFainted(CameraNode* arg0) {
+void BattleScene_PhaseWithdraw(CameraNode* arg0) {
     u8* sp2C = (u8*)sActivePokemon[sBattleScene.scene->actingSide] + 0x78C;
     ActivePokemon* temp_s0 = sActivePokemon[sBattleScene.scene->actingSide];
 
@@ -257,7 +262,6 @@ void BattleScene_PhaseWithdrawFainted(CameraNode* arg0) {
 
 /**
  * Phase 18: sends out the replacement after a faint (seen in play, on the turn after the faint).
- * @unverified Phase number seen in play (player agent); handler body only skimmed.
  */
 void BattleScene_PhaseSendOutAfterFaint(CameraNode* arg0) {
     ActivePokemonState* sp3C = &sActivePokemon[sBattleScene.scene->actingSide]->state;
@@ -361,7 +365,8 @@ void BattleScene_PhaseSendOutAfterFaint(CameraNode* arg0) {
 /**
  * Runs the per-frame battle presentation phase selected by scene->phase and phaseStep. Move-specific phases
  * (7, 12-15, 17, 25, 27-31, 38) are entered through BattleScene_PhaseDispatchMoveEffect.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-12): in a turn where 1P's Poison Sting went first, it was running the
+ * presentation from the frame after Battle_StartTurn (phase 0, then 2).
  */
 void BattleScene_UpdatePhase(CameraNode* arg0) {
     func_82125FD0();
@@ -374,49 +379,49 @@ void BattleScene_UpdatePhase(CameraNode* arg0) {
         BattleScene_PhaseCommand(arg0);
         break;
     case 2:
-        BattleScene_PhaseActionsCommitted(arg0);
+        BattleScene_PhaseFirstAction(arg0);
         break;
     case 3:
-        BattleScene_PhaseSecondMoverAction(arg0);
+        BattleScene_PhaseSecondAction(arg0);
         break;
     case 4:
         BattleScene_PhaseEndTurn((s32)arg0);
         break;
     case 7:
-        BattleScene_PhaseFirstMoverAction(arg0);
+        BattleScene_PhaseSelfEffect(arg0);
         break;
     case 30:
-        BattleScene_Phase30(arg0);
+        BattleScene_PhaseExplosion(arg0);
         break;
     case 29:
         BattleScene_PhaseHaze(arg0);
         break;
     case 28:
-        func_8212CF90(arg0);
+        BattleScene_PhaseMoveFailedMessage(arg0);
         break;
     case 25:
-        func_8212D820(arg0);
+        BattleScene_PhaseSubstitute(arg0);
         break;
     case 21:
-        func_8212D194(arg0);
+        BattleScene_PhaseHeal(arg0);
         break;
     case 27:
-        BattleScene_Phase38(arg0);
+        BattleScene_PhaseBide(arg0);
         break;
     case 12:
-        func_8212E0B0(arg0);
+        BattleScene_PhaseFlyUp(arg0);
         break;
     case 13:
-        BattleScene_Phase13(arg0);
+        BattleScene_PhaseDigUnder(arg0);
         break;
     case 14:
-        BattleScene_Phase14(arg0);
+        BattleScene_PhaseChargeUp(arg0);
         break;
     case 15:
-        func_8212D504(arg0);
+        BattleScene_PhaseTransform(arg0);
         break;
     case 17:
-        func_8212E7B0(arg0);
+        BattleScene_PhaseCannotMove(arg0);
         break;
     case 31:
         BattleScene_PhaseFullParalysis(arg0);
@@ -425,13 +430,13 @@ void BattleScene_UpdatePhase(CameraNode* arg0) {
         BattleScene_PhaseConfusionSelfHit(arg0);
         break;
     case 8:
-        BattleScene_PhaseMoveDamage(arg0);
+        BattleScene_PhaseMoveMissed(arg0);
         break;
     case 22:
-        BattleScene_PhaseConfuseRay(arg0);
+        BattleScene_PhaseInflictStatus(arg0);
         break;
     case 32:
-        func_8212F894(arg0);
+        BattleScene_PhaseDisable(arg0);
         break;
     case 23:
         func_8212F9FC(arg0);
@@ -452,16 +457,16 @@ void BattleScene_UpdatePhase(CameraNode* arg0) {
         BattleScene_PhaseRecoilDamage(arg0);
         break;
     case 16:
-        func_8212F16C(arg0);
+        BattleScene_PhaseCrashDamage(arg0);
         break;
     case 11:
-        BattleScene_PhaseWithdrawFainted(arg0);
+        BattleScene_PhaseWithdraw(arg0);
         break;
     case 18:
         BattleScene_PhaseSendOutAfterFaint(arg0);
         break;
     case 26:
-        func_8212F6E4(arg0);
+        BattleScene_PhaseLowerStat(arg0);
         break;
     case 5:
         BattleScene_PhaseFaint(arg0);
@@ -472,7 +477,12 @@ void BattleScene_UpdatePhase(CameraNode* arg0) {
     }
 }
 
-void func_82131880(CameraNode* arg0) {
+/**
+ * Seen in play (2026-11-13) with scene mode forced to 4 at scene start, func_82134374 called this
+ * directly (not through BattleScene_UpdateIntroSequence's case 0): it set rotationX to 0x3C6E and
+ * rotationY to 0, and the next frame's update was already at step 1.
+ */
+void BattleScene_IntroStepInitOverheadCamera(CameraNode* arg0) {
     BattleScene_ResetCameraFrameCounter();
     BattleScene_SetCameraAtFromPosition(arg0, D_8218B630, 0, 0, 0.0f, 0.0f);
     BattleScene_SetCameraEyeAndStoreAngles(arg0, D_8218B630, 0x3C6E, M2C_FIELD(sBattleScene.scene, s16*, 0x5A) = 0, sBattleScene.scene->unk_74 = D_FLT_82196668, 0.0f);
@@ -486,14 +496,23 @@ void func_82131880(CameraNode* arg0) {
     sBattleScene.scene->phaseStep += 1;
 }
 
-void func_821319FC(s32 arg0) {
+/**
+ * Seen in play (2026-11-13) with scene mode forced to 4 it ran on the two frames after the overhead
+ * camera was set up, then the step moved to 2.
+ */
+void BattleScene_IntroStepWaitForAssets(s32 arg0) {
     if (func_82101FD4(D_82199DE0) != 0) {
         M2C_FIELD(D_8219A5A0, s32 *, 0x20) = (s32) (M2C_FIELD(D_8219A5A0, s32 *, 0x20) + 1);
     }
 }
 
 s32 func_80041374(s32, u32);
-void func_82131A3C(CameraNode* arg0) {
+/**
+ * Seen in play (2026-11-13) with scene mode forced to 4 the screen showed the arena from directly
+ * above, small and rotating; rotationY fell by 0x16C per call (0 to -21476 over about 60 calls)
+ * until the step moved to 3 (BattleScene_OpeningStepThrowSide1).
+ */
+void BattleScene_IntroStepSpinOverheadCamera(CameraNode* arg0) {
     sActivePokemon[0]->displayObject.node.flags &= ~1;
     sActivePokemon[1]->displayObject.node.flags &= ~1;
     BattleAnim_ApproachF(&sBattleScene.scene->unk_74, 10000.0f, 0.025f);
@@ -517,7 +536,12 @@ void func_82131A3C(CameraNode* arg0) {
     }
 }
 
-void func_82131C64(s32 arg0) {
+/**
+ * Battle opening, step 4: once side 0's throw has finished, starts side 1's Poke Ball throw
+ * (model transform 1, effect list 10).
+ * Seen in play: a Poke Ball with a sparkle trail rises from the trainer box.
+ */
+void BattleScene_OpeningStepThrowSide1(s32 arg0) {
     M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 0), u8 *, 1) = (u8) (M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 0), u8 *, 1) & 0xFFFE);
     M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 4), u8 *, 1) = (u8) (M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 4), u8 *, 1) & 0xFFFE);
     if (M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 0), f32 *, 0x64C) == 0.0f) {
@@ -530,7 +554,12 @@ void func_82131C64(s32 arg0) {
 
 void func_8212254C(s8*, void*, Vec3f, s32, s32, f32, f32);
 void func_82122628(void*, Vec3f, s32, s32, f32, f32);
-void func_82131D24(void* arg0) {
+/**
+ * Battle opening, step 5: once side 1's throw has finished, frames side 0 and starts its Poke
+ * Ball landing (model transform 2, effect list 11).
+ * Seen in play: the camera then shows the field with the landing ball's shadow.
+ */
+void BattleScene_OpeningStepLandSide0Ball(void* arg0) {
     Vec3f sp34;
 
     sp34.y = 0.0f;
@@ -559,17 +588,21 @@ void BattleScene_IntroPanCamera(CameraNode* arg0) {
     sActivePokemon[0]->displayObject.node.flags &= ~1;
     sActivePokemon[1]->displayObject.node.flags &= ~1;
     BattleAnim_ApproachF(&sBattleScene.scene->unk_74, 60.000004f, 0.1f);
-    BattleAnim_StepToS16(&sBattleScene.scene->rotationY, 0, 0x1E);
-    BattleScene_SetCameraEyeFromPosition(arg0, sp2C, sBattleScene.scene->rotationY, 0x4000, sBattleScene.scene->unk_74, 0.0f);
+    BattleAnim_StepToS16(&sBattleScene.scene->rotationX, 0, 0x1E);
+    BattleScene_SetCameraEyeFromPosition(arg0, sp2C, sBattleScene.scene->rotationX, 0x4000, sBattleScene.scene->unk_74, 0.0f);
 
-    if ((sBattleScene.scene->rotationY >= 0x2E) && (M2C_FIELD(sActivePokemon[0], f32*, 0x64C) == 2.5f)) {
+    if ((sBattleScene.scene->rotationX >= 0x2E) && (M2C_FIELD(sActivePokemon[0], f32*, 0x64C) == 2.5f)) {
         Audio_PlayCommand(2, 0, 0);
         M2C_FIELD(sActivePokemon[0], u8*, 0x626) |= 0x20;
         sBattleScene.scene->phaseStep += 1;
     }
 }
 
-void func_8213201C(s32 arg0) {
+/**
+ * Battle opening, step 7: waits for side 0's Poke Ball animation to end.
+ * Seen in play: ends with the white flash of side 0's ball opening.
+ */
+void BattleScene_OpeningStepWaitSide0Ball(s32 arg0) {
     M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 0), u8 *, 1) = (u8) (M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 0), u8 *, 1) & 0xFFFE);
     M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 4), u8 *, 1) = (u8) (M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 4), u8 *, 1) & 0xFFFE);
     if (func_8001101C(M2C_FIELD(&D_82199DE0, s8 **, 0) + 0x624, &D_82199DE0) == 1) {
@@ -579,7 +612,8 @@ void func_8213201C(s32 arg0) {
 
 /**
  * Battle start: sends out side 0's Pokemon with ゆけっ！%s (Go! %s).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): at the start of a COM free battle it first ran as 1P's Poké Ball
+ * burst open, before COM's send-out.
  */
 void BattleScene_SendOutSide0(CameraNode* arg0) {
     sActivePokemon[0]->displayObject.node.flags &= ~1;
@@ -597,7 +631,12 @@ void BattleScene_SendOutSide0(CameraNode* arg0) {
     sBattleScene.scene->phaseStep++;
 }
 
-void func_821321A4(CameraNode* arg0) {
+/**
+ * Battle opening, step 9: holds the camera on side 0's Pokemon after BattleScene_SendOutSide0
+ * until its send-out row finishes.
+ * Seen in play: holds on the flash with 「ゆけっ！イワイワ」 (1P's lead).
+ */
+void BattleScene_OpeningStepWaitSide0SendOut(CameraNode* arg0) {
     M2C_FIELD(sActivePokemon[1], u8*, 1) &= ~1;
     func_82122A7C(arg0, sActivePokemon[0]);
     sBattleScene.scene->substepFrameCounter++;
@@ -611,7 +650,8 @@ void func_821321A4(CameraNode* arg0) {
 
 /**
  * Battle start: sends out side 1's Pokemon with ゆけっ！%s (Go! %s).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): at the start of the same battle it first ran right after 1P's Onix
+ * had come out, for COM's send-out.
  */
 void BattleScene_SendOutSide1(CameraNode* arg0) {
     Audio_PlayCommand(2, 0, 0);
@@ -628,7 +668,13 @@ void BattleScene_SendOutSide1(CameraNode* arg0) {
     sBattleScene.scene->substepFrameCounter = 0;
 }
 
-void func_8213233C(CameraNode* arg0) {
+/**
+ * Battle opening, step 11: holds the camera on side 1's Pokemon after BattleScene_SendOutSide1,
+ * then ends the opening.
+ * Seen in play: holds on the flash with 「ゆけっ！ニドのすけ」 (the COM's lead), then the command menu
+ * opens.
+ */
+void BattleScene_OpeningStepWaitSide1SendOut(CameraNode* arg0) {
     M2C_FIELD(sActivePokemon[0], u8*, 1) &= ~1;
     func_82122A7C(arg0, sActivePokemon[1]);
     sBattleScene.scene->substepFrameCounter++;

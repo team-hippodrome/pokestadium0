@@ -9,6 +9,7 @@
 
 s32 Audio_GetActiveVoiceCount(void);
 
+/** Returns the number of voices that are being released. */
 s32 Audio_GetActiveVoiceCount(void) {
     return mus_releasing_voices_count;
 }

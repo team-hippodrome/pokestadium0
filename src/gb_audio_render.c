@@ -121,10 +121,12 @@ void GbAudio_ClearInterpolationHistory(void);
 void GbAudio_ClearOutputBuffer(void);
 void func_8004602C(void);
 
+/** Generates emulated Game Boy audio samples. */
 void GbAudio_GenerateSamples(s16* arg0, s32 arg1, u32 arg2, f32 arg3) {
     func_80044D60(arg2);
 }
 
+/** Queues a write to an emulated Game Boy sound register. */
 void GbAudio_QueueRegisterWrite(u16 arg0, u8 arg1, u16 arg2) {
     D_800FD848[D_800FDE8C].unk_00 = (u8*)&D_800FD7E8.unk_00[(arg0 & 0xFF) - 0x10];
     D_800FD848[D_800FDE8C].unk_04 = arg1;
@@ -135,6 +137,7 @@ void GbAudio_QueueRegisterWrite(u16 arg0, u8 arg1, u16 arg2) {
     D_800FD848[D_800FDE8C].unk_06 = 0;
 }
 
+/** Returns the last value written to an emulated Game Boy sound register. */
 u8 GbAudio_GetRegisterValue(u16 arg0) {
     return D_800FDE80[arg0 & 0xFF];
 }
@@ -283,6 +286,7 @@ void func_80044D60(u32 arg0) {
     }
 }
 
+/** Applies the queued register writes that are due. */
 void GbAudio_ApplyQueuedWrites(u16 arg0) {
     while (D_800FD848[D_800FDE88].unk_06 >= arg0) {
         D_800FD848[D_800FDE88].unk_00[0] = D_800FD848[D_800FDE88].unk_04;
@@ -740,6 +744,7 @@ s16 func_80045B9C(void) {
     return sample;
 }
 
+/** Clears the sample interpolation history. */
 void GbAudio_ClearInterpolationHistory(void) {
     s32 i;
 
@@ -749,10 +754,11 @@ void GbAudio_ClearInterpolationHistory(void) {
     D_80100158 = 0;
 }
 
+/** Clears the audio output buffer. */
 void GbAudio_ClearOutputBuffer(void) {
     s32 i;
 
-    for (i = 0; i < 0xB80; i++) {
+    for (i = 0; i < 2944; i++) {
         D_800B41EC[i] = 0;
     }
     D_800FDED0 = 0;

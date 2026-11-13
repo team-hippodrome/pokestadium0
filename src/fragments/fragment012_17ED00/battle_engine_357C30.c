@@ -11,7 +11,8 @@ extern unk_D_843C3508 D_821CD9E8[6];
 
 void HyperBeamIceBeamTrail_ResetPool(void);
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Hyper Beam and Ice Beam.
  */
 void HyperBeamIceBeamTrail_Spawn(s16 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, u8 arg7, u8 arg8, u8 arg9,
                    u8 argA, u8 argB, u8 argC, u8 argD, u8 argE, u8 argF, f32 arg10, f32 arg11, f32 arg12, s16 arg13,
@@ -30,7 +31,8 @@ Gfx* HyperBeamIceBeamTrail_LoadTextures(Gfx* arg0, unk_D_843C3508* arg1);
 Gfx* HyperBeamIceBeamTrail_DrawAll(Gfx* arg0);
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Ice Beam, Hyper Beam.
  */
 void HyperBeamIceBeamTrail_ResetPool(void) {
     s32 i;
@@ -178,7 +180,8 @@ void HyperBeamIceBeamTrail_ComputeCameraRelativeOffset(s32 arg0, Vec3f* arg1, Ve
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Ice Beam, Hyper Beam.
  */
 void HyperBeamIceBeamTrail_ComputeRotatedOffset(f32 arg0, Vec3f* arg1, Vec3f* arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6) {
     UNUSED Mtx sp70;
@@ -190,7 +193,8 @@ void HyperBeamIceBeamTrail_ComputeRotatedOffset(f32 arg0, Vec3f* arg1, Vec3f* ar
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Ice Beam, Hyper Beam.
  */
 void HyperBeamIceBeamTrail_UpdateSlot(unk_D_843C3508* arg0) {
     unk_D_843C3508_0A4* var_s0;
@@ -237,7 +241,8 @@ void HyperBeamIceBeamTrail_UpdateSlot(unk_D_843C3508* arg0) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Ice Beam, Hyper Beam.
  */
 s32 HyperBeamIceBeamTrail_UpdateAll(void) {
     f32 temp_fv0;
@@ -284,7 +289,8 @@ s32 HyperBeamIceBeamTrail_UpdateAll(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Ice Beam, Hyper Beam.
  */
 Gfx* HyperBeamIceBeamTrail_DrawSegments(Gfx* arg0, unk_D_843C3508* arg1) {
     s32 i;
@@ -300,7 +306,8 @@ Gfx* HyperBeamIceBeamTrail_DrawSegments(Gfx* arg0, unk_D_843C3508* arg1) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Ice Beam, Hyper Beam.
  */
 Gfx* HyperBeamIceBeamTrail_LoadTextures(Gfx* arg0, unk_D_843C3508* arg1) {
     unk_D_843C2C00_064* ptr;
@@ -320,7 +327,8 @@ Gfx* HyperBeamIceBeamTrail_LoadTextures(Gfx* arg0, unk_D_843C3508* arg1) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Ice Beam, Hyper Beam.
  */
 Gfx* HyperBeamIceBeamTrail_DrawAll(Gfx* arg0) {
     static Gfx D_84389CE8[] = {

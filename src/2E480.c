@@ -83,7 +83,8 @@ M2C_UNK func_8000B2F4(s32);
 
 /**
  * Initializes a menu: stores its layout arguments, sets the position through Menu_SetItems, the 0xC00 repeat delay and the controller.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: R, then A on the ポケモン header, set up the five-row sort menu
+ * through this (アイウエオじゅんにならべる ... いちらんするポケモンをえらぶ).
  */
 void Menu_Init(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
     M2C_FIELD(arg0, s32*, 0xC) = arg4;
@@ -99,7 +100,7 @@ void Menu_ClearItemFlags(u8* arg0);
 
 /**
  * Points the menu at item table `arg1` with flags `arg2`, puts the cursor on the first item and clears the item flags.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: called from Menu_Init for the five-row sort menu.
  */
 void Menu_SetItems(s8 *arg0, s32 arg1, s32 arg2) {
     M2C_FIELD(arg0, s32 *, 0) = arg1;
@@ -110,7 +111,8 @@ void Menu_SetItems(s8 *arg0, s32 arg1, s32 arg2) {
 
 /**
  * Clears the flags of every item.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: ran over 5 items for the sort menu and 15 for the タイプであつめる
+ * type list (the 15 Gen 1 types).
  */
 void Menu_ClearItemFlags(u8* arg0) {
     s32 i;
@@ -123,9 +125,9 @@ void Menu_ClearItemFlags(u8* arg0) {
 /**
  * Draws the cursor rectangle (via Ui_DrawRoundedFrame) for a list menu with one cell per row:
  * x = arg1 + 2, y = cursor * cellHeight + arg2 + 2, size = (cellWidth - 4) x (cellHeight - 4),
- * colour read from D_80073520. Compare ScrollList_DrawCursor and ScrollGrid_DrawCursor. The separate `y`
+ * color read from D_80073520. Compare ScrollList_DrawCursor and ScrollGrid_DrawCursor. The separate `y`
  * local only fixes the order in which the fields are loaded.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-12) in いちらん: drew the yellow cursor frame on the selected sort menu row.
  */
 void Menu_DrawCursor(GridMenu80031004* arg0, s32 arg1, s32 arg2) {
     s32 y;
@@ -136,7 +138,7 @@ void Menu_DrawCursor(GridMenu80031004* arg0, s32 arg1, s32 arg2) {
 
 /**
  * Draws a menu's items from its definition, one row per item.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: drew the sort menu rows every frame while it was open.
  */
 void Menu_DrawItems(Menu8002E230* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     s32 i;
@@ -160,6 +162,8 @@ void Menu_DrawItems(Menu8002E230* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) 
 
 /**
  * Like Menu_DrawItems, for item tables that store `itemSize`-byte items inline instead of pointers.
+ * Seen in play (2026-11-13) (menu tour from the main menu): called in the Lab list (いちらん) and the
+ * Lab PC box screen.
  * @unverified Name and comment guessed from the code.
  */
 void Menu_DrawInlineItems(Menu8002E230* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
@@ -187,7 +191,8 @@ s32 func_8000B30C();
 s32 func_8003F6AC();
 /**
  * Moves a menu's cursor from controller input. Returns 0 when the menu has no items.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: D-Down moved the sort menu cursor one row per press. It also
+ * stops on a disabled row (すべてのせんたくをやめる).
  */
 s32 Menu_UpdateCursor(Menu8002E230* arg0) {
     s32 input;
@@ -221,7 +226,7 @@ s32 Menu_UpdateCursor(Menu8002E230* arg0) {
 
 /**
  * Moves the cursor up or down with wraparound, skipping disabled items (flag 1).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran while the cursor was in the せいとん (sort) screen's box list.
  */
 s32 Menu_UpdateCursorSkipDisabled(Menu8002E230* arg0) {
     s32 input;
@@ -258,7 +263,8 @@ s32 Menu_UpdateCursorSkipDisabled(Menu8002E230* arg0) {
 
 /**
  * Moves the cursor forward past disabled items (flag 1).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran once when the Free Battle opponent picker (1P VS 2P, 3P, 4P, COM)
+ * opened with only one controller: the cursor came up on COM, past the greyed-out 2P to 4P rows.
  */
 s32 Menu_SkipDisabledForward(Menu8002E230* arg0) {
     s32 i;
@@ -288,7 +294,7 @@ M2C_UNK func_8000B2F4(s32);
  * sets offset 0x1C to 0xC00 and offset 0x20 to 0, then stores D_800603C0 at
  * offset 0x18 and passes it to func_8000B2F4. What the fields mean is not
  * established.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-12) in せいとん: ran when ポケモンのせいり was opened from the せいとん menu.
  */
 void GridMenu_Init(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6) {
     M2C_FIELD(arg0, s32*, 0x24) = arg4;
@@ -305,7 +311,7 @@ void GridMenu_ClearItemFlags(u8* arg0);
 
 /**
  * Points the grid menu at item table `arg1` with flags `arg2`, puts the cursor on the first item and clears the item flags.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in せいとん: called from GridMenu_Init when ポケモンのせいり was opened.
  */
 void GridMenu_SetItems(s8 *arg0, s32 arg1, s32 arg2) {
     M2C_FIELD(arg0, s32 *, 0) = arg1;
@@ -316,7 +322,7 @@ void GridMenu_SetItems(s8 *arg0, s32 arg1, s32 arg2) {
 
 /**
  * Clears the flags of every item.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in せいとん: called from GridMenu_SetItems when ポケモンのせいり was opened.
  */
 void GridMenu_ClearItemFlags(u8* arg0) {
     s32 i;
@@ -330,8 +336,9 @@ void GridMenu_ClearItemFlags(u8* arg0) {
  * Draws the cursor rectangle (via Ui_DrawRoundedFrame) for a multi-column menu: the cursor cell is
  * at column cursor % columns, row cursor / columns, so x = column * colSpacing + arg_x + 2 and
  * y = row * rowSpacing + arg_y + 2; the size is (colSpacing - 4) x (rowSpacing - 4) and the
- * colour is read from D_80073520. Compare ScrollGrid_DrawCursor. The `px`/`py` locals only fix the
+ * color is read from D_80073520. Compare ScrollGrid_DrawCursor. The `px`/`py` locals only fix the
  * evaluation order of the argument expressions.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in Free Battle setup.
  * @unverified Name guessed from the code; comment kept.
  */
 void GridMenu_DrawCursor(Menu8002E230* menu, s32 x, s32 y) {
@@ -345,6 +352,8 @@ void GridMenu_DrawCursor(Menu8002E230* menu, s32 x, s32 y) {
 
 /**
  * Draws every cell of the grid; items are pointers.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
 void GridMenu_DrawItems(Menu8002E230* menu, s32 x, s32 y, s32 mask, s32 arg4) {
@@ -370,7 +379,8 @@ void GridMenu_DrawItems(Menu8002E230* menu, s32 x, s32 y, s32 mask, s32 arg4) {
 void GridMenu_DrawCursor(Menu8002E230*, s32, s32);
 /**
  * Draws every cell of the grid; items are stored inline.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): drew the main menu's 3 x 3 item grid (せいとん, いちらん, ずかん, バトル, てもち, GB,
+ * OFF, とうろく) every frame.
  */
 void GridMenu_DrawInlineItems(Menu8002E230* menu, s32 x, s32 y, s32 mask, s32 arg4) {
     MenuDef8002E230* def = menu->def;
@@ -394,7 +404,7 @@ void GridMenu_DrawInlineItems(Menu8002E230* menu, s32 x, s32 y, s32 mask, s32 ar
 
 /**
  * Moves the grid cursor with the D-Pad, wrapping around rows and columns.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran while the せいとん (sort) screen's Pokémon move grid had the cursor.
  */
 s32 GridMenu_UpdateCursor(Menu8002E230* arg0) {
     s32 input;
@@ -451,7 +461,9 @@ s32 GridMenu_UpdateCursor(Menu8002E230* arg0) {
 
 /**
  * Moves the grid cursor with the D-Pad, skipping disabled cells (flag 1).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): on the main menu with no GB cartridge (only バトル and OFF enabled),
+ * D-Down moved the cursor from バトル to OFF, D-Left left it on OFF (G B, to its left, is disabled),
+ * and D-Up moved it back to バトル.
  */
 s32 GridMenu_UpdateCursorSkipDisabled(Menu8002E230* menu) {
     s32 button;
@@ -552,7 +564,7 @@ void ScrollList_SetItems(s8* arg0, s32 arg1, s32 arg2);
 extern s32 D_800603C0;
 /**
  * Initializes a scrolling list: stores its layout arguments, the position, the 0xC00 repeat delay, the controller and the scroll bar geometry.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: set up the scrolling type list of タイプであつめる (8 rows visible).
  */
 void ScrollList_Init(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6) {
     M2C_FIELD(arg0, s32*, 0x24) = arg3;
@@ -575,7 +587,7 @@ void Menu_ClearItemFlags(u8* arg0);
 
 /**
  * Points the list at item table `arg1` with flags `arg2` and resets the cursor and scroll.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: called from ScrollList_Init with the 15-type item table.
  */
 void ScrollList_SetItems(s8 *arg0, s32 arg1, s32 arg2) {
     M2C_FIELD(arg0, s32 *, 0) = arg1;
@@ -590,6 +602,8 @@ void ScrollList_SetItems(s8 *arg0, s32 arg1, s32 arg2) {
 
 /**
  * Scrolls up when the cursor row is above the visible area.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void ScrollList_ScrollUpToCursor(s8 *arg0) {
@@ -604,7 +618,8 @@ void ScrollList_ScrollUpToCursor(s8 *arg0) {
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 /**
  * Scrolls down when the cursor row is below the visible area.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: paging the type list with D-Right moved the cursor below the
+ * visible rows, and this scrolled down to it.
  */
 void ScrollList_ScrollDownToCursor(s8 *arg0)
 {
@@ -626,6 +641,8 @@ void ScrollList_ScrollDownToCursor(s8 *arg0)
 // FAKE: permuter output. Raw offset casts stand in for menu fields 0x28-0x3C.
 /**
  * Moves the drawn scroll position toward the target a step at a time.
+ * Seen in play (2026-11-13) (menu tour from the main menu): called in the Pokédex, the Lab list,
+ * sort and PC screens and registration, while a list was on screen.
  * @unverified Name and comment guessed from the code.
  */
 void ScrollList_AnimateScroll(ScrollMenu8002F6C4 *menu)
@@ -726,7 +743,8 @@ void func_8001C22C(s32, s32, s32, s32, u8*, s32, s32);
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 /**
  * Draws the up and down arrows when there are rows above or below the visible area.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: ran each frame for the main list and drew the up and down
+ * arrows above and below it.
  */
 void ScrollList_DrawScrollArrows(ScrollMenu8002F6C4* menu, s32 x, s32 topY, s32 bottomY, s32 width) {
     s32 height = menu->rowSpacing * menu->rows;
@@ -755,9 +773,9 @@ void ScrollList_DrawScrollArrows(ScrollMenu8002F6C4* menu, s32 x, s32 topY, s32 
  * Draws the cursor rectangle (via Ui_DrawRoundedFrame) for a scrolling list menu. Same shape as
  * ScrollGrid_DrawCursor but with x = arg1 + 2 (no column calculation) and the rectangle size taken from
  * cellWidth/cellHeight minus 4: y = scrollTarget + arg2 - scroll + 2, and when flag 0x400 is
- * set, (cellHeight - 1) is subtracted from it. The colour argument is read from D_80073520.
+ * set, (cellHeight - 1) is subtracted from it. The color argument is read from D_80073520.
  * Matching note: the redundant (s32) cast on arg2 only fixes the operand order of the addu.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-12) in いちらん: drew the cursor frame on the selected row of the type list.
  */
 void ScrollList_DrawCursor(GridMenu80031004* arg0, s32 arg1, s32 arg2) {
     s32 sp2C;
@@ -780,7 +798,7 @@ void ScrollList_DrawCursor(GridMenu80031004* arg0, s32 arg1, s32 arg2) {
  * is restored to the full 640x480 screen, ScrollList_DrawScrollArrows draws when option bit 0x100000 is set
  * and ScrollList_DrawCursor (cursor box) draws when mask bit 2, option bit 0x10000 and a non-empty
  * list agree.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-12) in いちらん: drew the main list's rows (フシギダネ, ヒトカゲ, ゼニガメ) every frame.
  */
 void ScrollList_DrawItems(ScrollMenu8002F6C4* menu, s32 x, s32 y, s32 mask, s32 arg4) {
     s32 height = menu->rowSpacing * menu->rows;
@@ -822,7 +840,8 @@ void ScrollList_DrawItems(ScrollMenu8002F6C4* menu, s32 x, s32 y, s32 mask, s32 
 
 /**
  * Draws the visible rows inside a scissor box; items are stored inline.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in せいとん > ポケモンのせいり: drew the left (てもち, x 0x34) and right (GBのボックス1,
+ * x 0x180) Pokémon lists every frame.
  */
 void ScrollList_DrawInlineItems(ScrollMenu8002F6C4* menu, s32 x, s32 y, s32 mask, s32 arg4) {
     MenuDef8002E230* def = menu->def;
@@ -929,7 +948,8 @@ typedef struct ScrollList8002FD8C {
 
 /**
  * Moves a scrolling list's cursor and scroll position from controller input.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in いちらん: while it ran, D-Down moved the row cursor from フシギダネ to
+ * ヒトカゲ, then to ゼニガメ, where it stayed on the last row.
  */
 u16 ScrollList_UpdateCursor(ScrollList8002FD8C* menu) {
     s32 prev_top;
@@ -1125,6 +1145,7 @@ u16 func_80030230(ScrollList8002FD8C* menu) {
 
 /**
  * Puts the cursor on row `arg1` and scrolls up to it if needed.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in Free Battle setup.
  * @unverified Name and comment guessed from the code.
  */
 void ScrollList_SetCursor(s32* arg0, u32 arg1) {
@@ -1146,7 +1167,8 @@ void ScrollList_SetCursor(s32* arg0, u32 arg1) {
 
 /**
  * Puts the cursor on row `arg1`, keeping its distance from the top of the visible area where possible.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran once when C-Right switched the Pokédex list from number order to
+ * アイウエオ order; the list was re-sorted with the cursor kept on the top visible row.
  */
 void ScrollList_SetCursorKeepOffset(s32* arg0, s32 arg1) {
     s32 temp_a2;
@@ -1172,6 +1194,7 @@ void ScrollList_SetCursorKeepOffset(s32* arg0, s32 arg1) {
     arg0[12] = var_v1;
 }
 
+/** Sets the selected cell of a paged grid widget, applying a page offset. */
 void WidgetTree_SetPagedGridSelectionWithOffset(s8* arg0, s32 arg1, s32 arg2) {
     s32 temp_a2;
     s32 temp_a2_2;
@@ -1209,7 +1232,8 @@ void ScrollGrid_SetItems(s8* arg0, s32 arg1, s32 arg2);
 extern s32 D_800603C0;
 /**
  * Sets up a scrolling grid menu: draw callback, cell size, columns, rows and item table.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran once as the tournament entry screen built the レンタルポケモン grid (スピアー,
+ * オニドリル, ピカチュウ ... at L30).
  */
 void ScrollGrid_Init(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7) {
     M2C_FIELD(arg0, s32*, 0x24) = arg4;
@@ -1235,7 +1259,7 @@ void Menu_ClearItemFlags(u8* arg0);
 
 /**
  * Points the grid at item table `arg1` with flags `arg2` and resets the cursor.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran once as the tournament entry screen filled the レンタルポケモン grid.
  */
 void ScrollGrid_SetItems(s8 *arg0, s32 arg1, s32 arg2) {
     M2C_FIELD(arg0, s32 *, 0) = arg1;
@@ -1246,6 +1270,8 @@ void ScrollGrid_SetItems(s8 *arg0, s32 arg1, s32 arg2) {
 
 /**
  * Scrolls up when the cursor row is above the visible area.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void ScrollGrid_ScrollUpToCursor(s8 *arg0) {
@@ -1260,6 +1286,8 @@ void ScrollGrid_ScrollUpToCursor(s8 *arg0) {
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 /**
  * Scrolls down when the cursor row is below the visible area.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void ScrollGrid_ScrollDownToCursor(s8 *arg0)
@@ -1276,6 +1304,8 @@ void ScrollGrid_ScrollDownToCursor(s8 *arg0)
 
 /**
  * Moves the drawn scroll position toward the target a step at a time.
+ * Seen in play (2026-11-13) ran when the rental grid opened on the entry screen (Free Battle, L1-30
+ * rules, six L30 rentals vs COM).
  * @unverified Name and comment guessed from the code.
  */
 void ScrollGrid_AnimateScroll(GridMenu80031004* menu) {
@@ -1330,7 +1360,8 @@ void ScrollGrid_AnimateScroll(GridMenu80031004* menu) {
 
 /**
  * Draws the up and down arrows when there are rows above or below the visible area.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran while the tournament's レンタルポケモン grid had more rows below the
+ * visible ones.
  */
 void ScrollGrid_DrawScrollArrows(GridMenu800310D8* menu, s32 x, s32 y) {
     s32 height = menu->cellHeight * menu->rows;
@@ -1366,8 +1397,8 @@ void ScrollGrid_DrawScrollArrows(GridMenu800310D8* menu, s32 x, s32 y) {
  * The column is cursor % columns, so x = column * cellWidth + arg1. y is
  * scrollTarget + arg2 - scroll + 2; when flag 0x400 is set, (cellHeight - 1)
  * is subtracted from it. The rectangle size is the cell size minus 4 in each
- * direction, and the colour argument is read from D_80073520.
- * @unverified Name guessed from the code; comment kept.
+ * direction, and the color argument is read from D_80073520.
+ * Seen in play (2026-11-13) drew the cursor box on the tournament's レンタルポケモン grid.
  */
 void ScrollGrid_DrawCursor(GridMenu80031004* arg0, s32 arg1, s32 arg2) {
     s32 sp2C;
@@ -1391,7 +1422,7 @@ void ScrollGrid_DrawScrollArrows(GridMenu800310D8*, s32, s32);
  * flags 0. Afterwards the scissor is reset to the full screen, ScrollGrid_DrawScrollArrows draws when option
  * bit 0x100000 is set and ScrollGrid_DrawCursor (cursor box) draws when the list is non-empty, mask
  * bit 2 is set and option bit 0x10000 is set.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-13) drew the tournament's レンタルポケモン grid every frame.
  */
 void ScrollGrid_DrawItems(GridMenu800310D8* menu, s32 x, s32 y, s32 mask, s32 arg4) {
     s32 width = menu->cellWidth * menu->columns;
@@ -1434,6 +1465,8 @@ void ScrollGrid_DrawItems(GridMenu800310D8* menu, s32 x, s32 y, s32 mask, s32 ar
 
 /**
  * Returns how many cells the current row has (the last row can be short).
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 ScrollGrid_GetRowLength(GridMenu80031004* menu) {
@@ -1469,7 +1502,7 @@ typedef struct GridMenu8003152C {
 
 /**
  * Moves the scrolling grid's cursor with the D-Pad and scrolls to keep it visible.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran every frame while the cursor was in the tournament's レンタルポケモン grid.
  */
 u16 ScrollGrid_UpdateCursor(GridMenu8003152C *menu)
 {
@@ -1580,7 +1613,8 @@ typedef struct GridMenu80031AB0 {
 } GridMenu80031AB0;
 /**
  * Puts the cursor on cell `arg1` and scrolls to it.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran when a rental was picked from the tournament's レンタルポケモン grid and
+ * the cursor came back to it.
  */
 void ScrollGrid_SetCursor(GridMenu80031AB0* arg0, s32 arg1) {
     s32 v;
@@ -1603,7 +1637,8 @@ void ScrollGrid_SetCursor();                 /* extern */
 
 /**
  * Moves the cursor past disabled cells and scrolls to it.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran when the cursor came back to the tournament's レンタルポケモン grid after a
+ * pick.
  */
 void ScrollGrid_SyncCursor(s8 *arg0) {
     Menu_SkipDisabledForward((Menu8002E230*)arg0);

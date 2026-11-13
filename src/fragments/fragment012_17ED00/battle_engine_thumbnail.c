@@ -43,6 +43,8 @@ void BattleThumbnail_OwnerCameraLifecycleNop(void) {
 
 /**
  * Applies the sets coordinates for the Camera that generates the owner's thumbnail.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
+ * switch in battle.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleThumbnail_ApplyOwnerCameraFraming(ActivePokemon* active_pokemon) {
@@ -96,6 +98,8 @@ void func_80032840(s32);
 
 /**
  * Handles the slide-in animation for the owner's thumbnail for when move selection is ongoing.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleThumbnail_TickOwnerSlideIn(ActivePokemon* active_pokemon, s32 delta) {
@@ -157,6 +161,8 @@ void func_821075B4(s8 *arg0, M2C_UNK arg1) {
 
 /**
  * Handles the slide animation for the owner's thumbnail.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleThumbnail_TickOwnerSlideAnimation(ActivePokemon* active_pokemon) {
@@ -173,6 +179,8 @@ void BattleThumbnail_TickOwnerSlideAnimation(ActivePokemon* active_pokemon) {
 
 /**
  * Avoids drawing the thumbnails in the attract demo
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleThumbnail_TickBothOwnerSlideAnimations(ActivePokemon* side1_pokemon, ActivePokemon* side2_pokemon) {

@@ -17,7 +17,9 @@ void BattleAnim_SetupDescriptor25PaletteFadeIn(Particle* arg0);
  * Sets up the hue change upon being hit by
  * - A Draining move (absorb, mega drain, leech life)
  * - A flame-emitting move (Flamethrower, Fire blast, fire spin, dragon rage)
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep it ran only for Flamethrower, Absorb, Mega Drain,
+ * Dragon Rage, Fire Spin and Fire Blast: it recolored prim from the particle's palette index (e.g.
+ * prim FF0000) and advanced the lifecycle.
  */
 void BattleAnim_SetupDrainFlameHueChange(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
@@ -81,7 +83,7 @@ void BattleAnim_CallbackOwnerModelTintRandomPaletteCycle(Particle* arg0) {
 
         case 2:
             ParticleGfx_ApproachPrimPalette(arg0, arg0->unk_CF, arg0->unk_AA);
-            if (Particle_FieldA6_DecrementToZeroStep1_0BDAC(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZero(arg0) != 0) {
                 Particle_FieldA6_SetS16_0BCA8(arg0, 0xFF / arg0->unk_AA);
                 Particle_FieldCF_SetU8_0BEEC(arg0, gParticlePaletteSetA[ParticleMath_RandomRange(6)]);
             }
@@ -92,7 +94,8 @@ void BattleAnim_CallbackOwnerModelTintRandomPaletteCycle(Particle* arg0) {
 
 /**
  * Sets up the rainbow hue shift triggered by the user's Recover or by an incoming Psybeam or Aurora Beam.
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Psybeam, Aurora Beam.
  */
 void BattleAnim_SetupRainbowHueChange(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, gParticlePaletteSetA[0]);
@@ -110,7 +113,8 @@ void BattleAnim_SetupRainbowHueChange(Particle* arg0) {
 
 /**
  * Runs the rainbow hue shift triggered by the user's Recover or by an incoming Psybeam or Aurora Beam.
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Psybeam, Aurora Beam.
  */
 void BattleAnim_RunRainbowHueChange(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -119,8 +123,8 @@ void BattleAnim_RunRainbowHueChange(Particle* arg0) {
             break;
 
         case 2:
-            Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0);
-            if (Particle_FieldA8_DecrementToZeroStep1_0BE6C(arg0) != 0) {
+            Particle_DecrementUnkA6ToZeroThenAdvance(arg0);
+            if (Particle_DecrementUnkA8ToZero(arg0) != 0) {
                 Particle_FieldA8_SetS16_0BE14(arg0, 0xFF / arg0->unk_AA);
                 arg0->unk_AE = (arg0->unk_AE + 1) % 6;
                 Particle_FieldCF_SetU8_0BEEC(arg0, gParticlePaletteSetA[arg0->unk_AE]);
@@ -146,7 +150,9 @@ void BattleAnim_RunRainbowHueChange(Particle* arg0) {
  * Set up Fading the user's model to invisible for Teleport, defense curl, sky attack, acid armor and sharpen.
  * These moves do not replace the user's model like transform or substitute and do not have unique animation varients
  * like withdrawal; which are not covered by this function.
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Acid Armor, Defense Curl, Explosion, Selfdestruct, Sharpen and Teleport. Sky Attack's
+ * charge turn did not use it, and Explosion and Selfdestruct did.
  */
 void BattleAnim_SetupInvisibility(Particle* arg0) {
     arg0->prim_a = arg0->unk_A6;
@@ -217,7 +223,9 @@ void func_82144750(s8 *arg0) {
  * Blizzard's effect is more subtle and doesn't change the user completely white like the other listed moves.
  * It is used in blizzard to make the user's hue match that of the arena.
  * Also used for the poke ball's hue change.
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Ice Beam, Psybeam, Aurora Beam, Hyper Beam,
+ * Confusion, Psychic, Light Screen, Reflect): it kept prim white (FFFFFF), set prim alpha to 0 and
+ * advanced the lifecycle.
  */
 void BattleAnim_SetupWhiteHueChange(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
@@ -230,7 +238,9 @@ void BattleAnim_SetupWhiteHueChange(Particle* arg0) {
  * Blizzard's effect is more subtle and doesn't change the user completely white like the other listed moves.
  * It is used in blizzard to make the user's hue match that of the arena.
  * Also used for the poke ball's hue change.
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Ice Beam, Psybeam, Aurora Beam, Hyper Beam,
+ * Confusion, Psychic, Light Screen, Reflect): after setup the white overlay's prim alpha rose by
+ * 0x20 per frame (0, 0x20, 0x40, ...).
  */
 void BattleAnim_RunWhiteHueChange(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -239,11 +249,11 @@ void BattleAnim_RunWhiteHueChange(Particle* arg0) {
             break;
 
         case 2:
-            Particle_PrimAlpha_ApproachAndStepState_0BC5C(arg0, arg0->unk_CD, arg0->unk_AA);
+            Particle_ApproachPrimAlphaThenAdvance(arg0, arg0->unk_CD, arg0->unk_AA);
             break;
 
         case 3:
-            Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0);
+            Particle_DecrementUnkA6ToZeroThenAdvance(arg0);
             break;
 
         case 4:
@@ -277,6 +287,8 @@ void BattleAnim_SetupDescriptor25AlphaHoldFadeOut(s8 *arg0)
  *
  * BattleAnim_DrawFadingFullScreenColorOverlay in @battle_engine_particle_renderers.c is the equivalent for moves
  * that change both the full screen hue and the pokemon hue at the same time
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
+ * switch in battle.
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_RunFullScreenHueChange(Particle* arg0) {
@@ -286,7 +298,7 @@ void BattleAnim_RunFullScreenHueChange(Particle* arg0) {
             break;
 
         case 2:
-            Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0);
+            Particle_DecrementUnkA6ToZeroThenAdvance(arg0);
             break;
 
         case 3:
@@ -305,7 +317,8 @@ void BattleAnim_SetupDescriptor25AlphaFadeInHold(Particle* arg0) {
 
 /**
  * Used to change the Pokemon and screen hue at the same time for Blizzard, Boom, Confuse Ray, and Flash
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Blizzard, Confuse Ray, Explosion, Flash and Selfdestruct.
  */
 void BattleAnim_RunPokemonAndFullScreenHueChange(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -314,11 +327,11 @@ void BattleAnim_RunPokemonAndFullScreenHueChange(Particle* arg0) {
             break;
 
         case 2:
-            Particle_PrimAlpha_ApproachAndStepState_0BC5C(arg0, arg0->unk_CD, arg0->unk_AA);
+            Particle_ApproachPrimAlphaThenAdvance(arg0, arg0->unk_CD, arg0->unk_AA);
             break;
 
         case 3:
-            if (Particle_FieldA6_DecrementToZeroStep1_0BDAC(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZero(arg0) != 0) {
                 Particle_MarkInactive(arg0);
             }
             break;
@@ -363,7 +376,7 @@ void BattleAnim_CallbackDescriptor25PaletteFadeOut(Particle* arg0) {
             break;
 
         case 2:
-            Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0);
+            Particle_DecrementUnkA6ToZeroThenAdvance(arg0);
             break;
 
         case 3:
@@ -389,11 +402,11 @@ void BattleAnim_CallbackDescriptor25PaletteFadeIn(Particle* arg0) {
 
         case 2:
             ParticleGfx_ApproachPrimPalette(arg0, arg0->unk_CD, arg0->unk_AA);
-            Particle_PrimAlpha_ApproachAndStepState_0BC5C(arg0, 0xFF, arg0->unk_AA);
+            Particle_ApproachPrimAlphaThenAdvance(arg0, 0xFF, arg0->unk_AA);
             break;
 
         case 3:
-            if (Particle_FieldA6_DecrementToZeroStep1_0BDAC(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZero(arg0) != 0) {
                 Particle_MarkInactive(arg0);
             }
             break;

@@ -207,13 +207,13 @@ M2C_UNK func_8210B5C8(s32, s8 *);                 /* extern */
 
 void BattleAnim_SquishHitReaction(s32 arg0, s8 *arg1);
 
-void BattleAnim_LassoMoveHitReactionStart(ActivePokemon* owner, ActivePokemon* animated_pokemon);
+void BattleAnim_BindHitReactionStart(ActivePokemon* owner, ActivePokemon* animated_pokemon);
 
-void BattleAnim_LassoMoveHitReactionContinue(ActivePokemon* owner, ActivePokemon* animated_pokemon);
+void BattleAnim_BindHitReactionContinue(ActivePokemon* owner, ActivePokemon* animated_pokemon);
 
 M2C_UNK func_8210B824(s32, s8 *);                 /* extern */
 
-void BattleAnim_LassoMoveHitReaction(s32 arg0, s8 *arg1);
+void BattleAnim_BindHitReaction(s32 arg0, s8 *arg1);
 
 void BattleAnim_SurfStart(s32 arg0, s8 *arg1);
 

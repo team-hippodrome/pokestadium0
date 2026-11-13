@@ -62,6 +62,8 @@ extern Entry811151C8 D_81184668[];
 
 /**
  * Reads the argument of a control-flow command of kind `kind` from the script stream. Zelda 64 audio driver (seqplayer.c), same position and shape.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 u16 AudioSeq_GetScriptControlFlowArgument(u8** stream, u8 kind) {
@@ -95,6 +97,8 @@ u16 AudioSeq_ScriptReadCompressedU16(u8** arg0);
 
 /**
  * Runs a script control-flow command (end, call, loop, jump, branch). Zelda 64 audio driver.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 s32 AudioSeq_HandleScriptFlowControl(SeqPlayer811126B8* seq_player, SeqScriptState811126B8* state, s32 cmd, s32 cmd_arg) {
@@ -180,6 +184,8 @@ typedef struct Bits81112894 {
 extern u8 D_81136998[];
 /**
  * Resets a sequence channel to its defaults. Zelda 64 audio driver.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name and comment guessed from the code.
  */
 void AudioSeq_InitSequenceChannel(void* obj) {
@@ -279,6 +285,8 @@ s32 AudioSeq_AudioListPopBack(s8*);
 void AudioPlayback_SeqLayerNoteDecay();
 /**
  * Gives channel `arg0` a layer in slot `arg1`, taking one from the free list when needed. Zelda 64 audio driver.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 s32 AudioSeq_SeqChannelSetLayer(Owner811129E0* arg0, s32 arg1) {
@@ -324,6 +332,8 @@ s32 AudioSeq_SeqChannelSetLayer(Owner811129E0* arg0, s32 arg1) {
 
 /**
  * Decays the layer's note and turns the layer off. Zelda 64 audio driver.
+ * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
 void AudioSeq_SeqLayerDisable(Particle31FlagsA* arg0) {
@@ -336,6 +346,8 @@ void AudioSeq_SeqLayerDisable(Particle31FlagsA* arg0) {
 
 /**
  * Returns layer slot `arg1` of a channel to the free list. Zelda 64 audio driver.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name and comment guessed from the code.
  */
 void AudioSeq_SeqLayerFree(s8** arg0, s32 arg1) {
@@ -348,6 +360,7 @@ void AudioSeq_SeqLayerFree(s8** arg0, s32 arg1) {
     }
 }
 
+/** Resets all particle slots of a display object. */
 void Particle31_ResetAllSlots(DisplayObject* arg0) {
     s32 i;
 
@@ -361,6 +374,8 @@ void Particle31_ResetAllSlots(DisplayObject* arg0) {
 
 /**
  * Resets each channel selected in `mask`. Zelda 64 audio driver.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 void AudioSeq_SequencePlayerSetupChannels(s8* arg0, u16 mask) {
@@ -382,6 +397,8 @@ void func_81112B84(Item8111539C*);
 
 /**
  * Disables each channel selected in `channel_bits`. Zelda 64 audio driver.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name and comment guessed from the code.
  */
 void AudioSeq_SequencePlayerDisableChannels(u8* seqPlayer, s32 channel_bits) {
@@ -398,6 +415,8 @@ void AudioSeq_SequencePlayerDisableChannels(u8* seqPlayer, s32 channel_bits) {
 
 /**
  * Starts channel `arg1` at script address `arg2`. Zelda 64 audio driver.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 void AudioSeq_SequenceChannelEnable(Particle2D68** arg0, u8 arg1, s32 arg2) {
@@ -418,6 +437,8 @@ void AudioSeq_SequenceChannelEnable(Particle2D68** arg0, u8 arg1, s32 arg2) {
 
 /**
  * Stops a sequence player: disables its channels, clears its note pool and marks its data discardable. Zelda 64 audio driver.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name and comment guessed from the code.
  */
 void AudioSeq_SequencePlayerDisable(u8* arg0) {
@@ -440,6 +461,8 @@ void AudioSeq_SequencePlayerDisable(u8* arg0) {
 
 /**
  * Appends an item to the end of a list if it is on no list. Zelda 64 audio driver.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name and comment guessed from the code.
  */
 void AudioSeq_AudioListPushBack(s8 *arg0, s8 *arg1)
@@ -457,6 +480,8 @@ void AudioSeq_AudioListPushBack(s8 *arg0, s8 *arg1)
 
 /**
  * Removes and returns the last item of a list, or 0 when it is empty. Zelda 64 audio driver.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 s32 AudioSeq_AudioListPopBack(s8 *arg0) {
@@ -475,6 +500,8 @@ s32 AudioSeq_AudioListPopBack(s8 *arg0) {
 
 /**
  * Puts every sequence layer on the free list. Zelda 64 audio driver.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name and comment guessed from the code.
  */
 void AudioSeq_InitLayerFreelist(void) {
@@ -493,6 +520,8 @@ void AudioSeq_InitLayerFreelist(void) {
 
 /**
  * Reads one byte from the script stream. Zelda 64 audio driver.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 u8 AudioSeq_ScriptReadU8(u8 **arg0)
@@ -507,6 +536,8 @@ u8 AudioSeq_ScriptReadU8(u8 **arg0)
 
 /**
  * Reads a big-endian 16-bit value from the script stream. Zelda 64 audio driver.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 s16 AudioSeq_ScriptReadS16(u8** arg0) {
@@ -523,6 +554,8 @@ s16 AudioSeq_ScriptReadS16(u8** arg0) {
  * is stored at *arg0, advancing that position. If the first byte has bit 7
  * clear it is the result. Otherwise the result is ((first & 0x7F) << 8) |
  * second byte, and the position advances past both bytes.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name guessed from the code; comment kept.
  */
 u16 AudioSeq_ScriptReadCompressedU16(u8** arg0) {
@@ -555,6 +588,8 @@ s32 AudioSeq_SeqLayerProcessScriptStep4();
 s32 AudioSeq_SeqLayerProcessScriptStep5();
 /**
  * Runs a layer's script for one tick. Zelda 64 audio driver.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 void AudioSeq_SeqLayerProcessScript(Particle303C* arg0) {
@@ -587,6 +622,8 @@ void AudioSeq_SeqLayerProcessScript(Particle303C* arg0) {
 
 /**
  * Decays or releases the layer's note before the next script command. Zelda 64 audio driver.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 void AudioSeq_SeqLayerProcessScriptStep1(Particle3140* arg0) {
@@ -641,6 +678,8 @@ typedef struct Note811131CC {
 
 /**
  * Gets a note for the layer, reusing the current one for the same sound. Zelda 64 audio driver.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 s32 AudioSeq_SeqLayerProcessScriptStep5(Layer811131CC* layer, u32 same_sound) {
@@ -732,6 +771,8 @@ u8 func_81113E84(u8* arg0, u8 arg1, u8** arg2, u8* arg3);
 
 /**
  * Runs layer script commands until a note command. Zelda 64 audio driver.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 s32 AudioSeq_SeqLayerProcessScriptStep2(Layer811132E4* layer) {
@@ -949,6 +990,8 @@ u8* AudioPlayback_GetDrum(s32 arg0, s32 arg1);
 
 /**
  * Sets up the note's instrument, pitch and velocity from a note command. Zelda 64 audio driver.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 s32 AudioSeq_SeqLayerProcessScriptStep4(Layer81113650* layer, s32 cmd_semitone) {

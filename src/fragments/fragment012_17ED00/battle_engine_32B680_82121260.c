@@ -10,8 +10,8 @@
 #include "matrix.h"
 #include "m2c_macros.h"
 void func_8211F580(void);
-void BattleScene_IntroCameraRollStepNoFov(CameraNode* arg0);
-void BattleScene_SelectNextIntroCameraShot(CameraNode* arg0);
+void BattleScene_BRollCameraUpdateRotatingArenaOverview(CameraNode* arg0);
+void BattleScene_SelectNextBRollCameraShot(CameraNode* arg0);
 extern f32 D_FLT_8218935C[][4];
 extern Vec3f D_8218B630;
 extern Vec3f D_8218B63C;
@@ -28,13 +28,13 @@ void BattleCamera_CaptureModelOrbit(ActivePokemon*, CameraNode*);
 void func_8212054C(CameraNode*);
 extern const f64 D_DBL_821960A0;
 extern f32 D_FLT_82189358[][4];
-void BattleScene_SelectNextIntroCameraShot(CameraNode*);
-void BattleScene_SelectNextIntroCameraShot(CameraNode*);
+void BattleScene_SelectNextBRollCameraShot(CameraNode*);
+void BattleScene_SelectNextBRollCameraShot(CameraNode*);
 void func_82122FD8(CameraNode*, ActivePokemon*);
 s32 func_821217DC(M2C_UNK);
 extern f32 D_FLT_82189358[][4];
-void BattleScene_SelectNextIntroCameraShot(CameraNode*);
-void BattleScene_SelectNextIntroCameraShot(CameraNode*);
+void BattleScene_SelectNextBRollCameraShot(CameraNode*);
+void BattleScene_SelectNextBRollCameraShot(CameraNode*);
 s32 func_82135734(CameraNode*, ActivePokemon*);
 s32 func_821217DC(M2C_UNK);
 void func_82122628(s32, Vec3f, s32, s32, f32, f32);
@@ -48,12 +48,11 @@ extern u8* D_800603C0;
 void Audio_FadeCategoriesAndStreams(s32 arg0);
 
 void Battle_ChooseActionsForMode(void);
-void BattleMenu_ResetTimeout(void);
+void BattleMenu_ResetCommandTimer(void);
 
 /**
  * Per-frame update while unk_1C is 1 (b-roll camera mode): runs the action selection phase and
  * dispatches to the update function of the current b-roll shot (odd cameraCounter values).
- * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
 void BattleScene_UpdateBRollCameraSequence(CameraNode* arg0) {
     if (sBattleScene.scene->mode == 1) {
@@ -61,7 +60,7 @@ void BattleScene_UpdateBRollCameraSequence(CameraNode* arg0) {
             (sActivePokemon[1]->thumbnail.camera->viewport.x == 0x103)) {
             Battle_ChooseActionsForMode();
         } else {
-            BattleMenu_ResetTimeout();
+            BattleMenu_ResetCommandTimer();
         }
     }
     if (sBattleScene.scene->mode == 5) {
@@ -102,10 +101,10 @@ void BattleScene_UpdateBRollCameraSequence(CameraNode* arg0) {
             func_82120FB0(arg0);
             break;
         case 23:
-            BattleScene_IntroCameraPresetHoldStep(arg0);
+            BattleScene_BRollCameraUpdatePresetHold(arg0);
             break;
         case 50:
-            BattleScene_SelectNextIntroCameraShot(arg0);
+            BattleScene_SelectNextBRollCameraShot(arg0);
             break;
     }
 }

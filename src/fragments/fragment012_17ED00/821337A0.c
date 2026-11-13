@@ -285,7 +285,7 @@ void func_82133B6C(void) {
                 D_8219A4F0.flags &= ~8;
                 D_8219A4F0.flags |= 0x10;
             }
-            if ((D_8219A4F0.timer == 0x19) && (D_8219A4F0.flags & 0x10)) {
+            if ((D_8219A4F0.timer == 25) && (D_8219A4F0.flags & 0x10)) {
                 if (D_8219A4F0.index == 4) {
                     M2C_FIELD(M2C_FIELD(((s8**)&D_82199DE0)[0], u8**, 0x85C), s16*, 2) = 0x96;
                 } else {

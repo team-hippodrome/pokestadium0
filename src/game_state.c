@@ -130,6 +130,8 @@ extern M2C_UNK D_8007B7B8;
 
 /**
  * Sets up trainer slot `arg1` as a human player on controller port `arg0` with roster info `arg2`.
+ * Seen in play (2026-11-13) ran during boot, before the opening (console reset, then N64 logo,
+ * opening, title and main menu).
  * @unverified Name and comment guessed from the code.
  */
 M2C_UNK Session_InitHumanTrainer(M2C_UNK arg0, M2C_UNK *arg1, M2C_UNK *arg2, s32 arg3) {
@@ -173,6 +175,8 @@ extern M2C_UNK D_800AF94C;
 
 /**
  * Sets the session mode to `arg0` and sets up both trainer slots and battle sides.
+ * Seen in play (2026-11-13) ran during boot, before the opening (console reset, then N64 logo,
+ * opening, title and main menu).
  * @unverified Name and comment guessed from the code.
  */
 M2C_UNK Session_InitTwoTrainers(M2C_UNK arg0, M2C_UNK arg1, M2C_UNK arg2) {
@@ -198,6 +202,8 @@ extern GbSavePortSnapshot D_800AF9A8;
 
 /**
  * Copies the GB save snapshot of port `arg0` into the session; clears it for an invalid port.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void Session_LoadPortSnapshot(s32 arg0) {
@@ -344,6 +350,7 @@ s32 func_80025A64(void) {
     return ret;
 }
 
+/** Loads a fragment from a ROM range and calls its entry point. */
 s32 Fragment_LoadAndCall(s32 arg0, u8* romStart, u8* romEnd, u32 arg3, u32 arg4) {
     s32 result;
     FragmentEntry func;
@@ -357,6 +364,7 @@ s32 Fragment_LoadAndCall(s32 arg0, u8* romStart, u8* romEnd, u32 arg3, u32 arg4)
     return result;
 }
 
+/** Queues a fragment to be loaded and called by the game state loop. */
 void Fragment_QueueCall(s32 arg0, u8* arg1, u8* arg2, s32 arg3, s32 arg4) {
     D_800AF990.unk_00 = 1;
     D_800AF990.fragment_id = arg0;
@@ -366,14 +374,17 @@ void Fragment_QueueCall(s32 arg0, u8* arg1, u8* arg2, s32 arg3, s32 arg4) {
     D_800AF990.arg1 = arg4;
 }
 
+/** Returns the trainer slots of the session context. */
 TeamRoster* Trainer_GetSlots(void) {
     return gSessionContext.trainerSlots;
 }
 
+/** Returns the controller port of the active Game Boy save. */
 s32 GbSave_GetActivePort(void) {
     return D_800733D4;
 }
 
+/** Sets the active Game Boy save port when it is in range. */
 void GbSave_SetActivePort(s32 arg0) {
     if ((arg0 >= 0) && (arg0 < 4)) {
         D_800733D4 = arg0;
@@ -395,6 +406,8 @@ extern char D_8007B894[];
 
 /**
  * Full-screen Game Boy save error: remove the cartridge, clean the connector and insert it again without turning the power off; "could not save (report)"; "wrong cartridge or the data changed". `arg0` picks the message.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void Save_DrawGbReportErrorScreen(s32 arg0) {
@@ -431,6 +444,8 @@ extern char D_8007B8B4[];
 
 /**
  * Full-screen レポートちゅうです (Saving...) message.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void Save_DrawReportingScreen(void) {
@@ -464,6 +479,8 @@ extern M2C_UNK D_01000000;
 
 /**
  * Pushes the 'GBER' pool state and shows the GB report error screen until the cartridge check passes.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void Save_RunGbReportErrorScreen(s32 arg0) {
@@ -513,6 +530,7 @@ extern M2C_UNK D_81200000;
 extern M2C_UNK D_0015E220;
 extern s32 D_800AF988;
 
+/** Game state: shows the N64 logo quickly. */
 void State_FastN64Logo(void) {
     D_800733C8 = func_80025B60(((u32) ((s32) &D_81200000 & 0x0FF00000) >> 0x14) - 0x10, &D_0015E220, &D_0015F390, 0, 0);
     M2C_FIELD(&D_800AE8F0, u8*, 2) = 0;
@@ -710,6 +728,7 @@ void func_80023C30(void);
 void func_80025130(s32);
 void Save_CommitTypedRecord(s32, s32);
 
+/** Game state: runs Game Boy Tower. */
 void State_GbTower(void) {
     s32 sp2C;
     UnkInputStruct8000D738 sp24;
@@ -749,6 +768,7 @@ void func_80026898(void) {
     D_800733C8 = 0x8010;
 }
 
+/** Game state: unused 64DD boot sequence. */
 void State_N64ddBootUnused(void) {
     Audio_WaitForIdle(1);
     Display_WaitForFrames(2);
@@ -758,6 +778,7 @@ void State_N64ddBootUnused(void) {
 void func_800268DC(void) {
 }
 
+/** Powers off the paks, blanks the screen and loads a fragment. */
 void Game_ShutdownAndLoadFragment(s32 arg0, s32 arg1) {
     osViBlack(1);
     GbTower_PowerOffAllPaks();
@@ -772,6 +793,7 @@ void Game_ShutdownAndLoadFragment(s32 arg0, s32 arg1) {
     FRAGMENT_LOAD_AND_CALL(FRAGMENT_FATAL_ERROR_SCREEN, arg0, arg1);
 }
 
+/** Resets the storage device. */
 void Game_ResetStorageDevice(void) {
     Storage_ResetDisk();
 }
@@ -787,6 +809,8 @@ void func_800268A8(void);
 
 /**
  * Pushes the 'GAME' pool state and runs the top-level state machine (0x8001, 0x8010, 0x8040, 0x8050, 0x8060, 0x8080, 0xF000) forever.
+ * Seen in play (2026-11-13) ran at boot (console reset, then N64 logo, opening, title and main
+ * menu).
  * @unverified Name and comment guessed from the code.
  */
 void Game_RunStateLoop(s32 arg0) {
@@ -831,7 +855,7 @@ void Game_RunStateLoop(s32 arg0) {
  * func_80026B50
  *
  * Builds a display list that draws a 320x240 RGBA16 image `tex` as a grid of
- * 10 columns by 4 rows of 32x60 texel tiles, centred on (x, y) and scaled to
+ * 10 columns by 4 rows of 32x60 texel tiles, centered on (x, y) and scaled to
  * width x height. For each column it loads 32 vertices into the RSP, then for
  * each row it loads that tile into TMEM, writes the tile's four corner
  * vertices into `vtx` (shade 0x00007F, alpha 0xFF) and draws it as two
@@ -914,6 +938,7 @@ s32 func_800270B4(s16 arg0, s16 arg1, s16 arg2, s32 arg3, s16 arg4, s16 arg5) {
     return sp2C;
 }
 
+/** Turns off the screen blackout flag. */
 void Display_DisableBlackout(void) {
     D_800733F0 = 0;
 }

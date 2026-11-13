@@ -16,6 +16,8 @@ s32 BattleAi_EstimateDamage(s8 *, s8 *, u8);
  * If the chosen move is Hyper Beam but it would not knock the opponent out, looks
  * for another damaging move that would, trying stronger move groups only in later
  * rounds. Returns the move slot to use.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
+ * switch in battle.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_ReplaceHyperBeam(s32 arg0) {
@@ -153,7 +155,6 @@ s32 BattleAi_ReplaceHyperBeam(s32 arg0) {
 /**
  * Returns the slot of the usable move with the highest estimated damage if that
  * damage is more than arg0 percent of the opponent's HP, otherwise -1.
- * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_PickStrongestMove(s32 arg0) {
     s32 i;
@@ -195,11 +196,15 @@ s32 BattleAi_PickParalysisMove(s8 *, s8 *);
 s32 BattleAi_PickSleepMove(s8 *, s8 *);
 s32 BattleAi_PickBoomMove(s8 *, s8 *);
 /**
- * Normal move choice. In order: heal, set up when the opponent cannot act
- * (BattleAi_OpponentCannotAct), status the opponent, lower its stats, finish it with a strong move, boost,
- * explode when about to faint, or take the strongest move; then
- * BattleAi_ReplaceHyperBeam, and finally the first move that is useful.
- * @unverified Name and comment guessed from the code (COM AI pass).
+ * Normal move choice. In order:
+ * - heal, but only when the COM moves first and slot 0 is not a move that knocks the opponent out
+ *   (BattleAi_PickStrongestMove with the opponent's HP percent);
+ * - set up when the opponent cannot act (BattleAi_OpponentCannotAct), otherwise Toxic or Leech Seed,
+ *   paralysis, sleep, then a stat-lowering move;
+ * - a move doing more than half the opponent's HP, a stat boost, Self-Destruct or Explosion when about
+ *   to faint, or the strongest move;
+ * then BattleAi_ReplaceHyperBeam, and finally the first move that is useful.
+ * Each step was seen picking its move in game (Hypnosis, Tail Whip, Swords Dance, Explosion, Earthquake).
  */
 s32 BattleAi_ChooseMove(void)
 {
@@ -285,6 +290,8 @@ s32 BattleAi_ChooseMove(void)
 /**
  * If move slot arg0 has no PP left, returns another slot holding the same move
  * with PP; otherwise arg0.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
+ * switch in battle.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_FindSlotWithPp(s32 arg0) {
@@ -332,7 +339,6 @@ s32 BattleAi_ChooseRandomMove(void);
  * Per-turn COM entry point. Copies both active Pokemon (arg0 own, arg1 opponent's
  * visible state) into the AI's model, updates its turn bookkeeping, then returns
  * a move slot (0..3) or 4 + a party slot to switch, also stored in D_821CF2A4.
- * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_ChooseTurnAction(u8* arg0, u8* arg1, s32 arg2, s32 arg3) {
     s32 move;
@@ -407,7 +413,12 @@ extern u8* D_821CF2AC;
 extern u8 D_8006B18F[];
 
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Learns the opponent's chosen move once both sides have picked their actions
+ * (called from Battle_StartTurn, before the moves run): the move goes into the
+ * first empty move slot of the AI's opponent record with its maximum PP minus
+ * one, or one PP is taken off a move already recorded. arg2 is 0 when the COM
+ * acts first, 1 when it acts second and 2 for a move used later in the turn.
+ * In game, after a Poison Sting the record held move 40 with 55 PP (35 + 3 PP Ups - 1).
  */
 void BattleAi_RecordUsedMove(s32 arg0, s32 arg1, s32 arg2) {
     s32 i;

@@ -222,7 +222,8 @@ typedef struct Ctx89003880 {
 } Ctx89003880;
 /**
  * Writes the changed item lists back to the save and flushes it.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran on レポートしてやめる (ないようが へんこうされています) after moving items in せいとん >
+ * どうぐをいどうする.
  */
 void LabItem_SaveChanges(s8* arg0) {
     s32 locked = 0;
@@ -269,7 +270,8 @@ void LabItem_SaveChanges(s8* arg0) {
 
 /**
  * Returns 1 when any of the three item lists changed.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran once when B left the item sort screen after nothing had been moved;
+ * the screen closed without asking to save.
  */
 s32 LabItem_HasUnsavedChanges(s32* arg0) {
     s32 i;
@@ -302,7 +304,7 @@ extern s8 D_8901876C[];
 
 /**
  * Runs the item organizer's state machine for one frame.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): ran どうぐのせいり.
  */
 s32 LabItem_UpdateScreen(s8* arg0) {
     s32 ret = 0;
@@ -397,7 +399,7 @@ void Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
 void Font_SetColorForFlags(s32);
 /**
  * Draws one terminal menu row with its highlight or frame.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): rows ポケモンを いどうする / どうぐを いどうする / ボックスを いどうする.
  */
 void LabTerminal_DrawMenuRow(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s32* arg5) {
     s32 temp_v0 = *arg5;
@@ -417,7 +419,7 @@ void LabTerminal_DrawMenuRow(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4,
 M2C_UNK func_80027804();
 /**
  * Sets up a terminal menu window with its rows and title.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in せいとん: ran on entry as the せいとん menu window appeared.
  */
 void LabTerminal_InitMenuWindow(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, char *arg5, s32 arg6, char *arg7, s32 arg8, char *arg9) {
 
@@ -436,7 +438,7 @@ extern Color_RGBA8 D_8900A6FC;
 extern Color_RGBA8 D_8900A700;
 /**
  * Draws a terminal menu window.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): the せいとん menu with its description.
  */
 void LabTerminal_DrawMenuWindow(s8* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
@@ -462,7 +464,7 @@ void LabTerminal_DrawMenuWindow(s8* arg0) {
 
 /**
  * Handles input on a terminal menu window while it is open.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): moved over the せいとん menu.
  */
 s32 LabTerminal_UpdateMenuWindow(s8* arg0) {
     s32 ret = 0;
@@ -496,7 +498,7 @@ void LabTerminal_InitMenuWindow(s32, s32, s32, s32, s32, char*, s32, char*, s32,
  * followed by 0x30, 0x5C, 0x170, 0xCE, D_8900A704, 3, D_8900A710, 3 and
  * D_890188F4. What LabTerminal_InitMenuWindow does (it is still assembly) and what the
  * arguments mean are not established.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-12) in せいとん: set up the first menu: ポケモンを いどうする, どうぐを いどうする, ボックスを いどうする.
  */
 void LabTerminal_InitMainMenu(s32 arg0) {
     LabTerminal_InitMenuWindow(arg0, 0x30, 0x5C, 0x170, 0xCE, D_8900A704, 3, D_8900A710, 3, D_890188F4);
@@ -511,7 +513,7 @@ extern M2C_UNK D_89019110;
 
 /**
  * Draws the GB save summary bar and the background.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): the せいとん screen with the 1P サトシ IDNo/12345 bar.
  */
 void LabTerminal_DrawMainScreen(s32 arg0) {
     M2C_UNK *var_a1;
@@ -531,7 +533,7 @@ void LabTerminal_DrawMainScreen(s32 arg0) {
  * Wrapper around LabTerminal_UpdateMenuWindow(arg0): -1 calls func_8003F6AC(3) and returns -1;
  * a positive result calls func_8003F6AC(2) and returns the word at arg0 + 0x34
  * plus 1; any other result returns 0. (Same pattern as FreeBattle_UpdateBattleModeWindow.)
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-12): returned the せいとん menu pick.
  */
 s32 LabTerminal_UpdateMainMenu(s8* arg0) {
     s32 result = 0;
@@ -559,6 +561,8 @@ M2C_UNK func_80027FF8(M2C_UNK *, s32);
  * &D_89019110 to func_80027FF8. Then calls LabTerminal_InitMainMenu(&D_89028950) and sets
  * D_890289D4 to 1. (The value is re-read from D_89019108 after the store, which is
  * what the retail register allocation needs.) What the value means is not established.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name guessed from the code; comment kept.
  */
 void LabTerminal_InitScreen(void) {
@@ -635,7 +639,7 @@ extern s32 D_890289D4;
 
 /**
  * One frame of the lab terminal.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): ran every frame of せいとん.
  */
 s32 LabTerminal_RunFrame(s32 arg0) {
     s32 sp1C;
@@ -726,7 +730,7 @@ s32 func_8900429C(s32);
  *      D_00235D70..D_00238BD0.
  *
  * Returns 0x8040.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-12) in せいとん: ran when せいとん was entered from the main menu.
  */
 s32 LabTerminal_Init(s32 arg0, s32 arg1) {
     main_pool_push_state('TERM');

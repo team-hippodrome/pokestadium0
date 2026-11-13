@@ -8,7 +8,7 @@ s32 func_800246A8(M2C_UNK, s32);                    /* extern */
 
 /**
  * Returns the first empty slot of the 16 registered team slots, or -1 when all are used.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): the first registration went into slot 01 of the empty list.
  */
 s32 Registration_FindFreeSlot(void) {
     s32 var_s0;
@@ -34,7 +34,7 @@ s32 func_80020CE4(void*, s32, s32);
 M2C_UNK func_80020C60(s32);
 /**
  * Reads up to six Pokemon from deck (`arg0`, `arg1`, `arg2`) into team `arg3` and stores the count.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): read the cartridge party ハナ L5, ヒノコ L5, カメ L5 into the list.
  */
 void Registration_ReadTeam(s32 arg0, s32 arg1, s32 arg2, s32* arg3) {
     Entry88100078* entry = (Entry88100078*)arg3[0];
@@ -57,7 +57,7 @@ s32 func_80020DF0(s32, M2C_UNK, s32);               /* extern */
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 /**
  * Writes team `arg0` into registered slot `arg1`.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): 「このポケモンをとうろくする？」 > はい stored the party in slot 01.
  */
 void Registration_WriteTeam(s8 *arg0, M2C_UNK arg1)
 {
@@ -103,7 +103,8 @@ void Registration_WriteTeam(s8 *arg0, M2C_UNK arg1)
 s32 func_800245E0(M2C_UNK, s32);
 /**
  * Writes every listed team back to its slot and clears the registered slots after them.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in とうろく: ran after はい on 「このポケモンをけす？」 (「へんしん していた メタモンが もとの すがたに
+ * もどった。」). With no team left, the view and delete entries were then greyed out.
  */
 void Registration_WriteAllTeams(void *arg0) {
     s32 i;
@@ -133,7 +134,7 @@ s32 Deck_GetSaveEntryTrainerId(s32, s32);
 s32 Deck_GetSaveEntryName(s32 arg0, s32 arg1, u8* arg2);
 /**
  * Reads every used registered slot (deck 0x10) with its trainer id and name.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): filled the 01 slot row (Ditto placeholders until the copy finished).
  */
 void Registration_LoadRegisteredTeams(s8* arg0) {
     u8* p = M2C_FIELD(arg0, u8**, 0);
@@ -164,7 +165,7 @@ s32 GbSave_GetTrainerId(s32 arg0);
 void func_80022D84(s32, u8*);
 /**
  * Reads the party of each Game Boy cartridge in the four Transfer Paks (deck 0x20).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): ポケモンを とうろくする listed the 1P cartridge's party.
  */
 void Registration_LoadGbTeams(s8* arg0) {
     u8* p = M2C_FIELD(arg0, u8**, 0);
@@ -193,7 +194,7 @@ void Font_SetColorForFlags(s32);
 
 /**
  * Draws one menu row label with the selection highlight.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): one row of the とうろく menu.
  */
 void Registration_DrawMenuRow(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s32* arg5) {
     s32 temp_v0 = *arg5;
@@ -216,7 +217,7 @@ extern s32 D_88103078;
 
 /**
  * Sets up the registration menu: ポケモンをとうろくする (register), とうろくしたポケモンをみる (view), とうろくしたポケモンをけす (delete).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): ポケモンを とうろくする / とうろくした ポケモンをみる / とうろくした ポケモンをけす.
  */
 void Registration_InitMainMenu(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, M2C_UNK* arg5, s32 arg6, M2C_UNK* arg7, s32 arg8, M2C_UNK* arg9) {
     s32 sp2C;
@@ -256,7 +257,7 @@ extern Color88100D9C D_88102D9C;
 extern Color88100D9C D_88102DA0;
 /**
  * Draws the registration menu and the description of the selected item.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): that menu with the description 「GBカートリッジの てもちポケモンの「データ」だけを きろくする。…」.
  */
 void Registration_DrawMainMenu(s8* arg0, s32 arg1) {
     UNUSED s32 pad; // FAKE: stack padding
@@ -286,14 +287,14 @@ M2C_UNK func_8003F6AC(M2C_UNK);
 extern s32 D_800603C0;
 
 /**
- * Menu-list input handler (same pattern as MonSummary_UpdateMenuCursor and FreeBattle_UpdatePopupMenu). Returns 0
+ * Menu-list input handler (same pattern as PartyScreen_UpdateActionMenu and FreeBattle_UpdatePopupMenu). Returns 0
  * immediately unless the word at arg0 + 0x28 is 1 or 2. Then, while Menu_UpdateCursor(arg0 + 0x2C)
  * is zero, reads the input result from func_8002BC14(D_800603C0): -1 plays sound
  * func_8003F6AC(3) and returns -1; 1 checks the halfword table at arg0 + 0x30 indexed by the
  * cursor word at arg0 + 0x34 -- if bit 0 of the entry is clear it plays sound 2 and returns
  * cursor + 1, otherwise it plays sound 8 and returns 0. Every other case returns 0.
  * (The meaning of the table bit is inferred from the sound choice only.)
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-12): picked ポケモンを とうろくする from the menu.
  */
 s32 Registration_UpdateMainMenu(void* arg0) {
     s32 ret = 0;
@@ -340,7 +341,7 @@ void Window_InitLabeled(s8*, s32, s32, s32, Color_RGBA8, char*);
 M2C_UNK func_8000B2F4(s32);
 /**
  * Sets up the yes/no confirm window (372x102).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): opened 「このポケモンをとうろくする？」.
  */
 void Registration_InitConfirmWindow(s8* arg, s32 arg1, s32 arg2, s32 arg3) {
     Win88100898* arg0 = (Win88100898*)arg;
@@ -374,7 +375,7 @@ void Window_DrawLabeled(s8*, s32);
 
 /**
  * Draws the confirm window with its message and buttons.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): 「このポケモンをとうろくする？」 with はい / いいえ.
  */
 void Registration_DrawConfirmWindow(s8* arg0) {
     if (func_8002AE6C() == 0) {
@@ -397,7 +398,7 @@ M2C_UNK func_8002BC14(s32);
 extern s32 D_800603C0;
 /**
  * Handles the confirm window. Returns 1 for yes, -1 for no or cancel.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): はい confirmed the registration.
  */
 s32 Registration_UpdateConfirmWindow(s32 arg0) {
     s32 sp1C = 0;
@@ -428,7 +429,7 @@ void Window_SetRect(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 
 /**
  * Sets up the message window (368x104).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): opened the message after registering.
  */
 void Registration_InitMessageWindow(void* arg0, s32 arg1, s32 arg2, s32 arg3) {
     Window_SetRect((s8*)arg0, arg1, arg2, 0x170, 0x68);
@@ -445,7 +446,7 @@ s32 func_8002AE6C();
 extern u8 D_800734A8[4];
 /**
  * Draws the message window text.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): 「メタモンのへんしんがおわりました。ポケモンは GBカートリッジに そのまま のこっています。」.
  */
 void Registration_DrawMessageWindow(s8* arg0) {
     u8* c;
@@ -466,7 +467,7 @@ extern s32 D_800603C0;
 
 /**
  * Returns the confirm/cancel input while the message window is open.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): A closed that message.
  */
 s32 Registration_UpdateMessageWindow(s32 arg0) {
     return func_8002BC14(D_800603C0);
@@ -477,8 +478,9 @@ s32 Registration_UpdateMessageWindow(s32 arg0) {
  * Appends a call of display list D_80060270 to the current display list and
  * then calls func_80029028(arg0, arg1, 0x88, 0x64, arg2). arg0 and arg1 are
  * passed straight through (the retail code never touches $a0/$a1); arg2 is a
- * 4-byte colour passed by value.
- * @unverified Name guessed from the code; comment kept.
+ * 4-byte color passed by value.
+ * Seen in play (2026-11-13) ran when the registration screen opened its Pokémon list, which shows
+ * the trainer panel (1P, サトシ, IDNo/12345) on the left.
  */
 void Registration_FillTrainerPanel(s32 arg0, s32 arg1, Color88100D9C arg2) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
@@ -489,8 +491,9 @@ void Registration_FillTrainerPanel(s32 arg0, s32 arg1, Color88100D9C arg2) {
  * Appends a call of display list D_80060270 to the current display list and
  * then calls func_80029028(arg0 + 0x88, arg1, 0x18C, 0x64, arg2). arg1 is
  * passed straight through (the retail code never touches $a1); arg2 is a
- * 4-byte colour passed by value.
- * @unverified Name guessed from the code; comment kept.
+ * 4-byte color passed by value.
+ * Seen in play (2026-11-13) ran when the registration screen opened its Pokémon list, which shows
+ * the party (フシ, ヒト, カメ, L10) next to the trainer panel.
  */
 void Registration_FillTeamPanel(s32 arg0, s32 arg1, Color88100D9C arg2) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
@@ -499,7 +502,7 @@ void Registration_FillTeamPanel(s32 arg0, s32 arg1, Color88100D9C arg2) {
 
 /**
  * Draws the top and bottom border lines of a team row.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): the border lines of the team rows.
  */
 void Registration_DrawRowBorders(s32 arg0, s32 arg1, Color88100D9C arg2) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
@@ -520,7 +523,7 @@ void Ui_DrawImageInStrips(u8*, s32, s32);
 void Ui_DrawNumberZeroPadded(s32, s32, s32, s32);
 /**
  * Draws the team source (GB cartridge port or registered slot number), なまえ (name) and trainer id.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): the 1P cartridge or 01 slot icon, なまえ サトシ and IDNo/12345.
  */
 void Registration_DrawTrainerPanel(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
     UNUSED s32 pad[3]; // FAKE: stack padding
@@ -558,7 +561,7 @@ void Registration_DrawTrainerPanel(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
 extern Color88100D9C D_88102D78[2];
 /**
  * Fills both panels of a team row.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): the team row panels.
  */
 void Registration_FillRowBackground(s32 x, s32 y, s32 height) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
@@ -584,7 +587,7 @@ void Ui_DrawNumber(s32, s32, s32, s32);
 void func_8001833C(void*, s32, void*, u16);
 /**
  * Draws one Pokemon cell of a team row: nickname, level and icon.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): ハナ L5, ヒノコ L5, カメ L5 with their icons.
  */
 void Registration_DrawMonCell(s32 x, s32 y, u8* entry, s32 id, s32 color, IconCache8810173C* cache) {
     UNUSED s32 pad[4]; // FAKE
@@ -608,7 +611,7 @@ void Registration_DrawMonCell(s32 x, s32 y, u8* entry, s32 id, s32 color, IconCa
             *p = id;
             func_8001833C(D_88103074, slot, entry, ((D_88102D78[0].c[1] << 3) & 0x7C0) | ((D_88102D78[0].c[2] >> 2) & 0x3E) | ((D_88102D78[0].c[0] << 8) & 0xF800) | 1);
         }
-        if (cache) {} // FAKE: keeps cache live through the block above so the colour table address takes t1
+        if (cache) {} // FAKE: keeps cache live through the block above so the color table address takes t1
         gSPDisplayList(gDisplayListHead++, D_80073408);
         func_8001B884(x + 0x56, y + 6, 0x28, 0x28, (u8*)PokeIcon_GetImage((s8*)D_88103074, slot), 0x28, 0x200000);
         gSPDisplayList(gDisplayListHead++, D_80073438);
@@ -622,7 +625,7 @@ s32 PokeIcon_GetImage(s8 *arg0, s32 arg1);
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 /**
  * Draws an empty Pokemon cell with the placeholder icon.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): the empty cells and the pink Ditto placeholders in slot 01.
  */
 void Registration_DrawEmptyMonCell(s32 arg0, s32 arg1) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
@@ -659,6 +662,8 @@ void func_88101478(s32 x, s32 y, u8* entry, s32 frame, s32 color, s32* anim) {
 
 /**
  * Starts a timer at 0 that counts to `arg1` x 15.
+ * Seen in play (2026-11-13) ran during the Ditto transform animation after registering the party
+ * (とうろく > ポケモンをとうろくする, はい), which ends with メタモンのへんしんがおわりました.
  * @unverified Name and comment guessed from the code.
  */
 void Registration_InitTimer(s8 *arg0, s32 arg1) {
@@ -669,6 +674,8 @@ void Registration_InitTimer(s8 *arg0, s32 arg1) {
 
 /**
  * Starts a timer already at its end, `arg1` x 15.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void Registration_InitTimerFull(s8 *arg0, s32 arg1) {
@@ -680,6 +687,8 @@ void Registration_InitTimerFull(s8 *arg0, s32 arg1) {
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 /**
  * Returns whether the timer has reached its end.
+ * Seen in play (2026-11-13) ran during the Ditto transform animation after registering the party
+ * (とうろく > ポケモンをとうろくする, はい), which ends with メタモンのへんしんがおわりました.
  * @unverified Name and comment guessed from the code.
  */
 s32 Registration_IsTimerDone(s8 *arg0)
@@ -690,6 +699,8 @@ s32 Registration_IsTimerDone(s8 *arg0)
 
 /**
  * Returns whether the timer is at 0.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 Registration_IsTimerAtStart(s32 *arg0) {
@@ -698,6 +709,8 @@ s32 Registration_IsTimerAtStart(s32 *arg0) {
 
 /**
  * Advances the timer by one and returns whether it is done.
+ * Seen in play (2026-11-13) ran during the Ditto transform animation after registering the party
+ * (とうろく > ポケモンをとうろくする, はい), which ends with メタモンのへんしんがおわりました.
  * @unverified Name and comment guessed from the code.
  */
 s32 Registration_StepTimer(s8* arg0) {
@@ -707,6 +720,7 @@ s32 Registration_StepTimer(s8* arg0) {
     return Registration_IsTimerDone(arg0);
 }
 
+/** Queues a sound unless one played recently, counting down a cooldown. */
 s32 Audio_QueueSoundAvoidingRecent(s32* arg0) {
     if (*arg0 > 0) {
         *arg0 -= 1;
@@ -716,6 +730,8 @@ s32 Audio_QueueSoundAvoidingRecent(s32* arg0) {
 
 /**
  * Returns the timer's current value.
+ * Seen in play (2026-11-13) ran during the Ditto transform animation after registering the party
+ * (とうろく > ポケモンをとうろくする, はい), which ends with メタモンのへんしんがおわりました.
  * @unverified Name and comment guessed from the code.
  */
 s32 Registration_GetTimer(s32 *arg0) {
@@ -727,7 +743,7 @@ extern s32 D_88103098[];
 void Registration_DrawMonCell(s32, s32, u8*, s32, s32, IconCache8810173C*);
 /**
  * Draws the six Pokemon cells of a team row.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): the six cells of a team row.
  */
 void Registration_DrawTeamRow(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
     u8* box = (u8*)arg2;
@@ -742,7 +758,7 @@ void Registration_DrawTeamRow(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, 
         Registration_DrawTrainerPanel(arg0, arg1, arg4, box);
         cache.slots = D_88103098;
         cache.base = 0;
-        cache.count = 0x18;
+        cache.count = 24;
         cache.start = arg3 * 6;
         entry = M2C_FIELD(box, u8**, 0x18);
         for (i = 0; i < M2C_FIELD(box, s32*, 0x20); i++, entry += 0x54) {
@@ -768,7 +784,7 @@ void Registration_DrawTeamRow(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, 
 
 /**
  * Draws a full team row: trainer panel and six Pokemon cells.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): a full team row.
  */
 void Registration_DrawTeamRowWithTrainer(s32 arg0, s32 arg1, s8* arg2, s32 arg3, s32 arg4) {
     s32 pad[2]; // FAKE
@@ -781,7 +797,7 @@ void Registration_DrawTeamRowWithTrainer(s32 arg0, s32 arg1, s8* arg2, s32 arg3,
     Registration_DrawTrainerPanel(arg0, arg1, 0, (u8*)arg2);
     cache.slots = D_88103098;
     cache.base = 0;
-    cache.count = 0x18;
+    cache.count = 24;
     cache.start = arg3 * 6;
     if (arg4 == 0) {
         n = 0;
@@ -812,7 +828,8 @@ void Registration_DrawTeamRowWithTrainer(s32 arg0, s32 arg1, s8* arg2, s32 arg3,
  * index arg1 (indices arg1 .. arg1 + arg2 - 1). Does nothing when
  * arg1 + arg2 <= arg1, i.e. when arg2 is not positive. The compare is signed.
  * What the -1 entries mean is not established from this function.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-12) in とうろく: ran with count 0x18 when the registration screen was set up,
+ * before the team lists were built.
  */
 void Registration_ClearIndices(s32* arg0, s32 arg1, s32 arg2) {
     s32 end;
@@ -825,7 +842,7 @@ void Registration_ClearIndices(s32* arg0, s32 arg1, s32 arg2) {
 
 /**
  * Sets the team list mode: 0 register, 1 view, 2 delete.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): set the list to register mode for ポケモンを とうろくする.
  */
 void Registration_SetListMode(s8 *arg0, s32 arg1) {
     M2C_FIELD(arg0, s32 *, 0xBC) = arg1;
@@ -848,7 +865,7 @@ void Registration_DrawTeamRow(s32, s32, s32, s32, s32, s32);
 M2C_UNK ScrollList_Init();
 /**
  * Sets up the team list window (544x344) in mode `arg4`.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): opened the team list.
  */
 void Registration_InitTeamList(s8 *arg0, s32 arg1, s32 arg2, s8 *arg3, s32 arg4) {
     Window_SetRect(arg0 + 8, arg1, arg2, 0x220, 0x158);
@@ -883,7 +900,7 @@ void Registration_DrawTeamRow(s32, s32, s32, s32, s32, s32);
  * Calls Registration_DrawTeamRow with the fields at +0x08 and +0x0C each increased by 6,
  * the entry at the current index (+0x5C) in the first table of arg0->tables,
  * that index, and two zero arguments.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-12): the team rows of the list.
  */
 void Registration_DrawTeamListRow(IndexedDrawer* arg0) {
     s32 index = arg0->index;
@@ -899,7 +916,7 @@ void Registration_DrawTeamRowWithTrainer(s32, s32, s8*, s32, s32);
 void Registration_DrawMessageWindow(s8*);
 /**
  * Draws the team list window for its current state.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): the ポケモンを とうろくする list window.
  */
 void Registration_DrawTeamList(s8* arg0) {
     func_800189C0(D_88103074, 0);
@@ -965,7 +982,7 @@ void func_80027868(s32, s32);
 
 /**
  * Runs the team list's state machine: pick, confirm, register or delete, messages.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): ran the pick, confirm, register and message steps.
  */
 s32 Registration_UpdateTeamList(s8* arg0) {
     s32 ret = 0;
@@ -1085,6 +1102,7 @@ s32 Registration_UpdateTeamList(s8* arg0) {
  * known from the code alone.
  *
  * FreeBattle_BuildTeamPointers is the same routine with a record size of 0x214.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in registration.
  * @unverified Name guessed from the code; comment kept.
  */
 void Registration_BuildTeamPointers(s32* arg0, s32* arg1) {
@@ -1111,7 +1129,8 @@ void Registration_BuildTeamPointers(s32* arg0, s32* arg1);
 
 /**
  * Loads the registered teams and opens the list in view mode.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in とうろく: とうろくした ポケモンをみる ran this and showed the registered team (slot
+ * 01: ハナ, ヒノコ, カメ).
  */
 void Registration_OpenViewList(s32* arg0) {
     func_80027410((s8*)arg0 + 0x2698, (s8*)arg0 + 0x458, 0x220, 0x10, 0);
@@ -1129,7 +1148,8 @@ void Registration_BuildTeamPointers(s32* arg0, s32* arg1);
 
 /**
  * Loads the registered teams and opens the list in delete mode.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) in とうろく: とうろくした ポケモンをけす ran this and showed the same list with
+ * 「このポケモンをけす？」 on A.
  */
 void Registration_OpenDeleteList(s32* arg0) {
     func_80027410((s8*)arg0 + 0x2698, (s8*)arg0 + 0x458, 0x220, 0x10, 0);
@@ -1146,7 +1166,7 @@ void Registration_InitTeamList(s8*, s32, s32, s8*, s32);
 
 /**
  * Loads the Game Boy teams and opens the list in register mode.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): ポケモンを とうろくする loaded the cartridge party and opened the list.
  */
 void Registration_OpenRegisterList(s32* arg0) {
     func_80027410((s8*)arg0 + 0x2698, (s8*)arg0 + 0x458, 0x220, 4, 0);
@@ -1173,6 +1193,8 @@ extern M2C_UNK D_88103080;
  * &D_88102D90, 3, &D_88103000) and sets the state word *arg0 to 0.
  * arg0 is declared s32 to agree with the existing Registration_InitScreen(s32) prototype; it is
  * used as a byte-addressed pointer. What the object and the value mean is not established.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name guessed from the code; comment kept.
  */
 void Registration_InitScreen(s32 arg0) {
@@ -1191,7 +1213,7 @@ void Registration_DrawMainMenu(s8*, s32);
 void Registration_DrawTeamList(s8*);
 /**
  * Draws the registration screen for its current state.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): drew the とうろく screen every frame.
  */
 M2C_UNK Registration_DrawScreen(s32 a) {
     s32* arg0 = (s32*)a;
@@ -1240,7 +1262,7 @@ extern M2C_UNK D_8810300C;
 
 /**
  * Runs the registration screen's state machine for one frame.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): ran the とうろく screen.
  */
 s32 Registration_UpdateScreen(s32 arg0) {
     s32 sp3C;
@@ -1293,6 +1315,8 @@ extern s32 D_881030F8;
  * Matching note: the call result is stored straight into D_881030F8 and the
  * global is read back for the next call; going through a local gives a
  * different store sequence.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name guessed from the code; comment kept.
  */
 void Registration_AllocScreen(void) {
@@ -1312,7 +1336,7 @@ M2C_UNK GbSave_DrawSummaryBar(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
 void func_8002C8D8(Col88102A2C*, Col88102A2C, f32);
 /**
  * Steps the screen fade; returns once eight frames have passed.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran on the frames the registration screen faded in from the main menu.
  */
 s32 Registration_UpdateFade(s32 arg0) {
     Col88102A2C sp2C;
@@ -1354,7 +1378,7 @@ extern s32 D_881030F8;
 
 /**
  * One frame of the registration screen.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): ran every frame of the とうろく screen.
  */
 void Registration_RunFrame(s32 arg0) {
     Cont_StartReadInputs();
@@ -1368,7 +1392,7 @@ extern s32 D_881030F8;
 
 /**
  * Frees the registration screen state.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): B on the menu left the screen for the main menu.
  */
 void Registration_FreeScreen(void) {
     func_80002DC0(D_881030F8);
@@ -1405,6 +1429,8 @@ extern s32 D_88103070;
 extern s32 D_88103074;
 /**
  * Entry point: pushes the 'REGS' pool state, loads the icons and segments, and runs the registration screen.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 Registration_Init(s32 arg0, s32 arg1) {

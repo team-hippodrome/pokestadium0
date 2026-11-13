@@ -1,31 +1,41 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
 #include "fragment1_89010.h"
 
-void func_821323D0(UNUSED s32 arg0) {
+/**
+ * Battle opening, step 12: does nothing (the opening has ended).
+ */
+void BattleScene_OpeningStepNop(UNUSED s32 arg0) {
 }
 
 void BattleAnim_NoopUpdateHook(void) {
 }
 
+/**
+ * Seen in play (2026-11-13) (scene mode forced to 4): step 0 was run by func_82134374 at scene
+ * start, so the first update already saw step 1; the case 0 fall-through into case 1 was not
+ * reached. Steps 1 to 3 ran in order (wait for assets, spinning overhead shot, then the side 1
+ * throw). A COM Free Battle uses mode 8 (BattleScene_OpeningStepInitCamera and the other
+ * OpeningStep functions) instead.
+ */
 void BattleScene_UpdateIntroSequence(CameraNode* arg0) {
     switch (sBattleScene.scene->phaseStep) {
         case 0:
-            func_82131880(arg0);
+            BattleScene_IntroStepInitOverheadCamera(arg0);
 
         case 1:
-            func_821319FC(arg0);
+            BattleScene_IntroStepWaitForAssets(arg0);
             break;
 
         case 2:
-            func_82131A3C(arg0);
+            BattleScene_IntroStepSpinOverheadCamera(arg0);
             break;
 
         case 3:
-            func_82131C64(arg0);
+            BattleScene_OpeningStepThrowSide1(arg0);
             break;
 
         case 4:
-            func_82131D24(arg0);
+            BattleScene_OpeningStepLandSide0Ball(arg0);
             break;
 
         case 5:
@@ -33,7 +43,7 @@ void BattleScene_UpdateIntroSequence(CameraNode* arg0) {
             break;
 
         case 6:
-            func_8213201C(arg0);
+            BattleScene_OpeningStepWaitSide0Ball(arg0);
             break;
 
         case 7:
@@ -41,7 +51,7 @@ void BattleScene_UpdateIntroSequence(CameraNode* arg0) {
             break;
 
         case 8:
-            func_821321A4(arg0);
+            BattleScene_OpeningStepWaitSide0SendOut(arg0);
             break;
 
         case 9:
@@ -49,11 +59,11 @@ void BattleScene_UpdateIntroSequence(CameraNode* arg0) {
             break;
 
         case 10:
-            func_8213233C(arg0);
+            BattleScene_OpeningStepWaitSide1SendOut(arg0);
             break;
 
         case 11:
-            func_821323D0((s32)arg0);
+            BattleScene_OpeningStepNop((s32)arg0);
             break;
     }
 }
@@ -66,7 +76,12 @@ void func_8210BCF0(Vec3f*, Vec3f*, s8*, s8*, s8*);
 s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2);
 void func_80041914(s32, s32);
 void func_82136918(u8*, s32);
-void func_821324D8(CameraNode* arg0) {
+/**
+ * Battle opening, step 0 (BattleScene_RunOpeningSendOut): puts the camera high above the field
+ * (target y 425), hides both Pokemon and starts the opening music (audio command 4).
+ * Seen in play (COM battle opening): the screen opens on the stadium lights overhead.
+ */
+void BattleScene_OpeningStepInitCamera(CameraNode* arg0) {
     func_8212188C();
     func_8000D41C(&arg0->view.targetPosition, 0.0f, 425.0f, 0.0f);
     func_8000D41C(&arg0->view.eyePosition, -0.15f, 15.0f, 64.8f);
@@ -79,7 +94,13 @@ void func_821324D8(CameraNode* arg0) {
     M2C_FIELD(D_8219A5A0, s32 *, 0x20)++;
 }
 
-void func_821325E8(s32 arg0) {
+/**
+ * Battle opening, step 1: waits until the battle assets have loaded
+ * (BattleAnim_PollAssetLoadBusyFlags).
+ * Seen in play (2026-11-13) in a COM Free Battle opening it ran on the two frames after
+ * BattleScene_OpeningStepInitCamera, then the step moved to 2.
+ */
+void BattleScene_OpeningStepWaitForAssets(s32 arg0) {
     if (func_82101FD4(D_82199DE0) != 0) {
         M2C_FIELD(D_8219A5A0, s32 *, 0x20) = (s32) (M2C_FIELD(D_8219A5A0, s32 *, 0x20) + 1);
     }
@@ -87,12 +108,18 @@ void func_821325E8(s32 arg0) {
 
 s32 func_821217DC(s32);
 void func_8000EEBC(Vec3f*, Vec3f*, f32, s32, s32);
-void func_82132628(CameraNode* arg0) {
+/**
+ * Battle opening, step 2: orbits the high camera around the field for 15 frames.
+ * Seen in play (2026-11-13) in a COM Free Battle opening the high camera circled the field: scene
+ * rotationY rose by about 0x2D8 per call (-20, 702, 1427, ...) for 15 calls, then the step moved to
+ * 3.
+ */
+void BattleScene_OpeningStepOrbitCamera(CameraNode* arg0) {
     if (func_821217DC(0xF) != 0) {
         sBattleScene.scene->phaseStep++;
     }
     M2C_FIELD(sBattleScene.scene, s16*, 0x5A) += 0x2D8;
-    func_8000EEBC(&arg0->view.targetPosition, &arg0->view.eyePosition, sBattleScene.scene->unk_74, sBattleScene.scene->rotationY, M2C_FIELD(sBattleScene.scene, s16*, 0x5A));
+    func_8000EEBC(&arg0->view.targetPosition, &arg0->view.eyePosition, sBattleScene.scene->unk_74, sBattleScene.scene->rotationX, M2C_FIELD(sBattleScene.scene, s16*, 0x5A));
     func_8210BCF0(&arg0->view.targetPosition, &arg0->view.eyePosition, D_8219A5A0 + 0x74, D_8219A5A0 + 0x58, D_8219A5A0 + 0x5A);
     M2C_FIELD(D_8219A5A0, f32*, 0x98) = 0.0f;
 }
@@ -102,7 +129,13 @@ void func_8210C1A8(f32*, f32, f32);
 void func_80041374(s32, s32);
 M2C_UNK ActivePokemon_SetModelTransform(s8*, M2C_UNK, M2C_UNK);
 M2C_UNK func_821365B0(M2C_UNK, s8*, s8*, M2C_UNK, s32);
-void func_821326E4(CameraNode* arg0) {
+/**
+ * Battle opening, step 3: eases the camera down to field level over 110 frames, then starts side
+ * 0's Poke Ball throw (model transform 1, effect list 8).
+ * Seen in play: the camera comes down off the lights over about 220 frames, and side 0's Poke
+ * Ball trail follows at once.
+ */
+void BattleScene_OpeningStepLowerCameraAndThrowSide0(CameraNode* arg0) {
     s32 sp3C;
     s16 sp3A;
     s16 sp38;

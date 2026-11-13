@@ -3,31 +3,33 @@
 
 /**
  * Battle opening phase: steps through the intro camera shots and both send-outs.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) in a COM Free Battle (scene mode 8) it ran every frame of the opening,
+ * dispatching BattleScene_OpeningStepInitCamera, then WaitForAssets, OrbitCamera,
+ * LowerCameraAndThrowSide0 and ThrowSide1 in order.
  */
 void BattleScene_RunOpeningSendOut(CameraNode* arg0) {
     switch (sBattleScene.scene->phaseStep) {
         case 0:
-            func_821324D8(arg0);
+            BattleScene_OpeningStepInitCamera(arg0);
 
         case 1:
-            func_821325E8((s32)arg0);
+            BattleScene_OpeningStepWaitForAssets((s32)arg0);
             break;
 
         case 2:
-            func_82132628(arg0);
+            BattleScene_OpeningStepOrbitCamera(arg0);
             break;
 
         case 3:
-            func_821326E4(arg0);
+            BattleScene_OpeningStepLowerCameraAndThrowSide0(arg0);
             break;
 
         case 4:
-            func_82131C64(arg0);
+            BattleScene_OpeningStepThrowSide1(arg0);
             break;
 
         case 5:
-            func_82131D24(arg0);
+            BattleScene_OpeningStepLandSide0Ball(arg0);
             break;
 
         case 6:
@@ -35,7 +37,7 @@ void BattleScene_RunOpeningSendOut(CameraNode* arg0) {
             break;
 
         case 7:
-            func_8213201C(arg0);
+            BattleScene_OpeningStepWaitSide0Ball(arg0);
             break;
 
         case 8:
@@ -43,7 +45,7 @@ void BattleScene_RunOpeningSendOut(CameraNode* arg0) {
             break;
 
         case 9:
-            func_821321A4(arg0);
+            BattleScene_OpeningStepWaitSide0SendOut(arg0);
             break;
 
         case 10:
@@ -51,11 +53,11 @@ void BattleScene_RunOpeningSendOut(CameraNode* arg0) {
             break;
 
         case 11:
-            func_8213233C(arg0);
+            BattleScene_OpeningStepWaitSide1SendOut(arg0);
             break;
 
         case 12:
-            func_821323D0((s32)arg0);
+            BattleScene_OpeningStepNop((s32)arg0);
             break;
     }
 }

@@ -2,7 +2,8 @@
 #include "battle_engine_343BA0_8.h"
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Disable.
  */
 void BattleAnim_SetupDisableUseRadial(void) {
     D_8219CB16 = 0;
@@ -12,7 +13,8 @@ void BattleAnim_SetupDisableUseRadial(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Disable.
  */
 s32 BattleAnim_RunDisableUseRadial(void) {
     D_8219CB16++;
@@ -28,7 +30,8 @@ s32 BattleAnim_RunDisableUseRadial(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Disable.
  */
 void BattleAnim_DrawDisableUseRadial(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -37,7 +40,8 @@ void BattleAnim_DrawDisableUseRadial(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Razor Leaf.
  */
 void BattleAnim_SetupRazorLeafUseTrail(void) {
     D_8219CB18 = 0;
@@ -46,7 +50,8 @@ void BattleAnim_SetupRazorLeafUseTrail(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Razor Leaf.
  */
 s32 BattleAnim_RunRazorLeafUseTrail(void) {
     UNUSED s32 pad[1]; // FAKE: stack padding
@@ -76,7 +81,8 @@ s32 BattleAnim_RunRazorLeafUseTrail(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Razor Leaf.
  */
 void BattleAnim_DrawRazorLeafUseTrail(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -85,7 +91,8 @@ void BattleAnim_DrawRazorLeafUseTrail(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Petal Dance.
  */
 void BattleAnim_SetupPetalDanceUseTrail(void) {
     D_8219CB1A = 0;
@@ -94,7 +101,8 @@ void BattleAnim_SetupPetalDanceUseTrail(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Petal Dance.
  */
 s32 BattleAnim_RunPetalDanceUseTrail(void) {
     UNUSED s32 pad[1]; // FAKE: stack padding
@@ -124,7 +132,8 @@ s32 BattleAnim_RunPetalDanceUseTrail(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Petal Dance.
  */
 void BattleAnim_DrawPetalDanceUseTrail(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -133,7 +142,8 @@ void BattleAnim_DrawPetalDanceUseTrail(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Hypnosis, Screech.
  */
 void BattleAnim_SetupHypnosisScreechUseTrail(void) {
     Vec3f sp1C;
@@ -144,14 +154,16 @@ void BattleAnim_SetupHypnosisScreechUseTrail(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Hypnosis, Screech.
  */
 s32 BattleAnim_RunHypnosisScreechUseTrail(void) {
     return HypnosisScreechTrail_IsComplete();
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Hypnosis, Screech.
  */
 void BattleAnim_DrawHypnosisScreechUseTrail(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -160,7 +172,8 @@ void BattleAnim_DrawHypnosisScreechUseTrail(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Sing.
  */
 void BattleAnim_SetupSingUseTrail(void) {
     Vec3f sp1C;
@@ -171,14 +184,16 @@ void BattleAnim_SetupSingUseTrail(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Sing.
  */
 s32 BattleAnim_RunSingUseTrail(void) {
     return SingTrail_AdvanceTimer();
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Sing.
  */
 void BattleAnim_DrawSingUseTrail(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -189,7 +204,8 @@ void BattleAnim_DrawSingUseTrail(void) {
 /**
  * Moves: Kinesis (use), Supersonic (use)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Supersonic, Kinesis.
  */
 void BattleAnim_SetupKinesisSupersonicUseTrail(void) {
     Vec3f sp1C;
@@ -202,7 +218,8 @@ void BattleAnim_SetupKinesisSupersonicUseTrail(void) {
 /**
  * Moves: Kinesis (use), Supersonic (use)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Supersonic, Kinesis.
  */
 s32 BattleAnim_RunKinesisSupersonicUseTrail(void) {
     return Trail40GridAlt_IsComplete();
@@ -211,7 +228,8 @@ s32 BattleAnim_RunKinesisSupersonicUseTrail(void) {
 /**
  * Moves: Kinesis (use), Supersonic (use)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Supersonic, Kinesis.
  */
 void BattleAnim_DrawKinesisSupersonicUseTrail(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -222,7 +240,8 @@ void BattleAnim_DrawKinesisSupersonicUseTrail(void) {
 /**
  * Moves: Sonic Boom (use)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Sonic Boom.
  */
 void BattleAnim_SetupSonicBoomUseFourStream(void) {
     D_8219CAC0 = 0;
@@ -233,7 +252,8 @@ void BattleAnim_SetupSonicBoomUseFourStream(void) {
 /**
  * Moves: Sonic Boom (use)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Sonic Boom.
  */
 s32 BattleAnim_RunSonicBoomUseFourStream(void) {
     s32 var_v1;
@@ -282,7 +302,8 @@ s32 BattleAnim_RunSonicBoomUseFourStream(void) {
 /**
  * Moves: Sonic Boom (use)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Sonic Boom.
  */
 void BattleAnim_DrawSonicBoomUseFourStream(void) {
     if (D_8219CAC0 >= 2) {
@@ -293,7 +314,8 @@ void BattleAnim_DrawSonicBoomUseFourStream(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Spike Cannon.
  */
 void BattleAnim_SetupSpikeCannonUseFourStream(void) {
     D_8219CAC2 = 0;
@@ -302,7 +324,8 @@ void BattleAnim_SetupSpikeCannonUseFourStream(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Spike Cannon.
  */
 s32 BattleAnim_RunSpikeCannonUseFourStream(void) {
     s32 var_v1;
@@ -333,7 +356,8 @@ s32 BattleAnim_RunSpikeCannonUseFourStream(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Spike Cannon.
  */
 void BattleAnim_DrawSpikeCannonUseFourStream(void) {
     if (D_8219CAC2 >= 2) {
@@ -346,7 +370,8 @@ void BattleAnim_DrawSpikeCannonUseFourStream(void) {
 /**
  * Moves: Pin Missile (use), Poison Sting (use), Twineedle (use)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Poison Sting, Twineedle, Pin Missile.
  */
 void BattleAnim_StingerMoves_Init(void) {
     Vec3f sp5C;
@@ -374,7 +399,8 @@ void BattleAnim_StingerMoves_Init(void) {
 /**
  * Moves: Pin Missile (use), Poison Sting (use), Twineedle (use)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Poison Sting, Twineedle, Pin Missile.
  */
 s32 BattleAnim_StingerMoves_Update(void) {
     D_8219CB08++;
@@ -388,7 +414,8 @@ s32 BattleAnim_StingerMoves_Update(void) {
 /**
  * Moves: Pin Missile (use), Poison Sting (use), Twineedle (use)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Poison Sting, Twineedle, Pin Missile.
  */
 void BattleAnim_StingerMoves_Draw(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -397,7 +424,8 @@ void BattleAnim_StingerMoves_Draw(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Tri Attack.
  */
 void BattleAnim_EmitTriAttackUseRadial(void) {
     f32 sp5C;
@@ -415,7 +443,8 @@ void BattleAnim_EmitTriAttackUseRadial(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Tri Attack.
  */
 void BattleAnim_SetupTriAttackUseRadial(void) {
     D_8219CB0A = 0;
@@ -425,7 +454,8 @@ void BattleAnim_SetupTriAttackUseRadial(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Tri Attack.
  */
 s32 BattleAnim_RunTriAttackUseRadial(void) {
     D_8219CB0A++;
@@ -436,7 +466,8 @@ s32 BattleAnim_RunTriAttackUseRadial(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Tri Attack.
  */
 void BattleAnim_DrawTriAttackUseRadial(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -445,7 +476,8 @@ void BattleAnim_DrawTriAttackUseRadial(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Aurora Beam.
  */
 void BattleAnim_SeedAuroraBeamUseDoubleTextureTrail(void) {
     static unk_D_843C2C00_024 D_84387FC0 = { 2, 1, 0xE, 1, 2, 2, 3, 1 };
@@ -472,7 +504,8 @@ void BattleAnim_SeedAuroraBeamUseDoubleTextureTrail(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Aurora Beam.
  */
 void BattleAnim_SetupAuroraBeamUseDoubleTextureTrail(void) {
     BattleAnim_ResetSharedEffectMatrix();
@@ -481,14 +514,16 @@ void BattleAnim_SetupAuroraBeamUseDoubleTextureTrail(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Aurora Beam.
  */
 s32 BattleAnim_RunAuroraBeamUseDoubleTextureTrail(void) {
     return DoubleTextureTrail_UpdateAll();
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Aurora Beam.
  */
 void BattleAnim_DrawAuroraBeamUseDoubleTextureTrail(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -497,7 +532,8 @@ void BattleAnim_DrawAuroraBeamUseDoubleTextureTrail(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Ice Beam.
  */
 void BattleAnim_SeedIceBeamUseSixSlotTrail(void) {
     static unk_D_843C2C00_024 D_84388040 = { 3, 5, 1, 5, 1, 7, 3, 7 };
@@ -523,7 +559,8 @@ void BattleAnim_SeedIceBeamUseSixSlotTrail(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Ice Beam.
  */
 void BattleAnim_SetupIceBeamUseSixSlotTrail(void) {
     D_8219CB0C = 0;
@@ -533,7 +570,8 @@ void BattleAnim_SetupIceBeamUseSixSlotTrail(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Ice Beam.
  */
 s32 BattleAnim_RunIceBeamUseSixSlotTrail(void) {
     D_8219CB0C++;
@@ -544,7 +582,8 @@ s32 BattleAnim_RunIceBeamUseSixSlotTrail(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Ice Beam.
  */
 void BattleAnim_DrawIceBeamUseSixSlotTrail(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -553,7 +592,8 @@ void BattleAnim_DrawIceBeamUseSixSlotTrail(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Psybeam.
  */
 void BattleAnim_SeedPsybeamUseDoubleTextureTrail(void) {
     static unk_D_843C2C00_024 D_84388080 = { 3, 5, 1, 5, 6, 7, 2, 3 };
@@ -581,7 +621,8 @@ void BattleAnim_SeedPsybeamUseDoubleTextureTrail(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Psybeam.
  */
 void BattleAnim_SetupPsybeamUseDoubleTextureTrail(void) {
     BattleAnim_ResetSharedEffectMatrix();
@@ -590,14 +631,16 @@ void BattleAnim_SetupPsybeamUseDoubleTextureTrail(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Psybeam.
  */
 s32 BattleAnim_RunPsybeamUseDoubleTextureTrail(void) {
     return DoubleTextureTrail_UpdateAll();
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Psybeam.
  */
 void BattleAnim_DrawPsybeamUseDoubleTextureTrail(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -647,6 +690,8 @@ void BattleAnim_StartEffect77DoubleTextureTrail_Draw(void) {
 }
 
 /**
+ * Seen in play (2026-11-13) ran on SolarBeam's second turn, when the charged beam fired (the sweep
+ * only saw the charging turn).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SeedSolarBeamUseDoubleTextureTrail(void) {
@@ -670,6 +715,7 @@ void BattleAnim_SeedSolarBeamUseDoubleTextureTrail(void) {
 }
 
 /**
+ * Seen in play (2026-11-13) ran on SolarBeam's second turn, when the charged beam fired.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetupSolarBeamUseDoubleTextureTrail(void) {
@@ -679,6 +725,7 @@ void BattleAnim_SetupSolarBeamUseDoubleTextureTrail(void) {
 }
 
 /**
+ * Seen in play (2026-11-13) ran on SolarBeam's second turn, while the charged beam fired.
  * @unverified Name from Stadium 1.
  */
 s32 BattleAnim_RunSolarBeamUseDoubleTextureTrail(void) {
@@ -686,6 +733,7 @@ s32 BattleAnim_RunSolarBeamUseDoubleTextureTrail(void) {
 }
 
 /**
+ * Seen in play (2026-11-13) ran on SolarBeam's second turn, while the charged beam fired.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_DrawSolarBeamUseDoubleTextureTrail(void) {
@@ -695,7 +743,8 @@ void BattleAnim_DrawSolarBeamUseDoubleTextureTrail(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Hyper Beam.
  */
 void BattleAnim_SeedHyperBeamUseDoubleTextureTrail(void) {
     static unk_D_843C2C00_024 D_843881C0 = {

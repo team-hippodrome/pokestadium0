@@ -84,7 +84,8 @@ void BattleScene_SetParticipantModelScale(ActivePokemon* active_pokemon, f32 sca
 
 /**
  * Returns how many Pokemon the active Pokemon's trainer brought (teamRoster+0x2).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) in the 165-move sweep (Jump Kick, Sing, Hypnosis, Selfdestruct): it
+ * returned 6 for both the 1P and the COM side in a six-on-six free battle.
  */
 u8 ActivePokemon_GetBroughtCount(s8 *arg0) {
     return M2C_FIELD(M2C_FIELD(arg0, s8 **, 0x860), u8 *, 2);
@@ -94,6 +95,8 @@ u8 ActivePokemon_GetBroughtCount(s8 *arg0) {
 /**
  * Returns the brought count of the other team member's roster in the session
  * (teamMember[teamMemberIndex == 0]).
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 u8 ActivePokemon_GetPartnerBroughtCount(s8 *arg0)
@@ -150,6 +153,8 @@ extern f32 D_FLT_82189350[][4];
  * whose second float func_82107790 reads as a resting height), doubled, divided
  * by 50, times the display object's Y scale. Zero-side relative of the width
  * term used by BattleScene_GetParticipantModelWidth in Stadium 1.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 f32 BattleAnim_GetSpeciesBaseScale(ActivePokemon* active_pokemon) {
@@ -160,6 +165,8 @@ extern f32 D_FLT_82189350[][4];
 
 /**
  * Returns the model's first size entry from D_FLT_82189350, doubled and divided by 50.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 f32 ActivePokemon_GetSizeRatio(ActivePokemon* active_pokemon) {
@@ -173,9 +180,14 @@ u8 func_82107BF4(s8 *arg0) {
 extern f32 D_FLT_8218935C[][4];
 
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Writes the participant's model size to out: DisplayObject scale (0x30/0x34) times the species
+ * size table (D_FLT_8218935C) times 2/50, the same table BattleScene_GetParticipantModelRadiusScaled
+ * reads. Was misnamed Trade_UpdateBoxSlotBob, a Stadium 1 trade-machine name.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
+ * switch in battle.
+ * @unverified Named from the code; the sweep hit it but did not check the values.
  */
-void Trade_UpdateBoxSlotBob(s8* arg0, Vec3f* out) {
+void BattleScene_GetParticipantModelSizeScaled(s8* arg0, Vec3f* out) {
     out->x = M2C_FIELD(arg0, f32*, 0x30) * (D_FLT_8218935C[M2C_FIELD(arg0, s16*, 0x1A) - 1][0] * 2 / 50.0f);
     out->y = M2C_FIELD(arg0, f32*, 0x34) * (D_FLT_8218935C[M2C_FIELD(arg0, s16*, 0x1A) - 1][1] * 2 / 50.0f);
     out->z = M2C_FIELD(arg0, f32*, 0x30) * (D_FLT_8218935C[M2C_FIELD(arg0, s16*, 0x1A) - 1][0] * 2 / 50.0f);
@@ -220,6 +232,8 @@ f32 BattleScene_GetParticipantHeight(ActivePokemon*);
 /**
  * World point where effects aim at the participant: its position, raised by its
  * height for grounded species, never below its height.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn.
  * @unverified Name and comment guessed from the code.
  */
 void BattleScene_GetParticipantAimPoint(ActivePokemon *arg0, u8 *arg1) {
@@ -241,6 +255,7 @@ f32 func_8210791C(ActivePokemon*);
 f32 BattleScene_GetParticipantHeight(ActivePokemon*);
 /**
  * Like BattleScene_GetParticipantAimPoint, but in screen x (func_8210791C) with z 0.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a Pound turn.
  * @unverified Name and comment guessed from the code.
  */
 void BattleScene_GetParticipantScreenAimPoint(ActivePokemon* active_pokemon, Vec3f* out) {
@@ -260,7 +275,8 @@ void BattleScene_GetParticipantScreenAimPoint(ActivePokemon* active_pokemon, Vec
 
 /**
  * Writes the Poke Ball's position, raised by 2.5 units, to `arg1`.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): ran during ゆけっ！ゲンのすけ, while the Poké Ball for COM's replacement
+ * Gengar was in the air (its shadow on the floor), and not before.
  */
 void ActivePokemon_GetPokeBallAimPoint(s8 *arg0, s8 *arg1) {
     M2C_FIELD(arg1, f32 *, 0) = (f32) M2C_FIELD(arg0, f32 *, 0x648);
@@ -277,6 +293,8 @@ extern f32 D_FLT_82189350[][4];
  * D_FLT_82189350) unscaled when modelTransformId is 0x10, otherwise the same
  * width times the display object's Y scale. What transform 0x10 is has not been
  * established; the value is used literally here.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn.
  * @unverified Name guessed from the code; comment kept.
  */
 f32 BattleScene_GetParticipantHeight(ActivePokemon* active_pokemon) {
@@ -288,6 +306,8 @@ f32 BattleScene_GetParticipantHeight(ActivePokemon* active_pokemon) {
 
 extern f32 D_FLT_8218934C[][4];
 /**
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 f32 BattleScene_GetParticipantModelRadiusScaled(ActivePokemon* active_pokemon) {
@@ -300,6 +320,8 @@ ModelNodeView* Battle_GetLoadedModelNode(ActivePokemon* active_pokemon, s32 node
 
 /**
  * Returns the session's display model id (sessionTeams+0x2).
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
+ * switch in battle.
  * @unverified Name and comment guessed from the code.
  */
 s16 ActivePokemon_GetDisplayModel(s8 *arg0, M2C_UNK arg1) {
@@ -313,14 +335,18 @@ typedef struct {
 } unk_D_8006A9CC; // size = 0xC
 extern unk_D_8006A9CC D_8006A9CC[];
 
-s32 func_82107F68(u8* arg0) {
+/**
+ * Returns the name string of the Pokemon's current move (move cache byte at 0x80A).
+ */
+s32 ActivePokemon_GetMoveName(u8* arg0) {
     return D_8006A9CC[arg0[0x80A]].unk_00;
 }
 
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 /**
  * Returns the nickname (+0x30 in BattleMon) of this Pokemon in the roster of the teammate named by state.replacementState.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): for 1P's Nidoqueen it returned the string ニドニド, the nickname shown on
+ * its HUD.
  */
 s32 ActivePokemon_GetNickname(s8 *arg0)
 {
@@ -330,6 +356,8 @@ s32 ActivePokemon_GetNickname(s8 *arg0)
 
 /**
  * Creates the participant's owner (trainer) model.
+ * Seen in play (2026-11-13) ran during the opening of a COM Free Battle, before the first command
+ * menu.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_InitializeParticipantOwnerModel(ActivePokemon* active_pokemon) {
@@ -358,6 +386,8 @@ void BattleScene_InitializeParticipantOwnerModel(ActivePokemon* active_pokemon) 
 /**
  * Creates the participant's two hidden secondary models.
  * ^?????? this annotation seems like a hallucination
+ * Seen in play (2026-11-13) ran during the opening of a COM Free Battle, before the first command
+ * menu.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_InitializeParticipantSecondaryModels(ActivePokemon* pokemon, s32* secondary_models) {
@@ -392,10 +422,12 @@ void BattleScene_InitializeParticipantSecondaryModels(ActivePokemon* pokemon, s3
 
 extern f32 D_82199DF0[][4];
 void func_8000D41C(Vec3f*, f32, f32, f32);
-void func_8210213C(ActivePokemon*);
+void ActivePokemon_LoadSpeciesModelAssets(ActivePokemon*);
 /**
  * Creates and positions the participant's Pokemon model and loads its
  * presentation data.
+ * Seen in play (2026-11-13) ran during the opening of a COM Free Battle, before the first command
+ * menu.
  * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
  */
 void BattleScene_InitializeParticipantModel(ActivePokemon* active_pokemon) {
@@ -416,7 +448,7 @@ void BattleScene_InitializeParticipantModel(ActivePokemon* active_pokemon) {
     }
 
     Model_InitDisplayObject(&active_pokemon->displayObject, 0, model_id, model_view);
-    func_8210213C(active_pokemon);
+    ActivePokemon_LoadSpeciesModelAssets(active_pokemon);
     ModelAnim_SetAnimation(&active_pokemon->displayObject, 0);
     ModelAnim_SetFrame(&active_pokemon->displayObject, 0);
 
@@ -439,6 +471,8 @@ void BattleScene_InitializeParticipantModel(ActivePokemon* active_pokemon) {
 
 /**
  * Creates the participant's hidden auxiliary model (model 154).
+ * Seen in play (2026-11-13) ran during the opening of a COM Free Battle, before the first command
+ * menu.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_InitializeParticipantAuxiliaryModel(ActivePokemon* active_pokemon) {
@@ -477,7 +511,7 @@ void BattleScene_ReinitParticipantBodyModel(ActivePokemon* owner, ActivePokemon*
     }
 
     Model_InitDisplayObject(&pokemon->displayObject, 0, object_type, model_node);
-    func_8210213C(owner);
+    ActivePokemon_LoadSpeciesModelAssets(owner);
     ModelAnim_SetFrame(&pokemon->displayObject, 0);
     ModelAnim_SetAnimation(&pokemon->displayObject, 0);
 
@@ -627,6 +661,8 @@ void Battle_ReloadDisplayModel(ActivePokemon* active_pokemon) {
 
 /**
  * Sets the model transform id and its timer.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle and a Pound turn.
  * @unverified Name and comment guessed from the code.
  */
 void ActivePokemon_SetModelTransform(s8 *arg0, s32 arg1, s32 arg2) {
@@ -708,7 +744,7 @@ void Battle_SetModelToHitAnim(ActivePokemon* active_pokemon) {
 
 /**
  * Points teamRoster at sessionTeams->teamMember[index].
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): picked Onix's roster entry when it was switched in.
  */
 void ActivePokemon_SelectTeamRoster(s8 *arg0, s32 arg1) {
     M2C_FIELD(arg0, s32 *, 0x860) = (s32) M2C_FIELD((M2C_FIELD(arg0, s32 *, 0x85C) + (arg1 * 4)), s32 *, 8);
@@ -716,7 +752,7 @@ void ActivePokemon_SelectTeamRoster(s8 *arg0, s32 arg1) {
 
 /**
  * Sets state.teamMemberIndex.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): set the switched-in team member (Onix).
  */
 void ActivePokemon_SetTeamMemberIndex(void *arg0, s32 arg1) {
     M2C_FIELD(arg0, s8 *, 0x7B7) = arg1;
@@ -724,6 +760,8 @@ void ActivePokemon_SetTeamMemberIndex(void *arg0, s32 arg1) {
 
 /**
  * Sets state.controller, the controller that drives this Pokemon's menu.
+ * Seen in play (2026-11-13) in a Free Battle switch (1P switched to its second Pokémon) it ran when
+ * B opened the Pokémon menu.
  * @unverified Name and comment guessed from the code.
  */
 void ActivePokemon_SetController(s8 *arg0, s32 arg1) {
@@ -732,6 +770,8 @@ void ActivePokemon_SetController(s8 *arg0, s32 arg1) {
 
 /**
  * Sets state.replacementState.
+ * Seen in play (2026-11-13) ran during the opening of a COM Free Battle, before the first command
+ * menu.
  * @unverified Name and comment guessed from the code.
  */
 void ActivePokemon_SetReplacementState(void *arg0, s32 arg1) {

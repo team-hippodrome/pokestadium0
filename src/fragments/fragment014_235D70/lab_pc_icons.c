@@ -63,6 +63,8 @@ void Font_SetColorForFlags(s32);
 
 /**
  * Draws one wide menu row label with the selection highlight.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void MainMenu_DrawMenuRow(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4) {
@@ -85,6 +87,8 @@ extern u8 D_88001FE0[];
 extern u8 D_88001FE4[];
 /**
  * Sets up the prompt window (372x274) and its inner menu.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 M2C_UNK MainMenu_InitPromptWindow(s32 arg0, s32 arg1, s32 arg2) {
@@ -118,6 +122,8 @@ void Window_DrawFrame(void*);
 void Menu_DrawItems(s8 *, s32, s32, s32, s32);
 /**
  * Draws トーナメントのつづきをする？ (Continue the tournament?).
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void MainMenu_DrawContinueTournamentPrompt(s8* arg0) {
@@ -148,6 +154,8 @@ extern s32 D_800603C0;
 
 /**
  * Moves the prompt cursor while the window is open. Returns the 1-based choice on confirm, otherwise 0.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 MainMenu_UpdatePromptCursor(s8* arg0) {
@@ -172,7 +180,8 @@ extern Gfx D_80073450[];
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 /**
  * Draws an IA image at (x, y) in strips with primitive alpha `alpha`.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12) on the main menu: it drew the 0x60 x 0x40 item pictures at x 0x59
+ * (せいとん column) and 0x1C7 (いちらん column).
  */
 void MainMenu_DrawImageWithAlpha(s32 x, s32 y, s32 w, s32 h, s32 stride, u8* pixels, s32 alpha) {
     s32 rows;
@@ -210,9 +219,11 @@ extern Gfx D_80073450[];
 void Ui_DrawTexturedFrame(s32, s32, s32, s32, u8*);
 /**
  * Appends a call of display list D_80073450, a gDPSetCombineMode(G_CC_MODULATEIA_PRIM,
- * G_CC_MODULATEIA_PRIM) and a white primitive colour with alpha arg5 to the current display
+ * G_CC_MODULATEIA_PRIM) and a white primitive color with alpha arg5 to the current display
  * list, then forwards its first five arguments unchanged to Ui_DrawTexturedFrame (compare
- * Ui_DrawTexturedFrameDecal, which does the same with a decal combiner and no primitive colour).
+ * Ui_DrawTexturedFrameDecal, which does the same with a decal combiner and no primitive color).
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the main menu, the Pokédex,
+ * the party screen, the Lab list, Lab sort, registration, the Lab PC and Free Battle setup.
  * @unverified Name guessed from the code; comment kept.
  */
 void MainMenu_DrawTexturedFrameWithAlpha(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4, s32 arg5) {
@@ -244,7 +255,7 @@ void func_8001ABBC(void);
 
 /**
  * Draws one main menu item with its frame, fading it by `scale` (capped at 0.3 when disabled).
- * @unverified Name and comment guessed from the code.
+ * Seen in play: runs every frame for the main menu's item panels.
  */
 void MainMenu_DrawItem(s32 a0, s32 a1, s32 a2, s32 mode, s32 flags, f32* scale) {
     Color_RGBA8 frame_color;
@@ -303,7 +314,8 @@ s32 func_80025BD8();
 void MainMenu_DrawItem();
 /**
  * Sets up the main menu item list and enables the items for mode `arg2`.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran once each time the main menu came back from another screen, before
+ * its eight items were drawn.
  */
 M2C_UNK MainMenu_InitItemList(u8* arg0, s32 arg1, s32 arg2) {
     M2C_FIELD(arg0, s32*, 4) = 0;
@@ -344,7 +356,7 @@ M2C_UNK MainMenu_InitItemList(u8* arg0, s32 arg1, s32 arg2) {
 
 /**
  * Advances the item list fade timer and its state (fade in, shown, fade out, done).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran every frame on the main menu while the cursor moved between items.
  */
 s32 MainMenu_StepItemFade(s8 *arg0) {
     s32 temp_v0;
@@ -379,7 +391,8 @@ void GridMenu_DrawInlineItems(s8*, s32, s32, s32, f32*);
 
 /**
  * Draws the main menu items with the current fade.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: runs every frame while the main menu's item panels (ずかん, バトル, てもち, GB, とうろく, OFF)
+ * are drawn.
  */
 s32 MainMenu_DrawItemList(s8* arg0, s32 arg1) {
     f32 alpha;
@@ -421,7 +434,8 @@ extern char D_880023C0[];
 extern char D_880023C8[];
 /**
  * Sets up the message window (532x138) with its color and text.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: A on バトル opens its window (「コンピュータや ともだちと たいせん する。 はいりますか？ はい いいえ」) and runs
+ * this.
  */
 void MainMenu_InitMessageWindow(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, Color_RGBA8 arg6, s32 arg7) {
     Window_SetRect(arg0, arg1, arg2, 0x214, 0x8A);
@@ -453,7 +467,7 @@ void Window_DrawLabeled(s8 *, s32);
 void MainMenu_DrawImageWithAlpha(s32, s32, s32, s32, s32, u8*, s32);
 /**
  * Draws the message window: divider and text.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: draws the item window opened by A (「…はいりますか？ はい いいえ」).
  */
 void MainMenu_DrawMessageWindow(s8 *arg0) {
     s32* p;
@@ -480,7 +494,7 @@ extern s32 D_800603C0;
 
 /**
  * Handles input on the message window while it is open.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: runs while that window is open; D-Right moves the cursor between はい and いいえ.
  */
 s32 MainMenu_UpdateMessageWindow(s8* arg0) {
     s32 ret = 0;
@@ -515,8 +529,10 @@ void Window_SetRect(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
  * Initialises the object arg0 (size and layout not established; same
  * family as FreeBattle_InitLevelSumWarning). Calls Window_SetRect(arg0, arg1, arg2, 0x224, 0x60),
  * clears the words at 0x20, 0x24 and 0x28, sets the word at 0x14 to 0x2800,
- * copies the 4-byte colour D_88002230 to arg0 + 0x18, then stores arg3 at 0x20
+ * copies the 4-byte color D_88002230 to arg0 + 0x18, then stores arg3 at 0x20
  * (replacing the zero) and arg4 at 0x30.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name guessed from the code; comment kept.
  */
 void MainMenu_InitTextWindow(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
@@ -534,7 +550,7 @@ s32 func_8002AE6C();
 extern u8 D_800734A8[4];
 /**
  * Draws the text window's text.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: runs while the main menu shows the 「GBのカートリッジがない」 warning window at the top.
  */
 void MainMenu_DrawTextWindow(s8* arg0) {
     if (func_8002AE6C() == 0) {
@@ -556,7 +572,8 @@ extern M2C_UNK D_88002240;
  * The caller MainMenu_LoadGbSaveSummary passes a fourth argument, &D_88002B20, which this function
  * never reads. It is declared so that call compiles; the empty `if (arg3)` only stops
  * the compiler from spilling the unused argument, which the ROM does not do.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-13) ran once each time the main menu came back from another screen, after
+ * MainMenu_LoadGbSaveSummary.
  */
 void MainMenu_InitScreen(u8 *arg0, s32 arg1, s32 arg2, s32 *arg3) {
     s32 temp_v0;
@@ -588,7 +605,7 @@ extern M2C_UNK D_88002254;
 
 /**
  * Draws the main menu for its current state, including the continue-tournament prompt.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: runs every frame on the メインメニュー screen.
  */
 void MainMenu_DrawScreen(s8 *arg0) {
     s32 temp_v0;
@@ -625,7 +642,8 @@ void func_800245E0(s32, s32);
 s32 MainMenu_LoadSelectedFragment(s32);
 /**
  * Runs the main menu screen's state machine for one frame and returns the chosen item.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran every frame while the main menu was up and the cursor moved between
+ * its items.
  */
 s32 MainMenu_UpdateScreen(s8* arg0) {
     s32 ret = 0;
@@ -710,7 +728,7 @@ s32 MainMenu_UpdateScreen(s8* arg0) {
 s32 func_80002D98(M2C_UNK);
 M2C_UNK func_8000B2F4(s32);
 u8 GbSave_GetSaveState(s32 arg0);
-s32 func_80022F00(s32);
+s32 GbSave_HasPokedex(s32);
 s32 func_80022EDC(s32);
 s32 func_80025BD8();
 M2C_UNK func_80027FF8(M2C_UNK *, s32);
@@ -726,13 +744,14 @@ extern s32 D_88002B20;
  *  1. id = func_80025BD8(); D_88002B00 = id; if (D_88002B00 != -1) pass it with
  *     &D_88002B08 to func_80027FF8.
  *  2. Picks a mode from id: id == -1 -> 4; else GbSave_GetSaveState(id) != 0 -> 3;
- *     else func_80022F00(id) == 0 -> 2; else func_80022EDC(id) == 0 -> 1; else 0.
+ *     else GbSave_HasPokedex(id) == 0 -> 2; else func_80022EDC(id) == 0 -> 1; else 0.
  *  3. D_88002B20 = func_80002D98(0x3B0), then
  *     MainMenu_InitScreen(D_88002B20, mode, D_80073400 == 0 ? 4 : D_80073400 - 1, &D_88002B20)
  *     and finally func_8000B2F4(D_800603C0).
  * pad1/pad2 are unused locals that reproduce the retail 0x30-byte frame. What the id,
  * the modes and D_80073400 mean is not established.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-13) ran once each time the main menu came back from another screen; the
+ * menu then showed the GB save summary bar (1P サトシ IDNo/12345).
  */
 void MainMenu_LoadGbSaveSummary(void) {
     s32 pad1; // FAKE: stack padding
@@ -750,7 +769,7 @@ void MainMenu_LoadGbSaveSummary(void) {
         var_s0 = 4;
     } else if (GbSave_GetSaveState(sp24) != 0) {
         var_s0 = 3;
-    } else if (func_80022F00(sp24) == 0) {
+    } else if (GbSave_HasPokedex(sp24) == 0) {
         var_s0 = 2;
     } else if (func_80022EDC(sp24) == 0) {
         var_s0 = 1;
@@ -762,6 +781,8 @@ void MainMenu_LoadGbSaveSummary(void) {
 
 /**
  * Returns `arg0` with its RGB scaled by `arg1` (alpha kept).
+ * Seen in play (2026-11-13) ran as the main menu faded in (console reset, then N64 logo, opening,
+ * title and main menu).
  * @unverified Name and comment guessed from the code.
  */
 Color_RGBA8 MainMenu_ScaleColor(Color_RGBA8 arg0, f32 arg1) {
@@ -778,6 +799,8 @@ M2C_UNK func_80005B98(M2C_UNK);
 extern s32 D_880022C4;
 /**
  * Draws the background, brightening it a little more each call.
+ * Seen in play (2026-11-13) ran as the main menu faded in (console reset, then N64 logo, opening,
+ * title and main menu).
  * @unverified Name and comment guessed from the code.
  */
 s32 MainMenu_DrawFadeInBackground(s32 arg0) {
@@ -801,6 +824,8 @@ extern M2C_UNK D_88002254;
 
 /**
  * Draws the tinted main menu background.
+ * Seen in play (2026-11-13) ran as the main menu faded in (console reset, then N64 logo, opening,
+ * title and main menu).
  * @unverified Name and comment guessed from the code.
  */
 s32 MainMenu_DrawBackground(s32 arg0) {
@@ -814,6 +839,8 @@ extern M2C_UNK D_88002A8C;
 
 /**
  * Draws the GB save summary bar sliding in from the top.
+ * Seen in play (2026-11-13) ran as the main menu faded in (console reset, then N64 logo, opening,
+ * title and main menu).
  * @unverified Name and comment guessed from the code.
  */
 s32 MainMenu_DrawSummaryBarSlideIn(UNUSED s32 arg0) {
@@ -841,6 +868,8 @@ extern M2C_UNK D_88002B08;
 
 /**
  * Draws the GB save summary bar.
+ * Seen in play (2026-11-13) ran as the main menu faded in (console reset, then N64 logo, opening,
+ * title and main menu).
  * @unverified Name and comment guessed from the code.
  */
 s32 MainMenu_DrawSummaryBar(s32 arg0) {
@@ -868,7 +897,8 @@ extern s32 D_88002B20;
 
 /**
  * Draws the GB save summary bar over the background.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran when the main menu came back with its top bar (1P サトシ IDNo/12345)
+ * over the background.
  */
 s32 MainMenu_DrawSummaryBarAndBackground(s32 arg0) {
     M2C_UNK *var_a1;
@@ -896,7 +926,7 @@ extern s32 D_88002B20;
 
 /**
  * One frame: reads the controllers, draws the main menu and, when `arg0` is 0, updates it.
- * @unverified Name and comment guessed from the code.
+ * Seen in play: runs every frame on the メインメニュー screen (ずかん, バトル, てもち, GB, とうろく, OFF).
  */
 s32 MainMenu_RunFrame(s32 arg0) {
     s32 sp1C;
@@ -917,7 +947,7 @@ extern s32 D_88002B20;
 
 /**
  * Frees the main menu state.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-12): ran once as the main menu was left for いちらん.
  */
 void MainMenu_Free(void) {
     func_80002DC0(D_88002B20);
@@ -927,6 +957,8 @@ extern s32 D_88002B20;
 
 /**
  * Draws the main menu without updating it.
+ * Seen in play (2026-11-13) ran while the GB player prompt (ゲームボーイのポケモン, はい/いいえ) was open over the
+ * main menu.
  * @unverified Name and comment guessed from the code.
  */
 s32 MainMenu_DrawFrame(s32 arg0) {
@@ -961,7 +993,8 @@ s32 MainMenu_DrawSummaryBarSlideIn(s32 arg0);
 
 /**
  * Entry point: pushes the 'COMP' pool state, loads the font and segments, and sets up the screen.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran once each time the main menu came back from the Pokédex, party or
+ * list screen.
  */
 s32 MainMenu_Init(s32 arg0) {
     s32 sp1C;
@@ -1014,7 +1047,8 @@ extern M2C_UNK D_001720F0;
 
 /**
  * Goes straight to the fragment at 0x82000000 when D_800AF986 bit 8 is set, otherwise starts the main menu.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran once each time a menu screen (Pokédex, party, list) was left with B
+ * and the main menu came back.
  */
 s32 MainMenu_Enter(s32 arg0, s32 arg1) {
     s32 ret;
