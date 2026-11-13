@@ -267,6 +267,12 @@ void BattleAnim_RunRandomRotatingBoltOfLightning(Particle* arg0) {
     Particle_AddVelocityFromRotationTemplate1(arg0);
 }
 
+/**
+ * Lifecycle init: half scale, no speed, pointed up with a random spread about Z, palette
+ * color from the CF parameter.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (4 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_SetupSharedDirectionalSprayFade(Particle* arg0) {
     Vec3s sp28;
 
@@ -414,6 +420,13 @@ void func_8214F06C(s8 *arg0) {
     func_8213E5C8(arg0);
 }
 
+/**
+ * Lifecycle init: tiny and growing, pointed straight along the stream direction, palette
+ * color from the CF parameter.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_SetupUnregisteredStraightDirectionalStreamFade(Particle* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
     Vec3s sp2C;
@@ -464,6 +477,13 @@ void func_8214F1E8(s8 *arg0) {
     func_8213E5C8(arg0);
 }
 
+/**
+ * Lifecycle init for end effect 28: tiny and growing, offset and pointed upward, palette
+ * color from the CF parameter.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_SetupEndEffect28Descriptor10UpwardBurstFade(Particle* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
     Vec3f sp30;
@@ -514,6 +534,13 @@ void func_8214F3D4(s8 *arg0) {
     func_8213E5C8(arg0);
 }
 
+/**
+ * Lifecycle init for end effect 28: tiny and growing, with a wide random spread, palette
+ * color from the CF parameter.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_SetupEndEffect28Descriptor10WideScatterBurstFade(Particle* arg0) {
     UNUSED s32 pad[4]; // FAKE: stack padding
     Vec3s sp28;
@@ -570,7 +597,7 @@ void BattleAnim_InitializeThunderThunderboltUse(void) {
     BattleAnim_SpawnCategory17MarkerSlot(0x64, 1);
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0x20, 3);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 3, 8, BattleAnim_CallbackStartEffects18And73Descriptor11ScatterRiseFade, &gBattleAnimParticleDescriptors[0x11], 8, 4, 2, 0, 0x25, 0);
-    BattleAnim_AddSpawnDelay(0x19);
+    BattleAnim_AddSpawnDelay(25);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunThunderThunderboltUseEffect, &gBattleAnimParticleDescriptors[0x15], 0xE, 1, 2, 0, 0x25, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunThunderThunderboltUseEffect, &gBattleAnimParticleDescriptors[0x16], 0xE, 1, 2, 0, 0x25, 0);
     BattleAnim_SpawnDescriptor25AlphaHoldFadeOut(8, 2, 8, 0x8, 0xFF);
@@ -634,7 +661,7 @@ void BattleAnim_InitializeThunderShockUse(void) {
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0x10, 3);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 8, 3, BattleAnim_CallbackStartEffect59EndEffect28DirectionalStreamFade, &gBattleAnimParticleDescriptors[0x14], 2, 1, 2, 0, 0x25, 0);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 5, 5, BattleAnim_CallbackStartEffect59EndEffect28DirectionalStreamFade, &gBattleAnimParticleDescriptors[0x13], 2, 1, 2, 0, 0x25, 0);
-    BattleAnim_AddSpawnDelay(0x23);
+    BattleAnim_AddSpawnDelay(35);
     BattleAnim_SpawnDescriptor25AlphaHoldFadeOutFullAlpha(8, 4, 8, 0x8);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 2, BattleAnim_CallbackSharedDescriptor13DirectionalSprayScaledFade, &gBattleAnimParticleDescriptors[0x13], 0x14, 4, 2, 0, 0x25, 0);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 5, 2, BattleAnim_CallbackSharedDirectionalSprayFade, &gBattleAnimParticleDescriptors[0x13], 0x14, 4, 2, 0, 0x25, 0);
@@ -648,6 +675,10 @@ M2C_UNK func_8213B720(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK); /* extern */
 extern M2C_UNK D_8218E608;
 extern M2C_UNK D_8218E620;
 
+/**
+ * Starts a three-part effect: sets the tint and spawn timing, then queues func_8214F3D4,
+ * func_8214F55C and func_8214F06C on the current owner.
+ */
 void func_8214FCBC(void) {
     func_8213B720(0x22, 4, 0x10, 8);
     func_8213B644(0, 0x20, 3);

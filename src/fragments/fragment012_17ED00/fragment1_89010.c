@@ -7,6 +7,12 @@
 void BattleScene_OpeningStepNop(UNUSED s32 arg0) {
 }
 
+/**
+ * Empty update hook.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_NoopUpdateHook(void) {
 }
 
@@ -118,8 +124,8 @@ void BattleScene_OpeningStepOrbitCamera(CameraNode* arg0) {
     if (func_821217DC(0xF) != 0) {
         sBattleScene.scene->phaseStep++;
     }
-    M2C_FIELD(sBattleScene.scene, s16*, 0x5A) += 0x2D8;
-    func_8000EEBC(&arg0->view.targetPosition, &arg0->view.eyePosition, sBattleScene.scene->unk_74, sBattleScene.scene->rotationX, M2C_FIELD(sBattleScene.scene, s16*, 0x5A));
+    sBattleScene.scene->rotationY += 0x2D8;
+    func_8000EEBC(&arg0->view.targetPosition, &arg0->view.eyePosition, sBattleScene.scene->unk_74, sBattleScene.scene->rotationX, sBattleScene.scene->rotationY);
     func_8210BCF0(&arg0->view.targetPosition, &arg0->view.eyePosition, D_8219A5A0 + 0x74, D_8219A5A0 + 0x58, D_8219A5A0 + 0x5A);
     M2C_FIELD(D_8219A5A0, f32*, 0x98) = 0.0f;
 }

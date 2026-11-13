@@ -2,6 +2,12 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
 #include "battle_engine_32B680_3.h"
 
+/**
+ * Builds a reflection look-at matrix from the battle camera for environment-mapped
+ * effects. The results are allocated but not added to any display list here.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (4 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_SetupReflectiveCamera(void) {
     Mtx* sp3C = Gfx_AllocDisplayList(sizeof(Mtx) * 1);
     LookAt* sp38 = Gfx_AllocDisplayList(sizeof(LookAt) * 1);
@@ -13,6 +19,13 @@ void BattleAnim_SetupReflectiveCamera(void) {
 }
 
 void func_82154704(s8*);
+/**
+ * Lifecycle init for a model particle: the CF parameter picks the model and animation
+ * assets (and sometimes an offset, color or species scale). arg1 0 plays the animation,
+ * 1 plays it backward and 2 loads the model with no animation.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (52 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_SelectParticleModelFrames(Particle* arg0, s32 arg1) {
     f32 sp2C = 1.0f;
     s16 sp2A;
@@ -345,6 +358,12 @@ void BattleAnim_SelectParticleModelFrames(Particle* arg0, s32 arg1) {
 }
 
 
+/**
+ * Particle callback: loads its model with BattleAnim_SelectParticleModelFrames and marks
+ * the particle inactive when the animation finishes.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (24 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_CallbackInitModelAnimWait(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -413,6 +432,12 @@ void BattleAnim_RunDreamEaterUseEffect(Particle* arg0) {
     }
 }
 
+/**
+ * Particle callback: loads its model with no animation and then idles.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_CallbackInitModelAnimMode2(Particle* arg0) {
     if (arg0->lifecycle == 1) {
         BattleAnim_SelectParticleModelFrames(arg0, 2);
@@ -439,6 +464,13 @@ void BattleAnim_RunFillScreenOverlay(Particle* arg0) {
     }
 }
 
+/**
+ * Adds commands that load the arg2 x arg2 I4 texture arg1 into two tiles (mask arg3) and
+ * set their scroll offsets (arg4/arg5 and arg8/arg9) and shifts (arg6/arg7, argA/argB).
+ * Returns the new end of the list.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (5 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 Gfx* BattleAnim_BuildAnimatedTileDisplayList(Gfx* arg0, u8* arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5, s16 arg6, s16 arg7, s16 arg8, s16 arg9,
                    s16 argA, s16 argB) {
     gDPLoadTextureTile_4b(arg0++, arg1, G_IM_FMT_I, arg2, 0, 0, 0, arg2 - 1, arg2 - 1, 0, G_TX_NOMIRROR | G_TX_WRAP,
@@ -453,6 +485,12 @@ Gfx* BattleAnim_BuildAnimatedTileDisplayList(Gfx* arg0, u8* arg1, s16 arg2, s16 
     return arg0;
 }
 
+/**
+ * Like BattleAnim_BuildAnimatedTileDisplayList, but the two tiles come from the two
+ * textures in arg1 (unk_00 and unk_04).
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (17 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 Gfx* BattleAnim_BuildAnimatedTileDisplayListFromStruct(Gfx* arg0, arg1_func_8434E21C* arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5, s16 arg6, s16 arg7,
                    s16 arg8, s16 arg9, s16 argA, s16 argB) {
     gDPLoadTextureTile_4b(arg0++, arg1->unk_00, G_IM_FMT_I, arg2, arg2, 0, 0, arg2 - 1, arg2 - 1, 0,
@@ -466,6 +504,12 @@ Gfx* BattleAnim_BuildAnimatedTileDisplayListFromStruct(Gfx* arg0, arg1_func_8434
     return arg0;
 }
 
+/**
+ * Builds a display list that sets the owner particle's primitive and environment
+ * colors.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (13 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Gfx_SetParticlePrimEnvColors(Gfx* arg0) {
     Particle* temp_v0 = BattleAnim_GetOwnerContextParticle(D_8006049C);
 
@@ -477,6 +521,12 @@ void Gfx_SetParticlePrimEnvColors(Gfx* arg0) {
     gSPEndDisplayList(arg0++);
 }
 
+/**
+ * Display-list callback: on draw pass 2, allocates 30 commands into arg1->unk_18 and
+ * fills them with Gfx_SetParticlePrimEnvColors.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (97 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void ParticleEffect_AllocateGfxIfNeeded(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
         arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
@@ -484,6 +534,12 @@ void ParticleEffect_AllocateGfxIfNeeded(s32 arg0, arg1_func_84344CE8* arg1) {
     }
 }
 
+/**
+ * Builds a display list whose colors, tile scroll and shifts are chosen by the owner
+ * particle's CE parameter.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (5 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Gfx_DrawParticleTextureWithParams(Gfx* arg0, arg1_func_8434E21C* arg1, UNUSED u16 arg2) {
     s16 mask = 5;
     Particle* sp40;
@@ -559,6 +615,12 @@ void Gfx_DrawParticleTextureWithParams(Gfx* arg0, arg1_func_8434E21C* arg1, UNUS
     gSPEndDisplayList(arg0++);
 }
 
+/**
+ * Display-list callback: on draw pass 2, allocates 30 commands into arg1->unk_18 and
+ * fills them with Gfx_DrawParticleTextureWithParams.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (93 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void ParticleEffect_AllocateGfxAndDraw(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
         arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
@@ -566,6 +628,12 @@ void ParticleEffect_AllocateGfxAndDraw(s32 arg0, arg1_func_84344CE8* arg1) {
     }
 }
 
+/**
+ * Lifecycle init for a descriptor-0x24 particle of a move's end effect: triple scale,
+ * raised 10 and moved 15 forward, moving backward, palette colors 8 and 0x17.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * @unverified Name guessed from the code.
+ */
 void BattleAnim_SetupMove86EndDescriptor24(Particle* arg0) {
     Particle_SetScaleScaled(arg0, 3.0f);
     Particle_Field38_AddYScaled_08E90(arg0, 10.0f);
@@ -603,6 +671,12 @@ void BattleAnim_RunThunderWaveHitEffect(Particle* arg0) {
     Particle_AddVelocityXZFromRotationYViaImpulse(arg0);
 }
 
+/**
+ * Lifecycle init for a descriptor-0x24 particle of a move's start effect: tiny, with a
+ * start offset chosen by the CD parameter, palette colors 8 and 0x17.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * @unverified Name guessed from the code.
+ */
 void BattleAnim_SetupMove86StartDescriptor24(Particle* arg0) {
     Vec3f sp34;
     UNUSED s32 pad[2]; // FAKE: stack padding
@@ -638,6 +712,10 @@ void BattleAnim_SetupMove86StartDescriptor24(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
+/**
+ * Particle callback: init, wait for the spawn step, then the later stages; scale moves
+ * toward 10 by 0.05 and the particle rises every frame.
+ */
 void func_82153E28(s8 *arg0) {
     s16 temp_v0;
 

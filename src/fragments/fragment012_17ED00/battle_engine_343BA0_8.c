@@ -648,6 +648,13 @@ void BattleAnim_DrawPsybeamUseDoubleTextureTrail(void) {
     gDisplayListHead = DoubleTextureTrail_DrawAll(gDisplayListHead);
 }
 
+/**
+ * Starts the two double-texture trails of start effect 77 from the owner toward the
+ * target.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_StartEffect77DoubleTextureTrail_Seed(void) {
     static unk_D_843C2C00_024 D_84388100 = { 2, 1, 0xE, 1, 2, 7, 1, 3 };
     static unk_D_843C2C00_024 D_84388120 = { 3, 5, 0, 5, 0, 7, 5, 7 };
@@ -673,16 +680,35 @@ void BattleAnim_StartEffect77DoubleTextureTrail_Seed(void) {
                   0, 0, 0);
 }
 
+/**
+ * Init hook for start effect 77: resets the shared matrix and the trail pool, then starts
+ * the trails.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_StartEffect77DoubleTextureTrail_Init(void) {
     BattleAnim_ResetSharedEffectMatrix();
     DoubleTextureTrail_InitPool();
     BattleAnim_StartEffect77DoubleTextureTrail_Seed();
 }
 
+/**
+ * Update hook for start effect 77: advances the trails.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 s32 BattleAnim_StartEffect77DoubleTextureTrail_Update(void) {
     return DoubleTextureTrail_UpdateAll();
 }
 
+/**
+ * Draw hook for start effect 77: loads the shared matrix and draws the trails.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_StartEffect77DoubleTextureTrail_Draw(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 

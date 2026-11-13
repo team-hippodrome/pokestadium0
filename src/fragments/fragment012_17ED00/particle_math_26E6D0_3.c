@@ -81,12 +81,18 @@ void ParticleGfx_CopyPalettePairRgb(u8* arg0, u8* arg1, u16 arg2) {
     ParticleGfx_CopyPaletteRgb(arg1, sp1E);
 }
 
+/**
+ * Sets the particle's prim color (0xBA-0xBC) from palette entry arg1.
+ */
 void func_82143408(u8* arg0, u16 arg1) {
     arg0[0xBA] = gParticlePalette[arg1][0];
     arg0[0xBB] = gParticlePalette[arg1][1];
     arg0[0xBC] = gParticlePalette[arg1][2];
 }
 
+/**
+ * Sets the particle's env color (0xBD-0xBF) from palette entry arg1.
+ */
 void func_82143440(u8* arg0, u16 arg1) {
     arg0[0xBD] = gParticlePalette[arg1][0];
     arg0[0xBE] = gParticlePalette[arg1][1];
@@ -421,6 +427,9 @@ void BattleAnim_RunUserHueChange(Particle* arg0) {
     }
 }
 
+/**
+ * Empty.
+ */
 void func_82143C08(void) {
 }
 
@@ -456,6 +465,9 @@ void func_82143C10(s8 *arg0) {
     }
 }
 
+/**
+ * Init step: recolors the prim color from palette CF, copies field A6 into AE and advances.
+ */
 void func_82143CE0(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
     Particle_FieldAE_SetS16_0BF4C(arg0, arg0->unk_A6);
@@ -491,6 +503,9 @@ void func_82143D28(s8 *arg0) {
     }
 }
 
+/**
+ * Same init step as func_82143CE0.
+ */
 void func_82143DE8(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
     Particle_FieldAE_SetS16_0BF4C(arg0, arg0->unk_A6);
@@ -570,6 +585,9 @@ void BattleAnim_RunIceBeamBlizzardHitHueChange(Particle* arg0) {
     }
 }
 
+/**
+ * Same init step as func_82143CE0.
+ */
 void func_82144010(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
     Particle_FieldAE_SetS16_0BF4C(arg0, arg0->unk_A6);

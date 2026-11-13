@@ -205,7 +205,7 @@ void FreeBattle_DrawMenuRow(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, 
 /*
  * FreeBattle_InitMenuWindow
  *
- * Initialises the object arg0 (layout not established): calls
+ * Initializes the object arg0 (layout not established): calls
  * Window_SetRect(arg0, arg1, arg2, arg3, arg4), clears the words at 0x28 and
  * 0x24, sets the word at 0x14 to 0x801 and the word at 0x20 to arg9. Calls
  * func_80027804 on the sub-object at arg0 + 0x50 with (arg5, arg6, arg6),
@@ -477,7 +477,7 @@ extern M2C_UNK D_82009F70;
 /**
  * FreeBattle_InitOpponentSelect
  *
- * Initialises the object arg0 (layout not established): calls
+ * Initializes the object arg0 (layout not established): calls
  * Window_SetRect(arg0, arg1, arg2, 0x192, 0x10F), clears the words at 0x24 and
  * 0x28, sets the word at 0x14 to 0x801 and the pointer at 0x20 to
  * &D_82009F70. Calls func_80027804 on the sub-object at arg0 + 0x2C with
@@ -694,7 +694,7 @@ extern M2C_UNK D_82009FCC;
 /*
  * func_82006C74
  *
- * Initialises the object arg0 (layout not established): the same shape as
+ * Initializes the object arg0 (layout not established): the same shape as
  * FreeBattle_InitOpponentSelect, but the embedded window starts at arg0 + 4 (Window_SetRect with
  * 0x192 x 0x163), the words at 0x28 and 0x2C are cleared, the word at 0x18 is set to
  * 0x801 and the pointer at 0x24 to &D_82009FCC. Calls func_80027804 on the
@@ -949,7 +949,7 @@ void FreeBattle_DrawBattleModeCard(s32 arg0, s32 arg1, s32* arg2, s32 arg3, s32 
 /*
  * FreeBattle_InitBattleModeWindow
  *
- * Initialises the object arg0 (size and layout not established): calls
+ * Initializes the object arg0 (size and layout not established): calls
  * Window_SetRect(arg0, arg1, arg2, 0x190, 0x12E), clears the words at 0x24
  * and 0x28, sets the word at 0x14 to 0x801 and the word at 0x20 to arg4.
  * Calls func_80027410 on the sub-object at arg0 + 0x54 with (arg3, 0xC, 2, 2),
@@ -1186,7 +1186,7 @@ extern Cfg82007C30 D_820091EC[2];
 M2C_UNK func_80018234(s8*, s32, u8, u16);
 
 /**
- * Initialises the object arg0 (size and layout not established) and fills in a
+ * Initializes the object arg0 (size and layout not established) and fills in a
  * per-entry table. Stores arg4 and arg5 in the second word of the two entries of
  * the 12-byte table D_820091EC, selects entry 1 when arg3 == 2 (otherwise entry 0),
  * calls Window_SetRect(arg0, arg1, arg2, 0x235, 0x174), clears the words at 0x20, 0x24
@@ -1357,7 +1357,7 @@ extern char D_8200A114[];
 extern char D_8200A11C[];
 
 /**
- * Initialises the object arg0 (size and layout not established); the same
+ * Initializes the object arg0 (size and layout not established); the same
  * setup as FreeBattle_InitLevelSumWarning with different strings (D_8200A104, D_8200A114 and
  * D_8200A11C) and color (D_82009218), and one more argument. Calls
  * Window_SetRect(arg0, arg1, arg2, 0x134, 0x92), clears the words at 0x24 and
@@ -1463,7 +1463,7 @@ void Window_InitLabeled(s8*, s32, s32, s32, Color_RGBA8, char*);
 void func_8000B2F4(s32);
 
 /**
- * Initialises the object arg0 (size and layout not established): calls
+ * Initializes the object arg0 (size and layout not established): calls
  * Window_SetRect(arg0, arg1, arg2, 0x134, 0x92), clears the words at 0x24 and
  * 0x28, sets the word at 0x14 to 0x2801 and the pointer at 0x20 to
  * D_8200A178. Calls Window_InitLabeled twice, on the sub-objects at arg0 + 0x2C
@@ -1572,7 +1572,7 @@ extern char D_8200A1F4[];
 extern char D_8200A1FC[];
 
 /**
- * Initialises the object arg0 (size and layout not established); a sibling of
+ * Initializes the object arg0 (size and layout not established); a sibling of
  * FreeBattle_InitConfirmWindow. Calls Window_SetRect(arg0, arg1, arg2, 0x18C, 0x66), clears the words at
  * 0x20, 0x24 and 0x28 and sets the word at 0x14 to 0x1001. Calls Window_InitLabeled three times,
  * on the sub-objects at arg0 + 0x2C (string D_8200A1EC), + 0x68 (D_8200A1F4) and + 0xA4

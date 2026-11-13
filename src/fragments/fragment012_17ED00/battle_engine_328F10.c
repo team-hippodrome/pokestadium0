@@ -111,6 +111,14 @@ void BattleAnim_StartEffect122GlobalAndOwnerTintFade(void);
 
 void func_82150D1C(void);
 
+/**
+ * Lifecycle init for effect 135's rising particles: starts tiny and 2.5 units up, spreads
+ * them evenly around Y by burst index with a random tilt, and colors them from the CF
+ * parameter.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_InitStartEffect135Descriptor1CRisingScale(Particle* arg0) {
     Vec3s sp28;
     s16 sp26 = Particle_FieldCF_GetS16_0C058(arg0);
@@ -128,6 +136,13 @@ void BattleAnim_InitStartEffect135Descriptor1CRisingScale(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
+/**
+ * Particle callback for effect 135's rising particles: waits a delay by burst index, grows
+ * and spirals them upward, then fades them out.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_CallbackStartEffect135Descriptor1CRisingScaleFade(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -175,6 +190,13 @@ void func_821501B4(s32 arg0)
   func_8213C9D0(arg0);
 }
 
+/**
+ * Particle callback for effect 135's flash: grows it for 15 frames, holds, then fades it
+ * out and detaches.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_CallbackStartEffect135ExpandingFlashFade(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -200,6 +222,13 @@ void BattleAnim_CallbackStartEffect135ExpandingFlashFade(Particle* arg0) {
     }
 }
 
+/**
+ * Lifecycle init for effect 139's falling particles: tiny, randomly rotated, colored from
+ * the CF parameter and delayed by burst index.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_InitStartEffect139Descriptor42FallingScale(Particle* arg0) {
     s16 sp2E = Particle_FieldCF_GetS16_0C058(arg0);
     s16 sp2C = Particle_FieldAC_GetS16_0C038(arg0);
@@ -214,6 +243,13 @@ void BattleAnim_InitStartEffect139Descriptor42FallingScale(Particle* arg0) {
 }
 
 s32 Particle_ApproachStepMagnitude(Particle* arg0, f32 arg1, f32 arg2);
+/**
+ * Particle callback for effect 139's falling particles: after the delay, grows them, then
+ * slows and drops them as they fade.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_CallbackStartEffect139Descriptor42FallingScaleFade(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -248,6 +284,13 @@ void BattleAnim_CallbackStartEffect139Descriptor42FallingScaleFade(Particle* arg
     Particle_Field38_AddYScaled_08E90(arg0, -1.0f);
 }
 
+/**
+ * Lifecycle init for effect 139's spinning particle: randomly rotated, colored from the
+ * CF parameter, at half alpha.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_InitStartEffect139Descriptor22SpinFade(Particle* arg0) {
     UNUSED s16 pad; // FAKE: stack padding
     s16 sp2C;
@@ -288,6 +331,13 @@ void func_82150504(s8 *arg0) {
     }
 }
 
+/**
+ * Lifecycle init for effect 141: arranges the particles in a grid of rows of 8 by burst
+ * index (row sets the tilt and delay, column the Y rotation), light cyan.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_InitStartEffect141Descriptor1CGridRise(Particle* arg0) {
     s16 sp2E;
     s16 sp2C;
@@ -310,6 +360,13 @@ void BattleAnim_InitStartEffect141Descriptor1CGridRise(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
+/**
+ * Particle callback for effect 141: after the row delay, spins and grows each particle
+ * for 10 frames, then fades it out.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_CallbackStartEffect141Descriptor1CGridRiseFade(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -318,7 +375,7 @@ void BattleAnim_CallbackStartEffect141Descriptor1CGridRiseFade(Particle* arg0) {
 
         case 2:
             if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
-                Particle_FieldA6_SetS16_0BCA8(arg0, 0xA);
+                Particle_FieldA6_SetS16_0BCA8(arg0, 10);
                 Particle_EnableRendering(arg0);
             }
             break;
@@ -339,6 +396,13 @@ void BattleAnim_CallbackStartEffect141Descriptor1CGridRiseFade(Particle* arg0) {
     }
 }
 
+/**
+ * Init step for the Selfdestruct/Explosion orbit particles: random rotation, tiny scale, the
+ * palette pair from arg CF, and a random lifetime, phase and spin speeds that depend on the
+ * variant (arg CE). Delays the start by two frames per spawn index.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
+ * @unverified Name guessed from the code.
+ */
 void BattleAnim_InitExplosionOrbit(Particle* arg0) {
     s16 sp36;
     s16 sp34;
@@ -392,6 +456,12 @@ void BattleAnim_InitExplosionOrbit(Particle* arg0) {
 }
 
 void Particle_ApplyRotationStepX(Particle* arg0);
+/**
+ * Particle callback for the Selfdestruct/Explosion orbit: waits its delay, grows to 0.3,
+ * holds, then swirls and fades before detaching. Rises by 10 each frame.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
+ * @unverified Name guessed from the code.
+ */
 void BattleAnim_ExplosionOrbitSwirl(Particle* arg0) {
     Particle_FieldCE_GetS32_0C040(arg0);
 
@@ -444,6 +514,12 @@ void BattleAnim_ExplosionOrbitSwirl(Particle* arg0) {
     Particle_Field38_AddYScaled_08E90(arg0, 10.0f);
 }
 
+/**
+ * Init step for the Selfdestruct/Explosion burst: scale 0.2, raised by 5, palette pair from
+ * arg CF, alpha 64.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
+ * @unverified Name guessed from the code.
+ */
 void BattleAnim_InitExplosionBurst(Particle* arg0) {
     s16 sp26 = Particle_FieldCF_GetS16_0C058(arg0);
 
@@ -455,6 +531,13 @@ void BattleAnim_InitExplosionBurst(Particle* arg0) {
 }
 
 void func_8213E1FC(Particle* arg0, f32 arg1);
+/**
+ * Particle callback for the Selfdestruct/Explosion burst: swells to scale 4 while fading in,
+ * then shrinks and emits rings of six sparkle particles (descriptor 0x42) for several
+ * frames before detaching.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
+ * @unverified Name guessed from the code.
+ */
 void BattleAnim_ExplosionBurstEmitter(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -477,7 +560,7 @@ void BattleAnim_ExplosionBurstEmitter(Particle* arg0) {
 
         case 4:
             func_8213E1FC(arg0, 15.0f);
-            Particle_TickDelayAndAdvanceLifecycle(arg0, 0xA);
+            Particle_TickDelayAndAdvanceLifecycle(arg0, 10);
             BattleAnim_EmitParticleBurstWithMetadata(arg0, BattleAnim_RunSparkleHit, &gBattleAnimParticleDescriptors[0x42], 6, 0x18, 7);
             break;
 
@@ -492,28 +575,47 @@ extern M2C_UNK D_8218E698;
 extern M2C_UNK D_8218E798;
 extern M2C_UNK func_8215036C;
 
+/**
+ * Queues func_82150504 and func_8215036C on the current owner, 30 repeats each.
+ */
 void func_82150D1C(void) {
     func_8213B5D8(0, 1, 0x1E, &func_82150504, &D_8218E698, 0x10, 1, 0x1E, 0, 0x3B, 0);
     func_8213B5D8(0, 1, 0x1E, &func_8215036C, &D_8218E798, 0x10, 2, 0x1E, 0, 0x3B, 0);
 }
 
+/**
+ * Calls func_82150D1C.
+ */
 void func_82150DCC(void) {
     func_82150D1C();
 }
 
 extern M2C_UNK D_8218E668;
 
+/**
+ * Queues five sparkle hits, then after 16 frames a grid rise-fade and an alpha fade-in hold.
+ */
 void func_82150DEC(void) {
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0xB, 1, 5, BattleAnim_RunSparkleHit, (ParticleDescriptor*)&D_8218E798, 0, 5, 0x1E, 0, 0x3B, 8);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(11, 1, 5, BattleAnim_RunSparkleHit, (ParticleDescriptor*)&D_8218E798, 0, 5, 0x1E, 0, 0x3B, 8);
     BattleAnim_SetSpawnDelay(0x10);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffect141Descriptor1CGridRiseFade, (ParticleDescriptor*)&D_8218E668, 0, 0x40, 0x1E, 0, 8, 0);
     BattleAnim_SpawnDescriptor25AlphaFadeInHold(0, 2, 0x2C, 8, 0xFF);
 }
 
+/**
+ * Calls func_82150DEC.
+ */
 void func_82150EB0(void) {
     func_82150DEC();
 }
 
+/**
+ * Starts effect 135: a full-screen flash, white tint and invisibility on the owner, three
+ * expanding flashes, rising particles, and a global tint fade at frame 50.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_StartEffect135ExpandingFlashAndRisingScaleFade(void) {
     UNUSED s32 pad; // FAKE: stack padding
 
@@ -539,11 +641,11 @@ void BattleAnim_StartEffect134ModeOrbitAndMetadataBurst(void) {
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 8, 6);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 5, BattleAnim_ExplosionOrbitSwirl, &D_8218E7A0, 0, 4, 9, 0, 0x3C, 1);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 5, BattleAnim_ExplosionOrbitSwirl, &D_8218E7A0, 0, 4, 9, 0, 0x3C, 1);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0x18, 1, 4, BattleAnim_ExplosionOrbitSwirl, &D_8218E7A0, 0, 8, 9, 0, 0x3C, 2);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0x1E, 1, 8, BattleAnim_ExplosionOrbitSwirl, &D_8218E7A0, 0, 8, 9, 0, 0x3C, 3);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0x1E, 1, 8, BattleAnim_ExplosionOrbitSwirl, &D_8218E7A0, 0, 8, 9, 0, 0x3C, 3);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(24, 1, 4, BattleAnim_ExplosionOrbitSwirl, &D_8218E7A0, 0, 8, 9, 0, 0x3C, 2);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(30, 1, 8, BattleAnim_ExplosionOrbitSwirl, &D_8218E7A0, 0, 8, 9, 0, 0x3C, 3);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(30, 1, 8, BattleAnim_ExplosionOrbitSwirl, &D_8218E7A0, 0, 8, 9, 0, 0x3C, 3);
     BattleAnim_SpawnOwnerModelTintRampDetach(0x26, 0x8, 0, 0xFF, 4);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0x2D, BattleAnim_ExplosionBurstEmitter, &D_8218E748, 0x1A, 1, 2, 0, 0x3C, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(45, BattleAnim_ExplosionBurstEmitter, &D_8218E748, 0x1A, 1, 2, 0, 0x3C, 0);
     BattleAnim_SpawnInvisibility(0x48, 0x40, 0, 0xFF);
     BattleAnim_SpawnGlobalTintColorFadeDetach(0x55, 6, 0x8);
 }
@@ -551,6 +653,13 @@ void BattleAnim_StartEffect134ModeOrbitAndMetadataBurst(void) {
 extern ParticleDescriptor D_8218E588[86];
 extern M2C_UNK D_8218E7A0;
 extern M2C_UNK D_8218E748;
+/**
+ * Starts effect 143: a global tint, three waves of orbiting particles, a tint on the
+ * owner, the burst emitter at frame 20, invisibility at frame 45 and a fade at frame 50.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_StartEffect143ModeOrbitAndMetadataBurst(void) {
     UNUSED s32 pad; // FAKE: stack padding
 
@@ -559,27 +668,40 @@ void BattleAnim_StartEffect143ModeOrbitAndMetadataBurst(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(6, 1, 8, BattleAnim_ExplosionOrbitSwirl, &D_8218E7A0, 0, 8, 9, 0, 0x3C, 3);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(6, 1, 8, BattleAnim_ExplosionOrbitSwirl, &D_8218E7A0, 0, 8, 9, 0, 0x3C, 3);
     BattleAnim_SpawnOwnerModelTintRampDetach(0xE, 0x8, 0, 0xFF, 4);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0x14, BattleAnim_ExplosionBurstEmitter, &D_8218E748, 0x1A, 1, 2, 0, 0x3C, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(20, BattleAnim_ExplosionBurstEmitter, &D_8218E748, 0x1A, 1, 2, 0, 0x3C, 0);
     BattleAnim_SpawnInvisibility(0x2D, 0x40, 0, 0xFF);
     BattleAnim_SpawnGlobalTintColorFadeDetach(0x32, 6, 0x8);
 }
 
 extern ParticleDescriptor D_8218E588[86];
+/**
+ * Starts effect 133: waves of orbiting particles, an owner tint, the burst emitter, a
+ * white hue change and invisibility, then effect 135 from frame 80.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_StartEffect133ModeOrbitBurstAndEffect135Followup(void) {
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 8, 6);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 5, BattleAnim_ExplosionOrbitSwirl, &D_8218E7A0, 0, 4, 9, 0, 0x3C, 1);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 5, BattleAnim_ExplosionOrbitSwirl, &D_8218E7A0, 0, 4, 9, 0, 0x3C, 1);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0x18, 1, 4, BattleAnim_ExplosionOrbitSwirl, &D_8218E7A0, 0, 8, 9, 0, 0x3C, 2);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0x1E, 1, 8, BattleAnim_ExplosionOrbitSwirl, &D_8218E7A0, 0, 8, 9, 0, 0x3C, 3);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0x1E, 1, 8, BattleAnim_ExplosionOrbitSwirl, &D_8218E7A0, 0, 8, 9, 0, 0x3C, 3);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(24, 1, 4, BattleAnim_ExplosionOrbitSwirl, &D_8218E7A0, 0, 8, 9, 0, 0x3C, 2);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(30, 1, 8, BattleAnim_ExplosionOrbitSwirl, &D_8218E7A0, 0, 8, 9, 0, 0x3C, 3);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(30, 1, 8, BattleAnim_ExplosionOrbitSwirl, &D_8218E7A0, 0, 8, 9, 0, 0x3C, 3);
     BattleAnim_SpawnOwnerModelTintRampDetach(0x26, 0x8, 0, 0xFF, 8);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0x28, BattleAnim_ExplosionBurstEmitter, &D_8218E748, 0x18, 1, 2, 0, 0x3C, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(40, BattleAnim_ExplosionBurstEmitter, &D_8218E748, 0x18, 1, 2, 0, 0x3C, 0);
     BattleAnim_SpawnWhiteHueChange(0x3C, 0, 0x40, 0x8, 0xFF);
     BattleAnim_SpawnInvisibility(0x40, 0xFF, 0, 0xFF);
-    BattleAnim_SetSpawnDelay(0x50);
+    BattleAnim_SetSpawnDelay(80);
     BattleAnim_StartEffect135ExpandingFlashAndRisingScaleFade();
 }
 
+/**
+ * Starts effect 122: a global tint fade, then a tint ramp on the owner at frame 20.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_StartEffect122GlobalAndOwnerTintFade(void) {
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0xFF, 0);
     BattleAnim_SpawnOwnerModelTintRampDetach(0x14, 0, 0, 0xFF, 0x10);

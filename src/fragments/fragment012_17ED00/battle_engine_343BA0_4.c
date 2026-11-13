@@ -426,6 +426,9 @@ void func_82136018(void);
 void BattleAnim_RegisterEffectSlot(func_D_84390300 arg0, func_D_84390320 arg1);
 void BattleAnim_SetQueuedEffectList(u8 effect_list_index);
 
+/**
+ * Empty.
+ */
 void func_82135100(void) {
 }
 
@@ -469,6 +472,9 @@ void func_82135108(ActivePokemon* arg0) {
     func_80003824(&D_FLT_8219A5B0, temp_a1, temp_a1 + 0x168, 0);
 }
 
+/**
+ * Empty.
+ */
 void func_821351EC(UNUSED s32 arg0, UNUSED s32 arg1) {
 }
 
@@ -478,6 +484,11 @@ void func_8000EEBC(void*, Vec3f*, f32, s16, s32);
 void func_8212254C(s32, s32, Vec3f, s32, s32, f32, f32);
 extern f32 D_FLT_8219A718;
 
+/**
+ * Starts camera path 0x19 on Pokemon arg1: loads its path points into D_FLT_8219A5B0
+ * (func_82135108), mirrors them to its side, places the eye on the first point around its
+ * aim point and captures the model orbit.
+ */
 void func_821351F8(CameraNode* arg0, ActivePokemon* arg1) {
     s32 count;
     Vec3f* p;
@@ -513,6 +524,10 @@ void BattleScene_GetParticipantAimPoint(ActivePokemon*, f32*);
 void func_8210BCF0(f32*, Vec3f*, f32*, s16*, s16*);
 void func_8000EEBC(void*, Vec3f*, f32, s16, s32);
 extern f32 D_FLT_8219A718;
+/**
+ * Places the camera eye on path point arg4 + arg5 around Pokemon arg0's aim point, mirrored
+ * to its side, writing the result to arg3[arg5].
+ */
 void func_82135384(ActivePokemon* arg0, CameraNode* arg1, Vec3f* arg2, Vec3f* arg3, s32 arg4, s32 arg5) {
     f32 sp2C;
     s16 pad2A; // FAKE: stack padding
@@ -697,6 +712,10 @@ M2C_UNK func_80003824(M2C_UNK *, s8 *, s8 *, M2C_UNK); /* extern */
 extern s8 D_00434C00;
 extern s32 D_8218A2D4;
 extern s8 D_FLT_8219A5B0;
+/**
+ * Copies the 0x168-byte camera path table at D_8218A2D4 (30 points) from ROM into
+ * D_FLT_8219A5B0.
+ */
 void func_82135A04(s32 arg0) {
     s8 *temp_a1;
 
@@ -711,6 +730,10 @@ void func_8000EEBC(void*, Vec3f*, f32, s16, s32);
 void func_8212254C(s32, s32, Vec3f, s32, s32, f32, f32);
 extern f32 D_FLT_8219A718;
 
+/**
+ * Same as func_821351F8 but uses path D_8219A4F4 and loads the points from the ROM table
+ * (func_82135A04).
+ */
 void func_82135A54(CameraNode* arg0, ActivePokemon* arg1) {
     s32 count;
     Vec3f* p;
@@ -858,12 +881,23 @@ void func_82135FD0(s32 arg0) {
     func_8216D970();
 }
 
+/**
+ * Empty.
+ */
 void func_82136010(void) {
 }
 
+/**
+ * Empty.
+ */
 void func_82136018(void) {
 }
 
+/**
+ * Runs start effect arg0's init hook, and again with the alternate anchor if there is one.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (139 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_RunEffectInitStart(s16 arg0) {
     sMoveAnimEffectStartInitFuncs[arg0]();
     if (sBattleAnimAlternateAnchor != 0xFF) {
@@ -874,10 +908,21 @@ void BattleAnim_RunEffectInitStart(s16 arg0) {
 
 extern func_D_84390320 D_8218EA6C[];
 
+/**
+ * Runs end effect arg0's init hook.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (136 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_RunEffectInitEnd(s16 arg0) {
     D_8218EA6C[arg0]();
 }
 
+/**
+ * Registers an effect update and draw callback pair in the next of the 8 callback slots,
+ * wrapping around.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (157 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_RegisterEffectSlot(func_D_84390300 arg0, func_D_84390320 arg1) {
     if (sBattleAnimEffectCallbackIndex >= 8) {
         sBattleAnimEffectCallbackIndex = 0;
@@ -903,6 +948,12 @@ extern func_D_84390320 D_821926F8[];
 extern func_D_84390320 D_82191F28[];
 extern func_D_84390320 D_82192310[];
 void func_8213608C(s16 arg0);
+/**
+ * Runs effect list arg1 of move (or resource list) arg0: starts the list's effects in
+ * order and registers their callbacks.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (159 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_RunEffectList(s32 arg0, s32 arg1, s32 arg2) {
     u8* sp2C;
 
@@ -960,6 +1011,12 @@ void BattleAnim_RunEffectList(s32 arg0, s32 arg1, s32 arg2) {
 extern s16 D_8219A80A;
 extern s16 D_8219A80C;
 
+/**
+ * Runs whatever effect lists were queued this frame (the move's list, the alternate list
+ * and the resource list) and clears the queue.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_ProcessQueuedEffects(void) {
     if (sBattleAnimQueuedEffectListMode != BATTLE_ANIMATION_QUEUE_INACTIVE) {
         BattleAnim_ResetSpawnDelayAlias();
@@ -984,6 +1041,11 @@ void BattleAnim_ProcessQueuedEffects(void) {
     }
 }
 
+/**
+ * Sets which effect list of the queued move will run.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (159 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_SetQueuedEffectList(u8 effect_list_index) {
     sBattleAnimQueuedEffectList = effect_list_index;
 }

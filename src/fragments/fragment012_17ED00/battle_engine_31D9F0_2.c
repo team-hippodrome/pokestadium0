@@ -139,7 +139,7 @@ void BattleAnim_RunFireBreathFlameFading(Particle* arg0) {
             if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
                 Particle_BeginPhase(arg0);
                 Particle_EnableRendering(arg0);
-                Particle_FieldA6_SetS16_0BCA8(arg0, 0xB);
+                Particle_FieldA6_SetS16_0BCA8(arg0, 11);
             }
             break;
 
@@ -159,7 +159,7 @@ void BattleAnim_RunFireBreathFlameFading(Particle* arg0) {
             }
 
             if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
-                Particle_FieldA6_SetS16_0BCA8(arg0, 0xC);
+                Particle_FieldA6_SetS16_0BCA8(arg0, 12);
             }
             break;
 
@@ -193,6 +193,13 @@ void BattleAnim_RunFireBreathFlameFading(Particle* arg0) {
     }
 }
 
+/**
+ * Lifecycle init: quarter scale, small random turn about Y, palette color 0x17, delayed 2
+ * frames per burst index.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_SetupUnusedDescriptor4FColorCycleScaleFadeVariant(Particle* arg0) {
     UNUSED s32 pad[3]; // FAKE: stack padding
     s16 sp22 = Particle_FieldAC_GetS16_0C038(arg0);
@@ -206,6 +213,13 @@ void BattleAnim_SetupUnusedDescriptor4FColorCycleScaleFadeVariant(Particle* arg0
     Particle_AdvanceLifecycle(arg0);
 }
 
+/**
+ * Motion steps for the particle above: after 2 frames tilts it about Z, then keeps
+ * curving it about X while it moves.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_MotionUnusedDescriptor4FColorCycleScaleFadeVariant(Particle* arg0) {
     switch (arg0->phase) {
         case 1:
@@ -225,6 +239,13 @@ void BattleAnim_MotionUnusedDescriptor4FColorCycleScaleFadeVariant(Particle* arg
     }
 }
 
+/**
+ * Particle callback: after the delay shows the particle, loops its 8 texture frames and
+ * runs the motion steps until it fades.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_CallbackUnusedDescriptor4FColorCycleScaleFadeVariant(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -235,7 +256,7 @@ void BattleAnim_CallbackUnusedDescriptor4FColorCycleScaleFadeVariant(Particle* a
             if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
                 Particle_BeginPhase(arg0);
                 Particle_EnableRendering(arg0);
-                Particle_FieldA6_SetS16_0BCA8(arg0, 0xB);
+                Particle_FieldA6_SetS16_0BCA8(arg0, 11);
             }
             break;
 
@@ -244,7 +265,7 @@ void BattleAnim_CallbackUnusedDescriptor4FColorCycleScaleFadeVariant(Particle* a
             Particle_PrimB_Approach_0BB44(arg0, 0, 0x18);
             Particle_EnvG_Approach_0BBF0(arg0, 0, 0x20);
             if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
-                Particle_FieldA6_SetS16_0BCA8(arg0, 0xC);
+                Particle_FieldA6_SetS16_0BCA8(arg0, 12);
             }
             break;
 
@@ -570,6 +591,13 @@ void BattleAnim_RunPsybeamHitSparkDrift(Particle* arg0) {
     Particle_Field94_AddZ_0A5B0(arg0, 0x1000);
 }
 
+/**
+ * Particle callback: grows an expanding hit spark to 8 times its size, then fades it,
+ * picking a random color every 4 frames.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_CallbackUnusedGrowFadeVariant(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -729,6 +757,13 @@ void BattleAnim_FireSpinParticleUpdate(s8 *arg0) {
     }
 }
 
+/**
+ * Lifecycle init: full scale, raised 10 units, palette color 0x1A, starting angle spread
+ * over 18 steps by burst index.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_SetupUnusedVariant2(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
 
@@ -743,6 +778,13 @@ void BattleAnim_SetupUnusedVariant2(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
+/**
+ * Particle callback: shows the particle and moves it on a circle of radius 50 until it
+ * finishes.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_CallbackUnusedVariant2(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 3:
@@ -996,6 +1038,9 @@ void BattleAnim_GetExplosionParticleColor(Particle* arg0, u8 arg1) {
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, sp1E);
 }
 
+/**
+ * Empty.
+ */
 void func_82146674(void) {
 }
 
@@ -1737,7 +1782,7 @@ void BattleAnim_RunFlamethrowerHitRotation(Particle* arg0, s32 arg1) {
             break;
 
         case 3:
-            Particle_FieldA6_SetS16_0BCA8(arg0, 0xC);
+            Particle_FieldA6_SetS16_0BCA8(arg0, 12);
             Particle_AdvanceLifecycle(arg0);
             break;
 
@@ -1975,7 +2020,7 @@ void BattleAnim_RunDaimonji(Particle* arg0) {
             if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
                 Particle_BeginPhase(arg0);
                 Particle_EnableRendering(arg0);
-                Particle_FieldA6_SetS16_0BCA8(arg0, 0xB);
+                Particle_FieldA6_SetS16_0BCA8(arg0, 11);
             }
             break;
 
@@ -1983,7 +2028,7 @@ void BattleAnim_RunDaimonji(Particle* arg0) {
             Particle_PrimB_Approach_0BB44(arg0, 0, 0x18);
             Particle_EnvG_Approach_0BBF0(arg0, 0, 0x18);
             if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
-                Particle_FieldA6_SetS16_0BCA8(arg0, 0xC);
+                Particle_FieldA6_SetS16_0BCA8(arg0, 12);
             }
             break;
 
@@ -2168,10 +2213,10 @@ void BattleAnim_InitializeFlamethrowerHit(void) {
     BattleAnim_SpawnDrainFlameHueChange(0xA, 0x9, 0xE, 8, 0xC8, 0x10);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 2, 0x14, BattleAnim_RunFlamethrowerHitRotationWeak, &D_8218E7F0, 0, 1, 0x11, 9, 0, 0);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 2, 2, BattleAnim_RunFlamethrowerHitRotationStrong, &D_8218E7F0, 0, 0xC, 0x11, 9, 0, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0xE, 8, 5, BattleAnim_CallbackEndEffects15And22And59Descriptor3DRotatingAlphaScaleFade, &D_8218E770, 0, 2, 0x11, 9, 0, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(14, 8, 5, BattleAnim_CallbackEndEffects15And22And59Descriptor3DRotatingAlphaScaleFade, &D_8218E770, 0, 2, 0x11, 9, 0, 0);
     BattleAnim_SpawnOwnerModelTintRampDetach(0x3C, 0xE, 0xC8, 0, 8);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0x3A, 2, 2, BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E770, 0, 1, 9, 0, 0x33, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0x3C, 2, 2, BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E770, 0, 1, 9, 0, 0x33, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(58, 2, 2, BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E770, 0, 1, 9, 0, 0x33, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(60, 2, 2, BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E770, 0, 1, 9, 0, 0x33, 0);
 }
 
 M2C_UNK func_8213B5D8(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK *, M2C_UNK *, s32, s32, s32, s32, s32, s32); /* extern */
@@ -2205,10 +2250,10 @@ void BattleAnim_InitializeDragonRageHit(void) {
     BattleAnim_SpawnDrainFlameHueChange(0xA, 0x33, 0x2C, 8, 0xC8, 0x10);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 2, 0x14, BattleAnim_RunFlamethrowerHitRotationWeak, &D_8218E7F0, 0, 1, 0x11, 9, 1, 0);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 2, 2, BattleAnim_RunFlamethrowerHitRotationStrong, &D_8218E7F0, 0, 0xC, 0x11, 9, 1, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0xE, 8, 5, BattleAnim_CallbackEndEffects15And22And59Descriptor3DRotatingAlphaScaleFade, &D_8218E770, 0, 2, 0x11, 9, 1, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(14, 8, 5, BattleAnim_CallbackEndEffects15And22And59Descriptor3DRotatingAlphaScaleFade, &D_8218E770, 0, 2, 0x11, 9, 1, 0);
     BattleAnim_SpawnOwnerModelTintRampDetach(0x3C, 0x2C, 0xC8, 0, 8);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0x3A, 2, 2, BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E770, 0, 1, 9, 0, 0x18, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0x3C, 2, 2, BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E770, 0, 1, 9, 0, 0x18, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(58, 2, 2, BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E770, 0, 1, 9, 0, 0x18, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(60, 2, 2, BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E770, 0, 1, 9, 0, 0x18, 0);
 }
 
 M2C_UNK func_8213B5D8(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK *, M2C_UNK *, s32, s32, s32, s32, s32, s32); /* extern */
@@ -2248,9 +2293,18 @@ void BattleAnim_InitializeFireSpinHitFlames(void) {
     func_8213BF70(8, 9, 0xE, 8, 0xC8, 0x10);
 }
 
+/**
+ * Empty.
+ */
 void func_821491CC(void) {
 }
 
+/**
+ * Init hook for start effects that need no setup.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_DefaultStartEffect_Init(void) {
 }
 
@@ -2268,13 +2322,19 @@ void BattleAnim_InitializeEggBombHit(void) {
     BattleAnim_SpawnBeamBoomWaterfallHueChange(4, 0x8, 0x17, 0x20, 0xFF);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunBackgroundBombExplosion, &D_8218E7B0, 0, 3, 0x10, 9, 0x17, 2);
     BattleAnim_CreateEffectSlotForCurrentOwner(6, BattleAnim_RunBackgroundBombExplosion, &D_8218E7B0, 0, 3, 0x10, 9, 0x2C, 1);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0xC, BattleAnim_RunBackgroundBombExplosion, &D_8218E7B0, 0, 3, 0x10, 9, 0x1A, 1);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0x12, BattleAnim_RunBackgroundBombExplosion, &D_8218E7B0, 0, 2, 0x10, 9, 0x1A, 0);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0x14, BattleAnim_CallbackEndEffect40Descriptor48SpreadScaleAlphaFade, &D_8218E7C0, 0, 3, 0x11, 9, 0x1A, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0x14, 2, 2, BattleAnim_CallbackEndEffect40Descriptor3DSpreadRisingColorFade, &D_8218E770, 0, 6, 0x11, 9, 0, 0);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0x18, BattleAnim_CallbackEndEffects40And54Descriptor46SpreadScaleFade, &D_8218E7B0, 0, 8, 0x11, 9, 0, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(12, BattleAnim_RunBackgroundBombExplosion, &D_8218E7B0, 0, 3, 0x10, 9, 0x1A, 1);
+    BattleAnim_CreateEffectSlotForCurrentOwner(18, BattleAnim_RunBackgroundBombExplosion, &D_8218E7B0, 0, 2, 0x10, 9, 0x1A, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(20, BattleAnim_CallbackEndEffect40Descriptor48SpreadScaleAlphaFade, &D_8218E7C0, 0, 3, 0x11, 9, 0x1A, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(20, 2, 2, BattleAnim_CallbackEndEffect40Descriptor3DSpreadRisingColorFade, &D_8218E770, 0, 6, 0x11, 9, 0, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(24, BattleAnim_CallbackEndEffects40And54Descriptor46SpreadScaleFade, &D_8218E7B0, 0, 8, 0x11, 9, 0, 0);
 }
 
+/**
+ * Init hook for end effects that need no setup.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_DefaultEndEffect_Init(void) {
 }
 

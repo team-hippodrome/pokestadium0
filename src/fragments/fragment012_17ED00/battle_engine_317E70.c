@@ -53,6 +53,12 @@ void Battle_CheckAllBroughtFainted_LeechSeed(ActivePokemon* arg0);
 void Battle_CheckAllBroughtFainted_PendingHp(ActivePokemon* arg0);
 void Battle_CheckAllBroughtFainted_Hp(ActivePokemon* arg0);
 
+/**
+ * Empty effect end callback.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_EffectEndNop(void) {
 }
 

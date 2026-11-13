@@ -289,7 +289,7 @@ extern s32 D_800603C0;
 M2C_UNK func_8000B2F4(s32);
 
 /**
- * Initialises a menu object at arg0: stores arg4, arg5, arg6 and arg3 at
+ * Initializes a menu object at arg0: stores arg4, arg5, arg6 and arg3 at
  * offsets 0x24, 0x0C, 0x10 and 0x14, calls GridMenu_SetItems(arg0, arg1, arg2),
  * sets offset 0x1C to 0xC00 and offset 0x20 to 0, then stores D_800603C0 at
  * offset 0x18 and passes it to func_8000B2F4. What the fields mean is not

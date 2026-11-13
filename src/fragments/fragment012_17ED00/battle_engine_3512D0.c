@@ -46,6 +46,12 @@ void SwiftRibbonSheet_Init(void) {
     }
 }
 
+/**
+ * Starts a textured ribbon sheet in the first free of the 40 slots: from (arg0, arg1 + 35,
+ * arg2) toward (arg3, arg4, arg5), colored (arg6, arg7, arg8), sized by the secondary owner's
+ * model scale, with lifetime argB.
+ * @unverified Name from Stadium 1.
+ */
 void SwiftRibbonSheet_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9,
                    f32 argA, s16 argB) {
     TexturedRibbonSheet* var_v1;

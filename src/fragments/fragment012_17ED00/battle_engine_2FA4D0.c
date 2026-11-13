@@ -73,6 +73,10 @@ void BattleHud_DrawTranslucentShadowRect(s32 arg0, s32 arg1, s32 arg2, s32 arg3,
 void Ui_DrawGradientRectangle(s32 x1, s32 y1, s32 width, s32 height, Color_RGB8* top_color,
                               Color_RGB8* bottom_color);
 
+/**
+ * Draws up to seven digits (and '-') of the string arg0 at (arg1, arg2) with the small 8x6
+ * digit textures, stopping at the first space or the end.
+ */
 void func_82116480(s8* arg0, s16 arg1, s16 arg2) {
     u8** temp_s4;
     u8* var_v1;
@@ -113,6 +117,12 @@ void func_82116480(s8* arg0, s16 arg1, s16 arg2) {
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
+/**
+ * Draws a translucent black rectangle at (arg0, arg1) of size arg2 x arg3 with vertex alpha
+ * arg4, using a screen-space orthographic projection. The HUD boxes use it as a drop shadow.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleHud_DrawTranslucentShadowRect(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     DepthBuffer* temp_s1;
     Vtx* temp_s2;
@@ -146,6 +156,12 @@ void BattleHud_DrawTranslucentShadowRect(s32 arg0, s32 arg1, s32 arg2, s32 arg3,
     gSP2Triangles(gDisplayListHead++, 0, 2, 3, 0, 0, 3, 1, 0);
 }
 
+/**
+ * Draws an opaque rectangle that fades vertically from top_color to bottom_color, in screen
+ * space.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Ui_DrawGradientRectangle(s32 x1, s32 y1, s32 width, s32 height, Color_RGB8* top_color,
                               Color_RGB8* bottom_color) {
     Vtx* temp_s2;
@@ -186,6 +202,11 @@ void Ui_DrawGradientRectangle(s32 x1, s32 y1, s32 width, s32 height, Color_RGB8*
 }
 
 void func_8211694C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGB8* arg4, Color_RGB8* arg5);
+/**
+ * Calls func_8211694C with the same arguments (a gradient rectangle draw).
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Battle_DrawGradientRectWrapper(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGB8* arg4, Color_RGB8* arg5) {
     func_8211694C(arg0, arg1, arg2, arg3, arg4, arg5);
 }

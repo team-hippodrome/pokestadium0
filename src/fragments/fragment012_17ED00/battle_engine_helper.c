@@ -26,6 +26,13 @@ void BattleScene_GetParticipantModelPosition(ActivePokemon* pokemon, Vec3f* dest
 
 extern f32 D_FLT_82189354[][4];
 
+/**
+ * Places the Pokémon's model on its side of the field: 150 units from the center (175
+ * for Venusaur and Lapras, 200 for Gyarados and Onix), at the species' standing height.
+ * Side 1 is at negative X.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (6 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_PositionParticipantModel(ActivePokemon* active_pokemon) {
     if (BattleScene_GetParticipantSideIndex(active_pokemon) == 0) {
         if (active_pokemon->displayObject.objectType == GYARADOS) {
@@ -46,6 +53,12 @@ void BattleScene_PositionParticipantModel(ActivePokemon* active_pokemon) {
     }
 }
 
+/**
+ * Returns the X position BattleScene_PositionParticipantModel uses for this Pokémon: +-150,
+ * +-175 for Venusaur and Lapras, +-200 for Gyarados and Onix (negative on side 1).
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (124 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 f32 BattleScene_GetParticipantModelXOffset(ActivePokemon* active_pokemon) {
     if (BattleScene_GetParticipantSideIndex(active_pokemon) == 0) {
         if ((active_pokemon->displayObject.objectType == GYARADOS) || (active_pokemon->displayObject.objectType == ONIX)) {
@@ -69,6 +82,9 @@ f32 BattleScene_GetParticipantModelXOffset(ActivePokemon* active_pokemon) {
     return 150.0f;
 }
 
+/**
+ * Sets field 0x34 of both Pokemon's state (the camera clip mask) to value.
+ */
 void func_821079E8(s16 value) {
     ActivePokemonState* side1 = &sActivePokemon[0]->state;
     ActivePokemonState* side2 = &sActivePokemon[1]->state;
@@ -76,6 +92,12 @@ void func_821079E8(s16 value) {
     M2C_FIELD(side2, s16*, 0x34) = value;
 }
 
+/**
+ * Sets the Pokémon model's scale on all three axes.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_SetParticipantModelScale(ActivePokemon* active_pokemon, f32 scale) {
     active_pokemon->displayObject.scale.x = scale;
     active_pokemon->displayObject.scale.y = scale;
@@ -106,6 +128,11 @@ u8 ActivePokemon_GetPartnerBroughtCount(s8 *arg0)
   return *((u8 *) (((s8 *) (*((s8 **) (((s8 *) ((*((s32 *) (((s8 *) arg0) + 0x85C))) + (new_var * 4))) + 8)))) + 2)); // FAKE: decomp slop, raw pointer casts stand in for struct fields
 }
 
+/**
+ * Returns 0 if this is side 1's active Pokémon, otherwise 1.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 s32 BattleScene_GetParticipantSideIndex(ActivePokemon* active_pokemon) {
     if (active_pokemon == sSide1ActivePokemon) {
         return 0;
@@ -113,6 +140,12 @@ s32 BattleScene_GetParticipantSideIndex(ActivePokemon* active_pokemon) {
     return 1;
 }
 
+/**
+ * Returns the default animation anchor of the move the Pokémon just used, from its side's
+ * battle cue table.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (159 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 u8 BattleScene_GetMoveCueDefaultAnchor(ActivePokemon* active_pokemon) {
     UNUSED s32 pad; // FAKE: stack padding
     UNUSED s16 pad2; // FAKE: stack padding
@@ -122,6 +155,12 @@ u8 BattleScene_GetMoveCueDefaultAnchor(ActivePokemon* active_pokemon) {
     return move_cue->defaultAnchor;
 }
 
+/**
+ * Returns the alternate animation anchor of the move the Pokémon just used, from its
+ * side's battle cue table.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (159 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 u8 BattleScene_GetMoveCueAlternateAnchor(ActivePokemon* active_pokemon) {
     UNUSED s32 pad; // FAKE: stack padding
     UNUSED s16 pad2; // FAKE: stack padding
@@ -131,12 +170,20 @@ u8 BattleScene_GetMoveCueAlternateAnchor(ActivePokemon* active_pokemon) {
     return move_cue->alternateAnchor;
 }
 
+/**
+ * Returns the default animation anchor of the side's hit cue.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (127 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 s16 BattleScene_GetHitCueDefaultAnchor(ActivePokemon* active_pokemon) {
     MovePresentationCue* hit_cue = &sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon)]->hitCue;
 
     return hit_cue->defaultAnchor;
 }
 
+/**
+ * Returns the alternate anchor of the Pokemon's side hit cue.
+ */
 s16 func_82107B54(ActivePokemon* active_pokemon) {
     MovePresentationCue* hit_cue = &sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon)]->hitCue;
 
@@ -173,6 +220,9 @@ f32 ActivePokemon_GetSizeRatio(ActivePokemon* active_pokemon) {
     return (D_FLT_82189350[active_pokemon->displayObject.objectType][0] * 2) / 50.0f;
 }
 
+/**
+ * Returns the Pokemon's move id (+0x820).
+ */
 u8 func_82107BF4(s8 *arg0) {
     return M2C_FIELD(arg0, u8 *, 0x820);
 }
@@ -193,35 +243,75 @@ void BattleScene_GetParticipantModelSizeScaled(s8* arg0, Vec3f* out) {
     out->z = M2C_FIELD(arg0, f32*, 0x30) * (D_FLT_8218935C[M2C_FIELD(arg0, s16*, 0x1A) - 1][0] * 2 / 50.0f);
 }
 
+/**
+ * Copies the Pokémon model's rotation into dest.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (146 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_GetParticipantModelRotation(ActivePokemon* pokemon, Vec3s* dest) {
     dest->x = pokemon->displayObject.rotation.x;
     dest->y = pokemon->displayObject.rotation.y;
     dest->z = pokemon->displayObject.rotation.z;
 }
 
+/**
+ * Returns the current HP of the Pokémon's picked-team entry.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 u16 Battle_GetActiveMonHp(ActivePokemon* active_pokemon) {
     BattleMon* party_pokemon = &active_pokemon->teamRoster->pokemonPicked[active_pokemon->state.rosterIndex];
 
     return party_pokemon->hp;
 }
 
+/**
+ * Returns the Pokémon's facing direction (the s32 at 0x60C) as a binary angle, a quarter
+ * turn per unit.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 s16 BattleScene_GetParticipantFacingAngle(s8 *arg0) {
     return (s16) (M2C_FIELD(arg0, s32 *, 0x60C) << 0xE);
 }
 
+/**
+ * Returns the species shown by the given side's active Pokémon model.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
+ * @unverified Name from Stadium 1.
+ */
 s32 BattleAnim_GetSpeciesBySideIndex(s32 side) {
     return sActivePokemon[side]->displayObject.objectType;
 }
 
+/**
+ * Returns the species shown by the Pokémon's model (its object type, a national dex
+ * number).
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (156 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 s32 BattleAnim_GetOwnerSpecies(ActivePokemon* active_pokemon) {
     return active_pokemon->displayObject.objectType;
 }
 
+/**
+ * Returns the model's visible flag (node flag 1).
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 u8 BattleScene_IsParticipantModelVisible(ActivePokemon* active_pokemon) {
     s32 visible = active_pokemon->displayObject.node.flags & 1;
     return visible;
 }
 
+/**
+ * Copies the Pokémon model's position into dest.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_GetParticipantModelPosition(ActivePokemon* pokemon, Vec3f* dest) {
     dest->x = pokemon->displayObject.position.x;
     dest->y = pokemon->displayObject.position.y;
@@ -314,6 +404,11 @@ f32 BattleScene_GetParticipantModelRadiusScaled(ActivePokemon* active_pokemon) {
     return D_FLT_8218934C[active_pokemon->displayObject.objectType][0] * active_pokemon->displayObject.scale.y;
 }
 
+/**
+ * Returns node node_index of the model loaded for the Pokémon's session team.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 ModelNodeView* Battle_GetLoadedModelNode(ActivePokemon* active_pokemon, s32 node_index) {
     return active_pokemon->sessionTeams->loadedModel->unk_00[2]->unk_00[node_index];
 }
@@ -496,6 +591,15 @@ void BattleScene_InitializeParticipantAuxiliaryModel(ActivePokemon* active_pokem
     }
 }
 
+/**
+ * Reloads pokemon's model as object_type using owner's loaded model: picks the effect slot
+ * by side, loads the species assets, resets the animation, hides Diglett and Dugtrio's
+ * ground layer flag, and unless airborne puts the model back in place facing the other
+ * side. Diglett is not in Zero's battle roster, so only the Dugtrio case comes up in
+ * normal play.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_ReinitParticipantBodyModel(ActivePokemon* owner, ActivePokemon* pokemon, s16 object_type) {
     UNUSED s32 pad; // FAKE: stack padding
     ModelNodeView* model_node = Battle_GetLoadedModelNode(owner, 0);
@@ -534,6 +638,12 @@ void BattleScene_ReinitParticipantBodyModel(ActivePokemon* owner, ActivePokemon*
     func_8000D41C(&M2C_FIELD(owner, Vec3f*, 0x5DC), owner->facingDirection * D_82199DF0[side][0], D_82199DF0[side][1], D_82199DF0[side][2]);
 }
 
+/**
+ * Reloads the Pokémon's thumbnail model as object_type, using effect slot 2 or 3 and model
+ * slot 1 or 2 depending on side.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_ReinitParticipantThumbnailModel(ActivePokemon* pokemon, ThumbnailState* thumbnail, s16 object_type) {
     ModelNodeView* model_node;
 
@@ -557,6 +667,11 @@ void BattleScene_ReinitParticipantThumbnailModel(ActivePokemon* pokemon, Thumbna
     thumbnail->displayObject.node.renderFlags &= ~0x40;
 }
 
+/**
+ * Reloads the Pokémon's three afterimage models as object_type and hides them.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_ReinitParticipantAfterimages(ActivePokemon* pokemon, s16 object_type) {
     s32 i;
     ModelNodeView* model_node;
@@ -592,6 +707,11 @@ void BattleScene_ReinitParticipantAfterimages(ActivePokemon* pokemon, s16 object
     }
 }
 
+/**
+ * Clears the model's event track, or for a sleeping Pokémon sets the sleep event track.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Battle_ResetEventTrack(ActivePokemon* active_pokemon) {
     if (active_pokemon->state.flags & ACTIVE_SLEEP) {
         BattleAnim_TrySetModelEventTrackFromRow(active_pokemon, 0xAF, 2);
@@ -602,6 +722,13 @@ void Battle_ResetEventTrack(ActivePokemon* active_pokemon) {
     }
 }
 
+/**
+ * Reloads the Pokémon's body, thumbnail and afterimage models for the species it should
+ * show, resets its event track, keeps only the substitute presentation flags and resets
+ * its scale.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Battle_LoadOwnerModelForSpecies(ActivePokemon* active_pokemon) {
     ActivePokemonState* state = &active_pokemon->state;
     UNUSED s32 pad[3]; // FAKE: stack padding
@@ -617,6 +744,13 @@ void Battle_LoadOwnerModelForSpecies(ActivePokemon* active_pokemon) {
     Vec3f_SetComponentsDuplicate(&active_pokemon->displayObject.scale, 1.0f, 1.0f, 1.0f);
 }
 
+/**
+ * Same as Battle_LoadOwnerModelForSpecies, and also clears state field unk_2D. Used when
+ * the Pokémon is sent out.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void Battle_LoadOwnerModelForSwitchIn(ActivePokemon* active_pokemon) {
     ActivePokemonState* state = &active_pokemon->state;
     UNUSED s32 pad[3]; // FAKE: stack padding
@@ -633,6 +767,12 @@ void Battle_LoadOwnerModelForSwitchIn(ActivePokemon* active_pokemon) {
     Vec3f_SetComponentsDuplicate(&active_pokemon->displayObject.scale, 1.0f, 1.0f, 1.0f);
 }
 
+/**
+ * Swaps the Pokémon's model for the Substitute doll at full alpha, remembering the species
+ * model it had.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Battle_ResetOwnerModelToSubstituteDoll(ActivePokemon* active_pokemon) {
     Model_SetMaterialColor(&active_pokemon->displayObject, 0xFF, 0xFF, 0xFF, active_pokemon->state.alpha = 0xFF);
     active_pokemon->state.model = active_pokemon->displayObject.objectType;
@@ -641,12 +781,24 @@ void Battle_ResetOwnerModelToSubstituteDoll(ActivePokemon* active_pokemon) {
     Battle_ResetEventTrack(active_pokemon);
 }
 
+/**
+ * Reloads the Substitute doll model for the Pokémon.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void Battle_ReloadSubstituteDoll(ActivePokemon* active_pokemon) {
     func_8210840C(active_pokemon, active_pokemon, SUBSTITUTE_DOLL);
     func_82108648(active_pokemon, SUBSTITUTE_DOLL);
     Battle_ResetEventTrack(active_pokemon);
 }
 
+/**
+ * Reloads the Pokémon's species model at full alpha (used after Substitute ends).
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void Battle_ReloadDisplayModel(ActivePokemon* active_pokemon) {
     UNUSED s32 pad[3]; // FAKE: stack padding
     ActivePokemonState* state = &active_pokemon->state;
@@ -670,6 +822,14 @@ void ActivePokemon_SetModelTransform(s8 *arg0, s32 arg1, s32 arg2) {
     M2C_FIELD(arg0, s32 *, 0x614) = arg2;
 }
 
+/**
+ * Once the animated model's current animation finishes, starts its idle animation again:
+ * the flying idle when airborne, the sleep idle for sleeping Primeape and Exeggutor, a
+ * random one of five for Ditto, otherwise the normal idle. Does nothing while underground,
+ * frozen or while the session is busy.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Battle_ReturnToIdleAnimIfFinished(ActivePokemon* active_pokemon, ActivePokemon* animated_pokemon) {
     s32 idx;
     MovePresentationCue* idle_cue;
@@ -683,12 +843,12 @@ void Battle_ReturnToIdleAnimIfFinished(ActivePokemon* active_pokemon, ActivePoke
     flying_cue = (MovePresentationCue*)((u8*)sSideBattleCues[idx] + 0x790);
     idx = BattleScene_GetParticipantSideIndex(active_pokemon);
     sleep_idle_cue = (MovePresentationCue*)((u8*)sSideBattleCues[idx] + 0x785);
-    if (!(pokemon_state->flags & 0x4002)) {
+    if (!(pokemon_state->flags & (ACTIVE_UNDERGROUND | ACTIVE_FREEZE))) {
         if ((BattleAnim_IsSessionBusy(active_pokemon) == 0) && (animated_pokemon->displayObject.transformAnim.animationId != -1) &&
             (ModelAnim_IsFinished(&animated_pokemon->displayObject) == 1)) {
-            if (pokemon_state->flags & 0x200) {
+            if (pokemon_state->flags & ACTIVE_AIRBORNE) {
                 ModelAnim_SetAnimation(&animated_pokemon->displayObject, flying_cue->id);
-            } else if ((pokemon_state->flags & 1) && ((animated_pokemon->displayObject.objectType == 0x39) || (animated_pokemon->displayObject.objectType == 0x67))) {
+            } else if ((pokemon_state->flags & ACTIVE_SLEEP) && ((animated_pokemon->displayObject.objectType == PRIMEAPE) || (animated_pokemon->displayObject.objectType == EXEGGUTOR))) {
                 ModelAnim_SetAnimation(&animated_pokemon->displayObject, sleep_idle_cue->id);
             } else {
                 if (animated_pokemon->displayObject.objectType == DITTO) {
@@ -703,6 +863,12 @@ void Battle_ReturnToIdleAnimIfFinished(ActivePokemon* active_pokemon, ActivePoke
     }
 }
 
+/**
+ * Starts the Pokémon's idle animation right away, picking it like
+ * Battle_ReturnToIdleAnimIfFinished.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Battle_ResetModelToIdleAnim(ActivePokemon* active_pokemon) {
     s32 idx;
     ActivePokemonState* state;
@@ -718,12 +884,12 @@ void Battle_ResetModelToIdleAnim(ActivePokemon* active_pokemon) {
     idx = BattleScene_GetParticipantSideIndex(active_pokemon);
     sleep_idle_cue = (u8*)sSideBattleCues[idx] + 0x785;
 
-    if (!(state->flags & 0x4002) && (BattleAnim_IsSessionBusy(active_pokemon) == 0) && (active_pokemon->displayObject.transformAnim.animationId != -1)) {
-        if (state->flags & 0x200) {
+    if (!(state->flags & (ACTIVE_UNDERGROUND | ACTIVE_FREEZE)) && (BattleAnim_IsSessionBusy(active_pokemon) == 0) && (active_pokemon->displayObject.transformAnim.animationId != -1)) {
+        if (state->flags & ACTIVE_AIRBORNE) {
             ModelAnim_SetAnimation(&active_pokemon->displayObject, *flying_idle_cue);
-        } else if ((state->flags & 1) && ((active_pokemon->displayObject.objectType == 0x39) || (active_pokemon->displayObject.objectType == 0x67))) {
+        } else if ((state->flags & ACTIVE_SLEEP) && ((active_pokemon->displayObject.objectType == PRIMEAPE) || (active_pokemon->displayObject.objectType == EXEGGUTOR))) {
             ModelAnim_SetAnimation(&active_pokemon->displayObject, *sleep_idle_cue);
-        } else if (active_pokemon->displayObject.objectType == 0x84) {
+        } else if (active_pokemon->displayObject.objectType == DITTO) {
             ModelAnim_SetAnimation(&active_pokemon->displayObject, BattleAnim_RandomRange(5) + 13);
         } else {
             ModelAnim_SetAnimation(&active_pokemon->displayObject, *idle_cue);
@@ -732,6 +898,12 @@ void Battle_ResetModelToIdleAnim(ActivePokemon* active_pokemon) {
     }
 }
 
+/**
+ * Starts the Pokémon's hit animation from its first frame.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
+ * @unverified Name from Stadium 1.
+ */
 void Battle_SetModelToHitAnim(ActivePokemon* active_pokemon) {
     extern PokemonBattleCues* D_82189180[];
     MovePresentationCue* hit_cue = &D_82189180[BattleScene_GetParticipantSideIndex(active_pokemon)]->hitCue;
@@ -778,6 +950,13 @@ void ActivePokemon_SetReplacementState(void *arg0, s32 arg1) {
     M2C_FIELD(arg0, s8 *, 0x7B9) = arg1;
 }
 
+/**
+ * Binds the Pokémon slot to team member team_member_index and remembers its roster and
+ * team member indexes.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_RebindParticipantTeamMember(ActivePokemon* pokemon, s32 team_member_index) {
     ActivePokemonState* state = &pokemon->state;
 
@@ -787,6 +966,14 @@ void BattleScene_RebindParticipantTeamMember(ActivePokemon* pokemon, s32 team_me
     M2C_FIELD(pokemon, s32*, 0x9D4) = state->teamMemberIndex;
 }
 
+/**
+ * Freeze Clause check: returns 1 if a Pokémon on the trainer's team (or, in a two-trainer
+ * team, the partner's) is already frozen. Each check also needs the runtime roster entry
+ * for the active Pokémon's slot to be 0.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 s32 Battle_FreezeClauseInEffect(ActivePokemon* active_pokemon) {
     s32 i;
     ActivePokemonState* state;
@@ -814,6 +1001,13 @@ s32 Battle_FreezeClauseInEffect(ActivePokemon* active_pokemon) {
     return 0;
 }
 
+/**
+ * Sleep Clause check: returns 1 if a Pokémon on the trainer's team (or, in a two-trainer
+ * team, the partner's) is already asleep. Each check also needs the runtime roster entry
+ * for the active Pokémon's slot to be 0.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (5 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 s32 Battle_SleepClauseInEffect(ActivePokemon* active_pokemon) {
     s32 i;
     ActivePokemonState* state;

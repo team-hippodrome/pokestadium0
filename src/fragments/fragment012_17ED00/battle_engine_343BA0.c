@@ -28,6 +28,9 @@ extern const char D_821978C8[];
 
 void func_821329F0(void);
 
+/**
+ * Empty.
+ */
 void func_821329F0(void) {
 }
 
@@ -40,6 +43,10 @@ extern s8 *D_82199DE0;
 extern s8 *D_8219A580;
 extern s8 *D_8219A5A0;
 
+/**
+ * Scene mode 7 step 0: camera preset 0, clip planes 20-4000, picks side 0 as the featured
+ * Pokemon, plays its camera shot 3, starts its model reaction 9, stops music and advances.
+ */
 void func_821329F8(s32 arg0) {
     s8 *sp1C;
 
@@ -59,6 +66,9 @@ void func_821329F8(s32 arg0) {
 s32 func_82101FD4(s32);                             /* extern */
 extern s8 *D_8219A5A0;
 
+/**
+ * Advances the phase step once the featured Pokemon's model is ready.
+ */
 void func_82132AC4(s32 arg0) {
     if (func_82101FD4(D_8219A580) != 0) {
         M2C_FIELD(D_8219A5A0, s32 *, 0x20) = (s32) (M2C_FIELD(D_8219A5A0, s32 *, 0x20) + 1);
@@ -78,6 +88,9 @@ extern s8 D_8219A4F1;
 void func_821351F8(CameraNode* arg0, s8* arg1);
 void func_82104C68(s8* arg0, s32 arg1);
 
+/**
+ * Starts camera path 0x19 on the featured Pokemon with model reaction 1 and advances.
+ */
 void func_82132B04(CameraNode* arg0) {
     D_8219A4F1 = 0;
     func_821351F8(arg0, D_8219A580);
@@ -96,6 +109,9 @@ void func_82132B04(CameraNode* arg0) {
  */
 s32 func_82135894(CameraNode* arg0, s8* arg1);
 
+/**
+ * Advances the phase step once the camera path on the featured Pokemon finishes.
+ */
 void func_82132B54(CameraNode* arg0) {
     if (func_82135894(arg0, D_8219A580) != 0) {
         M2C_FIELD(D_8219A5A0, s32 *, 0x20) = (s32) (M2C_FIELD(D_8219A5A0, s32 *, 0x20) + 1);
@@ -185,6 +201,9 @@ void func_82132CDC(CameraNode* arg0) {
 }
 
 // Zero's version takes only the particle; the header keeps Stadium 1's callback signature.
+/**
+ * Draws the featured Pokemon's I4 atlas, scaled in Y.
+ */
 void func_82132D3C(Particle* arg0) {
     BattleAnim_DrawI4AtlasYScaled(arg0, D_8219A580);
 }
@@ -195,6 +214,9 @@ void func_82132B90(CameraNode* arg0);
 void func_82132C14(CameraNode* arg0);
 void func_82132CDC(CameraNode* arg0);
 
+/**
+ * Scene mode 7, a single-Pokemon showcase: runs the step for the current phase step.
+ */
 void func_82132D60(CameraNode* arg0) {
     switch (sBattleScene.scene->phaseStep) {
         case 0:

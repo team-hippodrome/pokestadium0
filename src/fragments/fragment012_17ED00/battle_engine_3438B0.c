@@ -18,9 +18,21 @@ extern MoveAnimInfoZ D_80073D90[];
 extern f32 D_FLT_82189354[][4];
 extern s8 *D_8219A5A0;
 
+/**
+ * Empty render hook.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_RenderNop1(void) {
 }
 
+/**
+ * Empty render hook.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_RenderNop2(void) {
 }
 
@@ -603,6 +615,10 @@ void BattleCamera_PlayTargetShot(ActivePokemon* arg0, CameraNode* arg1, s32 arg2
     }
 }
 
+/**
+ * Plays the user's camera shot for its move from the move table D_80073D90 (field 2). Shots
+ * 5, 6 and 7 use their own setups, and shot 4 also sets scene+0x54.
+ */
 void func_8212C78C(s32 arg0) {
     BattleMonRuntime* runtime;
 
@@ -1110,6 +1126,11 @@ void func_8210568C(ActivePokemon*, s32, s32);
 // Returns int with no return statement (most likely an old-style definition with
 // no return type). BattleScene_PhaseHaze only matches when this call is seen as
 // returning a value: it keeps $v0 away from the scene pointer there.
+/**
+ * Plays a Pokemon's pending model reactions from its state flags: 2 (reaction 1), 1 (resets
+ * its roster byte 5, sets event track 0xB8, reaction 3) and the acting Pokemon's 0x80
+ * (reaction 2), clearing each flag, then commits its pending status.
+ */
 s32 func_8212DD14(ActivePokemon* arg0) {
     ActivePokemonState* state = &arg0->state;
     BattleMon* sp28 = &arg0->teamRoster->pokemonPicked[arg0->state.rosterIndex];
@@ -1392,6 +1413,11 @@ void BattleScene_PhaseCannotMove(CameraNode* arg0) {
     }
 }
 
+/**
+ * Brings a Pokemon back to its normal height after an air or underground move: with flag
+ * 0x200 it only restores the height; with 0x4008 it also makes the model opaque and visible
+ * again and plays reaction 4.
+ */
 void func_8212E9C8(ActivePokemon* arg0) {
     u8* ptr = (u8*)arg0 + 0x78C;
 
@@ -1505,6 +1531,9 @@ void BattleScene_PhaseFullParalysis(CameraNode* arg0) {
     }
 }
 
+/**
+ * Picks one of three target camera framings at random for Pokemon arg0 and runs it.
+ */
 void func_8212EEC0(ActivePokemon* arg0, CameraNode* arg1) {
     D_8219A568 = BattleAnim_RandomRange(3);
     if (D_8219A568 >= 4) {
@@ -1526,6 +1555,9 @@ void func_8212EEC0(ActivePokemon* arg0, CameraNode* arg1) {
     }
 }
 
+/**
+ * Picks one of four or five target framings (func_8210C020(4)) for Pokemon arg0 and runs it.
+ */
 void func_8212EF74(ActivePokemon* arg0, CameraNode* arg1) {
     s32 temp_v0;
     s32 var_v1;
@@ -1555,6 +1587,10 @@ void func_8212EF74(ActivePokemon* arg0, CameraNode* arg1) {
     }
 }
 
+/**
+ * Plays the target camera shot for the move the other side used, from field 6 of the move
+ * table D_80073D90 (4 and 6 pick a random framing, 5 reuses the last one).
+ */
 void func_8212F044(CameraNode* arg0) {
     s32 other = sBattleScene.scene->actingSide == 0;
     ActivePokemon* opp = sActivePokemon[other];
@@ -1822,6 +1858,12 @@ void BattleScene_PhaseDisable(CameraNode* arg0) {
     }
 }
 
+/**
+ * Camera and HP sequence for a hit on the target: shows the target's shot and the move
+ * message, steps the target's displayed HP, then switches to the user's shot and steps
+ * both sides' HP until they catch up and the user's animation ends, then runs the HP bar
+ * step.
+ */
 void func_8212F9FC(CameraNode* arg0) {
     func_821255EC(arg0);
     switch (sBattleScene.scene->phaseStep) {
@@ -2049,6 +2091,15 @@ void BattleScene_PhaseRecoilDamage(CameraNode* arg0) {
     }
 }
 
+/**
+ * Battle phase 10. Step 0 waits until the acting Pokemon's check passes, then clears
+ * effects, shows a message for the other side, queues effect list 6 and plays sound
+ * command 0x23. Step 1 waits 55 frames and shows a second message, then falls through to
+ * step 2, which waits 60 frames and ends the phase.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name guessed from the code.
+ */
 void BattleScene_Phase10(CameraNode* arg0) {
     switch (sBattleScene.scene->phaseStep) {
         case 0:

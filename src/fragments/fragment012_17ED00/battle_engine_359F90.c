@@ -546,36 +546,46 @@ s32 func_82110EAC(s8 *arg0)
 }
 
 extern u8 D_82199F6A;
+/**
+ * Applies the Gen 1 badge boosts to side 0's Pokemon: each flagged stat (bits of
+ * D_82199F6A: Attack, Defense, Speed, Special) goes up by 1/8, capped at 999.
+ */
 void func_82110EE4(void) {
     if (D_82199F6A & 1) {
         D_8219A3C8[0].modifiedAttack += D_8219A3C8[0].modifiedAttack >> 3;
-        if (D_8219A3C8[0].modifiedAttack >= 0x3E8) {
-            D_8219A3C8[0].modifiedAttack = 0x3E7;
+        if (D_8219A3C8[0].modifiedAttack >= 1000) {
+            D_8219A3C8[0].modifiedAttack = 999;
         }
     }
     if (D_82199F6A & 2) {
         D_8219A3C8[0].modifiedDefense += D_8219A3C8[0].modifiedDefense >> 3;
-        if (D_8219A3C8[0].modifiedDefense >= 0x3E8) {
-            D_8219A3C8[0].modifiedDefense = 0x3E7;
+        if (D_8219A3C8[0].modifiedDefense >= 1000) {
+            D_8219A3C8[0].modifiedDefense = 999;
         }
     }
     if (D_82199F6A & 4) {
         D_8219A3C8[0].speed += D_8219A3C8[0].speed >> 3;
-        if (D_8219A3C8[0].speed >= 0x3E8) {
-            D_8219A3C8[0].speed = 0x3E7;
+        if (D_8219A3C8[0].speed >= 1000) {
+            D_8219A3C8[0].speed = 999;
         }
     }
     if (D_82199F6A & 8) {
         D_8219A3C8[0].modifiedSpecial += D_8219A3C8[0].modifiedSpecial >> 3;
-        if (D_8219A3C8[0].modifiedSpecial >= 0x3E8) {
-            D_8219A3C8[0].modifiedSpecial = 0x3E7;
+        if (D_8219A3C8[0].modifiedSpecial >= 1000) {
+            D_8219A3C8[0].modifiedSpecial = 999;
         }
     }
 }
 
+/**
+ * Empty.
+ */
 void func_82110FB0(void) {
 }
 
+/**
+ * Empty.
+ */
 void func_82110FB8(void) {
 }
 
@@ -891,6 +901,9 @@ void Battle_ApplyLeechSeedDamage(void) {
     }
 }
 
+/**
+ * Empty.
+ */
 void func_82111870(void) {
 }
 

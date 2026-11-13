@@ -91,6 +91,9 @@ s32 BattleAnim_SurfCompleteImmediately(void) {
     return -1;
 }
 
+/**
+ * Empty.
+ */
 void func_8216E0C0(void) {
 }
 
@@ -166,6 +169,12 @@ void BattleAnim_StartTrappingLassoMove_Draw(void) {
 
 void func_8216DAC0(Vec3f*);
 
+/**
+ * Init hook for end effect 9: resets the shared matrix and starts the lasso hit effect at
+ * the target, sized for the tertiary owner.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_EndEffect9Radial20_Init(void) {
     Vec3f sp34;
     f32 sp30;
@@ -177,10 +186,20 @@ void BattleAnim_EndEffect9Radial20_Init(void) {
     LassoHit_Init(sp34.x, sp34.y, sp34.z, sp30, 0x40, 0xFF, 0xFF, 0, 0, 0xFF);
 }
 
+/**
+ * Update hook for end effect 9: advances the lasso hit effect.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 s32 BattleAnim_EndEffect9Radial20_Update(void) {
     return LassoHit_Update();
 }
 
+/**
+ * Draw hook for end effect 9: loads the shared matrix and draws the trail strip.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_EndEffect9Radial20_Draw(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
@@ -253,6 +272,12 @@ void BattleAnim_DrawSwiftUseRibbonSheet(void) {
     gDisplayListHead = SwiftRibbonSheet_Draw(gDisplayListHead);
 }
 
+/**
+ * Emits one radial effect for start effect 33 from the owner toward the target with a
+ * small random spread.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep.
+ * @unverified Name guessed from the code.
+ */
 void BattleAnim_StartEffect33Radial20_EmitVariantC(void) {
     f32 sp74;
     f32 sp70;

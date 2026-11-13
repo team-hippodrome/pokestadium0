@@ -32,6 +32,7 @@ extern unk_D_843C6148 D_8219A494;
 #include "matrix.h"
 #include "memory.h"
 #include "moves.h"
+#include "pokemon_types.h"
 #include "pokemon.h"
 #include "status.h"
 extern PokemonBattleCues sSide1BattleCues;
@@ -96,6 +97,13 @@ void BattleAi_PrepareDamageCalcState(BattleMonRuntime* arg0, BattleMonRuntime* a
 s32 BattleScene_FindU16InByteArray(u16 lookup_value, u8* array, s32 array_length);
 void BattleScene_IntroInitNop(void);
 
+/**
+ * COM AI damage estimate for fixed-damage moves: Super Fang (effect 40) takes half the
+ * HP; Seismic Toss and Night Shade deal the level, SonicBoom 20, Dragon Rage 40, and
+ * Psywave is estimated at 3/4 of the level. Returns the estimate.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (11 of the moves).
+ * @unverified Name guessed from the code.
+ */
 u16 BattleAi_ApplyMoveEffectDamageOverride(BattleMonRuntime* arg0, BattleMonRuntime* arg1) {
     s32 var_v0;
 
@@ -112,17 +120,17 @@ u16 BattleAi_ApplyMoveEffectDamageOverride(BattleMonRuntime* arg0, BattleMonRunt
 
         case 41:
             switch (D_8219A494.unk_00) {
-                case 0x45:
-                case 0x65:
+                case SEISMIC_TOSS:
+                case NIGHT_SHADE:
                     var_v0 = arg0->unk_26;
                     break;
 
-                case 0x31:
-                    var_v0 = 0x14;
+                case SONICBOOM:
+                    var_v0 = 20;
                     break;
 
-                case 0x52:
-                    var_v0 = 0x28;
+                case DRAGON_RAGE:
+                    var_v0 = 40;
                     break;
 
                 default:
@@ -143,6 +151,11 @@ u16 BattleAi_ApplyMoveEffectDamageOverride(BattleMonRuntime* arg0, BattleMonRunt
     return D_82199F50;
 }
 
+/**
+ * Scales the damage estimate by 255/255, which leaves it unchanged.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (11 of the moves).
+ * @unverified Name guessed from the code.
+ */
 void BattleAi_ClampDamageRatio(void) {
     if (D_82199F50 >= 2) {
         D_82199F50 = (D_82199F50 * 0xFF) / 255;
@@ -182,6 +195,14 @@ void BattleCalc_ApplyTypeEffectAndStab(u8* attacker, u8* defender) {
     }
 }
 
+/**
+ * COM AI damage setup for move arg2: loads the move's data and picks the attack and
+ * defense stats (physical or special by type, doubled by Reflect or Light Screen, unmodified
+ * on a critical hit), scaling both down if both are over 255, and the level (doubled on a
+ * critical hit).
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (11 of the moves).
+ * @unverified Name guessed from the code.
+ */
 void BattleAi_PrepareDamageCalcState(BattleMonRuntime* arg0, BattleMonRuntime* arg1, u8 arg2) {
     MoveData* temp_v0 = &gMoveData[arg2 - 1];
 
@@ -195,7 +216,7 @@ void BattleAi_PrepareDamageCalcState(BattleMonRuntime* arg0, BattleMonRuntime* a
     D_82199F50 = 0;
     D_82199F52 = D_8219A494.unk_02;
     if (D_82199F52) {
-        if (D_8219A494.unk_03 < 0x14) {
+        if (D_8219A494.unk_03 < TYPE_FIRE) { // physical types come before Fire
             D_82199F56 = arg1->modifiedDefense;
             if (arg1->uniqueStatusFlags & 4) {
                 D_82199F56 *= 2;
@@ -469,6 +490,12 @@ s32 Battle_StepPartyHpToDisplay(ActivePokemon* arg0) {
     return 0;
 }
 
+/**
+ * Intro init hook that does nothing.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_IntroInitNop(void) {
 }
 
