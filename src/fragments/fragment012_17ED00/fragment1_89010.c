@@ -10,17 +10,24 @@ void BattleScene_OpeningStepNop(UNUSED s32 arg0) {
 void BattleAnim_NoopUpdateHook(void) {
 }
 
+/**
+ * Seen in play (2026-11-13) (scene mode forced to 4): step 0 was run by func_82134374 at scene
+ * start, so the first update already saw step 1; the case 0 fall-through into case 1 was not
+ * reached. Steps 1 to 3 ran in order (wait for assets, spinning overhead shot, then the side 1
+ * throw). A COM Free Battle uses mode 8 (BattleScene_OpeningStepInitCamera and the other
+ * OpeningStep functions) instead.
+ */
 void BattleScene_UpdateIntroSequence(CameraNode* arg0) {
     switch (sBattleScene.scene->phaseStep) {
         case 0:
-            func_82131880(arg0);
+            BattleScene_IntroStepInitOverheadCamera(arg0);
 
         case 1:
-            func_821319FC(arg0);
+            BattleScene_IntroStepWaitForAssets(arg0);
             break;
 
         case 2:
-            func_82131A3C(arg0);
+            BattleScene_IntroStepSpinOverheadCamera(arg0);
             break;
 
         case 3:
@@ -109,7 +116,7 @@ void BattleScene_OpeningStepOrbitCamera(CameraNode* arg0) {
         sBattleScene.scene->phaseStep++;
     }
     M2C_FIELD(sBattleScene.scene, s16*, 0x5A) += 0x2D8;
-    func_8000EEBC(&arg0->view.targetPosition, &arg0->view.eyePosition, sBattleScene.scene->unk_74, sBattleScene.scene->rotationY, M2C_FIELD(sBattleScene.scene, s16*, 0x5A));
+    func_8000EEBC(&arg0->view.targetPosition, &arg0->view.eyePosition, sBattleScene.scene->unk_74, sBattleScene.scene->rotationX, M2C_FIELD(sBattleScene.scene, s16*, 0x5A));
     func_8210BCF0(&arg0->view.targetPosition, &arg0->view.eyePosition, D_8219A5A0 + 0x74, D_8219A5A0 + 0x58, D_8219A5A0 + 0x5A);
     M2C_FIELD(D_8219A5A0, f32*, 0x98) = 0.0f;
 }

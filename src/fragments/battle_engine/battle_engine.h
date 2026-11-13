@@ -210,9 +210,9 @@ typedef struct BattleScene {
     /* 0x4C */ s32 rageFollowupPhase;
     /* 0x50 */ s32 cameraPresetId;
     /* 0x54 */ u8 heightShotSide;
-    /* 0x56 */ s16 rotationX;
-    /* 0x58 */ s16 rotationY;
-    /* 0x5A */ char unk5A[0x2];
+    /* 0x56 */ s16 unk_56;
+    /* 0x58 */ s16 rotationX; // camera pitch about the look-at point
+    /* 0x5A */ s16 rotationY; // camera yaw about the look-at point (the B-roll orbit sweeps it)
     /* 0x5C */ f32 distance;
     /* 0x60 */ f32 verticalFieldOfView;
     /* 0x64 */ char unk64[0x4];
@@ -1466,10 +1466,10 @@ void Battle_RenderHud(void);
 
 
 s32 BattleScene_AreBothParticipantModelsCompact(void);
-s32 BattleScene_SkipIntroIfFainted(UNUSED ActivePokemon* arg0, CameraNode* arg1);
+s32 BattleScene_SkipUnavailableBRollShot(UNUSED ActivePokemon* arg0, CameraNode* arg1);
 s32 BattleScene_IsEitherActivePokemonFainted(UNUSED ActivePokemon* arg0, UNUSED CameraNode* arg1);
-void BattleScene_IntroCameraStep0(CameraNode* arg0);
-void BattleScene_IntroCameraStep2(CameraNode* arg0);
+void BattleScene_BRollCameraSetupArenaOrbit(CameraNode* arg0);
+void BattleScene_BRollCameraSetupRotatingArenaOverview(CameraNode* arg0);
 void BattleScene_IntroCameraStep4Or6(CameraNode* arg0, s32 arg1);
 void BattleScene_IntroCameraStep8Or10(CameraNode* arg0, s32 arg1);
 void BattleScene_IntroCameraStep12Or14(CameraNode* arg0, s32 arg1);
@@ -1477,11 +1477,11 @@ void BattleScene_IntroCameraStep16(CameraNode* arg0);
 void BattleScene_IntroCameraStep18(CameraNode* arg0);
 void BattleScene_IntroCameraStep20(CameraNode* arg0);
 void BattleScene_IntroCameraStep22Or24(CameraNode* arg0, s32 arg1);
-void BattleScene_SelectNextIntroCameraShot(CameraNode* arg0);
-void BattleScene_IntroCameraRollStep(CameraNode* arg0);
-void BattleScene_IntroCameraRollStepNoFov(CameraNode* arg0);
+void BattleScene_SelectNextBRollCameraShot(CameraNode* arg0);
+void BattleScene_BRollCameraUpdateArenaOrbit(CameraNode* arg0);
+void BattleScene_BRollCameraUpdateRotatingArenaOverview(CameraNode* arg0);
 void BattleScene_IntroCameraAnimationHoldStep(CameraNode* arg0);
-void BattleScene_IntroCameraPresetHoldStep(CameraNode* arg0);
+void BattleScene_BRollCameraUpdatePresetHold(CameraNode* arg0);
 void BattleScene_IntroCameraWideHoldStep(CameraNode* arg0);
 void BattleScene_IntroCameraHeightShotSwapStep(CameraNode* arg0);
 void BattleScene_IntroCameraHeightShotStep(CameraNode* arg0);
@@ -1509,8 +1509,8 @@ void BattleScene_SetDamageShakeAmplitude(ActivePokemon* active_pokemon);
 void BattleScene_ApplyCameraShake(CameraNode* arg0);
 void BattleScene_StartCameraShake(UNUSED ActivePokemon* active_pokemon);
 s32 BattleScene_IsCameraAngleSettled(s16 arg0, s16 arg1);
-s32 BattleScene_ApproachCameraRoll(s32 arg0, s16 arg1, s16 arg2);
-s32 BattleScene_ApproachCameraRollNoEyeUpdate(UNUSED CameraNode* arg0, s16 arg1, s16 arg2);
+s32 BattleScene_ApproachCameraRotationY(s32 arg0, s16 arg1, s16 arg2);
+s32 BattleScene_ApproachCameraRotationYNoEyeUpdate(UNUSED CameraNode* arg0, s16 arg1, s16 arg2);
 void BattleScene_SetCameraAnglesAndDistance(s16 arg0, s16 arg1, f32 arg2);
 void BattleScene_SetCameraSendOutShot(CameraNode* arg0, s32 arg1);
 void BattleScene_ClampCameraEyeFloor(CameraNode* arg0);

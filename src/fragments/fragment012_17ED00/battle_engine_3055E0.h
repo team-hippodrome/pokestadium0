@@ -181,9 +181,9 @@ void func_82122104(s32 arg0);
 
 M2C_UNK func_8000EEBC(s32, s32, f32, s16, s32);     /* extern */
 
-s32 BattleScene_ApproachCameraRoll(s32 arg0, s16 arg1, s16 arg2);
+s32 BattleScene_ApproachCameraRotationY(s32 arg0, s16 arg1, s16 arg2);
 
-s32 BattleScene_ApproachCameraRollNoEyeUpdate(UNUSED CameraNode* arg0, s16 arg1, s16 arg2);
+s32 BattleScene_ApproachCameraRotationYNoEyeUpdate(UNUSED CameraNode* arg0, s16 arg1, s16 arg2);
 
 void BattleScene_SetCameraAnglesAndDistance(s16 arg0, s16 arg1, f32 arg2);
 

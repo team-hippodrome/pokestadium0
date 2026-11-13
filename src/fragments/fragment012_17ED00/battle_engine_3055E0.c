@@ -303,7 +303,12 @@ s32 BattleScene_IsCameraAngleSettled(s16 arg0, s16 arg1) {
 
 extern s8 *D_8219A5A0;
 
-s32 BattleScene_ApproachCameraRoll(s32 arg0, s16 arg1, s16 arg2) {
+/**
+ * Seen in play (2026-11-13) called by the B-roll overview shot with (0xB6, 0x78DC): it stepped
+ * scene rotationY (+0x5A) by -0xB6 per frame and rebuilt the eye from rotationX (+0x58) and the
+ * distance, orbiting the camera about the vertical axis.
+ */
+s32 BattleScene_ApproachCameraRotationY(s32 arg0, s16 arg1, s16 arg2) {
     s16 var_v0;
 
     if (arg1 > 0) {
@@ -326,7 +331,7 @@ block_7:
     return 0;
 }
 
-s32 BattleScene_ApproachCameraRollNoEyeUpdate(UNUSED CameraNode* arg0, s16 arg1, s16 arg2) {
+s32 BattleScene_ApproachCameraRotationYNoEyeUpdate(UNUSED CameraNode* arg0, s16 arg1, s16 arg2) {
     M2C_FIELD(sBattleScene.scene, s16*, 0x5A) -= arg1;
 
     if (arg1 > 0) {

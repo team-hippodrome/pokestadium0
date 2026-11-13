@@ -473,7 +473,12 @@ void BattleScene_UpdatePhase(CameraNode* arg0) {
     }
 }
 
-void func_82131880(CameraNode* arg0) {
+/**
+ * Seen in play (2026-11-13) with scene mode forced to 4 at scene start, func_82134374 called this
+ * directly (not through BattleScene_UpdateIntroSequence's case 0): it set rotationX to 0x3C6E and
+ * rotationY to 0, and the next frame's update was already at step 1.
+ */
+void BattleScene_IntroStepInitOverheadCamera(CameraNode* arg0) {
     BattleScene_ResetCameraFrameCounter();
     BattleScene_SetCameraAtFromPosition(arg0, D_8218B630, 0, 0, 0.0f, 0.0f);
     BattleScene_SetCameraEyeAndStoreAngles(arg0, D_8218B630, 0x3C6E, M2C_FIELD(sBattleScene.scene, s16*, 0x5A) = 0, sBattleScene.scene->unk_74 = D_FLT_82196668, 0.0f);
@@ -487,14 +492,23 @@ void func_82131880(CameraNode* arg0) {
     sBattleScene.scene->phaseStep += 1;
 }
 
-void func_821319FC(s32 arg0) {
+/**
+ * Seen in play (2026-11-13) with scene mode forced to 4 it ran on the two frames after the overhead
+ * camera was set up, then the step moved to 2.
+ */
+void BattleScene_IntroStepWaitForAssets(s32 arg0) {
     if (func_82101FD4(D_82199DE0) != 0) {
         M2C_FIELD(D_8219A5A0, s32 *, 0x20) = (s32) (M2C_FIELD(D_8219A5A0, s32 *, 0x20) + 1);
     }
 }
 
 s32 func_80041374(s32, u32);
-void func_82131A3C(CameraNode* arg0) {
+/**
+ * Seen in play (2026-11-13) with scene mode forced to 4 the screen showed the arena from directly
+ * above, small and rotating; rotationY fell by 0x16C per call (0 to -21476 over about 60 calls)
+ * until the step moved to 3 (BattleScene_OpeningStepThrowSide1).
+ */
+void BattleScene_IntroStepSpinOverheadCamera(CameraNode* arg0) {
     sActivePokemon[0]->displayObject.node.flags &= ~1;
     sActivePokemon[1]->displayObject.node.flags &= ~1;
     BattleAnim_ApproachF(&sBattleScene.scene->unk_74, 10000.0f, 0.025f);
@@ -570,10 +584,10 @@ void BattleScene_IntroPanCamera(CameraNode* arg0) {
     sActivePokemon[0]->displayObject.node.flags &= ~1;
     sActivePokemon[1]->displayObject.node.flags &= ~1;
     BattleAnim_ApproachF(&sBattleScene.scene->unk_74, 60.000004f, 0.1f);
-    BattleAnim_StepToS16(&sBattleScene.scene->rotationY, 0, 0x1E);
-    BattleScene_SetCameraEyeFromPosition(arg0, sp2C, sBattleScene.scene->rotationY, 0x4000, sBattleScene.scene->unk_74, 0.0f);
+    BattleAnim_StepToS16(&sBattleScene.scene->rotationX, 0, 0x1E);
+    BattleScene_SetCameraEyeFromPosition(arg0, sp2C, sBattleScene.scene->rotationX, 0x4000, sBattleScene.scene->unk_74, 0.0f);
 
-    if ((sBattleScene.scene->rotationY >= 0x2E) && (M2C_FIELD(sActivePokemon[0], f32*, 0x64C) == 2.5f)) {
+    if ((sBattleScene.scene->rotationX >= 0x2E) && (M2C_FIELD(sActivePokemon[0], f32*, 0x64C) == 2.5f)) {
         Audio_PlayCommand(2, 0, 0);
         M2C_FIELD(sActivePokemon[0], u8*, 0x626) |= 0x20;
         sBattleScene.scene->phaseStep += 1;
