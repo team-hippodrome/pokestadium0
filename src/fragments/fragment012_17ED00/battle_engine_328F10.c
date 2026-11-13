@@ -142,11 +142,11 @@ void BattleAnim_CallbackStartEffect135Descriptor1CRisingScaleFade(Particle* arg0
 
         case 3:
             Particle_Field1C_Approach_0B98C(arg0, 1.3157895f, 0.16447368f);
-            Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0);
+            Particle_DecrementUnkA6ToZeroThenAdvance(arg0);
             break;
 
         case 4:
-            Particle_PrimAlpha_ApproachAndStepState_0BC5C(arg0, 0, 0x10);
+            Particle_ApproachPrimAlphaThenAdvance(arg0, 0, 0x10);
             break;
 
         case 5:
@@ -187,11 +187,11 @@ void BattleAnim_CallbackStartEffect135ExpandingFlashFade(Particle* arg0) {
             break;
 
         case 3:
-            Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0);
+            Particle_DecrementUnkA6ToZeroThenAdvance(arg0);
             break;
 
         case 4:
-            Particle_PrimAlpha_ApproachAndStepState_0BC5C(arg0, 0, 0x20);
+            Particle_ApproachPrimAlphaThenAdvance(arg0, 0, 0x20);
             break;
 
         case 5:
@@ -221,7 +221,7 @@ void BattleAnim_CallbackStartEffect139Descriptor42FallingScaleFade(Particle* arg
             break;
 
         case 2:
-            if (Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
                 Particle_EnableRendering(arg0);
             }
             break;
@@ -317,7 +317,7 @@ void BattleAnim_CallbackStartEffect141Descriptor1CGridRiseFade(Particle* arg0) {
             break;
 
         case 2:
-            if (Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
                 Particle_FieldA6_SetS16_0BCA8(arg0, 0xA);
                 Particle_EnableRendering(arg0);
             }
@@ -326,11 +326,11 @@ void BattleAnim_CallbackStartEffect141Descriptor1CGridRiseFade(Particle* arg0) {
         case 3:
             Particle_Field94_AddY_0A594(arg0, 0x200);
             Particle_Field1C_Approach_0B98C(arg0, 2.0f, 0.01f);
-            Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0);
+            Particle_DecrementUnkA6ToZeroThenAdvance(arg0);
             break;
 
         case 4:
-            Particle_PrimAlpha_ApproachAndStepState_0BC5C(arg0, 0, 0x20);
+            Particle_ApproachPrimAlphaThenAdvance(arg0, 0, 0x20);
             break;
 
         case 5:
@@ -401,7 +401,7 @@ void BattleAnim_CallbackStartEffects133And134And143Descriptor44ModeOrbitSwirl(Pa
             break;
 
         case 2:
-            if (Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
                 Particle_EnableRendering(arg0);
                 Particle_AdvancePhase(arg0);
             }
@@ -464,7 +464,7 @@ void BattleAnim_CallbackStartEffects133And134And143Descriptor38MetadataBurstEmit
         case 2:
             Particle_Field1C_Approach_0B98C(arg0, 4.0f, 0.1f);
             Particle_PrimAlpha_Approach_0BC2C(arg0, 0xC8, 8);
-            Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0);
+            Particle_DecrementUnkA6ToZeroThenAdvance(arg0);
             break;
 
         case 3:

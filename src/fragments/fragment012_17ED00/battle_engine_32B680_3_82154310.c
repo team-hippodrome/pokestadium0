@@ -35,7 +35,7 @@ void BattleAnim_ApplyModelSpeciesOffset(Particle* arg0) {
             break;
         case EXEGGUTOR:
             offset = 5.0f;
-            Particle_Field38_AddXZFromField94Y_08ED0(arg0, 10.0f);
+            Particle_AddPositionOffsetAlongRotationY(arg0, 10.0f);
             break;
         case STARMIE:
             offset = -8.0f;
@@ -52,7 +52,7 @@ void BattleAnim_ApplyModelSpeciesOffset(Particle* arg0) {
             break;
         case VAPOREON:
             offset = -5.0f;
-            Particle_Field38_AddXZFromField94YOffsetMinus90_0901C(arg0, 5.0f);
+            Particle_AddPositionOffsetAlongRotationYMinus90(arg0, 5.0f);
             break;
         case JOLTEON:
             offset = -15.0f;

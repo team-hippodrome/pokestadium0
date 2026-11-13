@@ -98,7 +98,7 @@ void BattleAnim_CallbackOrphanDescriptor2BSpinFade(Particle* arg0) {
             break;
 
         case 2:
-            if (Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
                 Particle_EnableRendering(arg0);
                 Particle_BeginPhase(arg0);
             }
@@ -224,7 +224,7 @@ void BattleAnim_RunPetalDanceLingeringHitEffect(Particle* arg0) {
             break;
 
         case 2:
-            if (Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
                 Particle_EnableRendering(arg0);
                 Particle_BeginPhase(arg0);
                 Particle_FieldA6_SetS16_0BCA8(arg0, ParticleMath_RandomRange(0xA) + 0x1E);
@@ -232,14 +232,14 @@ void BattleAnim_RunPetalDanceLingeringHitEffect(Particle* arg0) {
             break;
 
         case 3:
-            if (Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
                 Particle_FieldA6_SetS16_0BCA8(arg0, 8);
                 Particle_AdvancePhase(arg0);
             }
             break;
 
         case 4:
-            if (Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
                 Particle_Field9A_SetX_0A3C4(arg0, ParticleMath_RandomSignedOffsetBySign(0x1000, 0x600));
                 Particle_FieldB0_SetS16_0BFEC(arg0, ParticleMath_RandomSignedOffsetBySign(0x400, 0x400));
                 Particle_Field9A_SetZ_0A3EC(arg0, ParticleMath_RandomSignedOffsetBySign(0x1000, 0x600));
@@ -346,7 +346,7 @@ void BattleAnim_RunSlowFallingHitEffect(Particle* arg0) {
             break;
 
         case 2:
-            if (Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
                 Particle_EnableRendering(arg0);
                 Particle_BeginPhase(arg0);
                 switch (sp26) {
@@ -362,7 +362,7 @@ void BattleAnim_RunSlowFallingHitEffect(Particle* arg0) {
             break;
 
         case 3:
-            Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0);
+            Particle_DecrementUnkA6ToZeroThenAdvance(arg0);
             break;
 
         case 4:

@@ -378,7 +378,7 @@ void BattleAnim_RunUserHueChange(Particle* arg0) {
             break;
 
         case 3:
-            Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0);
+            Particle_DecrementUnkA6ToZeroThenAdvance(arg0);
             break;
 
         case 4:

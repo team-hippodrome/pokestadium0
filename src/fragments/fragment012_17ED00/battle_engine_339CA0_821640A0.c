@@ -13,14 +13,14 @@ void BattleAnim_RunAcidArmorUseEffect2(Particle* arg0) {
             break;
 
         case 2:
-            if (Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
                 Particle_FieldA6_SetS16_0BCA8(arg0, ParticleMath_RandomRange(4) + 4);
                 Particle_EnableRendering(arg0);
             }
             break;
 
         case 3:
-            Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0);
+            Particle_DecrementUnkA6ToZeroThenAdvance(arg0);
             Particle_AddVelocityYFromFieldOffset74(arg0);
             break;
 
@@ -81,7 +81,7 @@ void BattleAnim_InitSharedVerticalFadeParticle(Particle* arg0) {
         case 3:
             Particle_Field1C_SetScaled_0B938(arg0, 1.0f);
             Particle_SetRandomVelocityXYZ(arg0, 0xA, 0, 0x19);
-            Particle_Field38_AddXZFromField94Y_08ED0(arg0, 10.0f);
+            Particle_AddPositionOffsetAlongRotationY(arg0, 10.0f);
             Particle_Field38_AddYScaled_08E90(arg0, 5.0f);
             Particle_Field74_SetScaled_0AD8C(arg0, (ParticleMath_RandomRange(0xA) * 0.05f) + 0.2f);
             Particle_SetPrimAlpha(arg0, 0xFF);
@@ -96,7 +96,7 @@ void BattleAnim_InitSharedVerticalFadeParticle(Particle* arg0) {
                random offset, the XZ offset of 10.0 and the Y offset of 5.0. */
             Particle_Field1C_SetScaled_0B938(arg0, 1.2f);
             Particle_SetRandomVelocityXYZ(arg0, 0xA, 0, 0x23);
-            Particle_Field38_AddXZFromField94Y_08ED0(arg0, 10.0f);
+            Particle_AddPositionOffsetAlongRotationY(arg0, 10.0f);
             Particle_Field38_AddYScaled_08E90(arg0, 5.0f);
             Particle_Field74_SetScaled_0AD8C(arg0, (ParticleMath_RandomRange(0xA) * 0.05f) + 0.2f);
             Particle_SetPrimAlpha(arg0, 0xFF);
@@ -108,7 +108,7 @@ void BattleAnim_InitSharedVerticalFadeParticle(Particle* arg0) {
         case 12:
             Particle_Field1C_SetScaled_0B938(arg0, 1.2f);
             Particle_SetRandomVelocityXYZ(arg0, 0xA, 0, 0x28);
-            Particle_Field38_AddXZFromField94Y_08ED0(arg0, 10.0f);
+            Particle_AddPositionOffsetAlongRotationY(arg0, 10.0f);
             Particle_Field38_AddYScaled_08E90(arg0, 5.0f);
             Particle_Field74_SetScaled_0AD8C(arg0, (ParticleMath_RandomRange(0xA) * 0.05f) + 0.2f);
             Particle_SetPrimAlpha(arg0, 0xFF);
@@ -258,7 +258,7 @@ void BattleAnim_ApplySpeciesKeyedSpawnOffset(Particle* arg0) {
             break;
     }
 
-    Particle_Field38_AddXZFromField94Y_08ED0(arg0, sp1C);
+    Particle_AddPositionOffsetAlongRotationY(arg0, sp1C);
     Particle_Field38_AddYScaled_08E90(arg0, sp18);
     Particle_Field78_SetScaled_0ADA4(arg0, 0.4f);
 }
@@ -492,7 +492,7 @@ void BattleAnim_CallbackDescriptor50BurstEmitter(Particle* arg0) {
 
         case 2:
             BattleAnim_EmitParticleBurst(arg0, BattleAnim_CallbackDescriptor50BurstChild, &D_8218E580[0x50], 1);
-            Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0);
+            Particle_DecrementUnkA6ToZeroThenAdvance(arg0);
             break;
 
         case 3:
@@ -597,14 +597,14 @@ void BattleAnim_RunQiChargeChild(Particle* arg0) {
             break;
 
         case 2:
-            if (Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
                 Particle_EnableRendering(arg0);
                 Particle_FieldA6_SetS16_0BCA8(arg0, 0x18);
             }
             break;
 
         case 3:
-            if ((Particle_FieldA6_DecrementToZeroStep1_0BDAC(arg0) != 0) && (Particle_Field1C_Approach_0B98C(arg0, 0.0f, 0.05f) != 0)) {
+            if ((Particle_DecrementUnkA6ToZero(arg0) != 0) && (Particle_Field1C_Approach_0B98C(arg0, 0.0f, 0.05f) != 0)) {
                 Particle_AdvanceLifecycle(arg0);
             }
             break;

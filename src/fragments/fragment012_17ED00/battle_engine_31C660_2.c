@@ -81,7 +81,7 @@ void BattleAnim_CallbackOwnerModelTintRandomPaletteCycle(Particle* arg0) {
 
         case 2:
             ParticleGfx_ApproachPrimPalette(arg0, arg0->unk_CF, arg0->unk_AA);
-            if (Particle_FieldA6_DecrementToZeroStep1_0BDAC(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZero(arg0) != 0) {
                 Particle_FieldA6_SetS16_0BCA8(arg0, 0xFF / arg0->unk_AA);
                 Particle_FieldCF_SetU8_0BEEC(arg0, gParticlePaletteSetA[ParticleMath_RandomRange(6)]);
             }
@@ -121,8 +121,8 @@ void BattleAnim_RunRainbowHueChange(Particle* arg0) {
             break;
 
         case 2:
-            Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0);
-            if (Particle_FieldA8_DecrementToZeroStep1_0BE6C(arg0) != 0) {
+            Particle_DecrementUnkA6ToZeroThenAdvance(arg0);
+            if (Particle_DecrementUnkA8ToZero(arg0) != 0) {
                 Particle_FieldA8_SetS16_0BE14(arg0, 0xFF / arg0->unk_AA);
                 arg0->unk_AE = (arg0->unk_AE + 1) % 6;
                 Particle_FieldCF_SetU8_0BEEC(arg0, gParticlePaletteSetA[arg0->unk_AE]);
@@ -243,11 +243,11 @@ void BattleAnim_RunWhiteHueChange(Particle* arg0) {
             break;
 
         case 2:
-            Particle_PrimAlpha_ApproachAndStepState_0BC5C(arg0, arg0->unk_CD, arg0->unk_AA);
+            Particle_ApproachPrimAlphaThenAdvance(arg0, arg0->unk_CD, arg0->unk_AA);
             break;
 
         case 3:
-            Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0);
+            Particle_DecrementUnkA6ToZeroThenAdvance(arg0);
             break;
 
         case 4:
@@ -290,7 +290,7 @@ void BattleAnim_RunFullScreenHueChange(Particle* arg0) {
             break;
 
         case 2:
-            Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0);
+            Particle_DecrementUnkA6ToZeroThenAdvance(arg0);
             break;
 
         case 3:
@@ -319,11 +319,11 @@ void BattleAnim_RunPokemonAndFullScreenHueChange(Particle* arg0) {
             break;
 
         case 2:
-            Particle_PrimAlpha_ApproachAndStepState_0BC5C(arg0, arg0->unk_CD, arg0->unk_AA);
+            Particle_ApproachPrimAlphaThenAdvance(arg0, arg0->unk_CD, arg0->unk_AA);
             break;
 
         case 3:
-            if (Particle_FieldA6_DecrementToZeroStep1_0BDAC(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZero(arg0) != 0) {
                 Particle_MarkInactive(arg0);
             }
             break;
@@ -368,7 +368,7 @@ void BattleAnim_CallbackDescriptor25PaletteFadeOut(Particle* arg0) {
             break;
 
         case 2:
-            Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0);
+            Particle_DecrementUnkA6ToZeroThenAdvance(arg0);
             break;
 
         case 3:
@@ -394,11 +394,11 @@ void BattleAnim_CallbackDescriptor25PaletteFadeIn(Particle* arg0) {
 
         case 2:
             ParticleGfx_ApproachPrimPalette(arg0, arg0->unk_CD, arg0->unk_AA);
-            Particle_PrimAlpha_ApproachAndStepState_0BC5C(arg0, 0xFF, arg0->unk_AA);
+            Particle_ApproachPrimAlphaThenAdvance(arg0, 0xFF, arg0->unk_AA);
             break;
 
         case 3:
-            if (Particle_FieldA6_DecrementToZeroStep1_0BDAC(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZero(arg0) != 0) {
                 Particle_MarkInactive(arg0);
             }
             break;

@@ -931,3 +931,27 @@ Run again with longer windows or a matching setup:
 Guillotine and Horn Drill still miss Pinsir, which is level 25 against
 Nidorino's 20, so their hit inits keep their tags.
 
+
+## Second player pass (2026-11-13): 165-move trace sweep
+
+Setup: free battle, 1P ガール team (Onix first) against COM むしとり (Pinsir first),
+from a command-phase savestate. For each move id 1-165 the state was reloaded, Onix's first
+move slot was overwritten with that move (20 PP), COM speed was set to 1 so Onix acted first,
+and the move was chosen with A, C-Up. Every named function in fragment012 (2,092) had an
+execution breakpoint. On each function's first three calls the tracer recorded a0-a3, f12,
+f14, the return value (v0, f0) and the 0xD0 bytes at a0 before and after the call (scripts not
+committed). A function's doc says "in the 165-move sweep" when its evidence comes from this run;
+the move named is the one being used when the call was seen.
+
+* Particle setters were judged by which bytes changed. Particle fields named after Stadium 1
+  offsets sit 4 bytes lower in Zero's struct (unk_AE is at 0xAA, unk_B0 at 0xAC, unk_A6 at 0xA2,
+  unk_A8 at 0xA4), and the sweep showed the writes there.
+* Renamed from code, confirmed by the sweep where they ran:
+  `Particle_AddVelocityXYFromRotationZViaImpulse` → `Particle_AddVelocityXZFromRotationYViaHelpers`
+  (it reads rotation.y and changed motionOffset.x and .z), its helper
+  `Particle_Field7C_SetXYFromField74AngleZ_0B23C` → `Particle_SetMotionStepXZFromRotationY`, and
+  twelve `Particle_FieldXX_..._0XXXX` placeholders (for example
+  `Particle_Field50_AddXZFromField7C_09C10` → `Particle_ApplyMotionStepXZ`,
+  `Particle_Field50_AddNegField74Y_CheckField2CYNonPositive_09F84` → `Particle_FallAtStepMagnitude`).
+* Setters only ever called with values the field already held (for example the zeroing calls in a
+  particle's first frame) keep their tags: nothing changed, so the sweep says nothing about them.

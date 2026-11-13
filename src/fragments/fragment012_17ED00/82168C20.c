@@ -38,9 +38,9 @@ void func_82168CC4(Particle* arg0) {
             BattleAnim_GetOwnerBonePosition(arg0->pokemon, arg0->unk_CD, &D_8219A898);
             Particle_ApproachPosition(arg0, D_8219A898);
             Particle_Field1C_Approach_0B98C(arg0, 0.2f, 0.053f);
-            Particle_PrimAlpha_ApproachAndStepState_0BC5C(arg0, 0x10, 0x1A);
+            Particle_ApproachPrimAlphaThenAdvance(arg0, 0x10, 0x1A);
             Particle_PrimG_Approach_0BB14(arg0, 0, 0x40);
-            if (Particle_FieldA6_DecrementToZeroStep1_0BDAC(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZero(arg0) != 0) {
                 Particle_PrimR_Approach_0BAE4(arg0, 0, 8);
                 Particle_EnvR_Approach_0BB90(arg0, 0, 0xE);
             }

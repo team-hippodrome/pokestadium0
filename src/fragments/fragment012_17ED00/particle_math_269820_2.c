@@ -35,7 +35,7 @@ s32 Particle_Field50_ApproachXToField5C_09AD8(Particle* arg0, f32 arg1);
 s32 Particle_Field50_ApproachYToField5C_09B18(Particle* arg0, f32 arg1);
 void Particle_Field50_AddXFromField7C_09C58(Particle* arg0);
 void Particle_Field50_AddYFromField7C_09C6C(Particle* arg0);
-void Particle_AddVelocityXYFromRotationZViaImpulse(Particle* arg0);
+void Particle_AddVelocityXZFromRotationYViaHelpers(Particle* arg0);
 void Particle_AddVelocityFromRotationTemplate2(Particle* arg0);
 void Particle_Field50_SetZScaled_09918(Particle* arg0, f32 arg1);
 f32 ParticleMath_ScaleApproachStep(f32 arg0);
@@ -64,13 +64,13 @@ s32 Particle_Field1C_ApproachAndStepState_0B9D0(Particle* arg0, f32 arg1, f32 ar
 s32 Particle_Field1C_ApproachField24ByField20_0BA1C(Particle* arg0);
 s32 Particle_Field1C_ApproachField24AndStepState_0BA48(Particle* arg0);
 s32 Particle_Field20_Approach_0BA84(Particle* arg0, f32 arg1, f32 arg2);
-s32 Particle_PrimAlpha_ApproachAndStepState_0BC5C(Particle* arg0, u8 arg1, u8 arg2);
+s32 Particle_ApproachPrimAlphaThenAdvance(Particle* arg0, u8 arg1, u8 arg2);
 s32 Particle_FieldA6_DecrementToZero_0BD08(Particle* arg0, s16 arg1);
 s32 Particle_FieldA6_DecrementToZeroAndStepState_0BD34(Particle* arg0, s16 arg1);
 s32 Particle_FieldA6_DecrementToStep1_0BD80(Particle* arg0, s16 arg1);
-s32 Particle_FieldA6_DecrementToZeroStep1_0BDAC(Particle* arg0);
-s32 Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(Particle* arg0);
-s32 Particle_FieldA8_DecrementToZeroStep1_0BE6C(Particle* arg0);
+s32 Particle_DecrementUnkA6ToZero(Particle* arg0);
+s32 Particle_DecrementUnkA6ToZeroThenAdvance(Particle* arg0);
+s32 Particle_DecrementUnkA8ToZero(Particle* arg0);
 s32 Particle_FieldA8_DecrementToZeroStep1AndStepState_0BE8C(Particle* arg0);
 s32 Particle_FieldAE_ApproachAndStepState_0BF98(Particle* arg0, s16 arg1, s16 arg2);
 
@@ -91,7 +91,7 @@ void Particle_ApproachRotationTargetY(Particle* arg0);
 void Particle_ApproachRotationTargetZ(Particle* arg0);
 void Particle_ComputeVectorFromRotationXYZAlt(Particle* arg0, f32 arg1, Vec3f* arg2);
 void Particle_ComputeVectorFromRotationYZVariant(Particle* arg0, f32 arg1, Vec3f* arg2);
-void Particle_Field7C_SetXYFromField74AngleZ_0B23C(Particle* arg0);
+void Particle_SetMotionStepXZFromRotationY(Particle* arg0);
 void Particle_Field7C_SetVecFromField74AnglesXZ_0B330(Particle* arg0);
 s32 Particle_PrimAlpha_Approach_0BC2C(Particle* arg0, u8 arg1, u8 arg2);
 s32 Particle_FieldA6_DecrementTo_0BCC4(Particle* arg0, s16 arg1, s16 arg2);
@@ -140,7 +140,8 @@ void Particle_ToggleFlags(Particle* arg0, s32 arg1) {
 
 /**
  * Return whether any selected flag bit is set.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep: with flags 0x4 it returned 0 for mask 0x108 and
+ * 1 for mask 0x4.
  */
 s32 Particle_HasFlags(Particle* arg0, s32 arg1) {
     s32 var_v1 = 0;
@@ -153,7 +154,8 @@ s32 Particle_HasFlags(Particle* arg0, s32 arg1) {
 
 /**
  * Return whether all selected flag bits are clear.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep: with flags 0x4 it returned 1 for masks 0x800 and
+ * 0x200.
  */
 s32 Particle_LacksFlags(Particle* arg0, s32 arg1) {
     s32 var_v1 = 0;
@@ -631,21 +633,22 @@ void Particle_AddPosOffsetZScaled(s8 *arg0, f32 arg1) {
     M2C_FIELD(arg0, f32 *, 0x3C) = (f32) (M2C_FIELD(arg0, f32 *, 0x3C) + (arg1 * D_FLT_8219A824));
 }
 
-void Particle_Field38_AddXZFromField94Y_08ED0(Particle* arg0, f32 arg1) {
+void Particle_AddPositionOffsetAlongRotationY(Particle* arg0, f32 arg1) {
     arg0->positionOffset.x += arg1 * SINS(arg0->rotation.y) * gParticleRenderContext.scale.y;
     arg0->positionOffset.z += arg1 * COSS(arg0->rotation.y) * gParticleRenderContext.scale.y;
 }
 
 /**
  * Add to positionOffset.x, positionOffset.z with render-context Y scaling.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Thrash, Sonic Boom): it changed positionOffset.x
+ * and .z (0x34, 0x3C) and left .y alone.
  */
-void Particle_Field38_AddXZFromField94YOffset180_08F38(Particle* arg0, f32 arg1) {
+void Particle_AddPositionOffsetAlongRotationYPlus180(Particle* arg0, f32 arg1) {
     arg0->positionOffset.x += arg1 * SINS(arg0->rotation.y + 0x8000) * gParticleRenderContext.scale.y;
     arg0->positionOffset.z += arg1 * COSS(arg0->rotation.y + 0x8000) * gParticleRenderContext.scale.y;
 }
 
-void Particle_Field38_AddXZFromField94YOffset90_08FAC(Particle* arg0, f32 arg1) {
+void Particle_AddPositionOffsetAlongRotationYPlus90(Particle* arg0, f32 arg1) {
     arg0->positionOffset.x += arg1 * SINS(arg0->rotation.y + 0x4000) * gParticleRenderContext.scale.y;
     arg0->positionOffset.z += arg1 * COSS(arg0->rotation.y + 0x4000) * gParticleRenderContext.scale.y;
 }
@@ -654,7 +657,7 @@ void Particle_Field38_AddXZFromField94YOffset90_08FAC(Particle* arg0, f32 arg1) 
  * Add to positionOffset.x, positionOffset.z with render-context Y scaling.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
-void Particle_Field38_AddXZFromField94YOffsetMinus90_0901C(Particle* arg0, f32 arg1) {
+void Particle_AddPositionOffsetAlongRotationYMinus90(Particle* arg0, f32 arg1) {
     arg0->positionOffset.x += arg1 * SINS(arg0->rotation.y - 0x4000) * gParticleRenderContext.scale.y;
     arg0->positionOffset.z += arg1 * COSS(arg0->rotation.y - 0x4000) * gParticleRenderContext.scale.y;
 }
@@ -1054,9 +1057,10 @@ M2C_UNK Particle_ApplyMotionStep(s32 arg0) {
 }
 
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Seen in play (2026-11-13) in the 165-move sweep (Mega Kick, Thunder Punch): it added motionStep.x
+ * and .z (0x78, 0x80) to motionOffset.x and .z (0x4C, 0x54); y was untouched.
  */
-void Particle_Field50_AddXZFromField7C_09C10(Particle* arg0) {
+void Particle_ApplyMotionStepXZ(Particle* arg0) {
     M2C_FIELD(arg0, f32*, 0x4C) += M2C_FIELD(arg0, f32*, 0x78);
     M2C_FIELD(arg0, f32*, 0x54) += M2C_FIELD(arg0, f32*, 0x80);
 }
@@ -1083,11 +1087,15 @@ void Particle_Field50_AddYFromField7C_09C6C(Particle* arg0) {
 }
 
 /**
+ * Sets motionStep.x and .z from stepMagnitude along rotation.y, then adds them to motionOffset.x
+ * and .z. Same result as Particle_AddVelocityXZFromRotationY, built from the two helpers. Renamed
+ * from Particle_AddVelocityXYFromRotationZViaImpulse: it reads rotation.y and writes x and z.
  * Evaluate the explicit trigonometric component formula and store/add the resulting motion term.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Petal Dance): it changed motionOffset.x and .z
+ * (0x4C, 0x54) only.
  */
-void Particle_AddVelocityXYFromRotationZViaImpulse(Particle* arg0) {
-    Particle_Field7C_SetXYFromField74AngleZ_0B23C(arg0);
+void Particle_AddVelocityXZFromRotationYViaHelpers(Particle* arg0) {
+    Particle_SetMotionStepXZFromRotationY(arg0);
     Particle_Field50_AddXYFromField7C_09C34(arg0);
 }
 
@@ -1095,7 +1103,7 @@ M2C_UNK func_8213FB14();                            /* extern */
 
 void func_8213E4D8(s32 arg0) {
     func_8213FB14();
-    Particle_Field50_AddXZFromField7C_09C10(arg0);
+    Particle_ApplyMotionStepXZ(arg0);
 }
 
 void Particle_AddVelocityFromRotationTemplate2(Particle* arg0) {
@@ -1172,18 +1180,19 @@ void Particle_AddVelocityXZFromRotationY(Particle* arg0) {
     arg0->motionStep.x = arg0->stepMagnitude * SINS(arg0->rotation.y);
     arg0->motionStep.z = arg0->stepMagnitude * COSS(arg0->rotation.y);
 
-    Particle_Field50_AddXZFromField7C_09C10(arg0);
+    Particle_ApplyMotionStepXZ(arg0);
 }
 
 /**
  * Evaluate the explicit trigonometric component formula and store/add the resulting motion term.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Thunder Punch, Scratch): it set motionStep.x
+ * (0x78) and added it to motionOffset.x (0x4C).
  */
 void Particle_AddVelocityXZFromRotationYPlusHalfTurn(Particle* arg0) {
     arg0->motionStep.x = arg0->stepMagnitude * SINS(arg0->rotation.y + 0x8000);
     arg0->motionStep.z = arg0->stepMagnitude * COSS(arg0->rotation.y + 0x8000);
 
-    Particle_Field50_AddXZFromField7C_09C10(arg0);
+    Particle_ApplyMotionStepXZ(arg0);
 }
 
 /**
@@ -1194,7 +1203,7 @@ void Particle_AddVelocityXZFromRotationYPlusHalfTurnFromArgument(Particle* arg0,
     arg0->motionStep.x = SINS(arg0->rotation.y + 0x8000) * arg1;
     arg0->motionStep.z = COSS(arg0->rotation.y + 0x8000) * arg1;
 
-    Particle_Field50_AddXZFromField7C_09C10(arg0);
+    Particle_ApplyMotionStepXZ(arg0);
 }
 
 M2C_UNK func_8213E488();                            /* extern */
@@ -1205,10 +1214,13 @@ void func_8213E77C(s8 *arg0) {
 }
 
 /**
+ * Sets motionStep.y to -stepMagnitude, adds it to motionOffset.y and returns 1 once worldPosition.y
+ * is at or below 0.
  * Apply the downward motion term and return whether the stored world-position Y is nonpositive.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Vice Grip): it wrote motionStep.y (0x7C) and
+ * changed motionOffset.y (0x50), returning 0 while the particle was above the floor.
  */
-s32 Particle_Field50_AddNegField74Y_CheckField2CYNonPositive_09F84(Particle* arg0) {
+s32 Particle_FallAtStepMagnitude(Particle* arg0) {
     s32 sp1C = 0;
 
     arg0->motionStep.y = -arg0->stepMagnitude;
@@ -1222,10 +1234,13 @@ s32 Particle_Field50_AddNegField74Y_CheckField2CYNonPositive_09F84(Particle* arg
 
 
 /**
+ * Adds magnitudeStep to stepMagnitude, then falls like Particle_FallAtStepMagnitude; returns 1 once
+ * worldPosition.y is at or below 0.
  * Apply the downward motion term and return whether the stored world-position Y is nonpositive.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Vice Grip): it wrote motionStep.y (0x7C) and
+ * returned 0 while the particle was above the floor.
  */
-s32 Particle_Field74_AdvanceAndAddNegY_CheckField2CYNonPositive_09FD8(Particle* arg0) {
+s32 Particle_AccelerateFall(Particle* arg0) {
     s32 sp1C = 0;
 
     arg0->stepMagnitude += arg0->magnitudeStep;
@@ -1253,7 +1268,8 @@ extern f32 D_FLT_8219A824;
 
 /**
  * Sets the particle's motionTarget.y to arg1 times the particle scale D_FLT_8219A824.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) in the 165-move sweep (Petal Dance): with arg1 = 2.0 it wrote 7.2 (2.0
+ * × scale 3.6) to motionTarget.y (0x5C).
  */
 void Particle_SetMotionTargetYScaled(s8 *arg0, f32 arg1) {
     M2C_FIELD(arg0, f32 *, 0x5C) = (f32) (arg1 * D_FLT_8219A824);
@@ -1377,7 +1393,8 @@ void Particle_FlipRotationY(s8 *arg0) {
 
 /**
  * Turns the particle's rotation.z by half a circle (+0x8000).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) in the 165-move sweep (Pin Missile): rotation.z (0x94) went from 0x18xx
+ * to 0x98xx, a turn of 0x8000.
  */
 void Particle_FlipRotationZ(s8 *arg0) {
     M2C_FIELD(arg0, s16 *, 0x94) = (s16) (M2C_FIELD(arg0, s16 *, 0x94) + 0x8000);
@@ -1846,7 +1863,8 @@ s32 Particle_ApproachStepMagnitude(Particle* arg0, f32 arg1, f32 arg2) {
 
 /**
  * Approach stepMagnitude, magnitudeStep using the stored or supplied target and step.
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-13) in the 165-move sweep (Petal Dance): it changed stepMagnitude (0x70)
+ * only.
  */
 s32 Particle_StepMagnitude_ApproachUsingMagnitudeStep(Particle* arg0, f32 arg1) {
     return ParticleMath_ApproachFloat(&arg0->stepMagnitude, arg1 * gParticleRenderContext.scale.y, arg0->magnitudeStep);
@@ -2010,9 +2028,11 @@ void Particle_ScaleMotionStep(s8 *arg0, f32 arg1) {
 }
 
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Steps motionStep.y toward arg1 by arg2 (both scaled by the render context); returns 1 on arrival.
+ * Seen in play (2026-11-13) in the 165-move sweep (Razor Wind): it changed motionStep.y (0x7C)
+ * only.
  */
-s32 Particle_Field7C_ApproachY_0B180(Particle* arg0, f32 arg1, f32 arg2) {
+s32 Particle_ApproachMotionStepY(Particle* arg0, f32 arg1, f32 arg2) {
     return ParticleMath_ApproachFloat(&arg0->motionStep.y, arg1 * gParticleRenderContext.scale.y, arg2 * gParticleRenderContext.scale.y);
 }
 
@@ -2036,7 +2056,7 @@ void Particle_Field7C_SetVecFromField74AnglesXZ_0B330(Particle* arg0) {
     M2C_FIELD(arg0, f32*, 0x7C) = arg0->stepMagnitude * SINS(M2C_FIELD(arg0, u16*, 0x94));
 }
 
-void Particle_Field7C_SetXYFromField74AngleZ_0B23C(Particle* arg0) {
+void Particle_SetMotionStepXZFromRotationY(Particle* arg0) {
     M2C_FIELD(arg0, f32*, 0x78) = SINS(M2C_FIELD(arg0, u16*, 0x92)) * arg0->stepMagnitude;
     M2C_FIELD(arg0, f32*, 0x80) = COSS(M2C_FIELD(arg0, u16*, 0x92)) * arg0->stepMagnitude;
 }
@@ -2333,10 +2353,12 @@ void Particle_ApproachPrimAlpha(s32 arg0, s32 arg1, s32 arg2) {
 }
 
 /**
+ * Steps prim alpha toward arg1 by arg2 and advances the lifecycle when it arrives.
  * Run the field-approach helper and advance lifecycle when it reports completion.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Pay Day): with target 0 and step 0x40 it lowered
+ * prim alpha (0xC0) from 0xFF to 0xBF.
  */
-s32 Particle_PrimAlpha_ApproachAndStepState_0BC5C(Particle* arg0, u8 arg1, u8 arg2) {
+s32 Particle_ApproachPrimAlphaThenAdvance(Particle* arg0, u8 arg1, u8 arg2) {
     s32 sp1C = Particle_PrimAlpha_Approach_0BC2C(arg0, arg1, arg2);
 
     if (sp1C != 0) {
@@ -2395,18 +2417,21 @@ s32 Particle_FieldA6_DecrementToStep1_0BD80(Particle* arg0, s16 arg1) {
 }
 
 /**
+ * Counts unk_A6 (offset 0xA2) down by 1 toward 0; returns 1 when it gets there.
  * Decrease the selected field toward its threshold and return the completion result.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Cut): unk_A6 at 0xA2 went from 7 to 6.
  */
-s32 Particle_FieldA6_DecrementToZeroStep1_0BDAC(Particle* arg0) {
+s32 Particle_DecrementUnkA6ToZero(Particle* arg0) {
     return Particle_FieldA6_DecrementTo_0BCC4(arg0, 0, 1);
 }
 
 /**
+ * Counts unk_A6 (offset 0xA2) down by 1 toward 0 and advances the lifecycle when it gets there.
  * Run the countdown helper and advance lifecycle when it reports completion.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Mega Kick, Vice Grip): unk_A6 at 0xA2 went from
+ * 0x32 to 0x31.
  */
-s32 Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(Particle* arg0) {
+s32 Particle_DecrementUnkA6ToZeroThenAdvance(Particle* arg0) {
     s32 sp1C = Particle_FieldA6_DecrementTo_0BCC4(arg0, 0, 1);
 
     if (sp1C != 0) {
@@ -2436,10 +2461,11 @@ s32 func_8214070C(s8 *arg0, s16 arg1) {
 }
 
 /**
+ * Counts unk_A8 (offset 0xA4) down by 1 toward 0; returns 1 when it gets there.
  * Decrease the selected field toward its threshold and return the completion result.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Ember): unk_A8 at 0xA4 went from 7 to 6.
  */
-s32 Particle_FieldA8_DecrementToZeroStep1_0BE6C(Particle* arg0) {
+s32 Particle_DecrementUnkA8ToZero(Particle* arg0) {
     return Particle_FieldA8_DecrementTo_0BE30(arg0, 0);
 }
 
@@ -2496,7 +2522,8 @@ void Particle_SetUnkCC(s8 *arg0, unsigned short arg1)
 
 /**
  * Sets the particle's unk_AA to arg1.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) in the 165-move sweep (Thunder Punch, Scratch): arg1 = 0 cleared unk_AA
+ * (offset 0xA6) from 1.
  */
 void Particle_SetUnkAA(s8 *arg0, s16 arg1) {
     M2C_FIELD(arg0, s16 *, 0xA6) = arg1;
@@ -2520,7 +2547,8 @@ void Particle_SetUnkCD(s8 *arg0, s16 arg1) {
 
 /**
  * Sets the particle's unk_AE to arg1.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) in the 165-move sweep (Pay Day, Double Kick): arg1 = 0xE1 was written
+ * to unk_AE, which sits at offset 0xAA.
  */
 void Particle_SetUnkAE(s8 *arg0, s16 arg1) {
     M2C_FIELD(arg0, s16 *, 0xAA) = arg1;
@@ -2530,7 +2558,8 @@ M2C_UNK func_82137898(s32, s16, s16);               /* extern */
 
 /**
  * Steps the particle's unk_AE toward a target (helper of the approach family).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) in the 165-move sweep (Pay Day): with target 0 and step 0x40, unk_AE
+ * (offset 0xAA) went from 0xE1 to 0xA1.
  */
 void Particle_ApproachUnkAE(s32 arg0, s16 arg1, s16 arg2) {
     func_82137898(arg0 + 0xAA, arg1, arg2);
@@ -2551,7 +2580,8 @@ s32 Particle_FieldAE_ApproachAndStepState_0BF98(Particle* arg0, s16 arg1, s16 ar
 
 /**
  * Sets the particle's unk_B0 to arg1.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) in the 165-move sweep (Bite): arg1 = 2 was written to unk_B0, which
+ * sits at offset 0xAC.
  */
 void Particle_SetUnkB0(s8 *arg0, s16 arg1) {
     M2C_FIELD(arg0, s16 *, 0xAC) = arg1;

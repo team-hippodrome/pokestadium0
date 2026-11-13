@@ -136,7 +136,7 @@ void BattleAnim_RunFireBreathFlameFading(Particle* arg0) {
             break;
 
         case 2:
-            if (Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
                 Particle_BeginPhase(arg0);
                 Particle_EnableRendering(arg0);
                 Particle_FieldA6_SetS16_0BCA8(arg0, 0xB);
@@ -158,7 +158,7 @@ void BattleAnim_RunFireBreathFlameFading(Particle* arg0) {
                     break;
             }
 
-            if (Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
                 Particle_FieldA6_SetS16_0BCA8(arg0, 0xC);
             }
             break;
@@ -177,7 +177,7 @@ void BattleAnim_RunFireBreathFlameFading(Particle* arg0) {
                     break;
             }
 
-            if ((Particle_FieldA6_DecrementToZeroStep1_0BDAC(arg0) != 0) && (Particle_PrimAlpha_Approach_0BC2C(arg0, 0, 0x18) != 0)) {
+            if ((Particle_DecrementUnkA6ToZero(arg0) != 0) && (Particle_PrimAlpha_Approach_0BC2C(arg0, 0, 0x18) != 0)) {
                 Particle_AdvanceLifecycle(arg0);
             }
             break;
@@ -232,7 +232,7 @@ void BattleAnim_CallbackUnusedDescriptor4FColorCycleScaleFadeVariant(Particle* a
             break;
 
         case 2:
-            if (Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
                 Particle_BeginPhase(arg0);
                 Particle_EnableRendering(arg0);
                 Particle_FieldA6_SetS16_0BCA8(arg0, 0xB);
@@ -243,7 +243,7 @@ void BattleAnim_CallbackUnusedDescriptor4FColorCycleScaleFadeVariant(Particle* a
             Particle_Field1C_Approach_0B98C(arg0, 0.75f, 0.03f);
             Particle_PrimB_Approach_0BB44(arg0, 0, 0x18);
             Particle_EnvG_Approach_0BBF0(arg0, 0, 0x20);
-            if (Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
                 Particle_FieldA6_SetS16_0BCA8(arg0, 0xC);
             }
             break;
@@ -252,7 +252,7 @@ void BattleAnim_CallbackUnusedDescriptor4FColorCycleScaleFadeVariant(Particle* a
             Particle_Field1C_Approach_0B98C(arg0, 0.75f, 0.02f);
             Particle_PrimG_Approach_0BB14(arg0, 0, 0x10);
             Particle_EnvR_Approach_0BB90(arg0, 0, 0x10);
-            if ((Particle_FieldA6_DecrementToZeroStep1_0BDAC(arg0) != 0) && (Particle_PrimAlpha_Approach_0BC2C(arg0, 0, 0xC) != 0)) {
+            if ((Particle_DecrementUnkA6ToZero(arg0) != 0) && (Particle_PrimAlpha_Approach_0BC2C(arg0, 0, 0xC) != 0)) {
                 Particle_AdvanceLifecycle(arg0);
             }
             break;
@@ -425,7 +425,7 @@ void BattleAnim_CallbackStartEffects23And35And84Descriptor4FRotatingFallColorCyc
             break;
 
         case 2:
-            if (Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
                 Particle_BeginPhase(arg0);
                 Particle_EnableRendering(arg0);
                 Particle_FieldAE_SetS16_0BF4C(arg0, ParticleMath_RandomRange(3));
@@ -445,7 +445,7 @@ void BattleAnim_CallbackStartEffects23And35And84Descriptor4FRotatingFallColorCyc
                     Particle_EnvG_Approach_0BBF0(arg0, 0x78, 0x10);
                     break;
             }
-            Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0);
+            Particle_DecrementUnkA6ToZeroThenAdvance(arg0);
             break;
 
         case 4:
@@ -487,7 +487,7 @@ void BattleAnim_CallbackStartEffects23And35And84Descriptor4FRotatingFallColorCyc
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_SetupExpandingHitSpark(Particle* arg0) {
-    Particle_Field38_AddXZFromField94YOffset180_08F38(arg0, 33.0f);
+    Particle_AddPositionOffsetAlongRotationYPlus180(arg0, 33.0f);
     Particle_Field1C_SetScaled_0B938(arg0, 0.67f);
     ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
     Particle_SetPrimAlpha(arg0, 0xC8);
@@ -746,13 +746,13 @@ void BattleAnim_CallbackUnusedVariant2(Particle* arg0) {
             break;
 
         case 2:
-            if (Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
                 Particle_EnableRendering(arg0);
             }
             break;
 
         case 4:
-            Particle_PrimAlpha_ApproachAndStepState_0BC5C(arg0, 0, 0x10);
+            Particle_ApproachPrimAlphaThenAdvance(arg0, 0, 0x10);
             break;
 
         case 5:
@@ -1091,7 +1091,7 @@ void BattleAnim_RunBackgroundBombExplosion(Particle* arg0) {
             break;
 
         case 2:
-            if (Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
                 Particle_EnableRendering(arg0);
             }
             break;
@@ -1420,7 +1420,7 @@ void BattleAnim_CallbackEndEffect56Descriptor47SpreadScaleAlphaRise(Particle* ar
             break;
 
         case 2:
-            if (Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
                 Particle_FieldA6_SetS16_0BCA8(arg0, 5);
                 Particle_EnableRendering(arg0);
             }
@@ -1431,7 +1431,7 @@ void BattleAnim_CallbackEndEffect56Descriptor47SpreadScaleAlphaRise(Particle* ar
             Particle_Field1C_Approach_0B98C(arg0, 1.05f, 0.075f);
             Particle_ApproachStepMagnitude(arg0, 0.5, 0.5f);
             Particle_AddVelocityFromRotationTemplate1(arg0);
-            if (Particle_FieldA6_DecrementToZeroStep1_0BDAC(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZero(arg0) != 0) {
                 func_8213E1FC(arg0, 0x3F000000);
                 Particle_PrimAlpha_Approach_0BC2C(arg0, 0x64, 0x10);
             }
@@ -1674,7 +1674,7 @@ void BattleAnim_SetupFlamethrowerHitRotation(Particle* arg0, s16 arg1, s16 arg2)
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
 
     Particle_Field38_SetYScaled_08CA0(arg0, -10.0f);
-    Particle_Field38_AddXZFromField94Y_08ED0(arg0, 50.0f);
+    Particle_AddPositionOffsetAlongRotationY(arg0, 50.0f);
     Particle_Field1C_SetScaled_0B938(arg0, 0.5f);
     Particle_Field74_SetScaled_0AD8C(arg0, 5.0f);
 
@@ -1720,7 +1720,7 @@ void BattleAnim_RunFlamethrowerHitRotation(Particle* arg0, s32 arg1) {
             break;
 
         case 2:
-            if (Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
                 Particle_EnableRendering(arg0);
             }
             break;
@@ -1743,7 +1743,7 @@ void BattleAnim_RunFlamethrowerHitRotation(Particle* arg0, s32 arg1) {
                     break;
             }
 
-            if ((Particle_FieldA6_DecrementToZeroStep1_0BDAC(arg0) != 0) && (Particle_PrimAlpha_Approach_0BC2C(arg0, 0, 0x18) != 0)) {
+            if ((Particle_DecrementUnkA6ToZero(arg0) != 0) && (Particle_PrimAlpha_Approach_0BC2C(arg0, 0, 0x18) != 0)) {
                 Particle_AdvanceLifecycle(arg0);
             }
             break;
@@ -1787,7 +1787,7 @@ void BattleAnim_SetupFireBlastHitFrontFlames(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
 
     Particle_Field1C_SetScaled_0B938(arg0, 0.4f);
-    Particle_Field38_AddXZFromField94Y_08ED0(arg0, 15.0f);
+    Particle_AddPositionOffsetAlongRotationY(arg0, 15.0f);
     Particle_Field94_AddX_0A578(arg0, ParticleMath_RandomSignedOffset(0x200, 0xE00));
     Particle_Field94_AddY_0A594(arg0, ParticleMath_RandomSignedOffset(0x3800, 0x8000));
     Particle_FieldA0_SetX_0A400(arg0, -0x4000);
@@ -1885,7 +1885,7 @@ void BattleAnim_SetupDaimonji(Particle* arg0) {
 
     Particle_Field1C_SetScaled_0B938(arg0, 0.6f);
     Particle_Field38_AddYScaled_08E90(arg0, 15.0f);
-    Particle_Field38_AddXZFromField94YOffset180_08F38(arg0, 20.0f);
+    Particle_AddPositionOffsetAlongRotationYPlus180(arg0, 20.0f);
 
     switch (sp20) {
         case 0:
@@ -1961,7 +1961,7 @@ void BattleAnim_RunDaimonji(Particle* arg0) {
             break;
 
         case 2:
-            if (Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
                 Particle_BeginPhase(arg0);
                 Particle_EnableRendering(arg0);
                 Particle_FieldA6_SetS16_0BCA8(arg0, 0xB);
@@ -1971,7 +1971,7 @@ void BattleAnim_RunDaimonji(Particle* arg0) {
         case 3:
             Particle_PrimB_Approach_0BB44(arg0, 0, 0x18);
             Particle_EnvG_Approach_0BBF0(arg0, 0, 0x18);
-            if (Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
                 Particle_FieldA6_SetS16_0BCA8(arg0, 0xC);
             }
             break;
@@ -1979,7 +1979,7 @@ void BattleAnim_RunDaimonji(Particle* arg0) {
         case 4:
             Particle_PrimG_Approach_0BB14(arg0, 0, 0x10);
             Particle_EnvR_Approach_0BB90(arg0, 0, 0x10);
-            if ((Particle_FieldA6_DecrementToZeroStep1_0BDAC(arg0) != 0) && (Particle_PrimAlpha_Approach_0BC2C(arg0, 0, 0x40) != 0)) {
+            if ((Particle_DecrementUnkA6ToZero(arg0) != 0) && (Particle_PrimAlpha_Approach_0BC2C(arg0, 0, 0x40) != 0)) {
                 Particle_AdvanceLifecycle(arg0);
             }
             break;

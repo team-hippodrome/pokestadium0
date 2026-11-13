@@ -113,8 +113,8 @@ void BattleAnim_ApplyThunderThunderboltUseRadialOffset(Particle* arg0) {
             break;
     }
 
-    Particle_Field38_AddXZFromField94YOffset180_08F38(arg0, sp1C);
-    Particle_Field38_AddXZFromField94YOffset90_08FAC(arg0, 5.0f);
+    Particle_AddPositionOffsetAlongRotationYPlus180(arg0, sp1C);
+    Particle_AddPositionOffsetAlongRotationYPlus90(arg0, 5.0f);
 }
 
 /**
@@ -141,12 +141,12 @@ void BattleAnim_RunThunderThunderboltUseEffect(Particle* arg0) {
 
         case 2:
             Particle_Field1C_Approach_0B98C(arg0, 4.0f, 0.5f);
-            Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0);
+            Particle_DecrementUnkA6ToZeroThenAdvance(arg0);
             break;
 
         case 3:
             Particle_Field1C_Approach_0B98C(arg0, 0.1f, 0.5f);
-            Particle_PrimAlpha_ApproachAndStepState_0BC5C(arg0, 0, 0x20);
+            Particle_ApproachPrimAlphaThenAdvance(arg0, 0, 0x20);
             break;
 
         case 4:
@@ -191,11 +191,11 @@ void BattleAnim_RunDeterministicRotatingBoltOfLightning(Particle* arg0) {
 
         case 3:
             Particle_Field1C_Approach_0B98C(arg0, 3.0f, 0.1f);
-            Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0);
+            Particle_DecrementUnkA6ToZeroThenAdvance(arg0);
             break;
 
         case 4:
-            Particle_PrimAlpha_ApproachAndStepState_0BC5C(arg0, 0, 0x40);
+            Particle_ApproachPrimAlphaThenAdvance(arg0, 0, 0x40);
             break;
 
         case 5:
@@ -243,11 +243,11 @@ void BattleAnim_RunRandomRotatingBoltOfLightning(Particle* arg0) {
 
         case 3:
             Particle_Field1C_Approach_0B98C(arg0, 3.5f, 0.1f);
-            Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0);
+            Particle_DecrementUnkA6ToZeroThenAdvance(arg0);
             break;
 
         case 4:
-            Particle_PrimAlpha_ApproachAndStepState_0BC5C(arg0, 0, 0x40);
+            Particle_ApproachPrimAlphaThenAdvance(arg0, 0, 0x40);
             break;
 
         case 5:

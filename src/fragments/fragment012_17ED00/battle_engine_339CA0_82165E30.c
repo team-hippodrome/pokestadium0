@@ -8,7 +8,7 @@ void BattleAnim_CallbackUnusedGrowingSparkVariant(Particle* arg0) {
             break;
 
         case 2:
-            if (Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
                 Particle_EnableRendering(arg0);
             }
             break;
@@ -18,7 +18,7 @@ void BattleAnim_CallbackUnusedGrowingSparkVariant(Particle* arg0) {
             break;
 
         case 4:
-            Particle_PrimAlpha_ApproachAndStepState_0BC5C(arg0, 0x20, 0x20);
+            Particle_ApproachPrimAlphaThenAdvance(arg0, 0x20, 0x20);
             break;
 
         case 5:

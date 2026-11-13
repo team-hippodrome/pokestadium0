@@ -11,7 +11,7 @@ void BattleAnim_CallbackDescriptor26BurstChild(Particle* arg0) {
             break;
 
         case 2:
-            if (Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
                 Particle_EnableRendering(arg0);
                 ParticleMath_ScaleDirectionToLength(&arg0->motionStep, arg0->motionOffset, D_8219A880, arg0->stepMagnitude);
             }
@@ -30,7 +30,7 @@ void BattleAnim_CallbackDescriptor26BurstChild(Particle* arg0) {
             Particle_PrimR_Approach_0BAE4(arg0, 0xFF, 4);
             Particle_EnvR_Approach_0BB90(arg0, 0xFF, 8);
             Particle_EnvG_Approach_0BBF0(arg0, 0xFF, 8);
-            Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0);
+            Particle_DecrementUnkA6ToZeroThenAdvance(arg0);
             break;
 
         case 5:
@@ -64,7 +64,7 @@ void BattleAnim_CallbackDescriptor26BurstEmitter(Particle* arg0) {
             break;
 
         case 2:
-            if (Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
                 Particle_EnableRendering(arg0);
             }
             break;
