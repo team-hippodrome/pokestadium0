@@ -2099,9 +2099,14 @@ void Particle_SetMotionStepFromRotationXYAlt(Particle* arg0) {
     arg0->motionStep.z = arg0->stepMagnitude * COSS(arg0->rotation.x) * COSS(arg0->rotation.y);
 }
 
+/**
+ * Not reached in play: no move in the 165-move sweep called it, and nothing in the source calls it
+ * directly.
+ */
 void Particle_SetMotionStepFromRotationYZ(Particle* arg0) {
     arg0->motionStep.x = arg0->stepMagnitude * SINS(arg0->rotation.y) * COSS(arg0->rotation.z);
     arg0->motionStep.y = arg0->stepMagnitude * SINS(arg0->rotation.y) * SINS(arg0->rotation.z);
+    //!bug The z step is not scaled by stepMagnitude, unlike x and y and every sibling.
     arg0->motionStep.z = COSS(arg0->rotation.y);
 }
 

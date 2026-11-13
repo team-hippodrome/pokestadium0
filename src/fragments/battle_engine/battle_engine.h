@@ -1566,7 +1566,7 @@ void BattleScene_CameraShotTargetAngled(CameraNode* arg0, ActivePokemon* arg1);
 void BattleScene_CameraShotTargetHigh(CameraNode* arg0, ActivePokemon* arg1);
 void BattleScene_CameraShotTargetLow(CameraNode* arg0, ActivePokemon* arg1);
 void BattleScene_CameraShotTargetClose(CameraNode* arg0, ActivePokemon* arg1);
-void BattleScene_SetCameraFollowPresetNear(CameraNode* arg0, ActivePokemon* arg1);
+void BattleScene_SetCameraPresetHighClose(CameraNode* arg0, ActivePokemon* arg1);
 void BattleScene_SetCameraOwnerStandardShot(CameraNode* arg0, ActivePokemon* arg1);
 void BattleScene_SelectCameraPreset(ActivePokemon* arg0, CameraNode* arg1, s32 arg2, s32 arg3);
 void BattleScene_SelectCameraFollowPreset(ActivePokemon* arg0, CameraNode* arg1, s32 arg2);

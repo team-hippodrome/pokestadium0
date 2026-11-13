@@ -1078,7 +1078,7 @@ func_821235E0,0x821235E0,src/fragments/fragment012_17ED00/battle_engine_3055E0.c
 func_82123684,0x82123684,src/fragments/fragment012_17ED00/battle_engine_3055E0.c,func_82123684,hand,,c
 func_821237B0,0x821237B0,src/fragments/fragment012_17ED00/battle_engine_3055E0.c,BattleScene_SetCameraOwnerWideShot,s1,stadium1:src/fragments/battle_engine/battle_engine_3055E0.c,c
 func_82123874,0x82123874,src/fragments/fragment012_17ED00/battle_engine_3055E0.c,BattleScene_SetCameraPresetClose,hand,,c
-func_821239B4,0x821239B4,src/fragments/fragment012_17ED00/battle_engine_3055E0.c,BattleScene_SetCameraFollowPresetNear,hand,,c
+func_821239B4,0x821239B4,src/fragments/fragment012_17ED00/battle_engine_3055E0.c,BattleScene_SetCameraPresetHighClose,hand,,c
 func_82123AEC,0x82123AEC,src/fragments/fragment012_17ED00/battle_engine_3055E0.c,BattleScene_SetCameraPresetLowClose,hand,,c
 func_82123C5C,0x82123C5C,src/fragments/fragment012_17ED00/battle_engine_3055E0.c,BattleScene_CameraShotTargetClose,hand,,c
 func_82123D4C,0x82123D4C,src/fragments/fragment012_17ED00/battle_engine_3055E0.c,func_82123D4C,hand,,c
@@ -1091,7 +1091,7 @@ func_821243DC,0x821243DC,src/fragments/fragment012_17ED00/battle_engine_3055E0_8
 func_82124544,0x82124544,src/fragments/fragment012_17ED00/battle_engine_3055E0_821243DC.c,func_82124544,hand,,c
 func_82124664,0x82124664,src/fragments/fragment012_17ED00/battle_engine_3055E0_821243DC.c,func_82124664,hand,,c
 func_82124750,0x82124750,src/fragments/fragment012_17ED00/battle_engine_3055E0_821243DC.c,BattleScene_SetCameraPresetCloseThunk,s1,stadium1:src/fragments/battle_engine/battle_engine_317E70.c,c
-func_82124770,0x82124770,src/fragments/fragment012_17ED00/battle_engine_3055E0_821243DC.c,BattleScene_SetCameraFollowPresetNearThunk,s1,stadium1:src/fragments/battle_engine/battle_engine_328F10.c,c
+func_82124770,0x82124770,src/fragments/fragment012_17ED00/battle_engine_3055E0_821243DC.c,BattleScene_SetCameraPresetHighCloseThunk,s1,stadium1:src/fragments/battle_engine/battle_engine_328F10.c,c
 func_82124790,0x82124790,src/fragments/fragment012_17ED00/battle_engine_3055E0_821243DC.c,BattleScene_SetCameraPresetLowCloseThunk,s1,stadium1:src/fragments/battle_engine/battle_engine_328F10.c,c
 func_821247B0,0x821247B0,src/fragments/fragment012_17ED00/battle_engine_3055E0_821243DC.c,BattleScene_CameraShotTargetCloseThunk,s1,stadium1:src/fragments/clefairy_game/clefairy_game.c,c
 func_821247D0,0x821247D0,src/fragments/fragment012_17ED00/battle_engine_3055E0_821243DC.c,func_821247D0,s1,stadium1:src/fragments/clefairy_game/clefairy_game.c,c

@@ -833,6 +833,11 @@ void BattleScene_SetCameraOwnerWideShot(CameraNode* arg0, ActivePokemon* arg1) {
     BattleScene_SetCameraEyeFromAt(arg0, 0, arg1->facingDirection << 0xE, sp3C, 0.0f);
 }
 
+/**
+ * Seen in play (2026-11-13) for DoubleSlap the camera cut to a close shot beside the user at body
+ * height, about 70 degrees off its facing, so the user's head filled one edge of the frame. In the
+ * sweep it ran for 44 moves.
+ */
 void BattleScene_SetCameraPresetClose(CameraNode* arg0, ActivePokemon* arg1) {
     BattleAnim_GetOwnerDefaultAnchorPosition(arg1, &sBattleScene.scene->unk_D0);
     gCameraDistTarget = BattleScene_ScaleCameraDistance(arg1, 1.0f, 100.0f);
@@ -841,7 +846,13 @@ void BattleScene_SetCameraPresetClose(CameraNode* arg0, ActivePokemon* arg1) {
     BattleScene_SetCameraEyeFromPosition(arg0, sBattleScene.scene->unk_D0, 0, BattleScene_GetParticipantFacingAngle(arg1) - (arg1->facingDirection * 0x31C7), D_8219A534, 0.0f);
 }
 
-void BattleScene_SetCameraFollowPresetNear(CameraNode* arg0, ActivePokemon* arg1) {
+/**
+ * Seen in play (2026-11-13) for Karate Chop the camera cut to a close shot of the user from above,
+ * looking down at it and its shadow on the field (the eye is raised by twice the Pokemon's height).
+ * Was BattleScene_SetCameraFollowPresetNear; it is the high counterpart of
+ * BattleScene_SetCameraPresetLowClose. In the sweep it ran for 36 moves.
+ */
+void BattleScene_SetCameraPresetHighClose(CameraNode* arg0, ActivePokemon* arg1) {
     s16 sp3E;
 
     BattleAnim_GetOwnerDefaultAnchorPosition(arg1, &sBattleScene.scene->unk_D0);
@@ -852,6 +863,10 @@ void BattleScene_SetCameraFollowPresetNear(CameraNode* arg0, ActivePokemon* arg1
     BattleScene_SetCameraEyeFromPosition(arg0, sBattleScene.scene->unk_D0, 0, sp3E - (arg1->facingDirection * 0x1555), D_8219A534, BattleScene_GetParticipantHeight(arg1) * 2.0f);
 }
 
+/**
+ * Seen in play (2026-11-13) for Swords Dance the camera cut to a close shot of the user's head from
+ * below, looking up at it against the stands. In the sweep it ran for 31 moves.
+ */
 void BattleScene_SetCameraPresetLowClose(CameraNode* arg0, ActivePokemon* arg1) {
     s16 sp3E;
 

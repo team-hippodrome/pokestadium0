@@ -33,23 +33,26 @@ void func_82124664(s32 arg0, s32 arg1, s16 arg2) {
 
 /**
  * Forwards both arguments to BattleScene_SetCameraPresetClose; camera shot table entry.
- * @unverified Name describes the forwarding only.
+ * Seen in play (2026-11-13) ran for the same 44 moves as BattleScene_SetCameraPresetClose
+ * (DoubleSlap showed the close side shot).
  */
 void BattleScene_SetCameraPresetCloseThunk(CameraNode* arg0, ActivePokemon* arg1) {
     BattleScene_SetCameraPresetClose(arg0, arg1);
 }
 
 /**
- * Forwards both arguments to BattleScene_SetCameraFollowPresetNear; camera shot table entry.
- * @unverified Name describes the forwarding only.
+ * Forwards both arguments to BattleScene_SetCameraPresetHighClose; camera shot table entry.
+ * Seen in play (2026-11-13) ran for the same 36 moves as BattleScene_SetCameraPresetHighClose
+ * (Karate Chop showed the high close-up). Was BattleScene_SetCameraFollowPresetNearThunk.
  */
-void BattleScene_SetCameraFollowPresetNearThunk(CameraNode* arg0, ActivePokemon* arg1) {
-    BattleScene_SetCameraFollowPresetNear(arg0, arg1);
+void BattleScene_SetCameraPresetHighCloseThunk(CameraNode* arg0, ActivePokemon* arg1) {
+    BattleScene_SetCameraPresetHighClose(arg0, arg1);
 }
 
 /**
  * Forwards both arguments to BattleScene_SetCameraPresetLowClose; camera shot table entry.
- * @unverified Name describes the forwarding only.
+ * Seen in play (2026-11-13) ran for the same 31 moves as BattleScene_SetCameraPresetLowClose
+ * (Swords Dance showed the low close-up).
  */
 void BattleScene_SetCameraPresetLowCloseThunk(CameraNode* arg0, ActivePokemon* arg1) {
     BattleScene_SetCameraPresetLowClose(arg0, arg1);
