@@ -80,7 +80,7 @@ void Particle_SetFieldOffsetA8IfNotSentinel(Particle* arg0, s16 arg1) {
  */
 void Particle_SetFieldOffsetCEIfNotSentinel(Particle* arg0, u8 arg1) {
     if ((u32)arg0 != -1) {
-        arg0->unk_CE = arg1;
+        arg0->byteParam2 = arg1;
     }
 }
 
@@ -123,7 +123,7 @@ void Particle_SetPrimAlphaIfNotSentinel(Particle* arg0, u8 arg1) {
  */
 void Particle_SetFieldOffsetAAIfNotSentinel(Particle* arg0, s16 arg1) {
     if ((u32)arg0 != -1) {
-        arg0->unk_AE = arg1;
+        arg0->scratchA = arg1;
     }
 }
 
@@ -162,7 +162,7 @@ u8 Particle_GetUnkCD(s8 *arg0) {
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s16 Particle_FieldAA_GetS16_0C068(Particle* arg0) {
-    return arg0->unk_AE;
+    return arg0->scratchA;
 }
 
 /**
@@ -191,7 +191,7 @@ s16 func_8213C484(s8 *arg0)
  * 0xA6.
  */
 s16 Particle_GetUnkAA(Particle* arg0) {
-    return arg0->unk_AA;
+    return arg0->param1;
 }
 
 /**

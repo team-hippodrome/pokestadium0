@@ -1857,7 +1857,7 @@ void BattleAnim_RunBoomUseEffect1(Particle* arg0) {
             break;
 
         case 2:
-            Particle_TickDelayAndAdvanceLifecycle(arg0, arg0->unk_A6);
+            Particle_TickDelayAndAdvanceLifecycle(arg0, arg0->param0);
             break;
 
         case 3:
@@ -1929,7 +1929,7 @@ void BattleAnim_SetupBoomUseEffect3(Particle* arg0) {
     Particle_Field9A_SetXY_0A3A0(arg0, 0, 0);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, sp34);
     Particle_SetPrimAlpha(arg0, 0x80);
-    Particle_FieldA6_SetS16_0BCA8(arg0, arg0->unk_AC * 2);
+    Particle_FieldA6_SetS16_0BCA8(arg0, arg0->spawnIndex * 2);
     Particle_DisableRendering(arg0);
     Particle_AdvanceLifecycle(arg0);
 }
@@ -2039,7 +2039,7 @@ void Gfx_DrawParticleCustomColors(Gfx* arg0, arg1_func_8434E21C* arg1, UNUSED u1
     gDPPipeSync(arg0++);
 
     gDPSetPrimColor(arg0++, 0, 0x78, temp_v0->prim_r, temp_v0->prim_g, temp_v0->prim_b, temp_v0->prim_a);
-    gDPSetEnvColor(arg0++, temp_v0->env_r, temp_v0->env_g, temp_v0->env_b, temp_v0->unk_B0);
+    gDPSetEnvColor(arg0++, temp_v0->env_r, temp_v0->env_g, temp_v0->env_b, temp_v0->scratchB);
     gDPSetCombineLERP(arg0++, TEXEL1, TEXEL0, PRIM_LOD_FRAC, TEXEL0, TEXEL1, TEXEL0, PRIM_LOD_FRAC, TEXEL0, PRIMITIVE,
                       ENVIRONMENT, COMBINED, ENVIRONMENT, COMBINED, 0, PRIMITIVE, ENVIRONMENT);
 
@@ -3828,7 +3828,7 @@ void Gfx_WaterAnimPrimEnvDL(Gfx* arg0, u8 arg1, UNUSED u16 arg2) {
 
         case 1:
             gDPPipeSync(arg0++);
-            gDPSetPrimColor(arg0++, 0, 0, temp_v0->prim_r, temp_v0->prim_g, temp_v0->prim_b, temp_v0->unk_AE);
+            gDPSetPrimColor(arg0++, 0, 0, temp_v0->prim_r, temp_v0->prim_g, temp_v0->prim_b, temp_v0->scratchA);
             break;
     }
 
@@ -4262,7 +4262,7 @@ void BattleAnim_RunConfusionPsychicHitEffect(Particle* arg0) {
             break;
 
         case 2:
-            Particle_ApproachPrimAlphaThenAdvance(arg0, arg0->unk_A6, Particle_FieldCE_GetS32_0C040(arg0));
+            Particle_ApproachPrimAlphaThenAdvance(arg0, arg0->param0, Particle_FieldCE_GetS32_0C040(arg0));
             break;
 
         case 3:

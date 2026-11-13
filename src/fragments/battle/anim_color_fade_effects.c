@@ -414,7 +414,7 @@ void BattleAnim_SetupFireBreathFlameColoration(Particle* arg0, s16 arg1) {
 void BattleAnim_ContinueFireBreathFlameColoration(Particle* arg0) {
     switch (arg0->phase) {
         case 1:
-            if (Particle_TickPhaseTimer(arg0, arg0->unk_AE) != 0) {
+            if (Particle_TickPhaseTimer(arg0, arg0->scratchA) != 0) {
                 Particle_AdvancePhase(arg0);
             }
             break;

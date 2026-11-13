@@ -295,13 +295,13 @@ void BattleAnim_RunPetalDanceLingeringHitEffect(Particle* arg0) {
         case 1:
             Particle_ApproachStepMagnitude(arg0, 20.0f, 0.5f);
             func_8213E1FC(arg0, arg0->motionStep.y);
-            Particle_UpdateRotatingVelocityXZ(arg0, arg0->stepMagnitude, arg0->unk_AE);
+            Particle_UpdateRotatingVelocityXZ(arg0, arg0->stepMagnitude, arg0->scratchA);
             break;
 
         case 2:
             Particle_FieldAE_Approach_0BF60(arg0, 0, 0x200);
             func_8213E1FC(arg0, arg0->motionStep.y);
-            Particle_UpdateRotatingVelocityXZ(arg0, arg0->stepMagnitude, arg0->unk_AE);
+            Particle_UpdateRotatingVelocityXZ(arg0, arg0->stepMagnitude, arg0->scratchA);
             break;
 
         case 3:
@@ -312,7 +312,7 @@ void BattleAnim_RunPetalDanceLingeringHitEffect(Particle* arg0) {
 
     if (Particle_IsRenderingEnabled(arg0) != 0) {
         Particle_ApplyRotationStepX(arg0);
-        Particle_Field94_AddY_0A594(arg0, arg0->unk_B0);
+        Particle_Field94_AddY_0A594(arg0, arg0->scratchB);
         Particle_Field94_AddXFromField9A_0A4B4(arg0);
         if (arg0->worldPosition.y < 0.0f) {
             Particle_MarkInactive(arg0);

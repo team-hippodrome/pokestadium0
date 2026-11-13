@@ -214,9 +214,9 @@ Particle* BattleAnim_SpawnSecondaryOwnerParticle(Vec3f arg0, u8 arg1) {
         BattleAnim_InitStingerMoveParticle(sp1C, arg1);
         sp1C->pokemon = gBattleAnimSecondaryOwner;
         sp1C->displayObject = NULL;
-        sp1C->unk_CD = 0xFF;
-        sp1C->unk_CC = 0x15;
-        sp1C->unk_CA = 0;
+        sp1C->byteParam0 = 0xFF;
+        sp1C->anchorMode = 0x15;
+        sp1C->effectList = 0;
     }
     return sp1C;
 }

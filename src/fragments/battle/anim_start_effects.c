@@ -111,7 +111,7 @@ void BattleAnim_InitStartEffect135Descriptor1CRisingScale(Particle* arg0) {
     Particle_SetScaleScaled(arg0, 0.065789476f);
     Particle_Field74_SetScaled_0AD8C(arg0, 0.0f);
     sp28.x = ParticleMath_RandomSigned(0x5000);
-    sp28.y = sp24 * (0x10000 / arg0->unk_AA);
+    sp28.y = sp24 * (0x10000 / arg0->param1);
     sp28.z = 0;
     Particle_Field94_AddVecFromVec3s_0A4F0(arg0, sp28);
     ParticleGfx_RecolorPrim(arg0, sp26);
@@ -465,7 +465,7 @@ void BattleAnim_ExplosionOrbitSwirl(Particle* arg0) {
             break;
 
         case 4:
-            if (Particle_TickDelayAndAdvanceLifecycle(arg0, arg0->unk_A8) != 0) {
+            if (Particle_TickDelayAndAdvanceLifecycle(arg0, arg0->countdown) != 0) {
                 Particle_AdvancePhase(arg0);
             }
             break;
@@ -483,13 +483,13 @@ void BattleAnim_ExplosionOrbitSwirl(Particle* arg0) {
         switch (arg0->phase) {
             case 1:
                 Particle_ApplyRotationStepX(arg0);
-                Particle_SetPositionFromRotationTemplate1(arg0, arg0->unk_AE);
+                Particle_SetPositionFromRotationTemplate1(arg0, arg0->scratchA);
                 break;
 
             case 2:
                 Particle_ApplyRotationStepX(arg0);
-                Particle_FieldAE_Approach_0BF60(arg0, 0, arg0->unk_B0);
-                Particle_SetPositionFromRotationTemplate1(arg0, arg0->unk_AE);
+                Particle_FieldAE_Approach_0BF60(arg0, 0, arg0->scratchB);
+                Particle_SetPositionFromRotationTemplate1(arg0, arg0->scratchA);
                 break;
         }
     }

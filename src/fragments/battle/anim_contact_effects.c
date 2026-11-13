@@ -1504,7 +1504,7 @@ void BattleAnim_RunThunderPunchHitEffect(Particle* arg0) {
             break;
 
         case 2:
-            if (Particle_TickDelayAndAdvanceLifecycle(arg0, arg0->unk_A6) != 0) {
+            if (Particle_TickDelayAndAdvanceLifecycle(arg0, arg0->param0) != 0) {
                 Particle_EnableRendering(arg0);
             }
             break;
@@ -1617,7 +1617,7 @@ void BattleAnim_RunDefaultHitSpark(Particle* arg0) {
             break;
 
         case 2:
-            if (Particle_TickDelayAndAdvanceLifecycle(arg0, arg0->unk_A6) != 0) {
+            if (Particle_TickDelayAndAdvanceLifecycle(arg0, arg0->param0) != 0) {
                 Particle_EnableRendering(arg0);
             }
             break;
@@ -1744,7 +1744,7 @@ void BattleAnim_RunHeavyHitSparksAndSmoke(Particle* arg0) {
             break;
 
         case 2:
-            if (Particle_TickDelayAndAdvanceLifecycle(arg0, arg0->unk_A6) != 0) {
+            if (Particle_TickDelayAndAdvanceLifecycle(arg0, arg0->param0) != 0) {
                 Particle_EnableRendering(arg0);
                 Particle_FieldA6_SetS16_0BCA8(arg0, 2);
             }
@@ -1813,7 +1813,7 @@ s32 BattleAnim_RunPointyMoveHitSpark(Particle* arg0) {
             break;
 
         case 2:
-            if (Particle_TickDelayAndAdvanceLifecycle(arg0, arg0->unk_A6) != 0) {
+            if (Particle_TickDelayAndAdvanceLifecycle(arg0, arg0->param0) != 0) {
                 Particle_EnableRendering(arg0);
                 Particle_FieldA6_SetS16_0BCA8(arg0, 2);
             }

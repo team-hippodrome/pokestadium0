@@ -72,13 +72,13 @@ void BattleAnim_CallbackOwnerModelTintPaletteFade(s8 *arg0) {
 void BattleAnim_SetupOwnerModelTintRandomPaletteCycle(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, gParticlePaletteSetA[ParticleMath_RandomRange(6)]);
     Particle_FieldCF_SetU8_0BEEC(arg0, gParticlePaletteSetA[ParticleMath_RandomRange(6)]);
-    Particle_SetPrimAlpha(arg0, arg0->unk_CD);
+    Particle_SetPrimAlpha(arg0, arg0->byteParam0);
 
-    if (arg0->unk_AA == 0) {
-        arg0->unk_AA = 1;
+    if (arg0->param1 == 0) {
+        arg0->param1 = 1;
     }
 
-    Particle_FieldA6_SetS16_0BCA8(arg0, 0xFF / arg0->unk_AA);
+    Particle_FieldA6_SetS16_0BCA8(arg0, 0xFF / arg0->param1);
     Particle_AdvanceLifecycle(arg0);
 }
 
@@ -96,9 +96,9 @@ void BattleAnim_CallbackOwnerModelTintRandomPaletteCycle(Particle* arg0) {
             break;
 
         case 2:
-            ParticleGfx_ApproachPrimPalette(arg0, arg0->unk_CF, arg0->unk_AA);
+            ParticleGfx_ApproachPrimPalette(arg0, arg0->byteParam1, arg0->param1);
             if (Particle_DecrementUnkA6ToZero(arg0) != 0) {
-                Particle_FieldA6_SetS16_0BCA8(arg0, 0xFF / arg0->unk_AA);
+                Particle_FieldA6_SetS16_0BCA8(arg0, 0xFF / arg0->param1);
                 Particle_FieldCF_SetU8_0BEEC(arg0, gParticlePaletteSetA[ParticleMath_RandomRange(6)]);
             }
             Model_SetMaterialColor(&arg0->pokemon->displayObject, arg0->prim_r, arg0->prim_g, arg0->prim_b, arg0->prim_a);
@@ -115,13 +115,13 @@ void BattleAnim_SetupRainbowHueChange(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, gParticlePaletteSetA[0]);
     Particle_FieldAE_SetS16_0BF4C(arg0, 1);
     Particle_FieldCF_SetU8_0BEEC(arg0, gParticlePaletteSetA[1]);
-    Particle_SetPrimAlpha(arg0, arg0->unk_CD);
+    Particle_SetPrimAlpha(arg0, arg0->byteParam0);
 
-    if (arg0->unk_AA == 0) {
-        arg0->unk_AA = 1;
+    if (arg0->param1 == 0) {
+        arg0->param1 = 1;
     }
 
-    Particle_FieldA8_SetS16_0BE14(arg0, 0xFF / arg0->unk_AA);
+    Particle_FieldA8_SetS16_0BE14(arg0, 0xFF / arg0->param1);
     Particle_AdvanceLifecycle(arg0);
 }
 
@@ -139,11 +139,11 @@ void BattleAnim_RunRainbowHueChange(Particle* arg0) {
         case 2:
             Particle_DecrementUnkA6ToZeroThenAdvance(arg0);
             if (Particle_DecrementUnkA8ToZero(arg0) != 0) {
-                Particle_FieldA8_SetS16_0BE14(arg0, 0xFF / arg0->unk_AA);
-                arg0->unk_AE = (arg0->unk_AE + 1) % 6;
-                Particle_FieldCF_SetU8_0BEEC(arg0, gParticlePaletteSetA[arg0->unk_AE]);
+                Particle_FieldA8_SetS16_0BE14(arg0, 0xFF / arg0->param1);
+                arg0->scratchA = (arg0->scratchA + 1) % 6;
+                Particle_FieldCF_SetU8_0BEEC(arg0, gParticlePaletteSetA[arg0->scratchA]);
             }
-            ParticleGfx_ApproachPrimPalette(arg0, arg0->unk_CF, arg0->unk_AA);
+            ParticleGfx_ApproachPrimPalette(arg0, arg0->byteParam1, arg0->param1);
             Model_SetMaterialColor(&arg0->pokemon->displayObject, arg0->prim_r, arg0->prim_g, arg0->prim_b, arg0->prim_a);
             break;
 
@@ -169,7 +169,7 @@ void BattleAnim_RunRainbowHueChange(Particle* arg0) {
  * charge turn did not use it, and Explosion and Selfdestruct did.
  */
 void BattleAnim_SetupInvisibility(Particle* arg0) {
-    arg0->prim_a = arg0->unk_A6;
+    arg0->prim_a = arg0->param0;
     Particle_AdvanceLifecycle(arg0);
 }
 
@@ -269,7 +269,7 @@ void BattleAnim_RunWhiteHueChange(Particle* arg0) {
             break;
 
         case 2:
-            Particle_ApproachPrimAlphaThenAdvance(arg0, arg0->unk_CD, arg0->unk_AA);
+            Particle_ApproachPrimAlphaThenAdvance(arg0, arg0->byteParam0, arg0->param1);
             break;
 
         case 3:
@@ -277,7 +277,7 @@ void BattleAnim_RunWhiteHueChange(Particle* arg0) {
             break;
 
         case 4:
-            if (Particle_PrimAlpha_Approach_0BC2C(arg0, 0, arg0->unk_AA) != 0) {
+            if (Particle_PrimAlpha_Approach_0BC2C(arg0, 0, arg0->param1) != 0) {
                 Particle_MarkInactive(arg0);
             }
             break;
@@ -322,7 +322,7 @@ void BattleAnim_RunFullScreenHueChange(Particle* arg0) {
             break;
 
         case 3:
-            if (Particle_PrimAlpha_Approach_0BC2C(arg0, 0, arg0->unk_AA) != 0) {
+            if (Particle_PrimAlpha_Approach_0BC2C(arg0, 0, arg0->param1) != 0) {
                 Particle_MarkInactive(arg0);
             }
             break;
@@ -353,7 +353,7 @@ void BattleAnim_RunPokemonAndFullScreenHueChange(Particle* arg0) {
             break;
 
         case 2:
-            Particle_ApproachPrimAlphaThenAdvance(arg0, arg0->unk_CD, arg0->unk_AA);
+            Particle_ApproachPrimAlphaThenAdvance(arg0, arg0->byteParam0, arg0->param1);
             break;
 
         case 3:
@@ -369,7 +369,7 @@ void BattleAnim_RunPokemonAndFullScreenHueChange(Particle* arg0) {
  */
 void func_82144A54(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
-    Particle_SetPrimAlpha(arg0, arg0->unk_CD);
+    Particle_SetPrimAlpha(arg0, arg0->byteParam0);
     Particle_AdvanceLifecycle(arg0);
 }
 
@@ -423,8 +423,8 @@ void BattleAnim_CallbackDescriptor25PaletteFadeOut(Particle* arg0) {
             break;
 
         case 3:
-            ParticleGfx_ApproachPrimPalette(arg0, arg0->unk_CD, arg0->unk_AA);
-            if (Particle_PrimAlpha_Approach_0BC2C(arg0, 0, arg0->unk_AA) != 0) {
+            ParticleGfx_ApproachPrimPalette(arg0, arg0->byteParam0, arg0->param1);
+            if (Particle_PrimAlpha_Approach_0BC2C(arg0, 0, arg0->param1) != 0) {
                 Particle_MarkInactive(arg0);
             }
             break;
@@ -458,8 +458,8 @@ void BattleAnim_CallbackDescriptor25PaletteFadeIn(Particle* arg0) {
             break;
 
         case 2:
-            ParticleGfx_ApproachPrimPalette(arg0, arg0->unk_CD, arg0->unk_AA);
-            Particle_ApproachPrimAlphaThenAdvance(arg0, 0xFF, arg0->unk_AA);
+            ParticleGfx_ApproachPrimPalette(arg0, arg0->byteParam0, arg0->param1);
+            Particle_ApproachPrimAlphaThenAdvance(arg0, 0xFF, arg0->param1);
             break;
 
         case 3:

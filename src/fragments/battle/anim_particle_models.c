@@ -412,7 +412,7 @@ void BattleAnim_RunScaryEyes(Particle* arg0) {
             break;
 
         case 2:
-            Particle_ApproachPrimAlphaThenAdvance(arg0, arg0->unk_A6, Particle_FieldCE_GetS32_0C040(arg0));
+            Particle_ApproachPrimAlphaThenAdvance(arg0, arg0->param0, Particle_FieldCE_GetS32_0C040(arg0));
             break;
     }
 }
@@ -466,7 +466,7 @@ void BattleAnim_RunFillScreenOverlay(Particle* arg0) {
             break;
 
         case 2:
-            Particle_ApproachPrimAlphaThenAdvance(arg0, arg0->unk_A6, Particle_FieldCE_GetS32_0C040(arg0));
+            Particle_ApproachPrimAlphaThenAdvance(arg0, arg0->param0, Particle_FieldCE_GetS32_0C040(arg0));
             break;
     }
 }

@@ -2869,7 +2869,7 @@ s32 Particle_ApproachPrimAlphaThenAdvance(Particle* arg0, u8 arg1, u8 arg2) {
  * @unverified Name and comment guessed from the code.
  */
 void Particle_SetUnkA6(Particle* arg0, s16 arg1) {
-    arg0->unk_A6 = arg1;
+    arg0->param0 = arg1;
 }
 
 /**
@@ -2878,10 +2878,10 @@ void Particle_SetUnkA6(Particle* arg0, s16 arg1) {
 s32 func_821405A8(Particle* arg0, s16 arg1, s16 arg2) {
     s32 var_v1;
 
-    arg0->unk_A6 = (s16) (arg0->unk_A6 - arg2);
+    arg0->param0 = (s16) (arg0->param0 - arg2);
     var_v1 = 0;
-    if (arg1 >= arg0->unk_A6) {
-        arg0->unk_A6 = arg1;
+    if (arg1 >= arg0->param0) {
+        arg0->param0 = arg1;
         var_v1 = 1;
     }
     return var_v1;
@@ -2953,7 +2953,7 @@ s32 Particle_DecrementUnkA6ToZeroThenAdvance(Particle* arg0) {
  * @unverified Name and comment guessed from the code.
  */
 void Particle_SetUnkA8(Particle* arg0, s16 arg1) {
-    arg0->unk_A8 = arg1;
+    arg0->countdown = arg1;
 }
 
 /**
@@ -2962,10 +2962,10 @@ void Particle_SetUnkA8(Particle* arg0, s16 arg1) {
 s32 func_8214070C(Particle* arg0, s16 arg1) {
     s32 var_v1;
 
-    arg0->unk_A8 = (s16) (arg0->unk_A8 - 1);
+    arg0->countdown = (s16) (arg0->countdown - 1);
     var_v1 = 0;
-    if (arg1 >= arg0->unk_A8) {
-        arg0->unk_A8 = arg1;
+    if (arg1 >= arg0->countdown) {
+        arg0->countdown = arg1;
         var_v1 = 1;
     }
     return var_v1;
@@ -3007,7 +3007,7 @@ void func_821407A8(s8 *arg0, int arg1)
  * Seen in play (2026-11-13) in the 165-move sweep: arg1 = 0 cleared unk_AC (offset 0xA8) from 0x16.
  */
 void Particle_SetUnkAC(Particle* arg0, s16 arg1) {
-    arg0->unk_AC = arg1;
+    arg0->spawnIndex = arg1;
 }
 
 void func_821407C8(s8 *arg0, unsigned char arg1)
@@ -3040,7 +3040,7 @@ void Particle_SetUnkCC(s8 *arg0, unsigned short arg1)
  * (offset 0xA6) from 1.
  */
 void Particle_SetUnkAA(Particle* arg0, s16 arg1) {
-    arg0->unk_AA = arg1;
+    arg0->param1 = arg1;
 }
 
 /**
@@ -3050,7 +3050,7 @@ void Particle_SetUnkAA(Particle* arg0, s16 arg1) {
  * @unverified Name and comment guessed from the code.
  */
 void Particle_SetUnkCE(Particle* arg0, s16 arg1) {
-    arg0->unk_CE = arg1;
+    arg0->byteParam2 = arg1;
 }
 
 /**
@@ -3060,7 +3060,7 @@ void Particle_SetUnkCE(Particle* arg0, s16 arg1) {
  * @unverified Name and comment guessed from the code.
  */
 void Particle_SetUnkCD(Particle* arg0, s16 arg1) {
-    arg0->unk_CD = arg1;
+    arg0->byteParam0 = arg1;
 }
 
 /**
@@ -3069,7 +3069,7 @@ void Particle_SetUnkCD(Particle* arg0, s16 arg1) {
  * to unk_AE, which sits at offset 0xAA.
  */
 void Particle_SetUnkAE(Particle* arg0, s16 arg1) {
-    arg0->unk_AE = arg1;
+    arg0->scratchA = arg1;
 }
 
 M2C_UNK func_82137898(s32, s16, s16);               /* extern */
@@ -3080,7 +3080,7 @@ M2C_UNK func_82137898(s32, s16, s16);               /* extern */
  * (offset 0xAA) went from 0xE1 to 0xA1.
  */
 void Particle_ApproachUnkAE(Particle* arg0, s16 arg1, s16 arg2) {
-    func_82137898((s32)&arg0->unk_AE, arg1, arg2);
+    func_82137898((s32)&arg0->scratchA, arg1, arg2);
 }
 
 /**
@@ -3104,7 +3104,7 @@ s32 Particle_ApproachUnkAEThenAdvance(Particle* arg0, s16 arg1, s16 arg2) {
  * sits at offset 0xAC.
  */
 void Particle_SetUnkB0(Particle* arg0, s16 arg1) {
-    arg0->unk_B0 = arg1;
+    arg0->scratchB = arg1;
 }
 
 M2C_UNK func_82137898(s32, s16, s16);               /* extern */
@@ -3115,5 +3115,5 @@ M2C_UNK func_82137898(s32, s16, s16);               /* extern */
  * (offset 0xAC) went from 0x64 to 0x5C.
  */
 void Particle_ApproachUnkB0(Particle* arg0, s16 arg1, s16 arg2) {
-    func_82137898((s32)&arg0->unk_B0, arg1, arg2);
+    func_82137898((s32)&arg0->scratchB, arg1, arg2);
 }

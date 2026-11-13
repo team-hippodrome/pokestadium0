@@ -192,7 +192,7 @@ s32 Particle_DecreaseRotationXTo(Particle* arg0, s32 arg1, s32 arg2);
  */
 void BattleAnim_ContinueBubbleBeamBubblesSlow(Particle* arg0) {
     if (arg0->phase == 1) {
-        Particle_DecreaseRotationXTo(arg0, arg0->unk_B0, arg0->rotationStep.x);
+        Particle_DecreaseRotationXTo(arg0, arg0->scratchB, arg0->rotationStep.x);
         Particle_AddVelocityFromRotationTemplate1(arg0);
     }
 }
@@ -390,12 +390,12 @@ void BattleAnim_MotionUnusedRotatingSparkVariant(Particle* arg0) {
         case 1:
             if (Particle_TickPhaseTimer(arg0, 2) != 0) {
                 Particle_AdvancePhase(arg0);
-                Particle_Field94_AddX_0A578(arg0, arg0->unk_AE);
+                Particle_Field94_AddX_0A578(arg0, arg0->scratchA);
             }
             break;
 
         case 2:
-            Particle_Field94_AddZ_0A5B0(arg0, arg0->unk_B0);
+            Particle_Field94_AddZ_0A5B0(arg0, arg0->scratchB);
             break;
     }
 
@@ -846,7 +846,7 @@ void BattleAnim_SetupIceBeamColdBreath(Particle* arg0) {
  */
 void BattleAnim_ContinueIceBeamColdBreath(Particle* arg0) {
     if (arg0->phase == 1) {
-        Particle_ApproachRotationXTo(arg0, arg0->unk_B0, arg0->rotationStep.x);
+        Particle_ApproachRotationXTo(arg0, arg0->scratchB, arg0->rotationStep.x);
         Particle_AddVelocityFromRotationTemplate1(arg0);
         Particle_Field38_AddYScaled_08E90(arg0, -0.2f);
     }

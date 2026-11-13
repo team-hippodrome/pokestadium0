@@ -875,8 +875,8 @@ typedef void (*ParticleUpdateCallback)(struct Particle*);
 
 /*
  * Same record as Stadium 1's Particle, but 4 bytes shorter: from 0x28 on, every
- * field sits 4 bytes lower than in Stadium 1 (unk_XX names keep the Stadium 1
- * offset). Field names follow Stadium 1. @unverified
+ * field sits 4 bytes lower than in Stadium 1. Field names up to lifecycle follow
+ * Stadium 1 unless tagged otherwise. @unverified
  */
 typedef struct Particle {
     /* 0x00 */ struct Particle* next;
@@ -891,25 +891,25 @@ typedef struct Particle {
     /* 0x24 */ f32 scaleStep;
     /* 0x28 */ Vec3f worldPosition;
     /* 0x34 */ Vec3f positionOffset;
-    /* 0x40 */ char unk44[0xC];
+    /* 0x40 */ char unk40[0xC];
     /* 0x4C */ Vec3f motionOffset;
     /* 0x58 */ Vec3f motionTarget;
     /* 0x64 */ Vec3f origin;
     /* 0x70 */ f32 stepMagnitude;
     /* 0x74 */ f32 magnitudeStep;
     /* 0x78 */ Vec3f motionStep;
-    /* 0x84 */ char unk88[0xC];
+    /* 0x84 */ char unk84[0xC];
     /* 0x90 */ Vec3s rotation;
     /* 0x96 */ Vec3s rotationStep;
     /* 0x9C */ Vec3s rotationTarget;
-    /* 0xA2 */ s16 unk_A6;
-    /* 0xA4 */ s16 unk_A8;
-    /* 0xA6 */ s16 unk_AA;
-    /* 0xA8 */ s16 unk_AC;
-    /* 0xAA */ s16 unk_AE;
-    /* 0xAC */ s16 unk_B0;
+    /* 0xA2 */ s16 param0; // @unverified: from BattleAnimEffectSlot.param0 at spawn (times spawnIndex for kind 18); per-effect countdown or alpha target
+    /* 0xA4 */ s16 countdown; // @unverified: per-effect countdown, only set and counted down by the particle.c helpers
+    /* 0xA6 */ s16 param1; // @unverified: from BattleAnimEffectSlot.param1 at spawn; per-effect step (palette/alpha approach speed)
+    /* 0xA8 */ s16 spawnIndex; // @unverified: index of the particle within its spawn batch/burst (BattleAnim_InitializeParticleFromEffect, CloneParticleState)
+    /* 0xAA */ s16 scratchA; // @unverified: per-effect scratch value (alpha, angle step, palette index), meaning set by each callback
+    /* 0xAC */ s16 scratchB; // @unverified: per-effect scratch value (env alpha, angle target), meaning set by each callback
     /* 0xAE */ s16 lifecycle;
-    /* 0xB0 */ char unkB4[0x2];
+    /* 0xB0 */ char unkB0[0x2];
     /* 0xB2 */ s16 frameTimer;
     /* 0xB4 */ s16 phase;
     /* 0xB6 */ s16 phaseTimer;
@@ -921,16 +921,16 @@ typedef struct Particle {
     /* 0xBE */ u8 env_g;
     /* 0xBF */ u8 env_b;
     /* 0xC0 */ u8 prim_a;
-    /* 0xC1 */ char unkC5[0x1];
+    /* 0xC1 */ char unkC1[0x1];
     /* 0xC2 */ s8 loopsRemaining;
     /* 0xC3 */ s8 textureFrame;
-    /* 0xC4 */ char unkC8[0x2];
-    /* 0xC6 */ u8 unk_CA;
-    /* 0xC7 */ u8 unk_CB;
-    /* 0xC8 */ u8 unk_CC;
-    /* 0xC9 */ u8 unk_CD;
-    /* 0xCA */ u8 unk_CE;
-    /* 0xCB */ u8 unk_CF;
+    /* 0xC4 */ char unkC4[0x2];
+    /* 0xC6 */ u8 effectList; // @unverified: effect list the particle belongs to; lists 4 and 7 survive BattleAnim_CleanupEffects*
+    /* 0xC7 */ u8 resourceListId; // @unverified: queued resource list id; BattleAnim_StopParticlesForOwnerCategory matches it
+    /* 0xC8 */ u8 anchorMode; // @unverified: selects the origin in BattleAnim_InitializeParticleAnchor/UpdateParticleAnchor
+    /* 0xC9 */ u8 byteParam0; // @unverified: from BattleAnimEffectSlot.byteParam0; 0xFF by default; bone id or alpha target per effect
+    /* 0xCA */ u8 byteParam2; // @unverified: from BattleAnimEffectSlot.byteParam2; per-effect step value
+    /* 0xCB */ u8 byteParam1; // @unverified: from BattleAnimEffectSlot.byteParam1; per-effect palette/color target
     /* 0xCC */ s8 allocated;
 } Particle; // size = 0xD0
 
@@ -1433,21 +1433,21 @@ typedef struct ParticleEmitter {
 typedef void (*func_unk_D_8140E724)(struct Particle*);
 
 typedef struct BattleAnimEffectSlot {
-    /* 0x00 */ func_unk_D_8140E724 unk_00;
-    /* 0x04 */ ParticleDescriptor* unk_04;
-    /* 0x08 */ struct ActivePokemon* unk_08;
-    /* 0x0C */ s16 unk_0C;
-    /* 0x0E */ s16 unk_0E;
-    /* 0x10 */ s16 unk_10;
-    /* 0x12 */ s16 unk_12;
-    /* 0x14 */ s8 unk_14;
-    /* 0x15 */ s8 unk_15;
-    /* 0x16 */ u8 unk_16;
-    /* 0x17 */ u8 unk_17;
-    /* 0x18 */ u8 unk_18;
-    /* 0x19 */ u8 unk_19;
-    /* 0x1A */ u8 unk_1A;
-    /* 0x1B */ u8 unk_1B;
+    /* 0x00 */ func_unk_D_8140E724 updateCallback; // @unverified: copied to Particle.updateCallback at spawn
+    /* 0x04 */ ParticleDescriptor* descriptor; // @unverified: copied to Particle.descriptor at spawn
+    /* 0x08 */ struct ActivePokemon* pokemon; // @unverified: owner, passed to BattleAnim_InitializeParticleFromEffect
+    /* 0x0C */ s16 repeatInterval; // @unverified: reloads delayTimer after each emission (BattleAnim_TickEffectSlots)
+    /* 0x0E */ s16 delayTimer; // @unverified: frames until the next emission, counts down in BattleAnim_TickEffectSlots
+    /* 0x10 */ s16 param0; // @unverified: copied to Particle.param0
+    /* 0x12 */ s16 param1; // @unverified: copied to Particle.param1
+    /* 0x14 */ s8 repeatCount; // @unverified: emissions left; 0x7F repeats forever, -1 emits every interval
+    /* 0x15 */ s8 inUse; // @unverified: nonzero while allocated (BattleAnim_AllocEffectSlot sets -1)
+    /* 0x16 */ u8 anchorMode; // @unverified: emission kind (18, 22-26 are special in BattleAnim_DispatchParticleEmission), else copied to Particle.anchorMode
+    /* 0x17 */ u8 effectList; // @unverified: BattleAnim_GetCurrentEffectList() at creation
+    /* 0x18 */ u8 resourceListId; // @unverified: BattleAnim_GetQueuedResourceListId() at creation
+    /* 0x19 */ u8 byteParam0; // @unverified: copied to Particle.byteParam0; effect state id for kinds 23/25
+    /* 0x1A */ u8 byteParam2; // @unverified: copied to Particle.byteParam2
+    /* 0x1B */ u8 byteParam1; // @unverified: copied to Particle.byteParam1
 } BattleAnimEffectSlot; // size = 0x1C
 
 typedef struct arg1_func_81407874_014_000_014_000_000 {

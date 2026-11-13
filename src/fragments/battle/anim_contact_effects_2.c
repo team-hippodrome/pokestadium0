@@ -506,7 +506,7 @@ void func_82165224(s8 *arg0) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_CallbackDescriptor50BurstEmitter_InitParticle(Particle* arg0) {
-    switch (arg0->unk_A6) {
+    switch (arg0->param0) {
         case 0:
             Particle_SetPosition(arg0, 0.0f, -5.0f, -10.0f);
             break;

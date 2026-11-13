@@ -338,7 +338,7 @@ void func_82143934(s8 *arg0) {
  */
 void BattleAnim_SetupTargetHueChange(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
-    Particle_FieldAE_SetS16_0BF4C(arg0, arg0->unk_A6);
+    Particle_FieldAE_SetS16_0BF4C(arg0, arg0->param0);
     Particle_AdvanceLifecycle(arg0);
 }
 
@@ -382,7 +382,7 @@ void func_82143A18(s8 *arg0) {
  */
 void BattleAnim_SetupUserHueChange(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
-    Particle_FieldAE_SetS16_0BF4C(arg0, arg0->unk_CE);
+    Particle_FieldAE_SetS16_0BF4C(arg0, arg0->byteParam2);
     Particle_AdvanceLifecycle(arg0);
 }
 
@@ -400,7 +400,7 @@ void BattleAnim_RunUserHueChange(Particle* arg0) {
             break;
 
         case 2:
-            if (Particle_FieldAE_Approach_0BF60(arg0, arg0->unk_CD, arg0->unk_AA) != 0) {
+            if (Particle_FieldAE_Approach_0BF60(arg0, arg0->byteParam0, arg0->param1) != 0) {
                 Particle_AdvanceLifecycle(arg0);
             }
             break;
@@ -410,7 +410,7 @@ void BattleAnim_RunUserHueChange(Particle* arg0) {
             break;
 
         case 4:
-            if (Particle_FieldAE_Approach_0BF60(arg0, 0, arg0->unk_AA) != 0) {
+            if (Particle_FieldAE_Approach_0BF60(arg0, 0, arg0->param1) != 0) {
                 Particle_AdvanceLifecycle(arg0);
             }
             break;
@@ -421,7 +421,7 @@ void BattleAnim_RunUserHueChange(Particle* arg0) {
     }
 
     if (Particle_IsRunning(arg0) != 0) {
-        Model_SetMaterialColor(&arg0->pokemon->displayObject, arg0->prim_r, arg0->prim_g, arg0->prim_b, arg0->unk_AE);
+        Model_SetMaterialColor(&arg0->pokemon->displayObject, arg0->prim_r, arg0->prim_g, arg0->prim_b, arg0->scratchA);
     }
 }
 
@@ -468,7 +468,7 @@ void func_82143C10(s8 *arg0) {
  */
 void func_82143CE0(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
-    Particle_FieldAE_SetS16_0BF4C(arg0, arg0->unk_A6);
+    Particle_FieldAE_SetS16_0BF4C(arg0, arg0->param0);
     Particle_AdvanceLifecycle(arg0);
 }
 
@@ -506,7 +506,7 @@ void func_82143D28(s8 *arg0) {
  */
 void func_82143DE8(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
-    Particle_FieldAE_SetS16_0BF4C(arg0, arg0->unk_A6);
+    Particle_FieldAE_SetS16_0BF4C(arg0, arg0->param0);
     Particle_AdvanceLifecycle(arg0);
 }
 
@@ -560,17 +560,17 @@ void BattleAnim_RunIceBeamBlizzardHitHueChange(Particle* arg0) {
             break;
 
         case 2:
-            Particle_ApproachUnkAEThenAdvance(arg0, arg0->unk_A6, arg0->unk_CE);
+            Particle_ApproachUnkAEThenAdvance(arg0, arg0->param0, arg0->byteParam2);
             break;
 
         case 3:
-            if (ParticleGfx_ApproachPrimPalette(arg0, arg0->unk_CD, arg0->unk_AA) != 0) {
+            if (ParticleGfx_ApproachPrimPalette(arg0, arg0->byteParam0, arg0->param1) != 0) {
                 Particle_AdvanceLifecycle(arg0);
             }
             break;
 
         case 4:
-            Particle_ApproachUnkAEThenAdvance(arg0, 0, arg0->unk_CE);
+            Particle_ApproachUnkAEThenAdvance(arg0, 0, arg0->byteParam2);
             break;
 
         case 5:
@@ -579,7 +579,7 @@ void BattleAnim_RunIceBeamBlizzardHitHueChange(Particle* arg0) {
     }
 
     if (Particle_IsRunning(arg0) != 0) {
-        Model_SetMaterialColor(&arg0->pokemon->displayObject, arg0->prim_r, arg0->prim_g, arg0->prim_b, arg0->unk_AE);
+        Model_SetMaterialColor(&arg0->pokemon->displayObject, arg0->prim_r, arg0->prim_g, arg0->prim_b, arg0->scratchA);
     }
 }
 
@@ -588,7 +588,7 @@ void BattleAnim_RunIceBeamBlizzardHitHueChange(Particle* arg0) {
  */
 void func_82144010(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
-    Particle_FieldAE_SetS16_0BF4C(arg0, arg0->unk_A6);
+    Particle_FieldAE_SetS16_0BF4C(arg0, arg0->param0);
     Particle_AdvanceLifecycle(arg0);
 }
 
