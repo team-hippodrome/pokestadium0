@@ -979,7 +979,6 @@ void BattleMenu_DrawScrollingInstructionPanel(void);
 void func_8000A7FC(u16 color);
 /**
  * Runs the order select screen (both sides pick their three Pokemon) for one frame.
- * @src/stage_loader.c
  * Seen in play (2026-11-13) ran every frame on the Free Battle order screen (じゅんばんを きめてください, 1P and
  * COM panels).
  */
