@@ -181,8 +181,8 @@ s32 AudioHeap_SearchPermanentCache(s32 arg0, s32 arg1) {
 
 /**
  * Allocates `size` bytes in the permanent cache for table `x`, id `y`. Name follows the Zelda 64 audio driver, whose loader this matches.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 s32 AudioHeap_AllocPermanent(s32 x, s32 y, s32 size) {
@@ -622,8 +622,8 @@ s32 AudioLoad_Dma();
 
 /**
  * Returns RAM holding the sample bytes at `devAddr`, reusing a cached DMA buffer or starting a new DMA. Name follows the Zelda 64 audio driver, whose loader this matches.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 void* AudioLoad_DmaSampleData(u32 devAddr, u32 size, s32 arg2, u8* dma_index_ref, s32 medium) {
@@ -868,8 +868,8 @@ void AudioLoad_SetSeqLoadStatus(s32 arg0, s32 arg1) {
 extern u8 D_81184654[1];
 /**
  * Sets sample bank `arg0`'s load status unless it is permanent (5). Name follows the Zelda 64 audio driver, whose loader this matches.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 void AudioLoad_SetSampleLoadStatus(s32 arg0, s32 arg1) {
@@ -1034,8 +1034,8 @@ void func_8110CF24(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
 }
 
 /**
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 u8* Audio_CountActiveSoundsByCategory(s32 arg0, s32* arg1) {
@@ -1142,8 +1142,8 @@ void func_811152A4(s32);
 void func_81115254(s8*);
 /**
  * Loads the sequence and its fonts, then initializes player `arg0` to play it. Name follows the Zelda 64 audio driver, whose loader this matches.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 s32 AudioLoad_SyncInitSeqPlayerInternal(s32 arg0, s32 arg1, s32 arg2) {
@@ -1288,8 +1288,8 @@ s32 AudioHeap_AllocCached(s32, s32, s32, s32);
  * allocated. *didAllocate says whether new memory was used (0 when the entry
  * was already cached). The table's load status is updated. Same structure as
  * AudioLoad_SyncLoad in the Ocarina of Time audio library.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name guessed from the code; comment kept.
  */
 s32 AudioLoad_SyncLoad(s32 table_type, s32 id, s32* did_allocate) {
@@ -1386,8 +1386,8 @@ s32 AudioHeap_SearchCaches(s32, M2C_UNK, s32);               /* extern */
 
 /**
  * Looks entry `arg1` of table `arg0` up in the permanent cache, then the other caches. Name follows the Zelda 64 audio driver, whose loader this matches.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 s32 AudioLoad_SearchCaches(s32 arg0, s32 arg1) {
@@ -1446,8 +1446,8 @@ void AudioLoad_RelocateSample(void* sampleP, u32 fontDataAddr, void* relocInfo);
  * lists, each drum's and instrument's samples and envelope, and records the
  * font's drum and instrument lists in D_811858B0. Same structure as
  * AudioLoad_RelocateFont in the Ocarina of Time audio library.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name guessed from the code; comment kept.
  */
 void AudioLoad_RelocateFont(s32 font_id, u32 font_data, void* reloc_info) {

@@ -74,8 +74,8 @@ struct Entry8110EABC* func_8110E9A8(s32, s32, u32, s32, s32, OSMesgQueue*, u32);
  * otherwise memory is allocated by the entry's cache policy and a chunked DMA
  * is started. The table's load status is updated either way. Same structure as
  * AudioLoad_AsyncLoadInner in the Ocarina of Time audio library.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name guessed from the code; comment kept.
  */
 s32 AudioLoad_AsyncLoadInner(s32 table_type, s32 id, s32 n_chunks, s32 ret_data, OSMesgQueue* ret_queue) {
@@ -468,8 +468,8 @@ void func_8110E994(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3);
  * Zero's version of OoT's AudioLoad_ProcessSlowLoads: steps the two slow sample
  * loads, copying at most 0x1000 bytes per call and finishing a load once nothing
  * is left.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name guessed from the code; comment kept.
  */
 void AudioLoad_ProcessSlowLoads(s32 reset_status) {
@@ -734,8 +734,8 @@ typedef struct Sample8110EE3C {
  * data address against the sample bank chosen by its medium. Samples flagged
  * for preloading that are not in RAM are added to D_81184978. Same structure as
  * AudioLoad_RelocateSample in the Ocarina of Time audio library.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name guessed from the code; comment kept.
  */
 void AudioLoad_RelocateSample(Sample8110EE3C** sampleP, s32 font_data_addr, RelocInfo8110EF7C* reloc_info) {

@@ -165,8 +165,8 @@ extern f32 D_FLT_82189350[][4];
 
 /**
  * Returns the model's first size entry from D_FLT_82189350, doubled and divided by 50.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 f32 ActivePokemon_GetSizeRatio(ActivePokemon* active_pokemon) {

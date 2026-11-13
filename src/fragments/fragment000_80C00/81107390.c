@@ -73,8 +73,8 @@ void func_80056730(void*, s32);
 
 /**
  * Sets up the next reverb ring buffer item for update `update_index` of reverb `reverb_index`. Zelda 64 audio driver (synthesis.c), same position and shape.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 void AudioSynth_InitNextRingBuf(s32 chunkLen, s32 update_index, s32 reverb_index) {
@@ -127,8 +127,8 @@ void AudioSynth_InitNextRingBuf(s32 chunkLen, s32 update_index, s32 reverb_index
 
 /**
  * Loads part of a reverb ring buffer into DMEM (both channels). Zelda 64 audio driver.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 void* AudioSynth_LoadRingBufferPart(AudioCmd* cmd, u16 dmem, u16 offset, s32 count, s32 channel) {
@@ -139,8 +139,8 @@ void* AudioSynth_LoadRingBufferPart(AudioCmd* cmd, u16 dmem, u16 offset, s32 cou
 
 /**
  * Saves part of DMEM back into a reverb ring buffer (both channels). Zelda 64 audio driver.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 void* AudioSynth_SaveRingBufferPart(AudioCmd* cmd, u16 dmem, u16 offset, s32 count, s32 channel) {
@@ -161,8 +161,8 @@ extern s32 D_811858E8;
 
 /**
  * Marks voice `voice_index` as not dirty in the later updates of this frame. Zelda 64 audio driver.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 void AudioSynth_DisableSampleStates(s32 update_index, s32 voice_index) {
@@ -185,8 +185,8 @@ extern Rec811077FC* D_81184664;
 extern s32 D_811858E8;
 /**
  * Copies each note's sample state into the per-update state. Zelda 64 audio driver.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 void AudioSynth_SyncSampleStates(u32 arg0) {
@@ -289,8 +289,8 @@ typedef struct Reverb81107AEC {
     }
 /**
  * Loads a reverb's ring buffer samples for this update. Zelda 64 audio driver.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 void* AudioSynth_LoadReverbSamples(AudioCmd* cmd, s32 bufLen, s16 reverbIndex, s16 update_index) {
@@ -420,8 +420,8 @@ AudioCmd* AudioSynth_ProcessSample(s32 noteIndex, struct ZNoteSubEu* noteSubEu, 
 
 /**
  * Builds the commands for one audio update: reverbs, every note, then the mix into the AI buffer. Zelda 64 audio driver.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 AudioCmd* AudioSynth_DoOneAudioUpdate(s32* ai_buf, s32 aiBufLen, AudioCmd* cmd, s32 updateIndex) {
@@ -618,8 +618,8 @@ AudioCmd* AudioSynth_ProcessEnvelope(AudioCmd*, ZNoteSubEu*, ZNoteSynthesisState
 
 /**
  * Builds the commands that decode, resample and mix one note's sample. Zelda 64 audio driver.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 AudioCmd* AudioSynth_ProcessSample(s32 note_index, ZNoteSubEu* noteSubEu, ZNoteSynthesisState* synthesisState, s16* ai_buf,
@@ -953,8 +953,8 @@ AudioCmd* AudioSynth_ProcessSample(s32 note_index, ZNoteSubEu* noteSubEu, ZNoteS
     } while (0)
 /**
  * Adds the final resample command for a note. Zelda 64 audio driver.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 void* AudioSynth_FinalResample(AudioCmd* cmd, s8* arg1, s32 arg2, u16 count, u16 arg4, s32 arg5) {
@@ -984,8 +984,8 @@ typedef struct State8110938C {
 
 /**
  * Adds the envelope (volume ramp, pan, reverb send) commands for a note. Zelda 64 audio driver.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 AudioCmd* AudioSynth_ProcessEnvelope(AudioCmd* cmd, ZNoteSubEu* note_sub_eu, ZNoteSynthesisState* synthesis_state, s32 ai_buf_len, u16 in_buf, s32 headset_pan_settings, s32 flags) {

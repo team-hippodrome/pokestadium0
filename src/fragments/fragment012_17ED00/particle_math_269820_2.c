@@ -1138,8 +1138,8 @@ void Particle_ApplyMotionStepXZ(Particle* arg0) {
 
 /**
  * Adds motionStep.x and .y to motionOffset.x and .y.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Named from the code; not reached in the sweep.
  */
 void Particle_ApplyMotionStepXY(Particle* arg0) {
@@ -1368,8 +1368,8 @@ s32 Particle_Field5C_ApproachY_0A0C4(Particle* arg0, f32 arg1, f32 arg2) {
 
 /**
  * Return 40 percent of the supplied difference for proportional position approach.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 f32 ParticleMath_ScaleApproachStep(f32 arg0) {
@@ -1378,8 +1378,8 @@ f32 ParticleMath_ScaleApproachStep(f32 arg0) {
 
 /**
  * Approach each base position-offset component by 40 percent of its difference when outside a +/-0.01 tolerance.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Particle_ApproachPosition(Particle* arg0, Vec3f arg1) {
@@ -2163,8 +2163,8 @@ s32 Particle_Field7C_DecrementYUntilAtMost_0B0A4(Particle* arg0, f32 arg1, f32 a
 
 /**
  * Multiplies motionStep by `arg1`.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 void Particle_ScaleMotionStep(s8 *arg0, f32 arg1) {
@@ -2195,8 +2195,8 @@ void Particle_Field7C_SetYFromField74AngleX_0B1C4(Particle* arg0) {
 }
 
 /**
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void Particle_SetMotionStepFromRotationXZ(Particle* arg0) {
@@ -2217,8 +2217,8 @@ void Particle_SetMotionStepFromRotationXY(Particle* arg0) {
 
 /**
  * Evaluate the explicit trigonometric component formula and store/add the resulting motion term.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
 void Particle_MotionStep_SetVecFromField74AnglesXZ(Particle* arg0) {
@@ -2405,8 +2405,8 @@ s32 Particle_ApproachScaleTargetThenAdvance(Particle* arg0) {
 /**
  * Steps scaleTarget itself toward arg1 by arg2 (both times the render-context scale); returns 1 on
  * arrival.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name from the code; not reached in the move sweep.
  */
 s32 Particle_StepScaleTarget(Particle* arg0, f32 arg1, f32 arg2) {

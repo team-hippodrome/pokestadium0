@@ -863,8 +863,8 @@ s16 ParticleMath_Atan2XY(Vec3f arg0) {
 
 /**
  * Write the YZ, ZX, and XY atan2 results to the three destination components.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleMath_Vec3ToAngles(Vec3s* arg0, Vec3f arg1) {
@@ -927,8 +927,8 @@ Vec3f* ParticleMath_MakeXZVectorFromAngle(Vec3f* arg0, f32 arg1, s16 arg2) {
 
 /**
  * Apply the explicit X/Y-angle transform to a copied vector and return the destination.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 Vec3f* ParticleMath_RotateVec3fXY(Vec3f* arg0, Vec3f arg1, Vec3s arg4) {
@@ -1016,8 +1016,8 @@ s32 ParticleMath_DistanceScaled(Vec3f arg0, Vec3f arg1, f32 arg2) {
 
 /**
  * Scale end - start to length and return the original distance / length as s32; no zero guard.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 ParticleMath_ScaleDirectionToLength(Vec3f* arg0, Vec3f arg1, Vec3f arg2, f32 arg3) {
@@ -1038,8 +1038,8 @@ s32 ParticleMath_ScaleDirectionToLength(Vec3f* arg0, Vec3f arg1, Vec3f arg2, f32
 
 /**
  * Rotate a +Z vector by independently sampled X/Y angles; this is not a uniform-sphere sampler.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 Vec3f* ParticleMath_RandomDirection(Vec3f* arg0, f32 arg1) {
@@ -1092,8 +1092,8 @@ void func_821385C0(void) {
 
 /**
  * Return the YZ-component atan2 of end - start in that argument order.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s16 ParticleMath_AngleXBetweenPoints(Vec3f arg0, Vec3f arg1) {

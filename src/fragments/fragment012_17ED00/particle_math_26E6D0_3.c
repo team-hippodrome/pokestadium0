@@ -173,8 +173,8 @@ void ParticleGfx_RecolorPrimEnvFromPaletteSetB(Particle* arg0, s16 arg1) {
 
 /**
  * Set the particle's primitive RGB channels from a randomly selected palette index, leaving alpha unchanged.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_RecolorPrimRandomPalette(Particle* arg0) {

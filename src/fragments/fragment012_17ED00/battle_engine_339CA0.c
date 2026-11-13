@@ -69,8 +69,8 @@ void func_8215FAA4(s8 *arg0) {
 }
 
 /**
- * No caller in play (2026-11-13): it is only called from BattleAnim_RunRazorWindHitEffect, which
- * has no caller in the ROM itself.
+ * Called from BattleAnim_RunRazorWindHitEffect, the Razor Wind hit effect's callback (an earlier
+ * no-caller note here was wrong).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetupRazorWindHitEffect(Particle* arg0) {
@@ -123,8 +123,8 @@ void BattleAnim_SetupRazorWindHitEffect(Particle* arg0) {
 }
 
 /**
- * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
- * no function-pointer word in any fragment), so play cannot reach it.
+ * Passed as the effect-slot callback by BattleAnim_InitializeRazorWindHit, which ran when Razor
+ * Wind hit on its second turn (2026-11-13; an earlier no-caller note here was wrong).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_RunRazorWindHitEffect(Particle* arg0) {

@@ -94,8 +94,8 @@ extern s32 D_811858E8;
  * sequences and register numbering (a plain `&= 0xFF7F; |= 0x40` on a byte
  * was one temporary register off). Indexing the array with the loop counter,
  * instead of a separate byte offset, gives the retail loop setup order.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name guessed from the code; comment kept.
  */
 void AudioHeap_DiscardFont(s32 arg0) {
@@ -122,8 +122,8 @@ extern s16 D_811858CC;
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 /**
  * Stops every sequence player that plays sequence `arg0`. Zelda 64 audio driver.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 void AudioHeap_DiscardSequence(s32 arg0)
@@ -396,8 +396,8 @@ void AudioLoad_SetFontLoadStatus(s32, s32);
 
 /**
  * Allocates `size` bytes for entry `id` of a table's persistent or temporary cache, evicting the older temporary entry when needed. Zelda 64 audio driver.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 void* AudioHeap_AllocCached(s32 table_type, s32 size, s32 cache, s32 id) {
@@ -776,8 +776,8 @@ extern s16 D_811373C8[];
  * Copies eight s16 values into arg0 from the table at D_811373C8. The entry is
  * numbered from 1: entry arg1 starts at D_811373C8 + (arg1 - 1) * 16 bytes
  * (8 s16 per entry; the loop is unrolled by four in the retail code).
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name guessed from the code; comment kept.
  */
 void AudioHeap_LoadHighPassFilter(s16* arg0, s32 arg1) {
@@ -792,8 +792,8 @@ void AudioHeap_LoadHighPassFilter(s16* arg0, s32 arg1) {
 
 /**
  * Loads a low-pass, high-pass or band-pass filter from the two cutoffs. Zelda 64 audio driver.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 void AudioHeap_LoadFilter(s16* arg0, s32 arg1, s32 arg2) {

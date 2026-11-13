@@ -2,8 +2,8 @@
 #include "battle_engine_339CA0.h"
 
 /**
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleAnim_CallbackDescriptor26BurstChild(Particle* arg0) {
