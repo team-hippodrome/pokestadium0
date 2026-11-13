@@ -8,6 +8,11 @@ extern const f64 D_DBL_82196260;
 extern const f32 D_FLT_82196268;
 extern f32 D_8219A530;
 
+/**
+ * Returns the Pokémon's scaled model radius times arg1, capped at arg2. Used to pick a
+ * camera distance that fits the Pokémon's size.
+ * @unverified Name from Stadium 1.
+ */
 f32 BattleScene_ScaleCameraDistance(ActivePokemon* arg0, f32 arg1, f32 arg2) {
     f32 temp_fv1 = BattleScene_GetParticipantModelRadiusScaled(arg0) * arg1;
 
@@ -17,6 +22,11 @@ f32 BattleScene_ScaleCameraDistance(ActivePokemon* arg0, f32 arg1, f32 arg2) {
     return temp_fv1;
 }
 
+/**
+ * Counts the scene's substep frame counter up and returns 1 (resetting it) once it
+ * reaches arg0.
+ * @unverified Name from Stadium 1.
+ */
 s32 BattleScene_AdvanceCameraSubstepCounter(s32 arg0) {
     sBattleScene.scene->substepFrameCounter++;
     if (sBattleScene.scene->substepFrameCounter >= arg0) {
@@ -26,6 +36,11 @@ s32 BattleScene_AdvanceCameraSubstepCounter(s32 arg0) {
     return 0;
 }
 
+/**
+ * Counts the scene's step frame timer up and returns 1 (resetting it) once it reaches
+ * frame_limit.
+ * @unverified Name from Stadium 1.
+ */
 s32 BattleScene_AdvanceCameraFrameCounter(s32 frame_limit) {
     sBattleScene.scene->stepFrameTimer++;
     if (sBattleScene.scene->stepFrameTimer >= frame_limit) {
@@ -35,6 +50,11 @@ s32 BattleScene_AdvanceCameraFrameCounter(s32 frame_limit) {
     return 0;
 }
 
+/**
+ * Returns 1 if the scene's step frame timer has reached arg0, otherwise counts it up and
+ * returns 0. Unlike BattleScene_AdvanceCameraFrameCounter it does not reset.
+ * @unverified Name from Stadium 1.
+ */
 s32 BattleScene_AdvanceCameraFrameCounterUntil(s32 arg0) {
     if (sBattleScene.scene->stepFrameTimer >= arg0) {
         return 1;
@@ -43,6 +63,10 @@ s32 BattleScene_AdvanceCameraFrameCounterUntil(s32 arg0) {
     return 0;
 }
 
+/**
+ * Returns 1 if the scene's step frame timer has reached arg0.
+ * @unverified Name from Stadium 1.
+ */
 s32 BattleScene_IsCameraFrameCounterAtLeast(s32 arg0) {
     if (sBattleScene.scene->stepFrameTimer >= arg0) {
         return 1;
@@ -50,18 +74,35 @@ s32 BattleScene_IsCameraFrameCounterAtLeast(s32 arg0) {
     return 0;
 }
 
+/**
+ * Sets which side is acting in the battle scene.
+ * @unverified Name guessed from the code.
+ */
 void BattleScene_SetActivePokemonIndex(s32 arg0) {
     sBattleScene.scene->actingSide = arg0;
 }
 
+/**
+ * Resets the scene's step frame timer.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_ResetCameraFrameCounter(void) {
     sBattleScene.scene->stepFrameTimer = 0;
 }
 
+/**
+ * Resets the scene's substep frame counter.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_ResetCameraSubstepCounter(void) {
     sBattleScene.scene->substepFrameCounter = 0;
 }
 
+/**
+ * Points the camera at (x, y, z) and places the eye distance units away at the given
+ * X and Y rotations.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_SetCameraAtAndEyeFromAngles(CameraNode* camera, f32 x, f32 y, f32 z, f32 distance, s16 rotation_x, s16 rotation_y) {
     Vec3f_SetComponentsDuplicate(&camera->view.targetPosition, x, y, z);
     Camera_ComputeEyeFromAngles(&camera->view.targetPosition, &camera->view.eyePosition, distance, rotation_x, rotation_y);
@@ -180,16 +221,28 @@ void func_82121C3C(s32 arg0) {
     }
 }
 
+/**
+ * Sets the battle scene's camera mode and its phase step.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_SetCameraModeAndStep(s32 camera_mode, s32 camera_step) {
     sBattleScene.scene->mode = camera_mode;
     sBattleScene.scene->phaseStep = camera_step;
 }
 
+/**
+ * Sets the camera's near and far clip planes.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_SetCameraClipPlanes(CameraNode* camera_node, f32 near_plane, f32 far_plane) {
     camera_node->perspective.nearPlane = near_plane;
     camera_node->perspective.farPlane = far_plane;
 }
 
+/**
+ * Sets the scene's transition step and transition style.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_SetCameraSubstate(s32 arg0, u16 arg1) {
     sBattleScene.scene->transitionStep = arg0;
     sBattleScene.scene->transitionStyle = arg1;
@@ -233,6 +286,12 @@ void func_82121DAC(void) {
     }
 }
 
+/**
+ * Sets the camera shake amplitude from the HP the Pokémon just lost (HP minus the value at
+ * 0x7D2, scaled by 450/996), clamped to 6..40, or 0 for no loss, and restarts the shake
+ * phase.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_SetDamageShakeAmplitude(ActivePokemon* arg0) {
     BattleMon* ptr = &arg0->teamRoster->pokemonPicked[arg0->state.rosterIndex];
 
@@ -249,6 +308,11 @@ void BattleScene_SetDamageShakeAmplitude(ActivePokemon* arg0) {
     M2C_FIELD(sBattleScene.scene, s16*, 0x6C) = 0;
 }
 
+/**
+ * Per-frame camera shake: advances the shake phase a quarter turn, decays the amplitude
+ * toward 0, and offsets the eye and target up and sideways by the current swing.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_ApplyCameraShake(CameraNode* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
     f32 sp30;
@@ -275,6 +339,10 @@ void func_82122104(s32 arg0) {
     M2C_FIELD(D_8219A5A0, s16 *, 0x6C) = 0;
 }
 
+/**
+ * Returns 1 if angle arg1 is already within 20 degrees (0xE38) of arg0.
+ * @unverified Name guessed from the code.
+ */
 s32 BattleScene_IsCameraAngleSettled(s16 arg0, s16 arg1) {
     s16 temp_v1;
     s16 var_v1;
@@ -401,44 +469,80 @@ void func_82122458(CameraNode* arg0) {
     }
 }
 
+/**
+ * Zeroes the scene's two camera offset vectors (unk_94 and unk_A0).
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_ClearCameraOffsetVectors(void) {
     Vec3f_SetComponentsDuplicate(&sBattleScene.scene->unk_94, 0.0f, 0.0f, 0.0f);
     Vec3f_SetComponentsDuplicate(&sBattleScene.scene->unk_A0, 0.0f, 0.0f, 0.0f);
 }
 
+/**
+ * Places the camera target arg5 units from anchor arg2 at the given rotations, raised by
+ * arg6 plus a per-species height offset for arg0.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_SetCameraAtFromAnchor(ActivePokemon* arg0, CameraNode* arg1, Vec3f arg2, s16 arg3, s16 arg4, f32 arg5, f32 arg6) {
     Camera_ComputeEyeFromAngles(&arg2, &arg1->view.targetPosition, arg5, arg3, arg4);
     arg1->view.targetPosition.y += arg6;
     arg1->view.targetPosition.y += ((CameraTargetOffsetRow*)D_FLT_82189358)[M2C_FIELD(arg0, s16*, 0x1A)].v;
 }
 
+/**
+ * Places the camera target arg4 units from arg1 at the given rotations, raised by arg5.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_SetCameraAtFromPosition(CameraNode* arg0, Vec3f arg1, s16 arg2, s16 arg3, f32 arg4, f32 arg5) {
     Camera_ComputeEyeFromAngles(&arg1, &arg0->view.targetPosition, arg4, arg2, arg3);
     arg0->view.targetPosition.y += arg5;
 }
 
+/**
+ * Places the camera eye arg4 units from arg1 at the given rotations, raised by arg5.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_SetCameraEyeFromPosition(CameraNode* arg0, Vec3f arg1, s16 arg2, s16 arg3, f32 arg4, f32 arg5) {
     Camera_ComputeEyeFromAngles(&arg1, &arg0->view.eyePosition, arg4, arg2, arg3);
     arg0->view.eyePosition.y += arg5;
 }
 
+/**
+ * Places the camera eye arg3 units from the camera target at the given rotations,
+ * raised by arg4.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_SetCameraEyeFromAt(CameraNode* arg0, s16 arg1, s16 arg2, f32 arg3, f32 arg4) {
     Camera_ComputeEyeFromAngles(&arg0->view.targetPosition, &arg0->view.eyePosition, arg3, arg1, arg2);
     arg0->view.eyePosition.y += arg4;
 }
 
+/**
+ * Like BattleScene_SetCameraEyeFromPosition, but also stores the angles and distance as
+ * the scene's current camera angles.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_SetCameraEyeAndStoreAngles(CameraNode* arg0, Vec3f arg1, s16 arg2, s16 arg3, f32 arg4, f32 arg5) {
     BattleScene_SetCameraAnglesAndDistance(arg2, arg3, arg4);
     Camera_ComputeEyeFromAngles(&arg1, &arg0->view.eyePosition, arg4, arg2, arg3);
     arg0->view.eyePosition.y += arg5;
 }
 
+/**
+ * Like BattleScene_SetCameraEyeFromAt, but also stores the angles and distance as the
+ * scene's current camera angles.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_SetCameraEyeAndStoreAnglesFromAt(CameraNode* arg0, s16 arg1, s16 arg2, f32 arg3, f32 arg4) {
     BattleScene_SetCameraAnglesAndDistance(arg1, arg2, arg3);
     Camera_ComputeEyeFromAngles(&arg0->view.targetPosition, &arg0->view.eyePosition, arg3, arg1, arg2);
     arg0->view.eyePosition.y += arg4;
 }
 
+/**
+ * Camera step that does nothing.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_CameraHelperNop(UNUSED CameraNode* arg0) {
 }
 
@@ -501,6 +605,11 @@ void func_821228B0(CameraNode* arg0, ActivePokemon* arg1) {
     func_821227C0(arg0, arg1);
 }
 
+/**
+ * Moves the camera target a tenth of the way toward the point the Pokémon's sway state
+ * is aimed at, each frame.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_ApproachCameraTarget(CameraNode* arg0, ActivePokemon* arg1) {
     SwayState* ptr = &arg1->modelTransform;
     Vec3f sp50;
@@ -766,6 +875,11 @@ void func_82123314(CameraNode* arg0, ActivePokemon* arg1) {
     }
 }
 
+/**
+ * Eases the camera from where it is toward a shot facing the Pokémon from 3.5 times its
+ * radius (at most 300 units), moving the target an eighth of the way per frame.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_RecenterCameraOnOwner(CameraNode* arg0, ActivePokemon* arg1) {
     Vec3f sp74;
     Vec3f sp68;
@@ -794,6 +908,11 @@ void BattleScene_RecenterCameraOnOwner(CameraNode* arg0, ActivePokemon* arg1) {
     BattleScene_SetCameraEyeFromAt(arg0, sp4E, sp52, gCameraDistTarget, 0.0f);
 }
 
+/**
+ * Eases the camera distance toward 8 times the Pokémon's radius (at most 500 units) and
+ * its X rotation toward 20 degrees.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_ApproachCameraZoom(CameraNode* arg0, ActivePokemon* arg1) {
     s16 sp26;
     s16 sp24;
@@ -830,6 +949,11 @@ void func_82123684(CameraNode* arg0, ActivePokemon* arg1) {
     BattleScene_SetCameraEyeFromAt(arg0, sp36, sp3A, gCameraDistTarget, 0.0f);
 }
 
+/**
+ * Wide shot of the Pokémon: target on its anchor, eye 8 times its radius away (at most
+ * 300 units) along the direction it faces.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_SetCameraOwnerWideShot(CameraNode* arg0, ActivePokemon* arg1) {
     f32 sp3C;
 
@@ -888,6 +1012,10 @@ void BattleScene_SetCameraPresetLowClose(CameraNode* arg0, ActivePokemon* arg1) 
     }
 }
 
+/**
+ * Shot of the Pokémon from the front, 3.5 times its radius away (at most 300 units).
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_CameraShotTargetClose(CameraNode* arg0, ActivePokemon* arg1) {
     BattleAnim_GetOwnerDefaultAnchorPosition(arg1, &sBattleScene.scene->unk_D0);
     gCameraDistTarget = BattleScene_ScaleCameraDistance(arg1, 3.5f, 300.0f);
@@ -902,6 +1030,11 @@ void func_82123D4C(CameraNode* arg0, ActivePokemon* arg1) {
     BattleScene_SetCameraEyeFromPosition(arg0, sBattleScene.scene->unk_D0, 0, BattleScene_GetParticipantFacingAngle(arg1), gCameraDistTarget, 0.0f);
 }
 
+/**
+ * Shot of the Pokémon from 5 times its radius away (at most 400 units), 20 degrees off the
+ * side it faces.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_CameraShotTargetHigh(CameraNode* arg0, ActivePokemon* arg1) {
     BattleAnim_GetOwnerDefaultAnchorPosition(arg1, &sBattleScene.scene->unk_D0);
     gCameraDistTarget = BattleScene_ScaleCameraDistance(arg1, 5.0f, 400.0f);
