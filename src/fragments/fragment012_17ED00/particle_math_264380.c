@@ -500,53 +500,90 @@ void func_8216A0E8(void* img, s32 width, s32 height) {
     gDPLoadTile(gDisplayListHead++, G_TX_LOADTILE, 0, 0, (width - 1) << G_TEXTURE_IMAGE_FRAC, (height - 1) << G_TEXTURE_IMAGE_FRAC);
 }
 
+/**
+ * Adds a 32-bit texture block load to the display list.
+ * @unverified Name from Stadium 1.
+ */
 void ParticleGfx_LoadTextureBlock32(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
                    s32 shiftt) {
     gDPLoadTextureBlock(gDisplayListHead++, texture, fmt, G_IM_SIZ_32b, width, height, 0, cms, cmt, masks, maskt,
                         shifts, shiftt);
 }
 
+/**
+ * Adds a 32-bit texture tile load to the display list.
+ * @unverified Name from Stadium 1.
+ */
 void ParticleGfx_LoadTextureTile32(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
                    s32 shiftt) {
     gDPLoadTextureTile(gDisplayListHead++, texture, fmt, G_IM_SIZ_32b, width, 0, 0, 0, width - 1, height - 1, 0, cms,
                        cmt, masks, maskt, shifts, shiftt);
 }
 
+/**
+ * Adds a 16-bit texture block load to the display list.
+ * @unverified Name from Stadium 1.
+ */
 void ParticleGfx_LoadTextureBlock16(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
                    s32 shiftt) {
     gDPLoadTextureBlock(gDisplayListHead++, texture, fmt, G_IM_SIZ_16b, width, height, 0, cms, cmt, masks, maskt,
                         shifts, shiftt);
 }
 
+/**
+ * Adds a 16-bit texture tile load to the display list.
+ * @unverified Name from Stadium 1.
+ */
 void ParticleGfx_LoadTextureTile16(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
                    s32 shiftt) {
     gDPLoadTextureTile(gDisplayListHead++, texture, fmt, G_IM_SIZ_16b, width, 0, 0, 0, width - 1, height - 1, 0, cms,
                        cmt, masks, maskt, shifts, shiftt);
 }
 
+/**
+ * Adds an 8-bit texture block load to the display list.
+ * @unverified Name from Stadium 1.
+ */
 void ParticleGfx_LoadTextureBlock8(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
                    s32 shiftt) {
     gDPLoadTextureBlock(gDisplayListHead++, texture, fmt, G_IM_SIZ_8b, width, height, 0, cms, cmt, masks, maskt, shifts,
                         shiftt);
 }
 
+/**
+ * Adds an 8-bit texture tile load to the display list.
+ * @unverified Name from Stadium 1.
+ */
 void ParticleGfx_LoadTextureTile8(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
                    s32 shiftt) {
     gDPLoadTextureTile(gDisplayListHead++, texture, fmt, G_IM_SIZ_8b, width, 0, 0, 0, width - 1, height - 1, 0, cms,
                        cmt, masks, maskt, shifts, shiftt);
 }
 
+/**
+ * Adds a 4-bit texture block load to the display list.
+ * @unverified Name from Stadium 1.
+ */
 void ParticleGfx_LoadTextureBlock4(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
                    s32 shiftt) {
     gDPLoadTextureBlock_4b(gDisplayListHead++, texture, fmt, width, height, 0, cms, cmt, masks, maskt, shifts, shiftt);
 }
 
+/**
+ * Adds a 4-bit texture tile load to the display list.
+ * @unverified Name from Stadium 1.
+ */
 void ParticleGfx_LoadTextureTile4(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
                    s32 shiftt) {
     gDPLoadTextureTile_4b(gDisplayListHead++, texture, fmt, width, 0, 0, 0, width - 1, height - 1, 0, cms, cmt, masks,
                           maskt, shifts, shiftt);
 }
 
+/**
+ * Adds a 4-bit texture block load into TMEM address tmem and render tile rtile to the
+ * display list.
+ * @unverified Name from Stadium 1.
+ */
 void ParticleGfx_LoadTextureMultiBlock4(u8* texture, s32 tmem, s32 rtile, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks,
                    s32 maskt, s32 shifts, s32 shiftt) {
     gDPLoadMultiBlock_4b(gDisplayListHead++, texture, tmem, rtile, fmt, width, height, 0, cms, cmt, masks, maskt,

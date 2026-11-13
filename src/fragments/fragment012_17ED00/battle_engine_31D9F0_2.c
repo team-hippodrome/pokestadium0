@@ -193,6 +193,11 @@ void BattleAnim_RunFireBreathFlameFading(Particle* arg0) {
     }
 }
 
+/**
+ * Lifecycle init: quarter scale, small random turn about Y, palette color 0x17, delayed 2
+ * frames per burst index.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_SetupUnusedDescriptor4FColorCycleScaleFadeVariant(Particle* arg0) {
     UNUSED s32 pad[3]; // FAKE: stack padding
     s16 sp22 = Particle_FieldAC_GetS16_0C038(arg0);
@@ -206,6 +211,11 @@ void BattleAnim_SetupUnusedDescriptor4FColorCycleScaleFadeVariant(Particle* arg0
     Particle_AdvanceLifecycle(arg0);
 }
 
+/**
+ * Motion steps for the particle above: after 2 frames tilts it about Z, then keeps
+ * curving it about X while it moves.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_MotionUnusedDescriptor4FColorCycleScaleFadeVariant(Particle* arg0) {
     switch (arg0->phase) {
         case 1:
@@ -225,6 +235,11 @@ void BattleAnim_MotionUnusedDescriptor4FColorCycleScaleFadeVariant(Particle* arg
     }
 }
 
+/**
+ * Particle callback: after the delay shows the particle, loops its 8 texture frames and
+ * runs the motion steps until it fades.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_CallbackUnusedDescriptor4FColorCycleScaleFadeVariant(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -570,6 +585,11 @@ void BattleAnim_RunPsybeamHitSparkDrift(Particle* arg0) {
     Particle_Field94_AddZ_0A5B0(arg0, 0x1000);
 }
 
+/**
+ * Particle callback: grows an expanding hit spark to 8 times its size, then fades it,
+ * picking a random color every 4 frames.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_CallbackUnusedGrowFadeVariant(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -730,6 +750,11 @@ void BattleAnim_FireSpinParticleUpdate(s8 *arg0) {
     }
 }
 
+/**
+ * Lifecycle init: full scale, raised 10 units, palette color 0x1A, starting angle spread
+ * over 18 steps by burst index.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_SetupUnusedVariant2(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
 
@@ -744,6 +769,11 @@ void BattleAnim_SetupUnusedVariant2(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
+/**
+ * Particle callback: shows the particle and moves it on a circle of radius 50 until it
+ * finishes.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_CallbackUnusedVariant2(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 3:
@@ -2252,6 +2282,10 @@ void BattleAnim_InitializeFireSpinHitFlames(void) {
 void func_821491CC(void) {
 }
 
+/**
+ * Init hook for start effects that need no setup.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_DefaultStartEffect_Init(void) {
 }
 
@@ -2276,6 +2310,10 @@ void BattleAnim_InitializeEggBombHit(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0x18, BattleAnim_CallbackEndEffects40And54Descriptor46SpreadScaleFade, &D_8218E7B0, 0, 8, 0x11, 9, 0, 0);
 }
 
+/**
+ * Init hook for end effects that need no setup.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_DefaultEndEffect_Init(void) {
 }
 

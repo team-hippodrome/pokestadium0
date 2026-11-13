@@ -44,6 +44,11 @@ s32 func_8210C708(s8 *arg0) {
     return 0;
 }
 
+/**
+ * Takes the trainer index at 0x7B8 as the commanding trainer (0x7B9) and uses that
+ * trainer's controller port for this Pokémon.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_SelectActiveController(ActivePokemon* arg0) {
     ActivePokemonState* ptr = &arg0->state;
 
@@ -318,6 +323,11 @@ s32 func_8210CCDC(s8 *arg0, M2C_UNK arg1)
   return 0;
 }
 
+/**
+ * Locks in a forced repeat of the Pokémon's current move (for example a multi-turn move)
+ * after the usual delay.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_ConfirmForcedMoveRepeat(ActivePokemon* arg0) {
     ActivePokemonState* ptr = &arg0->state;
 
@@ -342,6 +352,11 @@ void func_8211F274();
 M2C_UNK ActivePokemon_ShowCaption();
 extern s32 D_8218C6FC;
 
+/**
+ * Returns 1 if the chosen party member has HP left; otherwise plays the error sound,
+ * shows a caption and returns 0.
+ * @unverified Name from Stadium 1.
+ */
 s32 BattleScene_ValidateSelectedPartyMember(ActivePokemon* arg0) {
     if (arg0->sessionTeams->teamMember[M2C_FIELD(arg0, u8*, 0x7B9)]->pokemonPicked[arg0->state.actionChosen].hp != 0) {
         return 1;
@@ -693,6 +708,11 @@ s32 func_8210C778(ActivePokemon*);
 void func_8210D6BC(ActivePokemon* active_pokemon);
 void BattleMenu_UpdateSwitchMenu(ActivePokemon* active_pokemon);
 void BattleMenu_UpdateSurrenderPrompt(ActivePokemon* active_pokemon);
+/**
+ * Reads the player's command menu input for this turn. Returns 1 once an action has been
+ * chosen.
+ * @unverified Name from Stadium 1.
+ */
 s32 BattleScene_HandlePlayerActionInput(ActivePokemon* arg0) {
     ActivePokemonState* opponent_state = &sActivePokemon[BattleScene_GetParticipantSideIndex(arg0) == 0]->state;
 
@@ -721,6 +741,11 @@ s32 BattleScene_HandlePlayerActionInput(ActivePokemon* arg0) {
     return 0;
 }
 
+/**
+ * Collects the human player's action for the turn: handles a fainted switch, otherwise
+ * reads the command menu unless the Pokémon is locked into a move, in which case the
+ * repeat is confirmed.
+ */
 void BattleScene_CollectPlayerAction(ActivePokemon* arg0, ActivePokemon* arg1) {
     UNUSED s32 pad; // FAKE: stack padding
     BattleMonRuntime* sp20 = &arg0->state.runtime;
@@ -840,6 +865,10 @@ s32 BattleScene_HandleCpuFaintedSwitch(ActivePokemon* arg0, ActivePokemon* arg1)
     return 0;
 }
 
+/**
+ * Locks in a COM Pokémon's forced repeat of its current move after the usual delay.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_CompleteCpuForcedAction(ActivePokemon* arg0, UNUSED ActivePokemon* arg1) {
     ActivePokemonState* ptr = &arg0->state;
 
@@ -881,6 +910,12 @@ void BattleScene_AutoConfirmCpuMove(ActivePokemon* arg0, ActivePokemon* arg1) {
 }
 
 s32 BattleMenu_MustStruggle(ActivePokemon* arg0);
+/**
+ * Applies the COM's chosen move (a slot under 4) on its thinking timer: at frame 30 it
+ * opens Fight with a sound, and at frame 90 (or 10 once the player has locked in) it picks
+ * the move, or Struggle when no move has PP.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_ApplyCpuChoice(ActivePokemon* arg0, ActivePokemon* arg1) {
     ActivePokemonState* sp18;
     ActivePokemonState* sp14;
@@ -917,6 +952,11 @@ void BattleScene_ApplyCpuChoice(ActivePokemon* arg0, ActivePokemon* arg1) {
     }
 }
 
+/**
+ * Applies the COM's choice once its thinking delay is over when the choice is a switch
+ * (4 or more). Returns 1 if it applied one.
+ * @unverified Name from Stadium 1.
+ */
 s32 BattleScene_ApplyCpuSwitchChoice(ActivePokemon* arg0, ActivePokemon* arg1) {
     ActivePokemonState* sp1C = &arg0->state;
     ActivePokemonState* sp18 = &arg1->state;
@@ -954,6 +994,11 @@ extern s32 D_8439013C;
 extern s32 D_84390138;
 extern s32 D_82199EBC;
 s32 BattleAi_ChooseTurnAction(s32, s32, s32, s32, s8*);
+/**
+ * On the first frame of the COM's thinking delay, runs the COM AI once to pick its turn
+ * action.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_TriggerCpuChoice(s32 arg0, s32 arg1, s8* arg2, s8* arg3, ActivePokemon* arg4) {
     if (D_FLT_82199EB0 == 1.0f) {
         if (D_82199EBC == 0) {
@@ -965,6 +1010,10 @@ void BattleScene_TriggerCpuChoice(s32 arg0, s32 arg1, s8* arg2, s8* arg3, Active
 
 extern f32 D_82199EB0;
 extern s32 D_82199EBC;
+/**
+ * Collects the COM's action for the turn: handles a fainted switch, otherwise runs the COM
+ * AI and applies its move or switch, or confirms a forced repeat.
+ */
 s32 BattleScene_CollectCpuAction(ActivePokemon* arg0, ActivePokemon* arg1) {
     BattleMonRuntime* sp34 = &arg0->state.runtime;
     BattleMonRuntime* sp30 = &arg1->state.runtime;
