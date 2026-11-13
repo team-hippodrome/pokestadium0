@@ -266,21 +266,39 @@ s32 BattleAnim_DefaultEndEffect_CompleteImmediately(void);
 void func_8216DA50(void);
 void func_8216DA58(void);
 
+/**
+ * Empty.
+ */
 void func_8216D990(void) {
 }
 
+/**
+ * Empty.
+ */
 void func_8216D998(void) {
 }
 
+/**
+ * Empty.
+ */
 void func_8216D9A0(void) {
 }
 
+/**
+ * Empty.
+ */
 void func_8216D9A8(void) {
 }
 
+/**
+ * Empty.
+ */
 void func_8216D9B0(void) {
 }
 
+/**
+ * Empty.
+ */
 void func_8216D9B8(void) {
 }
 
@@ -293,9 +311,15 @@ void func_8216D9B8(void) {
 void BattleScene_IntroStepNop(UNUSED CameraNode* arg0) {
 }
 
+/**
+ * Empty.
+ */
 void func_8216D9C8(UNUSED s32 arg0) {
 }
 
+/**
+ * Empty.
+ */
 void func_8216D9D0(void) {
 }
 
@@ -318,6 +342,9 @@ void BattleAnim_ReinitAuxiliaryEffects(void) {
     AuxiliaryEffect_Init();
 }
 
+/**
+ * Empty.
+ */
 void func_8216DA30(void) {
 }
 
@@ -347,8 +374,14 @@ s32 BattleAnim_DefaultEndEffect_CompleteImmediately(void) {
     return -1;
 }
 
+/**
+ * Empty.
+ */
 void func_8216DA50(void) {
 }
 
+/**
+ * Empty.
+ */
 void func_8216DA58(void) {
 }

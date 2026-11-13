@@ -26,6 +26,9 @@ void BattleScene_BRollCameraUpdateRotatingArenaOverview(CameraNode* arg0);
 
 void BattleScene_SelectNextBRollCameraShot(CameraNode* arg0);
 
+/**
+ * Empty B-roll camera step.
+ */
 void func_8211F580(void) {
 }
 
@@ -124,6 +127,11 @@ void BattleScene_InitializeBattlePresentation(CameraNode* arg0) {
 
 s32 func_8211F644(ActivePokemon*, CameraNode*);
 void func_82104C68(ActivePokemon*, s32);
+/**
+ * B-roll shot setup: clip planes 20-4000, message mode 0; once the acting Pokemon can be
+ * filmed, aims the camera at it (func_821351F8), starts its model reaction 0x10 and advances
+ * the phase step.
+ */
 void func_8211FA34(CameraNode* arg0) {
     ActivePokemon* pokemon;
 
@@ -138,6 +146,9 @@ void func_8211FA34(CameraNode* arg0) {
     }
 }
 
+/**
+ * Same as func_8211FA34 with message mode 1.
+ */
 void func_8211FAC4(CameraNode* arg0) {
     ActivePokemon* pokemon;
 
@@ -154,6 +165,11 @@ void func_8211FAC4(CameraNode* arg0) {
 
 f32 BattleScene_GetParticipantHeight(ActivePokemon*);
 void BattleCamera_CaptureModelOrbit(ActivePokemon*, CameraNode*);
+/**
+ * B-roll shot setup: frames the acting Pokemon from the front, aimed 1.5 heights above its
+ * anchor at a size-scaled distance, starts its model reaction 0x10, captures the orbit and
+ * advances the phase step.
+ */
 void func_8211FB54(CameraNode* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
     f32 dist;
@@ -177,6 +193,11 @@ void func_8211FB54(CameraNode* arg0) {
     }
 }
 
+/**
+ * B-roll shot setup with random framing: distance from the model radius scaled by a random
+ * factor (at most 500), a random height and a random angle up to about 180 degrees around
+ * the front; starts model reaction 1 and captures the orbit. Message mode 0.
+ */
 void func_8211FCC8(CameraNode* arg0) {
     UNUSED s32 pad[2]; // FAKE: stack padding
     f32 sp4C;
@@ -201,6 +222,9 @@ void func_8211FCC8(CameraNode* arg0) {
     }
 }
 
+/**
+ * Same as func_8211FCC8 with message mode 1.
+ */
 void func_8211FF08(CameraNode* arg0) {
     UNUSED s32 pad[2]; // FAKE: stack padding
     f32 sp4C;
@@ -289,6 +313,10 @@ void func_821202AC(CameraNode* arg0) {
     }
 }
 
+/**
+ * B-roll shot setup: puts the acting Pokemon in state row 0x10 and frames it from the front
+ * at a wide distance (8 times its size, at least 300), then advances the phase step.
+ */
 void func_82120418(CameraNode* arg0) {
     ActivePokemon* ap;
 
@@ -305,6 +333,10 @@ void func_82120418(CameraNode* arg0) {
 }
 
 void BattleCamera_CaptureModelOrbit(ActivePokemon*, CameraNode*);
+/**
+ * Same as func_82120418 at a closer distance (3.5 times its size) and captures the model
+ * orbit.
+ */
 void func_8212054C(CameraNode* arg0) {
     ActivePokemon* ap;
 
@@ -322,6 +354,10 @@ void func_8212054C(CameraNode* arg0) {
 }
 
 void func_8212054C(CameraNode*);
+/**
+ * When the acting Pokemon's model type is 0x71 or 0x79, jumps the phase step to 22 and runs
+ * the close shot func_8212054C, returning 1. Otherwise returns 0.
+ */
 s32 func_8212068C(UNUSED s32 arg0, CameraNode* arg1) {
     ActivePokemon* p = sActivePokemon[sBattleScene.scene->actingSide];
 
@@ -555,6 +591,10 @@ void func_82120C44(CameraNode* arg0) {
 void BattleScene_SelectNextBRollCameraShot(CameraNode*);
 s32 func_82135734(CameraNode*, ActivePokemon*);
 s32 func_821217DC(M2C_UNK);
+/**
+ * B-roll hold step: moves to the next shot when the acting Pokemon can't be filmed, when its
+ * orbit finishes (func_82135734), or after 90 frames outside scene mode 9.
+ */
 void func_82120D94(CameraNode* arg0) {
     ActivePokemonState* st = &sActivePokemon[sBattleScene.scene->actingSide]->state;
 
@@ -669,6 +709,10 @@ void BattleScene_BRollCameraUpdatePresetHold(CameraNode* arg0) {
 
 s32 func_82135734(CameraNode*, ActivePokemon*);
 void func_8212188C(void);
+/**
+ * Steps the orbit of the acting Pokemon; when scene byte 1 is 16, clears the message state
+ * and jumps the phase step to 27.
+ */
 void func_8212116C(CameraNode* arg0) {
     func_82135734(arg0, sActivePokemon[sBattleScene.scene->actingSide]);
     if (M2C_FIELD(sBattleScene.scene, s8*, 1) == 0x10) {
@@ -680,6 +724,9 @@ void func_8212116C(CameraNode* arg0) {
 s32 func_821217DC(M2C_UNK);                         /* extern */
 extern s8 *D_8219A5A0;
 
+/**
+ * After 440 frames, sets the phase step to 29.
+ */
 void func_821211D4(s32 arg0) {
     if (func_821217DC(0x1B8) != 0) {
         M2C_FIELD(D_8219A5A0, s32 *, 0x20) = 0x1D;
@@ -699,6 +746,10 @@ void func_821211D4(s32 arg0) {
 extern u8* D_800603C0;
 void Audio_FadeCategoriesAndStreams(s32 arg0);
 
+/**
+ * Waits for a button press (A, B, Z, L, R or C) on controller 1; then fades audio category 1
+ * and sets scene+0x40 to 3. Keeps clip planes 20-4000.
+ */
 void func_8212120C(CameraNode* arg0) {
     func_82121D78(arg0, 20.0f, 4000.0f);
     if (*(u16*)(D_800603C0 + 8) & 0xE03F) {
