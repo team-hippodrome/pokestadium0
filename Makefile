@@ -15,7 +15,7 @@ $(error Only VERSION=jp is supported)
 endif
 .DEFAULT_GOAL := rom
 .NOTPARALLEL:
-.PHONY: all rom setup venv extract init diff-init test clean distclean coverage
+.PHONY: all rom shift-test setup venv extract init diff-init test clean distclean coverage
 all: rom
 
 venv:
@@ -45,6 +45,13 @@ rom:
 EN_FONT_ROM ?= baseroms/us/baserom.z64
 en: rom
 	$(PYTHON) tools/fonts_en.py patch --rom build/pokestadium0-jp.z64 --us $(EN_FONT_ROM)
+
+# Moves every piece of every image by SHIFT bytes and checks that each address followed: the
+# proof that the build relocates. A shiftable ROM to edit is just `make rom COMPARE=0`.
+SHIFT ?= 16
+shift-test:
+	@test -f assets/production/manifest.json || { echo 'Run make init first'; exit 1; }
+	$(PYTHON) tools/production.py build --cc $(IDO_CC) --cc71 $(IDO71_CC) --prefix $(MIPS_BINUTILS_PREFIX) --jobs $(JOBS) --shift $(SHIFT)
 
 diff-init: rom
 	@echo 'Per-image ELF objects, generated linker scripts and maps: build/production/'
