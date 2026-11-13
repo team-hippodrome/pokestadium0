@@ -679,7 +679,7 @@ void Battle_CheckAllBroughtFainted_PoisonBurn(ActivePokemon* arg0) {
     }
 
     if (var_s2 == 0) {
-        Battle_ResetEntityState(arg0);
+        Battle_FormatDamageComment(arg0);
         ptr1->unk_2D = 0x12;
     } else {
         Battle_HandleFaint(arg0);
@@ -712,7 +712,7 @@ void Battle_CheckAllBroughtFainted_Status(ActivePokemon* arg0) {
     }
 
     if (var_s2 == 0) {
-        Battle_ResetEntityState(arg0);
+        Battle_FormatDamageComment(arg0);
         ptr1->unk_2D = 0x12;
     } else {
         Battle_HandleFaint(arg0);
@@ -748,7 +748,7 @@ void Battle_CheckAllBroughtFainted_PendingHp(ActivePokemon* arg0) {
     }
 
     if (var_s2 == 0) {
-        Battle_ResetEntityState(arg0);
+        Battle_FormatDamageComment(arg0);
         ptr1->unk_2D = 0x12;
     } else {
         Battle_HandleFaint(arg0);
@@ -785,7 +785,7 @@ void Battle_CheckAllBroughtFainted_Hp(ActivePokemon* arg0) {
     }
 
     if (var_s2 == 0) {
-        Battle_ResetEntityState(arg0);
+        Battle_FormatDamageComment(arg0);
         ptr1->unk_2D = 0x12;
     } else {
         Battle_HandleFaint(arg0);
@@ -965,7 +965,7 @@ void BeginBattleForEntity(ActivePokemon* arg0) {
     sBattleUser = ptr1;
     sBattleTarget = ptr2;
 
-    Battle_ResetEntityState(arg0);
+    Battle_FormatDamageComment(arg0);
     Vec3f_SetComponentsDuplicate(&arg0->modelTransform.unk_00, 0.0f, 0.0f, 0.0f);
     Vec3f_SetComponentsDuplicate(&arg0->modelTransform.rotation, 0.0f, 0.0f, 0.0f);
     Battle_InitPokemonRuntimeState(arg0);

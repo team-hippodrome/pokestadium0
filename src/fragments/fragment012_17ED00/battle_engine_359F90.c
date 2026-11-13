@@ -48,7 +48,7 @@ void func_82111870(void);
 
 u8 Battle_Random(void);
 void ComputePokemonStat(s32 arg0, BattleMon* arg1);
-void Battle_IncrementMoveUsage(void);
+void Battle_RefundSelectedMovePp(void);
 
 /**
  * Invoke the stored-stat calculator for selectors 0 through 4, preserving its original range.
@@ -764,7 +764,13 @@ void Battle_PrintMoveFailureText(void) {
     }
 }
 
-void Battle_IncrementMoveUsage(void) {
+/**
+ * Gives back one PP of the selected move, on both the battle copy (sBattleUser) and the roster
+ * copy. Metronome calls it so that only the move it pulls costs PP. Was misnamed
+ * Battle_IncrementMoveUsage.
+ * @unverified Named from the code; the sweep saw it run for Metronome but did not read the PP.
+ */
+void Battle_RefundSelectedMovePp(void) {
     ActivePokemonState* state;
     BattleMon* mon;
 
@@ -783,7 +789,7 @@ void Battle_IncrementMoveUsage(void) {
 s32 Battle_Effect_Metronome(void) {
     s32 move_pulled;
 
-    Battle_IncrementMoveUsage();
+    Battle_RefundSelectedMovePp();
     do {
         do {
             move_pulled = Battle_Random();

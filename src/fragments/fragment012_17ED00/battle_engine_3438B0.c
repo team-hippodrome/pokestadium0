@@ -2068,7 +2068,7 @@ void BattleScene_Phase10(CameraNode* arg0) {
                 BattleMessage_ShowForSide(D_8219A520 + 0x2C8, !sBattleScene.scene->actingSide);
                 sBattleScene.scene->phaseStep += 1;
             }
-
+            /* fallthrough */
         case 2:
             if (BattleScene_AdvanceCameraFrameCounter(0x3C) != 0) {
                 func_8211EE8C();

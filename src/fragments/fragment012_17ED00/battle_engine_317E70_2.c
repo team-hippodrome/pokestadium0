@@ -80,7 +80,7 @@ void BattleAnim_SpawnBatchedParticles(s8* arg0);
 void BattleAnim_CleanupEffectsRetainingCategories47(void);
 void BattleAnim_CleanupEffectsRetainingCategory4(void);
 void BattleAnim_ClearEffectCallbacks(void);
-void BattleAnim_SetEffectStateFlag(s32 arg0);
+void BattleAnim_SetEffectState(s32 arg0);
 Particle* Particle_Alloc(void);
 s32 Particle_CountActive(void);
 s32 Particle_IsInactive(s8 *arg0);
@@ -758,7 +758,7 @@ void BattleAnim_DispatchParticleEmission(BattleAnimEffectSlot* arg0) {
             break;
 
         case 23:
-            BattleAnim_SetEffectStateFlag(arg0->unk_19);
+            BattleAnim_SetEffectState(arg0->unk_19);
             break;
 
         case 25:

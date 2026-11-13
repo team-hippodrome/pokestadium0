@@ -330,7 +330,7 @@ void FirstClearBonus_InitState(void);
 void func_8216DA50(void);
 void FirstClearBonus_DrawDialogFrame(s16 arg0, s16 arg1, s16 arg2, s16 arg3, u8 arg4, u8 arg5, u8 arg6, u8 arg7);
 void FirstClearBonus_ShowDialogBox(void);
-void FirstClearBonus_HideDialogBox(void);
+void BattleAnim_ClearEffectState(void);
 s32 FirstClearBonus_RevealNextChar(void);
 void FirstClearBonus_DrawDialogBox(void);
 void FirstClearBonus_DrawDialogText(void);

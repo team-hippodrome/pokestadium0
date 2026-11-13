@@ -124,7 +124,14 @@ extern s32 D_8218C79C;
 extern s32 D_8218C7A0;
 extern s32 D_8218C7A4;
 extern char D_8219544C[];
-void Battle_ResetEntityState(ActivePokemon* active_pokemon) {
+/**
+ * Formats the comment on the hit that just landed from the share of the target's max HP lost
+ * (unk_28, the HP before the hit, minus hp, as a percentage): message 0x25 for 0%, 0x26 under 30%,
+ * 0x27 under 70% and 0x28 for 70% or more. Adds message 0 when state.unk_2D is 0x10.
+ * Was misnamed Battle_ResetEntityState.
+ * @unverified Named from the code; not checked in play.
+ */
+void Battle_FormatDamageComment(ActivePokemon* active_pokemon) {
     ActivePokemonState* sp1C = &sActivePokemon[0]->state;
     ActivePokemonState* sp18 = &sActivePokemon[1]->state;
     BattleMonRuntime* temp_a1 = &sActivePokemon[0]->state.runtime;

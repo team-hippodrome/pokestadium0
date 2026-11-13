@@ -35,7 +35,7 @@ void Particle_SetPrimAlphaIfNotSentinel(Particle* arg0, u8 arg1);
 void Particle_SetFieldOffsetAAIfNotSentinel(Particle* arg0, s16 arg1);
 s16 Particle_FieldAA_GetS16_0C068(Particle* arg0);
 s16 Particle_GetUnkAA(Particle* arg0);
-void FirstClearBonus_HideDialogBox(void);
+void BattleAnim_ClearEffectState(void);
 
 void Particle_SetPrimAlpha(s8 *arg0, char arg1);
 void Particle_FieldA6_SetS16_0BCA8(Particle* arg0, s16 arg1);
@@ -204,16 +204,23 @@ s16 Particle_GetUnkA8(s8 *arg0) {
 }
 
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Sets the battle animation effect state word D_8219A82C. BattleAnim_ClearEffectState and
+ * BattleAnim_GetEffectState clear and read it.
+ * @unverified Named from the code.
  */
-void BattleAnim_SetEffectStateFlag(s32 arg0) {
+void BattleAnim_SetEffectState(s32 arg0) {
     (*(s32 *)&D_8219A82C) = arg0;
 }
 
-void FirstClearBonus_HideDialogBox(void) {
+/**
+ * Clears D_8219A82C.unk_00, the battle animation effect state. Was misnamed
+ * FirstClearBonus_HideDialogBox.
+ * @unverified Named from the code.
+ */
+void BattleAnim_ClearEffectState(void) {
     D_8219A82C.unk_00 = 0;
 }
 
-s32 func_8213C4C4(void) {
+s32 BattleAnim_GetEffectState(void) {
     return (*(s32 *)&D_8219A82C);
 }
