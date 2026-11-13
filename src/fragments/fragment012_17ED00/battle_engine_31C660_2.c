@@ -19,7 +19,7 @@ void BattleAnim_SetupDescriptor25PaletteFadeIn(Particle* arg0);
  * - A flame-emitting move (Flamethrower, Fire blast, fire spin, dragon rage)
  * Seen in play (2026-11-13) in the 165-move sweep it ran only for Flamethrower, Absorb, Mega Drain,
  * Dragon Rage, Fire Spin and Fire Blast: it recolored prim from the particle's palette index (e.g.
- * prim 00FF00 or 64C8FF) and advanced the lifecycle.
+ * prim FF0000) and advanced the lifecycle.
  */
 void BattleAnim_SetupDrainFlameHueChange(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
