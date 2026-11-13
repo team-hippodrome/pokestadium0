@@ -275,7 +275,7 @@ void Ui_FillRectRgba5551(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 arg
  * Fills a rectangle (x, y, w, h) using a primitive color.
  * Seen in play (2026-11-13) (menu tour from the main menu): called on the main menu and every menu
  * screen after it, as (451, 84, 104, 4) and (451, 84, 4, 68). Stubbing it on the main menu turned
- * the colored tile panels grey.
+ * the colored tile panels gray.
  * @unverified Name and comment guessed from the code.
  */
 void Ui_FillRectPrimColor(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 color) {

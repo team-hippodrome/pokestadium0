@@ -595,7 +595,8 @@ void BattleScene_InitializeParticipantAuxiliaryModel(ActivePokemon* active_pokem
  * Reloads pokemon's model as object_type using owner's loaded model: picks the effect slot
  * by side, loads the species assets, resets the animation, hides Diglett and Dugtrio's
  * ground layer flag, and unless airborne puts the model back in place facing the other
- * side.
+ * side. Diglett is not in Zero's battle roster, so only the Dugtrio case comes up in
+ * normal play.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
  * @unverified Name from Stadium 1.
  */
