@@ -596,7 +596,7 @@ void osViBlack(u8);
  * Per-frame tail of the GB Tower emulator: unless emulation is paused (D_81156546) or
  * the screen is being blanked (D_800AA148), runs the GB audio frame and mirrors the
  * emulated NR52 (0xFF26) register into GB memory; while D_800AA148 is set it blanks video.
- * @unverified Name guessed from the code.
+ * Seen in play (2026-11-13) ran every frame from the moment JP Green booted in the N64 GB player.
  */
 void GbEmu_UpdateAudioOrBlankVideo(UNUSED s32 arg0) {
     if ((*(u8*)&D_81156546 == 0) && (D_800AA148 == 0)) {

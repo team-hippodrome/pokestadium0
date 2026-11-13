@@ -555,7 +555,9 @@ s32 func_8004CFB0(OSMesgQueue *, s32, s32);
 /**
  * Waits for the I/O thread to go idle, sends it the 0xFF quit message and waits until it has
  * exited.
- * @unverified Name and comment from the code; no Transfer Pak was emulated.
+ * Seen in play (2026-11-13) with a JP Green cart in the Transfer Pak, it ran once when the GB
+ * session ended (Continue was picked on a save the game refused, and Stadium showed its "report is
+ * not correct" panel); it did not run while the game played.
  */
 void GbPak_StopIoThread(s32 arg0) {
     s32 i;

@@ -134,7 +134,8 @@ s32 GbTower_IsPakInserted(s32 arg0, u8 arg1) {
 
 /**
  * Powers off every pak that was initialized by GbTower_ScanPaks.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) with a JP Green cart in the Transfer Pak, it ran once, right as the GB
+ * session ended on the "report is not correct" panel, and not while the game played.
  */
 void GbTower_PowerOffAllPaks(void) {
     s32 i;
