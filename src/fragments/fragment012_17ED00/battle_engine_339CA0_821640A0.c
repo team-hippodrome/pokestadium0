@@ -624,7 +624,7 @@ void BattleAnim_RunQiChargeChild(Particle* arg0) {
         case 2:
             if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
                 Particle_EnableRendering(arg0);
-                Particle_FieldA6_SetS16_0BCA8(arg0, 0x18);
+                Particle_FieldA6_SetS16_0BCA8(arg0, 24);
             }
             break;
 

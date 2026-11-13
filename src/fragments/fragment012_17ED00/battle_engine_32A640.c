@@ -124,13 +124,13 @@ void BattleAnim_CallbackOrphanDescriptor2BSpinFade(Particle* arg0) {
             break;
 
         case 3:
-            if (Particle_TickDelayAndAdvanceLifecycle(arg0, 0x32) != 0) {
+            if (Particle_TickDelayAndAdvanceLifecycle(arg0, 50) != 0) {
                 Particle_AdvancePhase(arg0);
             }
             break;
 
         case 4:
-            if (Particle_TickDelayAndAdvanceLifecycle(arg0, 0x14) != 0) {} // karodo
+            if (Particle_TickDelayAndAdvanceLifecycle(arg0, 20) != 0) {} // karodo
             break;
 
         case 5:
@@ -277,7 +277,7 @@ void BattleAnim_RunPetalDanceLingeringHitEffect(Particle* arg0) {
             break;
 
         case 5:
-            Particle_TickDelayAndAdvanceLifecycle(arg0, 0x46);
+            Particle_TickDelayAndAdvanceLifecycle(arg0, 70);
             break;
 
         case 6:
@@ -427,7 +427,7 @@ void BattleAnim_OrphanDescriptor2BAnd2EEmitterSequence(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(2, BattleAnim_CallbackOrphanDescriptor2BSpinFade, &gBattleAnimParticleDescriptors[0x2B], 0, 0x10, 0xA, 0, 0, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(4, BattleAnim_CallbackOrphanDescriptor2BSpinFade, &gBattleAnimParticleDescriptors[0x2B], 0, 0x10, 0xA, 0, 0, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_CallbackOrphanDescriptor2BSpinFade, &gBattleAnimParticleDescriptors[0x2B], 0, 8, 0xA, 0, 0, 0);
-    BattleAnim_AddSpawnDelay(0x3A);
+    BattleAnim_AddSpawnDelay(58);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackOrphanDescriptor2EScatterFade, &gBattleAnimParticleDescriptors[0x2E], 0, 0x10, 2, 0, 0, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackOrphanDescriptor2EScatterFade, &gBattleAnimParticleDescriptors[0x2E], 0, 0x10, 2, 0, 0, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackOrphanDescriptor2EScatterFade, &gBattleAnimParticleDescriptors[0x2E], 0, 0x10, 2, 0, 0, 0);

@@ -572,7 +572,7 @@ extern s32 D_8218C8E4;
 
 /**
  * Haze: resets all stat stages and stats of both Pokémon, cures the target's status
- * (cancelling its move if it was asleep or frozen), ends Disable and confusion on both,
+ * (canceling its move if it was asleep or frozen), ends Disable and confusion on both,
  * and clears most volatile and side flags.
  * @unverified Name guessed from the code.
  */
