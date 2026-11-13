@@ -461,8 +461,8 @@ extern Gfx D_8A12EBF0[];
 extern Gfx D_8A12F128[];
 extern Gfx D_8A12F150[];
 /**
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) ran on the habitat map (ずかん > ぶんぷをみる) for フシギダネ and ヒトカゲ; only the
+ * せいそくちふめい label showed, so the per-area labels were not seen.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void Pokedex_BuildMapLabelsDisplayList(void) {
@@ -696,9 +696,8 @@ extern s16 D_8A130446;
 void BgStage_DrawFrame(void);
 /**
  * Draws the habitat page: のすみか (habitat), せいそくちふめい (habitat unknown), level, rate, and the button hint to show or hide the GB map.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) drew フシギダネのすみか and ヒトカゲのすみか over the Kanto map with the せいそくちふめい
+ * (habitat unknown) label, from ずかん > ぶんぷをみる.
  */
 s32 Pokedex_DrawHabitatPage(s32 arg0)
 {
