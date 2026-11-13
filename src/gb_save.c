@@ -1441,8 +1441,9 @@ void Window_DrawFrame(s32* arg0);
 
 /**
  * Draws the window frame, hiding it every other four frames while blinking is on. Returns 1 while hidden.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) ran when the COM entry was confirmed (このデータでエントリーします, はい), just before
+ * the stadium and VS intro (Free Battle, L1-30 rules, six L30 rentals vs COM); also in an ordinary
+ * Free Battle.
  * @unverified Name and comment guessed from the code.
  */
 s32 Window_DrawBlinkingFrame(s32* arg0) {
@@ -1538,8 +1539,9 @@ extern u8 D_800736FC[];
 u32 func_800566BC(s32);
 /**
  * Sets up a blinking text box sized to string `arg1`.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) ran when the COM entry was confirmed (このデータでエントリーします, はい), just before
+ * the stadium and VS intro (Free Battle, L1-30 rules, six L30 rentals vs COM); also in an ordinary
+ * Free Battle.
  * @unverified Name and comment guessed from the code.
  */
 void BlinkingTextBox_Init(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4) {
@@ -1572,8 +1574,9 @@ void BlinkingTextBox_Init(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4) {
 extern Rgba8002D188 D_80073700[];
 /**
  * Draws a blinking text box and its text.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) ran when the COM entry was confirmed (このデータでエントリーします, はい), just before
+ * the stadium and VS intro (Free Battle, L1-30 rules, six L30 rentals vs COM); also in an ordinary
+ * Free Battle.
  * @unverified Name and comment guessed from the code.
  */
 void BlinkingTextBox_Draw(s32* arg0) {

@@ -801,8 +801,8 @@ typedef struct Slot82001558 {
 
 /**
  * Counts the picked Pokemon that share a species with another pick and stores the first index.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) ran on the entry screen while rentals were picked (Free Battle, L1-30
+ * rules, six L30 rentals vs COM).
  * @unverified Name and comment guessed from the code.
  */
 s32 FreeBattle_CountDuplicateSpecies(void* arg0, s32* index) {

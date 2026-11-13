@@ -420,8 +420,8 @@ typedef struct Font8001B32C {
 /**
  * Returns the x position at which `str` starts when centered on x, using the
  * current font's glyph width, spacing and the scale (percent).
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) ran during the VS intro (トレーナー 1P vs トレーナー COM) (Free Battle, L1-30
+ * rules, six L30 rentals vs COM); also in an ordinary Free Battle.
  * @unverified Name and comment guessed from the code.
  */
 s32 Font_GetCenteredStartX(s32 x, s32 scale, const char* str) {

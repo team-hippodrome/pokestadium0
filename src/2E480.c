@@ -1304,8 +1304,8 @@ void ScrollGrid_ScrollDownToCursor(s8 *arg0)
 
 /**
  * Moves the drawn scroll position toward the target a step at a time.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) ran when the rental grid opened on the entry screen (Free Battle, L1-30
+ * rules, six L30 rentals vs COM).
  * @unverified Name and comment guessed from the code.
  */
 void ScrollGrid_AnimateScroll(GridMenu80031004* menu) {
