@@ -221,7 +221,8 @@ void BattleScene_TickQueueRowEffectList3AtAnimEnd(ActivePokemon* active_pokemon)
 
 /**
  * Clears the Pokemon's cue frame counter at +0x620 (rows 1, 12, 16 and 18 enter with it).
- * @unverified Name from the code.
+ * Seen in play (2026-11-13) in the 165-move sweep: it cleared the cue timer at 0x620 on the COM
+ * Pokémon (0x191 to 0, and 0x57 to 0).
  */
 void ActivePokemon_ResetCueTimer(s8 *arg0) {
     M2C_FIELD(arg0, s32 *, 0x620) = 0;
@@ -2075,7 +2076,8 @@ void func_82105D3C(s8* arg0) {
 
 /**
  * ORs `arg1` into state.flags.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) in the 165-move sweep (Fly, Sing, Dig, Hypnosis, Selfdestruct): with
+ * 0x200 it ORed the flag into the state flags at 0x7C2 (0 to 0x200) and left the other bits alone.
  */
 s32 ActivePokemon_SetStateFlags(s8 *arg0, unsigned short arg1)
 {

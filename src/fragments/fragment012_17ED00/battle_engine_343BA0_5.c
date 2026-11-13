@@ -49,7 +49,8 @@ void func_82140D58(s8 *arg0, s32 arg1) {
 
 /**
  * Load a texture frame selected by the shared particle clock using ParticleGfx_LoadTextureI4Alias.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Fire Spin): from base 0x80342970 it loaded
+ * 0x80344170, frame 6 of the 0x400-byte 32x64 I4 frames, with G_LOADBLOCK 071FF400 (2048 texels).
  */
 void ParticleGfx_LoadTextureCallbackI4FrameMod10_32x64(UNUSED Particle* arg0, u8* texture) {
     ParticleGfx_LoadTextureI4Alias(&texture[(gParticleFrameCounter % 10) * (32 * 64 / 2)], 32, 64);
@@ -63,7 +64,8 @@ void func_82140DD8(s8 *arg0, s32 arg1) {
 
 /**
  * Load the supplied texture using ParticleGfx_LoadTextureI4Alias.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Thunder Wave): it emitted an I texture load of
+ * 0x8033B120 with G_LOADBLOCK 073FF200 (4096 texels, 64x64).
  */
 void ParticleGfx_LoadTextureCallbackI4_64x64(UNUSED Particle* arg0, u8* texture) {
     ParticleGfx_LoadTextureI4Alias(texture, 64, 64);
@@ -71,7 +73,8 @@ void ParticleGfx_LoadTextureCallbackI4_64x64(UNUSED Particle* arg0, u8* texture)
 
 /**
  * Load a texture frame selected by the shared particle clock using ParticleGfx_LoadTextureI4Alias.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Thunderpunch, Thunderbolt, Thunder): from base
+ * 0x8033B950 it loaded the base and 0x8033F150, frame 7 of the 0x800-byte 64x64 I4 frames.
  */
 void ParticleGfx_LoadTextureCallbackI4FrameMod8_64x64(UNUSED Particle* arg0, u8* texture) {
     ParticleGfx_LoadTextureI4Alias(&texture[gParticleFrameMod8 * (64 * 64 / 2)], 64, 64);

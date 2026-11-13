@@ -125,7 +125,8 @@ void ParticleGfx_RecolorEnvFromPaletteSetA(Particle* arg0, s16 arg1) {
 
 /**
  * Set the particle's primitive RGB channels from the selected palette-set index, leaving alpha unchanged.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Psybeam): with index 9 it changed prim from
+ * FFFFFF to 64C8FF; env was untouched.
  */
 void ParticleGfx_RecolorPrimFromPaletteSetB(Particle* arg0, s16 arg1) {
     ParticleGfx_RecolorPrim(arg0, gParticlePaletteSetB[arg1]);
@@ -133,7 +134,8 @@ void ParticleGfx_RecolorPrimFromPaletteSetB(Particle* arg0, s16 arg1) {
 
 /**
  * Set the particle's environment RGB channels from the selected palette-set index, leaving alpha unchanged.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Psybeam): with index 9 it changed env from
+ * FFFFFF to FF78C8; prim was untouched.
  */
 void ParticleGfx_RecolorEnvFromPaletteSetB(Particle* arg0, s16 arg1) {
     ParticleGfx_RecolorEnv(arg0, gParticlePaletteSetB[arg1]);
