@@ -356,9 +356,10 @@ void BattleAnim_InitializeFirePunchUse(void) {
 }
 
 /**
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-13) (Free Battle, 1P Onix's Razor Wind with its accuracy raised so it
+ * lands): called through the effect table on the second (attacking) turn, and
+ * Pinsir dropped from 75 to 68 HP. In the earlier sweep the second turn missed and this did not
+ * run.
  */
 void BattleAnim_InitializeRazorWindHit(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunRazorWindHitEffect, &gBattleAnimParticleDescriptors[0x29], 0, 6, 0x10, 0x64, 0, 0);

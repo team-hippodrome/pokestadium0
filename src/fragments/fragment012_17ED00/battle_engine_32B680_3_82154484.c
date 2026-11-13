@@ -2166,9 +2166,9 @@ void BattleAnim_InitializeBitingMoveHit(void) {
 
 /**
  * initializes being hit by guillotine
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-13) (Free Battle, 1P Onix's Guillotine with its accuracy raised so it
+ * lands): called through the effect table as the hit animation started, and Pinsir dropped from
+ * 75 to 0 HP. In the earlier sweep Guillotine missed and this did not run.
  */
 void BattleAnim_InitializeGuillotineHit(void) {
     func_8213BC00(0, 0xA, 0, 0xFF, 0x40);
@@ -4037,9 +4037,9 @@ void BattleAnim_InitializeHornDrillUse(void) {
 
 /**
  * initializes getting hit by horn drill
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-13) (Free Battle, 1P Onix's Horn Drill with its accuracy raised so it
+ * lands): called through the effect table as the hit animation started. In the
+ * earlier sweep Horn Drill missed and this did not run.
  */
 void BattleAnim_InitializeHornDrillHit(void) {
     func_8213BC00(0, 0xA, 0, 0xFF, 0x40);
