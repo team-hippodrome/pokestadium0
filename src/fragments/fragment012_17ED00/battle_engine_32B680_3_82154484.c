@@ -1270,7 +1270,8 @@ void BattleAnim_InitEffects63And75Model38(Particle* arg0) {
 }
 
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Seen in play (2026-11-13) in the 165-move sweep (Strength, Rock Throw): step 1 attached a model
+ * and set prim alpha to 0; step 2 then raised prim alpha by 4 per frame (0, 4, 8, ...).
  */
 void BattleAnim_CallbackStartEffects63And75Model38FadeIn(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -1530,7 +1531,9 @@ void BattleAnim_RunBoomUseEffect1(Particle* arg0) {
 }
 
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Seen in play (2026-11-13) in the 165-move sweep (Selfdestruct): it set scale to 7.2 (2.0 times
+ * 3.6), moved positionOffset.x by -36 (10 along rotation.y + 0x8000), set a random rotation.z
+ * (0xF0E2) and advanced the lifecycle.
  */
 void BattleAnim_CallbackStartEffects50And82ScalePulse_InitParticle(Particle* arg0) {
     Particle_SetScaleScaled(arg0, 2.0f);

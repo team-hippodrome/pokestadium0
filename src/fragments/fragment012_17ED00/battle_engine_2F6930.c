@@ -67,7 +67,8 @@ Vec3f* BattleAnim_Vec3fOffsetByPolarXZ(Vec3f* arg0, Vec3f* arg1, f32 arg2, s16 a
  * z = sin(theta) * magnitude (theta measured from +X toward +Z, unlike
  * BattleAnim_Vec3fOffsetByPolarXZ, which measures from +Z toward +X). The Y
  * component is left untouched.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Fly, Agility, Double Team, Waterfall): with
+ * magnitude 1.706 and theta 0x4000 it set z to 1.706 and x to 0; y was untouched.
  */
 void BattleAnim_Vec3fSetPolarXZ(Vec3f* dest_vector, f32 magnitude, s16 theta) {
     dest_vector->x = COSS(theta) * magnitude;
@@ -204,7 +205,8 @@ s32 BattleAnim_StepToS16(s16* dest, s16 finish, s16 rate) {
  * Exponential approach: moves *dest toward `value` by the fraction `speed` of
  * the remaining distance (speed 0.1f closes 10% per call). A result within
  * +/-0.001 of zero is snapped to exactly 0.0f, even when `value` is not 0.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep: with *dest = 50, value 8 and speed 0.3 it set
+ * *dest to 37.4.
  */
 void BattleAnim_ApproachF(f32* dest, f32 value, f32 speed) {
     *dest = *dest + ((value - *dest) * speed);

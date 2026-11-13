@@ -648,7 +648,9 @@ void Particle_DispatchDraw(Particle* arg0, CameraNode* arg1) {
 }
 
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Seen in play (2026-11-13) in the 165-move sweep (Pound and most hit moves): it filled each new
+ * particle from its effect slot: the update callback (e.g. 0x80168350), the descriptor pointer, the
+ * owner (1P 0x8028FB20 or COM 0x802905C0) and the origin position.
  */
 void BattleAnim_InitializeParticleFromEffect(Particle* arg0, ActivePokemon* arg1, BattleAnimEffectSlot* arg2, s16 arg3) {
     if ((u32)arg0 == -1) {

@@ -833,7 +833,7 @@ void ParticleGfx_LoadTextureCallbackI4WrapST_64x64(UNUSED Particle* arg0, u8* te
 void ParticleGfx_LoadTextureCallbackIa8WrapST_64x64(UNUSED Particle* arg0, u8* texture);
 void ParticleGfx_DrawBillboardPrim(Particle* arg0, CameraNode* arg1);
 void ParticleGfx_DrawBillboardPrimEnv(Particle* arg0, CameraNode* arg1);
-s32 ParticleGfx_DrawBillboardDoubleSided(Particle* arg0, UNUSED CameraNode* arg1);
+s32 ParticleGfx_DrawDoubleSidedPrimEnvTransformedQuad(Particle* arg0, UNUSED CameraNode* arg1);
 void ParticleGfx_DrawBillboardDefaultQuad(Particle* arg0, CameraNode* arg1);
 void ParticleGfx_DrawBillboardPrimEnvQuad(Particle* arg0, CameraNode* arg1);
 void ParticleGfx_DrawBillboardTextureAlphaRotatedQuad(Particle* arg0, CameraNode* arg1);
@@ -846,7 +846,7 @@ void ParticleGfx_DrawBillboardPrimEnvQuadVariantB(Particle* arg0, CameraNode* ar
 void ParticleGfx_DrawBillboardPrimEnvQuadVariantC(Particle* arg0, CameraNode* arg1);
 void ParticleGfx_DrawBillboardPrimEnvComposite(Particle* arg0, CameraNode* arg1);
 s32 ParticleGfx_DrawBillboardPrimEnvTriangleDoubleSided(Particle* arg0, UNUSED CameraNode* arg1);
-void ParticleGfx_DrawBillboardPrimEnvTransformedQuad(Particle* arg0, CameraNode* arg1);
+void ParticleGfx_DrawPrimEnvTransformedQuad(Particle* arg0, CameraNode* arg1);
 void ParticleGfx_CopyPaletteRgb(u8* arg0, u16 arg1);
 void ParticleGfx_CopyPalettePairRgb(u8* arg0, u8* arg1, u16 arg2);
 void ParticleGfx_RecolorPrim(Particle* arg0, u16 arg1);

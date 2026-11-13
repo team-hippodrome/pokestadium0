@@ -219,7 +219,9 @@ s32 func_80006B50(s32 *, s32 *, s32 *, s32 *);
  * called every frame: bug boy in GLC
  * Use clipped destination offsets as 10.5 texture coordinates with a half-texel bias.
  * @src/gfx_rect.c
- * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep: for (0x17, 0x48, 0x3B, 0x51) it emitted
+ * G_TEXRECT E40F0148 0005C120 (corners 0x17,0x48 to 0x3C,0x52 in 10.2 fixed point), then
+ * G_RDPHALF_1 and G_RDPHALF_2 with s,t 0x10 and steps 0x800.
  */
 void Battle_DrawClippedTextureRect(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 x0 = arg0;

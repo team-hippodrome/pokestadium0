@@ -707,7 +707,9 @@ void func_80012DC8(s8* arg0, s8* arg1) {
  * G_TX_RENDERTILE, G_OFF)) to the display list. Then clears the words at
  * arg0 + 0x0C, + 0x10 and + 0x14. The second argument is not used (retail only
  * spills it to its stack home).
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-13) in the 165-move sweep (Mega Punch, Pay Day, Gust and others): when
+ * texture state was set it emitted gSPTexture off (D7000000 FFFFFFFF) and cleared state words 3 and
+ * 5; when it was already clear it emitted nothing.
  */
 void GeoRender_DisableTexture(s32* arg0, s32 arg1) {
     if (arg0[3] != 0) {

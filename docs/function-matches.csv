@@ -3420,7 +3420,7 @@ func_82140EE0,0x82140EE0,src/fragments/fragment012_17ED00/particle_math_26E6D0_2
 func_82140F0C,0x82140F0C,src/fragments/fragment012_17ED00/particle_math_26E6D0_2.c,ParticleGfx_LoadTextureCallbackIa8WrapST_64x64,s1,stadium1:src/fragments/particle_math/particle_math_26E6D0.c,c
 func_82140F38,0x82140F38,src/fragments/fragment012_17ED00/particle_math_26E6D0_2.c,ParticleGfx_DrawBillboardPrim,hand,,c
 func_82140FAC,0x82140FAC,src/fragments/fragment012_17ED00/particle_math_26E6D0_2.c,ParticleGfx_DrawBillboardPrimEnv,hand,,c
-func_82141038,0x82141038,src/fragments/fragment012_17ED00/particle_math_26E6D0_2.c,ParticleGfx_DrawBillboardDoubleSided,hand,,c
+func_82141038,0x82141038,src/fragments/fragment012_17ED00/particle_math_26E6D0_2.c,ParticleGfx_DrawDoubleSidedPrimEnvTransformedQuad,hand,,c
 func_82141128,0x82141128,src/fragments/fragment012_17ED00/particle_math_26E6D0_2.c,func_82141128,hand,,c
 func_821411B4,0x821411B4,src/fragments/fragment012_17ED00/particle_math_26E6D0_2.c,ParticleGfx_DrawBillboardTextureAlphaRotatedQuad,hand,,c
 func_82141220,0x82141220,src/fragments/fragment012_17ED00/particle_math_26E6D0_2.c,ParticleGfx_DrawBillboardDefaultQuad,hand,,c
@@ -3431,7 +3431,7 @@ func_82141428,0x82141428,src/fragments/fragment012_17ED00/particle_math_26E6D0_2
 func_821414B4,0x821414B4,src/fragments/fragment012_17ED00/particle_math_26E6D0_2.c,func_821414B4,hand,,c
 func_82141540,0x82141540,src/fragments/fragment012_17ED00/particle_math_26E6D0_2.c,func_82141540,hand,,c
 func_821415CC,0x821415CC,src/fragments/fragment012_17ED00/particle_math_26E6D0_2.c,BattleAnim_ThunderWaveParticleDraw,hand,,c
-func_821416BC,0x821416BC,src/fragments/fragment012_17ED00/particle_math_26E6D0_2.c,ParticleGfx_DrawBillboardPrimEnvTransformedQuad,hand,,c
+func_821416BC,0x821416BC,src/fragments/fragment012_17ED00/particle_math_26E6D0_2.c,ParticleGfx_DrawPrimEnvTransformedQuad,hand,,c
 func_82143380,0x82143380,src/fragments/fragment012_17ED00/particle_math_26E6D0_3.c,ParticleGfx_CopyPaletteRgb,s1,stadium1:src/fragments/particle_math/particle_math_26E6D0.c,c
 func_821433B8,0x821433B8,src/fragments/fragment012_17ED00/particle_math_26E6D0_3.c,ParticleGfx_CopyPalettePairRgb,s1,stadium1:src/fragments/particle_math/particle_math_26E6D0.c,c
 func_82143408,0x82143408,src/fragments/fragment012_17ED00/particle_math_26E6D0_3.c,func_82143408,hand,,c

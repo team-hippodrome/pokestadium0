@@ -84,7 +84,8 @@ void BattleScene_SetParticipantModelScale(ActivePokemon* active_pokemon, f32 sca
 
 /**
  * Returns how many Pokemon the active Pokemon's trainer brought (teamRoster+0x2).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) in the 165-move sweep (Jump Kick, Sing, Hypnosis, Selfdestruct): it
+ * returned 6 for both the 1P and the COM side in a six-on-six free battle.
  */
 u8 ActivePokemon_GetBroughtCount(s8 *arg0) {
     return M2C_FIELD(M2C_FIELD(arg0, s8 **, 0x860), u8 *, 2);
