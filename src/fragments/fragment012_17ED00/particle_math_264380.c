@@ -159,8 +159,8 @@ void ParticleGfx_PipeSync(void) {
 
 /**
  * Synchronize the RDP, select one-cycle mode, and disable RSP texturing.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_SetTextureState(void) {
@@ -171,8 +171,8 @@ void ParticleGfx_SetTextureState(void) {
 
 /**
  * Empty callback retained at its original entry point.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_NoopStub2(void) {
@@ -180,8 +180,8 @@ void ParticleGfx_NoopStub2(void) {
 
 /**
  * Empty callback retained at its original entry point.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_NoopStub3(void) {
@@ -555,8 +555,8 @@ void ParticleGfx_LoadTextureMultiBlock4(u8* texture, s32 tmem, s32 rtile, s32 fm
 
 /**
  * Append an RGBA32 texture block load with the specified addressing modes.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_LoadTextureRgba32(u8* texture, s32 width, s32 height) {
@@ -566,8 +566,8 @@ void ParticleGfx_LoadTextureRgba32(u8* texture, s32 width, s32 height) {
 
 /**
  * Append an RGBA32 texture tile load with the specified addressing modes.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_LoadTextureTileRgba32(u8* texture, s32 width, s32 height) {
@@ -588,8 +588,8 @@ void ParticleGfx_LoadTextureRgba16(u8* texture, s32 width, s32 height) {
 
 /**
  * Load textures into the explicitly selected TMEM regions/tiles for multi-texture rendering.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_LoadTextureRgba16Dual(u8* texture1, u8* texture2, s32 width, s32 height) {
@@ -604,8 +604,8 @@ void ParticleGfx_LoadTextureRgba16Dual(u8* texture1, u8* texture2, s32 width, s3
 
 /**
  * Append an RGBA16 texture block load with the specified addressing modes.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_LoadTextureRgba16WrapS(u8* texture, s32 width, s32 height) {
@@ -617,8 +617,8 @@ void ParticleGfx_LoadTextureRgba16WrapS(u8* texture, s32 width, s32 height) {
 
 /**
  * Append an RGBA16 texture block load with the specified addressing modes.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_LoadTextureRgba16WrapT(u8* texture, s32 width, s32 height) {
@@ -630,8 +630,8 @@ void ParticleGfx_LoadTextureRgba16WrapT(u8* texture, s32 width, s32 height) {
 
 /**
  * Append an RGBA16 texture block load with the specified addressing modes.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_LoadTextureRgba16WrapST(u8* texture, s32 width, s32 height) {
@@ -644,8 +644,8 @@ void ParticleGfx_LoadTextureRgba16WrapST(u8* texture, s32 width, s32 height) {
 
 /**
  * Append an RGBA16 texture block load with the specified addressing modes.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_LoadTextureRgba16WrapSWithMask(u8* texture, s32 width, s32 height, s32 masks) {
@@ -655,8 +655,8 @@ void ParticleGfx_LoadTextureRgba16WrapSWithMask(u8* texture, s32 width, s32 heig
 
 /**
  * Append an RGBA16 texture tile load with the specified addressing modes.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_LoadTextureTileRgba16(u8* texture, s32 width, s32 height) {
@@ -677,8 +677,8 @@ void ParticleGfx_LoadTextureIa16(u8* texture, s32 width, s32 height) {
 
 /**
  * Append an IA16 texture tile load with the specified addressing modes.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_LoadTextureTileIa16(u8* texture, s32 width, s32 height) {
@@ -699,8 +699,8 @@ void ParticleGfx_LoadTextureIa8(u8* texture, s32 width, s32 height) {
 
 /**
  * Append an IA8 texture tile load with the specified addressing modes.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_LoadTextureTileIa8(u8* texture, s32 width, s32 height) {
@@ -734,8 +734,8 @@ void ParticleGfx_LoadTextureI8(u8* texture, s32 width, s32 height) {
 
 /**
  * Append an I8 texture block load with the specified addressing modes.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_LoadTextureI8WrapST(u8* texture, s32 width, s32 height) {
@@ -759,8 +759,8 @@ void ParticleGfx_LoadTextureTileI8(u8* texture, s32 width, s32 height) {
 
 /**
  * Forward the texture and dimensions to the matching texture-load wrapper.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_LoadTextureI8Alias(u8* texture, s32 width, s32 height) {
@@ -769,8 +769,8 @@ void ParticleGfx_LoadTextureI8Alias(u8* texture, s32 width, s32 height) {
 
 /**
  * Forward the texture and dimensions to the matching texture-load wrapper.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_LoadTextureTileI8Alias(u8* texture, s32 width, s32 height) {
@@ -779,8 +779,8 @@ void ParticleGfx_LoadTextureTileI8Alias(u8* texture, s32 width, s32 height) {
 
 /**
  * Append an IA4 texture tile load with the specified addressing modes.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_LoadTextureTileIa4(u8* texture, s32 width, s32 height) {
@@ -800,8 +800,8 @@ void ParticleGfx_LoadTextureTileI4(u8* texture, s32 width, s32 height) {
 
 /**
  * Append an IA4 texture block load with the specified addressing modes.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_LoadTextureIa4(u8* texture, s32 width, s32 height) {
@@ -853,8 +853,8 @@ void ParticleGfx_LoadTextureTileI4Alias(u8* texture, s32 width, s32 height) {
 
 /**
  * Append an I4 texture block load with the specified addressing modes.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_LoadTextureI4WrapS(u8* texture, s32 width, s32 height) {
@@ -911,8 +911,8 @@ void ParticleGfx_LoadTextureI4MultiBlockWrapSTWithShift(u8* texture, s32 width, 
 
 /**
  * Append an CI8 texture block load with the specified addressing modes.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_LoadTextureCi8(u8* texture, s32 width, s32 height) {
@@ -922,8 +922,8 @@ void ParticleGfx_LoadTextureCi8(u8* texture, s32 width, s32 height) {
 
 /**
  * Append an CI8 texture block load with the specified addressing modes.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_LoadTextureCi8WrapSWithMask(u8* texture, s32 width, s32 height, s32 masks) {
@@ -933,8 +933,8 @@ void ParticleGfx_LoadTextureCi8WrapSWithMask(u8* texture, s32 width, s32 height,
 
 /**
  * Append an CI8 texture tile load with the specified addressing modes.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_LoadTextureTileCi8(u8* texture, s32 width, s32 height) {
@@ -944,8 +944,8 @@ void ParticleGfx_LoadTextureTileCi8(u8* texture, s32 width, s32 height) {
 
 /**
  * Load textures into the explicitly selected TMEM regions/tiles for multi-texture rendering.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_LoadTextureDualRgba16I8(u8* texture1, u8* texture2, s32 width, s32 height) {
@@ -977,8 +977,8 @@ void ParticleGfx_DrawQuadVertices(Vtx* arg0) {
 
 /**
  * Empty callback retained at its original entry point.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_NoopStub4(void) {
@@ -1064,8 +1064,8 @@ void ParticleGfx_DrawModelQuadRotated(CameraNode* arg0, Vec3f arg1, f32 arg2, Vt
 
 /**
  * Load a camera-facing transform, then draw the selected quad or triangle vertices.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_DrawModelQuadYScaled(CameraNode* arg0, Vec3f arg1, f32 arg2, Vtx* arg3) {
@@ -1089,8 +1089,8 @@ void ParticleGfx_DrawModelQuadRotatedYScaled(CameraNode* arg0, Vec3f arg1, f32 a
 
 /**
  * Load a camera-facing transform, then draw the selected quad or triangle vertices.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_DrawModelTriangle(CameraNode* arg0, Vec3f arg1, f32 arg2, Vtx* arg3) {
@@ -1102,8 +1102,8 @@ void ParticleGfx_DrawModelTriangle(CameraNode* arg0, Vec3f arg1, f32 arg2, Vtx* 
 
 /**
  * Load a camera-facing transform, then draw the selected quad or triangle vertices.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_DrawModelTriangleRotated(CameraNode* arg0, Vec3f arg1, f32 arg2, Vtx* arg3, s16 arg4) {
@@ -1115,8 +1115,8 @@ void ParticleGfx_DrawModelTriangleRotated(CameraNode* arg0, Vec3f arg1, f32 arg2
 
 /**
  * Walk the texture atlas in fixed-size chunks, loading each chunk and drawing its four corresponding vertices.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_DrawI8TextureAtlas(u8* texture, Vtx* vtx, s32 arg2, s32 arg3, s32 width, s32 height) {
@@ -1142,8 +1142,8 @@ void ParticleGfx_DrawI8TextureAtlas(u8* texture, Vtx* vtx, s32 arg2, s32 arg3, s
 
 /**
  * Walk the texture atlas in fixed-size chunks, loading each chunk and drawing its four corresponding vertices.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_DrawIa16TextureAtlas(u8* texture, Vtx* vtx, s32 arg2, s32 arg3, s32 width, s32 height) {
@@ -1169,8 +1169,8 @@ void ParticleGfx_DrawIa16TextureAtlas(u8* texture, Vtx* vtx, s32 arg2, s32 arg3,
 
 /**
  * Walk the texture atlas in fixed-size chunks, loading each chunk and drawing its four corresponding vertices.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_DrawIa8TextureAtlas(u8* texture, Vtx* vtx, s32 arg2, s32 arg3, s32 width, s32 height) {
@@ -1223,8 +1223,8 @@ void ParticleGfx_DrawI4TextureAtlas(u8* texture, Vtx* vtx, s32 arg2, s32 arg3, s
 
 /**
  * Walk the texture atlas in fixed-size chunks, loading each chunk and drawing its four corresponding vertices.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_DrawI4TextureAtlasTiled(u8* texture, Vtx* vtx, s32 arg2, s32 arg3, s32 width, s32 height) {

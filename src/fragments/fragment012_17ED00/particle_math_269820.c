@@ -57,8 +57,8 @@ void Particle_SetFieldOffsetACIfNotSentinel(Particle* arg0, s16 arg1) {
 
 /**
  * Store the parameter only when it differs from the field-specific sentinel.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Particle_SetFieldOffsetCFIfNotSentinel(Particle* arg0, u8 arg1) {
@@ -69,8 +69,8 @@ void Particle_SetFieldOffsetCFIfNotSentinel(Particle* arg0, u8 arg1) {
 
 /**
  * Store the parameter only when it differs from the field-specific sentinel.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Particle_SetFieldOffsetA6IfNotSentinel(Particle* arg0, s16 arg1) {
@@ -81,8 +81,8 @@ void Particle_SetFieldOffsetA6IfNotSentinel(Particle* arg0, s16 arg1) {
 
 /**
  * Store the parameter only when it differs from the field-specific sentinel.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Particle_SetFieldOffsetA8IfNotSentinel(Particle* arg0, s16 arg1) {
@@ -93,8 +93,8 @@ void Particle_SetFieldOffsetA8IfNotSentinel(Particle* arg0, s16 arg1) {
 
 /**
  * Store the parameter only when it differs from the field-specific sentinel.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Particle_SetFieldOffsetCEIfNotSentinel(Particle* arg0, u8 arg1) {
@@ -121,8 +121,8 @@ void func_8213C3D4(s8 *arg0, s16 arg1) {
 
 /**
  * Store the parameter only when it differs from the field-specific sentinel.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Particle_SetPrimAlphaIfNotSentinel(Particle* arg0, u8 arg1) {
@@ -133,8 +133,8 @@ void Particle_SetPrimAlphaIfNotSentinel(Particle* arg0, u8 arg1) {
 
 /**
  * Store the parameter only when it differs from the field-specific sentinel.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Particle_SetFieldOffsetAAIfNotSentinel(Particle* arg0, s16 arg1) {
@@ -168,8 +168,8 @@ u8 Particle_GetUnkCD(s8 *arg0) {
 
 /**
  * Return the particle's unk_AA field.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s16 Particle_FieldAA_GetS16_0C068(Particle* arg0) {
@@ -205,8 +205,8 @@ s16 Particle_GetUnkAA(Particle* arg0) {
 
 /**
  * Returns the particle's unk_A6.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
 s16 Particle_GetUnkA6(s8 *arg0) {
@@ -215,8 +215,8 @@ s16 Particle_GetUnkA6(s8 *arg0) {
 
 /**
  * Returns the particle's unk_A8.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
 s16 Particle_GetUnkA8(s8 *arg0) {
