@@ -389,14 +389,26 @@ void BattleAnim_PlaySoundEffect1(void);
 void BattleAnim_PlaySoundEffect2(void);
 void BattleAnim_PlaySoundEffect3(void);
 
+/**
+ * Plays the menu scroll sound.
+ * @unverified Name guessed from the code.
+ */
 void BattleAnim_PlaySoundEffect1(void) {
     Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
 }
 
+/**
+ * Plays the menu confirm sound.
+ * @unverified Name guessed from the code.
+ */
 void BattleAnim_PlaySoundEffect2(void) {
     Audio_PlaySoundEffectById(SFX_MENU_CONFIRM);
 }
 
+/**
+ * Plays the menu back sound.
+ * @unverified Name guessed from the code.
+ */
 void BattleAnim_PlaySoundEffect3(void) {
     Audio_PlaySoundEffectById(SFX_MENU_BACK);
 }
@@ -454,6 +466,11 @@ void ActivePokemon_PlayLandingSoundBySize(ActivePokemon* active_pokemon) {
     }
 }
 
+/**
+ * Sends the battle audio command sequence_id for the known sequences; sequence 0x32 is the
+ * Pokémon's cry and passes its species.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_PlayBattleSequenceById(ActivePokemon* active_pokemon, s32 sequence_id) {
     s16 species = active_pokemon->displayObject.objectType;
 

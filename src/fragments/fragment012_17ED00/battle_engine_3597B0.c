@@ -17,27 +17,41 @@ void BattleScene_UpdateStripWipe(void);
 Gfx* BattleScene_BuildStripWipeDisplayList(Gfx* arg0, s32 arg1);
 void BattleScene_DrawStripWipe(void);
 
+/**
+ * Sets the strip wipe state (0 off, 1 covered, 2 opening, 3 closing) and its speed. The
+ * wipe position starts at 320 (screen width) for states 0 and 3, otherwise at 0.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_SetStripWipeState(s32 arg0, s32 arg1) {
     D_821CF270 = arg0;
     D_821CF274 = arg1;
 
     if ((D_821CF270 == 0) || ((D_821CF270 != 1) && (D_821CF270 != 2) && (D_821CF270 == 3))) {
-        D_821CF272 = 0x140;
+        D_821CF272 = 320;
     } else {
         D_821CF272 = 0;
     }
 }
 
+/**
+ * Returns the strip wipe state.
+ * @unverified Name from Stadium 1.
+ */
 s32 BattleScene_GetStripWipeState(void) {
     return D_821CF270;
 }
 
+/**
+ * Moves the strip wipe by its speed: opening runs to the screen width (320) and turns the
+ * wipe off, closing runs to 0 and leaves the screen covered.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_UpdateStripWipe(void) {
     s16 var_v0 = D_821CF272;
 
     switch (D_821CF270) {
         case 2:
-            if (var_v0 < 0x140) {
+            if (var_v0 < 320) {
                 var_v0 += D_821CF274;
             } else {
                 D_821CF270 = 0;
@@ -58,6 +72,11 @@ void BattleScene_UpdateStripWipe(void) {
     D_821CF272 = var_v0;
 }
 
+/**
+ * Adds the display list that draws the strip wipe at its current position; arg1 picks the
+ * strip direction. Returns the new end of the list.
+ * @unverified Name from Stadium 1.
+ */
 Gfx* BattleScene_BuildStripWipeDisplayList(Gfx* arg0, s32 arg1) {
     s32 i;
     s16 left;
@@ -98,6 +117,10 @@ Gfx* BattleScene_BuildStripWipeDisplayList(Gfx* arg0, s32 arg1) {
     return arg0;
 }
 
+/**
+ * Draws the strip wipe if it is on.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_DrawStripWipe(void) {
     Gfx* gfx = gDisplayListHead;
 
