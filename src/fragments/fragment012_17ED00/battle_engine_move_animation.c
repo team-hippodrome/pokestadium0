@@ -100,6 +100,10 @@ void BattleScene_InitializeRuntime(BattleSessionTeams* session_teams);
  * Resets all seven state tick slots to the sentinel (no-op) callback.
  */
 // called on any fade in battle
+/**
+ * Resets the 7 battle scene state tick slots to the sentinel callback.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_ClearStateTickCallbacks(void) {
     s32 i;
 
@@ -113,6 +117,11 @@ void BattleScene_ClearStateTickCallbacks(void) {
  * with no anchors (0xFF).
  */
 // called on move select... sometimes. called on faint
+/**
+ * Queues effect list 3 entry effect_entry with the actor's model as user and target and
+ * no anchors.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_QueueRowEffectList3(ActivePokemon* actor, s32 effect_entry) {
     BattleAnim_QueueEffectList3(effect_entry, &actor->displayObject, &actor->displayObject, 0xFF, 0xFF);
 }
@@ -122,6 +131,11 @@ void BattleScene_QueueRowEffectList3(ActivePokemon* actor, s32 effect_entry) {
  * cue anchors and the opposing participant as the fallback owner.
  */
 // played on gengar using thunderbolt in bug boy glc fight
+/**
+ * Queues the main animation of move_id from user at the other side's Pokémon, with the
+ * move's camera anchors.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_PlayMoveEffectScript(ActivePokemon* user, s32 move_id) {
     UNUSED s16 pad; // FAKE: stack padding
     s16 camera_shot;
@@ -140,6 +154,11 @@ void BattleAnim_PlayMoveEffectScript(ActivePokemon* user, s32 move_id) {
  */
 // guess: plays during changing moves like skull base
 // but for some reason connected to fury swipes too?
+/**
+ * Queues the charging animation of move_id from user at the other side's Pokémon, with
+ * the move's camera anchors.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_PlayChargingMoveEffectScript(ActivePokemon* user, s32 move_id) {
     UNUSED s16 pad; // FAKE: stack padding
     s16 camera_shot;
@@ -155,6 +174,11 @@ void BattleAnim_PlayChargingMoveEffectScript(ActivePokemon* user, s32 move_id) {
  * anchored by the user's hit cue fields.
  */
 // play on move end
+/**
+ * Queues the end (hit) animation of move_id on the other side's Pokémon, with the hit
+ * cue's camera anchors.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_PlayMoveEffectEnd(ActivePokemon* user, s32 move_id) {
     UNUSED s16 pad; // FAKE: stack padding
     s16 default_anchor; // TODO: more descriptive name
@@ -264,11 +288,19 @@ void BattleAnim_SetFlagForRockThrowingMoves(ActivePokemon* active_pokemon) {
  * Clears render flag 0x2 on both participants.
  */
 // triggers at the end of move animations and at the end of damage animation of using a rock throwing move
+/**
+ * Clears render flag 2 on both active Pokémon models. The argument is unused.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_ClearRockThrowingMoveFlag(ActivePokemon* active_pokemon) {
     sActivePokemon[0]->displayObject.node.renderFlags &= ~2;
     sActivePokemon[1]->displayObject.node.renderFlags &= ~2;
 }
 
+/**
+ * Returns nonzero while the Pokémon's session is loading animation assets (flags 0xD0).
+ * @unverified Name from Stadium 1.
+ */
 s32 BattleAnim_IsAssetLoadBusy(s8 *arg0) {
     return M2C_FIELD(M2C_FIELD(arg0, s8 **, 0x85C), u8 *, 0x1D) & 0xD0;
 }
@@ -2513,6 +2545,11 @@ void func_82106AC0(ActivePokemon* arg0) {
 void BattleAnim_QueueEffectList(u8 arg0, s32 arg1);
 
 
+/**
+ * If the Pokémon is frozen but the freeze presentation is not showing yet, queues the
+ * freeze effect, clears the frozen bit in the state and starts the freeze presentation.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_ResetFreezeStatusAndRestoreAnimation(ActivePokemon* arg0) {
     u8* ptr = (u8*)&arg0->teamRoster->pokemonPicked[M2C_FIELD(arg0, s32*, 0x9D0)];
 
