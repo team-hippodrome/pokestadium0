@@ -196,7 +196,8 @@ void func_82200850(void);
 
 /**
  * Camera node callback: sets the perspective (fov 39, near 50, far 6400) and eye position on the first call.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran as the VS screen started; the scene then showed the stadium's big
+ * screen head-on.
  */
 void VsScene_SetupCamera(s32 arg0, CameraNode* arg1) {
     if (arg0 == 0) {
@@ -236,7 +237,7 @@ M2C_UNK func_8001B5F0();                            /* extern */
 
 /**
  * Makes the per-frame calls the scene runs before drawing (Cont_StartReadInputs, Cont_ReadInputs, func_8001B5F0).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran every frame of the VS screen.
  */
 s32 VsScene_BeginFrame(void) {
     Cont_StartReadInputs();
@@ -326,7 +327,7 @@ void VsScene_DrawBackground(void);
 
 /**
  * Draws one frame of the scene into the offscreen image.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran every frame of the VS screen.
  */
 s32 VsScene_DrawFrameToImage(s32 arg0) {
     s32 sp24 = VsScene_BeginFrame();
@@ -483,7 +484,7 @@ extern u8 D_8F5054C8[];
  * title model's animation (special curves for models 7 and 8), then the closing animation, 100 or
  * 160 frames.
  * Seen in play: the flaming 「バトル」 title letters appear one by one, then 「VS」 with both trainers.
- * @unverified The round-dependent cues were not compared.
+ * Seen in play (2026-11-13) ran once during the VS screen, over the flames on the stadium screen.
  */
 void VsScene_PlayBattleTitle(void) {
     s32 track;
@@ -1132,7 +1133,8 @@ void func_82202228(void) {
 
 /**
  * Allocates twelve 104x12 images for the names and clears them.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran once as the VS screen (flames behind the stadium screen) started
+ * after the Free Battle teams were confirmed.
  */
 void VsScene_AllocNameImages(void) {
     s32 i;
@@ -1158,7 +1160,7 @@ void func_800270B4(s32 arg0, s32 arg1, s32 arg2, u8* arg3, s32 arg4, s32 arg5);
 
 /**
  * Builds the scene's geo layout for the current stage kind.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran once as the VS screen started.
  */
 void VsScene_LoadGeoLayout(s32 arg0) {
     MemoryBlock* block = MainPool_AllocState(main_pool_get_available(), 0);

@@ -888,7 +888,8 @@ void func_80058410(void*, void*, s32, s32);
  * Copies a picked team into a battle roster: its name (the preset or saved name), source buffer
  * and its non-empty Pokemon, then builds the display copy.
  * Seen in play: runs on 「エントリーけってい」.
- * @unverified Name from the code.
+ * Seen in play (2026-11-13) ran twice once both sides had confirmed 「このデータでエントリーします。」, once for
+ * 1P's ガール team and once for the COM team.
  */
 void FreeBattle_CopyTeamToRoster(u8* arg0, u8* arg1, s32 arg2, Src82004020* arg3) {
     s32 i;
@@ -953,7 +954,8 @@ void Session_LoadPortSnapshot(u8);
  * (FreeBattle_CopyTeamToRoster), clears both side headers first and, in modes 1 and 2, loads the
  * picked port's session snapshot.
  * Seen in play: runs on 「エントリーけってい」.
- * @unverified Layout from the code.
+ * Seen in play (2026-11-13) ran once after both Free Battle teams were confirmed, just before the
+ * VS screen, and called FreeBattle_CopyTeamToRoster for each side.
  */
 void FreeBattle_BuildBattleRosters(s32* arg0, s32* arg1, Src82004020** arg2, s32 arg3, s32 arg4, s32 arg5) {
     Src82004020* src;

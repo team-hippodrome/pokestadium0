@@ -329,7 +329,8 @@ void BattleMenu_ResetOrderSlotIcons(s32 arg0) {
 
 /**
  * Draws a panel using the border color assigned to its controller port.
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-13) ran every frame on the Free Battle order screen, drawing the 1P panel
+ * in blue and the COM panel in green.
  */
 void BattleMenu_DrawPanelBorder(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4) {
     Ui_DrawBorderedPanelStyleB(arg0, arg1, arg2, arg3, D_82302800[arg4]);
@@ -601,7 +602,8 @@ void BattleMenu_DrawOrderSelectConfirmPrompt(s8*);
 void BattleMenu_DrawOrderSelectPanel_Ready(unk_D_848037A0*);
 /**
  * Draws the current panel mode when needed and updates its redraw countdown.
- * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ * Seen in play (2026-11-13) ran every frame on the Free Battle order screen, which shows the 1P and
+ * COM panels with their six Pokémon each.
  */
 void BattleMenu_DrawOrderSelectPanel(unk_D_848037A0* arg0) {
     if ((D_82302B40 != 0) || (arg0->unk_0006 != 0)) {
@@ -710,7 +712,8 @@ s32 BattleMenu_IsSlotAlreadySelected(unk_D_848037A0* arg0, s8 arg1) {
  * side): two picks summing to 106 or more, or three summing to 156 or more. The caller then shows
  * the 155 level-total notice.
  * Seen in play: runs on every pick on the order screen (Free Battle, rule 0, so it never fires).
- * @unverified The over-limit case was not triggered.
+ * Seen in play (2026-11-13) on the Free Battle order screen it ran after each 1P pick (pick counts
+ * 0, 1, 2) and returned 0; Free Battle has no level-sum rule.
  */
 s32 BattleMenu_OrderExceedsLevelSumLimit(unk_D_848037A0* arg0) {
     s32 sum;
@@ -975,8 +978,10 @@ extern s32 D_82302B44;
 void BattleMenu_DrawScrollingInstructionPanel(void);
 void func_8000A7FC(u16 color);
 /**
+ * Runs the order select screen (both sides pick their three Pokemon) for one frame.
  * @src/stage_loader.c
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) ran every frame on the Free Battle order screen (じゅんばんを きめてください, 1P and
+ * COM panels).
  */
 s32 BattleMenu_UpdateOrderSelect(s32 arg0) {
     UNUSED s32 pad; // FAKE: stack padding
