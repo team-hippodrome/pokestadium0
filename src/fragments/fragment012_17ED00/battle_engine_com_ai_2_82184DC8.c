@@ -1448,8 +1448,8 @@ extern u8 D_82194848[];
  * unfainted, not frozen, not recharging and not asleep, smaller ones for a healing
  * move, Ice or Poison type, higher speed, and the type-weighted accuracy of its
  * damaging moves.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * Seen in play (2026-11-13) (Free Battle, COM team selection after the order screen): called from
+ * BattleAi_PickNextPokemon once per opponent Pokémon for each COM candidate.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 void BattleAi_AddMatchupPickScore(u8 *arg0, u8 *arg1) {
@@ -1538,8 +1538,9 @@ s32 BattleAi_LevelSumAllowed(s32, s32);
 
 /**
  * Returns 1 if picking party slot arg2 in round arg1 keeps the team legal.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * Seen in play (2026-11-13) (Free Battle, COM team selection): called as IsPickAllowed(0, 0, slot)
+ * for slots 0, 1 and 2 and returned 1 each time; Free Battle has no level-sum rule, so
+ * BattleAi_LevelSumAllowed did not run.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_IsPickAllowed(s32 arg0, s32 arg1, s32 arg2) {

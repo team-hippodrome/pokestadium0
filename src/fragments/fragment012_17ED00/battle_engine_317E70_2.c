@@ -811,8 +811,8 @@ void BattleAnim_TickEffectSlots(void) {
 
 /**
  * Count allocated pool slots, regardless of their lifecycle or rendering flags.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller in play (2026-11-13): it is only called from Particle_CountActiveAlias, which has no
+ * caller in the ROM itself.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 Particle_CountActive(void) {

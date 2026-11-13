@@ -949,8 +949,8 @@ Vec3f* ParticleMath_RotateVec3fXY(Vec3f* arg0, Vec3f arg1, Vec3s arg4) {
 
 /**
  * Return the Euclidean distance between two 3D points.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller in play (2026-11-13): it is only called from ParticleMath_DistanceScaled, which has no
+ * caller in the ROM itself.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 f32 ParticleMath_Distance3D(Vec3f arg0, Vec3f arg1) {
@@ -1424,8 +1424,8 @@ void ParticleGfx_BuildBillboardMatrix(MtxF* arg0, MtxF* arg1, Vec3f arg2, f32 ar
 
 /**
  * Build a translated billboard matrix by transposing the supplied view basis and scaling only the second basis vector.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller in play (2026-11-13): it is only called from ParticleGfx_PushBillboardMatrixYScaled,
+ * which has no caller in the ROM itself.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_BuildBillboardMatrixYScaled(MtxF* arg0, MtxF* arg1, Vec3f arg2, f32 arg3) {
@@ -1513,8 +1513,8 @@ void ParticleGfx_BuildBillboardRotatedMatrixYScaled(MtxF* arg0, MtxF* arg1, Vec3
 
 /**
  * Build a scaled basis from a normalized direction and cross products, with the supplied translation.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller in play (2026-11-13): it is only called from ParticleGfx_PushDirectionMatrix, which has
+ * no caller in the ROM itself.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_BuildDirectionMatrix(MtxF* arg0, Vec3f arg1, Vec3f arg2, s16 arg3, f32 arg4) {
@@ -1613,8 +1613,8 @@ void ParticleGfx_PushBillboardRotatedMatrix(CameraNode* arg0, Vec3f arg1, f32 ar
 
 /**
  * Build the corresponding transform and load it through the matrix pool.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller in play (2026-11-13): it is only called from ParticleGfx_DrawModelQuadYScaled, which
+ * has no caller in the ROM itself.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_PushBillboardMatrixYScaled(CameraNode* arg0, Vec3f arg1, f32 arg4) {

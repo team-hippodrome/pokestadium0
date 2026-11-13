@@ -286,8 +286,8 @@ s32 Particle_AnimateFramesForwardLoopedThenAdvance(Particle* arg0, s16 arg1, s16
 
 /**
  * Like Particle_AnimateFramesForwardLooped, but steps textureFrame down from `arg1` to `arg2`.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller in play (2026-11-13): it is only called from
+ * Particle_AnimateFramesReverseLoopedThenAdvance, which has no caller in the ROM itself.
  * @unverified Name and comment guessed from the code.
  */
 s32 Particle_AnimateFramesReverseLooped(Particle* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5) {
@@ -343,8 +343,8 @@ s32 Particle_AnimateFramesReverseLoopedThenAdvance(Particle* arg0, s16 arg1, s16
 
 /**
  * Run ping-pong texture-frame animation with a frame timer and loop counter; return 1 on completion.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller in play (2026-11-13): it is only called from
+ * Particle_AnimateFramesForwardAndAdvanceLifecycle, which has no caller in the ROM itself.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 Particle_AnimateFramesPingPong(Particle* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5) {
@@ -409,8 +409,8 @@ s32 Particle_AnimateFramesForwardAndAdvanceLifecycle(Particle* arg0, s16 arg1, s
 
 /**
  * Run reverse-first ping-pong texture-frame animation with a frame timer and loop counter; return 1 on completion.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller in play (2026-11-13): it is only called from
+ * Particle_AnimateFramesReverseAndAdvanceLifecycle, which has no caller in the ROM itself.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 Particle_AnimateFramesReverseFirstPingPong(Particle* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5) {
@@ -1722,8 +1722,8 @@ M2C_UNK func_82137940(s8 *, s16, s16, s8 *);    /* extern */
 
 /**
  * Steps the particle's rotation.z toward a target (helper of the approach family).
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller in play (2026-11-13): it is only called from Particle_ApproachRotationTargetXYZ, which
+ * has no caller in the ROM itself.
  * @unverified Name and comment guessed from the code.
  */
 void Particle_ApproachRotationZ(s8 *arg0) {
@@ -1941,8 +1941,8 @@ void Particle_ComputeVectorFromRotationXYZAlt(Particle* arg0, f32 arg1, Vec3f* a
 
 /**
  * Write a direction vector using the indicated rotation components and the supplied magnitude.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller in play (2026-11-13): it is only called from Particle_AddPositionFromRotationTemplate2
+ * and Particle_SetPositionFromRotationTemplate2, which have no caller in the ROM themselves.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Particle_ComputeVectorFromRotationYZVariant(Particle* arg0, f32 arg1, Vec3f* arg2) {

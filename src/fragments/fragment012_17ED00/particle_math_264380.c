@@ -666,8 +666,8 @@ void ParticleGfx_LoadTextureTileRgba16(u8* texture, s32 width, s32 height) {
 
 /**
  * Append an IA16 texture block load with the specified addressing modes.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller in play (2026-11-13): it is only called from ParticleGfx_DrawIa16TextureAtlas, which
+ * has no caller in the ROM itself.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_LoadTextureIa16(u8* texture, s32 width, s32 height) {
@@ -723,8 +723,8 @@ void ParticleGfx_LoadTextureIa8WrapST(u8* texture, s32 width, s32 height) {
 
 /**
  * Append an I8 texture block load with the specified addressing modes.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller in play (2026-11-13): it is only called from ParticleGfx_DrawI8TextureAtlas and
+ * ParticleGfx_LoadTextureI8Alias, which have no caller in the ROM themselves.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_LoadTextureI8(u8* texture, s32 width, s32 height) {
@@ -748,8 +748,8 @@ void ParticleGfx_LoadTextureI8WrapST(u8* texture, s32 width, s32 height) {
 
 /**
  * Append an I8 texture tile load with the specified addressing modes.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller in play (2026-11-13): it is only called from ParticleGfx_LoadTextureTileI8Alias, which
+ * has no caller in the ROM itself.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_LoadTextureTileI8(u8* texture, s32 width, s32 height) {

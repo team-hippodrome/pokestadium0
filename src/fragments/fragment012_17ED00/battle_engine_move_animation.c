@@ -2519,8 +2519,9 @@ void BattleAnim_TriggerStatusAfflictionCry(ActivePokemon* active_pokemon) {
 
 /**
  * Allocates and zeroes the ActivePokemon for `side_index`.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * Seen in play (2026-11-13) (Free Battle, as the battle scene starts): called from
+ * BattleScene_AllocateParticipants for side 0 and then side 1, returning a different heap pointer
+ * each time.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_AllocateParticipantRecord(BattleSessionTeams* session_teams, s32 side_index) {
@@ -2542,8 +2543,8 @@ void BattleScene_AllocateParticipantRecord(BattleSessionTeams* session_teams, s3
 M2C_UNK func_8211F3F4();                            /* extern */
 
 /**
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * Seen in play (2026-11-13) (Free Battle, as the battle scene starts): called once from
+ * BattleScene_AllocateParticipants, right after both participant records were allocated.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void Battle_InitMessageQueues(void) {
