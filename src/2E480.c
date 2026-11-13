@@ -1222,7 +1222,8 @@ void ScrollGrid_SetItems(s8* arg0, s32 arg1, s32 arg2);
 extern s32 D_800603C0;
 /**
  * Sets up a scrolling grid menu: draw callback, cell size, columns, rows and item table.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran once as the tournament entry screen built the レンタルポケモン grid (スピアー,
+ * オニドリル, ピカチュウ ... at L30).
  */
 void ScrollGrid_Init(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7) {
     M2C_FIELD(arg0, s32*, 0x24) = arg4;
@@ -1248,7 +1249,7 @@ void Menu_ClearItemFlags(u8* arg0);
 
 /**
  * Points the grid at item table `arg1` with flags `arg2` and resets the cursor.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran once as the tournament entry screen filled the レンタルポケモン grid.
  */
 void ScrollGrid_SetItems(s8 *arg0, s32 arg1, s32 arg2) {
     M2C_FIELD(arg0, s32 *, 0) = arg1;
@@ -1343,7 +1344,8 @@ void ScrollGrid_AnimateScroll(GridMenu80031004* menu) {
 
 /**
  * Draws the up and down arrows when there are rows above or below the visible area.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran while the tournament's レンタルポケモン grid had more rows below the
+ * visible ones.
  */
 void ScrollGrid_DrawScrollArrows(GridMenu800310D8* menu, s32 x, s32 y) {
     s32 height = menu->cellHeight * menu->rows;
@@ -1380,7 +1382,7 @@ void ScrollGrid_DrawScrollArrows(GridMenu800310D8* menu, s32 x, s32 y) {
  * scrollTarget + arg2 - scroll + 2; when flag 0x400 is set, (cellHeight - 1)
  * is subtracted from it. The rectangle size is the cell size minus 4 in each
  * direction, and the color argument is read from D_80073520.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-13) drew the cursor box on the tournament's レンタルポケモン grid.
  */
 void ScrollGrid_DrawCursor(GridMenu80031004* arg0, s32 arg1, s32 arg2) {
     s32 sp2C;
@@ -1404,7 +1406,7 @@ void ScrollGrid_DrawScrollArrows(GridMenu800310D8*, s32, s32);
  * flags 0. Afterwards the scissor is reset to the full screen, ScrollGrid_DrawScrollArrows draws when option
  * bit 0x100000 is set and ScrollGrid_DrawCursor (cursor box) draws when the list is non-empty, mask
  * bit 2 is set and option bit 0x10000 is set.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-13) drew the tournament's レンタルポケモン grid every frame.
  */
 void ScrollGrid_DrawItems(GridMenu800310D8* menu, s32 x, s32 y, s32 mask, s32 arg4) {
     s32 width = menu->cellWidth * menu->columns;
@@ -1482,7 +1484,7 @@ typedef struct GridMenu8003152C {
 
 /**
  * Moves the scrolling grid's cursor with the D-Pad and scrolls to keep it visible.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran every frame while the cursor was in the tournament's レンタルポケモン grid.
  */
 u16 ScrollGrid_UpdateCursor(GridMenu8003152C *menu)
 {
@@ -1593,7 +1595,8 @@ typedef struct GridMenu80031AB0 {
 } GridMenu80031AB0;
 /**
  * Puts the cursor on cell `arg1` and scrolls to it.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran when a rental was picked from the tournament's レンタルポケモン grid and
+ * the cursor came back to it.
  */
 void ScrollGrid_SetCursor(GridMenu80031AB0* arg0, s32 arg1) {
     s32 v;
@@ -1616,7 +1619,8 @@ void ScrollGrid_SetCursor();                 /* extern */
 
 /**
  * Moves the cursor past disabled cells and scrolls to it.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran when the cursor came back to the tournament's レンタルポケモン grid after a
+ * pick.
  */
 void ScrollGrid_SyncCursor(s8 *arg0) {
     Menu_SkipDisabledForward((Menu8002E230*)arg0);

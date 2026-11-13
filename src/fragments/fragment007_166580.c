@@ -952,7 +952,8 @@ void FreeBattle_FillTrainerPanel(s32 arg0, s32 arg1, Color82001CCC arg2) {
  * Emits the display list D_80060270, then fills a 0x18C by 0x64 rectangle at
  * (arg0 + 0x88, arg1) with the color in arg2 using func_80029028
  * (Trade_DrawSolidFillRect).
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-13) ran while the tournament entry screen showed the GB party row (フシ, ヒト,
+ * カメ, L10).
  */
 void FreeBattle_FillTeamPanel(s32 arg0, s32 arg1, Color82001CCC arg2) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
