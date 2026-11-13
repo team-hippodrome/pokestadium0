@@ -1,6 +1,11 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
 #include "battle_engine_3055E0.h"
 
+/**
+ * Steps an impact framing started by func_82124284: eases the zoom toward 0 (speed
+ * ramping up to 2.8) and keeps the eye 5 times the Pokemon's size (at least 400) away
+ * offset by arg2, at least 15 high.
+ */
 void func_821243DC(CameraNode* arg0, ActivePokemon* arg1, f32 arg2) {
     BattleAnim_GetOwnerDefaultAnchorPosition(arg1, &sBattleScene.scene->unk_D0);
     M2C_FIELD(sBattleScene.scene, f32*, 0x8C) = Math_StepToF(M2C_FIELD(sBattleScene.scene, f32*, 0x98), 2.8f, 0.45f, 0.45f);
@@ -14,6 +19,11 @@ void func_821243DC(CameraNode* arg0, ActivePokemon* arg1, f32 arg2) {
 }
 
 
+/**
+ * Starts an orbit framing on the Pokemon: zoom arg2 times its size (at least 50 * arg3),
+ * target distance arg4 times its size (at least 50 * arg5), eye at pitch arg6 from its
+ * facing.
+ */
 void func_82124544(CameraNode* arg0, ActivePokemon* arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s16 arg6) {
     BattleAnim_GetOwnerDefaultAnchorPosition(arg1, &sBattleScene.scene->unk_D0);
     sBattleScene.scene->unk_74 = BattleScene_ScaleCameraDistance(arg1, arg2, 50.0f * arg3);
@@ -22,6 +32,10 @@ void func_82124544(CameraNode* arg0, ActivePokemon* arg1, f32 arg2, f32 arg3, f3
     BattleScene_SetCameraEyeFromAt(arg0, arg6, BattleScene_GetParticipantFacingAngle(arg1), sBattleScene.scene->unk_74, 0.0f);
 }
 
+/**
+ * Steps the orbit framing of func_82124544: eases the zoom toward the target distance (speed
+ * ramping up to 2.5) at pitch arg2.
+ */
 void func_82124664(s32 arg0, s32 arg1, s16 arg2) {
     f32 temp = 0.35f;
 
@@ -105,10 +119,16 @@ void func_82124830(s8 *arg0, ActivePokemon* arg1)
   }
 }
 
+/**
+ * Updates the mini effect particles.
+ */
 void func_82124874(void) {
     MiniFx_UpdateParticles();
 }
 
+/**
+ * Frames the Pokemon from the front of its facing at 3.5 times its size (at least 300).
+ */
 void func_82124894(CameraNode* arg0, ActivePokemon* arg1) {
     BattleAnim_GetOwnerDefaultAnchorPosition(arg1, &sBattleScene.scene->unk_D0);
     gCameraDistTarget = BattleScene_ScaleCameraDistance(arg1, 3.5f, 300.0f);

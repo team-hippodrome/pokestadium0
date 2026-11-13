@@ -447,15 +447,27 @@ void BattleAi_ResetBattleStats(s8 *arg0, s8 *arg1)
   while (var_v0 != 8);
 }
 
+/**
+ * Empty.
+ */
 void func_821853EC(void) {
 }
 
+/**
+ * Empty.
+ */
 void func_821853F4(void) {
 }
 
+/**
+ * Empty.
+ */
 void func_821853FC(void) {
 }
 
+/**
+ * Empty.
+ */
 void func_82185404(void) {
 }
 
@@ -495,6 +507,10 @@ s32 BattleAi_OpponentCannotAct(s8* arg0, s8* arg1) {
 
 extern s8 *D_821CF2A0;
 
+/**
+ * COM AI check: returns 1 when bit 0x10 of byte 0x59 of the AI's opponent record
+ * (D_821CF2A0) is clear.
+ */
 s32 func_82185494(void) {
     return (M2C_FIELD(D_821CF2A0, u8 *, 0x59) & 0x10) == 0;
 }

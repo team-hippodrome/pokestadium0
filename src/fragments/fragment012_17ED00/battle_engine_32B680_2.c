@@ -246,6 +246,10 @@ void BattleAnim_DrawAsset87AnimatedI4Quad(Particle* arg0, UNUSED CameraNode* arg
     ParticleGfx_DrawQuadVertices(gFullscreenQuadVtx);
 }
 
+/**
+ * Particle draw callback: draws 64x64 I4 atlas asset 0x19 as a 2D sprite at the particle's
+ * screen position, Z rotation and scale with its colors.
+ */
 void func_82141F6C(Particle* arg0, u8* arg1) {
     ParticleGfx_Push2DTransformYScaled(arg0->worldPosition.x, arg0->worldPosition.y, arg0->rotation.z, arg0->scale);
 
@@ -255,6 +259,9 @@ void func_82141F6C(Particle* arg0, u8* arg1) {
     ParticleGfx_DrawI4TextureAtlas(sBattleAnimAssetPointers[0x19], D_82191480, 0x40, 0x40, 0x40, 0x40);
 }
 
+/**
+ * Same as func_82141F6C with atlas asset 0x5E.
+ */
 void func_82142048(Particle* arg0, u8* arg1) {
     ParticleGfx_Push2DTransformYScaled(arg0->worldPosition.x, arg0->worldPosition.y, arg0->rotation.z, arg0->scale);
 
@@ -399,6 +406,10 @@ void BattleAnim_DrawAsset13FrameI4YScaledQuadB(Particle* arg0, UNUSED CameraNode
 }
 
 extern Vtx D_82191180[];
+/**
+ * Particle draw callback: draws a double-sided quad with frame (frame counter mod 8) of the
+ * 32x96 I4 texture asset 0x13, at the particle's position, rotation and scale.
+ */
 void func_821428F8(Particle* arg0, UNUSED CameraNode* arg1) {
     gSPDisplayList(gDisplayListHead++, D_82190548);
     gSPClearGeometryMode(gDisplayListHead++, G_CULL_BACK);
@@ -431,6 +442,9 @@ void BattleAnim_DrawAsset13FrameI4ModelQuadA(Particle* arg0, CameraNode* arg1) {
 
 extern Vtx D_82191140[];
 
+/**
+ * Like func_821428F8 but draws a camera-facing quad rotated by rotation.z.
+ */
 void func_82142B60(Particle* arg0, CameraNode* arg1) {
     gSPDisplayList(gDisplayListHead++, D_82190548);
     gSPClearGeometryMode(gDisplayListHead++, G_CULL_BACK);
@@ -478,6 +492,10 @@ void BattleAnim_DrawAsset1BI4TriangleA(Particle* arg0, UNUSED CameraNode* arg1) 
 }
 
 extern Vtx D_82190D60[];
+/**
+ * Particle draw callback: draws a double-sided triangle textured with the 16x256 I4 asset
+ * 0x1B, white prim and the particle's color as env.
+ */
 void func_82142EDC(Particle* arg0, UNUSED CameraNode* arg1) {
     gSPDisplayList(gDisplayListHead++, D_821904C8);
     gSPClearGeometryMode(gDisplayListHead++, G_CULL_BACK);

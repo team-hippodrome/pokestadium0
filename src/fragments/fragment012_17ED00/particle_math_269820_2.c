@@ -1323,6 +1323,9 @@ M2C_UNK Particle_ApplyMotionStep(s32);                         /* extern */
 
 void Particle_MotionStep_SetVecFromField74AnglesXZ(Particle* arg0);
 
+/**
+ * Sets motionStep from rotation.x and rotation.z and adds it to motionOffset.
+ */
 void func_8213E550(s32 arg0) {
     Particle_MotionStep_SetVecFromField74AnglesXZ((Particle*)arg0);
     Particle_ApplyMotionStep(arg0);
@@ -1832,6 +1835,9 @@ void Particle_AddRotationZ(s8 *arg0, s16 arg1) {
     M2C_FIELD(arg0, s16 *, 0x94) = (s16) (M2C_FIELD(arg0, s16 *, 0x94) + arg1);
 }
 
+/**
+ * Adds arg1 and arg2 to the particle's rotation speeds at 0x9C and 0x9E.
+ */
 void func_8213EDE8(s8 *arg0, s16 arg1, s16 arg2) {
     M2C_FIELD(arg0, s16 *, 0x9C) = (s16) (M2C_FIELD(arg0, s16 *, 0x9C) + arg1);
     M2C_FIELD(arg0, s16 *, 0x9E) = (s16) (M2C_FIELD(arg0, s16 *, 0x9E) + arg2);
@@ -2414,6 +2420,9 @@ void Particle_Field7C_SetXFromField74AngleY_0B1EC(Particle* arg0) {
     M2C_FIELD(arg0, f32*, 0x7C) = COSS(M2C_FIELD(arg0, u16*, 0x90)) * arg0->stepMagnitude;
 }
 
+/**
+ * Sets motionStep.y (0x78) to stepMagnitude times the sine of the angle at 0x92.
+ */
 void func_8213FA88(Particle* arg0) {
     M2C_FIELD(arg0, f32*, 0x78) = arg0->stepMagnitude * SINS(M2C_FIELD(arg0, u16*, 0x92));
 }
@@ -2864,6 +2873,9 @@ void Particle_SetUnkA6(s8 *arg0, s16 arg1) {
     M2C_FIELD(arg0, s16 *, 0xA2) = arg1;
 }
 
+/**
+ * Counts field A2 down by arg2 to at least arg1; returns 1 once it reaches arg1.
+ */
 s32 func_821405A8(s8 *arg0, s16 arg1, s16 arg2) {
     s32 var_v1;
 
@@ -2945,6 +2957,9 @@ void Particle_SetUnkA8(s8 *arg0, s16 arg1) {
     M2C_FIELD(arg0, s16 *, 0xA4) = arg1;
 }
 
+/**
+ * Counts field A4 down by 1 to at least arg1; returns 1 once it reaches arg1.
+ */
 s32 func_8214070C(s8 *arg0, s16 arg1) {
     s32 var_v1;
 
