@@ -486,6 +486,12 @@ void BattleScene_ActionStepUseMove(CameraNode* arg0, s32 arg1) {
     }
 }
 
+/**
+ * Camera step for an action: on substep 0 clears old effects and offsets and aims the camera
+ * at the acting Pokemon; on substep 1 tracks it until the camera settles, then ends the
+ * target's effect mode and advances the phase step.
+ * @unverified Name guessed from the code.
+ */
 void BattleScene_ActionSetupAnimationVariantB(CameraNode* arg0) {
     sBattleScene.scene->cameraPresetId = 2;
     switch (sBattleScene.scene->phaseSubstep) {

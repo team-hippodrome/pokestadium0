@@ -1796,7 +1796,7 @@ void BattleAnim_SetupFirePunchUseEffect1(Particle* arg0) {
     Particle_SetScaleScaled(arg0, 0.05f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 7);
     Particle_SetPrimAlpha(arg0, 0xFF);
-    Particle_FieldA6_SetS16_0BCA8(arg0, 0x32);
+    Particle_FieldA6_SetS16_0BCA8(arg0, 50);
     Particle_AdvanceLifecycle(arg0);
 }
 
@@ -2080,7 +2080,7 @@ void BattleAnim_AcidArmorParticleUpdateB(Particle* arg0) {
     Particle_SetScaleScaled(arg0, 0.2f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
     Particle_SetPrimAlpha(arg0, 0xC8);
-    Particle_FieldA6_SetS16_0BCA8(arg0, 0x18);
+    Particle_FieldA6_SetS16_0BCA8(arg0, 24);
     arg0->stepMagnitude = D_FLT_82197730;
     Particle_AdvanceLifecycle(arg0);
 }

@@ -7,6 +7,10 @@
 void BattleScene_OpeningStepNop(UNUSED s32 arg0) {
 }
 
+/**
+ * Empty update hook.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_NoopUpdateHook(void) {
 }
 

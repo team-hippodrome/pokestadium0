@@ -359,7 +359,7 @@ void BattleAnim_CallbackStartEffect141Descriptor1CGridRiseFade(Particle* arg0) {
 
         case 2:
             if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
-                Particle_FieldA6_SetS16_0BCA8(arg0, 0xA);
+                Particle_FieldA6_SetS16_0BCA8(arg0, 10);
                 Particle_EnableRendering(arg0);
             }
             break;
@@ -518,7 +518,7 @@ void BattleAnim_ExplosionBurstEmitter(Particle* arg0) {
 
         case 4:
             func_8213E1FC(arg0, 15.0f);
-            Particle_TickDelayAndAdvanceLifecycle(arg0, 0xA);
+            Particle_TickDelayAndAdvanceLifecycle(arg0, 10);
             BattleAnim_EmitParticleBurstWithMetadata(arg0, BattleAnim_RunSparkleHit, &gBattleAnimParticleDescriptors[0x42], 6, 0x18, 7);
             break;
 
@@ -545,7 +545,7 @@ void func_82150DCC(void) {
 extern M2C_UNK D_8218E668;
 
 void func_82150DEC(void) {
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0xB, 1, 5, BattleAnim_RunSparkleHit, (ParticleDescriptor*)&D_8218E798, 0, 5, 0x1E, 0, 0x3B, 8);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(11, 1, 5, BattleAnim_RunSparkleHit, (ParticleDescriptor*)&D_8218E798, 0, 5, 0x1E, 0, 0x3B, 8);
     BattleAnim_SetSpawnDelay(0x10);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffect141Descriptor1CGridRiseFade, (ParticleDescriptor*)&D_8218E668, 0, 0x40, 0x1E, 0, 8, 0);
     BattleAnim_SpawnDescriptor25AlphaFadeInHold(0, 2, 0x2C, 8, 0xFF);
@@ -632,7 +632,7 @@ void BattleAnim_StartEffect133ModeOrbitBurstAndEffect135Followup(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0x28, BattleAnim_ExplosionBurstEmitter, &D_8218E748, 0x18, 1, 2, 0, 0x3C, 0);
     BattleAnim_SpawnWhiteHueChange(0x3C, 0, 0x40, 0x8, 0xFF);
     BattleAnim_SpawnInvisibility(0x40, 0xFF, 0, 0xFF);
-    BattleAnim_SetSpawnDelay(0x50);
+    BattleAnim_SetSpawnDelay(80);
     BattleAnim_StartEffect135ExpandingFlashAndRisingScaleFade();
 }
 
