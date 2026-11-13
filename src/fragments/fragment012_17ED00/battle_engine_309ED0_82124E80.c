@@ -4,17 +4,26 @@
 extern s32 D_8219A570;
 extern s32 D_8219A574;
 
+/**
+ * Sets the camera preset to 1 and ends the target's effect mode (func_82108C0C).
+ */
 void func_82124E80(void) {
     M2C_FIELD(D_8219A5A0, s32 *, 0x50) = 1;
     func_82108C0C(D_8219A544);
 }
 
+/**
+ * Sets the camera preset to 3 and ends the effect mode of both the target and the user.
+ */
 void func_82124EB4(void) {
     M2C_FIELD(D_8219A5A0, s32 *, 0x50) = 3;
     func_82108C0C(D_8219A544);
     func_82108C0C(D_8219A540);
 }
 
+/**
+ * Empty.
+ */
 void func_82124EF4(void) {
 }
 
@@ -149,6 +158,12 @@ void BattleScene_InitializeSwitchActions(void) {
 extern s32 D_82199DE0;
 M2C_UNK func_800419F8();
 void func_82121D8C(s32, s32, s8 *);
+/**
+ * Calls func_800419F8 on both Pokemon's records and clears their +0x10 fields, then calls
+ * func_82121D8C(1, flag, side 1's record) with flag 0 in scene modes 4, 9 and 10, when
+ * either side's state byte is 16 or when scene+0x2E is 2, and 1 otherwise. Sets scene+0x44
+ * from the scene mode (5 for mode 6, 9 for mode 10, else 1) and advances the phase step.
+ */
 void func_82125384(void) {
     s8* a;
     s8* b;
@@ -235,17 +250,31 @@ void BattleScene_SetPhase(UNUSED CameraNode* arg0, s32 arg1) {
     sBattleScene.scene->phaseStep = 0;
 }
 
+/**
+ * Sets the camera clip mask 0x1FFE and copies the camera's field of view (+0x2C) into
+ * scene+0x60.
+ */
 void func_821255B4(s8 *arg0) {
     func_821079E8(0x1FFE);
     M2C_FIELD(D_8219A5A0, f32 *, 0x60) = (f32) M2C_FIELD(arg0, f32 *, 0x2C);
 }
 
+/**
+ * Sets the camera clip mask 0x1FFE and the field of view to 30, on the camera and in
+ * scene+0x60.
+ */
 void func_821255EC(s8 *arg0) {
     func_821079E8(0x1FFE);
     M2C_FIELD(arg0, f32 *, 0x2C) = 30.0f;
     M2C_FIELD(D_8219A5A0, f32 *, 0x60) = 30.0f;
 }
 
+/**
+ * Ends the acting side's action: clears its rock-throwing flag, stored sounds and model
+ * reload step. After the first action, goes to the second mover's phase (3) unless either
+ * side has no move (0xFF) and the other side's state byte is not 15 or 16, in which case it
+ * goes to the end-of-turn phase (4). After the second action, always goes to phase 4.
+ */
 void func_8212562C(void) {
     BattleMonRuntime* runtime;
     BattleMonRuntime* other_runtime;
@@ -414,12 +443,20 @@ void BattleScene_UpdateDisplayedHpAndTransition(CameraNode* arg0) {
     }
 }
 
+/**
+ * Steps both parties' displayed HP toward their real HP, storing whether each is done in
+ * D_8219A560/D_8219A564, then runs the HP bar step func_82125AC8.
+ */
 void func_82125C34(s32 arg0) {
     D_8219A560 = Battle_StepPartyHpToDisplay(D_82199DE0);
     D_8219A564 = Battle_StepPartyHpToDisplay(D_82199DE4);
     func_82125AC8(arg0);
 }
 
+/**
+ * Once both parties' displayed HP has caught up, sets camera preset 1 and runs the HP bar
+ * step func_82125AC8.
+ */
 void func_82125C80(s32 arg0) {
     if ((D_8219A560 == 1) && (D_8219A564 == 1)) {
         M2C_FIELD(D_8219A5A0, s32 *, 0x50) = 1;
@@ -800,6 +837,9 @@ void BattleScene_FaintStepEnd(UNUSED CameraNode* arg0) {
     }
 }
 
+/**
+ * Empty camera step.
+ */
 void func_82126A1C(UNUSED CameraNode* arg0) {
 }
 
@@ -880,6 +920,11 @@ void BattleScene_PhaseFaint(CameraNode* arg0) {
     }
 }
 
+/**
+ * Last step of the faint sequence in phase 34: after 2 frames, updates the fainted side's
+ * HUD, clears the camera and message state and advances. If the other side's state byte is
+ * 16 the battle continues at phase 4; otherwise the acting side wins (winner = side + 1).
+ */
 void func_82126D20(UNUSED CameraNode* arg0) {
     ActivePokemonState* state;
     UNUSED s32 pad[2]; // FAKE: stack padding
@@ -909,6 +954,10 @@ void func_82126D20(UNUSED CameraNode* arg0) {
     }
 }
 
+/**
+ * Phase 34, a faint that can end the battle: steps 0-3 are the faint collapse and vanish,
+ * step 4 is func_82126D20, and the later steps run the send-out follow-up camera.
+ */
 void func_82126E34(CameraNode* arg0) {
     switch (sBattleScene.scene->phaseStep) {
         case 0:
@@ -941,6 +990,11 @@ void func_82126E34(CameraNode* arg0) {
     }
 }
 
+/**
+ * Camera step: keeps the field of view, clears camera and message state, zeroes the zoom and
+ * advances the phase step after 10 frames, placing the eye from the stored distance and
+ * angles.
+ */
 void func_82126EE0(CameraNode* arg0) {
     func_821255B4((s8*)arg0);
     func_82124A40();
@@ -955,6 +1009,12 @@ void func_82126EE0(CameraNode* arg0) {
 
 f32 func_8000F23C(f32, f32, f32, f32);
 void func_8210C104(s16*, s16, s16);
+/**
+ * Camera step that pulls back to an overview: in scene mode 10 it eases the zoom to 120,
+ * the pitch to 0xE38, the distance to 250 and the field of view to 80, then moves on with
+ * func_82125594(2). Otherwise it does the same toward 350 once both models are above height
+ * 100.
+ */
 void func_82126F70(CameraNode* arg0) {
     s8* sp34 = (s8*)D_8219A544;
     s8* sp30 = (s8*)D_8219A540;
@@ -1010,11 +1070,18 @@ void BattleScene_PhaseCommand(CameraNode* arg0) {
     }
 }
 
+/**
+ * Sets the Pokemon's field +0x7BE to 0x800.
+ */
 void func_821272C0(s8 *arg0) {
     M2C_FIELD(arg0, s16 *, 0x7BE) = 0x800;
 }
 
 void ModelAnim_SetFrame(DisplayObject* display_object, s16 animation_timer);
+/**
+ * Rounds the model's animation frame to the next multiple of its frame count, counted back
+ * from arg1. Skipped when model flag 2 or 0x4000 is set.
+ */
 void func_821272CC(DisplayObject* arg0, s32 arg1) {
     s32 frames = M2C_FIELD(M2C_FIELD(arg0, s8**, 0x44), u16*, 0xA);
 
@@ -1033,6 +1100,11 @@ s16 BattleScene_GetParticipantFacingAngle(s8 *arg0);
 void func_82134FD0(ActivePokemon*);
 void func_82102010(ActivePokemon*);
 s32 func_82101FD4(ActivePokemon*);
+/**
+ * Move intro camera variant 0: once the user's model is ready, sets camera preset 3, frames
+ * the user's default anchor from the front at distance 150 and a size-scaled eye distance,
+ * then steps the shot until it hands over.
+ */
 void func_82127354(CameraNode* arg0) {
     s32 i;
     f32 sp58;
@@ -1097,6 +1169,10 @@ void func_82127354(CameraNode* arg0) {
     }
 }
 
+/**
+ * Move intro camera variant 1: frames the user from its facing angle at distance 150 with
+ * the eye 600 away (at least 25 high), then steps the shot until it hands over.
+ */
 void func_82127724(CameraNode* arg0) {
     s32 i;
     f32 dist;
@@ -1199,6 +1275,10 @@ s16 BattleScene_GetParticipantFacingAngle(s8 *arg0);
 void func_82134FD0(ActivePokemon*);
 void func_82102010(ActivePokemon*);
 s32 func_82101FD4(ActivePokemon*);
+/**
+ * Move intro camera variant 2: frames the user from the front, aimed 2.5 times its height
+ * above the anchor, shows the move message and steps the shot.
+ */
 void func_82127DFC(CameraNode* arg0) {
     s32 i;
     f32 sp68;
@@ -1260,6 +1340,10 @@ s16 BattleScene_GetParticipantFacingAngle(s8 *arg0);
 void func_82134FD0(ActivePokemon*);
 void func_82102010(ActivePokemon*);
 s32 func_82101FD4(ActivePokemon*);
+/**
+ * Move intro camera variant 3: like variant 2 but aimed 1.5 times the user's height below
+ * the anchor.
+ */
 void func_8212817C(CameraNode* arg0) {
     s32 i;
     f32 sp68;
@@ -1320,6 +1404,10 @@ s16 BattleScene_GetParticipantFacingAngle(s8 *arg0);
 void func_82134FD0(ActivePokemon*);
 void func_82102010(ActivePokemon*);
 s32 func_82101FD4(ActivePokemon*);
+/**
+ * Move intro camera variant 4: frames the user from the front, aimed two heights below the
+ * anchor with the eye 150 lower, shows the move message and steps the shot.
+ */
 void func_82128510(CameraNode* arg0) {
     f32 sp44;
     UNUSED s32 pad[2]; // FAKE: stack padding
@@ -1363,6 +1451,9 @@ void func_82128510(CameraNode* arg0) {
     }
 }
 
+/**
+ * Move intro camera variant 5: picks one of variants 0-3 at random on substep 0 and runs it.
+ */
 void func_82128780(CameraNode* arg0) {
     if (sBattleScene.scene->phaseSubstep == 0) {
         D_8219A568 = BattleAnim_RandomRange(4);
