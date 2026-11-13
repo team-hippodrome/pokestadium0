@@ -1332,8 +1332,8 @@ s32 Audio_GetActivityScore(void) {
 s32 func_8004D300(s32);
 /**
  * Stop all active songs (not FX), fade them out
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) ran when つづける was picked at トーナメントをつづけますか？ after winning tournament
+ * round 1.
  * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
  */
 void Audio_StopAllSoundEffects(void) {

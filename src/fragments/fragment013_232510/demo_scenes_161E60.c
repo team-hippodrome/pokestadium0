@@ -944,9 +944,8 @@ void func_80025830(void);
 
 /**
  * Asks トーナメントをつづけますか？ (Continue the tournament?) with つづける (Continue) / ちゅうだんする (Quit), plus the GB cartridge warning.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) after winning tournament round 1 it showed トーナメントをつづけますか？ with つづける /
+ * ちゅうだんする; つづける went on to the round 2 VS screen (サトシ vs かじばどろぼう).
  */
 s32 Tournament_RunContinuePrompt(void) {
     Color_RGB8 top = D_8220308C;
