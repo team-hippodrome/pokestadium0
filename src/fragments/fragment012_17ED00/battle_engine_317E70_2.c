@@ -406,6 +406,12 @@ Particle* BattleAnim_CreateProceduralParticle(s16 arg0, s16 arg1, s32 arg2, f32 
 
 void func_80015908(ActivePokemon*, s32, Vec3f*);
 void BattleScene_GetParticipantModelSizeScaled(ActivePokemon* arg0, Vec3f* arg1);
+/**
+ * Sets the particle's origin once at spawn from its anchor mode (unk_CC): the owner's model
+ * position, its default anchor, bone 100 (optionally on the ground, or pushed forward or
+ * backward along its facing by its size), or its Poke Ball position.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_InitializeParticleAnchor(Particle* arg0) {
     Vec3f sp3C;
     Vec3f sp30;
@@ -494,6 +500,12 @@ void BattleAnim_InitializeParticleAnchor(Particle* arg0) {
 }
 
 void BattleScene_GetParticipantModelSizeScaled(ActivePokemon* arg0, Vec3f* arg1);
+/**
+ * Re-reads the particle's origin each frame for the anchor modes that follow the owner:
+ * bone 100, optionally on the ground, pushed along the owner's facing, or raised by its
+ * model height; the last mode follows the Poke Ball.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_UpdateParticleAnchor(Particle* arg0) {
     Vec3f sp3C;
     Vec3f sp30;

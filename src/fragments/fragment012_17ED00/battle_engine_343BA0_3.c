@@ -29,6 +29,11 @@ void func_8213436C(void);
 extern s32 D_8219A760;
 void func_821079E8(s32);
 
+/**
+ * Camera frame on the Pokemon of side D_8219A760: aims at its default anchor from the
+ * front, at a distance scaled by its size, then advances the phase step.
+ * @unverified Name guessed from the code.
+ */
 void BattleScene_FinalPresentationFrameActiveOwner(CameraNode* arg0) {
     f32 sp3C;
 
@@ -96,6 +101,10 @@ void func_82134374(CameraNode* arg0, UNUSED s32 arg1, UNUSED s32 arg2) {
     sBattleScene.scene->camera = arg0;
 }
 
+/**
+ * Allocates the battle scene from the main pool and zeroes it.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_AllocateMemory(void) {
     sBattleScene.scene = main_pool_alloc(sizeof(BattleScene), 0);
     bzero(sBattleScene.scene, sizeof(BattleScene));

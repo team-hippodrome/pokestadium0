@@ -18,9 +18,17 @@ extern MoveAnimInfoZ D_80073D90[];
 extern f32 D_FLT_82189354[][4];
 extern s8 *D_8219A5A0;
 
+/**
+ * Empty render hook.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_RenderNop1(void) {
 }
 
+/**
+ * Empty render hook.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_RenderNop2(void) {
 }
 
@@ -2049,6 +2057,13 @@ void BattleScene_PhaseRecoilDamage(CameraNode* arg0) {
     }
 }
 
+/**
+ * Battle phase 10. Step 0 waits until the acting Pokemon's check passes, then clears
+ * effects, shows a message for the other side, queues effect list 6 and plays sound
+ * command 0x23. Step 1 waits 55 frames and shows a second message, then falls through to
+ * step 2, which waits 60 frames and ends the phase.
+ * @unverified Name guessed from the code.
+ */
 void BattleScene_Phase10(CameraNode* arg0) {
     switch (sBattleScene.scene->phaseStep) {
         case 0:

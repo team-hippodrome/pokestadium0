@@ -53,6 +53,10 @@ void Battle_CheckAllBroughtFainted_LeechSeed(ActivePokemon* arg0);
 void Battle_CheckAllBroughtFainted_PendingHp(ActivePokemon* arg0);
 void Battle_CheckAllBroughtFainted_Hp(ActivePokemon* arg0);
 
+/**
+ * Empty effect end callback.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_EffectEndNop(void) {
 }
 

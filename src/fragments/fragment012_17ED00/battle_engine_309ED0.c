@@ -1,6 +1,10 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
 #include "battle_engine_309ED0.h"
 
+/**
+ * Resets the scene's model-reload step to 0.
+ * @unverified Name guessed from the code.
+ */
 void BattleScene_ResetAnimationStep(void) {
     sBattleScene.scene->modelReloadStep = 0;
 }
@@ -39,6 +43,12 @@ s32 func_82124A50(ActivePokemon* arg0) {
     return sp1C;
 }
 
+/**
+ * Steps the model reload for one Pokemon whose state flag 0x2000 is set: step 0 starts the
+ * reload, step 1 waits for the Substitute bit (0x10) in its team status flags, clears 0x90 and
+ * reloads the doll. Returns 1 while the reload is still in progress.
+ * @unverified Name guessed from the code.
+ */
 s32 BattleScene_AdvanceOwnerAnimation98(ActivePokemon* arg0) {
     UNUSED s32 pad[2]; // FAKE: stack padding
     s32 sp1C = 0;
@@ -101,6 +111,12 @@ s32 func_82124BF8(ActivePokemon* arg0) {
 }
 
 
+/**
+ * Same model-reload steps as BattleScene_AdvanceOwnerAnimation98, run for side 0 and then
+ * side 1 (each only if its flag 0x2000 is set). Runs only when scene field unk_44 is 1.
+ * Returns 1 while a reload is still in progress.
+ * @unverified Name guessed from the code.
+ */
 s32 BattleScene_AdvanceBothOwnerAnimations(void) {
     UNUSED s32 pad[2]; // FAKE: stack padding
     s32 sp1C = 0;

@@ -69,6 +69,11 @@ void HyperBeamIceBeamTrail_ResetPool(void) {
     }
 }
 
+/**
+ * Starts a beam trail in the first free of 6 slots, from (arg1, arg2, arg3) toward (arg4,
+ * arg5, arg6), with its colors, widths, timing and the two texture scroll settings.
+ * @unverified Name from Stadium 1.
+ */
 void HyperBeamIceBeamTrail_Spawn(s16 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, u8 arg7, u8 arg8, u8 arg9,
                    u8 argA, u8 argB, u8 argC, u8 argD, u8 argE, u8 argF, f32 arg10, f32 arg11, f32 arg12, s16 arg13,
                    s32 arg14, s32 arg15, s16 arg16, s16 arg17, s16 arg18, s16 arg19, s16 arg1A, s16 arg1B, s16 arg1C,
@@ -138,6 +143,11 @@ void HyperBeamIceBeamTrail_Spawn(s16 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg
     }
 }
 
+/**
+ * Writes to arg3 a vector of length arg4 perpendicular to both direction arg1 and the line
+ * from the camera eye to arg2. arg0 = 1 flips it. Used to widen the beam toward the camera.
+ * @unverified Name from Stadium 1.
+ */
 void HyperBeamIceBeamTrail_ComputeCameraRelativeOffset(s32 arg0, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg4, UNUSED f32 arg5, UNUSED f32 arg6,
                    UNUSED f32 arg7) {
     UNUSED s32 pad[36];

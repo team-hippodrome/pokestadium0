@@ -1,6 +1,11 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
 #include "battle_engine_339CA0.h"
 
+/**
+ * Particle callback for the growing spark: waits its delay, shows for 12 frames, fades out
+ * and detaches. While visible it grows toward its scale target and fades env green and blue.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_CallbackUnusedGrowingSparkVariant(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -160,6 +165,11 @@ void BattleAnim_InitializeThunderPunchHit(void) {
     func_8213BC00(0, 0x17, 0xE1, 0, 0x40);
 }
 
+/**
+ * Queues one descriptor 0x34 color-fade particle on the current owner at once. No caller
+ * was found.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_OrphanDescriptor34Emitter(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackOrphanDescriptor34ColorFadeDetach, &gBattleAnimParticleDescriptors[0x34], 0, 5, 0x11, gBattleAnimCurrentAnchor, 0, 0);
 }
@@ -240,6 +250,11 @@ void BattleAnim_InitializeSwiftHit(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_RunSwiftHitEffect2, &gDefaultParticleDescriptor, 0, 2, 9, 0, 0, 0);
 }
 
+/**
+ * Starts effect 137: queues two descriptor 0x3F rising, fading particles on the current
+ * owner, three frames apart.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_StartEffect137Descriptor3FRisingFade(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 3, 2, BattleAnim_HeavyHitAnimatedRiseFade, &gBattleAnimParticleDescriptors[0x3F], 0, 0x10, 0xA, 0, 0x11, 0);
 }
