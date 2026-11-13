@@ -4,8 +4,9 @@
 /**
  * Phase 35. Same residual damage presentation as BattleScene_PhaseResidualDamageAfterMove for a Pokemon that
  * has no move this turn (usedMove high nibble 0xF); entered by BattleScene_PrepareResidualStatusPresentation.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * Seen in play (2026-11-13) (unattended all-Metronome Free Battle with randomized teams, battle 2
+ * turn 16): ran twice. Teams carried random sleep, poison, burn, freeze and paralysis; the exact
+ * status was not logged.
  * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
 void BattleScene_PhaseResidualDamageWithoutMove(CameraNode* arg0) {

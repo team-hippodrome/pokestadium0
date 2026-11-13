@@ -289,6 +289,7 @@ extern s32 D_821A8B80;
 /**
  * Seen in play (2026-11-13) (title-screen demo battle, left idle after boot): ran twice in a row
  * while Lapras was on screen, called from SingTrail_BuildGfx.
+ * Also ran in the COM-side move sweep when COM's Metronome was pinned to Sing (move 47).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void Trail40Variant_SetupCameraTransform(void) {

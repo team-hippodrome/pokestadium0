@@ -342,8 +342,9 @@ void BattleAnim_DrawStringShotHitRadial(void) {
 }
 
 /**
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) (COM-side move sweep, COM's Metronome pinned to Disable): ran when the
+ * yellow rings closed around Onix, with 「イワイワの ゆびをふるを ふうじこめた！」 on screen. Disable reuses String
+ * Shot's hit rings when it targets 1P.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetupStringShotHitRadial(void) {
@@ -376,8 +377,9 @@ void BattleAnim_DrawDisableHitRadial(void) {
 }
 
 /**
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) (COM-side move sweep: 1P Splash, then COM's Metronome pinned to
+ * Disable): ran as the yellow strand left Pinsir toward Onix, before 「イワイワの ゆびをふるを ふうじこめた！」. In the
+ * 1P-side sweep Disable never ran it, so it is the COM-side (target 1P) variant.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleAnim_StartEffect98Radial20_EmitVariantD(void) {
