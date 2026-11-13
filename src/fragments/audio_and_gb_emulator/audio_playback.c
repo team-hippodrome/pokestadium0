@@ -1,4 +1,7 @@
 /* Stadium Zero fragment000_80C00. */
+/* Audio driver, matching OoT src/audio/internal/playback.c in function order. The driver is
+ * Nintendo's "Nas" library (original names Nas_*); this revision sits between SM64 Shindou and
+ * OoT. See docs/annotation/audio-driver.md for the per-function mapping. */
 
 #include "global.h"
 #include "audio_and_gb_emulator.h"
@@ -26,7 +29,8 @@ extern f32 D_81136CD8[];
 extern f32 D_81136ED8[];
 
 /**
- * Sets a note's left and right volume, pan and reverb from its attributes. Zelda 64 audio driver (playback.c), same position and shape.
+ * Sets a note's left and right volume, pan and reverb from its attributes.
+ * Corresponds to OoT Audio_InitSampleState (original name Nas_smzSetParam).
  * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
@@ -125,45 +129,50 @@ void AudioPlayback_InitSampleState(s8* note, NoteSubAttributes* reverb_info) {
     }
 }
 
-typedef struct StereoFlags811105DC {
+/* Byte 1 of the note's sample state (OoT NoteSampleState.bitField1). */
+typedef struct SampleStateFlags811105DC {
     /* 0x0 */ u8 unk0;
     /* 0x1 */ u8 pad : 7;
-    /* 0x1 */ u8 wide : 1;
-} StereoFlags811105DC;
+    /* 0x1 */ u8 hasTwoParts : 1;
+} SampleStateFlags811105DC;
 
 /**
- * Sets a note's resampling rate, marking it as wide (half rate) when the rate is 2.0 or more. Zelda 64 audio driver.
+ * Sets a note's fixed-point resampling rate. Rates of 2.0 or more are halved and flagged
+ * hasTwoParts, so the synthesizer resamples in two halves.
+ * Corresponds to OoT Audio_NoteSetResamplingRate (original name Nas_smzSetPitch). Same 2.0f split,
+ * 1.99998f and 3.99996f clamps, halving and 32768.0f fixed-point scale.
  * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 void AudioPlayback_NoteSetResamplingRate(s8* arg0, f32 arg1) {
-    StereoFlags811105DC* flags = (StereoFlags811105DC*)(arg0 + 0xB4);
-    f32 pan;
+    SampleStateFlags811105DC* flags = (SampleStateFlags811105DC*)(arg0 + 0xB4);
+    f32 resampling_rate;
 
     if (arg1 < 2.0f) {
-        flags->wide = 0;
+        flags->hasTwoParts = 0;
         if (1.99998f < arg1) {
-            pan = 1.99998f;
+            resampling_rate = 1.99998f;
         } else {
-            pan = arg1;
+            resampling_rate = arg1;
         }
     } else {
-        flags->wide = 1;
+        flags->hasTwoParts = 1;
         if (3.99996f < arg1) {
-            pan = 1.99998f;
+            resampling_rate = 1.99998f;
         } else {
-            pan = arg1 * 0.5f;
+            resampling_rate = arg1 * 0.5f;
         }
     }
-    M2C_FIELD(arg0, s16*, 0xC0) = pan * 32768.0f;
+    M2C_FIELD(arg0, s16*, 0xC0) = resampling_rate * 32768.0f;
 }
 
 extern NoteSampleState D_811369C0;
 void AudioEffects_InitAdsr(u8*, s32, char*);
 
 /**
- * Starts a note's envelope from its instrument or the layer's own envelope. Zelda 64 audio driver.
+ * Starts a note's envelope from its instrument or the layer's own envelope.
+ * Corresponds to OoT Audio_NoteInit (original name Nas_StartVoice).
  * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
@@ -182,7 +191,8 @@ void AudioPlayback_NoteInit(Note* arg0) {
 }
 
 /**
- * Turns a note off and clears its playback state. Zelda 64 audio driver.
+ * Turns a note off and clears its playback state.
+ * Corresponds to OoT Audio_NoteDisable (original name Nas_StopVoice).
  * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
@@ -216,7 +226,8 @@ f32 AudioEffects_UpdateAdsr(u8*);
 void AudioEffects_UpdatePortamentoAndVibrato(Note*);
 
 /**
- * Updates every note once per audio frame: envelopes, releases, pitch, volume and pan. Zelda 64 audio driver.
+ * Updates every note once per audio frame: envelopes, releases, pitch, volume and pan.
+ * Corresponds to OoT Audio_ProcessNotes (original name Nas_UpdateChannel).
  * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
@@ -385,7 +396,8 @@ void AudioPlayback_ProcessNotes(void)
 }
 
 /**
- * Returns the low, normal or high sample of instrument `arg0` for semitone `arg1`. Zelda 64 audio driver.
+ * Returns the low, normal or high sample of instrument `arg0` for semitone `arg1`.
+ * Corresponds to OoT Audio_GetInstrumentTunedSample (original name NoteToVoice).
  * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
@@ -409,7 +421,8 @@ extern SoundFont* D_811858B0;
 extern s32 D_811859D0;
 
 /**
- * Returns instrument `arg1` of font `arg0`, or NULL when the font is not loaded or the id is out of range. Zelda 64 audio driver.
+ * Returns instrument `arg1` of font `arg0`, or NULL when the font is not loaded or the id is out of range.
+ * Corresponds to OoT Audio_GetInstrumentInner (original name ProgToVp).
  * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
@@ -436,7 +449,8 @@ u8* AudioPlayback_GetInstrumentInner(s32 arg0, s32 arg1) {
 }
 
 /**
- * Returns drum `arg1` of font `arg0`, or NULL when the font is not loaded or the id is out of range. Zelda 64 audio driver.
+ * Returns drum `arg1` of font `arg0`, or NULL when the font is not loaded or the id is out of range.
+ * Corresponds to OoT Audio_GetDrum (original name PercToPp).
  * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
@@ -473,7 +487,8 @@ void AudioPlayback_AudioListRemove(s8*);
 void AudioPlayback_AudioListPushFront(M2C_UNK* arg0, M2C_UNK* arg1);
 
 /**
- * Starts the decay (6) or release (7) of the note a sequence layer is playing. Zelda 64 audio driver.
+ * Starts the decay (6) or release (7) of the note a sequence layer is playing.
+ * Corresponds to OoT Audio_SeqLayerDecayRelease (original name __Nas_Release_Channel_Main).
  * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
@@ -550,7 +565,8 @@ void AudioPlayback_SeqLayerDecayRelease(SequenceLayer* layer, s32 target) {
 }
 
 /**
- * Starts the decay of the layer's note. Zelda 64 audio driver.
+ * Starts the decay of the layer's note.
+ * Corresponds to OoT Audio_SeqLayerNoteDecay (original name Nas_Release_Channel).
  * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
@@ -560,7 +576,8 @@ void AudioPlayback_SeqLayerNoteDecay(Particle* arg0) {
 }
 
 /**
- * Starts the release of the layer's note. Zelda 64 audio driver.
+ * Starts the release of the layer's note.
+ * Corresponds to OoT Audio_SeqLayerNoteRelease (original name Nas_Release_Channel_Force).
  * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
@@ -570,7 +587,8 @@ void AudioPlayback_SeqLayerNoteRelease(Particle* arg0) {
 }
 
 /**
- * Makes an empty circular note list. Zelda 64 audio driver.
+ * Makes an empty circular note list.
+ * Corresponds to OoT Audio_InitNoteList (original name __Nas_InitList).
  * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
  * quitting).
  * @unverified Name and comment guessed from the code.
@@ -591,6 +609,7 @@ void AudioPlayback_InitNoteList(s8 *arg0) {
  * list, link through the first two words, increment the third and copy the
  * fourth into the inserted node.  Afterwards arg0 itself is stored in the
  * fourth word (offset 0xC) of each block.
+ * Corresponds to OoT Audio_InitNoteLists (original name Nas_InitChNode).
  * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
  * quitting).
  * @unverified Name guessed from the code; comment kept.
@@ -620,6 +639,7 @@ extern s32 D_811858E8;
  * and calls AudioSeq_AudioListPushBack(&D_81184938, record). AudioHeap_DiscardFont, which walks the
  * same array, passes the same list argument to the same function. What the
  * records are is not established from this function.
+ * Corresponds to OoT Audio_InitNoteFreeList (original name Nas_InitChannelList).
  * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
  * quitting).
  * @unverified Name guessed from the code; comment kept.
@@ -644,6 +664,7 @@ void AudioPlayback_AudioListRemove(s8*);
  * Moves every note in the four lists of a note pool back to the matching
  * global free list (D_81184938, D_81184948, D_81184958, D_81184968). Same
  * structure as note_pool_clear in the Super Mario 64 audio library.
+ * Corresponds to OoT Audio_NotePoolClear (original name Nas_DeAllocAllVoices).
  * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
  * quitting).
  * @unverified Name guessed from the code; comment kept.
@@ -693,7 +714,8 @@ void AudioPlayback_NotePoolClear(NotePool* pool) {
 
 s32 AudioSeq_AudioListPopBack(AudioListItem* list);
 /**
- * Takes `arg1` notes from the global free lists into a pool. Zelda 64 audio driver.
+ * Takes `arg1` notes from the global free lists into a pool.
+ * Corresponds to OoT Audio_NotePoolFill (original name Nas_AllocVoices).
  * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
@@ -741,7 +763,8 @@ void AudioPlayback_NotePoolFill(s8* arg0, s32 arg1) {
 }
 
 /**
- * Pushes list item `arg1` onto the front of list `arg0` if it is on no list. Zelda 64 audio driver.
+ * Pushes list item `arg1` onto the front of list `arg0` if it is on no list.
+ * Corresponds to OoT Audio_AudioListPushFront (original name Nas_AddListHead).
  * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
@@ -758,7 +781,8 @@ void AudioPlayback_AudioListPushFront(M2C_UNK *arg0, M2C_UNK *arg1) {
 }
 
 /**
- * Unlinks a list item from its list. Zelda 64 audio driver.
+ * Unlinks a list item from its list.
+ * Corresponds to OoT Audio_AudioListRemove (original name Nas_CutList).
  * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
@@ -775,7 +799,8 @@ void AudioPlayback_AudioListRemove(s8 *arg0) {
 }
 
 /**
- * Returns the note in list `arg0` with the lowest priority below `arg1`, or NULL. Zelda 64 audio driver.
+ * Returns the note in list `arg0` with the lowest priority below `arg1`, or NULL.
+ * Corresponds to OoT Audio_FindNodeWithPrioLessThan (original name __Nas_GetLowerPrio).
  * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
@@ -809,7 +834,9 @@ s8 *AudioPlayback_FindNodeWithPrioLessThan(s8 *arg0, s32 arg1) {
 }
 
 /**
- * Gives note `arg0` to layer `arg1` and sets it up from the layer's instrument. Zelda 64 audio driver.
+ * Gives note `arg0` to layer `arg1` and sets it up from the layer's instrument.
+ * Corresponds to OoT Audio_NoteInitForLayer (original name Nas_EntryTrack). OoT adds synthetic
+ * waves.
  * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
@@ -846,7 +873,9 @@ void AudioPlayback_NoteInitForLayer(s8* arg0, s8* arg1) {
 
 
 /**
- * Releases the note's current layer and queues layer `arg1` to take it over. Zelda 64 audio driver.
+ * Releases the note's current layer and queues layer `arg1` to take it over.
+ * Corresponds to OoT func_800E82C0 (original name __Nas_InterTrack). OoT leaves it unnamed (MM:
+ * func_801963E8).
  * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
@@ -858,7 +887,8 @@ void AudioPlayback_NoteReleaseOwnerAndQueueLayer(s8 *arg0, s32 arg1) {
 
 extern f32 D_FLT_811858D4;
 /**
- * Starts releasing the note and hands it to layer `arg1` with the layer's priority. Zelda 64 audio driver.
+ * Starts releasing the note and hands it to layer `arg1` with the layer's priority.
+ * Corresponds to OoT Audio_NoteReleaseAndTakeOwnership (original name __Nas_InterReleaseTrack).
  * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
@@ -892,7 +922,8 @@ s32 AudioSeq_AudioListPopBack(AudioListItem* list);
 void AudioPlayback_NoteInitForLayer(s8*, s8*);
 
 /**
- * Allocates a note for a layer from a pool's disabled list. Zelda 64 audio driver.
+ * Allocates a note for a layer from a pool's disabled list.
+ * Corresponds to OoT Audio_AllocNoteFromDisabled.
  * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
@@ -923,7 +954,8 @@ s32 AudioPlayback_AllocNoteFromDisabled(s8 *arg0, s32 arg1) {
 s32 AudioSeq_AudioListPopBack(AudioListItem* list);
 
 /**
- * Takes over a decaying note for a layer. Zelda 64 audio driver.
+ * Takes over a decaying note for a layer.
+ * Corresponds to OoT Audio_AllocNoteFromDecaying.
  * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
@@ -941,7 +973,8 @@ s32 AudioPlayback_AllocNoteFromDecaying(s8 *arg0, s8 *arg1) {
 
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 /**
- * Steals the lowest-priority active note for a layer. Zelda 64 audio driver.
+ * Steals the lowest-priority active note for a layer.
+ * Corresponds to OoT Audio_AllocNoteFromActive (original name __Nas_ChLookRelWait).
  * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
@@ -981,7 +1014,8 @@ s8 *AudioPlayback_AllocNoteFromActive(s8 *arg0, s8 *arg1)
 }
 
 /**
- * Allocates a note for a layer by its channel's note-stealing policy. Zelda 64 audio driver.
+ * Allocates a note for a layer by its channel's note-stealing policy.
+ * Corresponds to OoT Audio_AllocNote (original name Nas_AllocationOnRequest).
  * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
@@ -1038,7 +1072,9 @@ extern NoteSampleState D_811369A8;
 extern s8 D_811842C0;
 s32 func_81109868(s8 *, s32);
 /**
- * Resets every note's state and sample buffers. Zelda 64 audio driver.
+ * Resets every note's state and sample buffers.
+ * Corresponds to OoT Audio_NoteInitAll (original name Nas_ChannelInit). Zero allocates with
+ * AudioHeap_Alloc; OoT uses AudioHeap_AllocDmaMemory.
  * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
  * quitting).
  * @unverified Name and comment guessed from the code.

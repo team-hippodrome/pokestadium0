@@ -1,3 +1,6 @@
+/* Audio driver, matching OoT src/audio/internal/seqplayer.c (continued) in function order. The
+ * driver is Nintendo's "Nas" library (original names Nas_*); this revision sits between SM64
+ * Shindou and OoT. See docs/annotation/audio-driver.md for the per-function mapping. */
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
 #include "audio_and_gb_emulator.h"
 
@@ -7,6 +10,11 @@ void AudioPlayback_NotePoolClear(s8*);
 
 extern u32 D_811859CC;
 
+/**
+ * Sets the layer's pitch, delay and velocity for a note command, handling portamento.
+ * Corresponds to OoT AudioSeq_SeqLayerProcessScriptStep3 (original name __SetNote).
+ * @unverified Name follows the counterpart; not checked in play.
+ */
 s32 AudioSeq_SeqLayerProcessScriptStep3(SequenceLayer* layer, s32 cmd) {
     SeqScriptState* state = &layer->scriptState;
     u16 delay;
@@ -111,6 +119,7 @@ s32 AudioSeq_SeqLayerProcessScriptStep3(SequenceLayer* layer, s32 cmd) {
  * the low nibble at offset 5 and the high nibble at offset 6. A zero nibble
  * leaves the corresponding byte unchanged. (arg1 itself is reused for the
  * high nibble, which is what the retail register use needs.)
+ * Corresponds to OoT AudioSeq_SetChannelPriorities (original name Nas_PriorityChanger).
  */
 void AudioSeq_SetChannelPriorities(u8* arg0, u8 arg1) {
     s32 low;
@@ -125,6 +134,12 @@ void AudioSeq_SetChannelPriorities(u8* arg0, u8 arg1) {
     }
 }
 
+/**
+ * Returns the channel's instrument `arg1` and copies its ADSR into `arg3`; returns 0 when it does
+ * not exist.
+ * Corresponds to OoT AudioSeq_GetInstrument (original name Nas_ProgramChanger).
+ * @unverified Name follows the counterpart; not checked in play.
+ */
 u8 AudioSeq_GetInstrument(u8* arg0, u8 arg1, u8** arg2, u8* arg3) {
     u8* p = AudioPlayback_GetInstrumentInner(arg0[7], arg1);
 
@@ -139,6 +154,11 @@ u8 AudioSeq_GetInstrument(u8* arg0, u8 arg1, u8** arg2, u8* arg3) {
     return arg1;
 }
 
+/**
+ * Sets the channel's instrument: 0x80 and up are raw instrument ids, 0x7F selects drums.
+ * Corresponds to OoT AudioSeq_SetInstrument (original name Nas_SubVoiceSet).
+ * @unverified Name follows the counterpart; not checked in play.
+ */
 void AudioSeq_SetInstrument(u8* arg0, u8 arg1) {
     s16 ret;
 
@@ -158,6 +178,11 @@ void AudioSeq_SetInstrument(u8* arg0, u8 arg1) {
     ((SequenceChannel*)arg0)->hasInstrument = 1;
 }
 
+/**
+ * Sets the channel's volume from 0-127.
+ * Corresponds to OoT AudioSeq_SequenceChannelSetVolume (original name Nas_SubVolumeSet).
+ * @unverified Name follows the counterpart; not checked in play.
+ */
 void AudioSeq_SequenceChannelSetVolume(u8* arg0, u8 arg1) {
     *(f32*)(arg0 + 0x2C) = (f32)(s32)arg1 / 127.0f;
 }
@@ -176,6 +201,12 @@ s32 AudioSeq_SeqChannelSetLayer(void*, s32);
 void AudioSeq_SeqLayerProcessScript(void*);
 s32 AudioSeq_HandleScriptFlowControl(void*, void*, s32, s32);
 
+/**
+ * Runs one tick of a channel's script, then its layers' scripts.
+ * Corresponds to OoT AudioSeq_SequenceChannelProcessScript (original name Nas_SubSeq). OoT adds
+ * random numbers (AudioThread_NextRandom).
+ * @unverified Name follows the counterpart; not checked in play.
+ */
 void AudioSeq_SequenceChannelProcessScript(SequenceChannel* channel) {
     s32 i;
     u8* data;

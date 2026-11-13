@@ -970,7 +970,7 @@ void func_8110FC30(void);
 void func_8110FE90(void);
 void AudioThread_InitMesgQueuesImpl(void);
 void AudioThread_InitMesgQueues(void);
-void BattleAnim_EffectStartNop(void);
+void func_81110164(void);
 void AudioThread_ResetExternalPool(void);
 
 // audio_playback.c
