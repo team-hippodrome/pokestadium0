@@ -447,7 +447,8 @@ s32 func_8213775C(s8* arg0, s8 arg1, s8 arg2) {
 
 /**
  * Move value toward target, clamp overshoot, and return 1 at the target.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Vice Grip, Guillotine): with target 0 and step
+ * 0x20 it took a particle color byte from 0xFF to 0xDF and returned 0.
  */
 s32 ParticleMath_ApproachU8(u8* arg0, u8 arg1, u8 arg2) {
     s32 var_v1 = 0;
@@ -509,7 +510,8 @@ s32 func_82137898(s16* arg0, s16 arg1, s16 arg2) {
 
 /**
  * Approach a wrapping 16-bit angle along the selected short arc; return 1 when the target is reached.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Thunderbolt): with target 0x4000 and step 0x800
+ * it moved the angle from 0x0Fxx to 0x17xx and returned 0.
  */
 s32 ParticleMath_ApproachAngle(s16* arg0, s16 arg1, s16 arg2) {
     s32 a0 = *(u16*)arg0;
@@ -591,7 +593,8 @@ s32 ParticleMath_ApproachS32(s32* arg0, s32 arg1, s32 arg2) {
 
 /**
  * Move value toward target, clamp overshoot, and return 1 at the target.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Thunder Punch): it moved a particle float toward
+ * its target and returned 0 before arriving.
  */
 s32 ParticleMath_ApproachFloat(f32* arg0, f32 arg1, f32 arg2) {
     s32 var_v1 = 0;
@@ -662,7 +665,8 @@ void ParticleMath_BounceS16(s16* arg0, s16 arg1, s16 arg2, s16* arg3) {
 
 /**
  * Copy all three vector components to the destination.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Swords Dance): it filled a zeroed vector at a0
+ * with (15.84, 52.8, 12.32).
  */
 void ParticleMath_CopyVec3f(Vec3f* arg0, Vec3f* arg1) {
     arg0->x = arg1->x;
@@ -672,7 +676,7 @@ void ParticleMath_CopyVec3f(Vec3f* arg0, Vec3f* arg1) {
 
 /**
  * Copy all three vector components to the destination.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Swords Dance): it filled a zeroed Vec3s at a0.
  */
 void ParticleMath_CopyVec3s(Vec3s* arg0, Vec3s* arg1) {
     arg0->x = arg1->x;
@@ -682,7 +686,8 @@ void ParticleMath_CopyVec3s(Vec3s* arg0, Vec3s* arg1) {
 
 /**
  * Add all three source components to the destination in place.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Leer, Mist): it added the vector at a1 into the
+ * one at a0.
  */
 void ParticleMath_AddVec3f(Vec3f* arg0, Vec3f* arg1) {
     arg0->x += arg1->x;
@@ -730,7 +735,7 @@ u32 ParticleMath_RandomRange(u32 arg0) {
 
 /**
  * Add offset to a random value in [0, range) for a positive range.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Vice Grip): range 12, offset 5 returned 6.
  */
 s32 ParticleMath_RandomRangeOffset(s32 arg0, s32 arg1) {
     return ParticleMath_RandomRange(arg0) + arg1;
@@ -738,7 +743,7 @@ s32 ParticleMath_RandomRangeOffset(s32 arg0, s32 arg1) {
 
 /**
  * Return a random integer in [-range, range) for a positive range.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Vice Grip): range 3 returned -1.
  */
 s32 ParticleMath_RandomSigned(s32 arg0) {
     return ParticleMath_RandomRange(arg0 * 2) - arg0;
@@ -746,7 +751,8 @@ s32 ParticleMath_RandomSigned(s32 arg0) {
 
 /**
  * Add offset to the signed random result.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Horn Attack): range 0x2000, offset 0x8000
+ * returned 0x7DD7.
  */
 s32 ParticleMath_RandomSignedOffset(s32 arg0, s32 arg1) {
     return ParticleMath_RandomSigned(arg0) + arg1;
@@ -754,7 +760,8 @@ s32 ParticleMath_RandomSignedOffset(s32 arg0, s32 arg1) {
 
 /**
  * Move a signed random result farther from zero by offset; zero takes the positive branch.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Horn Attack): range 0x800, offset 0x400 returned
+ * 0x75B (a positive draw of 0x35B pushed out by 0x400).
  */
 s32 ParticleMath_RandomSignedOffsetBySign(s32 arg0, s32 arg1) {
     s32 temp_v0 = ParticleMath_RandomSigned(arg0);
@@ -841,7 +848,8 @@ Vec3f* ParticleMath_RotateVec3fY(Vec3f* arg0, Vec3f arg1, Vec3s arg2) {
 
 /**
  * Build (length*sin(angle), 0, length*cos(angle)) and return the destination.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Leer, Mist): length 110 at angle 0x4000 wrote
+ * (110, 0, 0).
  */
 Vec3f* ParticleMath_MakeXZVectorFromAngle(Vec3f* arg0, f32 arg1, s16 arg2) {
     f32 temp_fv0 = SINS(arg2);
@@ -884,7 +892,8 @@ f32 ParticleMath_Distance3D(Vec3f arg0, Vec3f arg1) {
 
 /**
  * Normalize end - start into the destination; zero-length behavior belongs to Vec3f_Normalize.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Swords Dance): it wrote (-0.993, 0.116, 0.011),
+ * length 1.0, at a0.
  */
 Vec3f* ParticleMath_NormalizedDirection(Vec3f* arg0, Vec3f arg1, Vec3f arg2) {
     arg0->x = arg2.x - arg1.x;

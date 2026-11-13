@@ -3155,7 +3155,7 @@ func_8213C46C,0x8213C46C,src/fragments/fragment012_17ED00/particle_math_269820.c
 func_8213C474,0x8213C474,src/fragments/fragment012_17ED00/particle_math_269820.c,Particle_FieldAA_GetS16_0C068,s1,stadium1:src/fragments/particle_math/particle_math_269820.c,c
 func_8213C47C,0x8213C47C,src/fragments/fragment012_17ED00/particle_math_269820.c,Particle_GetUnkAC,m2c,m2c,c
 func_8213C484,0x8213C484,src/fragments/fragment012_17ED00/particle_math_269820.c,func_8213C484,m2c,m2c+permuter,c
-func_8213C494,0x8213C494,src/fragments/fragment012_17ED00/particle_math_269820.c,Particle_FieldA6_GetS16_0BCBC,s1,stadium1:src/fragments/particle_math/particle_math_269820.c,c
+func_8213C494,0x8213C494,src/fragments/fragment012_17ED00/particle_math_269820.c,Particle_GetUnkAA,s1,stadium1:src/fragments/particle_math/particle_math_269820.c,c
 func_8213C49C,0x8213C49C,src/fragments/fragment012_17ED00/particle_math_269820.c,Particle_GetUnkA6,m2c,m2c,c
 func_8213C4A4,0x8213C4A4,src/fragments/fragment012_17ED00/particle_math_269820.c,Particle_GetUnkA8,m2c,m2c,c
 func_8213C4AC,0x8213C4AC,src/fragments/fragment012_17ED00/particle_math_269820.c,BattleAnim_SetEffectStateFlag,m2c,m2c,c

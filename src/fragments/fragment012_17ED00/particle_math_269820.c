@@ -34,7 +34,7 @@ void Particle_SetFieldOffsetA8IfNotSentinel(Particle* arg0, s16 arg1);
 void Particle_SetPrimAlphaIfNotSentinel(Particle* arg0, u8 arg1);
 void Particle_SetFieldOffsetAAIfNotSentinel(Particle* arg0, s16 arg1);
 s16 Particle_FieldAA_GetS16_0C068(Particle* arg0);
-s16 Particle_FieldA6_GetS16_0BCBC(Particle* arg0);
+s16 Particle_GetUnkAA(Particle* arg0);
 void FirstClearBonus_HideDialogBox(void);
 
 void Particle_SetPrimAlpha(s8 *arg0, char arg1);
@@ -137,7 +137,8 @@ void func_8213C444(s8 *arg0, s16 arg1) {
 
 /**
  * Returns the particle's unk_CE.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) in the 165-move sweep (Pay Day, Vice Grip): it returned 7 and 2, the
+ * byte at 0xCA each time.
  */
 u8 Particle_GetUnkCE(s8 *arg0) {
     return M2C_FIELD(arg0, u8 *, 0xCA);
@@ -176,10 +177,13 @@ s16 func_8213C484(s8 *arg0)
 }
 
 /**
+ * Returns the particle's unk_AA (offset 0xA6). Renamed from Particle_FieldA6_GetS16_0BCBC, which
+ * used the Stadium 1 offset.
  * Return the particle's unk_A6 field.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Guillotine): it returned 32, the halfword at
+ * 0xA6.
  */
-s16 Particle_FieldA6_GetS16_0BCBC(Particle* arg0) {
+s16 Particle_GetUnkAA(Particle* arg0) {
     return arg0->unk_AA;
 }
 

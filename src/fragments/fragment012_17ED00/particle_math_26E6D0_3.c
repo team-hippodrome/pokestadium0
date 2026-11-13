@@ -59,7 +59,8 @@ void ParticleGfx_RecolorEnv(Particle* arg0, u16 arg1);
 
 /**
  * Copy the selected RGB palette entry or pair into the caller's color buffers.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Guillotine): it wrote three RGB bytes into the
+ * caller's buffer at a0.
  */
 void ParticleGfx_CopyPaletteRgb(u8* arg0, u16 arg1) {
     arg0[0] = gParticlePalette[arg1][0];
@@ -69,7 +70,8 @@ void ParticleGfx_CopyPaletteRgb(u8* arg0, u16 arg1) {
 
 /**
  * Copy the selected RGB palette entry or pair into the caller's color buffers.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Double Kick): it wrote three RGB bytes into the
+ * caller's buffer at a0.
  */
 void ParticleGfx_CopyPalettePairRgb(u8* arg0, u8* arg1, u16 arg2) {
     u8 sp1C = gParticlePalettePairs[arg2][0];
@@ -93,7 +95,8 @@ void func_82143440(u8* arg0, u16 arg1) {
 
 /**
  * Set the particle's primitive and environment RGB channels from the selected palette pair, leaving alpha unchanged.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Pay Day, Fire Punch): it changed prim_b (0xBC)
+ * and env r, g, b (0xBD-0xBF) to (0xF0, 0x28, 0x28) and left prim alpha alone.
  */
 void ParticleGfx_RecolorPrimEnvFromPalettePair(Particle* arg0, u16 arg1) {
     u8 sp1C = gParticlePalettePairs[arg1][0];
@@ -113,7 +116,8 @@ void ParticleGfx_RecolorPrimFromPaletteSetA(Particle* arg0, s16 arg1) {
 
 /**
  * Set the particle's environment RGB channels from the selected palette-set index, leaving alpha unchanged.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Ice Beam): it changed env_r and env_b (0xBD,
+ * 0xBF) only.
  */
 void ParticleGfx_RecolorEnvFromPaletteSetA(Particle* arg0, s16 arg1) {
     ParticleGfx_RecolorEnv(arg0, gParticlePaletteSetA[arg1]);
@@ -169,7 +173,8 @@ void ParticleGfx_RecolorPrimRandomPalette(Particle* arg0) {
 
 /**
  * Set the particle's environment RGB channels from a randomly selected palette index, leaving alpha unchanged.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Bubble Beam): it changed env_g and env_b (0xBE,
+ * 0xBF) only.
  */
 void ParticleGfx_RecolorEnvRandomPalette(Particle* arg0) {
     ParticleGfx_RecolorEnv(arg0, gParticleRandomPaletteIndices[ParticleMath_RandomRange(5) & 0xFF]);
@@ -178,7 +183,8 @@ void ParticleGfx_RecolorEnvRandomPalette(Particle* arg0) {
 /**
  * Approach each selected RGB channel toward its palette value; return 1 only when all channel helpers report
  * completion.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Guillotine): prim r, g, b (0xBA-0xBC) each
+ * stepped from 0xFF to 0xDF (step 0x20) and it returned 0.
  */
 s32 ParticleGfx_ApproachPrimPalette(Particle* arg0, u16 arg1, u8 arg2) {
     s32 sp2C = 0;
@@ -226,7 +232,8 @@ s32 ParticleGfx_ApproachEnvPalette(Particle* arg0, u16 arg1, u8 arg2) {
 /**
  * Approach each selected RGB channel toward its palette value; return 1 only when all channel helpers report
  * completion.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Double Kick): env_b (0xBF) stepped from 0 to
+ * 0x24 and it returned 0.
  */
 s32 ParticleGfx_ApproachPrimEnvPalettePair(Particle* arg0, u16 arg1, u8 arg2) {
     s32 sp44 = 0;
@@ -308,7 +315,8 @@ void func_82143934(s8 *arg0) {
  * (hit), Sky Attack (use), Sludge (hit), Solar Beam (use), Substitute (use), Thunder Punch (hit), Toxic (hit),
  * Transform (use)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Pay Day, Fly, Sonic Boom): it advanced the
+ * particle's lifecycle (0xAE, 1 to 2) and wrote its colors.
  */
 void BattleAnim_SetupTargetHueChange(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
@@ -351,7 +359,8 @@ void func_82143A18(s8 *arg0) {
  * (use), Sleep Powder (hit), Smog (hit), Soft-Boiled (use), Spore (hit), Struggle (use), Stun Spore (hit),
  * Thrash (use)
  * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Thrash, Growth, Poison Powder): it advanced the
+ * lifecycle and, for Thrash, set prim r, g, b to (0xF0, 0x28, 0x28), red.
  */
 void BattleAnim_SetupUserHueChange(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
@@ -363,7 +372,8 @@ void BattleAnim_SetupUserHueChange(Particle* arg0) {
  * Changes User's Hue. Examples:
  * - Thrash -> red
  * - Recover -> rainbow
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep: for Thrash it set the user's tint to (0xF0,
+ * 0x28, 0x28), red, as its comment says.
  */
 void BattleAnim_RunUserHueChange(Particle* arg0) {
     switch (arg0->lifecycle) {

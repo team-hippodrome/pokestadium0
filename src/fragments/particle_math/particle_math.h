@@ -757,7 +757,7 @@ void Particle_SetPrimAlpha(s8 *arg0, char arg1);
 s32 Particle_PrimAlpha_Approach_0BC2C(Particle* arg0, u8 arg1, u8 arg2);
 s32 Particle_ApproachPrimAlphaThenAdvance(Particle* arg0, u8 arg1, u8 arg2);
 void Particle_FieldA6_SetS16_0BCA8(Particle* arg0, s16 arg1);
-s16 Particle_FieldA6_GetS16_0BCBC(Particle* arg0);
+s16 Particle_GetUnkAA(Particle* arg0);
 s32 Particle_FieldA6_DecrementTo_0BCC4(Particle* arg0, s16 arg1, s16 arg2);
 s32 Particle_FieldA6_DecrementToZero_0BD08(Particle* arg0, s16 arg1);
 s32 Particle_FieldA6_DecrementToZeroAndStepState_0BD34(Particle* arg0, s16 arg1);
