@@ -1,10 +1,9 @@
 /* Stadium Zero fragment012_17ED00. */
 /* C ported from the Stadium 1 decomp: src/fragments/particle_math/particle_math_261F90.c. */
 
-#include "fragments/particle_math/particle_math.h"
-#include "math.h"
+#include "battle.h"
 #include "matrix.h"
-#include "math_util.h"
+#include "math.h"
 extern ParticleMatrixPool* gParticleMatrixPool;
 extern s32 gParticleMatrixPoolIndex;
 extern s32 gParticleMatrixPoolIndex;

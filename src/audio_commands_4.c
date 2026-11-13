@@ -3,16 +3,9 @@
 
 
 #include "audio_commands.h"
-#include "audio_commands_category2.h"
-#include "audio_commands.h"
-#include "3D140.h"
-#include "libnumus/player.h"
-#include "rom_device.h"
-#include "audio_channel.h"
 #include "audio_cache.h"
-#include "cry.h"
-#include "audio_fade.h"
-#include "audio_commands_types.h"
+#include "rom_device.h"
+#include "libnumus/player.h"
 extern u8 pad_D_800FC694[4];
 extern unk_D_800FC6CC* D_800B41E4;
 extern u8* D_800B41E8;
@@ -25,12 +18,7 @@ extern u8 pad_D_800FC718[0x80];
 #define AUDIO_HEAP_SIZE 300000
 extern s32 pad_D_80077C80;
 
-#include "audio_data.h"
 #include "libnumus/player.h"
-#include "rom_device.h"
-#include "audio_cache.h"
-#include "audio_category_fade.h"
-#include "audio_commands.h"
 
 #include "m2c_macros.h"
 

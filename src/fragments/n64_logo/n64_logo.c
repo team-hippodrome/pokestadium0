@@ -1,19 +1,10 @@
 /* Stadium Zero fragment003_15F390. */
 /* C ported from the Stadium 1 decomp: src/fragments/n64_logo/n64_logo.c. */
 
-#include "fragments/n64_logo/n64_logo.h"
-#include "save_data.h"
-#include "gb_data.h"
-#include "ui_graphics.h"
-#include "text_system.h"
-#include "3D140.h"
-#include "jpeg_stream.h"
-#include "audio_sfx.h"
-#include "audio_channel.h"
+#include "n64_logo.h"
+#include "fragments/battle/battle.h"
 #include "gfx_buffer.h"
-#include "gfx_rect.h"
-#include "memory.h"
-#include "stage_loader.h"
+#include "memory_main.h"
 
 void N64Logo_DrawLogoTexture(void);
 s32 N64Logo_DrawFrame(UNUSED u8 arg0);

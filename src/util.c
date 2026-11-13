@@ -2,9 +2,9 @@
 /* C ported from the Stadium 1 decomp: src/util.c. */
 
 #include "global.h"
-#include "memmap.h"
-#include "memory.h"
 #include "util.h"
+#include "memmap.h"
+#include "memory_main.h"
 extern u32 gExpansionRAMStart;
 extern MainPool** gMainPool;
 void Dma_InitializeCompletionQueue(void);

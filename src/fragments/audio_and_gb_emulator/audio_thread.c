@@ -1,32 +1,10 @@
 /* Stadium Zero fragment000_80C00. */
 /* C ported from the Stadium 1 decomp: src/audio_sound_state.c, src/fragments/battle_engine/battle_engine_2FA4D0.c, src/fragments/battle_engine/battle_engine_317E70.c. */
 
-#include "fragments/battle_engine/battle_engine.h"
-#include "graphics_textures.h"
-#include "ui_graphics.h"
-#include "status_icons.h"
-#include "game_state.h"
-#include "text_system.h"
-#include "3D140.h"
-#include "gfx_buffer.h"
-#include "gfx_rect.h"
-#include "matrix.h"
-#include "controller.h"
-#include "memmap.h"
-#include "memory.h"
+#include "audio_and_gb_emulator.h"
 
-#include "audio_sound_state.h"
 #include "libnumus/player.h"
-#include "audio_stream.h"
-#include "3D140.h"
-#include "audio_commands.h"
 
-#include "fragments/battle_engine/battle_engine.h"
-#include "geo_render.h"
-#include "model_renderer.h"
-#include "matrix.h"
-#include "fragments/particle_math/particle_math.h"
-#include "memory.h"
 
 #include "m2c_macros.h"
 

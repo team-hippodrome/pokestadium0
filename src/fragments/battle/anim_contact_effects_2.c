@@ -1,6 +1,20 @@
 #include "pokemon.h"
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
-#include "battle_engine_339CA0.h"
+#include "battle.h"
+
+// Declared here instead of in a header: the callers of these disagree on their types.
+M2C_UNK Particle_AnimateFramesForwardLooped(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32);
+M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32);
+M2C_UNK Particle_ApplyMotionStep(s8 *);
+M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);
+M2C_UNK Particle_IncrementPhase(s8 *);
+M2C_UNK Particle_SetMagnitudeStepScaled(s8 *, M2C_UNK);
+M2C_UNK Particle_SetUnkA6(s8 *, M2C_UNK);
+M2C_UNK func_8213E77C(s8 *);
+s32 func_82140690(s8 *);
+void BattleAnim_RunDigHitDust(s8 *arg0);
+void BattleAnim_RunDigHitRocks(s8 *arg0);
+void func_82164AD0(s8 *arg0);
 
 /**
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only

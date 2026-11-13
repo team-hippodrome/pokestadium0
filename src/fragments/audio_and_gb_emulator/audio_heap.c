@@ -2,26 +2,8 @@
 /* C ported from the Stadium 1 decomp: src/fragments/gb_tower_emulator/gb_tower_emulator_86920.c. */
 
 #include "global.h"
-#include "fragments/audio_and_gb_emulator/gb_tower_emulator_86920_types.h"
-typedef struct unk_D_81234690 {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ u16 unk_02;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ s16 unk_08;
-    /* 0x0A */ s16 unk_0A;
-    /* 0x0C */ s16 unk_0C;
-    /* 0x0E */ s16 unk_0E;
-    /* 0x10 */ s16 unk_10;
-    /* 0x12 */ s16 unk_12;
-    /* 0x14 */ s16 unk_14;
-    /* 0x16 */ u8 pad16[0x18 - 0x16];
-    /* 0x18 */ f32 unk_18;
-    /* 0x1C */ f32 unk_1C;
-    /* 0x20 */ f32 unk_20;
-    /* 0x24 */ f32 unk_24;
-    /* 0x28 */ u8 pad28[0x38 - 0x28];
-} unk_D_81234690;
+#include "audio_and_gb_emulator.h"
+
 extern unk_D_81234690 D_811858B8;
 extern volatile s32 D_811858F0;
 extern s32 D_811858F8;
@@ -68,7 +50,6 @@ void AudioHeap_ResetLoadStatus(void) {
 }
 
 /* One 0xCC-byte record; only the fields AudioHeap_DiscardFont touches are named. */
-
 
 s32 AudioPlayback_NoteDisable(Rec81109678*);
 s32 AudioPlayback_AudioListRemove(Rec81109678*);
@@ -369,8 +350,6 @@ void AudioHeap_InitTemporaryCache(s8 *arg0) {
     AudioHeap_TemporaryCacheClear(&D_81184400);
 }
 
-
-
 typedef struct PersistentCache81109C0C {
     /* 0x00 */ u32 numEntries;
     /* 0x04 */ Pool81109C0C pool;
@@ -387,7 +366,6 @@ typedef struct Cache81109C0C {
     /* 0x00 */ PersistentCache81109C0C persistent;
     /* 0x20 */ TemporaryCache81109C0C temporary;
 } Cache81109C0C;
-
 
 extern u8 D_81184654[1];
 extern u8 D_81184655[1];
@@ -938,13 +916,6 @@ s32 AudioHeap_ResetStep(void) {
     return 1;
 }
 
-
-
-
-
-
-
-
 typedef struct SplitAFF0 {
     /* 0x00 */ s32 a;
     /* 0x04 */ s32 b;
@@ -982,7 +953,6 @@ void AudioPlayback_InitNoteFreeList(void);
 void AudioPlayback_NoteInitAll(void);
 void func_8111539C(s32);
 void func_81115480(void);
-
 
 #define EXTERNAL_POOL_AFF0 (*(PoolAFF0*)&D_811842A0)
 #define REVERBS_AFF0 ((SynthesisReverbAFF0*)D_81184110)

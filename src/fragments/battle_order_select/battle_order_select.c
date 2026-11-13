@@ -1,22 +1,20 @@
 /* Stadium Zero fragment005_15FCE0. */
 /* C ported from the Stadium 1 decomp: src/fragments/battle_order_select/battle_order_select.c. */
 
-#include "fragments/battle_order_select/battle_order_select.h"
+#include "battle_order_select.h"
+#include "asset_archive.h"
+#include "audio_music.h"
+#include "font.h"
+#include "fragments/pikachu_reward/pikachu_reward.h"
+#include "fragments/vs_scene/vs_scene.h"
+#include "gb_data.h"
+#include "gb_save.h"
 #include "geo_render.h"
-#include "poke_icon.h"
+#include "gfx_buffer.h"
 #include "graphics_textures.h"
 #include "input.h"
+#include "memory_main.h"
 #include "ui_graphics.h"
-#include "status_icons.h"
-#include "pokemon_stats.h"
-#include "text_system.h"
-#include "jpeg_stream.h"
-#include "audio_sfx.h"
-#include "gfx_buffer.h"
-#include "DDC0.h"
-#include "controller.h"
-#include "memory.h"
-#include "stage_loader.h"
 #include "m2c_macros.h"
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 extern unk_D_84803760 D_82302B20[2];

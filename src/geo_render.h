@@ -1,7 +1,11 @@
-#ifndef _12D80_H_
-#define _12D80_H_
+/* Declarations for src/geo_render.c. */
+#ifndef GEO_RENDER_H
+#define GEO_RENDER_H
 
 #include "global.h"
+#include "stdarg.h"
+#include "moves.h"
+#include "m2c_macros.h"
 
 typedef struct unk_D_800AB970 {
     /* 0x000 */ Vec3f unk_000[1];
@@ -44,15 +48,49 @@ typedef struct unk_D_800ABB10 {
     /* 0x14 */ Gfx* unk_14;
 } unk_D_800ABB10; // size = 0x18?
 
+struct Root80013DC8;
+
+typedef struct unk_D_800ABCC0_008 {
+    /* 0x00 */ u8 unk_00;
+    /* 0x01 */ u8 unk_01;
+    /* 0x02 */ u8 unk_02;
+    /* 0x03 */ u8 unk_03;
+    /* 0x04 */ u16 unk_04;
+    /* 0x06 */ u16 unk_06;
+    /* 0x08 */ u16 unk_08;
+} unk_D_800ABCC0_008; // size = 0xA
+
+typedef struct unk_D_800ABCC0 {
+    /* 0x00 */ u8 unk_00;
+    /* 0x01 */ u8 unk_01;
+    /* 0x02 */ s16 unk_02;
+    /* 0x04 */ TransformAnimData* unk_04;
+    /* 0x08 */ unk_D_800ABCC0_008* unk_08;
+    /* 0x0C */ s16* unk_0C;
+    /* 0x10 */ s16* unk_10;
+    /* 0x14 */ s16* unk_14;
+} unk_D_800ABCC0; // size = 0x18
+
+typedef struct unk_func_80017540_arg1 {
+    /* 0x00 */ u16 unk_00;
+    /* 0x02 */ u16 unk_02;
+} unk_func_80017540_arg1; // size = 0x4
+
 extern s32 D_80060480;
+
 extern u16 D_80060484;
-extern CameraNode* D_80060488;
+
 extern unk_D_86002F34_alt1* D_8006048C;
+
 extern unk_D_86002F34_alt1* D_80060490;
+
 extern CameraNode* D_80060494;
+
 extern unk_D_86002F34_alt1* D_80060498;
+
 extern DisplayObject* D_8006049C;
 
+// geo_render.c
 void GeoRender_InitMatrixStack(void);
 void GeoRender_CommitMatrix(void);
 void GeoRender_SetMatrix(MtxF* arg0);
@@ -72,14 +110,12 @@ void Geo_NodeReference(GraphNode* arg0);
 void Geo_NodeCamera(GraphNode* arg0);
 void Geo_NodeType3Pass(GraphNode* arg0);
 void Geo_NodeModelRoot(GraphNode* arg0);
-struct Root80013DC8;
 void Geo_NodeModelPartRoot(struct Root80013DC8* arg0);
 void Geo_NodeOrtho(GraphNode* arg0);
 void Geo_NodePerspective(GraphNode* arg0);
 void Geo_NodeBackground(GraphNode* arg0);
 void Geo_NodeClearDepth(UNUSED GraphNode* arg0);
 void Geo_NodeType9Empty(UNUSED GraphNode* arg0);
-
 void Geo_NodeType12Empty(UNUSED GraphNode* arg0);
 void Geo_NodeAmbientLight(GraphNode* arg0);
 void Geo_NodeShadowContext(GraphNode* arg0);
@@ -104,6 +140,16 @@ Vec3f* GeoRender_FindAnchorPosition(DisplayObject* display_object, s16 lookup_id
 void GeoRender_SetCombineMode(Gfx* arg0, arg1_func_81407874_014_000_010* arg1);
 void GeoRender_DisableTexture(s32* arg0, s32 arg1);
 void GeoRender_BindTexture(unk_D_800ABB28* arg0, unk_D_800ABB10* arg1);
+M2C_UNK func_8001560C(s32);                         /* extern */
+M2C_UNK func_800158C0();                            /* extern */
+f32 ModelAnim_EvaluateTranslationChannel(unk_D_800ABCC0* arg0, s32 arg1);
+s16 ModelAnim_EvaluateRotationChannel(unk_D_800ABCC0* arg0, s32 arg1);
+f32 ModelAnim_EvaluateScaleChannel(unk_D_800ABCC0* arg0, s32 arg1);
+void ModelAnim_BeginCurveContext(void *arg0, s32 arg1);
+s32 ModelAnim_ResolveEventIndex(s32 arg0, unk_func_80017540_arg1* arg1, s32 arg2);
+s16 ModelAnim_AdvanceEventFrame(EventTrackState* arg0);
+
+// functions defined in assembly
 void GeoRender_EnableTextureGeneration(UNUSED unk_D_800ABB10* arg0);
 
-#endif // _12D80_H_
+#endif // GEO_RENDER_H

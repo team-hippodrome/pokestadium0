@@ -1,10 +1,7 @@
 /* Stadium Zero fragment012_17ED00. */
 /* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_thumbnail.c. */
 
-#include "fragments/battle_engine/battle_engine.h"
-#include "model_animation.h"
-#include "model_renderer.h"
-#include "model_renderer_callbacks.h"
+#include "battle.h"
 #include "matrix.h"
 #include "status.h"
 

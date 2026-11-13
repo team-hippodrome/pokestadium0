@@ -1,7 +1,7 @@
 /* Stadium Zero fragment012_17ED00. */
 /* C ported from the Stadium 1 decomp: src/fragments/particle_math/particle_math_264380.c. */
 
-#include "fragments/particle_math/particle_math.h"
+#include "battle.h"
 extern Gfx gDL_ItemIcon[];
 extern Gfx D_821904C8[];
 extern Gfx D_82190548[];

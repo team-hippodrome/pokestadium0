@@ -2,6 +2,9 @@
 
 #include "global.h"
 #include "m2c_macros.h"
+#include "lab_pc.h"
+#include "asset_archive.h"
+#include "memory_main.h"
 #include "pokemon_stats.h"
 
 M2C_UNK func_80023268(s32, u8, M2C_UNK);            /* extern */

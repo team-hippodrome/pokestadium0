@@ -2,6 +2,7 @@
 
 #include "global.h"
 #include "m2c_macros.h"
+#include "audio_and_gb_emulator.h"
 
 typedef struct Inst81111C20 {
     /* 0x00 */ u32 unk00_31 : 2;

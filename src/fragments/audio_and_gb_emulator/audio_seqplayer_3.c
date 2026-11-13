@@ -1,5 +1,12 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
-#include "gb_tower_emulator_86CB0.h"
+#include "audio_and_gb_emulator.h"
+
+// Declared here instead of in a header: the callers of these disagree on their types.
+M2C_UNK func_81111DC8(s8 *);
+extern Entry811151C8 D_81184668[];
+void AudioPlayback_NotePoolClear(s8*);
+void func_8110FD90(s32 cmd, s8 arg1);
+void func_8110FDF0(void);
 
 s32 AudioLoad_IsFontLoadComplete(s32);
 s32 AudioLoad_IsSeqLoadComplete(s32);
@@ -9,7 +16,6 @@ u16 AudioSeq_GetScriptControlFlowArgument(u8** stream, u8 kind);
 s32 AudioSeq_HandleScriptFlowControl(void*, void*, s32, s32);
 void AudioSeq_SequencePlayerSetupChannels(s8* arg0, u16 mask);
 void AudioSeq_SequencePlayerDisable(u8* arg0);
-#include "fragments/audio_and_gb_emulator/gb_tower_emulator_86CB0_types_2.h"
 void func_81112B84(Item8111539C*);
 
 typedef struct ScriptState81114B54 {

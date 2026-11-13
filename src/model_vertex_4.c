@@ -3,25 +3,12 @@
 
 #include <PR/os_internal_reg.h>
 #include "global.h"
-#include "dp_intro.h"
-#include "profiler.h"
-#include "audio_loop_point.h"
-#include "scheduler.h"
-#include "gb_tower_audio.h"
-#include "audio_commands.h"
-#include "audio_category_fade.h"
-#include "audio_sound_state.h"
-#include "audio_channel.h"
-#include "audio_loop_point.h"
-#include "33FE0_types_2.h"
+#include "model_vertex.h"
+#include "memmap.h"
 extern s32 D_800AAE30;
 extern s32 D_800AAF3C;
 
 #include "global.h"
-#include "33FE0.h"
-#include "geo_render.h"
-#include "battle_hud.h"
-#include "memmap.h"
 extern s16 D_80074670[0x102];
 extern s16 D_80074874[0x102];
 extern s16 D_80074A78[0x102];

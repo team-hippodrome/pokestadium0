@@ -2,6 +2,7 @@
 
 #include "global.h"
 #include "m2c_macros.h"
+#include "free_battle_setup.h"
 
 
 void FreeBattle_SetScreenState(s8*, s32, s32);

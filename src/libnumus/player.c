@@ -2,7 +2,7 @@
 /* C ported from the Stadium 1 decomp: src/libnumus/player.c. */
 
 #include "libnumus/player.h"
-#include "3D140.h"
+#include "audio_manager.h"
 #include "libnaudio/n_synsetpriority.h"
 typedef u8* (*command_func_t)(channel_t*, u8*);
 typedef u8* (*api_func_t)(u8*);

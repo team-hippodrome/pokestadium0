@@ -1,28 +1,9 @@
 /* Stadium Zero fragment012_17ED00. */
 /* C ported from the Stadium 1 decomp: src/fragments/demo_scenes/demo_scenes_16A0E0.c, src/fragments/particle_math/particle_math_269820.c. */
 
-#include "fragments/particle_math/particle_math.h"
-#include "geo_render.h"
+#include "battle.h"
 extern ParticleDescriptor gDefaultParticleDescriptor;
 
-#include "fragments/demo_scenes/demo_scenes.h"
-#include "geo_render.h"
-#include "model_animation.h"
-#include "geo_layout.h"
-#include "display_object_textures.h"
-#include "model_renderer.h"
-#include "graphics_textures.h"
-#include "input.h"
-#include "text_system.h"
-#include "jpeg_stream.h"
-#include "audio_loop_point.h"
-#include "gfx_buffer.h"
-#include "gfx_rect.h"
-#include "matrix.h"
-#include "controller.h"
-#include "memory.h"
-#include "stage_loader.h"
-#include "fragments/battle/battle_engine_361050_2_types.h"
 extern unk_D_86B10BE0 D_8219A82C;
 
 #include "m2c_macros.h"

@@ -1,11 +1,9 @@
 /* Stadium Zero fragment012_17ED00. */
 /* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_315D50.c, src/fragments/battle_engine/battle_engine_32B680.c, src/fragments/battle_engine/battle_engine_343BA0.c. */
 
-#include "fragments/battle_engine/battle_engine.h"
-#include "gallery.h"
-#include "gfx_buffer.h"
+#include "battle.h"
+#include "matrix.h"
 #include "math.h"
-#include "math_util.h"
 /* Spline camera path state (scene spline block pointer, keyframe buffer) and helper shared by the func_82135xxx camera path functions. */
 extern s8 D_FLT_8219A5B0;
 extern BattleScene* D_8219A5A0;
@@ -28,26 +26,7 @@ extern s16 D_8219CB18;
 extern s16 D_8219CB1A;
 extern const char D_821978C8[];
 
-#include "fragments/battle_engine/battle_engine.h"
-#include "model_animation.h"
-#include "geo_render.h"
-#include "gfx_buffer.h"
-#include "matrix.h"
-#include "math_util.h"
 
-#include "fragments/battle_engine/battle_engine.h"
-#include "model_animation.h"
-#include "display_object_textures.h"
-#include "model_renderer.h"
-#include "audio_commands.h"
-#include "3D140.h"
-#include "audio_fade.h"
-#include "audio_sfx.h"
-#include "audio_loop_point.h"
-#include "cry.h"
-#include "matrix.h"
-#include "math_util.h"
-#include "fragments/battle/battle_engine_315D50_types.h"
 #include "prevent_bss_reordering.h"
 extern s32 gBattleAnimFrameCounter;
 extern s32 gBattleAnimSpawnDelay;

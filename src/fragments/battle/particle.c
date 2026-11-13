@@ -1,8 +1,7 @@
 /* Stadium Zero fragment012_17ED00. */
 /* C ported from the Stadium 1 decomp: src/fragments/particle_math/particle_math_269820.c. */
 
-#include "fragments/particle_math/particle_math.h"
-#include "geo_render.h"
+#include "battle.h"
 extern ParticleDescriptor gDefaultParticleDescriptor;
 
 #include "m2c_macros.h"

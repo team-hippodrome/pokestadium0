@@ -1,6 +1,13 @@
 #include "pokemon.h"
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
-#include "battle_engine_32B680_3.h"
+#include "battle.h"
+#include "geo_node.h"
+#include "geo_render.h"
+#include "gfx_buffer.h"
+
+// Declared here instead of in a header: the callers of these disagree on their types.
+M2C_UNK func_8213B5D8(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK *, M2C_UNK *, s32, s32, s32, s32, s32, s32);
+M2C_UNK func_8213E4D8(s8 *);
 
 /**
  * Builds a reflection look-at matrix from the battle camera for environment-mapped

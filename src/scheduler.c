@@ -2,8 +2,6 @@
 /* C ported from the Stadium 1 decomp: src/scheduler.c. */
 
 #include "scheduler.h"
-#include "game_state.h"
-#include "DDC0.h"
 #include "profiler.h"
 extern unk_D_800A62E0 D_800A9710;
 

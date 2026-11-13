@@ -1,5 +1,42 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
-#include "battle_engine_2FA4D0.h"
+#include "cartridge_check.h"
+#include "asset_archive.h"
+#include "audio_commands.h"
+#include "audio_music.h"
+#include "font.h"
+#include "fragments/geo_model_038/geo_model_038.h"
+#include "fragments/geo_model_039/geo_model_039.h"
+#include "fragments/geo_model_040/geo_model_040.h"
+#include "fragments/main_menu/main_menu.h"
+#include "geo_node.h"
+#include "graphics_textures.h"
+#include "input.h"
+#include "main_pool.h"
+#include "matrix.h"
+#include "memory_main.h"
+#include "model_renderer.h"
+#include "pokemon_stats.h"
+#include "save_data.h"
+#include "stage_loader.h"
+#include "ui_graphics.h"
+
+// Declared here instead of in a header: the callers of these disagree on their types.
+M2C_UNK func_80005B98(M2C_UNK);
+M2C_UNK func_80006828(M2C_UNK, M2C_UNK *);
+M2C_UNK func_80006998(M2C_UNK);
+M2C_UNK func_800199E4(M2C_UNK *);
+M2C_UNK func_8001A384(M2C_UNK, M2C_UNK);
+M2C_UNK func_8001A944(M2C_UNK, M2C_UNK, s32);
+M2C_UNK func_8001AB6C();
+M2C_UNK func_8001ABBC();
+M2C_UNK func_80025100(s8 *, M2C_UNK);
+extern s8 *D_800603C0;
+s32 func_800023C4(M2C_UNK, M2C_UNK);
+s32 func_800051F0(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32);
+s32 func_80027214(s8*, s32);
+void MainPool_FinalizeAllocation(struct MemoryBlock* block);
+void func_8000A7FC(s32);
+void func_80041374(s32, s32);
 
 extern M2C_UNK D_88402E40;
 extern M2C_UNK D_88402E5C;

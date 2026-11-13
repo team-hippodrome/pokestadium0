@@ -1,18 +1,12 @@
 /* Stadium Zero fragment015_238BD0. */
 /* C ported from the Stadium 1 decomp: src/fragments/lab_pc_list/lab_pc_list_1D7B40.c. */
 
-#include "fragments/lab_pc_list/lab_pc_list.h"
+#include "lab_pc.h"
+#include "asset_archive.h"
+#include "font.h"
+#include "fragments/lab_pokemon_list/lab_pokemon_list.h"
 #include "graphics_textures.h"
-#include "input.h"
-#include "gb_data.h"
-#include "game_state.h"
-#include "table_view.h"
-#include "text_system.h"
-#include "gb_save.h"
-#include "audio_sfx.h"
-#include "hal_libc.h"
-#include "memmap.h"
-#include "memory.h"
+#include "memory_main.h"
 #include "pokemon_stats.h"
 extern u8 D_8910D7D0[];
 typedef struct unk_func_88309614 {
@@ -28,7 +22,6 @@ typedef struct unk_func_88313894 {
     /* 0x40 */ unk_func_88313894_020 unk_40;
 } unk_func_88313894;
 
-#include "fragments/particle_math/particle_math.h"
 #include "m2c_macros.h"
 void ScrollList_SetItems(s8*, s32, s8*);
 

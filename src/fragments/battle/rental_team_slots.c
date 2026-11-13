@@ -1,13 +1,5 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
-#include "fragments/battle_engine/battle_engine.h"
-#include "model_animation.h"
-#include "geo_render.h"
-#include "gfx_buffer.h"
-#include "matrix.h"
-#include "math_util.h"
-#include "fragments/battle_engine/battle_engine.h"
-#include "model_animation.h"
-#include "matrix.h"
+#include "battle.h"
 #include "m2c_macros.h"
 
 extern f32 D_FLT_8218935C[][4];

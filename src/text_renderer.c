@@ -2,17 +2,11 @@
 /* C ported from the Stadium 1 decomp: src/stage_loader.c. */
 
 #include "global.h"
+#include "text_renderer.h"
 #include "stage_loader.h"
-#include "memory.h"
-#include "string.h"
-#include "dp_intro.h"
-#include "gfx_rect.h"
-#include "gfx_buffer.h"
-#include "memmap.h"
 #include "util.h"
-#include "profiler.h"
+#include "string.h"
 #include "stdarg.h"
-#include "stage_loader_types.h"
 extern s32 gShowCPUProfiler;
 extern s32 gShowMEMProfiler;
 extern s32 D_80068C98_Pad[2];

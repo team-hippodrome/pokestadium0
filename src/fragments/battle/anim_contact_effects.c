@@ -1,6 +1,31 @@
 #include "moves.h"
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
-#include "battle_engine_339CA0.h"
+#include "battle.h"
+#include "matrix.h"
+
+// Declared here instead of in a header: the callers of these disagree on their types.
+M2C_UNK Particle_AddRotationY(s8 *, s16);
+M2C_UNK Particle_AnimateFramesForwardLooped(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32);
+M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32);
+M2C_UNK Particle_ApplyMotionStep(s8 *);
+M2C_UNK Particle_ApproachEnvBlue(s8 *, M2C_UNK, M2C_UNK);
+M2C_UNK Particle_ApproachEnvGreen(s8 *, M2C_UNK, M2C_UNK);
+M2C_UNK Particle_ApproachEnvRed(s8 *, M2C_UNK, M2C_UNK);
+M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);
+M2C_UNK Particle_ApproachPrimBlue(s8 *, M2C_UNK, M2C_UNK);
+M2C_UNK Particle_ApproachPrimGreen(s8 *, M2C_UNK, M2C_UNK);
+M2C_UNK Particle_ApproachPrimRed(s8 *, M2C_UNK, M2C_UNK);
+M2C_UNK Particle_ApproachStepMagnitude(s8 *, f32, f32);
+M2C_UNK Particle_SetStepMagnitudeScaled(s8 *, f32);
+M2C_UNK func_8213C9D0(s8 *);
+M2C_UNK func_8213E1FC(s8 *, s32);
+M2C_UNK func_8213E4D8(s8 *);
+M2C_UNK func_821401D4(s8 *, M2C_UNK);
+M2C_UNK func_82143478(s8 *, u16);
+s16 Particle_GetUnkCE();
+s32 func_82140690(s8 *);
+u16 func_8213C484(s8 *);
+void func_82163D7C(s8 *arg0);
 
 /**
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only

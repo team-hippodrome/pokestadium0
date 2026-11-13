@@ -1,7 +1,7 @@
 /* Stadium Zero fragment012_17ED00. */
 /* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_352570.c. */
 
-#include "fragments/battle_engine/battle_engine.h"
+#include "battle.h"
 #include "gfx_buffer.h"
 extern FourStreamTrail D_821B4D70[4];
 extern Gfx D_82193160[];

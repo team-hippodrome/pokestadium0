@@ -3,18 +3,15 @@
 
 #include <PR/os_internal_reg.h>
 #include "global.h"
-#include "dp_intro.h"
-#include "profiler.h"
-#include "audio_loop_point.h"
-#include "scheduler.h"
-#include "gb_tower_audio.h"
-#include "audio_commands.h"
-#include "audio_category_fade.h"
+#include "audio_music.h"
 #include "audio_sound_state.h"
-#include "audio_channel.h"
-#include "audio_loop_point.h"
+#include "fragments/battle/battle.h"
+#include "rom_device.h"
 #include "m2c_macros.h"
-#include "33FE0_types_2.h"
+
+// Declared here instead of in a header: the callers of these disagree on their types.
+s32 Audio_StartMusicTrack(s32 track_id);
+void Audio_FadeOutAll(s32);
 extern s32 D_800AAE30;
 extern s32 D_800AAF3C;
 

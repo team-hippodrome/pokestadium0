@@ -1,9 +1,12 @@
-#ifndef _26820_H_
-#define _26820_H_
+/* Declarations for src/save_data.c. */
+#ifndef SAVE_DATA_H
+#define SAVE_DATA_H
 
 #include "global.h"
+#include "stdarg.h"
+#include "moves.h"
+#include "m2c_macros.h"
 #include "gb_data.h"
-#include "game_state.h"
 
 typedef struct GameOptions {
     /* 0x00 */ s16 gbTowerUnlockTier; // 0 = normal, 1 = Doduo, 2 = Dodrio.
@@ -39,6 +42,12 @@ typedef struct DeckRecordHeader {
     /* 0x0C */ u16 unk_0C;
     /* 0x0E */ s16 unk_0E;
 } DeckRecordHeader; // size >= 0x10
+
+typedef struct GbPokemonNamedRecord {
+    /* 0x00 */ GbPokemonRecord unk_00;
+    /* 0x21 */ u8 unk_21[11];
+    /* 0x2C */ u8 unk_2C[11];
+} GbPokemonNamedRecord; // size = 0x37
 
 typedef struct RegisteredTeamSlot {
     /* 0x000 */ DeckRecordHeader unk_000;
@@ -150,11 +159,11 @@ typedef struct SaveBank {
     /* 0x08 */ unk_D_800AE4E8_004 unk_08;
 } SaveBank; // size = 0xC
 
+// save_data.c
 u16 Save_Checksum(u8* arg0, s32 arg1);
 s32 Save_RecordIsValid(u8* arg0, s32 arg1);
 void Save_WriteFooter(u8* arg0, s32 arg1, s32 arg2);
 s32 Save_IsTypedRecordFlagSet(s32 arg0, s32 arg1, s16 arg2);
-
 void Save_CommitTypedRecord(s32 arg0, s32 arg1);
 void Save_InvalidateTypedRecord(s32 arg0, s32 arg1);
 void Save_ClearTypedRecord(s32 arg0, s32 arg1);
@@ -165,10 +174,14 @@ s32 Deck_IsSaveEntryPresent(s32 arg0, s32 arg1);
 s32 Deck_GetSaveEntryTrainerId(s32 arg0, s32 arg1);
 s32 Deck_GetSaveEntryName(s32 arg0, s32 arg1, u8* arg2);
 void Deck_SetSaveEntryTrainerIdAndName(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4);
-s16 Deck_GetSaveEntryCount(s32 arg0, s32 arg1);
 void Deck_SetSaveEntryCount(s32 arg0, s32 arg1, s32 arg2);
 s32 Deck_ReadSaveEntry(s32 arg0, s32 arg1, s32 arg2, u8* arg3);
 s32 Save_WriteTypedRecord(s32 arg0, s32 arg1, s32 arg2, u8* arg3);
-void Save_InitializeBank3(void);
+void func_80024044(void);
+s32 Audio_GetFreeVoiceCount(void);
+void func_800245E0(s32 arg0, s32 arg1);
 
-#endif // _26820_H_
+// functions defined in assembly
+s16 Deck_GetSaveEntryCount(s32 arg0, s32 arg1);
+
+#endif // SAVE_DATA_H

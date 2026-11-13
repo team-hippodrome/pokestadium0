@@ -1,5 +1,13 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
-#include "gb_tower_emulator_86CB0.h"
+#include "audio_and_gb_emulator.h"
+
+// Declared here instead of in a header: the callers of these disagree on their types.
+extern Entry811151C8 D_81184668[];
+extern unk_D_81234690 D_811858B8;
+extern volatile u32 D_811859D4;
+void AudioPlayback_NotePoolClear(s8*);
+void AudioPlayback_SeqLayerNoteDecay(Particle31FlagsA*);
+void AudioSeq_AudioListPushBack(s8 *arg0, s8 *arg1);
 
 extern u8 D_81138690[];
 void AudioSeq_SequencePlayerDisableChannels(u8*, s32);
@@ -14,11 +22,6 @@ typedef struct TradeFlags81112E00 {
     u8 bit6 : 1;
     u8 rest : 6;
 } TradeFlags81112E00;
-typedef struct AudioStreamFlags {
-    u8 pad0 : 4;
-    u8 active : 1;
-    u8 pad1 : 3;
-} AudioStreamFlags;
 
 extern u16 D_81138A96;
 extern u32 D_81138A90;
@@ -167,7 +170,6 @@ s32 AudioSeq_HandleScriptFlowControl(SeqPlayer811126B8* seq_player, SeqScriptSta
     return 0;
 }
 
-#include "fragments/audio_and_gb_emulator/gb_tower_emulator_86CB0_types_2.h"
 extern Item8111539C D_81184850;
 
 void AudioPlayback_InitNoteLists(void*);

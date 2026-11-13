@@ -1,20 +1,29 @@
-#ifndef _FRAGMENT23_H_
-#define _FRAGMENT23_H_
+/* Declarations for the lab_pc fragment (src/fragments/lab_pc/). */
+#ifndef FRAGMENT_LAB_PC_H
+#define FRAGMENT_LAB_PC_H
 
 #include "global.h"
-#include "src/fragments/widget_tree/widget_tree.h"
-#include "src/fragments/lab_ui_support/lab_ui_support.h"
-#include "src/table_view.h"
-#include "src/gb_data.h"
-#include "src/gb_save.h"
+#include "controller.h"
+#include "game_state.h"
+#include "gb_save.h"
+#include "memory.h"
+#include "menu.h"
+#include "table_view.h"
 
 struct unk_func_8821421C_038_04C_000;
+
 struct unk_func_8820B12C_02C;
+
 struct unk_func_8821421C_034;
+
 struct unk_func_8821421C_038;
+
 struct unk_func_8821421C_03C;
+
 struct unk_func_8821421C_07C;
+
 struct unk_func_8820E99C;
+
 struct unk_func_8821421C_02C;
 
 typedef struct unk_func_88208C5C {
@@ -41,6 +50,25 @@ typedef struct unk_func_8820BE14_030 {
     /* 0x18 */ s32 unk_18;
 } unk_func_8820BE14_030; // size >= 0x1C
 
+// Copy of above with unk_2C changed just for fragment23_1AE680
+typedef struct unk_func_88200FA0_030_030_1AE680 {
+    /* 0x00 */ WidgetNode unk_00;
+    /* 0x2C */ unk_func_88205880_A030* unk_2C;
+    /* 0x30 */ s32 unk_30;
+    /* 0x34 */ u16* unk_34;
+    /* 0x38 */ s32 unk_38;
+    /* 0x3C */ s16 unk_3C;
+    /* 0x3E */ s16 unk_3E;
+    /* 0x40 */ unk_func_88200FA0_030_030_040 unk_40;
+    /* 0x44 */ WidgetAnimatedFrame* unk_44;
+    /* 0x48 */ s16 unk_48;
+    /* 0x4A */ s16 unk_4A;
+    /* 0x4C */ s16 unk_4C;
+    /* 0x4E */ s16 unk_4E;
+    /* 0x50 */ s16 unk_50;
+    /* 0x52 */ s16 unk_52;
+} unk_func_88200FA0_030_030_1AE680; // size = 0x54
+
 typedef struct unk_func_8820B12C_02C_020 {
     /* 0x00 */ unk_func_88200FA0_030_030_1AE680 unk_00; // unk_func_882025E0_024
     /* 0x54 */ u16 unk_54;
@@ -62,6 +90,7 @@ typedef struct unk_func_8820B12C_02C_020 {
 } unk_func_8820B12C_02C_020; // size = 0x90
 
 typedef s32 (*unk_func_8820B12C_02C_010)(struct unk_func_8820B12C_02C* arg0, Controller* arg1);
+
 typedef void (*unk_func_8820B12C_02C_014)(struct unk_func_8820B12C_02C* arg0, s32 arg1);
 
 typedef struct unk_func_8820B12C_02C {
@@ -354,21 +383,60 @@ typedef struct unk_func_8821421C_038 {
     /* 0x74 */ char unk74[0x4];
 } unk_func_8821421C_038; // size = 0x78
 
-void LabPC_WriteBoxEntries(s32 arg0, s32 arg1, s32 arg2, unk_func_88205880_00D0* arg3);
-s32 LabPC_NoEmptyBoxAvailable(unk_func_88205880_A030* arg0);
-s32 LabPC_AllBoxesEmpty(unk_func_88205880_A030* arg0);
+/* Struct types that were defined identically in each of these files; this is
+ * now the one definition they all include:
+ * src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c
+ * src/fragments/fragment015_238BD0/lab_pc_list_1CEA00_8900379C.c
+ * src/fragments/fragment015_238BD0/lab_pc_list_1CEA00_89003880.c
+ */
 
-void LabPC_WriteDeckBack(s32 arg0, s32 arg1, s32 arg2, unk_func_88200FA0_030_038* arg3);
+typedef struct Rgba89000D50 {
+    /* 0x0 */ u8 r, g, b, a;
+} Rgba89000D50; // size = 0x4
 
+typedef struct ColorPair890017FC {
+    /* 0x0 */ Color_RGBA8 prim;
+    /* 0x4 */ Color_RGBA8 env;
+} ColorPair890017FC;
+
+typedef struct Col89002C10 { u8 r, g, b, a; } Col89002C10;
+
+typedef void (*func889000C4)(unk_func_889000C4*, s32, WidgetAnimatedPanel*, s32, char**, MemoryPool*);
+
+typedef void (*func889006D4)(unk_func_889000C4*, s32);
+
+typedef void (*func889007AC)(unk_func_889000C4*);
+
+typedef s32 (*func88900808)(unk_func_889000C4*, Controller*, s32);
+
+typedef void (*func88900970)(unk_func_889000C4*, s32);
+
+typedef struct unk_D_88400100 {
+    /* 0x00 */ s32 unk_00;
+    /* 0x04 */ Color_RGBA8 unk_04;
+} unk_D_88400100; // size = 0x8
+
+typedef unk_D_88400100* (*func8840007C)(BattleMon*);
+
+typedef unk_D_88400138* (*func884000C4)(s32);
+
+struct unk_func_88203ED8_064;
+
+// lab_items.c
 void LabItem_ReadDeckEntries(s32 arg0, s32 arg1, s32 arg2, unk_func_8820BE14_06C* arg3);
 void LabItem_WriteDeckBack(s32 arg0, s32 arg1, s32 arg2, unk_func_8820BE14_06C* arg3, s32 arg4, char* arg5, s32 arg6);
 void LabItem_LoadGamePakBoxSlots(unk_func_8821421C_07C* arg0);
 s32 LabItem_FindOrAllocateGamePakBoxSlot(unk_func_8821421C_07C* arg0, s32 arg1, char* arg2);
-
-void func_88000FE0(void);
 s32 LabItem_ComputeRemainingCapacity(s32 arg0, unk_func_8820BE14_06C* arg1);
 s32 LabItem_ComputeMaxTransferQuantity(s32 arg0, unk_func_8820BE14_06C* arg1);
+void func_8900020C(void);
 
+// pc_sort.c
+void func_89004708(void);
+void func_89004710(void);
+
+// functions defined in assembly
 void LabItem_SubtractSelectedItemQuantity(unk_func_8820BE14_02C_038* arg0, s32 arg1);
+void WidgetTree_RemoveScrollableGridEntry(unk_func_8820BE14_02C_038*);
 
-#endif // _FRAGMENT23_H_
+#endif // FRAGMENT_LAB_PC_H

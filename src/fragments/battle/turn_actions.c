@@ -1,5 +1,40 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
-#include "battle_engine_309ED0.h"
+#include "battle.h"
+#include "audio_commands.h"
+#include "geo_node.h"
+
+// Declared here instead of in a header: the callers of these disagree on their types.
+M2C_UNK func_80019B28(s32, u8, u8, u8, s32);
+M2C_UNK func_800419F8();
+M2C_UNK func_82106220();
+M2C_UNK func_821079E8(M2C_UNK);
+M2C_UNK func_82108C0C(s32);
+M2C_UNK func_82121D78(s32, M2C_UNK, M2C_UNK);
+M2C_UNK func_821224F4();
+M2C_UNK func_82124A40();
+extern M2C_UNK D_8218B630;
+extern f32 D_FLT_82189354[][4];
+extern s32 D_82199DE0;
+extern s32 D_82199DE4;
+extern s32 D_8219A520;
+extern s32 D_8219A540;
+extern s32 D_8219A544;
+extern s8 *D_8219A5A0;
+extern u8 D_82199F31;
+f32 BattleScene_GetParticipantHeight(s32);
+s32 Battle_StepPartyHpToDisplay(s32);
+s32 func_80041374(s32, u32);
+s32 func_82124810(void*, void*);
+u16 func_82107CA0(ActivePokemon* active_pokemon);
+void BattleMessage_ShowForSide(s32, s32);
+void BattleScene_CameraShotTargetHighThunk(void*, void*);
+void func_8000EEBC(s8*, s8*, f32, s32, s32);
+void func_80041940(s32, s32, s32, s32);
+void func_8210C1A8(f32*, f32, f32);
+void func_8211EE8C(void);
+void func_8212188C(void);
+void func_82124830(void*, void*);
+void func_82124874(void*, void*);
 
 extern s32 D_8219A570;
 extern s32 D_8219A574;

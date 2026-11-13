@@ -2,6 +2,7 @@
 
 #include "global.h"
 #include "m2c_macros.h"
+#include "model_data.h"
 
 extern M2C_UNK D_8FF10E90;
 

@@ -1,30 +1,9 @@
 /* Stadium Zero fragment012_17ED00. */
 /* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_31AA30.c, src/fragments/battle_engine/battle_engine_32B680.c, src/fragments/battle_engine/battle_engine_move_animation.c. */
 
-#include "fragments/battle_engine/battle_engine.h"
-#include "model_animation.h"
-#include "geo_render.h"
-#include "gfx_buffer.h"
-#include "matrix.h"
-#include "math_util.h"
+#include "battle.h"
 
-#include "fragments/battle_engine/battle_engine.h"
 
-#include "fragments/battle_engine/battle_engine.h"
-#include "model_animation.h"
-#include "model_animation_events.h"
-#include "model_renderer.h"
-#include "pokemon_stats.h"
-#include "text_system.h"
-#include "gb_save.h"
-#include "audio_commands.h"
-#include "jpeg_stream.h"
-#include "audio_fade.h"
-#include "audio_stored_fade.h"
-#include "audio_loop_point.h"
-#include "cry.h"
-#include "matrix.h"
-#include "memory.h"
 #include "moves.h"
 #include "pokemon.h"
 #include "status.h"

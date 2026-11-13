@@ -1,10 +1,9 @@
-#ifndef _1AB70_H_
-#define _1AB70_H_
+/* Declarations for src/poke_icon.c, src/poke_icon_2.c. */
+#ifndef POKE_ICON_H
+#define POKE_ICON_H
 
 #include "global.h"
 #include "gfx_rect.h"
-#include "matrix.h"
-#include "game_state.h"
 
 typedef struct unk_func_8001B1FC {
     /* 0x00 */ u16 unk_00;
@@ -56,8 +55,10 @@ typedef struct unk_func_8001A024 {
     /* 0x18 */ unk_D_8006FF00* unk_18;
 } unk_func_8001A024; // size = 0x1C
 
+#include "game_state.h"
+
+// poke_icon.c
 unk_func_8001A024* PokeIcon_CreateRenderList(ModelLoadContext*, s16, s16, s16);
-void PokeIcon_AttachDepthBuffer(unk_func_8001A024*, ModelLoadContext*, DepthBuffer*);
 void func_80018234(unk_func_8001A024*, s32, s32, u16);
 void func_8001833C(unk_func_8001A024*, s32, BattleMon*, u16);
 s32 PokeIcon_ProcessNextSlot(unk_func_8001A024*, s32);
@@ -65,9 +66,11 @@ s32 PokeIcon_ProcessAllSlots(unk_func_8001A024*, s32);
 s32 PokeIcon_RenderNextSlotBlocking(unk_func_8001A024*, s32);
 s32 PokeIcon_GetImage(s8 *arg0, s32 arg1);
 s32 PokeIcon_AreSlotsIdle(unk_func_8001A024*);
+
+// poke_icon_2.c
 unk_func_8001B1FC* PokeIcon_CreateModelPreview(ModelLoadContext*, s16, s16, s16, s16, s16, s16, u8*);
 void PokeIcon_SetPreviewMon(unk_func_8001B1FC* arg0, BattleMon* arg1, u16 arg2);
 void PokeIcon_SetPreviewSpecies(unk_func_8001B1FC*, s32, u16);
 u8* PokeIcon_RenderPreview(unk_func_8001B1FC*);
 
-#endif // _1AB70_H_
+#endif // POKE_ICON_H

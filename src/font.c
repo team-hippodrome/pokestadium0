@@ -2,14 +2,13 @@
 /* C ported from the Stadium 1 decomp: src/graphics_textures.c. */
 
 #include "global.h"
-#include "graphics_textures.h"
-#include "string.h"
-#include "jpeg_stream.h"
+#include "font.h"
+#include "asset_archive.h"
 #include "gfx_buffer.h"
+#include "graphics_textures.h"
+#include "memory_main.h"
 #include "ui_graphics.h"
-#include "gfx_rect.h"
-#include "matrix.h"
-#include "memory.h"
+#include "string.h"
 #include "stdarg.h"
 #include "lib/ultralib/src/libc/xstdio.h"
 extern FontContext* font_context;

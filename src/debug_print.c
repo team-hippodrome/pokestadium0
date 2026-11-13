@@ -1,10 +1,10 @@
 /* Stadium Zero resident code. */
 /* C ported from the Stadium 1 decomp: src/33E30.c. */
 
-#include "33E30.h"
-#include "gallery.h"
+#include "fragments/cartridge_check/cartridge_check.h"
 #include "gfx_buffer.h"
-#include "geo_render.h"
+#include "vector_math.h"
+#include "debug_print.h"
 extern Gfx D_800745F0[];
 
 Gfx* Gfx_DrawTriangleMarker(Gfx* arg0, Vec3f* arg1, u8 arg2, u8 arg3, u8 arg4, u8 arg5, f32 arg6);

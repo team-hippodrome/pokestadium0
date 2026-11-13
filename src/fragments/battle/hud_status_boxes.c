@@ -1,5 +1,18 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
-#include "battle_engine_31D9F0.h"
+#include "battle.h"
+#include "font.h"
+#include "graphics_textures.h"
+#include "input.h"
+#include "ui_graphics.h"
+
+// Declared here instead of in a header: the callers of these disagree on their types.
+M2C_UNK func_8001A944(s32, s32, s8*);
+M2C_UNK func_8001AB6C();
+extern unk_D_84385790 D_80066AA0[];
+u32 func_8001FA30(s32);
+u32 func_800566BC(s8*);
+void func_8001A384(M2C_UNK, M2C_UNK);
+void func_8001ABBC(void);
 
 /* Zero uses different segmented addresses for the three party-ball textures. */
 extern u8 D_03006C40[];

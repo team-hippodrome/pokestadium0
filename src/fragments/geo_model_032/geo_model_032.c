@@ -1,10 +1,11 @@
 /* Stadium Zero fragment032_35C390: geo callbacks for the demo scene models. */
 
 #include "global.h"
+#include "fragments/geo_model_033/geo_model_033.h"
 #include "geo_render.h"
 #include "gfx_buffer.h"
-#include "fragments/demo_scenes/demo_geo.h"
 #include "m2c_macros.h"
+#include "geo_model_032.h"
 
 extern Gfx D_8F505570[];
 extern Gfx D_8F5056B0[];

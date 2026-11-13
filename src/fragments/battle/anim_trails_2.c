@@ -1,5 +1,5 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
-#include "battle_engine_343BA0_8.h"
+#include "battle.h"
 
 /**
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only

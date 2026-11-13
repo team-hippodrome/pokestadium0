@@ -2,7 +2,9 @@
 
 #include "global.h"
 #include "m2c_macros.h"
+#include "font.h"
 #include "graphics_textures.h"
+#include "registration.h"
 
 s32 func_800246A8(M2C_UNK, s32);                    /* extern */
 
@@ -242,9 +244,6 @@ void Registration_InitMainMenu(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4,
     }
 }
 
-typedef struct Color88100D9C {
-    u8 c[4];
-} Color88100D9C;
 s32 func_8002AE6C();
 void Ui_DrawTexturedDivider(s32, s32, s32, void*);
 void func_80029028(s32, s32, s32, s32, Color88100D9C);
@@ -473,7 +472,6 @@ s32 Registration_UpdateMessageWindow(s32 arg0) {
     return func_8002BC14(D_800603C0);
 }
 
-
 /**
  * Appends a call of display list D_80060270 to the current display list and
  * then calls func_80029028(arg0, arg1, 0x88, 0x64, arg2). arg0 and arg1 are
@@ -569,13 +567,6 @@ void Registration_FillRowBackground(s32 x, s32 y, s32 height) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(x + 0x88, y, 0x18C, height, D_88102D78[0]);
 }
-
-typedef struct IconCache8810173C {
-    /* 0x00 */ s32* slots;
-    /* 0x04 */ s32 base;
-    /* 0x08 */ s32 count;
-    /* 0x0C */ s32 start;
-} IconCache8810173C; // size = 0x10
 
 extern s32 D_88103074;
 extern Gfx D_80073408[];
@@ -881,16 +872,6 @@ void Registration_InitTeamList(s8 *arg0, s32 arg1, s32 arg2, s8 *arg3, s32 arg4)
     M2C_FIELD(arg0, s32 *, 0) = 0;
     Registration_ClearIndices(D_88103098, 0, 0x18);
 }
-
-typedef struct {
-    /* 0x00 */ char unk00[0x8];
-    /* 0x08 */ s32 unk_08;
-    /* 0x0C */ s32 unk_0C;
-    /* 0x10 */ char unk10[0x44];
-    /* 0x54 */ s32** tables;
-    /* 0x58 */ char unk58[0x4];
-    /* 0x5C */ s32 index;
-} IndexedDrawer;
 
 void Registration_DrawTeamRow(s32, s32, s32, s32, s32, s32);
 

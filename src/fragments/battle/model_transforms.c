@@ -1,5 +1,8 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
-#include "battle_engine_move_model_transforms.h"
+#include "battle.h"
+#include "geo_node.h"
+#include "matrix.h"
+#include "model_renderer.h"
 
 /**
  * Starts a sway or arc: sets the height y, splits it into Z and Y components by angle

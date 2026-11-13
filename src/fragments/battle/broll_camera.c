@@ -1,16 +1,8 @@
 /* Stadium Zero fragment012_17ED00. */
 /* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_304060.c, src/fragments/battle_engine/battle_engine_32B680.c. */
 
-#include "fragments/battle_engine/battle_engine.h"
-#include "model_animation.h"
-#include "geo_render.h"
-#include "gfx_buffer.h"
-#include "matrix.h"
-#include "math_util.h"
+#include "battle.h"
 
-#include "fragments/battle_engine/battle_engine.h"
-#include "model_animation.h"
-#include "matrix.h"
 typedef struct unk_D_843859E0 {
     /* 0x00 */ u8 unk_00;
     /* 0x04 */ f32 unk_04;

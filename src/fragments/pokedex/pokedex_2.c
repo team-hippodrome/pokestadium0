@@ -1,24 +1,22 @@
 /* Stadium Zero fragment018_262620. */
 /* C ported from the Stadium 1 decomp: src/fragments/pokedex/pokedex_2190D0.c. */
 
-#include "fragments/pokedex/pokedex.h"
-#include "geo_node.h"
-#include "geo_render.h"
-#include "display_object_textures.h"
-#include "graphics_textures.h"
-#include "gb_data.h"
-#include "game_state.h"
-#include "text_system.h"
-#include "gb_save.h"
-#include "gallery.h"
+#include "pokedex.h"
 #include "audio_sfx_wrapper.h"
-#include "jpeg_stream.h"
-#include "gfx_buffer.h"
-#include "matrix.h"
+#include "display_object_textures.h"
+#include "font.h"
+#include "gb_save.h"
 #include "geo_layout.h"
-#include "memory.h"
-#include "stage_loader.h"
+#include "geo_render.h"
+#include "gfx_buffer.h"
+#include "graphics_textures.h"
+#include "matrix.h"
+#include "memory_main.h"
 #include "pokemon_stats.h"
+#include "vector_math.h"
+
+// Declared here instead of in a header: the callers of these disagree on their types.
+void* MainPool_InitState(struct MainPoolState* block, s32 size);
 typedef struct unk_D_88826A88 {
     /* 0x00 */ char unk_00[1]; // unk size
     /* 0x01 */ char unk01[0x2C];
@@ -914,7 +912,6 @@ s32 Pokedex_CheckAreaMapExit(void) {
     return 0;
 }
 
-#include "fragments/pokedex/pokedex_214920_types.h"
 extern unk_D_80064C60 D_80064C60[];
 extern s16 D_8A130432;
 extern s16 D_8A130446;

@@ -3,6 +3,7 @@
 #include "global.h"
 #include "gfx_buffer.h"
 #include "m2c_macros.h"
+#include "geo_model_030.h"
 
 extern s32 D_8F100250;
 extern s32 D_8F100254;

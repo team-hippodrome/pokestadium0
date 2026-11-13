@@ -1,23 +1,17 @@
 /* Stadium Zero fragment015_238BD0. */
 /* C ported from the Stadium 1 decomp: src/fragments/lab_pc/lab_pc_1B4EA0.c, src/fragments/lab_pc_list/lab_pc_list_1CEA00.c. */
 
-#include "fragments/lab_pc_list/lab_pc_list.h"
+#include "lab_pc.h"
+#include "font.h"
 #include "graphics_textures.h"
+#include "hal_libc.h"
 #include "input.h"
-#include "gb_data.h"
+#include "lab_item.h"
 #include "pokemon_stats.h"
 #include "save_data.h"
-#include "game_state.h"
-#include "table_view.h"
-#include "text_system.h"
-#include "status_icons.h"
-#include "gb_save.h"
-#include "jpeg_stream.h"
-#include "audio_sfx.h"
-#include "memmap.h"
-#include "memory.h"
-#include "stage_loader.h"
-#include "fragments/pokemon_lab_support/pokemon_lab_support.h"
+
+// Declared here instead of in a header: the callers of these disagree on their types.
+s32 Ui_GetSelectionDirection(unk_func_8002EBD8_arg0* arg0);
 extern s32 pad_D_8831A4DC[8];
 typedef struct unk_D_88317298 {
     /* 0x00 */ s32 unk_00;
@@ -28,21 +22,6 @@ typedef struct unk_D_883172F4 {
     /* 0x04 */ s32 unk_04;
 } unk_D_883172F4;
 
-#include "fragments/lab_pc/lab_pc.h"
-#include "graphics_textures.h"
-#include "input.h"
-#include "gb_data.h"
-#include "pokemon_stats.h"
-#include "save_data.h"
-#include "game_state.h"
-#include "table_view.h"
-#include "text_system.h"
-#include "gb_save.h"
-#include "audio_sfx.h"
-#include "hal_libc.h"
-#include "memmap.h"
-#include "memory.h"
-#include "stage_loader.h"
 typedef struct unk_D_88218060 {
     /* 0x00 */ s32 unk_00;
     /* 0x04 */ Color_RGBA8* unk_04;
@@ -57,7 +36,6 @@ typedef struct unk_D_88218070 {
     /* 0x10 */ Color_RGBA8* unk_10;
 } unk_D_88218070;
 
-#include "fragments/particle_math/particle_math.h"
 #include "m2c_macros.h"
 void ScrollList_SetItems(s8*, s32, s8*);
 
@@ -403,7 +381,6 @@ s32 LabItem_UpdateConfirmWindow(s8* arg0) {
     return ret;
 }
 
-#include "fragments/lab_pc/lab_pc_list_1CEA00_types.h"
 extern Rgba89000D50 D_8900A5BC;
 
 /**

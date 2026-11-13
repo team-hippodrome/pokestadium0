@@ -2,12 +2,12 @@
 
 #include "global.h"
 #include "m2c_macros.h"
+#include "free_battle_setup.h"
 
 typedef struct {
     /* 0x00 */ s32 flag;
     /* 0x04 */ char unk04[0x50];
 } Slot54;
-#include "fragments/free_battle_setup/fragment007_166580_types_2.h"
 typedef struct {
     /* 0x00 */ u8 id;
     /* 0x01 */ char unk01[0x4F];

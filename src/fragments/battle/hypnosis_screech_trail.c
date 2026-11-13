@@ -1,10 +1,10 @@
 /* Stadium Zero fragment012_17ED00. */
 /* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_34E1A0.c. */
 
-#include "fragments/battle_engine/battle_engine.h"
-#include "math.h"
-#include "gallery.h"
+#include "battle.h"
 #include "gfx_buffer.h"
+#include "vector_math.h"
+#include "math.h"
 extern Trail40 sWaterSurface;
 extern Gfx D_82192B98[];
 

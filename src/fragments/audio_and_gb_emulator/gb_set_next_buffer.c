@@ -1,6 +1,7 @@
 /* Stadium Zero fragment000_80C00. */
 
 #include "global.h"
+#include "audio_and_gb_emulator.h"
 
 /**
  * The fragment's private copy of libultra's osAiSetNextBuffer (same body, including the

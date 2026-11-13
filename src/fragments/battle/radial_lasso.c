@@ -1,10 +1,8 @@
 /* Stadium Zero fragment012_17ED00. */
 /* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_34A420.c. */
 
-#include "fragments/battle_engine/battle_engine.h"
-#include "gallery.h"
+#include "battle.h"
 #include "gfx_buffer.h"
-#include "math_util.h"
 #include "math.h"
 typedef struct Strip400State {
     /* 0x00 */ s16 unk_00;

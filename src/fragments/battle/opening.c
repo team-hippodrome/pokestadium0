@@ -1,5 +1,14 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
-#include "fragment1_89010.h"
+#include "battle.h"
+
+// Declared here instead of in a header: the callers of these disagree on their types.
+extern s32 D_82199DE0;
+extern s8 *D_8219A5A0;
+s32 func_82101FD4(s32);
+void BattleScene_IntroStepWaitForAssets(CameraNode* arg0);
+void BattleScene_OpeningStepLandSide0Ball(CameraNode* arg0);
+void BattleScene_OpeningStepThrowSide1(CameraNode* arg0);
+void BattleScene_OpeningStepWaitSide0Ball(CameraNode* arg0);
 
 /**
  * Battle opening, step 12: does nothing (the opening has ended).

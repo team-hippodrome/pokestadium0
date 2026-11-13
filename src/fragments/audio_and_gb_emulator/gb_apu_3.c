@@ -1,6 +1,7 @@
 /* Stadium Zero fragment000_80C00. */
 
 #include "global.h"
+#include "audio_and_gb_emulator.h"
 
 #ifdef NON_MATCHING
 /* TODO: decompile func_81117B20; signature not recovered. */

@@ -1,5 +1,18 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
-#include "battle_engine_2FA4D0.h"
+#include "cartridge_check.h"
+#include "audio_commands.h"
+#include "font.h"
+#include "geo_render.h"
+#include "graphics_textures.h"
+#include "input.h"
+#include "matrix.h"
+#include "pokemon_stats.h"
+#include "stage_loader.h"
+#include "ui_graphics.h"
+
+// Declared here instead of in a header: the callers of these disagree on their types.
+M2C_UNK func_8001B5F0();
+extern s8 *D_800603C0;
 
 void func_88400020(s32 arg0, s8 *arg1) {
     if (arg0 == 2) {

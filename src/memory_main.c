@@ -3,7 +3,8 @@
 
 #include "global.h"
 #include "macros.h"
-#include "memory.h"
+#include "memory_main.h"
+#include "stage_loader.h"
 extern struct MainPool sMemPool;
 
 #include "m2c_macros.h"

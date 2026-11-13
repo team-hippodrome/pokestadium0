@@ -1,12 +1,9 @@
 /* Stadium Zero fragment012_17ED00. */
 /* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_31C660.c, src/fragments/battle_engine/battle_engine_35DF70.c. */
 
-#include "fragments/battle_engine/battle_engine.h"
-#include "model_renderer.h"
+#include "battle.h"
 
-#include "fragments/battle_engine/battle_engine.h"
 #include "moves.h"
-#include "text_system.h"
 
 s32 BattleMessage_Format(s32, s32, s32, ...);
 extern s32 D_8219A520;

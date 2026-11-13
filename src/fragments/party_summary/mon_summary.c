@@ -1,5 +1,39 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
-#include "lab_pc_icons.h"
+#include "party_summary.h"
+#include "audio_commands.h"
+#include "display_object_textures.h"
+#include "font.h"
+#include "fragments/cartridge_check/cartridge_check.h"
+#include "fragments/main_menu/main_menu.h"
+#include "fragments/unidentified_001/unidentified_001.h"
+#include "gb_save.h"
+#include "geo_render.h"
+#include "input.h"
+#include "memory_main.h"
+#include "pokemon_stats.h"
+#include "ui_graphics.h"
+
+// Declared here instead of in a header: the callers of these disagree on their types.
+M2C_UNK Ui_DrawTexturedDivider(s32, s32, s32, M2C_UNK *);
+M2C_UNK Ui_DrawTintedScreenBackground(M2C_UNK, M2C_UNK, u8, u8, s32);
+M2C_UNK func_80019008(s32, s32, M2C_UNK);
+M2C_UNK func_8001B5F0();
+M2C_UNK func_80029864(s32, s32, s32, M2C_UNK *);
+extern M2C_UNK D_800734A8;
+extern s8 *D_800603C0;
+extern s8 D_8007356C;
+s32 Particle_Field50_SetXZFromField7C_09BB4();
+s32 func_80020CE4(s32, s32, s32);
+u8* func_800196F8(s32);
+void func_8001A384(s32, s32);
+void func_8001A944(s32, s32, const char*, ...);
+void func_8001AA9C(u8, u8, u8, u8);
+void func_8001AB6C(void);
+void func_8001ABBC(void);
+void func_80022118(s32);
+void func_80022188(s32);
+void func_80029028(s32, s32, s32, s32, Color_RGBA8);
+void func_8002D7D4(s32);
 
 extern s32 D_8A21DE08;
 extern M2C_UNK D_8A21DE10;

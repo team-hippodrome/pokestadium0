@@ -3,6 +3,7 @@
 
 #include "global.h"
 #include "input.h"
+#include "controller.h"
 extern s32 pad_D_800AC880[0x2];
 extern s32 D_800AB02C;
 extern Controller* D_800AB030;

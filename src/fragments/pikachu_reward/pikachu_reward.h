@@ -1,8 +1,10 @@
-#ifndef _FRAGMENT66_H_
-#define _FRAGMENT66_H_
+/* Declarations for the pikachu_reward fragment (src/fragments/pikachu_reward/). */
+#ifndef FRAGMENT_PIKACHU_REWARD_H
+#define FRAGMENT_PIKACHU_REWARD_H
 
 #include "global.h"
-#include "src/game_state.h"
+#include "PR/leo.h"
+#include "game_state.h"
 
 typedef struct unk_D_832025C8 {
     /* 0x000 */ s32 unk_00;
@@ -16,6 +18,13 @@ typedef struct unk_D_832027C8 {
     /* 0x04 */ BattleMon unk_04;
 } unk_D_832027C8; // size = 0x58
 
+#define BTN_DUP         0x0800
+
+#define BTN_DDOWN       0x0400
+
+#define BTN_IS_PRESSED(controller, combo) (((controller)->buttonPressed & (combo)) != 0)
+
+// pikachu_reward.c
 s32 PikachuReward_PositionSurfingPikachuModel(s32 arg0, DisplayObject* arg1);
 void PikachuReward_UpdateLeadPikachuAnimation(void);
 void PikachuReward_UpdateFollowerVisibility(void);
@@ -33,5 +42,6 @@ void PikachuReward_ShowSaveStatusScreen(s32 arg0);
 void PikachuReward_SetupFollowerModel(DisplayObject* arg0, s16 arg1, s16 arg2, s16 arg3);
 void PikachuReward_SetupScene(void);
 s32 Stadium_BonusPikachuReward(UNUSED s32 arg0, UNUSED s32 arg1);
+void Controller_PollInputs(void);
 
-#endif // _FRAGMENT66_H_
+#endif // FRAGMENT_PIKACHU_REWARD_H

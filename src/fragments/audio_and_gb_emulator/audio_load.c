@@ -2,26 +2,8 @@
 /* C ported from the Stadium 1 decomp: src/fragments/gb_tower_emulator/gb_tower_emulator_86920.c. */
 
 #include "global.h"
-#include "fragments/audio_and_gb_emulator/gb_tower_emulator_86920_types.h"
-typedef struct unk_D_81234690 {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ u16 unk_02;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ s16 unk_08;
-    /* 0x0A */ s16 unk_0A;
-    /* 0x0C */ s16 unk_0C;
-    /* 0x0E */ s16 unk_0E;
-    /* 0x10 */ s16 unk_10;
-    /* 0x12 */ s16 unk_12;
-    /* 0x14 */ s16 unk_14;
-    /* 0x16 */ u8 pad16[0x18 - 0x16];
-    /* 0x18 */ f32 unk_18;
-    /* 0x1C */ f32 unk_1C;
-    /* 0x20 */ f32 unk_20;
-    /* 0x24 */ f32 unk_24;
-    /* 0x28 */ u8 pad28[0x38 - 0x28];
-} unk_D_81234690;
+#include "audio_and_gb_emulator.h"
+
 extern unk_D_81234690 D_811858B8;
 extern volatile s32 D_811858F0;
 extern s32 D_811858F8;
@@ -40,7 +22,6 @@ void GbApu_InitAllocator(unk_func_81206FA0* arg0, s32 arg1, s32 arg2);
 extern u8 D_81184654[1];
 extern u8 D_81184655[1];
 extern u8 D_81184656[1];
-
 
 /* Declarations copied from gb_tower_emulator_86920.c. */
 s32 AudioHeap_SearchCaches(s32, M2C_UNK, s32);
@@ -505,7 +486,6 @@ s8 *AudioHeap_AllocPersistentSampleCacheEntry(s32 arg0)
   *new_var += 1;
   return temp_v0;
 }
-
 
 /**
  * Discards the sample cache entries of fonts that are no longer loaded. Zelda 64 audio driver.

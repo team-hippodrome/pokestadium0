@@ -1,5 +1,5 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
-#include "gb_tower_emulator_86CB0.h"
+#include "audio_and_gb_emulator.h"
 
 void func_811177E8(s32 num_samples, s16* out) {
     static u32 D_8122869C = 0;

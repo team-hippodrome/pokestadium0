@@ -1,24 +1,24 @@
 /* Stadium Zero fragment012_17ED00. */
 /* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_309ED0.c, src/fragments/battle_engine/battle_engine_main.c. */
 
-#include "fragments/battle_engine/battle_engine.h"
-#include "game_state.h"
-#include "geo_node.h"
-#include "geo_render.h"
-#include "display_object_textures.h"
-#include "model_renderer.h"
-#include "graphics_textures.h"
-#include "input.h"
+#include "battle.h"
 #include "battle_hud.h"
-#include "3D140.h"
-#include "jpeg_stream.h"
-#include "audio_loop_point.h"
-#include "gfx_buffer.h"
-#include "matrix.h"
-#include "controller.h"
+#include "display_object_textures.h"
+#include "font.h"
+#include "fragments/cartridge_check/cartridge_check.h"
+#include "fragments/pikachu_reward/pikachu_reward.h"
+#include "gb_save.h"
 #include "geo_layout.h"
-#include "memmap.h"
-#include "memory.h"
+#include "geo_render.h"
+#include "gfx_buffer.h"
+#include "input.h"
+#include "main_pool.h"
+#include "matrix.h"
+#include "memory_main.h"
+#include "model_renderer.h"
+
+// Declared here instead of in a header: the callers of these disagree on their types.
+void MainPool_FinalizeAllocation(struct MemoryBlock* block);
 extern CameraNode sStageCamera;
 extern unk_D_8690A610 sStageFog;
 extern GraphNode sStageLayout0;
@@ -45,15 +45,6 @@ extern u32 sStageGeoLayout[];
 extern u32 sSide1ThumbnailLayout[];
 extern u32 sSide2ThumbnailLayout[];
 
-#include "fragments/battle_engine/battle_engine.h"
-#include "model_animation.h"
-#include "model_renderer.h"
-#include "audio_commands.h"
-#include "3D140.h"
-#include "audio_fade.h"
-#include "audio_loop_point.h"
-#include "cry.h"
-#include "matrix.h"
 extern s32 pad_D_84390210[4];
 extern s32 sMultihitCount;
 extern s32 sMultihitCountdown;

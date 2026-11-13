@@ -1,11 +1,11 @@
 /* Stadium Zero resident code. */
 /* C ported from the Stadium 1 decomp: src/jpeg_stream.c. */
 
-#include "jpeg_stream.h"
-#include "jpeg_stream.h"
-#include "flash.h"
+#include "asset_archive.h"
 #include "dma.h"
-#include "dp_intro.h"
+#include "jpeg_stream.h"
+#include "memory_main.h"
+#include "stage_loader.h"
 #include "util.h"
 #include "lib/ultralib/include/PR/leo.h"
 typedef enum {

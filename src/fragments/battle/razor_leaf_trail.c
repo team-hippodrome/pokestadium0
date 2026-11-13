@@ -1,7 +1,7 @@
 /* Stadium Zero fragment012_17ED00. */
 /* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_355A00.c. */
 
-#include "fragments/battle_engine/battle_engine.h"
+#include "battle.h"
 #include "gfx_buffer.h"
 extern Trail50Effect D_821C2820[50];
 extern Gfx D_821933D0[];

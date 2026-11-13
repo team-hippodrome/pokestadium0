@@ -3,16 +3,14 @@
 
 #include "global.h"
 #include "stage_loader.h"
-#include "memory.h"
-#include "string.h"
 #include "dp_intro.h"
-#include "gfx_rect.h"
 #include "gfx_buffer.h"
 #include "memmap.h"
-#include "util.h"
+#include "memory_main.h"
 #include "profiler.h"
+#include "text_renderer.h"
+#include "string.h"
 #include "stdarg.h"
-#include "stage_loader_types.h"
 extern s32 gShowCPUProfiler;
 extern s32 gShowMEMProfiler;
 extern s32 D_80068C98_Pad[2];

@@ -1,5 +1,9 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
-#include "gb_tower_emulator_86CB0.h"
+#include "audio_and_gb_emulator.h"
+
+// Declared here instead of in a header: the callers of these disagree on their types.
+extern unk_D_81234690 D_811858B8;
+extern volatile u32 D_811859D4;
 
 /**
  * Wave channel: 65536 / (2048 - period) Hz -> phase step (32 steps per cycle at 48 kHz).

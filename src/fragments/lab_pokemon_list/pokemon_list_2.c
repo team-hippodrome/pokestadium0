@@ -1,10 +1,7 @@
 /* Stadium Zero fragment016_252E10. */
 
 #include "global.h"
-#include "game_state.h"
-#include "jpeg_stream.h"
-#include "memory.h"
-#include "stage_loader.h"
+#include "lab_pokemon_list.h"
 #include "m2c_macros.h"
 
 extern u8 D_80073520[];
@@ -192,7 +189,6 @@ void LabPCList_DrawTypeIcon(s32 arg0, s32 arg1, u8* arg2, s32 arg3) {
     }
 }
 
-#include "fragments/lab_pokemon_list/89100020_89100914_types.h"
 typedef struct Label89100FC4 {
     Color82000BC4 color;
     const char* str;

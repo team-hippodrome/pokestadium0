@@ -4,11 +4,11 @@
 #include "global.h"
 #include <PR/os_internal_reg.h>
 #include "dp_intro.h"
-#include "scheduler.h"
-#include "gfx_rect.h"
+#include "asset_archive.h"
 #include "crash_screen.h"
+#include "game_state.h"
 #include "profiler.h"
-#include "memory.h"
+#include "stage_loader.h"
 extern u64 F3DEX2_data_bin[];
 extern s32 D_800733F0;
 extern UnkStruct80083CA0_2 D_800870A0;
@@ -19,20 +19,9 @@ extern u64 D_80088C98[0x20000 / sizeof(u64)];
 void Display_ClearFramebufferLine(u16 color);
 void Display_SetBufferConfig(struct UnkArray4* arg0, u8 arg1, u8 arg2, u8 arg3, u8 arg4, s32 arg5, s32 arg6, s32 arg7);
 
-#include "audio_loop_point.h"
 #include "libnumus/player.h"
-#include "audio_channel.h"
-#include "audio_commands_category2.h"
-#include "rom_device.h"
-#include "audio_stream.h"
-#include "audio_cache.h"
-#include "3D140.h"
-#include "audio_commands.h"
 
 #include "global.h"
-#include "controller.h"
-#include "gb_tower.h"
-#include "math_util.h"
 extern Controller* gPlayer1Controller;
 extern Controller* gPlayer2Controller;
 extern Controller* gPlayer3Controller;

@@ -1,6 +1,7 @@
 /* Stadium Zero fragment000_80C00. */
 
 #include "global.h"
+#include "audio_and_gb_emulator.h"
 
 typedef struct AudioVoice81107E70 {
     /* 0x00 */ char unk00[0x4];

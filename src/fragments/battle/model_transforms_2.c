@@ -1,5 +1,13 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
-#include "battle_engine_move_model_transforms.h"
+#include "battle.h"
+#include "geo_node.h"
+#include "matrix.h"
+#include "model_renderer.h"
+
+// Declared here instead of in a header: the callers of these disagree on their types.
+M2C_UNK func_8210C1A8(s32, M2C_UNK, M2C_UNK);
+extern f32 D_FLT_82189354[][4];
+s16 func_8000F1FC(s16, M2C_UNK, M2C_UNK, M2C_UNK);
 
 /**
  * Makes the first two afterimages trail the Pokémon: copies its animation and frame, pulls

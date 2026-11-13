@@ -1,43 +1,15 @@
 /* Stadium Zero fragment016_252E10. */
 /* C ported from the Stadium 1 decomp: src/fragments/lab_pc_list/lab_pc_list_1D7B40.c, src/fragments/lab_pc_list/lab_pc_list_1E46B0.c. */
 
-#include "fragments/lab_pc_list/lab_pc_list.h"
-#include "gb_data.h"
-#include "save_data.h"
-#include "game_state.h"
-#include "table_view.h"
-#include "gb_save.h"
-#include "hal_libc.h"
-#include "memory.h"
-extern Gfx D_8910D028[];
-typedef struct unk_func_88316214 {
-    /* 0x00 */ char unk00[0x2C];
-    /* 0x2C */ u8 unk_2C;
-} unk_func_88316214;
-typedef struct unk_func_88316304 {
-    /* 0x00 */ unk_func_8830867C_02C_0CC_000** unk_00;
-    /* 0x04 */ char unk04[0x4];
-    /* 0x08 */ u8 unk_08;
-    /* 0x09 */ char unk09[0x8];
-    /* 0x11 */ u8 unk_11[1];
-} unk_func_88316304;
-typedef struct unk_func_883164C0 {
-    /* 0x00 */ char unk00[0x5C];
-} unk_func_883164C0;
-
-#include "fragments/lab_pc_list/lab_pc_list.h"
-#include "graphics_textures.h"
-#include "input.h"
-#include "gb_data.h"
-#include "game_state.h"
-#include "table_view.h"
-#include "text_system.h"
-#include "gb_save.h"
-#include "audio_sfx.h"
-#include "hal_libc.h"
-#include "memmap.h"
-#include "memory.h"
+#include "lab_pokemon_list.h"
+#include "lab_item.h"
 #include "pokemon_stats.h"
+#include "save_data.h"
+
+// Declared here instead of in a header: the callers of these disagree on their types.
+void LabPCList_ConsumeUsedTmItem(unk_func_8830867C_04C_030_02C_000*);
+extern Gfx D_8910D028[];
+
 #include "m2c_macros.h"
 extern u8 D_8910D7D0[];
 typedef struct unk_func_88309614 {

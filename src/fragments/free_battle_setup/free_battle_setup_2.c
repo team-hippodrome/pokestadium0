@@ -2,6 +2,7 @@
 
 #include "global.h"
 #include "m2c_macros.h"
+#include "free_battle_setup.h"
 
 typedef struct { u8 b[9]; } Bytes9;
 extern u8 D_8200AC30[];

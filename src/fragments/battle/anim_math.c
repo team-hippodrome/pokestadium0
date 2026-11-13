@@ -1,8 +1,8 @@
 /* Stadium Zero fragment012_17ED00. */
 /* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_2F6930.c. */
 
-#include "fragments/battle_engine/battle_engine.h"
-#include "math_util.h"
+#include "battle.h"
+#include "matrix.h"
 
 void BattleAnim_CalculateDistanceAngles(Vec3f* arg0, Vec3f* arg1, f32* arg2, s16* arg3, s16* arg4);
 Vec3f* BattleAnim_Vec3fSetZero(Vec3f* arg0);

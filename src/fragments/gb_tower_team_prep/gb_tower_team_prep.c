@@ -1,16 +1,12 @@
 /* Stadium Zero fragment004_15F8F0. */
 /* C ported from the Stadium 1 decomp: src/fragments/gb_tower_team_prep/gb_tower_team_prep.c. */
 
-#include "fragments/gb_tower_team_prep/gb_tower_team_prep.h"
+#include "gb_tower_team_prep.h"
 #include "display_object_textures.h"
+#include "gfx_buffer.h"
+#include "memory_main.h"
 #include "poke_icon.h"
 #include "pokemon_stats.h"
-#include "save_data.h"
-#include "jpeg_stream.h"
-#include "gfx_buffer.h"
-#include "gfx_rect.h"
-#include "controller.h"
-#include "memory.h"
 #include "stage_loader.h"
 extern unk_func_8001A024* D_81300384;
 extern BattleMon D_81300388[6];

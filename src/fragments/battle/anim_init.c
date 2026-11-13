@@ -1,19 +1,8 @@
 /* Stadium Zero fragment012_17ED00. */
 /* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_315D50.c. */
 
-#include "fragments/battle_engine/battle_engine.h"
-#include "model_animation.h"
-#include "display_object_textures.h"
-#include "model_renderer.h"
-#include "audio_commands.h"
-#include "3D140.h"
-#include "audio_fade.h"
-#include "audio_sfx.h"
-#include "audio_loop_point.h"
-#include "cry.h"
+#include "battle.h"
 #include "matrix.h"
-#include "math_util.h"
-#include "fragments/battle/battle_engine_315D50_types.h"
 #include "prevent_bss_reordering.h"
 extern s32 gBattleAnimFrameCounter;
 extern s32 gBattleAnimSpawnDelay;

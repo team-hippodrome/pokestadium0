@@ -1,6 +1,7 @@
 /* Stadium Zero resident code. */
 
 #include "global.h"
+#include "fabsf.h"
 
 /*
  * fabsf

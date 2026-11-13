@@ -1,21 +1,11 @@
 /* Stadium Zero fragment012_17ED00. */
 /* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_317E70.c, src/fragments/battle_engine/battle_engine_359F90.c, src/fragments/particle_math/particle_math_26F9B0.c. */
 
-#include "fragments/battle_engine/battle_engine.h"
-#include "geo_render.h"
-#include "model_renderer.h"
+#include "battle.h"
 #include "matrix.h"
-#include "fragments/particle_math/particle_math.h"
-#include "memory.h"
 
-#include "fragments/particle_math/particle_math.h"
 
-#include "fragments/battle_engine/battle_engine.h"
-#include "gb_data.h"
-#include "text_system.h"
-#include "matrix.h"
 #include "moves.h"
-#include "fragments/battle/battle_engine_313D60_types.h"
 extern u8 sBattleMoveFailed;
 extern u8 sBattleCritFlag;
 extern u8 D_82199F4E;

@@ -1,5 +1,33 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
-#include "lab_pc_icons.h"
+#include "party_summary.h"
+#include "audio_commands.h"
+#include "font.h"
+#include "gb_save.h"
+#include "graphics_textures.h"
+#include "input.h"
+#include "ui_graphics.h"
+
+// Declared here instead of in a header: the callers of these disagree on their types.
+M2C_UNK Menu_DrawItems(s8 *, s32, s32, M2C_UNK, s32);
+M2C_UNK Menu_Init(s8 *, s32, s8 *, M2C_UNK *, s32, s32);
+M2C_UNK Ui_DrawTexturedDivider(s32, s32, s32, M2C_UNK *);
+extern Entry80066AA0 D_80066AA0[];
+extern M2C_UNK D_800734A8;
+extern s8 *D_800603C0;
+extern s8 D_8007356C;
+s32 Particle_Field50_SetXZFromField7C_09BB4();
+s32 Pokemon_GetTypeIndex(s32, s32);
+s32 func_8001FA30(u8);
+void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
+void func_8001A384(s32, s32);
+void func_8001A944(s32, s32, const char*, ...);
+void func_8001AA9C(u8, u8, u8, u8);
+void func_8001AAE4(s32, s32, s32, s32);
+void func_8001AB6C(void);
+void func_8001ABBC(void);
+void func_8001ABE8(void);
+void func_8001AC3C(void);
+void func_80029028(s32, s32, s32, s32, Color_RGBA8);
 
 extern Entry80066AA0 D_80066AA0[];
 extern Entry80066AA0 D_80066AA8;

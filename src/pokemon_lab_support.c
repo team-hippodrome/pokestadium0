@@ -1,8 +1,7 @@
 /* Stadium Zero resident code. */
 /* C ported from the Stadium 1 decomp: src/fragments/pokemon_lab_support/pokemon_lab_support.c. */
 
-#include "fragments/pokemon_lab_support/pokemon_lab_support.h"
-#include "gb_save.h"
+#include "pokemon_lab_support.h"
 #include "m2c_macros.h"
 
 s32 LabPC_StatusToIconIndex(s32 arg0);

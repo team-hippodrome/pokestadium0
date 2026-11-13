@@ -1,9 +1,9 @@
 /* Stadium Zero fragment012_17ED00. */
 /* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_351F20.c. */
 
-#include "fragments/battle_engine/battle_engine.h"
-#include "gallery.h"
+#include "battle.h"
 #include "gfx_buffer.h"
+#include "vector_math.h"
 extern Gfx D_82192FF0[];
 extern Vtx D_82193080[];
 

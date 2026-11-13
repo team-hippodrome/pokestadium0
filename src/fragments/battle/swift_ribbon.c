@@ -1,7 +1,7 @@
 /* Stadium Zero fragment012_17ED00. */
 /* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_3512D0.c. */
 
-#include "fragments/battle_engine/battle_engine.h"
+#include "battle.h"
 #include "gfx_buffer.h"
 extern TexturedRibbonSheet D_821AC7B0[40];
 extern Gfx D_82192F40[];

@@ -1,29 +1,25 @@
 /* Stadium Zero fragment010_17BE70. */
 /* C ported from the Stadium 1 decomp: src/fragments/pikachu_reward/pikachu_reward.c, src/game_state.c. */
 
-#include "fragments/pikachu_reward/pikachu_reward.h"
-#include "geo_render.h"
-#include "model_animation.h"
+#include "pikachu_reward.h"
 #include "display_object_textures.h"
-#include "model_renderer.h"
-#include "graphics_textures.h"
-#include "ui_graphics.h"
-#include "pokemon_stats.h"
-#include "text_system.h"
+#include "font.h"
 #include "gb_save.h"
-#include "jpeg_stream.h"
-#include "audio_fade.h"
-#include "audio_stored_fade.h"
-#include "audio_sfx.h"
-#include "cry.h"
-#include "gfx_buffer.h"
-#include "gfx_rect.h"
-#include "DDC0.h"
-#include "matrix.h"
 #include "geo_layout.h"
-#include "memory.h"
-#include "stage_loader.h"
+#include "geo_render.h"
+#include "gfx_buffer.h"
+#include "graphics_textures.h"
+#include "input.h"
+#include "main_pool.h"
+#include "matrix.h"
+#include "memory_main.h"
+#include "model_renderer.h"
+#include "pokemon_stats.h"
+#include "ui_graphics.h"
 #include "util.h"
+
+// Declared here instead of in a header: the callers of these disagree on their types.
+void MainPool_FinalizeAllocation(struct MemoryBlock* block);
 extern GraphNode* D_81702010;
 extern GraphNode* D_81702014;
 extern unk_D_86002F30* D_81702018;
@@ -33,29 +29,7 @@ extern s32 D_81701B04;
 extern char* D_81701B08;
 extern u32 D_81701B4C[];
 
-#include "game_state.h"
 #include "functions.h"
-#include "input.h"
-#include "save_data.h"
-#include "audio_commands.h"
-#include "gallery.h"
-#include "gb_data.h"
-#include "jpeg_stream.h"
-#include "gfx_buffer.h"
-#include "DDC0.h"
-#include "session.h"
-#include "save_data.h"
-#include "gb_save.h"
-#include "gb_tower_audio.h"
-#include "leo.h"
-#include "display_object_textures.h"
-#include "pokemon_stats.h"
-#include "controller.h"
-#include "dp_intro.h"
-#include "gb_tower.h"
-#include "memory.h"
-#include "rsp.h"
-#include "stage_loader.h"
 #include "lib/ultralib/include/PR/os_internal_reg.h"
 extern u16 D_8006BBB0[16][256];
 extern s32 pad_D_80075660;

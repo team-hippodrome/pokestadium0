@@ -1,12 +1,9 @@
 /* Stadium Zero fragment012_17ED00. */
 /* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_359F90.c. */
 
-#include "fragments/battle_engine/battle_engine.h"
+#include "battle.h"
 #include "gb_data.h"
-#include "text_system.h"
-#include "matrix.h"
 #include "moves.h"
-#include "fragments/battle/battle_engine_313D60_types.h"
 extern u8 sBattleMoveFailed;
 extern u8 sBattleCritFlag;
 extern u8 D_82199F4E;

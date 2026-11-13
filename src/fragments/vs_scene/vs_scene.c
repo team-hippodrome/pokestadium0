@@ -1,35 +1,27 @@
 /* Stadium Zero fragment013_232510. */
 /* C ported from the Stadium 1 decomp: src/fragments/demo_scenes/demo_scenes_161E60.c, src/fragments/jigglypuff_doodle/jigglypuff_doodle.c. */
 
-#include "fragments/demo_scenes/demo_scenes.h"
-#include "geo_render.h"
-#include "model_animation.h"
-#include "model_animation_events.h"
-#include "geo_layout.h"
+#include "vs_scene.h"
 #include "display_object_textures.h"
-#include "model_renderer.h"
+#include "font.h"
+#include "fragments/cartridge_check/cartridge_check.h"
+#include "gb_save.h"
+#include "geo_layout.h"
+#include "geo_render.h"
+#include "gfx_buffer.h"
 #include "graphics_textures.h"
 #include "input.h"
-#include "ui_graphics.h"
-#include "save_data.h"
-#include "text_system.h"
-#include "jpeg_stream.h"
-#include "audio_sfx.h"
-#include "audio_loop_point.h"
-#include "cry.h"
-#include "gfx_buffer.h"
-#include "gfx_rect.h"
+#include "main_pool.h"
 #include "matrix.h"
-#include "controller.h"
-#include "math_util.h"
-#include "memory.h"
-#include "stage_loader.h"
+#include "memory_main.h"
+#include "model_renderer.h"
+#include "save_data.h"
+#include "ui_graphics.h"
 #include "global.h"
-#include "fragments/particle_math/particle_math.h"
-#include "jpeg_stream.h"
-#include "controller.h"
-#include "gb_save.h"
 #include "m2c_macros.h"
+
+// Declared here instead of in a header: the callers of these disagree on their types.
+void MainPool_FinalizeAllocation(struct MemoryBlock* block);
 extern u8 D_30074E0[];
 extern u8 D_30092E0[];
 extern u8 D_300B6E0[];
@@ -159,23 +151,6 @@ typedef struct unk_D_86B0EBE0 {
 extern s32 pad_D_86B0C4BC[3];
 
 #include "math.h"
-#include "geo_render.h"
-#include "model_animation_events.h"
-#include "geo_layout.h"
-#include "display_object_textures.h"
-#include "model_renderer.h"
-#include "graphics_textures.h"
-#include "input.h"
-#include "ui_graphics.h"
-#include "gallery.h"
-#include "jpeg_stream.h"
-#include "gfx_buffer.h"
-#include "gfx_rect.h"
-#include "matrix.h"
-#include "controller.h"
-#include "fragments/widget_toolkit/widget_toolkit.h"
-#include "memory.h"
-#include "stage_loader.h"
 typedef struct unk_D_86301730 {
     /* 0x000 */ s16 unk_000;
     /* 0x002 */ s16 unk_002;

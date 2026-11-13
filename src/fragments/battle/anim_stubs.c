@@ -1,11 +1,8 @@
 /* Stadium Zero fragment012_17ED00. */
 /* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_343BA0.c, src/fragments/battle_engine/battle_engine_3591E0.c, src/fragments/battle_engine/battle_engine_359F80.c. */
 
-#include "fragments/battle_engine/battle_engine.h"
-#include "gallery.h"
-#include "gfx_buffer.h"
+#include "battle.h"
 #include "math.h"
-#include "math_util.h"
 extern u8* sBattleAnimAssetPointers[256];
 extern s16 sBattleAnimResourceList[0x10];
 extern arg1_func_80019420* sBattleAnimResourceTablePointers[40];
@@ -24,15 +21,9 @@ extern s16 D_8219CB18;
 extern s16 D_8219CB1A;
 extern const char D_821978C8[];
 
-#include "fragments/battle_engine/battle_engine.h"
-#include "gfx_buffer.h"
-#include "geo_render.h"
-#include "gallery.h"
-#include "battle_hud.h"
 extern AuxiliaryEffect D_821CEEA0[2];
 extern Gfx D_82193E18[];
 
-#include "fragments/battle_engine/battle_engine.h"
 
 void BattleAnim_EndEffect16_NoOpDraw(void);
 void func_8216D978(void);

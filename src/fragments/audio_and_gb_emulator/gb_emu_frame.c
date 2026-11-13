@@ -3,16 +3,13 @@
 /* C ported from the Stadium 1 decomp: src/fragments/gb_tower_emulator/gb_tower_emulator_7F9A0.c. */
 
 #include "global.h"
-#include "fragments/gb_tower_emulator/gb_tower_emulator.h"
-#include "game_state.h"
-#include "jpeg_stream.h"
-#include "scheduler.h"
-#include "gfx_rect.h"
-#include "controller.h"
-#include "memory.h"
+#include "audio_and_gb_emulator.h"
 #include "variables.h"
 
 #include "m2c_macros.h"
+
+// Declared here instead of in a header: the callers of these disagree on their types.
+void GbAudio_UpdateFrame();
 
 void GbEmu_BlitWithPixelOp(u16* dst, u16* src, s32 mode, s32 width, s32 height);
 void GbEmu_BlendScrollingLayer(u16* arg0, u16* arg1, s16* arg2, s32 arg3, s32 arg4);

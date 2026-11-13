@@ -1,5 +1,14 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
-#include "battle_engine_339CA0.h"
+#include "battle.h"
+
+// Declared here instead of in a header: the callers of these disagree on their types.
+M2C_UNK func_8213B5D8(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK *, M2C_UNK *, s32, s32, s32, s32, s32, s32);
+extern M2C_UNK BattleAnim_RunOscillatingFlameUnderneathPokemon;
+extern M2C_UNK D_8218E7B8;
+extern M2C_UNK func_8214E67C;
+s32 func_82107CF0(s32);
+void func_82163D7C(s8 *arg0);
+void func_82164AD0(s8 *arg0);
 
 /**
  * Particle callback for the growing spark: waits its delay, shows for 12 frames, fades out

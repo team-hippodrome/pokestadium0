@@ -1,7 +1,7 @@
 #include "moves.h"
 /* Stadium Zero fragment012_17ED00. */
 
-#include "fragments/battle_engine/battle_engine.h"
+#include "battle.h"
 #include "m2c_macros.h"
 
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.

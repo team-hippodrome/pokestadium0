@@ -2,6 +2,7 @@
 
 #include "global.h"
 #include "m2c_macros.h"
+#include "gb_tower_launch.h"
 
 M2C_UNK (*func_80002C80(M2C_UNK *))(s32);           /* extern */
 M2C_UNK func_80004920(s32);                         /* extern */

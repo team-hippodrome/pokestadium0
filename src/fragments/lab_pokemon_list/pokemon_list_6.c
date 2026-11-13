@@ -1,12 +1,8 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
 #include "global.h"
-#include "game_state.h"
-#include "jpeg_stream.h"
-#include "memory.h"
-#include "stage_loader.h"
+#include "lab_pokemon_list.h"
 #include "m2c_macros.h"
 
-typedef struct Rgba891024A4 { u8 r, g, b, a; } Rgba891024A4;
 typedef struct Color82000BC4 {
     u8 r, g, b, a;
 } Color82000BC4;
@@ -14,12 +10,7 @@ typedef struct Entry80066AD8 {
     const char* str;
     Color82000BC4 color;
 } Entry80066AD8;
-typedef struct Entry89100FC4 {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 type;
-    /* 0x04 */ const char* name;
-    /* 0x08 */ s32 unk_08;
-} Entry89100FC4; // size = 0xC
+
 typedef struct Label89100FC4 {
     Color82000BC4 color;
     const char* str;
@@ -443,7 +434,6 @@ s32 func_89103370(s8 **arg0) {
 }
 
 void TextBox_Init(s8* arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4);
-#include "fragments/lab_pokemon_list/89100020_89102C40_types.h"
 extern Info891033A0 D_80065D00[];
 extern s8 D_8910DD40[];
 extern s8 D_8910DD58[];

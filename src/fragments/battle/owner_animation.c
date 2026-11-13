@@ -1,5 +1,9 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
-#include "battle_engine_309ED0.h"
+#include "battle.h"
+
+// Declared here instead of in a header: the callers of these disagree on their types.
+void func_821020FC(ActivePokemon*);
+void func_8210211C(ActivePokemon* active_pokemon);
 
 /**
  * Resets the scene's model-reload step to 0.

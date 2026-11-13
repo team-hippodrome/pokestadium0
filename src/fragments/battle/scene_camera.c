@@ -1,5 +1,14 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
-#include "battle_engine_3055E0.h"
+#include "battle.h"
+#include "geo_render.h"
+#include "matrix.h"
+
+// Declared here instead of in a header: the callers of these disagree on their types.
+M2C_UNK func_8000EEBC(s32, s32, f32, s16, s32);
+extern f32 D_FLT_82189358[];
+extern s8 *D_8219A5A0;
+f32 BattleScene_GetParticipantHeight();
+void func_82124874();
 
 extern f32 D_8219A534;
 extern f32 D_FLT_82189358[];

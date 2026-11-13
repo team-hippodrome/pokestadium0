@@ -1,7 +1,7 @@
 /* Stadium Zero fragment012_17ED00. */
 /* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_356730.c. */
 
-#include "fragments/battle_engine/battle_engine.h"
+#include "battle.h"
 #include "battle_hud.h"
 #include "gfx_buffer.h"
 extern DoubleTextureTrail D_821CD0E0[4];

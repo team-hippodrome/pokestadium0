@@ -1,5 +1,11 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
-#include "battle_engine_3055E0.h"
+#include "battle.h"
+#include "matrix.h"
+
+// Declared here instead of in a header: the callers of these disagree on their types.
+void func_8210C1A8(f32*, f32, f32);
+void func_8212254C(s32, s32, Vec3f, s32, s32, f32, f32);
+void func_82123D4C(CameraNode* arg0, ActivePokemon* arg1);
 
 /**
  * Steps an impact framing started by func_82124284: eases the zoom toward 0 (speed

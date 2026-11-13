@@ -2,18 +2,12 @@
 /* C ported from the Stadium 1 decomp: src/poke_icon.c. */
 
 #include "poke_icon.h"
+#include "display_object_textures.h"
 #include "geo_node.h"
 #include "geo_render.h"
-#include "model_animation.h"
-#include "display_object_textures.h"
-#include "model_renderer.h"
-#include "graphics_textures.h"
-#include "jpeg_stream.h"
-#include "gfx_rect.h"
 #include "matrix.h"
-#include "dp_intro.h"
-#include "geo_layout.h"
-#include "memory.h"
+#include "memory_main.h"
+#include "model_renderer.h"
 extern DisplayObject* D_800AD1C0;
 s32 PokeIcon_CapturePreviewGeoNode(s32, GraphNode*);
 s32 PokeIcon_CaptureGeoNode(s32, GraphNode*);

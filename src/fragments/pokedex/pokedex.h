@@ -1,8 +1,10 @@
-#ifndef _FRAGMENT28_H_
-#define _FRAGMENT28_H_
+/* Declarations for the pokedex fragment (src/fragments/pokedex/). */
+#ifndef FRAGMENT_POKEDEX_H
+#define FRAGMENT_POKEDEX_H
 
 #include "global.h"
-#include "src/fragments/widget_tree/widget_tree.h"
+#include "menu.h"
+#include "table_view.h"
 
 typedef struct unk_func_888044BC_038_02C_02C_000 {
     /* 0x00 */ u8 unk_00;
@@ -91,19 +93,25 @@ typedef struct unk_func_888044BC_050 {
     /* 0x30 */ s32 unk_30;
 } unk_func_888044BC_050; // size = 0x34
 
-s32 Pokedex_DrawListScrollArrows(unk_func_888044BC_050* arg0, s32 arg1, s32 arg2);
-s32 Pokedex_HandleSpeciesListInput(unk_func_888044BC_038* arg0, Controller* arg1);
-void Pokedex_DrawTrainerInfoCard(unk_func_888044BC_03C_02C* arg0, s32 arg1, s32 arg2);
-s32 Pokedex_DrawSortOrderLabel(unk_func_888044BC_040_030* arg0, s32 arg1, s32 arg2);
-s32 Pokedex_HandleEntryMenuInput(unk_func_888044BC_040* arg0, Controller* arg1);
-s32 Pokedex_DrawDataPanel(unk_func_888044BC_044_02C* arg0, s32 arg1, s32 arg2);
-s32 Pokedex_DrawPreview(unk_func_888044BC_04C_02C* arg0, s32 arg1, s32 arg2);
+/* Struct types that were defined identically in each of these files; this is
+ * now the one definition they all include:
+ * src/fragments/fragment018_262620/pokedex_214920.c
+ * src/fragments/fragment018_262620/pokedex_2190D0.c
+ */
+
+typedef struct unk_D_80064C60 {
+    /* 0x00 */ char* unk_00;
+    /* 0x04 */ char unk04[0x18];
+} unk_D_80064C60; // size = 0x1C
+
+#include "controller.h"
+
+// pokedex.c
 s32 Pokedex_RunIndexScreen(void);
 s32 Pokedex_ShowEntryMenu(void);
 void Pokedex_LoadIcon(u8* arg0, s32 arg1);
 s32 Pokedex_ShowEntry(void);
 s32 Pokedex_PlayCry(void);
-s32 Pokedex_RedrawAreaMapTransition(u8 arg0);
 void Pokedex_EnterAreaMapScreen(void);
 void Pokedex_ExitAreaMapScreen(void);
 s32 Pokedex_ShowAreaMapScreen(void);
@@ -111,6 +119,7 @@ void Pokedex_RunEntryFlow(void);
 s32 Pokedex_GetHighestSeenSpeciesIndex(void);
 void Pokedex_InitFramebuffers(void);
 
+// pokedex_2.c
 s32 Pokedex_FindNextMapArea(s32 arg0);
 s32 Pokedex_FindPrevMapArea(s32 arg0);
 void Pokedex_BuildMapMarkerDisplayList(void);
@@ -124,9 +133,18 @@ void Pokedex_UpdateCameraEaseSpeed(void);
 void Pokedex_EaseVec3Toward(Vec3f* arg0, Vec3f* arg1);
 void Pokedex_UpdateAreaMapFrame(void);
 s32 Pokedex_GetCountTier(s32 arg0);
-s32 Pokedex_DrawAreaMapFrame(UNUSED u8 arg0);
 s32 Pokedex_CheckAreaMapExit(void);
-
 void Pokedex_ExitAreaMapPool(void);
 
-#endif // _FRAGMENT28_H_
+// functions defined in assembly
+s32 Pokedex_DrawListScrollArrows(unk_func_888044BC_050* arg0, s32 arg1, s32 arg2);
+s32 Pokedex_HandleSpeciesListInput(unk_func_888044BC_038* arg0, Controller* arg1);
+void Pokedex_DrawTrainerInfoCard(unk_func_888044BC_03C_02C* arg0, s32 arg1, s32 arg2);
+s32 Pokedex_DrawSortOrderLabel(unk_func_888044BC_040_030* arg0, s32 arg1, s32 arg2);
+s32 Pokedex_HandleEntryMenuInput(unk_func_888044BC_040* arg0, Controller* arg1);
+s32 Pokedex_DrawDataPanel(unk_func_888044BC_044_02C* arg0, s32 arg1, s32 arg2);
+s32 Pokedex_DrawPreview(unk_func_888044BC_04C_02C* arg0, s32 arg1, s32 arg2);
+s32 Pokedex_RedrawAreaMapTransition(u8 arg0);
+s32 Pokedex_DrawAreaMapFrame(UNUSED u8 arg0);
+
+#endif // FRAGMENT_POKEDEX_H

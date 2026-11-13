@@ -3,9 +3,7 @@
 #include "moves.h"
 #include "pokemon.h"
 #include "pokemon_types.h"
-#include "fragments/particle_math/particle_math.h"
-#include "jpeg_stream.h"
-#include "controller.h"
+#include "battle.h"
 
 struct BattleSlotZ;
 extern struct BattleSlotZ* D_821CF294;

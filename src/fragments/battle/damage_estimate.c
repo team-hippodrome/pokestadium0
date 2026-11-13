@@ -1,10 +1,10 @@
 /* Stadium Zero fragment012_17ED00. */
 /* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_313250.c, src/fragments/battle_engine/battle_engine_361050.c, src/fragments/battle_engine/battle_engine_move_animation.c. */
 
-#include "fragments/battle_engine/battle_engine.h"
-#include "math.h"
-#include "jpeg_stream.h"
+#include "battle.h"
 #include "gb_data.h"
+#include "matrix.h"
+#include "math.h"
 extern unk_D_843C5568 gBattleAI_ActivePokemon[2];
 extern s32 pad_D_843C60A0;
 extern u16 D_82199F50;
@@ -14,23 +14,7 @@ extern u16 D_82199F56;
 extern u16 D_82199F58;
 extern u8 D_82199F32;
 extern unk_D_843C6148 D_8219A494;
-#include "fragments/battle/battle_engine_361050_types.h"
 
-#include "fragments/battle_engine/battle_engine.h"
-#include "model_animation.h"
-#include "model_animation_events.h"
-#include "model_renderer.h"
-#include "pokemon_stats.h"
-#include "text_system.h"
-#include "gb_save.h"
-#include "audio_commands.h"
-#include "jpeg_stream.h"
-#include "audio_fade.h"
-#include "audio_stored_fade.h"
-#include "audio_loop_point.h"
-#include "cry.h"
-#include "matrix.h"
-#include "memory.h"
 #include "moves.h"
 #include "pokemon_types.h"
 #include "pokemon.h"
@@ -81,14 +65,6 @@ extern char** sBattleControllerDisconnectedMessage;
 #define BLASTOISE_OB1 (BLASTOISE - 1)
 #define CLOYSTER_OB1  (CLOYSTER - 1)
 
-#include "fragments/battle_engine/battle_engine.h"
-#include "geo_node.h"
-#include "model_animation.h"
-#include "text_system.h"
-#include "audio_commands.h"
-#include "matrix.h"
-#include "memory.h"
-#include "util.h"
 #include "m2c_macros.h"
 
 u16 BattleAi_ApplyMoveEffectDamageOverride(BattleMonRuntime* arg0, BattleMonRuntime* arg1);

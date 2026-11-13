@@ -1,23 +1,8 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
 #include "global.h"
-#include "game_state.h"
-#include "jpeg_stream.h"
-#include "memory.h"
-#include "stage_loader.h"
+#include "lab_pokemon_list.h"
 #include "m2c_macros.h"
 
-typedef struct LabPCInitialStateFields {
-    u8 pad0000[0x9828];
-    u8 unk_9828;
-    u8 unk_9829;
-    u8 pad982A[2];
-    s32 unk_982C;
-    u8 pad9830[0xE8];
-    s32 unk_9918;
-    u8 pad991C[0x1E8];
-    s32 unk_9B04;
-} LabPCInitialStateFields;
-typedef struct Rgba891024A4 { u8 r, g, b, a; } Rgba891024A4;
 typedef struct Color82000BC4 {
     u8 r, g, b, a;
 } Color82000BC4;
@@ -25,7 +10,6 @@ typedef struct Entry80066AD8 {
     const char* str;
     Color82000BC4 color;
 } Entry80066AD8;
-#include "fragments/lab_pokemon_list/89100020_89100914_types.h"
 typedef struct Label89100FC4 {
     Color82000BC4 color;
     const char* str;
@@ -114,7 +98,6 @@ extern s8 D_8910E358[];
 s32 LabPCList_UpdateHeaderCursor(void*);
 M2C_UNK LabPCList_ApplyFiltersAndSort();
 extern s32 D_8910E37C;
-
 
 s32 LabPCList_UpdatePopupMenu(s8*);
 void func_80027D68(s32, s32);

@@ -1,5 +1,38 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
-#include "battle_engine_3438B0.h"
+#include "battle.h"
+#include "audio_commands.h"
+#include "geo_node.h"
+#include "matrix.h"
+
+// Declared here instead of in a header: the callers of these disagree on their types.
+M2C_UNK ActivePokemon_SetModelTransform(s8 *, M2C_UNK, M2C_UNK);
+M2C_UNK func_8211EE8C();
+M2C_UNK func_82125384();
+M2C_UNK func_821365B0(M2C_UNK, s8 *, s8 *, M2C_UNK, s32);
+extern ActivePokemon* D_8219A540;
+extern M2C_UNK D_82199DE0;
+extern Vec3f D_8218B630;
+extern s32 D_8219A520;
+extern s32 D_8219A544;
+extern s8 *D_8219A5A0;
+s32 ActivePokemon_GetNickname(ActivePokemon*);
+s32 BattleMessage_Format(s32, s32, s32, ...);
+s32 Battle_StepPartyHpToDisplay(ActivePokemon*);
+s32 func_8001101C(s8 *, M2C_UNK *);
+s32 func_82101FD4(s32);
+s32 func_82107CA0(ActivePokemon*);
+void BattleCamera_PlayShot(s32, s32, s32);
+void BattleMessage_ShowForSide(s32, s32);
+void BattleScene_InitTurnPresentation(CameraNode* arg0);
+void func_80041914(u8, u8);
+void func_82104C68(ActivePokemon*, s32);
+void func_82106354(ActivePokemon*);
+void func_82106374(ActivePokemon*);
+void func_82107408(ActivePokemon*);
+void func_82108C0C(ActivePokemon*);
+void func_82124874(void*, void*);
+void func_82124A40(void);
+void func_82135098(ActivePokemon*);
 
 /**
  * Phase 35. Same residual damage presentation as BattleScene_PhaseResidualDamageAfterMove for a Pokemon that

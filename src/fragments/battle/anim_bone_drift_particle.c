@@ -1,7 +1,7 @@
 /* Stadium Zero fragment012_17ED00. */
 
 #include "global.h"
-#include "fragments/particle_math/particle_math.h"
+#include "battle.h"
 
 void func_821401D4(Particle*, f32);
 void func_8213E11C(Particle*, f32);

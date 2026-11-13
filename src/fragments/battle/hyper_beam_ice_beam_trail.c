@@ -1,11 +1,10 @@
 /* Stadium Zero fragment012_17ED00. */
 /* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_357C30.c. */
 
-#include "fragments/battle_engine/battle_engine.h"
-#include "gfx_buffer.h"
-#include "geo_render.h"
-#include "gallery.h"
+#include "battle.h"
 #include "battle_hud.h"
+#include "gfx_buffer.h"
+#include "vector_math.h"
 extern s16 D_821CD9E0;
 extern unk_D_843C3508 D_821CD9E8[6];
 

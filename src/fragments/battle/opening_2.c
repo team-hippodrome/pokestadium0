@@ -1,5 +1,10 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
-#include "fragment1_89010.h"
+#include "battle.h"
+
+// Declared here instead of in a header: the callers of these disagree on their types.
+void BattleScene_OpeningStepLandSide0Ball(CameraNode* arg0);
+void BattleScene_OpeningStepThrowSide1(CameraNode* arg0);
+void BattleScene_OpeningStepWaitSide0Ball(CameraNode* arg0);
 
 /**
  * Battle opening phase: steps through the intro camera shots and both send-outs.

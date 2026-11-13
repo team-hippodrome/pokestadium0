@@ -1,7 +1,9 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
-#include "gb_tower_emulator_86CB0.h"
+#include "audio_and_gb_emulator.h"
 
-#include "fragments/audio_and_gb_emulator/gb_tower_emulator_86CB0_types.h"
+// Declared here instead of in a header: the callers of these disagree on their types.
+void AudioPlayback_NotePoolClear(s8*);
+
 
 typedef struct SeqPlayer81113A44 {
     /* 0x00 */ u32 enabled : 1;

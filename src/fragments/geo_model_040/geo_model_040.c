@@ -3,6 +3,7 @@
 
 /* NON_MATCHING branches are TODO slots, not C implementations. */
 
+#include "geo_model_040.h"
 #include "gfx_buffer.h"
 #include "m2c_macros.h"
 

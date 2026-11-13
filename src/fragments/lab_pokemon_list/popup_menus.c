@@ -1,19 +1,9 @@
 /* Stadium Zero fragment016_252E10. */
 /* C ported from the Stadium 1 decomp: src/fragments/lab_pc_list/lab_pc_list_1D7B40.c. */
 
-#include "fragments/lab_pc_list/lab_pc_list.h"
+#include "lab_pokemon_list.h"
+#include "font.h"
 #include "graphics_textures.h"
-#include "input.h"
-#include "gb_data.h"
-#include "game_state.h"
-#include "table_view.h"
-#include "text_system.h"
-#include "gb_save.h"
-#include "audio_sfx.h"
-#include "hal_libc.h"
-#include "memmap.h"
-#include "memory.h"
-#include "pokemon_stats.h"
 extern u8 D_8910D7D0[];
 typedef struct unk_func_88309614 {
     /* 0x00 */ char unk00[0x8];

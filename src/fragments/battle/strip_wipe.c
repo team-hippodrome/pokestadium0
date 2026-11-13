@@ -1,7 +1,7 @@
 /* Stadium Zero fragment012_17ED00. */
 /* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_3597B0.c. */
 
-#include "fragments/battle_engine/battle_engine.h"
+#include "battle.h"
 extern s16 D_821CF270;
 extern s16 D_821CF272;
 extern s16 D_821CF274;

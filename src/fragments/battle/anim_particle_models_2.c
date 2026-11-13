@@ -1,6 +1,6 @@
 #include "pokemon.h"
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
-#include "battle_engine_32B680_3.h"
+#include "battle.h"
 
 /**
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70

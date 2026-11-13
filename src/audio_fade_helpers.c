@@ -2,6 +2,7 @@
 
 #include "global.h"
 #include "m2c_macros.h"
+#include "audio_fade_helpers.h"
 
 /*
  * func_80047490

@@ -1,43 +1,13 @@
 /* Stadium Zero fragment014_235D70. */
 /* C ported from the Stadium 1 decomp: src/fragments/lab_pc/lab_pc_1B4EA0.c, src/fragments/lab_pc_icons/lab_pc_icons.c. */
 
-#include "fragments/lab_pc_icons/lab_pc_icons.h"
-#include "display_object_textures.h"
-#include "poke_icon.h"
+#include "main_menu.h"
+#include "font.h"
+#include "fragments/party_summary/party_summary.h"
 #include "graphics_textures.h"
-#include "ui_graphics.h"
-#include "gb_data.h"
-#include "table_view.h"
-#include "text_system.h"
-#include "gb_save.h"
-#include "jpeg_stream.h"
-#include "audio_sfx.h"
-#include "memmap.h"
-#include "memory.h"
-#include "stage_loader.h"
-#include "util.h"
-#include "fragments/widget_tree/widget_tree.h"
-#include "fragments/pokemon_lab_support/pokemon_lab_support.h"
-typedef struct unk_D_88605B00 {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ s16 unk_02;
-} unk_D_88605B00;
-
-#include "fragments/lab_pc/lab_pc.h"
-#include "graphics_textures.h"
-#include "input.h"
-#include "gb_data.h"
 #include "pokemon_stats.h"
-#include "save_data.h"
-#include "game_state.h"
-#include "table_view.h"
-#include "text_system.h"
-#include "gb_save.h"
-#include "audio_sfx.h"
-#include "hal_libc.h"
-#include "memmap.h"
-#include "memory.h"
 #include "stage_loader.h"
+
 typedef struct unk_D_88218060 {
     /* 0x00 */ s32 unk_00;
     /* 0x04 */ Color_RGBA8* unk_04;

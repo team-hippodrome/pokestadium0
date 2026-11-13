@@ -1,15 +1,19 @@
-#ifndef _22630_H_
-#define _22630_H_
+/* Declarations for src/gb_data.c. */
+#ifndef GB_DATA_H
+#define GB_DATA_H
 
 #include "global.h"
-#include "memory.h"
+#include "m2c_macros.h"
 #include "game_state.h"
-#include "table_view.h"
 
 #define STAT_HP 1
+
 #define STAT_SPECIAL 2
+
 #define STAT_SPEED 3
+
 #define STAT_DEFENSE 4
+
 #define STAT_ATTACK 5
 
 // Shifted, one-based view used by gBaseStats. Its named stat fields and
@@ -51,10 +55,6 @@ typedef struct SpeciesData {
     /* 0x16 */ u8 padding;
 } SpeciesData; // size = 0x17
 
-extern PokemonStats gBaseStats[];
-// Indexed by species ID - 1: Bulbasaur through Mew, then the Substitute doll.
-extern SpeciesData gSpeciesData[152];
-
 typedef struct unk_D_80071D88 {
     /* 0x00 */ char* type_name;
     /* 0x04 */ Color_RGBA8 color;
@@ -79,12 +79,6 @@ typedef struct GbPokemonRecord {
     /* 0x1B */ u8 unk_1B[2];
     /* 0x1D */ u8 unk_1D[4];
 } GbPokemonRecord; // size = 0x21
-
-typedef struct GbPokemonNamedRecord {
-    /* 0x00 */ GbPokemonRecord unk_00;
-    /* 0x21 */ u8 unk_21[11];
-    /* 0x2C */ u8 unk_2C[11];
-} GbPokemonNamedRecord; // size = 0x37
 
 typedef struct GbPokemonRecordExt {
     /* 0x00 */ GbPokemonRecord unk_00;
@@ -177,42 +171,14 @@ typedef struct GbSaveMainData {
     /* 0xFA0 */ GbSaveChecksumBlock unk_FA0;
 } GbSaveMainData; // size = 0xFC0
 
-typedef struct GbSaveBoxPair {
-    /* 0x000 */ GbSaveBoxEntry unk_000;
-    /* 0x000 */ GbSaveBoxEntry unk_014;
-    /* 0x028 */ char unk028[0x43A];
-} GbSaveBoxPair; // size = 0x462
+#include "table_view.h"
 
-typedef struct GbSaveBoxBank {
-    /* 0x0000 */ GbSaveBoxPair unk_0000[6];
-    /* 0x1A4C */ char unk1A4C[0x14];
-} GbSaveBoxBank; // size = 0x1A60
+extern PokemonStats gBaseStats[];
 
-typedef struct GbSaveBoxData {
-    /* 0x0000 */ GbSaveBoxBank unk_0000[2];
-} GbSaveBoxData; // size = 0x34C0
+// Indexed by species ID - 1: Bulbasaur through Mew, then the Substitute doll.
+extern SpeciesData gSpeciesData[152];
 
-typedef struct GbSavePlayerIdentity {
-    /* 0x00 */ u16 unk_00;
-    /* 0x02 */ char unk_02[11];
-    /* 0x0D */ u8 unk_0D[2];
-    /* 0x0F */ char unkF[0x1];
-} GbSavePlayerIdentity; // size = 0x10
-
-typedef struct GbSavePort {
-    /* 0x00 */ u16 unk_00;
-    /* 0x02 */ u8 unk_02;
-    /* 0x03 */ u8 unk_03;
-    /* 0x04 */ u8 unk_04;
-    /* 0x05 */ u8 unk_05;
-    /* 0x06 */ u8 unk_06[0x13];
-    /* 0x19 */ u8 unk_19[0x20];
-    /* 0x39 */ char unk39[0x7];
-    /* 0x40 */ GbSavePlayerIdentity unk_40;
-    /* 0x50 */ GbSaveMainData* unk_50;
-    /* 0x54 */ GbSaveBoxData* unk_54;
-} GbSavePort; // size = 0x58
-
+// gb_data.c
 u16 GbData_ReadU16BE(u8* arg0);
 u32 GbData_ReadU24BE(u8* arg0);
 void GbData_WriteU16BE(u8* arg0, s32 arg1);
@@ -223,16 +189,28 @@ char* Text_UntranscodeFixedName(char* arg0, char* arg1);
 s8* Text_CopyString(s8* arg0, s8* arg1);
 char* Text_CopySpeciesName(char* arg0, s32 arg1);
 char* Text_GetTmHmName(s32 arg0, char* arg1);
-void Pokemon_FromGbRecord(BattleMon* arg0, GbPokemonRecord* arg1);
 void Pokemon_FromGbRecordExt(BattleMon* arg0, GbPokemonRecordExt* arg1);
 void Pokemon_ToGbRecord(s8 *arg0, s8 *arg1);
 void Pokemon_ToGbRecordExt(unk_func_88205880_00D0* arg0, GbPokemonRecordExt* arg1);
 u16 StatExpSqrt(u16 arg0);
 void func_80020188(void);
-
 u32 CalculateStatValue(s32 statId, s32 speciesId, u16 statModifier, u16 level, u16 dvBits);
 void Pokemon_RecalcStats(BattleMon* arg0);
 u16 Pokemon_StatExpForTarget(s32 arg0, s32 arg1, u16 arg2, u16 arg3, u16 arg4);
 u32 Pokemon_ExpForLevel(s32 arg0, u16 arg1);
+s32 func_80020AFC(M2C_UNK, s32, M2C_UNK, M2C_UNK);  /* extern */
+u16 Pokemon_LevelFromExp(s32 arg0, u32 arg1);
+void Pokemon_PrepareBattleMon(BattleMon* arg0);
+u8 Move_GetIdFromTableIndex(s32 tm_hm_index);
+u8 Species_FromInternalIndex(s32 arg0);
+u8 func_80020984(s32 arg0);
+void Deck_InitializeSaveBackend(DeckHandle* arg0);
+void Deck_InitializeBoxBackend(DeckHandle* arg0);
+DeckHandle* Deck_Open(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
+DeckHandle* Deck_OpenAndSetName(s32 arg0, s32 arg1, s32 arg2, s32 arg3, char* arg4, u16 arg5);
+s32 Deck_CloseAndFlushBox(DeckHandle* arg0);
 
-#endif // _6BC0_H_
+// functions defined in assembly
+void Pokemon_FromGbRecord(BattleMon* arg0, GbPokemonRecord* arg1);
+
+#endif // GB_DATA_H

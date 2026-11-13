@@ -1,5 +1,13 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
-#include "battle_engine_339CA0.h"
+#include "battle.h"
+
+// Declared here instead of in a header: the callers of these disagree on their types.
+M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32);
+M2C_UNK Particle_ApplyMotionStep(s8 *);
+M2C_UNK Particle_SetUnkA6(s8 *, M2C_UNK);
+M2C_UNK func_8213C9D0(s8 *);
+M2C_UNK func_821401D4(s8 *, M2C_UNK);
+M2C_UNK func_82143408(s32, M2C_UNK);
 
 /**
  * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data

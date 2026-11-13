@@ -1,21 +1,19 @@
 /* Stadium Zero fragment012_17ED00. */
 /* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_31C660.c, src/fragments/battle_engine/battle_engine_343BA0.c, src/fragments/particle_math/particle_math_26E6D0.c. */
 
-#include "fragments/particle_math/particle_math.h"
+#include "battle.h"
+#include "model_renderer.h"
+
+// Declared here instead of in a header: the callers of these disagree on their types.
+void BattleAnim_LoadGlobalTintToParticle(Particle* arg0);
 extern u8 gParticlePalette[][3];
 extern u8 gParticlePaletteSetA[];
 extern u8 gParticlePaletteSetB[];
 extern u8 gParticleRandomPaletteIndices[];
 extern u8 gParticlePalettePairs[][2];
 
-#include "fragments/battle_engine/battle_engine.h"
-#include "model_renderer.h"
 
-#include "fragments/battle_engine/battle_engine.h"
-#include "gallery.h"
-#include "gfx_buffer.h"
 #include "math.h"
-#include "math_util.h"
 extern u8* sBattleAnimAssetPointers[256];
 extern s16 sBattleAnimResourceList[0x10];
 extern arg1_func_80019420* sBattleAnimResourceTablePointers[40];

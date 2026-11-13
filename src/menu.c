@@ -2,6 +2,7 @@
 
 #include "global.h"
 #include "m2c_macros.h"
+#include "menu.h"
 
 /**
  * Paged grid menu fields used by ScrollGrid_DrawCursor, Menu_DrawCursor,

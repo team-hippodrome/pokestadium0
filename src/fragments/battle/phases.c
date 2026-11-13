@@ -1,5 +1,47 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
-#include "battle_engine_3438B0.h"
+#include "battle.h"
+#include "audio_commands.h"
+
+// Declared here instead of in a header: the callers of these disagree on their types.
+M2C_UNK func_8211EE8C();
+M2C_UNK func_82125384();
+extern ActivePokemon* D_8219A540;
+extern f32 D_FLT_82189354[][4];
+extern s32 D_8219A520;
+extern s32 D_8219A544;
+extern s8 *D_8219A5A0;
+extern u8* D_82189180[];
+s32 Battle_StepPartyHpToDisplay(ActivePokemon*);
+s32 func_82107A5C(ActivePokemon*);
+s32 func_82107CA0(ActivePokemon*);
+s32 func_8210C020(M2C_UNK, s32);
+s32 func_82124810(void*, void*);
+void ActivePokemon_SetStateFlags(ActivePokemon*, s32);
+void Audio_PlayMoveSound(s32, s32, s32);
+void BattleCamera_PlayShot(s32, s32, s32);
+void BattleMessage_ShowForSide(s32, s32);
+void BattleScene_CameraShotTargetHighThunk(void*, void*);
+void BattleScene_ReactionCritical(CameraNode*, void*);
+void BattleScene_ReactionNormal(CameraNode*, void*);
+void func_821020FC(s8*);
+void func_82104C68(ActivePokemon*, s32);
+void func_82106354(ActivePokemon*);
+void func_82106374(ActivePokemon*);
+void func_82107408(ActivePokemon*);
+void func_82108C0C(ActivePokemon*);
+void func_821224F4();
+void func_8212311C(CameraNode*, ActivePokemon*, f32);
+void func_82124830(void*, void*);
+void func_82124874(void*, void*);
+void func_82124A40(void);
+void func_82125AC8(CameraNode*);
+void func_82125C34(CameraNode*);
+void func_82125C80(CameraNode*);
+void func_8212A4A4(s32);
+void func_8212A4CC(CameraNode*, s32*, s32*);
+void func_8212A554(void*);
+void func_8212A768(ActivePokemon*, CameraNode*, void*);
+void func_82135098(ActivePokemon*);
 
 extern s32 D_8219A520;
 extern ActivePokemon* D_8219A540;

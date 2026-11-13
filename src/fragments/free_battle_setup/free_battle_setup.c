@@ -2,6 +2,7 @@
 
 #include "global.h"
 #include "m2c_macros.h"
+#include "free_battle_setup.h"
 
 /* Unprototyped on purpose: different callers in this file pass one or two arguments. */
 s32 Menu_UpdateCursor();
@@ -28,10 +29,6 @@ void FreeBattle_ClearIndices(s32* arg0, s32 arg1, s32 arg2) {
     }
 }
 
-typedef struct Entry82000058 {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ u8 unk_04[0x50];
-} Entry82000058; // size = 0x54
 s32 func_80020AFC(s32, s32, s32, s32);
 s32 func_80020CE4(void*, s32, s32);
 void func_80020C60(s32);
@@ -142,8 +139,6 @@ Slot54* FreeBattle_FindFlaggedSlot(Slot54* arg0, s32* arg1) {
     *arg1 = count;
     return found;
 }
-
-#include "fragments/free_battle_setup/fragment007_166580_types_2.h"
 
 /**
  * Returns 1 when no three of the six Pokemon have levels summing to 155 or less (the さいていレベル warning). The running sum keeps the levels of earlier `j` iterations, so later trios are overestimated.
@@ -469,7 +464,6 @@ void FreeBattle_DrawMoveName(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     }
     func_8001A944(arg0, arg1, str);
 }
-
 
 /**
  * Draws the colored type icon for type slot `arg3` of Pokemon `arg2`.
@@ -928,7 +922,6 @@ void FreeBattle_DrawMonCell(s32 x, s32 y, s32* entry, s32 frame, s32 flags, s32 
         }
     }
 }
-
 
 void FreeBattle_DrawMonCell(s32, s32, s32*, s32, s32, s32);
 

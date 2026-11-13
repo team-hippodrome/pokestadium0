@@ -2,15 +2,7 @@
 /* Split from audio_commands.c so the jump tables of Audio_PlayCommand land at 0x8007E87C. */
 
 #include "audio_commands.h"
-#include "audio_commands_category2.h"
-#include "audio_commands.h"
-#include "3D140.h"
 #include "libnumus/player.h"
-#include "rom_device.h"
-#include "audio_channel.h"
-#include "audio_cache.h"
-#include "cry.h"
-#include "audio_fade.h"
 
 typedef struct SoundBank8 {
     /* 0x0 */ u8 unk_0;

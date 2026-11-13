@@ -2,15 +2,7 @@
 /* Split from audio_commands.c: the code after the jump tables of Audio_PlayCommand. */
 
 #include "audio_commands.h"
-#include "audio_commands_category2.h"
-#include "audio_commands.h"
-#include "3D140.h"
 #include "libnumus/player.h"
-#include "rom_device.h"
-#include "audio_channel.h"
-#include "audio_cache.h"
-#include "cry.h"
-#include "audio_fade.h"
 #include "m2c_macros.h"
 
 extern u8 D_80077528;

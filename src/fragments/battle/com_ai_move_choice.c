@@ -4,6 +4,7 @@
 #include "pokemon.h"
 #include "pokemon_types.h"
 #include "m2c_macros.h"
+#include "battle.h"
 
 extern u8* D_821CF29C;
 extern s8* D_821CF2A0;

@@ -1,6 +1,8 @@
-#ifndef _RSP_H_
-#define _RSP_H_
+/* Declarations for src/rsp.c. */
+#ifndef RSP_H
+#define RSP_H
 
+#include "global.h"
 #include "PR/leo.h"
 
 struct UnkStruct800006C4_2 {
@@ -31,6 +33,7 @@ struct UnkStruct80083BD0 {
     OSMesgQueue queue2;
 };
 
+// rsp.c
 s32 Storage_InitializeLeoManager(void);
 OSPiHandle *Storage_GetSramHandle(void);
 s32 Storage_ReadSram(struct UnkStruct800006C4_2* arg0);
@@ -48,4 +51,4 @@ void thread20_rsp(void *arg);
 void Storage_ResetDisk(void);
 void Storage_QueueRequest(void* arg0, s32 arg1);
 
-#endif // _RSP_H_
+#endif // RSP_H

@@ -1,17 +1,13 @@
 /* Stadium Zero resident code. */
 /* C ported from the Stadium 1 decomp: src/3D140.c. */
 
-#include "3D140.h"
-#include "lib/ultralib/include/PR/leo.h"
-#include "audio_commands.h"
-#include "libnumus/player.h"
-#include "3D140.h"
+#include "audio_manager.h"
 #include "gb_audio.h"
+#include "gb_audio_render.h"
+#include "lib/ultralib/include/PR/leo.h"
+#include "libnumus/player.h"
 #include "libnaudio/n_libaudio_sc.h"
 #include "libnaudio/n_libaudio_sn_sc.h"
-#include "audio_stream.h"
-#include "gb_audio_render.h"
-#include "audio_loop_point.h"
 typedef union {
     struct {
         s16 type;
@@ -42,7 +38,6 @@ typedef struct AMAudioMgr {
     ///* 0x1F8 */ OSMesg audioReplyMsgBuf[MAX_MESGS];
     /* 0x238 */ ALGlobals g;
 } AMAudioMgr;
-#include "33FE0_types.h"
 typedef struct unk_D_800FCB48 {
     /* 0x00 */ u16 unk_00[16];
     /* 0x20 */ s32 unk_20;

@@ -1,6 +1,7 @@
 /* Stadium Zero fragment000_80C00. */
 
 #include "global.h"
+#include "audio_and_gb_emulator.h"
 
 void func_811177D0(s32);
 void func_81106820(void);

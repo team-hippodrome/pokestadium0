@@ -2,6 +2,7 @@
 
 #include "global.h"
 #include "m2c_macros.h"
+#include "main.h"
 
 M2C_UNK func_80000C14();                            /* extern */
 M2C_UNK DpIntro_SetViMode(M2C_UNK, M2C_UNK);            /* extern */

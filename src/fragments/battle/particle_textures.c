@@ -1,7 +1,7 @@
 /* Stadium Zero fragment012_17ED00. */
 /* C ported from the Stadium 1 decomp: src/fragments/particle_math/particle_math_26E6D0.c. */
 
-#include "fragments/particle_math/particle_math.h"
+#include "battle.h"
 extern u8 gParticlePalette[][3];
 extern u8 gParticlePaletteSetA[];
 extern u8 gParticlePaletteSetB[];

@@ -2,10 +2,9 @@
 /* C ported from the Stadium 1 decomp: src/33FE0.c, src/3D140_2.c, src/DDC0.c. */
 
 #include "global.h"
-#include "33FE0.h"
-#include "geo_render.h"
-#include "battle_hud.h"
-#include "memmap.h"
+#include "misc_stubs.h"
+#include "audio_manager.h"
+#include "model_vertex_draw.h"
 extern s16 D_80074670[0x102];
 extern s16 D_80074874[0x102];
 extern s16 D_80074A78[0x102];
@@ -20,17 +19,10 @@ extern Vec3fCounter* D_800B32C0;
 extern PosBlend D_800B32C8[0x10];
 extern Mtx D_800B35C8;
 
-#include "3D140.h"
 #include "lib/ultralib/include/PR/leo.h"
-#include "audio_commands.h"
 #include "libnumus/player.h"
-#include "3D140.h"
-#include "gb_audio.h"
 #include "libnaudio/n_libaudio_sc.h"
 #include "libnaudio/n_libaudio_sn_sc.h"
-#include "audio_stream.h"
-#include "gb_audio_render.h"
-#include "audio_loop_point.h"
 typedef union {
     struct {
         s16 type;
@@ -61,17 +53,7 @@ typedef struct AMAudioMgr {
     ///* 0x1F8 */ OSMesg audioReplyMsgBuf[MAX_MESGS];
     /* 0x238 */ ALGlobals g;
 } AMAudioMgr;
-typedef struct AMDMABuffer {
-    /* 0x00 */ ALLink node;
-    /* 0x08 */ u32 startAddr;
-    /* 0x0C */ u32 lastFrame;
-    /* 0x10 */ char* ptr;
-} AMDMABuffer;
-typedef struct AMDMAState {
-    /* 0x00 */ u8 initialized;
-    /* 0x04 */ AMDMABuffer* firstUsed;
-    /* 0x08 */ AMDMABuffer* firstFree;
-} AMDMAState;
+
 typedef struct unk_D_800FCB48 {
     /* 0x00 */ u16 unk_00[16];
     /* 0x20 */ s32 unk_20;
@@ -86,10 +68,7 @@ typedef struct unk_D_800FCB48 {
     /* 0x7C */ u32 unk_7C;
     /* 0x80 */ s32 unk_80;
 } unk_D_800FCB48;
-typedef struct unk_D_80078548 {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
-} unk_D_80078548;
+
 extern s32 D_80075C30;
 extern s8 D_800B3CE0;
 extern u8 D_800B3CE8;
@@ -114,17 +93,6 @@ extern u8 sMusicSeqTables[0x134];
 
 #include <PR/os_internal_reg.h>
 #include "global.h"
-#include "dp_intro.h"
-#include "profiler.h"
-#include "audio_loop_point.h"
-#include "scheduler.h"
-#include "gb_tower_audio.h"
-#include "audio_commands.h"
-#include "audio_category_fade.h"
-#include "audio_sound_state.h"
-#include "audio_channel.h"
-#include "audio_loop_point.h"
-#include "33FE0_types_2.h"
 extern s32 D_800AAE30;
 extern s32 D_800AAF3C;
 

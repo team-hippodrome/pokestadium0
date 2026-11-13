@@ -1,5 +1,8 @@
-#ifndef _PROFILER_H_
-#define	_PROFILER_H_
+/* Declarations for src/profiler.c. */
+#ifndef PROFILER_H
+#define PROFILER_H
+
+#include "global.h"
 
 /*
  * This struct contains time values per frame which is kept up by profiler.c. The game has
@@ -44,6 +47,7 @@ enum SetGetTimeDiff {
     GET_TIME_DIFF = 2
 };
 
+// profiler.c
 void profiler_log_thread5_time(enum ProfilerGameEvent eventID);
 void profiler_log_thread4_time(void);
 void profiler_log_gfx_time(enum ProfilerGfxEvent eventID);
@@ -59,4 +63,4 @@ void print_profiler_metrics(void);
 void clear_profiler_data(void);
 u32 set_get_time_diff(enum SetGetTimeDiff state);
 
-#endif // _PROFILER_H_
+#endif // PROFILER_H

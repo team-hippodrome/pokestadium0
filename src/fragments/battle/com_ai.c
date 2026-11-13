@@ -5,46 +5,9 @@
 #include "moves.h"
 #include "pokemon.h"
 #include "pokemon_types.h"
-#include "fragments/particle_math/particle_math.h"
-#include "jpeg_stream.h"
-#include "controller.h"
-#include "geo_render.h"
-#include "model_animation.h"
-#include "display_object_textures.h"
-#include "model_renderer.h"
-#include "graphics_textures.h"
-#include "ui_graphics.h"
-#include "text_system.h"
-#include "jpeg_stream.h"
-#include "audio_sound_state.h"
-#include "audio_sfx.h"
-#include "audio_channel.h"
-#include "audio_loop_point.h"
-#include "audio_commands_category2.h"
-#include "audio_category_fade.h"
-#include "gfx_buffer.h"
-#include "gfx_rect.h"
-#include "fragments/widget_toolkit/widget_toolkit.h"
-#include "fragments/particle_math/particle_math.h"
-#include "memory.h"
-#include "stage_loader.h"
-#include "geo_layout.h"
+#include "battle.h"
+#include "asset_archive.h"
 
-#include "fragments/free_battle_rules/free_battle_rules.h"
-#include "graphics_textures.h"
-#include "input.h"
-#include "ui_graphics.h"
-#include "pokemon_stats.h"
-#include "game_state.h"
-#include "session.h"
-#include "text_system.h"
-#include "jpeg_stream.h"
-#include "audio_sfx.h"
-#include "DDC0.h"
-#include "matrix.h"
-#include "controller.h"
-#include "memory.h"
-#include "stage_loader.h"
 typedef struct unk_D_84002D18 {
     /* 0x00 */ s16 unk_00;
     /* 0x02 */ s16 unk_02;
@@ -67,26 +30,8 @@ typedef struct unk_D_84002BE8 {
 extern s32 pad_D_84002D10;
 extern s32 pad_D_84002D1C;
 
-#include "fragments/gallery_backgrounds/gallery_backgrounds.h"
-#include "graphics_textures.h"
-#include "ui_graphics.h"
-#include "gb_data.h"
-#include "save_data.h"
-#include "gfx_rect.h"
-#include "controller_ram.h"
-#include "memory.h"
 
-#include "fragments/gallery_camera/gallery_camera.h"
-#include "matrix.h"
-#include "stage_loader.h"
 
-#include "fragments/gallery_camera/gallery_camera.h"
-#include "graphics_textures.h"
-#include "ui_graphics.h"
-#include "text_system.h"
-#include "gfx_buffer.h"
-#include "gfx_rect.h"
-#include "matrix.h"
 extern u8 D_50002A0[];
 extern u8 D_50003F0[];
 extern u8 D_5000BA0[];
@@ -95,15 +40,6 @@ extern u8 D_50011D0[];
 extern u8 D_5001680[];
 extern u8 D_50017E8[];
 
-#include "fragments/gallery_debugger/gallery_debugger.h"
-#include "graphics_textures.h"
-#include "input.h"
-#include "save_data.h"
-#include "jpeg_stream.h"
-#include "gfx_buffer.h"
-#include "controller.h"
-#include "memory.h"
-#include "stage_loader.h"
 typedef struct unk_D_839006B0 {
     /* 0x00 */ BattleMon unk_00;
     /* 0x54 */ char unk54[0x38];
@@ -113,31 +49,7 @@ typedef struct unk_D_83902700 {
     /* 0x04 */ char unk04[0x70];
 } unk_D_83902700;
 
-#include "fragments/gallery_enlarge/gallery_enlarge.h"
-#include "display_object_textures.h"
-#include "graphics_textures.h"
-#include "input.h"
-#include "gallery.h"
-#include "jpeg_stream.h"
-#include "audio_sfx.h"
-#include "gfx_buffer.h"
-#include "controller.h"
-#include "fragments/gallery_backgrounds/gallery_backgrounds.h"
-#include "memory.h"
-#include "stage_loader.h"
 
-#include "fragments/gym_leader_castle/gym_leader_castle.h"
-#include "graphics_textures.h"
-#include "ui_graphics.h"
-#include "save_data.h"
-#include "game_state.h"
-#include "text_system.h"
-#include "jpeg_stream.h"
-#include "audio_sfx.h"
-#include "audio_commands_category2.h"
-#include "DDC0.h"
-#include "memory.h"
-#include "stage_loader.h"
 extern char** sUiText;
 extern char** sTrainerNameText;
 extern GymLeaderCastleTrainer sCurrentNodeTrainers[4];
@@ -159,23 +71,6 @@ extern s16 sRoomDescriptionHeight;
 extern s16 sEliteFourTransition;
 
 #include "math.h"
-#include "geo_render.h"
-#include "model_animation_events.h"
-#include "geo_layout.h"
-#include "display_object_textures.h"
-#include "model_renderer.h"
-#include "graphics_textures.h"
-#include "input.h"
-#include "ui_graphics.h"
-#include "gallery.h"
-#include "jpeg_stream.h"
-#include "gfx_buffer.h"
-#include "gfx_rect.h"
-#include "matrix.h"
-#include "controller.h"
-#include "fragments/widget_toolkit/widget_toolkit.h"
-#include "memory.h"
-#include "stage_loader.h"
 typedef struct unk_D_86301730 {
     /* 0x000 */ s16 unk_000;
     /* 0x002 */ s16 unk_002;
@@ -395,7 +290,6 @@ void BattleAi_AddRandomPickScore(s8* arg0) {
 void func_82183E1C(void) {
 }
 
-#include "battle_engine_com_ai.h"
 extern BattleSlotZ* D_821CF298;
 
 /**
@@ -800,7 +694,6 @@ u8* BattleAi_FindByte(u8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     return NULL;
 }
 
-#include "fragments/battle/battle_engine_com_ai_2_types.h"
 extern Move82184ADC D_8006B190[];
 extern u8 D_8218AC50[];
 /**

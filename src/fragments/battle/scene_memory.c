@@ -1,11 +1,9 @@
 /* Stadium Zero fragment012_17ED00. */
 /* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_343BA0.c. */
 
-#include "fragments/battle_engine/battle_engine.h"
-#include "gallery.h"
-#include "gfx_buffer.h"
+#include "battle.h"
+#include "memory_main.h"
 #include "math.h"
-#include "math_util.h"
 extern u8* sBattleAnimAssetPointers[256];
 extern s16 sBattleAnimResourceList[0x10];
 extern arg1_func_80019420* sBattleAnimResourceTablePointers[40];

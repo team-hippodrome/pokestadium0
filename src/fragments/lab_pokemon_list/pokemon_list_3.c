@@ -1,10 +1,7 @@
 /* Stadium Zero fragment016_252E10. */
 
 #include "global.h"
-#include "game_state.h"
-#include "jpeg_stream.h"
-#include "memory.h"
-#include "stage_loader.h"
+#include "lab_pokemon_list.h"
 #include "m2c_macros.h"
 
 extern u8 D_80073520[];
@@ -13,48 +10,14 @@ M2C_UNK Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
 M2C_UNK func_89109E5C(s32, s32, s32, s32);
 M2C_UNK func_89109FE0(s32);
 M2C_UNK func_8910A03C(s32);
-typedef struct Entry89100140 {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ s32 unk_08;
-    /* 0x0C */ s32 unk_0C;
-    /* 0x10 */ char unk_10[0x10];
-    /* 0x20 */ s32 unk_20;
-} Entry89100140; // size = 0x24
 
-typedef struct Ctx89100140 {
-    /* 0x000 */ char unk000[0x3B4];
-    /* 0x3B4 */ Entry89100140 unk_3B4[3];
-    /* 0x420 */ char unk_420[1];
-} Ctx89100140;
 extern s32 D_8910A7F8[3];
 void func_80027410(void*, void*, s32, s32, s32);
 void func_89109990(void*, void*, void*, s32);
-typedef struct Ctx89100294 {
-    /* 0x0000 */ char unk0000[0x8C];
-    /* 0x008C */ s32 unk8C;
-    /* 0x0090 */ char unk0090[0xB15C - 0x90];
-    /* 0xB15C */ s32 mode;
-    /* 0xB160 */ char unkB160[0xB548 - 0xB160];
-    /* 0xB548 */ s32* ranges;
-    /* 0xB54C */ s32 unkB54C;
-    /* 0xB550 */ s32 unkB550;
-    /* 0xB554 */ s32 unkB554;
-} Ctx89100294;
+
 extern s32 D_800603C0;
 void func_8000B2F4(s32);
-typedef struct LabPCInitialStateFields {
-    u8 pad0000[0x9828];
-    u8 unk_9828;
-    u8 unk_9829;
-    u8 pad982A[2];
-    s32 unk_982C;
-    u8 pad9830[0xE8];
-    s32 unk_9918;
-    u8 pad991C[0x1E8];
-    s32 unk_9B04;
-} LabPCInitialStateFields;
-typedef struct Rgba891024A4 { u8 r, g, b, a; } Rgba891024A4;
+
 void Window_SetRect(s8 *, s32, s32, s32, s32);
 void func_80027804(s8*, s8*, s32, s32);
 void func_89109B60(s8*);
@@ -69,39 +32,11 @@ extern u8 D_8910A844[];
 extern u8 D_8910A848[];
 extern u8 D_8910A804[];
 extern u8 D_8910A84C[];
-typedef struct Big891003A4 {
-    /* 0x0000 */ char unk0000[0xB15C];
-    /* 0xB15C */ s32 unkB15C;
-    /* 0xB160 */ char unkB160[0x20];
-    /* 0xB180 */ s32 unkB180;
-    /* 0xB184 */ char unkB184[0x3C4];
-    /* 0xB548 */ u8* unkB548;
-    /* 0xB54C */ char unkB54C[0xC];
-    /* 0xB558 */ s32 unkB558;
-    /* 0xB55C */ char unkB55C[0x38];
-    /* 0xB594 */ s32 unkB594;
-} Big891003A4;
-typedef struct Ctx89100688 {
-    /* 0x0000 */ char unk0000[0x2C];
-    /* 0x002C */ s32 x;
-    /* 0x0030 */ s32 y;
-    /* 0x0034 */ char unk0034[0x84 - 0x34];
-    /* 0x0084 */ s32* widths;
-    /* 0x0088 */ char unk0088[0xB15C - 0x88];
-    /* 0xB15C */ s32 mode;
-    /* 0xB160 */ char unkB160[0xB548 - 0xB160];
-    /* 0xB548 */ s32* ranges;
-    /* 0xB54C */ s32 unkB54C;
-    /* 0xB550 */ s32 cursor;
-} Ctx89100688;
+
 void func_891000BC(s32 arg0);
 void func_89100294(Ctx89100294* arg0);
 s32 LabPCList_GetColumnCursorX(Ctx89100688* arg0);
 extern M2C_UNK D_800734A8;
-
-
-#include "fragments/lab_pokemon_list/89100020_891012A8_types.h"
-
 
 extern Gfx D_80060270[];
 extern Color_RGBA8 D_8910A85C[2][2];

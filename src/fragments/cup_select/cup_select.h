@@ -1,9 +1,18 @@
-#ifndef _FRAGMENT60_H_
-#define _FRAGMENT60_H_
+/* Declarations for the cup_select fragment (src/fragments/cup_select/). */
+#ifndef FRAGMENT_CUP_SELECT_H
+#define FRAGMENT_CUP_SELECT_H
 
 #include "global.h"
-#include "src/geo_node.h"
 
-void func_8216D9B8(void);
+// libultra/libc/xldtob.c
+void func_8005B388(void);
 
-#endif // _FRAGMENT60_H_
+// cup_select.c
+void AreaSelect_PollInput(void);
+void func_8180050C(void);
+void BattleScene_CameraPresetNop(UNUSED CameraNode* arg0);
+
+// functions defined in assembly
+s32 Stage_ShowIntro(void);
+
+#endif // FRAGMENT_CUP_SELECT_H

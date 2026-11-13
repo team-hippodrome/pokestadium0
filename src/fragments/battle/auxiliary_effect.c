@@ -1,39 +1,14 @@
 /* Stadium Zero fragment012_17ED00. */
 /* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_3591E0.c, src/fragments/ekans_game/ekans_game.c. */
 
-#include "fragments/battle_engine/battle_engine.h"
+#include "battle.h"
+#include "fragments/cartridge_check/cartridge_check.h"
 #include "gfx_buffer.h"
-#include "geo_render.h"
-#include "gallery.h"
-#include "battle_hud.h"
+#include "vector_math.h"
 extern AuxiliaryEffect D_821CEEA0[2];
 extern Gfx D_82193E18[];
 
 #include "global.h"
-#include "fragments/particle_math/particle_math.h"
-#include "jpeg_stream.h"
-#include "controller.h"
-#include "geo_render.h"
-#include "model_animation.h"
-#include "display_object_textures.h"
-#include "model_renderer.h"
-#include "graphics_textures.h"
-#include "ui_graphics.h"
-#include "text_system.h"
-#include "jpeg_stream.h"
-#include "audio_sound_state.h"
-#include "audio_sfx.h"
-#include "audio_channel.h"
-#include "audio_loop_point.h"
-#include "audio_commands_category2.h"
-#include "audio_category_fade.h"
-#include "gfx_buffer.h"
-#include "gfx_rect.h"
-#include "fragments/widget_toolkit/widget_toolkit.h"
-#include "fragments/particle_math/particle_math.h"
-#include "memory.h"
-#include "stage_loader.h"
-#include "geo_layout.h"
 
 void AuxiliaryEffect_Init(void);
 s16 AuxiliaryEffect_Alloc(void);

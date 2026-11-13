@@ -1,7 +1,7 @@
 /* Stadium Zero fragment012_17ED00. */
 /* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_31A7E0.c. */
 
-#include "fragments/battle_engine/battle_engine.h"
+#include "battle.h"
 
 #include "m2c_macros.h"
 

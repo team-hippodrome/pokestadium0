@@ -2,9 +2,7 @@
 /* C ported from the Stadium 1 decomp: src/33FE0.c. */
 
 #include "global.h"
-#include "33FE0.h"
-#include "geo_render.h"
-#include "battle_hud.h"
+#include "model_vertex_draw.h"
 #include "memmap.h"
 extern s16 D_80074670[0x102];
 extern s16 D_80074874[0x102];

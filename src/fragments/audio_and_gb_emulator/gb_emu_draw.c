@@ -3,15 +3,8 @@
 /* C ported from the Stadium 1 decomp: src/fragments/gb_tower_emulator/gb_tower_emulator_7F9A0.c. */
 
 #include "global.h"
-#include "fragments/gb_tower_emulator/gb_tower_emulator.h"
-#include "game_state.h"
-#include "jpeg_stream.h"
-#include "scheduler.h"
-#include "gfx_rect.h"
-#include "controller.h"
-#include "memory.h"
+#include "audio_and_gb_emulator.h"
 #include "variables.h"
-#include "fragments/audio_and_gb_emulator/gb_tower_emulator_7F9A0_types.h"
 typedef struct unk_func_812009D0 {
   /* 0x00 */ u8 unk00[0x34];
   /* 0x34 */ u8 data[0x10];  

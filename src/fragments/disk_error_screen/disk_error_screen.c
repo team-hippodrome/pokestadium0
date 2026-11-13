@@ -2,6 +2,7 @@
 
 #include "global.h"
 #include "m2c_macros.h"
+#include "disk_error_screen.h"
 
 s32 func_8000B2E8(void);
 void func_8001AB6C(void);

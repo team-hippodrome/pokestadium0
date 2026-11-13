@@ -1,15 +1,7 @@
 /* Stadium Zero fragment000_80C00. */
 /* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_309ED0.c. */
 
-#include "fragments/battle_engine/battle_engine.h"
-#include "model_animation.h"
-#include "model_renderer.h"
-#include "audio_commands.h"
-#include "3D140.h"
-#include "audio_fade.h"
-#include "audio_loop_point.h"
-#include "cry.h"
-#include "matrix.h"
+#include "audio_and_gb_emulator.h"
 extern s32 pad_D_84390210[4];
 extern s32 sMultihitCount;
 extern s32 sMultihitCountdown;

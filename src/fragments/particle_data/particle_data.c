@@ -1,6 +1,7 @@
 /* Stadium Zero fragment031_3553C0. */
 
 #include "global.h"
+#include "particle_data.h"
 #include "gfx_buffer.h"
 #include "m2c_macros.h"
 

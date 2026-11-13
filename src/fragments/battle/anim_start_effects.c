@@ -1,26 +1,9 @@
 /* Stadium Zero fragment012_17ED00. */
 /* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_328F10.c, src/gallery.c. */
 
-#include "fragments/battle_engine/battle_engine.h"
+#include "battle.h"
+#include "fragments/disk_error_screen/disk_error_screen.h"
 
-#include "gallery.h"
-#include "fragments/gallery_camera/gallery_camera.h"
-#include "fragments/particle_data_library/particle_data_library.h"
-#include "fragments/particle_math/particle_math.h"
-#include "geo_node.h"
-#include "geo_render.h"
-#include "model_animation.h"
-#include "model_animation_events.h"
-#include "geo_layout.h"
-#include "display_object_textures.h"
-#include "model_renderer.h"
-#include "graphics_textures.h"
-#include "game_state.h"
-#include "jpeg_stream.h"
-#include "audio_sfx_wrapper.h"
-#include "audio_loop_point.h"
-#include "memory.h"
-#include "util.h"
 typedef struct {
     /* 0x00 */ s16 unk_00;
     /* 0x02 */ s16 unk_02;

@@ -1,18 +1,12 @@
 /* Stadium Zero fragment012_17ED00. */
 /* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_317E70.c, src/fragments/particle_math/particle_math_269820.c, src/fragments/particle_math/particle_math_26E540.c. */
 
-#include "fragments/battle_engine/battle_engine.h"
-#include "geo_render.h"
-#include "model_renderer.h"
+#include "battle.h"
 #include "matrix.h"
-#include "fragments/particle_math/particle_math.h"
-#include "memory.h"
+#include "model_renderer.h"
 
-#include "fragments/particle_math/particle_math.h"
-#include "geo_render.h"
 extern ParticleDescriptor gDefaultParticleDescriptor;
 
-#include "fragments/particle_math/particle_math.h"
 
 #include "m2c_macros.h"
 

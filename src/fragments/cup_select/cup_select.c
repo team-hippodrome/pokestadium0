@@ -1,23 +1,21 @@
 /* Stadium Zero fragment011_17E340. */
 /* C ported from the Stadium 1 decomp: src/fragments/area_select/area_select.c, src/fragments/battle_engine/battle_engine_3055E0.c, src/fragments/battle_engine/battle_engine_main.c. */
 
-#include "fragments/area_select/area_select.h"
+#include "cup_select.h"
+#include "asset_archive.h"
+#include "font.h"
+#include "fragments/battle/battle.h"
+#include "geo_layout.h"
 #include "graphics_textures.h"
 #include "input.h"
-#include "game_state.h"
+#include "main_pool.h"
+#include "memory_main.h"
+#include "model_renderer.h"
 #include "save_data.h"
-#include "text_system.h"
-#include "jpeg_stream.h"
-#include "audio_sfx.h"
-#include "cry.h"
-#include "gfx_buffer.h"
-#include "DDC0.h"
-#include "matrix.h"
-#include "controller.h"
-#include "memory.h"
-#include "stage_loader.h"
-#include "math_util.h"
 #include "variables.h"
+
+// Declared here instead of in a header: the callers of these disagree on their types.
+void MainPool_FinalizeAllocation(struct MemoryBlock* block);
 typedef struct AreaSelectEntryConfig {
     /* 0x00 */ s16 x;
     /* 0x02 */ s16 y;
@@ -94,33 +92,12 @@ extern GameOptions sAreaSelectGameOptions;
 #define AREA_BACKGROUND_DAY_DODUO 19
 #define AREA_BACKGROUND_DAY_NORMAL 18
 
-#include "fragments/battle_engine/battle_engine.h"
 #include "moves.h"
-#include "geo_render.h"
-#include "matrix.h"
 #include "pokemon.h"
 extern unk_D_843901B0 gCameraPreset;
 extern f32 gCameraDistTarget;
 extern f32 D_8219A534;
 
-#include "fragments/battle_engine/battle_engine.h"
-#include "game_state.h"
-#include "geo_node.h"
-#include "geo_render.h"
-#include "display_object_textures.h"
-#include "model_renderer.h"
-#include "graphics_textures.h"
-#include "input.h"
-#include "battle_hud.h"
-#include "3D140.h"
-#include "jpeg_stream.h"
-#include "audio_loop_point.h"
-#include "gfx_buffer.h"
-#include "matrix.h"
-#include "controller.h"
-#include "geo_layout.h"
-#include "memmap.h"
-#include "memory.h"
 extern CameraNode sStageCamera;
 extern unk_D_8690A610 sStageFog;
 extern GraphNode sStageLayout0;

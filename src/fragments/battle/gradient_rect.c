@@ -1,27 +1,14 @@
 /* Stadium Zero fragment012_17ED00. */
 /* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_2FA4D0.c, src/ui_graphics.c. */
 
-#include "fragments/battle_engine/battle_engine.h"
-#include "graphics_textures.h"
-#include "ui_graphics.h"
-#include "status_icons.h"
-#include "game_state.h"
-#include "text_system.h"
-#include "3D140.h"
+#include "battle.h"
+#include "fragments/party_summary/party_summary.h"
 #include "gfx_buffer.h"
-#include "gfx_rect.h"
+#include "graphics_textures.h"
+#include "input.h"
 #include "matrix.h"
-#include "controller.h"
-#include "memmap.h"
-#include "memory.h"
-
 #include "ui_graphics.h"
-#include "graphics_textures.h"
-#include "text_system.h"
-#include "gfx_buffer.h"
-#include "gfx_rect.h"
-#include "hal_libc.h"
-#include "stage_loader.h"
+
 extern u8 D_10025D0[];
 extern u8 D_1002650[];
 extern u8 D_10026D0[];

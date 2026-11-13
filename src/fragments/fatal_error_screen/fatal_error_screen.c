@@ -1,14 +1,14 @@
 /* Stadium Zero fragment025_2B16A0. */
 /* C ported from the Stadium 1 decomp: src/fragments/fatal_error_screen/fatal_error_screen.c. */
 
-#include "fragments/fatal_error_screen/fatal_error_screen.h"
-#include "graphics_textures.h"
-#include "ui_graphics.h"
-#include "text_system.h"
-#include "jpeg_stream.h"
+#include "font.h"
 #include "gfx_buffer.h"
-#include "memory.h"
+#include "graphics_textures.h"
+#include "input.h"
+#include "memory_main.h"
 #include "stage_loader.h"
+#include "ui_graphics.h"
+#include "fatal_error_screen.h"
 extern s32 D_81600A70;
 extern s32 D_81600A74;
 

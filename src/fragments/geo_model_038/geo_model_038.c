@@ -2,6 +2,7 @@
 
 #include "global.h"
 #include "m2c_macros.h"
+#include "geo_model_038.h"
 
 s32 func_8004D300(s32);                             /* extern */
 s32 func_8F400020(s32 arg0) {

@@ -1,21 +1,12 @@
 /* Stadium Zero fragment012_17ED00. */
 /* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_move_animation.c, src/fragments/battle_engine/battle_engine_thumbnail.c. */
 
-#include "fragments/battle_engine/battle_engine.h"
-#include "model_animation.h"
-#include "model_animation_events.h"
-#include "model_renderer.h"
-#include "pokemon_stats.h"
-#include "text_system.h"
-#include "gb_save.h"
+#include "battle.h"
 #include "audio_commands.h"
-#include "jpeg_stream.h"
-#include "audio_fade.h"
-#include "audio_stored_fade.h"
-#include "audio_loop_point.h"
-#include "cry.h"
+#include "geo_node.h"
 #include "matrix.h"
-#include "memory.h"
+#include "memory_main.h"
+#include "model_renderer.h"
 #include "moves.h"
 #include "pokemon.h"
 #include "status.h"
@@ -65,11 +56,6 @@ extern char** sBattleControllerDisconnectedMessage;
 #define BLASTOISE_OB1 (BLASTOISE - 1)
 #define CLOYSTER_OB1  (CLOYSTER - 1)
 
-#include "fragments/battle_engine/battle_engine.h"
-#include "model_animation.h"
-#include "model_renderer.h"
-#include "model_renderer_callbacks.h"
-#include "matrix.h"
 #include "status.h"
 
 #include "m2c_macros.h"

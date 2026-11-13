@@ -1,26 +1,15 @@
 /* Stadium Zero fragment018_262620. */
 /* C ported from the Stadium 1 decomp: src/fragments/pokedex/pokedex_214920.c. */
 
-#include "fragments/pokedex/pokedex.h"
-#include "geo_render.h"
+#include "pokedex.h"
 #include "display_object_textures.h"
-#include "poke_icon.h"
-#include "model_renderer.h"
+#include "font.h"
+#include "fragments/battle/battle.h"
+#include "geo_render.h"
 #include "graphics_textures.h"
 #include "input.h"
-#include "gb_data.h"
-#include "game_state.h"
-#include "table_view.h"
-#include "text_system.h"
-#include "gb_save.h"
-#include "3D140.h"
-#include "jpeg_stream.h"
-#include "audio_sfx.h"
-#include "gfx_rect.h"
-#include "controller.h"
-#include "memmap.h"
-#include "memory.h"
-#include "stage_loader.h"
+#include "memory_main.h"
+#include "model_renderer.h"
 #include "pokemon_stats.h"
 s32 Pokedex_DrawListScrollArrows(unk_func_888044BC_050*, s32, s32);
 s32 Pokedex_HandleSpeciesListInput(unk_func_888044BC_038*, Controller*);
@@ -87,7 +76,6 @@ s32 Pokedex_GetCursorDexIndex(s8 *arg0) {
     return var_v1;
 }
 
-#include "fragments/pokedex/pokedex_214920_types.h"
 extern unk_D_80064C60 D_80064C60[];
 extern Gfx D_80060270[];
 extern Color_RGBA8 D_8A1057D4;

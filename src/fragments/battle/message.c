@@ -1,27 +1,13 @@
 /* Stadium Zero fragment012_17ED00. */
 /* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_3020D0.c, src/fragments/battle_engine/battle_engine_31D9F0.c, src/fragments/battle_engine/battle_engine_32A640.c. */
 
-#include "fragments/battle_engine/battle_engine.h"
-#include "graphics_textures.h"
-#include "ui_graphics.h"
-#include "status_icons.h"
-#include "game_state.h"
-#include "text_system.h"
-#include "3D140.h"
-#include "gfx_buffer.h"
-#include "gfx_rect.h"
-#include "matrix.h"
-#include "controller.h"
-#include "memmap.h"
-#include "memory.h"
+#include "battle.h"
+#include "memory_main.h"
 #include "stdarg.h"
 #include "moves.h"
 extern unk_D_843901A0* gBattleMessageQueues;
 
-#include "fragments/battle_engine/battle_engine.h"
-#include "model_renderer.h"
 
-#include "fragments/battle_engine/battle_engine.h"
 
 #include "m2c_macros.h"
 

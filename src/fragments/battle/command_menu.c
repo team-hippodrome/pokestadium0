@@ -1,7 +1,7 @@
 /* Stadium Zero fragment012_17ED00. */
 
 #include "global.h"
-#include "fragments/battle_engine/battle_engine.h"
+#include "battle.h"
 #include "m2c_macros.h"
 
 extern f32 D_82199EB0;
@@ -267,7 +267,7 @@ void func_8211F274();
  * move list (sub[0x1C]), and the C buttons go to BattleMenu_HandleMoveButtons.
  * Callers reach the same address as BattleScene_HandlePlayerMoveSelection
  * (Stadium 1's name); merging the two names changes the prototype in
- * battle_engine.h, so both stay for now.
+ * battle.h, so both stay for now.
  *
  * Does nothing unless the word at arg0 + 0x790 is 1 and BattleMenu_HandleNoUsableMoves()
  * returns 0. Then, with `rec` = the pointer at arg0 + 0x858 and `sub` =

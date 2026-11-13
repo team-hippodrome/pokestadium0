@@ -1,38 +1,7 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
-#include "fragments/lab_pc_list/lab_pc_list.h"
-#include "graphics_textures.h"
+#include "lab_pc.h"
 #include "input.h"
-#include "gb_data.h"
-#include "pokemon_stats.h"
-#include "save_data.h"
-#include "game_state.h"
-#include "table_view.h"
-#include "text_system.h"
-#include "status_icons.h"
-#include "gb_save.h"
-#include "jpeg_stream.h"
-#include "audio_sfx.h"
-#include "memmap.h"
-#include "memory.h"
-#include "stage_loader.h"
-#include "fragments/pokemon_lab_support/pokemon_lab_support.h"
 extern s32 pad_D_8831A4DC[8];
-#include "fragments/lab_pc/lab_pc.h"
-#include "graphics_textures.h"
-#include "input.h"
-#include "gb_data.h"
-#include "pokemon_stats.h"
-#include "save_data.h"
-#include "game_state.h"
-#include "table_view.h"
-#include "text_system.h"
-#include "gb_save.h"
-#include "audio_sfx.h"
-#include "hal_libc.h"
-#include "memmap.h"
-#include "memory.h"
-#include "stage_loader.h"
-#include "fragments/particle_math/particle_math.h"
 #include "m2c_macros.h"
 void ScrollList_SetItems(s8*, s32, s8*);
 void func_8900020C(void);
@@ -68,7 +37,6 @@ extern Color_RGBA8 D_8900A5CC;
 s32 func_8002B390(s8*);
 s32 func_8002BC14(s32);
 extern s32 D_800603C0;
-#include "fragments/lab_pc/lab_pc_list_1CEA00_types.h"
 extern Rgba89000D50 D_8900A5BC;
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 void func_8001AA60(s32, s32, s32);

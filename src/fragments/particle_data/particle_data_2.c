@@ -1,10 +1,9 @@
 /* Stadium Zero fragment031_3553C0. */
 /* C ported from the Stadium 1 decomp: src/fragments/particle_data_library/particle_data_library_257DE0.c. */
 
-#include "fragments/particle_data_library/particle_data_library.h"
-#include "gfx_buffer.h"
+#include "particle_data.h"
 #include "geo_render.h"
-#include "battle_hud.h"
+#include "gfx_buffer.h"
 
 #include "m2c_macros.h"
 

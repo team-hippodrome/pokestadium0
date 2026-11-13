@@ -1,13 +1,8 @@
 /* Stadium Zero fragment012_17ED00. */
 /* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_313D60.c. */
 
-#include "fragments/battle_engine/battle_engine.h"
+#include "battle.h"
 #include "geo_node.h"
-#include "model_animation.h"
-#include "text_system.h"
-#include "audio_commands.h"
-#include "matrix.h"
-#include "memory.h"
 #include "util.h"
 extern unk_D_84390240 sBattleScene;
 extern s32 pad_D_84390280;

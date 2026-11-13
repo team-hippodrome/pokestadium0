@@ -1,10 +1,9 @@
 /* Stadium Zero fragment012_17ED00. */
 /* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_35DF70.c. */
 
-#include "fragments/battle_engine/battle_engine.h"
+#include "battle.h"
 #include "moves.h"
 #include "pokemon_types.h"
-#include "text_system.h"
 typedef void (*func_D_8438AE50)(void);
 extern func_D_8438AE50 sMoveEffectHandlers[];
 

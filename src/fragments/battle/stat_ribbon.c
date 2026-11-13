@@ -1,5 +1,5 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
-#include "battle_engine_347330.h"
+#include "battle.h"
 
 /**
  * Part of the stat-change ribbon (see StatRibbon_Spawn).

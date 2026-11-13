@@ -1,7 +1,50 @@
 #include "pokemon.h"
 #include "moves.h"
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
-#include "battle_engine_32B680_3.h"
+#include "battle.h"
+#include "geo_node.h"
+#include "geo_render.h"
+#include "gfx_buffer.h"
+#include "matrix.h"
+
+// Declared here instead of in a header: the callers of these disagree on their types.
+M2C_UNK BattleAnim_InitializeSolarBeamUseSequence();
+M2C_UNK BattleAnim_InitializeWaterfallUseB();
+M2C_UNK Particle_AnimateFramesForwardLooped(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32);
+M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32);
+M2C_UNK Particle_ApproachEnvGreen(s8 *, M2C_UNK, M2C_UNK);
+M2C_UNK Particle_ApproachEnvRed(s8 *, M2C_UNK, M2C_UNK);
+M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);
+M2C_UNK Particle_ApproachPrimBlue(s8 *, M2C_UNK, M2C_UNK);
+M2C_UNK Particle_ApproachPrimGreen(s8 *, M2C_UNK, M2C_UNK);
+M2C_UNK Particle_ApproachPrimRed(s8 *, M2C_UNK, M2C_UNK);
+M2C_UNK Particle_ApproachStepMagnitude(s8 *, M2C_UNK, M2C_UNK);
+M2C_UNK Particle_ApproachUnkAE(s8 *, M2C_UNK, M2C_UNK);
+M2C_UNK Particle_ApproachUnkB0(s8 *, M2C_UNK, M2C_UNK);
+M2C_UNK Particle_GetUnkCE();
+M2C_UNK Particle_SetRotationY(s8 *, s16);
+M2C_UNK Particle_SetUnkA6(s8 *, s16);
+M2C_UNK Particle_SetUnkB0(s8 *, M2C_UNK);
+M2C_UNK func_8213831C(s8 *, M2C_UNK);
+M2C_UNK func_8213B5D8(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK *, M2C_UNK *, s32, s32, s32, s32, s32, s32);
+M2C_UNK func_8213C9D0(s8 *);
+M2C_UNK func_8213E77C(s8 *);
+M2C_UNK func_821401D4(s8 *, M2C_UNK);
+M2C_UNK func_82143478(s8 *, M2C_UNK);
+extern M2C_UNK BattleAnim_RunBlizzardHitUpwardColdAir;
+extern M2C_UNK BattleAnim_RunDigHitDust;
+extern M2C_UNK BattleAnim_RunDigHitRocks;
+extern M2C_UNK BattleAnim_RunOscillatingFlameUnderneathPokemon;
+extern M2C_UNK D_8218E7B8;
+extern M2C_UNK func_82144750;
+extern M2C_UNK func_82163D7C;
+extern M2C_UNK func_82164AD0;
+s16 Particle_GetUnkCD();
+s16 func_8213C484();
+s32 func_821385C0();
+s32 func_82140690(s8 *);
+void Particle_AddPosOffsetYScaled(s8*, f32);
+void func_8213E1FC(Particle* arg0, f32 arg1);
 
 /**
  * Lifecycle init for one of three side-by-side animated models (model 0x21, anim 0x22,

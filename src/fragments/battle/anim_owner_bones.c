@@ -1,27 +1,11 @@
 /* Stadium Zero fragment012_17ED00. */
 /* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_317E70.c, src/fragments/trade_machine/trade_machine_28ED00.c. */
 
-#include "fragments/battle_engine/battle_engine.h"
+#include "battle.h"
+#include "gb_save.h"
 #include "geo_render.h"
-#include "model_renderer.h"
-#include "matrix.h"
-#include "fragments/particle_math/particle_math.h"
-#include "memory.h"
 #include "pokemon.h"
 
-#include "fragments/trade_machine/trade_machine.h"
-#include "geo_render.h"
-#include "model_renderer.h"
-#include "graphics_textures.h"
-#include "ui_graphics.h"
-#include "game_state.h"
-#include "text_system.h"
-#include "audio_sfx.h"
-#include "matrix.h"
-#include "geo_layout.h"
-#include "math_util.h"
-#include "memmap.h"
-#include "memory.h"
 s32 Trade_DrawBox3DModel(s32 arg0, GraphNode* arg1);
 
 #include "m2c_macros.h"

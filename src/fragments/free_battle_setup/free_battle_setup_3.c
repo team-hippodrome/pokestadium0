@@ -4,7 +4,7 @@
 #include "global.h"
 #include "m2c_macros.h"
 
-#include "fragments/free_battle_setup/fragment007_166580_types.h"
+#include "free_battle_setup.h"
 s32 func_80020AFC(s32, s32, s32, s32);
 s32 func_80020CE4(void*, s32, s32);
 void func_80020C60(s32);

@@ -3,18 +3,9 @@
 #include "global.h"
 #include "game_state.h"
 #include "hal_libc.h"
-#include "math_util.h"
+#include "matrix.h"
 #include "m2c_macros.h"
-
-// A demo team: the roster's name strings and its six Pokémon.
-typedef struct DemoTeamTemplate {
-    /* 0x00 */ u16 unk_00;
-    /* 0x02 */ u16 unk_02;
-    /* 0x04 */ char* unk_04;
-    /* 0x08 */ char* unk_08;
-    /* 0x0C */ char* unk_0C;
-    /* 0x10 */ BattleMon mons[6];
-} DemoTeamTemplate; // size = 0x1F0
+#include "nintendo_cup_teams.h"
 
 extern Controller* D_800603C4;
 extern DemoTeamTemplate D_82400400[];

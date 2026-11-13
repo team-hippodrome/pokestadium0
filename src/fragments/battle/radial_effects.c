@@ -2,36 +2,9 @@
 /* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_343BA0.c, src/fragments/ekans_game/ekans_game.c. */
 
 #include "global.h"
-#include "fragments/particle_math/particle_math.h"
-#include "jpeg_stream.h"
-#include "controller.h"
-#include "geo_render.h"
-#include "model_animation.h"
-#include "display_object_textures.h"
-#include "model_renderer.h"
-#include "graphics_textures.h"
-#include "ui_graphics.h"
-#include "text_system.h"
-#include "jpeg_stream.h"
-#include "audio_sound_state.h"
-#include "audio_sfx.h"
-#include "audio_channel.h"
-#include "audio_loop_point.h"
-#include "audio_commands_category2.h"
-#include "audio_category_fade.h"
-#include "gfx_buffer.h"
-#include "gfx_rect.h"
-#include "fragments/widget_toolkit/widget_toolkit.h"
-#include "fragments/particle_math/particle_math.h"
-#include "memory.h"
-#include "stage_loader.h"
-#include "geo_layout.h"
+#include "battle.h"
 
-#include "fragments/battle_engine/battle_engine.h"
-#include "gallery.h"
-#include "gfx_buffer.h"
 #include "math.h"
-#include "math_util.h"
 extern u8* sBattleAnimAssetPointers[256];
 extern s16 sBattleAnimResourceList[0x10];
 extern arg1_func_80019420* sBattleAnimResourceTablePointers[40];
