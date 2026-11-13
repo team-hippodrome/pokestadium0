@@ -254,6 +254,10 @@ void BattleAnim_ApproachU16(u16* dest, u16 value, s16 speed) {
     *dest = *dest + ((value - *dest) * speed);
 }
 
+/**
+ * Writes the four uniform cubic B-spline weights for parameter arg1 (0 to 1) to arg0.
+ * @unverified Name guessed from the code.
+ */
 void Battle_ComputeSplineWeightsVariantA(f32* arg0, f32 arg1) {
     static f32 D_843900D8;
     static f32 D_843900DC;
@@ -269,6 +273,10 @@ void Battle_ComputeSplineWeightsVariantA(f32* arg0, f32 arg1) {
     arg0[3] = D_843900D8 / 6.0;
 }
 
+/**
+ * Writes the four cubic B-spline weights for the second segment of a clamped spline.
+ * @unverified Name guessed from the code.
+ */
 void Battle_ComputeSplineWeightsVariantB(f32* arg0, f32 arg1) {
     static f32 D_843900E4;
     static f32 D_843900E8;
@@ -284,6 +292,10 @@ void Battle_ComputeSplineWeightsVariantB(f32* arg0, f32 arg1) {
     arg0[3] = D_843900E4 / 6.0f;
 }
 
+/**
+ * Writes the four cubic B-spline weights for the third segment of a clamped spline.
+ * @unverified Name guessed from the code.
+ */
 void Battle_ComputeSplineWeightsVariantC(f32* arg0, f32 arg1) {
     static f32 D_843900F0;
     static f32 D_843900F4;
@@ -299,6 +311,11 @@ void Battle_ComputeSplineWeightsVariantC(f32* arg0, f32 arg1) {
     arg0[3] = D_843900F0 / 6.0f;
 }
 
+/**
+ * Writes the four cubic B-spline weights for the third-to-last segment of a clamped
+ * spline.
+ * @unverified Name guessed from the code.
+ */
 void Battle_ComputeSplineWeightsVariantD(f32* arg0, f32 arg1) {
     static f32 D_843900FC;
     static f32 D_84390100;
@@ -316,6 +333,11 @@ void Battle_ComputeSplineWeightsVariantD(f32* arg0, f32 arg1) {
     arg0[3] = D_843900FC * 0.25f;
 }
 
+/**
+ * Writes the four cubic B-spline weights for the second-to-last segment of a clamped
+ * spline.
+ * @unverified Name guessed from the code.
+ */
 void Battle_ComputeSplineWeightsVariantE(f32* arg0, f32 arg1) {
     static f32 D_8439010C;
     static f32 D_84390110;

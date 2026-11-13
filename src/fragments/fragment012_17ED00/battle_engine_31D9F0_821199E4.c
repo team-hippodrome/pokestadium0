@@ -1,6 +1,11 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
 #include "battle_engine_31D9F0.h"
 
+/**
+ * Draws a move's PP as "current/max" text left to right from (arg0, arg1). Returns the x
+ * position after it.
+ * @unverified Name from Stadium 1.
+ */
 s32 BattleHud_DrawMovePpTextLTR(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     UNUSED s32 pad[2]; // FAKE: stack padding
     s8 sp70[7];
@@ -46,6 +51,11 @@ s32 BattleHud_DrawMovePpTextLTR(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
 }
 
 
+/**
+ * Draws a move's PP as "current/max" text right to left, ending at (arg0, arg1). Returns
+ * the x position before it.
+ * @unverified Name from Stadium 1.
+ */
 s32 BattleHud_DrawMovePpTextRTL(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     UNUSED s32 pad[2]; // FAKE: stack padding
     s8 sp70[7];
@@ -320,6 +330,10 @@ void BattleMenu_DrawSurrenderPrompt(s16 arg0, s16 arg1, s16 arg2, s32 arg3) {
     BattleHud_DrawTranslucentShadowRect(arg0 - 3, arg1 - 2, 0xCC, 0x2D, 0);
 }
 
+/**
+ * Draws text arg2 at (arg0, arg1) in font 1.
+ * @unverified Name from Stadium 1.
+ */
 void BattleHud_DrawPlainText(s16 arg0, s16 arg1, char* arg2) {
     Font_BeginTranslucentTextRendering();
     Font_SetActive(1, 0);
@@ -949,6 +963,10 @@ void func_8211D06C(void) {
     }
 }
 
+/**
+ * Draws the strip wipe if it is on.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_DrawStripWipeIfActive(void) {
     if (BattleScene_GetStripWipeState() != 0) {
         BattleScene_DrawStripWipe();
