@@ -205,8 +205,8 @@ void BattleScene_ReactionMultiHitEnd(CameraNode* arg0, void* arg1) {
 /**
  * Step 4 reaction when the hit also lowered a stat or confused the target (hitReactionKind 3, set
  * by Battle_Effect_LowerStat and Battle_Effect_ConfuseChance).
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
  * @unverified Name from BattleScene_ActionStepReaction's dispatch.
  */
 void BattleScene_ReactionSideEffect(CameraNode* arg0, void* arg1) {
@@ -549,8 +549,8 @@ void func_8212C530(s32 arg0)
 
 /**
  * Plays BattleCamera_PlayShot variant 0-4 on the acting Pokemon.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
  * @unverified Name from the code.
  */
 void BattleCamera_PlayUserShot(s32 arg0, s32 arg1) {

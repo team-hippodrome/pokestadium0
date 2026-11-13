@@ -3,8 +3,8 @@
 
 /**
  * Part of the stat-change ribbon (see StatRibbon_Spawn).
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
  * @unverified Named after the ribbon seen in play; this function itself was not traced.
  */
 void StatRibbon_UpdateEnvAlpha(RibbonMesh* arg0) {
@@ -29,8 +29,8 @@ void StatRibbon_UpdateEnvAlpha(RibbonMesh* arg0) {
 
 /**
  * Part of the stat-change ribbon (see StatRibbon_Spawn).
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
  * @unverified Named after the ribbon seen in play; this function itself was not traced.
  */
 s32 StatRibbon_Update(RibbonMesh* arg0) {
@@ -187,8 +187,8 @@ s32 StatRibbon_Update(RibbonMesh* arg0) {
 
 /**
  * Part of the stat-change ribbon (see StatRibbon_Spawn).
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
  * @unverified Named after the ribbon seen in play; this function itself was not traced.
  */
 s32 StatRibbon_UpdatePool(void) {
@@ -215,8 +215,8 @@ s32 StatRibbon_UpdatePool(void) {
 
 /**
  * Part of the stat-change ribbon (see StatRibbon_Spawn).
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
  * @unverified Named after the ribbon seen in play; this function itself was not traced.
  */
 Gfx* StatRibbon_Draw(Gfx* arg0, RibbonMesh* arg1) {
@@ -243,8 +243,8 @@ Gfx* StatRibbon_Draw(Gfx* arg0, RibbonMesh* arg1) {
 
 /**
  * Part of the stat-change ribbon (see StatRibbon_Spawn).
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
  * @unverified Named after the ribbon seen in play; this function itself was not traced.
  */
 Gfx* StatRibbon_DrawPool(Gfx* arg0) {

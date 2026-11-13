@@ -77,8 +77,8 @@ void func_821247D0(CameraNode* arg0, ActivePokemon* arg1) {
 
 /**
  * Forwards both arguments to BattleScene_CameraShotTargetHigh; camera shot table entry.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
  * @unverified Name describes the forwarding only.
  */
 void BattleScene_CameraShotTargetHighThunk(CameraNode* arg0, ActivePokemon* arg1) {

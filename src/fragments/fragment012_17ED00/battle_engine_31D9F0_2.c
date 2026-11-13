@@ -488,8 +488,8 @@ void BattleAnim_FlameRotatingFallColorCycle(Particle* arg0) {
 /**
  * handles setting up the hit spark for Hydro Pump, Ice Beam, Bubble Beam, Hyper Beam, Solar Beam, Egg Bomb, Waterfall,
  * and Sky Attack Oddly, Psybeam calls this setup, but not the runner for the effect
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_SetupExpandingHitSpark(Particle* arg0) {

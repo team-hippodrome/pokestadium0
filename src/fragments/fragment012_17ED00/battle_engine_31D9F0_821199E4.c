@@ -674,8 +674,8 @@ void BattleMessage_DrawBox(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
 
 /**
  * Draws a side's caption box with the revealed part of the caption text.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
  * @unverified Name from its caller.
  */
 void BattleHud_DrawCaptionBox(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {

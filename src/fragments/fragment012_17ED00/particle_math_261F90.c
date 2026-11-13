@@ -1102,8 +1102,8 @@ s16 ParticleMath_AngleXBetweenPoints(Vec3f arg0, Vec3f arg1) {
 
 /**
  * Return the ZX-component atan2 of end - start in that argument order.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s16 ParticleMath_AngleYBetweenPoints(Vec3f arg0, Vec3f arg1) {

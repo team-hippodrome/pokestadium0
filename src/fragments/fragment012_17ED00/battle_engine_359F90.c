@@ -775,8 +775,8 @@ void Battle_PrintMoveFailureText(void) {
  * Gives back one PP of the selected move, on both the battle copy (sBattleUser) and the roster
  * copy. Metronome calls it so that only the move it pulls costs PP. Was misnamed
  * Battle_IncrementMoveUsage.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
  * @unverified Named from the code; the sweep saw it run for Metronome but did not read the PP.
  */
 void Battle_RefundSelectedMovePp(void) {

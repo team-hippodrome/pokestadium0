@@ -183,8 +183,8 @@ void func_8210568C(ActivePokemon*, s32, s32);
 
 /**
  * triggers on faint
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_TickStartRowAnimRecord(ActivePokemon* active_pokemon) {
@@ -207,8 +207,8 @@ extern ModelDimensions D_8218934C[];
 
 /**
  * trigger unknown
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_TickQueueRowEffectList3AtAnimEnd(ActivePokemon* active_pokemon) {
@@ -316,8 +316,8 @@ void BattleScene_LoadMoveResourceList(ActivePokemon* active_pokemon) {
 
 /**
  * Loads the resource list for the current state row's mode.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_LoadRowResourceList(ActivePokemon* active_pokemon) {

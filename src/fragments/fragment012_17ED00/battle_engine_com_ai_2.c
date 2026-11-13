@@ -316,8 +316,8 @@ s32 BattleAi_GetHpPercent(s8 *arg0)
  * party, whose info byte at offset 2 is the number of Pokemon in play.
  * Matching note: the loop is a do/while over a byte pointer with the end address
  * `arg0 + n * 0x90` recomputed in its condition, as in the ROM.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_CountUnfainted(u8 *arg0) {

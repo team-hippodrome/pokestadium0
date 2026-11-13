@@ -1438,8 +1438,8 @@ void BattleAnim_RunThunderPunchHitEffect(Particle* arg0) {
 }
 
 /**
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetupDefaultHitSpark(Particle* arg0) {
@@ -1524,8 +1524,8 @@ void BattleAnim_SetupDefaultHitSpark(Particle* arg0) {
  * Psywave (hit), Quick Attack (hit), Rage (hit), Rolling Kick (hit), Skull Bash (hit), Sonic Boom (hit),
  * Struggle (hit), Tackle (hit), Take Down (hit), Thunder Punch (hit), Wing Attack (hit)
  * TODO: Human contributor add screenshot
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_RunDefaultHitSpark(Particle* arg0) {

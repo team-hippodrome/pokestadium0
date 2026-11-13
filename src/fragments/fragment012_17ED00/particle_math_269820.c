@@ -160,8 +160,8 @@ u8 Particle_GetUnkCE(s8 *arg0) {
 
 /**
  * Returns the particle's unk_CD.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
  * @unverified Name and comment guessed from the code.
  */
 u8 Particle_GetUnkCD(s8 *arg0) {
@@ -241,8 +241,8 @@ void BattleAnim_SetEffectState(s32 arg0) {
 /**
  * Clears D_8219A82C.unk_00, the battle animation effect state. Was misnamed
  * FirstClearBonus_HideDialogBox.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
  * @unverified Named from the code.
  */
 void BattleAnim_ClearEffectState(void) {
