@@ -533,7 +533,7 @@ void BattleAnim_RunIceBeamBlizzardHitHueChange(Particle* arg0) {
             break;
 
         case 2:
-            Particle_FieldAE_ApproachAndStepState_0BF98(arg0, arg0->unk_A6, arg0->unk_CE);
+            Particle_ApproachUnkAEThenAdvance(arg0, arg0->unk_A6, arg0->unk_CE);
             break;
 
         case 3:
@@ -543,7 +543,7 @@ void BattleAnim_RunIceBeamBlizzardHitHueChange(Particle* arg0) {
             break;
 
         case 4:
-            Particle_FieldAE_ApproachAndStepState_0BF98(arg0, 0, arg0->unk_CE);
+            Particle_ApproachUnkAEThenAdvance(arg0, 0, arg0->unk_CE);
             break;
 
         case 5:

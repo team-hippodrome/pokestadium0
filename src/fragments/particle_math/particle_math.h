@@ -779,7 +779,7 @@ void Particle_FieldCE_SetS16_0BF24(Particle* arg0, s16 arg1);
 void Particle_FieldCD_SetS16_0BF38(Particle* arg0, s16 arg1);
 void Particle_FieldAE_SetS16_0BF4C(Particle* arg0, s16 arg1);
 s32 Particle_FieldAE_Approach_0BF60(Particle* arg0, s16 arg1, s16 arg2);
-s32 Particle_FieldAE_ApproachAndStepState_0BF98(Particle* arg0, s16 arg1, s16 arg2);
+s32 Particle_ApproachUnkAEThenAdvance(Particle* arg0, s16 arg1, s16 arg2);
 void Particle_FieldB0_SetS16_0BFEC(Particle* arg0, s16 arg1);
 s32 Particle_FieldB0_Approach_0C000(Particle* arg0, s16 arg1, s16 arg2);
 s16 Particle_FieldAC_GetS16_0C038(Particle* arg0);

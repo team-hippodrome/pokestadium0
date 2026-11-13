@@ -3402,7 +3402,7 @@ func_82140800,0x82140800,src/fragments/fragment012_17ED00/particle_math_269820_2
 func_82140814,0x82140814,src/fragments/fragment012_17ED00/particle_math_269820_2.c,Particle_SetUnkCD,m2c,m2c,c
 func_82140828,0x82140828,src/fragments/fragment012_17ED00/particle_math_269820_2.c,Particle_SetUnkAE,m2c,m2c,c
 func_8214083C,0x8214083C,src/fragments/fragment012_17ED00/particle_math_269820_2.c,Particle_ApproachUnkAE,m2c,m2c,c
-func_82140874,0x82140874,src/fragments/fragment012_17ED00/particle_math_269820_2.c,Particle_FieldAE_ApproachAndStepState_0BF98,s1,stadium1:src/fragments/particle_math/particle_math_269820.c,c
+func_82140874,0x82140874,src/fragments/fragment012_17ED00/particle_math_269820_2.c,Particle_ApproachUnkAEThenAdvance,s1,stadium1:src/fragments/particle_math/particle_math_269820.c,c
 func_821408C8,0x821408C8,src/fragments/fragment012_17ED00/particle_math_269820_2.c,Particle_SetUnkB0,m2c,m2c,c
 func_821408DC,0x821408DC,src/fragments/fragment012_17ED00/particle_math_269820_2.c,Particle_ApproachUnkB0,m2c,m2c,c
 func_82140B70,0x82140B70,src/fragments/fragment012_17ED00/particle_math_26E6D0.c,func_82140B70,m2c,m2c,c

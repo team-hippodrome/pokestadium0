@@ -72,7 +72,7 @@ s32 Particle_DecrementUnkA6ToZero(Particle* arg0);
 s32 Particle_DecrementUnkA6ToZeroThenAdvance(Particle* arg0);
 s32 Particle_DecrementUnkA8ToZero(Particle* arg0);
 s32 Particle_FieldA8_DecrementToZeroStep1AndStepState_0BE8C(Particle* arg0);
-s32 Particle_FieldAE_ApproachAndStepState_0BF98(Particle* arg0, s16 arg1, s16 arg2);
+s32 Particle_ApproachUnkAEThenAdvance(Particle* arg0, s16 arg1, s16 arg2);
 
 void Particle_AdvanceLifecycle(Particle* arg0);
 s32 Particle_TickDelayTimer(Particle* arg0, s16 arg1);
@@ -527,7 +527,8 @@ void Particle_UpdateWorldTransform(Particle* arg0) {
 
 /**
  * Set the base position offset after multiplying each input by the render context's Y scale.
- * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep: with (0, 0, 0) it set positionOffset.y (0x38)
+ * from -19.36 to 0.
  */
 void Particle_SetPosition(Particle* arg0, f32 arg1, f32 arg2, f32 arg3) {
     M2C_FIELD(arg0, f32*, 0x34) = arg1 * gParticleRenderContext.scale.y;
@@ -655,7 +656,9 @@ void Particle_AddPositionOffsetAlongRotationYPlus90(Particle* arg0, f32 arg1) {
 
 /**
  * Add to positionOffset.x, positionOffset.z with render-context Y scaling.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Dig, Barrier, Light Screen, Reflect): with
+ * rotation.y = 0x4000 (so rotation.y - 0x4000 = 0), arg1 = 20 added 72 (20 times the 3.6 render
+ * scale) to positionOffset.z and nothing to x; arg1 = 15 added 54.
  */
 void Particle_AddPositionOffsetAlongRotationYMinus90(Particle* arg0, f32 arg1) {
     arg0->positionOffset.x += arg1 * SINS(arg0->rotation.y - 0x4000) * gParticleRenderContext.scale.y;
@@ -1206,7 +1209,8 @@ void Particle_AddVelocityXZFromRotationYPlusHalfTurn(Particle* arg0) {
 
 /**
  * Evaluate the explicit trigonometric component formula and store/add the resulting motion term.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Surf): with arg1 = 10 it set motionStep.x to 10
+ * (z 0) and added it to motionOffset.x, i.e. the step pointed along rotation.y + 0x8000.
  */
 void Particle_AddVelocityXZFromRotationYPlusHalfTurnFromArgument(Particle* arg0, f32 arg1) {
     arg0->motionStep.x = SINS(arg0->rotation.y + 0x8000) * arg1;
@@ -1431,7 +1435,9 @@ void Particle_SetRotationStepVec(Particle* arg0, Vec3s arg1) {
 
 /**
  * Sets rotationStep.x and .y.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) in the 165-move sweep (Fire Punch, Ember, Bubblebeam, Selfdestruct, Egg
+ * Bomb): with (0x800, 0x300) it set rotationStep.x (0x96) to 0x800 and rotationStep.y (0x98) to
+ * 0x300; z was untouched.
  */
 void Particle_SetRotationStepXY(s8 *arg0, s16 arg1, s16 arg2) {
     M2C_FIELD(arg0, s16 *, 0x96) = arg1;
@@ -1845,7 +1851,8 @@ extern f32 D_FLT_8219A824;
 
 /**
  * Sets the particle's stepMagnitude to arg1 times the particle scale D_FLT_8219A824.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) in the 165-move sweep: arg1 = 0.4 set stepMagnitude (0x70) to 0.704,
+ * arg1 times the particle scale D_FLT_8219A824 (1.76).
  */
 void Particle_SetStepMagnitudeScaled(s8 *arg0, f32 arg1) {
     M2C_FIELD(arg0, f32 *, 0x70) = (f32) (arg1 * D_FLT_8219A824);
@@ -2265,7 +2272,8 @@ s32 Particle_StepScaleTarget(Particle* arg0, f32 arg1, f32 arg2) {
 
 /**
  * Set primRed, primGreen, primBlue.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep: with (FF, FF, FF) it set prim_r (0xBA) from 0xC8
+ * to 0xFF, with prim_g and prim_b already 0xFF.
  */
 void Particle_SetPrimColor(Particle* arg0, u8 arg1, u8 arg2, u8 arg3) {
     arg0->prim_r = arg1;
@@ -2536,7 +2544,7 @@ void func_821407A8(s8 *arg0, int arg1)
 
 /**
  * Sets the particle's unk_AC to arg1.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) in the 165-move sweep: arg1 = 0 cleared unk_AC (offset 0xA8) from 0x16.
  */
 void Particle_SetUnkAC(s8 *arg0, s16 arg1) {
     M2C_FIELD(arg0, s16 *, 0xA8) = arg1;
@@ -2558,7 +2566,8 @@ void func_821407D4(s8 *arg0, unsigned char arg1)
 
 /**
  * Sets the particle's unk_CC to arg1.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) in the 165-move sweep (Selfdestruct): arg1 = 9 set the byte at 0xC8
+ * (unk_CC) from 2 to 9.
  */
 void Particle_SetUnkCC(s8 *arg0, unsigned short arg1)
 {
@@ -2612,9 +2621,11 @@ void Particle_ApproachUnkAE(s32 arg0, s16 arg1, s16 arg2) {
 
 /**
  * Run the field-approach helper and advance lifecycle when it reports completion.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Ice Beam, Blizzard): with target 0xDC and step
+ * 0x20 it moved unk_AE (offset 0xAA) from 0 to 0x20 and returned 0, so the lifecycle did not
+ * advance yet.
  */
-s32 Particle_FieldAE_ApproachAndStepState_0BF98(Particle* arg0, s16 arg1, s16 arg2) {
+s32 Particle_ApproachUnkAEThenAdvance(Particle* arg0, s16 arg1, s16 arg2) {
     s32 sp1C = Particle_FieldAE_Approach_0BF60(arg0, arg1, arg2);
 
     if (sp1C != 0) {
@@ -2636,7 +2647,8 @@ M2C_UNK func_82137898(s32, s16, s16);               /* extern */
 
 /**
  * Steps the particle's unk_B0 toward a target (helper of the approach family).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) in the 165-move sweep (Selfdestruct): with target 0 and step 8, unk_B0
+ * (offset 0xAC) went from 0x64 to 0x5C.
  */
 void Particle_ApproachUnkB0(s32 arg0, s16 arg1, s16 arg2) {
     func_82137898(arg0 + 0xAC, arg1, arg2);
