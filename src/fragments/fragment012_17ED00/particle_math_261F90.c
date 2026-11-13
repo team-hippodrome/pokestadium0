@@ -833,7 +833,8 @@ f32 ParticleMath_Rotate2DY(f32 arg0, f32 arg1, s16 arg2) {
 
 /**
  * Rotate the supplied vector around the Y axis and return the destination.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Confusion, Confuse Ray, Amnesia): it turned
+ * (-10, 5, 10) into (10, 5, 10) and (-10, 5, -10) for quarter turns either way; y was kept.
  */
 Vec3f* ParticleMath_RotateVec3fY(Vec3f* arg0, Vec3f arg1, Vec3s arg2) {
     f32 temp_fv0 = SINS(arg2.y);
@@ -1080,7 +1081,9 @@ void ParticleGfx_NoopStub1(void) {
 
 /**
  * Convert a float matrix into the next pool slot and load it as MODELVIEW; stop emitting when all 364 slots are used.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Pound and most hit moves): it emitted G_MTX
+ * DA380003 (load, no push, modelview) pointing at the next gParticleMatrixPool slot, which advanced
+ * by 0x40 per call.
  */
 void ParticleGfx_PushMatrix(MtxF* arg0) {
     if (gParticleMatrixPoolIndex < 0x16C) {
@@ -1095,7 +1098,8 @@ void ParticleGfx_PushMatrix(MtxF* arg0) {
 
 /**
  * Build a translated 2D rotation matrix and apply uniform scale.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Mist, powders, Smokescreen, Haze, Smog): with
+ * angle 0x8000 and scale 1 it wrote mf[0][0] = mf[1][1] = -1 and zeros off the rotation block.
  */
 void ParticleGfx_Build2DTransformMatrix(MtxF* arg0, s16 arg1, s16 arg2, s16 arg3, f32 arg4) {
     f32 temp_fv0 = SINS(arg3) * arg4;
@@ -1124,7 +1128,9 @@ void ParticleGfx_Build2DTransformMatrix(MtxF* arg0, s16 arg1, s16 arg2, s16 arg3
 
 /**
  * Build a translated 2D rotation matrix and scale only its Y basis.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Scratch, Cut, Vine Whip): with the same angle
+ * and scales 2, 3 and 4, only the second row grew with the scale (mf[1][0] -1.58, -2.36, -3.15);
+ * the first row stayed the same.
  */
 void ParticleGfx_Build2DTransformMatrixYScaled(MtxF* arg0, s16 arg1, s16 arg2, s16 arg3, f32 arg4) {
     f32 temp_fv0 = SINS(arg3);
@@ -1153,7 +1159,8 @@ void ParticleGfx_Build2DTransformMatrixYScaled(MtxF* arg0, s16 arg1, s16 arg2, s
 
 /**
  * Build the 2D transform with an added half turn and load it through the matrix pool.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Mist, powders, Haze, Smog): it built the 2D
+ * matrix and emitted one G_MTX DA380003.
  */
 void ParticleGfx_Push2DTransform(s16 arg0, s16 arg1, s16 arg2, f32 arg3) {
     MtxF sp20;
@@ -1164,7 +1171,8 @@ void ParticleGfx_Push2DTransform(s16 arg0, s16 arg1, s16 arg2, f32 arg3) {
 
 /**
  * Build the 2D transform with an added half turn and load it through the matrix pool.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Scratch, Cut, Vine Whip): it built the Y-scaled
+ * 2D matrix and emitted one G_MTX DA380003.
  */
 void ParticleGfx_Push2DTransformYScaled(s16 arg0, s16 arg1, s16 arg2, f32 arg3) {
     MtxF sp20;
@@ -1175,7 +1183,9 @@ void ParticleGfx_Push2DTransformYScaled(s16 arg0, s16 arg1, s16 arg2, f32 arg3) 
 
 /**
  * Build a translated 3D rotation matrix and apply uniform scale.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Scratch, Razor Wind, Cut, Slam and others): it
+ * wrote the particle position (e.g. -170.4, 116.4, -11.85) into the translation row and the scale
+ * 4.5 into the rotation block.
  */
 void ParticleGfx_BuildTransformMatrix(MtxF* arg0, Vec3f arg1, Vec3s arg2, f32 arg3) {
     f32 temp_fa1;
@@ -1217,7 +1227,9 @@ void ParticleGfx_BuildTransformMatrix(MtxF* arg0, Vec3f arg1, Vec3s arg2, f32 ar
 
 /**
  * Build a translated 3D rotation matrix and scale only its Y basis.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Thunderpunch, Hyper Beam, Thundershock,
+ * Thunderbolt, Thunder): it wrote a rotation-and-translation matrix from the particle position and
+ * rotation.
  */
 void ParticleGfx_BuildTransformMatrixYScaled(MtxF* arg0, Vec3f arg1, Vec3s arg2, f32 arg3) {
     f32 temp_fa0;
@@ -1301,7 +1313,8 @@ void ParticleGfx_BuildTransformMatrixXYScaled(MtxF* arg0, Vec3f arg1, Vec3s arg2
 
 /**
  * Build a translated billboard matrix by transposing the supplied view basis and applying uniform scale.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Pound and most hit moves): it was called with
+ * the battle camera's view matrix and wrote a new matrix from it, scaled by the particle scale.
  */
 void ParticleGfx_BuildBillboardMatrix(MtxF* arg0, MtxF* arg1, Vec3f arg2, f32 arg3) {
     arg0->mf[0][0] = arg1->mf[0][0] * arg3;
@@ -1353,7 +1366,9 @@ void ParticleGfx_BuildBillboardMatrixYScaled(MtxF* arg0, MtxF* arg1, Vec3f arg2,
 
 /**
  * Build a translated billboard matrix by rotating its first two basis vectors and applying uniform scale.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Pay Day, Ice Punch, Ice Beam, Blizzard, Psybeam,
+ * Aurora Beam): it was called with the battle camera's view matrix and wrote the camera-facing
+ * matrix rotated by the extra angle, with the particle position as translation.
  */
 void ParticleGfx_BuildBillboardRotatedMatrix(MtxF* arg0, MtxF* arg1, Vec3f arg2, f32 arg3, s16 arg4) {
     f32 temp_fv0 = SINS(arg4);
@@ -1382,7 +1397,8 @@ void ParticleGfx_BuildBillboardRotatedMatrix(MtxF* arg0, MtxF* arg1, Vec3f arg2,
 
 /**
  * Build a translated billboard matrix by rotating its first two basis vectors and scaling only the second basis vector.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Hyper Beam, Thundershock, Thunderbolt, Thunder):
+ * it was called with the battle camera's view matrix and wrote the rotated camera-facing matrix.
  */
 void ParticleGfx_BuildBillboardRotatedMatrixYScaled(MtxF* arg0, MtxF* arg1, Vec3f arg2, f32 arg3, s16 arg4) {
     f32 temp_fv0 = SINS(arg4);
@@ -1448,7 +1464,8 @@ void ParticleGfx_BuildDirectionMatrix(MtxF* arg0, Vec3f arg1, Vec3f arg2, s16 ar
 
 /**
  * Build the corresponding transform and load it through the matrix pool.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Scratch, Razor Wind, Cut and others): it built
+ * the transform matrix and emitted one G_MTX DA380003.
  */
 void ParticleGfx_PushTransformMatrix(Vec3f arg0, Vec3s arg1, f32 arg2) {
     MtxF sp28;
@@ -1459,7 +1476,8 @@ void ParticleGfx_PushTransformMatrix(Vec3f arg0, Vec3s arg1, f32 arg2) {
 
 /**
  * Build the corresponding transform and load it through the matrix pool.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Thunderpunch, Hyper Beam, Thunder): it built the
+ * Y-scaled transform matrix and emitted one G_MTX DA380003.
  */
 void ParticleGfx_PushTransformMatrixYScaled(Vec3f arg0, Vec3s arg1, f32 arg2) {
     MtxF sp28;
@@ -1481,7 +1499,8 @@ void ParticleGfx_PushTransformMatrixXYScaled(Vec3f arg0, Vec3s arg1, f32 arg2, f
 
 /**
  * Build the corresponding transform and load it through the matrix pool.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Pound and most hit moves): called with the
+ * battle camera, it emitted one G_MTX DA380003.
  */
 void ParticleGfx_PushBillboardMatrix(CameraNode* arg0, Vec3f arg1, f32 arg4) {
     MtxF sp20;
@@ -1492,7 +1511,8 @@ void ParticleGfx_PushBillboardMatrix(CameraNode* arg0, Vec3f arg1, f32 arg4) {
 
 /**
  * Build the corresponding transform and load it through the matrix pool.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Pay Day, Ice Punch, Ice Beam, Blizzard,
+ * Psybeam): called with the battle camera, it emitted one G_MTX DA380003.
  */
 void ParticleGfx_PushBillboardRotatedMatrix(CameraNode* arg0, Vec3f arg1, f32 arg4, s16 arg5) {
     MtxF sp28;
@@ -1514,7 +1534,8 @@ void ParticleGfx_PushBillboardMatrixYScaled(CameraNode* arg0, Vec3f arg1, f32 ar
 
 /**
  * Build the corresponding transform and load it through the matrix pool.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Hyper Beam, Thundershock, Thunderbolt, Thunder):
+ * called with the battle camera, it emitted one G_MTX DA380003.
  */
 void ParticleGfx_PushBillboardRotatedMatrixYScaled(CameraNode* arg0, Vec3f arg1, f32 arg4, s16 arg5) {
     MtxF sp28;
