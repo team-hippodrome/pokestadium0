@@ -11,6 +11,7 @@ extern f32 D_8219A530;
 /**
  * Returns the Pokémon's scaled model radius times arg1, capped at arg2. Used to pick a
  * camera distance that fits the Pokémon's size.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
  * @unverified Name from Stadium 1.
  */
 f32 BattleScene_ScaleCameraDistance(ActivePokemon* arg0, f32 arg1, f32 arg2) {
@@ -25,6 +26,7 @@ f32 BattleScene_ScaleCameraDistance(ActivePokemon* arg0, f32 arg1, f32 arg2) {
 /**
  * Counts the scene's substep frame counter up and returns 1 (resetting it) once it
  * reaches arg0.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (134 of the moves).
  * @unverified Name from Stadium 1.
  */
 s32 BattleScene_AdvanceCameraSubstepCounter(s32 arg0) {
@@ -39,6 +41,7 @@ s32 BattleScene_AdvanceCameraSubstepCounter(s32 arg0) {
 /**
  * Counts the scene's step frame timer up and returns 1 (resetting it) once it reaches
  * frame_limit.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
  * @unverified Name from Stadium 1.
  */
 s32 BattleScene_AdvanceCameraFrameCounter(s32 frame_limit) {
@@ -53,6 +56,7 @@ s32 BattleScene_AdvanceCameraFrameCounter(s32 frame_limit) {
 /**
  * Returns 1 if the scene's step frame timer has reached arg0, otherwise counts it up and
  * returns 0. Unlike BattleScene_AdvanceCameraFrameCounter it does not reset.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (105 of the moves).
  * @unverified Name from Stadium 1.
  */
 s32 BattleScene_AdvanceCameraFrameCounterUntil(s32 arg0) {
@@ -65,6 +69,8 @@ s32 BattleScene_AdvanceCameraFrameCounterUntil(s32 arg0) {
 
 /**
  * Returns 1 if the scene's step frame timer has reached arg0.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 s32 BattleScene_IsCameraFrameCounterAtLeast(s32 arg0) {
@@ -76,6 +82,7 @@ s32 BattleScene_IsCameraFrameCounterAtLeast(s32 arg0) {
 
 /**
  * Sets which side is acting in the battle scene.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
  * @unverified Name guessed from the code.
  */
 void BattleScene_SetActivePokemonIndex(s32 arg0) {
@@ -84,6 +91,7 @@ void BattleScene_SetActivePokemonIndex(s32 arg0) {
 
 /**
  * Resets the scene's step frame timer.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleScene_ResetCameraFrameCounter(void) {
@@ -92,6 +100,7 @@ void BattleScene_ResetCameraFrameCounter(void) {
 
 /**
  * Resets the scene's substep frame counter.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (157 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleScene_ResetCameraSubstepCounter(void) {
@@ -101,6 +110,7 @@ void BattleScene_ResetCameraSubstepCounter(void) {
 /**
  * Points the camera at (x, y, z) and places the eye distance units away at the given
  * X and Y rotations.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleScene_SetCameraAtAndEyeFromAngles(CameraNode* camera, f32 x, f32 y, f32 z, f32 distance, s16 rotation_x, s16 rotation_y) {
@@ -223,6 +233,7 @@ void func_82121C3C(s32 arg0) {
 
 /**
  * Sets the battle scene's camera mode and its phase step.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleScene_SetCameraModeAndStep(s32 camera_mode, s32 camera_step) {
@@ -232,6 +243,7 @@ void BattleScene_SetCameraModeAndStep(s32 camera_mode, s32 camera_step) {
 
 /**
  * Sets the camera's near and far clip planes.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleScene_SetCameraClipPlanes(CameraNode* camera_node, f32 near_plane, f32 far_plane) {
@@ -241,6 +253,7 @@ void BattleScene_SetCameraClipPlanes(CameraNode* camera_node, f32 near_plane, f3
 
 /**
  * Sets the scene's transition step and transition style.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleScene_SetCameraSubstate(s32 arg0, u16 arg1) {
@@ -290,6 +303,7 @@ void func_82121DAC(void) {
  * Sets the camera shake amplitude from the HP the Pokémon just lost (HP minus the value at
  * 0x7D2, scaled by 450/996), clamped to 6..40, or 0 for no loss, and restarts the shake
  * phase.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (98 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleScene_SetDamageShakeAmplitude(ActivePokemon* arg0) {
@@ -311,6 +325,7 @@ void BattleScene_SetDamageShakeAmplitude(ActivePokemon* arg0) {
 /**
  * Per-frame camera shake: advances the shake phase a quarter turn, decays the amplitude
  * toward 0, and offsets the eye and target up and sideways by the current swing.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleScene_ApplyCameraShake(CameraNode* arg0) {
@@ -341,6 +356,8 @@ void func_82122104(s32 arg0) {
 
 /**
  * Returns 1 if angle arg1 is already within 20 degrees (0xE38) of arg0.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code.
  */
 s32 BattleScene_IsCameraAngleSettled(s16 arg0, s16 arg1) {
@@ -404,6 +421,8 @@ block_7:
 /**
  * Steps the scene camera's rotationY by -arg1 toward arg2 without moving the eye. Snaps to
  * arg2 and returns 1 once it gets there, otherwise returns 0.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code.
  */
 s32 BattleScene_ApproachCameraRotationYNoEyeUpdate(UNUSED CameraNode* arg0, s16 arg1, s16 arg2) {
@@ -476,6 +495,7 @@ void func_82122458(CameraNode* arg0) {
 
 /**
  * Zeroes the scene's two camera offset vectors (unk_94 and unk_A0).
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleScene_ClearCameraOffsetVectors(void) {
@@ -486,6 +506,7 @@ void BattleScene_ClearCameraOffsetVectors(void) {
 /**
  * Places the camera target arg5 units from anchor arg2 at the given rotations, raised by
  * arg6 plus a per-species height offset for arg0.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleScene_SetCameraAtFromAnchor(ActivePokemon* arg0, CameraNode* arg1, Vec3f arg2, s16 arg3, s16 arg4, f32 arg5, f32 arg6) {
@@ -496,6 +517,7 @@ void BattleScene_SetCameraAtFromAnchor(ActivePokemon* arg0, CameraNode* arg1, Ve
 
 /**
  * Places the camera target arg4 units from arg1 at the given rotations, raised by arg5.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (6 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleScene_SetCameraAtFromPosition(CameraNode* arg0, Vec3f arg1, s16 arg2, s16 arg3, f32 arg4, f32 arg5) {
@@ -505,6 +527,7 @@ void BattleScene_SetCameraAtFromPosition(CameraNode* arg0, Vec3f arg1, s16 arg2,
 
 /**
  * Places the camera eye arg4 units from arg1 at the given rotations, raised by arg5.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleScene_SetCameraEyeFromPosition(CameraNode* arg0, Vec3f arg1, s16 arg2, s16 arg3, f32 arg4, f32 arg5) {
@@ -515,6 +538,7 @@ void BattleScene_SetCameraEyeFromPosition(CameraNode* arg0, Vec3f arg1, s16 arg2
 /**
  * Places the camera eye arg3 units from the camera target at the given rotations,
  * raised by arg4.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (129 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleScene_SetCameraEyeFromAt(CameraNode* arg0, s16 arg1, s16 arg2, f32 arg3, f32 arg4) {
@@ -525,6 +549,7 @@ void BattleScene_SetCameraEyeFromAt(CameraNode* arg0, s16 arg1, s16 arg2, f32 ar
 /**
  * Like BattleScene_SetCameraEyeFromPosition, but also stores the angles and distance as
  * the scene's current camera angles.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (6 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleScene_SetCameraEyeAndStoreAngles(CameraNode* arg0, Vec3f arg1, s16 arg2, s16 arg3, f32 arg4, f32 arg5) {
@@ -536,6 +561,7 @@ void BattleScene_SetCameraEyeAndStoreAngles(CameraNode* arg0, Vec3f arg1, s16 ar
 /**
  * Like BattleScene_SetCameraEyeFromAt, but also stores the angles and distance as the
  * scene's current camera angles.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (7 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleScene_SetCameraEyeAndStoreAnglesFromAt(CameraNode* arg0, s16 arg1, s16 arg2, f32 arg3, f32 arg4) {
@@ -546,6 +572,7 @@ void BattleScene_SetCameraEyeAndStoreAnglesFromAt(CameraNode* arg0, s16 arg1, s1
 
 /**
  * Camera step that does nothing.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleScene_CameraHelperNop(UNUSED CameraNode* arg0) {
@@ -613,6 +640,7 @@ void func_821228B0(CameraNode* arg0, ActivePokemon* arg1) {
 /**
  * Moves the camera target a tenth of the way toward the point the Pokémon's sway state
  * is aimed at, each frame.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleScene_ApproachCameraTarget(CameraNode* arg0, ActivePokemon* arg1) {
@@ -883,6 +911,7 @@ void func_82123314(CameraNode* arg0, ActivePokemon* arg1) {
 /**
  * Eases the camera from where it is toward a shot facing the Pokémon from 3.5 times its
  * radius (at most 300 units), moving the target an eighth of the way per frame.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleScene_RecenterCameraOnOwner(CameraNode* arg0, ActivePokemon* arg1) {
@@ -916,6 +945,7 @@ void BattleScene_RecenterCameraOnOwner(CameraNode* arg0, ActivePokemon* arg1) {
 /**
  * Eases the camera distance toward 8 times the Pokémon's radius (at most 500 units) and
  * its X rotation toward 20 degrees.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleScene_ApproachCameraZoom(CameraNode* arg0, ActivePokemon* arg1) {
@@ -957,6 +987,7 @@ void func_82123684(CameraNode* arg0, ActivePokemon* arg1) {
 /**
  * Wide shot of the Pokémon: target on its anchor, eye 8 times its radius away (at most
  * 300 units) along the direction it faces.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (9 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleScene_SetCameraOwnerWideShot(CameraNode* arg0, ActivePokemon* arg1) {
@@ -1019,6 +1050,7 @@ void BattleScene_SetCameraPresetLowClose(CameraNode* arg0, ActivePokemon* arg1) 
 
 /**
  * Shot of the Pokémon from the front, 3.5 times its radius away (at most 300 units).
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (41 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleScene_CameraShotTargetClose(CameraNode* arg0, ActivePokemon* arg1) {
@@ -1038,6 +1070,7 @@ void func_82123D4C(CameraNode* arg0, ActivePokemon* arg1) {
 /**
  * Shot of the Pokémon from 5 times its radius away (at most 400 units), 20 degrees off the
  * side it faces.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (41 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleScene_CameraShotTargetHigh(CameraNode* arg0, ActivePokemon* arg1) {

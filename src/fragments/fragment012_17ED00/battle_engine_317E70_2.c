@@ -185,6 +185,7 @@ Particle* Particle_Alloc(void) {
  * Finds a free slot in the 300-entry effect slot ring, starting at
  * gBattleAnimEffectSlotIndex and wrapping around, and marks it in use. Returns -1 when all
  * slots are taken.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (157 of the moves).
  * @unverified Name from Stadium 1.
  */
 BattleAnimEffectSlot* BattleAnim_AllocEffectSlot(void) {
@@ -224,6 +225,7 @@ BattleAnimEffectSlot* BattleAnim_AllocEffectSlot(void) {
 /**
  * Unlinks a particle from its doubly linked list (next at 0x0, previous at 0x4) and
  * clears its allocated flag.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (157 of the moves).
  * @unverified Name from Stadium 1.
  */
 void Particle_Free(s8 *arg0) {
@@ -245,6 +247,7 @@ void Particle_Free(s8 *arg0) {
 
 /**
  * Marks an effect slot free and clears its delay, repeat interval and repeat count.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (157 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_FreeEffectSlot(BattleAnimEffectSlot* arg0) {
@@ -298,6 +301,8 @@ Particle* Particle_AllocChain(u8 arg0) {
 /**
  * Walks a chain of particles and gives each the same origin, rotation, update callback
  * and descriptor, with no owner Pokémon or display object.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_InitializeParticleChain(Particle* arg0, Vec3f arg1, Vec3s arg2, s32 arg3, s32 arg4) {
@@ -318,6 +323,7 @@ void BattleAnim_InitializeParticleChain(Particle* arg0, Vec3f arg1, Vec3s arg2, 
  * Initializes new particle arg0 as burst child arg4 of particle arg1: copies the owner,
  * parameters, motion and transform state, and gives it update callback arg2 and
  * descriptor arg3. A child of a list-4 particle goes to list 0.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (34 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_CloneParticleState(Particle* arg0, Particle* arg1, ParticleUpdateCallback arg2, ParticleDescriptor* arg3,
@@ -350,6 +356,7 @@ void BattleAnim_CloneParticleState(Particle* arg0, Particle* arg1, ParticleUpdat
 /**
  * Spawns arg3 copies of particle arg0 that use update callback arg1 and descriptor arg2,
  * stopping early if the pool runs out. Each copy gets its index in the burst.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (16 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_EmitParticleBurst(Particle* arg0, ParticleUpdateCallback arg1, ParticleDescriptor* arg2, s16 arg3) {
@@ -368,6 +375,7 @@ void BattleAnim_EmitParticleBurst(Particle* arg0, ParticleUpdateCallback arg1, P
 /**
  * Like BattleAnim_EmitParticleBurst, but also sets each child's CF parameter to arg4 and
  * CE parameter to arg5.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (24 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_EmitParticleBurstWithMetadata(Particle* arg0, ParticleUpdateCallback arg1, ParticleDescriptor* arg2, s16 arg3, s16 arg4,
@@ -389,6 +397,7 @@ void BattleAnim_EmitParticleBurstWithMetadata(Particle* arg0, ParticleUpdateCall
 /**
  * Allocates a screen-space particle at (arg0, arg1) with all three rotation angles set to
  * arg2 and scale arg3. Returns -1 if the pool is full.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (100 of the moves).
  * @unverified Name from Stadium 1.
  */
 Particle* BattleAnim_CreateProceduralParticle(s16 arg0, s16 arg1, s32 arg2, f32 arg3) {
@@ -410,6 +419,7 @@ void BattleScene_GetParticipantModelSizeScaled(ActivePokemon* arg0, Vec3f* arg1)
  * Sets the particle's origin once at spawn from its anchor mode (unk_CC): the owner's model
  * position, its default anchor, bone 100 (optionally on the ground, or pushed forward or
  * backward along its facing by its size), or its Poke Ball position.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (146 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_InitializeParticleAnchor(Particle* arg0) {
@@ -504,6 +514,7 @@ void BattleScene_GetParticipantModelSizeScaled(ActivePokemon* arg0, Vec3f* arg1)
  * Re-reads the particle's origin each frame for the anchor modes that follow the owner:
  * bone 100, optionally on the ground, pushed along the owner's facing, or raised by its
  * model height; the last mode follows the Poke Ball.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (157 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_UpdateParticleAnchor(Particle* arg0) {
@@ -577,6 +588,7 @@ void BattleAnim_UpdateParticleAnchor(Particle* arg0) {
 
 /**
  * Destroys the particle if it went inactive, otherwise updates its world transform.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (157 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_UpdateOrDestroyParticle(Particle* arg0) {
@@ -760,6 +772,7 @@ void BattleAnim_InitializeParticleFromEffect(Particle* arg0, ActivePokemon* arg1
  * Emits an effect slot's particles: one particle per count (slot field 0x12) from the
  * plain pool, or the whole count at once from the chained pool when the descriptor asks
  * for it.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (145 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SpawnStandardParticles(s8 *arg0) {
@@ -785,6 +798,8 @@ void BattleAnim_SpawnStandardParticles(s8 *arg0) {
 /**
  * Like BattleAnim_SpawnStandardParticles, but spawns field 0x10 divided by field 0x12
  * particles and sets field 0x10 to the batch size before each one.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SpawnBatchedParticles(s8* arg0) {
@@ -812,6 +827,7 @@ void BattleAnim_SpawnBatchedParticles(s8* arg0) {
 
 /**
  * Emits one particle for an effect slot, owned by the slot's Pokémon.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (57 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SpawnSingleParticle(BattleAnimEffectSlot* arg0) {
@@ -825,6 +841,7 @@ void BattleAnim_SpawnSingleParticle(BattleAnimEffectSlot* arg0) {
  * Runs an effect slot that is due: by its kind (unk_16) it spawns batched particles, a
  * screen-centered or screen-origin procedural particle, sets an effect state flag,
  * queues effect list 9, spawns a single particle, or spawns standard particles.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (157 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_DispatchParticleEmission(BattleAnimEffectSlot* arg0) {
@@ -863,6 +880,7 @@ void BattleAnim_DispatchParticleEmission(BattleAnimEffectSlot* arg0) {
  * Per-frame tick of all 300 effect slots: counts down each slot's delay, runs it when
  * due, and frees it after its last repeat (a repeat count of 127 repeats forever).
  * Otherwise reloads the delay from the repeat interval.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_TickEffectSlots(void) {
@@ -926,6 +944,7 @@ s32 Particle_CountActiveAlias(void) {
 /**
  * Frees a particle's display object, through the particle display pool when flag 0x400
  * is set or the owner display pool otherwise.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (157 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_ReleaseParticleModel(Particle* arg0) {
@@ -941,6 +960,7 @@ void BattleAnim_ReleaseParticleModel(Particle* arg0) {
 /**
  * Clears the spawn delay, frees every effect slot and destroys every particle except
  * those in effect lists 4 and 7.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (136 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_CleanupEffectsRetainingCategories47(void) {
@@ -970,6 +990,7 @@ void BattleAnim_CleanupEffectsRetainingCategories47(void) {
 /**
  * Frees every effect slot and destroys every particle outside effect list 4, then resets
  * the saved primitive color to white.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_CleanupEffectsRetainingCategory4(void) {
@@ -1002,6 +1023,7 @@ void BattleAnim_CleanupEffectsRetainingCategory4(void) {
 extern s32 D_84390340;
 /**
  * Clears the 8 registered effect update and draw callbacks.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_ClearEffectCallbacks(void) {
@@ -1017,6 +1039,7 @@ void BattleAnim_ClearEffectCallbacks(void) {
 
 /**
  * Returns 1 if D_8219A830 is 0.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (136 of the moves).
  * @unverified Name from Stadium 1.
  */
 s32 BattleAnim_IsEffectSpawningEnabled(void) {
@@ -1042,6 +1065,7 @@ void Particle_UpdateFrameCounters(void) {
 
 /**
  * Clears D_8219A830.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_EnableEffectSpawning(void) {
@@ -1062,6 +1086,7 @@ void Particle_UpdateFrameCountersAlias(void) {
  * Tears down battle animation effects. Mode 1 keeps effect lists 4 and 7 (and keeps the
  * callbacks while spawning is disabled). Mode 2 keeps only list 4, clears the callbacks
  * and reinitializes the auxiliary effects.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_CleanupEffects(s32 cleanup_mode) {
@@ -1086,6 +1111,7 @@ void BattleAnim_CleanupEffects(s32 cleanup_mode) {
 /**
  * Advances the lifecycle of every list-4 particle of owner arg1 whose sub-kind (unk_CB)
  * is arg0, which tells looping effects to finish.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_StopParticlesForOwnerCategory(u8 arg0, ActivePokemon* arg1) {
@@ -1101,6 +1127,7 @@ void BattleAnim_StopParticlesForOwnerCategory(u8 arg0, ActivePokemon* arg1) {
 
 /**
  * Sets the delay added to newly created effect slots to 0.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_ResetSpawnDelay(void) {
@@ -1109,6 +1136,7 @@ void BattleAnim_ResetSpawnDelay(void) {
 
 /**
  * Sets the delay, in frames, added to newly created effect slots.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetSpawnDelay(s32 arg0) {
@@ -1117,6 +1145,7 @@ void BattleAnim_SetSpawnDelay(s32 arg0) {
 
 /**
  * Adds arg0 frames to the delay given to newly created effect slots.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (16 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_AddSpawnDelay(s32 arg0) {
@@ -1125,6 +1154,7 @@ void BattleAnim_AddSpawnDelay(s32 arg0) {
 
 /**
  * Calls BattleAnim_ResetSpawnDelay.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (159 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_ResetSpawnDelayAlias(void) {
@@ -1137,6 +1167,7 @@ void BattleAnim_ResetSpawnDelayAlias(void) {
  * for owner arg5. arg8 is the emission kind and arg6, arg7, arg9 to argB its parameters.
  * The slot remembers the current effect list and resource list. Returns -1 if no slot is
  * free.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (157 of the moves).
  * @unverified Name from Stadium 1.
  */
 BattleAnimEffectSlot* BattleAnim_CreateEffectSlot(s32 arg0, s32 arg1, s8 arg2, func_unk_D_8140E724 arg3, ParticleDescriptor* arg4,
@@ -1164,6 +1195,7 @@ BattleAnimEffectSlot* BattleAnim_CreateEffectSlot(s32 arg0, s32 arg1, s8 arg2, f
 
 /**
  * BattleAnim_CreateEffectSlot for the current animation owner, run once.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (136 of the moves).
  * @unverified Name from Stadium 1.
  */
 BattleAnimEffectSlot* BattleAnim_CreateEffectSlotForCurrentOwner(s32 arg0, func_unk_D_8140E724 arg1, ParticleDescriptor* arg2, s16 arg3, s16 arg4, u8 arg5,
@@ -1174,6 +1206,7 @@ BattleAnimEffectSlot* BattleAnim_CreateEffectSlotForCurrentOwner(s32 arg0, func_
 /**
  * BattleAnim_CreateEffectSlot for the current animation owner, with a repeat interval and
  * count.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (81 of the moves).
  * @unverified Name from Stadium 1.
  */
 BattleAnimEffectSlot* BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(s32 arg0, s32 arg1, s8 arg2, func_unk_D_8140E724 arg3, ParticleDescriptor* arg4, s16 arg5,
@@ -1184,6 +1217,7 @@ BattleAnimEffectSlot* BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(s32 ar
 /**
  * Queues a global tint color fade, after arg0 frames, using fade parameter arg1 and
  * color arg2.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (83 of the moves).
  * @unverified Name from Stadium 1.
  */
 BattleAnimEffectSlot* BattleAnim_SpawnGlobalTintColorFadeDetach(s32 arg0, s16 arg1, u8 arg2) {
@@ -1202,6 +1236,7 @@ BattleAnimEffectSlot* BattleAnim_SpawnWhiteHueChange(s32 arg0, s16 arg1, s16 arg
 /**
  * Queues a full-screen color overlay (descriptor 37) after arg0 frames that starts at
  * full alpha, holds, then fades out.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (13 of the moves).
  * @unverified Name from Stadium 1.
  */
 BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaHoldFadeOutFullAlpha(s32 arg0, s16 arg1, s16 arg2, u8 arg3) {
@@ -1211,6 +1246,7 @@ BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaHoldFadeOutFullAlpha(s32 
 /**
  * Queues a full-screen color overlay (descriptor 37) after arg0 frames that starts at
  * alpha arg4, holds, then fades out.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (15 of the moves).
  * @unverified Name from Stadium 1.
  */
 BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaHoldFadeOut(s32 arg0, s16 arg1, s16 arg2, u8 arg3, u8 arg4) {
@@ -1220,6 +1256,8 @@ BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaHoldFadeOut(s32 arg0, s16
 /**
  * Repeating version of BattleAnim_SpawnDescriptor25AlphaHoldFadeOut: runs arg2 times,
  * arg1 frames apart.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
 BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaHoldFadeOutRepeating(s32 arg0, s32 arg1, s8 arg2, s16 arg3, s16 arg4, u8 arg5, u8 arg6) {
@@ -1229,6 +1267,7 @@ BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaHoldFadeOutRepeating(s32 
 /**
  * Queues an overlay over the screen and the Pokémon (descriptor 37) after arg0 frames
  * that fades in to full alpha and holds.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
  * @unverified Name from Stadium 1.
  */
 BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaFadeInHoldFullAlpha(s32 arg0, s16 arg1, s16 arg2, u8 arg3) {
@@ -1238,6 +1277,7 @@ BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaFadeInHoldFullAlpha(s32 a
 /**
  * Queues an overlay over the screen and the Pokémon (descriptor 37) after arg0 frames
  * that fades in to alpha arg4 and holds.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
  * @unverified Name from Stadium 1.
  */
 BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaFadeInHold(s32 arg0, s16 arg1, s16 arg2, u8 arg3, u8 arg4) {
@@ -1247,6 +1287,8 @@ BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaFadeInHold(s32 arg0, s16 
 /**
  * Repeating version of BattleAnim_SpawnDescriptor25AlphaFadeInHold: runs arg2 times,
  * arg1 frames apart.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
 BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaFadeInHoldRepeating(s32 arg0, s32 arg1, s8 arg2, s16 arg3, s16 arg4, u8 arg5, u8 arg6) {
@@ -1256,6 +1298,8 @@ BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaFadeInHoldRepeating(s32 a
 /**
  * Queues a full-alpha overlay (descriptor 37) after arg0 frames that holds for a time and
  * then detaches without fading.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
 BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaHoldDetachFullAlpha(s32 arg0, s16 arg1, u8 arg2) {
@@ -1265,6 +1309,8 @@ BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaHoldDetachFullAlpha(s32 a
 /**
  * Queues an overlay (descriptor 37) after arg0 frames that holds at a given alpha and
  * then detaches without fading.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
 BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaHoldDetach(s32 arg0, s16 arg1, u8 arg2, u8 arg3) {
@@ -1274,6 +1320,8 @@ BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaHoldDetach(s32 arg0, s16 
 /**
  * Repeating version of BattleAnim_SpawnDescriptor25AlphaHoldDetach: runs arg2 times, arg1
  * frames apart.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
 BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaHoldDetachRepeating(s32 arg0, s32 arg1, s8 arg2, s16 arg3, u8 arg4, u8 arg5) {
@@ -1282,6 +1330,8 @@ BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaHoldDetachRepeating(s32 a
 
 /**
  * Queues a palette-colored overlay (descriptor 37) after arg0 frames that fades out.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
 BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25PaletteFadeOut(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4) {
@@ -1290,6 +1340,8 @@ BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25PaletteFadeOut(s32 arg0, s16 a
 
 /**
  * Queues a palette-colored overlay (descriptor 37) after arg0 frames that fades in.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
 BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25PaletteFadeIn(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4) {
@@ -1298,6 +1350,7 @@ BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25PaletteFadeIn(s32 arg0, s16 ar
 
 /**
  * Queues a tint ramp on the current owner's model after arg0 frames.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (28 of the moves).
  * @unverified Name from Stadium 1.
  */
 BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintRampDetach(s32 arg0, u8 arg1, s16 arg2, s16 arg3, s16 arg4) {
@@ -1307,6 +1360,7 @@ BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintRampDetach(s32 arg0, u8 arg1
 /**
  * Queues a pulsing tint (the user hue change) on the current owner's model after arg0
  * frames.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (17 of the moves).
  * @unverified Name from Stadium 1.
  */
 BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintPulseDetach(s32 arg0, s16 arg1, u8 arg2, s16 arg3, s16 arg4, s16 arg5) {
@@ -1315,6 +1369,8 @@ BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintPulseDetach(s32 arg0, s16 ar
 
 /**
  * Queues a tint on the current owner's model after arg0 frames that holds and then fades.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
 BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintHoldFadeDetach(s32 arg0, s16 arg1, u8 arg2, s16 arg3, s16 arg4) {
@@ -1332,6 +1388,7 @@ BattleAnimEffectSlot* BattleAnim_SpawnBeamBoomWaterfallHueChange(s32 arg0, s16 a
 /**
  * Queues a tint on the current owner's model after arg0 frames that approaches a palette
  * color and then stops.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
  * @unverified Name from Stadium 1.
  */
 BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintPaletteApproachInactiveAlt(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4) {
@@ -1349,6 +1406,8 @@ BattleAnimEffectSlot* BattleAnim_SpawnIceBeamBlizzardHitHueChange(s32 arg0, s16 
 /**
  * Queues the Ice Beam/Blizzard hit hue change on the current owner's model after arg0
  * frames.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
 BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintPaletteCycleVariant(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5) {
@@ -1367,6 +1426,8 @@ BattleAnimEffectSlot* BattleAnim_SpawnDrainFlameHueChange(s32 arg0, s16 arg1, s1
 /**
  * Queues a tint on the current owner's model after arg0 frames that cycles through random
  * palette colors.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
 BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintRandomPaletteCycle(s32 arg0, s16 arg1, u8 arg2) {
@@ -1393,6 +1454,8 @@ BattleAnimEffectSlot* BattleAnim_SpawnInvisibility(s32 arg0, s16 arg1, s16 arg2,
 /**
  * Queues an alpha fade of the current owner's model after arg0 frames, starting from
  * full alpha.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
 BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelAlphaFadeFullPreset(s32 arg0) {
@@ -1402,6 +1465,7 @@ BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelAlphaFadeFullPreset(s32 arg0) {
 /**
  * Queues an alpha fade of the current owner's model after arg0 frames, starting from
  * zero alpha.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
  * @unverified Name from Stadium 1.
  */
 BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelAlphaFadeZeroStartPreset(s32 arg0) {
@@ -1411,6 +1475,7 @@ BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelAlphaFadeZeroStartPreset(s32 arg
 /**
  * Queues a kind-23 effect slot after arg0 frames, which sets effect state flag arg1 when
  * it runs.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (25 of the moves).
  * @unverified Name from Stadium 1.
  */
 BattleAnimEffectSlot* BattleAnim_SpawnCategory17MarkerSlot(s32 arg0, u8 arg1) {
@@ -1420,6 +1485,7 @@ BattleAnimEffectSlot* BattleAnim_SpawnCategory17MarkerSlot(s32 arg0, u8 arg1) {
 /**
  * Queues a kind-25 effect slot for the current owner after arg0 frames, which queues
  * effect list 9 with value arg1 when it runs.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
  * @unverified Name from Stadium 1.
  */
 BattleAnimEffectSlot* BattleAnim_SpawnCategory19MarkerSlot(s32 arg0, u8 arg1) {

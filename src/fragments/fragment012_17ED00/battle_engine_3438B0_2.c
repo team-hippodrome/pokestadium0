@@ -10,6 +10,7 @@ void BattleAnim_DrawFullScreenColorOverlay(u8 arg0, u8 arg1, u8 arg2, u8 arg3);
 
 /**
  * Fills the whole screen with the color (arg0, arg1, arg2) at alpha arg3.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (29 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_DrawFullScreenColorOverlay(u8 arg0, u8 arg1, u8 arg2, u8 arg3) {
@@ -45,6 +46,7 @@ extern s16 D_8219A8D6;
  * Draws the frame's battle effects: runs the effect draw callbacks, allocates the particle
  * matrix pool, sets the prim, fog, env and blend colors and the stage tint, draws the 3D
  * effects, then sets a 320x240 orthographic projection and draws the 2D overlays.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_RenderEffectsFrame(CameraNode* arg0) {

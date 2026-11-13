@@ -261,6 +261,8 @@ extern u8 D_80065CF8[];
 /**
  * Tests bit `bit` of the species' learnset bitfield (0x17 bytes per species at
  * D_80065CF8), with a few species patched in by hand.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_SpeciesHasLearnsetBit(species, bit) s32 species; s32 bit; {

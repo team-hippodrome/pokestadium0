@@ -424,6 +424,7 @@ void BattleAnim_QueueMoveEffect(s32 arg0, s32 arg1, s32 arg2, s16 arg3, s16 arg4
 
 /**
  * Returns the effect list being queued.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (157 of the moves).
  * @unverified Name from Stadium 1.
  */
 u8 BattleAnim_GetCurrentEffectList(void) {
@@ -432,6 +433,7 @@ u8 BattleAnim_GetCurrentEffectList(void) {
 
 /**
  * Sets the resource list given to newly created effect slots.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (16 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetQueuedResourceListId(u8 arg0) {
@@ -440,6 +442,7 @@ void BattleAnim_SetQueuedResourceListId(u8 arg0) {
 
 /**
  * Returns the resource list given to newly created effect slots.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (157 of the moves).
  * @unverified Name from Stadium 1.
  */
 u8 BattleAnim_GetQueuedResourceListId(void) {
@@ -448,6 +451,7 @@ u8 BattleAnim_GetQueuedResourceListId(void) {
 
 /**
  * Returns the move whose animation is being queued.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (22 of the moves).
  * @unverified Name from Stadium 1.
  */
 s16 BattleAnim_GetQueuedMoveId(void) {
@@ -467,6 +471,7 @@ extern s32 D_8219A818;
 /**
  * Queues the animation of move arg0 with user arg1, target arg2 and anchors arg3 and arg4,
  * resetting the queue state.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (159 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_QueueMoveEffect(s32 arg0, s32 arg1, s32 arg2, s16 arg3, s16 arg4) {
@@ -483,6 +488,7 @@ void BattleAnim_QueueMoveEffect(s32 arg0, s32 arg1, s32 arg2, s16 arg3, s16 arg4
 
 /**
  * Queues a move's main animation.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (159 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_QueueMoveEffectScript(s32 move_id, ActivePokemon* user, ActivePokemon* user_fallback, s16 default_anchor, s16 alternate_anchor) {
@@ -491,6 +497,7 @@ void BattleAnim_QueueMoveEffectScript(s32 move_id, ActivePokemon* user, ActivePo
 
 /**
  * Queues a move's end animation (effect list 2), owned by the target.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (127 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_QueueMoveEffectEnd(s32 move_id, ActivePokemon* user, ActivePokemon* user_fallback, s16 default_anchor, s16 alternate_anchor) {
@@ -502,6 +509,7 @@ void BattleAnim_QueueMoveEffectEnd(s32 move_id, ActivePokemon* user, ActivePokem
 
 /**
  * Queues a move's charging animation (effect list 1).
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (6 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_QueueChargingMoveEffectScript(s32 move_id, ActivePokemon* user, ActivePokemon* user_fallback, s16 default_anchor, s16 alternate_anchor) {
@@ -511,6 +519,7 @@ void BattleAnim_QueueChargingMoveEffectScript(s32 move_id, ActivePokemon* user, 
 
 /**
  * Queues a move's animation from effect list 3.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_QueueEffectList3(s32 move_id, ActivePokemon* user, ActivePokemon* user_fallback, s16 default_anchor, s16 alternative_anchor) {
@@ -520,6 +529,7 @@ void BattleAnim_QueueEffectList3(s32 move_id, ActivePokemon* user, ActivePokemon
 
 /**
  * Queues effect list 6 of move_id with owner as user and both targets, with no anchors.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (23 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_QueueEffectList6(s32 move_id, ActivePokemon* owner) {
@@ -535,6 +545,8 @@ void BattleAnim_QueueEffectList6(s32 move_id, ActivePokemon* owner) {
 
 /**
  * Like BattleAnim_QueueEffectList6, but queues effect list 5.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_QueueEffectList5(s32 arg0, ActivePokemon* arg1) {
@@ -545,6 +557,8 @@ void BattleAnim_QueueEffectList5(s32 arg0, ActivePokemon* arg1) {
 
 /**
  * Calls BattleAnim_QueueEffectList6.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_QueueEffectList6Alt(s32 arg0, ActivePokemon* arg1) {
@@ -573,6 +587,7 @@ extern s32 D_8219A810;
 
 /**
  * Queues effect list arg0 with user arg1. List 3 forces default anchor 7.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (16 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_QueueEffectList(u8 arg0, s32 arg1) {
@@ -586,6 +601,7 @@ void BattleAnim_QueueEffectList(u8 arg0, s32 arg1) {
 
 /**
  * Calls BattleAnim_StopParticlesForOwnerCategory.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_StopOwnerCategoryParticles(u8 category, ActivePokemon* owner) {
@@ -609,6 +625,7 @@ void func_82136760(void) {
 /**
  * Copies each (index, pointer) pair of a resource table into the animation asset pointer
  * table, up to the terminating entry.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (145 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_RegisterAssetTable(arg1_func_80019420* arg0) {
@@ -624,6 +641,8 @@ void BattleAnim_RegisterAssetTable(arg1_func_80019420* arg0) {
 
 /**
  * Clears all 256 animation asset pointers, then registers resource table 0.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_ResetAssetTable(void) {
@@ -639,6 +658,7 @@ void BattleAnim_ResetAssetTable(void) {
 /**
  * Builds the resource list for move arg0 from the two resource lists (entries 3 and 4) of
  * its effect script, each terminated by 0x3F, and ends it with -1.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_BuildResourceListForMove(s16 arg0) {
@@ -664,6 +684,7 @@ void BattleAnim_BuildResourceListForMove(s16 arg0) {
 /**
  * Builds the resource list for move_id (unless it is 0xFF, no move) and asks the session to
  * load it.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_LoadMoveResourceList(BattleSessionTeams* battle_session_teams, s16 move_id) {
@@ -677,6 +698,7 @@ void BattleAnim_LoadMoveResourceList(BattleSessionTeams* battle_session_teams, s
 
 /**
  * Builds the resource list for animation mode arg1 and asks the session to load it.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_LoadModeResourceList(BattleSessionTeams* battle_session_teams, s16 mode) {
@@ -697,6 +719,7 @@ void BattleAnim_LoadModeResourceList(BattleSessionTeams* battle_session_teams, s
 
 /**
  * Registers every loaded resource table into the animation asset pointer table.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_RegisterAllAssetTables(void) {
@@ -715,6 +738,7 @@ void BattleAnim_RegisterAllAssetTables(void) {
 
 /**
  * Clears the session's load-pending flag (0x10) and registers all loaded resource tables.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_RegisterAssetTablesForSession(BattleSessionTeams* battle_session_teams) {
@@ -725,6 +749,8 @@ void BattleAnim_RegisterAssetTablesForSession(BattleSessionTeams* battle_session
 /**
  * Resets the 16 owner display objects and 4 particle display objects and marks them all
  * free.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_ResetDisplayContexts(void) {
@@ -743,6 +769,7 @@ void BattleAnim_ResetDisplayContexts(void) {
 
 /**
  * Returns the particle that owns display object arg0.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (55 of the moves).
  * @unverified Name from Stadium 1.
  */
 Particle* BattleAnim_GetOwnerContextParticle(DisplayObject* arg0) {
@@ -752,6 +779,7 @@ Particle* BattleAnim_GetOwnerContextParticle(DisplayObject* arg0) {
 /**
  * Takes a free display object from the 16-entry owner pool and binds it to particle arg0.
  * Returns NULL if none is free.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (68 of the moves).
  * @unverified Name from Stadium 1.
  */
 DisplayObject* BattleAnim_AllocOwnerDisplayContext(Particle* arg0) {
@@ -778,6 +806,7 @@ DisplayObject* BattleAnim_AllocOwnerDisplayContext(Particle* arg0) {
 
 /**
  * Returns display object arg0 to the owner pool and clears it.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (58 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_FreeOwnerDisplayContext(DisplayObject* arg0) {
@@ -798,6 +827,7 @@ void BattleAnim_FreeOwnerDisplayContext(DisplayObject* arg0) {
 /**
  * Takes a free display object from the 4-entry particle pool, binds it to particle arg0
  * and sets the particle's flag 0x400. Returns NULL if none is free.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (7 of the moves).
  * @unverified Name from Stadium 1.
  */
 DisplayObject* BattleAnim_AllocParticleDisplayContext(Particle* arg0) {
@@ -825,6 +855,7 @@ DisplayObject* BattleAnim_AllocParticleDisplayContext(Particle* arg0) {
 
 /**
  * Returns display object arg0 to the particle pool and clears it.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (7 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_FreeParticleDisplayContext(DisplayObject* arg0) {
@@ -845,6 +876,7 @@ void BattleAnim_FreeParticleDisplayContext(DisplayObject* arg0) {
 /**
  * Loads animation asset arg1 as the display object's model and binds asset arg2 as its
  * animation at normal speed.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (53 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_InitModelWithAnim(DisplayObject* arg0, s16 arg1, s16 arg2) {
@@ -854,6 +886,7 @@ void BattleAnim_InitModelWithAnim(DisplayObject* arg0, s16 arg1, s16 arg2) {
 
 /**
  * Sets the display object's animation frame.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetModelAnimFrame(DisplayObject* arg0, s16 arg1) {
@@ -862,6 +895,7 @@ void BattleAnim_SetModelAnimFrame(DisplayObject* arg0, s16 arg1) {
 
 /**
  * Loads animation asset arg1 as the display object's model.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (31 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_InitModel(DisplayObject* arg0, s16 arg1) {
@@ -870,6 +904,7 @@ void BattleAnim_InitModel(DisplayObject* arg0, s16 arg1) {
 
 /**
  * Binds animation asset arg1 to the display object at normal speed.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (9 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_BindModelAnim(DisplayObject* arg0, s16 arg1) {
@@ -878,6 +913,7 @@ void BattleAnim_BindModelAnim(DisplayObject* arg0, s16 arg1) {
 
 /**
  * Binds animation asset arg1 to the display object to play backward from its last frame.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_BindModelAnimReversed(DisplayObject* arg0, s16 arg1) {
@@ -887,6 +923,7 @@ void BattleAnim_BindModelAnimReversed(DisplayObject* arg0, s16 arg1) {
 
 /**
  * Returns 1 when the display object's animation frame is 0.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
  * @unverified Name from Stadium 1.
  */
 s32 BattleAnim_IsModelAnimComplete(DisplayObject* arg0) {
@@ -960,6 +997,7 @@ void func_82136E48(void) {
 /**
  * Runs the 8 registered effect update callbacks and unregisters each one that returns
  * nonzero.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_UpdateEffectCallbacks(UNUSED CameraNode* arg0) {
@@ -975,6 +1013,7 @@ void BattleAnim_UpdateEffectCallbacks(UNUSED CameraNode* arg0) {
 
 /**
  * Runs the 8 registered effect draw callbacks.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_DrawEffectCallbacks(UNUSED CameraNode* arg0) {

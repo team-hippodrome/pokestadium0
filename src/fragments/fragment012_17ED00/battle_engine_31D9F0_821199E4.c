@@ -4,6 +4,8 @@
 /**
  * Draws a move's PP as "current/max" text left to right from (arg0, arg1). Returns the x
  * position after it.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 s32 BattleHud_DrawMovePpTextLTR(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
@@ -54,6 +56,8 @@ s32 BattleHud_DrawMovePpTextLTR(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
 /**
  * Draws a move's PP as "current/max" text right to left, ending at (arg0, arg1). Returns
  * the x position before it.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 s32 BattleHud_DrawMovePpTextRTL(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
@@ -332,6 +336,8 @@ void BattleMenu_DrawSurrenderPrompt(s16 arg0, s16 arg1, s16 arg2, s32 arg3) {
 
 /**
  * Draws text arg2 at (arg0, arg1) in font 1.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleHud_DrawPlainText(s16 arg0, s16 arg1, char* arg2) {
@@ -965,6 +971,7 @@ void func_8211D06C(void) {
 
 /**
  * Draws the strip wipe if it is on.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleScene_DrawStripWipeIfActive(void) {

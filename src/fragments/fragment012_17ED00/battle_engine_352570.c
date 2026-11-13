@@ -17,6 +17,7 @@ Gfx* FourStreamTrail_Draw(Gfx* arg0);
 
 /**
  * Clears the 4 four-stream trails and their 15 nodes each.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
  * @unverified Name from Stadium 1.
  */
 void FourStreamTrail_Init(void) {
@@ -49,6 +50,7 @@ void FourStreamTrail_Init(void) {
 /**
  * Starts a free four-stream trail from (arg0, arg1, arg2) toward (arg3, arg4, arg5) with
  * color arg6..arg9, spread, speed and length parameters.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
  * @unverified Name from Stadium 1.
  */
 void FourStreamTrail_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9,
@@ -106,6 +108,7 @@ void FourStreamTrail_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32
 /**
  * Writes the point arg2 units along Z, scaled by arg3 and rotated arg0 radians about X,
  * to arg1.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
  * @unverified Name from Stadium 1.
  */
 void FourStreamTrail_Update(f32 arg0, Vec3f* arg1, f32 arg2, f32 arg3) {
@@ -122,6 +125,7 @@ void FourStreamTrail_Update(f32 arg0, Vec3f* arg1, f32 arg2, f32 arg3) {
 
 /**
  * Advances a trail's 15 nodes, each following the one ahead of it.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
  * @unverified Name from Stadium 1.
  */
 void FourStreamTrail_UpdateNodeChain(FourStreamTrail* arg0) {
@@ -189,6 +193,7 @@ void FourStreamTrail_UpdateNodeChain(FourStreamTrail* arg0) {
 
 /**
  * Advances every active four-stream trail and counts its frames. Always returns 0.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
  * @unverified Name from Stadium 1.
  */
 s32 FourStreamTrail_IsComplete(void) {
@@ -212,6 +217,7 @@ s32 FourStreamTrail_IsComplete(void) {
 /**
  * Adds the display lists that draw every active four-stream trail and returns the new end
  * of the list.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
  * @unverified Name from Stadium 1.
  */
 Gfx* FourStreamTrail_Draw(Gfx* arg0) {

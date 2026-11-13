@@ -229,6 +229,7 @@ void func_82164AD0(s8 *arg0) {
 /**
  * Moves a particle to the owner's mouth or front: 50 units forward and 30 up by default,
  * with per-species distances.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_ApplySpeciesKeyedSpawnOffset(Particle* arg0) {
@@ -427,6 +428,8 @@ void BattleAnim_RunBarrageUseEffect2(Particle* arg0) {
 /**
  * Lifecycle init for a burst child: random direction around straight back, random speed,
  * palette color from the CF parameter.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_CallbackDescriptor50BurstChild_InitParticle(Particle* arg0) {
@@ -476,6 +479,8 @@ void func_82165224(s8 *arg0) {
 /**
  * Lifecycle init for a burst emitter: one of several fixed positions by its A6 parameter,
  * with a 6-frame timer.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_CallbackDescriptor50BurstEmitter_InitParticle(Particle* arg0) {
@@ -503,6 +508,8 @@ void BattleAnim_CallbackDescriptor50BurstEmitter_InitParticle(Particle* arg0) {
 
 /**
  * Particle callback for a burst emitter: emits its burst children, then goes inactive.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_CallbackDescriptor50BurstEmitter(Particle* arg0) {
@@ -524,6 +531,8 @@ void BattleAnim_CallbackDescriptor50BurstEmitter(Particle* arg0) {
 
 /**
  * Init hook for end effect 16: does nothing.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_EndEffect16_NoOpInit(void) {
@@ -681,6 +690,8 @@ void BattleAnim_SolarbeamMimicBurstEmitter(Particle* arg0) {
 /**
  * Lifecycle init for a burst child: light cyan, scale growing with burst index, texture
  * frame 15.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_CallbackDescriptor26BurstChild_InitParticle(Particle* arg0) {

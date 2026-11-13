@@ -47,6 +47,8 @@ s32 func_8210C708(s8 *arg0) {
 /**
  * Takes the trainer index at 0x7B8 as the commanding trainer (0x7B9) and uses that
  * trainer's controller port for this Pokémon.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleScene_SelectActiveController(ActivePokemon* arg0) {
@@ -326,6 +328,7 @@ s32 func_8210CCDC(s8 *arg0, M2C_UNK arg1)
 /**
  * Locks in a forced repeat of the Pokémon's current move (for example a multi-turn move)
  * after the usual delay.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleScene_ConfirmForcedMoveRepeat(ActivePokemon* arg0) {
@@ -355,6 +358,8 @@ extern s32 D_8218C6FC;
 /**
  * Returns 1 if the chosen party member has HP left; otherwise plays the error sound,
  * shows a caption and returns 0.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 s32 BattleScene_ValidateSelectedPartyMember(ActivePokemon* arg0) {
@@ -711,6 +716,7 @@ void BattleMenu_UpdateSurrenderPrompt(ActivePokemon* active_pokemon);
 /**
  * Reads the player's command menu input for this turn. Returns 1 once an action has been
  * chosen.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
  * @unverified Name from Stadium 1.
  */
 s32 BattleScene_HandlePlayerActionInput(ActivePokemon* arg0) {
@@ -867,6 +873,8 @@ s32 BattleScene_HandleCpuFaintedSwitch(ActivePokemon* arg0, ActivePokemon* arg1)
 
 /**
  * Locks in a COM Pokémon's forced repeat of its current move after the usual delay.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleScene_CompleteCpuForcedAction(ActivePokemon* arg0, UNUSED ActivePokemon* arg1) {
@@ -914,6 +922,7 @@ s32 BattleMenu_MustStruggle(ActivePokemon* arg0);
  * Applies the COM's chosen move (a slot under 4) on its thinking timer: at frame 30 it
  * opens Fight with a sound, and at frame 90 (or 10 once the player has locked in) it picks
  * the move, or Struggle when no move has PP.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (5 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleScene_ApplyCpuChoice(ActivePokemon* arg0, ActivePokemon* arg1) {
@@ -955,6 +964,7 @@ void BattleScene_ApplyCpuChoice(ActivePokemon* arg0, ActivePokemon* arg1) {
 /**
  * Applies the COM's choice once its thinking delay is over when the choice is a switch
  * (4 or more). Returns 1 if it applied one.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (11 of the moves).
  * @unverified Name from Stadium 1.
  */
 s32 BattleScene_ApplyCpuSwitchChoice(ActivePokemon* arg0, ActivePokemon* arg1) {
@@ -997,6 +1007,7 @@ s32 BattleAi_ChooseTurnAction(s32, s32, s32, s32, s8*);
 /**
  * On the first frame of the COM's thinking delay, runs the COM AI once to pick its turn
  * action.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (11 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleScene_TriggerCpuChoice(s32 arg0, s32 arg1, s8* arg2, s8* arg3, ActivePokemon* arg4) {

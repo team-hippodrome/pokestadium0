@@ -779,6 +779,8 @@ void func_82161288(s8 *arg0) {
 /**
  * Lifecycle init: random offset, full scale, white with an orange environment color,
  * delayed 4 frames per burst index.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_CallbackOrphanDescriptor34ColorFadeDetach_InitParticle(Particle* arg0) {
@@ -864,6 +866,8 @@ void BattleAnim_RunGroundedCircularHitSpark(Particle* arg0) {
 /**
  * Lifecycle init for a glitter particle: tiny, random direction, palette color 0x15, a
  * timer of 8 to 12 frames.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetupUnusedGlitterVariant(Particle* arg0) {
@@ -1090,6 +1094,7 @@ void BattleAnim_RunPhysicalHitPurpleSmoke(Particle* arg0) {
 /**
  * Init step for a Swift burst star: scale 0.1, random X/Y spin with a random Z spin speed,
  * step magnitude 8, palette pair 0x17, no delay, hidden until it starts.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
  * @unverified Name guessed from the code.
  */
 void BattleAnim_SwiftBurstChild_InitParticle(Particle* arg0) {
@@ -1178,6 +1183,7 @@ void BattleAnim_RunSwiftHitEffect2(Particle* arg0) {
 /**
  * Lifecycle init shared by several effects: random direction, no speed, then the CE
  * parameter picks scale, timers and colors.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (13 of the moves).
  * @unverified Name guessed from the code.
  */
 void BattleAnim_SetupSharedScalePulseFallSetup(Particle* arg0) {
@@ -1973,6 +1979,7 @@ void func_821639EC(s8 *arg0) {
 
 /**
  * Picks the particle's palette pair from the queued move (the powder moves and others).
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (10 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_RecolorParticleByQueuedMoveId(Particle* arg0) {

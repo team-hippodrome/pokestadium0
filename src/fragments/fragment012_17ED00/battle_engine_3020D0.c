@@ -136,6 +136,7 @@ void BattleMenu_DrawSide1Menus(ActivePokemon* arg0, ActivePokemonState* arg1) {
 
 /**
  * Empties all battle message queues.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
  * @unverified Name from Stadium 1.
  */
 void Battle_ClearAllMessageQueues(void) {
@@ -173,6 +174,7 @@ void Battle_ClearAllMessageQueues(void) {
 
 /**
  * Resets the battle message cursor and both line buffers.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
  * @unverified Name from Stadium 1.
  */
 void Battle_ClearMessageCursor(void) {
@@ -186,6 +188,7 @@ void Battle_ClearMessageCursor(void) {
 /**
  * Builds a battle message in arg0 from format arg1, replacing each %s with the next string
  * argument. Other % sequences are dropped.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
  * @unverified Name from Stadium 1.
  */
 void Battle_SimpleStringFormat(s8* arg0, s8* arg1, ...) {
@@ -321,6 +324,7 @@ void BattleMessage_TickTypewriter(void);
 /**
  * Draws both Pokémon's compact status boxes and advances the message typewriter, unless
  * a camera transition is running.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
  * @unverified Name from Stadium 1.
  */
 void Battle_DrawCompactStatusBoxesIfVisible(void) {
@@ -419,6 +423,8 @@ void func_8211F3F4(void) {
 
 /**
  * Resets the battle message queue to its first entry.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleScene_ResetMessageQueue(void) {
@@ -436,6 +442,7 @@ void func_8211C9FC(ActivePokemon*, ActivePokemonState*, ActivePokemonState*);
 
 /**
  * Draws the battle HUD for the current camera mode.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
  * @unverified Name from Stadium 1.
  */
 void Battle_RenderHud(void) {

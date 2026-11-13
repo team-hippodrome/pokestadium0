@@ -196,6 +196,8 @@ void BattleAnim_RunFireBreathFlameFading(Particle* arg0) {
 /**
  * Lifecycle init: quarter scale, small random turn about Y, palette color 0x17, delayed 2
  * frames per burst index.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetupUnusedDescriptor4FColorCycleScaleFadeVariant(Particle* arg0) {
@@ -214,6 +216,8 @@ void BattleAnim_SetupUnusedDescriptor4FColorCycleScaleFadeVariant(Particle* arg0
 /**
  * Motion steps for the particle above: after 2 frames tilts it about Z, then keeps
  * curving it about X while it moves.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_MotionUnusedDescriptor4FColorCycleScaleFadeVariant(Particle* arg0) {
@@ -238,6 +242,8 @@ void BattleAnim_MotionUnusedDescriptor4FColorCycleScaleFadeVariant(Particle* arg
 /**
  * Particle callback: after the delay shows the particle, loops its 8 texture frames and
  * runs the motion steps until it fades.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_CallbackUnusedDescriptor4FColorCycleScaleFadeVariant(Particle* arg0) {
@@ -588,6 +594,8 @@ void BattleAnim_RunPsybeamHitSparkDrift(Particle* arg0) {
 /**
  * Particle callback: grows an expanding hit spark to 8 times its size, then fades it,
  * picking a random color every 4 frames.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_CallbackUnusedGrowFadeVariant(Particle* arg0) {
@@ -753,6 +761,8 @@ void BattleAnim_FireSpinParticleUpdate(s8 *arg0) {
 /**
  * Lifecycle init: full scale, raised 10 units, palette color 0x1A, starting angle spread
  * over 18 steps by burst index.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetupUnusedVariant2(Particle* arg0) {
@@ -772,6 +782,8 @@ void BattleAnim_SetupUnusedVariant2(Particle* arg0) {
 /**
  * Particle callback: shows the particle and moves it on a circle of radius 50 until it
  * finishes.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_CallbackUnusedVariant2(Particle* arg0) {
@@ -2284,6 +2296,8 @@ void func_821491CC(void) {
 
 /**
  * Init hook for start effects that need no setup.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_DefaultStartEffect_Init(void) {
@@ -2312,6 +2326,8 @@ void BattleAnim_InitializeEggBombHit(void) {
 
 /**
  * Init hook for end effects that need no setup.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_DefaultEndEffect_Init(void) {

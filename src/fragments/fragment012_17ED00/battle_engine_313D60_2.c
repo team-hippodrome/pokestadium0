@@ -27,6 +27,8 @@ void BattleScene_Update(CameraNode* arg0);
 
 /**
  * Camera mode 0: does nothing.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleScene_UpdateCameraDefaultModeNoop(UNUSED CameraNode* arg0) {
@@ -34,6 +36,8 @@ void BattleScene_UpdateCameraDefaultModeNoop(UNUSED CameraNode* arg0) {
 
 /**
  * Camera mode that does nothing.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleScene_UpdateCameraOwner0FramingModeNoop(UNUSED CameraNode* arg0) {
@@ -42,6 +46,7 @@ void BattleScene_UpdateCameraOwner0FramingModeNoop(UNUSED CameraNode* arg0) {
 /**
  * Nudges the camera target if it sits right above or below the eye, which would break
  * the look-at matrix.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleScene_AvoidDegenerateCameraLookAt(CameraNode* arg0) {
@@ -57,6 +62,7 @@ void func_821054A8(ActivePokemon*);
 
 /**
  * Runs the default (fade) camera transition step by step.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleScene_TickCameraSubstateDefault(CameraNode* arg0) {
@@ -127,6 +133,7 @@ void BattleScene_TickCameraSubstateDefault(CameraNode* arg0) {
 
 /**
  * Runs the strip-wipe camera transition step by step.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleScene_TickCameraSubstateStripWipe(CameraNode* arg0) {
@@ -214,6 +221,7 @@ void BattleScene_TickCameraSubstateStripWipe(CameraNode* arg0) {
 
 /**
  * Runs the camera transition in the scene's transition style: fade (0) or strip wipe.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleScene_TickCameraSubstate(CameraNode* arg0) {
@@ -239,6 +247,7 @@ extern ActivePokemon* sSide2ActivePokemon;
 /**
  * Per-frame battle scene update: runs the camera transition and the current camera mode,
  * then the shared camera steps.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleScene_Update(CameraNode* arg0) {
@@ -303,6 +312,7 @@ void BattleScene_Update(CameraNode* arg0) {
 /**
  * Battle scene lifecycle: 0 allocates it, 1 and 2 update it, and 3 runs the final
  * presentation. Returns the winner.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
  * @unverified Name from Stadium 1.
  */
 s32 BattleScene_Dispatch(s32 arg0, CameraNode* arg1) {

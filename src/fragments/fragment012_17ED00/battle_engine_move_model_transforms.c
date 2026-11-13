@@ -4,6 +4,7 @@
 /**
  * Starts a sway or arc: sets the height y, splits it into Z and Y components by angle
  * theta, and sets the default speed.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_InitSwayOffset(ActivePokemon* pokemon, f32 y, s16 theta) {
@@ -16,6 +17,7 @@ void BattleAnim_InitSwayOffset(ActivePokemon* pokemon, f32 y, s16 theta) {
 /**
  * Moves the owner model one step along its sway arc toward height, by delta_y and
  * delta_theta, offsetting its position sideways from its facing.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_UpdateTransform(ActivePokemon* owner, ActivePokemon* animated_pokemon, f32 height, f32 delta_y, s32 delta_theta) {
@@ -59,6 +61,8 @@ void BattleAnim_UpdateTransform(ActivePokemon* owner, ActivePokemon* animated_po
 /**
  * Moves the Poké Ball one step along its arc toward target, offsetting it in direction
  * theta1.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_UpdateSwayPhysicsToTarget(UNUSED ActivePokemon* owner, ActivePokemon* animated_object, f32 target, f32 delta, s32 theta0, s32 theta1) {
@@ -100,6 +104,7 @@ void BattleAnim_UpdateSwayPhysicsToTarget(UNUSED ActivePokemon* owner, ActivePok
 
 /**
  * Hides the Pokémon's three afterimages and resets their scale.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (11 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleScene_HideParticipantSecondaryModels(ActivePokemon* active_pokemon) {
@@ -137,6 +142,7 @@ void BattleScene_ShowSecondaryModelsAtMainTransform(ActivePokemon* pokemon) {
 /**
  * Double Team step: fades the afterimages to alpha 60, speeds up their orbit and places
  * each one around the Pokémon, copying its animation.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleScene_UpdateSecondaryModelOrbit(ActivePokemon* pokemon) {
@@ -166,6 +172,7 @@ void BattleScene_UpdateSecondaryModelOrbit(ActivePokemon* pokemon) {
 
 /**
  * Shows the first two afterimages at the Pokémon's position at alpha 60.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleScene_ShowSecondaryModelsAtMainPose(ActivePokemon* active_pokemon) {
@@ -213,6 +220,7 @@ s32 func_82109824(ActivePokemon* arg0) {
 /**
  * Shows the first two afterimages exactly on the Pokémon, copying its animation, pose
  * and scale, at alpha 65 and 61.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (10 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleScene_ShowSecondaryModelsStaggeredFrame(ActivePokemon* active_pokemon) {

@@ -583,6 +583,8 @@ void BattleScene_OpeningStepLandSide0Ball(void* arg0) {
  * Intro camera step: clears node flag 1 on both models, zooms toward distance 60
  * and turns the camera angle to 0 around (-150, 0, 0). Once the angle is at least 46 and
  * side 0's model scale is 2.5, plays sound command 2 and advances the phase step.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleScene_IntroPanCamera(CameraNode* arg0) {

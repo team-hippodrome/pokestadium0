@@ -9,6 +9,8 @@ void BattleScene_OpeningStepNop(UNUSED s32 arg0) {
 
 /**
  * Empty update hook.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_NoopUpdateHook(void) {

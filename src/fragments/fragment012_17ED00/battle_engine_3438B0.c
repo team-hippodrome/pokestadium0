@@ -20,6 +20,8 @@ extern s8 *D_8219A5A0;
 
 /**
  * Empty render hook.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_RenderNop1(void) {
@@ -27,6 +29,8 @@ void BattleAnim_RenderNop1(void) {
 
 /**
  * Empty render hook.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_RenderNop2(void) {
@@ -2062,6 +2066,8 @@ void BattleScene_PhaseRecoilDamage(CameraNode* arg0) {
  * effects, shows a message for the other side, queues effect list 6 and plays sound
  * command 0x23. Step 1 waits 55 frames and shows a second message, then falls through to
  * step 2, which waits 60 frames and ends the phase.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name guessed from the code.
  */
 void BattleScene_Phase10(CameraNode* arg0) {

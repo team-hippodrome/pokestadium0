@@ -270,6 +270,7 @@ void BattleAnim_RunRandomRotatingBoltOfLightning(Particle* arg0) {
 /**
  * Lifecycle init: half scale, no speed, pointed up with a random spread about Z, palette
  * color from the CF parameter.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (4 of the moves).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetupSharedDirectionalSprayFade(Particle* arg0) {
@@ -422,6 +423,8 @@ void func_8214F06C(s8 *arg0) {
 /**
  * Lifecycle init: tiny and growing, pointed straight along the stream direction, palette
  * color from the CF parameter.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetupUnregisteredStraightDirectionalStreamFade(Particle* arg0) {
@@ -477,6 +480,8 @@ void func_8214F1E8(s8 *arg0) {
 /**
  * Lifecycle init for end effect 28: tiny and growing, offset and pointed upward, palette
  * color from the CF parameter.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetupEndEffect28Descriptor10UpwardBurstFade(Particle* arg0) {
@@ -532,6 +537,8 @@ void func_8214F3D4(s8 *arg0) {
 /**
  * Lifecycle init for end effect 28: tiny and growing, with a wide random spread, palette
  * color from the CF parameter.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetupEndEffect28Descriptor10WideScatterBurstFade(Particle* arg0) {

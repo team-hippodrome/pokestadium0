@@ -91,6 +91,7 @@ void BattleAnim_DrawAsset76Ia8FrameWithAsset77I4Overlay(Particle* arg0, CameraNo
 
 /**
  * Effect hook that does nothing.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (135 of the moves).
  * @unverified Name from Stadium 1.
  */
 void ParticleEffect_Noop(UNUSED s32 arg0, UNUSED s32 arg1) {
@@ -100,6 +101,7 @@ void ParticleEffect_Noop(UNUSED s32 arg0, UNUSED s32 arg1) {
  * Draws the particle as a camera-facing quad: frame textureFrame of the 32x64 IA8 strip in
  * asset 0x76, blended with the scrolling 64x64 I4 texture in asset 0x77 by the particle's
  * colors.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (8 of the moves).
  * @unverified Name guessed from the code.
  */
 void BattleAnim_DrawAsset76Ia8FrameWithAsset77I4Overlay(Particle* arg0, CameraNode* arg1) {
@@ -171,6 +173,7 @@ extern Vtx D_82191880[];
 /**
  * Draws the particle as a 2D screen quad of the 64x64 I4 textures in assets 0x27 and
  * 0x28 scrolling over each other, colored by the particle.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (4 of the moves).
  * @unverified Name guessed from the code.
  */
 void BattleAnim_DrawAssets27And28LayeredI4QuadVariantA(Particle* arg0, UNUSED CameraNode* arg1) {
@@ -191,6 +194,7 @@ extern Vtx D_821918C0[];
 /**
  * Same as BattleAnim_DrawAssets27And28LayeredI4QuadVariantA with different scroll
  * speeds and vertices.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (4 of the moves).
  * @unverified Name guessed from the code.
  */
 void BattleAnim_DrawAssets27And28LayeredI4QuadVariantB(Particle* arg0, UNUSED CameraNode* arg1) {
@@ -227,6 +231,8 @@ void BattleAnim_DrawMistLightest(Particle* arg0, UNUSED CameraNode* arg1) {
 /**
  * Draws the particle as a full-screen 2D quad of the scrolling 32x32 I4 texture in asset
  * 0x87, colored by the particle.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_DrawAsset87AnimatedI4Quad(Particle* arg0, UNUSED CameraNode* arg1) {
@@ -264,6 +270,7 @@ extern Vtx D_84385D00[];
 /**
  * Draws frame textureFrame of the 32x32 I4 strip in asset 0x1A as a two-sided quad at
  * the particle's transform.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (8 of the moves).
  * @unverified Name guessed from the code.
  */
 void BattleAnim_DrawAsset1AFrameI4Quad(Particle* arg0, UNUSED CameraNode* arg1) {
@@ -280,6 +287,7 @@ void BattleAnim_DrawAsset1AFrameI4Quad(Particle* arg0, UNUSED CameraNode* arg1) 
 /**
  * Draws the 32x32 RGBA16 texture in asset 0x1C as a two-sided quad at the particle's
  * transform.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
  * @unverified Name guessed from the code.
  */
 void BattleAnim_DrawAsset1CRgba16Quad(Particle* arg0, UNUSED CameraNode* arg1) {
@@ -324,6 +332,8 @@ extern Vtx D_82190E50[];
 /**
  * Draws the 32x32 I4 texture in asset 0x1D as a two-sided quad, turned a quarter turn
  * about X and Y from the particle's rotation.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_DrawAsset1DRotatedI4Quad(Particle* arg0, UNUSED CameraNode* arg1) {
@@ -353,6 +363,7 @@ extern Vtx D_82191100[];
 /**
  * Draws the current frame (of 8) of the 32x96 I4 strip in asset 0x13 as a two-sided quad
  * scaled in Y.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (4 of the moves).
  * @unverified Name guessed from the code.
  */
 void BattleAnim_DrawAsset13FrameI4YScaledQuadA(Particle* arg0, UNUSED CameraNode* arg1) {
@@ -372,6 +383,8 @@ extern Vtx D_82191140[];
 
 /**
  * Same as BattleAnim_DrawAsset13FrameI4YScaledQuadA with a different vertex set.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_DrawAsset13FrameI4YScaledQuadB(Particle* arg0, UNUSED CameraNode* arg1) {
@@ -402,6 +415,7 @@ extern Vtx D_82191100[];
 /**
  * Draws the current frame (of 8) of asset 0x13 as a camera-facing quad scaled in Y and
  * rotated about Z by the particle.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
  * @unverified Name guessed from the code.
  */
 void BattleAnim_DrawAsset13FrameI4ModelQuadA(Particle* arg0, CameraNode* arg1) {
@@ -448,6 +462,8 @@ void BattleAnim_ThunderShockParticleDraw(Particle* arg0, CameraNode* arg1) {
 /**
  * Draws the 16x256 I4 texture in asset 0x1B on a small two-sided triangle, white blended
  * with the particle's color.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_DrawAsset1BI4TriangleA(Particle* arg0, UNUSED CameraNode* arg1) {
@@ -475,6 +491,8 @@ void func_82142EDC(Particle* arg0, UNUSED CameraNode* arg1) {
 
 /**
  * Draws asset 0x13's frames at half speed as a two-sided quad in fixed white and blue.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_DrawAsset13FrameDiv2I4Quad(Particle* arg0, UNUSED CameraNode* arg1) {
@@ -491,6 +509,8 @@ void BattleAnim_DrawAsset13FrameDiv2I4Quad(Particle* arg0, UNUSED CameraNode* ar
 /**
  * Draws frame textureFrame of the 32x32 I4 strip in asset 0x18 as a camera-facing quad
  * rotated about Z by the particle.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_DrawAsset18FrameI4ModelQuad(Particle* arg0, CameraNode* arg1) {
@@ -504,6 +524,8 @@ void BattleAnim_DrawAsset18FrameI4ModelQuad(Particle* arg0, CameraNode* arg1) {
 /**
  * Draws the 32x32 I4 texture in asset 0xA9 as a two-sided vertical quad, scaled by the
  * particle's scale and unk_20.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_DrawAssetA9I4XYScaledQuad(Particle* arg0, UNUSED CameraNode* arg1) {

@@ -43,6 +43,8 @@ void BattleAnim_RunSlowFallingHitEffect(Particle* arg0);
 
 /**
  * Lifecycle init: white and fully opaque.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_UnusedResetAppearanceAndAdvance(Particle* arg0) {
@@ -54,6 +56,8 @@ void BattleAnim_UnusedResetAppearanceAndAdvance(Particle* arg0) {
 /**
  * Particle callback: resets the color, then fades the particle while moving it on a
  * circle of radius 32.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_CallbackUnusedGenericFadeApproach(Particle* arg0) {
@@ -87,6 +91,8 @@ void BattleAnim_CallbackUnusedGenericFadeApproach(Particle* arg0) {
 /**
  * Lifecycle init: small, randomly rotated and spinning, fast, delayed 4 frames per burst
  * index.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetupOrphanDescriptor2BSpinFade(Particle* arg0) {
@@ -108,6 +114,8 @@ s32 Particle_ApproachStepMagnitude(Particle* arg0, f32 arg1, f32 arg2);
 /**
  * Particle callback: after the delay shows the particle, flies it out spinning, then
  * fades it.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_CallbackOrphanDescriptor2BSpinFade(Particle* arg0) {
@@ -160,6 +168,8 @@ void BattleAnim_CallbackOrphanDescriptor2BSpinFade(Particle* arg0) {
 /**
  * Lifecycle init: half scale, fast, small random tilt, palette color 0x22, delayed 4
  * frames per burst index.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetupOrphanDescriptor2EScatterFade(Particle* arg0) {
@@ -411,6 +421,8 @@ void BattleAnim_RunSlowFallingHitEffect(Particle* arg0) {
 
 /**
  * Draw hook for start effects that draw nothing.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_DefaultStartEffect_Draw(void) {
@@ -419,6 +431,8 @@ void BattleAnim_DefaultStartEffect_Draw(void) {
 /**
  * Effect sequence: sets effect state flag 1 after 128 frames, spawns four waves of
  * spinning particles, then 58 frames later four scatter bursts.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_OrphanDescriptor2BAnd2EEmitterSequence(void) {

@@ -256,6 +256,7 @@ void BattleAnim_ApproachU16(u16* dest, u16 value, s16 speed) {
 
 /**
  * Writes the four uniform cubic B-spline weights for parameter arg1 (0 to 1) to arg0.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep.
  * @unverified Name guessed from the code.
  */
 void Battle_ComputeSplineWeightsVariantA(f32* arg0, f32 arg1) {
@@ -275,6 +276,7 @@ void Battle_ComputeSplineWeightsVariantA(f32* arg0, f32 arg1) {
 
 /**
  * Writes the four cubic B-spline weights for the second segment of a clamped spline.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep.
  * @unverified Name guessed from the code.
  */
 void Battle_ComputeSplineWeightsVariantB(f32* arg0, f32 arg1) {
@@ -294,6 +296,7 @@ void Battle_ComputeSplineWeightsVariantB(f32* arg0, f32 arg1) {
 
 /**
  * Writes the four cubic B-spline weights for the third segment of a clamped spline.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep.
  * @unverified Name guessed from the code.
  */
 void Battle_ComputeSplineWeightsVariantC(f32* arg0, f32 arg1) {
@@ -314,6 +317,8 @@ void Battle_ComputeSplineWeightsVariantC(f32* arg0, f32 arg1) {
 /**
  * Writes the four cubic B-spline weights for the third-to-last segment of a clamped
  * spline.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code.
  */
 void Battle_ComputeSplineWeightsVariantD(f32* arg0, f32 arg1) {
@@ -336,6 +341,8 @@ void Battle_ComputeSplineWeightsVariantD(f32* arg0, f32 arg1) {
 /**
  * Writes the four cubic B-spline weights for the second-to-last segment of a clamped
  * spline.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code.
  */
 void Battle_ComputeSplineWeightsVariantE(f32* arg0, f32 arg1) {

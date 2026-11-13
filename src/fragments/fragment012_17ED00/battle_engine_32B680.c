@@ -49,6 +49,7 @@ s32 BattleScene_AreBothParticipantModelsCompact(void) {
 /**
  * Skips the current B-roll camera shot when the acting Pokemon can't be filmed (state unk_2D
  * is 16 or flag 0x4000 is set): selects the next shot and returns 1. Otherwise returns 0.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
  * @unverified Name guessed from the code.
  */
 s32 BattleScene_SkipUnavailableBRollShot(UNUSED ActivePokemon* arg0, CameraNode* arg1) {
@@ -67,6 +68,7 @@ extern Vec3f D_8218B63C;
  * Sets up the arena-orbit B-roll shot: aims at the arena center (a closer point when both
  * models are compact), eye 750 away at a low angle, squeezed in depth, then advances the
  * phase step.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep.
  * @unverified Name guessed from the code.
  */
 void BattleScene_BRollCameraSetupArenaOrbit(CameraNode* arg0) {
@@ -86,6 +88,7 @@ void BattleScene_BRollCameraSetupArenaOrbit(CameraNode* arg0) {
 /**
  * Sets up the rotating arena-overview B-roll shot: aims at the arena center from 1000 away
  * at a higher angle, then advances the phase step.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (7 of the moves).
  * @unverified Name guessed from the code.
  */
 void BattleScene_BRollCameraSetupRotatingArenaOverview(CameraNode* arg0) {
@@ -107,6 +110,8 @@ void func_8212187C(s32);
 void func_821351F8(CameraNode*, ActivePokemon*);
 /**
  * Sets up the battle camera and presentation on the acting Pokémon.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
 void BattleScene_InitializeBattlePresentation(CameraNode* arg0) {
@@ -434,6 +439,7 @@ extern const f64 D_DBL_821960A0;
 /**
  * Turns the arena-orbit shot by 0xB6 a frame until rotationY reaches 0x78DC, then selects
  * the next B-roll shot. Keeps the eye squeezed in depth while turning.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep.
  * @unverified Name guessed from the code.
  */
 void BattleScene_BRollCameraUpdateArenaOrbit(CameraNode* arg0) {

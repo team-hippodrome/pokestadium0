@@ -562,6 +562,7 @@ void Particle_SetPosition(Particle* arg0, f32 arg1, f32 arg2, f32 arg3) {
 
 /**
  * Sets the particle's position offset to arg1 times the global particle scale.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
  * @unverified Name guessed from the code.
  */
 void Particle_Field38_SetVecFromVec3fScaled_08C20(Particle* arg0, Vec3f arg1) {
@@ -617,6 +618,7 @@ void Particle_SetPosOffsetZScaled(s8 *arg0, f32 arg1) {
 
 /**
  * Adds arg1 times the global particle scale to the particle's position offset.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (24 of the moves).
  * @unverified Name guessed from the code.
  */
 void Particle_Field38_AddVecScaledFromVec3f_08D78(Particle* arg0, Vec3f arg1) {
@@ -627,6 +629,8 @@ void Particle_Field38_AddVecScaledFromVec3f_08D78(Particle* arg0, Vec3f arg1) {
 
 /**
  * Adds arg1 to the particle's position offset, unscaled.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code.
  */
 void Particle_Field38_AddVecFromVec3f_08DD8(Particle* arg0, Vec3f arg1) {
@@ -638,6 +642,7 @@ void Particle_Field38_AddVecFromVec3f_08DD8(Particle* arg0, Vec3f arg1) {
 /**
  * Adds (arg1, arg2, arg3) times the global particle scale to the particle's position
  * offset.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
  * @unverified Name guessed from the code.
  */
 void Particle_Field38_AddVecScaled_08E18(Particle* arg0, f32 arg1, f32 arg2, f32 arg3) {
@@ -684,6 +689,7 @@ void Particle_AddPosOffsetZScaled(s8 *arg0, f32 arg1) {
 /**
  * Moves the position offset arg1 units (scaled) along the particle's Y rotation in the XZ
  * plane.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (23 of the moves).
  * @unverified Name guessed from the code.
  */
 void Particle_AddPositionOffsetAlongRotationY(Particle* arg0, f32 arg1) {
@@ -704,6 +710,7 @@ void Particle_AddPositionOffsetAlongRotationYPlus180(Particle* arg0, f32 arg1) {
 /**
  * Moves the position offset arg1 units (scaled) in the XZ plane, a quarter turn from the
  * particle's Y rotation.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
  * @unverified Name guessed from the code.
  */
 void Particle_AddPositionOffsetAlongRotationYPlus90(Particle* arg0, f32 arg1) {
@@ -725,6 +732,7 @@ void Particle_AddPositionOffsetAlongRotationYMinus90(Particle* arg0, f32 arg1) {
 /**
  * Adds the vector of length arg1 along the particle's Y rotation, times the global
  * particle scale, to the position offset.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
  * @unverified Name guessed from the code.
  */
 void Particle_AddVelocityFromDirVector(Particle* arg0, f32 arg1) {
@@ -789,6 +797,7 @@ void Particle_AddPositionFromRotationTemplate2(Particle* arg0, f32 arg1) {
 /**
  * Rotates arg1 by the particle's rotation about Y and adds it, scaled, to the position
  * offset.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
  * @unverified Name guessed from the code.
  */
 void Particle_AddPositionRotatedVectorByYaw(Particle* arg0, Vec3f arg1) {
@@ -934,6 +943,7 @@ void Particle_SetRandomPositionOffsetZWithGap(s8 *arg0, M2C_UNK arg1, s32 arg2) 
 /**
  * Sets the position offset to a random vector with components in +-arg1, +-arg2 and
  * +-arg3, times the global particle scale.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (62 of the moves).
  * @unverified Name guessed from the code.
  */
 void Particle_SetRandomVelocityXYZ(Particle* arg0, s32 arg1, s32 arg2, s32 arg3) {
@@ -969,6 +979,8 @@ void Particle_SetRandomPositionOffsetXYZ(Particle* arg0, s32 arg1, s32 arg2, s32
 /**
  * Sets the position offset to a random XY vector (+-arg1, +-arg2) rotated by the
  * particle's Y rotation, times the global particle scale.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name guessed from the code.
  */
 void Particle_SetRandomRotatedVelocityXY(Particle* arg0, s32 arg1, s32 arg2) {
@@ -1046,6 +1058,8 @@ void Particle_SetMotionOffsetYScaled(Particle* arg0, f32 arg1) {
 
 /**
  * Sets motionOffset.z to arg1 times the global particle scale.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code.
  */
 void Particle_SetMotionOffsetZScaled(Particle* arg0, f32 arg1) {
@@ -1055,6 +1069,8 @@ void Particle_SetMotionOffsetZScaled(Particle* arg0, f32 arg1) {
 /**
  * Sets motionOffset to a random direction of length arg1 times the global particle
  * scale.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name guessed from the code.
  */
 void Particle_SetVelocityRandomDirection(Particle* arg0, f32 arg1) {
@@ -1087,6 +1103,7 @@ void Particle_AddMotionOffsetXScaled(s8 *arg0, f32 arg1) {
 
 /**
  * Adds arg1 times the global particle scale to motionOffset.y.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (11 of the moves).
  * @unverified Name guessed from the code.
  */
 void Particle_AddMotionOffsetYScaled(Particle* arg0, f32 arg1) {
@@ -1095,6 +1112,8 @@ void Particle_AddMotionOffsetYScaled(Particle* arg0, f32 arg1) {
 
 /**
  * Adds arg1 times the global particle scale to motionOffset.z.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code.
  */
 void Particle_AddMotionOffsetZScaled(Particle* arg0, f32 arg1) {
@@ -1103,6 +1122,8 @@ void Particle_AddMotionOffsetZScaled(Particle* arg0, f32 arg1) {
 
 /**
  * Subtracts (arg1, arg2, arg3) times the global particle scale from motionOffset.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code.
  */
 void Particle_SubMotionOffsetScaled(Particle* arg0, f32 arg1, f32 arg2, f32 arg3) {
@@ -1125,6 +1146,8 @@ void Particle_SubMotionOffsetXScaled(s8 *arg0, f32 arg1) {
 
 /**
  * Subtracts arg1 times the global particle scale from motionOffset.y.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code.
  */
 void Particle_SubMotionOffsetYScaled(Particle* arg0, f32 arg1) {
@@ -1133,6 +1156,8 @@ void Particle_SubMotionOffsetYScaled(Particle* arg0, f32 arg1) {
 
 /**
  * Subtracts arg1 times the global particle scale from motionOffset.z.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code.
  */
 void Particle_SubMotionOffsetZScaled(Particle* arg0, f32 arg1) {
@@ -1160,6 +1185,8 @@ s32 Particle_ApproachMotionOffsetY(Particle* arg0, f32 arg1) {
 /**
  * Steps motionOffset.z toward arg1 (scaled) by motionTarget.z. Returns nonzero once it
  * arrives.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code.
  */
 s32 Particle_ApproachMotionOffsetZ(Particle* arg0, f32 arg1) {
@@ -1235,6 +1262,7 @@ void func_8213E474(s8 *arg0)
 
 /**
  * Adds motionStep.y to motionOffset.y.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (51 of the moves).
  * @unverified Name guessed from the code.
  */
 void Particle_ApplyMotionStepY(Particle* arg0) {
@@ -1243,6 +1271,8 @@ void Particle_ApplyMotionStepY(Particle* arg0) {
 
 /**
  * Adds motionStep.z to motionOffset.z.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code.
  */
 void Particle_ApplyMotionStepZ(Particle* arg0) {
@@ -1272,6 +1302,8 @@ void func_8213E4D8(s32 arg0) {
 /**
  * Recomputes motionStep from the step magnitude and rotation angles, then adds it to
  * motionOffset.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code.
  */
 void Particle_AddVelocityFromRotationTemplate2(Particle* arg0) {
@@ -1347,6 +1379,8 @@ void func_8213E640(s32 arg0) {
 /**
  * Sets motionStep.x and motionStep.z to the step magnitude along the particle's Y
  * rotation, then adds them to motionOffset.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code.
  */
 void Particle_AddVelocityXZFromRotationY(Particle* arg0) {
@@ -1430,6 +1464,7 @@ s32 Particle_AccelerateFall(Particle* arg0) {
 
 /**
  * Sets motionTarget to (arg1, arg2, arg3) times the global particle scale.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (157 of the moves).
  * @unverified Name guessed from the code.
  */
 void Particle_SetVelocityTarget(Particle* arg0, f32 arg1, f32 arg2, f32 arg3) {
@@ -1440,6 +1475,8 @@ void Particle_SetVelocityTarget(Particle* arg0, f32 arg1, f32 arg2, f32 arg3) {
 
 /**
  * Sets motionTarget.x to arg1 times the global particle scale.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code.
  */
 void Particle_SetMotionTargetXScaled(Particle* arg0, f32 arg1) {
@@ -1471,6 +1508,8 @@ void Particle_SetMotionTargetZScaled(s8 *arg0, f32 arg1) {
 
 /**
  * Steps motionTarget.y toward arg1 by arg2, both scaled. Returns nonzero once it arrives.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name guessed from the code.
  */
 s32 Particle_Field5C_ApproachY_0A0C4(Particle* arg0, f32 arg1, f32 arg2) {
@@ -1517,6 +1556,7 @@ void Particle_ApproachPosition(Particle* arg0, Vec3f arg1) {
 
 /**
  * Writes arg1 into the three s16 fields at offset 0x90 of the particle.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (25 of the moves).
  * @unverified Name guessed from the code.
  */
 void Particle_Field9A_SetVecFromVec3s_0A37C(Particle* arg0, Vec3s arg1) {
@@ -1738,6 +1778,7 @@ void Particle_ApplyRotationStepY(s8 *arg0)
 
 /**
  * Adds rotationStep.z to rotation.z.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (6 of the moves).
  * @unverified Name guessed from the code.
  */
 void Particle_Field94_AddXFromField9A_0A4B4(Particle* arg0) {
@@ -1746,6 +1787,7 @@ void Particle_Field94_AddXFromField9A_0A4B4(Particle* arg0) {
 
 /**
  * Adds arg1 to the particle's rotation.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (45 of the moves).
  * @unverified Name guessed from the code.
  */
 void Particle_Field94_AddVecFromVec3s_0A4F0(Particle* arg0, Vec3s arg1) {
@@ -1797,6 +1839,8 @@ void func_8213EDE8(s8 *arg0, s16 arg1, s16 arg2) {
 
 /**
  * Subtracts arg1 from the particle's rotation.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code.
  */
 void Particle_Field94_SubVecFromVec3s_0A600(Particle* arg0, Vec3s arg1) {
@@ -1827,6 +1871,8 @@ void Particle_SubRotationY(s8 *arg0, s16 arg1) {
 
 /**
  * Subtracts arg1 from rotation.z.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code.
  */
 void Particle_Field94_SubX_0A63C(Particle* arg0, s16 arg1) {
@@ -1952,6 +1998,8 @@ s32 Particle_DecreaseRotationYTo(Particle* arg0, s32 arg1, s32 arg2) {
 
 /**
  * Lowers rotation.z by arg2 until it reaches arg1. Returns 1 on the frame it gets there.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code.
  */
 s32 Particle_Field94_DecrementXTo_0A7DC(Particle* arg0, s32 arg1, s32 arg2) {
@@ -2028,6 +2076,7 @@ extern struct ActivePokemon* D_8219A818;
 /**
  * Returns the Y angle from the particle's origin to the default anchor of the Pokémon in
  * D_8219A818, plus the particle's own Y rotation.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
  * @unverified Name from Stadium 1.
  */
 s16 BattleAnim_GetParticleAngleYToTertiaryOwner(Particle* arg0) {
@@ -2146,6 +2195,7 @@ s32 Particle_StepMagnitude_ApproachUsingMagnitudeStep(Particle* arg0, f32 arg1) 
 
 /**
  * Steps magnitudeStep toward arg1 by arg2, both scaled. Returns nonzero once it arrives.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
  * @unverified Name guessed from the code.
  */
 s32 Particle_Field74_Approach_0ADBC(Particle* arg0, f32 arg1, f32 arg2) {
@@ -2232,6 +2282,8 @@ s32 Particle_IncreaseMotionStepXTo(Particle* arg0, f32 arg1, f32 arg2) {
 /**
  * Raises motionStep.y by arg2 (scaled) and clamps it at arg1 (scaled). Returns 1 once
  * clamped.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code.
  */
 s32 Particle_Field7C_IncrementXUntilAtLeast_0AF54(Particle* arg0, f32 arg1, f32 arg2) {
@@ -2251,6 +2303,8 @@ s32 Particle_Field7C_IncrementXUntilAtLeast_0AF54(Particle* arg0, f32 arg1, f32 
 /**
  * Raises motionStep.z by arg2 (scaled) and clamps it at arg1 (scaled). Returns 1 once
  * clamped.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code.
  */
 s32 Particle_Field7C_IncrementYUntilAtLeast_0AFA8(Particle* arg0, f32 arg1, f32 arg2) {
@@ -2290,6 +2344,7 @@ s32 Particle_MotionStep_DecrementYUntilAtMost(Particle* arg0, f32 arg1, f32 arg2
 /**
  * Lowers motionStep.y by arg2 (scaled) and clamps it at arg1 (scaled). Returns 1 once
  * clamped.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
  * @unverified Name guessed from the code.
  */
 s32 Particle_Field7C_DecrementXUntilAtMost_0B050(Particle* arg0, f32 arg1, f32 arg2) {
@@ -2309,6 +2364,8 @@ s32 Particle_Field7C_DecrementXUntilAtMost_0B050(Particle* arg0, f32 arg1, f32 a
 /**
  * Lowers motionStep.z by arg2 (scaled) and clamps it at arg1 (scaled). Returns 1 once
  * clamped.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code.
  */
 s32 Particle_Field7C_DecrementYUntilAtMost_0B0A4(Particle* arg0, f32 arg1, f32 arg2) {
@@ -2349,6 +2406,8 @@ s32 Particle_ApproachMotionStepY(Particle* arg0, f32 arg1, f32 arg2) {
 /**
  * Sets the f32 at offset 0x7C to the step magnitude times the cosine of the angle at
  * offset 0x90.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code.
  */
 void Particle_Field7C_SetXFromField74AngleY_0B1EC(Particle* arg0) {
@@ -2362,6 +2421,8 @@ void func_8213FA88(Particle* arg0) {
 /**
  * Sets the f32 at offset 0x80 to the step magnitude times the cosine of the angle at
  * offset 0x92.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code.
  */
 void Particle_Field7C_SetYFromField74AngleX_0B1C4(Particle* arg0) {
@@ -2381,6 +2442,7 @@ void Particle_SetMotionStepFromRotationXZ(Particle* arg0) {
 /**
  * Sets the f32s at offsets 0x78 and 0x80 to the step magnitude times the sine and cosine
  * of the angle at offset 0x92.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (26 of the moves).
  * @unverified Name guessed from the code.
  */
 void Particle_SetMotionStepXZFromRotationY(Particle* arg0) {
@@ -2391,6 +2453,7 @@ void Particle_SetMotionStepXZFromRotationY(Particle* arg0) {
 /**
  * Sets motionStep to stepMagnitude along the direction given by rotation.x (pitch) and
  * rotation.y (heading).
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (68 of the moves).
  * @unverified Name guessed from the code.
  */
 void Particle_SetMotionStepFromRotationXY(Particle* arg0) {
@@ -2414,6 +2477,7 @@ void Particle_MotionStep_SetVecFromField74AnglesXZ(Particle* arg0) {
 /**
  * Sets motionStep from rotation.x and rotation.y with the other rotation order: x from
  * rotation.y alone, y and z from both angles.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
  * @unverified Name guessed from the code.
  */
 void Particle_SetMotionStepFromRotationXYAlt(Particle* arg0) {
@@ -2435,6 +2499,8 @@ void Particle_SetMotionStepFromRotationYZ(Particle* arg0) {
 
 /**
  * Sets motionStep to stepMagnitude along the direction given by all three rotation angles.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name guessed from the code.
  */
 void Particle_SetMotionStepFromRotationXYZ(Particle* arg0) {
@@ -2448,6 +2514,7 @@ void Particle_SetMotionStepFromRotationXYZ(Particle* arg0) {
 /**
  * Sets motionStep to stepMagnitude along the direction given by all three rotation angles,
  * with a different rotation order from Particle_SetMotionStepFromRotationXYZ.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (6 of the moves).
  * @unverified Name guessed from the code.
  */
 void Particle_SetMotionStepFromRotationXYZAlt(Particle* arg0) {
@@ -2462,6 +2529,8 @@ void Particle_SetMotionStepFromRotationXYZAlt(Particle* arg0) {
 /**
  * Sets motionStep to stepMagnitude along the direction given by all three rotation angles,
  * with a third rotation order (see the XYZ and XYZAlt versions).
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name guessed from the code.
  */
 void Particle_SetMotionStepFromRotationYZAlt(Particle* arg0) {
@@ -2489,6 +2558,7 @@ void Particle_SetMotionStepFromRotationYZVariant(Particle* arg0) {
 /**
  * Advances rotationStep.y by arg2 and puts motionOffset on a circle of radius arg1
  * (scaled) at that angle. motionStep.x and motionStep.z become the change from last frame.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (8 of the moves).
  * @unverified Name guessed from the code.
  */
 void Particle_UpdateRotatingVelocityXZ(Particle* arg0, f32 arg1, s16 arg2) {
@@ -2509,6 +2579,8 @@ void Particle_UpdateRotatingVelocityXZ(Particle* arg0, f32 arg1, s16 arg2) {
  * step magnitude (arg3), upward speed (arg1) and heading (arg4). Each frame after, lowers
  * the upward speed by the gravity arg2 and applies the motion step. Returns 1 when the time
  * is up.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code.
  */
 s32 Particle_Field50_AdvanceField7CWithTimer_0B854(Particle* arg0, f32 arg1, f32 arg2, f32 arg3, s16 arg4, s16 arg5) {
