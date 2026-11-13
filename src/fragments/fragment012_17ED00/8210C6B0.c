@@ -1184,8 +1184,8 @@ void func_8210E504(void) {
  * Calls Battle_InitPokemonRuntimeState(arg0).  The two extra arguments are
  * accepted but not used; the retail code stores them to the stack, which is
  * why the signature declares them.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * Seen in play (2026-11-13) ran during the opening of a COM Free Battle, before the first command
+ * menu.
  * @unverified Name guessed from the code; comment kept.
  */
 void Battle_InitParticipantRuntime(ActivePokemon* arg0, s32 arg1, s32 arg2) {
@@ -1217,8 +1217,8 @@ void func_8210F688(s32 arg0, s32 arg1);
 
 /**
  * Initializes both participants and resets the demo input scripts and turn state.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * Seen in play (2026-11-13) ran during the opening of a COM Free Battle, before the first command
+ * menu.
  * @unverified Name and comment guessed from the code.
  */
 void Battle_InitBothParticipants(void) {

@@ -96,8 +96,8 @@ extern s32 D_8219CA58;
 extern s32 D_8219CA5C;
 
 /**
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * Seen in play (2026-11-13) ran during the opening of a COM Free Battle, before the first command
+ * menu.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleAnim_InitParticleSystem(void) {

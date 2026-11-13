@@ -2568,8 +2568,8 @@ void ActivePokemon_SetReplacementState(ActivePokemon*, s32);
 void ActivePokemon_SetController(ActivePokemon*, u8*);
 /**
  * Binds the first team member, side and controller to the participant.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * Seen in play (2026-11-13) ran during the opening of a COM Free Battle, before the first command
+ * menu.
  * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
  */
 void BattleScene_InitializeParticipantController(ActivePokemon* arg0) {
@@ -2603,8 +2603,8 @@ void func_8211F274(ActivePokemon*);
 /**
  * Initializes controllers, all participant models, the camera mode for the
  * session mode, message buffers and audio channel groups.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * Seen in play (2026-11-13) ran during the opening of a COM Free Battle, before the first command
+ * menu.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_InitializePresentation(UNUSED BattleSessionTeams* session_teams) {
@@ -2651,8 +2651,8 @@ void BattleScene_InitializePresentation(UNUSED BattleSessionTeams* session_teams
 
 /**
  * Zeroes the sway state and sets the facing direction (1 or -1).
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * Seen in play (2026-11-13) ran during the opening of a COM Free Battle, before the first command
+ * menu.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_ResetParticipantAuxTransform(UNUSED ActivePokemon* owner, ActivePokemon* active_pokemon, s32 facing_direction) {
@@ -2666,8 +2666,8 @@ void Battle_InitBothParticipants(void);
 /**
  * Loads battle string tables, clears tick slots and initializes facing,
  * presentation, runtime state and move illegality.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * Seen in play (2026-11-13) ran during the opening of a COM Free Battle, before the first command
+ * menu.
  * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
  */
 void BattleScene_InitializeRuntime(BattleSessionTeams* session_teams) {
@@ -2779,8 +2779,8 @@ void BattleThumbnail_SetFlagToUpdatePokemonThumbnail(CameraNode* camera) {
 
 /**
  * Loads the camera framing constants for the owner's thumbnail.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * Seen in play (2026-11-13) ran during the opening of a COM Free Battle, before the first command
+ * menu.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleThumbnail_LoadOwnerCameraFramingConstants(ActivePokemon* active_pokemon) {

@@ -826,8 +826,8 @@ end:
  * Returns 0 if a move would do nothing now: no damage by type, a status the
  * target already has or is immune to, a stat stage already at its limit, Haze
  * with nothing to reset, and similar checks keyed on the move's effect id.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * Seen in play (2026-11-13) ran during the opening of a COM Free Battle, before the first command
+ * menu.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_IsMoveUseful(s32 move) {

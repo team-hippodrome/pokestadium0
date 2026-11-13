@@ -3,9 +3,9 @@
 
 /**
  * Battle opening phase: steps through the intro camera shots and both send-outs.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) in a COM Free Battle (scene mode 8) it ran every frame of the opening,
+ * dispatching BattleScene_OpeningStepInitCamera, then WaitForAssets, OrbitCamera,
+ * LowerCameraAndThrowSide0 and ThrowSide1 in order.
  */
 void BattleScene_RunOpeningSendOut(CameraNode* arg0) {
     switch (sBattleScene.scene->phaseStep) {

@@ -343,8 +343,8 @@ s32 ActivePokemon_GetNickname(s8 *arg0)
 
 /**
  * Creates the participant's owner (trainer) model.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * Seen in play (2026-11-13) ran during the opening of a COM Free Battle, before the first command
+ * menu.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_InitializeParticipantOwnerModel(ActivePokemon* active_pokemon) {
@@ -373,8 +373,8 @@ void BattleScene_InitializeParticipantOwnerModel(ActivePokemon* active_pokemon) 
 /**
  * Creates the participant's two hidden secondary models.
  * ^?????? this annotation seems like a hallucination
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * Seen in play (2026-11-13) ran during the opening of a COM Free Battle, before the first command
+ * menu.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_InitializeParticipantSecondaryModels(ActivePokemon* pokemon, s32* secondary_models) {
@@ -413,8 +413,8 @@ void ActivePokemon_LoadSpeciesModelAssets(ActivePokemon*);
 /**
  * Creates and positions the participant's Pokemon model and loads its
  * presentation data.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * Seen in play (2026-11-13) ran during the opening of a COM Free Battle, before the first command
+ * menu.
  * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
  */
 void BattleScene_InitializeParticipantModel(ActivePokemon* active_pokemon) {
@@ -458,8 +458,8 @@ void BattleScene_InitializeParticipantModel(ActivePokemon* active_pokemon) {
 
 /**
  * Creates the participant's hidden auxiliary model (model 154).
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * Seen in play (2026-11-13) ran during the opening of a COM Free Battle, before the first command
+ * menu.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_InitializeParticipantAuxiliaryModel(ActivePokemon* active_pokemon) {
@@ -755,8 +755,8 @@ void ActivePokemon_SetController(s8 *arg0, s32 arg1) {
 
 /**
  * Sets state.replacementState.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * Seen in play (2026-11-13) ran during the opening of a COM Free Battle, before the first command
+ * menu.
  * @unverified Name and comment guessed from the code.
  */
 void ActivePokemon_SetReplacementState(void *arg0, s32 arg1) {
