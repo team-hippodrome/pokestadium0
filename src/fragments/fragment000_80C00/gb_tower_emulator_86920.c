@@ -160,6 +160,7 @@ void func_81112E00(unk_D_81184668* seqPlayer);
 extern unk_D_81184668 D_81184668[];
 extern s16 D_811858CC;
 
+//@unverified
 /** Calls func_81112E00 on every enabled sequence player that is playing sequence arg0. */
 void func_81109764(s32 arg0) {
     s32 i;
@@ -798,6 +799,7 @@ extern s32 D_8118465C;
 void func_8110AFF0(void);
 void func_8110BFB0(void);
 
+//@unverified
 /**
  * Steps the audio reset state machine in D_81184657 from 5 down to 0, waiting
  * D_8118465C updates between steps (halved when D_811858B8.unk_00 is 2): state 5

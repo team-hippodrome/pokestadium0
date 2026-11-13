@@ -134,6 +134,7 @@ s16 func_8213C47C(s8 *arg0) {
     return M2C_FIELD(arg0, s16 *, 0xA8);
 }
 
+//@unverified
 /** Returns the particle's unk_CF byte (offset 0xCB). */
 s16 func_8213C484(Particle* arg0) {
     u8 value = arg0->unk_CF;

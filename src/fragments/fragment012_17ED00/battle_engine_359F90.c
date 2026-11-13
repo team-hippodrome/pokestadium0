@@ -493,6 +493,7 @@ void Battle_InitPokemonRuntimeState(ActivePokemon* arg0) {
     func_80041940(BattleScene_GetParticipantSideIndex(arg0), sp34->hp, sp34->unk_26);
 }
 
+//@unverified
 /**
  * Returns 1 if the party Pokemon before slot state.unk_18 (a 1-based slot)
  * still has HP, otherwise 0.

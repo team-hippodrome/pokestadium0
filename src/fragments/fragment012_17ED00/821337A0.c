@@ -3,6 +3,7 @@
 #include "fragments/battle_engine/battle_engine.h"
 #include "m2c_macros.h"
 
+//@unverified
 /**
  * Copies the battle runtime HP (state.runtime.unk_0C) to the first party
  * Pokemon of arg0's roster.

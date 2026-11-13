@@ -265,6 +265,7 @@ typedef struct unk_func_89101D80 {
     /* 0x7C */ s32 flags;
 } unk_func_89101D80;
 
+//@unverified
 /** Toggles the bits arg1 in the flags word at 0x7C and returns which of them are now set. */
 s32 func_89101D80(unk_func_89101D80* arg0, s32 arg1) {
     arg0->flags ^= arg1;
@@ -546,6 +547,7 @@ typedef struct Ctx891025D8 {
 } Ctx891025D8;
 s32 func_8002B390(s32*);
 
+//@unverified
 /**
  * Input handler for the menu at unkB54C. When func_8002B390 returns a button it
  * returns 1: for 0x400 on entry 1 it calls func_8003F6AC(1), clears unk8C and

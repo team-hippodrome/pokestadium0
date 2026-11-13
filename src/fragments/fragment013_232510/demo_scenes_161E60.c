@@ -439,6 +439,7 @@ extern u8 D_8ED0FACC[];
 extern u8 D_8EE0FDE0[];
 extern u8 D_8F5054AC[];
 extern u8 D_8F5054C8[];
+//@unverified
 /**
  * Picks the demo track (1-6) from the demo state and passes it to
  * func_800407B0(0x3C, ...). When unk_0000 is set it first shows model unk_0003
@@ -744,6 +745,7 @@ void func_82201444(unk_D_82203170* arg0, s32 arg1) {
     }
 }
 
+//@unverified
 /**
  * For both players, finds each brought Pokemon whose unk_25 equals arg0 (both
  * teams in a tag battle), passes its slot's DepthBuffer from D_82203264 to

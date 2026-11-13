@@ -376,6 +376,7 @@ struct ZNoteSubEu;
 struct ZNoteSynthesisState;
 AudioCmd* func_81108750(s32 noteIndex, struct ZNoteSubEu* noteSubEu, struct ZNoteSynthesisState* synthesisState, s16* aiBuf, s32 bufLen, AudioCmd* cmd, s32 updateIndex);
 
+//@unverified
 /**
  * One synthesis update for the GB tower audio driver: collects the indices of
  * the enabled note sub-entries for this update (grouped by reverb index when
@@ -929,6 +930,7 @@ typedef struct State8110938C {
     /* 0x12 */ u16 right;
 } State8110938C;
 
+//@unverified
 /**
  * Emits the volume and reverb ramp commands for one note: steps the left/right
  * volume from the synthesis state towards the note's (shifted left by 4) over

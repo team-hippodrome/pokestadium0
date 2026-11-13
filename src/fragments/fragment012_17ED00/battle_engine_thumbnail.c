@@ -90,6 +90,7 @@ void func_82107428(s32 arg0, s8 *arg1, s32 arg2, s8 *arg3) {
 s32 func_80032890(s32);
 void func_80032840(s32);
 
+//@unverified
 /**
  * Moves the owner's thumbnail camera by up to `delta` per call towards x = 23
  * (side 1) or x = 259 (the other side). When the camera is still at its start

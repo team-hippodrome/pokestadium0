@@ -108,6 +108,7 @@ extern char D_82195A38[];
 typedef struct MovePpInit {
     s32 pp[4];
 } MovePpInit;
+//@unverified
 /**
  * Draws the move panel for arg0 at (arg1, arg2): the frame and border tiles,
  * then for each of the four moves its current and max PP (the max includes the

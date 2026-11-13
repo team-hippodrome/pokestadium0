@@ -59,6 +59,7 @@ s32 func_82124810(CameraNode* arg0, ActivePokemon* arg1) {
     return LabPCList_CompareBySpeciesGroup((unk_func_8830867C_02C_0CC*)arg0, (unk_func_8830867C_02C_0CC*)arg1);
 }
 
+//@unverified
 /**
  * Runs func_82124054 for camera arg0 and then keeps its target height
  * (view.targetPosition.y) above 20.

@@ -318,6 +318,7 @@ s32 func_811129E0(void*, s32);
 void func_8111303C(void*);
 s32 func_811126B8(void*, void*, s32, s32);
 
+//@unverified
 /**
  * Runs one tick of a sequence channel's script. It returns early if the
  * channel is stopped, if its player is muted and mute behavior bit 0x80 is set,

@@ -158,6 +158,7 @@ typedef struct FontGlyphSet8001A3E4 {
 } FontGlyphSet8001A3E4; // size = 0x8
 s32 func_80019F70(u16);
 
+//@unverified
 /**
  * Draws character `chr` at (x, y) with the current font set. It loads the
  * set's palette while line_break_flag has bit 0 set and bit 1 clear (then sets

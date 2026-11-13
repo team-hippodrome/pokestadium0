@@ -22,6 +22,7 @@ extern M2C_UNK D_002B1360;
 extern M2C_UNK D_00162BE0;
 extern M2C_UNK D_00175570;
 
+//@unverified
 /**
  * Queues the fragment for lab menu choice arg0 with func_80025BA0 and returns
  * the next state (0x8040, or 0x8060 for choice 6, which loads nothing).

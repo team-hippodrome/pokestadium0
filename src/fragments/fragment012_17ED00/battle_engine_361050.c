@@ -400,6 +400,7 @@ void func_8210F24C(s8* arg0) {
     }
 }
 
+//@unverified
 /**
  * Copies the battle runtime HP (state.runtime.unk_0C) back to arg0's party
  * Pokemon.
@@ -439,6 +440,7 @@ extern u8 D_82199F7C;
 extern f64 D_DBL_82195770;
 extern f64 D_DBL_82195778;
 u32 func_80053A80(void);
+//@unverified
 /**
  * Battle random byte: adds a scaled value from func_80053A80 to D_82199F7C and
  * returns the new value.

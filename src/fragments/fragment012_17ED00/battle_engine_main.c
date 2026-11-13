@@ -671,6 +671,7 @@ void Audio_PlayMusicIfChanged(s32);
 s32 Storage_GetDiskStatus(void);
 void Audio_SetDiskReadyPolling(s32);
 void Audio_WaitForIdle(s32);
+//@unverified
 /**
  * Battle fragment entry. Stores the session context, sets D_82198D1C (0-3)
  * from the mode and round, pushes the 'BATL' pool state, sets up display lists

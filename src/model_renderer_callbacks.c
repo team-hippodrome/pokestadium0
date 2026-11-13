@@ -31,6 +31,7 @@ void ModelRenderer_ApplySlotScale(u8 index);
 void ModelRenderer_RebuildSlotMatrix(u8 index);
 void ModelRenderer_ClearSlotModels(s32 arg0);
 
+//@unverified
 /**
  * For side arg0 & 1 (when arg0 < 4) it walks the three model slots in
  * D_800B0338. Only empty tests are left in the loop (karodo), so it has no

@@ -526,6 +526,7 @@ s32 func_80022B4C(s32);
 s32 GbSave_GetBoxCount(s32);
 void func_80023C30(void);
 void func_80025E3C(s32);
+//@unverified
 /**
  * Pushes an 'OVLY' pool state, sets up the display lists and a stage context,
  * then queues the fragment at 0x88000000 (if D_800AF988 or session flag 0x100

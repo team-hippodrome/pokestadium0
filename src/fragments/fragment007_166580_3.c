@@ -346,6 +346,7 @@ void func_820061F0(s8 *arg0, s32 arg1, s32 arg2, List820061F0 *arg3, s8 *arg4, C
 
 s32 func_8002AE6C();                                /* extern */
 void func_8002D9B8(s32, s32, s32, s32, s8 *);  /* extern */
+//@unverified
 /**
  * If func_8002AE6C() is zero, calls func_8002D9B8 on the menu at +0x2C, at
  * the panel's position (x + 6, y + 0xC) with flags arg1 | 0xFFED.

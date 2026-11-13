@@ -519,6 +519,7 @@ typedef struct Slot82186AF4 {
     /* 0x7A */ u8 unk7A[0x16];
 } Slot82186AF4; // size = 0x90
 
+//@unverified
 /**
  * Returns 1 if arg0's unk76 shares a bit with arg1's mask byte, or if arg1's
  * unk3A is lower than arg0's; otherwise 0.
@@ -684,6 +685,7 @@ s32 func_821857CC(u8* arg0) {
 }
 
 extern u8* D_821CF29C;
+//@unverified
 /**
  * Looks for a healing move: returns the index (0-3) in the slot's move list
  * at 0x2B of a move to use, or -1. Move numbers are Gen 1 (105 Recover,
@@ -1267,6 +1269,7 @@ void func_821868E8(s8* arg0, s32 species, s32 level) {
 
 M2C_UNK func_80058410(s8 *, s8 *, M2C_UNK);     /* extern */
 extern s8 *D_821CF2A0;
+//@unverified
 /**
  * Copies a slot's state from arg1 to arg0: the fields at 0x0C, 0x15, 0x28,
  * 0x4A-0x4E, 0x54 and 0x56-0x5B, plus the 6 bytes at 0x44 and 8 bytes at
@@ -1338,6 +1341,7 @@ typedef struct Side82186AF4 {
     /* 0x36B */ u8 unk36B;
 } Side82186AF4;
 
+//@unverified
 /**
  * Sets up one side from a party: clears the six slots with func_8004FD20 and
  * gives each its mask (1 << i), owner and species. For each of the first

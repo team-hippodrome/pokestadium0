@@ -12,6 +12,7 @@ M2C_UNK func_80029A64(s32, s32, s32, s32, Color_RGBA8);
 
 M2C_UNK func_89109E5C(s32, s32, s32, s32);          /* extern */
 M2C_UNK func_89109FE0(s32);                         /* extern */
+//@unverified
 /**
  * Calls func_89109E5C with the four blocks at +0x9E64, +0x9EB8, +0x9EE0 and
  * +0x9F44, then func_89109FE0 on each of the three 0x1C-byte entries from
@@ -178,6 +179,7 @@ typedef struct Big891003A4 {
     /* 0xB55C */ char unkB55C[0x38];
     /* 0xB594 */ s32 unkB594;
 } Big891003A4;
+//@unverified
 /**
  * Initializes the lab PC screen state in arg0: three windows with
  * func_8002A8C4, two func_80027804 buffers, the list (func_89109B60,

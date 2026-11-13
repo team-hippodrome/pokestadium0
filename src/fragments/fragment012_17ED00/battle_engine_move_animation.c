@@ -767,6 +767,7 @@ void BattleScene_TickRow1PlayOwnerCry(ActivePokemon* active_pokemon) {
 
 s32 func_8003F96C(u32 arg0, u32 arg1); //@src/audio_commands.c
 
+//@unverified
 /**
  * Row tick: once the Pokemon's assets have loaded (animationTimer == 1), calls
  * func_8003F96C(species, 3) and then func_800414B0 with 0x1B (flag 0x200 set)
@@ -799,6 +800,7 @@ void func_821036F4(ActivePokemon* active_pokemon) {
     }
 }
 
+//@unverified
 /**
  * Same as func_821036F4, but it passes 4 to func_8003F96C, and it ends straight
  * away on status bit 0x20 instead of flag 2.

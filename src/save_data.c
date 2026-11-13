@@ -271,6 +271,7 @@ s32 func_8000234C(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK *); /* extern */
 M2C_UNK func_80003774(s32, M2C_UNK, M2C_UNK, M2C_UNK); /* extern */
 void func_80023A20(s32, s32);
 M2C_UNK func_8004FD20(s32, M2C_UNK);                /* extern */
+//@unverified
 /**
  * Allocates the 0x8000-byte 'BU64' save buffer once (D_8006BBA0 marks it
  * done), passes it to func_8004FD20 and func_80003774, and sets up its entries
@@ -842,6 +843,7 @@ s32 func_80025168(s8 arg0) {
     return 1;
 }
 
+//@unverified
 /**
  * Returns the big-endian 16-bit value at +0x7A48 of the save buffer (the
  * value func_800251C8 stores).

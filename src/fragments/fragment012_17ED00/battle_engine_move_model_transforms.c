@@ -8,6 +8,7 @@ void BattleAnim_InitSwayOffset(ActivePokemon* pokemon, f32 y, s16 theta) {
     pokemon->rotationZ = D_FLT_82194900;
 }
 
+//@unverified
 /**
  * Same as BattleAnim_UpdateSwayPhysicsToTarget for a Pokemon: steps its y
  * towards `height` by `delta_y`, updates the damped z/y rotation from
@@ -52,6 +53,7 @@ void BattleAnim_UpdateTransform(ActivePokemon* owner, ActivePokemon* animated_po
     Vec3f_AddInPlace(&owner->displayObject.position, &rotation);
 }
 
+//@unverified
 /**
  * Steps animated_object->y towards `target` by `delta`, then updates the model's
  * z/y rotation as a damped sway driven by theta0 (the sway offset drops to 0 once

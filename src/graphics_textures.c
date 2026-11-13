@@ -43,6 +43,7 @@ void Gfx_SetViewportDimensions(Vp* viewport, s16 width, s16 height) {
 
 s32 func_80006B50(s32*, s32*, s32*, s32*);
 
+//@unverified
 /**
  * Draws a textured rectangle from (x1, y1) to (x2, y2) after clipping it with
  * func_80006B50. The texture start is shifted by however much was clipped (when

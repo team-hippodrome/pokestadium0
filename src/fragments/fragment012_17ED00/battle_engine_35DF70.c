@@ -541,6 +541,7 @@ void func_82115DE0(void) {
 extern s32 D_8218C8F8;
 extern s32 D_8218C8FC;
 /* Transform: the user copies the target's species, moves, stats and stat stages. */
+//@unverified
 /**
  * Transform. Unless the user has bit 0x40 at unk_4C, it sets the scene's
  * unk_48 to 15, calls func_8211EF74 with D_8218C8F8, sets the user's flag 0x08

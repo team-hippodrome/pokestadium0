@@ -403,6 +403,7 @@ void func_81112E00(u8* arg0) {
     }
 }
 
+//@unverified
 /**
  * Appends arg1 to the circular audio list arg0 if it is not already in a list
  * (its prev link at +0 is NULL): links it before arg0, adds 1 to the count at +8

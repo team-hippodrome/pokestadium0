@@ -242,6 +242,7 @@ typedef struct Box89105200 {
 
 M2C_UNK func_8003F6AC(M2C_UNK);
 
+//@unverified
 /**
  * Counts the box label timer down and draws the label with func_8002DAD8. While
  * the timer is 30 or more the alpha falls to 0 (flags 0xFDED); below 30 it
@@ -274,6 +275,7 @@ s32 func_89105200(Box89105200* arg0) {
     return arg0->timer == 0;
 }
 
+//@unverified
 /**
  * Starts the box's change animation for row arg1: remembers the row and the
  * new value arg2 - 1 (func_89105200 stores it at frame 29), sets the 60-frame
@@ -476,6 +478,7 @@ s32 func_89105924(List89105924* arg0) {
     return flags;
 }
 
+//@unverified
 /**
  * Sets flag 8 on the current item of arg0 (u16 array at +0x74, index at +0x78)
  * if any item of arg1's list (+0x24, count at +0x20 -> +8) has flag 8, and
@@ -844,6 +847,7 @@ void func_89106570(Popup89106570* arg0) {
 
 s32 func_8002AE6C();                                /* extern */
 M2C_UNK func_8002D9B8(s32, s32, s32, s32, s8 *);  /* extern */
+//@unverified
 /**
  * If func_8002AE6C() is zero, calls func_8002D9B8 on the menu at +0x40, at
  * the panel's position (x + 6, y + 0xA) with flags arg1 | 0xFFED.
@@ -865,6 +869,7 @@ extern char D_8910E064[];
 extern Rgba8910576C D_8910A94C;
 extern char D_8910E07C[];
 extern char D_8910E088[];
+//@unverified
 /**
  * Initializes a 316x80 window in arg0 at (arg1, arg2) with the color arg3,
  * fills in its fields (arg4 at +0xA4, arg5 at +0xB8, the pairs at +0xA8/+0xAC
@@ -1073,6 +1078,7 @@ typedef struct unk_func_89106F74 {
     /* 0x10 */ s32 flags;
 } unk_func_89106F74;
 
+//@unverified
 /**
  * Unless flags bit 0 is set, sets flags bit 3 on button 0x200 and clears it on
  * button 0x100 (newly pressed on controller 1). Returns the button that acted,

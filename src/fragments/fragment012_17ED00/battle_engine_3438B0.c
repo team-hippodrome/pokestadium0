@@ -420,6 +420,7 @@ void func_8212C1C4(CameraNode* arg0) {
 }
 
 
+//@unverified
 /**
  * Picks a variant with func_8210C020(3, arg0), stores it in D_8219A568 (values
  * of 4 and up become 0) and calls func_82124984(D_8219A544, arg0, variant) with
@@ -486,6 +487,7 @@ void func_8212C454(s32 arg0)
 
 }
 
+//@unverified
 /**
  * Same as func_8212C398 with func_8210C020(4, arg0): values of 5 and up become 0,
  * and variant 3 passes 4 to func_82124984.

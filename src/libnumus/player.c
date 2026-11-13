@@ -1476,6 +1476,7 @@ void func_80046860(N_ALVoice* v, u8 fxmix); /* n_alSynSetFXMix */
 #define CH_FRAME(ch) M2C_FIELD(ch, u64*, 0x00)
 #define CH_VOICE(ch) M2C_FIELD(ch, PlayerChannelZero_1E**, 0x144)
 
+//@unverified
 /**
  * Audio player handler (registered as D_800B3610.handler). For each channel
  * with data it advances the frame counter, reads notes that are due
@@ -1659,6 +1660,7 @@ extern command_func_t D_80075C38[];
 void Audio_UpdateVoicePlaybackEnd(channel_t* arg0);
 void func_80039A44(channel_t* cp);
 void func_800395D0(channel_t* cp);
+//@unverified
 /**
  * Processes the channel's data stream at +0x30: runs command bytes (0x80 and
  * up) through the handler table D_80075C38, then reads the next note and its
@@ -1833,6 +1835,7 @@ void Audio_UpdateVoicePlaybackEnd(channel_t* arg0) {
 }
 
 void func_8003A800(void*, s32);
+//@unverified
 /**
  * Steps the envelope state (byte 0x1E) of the channel's voice at +0x144. When
  * the note's end time is reached (and the state is below 4) or the channel has

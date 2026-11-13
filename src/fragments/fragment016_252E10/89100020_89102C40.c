@@ -225,6 +225,7 @@ typedef struct Ctx89102EC8 {
 } Ctx89102EC8;
 s32 func_89106C98(void*);
 M2C_UNK func_89101D94();
+//@unverified
 /**
  * Handles the result of func_89106C98 on the dialog at unk9830: -1 closes it
  * (unk88 = 0). 1 orders the two values unk98D4/unk98E8 into unk9828/unk9829

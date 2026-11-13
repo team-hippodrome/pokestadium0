@@ -46,6 +46,7 @@ void func_88100078(s32 arg0, s32 arg1, s32 arg2, s32* arg3) {
 s32 func_80020B94(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s8 *, s32); /* extern */
 M2C_UNK func_80020C60(s32);                         /* extern */
 s32 func_80020DF0(s32, M2C_UNK, s32);               /* extern */
+//@unverified
 /**
  * Gets a handle from func_80020B94(0x10, 0, arg1, 0, arg0 + 8, word at
  * arg0 + 4), then passes each 0x54-byte entry of the table at arg0 + 0x18
@@ -499,6 +500,7 @@ s32 func_80018DEC(s8*, s32);
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 void func_8002B940(s32, s32, s32, s32);
 void func_8001833C(void*, s32, void*, u16);
+//@unverified
 /**
  * Draws one icon-list entry at (x, y): the frame from D_88102D78[0] and, if
  * `entry` is set, its name (entry + 0x30) in font 4, two sprites
@@ -591,6 +593,7 @@ typedef struct unk_func_88101690 {
     /* 0x08 */ s32 unk_08;
 } unk_func_88101690;
 
+//@unverified
 /**
  * Returns whether the counter at offset 0 has reached unk_08 * unk_04 (see
  * func_881016BC, which counts it up to that limit).

@@ -318,6 +318,7 @@ extern Color_RGBA8 D_8900A5C4;
 extern Color_RGBA8 D_8900A5C8;
 extern Color_RGBA8 D_8900A5CC;
 
+//@unverified
 /**
  * Draws the panel in arg0 when func_8002AE6C() is 0: the frames at its
  * position, its text (+0x30) with func_8001A944, and the two items at +0x34 and
@@ -500,6 +501,7 @@ s32 func_89000BEC(s8 *arg0) {
     return sp2C;
 }
 
+//@unverified
 /**
  * For each of the three 0x10-byte entries in arg1 whose word at +8 is zero,
  * sets flag 0x100 in the matching u16 of the array pointed to by arg0 + 0x30.
@@ -1338,6 +1340,7 @@ void func_8002A8E0(void*);
 void func_8002DAD8(void*, s32, s32, s32, s32);
 extern u8 D_8007356C[];
 extern u8 D_89018688[];
+//@unverified
 /**
  * Draws the panel in arg0 when func_8002AE6C() is 0: its frame, the window at
  * +0x2C, the menu at +0x4C (func_8002DAD8, flags 0xFFEF) and the text

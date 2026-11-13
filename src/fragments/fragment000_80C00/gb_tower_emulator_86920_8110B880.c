@@ -957,6 +957,7 @@ typedef struct AudioTable8110DCC0 {
     /* 0x10 */ AudioTableEntry8110DCC0 entries[1];
 } AudioTable8110DCC0;
 
+//@unverified
 /**
  * Sets up an audio table loaded from ROM: stores rom_addr and unk_medium_param
  * in the header, then adds rom_addr to the romAddr of every non-empty entry

@@ -225,6 +225,7 @@ M2C_UNK func_8213C9D0(s8 *);                      /* extern */
 void func_8214050C(Particle* arg0, u8 arg1);
 void func_82143408(Particle* arg0, u16 arg1);
 
+//@unverified
 /**
  * Passes the particle's unk_CF byte to func_82143408 and its unk_CD byte to
  * func_8214050C, then calls func_8213C9D0.

@@ -507,6 +507,7 @@ s32 func_811064DC(void) {
 }
 
 extern u8 D_811565A0;
+//@unverified
 /**
  * Sends request 0x80 to the current pak channel (D_811565A0) and waits for the
  * pak thread to finish. Returns the channel's error code if one was set,

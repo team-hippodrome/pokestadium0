@@ -49,6 +49,7 @@ void func_8001AC3C(void);
 extern Color_RGBA8 D_800734A8[2];
 extern Color_RGBA8 D_800734B0[2];
 extern Color_RGBA8 D_800734B8[2];
+//@unverified
 /**
  * Sets the color for func_8001AA9C from a pair in D_800734B8 (any of bits 0x18),
  * D_800734B0 (bit 0) or D_800734A8; the second color of the pair is used
@@ -480,6 +481,7 @@ void func_8002A550(s32 x, s32 y, s32 w, s32 h, Color_RGBA8 prim, Color_RGBA8 env
                         (64 << 10) / w, (64 << 10) / h);
 }
 
+//@unverified
 /** Sets the window's position and size (words 0-3) and clears word 4. */
 void func_8002A8C4(s32* arg0, s32 x, s32 y, s32 w, s32 h) {
     arg0[0] = x;
@@ -1233,6 +1235,7 @@ s32 func_8002BC14(s32);
 s32 func_8002DC04(void *, void *);
 extern s32 D_800603C0;
 
+//@unverified
 /**
  * Input handler for the prompt in arg0 (its state at +0x28 must be 1 or 2).
  * When func_8002DC04 on the list at +0x2C returns 0, func_8002BC14 decides:

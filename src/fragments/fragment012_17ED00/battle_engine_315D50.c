@@ -509,9 +509,11 @@ void func_82134FD0(ActivePokemon* arg0) {
 }
 
 s32 func_82107A5C(s8 *);                          /* extern */
+//@unverified
 /**
  * Unless arg0 is model 152 (0x98), passes func_82107A5C(arg0), its runtime HP
  * and its party Pokemon's maximum HP (unk_26) to func_80041940.
+//@unverified
 /**
  * Unless arg0 is model 152 (0x98), passes func_82107A5C(arg0), its runtime HP
  * and its party Pokemon's maximum HP (unk_26) to func_80041940.

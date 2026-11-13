@@ -1235,6 +1235,7 @@ void Geo_NodeShadowContext(GraphNode* arg0) {
 }
 
 M2C_UNK func_8001380C();                            /* extern */
+//@unverified
 /**
  * Cull-distance node: traverses the children (func_8001380C) only when the
  * current matrix's depth (m[3][2], truncated to s16) is in [unk_18, unk_1A).
@@ -1474,6 +1475,7 @@ void func_80014EDC(s8 *arg0) {
 }
 
 M2C_UNK func_8001380C(s8 *);                      /* extern */
+//@unverified
 /**
  * Display-list node: submits unk_18 on the node's render layer (func_800135FC,
  * with renderFlags bit 2 as the last argument) when it is set, then processes
@@ -1499,6 +1501,7 @@ typedef struct GeoMaterialNode {
     /* 0x24 */ u32 color;
 } GeoMaterialNode;
 #define GEO_TINT (*(Color_RGBA8_u32*)&D_800AB450)
+//@unverified
 /**
  * Material node: sets D_800AB448 from unk_22 and the current color (white when
  * unk_22 is 1, otherwise the node's color, multiplied by D_8006049C's

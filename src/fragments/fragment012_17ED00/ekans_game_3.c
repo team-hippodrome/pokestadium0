@@ -326,6 +326,7 @@ typedef struct unk_func_82183CE4 {
     /* 0x34 */ u16 maxHp;
 } unk_func_82183CE4;
 
+//@unverified
 /**
  * Returns the slot's HP as a percentage of maxHp: 0 when hp is 0, otherwise
  * at least 1.

@@ -300,6 +300,7 @@ void func_811151C8(s32 arg0) {
     func_81110798();
 }
 
+//@unverified
 /**
  * Runs the player's tick (func_81114B54, then func_81111DC8) once for each
  * pending tick in the counter at +0xD8 (the skipTicks field in

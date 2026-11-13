@@ -178,6 +178,7 @@ typedef struct unk_func_8A201EAC {
     /* 0x34 */ s32 unk34;
 } unk_func_8A201EAC;
 
+//@unverified
 /**
  * Draws the panel's frame and contents for page arg1 (0 or not) unless state
  * is 2 or func_8002AB84 reports the window still animating. In states 1 and 2

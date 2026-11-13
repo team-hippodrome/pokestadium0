@@ -1156,6 +1156,7 @@ s32 GbSave_GetBoxCount(s32 arg0) {
 
 char* Text_UntranscodeFixedName(char* arg0, char* arg1);
 
+//@unverified
 /**
  * Converts the 6-byte Game Boy name at offset 0x18 of port arg0's save buffer
  * into arg1 and returns arg1, or returns NULL if the port has no save loaded
@@ -1182,6 +1183,7 @@ s32 func_80022DDC(s32 arg0) {
     return func_8001FBE4(M2C_FIELD(temp_v0, s32 *, 0x40) + 0x18);
 }
 
+//@unverified
 /**
  * Like func_80022D84, for the 6-byte name at offset 0x71 of the port's save
  * buffer.

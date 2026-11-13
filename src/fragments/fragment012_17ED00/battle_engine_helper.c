@@ -86,6 +86,7 @@ u8 func_82107A30(s8 *arg0) {
     return M2C_FIELD(M2C_FIELD(arg0, s8 **, 0x860), u8 *, 2);
 }
 
+//@unverified
 /**
  * Returns how many Pokemon the other member of arg0's tag team brought
  * (teamMember[1] when arg0 is member 0, otherwise teamMember[0]).
@@ -287,6 +288,7 @@ s32 func_82107F68(u8* arg0) {
     return D_8006A9CC[arg0[0x80A]].unk_00;
 }
 
+//@unverified
 /**
  * Returns the unk_30 bytes (the 11-byte name buffer) of arg0's party Pokemon in
  * the roster of tag-team member state.unk_2D_zero.

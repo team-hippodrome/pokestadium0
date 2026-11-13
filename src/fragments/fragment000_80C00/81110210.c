@@ -364,6 +364,7 @@ void func_81112278(Note81110798*);
 f32 func_81112380(u8*);
 void func_8111220C(Note81110798*);
 
+//@unverified
 /**
  * Per-update note processing for the GB tower audio driver: for each note with
  * a parent layer, releases it when the layer no longer owns it or its channel
@@ -1122,6 +1123,7 @@ s32 func_81111734(s8 *arg0, s8 *arg1) {
     return ret;
 }
 
+//@unverified
 /**
  * Picks a note for `layer` from the pool lists at +0x20 and +0x30. Each list
  * is searched with func_811114E8 using the channel priority (layer +0x54, then

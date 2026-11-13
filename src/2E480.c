@@ -169,6 +169,7 @@ void func_8002DAD8(Menu8002E230* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
 
 s32 func_8000B30C();
 s32 func_8003F6AC();
+//@unverified
 /**
  * Vertical list menu input: reads the input with func_8000B30C, moves the cursor
  * up (0x800) or down (0x400) with wrap-around over the item count, calls
@@ -541,6 +542,7 @@ void func_8002ED50(s8 *arg0) {
     }
 }
 
+//@unverified
 /**
  * Raises the menu's scroll position (offset 0x2C) to at least
  * unk34 - unk24 * unk10 + 1. func_8002ED50 clamps it from above.
@@ -554,6 +556,7 @@ void func_8002ED70(s8 *arg0) {
     }
 }
 
+//@unverified
 /**
  * Steps the scroll animations requested in unk2A. Bits 0x800 / 0x400 move
  * unk34 toward the cursor row's first / last line by up to unk38 per call;
@@ -1153,6 +1156,7 @@ void func_800309FC(s8 *arg0) {
     }
 }
 
+//@unverified
 /**
  * Raises the scroll position to at least unk34 - rowSpacing * rows + 1, like
  * func_8002ED70.
@@ -1344,6 +1348,7 @@ typedef struct GridMenu8003152C {
     /* 0x4C */ s32 scrollSpeedX;
 } GridMenu8003152C;
 
+//@unverified
 /**
  * Input handler for the grid menu. A new D-pad press (input[4], bits 0x800/0x400/
  * 0x200/0x100) sets an 8-frame repeat delay; otherwise the held buttons

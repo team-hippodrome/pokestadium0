@@ -229,6 +229,7 @@ typedef struct Arr82133534 { u8 b[7]; } Arr82133534;
 extern Arr82133534 D_8218B350;
 s16 func_8000F1FC(s16, M2C_UNK, M2C_UNK, M2C_UNK);
 M2C_UNK func_80019B28(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32);
+//@unverified
 /**
  * Moves D_8219A594 towards 0 with func_8000F1FC and passes 0xFF minus it to
  * func_80019B28 for the Pokemon in D_8219A590. Each time func_821217DC(8) is
