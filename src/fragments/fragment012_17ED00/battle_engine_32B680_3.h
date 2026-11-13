@@ -241,7 +241,7 @@ void Gfx_DrawParticleTextureWithParams(Gfx* arg0, arg1_func_8434E21C* arg1, UNUS
 void BattleAnim_CallbackMove86StartDescriptor24(Particle* arg0);
 void BattleAnim_ApplyEffect1SpeciesMotion(Particle* arg0);
 void BattleAnim_ApplyModelSpeciesOffset(Particle* arg0);
-void BattleAnim_ConfusionDelayedModelAnimWait(Particle* arg0);
+void BattleAnim_ConfuseRayAmnesiaModelAnimWait(Particle* arg0);
 void BattleAnim_CallbackMove73EndEffect31SpawnDescriptor42(Particle* arg0);
 void ParticleEffect_DrawNode(Gfx* arg0, s32 arg1, u16 arg2);
 void BattleAnim_RunDizzyPunchHitEffect(Particle* arg0);

@@ -155,6 +155,10 @@ void BattleAnim_RunThunderThunderboltUseEffect(Particle* arg0) {
     }
 }
 
+/**
+ * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
+ * only for Hyper Beam, ThunderShock, Thunderbolt and Thunder.
+ */
 void BattleAnim_SetupDelayedRisingColumnFade(Particle* arg0) {
     s16 sp2E = Particle_FieldAC_GetS16_0C038(arg0);
     Vec3s sp28;
@@ -207,6 +211,10 @@ void BattleAnim_RunDeterministicRotatingBoltOfLightning(Particle* arg0) {
     Particle_AddVelocityFromRotationTemplate1(arg0);
 }
 
+/**
+ * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
+ * only for Hyper Beam, ThunderShock, Thunderbolt and Thunder.
+ */
 void BattleAnim_SetupDelayedRisingColumnRandomScale(Particle* arg0) {
     s16 sp2E = Particle_FieldAC_GetS16_0C038(arg0);
     Vec3s sp28;
@@ -302,6 +310,10 @@ void func_8214ED30(s8 *arg0) {
     func_8213E5C8(arg0);
 }
 
+/**
+ * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
+ * only for Hyper Beam, ThunderShock, Thunderbolt and Thunder.
+ */
 void BattleAnim_SetupDirectionalSprayScaledFade(Particle* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
     Vec3s sp2C;

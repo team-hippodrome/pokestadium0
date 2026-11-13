@@ -333,6 +333,10 @@ void BattleAnim_RunSlashMoveWhiteFlashOverlay(s8 *arg0) {
     Particle_ApproachPrimAlpha(arg0, 0, 0x10);
 }
 
+/**
+ * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
+ * only for Scratch, Cut, Vine Whip, Crabhammer, Fury Swipes and Slash.
+ */
 void BattleAnim_SlashGrowFade_InitParticle(Particle* arg0) {
     s16 sp26 = Particle_FieldCE_GetS32_0C040(arg0);
     s16 sp24 = Particle_FieldCF_GetS16_0C058(arg0);
@@ -377,6 +381,12 @@ void func_821603C8(s8 *arg0) {
     func_82140228(arg0, 0x40A00000, 0x3ECCCCCD);
 }
 
+/**
+ * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
+ * only for ViceGrip, Razor Wind, Slam, Stomp, Body Slam, Thrash, Double-Edge, Bite, Submission,
+ * Counter, Seismic Toss, SolarBeam, Clamp, Skull Bash, Sky Attack, Crabhammer, Hyper Fang and Super
+ * Fang.
+ */
 void BattleAnim_HeavyHitBurstChild_InitParticle(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
     s16 sp24 = Particle_FieldCF_GetS16_0C058(arg0);
@@ -651,6 +661,12 @@ void BattleAnim_RunSandAttackHitEffect(s8 *arg0) {
     }
 }
 
+/**
+ * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
+ * only for Razor Wind, Fly, Slam, Stomp, Body Slam, Take Down, Thrash, Double-Edge, Submission,
+ * Counter, Seismic Toss, Strength, SolarBeam, String Shot, Rock Throw, Dig, Selfdestruct, Skull
+ * Bash, Sky Attack, Crabhammer, Explosion, Rock Slide and Struggle.
+ */
 void BattleAnim_HeavyHitAnimatedRiseFade_InitParticle(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
 
@@ -665,6 +681,10 @@ void BattleAnim_HeavyHitAnimatedRiseFade_InitParticle(Particle* arg0) {
 }
 
 /**
+ * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
+ * only for Razor Wind, Fly, Slam, Stomp, Body Slam, Take Down, Thrash, Double-Edge, Submission,
+ * Counter, Seismic Toss, Strength, SolarBeam, String Shot, Rock Throw, Dig, Selfdestruct, Skull
+ * Bash, Sky Attack, Crabhammer, Explosion, Rock Slide and Struggle.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleAnim_HeavyHitAnimatedRiseFade(Particle* arg0) {
@@ -1066,6 +1086,10 @@ void BattleAnim_SwiftBurstChild_InitParticle(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
+/**
+ * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
+ * only for Swift.
+ */
 void BattleAnim_SwiftBurstChild(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -1945,6 +1969,11 @@ void BattleAnim_RecolorParticleByQueuedMoveId(Particle* arg0) {
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, sp1E);
 }
 
+/**
+ * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
+ * only for Sand Attack, Mist, PoisonPowder, Stun Spore, Sleep Powder, SmokeScreen, Haze, Smog,
+ * Poison Gas and Spore.
+ */
 void BattleAnim_PowderCloudScaleMotion_InitParticle(Particle* arg0) {
     Vec3s sp28;
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);

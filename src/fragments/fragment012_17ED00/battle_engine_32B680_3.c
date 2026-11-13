@@ -751,11 +751,19 @@ void BattleAnim_ApplyEffect1SpeciesMotion(Particle* arg0) {
 }
 
 
+/**
+ * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
+ * only for Sing, Sleep Powder, Hypnosis, Lovely Kiss and Spore.
+ */
 void BattleAnim_SetupSleepMovePhaseFadeOut(Particle* arg0) {
     BattleAnim_ApplyEffect1SpeciesMotion(arg0);
     Particle_AdvanceLifecycle(arg0);
 }
 
+/**
+ * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
+ * only for Sing, Sleep Powder, Hypnosis, Lovely Kiss and Spore.
+ */
 void BattleAnim_SleepMovePhaseFadeOut(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:

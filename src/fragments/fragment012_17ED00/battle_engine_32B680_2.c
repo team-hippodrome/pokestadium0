@@ -122,6 +122,10 @@ void BattleAnim_DrawFlameUse(Particle* arg0, CameraNode* arg1) {
     BattleAnim_DrawAsset76Ia8FrameWithAsset77I4Overlay(arg0, arg1);
 }
 
+/**
+ * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
+ * only for Sing, Sleep Powder, Hypnosis, Lovely Kiss and Spore.
+ */
 void BattleAnim_DrawSleepMoveAnimatedI4(Particle* arg0, CameraNode* arg1) {
     ParticleGfx_PushBillboardMatrix(arg1, arg0->worldPosition, arg0->scale);
 

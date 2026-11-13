@@ -31,6 +31,10 @@ M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_82140920(s8 *);                      /* extern */
 
+/**
+ * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
+ * only for Poison Sting, Twineedle, Pin Missile and Spike Cannon.
+ */
 void BattleAnim_UpdateNeedleBlueFadeGrow(s8 *arg0) {
     s16 temp_v0;
 

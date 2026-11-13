@@ -637,6 +637,8 @@ void BattleAnim_SetupQiCharge(Particle* arg0) {
 }
 
 /**
+ * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
+ * only for SolarBeam, Mimic, Sky Attack and Conversion.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleAnim_SolarbeamMimicBurstEmitter(Particle* arg0) {

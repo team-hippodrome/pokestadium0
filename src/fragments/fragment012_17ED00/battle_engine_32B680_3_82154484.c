@@ -36,7 +36,7 @@ void BattleAnim_InitModelAnimationSlot(Particle* arg0, s16 arg1) {
     }
 }
 
-void BattleAnim_ConfusionDelayedModelAnimWait(Particle* arg0) {
+void BattleAnim_ConfuseRayAmnesiaModelAnimWait(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
 
     switch (arg0->lifecycle) {
@@ -69,7 +69,7 @@ void BattleAnim_ConfusionDelayedModelAnimWait(Particle* arg0) {
  */
 void BattleAnim_InitializeAmnesiaUse(void) {
     BattleAnim_SpawnCategory17MarkerSlot(0x55, 1);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_ConfusionDelayedModelAnimWait, &gDefaultParticleDescriptor, 0x1E, 3, 6, 0, 0, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_ConfuseRayAmnesiaModelAnimWait, &gDefaultParticleDescriptor, 0x1E, 3, 6, 0, 0, 0);
 }
 
 s32 func_82107CF0(s32);
@@ -1078,6 +1078,10 @@ void BattleAnim_AllocateEffect75DisplayList(s32 arg0, arg1_func_84344CE8* arg1) 
     }
 }
 
+/**
+ * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
+ * only for Strength, Rock Throw and Rock Slide.
+ */
 void BattleAnim_InitRockModel(Particle* arg0) {
     s16 sp26 = Particle_FieldCF_GetS16_0C058(arg0);
 
@@ -1097,6 +1101,8 @@ void BattleAnim_InitRockModel(Particle* arg0) {
 }
 
 /**
+ * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
+ * only for Strength, Rock Throw and Rock Slide.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleAnim_RockModelAnimWait(Particle* arg0) {
@@ -1199,6 +1205,10 @@ void BattleAnim_RunFallingRock(s8 *arg0) {
     }
 }
 
+/**
+ * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
+ * only for Strength, Rock Throw and Rock Slide.
+ */
 void BattleAnim_ApplyRockSpeciesScaleOffset(Particle* arg0) {
     f32 sp1C = 0.6f;
     f32 sp18 = 0.0f;
@@ -1257,6 +1267,10 @@ void BattleAnim_ApplyRockSpeciesScaleOffset(Particle* arg0) {
     Particle_AddPositionOffsetAlongRotationYPlus180(arg0, sp18);
 }
 
+/**
+ * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
+ * only for Strength, Rock Throw and Rock Slide.
+ */
 void BattleAnim_InitRockModel38(Particle* arg0) {
     arg0->displayObject = BattleAnim_AllocOwnerDisplayContext(arg0);
     if (arg0->displayObject != NULL) {
@@ -1272,6 +1286,8 @@ void BattleAnim_InitRockModel38(Particle* arg0) {
 /**
  * Seen in play (2026-11-13) in the 165-move sweep (Strength, Rock Throw): step 1 attached a model
  * and set prim alpha to 0; step 2 then raised prim alpha by 4 per frame (0, 4, 8, ...).
+ * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
+ * only for Strength, Rock Throw and Rock Slide.
  */
 void BattleAnim_RockModelFadeIn(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -2283,6 +2299,10 @@ void BattleAnim_InitializeBonemerangUse(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackInitModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 0xB, gBattleAnimCurrentAnchor, 2, 0);
 }
 
+/**
+ * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
+ * only for Acid, Toxic and Sludge.
+ */
 void BattleAnim_SludgeModelAnimFinish_InitParticle(Particle* arg0) {
     Particle_FieldCD_GetU8_0C048(arg0);
     arg0->displayObject = BattleAnim_AllocOwnerDisplayContext(arg0);
@@ -2296,6 +2316,10 @@ void BattleAnim_SludgeModelAnimFinish_InitParticle(Particle* arg0) {
     }
 }
 
+/**
+ * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
+ * only for Acid, Toxic and Sludge.
+ */
 void BattleAnim_SludgeModelAnimFinish(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -3942,6 +3966,10 @@ void BattleAnim_InitializeSolarBeamUse2(void) {
     BattleAnim_InitializeSolarBeamUseSequence();
 }
 
+/**
+ * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
+ * only for Mega Punch and Mega Kick.
+ */
 void BattleAnim_MegaHitModelFade(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -4166,7 +4194,7 @@ void BattleAnim_StartEffect128Descriptor39ScaleFade(void) {
 }
 
 void ParticleEffect_CreateTypeX(void) {
-    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_ConfusionDelayedModelAnimWait, &gDefaultParticleDescriptor, 0x1E, 3, 6, 0, 0, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_ConfuseRayAmnesiaModelAnimWait, &gDefaultParticleDescriptor, 0x1E, 3, 6, 0, 0, 0);
 }
 
 void ParticleEffect_CreateSmoke(void) {

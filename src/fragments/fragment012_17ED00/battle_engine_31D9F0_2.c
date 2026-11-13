@@ -416,6 +416,10 @@ void BattleAnim_ContinueFireBreathFlameColoration(Particle* arg0) {
     }
 }
 
+/**
+ * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
+ * only for Flamethrower, Dragon Rage, Fire Spin and Fire Blast.
+ */
 void BattleAnim_FlameRotatingFallColorCycle(Particle* arg0) {
     s16 temp_v0 = Particle_FieldCF_GetS16_0C058(arg0);
 
@@ -1413,6 +1417,10 @@ void BattleAnim_SetupEmberHitSmoke(Particle* arg0) {
 }
 
 s32 Particle_ApproachStepMagnitude(Particle* arg0, f32 arg1, f32 arg2);
+/**
+ * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
+ * only for Ember.
+ */
 void BattleAnim_EmberSpreadScaleAlphaRise(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
