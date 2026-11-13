@@ -36,11 +36,11 @@ RDRAM_START = 0x80001000        # the font sheets are decompressed anywhere insi
 RDRAM_END = 0x803F0000
 GLYPHS = 0x91
 # Which stages touch which part; the narrow ones exist to bisect a screen-level fault.
-INPLACE_STAGES = {'full', 'noremap'}          # the real patch: English payloads in Zero's own slots
+INPLACE_STAGES = {'full', 'noremap', 'payload', 'pmap', 'ploader'}          # the real patch: English payloads in Zero's own slots
 ARCHIVE_STAGES = {'archive', 'data', 'data-keep', 'keep-map', 'keep-loader'}  # bisect: whole-archive swap
-MAP_TABLE_STAGES = {'full', 'noremap', 'data', 'map', 'data-keep', 'keep-map'}
+MAP_TABLE_STAGES = {'full', 'noremap', 'pmap', 'data', 'map', 'data-keep', 'keep-map'}
 MAP_FUNC_STAGES = {'full', 'data', 'map', 'code', 'keep-map'}
-LOADER_STAGES = {'full', 'noremap', 'code', 'loader', 'loader0', 'keep-loader'}
+LOADER_STAGES = {'full', 'noremap', 'ploader', 'code', 'loader', 'loader0', 'keep-loader'}
 CELLS = [(0x10, 0x0A), (0x10, 0x0C), (0x10, 0x10), (0x18, 0x14), (0x18, 0x18), (0x20, 0x20)]
 
 ROM_BIAS = 0x7FFFF400            # rom = vram - ROM_BIAS for the resident image
@@ -571,7 +571,7 @@ def main():
     ap.add_argument('--rom', default='build/pokestadium0-jp.z64')
     ap.add_argument('--us', help='Stadium 1 US baserom.z64, the source of the English font')
     ap.add_argument('--out')
-    ap.add_argument('--stage', choices=['full', 'noremap', 'inplace', 'data', 'data-keep', 'keep-map', 'keep-loader', 'code', 'map', 'archive', 'loader', 'loader0', 'micro'], default='full',
+    ap.add_argument('--stage', choices=['full', 'noremap', 'payload', 'pmap', 'ploader', 'inplace', 'data', 'data-keep', 'keep-map', 'keep-loader', 'code', 'map', 'archive', 'loader', 'loader0', 'micro'], default='full',
                     help='full: archive + map + loader; data: archive + map; code: map + loader; '
                          'map/archive: one of them (bisecting a boot fault)')
     ap.add_argument('--base', default='build/pokestadium0-jp.z64',
