@@ -36,11 +36,11 @@ RDRAM_START = 0x80001000        # the font sheets are decompressed anywhere insi
 RDRAM_END = 0x803F0000
 GLYPHS = 0x91
 # Which stages touch which part; the narrow ones exist to bisect a screen-level fault.
-INPLACE_STAGES = {'full', 'noremap', 'payload', 'pmap', 'ploader'}          # the real patch: English payloads in Zero's own slots
+INPLACE_STAGES = {'full', 'noremap', 'payload', 'pmap', 'ploader', 'pfix'}          # the real patch: English payloads in Zero's own slots
 ARCHIVE_STAGES = {'archive', 'data', 'data-keep', 'keep-map', 'keep-loader'}  # bisect: whole-archive swap
-MAP_TABLE_STAGES = {'full', 'noremap', 'pmap', 'data', 'map', 'data-keep', 'keep-map'}
+MAP_TABLE_STAGES = {'full', 'pfix', 'noremap', 'pmap', 'data', 'map', 'data-keep', 'keep-map'}
 MAP_FUNC_STAGES = {'full', 'data', 'map', 'code', 'keep-map'}
-LOADER_STAGES = {'full', 'noremap', 'ploader', 'code', 'loader', 'loader0', 'keep-loader'}
+LOADER_STAGES = {'full', 'pfix', 'noremap', 'ploader', 'code', 'loader', 'loader0', 'keep-loader'}
 CELLS = [(0x10, 0x0A), (0x10, 0x0C), (0x10, 0x10), (0x18, 0x14), (0x18, 0x18), (0x20, 0x20)]
 
 ROM_BIAS = 0x7FFFF400            # rom = vram - ROM_BIAS for the resident image
@@ -324,6 +324,12 @@ def patch(rom, us, stage='full'):
     table = us[US_ASCII_MAP:US_ASCII_MAP + MAP_BYTES]
     if not map_is_latin(table):
         raise SystemExit('no ASCII glyph map at %#x in that dump' % US_ASCII_MAP)
+    # Replace printable ASCII only. Entries below 0x21 are the game's text macros (0x09/0x0D/0x11/
+    # 0x15 -> glyph 6, 0x19 -> 1, ...); the Stadium 1 table zeroes them, and a name string that uses
+    # one then draws glyph 0 forever instead of finishing its run.
+    table = bytearray(rom[ZERO_ASCII_MAP:ZERO_ASCII_MAP + MAP_BYTES])
+    table[0x21:0x80] = us[US_ASCII_MAP + 0x21:US_ASCII_MAP + 0x80]
+    table = bytes(table)
 
     seed = detect_seed(rom)
     out = bytearray(rom)
@@ -385,8 +391,10 @@ def check(rom, us, retail, stage='full', seed=None):
         if rom[ZERO_FONTS + total:ZERO_FONTS_END].count(0) != ZERO_FONTS_END - ZERO_FONTS - total:
             raise SystemExit('font slot tail is not cleared')
     if stage in MAP_TABLE_STAGES:
-        if rom[ZERO_ASCII_MAP:ZERO_ASCII_MAP + MAP_BYTES] != us[US_ASCII_MAP:US_ASCII_MAP + MAP_BYTES]:
-            raise SystemExit("ASCII glyph map differs from Stadium 1's")
+        if rom[ZERO_ASCII_MAP:ZERO_ASCII_MAP + 0x21] != retail[ZERO_ASCII_MAP:ZERO_ASCII_MAP + 0x21]:
+            raise SystemExit('the text-macro entries of the glyph map changed')
+        if rom[ZERO_ASCII_MAP + 0x21:ZERO_ASCII_MAP + 0x80] != us[US_ASCII_MAP + 0x21:US_ASCII_MAP + 0x80]:
+            raise SystemExit("printable ASCII does not map to Stadium 1's glyphs")
     if stage == 'micro':
         rw = words_at(retail, LOAD_FUNC, 0x7C // 4)
         expected_loader = rw[:11] + [(rw[11] & ~((0x1F << 21) | (0x1F << 16))) | (3 << 21) | (15 << 16)] + rw[12:]
@@ -571,7 +579,7 @@ def main():
     ap.add_argument('--rom', default='build/pokestadium0-jp.z64')
     ap.add_argument('--us', help='Stadium 1 US baserom.z64, the source of the English font')
     ap.add_argument('--out')
-    ap.add_argument('--stage', choices=['full', 'noremap', 'payload', 'pmap', 'ploader', 'inplace', 'data', 'data-keep', 'keep-map', 'keep-loader', 'code', 'map', 'archive', 'loader', 'loader0', 'micro'], default='full',
+    ap.add_argument('--stage', choices=['full', 'pfix', 'noremap', 'payload', 'pmap', 'ploader', 'inplace', 'data', 'data-keep', 'keep-map', 'keep-loader', 'code', 'map', 'archive', 'loader', 'loader0', 'micro'], default='full',
                     help='full: archive + map + loader; data: archive + map; code: map + loader; '
                          'map/archive: one of them (bisecting a boot fault)')
     ap.add_argument('--base', default='build/pokestadium0-jp.z64',
