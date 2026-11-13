@@ -422,18 +422,34 @@ void BattleAnim_DrawEffectCallbacks(UNUSED CameraNode* arg0);
 void BattleAnim_SetQueuedEffectList(u8 effect_list_index);
 void BattleAnim_QueueMoveEffect(s32 arg0, s32 arg1, s32 arg2, s16 arg3, s16 arg4);
 
+/**
+ * Returns the effect list being queued.
+ * @unverified Name from Stadium 1.
+ */
 u8 BattleAnim_GetCurrentEffectList(void) {
     return sBattleAnimCurrentEffectList;
 }
 
+/**
+ * Sets the resource list given to newly created effect slots.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_SetQueuedResourceListId(u8 arg0) {
     sBattleAnimQueuedResourceListId = arg0;
 }
 
+/**
+ * Returns the resource list given to newly created effect slots.
+ * @unverified Name from Stadium 1.
+ */
 u8 BattleAnim_GetQueuedResourceListId(void) {
     return sBattleAnimQueuedResourceListId;
 }
 
+/**
+ * Returns the move whose animation is being queued.
+ * @unverified Name from Stadium 1.
+ */
 s16 BattleAnim_GetQueuedMoveId(void) {
     return sBattleAnimQueuedMoveId;
 }
@@ -448,6 +464,11 @@ extern s32 D_8219A810;
 extern s32 D_8219A814;
 extern s32 D_8219A818;
 
+/**
+ * Queues the animation of move arg0 with user arg1, target arg2 and anchors arg3 and arg4,
+ * resetting the queue state.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_QueueMoveEffect(s32 arg0, s32 arg1, s32 arg2, s16 arg3, s16 arg4) {
     D_8219A7D8 = 1;
     D_8219A7D4 = arg0;
@@ -460,10 +481,18 @@ void BattleAnim_QueueMoveEffect(s32 arg0, s32 arg1, s32 arg2, s16 arg3, s16 arg4
     D_8219A818 = arg2;
 }
 
+/**
+ * Queues a move's main animation.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_QueueMoveEffectScript(s32 move_id, ActivePokemon* user, ActivePokemon* user_fallback, s16 default_anchor, s16 alternate_anchor) {
     BattleAnim_QueueMoveEffect(move_id, user, user_fallback, default_anchor, alternate_anchor);
 }
 
+/**
+ * Queues a move's end animation (effect list 2), owned by the target.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_QueueMoveEffectEnd(s32 move_id, ActivePokemon* user, ActivePokemon* user_fallback, s16 default_anchor, s16 alternate_anchor) {
     BattleAnim_QueueMoveEffect(move_id, user, user_fallback, default_anchor, alternate_anchor);
     BattleAnim_SetQueuedEffectList(2);
@@ -471,16 +500,28 @@ void BattleAnim_QueueMoveEffectEnd(s32 move_id, ActivePokemon* user, ActivePokem
     sBattleAnimQueuedEffectListMode = BATTLE_ANIMATION_QUEUE_END;
 }
 
+/**
+ * Queues a move's charging animation (effect list 1).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_QueueChargingMoveEffectScript(s32 move_id, ActivePokemon* user, ActivePokemon* user_fallback, s16 default_anchor, s16 alternate_anchor) {
     BattleAnim_QueueMoveEffect(move_id, user, user_fallback, default_anchor, alternate_anchor);
     BattleAnim_SetQueuedEffectList(1);
 }
 
+/**
+ * Queues a move's animation from effect list 3.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_QueueEffectList3(s32 move_id, ActivePokemon* user, ActivePokemon* user_fallback, s16 default_anchor, s16 alternative_anchor) {
     BattleAnim_QueueMoveEffect(move_id, user, user_fallback, default_anchor, alternative_anchor);
     BattleAnim_SetQueuedEffectList(3);
 }
 
+/**
+ * Queues effect list 6 of move_id with owner as user and both targets, with no anchors.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_QueueEffectList6(s32 move_id, ActivePokemon* owner) {
     sBattleAnimQueuedAlternatePending = 2;
     sBattleAnimQueuedAlternateMoveId = move_id;
@@ -492,12 +533,20 @@ void BattleAnim_QueueEffectList6(s32 move_id, ActivePokemon* owner) {
     gBattleAnimTertiaryOwner = owner;
 }
 
+/**
+ * Like BattleAnim_QueueEffectList6, but queues effect list 5.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_QueueEffectList5(s32 arg0, ActivePokemon* arg1) {
     BattleAnim_QueueEffectList6(arg0, arg1);
     sBattleAnimQueuedAlternatePending = 1;
     sBattleAnimQueuedAlternateList = 5;
 }
 
+/**
+ * Calls BattleAnim_QueueEffectList6.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_QueueEffectList6Alt(s32 arg0, ActivePokemon* arg1) {
     BattleAnim_QueueEffectList6(arg0, arg1);
 }
@@ -522,6 +571,10 @@ extern s32 D_8219A7E8;
 extern s16 D_8219A80C;
 extern s32 D_8219A810;
 
+/**
+ * Queues effect list arg0 with user arg1. List 3 forces default anchor 7.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_QueueEffectList(u8 arg0, s32 arg1) {
     D_8219A7E8 = 1;
     func_8213644C(arg0);
@@ -531,6 +584,10 @@ void BattleAnim_QueueEffectList(u8 arg0, s32 arg1) {
     }
 }
 
+/**
+ * Calls BattleAnim_StopParticlesForOwnerCategory.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_StopOwnerCategoryParticles(u8 category, ActivePokemon* owner) {
     BattleAnim_StopParticlesForOwnerCategory(category, owner);
 }
@@ -549,6 +606,11 @@ void func_82136760(void) {
     func_8213B644(0, 0x20, 8);
 }
 
+/**
+ * Copies each (index, pointer) pair of a resource table into the animation asset pointer
+ * table, up to the terminating entry.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_RegisterAssetTable(arg1_func_80019420* arg0) {
     if (arg0 != NULL) {
         do {
@@ -560,6 +622,10 @@ void BattleAnim_RegisterAssetTable(arg1_func_80019420* arg0) {
     }
 }
 
+/**
+ * Clears all 256 animation asset pointers, then registers resource table 0.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_ResetAssetTable(void) {
     s32 i;
 
@@ -570,6 +636,11 @@ void BattleAnim_ResetAssetTable(void) {
     BattleAnim_RegisterAssetTable(BattleAnim_LoadResourceTable(0));
 }
 
+/**
+ * Builds the resource list for move arg0 from the two resource lists (entries 3 and 4) of
+ * its effect script, each terminated by 0x3F, and ends it with -1.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_BuildResourceListForMove(s16 arg0) {
     s32 var_v0 = 0;
     u8* temp_a1 = sMoveAnimEffectScripts[arg0][3];
@@ -590,6 +661,11 @@ void BattleAnim_BuildResourceListForMove(s16 arg0) {
     sBattleAnimResourceList[var_v0] = -1;
 }
 
+/**
+ * Builds the resource list for move_id (unless it is 0xFF, no move) and asks the session to
+ * load it.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_LoadMoveResourceList(BattleSessionTeams* battle_session_teams, s16 move_id) {
     if (move_id != 0xFF) {
         BattleAnim_BuildResourceListForMove(move_id);
@@ -599,6 +675,10 @@ void BattleAnim_LoadMoveResourceList(BattleSessionTeams* battle_session_teams, s
     }
 }
 
+/**
+ * Builds the resource list for animation mode arg1 and asks the session to load it.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_LoadModeResourceList(BattleSessionTeams* battle_session_teams, s16 mode) {
     s32 index = 0;
     u8* var_v1 = sD_84386D44[mode][1];
@@ -615,6 +695,10 @@ void BattleAnim_LoadModeResourceList(BattleSessionTeams* battle_session_teams, s
     battle_session_teams->unk_24 = sBattleAnimResourceTablePointers;
 }
 
+/**
+ * Registers every loaded resource table into the animation asset pointer table.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_RegisterAllAssetTables(void) {
     s32 i = 0;
     arg1_func_80019420* var_v0;
@@ -629,11 +713,20 @@ void BattleAnim_RegisterAllAssetTables(void) {
     }
 }
 
+/**
+ * Clears the session's load-pending flag (0x10) and registers all loaded resource tables.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_RegisterAssetTablesForSession(BattleSessionTeams* battle_session_teams) {
     battle_session_teams->assetIsBusy &= ~0x10;
     BattleAnim_RegisterAllAssetTables();
 }
 
+/**
+ * Resets the 16 owner display objects and 4 particle display objects and marks them all
+ * free.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_ResetDisplayContexts(void) {
     s32 i;
 
@@ -648,10 +741,19 @@ void BattleAnim_ResetDisplayContexts(void) {
     }
 }
 
+/**
+ * Returns the particle that owns display object arg0.
+ * @unverified Name from Stadium 1.
+ */
 Particle* BattleAnim_GetOwnerContextParticle(DisplayObject* arg0) {
     return arg0->node.callbackArg;
 }
 
+/**
+ * Takes a free display object from the 16-entry owner pool and binds it to particle arg0.
+ * Returns NULL if none is free.
+ * @unverified Name from Stadium 1.
+ */
 DisplayObject* BattleAnim_AllocOwnerDisplayContext(Particle* arg0) {
     s32 i;
     s32 var_v0 = -1;
@@ -674,6 +776,10 @@ DisplayObject* BattleAnim_AllocOwnerDisplayContext(Particle* arg0) {
     return temp_a0;
 }
 
+/**
+ * Returns display object arg0 to the owner pool and clears it.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_FreeOwnerDisplayContext(DisplayObject* arg0) {
     s32 i;
 
@@ -689,6 +795,11 @@ void BattleAnim_FreeOwnerDisplayContext(DisplayObject* arg0) {
     }
 }
 
+/**
+ * Takes a free display object from the 4-entry particle pool, binds it to particle arg0
+ * and sets the particle's flag 0x400. Returns NULL if none is free.
+ * @unverified Name from Stadium 1.
+ */
 DisplayObject* BattleAnim_AllocParticleDisplayContext(Particle* arg0) {
     s32 i;
     s32 var_a2 = -1;
@@ -712,6 +823,10 @@ DisplayObject* BattleAnim_AllocParticleDisplayContext(Particle* arg0) {
     return sp1C;
 }
 
+/**
+ * Returns display object arg0 to the particle pool and clears it.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_FreeParticleDisplayContext(DisplayObject* arg0) {
     s32 i;
 
@@ -727,28 +842,53 @@ void BattleAnim_FreeParticleDisplayContext(DisplayObject* arg0) {
     }
 }
 
+/**
+ * Loads animation asset arg1 as the display object's model and binds asset arg2 as its
+ * animation at normal speed.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_InitModelWithAnim(DisplayObject* arg0, s16 arg1, s16 arg2) {
     Model_InitDisplayObject(arg0, 0, 0, sBattleAnimAssetPointers[arg1]);
     ModelAnim_BindTransformCurve(arg0, 0, sBattleAnimAssetPointers[arg2], 0x10000);
 }
 
+/**
+ * Sets the display object's animation frame.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_SetModelAnimFrame(DisplayObject* arg0, s16 arg1) {
     ModelAnim_SetFrame(arg0, arg1);
 }
 
+/**
+ * Loads animation asset arg1 as the display object's model.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_InitModel(DisplayObject* arg0, s16 arg1) {
     Model_InitDisplayObject(arg0, 0, 0, sBattleAnimAssetPointers[arg1]);
 }
 
+/**
+ * Binds animation asset arg1 to the display object at normal speed.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_BindModelAnim(DisplayObject* arg0, s16 arg1) {
     ModelAnim_BindTransformCurve(arg0, 0, sBattleAnimAssetPointers[arg1], 0x10000);
 }
 
+/**
+ * Binds animation asset arg1 to the display object to play backward from its last frame.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_BindModelAnimReversed(DisplayObject* arg0, s16 arg1) {
     ModelAnim_BindTransformCurve(arg0, 0, sBattleAnimAssetPointers[arg1], -0x10000);
     ModelAnim_SetFrame(arg0, arg0->transformAnim.data->endFrame - 1);
 }
 
+/**
+ * Returns 1 when the display object's animation frame is 0.
+ * @unverified Name from Stadium 1.
+ */
 s32 BattleAnim_IsModelAnimComplete(DisplayObject* arg0) {
     s32 ret = 0;
 
@@ -817,6 +957,11 @@ void func_82136E48(void) {
     }
 }
 
+/**
+ * Runs the 8 registered effect update callbacks and unregisters each one that returns
+ * nonzero.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_UpdateEffectCallbacks(UNUSED CameraNode* arg0) {
     s32 i;
 
@@ -828,6 +973,10 @@ void BattleAnim_UpdateEffectCallbacks(UNUSED CameraNode* arg0) {
     }
 }
 
+/**
+ * Runs the 8 registered effect draw callbacks.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_DrawEffectCallbacks(UNUSED CameraNode* arg0) {
     s32 i;
 
