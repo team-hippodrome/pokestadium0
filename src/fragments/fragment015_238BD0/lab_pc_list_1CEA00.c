@@ -88,7 +88,7 @@ void func_800275E4(s32, s32);
 void ScrollList_SetCursorKeepOffset(s32*, s32);
 
 /**
- * LabItem_RemoveSelectedEntry
+ * LabList_RemoveSelectedEntry
  *
  * Removes one row from the grid referenced by the cursor arg0 and fixes up
  * the cursor.  arg0->unk_00 is the grid and arg0->unk_08 the current index.
@@ -110,11 +110,11 @@ void ScrollList_SetCursorKeepOffset(s32*, s32);
  * and positive, sets the index to count - 1.  Zero's version operates on a
  * byte matrix and the retail code simply subtracts 1 from the index, so the
  * name is a rough match at best.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-13) removed the list row when フシギダネ was released (せいとん > ポケモンをにがす) and when
+ * a Pokémon moved out of てもち into GBのボックス1, so it serves the Pokémon lists as well as the item
+ * list.
  */
-void LabItem_RemoveSelectedEntry(LabItemCursor* arg0) {
+void LabList_RemoveSelectedEntry(LabItemCursor* arg0) {
     func_800275E4((s32)arg0->unk_00, arg0->unk_08);
     if (arg0->unk_08 >= M2C_FIELD(arg0->unk_00, s32*, 8)) {
         arg0->unk_08 -= 1;
@@ -182,7 +182,7 @@ void LabItem_DecreaseSelectedCount(LabItemCursor* arg0, s32 arg1) {
     u8* temp_v1 = &arg0->unk_00->unk_00[arg0->unk_00->unk_0C * arg0->unk_08];
 
     if (arg1 >= temp_v1[1]) {
-        LabItem_RemoveSelectedEntry(arg0);
+        LabList_RemoveSelectedEntry(arg0);
         return;
     }
     temp_v1[1] -= arg1;
@@ -1087,7 +1087,7 @@ void func_890020C0(u8* arg0) {
     M2C_FIELD(arg0, s32**, 0x494)[M2C_FIELD(arg0, s32*, 0x140)] = M2C_FIELD(arg0, s32**, 0x494)[M2C_FIELD(arg0, s32*, 0x1A4)];
     if (LabItem_IsQuantitylessItemForOperation(item[0]) != 0) {
         func_89000020((unk_func_8830867C_02C_0CC*)(arg0 + 0x2F8), (void*)(CURSOR(arg0)->grid->data + CURSOR(arg0)->grid->stride * CURSOR(arg0)->selected));
-        LabItem_RemoveSelectedEntry((LabItemCursor*)CURSOR(arg0));
+        LabList_RemoveSelectedEntry((LabItemCursor*)CURSOR(arg0));
     } else {
         func_890000A4((s32*)(arg0 + 0x2F8), item[0], M2C_FIELD(arg0, s32*, 0x444));
         LabItem_SubtractSelectedItemQuantity((unk_func_8820BE14_02C_038*)CURSOR(arg0), M2C_FIELD(arg0, s32*, 0x444));

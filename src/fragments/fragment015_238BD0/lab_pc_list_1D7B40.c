@@ -639,7 +639,7 @@ void PcSort_DrawOrganizeWindow(s8* arg0) {
 }
 
 void func_89000020(void* arg0, void* arg1);
-void LabItem_RemoveSelectedEntry(void*);
+void LabList_RemoveSelectedEntry(void*);
 
 /**
  * Moves the selected Pokemon into the destination box and marks both boxes changed.
@@ -650,7 +650,7 @@ void PcSort_MoveSelectedMon(s8* arg0) {
     M2C_FIELD(arg0, s32**, 0x3AC)[M2C_FIELD(arg0, s32*, 0x248)] = 1;
     M2C_FIELD(arg0, s32**, 0x3AC)[M2C_FIELD(arg0, s32*, 0x1D0)] = M2C_FIELD(arg0, s32**, 0x3AC)[M2C_FIELD(arg0, s32*, 0x248)];
     func_89000020(arg0 + 0x31C, (void*)(M2C_FIELD(arg0, s32**, 0x294)[3] * M2C_FIELD(arg0, s32*, 0x29C) + M2C_FIELD(arg0, s32**, 0x294)[0]));
-    LabItem_RemoveSelectedEntry(arg0 + 0x294);
+    LabList_RemoveSelectedEntry(arg0 + 0x294);
 }
 
 void func_80027654(s32* matrix, u8* out, s32 row);
@@ -691,16 +691,14 @@ void PcSort_SwapBetweenLists(s8* arg0) {
     M2C_FIELD(arg0, s32**, 0x3AC)[M2C_FIELD(arg0, s32*, 0x28C)] = M2C_FIELD(arg0, s32**, 0x3AC)[M2C_FIELD(arg0, s32*, 0x290)];
 }
 
-void LabItem_RemoveSelectedEntry(void*);
+void LabList_RemoveSelectedEntry(void*);
 
 /**
  * Removes the selected Pokemon from its box and marks the box changed.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) released フシギダネ in せいとん > ポケモンをにがす: てもち went from 03/06 to 02/06.
  */
 void PcSort_ReleaseSelectedMon(s8* arg0) {
-    LabItem_RemoveSelectedEntry(arg0 + 0x294);
+    LabList_RemoveSelectedEntry(arg0 + 0x294);
     M2C_FIELD(arg0, s32**, 0x3AC)[M2C_FIELD(arg0, s32*, 0x28C)] = 1;
     M2C_FIELD(arg0, s32*, 0) = (((M2C_FIELD(arg0, s32*, 0x28C) == 0) ? 1 : 0) == M2C_FIELD(M2C_FIELD(arg0, s8**, 0x294), s32*, 8)) ? 1 : 4;
 }
@@ -1034,8 +1032,8 @@ extern s32 D_89019108;
 
 /**
  * Requests the icon of each species in list `arg0`.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) ran when leaving せいとん with レポートしてやめる after moving フシギダネ and ヒトカゲ into
+ * GBのボックス1.
  * @unverified Name and comment guessed from the code.
  */
 void PcSort_LoadMonIcons(s8 *arg0) {

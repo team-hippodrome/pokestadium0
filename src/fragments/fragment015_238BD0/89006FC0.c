@@ -177,9 +177,7 @@ extern char D_89018E60[];
 extern char D_89018E68[];
 /**
  * Sets up the confirm window (430x292) with its labeled Yes/No buttons.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) set up the ほんとうにいいの？ はい/いいえ window in せいとん > ポケモンをにがす.
  */
 void PcBox_InitConfirmWindow(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, u16 *arg6) {
     Window_SetRect(arg0, arg1, arg2, 0x1AE, 0x124);
@@ -264,9 +262,8 @@ void PcBox_DrawMoveName(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
 
 /**
  * Draws the name of the species' type 1 or 2 in its type color; nothing for a missing type 2.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) in the せいとん > ポケモンをにがす confirm it drew くさ and どく for フシギダネ, and ほのお
+ * with no type 2 for ヒトカゲ.
  */
 void PcBox_DrawTypeName(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     Color890075E0 c;
@@ -355,9 +352,8 @@ s32 BattleMon_CountMoves(u8* arg0);
 s32 BattleMon_GetMoveIndex(Mon89007678*, s32);
 /**
  * Draws a Pokemon's status window: LV, HP, Type 1/2, Attack, Defense, Speed, Special.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) in the せいとん > ポケモンをにがす confirm it drew フシギダネ's window (LV 10, HP 30,
+ * Type 1 くさ, Type 2 どく, the four stats), and ヒトカゲ's.
  */
 void PcBox_DrawMonStatusWindow(Screen89007678* arg0) {
     s32 y = arg0->y + 6;
@@ -447,9 +443,8 @@ s32 Ui_GetSelectionDirection(void* arg0);
 
 /**
  * Moves the Yes/No cursor. Returns -1 on cancel or No, 1 on Yes.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) in the せいとん > ポケモンをにがす confirm, D-Left moved the cursor from いいえ to はい;
+ * A on いいえ cancelled and A on はい released.
  */
 s32 PcBox_UpdateConfirmCursor(u8* arg0) {
     s32 sp1C = 0;

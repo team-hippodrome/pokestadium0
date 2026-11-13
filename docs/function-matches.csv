@@ -3566,7 +3566,7 @@ func_8900A1CC,0x8900A1CC,src/fragments/fragment015_238BD0/89006FC0.c,PcBox_DrawS
 func_8900A298,0x8900A298,src/fragments/fragment015_238BD0/89006FC0.c,PcBox_HasUnsavedChanges,hand,,c
 func_8900A324,0x8900A324,src/fragments/fragment015_238BD0/89006FC0.c,PcBox_UpdateScreen,hand,,c
 func_89000020,0x89000020,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,func_89000020,hand,,c
-func_89000048,0x89000048,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,LabItem_RemoveSelectedEntry,hand,,c
+func_89000048,0x89000048,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,LabList_RemoveSelectedEntry,hand,,c
 func_890000A4,0x890000A4,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,func_890000A4,hand,,c
 func_890001B4,0x890001B4,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,LabItem_DecreaseSelectedCount,hand,,c
 func_8900020C,0x8900020C,src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c,func_8900020C,s1,stadium1:src/fragments/lab_pc_list/lab_pc_list_1CEA00.c,c

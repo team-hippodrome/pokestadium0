@@ -692,7 +692,11 @@ s32 GbSave_WriteBoxBanks(s32 arg0) {
     return sp28;
 }
 
-/** Writes the main save data back to the cartridge. */
+/**
+ * Writes the main save data back to the cartridge.
+ * Seen in play (2026-11-13) ran when leaving せいとん with レポートしてやめる after moving フシギダネ and ヒトカゲ into
+ * GBのボックス1.
+ */
 s32 GbSave_CommitMainData(s32 arg0) {
     u8 sp2F;
     s32 sp28 = 0;
@@ -809,8 +813,8 @@ void GbSave_SaveMainPokemon(unk_func_88205880_00D0* arg0, s32 arg1, s32 arg2) {
 }
 
 /**
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) ran when leaving せいとん with レポートしてやめる after moving フシギダネ and ヒトカゲ into
+ * GBのボックス1.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void GbSave_LoadBoxPokemon(BattleMon* arg0, s32 arg1, s32 arg2, s32 arg3) {
