@@ -77,7 +77,9 @@ DepthBuffer* GfxImage_GetCurrent(void) {
 }
 
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Seen in play (2026-11-13) in the 165-move sweep: it emitted G_RDPPIPESYNC, a G_SETOTHERMODE_L,
+ * G_SETZIMG (FE000000, depth buffer 0x00225180) and G_SETCIMG (FF...), and advanced the passed
+ * display-list pointer.
  */
 void GfxImage_SetRenderTarget(Gfx** gfx_p, DepthBuffer* arg1) {
     Gfx* gfx = *gfx_p;
@@ -96,7 +98,8 @@ void GfxImage_SetRenderTarget(Gfx** gfx_p, DepthBuffer* arg1) {
 }
 
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Seen in play (2026-11-13) in the 165-move sweep: it emitted G_RDPPIPESYNC and G_SETSCISSOR
+ * ED000000 005003C0, the full 320x240 screen.
  */
 void Gfx_ApplyScissorRect(Gfx** gfx_p) {
     Gfx* gfx = *gfx_p;

@@ -846,7 +846,8 @@ void func_800386E4(s32, s32);
 s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2);
 /**
  * Loads and plays the sound of `move_id` (1-based, below 167) for `species`; some species/move pairs are skipped. Some moves add a cry or a second sound.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) in the 165-move sweep: move_id matched the move being used in 125 of
+ * 133 calls (the rest were the COM's move) and species was 0x5F, Onix, the 1P Pokémon.
  */
 s32 Audio_PlayMoveSound(u32 move_id, u32 species, u32 sound_kind) {
     s32 var;
