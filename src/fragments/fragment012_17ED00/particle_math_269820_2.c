@@ -55,15 +55,15 @@ s32 Particle_Field7C_IncrementXUntilAtLeast_0AF54(Particle* arg0, f32 arg1, f32 
 s32 Particle_Field7C_IncrementYUntilAtLeast_0AFA8(Particle* arg0, f32 arg1, f32 arg2);
 s32 Particle_Field7C_DecrementXUntilAtMost_0B050(Particle* arg0, f32 arg1, f32 arg2);
 s32 Particle_Field7C_DecrementYUntilAtMost_0B0A4(Particle* arg0, f32 arg1, f32 arg2);
-void Particle_Field1C_SetScaled_0B938(Particle* arg0, f32 arg1);
+void Particle_SetScaleScaled(Particle* arg0, f32 arg1);
 void Particle_SetScale(Particle* arg0, f32 arg1);
-void Particle_SetScaleSpeed(Particle* arg0, f32 arg1);
 void Particle_SetScaleTarget(Particle* arg0, f32 arg1);
-s32 Particle_Field1C_Approach_0B98C(Particle* arg0, f32 arg1, f32 arg2);
-s32 Particle_Field1C_ApproachAndStepState_0B9D0(Particle* arg0, f32 arg1, f32 arg2);
-s32 Particle_Field1C_ApproachField24ByField20_0BA1C(Particle* arg0);
-s32 Particle_Field1C_ApproachField24AndStepState_0BA48(Particle* arg0);
-s32 Particle_Field20_Approach_0BA84(Particle* arg0, f32 arg1, f32 arg2);
+void Particle_SetScaleStep(Particle* arg0, f32 arg1);
+s32 Particle_ApproachScale(Particle* arg0, f32 arg1, f32 arg2);
+s32 Particle_ApproachScaleThenAdvance(Particle* arg0, f32 arg1, f32 arg2);
+s32 Particle_ApproachScaleTarget(Particle* arg0);
+s32 Particle_ApproachScaleTargetThenAdvance(Particle* arg0);
+s32 Particle_StepScaleTarget(Particle* arg0, f32 arg1, f32 arg2);
 s32 Particle_ApproachPrimAlphaThenAdvance(Particle* arg0, u8 arg1, u8 arg2);
 s32 Particle_FieldA6_DecrementToZero_0BD08(Particle* arg0, s16 arg1);
 s32 Particle_FieldA6_DecrementToZeroAndStepState_0BD34(Particle* arg0, s16 arg1);
@@ -2163,7 +2163,11 @@ s32 Particle_Field50_AdvanceField7CWithTimer_0B854(Particle* arg0, f32 arg1, f32
     return sp24;
 }
 
-void Particle_Field1C_SetScaled_0B938(Particle* arg0, f32 arg1) {
+/**
+ * Sets scale to arg1 times the render-context scale.
+ * Seen in play (2026-11-13) in the 165-move sweep (Pay Day): arg1 = 1.5 set scale to 2.64.
+ */
+void Particle_SetScaleScaled(Particle* arg0, f32 arg1) {
     arg0->scale = arg1 * gParticleRenderContext.scale.y;
 }
 
@@ -2176,33 +2180,41 @@ void Particle_SetScale(Particle* arg0, f32 arg1) {
     arg0->scale = arg1;
 }
 
-void Particle_SetScaleSpeed(Particle* arg0, f32 arg1) {
-    arg0->unk_20 = arg1 * gParticleRenderContext.scale.y;
-}
-
+/**
+ * Sets scaleTarget (0x20) to arg1 times the render-context scale. Was Particle_SetScaleSpeed,
+ * swapped with Particle_SetScaleStep: Particle_ApproachScaleTarget moves scale toward this field.
+ * Seen in play (2026-11-13) in the 165-move sweep (Vice Grip): arg1 = 0.1 wrote 0.36 to 0x20, and
+ * Particle_ApproachScaleTarget then moved scale toward 0.36.
+ */
 void Particle_SetScaleTarget(Particle* arg0, f32 arg1) {
-    arg0->unk_24 = arg1 * gParticleRenderContext.scale.y;
+    arg0->scaleTarget = arg1 * gParticleRenderContext.scale.y;
 }
 
-s32 Particle_Field1C_Approach_0B98C(Particle* arg0, f32 arg1, f32 arg2) {
+/**
+ * Sets scaleStep (0x24) to arg1 times the render-context scale. Was Particle_SetScaleTarget,
+ * swapped with Particle_SetScaleTarget.
+ * Seen in play (2026-11-13) in the 165-move sweep (Vice Grip): arg1 = 0.03 wrote 0.108 to 0x24, and
+ * Particle_ApproachScaleTarget then grew scale by 0.108 per call.
+ */
+void Particle_SetScaleStep(Particle* arg0, f32 arg1) {
+    arg0->scaleStep = arg1 * gParticleRenderContext.scale.y;
+}
+
+/**
+ * Steps scale toward arg1 by arg2 (both times the render-context scale); returns 1 on arrival.
+ * Seen in play (2026-11-13) in the 165-move sweep (Fire Punch): scale grew 0.18 to 0.216 to 0.252
+ * on successive calls.
+ */
+s32 Particle_ApproachScale(Particle* arg0, f32 arg1, f32 arg2) {
     return ParticleMath_ApproachFloat(&arg0->scale, arg1 * gParticleRenderContext.scale.y, arg2 * gParticleRenderContext.scale.y);
 }
 
-s32 Particle_Field1C_ApproachAndStepState_0B9D0(Particle* arg0, f32 arg1, f32 arg2) {
-    s32 sp1C = Particle_Field1C_Approach_0B98C(arg0, arg1, arg2);
-
-    if (sp1C != 0) {
-        Particle_AdvanceLifecycle(arg0);
-    }
-    return sp1C;
-}
-
-s32 Particle_Field1C_ApproachField24ByField20_0BA1C(Particle* arg0) {
-    return ParticleMath_ApproachFloat(&arg0->scale, arg0->unk_20, arg0->unk_24);
-}
-
-s32 Particle_Field1C_ApproachField24AndStepState_0BA48(Particle* arg0) {
-    s32 sp1C = Particle_Field1C_ApproachField24ByField20_0BA1C(arg0);
+/**
+ * Particle_ApproachScale, then advances the lifecycle on arrival.
+ * Seen in play (2026-11-13) in the 165-move sweep (Ice Beam): scale shrank 1.76 to 1.672 to 1.584.
+ */
+s32 Particle_ApproachScaleThenAdvance(Particle* arg0, f32 arg1, f32 arg2) {
+    s32 sp1C = Particle_ApproachScale(arg0, arg1, arg2);
 
     if (sp1C != 0) {
         Particle_AdvanceLifecycle(arg0);
@@ -2211,11 +2223,35 @@ s32 Particle_Field1C_ApproachField24AndStepState_0BA48(Particle* arg0) {
 }
 
 /**
- * Approach unk_20 using the stored or supplied target and step.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Steps scale toward scaleTarget by scaleStep; returns 1 on arrival.
+ * Seen in play (2026-11-13) in the 165-move sweep (Vice Grip): with scaleTarget 0.36 and scaleStep
+ * 0.108, scale went from 0 to 0.108.
  */
-s32 Particle_Field20_Approach_0BA84(Particle* arg0, f32 arg1, f32 arg2) {
-    return ParticleMath_ApproachFloat(&arg0->unk_20, arg1 * gParticleRenderContext.scale.y, arg2 * gParticleRenderContext.scale.y);
+s32 Particle_ApproachScaleTarget(Particle* arg0) {
+    return ParticleMath_ApproachFloat(&arg0->scale, arg0->scaleTarget, arg0->scaleStep);
+}
+
+/**
+ * Particle_ApproachScaleTarget, then advances the lifecycle on arrival.
+ * Seen in play (2026-11-13) in the 165-move sweep (Vice Grip): with scaleTarget 0.36 and scaleStep
+ * 0.108, scale went from 0 to 0.108 and it returned 0.
+ */
+s32 Particle_ApproachScaleTargetThenAdvance(Particle* arg0) {
+    s32 sp1C = Particle_ApproachScaleTarget(arg0);
+
+    if (sp1C != 0) {
+        Particle_AdvanceLifecycle(arg0);
+    }
+    return sp1C;
+}
+
+/**
+ * Steps scaleTarget itself toward arg1 by arg2 (both times the render-context scale); returns 1 on
+ * arrival.
+ * @unverified Name from the code; not reached in the move sweep.
+ */
+s32 Particle_StepScaleTarget(Particle* arg0, f32 arg1, f32 arg2) {
+    return ParticleMath_ApproachFloat(&arg0->scaleTarget, arg1 * gParticleRenderContext.scale.y, arg2 * gParticleRenderContext.scale.y);
 }
 
 /**

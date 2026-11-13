@@ -36,7 +36,7 @@ void BattleAnim_SetupStrongElectricSpark(Particle* arg0) {
     Vec3s sp2C;
 
     Particle_FieldAC_GetS16_0C038(arg0);
-    Particle_Field1C_SetScaled_0B938(arg0, 0.05f);
+    Particle_SetScaleScaled(arg0, 0.05f);
     sp2C.x = ParticleMath_RandomRange(0x8000) - 0x4000;
     sp2C.y = ParticleMath_RandomRange(0x10000);
     sp2C.z = ParticleMath_RandomRange(0x800) - 0x400;
@@ -122,7 +122,7 @@ void BattleAnim_ApplyThunderThunderboltUseRadialOffset(Particle* arg0) {
  * for Thunderbolt, Thunder.
  */
 void BattleAnim_SetupThunderThunderboltUseEffect(Particle* arg0) {
-    Particle_Field1C_SetScaled_0B938(arg0, 0.1f);
+    Particle_SetScaleScaled(arg0, 0.1f);
     Particle_Field74_SetScaled_0AD8C(arg0, 0.0f);
     BattleAnim_ApplyThunderThunderboltUseRadialOffset(arg0);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0x17);
@@ -140,12 +140,12 @@ void BattleAnim_RunThunderThunderboltUseEffect(Particle* arg0) {
             break;
 
         case 2:
-            Particle_Field1C_Approach_0B98C(arg0, 4.0f, 0.5f);
+            Particle_ApproachScale(arg0, 4.0f, 0.5f);
             Particle_DecrementUnkA6ToZeroThenAdvance(arg0);
             break;
 
         case 3:
-            Particle_Field1C_Approach_0B98C(arg0, 0.1f, 0.5f);
+            Particle_ApproachScale(arg0, 0.1f, 0.5f);
             Particle_ApproachPrimAlphaThenAdvance(arg0, 0, 0x20);
             break;
 
@@ -160,7 +160,7 @@ void BattleAnim_SetupSharedDescriptor0FDelayedRisingColumnFade(Particle* arg0) {
     Vec3s sp28;
 
     Particle_Field38_SetYScaled_08CA0(arg0, 15.0f);
-    Particle_Field1C_SetScaled_0B938(arg0, 0.1f);
+    Particle_SetScaleScaled(arg0, 0.1f);
     Particle_Field74_SetScaled_0AD8C(arg0, 0.0f);
     sp28.x = 0x4000 - ParticleMath_RandomRange(0x8000);
     sp28.y = sp2E << 0xD;
@@ -190,7 +190,7 @@ void BattleAnim_RunDeterministicRotatingBoltOfLightning(Particle* arg0) {
             break;
 
         case 3:
-            Particle_Field1C_Approach_0B98C(arg0, 3.0f, 0.1f);
+            Particle_ApproachScale(arg0, 3.0f, 0.1f);
             Particle_DecrementUnkA6ToZeroThenAdvance(arg0);
             break;
 
@@ -212,7 +212,7 @@ void BattleAnim_SetupSharedDescriptor0FDelayedRisingColumnRandomScale(Particle* 
     Vec3s sp28;
 
     Particle_Field38_SetYScaled_08CA0(arg0, 15.0f);
-    Particle_Field1C_SetScaled_0B938(arg0, 0.1f);
+    Particle_SetScaleScaled(arg0, 0.1f);
     Particle_Field74_SetScaled_0AD8C(arg0, MathUtil_Random_ZeroOne());
     sp28.x = 0x3000 - ParticleMath_RandomRange(0x6000);
     sp28.y = sp2E << 0xD;
@@ -242,7 +242,7 @@ void BattleAnim_RunRandomRotatingBoltOfLightning(Particle* arg0) {
             break;
 
         case 3:
-            Particle_Field1C_Approach_0B98C(arg0, 3.5f, 0.1f);
+            Particle_ApproachScale(arg0, 3.5f, 0.1f);
             Particle_DecrementUnkA6ToZeroThenAdvance(arg0);
             break;
 
@@ -263,7 +263,7 @@ void BattleAnim_SetupSharedDirectionalSprayFade(Particle* arg0) {
     Vec3s sp28;
 
     Particle_FieldAC_GetS16_0C038(arg0);
-    Particle_Field1C_SetScaled_0B938(arg0, 0.5f);
+    Particle_SetScaleScaled(arg0, 0.5f);
     Particle_Field74_SetScaled_0AD8C(arg0, 0.0f);
     sp28.x = -0x4000;
     sp28.y = 0;
@@ -307,9 +307,9 @@ void BattleAnim_SetupSharedDescriptor13DirectionalSprayScaledFade(Particle* arg0
     Vec3s sp2C;
 
     Particle_FieldAC_GetS16_0C038(arg0);
-    Particle_Field1C_SetScaled_0B938(arg0, 0.5f);
-    Particle_SetScaleSpeed(arg0, (MathUtil_Random_ZeroOne() * 5.0f) + 1.0f);
-    Particle_SetScaleTarget(arg0, 0.2f);
+    Particle_SetScaleScaled(arg0, 0.5f);
+    Particle_SetScaleTarget(arg0, (MathUtil_Random_ZeroOne() * 5.0f) + 1.0f);
+    Particle_SetScaleStep(arg0, 0.2f);
     Particle_Field74_SetScaled_0AD8C(arg0, MathUtil_Random_ZeroOne() * 4.0f);
     sp2C.x = -0x4000;
     sp2C.y = 0;
@@ -358,9 +358,9 @@ void BattleAnim_SetupThunderShockOuterJolts(Particle* arg0) {
     UNUSED s32 pad2[2]; // FAKE: stack padding
 
     Particle_FieldAC_GetS16_0C038(arg0);
-    Particle_Field1C_SetScaled_0B938(arg0, 0.1f);
-    Particle_SetScaleSpeed(arg0, 1.4f);
-    Particle_SetScaleTarget(arg0, 0.1f);
+    Particle_SetScaleScaled(arg0, 0.1f);
+    Particle_SetScaleTarget(arg0, 1.4f);
+    Particle_SetScaleStep(arg0, 0.1f);
     MathUtil_Random_ZeroOne();
     Particle_Field74_SetScaled_0AD8C(arg0, 0.0f);
     sp2C.x = -0x4000;
@@ -408,9 +408,9 @@ void BattleAnim_SetupUnregisteredStraightDirectionalStreamFade(Particle* arg0) {
     UNUSED s32 pad2[2]; // FAKE: stack padding
 
     Particle_FieldAC_GetS16_0C038(arg0);
-    Particle_Field1C_SetScaled_0B938(arg0, 0.1f);
-    Particle_SetScaleSpeed(arg0, 1.4f);
-    Particle_SetScaleTarget(arg0, 0.1f);
+    Particle_SetScaleScaled(arg0, 0.1f);
+    Particle_SetScaleTarget(arg0, 1.4f);
+    Particle_SetScaleStep(arg0, 0.1f);
     MathUtil_Random_ZeroOne();
     Particle_Field74_SetScaled_0AD8C(arg0, 0.0f);
     sp2C.x = -0x4000;
@@ -458,9 +458,9 @@ void BattleAnim_SetupEndEffect28Descriptor10UpwardBurstFade(Particle* arg0) {
     Vec3s sp28;
 
     Particle_FieldAC_GetS16_0C038(arg0);
-    Particle_Field1C_SetScaled_0B938(arg0, 0.1f);
-    Particle_SetScaleSpeed(arg0, 2.0f);
-    Particle_SetScaleTarget(arg0, 0.1f);
+    Particle_SetScaleScaled(arg0, 0.1f);
+    Particle_SetScaleTarget(arg0, 2.0f);
+    Particle_SetScaleStep(arg0, 0.1f);
     sp28.x = 0;
     sp28.y = 0;
     sp28.z = -0x8000;
@@ -507,9 +507,9 @@ void BattleAnim_SetupEndEffect28Descriptor10WideScatterBurstFade(Particle* arg0)
     Vec3s sp28;
 
     Particle_FieldAC_GetS16_0C038(arg0);
-    Particle_Field1C_SetScaled_0B938(arg0, 0.1f);
-    Particle_SetScaleSpeed(arg0, 2.0f);
-    Particle_SetScaleTarget(arg0, 0.1f);
+    Particle_SetScaleScaled(arg0, 0.1f);
+    Particle_SetScaleTarget(arg0, 2.0f);
+    Particle_SetScaleStep(arg0, 0.1f);
     sp28.x = -0x1000 - ParticleMath_RandomRange(0x6000);
     sp28.y = ParticleMath_RandomRange(0x10000);
     sp28.z = ParticleMath_RandomRange(0x800) - 0x400;

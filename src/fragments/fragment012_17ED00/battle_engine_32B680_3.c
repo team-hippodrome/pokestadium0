@@ -337,7 +337,7 @@ void BattleAnim_SelectParticleModelFrames(Particle* arg0, s32 arg1) {
                 BattleAnim_InitModel(arg0->displayObject, sp2A);
                 break;
         }
-        Particle_Field1C_SetScaled_0B938(arg0, sp2C);
+        Particle_SetScaleScaled(arg0, sp2C);
         Particle_AdvanceLifecycle(arg0);
     } else {
         Particle_DisableAndDetach(arg0);
@@ -563,7 +563,7 @@ void ParticleEffect_AllocateGfxAndDraw(s32 arg0, arg1_func_84344CE8* arg1) {
 }
 
 void BattleAnim_SetupMove86EndDescriptor24(Particle* arg0) {
-    Particle_Field1C_SetScaled_0B938(arg0, 3.0f);
+    Particle_SetScaleScaled(arg0, 3.0f);
     Particle_Field38_AddYScaled_08E90(arg0, 10.0f);
     Particle_AddPositionOffsetAlongRotationY(arg0, 15.0f);
     Particle_Field74_SetScaled_0AD8C(arg0, -5.0f);
@@ -595,7 +595,7 @@ void BattleAnim_RunThunderWaveHitEffect(Particle* arg0) {
             break;
     }
 
-    Particle_Field1C_Approach_0B98C(arg0, 0.0f, 0.1f);
+    Particle_ApproachScale(arg0, 0.0f, 0.1f);
     Particle_AddVelocityXZFromRotationYViaImpulse(arg0);
 }
 
@@ -604,7 +604,7 @@ void BattleAnim_SetupMove86StartDescriptor24(Particle* arg0) {
     UNUSED s32 pad[2]; // FAKE: stack padding
     s16 sp2A = Particle_FieldCD_GetU8_0C048(arg0);
 
-    Particle_Field1C_SetScaled_0B938(arg0, 0.05f);
+    Particle_SetScaleScaled(arg0, 0.05f);
 
     switch (sp2A) {
         case 0:
@@ -747,7 +747,7 @@ void BattleAnim_ApplyEffect1SpeciesMotion(Particle* arg0) {
             break;
     }
     Particle_AddPositionOffsetAlongRotationY(arg0, offset + 5.0f);
-    Particle_Field1C_SetScaled_0B938(arg0, scale);
+    Particle_SetScaleScaled(arg0, scale);
 }
 
 

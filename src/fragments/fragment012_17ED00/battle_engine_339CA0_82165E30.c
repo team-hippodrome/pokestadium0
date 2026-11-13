@@ -27,7 +27,7 @@ void BattleAnim_CallbackUnusedGrowingSparkVariant(Particle* arg0) {
     }
 
     if (Particle_IsRenderingEnabled(arg0) != 0) {
-        Particle_Field1C_ApproachField24ByField20_0BA1C(arg0);
+        Particle_ApproachScaleTarget(arg0);
         Particle_EnvG_Approach_0BBF0(arg0, 0, 0x10);
         Particle_EnvB_Approach_0BBC0(arg0, 0, 8);
     }

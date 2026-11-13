@@ -54,7 +54,7 @@ void BattleAnim_InitSharedVerticalFadeParticle(Particle* arg0) {
     /* sp2C selects which variant of the effect this particle belongs to (0..12) */
     switch (sp2C) {
         case 0:
-            Particle_Field1C_SetScaled_0B938(arg0, 1.0f);
+            Particle_SetScaleScaled(arg0, 1.0f);
             Particle_SetRandomVelocityXYZ(arg0, 0xA, 0xA, 0xA);
             Particle_Field74_SetScaled_0AD8C(arg0, (ParticleMath_RandomRange(0x32) * 0.02f) + 0.5f);
             Particle_SetPrimAlpha(arg0, 0x64);
@@ -62,7 +62,7 @@ void BattleAnim_InitSharedVerticalFadeParticle(Particle* arg0) {
             break;
 
         case 1:
-            Particle_Field1C_SetScaled_0B938(arg0, 1.0f);
+            Particle_SetScaleScaled(arg0, 1.0f);
             Particle_SetRandomVelocityXYZ(arg0, 0xA, 0xF, 0x3C);
             Particle_Field74_SetScaled_0AD8C(arg0, (ParticleMath_RandomRange(0x32) * 0.04f) + 1.0f);
             Particle_SetPrimAlpha(arg0, 0x64);
@@ -70,7 +70,7 @@ void BattleAnim_InitSharedVerticalFadeParticle(Particle* arg0) {
             break;
 
         case 2:
-            Particle_Field1C_SetScaled_0B938(arg0, 1.5f);
+            Particle_SetScaleScaled(arg0, 1.5f);
             Particle_SetRandomVelocityXYZ(arg0, 0xF, 0x14, 0x19);
             Particle_Field74_SetScaled_0AD8C(arg0, (ParticleMath_RandomRange(0x32) * 0.07f) + 4.0f);
             Particle_SetPrimAlpha(arg0, 0xA0);
@@ -79,7 +79,7 @@ void BattleAnim_InitSharedVerticalFadeParticle(Particle* arg0) {
             break;
 
         case 3:
-            Particle_Field1C_SetScaled_0B938(arg0, 1.0f);
+            Particle_SetScaleScaled(arg0, 1.0f);
             Particle_SetRandomVelocityXYZ(arg0, 0xA, 0, 0x19);
             Particle_AddPositionOffsetAlongRotationY(arg0, 10.0f);
             Particle_Field38_AddYScaled_08E90(arg0, 5.0f);
@@ -94,7 +94,7 @@ void BattleAnim_InitSharedVerticalFadeParticle(Particle* arg0) {
                for particular species.  The Zero code has only that helper's
                default path (no species adjustment) written out inline: the
                random offset, the XZ offset of 10.0 and the Y offset of 5.0. */
-            Particle_Field1C_SetScaled_0B938(arg0, 1.2f);
+            Particle_SetScaleScaled(arg0, 1.2f);
             Particle_SetRandomVelocityXYZ(arg0, 0xA, 0, 0x23);
             Particle_AddPositionOffsetAlongRotationY(arg0, 10.0f);
             Particle_Field38_AddYScaled_08E90(arg0, 5.0f);
@@ -106,7 +106,7 @@ void BattleAnim_InitSharedVerticalFadeParticle(Particle* arg0) {
             break;
 
         case 12:
-            Particle_Field1C_SetScaled_0B938(arg0, 1.2f);
+            Particle_SetScaleScaled(arg0, 1.2f);
             Particle_SetRandomVelocityXYZ(arg0, 0xA, 0, 0x28);
             Particle_AddPositionOffsetAlongRotationY(arg0, 10.0f);
             Particle_Field38_AddYScaled_08E90(arg0, 5.0f);
@@ -118,7 +118,7 @@ void BattleAnim_InitSharedVerticalFadeParticle(Particle* arg0) {
             break;
 
         case 4:
-            Particle_Field1C_SetScaled_0B938(arg0, 0.5f);
+            Particle_SetScaleScaled(arg0, 0.5f);
             Particle_SetRandomVelocityXYZ(arg0, 0xA, 0, 0x14);
             Particle_Field74_SetScaled_0AD8C(arg0, (ParticleMath_RandomRange(0xA) * 0.05f) + 0.5f);
             Particle_SetPrimAlpha(arg0, 0xFF);
@@ -127,7 +127,7 @@ void BattleAnim_InitSharedVerticalFadeParticle(Particle* arg0) {
             break;
 
         case 5:
-            Particle_Field1C_SetScaled_0B938(arg0, 1.0f);
+            Particle_SetScaleScaled(arg0, 1.0f);
             Particle_SetRandomVelocityXYZ(arg0, 0xF, 0xF, 0xF);
             Particle_Field74_SetScaled_0AD8C(arg0, (ParticleMath_RandomRange(0x32) * 0.02f) + 1.0f);
             Particle_SetPrimAlpha(arg0, 0x80);
@@ -135,7 +135,7 @@ void BattleAnim_InitSharedVerticalFadeParticle(Particle* arg0) {
             break;
 
         case 6:
-            Particle_Field1C_SetScaled_0B938(arg0, 0.5f);
+            Particle_SetScaleScaled(arg0, 0.5f);
             Particle_SetRandomVelocityXYZ(arg0, 5, 5, 5);
             Particle_Field74_SetScaled_0AD8C(arg0, 0.5f);
             Particle_SetPrimAlpha(arg0, 0xC8);
@@ -143,7 +143,7 @@ void BattleAnim_InitSharedVerticalFadeParticle(Particle* arg0) {
             break;
 
         case 7:
-            Particle_Field1C_SetScaled_0B938(arg0, 0.5f);
+            Particle_SetScaleScaled(arg0, 0.5f);
             Particle_SetRandomVelocityXYZ(arg0, 0xA, 0, 5);
             Particle_Field38_AddYScaled_08E90(arg0, 10.0f);
             Particle_Field74_SetScaled_0AD8C(arg0, (ParticleMath_RandomRange(0x14) * 0.02f) + 0.5f);
@@ -152,7 +152,7 @@ void BattleAnim_InitSharedVerticalFadeParticle(Particle* arg0) {
             break;
 
         case 9:
-            Particle_Field1C_SetScaled_0B938(arg0, 1.0f);
+            Particle_SetScaleScaled(arg0, 1.0f);
             Particle_SetRandomVelocityXYZ(arg0, 0xA, 0, 0xA);
             sp30.x = ParticleMath_RandomSigned(0x1800) - 0x4000;
             sp30.y = ParticleMath_RandomRange(0x10000);
@@ -165,7 +165,7 @@ void BattleAnim_InitSharedVerticalFadeParticle(Particle* arg0) {
             break;
 
         case 10:
-            Particle_Field1C_SetScaled_0B938(arg0, 0.8f);
+            Particle_SetScaleScaled(arg0, 0.8f);
             Particle_SetRandomVelocityXYZ(arg0, 0xF, 0, 0xF);
             sp30.x = ParticleMath_RandomSigned(0x1000) - 0x4000;
             sp30.y = ParticleMath_RandomRange(0x10000);
@@ -178,7 +178,7 @@ void BattleAnim_InitSharedVerticalFadeParticle(Particle* arg0) {
             break;
 
         case 11:
-            Particle_Field1C_SetScaled_0B938(arg0, 0.05f);
+            Particle_SetScaleScaled(arg0, 0.05f);
             Particle_SetRandomVelocityXYZ(arg0, 0xA, 0, 0xA);
             sp30.x = ParticleMath_RandomSigned(0x1000) - 0x4000;
             sp30.y = ParticleMath_RandomRange(0x10000);
@@ -388,7 +388,7 @@ void BattleAnim_SetupBarrageUseEffect2(Particle* arg0) {
     Particle_FieldAC_GetS16_0C038(arg0);
     Particle_FieldCD_GetU8_0C048(arg0);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
-    Particle_Field1C_SetScaled_0B938(arg0, 0.5f);
+    Particle_SetScaleScaled(arg0, 0.5f);
     Particle_Field94_AddVec_0A52C(arg0, ParticleMath_RandomRange(0x10000), ParticleMath_RandomRange(0x10000), 0);
     Particle_Field74_SetScaled_0AD8C(arg0, 0.75f);
     Particle_SetPrimAlpha(arg0, 0xFF);
@@ -426,9 +426,9 @@ void BattleAnim_CallbackDescriptor50BurstChild_InitParticle(Particle* arg0) {
     sp28.y = ParticleMath_RandomSignedOffset(0x1000, 0x8000);
     sp28.z = 0;
     Particle_Field94_AddVecFromVec3s_0A4F0(arg0, sp28);
-    Particle_Field1C_SetScaled_0B938(arg0, 0.05f);
-    Particle_SetScaleSpeed(arg0, 0.25f);
-    Particle_SetScaleTarget(arg0, 0.02f);
+    Particle_SetScaleScaled(arg0, 0.05f);
+    Particle_SetScaleTarget(arg0, 0.25f);
+    Particle_SetScaleStep(arg0, 0.02f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, sp26);
     Particle_FieldA6_SetS16_0BCA8(arg0, 8);
     Particle_Field74_SetScaled_0AD8C(arg0, (ParticleMath_RandomRange(8) * 0.25f) + 2.0f);
@@ -536,7 +536,7 @@ void func_8216547C(s8 *arg0) {
 void BattleAnim_SetupSolarBeamUseEffect(Particle* arg0) {
     s16 sp26 = Particle_FieldCF_GetS16_0C058(arg0);
 
-    Particle_Field1C_SetScaled_0B938(arg0, 0.2f);
+    Particle_SetScaleScaled(arg0, 0.2f);
     Particle_Field38_AddYScaled_08E90(arg0, 5.0f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, sp26);
     Particle_SetPrimAlpha(arg0, 0x40);
@@ -554,7 +554,7 @@ void BattleAnim_RunSolarBeamUseEffect(Particle* arg0) {
             break;
 
         case 2:
-            Particle_Field1C_Approach_0B98C(arg0, 8.0f, 0.1f);
+            Particle_ApproachScale(arg0, 8.0f, 0.1f);
             Particle_PrimAlpha_Approach_0BC2C(arg0, 0xFF, 4);
             break;
 
@@ -577,7 +577,7 @@ void BattleAnim_SetupQiChargeChild(Particle* arg0) {
     Particle_Field5C_SetYScaled_0A094(arg0, 2.0f);
     Particle_Field9A_SetY_0A3D8(arg0, 0x400);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, sp24);
-    Particle_Field1C_SetScaled_0B938(arg0, 0.5f - (sp26 * D_FLT_82197850));
+    Particle_SetScaleScaled(arg0, 0.5f - (sp26 * D_FLT_82197850));
     Particle_SetPrimAlpha(arg0, (0xFF - (sp26 * 0x10)) & 0xFF);
     Particle_FieldA6_SetS16_0BCA8(arg0, sp26 + 1);
     Particle_DisableRendering(arg0);
@@ -604,7 +604,7 @@ void BattleAnim_RunQiChargeChild(Particle* arg0) {
             break;
 
         case 3:
-            if ((Particle_DecrementUnkA6ToZero(arg0) != 0) && (Particle_Field1C_Approach_0B98C(arg0, 0.0f, 0.05f) != 0)) {
+            if ((Particle_DecrementUnkA6ToZero(arg0) != 0) && (Particle_ApproachScale(arg0, 0.0f, 0.05f) != 0)) {
                 Particle_AdvanceLifecycle(arg0);
             }
             break;

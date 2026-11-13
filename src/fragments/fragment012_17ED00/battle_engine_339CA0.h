@@ -423,7 +423,7 @@ void BattleAnim_InitSharedVerticalFadeParticle(Particle* arg0);
  * I found is case 8 (see the comment there).  The names
  * used for the helper calls are the ones already in this repo's symbol list,
  * so they look different from Stadium 1's names (for example
- * Particle_Field1C_SetScaled_0B938 is Stadium 1's Particle_Scale_SetScaled).
+ * Particle_SetScaleScaled is Stadium 1's Particle_Scale_SetScaled).
  *
  * Verified: compiles with IDO 7.1 -O2 -mips2 (repo flags and headers) to the same words as the retail ROM, relocations compared by address.
  * Constants: the float literals this function reads (0.0, 0.02, 0.04, 0.05,

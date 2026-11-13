@@ -17,7 +17,7 @@ void BattleAnim_UpdateSecondaryOwnerParticleBlueGrow(s8 *arg0);
  * for Pin Missile, Poison Sting, Spike Cannon and Twineedle.
  */
 void BattleAnim_InitStingerTrailColor(Particle* arg0) {
-    Particle_Field1C_SetScaled_0B938(arg0, 0.1f);
+    Particle_SetScaleScaled(arg0, 0.1f);
     Particle_SetPrimColor(arg0, 0xFF, 0xFF, 0xFF);
     Particle_SetEnvColor(arg0, 0x64, 0xC8, 0xFF);
     Particle_SetPrimAlpha(arg0, 0xFF);
@@ -57,7 +57,7 @@ void BattleAnim_UpdateSecondaryOwnerParticleBlueFadeGrow(s8 *arg0) {
  * for Pin Missile, Poison Sting, Spike Cannon and Twineedle.
  */
 void BattleAnim_InitStingerTrailColorDuplicate(Particle* arg0) {
-    Particle_Field1C_SetScaled_0B938(arg0, 0.1f);
+    Particle_SetScaleScaled(arg0, 0.1f);
     Particle_SetPrimColor(arg0, 0xFF, 0xFF, 0xFF);
     Particle_SetEnvColor(arg0, 0x64, 0xC8, 0xFF);
     Particle_SetPrimAlpha(arg0, 0xFF);

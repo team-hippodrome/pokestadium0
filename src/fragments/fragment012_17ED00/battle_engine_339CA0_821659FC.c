@@ -26,7 +26,7 @@ void BattleAnim_CallbackDescriptor26BurstChild(Particle* arg0) {
             break;
 
         case 4:
-            Particle_Field1C_Approach_0B98C(arg0, 0.1f, 0.02f);
+            Particle_ApproachScale(arg0, 0.1f, 0.02f);
             Particle_PrimR_Approach_0BAE4(arg0, 0xFF, 4);
             Particle_EnvR_Approach_0BB90(arg0, 0xFF, 8);
             Particle_EnvG_Approach_0BBF0(arg0, 0xFF, 8);
@@ -90,9 +90,9 @@ void BattleAnim_SetupUnusedGrowingSparkVariant(Particle* arg0) {
         sp24 = 1.0f;
     }
 
-    Particle_Field1C_SetScaled_0B938(arg0, sp24);
-    Particle_SetScaleSpeed(arg0, 8.0f * sp24);
-    Particle_SetScaleTarget(arg0, D_FLT_8219786C * sp24);
+    Particle_SetScaleScaled(arg0, sp24);
+    Particle_SetScaleTarget(arg0, 8.0f * sp24);
+    Particle_SetScaleStep(arg0, D_FLT_8219786C * sp24);
     Particle_Field38_AddYScaled_08E90(arg0, 10.0f);
     Particle_SetTextureFrame(arg0, 0xF);
     ParticleGfx_RecolorPrim(arg0, 0x8);

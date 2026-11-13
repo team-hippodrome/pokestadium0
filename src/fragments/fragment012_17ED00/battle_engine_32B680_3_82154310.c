@@ -48,7 +48,7 @@ void BattleAnim_ApplyModelSpeciesOffset(Particle* arg0) {
             break;
         case GYARADOS:
             offset = -10.0f;
-            Particle_Field1C_SetScaled_0B938(arg0, 0.15f);
+            Particle_SetScaleScaled(arg0, 0.15f);
             break;
         case VAPOREON:
             offset = -5.0f;

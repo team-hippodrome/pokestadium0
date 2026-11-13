@@ -955,3 +955,11 @@ the move named is the one being used when the call was seen.
   `Particle_Field50_AddNegField74Y_CheckField2CYNonPositive_09F84` → `Particle_FallAtStepMagnitude`).
 * Setters only ever called with values the field already held (for example the zeroing calls in a
   particle's first frame) keep their tags: nothing changed, so the sweep says nothing about them.
+* Scale fields: `Particle_SetScaleSpeed(0.1)` wrote 0.36 to 0x20 and `Particle_SetScaleTarget(0.03)`
+  wrote 0.108 to 0x24 (render scale 3.6); `Particle_Field1C_ApproachField24ByField20_0BA1C` then
+  moved scale from 0 to 0.108 toward 0.36. So 0x20 is the target and 0x24 the step. The fields are
+  now `scaleTarget` and `scaleStep`, the two setters swap names (`Particle_SetScaleTarget`,
+  `Particle_SetScaleStep`), and the five `Particle_Field1C_*` / `Particle_Field20_*` placeholders
+  became `Particle_SetScaleScaled`, `Particle_ApproachScale`, `Particle_ApproachScaleThenAdvance`,
+  `Particle_ApproachScaleTarget`, `Particle_ApproachScaleTargetThenAdvance` and
+  `Particle_StepScaleTarget` (found by the style pass; confirmed here).
