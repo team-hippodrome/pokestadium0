@@ -79,6 +79,11 @@ void Battle_UpdateFaintBatches(void);
 
 // called every frame: bug boy in GLC
 // Geo_ProcessNodeChildren invokes render callbacks with event 2.
+/**
+ * Stage graph node callback: on event 2, runs the stage camera's battle animation
+ * presentation step 5.
+ * @unverified Name from Stadium 1.
+ */
 s32 Battle_StageGeoDispatchCallback(s32 event, GraphNode* node) {
     if (event == 2) {
         BattleAnim_DispatchPresentation(5, &sStageCamera);
@@ -88,6 +93,11 @@ s32 Battle_StageGeoDispatchCallback(s32 event, GraphNode* node) {
 
 // called every frame: bug boy in GLC
 // Orient the first stage light relative to the current camera's viewing axis.
+/**
+ * Stage light callback: on event 2, points the light 45 degrees off the camera's view
+ * direction about both axes.
+ * @unverified Name from Stadium 1.
+ */
 s32 Battle_StageLightAngleCallbackA(s32 event, unk_D_86002F34_alt18* light) {
     UNUSED s32 pad; // FAKE: stack padding
     f32 distance;
@@ -104,6 +114,10 @@ s32 Battle_StageLightAngleCallbackA(s32 event, unk_D_86002F34_alt18* light) {
 
 // called every frame: bug boy in GLC
 // Apply presentation effects to each of the three stage-layout containers.
+/**
+ * Stage model callback: on event 2, applies the stage scale and tint color.
+ * @unverified Name from Stadium 1.
+ */
 s32 Battle_StageMaterialTintCallback(s32 event, DisplayObject* object) {
     if (event == 2) {
         Vec3f_SetComponentsDuplicate(&object->scale, sStageScale, sStageScale, sStageScale);
@@ -129,6 +143,10 @@ void Battle_SetStageTintColor(u8 r, u8 g, u8 b) {
 
 // Called at the start of battles
 // Uniform scale consumed by the stage material callbacks, not the Pokemon models.
+/**
+ * Sets the scale applied to the stage models.
+ * @unverified Name from Stadium 1.
+ */
 void Battle_SetStageScale(f32 scale) {
     sStageScale = scale;
 }
@@ -196,6 +214,11 @@ void Battle_DrawStageBackdrop(void) {
 */
 // Capture only when camera flag 0x10 requests a refresh. Restoring the viewport
 // keeps the camera's on-screen placement separate from its off-screen render size.
+/**
+ * If the thumbnail camera is enabled, renders its scene into the 76x76 thumbnail image,
+ * then restores the camera's viewport.
+ * @unverified Name from Stadium 1.
+ */
 void Battle_RenderActivePokemonThumbnail(GraphNode* thumbnail_root, DepthBuffer* thumbnail) {
     CameraNode* camera_node = thumbnail_root->children;
     CameraViewport viewport;
@@ -241,6 +264,10 @@ void Battle_DrawClippedTextureRect(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
 
 // called every frame: bug boy in GLC
 // Load full-width source rows and draw at half size using the clipped rectangle helper.
+/**
+ * Loads a band of an RGBA16 texture and draws it as a clipped rectangle at (x1, y1).
+ * @unverified Name from Stadium 1.
+ */
 void Battle_DrawTexturedRectSegment(s32 x1, s32 y1, s32 draw_width, s32 height, u8* texture, s32 load_width) {
     gDPLoadTextureBlock(gDisplayListHead++, texture, G_IM_FMT_RGBA, G_IM_SIZ_16b, load_width, (height * 2) + 2, 0,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
@@ -253,6 +280,10 @@ void Battle_DrawTexturedRectSegment(s32 x1, s32 y1, s32 draw_width, s32 height, 
     Fills in the texture of the pokemon thumbnail
 */
 // Blit the captured side image as four strips, producing a 37 x 37 thumbnail.
+/**
+ * Draws the Pokémon thumbnail image to the screen at its camera's viewport.
+ * @unverified Name from Stadium 1.
+ */
 void Battle_FillActivePokemonThumbnail(GraphNode* thumbnail_root, DepthBuffer* thumbnail) {
     s32 x;
     s32 y;
@@ -355,6 +386,11 @@ void func_82100CC0(void) {
 
 // called every frame: bug boy in GLC
 // Advance simulation/presentation, capture dirty thumbnails, then draw the scene and UI.
+/**
+ * Runs one battle frame: advances animations, updates both sides, the thumbnails and the
+ * battle scene, then draws the stage, models, HUD and fade. Returns the battle result.
+ * @unverified Name from Stadium 1.
+ */
 s32 BattleScene_UpdateFrame(s32 fade_mode) {
     s32 battle_result;
 
@@ -392,6 +428,11 @@ s32 BattleScene_UpdateFrame(s32 fade_mode) {
 */
 // Dormant frame-step path: this translation unit initializes the selector to zero
 // and never sets it to one. A steps and Start resumes only while fade_mode is zero.
+/**
+ * Frame while the battle is paused: redraws without advancing, runs one frame each time A
+ * is pressed (frame step), and unpauses when Start is pressed.
+ * @unverified Name from Stadium 1.
+ */
 s32 BattleScene_UpdatePausedFrame(s32 fade_mode) {
     s32 battle_result = 0;
 
@@ -509,6 +550,10 @@ s32 Battle_FrameCallback(s32 fade_mode) {
 // triggers on battle start: bug boy in glc
 // Preserve the picked prefix and append missing roster indices 0..5 in order.
 // This completes the copy order; it does not choose additional battle participants.
+/**
+ * Appends the roster slots (0 to 5) that were not picked to the end of the picked order.
+ * @unverified Name from Stadium 1.
+ */
 void Battle_CompleteRosterOrder(u8* roster_order, s32 number_of_pokemon_picked) {
     s32 roster_index;
     s32 picked_index;
@@ -580,6 +625,11 @@ void Battle_SelectComRoster(void) {
 
 // triggers at the start of battle: bug boy in glc
 // Seed icon/presentation state from the side's first trainer and first picked Pokemon.
+/**
+ * Sets up a side's model and display state from its first trainer's lead Pokémon and
+ * requests its icon.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_InitializeParticipantPresentation(BattleSessionTeams* side, unk_D_86002F30* model) {
     TeamRoster* first_trainer = side->teamMember[0];
 
