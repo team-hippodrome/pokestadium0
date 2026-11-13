@@ -2,6 +2,8 @@
 #include "battle_engine_339CA0.h"
 
 /**
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleAnim_CallbackDescriptor26BurstChild(Particle* arg0) {
@@ -11,7 +13,7 @@ void BattleAnim_CallbackDescriptor26BurstChild(Particle* arg0) {
             break;
 
         case 2:
-            if (Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
                 Particle_EnableRendering(arg0);
                 ParticleMath_ScaleDirectionToLength(&arg0->motionStep, arg0->motionOffset, D_8219A880, arg0->stepMagnitude);
             }
@@ -26,11 +28,11 @@ void BattleAnim_CallbackDescriptor26BurstChild(Particle* arg0) {
             break;
 
         case 4:
-            Particle_Field1C_Approach_0B98C(arg0, 0.1f, 0.02f);
+            Particle_ApproachScale(arg0, 0.1f, 0.02f);
             Particle_PrimR_Approach_0BAE4(arg0, 0xFF, 4);
             Particle_EnvR_Approach_0BB90(arg0, 0xFF, 8);
             Particle_EnvG_Approach_0BBF0(arg0, 0xFF, 8);
-            Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0);
+            Particle_DecrementUnkA6ToZeroThenAdvance(arg0);
             break;
 
         case 5:
@@ -64,7 +66,7 @@ void BattleAnim_CallbackDescriptor26BurstEmitter(Particle* arg0) {
             break;
 
         case 2:
-            if (Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
                 Particle_EnableRendering(arg0);
             }
             break;
@@ -90,9 +92,9 @@ void BattleAnim_SetupUnusedGrowingSparkVariant(Particle* arg0) {
         sp24 = 1.0f;
     }
 
-    Particle_Field1C_SetScaled_0B938(arg0, sp24);
-    Particle_SetScaleSpeed(arg0, 8.0f * sp24);
-    Particle_SetScaleTarget(arg0, D_FLT_8219786C * sp24);
+    Particle_SetScaleScaled(arg0, sp24);
+    Particle_SetScaleTarget(arg0, 8.0f * sp24);
+    Particle_SetScaleStep(arg0, D_FLT_8219786C * sp24);
     Particle_Field38_AddYScaled_08E90(arg0, 10.0f);
     Particle_SetTextureFrame(arg0, 0xF);
     ParticleGfx_RecolorPrim(arg0, 0x8);

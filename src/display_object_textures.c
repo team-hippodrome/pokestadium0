@@ -364,6 +364,8 @@ extern s32 D_800AD1A8;
 extern s32 D_800AD1AC;
 
 /**
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the Pokédex, the party screen,
+ * Lab sort, registration, the Lab PC and Free Battle setup.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void PokeIcon_OpenModelArchives(void) {
@@ -479,6 +481,8 @@ s32 PokeIcon_PollFrameLoad(ModelLoadContext* arg0) {
 }
 
 /**
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle and a Pound turn.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 s32 PokeIcon_PollBackgroundLoad(ModelLoadContext* arg0) {

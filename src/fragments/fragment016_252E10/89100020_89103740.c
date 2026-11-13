@@ -801,7 +801,7 @@ M2C_UNK GbSave_DrawSummaryBar(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
 void func_8002C8D8(Col891049E8*, Col891049E8, f32);
 /**
  * Steps the screen fade; returns once eight frames have passed.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran on the frames the いちらん (list) screen faded in from the main menu.
  */
 s32 LabPCList_UpdateFade(s32 arg0) {
     Col891049E8 sp2C;

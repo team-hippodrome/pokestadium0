@@ -117,6 +117,8 @@ extern u8 D_82198D28[];
 
 /**
  * Stores the RGB tint applied to the battle stage.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn.
  * @unverified Name from the header prototype; comment guessed from the code.
  */
 void Battle_SetStageTintColor(u8 r, u8 g, u8 b) {
@@ -142,6 +144,8 @@ extern Gfx D_80060398[];
  * Archive entry 2 returns a tagged backdrop value: NULL clears depth, -1 fills
  * black, a value below 0x10000 is RGBA5551, and larger values address a texture.
  * The 4 x 64 RGBA32 texture stretches over the upper half; its last row fills below.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn.
  * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
  */
 void Battle_DrawStageBackdrop(void) {
@@ -219,7 +223,9 @@ s32 func_80006B50(s32 *, s32 *, s32 *, s32 *);
  * called every frame: bug boy in GLC
  * Use clipped destination offsets as 10.5 texture coordinates with a half-texel bias.
  * @src/gfx_rect.c
- * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep: for (0x17, 0x48, 0x3B, 0x51) it emitted
+ * G_TEXRECT E40F0148 0005C120 (corners 0x17,0x48 to 0x3C,0x52 in 10.2 fixed point), then
+ * G_RDPHALF_1 and G_RDPHALF_2 with s,t 0x10 and steps 0x800.
  */
 void Battle_DrawClippedTextureRect(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 x0 = arg0;
@@ -285,6 +291,8 @@ void Battle_FillActivePokemonThumbnail(GraphNode* thumbnail_root, DepthBuffer* t
 /**
  * Clear the faint-batch stamps for every picked Pokemon, including teammate rosters.
  * BattleMon.unk_25 is written by Battle_UpdateFaintBatches when its current HP reaches zero.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Battle_ResetFaintBatches(void) {
@@ -308,6 +316,8 @@ void Battle_ResetFaintBatches(void) {
  * called every frame: bug boy in GLC
  * Stamp newly observed zero-HP Pokemon with the same batch number this frame.
  * Increment once per nonempty batch, so simultaneous faints share a stamp.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Battle_UpdateFaintBatches(void) {
@@ -414,6 +424,8 @@ void func_8000D304(void);
  * triggers every frame: bug boy in GLC
  * Count the initial two callbacks toward zero; once the gate is zero, the attract
  * demo battle (mode 16) can request exit on a button press. The normal path waits for the scene result.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn.
  * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
  */
 void Battle_UpdateCompletionGate(void) {
@@ -450,6 +462,8 @@ void func_8000A7FC(s32);
  * BgStage_WaitForCondition passes the current fade mode and starts the exit fade
  * after a nonzero return. Latch 2 prevents repeating the audio shutdown request.
  * @src/stage_loader.c
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 Battle_FrameCallback(s32 fade_mode) {

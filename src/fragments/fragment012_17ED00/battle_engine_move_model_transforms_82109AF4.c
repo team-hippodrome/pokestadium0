@@ -26,6 +26,8 @@ void BattleScene_ResetParticipantModelFlags(ActivePokemon* active_pokemon) {
 
 /**
  * Places the Poke Ball above the field on this Pokemon's side and starts its sway.
+ * Seen in play (2026-11-13) in a Pokémon Cup (L1～30, モンスターボールカップ) battle it ran once per side as
+ * the opening send-out threw its Poké Ball.
  * @unverified Name and comment guessed from the code.
  */
 void BattleAnim_PokeBallThrowStart(UNUSED ActivePokemon* owner, ActivePokemon* animated_pokemon) {
@@ -43,6 +45,8 @@ void BattleAnim_PokeBallThrowStart(UNUSED ActivePokemon* owner, ActivePokemon* a
 
 /**
  * Spins the Poke Ball and lets it fall; hides it once it drops below the floor.
+ * Seen in play (2026-11-13) in a Pokémon Cup (L1～30, モンスターボールカップ) battle it ran on the frames the
+ * opening send-out's Poké Ball spun and fell.
  * @unverified Name and comment guessed from the code.
  */
 void BattleAnim_PokeBallThrowContinue(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
@@ -65,6 +69,8 @@ void BattleAnim_PokeBallThrowContinue(ActivePokemon* owner, ActivePokemon* anima
 
 /**
  * Poke Ball throw model transform (case 1): start, then continue.
+ * Seen in play (2026-11-13) in a Pokémon Cup (L1～30, モンスターボールカップ) battle it ran as the opening
+ * send-out threw the Poké Balls, before 「ゆけっ！ ゲンガー」.
  * @unverified Name and comment guessed from the code.
  */
 void BattleAnim_PokeBallThrow(s32 arg0, s8 *arg1) {
@@ -114,6 +120,10 @@ void BattleAnim_PokeBallLandContinue(ActivePokemon* owner, ActivePokemon* animat
  * Poke Ball landing model transform (case 2). In game it ran on the player's
  * side for 12 frames during a recall (「もういい！ もどれ！」), not when the
  * next Pokemon was sent out; what it shows there is not established.
+ * Seen in play (2026-11-13) in a Free Battle switch (1P switched to its second Pokémon) it ran when
+ * A confirmed the switch, during the recall.
+ * Seen in play (2026-11-13) it also ran when COM sent out its next Pokémon (ゆけっ！ゲンのすけ) after its
+ * first one fainted.
  * @unverified Name and comment guessed from the code.
  */
 void BattleAnim_PokeBallLand(s32 arg0, s8 *arg1) {

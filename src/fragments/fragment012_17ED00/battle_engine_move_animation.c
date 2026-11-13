@@ -167,6 +167,8 @@ void BattleAnim_PlayMoveEffectEnd(ActivePokemon* user, s32 move_id) {
 
 /**
  * play on move end
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_TickClearAnimRecordIfLoaded(ActivePokemon* active_pokemon) {
@@ -181,6 +183,8 @@ void func_8210568C(ActivePokemon*, s32, s32);
 
 /**
  * triggers on faint
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_TickStartRowAnimRecord(ActivePokemon* active_pokemon) {
@@ -203,6 +207,8 @@ extern ModelDimensions D_8218934C[];
 
 /**
  * trigger unknown
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_TickQueueRowEffectList3AtAnimEnd(ActivePokemon* active_pokemon) {
@@ -221,7 +227,8 @@ void BattleScene_TickQueueRowEffectList3AtAnimEnd(ActivePokemon* active_pokemon)
 
 /**
  * Clears the Pokemon's cue frame counter at +0x620 (rows 1, 12, 16 and 18 enter with it).
- * @unverified Name from the code.
+ * Seen in play (2026-11-13) in the 165-move sweep: it cleared the cue timer at 0x620 on the COM
+ * Pokémon (0x191 to 0, and 0x57 to 0).
  */
 void ActivePokemon_ResetCueTimer(s8 *arg0) {
     M2C_FIELD(arg0, s32 *, 0x620) = 0;
@@ -229,6 +236,8 @@ void ActivePokemon_ResetCueTimer(s8 *arg0) {
 
 /**
  * trigger on up on the dialogue box disappearing after move use
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_ResetOpponentStateFrameCounter(ActivePokemon* active_pokemon) {
@@ -238,6 +247,8 @@ void BattleScene_ResetOpponentStateFrameCounter(ActivePokemon* active_pokemon) {
 /**
  * trigger on up on the dialogue box disappearing after move use
  * used to animate moves that throw rocks
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle and a Pound
+ * turn.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleAnim_SetFlagForRockThrowingMoves(ActivePokemon* active_pokemon) {
@@ -276,6 +287,8 @@ s32 func_82101FC4(s8 *arg0) {
 /**
  * Registers the session's animation asset tables once loading is idle.
  * Returns 1 if registered, 0 if still busy.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle and a Pound turn.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 BattleAnim_TryRegisterAssetTables(ActivePokemon* active_pokemon) {
@@ -288,6 +301,8 @@ s32 BattleAnim_TryRegisterAssetTables(ActivePokemon* active_pokemon) {
 
 /**
  * Loads the resource list for the participant's active animation row.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle and a Pound
+ * turn.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_LoadMoveResourceList(ActivePokemon* active_pokemon) {
@@ -301,6 +316,8 @@ void BattleScene_LoadMoveResourceList(ActivePokemon* active_pokemon) {
 
 /**
  * Loads the resource list for the current state row's mode.
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_LoadRowResourceList(ActivePokemon* active_pokemon) {
@@ -353,7 +370,7 @@ extern f32 D_82199DF0[][4];
 /**
  * Loads the species' model, animation and texture data for the Pokemon's side into its slots. Ran
  * in play when 1P switched and when 1P used Substitute (the doll model).
- * Seen in play (2026-11-12): ran when 1P switched Nidorino for Onix, and in the per-move sweep
+ * Seen in play (2026-11-12): ran when 1P switched Nidoqueen for Onix, and in the per-move sweep
  * only for Substitute (the doll model) and Transform (the target's model).
  */
 void ActivePokemon_LoadSpeciesModelAssets(ActivePokemon* arg0) {
@@ -392,6 +409,8 @@ void ActivePokemon_LoadSpeciesModelAssets(ActivePokemon* arg0) {
 /**
  * State row 10 tick: requests a model reload at frame 20; once it completes,
  * loads the switch-in owner model, frames the camera and enters state row 18.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_TickRow10CleanupAndEnterState18(ActivePokemon* active_pokemon) {
@@ -446,7 +465,8 @@ void func_82122104(ActivePokemon*);
 /**
  * Row 3 tick: when the user's move cue ends, sets the model transform for the move (Agility,
  * Surf, Meditate, Waterfall, Seismic Toss or the cue's own) and starts the move's effect script.
- * @unverified Name from the code.
+ * Seen in play (2026-11-13) in the 165-move sweep: it ran every frame of Mega Punch's use row, with
+ * the user at a0, and returned without effect until the cue ended.
  */
 void BattleScene_TickMoveUseStartEffect(ActivePokemon* active_pokemon) {
     UNUSED s32 pad; // FAKE: stack padding
@@ -501,7 +521,8 @@ extern s32 D_8219A574;
 /**
  * Row 3 tick: when the user's move cue ends, plays the move's sound (variant 3 for the extra hits
  * of a multi-hit move, 2 when the move failed).
- * @unverified Name from the code.
+ * Seen in play (2026-11-13) in the 165-move sweep: it ran every frame of Mega Punch's use row (user
+ * at a0) alongside the other row 3 ticks.
  */
 void BattleScene_TickMoveUsePlaySound(ActivePokemon* active_pokemon) {
     MovePresentationCue* cue;
@@ -534,6 +555,8 @@ void BattleScene_TickMoveUsePlaySound(ActivePokemon* active_pokemon) {
 /**
  * When the move cue reaches its stat-effect frame, queues the stat-raise
  * particle effect and sound for self-boosting moves.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle and a Pound
+ * turn.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Battle_HandleStatBoostingMoveAnimation(ActivePokemon* active_pokemon) {
@@ -563,7 +586,8 @@ void Battle_HandleStatBoostingMoveAnimation(ActivePokemon* active_pokemon) {
 /**
  * Row 3 tick: waits until 0x1F frames past the cue's effect frame; for Defense Curl (0x6A) it
  * also switches the model's texture mode.
- * @unverified Name from the code.
+ * Seen in play (2026-11-13) in the 165-move sweep: it ran as a row 3 tick during Mega Punch's use,
+ * with the user at a0.
  */
 void BattleScene_TickMoveUseEnd(ActivePokemon* active_pokemon) {
     BattleMonRuntime* runtime;
@@ -611,6 +635,8 @@ void BattleScene_EnterConfusedRow(ActivePokemon* active_pokemon) {
 
 /**
  * State row 21 tick: when move cue 0 ends, plays the species sound.
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
+ * turns): ran.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_TickRow22PlaySpeciesSound(ActivePokemon* active_pokemon) {
@@ -765,7 +791,8 @@ M2C_UNK func_8213B31C(M2C_UNK);
 /**
  * Row 4 tick: at the end of the target's hurt cue, finishes the hit and starts the Bind, Wrap,
  * String Shot and Constrict squeeze (transform 16) on the target.
- * @unverified Name from the code.
+ * Seen in play (2026-11-13) in the 165-move sweep: it ran during the target's hurt reaction to Pay
+ * Day and Thunder Punch.
  */
 void BattleScene_TickHitReactionEnd(ActivePokemon* active_pokemon) {
     BattleMonRuntime* runtime;
@@ -791,7 +818,8 @@ void BattleScene_TickHitReactionEnd(ActivePokemon* active_pokemon) {
 extern u8 D_82199FCC;
 /**
  * Row 4 tick: at the end of the target's hurt cue, plays the move's hit sound (variant 1 or 5).
- * @unverified Name from the code.
+ * Seen in play (2026-11-13) in the 165-move sweep: it ran during the target's hurt reaction to Pay
+ * Day and Thunder Punch, as the hit sound played.
  */
 void BattleScene_TickHitReactionPlaySound(ActivePokemon* active_pokemon) {
     BattleMonRuntime* runtime;
@@ -833,7 +861,8 @@ void func_800414B0(u8, s32, s32, s32);
  * First enter callback of rows 1, 16 and 18: sets the idle animation (the sleeping, flying or
  * normal idle cue, depending on status) unless the Pokemon is frozen or underground. In play row
  * 1 ran at the end of each turn.
- * @unverified Name from the code.
+ * Seen in play (2026-11-13) in the 165-move sweep: it ran for both Pokémon (a0 = each
+ * ActivePokemon) when the turn's command phase began, before any move.
  */
 void BattleScene_EnterIdleRow(ActivePokemon* active_pokemon) {
     s32 row_index = active_pokemon->animationState;
@@ -875,7 +904,8 @@ void func_82134DEC(s16);
  * State row 1 tick: on frame 1 plays the cry (the real species while behind
  * a Substitute), unless ACTIVE_UNDERGROUND or ACTIVE_FREEZE is set
  * or the Pokemon has STATUS_SLEEP_MASK bits set.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep: it ran for both Pokémon on entering the idle row
+ * at the start of the turn.
  */
 void BattleScene_TickRow1PlayOwnerCry(ActivePokemon* active_pokemon) {
     UNUSED s32 pad; // FAKE: stack padding
@@ -980,6 +1010,8 @@ void func_82103998(ActivePokemon* active_pokemon) {
 
 /**
  * State tick: on frame 1, queues the row's effect list 3 entry and sound 3.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_TickQueueRowEffectList3OnFirstFrame(ActivePokemon* active_pokemon) {
@@ -996,6 +1028,8 @@ void BattleScene_TickQueueRowEffectList3OnFirstFrame(ActivePokemon* active_pokem
 /**
  * State row 20 tick: requests a model reload at frame 79; once it completes,
  * loads the switch-in owner model, frames the camera and enters state row 18.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_TickRow21CleanupAndEnterState18(ActivePokemon* active_pokemon) {
@@ -1019,6 +1053,8 @@ void BattleScene_TickRow21CleanupAndEnterState18(ActivePokemon* active_pokemon) 
 /**
  * Once a requested model reload completes, resets the owner model to the
  * neutral placeholder.
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
+ * turns): ran.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_ResetOwnerModelIfLoaded(ActivePokemon* active_pokemon) {
@@ -1047,7 +1083,7 @@ void BattleScene_EnterChargeTurnRow(ActivePokemon* active_pokemon) {
 /**
  * State row 8 tick: when the charge cue ends, queues the alternate effect
  * script, applies Fly/Dig model flags and plays the reaction sound.
- * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep: it ran during Razor Wind's charging turn.
  */
 void BattleScene_TickRow8PlayMoveEffectScriptB(ActivePokemon* active_pokemon) {
     BattleMonRuntime* runtime;
@@ -1114,7 +1150,7 @@ void BattleScene_EnterCannotMoveRow(ActivePokemon* active_pokemon) {
 /**
  * State row 9 enter: when the opponent is bound by Bind, Wrap or String Shot,
  * queues the binding effect and model flags.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep: it ran for the target of Wrap.
  */
 void BattleScene_EnterRow9QueueEffectList6(ActivePokemon* active_pokemon) {
     BattleMonRuntime* runtime = &sActivePokemon[BattleScene_GetParticipantSideIndex(active_pokemon) == 0]->state.runtime;
@@ -1152,6 +1188,9 @@ void BattleScene_EnterMissRowPlaySound(ActivePokemon* active_pokemon) {
 /**
  * State row 13: plays battle sounds 20 and/or 33 from runtime bits 0x08/0x10,
  * then retires the slot.
+ * Seen in play (2026-11-13) (Free Battle, crafted states): ran as the state-row-13 callback for
+ * 1P's Onix after its move in four battles, each time with the poison bit (0x08) set in its
+ * pendingStatusCondition.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_Row13PlaySequences14And21(ActivePokemon* active_pokemon) {
@@ -1295,6 +1334,8 @@ void BattleScene_TickFaintRowQueueCollapseEffect(ActivePokemon* active_pokemon) 
 
 /**
  * Same as BattleScene_TickQueueList3Selector2OrC, using cue unk_B10.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_TickQueueList3Selector2OrCFromB10(ActivePokemon* active_pokemon) {
@@ -1322,7 +1363,8 @@ void BattleScene_TickQueueList3Selector2OrCFromB10(ActivePokemon* active_pokemon
  * Enter callback of rows 11 and 14: the target's hurt or dodge cue like
  * BattleScene_EnterHitReactionRow, keyed on D_82199FCC instead of the damage. In the per-move
  * sweep of moves 1-33 only Sand Attack, which lowers accuracy, entered it.
- * @unverified Name from the code.
+ * Seen in play (2026-11-13) in the 165-move sweep: it ran for Sand Attack, Tail Whip and Leer,
+ * moves that hit without damage, with row 11 in a1.
  */
 void BattleScene_EnterStatusHitRow(ActivePokemon* active_pokemon) {
     UNUSED s32 pad0; // FAKE: stack padding
@@ -1519,7 +1561,8 @@ void BattleScene_SetOpponentEventTrackA6(ActivePokemon* active_pokemon) {
 /**
  * Enters state row `row_index`: runs its three enter callbacks and registers
  * its four tick callbacks.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep: it ran with row 1 for both Pokémon at the start
+ * of the turn, followed by BattleScene_EnterIdleRow.
  */
 void BattleScene_EnterStateRow(ActivePokemon* active_pokemon, s32 row_index) {
     active_pokemon->animationState = row_index;
@@ -1536,7 +1579,8 @@ void BattleScene_EnterStateRow(ActivePokemon* active_pokemon, s32 row_index) {
 
 /**
  * Advances both participants' timers and runs every tick slot.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep: it ran every frame of the battle scene from the
+ * command phase on.
  */
 void BattleScene_TickStateCallbacks(void) {
     sActivePokemon[0]->animationTimer++;
@@ -1619,6 +1663,8 @@ void func_821054C4(ActivePokemon*, s32);
 
 /**
  * Starts the hit cue animation and event track from frame 0.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_StartHitCueAnimation(ActivePokemon* active_pokemon) {
@@ -1778,6 +1824,8 @@ void func_821054A8(s8 *arg0) {
 /**
  * Sets the event track of cue `cue_index` when the session is idle. Dugtrio's
  * idle cue picks one of three consecutive tracks at random.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleAnim_SetModelEventTrackFromRow(ActivePokemon* pokemon, s32 cue_index) {
@@ -1809,6 +1857,8 @@ s32 func_82101FC4();
 /**
  * Binds cue `cue_index`'s event track at its end frame and records
  * `event_state`. Returns 1 when the cue has no track, otherwise 0.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 BattleAnim_TrySetModelEventTrackFromRow(ActivePokemon* active_pokemon, s32 cue_index, s32 event_state) {
@@ -1868,6 +1918,10 @@ s32 func_82105724(ActivePokemon* arg0, s32 arg1) {
 /**
  * Like BattleScene_IsRowWaitComplete, but waits the unkA60 cue's frame count
  * when it is at least 11.
+ * Seen in play (2026-11-13) in a Free Battle switch (1P switched to its second Pokémon) it ran
+ * while the new Pokémon was sent out.
+ * Seen in play (2026-11-13) it also ran when COM sent out its next Pokémon (ゆけっ！ゲンのすけ) after its
+ * first one fainted.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 BattleScene_IsRowWaitCompleteWithEventCount(ActivePokemon* active_pokemon, s32 frame_limit) {
@@ -2002,6 +2056,7 @@ s32 BattleScene_IsMoveKeyedRowWaitComplete(ActivePokemon* active_pokemon, s32 fr
  * Returns 1 when the hit cue animation is done or replaced, or after
  * `frame_limit` frames while ACTIVE_FREEZE or ACTIVE_AIRBORNE (without
  * ACTIVE_AIR_ACTION) is set.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a Pound turn.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 BattleScene_IsRowAnimWaitComplete(ActivePokemon* active_pokemon, s32 frame_limit) {
@@ -2065,7 +2120,8 @@ void func_82105D3C(s8* arg0) {
 
 /**
  * ORs `arg1` into state.flags.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) in the 165-move sweep (Fly, Sing, Dig, Hypnosis, Selfdestruct): with
+ * 0x200 it ORed the flag into the state flags at 0x7C2 (0 to 0x200) and left the other bits alone.
  */
 s32 ActivePokemon_SetStateFlags(s8 *arg0, unsigned short arg1)
 {
@@ -2089,6 +2145,8 @@ void func_82105E64(ActivePokemon* active_pokemon) {
  * Moves participants with ACTIVE_AIR_SETTLE to y = 200 (setting
  * ACTIVE_AIRBORNE), restarts the Dig cue for Dugtrio with ACTIVE_UNDERGROUND,
  * then resets both participants' animation flags.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle and a Pound turn.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_ResetBothParticipantsAnimationState(void) {
@@ -2169,7 +2227,8 @@ void func_82106144(ActivePokemon* active_pokemon) {
 /**
  * Clears the opponent's ACTIVE_UNDERGROUND flag, showing its model and stopping category
  * 4 particles.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep: it ran on the opponent's side (a0 = COM
+ * ActivePokemon) at the end of the hit (Pay Day, Thunder Punch, Scratch).
  */
 void BattleScene_CleanupOpponentSpecialAnimFlag(ActivePokemon* active_pokemon) {
     UNUSED s32 pad[2]; // FAKE: stack padding
@@ -2199,7 +2258,8 @@ typedef struct { f32 v; f32 pad[3]; } RestHeightRow;
 /**
  * Clears the opponent's ACTIVE_UNDERGROUND flag (as above) and its
  * ACTIVE_RETURN_RESET flag.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep: it ran on the opponent's side (a0 = COM
+ * ActivePokemon) at the end of Guillotine, Cut, Whirlwind, Slam and Horn Attack.
  */
 void BattleScene_CleanupOpponentAnimationFlags(ActivePokemon* active_pokemon) {
     ActivePokemon* target = sActivePokemon[BattleScene_GetParticipantSideIndex(active_pokemon) == 0];
@@ -2233,6 +2293,8 @@ void func_82106354(void) {
 /**
  * Undoes the model changes of the participant's current effect mode
  * (scale, height, rotation and secondary models).
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle and a Pound turn.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_CleanupParticipantEffectMode(ActivePokemon* active_pokemon) {
@@ -2467,6 +2529,8 @@ void func_82134EBC(ActivePokemon*, s32);
 /**
  * Starts the sleeping event track, particles and sound for an asleep
  * participant whose sleep animation is not running.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleAnim_TriggerStatusAfflictionCry(ActivePokemon* active_pokemon) {
@@ -2481,6 +2545,9 @@ void BattleAnim_TriggerStatusAfflictionCry(ActivePokemon* active_pokemon) {
 
 /**
  * Allocates and zeroes the ActivePokemon for `side_index`.
+ * Seen in play (2026-11-13) (Free Battle, as the battle scene starts): called from
+ * BattleScene_AllocateParticipants for side 0 and then side 1, returning a different heap pointer
+ * each time.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_AllocateParticipantRecord(BattleSessionTeams* session_teams, s32 side_index) {
@@ -2502,6 +2569,8 @@ void BattleScene_AllocateParticipantRecord(BattleSessionTeams* session_teams, s3
 M2C_UNK func_8211F3F4();                            /* extern */
 
 /**
+ * Seen in play (2026-11-13) (Free Battle, as the battle scene starts): called once from
+ * BattleScene_AllocateParticipants, right after both participant records were allocated.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void Battle_InitMessageQueues(void) {
@@ -2526,6 +2595,8 @@ void ActivePokemon_SetReplacementState(ActivePokemon*, s32);
 void ActivePokemon_SetController(ActivePokemon*, u8*);
 /**
  * Binds the first team member, side and controller to the participant.
+ * Seen in play (2026-11-13) ran during the opening of a COM Free Battle, before the first command
+ * menu.
  * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
  */
 void BattleScene_InitializeParticipantController(ActivePokemon* arg0) {
@@ -2559,6 +2630,8 @@ void func_8211F274(ActivePokemon*);
 /**
  * Initializes controllers, all participant models, the camera mode for the
  * session mode, message buffers and audio channel groups.
+ * Seen in play (2026-11-13) ran during the opening of a COM Free Battle, before the first command
+ * menu.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_InitializePresentation(UNUSED BattleSessionTeams* session_teams) {
@@ -2605,6 +2678,8 @@ void BattleScene_InitializePresentation(UNUSED BattleSessionTeams* session_teams
 
 /**
  * Zeroes the sway state and sets the facing direction (1 or -1).
+ * Seen in play (2026-11-13) ran during the opening of a COM Free Battle, before the first command
+ * menu.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_ResetParticipantAuxTransform(UNUSED ActivePokemon* owner, ActivePokemon* active_pokemon, s32 facing_direction) {
@@ -2618,6 +2693,8 @@ void Battle_InitBothParticipants(void);
 /**
  * Loads battle string tables, clears tick slots and initializes facing,
  * presentation, runtime state and move illegality.
+ * Seen in play (2026-11-13) ran during the opening of a COM Free Battle, before the first command
+ * menu.
  * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
  */
 void BattleScene_InitializeRuntime(BattleSessionTeams* session_teams) {
@@ -2679,6 +2756,8 @@ s32 BattleScene_DispatchLifecycle(s32 lifecycle_stage, BattleSessionTeams* sessi
  *
  * Speculation: Some models changed between Stadium 0 and Stadium 1 (most apparent with Nidoking)
  * They could have choosen to render the thumbnails this way in case models changed mid-development.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
+ * switch in battle.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleThumbnail_TriggerOwnerModelAnimation(ActivePokemon* active_pokemon) {
@@ -2699,7 +2778,8 @@ extern M2C_UNK D_82199DE0;
 
 /**
  * Updates upon the entering the move phase for both pokemon
- * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep: it ran as the move phase began (Comet Punch,
+ * Mega Punch, Pay Day).
  */
 void BattleThumbnail_ClearBothOwnerIdleFlags(void) {
     M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 0), s32 *, 0x9D8) = 0;
@@ -2710,7 +2790,8 @@ extern M2C_UNK D_82199DE0;
 
 /**
  * Updates upon the exiting the move phase for both pokemon
- * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep: it ran when the move phase ended and the command
+ * phase returned (Rolling Kick, Headbutt, Tackle).
  */
 void BattleThumbnail_SetBothOwnerIdleFlags(void) {
     M2C_FIELD(M2C_FIELD(&D_82199DE0, s8 **, 0), s32 *, 0x9D8) = 1;
@@ -2727,6 +2808,8 @@ void BattleThumbnail_SetFlagToUpdatePokemonThumbnail(CameraNode* camera) {
 
 /**
  * Loads the camera framing constants for the owner's thumbnail.
+ * Seen in play (2026-11-13) ran during the opening of a COM Free Battle, before the first command
+ * menu.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleThumbnail_LoadOwnerCameraFramingConstants(ActivePokemon* active_pokemon) {

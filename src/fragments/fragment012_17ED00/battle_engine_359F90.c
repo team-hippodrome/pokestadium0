@@ -48,10 +48,12 @@ void func_82111870(void);
 
 u8 Battle_Random(void);
 void ComputePokemonStat(s32 arg0, BattleMon* arg1);
-void Battle_IncrementMoveUsage(void);
+void Battle_RefundSelectedMovePp(void);
 
 /**
  * Invoke the stored-stat calculator for selectors 0 through 4, preserving its original range.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ComputeAllPokemonStats(BattleMon* arg0) {
@@ -69,6 +71,8 @@ extern u16 D_82199F52;
 extern u16 D_843C4DCC;
 /**
  * Select damage power, offensive/defensive stats and level, including screens and critical hits.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle and a Pound
+ * turn.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void InitBattleParameters(void) {
@@ -125,7 +129,7 @@ extern u16 D_82199F54;
 extern u16 D_82199F58;
 /**
  * Calculate base damage, halving defense for boom moves and delegating OHKO success.
- * Seen in play (2026-11-12): for Nidorino's Poison Sting (level 20, Attack 43, power 15) against
+ * Seen in play (2026-11-12): for Nidoqueen's Poison Sting (level 20, Attack 43, power 15) against
  * Pinsir (Defense 62) it set sBattleDamage to 4, which is the Gen 1 base damage
  * ((20*2/5+2)*15*43/62)/50+2.
  */
@@ -400,6 +404,8 @@ void Battle_MoveHitTest(void) {
 
 /**
  * Copies the runtime's pending status condition into the party Pokemon.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle and a Pound
+ * turn.
  * @unverified Name and comment guessed from the code.
  */
 void ActivePokemon_CommitPendingStatus(ActivePokemon* arg0) {
@@ -591,6 +597,7 @@ extern s32 D_8218C780;
 /**
  * Gen 1 HandleBuildingRage: when the target is using Rage and its Attack stage isn't maxed,
  * queues the rage message and raises its Attack through BattleEffect_ApplyStatBoost.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a Pound turn.
  * @unverified Name and comment from the code (matches the Gen 1 engine).
  */
 void Battle_HandleBuildingRage(void) {
@@ -764,7 +771,15 @@ void Battle_PrintMoveFailureText(void) {
     }
 }
 
-void Battle_IncrementMoveUsage(void) {
+/**
+ * Gives back one PP of the selected move, on both the battle copy (sBattleUser) and the roster
+ * copy. Metronome calls it so that only the move it pulls costs PP. Was misnamed
+ * Battle_IncrementMoveUsage.
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
+ * @unverified Named from the code; the sweep saw it run for Metronome but did not read the PP.
+ */
+void Battle_RefundSelectedMovePp(void) {
     ActivePokemonState* state;
     BattleMon* mon;
 
@@ -783,7 +798,7 @@ void Battle_IncrementMoveUsage(void) {
 s32 Battle_Effect_Metronome(void) {
     s32 move_pulled;
 
-    Battle_IncrementMoveUsage();
+    Battle_RefundSelectedMovePp();
     do {
         do {
             move_pulled = Battle_Random();
@@ -883,6 +898,8 @@ void func_82111870(void);
 
 /**
  * Queue and stage poison/burn and Leech Seed effects after the action.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle and a Pound
+ * turn.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 Battle_ApplyResidualEffects(void) {

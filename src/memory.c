@@ -83,6 +83,9 @@ void* mem_pool_alloc(MemoryPool* node, s32 size) {
 
 /**
  * Free a block that was allocated using mem_pool_alloc.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the Pokédex, the party screen,
+ * the Lab list, Lab sort, registration, the Lab PC, Free Battle setup, the battle opening, a switch
+ * in battle and a Pound turn.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void mem_pool_free(MemoryPool* pool, void* addr) {

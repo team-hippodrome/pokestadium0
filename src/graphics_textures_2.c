@@ -328,6 +328,9 @@ void Font_DisableTwoCycleTexturing(void) {
 extern Gfx D_80060A00[];
 /**
  * Draws a textured rectangle tinted with the given RGBA primitive color.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn. Stubbed on the battle command menu, the COM
+ * info box lost its colored background fill.
  * @unverified Name and comment guessed from the code.
  */
 void Ui_DrawPrimColorRect(s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b, s32 a) {
@@ -417,6 +420,8 @@ typedef struct Font8001B32C {
 /**
  * Returns the x position at which `str` starts when centered on x, using the
  * current font's glyph width, spacing and the scale (percent).
+ * Seen in play (2026-11-13) ran during the VS intro (トレーナー 1P vs トレーナー COM) (Free Battle, L1-30
+ * rules, six L30 rentals vs COM); also in an ordinary Free Battle.
  * @unverified Name and comment guessed from the code.
  */
 s32 Font_GetCenteredStartX(s32 x, s32 scale, const char* str) {

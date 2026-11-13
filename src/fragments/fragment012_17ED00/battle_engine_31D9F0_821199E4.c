@@ -277,6 +277,8 @@ extern char D_82195A58[];
 extern char D_82195A60[];
 /**
  * Draws こうさんしますか? (Surrender?) with いいえ (No) and はい (Yes), tinted for the trainer slot.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
 void BattleMenu_DrawSurrenderPrompt(s16 arg0, s16 arg1, s16 arg2, s32 arg3) {
@@ -586,6 +588,8 @@ void BattleMenu_DrawSwitchPanel(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg
 
 extern s8 D_8218B020;
 /**
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle and a Pound
+ * turn.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleHud_DrawCompactMonStatusBox(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3) {
@@ -637,6 +641,8 @@ void BattleHud_DrawTranslucentShadowRect(s32 arg0, s32 arg1, s32 arg2, s32 arg3,
 /**
  * Draws the battle message box at (x, y) with the revealed part of the text, in the color of the
  * given side.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle and a Pound turn.
  * @unverified Name from its caller.
  */
 void BattleMessage_DrawBox(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
@@ -668,6 +674,8 @@ void BattleMessage_DrawBox(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
 
 /**
  * Draws a side's caption box with the revealed part of the caption text.
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
  * @unverified Name from its caller.
  */
 void BattleHud_DrawCaptionBox(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
@@ -1003,6 +1011,8 @@ extern char D_82195B64[];
 extern char D_82195B68[];
 /**
  * Debug overlay: camera distance, X/Y offset, X/Y angle and animation frame.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
 void BattleDebug_DrawCameraParams(s16 arg0, s16 arg1) {
@@ -1045,6 +1055,8 @@ s32 D_8218B15C[] = { (s32)D_82195B6C, (s32)D_82195B74, (s32)D_82195B80, (s32)D_8
 
 /**
  * Debug overlay: カメラ (Camera) label.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
 void BattleDebug_DrawCameraLabel(s16 arg0, s16 arg1) {
@@ -1090,6 +1102,8 @@ extern char D_82195CFC[], D_82195D04[], D_82195D0C[], D_82195D14[], D_82195D1C[]
 
 /**
  * Debug overlay: ステップ1 (Step 1) option lists, MODE, and しぬ/しなない (faint / don't faint).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
 void BattleDebug_DrawStepMenu(s16 arg0, s16 arg1) {
@@ -1165,6 +1179,8 @@ extern s32 D_8219A75C;
 extern s32 D_8219A768;
 /**
  * Debug overlay for move effects: move name and number, turn, effect 1/2 start, end frame and current frame.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
 void BattleDebug_DrawMoveEffectViewer(s16 arg0, s16 arg1) {
@@ -1231,6 +1247,8 @@ extern char D_82195F68[];
 extern char D_82195F6C[];
 /**
  * Debug overlay for move effects with the camera: move name and number, effect 1/2 start, current frame, camera and frame.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
 void BattleDebug_DrawMoveCameraViewer(s16 arg0, s16 arg1) {
@@ -1281,6 +1299,8 @@ extern char D_82195FBC[];
 extern char D_82195FC0[];
 /**
  * Debug overlay: effect start, sound start, current frame and frame.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
 void BattleDebug_DrawEffectSoundTiming(s16 arg0, s16 arg1) {
@@ -1315,6 +1335,8 @@ extern char D_82195FF0[];
 extern s32 D_8219A760;
 /**
  * Debug overlay: Pokemon, Poke Ball, number and player.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
 void BattleDebug_DrawPokeBallViewer(s16 arg0, s16 arg1) {

@@ -312,6 +312,9 @@ f32 ModelAnim_EvaluateScaleChannel(unk_D_800ABCC0* arg0, s32 arg1) {
 }
 
 /**
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the Pokédex, the party screen,
+ * registration, Free Battle setup, the battle opening, a switch in battle, running from battle and
+ * a Pound turn.
  * @unverified Name from Stadium 1, matched by code similarity.
  */
 s32 ModelAnim_AdvanceCurveFrame(TransformAnimRaw* arg0) {
@@ -707,7 +710,9 @@ void func_80012DC8(s8* arg0, s8* arg1) {
  * G_TX_RENDERTILE, G_OFF)) to the display list. Then clears the words at
  * arg0 + 0x0C, + 0x10 and + 0x14. The second argument is not used (retail only
  * spills it to its stack home).
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-13) in the 165-move sweep (Mega Punch, Pay Day, Gust and others): when
+ * texture state was set it emitted gSPTexture off (D7000000 FFFFFFFF) and cleared state words 3 and
+ * 5; when it was already clear it emitted nothing.
  */
 void GeoRender_DisableTexture(s32* arg0, s32 arg1) {
     if (arg0[3] != 0) {
@@ -917,6 +922,9 @@ extern s32 D_800AB458;
 extern s32 D_800AB45C;
 /**
  * Queues display list `arg1` on render layer `layer` with the current matrix.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the Pokédex, the party screen,
+ * registration, Free Battle setup, the battle opening, a switch in battle, running from battle and
+ * a Pound turn.
  * @unverified Name and comment guessed from the code.
  */
 void GeoRender_SubmitLayerDisplayList(s16 layer, s32 arg1, s32 arg2, s32 arg3) {
@@ -1115,6 +1123,9 @@ void func_80013398(Root80013DC8*);
 s32 func_8001380C();
 /**
  * Renders a model part root once: resets the material state, renders the children, then flushes the layers. Stadium 1 name for the same handler.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the Pokédex, the party screen,
+ * registration, Free Battle setup, the battle opening, a switch in battle, running from battle and
+ * a Pound turn.
  * @unverified Name and comment guessed from the code.
  */
 void Geo_NodeModelPartRoot(Root80013DC8* arg0) {
@@ -1199,6 +1210,8 @@ void Geo_NodeType9Empty(UNUSED GraphNode* arg0) {
 
 /**
  * Geo node handler: enables fog with the node's fog range and color.
+ * Seen in play (2026-11-13) ran while the opening and title scenes drew (console reset, then N64
+ * logo, opening, title and main menu).
  * @unverified Name and comment guessed from the code.
  */
 void GeoRender_SetFog(GraphNode* arg0) {
@@ -1213,6 +1226,9 @@ void GeoRender_SetFog(GraphNode* arg0) {
 
 /**
  * Adds the node's directional light to the current light set (at most seven).
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the Pokédex, the party screen,
+ * registration, Free Battle setup, the battle opening, a switch in battle, running from battle and
+ * a Pound turn.
  * @unverified Name and comment guessed from the code.
  */
 void Geo_NodeLight(GraphNode* arg0) {
@@ -1376,6 +1392,9 @@ extern s32 D_800AB248[];
 void func_8000ED9C(MtxF* dest, Vec3f* local_position, Vec3s* rotate, Vec3f* scale, MtxF* basis, MtxF* transform);
 /**
  * Geo_NodeAnimatedPart from Stadium 1, with the joint evaluation inlined. D_800AC690 is declared as u8 in this file, so it is cast to the anim record type.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the Pokédex, the party screen,
+ * registration, Free Battle setup, the battle opening, a switch in battle, running from battle and
+ * a Pound turn.
  * @unverified Name guessed from the code; comment kept.
  */
 void Geo_NodeAnimatedPart(GraphNode* arg0) {
@@ -1467,6 +1486,9 @@ extern s32 D_800AB248[];
 
 /**
  * Submits the node's display list on its layer, then renders the children. Stadium 1 name for the same handler.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the Pokédex, the party screen,
+ * registration, Free Battle setup, the battle opening, a switch in battle, running from battle and
+ * a Pound turn.
  * @unverified Name and comment guessed from the code.
  */
 void Geo_NodeDisplayListPart(void *arg0) {
@@ -1484,6 +1506,9 @@ void func_8000E41C(MtxF*, MtxF*, MtxF*, Vec3f*);
 extern s32 D_800AB44C;
 /**
  * Renders a display object: evaluates its animation curves and pushes its transform. Stadium 1 name for the same handler.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the Pokédex, the party screen,
+ * registration, Free Battle setup, the battle opening, a switch in battle, running from battle and
+ * a Pound turn.
  * @unverified Name and comment guessed from the code.
  */
 void Geo_NodeModelPart(GraphNode* arg0) {
@@ -1543,6 +1568,8 @@ M2C_UNK func_8001380C(s8 *);                      /* extern */
 
 /**
  * Pushes the node's matrix, then submits its display list. Stadium 1 name for the same handler.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void Geo_NodeDisplayListMatrix(s8 *arg0) {
@@ -1564,6 +1591,8 @@ M2C_UNK func_80011210(MtxF *);                      /* extern */
 
 /**
  * Pushes a scaled copy of the current matrix, then submits the node's display list. Stadium 1 name for the same handler.
+ * Seen in play (2026-11-13) ran while the opening and title scenes drew (console reset, then N64
+ * logo, opening, title and main menu).
  * @unverified Name and comment guessed from the code.
  */
 void Geo_NodeScale(s8 *arg0) {
@@ -1585,6 +1614,9 @@ M2C_UNK func_8001380C(s8 *);                      /* extern */
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 /**
  * Submits the node's display list with no matrix, then renders the children. Stadium 1 name for the same handler.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the Pokédex, the party screen,
+ * registration, Free Battle setup, the battle opening, a switch in battle, running from battle and
+ * a Pound turn.
  * @unverified Name and comment guessed from the code.
  */
 void Geo_NodeDisplayList(s8 *arg0)
@@ -1703,6 +1735,8 @@ Gfx* func_8001B3AC(s16 x, s16 y, s16 arg2, s16 arg3, Color_RGBA8_u32 color, cons
 /**
  * Geo callback for a text node: prints the node's formatted string with its
  * font and color and queues the resulting display list on the node's layer.
+ * Seen in play (2026-11-13) ran during the VS intro (トレーナー 1P vs トレーナー COM) (Free Battle, L1-30
+ * rules, six L30 rentals vs COM); also in an ordinary Free Battle.
  * @unverified Name guessed from the code; comment kept.
  */
 void Geo_NodeText(GraphNode* arg0) {
@@ -1722,6 +1756,9 @@ void Geo_NodeText(GraphNode* arg0) {
 extern Gfx D_01002480[];
 extern Gfx D_01002500[];
 /**
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the Pokédex, the party screen,
+ * registration, Free Battle setup, the battle opening, a switch in battle, running from battle and
+ * a Pound turn.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void Geo_NodeShadow(GraphNode* arg0) {

@@ -90,6 +90,7 @@ extern OSViMode D_80077F40[];
 /**
  * Selects the VI mode from the D_8005F664 table (indices arg0, arg1) and turns on
  * dither filter and divot, gamma off.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening.
  * @unverified Name and comment guessed from the code.
  */
 M2C_UNK DpIntro_SetViMode(s8 arg0, s8 arg1) {
@@ -230,6 +231,8 @@ void func_80001328(void);
 void func_80001558(void);
 
 /**
+ * Seen in play (2026-11-13) ran at boot (console reset, then N64 logo, opening, title and main
+ * menu).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void DisplayWorker_ThreadMain(UNUSED void* arg0) {
@@ -337,6 +340,8 @@ M2C_UNK DpIntro_SetViMode(s8, s8);                      /* extern */
 extern M2C_UNK D_800870D0;
 
 /**
+ * Seen in play (2026-11-13) ran when quitting the GB player (C-Up menu, Quit game, Yes) back to the
+ * main menu.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void Display_ApplyPendingVideoMode(void) {
@@ -346,6 +351,8 @@ void Display_ApplyPendingVideoMode(void) {
 extern M2C_UNK D_800870D0;
 
 /**
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the Pokédex, the party screen,
+ * the Lab list, Lab sort, registration, the Lab PC and Free Battle setup.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 s32 Display_IsFrameReady(void) {

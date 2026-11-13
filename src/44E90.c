@@ -87,6 +87,9 @@ typedef struct Synth800443C4 {
 void func_8004D600(ALLink800443C4*);
 void func_8004D630(ALLink800443C4*, ALLink800443C4*);
 /**
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the main menu, the Pokédex,
+ * the party screen, the Lab list, Lab sort, registration, the Lab PC, Free Battle setup, the battle
+ * opening, a switch in battle, running from battle and a Pound turn.
  * @unverified Name from Stadium 1, matched by code similarity.
  */
 s32 _allocatePVoice(void** pvoice, s16 priority) {

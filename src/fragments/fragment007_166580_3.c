@@ -1069,7 +1069,8 @@ void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
  * Draws one row of 「カップせんたく」: highlight box when selected (flag 0x10), a cleared-cup icon at the
  * right when flag 0x100 is set, and the cup name dimmed when locked.
  * Seen in play: draws モンスターボールカップ (boxed) and the greyed スーパーボール, ハイパーボール and マスターボールカップ.
- * @unverified The cleared icon (flag 0x100) was not seen.
+ * Seen in play (2026-11-13) drew the rows of 「カップせんたく」 for the L1～30 tournament (モンスターボールカップ, then
+ * the greyed スーパー, ハイパー and マスターボール cups).
  */
 void FreeBattle_DrawCupRow(s32 arg0, s32 arg1, IconPanel* arg2, s32 arg3, s32 arg4) {
     UNUSED s32 pad[5]; // FAKE: stack padding
@@ -1306,6 +1307,8 @@ extern Str4_820080B8 D_82009210;
 extern u8 D_8200A0A0[];
 /**
  * Sets up the ちゅうい！！ (warning) window for duplicate species.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void FreeBattle_InitDuplicateWarning(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
@@ -1331,6 +1334,8 @@ extern char D_8200A0B0[];
 
 /**
  * Draws おなじポケモンが %dたいいます (there are %d of the same Pokemon).
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void FreeBattle_DrawDuplicateWarning(s8* arg0) {
@@ -1362,7 +1367,8 @@ extern char D_8200A11C[];
  * D_800603C0 and then arg3 in the word at 0xA4 (calling func_8000B2F4 with
  * each), and finally stores arg3 at 0xB4 and arg4 at 0xB0.
  * What the object is and what the constants mean is not established.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-13) in the L1～30 tournament (モンスターボールカップ) entry, A on the GB party of three
+ * opened 「ちゅうい!! つかえるポケモンが 6たい たりません」 with はい/いいえ, and this ran once as it appeared.
  */
 void FreeBattle_InitShortageWarning(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     Window_SetRect(arg0, arg1, arg2, 0x134, 0x92);
@@ -1396,7 +1402,8 @@ extern char D_8200A124[];
  * selection index at +0xA8 again decides which of the two sub-objects (+0x2C,
  * +0x68) gets 2 from Window_DrawLabeled and which gets 0.
  * What the constants mean is not established.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-13) drew the 「ちゅうい!! つかえるポケモンが 6たい たりません」 warning on the tournament entry
+ * screen every frame while it was up.
  */
 void FreeBattle_DrawShortageWarning(s8* arg0) {
     if (func_8002AE6C() == 0) {
@@ -1421,7 +1428,8 @@ M2C_UNK func_8003F6AC(M2C_UNK);
 
 /**
  * Handles the too few usable Pokemon warning.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran every frame while the tournament entry screen's 「つかえるポケモンが 6たい
+ * たりません」 warning waited for はい/いいえ.
  */
 s32 FreeBattle_UpdateShortageWarning(s8* arg0) {
     s32 ret = 0;
@@ -1465,6 +1473,8 @@ void func_8000B2F4(s32);
  * stores D_800603C0 and then arg3 in the word at 0xA4, calling func_8000B2F4
  * with each value in turn. Finally stores arg3 at 0xB0.
  * What the object is and what the constants mean is not established.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name guessed from the code; comment kept.
  */
 void FreeBattle_InitLevelSumWarning(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
@@ -1501,6 +1511,8 @@ extern char D_8200A198[];
  * on the two sub-objects with 2 for the one whose index (0 for +0x2C, 1 for +0x68)
  * equals the selection at +0xA8 and 0 for the other.
  * What the constants mean is not established.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name guessed from the code; comment kept.
  */
 void FreeBattle_DrawLevelSumWarning(s8* arg0) {
@@ -1526,6 +1538,8 @@ M2C_UNK func_8003F6AC(M2C_UNK);
 
 /**
  * Handles the level sum warning.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 FreeBattle_UpdateLevelSumWarning(s8* arg0) {

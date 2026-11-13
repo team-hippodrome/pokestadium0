@@ -349,6 +349,7 @@ void func_80037C04(s32, u32);
 void func_800419F8(u32);
 
 /**
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 s32 Audio_StartMusicTrack(u32 track_id) {
@@ -625,6 +626,8 @@ s32 func_80037AC4(s32, s32);
 void func_800419F8(u32);
 
 /**
+ * Seen in play (2026-11-13) ran when Start was pressed at the title screen (console reset, then N64
+ * logo, opening, title and main menu).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 s32 Audio_FadeOutAll(s32 arg0) {
@@ -762,6 +765,8 @@ void func_80037DF4(s32, s32);
 
 /**
  * Loads and plays the cry of `arg0` (1-based national dex, below 152) into one of three rotating buffers.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn.
  * @unverified Name and comment guessed from the code.
  */
 s32 Audio_PlayCry(u32 arg0, u32 arg1) {
@@ -846,7 +851,8 @@ void func_800386E4(s32, s32);
 s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2);
 /**
  * Loads and plays the sound of `move_id` (1-based, below 167) for `species`; some species/move pairs are skipped. Some moves add a cry or a second sound.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) in the 165-move sweep: move_id matched the move being used in 125 of
+ * 133 calls (the rest were the COM's move) and species was 0x5F, Onix, the 1P Pokémon.
  */
 s32 Audio_PlayMoveSound(u32 move_id, u32 species, u32 sound_kind) {
     s32 var;

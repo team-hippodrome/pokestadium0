@@ -21,6 +21,8 @@ extern M2C_UNK D_80082B60;
 /**
  * Idle thread: sets up the VI mode, interrupts and subsystems, starts thread 4,
  * then idles. Name from Stadium 1's Idle_ThreadEntry.
+ * Seen in play (2026-11-13) ran at boot (console reset, then N64 logo, opening, title and main
+ * menu).
  * @unverified Name and comment guessed from the code.
  */
 void Idle_ThreadEntry(s32 arg0) {
@@ -51,6 +53,8 @@ extern M2C_UNK D_800809B0;
 /**
  * Boot entry: initializes the OS, then creates and starts the idle thread
  * (id 1, Idle_ThreadEntry). Name from Stadium 1's Main.
+ * Seen in play (2026-11-13) ran at boot (console reset, then N64 logo, opening, title and main
+ * menu).
  * @unverified Name and comment guessed from the code.
  */
 void Main(void) {

@@ -269,6 +269,8 @@ u32 main_pool_push_state(u32 arg) {
 /**
  * Restore pool state from a previous call to main_pool_push_state. Return the
  * amount of free space left in the pool.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the Pokédex, the party screen,
+ * the Lab list, Lab sort, registration, the Lab PC and Free Battle setup.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 u32 main_pool_pop_state(u32 arg) {

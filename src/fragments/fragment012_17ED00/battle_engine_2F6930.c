@@ -26,6 +26,8 @@ void Battle_ComputeSplineWeightsVariantE(f32* arg0, f32 arg1);
 
 /**
  * @src/math_util.c
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleAnim_CalculateDistanceAngles(Vec3f* arg0, Vec3f* arg1, f32* arg2, s16* arg3, s16* arg4) {
@@ -40,6 +42,8 @@ void BattleAnim_CalculateDistanceAngles(Vec3f* arg0, Vec3f* arg1, f32* arg2, s16
 
 /**
  * Sets all three components of `dest` to 0.0f and returns `dest`.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 Vec3f* BattleAnim_Vec3fSetZero(Vec3f* arg0) {
@@ -53,6 +57,8 @@ Vec3f* BattleAnim_Vec3fSetZero(Vec3f* arg0) {
  * Sets `dest` to `origin` displaced by `radius` in the XZ plane at angle
  * `theta` (s16 angle units, measured from +Z toward +X: x += sin, z += cos).
  * The Y component is copied unchanged. Returns `dest`.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 Vec3f* BattleAnim_Vec3fOffsetByPolarXZ(Vec3f* arg0, Vec3f* arg1, f32 arg2, s16 arg3) {
@@ -67,7 +73,8 @@ Vec3f* BattleAnim_Vec3fOffsetByPolarXZ(Vec3f* arg0, Vec3f* arg1, f32 arg2, s16 a
  * z = sin(theta) * magnitude (theta measured from +X toward +Z, unlike
  * BattleAnim_Vec3fOffsetByPolarXZ, which measures from +Z toward +X). The Y
  * component is left untouched.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Fly, Agility, Double Team, Waterfall): with
+ * magnitude 1.706 and theta 0x4000 it set z to 1.706 and x to 0; y was untouched.
  */
 void BattleAnim_Vec3fSetPolarXZ(Vec3f* dest_vector, f32 magnitude, s16 theta) {
     dest_vector->x = COSS(theta) * magnitude;
@@ -89,6 +96,8 @@ Vec3f* BattleAnim_Vec3fCopy(Vec3f* dest, Vec3f* src) {
 /**
  * Copies all three components of the s16 vector `src` into `dest` and returns
  * `dest`. Callers use it to copy display object rotations.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle and a Pound
+ * turn.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 Vec3s* BattleAnim_Vec3sCopy(Vec3s* arg0, Vec3s* arg1) {
@@ -100,6 +109,8 @@ Vec3s* BattleAnim_Vec3sCopy(Vec3s* arg0, Vec3s* arg1) {
 
 /**
  * Multiplies `dest` in place by a separate factor per axis and returns `dest`.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 Vec3f* BattleAnim_Vec3fScaleComponents(Vec3f* arg0, f32 arg1, f32 arg2, f32 arg3) {
@@ -111,6 +122,8 @@ Vec3f* BattleAnim_Vec3fScaleComponents(Vec3f* arg0, f32 arg1, f32 arg2, f32 arg3
 
 /**
  * @src/math_util.c
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s16 BattleAnim_Atan2sFromPoints(f32 arg0, f32 arg1, f32 arg2, f32 arg3) {
@@ -119,6 +132,8 @@ s16 BattleAnim_Atan2sFromPoints(f32 arg0, f32 arg1, f32 arg2, f32 arg3) {
 
 /**
  * Returns the Euclidean distance between points `a` and `b`, passed by value.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle and a Pound
+ * turn.
  * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
  */
 f32 BattleAnim_Vec3fDistance(Vec3f a, Vec3f b) {
@@ -135,6 +150,8 @@ f32 BattleAnim_Vec3fDistance(Vec3f a, Vec3f b) {
  * Returns the distance between (x0, y0) and (x1, y1) in a 2D plane. The camera
  * code passes X and Z world coordinates. The squared deltas are kept in
  * function-local statics (.bss words) instead of stack temporaries.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 f32 BattleAnim_Distance2D(f32 arg0, f32 arg1, f32 arg2, f32 arg3) {
@@ -154,6 +171,8 @@ f32 BattleAnim_Distance2D(f32 arg0, f32 arg1, f32 arg2, f32 arg3) {
 /**
  * @src/math_util.c
  * @src/fragments/battle_engine/battle_engine_battle_phases.c
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 u16 BattleAnim_RandomRange(s32 range) {
@@ -204,7 +223,8 @@ s32 BattleAnim_StepToS16(s16* dest, s16 finish, s16 rate) {
  * Exponential approach: moves *dest toward `value` by the fraction `speed` of
  * the remaining distance (speed 0.1f closes 10% per call). A result within
  * +/-0.001 of zero is snapped to exactly 0.0f, even when `value` is not 0.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep: with *dest = 50, value 8 and speed 0.3 it set
+ * *dest to 37.4.
  */
 void BattleAnim_ApproachF(f32* dest, f32 value, f32 speed) {
     *dest = *dest + ((value - *dest) * speed);
@@ -216,6 +236,8 @@ void BattleAnim_ApproachF(f32* dest, f32 value, f32 speed) {
 /**
  * Integer variant of BattleAnim_ApproachF without the snap to zero. `speed` is
  * an s16 multiplier, so any value other than 0 or 1 overshoots `value`.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleAnim_ApproachS16(s16* dest, s16 value, s16 speed) {
@@ -224,6 +246,8 @@ void BattleAnim_ApproachS16(s16* dest, s16 value, s16 speed) {
 
 /**
  * u16 version of BattleAnim_ApproachS16; the same overshoot caveat applies.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleAnim_ApproachU16(u16* dest, u16 value, s16 speed) {

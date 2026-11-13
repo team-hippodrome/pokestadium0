@@ -88,7 +88,7 @@ void func_800275E4(s32, s32);
 void ScrollList_SetCursorKeepOffset(s32*, s32);
 
 /**
- * LabItem_RemoveSelectedEntry
+ * LabList_RemoveSelectedEntry
  *
  * Removes one row from the grid referenced by the cursor arg0 and fixes up
  * the cursor.  arg0->unk_00 is the grid and arg0->unk_08 the current index.
@@ -110,9 +110,11 @@ void ScrollList_SetCursorKeepOffset(s32*, s32);
  * and positive, sets the index to count - 1.  Zero's version operates on a
  * byte matrix and the retail code simply subtracts 1 from the index, so the
  * name is a rough match at best.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-13) removed the list row when フシギダネ was released (せいとん > ポケモンをにがす) and when
+ * a Pokémon moved out of てもち into GBのボックス1, so it serves the Pokémon lists as well as the item
+ * list.
  */
-void LabItem_RemoveSelectedEntry(LabItemCursor* arg0) {
+void LabList_RemoveSelectedEntry(LabItemCursor* arg0) {
     func_800275E4((s32)arg0->unk_00, arg0->unk_08);
     if (arg0->unk_08 >= M2C_FIELD(arg0->unk_00, s32*, 8)) {
         arg0->unk_08 -= 1;
@@ -172,13 +174,14 @@ void func_890000A4(s32* arg0, s32 arg1, s32 arg2) {
 
 /**
  * Takes `arg1` from the selected item's count, removing the entry when nothing is left.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) in せいとん > どうぐをいどうする, moving all five ほのおのいし to サトシのパソコン removed the bag
+ * row (006/020 to 005/020, PC 000/050 to 001/050).
  */
 void LabItem_DecreaseSelectedCount(LabItemCursor* arg0, s32 arg1) {
     u8* temp_v1 = &arg0->unk_00->unk_00[arg0->unk_00->unk_0C * arg0->unk_08];
 
     if (arg1 >= temp_v1[1]) {
-        LabItem_RemoveSelectedEntry(arg0);
+        LabList_RemoveSelectedEntry(arg0);
         return;
     }
     temp_v1[1] -= arg1;
@@ -300,6 +303,8 @@ extern char D_89018468[];
 extern s32 D_800603C0;
 /**
  * Sets up the confirm window (268x146) with message `arg3` and labeled Yes/No buttons.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void LabItem_InitConfirmWindow(s8* arg0, s32 arg1, s32 arg2, char *arg3, s32 arg4) {
@@ -339,6 +344,8 @@ extern Color_RGBA8 D_8900A5CC;
 
 /**
  * Draws the confirm window: divider, message and buttons.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void LabItem_DrawConfirmWindow(s8* arg0) {
@@ -366,6 +373,8 @@ extern s32 D_800603C0;
 
 /**
  * Handles input on the confirm window while it is open.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 LabItem_UpdateConfirmWindow(s8* arg0) {
@@ -399,7 +408,8 @@ extern Rgba89000D50 D_8900A5BC;
 
 /**
  * Sets up the item count selector (84x52).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) in せいとん > どうぐをいどうする, the ×count selector opened when ほのおのいし ×05 was
+ * picked to move from てもちのどうぐ to サトシのパソコン.
  */
 void LabItem_InitCountSelector(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     Window_SetRect(arg0 + 4, arg1, arg2, 0x54, 0x34);
@@ -434,7 +444,8 @@ extern char D_89018470[];
 
 /**
  * Draws the count selector with its ×count and the up/down arrows.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) in せいとん > どうぐをいどうする, drew the ×count selector (×01, ×02 ... ×05) for
+ * ほのおのいし.
  */
 void LabItem_DrawCountSelector(s8* arg0) {
     UNUSED s32 pad[1]; // FAKE: stack padding
@@ -494,7 +505,8 @@ extern M2C_UNK D_89018474;
 
 /**
  * Handles the count selector input; shows どうぐがいっぱいです (the items are full) when needed.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) in せいとん > どうぐをいどうする, the D-pad changed the ほのおのいし count and A moved
+ * that many to サトシのパソコン.
  */
 s32 LabItem_UpdateCountSelector(s8 *arg0) {
     s32 sp2C;
@@ -557,7 +569,8 @@ void func_89000CF0(s8 *arg0, s8 *arg1)
 
 /**
  * Sets the disabled flag (1) on menu row `arg1`.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran when the てもちのどうぐ / サトシのパソコン / 64のカセット list menu opened in せいとん >
+ * どうぐをいどうする; the list already chosen as the source was greyed out as a destination.
  */
 void LabItem_DisableRow(s8 *arg0, s32 arg1) {
     u16 *temp_v0;
@@ -584,7 +597,8 @@ extern Rgba89000D50 D_8900A5D4[];
 extern M2C_UNK D_800734A8;
 /**
  * Draws one menu row label with the selection highlight (dimmed when disabled).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) drew the rows of the item sort screen's source window (てもちの どうぐ, サトシの
+ * パソコン, 64の カセット).
  */
 void LabItem_DrawMenuRow(s32 x, s32 y, char* str, UNUSED s32 index, s32 flags) {
     Rgba89000D50 color;
@@ -613,7 +627,8 @@ void Menu_Init(s8*, s32, s32, s32, s32, s32);
 M2C_UNK func_80027804();
 /**
  * Sets up a menu window whose height fits `arg4` rows.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) in せいとん > どうぐを いどうする, A opened the three-row source window (てもちの どうぐ,
+ * サトシの パソコン, 64の カセット) and this ran once as it appeared.
  */
 void LabItem_InitMenuWindow(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
     s32 pad[2]; // FAKE: stack padding
@@ -635,7 +650,8 @@ M2C_UNK Menu_DrawItems(s8 *, s32, s32, M2C_UNK, s32); /* extern */
 
 /**
  * Draws the menu window's items.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) drew the three-row source window (てもちの どうぐ, サトシの パソコン, 64の カセット) on the
+ * item sort screen.
  */
 void LabItem_DrawMenu(s8 *arg0) {
     if (func_8002AE6C() == 0) {
@@ -646,7 +662,8 @@ void LabItem_DrawMenu(s8 *arg0) {
 s32 Menu_UpdateCursorSkipDisabled(void*);
 /**
  * Moves the menu cursor. Returns -1 on cancel, the 1-based row on confirm, otherwise 0.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran every frame while the item sort screen's source window (てもちの どうぐ,
+ * サトシの パソコン, 64の カセット) had the cursor.
  */
 s32 LabItem_UpdateMenuCursor(s32 arg0) {
     s32 sp1C = 0;
@@ -675,6 +692,7 @@ s32 func_80031CC8(u8);
 void Font_SetColorForFlags(s32);
 /**
  * Draws an item row with its ×%02d count.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the Lab PC.
  * @unverified Name and comment guessed from the code; ran in play on empty item lists only.
  */
 void LabItem_DrawItemCountRow(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4) {
@@ -753,6 +771,8 @@ s32 func_80030230(void*);
 
 /**
  * Navigate the selected menu mode, then report cancel or confirm input.
+ * Seen in play (2026-11-13) ran while picking an item and a list in せいとん > どうぐをいどうする and in its
+ * swap command (どこのどうぐをいれかえる？).
  * @unverified Name guessed from the code; comment kept.
  */
 s32 LabItem_UpdateItemList(void* menu, u32 flags) {
@@ -910,7 +930,8 @@ extern M2C_UNK D_800734A8;
 
 /**
  * Draws `arg2` centered in the 376-pixel help area.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran when the item sort screen's help line changed to 「どこから いどうする?」,
+ * which sits centered in the bottom help area.
  */
 void LabItem_DrawCenteredText(s32 arg0, s32 arg1, char* arg2) {
     Font_BeginTranslucentTextRendering();
@@ -930,6 +951,8 @@ extern M2C_UNK D_800734A8;
 
 /**
  * Draws `arg2` in the small font.
+ * Seen in play (2026-11-13) ran while picking an item and a list in せいとん > どうぐをいどうする and in its
+ * swap command (どこのどうぐをいれかえる？).
  * @unverified Name and comment guessed from the code.
  */
 void LabItem_DrawSmallText(s32 arg0, s32 arg1, s32 arg2) {
@@ -1059,7 +1082,7 @@ void func_890020C0(u8* arg0) {
     M2C_FIELD(arg0, s32**, 0x494)[M2C_FIELD(arg0, s32*, 0x140)] = M2C_FIELD(arg0, s32**, 0x494)[M2C_FIELD(arg0, s32*, 0x1A4)];
     if (LabItem_IsQuantitylessItemForOperation(item[0]) != 0) {
         func_89000020((unk_func_8830867C_02C_0CC*)(arg0 + 0x2F8), (void*)(CURSOR(arg0)->grid->data + CURSOR(arg0)->grid->stride * CURSOR(arg0)->selected));
-        LabItem_RemoveSelectedEntry((LabItemCursor*)CURSOR(arg0));
+        LabList_RemoveSelectedEntry((LabItemCursor*)CURSOR(arg0));
     } else {
         func_890000A4((s32*)(arg0 + 0x2F8), item[0], M2C_FIELD(arg0, s32*, 0x444));
         LabItem_SubtractSelectedItemQuantity((unk_func_8820BE14_02C_038*)CURSOR(arg0), M2C_FIELD(arg0, s32*, 0x444));
@@ -1380,6 +1403,8 @@ void Ui_DrawImageInStrips(void*, s32, s32);
 void Font_SetColorForFlags(s32);
 /**
  * Draws なまえ/%s (Name) and ID No/%05d.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void LabItem_DrawTrainerInfo(s32 arg0, s32 arg1, s8* arg2, s32 arg3, s32 arg4) {
@@ -1421,6 +1446,8 @@ void Menu_Init(s8*, s32, s32, s32, s32, s32);
 void func_80027410(s8*, s8*, s32, s32, s32);
 /**
  * Sets up the データをけす (delete data) window.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void LabItem_InitDeleteDataWindow(s8* arg, s32 arg1, s32 arg2, s8* arg3) {
@@ -1447,6 +1474,8 @@ extern u8 D_8007356C[];
 extern u8 D_89018688[];
 /**
  * Draws the delete data window.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void LabItem_DrawDeleteDataWindow(s8* arg0, s32 arg1) {
@@ -1469,6 +1498,8 @@ s32 Menu_UpdateCursor(void*);
 
 /**
  * Moves the delete data cursor. Returns -1 on cancel, 1 on confirm.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 LabItem_UpdateDeleteDataCursor(unk_func_8820E99C_030* arg0) {

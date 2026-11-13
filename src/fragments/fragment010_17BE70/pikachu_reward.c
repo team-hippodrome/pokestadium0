@@ -740,6 +740,10 @@ M2C_UNK func_817012C0(M2C_UNK);                     /* extern */
 extern s32 D_817025C4;
 extern Rec81700064 D_817025C8[];
 
+/**
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ */
 void func_817014A4(s32 arg0) {
     M2C_UNK var_s0;
     s32 temp_v0;

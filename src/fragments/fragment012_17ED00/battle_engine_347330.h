@@ -44,15 +44,15 @@ extern s32 pad_D_84388E38[2];
 extern Gfx D_82192890[];
 extern s32 pad_D_84388F78[2];
 
-void MistHaze_Init(void);
-void MistHaze_Configure(RibbonMesh* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8,
+void StatRibbon_Init(void);
+void StatRibbon_Configure(RibbonMesh* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8,
                    s32 arg9);
-void MistHaze_Spawn(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, s32 arg5);
-void MistHaze_UpdateEnvAlpha(RibbonMesh* arg0);
-s32 MistHaze_Update(RibbonMesh* arg0);
-s32 MistHaze_UpdatePool(void);
-Gfx* MistHaze_Draw(Gfx* arg0, RibbonMesh* arg1);
-Gfx* MistHaze_DrawPool(Gfx* arg0);
+void StatRibbon_Spawn(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, s32 arg5);
+void StatRibbon_UpdateEnvAlpha(RibbonMesh* arg0);
+s32 StatRibbon_Update(RibbonMesh* arg0);
+s32 StatRibbon_UpdatePool(void);
+Gfx* StatRibbon_Draw(Gfx* arg0, RibbonMesh* arg1);
+Gfx* StatRibbon_DrawPool(Gfx* arg0);
 void SurfTerrainGrid_BuildCameraBounds(unk_D_843975E8* arg0, f32 arg1);
 f32 SurfTerrainGrid_SampleHeightAndSlope(f32 x, f32 z, f32* rotation_x);
 s32 SurfTerrainGrid_UpdateWaves(void);
@@ -60,7 +60,7 @@ void SurfTerrainGrid_Init(s32 arg0, s16 arg1, s16 arg2);
 s32 SurfTerrainGrid_Update(void);
 Gfx* SurfTerrainGrid_Draw(Gfx* arg0);
 
-void MistHaze_Configure(RibbonMesh* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8,
+void StatRibbon_Configure(RibbonMesh* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8,
                    s32 arg9);
 
 extern const f64 D_DBL_821979B8;

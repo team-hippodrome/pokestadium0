@@ -48,12 +48,12 @@ void BattleScene_FinalPresentationFrameActiveOwner(CameraNode* arg0) {
 void func_8213436C(void) {
 }
 
-void BattleScene_SelectNextIntroCameraShot(CameraNode* arg0);
+void BattleScene_SelectNextBRollCameraShot(CameraNode* arg0);
 void func_82121434(CameraNode* arg0);
 void BattleScene_InitTurnPresentation(s32 arg0);
 void BattleScene_SetPhase(CameraNode* arg0, s32 arg1);
 void BattleScene_OpeningStepInitCamera(CameraNode* arg0);
-void func_82131880(CameraNode* arg0);
+void BattleScene_IntroStepInitOverheadCamera(CameraNode* arg0);
 void func_821329F8(s32 arg0);
 void func_82132F88(CameraNode* arg0);
 void func_82134374(CameraNode* arg0, UNUSED s32 arg1, UNUSED s32 arg2) {
@@ -65,7 +65,7 @@ void func_82134374(CameraNode* arg0, UNUSED s32 arg1, UNUSED s32 arg2) {
             break;
         case 1:
         case 5:
-            BattleScene_SelectNextIntroCameraShot(arg0);
+            BattleScene_SelectNextBRollCameraShot(arg0);
             break;
         case 9:
             func_82121434(arg0);
@@ -84,7 +84,7 @@ void func_82134374(CameraNode* arg0, UNUSED s32 arg1, UNUSED s32 arg2) {
             BattleScene_OpeningStepInitCamera(arg0);
             break;
         case 4:
-            func_82131880(arg0);
+            BattleScene_IntroStepInitOverheadCamera(arg0);
             break;
         case 7:
             func_821329F8((s32)arg0);

@@ -190,6 +190,8 @@ s32 GbPak_WriteBackDirtySramBlock(s32 arg0);
 /**
  * Reads each clean 0x100-byte block of cartridge RAM back and compares it with the cached copy; a
  * mismatch rewrites the block and restarts the pass, up to 20 times. Returns -1 on failure.
+ * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * in a tour of the menus and a COM battle.
  * @unverified Name and comment from the code; no Transfer Pak was emulated.
  */
 s32 GbPak_VerifyRamBlocks(s32 arg0) {
@@ -268,6 +270,7 @@ M2C_UNK func_8005C0A0();
  * Fills the 32-byte probe block (probePattern and unk_5D90) for the writable-RAM
  * probe: mode 3 all zeros, mode 2 all ones, mode 1 DP counters and osGetCount values
  * so the pattern differs each run.
+ * Seen in play (2026-11-13) ran on the GB player loading screen (ロードちゅう).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void GbPak_PrepareProbeBlock(u32* arg0, s32 arg1) {
@@ -555,7 +558,9 @@ s32 func_8004CFB0(OSMesgQueue *, s32, s32);
 /**
  * Waits for the I/O thread to go idle, sends it the 0xFF quit message and waits until it has
  * exited.
- * @unverified Name and comment from the code; no Transfer Pak was emulated.
+ * Seen in play (2026-11-13) with a JP Green cart in the Transfer Pak, it ran once when the GB
+ * session ended (Continue was picked on a save the game refused, and Stadium showed its "report is
+ * not correct" panel); it did not run while the game played.
  */
 void GbPak_StopIoThread(s32 arg0) {
     s32 i;
@@ -714,6 +719,8 @@ void GbEmu_DrawTextCommands(u16* fb, u8* cmd) {
 
 /**
  * Pixel op: keeps the destination when the source alpha bit is clear, else the source.
+ * Seen in play (2026-11-13) ran on the GB player screen while Pocket Monsters Green booted; also
+ * when the GB player C-Up menu opened.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 GbEmu_PixelOpDitherA(s32 arg0, s32 arg1) {
@@ -722,6 +729,8 @@ s32 GbEmu_PixelOpDitherA(s32 arg0, s32 arg1) {
 
 /**
  * Pixel op: alternate keyed source/destination selection.
+ * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * in a tour of the menus and a COM battle.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 GbEmu_PixelOpDitherB(s32 arg0, s32 arg1) {
@@ -730,6 +739,8 @@ s32 GbEmu_PixelOpDitherB(s32 arg0, s32 arg1) {
 
 /**
  * Pixel op: averages source and destination per RGBA5551 channel.
+ * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * in a tour of the menus and a COM battle.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 GbEmu_PixelOpAverage555(s32 arg0, s32 arg1) {
@@ -738,6 +749,8 @@ s32 GbEmu_PixelOpAverage555(s32 arg0, s32 arg1) {
 
 /**
  * Pixel op: replaces the destination with the source.
+ * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * in a tour of the menus and a COM battle.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 GbEmu_PixelOpReplace(UNUSED s32 arg0, s32 arg1) {
@@ -747,6 +760,8 @@ s32 GbEmu_PixelOpReplace(UNUSED s32 arg0, s32 arg1) {
 /**
  * Copies a width x height RGBA5551 image into a 320-wide destination, combining
  * each pixel with the selected pixel op.
+ * Seen in play (2026-11-13) ran on the GB player screen while Pocket Monsters Green booted; also
+ * when the GB player C-Up menu opened.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void GbEmu_BlitWithPixelOp(u16* dst, u16* src, s32 mode, s32 width, s32 height) {
@@ -782,6 +797,8 @@ void func_81103D30(void) {
 
 /**
  * Copies an image using its blue channel as intensity to scale the given color.
+ * Seen in play (2026-11-13) ran on the GB player screen while Pocket Monsters Green booted; also
+ * when the GB player C-Up menu closed (B); also on the GB player loading screen (ロードちゅう).
  * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
 void GbEmu_BlitTinted(u16* dst, u16* src, s32 color, s32 width, s32 height) {
@@ -801,6 +818,8 @@ void GbEmu_BlitTinted(u16* dst, u16* src, s32 color, s32 width, s32 height) {
 
 /**
  * Additively blends a solid color into the destination using a 4-bit alpha map.
+ * Seen in play (2026-11-13) ran on the GB player screen while Pocket Monsters Green booted; also
+ * when the GB player C-Up menu closed (B); also on the GB player loading screen (ロードちゅう).
  * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
 void GbEmu_BlendColorWithAlphaMap(u16* dst, u8* alpha_map, s32 color, s32 width, s32 height, u32 alpha_stride) {
@@ -834,6 +853,8 @@ extern u16 D_811207F8[];
 /**
  * Draws a horizontal bar into a 16-bit framebuffer from tinted 8x16 tiles: left cap, repeated
  * middle, right cap.
+ * Seen in play (2026-11-13) ran on the GB player screen while Pocket Monsters Green booted; also
+ * when the GB player C-Up menu closed (B); also on the GB player loading screen (ロードちゅう).
  * @unverified Name and comment from the code.
  */
 void GbEmu_DrawTintedBar(u8* arg0, s32 arg1, s32 arg2) {
@@ -1033,6 +1054,8 @@ extern u32 D_811565B0;
 /**
  * Bump allocator: aligns the heap pointer to 64 bytes, reserves the size and hangs when the heap
  * runs out.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name and comment from the code.
  */
 s32 GbEmu_AllocAligned64(s32 arg0, M2C_UNK arg1)
@@ -1061,6 +1084,8 @@ void func_81104B60(s32 arg0) {
 
 /**
  * Blocks on an OS timer for the given number of milliseconds.
+ * Seen in play (2026-11-13) ran when quitting the GB player (C-Up menu, Quit game, Yes) and when it
+ * started again.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void GbEmu_Delay(OSTime arg0) {

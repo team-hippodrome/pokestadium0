@@ -95,6 +95,8 @@ void BattleScene_HideParticipantSecondaryModels(ActivePokemon* active_pokemon) {
 
 
 /**
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
+ * turns): ran.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleScene_ShowSecondaryModelsAtMainTransform(ActivePokemon* pokemon) {

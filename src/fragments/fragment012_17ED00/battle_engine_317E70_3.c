@@ -31,7 +31,7 @@ void BattleAnim_GetSecondaryOwnerBonePosition(Vec3f* arg0);
 void BattleAnim_GetTertiaryOwnerBonePosition(Vec3f* arg0);
 void BattleAnim_GetSecondaryOwnerAnchorPosition(Vec3f* arg0);
 void BattleAnim_GetTertiaryOwnerBone9Position(Vec3f* arg0);
-void Trade_UpdateBoxSlotBobIdle(unk_D_82F20A88* arg0);
+void BattleAnim_GetOwnerModelSizeScaled(unk_D_82F20A88* arg0);
 f32 BattleAnim_GetOwnerModelScale(ActivePokemon* arg0);
 f32 BattleAnim_GetSecondaryOwnerModelScale(void);
 void BattleAnim_GetSecondaryOwnerSpeciesBaseScale(void);
@@ -44,7 +44,7 @@ void BattleAnim_ReleaseParticleModel(Particle* arg0);
 void BattleAnim_GetOwnerBonePosition(ActivePokemon* arg0, s16 arg1, Vec3f* arg2);
 f32 BattleAnim_GetSpeciesBaseScale(ActivePokemon* arg0);
 void BattleAnim_GetOwnerSpeciesBaseScaleAlias(ActivePokemon* arg0);
-void Trade_UpdateBoxSlotBob(unk_D_82F20A88* arg0);
+void BattleScene_GetParticipantModelSizeScaled(unk_D_82F20A88* arg0);
 
 s32 BattleAnim_IsCurrentOwnerSpecies(s32 arg0) {
     s32 sp1C = 0;
@@ -103,8 +103,8 @@ void BattleAnim_GetTertiaryOwnerBone9Position(Vec3f* arg0) {
     BattleAnim_GetOwnerBonePosition(gBattleAnimTertiaryOwner, 9, arg0);
 }
 
-void Trade_UpdateBoxSlotBobIdle(unk_D_82F20A88* arg0) {
-    Trade_UpdateBoxSlotBob(arg0);
+void BattleAnim_GetOwnerModelSizeScaled(unk_D_82F20A88* arg0) {
+    BattleScene_GetParticipantModelSizeScaled(arg0);
 }
 
 f32 BattleAnim_GetOwnerModelScale(ActivePokemon* arg0) {
@@ -168,7 +168,8 @@ void BattleAnim_MarkParticleInactive(Particle* arg0) {
 
 /**
  * Start lifecycle 1 with a no-op descriptor, null associations, phase zero, and rendering enabled.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep: it set the new particle's descriptor to
+ * gDefaultParticleDescriptor (0x801A3920) and cleared the owner and callback, with lifecycle 1.
  */
 void Particle_InitLifecycle(Particle* arg0) {
     arg0->lifecycle = 1;
@@ -222,7 +223,7 @@ s32 Particle_IsRunning(s8 *arg0) {
 
 /**
  * Clear the frame-animation initialization bit and advance the lifecycle.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep: it moved lifecycle (offset 0xAE) from 1 to 2.
  */
 void Particle_AdvanceLifecycle(Particle* arg0) {
     Particle_ClearFlags(arg0, 1);
@@ -231,7 +232,8 @@ void Particle_AdvanceLifecycle(Particle* arg0) {
 
 /**
  * Initialize once under flag 0x80, decrement immediately, and finish at zero while clearing that flag.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep: on its first call with 0x14 it set flag 0x80,
+ * set delayTimer to 0x13 and returned 0; called with 0 it returned 1 at once.
  */
 s32 Particle_TickDelayTimer(Particle* arg0, s16 arg1) {
     s32 sp1C = 0;

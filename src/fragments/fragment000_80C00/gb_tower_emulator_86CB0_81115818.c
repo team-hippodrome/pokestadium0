@@ -19,6 +19,8 @@ u32 GbApu_FreqToStep(u16 arg0) {
 /**
  * Applies NR43: selects the 16 KB noise waveform for (shift, width), its loop start, and returns
  * the playback step for the clock divider.
+ * Seen in play (2026-11-13) ran while Pocket Monsters Green played sound in the GB player; also
+ * when quitting the GB player (C-Up menu, Quit game, Yes) back to the main menu.
  * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
 u32 GbApu_ConfigureNoiseTable(u16 arg0, u16 arg1, u16 arg2) {
@@ -52,6 +54,8 @@ void func_81115AF0(void) {
  * One sample (0..0x7F) of waveform `type` at step `pos`: 0-3 are the NRx1 duty cycles 12.5%, 25%,
  * 50% and 75% over 32 steps, 6 reads the selected noise waveform, 7 wave RAM (4-bit << 3).
  * Types 4 and 5 are unused and return nothing.
+ * Seen in play (2026-11-13) ran while Pocket Monsters Green played sound in the GB player; also
+ * when the GB player C-Up menu opened.
  * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
 s32 GbApu_GetWaveformSample(u32 arg0, s32 arg1) {
@@ -89,7 +93,8 @@ s32 GbApu_GetWaveformSample(u32 arg0, s32 arg1) {
 /**
  * Produces one sample of square channel 1 and advances its frequency sweep (NR10), volume
  * envelope (NR12) and length timer. A stopped channel decays to silence instead of cutting off.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) ran every audio frame while JP Green played its title screen music in
+ * the N64 GB player, together with the square 2, wave and noise channel updates.
  */
 u16 GbApu_UpdateSquare1Channel(void) {
     u16 var_t0;
@@ -185,7 +190,8 @@ u16 GbApu_UpdateSquare1Channel(void) {
 
 /**
  * Produces one sample of square channel 2 (GbApu_UpdateSquare1Channel without the sweep).
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) ran every audio frame while JP Green played its title screen music in
+ * the N64 GB player, together with the square 1, wave and noise channel updates.
  */
 s32 GbApu_UpdateSquare2Channel(void) {
     s32 temp_v0;
@@ -261,7 +267,8 @@ s32 GbApu_UpdateSquare2Channel(void) {
 /**
  * Produces one sample of the wave channel from wave RAM at the NR32 output level, averaged with
  * the previous sample. On a retrigger the old note fades out before the phase restarts.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) ran every audio frame while JP Green played its title screen music in
+ * the N64 GB player, together with the two square channel updates and the noise channel update.
  */
 u16 GbApu_UpdateWaveChannel(void) {
     u16 temp_v0;
@@ -331,7 +338,8 @@ u16 func_81207C5C_Empty(void) {
 /**
  * Noise channel counterpart of GbApu_UpdateSquare1Channel. The step slews toward a new NR43
  * value over ~128 samples and the applied amplitude moves one unit every 95 samples.
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-13) ran every audio frame while JP Green played its title screen music in
+ * the N64 GB player, together with the two square channel updates and the wave channel update.
  */
 u16 GbApu_UpdateNoiseChannel(void) {
     static s32 D_8120EB6C = 0;
@@ -816,7 +824,8 @@ void GbApu_QueueRegisterWrite(u16 arg0, u8 arg1, u16 arg2) {
 /**
  * Creates the register-write queue, zeroes every sound register (0xFF10-0xFF50) through
  * GbApu_WriteRegister and silences all four channels.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) ran once as the GB session ended (JP Green, "report is not correct"
+ * panel), next to GbAudio_RampToSilence.
  */
 void GbApu_ResetChannels(void) {
   s32 pad[6]; // FAKE: stack padding
@@ -841,6 +850,8 @@ void GbApu_ResetChannels(void) {
 
 /**
  * noise_table: the decompressed noise waveforms (GbEmu_Init / GbEmu_InitContext).
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void GbApu_Reset(s32 arg0) {
@@ -851,7 +862,8 @@ void GbApu_Reset(s32 arg0) {
 /**
  * Resets the APU and submits 640 samples ramping linearly from the last output sample to zero,
  * avoiding a click when audio stops. No C callers.
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-13) ran once as the GB session ended (JP Green, "report is not correct"
+ * panel); the game's music stopped there.
  */
 void GbAudio_RampToSilence(void) {
     void* sp34 = D_811859B8[0];

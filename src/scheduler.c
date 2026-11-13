@@ -237,6 +237,8 @@ extern s16 D_800AA148;
 /**
  * Handles the pre-NMI (reset button) message: sets D_800AA148 and calls the
  * shutdown hooks func_8000A8BC and func_80026980.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name from Stadium 1, where the same call sits in the same place.
  */
 void Sched_HandlePreNMI(void) {
@@ -246,6 +248,9 @@ void Sched_HandlePreNMI(void) {
 }
 
 /**
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the main menu, the Pokédex,
+ * the party screen, the Lab list, Lab sort, registration, the Lab PC, Free Battle setup, the battle
+ * opening, a switch in battle, running from battle and a Pound turn.
  * @unverified Name from Stadium 1, matched by code similarity.
  */
 void Sched_HandleRetrace(void) {

@@ -53,6 +53,9 @@ extern s8 D_800734B8;
 /**
  * Sets the text color from the row flags: 0x18 selected, 0x1 alternate, otherwise
  * normal. Each is a pair of colors; without flag 0x2 the second one is used.
+ * Seen in play (2026-11-13) (menu tour from the main menu): called on every menu screen past the
+ * main menu (Pokédex, party, Lab list, sort and PC, registration), with flags 2 and 0; it
+ * returned pointers into the color table at 0x800734A8.
  * @unverified Name and comment guessed from the code.
  */
 void Font_SetColorForFlags(s32 arg0)
@@ -156,7 +159,8 @@ u32 func_800566BC(s32);
 
 /**
  * Draws a save summary bar at `y`, colored by the summary's game, with `label`.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran on the Pokédex, party and list screens, which all show the 1P サトシ
+ * IDNo/12345 bar at the top.
  */
 void GbSave_DrawSummaryBar(s32 y, GbSaveSummary* summary, char* label, s32 arg3) {
     if (summary != NULL) {
@@ -226,6 +230,8 @@ void GbSave_DrawSummaryBar(s32 y, GbSaveSummary* summary, char* label, s32 arg3)
 
 /**
  * Loads an 8-bit texture block of `width` x `height` in format `fmt`.
+ * Seen in play (2026-11-13) (menu tour from the main menu): called on the main menu and every menu
+ * screen after it, loading 8x8 textures 0x04010C60 and 0x04010D38.
  * @unverified Name and comment guessed from the code.
  */
 void Gfx_LoadTextureBlock8b(s32 width, s32 height, void* texture, s32 fmt) {
@@ -234,6 +240,8 @@ void Gfx_LoadTextureBlock8b(s32 width, s32 height, void* texture, s32 fmt) {
 
 /**
  * Loads a 16-bit texture block of `width` x `height` in format `fmt`.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void Gfx_LoadTextureBlock16b(s32 width, s32 height, void* texture, s32 fmt) {
@@ -251,6 +259,8 @@ void Trade_DrawSolidFillRect(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGB8 
 
 /**
  * Fills a rectangle (x, y, w, h) with an RGBA5551 fill color made from arg4.
+ * Seen in play (2026-11-13) (menu tour from the main menu): called on every menu screen past the
+ * main menu, as (0, 0, 392, 54) for the header strip and (0, 54, 640, 2) for the line under it.
  * @unverified Name and comment guessed from the code.
  */
 void Ui_FillRectRgba5551(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 arg4) {
@@ -263,6 +273,9 @@ void Ui_FillRectRgba5551(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 arg
 
 /**
  * Fills a rectangle (x, y, w, h) using a primitive color.
+ * Seen in play (2026-11-13) (menu tour from the main menu): called on the main menu and every menu
+ * screen after it, as (451, 84, 104, 4) and (451, 84, 4, 68). Stubbing it on the main menu turned
+ * the colored tile panels grey.
  * @unverified Name and comment guessed from the code.
  */
 void Ui_FillRectPrimColor(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 color) {
@@ -280,6 +293,8 @@ extern GbTexLoadFunc4 D_800734F0[];
  * The two `8U` subtractions are deliberate: the target computes (x2 - 8) and (y2 - 8)
  * afresh in the following rectangle instead of reusing them, which IDO only does when
  * the two occurrences differ in signedness.
+ * Seen in play (2026-11-13) (menu tour from the main menu): called on the main menu and every menu
+ * screen after it, as (445, 78, 116, 112) and (79, 202, 116, 112).
  * @unverified Name guessed from the code; comment kept.
  */
 void Ui_DrawTexturedFrame(s32 x, s32 y, s32 w, s32 h, u8* arg4) {
@@ -315,6 +330,8 @@ void Ui_DrawTexturedFrame(s32, s32, s32, s32, u8*);
  * Appends a call of display list D_80073450 and a gDPSetCombineMode(
  * G_CC_DECALRGBA, G_CC_DECALRGBA) to the current display list, then forwards
  * all five arguments unchanged to Ui_DrawTexturedFrame.
+ * Seen in play (2026-11-13) (menu tour from the main menu): called on every menu screen past the
+ * main menu, at (54, 87).
  * @unverified Name guessed from the code; comment kept.
  */
 void Ui_DrawTexturedFrameDecal(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
@@ -331,6 +348,8 @@ extern Gfx D_80073450[];
  * Draws a horizontal frame edge of width w (at least 16) at (x, y): an 8x8 texture
  * stretched over all but the last 8 pixels, then an 8x8 end cap. The two textures come
  * from arg3 + 0x10 and arg3 + 0x14, and are loaded through D_80073500[arg3 + 4].
+ * Seen in play (2026-11-13) (menu tour from the main menu): called on every menu screen past the
+ * main menu, as (54, 176, width 532).
  * @unverified Name guessed from the code; comment kept.
  */
 void Ui_DrawTexturedDivider(s32 x, s32 y, s32 w, u8* arg3) {
@@ -429,6 +448,8 @@ extern Gfx D_80060270[];
 void func_80029028(s32, s32, s32, s32, Color8002A354);
 /**
  * Fills a rectangle with `color` brightened by 1.4 (alpha kept), used for the selected-row highlight.
+ * Seen in play (2026-11-13) (menu tour from the main menu): called on the party, Pokédex, Lab list,
+ * sort and PC screens, for the selected row (for example (56, 137, 527, 45) on the party screen).
  * @unverified Name and comment guessed from the code.
  */
 void Ui_FillRectHighlighted(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 color) {
@@ -476,6 +497,8 @@ extern Gfx D_80073438[];
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 /**
  * Draws an RGBA16 image at (x, y) in horizontal strips that fit the 4 KB texture memory.
+ * Seen in play (2026-11-13) (menu tour from the main menu): called in the Lab list, the Pokédex and
+ * registration (image 0x800828D0 at (59, 118) in registration).
  * @unverified Name and comment guessed from the code.
  */
 void Ui_DrawImageInStrips(Img8002A3F8 *arg0, s32 x, s32 y) {
@@ -510,6 +533,8 @@ void Ui_DrawImageInStrips(Img8002A3F8 *arg0, s32 x, s32 y) {
 extern u8 D_04000008[];
 /**
  * Fills a rectangle with the primitive and environment colors; opaque when prim alpha is 255, translucent otherwise.
+ * Seen in play (2026-11-13) (menu tour from the main menu): called on every menu screen past the
+ * main menu, for the info panel (for example (342, 114, 248, 104) in the Pokédex).
  * @unverified Name and comment guessed from the code.
  */
 void Ui_FillRectPrimEnvColor(s32 x, s32 y, s32 w, s32 h, Color_RGBA8 prim, Color_RGBA8 env) {
@@ -535,6 +560,8 @@ void Ui_FillRectPrimEnvColor(s32 x, s32 y, s32 w, s32 h, Color_RGBA8 prim, Color
 // FAKE: decomp slop. Raw pointer-offset casts and the new_var alias stand in for struct fields.
 /**
  * Sets a window's x, y, width and height and clears its state word (+0x10).
+ * Seen in play (2026-11-13) (menu tour from the main menu): called on every menu screen past the
+ * main menu, for example (54, 87, width 532).
  * @unverified Name and comment guessed from the code.
  */
 void Window_SetRect(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4)
@@ -554,6 +581,8 @@ extern u8 D_800735DC[];
 
 /**
  * Draws a window's frame and fill from its rect, flags and color; width and height are at least 16.
+ * Seen in play (2026-11-13) (menu tour from the main menu): called in the Lab list, sort and PC
+ * screens.
  * @unverified Name and comment guessed from the code.
  */
 void Window_DrawFrame(s32* arg0) {
@@ -742,6 +771,8 @@ void Particle_SetVelocityXZFromRotationY(Particle* arg0) {
  * arg3, 0x18), then sets offset 0x14 to 1, offset 0x20 to the color arg4
  * (a 4-byte struct passed by value, stored with unaligned stores) and offset
  * 0x38 to the string pointer arg5. What the fields mean is not established.
+ * Seen in play (2026-11-13) (menu tour from the main menu): called on every menu screen past the
+ * main menu, for windows at (411, 189, 72) and (496, 189, 72).
  * @unverified Name guessed from the code; comment kept.
  */
 void Window_InitLabeled(s8* arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 arg4, char* arg5) {
@@ -761,6 +792,8 @@ void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
 void Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
 /**
  * Draws a labeled window: frame, highlight or rounded border from the flags, then its label in the flag color.
+ * Seen in play (2026-11-13) (menu tour from the main menu): called on every menu screen past the
+ * main menu, for the windows set up by Window_InitLabeled.
  * @unverified Name and comment guessed from the code.
  */
 void Window_DrawLabeled(s8* arg0, s32 arg1) {
@@ -1027,9 +1060,13 @@ s32 Ui_AdjustSteppedRangeSelection(unk_func_8002E128_arg0* arg0) {
 extern Gfx D_80073450[];
 extern u8 *D_80073584[];
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Draws `arg2` (up to nine digits) at (arg0, arg1) in 8x12 digit images, 9 pixels apart, without
+ * leading zeros.
+ * Seen in play (2026-11-13) the Free Battle entry screen called it after each L icon, and the rows
+ * showed the levels without padding (L10, L20, L25). The Lab PC list calls it the same way. Was
+ * Trade_DrawDigitStrip, a Stadium 1 Trade name for a general number drawer.
  */
-void Trade_DrawDigitStrip(s32 arg0, s32 arg1, s32 arg2) {
+void Ui_DrawNumberUnpadded(s32 arg0, s32 arg1, s32 arg2) {
     s32 i;
     s32 var_s0;
     s32 var_s4;
@@ -1057,6 +1094,9 @@ extern Gfx D_80073450[];
 extern u8 *D_80073584[];
 /**
  * Draws `value` right-aligned in `digits` digit images, without leading zeros.
+ * Seen in play (2026-11-13) (menu tour from the main menu): called in registration as (246, 137,
+ * value 10, 3 digits) and in the Lab PC box screen as (206, 151, value 0, 2 digits) and (233, 151,
+ * value 30, 2 digits).
  * @unverified Name and comment guessed from the code.
  */
 void Ui_DrawNumber(s32 x, s32 y, s32 value, s32 digits) {
@@ -1144,6 +1184,8 @@ void func_8002BC58(s32 x, s32 y, s32 arg2, s32 game) {
 extern u8 D_04009FB0[];
 /**
  * Tiles the 128-pixel I8 background texture across the 640-wide screen from row `start` to `end`.
+ * Seen in play (2026-11-13) (menu tour from the main menu): called on the main menu and every menu
+ * screen after it, called from Ui_DrawTintedScreenBackground with rows 56 to 480.
  * @unverified Name and comment guessed from the code.
  */
 void Ui_DrawScreenBackgroundRows(s32 start, s32 end) {
@@ -1164,6 +1206,8 @@ void Ui_DrawScreenBackgroundRows(s32 start, s32 end) {
 
 /**
  * Draws the screen background rows `start`..`end` tinted with the environment color (r, g, b).
+ * Seen in play (2026-11-13) (menu tour from the main menu): called on the main menu and every menu
+ * screen after it, for rows 56 to 480 with the tint (200, 200, ...).
  * @unverified Name and comment guessed from the code.
  */
 void Ui_DrawTintedScreenBackground(s32 start, s32 end, s32 r, s32 g, s32 b) {
@@ -1397,6 +1441,9 @@ void Window_DrawFrame(s32* arg0);
 
 /**
  * Draws the window frame, hiding it every other four frames while blinking is on. Returns 1 while hidden.
+ * Seen in play (2026-11-13) ran when the COM entry was confirmed (このデータでエントリーします, はい), just before
+ * the stadium and VS intro (Free Battle, L1-30 rules, six L30 rentals vs COM); also in an ordinary
+ * Free Battle.
  * @unverified Name and comment guessed from the code.
  */
 s32 Window_DrawBlinkingFrame(s32* arg0) {
@@ -1419,7 +1466,8 @@ extern u8 D_800736E8[];
 extern u8 D_800736EC[];
 /**
  * Sets up a text box sized to string `arg1`.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran once when A was pressed on a Free Battle entry row whose Pokémon
+ * were all ineligible; a text box sized to 「エントリーできる ポケモンが いません」 then appeared.
  */
 void TextBox_Init(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4) {
     u32 len;
@@ -1452,7 +1500,8 @@ void TextBox_Init(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4) {
 extern Rgba8002D188 D_800736F0[];
 /**
  * Draws a text box and its text.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) drew the 「エントリーできる ポケモンが いません」 box on the Free Battle entry screen,
+ * every frame while it was up.
  */
 void TextBox_Draw(s32* arg0) {
     if (func_8002AE6C(arg0) != 0) {
@@ -1471,6 +1520,8 @@ void TextBox_Draw(s32* arg0) {
 
 /**
  * Returns 1 and plays the confirm sound if player 1 pressed A or B this frame.
+ * Seen in play (2026-11-13) (menu tour from the main menu): called in the Lab PC item and box
+ * screens while a prompt was open; it returned 0 on frames without A or B.
  * @unverified Name and comment guessed from the code.
  */
 s32 Ui_CheckConfirmPressed(UNUSED s32 arg0) {
@@ -1488,6 +1539,9 @@ extern u8 D_800736FC[];
 u32 func_800566BC(s32);
 /**
  * Sets up a blinking text box sized to string `arg1`.
+ * Seen in play (2026-11-13) ran when the COM entry was confirmed (このデータでエントリーします, はい), just before
+ * the stadium and VS intro (Free Battle, L1-30 rules, six L30 rentals vs COM); also in an ordinary
+ * Free Battle.
  * @unverified Name and comment guessed from the code.
  */
 void BlinkingTextBox_Init(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4) {
@@ -1520,6 +1574,9 @@ void BlinkingTextBox_Init(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4) {
 extern Rgba8002D188 D_80073700[];
 /**
  * Draws a blinking text box and its text.
+ * Seen in play (2026-11-13) ran when the COM entry was confirmed (このデータでエントリーします, はい), just before
+ * the stadium and VS intro (Free Battle, L1-30 rules, six L30 rentals vs COM); also in an ordinary
+ * Free Battle.
  * @unverified Name and comment guessed from the code.
  */
 void BlinkingTextBox_Draw(s32* arg0) {
@@ -1620,6 +1677,8 @@ extern u8 D_8007B9D0[];
 
 /**
  * Draws the save result window: レポートちゅう (Saving...) or, on failure, レポートできませんでした (Could not save) with "don't turn the power off".
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void Save_DrawReportResultWindow(s32 arg0) {

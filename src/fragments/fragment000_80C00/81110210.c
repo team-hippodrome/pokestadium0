@@ -58,6 +58,8 @@ extern f32 D_81136ED8[];
 
 /**
  * Sets a note's left and right volume, pan and reverb from its attributes. Zelda 64 audio driver (playback.c), same position and shape.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 void AudioPlayback_InitSampleState(s8* note, ReverbInfo81110210* reverb_info) {
@@ -162,6 +164,8 @@ typedef struct StereoFlags811105DC {
 
 /**
  * Sets a note's resampling rate, marking it as wide (half rate) when the rate is 2.0 or more. Zelda 64 audio driver.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 void AudioPlayback_NoteSetResamplingRate(s8* arg0, f32 arg1) {
@@ -217,6 +221,8 @@ void func_8111235C(u8*, s32, char*);
 
 /**
  * Starts a note's envelope from its instrument or the layer's own envelope. Zelda 64 audio driver.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 void AudioPlayback_NoteInit(Obj0694* arg0) {
@@ -261,6 +267,8 @@ typedef struct Note8111073C {
 
 /**
  * Turns a note off and clears its playback state. Zelda 64 audio driver.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 void AudioPlayback_NoteDisable(Note8111073C* note) {
@@ -382,6 +390,8 @@ void func_8111220C(Note81110798*);
 
 /**
  * Updates every note once per audio frame: envelopes, releases, pitch, volume and pan. Zelda 64 audio driver.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 void AudioPlayback_ProcessNotes(void)
@@ -549,6 +559,8 @@ void AudioPlayback_ProcessNotes(void)
 
 /**
  * Returns the low, normal or high sample of instrument `arg0` for semitone `arg1`. Zelda 64 audio driver.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 u8* AudioPlayback_GetInstrumentTunedSample(u8* arg0, s32 arg1) {
@@ -577,6 +589,8 @@ extern s32 D_811859D0;
 
 /**
  * Returns instrument `arg1` of font `arg0`, or NULL when the font is not loaded or the id is out of range. Zelda 64 audio driver.
+ * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
 u8* AudioPlayback_GetInstrumentInner(s32 arg0, s32 arg1) {
@@ -602,6 +616,8 @@ u8* AudioPlayback_GetInstrumentInner(s32 arg0, s32 arg1) {
 
 /**
  * Returns drum `arg1` of font `arg0`, or NULL when the font is not loaded or the id is out of range. Zelda 64 audio driver.
+ * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
 u8* AudioPlayback_GetDrum(s32 arg0, s32 arg1) {
@@ -730,6 +746,8 @@ void AudioPlayback_AudioListPushFront(M2C_UNK* arg0, M2C_UNK* arg1);
 
 /**
  * Starts the decay (6) or release (7) of the note a sequence layer is playing. Zelda 64 audio driver.
+ * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
 void AudioPlayback_SeqLayerDecayRelease(LayerE3C* layer, s32 target) {
@@ -805,6 +823,8 @@ void AudioPlayback_SeqLayerDecayRelease(LayerE3C* layer, s32 target) {
 
 /**
  * Starts the decay of the layer's note. Zelda 64 audio driver.
+ * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
 void AudioPlayback_SeqLayerNoteDecay(Particle* arg0) {
@@ -813,6 +833,8 @@ void AudioPlayback_SeqLayerNoteDecay(Particle* arg0) {
 
 /**
  * Starts the release of the layer's note. Zelda 64 audio driver.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 void AudioPlayback_SeqLayerNoteRelease(Particle* arg0) {
@@ -821,6 +843,8 @@ void AudioPlayback_SeqLayerNoteRelease(Particle* arg0) {
 
 /**
  * Makes an empty circular note list. Zelda 64 audio driver.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name and comment guessed from the code.
  */
 void AudioPlayback_InitNoteList(s8 *arg0) {
@@ -839,6 +863,8 @@ void AudioPlayback_InitNoteList(s8 *arg0) {
  * list, link through the first two words, increment the third and copy the
  * fourth into the inserted node.  Afterwards arg0 itself is stored in the
  * fourth word (offset 0xC) of each block.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name guessed from the code; comment kept.
  */
 void AudioPlayback_InitNoteLists(s8 *arg0) {
@@ -874,6 +900,8 @@ extern s32 D_811858E8;
  * and calls AudioSeq_AudioListPushBack(&D_81184938, record). AudioHeap_DiscardFont, which walks the
  * same array, passes the same list argument to the same function. What the
  * records are is not established from this function.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name guessed from the code; comment kept.
  */
 void AudioPlayback_InitNoteFreeList(void) {
@@ -910,6 +938,8 @@ void AudioPlayback_AudioListRemove(s8*);
  * Moves every note in the four lists of a note pool back to the matching
  * global free list (D_81184938, D_81184948, D_81184958, D_81184968). Same
  * structure as note_pool_clear in the Super Mario 64 audio library.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name guessed from the code; comment kept.
  */
 void AudioPlayback_NotePoolClear(NotePool811111E0* pool) {
@@ -958,6 +988,8 @@ void AudioPlayback_NotePoolClear(NotePool811111E0* pool) {
 s32 AudioSeq_AudioListPopBack(s8 *);
 /**
  * Takes `arg1` notes from the global free lists into a pool. Zelda 64 audio driver.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 void AudioPlayback_NotePoolFill(s8* arg0, s32 arg1) {
@@ -1004,6 +1036,8 @@ void AudioPlayback_NotePoolFill(s8* arg0, s32 arg1) {
 
 /**
  * Pushes list item `arg1` onto the front of list `arg0` if it is on no list. Zelda 64 audio driver.
+ * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
 void AudioPlayback_AudioListPushFront(M2C_UNK *arg0, M2C_UNK *arg1) {
@@ -1019,6 +1053,8 @@ void AudioPlayback_AudioListPushFront(M2C_UNK *arg0, M2C_UNK *arg1) {
 
 /**
  * Unlinks a list item from its list. Zelda 64 audio driver.
+ * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
 void AudioPlayback_AudioListRemove(s8 *arg0) {
@@ -1034,6 +1070,8 @@ void AudioPlayback_AudioListRemove(s8 *arg0) {
 
 /**
  * Returns the note in list `arg0` with the lowest priority below `arg1`, or NULL. Zelda 64 audio driver.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 s8 *AudioPlayback_FindNodeWithPrioLessThan(s8 *arg0, s32 arg1) {
@@ -1083,6 +1121,8 @@ typedef struct Src81111568 {
 typedef struct Bit81111568 { u8 pad : 5; u8 b : 1; u8 rest : 2; } Bit81111568;
 /**
  * Gives note `arg0` to layer `arg1` and sets it up from the layer's instrument. Zelda 64 audio driver.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 void AudioPlayback_NoteInitForLayer(s8* arg0, s8* arg1) {
@@ -1118,6 +1158,8 @@ void AudioPlayback_NoteInitForLayer(s8* arg0, s8* arg1) {
 
 /**
  * Releases the note's current layer and queues layer `arg1` to take it over. Zelda 64 audio driver.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 void AudioPlayback_NoteReleaseOwnerAndQueueLayer(s8 *arg0, s32 arg1) {
@@ -1128,6 +1170,8 @@ void AudioPlayback_NoteReleaseOwnerAndQueueLayer(s8 *arg0, s32 arg1) {
 extern f32 D_FLT_811858D4;
 /**
  * Starts releasing the note and hands it to layer `arg1` with the layer's priority. Zelda 64 audio driver.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 void AudioPlayback_NoteReleaseAndTakeOwnership(s8 *arg0, s8 *arg1)
@@ -1160,6 +1204,8 @@ void AudioPlayback_NoteInitForLayer(s8*, s8*);
 
 /**
  * Allocates a note for a layer from a pool's disabled list. Zelda 64 audio driver.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 s32 AudioPlayback_AllocNoteFromDisabled(s8 *arg0, s32 arg1) {
@@ -1189,6 +1235,8 @@ s32 AudioSeq_AudioListPopBack(s8 *);
 
 /**
  * Takes over a decaying note for a layer. Zelda 64 audio driver.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 s32 AudioPlayback_AllocNoteFromDecaying(s8 *arg0, s8 *arg1) {
@@ -1205,6 +1253,8 @@ s32 AudioPlayback_AllocNoteFromDecaying(s8 *arg0, s8 *arg1) {
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 /**
  * Steals the lowest-priority active note for a layer. Zelda 64 audio driver.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 s8 *AudioPlayback_AllocNoteFromActive(s8 *arg0, s8 *arg1)
@@ -1243,6 +1293,8 @@ s8 *AudioPlayback_AllocNoteFromActive(s8 *arg0, s8 *arg1)
 
 /**
  * Allocates a note for a layer by its channel's note-stealing policy. Zelda 64 audio driver.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 s8* AudioPlayback_AllocNote(s8* arg0) {
@@ -1326,6 +1378,8 @@ extern s8 D_811842C0;
 s32 func_81109868(s8 *, s32);
 /**
  * Resets every note's state and sample buffers. Zelda 64 audio driver.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name and comment guessed from the code.
  */
 void AudioPlayback_NoteInitAll(void) {

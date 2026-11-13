@@ -20,6 +20,8 @@ typedef struct OwnerLinkedFourStreamZero {
 extern OwnerLinkedFourStreamZero D_821B6F00[4];
 
 /**
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
+ * turns): ran.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void OwnerAnchoredFourStream_Init(void) {
@@ -58,6 +60,8 @@ typedef struct OwnerAnchoredFourStreamZero {
 } OwnerAnchoredFourStreamZero; // size = 0x418
 
 /**
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
+ * turns): ran.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void OwnerAnchoredFourStream_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9,
@@ -169,6 +173,8 @@ void OwnerAnchoredFourStream_UpdateNodeChain(OwnerAnchoredFourStream* arg0) {
 
 /**
  * M2C_UNK func_8217E0C0(M2C_UNK *);                   /* extern
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
+ * turns): ran.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 s32 OwnerAnchoredFourStream_IsComplete(void)
@@ -202,6 +208,8 @@ s32 OwnerAnchoredFourStream_IsComplete(void)
 
 extern Gfx D_82193270[];
 /**
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
+ * turns): ran.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 Gfx* OwnerAnchoredFourStream_Draw(Gfx* arg0) {

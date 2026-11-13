@@ -34,9 +34,9 @@ extern const char D_821978C8[];
 void BattleScene_OpeningStepNop(UNUSED s32 arg0);
 void BattleAnim_NoopUpdateHook(void);
 
-void func_82131880(CameraNode* arg0);
-void func_821319FC(CameraNode* arg0);
-void func_82131A3C(CameraNode* arg0);
+void BattleScene_IntroStepInitOverheadCamera(CameraNode* arg0);
+void BattleScene_IntroStepWaitForAssets(CameraNode* arg0);
+void BattleScene_IntroStepSpinOverheadCamera(CameraNode* arg0);
 void BattleScene_OpeningStepThrowSide1(CameraNode* arg0);
 void BattleScene_OpeningStepLandSide0Ball(CameraNode* arg0);
 void func_82131EC4(CameraNode* arg0);

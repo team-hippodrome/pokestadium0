@@ -230,6 +230,8 @@ s32 DoubleTextureTrail_UpdateAll(void) {
 }
 
 /**
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
+ * turns): ran.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 Gfx* WaterParticle_DrawPass(Gfx* arg0, DoubleTextureTrail* arg1, s16 arg2, s16 arg3) {

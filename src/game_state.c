@@ -130,6 +130,8 @@ extern M2C_UNK D_8007B7B8;
 
 /**
  * Sets up trainer slot `arg1` as a human player on controller port `arg0` with roster info `arg2`.
+ * Seen in play (2026-11-13) ran during boot, before the opening (console reset, then N64 logo,
+ * opening, title and main menu).
  * @unverified Name and comment guessed from the code.
  */
 M2C_UNK Session_InitHumanTrainer(M2C_UNK arg0, M2C_UNK *arg1, M2C_UNK *arg2, s32 arg3) {
@@ -173,6 +175,8 @@ extern M2C_UNK D_800AF94C;
 
 /**
  * Sets the session mode to `arg0` and sets up both trainer slots and battle sides.
+ * Seen in play (2026-11-13) ran during boot, before the opening (console reset, then N64 logo,
+ * opening, title and main menu).
  * @unverified Name and comment guessed from the code.
  */
 M2C_UNK Session_InitTwoTrainers(M2C_UNK arg0, M2C_UNK arg1, M2C_UNK arg2) {
@@ -198,6 +202,8 @@ extern GbSavePortSnapshot D_800AF9A8;
 
 /**
  * Copies the GB save snapshot of port `arg0` into the session; clears it for an invalid port.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void Session_LoadPortSnapshot(s32 arg0) {
@@ -400,6 +406,8 @@ extern char D_8007B894[];
 
 /**
  * Full-screen Game Boy save error: remove the cartridge, clean the connector and insert it again without turning the power off; "could not save (report)"; "wrong cartridge or the data changed". `arg0` picks the message.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void Save_DrawGbReportErrorScreen(s32 arg0) {
@@ -436,6 +444,8 @@ extern char D_8007B8B4[];
 
 /**
  * Full-screen レポートちゅうです (Saving...) message.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void Save_DrawReportingScreen(void) {
@@ -469,6 +479,8 @@ extern M2C_UNK D_01000000;
 
 /**
  * Pushes the 'GBER' pool state and shows the GB report error screen until the cartridge check passes.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void Save_RunGbReportErrorScreen(s32 arg0) {
@@ -797,6 +809,8 @@ void func_800268A8(void);
 
 /**
  * Pushes the 'GAME' pool state and runs the top-level state machine (0x8001, 0x8010, 0x8040, 0x8050, 0x8060, 0x8080, 0xF000) forever.
+ * Seen in play (2026-11-13) ran at boot (console reset, then N64 logo, opening, title and main
+ * menu).
  * @unverified Name and comment guessed from the code.
  */
 void Game_RunStateLoop(s32 arg0) {

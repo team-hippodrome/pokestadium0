@@ -158,7 +158,7 @@ void BattleScene_CameraHelperNop(UNUSED CameraNode* arg0);
 void BattleScene_RecenterCameraOnOwner(CameraNode* arg0, ActivePokemon* arg1);
 void BattleScene_ApproachCameraZoom(CameraNode* arg0, ActivePokemon* arg1);
 void BattleScene_SetCameraPresetCloseThunk(CameraNode* arg0, ActivePokemon* arg1);
-void BattleScene_SetCameraFollowPresetNearThunk(CameraNode* arg0, ActivePokemon* arg1);
+void BattleScene_SetCameraPresetHighCloseThunk(CameraNode* arg0, ActivePokemon* arg1);
 void BattleScene_SetCameraPresetLowCloseThunk(CameraNode* arg0, ActivePokemon* arg1);
 void BattleScene_CameraShotTargetCloseThunk(CameraNode* arg0, ActivePokemon* arg1);
 void func_821247D0(CameraNode* arg0, ActivePokemon* arg1);
@@ -169,7 +169,7 @@ void func_82124874();
 void BattleScene_SetCameraAnglesAndDistance(s16 arg0, s16 arg1, f32 arg2);
 void BattleScene_SetCameraAtFromAnchor(ActivePokemon* arg0, CameraNode* arg1, Vec3f arg2, s16 arg3, s16 arg4, f32 arg5, f32 arg6);
 
-void Trade_UpdateWaitForBoxConfirm(ActivePokemon* arg0, Vec3f* arg1);
+void BattleScene_GetParticipantCameraAnchor(ActivePokemon* arg0, Vec3f* arg1);
 
 void BattleScene_SetDamageShakeAmplitude(ActivePokemon* arg0);
 
@@ -181,9 +181,9 @@ void func_82122104(s32 arg0);
 
 M2C_UNK func_8000EEBC(s32, s32, f32, s16, s32);     /* extern */
 
-s32 BattleScene_ApproachCameraRoll(s32 arg0, s16 arg1, s16 arg2);
+s32 BattleScene_ApproachCameraRotationY(s32 arg0, s16 arg1, s16 arg2);
 
-s32 BattleScene_ApproachCameraRollNoEyeUpdate(UNUSED CameraNode* arg0, s16 arg1, s16 arg2);
+s32 BattleScene_ApproachCameraRotationYNoEyeUpdate(UNUSED CameraNode* arg0, s16 arg1, s16 arg2);
 
 void BattleScene_SetCameraAnglesAndDistance(s16 arg0, s16 arg1, f32 arg2);
 
@@ -210,7 +210,7 @@ void BattleScene_SetCameraOwnerWideShot(CameraNode* arg0, ActivePokemon* arg1);
 
 void BattleScene_SetCameraPresetClose(CameraNode* arg0, ActivePokemon* arg1);
 
-void BattleScene_SetCameraFollowPresetNear(CameraNode* arg0, ActivePokemon* arg1);
+void BattleScene_SetCameraPresetHighClose(CameraNode* arg0, ActivePokemon* arg1);
 
 extern const f64 D_DBL_82196260;
 void BattleScene_SetCameraPresetLowClose(CameraNode* arg0, ActivePokemon* arg1);

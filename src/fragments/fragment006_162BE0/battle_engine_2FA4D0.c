@@ -111,7 +111,9 @@ void func_88400168(s32, s32, s32, s32);
 
 /**
  * Shows the Transfer Pak cartridge details (ID, No., trainer) for `port`, or an error: not a Pokemon cartridge, or no 64GB Pak inserted.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran on the "choose a Game Boy cartridge" screen after the title
+ * (console reset, then N64 logo, opening, title and main menu), drawing port 1 (ID 12345, trainer
+ * サトシ) and "64GB Pak not inserted" for ports 2-4.
  */
 void TransferPak_DrawStatusScreen(s32 port, s32 x, s32 y) {
     Color_RGB8 top = D_88402F7C;
@@ -171,6 +173,9 @@ void TransferPak_DrawStatusScreen(s32 port, s32 x, s32 y) {
 /**
  * Moves the cartridge cursor between the four controller ports on D-pad up/down/left/right,
  * skipping ports without a Game Boy cartridge (D_88403310[port].game).
+ * Seen in play (2026-11-13) ran on the "choose a Game Boy cartridge" screen after the title
+ * (console reset, then N64 logo, opening, title and main menu), drawing port 1 (ID 12345, trainer
+ * サトシ) and "64GB Pak not inserted" for ports 2-4.
  * @unverified Needs a Transfer Pak to see; name from the code.
  */
 s32 TransferPak_MoveCartridgeCursor(s32 cursor) {

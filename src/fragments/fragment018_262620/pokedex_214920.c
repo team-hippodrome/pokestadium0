@@ -601,7 +601,8 @@ extern M2C_UNK D_8A130238;
 
 /**
  * Draws the Pokedex index: sort order menu, seen/caught/owned counts and the list.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) drew the ずかんもくじ index: the list, the みつけたかず / つかまえたかず / もっているかず counts
+ * (3/3/3), the ばんごうじゅん sort label and the データをみる / なきごえ / ぶんぷをみる / やめる menu.
  */
 s32 Pokedex_DrawIndexScreen(s32 arg0) {
     M2C_UNK *var_a1;
@@ -1145,6 +1146,8 @@ s32 func_8A101B30(u8);
 
 /**
  * Entry point of the Pokedex: reads the GB save, allocates the stage and framebuffers, and rebuilds the seen bitfield.
+ * Seen in play (2026-11-13) ran when ずかん > ぶんぷをみる was opened for a second species in the same
+ * visit, as the habitat map loaded.
  * @unverified Name and comment guessed from the code.
  */
 s32 Pokedex_Init(s32 arg0, s32 arg1) {

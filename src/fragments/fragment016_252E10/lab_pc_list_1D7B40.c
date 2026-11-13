@@ -1671,6 +1671,8 @@ char* func_8001FDC8(u8, char*);
 s32 func_80031CC8(u8);
 /**
  * Draws an item row with パソコン (PC) / てもち (Party) and ×%02d.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void PcSort_DrawItemRow(s32 x, s32 y, u8** item, UNUSED s32 index, s32 flags) {
@@ -1797,6 +1799,8 @@ extern char D_8910E16C[];
 char* func_80031BC0(u8, char*);
 /**
  * Draws このどうぐをつかいますか？ (Use this item?), どの わざに つかいますか？ (On which move?) or どの わざを わすれさせたい？ (Which move should it forget?).
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void PcSort_DrawUseItemPrompt(s8* arg0) {
@@ -1865,6 +1869,8 @@ void func_89105144(s8 *);
 s32 func_80020974(s32);
 /**
  * Handles the item window. Returns 1 for a vitamin, 2 for PP Up, 3 for a TM or HM.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 LabPCList_UpdateItemWindow(s8 *arg0)

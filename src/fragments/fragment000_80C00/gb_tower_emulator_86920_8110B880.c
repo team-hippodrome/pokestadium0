@@ -163,6 +163,8 @@ typedef struct unk_D_81184440 {
 extern unk_D_81184440 D_81184440;
 /**
  * Returns the permanent cache entry for table `arg0`, id `arg1`, or 0. Name follows the Zelda 64 audio driver, whose loader this matches.
+ * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
 s32 AudioHeap_SearchPermanentCache(s32 arg0, s32 arg1) {
@@ -179,6 +181,8 @@ s32 AudioHeap_SearchPermanentCache(s32 arg0, s32 arg1) {
 
 /**
  * Allocates `size` bytes in the permanent cache for table `x`, id `y`. Name follows the Zelda 64 audio driver, whose loader this matches.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 s32 AudioHeap_AllocPermanent(s32 x, s32 y, s32 size) {
@@ -198,6 +202,8 @@ s32 AudioHeap_AllocPermanent(s32 x, s32 y, s32 size) {
 struct SampleCacheEntry8110BA8C* AudioHeap_AllocTemporarySampleCacheEntry(u32);
 /**
  * Allocates a temporary sample cache entry of `arg0` bytes for font `arg1`. Zelda 64 audio driver (heap.c).
+ * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
 s32 AudioHeap_AllocTemporarySampleCache(s32 arg0, s32 arg1, s32 arg2, s8 arg3) {
@@ -215,6 +221,8 @@ s32 AudioHeap_AllocTemporarySampleCache(s32 arg0, s32 arg1, s32 arg2, s8 arg3) {
 s8* AudioHeap_AllocPersistentSampleCacheEntry(s32 arg0);
 /**
  * Allocates a persistent sample cache entry of `arg0` bytes for font `arg1`. Zelda 64 audio driver.
+ * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
 s32 AudioHeap_AllocPersistentSampleCache(s32 arg0, s32 arg1, s32 arg2, s8 arg3) {
@@ -274,6 +282,8 @@ extern s32 D_8118461C;
 
 /**
  * Sets up the persistent and temporary sample caches from the misc pool. Zelda 64 audio driver.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name and comment guessed from the code.
  */
 void AudioHeap_InitSampleCaches(s32 arg0, s32 arg1) {
@@ -302,6 +312,8 @@ void AudioHeap_DiscardSampleCacheEntry(SampleCacheEntry8110BA8C*);
 
 /**
  * Takes `size` bytes from the temporary sample cache, discarding the entries it overwrites. Zelda 64 audio driver.
+ * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
 SampleCacheEntry8110BA8C* AudioHeap_AllocTemporarySampleCacheEntry(u32 size) {
@@ -402,6 +414,8 @@ void AudioHeap_UnapplySampleCache(u8* arg0, Flags2Bit* arg1);
 
 /**
  * Points every font that used a cached sample back at the original sample. Zelda 64 audio driver.
+ * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
 void AudioHeap_DiscardSampleCacheEntry(SampleCacheEntry8110BA8C* entry) {
@@ -455,6 +469,8 @@ void AudioHeap_DiscardSampleCacheEntry(SampleCacheEntry8110BA8C* entry) {
  * arg1 + 0x04, copies the word at arg0 + 0x0C into arg1 + 0x04 and stores the
  * low two bits of the signed byte at arg0 + 0x01 into bits 2-3 of the byte at
  * arg1 + 0x00 (a bit-field write: the retail code masks with 0xFFF3 / 0x0C).
+ * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * in a tour of the menus and a COM battle.
  * @unverified Name guessed from the code; comment kept.
  */
 void AudioHeap_UnapplySampleCache(u8* arg0, Flags2Bit* arg1) {
@@ -467,6 +483,8 @@ void AudioHeap_UnapplySampleCache(u8* arg0, Flags2Bit* arg1) {
 s32 func_81109868(M2C_UNK *, s32);                  /* extern */
 /**
  * Takes `arg0` bytes from the persistent sample cache. Zelda 64 audio driver.
+ * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
 s8 *AudioHeap_AllocPersistentSampleCacheEntry(s32 arg0)
@@ -491,6 +509,8 @@ s8 *AudioHeap_AllocPersistentSampleCacheEntry(s32 arg0)
 
 /**
  * Discards the sample cache entries of fonts that are no longer loaded. Zelda 64 audio driver.
+ * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
 void AudioHeap_DiscardSampleCaches(void) {
@@ -564,6 +584,8 @@ extern u8 D_8118589A;
 extern u8 D_8118589B;
 /**
  * Ticks down the time-to-live of each sample DMA buffer and returns expired ones to the free list. Name follows the Zelda 64 audio driver, whose loader this matches.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
 void AudioLoad_DecreaseSampleDmaTtls(void) {
@@ -600,6 +622,8 @@ s32 AudioLoad_Dma();
 
 /**
  * Returns RAM holding the sample bytes at `devAddr`, reusing a cached DMA buffer or starting a new DMA. Name follows the Zelda 64 audio driver, whose loader this matches.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 void* AudioLoad_DmaSampleData(u32 devAddr, u32 size, s32 arg2, u8* dma_index_ref, s32 medium) {
@@ -681,6 +705,8 @@ extern s32 D_811858E0;
  * is filled with the buffer indices and the rest of the queue cleared. Same
  * structure as AudioLoad_InitSampleDmaBuffers in the Ocarina of Time audio
  * library.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name guessed from the code; comment kept.
  */
 void AudioLoad_InitSampleDmaBuffers(s32 num_notes) {
@@ -753,6 +779,8 @@ extern u8 D_81184655[1];
 
 /**
  * Returns 1 when font `arg0` is loaded (status 2 or above) or is 0xFF. Name follows the Zelda 64 audio driver, whose loader this matches.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name and comment guessed from the code.
  */
 s32 AudioLoad_IsFontLoadComplete(s32 arg0) {
@@ -769,6 +797,8 @@ extern u8 D_81184656[1];
 
 /**
  * Returns 1 when sequence `arg0` is loaded (status 2 or above) or is 0xFF. Name follows the Zelda 64 audio driver, whose loader this matches.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name and comment guessed from the code.
  */
 s32 AudioLoad_IsSeqLoadComplete(s32 arg0) {
@@ -785,6 +815,8 @@ extern u8 D_81184654[1];
 
 /**
  * Returns 1 when sample bank `arg0` is loaded (status 2 or above) or is 0xFF. Name follows the Zelda 64 audio driver, whose loader this matches.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
 s32 AudioLoad_IsSampleLoadComplete(s32 arg0) {
@@ -800,6 +832,8 @@ s32 AudioLoad_IsSampleLoadComplete(s32 arg0) {
 extern u8 D_81184655[1];
 /**
  * Sets font `arg0`'s load status unless it is permanent (5). Name follows the Zelda 64 audio driver, whose loader this matches.
+ * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
 void AudioLoad_SetFontLoadStatus(s32 arg0, s32 arg1) {
@@ -816,6 +850,8 @@ void AudioLoad_SetFontLoadStatus(s32 arg0, s32 arg1) {
 extern u8 D_81184656[1];
 /**
  * Sets sequence `arg0`'s load status unless it is permanent (5). Name follows the Zelda 64 audio driver, whose loader this matches.
+ * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
 void AudioLoad_SetSeqLoadStatus(s32 arg0, s32 arg1) {
@@ -832,6 +868,8 @@ void AudioLoad_SetSeqLoadStatus(s32 arg0, s32 arg1) {
 extern u8 D_81184654[1];
 /**
  * Sets sample bank `arg0`'s load status unless it is permanent (5). Name follows the Zelda 64 audio driver, whose loader this matches.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 void AudioLoad_SetSampleLoadStatus(s32 arg0, s32 arg1) {
@@ -971,6 +1009,8 @@ s32 AudioLoad_AsyncLoadInner(M2C_UNK, s32, s32, s32, s32);     /* extern */
 
 /**
  * Starts an async load of sample bank `arg0`, or sends an empty message to `arg3` when nothing needs loading. Zelda 64 audio driver (load.c).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
 void AudioLoad_AsyncLoadSampleBank(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
@@ -994,6 +1034,8 @@ void func_8110CF24(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
 }
 
 /**
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 u8* Audio_CountActiveSoundsByCategory(s32 arg0, s32* arg1) {
@@ -1064,6 +1106,8 @@ s32 AudioLoad_SyncInitSeqPlayerInternal(s32, s32, s32);
  * D_811859D4 is nonzero. arg1 and arg2 are passed through unchanged. Sibling of
  * AudioLoad_SyncInitSeqPlayerSkipTicks, which stores its arg2 instead of 0 and passes 0 as the last argument.
  * What the slot and the flag mean is not established.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code; comment kept.
  */
 s32 AudioLoad_SyncInitSeqPlayer(s32 arg0, s32 arg1, s32 arg2) {
@@ -1076,6 +1120,8 @@ s32 AudioLoad_SyncInitSeqPlayer(s32 arg0, s32 arg1, s32 arg2) {
 
 /**
  * Like AudioLoad_SyncInitSeqPlayer, but skips the first `arg2` ticks. Name follows the Zelda 64 audio driver, whose loader this matches.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
 s32 AudioLoad_SyncInitSeqPlayerSkipTicks(s32 arg0, s32 arg1, s32 arg2) {
@@ -1096,6 +1142,8 @@ void func_811152A4(s32);
 void func_81115254(s8*);
 /**
  * Loads the sequence and its fonts, then initializes player `arg0` to play it. Name follows the Zelda 64 audio driver, whose loader this matches.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 s32 AudioLoad_SyncInitSeqPlayerInternal(s32 arg0, s32 arg1, s32 arg2) {
@@ -1240,6 +1288,8 @@ s32 AudioHeap_AllocCached(s32, s32, s32, s32);
  * allocated. *didAllocate says whether new memory was used (0 when the entry
  * was already cached). The table's load status is updated. Same structure as
  * AudioLoad_SyncLoad in the Ocarina of Time audio library.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name guessed from the code; comment kept.
  */
 s32 AudioLoad_SyncLoad(s32 table_type, s32 id, s32* did_allocate) {
@@ -1319,6 +1369,8 @@ s32 AudioLoad_SyncLoad(s32 table_type, s32 id, s32* did_allocate) {
 u8* AudioLoad_GetLoadTable(s32);
 /**
  * Returns the real index of entry `arg1` in load table `arg0`: an entry with size 0 is an alias whose ROM address field holds the real index. Name follows the Zelda 64 audio driver, whose loader this matches.
+ * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
 s32 AudioLoad_GetRealTableIndex(s32 arg0, s32 arg1) {
@@ -1334,6 +1386,8 @@ s32 AudioHeap_SearchCaches(s32, M2C_UNK, s32);               /* extern */
 
 /**
  * Looks entry `arg1` of table `arg0` up in the permanent cache, then the other caches. Name follows the Zelda 64 audio driver, whose loader this matches.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 s32 AudioLoad_SearchCaches(s32 arg0, s32 arg1) {
@@ -1364,6 +1418,8 @@ extern u8* D_811858A4;
  * tables are is not established.
  * Matching note: the result is built in a local and returned once; separate
  * `return` statements in each case give a different register choice.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name guessed from the code; comment kept.
  */
 u8* AudioLoad_GetLoadTable(s32 arg0) {
@@ -1390,6 +1446,8 @@ void AudioLoad_RelocateSample(void* sampleP, u32 fontDataAddr, void* relocInfo);
  * lists, each drum's and instrument's samples and envelope, and records the
  * font's drum and instrument lists in D_811858B0. Same structure as
  * AudioLoad_RelocateFont in the Ocarina of Time audio library.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name guessed from the code; comment kept.
  */
 void AudioLoad_RelocateFont(s32 font_id, u32 font_data, void* reloc_info) {
@@ -1457,6 +1515,8 @@ void func_8004D1C0(void*, s32, s32);
 s32 AudioLoad_Dma();
 /**
  * Copies `arg2` bytes (rounded up to 16) from ROM `arg0` to RAM `arg1` in 1 KB DMA chunks and waits for each. Name follows the Zelda 64 audio driver, whose loader this matches.
+ * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
 void AudioLoad_SyncDma(s32 arg0, s32 arg1, u32 arg2, s32 arg3) {
@@ -1497,6 +1557,8 @@ s32 func_80051E60(void);
 void func_80056530(s32, IoMesg8110DBA0*, s32);
 /**
  * Starts a PI DMA for audio data through the message queue `mq`; refuses when more than 16 are pending. Name follows the Zelda 64 audio driver, whose loader this matches.
+ * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
 s32 AudioLoad_Dma(IoMesg8110DBA0* mb, s32 pri, s32 direction, u32 devAddr, void* dramAddr, u32 size, void* mq, s32 kind) {

@@ -479,7 +479,8 @@ s32 Registration_UpdateMessageWindow(s32 arg0) {
  * then calls func_80029028(arg0, arg1, 0x88, 0x64, arg2). arg0 and arg1 are
  * passed straight through (the retail code never touches $a0/$a1); arg2 is a
  * 4-byte color passed by value.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-13) ran when the registration screen opened its Pokémon list, which shows
+ * the trainer panel (1P, サトシ, IDNo/12345) on the left.
  */
 void Registration_FillTrainerPanel(s32 arg0, s32 arg1, Color88100D9C arg2) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
@@ -491,7 +492,8 @@ void Registration_FillTrainerPanel(s32 arg0, s32 arg1, Color88100D9C arg2) {
  * then calls func_80029028(arg0 + 0x88, arg1, 0x18C, 0x64, arg2). arg1 is
  * passed straight through (the retail code never touches $a1); arg2 is a
  * 4-byte color passed by value.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-13) ran when the registration screen opened its Pokémon list, which shows
+ * the party (フシ, ヒト, カメ, L10) next to the trainer panel.
  */
 void Registration_FillTeamPanel(s32 arg0, s32 arg1, Color88100D9C arg2) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
@@ -660,6 +662,8 @@ void func_88101478(s32 x, s32 y, u8* entry, s32 frame, s32 color, s32* anim) {
 
 /**
  * Starts a timer at 0 that counts to `arg1` x 15.
+ * Seen in play (2026-11-13) ran during the Ditto transform animation after registering the party
+ * (とうろく > ポケモンをとうろくする, はい), which ends with メタモンのへんしんがおわりました.
  * @unverified Name and comment guessed from the code.
  */
 void Registration_InitTimer(s8 *arg0, s32 arg1) {
@@ -670,6 +674,8 @@ void Registration_InitTimer(s8 *arg0, s32 arg1) {
 
 /**
  * Starts a timer already at its end, `arg1` x 15.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void Registration_InitTimerFull(s8 *arg0, s32 arg1) {
@@ -681,6 +687,8 @@ void Registration_InitTimerFull(s8 *arg0, s32 arg1) {
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 /**
  * Returns whether the timer has reached its end.
+ * Seen in play (2026-11-13) ran during the Ditto transform animation after registering the party
+ * (とうろく > ポケモンをとうろくする, はい), which ends with メタモンのへんしんがおわりました.
  * @unverified Name and comment guessed from the code.
  */
 s32 Registration_IsTimerDone(s8 *arg0)
@@ -691,6 +699,8 @@ s32 Registration_IsTimerDone(s8 *arg0)
 
 /**
  * Returns whether the timer is at 0.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 Registration_IsTimerAtStart(s32 *arg0) {
@@ -699,6 +709,8 @@ s32 Registration_IsTimerAtStart(s32 *arg0) {
 
 /**
  * Advances the timer by one and returns whether it is done.
+ * Seen in play (2026-11-13) ran during the Ditto transform animation after registering the party
+ * (とうろく > ポケモンをとうろくする, はい), which ends with メタモンのへんしんがおわりました.
  * @unverified Name and comment guessed from the code.
  */
 s32 Registration_StepTimer(s8* arg0) {
@@ -718,6 +730,8 @@ s32 Audio_QueueSoundAvoidingRecent(s32* arg0) {
 
 /**
  * Returns the timer's current value.
+ * Seen in play (2026-11-13) ran during the Ditto transform animation after registering the party
+ * (とうろく > ポケモンをとうろくする, はい), which ends with メタモンのへんしんがおわりました.
  * @unverified Name and comment guessed from the code.
  */
 s32 Registration_GetTimer(s32 *arg0) {
@@ -1088,6 +1102,7 @@ s32 Registration_UpdateTeamList(s8* arg0) {
  * known from the code alone.
  *
  * FreeBattle_BuildTeamPointers is the same routine with a record size of 0x214.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in registration.
  * @unverified Name guessed from the code; comment kept.
  */
 void Registration_BuildTeamPointers(s32* arg0, s32* arg1) {
@@ -1178,6 +1193,8 @@ extern M2C_UNK D_88103080;
  * &D_88102D90, 3, &D_88103000) and sets the state word *arg0 to 0.
  * arg0 is declared s32 to agree with the existing Registration_InitScreen(s32) prototype; it is
  * used as a byte-addressed pointer. What the object and the value mean is not established.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name guessed from the code; comment kept.
  */
 void Registration_InitScreen(s32 arg0) {
@@ -1298,6 +1315,8 @@ extern s32 D_881030F8;
  * Matching note: the call result is stored straight into D_881030F8 and the
  * global is read back for the next call; going through a local gives a
  * different store sequence.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name guessed from the code; comment kept.
  */
 void Registration_AllocScreen(void) {
@@ -1317,7 +1336,7 @@ M2C_UNK GbSave_DrawSummaryBar(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
 void func_8002C8D8(Col88102A2C*, Col88102A2C, f32);
 /**
  * Steps the screen fade; returns once eight frames have passed.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran on the frames the registration screen faded in from the main menu.
  */
 s32 Registration_UpdateFade(s32 arg0) {
     Col88102A2C sp2C;
@@ -1410,6 +1429,8 @@ extern s32 D_88103070;
 extern s32 D_88103074;
 /**
  * Entry point: pushes the 'REGS' pool state, loads the icons and segments, and runs the registration screen.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 Registration_Init(s32 arg0, s32 arg1) {

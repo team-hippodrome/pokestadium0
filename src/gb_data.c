@@ -109,7 +109,9 @@ extern u16 D_80076FD4_jp[0x100];
 /**
  * Converts a Game Boy name (terminated by 0x50) to EUC-JP; code 0x5D expands to the
  * 10-byte trainer name D_80076FD0_jp points at.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) with a JP Green cart, the party, registration, Pokédex, list and sort
+ * screens called it to build their names: the output buffers read サトシ (the trainer) and フシ (a
+ * nickname), as shown on screen.
  */
 char* Text_UntranscodeName(char* arg0, char* arg1) {
     char* sp34 = arg0;
@@ -133,6 +135,8 @@ char* Text_UntranscodeName(char* arg0, char* arg1) {
 /**
  * Converts an EUC-JP name back to Game Boy character codes by searching D_80076FD4_jp;
  * the full-width space 0xA1A1 becomes 0x7F.
+ * Seen in play (2026-11-13) ran when leaving せいとん with レポートしてやめる after moving フシギダネ and ヒトカゲ into
+ * GBのボックス1, and when the party was registered (とうろく > ポケモンをとうろくする).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 char* Text_TranscodeName(char* arg0, char* arg1) {
@@ -178,6 +182,8 @@ char* Text_UntranscodeFixedName(char* arg0, char* arg1) {
 /**
  * Copies a two-byte EUC-JP string, clearing bit 0 of the first byte of katakana ヘ, ベ, ペ
  * (0xA5D8-0xA5DA) and リ (0xA5EA), which turns them into hiragana へ, べ, ぺ, り.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the party screen,
+ * registration, Free Battle setup and a switch in battle.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s8* Text_CopyString(s8* arg0, s8* arg1) {

@@ -156,6 +156,8 @@ void Jpeg_BuildDspOutput(unk_func_80003680_sp90* arg0, u8(arg1)[2][0x80], unk_fu
 /**
  * Spins (with a capped counter) until func_80005014 returns 0 and at least one
  * controller is connected.
+ * Seen in play (2026-11-13) ran just after Start at the title screen (console reset, then N64 logo,
+ * opening, title and main menu).
  * @unverified Name and comment guessed from the code.
  */
 void Jpeg_WaitForControllerReady(void) {

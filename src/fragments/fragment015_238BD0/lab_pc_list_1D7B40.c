@@ -60,7 +60,8 @@ void func_89004710(void) {
 
 /**
  * Sets the 0x100 flag on each of the 13 box rows whose box is empty.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran once when the せいとん (sort) screen opened its list of 13 target boxes
+ * (てもち, GBのボックス1 to 12).
  */
 void PcSort_DisableEmptyBoxes(s8* arg0, s8* arg1) {
     s32 i;
@@ -74,7 +75,8 @@ void PcSort_DisableEmptyBoxes(s8* arg0, s8* arg1) {
 
 /**
  * Sets the 0x200 flag on the first row when the list holds exactly one Pokemon.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran once when A on the Pokémon sort screen's source (てもち) opened the
+ * party list of three (フシ, ヒト, カメ); with three Pokémon the first row stayed selectable.
  */
 void PcSort_DisableIfSingleMon(s8 *arg0, s8 *arg1) {
     u16 *temp_v0;
@@ -87,7 +89,8 @@ void PcSort_DisableIfSingleMon(s8 *arg0, s8 *arg1) {
 
 /**
  * Sets the 0x400 flag on each of the 13 box rows whose box is full.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran once when the Pokémon sort screen opened its target box list (てもち,
+ * GBのボックス1 to 12, 64のボックス); no box was full, and no row was greyed out.
  */
 void PcSort_DisableFullBoxes(s8* arg0, s8* arg1) {
     s32 i;
@@ -636,7 +639,7 @@ void PcSort_DrawOrganizeWindow(s8* arg0) {
 }
 
 void func_89000020(void* arg0, void* arg1);
-void LabItem_RemoveSelectedEntry(void*);
+void LabList_RemoveSelectedEntry(void*);
 
 /**
  * Moves the selected Pokemon into the destination box and marks both boxes changed.
@@ -647,7 +650,7 @@ void PcSort_MoveSelectedMon(s8* arg0) {
     M2C_FIELD(arg0, s32**, 0x3AC)[M2C_FIELD(arg0, s32*, 0x248)] = 1;
     M2C_FIELD(arg0, s32**, 0x3AC)[M2C_FIELD(arg0, s32*, 0x1D0)] = M2C_FIELD(arg0, s32**, 0x3AC)[M2C_FIELD(arg0, s32*, 0x248)];
     func_89000020(arg0 + 0x31C, (void*)(M2C_FIELD(arg0, s32**, 0x294)[3] * M2C_FIELD(arg0, s32*, 0x29C) + M2C_FIELD(arg0, s32**, 0x294)[0]));
-    LabItem_RemoveSelectedEntry(arg0 + 0x294);
+    LabList_RemoveSelectedEntry(arg0 + 0x294);
 }
 
 void func_80027654(s32* matrix, u8* out, s32 row);
@@ -655,6 +658,8 @@ void func_80027700(s32* matrix, u8* in, s32 row);
 
 /**
  * Swaps two entries of the source list.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void PcSort_SwapWithinList(s8* arg0) {
@@ -670,6 +675,8 @@ void PcSort_SwapWithinList(s8* arg0) {
 
 /**
  * Swaps the selected entries of the source and destination lists.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void PcSort_SwapBetweenLists(s8* arg0) {
@@ -684,14 +691,14 @@ void PcSort_SwapBetweenLists(s8* arg0) {
     M2C_FIELD(arg0, s32**, 0x3AC)[M2C_FIELD(arg0, s32*, 0x28C)] = M2C_FIELD(arg0, s32**, 0x3AC)[M2C_FIELD(arg0, s32*, 0x290)];
 }
 
-void LabItem_RemoveSelectedEntry(void*);
+void LabList_RemoveSelectedEntry(void*);
 
 /**
  * Removes the selected Pokemon from its box and marks the box changed.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) released フシギダネ in せいとん > ポケモンをにがす: てもち went from 03/06 to 02/06.
  */
 void PcSort_ReleaseSelectedMon(s8* arg0) {
-    LabItem_RemoveSelectedEntry(arg0 + 0x294);
+    LabList_RemoveSelectedEntry(arg0 + 0x294);
     M2C_FIELD(arg0, s32**, 0x3AC)[M2C_FIELD(arg0, s32*, 0x28C)] = 1;
     M2C_FIELD(arg0, s32*, 0) = (((M2C_FIELD(arg0, s32*, 0x28C) == 0) ? 1 : 0) == M2C_FIELD(M2C_FIELD(arg0, s8**, 0x294), s32*, 8)) ? 1 : 4;
 }
@@ -1025,6 +1032,8 @@ extern s32 D_89019108;
 
 /**
  * Requests the icon of each species in list `arg0`.
+ * Seen in play (2026-11-13) ran when leaving せいとん with レポートしてやめる after moving フシギダネ and ヒトカゲ into
+ * GBのボックス1.
  * @unverified Name and comment guessed from the code.
  */
 void PcSort_LoadMonIcons(s8 *arg0) {

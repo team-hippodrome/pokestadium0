@@ -65,6 +65,8 @@ extern M2C_UNK D_81186238;
 extern M2C_UNK *D_81186250;
 
 /**
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleAnim_DisableEffectSpawning(void) {
