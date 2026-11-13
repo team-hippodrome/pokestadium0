@@ -2158,6 +2158,10 @@ extern M2C_UNK D_8218E818;
 extern s16 D_8219A80A;
 extern M2C_UNK func_8214B1F8;
 
+/**
+ * Starts a beam effect: sets the spawn and tint timing, then queues func_8214B1F8 at once and
+ * the pulsing beam emanator after 6 frames (lifetime 70).
+ */
 void func_8214D938(void) {
     func_8213B6AC(0, 0, 0x20, 8, 0xA0);
     func_8213B644(0, 8, 0x20);

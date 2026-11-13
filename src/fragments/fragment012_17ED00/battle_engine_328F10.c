@@ -575,17 +575,26 @@ extern M2C_UNK D_8218E698;
 extern M2C_UNK D_8218E798;
 extern M2C_UNK func_8215036C;
 
+/**
+ * Queues func_82150504 and func_8215036C on the current owner, 30 repeats each.
+ */
 void func_82150D1C(void) {
     func_8213B5D8(0, 1, 0x1E, &func_82150504, &D_8218E698, 0x10, 1, 0x1E, 0, 0x3B, 0);
     func_8213B5D8(0, 1, 0x1E, &func_8215036C, &D_8218E798, 0x10, 2, 0x1E, 0, 0x3B, 0);
 }
 
+/**
+ * Calls func_82150D1C.
+ */
 void func_82150DCC(void) {
     func_82150D1C();
 }
 
 extern M2C_UNK D_8218E668;
 
+/**
+ * Queues five sparkle hits, then after 16 frames a grid rise-fade and an alpha fade-in hold.
+ */
 void func_82150DEC(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(11, 1, 5, BattleAnim_RunSparkleHit, (ParticleDescriptor*)&D_8218E798, 0, 5, 0x1E, 0, 0x3B, 8);
     BattleAnim_SetSpawnDelay(0x10);
@@ -593,6 +602,9 @@ void func_82150DEC(void) {
     BattleAnim_SpawnDescriptor25AlphaFadeInHold(0, 2, 0x2C, 8, 0xFF);
 }
 
+/**
+ * Calls func_82150DEC.
+ */
 void func_82150EB0(void) {
     func_82150DEC();
 }

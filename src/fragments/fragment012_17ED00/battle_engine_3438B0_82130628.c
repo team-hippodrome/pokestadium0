@@ -153,6 +153,10 @@ void BattleScene_PhaseResidualDamageFaintCheck(CameraNode* arg0) {
     }
 }
 
+/**
+ * When the Pokemon is frozen (status 0x20), stops its category-1 particles and sets render
+ * flag 0x20.
+ */
 void func_82130D48(ActivePokemon* active_pokemon) {
     BattleMon* party_pokemon = &active_pokemon->teamRoster->pokemonPicked[M2C_FIELD(active_pokemon, s32*, 0x9D0)];
 

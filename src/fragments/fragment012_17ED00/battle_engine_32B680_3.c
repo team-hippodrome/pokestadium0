@@ -712,6 +712,10 @@ void BattleAnim_SetupMove86StartDescriptor24(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
+/**
+ * Particle callback: init, wait for the spawn step, then the later stages; scale moves
+ * toward 10 by 0.05 and the particle rises every frame.
+ */
 void func_82153E28(s8 *arg0) {
     s16 temp_v0;
 

@@ -1039,6 +1039,9 @@ void BattleAnim_GetExplosionParticleColor(Particle* arg0, u8 arg1) {
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, sp1E);
 }
 
+/**
+ * Empty.
+ */
 void func_82146674(void) {
 }
 
@@ -2291,6 +2294,9 @@ void BattleAnim_InitializeFireSpinHitFlames(void) {
     func_8213BF70(8, 9, 0xE, 8, 0xC8, 0x10);
 }
 
+/**
+ * Empty.
+ */
 void func_821491CC(void) {
 }
 

@@ -385,10 +385,16 @@ void Battle_UpdateFaintBatches(void) {
 }
 
 // Empty retail hook; its intended purpose is not established.
+/**
+ * Empty.
+ */
 void func_82100CB8(void) {
 }
 
 // Empty retail hook; no purpose is established by callers in this fragment.
+/**
+ * Empty.
+ */
 void func_82100CC0(void) {
 }
 
@@ -791,6 +797,9 @@ s32 func_82101324(s32* arg0) { // FAKE: s32 return (value unused) fixes caller r
     D_82198D18 = 0;
 }
 
+/**
+ * Empty.
+ */
 void func_8210186C(void) {
 }
 

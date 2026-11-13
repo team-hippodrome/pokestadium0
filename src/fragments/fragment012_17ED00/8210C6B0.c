@@ -33,6 +33,10 @@ void BattleMenu_ResetCommandTimer(void) {
     D_FLT_82199EB0 = 0.0f;
 }
 
+/**
+ * While the Pokemon's command state (+0x79C) is 3, adds 0x38E to its action timer and
+ * returns 1; otherwise returns 0.
+ */
 s32 func_8210C708(s8 *arg0) {
     s8 *temp_v1;
 
@@ -63,6 +67,11 @@ void func_8210C738(ActivePokemon* arg0, ActivePokemonState* arg1, Controller* ar
 M2C_UNK func_82134D80();
 extern s8 D_82199DE0;
 
+/**
+ * While the command menu option is 3, waits for L on the Pokemon's controller (unless the
+ * other side's state byte is 16): then runs func_8210C738 for command 2, resets the option
+ * and returns 0. Until then adds 0x38E to the action timer and returns 1.
+ */
 s32 func_8210C778(ActivePokemon* arg0) {
     ActivePokemonState* state = &arg0->state;
     ActivePokemonState* other = &((ActivePokemon**)&D_82199DE0)[func_82107A5C() == 0]->state;
@@ -459,6 +468,9 @@ void func_8211F274();                            /* extern */
 M2C_UNK ActivePokemon_ShowCaption(s32, s32, s32);               /* extern */
 extern s32 D_8218C700;
 
+/**
+ * Clears the caption state and shows caption D_8218C700 with the Pokemon's nickname.
+ */
 void func_8210CFE4(s32 arg0) {
     func_8211F274();
     ActivePokemon_ShowCaption(arg0, D_8218C700, ActivePokemon_GetNickname(arg0));
@@ -671,6 +683,11 @@ extern u8 D_800AAF50[];
 void BattleMenu_TakeControlOnBPress(ActivePokemon*, u8*, u8*, s32);
 void func_82134D60(void);
 
+/**
+ * Reads the buttons of the Pokemon's controller(s) (both trainers in a tag battle) into its
+ * command state: A sets 1, B sets 2 and lets the partner take control, Start sets 3. A, B
+ * or Start (when the other side isn't in state 4) also calls func_82134D60.
+ */
 void func_8210D6BC(ActivePokemon* arg0) {
     s8* state = (s8*)arg0 + 0x78C;
     s8* other = (s8*)sActivePokemon[BattleScene_GetParticipantSideIndex(arg0) == 0] + 0x78C;

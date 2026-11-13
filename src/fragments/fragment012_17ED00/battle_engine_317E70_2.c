@@ -599,6 +599,11 @@ void BattleAnim_UpdateOrDestroyParticle(Particle* arg0) {
     }
 }
 
+/**
+ * Updates every allocated particle in the 300-entry pool: refreshes its anchor, sets the
+ * render scale (1 when it has no owner or flags 0x108, else the owner's species base scale
+ * unless flag 0x800 is set) and runs or destroys it.
+ */
 void func_8213A68C(void) {
     s32 i;
     Particle* var_s0 = gParticlePool;
@@ -674,6 +679,10 @@ void func_8213A858(s32 arg0) {
 }
 
 typedef void (*Fn8213A904)(s8*, s32);
+/**
+ * Draws a particle through its descriptor: picks the render setup display list from the
+ * descriptor's mode, then calls the descriptor's draw callback.
+ */
 void func_8213A904(s8* arg0) {
     s8* desc = M2C_FIELD(arg0, s8**, 0xC);
     s8* sp = M2C_FIELD(desc, s8**, 4);
