@@ -77,7 +77,12 @@ void BattleHud_DrawHpFractionText(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
-void BattleHud_DrawSpeciesNameLabel(s16 arg0, s16 arg1, s32 arg2, s32 arg3, s32 arg4) {
+/**
+ * Seen in play (2026-11-13) at the battle command menu: called at (0x16, 0x0F) with the 1P
+ * trainer's name, the string "1P" at 0x800AE8FC, which is the label in the top-left box. Was
+ * BattleHud_DrawSpeciesNameLabel, but it draws the trainer name, not the species.
+ */
+void BattleHud_DrawTrainerNameLabel(s16 arg0, s16 arg1, s32 arg2, s32 arg3, s32 arg4) {
     u32 sp24;
     s32 temp_v0;
 
@@ -93,7 +98,12 @@ void BattleHud_DrawSpeciesNameLabel(s16 arg0, s16 arg1, s32 arg2, s32 arg3, s32 
     func_8001ABBC();
 }
 
-void BattleHud_DrawSpeciesNameLabelBlink(s16 arg0, s16 arg1, s32 arg2, s32 arg3, u16 arg4, s32 arg5) {
+/**
+ * Seen in play (2026-11-13) at the battle command menu: called at (0xE3, 0xCE) with the COM
+ * trainer's name, fullwidth "ＣＯＭ" at 0x800AED04, the label in the COM side's box. Was
+ * BattleHud_DrawSpeciesNameLabelBlink.
+ */
+void BattleHud_DrawTrainerNameLabelBlink(s16 arg0, s16 arg1, s32 arg2, s32 arg3, u16 arg4, s32 arg5) {
     UNUSED s32 pad; // FAKE: stack padding
     s16 wave;
     s16 alpha;
@@ -123,7 +133,12 @@ void BattleHud_DrawSpeciesNameLabelBlink(s16 arg0, s16 arg1, s32 arg2, s32 arg3,
     func_8001ABBC();
 }
 
-void BattleHud_DrawSpeciesNameLabelAuto(ActivePokemon* arg0, TeamRoster* arg1, s16 arg2, s16 arg3, s32 arg4, u16 arg5, s32 arg6) {
+/**
+ * Seen in play (2026-11-13) at the battle command menu: called with the COM Pokémon and its
+ * TeamRoster (trainer name ＣＯＭ), it chose the blinking trainer-name label. Was
+ * BattleHud_DrawSpeciesNameLabelAuto.
+ */
+void BattleHud_DrawTrainerNameLabelAuto(ActivePokemon* arg0, TeamRoster* arg1, s16 arg2, s16 arg3, s32 arg4, u16 arg5, s32 arg6) {
     ActivePokemonState* ptr = &arg0->state;
     s32 var_t0 = 0;
     s32 i;
@@ -135,9 +150,9 @@ void BattleHud_DrawSpeciesNameLabelAuto(ActivePokemon* arg0, TeamRoster* arg1, s
     }
 
     if (arg6 == 0) {
-        BattleHud_DrawSpeciesNameLabel(arg2, arg3, arg4, &arg1->trainerName, var_t0);
+        BattleHud_DrawTrainerNameLabel(arg2, arg3, arg4, &arg1->trainerName, var_t0);
     } else {
-        BattleHud_DrawSpeciesNameLabelBlink(arg2, arg3, arg4, &arg1->trainerName, arg5, var_t0);
+        BattleHud_DrawTrainerNameLabelBlink(arg2, arg3, arg4, &arg1->trainerName, arg5, var_t0);
     }
 }
 
