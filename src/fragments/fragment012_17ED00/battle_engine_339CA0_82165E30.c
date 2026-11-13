@@ -262,6 +262,9 @@ void BattleAnim_StartEffect137Descriptor3FRisingFade(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 3, 2, BattleAnim_HeavyHitAnimatedRiseFade, &gBattleAnimParticleDescriptors[0x3F], 0, 0x10, 0xA, 0, 0x11, 0);
 }
 
+/**
+ * Queues the small and large sand particles on the current owner.
+ */
 void func_82166DC4(void) {
     func_8213B5D8(0, 3, 2, &BattleAnim_RunSmallSand, &D_8218E7D0, 0, 6, 0x11, (s32) D_8219A80A, 0x11, 0);
     func_8213B5D8(0, 4, 2, &BattleAnim_RunLargeSand, &D_8218E7D0, 0, 4, 0x11, (s32) D_8219A80A, 0x11, 0);
@@ -580,6 +583,10 @@ void BattleAnim_InitializeEarthquakeFissureHitSequence(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0x10, BattleAnim_RunDefaultHitSpark, &D_8218E580[0x51], 0, 5, 0x11, 9, 0x17, 0xE);
 }
 
+/**
+ * Queues four vertical-fade particles (frames 4-7) and two default hit sparks (frames 8 and
+ * 16) on the current owner.
+ */
 void func_82168364(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(4, BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E580[0x4A], 0, 8, 0xA, 0, 0x33, 1);
     BattleAnim_CreateEffectSlotForCurrentOwner(5, BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E580[0x4A], 0, 8, 0xA, 0, 0x33, 1);

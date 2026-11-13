@@ -675,6 +675,10 @@ M2C_UNK func_8213B720(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK); /* extern */
 extern M2C_UNK D_8218E608;
 extern M2C_UNK D_8218E620;
 
+/**
+ * Starts a three-part effect: sets the tint and spawn timing, then queues func_8214F3D4,
+ * func_8214F55C and func_8214F06C on the current owner.
+ */
 void func_8214FCBC(void) {
     func_8213B720(0x22, 4, 0x10, 8);
     func_8213B644(0, 0x20, 3);

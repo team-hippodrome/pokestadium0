@@ -445,6 +445,9 @@ void func_82134DC8(s32 arg0) {
  * instead of folding it into the argument register.
  */
 void Audio_PlayCry(s32, s32);
+/**
+ * Plays the cry of species arg0 with mode 2.
+ */
 void func_82134DEC(s16 arg0) {
     Audio_PlayCry(arg0 * 1, 2); // FAKE: no-op * 1
 }

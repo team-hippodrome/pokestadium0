@@ -338,6 +338,9 @@ void Battle_DrawCompactStatusBoxesIfVisible(void) {
     }
 }
 
+/**
+ * Clears the Pokemon's caption state fields (0xA04, 0xA08, 0xA0C, 0xA4C).
+ */
 void func_8211F274(s8 *arg0) {
     M2C_FIELD(arg0, s32 *, 0xA04) = 0;
     M2C_FIELD(arg0, s32 *, 0xA08) = 0;
@@ -408,14 +411,23 @@ void ActivePokemon_TickCaptionTypewriter(ActivePokemon* arg0) {
     }
 }
 
+/**
+ * Empty.
+ */
 void func_8211F3E4(void) {
 }
 
+/**
+ * Empty.
+ */
 void func_8211F3EC(void) {
 }
 
 extern void* D_8219A520;
 
+/**
+ * Allocates and zeroes the 0x4C8-byte battle message buffer D_8219A520.
+ */
 void func_8211F3F4(void) {
     D_8219A520 = main_pool_alloc(0x4C8, 0);
     bzero(D_8219A520, 0x4C8);

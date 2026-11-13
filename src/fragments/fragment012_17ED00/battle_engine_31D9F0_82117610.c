@@ -6,6 +6,9 @@ extern u8 D_03006C40[];
 extern u8 D_03006CA0[];
 extern u8 D_03006D00[];
 
+/**
+ * Draws the "TIME" label and the battle time (minutes, seconds, hundredths) at (x, y).
+ */
 void func_82117610(s16 x, s16 y) {
     UNUSED s32 pad; // FAKE: stack padding
     s8 buf[12];
@@ -25,6 +28,9 @@ void func_82117610(s16 x, s16 y) {
 }
 
 
+/**
+ * Draws the "TOTAL TIME" label and the total time (minutes, seconds, hundredths) at (x, y).
+ */
 void func_8211778C(s16 x, s16 y) {
     UNUSED s32 pad; // FAKE: stack padding
     s8 buf[12];

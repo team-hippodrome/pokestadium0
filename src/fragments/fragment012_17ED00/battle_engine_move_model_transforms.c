@@ -188,6 +188,10 @@ void BattleScene_ShowSecondaryModelsAtMainPose(ActivePokemon* active_pokemon) {
 }
 
 
+/**
+ * Steps the two afterimages: each follows the Pokemon's position and shrinks toward 0.65 at
+ * its own speed. Returns 1 once both are done.
+ */
 s32 func_82109824(ActivePokemon* arg0) {
     s32 i;
     s32 count;

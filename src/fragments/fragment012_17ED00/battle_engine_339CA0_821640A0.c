@@ -200,6 +200,10 @@ void BattleAnim_InitSharedVerticalFadeParticle(Particle* arg0) {
 }
 
 
+/**
+ * Particle callback: shared vertical-fade init, wait for the spawn step, the later stages,
+ * then inactive.
+ */
 void func_82164AD0(s8 *arg0) {
     s16 temp_v0;
 
@@ -451,6 +455,10 @@ void BattleAnim_CallbackDescriptor50BurstChild_InitParticle(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
+/**
+ * Particle callback: init, loops frames 1-7 until the spawn step is done, then fades; falls
+ * with speed -1.5 by 0.1 while running.
+ */
 void func_82165224(s8 *arg0) {
     s16 temp_v0;
 
@@ -538,6 +546,9 @@ void BattleAnim_CallbackDescriptor50BurstEmitter(Particle* arg0) {
 void BattleAnim_EndEffect16_NoOpInit(void) {
 }
 
+/**
+ * Like func_82165224 with the shared vertical-fade init and a fall step of 0.2.
+ */
 void func_8216547C(s8 *arg0) {
     s16 temp_v0;
 

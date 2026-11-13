@@ -206,9 +206,15 @@ Gfx* AuxiliaryEffect_Draw(s16 arg0, Gfx* arg1) {
     return arg1;
 }
 
+/**
+ * Empty.
+ */
 void func_821832F4(void) {
 }
 
+/**
+ * Empty.
+ */
 void func_821832FC(void) {
 }
 

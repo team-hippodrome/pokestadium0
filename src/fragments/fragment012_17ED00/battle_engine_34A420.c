@@ -499,6 +499,10 @@ void Radial20_VariantC(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg
 }
 
 extern Radial20 D_821A3490[10];
+/**
+ * Starts a radial effect in a free Radial20 slot: from (arg0, arg1, arg2) toward (arg3,
+ * arg4, arg5), with its colors, widths and lifetime argE.
+ */
 void func_82175440(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s16 arg6, u8 arg7, u8 arg8, u8 arg9,
                    u8 argA, f32 argB, f32 argC, f32 argD, s16 argE) {
     Radial20* var_v0;

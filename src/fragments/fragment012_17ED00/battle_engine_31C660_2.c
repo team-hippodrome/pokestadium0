@@ -364,6 +364,9 @@ void BattleAnim_RunPokemonAndFullScreenHueChange(Particle* arg0) {
     }
 }
 
+/**
+ * Init step: recolors the prim color from palette CF, sets alpha from field CD and advances.
+ */
 void func_82144A54(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
     Particle_SetPrimAlpha(arg0, arg0->unk_CD);

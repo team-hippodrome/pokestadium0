@@ -73,6 +73,10 @@ void BattleHud_DrawTranslucentShadowRect(s32 arg0, s32 arg1, s32 arg2, s32 arg3,
 void Ui_DrawGradientRectangle(s32 x1, s32 y1, s32 width, s32 height, Color_RGB8* top_color,
                               Color_RGB8* bottom_color);
 
+/**
+ * Draws up to seven digits (and '-') of the string arg0 at (arg1, arg2) with the small 8x6
+ * digit textures, stopping at the first space or the end.
+ */
 void func_82116480(s8* arg0, s16 arg1, s16 arg2) {
     u8** temp_s4;
     u8* var_v1;

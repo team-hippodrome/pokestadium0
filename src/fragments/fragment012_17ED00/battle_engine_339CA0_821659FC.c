@@ -46,6 +46,10 @@ void BattleAnim_CallbackDescriptor26BurstChild(Particle* arg0) {
 }
 
 
+/**
+ * Init step: scale 0.5, position offset 100, a delay of spawn index + 1 frames, prim
+ * palette 8 and env palette 0x33.
+ */
 void func_82165BC8(s32 arg0) {
     s16 sp26;
 

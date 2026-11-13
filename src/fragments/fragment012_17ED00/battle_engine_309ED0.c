@@ -10,6 +10,11 @@ void BattleScene_ResetAnimationStep(void) {
     sBattleScene.scene->modelReloadStep = 0;
 }
 
+/**
+ * Model reload for a Pokemon with state flag 0x2000 (not while moveEffectKind is 0x19):
+ * step 0 marks the model pending, step 1 waits for the reload bit (0x10), clears 0x90 and
+ * reloads the model. Returns 1 while in progress.
+ */
 s32 func_82124A50(ActivePokemon* arg0) {
     UNUSED s32 pad[2]; // FAKE: stack padding
     s32 sp1C = 0;
@@ -81,6 +86,9 @@ s32 BattleScene_AdvanceOwnerAnimation98(ActivePokemon* arg0) {
     return sp1C;
 }
 
+/**
+ * Same as func_82124A50 for state flag 0x1000.
+ */
 s32 func_82124BF8(ActivePokemon* arg0) {
     UNUSED s32 pad[2]; // FAKE: stack padding
     s32 sp1C = 0;

@@ -956,6 +956,11 @@ extern s32 D_8219A7C0;
 extern s32 D_8219A7C4;
 extern s32 D_8219A7C8;
 
+/**
+ * Advances the battle animation frame counter and its derived timers: the counter masked to
+ * 64, 32, 16, 8, 4 and 2 frames, and for each period a wrap counter and a toggle. Counts the
+ * countdown D_8219A77C down to 0.
+ */
 void func_82136E48(void) {
     D_8219A780++;
     D_8219A77C--;
@@ -1031,6 +1036,10 @@ M2C_UNK func_82137000(s32);                         /* extern */
 M2C_UNK func_82137160();                            /* extern */
 M2C_UNK func_8216D720(s32);                         /* extern */
 extern s32 D_8219A878;
+/**
+ * Effect list command handler: 0 resets (func_82137160), 2 selects list arg1, 5 calls
+ * func_8216D720(arg1); 1, 3 and 4 do nothing. Returns 0.
+ */
 s32 func_821370DC(u32 arg0, s32 arg1) {
     switch (arg0) {
     case 1:

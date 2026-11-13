@@ -53,6 +53,10 @@ void func_8211F9C4(CameraNode*);
 void func_82121C3C(CameraNode*);
 void func_82108C0C(ActivePokemon*);
 
+/**
+ * Selects the next B-roll camera shot from the shot list for D_8219A4F4 (wrapping at 0xFF)
+ * and starts it; list 5 jumps straight to phase step 24.
+ */
 void func_82121434(CameraNode* arg0) {
     if (D_8219A4F4 == 5) {
         sBattleScene.scene->phaseStep = 0x18;

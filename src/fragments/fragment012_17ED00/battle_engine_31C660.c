@@ -17,6 +17,9 @@ extern func_D_8438AE50 sMoveEffectHandlers[];
 void func_82113660(void);
 void BattleEffect_Explosion(void);
 
+/**
+ * Empty.
+ */
 void func_82113660(void) {
 }
 

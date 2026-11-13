@@ -113,6 +113,9 @@ void func_8213C3B8(s8 *arg0, unsigned char arg1)
   }
 }
 
+/**
+ * Sets field A6 of the particle to arg1, unless the particle pointer is -1.
+ */
 void func_8213C3D4(s8 *arg0, s16 arg1) {
     if (arg0 != (s8 *)-1) {
         M2C_FIELD(arg0, s16 *, 0xA6) = arg1;
@@ -143,6 +146,9 @@ void Particle_SetFieldOffsetAAIfNotSentinel(Particle* arg0, s16 arg1) {
     }
 }
 
+/**
+ * Sets field AC of the particle to arg1, unless the particle pointer is -1.
+ */
 void func_8213C444(s8 *arg0, s16 arg1) {
     if (arg0 != (s8 *)-1) {
         M2C_FIELD(arg0, s16 *, 0xAC) = arg1;

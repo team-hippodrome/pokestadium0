@@ -47,11 +47,20 @@ void func_8216D988(void);
 void BattleAnim_EndEffect16_NoOpDraw(void) {
 }
 
+/**
+ * Empty.
+ */
 void func_8216D978(void) {
 }
 
+/**
+ * Empty.
+ */
 void func_8216D980(void) {
 }
 
+/**
+ * Empty.
+ */
 void func_8216D988(void) {
 }

@@ -1,9 +1,15 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
 #include "battle_engine_31D9F0.h"
 
+/**
+ * Empty.
+ */
 void func_82116D20(void) {
 }
 
+/**
+ * Empty.
+ */
 void func_82116D28(void) {
 }
 

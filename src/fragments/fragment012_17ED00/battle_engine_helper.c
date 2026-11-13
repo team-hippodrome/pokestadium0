@@ -82,6 +82,9 @@ f32 BattleScene_GetParticipantModelXOffset(ActivePokemon* active_pokemon) {
     return 150.0f;
 }
 
+/**
+ * Sets field 0x34 of both Pokemon's state (the camera clip mask) to value.
+ */
 void func_821079E8(s16 value) {
     ActivePokemonState* side1 = &sActivePokemon[0]->state;
     ActivePokemonState* side2 = &sActivePokemon[1]->state;
@@ -178,6 +181,9 @@ s16 BattleScene_GetHitCueDefaultAnchor(ActivePokemon* active_pokemon) {
     return hit_cue->defaultAnchor;
 }
 
+/**
+ * Returns the alternate anchor of the Pokemon's side hit cue.
+ */
 s16 func_82107B54(ActivePokemon* active_pokemon) {
     MovePresentationCue* hit_cue = &sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon)]->hitCue;
 
@@ -214,6 +220,9 @@ f32 ActivePokemon_GetSizeRatio(ActivePokemon* active_pokemon) {
     return (D_FLT_82189350[active_pokemon->displayObject.objectType][0] * 2) / 50.0f;
 }
 
+/**
+ * Returns the Pokemon's move id (+0x820).
+ */
 u8 func_82107BF4(s8 *arg0) {
     return M2C_FIELD(arg0, u8 *, 0x820);
 }
