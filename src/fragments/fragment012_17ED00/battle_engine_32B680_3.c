@@ -751,15 +751,15 @@ void BattleAnim_ApplyEffect1SpeciesMotion(Particle* arg0) {
 }
 
 
-void BattleAnim_SetupEffect1Descriptor2F(Particle* arg0) {
+void BattleAnim_SetupSleepMovePhaseFadeOut(Particle* arg0) {
     BattleAnim_ApplyEffect1SpeciesMotion(arg0);
     Particle_AdvanceLifecycle(arg0);
 }
 
-void BattleAnim_CallbackStartEffect1Descriptor2FPhaseFadeOut(Particle* arg0) {
+void BattleAnim_SleepMovePhaseFadeOut(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_SetupEffect1Descriptor2F(arg0);
+            BattleAnim_SetupSleepMovePhaseFadeOut(arg0);
             break;
 
         case 3:

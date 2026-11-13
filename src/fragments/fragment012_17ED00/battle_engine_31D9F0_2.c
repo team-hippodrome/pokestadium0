@@ -416,7 +416,7 @@ void BattleAnim_ContinueFireBreathFlameColoration(Particle* arg0) {
     }
 }
 
-void BattleAnim_CallbackStartEffects23And35And84Descriptor4FRotatingFallColorCycle(Particle* arg0) {
+void BattleAnim_FlameRotatingFallColorCycle(Particle* arg0) {
     s16 temp_v0 = Particle_FieldCF_GetS16_0C058(arg0);
 
     switch (arg0->lifecycle) {
@@ -1413,7 +1413,7 @@ void BattleAnim_SetupEmberHitSmoke(Particle* arg0) {
 }
 
 s32 Particle_ApproachStepMagnitude(Particle* arg0, f32 arg1, f32 arg2);
-void BattleAnim_CallbackEndEffect56Descriptor47SpreadScaleAlphaRise(Particle* arg0) {
+void BattleAnim_EmberSpreadScaleAlphaRise(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupEmberHitSmoke(arg0);
@@ -2101,7 +2101,7 @@ void BattleAnim_InitializeEmberHit(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(4, BattleAnim_CallbackEndEffect56Descriptor46RisingScaleAlphaFade, &D_8218E7B0, 0, 6, 0x10, 9, 0, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_CallbackEndEffect56Descriptor46RisingScaleAlphaFade, &D_8218E7B0, 0, 6, 0x10, 9, 0, 0);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 2, 2, BattleAnim_CallbackEndEffects54And56Descriptor3DRisingColorScaleFade, &D_8218E770, 0, 4, 0x10, 9, 0, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 2, 2, BattleAnim_CallbackEndEffect56Descriptor47SpreadScaleAlphaRise, &D_8218E7B8, 0, 4, 0x10, 9, 0, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 2, 2, BattleAnim_EmberSpreadScaleAlphaRise, &D_8218E7B8, 0, 4, 0x10, 9, 0, 0);
 }
 
 M2C_UNK func_8213B560(M2C_UNK, M2C_UNK *, M2C_UNK *, M2C_UNK, s32, s32, s32, s32, s32); /* extern */

@@ -92,7 +92,7 @@ void Particle_ApproachRotationTargetZ(Particle* arg0);
 void Particle_ComputeVectorFromRotationXYZAlt(Particle* arg0, f32 arg1, Vec3f* arg2);
 void Particle_ComputeVectorFromRotationYZVariant(Particle* arg0, f32 arg1, Vec3f* arg2);
 void Particle_SetMotionStepXZFromRotationY(Particle* arg0);
-void Particle_Field7C_SetVecFromField74AnglesXZ_0B330(Particle* arg0);
+void Particle_SetMotionStepFromRotationXZ(Particle* arg0);
 s32 Particle_PrimAlpha_Approach_0BC2C(Particle* arg0, u8 arg1, u8 arg2);
 s32 Particle_FieldA6_DecrementTo_0BCC4(Particle* arg0, s16 arg1, s16 arg2);
 s32 Particle_FieldA8_DecrementTo_0BE30(Particle* arg0, s16 arg1);
@@ -1119,7 +1119,7 @@ void func_8213E4D8(s32 arg0) {
 }
 
 void Particle_AddVelocityFromRotationTemplate2(Particle* arg0) {
-    Particle_Field7C_SetVecFromField74AnglesXZ_0B330(arg0);
+    Particle_SetMotionStepFromRotationXZ(arg0);
     Particle_ApplyMotionStepXY(arg0);
 }
 
@@ -1212,7 +1212,7 @@ void Particle_AddVelocityXZFromRotationYPlusHalfTurn(Particle* arg0) {
  * Seen in play (2026-11-13) in the 165-move sweep (Surf): with arg1 = 10 it set motionStep.x to 10
  * (z 0) and added it to motionOffset.x, i.e. the step pointed along rotation.y + 0x8000.
  */
-void Particle_AddVelocityXZFromRotationYPlusHalfTurnFromArgument(Particle* arg0, f32 arg1) {
+void Particle_StepBackwardAlongRotationY(Particle* arg0, f32 arg1) {
     arg0->motionStep.x = SINS(arg0->rotation.y + 0x8000) * arg1;
     arg0->motionStep.z = COSS(arg0->rotation.y + 0x8000) * arg1;
 
@@ -2067,7 +2067,7 @@ void Particle_Field7C_SetYFromField74AngleX_0B1C4(Particle* arg0) {
 /**
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
-void Particle_Field7C_SetVecFromField74AnglesXZ_0B330(Particle* arg0) {
+void Particle_SetMotionStepFromRotationXZ(Particle* arg0) {
     M2C_FIELD(arg0, f32*, 0x78) = arg0->stepMagnitude * COSS(M2C_FIELD(arg0, u16*, 0x94));
     M2C_FIELD(arg0, f32*, 0x7C) = arg0->stepMagnitude * SINS(M2C_FIELD(arg0, u16*, 0x94));
 }
@@ -2077,7 +2077,7 @@ void Particle_SetMotionStepXZFromRotationY(Particle* arg0) {
     M2C_FIELD(arg0, f32*, 0x80) = COSS(M2C_FIELD(arg0, u16*, 0x92)) * arg0->stepMagnitude;
 }
 
-void Particle_Field7C_SetVecFromField74AnglesXY_0B2B4(Particle* arg0) {
+void Particle_SetMotionStepFromRotationXY(Particle* arg0) {
     arg0->motionStep.x = arg0->stepMagnitude * COSS(arg0->rotation.x) * SINS(arg0->rotation.y);
     arg0->motionStep.y = -arg0->stepMagnitude * SINS(arg0->rotation.x);
     arg0->motionStep.z = arg0->stepMagnitude * COSS(arg0->rotation.x) * COSS(arg0->rotation.y);
@@ -2093,19 +2093,19 @@ void Particle_MotionStep_SetVecFromField74AnglesXZ(Particle* arg0) {
     arg0->motionStep.z = arg0->stepMagnitude * COSS(arg0->rotation.x);
 }
 
-void Particle_Field7C_SetVecFromField74AnglesXYAlt_0B3AC(Particle* arg0) {
+void Particle_SetMotionStepFromRotationXYAlt(Particle* arg0) {
     arg0->motionStep.x = arg0->stepMagnitude * SINS(arg0->rotation.y);
     arg0->motionStep.y = -arg0->stepMagnitude * SINS(arg0->rotation.x) * COSS(arg0->rotation.y);
     arg0->motionStep.z = arg0->stepMagnitude * COSS(arg0->rotation.x) * COSS(arg0->rotation.y);
 }
 
-void Particle_Field7C_SetVecFromField74AnglesYZ_0B42C(Particle* arg0) {
+void Particle_SetMotionStepFromRotationYZ(Particle* arg0) {
     arg0->motionStep.x = arg0->stepMagnitude * SINS(arg0->rotation.y) * COSS(arg0->rotation.z);
     arg0->motionStep.y = arg0->stepMagnitude * SINS(arg0->rotation.y) * SINS(arg0->rotation.z);
     arg0->motionStep.z = COSS(arg0->rotation.y);
 }
 
-void Particle_Field7C_SetVecFromField74AnglesXYZ_0B4A0(Particle* arg0) {
+void Particle_SetMotionStepFromRotationXYZ(Particle* arg0) {
     arg0->motionStep.x = arg0->stepMagnitude * (COSS(arg0->rotation.x) * SINS(arg0->rotation.y) * COSS(arg0->rotation.z) +
                                      SINS(arg0->rotation.x) * SINS(arg0->rotation.z));
     arg0->motionStep.y = -arg0->stepMagnitude * (COSS(arg0->rotation.x) * SINS(arg0->rotation.y) * SINS(arg0->rotation.z) -
@@ -2113,7 +2113,7 @@ void Particle_Field7C_SetVecFromField74AnglesXYZ_0B4A0(Particle* arg0) {
     arg0->motionStep.z = arg0->stepMagnitude * (COSS(arg0->rotation.x) * COSS(arg0->rotation.y));
 }
 
-void Particle_Field7C_SetVecFromField74AnglesXYZAlt_0B568(Particle* arg0) {
+void Particle_SetMotionStepFromRotationXYZAlt(Particle* arg0) {
     arg0->motionStep.x = arg0->stepMagnitude * (SINS(arg0->rotation.x) * COSS(arg0->rotation.y) * SINS(arg0->rotation.z) +
                                      COSS(arg0->rotation.x) * SINS(arg0->rotation.y));
     arg0->motionStep.y = -arg0->stepMagnitude * SINS(arg0->rotation.x) * COSS(arg0->rotation.z);
@@ -2122,7 +2122,7 @@ void Particle_Field7C_SetVecFromField74AnglesXYZAlt_0B568(Particle* arg0) {
                                      COSS(arg0->rotation.x) * COSS(arg0->rotation.y));
 }
 
-void Particle_Field7C_SetVecFromField74AnglesYZAlt_0B638(Particle* arg0) {
+void Particle_SetMotionStepFromRotationYZAlt(Particle* arg0) {
     arg0->motionStep.x = arg0->stepMagnitude * SINS(arg0->rotation.y) * COSS(arg0->rotation.z);
     arg0->motionStep.y = arg0->stepMagnitude * (COSS(arg0->rotation.x) * SINS(arg0->rotation.y) * SINS(arg0->rotation.z) -
                                      SINS(arg0->rotation.x) * COSS(arg0->rotation.y));
@@ -2134,7 +2134,7 @@ void Particle_Field7C_SetVecFromField74AnglesYZAlt_0B638(Particle* arg0) {
  * Evaluate the explicit trigonometric component formula and store/add the resulting motion term.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
-void Particle_Field7C_SetVecFromField74AnglesYZVariant_0B700(Particle* arg0) {
+void Particle_SetMotionStepFromRotationYZVariant(Particle* arg0) {
     arg0->motionStep.x = arg0->stepMagnitude * (SINS(arg0->rotation.y) * COSS(arg0->rotation.z) +
                                      SINS(arg0->rotation.x) * COSS(arg0->rotation.y) * SINS(arg0->rotation.z));
     arg0->motionStep.y = arg0->stepMagnitude * (SINS(arg0->rotation.y) * SINS(arg0->rotation.z) -

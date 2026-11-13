@@ -122,7 +122,7 @@ void BattleAnim_DrawFlameUse(Particle* arg0, CameraNode* arg1) {
     BattleAnim_DrawAsset76Ia8FrameWithAsset77I4Overlay(arg0, arg1);
 }
 
-void BattleAnim_DrawAsset1FAnimatedI4WithAsset20DisplayList(Particle* arg0, CameraNode* arg1) {
+void BattleAnim_DrawSleepMoveAnimatedI4(Particle* arg0, CameraNode* arg1) {
     ParticleGfx_PushBillboardMatrix(arg1, arg0->worldPosition, arg0->scale);
 
     gSPDisplayList(gDisplayListHead++, D_82190548);

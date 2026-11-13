@@ -9,7 +9,7 @@ void BattleAnim_InitStingerTrailColor(Particle* arg0);
 void BattleAnim_InitStingerTrailColorDuplicate(Particle* arg0);
 void BattleAnim_InitStingerMoveParticle(Particle* arg0, u8 arg1);
 
-void BattleAnim_UpdateSecondaryOwnerParticleBlueFadeGrow(s8 *arg0);
+void BattleAnim_UpdateNeedleBlueFadeGrow(s8 *arg0);
 void BattleAnim_UpdateSecondaryOwnerParticleBlueGrow(s8 *arg0);
 
 /**
@@ -31,7 +31,7 @@ M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_82140920(s8 *);                      /* extern */
 
-void BattleAnim_UpdateSecondaryOwnerParticleBlueFadeGrow(s8 *arg0) {
+void BattleAnim_UpdateNeedleBlueFadeGrow(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -84,7 +84,7 @@ void BattleAnim_UpdateSecondaryOwnerParticleBlueGrow(s8 *arg0) {
 void BattleAnim_InitStingerMoveParticle(Particle* arg0, u8 arg1) {
     switch (arg1) {
         case 1:
-            arg0->updateCallback = BattleAnim_UpdateSecondaryOwnerParticleBlueFadeGrow;
+            arg0->updateCallback = BattleAnim_UpdateNeedleBlueFadeGrow;
             arg0->descriptor = &gBattleAnimParticleDescriptors[25];
             break;
 

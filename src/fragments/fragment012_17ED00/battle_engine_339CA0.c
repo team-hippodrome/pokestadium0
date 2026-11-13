@@ -333,7 +333,7 @@ void BattleAnim_RunSlashMoveWhiteFlashOverlay(s8 *arg0) {
     Particle_ApproachPrimAlpha(arg0, 0, 0x10);
 }
 
-void BattleAnim_CallbackSharedOwnerKeyedAnimGrowFade_InitParticle(Particle* arg0) {
+void BattleAnim_SlashGrowFade_InitParticle(Particle* arg0) {
     s16 sp26 = Particle_FieldCE_GetS32_0C040(arg0);
     s16 sp24 = Particle_FieldCF_GetS16_0C058(arg0);
 
@@ -377,7 +377,7 @@ void func_821603C8(s8 *arg0) {
     func_82140228(arg0, 0x40A00000, 0x3ECCCCCD);
 }
 
-void BattleAnim_CallbackEndEffects39And41And45And46And83Descriptor3DMetadataBurstChild_InitParticle(Particle* arg0) {
+void BattleAnim_HeavyHitBurstChild_InitParticle(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
     s16 sp24 = Particle_FieldCF_GetS16_0C058(arg0);
 
@@ -651,7 +651,7 @@ void BattleAnim_RunSandAttackHitEffect(s8 *arg0) {
     }
 }
 
-void BattleAnim_CallbackSharedDescriptors3EAnd3FAnimatedRiseFade_InitParticle(Particle* arg0) {
+void BattleAnim_HeavyHitAnimatedRiseFade_InitParticle(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
 
     Particle_SetScaleScaled(arg0, 0.25f);
@@ -667,10 +667,10 @@ void BattleAnim_CallbackSharedDescriptors3EAnd3FAnimatedRiseFade_InitParticle(Pa
 /**
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
-void BattleAnim_CallbackSharedDescriptors3EAnd3FAnimatedRiseFade(Particle* arg0) {
+void BattleAnim_HeavyHitAnimatedRiseFade(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_CallbackSharedDescriptors3EAnd3FAnimatedRiseFade_InitParticle(arg0);
+            BattleAnim_HeavyHitAnimatedRiseFade_InitParticle(arg0);
             break;
 
         case 2:
@@ -1049,7 +1049,7 @@ void BattleAnim_RunPhysicalHitPurpleSmoke(Particle* arg0) {
     }
 }
 
-void BattleAnim_CallbackEndEffect52Descriptor42BurstChild_InitParticle(Particle* arg0) {
+void BattleAnim_SwiftBurstChild_InitParticle(Particle* arg0) {
     s16 sp2E = Particle_FieldAC_GetS16_0C038(arg0);
     Vec3s sp28;
 
@@ -1066,10 +1066,10 @@ void BattleAnim_CallbackEndEffect52Descriptor42BurstChild_InitParticle(Particle*
     Particle_AdvanceLifecycle(arg0);
 }
 
-void BattleAnim_CallbackEndEffect52Descriptor42BurstChild(Particle* arg0) {
+void BattleAnim_SwiftBurstChild(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_CallbackEndEffect52Descriptor42BurstChild_InitParticle(arg0);
+            BattleAnim_SwiftBurstChild_InitParticle(arg0);
             break;
 
         case 2:
@@ -1098,7 +1098,7 @@ void BattleAnim_CallbackEndEffect52Descriptor42BurstChild(Particle* arg0) {
 
     if (Particle_IsRenderingEnabled(arg0) != 0) {
         Particle_Field94_AddXFromField9A_0A4B4(arg0);
-        Particle_Field7C_SetVecFromField74AnglesXY_0B2B4(arg0);
+        Particle_SetMotionStepFromRotationXY(arg0);
         Particle_ApplyMotionStep(arg0);
     }
 }
@@ -1108,7 +1108,7 @@ void BattleAnim_CallbackEndEffect52Descriptor42BurstChild(Particle* arg0) {
  * for Swift.
  */
 void BattleAnim_SetupSwiftHitEffect2(Particle* arg0) {
-    BattleAnim_EmitParticleBurst(arg0, BattleAnim_CallbackEndEffect52Descriptor42BurstChild, &gBattleAnimParticleDescriptors[0x42], 0xC);
+    BattleAnim_EmitParticleBurst(arg0, BattleAnim_SwiftBurstChild, &gBattleAnimParticleDescriptors[0x42], 0xC);
     Particle_AdvanceLifecycle(arg0);
 }
 
@@ -1638,7 +1638,7 @@ void BattleAnim_RunStrongPurpleHitSmoke(Particle* arg0) {
     }
 
     if (arg0->phase == 1) {
-        BattleAnim_EmitParticleBurstWithMetadata(arg0, BattleAnim_CallbackEndEffects39And41And45And46And83Descriptor3DMetadataBurstChild, &gBattleAnimParticleDescriptors[0x3D], 1, 8, 0);
+        BattleAnim_EmitParticleBurstWithMetadata(arg0, BattleAnim_HeavyHitBurstChild, &gBattleAnimParticleDescriptors[0x3D], 1, 8, 0);
         Particle_AdvancePhase(arg0);
     }
 }
@@ -1945,7 +1945,7 @@ void BattleAnim_RecolorParticleByQueuedMoveId(Particle* arg0) {
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, sp1E);
 }
 
-void BattleAnim_CallbackStartEffects28And53And65And76Descriptor47AnimatedScaleMotion_InitParticle(Particle* arg0) {
+void BattleAnim_PowderCloudScaleMotion_InitParticle(Particle* arg0) {
     Vec3s sp28;
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
     s16 sp24 = Particle_FieldCF_GetS16_0C058(arg0);

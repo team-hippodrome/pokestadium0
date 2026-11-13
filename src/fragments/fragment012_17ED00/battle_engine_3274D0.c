@@ -10,10 +10,10 @@
 void BattleAnim_SetupStrongElectricSpark(Particle* arg0);
 void BattleAnim_ApplyThunderThunderboltUseRadialOffset(Particle* arg0);
 void BattleAnim_SetupThunderThunderboltUseEffect(Particle* arg0);
-void BattleAnim_SetupSharedDescriptor0FDelayedRisingColumnFade(Particle* arg0);
-void BattleAnim_SetupSharedDescriptor0FDelayedRisingColumnRandomScale(Particle* arg0);
+void BattleAnim_SetupDelayedRisingColumnFade(Particle* arg0);
+void BattleAnim_SetupDelayedRisingColumnRandomScale(Particle* arg0);
 void BattleAnim_SetupSharedDirectionalSprayFade(Particle* arg0);
-void BattleAnim_SetupSharedDescriptor13DirectionalSprayScaledFade(Particle* arg0);
+void BattleAnim_SetupDirectionalSprayScaledFade(Particle* arg0);
 void BattleAnim_SetupThunderShockOuterJolts(Particle* arg0);
 void BattleAnim_SetupUnregisteredStraightDirectionalStreamFade(Particle* arg0);
 void BattleAnim_SetupEndEffect28Descriptor10UpwardBurstFade(Particle* arg0);
@@ -155,7 +155,7 @@ void BattleAnim_RunThunderThunderboltUseEffect(Particle* arg0) {
     }
 }
 
-void BattleAnim_SetupSharedDescriptor0FDelayedRisingColumnFade(Particle* arg0) {
+void BattleAnim_SetupDelayedRisingColumnFade(Particle* arg0) {
     s16 sp2E = Particle_FieldAC_GetS16_0C038(arg0);
     Vec3s sp28;
 
@@ -180,7 +180,7 @@ void BattleAnim_SetupSharedDescriptor0FDelayedRisingColumnFade(Particle* arg0) {
 void BattleAnim_RunDeterministicRotatingBoltOfLightning(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_SetupSharedDescriptor0FDelayedRisingColumnFade(arg0);
+            BattleAnim_SetupDelayedRisingColumnFade(arg0);
             break;
 
         case 2:
@@ -207,7 +207,7 @@ void BattleAnim_RunDeterministicRotatingBoltOfLightning(Particle* arg0) {
     Particle_AddVelocityFromRotationTemplate1(arg0);
 }
 
-void BattleAnim_SetupSharedDescriptor0FDelayedRisingColumnRandomScale(Particle* arg0) {
+void BattleAnim_SetupDelayedRisingColumnRandomScale(Particle* arg0) {
     s16 sp2E = Particle_FieldAC_GetS16_0C038(arg0);
     Vec3s sp28;
 
@@ -232,7 +232,7 @@ void BattleAnim_SetupSharedDescriptor0FDelayedRisingColumnRandomScale(Particle* 
 void BattleAnim_RunRandomRotatingBoltOfLightning(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_SetupSharedDescriptor0FDelayedRisingColumnRandomScale(arg0);
+            BattleAnim_SetupDelayedRisingColumnRandomScale(arg0);
             break;
 
         case 2:
@@ -302,7 +302,7 @@ void func_8214ED30(s8 *arg0) {
     func_8213E5C8(arg0);
 }
 
-void BattleAnim_SetupSharedDescriptor13DirectionalSprayScaledFade(Particle* arg0) {
+void BattleAnim_SetupDirectionalSprayScaledFade(Particle* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
     Vec3s sp2C;
 

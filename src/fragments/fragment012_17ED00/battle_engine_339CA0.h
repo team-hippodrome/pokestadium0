@@ -36,9 +36,9 @@ extern const char D_821978C8[];
 void BattleAnim_SetupSlashingMoveUse(Particle* arg0);
 void BattleAnim_SetupRazorWindHitEffect(Particle* arg0);
 void BattleAnim_SetupPetalDanceRazorLeafHitEffect(Particle* arg0);
-void BattleAnim_CallbackEndEffects39And41And45And46And83Descriptor3DMetadataBurstChild_InitParticle(Particle* arg0);
+void BattleAnim_HeavyHitBurstChild_InitParticle(Particle* arg0);
 void BattleAnim_SetupSandAttackHitEffect(Particle* arg0);
-void BattleAnim_CallbackSharedDescriptors3EAnd3FAnimatedRiseFade_InitParticle(Particle* arg0);
+void BattleAnim_HeavyHitAnimatedRiseFade_InitParticle(Particle* arg0);
 void BattleAnim_SetupIceBeamIcePunchEffect(Particle* arg0);
 void BattleAnim_CallbackOrphanDescriptor34ColorFadeDetach_InitParticle(Particle* arg0);
 void BattleAnim_SetupGroundedCircularHitSpark(Particle* arg0);
@@ -55,7 +55,7 @@ void BattleAnim_SetupFirePunchUseEffect1(Particle* arg0);
 void BattleAnim_SetupFirePunchUseEffect2(Particle* arg0);
 void BattleAnim_SetupThunderPunchUseEffect(Particle* arg0);
 void BattleAnim_RecolorParticleByQueuedMoveId(Particle* arg0);
-void BattleAnim_CallbackStartEffects28And53And65And76Descriptor47AnimatedScaleMotion_InitParticle(Particle* arg0);
+void BattleAnim_PowderCloudScaleMotion_InitParticle(Particle* arg0);
 void BattleAnim_SetupAcidArmorUseEffect2(Particle* arg0);
 void BattleAnim_ApplySpeciesKeyedSpawnOffset(Particle* arg0);
 void BattleAnim_SetupBarrageUseEffect2(Particle* arg0);
@@ -89,18 +89,18 @@ void BattleAnim_InitializeRecoverUse(void);
 
 void BattleAnim_RunRazorWindHitEffect(Particle* arg0);
 void BattleAnim_RunPetalDanceRazorLeafHitEffect(Particle* arg0);
-void BattleAnim_CallbackSharedDescriptors3EAnd3FAnimatedRiseFade(Particle* arg0);
+void BattleAnim_HeavyHitAnimatedRiseFade(Particle* arg0);
 void BattleAnim_CallbackOrphanDescriptor34ColorFadeDetach(Particle* arg0);
 void BattleAnim_RunGroundedCircularHitSpark(Particle* arg0);
 void BattleAnim_RunPhysicalHitPurpleSmoke(Particle* arg0);
-void BattleAnim_CallbackEndEffect52Descriptor42BurstChild(Particle* arg0);
+void BattleAnim_SwiftBurstChild(Particle* arg0);
 void BattleAnim_RunSwiftHitEffect2(Particle* arg0);
 void BattleAnim_RunSparkleHit(Particle* arg0);
 void BattleAnim_RunDefaultHitSpark(Particle* arg0);
 void BattleAnim_RunStrongPurpleHitSmoke(Particle* arg0);
 s32 BattleAnim_RunPointyMoveHitSpark(Particle* arg0);
 void BattleAnim_CallbackSharedAnimatedVerticalFade(Particle* arg0);
-void BattleAnim_CallbackStartEffects29And60And104And110DefaultDescriptorBurstEmitter(Particle* arg0);
+void BattleAnim_SolarbeamMimicBurstEmitter(Particle* arg0);
 
 void Particle_MarkInactive(s8 *arg0);                      /* extern */
 M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
@@ -139,7 +139,7 @@ M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 
 void BattleAnim_RunSlashMoveWhiteFlashOverlay(s8 *arg0);
 
-void BattleAnim_CallbackSharedOwnerKeyedAnimGrowFade_InitParticle(Particle* arg0);
+void BattleAnim_SlashGrowFade_InitParticle(Particle* arg0);
 
 void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
 M2C_UNK func_8213CA80(s8 *, M2C_UNK);             /* extern */
@@ -253,7 +253,7 @@ M2C_UNK func_82160DC4(s8 *);                      /* extern */
 void BattleAnim_RunSandAttackHitEffect(s8 *arg0);
 
 /*
- * BattleAnim_CallbackSharedDescriptors3EAnd3FAnimatedRiseFade
+ * BattleAnim_HeavyHitAnimatedRiseFade
  *
  * Per-frame callback of the "animated rise and fade" particle used by
  * descriptors 0x3E and 0x3F.  It switches on the particle's lifecycle state
@@ -269,14 +269,14 @@ void BattleAnim_RunSandAttackHitEffect(s8 *arg0);
  * Afterwards, if the particle is still running, it is pushed along its
  * facing direction.
  *
- * Same structure as BattleAnim_CallbackSharedDescriptors3EAnd3FAnimatedRiseFade
+ * Same structure as BattleAnim_HeavyHitAnimatedRiseFade
  * in the Stadium 1 decomp (the donor spells the callees differently, and
  * Zero's address 0x8213F658 has no name in the symbol table).  The first
  * float argument of that call is written as the double 1.0, as in the donor:
  * with 1.0f twice the compiler reuses one register and emits three extra
  * instructions.
  */
-void BattleAnim_CallbackSharedDescriptors3EAnd3FAnimatedRiseFade(Particle* arg0);
+void BattleAnim_HeavyHitAnimatedRiseFade(Particle* arg0);
 
 void Particle_MarkInactive(s8 *arg0);                      /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
@@ -324,7 +324,7 @@ M2C_UNK func_8216177C(s8 *);                      /* extern */
 
 void BattleAnim_RunPointyMoveHitSparkChild(s8 *arg0);
 
-void BattleAnim_CallbackEndEffect52Descriptor42BurstChild_InitParticle(Particle* arg0);
+void BattleAnim_SwiftBurstChild_InitParticle(Particle* arg0);
 
 M2C_UNK Particle_ApplyMotionStep(s8 *);
 
@@ -521,7 +521,7 @@ void func_8213E11C(Particle* arg0, f32 arg1);
 void BattleAnim_SetupQiCharge(Particle* arg0);
 
 void func_82165854(Particle* arg0);
-void BattleAnim_CallbackStartEffects29And60And104And110DefaultDescriptorBurstEmitter(Particle* arg0);
+void BattleAnim_SolarbeamMimicBurstEmitter(Particle* arg0);
 
 extern const f32 D_FLT_82197854;
 void BattleAnim_CallbackDescriptor26BurstChild_InitParticle(Particle* arg0);

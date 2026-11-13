@@ -159,7 +159,7 @@ void BattleAnim_InitSharedVerticalFadeParticle(Particle* arg0) {
             sp30.z = 0;
             Particle_Field94_AddVecFromVec3s_0A4F0(arg0, sp30);
             Particle_Field74_SetScaled_0AD8C(arg0, (ParticleMath_RandomRange(0x14) * 0.15f) + 3.0f);
-            Particle_Field7C_SetVecFromField74AnglesXY_0B2B4(arg0);
+            Particle_SetMotionStepFromRotationXY(arg0);
             Particle_FieldA6_SetS16_0BCA8(arg0, sp2E);
             Particle_FieldAE_SetS16_0BF4C(arg0, 0xA);
             break;
@@ -172,7 +172,7 @@ void BattleAnim_InitSharedVerticalFadeParticle(Particle* arg0) {
             sp30.z = 0;
             Particle_Field94_AddVecFromVec3s_0A4F0(arg0, sp30);
             Particle_Field74_SetScaled_0AD8C(arg0, (ParticleMath_RandomRange(0x14) * 0.15f) + 4.0f);
-            Particle_Field7C_SetVecFromField74AnglesXY_0B2B4(arg0);
+            Particle_SetMotionStepFromRotationXY(arg0);
             Particle_FieldA6_SetS16_0BCA8(arg0, 0);
             Particle_FieldAE_SetS16_0BF4C(arg0, 0xA);
             break;
@@ -185,7 +185,7 @@ void BattleAnim_InitSharedVerticalFadeParticle(Particle* arg0) {
             sp30.z = 0;
             Particle_Field94_AddVecFromVec3s_0A4F0(arg0, sp30);
             Particle_Field74_SetScaled_0AD8C(arg0, (ParticleMath_RandomRange(0x14) * 0.3f) + 6.0f);
-            Particle_Field7C_SetVecFromField74AnglesXY_0B2B4(arg0);
+            Particle_SetMotionStepFromRotationXY(arg0);
             Particle_SetPrimAlpha(arg0, 0xFF);
             Particle_FieldA6_SetS16_0BCA8(arg0, sp2E);
             Particle_FieldAE_SetS16_0BF4C(arg0, 0xA);
@@ -432,7 +432,7 @@ void BattleAnim_CallbackDescriptor50BurstChild_InitParticle(Particle* arg0) {
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, sp26);
     Particle_FieldA6_SetS16_0BCA8(arg0, 8);
     Particle_Field74_SetScaled_0AD8C(arg0, (ParticleMath_RandomRange(8) * 0.25f) + 2.0f);
-    Particle_Field7C_SetVecFromField74AnglesXY_0B2B4(arg0);
+    Particle_SetMotionStepFromRotationXY(arg0);
     Particle_AdvanceLifecycle(arg0);
 }
 
@@ -639,7 +639,7 @@ void BattleAnim_SetupQiCharge(Particle* arg0) {
 /**
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
-void BattleAnim_CallbackStartEffects29And60And104And110DefaultDescriptorBurstEmitter(Particle* arg0) {
+void BattleAnim_SolarbeamMimicBurstEmitter(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
             func_82165854(arg0);
