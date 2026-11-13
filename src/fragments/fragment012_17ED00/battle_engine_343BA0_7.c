@@ -47,31 +47,60 @@ void BattleAnim_SetupSurfUseTerrainGrid(void);
 s32 BattleAnim_RunSurfUseTerrainGrid(void);
 void BattleAnim_DrawSurfUseTerrainGrid(void);
 
+/**
+ * Calls BattleAnim_GetTertiaryOwnerBonePosition.
+ * @unverified Name from Stadium 1.
+ */
 void Battle_GetTertiaryOwnerBonePositionUnused(Vec3f* arg0) {
     BattleAnim_GetTertiaryOwnerBonePosition(arg0);
 }
 
+/**
+ * Calls BattleAnim_GetSecondaryOwnerAnchorPosition.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_EffectSecondaryOwnerAnchorPosition(Vec3f* arg0) {
     BattleAnim_GetSecondaryOwnerAnchorPosition(arg0);
 }
 
+/**
+ * Calls BattleAnim_GetTertiaryOwnerBonePosition.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_EffectTertiaryOwnerBonePosition(Vec3f* arg0) {
     BattleAnim_GetTertiaryOwnerBonePosition(arg0);
 }
 
+/**
+ * Calls BattleAnim_GetSecondaryOwnerBonePosition.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_EffectSecondaryOwnerBonePosition(Vec3f* arg0) {
     BattleAnim_GetSecondaryOwnerBonePosition(arg0);
 }
 
+/**
+ * Returns BattleAnim_GetTertiaryOwnerModelScale.
+ * @unverified Name from Stadium 1.
+ */
 f32 BattleAnim_EffectTertiaryOwnerModelScale(void) {
     return BattleAnim_GetTertiaryOwnerModelScale();
 }
 
+/**
+ * Returns BattleAnim_GetSecondaryOwnerModelScale.
+ * @unverified Name from Stadium 1.
+ */
 f32 BattleAnim_EffectSecondaryOwnerModelScale(void) {
     return BattleAnim_GetSecondaryOwnerModelScale();
 }
 
 extern char D_82197890[];
+/**
+ * Writes the secondary owner's anchor position to arg0..arg2 and the tertiary owner's bone
+ * position to arg3..arg5, as separate floats.
+ * @unverified Name guessed from the code.
+ */
 void BattleAnim_CalcVectorAtToDm(f32* arg0, f32* arg1, f32* arg2, f32* arg3, f32* arg4, f32* arg5) {
     Vec3f sp4C;
     Vec3f sp40;
@@ -108,6 +137,10 @@ void BattleAnim_CalcVectorAtToDm(f32* arg0, f32* arg1, f32* arg2, f32* arg3, f32
     *arg5 = sp1C;
 }
 
+/**
+ * Sets the shared effect matrix D_8219CAC8 to the identity.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_ResetSharedEffectMatrix(void) {
     guRotateRPY(&D_8219CAC8, 0.0f, 0.0f, 0.0f);
 }
@@ -180,6 +213,11 @@ void BattleAnim_DrawStatLowerRibbon(void) {
     gDisplayListHead = StatRibbon_DrawPool(gDisplayListHead);
 }
 
+/**
+ * Init hook for end effect 19: like end effect 1, but spawns two Mist/Haze clouds (radii
+ * 40 and 38) of different kinds.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_EndEffect19RibbonMesh_Init(void) {
     Vec3f sp24;
     f32 sp20;
@@ -192,10 +230,18 @@ void BattleAnim_EndEffect19RibbonMesh_Init(void) {
     StatRibbon_Spawn(sp24.x, sp24.y, sp24.z, 38.0f, sp20, 1);
 }
 
+/**
+ * Update hook for end effect 19: updates the Mist/Haze clouds and returns their result.
+ * @unverified Name from Stadium 1.
+ */
 s32 BattleAnim_EndEffect19RibbonMesh_Update(void) {
     return StatRibbon_UpdatePool();
 }
 
+/**
+ * Draw hook for end effect 19: loads the shared matrix and draws the Mist/Haze clouds.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_EndEffect19RibbonMesh_Draw(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
