@@ -169,11 +169,6 @@ typedef struct unk_func_88509F0C {
     /* 0x2C */ char* unk_2C;
 } unk_func_88509F0C; // size = 0x30
 
-typedef struct unk_func_88509E34 {
-    /* 0x00 */ unk_func_88509F0C unk_00;
-    /* 0x30 */ char unk30[0x4];
-} unk_func_88509E34; // size = 0x34
-
 typedef struct unk_func_8850B254 {
     /* 0x00 */ WidgetNode unk_00;
     /* 0x2C */ Color_RGBA8 unk_2C;
@@ -393,16 +388,6 @@ typedef struct unk_func_882025E0 {
     /* 0x38 */ s32 unk_38;
     /* 0x3C */ unk_func_882025E0_03C unk_3C[5];
 } unk_func_882025E0; // size = 0x78
-
-typedef struct unk_func_882025E0_1A9780 {
-    /* 0x00 */ unk_func_882025E0_000 unk_00;
-    /* 0x24 */ unk_func_88200FA0_030_030_1AE680* unk_24[2];
-    /* 0x2C */ s32 unk_2C;
-    /* 0x30 */ s32 unk_30;
-    /* 0x34 */ s32 unk_34;
-    /* 0x38 */ s32 unk_38;
-    /* 0x3C */ unk_func_882025E0_03C unk_3C[5];
-} unk_func_882025E0_1A9780; // size = 0x78
 
 typedef struct unk_func_88205880_0098_008_040_02C {
     /* 0x00 */ WidgetNode unk_00;
@@ -796,142 +781,10 @@ typedef void (*func8850CD24)(unk_func_8830867C_02C_048*, s32);
 typedef void (*func8850CD44)(unk_func_8850CD44*, s32, MemoryPool*);
 typedef void (*func8850CF00)(unk_func_8850CD44*, Controller*);
 
-void WidgetTree_DrawTiledTexture(unk_func_88500020*, s32, s32);
-void WidgetTree_DrawTiledTextureFmt(unk_func_88500020* arg0, s32 arg1, s32 arg2, s32 arg3);
-void WidgetTree_InitNode(WidgetLinkHeader*, s32);
-void WidgetTree_AppendChild(WidgetLinkHeader*, WidgetLinkHeader*);
-void WidgetTree_InitWidget(WidgetNode*, s32);
-void WidgetTree_Draw(WidgetNode*, s32, s32);
-void WidgetTree_Update(WidgetNode*);
-void WidgetTree_SetStateDefault(WidgetNode*, s32);
-void WidgetTree_InitPagedContainer(unk_func_88500994*, s32, s32);
-s32 WidgetTree_DrawCurrentPage(unk_func_88500994*, s32, s32);
-void WidgetTree_AddPage(unk_func_88500994*, WidgetNode*);
-void WidgetTree_SelectPage(unk_func_88500994*, s32);
-void WidgetTree_InitTiledTextureRegion(unk_func_88500E34*, s32, s32, s32, s32, u8*);
-s32 WidgetTree_DrawTiledTextureRegion(unk_func_88500E34*, s32, s32);
-void WidgetTree_InitTintedTexture(unk_func_88500EE4*, s32, s32, s32, s32, u8*, Color_RGBA8, Color_RGBA8);
-s32 WidgetTree_DrawTintedTexture(unk_func_88500EE4*, s32, s32);
-void WidgetTree_InitSolidColor(unk_func_885012A4*, s32, s32, s32, s32, Color_RGBA8);
-s32 WidgetTree_DrawSolidColor(unk_func_885012A4*, s32, s32);
-void WidgetTree_InitPatternTexture(unk_func_8850143C*, s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
-s32 WidgetTree_DrawPatternTexture(unk_func_8850143C*, s32, s32);
-void WidgetTree_InitCornerFrame(unk_func_8850182C*, s32, s32, s32, s32, Color_RGBA8);
-s32 WidgetTree_DrawCornerFrame(unk_func_8850182C*, s32, s32);
-void WidgetTree_InitAnimatedPanel(WidgetAnimatedPanel*, s32, s32, s32, s32);
-s32 WidgetTree_UpdateAnimatedPanel(WidgetAnimatedPanel*);
-s32 WidgetTree_DrawAnimatedPanel(WidgetAnimatedPanel*, s32, s32);
-s32 WidgetTree_GetAnimatedPanelInputState(WidgetAnimatedPanel*, Controller*);
-void WidgetTree_OpenAnimatedPanel(WidgetAnimatedPanel*);
-s32 WidgetTree_DrawHorizontalFrame(WidgetNode*, s32, s32);
-void WidgetTree_InitDelayedWidget(WidgetDelayedNode*, s32, s32, s32, s32);
-s32 WidgetTree_DrawDelayedWidget(WidgetDelayedNode*, s32, s32);
-s32 WidgetTree_UpdateDelayedWidget(WidgetDelayedNode*);
-void WidgetTree_InitVisibilityGate(WidgetNode*, s32, s32, s32, s32);
-s32 WidgetTree_ClearVisibilityGateFlags(WidgetNode*);
-s32 WidgetTree_DrawVisibilityGate(WidgetNode*, s32, s32);
-void WidgetTree_InitVisibilityGateBridge(unk_func_88503298*, WidgetAnimatedPanel*, WidgetNode*);
-s32 WidgetTree_UpdateVisibilityGateBridge(unk_func_88503298*);
-void WidgetTree_InitAnimatedFrameVariantA(WidgetAnimatedFrame*, s32, s32, s32, s32, Color_RGBA8);
-s32 WidgetTree_UpdateAnimatedFrameVariantA(WidgetAnimatedFrame*);
-s32 WidgetTree_DrawAnimatedFrameVariantA(WidgetAnimatedFrame*, s32, s32);
-void WidgetTree_SetAnimatedFrameVariantAState(WidgetAnimatedFrame*, s32);
-void WidgetTree_InitAnimatedFrameVariantB(WidgetAnimatedFrame*, s32, s32, s32, s32, Color_RGBA8);
-s32 WidgetTree_UpdateAnimatedFrameVariantB(WidgetAnimatedFrame*);
-s32 WidgetTree_DrawAnimatedFrameVariantB(WidgetAnimatedFrame*, s32, s32);
-void WidgetTree_SetAnimatedFrameVariantBState(WidgetAnimatedFrame*, s32);
-void WidgetTree_InitAnimatedFrameVariantC(WidgetAnimatedFrame*, s32, s32, s32, s32, Color_RGBA8);
-s32 WidgetTree_UpdateAnimatedFrameVariantC(WidgetAnimatedFrame*);
-s32 WidgetTree_DrawAnimatedFrameVariantC(WidgetAnimatedFrame*, s32, s32);
-void WidgetTree_SetAnimatedFrameVariantCState(WidgetAnimatedFrame*, s32);
-void WidgetTree_InitDirectionalIndicator(unk_func_8820E99C_030_044*, s32, s32, s32, s32);
-s32 WidgetTree_UpdateDirectionalIndicator(unk_func_8820E99C_030_044*);
-s32 WidgetTree_DrawDirectionalIndicator(unk_func_8820E99C_030_044*, s32, s32);
-void WidgetTree_SetDirectionalIndicatorState(unk_func_8820E99C_030_044*, s32);
-void WidgetTree_InitAnimatedPanelVariantB(WidgetAnimatedPanelVariantB*, s32, s32, s32, s32, Color_RGBA8);
-s32 WidgetTree_UpdateAnimatedPanelVariantB(WidgetAnimatedPanelVariantB*);
-s32 WidgetTree_DrawAnimatedPanelVariantB(WidgetAnimatedPanelVariantB*, s32, s32);
-void WidgetTree_InitTextList(WidgetTextList*, s32, s32, s32, s32, s32, Color_RGBA8, FontContext*);
-s32 WidgetTree_UpdateTextList(WidgetTextList*);
-s32 WidgetTree_DrawTextList(WidgetTextList*, s32, s32);
-void WidgetTree_SetTextList(WidgetTextList* arg0, u8* arg1);
-void WidgetTree_InitPagedGrid(unk_func_88200FA0_030_030*, s32, s32, unk_func_88200FA0_030_030_040, s32, s32, s32, s32, MemoryPool*);
-void WidgetTree_AllocateEntryFlags(unk_func_88200FA0_030_030*, s32, MemoryPool*);
 void WidgetTree_ClearEntryFlags(unk_func_88200FA0_030_030*);
-void WidgetTree_SetPagedGridState(unk_func_88200FA0_030_030*, s32);
-void WidgetTree_BindPagedGridData(unk_func_88200FA0_030_030_1CEA00*, unk_func_8830867C_02C_0CC*);
-void WidgetTree_BindPagedGridPage(unk_func_88200FA0_030_030*, unk_func_88200FA0_030_038*, MemoryPool*);
-void WidgetTree_BindPagedGridStridedData(unk_func_88200FA0_030_030*, unk_func_88201DA0_038*);
-void WidgetTree_BindPagedGridStridedPage(unk_func_88200FA0_030_030*, unk_func_8820BE14_06C*, MemoryPool*);
-s32 WidgetTree_DrawPagedGrid(unk_func_88200FA0_030_030*, s32, s32);
 
-void WidgetTree_SetPagedGridSelection(unk_func_88200FA0_030_030*, s32);
-s32 WidgetTree_FindSelectableGridEntry(unk_func_88200FA0_030_030*);
-void WidgetTree_InitScrollableGrid(unk_func_8821421C_038_034*, s32, s32, unk_func_88200FA0_030_030_040, s32, s32, s32, MemoryPool*);
-void WidgetTree_BindScrollableGridData(unk_func_8820BE14_02C_038*, unk_func_88200FA0_030_038*);
-void WidgetTree_BindScrollableGridPage(unk_func_8830867C_02C_034*, unk_func_88200FA0_030_038*, MemoryPool*);
-void WidgetTree_BindScrollableGridStridedData(unk_func_8821421C_038_034*, unk_func_8821421C_038_050**);
-void WidgetTree_BindScrollableGridStridedPage(unk_func_8821421C_038_034*, unk_func_8830867C_03C_0D0*, MemoryPool*);
-void WidgetTree_ClampScrollableGridTop(unk_func_8820BE14_02C_038*);
-void WidgetTree_ClampScrollableGridBottom(unk_func_8820BE14_02C_038*);
-s32 WidgetTree_UpdateScrollableGridScroll(unk_func_8821421C_038_034*);
-
-s32 WidgetTree_HandleScrollableGridInput(unk_func_8821421C_038_034*, Controller*);
-void WidgetTree_SetScrollableGridIndex(unk_func_8820BE14_02C_038*, s32);
 void WidgetTree_SetScrollableGridIndexPreserveScroll(unk_func_8820BE14_02C_038*, s32);
 void WidgetTree_SetPagedGridSelectionWithOffset(s8*, s32, s32);
-void WidgetTree_SetScrollableGridEntryText(unk_func_8820BE14_02C_038*, unk_func_88205880_00D0*);
 void WidgetTree_RemoveScrollableGridEntry(unk_func_8820BE14_02C_038*);
-void WidgetTree_InitScrollableGridScrollbar(unk_func_88507D4C*, s32, s32, s32, s32, unk_func_8820BE14_02C_038*);
-s32 WidgetTree_DrawScrollableGridScrollbar(unk_func_88507D4C*, s32, s32);
-void WidgetTree_InitTextLabel(unk_func_8850878C*, s32, s32, char*, s32);
-s32 WidgetTree_DrawTextLabel(unk_func_8850878C*, s32, s32);
-void WidgetTree_InitSlideTransition(unk_func_885088F4*, s32, s32, s32);
-s32 WidgetTree_UpdateSlideTransition(unk_func_885088F4*);
-s32 WidgetTree_DrawSlideTransition(unk_func_885088F4*, s32, s32);
-void WidgetTree_InitSaveSlotLabel(unk_func_88509A2C*, s32, s32, s32, char*);
-s32 WidgetTree_DrawSaveSlotLabel(unk_func_88509A2C*, s32, s32);
-void WidgetTree_InitTextMessage(unk_func_88509E34*, s32, s32, char*);
-s32 WidgetTree_DrawTextMessage(unk_func_88509F0C*, s32, s32);
-void WidgetTree_InitMessagePanel(unk_func_88509F48*, s32, s32, s32, s32, MemoryPool*, FontContext*);
-void WidgetTree_SetMessagePanelText(unk_func_88509F48*, unk_func_8850878C*, s32, s32);
-s32 WidgetTree_HandleMessagePanelInput(unk_func_88509F48*, Controller*);
-void WidgetTree_RunMessagePanelWithSound(unk_func_88509F48*, Controller*);
-void WidgetTree_RunMessagePanelSilent(unk_func_88509F48*, Controller*);
-void WidgetTree_InitBorderFrame(WidgetNode*, s32, s32, s32, s32);
-s32 WidgetTree_DrawBorderFrame(WidgetNode*, s32, s32);
-void WidgetTree_InitInsetBorderFrame(WidgetNode*, s32, s32, s32, s32);
-s32 WidgetTree_DrawInsetBorderFrame(WidgetNode*, s32, s32);
-void WidgetTree_InitDashedBorderFrame(unk_func_8850B254*, s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
-
-void Ui_PlayInputActionSound(s32);
-void WidgetTree_InitScrollableGridInputProxy(unk_func_8850BD40*, unk_func_8821421C_038_034*);
-s32 WidgetTree_HandleScrollableGridInputProxy(unk_func_8850BD40* arg0, Controller* arg1);
-void WidgetTree_SetScrollableGridInputProxyState(unk_func_8850BD40* arg0, s32 arg1);
-void WidgetTree_InitVerticalMenu(unk_func_8830867C_02C_048_000* arg0);
-s32 WidgetTree_HandleVerticalMenuInput(unk_func_8830867C_02C_048_000*, Controller*);
-void WidgetTree_SetVerticalMenuState(unk_func_8830867C_02C_048_000*, s32);
-void WidgetTree_AppendVerticalMenuItem(unk_func_8830867C_02C_048_000*, WidgetLinkHeader*);
-void WidgetTree_UpdateVerticalMenuItems(unk_func_8830867C_02C_048_000*);
-void WidgetTree_SetVerticalMenuSelection(unk_func_8830867C_02C_048_000*, s32);
-s32 WidgetTree_HandleHorizontalMenuInput(unk_func_8830867C_02C_048_000* arg0, Controller* arg1);
-void WidgetTree_SetHorizontalMenuState(unk_func_8830867C_02C_048_000* arg0, s32 arg1);
-void WidgetTree_UpdateHorizontalMenuItems(unk_func_8830867C_02C_048_000*);
-void WidgetTree_InitGridMenu(WidgetGridMenu*, s32, s32, MemoryPool*);
-s32 WidgetTree_HandleGridMenuInput(WidgetGridMenu*, Controller*);
-void WidgetTree_SetGridMenuState(WidgetGridMenu*, s32);
-void WidgetTree_UpdateGridMenuItems(WidgetGridMenu*);
-void WidgetTree_SelectFirstEnabledGridItem(WidgetGridMenu*);
-void WidgetTree_SetGridMenuSelection(WidgetGridMenu*, s32);
-void WidgetTree_InitChildSelectionProxy(unk_func_8830867C_02C_048_000*);
-s32 WidgetTree_HandleChildSelectionProxyInput(unk_func_8830867C_02C_048_000*, Controller*);
-void WidgetTree_SetChildSelectionProxyState(unk_func_8830867C_02C_048_000*, s32);
-void WidgetTree_UpdateChildSelectionProxyItems(unk_func_8830867C_02C_048_000* arg0);
-void WidgetTree_AppendChildSelectionProxyItem(unk_func_8830867C_02C_048_000*, WidgetNode*);
-void WidgetTree_SetChildSelectionProxySelection(unk_func_8830867C_02C_048*, s32);
-void WidgetTree_InitChildWidgetGroup(unk_func_8850CD44*, s32, MemoryPool*);
-s32 WidgetTree_HandleChildWidgetGroupInput(unk_func_8850CD44* arg0, Controller* arg1);
-void WidgetTree_SetChildWidgetGroupState(unk_func_8850CD44* arg0, s32 arg1);
-void WidgetTree_RunChildWidgetGroup(unk_func_8850CD44*, Controller* arg1);
 
 #endif // _FRAGMENT26_H_

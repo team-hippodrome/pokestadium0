@@ -28,19 +28,11 @@ typedef struct unk_D_843951D0 {
 extern RibbonMesh D_8219CB20[4];
 extern s16 D_8219F700;
 extern s16 D_8219F702;
-extern s32 pad_D_843951C8[2];
 extern unk_D_843951D0 sWaterHeightMap;
 extern s16 D_821A1B20;
 extern s16 D_821A1B22;
 extern s16 D_821A1B24;
 extern unk_D_843975E8 D_821A1B28;
-extern func_D_84390320 gMoveAnimEffectStartFuncs[];
-extern func_D_84390320 gMoveAnimEffectEndFuncs[];
-extern func_D_84390320 gMoveAnimEffectStartUpdateFuncs[];
-extern func_D_84390320 gMoveAnimEffectEndUpdateFuncs[];
-extern func_D_84390320 gMoveAnimEffectStartDrawFuncs[];
-extern func_D_84390320 gMoveAnimEffectEndDrawFuncs[];
-extern s32 pad_D_84388E38[2];
 extern Gfx D_82192890[];
 extern s32 pad_D_84388F78[2];
 

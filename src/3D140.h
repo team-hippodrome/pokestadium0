@@ -76,12 +76,7 @@ extern f32 mus_fade_start_volume;
 extern u8 mus_fade_target_volume;
 extern f32 mus_fade_step_rate;
 
-
-
-
 extern u8 mus_sound_effect_blocked;
-
-
 
 void amCreateAudioMgr(ALSynConfig* c, amConfig* amc, u32 num_dma_buffers, s32 arg3, s32 arg4);
 OSTask* Audio_CreateFrameTask(OSTask*);
@@ -90,29 +85,11 @@ void Cry_PlayFromPokedex(s32);
 
 s32 Cry_IsPlaying(void);
 s32 Audio_SetEnabled(s32);
-void Audio_SetVoiceEnabled(s32);
 void Audio_SetChannelGroupCounts(u8, u8, u8, u8);
-void Audio_ConfigureChannelGroups(u8, u8, u8, u8);
-void Audio_SelectModeMusic(u32 arg0, u32 arg1);
 void AudioFrameUpdate(s32 arg0);
-void ProcessAudioInfo(s32, BattleMonRuntime*);
-void RemovePlayer(u32);
-void PlayerDefeated(u32);
-void Audio_QueuePendingSoundId(u32 arg0);
-void ProcessAudioCommandQueue(s32);
-void HandleMoveEvent(BattleMonRuntime* arg0, s32 arg1, s32 arg2, s32 arg3);
-void QueuePlayerDefeatMessage(s32);
-void Audio_StartBattleMusicSequence(void);
-void Audio_StartResultMusicSequence(void);
 void Audio_UpdateBattleAudioFrame(void);
 
-void Audio_RemoveLastQueuedSequenceId(void);
 void Audio_QueueSequenceId(u32 arg0);
-void Audio_SwapSoundCandidates(u8* arg0, u8* arg1);
-u16 Audio_FilterRecentSoundId(u16 arg0);
-void Audio_RecordRecentSoundId(u16 arg0);
-void Audio_RemoveRecentSoundAt(u16 arg0);
-u32 Audio_SelectSoundAvoidingRecent(u16* arg0);
 void Audio_QueueSoundAvoidingRecent(u16* arg0);
 
 #endif // _3D140_H_

@@ -94,7 +94,6 @@ extern char** sBattleControllerDisconnectedMessage;
 
 extern f32 sModelTransformConstants[];
 #define NINETY_DEGREES 0x4000
-extern s32 pad_D_8438466C;
 extern s16 sChargeMoveCues[];
 extern ThumbnailSettings sSideThumbnailSettings[2];
 extern BattleSceneStateCallback sBattleSceneStateTickSentinel;

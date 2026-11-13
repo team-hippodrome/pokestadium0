@@ -3,22 +3,9 @@
 
 #include "global.h"
 
-
-
-
-
-
-
-
-
-
-
-void BattleHud_SetDigitRotationTargets(u8 arg0, s16 arg1);
-void BattleHud_ApproachDigitRotations(u8 arg0, s16 arg1);
 void ModelAnim_UpdateFrameChangeState(void);
 s32 ModelPhase_IsIdle(void);
 u8 ModelRenderer_GetActiveMode(void);
-s16 ModelRenderer_GetObjectType(void);
 void ModelAnim_StartDisplayObjectAnimation(DisplayObject* arg0);
 void ModelAnim_UpdateDisplayObjectAnimation(u32 arg0, u32 arg1);
 void ModelAnim_FinalizeDisplayObjectAnimation(u32 arg0, u32 arg1);

@@ -18,10 +18,6 @@ typedef struct unk_func_80017540_arg1 {
 
 s32 ModelAnim_ResolveEventIndex(s32 arg0, unk_func_80017540_arg1* arg1, s32 arg2);
 s16 ModelAnim_AdvanceEventFrame(EventTrackState* arg0);
-void ModelAnim_ResetEventContext(void);
-void ModelAnim_BeginEventContext(EventTrackState* arg0, u16 arg1, s32 arg2);
-void ModelAnim_EndEventContext(void);
-void ModelAnim_GetEventAtFrame(unk_D_86002F34_alt11_018** arg0, unk_D_86002F34_alt11_018* arg1, s32 arg2);
 void ModelAnim_ClearEventTrack(DisplayObject* arg0);
 s16 ModelAnim_BindEventTrack(DisplayObject* arg0, s16 arg1, s32 arg2);
 void ModelAnim_SetEventFrame(DisplayObject* display_object, s16 frame_number);

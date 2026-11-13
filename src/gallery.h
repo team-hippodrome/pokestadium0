@@ -55,12 +55,6 @@ typedef struct unk_D_83403C60_050_00C {
     /* 0x08 */ s32 unk_08;
 } unk_D_83403C60_050_00C; // size = 0xC
 
-typedef struct unk_D_83406EB0 {
-    /* 0x00 */ char unk00[0x6C];
-    /* 0x6C */ u8 unk_6C;
-    /* 0x6D */ char unk6D[0x1F];
-} unk_D_83406EB0; // size = 0x8C
-
 typedef struct unk_D_83407B00 {
     /* 0x00 */ union {
                     struct {
@@ -118,33 +112,9 @@ typedef struct unk_D_83407B38_0B0 {
     /* 0x00 */ s32 unk_08;
 } unk_D_83407B38_0B0; // size >= 0xC
 
-typedef struct unk_D_83407B38 {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ s32 unk_08;
-    /* 0x0C */ s32 unk_0C;
-    /* 0x10 */ s32 unk_10;
-    /* 0x14 */ s32 unk_14;
-    /* 0x18 */ s32 unk_18;
-    /* 0x1C */ s32 unk_1C;
-    /* 0x20 */ unk_func_80031270* unk_20[36];
-    /* 0xB0 */ unk_func_80031270* unk_B0;
-} unk_D_83407B38; // size = 0xB4
-
-
-
-void Gallery_Dispatch(void);
 void func_82150DCC(void);
-void Gallery_ClearPhotoRenderTarget(void);
-void Gallery_CopyPhotoMonFromBattleMon(unk_D_83402EE0_070*, BattleMon*);
-void Gallery_CopyBattleMonFromPhotoMon(BattleMon*, unk_D_83407AC8*);
-unk_func_80031270* Geo_CreateSceneInstance(s16, s16, DepthBuffer*, DepthBuffer*, ModelLoadContext*, BinArchive*, unk_D_83403C60*);
-u8* Gallery_ProcessSceneInstance(unk_func_80031270*);
 s32 func_812009C4(unk_func_80031270*);
-s32 Gallery_FindReadyScene(unk_func_80031270**, s32);
-unk_func_80031270* Gallery_GetActiveScene(void);
 void func_82150D1C(void);
-s32 Gallery_IsPhotoSpeciesValid(unk_D_83403C60*);
 f32 Math_AbsF32(f32);
 void Vec3f_CrossProductComponents(f32, f32, f32, f32, f32, f32, f32*, f32*, f32*);
 void Vec3f_NormalizeComponents(f32*, f32*, f32*);

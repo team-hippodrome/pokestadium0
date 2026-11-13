@@ -15,16 +15,6 @@ typedef struct DisplayListState {
     /* 0x18 */ Gfx* gfx;
 } DisplayListState; // size = 0x1C
 
-typedef struct unk_arg0_func_81002260 {
-    /* 0x00 */ char unk00[0x1A];
-    /* 0x1A */ s16 unk_1A;
-} unk_arg0_func_81002260; // size >= 0x1C
-
-
-
 void Particle31_ResetAllSlots(DisplayObject*);
-void Particle31_ResetCounters(void);
-void Particle31_PackSlotData(u8*);
-void Particle31_UnpackSlotData(unk_arg0_func_81002260*, u8*);
 
 #endif // _FRAGMENT31_H_

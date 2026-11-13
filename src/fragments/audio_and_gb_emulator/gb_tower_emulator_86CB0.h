@@ -178,7 +178,6 @@ void func_8110FD90(s32 cmd, s8 arg1);
 void func_8110FDF0(void);
 extern s32 D_81138A70;
 extern u8 D_81138A80[0x10];
-extern u8 sGbApuRegs[0x40];
 extern s32 D_81138AD0;
 extern s32 D_81138AD4;
 extern s32 D_81138AD8;

@@ -70,15 +70,10 @@ typedef struct UnkStruct80083CA0_2 {
 
 extern unk_D_800A62E0 D_800A9710;
 
-void Sched_InitClientQueue(UnkStruct80083CA0_2*, s32, s32);
-s32 Sched_WaitClientQueue(UnkStruct80083CA0_2*);
-s32 Sched_TryReceiveClientQueue(UnkStruct80083CA0_2*);
 void Sched_Init(void);
-void Sched_AddClient(unk_D_800AA660*);
 void Sched_ResetTaskState(UnkStruct80001380* arg0);
 void Sched_WaitForTaskMessage(UnkStruct80001380* arg0);
 void Sched_RemoveClient(unk_D_800AA660* arg0);
 void Sched_SubmitTask(UnkStruct80001380* arg0, s32 arg1);
-
 
 #endif // _5580_H_

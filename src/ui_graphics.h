@@ -3,19 +3,14 @@
 
 #include "global.h"
 
-
 extern Gfx gUiTranslucentFillDL[];
 extern Gfx D_80060270[];
 extern Gfx D_80060290[];
 extern Gfx gUiEnvTintTextureDL[];
 
-
-
 extern Gfx gUiRestoreTextureDL[];
 
 extern Gfx D_80060990[];
-
-
 
 s32 Ui_DrawTexturedRect8x8(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4);
 void Ui_DrawBorderStyleA(s32 x1, s32 y1, s32 width, s32 height);
@@ -30,10 +25,7 @@ void Ui_DrawGradientPanel(s32 x1, s32 y1, s32 width, s32 height, Color_RGB8* top
 void Ui_DrawBorderedPanelStyleB(s32 x1, s32 y1, s32 width, s32 height, u16 color);
 void Ui_DrawBorderedPanelNoFill(s32 x1, s32 y1, s32 width, s32 height);
 void Ui_DrawTextureMarker(s32 x, s32 y);
-void Ui_DrawAnimatedTextureMarker(s16 x, s16 y);
 void Ui_Draw20x20Icon(s32 arg0, s32 arg1, s32 arg2);
 void BattleHud_DrawHpBarTexture(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
-void BattleHud_DrawHpBar16x5(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
-void Text_LoadNameTable(void);
 
 #endif // _20470_H_

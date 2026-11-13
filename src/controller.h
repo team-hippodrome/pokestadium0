@@ -57,10 +57,6 @@ void Cont_ReadInputs(void);
 u8 Cont_GetControllerBits(void);
 s32 Cont_IsEepromPresent(void);
 s32 Cont_AttemptReadEeprom(u8* buffer, u32 size, s32 inaddr);
-s32 Cont_AttemptWriteEeprom(u8* buffer, u32 size, s32 inaddr);
-void Cont_BlockEepromQueue(void);
-void Cont_NoBlockEepromQueue(void);
-void Cont_InitEepromQueue(void);
 u8 Cont_SetupControllers(u8 arg0);
 
 #endif // _CONTROLLER_H_

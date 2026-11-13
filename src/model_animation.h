@@ -27,14 +27,7 @@ typedef struct unk_D_800ABCC0 {
 f32 ModelAnim_EvaluateTranslationChannel(unk_D_800ABCC0* arg0, s32 arg1);
 s16 ModelAnim_EvaluateRotationChannel(unk_D_800ABCC0* arg0, s32 arg1);
 f32 ModelAnim_EvaluateScaleChannel(unk_D_800ABCC0* arg0, s32 arg1);
-f32 ModelAnim_InterpolateKeyframe(Vec3s* arg0, s16 arg1, s16 arg2);
-f32 ModelAnim_EvaluateTranslationCurve(unk_D_800ABCC0* arg0, s32 arg1);
-s16 ModelAnim_EvaluateRotationCurve(unk_D_800ABCC0* arg0, s32 arg1);
-f32 ModelAnim_EvaluateScaleCurve(unk_D_800ABCC0* arg0, s32 arg1);
-void ModelAnim_ResetCurveContext(void);
 void ModelAnim_BeginCurveContext(void *arg0, s32 arg1);
-void ModelAnim_EndCurveContext(void);
-void ModelAnim_EvaluateJointTransform(Vec3f* arg0, Vec3s* arg1, Vec3f* arg2, s32 arg3);
 void ModelAnim_ClearTransformChannel(DisplayObject* arg0);
 s32 ModelAnim_BindTransformCurve(DisplayObject* arg0, s16 arg1, void* arg2, s32 arg3);
 s32 ModelAnim_SetSpeed(DisplayObject* display_object, s32 speed);
@@ -42,6 +35,5 @@ void ModelAnim_SetFrame(DisplayObject* display_object, s16 animation_timer);
 s32 ModelAnim_HasCrossedFrame(DisplayObject* arg0, s16 arg1);
 s32 ModelAnim_IsAnimationDone(DisplayObject* display_object);
 s32 ModelAnim_IsFinished(DisplayObject* arg0);
-
 
 #endif // _17300_H_

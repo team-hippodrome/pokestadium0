@@ -62,11 +62,6 @@ typedef struct unk_func_888044BC_03C_02C {
     /* 0x44 */ s32 unk_44;
 } unk_func_888044BC_03C_02C; // size = 0x48
 
-typedef struct unk_func_888044BC_03C {
-    /* 0x00 */ WidgetNode unk_00;
-    /* 0x2C */ unk_func_888044BC_03C_02C* unk_2C;
-} unk_func_888044BC_03C; // size = 0x30
-
 typedef struct unk_func_888044BC_040_030 {
     /* 0x00 */ WidgetNode unk_00;
     /* 0x2C */ s32 unk_2C;
@@ -85,25 +80,10 @@ typedef struct unk_func_888044BC_044_02C {
     /* 0x2C */ s32 unk_2C;
 } unk_func_888044BC_044_02C; // size = 0x30
 
-typedef struct unk_func_888044BC_044 {
-    /* 0x00 */ WidgetNode unk_00;
-    /* 0x2C */ unk_func_888044BC_044_02C* unk_2C;
-} unk_func_888044BC_044; // size = 0x30
-
-typedef struct unk_func_888044BC_048 {
-    /* 0x00 */ WidgetNode unk_00;
-    /* 0x2C */ unk_func_8850878C* unk_2C;
-} unk_func_888044BC_048; // size = 0x30
-
 typedef struct unk_func_888044BC_04C_02C {
     /* 0x00 */ WidgetNode unk_00;
     /* 0x2C */ s32 unk_2C;
 } unk_func_888044BC_04C_02C; // size = 0x30
-
-typedef struct unk_func_888044BC_04C {
-    /* 0x00 */ WidgetNode unk_00;
-    /* 0x2C */ unk_func_888044BC_04C_02C* unk_2C;
-} unk_func_888044BC_04C; // size = 0x30
 
 typedef struct unk_func_888044BC_050 {
     /* 0x00 */ WidgetNode unk_00;
@@ -111,53 +91,13 @@ typedef struct unk_func_888044BC_050 {
     /* 0x30 */ s32 unk_30;
 } unk_func_888044BC_050; // size = 0x34
 
-typedef struct unk_func_888044BC {
-    /* 0x00 */ WidgetNode unk_00;
-    /* 0x2C */ unk_func_88500994* unk_2C;
-    /* 0x30 */ unk_func_88500994* unk_30;
-    /* 0x34 */ WidgetDelayedNode* unk_34;
-    /* 0x38 */ unk_func_888044BC_038* unk_38;
-    /* 0x3C */ unk_func_888044BC_03C* unk_3C;
-    /* 0x40 */ unk_func_888044BC_040* unk_40;
-    /* 0x44 */ unk_func_888044BC_044* unk_44;
-    /* 0x48 */ unk_func_888044BC_048* unk_48;
-    /* 0x4C */ unk_func_888044BC_04C* unk_4C;
-    /* 0x50 */ unk_func_888044BC_050* unk_50;
-    /* 0x54 */ unk_func_888044BC_050* unk_54;
-} unk_func_888044BC; // size = 0x58
-
-void Pokedex_DrawCheckboxIcon(s32 arg0, s32 arg1, s32 arg2);
 s32 Pokedex_DrawListScrollArrows(unk_func_888044BC_050* arg0, s32 arg1, s32 arg2);
-void Pokedex_DrawSpeciesListRow(s32 arg0, s32 arg1, char* arg2, UNUSED s32 arg3, s32 arg4, unk_func_888044BC_038_02C* arg5);
-void Pokedex_BuildSpeciesListWidget(unk_func_888044BC_038_02C* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, MemoryPool* arg5);
-s32 Pokedex_GetSelectedSpeciesIndex(unk_func_888044BC_038_02C* arg0);
-void Pokedex_ToggleListSortOrder(unk_func_888044BC_038_02C* arg0);
-void Pokedex_BuildSpeciesListPanel(unk_func_888044BC_038* arg0, s32 arg1, s32 arg2, s32 arg3, MemoryPool* arg4);
 s32 Pokedex_HandleSpeciesListInput(unk_func_888044BC_038* arg0, Controller* arg1);
-void Pokedex_DrawListSelectionFrame(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 arg4);
-void Pokedex_InitTrainerInfoWidget(unk_func_888044BC_03C_02C* arg0, s32 arg1, s32 arg2);
-void Pokedex_LoadTrainerInfo(unk_func_888044BC_03C_02C* arg0, s32 arg1);
 void Pokedex_DrawTrainerInfoCard(unk_func_888044BC_03C_02C* arg0, s32 arg1, s32 arg2);
-void Pokedex_BuildTrainerInfoPanel(unk_func_888044BC_03C* arg0, s32 arg1, s32 arg2, s32 arg3, MemoryPool* arg4);
-void Pokedex_InitSortOrderLabel(unk_func_888044BC_040_030* arg0, s32 arg1, s32 arg2);
 s32 Pokedex_DrawSortOrderLabel(unk_func_888044BC_040_030* arg0, s32 arg1, s32 arg2);
-void Pokedex_ToggleSortOrderLabel(unk_func_888044BC_040_030* arg0);
-void Pokedex_DrawEntryMenuItem(s32 arg0, s32 arg1, char* arg2, UNUSED s32 arg3, UNUSED s32 arg4, unk_func_88200FA0_030_030* arg5);
-void Pokedex_BuildEntryMenuWidget(unk_func_888044BC_040* arg0, s32 arg1, s32 arg2, MemoryPool* arg3);
 s32 Pokedex_HandleEntryMenuInput(unk_func_888044BC_040* arg0, Controller* arg1);
-void Pokedex_InitDataPanel(unk_func_888044BC_044_02C* arg0, s32 arg1, s32 arg2);
-void Pokedex_SetDataPanelSpecies(unk_func_888044BC_044_02C* arg0, s32 arg1);
-void Pokedex_FormatHeightString(s32 arg0, s32 arg1, s32 arg2);
-void Pokedex_FormatWeightString(s32 arg0, s32 arg1, s32 arg2);
 s32 Pokedex_DrawDataPanel(unk_func_888044BC_044_02C* arg0, s32 arg1, s32 arg2);
-void Pokedex_BuildDataPanel(unk_func_888044BC_044* arg0, s32 arg1, s32 arg2, MemoryPool* arg3);
-void Pokedex_BuildFlavorTextPanel(unk_func_888044BC_048* arg0, s32 arg1, s32 arg2, MemoryPool* arg3);
-void Pokedex_SetFlavorText(unk_func_888044BC_048* arg0, s32 arg1, s32 arg2);
-void Pokedex_InitPreviewWidget(unk_func_888044BC_04C_02C* arg0, s32 arg1, s32 arg2);
-void Pokedex_SetPreviewSpecies(unk_func_888044BC_04C_02C* arg0, s32 arg1);
 s32 Pokedex_DrawPreview(unk_func_888044BC_04C_02C* arg0, s32 arg1, s32 arg2);
-void Pokedex_BuildPreviewPanel(unk_func_888044BC_04C* arg0, s32 arg1, s32 arg2, MemoryPool* arg3);
-void Pokedex_BuildRootWidget(unk_func_888044BC* arg0, s32 arg1, s32 arg2, u8* arg3, MemoryPool* arg4);
 s32 Pokedex_RunIndexScreen(void);
 s32 Pokedex_ShowEntryMenu(void);
 void Pokedex_LoadIcon(u8* arg0, s32 arg1);
@@ -167,12 +107,9 @@ s32 Pokedex_RedrawAreaMapTransition(u8 arg0);
 void Pokedex_EnterAreaMapScreen(void);
 void Pokedex_ExitAreaMapScreen(void);
 s32 Pokedex_ShowAreaMapScreen(void);
-s32 Pokedex_RedrawRootTransition(u8 arg0);
 void Pokedex_RunEntryFlow(void);
 s32 Pokedex_GetHighestSeenSpeciesIndex(void);
 void Pokedex_InitFramebuffers(void);
-s32 Pokedex_Main(UNUSED s32 arg0, UNUSED s32 arg1);
-
 
 s32 Pokedex_FindNextMapArea(s32 arg0);
 s32 Pokedex_FindPrevMapArea(s32 arg0);

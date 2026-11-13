@@ -152,51 +152,22 @@ typedef struct SessionContext {
 // 26: Cutscene
 #define SESSION_FLAG_REVEAL_MEWTWO 0x04
 
-
-
 extern u16 D_8006BBB0[16][256];
 extern s32 gCurrentGameState;
 extern unk_D_800AE520 D_800AF990;
 extern SessionContext gSessionContext;
 
-
-s32 Game_DoCopyProtection(s32 state);
 s32 Fragment_LoadAndCall(s32 arg0, u8* romStart, u8* romEnd, u32 arg3, u32 arg4);
 void Fragment_QueueCall(s32 arg0, u8* arg1, u8* arg2, s32 arg3, s32 arg4);
 TeamRoster* Trainer_GetSlots(void);
 s32 GbSave_GetActivePort(void);
 void GbSave_SetActivePort(s32 arg0);
 void Controller_PollInputs(void);
-s32 Stage_RunDemoScene(s16 arg0);
-void State_RunCredits(void);
-void State_N64LogoIntro(void);
-void State_TitleScreen(void);
 void State_N64ddBootUnused(void);
-void State_StubbedDebug(void);
-void State_AreaSelect(void);
-void State_EventBattle(void);
-void State_Options(void);
-void State_MenuSelect(void);
-s16 RuleWizard_StadiumMenu(s16 arg0);
-void State_StadiumMenu(void);
-s32 RuleWizard_FreeBattle(s16 arg0);
-void State_FreeBattle(void);
-s16 RuleWizard_VsMewtwo(s16 arg0);
-void State_VsMewtwo(void);
-void State_KidsClub(void);
-void State_Gallery(void);
-void State_VictoryPalace(void);
 void State_GbTower(void);
-s16 RuleWizard_GymLeaderCastle(s16 arg0, s16 arg1);
-void State_GymLeaderCastle(void);
-void State_BattleNow(s32 arg0);
-void State_BattleFromEvent(void);
 void State_FastN64Logo(void);
-void State_FastBattle(void);
 void func_800268DC(void);
-void State_KidsClubTitle(void);
 void Game_ShutdownAndLoadFragment(s32 arg0, s32 arg1);
 void Game_ResetStorageDevice(void);
-void Game_Thread(UNUSED LEODiskID* arg);
 
 #endif // _29BA0_H_

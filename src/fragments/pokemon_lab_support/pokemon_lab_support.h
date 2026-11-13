@@ -18,7 +18,4 @@ typedef struct unk_D_88400138 {
 typedef unk_D_88400100* (*func8840007C)(BattleMon*);
 typedef unk_D_88400138* (*func884000C4)(s32);
 
-unk_D_88400100* LabPC_GetMonStatusIcon(BattleMon*);
-unk_D_88400138* LabPC_GetTypeColor(s32);
-
 #endif // _FRAGMENT25_H_

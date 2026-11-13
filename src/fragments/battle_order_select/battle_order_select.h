@@ -46,7 +46,6 @@ typedef struct unk_D_84803548 {
 } unk_D_84803548; // size = 0x4
 
 void BattleMenu_DrawBottomActionButtons(void);
-void BattleMenu_DrawScrollingRulesText(void);
 void BattleMenu_InitTeamOrderState(unk_D_84803760* arg0, BattleSessionTeams* arg1, s32 arg2);
 void BattleMenu_DrawSidebarLeadIcon(s32 arg0, s32 arg1, unk_D_84803760* arg2);
 s32 BattleMenu_DrawSidebarRowTypeIcon(s32 arg0, s32 arg1, s8 arg2, s8 arg3);
@@ -55,24 +54,14 @@ void BattleMenu_DrawTeamOrderSidebarTeam1(void);
 void BattleMenu_AppendOrderSlotIcon(s32 arg0, s32 arg1);
 void BattleMenu_ResetOrderSlotIcons(s32 arg0);
 void BattleMenu_DrawPanelBorder(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4);
-void BattleMenu_DrawOrderSelectPanel_PartyGrid(unk_D_848037A0* arg0);
-void BattleMenu_DrawCursorArrow(s16 arg0, s16 arg1, s16 arg2);
-void BattleMenu_DrawOrderSelectPanel_ConfirmPrompt(unk_D_848037A0* arg0);
-void BattleMenu_DrawOrderSelectPanel_LevelCapNotice(unk_D_848037A0* arg0);
 void BattleMenu_DrawOrderSelectPanel_Ready(unk_D_848037A0* arg0);
-void BattleMenu_DrawOrderSelectPanel_MonDetail(unk_D_848037A0* arg0);
 void BattleMenu_DrawConfirmButtonLabel(unk_D_848037A0* arg0);
 void BattleMenu_DrawOrderSelectPanel(unk_D_848037A0* arg0);
-void BattleMenu_UpdateComPanelAutoInput(void);
 s32 BattleMenu_IsSlotAlreadySelected(unk_D_848037A0* arg0, s8 arg1);
-s32 BattleMenu_PicksExceedLevelCap(unk_D_848037A0* arg0);
-s32 BattleMenu_IsOrderSelectionComplete(unk_D_848037A0* arg0);
 void BattleMenu_SelectOrderSlot(unk_D_848037A0* arg0, s8 arg1, s32 arg2);
-void BattleMenu_UndoLastOrderSelection(unk_D_848037A0* arg0);
 void BattleMenu_HandleOrderSelectPanel_PartyInput(Controller* arg0, unk_D_848037A0* arg1);
 void BattleMenu_HandleOrderSelectPanel_ConfirmInput(Controller* arg0, unk_D_848037A0* arg1);
 void BattleMenu_HandleOrderSelectPanel_LevelCapNoticeInput(Controller* arg0, unk_D_848037A0* arg1);
-void BattleMenu_HandleOrderSelectPanel_MonDetailInput(Controller* arg0, unk_D_848037A0* arg1);
 s32 BattleMenu_UpdateOrderSelectPanel(s32 arg0, unk_D_848037A0* arg1);
 s32 BattleMenu_UpdateOrderSelect(s32 arg0);
 void BattleMenu_SetLeadTagTeamMember(BattleSessionTeams* arg0, unk_D_84803760* arg1);

@@ -63,18 +63,6 @@ typedef struct unk_D_800FC6D4 {
 typedef struct MoveSoundEntry { u8 unk0[0x6]; } MoveSoundEntry;
 typedef struct MoveSoundTable { u8 header[0x10]; MoveSoundEntry entries[1]; } MoveSoundTable;
 
-
-
-
-
-
-
-
-
-
-
-
-
 extern unk_D_800FC6CC* D_800B41E4;
 extern u8* D_800B41E8;
 extern unk_D_800FC6D4* D_800FD688;
@@ -82,23 +70,9 @@ extern s16* D_800B41EC;
 
 extern u32* gAudioRegions;
 
-
-
-
-
-
-
-
-
-
-
-
-
 s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2);
-s32 Audio_FadeCommand(s32 arg0, u32 arg1);
 void func_80056950(void);
 void Audio_CreateFrameTaskWrapper(void* arg0);
 void Audio_RelocateOffsets(u32* arg0, u32 arg1, s32 arg2);
-s32 Audio_InitBanks(void);
 
 #endif // _373A0_H_

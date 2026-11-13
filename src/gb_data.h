@@ -60,7 +60,6 @@ typedef struct unk_D_80071D88 {
     /* 0x04 */ Color_RGBA8 color;
 } unk_D_80071D88; // size = 0x8
 
-
 typedef struct GbPokemonRecord {
     /* 0x00 */ u8 unk_00;
     /* 0x01 */ u8 unk_01[2];
@@ -219,9 +218,7 @@ u32 GbData_ReadU24BE(u8* arg0);
 void GbData_WriteU16BE(u8* arg0, s32 arg1);
 void GbData_WriteU24BE(u8* arg0, s32 arg1);
 char* Text_UntranscodeName(char* arg0, char* arg1);
-void Text_UntranscodeNameWrapper(char* arg0, char* arg1);
 char* Text_TranscodeName(char* arg0, char* arg1);
-char* Text_TranscodeNameWrapper(char* arg0, char* arg1);
 char* Text_UntranscodeFixedName(char* arg0, char* arg1);
 s8* Text_CopyString(s8* arg0, s8* arg1);
 char* Text_CopySpeciesName(char* arg0, s32 arg1);

@@ -43,11 +43,9 @@ typedef struct StageContext {
 
 typedef StageContext unk_func_80007444;
 
-void StageFade_Update(void);
 s32 StageFade_Start(s32 arg0);
 s32 StageFade_StartFromOpaque(s32 arg0);
 s32 StageFade_StartFromTransparent(s32 arg0);
-void StageFade_SetMode(s32 fade_mode);
 void Profiler_SetDisplayModes(u32 arg0, u32 arg1);
 void Gfx_SetDefaultRenderState(void);
 void Gfx_SetDefaultGeometryState(void);
@@ -58,7 +56,6 @@ void StageLoader_BeginFrame(void);
 void StageLoader_FillFrame(void);
 StageContext* StageContext_Allocate(s8 zoom, s8 arg1, s8 render_target_count, s8 has_depth_buffer, s8 arg4, s32 allocate_render_targets);
 StageContext* StageContext_GetCurrent(void);
-s32 StageContext_GetFadeMode(void);
 void StageContext_SaveAndSwitch(StageContext* arg0);
 void StageContext_Activate(StageContext* arg0);
 void StageContext_Deactivate(void);
@@ -82,6 +79,5 @@ void TextRenderer_ClearQueuedStrings(void);
 char* TextRenderer_FormatCopy(char* buffer, const char* data, size_t size);
 s32 HAL_Printf(s16 x, s16 y, const char* fmt, ...);
 s32 TextRenderer_QueuePersistentString(s16 x, s16 y, const char* fmt, ...);
-
 
 #endif // _STAGE_LOADER_H_

@@ -140,24 +140,6 @@ typedef struct BattleAnimEffectSlot {
     /* 0x1B */ u8 unk_1B;
 } BattleAnimEffectSlot; // size = 0x1C
 
-typedef struct arg1_func_87903D64_014 {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ unk_D_86002F34_000_014_004* unk_04;
-    /* 0x08 */ unk_D_86002F34_000_014_004* unk_08;
-    /* 0x0C */ unk_D_86002F34_000_014_004* unk_0C;
-    /* 0x10 */ unk_D_86002F34_000_014_010* unk_10;
-    /* 0x14 */ unk_D_86002F34_000_014_010* unk_14;
-    /* 0x18 */ unk_D_86002F34_000_014_010* unk_18;
-} arg1_func_87903D64_014; // size = 0x1C
-
-// Possibly unk_D_86002F34_alt7, unk_D_86002F34_alt8,
-// unk_D_86002F34_alt9 or unk_D_86002F34_alt2
-typedef struct arg1_func_87903D64 {
-    /* 0x00 */ char unk00[0x14];
-    /* 0x14 */ arg1_func_87903D64_014* unk_14;
-    /* 0x18 */ Gfx* unk_18;
-} arg1_func_87903D64; // size >= 0x1C
-
 typedef struct arg1_func_81407874_014_000_014_000_000 {
     /* 0x00 */ Color_RGBA8 color;
     /* 0x04 */ u8 l;
@@ -259,42 +241,24 @@ typedef struct ParticleMatrixPool {
     /* 0x5BC0 */ char unk5BC0[0x20];
 } ParticleMatrixPool; // size = 0x5BE0
 
-
-
 extern Gfx gDL_ItemIcon[];
 
-
-
-
-
 extern Gfx D_821904C8[];
-
-
 
 extern Gfx D_82190548[];
 extern Gfx gDL_BeginUIOverlay[];
 extern Gfx gDL_EndColorFill[];
 extern Gfx gDL_BeginColorFill[];
 
-
 extern Vtx gVtx_UI_TriangleSmall[];
 extern Vtx gVtx_UI_TriangleLarge[];
 
-
-
 extern Vtx gVtx_UI_RectVertical[];
-
-
-
-
-
 
 extern Vtx gVtx_UI_ComplexQuad[];
 
-
 extern Vtx gFullscreenQuadVtx[];
 extern Gfx gDL_PanelBackground[];
-
 
 extern ParticleDescriptor gDefaultParticleDescriptor;
 
@@ -354,9 +318,7 @@ s32 ParticleMath_ApproachS32UpByPointer(s32* arg0, s32 arg1, s32* arg2);
 s32 ParticleMath_ApproachS32DownByPointer(s32* arg0, s32 arg1, s32* arg2);
 s32 ParticleMath_ApproachS16UpByPointer(s16* arg0, s16 arg1, s16* arg2);
 s32 ParticleMath_ApproachS16DownByPointer(s16* arg0, s16 arg1, s16* arg2);
-s32 ParticleMath_ApproachS8(s8* arg0, s8 arg1, s8 arg2);
 s32 ParticleMath_ApproachU8(u8* arg0, u8 arg1, u8 arg2);
-s32 ParticleMath_ApproachS16(s16* arg0, s16 arg1, s16 arg2);
 s32 ParticleMath_ApproachAngle(s16* arg0, s16 arg1, s16 arg2);
 s32 ParticleMath_ApproachS32(s32* arg0, s32 arg1, s32 arg2);
 s32 ParticleMath_ApproachFloat(f32* arg0, f32 arg1, f32 arg2);
@@ -366,9 +328,7 @@ void ParticleMath_CopyVec3f(Vec3f* arg0, Vec3f* arg1);
 void ParticleMath_CopyVec3s(Vec3s* arg0, Vec3s* arg1);
 void ParticleMath_AddVec3f(Vec3f* arg0, Vec3f* arg1);
 void ParticleMath_AddVec3s(Vec3s* arg0, Vec3s* arg1);
-f32 ParticleMath_DotVec3f(Vec3f arg0, Vec3f arg1);
 s32 ParticleMath_IsWithinRadius2D(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4);
-void ParticleMath_AdvanceRandomOffset(void);
 u32 ParticleMath_RandomRange(u32 arg0);
 s32 ParticleMath_RandomRangeOffset(s32 arg0, s32 arg1);
 s32 ParticleMath_RandomSigned(s32 arg0);
@@ -385,7 +345,6 @@ Vec3f* ParticleMath_RotateVec3fY(Vec3f* arg0, Vec3f arg1, Vec3s arg4);
 Vec3f* ParticleMath_MakeXZVectorFromAngle(Vec3f* arg0, f32 arg1, s16 arg2);
 Vec3f* ParticleMath_RotateVec3fXY(Vec3f* arg0, Vec3f arg1, Vec3s arg4);
 f32 ParticleMath_Distance3D(Vec3f arg0, Vec3f arg1);
-f32 ParticleMath_DistanceXZ(Vec3f arg0, Vec3f arg1);
 Vec3f* ParticleMath_NormalizedDirection(Vec3f* arg0, Vec3f arg1, Vec3f arg2);
 s32 ParticleMath_DistanceScaled(Vec3f arg0, Vec3f arg1, f32 arg2);
 s32 ParticleMath_ScaleDirectionToLength(Vec3f* arg0, Vec3f arg1, Vec3f arg2, f32 arg3);
@@ -419,18 +378,12 @@ void ParticleGfx_PushBillboardRotatedMatrixYScaled(CameraNode* arg0, Vec3f arg1,
 void ParticleGfx_PushTransformMatrixWithHalfTurnXY(Vec3f arg0, Vec3s arg3, f32 arg5);
 void ParticleGfx_PushDirectionMatrix(Vec3f arg0, Vec3f arg3, f32 arg6);
 
-
 void ParticleGfx_PipeSync(void);
 void ParticleGfx_SetTextureState(void);
 s32 ParticleGfx_TextureSizeLog2(s32 size);
 void ParticleGfx_NoopStub2(void);
 void ParticleGfx_NoopStub3(void);
 void ParticleGfx_NoopStub4(void);
-void ParticleGfx_NoopStub5(void);
-void ParticleGfx_NoopStub6(void);
-void ParticleGfx_NoopStub7(void);
-void ParticleGfx_NoopStub8(void);
-void ParticleGfx_NoopStub9(void);
 void ParticleGfx_LoadTextureBlock32(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts, s32 shiftt);
 void ParticleGfx_LoadTextureTile32(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts, s32 shiftt);
 void ParticleGfx_LoadTextureBlock16(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts, s32 shiftt);
@@ -475,7 +428,6 @@ void ParticleGfx_LoadTextureCi8WrapSWithMask(u8* texture, s32 width, s32 height,
 void ParticleGfx_LoadTextureTileCi8(u8* texture, s32 width, s32 height);
 void ParticleGfx_LoadTextureDualRgba16I8(u8* texture1, u8* texture2, s32 width, s32 height);
 void ParticleGfx_DrawQuadVertices(Vtx* arg0);
-void ParticleGfx_NoopStub10(void);
 void ParticleGfx_DrawTransformedQuad(Vec3f arg0, Vec3s arg1, f32 arg2, Vtx* arg3);
 void ParticleGfx_DrawTransformedQuadYScaled(Vec3f arg0, Vec3s arg1, f32 arg3, Vtx* arg4);
 void ParticleGfx_DrawTransformedQuadXYScaled(Vec3f arg0, Vec3s arg1, f32 arg2, f32 arg3, Vtx* arg4);
@@ -502,34 +454,18 @@ void ParticleGfx_SetPrimEnvNoiseCombine(u8 prim_r, u8 prim_g, u8 prim_b, u8 env_
 void ParticleGfx_SetPrimEnvColorShadeCombine(u8 prim_r, u8 prim_g, u8 prim_b, u8 prim_a, u8 env_r, u8 env_g, u8 env_b, u8 env_a);
 void ParticleGfx_SetPrimEnvLodCombine(u8 l, u8 prim_r, u8 prim_g, u8 prim_b, u8 prim_a, u8 env_r, u8 env_g, u8 env_b);
 void ParticleGfx_SetPrimEnvLodTextureCombine(u8 l, u8 prim_r, u8 prim_g, u8 prim_b, u8 prim_a, u8 env_r, u8 env_g, u8 env_b);
-u32 ParticleGfx_GetFrameDivisor(s32 arg0);
 void ParticleGfx_SetAnimatedTileSize(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 void ParticleGfx_SetAnimatedAuxTileSize(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 void ParticleGfx_SetAnimatedTileSizeOnList(Gfx* gfx, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 void ParticleGfx_SetAnimatedAuxTileSizeOnList(Gfx* gfx, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 void ParticleGfx_SetPartiallyAnimatedTileSize(Gfx* gfx, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 void ParticleGfx_SetPartiallyAnimatedAuxTileSize(Gfx* gfx, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
-void ParticleGfx_SetFrameIndexedTileSize(Gfx* gfx, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7);
-void ParticleGfx_SetFrameIndexedAuxTileSize(Gfx* gfx, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7);
-void ParticleGfx_LoadTextureI4ToList(Gfx* gfx, u8* texture, s32 width, s32 height);
-Gfx* ParticleGfx_LoadDescriptorTexture(Gfx* arg0, u8* texture, arg1_func_81407874_014_004* arg2, s32 tmem, s32 rtile);
-Gfx* ParticleGfx_LoadDescriptorTextureAndTile(Gfx* arg0, arg1_func_81407874_014_004* arg1, s32 tmem, s32 rtile);
-Gfx* ParticleGfx_LoadPrimaryDescriptorTexture(Gfx* arg0, arg1_func_81407874_014* arg1);
-Gfx* ParticleGfx_LoadSecondaryDescriptorTexture(Gfx* arg0, arg1_func_81407874_014* arg1);
-void ParticleGfx_SetCombineModeFromDescriptor(Gfx* arg0, arg1_func_81407874_014_000_010* arg1);
-
-void ParticleGfx_GraphNodeBuildDescriptorMaterialList(s32 arg0, arg1_func_87903D64* arg1);
-
 
 void Particle_ResetDefaults(Particle* arg0);
 Particle* Particle_Alloc(void);
 void Particle_Free(s8 *arg0);
 Particle* Particle_New(void);
 Particle* Particle_AllocChain(u8 arg0);
-void Particle_EmitBurstAtTransform(f32 arg0, Vec3f arg1, Vec3s arg2, ParticleUpdateCallback arg3, ParticleDescriptor* arg4, s16 arg5);
-void Particle_EmitBurstAtTransformWithMetadata(f32 arg0, Vec3f arg1, Vec3s arg2, ParticleUpdateCallback arg3, ParticleDescriptor* arg4, s16 arg5, s16 arg6);
-void Particle_EmitBurstFromObject(DisplayObject* arg0, ParticleUpdateCallback arg1, ParticleDescriptor* arg2, s16 arg3, s16 arg4);
-void Particle_EmitBurstFromObjectWithMetadata(DisplayObject* arg0, ParticleUpdateCallback arg1, ParticleDescriptor* arg2, s16 arg3, s16 arg4, s16 arg5);
 s32 Particle_CountActive(void);
 s32 Particle_CountActiveAlias(void);
 void Particle_InitLifecycle(Particle* arg0);
@@ -557,9 +493,7 @@ s32 Particle_AnimateFramesForwardAndAdvanceLifecycle(Particle* arg0, s16 arg1, s
 s32 Particle_AnimateFramesReverseFirstPingPong(Particle* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5);
 s32 Particle_AnimateFramesReverseAndAdvanceLifecycle(Particle* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5);
 s32 Particle_AnimateFramesPingPong(Particle* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5);
-s32 Particle_AnimateFramesPingPongAndAdvanceLifecycle(Particle* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5);
 s32 Particle_AnimateFramesReverseFirstPingPong(Particle* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5);
-s32 Particle_AnimateFramesReverseFirstPingPongAndAdvanceLifecycle(Particle* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5);
 void Particle_BeginPhase(Particle* arg0);
 void Particle_ResetPhase(Particle* arg0);
 void Particle_AdvancePhase(Particle* arg0);
@@ -567,7 +501,6 @@ s32 Particle_TickPhaseTimer(Particle* arg0, s16 arg1);
 void Particle_UpdateWorldTransform(Particle* arg0);
 void Particle_SetPosition(Particle* arg0, f32 arg1, f32 arg2, f32 arg3);
 void Particle_Field38_SetVecFromVec3fScaled_08C20(Particle* arg0, Vec3f arg1);
-void Particle_Field38_SetVec_08C68(Particle* arg0, f32 arg1, f32 arg2, f32 arg3);
 void Particle_Field38_SetXScaled_08C88(Particle* arg0, f32 arg1);
 void Particle_Field38_SetYScaled_08CA0(Particle* arg0, f32 arg1);
 void Particle_Field38_SetZScaled_08CB8(Particle* arg0, f32 arg1);
@@ -576,9 +509,7 @@ void Particle_SetPositionFromRotationTemplate2(Particle* arg0, f32 arg1);
 void Particle_Field38_AddVecScaledFromVec3f_08D78(Particle* arg0, Vec3f arg1);
 void Particle_Field38_AddVecFromVec3f_08DD8(Particle* arg0, Vec3f arg1);
 void Particle_Field38_AddVecScaled_08E18(Particle* arg0, f32 arg1, f32 arg2, f32 arg3);
-void Particle_Field38_AddXScaled_08E70(Particle* arg0, f32 arg1);
 void Particle_Field38_AddYScaled_08E90(Particle* arg0, f32 arg1);
-void Particle_Field38_AddZScaled_08EB0(Particle* arg0, f32 arg1);
 void Particle_AddPositionOffsetAlongRotationY(Particle* arg0, f32 arg1);
 void Particle_AddPositionOffsetAlongRotationYPlus180(Particle* arg0, f32 arg1);
 void Particle_AddPositionOffsetAlongRotationYPlus90(Particle* arg0, f32 arg1);
@@ -606,36 +537,26 @@ void Particle_SetMotionOffsetYScaled(Particle* arg0, f32 arg1);
 void Particle_SetMotionOffsetZScaled(Particle* arg0, f32 arg1);
 void Particle_SetMotionTargetXScaled(Particle* arg0, f32 arg1);
 void Particle_SetVelocityRandomDirection(Particle* arg0, f32 arg1);
-void Particle_Field50_AddVecScaled_09968(Particle* arg0, f32 arg1, f32 arg2, f32 arg3);
 void Particle_AddMotionOffsetYScaled(Particle* arg0, f32 arg1);
 void Particle_AddMotionOffsetZScaled(Particle* arg0, f32 arg1);
-void Particle_Field50_AddZScaled_09A00(Particle* arg0, f32 arg1);
 void Particle_SubMotionOffsetScaled(Particle* arg0, f32 arg1, f32 arg2, f32 arg3);
 void Particle_SubMotionOffsetYScaled(Particle* arg0, f32 arg1);
 void Particle_SubMotionOffsetZScaled(Particle* arg0, f32 arg1);
-void Particle_Field50_SubZScaled_09AB8(Particle* arg0, f32 arg1);
 s32 Particle_ApproachMotionOffsetY(Particle* arg0, f32 arg1);
 s32 Particle_ApproachMotionOffsetZ(Particle* arg0, f32 arg1);
-s32 Particle_Field50_ApproachZToField5C_09B58(Particle* arg0, f32 arg1);
-void Particle_Field50_SetVecFromField7C_09B98(Particle* arg0);
 s32 Particle_Field50_SetXZFromField7C_09BB4(s32* arg0);
-void Particle_Field50_SetXYFromField7C_09BC8(Particle* arg0);
 void Particle_ApplyMotionStepXY(Particle* arg0);
 void Particle_ApplyMotionStepXZ(Particle* arg0);
 void Particle_Field50_AddXYFromField7C_09C34(Particle* arg0);
 void Particle_ApplyMotionStepY(Particle* arg0);
 void Particle_ApplyMotionStepZ(Particle* arg0);
-void Particle_Field50_AddZFromField7C_09C80(Particle* arg0);
 void Particle_SetVelocityXZFromRotationY(Particle* arg0);
 void Particle_AddVelocityXZFromRotationYViaImpulse(Particle* arg0);
 void Particle_AddVelocityXZFromRotationYViaHelpers(Particle* arg0);
 void Particle_AddVelocityFromRotationTemplate1(s32 arg0);
 void Particle_AddVelocityFromRotationTemplate2(Particle* arg0);
 void Particle_AddVelocityFromRotationTemplate3(Particle* arg0);
-void Particle_AddVelocityFromRotationTemplate4(Particle* arg0);
 void Particle_AddVelocityFromRotationTemplate5(Particle* arg0);
-void Particle_AddVelocityFromRotationTemplate6(Particle* arg0);
-void Particle_AddVelocityFromRotationTemplate7A(Particle* arg0);
 void Particle_AddVelocityFromRotationTemplate7B(Particle* arg0);
 void Particle_AddVelocityXZFromRotationY(Particle* arg0);
 void Particle_AddVelocityXZFromRotationYPlusHalfTurn(Particle* arg0);
@@ -644,9 +565,7 @@ void Particle_AddVelocityYFromFieldOffset74(Particle* arg0);
 s32 Particle_FallAtStepMagnitude(Particle* arg0);
 s32 Particle_AccelerateFall(Particle* arg0);
 void Particle_SetVelocityTarget(Particle* arg0, f32 arg1, f32 arg2, f32 arg3);
-void Particle_Field5C_SetXScaled_0A07C(Particle* arg0, f32 arg1);
 void Particle_Field5C_SetYScaled_0A094(Particle* arg0, f32 arg1);
-void Particle_Field5C_SetZScaled_0A0AC(Particle* arg0, f32 arg1);
 s32 Particle_Field5C_ApproachY_0A0C4(Particle* arg0, f32 arg1, f32 arg2);
 f32 ParticleMath_ScaleApproachStep(f32 arg0);
 void Particle_ApproachPosition(Particle* arg0, Vec3f arg1);
@@ -655,9 +574,6 @@ void Particle_SetRotation(Particle* arg0, s16 arg1, s16 arg2, s16 arg3);
 void Particle_Field94_SetX_0A2A4(Particle* arg0, s16 arg1);
 void Particle_Field94_SetY_0A2B8(Particle* arg0, s16 arg1);
 void Particle_Field94_SetZ_0A2CC(Particle* arg0, s16 arg1);
-void Particle_Field94_AddConstantAll_0A2E0(Particle* arg0);
-void Particle_Field94_AddXConstant_0A30C(Particle* arg0);
-void Particle_Field94_AddYConstant_0A320(Particle* arg0);
 void Particle_Field94_AddZConstant_0A334(Particle* arg0);
 void Particle_SetRotationSpeed(Particle* arg0, s16 arg1, s16 arg2, s16 arg3);
 void Particle_Field9A_SetVecFromVec3s_0A37C(Particle* arg0, Vec3s arg1);
@@ -668,8 +584,6 @@ void Particle_Field9A_SetZ_0A3EC(Particle* arg0, s16 arg1);
 void Particle_FieldA0_SetX_0A400(Particle* arg0, s16 arg1);
 void Particle_FieldA0_SetY_0A414(Particle* arg0, s16 arg1);
 void Particle_SetRotationTargetXY(Particle* arg0, s16 arg1, s16 arg2);
-void Particle_SetRotationTargetFromCurrent(Particle* arg0);
-void Particle_Field94_AddVecFromField9A_0A480(Particle* arg0);
 void Particle_Field94_AddXFromField9A_0A4B4(Particle* arg0);
 void Particle_Field94_AddYFromField9A_0A4C8(Particle* arg0);
 void Particle_Field94_AddXFromField9A_0A4B4(Particle* arg0);
@@ -681,18 +595,13 @@ void Particle_Field94_AddZ_0A5B0(Particle* arg0, s16 arg1);
 void Particle_AddRotationTargetXY(Particle* arg0, s16 arg1, s16 arg2);
 void Particle_Field94_SubVecFromVec3s_0A600(Particle* arg0, Vec3s arg1);
 void Particle_Field94_SubX_0A63C(Particle* arg0, s16 arg1);
-void Particle_Field94_SubY_0A658(Particle* arg0, s16 arg1);
-void Particle_Field94_SubZ_0A674(Particle* arg0, s16 arg1);
 void Particle_ApproachRotationTargetX(Particle* arg0);
 void Particle_ApproachRotationTargetY(Particle* arg0);
 void Particle_ApproachRotationTargetZ(Particle* arg0);
 void Particle_ApproachRotationTargetXY(Particle* arg0);
 void Particle_ApproachRotationTargetXYZ(Particle* arg0);
 void Particle_ApproachRotationXTo(Particle* arg0, s16 arg1, s16 arg2);
-void Particle_ApproachRotationYTo(Particle* arg0, s16 arg1, s16 arg2);
 s32 Particle_Field94_DecrementXTo_0A7DC(Particle* arg0, s32 arg1, s32 arg2);
-s32 Particle_Field94_DecrementYTo_0A810(Particle* arg0, s32 arg1, s32 arg2);
-s32 Particle_Field94_DecrementZTo_0A844(Particle* arg0, s32 arg1, s32 arg2);
 void Particle_AddRotationRandomSignedXY(Particle* arg0, s32 arg1, s32 arg2);
 void Particle_AddRotationRandomSignedXYWithXHalfTurn(Particle* arg0, s32 arg1, s32 arg2);
 void Particle_AddRotationRandomSignedY(Particle* arg0, s32 arg1);
@@ -707,23 +616,16 @@ void Particle_Field74_SetScaled_0AD8C(Particle* arg0, f32 arg1);
 void Particle_Field78_SetScaled_0ADA4(Particle* arg0, f32 arg1);
 s32 Particle_Field74_Approach_0ADBC(Particle* arg0, f32 arg1, f32 arg2);
 s32 Particle_StepMagnitude_ApproachUsingMagnitudeStep(Particle* arg0, f32 arg1);
-s32 Particle_Field78_Approach_0AE40(Particle* arg0, f32 arg1, f32 arg2);
-void Particle_Field7C_SetVecScaled_0AE84(Particle* arg0, Vec3f arg1);
 void Particle_SetMotionStep(Particle* arg0, f32 arg1, f32 arg2, f32 arg3);
-void Particle_Field7C_SetXScaled_0AF0C(Particle* arg0, f32 arg1);
 void Particle_Field7C_SetYScaled_0AF24(Particle* arg0, f32 arg1);
-void Particle_Field7C_SetZScaled_0AF3C(Particle* arg0, f32 arg1);
 s32 Particle_Field7C_IncrementXUntilAtLeast_0AF54(Particle* arg0, f32 arg1, f32 arg2);
 s32 Particle_Field7C_IncrementYUntilAtLeast_0AFA8(Particle* arg0, f32 arg1, f32 arg2);
-s32 Particle_Field7C_IncrementZUntilAtLeast_0AFFC(Particle* arg0, f32 arg1, f32 arg2);
 s32 Particle_Field7C_DecrementXUntilAtMost_0B050(Particle* arg0, f32 arg1, f32 arg2);
 s32 Particle_Field7C_DecrementYUntilAtMost_0B0A4(Particle* arg0, f32 arg1, f32 arg2);
-s32 Particle_Field7C_DecrementZUntilAtMost_0B0F8(Particle* arg0, f32 arg1, f32 arg2);
 void Particle_Field7C_ScaleVec_0B14C(Particle* arg0, f32 arg1);
 s32 Particle_ApproachMotionStepY(Particle* arg0, f32 arg1, f32 arg2);
 void Particle_Field7C_SetYFromField74AngleX_0B1C4(Particle* arg0);
 void Particle_Field7C_SetXFromField74AngleY_0B1EC(Particle* arg0);
-void Particle_Field7C_SetZFromField74AngleY_0B214(Particle* arg0);
 void Particle_SetMotionStepXZFromRotationY(Particle* arg0);
 s32 Particle_Field7C_SetXZFromField74AngleY_0B278(void *arg0);
 void Particle_SetMotionStepFromRotationXY(Particle* arg0);
@@ -765,7 +667,6 @@ s32 Particle_FieldA6_DecrementToStep1_0BD80(Particle* arg0, s16 arg1);
 s32 Particle_DecrementUnkA6ToZero(Particle* arg0);
 s32 Particle_DecrementUnkA6ToZeroThenAdvance(Particle* arg0);
 void Particle_FieldA8_SetS16_0BE14(Particle* arg0, s16 arg1);
-s16 Particle_FieldA8_GetS16_0BE28(Particle* arg0);
 s32 Particle_FieldA8_DecrementTo_0BE30(Particle* arg0, s16 arg1);
 s32 Particle_DecrementUnkA8ToZero(Particle* arg0);
 s32 Particle_FieldA8_DecrementToZeroStep1AndStepState_0BE8C(Particle* arg0);
@@ -785,7 +686,6 @@ s32 Particle_FieldB0_Approach_0C000(Particle* arg0, s16 arg1, s16 arg2);
 s16 Particle_FieldAC_GetS16_0C038(Particle* arg0);
 s32 Particle_FieldCE_GetS32_0C040(Particle* arg0);
 u8 Particle_FieldCD_GetU8_0C048(Particle* arg0);
-s16 Particle_FieldAE_GetS16_0C050(Particle* arg0);
 s16 Particle_FieldCF_GetS16_0C058(Particle* arg0);
 s16 Particle_FieldAA_GetS16_0C068(Particle* arg0);
 void Particle_SetFieldOffsetACIfNotSentinel(Particle* arg0, s16 arg1);
@@ -793,59 +693,31 @@ void Particle_SetFieldOffsetCFIfNotSentinel(Particle* arg0, u8 arg1);
 void Particle_SetFieldOffsetA6IfNotSentinel(Particle* arg0, s16 arg1);
 void Particle_SetFieldOffsetA8IfNotSentinel(Particle* arg0, s16 arg1);
 void Particle_SetFieldOffsetCEIfNotSentinel(Particle* arg0, u8 arg1);
-void Particle_SetFieldOffsetCDIfNotSentinel(Particle* arg0, u8 arg1);
 void Particle_SetFieldOffsetAAIfNotSentinel(Particle* arg0, s16 arg1);
 void Particle_SetPrimAlphaIfNotSentinel(Particle* arg0, u8 arg1);
-void Particle_SetFieldOffsetAEIfNotSentinel(Particle* arg0, s16 arg1);
-void Particle_SetFieldOffsetB0IfNotSentinel(Particle* arg0, s16 arg1);
-void Particle_RenderWorldChains(CameraNode* arg0);
-void Particle_RenderOrthoParticles(CameraNode* arg0);
-void Particle_SetRenderMode(s16 arg0);
-void Particle_InvokeRenderSetup(Particle* arg0, ParticleDescriptorChild* arg1);
-void Particle_PrepareRender(Particle* arg0);
 void Particle_DispatchDraw(Particle* arg0, CameraNode* arg1);
-void Particle_NoopDraw(UNUSED Particle* arg0, UNUSED CameraNode* arg1);
-
 
 void Particle_UpdateFrameCounters(void);
 void Particle_UpdateFrameCountersAlias(void);
 
-
-void ParticleGfx_LoadTextureCallbackRgba16_32x32(UNUSED Particle* arg0, u8* texture);
-void ParticleGfx_LoadTextureCallbackIa8Frame_32x32(Particle* arg0, u8* texture);
 void ParticleGfx_LoadTextureCallbackIa8_32x32(UNUSED Particle* arg0, u8* texture);
-void ParticleGfx_LoadTextureCallbackIa8Frame_32x64(Particle* arg0, u8* texture);
 void ParticleGfx_LoadTextureCallbackI4_32x32(UNUSED Particle* arg0, u8* texture);
-void ParticleGfx_LoadTextureCallbackI4ParticleFrame_32x32(Particle* arg0, u8* texture);
 void ParticleGfx_LoadTextureCallbackI4FrameMod4_32x32(UNUSED Particle* arg0, u8* texture);
 void ParticleGfx_LoadTextureCallbackI4FrameDiv2Mod4_32x32(UNUSED Particle* arg0, u8* texture);
 void ParticleGfx_LoadTextureCallbackI4FrameDiv4Mod4_32x32(UNUSED Particle* arg0, u8* texture);
 void ParticleGfx_LoadTextureCallbackI4FrameDiv2Mod8_32x32(UNUSED Particle* arg0, u8* texture);
-void ParticleGfx_LoadTextureCallbackI4TileFrameDiv2Mod8_24x24(UNUSED Particle* arg0, u8* texture);
-void ParticleGfx_LoadTextureCallbackI4TileParticleFrame_24x24(Particle* arg0, u8* texture);
 void ParticleGfx_LoadTextureCallbackI4FrameMod10_32x64(UNUSED Particle* arg0, u8* texture);
-void ParticleGfx_LoadTextureCallbackI4ParticleFrame_32x64(Particle* arg0, u8* texture);
 void ParticleGfx_LoadTextureCallbackI4_64x64(UNUSED Particle* arg0, u8* texture);
 void ParticleGfx_LoadTextureCallbackI4FrameMod8_64x64(UNUSED Particle* arg0, u8* texture);
 void ParticleGfx_LoadTextureCallbackI4FrameDiv2Mod8_64x64(UNUSED Particle* arg0, u8* texture);
-void ParticleGfx_LoadTextureCallbackI4ParticleFrame_64x64(Particle* arg0, u8* texture);
 void ParticleGfx_LoadTextureCallbackI4WrapST_64x64(UNUSED Particle* arg0, u8* texture);
 void ParticleGfx_LoadTextureCallbackIa8WrapST_64x64(UNUSED Particle* arg0, u8* texture);
 void ParticleGfx_DrawBillboardPrim(Particle* arg0, CameraNode* arg1);
 void ParticleGfx_DrawBillboardPrimEnv(Particle* arg0, CameraNode* arg1);
 s32 ParticleGfx_DrawDoubleSidedPrimEnvTransformedQuad(Particle* arg0, UNUSED CameraNode* arg1);
 void ParticleGfx_DrawBillboardDefaultQuad(Particle* arg0, CameraNode* arg1);
-void ParticleGfx_DrawBillboardPrimEnvQuad(Particle* arg0, CameraNode* arg1);
 void ParticleGfx_DrawBillboardTextureAlphaRotatedQuad(Particle* arg0, CameraNode* arg1);
-void ParticleGfx_DrawBillboardOffsetQuad(Particle* arg0, CameraNode* arg1);
-void ParticleGfx_DrawBillboardPrimEnvNoiseQuad(Particle* arg0, CameraNode* arg1);
 void ParticleGfx_DrawBillboardPrimEnvRotatedQuad(Particle* arg0, CameraNode* arg1);
-void ParticleGfx_DrawBillboardPrimEnvRotatedTriangle(Particle* arg0, CameraNode* arg1);
-void ParticleGfx_DrawBillboardPrimEnvQuadVariantA(Particle* arg0, CameraNode* arg1);
-void ParticleGfx_DrawBillboardPrimEnvQuadVariantB(Particle* arg0, CameraNode* arg1);
-void ParticleGfx_DrawBillboardPrimEnvQuadVariantC(Particle* arg0, CameraNode* arg1);
-void ParticleGfx_DrawBillboardPrimEnvComposite(Particle* arg0, CameraNode* arg1);
-s32 ParticleGfx_DrawBillboardPrimEnvTriangleDoubleSided(Particle* arg0, UNUSED CameraNode* arg1);
 void ParticleGfx_DrawPrimEnvTransformedQuad(Particle* arg0, CameraNode* arg1);
 void ParticleGfx_CopyPaletteRgb(u8* arg0, u16 arg1);
 void ParticleGfx_CopyPalettePairRgb(u8* arg0, u8* arg1, u16 arg2);

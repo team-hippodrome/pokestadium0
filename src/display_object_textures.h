@@ -69,7 +69,6 @@ void PokeIcon_StartThread(void);
 s8 *PokeIcon_AllocFramebuffers(s32 arg0);
 void PokeIcon_OpenModelArchives(void);
 s32 PokeIcon_RequestFrameLoad(ModelLoadContext* arg0, u16 arg1, arg1_func_80010CA8 arg2);
-s32 PokeIcon_RequestFrameLoadWithVariant(ModelLoadContext* arg0, u16 arg1, arg1_func_80010CA8 arg2, s16 arg3);
 s32 PokeIcon_RequestBackgroundLoad(ModelLoadContext* arg0, s32 arg1, s32 arg2);
 s32 PokeIcon_ApplyLoadResult(ModelLoadContext* arg0, sp18_func_800198E4* arg1);
 s32 PokeIcon_PollFrameLoad(ModelLoadContext* arg0);
@@ -78,9 +77,7 @@ s32 PokeIcon_WaitFrameLoad(ModelLoadContext* arg0);
 void PokeIcon_WaitBackgroundLoad(s32 arg0);
 unk_D_86002F30* Model_LoadByArchiveIndex(s32 arg0);
 unk_D_86002F30* Model_LoadForPokemon(BattleMon* arg0);
-s32 Model_LoadWithScale(s32 arg0, s32 arg1);
 arg1_func_80019420* BattleAnim_LoadResourceTable(s32 arg0);
 Fragment* Fragment_LoadAndRelocateFromRomRange(MainPoolState* arg0, u32 arg1, s32 arg2, s32 arg3, PERSSZP* arg4, s32 arg5);
-
 
 #endif // _19840_H_

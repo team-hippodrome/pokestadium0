@@ -33,30 +33,6 @@ typedef struct CastleMapNode {
     /* 0x24 */ u8* infoPanelTexture;
 } CastleMapNode; // size = 0x28
 
-void GymLeaderCastle_DrawBackgroundCrossFade(u8* fade_in_texture, u8* fade_out_texture, u8 alpha);
-void GymLeaderCastle_DrawScaledTextureRgba(s16 x_start, s16 y_start, s16 draw_width, s16 height, s16 load_width,
-                                           u8* texture, f32 scale);
 void func_821853FC(void);
-void GymLeaderCastle_DrawScaledTextureIa8(s16 x_start, s16 y_start, s16 width, s16 height, u8* texture, f32 scale);
-void GymLeaderCastle_DrawRoomDescription(void);
-void GymLeaderCastle_DrawTrainerIntroPanels(void);
-void GymLeaderCastle_DrawMapBorder(void);
-void GymLeaderCastle_DrawRoomMarkers(void);
-void GymLeaderCastle_DrawRoomLabels(void);
-void GymLeaderCastle_DrawGymLeaderInfoPanel(CastleMapNode* node, u8 alpha1, u8 alpha2);
-void GymLeaderCastle_DrawEliteFourRoomInfoPanel(CastleMapNode* node, u8 alpha1, u8 alpha2);
-void GymLeaderCastle_UpdateRoomInfoPanelFade(void);
-void GymLeaderCastle_UpdateMapCursor(void);
-void GymLeaderCastle_Draw(void);
-
-s32 GymLeaderCastle_SelectRoom(void);
-void GymLeaderCastle_LoadTrainerPanels(void);
-void GymLeaderCastle_ClearTrainerPanels(void);
-void GymLeaderCastle_SlideTrainerPanels(s16 panels_start, s16 panels_end, s16 timer, s16 x_delta);
-s32 GymLeaderCastle_ShowIntro(void);
-s32 GymLeaderCastle_AdvanceRoom(void);
-s16 GymLeaderCastle_RunMenu(s16 action);
-s16 GymLeaderCastle_InitMenu(s16 arg0);
-s32 GymLeaderCastle_Main(s32 arg0, UNUSED s32 arg1);
 
 #endif // _FRAGMENT65_H_

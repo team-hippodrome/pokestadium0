@@ -470,53 +470,6 @@ typedef struct unk_func_8830867C_02C {
     /* 0xCDC */ unk_func_8830867C_054* unk_CDC;
 } unk_func_8830867C_02C; // size = 0xCE0
 
-typedef struct unk_func_8830867C {
-    /* 0x00 */ WidgetNode unk_00;
-    /* 0x2C */ unk_func_8830867C_02C* unk_2C;
-    /* 0x30 */ unk_func_8830867C_030* unk_30;
-    /* 0x34 */ unk_func_8830867C_034* unk_34;
-    /* 0x38 */ unk_func_8830867C_038* unk_38;
-    /* 0x3C */ unk_func_8830867C_03C* unk_3C;
-    /* 0x40 */ unk_func_8830867C_040* unk_40;
-    /* 0x44 */ unk_func_8830867C_044* unk_44;
-    /* 0x48 */ unk_func_8830867C_048* unk_48;
-    /* 0x4C */ unk_func_8830867C_04C* unk_4C;
-    /* 0x50 */ unk_func_889000C4* unk_50;
-    /* 0x54 */ unk_func_8830867C_054 unk_54;
-    /* 0x6C */ s32 unk_6C;
-    /* 0x70 */ char** unk_70;
-    /* 0x74 */ char** unk_74;
-    /* 0x78 */ char** unk_78;
-    /* 0x7C */ char** unk_7C;
-    /* 0x80 */ char** unk_80;
-    /* 0x84 */ char** unk_84;
-    /* 0x88 */ char** unk_88;
-} unk_func_8830867C; // size = 0x8C
-
-typedef struct unk_func_88302D98 {
-    /* 0x00 */ WidgetNode unk_00;
-    /* 0x2C */ unk_func_8830867C_02C* unk_2C;
-} unk_func_88302D98; // size = 0x30
-
-typedef struct unk_func_88304850_arg2 {
-    /* 0x00 */ s32* unk_00;
-    /* 0x04 */ char unk04[4];
-    /* 0x08 */ u8 unk_08;
-    /* 0x09 */ char unk09[0xD];
-    /* 0x16 */ s16 unk_16;
-    /* 0x18 */ char unk18[0x14];
-    /* 0x2C */ u8 unk_2C;
-    /* 0x2E */ s16 unk_2E;
-    /* 0x30 */ s16 unk_30;
-    /* 0x32 */ s16 unk_32;
-    /* 0x34 */ s16 unk_34;
-    /* 0x36 */ s16 unk_36;
-    /* 0x38 */ char unk_38[4];
-    /* 0x3C */ char unk3C[0x4];
-    /* 0x40 */ char unk_40[3];
-    /* 0x43 */ char unk_43[1];
-} unk_func_88304850_arg2; // size >= 0x44
-
 typedef struct unk_func_88309C38_arg2_004 {
     /* 0x00 */ s32 unk_00;
     /* 0x04 */ Color_RGBA8 unk_04;
@@ -539,16 +492,6 @@ typedef struct unk_func_88309C38_arg2 {
     /* 0x18 */ s32 unk_18;
 } unk_func_88309C38_arg2; // size >= 0x1C
 
-typedef struct unk_func_88309160_arg2 {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ char unk08[0x4];
-    /* 0x0C */ unk_func_88309C38_arg2_00C* unk_0C;
-    /* 0x10 */ char unk10[0x4];
-    /* 0x14 */ s32 unk_14;
-    /* 0x18 */ s32 unk_18;
-} unk_func_88309160_arg2; // size >= 0x1C
-
 typedef struct unk_func_88310CA4_arg2 {
     /* 0x00 */ u8* unk_00;
     /* 0x04 */ u8* unk_04;
@@ -558,12 +501,6 @@ typedef struct unk_func_88310CA4_arg2 {
     /* 0x14 */ s32 unk_14;
     /* 0x18 */ s32 unk_18;
 } unk_func_88310CA4_arg2; // size >= 0x1C
-
-typedef struct unk_func_88310B70 {
-    /* 0x00 */ WidgetNode unk_00;
-    /* 0x2C */ unk_func_8830867C_04C_030* unk_2C;
-    /* 0x30 */ unk_func_8850878C* unk_30;
-} unk_func_88310B70; // size = 0x34
 
 typedef struct unk_func_88313894_020 {
     /* 0x00 */ char unk00[0xC];
@@ -591,254 +528,28 @@ typedef struct unk_func_88316128 {
     /* 0x43 */ u8 unk_43;
 } unk_func_88316128; // size >= 0x44
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-void LabPCList_InitHeaderSelectIcon(WidgetNode* arg0, s32 arg1, s32 arg2);
-s32 LabPCList_HeaderSelectIcon_Draw(WidgetNode* arg0, s32 arg1, s32 arg2);
-void LabPCList_DrawHeaderPokemon(WidgetNode* arg0, s32 arg1, s32 arg2);
-s32 LabPCList_HeaderPokemon_Draw(WidgetNode* arg0, s32 arg1, s32 arg2);
-void LabPCList_DrawHeaderNickname(WidgetNode* arg0, s32 arg1, s32 arg2);
-s32 LabPCList_HeaderNickname_Draw(WidgetNode* arg0, s32 arg1, s32 arg2);
-void LabPCList_DrawHeaderID(WidgetNode* arg0, s32 arg1, s32 arg2);
-s32 LabPCList_HeaderID_Draw(WidgetNode* arg0, s32 arg1, s32 arg2);
-void LabPCList_DrawHeaderOT(WidgetNode* arg0, s32 arg1, s32 arg2);
-s32 LabPCList_HeaderOT_Draw(WidgetNode* arg0, s32 arg1, s32 arg2);
-void LabPCList_DrawHeaderArea(WidgetNode* arg0, s32 arg1, s32 arg2);
-s32 LabPCList_HeaderArea_Draw(WidgetNode* arg0, s32 arg1, s32 arg2);
-void LabPCList_DrawHeaderTypes(WidgetNode* arg0, s32 arg1, s32 arg2);
-s32 LabPCList_HeaderTypes_Draw(WidgetNode* arg0, s32 arg1, s32 arg2);
-void LabPCList_DrawHeaderMoves(WidgetNode* arg0, s32 arg1, s32 arg2);
-s32 LabPCList_HeaderMoves_Draw(WidgetNode* arg0, s32 arg1, s32 arg2);
-void LabPCList_DrawHeaderLevel(WidgetNode* arg0, s32 arg1, s32 arg2);
-s32 LabPCList_HeaderLevel_Draw(WidgetNode* arg0, s32 arg1, s32 arg2);
-void LabPCList_DrawHeaderHp(WidgetNode* arg0, s32 arg1, s32 arg2);
-s32 LabPCList_HeaderHp_Draw(WidgetNode* arg0, s32 arg1, s32 arg2);
-void LabPCList_DrawHeaderAttack(WidgetNode* arg0, s32 arg1, s32 arg2);
-s32 LabPCList_HeaderAttack_Draw(WidgetNode* arg0, s32 arg1, s32 arg2);
-void LabPCList_DrawHeaderDefense(WidgetNode* arg0, s32 arg1, s32 arg2);
-s32 LabPCList_HeaderDefense_Draw(WidgetNode* arg0, s32 arg1, s32 arg2);
-void LabPCList_DrawHeaderSpeed(WidgetNode* arg0, s32 arg1, s32 arg2);
-s32 LabPCList_HeaderSpeed_Draw(WidgetNode* arg0, s32 arg1, s32 arg2);
-void LabPCList_DrawHeaderSpecial(WidgetNode* arg0, s32 arg1, s32 arg2);
-s32 LabPCList_HeaderSpecial_Draw(WidgetNode* arg0, s32 arg1, s32 arg2);
-s32 LabPCList_DrawColumnDivider(unk_func_8830867C_02C_050* arg0, s32 arg1, s32 arg2);
-void LabPCList_InitCornerIcon(WidgetNode* arg0, s32 arg1, s32 arg2);
-s32 LabPCList_DrawCornerIcon(WidgetNode* arg0, s32 arg1, s32 arg2);
-void LabPCList_LoadDecks(unk_func_8830867C_02C* arg0, MemoryPool* arg1);
-void LabPCList_SaveDirtyDecks(unk_func_8830867C_02C* arg0);
-void LabPCList_InitDeckSlots(unk_func_8830867C_02C* arg0, MemoryPool* arg1);
-void LabPCList_InitPageHeader(unk_func_88302D98* arg0, s32 arg1, s32 arg2, unk_func_8830867C_02C* arg3);
-s32 LabPCList_DrawPageHeader(unk_func_88302D98* arg0, s32 arg1, s32 arg2);
-void LabPCList_SwitchColumnPage(unk_func_8830867C_02C* arg0);
-void LabPCList_DrawTypeName(s32 arg0, s32 arg1, s32 arg2, u8* arg3, s32 arg4);
-void LabPCList_DrawMoveNameCell(s32 arg0, s32 arg1, s32 arg2, u8* arg3, s32 arg4);
-void LabPCList_DrawAreaCell(s32 arg0, s32 arg1, s32 arg2, unk_func_88304850_arg2* arg3);
 void LabPCList_DrawPlainText(s32 arg0, s32 arg1, s8* arg2, s32 arg3, s32 arg4);
-void LabPCList_DrawFormattedNumber(s32 arg0, s32 arg1, char* arg2, s32 arg3);
-void LabPCList_DrawStatNumber(s32 arg0, s32 arg1, char* arg2, s32 arg3, u8* arg4);
-s32 LabPCList_CheckStatFilterRange(unk_func_8830867C_02C* arg0, unk_func_88304850_arg2* arg1);
 
-void LabPCList_SaveFilterState(unk_func_8830867C_02C* arg0);
-void LabPCList_RestoreFilterState(unk_func_8830867C_02C* arg0);
-void LabPCList_DiscardFilterBackup(unk_func_8830867C_02C* arg0);
 void LabPCList_ResetFilterState(unk_func_8830867C_02C* arg0);
 s32 LabPCList_HasFilterFlag(unk_func_8830867C_02C* arg0, s32 arg1);
 void LabPCList_SetFilterFlag(unk_func_8830867C_02C* arg0, s32 arg1);
 void LabPCList_ClearFilterFlag(unk_func_8830867C_02C* arg0, s32 arg1);
 s32 LabPCList_ToggleFilterFlag(unk_func_8830867C_02C* arg0, s32 arg1);
-void LabPCList_SetSortMode(unk_func_8830867C_02C* arg0, s32 arg1);
 void LabPCList_ApplyFiltersAndSort(unk_func_8830867C_02C* arg0);
-s32 LabPCList_CheckAnyDirty(unk_func_8830867C_02C* arg0);
-s32 LabPCList_FindEntryIndex(unk_func_8830867C_02C_0CC* arg0, unk_func_8830867C_02C_0CC_000* arg1);
-void LabPCList_PerformMoveMon(unk_func_8830867C_02C* arg0, unk_func_8830867C_02C_0CC_000* arg1, Controller* arg2);
 void LabPCList_ReindexBoxSlots(unk_func_8830867C_02C_0CC_000_000* arg0);
-void LabPCList_MoveEntryToBox(unk_func_8830867C_02C* arg0, unk_func_8830867C_02C_0CC_000* arg1, s32 arg2, s32 arg3);
-void LabPCList_ClearMovesFrom(unk_func_8830867C_02C_0CC_000_008* arg0, s32 arg1);
-void LabPCList_TeachTmMove(unk_func_8830867C_02C_0CC_000* arg0, unk_func_8830867C_04C_030_02C_000* arg1, s32 arg2);
-void LabPCList_SetRowMenuState(unk_func_8830867C_02C* arg0, s32 arg1);
-s32 LabPCList_RowMenuHandleInput(unk_func_8830867C_02C* arg0, Controller* arg1);
-void LabPCList_RunPartySelectionModal(unk_func_8830867C_02C* arg0, Controller* arg1);
 
-s32 LabPCList_OpenListMenu(unk_func_8830867C_02C* arg0, Controller* arg1);
-s32 LabPCList_OpenRowMenu(unk_func_8830867C_02C* arg0, Controller* arg1);
-s32 LabPCList_HandleColumnHeaderClick(unk_func_8830867C_02C* arg0, WidgetNode* arg1, s32 arg2, Controller* arg3);
-u32 LabPCList_GetColumnMenuIndex(unk_func_8830867C_02C* arg0);
 void func_8900020C(void);
-void LabPCList_InitColumnSelectionProxy(unk_func_8830867C_02C_048* arg0, unk_func_8830867C_02C* arg1);
-void LabPCList_SaveAll(unk_func_8830867C_02C* arg0, s32 arg1);
-void LabPCList_MarkIneligibleEntries(unk_func_8830867C_02C* arg0);
-s32 LabPCList_IsGamePakBoxEmpty(unk_func_8830867C_02C* arg0);
-s32 LabPCList_ConfirmExit(unk_func_8830867C_02C* arg0, Controller* arg1, s32 arg2);
-void LabPCList_SetGridInteractive(unk_func_8830867C_02C* arg0, s32 arg1);
-void LabPCList_ResetGridSelection(unk_func_8830867C_02C_048* arg0);
-void LabPCList_HandleGridSelectionEntry(unk_func_8830867C_02C_048* arg0, Controller* arg1);
-s32 LabPCList_HandleBackButton(unk_func_8830867C_02C_048* arg0, Controller* arg1);
-s32 LabPCList_HandlePageSwitchInput(unk_func_8830867C_02C_048* arg0, Controller* arg1);
-s32 LabPCList_HandleGridInput(unk_func_8830867C_02C_048* arg0, Controller* arg1, s32 arg2);
-s32 LabPCList_HandleColumnMenuInput(unk_func_8830867C_02C_048* arg0, Controller* arg1, s32 arg2);
-s32 LabPCList_HandleTopLevelInput(unk_func_8830867C_02C_048* arg0, Controller* arg1);
-void LabPCList_RunWidgetLoop(unk_func_8830867C* arg0);
-void LabPCList_ScreenThreadEntry(unk_func_8830867C* arg0);
-s32 LabPCList_ShowListScreen(UNUSED s32 arg0, UNUSED s32 arg1);
 
-void BattleMoveListWidget_Initialize(unk_func_8830867C_04C_078* arg0, s32 arg1, s32 arg2, MemoryPool* arg3);
-void BattleMoveListWidget_SetMoves(unk_func_8830867C_04C_078* arg0, BattleMon* arg1);
-void BattleMoveListWidget_DisableUnavailableMoves(unk_func_8830867C_04C_078* arg0);
 void BattleMoveListWidget_DisableRestrictedMoves(unk_func_8830867C_04C_078* arg0);
-s32 BattleMoveListWidget_HandleInput(unk_func_8830867C_04C_078* arg0, Controller* arg1);
-void BattleMoveListWidget_Destroy(unk_func_8830867C_04C_078* arg0);
-void BattleMoveListWidget_SetCloseState(unk_func_8830867C_04C_078* arg0);
 void func_89004708(void);
-s32 BattleInfoWidget_GetEntryDisabledFlags(unk_func_8830867C_034_03C_038_02C_000* arg0);
 void func_89004710(void);
-void BattleInfoWidget_ApplyEntryDisabledFlags(unk_func_8830867C_034_03C* arg0);
-void BattleInfoWidget_SetActivePageFlags(unk_func_8830867C_034_03C* arg0, s32 arg1);
-void BattleInfoWidget_SyncEntrySelection(unk_func_8830867C_034_03C* arg0);
-void BattleInfoWidget_DrawIndicator(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
-s32 BattleInfoWidget_GetEntryWidth(void);
-void BattleInfoWidget_Initialize(unk_func_8830867C_034_03C* arg0, s32 arg1, s32 arg2, s32 arg3, MemoryPool* arg4);
-s32 BattleInfoWidget_HandleInput(unk_func_8830867C_034_03C* arg0, Controller* arg1);
-void BattleInfoWidget_SelectPage(unk_func_8830867C_034_03C* arg0, s32 arg1);
-void BattleInfoWidget_InitializeEntryMarker(unk_func_8830867C_034_034* arg0, s32 arg1, s32 arg2, s32 arg3);
-s32 BattleInfoWidget_DrawEntryMarker(unk_func_8830867C_034_034* arg0, s32 arg1, s32 arg2);
-s32 BattleInfoWidget_GetPageSelectionFlags(unk_func_8830867C_02C_144_000* arg0);
-void BattleInfoWidget_SyncParentSelection(unk_func_8830867C_034* arg0, unk_func_8830867C_034_03C* arg1);
 void BattleInfoWidget_UpdateEntryFlags(unk_func_8830867C_034* arg0);
-void BattleInfoWidget_UpdateConfirmState(unk_func_8830867C_034* arg0);
 void BattleInfoWidget_ApplyEntrySelection(unk_func_8830867C_034* arg0, s32 arg1);
-s32 BattleInfoWidget_GetStatusEntryWidth(void);
-void BattleInfoWidget_Build(unk_func_8830867C_034* arg0, s32 arg1, s32 arg2, WidgetNode* arg3, MemoryPool* arg4);
-void BattleInfoWidget_BindData(unk_func_8830867C_034* arg0, unk_func_8830867C_02C_144* arg1);
-void BattleInfoWidget_SetWidgetState(unk_func_8830867C_034* arg0, s32 arg1);
-s32 BattleInfoWidget_HandleContainerInput(unk_func_8830867C_034* arg0, Controller* arg1);
-void BattleInfoWidget_InitSelectionProxy(unk_func_8830867C_034_038* arg0, unk_func_8830867C_034* arg1);
-s32 BattleInfoWidget_HandleSelectionProxyInput(unk_func_8830867C_034_038* arg0, Controller* arg1);
-void BattleInfoWidget_OpenPanels(unk_func_8830867C_034* arg0);
-void BattleInfoWidget_SetCloseState(unk_func_8830867C_034* arg0);
-s32 BattleInfoWidget_RunSelectionModal(unk_func_8830867C_034* arg0, Controller* arg1);
 void BattleInfoWidget_DrawLabel(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4);
-void BattleInfoWidget_InitDropdownMenu(unk_func_8830867C_030* arg0, WidgetNode* arg1, MemoryPool* arg2);
-void BattleInfoWidget_SetLabels(unk_func_8830867C_030* arg0, char** arg1, s32 arg2);
-void BattleInfoWidget_UpdateViewport(unk_func_8830867C_030* arg0);
-void BattleInfoWidget_SetSelectionState(unk_func_8830867C_030* arg0, s32 arg1);
-s32 BattleInfoWidget_HandleSelectionInput(unk_func_8830867C_030* arg0, Controller* arg1);
-void BattleInfoWidget_OpenSelectionAt(unk_func_8830867C_030* arg0, s32 arg1);
-void BattleInfoWidget_CloseSelection(unk_func_8830867C_030* arg0);
-u32 BattleInfoWidget_RunEntryModal(unk_func_8830867C_030* arg0, Controller* arg1, s32 arg2);
-void BattleInfoWidget_DrawStatusMenuLabel(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4);
-void BattleInfoWidget_BuildStatusMenu(unk_func_8830867C_038* arg0, s32 arg1, s32 arg2, WidgetNode* arg3, MemoryPool* arg4);
-void BattleInfoWidget_SetStatusSelection(unk_func_8830867C_038* arg0, s32 arg1);
-s32 BattleInfoWidget_HandleStatusInput(unk_func_8830867C_038* arg0, Controller* arg1);
-s32 BattleInfoWidget_RunStatusModal(unk_func_8830867C_038* arg0, Controller* arg1);
-void BattleInfoWidget_UpdateNumberIndicator(unk_func_8830867C_044_038* arg0);
-void BattleInfoWidget_InitNumberSelectorDigits(unk_func_8830867C_044_038* arg0, s32 arg1, s32 arg2, MemoryPool* arg3);
-void BattleInfoWidget_SetNumberSelectorState(unk_func_8830867C_044_038* arg0, s32 arg1);
-s32 BattleInfoWidget_DrawNumberSelector(unk_func_8830867C_044_038* arg0, s32 arg1, s32 arg2);
-s32 BattleInfoWidget_HandleNumberSelectorInput(unk_func_8830867C_044_038* arg0, Controller* arg1);
-void BattleInfoWidget_BuildLevelRangeMenu(unk_func_8830867C_044* arg0, s32 arg1, s32 arg2, WidgetNode* arg3, MemoryPool* arg4);
-void BattleInfoWidget_SetLevelRange(unk_func_8830867C_044* arg0, s32 arg1, s32 arg2, s32 arg3);
-void BattleInfoWidget_SetLevelRangeState(unk_func_8830867C_044* arg0, s32 arg1);
-s32 BattleInfoWidget_HandleLevelRangeInput(unk_func_8830867C_044* arg0, Controller* arg1);
-s32 BattleInfoWidget_RunLevelRangeModal(unk_func_8830867C_044* arg0, Controller* arg1);
-void BattleInfoWidget_InitLevelRangeSelectionProxy(unk_func_8830867C_044_040* arg0, unk_func_8830867C_044* arg1);
-s32 BattleInfoWidget_LevelRangeSelectionInput(unk_func_8830867C_044_040* arg0, Controller* arg1);
-void BattleInfoWidget_CenterLabel(unk_func_8830867C_03C* arg0, unk_func_8850878C* arg1, char* arg2);
-void BattleInfoWidget_BuildTypePanel(unk_func_8830867C_03C* arg0, s32 arg1, s32 arg2, WidgetNode* arg3, MemoryPool* arg4);
-void BattleInfoWidget_SetTypeEntries(unk_func_8830867C_03C* arg0, unk_func_8830867C_02C_C54_01C* arg1);
-void BattleInfoWidget_GetTypeEntries(unk_func_8830867C_03C* arg0, unk_func_8830867C_02C_C54_01C* arg1);
-void BattleInfoWidget_SetTypePanelState(unk_func_8830867C_03C* arg0, s32 arg1);
-s32 BattleInfoWidget_HandleTypePanelInput(unk_func_8830867C_03C* arg0, Controller* arg1);
-s32 BattleInfoWidget_RunTypeSelectionModal(unk_func_8830867C_03C* arg0, Controller* arg1);
-void BattleInfoWidget_InitTypeSelectionProxy(unk_func_8830867C_03C_04C* arg0, unk_func_8830867C_03C* arg1);
-s32 BattleInfoWidget_HandleTypeSelectionProxyInput(unk_func_8830867C_03C_04C* arg0, Controller* arg1);
 void func_891053E0(void);
 void func_89108F0C(void);
-void BattleInfoWidget_CenterTypeLabel(unk_func_8830867C_040* arg0, unk_func_8850878C* arg1, char* arg2);
-void BattleInfoWidget_BuildMovePanel(unk_func_8830867C_040* arg0, s32 arg1, s32 arg2, WidgetNode* arg3, MemoryPool* arg4);
-void BattleInfoWidget_SetMoveSlots(unk_func_8830867C_040* arg0, unk_func_8830867C_02C_C54_024* arg1);
-void BattleInfoWidget_GetMoveSlots(unk_func_8830867C_040* arg0, unk_func_8830867C_02C_C54_024* arg1);
-void BattleInfoWidget_SetMovePanelState(unk_func_8830867C_040* arg0, s32 arg1);
-s32 BattleInfoWidget_HandleMovePanelInput(unk_func_8830867C_040* arg0, Controller* arg1);
-s32 BattleInfoWidget_RunMovePanelModal(unk_func_8830867C_040* arg0, Controller* arg1);
-void BattleInfoWidget_InitMoveSelectionProxy(unk_func_8830867C_040_05C* arg0, unk_func_8830867C_040* arg1);
 
-void BattleInfoWidget_InitGamePakSlotLabel(unk_func_88310B70* arg0, s32 arg1, s32 arg2, unk_func_8830867C_04C_030* arg3, MemoryPool* arg4);
-s32 BattleInfoWidget_DrawGamePakSlotLabel(unk_func_88310B70* arg0);
-void BattleInfoWidget_BuildItemMenu(unk_func_8830867C_04C* arg0, s32 arg1, s32 arg2, WidgetNode* arg3, MemoryPool* arg4);
 s32 LabPCList_CanLearnMoveByLevelUp(s32 arg0, s32 arg1);
-s32 LabPCList_CheckTmHmIneligibility(s32 arg0, unk_func_8830867C_02C_0CC_000_008* arg1);
-s32 LabPCList_CheckPpUpIneligibility(unk_func_8830867C_02C_0CC_000_008* arg0);
-s32 LabPCList_CheckVitaminIneligibility(s32 arg0, unk_func_8830867C_02C_0CC_000_008* arg1);
-void BattleInfoWidget_RebindItemGrid(unk_func_8830867C_04C* arg0, unk_func_88200FA0_030_038* arg1);
-void BattleInfoWidget_SetItemMenuMon(unk_func_8830867C_04C* arg0, BattleMon* arg1);
-void BattleInfoWidget_MarkIneligibleItems(unk_func_8830867C_04C* arg0);
-void BattleInfoWidget_UpdateItemMenuTitle(unk_func_8830867C_04C* arg0);
-void BattleInfoWidget_SetItemMenuMode(unk_func_8830867C_04C* arg0, s32 arg1);
-void BattleInfoWidget_SetItemMenuState(unk_func_8830867C_04C* arg0, s32 arg1);
-s32 BattleInfoWidget_GetItemMenuActionType(unk_func_8830867C_04C* arg0, s32* arg1);
-void BattleInfoWidget_InitItemMenuSelectionProxy(unk_func_8830867C_04C_080* arg0, unk_func_8830867C_04C* arg1);
-s32 BattleInfoWidget_ItemMenuBackToBrowse(unk_func_8830867C_04C_080* arg0);
-s32 BattleInfoWidget_ItemMenuBackFromMoveSelect(unk_func_8830867C_04C_080* arg0);
-void BattleInfoWidget_ItemMenuConfirmSelection(unk_func_8830867C_04C_080* arg0);
-s32 BattleInfoWidget_ItemMenuHandleInput(unk_func_8830867C_04C_080* arg0, Controller* arg1);
-s32 BattleInfoWidget_ItemMenuHandleContainerInput(unk_func_8830867C_04C* arg0, Controller* arg1);
-void BattleInfoWidget_OpenItemMenu(unk_func_8830867C_04C* arg0);
-void BattleInfoWidget_CloseItemMenu(unk_func_8830867C_04C* arg0);
-s32 BattleInfoWidget_RunItemMenuModal(unk_func_8830867C_04C* arg0, Controller* arg1);
-void BattleInfoWidget_DrawSlotEntry(s32 arg0, s32 arg1, unk_func_88309160_arg2* arg2, s32 arg3, s32 arg4, unk_func_88200FA0_030_030_1CEA00* arg5);
-void BattleInfoWidget_DrawLocationEntry(s32 arg0, s32 arg1, unk_func_88309160_arg2* arg2, s32 arg3, s32 arg4, unk_func_88200FA0_030_030_1CEA00* arg5);
-void BattleInfoWidget_BuildMoveDestinationMenu(unk_func_8830867C_048* arg0, s32 arg1, s32 arg2, WidgetNode* arg3, MemoryPool* arg4);
-void BattleInfoWidget_BindMoveDestinationData(unk_func_8830867C_048* arg0, unk_func_8830867C_02C_144* arg1);
-void BattleInfoWidget_MarkFullBoxSlots(unk_func_88200FA0_030_030_1CEA00* arg0, unk_func_8830867C_02C_0CC_000* arg1, unk_func_88313894_020* arg2);
-void BattleInfoWidget_MarkIneligibleDestinations(unk_func_8830867C_048* arg0, unk_func_8830867C_02C_0CC_000* arg1);
-void BattleInfoWidget_FormatLocationName(char* arg0, s32 arg1, s32 arg2);
-void BattleInfoWidget_SetMoveDestinationTitle(unk_func_8830867C_048* arg0, s32 arg1, s32 arg2);
-void BattleInfoWidget_SyncDestinationPage(unk_func_8830867C_048* arg0);
-void BattleInfoWidget_OpenMoveDestinationMenu(unk_func_8830867C_048* arg0);
-void BattleInfoWidget_CloseMoveDestinationMenu(unk_func_8830867C_048* arg0);
-void BattleInfoWidget_SetMoveDestinationState(unk_func_8830867C_048* arg0, s32 arg1);
-s32 BattleInfoWidget_HandleMoveDestinationContainerInput(unk_func_8830867C_048* arg0, Controller* arg1);
-void BattleInfoWidget_InitMoveDestinationSelectionProxy(unk_func_8830867C_048_048* arg0, unk_func_8830867C_048* arg1);
-s32 BattleInfoWidget_MoveDestinationSelectionInput(unk_func_8830867C_048_048* arg0, Controller* arg1);
-s32 BattleInfoWidget_RunMoveDestinationModal(unk_func_8830867C_048* arg0, Controller* arg1);
-void BattleInfoWidget_DrawSaveConfirmLabel(s32 arg0, s32 arg1, s8* arg2, s32 arg3);
-void BattleInfoWidget_BuildSaveConfirmDialog(unk_func_8830867C_02C_0B4* arg0, s32 arg1, s32 arg2, MemoryPool* arg3);
-s32 BattleInfoWidget_HandleSaveConfirmInput(unk_func_8830867C_02C_0B4* arg0, Controller* arg1);
-s32 BattleInfoWidget_RunSaveConfirmModal(unk_func_8830867C_02C_0B4* arg0, Controller* arg1);
-void LabPCList_InitTextFadeWidget(unk_func_882173EC* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
-s32 LabPCList_TextFadeWidget_Update(unk_func_882173EC* arg0);
-s32 LabPCList_DrawTextFadeWidget(unk_func_882173EC* arg0, s32 arg1, s32 arg2);
-void LabPCList_TextFadeWidget_Start(unk_func_882173EC* arg0, s32 arg1, s32 arg2, WidgetPoint arg3);
-void LabPCList_InitPpUpAnimWidget(unk_func_8830867C_02C_0C0* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
-s32 LabPCList_PpUpAnimWidget_Update(unk_func_8830867C_02C_0C0* arg0);
-s32 LabPCList_DrawPpUpAnimWidget(unk_func_8830867C_02C_0C0* arg0, s32 arg1, s32 arg2);
-void LabPCList_PpUpAnimWidget_Start(unk_func_8830867C_02C_0C0* arg0, s32 arg1, s32 arg2, s32 arg3, WidgetPoint arg4);
-void LabPCList_InitVitaminAnimWidget(unk_func_882173EC* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
-s32 LabPCList_VitaminAnimWidget_Update(unk_func_882173EC* arg0);
-s32 LabPCList_DrawVitaminAnimWidget(unk_func_882173EC* arg0, s32 arg1, s32 arg2);
-void LabPCList_TextCrossfadeWidget_Start(unk_func_882173EC* arg0, char* arg1, char* arg2, WidgetPoint arg3);
-void LabPCList_InitLocationCrossfadeWidget(unk_func_882173EC* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
-s32 LabPCList_LocationCrossfadeWidget_Update(unk_func_882173EC* arg0);
-void LabPCList_DrawLocationCaption(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
-s32 LabPCList_DrawLocationCrossfadeWidget(unk_func_882173EC* arg0, s32 arg1, s32 arg2);
-void LabPCList_LocationCrossfadeWidget_Start(unk_func_882173EC* arg0, s32 arg1, s32 arg2, WidgetPoint arg3);
 
 s32 LabPCList_CompareByPointer(unk_func_88316128*, unk_func_88316128*);
 s32 LabPCList_CompareByLevelAsc(unk_func_88316128*, unk_func_88316128*);
@@ -854,27 +565,21 @@ s32 LabPCList_CompareBySpeedDesc(unk_func_88316128*, unk_func_88316128*);
 s32 LabPCList_CompareBySpecialAsc(unk_func_88316128*, unk_func_88316128*);
 s32 LabPCList_CompareBySpecialDesc(unk_func_88316128*, unk_func_88316128*);
 s32 LabPCList_CompareById(unk_func_88316128*, unk_func_88316128*);
-s32 LabPCList_CompareByPokemonColumn(unk_func_8830867C_02C_0CC*, unk_func_8830867C_02C_0CC*);
 s32 LabPCList_CompareByOtName(unk_func_88316128* arg0, unk_func_88316128* arg1);
 s32 LabPCList_CompareByNickname(unk_func_88316128*, unk_func_88316128*);
-s32 LabPCList_CompareBySpeciesDexOrder(unk_func_8830867C_02C_0CC*, unk_func_8830867C_02C_0CC*);
 s32 LabPCList_CompareBySpeciesRawId(unk_func_8830867C_02C_0CC*, unk_func_8830867C_02C_0CC*);
 int LabPCList_FilterByLevelRange(unk_func_8830867C_02C_0CC* arg0, u8* arg1);
 s32 LabPCList_FilterByAnyType(unk_func_8830867C_02C_0CC* arg0, unk_func_8830867C_02C_C54_01C* arg1);
 s32 LabPCList_FilterByAnyMove(unk_func_8830867C_02C_0CC* arg0, unk_func_8830867C_02C_C54_024* arg1);
 s32 LabPCList_FilterBySpeciesId(unk_func_8830867C_02C_0CC* arg0, s32* arg1);
 s32 LabPCList_FilterByExactTypePair(unk_func_8830867C_02C_0CC* arg0, unk_func_8830867C_02C_C54_014* arg1);
-s32 LabPCList_FilterByCategoryBit(unk_func_88316128* arg0, u8* arg1);
-void LabPCList_AllocateBoxSlots(unk_func_8830867C_02C_0E4*, s32, s32, MemoryPool*);
 void LabPCList_LoadAllBoxes(unk_func_8830867C_02C_144*);
 void LabPCList_FlattenEntries(unk_func_88200FA0_030_038*, unk_func_8830867C_02C_144*);
-s32 LabPCList_CheckDirtyBoxes(unk_func_8830867C_02C_144*);
 void LabPCList_SaveDirtyBoxes(unk_func_8830867C_02C_144*, s32);
 void LabPCList_InitDeckCategories(unk_func_8830867C_02C_154*, MemoryPool* arg1);
 void LabPCList_ReadDeckCategory(unk_func_8830867C_02C_154*);
 void LabPCList_WriteDeckCategory(unk_func_8830867C_02C_154*);
 void LabPCList_BuildTmHmList(unk_func_88200FA0_030_038*, unk_func_8830867C_02C_1A8*, unk_func_8830867C_02C_154*, s32, s32);
 void LabPCList_ConsumeUsedTmItem(unk_func_8830867C_04C_030_02C_000*);
-
 
 #endif // _FRAGMENT24_H_
