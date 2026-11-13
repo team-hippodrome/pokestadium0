@@ -203,10 +203,18 @@ void BattleAnim_SetupStatLowerRibbon(void) {
     StatRibbon_Spawn(sp24.x, sp24.y, sp24.z, 40.0f, sp20, 1);
 }
 
+/**
+ * Updates the stat-change ribbon pool; returns its result.
+ * @unverified Name guessed from the code.
+ */
 s32 BattleAnim_RunStatLowerRibbon(void) {
     return StatRibbon_UpdatePool();
 }
 
+/**
+ * Loads the shared effect matrix and draws the stat-change ribbon pool.
+ * @unverified Name guessed from the code.
+ */
 void BattleAnim_DrawStatLowerRibbon(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
