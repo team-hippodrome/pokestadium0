@@ -467,6 +467,7 @@ typedef struct BattleScene {
     /* 0x14 */ s32 stepFrameTimer;
     /* 0x18 */ u16 transitionStage;
     /* 0x1A */ u8 hitReactionKind;
+    /* 0x1B */ u8 unk_1B;
     /* 0x1C */ s32 mode;
     /* 0x20 */ s32 phaseStep;
     /* 0x24 */ s32 modelReloadStep;
@@ -483,26 +484,24 @@ typedef struct BattleScene {
     /* 0x48 */ s32 moveEffectKind;
     /* 0x4C */ s32 rageFollowupPhase;
     /* 0x50 */ s32 cameraPresetId;
-    /* 0x54 */ u8 heightShotSide;
-    /* 0x56 */ s16 unk_56;
+    /* 0x54 */ s32 easeFovAfterUserShot; // @unverified: func_8212C78C sets 1 for move camera shot 4; the effect phases then ease the camera's 0x2C toward 60
     /* 0x58 */ s16 rotationX; // camera pitch about the look-at point
     /* 0x5A */ s16 rotationY; // camera yaw about the look-at point (the B-roll orbit sweeps it)
     /* 0x5C */ f32 distance;
     /* 0x60 */ f32 verticalFieldOfView;
-    /* 0x64 */ char unk64[0x4];
+    /* 0x64 */ f32 stageScale; // @unverified: eased toward 1.0 and passed to Battle_SetStageScale in phases_2.c
     /* 0x68 */ f32 shakeAmplitude;
-    /* 0x6C */ f32 unk_6C;
-    /* 0x70 */ f32 targetDistance;
-    /* 0x74 */ f32 unk_74;
-    /* 0x78 */ u8 nextPhase;
-    /* 0x7A */ s16 shakeAngle;
-    /* 0x7C */ char unk7C[0x8];
-    /* 0x84 */ Vec3f unk_94;
-    /* 0x90 */ Vec3f unk_A0;
-    /* 0x9C */ char unkAC[0xC];
-    /* 0xA8 */ Vec3f unk_B8;
-    /* 0xB4 */ Vec3f unk_C4;
-    /* 0xC0 */ Vec3f unk_D0;
+    /* 0x6C */ s16 shakeAngle; // @unverified: BattleScene_ApplyCameraShake adds 0x4000 a frame and scales shakeAmplitude by its cosine
+    /* 0x6E */ s16 unk_6E;
+    /* 0x70 */ char unk70[0x4];
+    /* 0x74 */ f32 orbitDistance; // @unverified: eye-to-look-at distance that func_8210BCF0 measures next to rotationX/rotationY
+    /* 0x78 */ char unk78[0xC];
+    /* 0x84 */ Vec3f unk_84;
+    /* 0x90 */ Vec3f unk_90;
+    /* 0x9C */ char unk9C[0xC];
+    /* 0xA8 */ Vec3f savedCameraAt; // @unverified: camera look-at saved and restored around a shot (phases.c, scene_camera.c)
+    /* 0xB4 */ Vec3f savedCameraEye; // @unverified: camera eye saved and restored with savedCameraAt
+    /* 0xC0 */ Vec3f anchorPosition; // @unverified: an owner's default anchor (BattleAnim_GetOwnerDefaultAnchorPosition) that camera shots orbit
     /* 0xCC */ CameraNode* camera;
 } BattleScene; // size = 0xD0 (Stadium 1: 0xE0)
 

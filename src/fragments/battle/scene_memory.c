@@ -39,9 +39,9 @@ void BattleScene_FinalPresentationFrameActiveOwner(CameraNode* arg0) {
 
     func_821079E8(0x1FFE);
     BattleScene_SetCameraClipPlanes(arg0, 20.0f, 4000.0f);
-    BattleAnim_GetOwnerDefaultAnchorPosition(sActivePokemon[D_8219A760], &sBattleScene.scene->unk_D0);
+    BattleAnim_GetOwnerDefaultAnchorPosition(sActivePokemon[D_8219A760], &sBattleScene.scene->anchorPosition);
     sp3C = BattleScene_ScaleCameraDistance(sActivePokemon[D_8219A760], 3.5f, 300.0f);
-    BattleScene_SetCameraAtFromAnchor(sActivePokemon[D_8219A760], arg0, sBattleScene.scene->unk_D0, 0, BattleScene_GetParticipantFacingAngle(sActivePokemon[D_8219A760]),
+    BattleScene_SetCameraAtFromAnchor(sActivePokemon[D_8219A760], arg0, sBattleScene.scene->anchorPosition, 0, BattleScene_GetParticipantFacingAngle(sActivePokemon[D_8219A760]),
                   0.0f, 0.0f);
     BattleScene_SetCameraEyeFromAt(arg0, 0, BattleScene_GetParticipantFacingAngle(sActivePokemon[D_8219A760]), sp3C, 0.0f);
 

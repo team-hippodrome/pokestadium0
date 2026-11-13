@@ -71,7 +71,7 @@ s32 Battle_TryLoadFollowupMoveFromTarget(void) {
 
     temp_v0 = M2C_FIELD(D_8219A3C4, u8 *, 0x58);
     if ((temp_v0 == 0x77) || (temp_v0 == 0)) {
-        M2C_FIELD(D_8219A5A0, s32 *, 0x48) = 0x1C;
+        sBattleScene.scene->moveEffectKind = 0x1C;
         BattleMessage_Format(D_8219A520 + 0x88, 0x20, D_8218C784);
         return 0;
     }

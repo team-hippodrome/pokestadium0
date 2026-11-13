@@ -92,7 +92,7 @@ void func_8212A4A4(s8 *arg0) {
 void func_8212A4CC(s32 arg0, s32 *arg1, s32 *arg2) {
     if ((*arg1 == 1) && (*arg2 == 1) && (func_82121820(0x1E) != 0)) {
         func_82108C0C(D_8219A544);
-        M2C_FIELD(D_8219A5A0, s8 *, 0x1A) = 0;
+        sBattleScene.scene->hitReactionKind = 0;
         func_8212188C();
         func_8212189C();
         func_8211EE8C();

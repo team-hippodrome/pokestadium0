@@ -66,9 +66,9 @@ void func_82122628(s32, Vec3f, s32, s32, f32, f32);
  * angles (arg4, arg5) and distance arg2.
  */
 void func_82132EB4(s32 arg0, s32 arg1, f32 arg2, f32 arg3, s16 arg4, s16 arg5) {
-    BattleScene_GetParticipantAimPoint(arg1, &sBattleScene.scene->unk_D0);
-    func_8212254C(arg1, arg0, sBattleScene.scene->unk_D0, 0, 0x4000, arg3, 0.0f);
-    func_82122628(arg0, sBattleScene.scene->unk_D0, arg4, arg5, arg2, 0.0f);
+    BattleScene_GetParticipantAimPoint(arg1, &sBattleScene.scene->anchorPosition);
+    func_8212254C(arg1, arg0, sBattleScene.scene->anchorPosition, 0, 0x4000, arg3, 0.0f);
+    func_82122628(arg0, sBattleScene.scene->anchorPosition, arg4, arg5, arg2, 0.0f);
 }
 
 extern s16 D_8219A4F0[];
@@ -161,7 +161,7 @@ extern s8 *D_8219A5A0;
  */
 void func_82133318(CameraNode* arg0) {
     func_82133028(arg0);
-    M2C_FIELD(D_8219A5A0, s32 *, 0x20) = (s32) (M2C_FIELD(D_8219A5A0, s32 *, 0x20) + 1);
+    sBattleScene.scene->phaseStep = (s32) (sBattleScene.scene->phaseStep + 1);
 }
 
 M2C_UNK func_82135E80(CameraNode*, s8*);
@@ -187,7 +187,7 @@ void func_8213334C(CameraNode* arg0) {
         case 3:
         case 4:
             if (func_821217DC(0x28) != 0) {
-                M2C_FIELD(D_8219A5A0, s32 *, 0x20) = (s32) (M2C_FIELD(D_8219A5A0, s32 *, 0x20) + 1);
+                sBattleScene.scene->phaseStep = (s32) (sBattleScene.scene->phaseStep + 1);
             }
             break;
         case 5:
@@ -196,7 +196,7 @@ void func_8213334C(CameraNode* arg0) {
                 func_800414B0(0, 0x38, 9, 0);
                 D_8219A4F4 = 1;
                 func_82104C68(D_8219A590, 0x14);
-                M2C_FIELD(D_8219A5A0, s32 *, 0x20) = (s32) (M2C_FIELD(D_8219A5A0, s32 *, 0x20) + 1);
+                sBattleScene.scene->phaseStep = (s32) (sBattleScene.scene->phaseStep + 1);
             }
             break;
     }
@@ -243,14 +243,14 @@ void func_8213346C(CameraNode* arg0) {
             Audio_PlayMoveSound(0x38, 9, 0);
         }
         if (func_821217DC(0x37) != 0) {
-            M2C_FIELD(D_8219A5A0, s32 *, 0x40) = 3;
+            sBattleScene.scene->winner = 3;
             func_80006998(0xFFFF);
             func_80005C4C(4);
             Audio_FadeAndClearStoredSounds();
-            M2C_FIELD(D_8219A5A0, s32 *, 0x20) = 6;
+            sBattleScene.scene->phaseStep = 6;
         }
     } else {
-        M2C_FIELD(D_8219A5A0, s32 *, 0x20) = (s32) (M2C_FIELD(D_8219A5A0, s32 *, 0x20) + 1);
+        sBattleScene.scene->phaseStep = (s32) (sBattleScene.scene->phaseStep + 1);
     }
 }
 
@@ -307,7 +307,7 @@ void func_82133640(s32 arg0) {
         func_82133028(arg0);
         func_80019B28(D_8219A590, 0, 0, 0, 0xFF);
         D_8219A594 = 0;
-        M2C_FIELD(D_8219A5A0, s32 *, 0x20) = 2;
+        sBattleScene.scene->phaseStep = 2;
     }
 }
 

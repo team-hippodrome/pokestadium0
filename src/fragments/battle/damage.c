@@ -346,7 +346,7 @@ void Battle_MoveMissed(void) {
     s32 temp_v0;
 
     D_82199F50 = 0;
-    temp_v0 = M2C_FIELD(D_8219A5A0, s32 *, 0x1C);
+    temp_v0 = sBattleScene.scene->mode;
     if ((temp_v0 == 5) || (temp_v0 == 9) || (temp_v0 == 6) || (temp_v0 == 0xA)) {
         if (M2C_FIELD(D_8219A3C4, u8 *, 0x4C) & 0x40) {
             D_82199F31 = 1;
