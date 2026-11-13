@@ -162,6 +162,8 @@ void Menu_DrawItems(Menu8002E230* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) 
 
 /**
  * Like Menu_DrawItems, for item tables that store `itemSize`-byte items inline instead of pointers.
+ * Seen in play (2026-11-13) (menu tour from the main menu): called in the Lab list (いちらん) and the
+ * Lab PC box screen.
  * @unverified Name and comment guessed from the code.
  */
 void Menu_DrawInlineItems(Menu8002E230* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
@@ -636,6 +638,8 @@ void ScrollList_ScrollDownToCursor(s8 *arg0)
 // FAKE: permuter output. Raw offset casts stand in for menu fields 0x28-0x3C.
 /**
  * Moves the drawn scroll position toward the target a step at a time.
+ * Seen in play (2026-11-13) (menu tour from the main menu): called in the Pokédex, the Lab list,
+ * sort and PC screens and registration, while a list was on screen.
  * @unverified Name and comment guessed from the code.
  */
 void ScrollList_AnimateScroll(ScrollMenu8002F6C4 *menu)
