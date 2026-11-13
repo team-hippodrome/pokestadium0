@@ -255,6 +255,10 @@ void BattleAnim_Waterfall(ActivePokemon* owner, ActivePokemon* animated_pokemon)
     }
 }
 
+/**
+ * Model transform init: clears the animated Pokemon's offset and rotation, starts a sway at
+ * angle 0x2AAA and advances the transform timer.
+ */
 void func_8210A2F4(UNUSED ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     Vec3f_SetComponentsDuplicate(&animated_pokemon->modelTransform, 0.0f, 0.0f, 0.0f);
     Vec3f_SetComponentsDuplicate(&animated_pokemon->modelTransform.rotation, 0.0f, 0.0f, 0.0f);
@@ -262,6 +266,10 @@ void func_8210A2F4(UNUSED ActivePokemon* owner, ActivePokemon* animated_pokemon)
     animated_pokemon->modelTransformTimer++;
 }
 
+/**
+ * Model transform step: moves the animated Pokemon with the sway (9, 0.9, 0x2AAA) and resets
+ * it once the owner's model is below the ground.
+ */
 void func_8210A374(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     BattleAnim_UpdateTransform(owner, animated_pokemon, 9.0f, 0.9f, 0x2AAA);
     if (owner->displayObject.position.y < 0.0f) {
@@ -270,6 +278,10 @@ void func_8210A374(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     }
 }
 
+/**
+ * Model transform dispatcher: step 0 runs the init then falls through to the step
+ * (func_8210A374).
+ */
 void func_8210A3DC(s32 arg0, s8 *arg1) {
     s32 temp_v0;
 
@@ -405,6 +417,10 @@ void BattleAnim_DigContinue(s32 arg0, s8 *arg1) {
 }
 
 f32 BattleScene_GetParticipantHeight(s8*);
+/**
+ * Model transform step that sinks the Pokemon below the ground: turns it toward its side,
+ * lowers it toward -2.6 heights and ends the transform once it is 2.5 heights down.
+ */
 void func_8210A7D8(s32 arg0, s8* arg1) {
     func_8210A430(arg0, M2C_FIELD(arg1, s16*, 0x602), (s16)(M2C_FIELD(arg1, s32*, 0x60C) << 0xE));
     func_82109AF4(arg1, M2C_FIELD(arg1, s16*, 0x602));
