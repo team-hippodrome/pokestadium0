@@ -54,7 +54,7 @@ extern s8 D_800734B8;
  * Sets the text color from the row flags: 0x18 selected, 0x1 alternate, otherwise
  * normal. Each is a pair of colors; without flag 0x2 the second one is used.
  * Seen in play (2026-11-13) (menu tour from the main menu): called on every menu screen past the
- * main menu (Pokédex, party, Lab list, sort and PC, registration), with flags 0x18 and 0x08; it
+ * main menu (Pokédex, party, Lab list, sort and PC, registration), with flags 2 and 0; it
  * returned pointers into the color table at 0x800734A8.
  * @unverified Name and comment guessed from the code.
  */
