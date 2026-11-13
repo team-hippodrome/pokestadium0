@@ -2,11 +2,10 @@
 #include "battle_engine_347330.h"
 
 /**
- * Moves: Haze (use), Mist (use)
- * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Part of the stat-change ribbon (see StatRibbon_Spawn).
+ * @unverified Named after the ribbon seen in play; this function itself was not traced.
  */
-void MistHaze_Init(void) {
+void StatRibbon_Init(void) {
     RibbonMesh* ptr = &D_8219CB20[0];
     s32 i;
 
@@ -17,9 +16,9 @@ void MistHaze_Init(void) {
 }
 
 /**
- * @unverified Name from Stadium 1.
+ * @unverified Named after the ribbon seen in play; this function itself was not traced.
  */
-void MistHaze_Configure(RibbonMesh* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8,
+void StatRibbon_Configure(RibbonMesh* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8,
                    s32 arg9) {
     arg0->unk_028 = arg1;
     arg0->unk_02C = arg2;
@@ -34,11 +33,15 @@ void MistHaze_Configure(RibbonMesh* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4
 
 
 /**
- * Moves: Haze (use), Mist (use)
- * TODO: Human contributor add screenshot
- * @unverified Name and comment from Stadium 1.
+ * Spawns one stat-change ribbon in a free slot of the 4-entry pool, centred on (arg0, arg1, arg2)
+ * with radius arg3 and scale arg4. arg5 picks the direction: 0 is the rising ribbon used when a
+ * stat goes up, 1 the falling curtain used when a stat goes down (Haze spawns both).
+ * Seen in play (2026-11-13) in the per-move sweep it ran for 23 moves: every stat-raising and stat-
+ * lowering move plus Mist and Haze. On screen (Swords Dance) a translucent pale-yellow wavy band
+ * rose around the user while the attack-rose message showed; for Growl a brownish curtain came down
+ * from the top of the screen in front of the target.
  */
-void MistHaze_Spawn(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, s32 arg5) {
+void StatRibbon_Spawn(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, s32 arg5) {
     RibbonMesh* ptr;
     RibbonMeshVertexState* ptr1;
     RibbonMeshVertexState* ptr2;
@@ -81,7 +84,7 @@ void MistHaze_Spawn(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, s32 arg5) 
             ptr->unk_008 = (arg4 * 0.0) + arg1;
             ptr->unk_01A = 0x3C;
             ptr->unk_020 = 1.5f;
-            MistHaze_Configure(&D_8219CB20[var_v1], 0xFF, 0xFF, 0xC8, 0x20, 0x20, 0xFF, 0x80, 0x80, 0xFF);
+            StatRibbon_Configure(&D_8219CB20[var_v1], 0xFF, 0xFF, 0xC8, 0x20, 0x20, 0xFF, 0x80, 0x80, 0xFF);
             ptr->unk_01E = AuxiliaryEffect_Alloc();
             break;
 
@@ -90,7 +93,7 @@ void MistHaze_Spawn(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, s32 arg5) 
             ptr->unk_01A = 0x78;
             ptr->unk_008 = (arg4 * 100.0) + arg1;
             ptr->unk_020 = 1.5f;
-            MistHaze_Configure(&D_8219CB20[var_v1], 0xFF, 0xFF, 0xC8, 0xFF, 0x20, 0x20, 0x80, 0x80, 0);
+            StatRibbon_Configure(&D_8219CB20[var_v1], 0xFF, 0xFF, 0xC8, 0xFF, 0x20, 0x20, 0x80, 0x80, 0);
             break;
 
         default:
