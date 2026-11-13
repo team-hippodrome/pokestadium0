@@ -864,6 +864,10 @@ void func_82136010(void) {
 void func_82136018(void) {
 }
 
+/**
+ * Runs start effect arg0's init hook, and again with the alternate anchor if there is one.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_RunEffectInitStart(s16 arg0) {
     sMoveAnimEffectStartInitFuncs[arg0]();
     if (sBattleAnimAlternateAnchor != 0xFF) {
@@ -874,10 +878,19 @@ void BattleAnim_RunEffectInitStart(s16 arg0) {
 
 extern func_D_84390320 D_8218EA6C[];
 
+/**
+ * Runs end effect arg0's init hook.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_RunEffectInitEnd(s16 arg0) {
     D_8218EA6C[arg0]();
 }
 
+/**
+ * Registers an effect update and draw callback pair in the next of the 8 callback slots,
+ * wrapping around.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_RegisterEffectSlot(func_D_84390300 arg0, func_D_84390320 arg1) {
     if (sBattleAnimEffectCallbackIndex >= 8) {
         sBattleAnimEffectCallbackIndex = 0;
@@ -903,6 +916,11 @@ extern func_D_84390320 D_821926F8[];
 extern func_D_84390320 D_82191F28[];
 extern func_D_84390320 D_82192310[];
 void func_8213608C(s16 arg0);
+/**
+ * Runs effect list arg1 of move (or resource list) arg0: starts the list's effects in
+ * order and registers their callbacks.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_RunEffectList(s32 arg0, s32 arg1, s32 arg2) {
     u8* sp2C;
 
@@ -960,6 +978,11 @@ void BattleAnim_RunEffectList(s32 arg0, s32 arg1, s32 arg2) {
 extern s16 D_8219A80A;
 extern s16 D_8219A80C;
 
+/**
+ * Runs whatever effect lists were queued this frame (the move's list, the alternate list
+ * and the resource list) and clears the queue.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_ProcessQueuedEffects(void) {
     if (sBattleAnimQueuedEffectListMode != BATTLE_ANIMATION_QUEUE_INACTIVE) {
         BattleAnim_ResetSpawnDelayAlias();
@@ -984,6 +1007,10 @@ void BattleAnim_ProcessQueuedEffects(void) {
     }
 }
 
+/**
+ * Sets which effect list of the queued move will run.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_SetQueuedEffectList(u8 effect_list_index) {
     sBattleAnimQueuedEffectList = effect_list_index;
 }
