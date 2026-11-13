@@ -26,8 +26,8 @@ void BattleScene_ResetParticipantModelFlags(ActivePokemon* active_pokemon) {
 
 /**
  * Places the Poke Ball above the field on this Pokemon's side and starts its sway.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * Seen in play (2026-11-13) in a Pokémon Cup (L1～30, モンスターボールカップ) battle it ran once per side as
+ * the opening send-out threw its Poké Ball.
  * @unverified Name and comment guessed from the code.
  */
 void BattleAnim_PokeBallThrowStart(UNUSED ActivePokemon* owner, ActivePokemon* animated_pokemon) {
@@ -45,8 +45,8 @@ void BattleAnim_PokeBallThrowStart(UNUSED ActivePokemon* owner, ActivePokemon* a
 
 /**
  * Spins the Poke Ball and lets it fall; hides it once it drops below the floor.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * Seen in play (2026-11-13) in a Pokémon Cup (L1～30, モンスターボールカップ) battle it ran on the frames the
+ * opening send-out's Poké Ball spun and fell.
  * @unverified Name and comment guessed from the code.
  */
 void BattleAnim_PokeBallThrowContinue(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
@@ -69,8 +69,8 @@ void BattleAnim_PokeBallThrowContinue(ActivePokemon* owner, ActivePokemon* anima
 
 /**
  * Poke Ball throw model transform (case 1): start, then continue.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * Seen in play (2026-11-13) in a Pokémon Cup (L1～30, モンスターボールカップ) battle it ran as the opening
+ * send-out threw the Poké Balls, before 「ゆけっ！ ゲンガー」.
  * @unverified Name and comment guessed from the code.
  */
 void BattleAnim_PokeBallThrow(s32 arg0, s8 *arg1) {

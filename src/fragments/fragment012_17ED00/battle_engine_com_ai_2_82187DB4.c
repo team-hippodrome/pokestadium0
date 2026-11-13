@@ -17,8 +17,8 @@ extern s8* D_821CF2A0;
  * Random move choice used in AI mode 3: picks a random usable move, with soft
  * checks that steer away from Self-Destruct, sleep moves, healing and Dream Eater
  * when they make little sense.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * Seen in play (2026-11-13) in a Pokémon Cup (L1～30, モンスターボールカップ) battle it ran twice when the COM
+ * picked its first move, so the cup's first opponent uses this AI mode.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_ChooseRandomMove(void) {
