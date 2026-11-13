@@ -7,6 +7,7 @@
 #include "matrix.h"
 #include "fragments/particle_math/particle_math.h"
 #include "memory.h"
+#include "pokemon.h"
 
 #include "fragments/trade_machine/trade_machine.h"
 #include "geo_render.h"
@@ -46,6 +47,10 @@ f32 BattleAnim_GetSpeciesBaseScale(ActivePokemon* arg0);
 void BattleAnim_GetOwnerSpeciesBaseScaleAlias(ActivePokemon* arg0);
 void BattleScene_GetParticipantModelSizeScaled(unk_D_82F20A88* arg0);
 
+/**
+ * Returns 1 if the current animation owner's model shows species arg0.
+ * @unverified Name from Stadium 1.
+ */
 s32 BattleAnim_IsCurrentOwnerSpecies(s32 arg0) {
     s32 sp1C = 0;
 
@@ -57,6 +62,12 @@ s32 BattleAnim_IsCurrentOwnerSpecies(s32 arg0) {
 
 void BattleAnim_GetOwnerBonePosition(ActivePokemon* arg0, s16 arg1, Vec3f* arg2);
 void BattleAnim_GetOwnerBonePosition(ActivePokemon* arg0, s16 arg1, Vec3f* arg2);
+/**
+ * Writes the position of anchor bone arg1 of the Pokémon's model to arg2, falling back to
+ * bone 0x64 and then to the origin. Onix, Magneton and Kangaskhan use bone 9 instead of
+ * bone 0x64 (Magneton also for bone 9).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_GetOwnerBonePosition(ActivePokemon *arg0, s16 arg1, Vec3f *arg2) {
     s16 sp1E;
 
@@ -66,31 +77,48 @@ void BattleAnim_GetOwnerBonePosition(ActivePokemon *arg0, s16 arg1, Vec3f *arg2)
         arg2->y = 0.0f;
         arg2->z = 0.0f;
     }
-    if ((sp1E == 0x5F) && (arg1 == 0x64)) {
+    if ((sp1E == ONIX) && (arg1 == 0x64)) {
         GeoRender_FindAnchorPosition(&arg0->displayObject, 9, arg2);
         return;
     }
-    if ((sp1E == 0x52) && ((arg1 == 0x64) || (arg1 == 9))) {
+    if ((sp1E == MAGNETON) && ((arg1 == 0x64) || (arg1 == 9))) {
         GeoRender_FindAnchorPosition(&arg0->displayObject, 9, arg2);
         return;
     }
-    if ((sp1E == 0x73) && (arg1 == 0x64)) {
+    if ((sp1E == KANGASKHAN) && (arg1 == 0x64)) {
         GeoRender_FindAnchorPosition(&arg0->displayObject, 9, arg2);
     }
 }
 
+/**
+ * Writes the position of bone 0x64 of the current animation owner.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_GetCurrentOwnerBonePosition(Vec3f* arg0) {
     BattleAnim_GetOwnerBonePosition(gBattleAnimCurrentOwner, 0x64, arg0);
 }
 
+/**
+ * Writes the position of bone 0x64 of the secondary animation owner.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_GetSecondaryOwnerBonePosition(Vec3f* arg0) {
     BattleAnim_GetOwnerBonePosition(gBattleAnimSecondaryOwner, 0x64, arg0);
 }
 
+/**
+ * Writes the position of bone 0x64 of the tertiary animation owner.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_GetTertiaryOwnerBonePosition(Vec3f* arg0) {
     BattleAnim_GetOwnerBonePosition(gBattleAnimTertiaryOwner, 0x64, arg0);
 }
 
+/**
+ * Writes the secondary owner's default anchor position, or the position of the current
+ * anchor bone if a default anchor is set.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_GetSecondaryOwnerAnchorPosition(Vec3f* arg0) {
     if (gBattleAnimDefaultAnchor == 0xFF) {
         BattleAnim_GetOwnerDefaultAnchorPosition(gBattleAnimSecondaryOwner, arg0);
@@ -99,6 +127,10 @@ void BattleAnim_GetSecondaryOwnerAnchorPosition(Vec3f* arg0) {
     }
 }
 
+/**
+ * Writes the position of bone 9 of the tertiary animation owner.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_GetTertiaryOwnerBone9Position(Vec3f* arg0) {
     BattleAnim_GetOwnerBonePosition(gBattleAnimTertiaryOwner, 9, arg0);
 }
@@ -107,6 +139,10 @@ void BattleAnim_GetOwnerModelSizeScaled(unk_D_82F20A88* arg0) {
     BattleScene_GetParticipantModelSizeScaled(arg0);
 }
 
+/**
+ * Returns the base model scale of the Pokémon's species.
+ * @unverified Name from Stadium 1.
+ */
 f32 BattleAnim_GetOwnerModelScale(ActivePokemon* arg0) {
     return BattleAnim_GetSpeciesBaseScale(arg0);
 }
@@ -117,28 +153,53 @@ void func_8213C75C(void) {
     ActivePokemon_GetSizeRatio();
 }
 
+/**
+ * Returns the base model scale of the secondary animation owner.
+ * @unverified Name from Stadium 1.
+ */
 f32 BattleAnim_GetSecondaryOwnerModelScale(void) {
     return BattleAnim_GetOwnerModelScale(gBattleAnimSecondaryOwner);
 }
 
+/**
+ * Looks up the secondary owner's species base scale and discards it.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_GetSecondaryOwnerSpeciesBaseScale(void) {
     BattleAnim_GetOwnerSpeciesBaseScaleAlias(gBattleAnimSecondaryOwner);
 }
 
+/**
+ * Returns the base model scale of the tertiary animation owner.
+ * @unverified Name from Stadium 1.
+ */
 f32 BattleAnim_GetTertiaryOwnerModelScale(void) {
     return BattleAnim_GetOwnerModelScale(gBattleAnimTertiaryOwner);
 }
 
+/**
+ * Looks up the tertiary owner's species base scale and discards it.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_GetTertiaryOwnerSpeciesBaseScale(void) {
     BattleAnim_GetOwnerSpeciesBaseScaleAlias(gBattleAnimTertiaryOwner);
 }
 
 extern s32 D_8219A878;
 
+/**
+ * Returns D_8219A878.
+ * @unverified Name from Stadium 1.
+ */
 s32 BattleAnim_GetCameraContext(void) {
     return D_8219A878;
 }
 
+/**
+ * Allocates a stinger-move particle of kind arg1 at arg0, owned by the secondary owner,
+ * with anchor kind 0x15. Returns -1 if the pool is full.
+ * @unverified Name from Stadium 1.
+ */
 Particle* BattleAnim_SpawnSecondaryOwnerParticle(Vec3f arg0, u8 arg1) {
     Particle* sp1C = Particle_New();
 
@@ -154,6 +215,10 @@ Particle* BattleAnim_SpawnSecondaryOwnerParticle(Vec3f arg0, u8 arg1) {
     return sp1C;
 }
 
+/**
+ * Sets a particle's origin, unless the particle pointer is -1 (allocation failed).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_SetParticlePosition(Particle* arg0, Vec3f arg1) {
     if ((u32)arg0 != -1) {
         arg0->origin.x = arg1.x;
@@ -162,6 +227,10 @@ void BattleAnim_SetParticlePosition(Particle* arg0, Vec3f arg1) {
     }
 }
 
+/**
+ * Calls Particle_MarkInactive.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_MarkParticleInactive(Particle* arg0) {
     Particle_MarkInactive(arg0);
 }
@@ -181,6 +250,10 @@ void Particle_InitLifecycle(Particle* arg0) {
     Particle_SetFlags(arg0, 4);
 }
 
+/**
+ * Sets the particle's lifecycle (s16 at 0xAE) to 0, so it is destroyed on its next update.
+ * @unverified Name from Stadium 1.
+ */
 void Particle_MarkInactive(s8 *arg0) {
     M2C_FIELD(arg0, s16 *, 0xAE) = 0;
 }
@@ -194,6 +267,10 @@ void Particle_DisableAndDetach(s8 *arg0) {
     func_8213D260();
 }
 
+/**
+ * Releases the particle's model, clears its flags, detaches it and returns it to the pool.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_DestroyParticle(Particle* arg0) {
     BattleAnim_ReleaseParticleModel(arg0);
     arg0->flags = 0;
@@ -201,6 +278,10 @@ void BattleAnim_DestroyParticle(Particle* arg0) {
     Particle_Free(arg0);
 }
 
+/**
+ * Returns 1 if the particle's lifecycle is 0.
+ * @unverified Name from Stadium 1.
+ */
 s32 Particle_IsInactive(s8 *arg0) {
     s32 var_v1;
 
@@ -211,6 +292,10 @@ s32 Particle_IsInactive(s8 *arg0) {
     return var_v1;
 }
 
+/**
+ * Returns 1 if the particle's lifecycle is 2 or more (past its init step).
+ * @unverified Name from Stadium 1.
+ */
 s32 Particle_IsRunning(s8 *arg0) {
     s32 var_v1;
 
