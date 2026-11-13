@@ -564,6 +564,8 @@ extern u8 D_8118589A;
 extern u8 D_8118589B;
 /**
  * Ticks down the time-to-live of each sample DMA buffer and returns expired ones to the free list. Name follows the Zelda 64 audio driver, whose loader this matches.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
 void AudioLoad_DecreaseSampleDmaTtls(void) {
@@ -785,6 +787,8 @@ extern u8 D_81184654[1];
 
 /**
  * Returns 1 when sample bank `arg0` is loaded (status 2 or above) or is 0xFF. Name follows the Zelda 64 audio driver, whose loader this matches.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
 s32 AudioLoad_IsSampleLoadComplete(s32 arg0) {
@@ -971,6 +975,8 @@ s32 AudioLoad_AsyncLoadInner(M2C_UNK, s32, s32, s32, s32);     /* extern */
 
 /**
  * Starts an async load of sample bank `arg0`, or sends an empty message to `arg3` when nothing needs loading. Zelda 64 audio driver (load.c).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
 void AudioLoad_AsyncLoadSampleBank(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
@@ -1064,6 +1070,8 @@ s32 AudioLoad_SyncInitSeqPlayerInternal(s32, s32, s32);
  * D_811859D4 is nonzero. arg1 and arg2 are passed through unchanged. Sibling of
  * AudioLoad_SyncInitSeqPlayerSkipTicks, which stores its arg2 instead of 0 and passes 0 as the last argument.
  * What the slot and the flag mean is not established.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code; comment kept.
  */
 s32 AudioLoad_SyncInitSeqPlayer(s32 arg0, s32 arg1, s32 arg2) {
@@ -1076,6 +1084,8 @@ s32 AudioLoad_SyncInitSeqPlayer(s32 arg0, s32 arg1, s32 arg2) {
 
 /**
  * Like AudioLoad_SyncInitSeqPlayer, but skips the first `arg2` ticks. Name follows the Zelda 64 audio driver, whose loader this matches.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
 s32 AudioLoad_SyncInitSeqPlayerSkipTicks(s32 arg0, s32 arg1, s32 arg2) {

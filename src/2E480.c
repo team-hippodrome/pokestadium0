@@ -349,6 +349,8 @@ void GridMenu_DrawCursor(Menu8002E230* menu, s32 x, s32 y) {
 
 /**
  * Draws every cell of the grid; items are pointers.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
 void GridMenu_DrawItems(Menu8002E230* menu, s32 x, s32 y, s32 mask, s32 arg4) {

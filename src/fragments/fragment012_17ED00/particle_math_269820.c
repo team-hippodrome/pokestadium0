@@ -45,8 +45,8 @@ void Particle_FieldCF_SetU8_0BEEC(Particle* arg0, u8 arg1);
 
 /**
  * Store the parameter only when it differs from the field-specific sentinel.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Particle_SetFieldOffsetACIfNotSentinel(Particle* arg0, s16 arg1) {

@@ -203,6 +203,8 @@ AudioCmd* AudioSynth_DoOneAudioUpdate(s32*, s32, AudioCmd*, s32);
 void func_811151C8(s32 arg0);
 /**
  * Builds the audio command list for one frame of `arg3` samples. Zelda 64 audio driver.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
 AudioCmd* AudioSynth_Update(AudioCmd* arg0, s32* arg1, s32* arg2, s32 arg3) {

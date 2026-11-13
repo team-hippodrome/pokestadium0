@@ -113,6 +113,8 @@ Acmd* n_alFxPull(s32 sample_offset, Acmd* p) {
  * This routine gets called by alSynSetFXParam. No checking takes place to
  * verify the validity of the paramID or the param value. input and output
  * values must be 8 byte aligned, so round down any param passed.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 n_alFxParamHdl(void* filter, s32 paramID, void* param) {

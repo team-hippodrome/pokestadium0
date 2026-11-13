@@ -234,6 +234,8 @@ void AudioHeap_TemporaryCacheClear(s32* arg0) {
 
 /**
  * Rewinds an allocation pool to its start. Zelda 64 audio driver.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
 void AudioHeap_ResetPool(s8 *arg0) {
@@ -672,6 +674,8 @@ s32 AudioHeap_SearchRegularCaches(s32 arg0, s32 arg1, s32 arg2) {
  * and q seeded with 262159.0f; as in the Ocarina of Time version
  * (func_800DDF80) the first loop writes to out instead of tmp, so the second
  * loop copies partly uninitialised values.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code; comment kept.
  */
 void AudioHeap_ComputeFilterCoefficients(f32 p, f32 q, u16* out) {
@@ -698,6 +702,8 @@ void AudioHeap_ComputeFilterCoefficients(f32 p, f32 q, u16* out) {
  *
  * Sets the eight s16 values at arg0 to zero (the loop is unrolled by four in
  * the retail code).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code; comment kept.
  */
 void AudioHeap_ClearFilter(s16* arg0) {

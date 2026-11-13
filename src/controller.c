@@ -250,6 +250,8 @@ s32 Cont_IsEepromPresent(void) {
 /**
  * Attempt to read from EEPROM up to 4 times given a buffer and size and inaddr.
  * A return of 0 indicates success while -1 is an EEPROM error.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 Cont_AttemptReadEeprom(u8* buffer, u32 size, s32 inaddr) {
