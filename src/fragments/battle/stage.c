@@ -337,7 +337,7 @@ void Battle_ResetFaintBatches(void) {
         for (trainer_index = 0; trainer_index < side->tagTeamSize; trainer_index++) {
             roster = side->teamMember[trainer_index];
             for (pokemon_index = 0; pokemon_index < roster->numberOfPokemonBrought; pokemon_index++) {
-                roster->pokemonPicked[pokemon_index].unk_25 = 0;
+                roster->pokemonPicked[pokemon_index].faintBatch = 0;
             }
         }
     }
@@ -363,9 +363,9 @@ void Battle_UpdateFaintBatches(void) {
         for (trainer_index = 0; trainer_index < side->tagTeamSize; trainer_index++) {
             roster = side->teamMember[trainer_index];
             for (pokemon_index = 0; pokemon_index < roster->numberOfPokemonBrought; pokemon_index++) {
-                if ((roster->pokemonPicked[pokemon_index].unk_25 == 0) && (roster->pokemonPicked[pokemon_index].hp == 0)) {
+                if ((roster->pokemonPicked[pokemon_index].faintBatch == 0) && (roster->pokemonPicked[pokemon_index].hp == 0)) {
                     found_faint = 1;
-                    roster->pokemonPicked[pokemon_index].unk_25 = sNextFaintBatch;
+                    roster->pokemonPicked[pokemon_index].faintBatch = sNextFaintBatch;
                 }
             }
         }

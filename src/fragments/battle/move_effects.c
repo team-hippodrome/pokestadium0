@@ -361,7 +361,7 @@ extern s32 D_8218C8B8;
 void Battle_Effect_Paralyze(void) {
     sBattleScene.scene->moveEffectKind = 0x16;
     if (sBattleTarget->pendingStatusCondition == 0) {
-        if ((sBattleUser->moveCache.type != TYPE_ELECTRIC) || ((sBattleTarget->roster[6] != TYPE_GROUND) && (sBattleTarget->roster[7] != TYPE_GROUND))) {
+        if ((sBattleUser->moveCache.type != TYPE_ELECTRIC) || ((sBattleTarget->type1 != TYPE_GROUND) && (sBattleTarget->type2 != TYPE_GROUND))) {
             Battle_MoveHitTest();
             if (sBattleMoveFailed == 0) {
                 sBattleTarget->pendingStatusCondition |= 0x40;
@@ -486,7 +486,7 @@ extern s32 D_8218C8C8;
 void Battle_Effect_LeechSeed(void) {
     Battle_MoveHitTest();
 
-    if ((sBattleMoveFailed == 0) && (sBattleTarget->roster[6] != TYPE_GRASS) && (sBattleTarget->roster[7] != TYPE_GRASS)) {
+    if ((sBattleMoveFailed == 0) && (sBattleTarget->type1 != TYPE_GRASS) && (sBattleTarget->type2 != TYPE_GRASS)) {
         if (!(sBattleTarget->volatileStatusFlags & 0x80)) {
             sBattleTarget->volatileStatusFlags |= 0x80;
             BattleMessage_Format(D_8219A520 + 0x88, -0x3E, D_8218C8C4, ActivePokemon_GetNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
@@ -569,8 +569,8 @@ extern s32 D_8218C8E0;
 void Battle_Effect_Conversion(void) {
     sBattleScene.scene->moveEffectKind = 7;
     if (!(sBattleTarget->immobilizedReason & 0x40)) {
-        sBattleUser->roster[6] = sBattleTarget->roster[6];
-        sBattleUser->roster[7] = sBattleTarget->roster[7];
+        sBattleUser->type1 = sBattleTarget->type1;
+        sBattleUser->type2 = sBattleTarget->type2;
         BattleMessage_Format(D_8219A520 + 0x88, -0x38, D_8218C8DC, ActivePokemon_GetNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
     } else {
         BattleMessage_Format(D_8219A520 + 0x88, -0x37, D_8218C8E0);
@@ -594,8 +594,8 @@ void Battle_Effect_Haze(void) {
     sBattleScene.scene->moveEffectKind = 0x1D;
 
     for (i = 0; i < 8; i++) {
-        temp_t0->unk_5C[i] = 7;
-        temp_a3->unk_5C[i] = 7;
+        temp_t0->statStages[i] = 7;
+        temp_a3->statStages[i] = 7;
     }
 
     temp_t0->modifiedAttack = temp_t0->unmodifiedAttack;
@@ -653,7 +653,7 @@ void Battle_Effect_Heal(void) {
             temp_v0 = sBattleUser->pendingStatusCondition;
 
             sBattleUser->pendingStatusCondition = 2;
-            temp_a2->roster[temp_a1->rosterIndex + temp_a1->teamMemberIndex * 3] = 2;
+            temp_a2->restSleepTurns[temp_a1->rosterIndex + temp_a1->teamMemberIndex * 3] = 2;
 
             if (temp_v0 != 0) {
                 BattleMessage_Format(D_8219A520 + 0x88, -0x35, D_8218C8E8, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]));
@@ -701,18 +701,18 @@ void Battle_Effect_Transform(void) {
         sBattleUser->uniqueStatusFlags |= 8;
 
         if (sBattleTarget->uniqueStatusFlags & 8) {
-            user->unk_BE = target->unk_BE;
+            user->transformSpecies = target->transformSpecies;
         } else {
-            user->unk_BE = sBattleTarget->id;
+            user->transformSpecies = sBattleTarget->species;
         }
 
-        sBattleUser->roster[6] = sBattleTarget->roster[6];
-        sBattleUser->roster[7] = sBattleTarget->roster[7];
+        sBattleUser->type1 = sBattleTarget->type1;
+        sBattleUser->type2 = sBattleTarget->type2;
         sBattleUser->moves[0] = sBattleTarget->moves[0];
         sBattleUser->moves[1] = sBattleTarget->moves[1];
         sBattleUser->moves[2] = sBattleTarget->moves[2];
         sBattleUser->moves[3] = sBattleTarget->moves[3];
-        sBattleUser->unk_24 = sBattleTarget->unk_24;
+        sBattleUser->dvs = sBattleTarget->dvs;
         sBattleUser->modifiedAttack = sBattleTarget->modifiedAttack;
         sBattleUser->modifiedDefense = sBattleTarget->modifiedDefense;
         sBattleUser->speed = sBattleTarget->speed;
@@ -731,7 +731,7 @@ void Battle_Effect_Transform(void) {
         sBattleUser->unmodifiedSpecial = sBattleTarget->unmodifiedSpecial;
 
         for (i = 0; i < 8; i++) {
-            sBattleUser->unk_5C[i] = sBattleTarget->unk_5C[i];
+            sBattleUser->statStages[i] = sBattleTarget->statStages[i];
         }
     } else {
         BattleMessage_Format(D_8219A520 + 0x88, -0x30, D_8218C8FC);

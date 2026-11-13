@@ -173,7 +173,7 @@ arg1_func_80010CA8* Model_ComputeNicknameColorVariant(arg1_func_80010CA8* arg0, 
     Text_CopySpeciesName(sp38, arg1->species.id);
 
     if (HAL_Strcmp(arg1->nickname, sp38) != 0) {
-        var_a0 = ((arg1->unk_0E >> 8) & 0xFF) + (arg1->unk_0E & 0xFF);
+        var_a0 = ((arg1->otId >> 8) & 0xFF) + (arg1->otId & 0xFF);
 
         if (1) {}  // karodo
 

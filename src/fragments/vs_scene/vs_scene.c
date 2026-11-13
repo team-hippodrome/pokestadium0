@@ -790,7 +790,7 @@ void func_82201600(s32 arg0) {
                 if (team == NULL && team == NULL && team == NULL) {  // FAKE
                 }
                 for (k = 0; k < team->numberOfPokemonBrought; k++) {
-                    if (arg0 == team->pokemonPicked[k].unk_25) {
+                    if (arg0 == team->pokemonPicked[k].faintBatch) {
                         idx = i * 6 + j * 3 + k;
                         func_82201348(*(DepthBuffer**)(M2C_FIELD(D_82203264, s8**, 8) + idx * 0x14 + 0xC));
                         Audio_PlayCommand(0x3D, 2, idx + 1);
@@ -800,7 +800,7 @@ void func_82201600(s32 arg0) {
         } else {
             team = ((DemoState*)D_822036A4)->players[i].unk_14[0];
             for (k = 0; k < team->numberOfPokemonBrought; k++) {
-                if (arg0 == (team->pokemonPicked + k)->unk_25) {
+                if (arg0 == (team->pokemonPicked + k)->faintBatch) {
                     idx = i * 6 + k;
                     func_82201348(*(DepthBuffer**)(M2C_FIELD(D_82203264, s8**, 8) + idx * 0x14 + 0xC));
                     Audio_PlayCommand(0x3D, 2, idx + 1);

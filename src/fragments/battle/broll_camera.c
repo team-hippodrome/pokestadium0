@@ -50,7 +50,7 @@ s32 BattleScene_AreBothParticipantModelsCompact(void) {
 s32 BattleScene_SkipUnavailableBRollShot(UNUSED ActivePokemon* arg0, CameraNode* arg1) {
     ActivePokemonState* ptr = &sActivePokemon[sBattleScene.scene->actingSide]->state;
 
-    if ((ptr->unk_2D == 0x10) || ((ptr->flags & 0x4000) != 0)) {
+    if ((ptr->unk_2E == 0x10) || ((ptr->flags & 0x4000) != 0)) {
         BattleScene_SelectNextBRollCameraShot(arg1);
         return 1;
     }
@@ -538,7 +538,7 @@ void func_82120BB8(CameraNode* arg0) {
     ActivePokemon* pokemon;
     ActivePokemonState* st = &sActivePokemon[sBattleScene.scene->actingSide]->state;
 
-    if ((st->unk_2D == 0x10) || (st->flags & 0x4000)) {
+    if ((st->unk_2E == 0x10) || (st->flags & 0x4000)) {
         BattleScene_SelectNextBRollCameraShot(arg0);
         return;
     }
@@ -567,7 +567,7 @@ void BattleScene_SelectNextBRollCameraShot(CameraNode*);
 void func_82120C44(CameraNode* arg0) {
     ActivePokemonState* st = &sActivePokemon[sBattleScene.scene->actingSide]->state;
 
-    if ((st->unk_2D == 0x10) || (st->flags & 0x4000)) {
+    if ((st->unk_2E == 0x10) || (st->flags & 0x4000)) {
         BattleScene_SelectNextBRollCameraShot(arg0);
         return;
     }
@@ -590,7 +590,7 @@ s32 func_821217DC(M2C_UNK);
 void func_82120D94(CameraNode* arg0) {
     ActivePokemonState* st = &sActivePokemon[sBattleScene.scene->actingSide]->state;
 
-    if ((st->unk_2D == 0x10) || (st->flags & 0x4000)) {
+    if ((st->unk_2E == 0x10) || (st->flags & 0x4000)) {
         BattleScene_SelectNextBRollCameraShot(arg0);
     } else if (sBattleScene.scene->mode == 9) {
         if (func_82135734(arg0, sActivePokemon[sBattleScene.scene->actingSide]) != 0) {
@@ -620,7 +620,7 @@ void func_82120E70(CameraNode* arg0) {
     ActivePokemonState* st = &sActivePokemon[sBattleScene.scene->actingSide]->state;
     f32 temp_f0;
 
-    if ((st->unk_2D == 0x10) || (st->flags & 0x4000)) {
+    if ((st->unk_2E == 0x10) || (st->flags & 0x4000)) {
         BattleScene_SelectNextBRollCameraShot(arg0);
         return;
     }
@@ -654,7 +654,7 @@ void func_82120FB0(CameraNode* arg0) {
     ActivePokemonState* st = &sActivePokemon[sBattleScene.scene->actingSide]->state;
     f32 temp_f0;
 
-    if ((st->unk_2D == 0x10) || (st->flags & 0x4000)) {
+    if ((st->unk_2E == 0x10) || (st->flags & 0x4000)) {
         BattleScene_SelectNextBRollCameraShot(arg0);
         return;
     }
@@ -689,7 +689,7 @@ void func_82122A7C(CameraNode*, ActivePokemon*);
 void BattleScene_BRollCameraUpdatePresetHold(CameraNode* arg0) {
     ActivePokemonState* st = &sActivePokemon[sBattleScene.scene->actingSide]->state;
 
-    if ((st->unk_2D == 0x10) || (st->flags & 0x4000)) {
+    if ((st->unk_2E == 0x10) || (st->flags & 0x4000)) {
         BattleScene_SelectNextBRollCameraShot(arg0);
         return;
     }

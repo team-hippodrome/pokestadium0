@@ -104,8 +104,8 @@ void Battle_StartTurn(void) {
 
     sBattleScene.scene->sideCurrentlySwitching = sBattleScene.scene->actingSide;
     sBattleScene.scene->phase = 0;
-    temp_s0->unk_30 = 0;
-    temp_s1->unk_30 = 0;
+    temp_s0->infoBoxBlinkTimer = 0;
+    temp_s1->infoBoxBlinkTimer = 0;
     if (sBattleScene.scene->mode == 5) {
         sBattleScene.scene->unk_44 = 6;
     } else {
@@ -167,7 +167,7 @@ void BattleScene_InitializeSwitchActions(void) {
 
     sp2C = sBattleScene.scene->actingSide;
 
-    if ((sp28->unk_2D == 0xF) || (sp28->unk_2D == 0x10)) {
+    if ((sp28->unk_2E == 0xF) || (sp28->unk_2E == 0x10)) {
         if (sActivePokemon[0]->teamRoster->isHuman & 2) {
             BattleAi_RecordUsedMove(sp28->rosterIndex, sp24->rosterIndex, 2);
         }
@@ -245,7 +245,7 @@ void BattleScene_StartSecondAction(void) {
     sBattleScene.scene->actingSide = !sBattleScene.scene->actingSide;
     temp_a3 = &sActivePokemon[sBattleScene.scene->actingSide]->state;
 
-    if ((temp_a3->unk_2D == 0xF) || (temp_a3->unk_2D == 0x10)) {
+    if ((temp_a3->unk_2E == 0xF) || (temp_a3->unk_2E == 0x10)) {
         BeginBattleForEntity(sActivePokemon[sBattleScene.scene->actingSide]);
     } else if (sBattleScene.scene->mode == 0xA) {
         func_82133868(temp_a3);
@@ -325,7 +325,7 @@ void func_8212562C(void) {
         other_runtime = &sActivePokemon[other]->state.runtime;
         other_state = &sActivePokemon[other]->state;
         if ((runtime->usedMove == 0xFF) || (other_runtime->usedMove == 0xFF)) {
-            if ((other_state->unk_2D != 0xF) && (other_state->unk_2D != 0x10)) {
+            if ((other_state->unk_2E != 0xF) && (other_state->unk_2E != 0x10)) {
                 sBattleScene.scene->phaseStep = 0;
                 sBattleScene.scene->stepFrameTimer = 0;
                 sBattleScene.scene->phase = 4;
@@ -772,7 +772,7 @@ void BattleScene_FaintStepCollapse(CameraNode* arg0) {
         }
         if (rec[0xA] == (sActivePokemon[!sBattleScene.scene->actingSide]->displayObject.transformAnim.frameFixed >> 16) + 3) {
             func_8211EE8C();
-            if (state->unk_2D != 0x12) {
+            if (state->unk_2E != 0x12) {
                 BattleMessage_ShowForSide(D_8219A520 + 0x1C8, !sBattleScene.scene->actingSide);
             }
             sActivePokemon[!sBattleScene.scene->actingSide]->displayObject.node.renderFlags &= ~0x20;
@@ -810,12 +810,12 @@ void BattleScene_FaintStepFinishVanish(CameraNode* arg0) {
         BattleAnim_CleanupEffects(1);
         func_80041374(3, 0);
 
-        if (temp_s0->unk_2D != 0x12) {
-            temp_s0->unk_2D = 0x10;
+        if (temp_s0->unk_2E != 0x12) {
+            temp_s0->unk_2E = 0x10;
         }
 
-        if (temp_s0->unk_2D == 0x12) {
-            temp_s0->unk_2D = 0x13;
+        if (temp_s0->unk_2E == 0x12) {
+            temp_s0->unk_2E = 0x13;
         }
 
         sBattleScene.scene->phaseStep++;
@@ -844,21 +844,21 @@ void BattleScene_FaintStepEnd(UNUSED CameraNode* arg0) {
         func_82125570();
         func_8211EE8C();
         sBattleScene.scene->phaseStep++;
-        if (other->unk_2D == 0x10) {
+        if (other->unk_2E == 0x10) {
             sBattleScene.scene->stepFrameTimer = 0;
             sBattleScene.scene->phaseStep = 0;
-            if (self->unk_2D == 0x11) {
+            if (self->unk_2E == 0x11) {
                 sBattleScene.scene->phase = 5;
                 side = sBattleScene.scene->actingSide == 0;
                 sBattleScene.scene->actingSide = side;
-            } else if (self->unk_2D == 0x12) {
+            } else if (self->unk_2E == 0x12) {
                 sBattleScene.scene->phase = 5;
                 side = sBattleScene.scene->actingSide == 0;
                 sBattleScene.scene->actingSide = side;
             } else {
                 sBattleScene.scene->phase = 4;
             }
-        } else if (self->unk_2D == 0x12) {
+        } else if (self->unk_2E == 0x12) {
             sBattleScene.scene->stepFrameTimer = 0;
             sBattleScene.scene->phaseStep = 0;
             sBattleScene.scene->phase = 5;
@@ -908,7 +908,7 @@ void BattleScene_AdvanceSendOutFollowupCamera(CameraNode* arg0) {
         }
         if (rec[0xA] == (sActivePokemon[!sBattleScene.scene->actingSide]->displayObject.transformAnim.frameFixed >> 16) + 1) {
             func_8211EE8C();
-            if (state->unk_2D != 0x12) {
+            if (state->unk_2E != 0x12) {
                 BattleMessage_ShowForSide(D_8219A520 + 0x1C8, !sBattleScene.scene->actingSide);
             }
             sActivePokemon[!sBattleScene.scene->actingSide]->displayObject.node.renderFlags &= ~0x20;
@@ -977,7 +977,7 @@ void func_82126D20(UNUSED CameraNode* arg0) {
         func_82125570();
         func_8211EE8C();
         sBattleScene.scene->phaseStep++;
-        if (state->unk_2D == 0x10) {
+        if (state->unk_2E == 0x10) {
             sBattleScene.scene->stepFrameTimer = 0;
             sBattleScene.scene->phaseStep = 0;
             sBattleScene.scene->phase = 4;

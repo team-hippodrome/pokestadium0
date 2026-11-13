@@ -112,7 +112,7 @@ void InitBattleParameters(void) {
             }
         }
 
-        D_82199F58 = sBattleUser->unk_26;
+        D_82199F58 = sBattleUser->level;
         if (sBattleCritFlag != 0) {
             D_82199F58 *= 2;
         }
@@ -462,19 +462,19 @@ void Battle_InitPokemonRuntimeState(ActivePokemon* arg0) {
     sp24 = &arg0->state.runtime;
     sp34 = &arg0->sessionTeams->teamMember[sp28->replacementState]->pokemonPicked[sp28->rosterIndex];
 
-    sp24->unk_14 = sp28->rosterIndex;
-    sp24->id = sp34->species.id;
+    sp24->rosterIndex = sp28->rosterIndex;
+    sp24->species = sp34->species.id;
     sp24->hp = sp34->hp;
     sp24->pendingStatusCondition = sp34->statusCondition;
-    sp24->roster[6] = sp34->type1;
-    sp24->roster[7] = sp34->type2;
-    sp24->roster[8] = sp34->unk_08;
+    sp24->type1 = sp34->type1;
+    sp24->type2 = sp34->type2;
+    sp24->catchRate = sp34->catchRate;
 
     sp24->moves[0] = sp34->moves[0];
     sp24->moves[1] = sp34->moves[1];
     sp24->moves[2] = sp34->moves[2];
     sp24->moves[3] = sp34->moves[3];
-    sp24->unk_24 = sp34->unk_1E;
+    sp24->dvs = sp34->dvs;
 
     sp24->pp[0] = sp34->pp[0];
     sp24->pp[1] = sp34->pp[1];
@@ -507,7 +507,7 @@ void Battle_InitPokemonRuntimeState(ActivePokemon* arg0) {
         }
     }
 
-    sp24->unk_26 = sp34->level;
+    sp24->level = sp34->level;
     sp24->maxHp = sp34->maxHp;
     sp24->modifiedAttack = sp34->attack;
     sp24->modifiedDefense = sp34->defense;
@@ -517,14 +517,14 @@ void Battle_InitPokemonRuntimeState(ActivePokemon* arg0) {
     ApplyParalysisSpeedCut(arg0);
     ApplyBurnAttackCut(arg0);
 
-    sp24->unk_36 = gBaseStats[sp24->id].baseHP;
+    sp24->baseHp = gBaseStats[sp24->species].baseHP;
     sp24->unmodifiedAttack = sp34->attack;
     sp24->unmodifiedDefense = sp34->defense;
     sp24->unmodifiedSpeed = sp34->speed;
     sp24->unmodifiedSpecial = sp34->special;
 
     // clang-format off
-    for (i = 0; i < 8; i++) { sp24->unk_5C[i] = 7; }
+    for (i = 0; i < 8; i++) { sp24->statStages[i] = 7; }
     // clang-format on
 
     Battle_CheckMovesetLegality(arg0);
@@ -610,7 +610,7 @@ extern s32 D_8218C780;
 void Battle_HandleBuildingRage(void) {
     BattleMonRuntime* sp1C;
 
-    if ((sBattleTarget->volatileStatusFlags & 0x40) && ((sBattleTarget->unk_5C[0]) != 0xD)) {
+    if ((sBattleTarget->volatileStatusFlags & 0x40) && ((sBattleTarget->statStages[0]) != 0xD)) {
         sp1C = sBattleUser;
 
         sBattleUser = sBattleTarget;
@@ -670,7 +670,7 @@ void Battle_PrintCriticalOHKOText(void) {
             sBattleScene.scene->hitReactionKind = 2;
             break;
     }
-    sp1C->unk_5B = sBattleCritFlag;
+    sp1C->receivedCritFlag = sBattleCritFlag;
     sBattleCritFlag = 0;
 }
 
@@ -852,7 +852,7 @@ void Battle_ApplyPoisonOrBurnDamage(void) {
         sBattleUser->hpAfterPoisonBurn -= var_a0;
     }
 
-    sBattleUser->unk_10 = sBattleUser->hpAfterPoisonBurn;
+    sBattleUser->hpAfterLeechSeed = sBattleUser->hpAfterPoisonBurn;
 }
 
 /**
@@ -867,9 +867,9 @@ void Battle_ApplyLeechSeedDamage(void) {
     if (!(sBattleUser->pendingStatusCondition & 0x18)) {
         v = sBattleUser->pendingHp;
         if (v != 0xFFFF) {
-            sBattleUser->unk_10 = v;
+            sBattleUser->hpAfterLeechSeed = v;
         } else {
-            sBattleUser->unk_10 = sBattleUser->hp;
+            sBattleUser->hpAfterLeechSeed = sBattleUser->hp;
         }
     }
     v = (sBattleUser->maxHp >> 4) & 0xFFFF;
@@ -883,18 +883,18 @@ void Battle_ApplyLeechSeedDamage(void) {
         v = (u32)amount * sBattleUser->toxicCounter;
         amount = v & 0xFFFF;
     }
-    v = sBattleUser->unk_10;
+    v = sBattleUser->hpAfterLeechSeed;
     if (v < amount) {
-        sBattleUser->unk_10 = 0;
-        amount = sBattleUser->unk_10;
+        sBattleUser->hpAfterLeechSeed = 0;
+        amount = sBattleUser->hpAfterLeechSeed;
     } else {
-        sBattleUser->unk_10 = v - amount;
+        sBattleUser->hpAfterLeechSeed = v - amount;
     }
-    sBattleTarget->unk_10 = sBattleTarget->hp;
-    sBattleTarget->unk_10 = sBattleTarget->unk_10 + amount;
+    sBattleTarget->hpAfterLeechSeed = sBattleTarget->hp;
+    sBattleTarget->hpAfterLeechSeed = sBattleTarget->hpAfterLeechSeed + amount;
     v = sBattleTarget->maxHp;
-    if (v < sBattleTarget->unk_10) {
-        sBattleTarget->unk_10 = v;
+    if (v < sBattleTarget->hpAfterLeechSeed) {
+        sBattleTarget->hpAfterLeechSeed = v;
     }
 }
 

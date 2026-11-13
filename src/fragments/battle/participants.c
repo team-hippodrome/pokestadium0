@@ -714,7 +714,7 @@ void Battle_ResetEventTrack(ActivePokemon* active_pokemon) {
     if (active_pokemon->state.flags & ACTIVE_SLEEP) {
         BattleAnim_TrySetModelEventTrackFromRow(active_pokemon, 0xAF, 2);
     } else {
-        active_pokemon->state.unk_36 = 0;
+        active_pokemon->state.modelEventTrackState = 0;
         ModelAnim_SetEventFrame(&active_pokemon->displayObject, 0);
         ModelAnim_SetEventTrack(&active_pokemon->displayObject, -1);
     }
@@ -760,7 +760,7 @@ void Battle_LoadOwnerModelForSwitchIn(ActivePokemon* active_pokemon) {
     BattleScene_ReinitParticipantThumbnailModel(active_pokemon, &active_pokemon->thumbnail, object_type);
     func_82108648(active_pokemon, object_type);
     Battle_ResetEventTrack(active_pokemon);
-    state->unk_2D = 0;
+    state->unk_2E = 0;
     state->flags &= 0x3800;
     Vec3f_SetComponentsDuplicate(&active_pokemon->displayObject.scale, 1.0f, 1.0f, 1.0f);
 }
@@ -981,7 +981,7 @@ s32 Battle_FreezeClauseInEffect(ActivePokemon* active_pokemon) {
 
     for (i = 0; i < BattleScene_GetTeamMemberTeamSize(active_pokemon); i++) {
         pokemon = &active_pokemon->teamRoster->pokemonPicked[i];
-        if ((pokemon->statusCondition & STATUS_FREEZE) && (active_pokemon->state.runtime.roster[state->rosterIndex + state->teamMemberIndex * 3] == 0)) {
+        if ((pokemon->statusCondition & STATUS_FREEZE) && (active_pokemon->state.runtime.restSleepTurns[state->rosterIndex + state->teamMemberIndex * 3] == 0)) {
             return 1;
         }
     }
@@ -990,7 +990,7 @@ s32 Battle_FreezeClauseInEffect(ActivePokemon* active_pokemon) {
         for (i = 0; i < BattleScene_GetPartnerTeamSize(active_pokemon); i++) {
             pokemon = &active_pokemon->sessionTeams->teamMember[state->teamMemberIndex == 0]->pokemonPicked[i];
             if ((pokemon->statusCondition & STATUS_FREEZE) &&
-                (active_pokemon->state.runtime.roster[state->rosterIndex + (state->teamMemberIndex == 0) * 3] == 0)) {
+                (active_pokemon->state.runtime.restSleepTurns[state->rosterIndex + (state->teamMemberIndex == 0) * 3] == 0)) {
                 return 1;
             }
         }
@@ -1015,7 +1015,7 @@ s32 Battle_SleepClauseInEffect(ActivePokemon* active_pokemon) {
 
     for (i = 0; i < BattleScene_GetTeamMemberTeamSize(active_pokemon); i++) {
         pokemon = &active_pokemon->teamRoster->pokemonPicked[i];
-        if ((pokemon->statusCondition & STATUS_SLEEP_MASK) && (active_pokemon->state.runtime.roster[state->rosterIndex + state->teamMemberIndex * 3] == 0)) {
+        if ((pokemon->statusCondition & STATUS_SLEEP_MASK) && (active_pokemon->state.runtime.restSleepTurns[state->rosterIndex + state->teamMemberIndex * 3] == 0)) {
             return 1;
         }
     }
@@ -1023,7 +1023,7 @@ s32 Battle_SleepClauseInEffect(ActivePokemon* active_pokemon) {
     if (active_pokemon->sessionTeams->tagTeamSize == 2) {
         for (i = 0; i < BattleScene_GetPartnerTeamSize(active_pokemon); i++) {
             pokemon = &active_pokemon->sessionTeams->teamMember[state->teamMemberIndex == 0]->pokemonPicked[i];
-            if ((pokemon->statusCondition & STATUS_SLEEP_MASK) && (active_pokemon->state.runtime.roster[state->rosterIndex + (state->teamMemberIndex == 0) * 3] == 0)) {
+            if ((pokemon->statusCondition & STATUS_SLEEP_MASK) && (active_pokemon->state.runtime.restSleepTurns[state->rosterIndex + (state->teamMemberIndex == 0) * 3] == 0)) {
                 return 1;
             }
         }

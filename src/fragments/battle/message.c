@@ -49,7 +49,7 @@ void BattleMenu_DrawSide0Menus(ActivePokemon* arg0, ActivePokemonState* arg1) {
                     } else {
                         BattleMenu_DrawSwitchPanel(arg0, 0x60, 0xF, sp2C->controllerPort);
                     }
-                } else if (arg1->unk_2D == 0x10) {
+                } else if (arg1->unk_2E == 0x10) {
                     BattleMenu_DrawConfirmButton(arg0, 0x60, 0xF, sp2C->controllerPort);
                 } else {
                     BattleMenu_DrawBackConfirmBar(arg0, 0x60, 0xF, sp2C->controllerPort);
@@ -97,7 +97,7 @@ void BattleMenu_DrawSide1Menus(ActivePokemon* arg0, ActivePokemonState* arg1) {
                     } else {
                         BattleMenu_DrawSwitchPanel(arg0, 0x18, 0x79, sp2C->controllerPort);
                     }
-                } else if (arg1->unk_2D == 0x10) {
+                } else if (arg1->unk_2E == 0x10) {
                     BattleMenu_DrawConfirmButton(arg0, 0x9A, 0xCE, sp2C->controllerPort);
                 } else {
                     BattleMenu_DrawBackConfirmBar(arg0, 0x62, 0xCE, sp2C->controllerPort);
@@ -355,7 +355,7 @@ void func_8211F274(s8 *arg0) {
 void ActivePokemon_ShowCaption(ActivePokemon* arg0, s8* arg1, ...) {
     *(u8*)D_8219A520 = (*(u8***)((u8*)arg0 + 0x85C))[arg0->state.replacementState + 2][1];
     arg0->captionState.active = 1;
-    func_8211EEC0(&arg0->captionState.unk_48, arg1);
+    func_8211EEC0(&arg0->captionState.fullText, arg1);
 }
 
 void BattleHud_DrawCaptionBox(u8, s32, s32, s8*);
@@ -370,29 +370,29 @@ extern ActivePokemon* sSide1ActivePokemon;
  */
 void ActivePokemon_TickCaptionTypewriter(ActivePokemon* arg0) {
     TeamRoster* roster = arg0->teamRoster;
-    s8 c = arg0->captionState.unk_48[arg0->captionState.unk_04];
+    s8 c = arg0->captionState.fullText[arg0->captionState.revealIndex];
 
     if (c != 0) {
         if ((c == 0xA) || (c == 0x20)) {
-            arg0->captionState.unk_08[arg0->captionState.unk_04] = c;
-            arg0->captionState.unk_04++;
-            c = arg0->captionState.unk_48[arg0->captionState.unk_04];
+            arg0->captionState.shownText[arg0->captionState.revealIndex] = c;
+            arg0->captionState.revealIndex++;
+            c = arg0->captionState.fullText[arg0->captionState.revealIndex];
         }
         if ((c > 0x20) && (c < 0x40)) {
-            arg0->captionState.unk_08[arg0->captionState.unk_04] = c;
-            arg0->captionState.unk_04++;
+            arg0->captionState.shownText[arg0->captionState.revealIndex] = c;
+            arg0->captionState.revealIndex++;
         } else {
-            arg0->captionState.unk_08[arg0->captionState.unk_04] = c;
-            arg0->captionState.unk_08[arg0->captionState.unk_04 + 1] = arg0->captionState.unk_48[arg0->captionState.unk_04 + 1];
-            arg0->captionState.unk_04 += 2;
+            arg0->captionState.shownText[arg0->captionState.revealIndex] = c;
+            arg0->captionState.shownText[arg0->captionState.revealIndex + 1] = arg0->captionState.fullText[arg0->captionState.revealIndex + 1];
+            arg0->captionState.revealIndex += 2;
         }
     }
-    arg0->captionState.unk_08[arg0->captionState.unk_04] = 0;
-    if (arg0->captionState.unk_48[0] != 0) {
+    arg0->captionState.shownText[arg0->captionState.revealIndex] = 0;
+    if (arg0->captionState.fullText[0] != 0) {
         if (arg0 == sSide1ActivePokemon) {
-            BattleHud_DrawCaptionBox(roster->controllerPort, 0x5F, 0xE, arg0->captionState.unk_08);
+            BattleHud_DrawCaptionBox(roster->controllerPort, 0x5F, 0xE, arg0->captionState.shownText);
         } else {
-            BattleHud_DrawCaptionBox(roster->controllerPort, 0x17, 0xBB, arg0->captionState.unk_08);
+            BattleHud_DrawCaptionBox(roster->controllerPort, 0x17, 0xBB, arg0->captionState.shownText);
         }
     }
 }

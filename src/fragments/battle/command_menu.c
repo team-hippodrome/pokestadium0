@@ -79,7 +79,7 @@ s32 func_8210C778(ActivePokemon* arg0) {
     s32 pad; // FAKE: stack padding
 
     if (state->selectedCommandOption == 3) {
-        if ((controller->buttonPressed & 0x20) && (other->unk_2D != 0x10)) {
+        if ((controller->buttonPressed & 0x20) && (other->unk_2E != 0x10)) {
             if (state->selectedCommand == 2) {
                 func_8210C738(arg0, other, controller);
             }
@@ -563,7 +563,7 @@ void BattleMenu_UpdateSwitchMenu(ActivePokemon* arg0) {
         }
     } else if (sp18->selectedCommandOption == 0) {
         sp18->selectedCommandOption = 2;
-    } else if ((c1->buttonPressed & 0x20) && (sp18->unk_2D != 0x10) &&
+    } else if ((c1->buttonPressed & 0x20) && (sp18->unk_2E != 0x10) &&
                !(c1->buttonDown & 0x10) && !(c2->buttonDown & 0x10)) {
         BattleScene_SelectActiveController(arg0);
         BattleAnim_PlaySoundEffect3();
@@ -602,7 +602,7 @@ s32 BattleScene_HandlePlayerFaintedSwitch(ActivePokemon* arg0, ActivePokemon* ar
         c1 = &D_800AAF50[M2C_FIELD(M2C_FIELD(team, s8**, 8), u8*, 1) * 0x24];
         c2 = &D_800AAF50[M2C_FIELD(M2C_FIELD(team, s8**, 0xC), u8*, 1) * 0x24];
     }
-    if ((state->unk_2D == 0x10) && (other->unk_2D == 0x10)) {
+    if ((state->unk_2E == 0x10) && (other->unk_2E == 0x10)) {
         if (state->selectedCommandOption == 3) {
             func_8210C708((s8*)arg0);
             return 1;
@@ -612,7 +612,7 @@ s32 BattleScene_HandlePlayerFaintedSwitch(ActivePokemon* arg0, ActivePokemon* ar
         BattleMenu_UpdateSwitchMenu(arg0);
         return 1;
     }
-    if (state->unk_2D == 0x10) {
+    if (state->unk_2E == 0x10) {
         state->selectedCommand = 2;
         state->selectedCommandOption = 2;
         other->selectedCommandOption = 3;
@@ -654,25 +654,25 @@ void BattleMenu_UpdateSurrenderPrompt(ActivePokemon* arg0) {
     }
 
     if (sp18->selectedCommandOption != 4) {
-        sp18->unk_2F = 0;
+        sp18->surrenderCursor = 0;
     }
 
     sp18->selectedCommandOption = 4;
 
     if ((c1->buttonPressed & 0x200) || (c2->buttonPressed & 0x200)) {
-        sp18->unk_2F = 0;
+        sp18->surrenderCursor = 0;
         Audio_PlaySoundEffectById(1);
     }
 
     if ((c1->buttonPressed & 0x100) || (c2->buttonPressed & 0x100)) {
-        sp18->unk_2F = 1;
+        sp18->surrenderCursor = 1;
         Audio_PlaySoundEffectById(1);
     }
 
-    if ((sp18->unk_2F == 1) && ((c1->buttonPressed & 0x8000) || (c2->buttonPressed & 0x8000))) {
+    if ((sp18->surrenderCursor == 1) && ((c1->buttonPressed & 0x8000) || (c2->buttonPressed & 0x8000))) {
         Audio_PlaySoundEffectById(2);
         sBattleScene.scene->winner = (BattleScene_GetParticipantSideIndex(arg0) == 0) + 1;
-    } else if ((sp18->unk_2F == 0) && ((c1->buttonPressed & 0x8000) || (c2->buttonPressed & 0x8000))) {
+    } else if ((sp18->surrenderCursor == 0) && ((c1->buttonPressed & 0x8000) || (c2->buttonPressed & 0x8000))) {
         sp18->selectedCommandOption = 0;
         sp18->selectedCommand = 0;
         Audio_PlaySoundEffectById(3);
@@ -739,7 +739,7 @@ void BattleMenu_UpdateSurrenderPrompt(ActivePokemon* active_pokemon);
 s32 BattleScene_HandlePlayerActionInput(ActivePokemon* arg0) {
     ActivePokemonState* opponent_state = &sActivePokemon[BattleScene_GetParticipantSideIndex(arg0) == 0]->state;
 
-    if (opponent_state->unk_2D == 0x10) {
+    if (opponent_state->unk_2E == 0x10) {
         if (func_8210C708(arg0) != 0) {
             return 1;
         }
@@ -851,7 +851,7 @@ s32 BattleScene_HandleCpuFaintedSwitch(ActivePokemon* arg0, ActivePokemon* arg1)
     ActivePokemonState* other = &arg1->state;
     s32 pad[2]; // FAKE
 
-    if ((state->unk_2D == 0x10) && (other->unk_2D == 0x10)) {
+    if ((state->unk_2E == 0x10) && (other->unk_2E == 0x10)) {
         if (state->selectedCommandOption == 3) {
             func_8210C708((s8*)arg0);
             return 1;
@@ -869,7 +869,7 @@ s32 BattleScene_HandleCpuFaintedSwitch(ActivePokemon* arg0, ActivePokemon* arg1)
         }
         return 1;
     }
-    if (state->unk_2D == 0x10) {
+    if (state->unk_2E == 0x10) {
         state->selectedCommand = 2;
         state->selectedCommandOption = 2;
         other->selectedCommandOption = 3;

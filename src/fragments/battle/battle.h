@@ -308,23 +308,23 @@ typedef struct ActivePokemonState {
     /* 0x1C */ u8 showingCommandOptions;
     /* 0x1E */ u16 actionDelayTimer;
     /* 0x20 */ char unk20[0x8];
-    /* 0x28 */ u16 unk_28;
+    /* 0x28 */ u16 foeHpBeforeMove; // the opponent's HP when ShowDamageMessage ran, for the damage-dealt comment
     /* 0x2A */ u8 moveSelectionLocked;
     /* 0x2B */ u8 teamMemberIndex;
     /* 0x2C */ u8 ownerTeamMemberIndex;
     /* 0x2D */ u8 replacementState;
-    /* 0x2E */ u8 unk_2D;
+    /* 0x2E */ u8 unk_2E;
     /* 0x2F */ u8 alpha;
-    /* 0x30 */ u8 unk_2F;
-    /* 0x32 */ u16 unk_30;
+    /* 0x30 */ u8 surrenderCursor; // こうさんしますか？ (Surrender?) prompt: 0 いいえ (No), 1 はい (Yes)
+    /* 0x32 */ u16 infoBoxBlinkTimer; // counts down by 0x30 a frame; bit 8 picks the info box color
     /* 0x34 */ char unk32[0x2];
     /* 0x36 */ u16 flags;
-    /* 0x38 */ u16 unk_36;
+    /* 0x38 */ u16 modelEventTrackState; // event_state of BattleAnim_TrySetModelEventTrackFromRow; 2 blocks a new track
     /* 0x3A */ BattleMonRuntime runtime;
     /* 0xA0 */ unk_D_84390010_654_09C unk_9C;
     /* 0xB0 */ unk_D_84390010_654_0AC unk_AC;
     /* 0xC0 */ s16 model;
-    /* 0xC2 */ s16 unk_BE;
+    /* 0xC2 */ s16 transformSpecies; // species Transform copied (the target's own transformSpecies if it is transformed too)
     /* 0xC4 */ char unkC0[1];
     /* 0xC5 */ u8 moveSlotIllegality[4];
     /* 0xCC */ Controller* controller;
@@ -351,11 +351,9 @@ typedef struct ThumbnailState {
 
 typedef struct MonCaptionState {
     /* 0x00 */ s32 active;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ s8 unk_08[4];
-    /* 0x0C */ char unk0C[0x3C];
-    /* 0x48 */ s8 unk_48[4];
-    /* 0x4C */ char unk4C[0x3C];
+    /* 0x04 */ s32 revealIndex; // byte index into fullText
+    /* 0x08 */ s8 shownText[64]; // the part of fullText revealed so far, one character a frame
+    /* 0x48 */ s8 fullText[64]; // formatted by ActivePokemon_ShowCaption
 } MonCaptionState; // size = 0x88
 
 typedef struct SpeciesLearnsetBuffer {

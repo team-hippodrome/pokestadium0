@@ -85,8 +85,8 @@ extern s32 D_8218C7D4;
 void Battle_Effect_Poison(void) {
     s32 sp1C = D_8219A520 + 0x88;
 
-    if (!(sBattleTarget->volatileStatusFlags & 0x10) && (sBattleTarget->pendingStatusCondition == 0) && (sBattleTarget->roster[6] != 3) &&
-        (sBattleTarget->roster[7] != 3)) {
+    if (!(sBattleTarget->volatileStatusFlags & 0x10) && (sBattleTarget->pendingStatusCondition == 0) && (sBattleTarget->type1 != 3) &&
+        (sBattleTarget->type2 != 3)) {
         switch (sBattleUser->moveCache.effect) {
             case 2:
                 if (sBattleScene.scene->moveEffectKind != 0x18) {
@@ -201,8 +201,8 @@ void Battle_Effect_FreezeBurnParalyze(void) {
         return;
     }
 
-    if ((sBattleTarget->roster[6] != (*sBattleUser).moveCache.type) &&
-        (sBattleTarget->roster[7] != (*sBattleUser).moveCache.type)) {
+    if ((sBattleTarget->type1 != (*sBattleUser).moveCache.type) &&
+        (sBattleTarget->type2 != (*sBattleUser).moveCache.type)) {
         if ((sBattleUser->moveCache.effect < 7) || (sBattleUser->moveCache.lastMove == BLIZZARD)) {
             if (Battle_Random() >= 0x1A) {
                 return;
@@ -264,10 +264,10 @@ void BattleEffect_ApplyStatBoost(void) {
         sp24 -= 0x28;
     }
 
-    if (sBattleUser->unk_5C[sp24] != 0xD) {
-        sBattleUser->unk_5C[sp24] += var_a3;
-        if (sBattleUser->unk_5C[sp24] >= 0xE) {
-            sBattleUser->unk_5C[var_a3] = 0xD;
+    if (sBattleUser->statStages[sp24] != 0xD) {
+        sBattleUser->statStages[sp24] += var_a3;
+        if (sBattleUser->statStages[sp24] >= 0xE) {
+            sBattleUser->statStages[var_a3] = 0xD;
         }
 
         if (sp24 < 4) {
@@ -294,8 +294,8 @@ void BattleEffect_ApplyStatBoost(void) {
             }
 
             if (*sp1C != 0x3E7) {
-                *sp1C = (*sp18 * D_8218ADF4[sBattleUser->unk_5C[sp24] - 1].multiplier) /
-                        D_8218ADF4[sBattleUser->unk_5C[sp24] - 1].divisor;
+                *sp1C = (*sp18 * D_8218ADF4[sBattleUser->statStages[sp24] - 1].multiplier) /
+                        D_8218ADF4[sBattleUser->statStages[sp24] - 1].divisor;
                 if (*sp1C >= 0x3E8) {
                     *sp1C = 0x3E7;
                 }
@@ -344,10 +344,10 @@ void Battle_Effect_StatUp(void) {
         sp24 -= 0x28;
     }
 
-    if (sBattleUser->unk_5C[sp24] != 0xD) {
-        sBattleUser->unk_5C[sp24] += var_a3;
-        if (sBattleUser->unk_5C[sp24] >= 0xE) {
-            sBattleUser->unk_5C[sp24] = 0xD;
+    if (sBattleUser->statStages[sp24] != 0xD) {
+        sBattleUser->statStages[sp24] += var_a3;
+        if (sBattleUser->statStages[sp24] >= 0xE) {
+            sBattleUser->statStages[sp24] = 0xD;
         }
 
         if (sp24 < 4) {
@@ -374,8 +374,8 @@ void Battle_Effect_StatUp(void) {
             }
 
             if (*sp1C != 0x3E7) {
-                *sp1C = (*sp18 * D_8218ADF4[sBattleUser->unk_5C[sp24] - 1].multiplier) /
-                        D_8218ADF4[sBattleUser->unk_5C[sp24] - 1].divisor;
+                *sp1C = (*sp18 * D_8218ADF4[sBattleUser->statStages[sp24] - 1].multiplier) /
+                        D_8218ADF4[sBattleUser->statStages[sp24] - 1].divisor;
                 if (*sp1C >= 0x3E8) {
                     *sp1C = 0x3E7;
                 }
@@ -462,10 +462,10 @@ void Battle_Effect_LowerStat(void) {
         }
 
     block_14:
-        if (sBattleTarget->unk_5C[sp24] != 1) {
-            sBattleTarget->unk_5C[sp24] -= sp20;
-            if (sBattleTarget->unk_5C[sp24] <= 0) {
-                sBattleTarget->unk_5C[sp24] = 1;
+        if (sBattleTarget->statStages[sp24] != 1) {
+            sBattleTarget->statStages[sp24] -= sp20;
+            if (sBattleTarget->statStages[sp24] <= 0) {
+                sBattleTarget->statStages[sp24] = 1;
             }
 
             if (sp24 < 4) {
@@ -492,8 +492,8 @@ void Battle_Effect_LowerStat(void) {
                 }
 
                 if (*sp1C != 1) {
-                    *sp1C = (*sp18 * D_8218ADF4[sBattleTarget->unk_5C[sp24] - 1].multiplier) /
-                            D_8218ADF4[sBattleTarget->unk_5C[sp24] - 1].divisor;
+                    *sp1C = (*sp18 * D_8218ADF4[sBattleTarget->statStages[sp24] - 1].multiplier) /
+                            D_8218ADF4[sBattleTarget->statStages[sp24] - 1].divisor;
                     if (*sp1C == 0) {
                         *sp1C = 1;
                     }

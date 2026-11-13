@@ -401,7 +401,7 @@ void MonSummary_DrawTrainerInfo(s32 arg0, s32 arg1, s32 arg2) {
     } else {
         next_level = ((BattleMon*)arg2)->level + 1;
     }
-    to_next = func_8A20219C(((BattleMon*)arg2)->species.id, next_level) - ((BattleMon*)arg2)->unk_10;
+    to_next = func_8A20219C(((BattleMon*)arg2)->species.id, next_level) - ((BattleMon*)arg2)->exp;
     Ui_FillRectPrimEnvColor(arg0, arg1, 0x122, 0xC8, D_8A203370, D_8A203374);
     func_8001AB6C();
     func_8001A384(8, 0);
@@ -421,9 +421,9 @@ void MonSummary_DrawTrainerInfo(s32 arg0, s32 arg1, s32 arg2) {
     func_8001A944(arg0 + 0xA5, arg1 + 0xA8, D_8A21D964);
     func_8001A944(arg0 + 0xC3, arg1 + 0xA8, D_8A21D968);
     func_8001AA9C(((Color_RGBA8*)&D_800734A8)->r, ((Color_RGBA8*)&D_800734A8)->g, ((Color_RGBA8*)&D_800734A8)->b, ((Color_RGBA8*)&D_800734A8)->a);
-    func_8001A944(arg0 + 0xAF, arg1 + 0x4C, D_8A21D96C, ((BattleMon*)arg2)->unk_0E);
+    func_8001A944(arg0 + 0xAF, arg1 + 0x4C, D_8A21D96C, ((BattleMon*)arg2)->otId);
     func_8001A944(arg0 + 0xAF, arg1 + 0x68, (char*)arg2 + 0x40);
-    func_8001A944(arg0 + 0x87, arg1 + 0x8C, D_8A21D974, ((BattleMon*)arg2)->unk_10);
+    func_8001A944(arg0 + 0x87, arg1 + 0x8C, D_8A21D974, ((BattleMon*)arg2)->exp);
     func_8001A944(arg0 + 0x40, arg1 + 0xA8, D_8A21D978, to_next);
     func_8001A944(arg0 + 0xD7, arg1 + 0xA8, D_8A21D97C, next_level);
     func_8001ABBC();

@@ -389,12 +389,12 @@ u32 CalculateStatValue(s32 stat_id, s32 species_id, u16 stat_modifier, u16 level
 
 /** Recalculates a Pokemon's level and all of its stats. */
 void Pokemon_RecalcStats(BattleMon* arg0) {
-    arg0->level = Pokemon_LevelFromExp(arg0->species.id, arg0->unk_10);
-    arg0->maxHp = CalculateStatValue(1, arg0->species.id, arg0->unk_14, arg0->level, arg0->unk_1E);
-    arg0->attack = CalculateStatValue(2, arg0->species.id, arg0->unk_16, arg0->level, arg0->unk_1E);
-    arg0->defense = CalculateStatValue(3, arg0->species.id, arg0->unk_18, arg0->level, arg0->unk_1E);
-    arg0->speed = CalculateStatValue(4, arg0->species.id, arg0->unk_1A, arg0->level, arg0->unk_1E);
-    arg0->special = CalculateStatValue(5, arg0->species.id, arg0->unk_1C, arg0->level, arg0->unk_1E);
+    arg0->level = Pokemon_LevelFromExp(arg0->species.id, arg0->exp);
+    arg0->maxHp = CalculateStatValue(1, arg0->species.id, arg0->statExp[0], arg0->level, arg0->dvs);
+    arg0->attack = CalculateStatValue(2, arg0->species.id, arg0->statExp[1], arg0->level, arg0->dvs);
+    arg0->defense = CalculateStatValue(3, arg0->species.id, arg0->statExp[2], arg0->level, arg0->dvs);
+    arg0->speed = CalculateStatValue(4, arg0->species.id, arg0->statExp[3], arg0->level, arg0->dvs);
+    arg0->special = CalculateStatValue(5, arg0->species.id, arg0->statExp[4], arg0->level, arg0->dvs);
 }
 
 /** Searches for the stat experience that produces a target stat value. */

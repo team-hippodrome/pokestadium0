@@ -393,58 +393,58 @@ void LabPCList_ApplyVitaminItem(u8** arg0, u8** arg1, Msg89103F04* arg2) {
         case 0x23:
             arg2->text = D_8910DDFC;
             arg2->oldValue = mon->maxHp;
-            mon->unk_14 += 0xA00;
-            if (mon->unk_14 > 0x6400) {
-                mon->unk_14 = 0x6400;
+            mon->statExp[0] += 0xA00;
+            if (mon->statExp[0] > 0x6400) {
+                mon->statExp[0] = 0x6400;
             }
-            mon->maxHp = func_80020234(1, mon->species.id, mon->unk_14, mon->level, mon->unk_1E);
+            mon->maxHp = func_80020234(1, mon->species.id, mon->statExp[0], mon->level, mon->dvs);
             arg2->newValue = mon->maxHp;
             break;
         case 0x24:
             arg2->text = D_8910DE04;
             arg2->oldValue = mon->attack;
-            mon->unk_16 += 0xA00;
-            if (mon->unk_16 > 0x6400) {
-                mon->unk_16 = 0x6400;
+            mon->statExp[1] += 0xA00;
+            if (mon->statExp[1] > 0x6400) {
+                mon->statExp[1] = 0x6400;
             }
-            mon->attack = func_80020234(2, mon->species.id, mon->unk_16, mon->level, mon->unk_1E);
+            mon->attack = func_80020234(2, mon->species.id, mon->statExp[1], mon->level, mon->dvs);
             arg2->newValue = mon->attack;
             break;
         case 0x25:
             arg2->text = D_8910DE10;
             arg2->oldValue = mon->defense;
-            mon->unk_18 += 0xA00;
-            if (mon->unk_18 > 0x6400) {
-                mon->unk_18 = 0x6400;
+            mon->statExp[2] += 0xA00;
+            if (mon->statExp[2] > 0x6400) {
+                mon->statExp[2] = 0x6400;
             }
-            mon->defense = func_80020234(3, mon->species.id, mon->unk_18, mon->level, mon->unk_1E);
+            mon->defense = func_80020234(3, mon->species.id, mon->statExp[2], mon->level, mon->dvs);
             arg2->newValue = mon->defense;
             break;
         case 0x26:
             arg2->text = D_8910DE1C;
             arg2->oldValue = mon->speed;
-            mon->unk_1A += 0xA00;
-            if (mon->unk_1A > 0x6400) {
-                mon->unk_1A = 0x6400;
+            mon->statExp[3] += 0xA00;
+            if (mon->statExp[3] > 0x6400) {
+                mon->statExp[3] = 0x6400;
             }
-            mon->speed = func_80020234(4, mon->species.id, mon->unk_1A, mon->level, mon->unk_1E);
+            mon->speed = func_80020234(4, mon->species.id, mon->statExp[3], mon->level, mon->dvs);
             arg2->newValue = mon->speed;
             break;
         case 0x27:
             arg2->text = D_8910DE28;
             arg2->oldValue = mon->special;
-            mon->unk_1C += 0xA00;
-            if (mon->unk_1C > 0x6400) {
-                mon->unk_1C = 0x6400;
+            mon->statExp[4] += 0xA00;
+            if (mon->statExp[4] > 0x6400) {
+                mon->statExp[4] = 0x6400;
             }
-            mon->special = func_80020234(5, mon->species.id, mon->unk_1C, mon->level, mon->unk_1E);
+            mon->special = func_80020234(5, mon->species.id, mon->statExp[4], mon->level, mon->dvs);
             arg2->newValue = mon->special;
             break;
         case 0x28:
             arg2->text = D_8910DE34;
             arg2->oldValue = mon->level;
             old_max_hp = mon->maxHp;
-            mon->unk_10 = func_8002057C(mon->species.id, mon->level + 1);
+            mon->exp = func_8002057C(mon->species.id, mon->level + 1);
             func_800203FC(mon);
             mon->hp += mon->maxHp - old_max_hp;
             arg2->newValue = mon->level;

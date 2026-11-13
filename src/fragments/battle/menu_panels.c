@@ -652,10 +652,10 @@ void BattleHud_DrawCompactMonStatusBox(ActivePokemon* arg0, s16 arg1, s16 arg2, 
     } else {
         status = func_8001FA30(mon->statusCondition);
     }
-    if (state->unk_30 < 0xFF00) {
-        state->unk_30 -= 0x30;
+    if (state->infoBoxBlinkTimer < 0xFF00) {
+        state->infoBoxBlinkTimer -= 0x30;
     }
-    val = state->unk_30;
+    val = state->infoBoxBlinkTimer;
     if ((val >> 8) & 1) {
         color = (u8*)(&D_8218B008 + arg3 * 3);
     } else {
@@ -769,7 +769,7 @@ void BattleMenu_DrawSurrenderPromptWithCursor(ActivePokemon* arg0, s16 arg1, s16
     func_8001A944(arg1 + 0x7A, arg2 + 0x14, D_82195A84);
     func_8001ABBC();
     gSPDisplayList(gDisplayListHead++, D_80060308);
-    Gfx_DrawTextureRgba16Ia8(arg1 + arg0->state.unk_2F * 0x49 + 0x1B, arg2 + 0x14, 0x18, 0xE, D_0300A500, D_0300A7A0, 0x18, 0x100000);
+    Gfx_DrawTextureRgba16Ia8(arg1 + arg0->state.surrenderCursor * 0x49 + 0x1B, arg2 + 0x14, 0x18, 0xE, D_0300A500, D_0300A7A0, 0x18, 0x100000);
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
     BattleHud_DrawBorderTile(arg1, arg2, 8, 8, D_030096C0);

@@ -140,10 +140,10 @@ void Battle_ApplyTypeEffectAndSTAB(void) {
     u8 target_type2;
     u8 move_type;
 
-    user_type1 = sBattleUser->roster[6];
-    user_type2 = sBattleUser->roster[7];
-    target_type1 = sBattleTarget->roster[6];
-    target_type2 = sBattleTarget->roster[7];
+    user_type1 = sBattleUser->type1;
+    user_type2 = sBattleUser->type2;
+    target_type1 = sBattleTarget->type1;
+    target_type2 = sBattleTarget->type2;
     move_type = sBattleUser->moveCache.type;
     if ((move_type == user_type1) || (move_type == user_type2)) {
         sBattleDamage += sBattleDamage >> 1;
@@ -296,8 +296,8 @@ s32 Battle_CheckMonCanAct(void) {
 
     if (sBattleUser->pendingStatusCondition & 7) {
         sBattleUser->pendingStatusCondition = (sBattleUser->pendingStatusCondition & 7) - 1;
-        if (temp_v1->roster[temp_v0->rosterIndex + temp_v0->teamMemberIndex * 3] != 0) {
-            temp_v1->roster[temp_v0->rosterIndex + temp_v0->teamMemberIndex * 3]--;
+        if (temp_v1->restSleepTurns[temp_v0->rosterIndex + temp_v0->teamMemberIndex * 3] != 0) {
+            temp_v1->restSleepTurns[temp_v0->rosterIndex + temp_v0->teamMemberIndex * 3]--;
         }
         if (sBattleUser->pendingStatusCondition != 0) {
             BattleMessage_Format(D_8219A520 + 0x88, 5, D_8218C718, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]));
@@ -641,8 +641,8 @@ void Battle_HandleFaint(ActivePokemon* arg0) {
     temp_a11->scaleResize = 0;
     temp_a11->lastMove = 0;
 
-    if (temp_a10->unk_2D != 0xF) {
-        temp_a10->unk_2D = 0x11;
+    if (temp_a10->unk_2E != 0xF) {
+        temp_a10->unk_2E = 0x11;
     }
 
     func_8210F730(arg0);
@@ -681,7 +681,7 @@ void Battle_CheckAllBroughtFainted_PoisonBurn(ActivePokemon* arg0) {
 
     if (var_s2 == 0) {
         Battle_FormatDamageComment(arg0);
-        ptr1->unk_2D = 0x12;
+        ptr1->unk_2E = 0x12;
     } else {
         Battle_HandleFaint(arg0);
     }
@@ -721,7 +721,7 @@ void Battle_CheckAllBroughtFainted_LeechSeed(ActivePokemon* arg0) {
 
     if (var_s2 == 0) {
         Battle_FormatDamageComment(arg0);
-        ptr1->unk_2D = 0x12;
+        ptr1->unk_2E = 0x12;
     } else {
         Battle_HandleFaint(arg0);
     }
@@ -760,7 +760,7 @@ void Battle_CheckAllBroughtFainted_PendingHp(ActivePokemon* arg0) {
 
     if (var_s2 == 0) {
         Battle_FormatDamageComment(arg0);
-        ptr1->unk_2D = 0x12;
+        ptr1->unk_2E = 0x12;
     } else {
         Battle_HandleFaint(arg0);
     }
@@ -797,7 +797,7 @@ void Battle_CheckAllBroughtFainted_Hp(ActivePokemon* arg0) {
 
     if (var_s2 == 0) {
         Battle_FormatDamageComment(arg0);
-        ptr1->unk_2D = 0x12;
+        ptr1->unk_2E = 0x12;
     } else {
         Battle_HandleFaint(arg0);
     }
@@ -831,7 +831,7 @@ s32 Battle_CheckSideDefeatAfterResidualStatus(ActivePokemon* arg0) {
             }
 
             if (var_s2 == 0) {
-                ptr1->unk_2D = 0x12;
+                ptr1->unk_2E = 0x12;
                 return 1;
             }
             Battle_HandleFaint(arg0);
@@ -864,7 +864,7 @@ s32 Battle_CheckFaintAfterMove(void) {
         Battle_CheckAllBroughtFainted_PoisonBurn(sActivePokemon[sBattleScene.scene->actingSide]);
         return 0;
     } else if ((sBattleUser->hp != 0) && (sBattleTarget->hp != 0) && (sBattleUser->volatileStatusFlags & 0x80) &&
-               (sBattleUser->unk_10 == 0)) {
+               (sBattleUser->hpAfterLeechSeed == 0)) {
         Battle_CheckAllBroughtFainted_LeechSeed(sActivePokemon[sBattleScene.scene->actingSide]);
         return 0;
     }
@@ -910,8 +910,8 @@ void Battle_ResolveMonAction(void)
     sBattleTarget->hp = 900;
     sBattleUser->hpAfterPoisonBurn = 900;
     sBattleTarget->hpAfterPoisonBurn = 900;
-    sBattleUser->unk_10 = 0x384;
-    sBattleTarget->unk_10 = 0x384;
+    sBattleUser->hpAfterLeechSeed = 0x384;
+    sBattleTarget->hpAfterLeechSeed = 0x384;
     func_8210F2F4(sActivePokemon[0]);
     func_8210F2F4(sActivePokemon[1]);
     Battle_ApplyResidualEffects();
@@ -927,8 +927,8 @@ void Battle_ResolveMonAction(void)
     ((BattleMonRuntime *) D_8219A3C4)->hp = 0x384; // FAKE: alias of sBattleTarget
     ((BattleMonRuntime *) D_8219A3C0)->hpAfterPoisonBurn = 0x384; // FAKE
     ((BattleMonRuntime *) D_8219A3C4)->hpAfterPoisonBurn = 0x384; // FAKE
-    ((BattleMonRuntime *) D_8219A3C0)->unk_10 = 0x384; // FAKE
-    ((BattleMonRuntime *) D_8219A3C4)->unk_10 = 0x384; // FAKE
+    ((BattleMonRuntime *) D_8219A3C0)->hpAfterLeechSeed = 0x384; // FAKE
+    ((BattleMonRuntime *) D_8219A3C4)->hpAfterLeechSeed = 0x384; // FAKE
     func_8210F2F4(sActivePokemon[0]);
     func_8210F2F4(sActivePokemon[1]);
     return;

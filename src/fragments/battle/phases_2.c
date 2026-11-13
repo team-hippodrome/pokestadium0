@@ -324,7 +324,7 @@ void BattleScene_PhaseSendOutAfterFaint(CameraNode* arg0) {
 
         case 1:
             if (BattleAnim_TryRegisterAssetTables(temp_s0) != 0) {
-                temp_s0->sessionTeams->displayModel = sp2C->id;
+                temp_s0->sessionTeams->displayModel = sp2C->species;
                 temp_s0->sessionTeams->unk_04 = (TeamRoster*)&temp_s0->teamRoster->pokemonPicked[temp_s0->state.rosterIndex];
                 BattleScene_SetParticipantModelTransform(temp_s0, 2, 0);
                 BattleAnim_QueueEffectList3(0xD, temp_s0, temp_s0, 0xFF, 0xFF);
@@ -389,7 +389,7 @@ void BattleScene_PhaseSendOutAfterFaint(CameraNode* arg0) {
                 Battle_ClearMessageCursor();
                 BattleScene_ResetCameraFrameCounter();
                 Vec3f_SetComponentsDuplicate(&temp_s0->displayObject.scale, 1.0f, 1.0f, 1.0f);
-                if (sp38->unk_2D != 0x10) {
+                if (sp38->unk_2E != 0x10) {
                     sBattleScene.scene->actionPass = 3;
                 }
                 sBattleScene.scene->transitionStyle = 2;

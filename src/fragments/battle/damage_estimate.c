@@ -98,7 +98,7 @@ u16 BattleAi_ApplyMoveEffectDamageOverride(BattleMonRuntime* arg0, BattleMonRunt
             switch (D_8219A494.unk_00) {
                 case SEISMIC_TOSS:
                 case NIGHT_SHADE:
-                    var_v0 = arg0->unk_26;
+                    var_v0 = arg0->level;
                     break;
 
                 case SONICBOOM:
@@ -110,7 +110,7 @@ u16 BattleAi_ApplyMoveEffectDamageOverride(BattleMonRuntime* arg0, BattleMonRunt
                     break;
 
                 default:
-                    var_v0 = arg0->unk_26;
+                    var_v0 = arg0->level;
                     var_v0 = (var_v0 >> 1) + (var_v0 >> 2);
             }
 
@@ -228,7 +228,7 @@ void BattleAi_PrepareDamageCalcState(BattleMonRuntime* arg0, BattleMonRuntime* a
             }
         }
 
-        D_82199F58 = arg0->unk_26;
+        D_82199F58 = arg0->level;
         if (D_82199F32 != 0) {
             D_82199F58 *= 2;
         }

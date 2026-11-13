@@ -780,10 +780,10 @@ void GbSave_LoadMainPokemon(BattleMon* arg0, s32 arg1, s32 arg2) {
 
     Pokemon_FromGbRecordExt(arg0, &ptr2->unk_008[arg2]);
 
-    _bcopy(ptr2->unk_110[arg2], (u8*)arg0 + 0x3D, 3);
-    _bcopy(ptr2->unk_110[arg2] + 3, (u8*)arg0 + 0x4D, 3);
-    Text_UntranscodeFixedName((char*)arg0 + 0x30, ptr2->unk_134[arg2]);
-    Text_UntranscodeFixedName((char*)arg0 + 0x40, ptr2->unk_110[arg2]);
+    _bcopy(ptr2->unk_110[arg2], arg0->gbOtNameHead, 3);
+    _bcopy(ptr2->unk_110[arg2] + 3, arg0->gbOtNameTail, 3);
+    Text_UntranscodeFixedName((char*)arg0->nickname, ptr2->unk_134[arg2]);
+    Text_UntranscodeFixedName((char*)arg0->otName, ptr2->unk_110[arg2]);
 }
 
 /**
@@ -792,9 +792,8 @@ void GbSave_LoadMainPokemon(BattleMon* arg0, s32 arg1, s32 arg2) {
  * Stores battle Pokemon slot arg2 of arg0 into slot arg2 of the party block
  * (offset 0x955 of the main save data) of Game Boy port arg1: the record
  * itself (Pokemon_ToGbRecordExt), the transcoded name at offset 0x30 of the
- * Pokemon, two 3-byte fields (offsets 0x3D and 0x4D of the Pokemon; their
- * meaning is not established here) and the species byte in the party's
- * species list.
+ * Pokemon, the raw Game Boy OT name (kept in gbOtNameHead and gbOtNameTail)
+ * and the species byte in the party's species list.
  *
  * Same structure as GbSave_SaveMainPokemon in the Stadium 1 decomp.
  * Seen in play (2026-11-12) in a せいとん save: called by Deck_WriteEntry for party slots 0 and 1.
@@ -804,8 +803,8 @@ void GbSave_SaveMainPokemon(unk_func_88205880_00D0* arg0, s32 arg1, s32 arg2) {
 
     Pokemon_ToGbRecordExt(arg0, &sp24->unk_008[arg2]);
     Text_TranscodeName(sp24->unk_134[arg2], (char*)arg0->unk_000[0].nickname);
-    _bcopy((u8*)&arg0->unk_000[0] + 0x3D, sp24->unk_110[arg2], 3);
-    _bcopy((u8*)&arg0->unk_000[0] + 0x4D, sp24->unk_110[arg2] + 3, 3);
+    _bcopy(arg0->unk_000[0].gbOtNameHead, sp24->unk_110[arg2], 3);
+    _bcopy(arg0->unk_000[0].gbOtNameTail, sp24->unk_110[arg2] + 3, 3);
     sp24->unk_001[arg2] = sp24->unk_008[arg2].unk_00.unk_00;
 }
 
@@ -821,10 +820,10 @@ void GbSave_LoadBoxPokemon(BattleMon* arg0, s32 arg1, s32 arg2, s32 arg3) {
         Pokemon_FromGbRecord(arg0, (GbPokemonRecord*)(sp2C + 0x20 + arg3 * 0x21));
         Pokemon_RecalcStats(arg0);
 
-        _bcopy(((u8(*)[6])(sp2C + 0x3FE))[arg3], (u8*)arg0 + 0x3D, 3);
-        _bcopy(((u8(*)[6])(sp2C + 0x3FE))[arg3] + 3, (u8*)arg0 + 0x4D, 3);
-        Text_UntranscodeFixedName((char*)arg0 + 0x30, (char*)((u8(*)[6])(sp2C + 0x4B2))[arg3]);
-        Text_UntranscodeFixedName((char*)arg0 + 0x40, (char*)((u8(*)[6])(sp2C + 0x3FE))[arg3]);
+        _bcopy(((u8(*)[6])(sp2C + 0x3FE))[arg3], arg0->gbOtNameHead, 3);
+        _bcopy(((u8(*)[6])(sp2C + 0x3FE))[arg3] + 3, arg0->gbOtNameTail, 3);
+        Text_UntranscodeFixedName((char*)arg0->nickname, (char*)((u8(*)[6])(sp2C + 0x4B2))[arg3]);
+        Text_UntranscodeFixedName((char*)arg0->otName, (char*)((u8(*)[6])(sp2C + 0x3FE))[arg3]);
     }
 }
 
@@ -833,11 +832,9 @@ void GbSave_LoadBoxPokemon(BattleMon* arg0, s32 arg1, s32 arg2, s32 arg3) {
  *
  * Stores battle Pokemon arg0 into slot arg3 of box arg2 of Game Boy port
  * arg1, if that box exists (GbSave_GetBoxEntry returns non-NULL): the
- * record (Pokemon_ToGbRecord), the transcoded name at offset 0x30, two
- * 3-byte fields (offsets 0x3D and 0x4D of the Pokemon; their meaning is not
- * established here) and the species byte in the box's species list.
- * Before the conversion the Pokemon's byte at +0x04 is set from its byte at
- * +0x24.
+ * record (Pokemon_ToGbRecord), the transcoded nickname, the raw Game Boy OT
+ * name (gbOtNameHead and gbOtNameTail) and the species byte in the box's
+ * species list. Before the conversion boxLevel is set from level.
  *
  * Same structure as GbSave_SaveBoxPokemon in the Stadium 1 decomp.
  */
@@ -845,11 +842,11 @@ void GbSave_SaveBoxPokemon(BattleMon* arg0, s32 arg1, s32 arg2, s32 arg3) {
     GbSaveBoxZero* sp2C = (GbSaveBoxZero*)GbSave_GetBoxEntry(arg1, arg2);
 
     if (sp2C != NULL) {
-        arg0->unk_04 = arg0->level;
+        arg0->boxLevel = arg0->level;
         Pokemon_ToGbRecord(arg0, &sp2C->unk_020[arg3]);
         Text_TranscodeName(sp2C->unk_4B2[arg3], (char*)arg0->nickname);
-        _bcopy((u8*)arg0 + 0x3D, sp2C->unk_3FE[arg3], 3);
-        _bcopy((u8*)arg0 + 0x4D, sp2C->unk_3FE[arg3] + 3, 3);
+        _bcopy(arg0->gbOtNameHead, sp2C->unk_3FE[arg3], 3);
+        _bcopy(arg0->gbOtNameTail, sp2C->unk_3FE[arg3] + 3, 3);
         sp2C->unk_001[arg3] = sp2C->unk_020[arg3].unk_00;
     }
 }

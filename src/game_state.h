@@ -34,35 +34,29 @@ typedef struct BattleMonSpecies {
 typedef struct BattleMon {
     /* 0x00 */ BattleMonSpecies species;
     /* 0x02 */ u16 hp;
-    /* 0x04 */ u8 unk_04;
+    /* 0x04 */ u8 boxLevel; // the Game Boy box record's level byte; set from level before a box save
     /* 0x05 */ u8 statusCondition;
     /* 0x06 */ u8 type1;
     /* 0x07 */ u8 type2;
-    /* 0x08 */ u8 unk_08;
+    /* 0x08 */ u8 catchRate; // the Game Boy record's catch rate byte; 0xFF in rental Pokémon
     /* 0x09 */ u8 moves[4];
     /* 0x0D */ u8 pad0D;
-    /* 0x0E */ u16 unk_0E;
-    /* 0x10 */ u32 unk_10;
-    /* 0x14 */ u16 unk_14;
-    /* 0x16 */ u16 unk_16;
-    /* 0x18 */ u16 unk_18;
-    /* 0x1A */ u16 unk_1A;
-    /* 0x1C */ u16 unk_1C;
-    /* 0x1E */ u16 unk_1E;
+    /* 0x0E */ u16 otId; // Original Trainer ID No.
+    /* 0x10 */ u32 exp; // experience points: 8000 for a level 20 Onix, 15625 for a level 25 Ditto
+    /* 0x14 */ u16 statExp[5]; // Gen 1 stat experience (EVs): HP, Attack, Defense, Speed, Special; vitamins add 2560
+    /* 0x1E */ u16 dvs; // Gen 1 DVs (IVs), 4 bits per stat
     /* 0x20 */ u8 pp[4];
     /* 0x24 */ u8 level;
-    /* 0x25 */ u8 unk_25;
+    /* 0x25 */ u8 faintBatch; // 0 while not fainted, else the sNextFaintBatch it fainted in
     /* 0x26 */ u16 maxHp;
     /* 0x28 */ u16 attack;
     /* 0x2A */ u16 defense;
     /* 0x2C */ u16 speed;
     /* 0x2E */ u16 special;
-    /* 0x30 */ u8 nickname[11]; // @unverified: ActivePokemon_GetNickname passes it as the %s of "Go! %s"
-    /* 0x3B */ u8 unk_3B[11];
-    /* 0x46 */ u8 unk_46[7];
-    /* 0x4D */ u8 pad4D;
-    /* 0x4E */ u8 unk_4E;
-    /* 0x4F */ u8 unk_4F;
+    /* 0x30 */ u8 nickname[13]; // EUC-JP, e.g. イワイワ
+    /* 0x3D */ u8 gbOtNameHead[3]; // first 3 bytes of the Game Boy save's OT name, kept to write back unchanged
+    /* 0x40 */ u8 otName[13]; // Original Trainer name, EUC-JP, e.g. ガール
+    /* 0x4D */ u8 gbOtNameTail[3]; // last 3 bytes of the Game Boy save's OT name
 } BattleMon; // size = 0x50
 
 typedef struct ExtendedRosterInfo {
