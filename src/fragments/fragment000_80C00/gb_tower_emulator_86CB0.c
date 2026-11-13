@@ -184,8 +184,8 @@ typedef struct Bits81112894 {
 extern u8 D_81136998[];
 /**
  * Resets a sequence channel to its defaults. Zelda 64 audio driver.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name and comment guessed from the code.
  */
 void AudioSeq_InitSequenceChannel(void* obj) {
@@ -346,8 +346,8 @@ void AudioSeq_SeqLayerDisable(Particle31FlagsA* arg0) {
 
 /**
  * Returns layer slot `arg1` of a channel to the free list. Zelda 64 audio driver.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name and comment guessed from the code.
  */
 void AudioSeq_SeqLayerFree(s8** arg0, s32 arg1) {
@@ -397,8 +397,8 @@ void func_81112B84(Item8111539C*);
 
 /**
  * Disables each channel selected in `channel_bits`. Zelda 64 audio driver.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name and comment guessed from the code.
  */
 void AudioSeq_SequencePlayerDisableChannels(u8* seqPlayer, s32 channel_bits) {
@@ -437,8 +437,8 @@ void AudioSeq_SequenceChannelEnable(Particle2D68** arg0, u8 arg1, s32 arg2) {
 
 /**
  * Stops a sequence player: disables its channels, clears its note pool and marks its data discardable. Zelda 64 audio driver.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name and comment guessed from the code.
  */
 void AudioSeq_SequencePlayerDisable(u8* arg0) {
@@ -461,8 +461,8 @@ void AudioSeq_SequencePlayerDisable(u8* arg0) {
 
 /**
  * Appends an item to the end of a list if it is on no list. Zelda 64 audio driver.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name and comment guessed from the code.
  */
 void AudioSeq_AudioListPushBack(s8 *arg0, s8 *arg1)
@@ -500,8 +500,8 @@ s32 AudioSeq_AudioListPopBack(s8 *arg0) {
 
 /**
  * Puts every sequence layer on the free list. Zelda 64 audio driver.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name and comment guessed from the code.
  */
 void AudioSeq_InitLayerFreelist(void) {

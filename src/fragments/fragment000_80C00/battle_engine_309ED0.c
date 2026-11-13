@@ -237,8 +237,8 @@ void func_8110CB70(AudioTable8110DCC0*, u8*, s32);
  * and sample tables at their ROM copies and fills in each font's sample bank
  * ids and instrument and drum counts. Same structure as AudioLoad_Init in the
  * Ocarina of Time audio library.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name guessed from the code; comment kept.
  */
 void AudioLoad_Init(void) {

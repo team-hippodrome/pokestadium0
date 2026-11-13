@@ -19,8 +19,8 @@ u32 GbApu_FreqToStep(u16 arg0) {
 /**
  * Applies NR43: selects the 16 KB noise waveform for (shift, width), its loop start, and returns
  * the playback step for the clock divider.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * Seen in play (2026-11-13) ran while Pocket Monsters Green played sound in the GB player; also
+ * when quitting the GB player (C-Up menu, Quit game, Yes) back to the main menu.
  * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
 u32 GbApu_ConfigureNoiseTable(u16 arg0, u16 arg1, u16 arg2) {
@@ -54,8 +54,8 @@ void func_81115AF0(void) {
  * One sample (0..0x7F) of waveform `type` at step `pos`: 0-3 are the NRx1 duty cycles 12.5%, 25%,
  * 50% and 75% over 32 steps, 6 reads the selected noise waveform, 7 wave RAM (4-bit << 3).
  * Types 4 and 5 are unused and return nothing.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * Seen in play (2026-11-13) ran while Pocket Monsters Green played sound in the GB player; also
+ * when the GB player C-Up menu opened.
  * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
 s32 GbApu_GetWaveformSample(u32 arg0, s32 arg1) {
@@ -850,8 +850,8 @@ void GbApu_ResetChannels(void) {
 
 /**
  * noise_table: the decompressed noise waveforms (GbEmu_Init / GbEmu_InitContext).
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void GbApu_Reset(s32 arg0) {

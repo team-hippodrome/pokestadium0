@@ -413,8 +413,8 @@ void func_80024044(void) {
 
 void func_800238D8(); // Called with two or three arguments.
 /**
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) ran when quitting the GB player (C-Up menu, Quit game, Yes) back to the
+ * main menu.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void Save_CommitTypedRecord(s32 arg0, s32 arg1) {

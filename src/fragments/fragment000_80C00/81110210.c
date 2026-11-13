@@ -843,8 +843,8 @@ void AudioPlayback_SeqLayerNoteRelease(Particle* arg0) {
 
 /**
  * Makes an empty circular note list. Zelda 64 audio driver.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name and comment guessed from the code.
  */
 void AudioPlayback_InitNoteList(s8 *arg0) {
@@ -863,8 +863,8 @@ void AudioPlayback_InitNoteList(s8 *arg0) {
  * list, link through the first two words, increment the third and copy the
  * fourth into the inserted node.  Afterwards arg0 itself is stored in the
  * fourth word (offset 0xC) of each block.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name guessed from the code; comment kept.
  */
 void AudioPlayback_InitNoteLists(s8 *arg0) {
@@ -900,8 +900,8 @@ extern s32 D_811858E8;
  * and calls AudioSeq_AudioListPushBack(&D_81184938, record). AudioHeap_DiscardFont, which walks the
  * same array, passes the same list argument to the same function. What the
  * records are is not established from this function.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name guessed from the code; comment kept.
  */
 void AudioPlayback_InitNoteFreeList(void) {
@@ -938,8 +938,8 @@ void AudioPlayback_AudioListRemove(s8*);
  * Moves every note in the four lists of a note pool back to the matching
  * global free list (D_81184938, D_81184948, D_81184958, D_81184968). Same
  * structure as note_pool_clear in the Super Mario 64 audio library.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name guessed from the code; comment kept.
  */
 void AudioPlayback_NotePoolClear(NotePool811111E0* pool) {
@@ -1378,8 +1378,8 @@ extern s8 D_811842C0;
 s32 func_81109868(s8 *, s32);
 /**
  * Resets every note's state and sample buffers. Zelda 64 audio driver.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name and comment guessed from the code.
  */
 void AudioPlayback_NoteInitAll(void) {

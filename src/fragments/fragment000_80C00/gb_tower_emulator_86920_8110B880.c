@@ -282,8 +282,8 @@ extern s32 D_8118461C;
 
 /**
  * Sets up the persistent and temporary sample caches from the misc pool. Zelda 64 audio driver.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name and comment guessed from the code.
  */
 void AudioHeap_InitSampleCaches(s32 arg0, s32 arg1) {
@@ -705,8 +705,8 @@ extern s32 D_811858E0;
  * is filled with the buffer indices and the rest of the queue cleared. Same
  * structure as AudioLoad_InitSampleDmaBuffers in the Ocarina of Time audio
  * library.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name guessed from the code; comment kept.
  */
 void AudioLoad_InitSampleDmaBuffers(s32 num_notes) {
@@ -779,8 +779,8 @@ extern u8 D_81184655[1];
 
 /**
  * Returns 1 when font `arg0` is loaded (status 2 or above) or is 0xFF. Name follows the Zelda 64 audio driver, whose loader this matches.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name and comment guessed from the code.
  */
 s32 AudioLoad_IsFontLoadComplete(s32 arg0) {
@@ -797,8 +797,8 @@ extern u8 D_81184656[1];
 
 /**
  * Returns 1 when sequence `arg0` is loaded (status 2 or above) or is 0xFF. Name follows the Zelda 64 audio driver, whose loader this matches.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name and comment guessed from the code.
  */
 s32 AudioLoad_IsSeqLoadComplete(s32 arg0) {
@@ -1418,8 +1418,8 @@ extern u8* D_811858A4;
  * tables are is not established.
  * Matching note: the result is built in a local and returned once; separate
  * `return` statements in each case give a different register choice.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name guessed from the code; comment kept.
  */
 u8* AudioLoad_GetLoadTable(s32 arg0) {

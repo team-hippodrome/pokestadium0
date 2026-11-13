@@ -957,8 +957,8 @@ extern s32 D_88002B20;
 
 /**
  * Draws the main menu without updating it.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) ran while the GB player prompt (ゲームボーイのポケモン, はい/いいえ) was open over the
+ * main menu.
  * @unverified Name and comment guessed from the code.
  */
 s32 MainMenu_DrawFrame(s32 arg0) {

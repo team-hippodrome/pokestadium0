@@ -419,7 +419,10 @@ extern u8 D_010067D0[];
 extern u8 D_01006890[];
 extern u8 D_01006950[];
 
-/** Draws the textured fill of an HP bar. */
+/**
+ * Draws the textured fill of an HP bar.
+ * Seen in play (2026-11-13) ran on the party (てもち) screen.
+ */
 void BattleHud_DrawHpBarTexture(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     u8* spDC;                 /* chosen fill texture */
     s32 spD8 = arg2 - 4;      /* usable width of the bar */

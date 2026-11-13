@@ -270,8 +270,7 @@ M2C_UNK func_8005C0A0();
  * Fills the 32-byte probe block (probePattern and unk_5D90) for the writable-RAM
  * probe: mode 3 all zeros, mode 2 all ones, mode 1 DP counters and osGetCount values
  * so the pattern differs each run.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * Seen in play (2026-11-13) ran on the GB player loading screen (ロードちゅう).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void GbPak_PrepareProbeBlock(u32* arg0, s32 arg1) {
@@ -720,8 +719,8 @@ void GbEmu_DrawTextCommands(u16* fb, u8* cmd) {
 
 /**
  * Pixel op: keeps the destination when the source alpha bit is clear, else the source.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * Seen in play (2026-11-13) ran on the GB player screen while Pocket Monsters Green booted; also
+ * when the GB player C-Up menu opened.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 GbEmu_PixelOpDitherA(s32 arg0, s32 arg1) {
@@ -761,8 +760,8 @@ s32 GbEmu_PixelOpReplace(UNUSED s32 arg0, s32 arg1) {
 /**
  * Copies a width x height RGBA5551 image into a 320-wide destination, combining
  * each pixel with the selected pixel op.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * Seen in play (2026-11-13) ran on the GB player screen while Pocket Monsters Green booted; also
+ * when the GB player C-Up menu opened.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void GbEmu_BlitWithPixelOp(u16* dst, u16* src, s32 mode, s32 width, s32 height) {
@@ -798,8 +797,8 @@ void func_81103D30(void) {
 
 /**
  * Copies an image using its blue channel as intensity to scale the given color.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * Seen in play (2026-11-13) ran on the GB player screen while Pocket Monsters Green booted; also
+ * when the GB player C-Up menu closed (B); also on the GB player loading screen (ロードちゅう).
  * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
 void GbEmu_BlitTinted(u16* dst, u16* src, s32 color, s32 width, s32 height) {
@@ -819,8 +818,8 @@ void GbEmu_BlitTinted(u16* dst, u16* src, s32 color, s32 width, s32 height) {
 
 /**
  * Additively blends a solid color into the destination using a 4-bit alpha map.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * Seen in play (2026-11-13) ran on the GB player screen while Pocket Monsters Green booted; also
+ * when the GB player C-Up menu closed (B); also on the GB player loading screen (ロードちゅう).
  * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
 void GbEmu_BlendColorWithAlphaMap(u16* dst, u8* alpha_map, s32 color, s32 width, s32 height, u32 alpha_stride) {
@@ -854,8 +853,8 @@ extern u16 D_811207F8[];
 /**
  * Draws a horizontal bar into a 16-bit framebuffer from tinted 8x16 tiles: left cap, repeated
  * middle, right cap.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * Seen in play (2026-11-13) ran on the GB player screen while Pocket Monsters Green booted; also
+ * when the GB player C-Up menu closed (B); also on the GB player loading screen (ロードちゅう).
  * @unverified Name and comment from the code.
  */
 void GbEmu_DrawTintedBar(u8* arg0, s32 arg1, s32 arg2) {
@@ -1055,8 +1054,8 @@ extern u32 D_811565B0;
 /**
  * Bump allocator: aligns the heap pointer to 64 bytes, reserves the size and hangs when the heap
  * runs out.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name and comment from the code.
  */
 s32 GbEmu_AllocAligned64(s32 arg0, M2C_UNK arg1)
@@ -1085,8 +1084,8 @@ void func_81104B60(s32 arg0) {
 
 /**
  * Blocks on an OS timer for the given number of milliseconds.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
- * in a tour of the menus and a COM battle.
+ * Seen in play (2026-11-13) ran when quitting the GB player (C-Up menu, Quit game, Yes) and when it
+ * started again.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void GbEmu_Delay(OSTime arg0) {

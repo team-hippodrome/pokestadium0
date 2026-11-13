@@ -340,8 +340,8 @@ M2C_UNK DpIntro_SetViMode(s8, s8);                      /* extern */
 extern M2C_UNK D_800870D0;
 
 /**
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) ran when quitting the GB player (C-Up menu, Quit game, Yes) back to the
+ * main menu.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void Display_ApplyPendingVideoMode(void) {
