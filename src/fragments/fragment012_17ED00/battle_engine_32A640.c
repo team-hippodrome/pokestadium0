@@ -67,7 +67,7 @@ void BattleAnim_CallbackUnusedGenericFadeApproach(Particle* arg0) {
 
         case 2:
             Particle_ApproachScale(arg0, 3.0f, 0.025f);
-            Particle_TickDelayAndAdvanceLifecycle(arg0, 0x12C);
+            Particle_TickDelayAndAdvanceLifecycle(arg0, 300);
             break;
 
         case 3:

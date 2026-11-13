@@ -135,6 +135,10 @@ void BattleAnim_GetTertiaryOwnerBone9Position(Vec3f* arg0) {
     BattleAnim_GetOwnerBonePosition(gBattleAnimTertiaryOwner, 9, arg0);
 }
 
+/**
+ * Calls BattleScene_GetParticipantModelSizeScaled with arg0.
+ * @unverified Name guessed from the code.
+ */
 void BattleAnim_GetOwnerModelSizeScaled(unk_D_82F20A88* arg0) {
     BattleScene_GetParticipantModelSizeScaled(arg0);
 }
