@@ -141,6 +141,39 @@ def fill(json_path, dictionary_path):
           % (added, dictionary_path, sum(1 for e in strings.values() if not e['en'])))
 
 
+def merge(json_path, auto_dir):
+    """Absorbs the {jp: en} files written by the translation batches into the catalogue.
+
+    A translation is applied to every catalogue entry with that Japanese text, but only where it
+    fits: `room` is the byte extent of the original string, and an English line that does not fit
+    would have to be relocated, which is a separate job.
+    """
+    strings = json.loads(Path(json_path).read_text(encoding='utf-8'))
+    pairs, conflicts = {}, 0
+    for path in sorted(Path(auto_dir).glob('*_en.json')):
+        for jp, en in json.loads(path.read_text(encoding='utf-8')).items():
+            if not en:
+                continue
+            if pairs.get(jp, en) != en:
+                conflicts += 1
+                continue
+            pairs[jp] = en
+    filled = overflow = 0
+    for entry in strings.values():
+        if entry['en'] or entry['jp'] not in pairs:
+            continue
+        text = pairs[entry['jp']]
+        if len(text.encode('ascii', 'replace')) + 1 > entry['room']:
+            overflow += 1
+            continue
+        entry['en'] = text
+        filled += 1
+    Path(json_path).write_text(json.dumps(strings, ensure_ascii=False, indent=1) + '\n', encoding='utf-8')
+    print('%d batch pairs (%d conflicting texts skipped), %d entries filled, %d would not fit, '
+          '%d still untranslated' % (len(pairs), conflicts, filled, overflow,
+                                     sum(1 for e in strings.values() if not e['en'])))
+
+
 def selftest():
     # "バトル" + NUL: 2-byte EUC-JP kana, must be found as one string of 6 bytes plus terminator.
     rom = bytearray(0x100)
@@ -162,7 +195,7 @@ def selftest():
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('command', choices=['dump', 'fill', 'selftest'])
+    ap.add_argument('command', choices=['dump', 'fill', 'merge', 'selftest'])
     ap.add_argument('--rom', default='baseroms/jp/baserom.z64')
     ap.add_argument('--json', default='text/strings.json')
     ap.add_argument('--dictionary', default='text/dictionary.json')
@@ -172,6 +205,9 @@ def main():
         return
     if args.command == 'fill':
         fill(args.json, args.dictionary)
+        return
+    if args.command == 'merge':
+        merge(args.json, 'text/auto')
         return
     dump(args.rom, args.json)
 

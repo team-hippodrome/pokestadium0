@@ -285,6 +285,19 @@ Full English build:
 .venv/bin/python tools/translate_strings.py apply # -> build/pokestadium0-en.z64
 ```
 
+## Bulk translation (2026-11-12)
+
+1657 distinct untranslated strings were split into ten batches (`text/auto/batchNN_jp.json`), each
+translated against the brief in `text/auto/README-translate.md` (Stadium 1 localisation style,
+official names from `text/dictionary.json`, ASCII only, `len(en)+1 <= room`, line breaks and line
+widths preserved). `string_catalog.py merge` absorbs the `*_en.json` results into
+`text/strings.json` for every entry with that Japanese text, but only where the English fits.
+
+Result: 2583 of 2722 strings translated, 139 still Japanese (garbage entries and leftovers), and
+138 that do not fit their original slot — official names like `Weepinbell` in a slot sized for four
+kana. Those need relocation (write the English elsewhere and patch the reference), which is the same
+mechanism workstream 4 needs for attack and Pokédex names.
+
 ## Kana stays visible (2026-11-12)
 
 Stadium 1's sets hold 145 glyphs, Zero's 257. The English payload keeps Stadium 1's 0x90-byte
