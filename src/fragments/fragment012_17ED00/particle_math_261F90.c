@@ -450,6 +450,9 @@ s32 ParticleMath_ApproachS16DownByPointer(s16* arg0, s16 arg1, s16* arg2) {
     return var_v1;
 }
 
+/**
+ * Steps the byte *arg0 toward arg1 by |arg2|; returns 1 once it gets there.
+ */
 s32 func_8213775C(s8* arg0, s8 arg1, s8 arg2) {
     s8 temp_v0 = *arg0;
     s32 var_v1 = 0;
@@ -513,6 +516,9 @@ s32 ParticleMath_ApproachU8(u8* arg0, u8 arg1, u8 arg2) {
     return var_v1;
 }
 
+/**
+ * Steps the halfword *arg0 toward arg1 by |arg2|; returns 1 once it gets there.
+ */
 s32 func_82137898(s16* arg0, s16 arg1, s16 arg2) {
     s16 temp_v0 = *arg0;
     s32 var_v1 = 0;
@@ -980,6 +986,10 @@ s32 BattleAnim_GetCameraContext(void);
 void func_821381E4(Vec3f*, Vec3f, Vec3f);
 s32 BattleAnim_GetCameraContext(void);
 void func_82137F10();
+/**
+ * Writes to arg0 the point arg2 units from the camera eye along the view direction turned
+ * by arg1.
+ */
 void func_82138244(Vec3f *arg0, s32 arg1, f32 arg2) {
     Vec3f dir;
     CameraNode *camera;

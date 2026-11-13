@@ -4,8 +4,9 @@
 /**
  * Phase 35. Same residual damage presentation as BattleScene_PhaseResidualDamageAfterMove for a Pokemon that
  * has no move this turn (usedMove high nibble 0xF); entered by BattleScene_PrepareResidualStatusPresentation.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * Seen in play (2026-11-13) (unattended all-Metronome Free Battle with randomized teams, battle 2
+ * turn 16): ran twice. Teams carried random sleep, poison, burn, freeze and paralysis; the exact
+ * status was not logged.
  * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
 void BattleScene_PhaseResidualDamageWithoutMove(CameraNode* arg0) {
@@ -153,6 +154,10 @@ void BattleScene_PhaseResidualDamageFaintCheck(CameraNode* arg0) {
     }
 }
 
+/**
+ * When the Pokemon is frozen (status 0x20), stops its category-1 particles and sets render
+ * flag 0x20.
+ */
 void func_82130D48(ActivePokemon* active_pokemon) {
     BattleMon* party_pokemon = &active_pokemon->teamRoster->pokemonPicked[M2C_FIELD(active_pokemon, s32*, 0x9D0)];
 
@@ -485,7 +490,7 @@ void BattleScene_UpdatePhase(CameraNode* arg0) {
 void BattleScene_IntroStepInitOverheadCamera(CameraNode* arg0) {
     BattleScene_ResetCameraFrameCounter();
     BattleScene_SetCameraAtFromPosition(arg0, D_8218B630, 0, 0, 0.0f, 0.0f);
-    BattleScene_SetCameraEyeAndStoreAngles(arg0, D_8218B630, 0x3C6E, M2C_FIELD(sBattleScene.scene, s16*, 0x5A) = 0, sBattleScene.scene->unk_74 = D_FLT_82196668, 0.0f);
+    BattleScene_SetCameraEyeAndStoreAngles(arg0, D_8218B630, 0x3C6E, sBattleScene.scene->rotationY = 0, sBattleScene.scene->unk_74 = D_FLT_82196668, 0.0f);
     sActivePokemon[0]->displayObject.node.flags &= ~1;
     sActivePokemon[1]->displayObject.node.flags &= ~1;
     M2C_FIELD(sBattleScene.scene, f32*, 0x64) = D_FLT_8219666C;
@@ -517,7 +522,7 @@ void BattleScene_IntroStepSpinOverheadCamera(CameraNode* arg0) {
     sActivePokemon[1]->displayObject.node.flags &= ~1;
     BattleAnim_ApproachF(&sBattleScene.scene->unk_74, 10000.0f, 0.025f);
     BattleScene_SetCameraAtFromPosition(arg0, D_8218B630, 0, 0, 0.0f, 0.0f);
-    BattleScene_SetCameraEyeAndStoreAngles(arg0, D_8218B630, 0x3C6E, M2C_FIELD(sBattleScene.scene, s16*, 0x5A) -= 0x16C, sBattleScene.scene->unk_74, 0.0f);
+    BattleScene_SetCameraEyeAndStoreAngles(arg0, D_8218B630, 0x3C6E, sBattleScene.scene->rotationY -= 0x16C, sBattleScene.scene->unk_74, 0.0f);
     BattleAnim_ApproachF(&M2C_FIELD(sBattleScene.scene, f32*, 0x64), 1.0f, 0.06f);
     Battle_SetStageScale(M2C_FIELD(sBattleScene.scene, f32*, 0x64));
     if (sBattleScene.scene->stepFrameTimer == 0x3C) {
@@ -579,6 +584,14 @@ void BattleScene_OpeningStepLandSide0Ball(void* arg0) {
     }
 }
 
+/**
+ * Intro camera step: clears node flag 1 on both models, zooms toward distance 60
+ * and turns the camera angle to 0 around (-150, 0, 0). Once the angle is at least 46 and
+ * side 0's model scale is 2.5, plays sound command 2 and advances the phase step.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_IntroPanCamera(CameraNode* arg0) {
     Vec3f sp2C;
 

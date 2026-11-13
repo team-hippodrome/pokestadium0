@@ -14,6 +14,10 @@ void Particle_SetPrimAlpha(s8 *arg0, char arg1);
 void Particle_SetUnkA6(Particle*, s32);
 void func_8213C9D0(Particle*);
 
+/**
+ * Init step for a small particle that drifts to a bone: scale 0.16, a random Y spin, slow
+ * step and rise speeds, palette 0x1A, full alpha and a 2-frame delay.
+ */
 void func_82168C20(Particle* arg0) {
     func_821401D4(arg0, 0.16f);
     func_8213E11C(arg0, -3.2f);
@@ -28,6 +32,10 @@ void func_82168C20(Particle* arg0) {
 
 extern Vec3f D_8219A898;
 
+/**
+ * Particle callback: init, then follows the owner's bone CD while shrinking and fading,
+ * then detaches. Hidden while not running.
+ */
 void func_82168CC4(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -70,6 +78,10 @@ extern u8 D_8218E5A0[];
 s32 func_82107CF0(void*);
 void func_8213B5D8(s32, s32, s32, void (*)(Particle*), u8*, s32, s32, s32, s32, s32, s32);
 
+/**
+ * Spawns the func_82168CC4 effect for side arg0 when D_800733C8 is 0x8080 and that
+ * Pokemon's species is 6 (Charizard).
+ */
 void func_82168E18(s32 arg0) {
     D_8219A810 = D_82199DE0[arg0];
     if (D_800733C8 == 0x8080) {

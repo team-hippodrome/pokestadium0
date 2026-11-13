@@ -444,7 +444,7 @@ s32 Ui_GetSelectionDirection(void* arg0);
 /**
  * Moves the Yes/No cursor. Returns -1 on cancel or No, 1 on Yes.
  * Seen in play (2026-11-13) in the せいとん > ポケモンをにがす confirm, D-Left moved the cursor from いいえ to はい;
- * A on いいえ cancelled and A on はい released.
+ * A on いいえ canceled and A on はい released.
  */
 s32 PcBox_UpdateConfirmCursor(u8* arg0) {
     s32 sp1C = 0;

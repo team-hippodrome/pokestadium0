@@ -389,14 +389,31 @@ void BattleAnim_PlaySoundEffect1(void);
 void BattleAnim_PlaySoundEffect2(void);
 void BattleAnim_PlaySoundEffect3(void);
 
+/**
+ * Plays the menu scroll sound.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name guessed from the code.
+ */
 void BattleAnim_PlaySoundEffect1(void) {
     Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
 }
 
+/**
+ * Plays the menu confirm sound.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
+ * @unverified Name guessed from the code.
+ */
 void BattleAnim_PlaySoundEffect2(void) {
     Audio_PlaySoundEffectById(SFX_MENU_CONFIRM);
 }
 
+/**
+ * Plays the menu back sound.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name guessed from the code.
+ */
 void BattleAnim_PlaySoundEffect3(void) {
     Audio_PlaySoundEffectById(SFX_MENU_BACK);
 }
@@ -428,6 +445,9 @@ void func_82134DC8(s32 arg0) {
  * instead of folding it into the argument register.
  */
 void Audio_PlayCry(s32, s32);
+/**
+ * Plays the cry of species arg0 with mode 2.
+ */
 void func_82134DEC(s16 arg0) {
     Audio_PlayCry(arg0 * 1, 2); // FAKE: no-op * 1
 }
@@ -454,6 +474,12 @@ void ActivePokemon_PlayLandingSoundBySize(ActivePokemon* active_pokemon) {
     }
 }
 
+/**
+ * Sends the battle audio command sequence_id for the known sequences; sequence 0x32 is the
+ * Pokémon's cry and passes its species.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (24 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_PlayBattleSequenceById(ActivePokemon* active_pokemon, s32 sequence_id) {
     s16 species = active_pokemon->displayObject.objectType;
 

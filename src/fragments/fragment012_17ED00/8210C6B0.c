@@ -33,6 +33,10 @@ void BattleMenu_ResetCommandTimer(void) {
     D_FLT_82199EB0 = 0.0f;
 }
 
+/**
+ * While the Pokemon's command state (+0x79C) is 3, adds 0x38E to its action timer and
+ * returns 1; otherwise returns 0.
+ */
 s32 func_8210C708(s8 *arg0) {
     s8 *temp_v1;
 
@@ -44,6 +48,13 @@ s32 func_8210C708(s8 *arg0) {
     return 0;
 }
 
+/**
+ * Takes the trainer index at 0x7B8 as the commanding trainer (0x7B9) and uses that
+ * trainer's controller port for this Pokémon.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_SelectActiveController(ActivePokemon* arg0) {
     ActivePokemonState* ptr = &arg0->state;
 
@@ -56,6 +67,11 @@ void func_8210C738(ActivePokemon* arg0, ActivePokemonState* arg1, Controller* ar
 M2C_UNK func_82134D80();
 extern s8 D_82199DE0;
 
+/**
+ * While the command menu option is 3, waits for L on the Pokemon's controller (unless the
+ * other side's state byte is 16): then runs func_8210C738 for command 2, resets the option
+ * and returns 0. Until then adds 0x38E to the action timer and returns 1.
+ */
 s32 func_8210C778(ActivePokemon* arg0) {
     ActivePokemonState* state = &arg0->state;
     ActivePokemonState* other = &((ActivePokemon**)&D_82199DE0)[func_82107A5C() == 0]->state;
@@ -318,6 +334,12 @@ s32 func_8210CCDC(s8 *arg0, M2C_UNK arg1)
   return 0;
 }
 
+/**
+ * Locks in a forced repeat of the Pokémon's current move (for example a multi-turn move)
+ * after the usual delay.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_ConfirmForcedMoveRepeat(ActivePokemon* arg0) {
     ActivePokemonState* ptr = &arg0->state;
 
@@ -342,6 +364,13 @@ void func_8211F274();
 M2C_UNK ActivePokemon_ShowCaption();
 extern s32 D_8218C6FC;
 
+/**
+ * Returns 1 if the chosen party member has HP left; otherwise plays the error sound,
+ * shows a caption and returns 0.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 s32 BattleScene_ValidateSelectedPartyMember(ActivePokemon* arg0) {
     if (arg0->sessionTeams->teamMember[M2C_FIELD(arg0, u8*, 0x7B9)]->pokemonPicked[arg0->state.actionChosen].hp != 0) {
         return 1;
@@ -439,6 +468,9 @@ void func_8211F274();                            /* extern */
 M2C_UNK ActivePokemon_ShowCaption(s32, s32, s32);               /* extern */
 extern s32 D_8218C700;
 
+/**
+ * Clears the caption state and shows caption D_8218C700 with the Pokemon's nickname.
+ */
 void func_8210CFE4(s32 arg0) {
     func_8211F274();
     ActivePokemon_ShowCaption(arg0, D_8218C700, ActivePokemon_GetNickname(arg0));
@@ -651,6 +683,11 @@ extern u8 D_800AAF50[];
 void BattleMenu_TakeControlOnBPress(ActivePokemon*, u8*, u8*, s32);
 void func_82134D60(void);
 
+/**
+ * Reads the buttons of the Pokemon's controller(s) (both trainers in a tag battle) into its
+ * command state: A sets 1, B sets 2 and lets the partner take control, Start sets 3. A, B
+ * or Start (when the other side isn't in state 4) also calls func_82134D60.
+ */
 void func_8210D6BC(ActivePokemon* arg0) {
     s8* state = (s8*)arg0 + 0x78C;
     s8* other = (s8*)sActivePokemon[BattleScene_GetParticipantSideIndex(arg0) == 0] + 0x78C;
@@ -693,6 +730,12 @@ s32 func_8210C778(ActivePokemon*);
 void func_8210D6BC(ActivePokemon* active_pokemon);
 void BattleMenu_UpdateSwitchMenu(ActivePokemon* active_pokemon);
 void BattleMenu_UpdateSurrenderPrompt(ActivePokemon* active_pokemon);
+/**
+ * Reads the player's command menu input for this turn. Returns 1 once an action has been
+ * chosen.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 s32 BattleScene_HandlePlayerActionInput(ActivePokemon* arg0) {
     ActivePokemonState* opponent_state = &sActivePokemon[BattleScene_GetParticipantSideIndex(arg0) == 0]->state;
 
@@ -721,6 +764,11 @@ s32 BattleScene_HandlePlayerActionInput(ActivePokemon* arg0) {
     return 0;
 }
 
+/**
+ * Collects the human player's action for the turn: handles a fainted switch, otherwise
+ * reads the command menu unless the Pokémon is locked into a move, in which case the
+ * repeat is confirmed.
+ */
 void BattleScene_CollectPlayerAction(ActivePokemon* arg0, ActivePokemon* arg1) {
     UNUSED s32 pad; // FAKE: stack padding
     BattleMonRuntime* sp20 = &arg0->state.runtime;
@@ -840,6 +888,12 @@ s32 BattleScene_HandleCpuFaintedSwitch(ActivePokemon* arg0, ActivePokemon* arg1)
     return 0;
 }
 
+/**
+ * Locks in a COM Pokémon's forced repeat of its current move after the usual delay.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_CompleteCpuForcedAction(ActivePokemon* arg0, UNUSED ActivePokemon* arg1) {
     ActivePokemonState* ptr = &arg0->state;
 
@@ -881,6 +935,13 @@ void BattleScene_AutoConfirmCpuMove(ActivePokemon* arg0, ActivePokemon* arg1) {
 }
 
 s32 BattleMenu_MustStruggle(ActivePokemon* arg0);
+/**
+ * Applies the COM's chosen move (a slot under 4) on its thinking timer: at frame 30 it
+ * opens Fight with a sound, and at frame 90 (or 10 once the player has locked in) it picks
+ * the move, or Struggle when no move has PP.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (5 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_ApplyCpuChoice(ActivePokemon* arg0, ActivePokemon* arg1) {
     ActivePokemonState* sp18;
     ActivePokemonState* sp14;
@@ -917,6 +978,12 @@ void BattleScene_ApplyCpuChoice(ActivePokemon* arg0, ActivePokemon* arg1) {
     }
 }
 
+/**
+ * Applies the COM's choice once its thinking delay is over when the choice is a switch
+ * (4 or more). Returns 1 if it applied one.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (11 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 s32 BattleScene_ApplyCpuSwitchChoice(ActivePokemon* arg0, ActivePokemon* arg1) {
     ActivePokemonState* sp1C = &arg0->state;
     ActivePokemonState* sp18 = &arg1->state;
@@ -954,6 +1021,12 @@ extern s32 D_8439013C;
 extern s32 D_84390138;
 extern s32 D_82199EBC;
 s32 BattleAi_ChooseTurnAction(s32, s32, s32, s32, s8*);
+/**
+ * On the first frame of the COM's thinking delay, runs the COM AI once to pick its turn
+ * action.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (11 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_TriggerCpuChoice(s32 arg0, s32 arg1, s8* arg2, s8* arg3, ActivePokemon* arg4) {
     if (D_FLT_82199EB0 == 1.0f) {
         if (D_82199EBC == 0) {
@@ -965,6 +1038,10 @@ void BattleScene_TriggerCpuChoice(s32 arg0, s32 arg1, s8* arg2, s8* arg3, Active
 
 extern f32 D_82199EB0;
 extern s32 D_82199EBC;
+/**
+ * Collects the COM's action for the turn: handles a fainted switch, otherwise runs the COM
+ * AI and applies its move or switch, or confirms a forced repeat.
+ */
 s32 BattleScene_CollectCpuAction(ActivePokemon* arg0, ActivePokemon* arg1) {
     BattleMonRuntime* sp34 = &arg0->state.runtime;
     BattleMonRuntime* sp30 = &arg1->state.runtime;
@@ -1068,9 +1145,9 @@ extern s32 D_82199F18[];
 /**
  * Feeds the scripted controller input for the current side (D_8218ABB8: frames,
  * pressed, held), as used by the demo battles.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) (title-screen demo battle, left idle after boot: Lapras vs Zapdos, then
+ * Ditto and Jynx): ran for both sides on the demo's first turn, returning 0 for side 0 and 1 for
+ * side 1. It did not run in the 165-move or Metronome Free Battle sweeps.
  */
 void BattleDemo_PlayScriptedInput() {
     s32 i = func_82107A5C();
@@ -1092,8 +1169,9 @@ void BattleDemo_PlayScriptedInput();
 /**
  * Runs the scripted input, then locks move selection when a volatile or trapping
  * state forces the move.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * Seen in play (2026-11-13) (title-screen demo battle, left idle after boot): ran for both sides on
+ * the demo's first turn, each time just before BattleDemo_PlayScriptedInput. It did not run in
+ * 165-move or Metronome Free Battles.
  * @unverified Name and comment guessed from the code.
  */
 void Battle_PrepareTurnInput(ActivePokemon* arg0, ActivePokemon* arg1) {

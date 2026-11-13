@@ -41,12 +41,25 @@ void BattleAnim_CallbackOrphanDescriptor2EScatterFade(Particle* arg0);
 void BattleAnim_RunPetalDanceLingeringHitEffect(Particle* arg0);
 void BattleAnim_RunSlowFallingHitEffect(Particle* arg0);
 
+/**
+ * Lifecycle init: white and fully opaque.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_UnusedResetAppearanceAndAdvance(Particle* arg0) {
     Particle_SetPrimColor(arg0, 0xFF, 0xFF, 0xFF);
     Particle_SetPrimAlpha(arg0, 0xFF);
     Particle_AdvanceLifecycle(arg0);
 }
 
+/**
+ * Particle callback: resets the color, then fades the particle while moving it on a
+ * circle of radius 32.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_CallbackUnusedGenericFadeApproach(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 0:
@@ -58,7 +71,7 @@ void BattleAnim_CallbackUnusedGenericFadeApproach(Particle* arg0) {
 
         case 2:
             Particle_ApproachScale(arg0, 3.0f, 0.025f);
-            Particle_TickDelayAndAdvanceLifecycle(arg0, 0x12C);
+            Particle_TickDelayAndAdvanceLifecycle(arg0, 300);
             break;
 
         case 3:
@@ -75,6 +88,13 @@ void BattleAnim_CallbackUnusedGenericFadeApproach(Particle* arg0) {
     Particle_UpdateRotatingVelocityXZ(arg0, 32.0f, 0x400);
 }
 
+/**
+ * Lifecycle init: small, randomly rotated and spinning, fast, delayed 4 frames per burst
+ * index.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_SetupOrphanDescriptor2BSpinFade(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
 
@@ -91,6 +111,13 @@ void BattleAnim_SetupOrphanDescriptor2BSpinFade(Particle* arg0) {
 
 void func_8213E1FC(Particle* arg0, f32 arg1);
 s32 Particle_ApproachStepMagnitude(Particle* arg0, f32 arg1, f32 arg2);
+/**
+ * Particle callback: after the delay shows the particle, flies it out spinning, then
+ * fades it.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_CallbackOrphanDescriptor2BSpinFade(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -105,13 +132,13 @@ void BattleAnim_CallbackOrphanDescriptor2BSpinFade(Particle* arg0) {
             break;
 
         case 3:
-            if (Particle_TickDelayAndAdvanceLifecycle(arg0, 0x32) != 0) {
+            if (Particle_TickDelayAndAdvanceLifecycle(arg0, 50) != 0) {
                 Particle_AdvancePhase(arg0);
             }
             break;
 
         case 4:
-            if (Particle_TickDelayAndAdvanceLifecycle(arg0, 0x14) != 0) {} // karodo
+            if (Particle_TickDelayAndAdvanceLifecycle(arg0, 20) != 0) {} // karodo
             break;
 
         case 5:
@@ -138,6 +165,13 @@ void BattleAnim_CallbackOrphanDescriptor2BSpinFade(Particle* arg0) {
     }
 }
 
+/**
+ * Lifecycle init: half scale, fast, small random tilt, palette color 0x22, delayed 4
+ * frames per burst index.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_SetupOrphanDescriptor2EScatterFade(Particle* arg0) {
     s16 sp2E = Particle_FieldAC_GetS16_0C038(arg0);
 
@@ -253,7 +287,7 @@ void BattleAnim_RunPetalDanceLingeringHitEffect(Particle* arg0) {
             break;
 
         case 5:
-            Particle_TickDelayAndAdvanceLifecycle(arg0, 0x46);
+            Particle_TickDelayAndAdvanceLifecycle(arg0, 70);
             break;
 
         case 6:
@@ -385,16 +419,29 @@ void BattleAnim_RunSlowFallingHitEffect(Particle* arg0) {
     }
 }
 
+/**
+ * Draw hook for start effects that draw nothing.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_DefaultStartEffect_Draw(void) {
 }
 
+/**
+ * Effect sequence: sets effect state flag 1 after 128 frames, spawns four waves of
+ * spinning particles, then 58 frames later four scatter bursts.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_OrphanDescriptor2BAnd2EEmitterSequence(void) {
     BattleAnim_SpawnCategory17MarkerSlot(0x80, 1);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackOrphanDescriptor2BSpinFade, &gBattleAnimParticleDescriptors[0x2B], 0, 0x10, 0xA, 0, 0, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(2, BattleAnim_CallbackOrphanDescriptor2BSpinFade, &gBattleAnimParticleDescriptors[0x2B], 0, 0x10, 0xA, 0, 0, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(4, BattleAnim_CallbackOrphanDescriptor2BSpinFade, &gBattleAnimParticleDescriptors[0x2B], 0, 0x10, 0xA, 0, 0, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_CallbackOrphanDescriptor2BSpinFade, &gBattleAnimParticleDescriptors[0x2B], 0, 8, 0xA, 0, 0, 0);
-    BattleAnim_AddSpawnDelay(0x3A);
+    BattleAnim_AddSpawnDelay(58);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackOrphanDescriptor2EScatterFade, &gBattleAnimParticleDescriptors[0x2E], 0, 0x10, 2, 0, 0, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackOrphanDescriptor2EScatterFade, &gBattleAnimParticleDescriptors[0x2E], 0, 0x10, 2, 0, 0, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackOrphanDescriptor2EScatterFade, &gBattleAnimParticleDescriptors[0x2E], 0, 0x10, 2, 0, 0, 0);

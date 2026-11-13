@@ -266,6 +266,10 @@ unk_D_8690A610* GeoNode_CreateFog(s32 arg0, unk_D_8690A610* arg1, s16 arg2, s16 
     return arg1;
 }
 
+/**
+ * Allocates a directional light graph node (type 0xB) with a color and two s16 light
+ * parameters (stored at 0x1C and 0x1E). Allocates from arg0 if given, else uses arg1.
+ */
 unk_D_86002F34_alt18* GeoNode_CreateLight(MainPoolState* arg0, unk_D_86002F34_alt18* arg1, s16 arg2, s16 arg3, u8 r, u8 g,
                                     u8 b, u8 a) {
     if (arg0 != NULL) {
@@ -301,6 +305,10 @@ unk_D_86002F34_alt19* GeoNode_CreateAmbientLight(MainPoolState* arg0, unk_D_8600
     return arg1;
 }
 
+/**
+ * Allocates a graph node of type 0xE that holds three tables with their counts (arg3/arg2,
+ * arg5/arg4, arg7/arg6), used as the shadow context.
+ */
 unk_D_86002F34* GeoNode_CreateShadowContext(MainPoolState* arg0, unk_D_86002F34* arg1, s32 arg2, unk_D_86002F34_018* arg3, s32 arg4,
                               unk_D_86002F34_01C* arg5, s32 arg6, Vtx* arg7) {
     if (arg0 != NULL) {
@@ -321,6 +329,9 @@ unk_D_86002F34* GeoNode_CreateShadowContext(MainPoolState* arg0, unk_D_86002F34*
     return arg1;
 }
 
+/**
+ * Allocates a shadow graph node (type 0xF) with four s16 parameters.
+ */
 unk_D_86002F34_alt12* GeoNode_CreateShadow(MainPoolState* arg0, unk_D_86002F34_alt12* arg1, s16 arg2, s16 arg3, s16 arg4,
                                     s16 arg5) {
     if (arg0 != NULL) {
@@ -399,6 +410,10 @@ unk_D_86002F34_alt22* GeoNode_CreateTranslate(MainPoolState* arg0, unk_D_86002F3
     return arg1;
 }
 
+/**
+ * Allocates an animated part graph node (type 0x14) with a translation, rotation and
+ * scale and three s16 part parameters.
+ */
 unk_D_86002F34_alt6* GeoNode_CreateAnimatedPart(MainPoolState* arg0, unk_D_86002F34_alt6* arg1, s16 arg2, s16 arg3, s16 arg4,
                                    Vec3s* arg5, Vec3s* arg6, Vec3f* arg7) {
     if (arg0 != NULL) {
@@ -434,6 +449,10 @@ unk_D_86002F34_alt7* GeoNode_CreateDisplayListPart(MainPoolState* arg0, unk_D_86
     return arg1;
 }
 
+/**
+ * Allocates a model part display object (graph node type 0x16) at a position, rotation
+ * and scale, with full alpha, white fog and tint, and no animation.
+ */
 DisplayObject* GeoNode_CreateModelPart(MainPoolState* arg0, DisplayObject* arg1, s16 arg2, Vec3f* arg3,
                                       Vec3s* arg4, Vec3f* arg5) {
     if (arg0 != 0) {
@@ -487,6 +506,10 @@ unk_D_86002F34_alt8* GeoNode_CreateDisplayListMatrix(MainPoolState* arg0, unk_D_
     return arg1;
 }
 
+/**
+ * Builds a matrix from a translation and rotation, then allocates a display list matrix
+ * node with it.
+ */
 unk_D_86002F34_alt8* GeoNode_CreateDisplayListMatrixFromTransform(MainPoolState* arg0, unk_D_86002F34_alt8* arg1, s32 arg2, Gfx* arg3, Vec3f* arg4,
                                    Vec3s* arg5) {
     MtxF sp20;
@@ -495,6 +518,10 @@ unk_D_86002F34_alt8* GeoNode_CreateDisplayListMatrixFromTransform(MainPoolState*
     return GeoNode_CreateDisplayListMatrix(arg0, arg1, arg2, arg3, &sp20);
 }
 
+/**
+ * Allocates a scale graph node (type 0x18) on render layer arg2 that draws display list
+ * arg3 at offset arg4 scaled by arg5.
+ */
 unk_D_86002F34_alt9* GeoNode_CreateScale(MainPoolState* arg0, unk_D_86002F34_alt9* arg1, s32 arg2, Gfx* arg3, Vec3f* arg4,
                                    f32 arg5) {
     if (arg0 != NULL) {
@@ -527,6 +554,10 @@ unk_func_80011B94* GeoNode_CreateDisplayList(MainPoolState* arg0, unk_func_80011
     return arg1;
 }
 
+/**
+ * Allocates a shadow texture graph node (type 0x1A) with a display list, size parameters
+ * and an RGBA color.
+ */
 unk_D_86002F34_alt10* GeoNode_CreateShadowTexture(MainPoolState* arg0, unk_D_86002F34_alt10* arg1, s16 arg2, s16 arg3, Gfx* arg4,
                                     s16 arg5, s16 arg6, u8 r, u8 g, u8 b, u8 a) {
     if (arg0 != NULL) {
@@ -563,6 +594,10 @@ unk_D_86002F34_alt23* GeoNode_CreateAnchor(MainPoolState* arg0, unk_D_86002F34_a
     return arg1;
 }
 
+/**
+ * Allocates a group graph node (type 0x1C) on render layer arg2 with six s16 parameters, a
+ * word parameter and an RGBA color.
+ */
 unk_D_86002F34_alt24* GeoNode_CreateGroup(MainPoolState* arg0, unk_D_86002F34_alt24* arg1, s32 arg2, s16 arg3, s16 arg4,
                                     s16 arg5, s16 arg6, s16 arg7, s16 arg8, s32 arg9, u8 r, u8 g, u8 b, u8 a) {
     if (arg0 != NULL) {

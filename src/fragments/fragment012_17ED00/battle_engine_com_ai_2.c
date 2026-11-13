@@ -241,6 +241,9 @@ void BattleAi_StirRandom(void) {
     }
 }
 
+/**
+ * Empty.
+ */
 void func_82183BA8(void) {
 }
 
@@ -339,21 +342,39 @@ s32 BattleAi_CountUnfainted(u8 *arg0) {
     return count;
 }
 
+/**
+ * Empty.
+ */
 void func_82183D9C(void) {
 }
 
+/**
+ * Empty.
+ */
 void func_82183DA4(void) {
 }
 
+/**
+ * Empty.
+ */
 void func_82183DAC(void) {
 }
 
+/**
+ * Empty.
+ */
 void func_82183DB4(void) {
 }
 
+/**
+ * Empty.
+ */
 void func_82183DBC(void) {
 }
 
+/**
+ * Empty.
+ */
 void func_82183DC4(void) {
 }
 
@@ -368,6 +389,9 @@ void BattleAi_AddRandomPickScore(s8* arg0) {
     M2C_FIELD(arg0, s32*, 4) += (BattleAi_RandomPercent() & 0xF) * 400;
 }
 
+/**
+ * Empty.
+ */
 void func_82183E1C(void) {
 }
 

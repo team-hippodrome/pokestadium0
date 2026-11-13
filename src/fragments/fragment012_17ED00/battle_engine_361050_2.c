@@ -266,57 +266,122 @@ s32 BattleAnim_DefaultEndEffect_CompleteImmediately(void);
 void func_8216DA50(void);
 void func_8216DA58(void);
 
+/**
+ * Empty.
+ */
 void func_8216D990(void) {
 }
 
+/**
+ * Empty.
+ */
 void func_8216D998(void) {
 }
 
+/**
+ * Empty.
+ */
 void func_8216D9A0(void) {
 }
 
+/**
+ * Empty.
+ */
 void func_8216D9A8(void) {
 }
 
+/**
+ * Empty.
+ */
 void func_8216D9B0(void) {
 }
 
+/**
+ * Empty.
+ */
 void func_8216D9B8(void) {
 }
 
+/**
+ * Intro camera step that does nothing.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_IntroStepNop(UNUSED CameraNode* arg0) {
 }
 
+/**
+ * Empty.
+ */
 void func_8216D9C8(UNUSED s32 arg0) {
 }
 
+/**
+ * Empty.
+ */
 void func_8216D9D0(void) {
 }
 
+/**
+ * Draws a full-screen overlay in the saved primitive color, fully opaque.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_DrawStoredColorOverlay(void) {
     BattleAnim_DrawFullScreenColorOverlay(gSavedPrimColorR, gSavedPrimColorG, gSavedPrimColorB, 0xFF);
 }
 
+/**
+ * Calls AuxiliaryEffect_Init.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_ReinitAuxiliaryEffects(void) {
     AuxiliaryEffect_Init();
 }
 
+/**
+ * Empty.
+ */
 void func_8216DA30(void) {
 }
 
+/**
+ * Empty draw hook.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (112 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void MewtwoIntro_DrawOverlay(void) {
 }
 
+/**
+ * Update hook for start effects with nothing to run: returns -1 (done) right away.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (130 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 s32 BattleAnim_DefaultStartEffect_CompleteImmediately(void) {
     return -1;
 }
 
+/**
+ * Update hook for end effects with nothing to run: returns -1 (done) right away.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (112 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 s32 BattleAnim_DefaultEndEffect_CompleteImmediately(void) {
     return -1;
 }
 
+/**
+ * Empty.
+ */
 void func_8216DA50(void) {
 }
 
+/**
+ * Empty.
+ */
 void func_8216DA58(void) {
 }

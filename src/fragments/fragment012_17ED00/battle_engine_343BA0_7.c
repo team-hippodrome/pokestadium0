@@ -47,31 +47,68 @@ void BattleAnim_SetupSurfUseTerrainGrid(void);
 s32 BattleAnim_RunSurfUseTerrainGrid(void);
 void BattleAnim_DrawSurfUseTerrainGrid(void);
 
+/**
+ * Calls BattleAnim_GetTertiaryOwnerBonePosition.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
+ * @unverified Name from Stadium 1.
+ */
 void Battle_GetTertiaryOwnerBonePositionUnused(Vec3f* arg0) {
     BattleAnim_GetTertiaryOwnerBonePosition(arg0);
 }
 
+/**
+ * Calls BattleAnim_GetSecondaryOwnerAnchorPosition.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (23 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_EffectSecondaryOwnerAnchorPosition(Vec3f* arg0) {
     BattleAnim_GetSecondaryOwnerAnchorPosition(arg0);
 }
 
+/**
+ * Calls BattleAnim_GetTertiaryOwnerBonePosition.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (13 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_EffectTertiaryOwnerBonePosition(Vec3f* arg0) {
     BattleAnim_GetTertiaryOwnerBonePosition(arg0);
 }
 
+/**
+ * Calls BattleAnim_GetSecondaryOwnerBonePosition.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (28 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_EffectSecondaryOwnerBonePosition(Vec3f* arg0) {
     BattleAnim_GetSecondaryOwnerBonePosition(arg0);
 }
 
+/**
+ * Returns BattleAnim_GetTertiaryOwnerModelScale.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (12 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 f32 BattleAnim_EffectTertiaryOwnerModelScale(void) {
     return BattleAnim_GetTertiaryOwnerModelScale();
 }
 
+/**
+ * Returns BattleAnim_GetSecondaryOwnerModelScale.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (19 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 f32 BattleAnim_EffectSecondaryOwnerModelScale(void) {
     return BattleAnim_GetSecondaryOwnerModelScale();
 }
 
 extern char D_82197890[];
+/**
+ * Writes the secondary owner's anchor position to arg0..arg2 and the tertiary owner's bone
+ * position to arg3..arg5, as separate floats.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (13 of the moves).
+ * @unverified Name guessed from the code.
+ */
 void BattleAnim_CalcVectorAtToDm(f32* arg0, f32* arg1, f32* arg2, f32* arg3, f32* arg4, f32* arg5) {
     Vec3f sp4C;
     Vec3f sp40;
@@ -108,6 +145,11 @@ void BattleAnim_CalcVectorAtToDm(f32* arg0, f32* arg1, f32* arg2, f32* arg3, f32
     *arg5 = sp1C;
 }
 
+/**
+ * Sets the shared effect matrix D_8219CAC8 to the identity.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (45 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_ResetSharedEffectMatrix(void) {
     guRotateRPY(&D_8219CAC8, 0.0f, 0.0f, 0.0f);
 }
@@ -170,16 +212,33 @@ void BattleAnim_SetupStatLowerRibbon(void) {
     StatRibbon_Spawn(sp24.x, sp24.y, sp24.z, 40.0f, sp20, 1);
 }
 
+/**
+ * Updates the stat-change ribbon pool; returns its result.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (8 of the moves).
+ * @unverified Name guessed from the code.
+ */
 s32 BattleAnim_RunStatLowerRibbon(void) {
     return StatRibbon_UpdatePool();
 }
 
+/**
+ * Loads the shared effect matrix and draws the stat-change ribbon pool.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (8 of the moves).
+ * @unverified Name guessed from the code.
+ */
 void BattleAnim_DrawStatLowerRibbon(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     gDisplayListHead = StatRibbon_DrawPool(gDisplayListHead);
 }
 
+/**
+ * Init hook for end effect 19: like end effect 1, but spawns two Mist/Haze clouds (radii
+ * 40 and 38) of different kinds.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_EndEffect19RibbonMesh_Init(void) {
     Vec3f sp24;
     f32 sp20;
@@ -192,10 +251,22 @@ void BattleAnim_EndEffect19RibbonMesh_Init(void) {
     StatRibbon_Spawn(sp24.x, sp24.y, sp24.z, 38.0f, sp20, 1);
 }
 
+/**
+ * Update hook for end effect 19: updates the Mist/Haze clouds and returns their result.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 s32 BattleAnim_EndEffect19RibbonMesh_Update(void) {
     return StatRibbon_UpdatePool();
 }
 
+/**
+ * Draw hook for end effect 19: loads the shared matrix and draws the Mist/Haze clouds.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_EndEffect19RibbonMesh_Draw(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 

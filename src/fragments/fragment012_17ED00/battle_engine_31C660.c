@@ -17,6 +17,9 @@ extern func_D_8438AE50 sMoveEffectHandlers[];
 void func_82113660(void);
 void BattleEffect_Explosion(void);
 
+/**
+ * Empty.
+ */
 void func_82113660(void) {
 }
 
@@ -73,6 +76,15 @@ extern s32 D_8218C7D0;
 extern s32 D_8218C7D4;
 
 // Matches the ROM, but uses rodata data that is not placed in this file yet.
+/**
+ * Poison move effects. Poisons the target if it is not behind a Substitute, has no status
+ * and is not Poison type. Effect 2 is the 20% side effect and effect 33 the 40% side
+ * effect; any other effect runs a hit test first (failing with a message). Toxic also sets
+ * the badly poisoned bit and resets the Toxic counter. When the target can't be poisoned,
+ * effect 0x42 fails the move.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (7 of the moves).
+ * @unverified Name guessed from the code.
+ */
 void Battle_Effect_Poison(void) {
     s32 sp1C = D_8219A520 + 0x88;
 
@@ -133,6 +145,12 @@ extern s32 D_8218C7D8;
 extern s32 D_8218C7DC;
 
 // Matches the ROM, but uses rodata data that is not placed in this file yet.
+/**
+ * Drain move effect: heals the user by half the damage dealt (at least 1, capped at max HP)
+ * and queues the message. Effect 8 (Dream Eater) uses its own message.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
+ * @unverified Name guessed from the code.
+ */
 void Battle_Effect_DrainHP(void) {
     sBattleDamage /= 2;
     if (sBattleDamage == 0) {
@@ -229,9 +247,9 @@ extern s32 D_8218C808;
 extern s32 D_8218C820;
 /**
  * Apply the Rage follow-up stat boost, using its separate message queue.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-13) (Free Battle, 1P Metronome pinned to Rage, then COM's pinned to
+ * Tackle): ran once when Tackle hit the raging Onix, which showed 「イワイワの いかりの…」 and 「イワイワの こうげきりょくが
+ * あがった！」.
  */
 void BattleEffect_ApplyStatBoost(void) {
     s32 sp24;
@@ -396,6 +414,15 @@ extern s32 D_8218C854;
 extern s32 D_8218C858;
 
 // Matches the ROM, but uses rodata data that is not placed in this file yet.
+/**
+ * Stat-lowering move effects. Effects below 0x44 are status moves that run a hit test and
+ * lower a stat by one stage (two for the sharply-lowering effects); 0x44 and up are the 33%
+ * side effects of damaging moves. Lowers the target's stage (minimum stage 1), recomputes
+ * the stat from the stage table, queues the message and reapplies the paralysis and burn
+ * stat cuts. Fails with a message behind a Substitute, on a miss or at the minimum stage.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (14 of the moves).
+ * @unverified Name guessed from the code.
+ */
 void Battle_Effect_LowerStat(void) {
     s32 sp24;
     s32 sp20;

@@ -29,5 +29,8 @@
 
 void func_82183AE0(void);
 
+/**
+ * Empty.
+ */
 void func_82183AE0(void) {
 }

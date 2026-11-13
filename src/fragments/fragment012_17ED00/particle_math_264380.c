@@ -42,54 +42,67 @@ void ParticleGfx_SetPartiallyAnimatedTileSize(Gfx* gfx, s32 arg1, s32 arg2, s32 
 void ParticleGfx_SetPartiallyAnimatedAuxTileSize(Gfx* gfx, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 /**
  * Append a 32-bit texture block load with caller-supplied format and addressing.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_LoadTextureBlock32(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
                    s32 shiftt);
 /**
  * Append a 32-bit texture tile load with caller-supplied format and addressing.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_LoadTextureTile32(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
                    s32 shiftt);
 /**
  * Append a 16-bit texture block load with caller-supplied format and addressing.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (5 of the moves).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_LoadTextureBlock16(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
                    s32 shiftt);
 /**
  * Append a 16-bit texture tile load with caller-supplied format and addressing.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_LoadTextureTile16(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
                    s32 shiftt);
 /**
  * Append a 8-bit texture block load with caller-supplied format and addressing.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (92 of the moves).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_LoadTextureBlock8(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
                    s32 shiftt);
 /**
  * Append a 8-bit texture tile load with caller-supplied format and addressing.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_LoadTextureTile8(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
                    s32 shiftt);
 /**
  * Append a 4-bit texture block load with caller-supplied format and addressing.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (110 of the moves).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_LoadTextureBlock4(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
                    s32 shiftt);
 /**
  * Append a 4-bit texture tile load with caller-supplied format and addressing.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (10 of the moves).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_LoadTextureTile4(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
                    s32 shiftt);
 /**
  * Load textures into the explicitly selected TMEM regions/tiles for multi-texture rendering.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (17 of the moves).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_LoadTextureMultiBlock4(u8* texture, s32 tmem, s32 rtile, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks,
@@ -201,10 +214,16 @@ s32 func_82168F54(s32 arg0)
   return var_v1;
 }
 
+/**
+ * Sets the render mode to 0x0C180000 / 0x5978.
+ */
 void func_82168F7C(void) {
     gDPSetRenderMode(gDisplayListHead++, 0x0C180000, 0x5978);
 }
 
+/**
+ * Loads a 256-color palette.
+ */
 void func_82168FAC(u16* palette) {
     gDPLoadTLUT_pal256(gDisplayListHead++, palette);
 }
@@ -248,6 +267,9 @@ void ParticleGfx_SetEnvColor(u8 r, u8 g, u8 b, u8 a) {
     gDPSetEnvColor(gDisplayListHead++, r, g, b, a);
 }
 
+/**
+ * Sets the prim color (arg0, arg1, arg2, alpha arg6) and env color (arg3, arg4, arg5).
+ */
 void func_82169200(u8 arg0, u8 arg1, u8 arg2, u8 arg3, u8 arg4, u8 arg5, u8 arg6) {
     gDPPipeSync(gDisplayListHead++);
     gDPSetPrimColor(gDisplayListHead++, 0, 0, arg0, arg1, arg2, arg6);
@@ -432,6 +454,9 @@ s32 ParticleGfx_TextureSizeLog2(s32 arg0) {
     return var_v1;
 }
 
+/**
+ * Sets up the load and render tiles for a width x height RGBA16 texture loaded as a block.
+ */
 void func_82169B14(s32 width, s32 height) {
     gDPPipeSync(gDisplayListHead++);
     gDPTileSync(gDisplayListHead++);
@@ -443,6 +468,9 @@ void func_82169B14(s32 width, s32 height) {
     gDPSetTileSize(gDisplayListHead++, G_TX_RENDERTILE, 0, 0, (width - 1) << 2, (height - 1) << 2);
 }
 
+/**
+ * Sets up the load and render tiles for a width x height RGBA16 texture loaded as a tile.
+ */
 void func_82169BF0(s32 width, s32 height) {
     gDPPipeSync(gDisplayListHead++);
     gDPTileSync(gDisplayListHead++);
@@ -454,6 +482,10 @@ void func_82169BF0(s32 width, s32 height) {
     gDPSetTileSize(gDisplayListHead++, G_TX_RENDERTILE, 0, 0, (width - 1) << 2, (height - 1) << 2);
 }
 
+/**
+ * Sets up the load and render tiles for a width x height RGBA32 texture loaded as a block.
+ * The render tile line uses the RGBA16 size (width * 2 bytes).
+ */
 void func_82169CCC(s32 width, s32 height) {
     gDPPipeSync(gDisplayListHead++);
     gDPTileSync(gDisplayListHead++);
@@ -465,6 +497,10 @@ void func_82169CCC(s32 width, s32 height) {
     gDPSetTileSize(gDisplayListHead++, G_TX_RENDERTILE, 0, 0, (width - 1) << 2, (height - 1) << 2);
 }
 
+/**
+ * Sets up the load and render tiles for a width x height RGBA32 texture loaded as a tile.
+ * The line size uses the RGBA16 size (width * 2 bytes).
+ */
 void func_82169DA8(s32 width, s32 height) {
     gDPPipeSync(gDisplayListHead++);
     gDPTileSync(gDisplayListHead++);
@@ -476,77 +512,126 @@ void func_82169DA8(s32 width, s32 height) {
     gDPSetTileSize(gDisplayListHead++, G_TX_RENDERTILE, 0, 0, (width - 1) << 2, (height - 1) << 2);
 }
 
+/**
+ * Loads a width x height RGBA16 texture as one block.
+ */
 void func_82169E84(u8* texture, s32 width, s32 height) {
     gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, texture);
     gDPLoadSync(gDisplayListHead++);
     gDPLoadBlock(gDisplayListHead++, G_TX_LOADTILE, 0, 0, width * height - 1, CALC_DXT(width, G_IM_SIZ_16b_BYTES));
 }
 
+/**
+ * Loads a width x height RGBA16 texture as a tile.
+ */
 void func_82169F74(void* img, s32 width, s32 height) {
     gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, width, img);
     gDPLoadSync(gDisplayListHead++);
     gDPLoadTile(gDisplayListHead++, G_TX_LOADTILE, 0, 0, (width - 1) << G_TEXTURE_IMAGE_FRAC, (height - 1) << G_TEXTURE_IMAGE_FRAC);
 }
 
+/**
+ * Loads a width x height RGBA32 texture as one block.
+ */
 void func_82169FF8(u8* texture, s32 width, s32 height) {
     gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_32b, 1, texture);
     gDPLoadSync(gDisplayListHead++);
     gDPLoadBlock(gDisplayListHead++, G_TX_LOADTILE, 0, 0, width * height - 1, CALC_DXT(width, G_IM_SIZ_32b_BYTES));
 }
 
+/**
+ * Loads a width x height RGBA32 texture as a tile.
+ */
 void func_8216A0E8(void* img, s32 width, s32 height) {
     gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_32b, width, img);
     gDPLoadSync(gDisplayListHead++);
     gDPLoadTile(gDisplayListHead++, G_TX_LOADTILE, 0, 0, (width - 1) << G_TEXTURE_IMAGE_FRAC, (height - 1) << G_TEXTURE_IMAGE_FRAC);
 }
 
+/**
+ * Adds a 32-bit texture block load to the display list.
+ * @unverified Name from Stadium 1.
+ */
 void ParticleGfx_LoadTextureBlock32(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
                    s32 shiftt) {
     gDPLoadTextureBlock(gDisplayListHead++, texture, fmt, G_IM_SIZ_32b, width, height, 0, cms, cmt, masks, maskt,
                         shifts, shiftt);
 }
 
+/**
+ * Adds a 32-bit texture tile load to the display list.
+ * @unverified Name from Stadium 1.
+ */
 void ParticleGfx_LoadTextureTile32(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
                    s32 shiftt) {
     gDPLoadTextureTile(gDisplayListHead++, texture, fmt, G_IM_SIZ_32b, width, 0, 0, 0, width - 1, height - 1, 0, cms,
                        cmt, masks, maskt, shifts, shiftt);
 }
 
+/**
+ * Adds a 16-bit texture block load to the display list.
+ * @unverified Name from Stadium 1.
+ */
 void ParticleGfx_LoadTextureBlock16(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
                    s32 shiftt) {
     gDPLoadTextureBlock(gDisplayListHead++, texture, fmt, G_IM_SIZ_16b, width, height, 0, cms, cmt, masks, maskt,
                         shifts, shiftt);
 }
 
+/**
+ * Adds a 16-bit texture tile load to the display list.
+ * @unverified Name from Stadium 1.
+ */
 void ParticleGfx_LoadTextureTile16(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
                    s32 shiftt) {
     gDPLoadTextureTile(gDisplayListHead++, texture, fmt, G_IM_SIZ_16b, width, 0, 0, 0, width - 1, height - 1, 0, cms,
                        cmt, masks, maskt, shifts, shiftt);
 }
 
+/**
+ * Adds an 8-bit texture block load to the display list.
+ * @unverified Name from Stadium 1.
+ */
 void ParticleGfx_LoadTextureBlock8(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
                    s32 shiftt) {
     gDPLoadTextureBlock(gDisplayListHead++, texture, fmt, G_IM_SIZ_8b, width, height, 0, cms, cmt, masks, maskt, shifts,
                         shiftt);
 }
 
+/**
+ * Adds an 8-bit texture tile load to the display list.
+ * @unverified Name from Stadium 1.
+ */
 void ParticleGfx_LoadTextureTile8(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
                    s32 shiftt) {
     gDPLoadTextureTile(gDisplayListHead++, texture, fmt, G_IM_SIZ_8b, width, 0, 0, 0, width - 1, height - 1, 0, cms,
                        cmt, masks, maskt, shifts, shiftt);
 }
 
+/**
+ * Adds a 4-bit texture block load to the display list.
+ * @unverified Name from Stadium 1.
+ */
 void ParticleGfx_LoadTextureBlock4(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
                    s32 shiftt) {
     gDPLoadTextureBlock_4b(gDisplayListHead++, texture, fmt, width, height, 0, cms, cmt, masks, maskt, shifts, shiftt);
 }
 
+/**
+ * Adds a 4-bit texture tile load to the display list.
+ * @unverified Name from Stadium 1.
+ */
 void ParticleGfx_LoadTextureTile4(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
                    s32 shiftt) {
     gDPLoadTextureTile_4b(gDisplayListHead++, texture, fmt, width, 0, 0, 0, width - 1, height - 1, 0, cms, cmt, masks,
                           maskt, shifts, shiftt);
 }
 
+/**
+ * Adds a 4-bit texture block load into TMEM address tmem and render tile rtile to the
+ * display list.
+ * @unverified Name from Stadium 1.
+ */
 void ParticleGfx_LoadTextureMultiBlock4(u8* texture, s32 tmem, s32 rtile, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks,
                    s32 maskt, s32 shifts, s32 shiftt) {
     gDPLoadMultiBlock_4b(gDisplayListHead++, texture, tmem, rtile, fmt, width, height, 0, cms, cmt, masks, maskt,

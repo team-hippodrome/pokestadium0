@@ -45,6 +45,12 @@ void SpikeCannonFourStream_Init(void) {
     }
 }
 
+/**
+ * Starts a four-stream spike trail in the first free of 4 slots: from (arg0, arg1, arg2)
+ * toward (arg3, arg4, arg5), colored (arg6, arg7, arg8), with a particle on the secondary
+ * owner and 15 trail nodes whose alpha fades from arg9. The direction sign comes from arg3.
+ * @unverified Name from Stadium 1.
+ */
 void SpikeCannonFourStream_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9,
                    f32 argA, f32 argB, f32 argC, s16 argD) {
     s32 i;

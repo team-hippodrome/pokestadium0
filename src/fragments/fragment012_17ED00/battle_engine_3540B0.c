@@ -112,6 +112,11 @@ void OwnerAnchoredFourStream_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 a
     }
 }
 
+/**
+ * Rotates the point (0, 0, arg2) about the X axis by arg0 radians and writes it to arg1.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void OwnerAnchoredFourStream_Update(f32 arg0, Vec3f* arg1, f32 arg2) {
     UNUSED MtxF sp70;
     MtxF sp30;
@@ -121,6 +126,13 @@ void OwnerAnchoredFourStream_Update(f32 arg0, Vec3f* arg1, f32 arg2) {
     guMtxXFMF(sp30.mf, 0.0f, 0.0f, arg2, &arg1->x, &arg1->y, &arg1->z);
 }
 
+/**
+ * Steps a stream's 15-node chain: the head node moves by its velocity, bending sideways by
+ * 0.4 a frame up to 20, and grows its width by 2 up to the stream's maximum; each other node
+ * takes the previous frame's values of the node before it.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void OwnerAnchoredFourStream_UpdateNodeChain(OwnerAnchoredFourStream* arg0) {
     s32 i;
     OwnerAnchoredFourStreamNode* var_s0 = &arg0->unk_01C[0];

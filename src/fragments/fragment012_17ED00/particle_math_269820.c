@@ -113,6 +113,9 @@ void func_8213C3B8(s8 *arg0, unsigned char arg1)
   }
 }
 
+/**
+ * Sets field A6 of the particle to arg1, unless the particle pointer is -1.
+ */
 void func_8213C3D4(s8 *arg0, s16 arg1) {
     if (arg0 != (s8 *)-1) {
         M2C_FIELD(arg0, s16 *, 0xA6) = arg1;
@@ -143,6 +146,9 @@ void Particle_SetFieldOffsetAAIfNotSentinel(Particle* arg0, s16 arg1) {
     }
 }
 
+/**
+ * Sets field AC of the particle to arg1, unless the particle pointer is -1.
+ */
 void func_8213C444(s8 *arg0, s16 arg1) {
     if (arg0 != (s8 *)-1) {
         M2C_FIELD(arg0, s16 *, 0xAC) = arg1;
@@ -230,8 +236,8 @@ s16 Particle_GetUnkA8(s8 *arg0) {
 /**
  * Sets the battle animation effect state word D_8219A82C. BattleAnim_ClearEffectState and
  * BattleAnim_GetEffectState clear and read it.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) (title-screen demo battle, left idle after boot): ran once, with state
+ * 1, called from BattleAnim_DispatchParticleEmission.
  * @unverified Named from the code.
  */
 void BattleAnim_SetEffectState(s32 arg0) {
@@ -249,6 +255,12 @@ void BattleAnim_ClearEffectState(void) {
     D_8219A82C.unk_00 = 0;
 }
 
+/**
+ * Returns the battle animation effect state word D_8219A82C.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
+ * @unverified Name guessed from the code.
+ */
 s32 BattleAnim_GetEffectState(void) {
     return (*(s32 *)&D_8219A82C);
 }

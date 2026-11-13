@@ -3,6 +3,14 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
 #include "battle_engine_32B680_3.h"
 
+/**
+ * Lifecycle init for one of three side-by-side animated models (model 0x21, anim 0x22,
+ * scale 0.2). Slot arg1 picks the X offset and the Z rotation (slot 0 tilts one way, slot 2
+ * the other, slot 1 sits higher and upright). Detaches the particle if no display object
+ * could be allocated.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_InitModelAnimationSlot(Particle* arg0, s16 arg1) {
     Vec3f sp24;
 
@@ -36,6 +44,12 @@ void BattleAnim_InitModelAnimationSlot(Particle* arg0, s16 arg1) {
     }
 }
 
+/**
+ * Particle callback: waits eight frames per spawn index, starts model animation slot arg AC,
+ * waits for the animation to finish and detaches.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
+ * @unverified Name guessed from the code.
+ */
 void BattleAnim_ConfuseRayAmnesiaModelAnimWait(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
 
@@ -75,6 +89,10 @@ void BattleAnim_InitializeAmnesiaUse(void) {
 s32 func_82107CF0(s32);
 void func_8213D720(s8*, f32);
 void func_8213D790(s8*, f32);
+/**
+ * Raises or lowers the particle by a per-species offset (species from the owner at +0x10):
+ * -10, 10 or 15 for the listed species, and also pushes it forward for species 0x3B.
+ */
 void func_82154704(s8* arg0) {
     f32 var_f20 = 0.0f;
 
@@ -164,6 +182,13 @@ void BattleAnim_InitializeScreenMove(void) {
     }
 }
 
+/**
+ * Builds the display list for the Barrier, Light Screen and Reflect wall: sets up the
+ * reflective camera, picks the move's primitive and environment colors, then adds the
+ * animated tile.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_BuildReflectiveTextureDisplayList(Gfx* arg0, s32 arg1, u16 arg2) {
     BattleAnim_SetupReflectiveCamera();
 
@@ -192,6 +217,12 @@ void BattleAnim_BuildReflectiveTextureDisplayList(Gfx* arg0, s32 arg1, u16 arg2)
     gSPEndDisplayList(arg0++);
 }
 
+/**
+ * Display-list callback: on draw pass 2, allocates 30 commands into arg1->unk_18 and
+ * fills them with BattleAnim_BuildReflectiveTextureDisplayList.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_AllocateReflectiveTextureDisplayList(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
         arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
@@ -200,8 +231,8 @@ void BattleAnim_AllocateReflectiveTextureDisplayList(s32 arg0, arg1_func_84344CE
 }
 
 /**
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * Seen in play (2026-11-13) (unattended all-Metronome Free Battle with randomized teams, battle 0
+ * turn 8): ran. The move was not logged.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleAnim_ApplyEffect125ModelScaleOffset(Particle* arg0) {
@@ -262,6 +293,13 @@ void BattleAnim_ApplyEffect125ModelScaleOffset(Particle* arg0) {
     Particle_SetScaleScaled(arg0, scale);
 }
 
+/**
+ * Lifecycle init for effect 125: loads model 0x25 with anim 0x26 turned half a turn about
+ * Y, applies the species scale and offset, and arms a 32-frame timer.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_InitEffect125Model(Particle* arg0, UNUSED s16 arg1) {
     arg0->displayObject = BattleAnim_AllocOwnerDisplayContext(arg0);
     if (arg0->displayObject != NULL) {
@@ -275,6 +313,13 @@ void BattleAnim_InitEffect125Model(Particle* arg0, UNUSED s16 arg1) {
     }
 }
 
+/**
+ * Particle callback for effect 125: inits the model, emits a burst of 8 sparkle hits when
+ * the timer runs out, then shrinks and fades the model out before detaching.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_CallbackStartEffect125ModelBurstEmitter(Particle* arg0) {
     s16 temp_a1 = Particle_FieldAC_GetS16_0C038(arg0);
 
@@ -301,6 +346,13 @@ void BattleAnim_CallbackStartEffect125ModelBurstEmitter(Particle* arg0) {
     }
 }
 
+/**
+ * Builds effect 125's display list: white primitive color with the display object's LOD
+ * fraction as alpha, and two scrolling 32x32 tiles.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_BuildEffect125DisplayList(Gfx* arg0, u16 arg1) {
     DisplayObject* tmp = D_8006049C;
 
@@ -314,6 +366,12 @@ void BattleAnim_BuildEffect125DisplayList(Gfx* arg0, u16 arg1) {
     gSPEndDisplayList(arg0++);
 }
 
+/**
+ * Display-list callback: on draw pass 2, allocates 10 commands into arg1->unk_18 and
+ * fills them with BattleAnim_BuildEffect125DisplayList.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_AllocateEffect125DisplayList(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
         arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 10);
@@ -321,11 +379,22 @@ void BattleAnim_AllocateEffect125DisplayList(s32 arg0, arg1_func_84344CE8* arg1)
     }
 }
 
+/**
+ * Queues two effect slots on the current owner: func_82154EA4 at once (lifetime 30) and
+ * func_82144750 after 20 frames (lifetime 80).
+ */
 void func_82155084(void) {
     func_8213B560(0, &func_82154EA4, &D_8218E580, 0x1E, 1, 7, 0, 0, 0);
     func_8213B560(0x14, &func_82144750, &D_8218E580, 0x50, 1, 0, 0, 0x33, 0);
 }
 
+/**
+ * Lifecycle init for effect 65's full-screen overlay: centers it on the 320x240 screen
+ * and picks the primitive and environment palette entries from the queued move (the
+ * powder moves and Spore), starting fully transparent.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (4 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_InitEffect65Overlay(Particle* arg0) {
     s16 sp26;
     u16 sp24;
@@ -339,16 +408,16 @@ void BattleAnim_InitEffect65Overlay(Particle* arg0) {
     Particle_SetPosition(arg0, 160.0f, 120.0f, 0.0f);
 
     switch (sp26) {
-        case 0x4E:
-        case 0x93:
+        case STUN_SPORE:
+        case SPORE:
             break;
 
-        case 0x4D:
+        case POISONPOWDER:
             sp24 = 0x3B;
             sp22 = 0;
             break;
 
-        case 0x4F:
+        case SLEEP_POWDER:
             sp24 = 0x33;
             break;
     }
@@ -387,6 +456,12 @@ void ParticleEffect_RegisterParticleNodes(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 3, 0x14, BattleAnim_PowderCloudScaleMotion, &gBattleAnimParticleDescriptors[0x46], 0, 1, 0x10, 0x64, 0, 0);
 }
 
+/**
+ * Lifecycle init for effect 28's full-screen overlay: centers it on screen, takes its
+ * palette pair from the particle's CF parameter and starts fully transparent.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (5 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_InitEffect28Overlay(Particle* arg0) {
     s16 sp26 = Particle_FieldCF_GetS16_0C058(arg0);
 
@@ -497,6 +572,13 @@ void BattleAnim_SetupLeechSeedUseEffect2(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
+/**
+ * Particle callback for effect 8 (Leech Seed use): sets up the seed, loads model 0x9F
+ * after a delay, emits a sparkle hit, waits 30 frames, then spawns the Leech Seed
+ * particle.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * @unverified Name guessed from the code.
+ */
 void BattleAnim_CallbackStartEffect8ModelBurstEmitter(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -519,7 +601,7 @@ void BattleAnim_CallbackStartEffect8ModelBurstEmitter(Particle* arg0) {
             break;
 
         case 4:
-            Particle_TickDelayAndAdvanceLifecycle(arg0, 0x1E);
+            Particle_TickDelayAndAdvanceLifecycle(arg0, 30);
             break;
 
         case 5:
@@ -535,6 +617,12 @@ void BattleAnim_CallbackStartEffect8ModelBurstEmitter(Particle* arg0) {
     }
 }
 
+/**
+ * Lifecycle init for effect 31: loads model 0x2B with anim 0x2C at quarter scale with a
+ * random rotation about Y.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * @unverified Name guessed from the code.
+ */
 void BattleAnim_InitEffect31Model(Particle* arg0) {
     arg0->displayObject = BattleAnim_AllocOwnerDisplayContext(arg0);
     if (arg0->displayObject != NULL) {
@@ -547,6 +635,11 @@ void BattleAnim_InitEffect31Model(Particle* arg0) {
     }
 }
 
+/**
+ * Particle callback (lifecycle at 0xAE): starts after a random delay of up to 24 frames,
+ * then when the spawn step reports done spawns a func_821624FC hit effect, and finishes once
+ * the owner's model animation (+0x14) ends.
+ */
 void func_821558F4(s8 *arg0) {
     s16 temp_v0;
 
@@ -612,12 +705,24 @@ void BattleAnim_InitializePayDayHit(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(4, 2, 4, BattleAnim_RunSparkleHit, &gBattleAnimParticleDescriptors[0x42], 0, 4, 9, 0, 0x17, 1);
 }
 
+/**
+ * Builds a display list with the reflective camera and one animated 32x32 tile that
+ * scrolls 2 units per frame in S.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void ParticleEffect_DrawSimple(Gfx* arg0, u8* arg1) {
     BattleAnim_SetupReflectiveCamera();
     arg0 = BattleAnim_BuildAnimatedTileDisplayList(arg0, arg1, 0x20, 5, 2, 0, 0, 0, 1, 0, 0, 0);
     gSPEndDisplayList(arg0++);
 }
 
+/**
+ * Display-list callback: on draw pass 2, allocates 30 commands into arg1->unk_18 and
+ * fills them with ParticleEffect_DrawSimple.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void ParticleEffect_CreateSimpleDL(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
         arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
@@ -747,6 +852,12 @@ void BattleAnim_InitializeBlizzardHit(void) {
     func_8213B644(0x32, 0x20, 8);
 }
 
+/**
+ * Builds a display list for a 64x64 two-tile texture that scrolls in opposite directions,
+ * using the owner particle's alpha on a white primitive color.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void ParticleEffect_DrawNode(Gfx* arg0, s32 arg1, u16 arg2) {
     Particle* temp_v0 = BattleAnim_GetOwnerContextParticle(D_8006049C);
 
@@ -758,6 +869,12 @@ void ParticleEffect_DrawNode(Gfx* arg0, s32 arg1, u16 arg2) {
     gSPEndDisplayList(arg0++);
 }
 
+/**
+ * Display-list callback: on draw pass 2, allocates 30 commands into arg1->unk_18 and
+ * fills them with ParticleEffect_DrawNode.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void ParticleEffect_CreateNodeDL(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
         arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
@@ -765,12 +882,23 @@ void ParticleEffect_CreateNodeDL(s32 arg0, arg1_func_84344CE8* arg1) {
     }
 }
 
+/**
+ * Like ParticleEffect_DrawNode, but with no color setup and a slower second tile.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void ParticleEffect_DrawNodeVariant(Gfx* arg0, arg1_func_8434E21C* arg1, UNUSED u16 arg2) {
     arg0 = BattleAnim_BuildAnimatedTileDisplayListFromStruct(arg0, arg1, 0x40, 6, -4, 0xF, 0, 0, -5, 5, 0, 0);
 
     gSPEndDisplayList(arg0++);
 }
 
+/**
+ * Display-list callback: on draw pass 2, allocates 30 commands into arg1->unk_18 and
+ * fills them with ParticleEffect_DrawNodeVariant.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void ParticleEffect_CreateNodeVariantDL(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
         arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
@@ -778,12 +906,25 @@ void ParticleEffect_CreateNodeVariantDL(s32 arg0, arg1_func_84344CE8* arg1) {
     }
 }
 
+/**
+ * Builds a display list with one offset, scrolling 32x32 two-tile texture and no camera
+ * setup.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void ParticleEffect_DrawSimpleOffsetTileNoCamera(Gfx* arg0, u8* arg1, UNUSED u16 arg2) {
     arg0 = BattleAnim_BuildAnimatedTileDisplayList(arg0, arg1, 0x20, 5, -8, -0x1E, 0, 0, -0xB, -0xA, 0, 0);
 
     gSPEndDisplayList(arg0++);
 }
 
+/**
+ * Display-list callback: on draw pass 2, allocates 30 commands into arg1->unk_18 and
+ * fills them with ParticleEffect_DrawSimpleOffsetTileNoCamera.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void ParticleEffect_CreateSimpleOffsetTileNoCameraDL(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
         arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
@@ -791,9 +932,21 @@ void ParticleEffect_CreateSimpleOffsetTileNoCameraDL(s32 arg0, arg1_func_84344CE
     }
 }
 
+/**
+ * Empty draw hook used by end effects that draw nothing.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_DefaultEndEffect_Draw(void) {
 }
 
+/**
+ * Lifecycle init for a model in a ring of three (model 0x31, anim 0x32, quarter scale,
+ * raised 5 units): the CF parameter picks a rotation of 0, 1/3 or 2/3 of a turn.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * @unverified Name guessed from the code.
+ */
 void BattleAnim_InitMove146Model(Particle* arg0) {
     s16 sp26 = Particle_FieldCF_GetS16_0C058(arg0);
     s16 sp24;
@@ -857,6 +1010,12 @@ void BattleAnim_InitializeDizzyPunchHit(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunDizzyPunchHitEffect, &gDefaultParticleDescriptor, 0x1E, 1, 6, gBattleAnimCurrentAnchor, 2, 0);
 }
 
+/**
+ * Lifecycle init for effect 49, the draining orb of Absorb, Mega Drain and Leech Life:
+ * picks the palette pair from the queued move and loads model 0x33.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_InitEffect49Model(Particle* arg0) {
     s16 sp26 = Particle_FieldCF_GetS16_0C058(arg0);
     u16 sp24;
@@ -938,6 +1097,12 @@ void BattleAnim_CallbackEndEffect21ModelAnimWait(Particle* arg0) {
     }
 }
 
+/**
+ * Builds effect 49's display list from the owner particle's primitive and environment
+ * colors.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_BuildEffect49DisplayList(Gfx* arg0, UNUSED s32 arg1, UNUSED u16 arg2) {
     Particle* temp_v0 = BattleAnim_GetOwnerContextParticle(D_8006049C);
 
@@ -949,6 +1114,12 @@ void BattleAnim_BuildEffect49DisplayList(Gfx* arg0, UNUSED s32 arg1, UNUSED u16 
     gSPEndDisplayList(arg0++);
 }
 
+/**
+ * Display-list callback: on draw pass 2, allocates 30 commands into arg1->unk_18 and
+ * fills them with BattleAnim_BuildEffect49DisplayList.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_AllocateEffect49DisplayList(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
         arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
@@ -956,6 +1127,12 @@ void BattleAnim_AllocateEffect49DisplayList(s32 arg0, arg1_func_84344CE8* arg1) 
     }
 }
 
+/**
+ * Starts effect 49's model particle for the current animation owner.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void ParticleEffect_RegisterColorAnim(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackEndEffect49Model33Anim34WaitCleanup, &gDefaultParticleDescriptor, 0, 1, 2, gBattleAnimCurrentAnchor, 1, 0);
 }
@@ -1044,6 +1221,12 @@ void BattleAnim_InitializeTeleportUse(void) {
     BattleAnim_SpawnInvisibility(0x2D, 0, 0xFF, 0x20);
 }
 
+/**
+ * Builds effect 63's display list: two scrolling 32x32 tiles, the owner particle's alpha
+ * on white, and a pink-red environment color.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_BuildEffect63DisplayList(Gfx* arg0, s32 arg1, u16 arg2) {
     UNUSED s32 pad; // FAKE: stack padding
     Particle* sp28 = BattleAnim_GetOwnerContextParticle(D_8006049C);
@@ -1059,6 +1242,12 @@ void BattleAnim_BuildEffect63DisplayList(Gfx* arg0, s32 arg1, u16 arg2) {
     gSPEndDisplayList(arg0++);
 }
 
+/**
+ * Display-list callback: on draw pass 2, allocates 30 commands into arg1->unk_18 and
+ * fills them with BattleAnim_BuildEffect63DisplayList.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_AllocateEffect63DisplayList(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
         arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
@@ -1066,6 +1255,12 @@ void BattleAnim_AllocateEffect63DisplayList(s32 arg0, arg1_func_84344CE8* arg1) 
     }
 }
 
+/**
+ * Builds effect 75's display list: the owner particle's alpha on white, with a yellow
+ * environment color.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_BuildEffect75DisplayList(Gfx* arg0, UNUSED s32 arg1, UNUSED u16 arg2) {
     Particle* temp_v0 = BattleAnim_GetOwnerContextParticle(D_8006049C);
 
@@ -1077,6 +1272,12 @@ void BattleAnim_BuildEffect75DisplayList(Gfx* arg0, UNUSED s32 arg1, UNUSED u16 
     gSPEndDisplayList(arg0++);
 }
 
+/**
+ * Display-list callback: on draw pass 2, allocates 30 commands into arg1->unk_18 and
+ * fills them with BattleAnim_BuildEffect75DisplayList.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_AllocateEffect75DisplayList(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
         arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
@@ -1129,6 +1330,12 @@ void BattleAnim_RockModelAnimWait(Particle* arg0) {
     }
 }
 
+/**
+ * Lifecycle init shared by effects 10 and 50: loads model 0x39 (anim 0x3A) at half scale
+ * and moves it to one of several fixed offsets chosen by the CF parameter.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_InitEffects10And50Model(Particle* arg0) {
     u16 sp26 = Particle_FieldCF_GetS16_0C058(arg0);
 
@@ -1307,6 +1514,12 @@ void BattleAnim_RockModelFadeIn(Particle* arg0) {
     }
 }
 
+/**
+ * Builds a display list with the owner particle's alpha on white, an orange environment
+ * color and a scrolling two-tile texture.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Gfx_DrawParticleAlpha(Gfx* arg0, s32 arg1, u16 arg2) {
     Particle* temp_v0 = BattleAnim_GetOwnerContextParticle(D_8006049C);
 
@@ -1320,6 +1533,12 @@ void Gfx_DrawParticleAlpha(Gfx* arg0, s32 arg1, u16 arg2) {
     gSPEndDisplayList(arg0++);
 }
 
+/**
+ * Display-list callback: on draw pass 2, allocates 30 commands into arg1->unk_18 and
+ * fills them with Gfx_DrawParticleAlpha.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Particle_CreateDisplayList_Alpha(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
         arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
@@ -1327,6 +1546,12 @@ void Particle_CreateDisplayList_Alpha(s32 arg0, arg1_func_84344CE8* arg1) {
     }
 }
 
+/**
+ * Builds a display list that loads a 32x32 4-bit intensity texture, tinted orange, with
+ * the owner particle's prim_r field used as the alpha.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Gfx_DrawParticleTexture4b(Gfx* arg0, u8* arg1, UNUSED u16 arg2) {
     Particle* temp_v0 = BattleAnim_GetOwnerContextParticle(D_8006049C);
 
@@ -1344,6 +1569,12 @@ void Gfx_DrawParticleTexture4b(Gfx* arg0, u8* arg1, UNUSED u16 arg2) {
     gSPEndDisplayList(arg0++);
 }
 
+/**
+ * Display-list callback: on draw pass 2, allocates 30 commands into arg1->unk_18 and
+ * fills them with Gfx_DrawParticleTexture4b.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Particle_CreateDisplayList_Texture4b(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
         arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
@@ -1351,6 +1582,12 @@ void Particle_CreateDisplayList_Texture4b(s32 arg0, arg1_func_84344CE8* arg1) {
     }
 }
 
+/**
+ * Same as Gfx_DrawParticleTexture4b but tinted yellow, with the owner particle's prim_g
+ * field used as the alpha.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Gfx_DrawParticleGreenPrim(Gfx* arg0, u8* arg1, UNUSED u16 arg2) {
     Particle* temp_v0 = BattleAnim_GetOwnerContextParticle(D_8006049C);
 
@@ -1368,6 +1605,12 @@ void Gfx_DrawParticleGreenPrim(Gfx* arg0, u8* arg1, UNUSED u16 arg2) {
     gSPEndDisplayList(arg0++);
 }
 
+/**
+ * Display-list callback: on draw pass 2, allocates 30 commands into arg1->unk_18 and
+ * fills them with Gfx_DrawParticleGreenPrim.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Particle_CreateDisplayList_GreenPrim(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
         arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
@@ -1395,9 +1638,9 @@ void BattleAnim_InitializeRockSlideRockThrowHit(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(5, BattleAnim_CallbackEndEffects10And50ModelAnimColorFade, &gDefaultParticleDescriptor, 0, 1, 0xA, 0, 3, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_CallbackEndEffects10And50ModelAnimColorFade, &gDefaultParticleDescriptor, 0, 1, 0xA, 0, 0, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(9, BattleAnim_CallbackEndEffects10And50ModelAnimColorFade, &gDefaultParticleDescriptor, 0, 1, 0xA, 0, 5, 0);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0xA, BattleAnim_CallbackEndEffects10And50ModelAnimColorFade, &gDefaultParticleDescriptor, 0, 1, 0xA, 0, 6, 0);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0xD, BattleAnim_CallbackEndEffects10And50ModelAnimColorFade, &gDefaultParticleDescriptor, 0, 1, 0xA, 0, 7, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0xA, 3, 2, BattleAnim_HeavyHitAnimatedRiseFade, &gBattleAnimParticleDescriptors[0x3F], 0, 0x10, 0xA, 0, 0x11, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(10, BattleAnim_CallbackEndEffects10And50ModelAnimColorFade, &gDefaultParticleDescriptor, 0, 1, 0xA, 0, 6, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(13, BattleAnim_CallbackEndEffects10And50ModelAnimColorFade, &gDefaultParticleDescriptor, 0, 1, 0xA, 0, 7, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(10, 3, 2, BattleAnim_HeavyHitAnimatedRiseFade, &gBattleAnimParticleDescriptors[0x3F], 0, 0x10, 0xA, 0, 0x11, 0);
 }
 
 /**
@@ -1415,7 +1658,7 @@ void BattleAnim_InitializeStrengthUse(void) {
  */
 void BattleAnim_InitializeStrengthHit(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackEndEffects10And50ModelAnimColorFade, &gDefaultParticleDescriptor, 0, 1, 0xA, 0, 8, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0xA, 3, 2, BattleAnim_HeavyHitAnimatedRiseFade, &gBattleAnimParticleDescriptors[0x3E], 0, 0x10, 0xA, 0, 0x11, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(10, 3, 2, BattleAnim_HeavyHitAnimatedRiseFade, &gBattleAnimParticleDescriptors[0x3E], 0, 0x10, 0xA, 0, 0x11, 0);
 }
 
 /**
@@ -1435,7 +1678,7 @@ void BattleAnim_InitializeSoftBoiledUse(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_CallbackInitModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 0xA, 1, 0x24, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(0x10, BattleAnim_CallbackInitModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 0xA, 2, 0x24, 0);
     BattleAnim_SpawnOwnerModelTintPulseDetach(0x5F, 0, 0x8, 0, 0xFF, 8);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0x5F, 8, 0xC, BattleAnim_RunSparkleHit, &gBattleAnimParticleDescriptors[0x42], 0, 8, 9, 0, 0x17, 6);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(95, 8, 0xC, BattleAnim_RunSparkleHit, &gBattleAnimParticleDescriptors[0x42], 0, 8, 9, 0, 0x17, 6);
 }
 
 /**
@@ -1456,6 +1699,10 @@ void BattleAnim_SetupStrongWinds(Particle* arg0) {
     }
 }
 
+/**
+ * Particle callback: init, fade alpha toward 155, then mark inactive. While running it
+ * keeps motionOffset (+0x4C) moving toward 200.
+ */
 void func_82157E28(s8 *arg0) {
     s16 temp_v0;
 
@@ -1476,6 +1723,12 @@ void func_82157E28(s8 *arg0) {
     }
 }
 
+/**
+ * Builds a display list with a light cyan environment color and a scrolling two-tile
+ * texture.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Gfx_DrawParticleCyanEnv(Gfx* arg0, arg1_func_8434E21C* arg1, UNUSED u16 arg2) {
     BattleAnim_GetOwnerContextParticle(D_8006049C);
 
@@ -1487,6 +1740,12 @@ void Gfx_DrawParticleCyanEnv(Gfx* arg0, arg1_func_8434E21C* arg1, UNUSED u16 arg
     gSPEndDisplayList(arg0++);
 }
 
+/**
+ * Display-list callback: on draw pass 2, allocates 30 commands into arg1->unk_18 and
+ * fills them with Gfx_DrawParticleCyanEnv.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Particle_CreateDisplayList_CyanEnv(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
         arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
@@ -1494,6 +1753,12 @@ void Particle_CreateDisplayList_CyanEnv(s32 arg0, arg1_func_84344CE8* arg1) {
     }
 }
 
+/**
+ * Builds a display list with the owner particle's alpha on white, a cyan environment
+ * color and a scrolling two-tile texture.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Gfx_DrawParticleBluePrim(Gfx* arg0, arg1_func_8434E21C* arg1, UNUSED u16 arg2) {
     Particle* temp_v0 = BattleAnim_GetOwnerContextParticle(D_8006049C);
 
@@ -1506,6 +1771,12 @@ void Gfx_DrawParticleBluePrim(Gfx* arg0, arg1_func_8434E21C* arg1, UNUSED u16 ar
     gSPEndDisplayList(arg0++);
 }
 
+/**
+ * Display-list callback: on draw pass 2, allocates 30 commands into arg1->unk_18 and
+ * fills them with Gfx_DrawParticleBluePrim.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Particle_CreateDisplayList_BluePrim(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
         arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
@@ -1713,6 +1984,12 @@ void BattleAnim_RunBoomUseEffect4(s8 *arg0) {
     }
 }
 
+/**
+ * Builds a display list from the owner particle's own primitive and environment colors,
+ * blending two scrolling tiles by the LOD fraction.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Gfx_DrawParticleCustomColors(Gfx* arg0, arg1_func_8434E21C* arg1, UNUSED u16 arg2) {
     Particle* temp_v0 = BattleAnim_GetOwnerContextParticle(D_8006049C);
 
@@ -1728,6 +2005,12 @@ void Gfx_DrawParticleCustomColors(Gfx* arg0, arg1_func_8434E21C* arg1, UNUSED u1
     gSPEndDisplayList(arg0++);
 }
 
+/**
+ * Display-list callback: on draw pass 2, allocates 30 commands into arg1->unk_18 and
+ * fills them with Gfx_DrawParticleCustomColors.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (5 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Particle_CreateDisplayList_CustomColors(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
         arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
@@ -1735,6 +2018,11 @@ void Particle_CreateDisplayList_CustomColors(s32 arg0, arg1_func_84344CE8* arg1)
     }
 }
 
+/**
+ * Particle callback: init with scale 0.5, field B0 100, palette 0x17 and a 5-frame delay;
+ * then grows toward scale 7 by 0.25 with 5-frame delays between stages before it is marked
+ * inactive.
+ */
 void func_821588C0(s8 *arg0) {
     s16 temp_v1;
 
@@ -1999,17 +2287,17 @@ void BattleAnim_InitializeBoomUse(void) {
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0x10, 6);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunBoomUseEffect1, &gDefaultParticleDescriptor, 0x19, 1, 0xE, 0, 0x27, 0);
     BattleAnim_SpawnDescriptor25AlphaFadeInHold(0, 0, 4, 0x8, 0x80);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0x16, BattleAnim_RunBoomUseEffect2, &D_8218E580[0x54], 0, 1, 0xC, 0, 0x33, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(22, BattleAnim_RunBoomUseEffect2, &D_8218E580[0x54], 0, 1, 0xC, 0, 0x33, 0);
     BattleAnim_SpawnDescriptor25AlphaHoldFadeOut(0x1A, 3, 0x20, 0x8, 0xC8);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0x1B, BattleAnim_CallbackStartEffects50And82CenterModelScalePaletteFade, &gDefaultParticleDescriptor, 0, 1, 9, 0, 0x21, 0);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0x1E, BattleAnim_RunBoomUseEffect6, &gDefaultParticleDescriptor, 0, 1, 9, 0, 0x21, 0);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0x22, BattleAnim_RunBoomUseEffect6, &gDefaultParticleDescriptor, 0, 1, 9, 0, 0x21, 1);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0x26, BattleAnim_RunBoomUseEffect6, &gDefaultParticleDescriptor, 0, 1, 9, 0, 0x21, 2);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0x28, BattleAnim_CallbackStartEffects50And82Descriptor48AnimatedScaleFade, &D_8218E580[0x48], 0, 6, 0x10, 9, 0x1A, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0x32, 2, 2, BattleAnim_CallbackStartEffects50And82Descriptor4AAnimatedVerticalFade, &D_8218E580[0x4A], 0, 1, 9, 0, 0x1A, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0x33, 2, 2, BattleAnim_CallbackStartEffects50And82Descriptor4AAnimatedVerticalFade, &D_8218E580[0x4A], 0, 1, 9, 0, 0x1A, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0x34, 2, 2, BattleAnim_CallbackStartEffects50And82Descriptor4AAnimatedVerticalFade, &D_8218E580[0x4A], 0, 1, 9, 0, 0x1A, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0x36, 2, 2, BattleAnim_CallbackStartEffects50And82Descriptor4AAnimatedVerticalFade, &D_8218E580[0x4A], 0, 1, 9, 0, 0x1A, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(27, BattleAnim_CallbackStartEffects50And82CenterModelScalePaletteFade, &gDefaultParticleDescriptor, 0, 1, 9, 0, 0x21, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(30, BattleAnim_RunBoomUseEffect6, &gDefaultParticleDescriptor, 0, 1, 9, 0, 0x21, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(34, BattleAnim_RunBoomUseEffect6, &gDefaultParticleDescriptor, 0, 1, 9, 0, 0x21, 1);
+    BattleAnim_CreateEffectSlotForCurrentOwner(38, BattleAnim_RunBoomUseEffect6, &gDefaultParticleDescriptor, 0, 1, 9, 0, 0x21, 2);
+    BattleAnim_CreateEffectSlotForCurrentOwner(40, BattleAnim_CallbackStartEffects50And82Descriptor48AnimatedScaleFade, &D_8218E580[0x48], 0, 6, 0x10, 9, 0x1A, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(50, 2, 2, BattleAnim_CallbackStartEffects50And82Descriptor4AAnimatedVerticalFade, &D_8218E580[0x4A], 0, 1, 9, 0, 0x1A, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(51, 2, 2, BattleAnim_CallbackStartEffects50And82Descriptor4AAnimatedVerticalFade, &D_8218E580[0x4A], 0, 1, 9, 0, 0x1A, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(52, 2, 2, BattleAnim_CallbackStartEffects50And82Descriptor4AAnimatedVerticalFade, &D_8218E580[0x4A], 0, 1, 9, 0, 0x1A, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(54, 2, 2, BattleAnim_CallbackStartEffects50And82Descriptor4AAnimatedVerticalFade, &D_8218E580[0x4A], 0, 1, 9, 0, 0x1A, 0);
     BattleAnim_SpawnOwnerModelTintRampDetach(0x16, 0x8, 0, 0xFF, 0x40);
     BattleAnim_SpawnOwnerModelTintRampDetach(0x24, 0x8, 0xFF, 0xDC, 0xC);
     BattleAnim_SpawnOwnerModelTintPaletteApproachInactiveAlt(0x28, 0x8, 0x17, 0x10, 0xDC);
@@ -2026,10 +2314,10 @@ void BattleAnim_InitializeBoomHit(void) {
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0xFF, 6);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackEndEffects81And82ModelScalePaletteFade, &gDefaultParticleDescriptor, 0, 1, 0xB, 0, 0x21, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(4, BattleAnim_CallbackEndEffects81And82ModelScalePaletteFade, &gDefaultParticleDescriptor, 0, 1, 0xB, 0, 0x21, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0xA, 8, 4, BattleAnim_CallbackInitModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 0xC, 0, 0x8, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0xC, 8, 5, BattleAnim_CallbackEndEffects81And82Descriptor46AnimatedFade, &D_8218E580[0x46], 0, 5, 0x10, 9, 0x48, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0xC, 4, 0xA, BattleAnim_CallbackEndEffects81And82Descriptor4AAnimatedColorFade, &D_8218E580[0x4A], 0, 4, 0xB, 9, 0, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0xC, 4, 0xA, BattleAnim_CallbackEndEffects81And82Descriptor4FAnimatedPaletteFade, &D_8218E580[0x4F], 0, 4, 0xE, 9, 0x1A, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(10, 8, 4, BattleAnim_CallbackInitModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 0xC, 0, 0x8, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(12, 8, 5, BattleAnim_CallbackEndEffects81And82Descriptor46AnimatedFade, &D_8218E580[0x46], 0, 5, 0x10, 9, 0x48, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(12, 4, 0xA, BattleAnim_CallbackEndEffects81And82Descriptor4AAnimatedColorFade, &D_8218E580[0x4A], 0, 4, 0xB, 9, 0, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(12, 4, 0xA, BattleAnim_CallbackEndEffects81And82Descriptor4FAnimatedPaletteFade, &D_8218E580[0x4F], 0, 4, 0xE, 9, 0x1A, 0);
     BattleAnim_SpawnOwnerModelTintRampDetach(3, 0x8, 0, 0xFF, 0x40);
     BattleAnim_SpawnOwnerModelTintRampDetach(0xA, 0x8, 0xFF, 0xE6, 5);
     BattleAnim_SpawnOwnerModelTintPaletteApproachInactiveAlt(0x10, 0x8, 0x17, 0x10, 0xDC);
@@ -2038,9 +2326,18 @@ void BattleAnim_InitializeBoomHit(void) {
     BattleAnim_SpawnOwnerModelTintRampDetach(0x30, 0xE, 0xC8, 0xB4, 6);
 }
 
+/**
+ * Empty.
+ */
 void func_821597B8(UNUSED ActivePokemon* active_pokemon, UNUSED s32 unused) {
 }
 
+/**
+ * Model transform hook that does nothing.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_TransformNop(UNUSED ActivePokemon* owner, UNUSED ActivePokemon* animated_pokemon) {
 }
 
@@ -2070,6 +2367,11 @@ void BattleAnim_SetupBitingEffect(Particle* arg0) {
     }
 }
 
+/**
+ * Particle callback: init, then a color stage that brightens prim green/blue, env green and
+ * alpha, then one that fades blue and green back out. While running it moves motionOffset
+ * toward 140.
+ */
 void func_82159898(s8 *arg0) {
     s16 sp26;
     s16 temp_v1;
@@ -2108,6 +2410,12 @@ void func_82159898(s8 *arg0) {
     }
 }
 
+/**
+ * Builds a display list from the owner particle's primitive and environment colors with a
+ * static (non-scrolling) tile.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (6 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Gfx_DrawParticleFromTempColors(Gfx* arg0, s32 arg1, u16 arg2) {
     Particle* temp_v0 = BattleAnim_GetOwnerContextParticle(D_8006049C);
 
@@ -2121,6 +2429,12 @@ void Gfx_DrawParticleFromTempColors(Gfx* arg0, s32 arg1, u16 arg2) {
     gSPEndDisplayList(arg0++);
 }
 
+/**
+ * Display-list callback: on draw pass 2, allocates 30 commands into arg1->unk_18 and
+ * fills them with Gfx_DrawParticleFromTempColors.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (6 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Particle_CreateDisplayList_TempColors(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
         arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
@@ -2178,6 +2492,11 @@ void BattleAnim_InitializeGuillotineHit(void) {
     func_8213BC00(0x30, 0xA, 0xFF, 0, 2);
 }
 
+/**
+ * Builds a display list with two tiles that scroll diagonally in opposite directions.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Gfx_DrawParticleDualTileDiagonal4(Gfx* arg0, u8* arg1, UNUSED u16 arg2) {
     BattleAnim_GetOwnerContextParticle(D_8006049C);
     arg0 = BattleAnim_BuildAnimatedTileDisplayList(arg0, arg1, 0x20, 5, -4, -4, 0xD, 6, 4, 4, 0xF, 1);
@@ -2185,6 +2504,12 @@ void Gfx_DrawParticleDualTileDiagonal4(Gfx* arg0, u8* arg1, UNUSED u16 arg2) {
     gSPEndDisplayList(arg0++);
 }
 
+/**
+ * Display-list callback: on draw pass 2, allocates 30 commands into arg1->unk_18 and
+ * fills them with Gfx_DrawParticleDualTileDiagonal4.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Particle_CreateDisplayList_DualTileDiagonal4(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
         arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
@@ -2192,6 +2517,12 @@ void Particle_CreateDisplayList_DualTileDiagonal4(s32 arg0, arg1_func_84344CE8* 
     }
 }
 
+/**
+ * Builds a display list with two tiles that scroll slowly along the anti-diagonal in
+ * opposite directions.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Gfx_DrawParticleDualTileAntiDiagonal1(Gfx* arg0, u8* arg1, UNUSED u16 arg2) {
     BattleAnim_GetOwnerContextParticle(D_8006049C);
     arg0 = BattleAnim_BuildAnimatedTileDisplayList(arg0, arg1, 0x20, 5, 1, -1, 0xE, 0xE, -1, 1, 2, 2);
@@ -2199,6 +2530,12 @@ void Gfx_DrawParticleDualTileAntiDiagonal1(Gfx* arg0, u8* arg1, UNUSED u16 arg2)
     gSPEndDisplayList(arg0++);
 }
 
+/**
+ * Display-list callback: on draw pass 2, allocates 30 commands into arg1->unk_18 and
+ * fills them with Gfx_DrawParticleDualTileAntiDiagonal1.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Particle_CreateDisplayList_DualTileAntiDiagonal1(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
         arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
@@ -2216,6 +2553,12 @@ void BattleAnim_InitializeSwordsDanceUse(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(4, 8, 0xC, BattleAnim_RunSparkleHit, &gBattleAnimParticleDescriptors[0x42], 0, 8, 9, 0, 0x22, 6);
 }
 
+/**
+ * Returns the effect scale for the owner's species: 1.45 for Arcanine, 0.9 for Onix
+ * (which also moves the effect 20 units sideways) and Gyarados, otherwise 1.0.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 f32 BattleAnim_GetSpeciesScaleAdjust(Particle* arg0) {
     f32 sp1C = 1.0f;
 
@@ -2236,6 +2579,12 @@ f32 BattleAnim_GetSpeciesScaleAdjust(Particle* arg0) {
     return sp1C;
 }
 
+/**
+ * Particle callback for effect 69: selects the model frames, idles until something else
+ * advances its lifecycle, then detaches.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_CallbackStartEffect69ModelPhaseWait(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -2317,7 +2666,7 @@ void BattleAnim_SludgeModelAnimFinish_InitParticle(Particle* arg0) {
     if (arg0->displayObject != NULL) {
         BattleAnim_InitModelWithAnim(arg0->displayObject, 0x71, 0x72);
         Particle_SetScaleScaled(arg0, 1.0f);
-        Particle_FieldA6_SetS16_0BCA8(arg0, 0x1E);
+        Particle_FieldA6_SetS16_0BCA8(arg0, 30);
         Particle_AdvanceLifecycle(arg0);
     } else {
         Particle_DisableAndDetach(arg0);
@@ -2371,7 +2720,7 @@ void BattleAnim_SetupSlimePuddle(Particle* arg0) {
 
         BattleAnim_InitModelWithAnim(arg0->displayObject, 0x6E, 0x6F);
         Particle_SetScaleScaled(arg0, 1.0f);
-        Particle_FieldA6_SetS16_0BCA8(arg0, 0x1E);
+        Particle_FieldA6_SetS16_0BCA8(arg0, 30);
         Particle_AdvanceLifecycle(arg0);
     } else {
         Particle_DisableAndDetach(arg0);
@@ -2405,6 +2754,12 @@ void BattleAnim_RunSlimePuddle(Particle* arg0) {
     }
 }
 
+/**
+ * Builds a display list for a 32x32 RGBA16 texture whose primitive and environment colors
+ * come from a table keyed by the owner particle's CF parameter.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (4 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Gfx_DrawParticlePaletteBased(Gfx* arg0, u8* arg1, UNUSED u16 arg2) {
     UNUSED s32 pad[2]; // FAKE: stack padding
     s16 sp2E = Particle_FieldCF_GetS16_0C058(BattleAnim_GetOwnerContextParticle(D_8006049C));
@@ -2464,6 +2819,12 @@ void Gfx_DrawParticlePaletteBased(Gfx* arg0, u8* arg1, UNUSED u16 arg2) {
     gSPEndDisplayList(arg0++);
 }
 
+/**
+ * Display-list callback: on draw pass 2, allocates 30 commands into arg1->unk_18 and
+ * fills them with Gfx_DrawParticlePaletteBased.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (7 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Gfx_ParticlePaletteCallback(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
         arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
@@ -2471,6 +2832,12 @@ void Gfx_ParticlePaletteCallback(s32 arg0, arg1_func_84344CE8* arg1) {
     }
 }
 
+/**
+ * Builds a display list of only the primitive and environment colors, picked from a table
+ * keyed by the owner particle's CF parameter.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (4 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Gfx_ParticlePaletteDL(Gfx* arg0, UNUSED arg1_func_8434E21C* arg1, UNUSED u16 arg2) {
     DisplayObject* sp24 = D_8006049C;
     s32 tmp = BattleAnim_GetOwnerContextParticle(D_8006049C);
@@ -2529,6 +2896,12 @@ void Gfx_ParticlePaletteDL(Gfx* arg0, UNUSED arg1_func_8434E21C* arg1, UNUSED u1
     gSPEndDisplayList(arg0++);
 }
 
+/**
+ * Display-list callback: on draw pass 2, allocates 30 commands into arg1->unk_18 and
+ * fills them with Gfx_ParticlePaletteDL.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (7 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Gfx_ParticlePaletteColorOnlyCallback(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
         arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
@@ -2566,6 +2939,12 @@ s16 BattleAnim_GetSlimeVariantIndex(void) {
     return sp1E;
 }
 
+/**
+ * Returns the tint palette index for the queued poison-style move (Sludge, Acid, Toxic or
+ * Lick).
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (4 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 s16 BattleAnim_GetMoveKeyedTintRampParam(void) {
     s16 sp1E;
 
@@ -2590,6 +2969,12 @@ s16 BattleAnim_GetMoveKeyedTintRampParam(void) {
     return sp1E;
 }
 
+/**
+ * Returns the trail palette index for the queued poison-style move (Sludge, Acid, Toxic or
+ * Lick).
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (4 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 s16 BattleAnim_GetMoveKeyedTrailVariantParam(void) {
     s16 sp1E;
 
@@ -2640,12 +3025,16 @@ void ParticleEffect_PaletteMultiBurst(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunSlimePuddle, &gDefaultParticleDescriptor, 0, 1, 0xA, 0, sp4E, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(4, BattleAnim_RunSlimePuddle, &gDefaultParticleDescriptor, 0, 1, 0xA, 1, sp4E, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_RunSlimePuddle, &gDefaultParticleDescriptor, 0, 1, 0xA, 2, sp4E, 0);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0xC, BattleAnim_RunSlimePuddle, &gDefaultParticleDescriptor, 0, 1, 0xA, 3, sp4E, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(12, BattleAnim_RunSlimePuddle, &gDefaultParticleDescriptor, 0, 1, 0xA, 3, sp4E, 0);
     BattleAnim_SpawnOwnerModelTintRampDetach(0x28, sp44, 0xFF, 0, 0x10);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(6, 4, 0xA, BattleAnim_CallbackSharedAnimatedVerticalFade, &gBattleAnimParticleDescriptors[0x3D], 0, 1, 9, 0, sp4A, 0);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(7, 8, 5, BattleAnim_CallbackSharedAnimatedVerticalFade, &gBattleAnimParticleDescriptors[0x3D], 0, 1, 9, 0, sp4A, 0);
 }
 
+/**
+ * Returns the particle scale for the owner's species: 0.3 for Onix, 0.25 for Gyarados, 0.4
+ * for Lapras, 0.5 for any other.
+ */
 f32 func_8215AEA4(Particle* arg0) {
     f32 sp1C = 0.5f;
 
@@ -2665,6 +3054,11 @@ f32 func_8215AEA4(Particle* arg0) {
     return sp1C;
 }
 
+/**
+ * Builds a display list with two slowly scrolling tiles and no color setup.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Gfx_ParticleTextureTileCallback(Gfx* arg0, arg1_func_8434E21C* arg1, UNUSED u16 arg2) {
     BattleAnim_GetOwnerContextParticle(D_8006049C);
     arg0 = BattleAnim_BuildAnimatedTileDisplayListFromStruct(arg0, arg1, 0x20, 5, 0, 0, 1, 1, 0, -3, 1, 1);
@@ -2672,6 +3066,12 @@ void Gfx_ParticleTextureTileCallback(Gfx* arg0, arg1_func_8434E21C* arg1, UNUSED
     gSPEndDisplayList(arg0++);
 }
 
+/**
+ * Display-list callback: on draw pass 2, allocates 30 commands into arg1->unk_18 and
+ * fills them with Gfx_ParticleTextureTileCallback.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Gfx_ParticleTextureTileAllocCallback(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
         arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
@@ -2679,6 +3079,11 @@ void Gfx_ParticleTextureTileAllocCallback(s32 arg0, arg1_func_84344CE8* arg1) {
     }
 }
 
+/**
+ * Builds a display list that sets a red primitive color with the owner particle's alpha.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Gfx_ParticleRedPrimCallback(Gfx* arg0, UNUSED arg1_func_8434E21C* arg1, UNUSED u16 arg2) {
     Particle* temp_v0 = BattleAnim_GetOwnerContextParticle(D_8006049C);
 
@@ -2688,6 +3093,12 @@ void Gfx_ParticleRedPrimCallback(Gfx* arg0, UNUSED arg1_func_8434E21C* arg1, UNU
     gSPEndDisplayList(arg0++);
 }
 
+/**
+ * Display-list callback: on draw pass 2, allocates 30 commands into arg1->unk_18 and
+ * fills them with Gfx_ParticleRedPrimCallback.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Gfx_ParticleRedPrimAllocCallback(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
         arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
@@ -2775,6 +3186,12 @@ void BattleAnim_InitializeSharpenUse(void) {
     func_82168504();
 }
 
+/**
+ * Builds a display list that loads frame arg1 of the owner side's 76x19 Pokémon
+ * thumbnail strip as a texture.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Gfx_PokemonPortraitCallback(Gfx* arg0, u8 arg1, UNUSED u16 arg2) {
     u8* var_a3;
     s32 idx = arg1 * 0xB48;
@@ -2791,6 +3208,12 @@ void Gfx_PokemonPortraitCallback(Gfx* arg0, u8 arg1, UNUSED u16 arg2) {
     gSPEndDisplayList(arg0++);
 }
 
+/**
+ * Display-list callback: on draw pass 2, allocates 30 commands into arg1->unk_18 and
+ * fills them with Gfx_PokemonPortraitCallback.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Gfx_PokemonPortraitAllocCallback(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
         arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
@@ -2808,6 +3231,9 @@ void BattleAnim_InitializeSpeedLines(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 8, 6, BattleAnim_CallbackInitModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 9, 0, 8, 0);
 }
 
+/**
+ * Sets the spawn timing (0, 32, 14) and starts the Quick Attack / Hi Jump Kick use effect.
+ */
 void func_8215B5B8(void) {
     func_8213B644(0, 0x20, 0xE);
     BattleAnim_InitializeQuickAttackHiJumpKickUse();
@@ -2833,6 +3259,11 @@ void BattleAnim_InitializeLickUse(void) {
     }
 }
 
+/**
+ * Adjusts the particle for large species and returns its scale: Onix is moved 15 to the
+ * side, Onix, Gyarados and Lapras are raised by 10, and the scale is 0.5 (Onix), 0.4
+ * (Gyarados, Lapras) or 1.
+ */
 f32 func_8215B6A4(Particle* arg0) {
     f32 a = 0.0f;
     f32 b = 1.0f;
@@ -2874,6 +3305,11 @@ void BattleAnim_InitializeLovelyKissHit(void) {
     func_8213B560(0, &func_82152F44, &D_8218E580, 0, 1, 9, 0, 0xC, 0);
 }
 
+/**
+ * Init step: creates a model object for the particle (+0x14) and picks model 0x8C, 0x8E or
+ * 0x8D from field CD (0-1, 2-3, other), with scale 1 and alpha 0. Detaches if no model
+ * could be created.
+ */
 void func_8215B83C(s8 *arg0) {
     s16 sp26;
     s32 temp_v0;
@@ -2922,6 +3358,12 @@ void BattleAnim_RunPsychedelicOverlay(Particle* arg0) {
     }
 }
 
+/**
+ * Builds a display list for a palette-driven particle: the owner particle's CD parameter
+ * selects texture size, colors and two tile scroll offsets.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (12 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Gfx_PaletteParticleDL(Gfx* arg0, u8* arg1, UNUSED u16 arg2) {
     u8* a1;
     Particle* spC8;
@@ -3155,6 +3597,12 @@ void Gfx_PaletteParticleDL(Gfx* arg0, u8* arg1, UNUSED u16 arg2) {
     gSPEndDisplayList(arg0++);
 }
 
+/**
+ * Display-list callback: on draw pass 2, allocates 30 commands into arg1->unk_18 and
+ * fills them with Gfx_PaletteParticleDL.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (17 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Gfx_PaletteParticleDLCallback(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
         arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
@@ -3188,11 +3636,11 @@ void BattleAnim_InitializeDreamEaterHit(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackInitModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 9, 0, 0xD, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(4, BattleAnim_CallbackInitModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 9, 1, 0xD, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_CallbackInitModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 9, 2, 0xD, 0);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0xC, BattleAnim_CallbackInitModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 9, 0, 0xD, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(12, BattleAnim_CallbackInitModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 9, 0, 0xD, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(0x10, BattleAnim_CallbackInitModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 9, 1, 0xD, 0);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0x14, BattleAnim_CallbackInitModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 9, 2, 0xD, 0);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0x18, BattleAnim_CallbackInitModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 9, 0, 0xD, 0);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0x1C, BattleAnim_CallbackInitModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 9, 1, 0xD, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(20, BattleAnim_CallbackInitModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 9, 2, 0xD, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(24, BattleAnim_CallbackInitModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 9, 0, 0xD, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(28, BattleAnim_CallbackInitModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 9, 1, 0xD, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(0x20, BattleAnim_CallbackInitModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 9, 2, 0xD, 0);
 }
 
@@ -3271,6 +3719,10 @@ void BattleAnim_SetupConfuseRayUseSpotlight(Particle* arg0) {
     }
 }
 
+/**
+ * Particle callback: init, then fades in to full alpha while field AE moves toward 200.
+ * Always turns the particle to face away from the camera (camera yaw + 0x8000).
+ */
 void func_8215C984(s8 *arg0) {
     s16 temp_v0;
 
@@ -3316,6 +3768,12 @@ void BattleAnim_ConfuseRayParticleUpdate(s8 *arg0) {
     Particle_SetRotationY(arg0, (s16) (func_821385C0() + 0x8000));
 }
 
+/**
+ * Builds a display list from the owner particle's colors. Pass arg1 0 uses prim_a as the
+ * alpha and pass 1 uses unk_AE.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Gfx_WaterAnimPrimEnvDL(Gfx* arg0, u8 arg1, UNUSED u16 arg2) {
     Particle* temp_v0 = BattleAnim_GetOwnerContextParticle(D_8006049C);
 
@@ -3338,6 +3796,12 @@ void Gfx_WaterAnimPrimEnvDL(Gfx* arg0, u8 arg1, UNUSED u16 arg2) {
     gSPEndDisplayList(arg0++);
 }
 
+/**
+ * Display-list callback: on draw pass 2, allocates 30 commands into arg1->unk_18 and
+ * fills them with Gfx_WaterAnimPrimEnvDL.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Gfx_WaterAnimPrimEnvDLCallback(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
         arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
@@ -3345,11 +3809,21 @@ void Gfx_WaterAnimPrimEnvDLCallback(s32 arg0, arg1_func_84344CE8* arg1) {
     }
 }
 
+/**
+ * Starts a global tint fade, then the effect 21/93 model particle for the current
+ * animation owner.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void ParticleEffect_WaterAnimBurst(void) {
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 8, 3);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffects21And93ModelAlphaAnchorFollow, &gDefaultParticleDescriptor, 0, 1, 0xA, 0, 0, 0);
 }
 
+/**
+ * Sets the spawn timing (16, 16, 8).
+ */
 void func_8215CCF0(void) {
     func_8213B644(0x10, 0x10, 8);
 }
@@ -3385,6 +3859,12 @@ void BattleAnim_InitializeConfuseRayHit(void) {
     func_8213BC00(0, 8, 0xFF, 0, 0x10);
 }
 
+/**
+ * Builds a display list for two layers of a scrolling 32x32 4-bit intensity texture with
+ * the owner particle's alpha.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Gfx_WaterAnimDL(Gfx* arg0, u8* arg1, UNUSED u16 arg2) {
     Particle* temp_v0 = BattleAnim_GetOwnerContextParticle(D_8006049C);
 
@@ -3404,6 +3884,12 @@ void Gfx_WaterAnimDL(Gfx* arg0, u8* arg1, UNUSED u16 arg2) {
     gSPEndDisplayList(arg0++);
 }
 
+/**
+ * Display-list callback: on draw pass 2, allocates 30 commands into arg1->unk_18 and
+ * fills them with Gfx_WaterAnimDL.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Gfx_WaterAnimDLCallback(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
         arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
@@ -3443,7 +3929,7 @@ void BattleAnim_InitializeWaterfallHit(void) {
  * it ran for exactly Surf.
  */
 void BattleAnim_InitializeSurfUseSpray(void) {
-    BattleAnim_AddSpawnDelay(0x41);
+    BattleAnim_AddSpawnDelay(65);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 0x20, BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E7D0, 0, 2, 7, 0, 0x33, 8);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 0x20, BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E650, 0, 2, 7, 0, 0xC, 8);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 0x20, BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E5F8, 0, 2, 7, 0, 0xC, 8);
@@ -3484,6 +3970,10 @@ void BattleAnim_SetupBarrageEffect(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
+/**
+ * Particle callback: init, then loops frames 0-7 while fading alpha toward 32, then detaches.
+ * Scale moves toward 0.5 by 0.1 every frame.
+ */
 void func_8215D76C(s8 *arg0) {
     s16 temp_v0;
 
@@ -3517,6 +4007,12 @@ void BattleAnim_SetupBarrageUseEffect1(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
+/**
+ * Particle callback for effect 101 (Barrage use): sets up the throw, loads model 0xA0
+ * (anim 0xA1), then after 10 frames launches the projectile and a 12-particle burst.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * @unverified Name guessed from the code.
+ */
 void BattleAnim_CallbackStartEffect101ModelBurstEmitter(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -3532,7 +4028,7 @@ void BattleAnim_CallbackStartEffect101ModelBurstEmitter(Particle* arg0) {
             break;
 
         case 3:
-            if (Particle_TickDelayAndAdvanceLifecycle(arg0, 0xA) != 0) {
+            if (Particle_TickDelayAndAdvanceLifecycle(arg0, 10) != 0) {
                 Particle_Field74_SetScaled_0AD8C(arg0, 8.0f);
                 BattleAnim_EmitParticleBurst(arg0, BattleAnim_CallbackStartEffect101EndEffect65Descriptor4ABurstChild, &D_8218E7D0, 1);
                 BattleAnim_EmitParticleBurstWithMetadata(arg0, BattleAnim_RunBarrageUseEffect2, &D_8218E770, 0xC, 0x33, 0);
@@ -3580,6 +4076,10 @@ void BattleAnim_SetupBarrageHitEffect(Particle* arg0) {
     BattleAnim_InitModel(arg0->displayObject, 0xA0);
 }
 
+/**
+ * Particle callback: init, then emits one func_8215D76C child per frame while spinning and
+ * counting down 7 frames, then detaches. Moves along its rotation while the countdown runs.
+ */
 void func_8215DAEC(s8 *arg0) {
     s16 temp_v0;
 
@@ -3644,6 +4144,12 @@ void BattleAnim_RunPsywaveEffect(Particle* arg0) {
     }
 }
 
+/**
+ * Builds a display list with a cyan primitive color and two tiles whose scroll direction
+ * is chosen by the owner particle's CF parameter.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Gfx_SimpleNodeDL(Gfx* arg0, arg1_func_8434E21C* arg1, UNUSED u16 arg2) {
     UNUSED s32 pad; // FAKE: stack padding
     Particle* sp48 = BattleAnim_GetOwnerContextParticle(D_8006049C);
@@ -3670,6 +4176,12 @@ void Gfx_SimpleNodeDL(Gfx* arg0, arg1_func_8434E21C* arg1, UNUSED u16 arg2) {
     gSPEndDisplayList(arg0++);
 }
 
+/**
+ * Display-list callback: on draw pass 2, allocates 30 commands into arg1->unk_18 and
+ * fills them with Gfx_SimpleNodeDL.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (9 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Gfx_SimpleNodeDLCallback(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
         arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
@@ -3786,8 +4298,8 @@ void BattleAnim_InitializeFocusEnergyUse(void) {
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0x10, 6);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunFillScreenOverlay, &gDefaultParticleDescriptor, 0x80, 1, 0xC, 0xA, 0x1A, 4);
     BattleAnim_SpawnOwnerModelTintPulseDetach(0, 1, 0xA, 0, 0xC8, 3);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0x3C, 4, 0xE, BattleAnim_CallbackSharedAnimatedVerticalFade, &gBattleAnimParticleDescriptors[0x3D], 0, 1, 0x11, 7, 0x33, 7);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0x3D, 8, 7, BattleAnim_CallbackSharedAnimatedVerticalFade, &gBattleAnimParticleDescriptors[0x3D], 0, 1, 0x11, 7, 0x33, 7);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(60, 4, 0xE, BattleAnim_CallbackSharedAnimatedVerticalFade, &gBattleAnimParticleDescriptors[0x3D], 0, 1, 0x11, 7, 0x33, 7);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(61, 8, 7, BattleAnim_CallbackSharedAnimatedVerticalFade, &gBattleAnimParticleDescriptors[0x3D], 0, 1, 0x11, 7, 0x33, 7);
 }
 
 /**
@@ -3832,6 +4344,13 @@ void BattleAnim_InitializeSkyAttackHit(void) {
     BattleAnim_EndEffect71PaletteApproachWithExpandingScaleFades();
 }
 
+/**
+ * Builds a display list whose colors, texture size and tile scroll are chosen by the
+ * owner particle's parameters.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void ParticleEffect_DrawQuad(Gfx* arg0, arg1_func_8434E21C* arg1, UNUSED u16 arg2) {
     Particle* temp_v0;
     UNUSED s32 pad; // FAKE: stack padding
@@ -3949,6 +4468,12 @@ void ParticleEffect_DrawQuad(Gfx* arg0, arg1_func_8434E21C* arg1, UNUSED u16 arg
     gSPEndDisplayList(arg0++);
 }
 
+/**
+ * Display-list callback: on draw pass 2, allocates 30 commands into arg1->unk_18 and
+ * fills them with ParticleEffect_DrawQuad.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void ParticleEffect_AllocateDisplayList(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
         arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
@@ -3988,7 +4513,7 @@ void BattleAnim_MegaHitModelFade(Particle* arg0) {
         case 2:
             Particle_PrimG_Approach_0BB14(arg0, 0, 0x20);
 
-            if (Particle_DecrementUnkA6ToZero != NULL) {
+            if (Particle_DecrementUnkA6ToZero != NULL) { //!bug: compares the function pointer instead of calling it, so this is always true
                 Particle_PrimAlpha_Approach_0BC2C(arg0, 0, 0x20);
             }
 
@@ -4099,6 +4624,10 @@ void BattleAnim_InitializeHornAttackUse(void) {
     func_8213B560(0, &func_8215EFF8, &D_8218E580, 0, 1, 0x11, 7, 0x20, 1);
 }
 
+/**
+ * Particle callback: starts a model animation (func_82152730 0), then fades alpha in and
+ * marks itself inactive once the model animation ends.
+ */
 void func_8215F1B0(s8 *arg0) {
     s16 temp_v0;
 
@@ -4137,6 +4666,13 @@ void BattleAnim_InitializeSonicBoomUse(void) {
     func_8213B644(0, 8, 0x20);
 }
 
+/**
+ * Lifecycle init for effects 127 and 128: places the particle at one of three positions
+ * by slot, starts it small and growing, and delays it 8 frames per slot.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_CallbackStartEffects127And128Descriptor39ScaleFade_InitParticle(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
     s16 sp24 = Particle_FieldCF_GetS16_0C058(arg0);
@@ -4167,6 +4703,10 @@ void BattleAnim_CallbackStartEffects127And128Descriptor39ScaleFade_InitParticle(
     Particle_AdvanceLifecycle(arg0);
 }
 
+/**
+ * Particle callback with several staged waits: init, wait for the spawn step, then a
+ * 10-frame delay, then the approach steps of func_821402B8 / func_82140548, then inactive.
+ */
 void func_8215F3EC(s8 *arg0) {
     s16 temp_v0;
 
@@ -4195,18 +4735,42 @@ void func_8215F3EC(s8 *arg0) {
     }
 }
 
+/**
+ * Starts effect 127's three scale-fade particles for the current animation owner.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_StartEffect127Descriptor39ScaleFade(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffects127And128Descriptor39ScaleFade, &gBattleAnimParticleDescriptors[0x39], 8, 3, 2, 0, 0x45, 0);
 }
 
+/**
+ * Starts effect 128's three scale-fade particles for the current animation owner.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_StartEffect128Descriptor39ScaleFade(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffects127And128Descriptor39ScaleFade, &gBattleAnimParticleDescriptors[0x39], 8, 3, 2, 0, 0x47, 0);
 }
 
+/**
+ * Starts the three delayed model particles of effect 12/129 for the current animation
+ * owner.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void ParticleEffect_CreateTypeX(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_ConfuseRayAmnesiaModelAnimWait, &gDefaultParticleDescriptor, 0x1E, 3, 6, 0, 0, 0);
 }
 
+/**
+ * Starts a default hit spark with particle descriptor 0x34 for the current animation
+ * owner.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void ParticleEffect_CreateSmoke(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunDefaultHitSpark, &gBattleAnimParticleDescriptors[0x34], 0, 1, 0x11, 9, 0, 6);
 }
@@ -4219,6 +4783,13 @@ void ParticleEffect_CreateSmokeHighPriority(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0x10, BattleAnim_RunDefaultHitSpark, &gBattleAnimParticleDescriptors[0x34], 0, 1, 0x11, 9, 0, 6);
 }
 
+/**
+ * Lifecycle init for effect 132: places the particle at one of three positions by slot,
+ * starts it tiny and growing, and delays it 8 frames per slot.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_CallbackStartEffect132Descriptor39DelayedRiseFade_InitParticle(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
     s16 sp24 = Particle_FieldCF_GetS16_0C058(arg0);
@@ -4249,6 +4820,13 @@ void BattleAnim_CallbackStartEffect132Descriptor39DelayedRiseFade_InitParticle(P
     Particle_AdvanceLifecycle(arg0);
 }
 
+/**
+ * Particle callback for effect 132: after its delay, grows the particle, then rises and
+ * fades it out before marking it inactive.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_CallbackStartEffect132Descriptor39DelayedRiseFade(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -4258,7 +4836,7 @@ void BattleAnim_CallbackStartEffect132Descriptor39DelayedRiseFade(Particle* arg0
         case 2:
             if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
                 Particle_EnableRendering(arg0);
-                Particle_FieldA6_SetS16_0BCA8(arg0, 0xA);
+                Particle_FieldA6_SetS16_0BCA8(arg0, 10);
             }
             break;
 
@@ -4285,6 +4863,13 @@ void BattleAnim_CallbackStartEffect132Descriptor39DelayedRiseFade(Particle* arg0
     }
 }
 
+/**
+ * Starts effect 132's particles for the current animation owner twice, the second set 16
+ * frames later.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void ParticleEffect_CreateDual(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffect132Descriptor39DelayedRiseFade, &gBattleAnimParticleDescriptors[0x39], 8, 3, 2, 0, 0x46, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(0x10, BattleAnim_CallbackStartEffect132Descriptor39DelayedRiseFade, &gBattleAnimParticleDescriptors[0x39], 8, 3, 2, 0, 0x46, 0);
