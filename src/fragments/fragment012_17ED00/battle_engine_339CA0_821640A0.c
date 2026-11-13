@@ -226,6 +226,11 @@ void func_82164AD0(s8 *arg0) {
 }
 
 
+/**
+ * Moves a particle to the owner's mouth or front: 50 units forward and 30 up by default,
+ * with per-species distances.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_ApplySpeciesKeyedSpawnOffset(Particle* arg0) {
     f32 sp1C = 50.0f;
     f32 sp18 = 30.0f;
@@ -419,6 +424,11 @@ void BattleAnim_RunBarrageUseEffect2(Particle* arg0) {
     }
 }
 
+/**
+ * Lifecycle init for a burst child: random direction around straight back, random speed,
+ * palette color from the CF parameter.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_CallbackDescriptor50BurstChild_InitParticle(Particle* arg0) {
     Vec3s sp28;
     s16 sp26 = Particle_FieldCF_GetS16_0C058(arg0);
@@ -463,6 +473,11 @@ void func_82165224(s8 *arg0) {
     }
 }
 
+/**
+ * Lifecycle init for a burst emitter: one of several fixed positions by its A6 parameter,
+ * with a 6-frame timer.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_CallbackDescriptor50BurstEmitter_InitParticle(Particle* arg0) {
     switch (arg0->unk_A6) {
         case 0:
@@ -486,6 +501,10 @@ void BattleAnim_CallbackDescriptor50BurstEmitter_InitParticle(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
+/**
+ * Particle callback for a burst emitter: emits its burst children, then goes inactive.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_CallbackDescriptor50BurstEmitter(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -503,6 +522,10 @@ void BattleAnim_CallbackDescriptor50BurstEmitter(Particle* arg0) {
     }
 }
 
+/**
+ * Init hook for end effect 16: does nothing.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_EndEffect16_NoOpInit(void) {
 }
 
@@ -655,6 +678,11 @@ void BattleAnim_SolarbeamMimicBurstEmitter(Particle* arg0) {
     }
 }
 
+/**
+ * Lifecycle init for a burst child: light cyan, scale growing with burst index, texture
+ * frame 15.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_CallbackDescriptor26BurstChild_InitParticle(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
 

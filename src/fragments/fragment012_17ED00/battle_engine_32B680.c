@@ -89,6 +89,10 @@ void func_821224F4(CameraNode*);
 void func_82121D78(CameraNode*, f32, f32);
 void func_8212187C(s32);
 void func_821351F8(CameraNode*, ActivePokemon*);
+/**
+ * Sets up the battle camera and presentation on the acting Pokémon.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_InitializeBattlePresentation(CameraNode* arg0) {
     func_821224F4(arg0);
     func_82121D78(arg0, 20.0f, 4000.0f);

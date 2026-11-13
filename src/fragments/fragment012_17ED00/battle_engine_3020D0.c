@@ -134,6 +134,10 @@ void BattleMenu_DrawSide1Menus(ActivePokemon* arg0, ActivePokemonState* arg1) {
     }
 }
 
+/**
+ * Empties all battle message queues.
+ * @unverified Name from Stadium 1.
+ */
 void Battle_ClearAllMessageQueues(void) {
     gBattleMessageQueues->unk_088[0] = 0;
     gBattleMessageQueues->unk_088[1] = 0;
@@ -167,6 +171,10 @@ void Battle_ClearAllMessageQueues(void) {
     gBattleMessageQueues->unk_408[1] = 0;
 }
 
+/**
+ * Resets the battle message cursor and both line buffers.
+ * @unverified Name from Stadium 1.
+ */
 void Battle_ClearMessageCursor(void) {
     gBattleMessageQueues->unk_004 = 0;
     gBattleMessageQueues->unk_048[0] = 0;
@@ -175,6 +183,11 @@ void Battle_ClearMessageCursor(void) {
     gBattleMessageQueues->unk_008[1] = 0;
 }
 
+/**
+ * Builds a battle message in arg0 from format arg1, replacing each %s with the next string
+ * argument. Other % sequences are dropped.
+ * @unverified Name from Stadium 1.
+ */
 void Battle_SimpleStringFormat(s8* arg0, s8* arg1, ...) {
     va_list args;
     s8* src;
@@ -186,11 +199,11 @@ void Battle_SimpleStringFormat(s8* arg0, s8* arg1, ...) {
     fmt = arg1;
 
     while (*fmt != 0) {
-        if (*fmt != 0x25) {
+        if (*fmt != '%') {
             arg0[len++] = *fmt;
         } else {
             fmt++;
-            if (*fmt == 0x73) {
+            if (*fmt == 's') {
                 src = va_arg(args, s8*);
                 while (*src != 0) {
                     arg0[len] = *src;
@@ -221,11 +234,11 @@ void BattleMessage_Format(s8* arg0, s8 id, s8* arg1, ...) {
     fmt = arg1;
 
     while (*fmt != 0) {
-        if (*fmt != 0x25) {
+        if (*fmt != '%') {
             arg0[len++] = *fmt;
         } else {
             fmt++;
-            if (*fmt == 0x73) {
+            if (*fmt == 's') {
                 src = va_arg(args, s8*);
                 while (*src != 0) {
                     arg0[len] = *src;
@@ -305,6 +318,11 @@ void BattleMessage_TickTypewriter(void)
 #undef MSG
 
 void BattleMessage_TickTypewriter(void);
+/**
+ * Draws both Pokémon's compact status boxes and advances the message typewriter, unless
+ * a camera transition is running.
+ * @unverified Name from Stadium 1.
+ */
 void Battle_DrawCompactStatusBoxesIfVisible(void) {
     ActivePokemon* ptr1 = sActivePokemon[0];
     ActivePokemon* ptr2 = sActivePokemon[1];
@@ -399,6 +417,10 @@ void func_8211F3F4(void) {
     bzero(D_8219A520, 0x4C8);
 }
 
+/**
+ * Resets the battle message queue to its first entry.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_ResetMessageQueue(void) {
     gBattleMessageQueues->unk_004 = 0;
     gBattleMessageQueues->unk_008[gBattleMessageQueues->unk_004] = 0;
@@ -412,6 +434,10 @@ void func_8211D06C(void);
 void func_8211CB0C(ActivePokemon*, ActivePokemonState*, ActivePokemonState*);
 void func_8211C9FC(ActivePokemon*, ActivePokemonState*, ActivePokemonState*);
 
+/**
+ * Draws the battle HUD for the current camera mode.
+ * @unverified Name from Stadium 1.
+ */
 void Battle_RenderHud(void) {
     ActivePokemonState* s0 = &sActivePokemon[0]->state;
     ActivePokemonState* s1 = &sActivePokemon[1]->state;

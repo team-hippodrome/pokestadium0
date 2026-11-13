@@ -82,6 +82,11 @@ void LassoHit_Init(f32 arg0, f32 arg1, f32 arg2, f32 arg3, u8 arg4, u8 arg5, u8 
     }
 }
 
+/**
+ * Returns how far the trail strip's tail has faded, from 1.0 (not started) down toward 0,
+ * based on the strip's current point count.
+ * @unverified Name from Stadium 1.
+ */
 f32 Strip400_GetTailFadeRatio(void) {
     Strip400State* ptr = &sTrailState;
     f32 tmp;
@@ -269,6 +274,10 @@ Gfx* Strip400_Draw(Gfx* arg0) {
 }
 
 extern Radial20 D_821A3490[10];
+/**
+ * Clears the 10 radial effects and their nodes.
+ * @unverified Name from Stadium 1.
+ */
 void Radial20_ResetPool(void) {
     s16 temp_v0;
     s32 i;
@@ -363,6 +372,11 @@ void TriAttackRadial_EmitVariantA(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 ar
 }
 
 extern Radial20 D_821A3490[10];
+/**
+ * Starts a free radial effect from (arg0, arg1, arg2) toward (arg3, arg4, arg5) with
+ * node count arg6, color arg7..argA and spread, speed and length parameters.
+ * @unverified Name from Stadium 1.
+ */
 void Radial20_VariantB(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s16 arg6, u8 arg7, u8 arg8, u8 arg9,
                    u8 argA, f32 argB, f32 argC, f32 argD, s16 argE) {
     Radial20* var_v0;
@@ -549,6 +563,10 @@ void func_82175440(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s
 }
 
 extern Radial20 D_821A3490[10];
+/**
+ * Like Radial20_VariantB with a different node layout.
+ * @unverified Name from Stadium 1.
+ */
 void Radial20_VariantE(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s16 arg6, u8 arg7, u8 arg8, u8 arg9,
                    u8 argA, f32 argB, f32 argC, f32 argD, s16 argE) {
     Radial20* var_v0;
@@ -612,6 +630,10 @@ void Radial20_VariantE(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg
     }
 }
 
+/**
+ * Writes the point arg3 units along Z rotated arg0 radians about X to arg2.
+ * @unverified Name from Stadium 1.
+ */
 void Radial20_RotateVertexOffset(f32 arg0, UNUSED Vec3f* arg1, Vec3f* arg2, f32 arg3, UNUSED f32 arg4, UNUSED f32 arg5,
                    UNUSED f32 arg6) {
     UNUSED MtxF pad;
@@ -776,6 +798,10 @@ void Radial20_UpdateNode(Radial20* arg0) {
 }
 
 extern Radial20 D_821A3490[10];
+/**
+ * Advances every active radial effect. Returns -1 once none are left running, else 0.
+ * @unverified Name from Stadium 1.
+ */
 s32 Radial20_IsComplete(void) {
     s32 i;
     s32 var_s2 = 0;
