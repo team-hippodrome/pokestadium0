@@ -320,6 +320,11 @@ void BattleAnim_RunBubbleBeamBubblesFast(s8 *arg0) {
     }
 }
 
+/**
+ * Lifecycle init for a rotating spark: tiny, aimed from the owner toward the target with
+ * a mode-dependent spread (CE parameter), delayed 2 frames per burst index.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_SetupUnusedRotatingSparkVariant(Particle* arg0) {
     UNUSED s32 pad[2]; // FAKE: stack padding
     f32 temp_fv0;
@@ -371,6 +376,11 @@ void BattleAnim_SetupUnusedRotatingSparkVariant(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
+/**
+ * Motion steps for the rotating spark: after 2 frames turns it about X by unk_AE, then
+ * keeps turning it about Z by unk_B0 while it moves.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_MotionUnusedRotatingSparkVariant(Particle* arg0) {
     switch (arg0->phase) {
         case 1:
@@ -426,6 +436,11 @@ void func_8214A220(s8 *arg0) {
     }
 }
 
+/**
+ * Lifecycle init for an aimed spark: tiny, pointed from the secondary owner's anchor at
+ * the tertiary owner's bone 9, palette color from the CF parameter.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_SetupUnusedAimedSparkVariant(Particle* arg0) {
     s16 sp4E = Particle_FieldCE_GetS32_0C040(arg0);
     Vec3f sp40;
@@ -456,6 +471,11 @@ void BattleAnim_SetupUnusedAimedSparkVariant(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
+/**
+ * Particle callback for the aimed spark: fades it in, holds, then fades it out, while
+ * growing it toward 50 times its size.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_CallbackUnusedAimedSparkVariant(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -1524,6 +1544,11 @@ void func_8214C208(s8 *arg0) {
     }
 }
 
+/**
+ * Lifecycle init: random offset, quarter scale, random tilt, random palette color at
+ * alpha 200, delayed 4 frames per burst index.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_SetupUnusedIndexedFadeVariantA(Particle* arg0) {
     s16 sp2E = Particle_FieldAC_GetS16_0C038(arg0);
 
@@ -1579,6 +1604,11 @@ void func_8214C3C8(s8 *arg0) {
     }
 }
 
+/**
+ * Like BattleAnim_SetupUnusedIndexedFadeVariantA but larger, white with a random
+ * environment color.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_SetupUnusedIndexedFadeVariantB(Particle* arg0) {
     s16 sp2E = Particle_FieldAC_GetS16_0C038(arg0);
 
@@ -1651,6 +1681,11 @@ void BattleAnim_SetupBubbleBubbleBeamSharedEffect(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
+/**
+ * Particle callback for end effects 34 and 53 (the Bubble/BubbleBeam hit): bubbles grow,
+ * slow and turn toward their target, then bounce and fade.
+ * @unverified Name guessed from the code.
+ */
 void BattleAnim_CallbackEndEffects34And53Descriptor45RotatingBounceFade(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -2267,6 +2302,11 @@ void BattleAnim_InitializeHyperBeamHit(void) {
 }
 
 extern ParticleDescriptor D_8218E588[86];
+/**
+ * Starts end effect 71: a hue change, strong beam hits, an expanding hit spark, waves of
+ * fading particles, and a global tint fade at frame 22.
+ * @unverified Name guessed from the code.
+ */
 void BattleAnim_EndEffect71PaletteApproachWithExpandingScaleFades(void) {
     UNUSED s32 pad; // FAKE: stack padding
 
