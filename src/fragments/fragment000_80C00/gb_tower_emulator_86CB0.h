@@ -173,9 +173,9 @@ typedef struct unk_D_81287B08_jp {
 } unk_D_81287B08_jp;
 extern unk_D_81287B08_jp D_81287B08_jp[];
 extern OSMesgQueue* D_812896A0_jp;
-void func_8110FD6C(s32 cmd, s32 arg1);
-void func_8110FD90(s32 cmd, s8 arg1);
-void func_8110FDF0(void);
+void AudioThread_QueueCmdS32(s32 cmd, s32 arg1);
+void AudioThread_QueueCmdS8(s32 cmd, s8 arg1);
+void AudioThread_ScheduleProcessCmds(void);
 extern s32 D_81138A70;
 extern u8 D_81138A80[0x10];
 extern u8 sGbApuRegs[0x40];
@@ -208,12 +208,12 @@ typedef struct GbStereoSample {
 #include "m2c_macros.h"
 
 void func_811155A0(void);
-void GbApu_SetActiveFlag(void);
-void GbApu_ClearActiveFlag(void);
+void Audio_QueueGlobalMute(void);
+void Audio_QueueGlobalUnmute(void);
 void func_81215C14_jp(s32 arg0, s32 arg1, u8 arg2);
 void func_81215C9C_jp(s32 arg0, s32 arg1);
 void func_81115704(void);
-void func_81215D0C_jp(s32 arg0, s32 arg1, s32 arg2);
+void Audio_QueueChannelMute(s32 arg0, s32 arg1, s32 arg2);
 void func_81215D50_jp(void);
 void func_81215D8C_jp(s32 arg0, s32 arg1, s32 arg2);
 void func_81215DDC_jp(void);
@@ -262,7 +262,7 @@ typedef struct Particle31Flags {
 void AudioPlayback_NotePoolClear(s8*);
 
 void AudioSeq_SeqLayerFree();
-void Particle31_ResetAllSlots(DisplayObject* arg0);
+void AudioSeq_SequenceChannelDisable(DisplayObject* arg0);
 
 typedef struct Particle2D68 {
     u8 b80 : 1;
@@ -321,7 +321,7 @@ typedef struct Particle3140 {
 void AudioSeq_SeqLayerProcessScriptStep1(Particle3140* arg0);
 
 /*
- * func_81113F84
+ * AudioSeq_SequenceChannelSetVolume
  *
  * Stores (float)arg1 / 127.0f into the float at offset 0x2C of the object
  * arg0 points to.  arg1 is an unsigned byte (the generated code masks it
@@ -329,11 +329,11 @@ void AudioSeq_SeqLayerProcessScriptStep1(Particle3140* arg0);
  * the stored value is 1.0 when arg1 is 127.  What the field at +0x2C
  * represents is not known.
  */
-void func_81113F84(u8* arg0, u8 arg1);
+void AudioSeq_SequenceChannelSetVolume(u8* arg0, u8 arg1);
 
-M2C_UNK func_81111DC8(s8 *);
+M2C_UNK AudioEffects_SequencePlayerProcessSound(s8 *);
 struct SeqPlayer81114B54;
-void func_81114B54(struct SeqPlayer81114B54*);
+void AudioSeq_SequencePlayerProcessSequence(struct SeqPlayer81114B54*);
 typedef struct Entry811151C8 {
     u32 b80 : 1;
     char pad[0x15C - 4];
@@ -341,10 +341,10 @@ typedef struct Entry811151C8 {
 extern s16 D_811858CC;
 extern Entry811151C8 D_81184668[];
 void AudioPlayback_ProcessNotes(void);
-void func_811151C8(s32 arg0);
+void AudioSeq_ProcessSequences(s32 arg0);
 
-M2C_UNK func_81111DC8(s8 *);                      /* extern */
-void func_81115254(s8 *arg0);
+M2C_UNK AudioEffects_SequencePlayerProcessSound(s8 *);                      /* extern */
+void AudioSeq_SkipForwardSequence(s8 *arg0);
 
 // Scales channel arg0's unk_01C by arg2 percent: at once when arg1 == 0, otherwise as a ramp
 // of unk_020 per step over unk_012 = arg1 steps. unk_024 keeps the value before the change.

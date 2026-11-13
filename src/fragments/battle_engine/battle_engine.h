@@ -1657,7 +1657,7 @@ void BattleScene_RunConditionalHpTransition(CameraNode* arg0);
 void BattleScene_RunMoveEffectEndHpTransition(CameraNode* arg0);
 void BattleScene_RunActionEffectHpTransition(CameraNode* arg0);
 void func_8110DC98(void);
-void func_8110E714(void);
+void AudioLoad_Unused2(void);
 void BattleScene_RunRepeatedHitHpTransition(CameraNode* arg0);
 void BattleScene_ActionSetupFinalizeStep(CameraNode* arg0);
 void BattleScene_PhaseCommand(CameraNode* arg0);

@@ -18,8 +18,8 @@ extern s32 sMultihitCountdown;
 
 void func_8110DC90(void);
 void func_8110DC98(void);
-s32 BattleScene_EndStatusAnimationsAndCommit(ActivePokemon* arg0);
-void func_8110E714(void);
+void AudioLoad_ProcessLoads(s32 reset_status);
+void AudioLoad_Unused2(void);
 
 void func_8110DC90(void) {
 }
@@ -29,7 +29,7 @@ void func_8110DC98(void) {
 
 void AudioLoad_SyncLoad(Particle* arg0, s32 arg1, s32* arg2);
 
-void func_8110DCA0(Particle* arg0, s32 arg1) {
+void AudioLoad_SyncLoadSimple(Particle* arg0, s32 arg1) {
     s32 sp1C;
 
     AudioLoad_SyncLoad(arg0, arg1, &sp1C);
@@ -64,7 +64,7 @@ s32 func_8004CFB0(OSMesgQueue*, OSMesg, s32);
 void AudioLoad_SetFontLoadStatus(s32, s32);
 void AudioLoad_SetSeqLoadStatus(s32, s32);
 void AudioLoad_SetSampleLoadStatus(s32, s32);
-struct Entry8110EABC* func_8110E9A8(s32, s32, u32, s32, s32, OSMesgQueue*, u32);
+struct Entry8110EABC* AudioLoad_StartAsyncLoad(s32, s32, u32, s32, s32, OSMesgQueue*, u32);
 
 /**
  * Starts an asynchronous load of entry id of audio table tableType (0 sequences,
@@ -147,7 +147,7 @@ s32 AudioLoad_AsyncLoadInner(s32 table_type, s32 id, s32 n_chunks, s32 ret_data,
                 break;
         }
 
-        func_8110E9A8(dev_addr, ram_addr, size, medium, n_chunks, ret_queue, (ret_data << 0x18) | (table_type << 0x10) | (id << 8) | load_status);
+        AudioLoad_StartAsyncLoad(dev_addr, ram_addr, size, medium, n_chunks, ret_queue, (ret_data << 0x18) | (table_type << 0x10) | (id << 8) | load_status);
         load_status = 1;
     }
 
@@ -166,11 +166,20 @@ s32 AudioLoad_AsyncLoadInner(s32 table_type, s32 id, s32 n_chunks, s32 ret_data,
     return ram_addr;
 }
 
-/** Ends a Pokemon's status animations and commits the result. */
-s32 BattleScene_EndStatusAnimationsAndCommit(ActivePokemon* arg0) {
-    BattleAnim_ClearFreezeStatusAnimation(arg0);
-    BattleAnim_EndSleepStatusAnimation(arg0);
-    Battle_ApplyAnimStateEffects(arg0);
+void AudioLoad_ProcessSlowLoads(s32 reset_status);
+s32 AudioLoad_ProcessSamplePreloads(s32 reset_status);
+void AudioLoad_ProcessAsyncLoads(s32 reset_status);
+
+/**
+ * Runs the per-frame load work: slow sample loads, sample preloads, then async loads.
+ * Corresponds to OoT AudioLoad_ProcessLoads (original name Nas_BgDmaFrameWork): the same
+ * three calls in the same order.
+ * @unverified Not reached in play.
+ */
+void AudioLoad_ProcessLoads(s32 reset_status) {
+    AudioLoad_ProcessSlowLoads(reset_status);
+    AudioLoad_ProcessSamplePreloads(reset_status);
+    AudioLoad_ProcessAsyncLoads(reset_status);
 }
 
 typedef struct Entry811858B0 {
@@ -229,7 +238,7 @@ void AudioHeap_InitMainPools(s32);
 void* func_81109868(void*, s32);
 void func_811098C0(void*, void*, s32);
 s32 AudioHeap_ResetStep(void);
-void func_8110CB70(AudioTable8110DCC0*, u8*, s32);
+void AudioLoad_InitTable(AudioTable8110DCC0*, u8*, s32);
 
 /**
  * Initializes the audio system: clears the heap and the audio globals, sets up
@@ -302,9 +311,9 @@ void AudioLoad_Init(void) {
     D_811858A8 = D_81152710;
     D_811858AC = D_8118589C->numEntries;
 
-    func_8110CB70(D_8118589C, D_0015AE60, 0);
-    func_8110CB70(D_811858A0, D_0015A9B0, 0);
-    func_8110CB70((AudioTable8110DCC0*)D_811858A4, D_0015AA60, 0);
+    AudioLoad_InitTable(D_8118589C, D_0015AE60, 0);
+    AudioLoad_InitTable(D_811858A0, D_0015A9B0, 0);
+    AudioLoad_InitTable((AudioTable8110DCC0*)D_811858A4, D_0015AA60, 0);
 
     num_fonts = D_811858A0->numEntries;
     D_811858B0 = func_81109868(D_811842B0, num_fonts * sizeof(Entry811858B0));
@@ -353,10 +362,10 @@ typedef struct SampleLoads8110E500 {
 
 extern SampleLoads8110E500 D_81180610;
 s32 AudioHeap_AllocTemporarySampleCache(s32, s32, s32, s8);
-s32 func_8110E6B0(s32 arg0, s32 arg1);
+s32 AudioLoad_GetFontSample(s32 arg0, s32 arg1);
 
-s32 func_8110E500(s32 arg0, u8 arg1, s8* status) {
-    SampleHeader8110E500* header = (SampleHeader8110E500*)func_8110E6B0(arg0, arg1);
+s32 AudioLoad_SlowLoadSample(s32 arg0, u8 arg1, s8* status) {
+    SampleHeader8110E500* header = (SampleHeader8110E500*)AudioLoad_GetFontSample(arg0, arg1);
     SampleLoad8110E500* load;
 
     if (header == NULL) {
@@ -395,7 +404,7 @@ s32 func_8110E500(s32 arg0, u8 arg1, s8* status) {
 
 s32* AudioPlayback_GetInstrumentInner(s32, s32);
 s32* AudioPlayback_GetDrum(s32, s32);
-s32 func_8110E6B0(s32 arg0, s32 arg1) {
+s32 AudioLoad_GetFontSample(s32 arg0, s32 arg1) {
     s32* p;
     s32 v;
 
@@ -415,7 +424,7 @@ s32 func_8110E6B0(s32 arg0, s32 arg1) {
     return v;
 }
 
-void func_8110E714(void) {
+void AudioLoad_Unused2(void) {
 }
 
 /** Four consecutive words, copied as a unit. */
@@ -423,7 +432,7 @@ typedef struct Words4_8110E71C {
     s32 w[4];
 } Words4_8110E71C;
 
-/** Entry returned by func_8110E6B0: four words, the first of which starts with a flag byte. */
+/** Entry returned by AudioLoad_GetFontSample: four words, the first of which starts with a flag byte. */
 typedef struct Entry8110E71C {
     /* 0x00 */ u8 flags;
     /* 0x01 */ u8 unk_01[3];
@@ -444,15 +453,15 @@ typedef struct Owner8110E71C {
 } Owner8110E71C;
 
 /**
- * Looks up the entry for (keyA, keyB) with func_8110E6B0. If one exists, its
+ * Looks up the entry for (keyA, keyB) with AudioLoad_GetFontSample. If one exists, its
  * 16 bytes are copied into arg0->copy, the entry's second word is
  * overwritten with arg0->unk_0C, and bits 2 and 3 of its first byte are
  * cleared.
  */
-void func_8110E71C(Owner8110E71C* arg0) {
+void AudioLoad_FinishSlowLoad(Owner8110E71C* arg0) {
     Entry8110E71C* entry;
 
-    entry = (Entry8110E71C*)func_8110E6B0(arg0->keyA, arg0->keyB);
+    entry = (Entry8110E71C*)AudioLoad_GetFontSample(arg0->keyA, arg0->keyB);
     if (entry != NULL) {
         arg0->copy = *(Words4_8110E71C*)entry;
         entry->unk_04 = arg0->unk_0C;
@@ -461,8 +470,8 @@ void func_8110E71C(Owner8110E71C* arg0) {
 }
 
 s32 func_8004D1C0(OSMesgQueue*, u32*, s32);
-void func_8110E910(s8* arg0, s32 arg1);
-void func_8110E994(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3);
+void AudioLoad_DmaSlowCopy(s8* arg0, s32 arg1);
+void AudioLoad_DmaSlowCopyUnkMedium(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3);
 
 /**
  * Zero's version of OoT's AudioLoad_ProcessSlowLoads: steps the two slow sample
@@ -489,23 +498,23 @@ void AudioLoad_ProcessSlowLoads(s32 reset_status) {
             case 1:
                 load->state = 2;
                 if (load->size == 0) {
-                    func_8110E71C((Owner8110E71C*)load);
+                    AudioLoad_FinishSlowLoad((Owner8110E71C*)load);
                     load->state = 3;
                     *load->status = 1;
                 } else if (load->size < 0x1000) {
                     if (load->medium == 1) {
                         u32 size = load->size;
 
-                        func_8110E994(load->devAddr, load->ramAddr, size, *(s16*)(table + 2));
+                        AudioLoad_DmaSlowCopyUnkMedium(load->devAddr, load->ramAddr, size, *(s16*)(table + 2));
                     } else {
-                        func_8110E910((s8*)load, load->size);
+                        AudioLoad_DmaSlowCopy((s8*)load, load->size);
                     }
                     load->size = 0;
                 } else {
                     if (load->medium == 1) {
-                        func_8110E994(load->devAddr, load->ramAddr, 0x1000, *(s16*)(table + 2));
+                        AudioLoad_DmaSlowCopyUnkMedium(load->devAddr, load->ramAddr, 0x1000, *(s16*)(table + 2));
                     } else {
-                        func_8110E910((s8*)load, 0x1000);
+                        AudioLoad_DmaSlowCopy((s8*)load, 0x1000);
                     }
                     load->size -= 0x1000;
                     load->ramAddr += 0x1000;
@@ -519,13 +528,13 @@ void AudioLoad_ProcessSlowLoads(s32 reset_status) {
 extern u8 D_81137E3C[];
 void AudioLoad_Dma(s8*, s32, s32, s32, s32, s32, OSMesgQueue*, s32, u8*);
 
-void func_8110E910(s8* arg0, s32 arg1) {
+void AudioLoad_DmaSlowCopy(s8* arg0, s32 arg1) {
     osInvalDCache((void*)M2C_FIELD(arg0, s32*, 8), arg1);
     osCreateMesgQueue((OSMesgQueue*)(arg0 + 0x2C), (OSMesg*)(arg0 + 0x44), 1);
     AudioLoad_Dma(arg0 + 0x48, 0, 0, M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 8), arg1, (OSMesgQueue*)(arg0 + 0x2C), *(u8*)arg0, D_81137E3C);
 }
 
-void func_8110E994(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3) {
+void AudioLoad_DmaSlowCopyUnkMedium(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3) {
 
 }
 
@@ -546,7 +555,7 @@ typedef struct Entry8110EABC {
 } Entry8110EABC; // size = 0x54
 extern Entry8110EABC D_81185580[1];
 
-Entry8110EABC* func_8110E9A8(s32, s32, u32, s32, s32, OSMesgQueue*, u32);
+Entry8110EABC* AudioLoad_StartAsyncLoad(s32, s32, u32, s32, s32, OSMesgQueue*, u32);
 
 void func_800567E0(OSMesgQueue*, OSMesg*, s32);
 /**
@@ -555,7 +564,7 @@ void func_800567E0(OSMesgQueue*, OSMesg*, s32);
  * is split into nChunks pieces rounded up to 0x100 (at least 0x100). retMsg is
  * sent to retQueue when the load finishes. Returns NULL when no slot is free.
  */
-Entry8110EABC* func_8110E9A8(s32 dev_addr, s32 ramAddr, u32 size, s32 medium, s32 n_chunks, OSMesgQueue* ret_queue, u32 ret_msg) {
+Entry8110EABC* AudioLoad_StartAsyncLoad(s32 dev_addr, s32 ramAddr, u32 size, s32 medium, s32 n_chunks, OSMesgQueue* ret_queue, u32 ret_msg) {
     Entry8110EABC* load;
     s32 i;
 
@@ -594,15 +603,15 @@ Entry8110EABC* func_8110E9A8(s32 dev_addr, s32 ramAddr, u32 size, s32 medium, s3
 }
 
 extern volatile s32 D_811859D4;
-void func_8110EB40(Entry8110EABC*, s32);
+void AudioLoad_ProcessAsyncLoad(Entry8110EABC*, s32);
 /** Applies animation state effects for every Pokemon. */
-void Battle_ApplyAnimStateEffects(s32 arg0) {
+void AudioLoad_ProcessAsyncLoads(s32 arg0) {
     s32 i;
 
     if (D_811859D4 != 1U) {
         for (i = 0; i < 1; i++) {
             if (D_81185580[i].active == 1) {
-                func_8110EB40(&D_81185580[i], arg0);
+                AudioLoad_ProcessAsyncLoad(&D_81185580[i], arg0);
             }
         }
     }
@@ -618,12 +627,12 @@ typedef struct RelocInfo8110EF7C {
 } RelocInfo8110EF7C;
 
 s32 func_8004D1C0(OSMesgQueue*, u32*, s32);
-s32 func_8110D408(s32, u32*);
-void func_8110ED98(s8* arg0, u32 arg1);
-void func_8110EE28(s32 arg0, M2C_UNK arg1, u32 arg2, M2C_UNK arg3);
-void func_8110EF7C(s32 size, s32 fontData, RelocInfo8110EF7C* relocInfo, s32 async);
+s32 AudioLoad_TrySyncLoadSampleBank(s32, u32*);
+void AudioLoad_AsyncDma(s8* arg0, u32 arg1);
+void AudioLoad_AsyncDmaUnkMedium(s32 arg0, M2C_UNK arg1, u32 arg2, M2C_UNK arg3);
+void AudioLoad_RelocateFontAndPreloadSamples(s32 size, s32 fontData, RelocInfo8110EF7C* relocInfo, s32 async);
 
-void func_8110EB40(Entry8110EABC* load, s32 reset_status) {
+void AudioLoad_ProcessAsyncLoad(Entry8110EABC* load, s32 reset_status) {
     u8* table = D_811858A4;
     u32 info;
     s32 font_id;
@@ -661,9 +670,9 @@ void func_8110EB40(Entry8110EABC* load, s32 reset_status) {
                 sampleBankId2 = D_811858B0[font_id].unk_03;
                 reloc_info.sampleBankId1 = sampleBankId1;
                 reloc_info.sampleBankId2 = sampleBankId2;
-                reloc_info.baseAddr1 = (sampleBankId1 != 0xFF) ? func_8110D408(sampleBankId1, &reloc_info.medium1) : 0;
-                reloc_info.baseAddr2 = (sampleBankId2 != 0xFF) ? func_8110D408(sampleBankId2, &reloc_info.medium2) : 0;
-                func_8110EF7C(font_id, load->ramAddr, &reloc_info, 1);
+                reloc_info.baseAddr1 = (sampleBankId1 != 0xFF) ? AudioLoad_TrySyncLoadSampleBank(sampleBankId1, &reloc_info.medium1) : 0;
+                reloc_info.baseAddr2 = (sampleBankId2 != 0xFF) ? AudioLoad_TrySyncLoadSampleBank(sampleBankId2, &reloc_info.medium2) : 0;
+                AudioLoad_RelocateFontAndPreloadSamples(font_id, load->ramAddr, &reloc_info, 1);
                 break;
         }
         load->active = 0;
@@ -672,17 +681,17 @@ void func_8110EB40(Entry8110EABC* load, s32 reset_status) {
     }
     if (load->size < load->chunkSize) {
         if (load->medium == 1) {
-            func_8110EE28(load->romAddr, load->curAddr, load->size, *((s16*)(table + 2)));
+            AudioLoad_AsyncDmaUnkMedium(load->romAddr, load->curAddr, load->size, *((s16*)(table + 2)));
         } else {
-            func_8110ED98((s8*)load, load->size);
+            AudioLoad_AsyncDma((s8*)load, load->size);
         }
         load->size = 0;
         return;
     }
     if (load->medium == 1) {
-        func_8110EE28(load->romAddr, load->curAddr, load->chunkSize, *((s16*)(table + 2)));
+        AudioLoad_AsyncDmaUnkMedium(load->romAddr, load->curAddr, load->chunkSize, *((s16*)(table + 2)));
     } else {
-        func_8110ED98((s8*)load, load->chunkSize);
+        AudioLoad_AsyncDma((s8*)load, load->chunkSize);
     }
     load->size -= load->chunkSize;
     load->romAddr += load->chunkSize;
@@ -691,7 +700,7 @@ void func_8110EB40(Entry8110EABC* load, s32 reset_status) {
 
 extern u8 D_81137F04[];
 
-void func_8110ED98(s8* arg0, u32 arg1) {
+void AudioLoad_AsyncDma(s8* arg0, u32 arg1) {
     arg1 = (arg1 + 0xF) & ~0xF;
     osInvalDCache((void*)M2C_FIELD(arg0, s32*, 0xC), arg1);
     osCreateMesgQueue((OSMesgQueue*)(arg0 + 0x20), (OSMesg*)(arg0 + 0x38), 1);
@@ -699,7 +708,7 @@ void func_8110ED98(s8* arg0, u32 arg1) {
     if (arg1) {}  // karodo
 }
 
-void func_8110EE28(s32 arg0, M2C_UNK arg1, u32 arg2, M2C_UNK arg3) {
+void AudioLoad_AsyncDmaUnkMedium(s32 arg0, M2C_UNK arg1, u32 arg2, M2C_UNK arg3) {
 
 }
 
@@ -800,13 +809,13 @@ extern s32 D_8118557C;
 extern OSMesgQueue D_811855F8;
 extern u8* D_811858A4;
 void AudioLoad_RelocateFont(s32, s32, RelocInfo8110EF7C*);
-void func_8110DB8C(s32, s32, u32, s16);
+void AudioLoad_SyncDmaUnkMedium(s32, s32, u32, s16);
 void AudioLoad_SyncDma(s32, s32, u32, s32);
 
 s32 AudioHeap_AllocPersistentSampleCache(s32, s32, s32, s8);
 
 
-void func_8110EF7C(s32 font_id, s32 font_data, RelocInfo8110EF7C* reloc_info, s32 async) {
+void AudioLoad_RelocateFontAndPreloadSamples(s32 font_id, s32 font_data, RelocInfo8110EF7C* reloc_info, s32 async) {
     UNUSED s32 pad[2]; // FAKE: stack padding
     s32 sample_ram_addr;
     Sample8110EF7C* sample;
@@ -862,7 +871,7 @@ void func_8110EF7C(s32 font_id, s32 font_data, RelocInfo8110EF7C* reloc_info, s3
         switch (async) {
             case 0:
                 if (sample->medium == 1) {
-                    func_8110DB8C(sample->sampleAddr, sample_ram_addr, sample->size, *(s16*)(D_811858A4 + 2));
+                    AudioLoad_SyncDmaUnkMedium(sample->sampleAddr, sample_ram_addr, sample->size, *(s16*)(D_811858A4 + 2));
                     sample->sampleAddr = sample_ram_addr;
                     sample->medium = 0;
                 } else {
@@ -887,7 +896,7 @@ void func_8110EF7C(s32 font_id, s32 font_data, RelocInfo8110EF7C* reloc_info, s3
     if ((D_8118557C != 0) && !preload_in_progress) {
         sample = D_81184B78[D_8118557C - 1].sample;
         n_chunks = (sample->size >> 12) + 1;
-        func_8110E9A8(sample->sampleAddr, D_81184B78[D_8118557C - 1].ramAddr, sample->size, sample->medium, n_chunks, &D_811855F8, D_81184B78[D_8118557C - 1].encodedInfo);
+        AudioLoad_StartAsyncLoad(sample->sampleAddr, D_81184B78[D_8118557C - 1].ramAddr, sample->size, sample->medium, n_chunks, &D_811855F8, D_81184B78[D_8118557C - 1].encodedInfo);
     }
 }
 
@@ -898,7 +907,7 @@ s32 func_8004D1C0(OSMesgQueue*, u32*, s32);
  * the next pending request on the stack is started. Returns 0 while a DMA is
  * still in flight or on reset (arg0 != 0), otherwise 1.
  */
-s32 BattleAnim_EndSleepStatusAnimation(s32 arg0) {
+s32 AudioLoad_ProcessSamplePreloads(s32 arg0) {
     Sample8110EF7C* sample;
     u32 preload_index;
     u32 key;
@@ -942,7 +951,7 @@ s32 BattleAnim_EndSleepStatusAnimation(s32 arg0) {
                 D_81184B78[D_8118557C - 1].isFree = 1;
                 D_8118557C--;
             } else {
-                func_8110E9A8(sample->sampleAddr, D_81184B78[D_8118557C - 1].ramAddr, sample->size, sample->medium, n_chunks, &D_811855F8, D_81184B78[D_8118557C - 1].encodedInfo);
+                AudioLoad_StartAsyncLoad(sample->sampleAddr, D_81184B78[D_8118557C - 1].ramAddr, sample->size, sample->medium, n_chunks, &D_811855F8, D_81184B78[D_8118557C - 1].encodedInfo);
                 break;
             }
         }
@@ -964,7 +973,7 @@ typedef struct Item8110F4D0 {
  * @param list  Array of item pointers; must have room for `count + 1` entries.
  * @return The new entry count (count + 1 if added, otherwise unchanged).
  */
-s32 func_8110F4D0(Item8110F4D0* arg0, s32 count, Item8110F4D0** list) {
+s32 AudioLoad_AddToSampleSet(Item8110F4D0* arg0, s32 count, Item8110F4D0** list) {
     s32 i;
 
     for (i = 0; i < count; i++) {
@@ -980,7 +989,7 @@ s32 func_8110F4D0(Item8110F4D0* arg0, s32 count, Item8110F4D0** list) {
 }
 
 
-s32 func_8110F518(s32 arg0, Item8110F4D0** arg1) {
+s32 AudioLoad_GetSamplesForFont(s32 arg0, Item8110F4D0** arg1) {
     s32 count = 0;
     s32 i;
     s32 n1 = D_811858B0[arg0].unk_00[1];
@@ -993,7 +1002,7 @@ s32 func_8110F518(s32 arg0, Item8110F4D0** arg1) {
         if (p != 0) {
             // FAKE: do-while(0) wrapper only changes register allocation; needed to match
             do {  // FAKE
-                count = func_8110F4D0((Item8110F4D0*)p[1], count, arg1);
+                count = AudioLoad_AddToSampleSet((Item8110F4D0*)p[1], count, arg1);
             } while (0);
         }
     }
@@ -1001,12 +1010,12 @@ s32 func_8110F518(s32 arg0, Item8110F4D0** arg1) {
         q = (u8*)AudioPlayback_GetInstrumentInner(arg0, i);
         if (q != 0) {
             if (q[1] != 0) {
-                count = func_8110F4D0(*(Item8110F4D0**)(q + 8), count, arg1);
+                count = AudioLoad_AddToSampleSet(*(Item8110F4D0**)(q + 8), count, arg1);
             }
             if (q[2] != 0x7F) {
-                count = func_8110F4D0(*(Item8110F4D0**)(q + 0x18), count, arg1);
+                count = AudioLoad_AddToSampleSet(*(Item8110F4D0**)(q + 0x18), count, arg1);
             }
-            count = func_8110F4D0(*(Item8110F4D0**)(q + 0x10), count, arg1);
+            count = AudioLoad_AddToSampleSet(*(Item8110F4D0**)(q + 0x10), count, arg1);
         }
     }
     return count;
@@ -1014,7 +1023,7 @@ s32 func_8110F518(s32 arg0, Item8110F4D0** arg1) {
 
 
 /*
- * func_8110F64C
+ * AudioLoad_AddUsedSample
  *
  * Takes a pointer to a pointer to a record whose first word is read as the
  * bit ranges above. When the low 24 bits, bit 25 and bits 27..26 are all
@@ -1026,7 +1035,7 @@ s32 func_8110F518(s32 arg0, Item8110F4D0** arg1) {
  * sequence; the equivalent masks and shifts on a plain word differ in
  * temporary register numbering.
  */
-void func_8110F64C(PackedWordRec **arg0) {
+void AudioLoad_AddUsedSample(PackedWordRec **arg0) {
     PackedWordRec *rec;
 
     rec = *arg0;
@@ -1069,20 +1078,20 @@ void AudioLoad_PreloadSamplesForFont(s32 font_id, s32 async, RelocInfo8110EF7C* 
         instrument = (u8*)AudioPlayback_GetInstrumentInner(font_id, i);
         if (instrument != NULL) {
             if (instrument[1] != 0) {
-                func_8110F64C((PackedWordRec**)(instrument + 8));
+                AudioLoad_AddUsedSample((PackedWordRec**)(instrument + 8));
                 if (!reloc_info->medium2) {} // FAKE
             }
             if (instrument[2] != 0x7F) {
-                func_8110F64C((PackedWordRec**)(instrument + 0x18));
+                AudioLoad_AddUsedSample((PackedWordRec**)(instrument + 0x18));
             }
-            func_8110F64C((PackedWordRec**)(instrument + 0x10));
+            AudioLoad_AddUsedSample((PackedWordRec**)(instrument + 0x10));
         }
     }
 
     for (i = 0; i < num_drums; i++) {
         drum = (u8*)AudioPlayback_GetDrum(font_id, i);
         if (drum != NULL) {
-            func_8110F64C((PackedWordRec**)(drum + 4));
+            AudioLoad_AddUsedSample((PackedWordRec**)(drum + 4));
         }
     }
 
@@ -1127,7 +1136,7 @@ void AudioLoad_PreloadSamplesForFont(s32 font_id, s32 async, RelocInfo8110EF7C* 
         switch (async) {
             case 0:
                 if (sample->medium == 1) {
-                    func_8110DB8C(sample->sampleAddr, sample_ram_addr, sample->size, *(s16*)(D_811858A4 + 2));
+                    AudioLoad_SyncDmaUnkMedium(sample->sampleAddr, sample_ram_addr, sample->size, *(s16*)(D_811858A4 + 2));
                     sample->sampleAddr = sample_ram_addr;
                     sample->medium = 0;
                 } else {
@@ -1152,7 +1161,7 @@ void AudioLoad_PreloadSamplesForFont(s32 font_id, s32 async, RelocInfo8110EF7C* 
     if ((D_8118557C != 0) && !preload_in_progress) {
         sample = D_81184B78[D_8118557C - 1].sample;
         n_chunks = (sample->size >> 12) + 1;
-        func_8110E9A8(sample->sampleAddr, D_81184B78[D_8118557C - 1].ramAddr, sample->size, sample->medium, n_chunks, &D_811855F8, D_81184B78[D_8118557C - 1].encodedInfo);
+        AudioLoad_StartAsyncLoad(sample->sampleAddr, D_81184B78[D_8118557C - 1].ramAddr, sample->size, sample->medium, n_chunks, &D_811855F8, D_81184B78[D_8118557C - 1].encodedInfo);
     }
 }
 
@@ -1181,7 +1190,7 @@ typedef struct Table8110D840 {
 Table8110D840* AudioLoad_GetLoadTable(s32);
 s32 AudioLoad_GetRealTableIndex(s32, s32);
 void AudioLoad_PreloadSamplesForFont(s32, s32, RelocInfo8110EF7C*);
-void func_8110FAF4(void) {
+void AudioLoad_LoadPermanentSamples(void) {
     Table8110D840* base = AudioLoad_GetLoadTable(2);
     s32 i;
     s32 idx;

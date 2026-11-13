@@ -34,12 +34,12 @@ void func_8110FC30(void);
 void func_8110FC38(void);
 void func_8110FC40(void);
 void func_8110FE90(void);
-s32 Audio_CountCategorySounds(s32 arg0);
-void BattleAnim_ClearEffectStateFlag(void);
+s32 AudioThread_GetFontsForSequence(s32 arg0);
+void AudioThread_ResetExternalPool(void);
 void BattleAnim_EffectStartNop(void);
-void BattleAnim_DisableEffectSpawningAlias(void);
+void AudioThread_InitMesgQueues(void);
 
-void BattleAnim_DisableEffectSpawning(void);
+void AudioThread_InitMesgQueuesImpl(void);
 
 void func_8110FC30(void) {
 }
@@ -69,7 +69,7 @@ extern M2C_UNK *D_81186250;
  * in a tour of the menus and a COM battle.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
-void BattleAnim_DisableEffectSpawning(void) {
+void AudioThread_InitMesgQueuesImpl(void) {
     D_811861DA = 0;
     D_811861DB = 0;
     D_811861DC = 0;
@@ -83,7 +83,7 @@ void BattleAnim_DisableEffectSpawning(void) {
 
 extern s32 D_811859D8[][2];
 
-void func_8110FCF0(DisplayObject* arg0, s32* arg1) {
+void AudioThread_QueueCmd(DisplayObject* arg0, s32* arg1) {
     s32* entry = D_811859D8[D_811861DA & 0xFF]; // FAKE: no-op mask on a u8
 
     entry[0] = (s32)arg0;
@@ -94,64 +94,64 @@ void func_8110FCF0(DisplayObject* arg0, s32* arg1) {
 }
 
 /*
- * func_8110FD48
+ * AudioThread_QueueCmdF32
  *
- * Calls func_8110FCF0(arg0, &value) where `value` is a local copy of the
+ * Calls AudioThread_QueueCmd(arg0, &value) where `value` is a local copy of the
  * second argument, so the callee receives it by pointer.  Siblings
- * func_8110FD90 / func_8110FDC0 do the same after shifting an s8 / s16
+ * AudioThread_QueueCmdS8 / AudioThread_QueueCmdU16 do the same after shifting an s8 / s16
  * left by 24 / 16 bits; this one passes the word through unchanged.
  *
  * arg0 is declared s32 because the one known caller of the twin function
- * func_8110FD6C passes the constant 0xF9000000 there, so it is a plain
+ * AudioThread_QueueCmdS32 passes the constant 0xF9000000 there, so it is a plain
  * word and not necessarily an object pointer.  The cast below only
- * satisfies the DisplayObject* prototype of func_8110FCF0 used by the
+ * satisfies the DisplayObject* prototype of AudioThread_QueueCmd used by the
  * siblings and produces no code.
  *
- * func_8110FD6C compiles to identical machine code (the original source
+ * AudioThread_QueueCmdS32 compiles to identical machine code (the original source
  * probably differed in a type that cannot be recovered from the assembly).
  */
-void func_8110FCF0(DisplayObject* arg0, s32* arg1);
-void func_8110FD48(s32 arg0, s32 arg1) {
-    func_8110FCF0((DisplayObject*)arg0, &arg1);
+void AudioThread_QueueCmd(DisplayObject* arg0, s32* arg1);
+void AudioThread_QueueCmdF32(s32 arg0, s32 arg1) {
+    AudioThread_QueueCmd((DisplayObject*)arg0, &arg1);
 }
 
 /*
- * func_8110FD6C
+ * AudioThread_QueueCmdS32
  *
- * Passes arg0 and the address of a stack copy of arg1 on to func_8110FCF0.
+ * Passes arg0 and the address of a stack copy of arg1 on to AudioThread_QueueCmd.
  * This is the function the project's symbol list also knows as
- * func_8110FD6C(s32 cmd, s32 arg1); callers pass a 32-bit command word
+ * AudioThread_QueueCmdS32(s32 cmd, s32 arg1); callers pass a 32-bit command word
  * such as 0xF9000000 or 0xF1000000 as the first argument, which is why arg0
  * is an s32 here.  The cast only satisfies the DisplayObject* prototype of
- * func_8110FCF0 used by the sibling functions and produces no code.
+ * AudioThread_QueueCmd used by the sibling functions and produces no code.
  *
- * It is a machine-code twin of func_8110FD48; the two cannot be told apart
+ * It is a machine-code twin of AudioThread_QueueCmdF32; the two cannot be told apart
  * from the assembly.  The address-style name is kept because the other C
- * functions in this file (e.g. func_8110FD90) also use address names.
+ * functions in this file (e.g. AudioThread_QueueCmdS8) also use address names.
  */
-void func_8110FCF0(DisplayObject* arg0, s32* arg1);
-void func_8110FD6C(s32 arg0, s32 arg1) {
-    func_8110FCF0((DisplayObject*)arg0, &arg1);
+void AudioThread_QueueCmd(DisplayObject* arg0, s32* arg1);
+void AudioThread_QueueCmdS32(s32 arg0, s32 arg1) {
+    AudioThread_QueueCmd((DisplayObject*)arg0, &arg1);
 }
 
-void func_8110FCF0(DisplayObject* arg0, s32* arg1);
-void func_8110FD90(DisplayObject* arg0, s8 arg1) {
+void AudioThread_QueueCmd(DisplayObject* arg0, s32* arg1);
+void AudioThread_QueueCmdS8(DisplayObject* arg0, s8 arg1) {
     s32 sp1C = arg1 << 24;
 
-    func_8110FCF0(arg0, &sp1C);
+    AudioThread_QueueCmd(arg0, &sp1C);
 }
 
-void func_8110FDC0(DisplayObject* arg0, s16 arg1) {
+void AudioThread_QueueCmdU16(DisplayObject* arg0, s16 arg1) {
     s32 sp1C = arg1 << 16;
 
-    func_8110FCF0(arg0, &sp1C);
+    AudioThread_QueueCmd(arg0, &sp1C);
 }
 
 extern s32 D_811381D8;
 s32 func_8004CFB0(OSMesgQueue*, s32, s32);
 
-// No return statement: retail leaves the send result in v0 and func_8110FFC8 returns it.
-s32 func_8110FDF0(void) {
+// No return statement: retail leaves the send result in v0 and AudioThread_ResetAudioHeap returns it.
+s32 AudioThread_ScheduleProcessCmds(void) {
     s32 head;
     s32 tail;
     s32 count = ((head = D_811861DA) - (tail = D_811861DB) + 0x100) & 0xFF;
@@ -165,7 +165,7 @@ s32 func_8110FDF0(void) {
     }
 }
 
-void func_8110FE74(void) {
+void AudioThread_ResetCmdQueue(void) {
     (*(u8 *)&D_811861DB) = (*(u8 *)&D_811861DA);
     (*(s8 *)&D_811861DC) = 0;
 }
@@ -176,7 +176,7 @@ void func_8110FE90(void) {
 s32 func_8004D1C0(M2C_UNK *, u32 *, M2C_UNK);       /* extern */
 extern M2C_UNK D_811855D8;
 
-u32 func_8110FE98(s32 *arg0) {
+u32 AudioThread_GetExternalLoadQueueMsg(s32 *arg0) {
     u32 sp1C;
 
     if (func_8004D1C0(&D_811855D8, &sp1C, 0) == -1) {
@@ -188,17 +188,17 @@ u32 func_8110FE98(s32 *arg0) {
 }
 
 /** Returns the number of sounds active in an audio category. */
-s32 Audio_CountCategorySounds(s32 arg0) {
-    return Audio_CountActiveSoundsByCategory(arg0);
+s32 AudioThread_GetFontsForSequence(s32 arg0) {
+    return AudioLoad_GetFontsForSequence(arg0);
 }
 
 extern u8 D_81184658;
 
 /*
- * func_8110FF1C
+ * AudioThread_CheckSpecChange
  *
  * Calls func_8004D1C0 once with the queue pointer in D_81186250, the address
- * of a local word and a third argument of 0 (see func_8110FF74). Returns 0 if
+ * of a local word and a third argument of 0 (see AudioThread_ClearSpecChangeQueue). Returns 0 if
  * that call returns -1; otherwise returns 1 when the word it stored equals
  * D_81184658 and 0 when it does not. The caller-visible meaning of the
  * comparison is not established here.
@@ -207,7 +207,7 @@ extern u8 D_81184658;
  * `return 0` / `return 1` paths because that is the form that compiles to the
  * ROM's branch layout.
  */
-s32 func_8110FF1C(void) {
+s32 AudioThread_CheckSpecChange(void) {
     UNUSED s32 pad; // FAKE: stack padding
     u32 sp18;
 
@@ -221,7 +221,7 @@ s32 func_8110FF1C(void) {
 }
 
 /*
- * func_8110FF74
+ * AudioThread_ClearSpecChangeQueue
  *
  * Calls func_8004D1C0 with the queue pointer in D_81186250, the address of a
  * local word and a third argument of 0, repeatedly until it returns -1. The
@@ -234,7 +234,7 @@ s32 func_8110FF1C(void) {
  * registers in a different order. Declaring `neg` before `sp28` puts `sp28`
  * at the ROM's stack offset (sp+0x28).
  */
-void func_8110FF74(void) {
+void AudioThread_ClearSpecChangeQueue(void) {
     s32 neg;
     u32 sp28;
 
@@ -245,19 +245,19 @@ void func_8110FF74(void) {
 
 extern u8* D_86B0E5E8;
 extern GraphNode* D_86B0E5D0;
-void func_8110FF74(void);
-void func_8110FD6C(s32, s32);
-s32 func_8110FDF0(void);
+void AudioThread_ClearSpecChangeQueue(void);
+void AudioThread_QueueCmdS32(s32, s32);
+s32 AudioThread_ScheduleProcessCmds(void);
 extern volatile u8 D_81184657;
 extern u8 D_81184658;
-s32 func_8110FFC8(s32 arg0) {
+s32 AudioThread_ResetAudioHeap(s32 arg0) {
     s32 v;
     u32 sp18;
 
-    func_8110FF74();
+    AudioThread_ClearSpecChangeQueue();
     v = D_81184657;
     if (v != 0) {
-        func_8110FE74();
+        AudioThread_ResetCmdQueue();
         if (arg0 == D_81184658) {
             return 0;
         }
@@ -266,20 +266,20 @@ s32 func_8110FFC8(s32 arg0) {
         }
         func_8004D1C0(D_81186250, &sp18, 1);
     }
-    func_8110FF74();
-    func_8110FD6C(0xF9000000, arg0);
-    return func_8110FDF0();
+    AudioThread_ClearSpecChangeQueue();
+    AudioThread_QueueCmdS32(0xF9000000, arg0);
+    return AudioThread_ScheduleProcessCmds();
 }
 
 extern volatile s32 D_811859D4;
 
 /**
- * Sets the volatile flag D_811859D4 to 1, calls func_8110FFC8(0), then
+ * Sets the volatile flag D_811859D4 to 1, calls AudioThread_ResetAudioHeap(0), then
  * clears the volatile byte D_81184657.
  */
-void func_81110060(void) {
+void AudioThread_PreNMIInternal(void) {
     D_811859D4 = 1;
-    func_8110FFC8(0);
+    AudioThread_ResetAudioHeap(0);
     D_81184657 = 0;
 }
 
@@ -292,7 +292,7 @@ typedef struct unk_D_81184668 {
 
 extern unk_D_81184668 D_81184668[];
 
-s8 func_8111009C(s32 arg0, s32 arg1, s32 arg2) {
+s8 AudioThread_GetChannelIO(s32 arg0, s32 arg1, s32 arg2) {
     unk_D_81184668* ch = &D_81184668[arg0];
     s8* p;
 
@@ -304,19 +304,19 @@ s8 func_8111009C(s32 arg0, s32 arg1, s32 arg2) {
 }
 
 extern s8 D_811847BC;
-s8 func_811100F8(s32 arg0, s32 arg1) {
+s8 AudioThread_GetSeqPlayerIO(s32 arg0, s32 arg1) {
     return *(&D_811847BC + ((arg0 * 0x15C) + arg1));
 }
 
 M2C_UNK func_811098C0(M2C_UNK *, s32, M2C_UNK);     /* extern */
 extern M2C_UNK D_811842A0;
 
-void func_81110128(s32 arg0, M2C_UNK arg1) {
+void AudioThread_InitExternalPool(s32 arg0, M2C_UNK arg1) {
     func_811098C0(&D_811842A0, arg0, arg1);
 }
 
 /** Clears the battle effect state flag. */
-void BattleAnim_ClearEffectStateFlag(void) {
+void AudioThread_ResetExternalPool(void) {
     D_811842A0 = 0;
 }
 
@@ -325,6 +325,6 @@ void BattleAnim_EffectStartNop(void) {
 }
 
 /** Alias that disables battle effect spawning. */
-void BattleAnim_DisableEffectSpawningAlias(void) {
-    BattleAnim_DisableEffectSpawning();
+void AudioThread_InitMesgQueues(void) {
+    AudioThread_InitMesgQueuesImpl();
 }

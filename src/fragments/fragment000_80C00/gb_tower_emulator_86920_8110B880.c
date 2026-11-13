@@ -33,9 +33,9 @@ extern volatile s32 D_811859D4;
 
 #include "m2c_macros.h"
 
-u32 GbApu_AllocZeroed(unk_func_81206FA0* arg0, s32 arg1);
-s32 GbApu_Alloc(unk_func_81206FA0* arg0, s32 arg1);
-void GbApu_InitAllocator(unk_func_81206FA0* arg0, s32 arg1, s32 arg2);
+u32 AudioHeap_AllocZeroed(unk_func_81206FA0* arg0, s32 arg1);
+s32 AudioHeap_Alloc(unk_func_81206FA0* arg0, s32 arg1);
+void AudioHeap_InitPool(unk_func_81206FA0* arg0, s32 arg1, s32 arg2);
 
 extern u8 D_81184654[1];
 extern u8 D_81184655[1];
@@ -136,14 +136,14 @@ extern f32 D_811859B0;
 extern u32 D_8118568C;
 extern s32 D_8118557C;
 void AudioLoad_InitSampleDmaBuffers(s32);
-void func_811152A4(s32);
+void AudioSeq_ResetSequencePlayer(s32);
 s32 func_80058100(s32);
 void func_8005C0A0(void);
-void func_8110FAF4(void);
+void AudioLoad_LoadPermanentSamples(void);
 void AudioPlayback_InitNoteFreeList(void);
 void AudioPlayback_NoteInitAll(void);
-void func_8111539C(s32);
-void func_81115480(void);
+void AudioSeq_InitSequencePlayerChannels(s32);
+void AudioSeq_InitSequencePlayers(void);
 #define EXTERNAL_POOL_AFF0 (*(PoolAFF0*)&D_811842A0)
 #define REVERBS_AFF0 ((SynthesisReverbAFF0*)D_81184110)
 
@@ -884,7 +884,7 @@ void AudioLoad_SetSampleLoadStatus(s32 arg0, s32 arg1) {
 }
 
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-void func_8110CB70(s8 *arg0, s32 arg1, unsigned short arg2)
+void AudioLoad_InitTable(s8 *arg0, s32 arg1, unsigned short arg2)
 {
   s32 var_v0;
   s8 *var_a2;
@@ -903,9 +903,9 @@ void func_8110CB70(s8 *arg0, s32 arg1, unsigned short arg2)
 extern u8* D_811858A8;
 extern u16 D_811858AC;
 s32 AudioLoad_GetRealTableIndex(M2C_UNK, s32);
-s32 func_8110D4E0(s32);
+s32 AudioLoad_SyncLoadFont(s32);
 
-s32 func_8110CBD0(s32 arg0, s32* arg1) {
+s32 AudioLoad_SyncLoadSeqFonts(s32 arg0, s32* arg1) {
     s32 off;
     s32 count;
     u8 id;
@@ -920,7 +920,7 @@ s32 func_8110CBD0(s32 arg0, s32* arg1) {
     off++;
     while (count > 0) {
         id = D_811858A8[off++];
-        ret = func_8110D4E0(id);
+        ret = AudioLoad_SyncLoadFont(id);
         count--;
     }
     *arg1 = id;
@@ -929,18 +929,18 @@ s32 func_8110CBD0(s32 arg0, s32* arg1) {
 
 extern u16 D_811858AC;
 s32 AudioLoad_GetRealTableIndex(M2C_UNK, s32);
-s32 func_8110CBD0(s32, s32*);
-s32 func_8110D3D4(s32);
-void func_8110CC94(s32 arg0, s32 arg1) {
+s32 AudioLoad_SyncLoadSeqFonts(s32, s32*);
+s32 AudioLoad_SyncLoadSeq(s32);
+void AudioLoad_SyncLoadSeqParts(s32 arg0, s32 arg1) {
     s32 sp18[2];
 
     if (arg0 < D_811858AC) {
         arg0 = AudioLoad_GetRealTableIndex(0, arg0);
         if (arg1 & 2) {
-            func_8110CBD0(arg0, sp18);
+            AudioLoad_SyncLoadSeqFonts(arg0, sp18);
         }
         if (arg1 & 1) {
-            func_8110D3D4(arg0);
+            AudioLoad_SyncLoadSeq(arg0);
         }
     }
 }
@@ -953,10 +953,10 @@ typedef struct Stream8110CD0C {
     /* 0x00 */ u32 addr : 24;
     /* 0x04 */ s32 unk04;
 } Stream8110CD0C;
-void func_8110DB8C(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3);
+void AudioLoad_SyncDmaUnkMedium(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3);
 void AudioLoad_SyncDma(s32, s32, u32, s32);
 extern u8* D_811858A4;
-s32 func_8110CD0C(Stream8110CD0C* arg0, s32 arg1) {
+s32 AudioLoad_SyncLoadSample(Stream8110CD0C* arg0, s32 arg1) {
     s32 ret;
 
     if (arg0->enabled == 1) {
@@ -966,7 +966,7 @@ s32 func_8110CD0C(Stream8110CD0C* arg0, s32 arg1) {
                 return -1;
             }
             if (arg0->mode == 1) {
-                func_8110DB8C(arg0->unk04, ret, arg0->addr, *(s16*)(D_811858A4 + 2));
+                AudioLoad_SyncDmaUnkMedium(arg0->unk04, ret, arg0->addr, *(s16*)(D_811858A4 + 2));
             } else {
                 AudioLoad_SyncDma(arg0->unk04, ret, arg0->addr, arg0->mode);
             }
@@ -978,7 +978,7 @@ s32 func_8110CD0C(Stream8110CD0C* arg0, s32 arg1) {
 
 u8* AudioPlayback_GetInstrumentInner(s32, s32);
 u8* AudioPlayback_GetDrum(s32, s32);
-s32 func_8110CDF0(s32 arg0, s32 arg1, s32 arg2) {
+s32 AudioLoad_SyncLoadInstrument(s32 arg0, s32 arg1, s32 arg2) {
     u8 *p;
 
     if (arg1 < 0x7F) {
@@ -987,18 +987,18 @@ s32 func_8110CDF0(s32 arg0, s32 arg1, s32 arg2) {
             return -1;
         }
         if (p[1] != 0) {
-            func_8110CD0C(M2C_FIELD(p, Stream8110CD0C **, 8), arg0);
+            AudioLoad_SyncLoadSample(M2C_FIELD(p, Stream8110CD0C **, 8), arg0);
         }
-        func_8110CD0C(M2C_FIELD(p, Stream8110CD0C **, 0x10), arg0);
+        AudioLoad_SyncLoadSample(M2C_FIELD(p, Stream8110CD0C **, 0x10), arg0);
         if (p[2] != 0x7F) {
-            func_8110CD0C(M2C_FIELD(p, Stream8110CD0C **, 0x18), arg0);
+            AudioLoad_SyncLoadSample(M2C_FIELD(p, Stream8110CD0C **, 0x18), arg0);
         }
     } else if (arg1 == 0x7F) {
         p = AudioPlayback_GetDrum(arg0, arg2);
         if (p == NULL) {
             return -1;
         }
-        func_8110CD0C(M2C_FIELD(p, Stream8110CD0C **, 4), arg0);
+        AudioLoad_SyncLoadSample(M2C_FIELD(p, Stream8110CD0C **, 4), arg0);
         return 0;
     }
 }
@@ -1020,7 +1020,7 @@ void AudioLoad_AsyncLoadSampleBank(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
 }
 
 extern u8* D_811858A8;
-void func_8110CF24(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
+void AudioLoad_AsyncLoadSeqFonts(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 off;
     s32 count;
 
@@ -1038,7 +1038,7 @@ void func_8110CF24(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
  * tables or fragment headers.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
-u8* Audio_CountActiveSoundsByCategory(s32 arg0, s32* arg1) {
+u8* AudioLoad_GetFontsForSequence(s32 arg0, s32* arg1) {
     s32 off;
 
     off = ((u16*)D_811858A8)[AudioLoad_GetRealTableIndex(0, arg0)];
@@ -1050,9 +1050,9 @@ u8* Audio_CountActiveSoundsByCategory(s32 arg0, s32* arg1) {
     return D_811858A8 + off;
 }
 
-void func_8110D110(s32 arg0);
+void AudioLoad_DiscardFont(s32 arg0);
 
-void func_8110D054(s32 arg0) {
+void AudioLoad_DiscardSeqFonts(s32 arg0) {
     s32 off;
     s32 count;
     s32 id;
@@ -1064,7 +1064,7 @@ void func_8110D054(s32 arg0) {
         count--;
         id = AudioLoad_GetRealTableIndex(1, D_811858A8[off++]);
         if (AudioHeap_SearchPermanentCache(1, id) == 0) {
-            func_8110D110(id);
+            AudioLoad_DiscardFont(id);
             AudioLoad_SetFontLoadStatus(id, 0);
         }
     }
@@ -1072,7 +1072,7 @@ void func_8110D054(s32 arg0) {
 
 extern s16 D_811843BE;
 extern s16 D_811843CA;
-void func_8110D110(s32 arg0) {
+void AudioLoad_DiscardFont(s32 arg0) {
     Tbl8110A368* tbl2;
     s32 none;
     Tbl8110A368* tbl = (Tbl8110A368*)&D_81184380;
@@ -1137,9 +1137,9 @@ typedef struct Flags8110D278 {
     u8 b40 : 1;
     u8 rest : 6;
 } Flags8110D278;
-s32 func_8110D3D4(s32);
-void func_811152A4(s32);
-void func_81115254(s8*);
+s32 AudioLoad_SyncLoadSeq(s32);
+void AudioSeq_ResetSequencePlayer(s32);
+void AudioSeq_SkipForwardSequence(s8*);
 /**
  * Loads the sequence and its fonts, then initializes player `arg0` to play it. Name follows the Zelda 64 audio driver, whose loader this matches.
  * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
@@ -1169,11 +1169,11 @@ s32 AudioLoad_SyncInitSeqPlayerInternal(s32 arg0, s32 arg1, s32 arg2) {
     } while (0);
     while (count > 0) {
         id = D_811858A8[off++];
-        func_8110D4E0(id);
+        AudioLoad_SyncLoadFont(id);
         count--;
     }
-    r = func_8110D3D4(arg1);
-    func_811152A4(arg0);
+    r = AudioLoad_SyncLoadSeq(arg1);
+    AudioSeq_ResetSequencePlayer(arg0);
     M2C_FIELD(slot, s8*, 4) = arg1;
     M2C_FIELD(slot, u8*, 5) = id;
     ((Flags8110D278*)slot)->b80 = 1;
@@ -1182,14 +1182,14 @@ s32 AudioLoad_SyncInitSeqPlayerInternal(s32 arg0, s32 arg1, s32 arg2) {
     M2C_FIELD(slot, s8*, 0x8C) = 0;
     M2C_FIELD(slot, s16*, 0x10) = 0;
     ((Flags8110D278*)slot)->b40 = 0;
-    func_81115254(slot);
+    AudioSeq_SkipForwardSequence(slot);
     for (i = 0; i < 16; i++) {
     }
 }
 
 s32 AudioLoad_SyncLoad(s32 tableType, s32 id, s32* didAllocate);
 
-s32 func_8110D3D4(s32 arg0) {
+s32 AudioLoad_SyncLoadSeq(s32 arg0) {
     s32 idx;
     s32 sp18;
 
@@ -1200,7 +1200,7 @@ s32 func_8110D3D4(s32 arg0) {
 u8* AudioLoad_GetLoadTable(s32);
 s32 AudioLoad_SearchCaches(s32, s32);
 #define ENTRY ((u8*)&((s32(*)[4])table)[arg0])
-s32 func_8110D408(s32 arg0, s32* arg1) {
+s32 AudioLoad_TrySyncLoadSampleBank(s32 arg0, s32* arg1) {
     s32 ret;
     u8* table = AudioLoad_GetLoadTable(2);
     s32 state;
@@ -1226,9 +1226,9 @@ s32 func_8110D408(s32 arg0, s32* arg1) {
 }
 #undef ENTRY
 
-s32 func_8110D408(s32, s32*);
-void func_8110EF7C(s32, s32, s32*, s32);
-s32 func_8110D4E0(s32 arg0) {
+s32 AudioLoad_TrySyncLoadSampleBank(s32, s32*);
+void AudioLoad_RelocateFontAndPreloadSamples(s32, s32, s32*, s32);
+s32 AudioLoad_SyncLoadFont(s32 arg0) {
     s32 ret;
     s32 a;
     s32 b;
@@ -1243,12 +1243,12 @@ s32 func_8110D4E0(s32 arg0) {
     sp20[0] = a;
     sp20[1] = b;
     if (a != 0xFF) {
-        sp20[2] = func_8110D408(a, &sp30);
+        sp20[2] = AudioLoad_TrySyncLoadSampleBank(a, &sp30);
     } else {
         sp20[2] = 0;
     }
     if (b != 0xFF) {
-        sp20[3] = func_8110D408(b, &sp34);
+        sp20[3] = AudioLoad_TrySyncLoadSampleBank(b, &sp34);
     } else {
         sp20[3] = 0;
     }
@@ -1257,7 +1257,7 @@ s32 func_8110D4E0(s32 arg0) {
         return 0;
     }
     if (sp38 == 1) {
-        func_8110EF7C(arg0, ret, sp20, 0);
+        AudioLoad_RelocateFontAndPreloadSamples(arg0, ret, sp20, 0);
     }
     return ret;
 }
@@ -1343,7 +1343,7 @@ s32 AudioLoad_SyncLoad(s32 table_type, s32 id, s32* did_allocate) {
 
         *did_allocate = 1;
         if (medium == 1) {
-            func_8110DB8C(romAddr, ram_addr, size, table->unkMediumParam);
+            AudioLoad_SyncDmaUnkMedium(romAddr, ram_addr, size, table->unkMediumParam);
         } else {
             AudioLoad_SyncDma(romAddr, ram_addr, size, medium);
         }
@@ -1539,7 +1539,7 @@ void AudioLoad_SyncDma(s32 arg0, s32 arg1, u32 arg2, s32 arg3) {
     }
 }
 
-void func_8110DB8C(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3) {
+void AudioLoad_SyncDmaUnkMedium(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3) {
 
 }
 

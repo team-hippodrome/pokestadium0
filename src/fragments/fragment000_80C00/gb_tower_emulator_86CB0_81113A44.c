@@ -56,7 +56,7 @@ typedef struct Layer81113A44 {
 
 extern u32 D_811859CC;
 
-s32 func_81113A44(Layer81113A44* layer, s32 cmd) {
+s32 AudioSeq_SeqLayerProcessScriptStep3(Layer81113A44* layer, s32 cmd) {
     ScriptState81113A44* state = &layer->scriptState;
     u16 delay;
     s32 velocity;
@@ -161,7 +161,7 @@ s32 func_81113A44(Layer81113A44* layer, s32 cmd) {
  * leaves the corresponding byte unchanged. (arg1 itself is reused for the
  * high nibble, which is what the retail register use needs.)
  */
-void func_81113E54(u8* arg0, u8 arg1) {
+void AudioSeq_SetChannelPriorities(u8* arg0, u8 arg1) {
     s32 low;
 
     low = arg1 & 0xF;
@@ -174,7 +174,7 @@ void func_81113E54(u8* arg0, u8 arg1) {
     }
 }
 
-u8 func_81113E84(u8* arg0, u8 arg1, u8** arg2, u8* arg3) {
+u8 AudioSeq_GetInstrument(u8* arg0, u8 arg1, u8** arg2, u8* arg3) {
     u8* p = AudioPlayback_GetInstrumentInner(arg0[7], arg1);
 
     if (p == NULL) {
@@ -188,7 +188,7 @@ u8 func_81113E84(u8* arg0, u8 arg1, u8** arg2, u8* arg3) {
     return arg1;
 }
 
-void func_81113EF4(u8* arg0, u8 arg1) {
+void AudioSeq_SetInstrument(u8* arg0, u8 arg1) {
     s16 ret;
 
     if (arg1 >= 0x80) {
@@ -198,7 +198,7 @@ void func_81113EF4(u8* arg0, u8 arg1) {
         M2C_FIELD(arg0, s16*, 0x22) = 0;
         M2C_FIELD(arg0, s32*, 0x48) = 1;
     } else {
-        ret = M2C_FIELD(arg0, s16*, 0x22) = func_81113E84(arg0, arg1, (u8**)(arg0 + 0x48), arg0 + 0x7C);
+        ret = M2C_FIELD(arg0, s16*, 0x22) = AudioSeq_GetInstrument(arg0, arg1, (u8**)(arg0 + 0x48), arg0 + 0x7C);
         if (ret == 0) {
             ((AudioStreamFlags*)arg0)->active = 0;
             return;
@@ -207,7 +207,7 @@ void func_81113EF4(u8* arg0, u8 arg1) {
     ((AudioStreamFlags*)arg0)->active = 1;
 }
 
-void func_81113F84(u8* arg0, u8 arg1) {
+void AudioSeq_SequenceChannelSetVolume(u8* arg0, u8 arg1) {
     *(f32*)(arg0 + 0x2C) = (f32)(s32)arg1 / 127.0f;
 }
 
@@ -307,14 +307,14 @@ extern f32 D_81135F78[];
 extern f32 D_81136378[];
 s32 AudioHeap_SearchCaches(s32, s32, s32);
 void AudioHeap_LoadFilter(s16*, s32, s32);
-s32 func_8110E500(s32, u8, s8*);
+s32 AudioLoad_SlowLoadSample(s32, u8, s8*);
 void AudioPlayback_NotePoolFill(void*, s32);
 void func_81112B84(void*);
 s32 AudioSeq_SeqChannelSetLayer(void*, s32);
 void AudioSeq_SeqLayerProcessScript(void*);
 s32 AudioSeq_HandleScriptFlowControl(void*, void*, s32, s32);
 
-void func_81113FA8(Channel81113FA8* channel) {
+void AudioSeq_SequenceChannelProcessScript(Channel81113FA8* channel) {
     s32 i;
     u8* data;
     s8 signed_param;
@@ -401,7 +401,7 @@ void func_81113FA8(Channel81113FA8* channel) {
                         parameters[0] = parameters[1];
                     case 0xC1:
                         command = (u8)parameters[0];
-                        func_81113EF4((u8*)channel, command);
+                        AudioSeq_SetInstrument((u8*)channel, command);
                         break;
                     case 0xC3:
                         channel->largeNotes = 0;
@@ -411,7 +411,7 @@ void func_81113FA8(Channel81113FA8* channel) {
                         break;
                     case 0xDF:
                         command = (u8)parameters[0];
-                        func_81113F84((u8*)channel, command);
+                        AudioSeq_SequenceChannelSetVolume((u8*)channel, command);
                         channel->changeVolume = 1;
                         break;
                     case 0xE0:
@@ -580,7 +580,7 @@ void func_81113FA8(Channel81113FA8* channel) {
                         channel->muteBehavior = data[0];
                         data += 3;
                         channel->noteAllocPolicy = data[-2];
-                        func_81113E54((u8*)channel, data[-1]);
+                        AudioSeq_SetChannelPriorities((u8*)channel, data[-1]);
                         channel->transposition = (s8)data[0];
                         data += 4;
                         channel->newPan = data[-3];
@@ -593,7 +593,7 @@ void func_81113FA8(Channel81113FA8* channel) {
                         channel->muteBehavior = parameters[0];
                         channel->noteAllocPolicy = parameters[1];
                         command = (u8)parameters[2];
-                        func_81113E54((u8*)channel, command);
+                        AudioSeq_SetChannelPriorities((u8*)channel, command);
                         channel->transposition = (s8)AudioSeq_ScriptReadU8(&scriptState->pc);
                         channel->newPan = AudioSeq_ScriptReadU8(&scriptState->pc);
                         channel->panChannelWeight = AudioSeq_ScriptReadU8(&scriptState->pc);
@@ -619,7 +619,7 @@ void func_81113FA8(Channel81113FA8* channel) {
                         channel->freqScale = 1.0f;
                         break;
                     case 0xE9:
-                        func_81113E54((u8*)channel, (u8)parameters[0]);
+                        AudioSeq_SetChannelPriorities((u8*)channel, (u8)parameters[0]);
                         break;
                     case 0xED:
                         command = (u8)parameters[0];
@@ -707,7 +707,7 @@ void func_81113FA8(Channel81113FA8* channel) {
                     goto exit_loop;
                 case 0x10:
                     channel->soundScriptIO[low_bits] = -1;
-                    if (func_8110E500(channel->bankId, scriptState->value, &channel->soundScriptIO[low_bits]) == -1) {} // karodo
+                    if (AudioLoad_SlowLoadSample(channel->bankId, scriptState->value, &channel->soundScriptIO[low_bits]) == -1) {} // karodo
                     break;
                 case 0x70:
                     channel->soundScriptIO[low_bits] = scriptState->value;

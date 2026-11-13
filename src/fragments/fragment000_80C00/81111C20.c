@@ -49,7 +49,7 @@ typedef struct Chan81111C20 {
     /* 0x4C */ Inst81111C20* inst;
     /* 0x50 */ Voice81111C20* voices[4];
 } Chan81111C20;
-void func_81111C20(Chan81111C20* arg0, u32 force) {
+void AudioEffects_SequenceChannelProcessSound(Chan81111C20* arg0, u32 force) {
     f32 vol;
     s32 i;
     Voice81111C20* v;
@@ -106,9 +106,9 @@ typedef struct Track81111DC8 {
     /* 0x30 */ f32 out;
     /* 0x34 */ Voice81111DC8* voices[16];
 } Track81111DC8;
-void func_81111C20();
+void AudioEffects_SequenceChannelProcessSound();
 void AudioSeq_SequencePlayerDisable(Track81111DC8 *);
-void func_81111DC8(Track81111DC8 *arg0) {
+void AudioEffects_SequencePlayerProcessSound(Track81111DC8 *arg0) {
     s32 i;
 
     if (arg0->timer != 0) {
@@ -130,7 +130,7 @@ void func_81111DC8(Track81111DC8 *arg0) {
     }
     for (i = 0; i < 16; i++) {
         if (arg0->voices[i]->active == 1) {
-            func_81111C20(arg0->voices[i], arg0->dirty);
+            AudioEffects_SequenceChannelProcessSound(arg0->voices[i], arg0->dirty);
         }
     }
     arg0->dirty = 0;
@@ -138,7 +138,7 @@ void func_81111DC8(Track81111DC8 *arg0) {
 
 extern f32 D_FLT_81136178[];
 
-f32 func_81111F0C(arg0)
+f32 AudioEffects_UpdatePortamento(arg0)
     s8* arg0;
 {
     u32 idx;
@@ -162,14 +162,14 @@ typedef struct {
 } PhaseTableCursor;
 
 /*
- * func_81111FE0
+ * AudioEffects_GetVibratoPitchChange
  *
  * Advances the cursor's phase by its step (truncated to an integer) and
  * returns the table entry selected by phase bits 10-15 (a 64-entry table of
  * s16), shifted right by 8 so only the entry's upper byte remains
  * (sign-extended).
  */
-s16 func_81111FE0(PhaseTableCursor* arg0) {
+s16 AudioEffects_GetVibratoPitchChange(PhaseTableCursor* arg0) {
     s32 index;
 
     arg0->phase += (s32)arg0->step;
@@ -237,7 +237,7 @@ typedef struct Note81112278 {
  * extent. Same structure as get_vibrato_freq_scale in the Super Mario 64 audio
  * library.
  */
-f32 func_81112024(vib)
+f32 AudioEffects_UpdateVibrato(vib)
     Vibrato81112278* vib;
 {
     s32 pitch_change;
@@ -282,22 +282,22 @@ f32 func_81112024(vib)
         return 1.0f;
     }
 
-    pitch_change = func_81111FE0((PhaseTableCursor*)vib);
+    pitch_change = AudioEffects_GetVibratoPitchChange((PhaseTableCursor*)vib);
     extent = (f32)vib->extent / 4096.0f;
 
     result = 1.0f + extent * (D_FLT_81136178[pitch_change] - 1.0f);
     return result;
 }
 
-f32 func_81111F0C(); // The caller passes a second argument the callee ignores.
-f32 func_81112024(); // The caller passes a second argument the callee ignores.
+f32 AudioEffects_UpdatePortamento(); // The caller passes a second argument the callee ignores.
+f32 AudioEffects_UpdateVibrato(); // The caller passes a second argument the callee ignores.
 
-void func_8111220C(s8 *arg0) {
+void AudioEffects_UpdatePortamentoAndVibrato(s8 *arg0) {
     if (M2C_FIELD(arg0, u8 *, 0x80) != 0) {
-        M2C_FIELD(arg0, f32 *, 0x38) = func_81111F0C(arg0 + 0x80, arg0);
+        M2C_FIELD(arg0, f32 *, 0x38) = AudioEffects_UpdatePortamento(arg0 + 0x80, arg0);
     }
     if ((M2C_FIELD(arg0, u8 *, 0xA4) != 0) && (M2C_FIELD(arg0, s32 *, 0x44) != -1)) {
-        M2C_FIELD(arg0, f32 *, 0x3C) = func_81112024(arg0 + 0x90, arg0);
+        M2C_FIELD(arg0, f32 *, 0x3C) = AudioEffects_UpdateVibrato(arg0 + 0x90, arg0);
     }
 }
 
@@ -309,7 +309,7 @@ extern s16* D_81135F68;
  * their targets) and copies the layer's portamento into the note. Same
  * structure as note_vibrato_init in the Super Mario 64 audio library.
  */
-void func_81112278(Note81112278* note) {
+void AudioEffects_InitVibrato(Note81112278* note) {
     Vibrato81112278* vib;
     Channel81112278* seqChannel;
     PlaybackState81112278* seq_player_state = (PlaybackState81112278*)&note->priority;
@@ -341,7 +341,7 @@ void func_81112278(Note81112278* note) {
     seq_player_state->portamento = seq_player_state->parentLayer->portamento;
 }
 
-void func_8111235C(s8 *arg0, s32 arg1, M2C_UNK arg2) {
+void AudioEffects_InitAdsr(s8 *arg0, s32 arg1, M2C_UNK arg2) {
     M2C_FIELD(arg0, s8 *, 0) = 0;
     M2C_FIELD(arg0, s8 *, 1) = 0;
     M2C_FIELD(arg0, s16 *, 4) = 0;

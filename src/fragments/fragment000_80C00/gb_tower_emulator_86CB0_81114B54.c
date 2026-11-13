@@ -68,9 +68,9 @@ typedef struct SeqPlayer81114B54 {
 
 extern s16 D_811858EC;
 void AudioPlayback_NotePoolFill(void*, s32);
-void func_81113FA8(Channel81114B54*);
+void AudioSeq_SequenceChannelProcessScript(Channel81114B54*);
 
-void func_81114B54(SeqPlayer81114B54* seq_player) {
+void AudioSeq_SequencePlayerProcessSequence(SeqPlayer81114B54* seq_player) {
     u8 cmd;
     u8 lo_bits;
     u16 temp;
@@ -278,25 +278,25 @@ void func_81114B54(SeqPlayer81114B54* seq_player) {
 
     for (i = 0; i < 16; i++) {
         if (seq_player->channels[i]->enabled) {
-            func_81113FA8(seq_player->channels[i]);
+            AudioSeq_SequenceChannelProcessScript(seq_player->channels[i]);
         }
     }
 }
 
-void func_811151C8(s32 arg0) {
+void AudioSeq_ProcessSequences(s32 arg0) {
     u32 i;
 
     for (i = 0; i < D_811858CC; i++) {
         if (D_81184668[i].b80 == 1) {
-            func_81114B54((s8*)&D_81184668[i]);
-            func_81111DC8((s8*)&D_81184668[i]);
+            AudioSeq_SequencePlayerProcessSequence((s8*)&D_81184668[i]);
+            AudioEffects_SequencePlayerProcessSound((s8*)&D_81184668[i]);
         }
     }
     AudioPlayback_ProcessNotes();
 }
 
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-void func_81115254(s8 *arg0)
+void AudioSeq_SkipForwardSequence(s8 *arg0)
 {
   s8 *new_var; // FAKE: permuter temp
   s32 temp_t8;
@@ -304,8 +304,8 @@ void func_81115254(s8 *arg0)
   {
     do
     {
-      func_81114B54(arg0);
-      func_81111DC8(arg0);
+      AudioSeq_SequencePlayerProcessSequence(arg0);
+      AudioEffects_SequencePlayerProcessSound(arg0);
       new_var = (s8 *) arg0;
       temp_t8 = (unsigned long long) ((*((s32 *) (new_var + 0xD8))) - 1);
       *((s32 *) (((s8 *) arg0) + 0xD8)) = temp_t8;
@@ -347,7 +347,7 @@ typedef struct Chan811152A4 {
 extern u8 D_81136978[];
 extern u8 D_81136988[];
 void AudioSeq_InitSequenceChannel(void*);
-void func_811152A4(s32 arg0) {
+void AudioSeq_ResetSequencePlayer(s32 arg0) {
     Chan811152A4* chan = (Chan811152A4*)&D_81184668[arg0];
     s32 i;
 
@@ -383,7 +383,7 @@ typedef struct Rec8111539C {
 extern u8 D_811842C0[];
 extern Item8111539C D_81184850;
 void* func_811097E8(void*, s32);
-void func_8111539C(s32 arg0) {
+void AudioSeq_InitSequencePlayerChannels(s32 arg0) {
     Rec8111539C* rec = (Rec8111539C*)&D_81184668[arg0];
     s32 i;
     s32 j;
@@ -430,7 +430,7 @@ typedef struct Rec81115480 {
     char pad155[7];
 } Rec81115480; // size = 0x15C
 void AudioPlayback_InitNoteLists(void*);
-void func_81115480(void) {
+void AudioSeq_InitSequencePlayers(void) {
     s32 i;
     s32 j;
     Rec81115480* rec;
@@ -452,12 +452,12 @@ void func_81115480(void) {
         rec->b08 = 0;
         rec->b10 = 0;
         AudioPlayback_InitNoteLists(rec->unk98);
-        func_811152A4(i);
+        AudioSeq_ResetSequencePlayer(i);
     }
 }
 
 void func_811155A0(void) {
-    func_8110FDF0();
+    AudioThread_ScheduleProcessCmds();
 }
 
 /**
@@ -466,8 +466,8 @@ void func_811155A0(void) {
  * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
-void GbApu_SetActiveFlag(void) {
-    func_8110FD6C(0xF1000000, 0);
+void Audio_QueueGlobalMute(void) {
+    AudioThread_QueueCmdS32(0xF1000000, 0);
     D_81138A70 = 1;
 }
 
@@ -477,8 +477,8 @@ void GbApu_SetActiveFlag(void) {
  * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
-void GbApu_ClearActiveFlag(void) {
-    func_8110FD6C(0xF2000000, 0);
+void Audio_QueueGlobalUnmute(void) {
+    AudioThread_QueueCmdS32(0xF2000000, 0);
     D_81138A70 = 0;
 }
 
@@ -514,24 +514,24 @@ void func_81215C9C_jp(s32 arg0, s32 arg1) {
 void func_81115704(void) {
 }
 
-void func_81215D0C_jp(s32 arg0, s32 arg1, s32 arg2) {
-    func_8110FD90(((arg0 & 0xFF) << 16) | 0x08000000 | ((arg1 & 0xFF) << 8), arg2);
+void Audio_QueueChannelMute(s32 arg0, s32 arg1, s32 arg2) {
+    AudioThread_QueueCmdS8(((arg0 & 0xFF) << 16) | 0x08000000 | ((arg1 & 0xFF) << 8), arg2);
 }
 
 void func_81215D50_jp(void) {
-    func_8110FD6C(0x82020100, 0);
-    func_8110FDF0();
-    func_8110FD6C(0xF8000000, 0);
+    AudioThread_QueueCmdS32(0x82020100, 0);
+    AudioThread_ScheduleProcessCmds();
+    AudioThread_QueueCmdS32(0xF8000000, 0);
 }
 
 void func_81215D8C_jp(s32 arg0, s32 arg1, s32 arg2) {
-    func_8110FD90(0x06020002, arg1);
-    func_8110FD90(0x06020001, arg0);
-    func_8110FD90(0x06020000, arg2);
+    AudioThread_QueueCmdS8(0x06020002, arg1);
+    AudioThread_QueueCmdS8(0x06020001, arg0);
+    AudioThread_QueueCmdS8(0x06020000, arg2);
 }
 
 void func_81215DDC_jp(void) {
-    func_8110FD90(0x06020004, -1);
+    AudioThread_QueueCmdS8(0x06020004, -1);
 }
 
 /**
