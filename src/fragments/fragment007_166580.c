@@ -16,6 +16,7 @@ void FreeBattle_SetScreenState(s32, s32, s32);
  * index arg1 (indices arg1 .. arg1 + arg2 - 1). Does nothing when
  * arg1 + arg2 <= arg1, i.e. when arg2 is not positive. The compare is signed.
  * What the -1 entries mean is not established from this function.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in Free Battle setup.
  * @unverified Name guessed from the code; comment kept.
  */
 void FreeBattle_ClearIndices(s32* arg0, s32 arg1, s32 arg2) {
@@ -77,6 +78,7 @@ typedef struct {
  * Sets the first word (flag) to 1 in each of the slots arg1 .. 5 of an array
  * of six 0x54-byte slots starting at arg0 (nothing happens when arg1 >= 6).
  * The retail code unrolls the loop by four.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in Free Battle setup.
  * @unverified Name guessed from the code; comment kept.
  */
 void FreeBattle_MarkEmptySlots(Slot54* arg0, s32 arg1) {
@@ -145,6 +147,8 @@ Slot54* FreeBattle_FindFlaggedSlot(Slot54* arg0, s32* arg1) {
 
 /**
  * Returns 1 when no three of the six Pokemon have levels summing to 155 or less (the さいていレベル warning). The running sum keeps the levels of earlier `j` iterations, so later trios are overestimated.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 FreeBattle_AllTriosOverLevelLimit(Mon82000258* mons) {
@@ -321,6 +325,7 @@ void FreeBattle_AddPresetTeams(List82000594* arg0) {
  * known from the code alone.
  *
  * Registration_BuildTeamPointers is the same routine with a record size of 0x220.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in Free Battle setup.
  * @unverified Name guessed from the code; comment kept.
  */
 void FreeBattle_BuildTeamPointers(s32* arg0, s32* arg1) {
@@ -796,6 +801,8 @@ typedef struct Slot82001558 {
 
 /**
  * Counts the picked Pokemon that share a species with another pick and stores the first index.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 FreeBattle_CountDuplicateSpecies(void* arg0, s32* index) {
@@ -962,6 +969,7 @@ void FreeBattle_FillTeamPanel(s32 arg0, s32 arg1, Color82001CCC arg2) {
 
 /**
  * Draws the top and bottom border lines of a team row.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in Free Battle setup.
  * @unverified Name and comment guessed from the code.
  */
 void FreeBattle_DrawRowBorders(s32 arg0, s32 arg1, Color82001CCC arg2) {
@@ -1210,6 +1218,8 @@ void func_82002528(SlotFlags* arg0) {
  * For each of the six Slot54 entries reached through `*arg0->slots`, sets bit 0
  * of the matching u16 in `arg0->flags` when the entry's flag word does not have
  * bit 0x40 set. The meaning of the bits is not yet established.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name guessed from the code; comment kept.
  */
 void FreeBattle_DisableUnpickedRows(SlotFlags* arg0) {
@@ -1229,6 +1239,8 @@ void FreeBattle_DisableUnpickedRows(SlotFlags* arg0) {
  * through `*arg0->slots`, clears bit 0 of the matching u16 in `arg0->flags`
  * when the entry's flag word does not have bit 0x40 set.
  * The meaning of the bits is not yet established.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name guessed from the code; comment kept.
  */
 void FreeBattle_EnableUnpickedRows(SlotFlags* arg0) {

@@ -135,6 +135,8 @@ char* Text_UntranscodeName(char* arg0, char* arg1) {
 /**
  * Converts an EUC-JP name back to Game Boy character codes by searching D_80076FD4_jp;
  * the full-width space 0xA1A1 becomes 0x7F.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 char* Text_TranscodeName(char* arg0, char* arg1) {
@@ -180,6 +182,8 @@ char* Text_UntranscodeFixedName(char* arg0, char* arg1) {
 /**
  * Copies a two-byte EUC-JP string, clearing bit 0 of the first byte of katakana ヘ, ベ, ペ
  * (0xA5D8-0xA5DA) and リ (0xA5EA), which turns them into hiragana へ, べ, ぺ, り.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the party screen,
+ * registration, Free Battle setup and a switch in battle.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s8* Text_CopyString(s8* arg0, s8* arg1) {

@@ -65,6 +65,8 @@ extern M2C_UNK D_81186238;
 extern M2C_UNK *D_81186250;
 
 /**
+ * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * in a tour of the menus and a COM battle.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleAnim_DisableEffectSpawning(void) {

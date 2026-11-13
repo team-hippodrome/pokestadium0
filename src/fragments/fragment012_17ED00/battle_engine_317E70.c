@@ -89,6 +89,7 @@ s32 Battle_TryLoadFollowupMoveFromTarget(void) {
 /**
  * Self-Destruct and Explosion check of the target's Substitute and state; the body does nothing
  * in Zero. Runs after every move.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a Pound turn.
  * @unverified Name and comment from the code.
  */
 void Battle_CheckExplosionVsSubstitute(void)
@@ -167,6 +168,8 @@ void Battle_ApplyTypeEffectAndSTAB(void) {
 
 /**
  * Replace Counter damage with twice the eligible Normal/Fighting damage, or mark failure.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle and a Pound
+ * turn.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 Battle_Effect_Counter(void) {
@@ -280,6 +283,8 @@ extern MoveName82111DCC D_8006A9CC[];
  * Before-move checks for the acting Pokemon: sleep countdown, freeze, and the
  * other conditions that stop it acting. Returns a code the turn loop switches on.
  * Name from Stadium 1.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle and a Pound
+ * turn.
  * @unverified Name and comment guessed from the code.
  */
 s32 Battle_CheckMonCanAct(void) {

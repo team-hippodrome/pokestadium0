@@ -60,6 +60,8 @@ void BattleScene_SetCameraPresetLowCloseThunk(CameraNode* arg0, ActivePokemon* a
 
 /**
  * Forwards both arguments to BattleScene_CameraShotTargetClose; camera shot table entry.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle and a Pound turn.
  * @unverified Name describes the forwarding only.
  */
 void BattleScene_CameraShotTargetCloseThunk(CameraNode* arg0, ActivePokemon* arg1) {
@@ -75,6 +77,8 @@ void func_821247D0(CameraNode* arg0, ActivePokemon* arg1) {
 
 /**
  * Forwards both arguments to BattleScene_CameraShotTargetHigh; camera shot table entry.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name describes the forwarding only.
  */
 void BattleScene_CameraShotTargetHighThunk(CameraNode* arg0, ActivePokemon* arg1) {
@@ -119,6 +123,8 @@ void func_821247B0();
 void func_821247D0();
 /**
  * Runs camera shot `arg2` (0-4, default 0) for Pokemon `arg0` on camera `arg1`.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle and a Pound turn.
  * @unverified Name and comment guessed from the code.
  */
 void BattleCamera_PlayShot(void* arg0, void* arg1, s32 arg2) {

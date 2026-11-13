@@ -71,6 +71,8 @@ extern u16 D_82199F52;
 extern u16 D_843C4DCC;
 /**
  * Select damage power, offensive/defensive stats and level, including screens and critical hits.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle and a Pound
+ * turn.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void InitBattleParameters(void) {
@@ -402,6 +404,8 @@ void Battle_MoveHitTest(void) {
 
 /**
  * Copies the runtime's pending status condition into the party Pokemon.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle and a Pound
+ * turn.
  * @unverified Name and comment guessed from the code.
  */
 void ActivePokemon_CommitPendingStatus(ActivePokemon* arg0) {
@@ -593,6 +597,7 @@ extern s32 D_8218C780;
 /**
  * Gen 1 HandleBuildingRage: when the target is using Rage and its Attack stage isn't maxed,
  * queues the rage message and raises its Attack through BattleEffect_ApplyStatBoost.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a Pound turn.
  * @unverified Name and comment from the code (matches the Gen 1 engine).
  */
 void Battle_HandleBuildingRage(void) {
@@ -770,6 +775,8 @@ void Battle_PrintMoveFailureText(void) {
  * Gives back one PP of the selected move, on both the battle copy (sBattleUser) and the roster
  * copy. Metronome calls it so that only the move it pulls costs PP. Was misnamed
  * Battle_IncrementMoveUsage.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Named from the code; the sweep saw it run for Metronome but did not read the PP.
  */
 void Battle_RefundSelectedMovePp(void) {
@@ -891,6 +898,8 @@ void func_82111870(void);
 
 /**
  * Queue and stage poison/burn and Leech Seed effects after the action.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle and a Pound
+ * turn.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 Battle_ApplyResidualEffects(void) {

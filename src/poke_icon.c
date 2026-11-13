@@ -182,6 +182,8 @@ void PokeIcon_AdjustImageColors(u8* arg0, arg1_func_80010CA8 arg1) {
 
 extern unk_D_8006FF00 D_80064C5C[];
 /**
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the party screen, registration
+ * and Free Battle setup.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void PokeIcon_RenderSlot(unk_func_8001A024* arg0, s32 arg1) {

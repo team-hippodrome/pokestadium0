@@ -662,6 +662,8 @@ void func_88101478(s32 x, s32 y, u8* entry, s32 frame, s32 color, s32* anim) {
 
 /**
  * Starts a timer at 0 that counts to `arg1` x 15.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void Registration_InitTimer(s8 *arg0, s32 arg1) {
@@ -672,6 +674,8 @@ void Registration_InitTimer(s8 *arg0, s32 arg1) {
 
 /**
  * Starts a timer already at its end, `arg1` x 15.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void Registration_InitTimerFull(s8 *arg0, s32 arg1) {
@@ -683,6 +687,8 @@ void Registration_InitTimerFull(s8 *arg0, s32 arg1) {
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 /**
  * Returns whether the timer has reached its end.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 Registration_IsTimerDone(s8 *arg0)
@@ -693,6 +699,8 @@ s32 Registration_IsTimerDone(s8 *arg0)
 
 /**
  * Returns whether the timer is at 0.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 Registration_IsTimerAtStart(s32 *arg0) {
@@ -701,6 +709,8 @@ s32 Registration_IsTimerAtStart(s32 *arg0) {
 
 /**
  * Advances the timer by one and returns whether it is done.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 Registration_StepTimer(s8* arg0) {
@@ -720,6 +730,8 @@ s32 Audio_QueueSoundAvoidingRecent(s32* arg0) {
 
 /**
  * Returns the timer's current value.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 Registration_GetTimer(s32 *arg0) {
@@ -1090,6 +1102,7 @@ s32 Registration_UpdateTeamList(s8* arg0) {
  * known from the code alone.
  *
  * FreeBattle_BuildTeamPointers is the same routine with a record size of 0x214.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in registration.
  * @unverified Name guessed from the code; comment kept.
  */
 void Registration_BuildTeamPointers(s32* arg0, s32* arg1) {
@@ -1180,6 +1193,8 @@ extern M2C_UNK D_88103080;
  * &D_88102D90, 3, &D_88103000) and sets the state word *arg0 to 0.
  * arg0 is declared s32 to agree with the existing Registration_InitScreen(s32) prototype; it is
  * used as a byte-addressed pointer. What the object and the value mean is not established.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name guessed from the code; comment kept.
  */
 void Registration_InitScreen(s32 arg0) {
@@ -1300,6 +1315,8 @@ extern s32 D_881030F8;
  * Matching note: the call result is stored straight into D_881030F8 and the
  * global is read back for the next call; going through a local gives a
  * different store sequence.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name guessed from the code; comment kept.
  */
 void Registration_AllocScreen(void) {
@@ -1412,6 +1429,8 @@ extern s32 D_88103070;
 extern s32 D_88103074;
 /**
  * Entry point: pushes the 'REGS' pool state, loads the icons and segments, and runs the registration screen.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 Registration_Init(s32 arg0, s32 arg1) {

@@ -156,6 +156,8 @@ void Jpeg_BuildDspOutput(unk_func_80003680_sp90* arg0, u8(arg1)[2][0x80], unk_fu
 /**
  * Spins (with a capped counter) until func_80005014 returns 0 and at least one
  * controller is connected.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void Jpeg_WaitForControllerReady(void) {

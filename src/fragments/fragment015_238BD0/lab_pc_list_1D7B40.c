@@ -658,6 +658,8 @@ void func_80027700(s32* matrix, u8* in, s32 row);
 
 /**
  * Swaps two entries of the source list.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void PcSort_SwapWithinList(s8* arg0) {
@@ -673,6 +675,8 @@ void PcSort_SwapWithinList(s8* arg0) {
 
 /**
  * Swaps the selected entries of the source and destination lists.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void PcSort_SwapBetweenLists(s8* arg0) {
@@ -691,6 +695,8 @@ void LabItem_RemoveSelectedEntry(void*);
 
 /**
  * Removes the selected Pokemon from its box and marks the box changed.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void PcSort_ReleaseSelectedMon(s8* arg0) {
@@ -1028,6 +1034,8 @@ extern s32 D_89019108;
 
 /**
  * Requests the icon of each species in list `arg0`.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void PcSort_LoadMonIcons(s8 *arg0) {

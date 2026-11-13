@@ -287,6 +287,8 @@ void BattleAnim_SetupDescriptor25AlphaHoldFadeOut(s8 *arg0)
  *
  * BattleAnim_DrawFadingFullScreenColorOverlay in @battle_engine_particle_renderers.c is the equivalent for moves
  * that change both the full screen hue and the pokemon hue at the same time
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
+ * switch in battle.
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_RunFullScreenHueChange(Particle* arg0) {

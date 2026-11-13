@@ -160,6 +160,8 @@ extern TypeMatchupZ D_8218AC50[];
 /**
  * Damage-estimate version of Battle_ApplyTypeEffectAndSTAB for any attacker and
  * defender (battle Pokemon records), working on D_82199F50.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
+ * switch in battle.
  * @unverified Name and comment guessed from the code.
  */
 void BattleCalc_ApplyTypeEffectAndStab(u8* attacker, u8* defender) {
@@ -239,6 +241,8 @@ void BattleAi_PrepareDamageCalcState(BattleMonRuntime* arg0, BattleMonRuntime* a
 /**
  * Gen 1 base damage ((level * 2 / 5 + 2) * power * attack / defense) / 50 + 2,
  * capped at 997, added to D_82199F50.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
+ * switch in battle.
  * @unverified Name and comment guessed from the code.
  */
 void BattleCalc_AddBaseDamage(UNUSED u8* arg0, UNUSED u8* arg1) {
@@ -277,6 +281,8 @@ void BattleCalc_AddBaseDamage(u8*, u8*);
  * (arg0, arg1). The flag D_82199F32 is saved into D_82199F33 and cleared
  * for the first four steps, and restored before the last one. arg2 is only
  * handed on to func_8210EC0C.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
+ * switch in battle.
  * @unverified Name guessed from the code; comment kept.
  */
 void BattleCalc_EstimateDamage(u8* arg0, u8* arg1, u8 arg2) {
@@ -441,6 +447,8 @@ void func_80043860(s32);
 /**
  * Steps the party Pokemon's HP one point toward the battle display HP. Returns 1
  * once they are equal.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle and a Pound
+ * turn.
  * @unverified Name and comment guessed from the code.
  */
 s32 Battle_StepPartyHpToDisplay(ActivePokemon* arg0) {

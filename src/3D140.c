@@ -113,6 +113,9 @@ s16 _getVol(s16 arg0, s32 arg1, s16 arg2, u16 arg3);
 
 /**
  * Envelope mixer pull: applies the voice envelope and pan, then mixes into the output buffers.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the main menu, the Pokédex,
+ * the party screen, the Lab list, Lab sort, registration, the Lab PC, Free Battle setup, the battle
+ * opening, a switch in battle, running from battle and a Pound turn.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 Acmd* n_alEnvmixerPull(N_PVoice* filter, s32 sample_offset, Acmd* p) {
@@ -309,6 +312,9 @@ extern s16 D_80075D00[];
 
 /**
  * libultra n_env.c envelope mixer helper: pulls one subframe of samples through the voice.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the main menu, the Pokédex,
+ * the party screen, the Lab list, Lab sort, registration, the Lab PC, Free Battle setup, the battle
+ * opening, a switch in battle, running from battle and a Pound turn.
  * @unverified Name from Stadium 1, where the same call sits in the same switch case.
  */
 Acmd* _pullSubFrame(N_PVoice* filter, s16* inp, s16* outp, s32 out_count, Acmd* p) {
@@ -379,6 +385,9 @@ s16 func_8003B0F8(f64 vol, f64 tgt, s32 count, u16* ratel) {
 
 /**
  * libultra n_env.c helper: steps the envelope volume over the given number of samples.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the Pokédex, the party screen,
+ * the Lab list, Lab sort, registration, the Lab PC, Free Battle setup, the battle opening, a switch
+ * in battle, running from battle and a Pound turn.
  * @unverified Name from Stadium 1, where the same call sits in the same switch case.
  */
 s16 _getVol(s16 arg0, s32 arg1, s16 arg2, u16 arg3) {
@@ -766,6 +775,8 @@ extern s8 D_800B3F78;
 extern s32 D_800B3F94;
 
 /**
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 s32 Audio_SetEnabled(s32 arg0) {

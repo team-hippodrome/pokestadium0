@@ -338,6 +338,7 @@ void GridMenu_ClearItemFlags(u8* arg0) {
  * y = row * rowSpacing + arg_y + 2; the size is (colSpacing - 4) x (rowSpacing - 4) and the
  * color is read from D_80073520. Compare ScrollGrid_DrawCursor. The `px`/`py` locals only fix the
  * evaluation order of the argument expressions.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in Free Battle setup.
  * @unverified Name guessed from the code; comment kept.
  */
 void GridMenu_DrawCursor(Menu8002E230* menu, s32 x, s32 y) {
@@ -601,6 +602,8 @@ void ScrollList_SetItems(s8 *arg0, s32 arg1, s32 arg2) {
 
 /**
  * Scrolls up when the cursor row is above the visible area.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void ScrollList_ScrollUpToCursor(s8 *arg0) {
@@ -1142,6 +1145,7 @@ u16 func_80030230(ScrollList8002FD8C* menu) {
 
 /**
  * Puts the cursor on row `arg1` and scrolls up to it if needed.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in Free Battle setup.
  * @unverified Name and comment guessed from the code.
  */
 void ScrollList_SetCursor(s32* arg0, u32 arg1) {
@@ -1266,6 +1270,8 @@ void ScrollGrid_SetItems(s8 *arg0, s32 arg1, s32 arg2) {
 
 /**
  * Scrolls up when the cursor row is above the visible area.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void ScrollGrid_ScrollUpToCursor(s8 *arg0) {
@@ -1280,6 +1286,8 @@ void ScrollGrid_ScrollUpToCursor(s8 *arg0) {
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 /**
  * Scrolls down when the cursor row is below the visible area.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void ScrollGrid_ScrollDownToCursor(s8 *arg0)
@@ -1296,6 +1304,8 @@ void ScrollGrid_ScrollDownToCursor(s8 *arg0)
 
 /**
  * Moves the drawn scroll position toward the target a step at a time.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void ScrollGrid_AnimateScroll(GridMenu80031004* menu) {
@@ -1455,6 +1465,8 @@ void ScrollGrid_DrawItems(GridMenu800310D8* menu, s32 x, s32 y, s32 mask, s32 ar
 
 /**
  * Returns how many cells the current row has (the last row can be short).
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 ScrollGrid_GetRowLength(GridMenu80031004* menu) {

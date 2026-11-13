@@ -87,6 +87,8 @@ void Ui_DrawPrimColorRect(s32, s32, s32, s32, s32, s32, s32, s32);
 
 /**
  * 64DD error screen: エラー：%2d (Error: %2d), "read the instruction manual", and a warning not to remove the disk while the access lamp blinks.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void Leo_DrawErrorScreen(s32 arg0) {

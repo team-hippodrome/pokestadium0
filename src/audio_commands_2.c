@@ -852,6 +852,9 @@ s32 Audio_QueueSetMonoOutputCommand(s32 handle);
 s32 func_800383DC(s32, s32, s32, s32, s32, s32, s32);
 
 /**
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the main menu, the Pokédex,
+ * the party screen, the Lab list, Lab sort, registration, the Lab PC, Free Battle setup, the battle
+ * opening, a switch in battle, running from battle and a Pound turn.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void Audio_UpdateBattleAudioFrame(void) {
@@ -908,6 +911,8 @@ s32 func_80037F68(u8*, u8*);
 void func_80037C04(s32, u32);
 
 /**
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 s32 Audio_LoadWaveTablesAndMusic(u8* arg0) {

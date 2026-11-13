@@ -507,6 +507,8 @@ extern s32 D_8219A800;
 extern s32 D_8219A804;
 
 /**
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleAnim_QueueEffectList9(s32 arg0) {

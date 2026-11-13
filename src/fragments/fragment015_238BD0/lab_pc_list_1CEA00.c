@@ -110,6 +110,8 @@ void ScrollList_SetCursorKeepOffset(s32*, s32);
  * and positive, sets the index to count - 1.  Zero's version operates on a
  * byte matrix and the retail code simply subtracts 1 from the index, so the
  * name is a rough match at best.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name guessed from the code; comment kept.
  */
 void LabItem_RemoveSelectedEntry(LabItemCursor* arg0) {
@@ -172,6 +174,8 @@ void func_890000A4(s32* arg0, s32 arg1, s32 arg2) {
 
 /**
  * Takes `arg1` from the selected item's count, removing the entry when nothing is left.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void LabItem_DecreaseSelectedCount(LabItemCursor* arg0, s32 arg1) {
@@ -300,6 +304,8 @@ extern char D_89018468[];
 extern s32 D_800603C0;
 /**
  * Sets up the confirm window (268x146) with message `arg3` and labeled Yes/No buttons.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void LabItem_InitConfirmWindow(s8* arg0, s32 arg1, s32 arg2, char *arg3, s32 arg4) {
@@ -339,6 +345,8 @@ extern Color_RGBA8 D_8900A5CC;
 
 /**
  * Draws the confirm window: divider, message and buttons.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void LabItem_DrawConfirmWindow(s8* arg0) {
@@ -366,6 +374,8 @@ extern s32 D_800603C0;
 
 /**
  * Handles input on the confirm window while it is open.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 LabItem_UpdateConfirmWindow(s8* arg0) {
@@ -399,6 +409,8 @@ extern Rgba89000D50 D_8900A5BC;
 
 /**
  * Sets up the item count selector (84x52).
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void LabItem_InitCountSelector(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
@@ -434,6 +446,8 @@ extern char D_89018470[];
 
 /**
  * Draws the count selector with its ×count and the up/down arrows.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void LabItem_DrawCountSelector(s8* arg0) {
@@ -494,6 +508,8 @@ extern M2C_UNK D_89018474;
 
 /**
  * Handles the count selector input; shows どうぐがいっぱいです (the items are full) when needed.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 LabItem_UpdateCountSelector(s8 *arg0) {
@@ -557,6 +573,8 @@ void func_89000CF0(s8 *arg0, s8 *arg1)
 
 /**
  * Sets the disabled flag (1) on menu row `arg1`.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void LabItem_DisableRow(s8 *arg0, s32 arg1) {
@@ -679,6 +697,7 @@ s32 func_80031CC8(u8);
 void Font_SetColorForFlags(s32);
 /**
  * Draws an item row with its ×%02d count.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the Lab PC.
  * @unverified Name and comment guessed from the code; ran in play on empty item lists only.
  */
 void LabItem_DrawItemCountRow(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4) {
@@ -757,6 +776,8 @@ s32 func_80030230(void*);
 
 /**
  * Navigate the selected menu mode, then report cancel or confirm input.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name guessed from the code; comment kept.
  */
 s32 LabItem_UpdateItemList(void* menu, u32 flags) {
@@ -935,6 +956,8 @@ extern M2C_UNK D_800734A8;
 
 /**
  * Draws `arg2` in the small font.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void LabItem_DrawSmallText(s32 arg0, s32 arg1, s32 arg2) {
@@ -1385,6 +1408,8 @@ void Ui_DrawImageInStrips(void*, s32, s32);
 void Font_SetColorForFlags(s32);
 /**
  * Draws なまえ/%s (Name) and ID No/%05d.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void LabItem_DrawTrainerInfo(s32 arg0, s32 arg1, s8* arg2, s32 arg3, s32 arg4) {
@@ -1426,6 +1451,8 @@ void Menu_Init(s8*, s32, s32, s32, s32, s32);
 void func_80027410(s8*, s8*, s32, s32, s32);
 /**
  * Sets up the データをけす (delete data) window.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void LabItem_InitDeleteDataWindow(s8* arg, s32 arg1, s32 arg2, s8* arg3) {
@@ -1452,6 +1479,8 @@ extern u8 D_8007356C[];
 extern u8 D_89018688[];
 /**
  * Draws the delete data window.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void LabItem_DrawDeleteDataWindow(s8* arg0, s32 arg1) {
@@ -1474,6 +1503,8 @@ s32 Menu_UpdateCursor(void*);
 
 /**
  * Moves the delete data cursor. Returns -1 on cancel, 1 on confirm.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 LabItem_UpdateDeleteDataCursor(unk_func_8820E99C_030* arg0) {

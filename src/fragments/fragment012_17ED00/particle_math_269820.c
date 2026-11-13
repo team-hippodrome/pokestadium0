@@ -160,6 +160,8 @@ u8 Particle_GetUnkCE(s8 *arg0) {
 
 /**
  * Returns the particle's unk_CD.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 u8 Particle_GetUnkCD(s8 *arg0) {
@@ -178,6 +180,8 @@ s16 Particle_FieldAA_GetS16_0C068(Particle* arg0) {
 
 /**
  * Returns the particle's unk_AC.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle and a Pound turn.
  * @unverified Name and comment guessed from the code.
  */
 s16 Particle_GetUnkAC(s8 *arg0) {
@@ -226,6 +230,8 @@ s16 Particle_GetUnkA8(s8 *arg0) {
 /**
  * Sets the battle animation effect state word D_8219A82C. BattleAnim_ClearEffectState and
  * BattleAnim_GetEffectState clear and read it.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Named from the code.
  */
 void BattleAnim_SetEffectState(s32 arg0) {
@@ -235,6 +241,8 @@ void BattleAnim_SetEffectState(s32 arg0) {
 /**
  * Clears D_8219A82C.unk_00, the battle animation effect state. Was misnamed
  * FirstClearBonus_HideDialogBox.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Named from the code.
  */
 void BattleAnim_ClearEffectState(void) {

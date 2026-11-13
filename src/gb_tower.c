@@ -84,6 +84,8 @@ s32 GbPak_DetectRam(s32 arg0, u8* arg1) {
 /**
  * Prepares the pak on a port once (gGbPakPortReady): reads the ID, enables
  * cartridge RAM and runs GbPak_DetectRam. Shuts down with error 1 if the read fails.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 GbTower_ProbePak(s32 arg0, u8* arg1, u8* arg2) {
@@ -199,6 +201,8 @@ s32 GbTower_ScanPaks(void) {
 
 /**
  * Returns 1 if the Transfer Pak reports no powered cartridge; shuts down on a pak error.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 GbPak_IsCartOff(s32 arg0) {
@@ -216,6 +220,8 @@ s32 GbPak_IsCartOff(s32 arg0) {
 
 /**
  * Returns 1 if the Transfer Pak reports a powered cartridge; shuts down on a pak error.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 GbPak_IsCartOn(s32 arg0) {
@@ -230,6 +236,8 @@ s32 GbPak_IsCartOn(s32 arg0) {
 
 /**
  * Re-initializes the pak on a port and enables cartridge RAM; returns 1 on success.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 GbTower_ReinitPak(s32 arg0) {
@@ -252,6 +260,8 @@ s32 GbTower_ReinitPak(s32 arg0) {
 /**
  * Returns 1 if the 32-byte pattern left by GbPak_DetectRam is still in
  * cartridge RAM and the pak was not reset, i.e. the same cartridge is still inserted.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 GbTower_VerifyPakStillInserted(s32 arg0, void* arg1) {
@@ -314,6 +324,8 @@ s32 GbPak_RawRead(s32 arg0, u8* arg1, u16 arg2, u16 arg3) {
 
 /**
  * Writes raw Transfer Pak address space through osGbpakReadWrite if the port is usable.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 GbPak_RawWrite(s32 arg0, u8* arg1, u16 arg2, u16 arg3) {
@@ -329,6 +341,8 @@ s32 GbPak_RawWrite(s32 arg0, u8* arg1, u16 arg2, u16 arg3) {
 /**
  * Selects a ROM bank by writing 0x5000, the upper bank bits to 0x4000 and the
  * lower 5 bits to 0x2000.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 int GbPak_SelectRomBank(s32 arg0, s32 arg1) {

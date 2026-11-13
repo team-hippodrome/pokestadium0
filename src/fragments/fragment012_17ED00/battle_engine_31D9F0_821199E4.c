@@ -588,6 +588,8 @@ void BattleMenu_DrawSwitchPanel(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg
 
 extern s8 D_8218B020;
 /**
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle and a Pound
+ * turn.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleHud_DrawCompactMonStatusBox(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3) {
@@ -639,6 +641,8 @@ void BattleHud_DrawTranslucentShadowRect(s32 arg0, s32 arg1, s32 arg2, s32 arg3,
 /**
  * Draws the battle message box at (x, y) with the revealed part of the text, in the color of the
  * given side.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle and a Pound turn.
  * @unverified Name from its caller.
  */
 void BattleMessage_DrawBox(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {

@@ -153,6 +153,8 @@ extern f32 D_FLT_82189350[][4];
  * whose second float func_82107790 reads as a resting height), doubled, divided
  * by 50, times the display object's Y scale. Zero-side relative of the width
  * term used by BattleScene_GetParticipantModelWidth in Stadium 1.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 f32 BattleAnim_GetSpeciesBaseScale(ActivePokemon* active_pokemon) {
@@ -181,6 +183,8 @@ extern f32 D_FLT_8218935C[][4];
  * Writes the participant's model size to out: DisplayObject scale (0x30/0x34) times the species
  * size table (D_FLT_8218935C) times 2/50, the same table BattleScene_GetParticipantModelRadiusScaled
  * reads. Was misnamed Trade_UpdateBoxSlotBob, a Stadium 1 trade-machine name.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
+ * switch in battle.
  * @unverified Named from the code; the sweep hit it but did not check the values.
  */
 void BattleScene_GetParticipantModelSizeScaled(s8* arg0, Vec3f* out) {
@@ -228,6 +232,8 @@ f32 BattleScene_GetParticipantHeight(ActivePokemon*);
 /**
  * World point where effects aim at the participant: its position, raised by its
  * height for grounded species, never below its height.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn.
  * @unverified Name and comment guessed from the code.
  */
 void BattleScene_GetParticipantAimPoint(ActivePokemon *arg0, u8 *arg1) {
@@ -249,6 +255,7 @@ f32 func_8210791C(ActivePokemon*);
 f32 BattleScene_GetParticipantHeight(ActivePokemon*);
 /**
  * Like BattleScene_GetParticipantAimPoint, but in screen x (func_8210791C) with z 0.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a Pound turn.
  * @unverified Name and comment guessed from the code.
  */
 void BattleScene_GetParticipantScreenAimPoint(ActivePokemon* active_pokemon, Vec3f* out) {
@@ -286,6 +293,8 @@ extern f32 D_FLT_82189350[][4];
  * D_FLT_82189350) unscaled when modelTransformId is 0x10, otherwise the same
  * width times the display object's Y scale. What transform 0x10 is has not been
  * established; the value is used literally here.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn.
  * @unverified Name guessed from the code; comment kept.
  */
 f32 BattleScene_GetParticipantHeight(ActivePokemon* active_pokemon) {
@@ -297,6 +306,8 @@ f32 BattleScene_GetParticipantHeight(ActivePokemon* active_pokemon) {
 
 extern f32 D_FLT_8218934C[][4];
 /**
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 f32 BattleScene_GetParticipantModelRadiusScaled(ActivePokemon* active_pokemon) {
@@ -309,6 +320,8 @@ ModelNodeView* Battle_GetLoadedModelNode(ActivePokemon* active_pokemon, s32 node
 
 /**
  * Returns the session's display model id (sessionTeams+0x2).
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
+ * switch in battle.
  * @unverified Name and comment guessed from the code.
  */
 s16 ActivePokemon_GetDisplayModel(s8 *arg0, M2C_UNK arg1) {
@@ -648,6 +661,8 @@ void Battle_ReloadDisplayModel(ActivePokemon* active_pokemon) {
 
 /**
  * Sets the model transform id and its timer.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle and a Pound turn.
  * @unverified Name and comment guessed from the code.
  */
 void ActivePokemon_SetModelTransform(s8 *arg0, s32 arg1, s32 arg2) {

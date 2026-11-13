@@ -335,6 +335,8 @@ void func_80023D3C(s32 arg0, s32 arg1) {
 
 /**
  * Packs a BattleMon into a GB-format save record with its transcoded name and trainer data.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void BattleMon_ToGbSaveRecord(s32 arg0, s32 arg1) {
@@ -346,6 +348,8 @@ void BattleMon_ToGbSaveRecord(s32 arg0, s32 arg1) {
 }
 
 /**
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the Lab list, registration,
+ * the Lab PC and Free Battle setup.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 s32 Save_IsTypedRecordFlagSet(arg0, arg1, arg2)
@@ -409,6 +413,8 @@ void func_80024044(void) {
 
 void func_800238D8(); // Called with two or three arguments.
 /**
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void Save_CommitTypedRecord(s32 arg0, s32 arg1) {
@@ -438,6 +444,8 @@ void Save_CommitTypedRecord(s32 arg0, s32 arg1) {
 
 void func_80023954(); // Called with three arguments; the third is ignored.
 /**
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void Save_InvalidateTypedRecord(s32 arg0, s32 arg1) {
@@ -504,6 +512,8 @@ void func_800243B8(void) {
 }
 
 /**
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void Save_ClearTypedRecord(s32 arg0, s32 arg1) {
@@ -553,6 +563,8 @@ void Save_ResetAndCommitTypedRecord(s32 arg0, s32 arg1) {
 }
 
 /**
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the Lab list, Lab sort and the
+ * Lab PC.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 s32 Deck_GetSaveRecordCapacity(s32 arg0) {
@@ -580,6 +592,8 @@ s32 Deck_GetSaveRecordCapacity(s32 arg0) {
 }
 
 /**
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the Lab list, Lab sort and the
+ * Lab PC.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 s32 Deck_GetSaveRecordSize(s32 arg0) {
@@ -609,6 +623,8 @@ s32 Deck_IsSaveEntryPresent(s32 arg0, s32 arg1) {
 
 s32 func_800246A8(s32, s32);
 /**
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 s32 Deck_GetSaveEntryTrainerId(s32 arg0, s32 arg1) {
@@ -750,6 +766,8 @@ M2C_UNK func_80023F38(s32, s32, M2C_UNK);           /* extern */
 s32 func_80024ADC();                                /* extern */
 
 /**
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void Deck_SetSaveEntryCount(s32 arg0, s32 arg1, s32 arg2) {
@@ -884,6 +902,8 @@ s32 func_80025168(s8 arg0) {
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 /**
  * Returns the 16-bit progress flags at save offset 0x7A48.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 Save_GetProgressFlags(void)
@@ -893,6 +913,8 @@ s32 Save_GetProgressFlags(void)
 
 /**
  * Sets the progress flags at save offset 0x7A48 and writes the block.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void Save_SetProgressFlags(u16 arg0) {
@@ -925,6 +947,8 @@ typedef struct SaveF80025260 {
 } SaveF80025260;
 /**
  * Fills the continue block at save offset 0x7A60 with the name, session and Pokemon data.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void Save_WriteContinueData(SaveName80025260* arg0, SaveBlob80025260* arg1, SaveMon80025260* arg2, s32 arg3) {
@@ -962,6 +986,8 @@ typedef struct { u8 unk_00; u8 unk_01; u8 pad[0x4E]; } Mon50;
 
 /**
  * Reads the continue block at save offset 0x7A60 back; returns -1 when it is empty.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 s16 Save_ReadContinueData(Unk12Bytes* arg0, Unk162Bytes* arg1, Mon50* arg2) {

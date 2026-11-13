@@ -228,6 +228,8 @@ void Particle_HasFlag40(Particle* arg0) {
 
 /**
  * Sets the particle's textureFrame to arg1.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle and a Pound turn.
  * @unverified Name and comment guessed from the code.
  */
 void Particle_SetTextureFrame(Particle* arg0, s16 arg1) {
@@ -480,6 +482,8 @@ void Particle_BeginPhase(Particle* arg0) {
 
 /**
  * Set phase to zero and clear the phase-timer initialization bit.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle and a Pound turn.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Particle_ResetPhase(Particle* arg0) {
@@ -1485,6 +1489,8 @@ void Particle_FlipRotationZ(s8 *arg0) {
 
 /**
  * Sets rotationStep.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle and a Pound turn.
  * @unverified Name and comment guessed from the code.
  */
 void Particle_SetRotationStep(s8 *arg0, s16 arg1, s16 arg2, s16 arg3) {
@@ -1895,6 +1901,8 @@ s16 BattleAnim_GetParticleAngleYToTertiaryOwner(Particle* arg0) {
 
 /**
  * Write a direction vector using the indicated rotation components and the supplied magnitude.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Particle_ComputeVectorFromRotationY(Particle* arg0, f32 arg1, Vec3f* arg2) {
@@ -1929,6 +1937,8 @@ void Particle_ComputeVectorFromRotationXZ(Particle* arg0, f32 arg1, Vec3f* arg2)
 
 /**
  * Write a direction vector using the indicated rotation components and the supplied magnitude.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
+ * switch in battle.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Particle_ComputeVectorFromRotationXYZAlt(Particle* arg0, f32 arg1, Vec3f* arg2) {
@@ -1968,6 +1978,8 @@ extern f32 D_FLT_8219A824;
 
 /**
  * Sets the particle's magnitudeStep to arg1 times the particle scale D_FLT_8219A824.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle and a Pound turn.
  * @unverified Name and comment guessed from the code.
  */
 void Particle_SetMagnitudeStepScaled(s8 *arg0, f32 arg1) {
@@ -2451,6 +2463,8 @@ extern s16 D_8219A8B6;
 
 /**
  * Copies prim_r/g/b into the temporary color D_8219A8B2..D_8219A8B6.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
+ * switch in battle.
  * @unverified Name and comment guessed from the code.
  */
 void Particle_StorePrimColorInTemp(s8 *arg0) {
@@ -2464,6 +2478,8 @@ extern s16 D_8219A8B4;
 extern s16 D_8219A8B6;
 
 /**
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
+ * switch in battle.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleAnim_LoadGlobalTintToParticle(s8 *arg0) {
@@ -2553,6 +2569,8 @@ s32 Particle_ApproachPrimAlphaThenAdvance(Particle* arg0, u8 arg1, u8 arg2) {
 
 /**
  * Sets the particle's unk_A6 to arg1.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle and a Pound turn.
  * @unverified Name and comment guessed from the code.
  */
 void Particle_SetUnkA6(s8 *arg0, s16 arg1) {
@@ -2632,6 +2650,8 @@ s32 Particle_DecrementUnkA6ToZeroThenAdvance(Particle* arg0) {
 
 /**
  * Sets the particle's unk_A8 to arg1.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle and a Pound turn.
  * @unverified Name and comment guessed from the code.
  */
 void Particle_SetUnkA8(s8 *arg0, s16 arg1) {
@@ -2724,6 +2744,8 @@ void Particle_SetUnkAA(s8 *arg0, s16 arg1) {
 
 /**
  * Sets the particle's unk_CE to arg1.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle and a Pound turn.
  * @unverified Name and comment guessed from the code.
  */
 void Particle_SetUnkCE(s8 *arg0, s16 arg1) {
@@ -2732,6 +2754,8 @@ void Particle_SetUnkCE(s8 *arg0, s16 arg1) {
 
 /**
  * Sets the particle's unk_CD to arg1.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle and a Pound turn.
  * @unverified Name and comment guessed from the code.
  */
 void Particle_SetUnkCD(s8 *arg0, s16 arg1) {

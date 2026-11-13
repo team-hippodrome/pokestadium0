@@ -353,6 +353,8 @@ extern ActivePokemon* sSide1ActivePokemon;
  * Same one-character-per-frame reveal as BattleMessage_TickTypewriter for the Pokemon's caption
  * (ActivePokemon_ShowCaption), drawn near that side's HUD. Called every frame from
  * Battle_RenderHud.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn.
  * @unverified Name from the code.
  */
 void ActivePokemon_TickCaptionTypewriter(ActivePokemon* arg0) {

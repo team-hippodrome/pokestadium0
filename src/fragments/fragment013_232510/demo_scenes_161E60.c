@@ -767,6 +767,8 @@ void func_82201348(DepthBuffer* arg0) {
 
 /**
  * Requests the icons of both members of a two-trainer side, three Pokemon each.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void VsScene_LoadTagTeamIcons(unk_D_82203170* arg0, s32 arg1) {
@@ -942,6 +944,8 @@ void func_80025830(void);
 
 /**
  * Asks トーナメントをつづけますか？ (Continue the tournament?) with つづける (Continue) / ちゅうだんする (Quit), plus the GB cartridge warning.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 Tournament_RunContinuePrompt(void) {
@@ -1251,6 +1255,8 @@ s32 Font_Init(s32 load_size, s32 side);
 
 /**
  * Entry point: pushes the 'BTLS' pool state, loads the round's stage and fragments, and runs the pre-battle scene for mode `arg0`.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 VsScene_Run(s32 arg0, s8* arg1) {

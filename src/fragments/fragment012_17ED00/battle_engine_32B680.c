@@ -31,6 +31,8 @@ void func_8211F580(void) {
 
 extern f32 D_FLT_8218935C[][4];
 /**
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle and running from battle.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 s32 BattleScene_AreBothParticipantModelsCompact(void) {

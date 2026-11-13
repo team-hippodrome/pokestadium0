@@ -111,6 +111,8 @@ void func_88400168(s32, s32, s32, s32);
 
 /**
  * Shows the Transfer Pak cartridge details (ID, No., trainer) for `port`, or an error: not a Pokemon cartridge, or no 64GB Pak inserted.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void TransferPak_DrawStatusScreen(s32 port, s32 x, s32 y) {
@@ -171,6 +173,8 @@ void TransferPak_DrawStatusScreen(s32 port, s32 x, s32 y) {
 /**
  * Moves the cartridge cursor between the four controller ports on D-pad up/down/left/right,
  * skipping ports without a Game Boy cartridge (D_88403310[port].game).
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Needs a Transfer Pak to see; name from the code.
  */
 s32 TransferPak_MoveCartridgeCursor(s32 cursor) {

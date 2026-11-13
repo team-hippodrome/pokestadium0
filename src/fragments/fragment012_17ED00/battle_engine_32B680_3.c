@@ -363,6 +363,8 @@ void BattleAnim_CallbackInitModelAnimWait(Particle* arg0) {
  * Moves: Barrier (use), Defense Curl (use), Dig (use/hit), Earthquake (hit), Fissure (hit), Light Screen
  * (use), Pay Day (hit), Reflect (use), Sharpen (use), Withdraw (use)
  * TODO: Human contributor add screenshot
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_InitializeParticleModel(Particle* arg0) {
@@ -421,6 +423,8 @@ void BattleAnim_CallbackInitModelAnimMode2(Particle* arg0) {
  * Moves: Absorb (use), Bide (use), Confusion (use), Focus Energy (use), Leech Life (use), Mega Drain (use),
  * Psychic (use), Rage (use), Solar Beam (use), Waterfall (use/hit)
  * TODO: Human contributor add screenshot
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_RunFillScreenOverlay(Particle* arg0) {
@@ -679,6 +683,8 @@ void BattleAnim_InitializeThunderWaveHit(void) {
 
 
 /**
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleAnim_ApplyEffect1SpeciesMotion(Particle* arg0) {

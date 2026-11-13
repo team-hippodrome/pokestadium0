@@ -71,6 +71,8 @@ void BattleScene_SetCameraAtAndEyeFromAngles(CameraNode* camera, f32 x, f32 y, f
  * Writes the participant's camera anchor point to arg1: anchor 9 for species 0x52 and 0x5F,
  * otherwise anchor 0x64 (GeoRender_FindAnchorPosition). Was misnamed Trade_UpdateWaitForBoxConfirm,
  * a Stadium 1 trade-machine name; this is battle camera code.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn.
  * @unverified Named from the code; the sweep hit it during move animations but did not check the point.
  */
 void BattleScene_GetParticipantCameraAnchor(ActivePokemon* arg0, Vec3f* arg1) {
@@ -347,6 +349,8 @@ s32 BattleScene_ApproachCameraRotationYNoEyeUpdate(UNUSED CameraNode* arg0, s16 
 }
 
 /**
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle and running from battle.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleScene_SetCameraAnglesAndDistance(s16 arg0, s16 arg1, f32 arg2) {
@@ -367,6 +371,8 @@ typedef struct BattleCameraModelState {
 extern f32 D_FLT_82189354[][4];
 /**
  * Saves the camera target and eye, then records the distance and angles from this Pokemon's model focus point to the camera target.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn.
  * @unverified Name and comment guessed from the code.
  */
 void BattleCamera_CaptureModelOrbit(ActivePokemon* pokemon, CameraNode* camera) {

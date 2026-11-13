@@ -75,6 +75,8 @@ void BattleAi_RecordUsedMove(s32, s32, s32);
 /**
  * When the acting side's action is a switch (0x0F) or a send-out (0x10), records it for the COM
  * AI and enters phase 11 or 18. Returns 1 if it did.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle and a Pound
+ * turn.
  * @unverified Name and comment from the code.
  */
 s32 BattleScene_TryStartSwitchAction(void) {
@@ -371,6 +373,8 @@ void func_82125C80(s32 arg0) {
  * Enters the effect phase for moves whose presentation replaces the attack animation
  * (moveEffectKind 7, 12-15, 17, 21, 25, 27-31), via BattleScene_TransitionToPhaseFull. Returns 1
  * if it did.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle and a Pound
+ * turn.
  * @unverified Name and comment from the code; kind 7 to phase 7 seen in play with Double Team.
  */
 s32 BattleScene_TryEnterEffectPhaseBeforeLaunch(void) {
@@ -423,6 +427,8 @@ s32 BattleScene_TryEnterEffectPhaseBeforeLaunch(void) {
  * Enters the effect phase that follows the launch: the miss (8, also when Battle_MoveMissed
  * flagged it), status (22), confusion self-hit (20), Disable (32), stat lowering (26), crash (16)
  * and 23. Returns 1 if it did.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle and a Pound
+ * turn.
  * @unverified Name and comment from the code; the miss path seen in play.
  */
 s32 BattleScene_TryEnterEffectPhaseBeforeImpact(void) {

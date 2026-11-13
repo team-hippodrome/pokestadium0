@@ -349,6 +349,7 @@ void func_80037C04(s32, u32);
 void func_800419F8(u32);
 
 /**
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 s32 Audio_StartMusicTrack(u32 track_id) {
@@ -625,6 +626,8 @@ s32 func_80037AC4(s32, s32);
 void func_800419F8(u32);
 
 /**
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 s32 Audio_FadeOutAll(s32 arg0) {
@@ -762,6 +765,8 @@ void func_80037DF4(s32, s32);
 
 /**
  * Loads and plays the cry of `arg0` (1-based national dex, below 152) into one of three rotating buffers.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn.
  * @unverified Name and comment guessed from the code.
  */
 s32 Audio_PlayCry(u32 arg0, u32 arg1) {

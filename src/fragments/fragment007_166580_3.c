@@ -1307,6 +1307,8 @@ extern Str4_820080B8 D_82009210;
 extern u8 D_8200A0A0[];
 /**
  * Sets up the ちゅうい！！ (warning) window for duplicate species.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void FreeBattle_InitDuplicateWarning(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
@@ -1332,6 +1334,8 @@ extern char D_8200A0B0[];
 
 /**
  * Draws おなじポケモンが %dたいいます (there are %d of the same Pokemon).
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void FreeBattle_DrawDuplicateWarning(s8* arg0) {
@@ -1469,6 +1473,8 @@ void func_8000B2F4(s32);
  * stores D_800603C0 and then arg3 in the word at 0xA4, calling func_8000B2F4
  * with each value in turn. Finally stores arg3 at 0xB0.
  * What the object is and what the constants mean is not established.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name guessed from the code; comment kept.
  */
 void FreeBattle_InitLevelSumWarning(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
@@ -1505,6 +1511,8 @@ extern char D_8200A198[];
  * on the two sub-objects with 2 for the one whose index (0 for +0x2C, 1 for +0x68)
  * equals the selection at +0xA8 and 0 for the other.
  * What the constants mean is not established.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name guessed from the code; comment kept.
  */
 void FreeBattle_DrawLevelSumWarning(s8* arg0) {
@@ -1530,6 +1538,8 @@ M2C_UNK func_8003F6AC(M2C_UNK);
 
 /**
  * Handles the level sum warning.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 FreeBattle_UpdateLevelSumWarning(s8* arg0) {

@@ -117,6 +117,8 @@ extern u8 D_82198D28[];
 
 /**
  * Stores the RGB tint applied to the battle stage.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn.
  * @unverified Name from the header prototype; comment guessed from the code.
  */
 void Battle_SetStageTintColor(u8 r, u8 g, u8 b) {
@@ -142,6 +144,8 @@ extern Gfx D_80060398[];
  * Archive entry 2 returns a tagged backdrop value: NULL clears depth, -1 fills
  * black, a value below 0x10000 is RGBA5551, and larger values address a texture.
  * The 4 x 64 RGBA32 texture stretches over the upper half; its last row fills below.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn.
  * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
  */
 void Battle_DrawStageBackdrop(void) {
@@ -312,6 +316,8 @@ void Battle_ResetFaintBatches(void) {
  * called every frame: bug boy in GLC
  * Stamp newly observed zero-HP Pokemon with the same batch number this frame.
  * Increment once per nonempty batch, so simultaneous faints share a stamp.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Battle_UpdateFaintBatches(void) {
@@ -418,6 +424,8 @@ void func_8000D304(void);
  * triggers every frame: bug boy in GLC
  * Count the initial two callbacks toward zero; once the gate is zero, the attract
  * demo battle (mode 16) can request exit on a button press. The normal path waits for the scene result.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn.
  * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
  */
 void Battle_UpdateCompletionGate(void) {
@@ -454,6 +462,8 @@ void func_8000A7FC(s32);
  * BgStage_WaitForCondition passes the current fade mode and starts the exit fade
  * after a nonzero return. Latch 2 prevents repeating the audio shutdown request.
  * @src/stage_loader.c
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 Battle_FrameCallback(s32 fade_mode) {

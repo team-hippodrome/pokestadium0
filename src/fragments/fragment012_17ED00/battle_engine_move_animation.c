@@ -183,6 +183,8 @@ void func_8210568C(ActivePokemon*, s32, s32);
 
 /**
  * triggers on faint
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_TickStartRowAnimRecord(ActivePokemon* active_pokemon) {
@@ -205,6 +207,8 @@ extern ModelDimensions D_8218934C[];
 
 /**
  * trigger unknown
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_TickQueueRowEffectList3AtAnimEnd(ActivePokemon* active_pokemon) {
@@ -243,6 +247,8 @@ void BattleScene_ResetOpponentStateFrameCounter(ActivePokemon* active_pokemon) {
 /**
  * trigger on up on the dialogue box disappearing after move use
  * used to animate moves that throw rocks
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle and a Pound
+ * turn.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleAnim_SetFlagForRockThrowingMoves(ActivePokemon* active_pokemon) {
@@ -281,6 +287,8 @@ s32 func_82101FC4(s8 *arg0) {
 /**
  * Registers the session's animation asset tables once loading is idle.
  * Returns 1 if registered, 0 if still busy.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle and a Pound turn.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 BattleAnim_TryRegisterAssetTables(ActivePokemon* active_pokemon) {
@@ -293,6 +301,8 @@ s32 BattleAnim_TryRegisterAssetTables(ActivePokemon* active_pokemon) {
 
 /**
  * Loads the resource list for the participant's active animation row.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle and a Pound
+ * turn.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_LoadMoveResourceList(ActivePokemon* active_pokemon) {
@@ -306,6 +316,8 @@ void BattleScene_LoadMoveResourceList(ActivePokemon* active_pokemon) {
 
 /**
  * Loads the resource list for the current state row's mode.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_LoadRowResourceList(ActivePokemon* active_pokemon) {
@@ -543,6 +555,8 @@ void BattleScene_TickMoveUsePlaySound(ActivePokemon* active_pokemon) {
 /**
  * When the move cue reaches its stat-effect frame, queues the stat-raise
  * particle effect and sound for self-boosting moves.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle and a Pound
+ * turn.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Battle_HandleStatBoostingMoveAnimation(ActivePokemon* active_pokemon) {
@@ -621,6 +635,8 @@ void BattleScene_EnterConfusedRow(ActivePokemon* active_pokemon) {
 
 /**
  * State row 21 tick: when move cue 0 ends, plays the species sound.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_TickRow22PlaySpeciesSound(ActivePokemon* active_pokemon) {
@@ -1037,6 +1053,8 @@ void BattleScene_TickRow21CleanupAndEnterState18(ActivePokemon* active_pokemon) 
 /**
  * Once a requested model reload completes, resets the owner model to the
  * neutral placeholder.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_ResetOwnerModelIfLoaded(ActivePokemon* active_pokemon) {
@@ -1806,6 +1824,8 @@ void func_821054A8(s8 *arg0) {
 /**
  * Sets the event track of cue `cue_index` when the session is idle. Dugtrio's
  * idle cue picks one of three consecutive tracks at random.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleAnim_SetModelEventTrackFromRow(ActivePokemon* pokemon, s32 cue_index) {
@@ -2036,6 +2056,7 @@ s32 BattleScene_IsMoveKeyedRowWaitComplete(ActivePokemon* active_pokemon, s32 fr
  * Returns 1 when the hit cue animation is done or replaced, or after
  * `frame_limit` frames while ACTIVE_FREEZE or ACTIVE_AIRBORNE (without
  * ACTIVE_AIR_ACTION) is set.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a Pound turn.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 BattleScene_IsRowAnimWaitComplete(ActivePokemon* active_pokemon, s32 frame_limit) {
@@ -2124,6 +2145,8 @@ void func_82105E64(ActivePokemon* active_pokemon) {
  * Moves participants with ACTIVE_AIR_SETTLE to y = 200 (setting
  * ACTIVE_AIRBORNE), restarts the Dig cue for Dugtrio with ACTIVE_UNDERGROUND,
  * then resets both participants' animation flags.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle and a Pound turn.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_ResetBothParticipantsAnimationState(void) {
@@ -2270,6 +2293,8 @@ void func_82106354(void) {
 /**
  * Undoes the model changes of the participant's current effect mode
  * (scale, height, rotation and secondary models).
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle and a Pound turn.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_CleanupParticipantEffectMode(ActivePokemon* active_pokemon) {
@@ -2731,6 +2756,8 @@ s32 BattleScene_DispatchLifecycle(s32 lifecycle_stage, BattleSessionTeams* sessi
  *
  * Speculation: Some models changed between Stadium 0 and Stadium 1 (most apparent with Nidoking)
  * They could have choosen to render the thumbnails this way in case models changed mid-development.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
+ * switch in battle.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleThumbnail_TriggerOwnerModelAnimation(ActivePokemon* active_pokemon) {

@@ -160,6 +160,8 @@ void BattleHud_DrawTrainerNameLabelAuto(ActivePokemon* arg0, TeamRoster* arg1, s
  * Draws a Pokemon's info box: background (clipped at the left edge), level, HP bar, HP fraction,
  * the nickname centered on top and the status text in its color. Called every frame from
  * BattleHud_DrawMonStatusBoxPlayer.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn.
  * @unverified Name from the code.
  */
 void BattleHud_DrawMonInfoBox(ActivePokemon* arg0, BattleMon* arg1, unk_D_84385790* arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9, s32 argA) {

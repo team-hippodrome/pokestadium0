@@ -133,6 +133,7 @@ extern char D_8219544C[];
  * (unk_28, the HP before the hit, minus hp, as a percentage): message 0x25 for 0%, 0x26 under 30%,
  * 0x27 under 70% and 0x28 for 70% or more. Adds message 0 when state.unk_2D is 0x10.
  * Was misnamed Battle_ResetEntityState.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle.
  * @unverified Named from the code; not checked in play.
  */
 void Battle_FormatDamageComment(ActivePokemon* active_pokemon) {

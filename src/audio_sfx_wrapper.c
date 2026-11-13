@@ -26,6 +26,8 @@ void Audio_PlaySoundEffectByIdWrapper(s32 arg0) {
  * calls it with one argument.  A function that really queued a sequence id
  * would have to store something, so that name does not fit this code and
  * should be double-checked.  The address-style name is used here.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 s32 Audio_QueueSequenceId(void) {

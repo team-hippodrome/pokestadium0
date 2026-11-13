@@ -222,6 +222,8 @@ extern char D_81800888[];
 
 /**
  * Draws the cup list (Poke Ball, Great Ball, Ultra Ball and Master Ball Cups, Tournament) with blinking クリアー！ (Cleared!) marks.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void AreaSelect_DrawCupClearList(s32 frames, s32 blink) {
@@ -345,6 +347,8 @@ void func_81800320(void);
 
 /**
  * Plays the cup-cleared sequence: music cue, then the cup list with blinking クリアー！ marks.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void AreaSelect_PlayCupClearSequence(void) {

@@ -822,6 +822,7 @@ void func_8216140C(s8 *arg0) {
 }
 
 /**
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a Pound turn.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetupGroundedCircularHitSpark(Particle* arg0) {
@@ -835,6 +836,7 @@ void BattleAnim_SetupGroundedCircularHitSpark(Particle* arg0) {
  * Moves: Body Slam (hit), Crabhammer (hit), Double-Edge (hit), Fly (hit), Seismic Toss (hit), Slam (hit),
  * Stomp (hit), Submission (hit), Thrash (hit)
  * TODO: Human contributor add screenshot
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a Pound turn.
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_RunGroundedCircularHitSpark(Particle* arg0) {
@@ -1258,6 +1260,8 @@ void BattleAnim_SetupSharedScalePulseFallSetup(Particle* arg0) {
  * Moves: Barrier (use), Harden (use), Ice Punch (use/hit), Kinesis (use), Leech Seed (use/hit), Light Screen
  * (use), Pay Day (hit), Recover (use), Reflect (use), Soft-Boiled (use), Swift (hit), Swords Dance (use)
  * TODO: Human contributor add screenshot
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
+ * switch in battle.
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_RunSparkleHit(Particle* arg0) {
@@ -1434,6 +1438,8 @@ void BattleAnim_RunThunderPunchHitEffect(Particle* arg0) {
 }
 
 /**
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetupDefaultHitSpark(Particle* arg0) {
@@ -1518,6 +1524,8 @@ void BattleAnim_SetupDefaultHitSpark(Particle* arg0) {
  * Psywave (hit), Quick Attack (hit), Rage (hit), Rolling Kick (hit), Skull Bash (hit), Sonic Boom (hit),
  * Struggle (hit), Tackle (hit), Take Down (hit), Thunder Punch (hit), Wing Attack (hit)
  * TODO: Human contributor add screenshot
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_RunDefaultHitSpark(Particle* arg0) {

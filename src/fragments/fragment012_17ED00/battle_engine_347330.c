@@ -3,6 +3,8 @@
 
 /**
  * Part of the stat-change ribbon (see StatRibbon_Spawn).
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Named after the ribbon seen in play; this function itself was not traced.
  */
 void StatRibbon_Init(void) {

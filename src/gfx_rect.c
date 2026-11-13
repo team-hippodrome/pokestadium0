@@ -65,6 +65,9 @@ void GfxImage_AttachDepthBuffer(DepthBuffer* img, DepthBuffer* depth) {
 }
 
 /**
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the main menu, the Pokédex,
+ * the party screen, the Lab list, Lab sort, registration, the Lab PC, Free Battle setup, the battle
+ * opening, a switch in battle, running from battle and a Pound turn.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void GfxImage_ResetCurrent(void) {

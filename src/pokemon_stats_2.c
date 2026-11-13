@@ -581,6 +581,8 @@ s32 GbSave_PollCartRemoval(s32 arg0) {
  */
 s32 GbSave_RefreshPlayerIdentity(s32 arg0);
 /**
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void GbSave_ForceReloadPort(s32 arg0) {
@@ -807,6 +809,8 @@ void GbSave_SaveMainPokemon(unk_func_88205880_00D0* arg0, s32 arg1, s32 arg2) {
 }
 
 /**
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void GbSave_LoadBoxPokemon(BattleMon* arg0, s32 arg1, s32 arg2, s32 arg3) {
@@ -1178,6 +1182,8 @@ u8 GbSave_GetPortGame(s32 arg0) {
 s32 func_8001FAB0(u8*);
 
 /**
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 s32 GbSave_RefreshPlayerIdentity(s32 arg0) {
@@ -1382,6 +1388,7 @@ void GbSave_MarkSpeciesHeld(char* arg0, s32 arg1, u8* arg2) {
 /**
  * Rebuilds the held-species bits (unk_05) of port arg0 from the party, the current GB box and the
  * Stadium boxes.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the Pokédex.
  * @unverified Renamed from GbSave_RebuildSeenBitfield after its callee was seen in play; the
  * Stadium box lists were empty in the test save.
  */

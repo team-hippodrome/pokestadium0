@@ -101,6 +101,8 @@ u8 func_8000C610(u8);
 /**
  * Starts a GB Tower session: allocates both thread blocks, loads the emulator
  * fragment and fonts, copies the session parameters and starts the emulator thread.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
  */
 void GbTower_Start(UnkInputStruct8000D738* arg0) {
@@ -141,6 +143,8 @@ void func_80002620(s32);
 /**
  * Ends the session: copies the session parameters back (button bindings), restores
  * the pak poll mask and destroys both threads.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void GbTower_Stop(UnkInputStruct8000D738* arg0) {

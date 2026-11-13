@@ -478,6 +478,8 @@ extern char D_82302ACC[];
 
 /**
  * Battle order select: レベルの ごうけいが 155を こえてしまいます (The level total goes over 155).
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void BattleMenu_DrawLevelSumOverNotice(s8* arg0) {
@@ -915,6 +917,8 @@ void BattleMenu_HandleOrderSelectPanel_ConfirmInput(Controller* arg0, unk_D_8480
 
 /**
  * Dismisses the level-limit warning and clears this panel's picks.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleMenu_HandleOrderSelectPanel_LevelCapNoticeInput(Controller* arg0, unk_D_848037A0* arg1) {
@@ -1033,6 +1037,8 @@ s32 BattleMenu_UpdateOrderSelect(s32 arg0) {
 
 /**
  * Moves the trainer owning the first selection into the lead tag-team position.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment from Stadium 1.
  */
 void BattleMenu_SetLeadTagTeamMember(BattleSessionTeams* arg0, unk_D_84803760* arg1) {
@@ -1051,6 +1057,8 @@ void BattleMenu_SetLeadTagTeamMember(BattleSessionTeams* arg0, unk_D_84803760* a
 
 /**
  * Appends the unpicked roster slots in ascending order to fill six entries.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment from Stadium 1.
  */
 void BattleMenu_AppendUnpickedSlots(s8* arg0, s32 arg1) {
@@ -1122,6 +1130,8 @@ void BattleMenu_CommitOrderSelection(void) {
 
 /**
  * Initializes one trainer's panel and loads its roster icons.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleMenu_AddOrderSelectPanel(s16 arg0, s16 arg1, TeamRoster* arg2, s32 arg3, s32 arg4) {
@@ -1162,6 +1172,8 @@ extern s32 D_82302C00;
 extern Controller D_82302BD8;
 /**
  * Resets selection state and creates controller-ordered panels for both sides.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleMenu_InitOrderSelectPanels(SessionContext* arg0) {
@@ -1233,6 +1245,8 @@ s32 func_82301EF4();
 
 /**
  * Loads selection resources, runs the screen through its fades, and commits the orders.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 BattleMenu_RunOrderSelectScreen(s32 arg0, s32 arg1) {

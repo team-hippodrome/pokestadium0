@@ -26,6 +26,8 @@ void Battle_ComputeSplineWeightsVariantE(f32* arg0, f32 arg1);
 
 /**
  * @src/math_util.c
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleAnim_CalculateDistanceAngles(Vec3f* arg0, Vec3f* arg1, f32* arg2, s16* arg3, s16* arg4) {
@@ -94,6 +96,8 @@ Vec3f* BattleAnim_Vec3fCopy(Vec3f* dest, Vec3f* src) {
 /**
  * Copies all three components of the s16 vector `src` into `dest` and returns
  * `dest`. Callers use it to copy display object rotations.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle and a Pound
+ * turn.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 Vec3s* BattleAnim_Vec3sCopy(Vec3s* arg0, Vec3s* arg1) {
@@ -128,6 +132,8 @@ s16 BattleAnim_Atan2sFromPoints(f32 arg0, f32 arg1, f32 arg2, f32 arg3) {
 
 /**
  * Returns the Euclidean distance between points `a` and `b`, passed by value.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle and a Pound
+ * turn.
  * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
  */
 f32 BattleAnim_Vec3fDistance(Vec3f a, Vec3f b) {
@@ -144,6 +150,8 @@ f32 BattleAnim_Vec3fDistance(Vec3f a, Vec3f b) {
  * Returns the distance between (x0, y0) and (x1, y1) in a 2D plane. The camera
  * code passes X and Z world coordinates. The squared deltas are kept in
  * function-local statics (.bss words) instead of stack temporaries.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 f32 BattleAnim_Distance2D(f32 arg0, f32 arg1, f32 arg2, f32 arg3) {
@@ -163,6 +171,8 @@ f32 BattleAnim_Distance2D(f32 arg0, f32 arg1, f32 arg2, f32 arg3) {
 /**
  * @src/math_util.c
  * @src/fragments/battle_engine/battle_engine_battle_phases.c
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 u16 BattleAnim_RandomRange(s32 range) {

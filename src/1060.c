@@ -21,6 +21,8 @@ extern M2C_UNK D_80082B60;
 /**
  * Idle thread: sets up the VI mode, interrupts and subsystems, starts thread 4,
  * then idles. Name from Stadium 1's Idle_ThreadEntry.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void Idle_ThreadEntry(s32 arg0) {
@@ -51,6 +53,8 @@ extern M2C_UNK D_800809B0;
 /**
  * Boot entry: initializes the OS, then creates and starts the idle thread
  * (id 1, Idle_ThreadEntry). Name from Stadium 1's Main.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void Main(void) {

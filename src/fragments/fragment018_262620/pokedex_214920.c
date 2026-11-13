@@ -601,6 +601,8 @@ extern M2C_UNK D_8A130238;
 
 /**
  * Draws the Pokedex index: sort order menu, seen/caught/owned counts and the list.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 Pokedex_DrawIndexScreen(s32 arg0) {
@@ -1145,6 +1147,8 @@ s32 func_8A101B30(u8);
 
 /**
  * Entry point of the Pokedex: reads the GB save, allocates the stage and framebuffers, and rebuilds the seen bitfield.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 Pokedex_Init(s32 arg0, s32 arg1) {

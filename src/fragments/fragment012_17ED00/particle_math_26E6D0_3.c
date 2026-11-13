@@ -285,6 +285,8 @@ s32 ParticleGfx_ApproachPrimEnvPalettePair(Particle* arg0, u16 arg1, u8 arg2) {
  * Boom (use), Swift (use), Take Down (use), Thunder (use/hit), Thunder Shock (use/hit), Thunder Wave (hit),
  * Thunderbolt (use/hit), Tri Attack (use)
  * TODO: Human contributor add screenshot
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
+ * switch in battle.
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_SetupBackgroundRecolor(Particle* arg0) {

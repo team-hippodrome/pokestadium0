@@ -159,6 +159,8 @@ extern unk_D_8006FF00 D_80064C5C[];
 
 /**
  * Derive the material color variant from a non-default nickname, OT id, and OT name.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the party screen,
+ * registration, Free Battle setup and a switch in battle.
  * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
 arg1_func_80010CA8* Model_ComputeNicknameColorVariant(arg1_func_80010CA8* arg0, BattleMon* arg1) {

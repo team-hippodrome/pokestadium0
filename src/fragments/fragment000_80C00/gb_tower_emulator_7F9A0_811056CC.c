@@ -619,6 +619,8 @@ extern u16 D_81124C40[];
 /**
  * Draws a 46x46 framed panel (8x8 edge and corner tiles from sUiGraphics) with a
  * solid interior, used behind each party icon on the loading screen.
+ * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * in a tour of the menus and a COM battle.
  * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
 void GbEmu_DrawFramedPanel(u16* arg0) {
@@ -809,6 +811,8 @@ void func_81106CC8(u16* dst, u8 (*arg1)[0xC80], s32 arg2, s32 arg3) {
 
 /**
  * Adds a scrolling image layer to the destination with per-channel saturation.
+ * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * in a tour of the menus and a COM battle.
  * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
 void GbEmu_BlendScrollingLayer(u16* arg0, u16* arg1, s16* arg2, s32 arg3, s32 arg4) {

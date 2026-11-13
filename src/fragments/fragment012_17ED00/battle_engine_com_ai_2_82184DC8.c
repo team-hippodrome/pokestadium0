@@ -411,6 +411,7 @@ s32 BattleAi_GetBestDamage(u8 *arg0, u8 *arg1, s32 arg2)
  * Clears the switch-out volatile state of a battle Pokemon (arg0, BattleMonRuntime
  * layout), resets its in-battle stats to the party Pokemon's stats (arg1, BattleMon
  * layout) and resets all eight stat stages to 7 (neutral).
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 void BattleAi_ResetBattleStats(s8 *arg0, s8 *arg1)
@@ -479,6 +480,8 @@ extern u8 D_8438B0C4[];
 /**
  * Returns 1 if battler arg1 is held by a trapping state (byte 0x58 bit 0x40) and
  * arg0 moves first, so arg1 cannot act this turn.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
+ * switch in battle.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_OpponentCannotAct(s8* arg0, s8* arg1) {
@@ -552,6 +555,8 @@ extern s32 D_821CF288;
  * 0x7F (copied from the battle state each turn, possibly "slept from Rest") is
  * clear; when arg0 is the opponent's side, an asleep active opponent also blocks.
  * Returns 1 when another sleep move may be used.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
+ * switch in battle.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_SleepClauseAllows(BattleSlotZ *arg0)
@@ -584,6 +589,7 @@ extern u8 D_82194840[];
  * Returns 1 if the battler can use Sing, Sleep Powder, Hypnosis, Lovely Kiss or
  * Spore, or (when its moves are unknown) its species is one that could learn a
  * sleep move (D_82194824, and D_82194840 from level 50).
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_MayHaveSleepMove(u8 *arg0) {

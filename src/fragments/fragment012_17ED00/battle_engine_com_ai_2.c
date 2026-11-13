@@ -760,6 +760,8 @@ void BattleAi_AddTrainerPickScore(u8* arg0, s32 arg1) {
 /**
  * Strided byte search: returns the first byte equal to arg3 in a table of arg2
  * bytes read every arg1 bytes, or NULL.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
+ * switch in battle.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 u8* BattleAi_FindByte(u8* arg0, s32 arg1, s32 arg2, s32 arg3) {
